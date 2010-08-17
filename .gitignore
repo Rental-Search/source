@@ -1,0 +1,6 @@
+*.pyc
+*.tmproj
+.DS_Store
+env
+eloue.db
+eloue/local.py
