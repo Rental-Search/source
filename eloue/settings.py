@@ -120,10 +120,15 @@ INSTALLED_APPS = (
     'django.contrib.sitemaps',
     'django.contrib.formtools',
     'django.contrib.markup',
+    'django_nose',
     'south',
     'compress',
     'haystack',
 )
+
+# Tests configuration
+TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
+NOSE_ARGS = ['--failed', '--stop']
 
 # Message configuration
 MESSAGE_STORAGE = getattr(local, 'MESSAGE_STORAGE', 'django.contrib.messages.storage.session.SessionStorage')

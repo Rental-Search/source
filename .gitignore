@@ -1,6 +1,7 @@
 *.pyc
 *.tmproj
 .DS_Store
+.noseids
 env
 eloue.db
 eloue/local.py

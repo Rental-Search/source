@@ -1,8 +1,10 @@
 django-compress>=1.0
 django-haystack==1.0.1-final
+django-nose>=0.1.2
 fabric>=0.9
 ipython>=0.10
 markdown>=2.0.3
+nose>=0.11.4
 south>=0.7
 -e svn+http://code.djangoproject.com/svn/django/branches/releases/1.2.X#egg=django
 -e git://github.com/robhudson/django-debug-toolbar.git#egg=debug_toolbar
