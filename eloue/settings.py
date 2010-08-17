@@ -124,6 +124,11 @@ INSTALLED_APPS = (
     'south',
     'compress',
     'haystack',
+    'accounts',
+    'rent',
+    'products',
+    'payments',
+    'quack'
 )
 
 # Tests configuration
