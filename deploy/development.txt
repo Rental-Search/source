@@ -1,0 +1,9 @@
+django-compress>=1.0
+django-haystack==1.0.1-final
+fabric>=0.9
+ipython>=0.10
+markdown>=2.0.3
+south>=0.7
+-e svn+http://code.djangoproject.com/svn/django/branches/releases/1.2.X#egg=django
+-e git://github.com/robhudson/django-debug-toolbar.git#egg=debug_toolbar
+-e git://github.com/toastdriven/pysolr.git#egg=pysolr
