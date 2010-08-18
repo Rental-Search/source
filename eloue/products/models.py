@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
+from django.utils.encoding import smart_unicode
+
+from storage.backends.image import ImageStorage
 
 from eloue.accounts.models import Address
 
@@ -23,17 +26,24 @@ class Product(models.Model):
     quantity = models.IntegerField(null=False)
     category = models.ForeignKey('Category', related_name='products')
     
+    def __unicode__(self):
+        return smart_unicode(self.summary)
+    
     class Meta:
         verbose_name = _('product')
 
 class Picture(models.Model):
     """A picture"""
     product = models.ForeignKey(Product, related_name='pictures')
+    image = models.ImageField(upload_to='pictures/', storage=ImageStorage()) # TODO : This might not be ideal
 
 class Category(models.Model):
     """A category"""
     parent = models.ForeignKey('self', related_name='children')
     name = models.CharField(null=False, max_length=255)
+    
+    def __unicode__(self):
+        return smart_unicode(self.name)
     
     class Meta:
         verbose_name = _('category')
@@ -44,6 +54,9 @@ class Property(models.Model):
     category = models.ForeignKey(Category, related_name='properties')
     name = models.CharField(null=False, max_length=255)
     
+    def __unicode__(self):
+        return smart_unicode(self.name)
+    
     class Meta:
         verbose_name_plural = _('properties')
     
@@ -53,6 +66,9 @@ class PropertyValue(models.Model):
     value = models.CharField(null=False, max_length=255)
     product = models.ForeignKey(Product, related_name='properties')
     
+    def __unicode__(self):
+        return smart_unicode(self.value)
+    
     class Meta:
         unique_together = ('property', 'product')
     
@@ -61,6 +77,9 @@ class Price(models.Model):
     """A price"""
     amount = models.DecimalField(max_digits=8, decimal_places=2)
     product = models.ForeignKey(Product, related_name='%(class)s')
+    
+    def __unicode__(self):
+        return smart_unicode(self.amount)
     
     class Meta:
         abstract = True
@@ -76,8 +95,13 @@ class StandardPrice(Price):
 
 class Review(models.Model):
     """A review"""
+    summary = models.CharField(null=False, blank=True, max_length=255)
     score = models.FloatField(null=False)
     description = models.TextField(null=False)
     created_at = models.DateTimeField()
     ip = models.IPAddressField(null=True)
     product = models.ForeignKey(Product, related_name='reviews')
+    
+    def __unicode__(self):
+        return smart_unicode(self.summary)
+    
