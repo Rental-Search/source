@@ -8,7 +8,7 @@ from eloue.accounts.models import Patron
 from eloue.products.models import Product
 
 BOOKING_STATE = (
-    (0, _('Demander'),
+    (0, _('Demander')),
     (1, _('Annuler')),
     (2, _('En attente')),
     (3, _('En cours')),
