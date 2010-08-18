@@ -6,7 +6,7 @@ from eloue.accounts.models import Patron
 class PatronModelBackend(ModelBackend):
     def authenticate(self, username=None, password=None):
         try:
-            user = Patron.objects.get(username=username)
+            user = Patron.objects.get(email=username)
             if user.check_password(password):
                 return user
         except Patron.DoesNotExist:
