@@ -120,8 +120,8 @@ INSTALLED_APPS = (
     'django.contrib.sitemaps',
     'django.contrib.formtools',
     'django.contrib.markup',
-    'django_nose',
     'south',
+    'django_nose',
     'compress',
     'haystack',
     'accounts',
@@ -133,7 +133,8 @@ INSTALLED_APPS = (
 
 # Tests configuration
 TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
-NOSE_ARGS = ['--failed', '--stop']
+NOSE_ARGS = getattr(local, 'NOSE_ARGS', ['--stop', '--with-coverage'])
+NOSE_PLUGINS = getattr(local, 'NOSE_PLUGINS', [])
 
 # Message configuration
 MESSAGE_STORAGE = getattr(local, 'MESSAGE_STORAGE', 'django.contrib.messages.storage.session.SessionStorage')
