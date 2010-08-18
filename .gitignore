@@ -6,3 +6,4 @@
 env
 eloue.db
 eloue/local.py
+docs/_*/
