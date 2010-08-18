@@ -131,6 +131,11 @@ INSTALLED_APPS = (
     'quack'
 )
 
+# Authentification configuration
+AUTHENTICATION_BACKENDS = (
+    'eloue.accounts.auth.PatronModelBackend',
+)
+
 # Tests configuration
 TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
 NOSE_ARGS = getattr(local, 'NOSE_ARGS', ['--stop', '--with-coverage'])
