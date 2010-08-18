@@ -8,6 +8,7 @@ Imaging==1.1.7
 ipython>=0.10
 markdown>=2.0.3
 nose>=0.11.4
+pyyaml>=3.09
 south>=0.7
 sphinx>=1.0.2
 -e svn+http://code.djangoproject.com/svn/django/branches/releases/1.2.X#egg=django

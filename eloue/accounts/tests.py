@@ -3,9 +3,8 @@ import datetime
 
 from django.core import mail
 from django.test import TestCase
-from django.core.exceptions import ObjectDoesNotExist
 
-from eloue.accounts.models import Patron
+from eloue.accounts.models import Patron, Comment
 
 class AccountManagerTest(TestCase):
     def test_inactive_account_creation(self):
@@ -56,9 +55,19 @@ class AccountManagerTest(TestCase):
 class AccountTest(TestCase):
     def test_modified_at(self):
         patron = Patron.objects.create_user('benoit', 'benoit@e-loue.com', 'benoit')
-        patron.save()
         self.assertTrue(patron.modified_at <= datetime.datetime.now())
         modified_at = patron.modified_at
         patron.save()
         self.assertTrue(modified_at <= patron.modified_at <= datetime.datetime.now())
+    
+
+class CommentTest(TestCase):
+    fixtures = ['patron']
+    
+    def test_created_at(self):
+        comment = Comment.objects.create(score=1.0, patron=Patron(pk=1))
+        self.assertTrue(comment.created_at <= datetime.datetime.now())
+        created_at = comment.created_at
+        comment.save()
+        self.assertEquals(comment.created_at, created_at)
     

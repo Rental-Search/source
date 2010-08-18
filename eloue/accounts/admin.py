@@ -5,8 +5,14 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.utils.translation import ugettext_lazy as _
 
-from eloue.accounts.models import Patron
+from eloue.accounts.models import Patron, Address, PhoneNumber, Comment
 from eloue.accounts.forms import PatronChangeForm
+
+class AddressInline(admin.TabularInline):
+    model = Address
+
+class PhoneNumberInline(admin.TabularInline):
+    model = PhoneNumber
 
 class PatronAdmin(UserAdmin):
     fieldsets = (
@@ -21,6 +27,7 @@ class PatronAdmin(UserAdmin):
     list_filter = ('is_active', 'is_staff', 'is_superuser')
     save_on_top = True
     ordering = ['-date_joined']
+    inlines = [ AddressInline, PhoneNumberInline ]
     form = PatronChangeForm
     actions = ['send_activation_email']
     
@@ -35,4 +42,8 @@ class PatronAdmin(UserAdmin):
     send_activation_email.short_description = _(u"Envoyer à nouveau l'email d'activation")
     
 
+class CommentAdmin(admin.ModelAdmin):
+    pass
+
 admin.site.register(Patron, PatronAdmin)
+admin.site.register(Comment, CommentAdmin)

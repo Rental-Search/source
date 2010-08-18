@@ -62,7 +62,7 @@ class Patron(User):
 
 class Address(models.Model):
     """An address"""
-    patrons = models.ForeignKey(Patron, related_name='addresses')
+    patron = models.ForeignKey(Patron, related_name='addresses')
     civility = models.IntegerField(choices=CIVILITY_CHOICES)
     address1 = models.CharField(max_length=255)
     address2 = models.CharField(max_length=255)
@@ -71,7 +71,7 @@ class Address(models.Model):
 
 class PhoneNumber(models.Model):
     """A phone number"""
-    patrons = models.ForeignKey(Patron, related_name='phones')
+    patron = models.ForeignKey(Patron, related_name='phones')
     number = models.CharField(null=False, max_length=255)
     kind = models.IntegerField(choices=PHONE_TYPES)
 
@@ -87,5 +87,5 @@ class Comment(models.Model):
     def save(self, *args, **kwargs):
         if not self.pk:
             self.created_at = datetime.datetime.now()
-        super(Patron, self).save(*args, **kwargs)
+        super(Comment, self).save(*args, **kwargs)
     

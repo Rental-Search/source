@@ -1,0 +1,23 @@
+- fields:
+    date_joined: 2010-08-17 09:00:10
+    email: alexandre.woog@e-loue.com
+    username: alexandre
+    first_name: Alexandre
+    last_name: Woog
+    groups: []
+    is_active: true
+    is_staff: false
+    is_superuser: false
+    last_login: 2010-08-18 15:35:00.180475
+    password: sha1$6014d$07264a609bb1293fa9f07b7a9acbe9194eb4c1bd
+    user_permissions: []
+  model: auth.user
+  pk: 1
+
+- fields:
+    activation_key: ALREADY_ACTIVATED
+    groups: []
+    modified_at: 2010-08-17 09:00:10
+    user_permissions: []
+  model: accounts.patron
+  pk: 1
