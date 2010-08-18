@@ -84,6 +84,11 @@ class Comment(models.Model):
     ip = models.IPAddressField(null=True)
     patron = models.ForeignKey(Patron, related_name='comments')
     
+    def clean(self):
+        from django.core.exceptions import ValidationError
+        if 0 < self.score > 1:
+            raise ValidationError(_("Score isn't between 0 and 1"))
+    
     def save(self, *args, **kwargs):
         if not self.pk:
             self.created_at = datetime.datetime.now()

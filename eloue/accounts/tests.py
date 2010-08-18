@@ -3,6 +3,7 @@ import datetime
 
 from django.core import mail
 from django.test import TestCase
+from django.core.exceptions import ValidationError
 
 from eloue.accounts.models import Patron, Comment
 
@@ -70,4 +71,12 @@ class CommentTest(TestCase):
         created_at = comment.created_at
         comment.save()
         self.assertEquals(comment.created_at, created_at)
+    
+    def test_score_values(self):
+        comment = Comment(score=-1.0)
+        self.assertRaises(ValidationError, comment.full_clean)
+        comment = Comment(score=2.0)
+        self.assertRaises(ValidationError, comment.full_clean)
+        comment = Comment(score=0.5)
+        self.failUnlessRaises(ValidationError, comment.full_clean)
     

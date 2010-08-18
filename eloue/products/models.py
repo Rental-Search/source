@@ -83,6 +83,11 @@ class Price(models.Model):
     def __unicode__(self):
         return smart_unicode(self.amount)
     
+    def clean(self):
+        from django.core.exceptions import ValidationError
+        if self.amount < 0:
+            raise ValidationError(_(u"Le prix ne peut pas être négatif"))
+    
     class Meta:
         abstract = True
 
@@ -91,6 +96,12 @@ class SeasonalPrice(Price):
     name = models.CharField(null=False, max_length=255)
     started_at = models.DateTimeField(null=False)
     ended_at = models.DateTimeField(null=False)
+    
+    def clean(self):
+        from django.core.exceptions import ValidationError
+        if self.started_at >= self.ended_at:
+            raise ValidationError(_(u"Une saison ne peut pas terminer avant d'avoir commencer"))
+    
 
 class StandardPrice(Price):
     unit = models.IntegerField(choices=UNIT_CHOICES)
@@ -103,6 +114,11 @@ class Review(models.Model):
     created_at = models.DateTimeField()
     ip = models.IPAddressField(null=True)
     product = models.ForeignKey(Product, related_name='reviews')
+    
+    def clean(self):
+        from django.core.exceptions import ValidationError
+        if 0 < self.score > 1:
+            raise ValidationError(_("Score isn't between 0 and 1"))
     
     def __unicode__(self):
         return smart_unicode(self.summary)
