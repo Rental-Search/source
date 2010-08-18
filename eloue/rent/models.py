@@ -30,7 +30,7 @@ class Booking(models.Model):
     owner = models.ForeignKey(Patron, related_name='sellings')
     borrower = models.ForeignKey(Patron, related_name='buyings')
     product = models.ForeignKey(Product, related_name='bookings')
-    passphrase = models.CharField(unique=True, null=False, max_length=255)
+    passphrase = models.CharField(unique=True, null=False, max_length=40)
     created_at = models.DateTimeField()
     ip = models.IPAddressField(null=True)
     

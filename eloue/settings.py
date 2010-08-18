@@ -11,7 +11,9 @@ ADMINS = (
 
 MANAGERS = ADMINS
 
+# Email configuration
 SERVER_EMAIL = 'noreply@e-loue.com'
+DEFAULT_FROM_EMAIL = 'noreply@e-loue.com'
 
 DATABASES = {
     'default':{
@@ -121,9 +123,9 @@ INSTALLED_APPS = (
     'django.contrib.formtools',
     'django.contrib.markup',
     'south',
-    'django_nose',
     'compress',
     'haystack',
+    'django_nose',
     'accounts',
     'rent',
     'products',
@@ -135,10 +137,11 @@ INSTALLED_APPS = (
 AUTHENTICATION_BACKENDS = (
     'eloue.accounts.auth.PatronModelBackend',
 )
+ACCOUNT_ACTIVATION_DAYS = 7
 
 # Tests configuration
 TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
-NOSE_ARGS = getattr(local, 'NOSE_ARGS', ['--stop', '--with-coverage'])
+NOSE_ARGS = getattr(local, 'NOSE_ARGS', ['--stop', '--with-coverage', '--cover-package=eloue'])
 NOSE_PLUGINS = getattr(local, 'NOSE_PLUGINS', [])
 
 # Message configuration
