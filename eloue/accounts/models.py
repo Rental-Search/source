@@ -51,7 +51,7 @@ class Patron(User):
         True
         """
         expiration_date = datetime.timedelta(days=settings.ACCOUNT_ACTIVATION_DAYS)
-        return self.activation_key == "ALREADY_ACTIVATED" or (self.date_joined + expiration_date <= datetime.now())
+        return self.activation_key == "ALREADY_ACTIVATED" or (self.date_joined + expiration_date <= datetime.datetime.now())
     is_expired.boolean = True
     is_expired.short_description = "expired"
     
