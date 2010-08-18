@@ -49,7 +49,7 @@ class PatronManager(UserManager):
     def create_inactive(self, username, email, password, send_email=True):
         """
         Create a new, inactive ``Patron`` and email its activation key to the
-        ``Patron``, returning the new ``Patrong``.
+        ``Patron``, returning the new ``Patron``.
         
         To disable the email, call with ``send_email=False``.
         """
