@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+import datetime
+
 from django.db import models
 from django.contrib.auth.models import User
 
@@ -19,7 +21,12 @@ class Patron(User):
     is_professional = models.BooleanField(null=False, default=False)
     company_name = models.CharField(null=True, max_length=255)
     last_ip = models.IPAddressField(null=True)
-    modified_at = models.DateTimeField()
+    modified_at = models.DateTimeField(editable=False)
+    
+    def save(self, *args, **kwargs):
+        self.modified_at = datetime.datetime.now()
+        super(Patron, self).save(*args, **kwargs)
+    
 
 class Address(models.Model):
     """An address"""
@@ -38,9 +45,15 @@ class PhoneNumber(models.Model):
 
 class Comment(models.Model):
     """A comment"""
+    summary = models.CharField(null=False, max_length=255)
     score = models.FloatField(null=False)
     description = models.TextField(null=False)
     created_at = models.DateTimeField()
     ip = models.IPAddressField(null=True)
     patron = models.ForeignKey(Patron, related_name='comments')
-
+    
+    def save(self, *args, **kwargs):
+        if not self.pk:
+            self.created_at = datetime.datetime.now()
+        super(Patron, self).save(*args, **kwargs)
+    

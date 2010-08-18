@@ -1,9 +1,11 @@
 # -*- coding: utf-8 -*-
+import datetime
+
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.utils.encoding import smart_unicode
 
-from storage.backends.image import ImageStorage
+from storages.backends.image import ImageStorage
 
 from eloue.accounts.models import Address
 
@@ -104,4 +106,9 @@ class Review(models.Model):
     
     def __unicode__(self):
         return smart_unicode(self.summary)
+    
+    def save(self, *args, **kwargs):
+        if not self.pk:
+            self.created_at = datetime.datetime.now()
+        super(Review, self).save(*args, **kwargs)
     

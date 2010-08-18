@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+import datetime
+
 from django.db import models
 
 from eloue.accounts.models import Patron
@@ -30,3 +32,9 @@ class Booking(models.Model):
     passphrase = models.CharField(unique=True, null=False, max_length=255)
     created_at = models.DateTimeField()
     ip = models.IPAddressField(null=True)
+    
+    def save(self, *args, **kwargs):
+        if not self.pk:
+            self.created_at = datetime.datetime.now()
+        super(Booking, self).save(*args, **kwargs)
+    
