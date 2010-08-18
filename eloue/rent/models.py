@@ -2,21 +2,22 @@
 import datetime
 
 from django.db import models
+from django.utils.translation import ugettext_lazy as _
 
 from eloue.accounts.models import Patron
 from eloue.products.models import Product
 
 BOOKING_STATE = (
-    (0, 'Demander'),
-    (1, 'Annuler'),
-    (2, 'En attente'),
-    (3, 'En cours'),
-    (4, 'Terminer'),
+    (0, _('Demander'),
+    (1, _('Annuler')),
+    (2, _('En attente')),
+    (3, _('En cours')),
+    (4, _('Terminer')),
 )
 
 PAYMENT_STATE = (
-    (0, 'Autoriser'),
-    (1, 'Payer')
+    (0, _('Autoriser')),
+    (1, _('Payer'))
 )
 
 class Booking(models.Model):

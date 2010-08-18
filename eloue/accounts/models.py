@@ -3,17 +3,18 @@ import datetime
 
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils.translation import ugettext_lazy as _
 
 CIVILITY_CHOICES = (
-    (0, 'Madame'),
-    (1, 'Mademoiselle'),
-    (2, 'Monsieur')
+    (0, _('Madame')),
+    (1, _('Mademoiselle')),
+    (2, _('Monsieur'))
 )
 
 PHONE_TYPES = (
-    (0, 'Domicile'),
-    (1, 'Mobile'),
-    (2, 'Fax')
+    (0, _('Domicile')),
+    (1, _('Mobile')),
+    (2, _('Fax'))
 )
 
 class Patron(User):
