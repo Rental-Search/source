@@ -5,6 +5,8 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.utils.translation import ugettext_lazy as _
 
+from eloue.accounts.manager import PatronManager
+
 CIVILITY_CHOICES = (
     (0, _('Madame')),
     (1, _('Mademoiselle')),
@@ -23,6 +25,8 @@ class Patron(User):
     company_name = models.CharField(null=True, max_length=255)
     last_ip = models.IPAddressField(null=True)
     modified_at = models.DateTimeField(editable=False)
+    
+    objects = PatronManager()
     
     def save(self, *args, **kwargs):
         self.modified_at = datetime.datetime.now()
