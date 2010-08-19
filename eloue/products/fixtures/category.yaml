@@ -1,0 +1,5 @@
+-   fields: 
+        name: Travaux et bricolage,
+        parent: null
+    model: products.category
+    pk: 1

@@ -7,7 +7,7 @@ from django.utils.encoding import smart_unicode
 
 from storages.backends.image import ImageStorage
 
-from eloue.accounts.models import Address
+from eloue.accounts.models import Patron, Address
 
 UNIT_CHOICES = (
     (0, _('heure')),
@@ -22,11 +22,17 @@ class Product(models.Model):
     summary = models.CharField(null=False, max_length=255)
     deposit = models.DecimalField(null=False, max_digits=8, decimal_places=2)
     description = models.TextField(null=False)
-    location = models.ForeignKey(Address, related_name='products')
+    address = models.ForeignKey(Address, related_name='products')
     lat = models.FloatField(null=True, blank=True)
     lon = models.FloatField(null=True, blank=True)
     quantity = models.IntegerField(null=False)
     category = models.ForeignKey('Category', related_name='products')
+    owner = models.ForeignKey(Patron, related_name='products')
+    
+    def clean(self):
+        from django.core.exceptions import ValidationError
+        if self.address.patron != self.owner:
+            raise ValidationError(_(u"L'adresse n'appartient pas au propriétaire de l'objet"))
     
     def __unicode__(self):
         return smart_unicode(self.summary)
@@ -41,7 +47,7 @@ class Picture(models.Model):
 
 class Category(models.Model):
     """A category"""
-    parent = models.ForeignKey('self', related_name='children')
+    parent = models.ForeignKey('self', related_name='children', null=True)
     name = models.CharField(null=False, max_length=255)
     
     def __unicode__(self):
@@ -102,23 +108,32 @@ class SeasonalPrice(Price):
         if self.started_at >= self.ended_at:
             raise ValidationError(_(u"Une saison ne peut pas terminer avant d'avoir commencer"))
     
+    class Meta:
+        unique_together = ('product', 'name')
+    
 
 class StandardPrice(Price):
     unit = models.IntegerField(choices=UNIT_CHOICES)
+    
+    class Meta:
+        unique_together = ('product', 'unit')
+    
 
 class Review(models.Model):
     """A review"""
     summary = models.CharField(null=False, blank=True, max_length=255)
     score = models.FloatField(null=False)
     description = models.TextField(null=False)
-    created_at = models.DateTimeField()
-    ip = models.IPAddressField(null=True)
+    created_at = models.DateTimeField(blank=True)
+    ip = models.IPAddressField(null=True, blank=True)
     product = models.ForeignKey(Product, related_name='reviews')
     
     def clean(self):
         from django.core.exceptions import ValidationError
-        if 0 < self.score > 1:
-            raise ValidationError(_("Score isn't between 0 and 1"))
+        if self.score > 1:
+            raise ValidationError(_("Score can't be higher than 1"))
+        if self.score < 0:
+            raise ValidationError(_("Score can't be a negative value"))
     
     def __unicode__(self):
         return smart_unicode(self.summary)

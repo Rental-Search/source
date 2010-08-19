@@ -1,0 +1,19 @@
+- fields:
+    address1: '11, rue debelleyme'
+    address2: null
+    city: 'Paris'
+    civility: 2
+    patron: 1
+    zipcode: '75003'
+  model: accounts.address
+  pk: 1
+
+- fields:
+    address1: '70, rue Mont-Cenis'
+    address2: null
+    city: 'Paris'
+    civility: 2
+    patron: 2
+    zipcode: '75018'
+  model: accounts.address
+  pk: 2

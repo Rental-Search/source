@@ -65,7 +65,7 @@ class Address(models.Model):
     patron = models.ForeignKey(Patron, related_name='addresses')
     civility = models.IntegerField(choices=CIVILITY_CHOICES)
     address1 = models.CharField(max_length=255)
-    address2 = models.CharField(max_length=255)
+    address2 = models.CharField(max_length=255, null=True, blank=True)
     city = models.CharField(null=False, max_length=255)
     zipcode = models.CharField(null=True, max_length=255)
 
@@ -81,13 +81,15 @@ class Comment(models.Model):
     score = models.FloatField(null=False)
     description = models.TextField(null=False)
     created_at = models.DateTimeField()
-    ip = models.IPAddressField(null=True)
+    ip = models.IPAddressField(null=True, blank=True)
     patron = models.ForeignKey(Patron, related_name='comments')
     
     def clean(self):
         from django.core.exceptions import ValidationError
-        if 0 < self.score > 1:
-            raise ValidationError(_("Score isn't between 0 and 1"))
+        if self.score > 1:
+            raise ValidationError(_("Score can't be higher than 1"))
+        if self.score < 0:
+            raise ValidationError(_("Score can't be a negative value"))
     
     def save(self, *args, **kwargs):
         if not self.pk:
