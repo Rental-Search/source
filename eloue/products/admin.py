@@ -19,7 +19,8 @@ class ProductAdmin(admin.ModelAdmin):
     inlines = [ PictureInline, PropertyValueInline, StandardPriceInline, SeasonalPriceInline ]
 
 class CategoryAdmin(admin.ModelAdmin):
-    pass
+    list_display = ('name', 'parent')
+    search_fields = ['name', 'parent__name']
 
 class PropertyAdmin(admin.ModelAdmin):
     pass

@@ -39,6 +39,7 @@ class Product(models.Model):
     
     class Meta:
         verbose_name = _('product')
+    
 
 class Picture(models.Model):
     """A picture"""
@@ -49,6 +50,7 @@ class Category(models.Model):
     """A category"""
     parent = models.ForeignKey('self', related_name='children', null=True)
     name = models.CharField(null=False, max_length=255)
+    slug = models.SlugField(null=False)
     
     def __unicode__(self):
         return smart_unicode(self.name)
@@ -56,6 +58,7 @@ class Category(models.Model):
     class Meta:
         verbose_name = _('category')
         verbose_name_plural = _('categories')
+    
 
 class Property(models.Model):
     """A property"""
@@ -96,6 +99,7 @@ class Price(models.Model):
     
     class Meta:
         abstract = True
+    
 
 class SeasonalPrice(Price):
     """A season"""
