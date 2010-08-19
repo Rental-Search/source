@@ -23,7 +23,7 @@ class AccountManagerTest(TestCase):
         self.assertFalse(patron.is_expired())
         patron = Patron.objects.get(pk=patron.pk)
         self.assertTrue(patron.is_active)
-        self.assertEquals(patron.activation_key, "ALREADY_ACTIVATED")
+        self.assertEquals(patron.activation_key, None)
     
     def test_activate_with_wrong_key(self):
         self.assertFalse(Patron.objects.activate('this is not a valid key'))

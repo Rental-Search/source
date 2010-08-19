@@ -23,8 +23,6 @@ class Product(models.Model):
     deposit = models.DecimalField(null=False, max_digits=8, decimal_places=2)
     description = models.TextField(null=False)
     address = models.ForeignKey(Address, related_name='products')
-    lat = models.FloatField(null=True, blank=True)
-    lon = models.FloatField(null=True, blank=True)
     quantity = models.IntegerField(null=False)
     category = models.ForeignKey('Category', related_name='products')
     owner = models.ForeignKey(Patron, related_name='products')

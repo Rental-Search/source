@@ -28,8 +28,7 @@ class PatronManager(UserManager):
         
         To prevent reactivation of an account which has been
         deactivated by site administrators, the activation key is
-        reset to the string ``ALREADY_ACTIVATED`` after successful
-        activation.
+        reset to None after successful activation.
         """
         # Make sure the key we're trying conforms to the pattern of a
         # SHA1 hash; if it doesn't, no point trying to look it up in
@@ -41,7 +40,7 @@ class PatronManager(UserManager):
                 return False
             if not patron.is_expired():
                 patron.is_active = True
-                patron.activation_key = "ALREADY_ACTIVATED"
+                patron.activation_key = None
                 patron.save()
                 return patron
         return False

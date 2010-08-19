@@ -25,7 +25,7 @@ PHONE_TYPES = (
 
 class Patron(User):
     """A member"""
-    activation_key = models.CharField(max_length=40)
+    activation_key = models.CharField(null=True, blank=True, max_length=40)
     is_professional = models.BooleanField(null=False, default=False)
     company_name = models.CharField(null=True, max_length=255)
     last_ip = models.IPAddressField(null=True)
@@ -51,7 +51,7 @@ class Patron(User):
         True
         """
         expiration_date = datetime.timedelta(days=settings.ACCOUNT_ACTIVATION_DAYS)
-        return self.activation_key == "ALREADY_ACTIVATED" or (self.date_joined + expiration_date <= datetime.datetime.now())
+        return self.activation_key == None or (self.date_joined + expiration_date <= datetime.datetime.now())
     is_expired.boolean = True
     is_expired.short_description = "expired"
     
@@ -68,6 +68,8 @@ class Address(models.Model):
     address2 = models.CharField(max_length=255, null=True, blank=True)
     city = models.CharField(null=False, max_length=255)
     zipcode = models.CharField(null=True, max_length=255)
+    lat = models.FloatField(null=True, blank=True)
+    lon = models.FloatField(null=True, blank=True)
 
 class PhoneNumber(models.Model):
     """A phone number"""

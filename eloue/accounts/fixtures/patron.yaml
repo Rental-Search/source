@@ -15,7 +15,7 @@
   pk: 1
 
 - fields:
-    activation_key: ALREADY_ACTIVATED
+    activation_key: null
     groups: []
     modified_at: 2010-08-17 09:00:10
     user_permissions: []
@@ -39,7 +39,7 @@
   pk: 2
 
 - fields:
-    activation_key: ALREADY_ACTIVATED
+    activation_key: null
     groups: []
     modified_at: 2010-08-17 09:00:10
     user_permissions: []
