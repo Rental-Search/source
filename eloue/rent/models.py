@@ -37,7 +37,7 @@ class Booking(models.Model):
     def clean(self):
         from django.core.exceptions import ValidationError
         if self.owner == self.borrower:
-            raise ValidationError(_(u"Un object ne peut pas être louer à son propriétaire"))
+            raise ValidationError(_(u"Un objet ne peut pas être louer à son propriétaire"))
         if self.started_at >= self.ended_at:
             raise ValidationError(_(u"Une location ne peut pas terminer avant d'avoir commencer"))
         if self.total_price < 0:
