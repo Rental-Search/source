@@ -141,7 +141,7 @@ ACCOUNT_ACTIVATION_DAYS = 7
 
 # Tests configuration
 TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
-NOSE_ARGS = getattr(local, 'NOSE_ARGS', ['--stop', '--with-coverage', '--cover-package=eloue'])
+NOSE_ARGS = getattr(local, 'NOSE_ARGS', ['--stop', '--with-doctest', '--with-coverage', '--cover-package=eloue'])
 NOSE_PLUGINS = getattr(local, 'NOSE_PLUGINS', [])
 
 # Message configuration
