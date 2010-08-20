@@ -22,7 +22,7 @@ class PatronAdmin(UserAdmin):
         (_('Important dates'), {'fields': ('last_login', 'date_joined')}),
         (_('Groups'), {'classes': ('collapse',), 'fields': ('groups',)}),
     )
-    list_display = ('username', 'email', 'is_staff', 'is_active', 'is_expired', 'date_joined')
+    list_display = ('username', 'email', 'is_staff', 'is_active', 'is_expired', 'is_professional', 'date_joined', 'modified_at')
     date_hierarchy = 'date_joined'
     list_filter = ('is_active', 'is_staff', 'is_superuser')
     save_on_top = True

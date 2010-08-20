@@ -7,6 +7,7 @@ from django.contrib.auth.models import User
 from django.contrib.sites.models import Site
 from django.core.mail import EmailMultiAlternatives
 from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import ugettext
 from django.template.loader import render_to_string
 
 from eloue.accounts.manager import PatronManager
@@ -76,10 +77,10 @@ PHONE_TYPES = (
 class Patron(User):
     """A member"""
     activation_key = models.CharField(null=True, blank=True, max_length=40)
-    is_professional = models.BooleanField(null=False, default=False)
+    is_professional = models.BooleanField(_('professionnel'), null=False, default=False)
     company_name = models.CharField(null=True, max_length=255)
     last_ip = models.IPAddressField(null=True)
-    modified_at = models.DateTimeField(editable=False)
+    modified_at = models.DateTimeField(_('date de modification'), editable=False)
     
     objects = PatronManager()
     
@@ -103,7 +104,7 @@ class Patron(User):
         expiration_date = datetime.timedelta(days=settings.ACCOUNT_ACTIVATION_DAYS)
         return self.activation_key == None or (self.date_joined + expiration_date <= datetime.datetime.now())
     is_expired.boolean = True
-    is_expired.short_description = "expired"
+    is_expired.short_description = ugettext(u"Expiré")
     
     def save(self, *args, **kwargs):
         self.modified_at = datetime.datetime.now()
