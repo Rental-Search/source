@@ -50,7 +50,7 @@ COUNTRY_CHOICES = (
     ('YT', _(u'Mayotte')),
     ('MC', _(u'Monaco')),
     ('NO', _(u'Norvège')),
-    ('NC', _(u'Nouvelle-Calédonie'))
+    ('NC', _(u'Nouvelle-Calédonie')),
     ('NL', _(u'Pays-Bas')),
     ('PL', _(u'Pologne')),
     ('PF', _(u'Polynésie Française')),
