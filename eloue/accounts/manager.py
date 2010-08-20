@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-import re, hashlib, random
+import re, datetime, hashlib, random
 
 from django.contrib.auth.models import UserManager
 
@@ -45,7 +45,33 @@ class PatronManager(UserManager):
                 return patron
         return False
     
-    def create_inactive(self, username, email, password, send_email=True):
+    def create_user(self, username, email, password=None, pk=None):
+        """
+        Creates and saves a User with the given username, e-mail and password.
+        """
+        now = datetime.datetime.now()
+           
+        # Normalize the address by lowercasing the domain part of the email
+        # address.
+        try:
+            email_name, domain_part = email.strip().split('@', 1)
+        except ValueError:
+            pass
+        else:
+            email = '@'.join([email_name, domain_part.lower()])
+        
+        user = self.model(username=username, email=email, is_staff=False,
+                            is_active=True, is_superuser=False, last_login=now,
+                            date_joined=now, id=pk)
+        
+        if password:
+            user.set_password(password)
+        else:
+            user.set_unusable_password()
+        user.save(using=self._db)
+        return user
+    
+    def create_inactive(self, username, email, password, send_email=True, pk=None):
         """
         Create a new, inactive ``Patron`` and email its activation key to the
         ``Patron``, returning the new ``Patron``.
@@ -55,7 +81,7 @@ class PatronManager(UserManager):
         salt = hashlib.sha1(str(random.random())).hexdigest()[:5]
         activation_key = hashlib.sha1(salt+email).hexdigest()
         
-        new_patron = self.create_user(username, email, password)
+        new_patron = self.create_user(username, email, password, pk=pk)
         new_patron.is_active = False
         new_patron.activation_key = activation_key
         new_patron.save()
