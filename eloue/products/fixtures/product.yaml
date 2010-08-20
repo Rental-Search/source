@@ -1,6 +1,6 @@
 -   fields: {address: 1, category: 1, deposit: '250', description: 'Engrenage plantaire  haute
             performance 2 vitesses : dure de vie suprieure, transmission optimale,
-            fonctionnement rgulier.', lat: null, lon: null, owner: 1, quantity: 1,
+            fonctionnement rgulier.', owner: 1, quantity: 1,
         summary: Perceuse visseuse Philips}
     model: products.product
     pk: 1

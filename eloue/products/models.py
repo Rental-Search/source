@@ -17,6 +17,13 @@ UNIT_CHOICES = (
     (4, _('mois'))
 )
 
+CURRENCY_CHOICES = (
+    ('EUR', _(u'€')),
+    ('USD', _(u'$')),
+    ('GBP', _(u'£')),
+    ('JPY', _(u'¥'))
+)
+
 class Product(models.Model):
     """A product"""
     summary = models.CharField(null=False, max_length=255)
@@ -85,6 +92,7 @@ class PropertyValue(models.Model):
 class Price(models.Model):
     """A price"""
     amount = models.DecimalField(max_digits=8, decimal_places=2)
+    currency = models.CharField(null=False, max_length=3, choices=CURRENCY_CHOICES)
     product = models.ForeignKey(Product, related_name='%(class)s')
     
     def __unicode__(self):
