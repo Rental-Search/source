@@ -17,6 +17,56 @@ CIVILITY_CHOICES = (
     (2, _('Monsieur'))
 )
 
+COUNTRY_CHOICES = (
+    ('FR', _(u'France')),
+    ('BE', _(u'Belgique')),
+    ('LU', _(u'Luxembourg')),
+    ('RE', _(u'Réunion')),
+    ('DE', _(u'Allemagne')),
+    ('AD', _(u'Andore')),
+    ('AT', _(u'Autriche')),
+    ('CA', _(u'Canada')),
+    ('CY', _(u'Chypre')),
+    ('DK', _(u'Danemark')),
+    ('ES', _(u'Espagnole')),
+    ('US', _(u'États-Unis')),
+    ('FI', _(u'Finlande')),
+    ('GR', _(u'Grèce')),
+    ('GP', _(u'Guadeloupe')),
+    ('GG', _(u'Guernesey')),
+    ('GF', _(u'Guyane Française')),
+    ('HU', _(u'Hongrie')),
+    ('IE', _(u'Irlande')),
+    ('IS', _(u'Islande')),
+    ('IT', _(u'Italie')),
+    ('JP', _(u'Japon')),
+    ('JE', _(u'Jersey')),
+    ('LV', _(u'Lettonie')),
+    ('LI', _(u'Liechtenstein')),
+    ('LT', _(u'Lituanie')),
+    ('MT', _(u'Malte')),
+    ('MQ', _(u'Martinique')),
+    ('MU', _(u'Maurice')),
+    ('YT', _(u'Mayotte')),
+    ('MC', _(u'Monaco')),
+    ('NO', _(u'Norvège')),
+    ('NC', _(u'Nouvelle-Calédonie'))
+    ('NL', _(u'Pays-Bas')),
+    ('PL', _(u'Pologne')),
+    ('PF', _(u'Polynésie Française')),
+    ('PT', _(u'Portugal')),
+    ('RO', _(u'Roumanie')),
+    ('GB', _(u'Royaume-Uni')),
+    ('RU', _(u'Russie, Fédération de')),
+    ('PM', _(u'Saint-Pierre-et-Miquelon')),
+    ('VA', _(u'Saint-Siège (État de la cité du Vatican)')),
+    ('SE', _(u'Suède')),
+    ('CH', _(u'Suisse')),
+    ('CZ', _(u'Tchèque, République')),
+    ('TF', _(u'Terres Australes Françaises')),
+    ('TR', _(u'Turquie'))
+)
+
 PHONE_TYPES = (
     (0, _('Domicile')),
     (1, _('Mobile')),
@@ -66,10 +116,11 @@ class Address(models.Model):
     civility = models.IntegerField(choices=CIVILITY_CHOICES)
     address1 = models.CharField(max_length=255)
     address2 = models.CharField(max_length=255, null=True, blank=True)
-    city = models.CharField(null=False, max_length=255)
     zipcode = models.CharField(null=True, max_length=255)
     lat = models.FloatField(null=True, blank=True)
     lon = models.FloatField(null=True, blank=True)
+    city = models.CharField(null=False, max_length=255)
+    country = models.CharField(max_length=2, choices=COUNTRY_CHOICES, null=False)
 
 class PhoneNumber(models.Model):
     """A phone number"""
