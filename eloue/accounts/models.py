@@ -29,7 +29,7 @@ COUNTRY_CHOICES = (
     ('CA', _(u'Canada')),
     ('CY', _(u'Chypre')),
     ('DK', _(u'Danemark')),
-    ('ES', _(u'Espagnole')),
+    ('ES', _(u'Espagne')),
     ('US', _(u'États-Unis')),
     ('FI', _(u'Finlande')),
     ('GR', _(u'Grèce')),
@@ -50,6 +50,7 @@ COUNTRY_CHOICES = (
     ('MU', _(u'Maurice')),
     ('YT', _(u'Mayotte')),
     ('MC', _(u'Monaco')),
+    ('MA', _(u'Maroc')),
     ('NO', _(u'Norvège')),
     ('NC', _(u'Nouvelle-Calédonie')),
     ('NL', _(u'Pays-Bas')),
@@ -65,13 +66,16 @@ COUNTRY_CHOICES = (
     ('CH', _(u'Suisse')),
     ('CZ', _(u'Tchèque, République')),
     ('TF', _(u'Terres Australes Françaises')),
+    ('TN', _(u'Tunisie')),
     ('TR', _(u'Turquie'))
 )
 
 PHONE_TYPES = (
     (0, _('Domicile')),
-    (1, _('Mobile')),
-    (2, _('Fax'))
+    (1, _('Travail')),
+    (2, _('Mobile')),
+    (3, _('Fax')),
+    (4, _('Autre'))
 )
 
 class Patron(User):
@@ -114,7 +118,7 @@ class Patron(User):
 class Address(models.Model):
     """An address"""
     patron = models.ForeignKey(Patron, related_name='addresses')
-    civility = models.IntegerField(choices=CIVILITY_CHOICES)
+    civility = models.IntegerField(null=True, blank=True, choices=CIVILITY_CHOICES)
     address1 = models.CharField(max_length=255)
     address2 = models.CharField(max_length=255, null=True, blank=True)
     zipcode = models.CharField(null=True, max_length=255)

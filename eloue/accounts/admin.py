@@ -22,14 +22,15 @@ class PatronAdmin(UserAdmin):
         (_('Important dates'), {'fields': ('last_login', 'date_joined')}),
         (_('Groups'), {'classes': ('collapse',), 'fields': ('groups',)}),
     )
-    list_display = ('username', 'email', 'is_staff', 'is_active', 'is_expired', 'is_professional', 'date_joined', 'modified_at')
+    list_display = ('username', 'email', 'company_name', 'is_staff', 'is_active', 'is_expired', 'is_professional', 'date_joined', 'modified_at')
     date_hierarchy = 'date_joined'
-    list_filter = ('is_active', 'is_staff', 'is_superuser')
+    list_filter = ('is_active', 'is_staff', 'is_superuser', 'is_professional')
     save_on_top = True
     ordering = ['-date_joined']
     inlines = [ AddressInline, PhoneNumberInline ]
     form = PatronChangeForm
     actions = ['send_activation_email']
+    search_fields = ('username', 'first_name', 'last_name', 'email', 'phones__number', 'addresses__city', 'company_name')
     
     def send_activation_email(self, request, queryset):
         for patron in queryset:

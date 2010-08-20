@@ -14,6 +14,7 @@ south>=0.7
 sphinx>=1.0.2
 -e svn+http://code.djangoproject.com/svn/django/branches/releases/1.2.X#egg=django
 -e git://github.com/e-loue/django-faq.git#egg=faq
+-e git://github.com/e-loue/geocoders.git#egg=geocoders
 -e git://github.com/robhudson/django-debug-toolbar.git#egg=debug_toolbar
 -e git://github.com/toastdriven/pysolr.git#egg=pysolr
 -e git://github.com/e-loue/django-storages.git#egg=storages
