@@ -33,7 +33,7 @@ class Product(models.Model):
     address = models.ForeignKey(Address, related_name='products')
     quantity = models.IntegerField(null=False)
     archived = models.BooleanField(default=False, db_index=True)
-    allowed = models.BooleanField(defaut=True, db_index=True)
+    allowed = models.BooleanField(default=True, db_index=True)
     category = models.ForeignKey('Category', related_name='products')
     owner = models.ForeignKey(Patron, related_name='products')
     
