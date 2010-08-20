@@ -8,6 +8,7 @@ from django.utils.encoding import smart_unicode
 from storages.backends.image import ImageStorage
 
 from eloue.accounts.models import Patron, Address
+from eloue.products.manager import ProductManager
 
 UNIT_CHOICES = (
     (0, _('heure')),
@@ -31,8 +32,11 @@ class Product(models.Model):
     description = models.TextField(null=False)
     address = models.ForeignKey(Address, related_name='products')
     quantity = models.IntegerField(null=False)
+    archived = models.BooleanField(default=False, db_index=True)
     category = models.ForeignKey('Category', related_name='products')
     owner = models.ForeignKey(Patron, related_name='products')
+    
+    objects = ProductManager()
     
     def clean(self):
         from django.core.exceptions import ValidationError
