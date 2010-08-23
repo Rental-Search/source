@@ -1,7 +1,6 @@
 -f http://effbot.org/downloads/Imaging-1.1.7.tar.gz
 coverage>=3.3.1
 django-compress>=1.0
-django-haystack==1.0.1-final
 django-nose>=0.1.2
 fabric>=0.9
 Imaging==1.1.7
@@ -18,5 +17,6 @@ sphinx>=1.0.2
 -e git://github.com/e-loue/geocoders.git#egg=geocoders
 -e git://github.com/robhudson/django-debug-toolbar.git#egg=debug_toolbar
 -e git://github.com/e-loue/pysolr.git#egg=pysolr
+-e git://github.com/e-loue/django-haystack.git#egg=haystack
 -e git://github.com/e-loue/django-storages.git#egg=storages
 -e git://github.com/e-loue/django-lean.git#egg=django_lean

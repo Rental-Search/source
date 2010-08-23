@@ -46,5 +46,9 @@ class PatronAdmin(UserAdmin):
 class CommentAdmin(admin.ModelAdmin):
     pass
 
+class AddressAdmin(admin.ModelAdmin):
+    pass
+
+admin.site.register(Address, AddressAdmin)
 admin.site.register(Patron, PatronAdmin)
 admin.site.register(Comment, CommentAdmin)

@@ -5,10 +5,14 @@ from django.contrib.gis.db import models
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.contrib.sites.models import Site
+from django.contrib.gis.geos import Point
 from django.core.mail import EmailMultiAlternatives
+from django.utils.encoding import smart_str
 from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import ugettext
 from django.template.loader import render_to_string
+
+from geocoders.google import geocoder
 
 from eloue.accounts.manager import PatronManager
 
@@ -127,6 +131,14 @@ class Address(models.Model):
     country = models.CharField(max_length=2, choices=COUNTRY_CHOICES, null=False)
     
     objects = models.GeoManager()
+    
+    def save(self, *args, **kwargs):
+        if not self.position: # TODO : improve that part
+            geocode = geocoder(settings.GOOGLE_API_KEY)
+            name, (lat, lon) = geocode(smart_str("%s %s %s %s" % (self.address1, self.address2, self.zipcode, self.city)))
+            if lat and lon:
+                self.position = Point(lat, lon)
+        super(Address, self).save(*args, **kwargs)
 
 class PhoneNumber(models.Model):
     """A phone number"""

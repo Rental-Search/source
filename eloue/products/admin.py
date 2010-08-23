@@ -17,6 +17,9 @@ class StandardPriceInline(admin.TabularInline):
 
 class ProductAdmin(admin.ModelAdmin):
     inlines = [ PictureInline, PropertyValueInline, StandardPriceInline, SeasonalPriceInline ]
+    raw_id_fields = ("owner", "address")
+    list_display = ('summary', 'deposit', 'quantity', 'is_archived', 'is_allowed')
+    list_filter = ('is_archived', 'is_allowed')
 
 class CategoryAdmin(admin.ModelAdmin):
     list_display = ('name', 'parent')
