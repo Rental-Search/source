@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import datetime
 
-from django.db import models
+from django.contrib.gis.db import models
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.contrib.sites.models import Site
@@ -122,10 +122,11 @@ class Address(models.Model):
     address1 = models.CharField(max_length=255)
     address2 = models.CharField(max_length=255, null=True, blank=True)
     zipcode = models.CharField(null=True, max_length=255)
-    lat = models.FloatField(null=True, blank=True)
-    lon = models.FloatField(null=True, blank=True)
+    position = models.PointField(null=True, blank=True)
     city = models.CharField(null=False, max_length=255)
     country = models.CharField(max_length=2, choices=COUNTRY_CHOICES, null=False)
+    
+    objects = models.GeoManager()
 
 class PhoneNumber(models.Model):
     """A phone number"""

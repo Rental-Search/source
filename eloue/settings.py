@@ -122,6 +122,7 @@ INSTALLED_APPS = (
     'django.contrib.sitemaps',
     'django.contrib.formtools',
     'django.contrib.markup',
+    'django.contrib.gis',
     'south',
     'django_lean.experiments',
     'compress',
