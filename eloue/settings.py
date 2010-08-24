@@ -179,3 +179,7 @@ HAYSTACK_INCLUDE_SPELLING = True
 
 # Google API
 GOOGLE_API_KEY = 'ABQIAAAA7bPNcG5t1-bTyW9iNmI-jRRqVDjnV4vohYMgEqqi0RF2UFYT-xSSwfcv2yfC-sACkmL4FuG-A_bScQ'
+
+# SSL configuration
+USE_HTTPS = getattr(local, 'USE_HTTPS', True)
+SESSION_COOKIE_SECURE = getattr(local, 'SESSION_COOKIE_SECURE', True)
