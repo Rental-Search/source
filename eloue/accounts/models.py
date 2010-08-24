@@ -7,7 +7,7 @@ from django.contrib.auth.models import User
 from django.contrib.sites.models import Site
 from django.contrib.gis.geos import Point
 from django.core.mail import EmailMultiAlternatives
-from django.utils.encoding import smart_str
+from django.utils.encoding import smart_unicode, smart_str
 from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import ugettext
 from django.template.loader import render_to_string
@@ -84,11 +84,12 @@ PHONE_TYPES = (
 
 class Patron(User):
     """A member"""
+    civility = models.IntegerField(null=True, blank=True, choices=CIVILITY_CHOICES)
+    company_name = models.CharField(null=True, max_length=255)
     activation_key = models.CharField(null=True, blank=True, max_length=40)
     is_professional = models.BooleanField(_('professionnel'), null=False, default=False)
-    company_name = models.CharField(null=True, max_length=255)
-    last_ip = models.IPAddressField(null=True)
     modified_at = models.DateTimeField(_('date de modification'), editable=False)
+    last_ip = models.IPAddressField(null=True)
     
     objects = PatronManager()
     
@@ -122,7 +123,6 @@ class Patron(User):
 class Address(models.Model):
     """An address"""
     patron = models.ForeignKey(Patron, related_name='addresses')
-    civility = models.IntegerField(null=True, blank=True, choices=CIVILITY_CHOICES)
     address1 = models.CharField(max_length=255)
     address2 = models.CharField(max_length=255, null=True, blank=True)
     zipcode = models.CharField(null=True, max_length=255)
@@ -132,6 +132,9 @@ class Address(models.Model):
     
     objects = models.GeoManager()
     
+    def __unicode__(self):
+        return smart_unicode("%s %s %s %s (%s, %s)" % (self.address1, self.address2, self.zipcode, self.city, self.position.x, self.position.y))
+    
     def save(self, *args, **kwargs):
         if not self.position: # TODO : improve that part
             geocode = geocoder(settings.GOOGLE_API_KEY)
@@ -139,6 +142,10 @@ class Address(models.Model):
             if lat and lon:
                 self.position = Point(lat, lon)
         super(Address, self).save(*args, **kwargs)
+        
+    class Meta:
+        verbose_name_plural = _('addresses')
+    
 
 class PhoneNumber(models.Model):
     """A phone number"""

@@ -104,6 +104,8 @@ class Command(BaseCommand):
                 else: 
                     address2 = None
                 
+                patron.civility = CIVILITY_MAP[user_info['title']]
+                
                 city = smart_unicode(user_info['city'], encoding='latin1')
                 zipcode = smart_unicode(user_info['zip'], encoding='latin1')
                 country = COUNTRIES_MAP[user_info['country']]
@@ -115,7 +117,6 @@ class Command(BaseCommand):
                     else:
                         position = None
                     patron.addresses.create(
-                        civility=CIVILITY_MAP[user_info['title']],
                         address1=address1,
                         address2=address2,
                         zipcode=zipcode,

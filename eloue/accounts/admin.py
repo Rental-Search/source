@@ -17,7 +17,7 @@ class PhoneNumberInline(admin.TabularInline):
 class PatronAdmin(UserAdmin):
     fieldsets = (
         (None, {'fields': ('username', 'password')}),
-        (_('Personal info'), {'fields': ('first_name', 'last_name', 'email')}),
+        (_('Personal info'), {'fields': ('civility', 'first_name', 'last_name', 'email')}),
         (_('Permissions'), {'fields': ('is_staff', 'is_active', 'is_superuser', 'user_permissions')}),
         (_('Important dates'), {'fields': ('last_login', 'date_joined')}),
         (_('Groups'), {'classes': ('collapse',), 'fields': ('groups',)}),
@@ -47,7 +47,14 @@ class CommentAdmin(admin.ModelAdmin):
     pass
 
 class AddressAdmin(admin.ModelAdmin):
-    pass
+    list_display = ('address1', 'address2', 'city', 'country')
+    list_filter = ('country',)
+    save_on_top = True
+    search_fields = ('address1', 'address2', 'zipcode', 'city')
+    fieldsets = (
+        (None, {'fields':('address1', 'address2', 'zipcode', 'city')}),
+        (_('Geolocation'), {'classes':('collapse',), 'fields':('position',)})
+    )
 
 admin.site.register(Address, AddressAdmin)
 admin.site.register(Patron, PatronAdmin)
