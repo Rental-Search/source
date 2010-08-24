@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import MySQLdb
+from lxml import html
 
 from django.template.defaultfilters import slugify
 from django.core.management.base import BaseCommand
@@ -8,9 +9,6 @@ from django.contrib.gis.measure import D
 from django.utils.encoding import smart_unicode, smart_str
 
 from geocoders.google import geocoder
-
-from eloue.accounts.models import Patron
-from eloue.products.models import Category
 
 CIVILITY_MAP = {
     'Mr':2,
@@ -44,7 +42,12 @@ COUNTRIES_MAP = {
 PUBLISH_MAP = { # WARN : We invert value because we mark them as archived rather than published
     'Y':False,
     'N':True
-} 
+}
+
+def cleanup_html_entities(text):
+    """Remove html entitites from text"""
+    doc = html.fromstring(text)
+    return html.tostring(doc, encoding='utf-8', method='html')
 
 def cleanup_phone_number(phone_number):
     """Cleanup phone number format"""
@@ -52,6 +55,7 @@ def cleanup_phone_number(phone_number):
 
 class Command(BaseCommand):
     def import_category_tree(self, cursor):
+        from eloue.products.models import Category
         cursor.execute("""SELECT category_id, category_name FROM abs_vm_category""")
         result_set = cursor.fetchall()
         for row in result_set:
@@ -66,6 +70,7 @@ class Command(BaseCommand):
                 category.save()
     
     def import_members(self, cursor):
+        from eloue.accounts.models import Patron
         geocode = geocoder('ABQIAAAA7bPNcG5t1-bTyW9iNmI-jRRqVDjnV4vohYMgEqqi0RF2UFYT-xSSwfcv2yfC-sACkmL4FuG-A_bScQ')
         cursor.execute("""SELECT id, username, email, password, registerDate, activation, lat, 'long' FROM abs_users""")
         result_set = cursor.fetchall()
@@ -131,7 +136,8 @@ class Command(BaseCommand):
                 patron.save()
     
     def import_products(self, cursor):
-        # TODO : Missing category and address
+        from eloue.accounts.models import Patron
+        from eloue.products.models import Category
         failures = set()
         cursor.execute("""SELECT product_id, product_name, product_s_desc, product_desc, count(product_desc) AS quantity, product_full_image, product_publish, prix, caution, vendor_id, product_lat, product_lng, localisation FROM abs_vm_product GROUP BY product_desc, product_name ORDER BY quantity DESC""")
         result_set = cursor.fetchall()
@@ -141,6 +147,9 @@ class Command(BaseCommand):
                 description = smart_unicode(row['product_s_desc'], encoding='latin1')
             else:
                 description = smart_unicode(row['product_desc'], encoding='latin1')
+            
+            summary = cleanup_html_entities(summary)
+            description = cleanup_html_entities(description)
             
             vendor_id = row['vendor_id']
             if vendor_id != 0:
