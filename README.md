@@ -10,6 +10,7 @@ Pré-requis
 Base de données
 ---------------
 
+    $ initdb /usr/local/var/postgres
     $ pg_ctl -D /usr/local/var/postgres -l /usr/local/var/postgres/server.log start
     $ createuser --createdb eloue
     $ createlang -d template_postgis plpgsql
@@ -40,4 +41,4 @@ Pour faire tourner un serveur :
 
 Pour faire tourner les tests :
 
-    $ nosetests
+    $ python manage.py test
