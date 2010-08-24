@@ -23,6 +23,7 @@ DATABASES = {
         'PASSWORD':getattr(local, 'DATABASE_PASSWORD', ''),
         'HOST':getattr(local, 'DATABASE_HOST', ''),
         'PORT':getattr(local, 'DATABASE_PORT', ''),
+        'OPTIONS':getattr(local, 'DATABASE_OPTIONS', {}),
         'TEST_NAME':':memory:'
     }
 }
