@@ -2,6 +2,7 @@
 import MySQLdb
 
 from lxml import html
+from optparse import make_option
 
 from django.db import connection
 from django.template.defaultfilters import slugify
@@ -46,15 +47,46 @@ PUBLISH_MAP = { # WARN : We invert value because we mark them as archived rather
 
 def cleanup_html_entities(text):
     """Remove html entitites from text"""
-    doc = html.fromstring(text)
-    return html.tostring(doc, encoding='utf-8', method='html')
+    if text:
+        doc = html.fromstring(text)
+        return html.tostring(doc, encoding='utf-8', method='html')
+    else:
+        return text
 
 def cleanup_phone_number(phone_number):
     """Cleanup phone number format"""
     return phone_number.replace('O', '0').replace('.', '').replace('o', '').replace(' ', '').replace('/', '')
 
 class Command(BaseCommand):
-    def import_category_tree(self, cursor):
+    help = "Migrate data from elouweb to eloue"
+    option_list = BaseCommand.option_list + (
+        make_option('--migrate-categories',
+            action='store_true',
+            dest='categories',
+            default=False,
+            help='Migrate categories tree'
+        ),
+        make_option('--migrate-members',
+            action='store_true',
+            dest='members',
+            default=False,
+            help='Migrate members data'
+        ),
+        make_option('--migrate-products',
+            action='store_true',
+            dest='products',
+            default=False,
+            help='Migrate products data'
+        ),
+        make_option('--status',
+            action='store_true',
+            dest='status',
+            default=False,
+            help='Follow status of migration'
+        )
+    )
+
+    def import_category_tree(self, cursor, status=False):
         from eloue.products.models import Category
         
         cursor.execute("""SELECT category_id, category_name FROM abs_vm_category""")
@@ -70,12 +102,15 @@ class Command(BaseCommand):
                 category.parent_id = original_parent_id
                 category.save()
     
-    def import_members(self, cursor):
+    def import_members(self, cursor, status=False):
         from eloue.accounts.models import Patron
         
         cursor.execute("""SELECT id, username, email, password, registerDate, activation, lat, 'long' FROM abs_users""")
         result_set = cursor.fetchall()
-        for row in result_set:
+        for i, row in enumerate(result_set):
+            if status:
+                print '%s\r' % ' '*20, # clean up row
+            
             username = smart_unicode(row['username'], encoding='latin1')
             email = smart_unicode(row['email'], encoding='latin1')
             password = "md5$$%s" % row['password']
@@ -132,14 +167,20 @@ class Command(BaseCommand):
                     patron.phones.create(number=smart_unicode(cleanup_phone_number(user_info['fax']), encoding='latin1'), kind=3)
                 
                 patron.save()
+            
+            if status:
+                print ' Migrate members : %d%%' % ((i * 100) / len(result_set)), # note ending with comma
     
-    def import_products(self, cursor):
+    def import_products(self, cursor, status=False):
         from eloue.accounts.models import Patron
         from eloue.products.models import Category
         
         cursor.execute("""SELECT product_id, product_name, product_s_desc, product_desc, count(product_desc) AS quantity, product_full_image, product_publish, prix, caution, vendor_id, product_lat, product_lng, localisation FROM abs_vm_product GROUP BY product_desc, product_name ORDER BY quantity DESC""")
         result_set = cursor.fetchall()
-        for row in result_set:
+        for i, row in enumerate(result_set):
+            if status:
+                print '%s\r' % ' '*20, # clean up row
+            
             summary = smart_unicode(row['product_name'], encoding='latin1')
             if not row['product_desc'] and row['product_s_desc']:
                 description = smart_unicode(row['product_s_desc'], encoding='latin1')
@@ -153,24 +194,34 @@ class Command(BaseCommand):
             if vendor_id != 0:
                 owner = Patron.objects.get(pk=vendor_id)
                 if owner.addresses.all():
-                    #position = Point(float(row['product_lat']), float(row['product_lng']))
-                    #addresses = owner.addresses.filter(position__distance_lte=(position, D(km=25)))
-                    #if not addresses:               
-                    pass    
+                    position = Point(float(row['product_lat']), float(row['product_lng']))
+                    addresses = owner.addresses.filter(position__distance_lte=(position, D(km=15)))
+                    if addresses:
+                        address = addresses[0]    
+                    else:
+                        #print "can't find a place for %d" % row['product_id']
+                        pass # TODO : find out what to do
+                else:
+                    print "owner has no addresses : %d" % vendor_id
                 
-                cursor.execute("""SELECT category_id FROM abs_vm_product_category_xref WHERE product_id = %s""" % row['product_id'])
-                result = cursor.fetchone()
-                category = Category.objects.get(pk=int(result['category_id']))
+                #cursor.execute("""SELECT category_id FROM abs_vm_product_category_xref WHERE product_id = %s""" % row['product_id'])
+                #result = cursor.fetchone()
+                #category = Category.objects.get(pk=int(result['category_id']))
                 
                 #product = Product.objects.create(
+                #    pk=row['product_id']
                 #    summary=summary,
                 #    description=description,
                 #    category=category,
                 #    archived=PUBLISH_MAP[row['product_publish']],
                 #    deposit=row['caution'],
                 #    quantity=row['quantity'],
-                #    owner=owner
+                #    owner=owner,
+                #    address=address
                 #)
+            
+            if status:
+                print ' Migrate products : %d%%' % ((i * 100) / len(result_set)), # note ending with comma
     
     def update_sequence(self):
         db = connection.cursor()
@@ -180,8 +231,12 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         mysql_db = MySQLdb.connect(unix_socket='/tmp/mysql.sock', user='root', passwd='facteur', db="eloueweb")
         cursor = mysql_db.cursor(MySQLdb.cursors.DictCursor)
-        self.import_category_tree(cursor)
-        self.import_members(cursor)
-        self.import_products(cursor)
+        status = options.get('status')
+        if options.get('categories'):
+            self.import_category_tree(cursor, status)
+        if options.get('members'):
+            self.import_members(cursor, status)
+        if options.get('products'):
+            self.import_products(cursor, status)
+        self.update_sequence()
     
-
