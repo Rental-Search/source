@@ -12,6 +12,7 @@ Base de données
 
     $ pg_ctl -D /usr/local/var/postgres -l /usr/local/var/postgres/server.log start
     $ createuser --createdb eloue
+    $ createdb -E UTF8 template_postgis
     $ createlang -d template_postgis plpgsql
     $ psql -d postgres -c "UPDATE pg_database SET datistemplate='true' WHERE datname='template_postgis';"
     $ psql -d template_postgis -f /usr/local/Cellar/postgis/1.5.1/share/postgis/postgis.sql
@@ -32,7 +33,7 @@ Usage
 
 Pour avoir un shell :
 
-    $ python manage.py shell``
+    $ python manage.py shell
 
 Pour faire tourner un serveur :
 
