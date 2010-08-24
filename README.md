@@ -4,7 +4,7 @@ E-Loue
 Pré-requis
 ----------
 
-    $ brew install git subversion python pip jpeg postgresl postgis gdal
+    $ brew install git subversion python pip jpeg postgresql postgis gdal solr
     $ pip install mercurial virtualenv pyflakes
     
 Base de données
@@ -22,6 +22,12 @@ Base de données
     $ psql -d template_postgis -c "GRANT ALL ON geography_columns TO PUBLIC;"
     $ psql -d template_postgis -c "GRANT ALL ON spatial_ref_sys TO PUBLIC;"
     $ createdb -O eloue -T template_postgis -E UTF-8 eloue
+
+Moteur de recherche
+-------------------
+
+    $ cp solr.war /usr/local/Cellar/solr/1.4.1/example/webapps/
+    $ solr `pwd`/deploy/solr/
 
 Installation
 ------------
