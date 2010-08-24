@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 import MySQLdb
+
 from lxml import html
 
+from django.db import connection
 from django.template.defaultfilters import slugify
 from django.core.management.base import BaseCommand
 from django.contrib.gis.geos import Point
@@ -170,10 +172,16 @@ class Command(BaseCommand):
                 #    owner=owner
                 #)
     
+    def update_sequence(self):
+        db = connection.cursor()
+        db.execute("""SELECT setval('auth_user_id_seq', (SELECT MAX(id) FROM auth_user))""")
+        db.execute("""SELECT setval('products_product_id_seq', (SELECT MAX(id) FROM products_product))""")
+    
     def handle(self, *args, **options):
-        connection = MySQLdb.connect(unix_socket='/tmp/mysql.sock', user='root', passwd='facteur', db="eloueweb")
-        cursor = connection.cursor(MySQLdb.cursors.DictCursor)
+        mysql_db = MySQLdb.connect(unix_socket='/tmp/mysql.sock', user='root', passwd='facteur', db="eloueweb")
+        cursor = mysql_db.cursor(MySQLdb.cursors.DictCursor)
         self.import_category_tree(cursor)
         self.import_members(cursor)
         self.import_products(cursor)
     
+
