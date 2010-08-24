@@ -133,7 +133,10 @@ class Address(models.Model):
     objects = models.GeoManager()
     
     def __unicode__(self):
-        return smart_unicode("%s %s %s %s (%s, %s)" % (self.address1, self.address2, self.zipcode, self.city, self.position.x, self.position.y))
+        if self.position:
+            return smart_unicode("%s %s %s %s (%s, %s)" % (self.address1, self.address2, self.zipcode, self.city, self.position.x, self.position.y))
+        else:
+            return smart_unicode("%s %s %s %s" % (self.address1, self.address2, self.zipcode, self.city))
     
     def save(self, *args, **kwargs):
         if not self.position: # TODO : improve that part

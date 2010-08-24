@@ -6,9 +6,7 @@ from django.template.defaultfilters import slugify
 from django.core.management.base import BaseCommand
 from django.contrib.gis.geos import Point
 from django.contrib.gis.measure import D
-from django.utils.encoding import smart_unicode, smart_str
-
-from geocoders.google import geocoder
+from django.utils.encoding import smart_unicode
 
 CIVILITY_MAP = {
     'Mr':2,
@@ -56,6 +54,7 @@ def cleanup_phone_number(phone_number):
 class Command(BaseCommand):
     def import_category_tree(self, cursor):
         from eloue.products.models import Category
+        
         cursor.execute("""SELECT category_id, category_name FROM abs_vm_category""")
         result_set = cursor.fetchall()
         for row in result_set:
@@ -71,7 +70,7 @@ class Command(BaseCommand):
     
     def import_members(self, cursor):
         from eloue.accounts.models import Patron
-        geocode = geocoder('ABQIAAAA7bPNcG5t1-bTyW9iNmI-jRRqVDjnV4vohYMgEqqi0RF2UFYT-xSSwfcv2yfC-sACkmL4FuG-A_bScQ')
+        
         cursor.execute("""SELECT id, username, email, password, registerDate, activation, lat, 'long' FROM abs_users""")
         result_set = cursor.fetchall()
         for row in result_set:
@@ -105,24 +104,20 @@ class Command(BaseCommand):
                     address2 = None
                 
                 patron.civility = CIVILITY_MAP[user_info['title']]
+                patron.last_name = smart_unicode(user_info['last_name'], encoding='latin1')
+                patron.first_name = smart_unicode(user_info['first_name'], encoding='latin1')
                 
                 city = smart_unicode(user_info['city'], encoding='latin1')
                 zipcode = smart_unicode(user_info['zip'], encoding='latin1')
                 country = COUNTRIES_MAP[user_info['country']]
                 
                 if address1 and country:
-                    name, (lat, lon) = geocode(smart_str("%s %s %s %s" % (address1, address2, zipcode, city)))
-                    if lat and lon:
-                        position = Point(lat, lon)
-                    else:
-                        position = None
                     patron.addresses.create(
                         address1=address1,
                         address2=address2,
                         zipcode=zipcode,
                         city=city,
-                        country=country,
-                        position=position
+                        country=country
                     )
                 
                 if user_info['phone_1']:
@@ -139,7 +134,7 @@ class Command(BaseCommand):
     def import_products(self, cursor):
         from eloue.accounts.models import Patron
         from eloue.products.models import Category
-        failures = set()
+        
         cursor.execute("""SELECT product_id, product_name, product_s_desc, product_desc, count(product_desc) AS quantity, product_full_image, product_publish, prix, caution, vendor_id, product_lat, product_lng, localisation FROM abs_vm_product GROUP BY product_desc, product_name ORDER BY quantity DESC""")
         result_set = cursor.fetchall()
         for row in result_set:
@@ -156,10 +151,10 @@ class Command(BaseCommand):
             if vendor_id != 0:
                 owner = Patron.objects.get(pk=vendor_id)
                 if owner.addresses.all():
-                    position = Point(float(row['product_lat']), float(row['product_lng']))
-                    addresses = owner.addresses.filter(position__distance_lte=(position, D(km=25)))
-                    if not addresses:
-                        failures.add(owner.username)
+                    #position = Point(float(row['product_lat']), float(row['product_lng']))
+                    #addresses = owner.addresses.filter(position__distance_lte=(position, D(km=25)))
+                    #if not addresses:               
+                    pass    
                 
                 cursor.execute("""SELECT category_id FROM abs_vm_product_category_xref WHERE product_id = %s""" % row['product_id'])
                 result = cursor.fetchone()
@@ -174,9 +169,6 @@ class Command(BaseCommand):
                 #    quantity=row['quantity'],
                 #    owner=owner
                 #)
-        print len(failures)
-            
-            
     
     def handle(self, *args, **options):
         connection = MySQLdb.connect(unix_socket='/tmp/mysql.sock', user='root', passwd='facteur', db="eloueweb")
