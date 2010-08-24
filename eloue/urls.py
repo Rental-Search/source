@@ -5,6 +5,7 @@ from django.contrib import admin
 from django.contrib.auth.views import login, logout_then_login, password_reset, password_reset_confirm, password_reset_done, password_reset_complete
 from django.contrib.sitemaps.views import sitemap
 
+from eloue.sitemaps import FlatPageSitemap, PatronSitemap, ProductSitemap
 from eloue.accounts.forms import EmailAuthenticationForm, EmailPasswordResetForm
 from eloue.accounts.views import activate
 

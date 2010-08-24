@@ -1,0 +1,3 @@
+-   fields: {domain: www.e-loue.com, name: e-loue}
+    model: sites.site
+    pk: 1

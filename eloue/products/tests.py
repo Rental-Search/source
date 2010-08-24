@@ -36,7 +36,7 @@ class ProductTest(TestCase):
     
 
 class ReviewTest(TestCase):
-    fixtures = ['product']
+    fixtures = ['patron', 'address', 'product']
     
     def test_score_values_negative(self):
         review = Review(score=-1.0, product_id=1, description='Incorrect')
@@ -55,7 +55,7 @@ class ReviewTest(TestCase):
     
 
 class PriceTest(TestCase):
-    fixtures = ['product']
+    fixtures = ['patron', 'address', 'product']
     
     def test_amount_values_negative(self):
         price = Price(amount=-1, product_id=1, currency='EUR')
@@ -70,7 +70,7 @@ class PriceTest(TestCase):
     
 
 class StandardPriceTest(TestCase):
-    fixtures = ['product']
+    fixtures = ['address', 'product']
     
     def test_product_pricing(self):
         standard_price = StandardPrice.objects.create(unit=1, amount=10, product_id=1, currency='EUR')
@@ -83,7 +83,7 @@ class StandardPriceTest(TestCase):
     
 
 class SeasonalPriceTest(TestCase):
-    fixtures = ['product']
+    fixtures = ['patron', 'address', 'product']
     
     def test_product_pricing(self):
         seasonal_price = SeasonalPrice.objects.create(

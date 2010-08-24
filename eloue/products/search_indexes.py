@@ -1,6 +1,7 @@
 #-*- coding: utf-8 -*-
 from haystack.sites import site
 from haystack.indexes import RealTimeSearchIndex, CharField, BooleanField, IntegerField, DateField, FloatField
+from haystack.exceptions import AlreadyRegistered
 
 from eloue.products.models import Product
 
@@ -14,5 +15,7 @@ class ProductIndex(RealTimeSearchIndex):
     def get_queryset(self):
         return Product.objects.active()
     
-
-site.register(Product, ProductIndex)
+try:
+    site.register(Product, ProductIndex)
+except AlreadyRegistered:
+    pass
