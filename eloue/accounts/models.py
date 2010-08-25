@@ -125,7 +125,7 @@ class Address(models.Model):
     patron = models.ForeignKey(Patron, related_name='addresses')
     address1 = models.CharField(max_length=255)
     address2 = models.CharField(max_length=255, null=True, blank=True)
-    zipcode = models.CharField(null=True, max_length=255)
+    zipcode = models.CharField(null=True, max_length=9)
     position = models.PointField(null=True, blank=True)
     city = models.CharField(null=False, max_length=255)
     country = models.CharField(max_length=2, choices=COUNTRY_CHOICES, null=False)
