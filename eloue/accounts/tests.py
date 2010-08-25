@@ -2,10 +2,11 @@
 import datetime
 
 from django.core import mail
-from django.test import TestCase
 from django.core.exceptions import ValidationError
+from django.contrib.gis.geos import Point
+from django.test import TestCase
 
-from eloue.accounts.models import Patron, Comment
+from eloue.accounts.models import Patron, Address, Comment
 
 class AccountManagerTest(TestCase):
     def test_inactive_account_creation(self):
@@ -72,6 +73,63 @@ class AccountTest(TestCase):
         modified_at = patron.modified_at
         patron.save()
         self.assertTrue(modified_at <= patron.modified_at <= datetime.datetime.now())
+    
+
+class AddressTest(TestCase):
+    fixtures = ['patron']
+    
+    def test_latitude_too_high(self):
+        address = Address(position=Point(270, 40),
+            address1='11, rue debelleyme',
+            patron_id=1,
+            country='FR',
+            city='Paris',
+            zipcode='75003'
+        )
+        self.assertRaises(ValidationError, address.full_clean) 
+    
+    def test_latitude_too_low(self):
+        address = Address(position=Point(-270, 40),
+            address1='11, rue debelleyme',
+            patron_id=1,
+            country='FR',
+            city='Paris',
+            zipcode='75003'
+        )
+        self.assertRaises(ValidationError, address.full_clean)
+    
+    def test_longitude_too_high(self):
+        address = Address(position=Point(40, 270),
+            address1='11, rue debelleyme',
+            patron_id=1,
+            country='FR',
+            city='Paris',
+            zipcode='75003'
+        )
+        self.assertRaises(ValidationError, address.full_clean) 
+    
+    def test_longitude_too_low(self):
+        address = Address(position=Point(40, -270),
+            address1='11, rue debelleyme',
+            patron_id=1,
+            country='FR',
+            city='Paris',
+            zipcode='75003'
+        )
+        self.assertRaises(ValidationError, address.full_clean) 
+    
+    def test_correct_coordinates(self):
+        try:
+            address = Address(position=Point(48.8613232, 2.3631101),
+                address1='11, rue debelleyme',
+                patron_id=1,
+                country='FR',
+                city='Paris',
+                zipcode='75003'
+            )
+            address.full_clean()
+        except ValidationError:
+            self.fail(e)
     
 
 class CommentTest(TestCase):

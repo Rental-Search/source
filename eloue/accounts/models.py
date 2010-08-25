@@ -147,6 +147,12 @@ class Address(models.Model):
         else:
             return smart_unicode("%s %s %s %s" % (self.address1, self.address2, self.zipcode, self.city))
     
+    def clean(self):
+        from django.core.exceptions import ValidationError
+        if self.position:
+            if self.position.x > 90 or self.position.x < -90 or self.position.y < -180 or self.position.y > 180:
+                raise ValidationError(_(u"Coordonnées géographiques incorrectes"))
+    
     def save(self, *args, **kwargs):
         if not self.position: # TODO : improve that part
             geocode = geocoder(settings.GOOGLE_API_KEY)
