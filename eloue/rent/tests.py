@@ -7,7 +7,8 @@ from django.core.exceptions import ValidationError
 from eloue.rent.models import Booking
 
 class BookingTest(TestCase):
-    fixtures = ['patron']
+    fixtures = ['patron', 'address', 'product']
+    
     def test_booking_created_at(self):
         booking = Booking.objects.create(
             started_at=datetime.datetime.now(),

@@ -70,7 +70,16 @@ class PriceTest(TestCase):
     
 
 class StandardPriceTest(TestCase):
-    fixtures = ['address', 'product']
+    fixtures = ['patron', 'address', 'product']
+    
+    def setUp(self):
+        from django.db import connection
+        self.isolation_level = connection.isolation_level
+        connection._set_isolation_level(0)
+    
+    def tearDown(self):
+        from django.db import connection
+        connection._set_isolation_level(self.isolation_level)
     
     def test_product_pricing(self):
         standard_price = StandardPrice.objects.create(unit=1, amount=10, product_id=1, currency='EUR')
@@ -85,11 +94,20 @@ class StandardPriceTest(TestCase):
 class SeasonalPriceTest(TestCase):
     fixtures = ['patron', 'address', 'product']
     
+    def setUp(self):
+        from django.db import connection
+        self.isolation_level = connection.isolation_level
+        connection._set_isolation_level(0)
+    
+    def tearDown(self):
+        from django.db import connection
+        connection._set_isolation_level(self.isolation_level)
+    
     def test_product_pricing(self):
         seasonal_price = SeasonalPrice.objects.create(
             name='Haute saison',
             product_id=1,
-            amount=20,
+            amount=30,
             currency='EUR',
             started_at=datetime.datetime.now(),
             ended_at=datetime.datetime.now() + datetime.timedelta(days=3)
@@ -98,6 +116,8 @@ class SeasonalPriceTest(TestCase):
         self.assertTrue(seasonal_price in product.seasonalprice.all())
     
     def test_pricing_uniqueness(self):
+        from django.db import connection
+        self.assertEquals(connection.isolation_level, 0)
         SeasonalPrice.objects.create(
             name='Haute saison',
             product_id=1,
@@ -109,7 +129,7 @@ class SeasonalPriceTest(TestCase):
         self.assertRaises(IntegrityError, SeasonalPrice.objects.create, 
             name='Haute saison',
             product_id=1,
-            amount=20,
+            amount=25,
             currency='EUR',
             started_at=datetime.datetime.now(),
             ended_at=datetime.datetime.now() + datetime.timedelta(days=3)
@@ -119,7 +139,7 @@ class SeasonalPriceTest(TestCase):
         seasonal_price = SeasonalPrice(
             name='Haute saison',
             product_id=1,
-            amount=20,
+            amount=40,
             currency='EUR',
             started_at=datetime.datetime.now() + datetime.timedelta(days=3),
             ended_at=datetime.datetime.now()
@@ -131,7 +151,7 @@ class SeasonalPriceTest(TestCase):
             name='Haute saison',
             product_id=1,
             currency='EUR',
-            amount=20,
+            amount=60,
             started_at=datetime.datetime.now(),
             ended_at=datetime.datetime.now() + datetime.timedelta(days=3)
         )

@@ -23,8 +23,7 @@ DATABASES = {
         'PASSWORD':getattr(local, 'DATABASE_PASSWORD', ''),
         'HOST':getattr(local, 'DATABASE_HOST', ''),
         'PORT':getattr(local, 'DATABASE_PORT', ''),
-        'OPTIONS':getattr(local, 'DATABASE_OPTIONS', {}),
-        'TEST_NAME':':memory:'
+        'OPTIONS':getattr(local, 'DATABASE_OPTIONS', {})
     }
 }
 
@@ -144,7 +143,7 @@ ACCOUNT_ACTIVATION_DAYS = 7
 
 # Tests configuration
 TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
-NOSE_ARGS = getattr(local, 'NOSE_ARGS', ['--stop', '--with-doctest', '--with-coverage', '--cover-package=eloue'])
+NOSE_ARGS = getattr(local, 'NOSE_ARGS', ['--stop', '--failed', '--with-doctest', '--with-coverage', '--cover-package=eloue'])
 NOSE_PLUGINS = getattr(local, 'NOSE_PLUGINS', [])
 
 # Message configuration
