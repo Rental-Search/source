@@ -5,7 +5,7 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.utils.encoding import smart_unicode
 
-from storages.backends.image import ImageStorage
+from storages.backends.s3boto import S3BotoStorage
 
 from eloue.accounts.models import Patron, Address
 from eloue.products.manager import ProductManager
@@ -54,7 +54,8 @@ class Product(models.Model):
 class Picture(models.Model):
     """A picture"""
     product = models.ForeignKey(Product, related_name='pictures')
-    image = models.ImageField(upload_to='pictures/', storage=ImageStorage()) # TODO : This might not be ideal
+    image = models.ImageField(upload_to='pictures/', storage=S3BotoStorage())
+    # TODO : We still need to store thumbnails
 
 class Category(models.Model):
     """A category"""
