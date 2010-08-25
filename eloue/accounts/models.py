@@ -85,11 +85,11 @@ PHONE_TYPES = (
 class Patron(User):
     """A member"""
     civility = models.IntegerField(null=True, blank=True, choices=CIVILITY_CHOICES)
-    company_name = models.CharField(null=True, max_length=255)
+    company_name = models.CharField(null=True, blank=True, max_length=255)
     activation_key = models.CharField(null=True, blank=True, max_length=40)
     is_professional = models.BooleanField(_('professionnel'), null=False, default=False)
     modified_at = models.DateTimeField(_('date de modification'), editable=False)
-    last_ip = models.IPAddressField(null=True)
+    last_ip = models.IPAddressField(null=True, blank=True)
     
     objects = PatronManager()
     
@@ -100,6 +100,15 @@ class Patron(User):
         message = EmailMultiAlternatives(subject, text_content, settings.DEFAULT_FROM_EMAIL, [self.email])
         message.attach_alternative(html_content, "text/html")
         message.send()
+        
+    def clean(self):
+        from django.core.exceptions import ValidationError
+        if self.pk: # TODO : Might need some improvements
+            if Patron.objects.exclude(pk=self.pk).filter(email=self.email).exists():
+                raise ValidationError(_(u"Un utilisateur utilisant cet email existe déjà"))
+        else:
+            if Patron.objects.exists(email=self.email):
+                raise ValidationError(_(u"Un utilisateur utilisant cet email existe déjà"))
     
     def is_expired(self):
         """
@@ -158,10 +167,10 @@ class PhoneNumber(models.Model):
 
 class Comment(models.Model):
     """A comment"""
-    summary = models.CharField(null=False, max_length=255)
+    summary = models.CharField(null=False, blank=True, max_length=255)
     score = models.FloatField(null=False)
     description = models.TextField(null=False)
-    created_at = models.DateTimeField()
+    created_at = models.DateTimeField(blank=True)
     ip = models.IPAddressField(null=True, blank=True)
     patron = models.ForeignKey(Patron, related_name='comments')
     
