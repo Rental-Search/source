@@ -99,6 +99,7 @@ class Price(models.Model):
     amount = models.DecimalField(max_digits=8, decimal_places=2)
     currency = models.CharField(null=False, max_length=3, choices=CURRENCY_CHOICES)
     product = models.ForeignKey(Product, related_name='%(class)s')
+    unit = models.IntegerField(choices=UNIT_CHOICES)
     
     def __unicode__(self):
         return smart_unicode(self.amount)
@@ -124,12 +125,10 @@ class SeasonalPrice(Price):
             raise ValidationError(_(u"Une saison ne peut pas terminer avant d'avoir commencer"))
     
     class Meta:
-        unique_together = ('product', 'name')
+        unique_together = ('product', 'name', 'unit')
     
 
 class StandardPrice(Price):
-    unit = models.IntegerField(choices=UNIT_CHOICES)
-    
     class Meta:
         unique_together = ('product', 'unit')
     

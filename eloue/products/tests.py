@@ -58,12 +58,12 @@ class PriceTest(TestCase):
     fixtures = ['patron', 'address', 'product']
     
     def test_amount_values_negative(self):
-        price = Price(amount=-1, product_id=1, currency='EUR')
+        price = Price(amount=-1, product_id=1, unit=1, currency='EUR')
         self.assertRaises(ValidationError, price.full_clean)
     
     def test_amount_values_positive(self):
         try:
-            price = Price(amount=20, product_id=1, currency='EUR')
+            price = Price(amount=20, product_id=1, unit=1, currency='EUR')
             price.full_clean()
         except ValidationError, e:
             self.fail(e)
@@ -108,6 +108,7 @@ class SeasonalPriceTest(TestCase):
             name='Haute saison',
             product_id=1,
             amount=30,
+            unit=1,
             currency='EUR',
             started_at=datetime.date.today(),
             ended_at=datetime.date.today() + datetime.timedelta(days=3)
@@ -122,6 +123,7 @@ class SeasonalPriceTest(TestCase):
             name='Haute saison',
             product_id=1,
             amount=20,
+            unit=1,
             currency='EUR',
             started_at=datetime.date.today(),
             ended_at=datetime.date.today() + datetime.timedelta(days=3)
@@ -130,6 +132,7 @@ class SeasonalPriceTest(TestCase):
             name='Haute saison',
             product_id=1,
             amount=25,
+            unit=1,
             currency='EUR',
             started_at=datetime.date.today(),
             ended_at=datetime.date.today() + datetime.timedelta(days=3)
@@ -140,6 +143,7 @@ class SeasonalPriceTest(TestCase):
             name='Haute saison',
             product_id=1,
             amount=40,
+            unit=1,
             currency='EUR',
             started_at=datetime.date.today() + datetime.timedelta(days=3),
             ended_at=datetime.date.today()
@@ -152,6 +156,7 @@ class SeasonalPriceTest(TestCase):
             product_id=1,
             currency='EUR',
             amount=60,
+            unit=1,
             started_at=datetime.date.today(),
             ended_at=datetime.date.today() + datetime.timedelta(days=3)
         )
