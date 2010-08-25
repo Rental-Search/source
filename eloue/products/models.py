@@ -115,8 +115,8 @@ class Price(models.Model):
 class SeasonalPrice(Price):
     """A season"""
     name = models.CharField(null=False, max_length=255)
-    started_at = models.DateTimeField(null=False)
-    ended_at = models.DateTimeField(null=False)
+    started_at = models.DateField(null=False)
+    ended_at = models.DateField(null=False)
     
     def clean(self):
         from django.core.exceptions import ValidationError

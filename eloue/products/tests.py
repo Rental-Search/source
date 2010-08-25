@@ -109,8 +109,8 @@ class SeasonalPriceTest(TestCase):
             product_id=1,
             amount=30,
             currency='EUR',
-            started_at=datetime.datetime.now(),
-            ended_at=datetime.datetime.now() + datetime.timedelta(days=3)
+            started_at=datetime.date.today(),
+            ended_at=datetime.date.today() + datetime.timedelta(days=3)
         )
         product = Product.objects.get(pk=1)
         self.assertTrue(seasonal_price in product.seasonalprice.all())
@@ -123,16 +123,16 @@ class SeasonalPriceTest(TestCase):
             product_id=1,
             amount=20,
             currency='EUR',
-            started_at=datetime.datetime.now(),
-            ended_at=datetime.datetime.now() + datetime.timedelta(days=3)
+            started_at=datetime.date.today(),
+            ended_at=datetime.date.today() + datetime.timedelta(days=3)
         )
         self.assertRaises(IntegrityError, SeasonalPrice.objects.create, 
             name='Haute saison',
             product_id=1,
             amount=25,
             currency='EUR',
-            started_at=datetime.datetime.now(),
-            ended_at=datetime.datetime.now() + datetime.timedelta(days=3)
+            started_at=datetime.date.today(),
+            ended_at=datetime.date.today() + datetime.timedelta(days=3)
         )
     
     def test_wrong_start_and_end_date(self):
@@ -141,8 +141,8 @@ class SeasonalPriceTest(TestCase):
             product_id=1,
             amount=40,
             currency='EUR',
-            started_at=datetime.datetime.now() + datetime.timedelta(days=3),
-            ended_at=datetime.datetime.now()
+            started_at=datetime.date.today() + datetime.timedelta(days=3),
+            ended_at=datetime.date.today()
         )
         self.assertRaises(ValidationError, seasonal_price.full_clean)
     
@@ -152,8 +152,8 @@ class SeasonalPriceTest(TestCase):
             product_id=1,
             currency='EUR',
             amount=60,
-            started_at=datetime.datetime.now(),
-            ended_at=datetime.datetime.now() + datetime.timedelta(days=3)
+            started_at=datetime.date.today(),
+            ended_at=datetime.date.today() + datetime.timedelta(days=3)
         )
         try:
             seasonal_price.full_clean()
