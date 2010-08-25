@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-import MySQLdb
+import os, MySQLdb
 
 from lxml import html
 from optparse import make_option
@@ -195,11 +195,11 @@ class Command(BaseCommand):
                 owner = Patron.objects.get(pk=vendor_id)
                 if owner.addresses.all():
                     position = Point(float(row['product_lat']), float(row['product_lng']))
-                    addresses = owner.addresses.filter(position__distance_lte=(position, D(km=15)))
+                    addresses = owner.addresses.filter(position__distance_lte=(position, D(km=20)))
                     if addresses:
                         address = addresses[0]    
                     else:
-                        #print "can't find a place for %d" % row['product_id']
+                        print "can't find a place for %d" % row['product_id']
                         pass # TODO : find out what to do
                 else:
                     print "owner has no addresses : %d" % vendor_id
@@ -219,7 +219,19 @@ class Command(BaseCommand):
                 #    owner=owner,
                 #    address=address
                 #)
-            
+                
+                #product.standardprice.create(
+                #    unit=1, amount=row['prix'], currency='EUR'
+                #)
+                
+                if row['product_full_image']:
+                    try: # FIXME : hardcoded path
+                        picture = open(os.path.join('/Users/tim/Downloads/elouefile', str(row['vendor_id']), row['product_full_image']))
+                        # product.pictures.create(image=picture)`
+                    except IOError, e:
+                        print e
+                
+                # product.save()
             if status:
                 print ' Migrate products : %d%%' % ((i * 100) / len(result_set)), # note ending with comma
     
