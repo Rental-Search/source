@@ -16,6 +16,7 @@ class StandardPriceInline(admin.TabularInline):
     model = StandardPrice
 
 class ProductAdmin(admin.ModelAdmin):
+    search_fields = ['summary', 'description']
     inlines = [ PictureInline, PropertyValueInline, StandardPriceInline, SeasonalPriceInline ]
     raw_id_fields = ("owner", "address")
     list_display = ('summary', 'deposit', 'quantity', 'is_archived', 'is_allowed')
