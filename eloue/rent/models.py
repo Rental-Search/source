@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-import datetime
+import datetime, random
 
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
@@ -30,9 +30,9 @@ class Booking(models.Model):
     owner = models.ForeignKey(Patron, related_name='bookings')
     borrower = models.ForeignKey(Patron, related_name='rentals')
     product = models.ForeignKey(Product, related_name='bookings')
-    passphrase = models.CharField(unique=True, null=False, max_length=40)
-    created_at = models.DateTimeField()
-    ip = models.IPAddressField(null=True)
+    pin = models.CharField(unique=True, blank=True, null=False, max_length=4)
+    created_at = models.DateTimeField(blank=True)
+    ip = models.IPAddressField(blank=True, null=True)
     
     def clean(self):
         from django.core.exceptions import ValidationError
@@ -46,5 +46,6 @@ class Booking(models.Model):
     def save(self, *args, **kwargs):
         if not self.pk:
             self.created_at = datetime.datetime.now()
+            self.passphrase = str(random.randint(1000, 9999))
         super(Booking, self).save(*args, **kwargs)
     
