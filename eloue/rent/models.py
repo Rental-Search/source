@@ -46,6 +46,6 @@ class Booking(models.Model):
     def save(self, *args, **kwargs):
         if not self.pk:
             self.created_at = datetime.datetime.now()
-            self.passphrase = str(random.randint(1000, 9999))
+            self.pin = str(random.randint(1000, 9999))
         super(Booking, self).save(*args, **kwargs)
     
