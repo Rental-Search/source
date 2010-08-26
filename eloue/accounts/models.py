@@ -87,7 +87,8 @@ class Patron(User):
     civility = models.IntegerField(null=True, blank=True, choices=CIVILITY_CHOICES)
     company_name = models.CharField(null=True, blank=True, max_length=255)
     activation_key = models.CharField(null=True, blank=True, max_length=40)
-    is_professional = models.BooleanField(_('professionnel'), null=False, default=False)
+    is_subscribed = models.BooleanField(_(u'newsletter'), default=False, help_text=_(u"Précise si l'utilisateur est abonné à la newsletter"))
+    is_professional = models.BooleanField(_('professionnel'), null=False, default=False, help_text=_(u"Précise si l'utilisateur est un professionnel"))
     modified_at = models.DateTimeField(_('date de modification'), editable=False)
     last_ip = models.IPAddressField(null=True, blank=True)
     
