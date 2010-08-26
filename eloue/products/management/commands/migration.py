@@ -45,11 +45,11 @@ PUBLISH_MAP = { # WARN : We invert value because we mark them as archived rather
     'N':True
 }
 
-def cleanup_html_entities(text):
+def cleanup_html_entities(text, method='html'):
     """Remove html entitites from text"""
     if text:
         doc = html.fromstring(text)
-        return html.tostring(doc, encoding='utf-8', method='html')
+        return html.tostring(doc, encoding='utf-8', method=method)
     else:
         return text
 
@@ -113,7 +113,7 @@ class Command(BaseCommand):
             
             username = smart_unicode(row['username'], encoding='latin1')
             email = smart_unicode(row['email'], encoding='latin1')
-            password = "md5$$%s" % row['password']
+            password = smart_unicode("md5$$%s" % row['password'], encoding='latin1')
             date_joined = row['registerDate']
             activation_key = smart_unicode(row['activation'], encoding='latin1')
             lat, lon = row['lat'], row['long']
@@ -121,10 +121,12 @@ class Command(BaseCommand):
             if not activation_key:
                 patron = Patron.objects.create_user(username, email, password, pk=row['id'])
                 patron.date_joined = date_joined
+                patron.password = password
                 patron.save()
             else:
                 patron = Patron.objects.create_inactive(username, email, password, send_email=False, pk=row['id']) # TODO : THIS IS SENDING AN EMAIL DUDE
                 patron.date_joined = date_joined
+                patron.password = password
                 patron.save()
             
             cursor.execute("""SELECT company, title, last_name, first_name, phone_1, phone_2, fax, address_1, address_2, city, country, zip FROM abs_vm_user_info WHERE user_id = %s""" % row['id'])
@@ -173,7 +175,7 @@ class Command(BaseCommand):
     
     def import_products(self, cursor, status=False):
         from eloue.accounts.models import Patron
-        from eloue.products.models import Category
+        from eloue.products.models import Product, Category
         
         cursor.execute("""SELECT product_id, product_name, product_s_desc, product_desc, count(product_desc) AS quantity, product_full_image, product_publish, prix, caution, vendor_id, product_lat, product_lng, localisation FROM abs_vm_product GROUP BY product_desc, product_name ORDER BY quantity DESC""")
         result_set = cursor.fetchall()
@@ -187,51 +189,55 @@ class Command(BaseCommand):
             else:
                 description = smart_unicode(row['product_desc'], encoding='latin1')
             
-            summary = cleanup_html_entities(summary)
+            summary = cleanup_html_entities(summary, method='text')
             description = cleanup_html_entities(description)
             
-            vendor_id = row['vendor_id']
-            if vendor_id != 0:
-                owner = Patron.objects.get(pk=vendor_id)
-                if owner.addresses.all():
-                    position = Point(float(row['product_lat']), float(row['product_lng']))
-                    addresses = owner.addresses.filter(position__distance_lte=(position, D(km=20)))
-                    if addresses:
-                        address = addresses[0]    
-                    else:
-                        print "can't find a place for %d" % row['product_id']
-                        pass # TODO : find out what to do
-                else:
-                    print "owner has no addresses : %d" % vendor_id
-                
-                #cursor.execute("""SELECT category_id FROM abs_vm_product_category_xref WHERE product_id = %s""" % row['product_id'])
-                #result = cursor.fetchone()
-                #category = Category.objects.get(pk=int(result['category_id']))
-                
-                #product = Product.objects.create(
-                #    pk=row['product_id']
-                #    summary=summary,
-                #    description=description,
-                #    category=category,
-                #    archived=PUBLISH_MAP[row['product_publish']],
-                #    deposit=row['caution'],
-                #    quantity=row['quantity'],
-                #    owner=owner,
-                #    address=address
-                #)
-                
-                #product.standardprice.create(
-                #    unit=1, amount=row['prix'], currency='EUR'
-                #)
-                
-                if row['product_full_image']:
-                    try: # FIXME : hardcoded path
-                        picture = open(os.path.join('/Users/tim/Downloads/elouefile', str(row['vendor_id']), row['product_full_image']))
-                        # product.pictures.create(image=picture)`
-                    except IOError, e:
-                        print e
-                
-                # product.save()
+            vendor_id = int(row['vendor_id'])
+            owner = Patron.objects.get(pk=vendor_id)
+            if owner.addresses.all():
+                position = Point(float(row['product_lat']), float(row['product_lng']))
+                address = owner.addresses.distance(position).order_by('distance')[0]
+            else:
+                print "owner has no addresses : %d" % vendor_id
+            
+            cursor.execute("""SELECT category_id FROM abs_vm_product_category_xref WHERE product_id = %s""" % row['product_id'])
+            result = cursor.fetchone()
+            if not result:
+                print "no category for product %d" % row['product_id']
+            elif result['category_id'] != 0:
+                try:
+                    category = Category.objects.get(pk=int(result['category_id']))
+                except Category.DoesNotExist:
+                    print "product :", row['product_id'], "category :", result['category_id']
+            else:
+                print "no valid category for product %d" % row['product_id']
+                continue
+            
+            product = Product.objects.create(
+                pk=row['product_id'],
+                summary=summary,
+                description=description,
+                category=category,
+                is_archived=PUBLISH_MAP[row['product_publish']],
+                deposit=row['caution'],
+                quantity=row['quantity'],
+                owner=owner,
+                address=address
+            )
+            
+            product.standardprice.create(
+                unit=1, amount=row['prix'], currency='EUR'
+            )
+            
+            if row['product_full_image']:
+                try: # FIXME : hardcoded path
+                    picture = open(os.path.join('/Users/tim/Downloads/elouefile', str(row['vendor_id']), row['product_full_image']))
+                    # product.pictures.create(image=picture)`
+                except IOError, e:
+                    pass # print e
+            
+            product.save()
+            
             if status:
                 print ' Migrate products : %d%%' % ((i * 100) / len(result_set)), # note ending with comma
     
