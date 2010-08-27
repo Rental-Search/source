@@ -31,5 +31,7 @@ urlpatterns = patterns('',
     url(r'^login/$', login, {'template_name':'auth/login.html', 'authentication_form':EmailAuthenticationForm}, name='auth_login'),
     url(r'^logout/$', logout_then_login, name='auth_logout'),
     url(r'^media/(.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT}),
+    url(r'^loueur/', include('eloue.accounts.urls')),
+    url(r'^location/', include('eloue.products.urls')),
     url(r'^edit/', include(admin.site.urls)),
 )

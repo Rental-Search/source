@@ -111,6 +111,7 @@ class Command(BaseCommand):
             if status:
                 print '%s\r' % ' '*20, # clean up row
             
+            
             username = smart_unicode(row['username'], encoding='latin1')
             email = smart_unicode(row['email'], encoding='latin1')
             password = smart_unicode("md5$$%s" % row['password'], encoding='latin1')
@@ -122,11 +123,13 @@ class Command(BaseCommand):
                 patron = Patron.objects.create_user(username, email, password, pk=row['id'])
                 patron.date_joined = date_joined
                 patron.password = password
+                patron.slug = slugify(username)
                 patron.save()
             else:
                 patron = Patron.objects.create_inactive(username, email, password, send_email=False, pk=row['id']) # TODO : THIS IS SENDING AN EMAIL DUDE
                 patron.date_joined = date_joined
                 patron.password = password
+                patron.slug = slugify(username)
                 patron.save()
             
             cursor.execute("""SELECT company, title, last_name, first_name, phone_1, phone_2, fax, address_1, address_2, city, country, zip FROM abs_vm_user_info WHERE user_id = %s""" % row['id'])

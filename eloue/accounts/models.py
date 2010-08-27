@@ -7,6 +7,7 @@ from django.contrib.auth.models import User
 from django.contrib.sites.models import Site
 from django.contrib.gis.geos import Point
 from django.core.mail import EmailMultiAlternatives
+from django.db.models import permalink
 from django.utils.encoding import smart_unicode, smart_str
 from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import ugettext
@@ -91,6 +92,7 @@ class Patron(User):
     is_professional = models.BooleanField(_('professionnel'), null=False, default=False, help_text=_(u"Précise si l'utilisateur est un professionnel"))
     modified_at = models.DateTimeField(_('date de modification'), editable=False)
     last_ip = models.IPAddressField(null=True, blank=True)
+    slug = models.SlugField(null=False, unique=True, db_index=True)
     
     objects = PatronManager()
     
@@ -104,7 +106,7 @@ class Patron(User):
         
     def clean(self):
         from django.core.exceptions import ValidationError
-        if self.pk: # TODO : Might need some improvements
+        if self.pk: # FIXME : Might need some improvements and more tests
             if Patron.objects.exclude(pk=self.pk).filter(email=self.email).exists():
                 raise ValidationError(_(u"Un utilisateur utilisant cet email existe déjà"))
         else:
@@ -125,7 +127,12 @@ class Patron(User):
     is_expired.boolean = True
     is_expired.short_description = ugettext(u"Expiré")
     
+    @permalink
+    def get_absolute_url(self):
+        return ('patron_detail', [self.slug])
+    
     def save(self, *args, **kwargs):
+        # TODO : deal with slugs
         self.modified_at = datetime.datetime.now()
         super(Patron, self).save(*args, **kwargs)
     

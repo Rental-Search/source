@@ -48,6 +48,10 @@ class Product(models.Model):
     def __unicode__(self):
         return smart_unicode(self.summary)
     
+    def get_absolute_url(self):
+        from django.template.defaultfilters import slugify
+        return ('product_detail', [slugify(self.summary), self.pk])
+    
     class Meta:
         verbose_name = _('product')
     
@@ -62,7 +66,7 @@ class Category(models.Model):
     """A category"""
     parent = models.ForeignKey('self', related_name='children', null=True)
     name = models.CharField(null=False, max_length=255)
-    slug = models.SlugField(null=False)
+    slug = models.SlugField(null=False, db_index=True) # TODO : add unique=True
     
     def __unicode__(self):
         return smart_unicode(self.name)
