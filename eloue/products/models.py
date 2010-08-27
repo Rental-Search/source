@@ -8,6 +8,7 @@ from django.utils.encoding import smart_unicode
 from storages.backends.s3boto import S3BotoStorage
 
 from eloue.accounts.models import Patron, Address
+from eloue.products.fields import SimpleDateField
 from eloue.products.manager import ProductManager
 
 UNIT_CHOICES = (
@@ -97,10 +98,14 @@ class PropertyValue(models.Model):
 
 class Price(models.Model):
     """A price"""
+    name = models.CharField(null=True, blank=True, max_length=255)
     amount = models.DecimalField(max_digits=8, decimal_places=2)
     currency = models.CharField(null=False, max_length=3, choices=CURRENCY_CHOICES)
-    product = models.ForeignKey(Product, related_name='%(class)s')
+    product = models.ForeignKey(Product, related_name='prices')
     unit = models.IntegerField(choices=UNIT_CHOICES)
+    
+    started_at = SimpleDateField(null=True, blank=True)
+    ended_at = SimpleDateField(null=True, blank=True)
     
     def __unicode__(self):
         return smart_unicode(self.amount)
@@ -110,26 +115,6 @@ class Price(models.Model):
         if self.amount < 0:
             raise ValidationError(_(u"Le prix ne peut pas être négatif"))
     
-    class Meta:
-        abstract = True
-    
-
-class SeasonalPrice(Price):
-    """A season"""
-    name = models.CharField(null=False, max_length=255)
-    started_at = models.DateField(null=False)
-    ended_at = models.DateField(null=False)
-    
-    def clean(self):
-        from django.core.exceptions import ValidationError
-        if self.started_at >= self.ended_at:
-            raise ValidationError(_(u"Une saison ne peut pas terminer avant d'avoir commencer"))
-    
-    class Meta:
-        unique_together = ('product', 'name', 'unit')
-    
-
-class StandardPrice(Price):
     class Meta:
         unique_together = ('product', 'unit')
     

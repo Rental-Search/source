@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.contrib import admin
 
-from eloue.products.models import Product, Picture, Category, Property, PropertyValue, SeasonalPrice, StandardPrice, Review
+from eloue.products.models import Product, Picture, Category, Property, PropertyValue, Price, Review
 
 class PictureInline(admin.TabularInline):
     model = Picture
@@ -9,15 +9,12 @@ class PictureInline(admin.TabularInline):
 class PropertyValueInline(admin.TabularInline):
     model = PropertyValue
 
-class SeasonalPriceInline(admin.TabularInline):
-    model = SeasonalPrice
-
-class StandardPriceInline(admin.TabularInline):
-    model = StandardPrice
+class PriceInline(admin.TabularInline):
+    model = Price
 
 class ProductAdmin(admin.ModelAdmin):
     search_fields = ['summary', 'description']
-    inlines = [ PictureInline, PropertyValueInline, StandardPriceInline, SeasonalPriceInline ]
+    inlines = [ PictureInline, PropertyValueInline, PriceInline ]
     raw_id_fields = ("owner", "address")
     list_display = ('summary', 'deposit', 'quantity', 'is_archived', 'is_allowed')
     list_filter = ('is_archived', 'is_allowed')

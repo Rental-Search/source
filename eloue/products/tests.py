@@ -5,7 +5,7 @@ from django.db import IntegrityError
 from django.test import TestCase
 from django.core.exceptions import ValidationError
 
-from eloue.products.models import Product, Review, Price, StandardPrice, SeasonalPrice
+from eloue.products.models import Product, Review, Price
 
 class ProductTest(TestCase):
     fixtures = ['patron', 'address', 'category']
@@ -82,13 +82,13 @@ class StandardPriceTest(TestCase):
         connection._set_isolation_level(self.isolation_level)
     
     def test_product_pricing(self):
-        standard_price = StandardPrice.objects.create(unit=1, amount=10, product_id=1, currency='EUR')
+        standard_price = Price.objects.create(unit=1, amount=10, product_id=1, currency='EUR')
         product = Product.objects.get(pk=1)
-        self.assertTrue(standard_price in product.standardprice.all())
+        self.assertTrue(standard_price in product.prices.all())
     
     def test_pricing_uniqueness(self):
-        StandardPrice.objects.create(unit=1, amount=10, product_id=1, currency='EUR')
-        self.assertRaises(IntegrityError, StandardPrice.objects.create, unit=1, amount=20, product_id=1)
+        Price.objects.create(unit=1, amount=10, product_id=1, currency='EUR')
+        self.assertRaises(IntegrityError, Price.objects.create, unit=1, amount=20, product_id=1)
     
 
 class SeasonalPriceTest(TestCase):
@@ -104,7 +104,7 @@ class SeasonalPriceTest(TestCase):
         connection._set_isolation_level(self.isolation_level)
     
     def test_product_pricing(self):
-        seasonal_price = SeasonalPrice.objects.create(
+        seasonal_price = Price.objects.create(
             name='Haute saison',
             product_id=1,
             amount=30,
@@ -114,12 +114,12 @@ class SeasonalPriceTest(TestCase):
             ended_at=datetime.date.today() + datetime.timedelta(days=3)
         )
         product = Product.objects.get(pk=1)
-        self.assertTrue(seasonal_price in product.seasonalprice.all())
+        self.assertTrue(seasonal_price in product.prices.all())
     
     def test_pricing_uniqueness(self):
         from django.db import connection
         self.assertEquals(connection.isolation_level, 0)
-        SeasonalPrice.objects.create(
+        Price.objects.create(
             name='Haute saison',
             product_id=1,
             amount=20,
@@ -128,7 +128,7 @@ class SeasonalPriceTest(TestCase):
             started_at=datetime.date.today(),
             ended_at=datetime.date.today() + datetime.timedelta(days=3)
         )
-        self.assertRaises(IntegrityError, SeasonalPrice.objects.create, 
+        self.assertRaises(IntegrityError, Price.objects.create, 
             name='Haute saison',
             product_id=1,
             amount=25,
@@ -137,31 +137,4 @@ class SeasonalPriceTest(TestCase):
             started_at=datetime.date.today(),
             ended_at=datetime.date.today() + datetime.timedelta(days=3)
         )
-    
-    def test_wrong_start_and_end_date(self):
-        seasonal_price = SeasonalPrice(
-            name='Haute saison',
-            product_id=1,
-            amount=40,
-            unit=1,
-            currency='EUR',
-            started_at=datetime.date.today() + datetime.timedelta(days=3),
-            ended_at=datetime.date.today()
-        )
-        self.assertRaises(ValidationError, seasonal_price.full_clean)
-    
-    def test_correct_start_and_end_date(self):
-        seasonal_price = SeasonalPrice(
-            name='Haute saison',
-            product_id=1,
-            currency='EUR',
-            amount=60,
-            unit=1,
-            started_at=datetime.date.today(),
-            ended_at=datetime.date.today() + datetime.timedelta(days=3)
-        )
-        try:
-            seasonal_price.full_clean()
-        except ValidationError, e:
-            self.fail(e)
     

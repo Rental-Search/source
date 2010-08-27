@@ -225,7 +225,7 @@ class Command(BaseCommand):
                 address=address
             )
             
-            product.standardprice.create(
+            product.prices.create(
                 unit=1, amount=row['prix'], currency='EUR'
             )
             
