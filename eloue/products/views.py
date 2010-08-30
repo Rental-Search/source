@@ -27,19 +27,17 @@ def product_detail(request, slug, product_id):
 
 @cache_page(900)
 @vary_on_cookie
-def product_list(request, urlbits, sqs = SearchQuerySet(), page = None):
+def product_list(request, urlbits, sqs = SearchQuerySet(), suggestions = None, page = None):
     query = request.GET.get('q', None)
-    radius = request.GET.get('radius', DEFAULT_RADIUS)
-    lat = request.GET.get('lat', None)
-    lng = request.GET.get('lng', None)
     if query:
         sqs = sqs.auto_query(query).highlight()
         suggestions = sqs.spelling_suggestion()
-    else:
-        sqs = sqs.all()
-        suggestions = None
+    
+    lat, lng = request.GET.get('lat', None), request.GET.get('lng', None)
     if (lat and lng):
+        radius = request.GET.get('radius', DEFAULT_RADIUS)
         sqs = sqs.spatial(lat=lat, long=lng, radius=radius, unit='km').order_by('geo_distance')
+    
     breadcrumbs = SortedDict()
     urlbits = urlbits or ''
     urlbits = filter(None, urlbits.split('/')[::-1])
