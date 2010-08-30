@@ -4,4 +4,16 @@
 
 {% block content %}
  {{ product.summary }}
+ {% for review in product.reviews.all %}
+  <div>
+    <div itemscope itemtype="http://data-vocabulary.org/Review">
+      <span itemprop="itemreviewed">{{ product.summary }}</span>
+      Revu par <span itemprop="reviewer">{{ review.reviewer.username }}</span> le
+      <time itemprop="dtreviewed" datetime="{{ review.created_at|date:"Y-m-d" }}">{{ review.created_at|date:"j N" }}</time>.
+      <span itemprop="summary">{{ review.summary }}</span>
+      <span itemprop="description">{{ review.description|safe }}</span>
+      Score : <span itemprop="rating">{{ review.score }}</span>
+    </div>
+  </div>
+ {% endfor %}
 {% endblock %}

@@ -12,7 +12,7 @@
  {% endif %}
  <ul>
   {% for product in product_list %}
-   <li><h3>{{ product.summary }}</h3></li>
+   <li><h3>{{ product.summary }} (#{{ product.pk }})</h3></li>
   {% endfor %}
  </ul>
  

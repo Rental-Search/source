@@ -49,10 +49,14 @@ class Product(models.Model):
     def __unicode__(self):
         return smart_unicode(self.summary)
     
+    @property
+    def slug(self):
+        from django.template.defaultfilters import slugify
+        return slugify(self.summary)
+    
     @permalink
     def get_absolute_url(self):
-        from django.template.defaultfilters import slugify
-        return ('product_detail', [slugify(self.summary), self.pk])
+        return ('product_detail', [self.slug, self.pk])
     
     class Meta:
         verbose_name = _('product')
@@ -132,6 +136,7 @@ class Review(models.Model):
     description = models.TextField(null=False)
     created_at = models.DateTimeField(blank=True)
     ip = models.IPAddressField(null=True, blank=True)
+    reviewer = models.ForeignKey(Patron, related_name='reviews')
     product = models.ForeignKey(Product, related_name='reviews')
     
     def clean(self):
@@ -145,7 +150,7 @@ class Review(models.Model):
         return smart_unicode(self.summary)
     
     def save(self, *args, **kwargs):
-        if not self.pk:
+        if not self.created_at:
             self.created_at = datetime.datetime.now()
         super(Review, self).save(*args, **kwargs)
     

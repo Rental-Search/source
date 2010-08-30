@@ -26,8 +26,8 @@ class CategoryAdmin(admin.ModelAdmin):
 class PropertyAdmin(admin.ModelAdmin):
     pass
 
-class ReviewAdmin(admin.ModelAdmin):
-    pass
+class ReviewAdmin(admin.ModelAdmin):    
+    raw_id_fields = ("reviewer", "product")
 
 admin.site.register(Product, ProductAdmin)
 admin.site.register(Category, CategoryAdmin)
