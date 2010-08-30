@@ -78,7 +78,7 @@
     <lst name="spellchecker">
       <str name="classname">solr.IndexBasedSpellChecker</str>
       <str name="name">default</str>
-      <str name="field">spell</str>
+      <str name="field">text</str>
       <str name="spellcheckIndexDir">./spell-index</str>
       <str name="buildOnCommit">true</str>
       <str name="accuracy">0.8</str>

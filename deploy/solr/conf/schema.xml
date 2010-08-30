@@ -82,7 +82,6 @@
     <field name="django_ct" type="string"   indexed="true"  stored="true"  multiValued="false" />
     <field name="django_id" type="string"   indexed="true"  stored="true"  multiValued="false" />
     
-
     <field name="categories" type="text" indexed="true" stored="true" multiValued="true" />
     
     <field name="categories_exact" type="string" indexed="true" stored="true" multiValued="true" />
@@ -90,8 +89,6 @@
     <field name="summary" type="text" indexed="true" stored="true" multiValued="false" />
     
     <field name="text" type="text" indexed="true" stored="true" multiValued="false" />
-
-    <field name="spell" type="text" indexed="true" stored="true" multiValued="false" />
 
     <field name="owner" type="text" indexed="true" stored="true" multiValued="false" />
     
