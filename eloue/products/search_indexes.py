@@ -7,6 +7,7 @@ from eloue.products.models import Product
 
 class ProductIndex(RealTimeSearchIndex):
     summary = CharField(model_attr='summary')
+    description = CharField(model_attr='description')
     categories = MultiValueField(faceted=True)
     owner = CharField(model_attr='owner__slug', faceted=True)
     text = CharField(document=True, use_template=True)
