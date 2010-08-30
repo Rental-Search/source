@@ -16,6 +16,7 @@ from eloue.products.forms import FacetedSearchForm
 from eloue.products.models import Product, Category
 
 PAGINATE_PRODUCTS_BY = getattr(settings, 'PAGINATE_PRODUCTS_BY', 20)
+DEFAULT_RADIUS = getattr(settings, 'DEFAULT_RADIUS', 50)
 
 def product_detail(request, slug, product_id):
     return object_detail(request, queryset=Product.objects.active(), object_id=product_id, template_object_name='product')
@@ -24,12 +25,17 @@ def product_detail(request, slug, product_id):
 @vary_on_cookie
 def product_list(request, urlbits, sqs = SearchQuerySet(), page = None):
     query = request.GET.get('q', None)
+    radius = request.GET.get('radius', DEFAULT_RADIUS)
+    lat = request.GET.get('lat', None)
+    lng = request.GET.get('lng', None)
     if query:
         sqs = sqs.auto_query(query).highlight()
         suggestions = sqs.spelling_suggestion()
     else:
         sqs = sqs.all()
         suggestions = None
+    if (lat and lng):
+        sqs = sqs.spatial(lat=lat, long=lng, radius=radius, unit='km').order_by('geo_distance')
     breadcrumbs = SortedDict()
     urlbits = urlbits or ''
     urlbits = filter(None, urlbits.split('/')[::-1])
@@ -42,7 +48,7 @@ def product_list(request, urlbits, sqs = SearchQuerySet(), page = None):
                 raise Http404
             if bit.endswith(_('categorie')):
                 item = get_object_or_404(Category, slug=value)
-                sqs = sqs.narrow("category:%s" % value)
+                sqs = sqs.narrow("categories:%s" % value)
                 breadcrumbs[bit] = { 'name':'category', 'value':value, 'label':bit, 'object':item, 'pretty_name':_(u"Catégorie"), 'pretty_value':item.name, 'url':'%s/%s' % (bit, value) }
             elif bit.endswith(_('loueur')):
                 item = get_object_or_404(Patron, slug=value)

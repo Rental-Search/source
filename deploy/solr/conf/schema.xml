@@ -81,7 +81,7 @@
     <field name="django_id" type="string"   indexed="true"  stored="true"  multiValued="false" />
     
 
-    <field name="category" type="text" indexed="true" stored="true" multiValued="false" />
+    <field name="categories" type="text" indexed="true" stored="true" multiValued="true" />
 
     <field name="summary" type="text" indexed="true" stored="true" multiValued="false" />
     
