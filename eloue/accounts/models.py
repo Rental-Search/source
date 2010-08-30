@@ -163,6 +163,11 @@ class Address(models.Model):
             if self.position.x > 90 or self.position.x < -90 or self.position.y < -180 or self.position.y > 180:
                 raise ValidationError(_(u"Coordonnées géographiques incorrectes"))
     
+    def is_geocoded(self):
+        return self.position != None
+    is_geocoded.boolean = True
+    is_geocoded.short_description = ugettext(u"Géolocalisé")
+    
     def save(self, *args, **kwargs):
         if not self.position: # TODO : improve that part
             geocode = geocoder(settings.GOOGLE_API_KEY)
