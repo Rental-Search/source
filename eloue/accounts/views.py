@@ -15,6 +15,6 @@ def activate(request, activation_key):
 
 def patron_detail(request, slug, patron_id=None):
     if patron_id:
-        return object_detail(request, queryset=Patron.objects.all(), object_id=patron_id)
+        return object_detail(request, queryset=Patron.objects.all(), object_id=patron_id, template_object_name='patron')
     else:
-        return object_detail(request, queryset=Patron.objects.all(), slug=slug)
+        return object_detail(request, queryset=Patron.objects.all(), slug=slug, template_object_name='patron')

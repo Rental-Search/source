@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 import datetime
-
 from django.db import models
 from django.core import exceptions
+import django.forms as forms
 
 class SimpleDate(int):
     def __new__(cls, value):
@@ -66,4 +66,10 @@ class SimpleDateField(models.IntegerField):
         if isinstance(value, datetime.date):
             return int((32 * value.month) + value.day)
         return int(value)
+    
+
+class FacetField(forms.CharField):
+    def __init__(self, pretty_name=None, *args, **kwargs):
+        self.pretty_name = pretty_name
+        super(FacetField, self).__init__(*args, **kwargs)
     

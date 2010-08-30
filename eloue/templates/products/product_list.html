@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+ {% load facets %}
+
+{% block head %}
+ {{ block.super }}
+ <link rel="canonical" href="{% canonical_url urlbits %}" />
+{% endblock %}
+
+{% block content %}
+ <ul>
+  {% for product in product_list %}
+   <li>{{ product.summary }}</li>
+  {% endfor %}
+ </ul>
+{% endblock %}

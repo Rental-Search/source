@@ -83,34 +83,17 @@
 
     <field name="category" type="text" indexed="true" stored="true" multiValued="false" />
 
-    <field name="network" type="text" indexed="true" stored="true" multiValued="false" />
-
+    <field name="summary" type="text" indexed="true" stored="true" multiValued="false" />
+    
     <field name="text" type="text" indexed="true" stored="true" multiValued="false" />
 
     <field name="spell" type="text" indexed="true" stored="true" multiValued="false" />
 
-    <field name="pub_date" type="date" indexed="true" stored="true" multiValued="false" />
-
-    <field name="site" type="slong" indexed="true" stored="true" multiValued="false" />
-
     <field name="owner" type="text" indexed="true" stored="true" multiValued="false" />
-
-    <field name="featured" type="boolean" indexed="true" stored="true" multiValued="false" />
-
-    <field name="station" type="text" indexed="true" stored="true" multiValued="false" />
-
-    <field name="meeting_date" type="date" indexed="true" stored="true" multiValued="false" />
 
     <field name="lat" type="tdouble" indexed="true" stored="true" multiValued="false" />
 
-    <field name="kind_of" type="text" indexed="true" stored="true" multiValued="false" />
-
     <field name="lng" type="tdouble" indexed="true" stored="true" multiValued="false" />
-
-    <field name="looking_for" type="text" indexed="true" stored="true" multiValued="false" />
-
-    <field name="line" type="text" indexed="true" stored="true" multiValued="false" />
-
   </fields>
 
   <!-- field to use to determine and enforce document uniqueness. -->
