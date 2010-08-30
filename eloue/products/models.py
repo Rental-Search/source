@@ -2,6 +2,7 @@
 import datetime
 
 from django.db import models
+from django.db.models import permalink
 from django.utils.translation import ugettext_lazy as _
 from django.utils.encoding import smart_unicode
 
@@ -48,6 +49,7 @@ class Product(models.Model):
     def __unicode__(self):
         return smart_unicode(self.summary)
     
+    @permalink
     def get_absolute_url(self):
         from django.template.defaultfilters import slugify
         return ('product_detail', [slugify(self.summary), self.pk])

@@ -12,6 +12,7 @@ from django.utils.encoding import smart_unicode, smart_str
 from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import ugettext
 from django.template.loader import render_to_string
+from django.template.defaultfilters import slugify
 
 from geocoders.google import geocoder
 
@@ -132,7 +133,8 @@ class Patron(User):
         return ('patron_detail', [self.slug])
     
     def save(self, *args, **kwargs):
-        # TODO : deal with slugs
+        if not self.slug:
+            self.slug = slugify(self.username)
         self.modified_at = datetime.datetime.now()
         super(Patron, self).save(*args, **kwargs)
     

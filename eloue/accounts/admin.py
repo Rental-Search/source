@@ -17,7 +17,7 @@ class PhoneNumberInline(admin.TabularInline):
 class PatronAdmin(UserAdmin):
     fieldsets = (
         (None, {'fields': ('username', 'password')}),
-        (_('Personal info'), {'fields': ('civility', 'first_name', 'last_name', 'email')}),
+        (_('Personal info'), {'fields': ('civility', 'first_name', 'last_name', 'email', 'slug')}),
         (_('Permissions'), {'fields': ('is_staff', 'is_active', 'is_superuser', 'user_permissions')}),
         (_('Important dates'), {'fields': ('last_login', 'date_joined')}),
         (_('Groups'), {'classes': ('collapse',), 'fields': ('groups',)}),

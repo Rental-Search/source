@@ -119,6 +119,8 @@ class Command(BaseCommand):
             activation_key = smart_unicode(row['activation'], encoding='latin1')
             lat, lon = row['lat'], row['long']
             
+            username = username.lower()
+            
             if not activation_key:
                 patron = Patron.objects.create_user(username, email, password, pk=row['id'])
                 patron.date_joined = date_joined

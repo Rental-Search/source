@@ -3,7 +3,7 @@ from django.conf import settings
 from django.conf.urls.defaults import *
 from django.contrib import admin
 from django.contrib.auth.views import login, logout_then_login, password_reset, password_reset_confirm, password_reset_done, password_reset_complete
-from django.contrib.sitemaps.views import sitemap
+from django.contrib.sitemaps.views import index, sitemap
 
 from eloue.sitemaps import FlatPageSitemap, PatronSitemap, ProductSitemap
 from eloue.accounts.forms import EmailAuthenticationForm, EmailPasswordResetForm
@@ -21,7 +21,8 @@ sitemaps = {
 }
 
 urlpatterns = patterns('',
-    url(r'^sitemap.xml$', sitemap, {'sitemaps': sitemaps}, name="sitemap"),
+    url(r'^sitemap.xml$', index, {'sitemaps': sitemaps}, name="sitemap"),
+    url(r'^sitemap-(?P<section>.+).xml$', sitemap, {'sitemaps': sitemaps}),
     url(r'^reset/$', password_reset, { 'password_reset_form':EmailPasswordResetForm, 'template_name':'auth/password_reset_form.html',
         'email_template_name':'auth/password_reset_email.html' }, name="password_reset"),
     url(r'^reset/done/$', password_reset_done, {'template_name':'registration/password_reset_done.html'}, name="password_reset_done"),
