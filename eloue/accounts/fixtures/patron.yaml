@@ -17,6 +17,7 @@
 - fields:
     activation_key: null
     civility: 2
+    slug: alexandre
     groups: []
     modified_at: 2010-08-17 09:00:10
     user_permissions: []
@@ -42,6 +43,7 @@
 - fields:
     activation_key: null
     civility: 2
+    slug: tim
     groups: []
     modified_at: 2010-08-17 09:00:10
     user_permissions: []

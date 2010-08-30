@@ -5,7 +5,7 @@ from django.db import IntegrityError
 from django.test import TestCase
 from django.core.exceptions import ValidationError
 
-from eloue.products.models import Product, Review, Price
+from eloue.products.models import Product, ProductReview, Price
 
 class ProductTest(TestCase):
     fixtures = ['patron', 'address', 'category']
@@ -35,20 +35,20 @@ class ProductTest(TestCase):
         self.assertRaises(ValidationError, product.full_clean)
     
 
-class ReviewTest(TestCase):
+class ProductReviewTest(TestCase):
     fixtures = ['patron', 'address', 'product']
     
     def test_score_values_negative(self):
-        review = Review(score=-1.0, product_id=1, description='Incorrect')
+        review = ProductReview(score=-1.0, product_id=1, description='Incorrect', reviewer_id=1)
         self.assertRaises(ValidationError, review.full_clean)
     
     def test_score_values_too_high(self):
-        review = Review(score=2.0, product_id=1, description='Parfait')
+        review = ProductReview(score=2.0, product_id=1, description='Parfait', reviewer_id=1)
         self.assertRaises(ValidationError, review.full_clean)
     
     def test_score_values_correct(self):
         try:
-            review = Review(score=0.5, product_id=1, description='Correct')
+            review = ProductReview(score=0.5, product_id=1, description='Correct', reviewer_id=1)
             review.full_clean()
         except ValidationError, e:
             self.fail(e)
