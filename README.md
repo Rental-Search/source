@@ -4,7 +4,7 @@ E-Loue
 Pré-requis
 ----------
 
-    $ brew install git subversion python pip jpeg postgresql postgis gdal solr
+    $ brew install git subversion python pip jpeg libyaml postgresql postgis gdal solr
     $ pip install mercurial virtualenv pyflakes
     
 Base de données
