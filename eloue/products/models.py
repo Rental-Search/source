@@ -136,8 +136,7 @@ class Review(models.Model):
     description = models.TextField(null=False)
     created_at = models.DateTimeField(blank=True)
     ip = models.IPAddressField(null=True, blank=True)
-    reviewer = models.ForeignKey(Patron, related_name='reviews')
-    product = models.ForeignKey(Product, related_name='reviews')
+    reviewer = models.ForeignKey(Patron, related_name="%(class)s_reviews")
     
     def clean(self):
         from django.core.exceptions import ValidationError
@@ -154,3 +153,12 @@ class Review(models.Model):
             self.created_at = datetime.datetime.now()
         super(Review, self).save(*args, **kwargs)
     
+    class Meta:
+        abstract = True
+    
+
+class ProductReview(Review):
+    product = models.ForeignKey(Product, related_name='reviews')
+
+class PatronReview(Review):
+    patron = models.ForeignKey(Patron, related_name='reviews')

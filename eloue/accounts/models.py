@@ -186,24 +186,3 @@ class PhoneNumber(models.Model):
     number = models.CharField(null=False, max_length=255)
     kind = models.IntegerField(choices=PHONE_TYPES)
 
-class Comment(models.Model):
-    """A comment"""
-    summary = models.CharField(null=False, blank=True, max_length=255)
-    score = models.FloatField(null=False)
-    description = models.TextField(null=False)
-    created_at = models.DateTimeField(blank=True)
-    ip = models.IPAddressField(null=True, blank=True)
-    patron = models.ForeignKey(Patron, related_name='comments')
-    
-    def clean(self):
-        from django.core.exceptions import ValidationError
-        if self.score > 1:
-            raise ValidationError(_("Score can't be higher than 1"))
-        if self.score < 0:
-            raise ValidationError(_("Score can't be a negative value"))
-    
-    def save(self, *args, **kwargs):
-        if not self.pk:
-            self.created_at = datetime.datetime.now()
-        super(Comment, self).save(*args, **kwargs)
-    

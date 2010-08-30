@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.contrib import admin
 
-from eloue.products.models import Product, Picture, Category, Property, PropertyValue, Price, Review
+from eloue.products.models import Product, Picture, Category, Property, PropertyValue, Price, ProductReview, PatronReview
 
 class PictureInline(admin.TabularInline):
     model = Picture
@@ -26,10 +26,16 @@ class CategoryAdmin(admin.ModelAdmin):
 class PropertyAdmin(admin.ModelAdmin):
     pass
 
-class ReviewAdmin(admin.ModelAdmin):    
+class ProductReviewAdmin(admin.ModelAdmin):    
     raw_id_fields = ("reviewer", "product")
+
+
+class PatronReviewAdmin(admin.ModelAdmin):    
+    raw_id_fields = ("reviewer", "patron")
+
 
 admin.site.register(Product, ProductAdmin)
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Property, PropertyAdmin)
-admin.site.register(Review, ReviewAdmin)
+admin.site.register(ProductReview, ProductReviewAdmin)
+admin.site.register(PatronReview, PatronReviewAdmin)

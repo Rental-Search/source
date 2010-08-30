@@ -5,7 +5,7 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.utils.translation import ugettext_lazy as _
 
-from eloue.accounts.models import Patron, Address, PhoneNumber, Comment
+from eloue.accounts.models import Patron, Address, PhoneNumber
 from eloue.accounts.forms import PatronChangeForm
 
 class AddressInline(admin.TabularInline):
@@ -43,9 +43,6 @@ class PatronAdmin(UserAdmin):
     send_activation_email.short_description = _(u"Envoyer à nouveau l'email d'activation")
     
 
-class CommentAdmin(admin.ModelAdmin):
-    pass
-
 class AddressAdmin(admin.ModelAdmin):
     list_display = ('address1', 'address2', 'zipcode', 'city', 'country', 'is_geocoded')
     list_filter = ('country',)
@@ -58,4 +55,3 @@ class AddressAdmin(admin.ModelAdmin):
 
 admin.site.register(Address, AddressAdmin)
 admin.site.register(Patron, PatronAdmin)
-admin.site.register(Comment, CommentAdmin)

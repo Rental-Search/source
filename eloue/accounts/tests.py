@@ -6,7 +6,7 @@ from django.core.exceptions import ValidationError
 from django.contrib.gis.geos import Point
 from django.test import TestCase
 
-from eloue.accounts.models import Patron, Address, Comment
+from eloue.accounts.models import Patron, Address
 
 class AccountManagerTest(TestCase):
     def test_inactive_account_creation(self):
@@ -129,31 +129,5 @@ class AddressTest(TestCase):
             )
             address.full_clean()
         except ValidationError:
-            self.fail(e)
-    
-
-class CommentTest(TestCase):
-    fixtures = ['patron']
-    
-    def test_created_at(self):
-        comment = Comment.objects.create(score=1.0, patron_id=1)
-        self.assertTrue(comment.created_at <= datetime.datetime.now())
-        created_at = comment.created_at
-        comment.save()
-        self.assertEquals(comment.created_at, created_at)
-    
-    def test_score_values_negative(self):
-        comment = Comment(score=-1.0, patron_id=1, description="Incorrect")
-        self.assertRaises(ValidationError, comment.full_clean)
-    
-    def test_score_values_too_high(self):
-        comment = Comment(score=2.0, patron_id=1, description="Trop parfait")
-        self.assertRaises(ValidationError, comment.full_clean)
-    
-    def test_score_values_correct(self):
-        try:
-            comment = Comment(score=0.5, patron_id=1, description="Correct")
-            comment.full_clean()
-        except ValidationError, e:
             self.fail(e)
     
