@@ -23,7 +23,7 @@ def product_detail(request, slug, product_id):
     product = get_object_or_404(Product, pk=product_id)
     if product.slug != slug:
         return redirect_to(request, product.get_absolute_url())
-    return object_detail(request, queryset=Product.objects.active(), object_id=product_id, template_object_name='product')
+    return direct_to_template(request, template='products/product_detail.html', extra_context={ 'product':product })
 
 @cache_page(900)
 @vary_on_cookie
