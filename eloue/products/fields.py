@@ -30,10 +30,26 @@ class SimpleDate(int):
     
     @property
     def day(self):
+        """
+        >>> date = SimpleDate(33)
+        >>> date.day
+        1
+        >>> date = SimpleDate(415)
+        >>> date.day
+        31
+        """
         return self - (32 * self.month)
     
     @property
     def month(self):
+        """
+        >>> date = SimpleDate(415)
+        >>> date.month
+        12
+        >>> date = SimpleDate(33)
+        >>> date.month
+        1
+        """
         return self / 32
     
 
@@ -41,6 +57,13 @@ class SimpleDateField(models.IntegerField):
     __metaclass__ = models.SubfieldBase
     
     def to_python(self, value):
+        """
+        >>> SimpleDateField().to_python(283)
+        283
+        >>> SimpleDateField().to_python(None)
+        >>> SimpleDateField().to_python(2.3)
+        2
+        """
         if value is None:
             return None
         try:
@@ -50,13 +73,14 @@ class SimpleDateField(models.IntegerField):
     
     def get_prep_value(self, value):
         """
-        >>> SimpleDate.format(283)
+        >>> SimpleDateField().get_prep_value(None)
+        >>> SimpleDateField().get_prep_value(283)
         283
-        >>> SimpleDate.format(datetime.date(2010, 8, 27))
+        >>> SimpleDateField().get_prep_value(datetime.date(2010, 8, 27))
         283
-        >>> SimpleDate.format(datetime.datetime(2010, 8, 27))
+        >>> SimpleDateField().get_prep_value(datetime.datetime(2010, 8, 27))
         283
-        >>> SimpleDate.format('283')
+        >>> SimpleDateField().get_prep_value('283')
         283
         """
         if value is None:
