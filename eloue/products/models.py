@@ -159,6 +159,22 @@ class Review(models.Model):
 
 class ProductReview(Review):
     product = models.ForeignKey(Product, related_name='reviews')
+    
+    def clean(self):
+        from django.core.exceptions import ValidationError
+        if self.reviewer == self.product.owner:
+            raise ValidationError(_(u"Vous ne pouvez pas commenter vos propres locations"))
+        if not self.products.bookings.exists(borrower=self.reviewer):
+            raise ValidationError(_(u"Vous ne pouvez pas commenter un produit que vous n'avez pas loué"))
+    
 
 class PatronReview(Review):
     patron = models.ForeignKey(Patron, related_name='reviews')
+    
+    def clean(self):
+        from django.core.exceptions import ValidationError
+        if self.reviewer == self.patron:
+            raise ValidationError(_(u"Vous ne pouvez pas commenter votre profil"))
+        if not self.patron.rentals.exists(borrower=self.reviewer):
+            raise ValidationError(_(u"Vous ne pouvez pas commenter le profil d'un loueur avec lequel n'avez pas eu de réservations"))
+    
