@@ -164,8 +164,9 @@ class ProductReview(Review):
         from django.core.exceptions import ValidationError
         if self.reviewer == self.product.owner:
             raise ValidationError(_(u"Vous ne pouvez pas commenter vos propres locations"))
-        if not self.products.bookings.exists(borrower=self.reviewer):
+        if not self.product.bookings.filter(borrower=self.reviewer).exists():
             raise ValidationError(_(u"Vous ne pouvez pas commenter un produit que vous n'avez pas loué"))
+        super(ProductReview, self).clean()
     
 
 class PatronReview(Review):
@@ -175,6 +176,7 @@ class PatronReview(Review):
         from django.core.exceptions import ValidationError
         if self.reviewer == self.patron:
             raise ValidationError(_(u"Vous ne pouvez pas commenter votre profil"))
-        if not self.patron.rentals.exists(borrower=self.reviewer):
+        if not self.patron.bookings.filter(borrower=self.reviewer).exists():
             raise ValidationError(_(u"Vous ne pouvez pas commenter le profil d'un loueur avec lequel n'avez pas effectué de réservations"))
+        super(PatronReview, self).clean()
     

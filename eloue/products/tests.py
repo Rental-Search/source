@@ -5,7 +5,7 @@ from django.db import IntegrityError
 from django.test import TestCase
 from django.core.exceptions import ValidationError
 
-from eloue.products.models import Product, ProductReview, Price
+from eloue.products.models import Product, ProductReview, PatronReview, Price
 
 class ProductTest(TestCase):
     fixtures = ['patron', 'address', 'category']
@@ -36,22 +36,57 @@ class ProductTest(TestCase):
     
 
 class ProductReviewTest(TestCase):
-    fixtures = ['patron', 'address', 'product']
+    fixtures = ['patron', 'address', 'product', 'booking']
     
     def test_score_values_negative(self):
-        review = ProductReview(score=-1.0, product_id=1, description='Incorrect', reviewer_id=1)
+        review = ProductReview(score=-1.0, product_id=1, description='Incorrect', reviewer_id=2)
         self.assertRaises(ValidationError, review.full_clean)
     
     def test_score_values_too_high(self):
-        review = ProductReview(score=2.0, product_id=1, description='Parfait', reviewer_id=1)
+        review = ProductReview(score=2.0, product_id=1, description='Parfait', reviewer_id=2)
         self.assertRaises(ValidationError, review.full_clean)
     
     def test_score_values_correct(self):
         try:
-            review = ProductReview(score=0.5, product_id=1, description='Correct', reviewer_id=1)
+            review = ProductReview(score=0.5, product_id=1, description='Correct', reviewer_id=2)
             review.full_clean()
         except ValidationError, e:
             self.fail(e)
+    
+    def test_owner_review(self):
+        review = ProductReview(score=2.0, product_id=1, description='Parfait', reviewer_id=1)
+        self.assertRaises(ValidationError, review.full_clean)
+    
+    def test_booking_review(self):
+        review = ProductReview(score=2.0, product_id=2, description='Parfait', reviewer_id=2)
+        self.assertRaises(ValidationError, review.full_clean)
+    
+
+class PatronReviewTest(TestCase):
+    fixtures = ['patron', 'address', 'product', 'booking']
+    
+    def test_score_values_negative(self):
+        review = PatronReview(score=-1.0, patron_id=1, description='Incorrect', reviewer_id=2)
+        self.assertRaises(ValidationError, review.full_clean)
+    
+    def test_score_values_too_high(self):
+        review = PatronReview(score=2.0, patron_id=1, description='Parfait', reviewer_id=2)
+        self.assertRaises(ValidationError, review.full_clean)
+    
+    def test_score_values_correct(self):
+        try:
+            review = PatronReview(score=0.5, patron_id=1, description='Correct', reviewer_id=2)
+            review.full_clean()
+        except ValidationError, e:
+            self.fail(e)
+    
+    def test_patron_review(self):
+        review = PatronReview(score=2.0, patron_id=1, description='Correct', reviewer_id=1)
+        self.assertRaises(ValidationError, review.full_clean)
+    
+    def test_booking_review(self):
+        review = PatronReview(score=2.0, patron_id=2, description='Correct', reviewer_id=1)
+        self.assertRaises(ValidationError, review.full_clean)
     
 
 class PriceTest(TestCase):
@@ -92,7 +127,7 @@ class StandardPriceTest(TestCase):
     
 
 class SeasonalPriceTest(TestCase):
-    fixtures = ['patron', 'address', 'product']
+    fixtures = ['patron', 'address', 'product', 'booking']
     
     def setUp(self):
         from django.db import connection
