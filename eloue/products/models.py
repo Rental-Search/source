@@ -176,5 +176,5 @@ class PatronReview(Review):
         if self.reviewer == self.patron:
             raise ValidationError(_(u"Vous ne pouvez pas commenter votre profil"))
         if not self.patron.rentals.exists(borrower=self.reviewer):
-            raise ValidationError(_(u"Vous ne pouvez pas commenter le profil d'un loueur avec lequel n'avez pas eu de réservations"))
+            raise ValidationError(_(u"Vous ne pouvez pas commenter le profil d'un loueur avec lequel n'avez pas effectué de réservations"))
     
