@@ -172,6 +172,14 @@ class Address(models.Model):
                 raise ValidationError(_(u"Coordonnées géographiques incorrectes"))
     
     def is_geocoded(self):
+        """
+        >>> address = Address(address1='11, rue debelleyme', zipcode='75003', city='Paris')
+        >>> address.is_geocoded()
+        False
+        >>> address = Address(address1='11, rue debelleyme', zipcode='75003', city='Paris', position=Point((48.8613232, 2.3631101)))
+        >>> address.is_geocoded()
+        True
+        """
         return self.position != None
     is_geocoded.boolean = True
     is_geocoded.short_description = ugettext(u"Géolocalisé")
