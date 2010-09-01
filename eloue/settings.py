@@ -192,3 +192,15 @@ AWS_S3_CUSTOM_DOMAIN = getattr(local, 'AWS_S3_CUSTOM_DOMAIN', '')
 AWS_DEFAULT_ACL = getattr(local, 'AWS_DEFAULT_ACL', 'public-read')
 AWS_LOCATION = getattr(local, 'AWS_LOCATION', 'EU')
 AWS_AUTO_CREATE_BUCKET = getattr(local, 'AWS_AUTO_CREATE_BUCKET', False)
+
+# Paypal configuration
+if DEBUG:
+    PAYPAL_API_USERNAME = getattr(local, 'PAYPAL_SANDBOX_API_USERNAME', "sand_1266353156_biz_api1.tryphon.org")
+    PAYPAL_API_PASSWORD = getattr(local, 'PAYPAL_SANDBOX_API_PASSWORD', "1266353174")
+    PAYPAL_API_SIGNATURE = getattr(local, 'PAYPAL_SANDBOX_API_SIGNATURE', "ACFP1tIskAXJ.m25BMGIQFW.gpwvAQpVs6wPW462vdrnRb5OjB-r5Jsu")
+else:
+    PAYPAL_API_USERNAME = getattr(local, 'PAYPAL_API_USERNAME')
+    PAYPAL_API_PASSWORD = getattr(local, 'PAYPAL_API_PASSWORD')
+    PAYPAL_API_SIGNATURE = getattr(local, 'PAYPAL_API_SIGNATURE')
+
+    
