@@ -1,23 +1,30 @@
 # -*- coding: utf-8 -*-
 import datetime, random
 
+from django.conf import settings
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
+from paypalx.payments import PaymentsAPI
+
 from eloue.accounts.models import Patron
 from eloue.products.models import Product
+from eloue.products.utils import Enum
 
-BOOKING_STATE = (
-    (0, _('Demander')),
-    (1, _('Annuler')),
-    (2, _('En attente')),
-    (3, _('En cours')),
-    (4, _('Terminer')),
+BOOKING_STATE = Enum(
+    (0, 'ASKED', _(u'Demandé')),
+    (1, 'CANCELED', _(u'Annulé')),
+    (2, 'PENDING', _(u'En attente')),
+    (3, 'ONGOING', _(u'En cours')),
+    (4, 'ENDED', _(u'Terminé')),
 )
 
-PAYMENT_STATE = (
-    (0, _('Autoriser')),
-    (1, _('Payer'))
+PAYMENT_STATE = Enum(
+    (0, 'REJECTED', _(u'Rejeté'))
+    (1, 'AUTHORIZED', _(u'Autorisé')),
+    (2, 'PAID', _(u'Payé')),
+    (3, 'REFUNDED_PENDING', _(u'En attente de remboursement')),
+    (4, 'REFUNDED', _(u'Remboursé')),
 )
 
 class Booking(models.Model):
@@ -33,6 +40,30 @@ class Booking(models.Model):
     pin = models.CharField(unique=True, blank=True, null=False, max_length=4)
     created_at = models.DateTimeField(blank=True)
     ip = models.IPAddressField(blank=True, null=True)
+    
+    preapproval_key = models.CharField(null=True, max_length=255)
+    
+    def preapproval(self, **kwargs):
+        if self.payment_state != PAYMENT_STATE.AUTHORIZED:
+            paypal = PaymentsAPI(settings.PAYPAL_API_USERNAME, settings.PAYPAL_API_PASSWORD, settings.PAYPAL_API_SIGNATURE, settings.PAYPAL_API_APPLICATION_ID, settings.PAYPAL_API_EMAIL)
+            response = paypal.preapproval(
+                startingDate = self.started_at,
+                endingDate = self.ended_at,
+                currencyCode = 'EUR', # FIXME : Hardcoded currency
+                # TODO : Missing value
+            )
+            # TODO : Check return status and deal with it
+    
+    def refund(self):
+        if self.payment_state != PAYMENT_STATE.REFUNDED:
+            paypal = PaymentsAPI(settings.PAYPAL_API_USERNAME, settings.PAYPAL_API_PASSWORD, settings.PAYPAL_API_SIGNATURE, settings.PAYPAL_API_APPLICATION_ID, settings.PAYPAL_API_EMAIL)
+            response = paypal.refund(
+                trackingId = self.pk,
+                currencyCode = 'EUR' # FIXME : Hardcoded currency
+            )
+            # TODO : Check return status and deal with it
+            self.payment_state = PAYMENT_STATE.REFUNDED
+            self.save()
     
     def clean(self):
         from django.core.exceptions import ValidationError
