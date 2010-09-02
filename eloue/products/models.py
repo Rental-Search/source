@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import datetime
 
+from django.conf import settings
 from django.db import models
 from django.db.models import permalink
 from django.utils.translation import ugettext_lazy as _
@@ -27,6 +28,8 @@ CURRENCY_CHOICES = (
     ('JPY', _(u'¥'))
 )
 
+INSURANCE_MAX_DEPOSIT = getattr(settings, 'INSURANCE_MAX_DEPOSIT', 750)
+
 class Product(models.Model):
     """A product"""
     summary = models.CharField(null=False, max_length=255)
@@ -48,6 +51,11 @@ class Product(models.Model):
     
     def __unicode__(self):
         return smart_unicode(self.summary)
+    
+    def has_insurance(self):
+        return not self.owner.is_professional \
+            and self.deposit <= INSURANCE_MAX_DEPOSIT \
+            and self.category.need_insurance
     
     @property
     def slug(self):
@@ -73,6 +81,7 @@ class Category(models.Model):
     parent = models.ForeignKey('self', related_name='children', null=True)
     name = models.CharField(null=False, max_length=255)
     slug = models.SlugField(null=False, db_index=True) # TODO : add unique=True
+    need_insurance = models.BooleanField(default=True, db_index=True)
     
     def __unicode__(self):
         return smart_unicode(self.name)
