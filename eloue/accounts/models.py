@@ -107,7 +107,7 @@ class Patron(User):
         
     def clean(self):
         from django.core.exceptions import ValidationError
-        if self.pk: # FIXME : Might need some improvements and more tests
+        if self.pk: # TODO : Might need some improvements and more tests
             if Patron.objects.exclude(pk=self.pk).filter(email=self.email).exists():
                 raise ValidationError(_(u"Un utilisateur utilisant cet email existe déjà"))
         else:

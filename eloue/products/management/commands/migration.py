@@ -235,7 +235,7 @@ class Command(BaseCommand):
             )
             
             if row['product_full_image']:
-                try: # FIXME : hardcoded path
+                try: # FIXME : Hardcoded path
                     picture = open(os.path.join('/Users/tim/Downloads/elouefile', str(row['vendor_id']), row['product_full_image']))
                     # product.pictures.create(image=picture)`
                 except IOError, e:
