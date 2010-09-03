@@ -1,37 +1,38 @@
 # -*- coding: utf-8 -*-
-import datetime, random
+import datetime, random, warnings
 
-from django.conf import settings
+from django.core.urlresolvers import reverse
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
-from paypalx.payments import PaymentsAPI
-
 from eloue.accounts.models import Patron
-from eloue.products.models import Product
+from eloue.products.models import CURRENCY, Product
 from eloue.products.utils import Enum
+from eloue.rent.paypal import payments, PaypalError 
 
-BOOKING_STATE = Enum(
+BOOKING_STATE = Enum([
     (0, 'ASKED', _(u'Demandé')),
     (1, 'CANCELED', _(u'Annulé')),
     (2, 'PENDING', _(u'En attente')),
     (3, 'ONGOING', _(u'En cours')),
     (4, 'ENDED', _(u'Terminé')),
-)
+])
 
-PAYMENT_STATE = Enum(
-    (0, 'REJECTED', _(u'Rejeté'))
+PAYMENT_STATE = Enum([
+    (0, 'REJECTED', _(u'Rejeté')),
     (1, 'AUTHORIZED', _(u'Autorisé')),
-    (2, 'PAID', _(u'Payé')),
-    (3, 'REFUNDED_PENDING', _(u'En attente de remboursement')),
-    (4, 'REFUNDED', _(u'Remboursé')),
-)
+    (2, 'HOLDED', _(u'Sequestré')),
+    (3, 'PAID', _(u'Payé')),
+    (4, 'REFUNDED_PENDING', _(u'En attente de remboursement')),
+    (5, 'REFUNDED', _(u'Remboursé')),
+])
 
 class Booking(models.Model):
     """A reservation"""
     started_at = models.DateTimeField(null=False)
     ended_at = models.DateTimeField(null=False)
     total_price = models.DecimalField(null=False, max_digits=8, decimal_places=2)
+    currency = models.CharField(null=False, max_length=3, choices=CURRENCY)
     booking_state = models.IntegerField(null=False, choices=BOOKING_STATE)
     payment_state = models.IntegerField(null=False, choices=PAYMENT_STATE)
     owner = models.ForeignKey(Patron, related_name='bookings')
@@ -43,23 +44,68 @@ class Booking(models.Model):
     
     preapproval_key = models.CharField(null=True, max_length=255)
     
-    def preapproval(self, **kwargs):
+    def preapproval(self, cancel_url=None, return_url=None, ip_address=None):
+        """
+        Preapprove payments for borrower from Paypal.
+        
+        Keywords arguments :
+        cancel_url -- The URL to which the sender’s browser is redirected after the sender cancels the preapproval at paypal.com. 
+        return_url -- The URL to which the sender’s browser is redirected after the sender approves the preapproval on paypal.com.
+        ip_address -- The ip address of sender.
+        """
         if self.payment_state != PAYMENT_STATE.AUTHORIZED:
-            paypal = PaymentsAPI(settings.PAYPAL_API_USERNAME, settings.PAYPAL_API_PASSWORD, settings.PAYPAL_API_SIGNATURE, settings.PAYPAL_API_APPLICATION_ID, settings.PAYPAL_API_EMAIL)
-            response = paypal.preapproval(
-                startingDate = self.started_at,
-                endingDate = self.ended_at,
-                currencyCode = 'EUR', # FIXME : Hardcoded currency
-                # TODO : Missing value
-            )
-            # TODO : Check return status and deal with it
+            try:
+                response = payments.preapproval(
+                    # FIXME : His email might not be related to his PayPal account
+                    senderEmail = self.borrower.email,
+                    startingDate = datetime.datetime.now(),
+                    endingDate = self.ended_at,
+                    currencyCode = self.currency,
+                    maxTotalAmountOfAllPayments = str(self.total_price),
+                    cancelUrl = cancel_url,
+                    returnUrl = return_url,
+                    ipnNotificationUrl = reverse('ipn_handler'),
+                    client_details = {
+                        'ipAddress': ip_address,
+                        'partnerName': 'e-loue',
+                        'customerType': 'Business' if self.borrower.is_professional else 'Personnal',
+                        'customerId': str(self.borrower.pk)
+                    }
+                )
+                if response['responseEnvelope']['ack'] in ['Success', 'SuccessWithWarning']:
+                    self.payment_state = PAYMENT_STATE.AUTHORIZED
+                    self.preapproval_key = response['preapprovalKey']
+                else:
+                    self.payment_state = PAYMENT_STATE.REJECTED
+            except PaypalError, e: # TODO : Add logging
+                self.payment_state = PAYMENT_STATE.REJECTED
+    
+    def hold(self, cancel_url=None):
+        """
+        Take money from borrower and keep it safe for later.
+        
+        Keywords arguments :
+        cancel_url -- The URL to which the sender’s browser is redirected after the sender cancels the preapproval at paypal.com. 
+        return_url -- The URL to which the sender’s browser is redirected after the sender approves the preapproval on paypal.com.
+        ip_address -- The ip address of sender.
+        """
+        if self.payment_state != PAYMENT_STATE.HOLDED:
+            try:
+                response = payment.pay(
+                    actionType = 'PAY_PRIMARY',
+                    cancelUrl = cancel_url,
+                    currencyCode = self.currency
+                )
+            except PaypalError, e: # TODO : Add logging
+                self.payment_state = PAYMENT_STATE.
     
     def refund(self):
+        # FIXME : Not that much deprecated, just purely unfinished
+        warnings.warn("deprecated", DeprecationWarning) 
         if self.payment_state != PAYMENT_STATE.REFUNDED:
-            paypal = PaymentsAPI(settings.PAYPAL_API_USERNAME, settings.PAYPAL_API_PASSWORD, settings.PAYPAL_API_SIGNATURE, settings.PAYPAL_API_APPLICATION_ID, settings.PAYPAL_API_EMAIL)
-            response = paypal.refund(
+            response = payments.refund(
                 trackingId = self.pk,
-                currencyCode = 'EUR' # FIXME : Hardcoded currency
+                currencyCode = self.currency
             )
             # TODO : Check return status and deal with it
             self.payment_state = PAYMENT_STATE.REFUNDED

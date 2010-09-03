@@ -12,21 +12,22 @@ from storages.backends.s3boto import S3BotoStorage
 from eloue.accounts.models import Patron, Address
 from eloue.products.fields import SimpleDateField
 from eloue.products.manager import ProductManager
+from eloue.products.utils import Enum
 
-UNIT_CHOICES = (
-    (0, _('heure')),
-    (1, _('jour')),
-    (2, _('week-end')),
-    (3, _('semaine')),
-    (4, _('mois'))
-)
+UNIT = Enum([
+    (0, 'HOUR', _(u'heure')),
+    (1, 'DAY', _(u'jour')),
+    (2, 'WEEK_END', _(u'week-end')),
+    (3, 'WEEK', _(u'semaine')),
+    (4, 'MONTH', _(u'mois'))
+])
 
-CURRENCY_CHOICES = (
-    ('EUR', _(u'€')),
-    ('USD', _(u'$')),
-    ('GBP', _(u'£')),
-    ('JPY', _(u'¥'))
-)
+CURRENCY = Enum([
+    ('EUR', 'EUR', _(u'€')),
+    ('USD', 'USD', _(u'$')),
+    ('GBP', 'GPB', _(u'£')),
+    ('JPY', 'YEN', _(u'¥'))
+])
 
 INSURANCE_MAX_DEPOSIT = getattr(settings, 'INSURANCE_MAX_DEPOSIT', 750)
 
@@ -34,6 +35,7 @@ class Product(models.Model):
     """A product"""
     summary = models.CharField(null=False, max_length=255)
     deposit = models.DecimalField(null=False, max_digits=8, decimal_places=2)
+    currency = models.CharField(null=False, max_length=3, choices=CURRENCY)
     description = models.TextField(null=False)
     address = models.ForeignKey(Address, related_name='products')
     quantity = models.IntegerField(null=False)
@@ -119,9 +121,9 @@ class Price(models.Model):
     """A price"""
     name = models.CharField(null=True, blank=True, max_length=255)
     amount = models.DecimalField(max_digits=8, decimal_places=2)
-    currency = models.CharField(null=False, max_length=3, choices=CURRENCY_CHOICES)
+    currency = models.CharField(null=False, max_length=3, choices=CURRENCY)
     product = models.ForeignKey(Product, related_name='prices')
-    unit = models.IntegerField(choices=UNIT_CHOICES)
+    unit = models.IntegerField(choices=UNIT)
     
     started_at = SimpleDateField(null=True, blank=True)
     ended_at = SimpleDateField(null=True, blank=True)
