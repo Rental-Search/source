@@ -194,6 +194,7 @@ AWS_LOCATION = getattr(local, 'AWS_LOCATION', 'EU')
 AWS_AUTO_CREATE_BUCKET = getattr(local, 'AWS_AUTO_CREATE_BUCKET', False)
 
 # Paypal configuration
+USE_PAYPAL_SANDBOX = getattr(local, 'USE_PAYPAL_SANDBOX', False)
 if DEBUG:
     PAYPAL_API_USERNAME = getattr(local, 'PAYPAL_SANDBOX_API_USERNAME', "sand_1266353156_biz_api1.tryphon.org")
     PAYPAL_API_PASSWORD = getattr(local, 'PAYPAL_SANDBOX_API_PASSWORD', "1266353174")

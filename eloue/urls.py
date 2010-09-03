@@ -34,5 +34,6 @@ urlpatterns = patterns('',
     url(r'^media/(.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT}),
     url(r'^loueur/', include('eloue.accounts.urls')),
     url(r'^location/', include('eloue.products.urls')),
+    url(r'^rent/', include('eloue.rent.urls')),
     url(r'^edit/', include(admin.site.urls)),
 )

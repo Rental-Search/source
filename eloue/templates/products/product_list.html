@@ -7,6 +7,13 @@
 {% endblock %}
 
 {% block content %}
+ {% if breadcrumbs %}
+  {% for crumb in breadcrumbs.values %}
+   <div itemscope itemptype="http://data-vocabulary.org/Breadcrumb">
+    <a href="{% facet_breadcrumb_link breadcrumbs crumb %}">{{ crumb.pretty_value|capfirst }}</a>
+   </div>{% if not forloop.last %} › {% endif %}
+  {% endfor %}
+ {% endif %}
  {% if suggestions %}
   <p>{{ suggestions }}</p>
  {% endif %}
@@ -15,6 +22,5 @@
    <li><h3>{{ product.summary }} (#{{ product.pk }})</h3></li>
   {% endfor %}
  </ul>
- 
  {{ facets }}
 {% endblock %}

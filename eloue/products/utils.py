@@ -5,15 +5,14 @@ class Enum(object):
     A small helper class for more readable enumerations,
     and compatible with Django's choice convention.
     
-        >>> PERSON = Enum([
-        >>>        (100, 'NAME', 'Verbose name title'),
-        >>>        (200, 'AGE', 'Verbose age title'),
-        >>>    ])
-        >>> PERSON.AGE
-        100
-        >>> PERSON[1]
-        (200, 'Verbose age title')
-    
+    >>> PERSON = Enum([
+    ...   (100, 'NAME', 'Verbose name title'),
+    ...   (200, 'AGE', 'Verbose age title')
+    ... ])
+    >>> PERSON.AGE
+    200
+    >>> PERSON[1]
+    (200, 'Verbose age title')
     """
     def __init__(self, enum_list):
         self.enum_list = [(item[0], item[2]) for item in enum_list]
