@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-import datetime, logging, random, warnings
+import datetime, logging, random
 
+from decimal import Decimal as D
 from urlparse import urljoin
 
 from django.conf import settings
@@ -24,16 +25,18 @@ BOOKING_STATE = Enum([
 
 PAYMENT_STATE = Enum([
     (0, 'REJECTED', _(u'Rejeté')),
-    (1, 'AUTHORIZED', _(u'Autorisé')),
-    (2, 'HOLDED_PENDING', _(u'En cours de sequestration')),
-    (3, 'HOLDED', _(u'Sequestré')),
-    (4, 'PAID_PENDING', _(u'En cours de paiment')),
-    (5, 'PAID', _(u'Payé')),
-    (6, 'REFUNDED_PENDING', _(u'En attente de remboursement')),
-    (7, 'REFUNDED', _(u'Remboursé')),
+    (1, 'CANCELED', _(u'Annulé')),
+    (2, 'CANCELED_PENDING', _(u'En cours de sequestration')),
+    (3, 'AUTHORIZED', _(u'Autorisé')),
+    (4, 'HOLDED_PENDING', _(u'En cours de sequestration')),
+    (5, 'HOLDED', _(u'Sequestré')),
+    (6, 'PAID_PENDING', _(u'En cours de paiment')),
+    (7, 'PAID', _(u'Payé')),
+    (8, 'REFUNDED_PENDING', _(u'En attente de remboursement')),
+    (9, 'REFUNDED', _(u'Remboursé')),
 ])
 
-FEE_PERCENTAGE = getattr(settings, 'FEE_PERCENTAGE', 0.1)
+FEE_PERCENTAGE = D(str(getattr(settings, 'FEE_PERCENTAGE', 0.1)))
 
 log = logging.getLogger(__name__)
 
@@ -41,6 +44,7 @@ class Booking(models.Model):
     """A reservation"""
     started_at = models.DateTimeField(null=False)
     ended_at = models.DateTimeField(null=False)
+    deposit = models.DecimalField(null=False, max_digits=8, decimal_places=2)
     total_price = models.DecimalField(null=False, max_digits=8, decimal_places=2)
     currency = models.CharField(null=False, max_length=3, choices=CURRENCY)
     booking_state = models.IntegerField(null=False, default=BOOKING_STATE.ASKED, choices=BOOKING_STATE)
@@ -56,8 +60,7 @@ class Booking(models.Model):
     pay_key = models.CharField(null=True, max_length=255)
     
     def preapproval(self, cancel_url=None, return_url=None, ip_address=None):
-        """
-        Preapprove payments for borrower from Paypal.
+        """Preapprove payments for borrower from Paypal.
         
         Keywords arguments :
         cancel_url -- The URL to which the sender’s browser is redirected after the sender cancels the preapproval at paypal.com. 
@@ -70,12 +73,10 @@ class Booking(models.Model):
         if self.payment_state != PAYMENT_STATE.AUTHORIZED:
             try:
                 response = payments.preapproval(
-                    # FIXME : Patron email might not be related to PayPal account
-                    senderEmail = self.borrower.email,
                     startingDate = datetime.datetime.now(),
                     endingDate = self.ended_at,
                     currencyCode = self.currency,
-                    maxTotalAmountOfAllPayments = str(self.total_price),
+                    maxTotalAmountOfAllPayments = str(self.total_price + self.deposit),
                     cancelUrl = cancel_url,
                     returnUrl = return_url,
                     ipnNotificationUrl = urljoin(
@@ -102,15 +103,14 @@ class Booking(models.Model):
     
     @property
     def fee(self):
-        return (self.total_price * FEE_PERCENTAGE)
+        return self.total_price * FEE_PERCENTAGE
     
     @property
     def net_price(self):
         return self.total_price - self.fee
     
     def hold(self, cancel_url=None, return_url=None):
-        """
-        Take money from borrower and keep it safe for later.
+        """Take money from borrower and keep it safe for later.
         
         Keywords arguments :
         cancel_url -- The URL to which the sender’s browser is redirected after the sender cancels the preapproval at paypal.com. 
@@ -122,7 +122,6 @@ class Booking(models.Model):
         """
         if self.payment_state != PAYMENT_STATE.HOLDED:
             try:
-                payments.debug = True
                 response = payments.pay(
                     # FIXME : Patron email might not be related to PayPal account
                     senderEmail = self.borrower.email,
@@ -135,10 +134,9 @@ class Booking(models.Model):
                     ipnNotificationUrl = urljoin(
                         "http://%s" % Site.objects.get_current().domain, reverse('ipn_handler')
                     ),
-                    trackingId = str(self.pk),
                     receiverList = { 'receiver': [
-                        {'primary':True, 'amount':str(self.fee) , 'email':settings.PAYPAL_API_EMAIL },
-                        {'amount':str(self.net_price), 'email':self.owner.email }
+                        {'primary':True, 'amount':str(self.total_price), 'email':settings.PAYPAL_API_EMAIL},
+                        {'primary':False, 'amount':str(self.net_price), 'email':self.owner.email }
                     ]}
                 )
                 if response['paymentExecStatus'] in ['CREATED', 'INCOMPLETE']:
@@ -155,6 +153,7 @@ class Booking(models.Model):
             self.save()
     
     def pay(self):
+        """Return deposit to borrower and pay the owner"""
         if self.payment_state != PAYMENT_STATE.PAID:
             try:
                 response = payments.execute_payment(
@@ -165,21 +164,35 @@ class Booking(models.Model):
                 else:
                     self.payment_state = PAYMENT_STATE.PAID_PENDING
                 self.save()
-                return True
             except PaypalError, e:
-                return False # TODO : Add logging
+                log.error(e)
+    
+    def cancel(self):
+        """Cancel preapproval for the borrower"""
+        if self.payment_state != PAYMENT_STATE.CANCELED:
+            try:
+                response = payments.cancel_preapproval(
+                    preapprovalKey = self.preapproval_key,
+                )
+                if response['responseEnvelope']['ack'] in ["Success", "SuccessWithWarning"]:
+                    self.payment_state = PAYMENT_STATE.CANCELED
+                else:
+                    self.payment_state = PAYMENT_STATE.CANCELED_PENDING
+            except PaypalError, e:
+                log.error(e)
+            self.save()
     
     def refund(self):
-        # FIXME : Not that much deprecated, just purely unfinished
-        warnings.warn("deprecated", DeprecationWarning) 
+        """Refund borrower or owner if something as gone wrong"""
         if self.payment_state != PAYMENT_STATE.REFUNDED:
             response = payments.refund(
                 payKey = self.pay_key,
-                trackingId = str(self.pk),
                 currencyCode = self.currency
             )
-            # TODO : Check return status and deal with it
-            self.payment_state = PAYMENT_STATE.REFUNDED
+            if response['refundStatus'] in ['REFUNDED', 'NOT_PAID', 'ALREADY_REVERSED_OR_REFUNDED']:
+                self.payment_state = PAYMENT_STATE.REFUNDED
+            else:
+                self.payment_state = PAYMENT_STATE.REFUNDED_PENDING
             self.save()
     
     def clean(self):
@@ -195,5 +208,6 @@ class Booking(models.Model):
         if not self.pk:
             self.created_at = datetime.datetime.now()
             self.pin = str(random.randint(1000, 9999))
+            self.deposit = self.product.deposit
         super(Booking, self).save(*args, **kwargs)
     
