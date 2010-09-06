@@ -34,6 +34,8 @@ PAYMENT_STATE = Enum([
     (7, 'PAID', _(u'Payé')),
     (8, 'REFUNDED_PENDING', _(u'En attente de remboursement')),
     (9, 'REFUNDED', _(u'Remboursé')),
+    (10, 'DEPOSIT_PENDING', _(u'Caution en cours de versement')),
+    (11, 'DEPOSIT', _(u'Caution versée'))
 ])
 
 FEE_PERCENTAGE = D(str(getattr(settings, 'FEE_PERCENTAGE', 0.1)))
@@ -70,36 +72,35 @@ class Booking(models.Model):
         The you should redirect user to :
         https://www.paypal.com/webscr?cmd=_ap-preapproval&preapprovalkey={{ preapproval_key }}
         """
-        if self.payment_state != PAYMENT_STATE.AUTHORIZED:
-            try:
-                response = payments.preapproval(
-                    startingDate = datetime.datetime.now(),
-                    endingDate = self.ended_at,
-                    currencyCode = self.currency,
-                    maxTotalAmountOfAllPayments = str(self.total_price + self.deposit),
-                    cancelUrl = cancel_url,
-                    returnUrl = return_url,
-                    ipnNotificationUrl = urljoin(
-                        "http://%s" % Site.objects.get_current().domain, reverse('ipn_handler')
-                    ),
-                    client_details = {
-                        'ipAddress': ip_address,
-                        'partnerName': 'e-loue',
-                        'customerType': 'Business' if self.borrower.is_professional else 'Personnal',
-                        'customerId': str(self.borrower.pk)
-                    }
-                )
-                if response['responseEnvelope']['ack'] in ['Success', 'SuccessWithWarning']:
-                    log.info("Preapproval accepted")
-                    self.payment_state = PAYMENT_STATE.AUTHORIZED
-                    self.preapproval_key = response['preapprovalKey']
-                else:
-                    log.info("Preapproval rejected")
-                    self.payment_state = PAYMENT_STATE.REJECTED
-            except PaypalError, e:
-                log.error(e)
+        try:
+            response = payments.preapproval(
+                startingDate = datetime.datetime.now(),
+                endingDate = self.ended_at,
+                currencyCode = self.currency,
+                maxTotalAmountOfAllPayments = str(self.total_price + self.deposit),
+                cancelUrl = cancel_url,
+                returnUrl = return_url,
+                ipnNotificationUrl = urljoin(
+                    "http://%s" % Site.objects.get_current().domain, reverse('ipn_handler')
+                ),
+                client_details = {
+                    'ipAddress': ip_address,
+                    'partnerName': 'e-loue',
+                    'customerType': 'Business' if self.borrower.is_professional else 'Personnal',
+                    'customerId': str(self.borrower.pk)
+                }
+            )
+            if response['responseEnvelope']['ack'] in ['Success', 'SuccessWithWarning']:
+                log.info("Preapproval accepted")
+                self.payment_state = PAYMENT_STATE.AUTHORIZED
+                self.preapproval_key = response['preapprovalKey']
+            else:
+                log.info("Preapproval rejected")
                 self.payment_state = PAYMENT_STATE.REJECTED
-            self.save()
+        except PaypalError, e:
+            log.error(e)
+            self.payment_state = PAYMENT_STATE.REJECTED
+        self.save()
     
     @property
     def fee(self):
@@ -120,71 +121,96 @@ class Booking(models.Model):
         Then you should redirect user to : 
         https://www.paypal.com/webscr?cmd=_ap-payment&paykey={{ pay_key }}
         """
-        if self.payment_state != PAYMENT_STATE.HOLDED:
-            try:
-                response = payments.pay(
-                    # FIXME : Patron email might not be related to PayPal account
-                    senderEmail = self.borrower.email,
-                    actionType = 'PAY_PRIMARY',
-                    feesPayer = 'PRIMARYRECEIVER',
-                    cancelUrl = cancel_url,
-                    returnUrl = return_url,
-                    currencyCode = self.currency,
-                    preapprovalKey = self.preapproval_key,
-                    ipnNotificationUrl = urljoin(
-                        "http://%s" % Site.objects.get_current().domain, reverse('ipn_handler')
-                    ),
-                    receiverList = { 'receiver': [
-                        {'primary':True, 'amount':str(self.total_price), 'email':settings.PAYPAL_API_EMAIL},
-                        {'primary':False, 'amount':str(self.net_price), 'email':self.owner.email }
-                    ]}
-                )
-                if response['paymentExecStatus'] in ['CREATED', 'INCOMPLETE']:
-                    log.info("Payment was a success")
-                    self.payment_state = PAYMENT_STATE.HOLDED
-                elif response['paymentExecStatus'] in ['PROCESSING', 'PENDING']:
-                    log.info("Payment was a failure")
-                    self.payment_state = PAYMENT_STATE.HOLDED_PENDING
-                else:
-                    log.warn(response['paymentExecStatus'])
-                self.pay_key = response['payKey']
-            except PaypalError, e:
-                log.error(e)
-            self.save()
+        try:
+            response = payments.pay(
+                # FIXME : Patron email might not be related to PayPal account
+                senderEmail = self.borrower.email,
+                actionType = 'PAY_PRIMARY',
+                feesPayer = 'PRIMARYRECEIVER',
+                cancelUrl = cancel_url,
+                returnUrl = return_url,
+                currencyCode = self.currency,
+                preapprovalKey = self.preapproval_key,
+                ipnNotificationUrl = urljoin(
+                    "http://%s" % Site.objects.get_current().domain, reverse('ipn_handler')
+                ),
+                receiverList = { 'receiver': [
+                    {'primary':True, 'amount':str(self.total_price), 'email':settings.PAYPAL_API_EMAIL},
+                    {'primary':False, 'amount':str(self.net_price), 'email':self.owner.email }
+                ]}
+            )
+            if response['paymentExecStatus'] in ['CREATED', 'INCOMPLETE']:
+                self.payment_state = PAYMENT_STATE.HOLDED
+            elif response['paymentExecStatus'] in ['PROCESSING', 'PENDING']:
+                self.payment_state = PAYMENT_STATE.HOLDED_PENDING
+            else: # FIXME : Hazardous, in this case only INCOMPLETE is the oonyl valid response
+                log.warn(response['paymentExecStatus'])
+            self.pay_key = response['payKey']
+        except PaypalError, e:
+            log.error(e)
+        self.save()
     
     def pay(self):
         """Return deposit to borrower and pay the owner"""
-        if self.payment_state != PAYMENT_STATE.PAID:
-            try:
-                response = payments.execute_payment(
-                    payKey = self.pay_key
-                )
-                if response['paymentExecStatus'] in ['COMPLETED']:
-                    self.payment_state = PAYMENT_STATE.PAID
-                else:
-                    self.payment_state = PAYMENT_STATE.PAID_PENDING
-                self.save()
-            except PaypalError, e:
-                log.error(e)
+        try:
+            response = payments.execute_payment(
+                payKey = self.pay_key
+            )
+            if response['paymentExecStatus'] in ['COMPLETED']:
+                self.payment_state = PAYMENT_STATE.PAID
+            else:
+                self.payment_state = PAYMENT_STATE.PAID_PENDING
+            self.save()
+        except PaypalError, e:
+            log.error(e)
     
     def cancel(self):
         """Cancel preapproval for the borrower"""
-        if self.payment_state != PAYMENT_STATE.CANCELED:
-            try:
-                response = payments.cancel_preapproval(
-                    preapprovalKey = self.preapproval_key,
-                )
-                if response['responseEnvelope']['ack'] in ["Success", "SuccessWithWarning"]:
-                    self.payment_state = PAYMENT_STATE.CANCELED
-                else:
-                    self.payment_state = PAYMENT_STATE.CANCELED_PENDING
-            except PaypalError, e:
-                log.error(e)
+        try:
+            response = payments.cancel_preapproval(
+                preapprovalKey = self.preapproval_key,
+            )
+            if response['responseEnvelope']['ack'] in ["Success", "SuccessWithWarning"]:
+                self.payment_state = PAYMENT_STATE.CANCELED
+            else:
+                self.payment_state = PAYMENT_STATE.CANCELED_PENDING
+        except PaypalError, e:
+            log.error(e)
+        self.save()
+    
+    def litigation(self, amount=None, cancel_url='', return_url=''):
+        """Giving caution to owner"""
+        if not amount or amount > self.deposit:
+            amount = self.deposit
+        try:
+            payments.debug = True
+            response = payments.pay(
+                actionType = 'PAY',
+                senderEmail = self.borrower.email,
+                preapprovalKey = self.preapproval_key,
+                cancelUrl = cancel_url,
+                returnUrl = return_url,
+                currencyCode = self.currency,
+                ipnNotificationUrl = urljoin(
+                    "http://%s" % Site.objects.get_current().domain, reverse('ipn_handler')
+                ),
+                receiverList = { 'receiver':[
+                    {'amount':str(amount), 'email':self.owner.email},
+                ]}
+            )
+            if response['paymentExecStatus'] in ['CREATED', 'COMPELTED']:
+                self.payment_state = PAYMENT_STATE.DEPOSIT
+            elif response['paymentExecStatus'] in ['PROCESSING', 'PENDING']:
+                self.payment_state = PAYMENT_STATE.DEPOSIT_PENDING
+            else:
+                log.warn(response['paymentExecStatus'])
             self.save()
+        except PaypalError, e:
+            log.error(e)
     
     def refund(self):
         """Refund borrower or owner if something as gone wrong"""
-        if self.payment_state != PAYMENT_STATE.REFUNDED:
+        try:
             response = payments.refund(
                 payKey = self.pay_key,
                 currencyCode = self.currency
@@ -194,6 +220,8 @@ class Booking(models.Model):
             else:
                 self.payment_state = PAYMENT_STATE.REFUNDED_PENDING
             self.save()
+        except PaypalError, e:
+            log.error(e)
     
     def clean(self):
         from django.core.exceptions import ValidationError
