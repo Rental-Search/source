@@ -183,7 +183,6 @@ class Booking(models.Model):
         if not amount or amount > self.deposit:
             amount = self.deposit
         try:
-            payments.debug = True
             response = payments.pay(
                 actionType = 'PAY',
                 senderEmail = self.borrower.email,
