@@ -77,7 +77,7 @@ class Booking(models.Model):
                 startingDate = datetime.datetime.now(),
                 endingDate = self.ended_at,
                 currencyCode = self.currency,
-                maxTotalAmountOfAllPayments = str(self.total_price + self.deposit),
+                maxTotalAmountOfAllPayments = str(self.total_price + self.net_price + self.deposit),
                 cancelUrl = cancel_url,
                 returnUrl = return_url,
                 ipnNotificationUrl = urljoin(
@@ -182,6 +182,7 @@ class Booking(models.Model):
         """Giving caution to owner"""
         if not amount or amount > self.deposit:
             amount = self.deposit
+        
         try:
             response = payments.pay(
                 actionType = 'PAY',
