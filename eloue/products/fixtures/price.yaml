@@ -1,0 +1,50 @@
+-   fields:
+        name: null
+        amount: "0.3"
+        currency: "EUR"
+        product: 1
+        unit: 0
+    model: products.price
+    pk: 1
+
+-   fields:
+        name: null
+        amount: "7"
+        currency: "EUR"
+        product: 1
+        unit: 1
+    model: products.price
+    pk: 2
+
+-   fields:
+        name: null
+        amount: "12"
+        currency: "EUR"
+        product: 1
+        unit: 2
+    model: products.price
+    pk: 3
+
+-   fields:
+        name: null
+        amount: "5"
+        product: 1
+        unit: 3
+    model: products.price
+    pk: 4
+
+-   fields:
+        name: null
+        amount: "4"
+        product: 1
+        unit: 4
+    model: products.price
+    pk: 5
+
+-   fields:
+        name: null
+        amount: "3"
+        product: 1
+        unit: 5
+    model: products.price
+    pk: 6

@@ -1,7 +1,3 @@
--   fields: {name: Travaux et bricolage, parent: null}
-    model: products.category
-    pk: 1
-
 -   fields: {address: 1, category: 1, deposit: '250', description: 'Engrenage plantaire  haute
             performance 2 vitesses : dure de vie suprieure, transmission optimale,
             fonctionnement rgulier.', owner: 1, quantity: 1,

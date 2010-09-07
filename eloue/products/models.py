@@ -19,7 +19,8 @@ UNIT = Enum([
     (1, 'DAY', _(u'jour')),
     (2, 'WEEK_END', _(u'week-end')),
     (3, 'WEEK', _(u'semaine')),
-    (4, 'MONTH', _(u'mois'))
+    (4, 'TWO_WEEKS', _(u'deux semaines')),
+    (5, 'MONTH', _(u'mois'))
 ])
 
 CURRENCY = Enum([

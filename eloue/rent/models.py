@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-import datetime, logging, random
+import calendar, datetime, logging, random
 
 from decimal import Decimal as D
 from urlparse import urljoin
@@ -11,7 +11,7 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
 from eloue.accounts.models import Patron
-from eloue.products.models import CURRENCY, Product
+from eloue.products.models import CURRENCY, UNIT, Product
 from eloue.products.utils import Enum
 from eloue.rent.paypal import payments, PaypalError 
 
@@ -61,6 +61,30 @@ class Booking(models.Model):
     preapproval_key = models.CharField(null=True, max_length=255)
     pay_key = models.CharField(null=True, max_length=255)
     
+    @staticmethod
+    def calculate_price(product, started_at, ended_at):
+        delta = ended_at - started_at
+        if delta.days < 1: # We are under a day
+            return product.prices.get(unit=UNIT.HOUR).amount * (delta.seconds / 60)
+        if calendar.weekday(ended_at.year, ended_at.month, ended_at.day) == 0 and \
+            calendar.weekday(started_at.year, started_at.month, started_at.day) >= 4:
+            # It's look like a week-end, have a rest
+            return product.prices.get(unit=UNIT.WEEK_END).amount
+        if delta.days < 7:
+            # It's look like we're under a week
+            return product.prices.get(unit=UNIT.DAY).amount * (delta.days)
+        if delta.days < 14:
+            # It's look like we're under two weeks
+            return product.prices.get(unit=UNIT.WEEK).amount * (delta.days)
+        if delta.days < 28:
+            # It's look like we're under a month
+            return product.prices.get(unit=UNIT.TWO_WEEKS).amount * (delta.days)
+        if delta.days < calendar.monthrange(started_at.year, started_at.month)[1]:
+            # We are still under a month (for current month)
+            return product.prices.get(unit=UNIT.TWO_WEEKS).amount * (delta.days)
+        # We are definitely over a month
+        return product.prices.get(unit=UNIT.MONTH).amount * (delta.days)
+    
     def preapproval(self, cancel_url=None, return_url=None, ip_address=None):
         """Preapprove payments for borrower from Paypal.
         
@@ -104,10 +128,12 @@ class Booking(models.Model):
     
     @property
     def fee(self):
+        """Return our commission"""
         return self.total_price * FEE_PERCENTAGE
     
     @property
     def net_price(self):
+        """Return net price for owner"""
         return self.total_price - self.fee
     
     def hold(self, cancel_url=None, return_url=None):
@@ -143,7 +169,7 @@ class Booking(models.Model):
                 self.payment_state = PAYMENT_STATE.HOLDED
             elif response['paymentExecStatus'] in ['PROCESSING', 'PENDING']:
                 self.payment_state = PAYMENT_STATE.HOLDED_PENDING
-            else: # FIXME : Hazardous, in this case only INCOMPLETE is the oonyl valid response
+            else: # FIXME : Hazardous, in this case only INCOMPLETE is the only valid response
                 log.warn(response['paymentExecStatus'])
             self.pay_key = response['payKey']
         except PaypalError, e:
