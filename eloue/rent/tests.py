@@ -142,3 +142,17 @@ class BookingPayments(TestCase):
         price = Booking.calculate_price(self.product, started_at, ended_at)
         self.assertEquals(price, D('135'))
     
+    def test_calculate_default_price(self):
+        product = Product.objects.get(pk=2)
+        started_at = datetime.now()
+        ended_at = started_at + timedelta(days=45)
+        price = Booking.calculate_price(product, started_at, ended_at)
+        self.assertEquals(price, D('315'))
+    
+    def test_calculate_hourly_price(self):
+        product = Product.objects.get(pk=2)
+        started_at = datetime.now()
+        ended_at = started_at + timedelta(seconds=360)
+        price = Booking.calculate_price(product, started_at, ended_at)
+        self.assertEquals(price, D('3.6'))
+    

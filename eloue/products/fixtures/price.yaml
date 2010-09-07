@@ -48,3 +48,21 @@
         unit: 5
     model: products.price
     pk: 6
+
+-   fields:
+        name: null
+        amount: "7"
+        currency: "EUR"
+        product: 2
+        unit: 1
+    model: products.price
+    pk: 7
+
+-   fields:
+        name: null
+        amount: "0.6"
+        currency: "EUR"
+        product: 2
+        unit: 0
+    model: products.price
+    pk: 8

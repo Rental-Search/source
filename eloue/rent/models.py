@@ -64,26 +64,32 @@ class Booking(models.Model):
     @staticmethod
     def calculate_price(product, started_at, ended_at):
         delta = ended_at - started_at
-        if delta.days < 1: # We are under a day
+        if delta.days < 1 and product.prices.filter(unit=UNIT.HOUR).exists():
+            # We are under a day
             return product.prices.get(unit=UNIT.HOUR).amount * (delta.seconds / 60)
-        if calendar.weekday(ended_at.year, ended_at.month, ended_at.day) == 0 and \
-            calendar.weekday(started_at.year, started_at.month, started_at.day) >= 4:
+        if calendar.weekday(ended_at.year, ended_at.month, ended_at.day) == 0 \
+            and calendar.weekday(started_at.year, started_at.month, started_at.day) >= 4 \
+            and product.prices.filter(unit=UNIT.WEEK_END).exists():
             # It's look like a week-end, have a rest
             return product.prices.get(unit=UNIT.WEEK_END).amount
-        if delta.days < 7:
+        if delta.days < 7 and product.prices.filter(unit=UNIT.DAY).exists():
             # It's look like we're under a week
-            return product.prices.get(unit=UNIT.DAY).amount * (delta.days)
-        if delta.days < 14:
+            return product.prices.get(unit=UNIT.DAY).amount * delta.days
+        if delta.days < 14 and product.prices.filter(unit=UNIT.WEEK).exists():
             # It's look like we're under two weeks
-            return product.prices.get(unit=UNIT.WEEK).amount * (delta.days)
-        if delta.days < 28:
+            return product.prices.get(unit=UNIT.WEEK).amount * delta.days
+        if delta.days < 28 and product.prices.filter(unit=UNIT.TWO_WEEKS).exists():
             # It's look like we're under a month
-            return product.prices.get(unit=UNIT.TWO_WEEKS).amount * (delta.days)
-        if delta.days < calendar.monthrange(started_at.year, started_at.month)[1]:
+            return product.prices.get(unit=UNIT.TWO_WEEKS).amount * delta.days
+        if delta.days < calendar.monthrange(started_at.year, started_at.month)[1] \
+            and product.prices.filter(unit=UNIT.TWO_WEEKS).exists():
             # We are still under a month (for current month)
-            return product.prices.get(unit=UNIT.TWO_WEEKS).amount * (delta.days)
-        # We are definitely over a month
-        return product.prices.get(unit=UNIT.MONTH).amount * (delta.days)
+            return product.prices.get(unit=UNIT.TWO_WEEKS).amount * delta.days
+        if product.prices.filter(unit=UNIT.MONTH).exists():
+            # We are definitely over a month
+            return product.prices.get(unit=UNIT.MONTH).amount * delta.days
+        # Since price per day is supposed to be obligatory, this is our fallback
+        return product.prices.get(unit=UNIT.DAY).amount * delta.days
     
     def preapproval(self, cancel_url=None, return_url=None, ip_address=None):
         """Preapprove payments for borrower from Paypal.
