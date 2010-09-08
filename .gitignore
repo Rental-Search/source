@@ -7,3 +7,4 @@ env
 eloue.db
 eloue/local.py
 docs/_*/
+eloue/rent/rules

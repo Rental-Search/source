@@ -41,8 +41,6 @@ PAYMENT_STATE = Enum([
 
 FEE_PERCENTAGE = D(str(getattr(settings, 'FEE_PERCENTAGE', 0.1)))
 
-PACKAGES = { UNIT.HOUR:1./24, UNIT.DAY:1, UNIT.WEEK:7, UNIT.TWO_WEEKS:14, UNIT.MONTH:28 }
-
 log = logging.getLogger(__name__)
 
 class Booking(models.Model):
@@ -67,7 +65,7 @@ class Booking(models.Model):
     @staticmethod
     def calculate_price(product, started_at, ended_at):
         delta = ended_at - started_at
-        engine = knowledge_engine.engine(__file__)
+        engine = knowledge_engine.engine((__file__, '.rules'))
         engine.activate('pricing')
         for price in product.prices.iterator():
             engine.assert_('prices', 'price', (price.unit, price.amount))
