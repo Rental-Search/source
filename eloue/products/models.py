@@ -133,6 +133,7 @@ class Price(models.Model):
         return smart_unicode(self.amount)
     
     def delta(self, started_at, ended_at):
+        """Return delta of time passed in this season price"""
         increase = 0
         if self.ended_at < self.started_at:
             increase = 1

@@ -31,8 +31,8 @@ class SimpleDate(int):
     def date(self, year):
         return datetime.date(year, self.month, self.day)
     
-    def datetime(self, year, *args):
-        return datetime.datetime(year, self.month, self.day, *args)
+    def datetime(self, year):
+        return datetime.datetime(year, self.month, self.day)
     
     @property
     def day(self):
