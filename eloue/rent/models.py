@@ -93,10 +93,10 @@ class Booking(models.Model):
         
         amount, unit = D(0), PACKAGES_UNIT[vals['type']]
         package = PACKAGES[unit]
-        for price in product.prices.filter(name__isnull=True, unit=unit):
+        for price in product.prices.filter(unit=unit, started_at__isnull=True, ended_at__isnull=True):
             amount += package(price.amount, delta)
         
-        for price in product.prices.filter(name__isnull=False, unit=unit):
+        for price in product.prices.filter(unit=unit, started_at__isnull=False, ended_at__isnull=False):
             amount += package(price.amount, price.delta(started_at, ended_at))
         
         return amount

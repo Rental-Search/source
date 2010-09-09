@@ -120,7 +120,7 @@ class PropertyValue(models.Model):
 
 class Price(models.Model):
     """A price"""
-    name = models.CharField(null=True, blank=True, max_length=255)
+    name = models.CharField(null=False, blank=True, max_length=255)
     amount = models.DecimalField(max_digits=8, decimal_places=2)
     currency = models.CharField(null=False, max_length=3, choices=CURRENCY)
     product = models.ForeignKey(Product, related_name='prices')

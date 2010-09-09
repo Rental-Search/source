@@ -1,5 +1,5 @@
 -   fields:
-        name: null
+        name: ''
         amount: "0.3"
         currency: "EUR"
         product: 1
@@ -8,7 +8,7 @@
     pk: 1
 
 -   fields:
-        name: null
+        name: ''
         amount: "7"
         currency: "EUR"
         product: 1
@@ -17,7 +17,7 @@
     pk: 2
 
 -   fields:
-        name: null
+        name: ''
         amount: "12"
         currency: "EUR"
         product: 1
@@ -26,7 +26,7 @@
     pk: 3
 
 -   fields:
-        name: null
+        name: ''
         amount: "5"
         product: 1
         unit: 3
@@ -34,7 +34,7 @@
     pk: 4
 
 -   fields:
-        name: null
+        name: ''
         amount: "4"
         product: 1
         unit: 4
@@ -42,7 +42,7 @@
     pk: 5
 
 -   fields:
-        name: null
+        name: ''
         amount: "3"
         product: 1
         unit: 5
@@ -50,7 +50,7 @@
     pk: 6
 
 -   fields:
-        name: null
+        name: ''
         amount: "7"
         currency: "EUR"
         product: 2
@@ -59,7 +59,7 @@
     pk: 7
 
 -   fields:
-        name: null
+        name: ''
         amount: "0.6"
         currency: "EUR"
         product: 2
