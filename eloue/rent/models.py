@@ -74,7 +74,7 @@ class Booking(models.Model):
     borrower = models.ForeignKey(Patron, related_name='rentals')
     product = models.ForeignKey(Product, related_name='bookings')
     pin = models.CharField(unique=True, blank=True, null=False, max_length=4)
-    created_at = models.DateTimeField(blank=True)
+    created_at = models.DateTimeField(blank=True, editable=False)
     ip = models.IPAddressField(blank=True, null=True)
     
     preapproval_key = models.CharField(null=True, max_length=255)

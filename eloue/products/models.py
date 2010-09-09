@@ -4,6 +4,7 @@ from datetime import datetime, timedelta
 from django.conf import settings
 from django.db import models
 from django.db.models import permalink
+from django.db.models.signals import post_save
 from django.utils.translation import ugettext_lazy as _
 from django.utils.encoding import smart_unicode
 
@@ -12,6 +13,7 @@ from storages.backends.s3boto import S3BotoStorage
 from eloue.accounts.models import Patron, Address
 from eloue.products.fields import SimpleDateField
 from eloue.products.manager import ProductManager
+from eloue.products.signals import post_save_answer
 from eloue.products.utils import Enum
 
 UNIT = Enum([
@@ -28,6 +30,13 @@ CURRENCY = Enum([
     ('USD', 'USD', _(u'$')),
     ('GBP', 'GPB', _(u'£')),
     ('JPY', 'YEN', _(u'¥'))
+])
+
+STATUS = Enum([
+    (0, 'DRAFT', _(u'brouillon')),
+    (1, 'PRIVATE', _(u'privé')),
+    (2, 'PUBLIC', _(u'public')),
+    (3, 'REMOVED', _(u'supprimé'))
 ])
 
 INSURANCE_MAX_DEPOSIT = getattr(settings, 'INSURANCE_MAX_DEPOSIT', 750)
@@ -87,6 +96,11 @@ class Category(models.Model):
     need_insurance = models.BooleanField(default=True, db_index=True)
     
     def __unicode__(self):
+        """
+        >>> category = Category(name='Travaux - Bricolage')
+        >>> category.__unicode__()
+        u'Travaux - Bricolage'
+        """
         return smart_unicode(self.name)
     
     class Meta:
@@ -100,6 +114,11 @@ class Property(models.Model):
     name = models.CharField(null=False, max_length=255)
     
     def __unicode__(self):
+        """
+        >>> property = Property(name="Marque")
+        >>> property.__unicode__()
+        u'Marque'
+        """
         return smart_unicode(self.name)
     
     class Meta:
@@ -112,6 +131,11 @@ class PropertyValue(models.Model):
     product = models.ForeignKey(Product, related_name='properties')
     
     def __unicode__(self):
+        """
+        >>> property = PropertyValue(value="Mercedes")
+        >>> property.__unicode__()
+        u'Mercedes'
+        """
         return smart_unicode(self.value)
     
     class Meta:
@@ -124,7 +148,7 @@ class Price(models.Model):
     amount = models.DecimalField(max_digits=8, decimal_places=2)
     currency = models.CharField(null=False, max_length=3, choices=CURRENCY)
     product = models.ForeignKey(Product, related_name='prices')
-    unit = models.IntegerField(choices=UNIT)
+    unit = models.IntegerField(choices=UNIT, db_index=True)
     
     started_at = SimpleDateField(null=True, blank=True)
     ended_at = SimpleDateField(null=True, blank=True)
@@ -158,7 +182,7 @@ class Review(models.Model):
     summary = models.CharField(null=False, blank=True, max_length=255)
     score = models.FloatField(null=False)
     description = models.TextField(null=False)
-    created_at = models.DateTimeField(blank=True)
+    created_at = models.DateTimeField(blank=True, editable=False)
     ip = models.IPAddressField(null=True, blank=True)
     reviewer = models.ForeignKey(Patron, related_name="%(class)s_reviews")
     
@@ -204,3 +228,53 @@ class PatronReview(Review):
             raise ValidationError(_(u"Vous ne pouvez pas commenter le profil d'un loueur avec lequel n'avez pas effectué de réservations"))
         super(PatronReview, self).clean()
     
+
+class Question(models.Model):
+    text = models.CharField(max_length=255)
+    created_at = models.DateTimeField(editable=False)
+    modified_at = models.DateTimeField(editable=False)
+    status = models.IntegerField(choices=STATUS, db_index=True, default=STATUS.DRAFT)
+    
+    product = models.ForeignKey(Product)
+    author = models.ForeignKey(Patron)
+    
+    def __unicode__(self):
+        """
+        >>> question = Question(text='Quel est le nombre de place de cette voiture ?')
+        >>> question.__unicode__()
+        u'Quel est le nombre de place de cette voiture ?'
+        """
+        return smart_unicode(self.text)
+    
+    def save(self):
+        if not self.created_at:
+            self.created_at = datetime.now()
+        else:
+            self.modified_at = datetime.now()
+        super(Question, self).save()
+    
+    class Meta:
+        ordering = ('modified_at', 'created_at')
+        get_latest_by = 'modified_at'
+    
+
+class Answer(models.Model):
+    text = models.CharField(max_length=255)
+    created_at = models.DateTimeField(editable=False)
+    question = models.ForeignKey(Question, null=False)
+    
+    def __unicode__(self):
+        """
+        >>> answer = Answer(text='Cette voiture comporte 5 places')
+        >>> answer.__unicode__()
+        u'Cette voiture comporte 5 places'
+        """
+        return smart_unicode(self.text)
+    
+    def save(self):
+        if not self.created_at:
+            self.created_at = datetime.now()
+        super(Answer, self).save()
+    
+
+post_save.connect(post_save_answer, sender=Answer)

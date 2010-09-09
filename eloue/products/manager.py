@@ -8,3 +8,22 @@ class ProductManager(Manager):
     def archived(self):
         return self.filter(is_archived=True, is_allowed=True)
     
+
+class QuestionManager(Manager):
+    def drafts(self):
+        from eloue.products.models import STATUS
+        return self.get_queryset().filter(status=STATUS.DRAFT)
+    
+    def privates(self):
+        from eloue.products.models import STATUS
+        return self.get_queryset().filter(status=STATUS.PRIVATE)
+    
+    def public(self):
+        from eloue.products.models import STATUS
+        return self.get_queryset().filter(status=STATUS.PUBLIC)
+    
+    def removed(self):
+        from eloue.products.models import STATUS
+        return self.get_queryset().filter(status=STATUS.REMOVED)
+    
+
