@@ -28,6 +28,12 @@ class SimpleDate(int):
             return int((32 * value.month) + value.day)
         return int(value)
     
+    def date(self, year):
+        return datetime.date(year, self.month, self.day)
+    
+    def datetime(self, year, *args):
+        return datetime.datetime(year, self.month, self.day, *args)
+    
     @property
     def day(self):
         """

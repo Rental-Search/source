@@ -3,13 +3,11 @@ from datetime import datetime, timedelta
 
 from decimal import Decimal as D
 
-from django.conf import settings
 from django.test import TestCase
 from django.core.exceptions import ValidationError
 
-from eloue.accounts.models import Patron
 from eloue.products.models import Product
-from eloue.rent.models import Booking, PAYMENT_STATE
+from eloue.rent.models import Booking
 
 class BookingTest(TestCase):
     fixtures = ['patron', 'address', 'category', 'product']
@@ -84,7 +82,7 @@ class BookingTest(TestCase):
         self.assertTrue(booking.pin.isdigit())
     
 
-class BookingPayments(TestCase):
+class BookingPriceTest(TestCase):
     fixtures = ['patron', 'address', 'category', 'product', 'price']
     
     def setUp(self):
@@ -155,4 +153,50 @@ class BookingPayments(TestCase):
         ended_at = started_at + timedelta(seconds=360)
         price = Booking.calculate_price(product, started_at, ended_at)
         self.assertEquals(price, D('3.6'))
+    
+    def test_calculate_two_week_price(self):
+        product = Product.objects.get(pk=2)
+        started_at = datetime.now()
+        ended_at = started_at + timedelta(days=18)
+        price = Booking.calculate_price(product, started_at, ended_at)
+        self.assertEquals(price, D('126'))
+    
+
+class BookingSeasonTest(TestCase):
+    fixtures = ['patron', 'address', 'category', 'product', 'price']
+    
+    def test_calculate_day_season(self):
+        product = Product.objects.get(pk=3)
+        started_at = datetime(2010, 9, 15)
+        ended_at = started_at + timedelta(days=2)
+        price = Booking.calculate_price(product, started_at, ended_at)
+        self.assertEquals(price, D('20'))
+    
+    def test_calculate_over_season(self):
+        product = Product.objects.get(pk=3)
+        started_at = datetime(2010, 9, 15, 9, 0)
+        ended_at = started_at + timedelta(days=14)
+        price = Booking.calculate_price(product, started_at, ended_at)
+        self.assertEquals(price, D('126'))
+    
+    def test_calculate_over_year(self):
+        product = Product.objects.get(pk=3)
+        started_at = datetime(2010, 9, 30, 9, 0)
+        ended_at = started_at + timedelta(days=90)
+        price = Booking.calculate_price(product, started_at, ended_at)
+        self.assertEquals(price, D('720'))
+    
+    def test_calculate_on_start_terminal(self):
+        product = Product.objects.get(pk=3)
+        started_at = datetime(2010, 6, 21, 9, 0)
+        ended_at = started_at + timedelta(days=4)
+        price = Booking.calculate_price(product, started_at, ended_at)
+        self.assertEquals(price, D('40'))
+    
+    def test_calculate_on_end_terminal(self):
+        product = Product.objects.get(pk=3)
+        started_at = datetime(2010, 9, 20, 9, 0)
+        ended_at = started_at + timedelta(days=2)
+        price = Booking.calculate_price(product, started_at, ended_at)
+        self.assertEquals(price, D('20'))
     

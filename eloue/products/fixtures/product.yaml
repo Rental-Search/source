@@ -11,3 +11,8 @@
         summary: Perceuse visseuse Black Decker}
     model: products.product
     pk: 2
+
+-   fields: {address: 1, category: 1, deposit: '1000', description: 'Belle maison de bord de plage', owner: 1, quantity: 1, summary: 'Maison de vacances au bord de la plage'}
+    model: products.product
+    pk: 3
+

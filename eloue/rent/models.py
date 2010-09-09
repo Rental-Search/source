@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-import calendar, datetime, logging, random
+import datetime, logging, random
 
 from decimal import Decimal as D
 from pyke import knowledge_engine
@@ -41,6 +41,24 @@ PAYMENT_STATE = Enum([
 
 FEE_PERCENTAGE = D(str(getattr(settings, 'FEE_PERCENTAGE', 0.1)))
 
+PACKAGES_UNIT = {
+    'hour':UNIT.HOUR,
+    'week_end':UNIT.WEEK_END,
+    'day':UNIT.DAY,
+    'week':UNIT.WEEK,
+    'two_weeks':UNIT.TWO_WEEKS,
+    'month':UNIT.MONTH
+}
+
+PACKAGES = {
+    UNIT.HOUR: lambda amount, delta: amount * (delta.seconds / 60), 
+    UNIT.WEEK_END: lambda amount, delta: amount,
+    UNIT.DAY: lambda amount, delta: amount * delta.days,
+    UNIT.WEEK: lambda amount, delta: amount * delta.days,
+    UNIT.TWO_WEEKS: lambda amount, delta: amount * delta.days,
+    UNIT.MONTH: lambda amount, delta: amount * delta.days
+}
+
 log = logging.getLogger(__name__)
 
 class Booking(models.Model):
@@ -65,21 +83,23 @@ class Booking(models.Model):
     @staticmethod
     def calculate_price(product, started_at, ended_at):
         delta = ended_at - started_at
+        
         engine = knowledge_engine.engine((__file__, '.rules'))
         engine.activate('pricing')
         for price in product.prices.iterator():
             engine.assert_('prices', 'price', (price.unit, price.amount))
         vals, plans = engine.prove_1_goal('pricing.pricing($type, $started_at, $ended_at, $delta)', started_at=started_at, ended_at=ended_at, delta=delta)
-        packages = {
-            'hour': lambda delta: product.prices.get(unit=UNIT.HOUR).amount * (delta.seconds / 60), 
-            'week_end': lambda delta: product.prices.get(unit=UNIT.WEEK_END).amount,
-            'day': lambda delta: product.prices.get(unit=UNIT.DAY).amount * delta.days,
-            'week': lambda delta: product.prices.get(unit=UNIT.WEEK).amount * delta.days,
-            'two_weeks': lambda delta: product.prices.get(unit=UNIT.TWO_WEEKS).amount * delta.days,
-            'month': lambda delta: product.prices.get(unit=UNIT.MONTH).amount * delta.days
-        }
         engine.reset()
-        return packages[vals['type']](delta)
+        
+        amount, unit = D(0), PACKAGES_UNIT[vals['type']]
+        package = PACKAGES[unit]
+        for price in product.prices.filter(name__isnull=True, unit=unit):
+            amount += package(price.amount, delta)
+        
+        for price in product.prices.filter(name__isnull=False, unit=unit):
+            amount += package(price.amount, price.delta(started_at, ended_at))
+        
+        return amount
     
     def preapproval(self, cancel_url=None, return_url=None, ip_address=None):
         """Preapprove payments for borrower from Paypal.

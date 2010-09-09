@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-import datetime
+from datetime import datetime, timedelta
 
 from django.conf import settings
 from django.db import models
@@ -132,13 +132,24 @@ class Price(models.Model):
     def __unicode__(self):
         return smart_unicode(self.amount)
     
+    def delta(self, started_at, ended_at):
+        increase = 0
+        if self.ended_at < self.started_at:
+            increase = 1
+        if ended_at >= self.ended_at.datetime(ended_at.year + increase):
+            ended_at = self.ended_at.datetime(ended_at.year + increase) + timedelta(days=1)
+        if started_at <= self.started_at.datetime(started_at.year):
+            started_at = self.started_at.datetime(started_at.year) - timedelta(days=1)
+        delta = (ended_at - started_at) 
+        return delta if delta > timedelta(days=0) else timedelta(days=0)
+    
     def clean(self):
         from django.core.exceptions import ValidationError
         if self.amount < 0:
             raise ValidationError(_(u"Le prix ne peut pas être négatif"))
     
     class Meta:
-        unique_together = ('product', 'unit')
+        unique_together = ('product', 'unit', 'name')
     
 
 class Review(models.Model):
@@ -162,7 +173,7 @@ class Review(models.Model):
     
     def save(self, *args, **kwargs):
         if not self.created_at:
-            self.created_at = datetime.datetime.now()
+            self.created_at = datetime.now()
         super(Review, self).save(*args, **kwargs)
     
     class Meta:
