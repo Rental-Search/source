@@ -126,6 +126,7 @@ INSTALLED_APPS = (
     'south',
     'django_lean.experiments',
     'compress',
+    'announcements',
     'haystack',
     'django_nose',
     'accounts',
