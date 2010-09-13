@@ -25,7 +25,6 @@ def preapproval_ipn(request):
 @validate_ipn
 def pay_ipn(request):
     form = PayIPNForm(request.POST)
-    print request.POST
     if form.is_valid():
         pass # TODO : deal with data
     return HttpResponse()
