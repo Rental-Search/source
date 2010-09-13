@@ -5,7 +5,7 @@ from django.utils.translation import ugettext as _
 from haystack.forms import SearchForm
 
 from eloue.products.fields import FacetField
-from eloue.products.models import Review
+from eloue.products.models import Review, Product
 
 class FacetedSearchForm(SearchForm):
     owner = FacetField(label=_(u"Loueur"), pretty_name=_("par-loueur"), required=False, widget=forms.HiddenInput)
@@ -25,4 +25,9 @@ class ReviewForm(forms.ModelForm):
     class Meta:
         model = Review
         exclude = ('created_at', 'ip', 'reviewer')
+    
+
+class ProductForm(forms.ModelForm):
+    class Meta:
+        model = Product
     
