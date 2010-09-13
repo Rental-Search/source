@@ -196,6 +196,7 @@ AWS_AUTO_CREATE_BUCKET = getattr(local, 'AWS_AUTO_CREATE_BUCKET', False)
 
 # Paypal configuration
 USE_PAYPAL_SANDBOX = getattr(local, 'USE_PAYPAL_SANDBOX', False)
+VALIDATE_IPN = getattr(local, 'VALIDATE_IPN', True)
 PAYPAL_MERCHANT_REFERRAL = "Z6GVNB75VNCTU"
 if DEBUG:
     PAYPAL_API_USERNAME = getattr(local, 'PAYPAL_SANDBOX_API_USERNAME', "sand_1266353156_biz_api1.tryphon.org")

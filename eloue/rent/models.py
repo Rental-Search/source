@@ -121,7 +121,7 @@ class Booking(models.Model):
                 cancelUrl = cancel_url,
                 returnUrl = return_url,
                 ipnNotificationUrl = urljoin(
-                    "http://%s" % Site.objects.get_current().domain, reverse('ipn_handler')
+                    "http://%s" % Site.objects.get_current().domain, reverse('preapproval_ipn')
                 ),
                 client_details = {
                     'ipAddress': ip_address,
@@ -174,7 +174,7 @@ class Booking(models.Model):
                 currencyCode = self.currency,
                 preapprovalKey = self.preapproval_key,
                 ipnNotificationUrl = urljoin(
-                    "http://%s" % Site.objects.get_current().domain, reverse('ipn_handler')
+                    "http://%s" % Site.objects.get_current().domain, reverse('pay_ip')
                 ),
                 receiverList = { 'receiver': [
                     {'primary':True, 'amount':str(self.total_price), 'email':settings.PAYPAL_API_EMAIL},
@@ -234,7 +234,7 @@ class Booking(models.Model):
                 returnUrl = return_url,
                 currencyCode = self.currency,
                 ipnNotificationUrl = urljoin(
-                    "http://%s" % Site.objects.get_current().domain, reverse('ipn_handler')
+                    "http://%s" % Site.objects.get_current().domain, reverse('pay_ipn')
                 ),
                 receiverList = { 'receiver':[
                     {'amount':str(amount), 'email':self.owner.email},
