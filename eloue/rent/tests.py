@@ -263,5 +263,5 @@ class TestPaypalIPN(TestCase):
             'verify_sign':'ApZ7gM6YawE7YxcPuk9xgCNvybLAA.3oQL8gQFO3duXtJ-WfJ-dh1jJD'
         }
         response = self.client.post(reverse('pay_ipn'), urllib.urlencode(data), content_type='application/x-www-form-urlencoded; charset=windows-1252;')
-        self.failUnlessEqual(response.status_code, 403)
+        self.failUnlessEqual(response.status_code, 200)
     
