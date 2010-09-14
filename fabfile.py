@@ -3,7 +3,7 @@ from fabric.api import env, run, sudo, local, put
 def production():
     """Defines production environment"""
     env.user = "tim"
-    env.hosts = ['chase.e-loue.com',]
+    env.hosts = ['192.168.0.25',]
     env.base_dir = "/var/www"
     env.app_name = "eloue"
     env.domain_name = "e-loue.com"
@@ -11,7 +11,7 @@ def production():
     env.current_path = "%(domain_path)s/current" % { 'domain_path':env.domain_path }
     env.releases_path = "%(domain_path)s/releases" % { 'domain_path':env.domain_path }
     env.shared_path = "%(domain_path)s/shared" % { 'domain_path':env.domain_path }
-    env.git_clone = "git@github.com:eloue/eloue.git"
+    env.git_clone = "git@github.com:e-loue/eloue.git"
     env.env_file = "deploy/production.txt"
 
 def releases():
