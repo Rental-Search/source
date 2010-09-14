@@ -23,5 +23,4 @@ sphinx>=1.0.2
 -e git://github.com/e-loue/django-lean.git#egg=django_lean
 -e git://github.com/e-loue/geocoders.git#egg=geocoders
 -e git://github.com/e-loue/pysolr.git#egg=pysolr
--e git://github.com/e-loue/python-nose.git#egg=nose
--e git+git@github.com:e-loue/python-paypalx.git#egg=paypalx
+-e git+ssh://git@github.com/e-loue/python-paypalx.git#egg=paypalx
