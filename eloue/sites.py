@@ -4,7 +4,4 @@ from haystack.exceptions import AlreadyRegistered
 from eloue.products.models import Product
 from eloue.products.search_indexes import ProductIndex
 
-try:
-    site.register(Product, ProductIndex)
-except AlreadyRegistered:
-    pass
+site.register(Product, ProductIndex)
