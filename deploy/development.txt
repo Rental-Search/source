@@ -24,4 +24,5 @@ sphinx>=1.0.2
 -e git://github.com/e-loue/geocoders.git#egg=geocoders
 -e git://github.com/e-loue/pysolr.git#egg=pysolr
 -e git://github.com/e-loue/python-nose.git#egg=nose
+-e git://github.com/e-loue/nose-xcover.git#egg=nosexcover
 -e git+ssh://git@github.com/e-loue/python-paypalx.git#egg=paypalx

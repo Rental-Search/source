@@ -1,5 +1,6 @@
 *.pyc
 *.tmproj
+nosetests.xml
 .DS_Store
 .noseids
 .coverage
