@@ -1,4 +1,10 @@
 # -*- coding: utf-8 -*-
-import haystack
+from haystack import site
+from haystack.exceptions import AlreadyRegistered
+from eloue.products.models import Product
+from eloue.products.search_indexes import ProductIndex
 
-haystack.autodiscover()
+try:
+    site.register(Product, ProductIndex)
+except AlreadyRegistered:
+    pass
