@@ -129,11 +129,11 @@ INSTALLED_APPS = (
     'announcements',
     'haystack',
     'django_nose',
-    'accounts',
-    'rent',
-    'products',
-    'payments',
-    'quack'
+    'eloue.accounts',
+    'eloue.rent',
+    'eloue.products',
+    'eloue.payments',
+    'eloue.quack'
 )
 
 # Authentification configuration
