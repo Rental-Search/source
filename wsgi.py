@@ -1,0 +1,13 @@
+# -*- coding: utf-8 -*-
+import sys, site, os
+local_path = lambda path: os.path.join(os.path.abspath(os.path.dirname(__file__)), path)
+
+os.environ['DJANGO_SETTINGS_MODULE'] = 'eloue.settings'
+
+site.addsitedir(local_path('env/lib/python2.6/site-packages'))
+
+sys.path.append(local_path(''))
+sys.path.append(local_path('env/lib/python2.6/site-packages'))
+
+import django.core.handlers.wsgi
+application = django.core.handlers.wsgi.WSGIHandler()
