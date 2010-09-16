@@ -102,8 +102,37 @@ class Patron(User):
     
     objects = PatronManager()
     
-    def add_payment_card(self, card_name, card_number, card_owner_birth, card_type, card_verification):
-        pass
+    def add_payment_card(self, card_name, card_number, card_owner_birth, card_type, card_verification,
+        expiration_date, issue_number=''):
+        # You shouldn't call this if we haven't created this user's paypal account 
+        # We need to see what kind of return will be needed
+        try:
+            response = accounts.add_payment_card(
+                emailAddress = self.email,
+                nameOnCard = { # FIXME : This should be name linked to card
+                    'firstName':self.first_name,
+                    'lastName':self.last_name
+                },
+                cardNumber = card_number,
+                cardOwnerDateOfBirth = card_owner_birth,
+                cardType = card_type,
+                cardVerification_bumber = card_verification,
+                confirmationType = 'NONE',
+                address = {
+                    # TODO : This should be the address linked to card
+                },
+                expirationDate = {
+                    'month':expiration_date.month,
+                    'year':expiration_date.year
+                },
+                issueNumber = issue_number,
+                createAccountKey = self.account_key
+            )
+            # response['execStatus'] CREATED / COMPLETED / CREATED PENDING VERIFICATION
+            # response['fundingSourceKey']
+            # response['redirectUrl']
+        except PaypalError, e:
+            log.error(e)
     
     @property
     def is_verified(self):
