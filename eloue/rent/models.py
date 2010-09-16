@@ -14,7 +14,7 @@ from django.utils.translation import ugettext_lazy as _
 from eloue.accounts.models import Patron
 from eloue.products.models import CURRENCY, UNIT, Product
 from eloue.products.utils import Enum
-from eloue.rent.paypal import payments, PaypalError 
+from eloue.rent.paypal import payments, PaypalError
 
 BOOKING_STATE = Enum([
     (0, 'ASKED', _(u'Demandé')),
