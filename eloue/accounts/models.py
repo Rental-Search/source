@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-import datetime
+import datetime, logging
 
 from django.contrib.gis.db import models
 from django.conf import settings
@@ -17,6 +17,7 @@ from django.template.defaultfilters import slugify
 from geocoders.google import geocoder
 
 from eloue.accounts.manager import PatronManager
+from eloue.rent.paypal import accounts, PaypalError
 
 CIVILITY_CHOICES = (
     (0, _('Madame')),
@@ -84,6 +85,8 @@ PHONE_TYPES = (
     (4, _('Autre'))
 )
 
+log = logging.getLogger(__name__)
+
 class Patron(User):
     """A member"""
     civility = models.IntegerField(null=True, blank=True, choices=CIVILITY_CHOICES)
@@ -95,8 +98,25 @@ class Patron(User):
     last_ip = models.IPAddressField(null=True, blank=True)
     slug = models.SlugField(null=False, unique=True, db_index=True)
     paypal_email = models.EmailField(null=True, blank=True)
+    account_key = models.CharField(max_length=255, null=True, editable=False)
     
     objects = PatronManager()
+    
+    def add_payment_card(self, card_name, card_number, card_owner_birth, card_type, card_verification):
+        pass
+    
+    @property
+    def is_verified(self):
+        try:
+            response = accounts.get_verified_status(
+                emailAddress = self.email,
+                firstName = self.first_name,
+                lastName = self.last_name
+            )
+            return response['accountStatus'] == 'VERIFIED'
+        except PaypalError, e:
+            log.error(e)
+            return False
     
     def send_activation_email(self):
         subject = render_to_string('auth/activation_email_subject.txt', { 'site':Site.objects.get_current() })
