@@ -132,7 +132,6 @@ INSTALLED_APPS = (
     'eloue.accounts',
     'eloue.rent',
     'eloue.products',
-    'eloue.payments',
     'eloue.quack'
 )
 
@@ -187,7 +186,7 @@ USE_HTTPS = getattr(local, 'USE_HTTPS', True)
 SESSION_COOKIE_SECURE = getattr(local, 'SESSION_COOKIE_SECURE', True)
 
 # S3 configuration
-AWS_ACCESS_KEY_ID = getattr(local, 'AWS_ACCESS_KEY_ID', 'AKIAJ3PXVVKSTM3WSZSQ') 
+AWS_ACCESS_KEY_ID = getattr(local, 'AWS_ACCESS_KEY_ID', 'AKIAJ3PXVVKSTM3WSZSQ')
 AWS_SECRET_ACCESS_KEY = getattr(local, 'AWS_SECRET_ACCESS_KEY', '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')
 AWS_STORAGE_BUCKET_NAME = getattr(local, 'AWS_STORAGE_BUCKET_NAME', 'eloue')
 AWS_S3_CUSTOM_DOMAIN = getattr(local, 'AWS_S3_CUSTOM_DOMAIN', '')
