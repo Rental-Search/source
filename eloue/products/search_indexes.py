@@ -27,6 +27,7 @@ class ProductIndex(RealTimeSearchIndex):
     def get_queryset(self):
         return Product.objects.active()
     
+
 try:
     site.register(Product, ProductIndex)
 except AlreadyRegistered:

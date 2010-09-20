@@ -10,4 +10,5 @@ sys.path.append(local_path(''))
 sys.path.append(local_path('env/lib/python2.6/site-packages'))
 
 import django.core.handlers.wsgi
+from haystack import site
 application = django.core.handlers.wsgi.WSGIHandler()

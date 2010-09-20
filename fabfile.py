@@ -2,8 +2,22 @@ from fabric.api import env, run, sudo, local, put
 
 def production():
     """Defines production environment"""
-    env.user = "tim"
+    env.user = "deploy"
     env.hosts = ['192.168.0.25',]
+    env.base_dir = "/var/www"
+    env.app_name = "eloue"
+    env.domain_name = "e-loue.com"
+    env.domain_path = "%(base_dir)s/%(domain_name)s" % { 'base_dir':env.base_dir, 'domain_name':env.domain_name }
+    env.current_path = "%(domain_path)s/current" % { 'domain_path':env.domain_path }
+    env.releases_path = "%(domain_path)s/releases" % { 'domain_path':env.domain_path }
+    env.shared_path = "%(domain_path)s/shared" % { 'domain_path':env.domain_path }
+    env.git_clone = "git@github.com:e-loue/eloue.git"
+    env.env_file = "deploy/production.txt"
+
+def staging():
+    """Defines staging environment"""
+    env.user = "tim"
+    env.hosts = ['staging.e-loue.com',]
     env.base_dir = "/var/www"
     env.app_name = "eloue"
     env.domain_name = "e-loue.com"
@@ -80,7 +94,7 @@ def update_env():
     if not env.has_key('current_release'):
         releases()
     run("cd %(current_release)s; virtualenv --no-site-packages --unzip-setuptools env" % { 'current_release':env.current_release })
-    run("pip -q install -E %(current_release)s/env -r %(current_release)s/%(env_file)s" % { 'current_release':env.current_release, 'env_file':env.env_file })
+    run("%(current_release)s/env/bin/pip -q install -E %(current_release)s/env -r %(current_release)s/%(env_file)s" % { 'current_release':env.current_release, 'env_file':env.env_file })
     permissions()
 
 def migrate():
