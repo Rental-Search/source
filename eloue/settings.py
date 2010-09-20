@@ -173,7 +173,7 @@ SOUTH_TESTS_MIGRATE = getattr(local, 'SOUTH_TESTS_MIGRATE', True)
 # Haystack configuration
 HAYSTACK_SITECONF = 'eloue.sites'
 HAYSTACK_SEARCH_ENGINE = getattr(local, 'HAYSTACK_SEARCH_ENGINE', 'solr')
-HAYSTACK_SOLR_URL = getattr(local, 'HAYSTACK_SOLR_URL', 'http://localhost:8080/solr')
+HAYSTACK_SOLR_URL = getattr(local, 'HAYSTACK_SOLR_URL', 'http://localhost:8983/solr')
 HAYSTACK_INCLUDE_SPELLING = True
 HAYSTACK_ENABLE_REGISTRATIONS = False
 
