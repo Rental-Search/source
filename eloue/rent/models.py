@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
-import datetime, logging, random
+import logging
+import random
 
+from datetime import datetime, timedelta
 from decimal import Decimal as D
 from pyke import knowledge_engine
 from urlparse import urljoin
@@ -40,6 +42,8 @@ PAYMENT_STATE = Enum([
 ])
 
 FEE_PERCENTAGE = D(str(getattr(settings, 'FEE_PERCENTAGE', 0.1)))
+
+BOOKING_DAYS = getattr(settings, 'BOOKING_DAYS', 85)
 
 PACKAGES_UNIT = {
     'hour':UNIT.HOUR,
@@ -273,10 +277,12 @@ class Booking(models.Model):
             raise ValidationError(_(u"Une location ne peut pas terminer avant d'avoir commencer"))
         if self.total_price < 0:
             raise ValidationError(_(u"Le prix total d'une location ne peut pas être négatif"))
+        if (self.ended_at - self.started_at) > timedelta(days=settings.BOOKING_DAYS):
+            raise ValidationError(_(u"La durée d'une location est limitée à 85 jours."))
     
     def save(self, *args, **kwargs):
         if not self.pk:
-            self.created_at = datetime.datetime.now()
+            self.created_at = datetime.now()
             self.pin = str(random.randint(1000, 9999))
             self.deposit = self.product.deposit
         super(Booking, self).save(*args, **kwargs)

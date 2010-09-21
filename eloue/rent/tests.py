@@ -83,6 +83,19 @@ class BookingTest(TestCase):
         self.assertEqual(4, len(booking.pin))
         self.assertTrue(booking.pin.isdigit())
     
+    def test_long_booking(self):
+        booking = Booking(
+            started_at=datetime.now(),
+            ended_at=datetime.now() + timedelta(days=90),
+            total_price=10,
+            booking_state=4,
+            payment_state=1,
+            owner_id=1,
+            borrower_id=2,
+            product_id=1
+        )
+        self.assertRaises(ValidationError, booking.full_clean)
+    
 
 class BookingPriceTest(TestCase):
     fixtures = ['patron', 'address', 'category', 'product', 'price']

@@ -213,3 +213,7 @@ else:
     PAYPAL_API_SIGNATURE = getattr(local, 'PAYPAL_API_SIGNATURE')
     PAYPAL_API_APPLICATION_ID = getattr(local, 'PAYPAL_API_APPLICATION_ID')
     PAYPAL_API_EMAIL = getattr(local, 'PAYPAL_API_EMAIL')
+
+# Business configuration
+BOOKING_DAYS = 85 # Max booking days
+FEE_PERCENTAGE = 0.1 # Our commission percentage
