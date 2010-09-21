@@ -178,7 +178,7 @@ HAYSTACK_INCLUDE_SPELLING = True
 HAYSTACK_ENABLE_REGISTRATIONS = True
 
 # Lean configuration
-LEAN_ENGAGEMENT_CALCULATOR = 'eloue.lean'
+LEAN_ENGAGEMENT_CALCULATOR = 'eloue.lean.PatronEngagementScoreCalculator'
 
 # Geocoding API
 GOOGLE_API_KEY = 'ABQIAAAA7bPNcG5t1-bTyW9iNmI-jRRqVDjnV4vohYMgEqqi0RF2UFYT-xSSwfcv2yfC-sACkmL4FuG-A_bScQ'
