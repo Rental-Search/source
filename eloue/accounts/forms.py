@@ -5,7 +5,7 @@ from django.contrib.auth import authenticate
 from django.contrib.sites.models import Site
 from django.contrib.auth.forms import AuthenticationForm, PasswordResetForm
 from django.contrib.auth.tokens import default_token_generator
-from django.template import Context, loader
+from django.template.loader import render_to_string
 from django.utils.http import int_to_base36
 from django.utils.translation import ugettext as _
 
@@ -54,7 +54,7 @@ class EmailPasswordResetForm(PasswordResetForm):
         'autocapitalize':'off', 'autocorrect':'off'
     }))
     
-    def save(self, domain_override=None, use_https=False, token_generator=default_token_generator):
+    def save(self, domain_override=None, use_https=False, token_generator=default_token_generator, **kwargs):
         """Generates a one-use only link for resetting password and sends to the user"""
         from django.core.mail import EmailMultiAlternatives 
         for user in self.users_cache:
@@ -73,9 +73,9 @@ class EmailPasswordResetForm(PasswordResetForm):
                 'token': token_generator.make_token(user),
                 'protocol': use_https and 'https' or 'http',
             }
-            subject = render_to_string('auth/password_reset_email_subject.txt', { 'site':Site.objects.get_current() })
-            text_content = render_to_string('auth/password_reset_email.txt', context)
-            html_content = render_to_string('auth/password_reset_email.html', context)
+            subject = render_to_string('accounts/password_reset_email_subject.txt', { 'site':Site.objects.get_current() })
+            text_content = render_to_string('accounts/password_reset_email.txt', context)
+            html_content = render_to_string('accounts/password_reset_email.html', context)
             message = EmailMultiAlternatives(subject, text_content, settings.DEFAULT_FROM_EMAIL, [user.email])
             message.attach_alternative(html_content, "text/html")
             message.send()

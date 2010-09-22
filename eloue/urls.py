@@ -23,13 +23,26 @@ sitemaps = {
 urlpatterns = patterns('',
     url(r'^sitemap.xml$', index, {'sitemaps': sitemaps}, name="sitemap"),
     url(r'^sitemap-(?P<section>.+).xml$', sitemap, {'sitemaps': sitemaps}),
-    url(r'^reset/$', password_reset, { 'password_reset_form':EmailPasswordResetForm, 'template_name':'auth/password_reset_form.html',
-        'email_template_name':'auth/password_reset_email.html' }, name="password_reset"),
-    url(r'^reset/done/$', password_reset_done, {'template_name':'registration/password_reset_done.html'}, name="password_reset_done"),
-    url(r'^reset/(?P<uidb36>[0-9A-Za-z]+)-(?P<token>.+)/$', password_reset_confirm, {'template_name':'registration/password_reset_confirm.html'}, name="password_reset_confirm"),
-    url(r'^reset/complete/$', password_reset_complete, {'template_name':'registration/password_reset_complete.html'}, name="password_reset_complete"),
+    url(r'^reset/$', password_reset, {
+        'is_admin_site':False,
+        'password_reset_form':EmailPasswordResetForm,
+        'template_name':'accounts/password_reset_form.html',
+        'email_template_name':'accounts/password_reset_email.html'
+        }, name="password_reset"),
+    url(r'^reset/done/$', password_reset_done, {
+        'template_name':'accounts/password_reset_done.html'
+    }, name="password_reset_done"),
+    url(r'^reset/(?P<uidb36>[0-9A-Za-z]+)-(?P<token>.+)/$', password_reset_confirm, {
+        'template_name':'accounts/password_reset_confirm.html'
+    }, name="password_reset_confirm"),
+    url(r'^reset/complete/$', password_reset_complete, {
+        'template_name':'accounts/password_reset_complete.html'
+    }, name="password_reset_complete"),
     url(r'^activate/(?P<activation_key>\w+)/$', activate, name='auth_activate'),
-    url(r'^login/$', login, {'template_name':'auth/login.html', 'authentication_form':EmailAuthenticationForm}, name='auth_login'),
+    url(r'^login/$', login, {
+        'template_name':'accounts/login.html',
+        'authentication_form':EmailAuthenticationForm
+    }, name='auth_login'),
     url(r'^logout/$', logout_then_login, name='auth_logout'),
     url(r'^media/(.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT}),
     url(r'^loueur/', include('eloue.accounts.urls')),

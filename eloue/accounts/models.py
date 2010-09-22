@@ -148,9 +148,9 @@ class Patron(User):
             return False
     
     def send_activation_email(self):
-        subject = render_to_string('auth/activation_email_subject.txt', { 'site':Site.objects.get_current() })
-        text_content = render_to_string('auth/activation_email.txt', { 'activation_key':self.activation_key, 'expiration_days':settings.ACCOUNT_ACTIVATION_DAYS, 'site':Site.objects.get_current() })
-        html_content = render_to_string('auth/activation_email.html', { 'activation_key':self.activation_key, 'expiration_days':settings.ACCOUNT_ACTIVATION_DAYS, 'site':Site.objects.get_current() })
+        subject = render_to_string('accounts/activation_email_subject.txt', { 'site':Site.objects.get_current() })
+        text_content = render_to_string('accounts/activation_email.txt', { 'activation_key':self.activation_key, 'expiration_days':settings.ACCOUNT_ACTIVATION_DAYS, 'site':Site.objects.get_current() })
+        html_content = render_to_string('accounts/activation_email.html', { 'activation_key':self.activation_key, 'expiration_days':settings.ACCOUNT_ACTIVATION_DAYS, 'site':Site.objects.get_current() })
         message = EmailMultiAlternatives(subject, text_content, settings.DEFAULT_FROM_EMAIL, [self.email])
         message.attach_alternative(html_content, "text/html")
         message.send()
