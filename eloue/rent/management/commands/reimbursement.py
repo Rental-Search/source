@@ -8,7 +8,7 @@ from ftplib import FTP
 from django.core.management.base import BaseCommand
 
 class Command(BaseCommand):
-    help = "Send monthly insurance billing"
+    help = "Send monthly insurance reimbursement"
     
     def handle(self, *args, **options):
         # FIXME : dumb date filter and add logging
@@ -16,14 +16,13 @@ class Command(BaseCommand):
         from eloue.rent.models import Booking
         csv_file, path = tempfile.mkstemp()
         writer = csv.writer(csv_file, delimiter='|')
-        for booking in Booking.objects.ended().filter(created_at__gte=date.today()):
+        for booking in Booking.objects.canceled().filter(created_at__gte=date.today()):
             row = {}
             row['Numéro police'] = settings.POLICY_NUMBER
             row['Numéro partenaire'] = settings.PARTNER_NUMBER
             row['Numéro contrat'] = booking.contract_id
             row[u'Durée de garantie'] = (booking.ended_at - booking.started_at).days
             row[u'Numéro de commande'] = booking.uuid
-            row['Date d\'effet des garanties'] = booking.started_at.strftime("%Y%m%d")
             row[u'Désignation'] = booking.product.description
             row['Prix de la location TTC'] = booking.total_price
             # TODO : Missing fields 
