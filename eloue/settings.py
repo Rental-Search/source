@@ -177,6 +177,14 @@ HAYSTACK_SOLR_URL = getattr(local, 'HAYSTACK_SOLR_URL', 'http://localhost:8983/s
 HAYSTACK_INCLUDE_SPELLING = True
 HAYSTACK_ENABLE_REGISTRATIONS = True
 
+# Logging configuration
+try:
+    from logbook import StderrHandler, warn
+    handler = StderrHandler()
+    handler.push_application()
+except ImportError:
+    pass
+
 # Lean configuration
 LEAN_ENGAGEMENT_CALCULATOR = 'eloue.lean.PatronEngagementScoreCalculator'
 
