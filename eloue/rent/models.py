@@ -16,7 +16,9 @@ from django.utils.translation import ugettext_lazy as _
 from eloue.accounts.models import Patron
 from eloue.products.models import CURRENCY, UNIT, Product
 from eloue.products.utils import Enum
+from eloue.rent.fields import UUIDField
 from eloue.rent.paypal import payments, PaypalError
+
 
 BOOKING_STATE = Enum([
     (0, 'ASKED', _(u'Demandé')),
@@ -67,6 +69,7 @@ log = logging.getLogger(__name__)
 
 class Booking(models.Model):
     """A reservation"""
+    uuid = UUIDField(primary_key=True)
     started_at = models.DateTimeField(null=False)
     ended_at = models.DateTimeField(null=False)
     deposit = models.DecimalField(null=False, max_digits=8, decimal_places=2)
