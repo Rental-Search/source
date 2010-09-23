@@ -17,73 +17,74 @@ from django.template.defaultfilters import slugify
 from geocoders.google import geocoder
 
 from eloue.accounts.manager import PatronManager
+from eloue.products.utils import Enum
 from eloue.rent.paypal import accounts, PaypalError
 
-CIVILITY_CHOICES = (
-    (0, _('Madame')),
-    (1, _('Mademoiselle')),
-    (2, _('Monsieur'))
-)
+CIVILITY_CHOICES = Enum([
+    (0, 'MME', _('Madame')),
+    (1, 'MLLE', _('Mademoiselle')),
+    (2, 'M', _('Monsieur'))
+])
 
-COUNTRY_CHOICES = (
-    ('FR', _(u'France')),
-    ('BE', _(u'Belgique')),
-    ('LU', _(u'Luxembourg')),
-    ('RE', _(u'Réunion')),
-    ('DE', _(u'Allemagne')),
-    ('AD', _(u'Andore')),
-    ('AT', _(u'Autriche')),
-    ('CA', _(u'Canada')),
-    ('CY', _(u'Chypre')),
-    ('DK', _(u'Danemark')),
-    ('ES', _(u'Espagne')),
-    ('US', _(u'États-Unis')),
-    ('FI', _(u'Finlande')),
-    ('GR', _(u'Grèce')),
-    ('GP', _(u'Guadeloupe')),
-    ('GG', _(u'Guernesey')),
-    ('GF', _(u'Guyane Française')),
-    ('HU', _(u'Hongrie')),
-    ('IE', _(u'Irlande')),
-    ('IS', _(u'Islande')),
-    ('IT', _(u'Italie')),
-    ('JP', _(u'Japon')),
-    ('JE', _(u'Jersey')),
-    ('LV', _(u'Lettonie')),
-    ('LI', _(u'Liechtenstein')),
-    ('LT', _(u'Lituanie')),
-    ('MT', _(u'Malte')),
-    ('MQ', _(u'Martinique')),
-    ('MU', _(u'Maurice')),
-    ('YT', _(u'Mayotte')),
-    ('MC', _(u'Monaco')),
-    ('MA', _(u'Maroc')),
-    ('NO', _(u'Norvège')),
-    ('NC', _(u'Nouvelle-Calédonie')),
-    ('NL', _(u'Pays-Bas')),
-    ('PL', _(u'Pologne')),
-    ('PF', _(u'Polynésie Française')),
-    ('PT', _(u'Portugal')),
-    ('RO', _(u'Roumanie')),
-    ('GB', _(u'Royaume-Uni')),
-    ('RU', _(u'Russie, Fédération de')),
-    ('PM', _(u'Saint-Pierre-et-Miquelon')),
-    ('VA', _(u'Saint-Siège (État de la cité du Vatican)')),
-    ('SE', _(u'Suède')),
-    ('CH', _(u'Suisse')),
-    ('CZ', _(u'Tchèque, République')),
-    ('TF', _(u'Terres Australes Françaises')),
-    ('TN', _(u'Tunisie')),
-    ('TR', _(u'Turquie'))
-)
+COUNTRY_CHOICES = Enum([
+    ('FR', 'FR', _(u'France')),
+    ('BE', 'BE', _(u'Belgique')),
+    ('LU', 'LU', _(u'Luxembourg')),
+    ('RE', 'RE', _(u'Réunion')),
+    ('DE', 'DE', _(u'Allemagne')),
+    ('AD', 'AD', _(u'Andore')),
+    ('AT', 'AT', _(u'Autriche')),
+    ('CA', 'CA', _(u'Canada')),
+    ('CY', 'CY', _(u'Chypre')),
+    ('DK', 'DK', _(u'Danemark')),
+    ('ES', 'ES', _(u'Espagne')),
+    ('US', 'US', _(u'États-Unis')),
+    ('FI', 'FI', _(u'Finlande')),
+    ('GR', 'GR', _(u'Grèce')),
+    ('GP', 'GP', _(u'Guadeloupe')),
+    ('GG', 'GG', _(u'Guernesey')),
+    ('GF', 'GF', _(u'Guyane Française')),
+    ('HU', 'HU', _(u'Hongrie')),
+    ('IE', 'IE', _(u'Irlande')),
+    ('IS', 'IS', _(u'Islande')),
+    ('IT', 'IT', _(u'Italie')),
+    ('JP', 'JP', _(u'Japon')),
+    ('JE', 'JE', _(u'Jersey')),
+    ('LV', 'LV', _(u'Lettonie')),
+    ('LI', 'LI', _(u'Liechtenstein')),
+    ('LT', 'LT', _(u'Lituanie')),
+    ('MT', 'MT', _(u'Malte')),
+    ('MQ', 'MQ', _(u'Martinique')),
+    ('MU', 'MU', _(u'Maurice')),
+    ('YT', 'YT', _(u'Mayotte')),
+    ('MC', 'MC', _(u'Monaco')),
+    ('MA', 'MA', _(u'Maroc')),
+    ('NO', 'NO', _(u'Norvège')),
+    ('NC', 'NC', _(u'Nouvelle-Calédonie')),
+    ('NL', 'NL', _(u'Pays-Bas')),
+    ('PL', 'PL', _(u'Pologne')),
+    ('PF', 'PF', _(u'Polynésie Française')),
+    ('PT', 'PT', _(u'Portugal')),
+    ('RO', 'RO', _(u'Roumanie')),
+    ('GB', 'GB', _(u'Royaume-Uni')),
+    ('RU', 'RU', _(u'Russie, Fédération de')),
+    ('PM', 'PM', _(u'Saint-Pierre-et-Miquelon')),
+    ('VA', 'VA', _(u'Saint-Siège (État de la cité du Vatican)')),
+    ('SE', 'SE', _(u'Suède')),
+    ('CH', 'CH', _(u'Suisse')),
+    ('CZ', 'CZ', _(u'Tchèque, République')),
+    ('TF', 'TF', _(u'Terres Australes Françaises')),
+    ('TN', 'TN', _(u'Tunisie')),
+    ('TR', 'TR', _(u'Turquie'))
+])
 
-PHONE_TYPES = (
-    (0, _('Domicile')),
-    (1, _('Travail')),
-    (2, _('Mobile')),
-    (3, _('Fax')),
-    (4, _('Autre'))
-)
+PHONE_TYPES = Enum([
+    (0, 'HOME', _('Domicile')),
+    (1, 'WORK', _('Travail')),
+    (2, 'MOBILE', _('Mobile')),
+    (3, 'FAX', _('Fax')),
+    (4, 'OTHER', _('Autre'))
+])
 
 log = logging.getLogger(__name__)
 

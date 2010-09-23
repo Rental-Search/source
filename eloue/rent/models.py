@@ -17,6 +17,7 @@ from eloue.accounts.models import Patron
 from eloue.products.models import CURRENCY, UNIT, Product
 from eloue.products.utils import Enum
 from eloue.rent.fields import UUIDField
+from eloue.rent.manager import BookingManager
 from eloue.rent.paypal import payments, PaypalError
 
 
@@ -86,6 +87,8 @@ class Booking(models.Model):
     
     preapproval_key = models.CharField(null=True, max_length=255)
     pay_key = models.CharField(null=True, max_length=255)
+    
+    objects = BookingManager()
     
     @staticmethod
     def calculate_price(product, started_at, ended_at):
