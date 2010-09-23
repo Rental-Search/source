@@ -1,5 +1,5 @@
 Feature: Reset password
-  Scenario: Send reset password email 
+  Scenario: Reset my password 
     When I navigate to page 'password_reset'
     Then I should find 'form'
     Given I fill 'email' field with 'alexandre.woog@e-loue.com'
