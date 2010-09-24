@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 import csv
 import logbook
-import tempfile
+from tempfile import TemporaryFile
 
+from dateutil.relativedelta import relativedelta
 from datetime import date
 from ftplib import FTP
 
@@ -14,13 +15,13 @@ class Command(BaseCommand):
     help = "Send monthly insurance reimbursement"
     
     def handle(self, *args, **options):
-        # FIXME : dumb date filter
         from django.conf import settings
         from eloue.rent.models import Booking, PAYMENT_STATE
         log.info('Starting monthly insurance reimbursement batch')
-        csv_file, path = tempfile.mkstemp()
+        csv_file = TemporaryFile()
         writer = csv.writer(csv_file, delimiter='|')
-        for booking in Booking.objects.canceled().filter(created_at__gte=date.today()):
+        period = (date.today() - relativedelta(months=1))
+        for booking in Booking.objects.canceled().filter(canceled_at__year=period.year, canceled_at__month=period.month):
             row = {}
             row['Numéro police'] = settings.POLICY_NUMBER
             row['Numéro partenaire'] = settings.PARTNER_NUMBER
@@ -38,7 +39,7 @@ class Command(BaseCommand):
             row[u'Désignation'] = booking.product.description
             row['Prix de la location TTC'] = booking.total_amount
             row['Prix de cession HT'] = booking.insurance_fee
-            row['Com. du partenaire'] = 0
+            row['Com. du partenaire'] = booking.insurance_commission
             row['Taxes assurance à 9%'] = booking.insurance_taxes
             row['Cotisation TTC'] = booking.insurance_amount
             writer.writerow(row)

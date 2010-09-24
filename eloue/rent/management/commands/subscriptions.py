@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 import csv
 import logbook
-import tempfile
 
-from datetime import date
+from datetime import date, timedelta
 from ftplib import FTP
+from tempfile import TemporaryFile
 
 from django.core.management.base import BaseCommand
 
@@ -14,14 +14,14 @@ class Command(BaseCommand):
     help = "Send daily insurance subscriptions"
     
     def handle(self, *args, **options):
-        # FIXME : dumb date filter
         from django.conf import settings
         from eloue.accounts.models import COUNTRY_CHOICES
         from eloue.rent.models import Booking
         log.info('Starting daily insurance subscriptions batch')
-        csv_file, path = tempfile.mkstemp()
+        csv_file = TemporaryFile()
         writer = csv.writer(csv_file, delimiter='|')
-        for booking in Booking.objects.pending().filter(created_at__gte=date.today()):
+        period = (date.today() - timedelta(days=1))
+        for booking in Booking.objects.pending().filter(created_at__year=period.year, created_at__month=period.month, created_at__day=period.day):
             row = {}
             row['Login locataire'] = booking.borrower.username
             row['Adresse email'] = booking.borrower.email
@@ -42,7 +42,7 @@ class Command(BaseCommand):
             row['Montant de la Caution'] = booking.deposit_amount
             row[u'Durée de garantie'] = (booking.ended_at - booking.started_at).days
             row[u'Prix de cession de l\'assurance HT'] = booking.insurance_fee
-            row['Com. du partenaire'] = 0
+            row['Com. du partenaire'] = booking.insurance_commission
             row['Taxes assurance à 9%'] = booking.insurance_taxes
             row['Cotisation TTC'] = booking.insurance_amount
             writer.writerow(row)

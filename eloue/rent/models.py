@@ -44,8 +44,9 @@ PAYMENT_STATE = Enum([
     (11, 'DEPOSIT', _(u'Caution versée'))
 ])
 
-FEE_PERCENTAGE = D(str(getattr(settings, 'FEE_PERCENTAGE', 0.1)))
+COMMISSION = D(str(getattr(settings, 'COMMISSION', 0.1)))
 INSURANCE_FEE = D(str(getattr(settings, 'INSURANCE_FEE', 0.0594)))
+INSURANCE_COMMISSION = D(str(getattr(settings, 'INSURANCE_COMMISSION', 0)))
 INSURANCE_TAXES = D(str(getattr(settings, 'INSURANCE_TAXES', 0.09)))
 
 BOOKING_DAYS = getattr(settings, 'BOOKING_DAYS', 85)
@@ -163,14 +164,19 @@ class Booking(models.Model):
         self.save()
     
     @property
-    def fee(self):
+    def commission(self):
         """Return our commission"""
-        return self.total_amount * FEE_PERCENTAGE
+        return self.total_amount * COMMISSION
     
     @property
     def net_price(self):
         """Return net price for owner"""
-        return self.total_amount - self.fee
+        return self.total_amount - self.commission
+    
+    @property
+    def insurance_commision(self):
+        """Return our commission on insurance"""
+        return self.total_amount * INSURANCE_COMMISSION
     
     @property
     def insurance_fee(self):
@@ -311,6 +317,6 @@ class Booking(models.Model):
             self.created_at = datetime.now()
             self.pin = str(random.randint(1000, 9999))
             self.deposit_amount = self.product.deposit_amount
-            self.insurance_amount = self.insurance_fee + self.insurance_taxes
+            self.insurance_amount = self.insurance_fee + self.insurance_taxes + self.insurance_commision
         super(Booking, self).save(*args, **kwargs)
     
