@@ -12,6 +12,7 @@ markdown>=2.0.3
 mysql-python>=1.2.3
 python-memcached>=1.44
 pyke>=1.1.1
+python-dateutil>=1.5
 pyyaml>=3.09
 psycopg2>=2.2.2
 south>=0.7
