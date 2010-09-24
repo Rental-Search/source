@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-import datetime, logging
+import datetime
+import logbook
 
 from django.contrib.gis.db import models
 from django.conf import settings
@@ -86,7 +87,7 @@ PHONE_TYPES = Enum([
     (4, 'OTHER', _('Autre'))
 ])
 
-log = logging.getLogger(__name__)
+log = logbook.Logger('eloue.accounts')
 
 class Patron(User):
     """A member"""

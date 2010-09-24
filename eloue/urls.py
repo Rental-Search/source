@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+import logbook
+
 from django.conf import settings
 from django.conf.urls.defaults import *
 from django.contrib import admin
@@ -9,10 +11,12 @@ from eloue.sitemaps import FlatPageSitemap, PatronSitemap, ProductSitemap
 from eloue.accounts.forms import EmailAuthenticationForm, EmailPasswordResetForm
 from eloue.accounts.views import activate
 
+log = logbook.Logger('eloue')
+
 try:
     admin.autodiscover()
-except admin.sites.AlreadyRegistered:
-    pass # FIXME : Has been made to enable doctest, put logging in there
+except admin.sites.AlreadyRegistered, e:
+    log.warn('Site is already registered : %s' % e.message)
 
 sitemaps = {
     'flatpages':FlatPageSitemap,

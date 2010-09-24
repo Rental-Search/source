@@ -1,11 +1,14 @@
 # -*- coding: utf-8 -*-
 import csv
+import logbook
 import tempfile
 
 from datetime import date
 from ftplib import FTP
 
 from django.core.management.base import BaseCommand
+
+log = logbook.Logger('eloue.rent.subscriptions')
 
 class Command(BaseCommand):
     help = "Send daily insurance subscriptions"

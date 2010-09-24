@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-import logging
+import logbook
 import random
 
 from datetime import datetime, timedelta
@@ -66,7 +66,7 @@ PACKAGES = {
     UNIT.MONTH: lambda amount, delta: amount * delta.days
 }
 
-log = logging.getLogger(__name__)
+log = logbook.Logger('eloue.rent')
 
 class Booking(models.Model):
     """A reservation"""
