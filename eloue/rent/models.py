@@ -90,6 +90,7 @@ class Booking(models.Model):
     borrower = models.ForeignKey(Patron, related_name='rentals')
     product = models.ForeignKey(Product, related_name='bookings')
     
+    contract_id = models.IntegerField(null=True, db_index=True)
     pin = models.CharField(unique=True, blank=True, null=False, max_length=4)
     ip = models.IPAddressField(blank=True, null=True)
     
@@ -317,6 +318,26 @@ class Booking(models.Model):
             self.created_at = datetime.now()
             self.pin = str(random.randint(1000, 9999))
             self.deposit_amount = self.product.deposit_amount
-            self.insurance_amount = self.insurance_fee + self.insurance_taxes + self.insurance_commision
+            if self.product.has_insurance:
+                self.insurance_amount = self.insurance_fee + self.insurance_taxes + self.insurance_commision
+            else:
+                self.insurance_amount = D(0)
         super(Booking, self).save(*args, **kwargs)
     
+
+class Sinister(models.Model):
+    uuid = UUIDField(primary_key=True)
+    sinister_id = models.IntegerField(null=False, db_index=True)
+    description = models.TextField(null=False)
+    patron = models.ForeignKey(Patron, related_name='sinisters')
+    booking =  models.ForeignKey(Booking, related_name='sinisters')
+    product = models.ForeignKey(Product, related_name='sinisters')
+    
+    created_at = models.DateTimeField(blank=True, editable=False)
+    
+    def save(self, *args, **kwargs):
+        if not self.pk:
+            self.created_at = datetime.now()
+        super(Sinister, self).save(*args, **kwargs)
+    
+

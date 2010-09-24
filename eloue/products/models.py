@@ -64,6 +64,7 @@ class Product(models.Model):
     def __unicode__(self):
         return smart_unicode(self.summary)
     
+    @property
     def has_insurance(self):
         return not self.owner.is_professional \
             and self.deposit_amount <= INSURANCE_MAX_DEPOSIT \
