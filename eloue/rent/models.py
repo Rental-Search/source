@@ -31,8 +31,8 @@ BOOKING_STATE = Enum([
 
 PAYMENT_STATE = Enum([
     (0, 'REJECTED', _(u'Rejeté')),
-    (1, 'CANCELED', _(u'Annulé')),
-    (2, 'CANCELED_PENDING', _(u'En cours de sequestration')),
+    (1, 'CANCELED_PENDING', _(u'En cours de sequestration')),
+    (2, 'CANCELED', _(u'Annulé')),
     (3, 'AUTHORIZED', _(u'Autorisé')),
     (4, 'HOLDED_PENDING', _(u'En cours de sequestration')),
     (5, 'HOLDED', _(u'Sequestré')),

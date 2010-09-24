@@ -14,9 +14,10 @@ class Command(BaseCommand):
     help = "Send monthly insurance billing"
     
     def handle(self, *args, **options):
-        # FIXME : dumb date filter and add logging
+        # FIXME : dumb date filter
         from django.conf import settings
         from eloue.rent.models import Booking
+        log.info('Starting monthly insurance billing batch')
         csv_file, path = tempfile.mkstemp()
         writer = csv.writer(csv_file, delimiter='|')
         for booking in Booking.objects.ended().filter(created_at__gte=date.today()):
@@ -29,12 +30,17 @@ class Command(BaseCommand):
             row['Date d\'effet des garanties'] = booking.started_at.strftime("%Y%m%d")
             row[u'Désignation'] = booking.product.description
             row['Prix de la location TTC'] = booking.total_amount
-            # TODO : Missing fields 
+            row['Prix de cession HT'] = booking.insurance_fee
+            row['Com. du partenaire'] = 0
+            row['Taxes assurance à 9%'] = booking.insurance_taxes
+            row['Cotisation TTC'] = booking.insurance_amount
             writer.writerow(row)
+        log.info('Uploading monthly insurance billing')
         ftp = FTP(settings.INSURANCE_FTP_HOST)
         ftp.login(settings.INSURANCE_FTP_USER, settings.INSURANCE_FTP_PASSWORD)
         if settings.INSURANCE_FTP_CWD:
             ftp.cwd(settings.INSURANCE_FTP_CWD)
         ftp.storlines("STOR " + csv_file.name, csv_file)
         ftp.quit()
+        log.info('Finished monthly insurance reimbursement batch')
     

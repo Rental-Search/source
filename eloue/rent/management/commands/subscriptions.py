@@ -14,10 +14,11 @@ class Command(BaseCommand):
     help = "Send daily insurance subscriptions"
     
     def handle(self, *args, **options):
-        # FIXME : dumb date filter and add logging
+        # FIXME : dumb date filter
         from django.conf import settings
         from eloue.accounts.models import COUNTRY_CHOICES
         from eloue.rent.models import Booking
+        log.info('Starting daily insurance subscriptions batch')
         csv_file, path = tempfile.mkstemp()
         writer = csv.writer(csv_file, delimiter='|')
         for booking in Booking.objects.pending().filter(created_at__gte=date.today()):
@@ -40,12 +41,17 @@ class Command(BaseCommand):
             row['Prix de la location TTC'] = booking.total_amount
             row['Montant de la Caution'] = booking.deposit_amount
             row[u'Durée de garantie'] = (booking.ended_at - booking.started_at).days
-            # TODO : Missing fields 
+            row[u'Prix de cession de l\'assurance HT'] = booking.insurance_fee
+            row['Com. du partenaire'] = 0
+            row['Taxes assurance à 9%'] = booking.insurance_taxes
+            row['Cotisation TTC'] = booking.insurance_amount
             writer.writerow(row)
+        log.info('Uploading daily insurance subscriptions')
         ftp = FTP(settings.INSURANCE_FTP_HOST)
         ftp.login(settings.INSURANCE_FTP_USER, settings.INSURANCE_FTP_PASSWORD)
         if settings.INSURANCE_FTP_CWD:
             ftp.cwd(settings.INSURANCE_FTP_CWD)
         ftp.storlines("STOR " + csv_file.name, csv_file)
         ftp.quit()
+        log.info('Finished daily insurance subscriptions batch')
     
