@@ -10,8 +10,8 @@ from eloue.accounts.models import Patron
 def activate(request, activation_key):
     """Activate account"""
     activation_key = activation_key.lower() # Normalize before trying anything with it.
-    patron = Patron.objects.activate(activation_key)
-    return direct_to_template(request, 'accounts/activate.html', extra_context={ 'patron':patron, 'expiration_days':settings.ACCOUNT_ACTIVATION_DAYS })
+    is_actived = Patron.objects.activate(activation_key)
+    return direct_to_template(request, 'accounts/activate.html', extra_context={ 'is_actived':is_actived, 'expiration_days':settings.ACCOUNT_ACTIVATION_DAYS })
 
 def patron_detail(request, slug, patron_id=None):
     if patron_id:

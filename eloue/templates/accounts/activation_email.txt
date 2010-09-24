@@ -1,0 +1,7 @@
+{% load i18n %}
+{% blocktrans %}Votre enregistrement est presque terminé.{% endblocktrans %}
+
+http://{{ site.domain }}{% url auth_activate activation_key %}
+
+{% trans "Merci d'utiliser e-loue !" %}
+{% trans "L'équipe" %}.
