@@ -45,6 +45,8 @@ PAYMENT_STATE = Enum([
 ])
 
 FEE_PERCENTAGE = D(str(getattr(settings, 'FEE_PERCENTAGE', 0.1)))
+INSURANCE_FEE = D(str(getattr(settings, 'INSURANCE_FEE', 0.0594)))
+INSURANCE_TAXES = D(str(getattr(settings, 'INSURANCE_TAXES', 0.09)))
 
 BOOKING_DAYS = getattr(settings, 'BOOKING_DAYS', 85)
 
@@ -71,19 +73,27 @@ log = logbook.Logger('eloue.rent')
 class Booking(models.Model):
     """A reservation"""
     uuid = UUIDField(primary_key=True)
+    
     started_at = models.DateTimeField(null=False)
     ended_at = models.DateTimeField(null=False)
-    deposit = models.DecimalField(null=False, max_digits=8, decimal_places=2)
-    total_price = models.DecimalField(null=False, max_digits=8, decimal_places=2)
-    currency = models.CharField(null=False, max_length=3, choices=CURRENCY)
+    
     booking_state = models.IntegerField(null=False, default=BOOKING_STATE.ASKED, choices=BOOKING_STATE)
     payment_state = models.IntegerField(null=True, choices=PAYMENT_STATE)
+    
+    deposit_amount = models.DecimalField(null=False, max_digits=8, decimal_places=2)
+    insurance_amount = models.DecimalField(null=False, max_digits=8, decimal_places=2)
+    total_amount = models.DecimalField(null=False, max_digits=8, decimal_places=2)
+    currency = models.CharField(null=False, max_length=3, choices=CURRENCY)
+    
     owner = models.ForeignKey(Patron, related_name='bookings')
     borrower = models.ForeignKey(Patron, related_name='rentals')
     product = models.ForeignKey(Product, related_name='bookings')
+    
     pin = models.CharField(unique=True, blank=True, null=False, max_length=4)
-    created_at = models.DateTimeField(blank=True, editable=False)
     ip = models.IPAddressField(blank=True, null=True)
+    
+    created_at = models.DateTimeField(blank=True, editable=False)
+    canceled_at = models.DateTimeField(null=True, blank=True, editable=False)
     
     preapproval_key = models.CharField(null=True, max_length=255)
     pay_key = models.CharField(null=True, max_length=255)
@@ -127,7 +137,7 @@ class Booking(models.Model):
                 startingDate = datetime.datetime.now(),
                 endingDate = self.ended_at,
                 currencyCode = self.currency,
-                maxTotalAmountOfAllPayments = str(self.total_price + self.net_price + self.deposit),
+                maxTotalAmountOfAllPayments = str(self.total_amount + self.net_price + self.deposit_amount),
                 cancelUrl = cancel_url,
                 returnUrl = return_url,
                 ipnNotificationUrl = urljoin(
@@ -155,12 +165,22 @@ class Booking(models.Model):
     @property
     def fee(self):
         """Return our commission"""
-        return self.total_price * FEE_PERCENTAGE
+        return self.total_amount * FEE_PERCENTAGE
     
     @property
     def net_price(self):
         """Return net price for owner"""
-        return self.total_price - self.fee
+        return self.total_amount - self.fee
+    
+    @property
+    def insurance_fee(self):
+        """Return insurance commission"""
+        return self.total_amount * INSURANCE_FEE
+    
+    @property
+    def insurance_taxes(self):
+        """Return insurance taxes"""
+        return self.insurance_fee * INSURANCE_TAXES
     
     def hold(self, cancel_url=None, return_url=None):
         """Take money from borrower and keep it safe for later.
@@ -187,7 +207,7 @@ class Booking(models.Model):
                     "http://%s" % Site.objects.get_current().domain, reverse('pay_ip')
                 ),
                 receiverList = { 'receiver': [
-                    {'primary':True, 'amount':str(self.total_price), 'email':settings.PAYPAL_API_EMAIL},
+                    {'primary':True, 'amount':str(self.total_amount), 'email':settings.PAYPAL_API_EMAIL},
                     {'primary':False, 'amount':str(self.net_price), 'email':self.owner.email }
                 ]}
             )
@@ -203,7 +223,7 @@ class Booking(models.Model):
         self.save()
     
     def pay(self):
-        """Return deposit to borrower and pay the owner"""
+        """Return deposit_amount to borrower and pay the owner"""
         try:
             response = payments.execute_payment(
                 payKey = self.pay_key
@@ -232,8 +252,8 @@ class Booking(models.Model):
     
     def litigation(self, amount=None, cancel_url='', return_url=''):
         """Giving caution to owner"""
-        if not amount or amount > self.deposit:
-            amount = self.deposit
+        if not amount or amount > self.deposit_amount:
+            amount = self.deposit_amount
         
         try:
             response = payments.pay(
@@ -281,7 +301,7 @@ class Booking(models.Model):
             raise ValidationError(_(u"Un objet ne peut pas être louer à son propriétaire"))
         if self.started_at >= self.ended_at:
             raise ValidationError(_(u"Une location ne peut pas terminer avant d'avoir commencer"))
-        if self.total_price < 0:
+        if self.total_amount < 0:
             raise ValidationError(_(u"Le prix total d'une location ne peut pas être négatif"))
         if (self.ended_at - self.started_at) > timedelta(days=settings.BOOKING_DAYS):
             raise ValidationError(_(u"La durée d'une location est limitée à 85 jours."))
@@ -290,6 +310,7 @@ class Booking(models.Model):
         if not self.pk:
             self.created_at = datetime.now()
             self.pin = str(random.randint(1000, 9999))
-            self.deposit = self.product.deposit
+            self.deposit_amount = self.product.deposit_amount
+            self.insurance_amount = self.insurance_fee + self.insurance_taxes
         super(Booking, self).save(*args, **kwargs)
     

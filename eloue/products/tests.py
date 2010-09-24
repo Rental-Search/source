@@ -13,7 +13,7 @@ class ProductTest(TestCase):
     def test_product_creation(self):
         product = Product(
             summary="Perceuse visseuse Philips",
-            deposit=250,
+            deposit_amount=250,
             description=u"Engrenage planétaire à haute performance 2 vitesses : durée de vie supérieure, transmission optimale, fonctionnement régulier.",
             address_id=1,
             quantity=1,
@@ -25,7 +25,7 @@ class ProductTest(TestCase):
     def test_product_owner_address(self):
         product = Product(
             summary="Perceuse visseuse Philips",
-            deposit=250,
+            deposit_amount=250,
             description=u"Engrenage planétaire à haute performance 2 vitesses : durée de vie supérieure, transmission optimale, fonctionnement régulier.",
             address_id=1,
             quantity=1,

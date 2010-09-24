@@ -37,8 +37,8 @@ class Command(BaseCommand):
             row['Date d\'effet des garanties'] = booking.started_at.strftime("%Y%m%d")
             row[u'Numéro de commande'] = booking.uuid
             row[u'Désignation'] = booking.product.description
-            row['Prix de la location TTC'] = booking.total_price
-            row['Montant de la Caution'] = booking.deposit
+            row['Prix de la location TTC'] = booking.total_amount
+            row['Montant de la Caution'] = booking.deposit_amount
             row[u'Durée de garantie'] = (booking.ended_at - booking.started_at).days
             # TODO : Missing fields 
             writer.writerow(row)

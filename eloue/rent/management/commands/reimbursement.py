@@ -27,7 +27,7 @@ class Command(BaseCommand):
             row[u'Durée de garantie'] = (booking.ended_at - booking.started_at).days
             row[u'Numéro de commande'] = booking.uuid
             row[u'Désignation'] = booking.product.description
-            row['Prix de la location TTC'] = booking.total_price
+            row['Prix de la location TTC'] = booking.total_amount
             # TODO : Missing fields 
             writer.writerow(row)
         ftp = FTP(settings.INSURANCE_FTP_HOST)

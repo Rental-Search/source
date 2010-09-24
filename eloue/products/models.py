@@ -44,7 +44,7 @@ INSURANCE_MAX_DEPOSIT = getattr(settings, 'INSURANCE_MAX_DEPOSIT', 750)
 class Product(models.Model):
     """A product"""
     summary = models.CharField(null=False, max_length=255)
-    deposit = models.DecimalField(null=False, max_digits=8, decimal_places=2)
+    deposit_amount = models.DecimalField(null=False, max_digits=8, decimal_places=2)
     currency = models.CharField(null=False, max_length=3, choices=CURRENCY)
     description = models.TextField(null=False)
     address = models.ForeignKey(Address, related_name='products')
@@ -66,7 +66,7 @@ class Product(models.Model):
     
     def has_insurance(self):
         return not self.owner.is_professional \
-            and self.deposit <= INSURANCE_MAX_DEPOSIT \
+            and self.deposit_amount <= INSURANCE_MAX_DEPOSIT \
             and self.category.need_insurance
     
     @property

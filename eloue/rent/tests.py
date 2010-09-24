@@ -18,7 +18,7 @@ class BookingTest(TestCase):
         booking = Booking.objects.create(
             started_at=datetime.now(),
             ended_at=datetime.now() + timedelta(days=3),
-            total_price=10,
+            total_amount=10,
             booking_state=4,
             payment_state=1,
             owner_id=1,
@@ -34,7 +34,7 @@ class BookingTest(TestCase):
         booking = Booking(
             started_at=datetime.now() + timedelta(days=3),
             ended_at=datetime.now(),
-            total_price=10,
+            total_amount=10,
             booking_state=4,
             payment_state=1,
             owner_id=1,
@@ -47,7 +47,7 @@ class BookingTest(TestCase):
         booking = Booking(
             started_at=datetime.now(),
             ended_at=datetime.now() + timedelta(days=3),
-            total_price=10,
+            total_amount=10,
             booking_state=4,
             payment_state=1,
             owner_id=1,
@@ -56,11 +56,11 @@ class BookingTest(TestCase):
         )
         self.assertRaises(ValidationError, booking.full_clean)
     
-    def test_negative_total_price(self):
+    def test_negative_total_amount(self):
         booking = Booking(
             started_at=datetime.now(),
             ended_at=datetime.now() + timedelta(days=3),
-            total_price=-10,
+            total_amount=-10,
             booking_state=4,
             payment_state=1,
             owner_id=1,
@@ -73,7 +73,7 @@ class BookingTest(TestCase):
         booking = Booking.objects.create(
             started_at=datetime.now(),
             ended_at=datetime.now() + timedelta(days=3),
-            total_price=10,
+            total_amount=10,
             booking_state=4,
             payment_state=1,
             owner_id=1,
@@ -87,7 +87,7 @@ class BookingTest(TestCase):
         booking = Booking(
             started_at=datetime.now(),
             ended_at=datetime.now() + timedelta(days=90),
-            total_price=10,
+            total_amount=10,
             booking_state=4,
             payment_state=1,
             owner_id=1,
