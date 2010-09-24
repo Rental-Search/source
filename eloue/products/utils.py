@@ -13,6 +13,12 @@ class Enum(object):
     200
     >>> PERSON[1]
     (200, 'Verbose age title')
+    >>> PERSON['NAME']
+    100
+    >>> len(PERSON)
+    2
+    >>> (100, 'Verbose name title') in PERSON
+    True
     """
     def __init__(self, enum_list):
         self.enum_list = [(item[0], item[2]) for item in enum_list]
