@@ -167,9 +167,6 @@
 -   fields: {name: "Hygrom\xE8tre", need_insurance: true, parent: 64, slug: hygrometre}
     model: products.category
     pk: 68
--   fields: {name: Laser, need_insurance: true, parent: 64, slug: laser}
-    model: products.category
-    pk: 69
 -   fields: {name: "Sonom\xE8tre", need_insurance: true, parent: 64, slug: sonometre}
     model: products.category
     pk: 71
@@ -323,9 +320,6 @@
 -   fields: {name: Tamis, need_insurance: true, parent: 124, slug: tamis}
     model: products.category
     pk: 132
--   fields: {name: "bac \xE0 g\xE2cher", need_insurance: true, parent: 124, slug: bac-a-gacher}
-    model: products.category
-    pk: 134
 -   fields: {name: "B\xE9tonni\xE8re", need_insurance: true, parent: 124, slug: betonniere}
     model: products.category
     pk: 135
@@ -341,9 +335,6 @@
 -   fields: {name: Monte-charge, need_insurance: true, parent: 124, slug: monte-charge}
     model: products.category
     pk: 141
--   fields: {name: Aspirateur, need_insurance: true, parent: 143, slug: aspirateur}
-    model: products.category
-    pk: 144
 -   fields: {name: "D\xE9boucheur de canalisations", need_insurance: true, parent: 143,
         slug: deboucheur-de-canalisations}
     model: products.category
@@ -381,6 +372,9 @@
 -   fields: {name: Perceuse sans fil, need_insurance: true, parent: 152, slug: perceuse-sans-fil}
     model: products.category
     pk: 159
+-   fields: {name: "Bac \xE0 g\xE2cher", need_insurance: true, parent: 124, slug: bac-a-gacher}
+    model: products.category
+    pk: 134
 -   fields: {name: Perforateur, need_insurance: true, parent: 152, slug: perforateur}
     model: products.category
     pk: 160
@@ -432,9 +426,6 @@
 -   fields: {name: Uniforme, need_insurance: true, parent: 172, slug: uniforme}
     model: products.category
     pk: 181
--   fields: {name: Carnaval, need_insurance: true, parent: 172, slug: carnaval}
-    model: products.category
-    pk: 182
 -   fields: {name: Danse, need_insurance: true, parent: 172, slug: danse}
     model: products.category
     pk: 183
@@ -829,9 +820,6 @@
 -   fields: {name: Console, need_insurance: true, parent: 335, slug: console}
     model: products.category
     pk: 348
--   fields: {name: Accessoires, need_insurance: true, parent: 348, slug: accessoires}
-    model: products.category
-    pk: 349
 -   fields: {name: Microsoft, need_insurance: true, parent: 348, slug: microsoft}
     model: products.category
     pk: 350
@@ -1110,9 +1098,6 @@
 -   fields: {name: Equipement DJ, need_insurance: true, parent: 443, slug: equipement-dj}
     model: products.category
     pk: 467
--   fields: {name: Amplificateurs, need_insurance: true, parent: 467, slug: amplificateurs}
-    model: products.category
-    pk: 468
 -   fields: {name: Casques DJ, need_insurance: true, parent: 467, slug: casques-dj}
     model: products.category
     pk: 470
@@ -1147,6 +1132,9 @@
 -   fields: {name: Lecteur DVD portable, need_insurance: true, parent: 478, slug: lecteur-dvd-portable}
     model: products.category
     pk: 483
+-   fields: {name: Amplificateur DJ, need_insurance: true, parent: 467, slug: amplificateur-dj}
+    model: products.category
+    pk: 468
 -   fields: {name: "Cam\xE9ra video", need_insurance: true, parent: 443, slug: camera-video}
     model: products.category
     pk: 485
@@ -1214,9 +1202,6 @@
 -   fields: {name: Tente, need_insurance: true, parent: 509, slug: tente}
     model: products.category
     pk: 510
--   fields: {name: Camping car, need_insurance: true, parent: 509, slug: camping-car}
-    model: products.category
-    pk: 512
 -   fields: {name: Emplacement, need_insurance: true, parent: 509, slug: emplacement}
     model: products.category
     pk: 513
@@ -1339,12 +1324,6 @@
 -   fields: {name: Plaques de cuisson, need_insurance: true, parent: 554, slug: plaques-de-cuisson}
     model: products.category
     pk: 563
--   fields: {name: Ustensiles, need_insurance: true, parent: 554, slug: ustensiles}
-    model: products.category
-    pk: 564
--   fields: {name: Micro onde, need_insurance: true, parent: 554, slug: micro-onde}
-    model: products.category
-    pk: 565
 -   fields: {name: Poele, need_insurance: true, parent: 554, slug: poele}
     model: products.category
     pk: 567
@@ -1423,15 +1402,6 @@
 -   fields: {name: "Crespi\xE8res", need_insurance: true, parent: 554, slug: crespieres}
     model: products.category
     pk: 579
--   fields: {name: Gaufrier, need_insurance: true, parent: 554, slug: gaufrier}
-    model: products.category
-    pk: 580
--   fields: {name: Hot dog, need_insurance: true, parent: 554, slug: hot-dog}
-    model: products.category
-    pk: 581
--   fields: {name: Barbecue, need_insurance: true, parent: 554, slug: barbecue}
-    model: products.category
-    pk: 582
 -   fields: {name: Armoire froide, need_insurance: true, parent: 554, slug: armoire-froide}
     model: products.category
     pk: 583
@@ -1502,9 +1472,6 @@
 -   fields: {name: "C\xE9ramique", need_insurance: true, parent: 603, slug: ceramique}
     model: products.category
     pk: 611
--   fields: {name: Ustensiles, need_insurance: true, parent: 603, slug: ustensiles}
-    model: products.category
-    pk: 612
 -   fields: {name: Auto et moto, need_insurance: true, parent: null, slug: auto-et-moto}
     model: products.category
     pk: 613
@@ -1520,12 +1487,15 @@
 -   fields: {name: Gallerie, need_insurance: true, parent: 618, slug: gallerie}
     model: products.category
     pk: 619
+-   fields: {name: Ustensiles de cuisine, need_insurance: true, parent: 554, slug: ustensiles-de-cuisine}
+    model: products.category
+    pk: 564
+-   fields: {name: Ustensiles de table, need_insurance: true, parent: 603, slug: ustensiles-de-table}
+    model: products.category
+    pk: 612
 -   fields: {name: Attelage, need_insurance: true, parent: 618, slug: attelage}
     model: products.category
     pk: 620
--   fields: {name: GPS voiture, need_insurance: true, parent: 618, slug: gps-voiture}
-    model: products.category
-    pk: 621
 -   fields: {name: Siege enfant, need_insurance: true, parent: 618, slug: siege-enfant}
     model: products.category
     pk: 622
@@ -1583,9 +1553,6 @@
 -   fields: {name: Remorque animaux, need_insurance: true, parent: 643, slug: remorque-animaux}
     model: products.category
     pk: 646
--   fields: {name: Tracteur, need_insurance: true, parent: 643, slug: tracteur}
-    model: products.category
-    pk: 647
 -   fields: {name: Tracteur, need_insurance: true, parent: 648, slug: tracteur}
     model: products.category
     pk: 649
@@ -1611,9 +1578,6 @@
 -   fields: {name: Transport de loisir, need_insurance: true, parent: 639, slug: transport-de-loisir}
     model: products.category
     pk: 658
--   fields: {name: Caravane, need_insurance: true, parent: 658, slug: caravane}
-    model: products.category
-    pk: 659
 -   fields: {name: "Camion am\xE9nag\xE9", need_insurance: true, parent: 658, slug: camion-amenage}
     model: products.category
     pk: 661
@@ -1653,9 +1617,6 @@
 -   fields: {name: Cuiseur vapeur, need_insurance: true, parent: 666, slug: cuiseur-vapeur}
     model: products.category
     pk: 677
--   fields: {name: Autocuiseur, need_insurance: true, parent: 666, slug: autocuiseur}
-    model: products.category
-    pk: 678
 -   fields: {name: Raclette, need_insurance: true, parent: 666, slug: raclette}
     model: products.category
     pk: 679
@@ -2179,5 +2140,12 @@
 -   fields: {name: Centrale vapeur, need_insurance: true, parent: 689, slug: centrale-vapeur}
     model: products.category
     pk: 692
-
-
+-   fields: {name: Accessoires consoles, need_insurance: true, parent: 348, slug: accessoires-consoles}
+    model: products.category
+    pk: 349
+-   fields: {name: Aspirateur industriel, need_insurance: true, parent: 143, slug: aspirateur-industriel}
+    model: products.category
+    pk: 144
+-   fields: {name: Laser de mesure, need_insurance: true, parent: 64, slug: laser-de-mesure}
+    model: products.category
+    pk: 69
