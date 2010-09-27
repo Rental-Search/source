@@ -90,7 +90,7 @@ class Booking(models.Model):
     borrower = models.ForeignKey(Patron, related_name='rentals')
     product = models.ForeignKey(Product, related_name='bookings')
     
-    contract_id = models.AutoField(null=True, db_index=True)
+    contract_id = models.IntegerField(null=True, db_index=True)
     pin = models.CharField(unique=True, blank=True, null=False, max_length=4)
     ip = models.IPAddressField(blank=True, null=True)
     
@@ -327,7 +327,7 @@ class Booking(models.Model):
 
 class Sinister(models.Model):
     uuid = UUIDField(primary_key=True)
-    sinister_id = models.AutoField(null=False, db_index=True)
+    sinister_id = models.IntegerField(null=False, db_index=True)
     description = models.TextField(null=False)
     patron = models.ForeignKey(Patron, related_name='sinisters')
     booking =  models.ForeignKey(Booking, related_name='sinisters')
