@@ -31,7 +31,7 @@ class PatronAdmin(UserAdmin):
     form = PatronChangeForm
     actions = ['send_activation_email']
     search_fields = ('username', 'first_name', 'last_name', 'email', 'phones__number', 'addresses__city', 'company_name')
-
+    
     def send_activation_email(self, request, queryset):
         for patron in queryset:
             if patron.is_expired() or patron.is_active:
@@ -41,10 +41,10 @@ class PatronAdmin(UserAdmin):
             except smtplib.SMTPException:
                 pass
     send_activation_email.short_description = _(u"Envoyer à nouveau l'email d'activation")
-
+    
     def __unicode__(self):
         return self.username
-
+    
 
 class AddressAdmin(admin.ModelAdmin):
     list_display = ('patron', 'address1', 'address2', 'zipcode', 'city', 'country', 'is_geocoded')
