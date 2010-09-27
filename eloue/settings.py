@@ -143,7 +143,7 @@ ACCOUNT_ACTIVATION_DAYS = 7
 
 # Tests configuration
 TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
-NOSE_ARGS = getattr(local, 'NOSE_ARGS', ['--stop', '--with-doctest', '--with-coverage', '--cover-package=eloue'])
+NOSE_ARGS = getattr(local, 'NOSE_ARGS', ['--stop', '--with-doctest', '--cover-package=eloue', '--with-freshen', '--cover-branches'])
 NOSE_PLUGINS = getattr(local, 'NOSE_PLUGINS', [])
 
 # Message configuration
@@ -176,6 +176,17 @@ HAYSTACK_SEARCH_ENGINE = getattr(local, 'HAYSTACK_SEARCH_ENGINE', 'solr')
 HAYSTACK_SOLR_URL = getattr(local, 'HAYSTACK_SOLR_URL', 'http://localhost:8983/solr')
 HAYSTACK_INCLUDE_SPELLING = True
 HAYSTACK_ENABLE_REGISTRATIONS = True
+
+# Logging configuration
+try:
+    from logbook.more import ColorizedStderrHandler
+    handler = ColorizedStderrHandler()
+    handler.push_application()
+except ImportError:
+    pass
+
+# Lean configuration
+LEAN_ENGAGEMENT_CALCULATOR = 'eloue.lean.PatronEngagementScoreCalculator'
 
 # Geocoding API
 GOOGLE_API_KEY = 'ABQIAAAA7bPNcG5t1-bTyW9iNmI-jRRqVDjnV4vohYMgEqqi0RF2UFYT-xSSwfcv2yfC-sACkmL4FuG-A_bScQ'
@@ -210,3 +221,15 @@ else:
     PAYPAL_API_SIGNATURE = getattr(local, 'PAYPAL_API_SIGNATURE')
     PAYPAL_API_APPLICATION_ID = getattr(local, 'PAYPAL_API_APPLICATION_ID')
     PAYPAL_API_EMAIL = getattr(local, 'PAYPAL_API_EMAIL')
+
+# Business configuration
+BOOKING_DAYS = 85 # Max booking days
+COMMISSION = 0.1 # Our commission percentage
+POLICY_NUMBER = None # Our insurance policy number
+PARTNER_NUMBER = None # Our insurance partner number
+INSURANCE_FEE = 0.054 # Use to calculate transfer price
+INSURANCE_TAXES = 0.09 # Use to calculate taxes on insurance
+INSURANCE_FTP_HOST = None # Our insurance ftp server host
+INSURANCE_FTP_USER = None # Our insurance ftp server username
+INSURANCE_FTP_PASSWORD = None # Our insurance ftp server password
+INSURANCE_FTP_CWD = None # Our insurance ftp server directory

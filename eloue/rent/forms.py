@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
-import logging
+import logbook
 from django import forms
 
-log = logging.getLogger(__name__)
+log = logbook.Logger('eloue.rent')
 
 class PreApprovalIPNForm(forms.Form):
     approved = forms.BooleanField(required=True)

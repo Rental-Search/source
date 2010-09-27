@@ -231,7 +231,7 @@ class Command(BaseCommand):
                 description=description,
                 category=category,
                 is_archived=PUBLISH_MAP[row['product_publish']],
-                deposit=row['caution'],
+                deposit_amount=row['caution'],
                 quantity=row['quantity'],
                 owner=owner,
                 address=address

@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
-import datetime, logging, random
+import logbook
+import random
 
+from datetime import datetime, timedelta
 from decimal import Decimal as D
 from pyke import knowledge_engine
 from urlparse import urljoin
@@ -14,7 +16,10 @@ from django.utils.translation import ugettext_lazy as _
 from eloue.accounts.models import Patron
 from eloue.products.models import CURRENCY, UNIT, Product
 from eloue.products.utils import Enum
+from eloue.rent.fields import UUIDField
+from eloue.rent.manager import BookingManager
 from eloue.rent.paypal import payments, PaypalError
+
 
 BOOKING_STATE = Enum([
     (0, 'ASKED', _(u'Demandé')),
@@ -26,8 +31,8 @@ BOOKING_STATE = Enum([
 
 PAYMENT_STATE = Enum([
     (0, 'REJECTED', _(u'Rejeté')),
-    (1, 'CANCELED', _(u'Annulé')),
-    (2, 'CANCELED_PENDING', _(u'En cours de sequestration')),
+    (1, 'CANCELED_PENDING', _(u'En cours de sequestration')),
+    (2, 'CANCELED', _(u'Annulé')),
     (3, 'AUTHORIZED', _(u'Autorisé')),
     (4, 'HOLDED_PENDING', _(u'En cours de sequestration')),
     (5, 'HOLDED', _(u'Sequestré')),
@@ -39,7 +44,12 @@ PAYMENT_STATE = Enum([
     (11, 'DEPOSIT', _(u'Caution versée'))
 ])
 
-FEE_PERCENTAGE = D(str(getattr(settings, 'FEE_PERCENTAGE', 0.1)))
+COMMISSION = D(str(getattr(settings, 'COMMISSION', 0.1)))
+INSURANCE_FEE = D(str(getattr(settings, 'INSURANCE_FEE', 0.0594)))
+INSURANCE_COMMISSION = D(str(getattr(settings, 'INSURANCE_COMMISSION', 0)))
+INSURANCE_TAXES = D(str(getattr(settings, 'INSURANCE_TAXES', 0.09)))
+
+BOOKING_DAYS = getattr(settings, 'BOOKING_DAYS', 85)
 
 PACKAGES_UNIT = {
     'hour':UNIT.HOUR,
@@ -59,26 +69,38 @@ PACKAGES = {
     UNIT.MONTH: lambda amount, delta: amount * delta.days
 }
 
-log = logging.getLogger(__name__)
+log = logbook.Logger('eloue.rent')
 
 class Booking(models.Model):
     """A reservation"""
+    uuid = UUIDField(primary_key=True)
+    
     started_at = models.DateTimeField(null=False)
     ended_at = models.DateTimeField(null=False)
-    deposit = models.DecimalField(null=False, max_digits=8, decimal_places=2)
-    total_price = models.DecimalField(null=False, max_digits=8, decimal_places=2)
-    currency = models.CharField(null=False, max_length=3, choices=CURRENCY)
+    
     booking_state = models.IntegerField(null=False, default=BOOKING_STATE.ASKED, choices=BOOKING_STATE)
     payment_state = models.IntegerField(null=True, choices=PAYMENT_STATE)
+    
+    deposit_amount = models.DecimalField(null=False, max_digits=8, decimal_places=2)
+    insurance_amount = models.DecimalField(null=False, max_digits=8, decimal_places=2)
+    total_amount = models.DecimalField(null=False, max_digits=8, decimal_places=2)
+    currency = models.CharField(null=False, max_length=3, choices=CURRENCY)
+    
     owner = models.ForeignKey(Patron, related_name='bookings')
     borrower = models.ForeignKey(Patron, related_name='rentals')
     product = models.ForeignKey(Product, related_name='bookings')
+    
+    contract_id = models.IntegerField(null=True, db_index=True)
     pin = models.CharField(unique=True, blank=True, null=False, max_length=4)
-    created_at = models.DateTimeField(blank=True, editable=False)
     ip = models.IPAddressField(blank=True, null=True)
+    
+    created_at = models.DateTimeField(blank=True, editable=False)
+    canceled_at = models.DateTimeField(null=True, blank=True, editable=False)
     
     preapproval_key = models.CharField(null=True, max_length=255)
     pay_key = models.CharField(null=True, max_length=255)
+    
+    objects = BookingManager()
     
     @staticmethod
     def calculate_price(product, started_at, ended_at):
@@ -117,7 +139,7 @@ class Booking(models.Model):
                 startingDate = datetime.datetime.now(),
                 endingDate = self.ended_at,
                 currencyCode = self.currency,
-                maxTotalAmountOfAllPayments = str(self.total_price + self.net_price + self.deposit),
+                maxTotalAmountOfAllPayments = str(self.total_amount + self.net_price + self.deposit_amount),
                 cancelUrl = cancel_url,
                 returnUrl = return_url,
                 ipnNotificationUrl = urljoin(
@@ -143,14 +165,29 @@ class Booking(models.Model):
         self.save()
     
     @property
-    def fee(self):
+    def commission(self):
         """Return our commission"""
-        return self.total_price * FEE_PERCENTAGE
+        return self.total_amount * COMMISSION
     
     @property
     def net_price(self):
         """Return net price for owner"""
-        return self.total_price - self.fee
+        return self.total_amount - self.commission
+    
+    @property
+    def insurance_commision(self):
+        """Return our commission on insurance"""
+        return self.total_amount * INSURANCE_COMMISSION
+    
+    @property
+    def insurance_fee(self):
+        """Return insurance commission"""
+        return self.total_amount * INSURANCE_FEE
+    
+    @property
+    def insurance_taxes(self):
+        """Return insurance taxes"""
+        return self.insurance_fee * INSURANCE_TAXES
     
     def hold(self, cancel_url=None, return_url=None):
         """Take money from borrower and keep it safe for later.
@@ -177,7 +214,7 @@ class Booking(models.Model):
                     "http://%s" % Site.objects.get_current().domain, reverse('pay_ip')
                 ),
                 receiverList = { 'receiver': [
-                    {'primary':True, 'amount':str(self.total_price), 'email':settings.PAYPAL_API_EMAIL},
+                    {'primary':True, 'amount':str(self.total_amount), 'email':settings.PAYPAL_API_EMAIL},
                     {'primary':False, 'amount':str(self.net_price), 'email':self.owner.email }
                 ]}
             )
@@ -193,7 +230,7 @@ class Booking(models.Model):
         self.save()
     
     def pay(self):
-        """Return deposit to borrower and pay the owner"""
+        """Return deposit_amount to borrower and pay the owner"""
         try:
             response = payments.execute_payment(
                 payKey = self.pay_key
@@ -222,8 +259,8 @@ class Booking(models.Model):
     
     def litigation(self, amount=None, cancel_url='', return_url=''):
         """Giving caution to owner"""
-        if not amount or amount > self.deposit:
-            amount = self.deposit
+        if not amount or amount > self.deposit_amount:
+            amount = self.deposit_amount
         
         try:
             response = payments.pay(
@@ -271,13 +308,36 @@ class Booking(models.Model):
             raise ValidationError(_(u"Un objet ne peut pas être louer à son propriétaire"))
         if self.started_at >= self.ended_at:
             raise ValidationError(_(u"Une location ne peut pas terminer avant d'avoir commencer"))
-        if self.total_price < 0:
+        if self.total_amount < 0:
             raise ValidationError(_(u"Le prix total d'une location ne peut pas être négatif"))
+        if (self.ended_at - self.started_at) > timedelta(days=settings.BOOKING_DAYS):
+            raise ValidationError(_(u"La durée d'une location est limitée à 85 jours."))
     
     def save(self, *args, **kwargs):
         if not self.pk:
-            self.created_at = datetime.datetime.now()
+            self.created_at = datetime.now()
             self.pin = str(random.randint(1000, 9999))
-            self.deposit = self.product.deposit
+            self.deposit_amount = self.product.deposit_amount
+            if self.product.has_insurance:
+                self.insurance_amount = self.insurance_fee + self.insurance_taxes + self.insurance_commision
+            else:
+                self.insurance_amount = D(0)
         super(Booking, self).save(*args, **kwargs)
     
+
+class Sinister(models.Model):
+    uuid = UUIDField(primary_key=True)
+    sinister_id = models.IntegerField(null=False, db_index=True)
+    description = models.TextField(null=False)
+    patron = models.ForeignKey(Patron, related_name='sinisters')
+    booking =  models.ForeignKey(Booking, related_name='sinisters')
+    product = models.ForeignKey(Product, related_name='sinisters')
+    
+    created_at = models.DateTimeField(blank=True, editable=False)
+    
+    def save(self, *args, **kwargs):
+        if not self.pk:
+            self.created_at = datetime.now()
+        super(Sinister, self).save(*args, **kwargs)
+    
+

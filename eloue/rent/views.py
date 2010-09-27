@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-import logging
+import logbook
 
 from django.http import HttpResponse
 from django.views.decorators.http import require_POST
@@ -9,7 +9,7 @@ from eloue.rent.decorators import validate_ipn
 from eloue.rent.forms import PreApprovalIPNForm, PayIPNForm
 from eloue.rent.models import Booking
 
-log = logging.getLogger(__name__)
+log = logbook.Logger('eloue.rent')
 
 @require_POST
 @csrf_exempt

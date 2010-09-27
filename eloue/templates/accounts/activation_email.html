@@ -1,0 +1,7 @@
+{% load i18n %}
+<p>{% trans "Votre enregistrement sur e-loue est presque terminé." %}</p>
+
+<p><a href="http://{{ site.domain }}{% url auth_activate activation_key %}">http://{{ site.domain }}{% url auth_activate activation_key %}</a></p>
+
+<p>{% trans "Merci d'utiliser e-loue !" %}<br />
+{% trans "L'équipe" %}.</p>

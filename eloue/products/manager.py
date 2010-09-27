@@ -12,18 +12,18 @@ class ProductManager(Manager):
 class QuestionManager(Manager):
     def drafts(self):
         from eloue.products.models import STATUS
-        return self.get_queryset().filter(status=STATUS.DRAFT)
+        return self.get_query_set().filter(status=STATUS.DRAFT)
     
     def privates(self):
         from eloue.products.models import STATUS
-        return self.get_queryset().filter(status=STATUS.PRIVATE)
+        return self.get_query_set().filter(status=STATUS.PRIVATE)
     
     def public(self):
         from eloue.products.models import STATUS
-        return self.get_queryset().filter(status=STATUS.PUBLIC)
+        return self.get_query_set().filter(status=STATUS.PUBLIC)
     
     def removed(self):
         from eloue.products.models import STATUS
-        return self.get_queryset().filter(status=STATUS.REMOVED)
+        return self.get_query_set().filter(status=STATUS.REMOVED)
     
 
