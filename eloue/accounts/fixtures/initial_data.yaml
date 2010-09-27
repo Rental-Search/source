@@ -1,3 +1,2155 @@
 -   fields: {domain: www.e-loue.com, name: e-loue}
     model: sites.site
     pk: 1
+- fields: {domain: www.e-loue.com, name: e-loue}
+  model: sites.site
+  pk: 1
+- fields: {name: "B\xE9b\xE9", need_insurance: true, parent: null, slug: ''}
+  model: products.category
+  pk: 1
+- fields: {name: "Mobilier B\xE9b\xE9", need_insurance: true, parent: 1, slug: ''}
+  model: products.category
+  pk: 2
+- fields: {name: Berceaux, need_insurance: true, parent: 2, slug: ''}
+  model: products.category
+  pk: 3
+- fields: {name: "Commodes et plans \xE0 langer", need_insurance: true, parent: 2,
+    slug: ''}
+  model: products.category
+  pk: 4
+- fields: {name: "\xC9tag\xE8res murales", need_insurance: true, parent: 2, slug: ''}
+  model: products.category
+  pk: 5
+- fields: {name: Lits, need_insurance: true, parent: 2, slug: ''}
+  model: products.category
+  pk: 6
+- fields: {name: "Divers mobilier b\xE9b\xE9", need_insurance: true, parent: 2, slug: ''}
+  model: products.category
+  pk: 7
+- fields: {name: "Toilette b\xE9b\xE9", need_insurance: true, parent: 1, slug: ''}
+  model: products.category
+  pk: 8
+- fields: {name: "Meubles \xE0 langer", need_insurance: true, parent: 8, slug: ''}
+  model: products.category
+  pk: 9
+- fields: {name: "Les baignoires et \xE9quipements", need_insurance: true, parent: 8,
+    slug: ''}
+  model: products.category
+  pk: 10
+- fields: {name: "Hygi\xE8ne et propret\xE9", need_insurance: true, parent: 8, slug: ''}
+  model: products.category
+  pk: 11
+- fields: {name: "Eveil et jouets b\xE9b\xE9", need_insurance: true, parent: 1, slug: ''}
+  model: products.category
+  pk: 12
+- fields: {name: Arches, need_insurance: true, parent: 12, slug: ''}
+  model: products.category
+  pk: 13
+- fields: {name: Jouets, need_insurance: true, parent: 12, slug: ''}
+  model: products.category
+  pk: 14
+- fields: {name: "Jouets d'ext\xE9rieur", need_insurance: true, parent: 12, slug: ''}
+  model: products.category
+  pk: 15
+- fields: {name: Plage et piscine et bain, need_insurance: true, parent: 12, slug: ''}
+  model: products.category
+  pk: 16
+- fields: {name: "Livres d'\xE9veil", need_insurance: true, parent: 12, slug: ''}
+  model: products.category
+  pk: 17
+- fields: {name: Mobiles, need_insurance: true, parent: 12, slug: ''}
+  model: products.category
+  pk: 18
+- fields: {name: "Tapis de jeux et d'\xE9veil", need_insurance: true, parent: 12,
+    slug: ''}
+  model: products.category
+  pk: 19
+- fields: {name: Transat et balancelles, need_insurance: true, parent: 12, slug: ''}
+  model: products.category
+  pk: 20
+- fields: {name: Trotteurs, need_insurance: true, parent: 12, slug: ''}
+  model: products.category
+  pk: 21
+- fields: {name: "Alimentation b\xE9b\xE9", need_insurance: true, parent: 1, slug: ''}
+  model: products.category
+  pk: 22
+- fields: {name: Biberon, need_insurance: true, parent: 22, slug: ''}
+  model: products.category
+  pk: 23
+- fields: {name: Chaise haute, need_insurance: true, parent: 22, slug: ''}
+  model: products.category
+  pk: 24
+- fields: {name: Chauffe biberon, need_insurance: true, parent: 22, slug: ''}
+  model: products.category
+  pk: 25
+- fields: {name: Coussin d'allaitement, need_insurance: true, parent: 22, slug: ''}
+  model: products.category
+  pk: 26
+- fields: {name: Cuiseur, need_insurance: true, parent: 22, slug: ''}
+  model: products.category
+  pk: 27
+- fields: {name: "Si\xE8ge de table et r\xE9hausseur", need_insurance: true, parent: 22,
+    slug: ''}
+  model: products.category
+  pk: 28
+- fields: {name: "St\xE9rilisateur de biberon", need_insurance: true, parent: 22,
+    slug: ''}
+  model: products.category
+  pk: 29
+- fields: {name: Tire-lait, need_insurance: true, parent: 22, slug: ''}
+  model: products.category
+  pk: 30
+- fields: {name: "D\xE9placements b\xE9b\xE9", need_insurance: true, parent: 1, slug: ''}
+  model: products.category
+  pk: 31
+- fields: {name: Poussette, need_insurance: true, parent: 31, slug: ''}
+  model: products.category
+  pk: 32
+- fields: {name: "Porte-b\xE9b\xE9s", need_insurance: true, parent: 31, slug: ''}
+  model: products.category
+  pk: 33
+- fields: {name: Lits pliants, need_insurance: true, parent: 31, slug: ''}
+  model: products.category
+  pk: 34
+- fields: {name: Sacs a langer, need_insurance: true, parent: 31, slug: ''}
+  model: products.category
+  pk: 35
+- fields: {name: Baby-coques, need_insurance: true, parent: 31, slug: ''}
+  model: products.category
+  pk: 36
+- fields: {name: "Si\xE8ge auto", need_insurance: true, parent: 31, slug: ''}
+  model: products.category
+  pk: 37
+- fields: {name: Landau/nacelle, need_insurance: true, parent: 31, slug: ''}
+  model: products.category
+  pk: 38
+- fields: {name: "Tente de plage b\xE9b\xE9", need_insurance: true, parent: 31, slug: ''}
+  model: products.category
+  pk: 39
+- fields: {name: "S\xE9curit\xE9", need_insurance: true, parent: 1, slug: ''}
+  model: products.category
+  pk: 40
+- fields: {name: Babyphone, need_insurance: true, parent: 40, slug: ''}
+  model: products.category
+  pk: 41
+- fields: {name: Parc, need_insurance: true, parent: 40, slug: ''}
+  model: products.category
+  pk: 42
+- fields: {name: Barrieres, need_insurance: true, parent: 40, slug: ''}
+  model: products.category
+  pk: 43
+- fields: {name: Bricolage, need_insurance: true, parent: null, slug: ''}
+  model: products.category
+  pk: 44
+- fields: {name: "Outillage \xE0 main", need_insurance: true, parent: 44, slug: ''}
+  model: products.category
+  pk: 45
+- fields: {name: Chasse-pointe et chasse goupille, need_insurance: true, parent: 45,
+    slug: ''}
+  model: products.category
+  pk: 46
+- fields: {name: "Ciseaux \xE0 bois", need_insurance: true, parent: 45, slug: ''}
+  model: products.category
+  pk: 47
+- fields: {name: "Cl\xE9s", need_insurance: true, parent: 45, slug: ''}
+  model: products.category
+  pk: 48
+- fields: {name: Cliquet et douille, need_insurance: true, parent: 45, slug: ''}
+  model: products.category
+  pk: 49
+- fields: {name: "Emporte pri\xE8ce", need_insurance: true, parent: 45, slug: ''}
+  model: products.category
+  pk: 50
+- fields: {name: "Lime et r\xE2pe", need_insurance: true, parent: 45, slug: ''}
+  model: products.category
+  pk: 51
+- fields: {name: Marteau, need_insurance: true, parent: 45, slug: ''}
+  model: products.category
+  pk: 52
+- fields: {name: "M\xE8tre", need_insurance: true, parent: 45, slug: ''}
+  model: products.category
+  pk: 53
+- fields: {name: "Outillage de d\xE9molition", need_insurance: true, parent: 45, slug: ''}
+  model: products.category
+  pk: 54
+- fields: {name: "Perceuse \xE0 main", need_insurance: true, parent: 45, slug: ''}
+  model: products.category
+  pk: 55
+- fields: {name: Pince et tenaille, need_insurance: true, parent: 45, slug: ''}
+  model: products.category
+  pk: 56
+- fields: {name: Pointeaux, need_insurance: true, parent: 45, slug: ''}
+  model: products.category
+  pk: 57
+- fields: {name: "Rabot \xE0 main", need_insurance: true, parent: 45, slug: ''}
+  model: products.category
+  pk: 58
+- fields: {name: Tamponnoir, need_insurance: true, parent: 45, slug: ''}
+  model: products.category
+  pk: 59
+- fields: {name: "Taraud et fili\xE8re", need_insurance: true, parent: 45, slug: ''}
+  model: products.category
+  pk: 60
+- fields: {name: "T\xE9l\xE9m\xE8tre", need_insurance: true, parent: 45, slug: ''}
+  model: products.category
+  pk: 61
+- fields: {name: Tournevis, need_insurance: true, parent: 45, slug: ''}
+  model: products.category
+  pk: 62
+- fields: {name: Maillet, need_insurance: true, parent: 45, slug: ''}
+  model: products.category
+  pk: 63
+- fields: {name: "Mesure et d\xE9tection", need_insurance: true, parent: 44, slug: ''}
+  model: products.category
+  pk: 64
+- fields: {name: "Compressiom\xE8tre", need_insurance: true, parent: 64, slug: ''}
+  model: products.category
+  pk: 65
+- fields: {name: "D\xE9tecteur de m\xE9taux", need_insurance: true, parent: 64, slug: ''}
+  model: products.category
+  pk: 66
+- fields: {name: "D\xE9tecteur d'humidit\xE9", need_insurance: true, parent: 64, slug: ''}
+  model: products.category
+  pk: 67
+- fields: {name: "Hygrom\xE8tre", need_insurance: true, parent: 64, slug: ''}
+  model: products.category
+  pk: 68
+- fields: {name: Laser, need_insurance: true, parent: 64, slug: ''}
+  model: products.category
+  pk: 69
+- fields: {name: Multifaisceaux, need_insurance: true, parent: 64, slug: ''}
+  model: products.category
+  pk: 70
+- fields: {name: "Sonom\xE8tre", need_insurance: true, parent: 64, slug: ''}
+  model: products.category
+  pk: 71
+- fields: {name: Soudure et plomberie, need_insurance: true, parent: 64, slug: ''}
+  model: products.category
+  pk: 72
+- fields: {name: Theodolite, need_insurance: true, parent: 64, slug: ''}
+  model: products.category
+  pk: 73
+- fields: {name: "Niveau \xE0 bulle", need_insurance: true, parent: 64, slug: ''}
+  model: products.category
+  pk: 74
+- fields: {name: Niveau laser, need_insurance: true, parent: 64, slug: ''}
+  model: products.category
+  pk: 75
+- fields: {name: Plomberie et converture, need_insurance: true, parent: 44, slug: ''}
+  model: products.category
+  pk: 76
+- fields: {name: "Poste \xE0 souder \xE0 flamme", need_insurance: true, parent: 76,
+    slug: ''}
+  model: products.category
+  pk: 77
+- fields: {name: "Bruleur \xE0 goudron", need_insurance: true, parent: 76, slug: ''}
+  model: products.category
+  pk: 78
+- fields: {name: "D\xE9tartreuse", need_insurance: true, parent: 76, slug: ''}
+  model: products.category
+  pk: 79
+- fields: {name: Coupe tube, need_insurance: true, parent: 76, slug: ''}
+  model: products.category
+  pk: 80
+- fields: {name: Deboucheur, need_insurance: true, parent: 76, slug: ''}
+  model: products.category
+  pk: 81
+- fields: {name: Outil d'assemblage de plombier, need_insurance: true, parent: 76,
+    slug: ''}
+  model: products.category
+  pk: 82
+- fields: {name: Outil de cintrage, need_insurance: true, parent: 76, slug: ''}
+  model: products.category
+  pk: 83
+- fields: {name: Outillage d'atelier, need_insurance: true, parent: 44, slug: ''}
+  model: products.category
+  pk: 84
+- fields: {name: "Combin\xE9 \xE0 bois", need_insurance: true, parent: 84, slug: ''}
+  model: products.category
+  pk: 85
+- fields: {name: "D\xE9gauchisseuse-raboteuses", need_insurance: true, parent: 84,
+    slug: ''}
+  model: products.category
+  pk: 86
+- fields: {name: "Aspirateur pour machine \xE0 bois", need_insurance: true, parent: 84,
+    slug: ''}
+  model: products.category
+  pk: 87
+- fields: {name: "Mortaiseuse \xE0 b\xE9dane", need_insurance: true, parent: 84, slug: ''}
+  model: products.category
+  pk: 88
+- fields: {name: Ponceuse stationnaire, need_insurance: true, parent: 84, slug: ''}
+  model: products.category
+  pk: 89
+- fields: {name: "Scie \xE0 chantourner", need_insurance: true, parent: 84, slug: ''}
+  model: products.category
+  pk: 90
+- fields: {name: "Scie \xE0 onglets \xE9lectrique", need_insurance: true, parent: 84,
+    slug: ''}
+  model: products.category
+  pk: 91
+- fields: {name: "Scie \xE0 ruban", need_insurance: true, parent: 84, slug: ''}
+  model: products.category
+  pk: 92
+- fields: {name: Scie circulaire de table, need_insurance: true, parent: 84, slug: ''}
+  model: products.category
+  pk: 93
+- fields: {name: Toupie, need_insurance: true, parent: 84, slug: ''}
+  model: products.category
+  pk: 94
+- fields: {name: "Tours \xE0 bois et \xE0 m\xE9taux", need_insurance: true, parent: 84,
+    slug: ''}
+  model: products.category
+  pk: 95
+- fields: {name: "Tron\xE7onneuse \xE0 m\xE9taux", need_insurance: true, parent: 84,
+    slug: ''}
+  model: products.category
+  pk: 96
+- fields: {name: Compresseur, need_insurance: true, parent: 84, slug: ''}
+  model: products.category
+  pk: 97
+- fields: {name: "Echafaudage d'int\xE9rieur", need_insurance: true, parent: 84, slug: ''}
+  model: products.category
+  pk: 98
+- fields: {name: Escabeau et marchepied, need_insurance: true, parent: 84, slug: ''}
+  model: products.category
+  pk: 99
+- fields: {name: "Groupe \xE9lectrog\xE8ne", need_insurance: true, parent: 84, slug: ''}
+  model: products.category
+  pk: 100
+- fields: {name: "Perceuse \xE0 colonne", need_insurance: true, parent: 84, slug: ''}
+  model: products.category
+  pk: 101
+- fields: {name: Touret, need_insurance: true, parent: 84, slug: ''}
+  model: products.category
+  pk: 102
+- fields: {name: Treuil et palan, need_insurance: true, parent: 84, slug: ''}
+  model: products.category
+  pk: 103
+- fields: {name: "Fer \xE0 souder electrique", need_insurance: true, parent: 84, slug: ''}
+  model: products.category
+  pk: 104
+- fields: {name: "Poste \xE0 souder \xE0 l'arc", need_insurance: true, parent: 84,
+    slug: ''}
+  model: products.category
+  pk: 105
+- fields: {name: "Peinture et r\xE9novation", need_insurance: true, parent: 44, slug: ''}
+  model: products.category
+  pk: 106
+- fields: {name: Cireuse, need_insurance: true, parent: 106, slug: ''}
+  model: products.category
+  pk: 107
+- fields: {name: Cloueuse, need_insurance: true, parent: 106, slug: ''}
+  model: products.category
+  pk: 108
+- fields: {name: Cristalliseuse, need_insurance: true, parent: 106, slug: ''}
+  model: products.category
+  pk: 109
+- fields: {name: "D\xE9capeuse", need_insurance: true, parent: 106, slug: ''}
+  model: products.category
+  pk: 110
+- fields: {name: "D\xE9colleuse", need_insurance: true, parent: 106, slug: ''}
+  model: products.category
+  pk: 111
+- fields: {name: Gratte papier, need_insurance: true, parent: 106, slug: ''}
+  model: products.category
+  pk: 112
+- fields: {name: "Pistolet \xE0 peinture", need_insurance: true, parent: 106, slug: ''}
+  model: products.category
+  pk: 113
+- fields: {name: "Table \xE0 tapisser", need_insurance: true, parent: 106, slug: ''}
+  model: products.category
+  pk: 114
+- fields: {name: "Pistolet \xE0 colle", need_insurance: true, parent: 106, slug: ''}
+  model: products.category
+  pk: 115
+- fields: {name: "M\xE9langeur \xE0 peinture", need_insurance: true, parent: 106,
+    slug: ''}
+  model: products.category
+  pk: 116
+- fields: {name: Climatisation et Chauffage, need_insurance: true, parent: 44, slug: ''}
+  model: products.category
+  pk: 117
+- fields: {name: Chauffage, need_insurance: true, parent: 117, slug: ''}
+  model: products.category
+  pk: 118
+- fields: {name: "D\xE9shumificateur", need_insurance: true, parent: 117, slug: ''}
+  model: products.category
+  pk: 119
+- fields: {name: Ventilateur, need_insurance: true, parent: 117, slug: ''}
+  model: products.category
+  pk: 120
+- fields: {name: Vitrerie, need_insurance: true, parent: 44, slug: ''}
+  model: products.category
+  pk: 121
+- fields: {name: "Appareil \xE0 vitrer", need_insurance: true, parent: 121, slug: ''}
+  model: products.category
+  pk: 122
+- fields: {name: Ventouse, need_insurance: true, parent: 121, slug: ''}
+  model: products.category
+  pk: 123
+- fields: {name: Construction, need_insurance: true, parent: 44, slug: ''}
+  model: products.category
+  pk: 124
+- fields: {name: "Fils \xE0 plomb", need_insurance: true, parent: 124, slug: ''}
+  model: products.category
+  pk: 125
+- fields: {name: "Machine \xE0 cr\xE9pir", need_insurance: true, parent: 124, slug: ''}
+  model: products.category
+  pk: 126
+- fields: {name: Platoir, need_insurance: true, parent: 124, slug: ''}
+  model: products.category
+  pk: 127
+- fields: {name: "Regle de ma\xE7on", need_insurance: true, parent: 124, slug: ''}
+  model: products.category
+  pk: 128
+- fields: {name: Seau et auge, need_insurance: true, parent: 124, slug: ''}
+  model: products.category
+  pk: 129
+- fields: {name: Serre-joints, need_insurance: true, parent: 124, slug: ''}
+  model: products.category
+  pk: 130
+- fields: {name: Taloche, need_insurance: true, parent: 124, slug: ''}
+  model: products.category
+  pk: 131
+- fields: {name: Tamis, need_insurance: true, parent: 124, slug: ''}
+  model: products.category
+  pk: 132
+- fields: {name: Truelle, need_insurance: true, parent: 124, slug: ''}
+  model: products.category
+  pk: 133
+- fields: {name: "bac \xE0 g\xE2cher", need_insurance: true, parent: 124, slug: ''}
+  model: products.category
+  pk: 134
+- fields: {name: "B\xE9tonni\xE8re", need_insurance: true, parent: 124, slug: ''}
+  model: products.category
+  pk: 135
+- fields: {name: Echafaudage, need_insurance: true, parent: 124, slug: ''}
+  model: products.category
+  pk: 136
+- fields: {name: Echelle, need_insurance: true, parent: 124, slug: ''}
+  model: products.category
+  pk: 137
+- fields: {name: "Etai et tr\xE9teau", need_insurance: true, parent: 124, slug: ''}
+  model: products.category
+  pk: 138
+- fields: {name: "Goulotte d'\xE9vacuation", need_insurance: true, parent: 124, slug: ''}
+  model: products.category
+  pk: 139
+- fields: {name: "L\xE8ve plaque", need_insurance: true, parent: 124, slug: ''}
+  model: products.category
+  pk: 140
+- fields: {name: Monte-charge, need_insurance: true, parent: 124, slug: ''}
+  model: products.category
+  pk: 141
+- fields: {name: "Pelle pioche et tari\xE8re", need_insurance: true, parent: 124,
+    slug: ''}
+  model: products.category
+  pk: 142
+- fields: {name: Netoyage et entretien, need_insurance: true, parent: 44, slug: ''}
+  model: products.category
+  pk: 143
+- fields: {name: Aspirateur, need_insurance: true, parent: 143, slug: ''}
+  model: products.category
+  pk: 144
+- fields: {name: "D\xE9boucheur de canalisations", need_insurance: true, parent: 143,
+    slug: ''}
+  model: products.category
+  pk: 145
+- fields: {name: Nettoyeur haute pression, need_insurance: true, parent: 143, slug: ''}
+  model: products.category
+  pk: 146
+- fields: {name: Nettoyeur vapeur, need_insurance: true, parent: 143, slug: ''}
+  model: products.category
+  pk: 147
+- fields: {name: "Pompe immerg\xE9e", need_insurance: true, parent: 143, slug: ''}
+  model: products.category
+  pk: 148
+- fields: {name: Pompe submersible, need_insurance: true, parent: 143, slug: ''}
+  model: products.category
+  pk: 149
+- fields: {name: Shampouineuse, need_insurance: true, parent: 143, slug: ''}
+  model: products.category
+  pk: 150
+- fields: {name: Balayeuse, need_insurance: true, parent: 143, slug: ''}
+  model: products.category
+  pk: 151
+- fields: {name: "Outillage \xE9l\xE9ctroportatif", need_insurance: true, parent: 44,
+    slug: ''}
+  model: products.category
+  pk: 152
+- fields: {name: "D\xE9fonceuse", need_insurance: true, parent: 152, slug: ''}
+  model: products.category
+  pk: 153
+- fields: {name: Policeusse, need_insurance: true, parent: 152, slug: ''}
+  model: products.category
+  pk: 154
+- fields: {name: Ponceuse, need_insurance: true, parent: 152, slug: ''}
+  model: products.category
+  pk: 155
+- fields: {name: "D\xE9capeur", need_insurance: true, parent: 152, slug: ''}
+  model: products.category
+  pk: 156
+- fields: {name: Meuleuse, need_insurance: true, parent: 152, slug: ''}
+  model: products.category
+  pk: 157
+- fields: {name: Perceuse filaire, need_insurance: true, parent: 152, slug: ''}
+  model: products.category
+  pk: 158
+- fields: {name: Perceuse sans fil, need_insurance: true, parent: 152, slug: ''}
+  model: products.category
+  pk: 159
+- fields: {name: Perforateur, need_insurance: true, parent: 152, slug: ''}
+  model: products.category
+  pk: 160
+- fields: {name: "Rabot \xE9lectrique", need_insurance: true, parent: 152, slug: ''}
+  model: products.category
+  pk: 161
+- fields: {name: Scie circulaire, need_insurance: true, parent: 152, slug: ''}
+  model: products.category
+  pk: 162
+- fields: {name: Scie cloche, need_insurance: true, parent: 152, slug: ''}
+  model: products.category
+  pk: 163
+- fields: {name: "Scie \xE9go\xEFne", need_insurance: true, parent: 152, slug: ''}
+  model: products.category
+  pk: 164
+- fields: {name: Scie sauteuse, need_insurance: true, parent: 152, slug: ''}
+  model: products.category
+  pk: 165
+- fields: {name: Visseuse et tournevis sans fil, need_insurance: true, parent: 152,
+    slug: ''}
+  model: products.category
+  pk: 166
+- fields: {name: Mode et accessoires, need_insurance: true, parent: null, slug: ''}
+  model: products.category
+  pk: 167
+- fields: {name: Chaussure homme, need_insurance: true, parent: 167, slug: ''}
+  model: products.category
+  pk: 168
+- fields: {name: Baskets pour homme, need_insurance: true, parent: 168, slug: ''}
+  model: products.category
+  pk: 169
+- fields: {name: Joggers, need_insurance: true, parent: 168, slug: ''}
+  model: products.category
+  pk: 170
+- fields: {name: Boots, need_insurance: true, parent: 168, slug: ''}
+  model: products.category
+  pk: 171
+- fields: {name: "D\xE9guisement", need_insurance: true, parent: 167, slug: ''}
+  model: products.category
+  pk: 172
+- fields: {name: Animal, need_insurance: true, parent: 172, slug: ''}
+  model: products.category
+  pk: 173
+- fields: {name: "Ann\xE9es 60-70", need_insurance: true, parent: 172, slug: ''}
+  model: products.category
+  pk: 174
+- fields: {name: Aventure, need_insurance: true, parent: 172, slug: ''}
+  model: products.category
+  pk: 175
+- fields: {name: Carnaval, need_insurance: true, parent: 172, slug: ''}
+  model: products.category
+  pk: 176
+- fields: {name: Princesse, need_insurance: true, parent: 172, slug: ''}
+  model: products.category
+  pk: 177
+- fields: {name: Halloween, need_insurance: true, parent: 172, slug: ''}
+  model: products.category
+  pk: 178
+- fields: {name: Historique, need_insurance: true, parent: 172, slug: ''}
+  model: products.category
+  pk: 179
+- fields: {name: Pays du monde, need_insurance: true, parent: 172, slug: ''}
+  model: products.category
+  pk: 180
+- fields: {name: Uniforme, need_insurance: true, parent: 172, slug: ''}
+  model: products.category
+  pk: 181
+- fields: {name: Carnaval, need_insurance: true, parent: 172, slug: ''}
+  model: products.category
+  pk: 182
+- fields: {name: Danse, need_insurance: true, parent: 172, slug: ''}
+  model: products.category
+  pk: 183
+- fields: {name: "P\xE8re noel", need_insurance: true, parent: 172, slug: ''}
+  model: products.category
+  pk: 184
+- fields: {name: Masque, need_insurance: true, parent: 172, slug: ''}
+  model: products.category
+  pk: 185
+- fields: {name: Perruque, need_insurance: true, parent: 172, slug: ''}
+  model: products.category
+  pk: 186
+- fields: {name: Sexy, need_insurance: true, parent: 172, slug: ''}
+  model: products.category
+  pk: 187
+- fields: {name: Accessoire femme, need_insurance: true, parent: 167, slug: ''}
+  model: products.category
+  pk: 188
+- fields: {name: Sac, need_insurance: true, parent: 188, slug: ''}
+  model: products.category
+  pk: 189
+- fields: {name: Ceinture pour femme, need_insurance: true, parent: 188, slug: ''}
+  model: products.category
+  pk: 190
+- fields: {name: "Ch\xE8che et foulard", need_insurance: true, parent: 188, slug: ''}
+  model: products.category
+  pk: 191
+- fields: {name: Lunette de soleil pour femme, need_insurance: true, parent: 188,
+    slug: ''}
+  model: products.category
+  pk: 192
+- fields: {name: Chapeau pour femme, need_insurance: true, parent: 188, slug: ''}
+  model: products.category
+  pk: 193
+- fields: {name: "V\xEAtement femme", need_insurance: true, parent: 167, slug: ''}
+  model: products.category
+  pk: 194
+- fields: {name: Chemisier, need_insurance: true, parent: 194, slug: ''}
+  model: products.category
+  pk: 195
+- fields: {name: Pantalon pour femme, need_insurance: true, parent: 194, slug: ''}
+  model: products.category
+  pk: 196
+- fields: {name: Jupe, need_insurance: true, parent: 194, slug: ''}
+  model: products.category
+  pk: 197
+- fields: {name: Robe, need_insurance: true, parent: 194, slug: ''}
+  model: products.category
+  pk: 198
+- fields: {name: Veste, need_insurance: true, parent: 194, slug: ''}
+  model: products.category
+  pk: 199
+- fields: {name: Manteau, need_insurance: true, parent: 194, slug: ''}
+  model: products.category
+  pk: 200
+- fields: {name: Bijoux, need_insurance: true, parent: 167, slug: ''}
+  model: products.category
+  pk: 201
+- fields: {name: Colier, need_insurance: true, parent: 201, slug: ''}
+  model: products.category
+  pk: 202
+- fields: {name: Boucles d'oreilles, need_insurance: true, parent: 201, slug: ''}
+  model: products.category
+  pk: 203
+- fields: {name: Bracelet, need_insurance: true, parent: 201, slug: ''}
+  model: products.category
+  pk: 204
+- fields: {name: Bague, need_insurance: true, parent: 201, slug: ''}
+  model: products.category
+  pk: 205
+- fields: {name: Parure, need_insurance: true, parent: 201, slug: ''}
+  model: products.category
+  pk: 206
+- fields: {name: Montre, need_insurance: true, parent: 201, slug: ''}
+  model: products.category
+  pk: 207
+- fields: {name: Chaussures femme, need_insurance: true, parent: 167, slug: ''}
+  model: products.category
+  pk: 208
+- fields: {name: Ballerines, need_insurance: true, parent: 208, slug: ''}
+  model: products.category
+  pk: 209
+- fields: {name: Escarpins, need_insurance: true, parent: 208, slug: ''}
+  model: products.category
+  pk: 210
+- fields: {name: baskets pour femme, need_insurance: true, parent: 208, slug: ''}
+  model: products.category
+  pk: 211
+- fields: {name: Bottes, need_insurance: true, parent: 208, slug: ''}
+  model: products.category
+  pk: 212
+- fields: {name: Mocassins et Derbies, need_insurance: true, parent: 208, slug: ''}
+  model: products.category
+  pk: 213
+- fields: {name: "Sandales et Salom\xE9s", need_insurance: true, parent: 208, slug: ''}
+  model: products.category
+  pk: 214
+- fields: {name: Accesoire homme, need_insurance: true, parent: 167, slug: ''}
+  model: products.category
+  pk: 215
+- fields: {name: Ceinture pour homme, need_insurance: true, parent: 215, slug: ''}
+  model: products.category
+  pk: 216
+- fields: {name: Cravate, need_insurance: true, parent: 215, slug: ''}
+  model: products.category
+  pk: 217
+- fields: {name: Chapeau pour homme, need_insurance: true, parent: 215, slug: ''}
+  model: products.category
+  pk: 218
+- fields: {name: Sac et besace, need_insurance: true, parent: 215, slug: ''}
+  model: products.category
+  pk: 219
+- fields: {name: Lunette de soleil pour homme, need_insurance: true, parent: 215,
+    slug: ''}
+  model: products.category
+  pk: 220
+- fields: {name: "V\xEAtement homme", need_insurance: true, parent: 167, slug: ''}
+  model: products.category
+  pk: 221
+- fields: {name: Chemise, need_insurance: true, parent: 221, slug: ''}
+  model: products.category
+  pk: 222
+- fields: {name: Pantalon et jean, need_insurance: true, parent: 221, slug: ''}
+  model: products.category
+  pk: 223
+- fields: {name: Manteau et blouson, need_insurance: true, parent: 221, slug: ''}
+  model: products.category
+  pk: 224
+- fields: {name: Veste et costume, need_insurance: true, parent: 221, slug: ''}
+  model: products.category
+  pk: 225
+- fields: {name: Loisirs, need_insurance: true, parent: null, slug: ''}
+  model: products.category
+  pk: 226
+- fields: {name: Jeux, need_insurance: true, parent: 226, slug: ''}
+  model: products.category
+  pk: 227
+- fields: {name: "Jeux de soci\xE9t\xE9", need_insurance: true, parent: 227, slug: ''}
+  model: products.category
+  pk: 228
+- fields: {name: Jeux d'addresse, need_insurance: true, parent: 227, slug: ''}
+  model: products.category
+  pk: 229
+- fields: {name: Jeux de bistrot, need_insurance: true, parent: 227, slug: ''}
+  model: products.category
+  pk: 230
+- fields: {name: Avion, need_insurance: true, parent: 226, slug: ''}
+  model: products.category
+  pk: 231
+- fields: {name: Planeur, need_insurance: true, parent: 231, slug: ''}
+  model: products.category
+  pk: 232
+- fields: {name: "Montgolfi\xE8re", need_insurance: true, parent: 231, slug: ''}
+  model: products.category
+  pk: 233
+- fields: {name: ULM, need_insurance: true, parent: 231, slug: ''}
+  model: products.category
+  pk: 234
+- fields: {name: Jet, need_insurance: true, parent: 231, slug: ''}
+  model: products.category
+  pk: 235
+- fields: {name: "Avion moteur \xE0 pistons", need_insurance: true, parent: 231, slug: ''}
+  model: products.category
+  pk: 236
+- fields: {name: Avion turbopropulseurs, need_insurance: true, parent: 231, slug: ''}
+  model: products.category
+  pk: 237
+- fields: {name: Bateau, need_insurance: true, parent: 226, slug: ''}
+  model: products.category
+  pk: 238
+- fields: {name: "Bateau \xE0 console centrale", need_insurance: true, parent: 238,
+    slug: ''}
+  model: products.category
+  pk: 239
+- fields: {name: "Bateau \xE0 coque metallique soud\xE9e", need_insurance: true, parent: 238,
+    slug: ''}
+  model: products.category
+  pk: 240
+- fields: {name: "Bateau \xE0 fond plat", need_insurance: true, parent: 238, slug: ''}
+  model: products.category
+  pk: 241
+- fields: {name: "Bateau \xE0 jet", need_insurance: true, parent: 238, slug: ''}
+  model: products.category
+  pk: 242
+- fields: {name: "Bateau \xE0 moteur \xE9lectrique", need_insurance: true, parent: 238,
+    slug: ''}
+  model: products.category
+  pk: 243
+- fields: {name: "Bateau \xE0 moteur multicoque", need_insurance: true, parent: 238,
+    slug: ''}
+  model: products.category
+  pk: 244
+- fields: {name: "Bateau \xE0 plateforme", need_insurance: true, parent: 238, slug: ''}
+  model: products.category
+  pk: 245
+- fields: {name: "Bateaux \xE0 pont sur\xE9lev\xE9", need_insurance: true, parent: 238,
+    slug: ''}
+  model: products.category
+  pk: 246
+- fields: {name: "Bateau \xE0 ponton", need_insurance: true, parent: 238, slug: ''}
+  model: products.category
+  pk: 247
+- fields: {name: "Bateau de p\xE8che en aluminium", need_insurance: true, parent: 238,
+    slug: ''}
+  model: products.category
+  pk: 248
+- fields: {name: "Bateau de p\xEAche sp\xE9cialis\xE9", need_insurance: true, parent: 238,
+    slug: ''}
+  model: products.category
+  pk: 249
+- fields: {name: "Bateau de p\xEAche tout usage", need_insurance: true, parent: 238,
+    slug: ''}
+  model: products.category
+  pk: 250
+- fields: {name: Bateau de plaisance semi hors-bord, need_insurance: true, parent: 238,
+    slug: ''}
+  model: products.category
+  pk: 251
+- fields: {name: Bateau maison, need_insurance: true, parent: 238, slug: ''}
+  model: products.category
+  pk: 252
+- fields: {name: "Bateau pont\xE9", need_insurance: true, parent: 238, slug: ''}
+  model: products.category
+  pk: 253
+- fields: {name: "Bateau pour la p\xEAche et le ski nautique", need_insurance: true,
+    parent: 238, slug: ''}
+  model: products.category
+  pk: 254
+- fields: {name: "Bateau pour la p\xEAche sportive", need_insurance: true, parent: 238,
+    slug: ''}
+  model: products.category
+  pk: 255
+- fields: {name: "Bateau pour la planche nautique \xE0 moteur en-bord", need_insurance: true,
+    parent: 238, slug: ''}
+  model: products.category
+  pk: 256
+- fields: {name: "Bateau pour le ski nautique \xE0 moteur en-bord", need_insurance: true,
+    parent: 238, slug: ''}
+  model: products.category
+  pk: 257
+- fields: {name: Canot, need_insurance: true, parent: 238, slug: ''}
+  model: products.category
+  pk: 258
+- fields: {name: "Canot \xE0 pont surbaiss\xE9", need_insurance: true, parent: 238,
+    slug: ''}
+  model: products.category
+  pk: 259
+- fields: {name: Canot pneumatique, need_insurance: true, parent: 238, slug: ''}
+  model: products.category
+  pk: 260
+- fields: {name: "Croiseur \xE0 moteur en-bord", need_insurance: true, parent: 238,
+    slug: ''}
+  model: products.category
+  pk: 261
+- fields: {name: Croiseur haute performance, need_insurance: true, parent: 238, slug: ''}
+  model: products.category
+  pk: 262
+- fields: {name: Croiseur multicoque, need_insurance: true, parent: 238, slug: ''}
+  model: products.category
+  pk: 263
+- fields: {name: Croiseur semi hors-bord, need_insurance: true, parent: 238, slug: ''}
+  model: products.category
+  pk: 264
+- fields: {name: Dinghies, need_insurance: true, parent: 238, slug: ''}
+  model: products.category
+  pk: 265
+- fields: {name: "Hors-bord \xE0 proue ferm\xE9e", need_insurance: true, parent: 238,
+    slug: ''}
+  model: products.category
+  pk: 266
+- fields: {name: Trawler, need_insurance: true, parent: 238, slug: ''}
+  model: products.category
+  pk: 267
+- fields: {name: Vedette habitable, need_insurance: true, parent: 238, slug: ''}
+  model: products.category
+  pk: 268
+- fields: {name: Yatch, need_insurance: true, parent: 238, slug: ''}
+  model: products.category
+  pk: 269
+- fields: {name: Monocoques et voiliers, need_insurance: true, parent: 238, slug: ''}
+  model: products.category
+  pk: 270
+- fields: {name: Voilier multicoque, need_insurance: true, parent: 238, slug: ''}
+  model: products.category
+  pk: 271
+- fields: {name: Voilier de tradition, need_insurance: true, parent: 238, slug: ''}
+  model: products.category
+  pk: 272
+- fields: {name: Voilier de luxe, need_insurance: true, parent: 238, slug: ''}
+  model: products.category
+  pk: 273
+- fields: {name: "P\xE9dalo", need_insurance: true, parent: 238, slug: ''}
+  model: products.category
+  pk: 274
+- fields: {name: Jet ski, need_insurance: true, parent: 238, slug: ''}
+  model: products.category
+  pk: 275
+- fields: {name: Sport, need_insurance: true, parent: 226, slug: ''}
+  model: products.category
+  pk: 276
+- fields: {name: Alpiniste, need_insurance: true, parent: 276, slug: ''}
+  model: products.category
+  pk: 277
+- fields: {name: Badminton, need_insurance: true, parent: 276, slug: ''}
+  model: products.category
+  pk: 278
+- fields: {name: Basket-Ball, need_insurance: true, parent: 276, slug: ''}
+  model: products.category
+  pk: 279
+- fields: {name: Bodyboard, need_insurance: true, parent: 276, slug: ''}
+  model: products.category
+  pk: 280
+- fields: {name: Boxes, need_insurance: true, parent: 276, slug: ''}
+  model: products.category
+  pk: 281
+- fields: {name: "Cano\xEA-kayak", need_insurance: true, parent: 276, slug: ''}
+  model: products.category
+  pk: 282
+- fields: {name: Cerf-volant, need_insurance: true, parent: 276, slug: ''}
+  model: products.category
+  pk: 283
+- fields: {name: Chasse, need_insurance: true, parent: 276, slug: ''}
+  model: products.category
+  pk: 284
+- fields: {name: "Course \xE0 pied", need_insurance: true, parent: 276, slug: ''}
+  model: products.category
+  pk: 285
+- fields: {name: Danse classique, need_insurance: true, parent: 276, slug: ''}
+  model: products.category
+  pk: 286
+- fields: {name: "D\xE9riveur", need_insurance: true, parent: 276, slug: ''}
+  model: products.category
+  pk: 287
+- fields: {name: Equitation, need_insurance: true, parent: 276, slug: ''}
+  model: products.category
+  pk: 288
+- fields: {name: Escalade, need_insurance: true, parent: 276, slug: ''}
+  model: products.category
+  pk: 289
+- fields: {name: Fitness, need_insurance: true, parent: 276, slug: ''}
+  model: products.category
+  pk: 290
+- fields: {name: "Fl\xE9chettes", need_insurance: true, parent: 276, slug: ''}
+  model: products.category
+  pk: 291
+- fields: {name: Football, need_insurance: true, parent: 276, slug: ''}
+  model: products.category
+  pk: 292
+- fields: {name: Golf, need_insurance: true, parent: 276, slug: ''}
+  model: products.category
+  pk: 293
+- fields: {name: Gymnastique, need_insurance: true, parent: 276, slug: ''}
+  model: products.category
+  pk: 294
+- fields: {name: Handball, need_insurance: true, parent: 276, slug: ''}
+  model: products.category
+  pk: 295
+- fields: {name: Judo, need_insurance: true, parent: 276, slug: ''}
+  model: products.category
+  pk: 296
+- fields: {name: "Karat\xE9", need_insurance: true, parent: 276, slug: ''}
+  model: products.category
+  pk: 297
+- fields: {name: Kung Fu, need_insurance: true, parent: 276, slug: ''}
+  model: products.category
+  pk: 298
+- fields: {name: Marche, need_insurance: true, parent: 276, slug: ''}
+  model: products.category
+  pk: 299
+- fields: {name: Modern Jazz, need_insurance: true, parent: 276, slug: ''}
+  model: products.category
+  pk: 300
+- fields: {name: Natation, need_insurance: true, parent: 276, slug: ''}
+  model: products.category
+  pk: 301
+- fields: {name: Padel, need_insurance: true, parent: 276, slug: ''}
+  model: products.category
+  pk: 302
+- fields: {name: "P\xEAche", need_insurance: true, parent: 276, slug: ''}
+  model: products.category
+  pk: 303
+- fields: {name: "P\xE9tanque", need_insurance: true, parent: 276, slug: ''}
+  model: products.category
+  pk: 304
+- fields: {name: "Planche \xE0 voile", need_insurance: true, parent: 276, slug: ''}
+  model: products.category
+  pk: 305
+- fields: {name: "Plong\xE9e", need_insurance: true, parent: 276, slug: ''}
+  model: products.category
+  pk: 306
+- fields: {name: Raid, need_insurance: true, parent: 276, slug: ''}
+  model: products.category
+  pk: 307
+- fields: {name: "Randonn\xE9e", need_insurance: true, parent: 276, slug: ''}
+  model: products.category
+  pk: 308
+- fields: {name: Roller, need_insurance: true, parent: 276, slug: ''}
+  model: products.category
+  pk: 309
+- fields: {name: Rugby, need_insurance: true, parent: 276, slug: ''}
+  model: products.category
+  pk: 310
+- fields: {name: Skateboard, need_insurance: true, parent: 276, slug: ''}
+  model: products.category
+  pk: 311
+- fields: {name: Ski, need_insurance: true, parent: 276, slug: ''}
+  model: products.category
+  pk: 312
+- fields: {name: Snowboard, need_insurance: true, parent: 276, slug: ''}
+  model: products.category
+  pk: 313
+- fields: {name: Sport de glace, need_insurance: true, parent: 276, slug: ''}
+  model: products.category
+  pk: 314
+- fields: {name: Sports US, need_insurance: true, parent: 276, slug: ''}
+  model: products.category
+  pk: 315
+- fields: {name: Squash, need_insurance: true, parent: 276, slug: ''}
+  model: products.category
+  pk: 316
+- fields: {name: Surf, need_insurance: true, parent: 276, slug: ''}
+  model: products.category
+  pk: 317
+- fields: {name: Tae knon do, need_insurance: true, parent: 276, slug: ''}
+  model: products.category
+  pk: 318
+- fields: {name: Tennis, need_insurance: true, parent: 276, slug: ''}
+  model: products.category
+  pk: 319
+- fields: {name: Tennis de table, need_insurance: true, parent: 276, slug: ''}
+  model: products.category
+  pk: 320
+- fields: {name: "Tir \xE0 l'arc", need_insurance: true, parent: 276, slug: ''}
+  model: products.category
+  pk: 321
+- fields: {name: Trotinnette, need_insurance: true, parent: 276, slug: ''}
+  model: products.category
+  pk: 322
+- fields: {name: Volley-ball, need_insurance: true, parent: 276, slug: ''}
+  model: products.category
+  pk: 323
+- fields: {name: Segway, need_insurance: true, parent: 276, slug: ''}
+  model: products.category
+  pk: 324
+- fields: {name: "Char \xE0 voile", need_insurance: true, parent: 276, slug: ''}
+  model: products.category
+  pk: 325
+- fields: {name: Mini-motos, need_insurance: true, parent: 276, slug: ''}
+  model: products.category
+  pk: 326
+- fields: {name: "V\xE9lo", need_insurance: true, parent: 226, slug: ''}
+  model: products.category
+  pk: 327
+- fields: {name: "V\xE9los de route", need_insurance: true, parent: 327, slug: ''}
+  model: products.category
+  pk: 328
+- fields: {name: "V\xE9lo enfant", need_insurance: true, parent: 327, slug: ''}
+  model: products.category
+  pk: 329
+- fields: {name: "V\xE9lo adulte", need_insurance: true, parent: 327, slug: ''}
+  model: products.category
+  pk: 330
+- fields: {name: Bmx, need_insurance: true, parent: 327, slug: ''}
+  model: products.category
+  pk: 331
+- fields: {name: "H\xE9licopt\xE8re", need_insurance: true, parent: 226, slug: ''}
+  model: products.category
+  pk: 332
+- fields: {name: "H\xE9licopt\xE8re mono-turbine", need_insurance: true, parent: 332,
+    slug: ''}
+  model: products.category
+  pk: 333
+- fields: {name: "Helicopt\xE8re bi-turbine", need_insurance: true, parent: 332, slug: ''}
+  model: products.category
+  pk: 334
+- fields: {name: High-tech, need_insurance: true, parent: null, slug: ''}
+  model: products.category
+  pk: 335
+- fields: {name: Imprimante, need_insurance: true, parent: 335, slug: ''}
+  model: products.category
+  pk: 336
+- fields: {name: Imprimantes jet d'encre, need_insurance: true, parent: 336, slug: ''}
+  model: products.category
+  pk: 337
+- fields: {name: Imprimantes jet d'encre multifonction, need_insurance: true, parent: 336,
+    slug: ''}
+  model: products.category
+  pk: 338
+- fields: {name: Imprimante laser, need_insurance: true, parent: 336, slug: ''}
+  model: products.category
+  pk: 339
+- fields: {name: Imprimante laser couleur, need_insurance: true, parent: 336, slug: ''}
+  model: products.category
+  pk: 340
+- fields: {name: Imprimante laser multifonction, need_insurance: true, parent: 336,
+    slug: ''}
+  model: products.category
+  pk: 341
+- fields: {name: Imprimante photo 10x15, need_insurance: true, parent: 336, slug: ''}
+  model: products.category
+  pk: 342
+- fields: {name: Imprimante grand format traceur, need_insurance: true, parent: 336,
+    slug: ''}
+  model: products.category
+  pk: 343
+- fields: {name: Imprimante matricielle, need_insurance: true, parent: 336, slug: ''}
+  model: products.category
+  pk: 344
+- fields: {name: Copieur, need_insurance: true, parent: 336, slug: ''}
+  model: products.category
+  pk: 345
+- fields: {name: Etiquetteuse, need_insurance: true, parent: 336, slug: ''}
+  model: products.category
+  pk: 346
+- fields: {name: Accessoires imprimante, need_insurance: true, parent: 336, slug: ''}
+  model: products.category
+  pk: 347
+- fields: {name: Console, need_insurance: true, parent: 335, slug: ''}
+  model: products.category
+  pk: 348
+- fields: {name: Accessoires, need_insurance: true, parent: 348, slug: ''}
+  model: products.category
+  pk: 349
+- fields: {name: Microsoft, need_insurance: true, parent: 348, slug: ''}
+  model: products.category
+  pk: 350
+- fields: {name: Nitendo, need_insurance: true, parent: 348, slug: ''}
+  model: products.category
+  pk: 351
+- fields: {name: Sony, need_insurance: true, parent: 348, slug: ''}
+  model: products.category
+  pk: 352
+- fields: {name: Sega, need_insurance: true, parent: 348, slug: ''}
+  model: products.category
+  pk: 353
+- fields: {name: Scanner, need_insurance: true, parent: 335, slug: ''}
+  model: products.category
+  pk: 354
+- fields: {name: Scanner A4, need_insurance: true, parent: 354, slug: ''}
+  model: products.category
+  pk: 355
+- fields: {name: Scanner A3, need_insurance: true, parent: 354, slug: ''}
+  model: products.category
+  pk: 356
+- fields: {name: Scanner de film, need_insurance: true, parent: 354, slug: ''}
+  model: products.category
+  pk: 357
+- fields: {name: Scanner portable, need_insurance: true, parent: 354, slug: ''}
+  model: products.category
+  pk: 358
+- fields: {name: "R\xE9seaux", need_insurance: true, parent: 335, slug: ''}
+  model: products.category
+  pk: 359
+- fields: {name: Routeur, need_insurance: true, parent: 359, slug: ''}
+  model: products.category
+  pk: 360
+- fields: {name: Switch, need_insurance: true, parent: 359, slug: ''}
+  model: products.category
+  pk: 361
+- fields: {name: "Cl\xE9 wifi", need_insurance: true, parent: 359, slug: ''}
+  model: products.category
+  pk: 362
+- fields: {name: "Cl\xE9 3g", need_insurance: true, parent: 359, slug: ''}
+  model: products.category
+  pk: 363
+- fields: {name: "P\xE9riph\xE9riques", need_insurance: true, parent: 335, slug: ''}
+  model: products.category
+  pk: 364
+- fields: {name: Clavier, need_insurance: true, parent: 364, slug: ''}
+  model: products.category
+  pk: 365
+- fields: {name: Souris, need_insurance: true, parent: 364, slug: ''}
+  model: products.category
+  pk: 366
+- fields: {name: Hub usb, need_insurance: true, parent: 364, slug: ''}
+  model: products.category
+  pk: 367
+- fields: {name: Tablette graphique, need_insurance: true, parent: 364, slug: ''}
+  model: products.category
+  pk: 368
+- fields: {name: Ecran, need_insurance: true, parent: 364, slug: ''}
+  model: products.category
+  pk: 369
+- fields: {name: "Cl\xE9 USB", need_insurance: true, parent: 364, slug: ''}
+  model: products.category
+  pk: 370
+- fields: {name: Disque dur externe, need_insurance: true, parent: 364, slug: ''}
+  model: products.category
+  pk: 371
+- fields: {name: Lecteur graveur externe, need_insurance: true, parent: 364, slug: ''}
+  model: products.category
+  pk: 372
+- fields: {name: Webcam, need_insurance: true, parent: 364, slug: ''}
+  model: products.category
+  pk: 373
+- fields: {name: "P\xE9riph\xE9riques de jeu", need_insurance: true, parent: 364,
+    slug: ''}
+  model: products.category
+  pk: 374
+- fields: {name: "Jeux vid\xE9os", need_insurance: true, parent: 335, slug: ''}
+  model: products.category
+  pk: 375
+- fields: {name: Jeux playstation, need_insurance: true, parent: 375, slug: ''}
+  model: products.category
+  pk: 376
+- fields: {name: Jeux xbox, need_insurance: true, parent: 375, slug: ''}
+  model: products.category
+  pk: 377
+- fields: {name: Jeux DS, need_insurance: true, parent: 375, slug: ''}
+  model: products.category
+  pk: 378
+- fields: {name: Jeux wii, need_insurance: true, parent: 375, slug: ''}
+  model: products.category
+  pk: 379
+- fields: {name: Autre jeux, need_insurance: true, parent: 375, slug: ''}
+  model: products.category
+  pk: 380
+- fields: {name: Ordinateur, need_insurance: true, parent: 335, slug: ''}
+  model: products.category
+  pk: 381
+- fields: {name: Mac portable, need_insurance: true, parent: 381, slug: ''}
+  model: products.category
+  pk: 382
+- fields: {name: Mac Bureau, need_insurance: true, parent: 381, slug: ''}
+  model: products.category
+  pk: 383
+- fields: {name: Pc portable, need_insurance: true, parent: 381, slug: ''}
+  model: products.category
+  pk: 384
+- fields: {name: Pc bureau, need_insurance: true, parent: 381, slug: ''}
+  model: products.category
+  pk: 385
+- fields: {name: GPS, need_insurance: true, parent: 335, slug: ''}
+  model: products.category
+  pk: 386
+- fields: {name: GPS voiture, need_insurance: true, parent: 386, slug: ''}
+  model: products.category
+  pk: 387
+- fields: {name: "GPS randonn\xE9e/marin", need_insurance: true, parent: 386, slug: ''}
+  model: products.category
+  pk: 388
+- fields: {name: GPS pour appareils mobiles, need_insurance: true, parent: 386, slug: ''}
+  model: products.category
+  pk: 389
+- fields: {name: GPS moto, need_insurance: true, parent: 386, slug: ''}
+  model: products.category
+  pk: 390
+- fields: {name: Avertisseur de radar, need_insurance: true, parent: 386, slug: ''}
+  model: products.category
+  pk: 391
+- fields: {name: Culture, need_insurance: true, parent: null, slug: ''}
+  model: products.category
+  pk: 392
+- fields: {name: Films, need_insurance: true, parent: 392, slug: ''}
+  model: products.category
+  pk: 393
+- fields: {name: Action et aventure, need_insurance: true, parent: 393, slug: ''}
+  model: products.category
+  pk: 394
+- fields: {name: Classiques, need_insurance: true, parent: 393, slug: ''}
+  model: products.category
+  pk: 395
+- fields: {name: "Com\xE9dies", need_insurance: true, parent: 393, slug: ''}
+  model: products.category
+  pk: 396
+- fields: {name: "Dessins anim\xE9s", need_insurance: true, parent: 393, slug: ''}
+  model: products.category
+  pk: 397
+- fields: {name: Drames et passions, need_insurance: true, parent: 393, slug: ''}
+  model: products.category
+  pk: 398
+- fields: {name: Educatif, need_insurance: true, parent: 393, slug: ''}
+  model: products.category
+  pk: 399
+- fields: {name: Fantastique et SF, need_insurance: true, parent: 393, slug: ''}
+  model: products.category
+  pk: 400
+- fields: {name: Histoire, need_insurance: true, parent: 393, slug: ''}
+  model: products.category
+  pk: 401
+- fields: {name: Horreur, need_insurance: true, parent: 393, slug: ''}
+  model: products.category
+  pk: 402
+- fields: {name: Policier et Thriller, need_insurance: true, parent: 393, slug: ''}
+  model: products.category
+  pk: 403
+- fields: {name: "Courts-m\xE9trages", need_insurance: true, parent: 393, slug: ''}
+  model: products.category
+  pk: 404
+- fields: {name: "Humour et th\xE9atre", need_insurance: true, parent: 393, slug: ''}
+  model: products.category
+  pk: 405
+- fields: {name: Documentaire et sport, need_insurance: true, parent: 393, slug: ''}
+  model: products.category
+  pk: 406
+- fields: {name: "Cin\xE9ma gay et lesbienne", need_insurance: true, parent: 393,
+    slug: ''}
+  model: products.category
+  pk: 407
+- fields: {name: Charme et erotisme, need_insurance: true, parent: 393, slug: ''}
+  model: products.category
+  pk: 408
+- fields: {name: Livre, need_insurance: true, parent: 392, slug: ''}
+  model: products.category
+  pk: 409
+- fields: {name: BD et jeunesse, need_insurance: true, parent: 409, slug: ''}
+  model: products.category
+  pk: 410
+- fields: {name: "Litt\xE9rature et fiction", need_insurance: true, parent: 409, slug: ''}
+  model: products.category
+  pk: 411
+- fields: {name: "Cuisine et soci\xE9t\xE9", need_insurance: true, parent: 409, slug: ''}
+  model: products.category
+  pk: 412
+- fields: {name: Art de vivre, need_insurance: true, parent: 409, slug: ''}
+  model: products.category
+  pk: 413
+- fields: {name: Nature et loisirs, need_insurance: true, parent: 409, slug: ''}
+  model: products.category
+  pk: 414
+- fields: {name: Partitions, need_insurance: true, parent: 409, slug: ''}
+  model: products.category
+  pk: 415
+- fields: {name: Tableau, need_insurance: true, parent: 392, slug: ''}
+  model: products.category
+  pk: 416
+- fields: {name: Musique, need_insurance: true, parent: 416, slug: ''}
+  model: products.category
+  pk: 417
+- fields: {name: Sport et loisir, need_insurance: true, parent: 416, slug: ''}
+  model: products.category
+  pk: 418
+- fields: {name: Gastronomie et Cuisine, need_insurance: true, parent: 416, slug: ''}
+  model: products.category
+  pk: 419
+- fields: {name: Art et concept, need_insurance: true, parent: 416, slug: ''}
+  model: products.category
+  pk: 420
+- fields: {name: Animaux et vie sauvage, need_insurance: true, parent: 416, slug: ''}
+  model: products.category
+  pk: 421
+- fields: {name: Espace et sciences, need_insurance: true, parent: 416, slug: ''}
+  model: products.category
+  pk: 422
+- fields: {name: Nature et paysages, need_insurance: true, parent: 416, slug: ''}
+  model: products.category
+  pk: 423
+- fields: {name: Architecture et habitat, need_insurance: true, parent: 416, slug: ''}
+  model: products.category
+  pk: 424
+- fields: {name: "Sant\xE9 et Bien \xEAtre", need_insurance: true, parent: null, slug: ''}
+  model: products.category
+  pk: 425
+- fields: {name: "Param\xE9dical", need_insurance: true, parent: 425, slug: ''}
+  model: products.category
+  pk: 426
+- fields: {name: Attelle, need_insurance: true, parent: 426, slug: ''}
+  model: products.category
+  pk: 427
+- fields: {name: "B\xE9quille", need_insurance: true, parent: 426, slug: ''}
+  model: products.category
+  pk: 428
+- fields: {name: "D\xE9ambulateur", need_insurance: true, parent: 426, slug: ''}
+  model: products.category
+  pk: 429
+- fields: {name: Fauteuil roulant, need_insurance: true, parent: 426, slug: ''}
+  model: products.category
+  pk: 430
+- fields: {name: Ceinture abdominale, need_insurance: true, parent: 426, slug: ''}
+  model: products.category
+  pk: 431
+- fields: {name: "Chevilli\xE8re", need_insurance: true, parent: 426, slug: ''}
+  model: products.category
+  pk: 432
+- fields: {name: Colliers cervicaux, need_insurance: true, parent: 426, slug: ''}
+  model: products.category
+  pk: 433
+- fields: {name: Coudiere, need_insurance: true, parent: 426, slug: ''}
+  model: products.category
+  pk: 434
+- fields: {name: "Genouill\xE8re", need_insurance: true, parent: 426, slug: ''}
+  model: products.category
+  pk: 435
+- fields: {name: Soin du corps, need_insurance: true, parent: 425, slug: ''}
+  model: products.category
+  pk: 436
+- fields: {name: Table de massage, need_insurance: true, parent: 436, slug: ''}
+  model: products.category
+  pk: 437
+- fields: {name: Humidificateur ionisateur d'air, need_insurance: true, parent: 436,
+    slug: ''}
+  model: products.category
+  pk: 438
+- fields: {name: Velo d'appartement, need_insurance: true, parent: 436, slug: ''}
+  model: products.category
+  pk: 439
+- fields: {name: Manucure pedicure, need_insurance: true, parent: 436, slug: ''}
+  model: products.category
+  pk: 440
+- fields: {name: Lampe de luminotherapie, need_insurance: true, parent: 436, slug: ''}
+  model: products.category
+  pk: 441
+- fields: {name: Diffuseur d'huiles essentielles, need_insurance: true, parent: 436,
+    slug: ''}
+  model: products.category
+  pk: 442
+- fields: {name: Image et son, need_insurance: true, parent: null, slug: ''}
+  model: products.category
+  pk: 443
+- fields: {name: Casque, need_insurance: true, parent: 443, slug: ''}
+  model: products.category
+  pk: 444
+- fields: {name: Casque portable, need_insurance: true, parent: 444, slug: ''}
+  model: products.category
+  pk: 445
+- fields: {name: Casque Hifi TV, need_insurance: true, parent: 444, slug: ''}
+  model: products.category
+  pk: 446
+- fields: {name: Casques sans fil, need_insurance: true, parent: 444, slug: ''}
+  model: products.category
+  pk: 447
+- fields: {name: Appareil photo, need_insurance: true, parent: 443, slug: ''}
+  model: products.category
+  pk: 448
+- fields: {name: "Appareil photo num\xE9rique", need_insurance: true, parent: 448,
+    slug: ''}
+  model: products.category
+  pk: 449
+- fields: {name: Appareil photo argentique, need_insurance: true, parent: 448, slug: ''}
+  model: products.category
+  pk: 450
+- fields: {name: "Reflex num\xE9rique", need_insurance: true, parent: 448, slug: ''}
+  model: products.category
+  pk: 451
+- fields: {name: "R\xE9flex argentique", need_insurance: true, parent: 448, slug: ''}
+  model: products.category
+  pk: 452
+- fields: {name: Objectifs, need_insurance: true, parent: 448, slug: ''}
+  model: products.category
+  pk: 453
+- fields: {name: Accessoires appareils photo, need_insurance: true, parent: 448, slug: ''}
+  model: products.category
+  pk: 454
+- fields: {name: Ploraroid, need_insurance: true, parent: 448, slug: ''}
+  model: products.category
+  pk: 455
+- fields: {name: Micro, need_insurance: true, parent: 443, slug: ''}
+  model: products.category
+  pk: 456
+- fields: {name: Micro filaire, need_insurance: true, parent: 456, slug: ''}
+  model: products.category
+  pk: 457
+- fields: {name: Micro sans fil, need_insurance: true, parent: 456, slug: ''}
+  model: products.category
+  pk: 458
+- fields: {name: Hifi, need_insurance: true, parent: 443, slug: ''}
+  model: products.category
+  pk: 459
+- fields: {name: Chaines Hifi, need_insurance: true, parent: 459, slug: ''}
+  model: products.category
+  pk: 460
+- fields: {name: Amplificateur, need_insurance: true, parent: 459, slug: ''}
+  model: products.category
+  pk: 461
+- fields: {name: Lecteur CD de salon, need_insurance: true, parent: 459, slug: ''}
+  model: products.category
+  pk: 462
+- fields: {name: Platine vinyle, need_insurance: true, parent: 459, slug: ''}
+  model: products.category
+  pk: 463
+- fields: {name: Tuner, need_insurance: true, parent: 459, slug: ''}
+  model: products.category
+  pk: 464
+- fields: {name: "Syst\xE8me audio sans fil", need_insurance: true, parent: 459, slug: ''}
+  model: products.category
+  pk: 465
+- fields: {name: Enceintes salon, need_insurance: true, parent: 459, slug: ''}
+  model: products.category
+  pk: 466
+- fields: {name: Equipement DJ, need_insurance: true, parent: 443, slug: ''}
+  model: products.category
+  pk: 467
+- fields: {name: Amplificateurs, need_insurance: true, parent: 467, slug: ''}
+  model: products.category
+  pk: 468
+- fields: {name: Blocs de puissance, need_insurance: true, parent: 467, slug: ''}
+  model: products.category
+  pk: 469
+- fields: {name: Casques DJ, need_insurance: true, parent: 467, slug: ''}
+  model: products.category
+  pk: 470
+- fields: {name: Cellules DJ, need_insurance: true, parent: 467, slug: ''}
+  model: products.category
+  pk: 471
+- fields: {name: Connectique, need_insurance: true, parent: 467, slug: ''}
+  model: products.category
+  pk: 472
+- fields: {name: Consoles USB, need_insurance: true, parent: 467, slug: ''}
+  model: products.category
+  pk: 473
+- fields: {name: Controleur DMX, need_insurance: true, parent: 467, slug: ''}
+  model: products.category
+  pk: 474
+- fields: {name: Effets son, need_insurance: true, parent: 467, slug: ''}
+  model: products.category
+  pk: 475
+- fields: {name: Enceinte DJ, need_insurance: true, parent: 467, slug: ''}
+  model: products.category
+  pk: 476
+- fields: {name: Subwoofer, need_insurance: true, parent: 467, slug: ''}
+  model: products.category
+  pk: 477
+- fields: {name: "Lecteur vid\xE9o", need_insurance: true, parent: 443, slug: ''}
+  model: products.category
+  pk: 478
+- fields: {name: Lecteur DVD, need_insurance: true, parent: 478, slug: ''}
+  model: products.category
+  pk: 479
+- fields: {name: Lecteur enregistreur DVD, need_insurance: true, parent: 478, slug: ''}
+  model: products.category
+  pk: 480
+- fields: {name: Lecteur Blu-Ray, need_insurance: true, parent: 478, slug: ''}
+  model: products.category
+  pk: 481
+- fields: {name: Lecteur enregistreur Blu-Ray, need_insurance: true, parent: 478,
+    slug: ''}
+  model: products.category
+  pk: 482
+- fields: {name: Lecteur DVD portable, need_insurance: true, parent: 478, slug: ''}
+  model: products.category
+  pk: 483
+- fields: {name: Lecteur enregistreur VHS, need_insurance: true, parent: 478, slug: ''}
+  model: products.category
+  pk: 484
+- fields: {name: "Cam\xE9ra video", need_insurance: true, parent: 443, slug: ''}
+  model: products.category
+  pk: 485
+- fields: {name: Camescope, need_insurance: true, parent: 485, slug: ''}
+  model: products.category
+  pk: 486
+- fields: {name: "Camescopes num\xE9riques", need_insurance: true, parent: 485, slug: ''}
+  model: products.category
+  pk: 487
+- fields: {name: Accessoires camescope, need_insurance: true, parent: 485, slug: ''}
+  model: products.category
+  pk: 488
+- fields: {name: Eclairage, need_insurance: true, parent: 443, slug: ''}
+  model: products.category
+  pk: 489
+- fields: {name: "Boule \xE0 facette", need_insurance: true, parent: 489, slug: ''}
+  model: products.category
+  pk: 490
+- fields: {name: Filtres, need_insurance: true, parent: 489, slug: ''}
+  model: products.category
+  pk: 491
+- fields: {name: "Jeu de lumi\xE8re", need_insurance: true, parent: 489, slug: ''}
+  model: products.category
+  pk: 492
+- fields: {name: Spot, need_insurance: true, parent: 489, slug: ''}
+  model: products.category
+  pk: 493
+- fields: {name: Laser, need_insurance: true, parent: 489, slug: ''}
+  model: products.category
+  pk: 494
+- fields: {name: Led, need_insurance: true, parent: 489, slug: ''}
+  model: products.category
+  pk: 495
+- fields: {name: Stroboscope, need_insurance: true, parent: 489, slug: ''}
+  model: products.category
+  pk: 496
+- fields: {name: "Lumi\xE8re noire", need_insurance: true, parent: 489, slug: ''}
+  model: products.category
+  pk: 497
+- fields: {name: Lyres, need_insurance: true, parent: 489, slug: ''}
+  model: products.category
+  pk: 498
+- fields: {name: Lieu, need_insurance: true, parent: null, slug: ''}
+  model: products.category
+  pk: 499
+- fields: {name: Appartement, need_insurance: true, parent: 499, slug: ''}
+  model: products.category
+  pk: 500
+- fields: {name: Studio, need_insurance: true, parent: 500, slug: ''}
+  model: products.category
+  pk: 501
+- fields: {name: "2/3 pi\xE8ces", need_insurance: true, parent: 500, slug: ''}
+  model: products.category
+  pk: 502
+- fields: {name: "4/5 pi\xE8ces", need_insurance: true, parent: 500, slug: ''}
+  model: products.category
+  pk: 503
+- fields: {name: "+5 pi\xE8ces", need_insurance: true, parent: 500, slug: ''}
+  model: products.category
+  pk: 504
+- fields: {name: Maison/villa, need_insurance: true, parent: 499, slug: ''}
+  model: products.category
+  pk: 505
+- fields: {name: 1/3 chambres, need_insurance: true, parent: 505, slug: ''}
+  model: products.category
+  pk: 506
+- fields: {name: 4/5 chambres, need_insurance: true, parent: 505, slug: ''}
+  model: products.category
+  pk: 507
+- fields: {name: +5 chambres, need_insurance: true, parent: 505, slug: ''}
+  model: products.category
+  pk: 508
+- fields: {name: Camping, need_insurance: true, parent: 499, slug: ''}
+  model: products.category
+  pk: 509
+- fields: {name: Tente, need_insurance: true, parent: 509, slug: ''}
+  model: products.category
+  pk: 510
+- fields: {name: Caravane, need_insurance: true, parent: 509, slug: ''}
+  model: products.category
+  pk: 511
+- fields: {name: Camping car, need_insurance: true, parent: 509, slug: ''}
+  model: products.category
+  pk: 512
+- fields: {name: Emplacement, need_insurance: true, parent: 509, slug: ''}
+  model: products.category
+  pk: 513
+- fields: {name: Mobil home, need_insurance: true, parent: 509, slug: ''}
+  model: products.category
+  pk: 514
+- fields: {name: Jardinage, need_insurance: true, parent: null, slug: ''}
+  model: products.category
+  pk: 515
+- fields: {name: "Outils \xE0 moteur", need_insurance: true, parent: 515, slug: ''}
+  model: products.category
+  pk: 516
+- fields: {name: Aspirteur et souffleur, need_insurance: true, parent: 516, slug: ''}
+  model: products.category
+  pk: 517
+- fields: {name: "Autoport\xE9e et rider", need_insurance: true, parent: 516, slug: ''}
+  model: products.category
+  pk: 518
+- fields: {name: "Broyeur de v\xE9g\xE9taux", need_insurance: true, parent: 516, slug: ''}
+  model: products.category
+  pk: 519
+- fields: {name: "Coupe-bordure et cisaille \xE0 gazon", need_insurance: true, parent: 516,
+    slug: ''}
+  model: products.category
+  pk: 520
+- fields: {name: "D\xE9broussailleuse", need_insurance: true, parent: 516, slug: ''}
+  model: products.category
+  pk: 521
+- fields: {name: Equipement de protection du jardinier, need_insurance: true, parent: 516,
+    slug: ''}
+  model: products.category
+  pk: 522
+- fields: {name: Motobineuse et motoculteur, need_insurance: true, parent: 516, slug: ''}
+  model: products.category
+  pk: 523
+- fields: {name: "Scarificateur \xE0 moteur", need_insurance: true, parent: 516, slug: ''}
+  model: products.category
+  pk: 524
+- fields: {name: "Fendeur de b\xFBche", need_insurance: true, parent: 516, slug: ''}
+  model: products.category
+  pk: 525
+- fields: {name: Taille-haie, need_insurance: true, parent: 516, slug: ''}
+  model: products.category
+  pk: 526
+- fields: {name: Tondeuse autonome, need_insurance: true, parent: 516, slug: ''}
+  model: products.category
+  pk: 527
+- fields: {name: "Tondeuse d\xE9broussailleuse", need_insurance: true, parent: 516,
+    slug: ''}
+  model: products.category
+  pk: 528
+- fields: {name: "Tondeuse et autoport\xE9", need_insurance: true, parent: 516, slug: ''}
+  model: products.category
+  pk: 529
+- fields: {name: "Tron\xE7onneuse", need_insurance: true, parent: 516, slug: ''}
+  model: products.category
+  pk: 530
+- fields: {name: "Outils \xE0 main", need_insurance: true, parent: 515, slug: ''}
+  model: products.category
+  pk: 531
+- fields: {name: "Balais \xE0 gazon", need_insurance: true, parent: 531, slug: ''}
+  model: products.category
+  pk: 532
+- fields: {name: Balayeuse sur roue, need_insurance: true, parent: 531, slug: ''}
+  model: products.category
+  pk: 533
+- fields: {name: "B\xEAche fourche louchet et houe", need_insurance: true, parent: 531,
+    slug: ''}
+  model: products.category
+  pk: 534
+- fields: {name: Binette serfouette gratoir ratissoire, need_insurance: true, parent: 531,
+    slug: ''}
+  model: products.category
+  pk: 535
+- fields: {name: Brouette, need_insurance: true, parent: 531, slug: ''}
+  model: products.category
+  pk: 536
+- fields: {name: Chevalet, need_insurance: true, parent: 531, slug: ''}
+  model: products.category
+  pk: 537
+- fields: {name: "Cisaille \xE0 haie", need_insurance: true, parent: 531, slug: ''}
+  model: products.category
+  pk: 538
+- fields: {name: "D\xE9sherbeur thermique", need_insurance: true, parent: 531, slug: ''}
+  model: products.category
+  pk: 539
+- fields: {name: "Dresse-bordure cisaille \xE0 gazon", need_insurance: true, parent: 531,
+    slug: ''}
+  model: products.category
+  pk: 540
+- fields: {name: Epandeur rouleau, need_insurance: true, parent: 531, slug: ''}
+  model: products.category
+  pk: 541
+- fields: {name: Faux  faucille serpette machette, need_insurance: true, parent: 531,
+    slug: ''}
+  model: products.category
+  pk: 542
+- fields: {name: Hache merlin  hachette masser et coin, need_insurance: true, parent: 531,
+    slug: ''}
+  model: products.category
+  pk: 543
+- fields: {name: "Pelle pioche tari\xE8re", need_insurance: true, parent: 531, slug: ''}
+  model: products.category
+  pk: 544
+- fields: {name: "Rateau crocs  griffe \xE9mietteur cultivateur", need_insurance: true,
+    parent: 531, slug: ''}
+  model: products.category
+  pk: 545
+- fields: {name: "Scie \xE0 buchee scie \xE0 \xE9laguer", need_insurance: true, parent: 531,
+    slug: ''}
+  model: products.category
+  pk: 546
+- fields: {name: "S\xE9cateur \xE9brancheur \xE9chenilloir", need_insurance: true,
+    parent: 531, slug: ''}
+  model: products.category
+  pk: 547
+- fields: {name: Arrosage, need_insurance: true, parent: 515, slug: ''}
+  model: products.category
+  pk: 548
+- fields: {name: Arrosoir de jardin seau, need_insurance: true, parent: 548, slug: ''}
+  model: products.category
+  pk: 549
+- fields: {name: "Pompe \xE0 bras", need_insurance: true, parent: 548, slug: ''}
+  model: products.category
+  pk: 550
+- fields: {name: "Pompe d'\xE9vacuation", need_insurance: true, parent: 548, slug: ''}
+  model: products.category
+  pk: 551
+- fields: {name: Tuyaux d'arrosage, need_insurance: true, parent: 548, slug: ''}
+  model: products.category
+  pk: 552
+- fields: {name: "R\xE9ception", need_insurance: true, parent: null, slug: ''}
+  model: products.category
+  pk: 553
+- fields: {name: Cuisine, need_insurance: true, parent: 553, slug: ''}
+  model: products.category
+  pk: 554
+- fields: {name: "Chaudron \xE0 soupe", need_insurance: true, parent: 554, slug: ''}
+  model: products.category
+  pk: 555
+- fields: {name: Autocuiseur, need_insurance: true, parent: 554, slug: ''}
+  model: products.category
+  pk: 556
+- fields: {name: Bac Gastro, need_insurance: true, parent: 554, slug: ''}
+  model: products.category
+  pk: 557
+- fields: {name: Etuves, need_insurance: true, parent: 554, slug: ''}
+  model: products.category
+  pk: 558
+- fields: {name: "Etuves ventil\xE9es", need_insurance: true, parent: 554, slug: ''}
+  model: products.category
+  pk: 559
+- fields: {name: Fours 10 et 20 niv, need_insurance: true, parent: 554, slug: ''}
+  model: products.category
+  pk: 560
+- fields: {name: Fours moins de 10mn, need_insurance: true, parent: 554, slug: ''}
+  model: products.category
+  pk: 561
+- fields: {name: Bains marie, need_insurance: true, parent: 554, slug: ''}
+  model: products.category
+  pk: 562
+- fields: {name: Plaques de cuisson, need_insurance: true, parent: 554, slug: ''}
+  model: products.category
+  pk: 563
+- fields: {name: Ustensiles, need_insurance: true, parent: 554, slug: ''}
+  model: products.category
+  pk: 564
+- fields: {name: Micro onde, need_insurance: true, parent: 554, slug: ''}
+  model: products.category
+  pk: 565
+- fields: {name: Percolateurs, need_insurance: true, parent: 554, slug: ''}
+  model: products.category
+  pk: 566
+- fields: {name: Poele, need_insurance: true, parent: 554, slug: ''}
+  model: products.category
+  pk: 567
+- fields: {name: Thermoverseur, need_insurance: true, parent: 554, slug: ''}
+  model: products.category
+  pk: 568
+- fields: {name: Trancheur de jambon, need_insurance: true, parent: 554, slug: ''}
+  model: products.category
+  pk: 569
+- fields: {name: Grill poulet, need_insurance: true, parent: 554, slug: ''}
+  model: products.category
+  pk: 570
+- fields: {name: Plaque hamburger, need_insurance: true, parent: 554, slug: ''}
+  model: products.category
+  pk: 571
+- fields: {name: Salamandre, need_insurance: true, parent: 554, slug: ''}
+  model: products.category
+  pk: 572
+- fields: {name: Steak et croque, need_insurance: true, parent: 554, slug: ''}
+  model: products.category
+  pk: 573
+- fields: {name: Toasteur, need_insurance: true, parent: 554, slug: ''}
+  model: products.category
+  pk: 574
+- fields: {name: Barbecue, need_insurance: true, parent: 554, slug: ''}
+  model: products.category
+  pk: 575
+- fields: {name: "Tireuse \xE0 bi\xE8re", need_insurance: true, parent: 554, slug: ''}
+  model: products.category
+  pk: 576
+- fields: {name: Appareil a pop corn, need_insurance: true, parent: 554, slug: ''}
+  model: products.category
+  pk: 577
+- fields: {name: "Appareil \xE0 barbe \xE0 papa", need_insurance: true, parent: 554,
+    slug: ''}
+  model: products.category
+  pk: 578
+- fields: {name: "Crespi\xE8res", need_insurance: true, parent: 554, slug: ''}
+  model: products.category
+  pk: 579
+- fields: {name: Gaufrier, need_insurance: true, parent: 554, slug: ''}
+  model: products.category
+  pk: 580
+- fields: {name: Hot dog, need_insurance: true, parent: 554, slug: ''}
+  model: products.category
+  pk: 581
+- fields: {name: Barbecue, need_insurance: true, parent: 554, slug: ''}
+  model: products.category
+  pk: 582
+- fields: {name: Armoire froide, need_insurance: true, parent: 554, slug: ''}
+  model: products.category
+  pk: 583
+- fields: {name: "Machine \xE0 glace", need_insurance: true, parent: 554, slug: ''}
+  model: products.category
+  pk: 584
+- fields: {name: Vitrines froides, need_insurance: true, parent: 554, slug: ''}
+  model: products.category
+  pk: 585
+- fields: {name: Conteneur isotherme, need_insurance: true, parent: 554, slug: ''}
+  model: products.category
+  pk: 586
+- fields: {name: Rangement, need_insurance: true, parent: 554, slug: ''}
+  model: products.category
+  pk: 587
+- fields: {name: Lavage, need_insurance: true, parent: 554, slug: ''}
+  model: products.category
+  pk: 588
+- fields: {name: Mobilier, need_insurance: true, parent: 553, slug: ''}
+  model: products.category
+  pk: 589
+- fields: {name: Chaises, need_insurance: true, parent: 589, slug: ''}
+  model: products.category
+  pk: 590
+- fields: {name: Tables et buffets, need_insurance: true, parent: 589, slug: ''}
+  model: products.category
+  pk: 591
+- fields: {name: Bar et tabourets, need_insurance: true, parent: 589, slug: ''}
+  model: products.category
+  pk: 592
+- fields: {name: "Charrettes et \xE9tals", need_insurance: true, parent: 589, slug: ''}
+  model: products.category
+  pk: 593
+- fields: {name: Cloisons et paravents, need_insurance: true, parent: 589, slug: ''}
+  model: products.category
+  pk: 594
+- fields: {name: "D\xE9coration", need_insurance: true, parent: 589, slug: ''}
+  model: products.category
+  pk: 595
+- fields: {name: Comptoir, need_insurance: true, parent: 589, slug: ''}
+  model: products.category
+  pk: 596
+- fields: {name: Exterieurs, need_insurance: true, parent: 553, slug: ''}
+  model: products.category
+  pk: 597
+- fields: {name: Chapiteau, need_insurance: true, parent: 597, slug: ''}
+  model: products.category
+  pk: 598
+- fields: {name: Jeux gonflables, need_insurance: true, parent: 597, slug: ''}
+  model: products.category
+  pk: 599
+- fields: {name: Tente de reception, need_insurance: true, parent: 597, slug: ''}
+  model: products.category
+  pk: 600
+- fields: {name: Gradin   estrade   podium, need_insurance: true, parent: 597, slug: ''}
+  model: products.category
+  pk: 601
+- fields: {name: Parasol, need_insurance: true, parent: 597, slug: ''}
+  model: products.category
+  pk: 602
+- fields: {name: Art de la table, need_insurance: true, parent: 553, slug: ''}
+  model: products.category
+  pk: 603
+- fields: {name: Couverts, need_insurance: true, parent: 603, slug: ''}
+  model: products.category
+  pk: 604
+- fields: {name: Verrerie, need_insurance: true, parent: 603, slug: ''}
+  model: products.category
+  pk: 605
+- fields: {name: Assiettes et sous assiettes, need_insurance: true, parent: 603, slug: ''}
+  model: products.category
+  pk: 606
+- fields: {name: Plats et plateaux, need_insurance: true, parent: 603, slug: ''}
+  model: products.category
+  pk: 607
+- fields: {name: Les contenants et l'utilitaire, need_insurance: true, parent: 603,
+    slug: ''}
+  model: products.category
+  pk: 608
+- fields: {name: Nappes, need_insurance: true, parent: 603, slug: ''}
+  model: products.category
+  pk: 609
+- fields: {name: Argenterie, need_insurance: true, parent: 603, slug: ''}
+  model: products.category
+  pk: 610
+- fields: {name: "C\xE9ramique", need_insurance: true, parent: 603, slug: ''}
+  model: products.category
+  pk: 611
+- fields: {name: Ustensiles, need_insurance: true, parent: 603, slug: ''}
+  model: products.category
+  pk: 612
+- fields: {name: Auto et moto, need_insurance: true, parent: null, slug: ''}
+  model: products.category
+  pk: 613
+- fields: {name: Scooter, need_insurance: true, parent: 613, slug: ''}
+  model: products.category
+  pk: 614
+- fields: {name: 50 Cc, need_insurance: true, parent: 614, slug: ''}
+  model: products.category
+  pk: 615
+- fields: {name: 125 Cc, need_insurance: true, parent: 614, slug: ''}
+  model: products.category
+  pk: 616
+- fields: {name: Maxi scooter, need_insurance: true, parent: 614, slug: ''}
+  model: products.category
+  pk: 617
+- fields: {name: Accesoires autos, need_insurance: true, parent: 613, slug: ''}
+  model: products.category
+  pk: 618
+- fields: {name: Gallerie, need_insurance: true, parent: 618, slug: ''}
+  model: products.category
+  pk: 619
+- fields: {name: Attelage, need_insurance: true, parent: 618, slug: ''}
+  model: products.category
+  pk: 620
+- fields: {name: GPS voiture, need_insurance: true, parent: 618, slug: ''}
+  model: products.category
+  pk: 621
+- fields: {name: Siege enfant, need_insurance: true, parent: 618, slug: ''}
+  model: products.category
+  pk: 622
+- fields: {name: Voiture, need_insurance: true, parent: 613, slug: ''}
+  model: products.category
+  pk: 623
+- fields: {name: Voiture de tourisme, need_insurance: true, parent: 623, slug: ''}
+  model: products.category
+  pk: 624
+- fields: {name: Voiture de luxe, need_insurance: true, parent: 623, slug: ''}
+  model: products.category
+  pk: 625
+- fields: {name: Voiture ancienne, need_insurance: true, parent: 623, slug: ''}
+  model: products.category
+  pk: 626
+- fields: {name: Voiture avec chauffeur, need_insurance: true, parent: 623, slug: ''}
+  model: products.category
+  pk: 627
+- fields: {name: "Voiture \xE9lectrique", need_insurance: true, parent: 623, slug: ''}
+  model: products.category
+  pk: 628
+- fields: {name: Voiture sans permis, need_insurance: true, parent: 623, slug: ''}
+  model: products.category
+  pk: 629
+- fields: {name: Moto, need_insurance: true, parent: 613, slug: ''}
+  model: products.category
+  pk: 630
+- fields: {name: Enduro et cross, need_insurance: true, parent: 630, slug: ''}
+  model: products.category
+  pk: 631
+- fields: {name: Roadster, need_insurance: true, parent: 630, slug: ''}
+  model: products.category
+  pk: 632
+- fields: {name: "Routi\xE8re", need_insurance: true, parent: 630, slug: ''}
+  model: products.category
+  pk: 633
+- fields: {name: Side-car, need_insurance: true, parent: 630, slug: ''}
+  model: products.category
+  pk: 634
+- fields: {name: Sportive, need_insurance: true, parent: 630, slug: ''}
+  model: products.category
+  pk: 635
+- fields: {name: Supermotard, need_insurance: true, parent: 630, slug: ''}
+  model: products.category
+  pk: 636
+- fields: {name: Trial, need_insurance: true, parent: 630, slug: ''}
+  model: products.category
+  pk: 637
+- fields: {name: Quad, need_insurance: true, parent: 630, slug: ''}
+  model: products.category
+  pk: 638
+- fields: {name: Transport, need_insurance: true, parent: null, slug: ''}
+  model: products.category
+  pk: 639
+- fields: {name: Camion, need_insurance: true, parent: 639, slug: ''}
+  model: products.category
+  pk: 640
+- fields: {name: Utilitaire, need_insurance: true, parent: 640, slug: ''}
+  model: products.category
+  pk: 641
+- fields: {name: Fourgon petit volume, need_insurance: true, parent: 640, slug: ''}
+  model: products.category
+  pk: 642
+- fields: {name: Remorque, need_insurance: true, parent: 639, slug: ''}
+  model: products.category
+  pk: 643
+- fields: {name: "Remorque \xE0 bateau", need_insurance: true, parent: 643, slug: ''}
+  model: products.category
+  pk: 644
+- fields: {name: Remorque moto, need_insurance: true, parent: 643, slug: ''}
+  model: products.category
+  pk: 645
+- fields: {name: Remorque animaux, need_insurance: true, parent: 643, slug: ''}
+  model: products.category
+  pk: 646
+- fields: {name: Tracteur, need_insurance: true, parent: 643, slug: ''}
+  model: products.category
+  pk: 647
+- fields: {name: Engins agricoles, need_insurance: true, parent: 639, slug: ''}
+  model: products.category
+  pk: 648
+- fields: {name: Tracteur, need_insurance: true, parent: 648, slug: ''}
+  model: products.category
+  pk: 649
+- fields: {name: "Mat\xE9riel de fenaison", need_insurance: true, parent: 648, slug: ''}
+  model: products.category
+  pk: 650
+- fields: {name: Appareil de manutention, need_insurance: true, parent: 648, slug: ''}
+  model: products.category
+  pk: 651
+- fields: {name: Outil du sol, need_insurance: true, parent: 648, slug: ''}
+  model: products.category
+  pk: 652
+- fields: {name: "Outil d'\xE9pandage", need_insurance: true, parent: 648, slug: ''}
+  model: products.category
+  pk: 653
+- fields: {name: "Mat\xE9riel de transport", need_insurance: true, parent: 648, slug: ''}
+  model: products.category
+  pk: 654
+- fields: {name: "Mat\xE9riel de r\xE9colte", need_insurance: true, parent: 648, slug: ''}
+  model: products.category
+  pk: 655
+- fields: {name: "Mat\xE9rieil d'elevage", need_insurance: true, parent: 648, slug: ''}
+  model: products.category
+  pk: 656
+- fields: {name: Semoir, need_insurance: true, parent: 648, slug: ''}
+  model: products.category
+  pk: 657
+- fields: {name: Transport de loisir, need_insurance: true, parent: 639, slug: ''}
+  model: products.category
+  pk: 658
+- fields: {name: Caravane, need_insurance: true, parent: 658, slug: ''}
+  model: products.category
+  pk: 659
+- fields: {name: Camping-car, need_insurance: true, parent: 658, slug: ''}
+  model: products.category
+  pk: 660
+- fields: {name: "Camion am\xE9nag\xE9", need_insurance: true, parent: 658, slug: ''}
+  model: products.category
+  pk: 661
+- fields: {name: Transport de personne, need_insurance: true, parent: 639, slug: ''}
+  model: products.category
+  pk: 662
+- fields: {name: Autocar, need_insurance: true, parent: 662, slug: ''}
+  model: products.category
+  pk: 663
+- fields: {name: Minibus, need_insurance: true, parent: 662, slug: ''}
+  model: products.category
+  pk: 664
+- fields: {name: "Electrom\xE9nager", need_insurance: true, parent: null, slug: ''}
+  model: products.category
+  pk: 665
+- fields: {name: Electromenager de cuisine, need_insurance: true, parent: 665, slug: ''}
+  model: products.category
+  pk: 666
+- fields: {name: Cafetiere, need_insurance: true, parent: 666, slug: ''}
+  model: products.category
+  pk: 667
+- fields: {name: "Cafetiere \xE0 dosettes", need_insurance: true, parent: 666, slug: ''}
+  model: products.category
+  pk: 668
+- fields: {name: Expresso, need_insurance: true, parent: 666, slug: ''}
+  model: products.category
+  pk: 669
+- fields: {name: "Moulin \xE0 caf\xE9", need_insurance: true, parent: 666, slug: ''}
+  model: products.category
+  pk: 670
+- fields: {name: Grille pain, need_insurance: true, parent: 666, slug: ''}
+  model: products.category
+  pk: 671
+- fields: {name: "Machine \xE0 pain", need_insurance: true, parent: 666, slug: ''}
+  model: products.category
+  pk: 672
+- fields: {name: Presse-agrume, need_insurance: true, parent: 666, slug: ''}
+  model: products.category
+  pk: 673
+- fields: {name: Centrifugeuse, need_insurance: true, parent: 666, slug: ''}
+  model: products.category
+  pk: 674
+- fields: {name: Friteuse, need_insurance: true, parent: 666, slug: ''}
+  model: products.category
+  pk: 675
+- fields: {name: Grill pierrade, need_insurance: true, parent: 666, slug: ''}
+  model: products.category
+  pk: 676
+- fields: {name: Cuiseur vapeur, need_insurance: true, parent: 666, slug: ''}
+  model: products.category
+  pk: 677
+- fields: {name: Autocuiseur, need_insurance: true, parent: 666, slug: ''}
+  model: products.category
+  pk: 678
+- fields: {name: Raclette, need_insurance: true, parent: 666, slug: ''}
+  model: products.category
+  pk: 679
+- fields: {name: Fondue, need_insurance: true, parent: 666, slug: ''}
+  model: products.category
+  pk: 680
+- fields: {name: Gaufrier/croque monsieur/hotdog, need_insurance: true, parent: 666,
+    slug: ''}
+  model: products.category
+  pk: 681
+- fields: {name: Crepiere, need_insurance: true, parent: 666, slug: ''}
+  model: products.category
+  pk: 682
+- fields: {name: Micro onde, need_insurance: true, parent: 666, slug: ''}
+  model: products.category
+  pk: 683
+- fields: {name: Four, need_insurance: true, parent: 666, slug: ''}
+  model: products.category
+  pk: 684
+- fields: {name: Refrigerateur, need_insurance: true, parent: 666, slug: ''}
+  model: products.category
+  pk: 685
+- fields: {name: Congelateur, need_insurance: true, parent: 666, slug: ''}
+  model: products.category
+  pk: 686
+- fields: {name: Cave a vin, need_insurance: true, parent: 666, slug: ''}
+  model: products.category
+  pk: 687
+- fields: {name: Lave vaisselle, need_insurance: true, parent: 666, slug: ''}
+  model: products.category
+  pk: 688
+- fields: {name: Entretien, need_insurance: true, parent: 665, slug: ''}
+  model: products.category
+  pk: 689
+- fields: {name: Aspirateur, need_insurance: true, parent: 689, slug: ''}
+  model: products.category
+  pk: 690
+- fields: {name: Machine a vapeur, need_insurance: true, parent: 689, slug: ''}
+  model: products.category
+  pk: 691
+- fields: {name: Centrale vapeur, need_insurance: true, parent: 689, slug: ''}
+  model: products.category
+  pk: 692
+- fields: {name: Fer a repasser, need_insurance: true, parent: 689, slug: ''}
+  model: products.category
+  pk: 693
+- fields: {name: Lave linge, need_insurance: true, parent: 689, slug: ''}
+  model: products.category
+  pk: 694
+- fields: {name: Seche linge, need_insurance: true, parent: 689, slug: ''}
+  model: products.category
+  pk: 695
+- fields: {name: Machine a coudre, need_insurance: true, parent: 689, slug: ''}
+  model: products.category
+  pk: 696
