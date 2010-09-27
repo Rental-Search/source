@@ -233,3 +233,4 @@ INSURANCE_FTP_HOST = None # Our insurance ftp server host
 INSURANCE_FTP_USER = None # Our insurance ftp server username
 INSURANCE_FTP_PASSWORD = None # Our insurance ftp server password
 INSURANCE_FTP_CWD = None # Our insurance ftp server directory
+INSURANCE_EMAIL = None # Our insurance email

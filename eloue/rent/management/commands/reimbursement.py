@@ -5,8 +5,8 @@ from tempfile import TemporaryFile
 
 from dateutil.relativedelta import relativedelta
 from datetime import date
-from ftplib import FTP
 
+from django.core.mail import EmailMessage
 from django.core.management.base import BaseCommand
 
 log = logbook.Logger('eloue.rent.reimbursement')
@@ -43,12 +43,14 @@ class Command(BaseCommand):
             row['Taxes assurance à 9%'] = booking.insurance_taxes
             row['Cotisation TTC'] = booking.insurance_amount
             writer.writerow(row)
-        log.info('Uploady monthly insurance reimbursement')
-        ftp = FTP(settings.INSURANCE_FTP_HOST)
-        ftp.login(settings.INSURANCE_FTP_USER, settings.INSURANCE_FTP_PASSWORD)
-        if settings.INSURANCE_FTP_CWD:
-            ftp.cwd(settings.INSURANCE_FTP_CWD)
-        ftp.storlines("STOR " + csv_file.name, csv_file)
-        ftp.quit()
+        log.info('Send monthly insurance reimbursement by mail')
+        email = EmailMessage('Fichier remboursement e-loue.com',
+            'Ci-joint le fichier de remboursement du %s/%s' % (
+                period.month, period.year
+            ), 'ops@e-loue.com',
+            [settings.INSURANCE_EMAIL])
+        email.attach('remboursement-eloue-%s/%s.csv' %
+            (period.month, period.year), csv_file)
+        email.send()
         log.info('Finished monthly insurance reimbursement batch')
     

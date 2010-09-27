@@ -92,10 +92,9 @@ class Command(BaseCommand):
             help='Follow status of migration'
         )
     )
-
+    
     def import_category_tree(self, cursor, status=False):
         from eloue.products.models import Category
-
         cursor.execute("""SELECT category_id, category_name FROM abs_vm_category""")
         result_set = cursor.fetchall()
         for row in result_set:
@@ -117,8 +116,6 @@ class Command(BaseCommand):
         for i, row in enumerate(result_set):
             if status:
                 print '%s\r' % ' '*20, # clean up row
-
-
             username = smart_unicode(row['username'], encoding='latin1')
             email = smart_unicode(row['email'], encoding='latin1')
             password = smart_unicode("md5$$%s" % row['password'], encoding='latin1')
@@ -127,7 +124,6 @@ class Command(BaseCommand):
             lat, lon = row['lat'], row['long']
 
             username = username.lower()
-
             if not activation_key:
                 patron = Patron.objects.create_user(username, email, password, pk=row['id'])
                 patron.date_joined = date_joined
@@ -177,6 +173,7 @@ class Command(BaseCommand):
                 if user_info['phone_2']:
                     patron.phones.create(number=smart_unicode(cleanup_phone_number(user_info['phone_2']), encoding='latin1'), kind=4)
 
+                
                 if user_info['fax']:
                     patron.phones.create(number=smart_unicode(cleanup_phone_number(user_info['fax']), encoding='latin1'), kind=3)
 
@@ -188,7 +185,6 @@ class Command(BaseCommand):
     def import_products(self, cursor, status=False):
         from eloue.accounts.models import Patron
         from eloue.products.models import Product, Category
-
         cursor.execute("""SELECT product_id, product_name, product_s_desc, product_desc, count(product_desc) AS quantity, product_full_image, product_publish, prix, caution, vendor_id, product_lat, product_lng, localisation FROM abs_vm_product GROUP BY product_desc, product_name ORDER BY quantity DESC""")
         result_set = cursor.fetchall()
         for i, row in enumerate(result_set):
