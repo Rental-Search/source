@@ -5,6 +5,7 @@ from django.conf import settings
 from django.db import models
 from django.db.models import permalink
 from django.db.models.signals import post_save
+from django.template.defaultfilters import slugify
 from django.utils.translation import ugettext_lazy as _
 from django.utils.encoding import smart_unicode
 
@@ -72,7 +73,6 @@ class Product(models.Model):
     
     @property
     def slug(self):
-        from django.template.defaultfilters import slugify
         return slugify(self.summary)
     
     @permalink
@@ -93,7 +93,7 @@ class Category(models.Model):
     """A category"""
     parent = models.ForeignKey('self', related_name='children', null=True)
     name = models.CharField(null=False, max_length=255)
-    slug = models.SlugField(null=False, db_index=True, unique=True)
+    slug = models.SlugField(null=False, blank=False, db_index=True) # TODO : add unique=True
     need_insurance = models.BooleanField(default=True, db_index=True)
     
     def __unicode__(self):
@@ -103,6 +103,11 @@ class Category(models.Model):
         u'Travaux - Bricolage'
         """
         return smart_unicode(self.name)
+    
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.name)
+        super(Category, self).save(*args, **kwargs)
     
     class Meta:
         verbose_name = _('category')
