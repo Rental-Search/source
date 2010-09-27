@@ -95,14 +95,33 @@ class Patron(User):
     company_name = models.CharField(null=True, blank=True, max_length=255)
     activation_key = models.CharField(null=True, blank=True, max_length=40)
     is_subscribed = models.BooleanField(_(u'newsletter'), default=False, help_text=_(u"Précise si l'utilisateur est abonné à la newsletter"))
-    is_professional = models.BooleanField(_('professionnel'), null=False, default=False, help_text=_(u"Précise si l'utilisateur est un professionnel"))
+    is_professional = models.BooleanField(_('professionnel'), default=False, help_text=_(u"Précise si l'utilisateur est un professionnel"))
     modified_at = models.DateTimeField(_('date de modification'), editable=False)
     last_ip = models.IPAddressField(null=True, blank=True)
-    slug = models.SlugField(null=False, unique=True, db_index=True)
+    slug = models.SlugField( unique=True, db_index=True)
     paypal_email = models.EmailField(null=True, blank=True)
-    account_key = models.CharField(max_length=255, null=True, editable=False)
+    account_key = models.CharField(max_length=255, blank=True, null=True, editable=False)
     
     objects = PatronManager()
+    
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.username)
+        self.modified_at = datetime.datetime.now()
+        super(Patron, self).save(*args, **kwargs)
+    
+    @permalink
+    def get_absolute_url(self):
+        return ('patron_detail', [self.slug])
+    
+    def clean(self):
+        from django.core.exceptions import ValidationError
+        if self.pk: # TODO : Might need some improvements and more tests
+            if Patron.objects.exclude(pk=self.pk).filter(email=self.email).exists():
+                raise ValidationError(_(u"Un utilisateur utilisant cet email existe déjà"))
+        else:
+            if Patron.objects.exists(email=self.email):
+                raise ValidationError(_(u"Un utilisateur utilisant cet email existe déjà"))
     
     def add_payment_card(self, card_name, card_number, card_owner_birth, card_type, card_verification,
         expiration_date, issue_number=''):
@@ -156,15 +175,6 @@ class Patron(User):
         message = EmailMultiAlternatives(subject, text_content, settings.DEFAULT_FROM_EMAIL, [self.email])
         message.attach_alternative(html_content, "text/html")
         message.send()
-        
-    def clean(self):
-        from django.core.exceptions import ValidationError
-        if self.pk: # TODO : Might need some improvements and more tests
-            if Patron.objects.exclude(pk=self.pk).filter(email=self.email).exists():
-                raise ValidationError(_(u"Un utilisateur utilisant cet email existe déjà"))
-        else:
-            if Patron.objects.exists(email=self.email):
-                raise ValidationError(_(u"Un utilisateur utilisant cet email existe déjà"))
     
     def is_expired(self):
         """
@@ -180,28 +190,21 @@ class Patron(User):
     is_expired.boolean = True
     is_expired.short_description = ugettext(u"Expiré")
     
-    @permalink
-    def get_absolute_url(self):
-        return ('patron_detail', [self.slug])
-    
-    def save(self, *args, **kwargs):
-        if not self.slug:
-            self.slug = slugify(self.username)
-        self.modified_at = datetime.datetime.now()
-        super(Patron, self).save(*args, **kwargs)
-    
 
 class Address(models.Model):
     """An address"""
     patron = models.ForeignKey(Patron, related_name='addresses')
     address1 = models.CharField(max_length=255)
     address2 = models.CharField(max_length=255, null=True, blank=True)
-    zipcode = models.CharField(null=True, max_length=9)
+    zipcode = models.CharField(max_length=9)
     position = models.PointField(null=True, blank=True)
-    city = models.CharField(null=False, max_length=255)
-    country = models.CharField(max_length=2, choices=COUNTRY_CHOICES, null=False)
+    city = models.CharField(max_length=255)
+    country = models.CharField(max_length=2, choices=COUNTRY_CHOICES)
     
     objects = models.GeoManager()
+    
+    class Meta:
+        verbose_name_plural = _('addresses')
     
     def __unicode__(self):
         """
@@ -216,6 +219,14 @@ class Address(models.Model):
             return smart_unicode("%s %s %s %s (%s, %s)" % (self.address1, self.address2 if self.address2 else '', self.zipcode, self.city, self.position.x, self.position.y))
         else:
             return smart_unicode("%s %s %s %s" % (self.address1, self.address2 if self.address2 else '', self.zipcode, self.city))
+    
+    def save(self, *args, **kwargs):
+        if not self.position: # TODO : improve that part
+            geocode = geocoder(settings.GOOGLE_API_KEY)
+            name, (lat, lon) = geocode(smart_str("%s %s %s %s" % (self.address1, self.address2, self.zipcode, self.city)))
+            if lat and lon:
+                self.position = Point(lat, lon)
+        super(Address, self).save(*args, **kwargs)
     
     def clean(self):
         from django.core.exceptions import ValidationError
@@ -236,21 +247,10 @@ class Address(models.Model):
     is_geocoded.boolean = True
     is_geocoded.short_description = ugettext(u"Géolocalisé")
     
-    def save(self, *args, **kwargs):
-        if not self.position: # TODO : improve that part
-            geocode = geocoder(settings.GOOGLE_API_KEY)
-            name, (lat, lon) = geocode(smart_str("%s %s %s %s" % (self.address1, self.address2, self.zipcode, self.city)))
-            if lat and lon:
-                self.position = Point(lat, lon)
-        super(Address, self).save(*args, **kwargs)
-        
-    class Meta:
-        verbose_name_plural = _('addresses')
-    
 
 class PhoneNumber(models.Model):
     """A phone number"""
     patron = models.ForeignKey(Patron, related_name='phones')
-    number = models.CharField(null=False, max_length=255)
+    number = models.CharField( max_length=255)
     kind = models.IntegerField(choices=PHONE_TYPES)
 

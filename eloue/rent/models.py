@@ -75,32 +75,54 @@ class Booking(models.Model):
     """A reservation"""
     uuid = UUIDField(primary_key=True)
     
-    started_at = models.DateTimeField(null=False)
-    ended_at = models.DateTimeField(null=False)
+    started_at = models.DateTimeField()
+    ended_at = models.DateTimeField()
     
-    booking_state = models.IntegerField(null=False, default=BOOKING_STATE.ASKED, choices=BOOKING_STATE)
-    payment_state = models.IntegerField(null=True, choices=PAYMENT_STATE)
+    booking_state = models.IntegerField(default=BOOKING_STATE.ASKED, choices=BOOKING_STATE)
+    payment_state = models.IntegerField(choices=PAYMENT_STATE)
     
-    deposit_amount = models.DecimalField(null=False, max_digits=8, decimal_places=2)
-    insurance_amount = models.DecimalField(null=False, max_digits=8, decimal_places=2)
-    total_amount = models.DecimalField(null=False, max_digits=8, decimal_places=2)
-    currency = models.CharField(null=False, max_length=3, choices=CURRENCY)
+    deposit_amount = models.DecimalField(max_digits=8, decimal_places=2)
+    insurance_amount = models.DecimalField(max_digits=8, decimal_places=2)
+    total_amount = models.DecimalField(max_digits=8, decimal_places=2)
+    currency = models.CharField(max_length=3, choices=CURRENCY)
     
     owner = models.ForeignKey(Patron, related_name='bookings')
     borrower = models.ForeignKey(Patron, related_name='rentals')
     product = models.ForeignKey(Product, related_name='bookings')
     
     contract_id = models.IntegerField(null=True, db_index=True)
-    pin = models.CharField(unique=True, blank=True, null=False, max_length=4)
+    pin = models.CharField(unique=True, blank=True, max_length=4)
     ip = models.IPAddressField(blank=True, null=True)
     
     created_at = models.DateTimeField(blank=True, editable=False)
     canceled_at = models.DateTimeField(null=True, blank=True, editable=False)
     
-    preapproval_key = models.CharField(null=True, max_length=255)
-    pay_key = models.CharField(null=True, max_length=255)
+    preapproval_key = models.CharField(null=True, editable=False, blank=True, max_length=255)
+    pay_key = models.CharField(null=True, editable=False, blank=True, max_length=255)
     
     objects = BookingManager()
+    
+    def save(self, *args, **kwargs):
+        if not self.pk:
+            self.created_at = datetime.now()
+            self.pin = str(random.randint(1000, 9999))
+            self.deposit_amount = self.product.deposit_amount
+            if self.product.has_insurance:
+                self.insurance_amount = self.insurance_fee + self.insurance_taxes + self.insurance_commision
+            else:
+                self.insurance_amount = D(0)
+        super(Booking, self).save(*args, **kwargs)
+    
+    def clean(self):
+        from django.core.exceptions import ValidationError
+        if self.owner == self.borrower:
+            raise ValidationError(_(u"Un objet ne peut pas être louer à son propriétaire"))
+        if self.started_at >= self.ended_at:
+            raise ValidationError(_(u"Une location ne peut pas terminer avant d'avoir commencer"))
+        if self.total_amount < 0:
+            raise ValidationError(_(u"Le prix total d'une location ne peut pas être négatif"))
+        if (self.ended_at - self.started_at) > timedelta(days=settings.BOOKING_DAYS):
+            raise ValidationError(_(u"La durée d'une location est limitée à 85 jours."))
     
     @staticmethod
     def calculate_price(product, started_at, ended_at):
@@ -302,33 +324,11 @@ class Booking(models.Model):
         except PaypalError, e:
             log.error(e)
     
-    def clean(self):
-        from django.core.exceptions import ValidationError
-        if self.owner == self.borrower:
-            raise ValidationError(_(u"Un objet ne peut pas être louer à son propriétaire"))
-        if self.started_at >= self.ended_at:
-            raise ValidationError(_(u"Une location ne peut pas terminer avant d'avoir commencer"))
-        if self.total_amount < 0:
-            raise ValidationError(_(u"Le prix total d'une location ne peut pas être négatif"))
-        if (self.ended_at - self.started_at) > timedelta(days=settings.BOOKING_DAYS):
-            raise ValidationError(_(u"La durée d'une location est limitée à 85 jours."))
-    
-    def save(self, *args, **kwargs):
-        if not self.pk:
-            self.created_at = datetime.now()
-            self.pin = str(random.randint(1000, 9999))
-            self.deposit_amount = self.product.deposit_amount
-            if self.product.has_insurance:
-                self.insurance_amount = self.insurance_fee + self.insurance_taxes + self.insurance_commision
-            else:
-                self.insurance_amount = D(0)
-        super(Booking, self).save(*args, **kwargs)
-    
 
 class Sinister(models.Model):
     uuid = UUIDField(primary_key=True)
-    sinister_id = models.IntegerField(null=False, db_index=True)
-    description = models.TextField(null=False)
+    sinister_id = models.IntegerField(db_index=True)
+    description = models.TextField()
     patron = models.ForeignKey(Patron, related_name='sinisters')
     booking =  models.ForeignKey(Booking, related_name='sinisters')
     product = models.ForeignKey(Product, related_name='sinisters')

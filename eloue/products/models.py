@@ -44,12 +44,12 @@ INSURANCE_MAX_DEPOSIT = getattr(settings, 'INSURANCE_MAX_DEPOSIT', 750)
 
 class Product(models.Model):
     """A product"""
-    summary = models.CharField(null=False, max_length=255)
-    deposit_amount = models.DecimalField(null=False, max_digits=8, decimal_places=2)
-    currency = models.CharField(null=False, max_length=3, choices=CURRENCY)
-    description = models.TextField(null=False)
+    summary = models.CharField(max_length=255)
+    deposit_amount = models.DecimalField(max_digits=8, decimal_places=2)
+    currency = models.CharField(max_length=3, choices=CURRENCY)
+    description = models.TextField()
     address = models.ForeignKey(Address, related_name='products')
-    quantity = models.IntegerField(null=False)
+    quantity = models.IntegerField()
     is_archived = models.BooleanField(_(u'archivé'), default=False, db_index=True)
     is_allowed = models.BooleanField(_(u'autorisé'), default=True, db_index=True)
     category = models.ForeignKey('Category', related_name='products')
@@ -57,30 +57,30 @@ class Product(models.Model):
     
     objects = ProductManager()
     
+    class Meta:
+        verbose_name = _('product')
+    
+    def __unicode__(self):
+        return smart_unicode(self.summary)
+    
+    @permalink
+    def get_absolute_url(self):
+        return ('product_detail', [self.slug, self.pk])
+    
     def clean(self):
         from django.core.exceptions import ValidationError
         if self.address.patron != self.owner:
             raise ValidationError(_(u"L'adresse n'appartient pas au propriétaire de l'objet"))
     
-    def __unicode__(self):
-        return smart_unicode(self.summary)
+    @property
+    def slug(self):
+        return slugify(self.summary)
     
     @property
     def has_insurance(self):
         return not self.owner.is_professional \
             and self.deposit_amount <= INSURANCE_MAX_DEPOSIT \
             and self.category.need_insurance
-    
-    @property
-    def slug(self):
-        return slugify(self.summary)
-    
-    @permalink
-    def get_absolute_url(self):
-        return ('product_detail', [self.slug, self.pk])
-    
-    class Meta:
-        verbose_name = _('product')
     
 
 class Picture(models.Model):
@@ -91,10 +91,14 @@ class Picture(models.Model):
 
 class Category(models.Model):
     """A category"""
-    parent = models.ForeignKey('self', related_name='children', null=True)
-    name = models.CharField(null=False, max_length=255)
-    slug = models.SlugField(null=False, blank=False, unique=True, db_index=True)
+    parent = models.ForeignKey('self', related_name='children', blank=True, null=True)
+    name = models.CharField(max_length=255)
+    slug = models.SlugField(unique=True, db_index=True)
     need_insurance = models.BooleanField(default=True, db_index=True)
+    
+    class Meta:
+        verbose_name = _('category')
+        verbose_name_plural = _('categories')
     
     def __unicode__(self):
         """
@@ -109,15 +113,14 @@ class Category(models.Model):
             self.slug = slugify(self.name)
         super(Category, self).save(*args, **kwargs)
     
-    class Meta:
-        verbose_name = _('category')
-        verbose_name_plural = _('categories')
-    
 
 class Property(models.Model):
     """A property"""
     category = models.ForeignKey(Category, related_name='properties')
-    name = models.CharField(null=False, max_length=255)
+    name = models.CharField(max_length=255)
+    
+    class Meta:
+        verbose_name_plural = _('properties')
     
     def __unicode__(self):
         """
@@ -127,14 +130,14 @@ class Property(models.Model):
         """
         return smart_unicode(self.name)
     
-    class Meta:
-        verbose_name_plural = _('properties')
-    
 
 class PropertyValue(models.Model):
     property = models.ForeignKey(Property, related_name='values')
-    value = models.CharField(null=False, max_length=255)
+    value = models.CharField(max_length=255)
     product = models.ForeignKey(Product, related_name='properties')
+    
+    class Meta:
+        unique_together = ('property', 'product')
     
     def __unicode__(self):
         """
@@ -144,23 +147,28 @@ class PropertyValue(models.Model):
         """
         return smart_unicode(self.value)
     
-    class Meta:
-        unique_together = ('property', 'product')
-    
 
 class Price(models.Model):
     """A price"""
-    name = models.CharField(null=False, blank=True, max_length=255)
+    name = models.CharField(blank=True, max_length=255)
     amount = models.DecimalField(max_digits=8, decimal_places=2)
-    currency = models.CharField(null=False, max_length=3, choices=CURRENCY)
+    currency = models.CharField(max_length=3, choices=CURRENCY)
     product = models.ForeignKey(Product, related_name='prices')
     unit = models.IntegerField(choices=UNIT, db_index=True)
     
     started_at = SimpleDateField(null=True, blank=True)
     ended_at = SimpleDateField(null=True, blank=True)
     
+    class Meta:
+        unique_together = ('product', 'unit', 'name')
+    
     def __unicode__(self):
         return smart_unicode(self.amount)
+    
+    def clean(self):
+        from django.core.exceptions import ValidationError
+        if self.amount < 0:
+            raise ValidationError(_(u"Le prix ne peut pas être négatif"))
     
     def delta(self, started_at, ended_at):
         """Return delta of time passed in this season price"""
@@ -174,30 +182,18 @@ class Price(models.Model):
         delta = (ended_at - started_at) 
         return delta if delta > timedelta(days=0) else timedelta(days=0)
     
-    def clean(self):
-        from django.core.exceptions import ValidationError
-        if self.amount < 0:
-            raise ValidationError(_(u"Le prix ne peut pas être négatif"))
-    
-    class Meta:
-        unique_together = ('product', 'unit', 'name')
-    
 
 class Review(models.Model):
     """A review"""
-    summary = models.CharField(null=False, blank=True, max_length=255)
-    score = models.FloatField(null=False)
-    description = models.TextField(null=False)
+    summary = models.CharField(blank=True, max_length=255)
+    score = models.FloatField()
+    description = models.TextField()
     created_at = models.DateTimeField(blank=True, editable=False)
     ip = models.IPAddressField(null=True, blank=True)
     reviewer = models.ForeignKey(Patron, related_name="%(class)s_reviews")
     
-    def clean(self):
-        from django.core.exceptions import ValidationError
-        if self.score > 1:
-            raise ValidationError(_("Score can't be higher than 1"))
-        if self.score < 0:
-            raise ValidationError(_("Score can't be a negative value"))
+    class Meta:
+        abstract = True
     
     def __unicode__(self):
         return smart_unicode(self.summary)
@@ -207,8 +203,12 @@ class Review(models.Model):
             self.created_at = datetime.now()
         super(Review, self).save(*args, **kwargs)
     
-    class Meta:
-        abstract = True
+    def clean(self):
+        from django.core.exceptions import ValidationError
+        if self.score > 1:
+            raise ValidationError(_("Score can't be higher than 1"))
+        if self.score < 0:
+            raise ValidationError(_("Score can't be a negative value"))
     
 
 class ProductReview(Review):
@@ -241,8 +241,12 @@ class Question(models.Model):
     modified_at = models.DateTimeField(editable=False)
     status = models.IntegerField(choices=STATUS, db_index=True, default=STATUS.DRAFT)
     
-    product = models.ForeignKey(Product)
-    author = models.ForeignKey(Patron)
+    product = models.ForeignKey(Product, related_name="questions")
+    author = models.ForeignKey(Patron, related_name="questions")
+    
+    class Meta:
+        ordering = ('modified_at', 'created_at')
+        get_latest_by = 'modified_at'
     
     def __unicode__(self):
         """
@@ -259,15 +263,11 @@ class Question(models.Model):
             self.modified_at = datetime.now()
         super(Question, self).save()
     
-    class Meta:
-        ordering = ('modified_at', 'created_at')
-        get_latest_by = 'modified_at'
-    
 
 class Answer(models.Model):
     text = models.CharField(max_length=255)
     created_at = models.DateTimeField(editable=False)
-    question = models.ForeignKey(Question, null=False)
+    question = models.ForeignKey(Question, related_name="answers")
     
     def __unicode__(self):
         """
