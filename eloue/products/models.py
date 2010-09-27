@@ -93,7 +93,7 @@ class Category(models.Model):
     """A category"""
     parent = models.ForeignKey('self', related_name='children', null=True)
     name = models.CharField(null=False, max_length=255)
-    slug = models.SlugField(null=False, db_index=True) # TODO : add unique=True
+    slug = models.SlugField(null=False, db_index=True, unique=True)
     need_insurance = models.BooleanField(default=True, db_index=True)
     
     def __unicode__(self):
