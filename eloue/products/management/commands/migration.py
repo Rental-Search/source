@@ -220,31 +220,34 @@ class Command(BaseCommand):
             else:
                 print "no valid category for product %d" % row['product_id']
                 continue
+            
+            try:
+                product = Product.objects.create(
+                    pk=row['product_id'],
+                    summary=summary,
+                    description=description,
+                    category=category,
+                    is_archived=PUBLISH_MAP[row['product_publish']],
+                    deposit_amount=row['caution'],
+                    quantity=row['quantity'],
+                    owner=owner,
+                    address=address
+                )
 
-            product = Product.objects.create(
-                pk=row['product_id'],
-                summary=summary,
-                description=description,
-                category=category,
-                is_archived=PUBLISH_MAP[row['product_publish']],
-                deposit_amount=row['caution'],
-                quantity=row['quantity'],
-                owner=owner,
-                address=address
-            )
+                product.prices.create(
+                    unit=1, amount=row['prix'], currency='EUR'
+                )
 
-            product.prices.create(
-                unit=1, amount=row['prix'], currency='EUR'
-            )
+                if row['product_full_image']:
+                    try: # FIXME : Hardcoded path
+                        picture = open(os.path.join('/Users/tim/Downloads/elouefile', str(row['vendor_id']), row['product_full_image']))
+                        # product.pictures.create(image=picture)`
+                    except IOError, e:
+                        pass # print e
 
-            if row['product_full_image']:
-                try: # FIXME : Hardcoded path
-                    picture = open(os.path.join('/Users/tim/Downloads/elouefile', str(row['vendor_id']), row['product_full_image']))
-                    # product.pictures.create(image=picture)`
-                except IOError, e:
-                    pass # print e
-
-            product.save()
+                product.save()
+            except Product.DoesNotExist:
+                print "Product already exists"
 
             if status:
                 print ' Migrate products : %d%%' % ((i * 100) / len(result_set)), # note ending with comma
