@@ -2,6 +2,29 @@
 import uuid
 
 from django.db import models
+from django.utils.translation import ugettext_lazy as _
+
+class IntegerAutoField(models.IntegerField):
+    empty_strings_allowed = False
+    def __init__(self, *args, **kwargs):
+        kwargs['blank'] = True
+        super(IntegerAutoField, self).__init__(*args, **kwargs)
+
+    def validate(self, value, model_instance):
+        pass
+    
+    def db_type(self, connection):
+        return 'serial'
+    
+    def formfield(self, **kwargs):
+        return None
+    
+    def south_field_triple(self):
+        from south.modelsinspector import introspector
+        field_class = "django.db.models.fields.AutoField"
+        args, kwargs = introspector(self)
+        return (field_class, args, kwargs)
+    
 
 class UUIDVersionError(Exception):
     pass

@@ -16,7 +16,8 @@ from django.utils.translation import ugettext_lazy as _
 from eloue.accounts.models import Patron
 from eloue.products.models import CURRENCY, UNIT, Product
 from eloue.products.utils import Enum
-from eloue.rent.fields import UUIDField
+from eloue.rent.decorators import incr_sequence
+from eloue.rent.fields import UUIDField, IntegerAutoField
 from eloue.rent.manager import BookingManager
 from eloue.rent.paypal import payments, PaypalError
 
@@ -90,7 +91,7 @@ class Booking(models.Model):
     borrower = models.ForeignKey(Patron, related_name='rentals')
     product = models.ForeignKey(Product, related_name='bookings')
     
-    contract_id = models.IntegerField(null=True, db_index=True)
+    contract_id = IntegerAutoField(db_index=True)
     pin = models.CharField(unique=True, blank=True, max_length=4)
     ip = models.IPAddressField(blank=True, null=True)
     
@@ -102,6 +103,7 @@ class Booking(models.Model):
     
     objects = BookingManager()
     
+    @incr_sequence('contract_id', 'rent_booking_contract_id_seq')
     def save(self, *args, **kwargs):
         if not self.pk:
             self.created_at = datetime.now()
@@ -327,7 +329,7 @@ class Booking(models.Model):
 
 class Sinister(models.Model):
     uuid = UUIDField(primary_key=True)
-    sinister_id = models.IntegerField(db_index=True)
+    sinister_id = IntegerAutoField(db_index=True)
     description = models.TextField()
     patron = models.ForeignKey(Patron, related_name='sinisters')
     booking =  models.ForeignKey(Booking, related_name='sinisters')
@@ -335,6 +337,7 @@ class Sinister(models.Model):
     
     created_at = models.DateTimeField(blank=True, editable=False)
     
+    @incr_sequence('sinister_id', 'rent_sinister_sinister_id_seq')
     def save(self, *args, **kwargs):
         if not self.pk:
             self.created_at = datetime.now()

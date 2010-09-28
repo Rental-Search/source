@@ -2,6 +2,7 @@
 from httplib2 import Http
 
 from django.conf import settings
+from django.db import connection
 from django.http import HttpResponseForbidden
 
 if settings.USE_PAYPAL_SANDBOX:
@@ -18,3 +19,15 @@ def validate_ipn(view_func):
                 return HttpResponseForbidden()
         return view_func(request, *args, **kwargs)
     return _wrapped_view_func
+
+def incr_sequence(field, sequence_name):
+    def wrapper(func):
+        def inner_wrapper(self, *args, **kwargs):
+            if not getattr(self, field):
+                cursor = connection.cursor()
+                cursor.execute("SELECT nextval(%s)", [sequence_name])
+                row = cursor.fetchone()
+                setattr(self, field, row[0])
+            return func(self, *args, **kwargs)
+        return inner_wrapper
+    return wrapper
