@@ -6,6 +6,7 @@
         deposit_amount: "10"
         booking_state: 1
         payment_state: 0
+        contract_id: 1
         owner: 1
         borrower: 2
         product: 1
