@@ -9,7 +9,6 @@ from django.db import connection
 from django.template.defaultfilters import slugify
 from django.core.management.base import BaseCommand
 from django.contrib.gis.geos import Point
-from django.contrib.gis.measure import D
 from django.utils.encoding import smart_unicode
 
 local_path = lambda path: os.path.join(os.path.dirname(__file__), path)
@@ -67,12 +66,6 @@ def cleanup_phone_number(phone_number):
 class Command(BaseCommand):
     help = "Migrate data from elouweb to eloue"
     option_list = BaseCommand.option_list + (
-        make_option('--migrate-categories',
-            action='store_true',
-            dest='categories',
-            default=False,
-            help='Migrate categories tree'
-        ),
         make_option('--migrate-members',
             action='store_true',
             dest='members',
@@ -93,21 +86,6 @@ class Command(BaseCommand):
         )
     )
     
-    def import_category_tree(self, cursor, status=False):
-        from eloue.products.models import Category
-        cursor.execute("""SELECT category_id, category_name FROM abs_vm_category""")
-        result_set = cursor.fetchall()
-        for row in result_set:
-            name = smart_unicode(row['category_name'], encoding='latin1') # encode in utf-8
-            category = Category.objects.create(id=row['category_id'], name=name, slug=slugify(name))
-        for category in Category.objects.iterator():
-            cursor.execute("""SELECT category_parent_id FROM abs_vm_category_xref WHERE category_child_id = %d""" % category.id)
-            row = cursor.fetchone()
-            original_parent_id = int(row["category_parent_id"])
-            if original_parent_id != 0: # don't add parent to root category
-                category.parent_id = original_parent_id
-                category.save()
-
     def import_members(self, cursor, status=False):
         from eloue.accounts.models import Patron
 
@@ -221,33 +199,30 @@ class Command(BaseCommand):
                 print "no valid category for product %d" % row['product_id']
                 continue
             
-            try:
-                product = Product.objects.create(
-                    pk=row['product_id'],
-                    summary=summary,
-                    description=description,
-                    category=category,
-                    is_archived=PUBLISH_MAP[row['product_publish']],
-                    deposit_amount=row['caution'],
-                    quantity=row['quantity'],
-                    owner=owner,
-                    address=address
-                )
+            product = Product.objects.create(
+                pk=row['product_id'],
+                summary=summary,
+                description=description,
+                category=category,
+                is_archived=PUBLISH_MAP[row['product_publish']],
+                deposit_amount=row['caution'],
+                quantity=row['quantity'],
+                owner=owner,
+                address=address
+            )
 
-                product.prices.create(
-                    unit=1, amount=row['prix'], currency='EUR'
-                )
+            product.prices.create(
+                unit=1, amount=row['prix'], currency='EUR'
+            )
 
-                if row['product_full_image']:
-                    try: # FIXME : Hardcoded path
-                        picture = open(os.path.join('/Users/tim/Downloads/elouefile', str(row['vendor_id']), row['product_full_image']))
-                        # product.pictures.create(image=picture)`
-                    except IOError, e:
-                        pass # print e
+            if row['product_full_image']:
+                try: # FIXME : Hardcoded path
+                    picture = open(os.path.join('/Users/tim/Downloads/elouefile', str(row['vendor_id']), row['product_full_image']))
+                    # product.pictures.create(image=picture)`
+                except IOError, e:
+                    pass # print e
 
-                product.save()
-            except Product.DoesNotExist:
-                print "Product already exists"
+            product.save()
 
             if status:
                 print ' Migrate products : %d%%' % ((i * 100) / len(result_set)), # note ending with comma
@@ -261,8 +236,6 @@ class Command(BaseCommand):
         mysql_db = MySQLdb.connect(unix_socket='/tmp/mysql.sock', user='root', passwd='facteur', db="eloueweb")
         cursor = mysql_db.cursor(MySQLdb.cursors.DictCursor)
         status = options.get('status')
-        if options.get('categories'):
-            self.import_category_tree(cursor, status)
         if options.get('members'):
             self.import_members(cursor, status)
         if options.get('products'):
