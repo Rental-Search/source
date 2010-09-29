@@ -6,7 +6,8 @@ os.environ['DJANGO_SETTINGS_MODULE'] = 'eloue.settings'
 
 site.addsitedir(local_path('env/lib/python2.6/site-packages'))
 
-sys.path.append(local_path(''))
+sys.path.append(local_path('.'))
+sys.path.append(local_path('eloue'))
 sys.path.append(local_path('env/lib/python2.6/site-packages'))
 
 import django.core.handlers.wsgi
