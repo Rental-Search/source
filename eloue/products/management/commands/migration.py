@@ -233,7 +233,7 @@ class Command(BaseCommand):
         db.execute("""SELECT setval('products_product_id_seq', (SELECT MAX(id) FROM products_product))""")
 
     def handle(self, *args, **options):
-        mysql_db = MySQLdb.connect(unix_socket='/tmp/mysql.sock', user='root', passwd='facteur', db="eloueweb")
+        mysql_db = MySQLdb.connect(host='localhost', user='eloueweb', db="eloueweb")
         cursor = mysql_db.cursor(MySQLdb.cursors.DictCursor)
         status = options.get('status')
         if options.get('members'):
