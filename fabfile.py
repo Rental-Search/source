@@ -65,7 +65,6 @@ def checkout():
     """Checkout code to the remote servers"""
     from time import time
     env.current_release = "%(releases_path)s/%(time).0f" % { 'releases_path':env.releases_path, 'time':time() }
-    #run("mkdir -p %(current_release)s" % { 'current_release':env.current_release })
     run("cd %(releases_path)s; git clone -q -o deploy --depth 1 %(git_clone)s %(current_release)s" % { 'releases_path':env.releases_path, 'git_clone':env.git_clone, 'current_release':env.current_release })
 
 def update():
@@ -171,4 +170,11 @@ def cold():
 def deploy():
     """Deploys your project. This calls both `update' and `restart'"""
     update()
+    restart()
+
+def soft():
+    """Deploys your project without updating the environnement"""
+    if not env.has_key('current_release'):
+        releases()
+    run("cd %(current_release)s; git pull -q deploy master" % { 'current_release':env.current_release })
     restart()
