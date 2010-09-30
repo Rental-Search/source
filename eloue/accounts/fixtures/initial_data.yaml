@@ -823,7 +823,7 @@
 -   fields: {name: Microsoft, need_insurance: true, parent: 348, slug: microsoft}
     model: products.category
     pk: 350
--   fields: {name: Nitendo, need_insurance: true, parent: 348, slug: nitendo}
+-   fields: {name: Nintendo, need_insurance: true, parent: 348, slug: nitendo}
     model: products.category
     pk: 351
 -   fields: {name: Sony, need_insurance: true, parent: 348, slug: sony}
@@ -868,7 +868,7 @@
 -   fields: {name: Tablette graphique, need_insurance: true, parent: 364, slug: tablette-graphique}
     model: products.category
     pk: 368
--   fields: {name: Ecran, need_insurance: true, parent: 364, slug: ecran}
+-   fields: {name: Ecran, need_insurance: true, parent: 364, slug: externe}
     model: products.category
     pk: 369
 -   fields: {name: Disque dur externe, need_insurance: true, parent: 364, slug: disque-dur-externe}
@@ -1068,7 +1068,7 @@
         slug: accessoires-appareils-photo}
     model: products.category
     pk: 454
--   fields: {name: Ploraroid, need_insurance: true, parent: 448, slug: ploraroid}
+-   fields: {name: Polaroid, need_insurance: true, parent: 448, slug: ploraroid}
     model: products.category
     pk: 455
 -   fields: {name: Micro, need_insurance: true, parent: 443, slug: micro}

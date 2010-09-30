@@ -1,726 +1,391 @@
-"Peinture et rénovation","id ancienne categorie","nom acienne categorie"
-"Cireuse",59,"Cireuse"
-"Cloueuse",112,"Cloueuse"
-"Cristalliseuse",1003,"Cristalliseuse"
-"Décapeuse",60,"Décapeuse"
-"Décolleuse",61,"Décolleuse"
-"Gratte papier",110,"Gratte papier"
-"Pistolet à peinture",114,"Pistolet à peinture"
-"Table à tapisser",1007,"Table à tapisser"
-"Pistolet à colle",1016,"Pistolet à colle"
-"Mélangeur à peinture",,
-"Climatisation et Chauffage","id ancienne categorie","nom acienne categorie"
-"Chauffage",55,"Chauffage électrique"
-"Déshumificateur",57,"Déhumidificateur"
-"Ventilateur",56,"Ventilateur"
-"Netoyage et entretien","id ancienne categorie","nom acienne categorie"
-"Aspirateur",120,"Aspirateur"
-"Déboucheur de canalisations",121,"Déboucheur de canalisations"
-"Nettoyeur haute pression",122,"Nettoyeur haute pression"
-"Nettoyeur vapeur",608,"Nettoyeur Vapeur"
-"Pompe immergée",118,"Pompe immergée"
-"Pompe submersible",117,"Pompe submersible"
-"Shampouineuse",123,"Shampouineuse"
-"Balayeuse",140,"Balayeuse"
-"Mesure et détection","id ancienne categorie","nom acienne categorie"
-"Compressiomètre",171,"Compressiomètre"
-"Détecteur de métaux",164,"Détecteur de métaux"
-"Détecteur d\'humidité",165,"Détecteur d\'humidité"
-"Hygromètre",168,"Hygromètre"
-"Laser",166,"Laser"
-"Multifaisceaux",170,"Multifaisceaux"
-"Sonomètre",167,"Sonomètre"
-"Soudure et plomberie",172,"Soudure et plomberie"
-"Theodolite",169,"Theodolite"
-"Niveau à bulle",,
-"Niveau laser",,
-"Plomberie et converture","id ancienne categorie","nom acienne categorie"
-"Poste à souder à flamme",,
-"Bruleur à goudron",998,"Bruleur à goudron"
-"Détartreuse",1004,"Détartreuse"
-"Coupe tube",,
-"Deboucheur",,
-"Outil d'assemblage de plombier",,
-"Outil de cintrage",,
-"Outillage d'atelier","id ancienne categorie","nom acienne categorie"
-"Combiné à bois",,
-"Dégauchisseuse-raboteuses",,
-"Aspirateur pour machine à bois",,
-"Mortaiseuse à bédane",81,"Mortaiseuse"
-"Ponceuse stationnaire",32,"Ponceuse"
-"Scie à chantourner",,
-"Scie à onglets électrique",,
-"Scie à ruban",,
-"Scie circulaire de table",34,"Scie circulaire"
-"Toupie",,
-"Tours à bois et à métaux",,
-"Tronçonneuse à métaux",39,"Tronçonneuse"
-"Compresseur",,
-"Echafaudage d'intérieur",,
-"Escabeau et marchepied",,
-"Groupe électrogène",105,"Groupe électrogène"
-"Perceuse à colonne",,
-"Touret",69,"Touret"
-"Treuil et palan",129,"Treuil"
-"Fer à souder electrique",,
-"Poste à souder à l'arc",,
-"Outillage à main","id ancienne categorie","nom acienne categorie"
-"Chasse-pointe et chasse goupille",,
-"Ciseaux à bois",,
-"Clés",92,"Clefs et jeux de clefs"
-"Cliquet et douille",,
-"Emporte prièce",,
-"Lime et râpe",,
-"Marteau",49,"Marteaux"
-"Mètre",,
-"Outillage de démolition",,
-"Perceuse à main",,
-"Pince et tenaille",50,"Pinces et tenailles"
-"Pointeaux",,
-"Rabot à main",,
-"Tamponnoir",,
-"Taraud et filière",,
-"Télémètre",,
-"Tournevis",,
-"Maillet",,
-"Construction","id ancienne categorie","nom acienne categorie"
-"Fils à plomb",,
-"Machine à crépir",,
-"Platoir",,
-"Regle de maçon",,
-"Seau et auge",,
-"Serre-joints",,
-"Taloche",,
-"Tamis",,
-"Truelle",,
-"bac à gâcher",,
-"Bétonnière",64,"Bétonnière"
-"Echafaudage",136,"Echafaudages"
-"Echelle",,
-"Etai et tréteau",,
-"Goulotte d'évacuation","?101?",
-"Lève plaque",,
-"Monte-charge",141,"Monte matériaux"
-"Pelle, pioche et tarière",153,"Pelle"
-"Vitrerie","id ancienne categorie","nom acienne categorie"
-"Appareil à vitrer",,
-"Ventouse",1009,"Ventouse"
-"Outillage éléctroportatif","id ancienne categorie","nom acienne categorie"
-"Défonceuse",1005,"Défonceuse"
-"Policeusse",1006,"Policeusse"
-"Ponceuse",32,"Ponceuse"
-"Décapeur",60,"Décapeuse"
-"Meuleuse",33,"Meuleuse"
-"Perceuse filaire",,
-"Perceuse sans fil",,
-"Perforateur",68,"Perforateur"
-"Rabot éléectrique",95,"Rabot"
-"Scie circulaire",34,"Scie circulaire"
-"Scie cloche",,
-"Scie égoïne",,
-"Scie sauteuse",35,"Scie sauteuse"
-"Visseuse et tournevis sans fil",36,"Visseuse dévisseuse"
-"Camion","id ancienne categorie","nom acienne categorie"
-"Utilitaire","836-842","petit utilitaire (-5m3), utilitaires transformés"
-"Fourgon petit volume",837,"Camionnette et fourgon (5 m3 et +)"
-"Remorque","id ancienne categorie","nom acienne categorie"
-"Remorque à bateau",884,"Remorque Bateau"
-"Remorque moto",883,"Remorque Moto"
-"Remorque animaux",888,"Remorque pour animaux"
-"Tracteur",151,"Tracteur"
-"Engins agricoles","id ancienne categorie","nom acienne categorie"
-"Tracteur",151,"Tracteur"
-"Matériel de fenaison",,
-"Appareil de manutention",,
-"Outil du sol",,
-"Outil d'épandage",,
-"Matériel de transport",,
-"Matériel de récolte",,
-"Matérieil d'elevage",,
-"Semoir",,
-"Transport de personne","id ancienne categorie","nom acienne categorie"
-"Autocar",882,"Autocar/Bus"
-"Minibus",839,"Minibus"
-"Transport de loisir","id ancienne categorie","nom acienne categorie"
-"Caravane",814,"Caravane"
-"Camping-car",815,"Camping Car"
-"Camion aménagé",,
-"Voiture","id ancienne categorie","nom acienne categorie"
-"Voiture de tourisme",871,"Voiture/Break"
-"Voiture de luxe",876,"Voiture de sport/luxe"
-"Voiture ancienne",878,"Voitures d\'exception/anciennes"
-"Voiture avec chauffeur",880,"Voiture avec chauffeur"
-"Voiture électrique",877,"Voiture électrique"
-"Voiture sans permis",875,"Voiture sans permis"
-"Moto","id ancienne categorie","nom acienne categorie"
-"Enduro et cross",,
-"Roadster",,
-"Routière",,
-"Side-car",,
-"Sportive",,
-"Supermotard",,
-"Trial",,
-"Quad",,
-"Scooter","id ancienne categorie","nom acienne categorie"
-"50 Cc",848,"Scooter - de 125cm3"
-"125 Cc",851,"Moto 125cm3 et +"
-"Maxi scooter",,
-"Accesoires autos","id ancienne categorie","nom acienne categorie"
-"Gallerie",887,"Gallerie"
-"Attelage",886,"Attelage"
-"GPS voiture",458,"GPS automobile"
-"Siege enfant",,
-"Télévision","id ancienne categorie","nom acienne categorie"
-"TV LCD",523,"TV"
-"TV LED",523,"TV"
-"Plasma",,
-"accessoires TV",,
-"Projecteur","id ancienne categorie","nom acienne categorie"
-"Video project",,
-"Projecteur diapo",521,"Rétroprojecteur"
-"Projecteur de transparent",525,"Projecteur transparent"
-"Home cinema","id ancienne categorie","nom acienne categorie"
-"Système 2.1",,
-"Système 5.1",,
-"Bare de son",,
-"Baladeur","id ancienne categorie","nom acienne categorie"
-"iPod",,
-"Lecteur MP3/MP4",566,"Lecteur MP3/MP4"
-"Accesoires baladeur",,
-"Enceinte Ipod Iphone",,
-"Enceinte portative",577,
-"Hifi","id ancienne categorie","nom acienne categorie"
-"Chaines Hifi",567,"Chaîne hifi"
-"Amplificateur",915,"Amplificateurs, Condensateurs"
-"Lecteur CD de salon",569,"Lecteur CD"
-"Platine vinyle",,
-"Tuner",,
-"Système audio sans fil",,
-"Enceintes",231,"Enceinte"
-"Casque","id ancienne categorie","nom acienne categorie"
-"Casque portable",575,"Casque et écouteur"
-"Casque Hifi TV",,
-"Casques sans fil",,
-"Micro","id ancienne categorie","nom acienne categorie"
-"Micro filaire",234,"Microphone"
-"Micro sans fil",,
-"Equipement DJ","id ancienne categorie","nom acienne categorie"
-"Amplificateurs",,
-"Blocs de puissance",,
-"Casques",,
-"Cellules DJ",,
-"Connectique",,
-"Consoles USB",,
-"Controleur DMX",,
-"Effets son",,
-"Enceinte DJ",,
-"Subwoofer",,
-"Eclairage","id ancienne categorie","nom acienne categorie"
-"Laser",,
-"Led",,
-"Lyres",,
-"Stroboscope",245,
-"Projecteurs",517,
-"Boule à facette",,
-"Filtres",,
-"Lumière noire",,
-"Jeu de lumière",,
-"Appareil photo","id ancienne categorie","nom acienne categorie"
-"Appareil photo numérique",533,"Compact Numérique"
-"Appareil photo argentique",535,"Compact Argentique"
-"Reflex numérique",532,"Reflex Numérique"
-"Réflex argentique",534,"Reflex Argentique"
-"Objectifs",,
-"Accessoires appareils photo",,
-"Ploraroid",536,"Polaroid/Instantané"
-"Caméra video","id ancienne categorie","nom acienne categorie"
-"Camescope",565,"Caméra argentique"
-"Camescopes numériques","563-564","Caméra video, Caméra HD"
-"Accessoires camescope",1020,"Accessoires caméras"
-"Lecteur vidéo","id ancienne categorie","nom acienne categorie"
-"Lecteur DVD",526,
-"Lecteur enregistreur DVD",,
-"Lecteur Blu-Ray",974,
-"Lecteur enregistreur Blu-Ray",,
-"Lecteur DVD portable",,
-"Lecteur enregistreur VHS",,
-"Téléphone","id ancienne categorie","nom acienne categorie"
-"Assisstant personnel",455,"Assistant personnel"
-"Chargeur téléphone",454,"Chargeur Téléphone"
-"Fax",456,"Fax"
-"Répondeur",457,"Répondeur"
-"Talkie-Walkie",233,"Talkie Walkie"
-"Téléphone Fixe",970,"Téléphone fixe"
-"Téléphone portable",450,"Téléphone portable"
-"Téléphone sattelitte",451,"Téléphone satellite"
-"Voix sur IP",452,"Voix sur IP"
-"Ordinateur","id ancienne categorie","nom acienne categorie"
-"Mac portable",473,"Mac Portable"
-"Mac Bureau",474,"Mac Bureau"
-"Pc portable",472,"PC portable"
-"Pc bureau",471,"PC bureau"
-"Console","id ancienne categorie","nom acienne categorie"
-"Accessoires consoles",,
-"Microsoft",468,"Microsoft"
-"Nitendo",466,"Nintendo"
-"Sony",465,"Sony"
-"Sega",467,"Sega"
-"Jeux vidéos","id ancienne categorie","nom acienne categorie"
-"Jeux playstation",,
-"Jeux xbox",,
-"Jeux DS",,
-"Jeux wii",,
-"Autre jeux",,
-"Imprimante","id ancienne categorie","nom acienne categorie"
-"Imprimantes jet d'encre",,
-"Imprimantes jet d'encre multifonction",,
-"Imprimante laser",,
-"Imprimante laser couleur",,
-"Imprimante laser multifonction",,
-"Imprimante photo 10x15",548,"Imprimante photos"
-"Imprimante grand format traceur",,
-"Imprimante matricielle",,
-"Copieur",,
-"Etiquetteuse",,
-"Accessoires imprimante",,
-"Scanner","id ancienne categorie","nom acienne categorie"
-"Scanner A4",476,"Scanner"
-"Scanner A3",,
-"Scanner de film",,
-"Scanner portable",,
-"Accessoires scanner",,
-"Périphériques","id ancienne categorie","nom acienne categorie"
-"Clavier",485,"Clavier"
-"Souris",486,"Souris"
-"Hub usb",972,"Hubs USB"
-"Tablette graphique",,
-"Ecran",478,"Ecran"
-"Clé USB",482,"Clef usb"
-"Disque dur externe",481,"Disque dur externe"
-"Lecteur graveur externe",480,"Graveur"
-"Webcam",487,"Webcam"
-"Périphériques de jeu",,
-"Réseaux","id ancienne categorie","nom acienne categorie"
-"Routeur",479,"Routeur"
-"Switch",,
-"Clé/carte wifi",,
-"GPS","id ancienne categorie","nom acienne categorie"
-"GOD voiture","458-461-462","GPS auto, moto, camping car, poids lourd"
-"GPS randonnée/marin",459,"GPS rando"
-"GPS pour appareils mobiles",463,"Avertisseur de radars"
-"GPS moto",460,"GPS moto"
-"Outils à moteur","id ancienne categorie","nom acienne categorie"
-"Aspirteur et souffleur",120,"Aspirateur"
-"Autoportée et rider",,
-"Broyeur de végétaux",41,"Broyeur végétal"
-"Coupe-bordure et cisaille à gazon",,
-"Débroussailleuse",45,"Débroussailleuse"
-"Equipement de protection du jardinier",,
-"Motobineuse et motoculteur",40,"Motoculteur"
-"Scarificateur à moteur",86,"Scarificateur"
-"Fendeur de bûche",,
-"Taille-haie",42,"Taille-haie"
-"Tondeuse autonome",,
-"Tondeuse débroussailleuse",,
-"Tondeuse et autoporté",,
-"Tronçonneuse",39,"Tronçonneuse"
-"Outils à main","id ancienne categorie","nom acienne categorie"
-"Balais à gazon",,
-"Balayeuse sur roue",,
-"Bêche, fourche, louchet et houe",,
-"Binette, serfouette, gratoir, ratissoire",,
-"Brouette",127,"Brouette"
-"Chevalet",,
-"Cisaille à haie",,
-"Désherbeur thermique",85,"Désherbeur thermique"
-"Dresse-bordure, cisaille à gazon",,
-"Epandeur, rouleau",1012,"Rouleau à gazon"
-"Faux, faucille, serpette, machette",,
-"Hache, merlin, hachette, masser et coin",,
-"Pelle, pioche, tarière",153,"Pelle"
-"Rateau, crocs, griffe, émietteur, cultivateur",,
-"Scie à buchee, scie à élaguer",,
-"Sécateur, ébrancheur, échenilloir",1011,"Échenilloir"
-"Arrosage","id ancienne categorie","nom acienne categorie"
-"Arrosoir de jardin, seau",,
-"Pompe à bras",,
-"Pompe d'évacuation",119,"Pompe"
-"Films","id ancienne categorie","nom acienne categorie"
-"Enfant et jeunesse",,
-"Animation japonaise",,
-"Action et policier",,
-"Fantastique et Science-fiction",,
-"Angoisse et horreur",,
-"Comédie",,
-"Drame et comédie dramatique",,
-"Grand classique",,
-"Cinema asiatique",,
-"Western et guerre",,
-"Humour et théâtre",,
-"Documentaire et sport",,
-"Cinéma gay et lesbienne",,
-"Charme et erostisme",,
-"Livre","id ancienne categorie","nom acienne categorie"
-"BD et jeunesse",656,"BD, Manga"
-"Littérature et fiction",,
-"Cuisine et société",,
-"Art de vicire",,
-"Nature et loisirs",,
-"Partition",,
-"Tableau","id ancienne categorie","nom acienne categorie"
-"Musique",,
-"Sport et loisir",,
-"Gastronomie et Cuisine",,
-"Art et concept",,
-"Animaux et vie sauvage",,
-"Espace et science",,
-"Nature et paysage",,
-"Architecture et habitat",,
-"Vélo","id ancienne categorie","nom acienne categorie"
-"Vélos de route",341,"Vélo de course"
-"Vélo enfant",,
-"Vélo électrique",340,"Vélo électrique"
-"Accessoires velo",346,"Accessoire cyclisme"
-"BMX",342,"BMX"
-"Tandem",1010,"Tandem"
-"VTT",343,"VTT"
-"VTC",347,"VTC"
-"Bateau","id ancienne categorie","nom acienne categorie"
-"Bateau à fond plat",782,"Péniche"
-"Pédalo",865,"Pédalo"
-"Jet ski",860,"Scooter - Jet Ski"
-"Monocoques et voiliers",856,"Voilier et catamaran"
-"Barque",861,"Barque et Aviron"
-"Bateau à console centrale",,
-"Bateau à coque metallique soudée",,
-"Bateau à jet",,
-"Bateau à moteur électrique",,
-"Bateau à moteur multicoque",,
-"Bateau à plateforme",,
-"Bateaux à pont surélevé",,
-"Bateau à ponton",,
-"Bateau de pèche en aluminium",,
-"Bateau de pêche spécialisé",,
-"Bateau de pêche tout usage",,
-"Bateau de plaisance semi hors-bord",,
-"Bateau maison",,
-"Bateau ponté",,
-"Bateau pour la pêche et le ski nautique",,
-"Bateau pour la pêche sportive",,
-"Bateau pour la planche nautique à moteur en-bord",,
-"Bateau pour le ski nautique à moteur en-bord",,
-"Canot",,
-"Canot à pont surbaissé",,
-"Canot pneumatique",,
-"Croiseur à moteur en-bord",,
-"Croiseur haute performance",,
-"Croiseur multicoque",,
-"Croiseur semi hors-bord",,
-"Dinghies",,
-"Hors-bord à proue fermée",,
-"Trawler",,
-"Vedette habitable",,
-"Yatch",,
-"Voilier multicoque",,
-"Voilier de tradition",,
-"Voilier de luxe",,
-"Sport","id ancienne categorie","nom acienne categorie"
-"Alpiniste",,
-"Badminton",324,"Badmington"
-"Basket-Ball",787,"Basketball"
-"Bmx",342,"BMX"
-"Bodyboard",,
-"Boxes",331,"Boxe"
-"Canoê-kayak",859,"Canoe Kayak"
-"Cerf-volant",,
-"Chasse","292-293",
-"Course à pied",,
-"Danse classique",330,"Danse"
-"Dériveur",,
-"Equitation",,
-"Escalade",311,"Escalade"
-"Fitness",314,"Fitness"
-"Fléchettes",,
-"Football",350,"Football"
-"Golf",318,"Golf"
-"Gymnastique",334,"Gymnastique"
-"Handball",,
-"Judo",,
-"Karaté",,
-"Kung Fu",,
-"Marche",,
-"Modern Jazz",,
-"Natation",,
-"Padel",,
-"Pêche","290-294",
-"Pétanque",278,"Pétanque"
-"Planche à voile",300,"Planche à voile"
-"Plongée","319-961",
-"Raid",,
-"Randonnée","358 a 367",
-"Roller",327,"Rollers"
-"Rugby",949,"Rugby"
-"Skateboard",326,"Skateboard"
-"Ski",297,"Ski"
-"Snowboard",296,"Snowboard"
-"Sport de glace",,
-"Sports US",,
-"Squash",323,"Squash"
-"Surf",299,"Surf (mer)"
-"Tae knon do",,
-"Tennis",322,"Tennis"
-"Tennis de table",,
-"Tir à l'arc",279,"Tir à l\'arc"
-"Trotinnette",,
-"Volley-ball",,
-"Segway",854,"Segway"
-"Char à voile",862,"Char à voile"
-"Mini-motos",853,"Mini-motos"
-"Jeux","id ancienne categorie","nom acienne categorie"
-"Jeux de société",759,"Jeu de société"
-"Jeux d'addresse",,
-"Jeux de bistrot",,
-"Avion","id ancienne categorie","nom acienne categorie"
-"Planeur",868,"Planeur"
-"Montgolfière",870,"Montgolfière"
-"ULM",867,"ULM"
-"Jet",866,"Jet et avion"
-"Avion moteur à pistons",830,"Avions, Hélicoptères, Jet"
-"Avion turbopropulseurs",866,"Jet et avion"
-"Hélicoptère","id ancienne categorie","nom acienne categorie"
-"Hélicoptère mono-turbine",,
-"Helicoptère bi-turbine",,
-"Vêtement femme","id ancienne categorie","nom acienne categorie"
-"Chemise et blouse",,
-"Pull et Gilet",,
-"Pantalon et jean",,
-"Jupe",,
-"Robe",,
-"Veste",391,"Vestes"
-"Manteau",,
-"Vêtement homme","id ancienne categorie","nom acienne categorie"
-"Chemise",421,"Haus (Tshirts, chemises, pulls)"
-"Pull, gilet et sweat shirt",421,"Haus (Tshirts, chemises, pulls)"
-"Pantalon et jean",422,"Bas (pantalons, shorts)"
-"Manteau et blouson",,
-"Veste et costume",426,"Costume et veste"
-"Bijoux","id ancienne categorie","nom acienne categorie"
-"Colier",407,"Colllier"
-"Boucles d'oreilles",408,"Boucles d\'oreilles"
-"Bracelet",409,"Bracelet"
-"Bague",410,"Bague"
-"Parure",411,"Parure"
-"Déguisement","id ancienne categorie","nom acienne categorie"
-"Animal",,
-"Années 60-70",,
-"Aventure",,
-"Carnaval",,
-"Princesse",,
-"Halloween",,
-"Historique",,
-"Pays du monde",,
-"Uniforme",,
-"Carnaval",,
-"Danse",,
-"Père noel",,
-"Masque",,
-"Perruque",,
-"Sexy",,
-"Chaussure homme","id ancienne categorie","nom acienne categorie"
-"Baskets basses",437,"Chaussures de sport"
-"Joggers",,
-"Baskets hautes",,
-"Boots",,
-"Chaussures de ville",439,"Chaussure de ville"
-"Chaussures de smoking",440,"Chaussure de smoking"
-"Chaussures de marche",952,"Chaussures de marche"
-"Chaussures de soirée",434,"Chaussures de soirée"
-"Chaussures femme","id ancienne categorie","nom acienne categorie"
-"Ballerines",,
-"Escarpins",,
-"baskets",,
-"Bottes",,
-"Boots",,
-"Mocassins et Derbies",,
-"Sandales et Salomés",,
-"Chaussures de sport",437,"Chaussures de sport"
-"Accesoire homme","id ancienne categorie","nom acienne categorie"
-"Ceinture",,
-"Cravate",,
-"Chapeau",,
-"Sac et besace",,
-"Accessoire femme","id ancienne categorie","nom acienne categorie"
-"Sac",,
-"Ceinture",,
-"Chèche et foulard",969,"Foulards, écharpes, étoles"
-"Lunette de soleil",965,"Lunettes de soleil"
-"Chapeau",,
-"Alimentation bébé","id ancienne categorie","nom acienne categorie"
-"Biberon",738,"Biberon"
-"Chaise haute",739,"Chaise haute"
-"Chauffe biberon",737,"Chauffe biberon"
-"Coussin d'allaitement",743,"Coussin d\'allaitement"
-"Cuiseur",741,"Cuiseur"
-"Siège de table et réhausseur",740,"Siège de table et réhausseur"
-"Stérilisateur de biberon",736,"Stérilisateur de biberon"
-"Tire-lait",742,"Tire-lait"
-"Déplacements bébé","id ancienne categorie","nom acienne categorie"
-"Poussette",719,"Poussette"
-"Porte-bébés",721,"Porte-bébé"
-"Lits pliants",,
-"Sacs a langer",725,"Sac/table à langer"
-"Baby-coques",,
-"Siège auto",720,"Siège auto"
-"Landau/nacelle",718,"Landau/Nacelle"
-"Tente de plage bébé",722,"Tente de plage bébé"
-"Eveil et jouets bébé","id ancienne categorie","nom acienne categorie"
-"Arches",,
-"Jouets",,
-"Jouets d'extérieur",753,"Jouets d\'extérieur"
-"Plage et piscine et bain",751,"Jouets bain"
-"Livres d'éveil",639,"Livres"
-"Mobiles",748,"Mobiles"
-"Tapis de jeux et d'éveil",746,"Tapis de jeux et d\'éveil"
-"Transat et balancelles",745,"Transat bébé"
-"Trotteurs",744,"Balancelle et trotteur"
-"Mobilier Bébé","id ancienne categorie","nom acienne categorie"
-"Armoires",732,"Armoire"
-"Berceaux",729,"Berceau"
-"Bibliothèques",,
-"Bureaux",,
-"Chevets",,
-"Coffres à jouets",734,"Coffre à jouets"
-"Commodes et plans à langer",733,"Commode et plan à langer"
-"Couffins",730,"Couffin"
-"Étagères murales",,
-"Lits",731,"Lit d\'appoint/lit pliant"
-"Divers mobilier bébé",,
-"Toilette bébé","id ancienne categorie","nom acienne categorie"
-"Meubles à langer",,
-"Les baignoires et équipements",723,"Baignoire"
-"Hygiène et propreté","726-727-728","Mouche bébé, Pot/réhausseur toilettes, Thermomètre bébé"
-"Sécurité","id ancienne categorie","nom acienne categorie"
-"Babyphone",757,"Babyphone"
-"Parc",756,"Parc"
-"Barrieres",755,"Barrières"
-"Appartement","id ancienne categorie","nom acienne categorie"
-"Studio",822,"Studio"
-"2/3 pièces",823,"2/3 pièces"
-"4/5 pièces",823,"2/3 pièces"
-"+5 pièces",825,"+ de 5 pièces"
-"Maison/villa","id ancienne categorie","nom acienne categorie"
-"1/3 chambres",819,"1 à 3 Chambres"
-"4/5 chambres",820,"4 à 5 Chambres"
-"+5 chambres",821,"+ de 5 chambres"
-"Camping","id ancienne categorie","nom acienne categorie"
-"Tente",,
-"Caravane",814,"Caravane"
-"Camping car",815,"Camping Car"
-"Emplacement",812,"Emplacement"
-"Mobil home",811,"Mobil Home"
-"Art de la table","id ancienne categorie","nom acienne categorie"
-"Couverts",220,"couvert"
-"Verrerie",,
-"Assiettes et sous assiettes",,
-"Plats et plateaux",221,"Platerie plateaux"
-"Les contenants et l'utilitaire",228,"Petit, gros contenants"
-"Nappes",,
-"Argenterie",223,"Argenterie"
-"Céramique",229,"Céramique"
-"Ustensiles",227,"Ustensiles"
-"Mobilier","id ancienne categorie","nom acienne categorie"
-"Chaises",263,"Chaises"
-"Tables et buffets",262,"Tables"
-"Bar et tabourets",270,"Bar"
-"Charrettes et étals",273,"Chariot Mobile"
-"Cloisons et paravents",,
-"Décoration",,
-"Comptoir",,
-"Cuisine","id ancienne categorie","nom acienne categorie"
-"Chaudron à soupe",,
-"Autocuiseur",213,"Autocuiseur"
-"Bac Gastro",,
-"Etuves",207,"Etuves et réchaux"
-"Etuves ventilées",,
-"Fours 10 et 20 niv",175,"Four"
-"Fours moins de 10mn",,
-"Bains marie",,
-"Plaques de cuisson",603,"Plaque de cuisson"
-"Ustensiles",,
-"Micro onde",,
-"Percolateurs",,
-"Poele",,
-"Thermoverseur",183,"Thermoverseur"
-"Trancheur de jambon",,
-"Grill poulet",,
-"Plaque hamburger",,
-"Salamandre",212,"Salamandre"
-"Steak et croque",,
-"Toasteur",,
-"Barbecue",206,"Barbecue"
-"Tireuse à bière",174,"Tireuse à bière"
-"Appareil a pop corn",177,"Pop corn"
-"Appareil à barbe à papa",178,"Barbe à papa"
-"Crespières",,
-"Gaufrier",604,"Gaufrier"
-"Hot dogger",181,"Hotdog"
-"Table barbecue",,
-"Armoire froide",,
-"Machine à glace",182,"Machine à glace"
-"Vitrines froides",,
-"Conteneur isotherme",,
-"Rangement",,
-"Lavage",,
-"Exterieurs","id ancienne categorie","nom acienne categorie"
-"Chapiteau",197,"Chapiteau"
-"Jeux gonflables",196,"Jeux gonflables"
-"Tente de reception",193,"Tente de réception"
-"Gradin/estrade/podium",194,"Gradin"
-"Parasol",195,"Parasol"
-"Electromenager de cuisine","id ancienne categorie","nom acienne categorie"
-"Cafetiere",,
-"Cafetiere à dosettes",,
-"Expresso",,
-"Moulin à café",,
-"Grille pain",596,"Grille-pain"
-"Machine à pain",,
-"Presse-agrume",600,"Presse-agrumes"
-"Centrifugeuse",602,"Centrifugeuse"
-"Friteuse",208,"Friteuse"
-"Grill/pierrade",,
-"Cuiseur vapeur",601,"Cuisovapeur"
-"Autocuiseur",213,"Autocuiseur"
-"Raclette/fondue","202-203","Appareil à fondue, appareil à raclette"
-"Gaufrier/croque monsieur/hotdog",,
-"Crepiere",,
-"Micro onde",,
-"Four",216,"Four"
-"Refrigerateur",945,"Réfrigerateur"
-"Congelateur",215,"Congélateur"
-"Cave a vin",,
-"Lace vaisselle",609,"Lave-vaisselle"
-"Entretien","id ancienne categorie","nom acienne categorie"
-"Aspirateur",605,"Aspirateur"
-"Machine a vapeur",608,"Nettoyeur Vapeur"
-"Centrale vapeur",,
-"Fer a repasser",606,"Repassage"
-"Lave linge",,
-"Seche linge",610,"Lave Linge"
-"Machine a coudre",607,"Machine à coudre/tricoter"
-"Paramédical","id ancienne categorie","nom acienne categorie"
-"Attelle",700,"Attelle"
-"Béquille",691,"Béquille"
-"Déambulateur",692,"Déambulateur"
-"Fauteuil roulant",690,"Fauteuil Roulant"
-"Ceinture abdominale",703,"Ceinture"
-"Chevillière",705,"Chevillière"
-"Colliers cervicaux",702,"Colliers cervicaux"
-"Coudiere",705,"Chevillière"
-"Genouillère",701,"Genouillère"
-"Soin du corp","id ancienne categorie","nom acienne categorie"
-"Table de massage",625,"Massage"
-"Humidificateur ionisateur d'air",717,"Humidificateur"
-"Velo d'appartement",,
-"Manucure pedicure",,
-"Lampe de luminotherapie",617,"Luminothérapie"
-"Diffuseur d'huiles essentielles",,
+"+5 chambres",821
+"+5 pièces",825
+"1/3 chambres",819
+"125 Cc",851
+"2/3 pièces",823
+"4/5 chambres",820
+"4/5 pièces",823
+"50 Cc",848
+"Accessoires camescope",1020
+"Accessoires velo",346
+"Amplificateur",915
+"Appareil a pop corn",177
+"Appareil photo argentique",535
+"Appareil photo numérique",533
+"Appareil photo",650
+"Appareil à barbe à papa",178
+"Argenterie",223
+"Armoires",732
+"Aspirateur",120
+"Aspirateur",605
+"Aspirteur et souffleur",120
+"Assiettes et sous assiettes",219
+"Assisstant personnel",455
+"Attelage",886
+"Attelage",903
+"Attelle",700
+"Autocar",882
+"Autocuiseur",213
+"Avion moteur à pistons",830
+"Avion turbopropulseurs",866
+"Babyphone",757
+"Badminton",324
+"Bague",410
+"Balayeuse",140
+"Bar et tabourets",270
+"Barbecue",206
+"Barque",861
+"Barrieres",755
+"Basket-Ball",787
+"Baskets basses",437
+"Bateau à fond plat",782
+"BD et jeunesse",656
+"BD et jeunesse",991
+"Berceaux",729
+"Biberon",738
+"BMX",342
+"Bmx",342
+"Boucles d'oreilles",408
+"Boxes",331
+"Bracelet",409
+"Brouette",127
+"Broyeur de végétaux",41
+"Bruleur à goudron",998
+"Béquille",691
+"Bétonnière",64
+"Bétonnière",97
+"Camescope",565
+"Camescopes numériques",563
+"Camescopes numériques",564
+"Camping car",815
+"Camping-car",815
+"Canoê-kayak",859
+"Caravane",814
+"Casque portable",575
+"Ceinture abdominale",703
+"Centrifugeuse",602
+"Chaines Hifi",567
+"Chaise haute",739
+"Chaises",263
+"Chapeau pour homme",417
+"Chapiteau",197
+"Char à voile",862
+"Chargeur téléphone",454
+"Charrettes et étals",273
+"Chasse",292
+"Chasse",293
+"Chauffage",55
+"Chauffe biberon",737
+"Chaussures de marche",952
+"Chaussures de smoking",440
+"Chaussures de soirée",434
+"Chaussures de sport",437
+"Chaussures de ville",439
+"Chaussures femme",435
+"Chemise",421
+"Chevillière",705
+"Chèche et foulard",969
+"Cireuse",59
+"Clavier",485
+"Climatisation et Chauffage",54
+"Cloueuse",112
+"Clé USB",482
+"Clés",92
+"Coffres à jouets",734
+"Colier",407
+"Colliers cervicaux",702
+"Commodes et plans à langer",733
+"Compresseur",158
+"Compressiomètre",171
+"Comptoir",266
+"Congelateur",215
+"Console",284
+"Coudiere",705
+"Couffins",730
+"Coussin d'allaitement",743
+"Couverts",220
+"Cravate",424
+"Cristalliseuse",1003
+"Cuiseur vapeur",601
+"Cuiseur",741
+"Cuisine",180
+"Culture",661
+"Céramique",229
+"Danse classique",330
+"Disque dur externe",481
+"Déambulateur",692
+"Déboucheur de canalisations",121
+"Débroussailleuse",45
+"Décapeur",60
+"Décapeuse",60
+"Décolleuse",61
+"Décoration",186
+"Décoration",268
+"Décoration",269
+"Défonceuse",1005
+"Désherbeur thermique",85
+"Déshumificateur",57
+"Détartreuse",1004
+"Détecteur de métaux",164
+"Détecteur d\'humidité",165
+"Echafaudage",136
+"Echelle",63
+"Eclairage",251
+"Ecran",478
+"Ecran",518
+"Electroménager",598
+"Emplacement",812
+"Enceinte portative",577
+"Enceintes",231
+"Epandeur, rouleau",1012
+"Equipement DJ",237
+"Equipement DJ",241
+"Escalade",311
+"Etuves",207
+"Exterieurs",946
+"Fauteuil roulant",690
+"Fax",456
+"Fer a repasser",606
+"Films",662
+"Fitness",314
+"Football",350
+"Four",216
+"Fourgon petit volume",837
+"Fours 10 et 20 niv",175
+"Friteuse",208
+"Gallerie",887
+"Gaufrier",604
+"Genouillère",701
+"Golf",318
+"Goulotte d'évacuation",101
+"GPS moto",460
+"GPS pour appareils mobiles",463
+"GPS randonnée/marin",459
+"GPS voiture",458
+"GPS voiture",461
+"GPS voiture",462
+"GPS",919
+"Gradin/estrade/podium",194
+"Gratte papier",110
+"Grille pain",596
+"Groupe électrogène",105
+"Gymnastique",334
+"High-tech",524
+"Hot dogger",181
+"Hub usb",972
+"Humidificateur ionisateur d'air",717
+"Hygiène et propreté",726
+"Hygiène et propreté",727
+"Hygiène et propreté",728
+"Hygromètre",168
+"Image et son",240
+"Image et son",246
+"Image et son",490
+"Imprimante photo 10x15",548
+"Imprimante",475
+"Jardinage",1058
+"Jardinage",185
+"Jardinage",189
+"Jet ski",860
+"Jet",866
+"Jeux de société",759
+"Jeux gonflables",196
+"Jeux",276
+"Jouets d'extérieur",753
+"Lace vaisselle",609
+"Lampe de luminotherapie",617
+"Landau/nacelle",718
+"Laser",166
+"Lecteur Blu-Ray",974
+"Lecteur CD de salon",569
+"Lecteur DVD",526
+"Lecteur graveur externe",480
+"Lecteur MP3/MP4",566
+"Les baignoires et équipements",723
+"Les contenants et l'utilitaire",228
+"Lieu",816
+"Lits",731
+"Littérature et fiction",655
+"Livres d'éveil",639
+"Lunette de soleil",965
+"Mac Bureau",474
+"Mac portable",473
+"Machine a coudre",607
+"Machine a vapeur",608
+"Machine à glace",182
+"Marteau",49
+"Matériel de transport",131
+"Meuleuse",33
+"Micro filaire",234
+"Microsoft",468
+"Mini-motos",853
+"Minibus",839
+"Mobil home",811
+"Mobiles",748
+"Mobilier",265
+"Mobilier",595
+"Mobilier",935
+"Mode et accessoires",415
+"Monocoques et voiliers",856
+"Monte-charge",141
+"Montgolfière",870
+"Mortaiseuse à bédane",81
+"Motobineuse et motoculteur",40
+"Multifaisceaux",170
+"Musique",508
+"Musique",509
+"Nettoyeur haute pression",122
+"Nettoyeur vapeur",608
+"Nintendo",466
+"Objectifs",537
+"Outillage d'atelier",78
+"Outillage à main",80
+"Outils à moteur",43
+"Outils à moteur",927
+"Pantalon et jean",422
+"Parasol",195
+"Parc",756
+"Parure",411
+"Pc bureau",471
+"Pc portable",472
+"Pelle, pioche et tarière",153
+"Pelle, pioche, tarière",153
+"Perceuse filaire",28
+"Perforateur",68
+"Perruque",419
+"Pince et tenaille",50
+"Pistolet à colle",1016
+"Pistolet à peinture",114
+"Plage et piscine et bain",751
+"Planche à voile",300
+"Planeur",868
+"Plaques de cuisson",603
+"Plats et plateaux",221
+"Plongée",319
+"Plongée",961
+"Polaroid",536
+"Policeusse",1006
+"Pompe d'évacuation",119
+"Pompe immergée",118
+"Pompe submersible",117
+"Ponceuse stationnaire",32
+"Ponceuse",32
+"Porte-bébés",721
+"Poussette",719
+"Presse-agrume",600
+"Projecteur de transparent",525
+"Projecteur diapo",521
+"Projecteurs",517
+"Pull, gilet et sweat shirt",421
+"Pédalo",865
+"Pétanque",278
+"Pêche",290
+"Pêche",294
+"Rabot éléectrique",95
+"Raclette/fondue",202
+"Raclette/fondue",203
+"Randonnée",358
+"Randonnée",367
+"Rangement",587
+"Reflex numérique",532
+"Refrigerateur",945
+"Remorque animaux",888
+"Remorque moto",883
+"Remorque à bateau",884
+"Remorque",885
+"Robe",392
+"Robe",393
+"Robe",394
+"Roller",327
+"Routeur",479
+"Rugby",949
+"Réflex argentique",534
+"Répondeur",457
+"Sacs a langer",725
+"Salamandre",212
+"Scanner A4",476
+"Scarificateur à moteur",86
+"Scie circulaire de table",34
+"Scie circulaire",34
+"Scie sauteuse",35
+"Seche linge",610
+"Sega",467
+"Segway",854
+"Shampouineuse",123
+"Siège auto",720
+"Siège de table et réhausseur",740
+"Skateboard",326
+"Ski",297
+"Snowboard",296
+"Sonomètre",167
+"Sony",465
+"Sony",666
+"Soudure et plomberie",172
+"Souris",486
+"Sport",305
+"Sport",336
+"Squash",323
+"Stroboscope",245
+"Studio",822
+"Stérilisateur de biberon",736
+"Surf",299
+"Sécateur, ébrancheur, échenilloir",1011
+"Table de massage",625
+"Table à tapisser",1007
+"Tableau",638
+"Tables et buffets",262
+"Taille-haie",42
+"Talkie-Walkie",233
+"Tandem",1010
+"Tapis de jeux et d'éveil",746
+"Tennis",322
+"Tente de plage bébé",722
+"Tente de reception",193
+"Tente",365
+"Theodolite",169
+"Thermoverseur",183
+"Tir à l'arc",279
+"Tire-lait",742
+"Tireuse à bière",174
+"Touret",69
+"Transat et balancelles",745
+"Treuil et palan",129
+"Tronçonneuse à métaux",39
+"Tronçonneuse",39
+"Trotteurs",744
+"TV LCD",523
+"TV LED",523
+"Téléphone Fixe",970
+"Téléphone portable",450
+"Téléphone sattelitte",451
+"ULM",867
+"Ustensiles de table",1034
+"Ustensiles",227
+"Utilitaire",836
+"Utilitaire",842
+"Ventilateur",56
+"Ventouse",1009
+"Verrerie",1031
+"Veste et costume",426
+"Veste",391
+"Visseuse et tournevis sans fil",36
+"Voiture ancienne",878
+"Voiture avec chauffeur",880
+"Voiture de luxe",876
+"Voiture de tourisme",871
+"Voiture sans permis",875
+"Voiture électrique",877
+"Voiture",874
+"Voix sur IP",452
+"Vélo",338
+"Vélo",340
+"Vélo",343
+"Vélo",347
+"Vélos de route",341
+"Webcam",487
+"Animaux",633
+"Bricolage",495
+"Velo d'appartement",313
+"Soin du corps",316
+"High-tech",992
+"Lieu",791

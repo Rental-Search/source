@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
-import os, MySQLdb
 import csv
+import logbook
+import MySQLdb
+import os
 
 from lxml import html
 from optparse import make_option
@@ -39,17 +41,20 @@ COUNTRIES_MAP = {
     'MAR':'MA',
     'TUN':'TN',
     'MCO':'MC',
-    'MUS':'MU'
+    'MUS':'MU',
+    'SEN':None
 }
 
 CATEGORY_MAP = {}
 csv_file = csv.reader(open(local_path('fixtures/categories_map.csv')))
-CATEGORY_MAP = dict([ (row[1], row[0]) for row in csv_file ])
+CATEGORY_MAP = dict([ (int(row[1]), row[0]) for row in csv_file ])
 
 PUBLISH_MAP = { # WARN : We invert value because we mark them as archived rather than published
     'Y':False,
     'N':True
 }
+
+log = logbook.Logger('eloue.migration')
 
 def cleanup_html_entities(text, method='html'):
     """Remove html entitites from text"""
@@ -77,30 +82,22 @@ class Command(BaseCommand):
             dest='products',
             default=False,
             help='Migrate products data'
-        ),
-        make_option('--status',
-            action='store_true',
-            dest='status',
-            default=False,
-            help='Follow status of migration'
         )
     )
     
-    def import_members(self, cursor, status=False):
+    def import_members(self, cursor):
         from eloue.accounts.models import Patron
-
         cursor.execute("""SELECT id, username, email, password, registerDate, activation, lat, 'long' FROM abs_users""")
         result_set = cursor.fetchall()
         for i, row in enumerate(result_set):
-            if status:
-                print '%s\r' % ' '*20, # clean up row
             username = smart_unicode(row['username'], encoding='latin1')
             email = smart_unicode(row['email'], encoding='latin1')
             password = smart_unicode("md5$$%s" % row['password'], encoding='latin1')
             date_joined = row['registerDate']
             activation_key = smart_unicode(row['activation'], encoding='latin1')
             lat, lon = row['lat'], row['long']
-
+            
+            log.debug("Importing user #%s" % row['id'])
             username = username.lower()
             if not activation_key:
                 patron = Patron.objects.create_user(username, email, password, pk=row['id'])
@@ -156,19 +153,14 @@ class Command(BaseCommand):
                     patron.phones.create(number=smart_unicode(cleanup_phone_number(user_info['fax']), encoding='latin1'), kind=3)
 
                 patron.save()
-
-            if status:
-                print ' Migrate members : %d%%' % ((i * 100) / len(result_set)), # note ending with comma
-
-    def import_products(self, cursor, status=False):
+    
+    def import_products(self, cursor):
         from eloue.accounts.models import Patron
         from eloue.products.models import Product, Category
         cursor.execute("""SELECT product_id, product_name, product_s_desc, product_desc, count(product_desc) AS quantity, product_full_image, product_publish, prix, caution, vendor_id, product_lat, product_lng, localisation FROM abs_vm_product GROUP BY product_desc, product_name ORDER BY quantity DESC""")
         result_set = cursor.fetchall()
         for i, row in enumerate(result_set):
-            if status:
-                print '%s\r' % ' '*20, # clean up row
-
+            log.debug("Import product #%d" % row['product_id'])
             summary = smart_unicode(row['product_name'], encoding='latin1')
             if not row['product_desc'] and row['product_s_desc']:
                 description = smart_unicode(row['product_s_desc'], encoding='latin1')
@@ -184,19 +176,19 @@ class Command(BaseCommand):
                 position = Point(float(row['product_lat']), float(row['product_lng']))
                 address = owner.addresses.distance(position).order_by('distance')[0]
             else:
-                print "owner has no addresses : %d" % vendor_id
+                log.info("owner has no addresses : %d" % vendor_id)
 
             cursor.execute("""SELECT category_id FROM abs_vm_product_category_xref WHERE product_id = %s""" % row['product_id'])
             result = cursor.fetchone()
             if not result:
-                print "no category for product %d" % row['product_id']
+                log.warning("no category for product %d" % row['product_id'])
             elif result['category_id'] != 0:
                 try:
                     category = Category.objects.get(name=CATEGORY_MAP[result['category_id']])
                 except Category.DoesNotExist:
-                    print "product :", row['product_id'], "category :", result['category_id']
+                    log.warning("Can't find category #%s for product #%s" % (result['category_id'], row['product_id']))
             else:
-                print "no valid category for product %d" % row['product_id']
+                log.warning("no valid category for product %d" % row['product_id'])
                 continue
             
             product = Product.objects.create(
@@ -223,10 +215,7 @@ class Command(BaseCommand):
                     pass # print e
 
             product.save()
-
-            if status:
-                print ' Migrate products : %d%%' % ((i * 100) / len(result_set)), # note ending with comma
-
+    
     def update_sequence(self):
         db = connection.cursor()
         db.execute("""SELECT setval('auth_user_id_seq', (SELECT MAX(id) FROM auth_user))""")
@@ -235,10 +224,9 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         mysql_db = MySQLdb.connect(host='localhost', user='eloueweb', db="eloueweb")
         cursor = mysql_db.cursor(MySQLdb.cursors.DictCursor)
-        status = options.get('status')
         if options.get('members'):
-            self.import_members(cursor, status)
+            self.import_members(cursor)
         if options.get('products'):
-            self.import_products(cursor, status)
+            self.import_products(cursor)
         self.update_sequence()
 
