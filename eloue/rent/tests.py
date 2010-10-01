@@ -8,6 +8,8 @@ from django.test import TestCase
 from django.core.exceptions import ValidationError
 from django.core.urlresolvers import reverse
 
+from eloue.lean import PatronEngagementScoreCalculator
+from eloue.accounts.models import Patron
 from eloue.products.models import Product
 from eloue.rent.models import Booking
 
@@ -277,4 +279,17 @@ class TestPaypalIPN(TestCase):
         }
         response = self.client.post(reverse('pay_ipn'), urllib.urlencode(data), content_type='application/x-www-form-urlencoded; charset=windows-1252;')
         self.failUnlessEqual(response.status_code, 200)
+    
+
+
+class ScoreCalculatorTest(TestCase):
+    fixtures = ['patron', 'address', 'product', 'booking']
+    
+    def test_classic_period(self):
+        score_calculator = PatronEngagementScoreCalculator()
+        patron = Patron.objects.get(pk=1)
+        score = score_calculator.calculate_user_engagement_score(
+            patron, datetime(2010, 8, 14), datetime(2010, 8, 20)
+        )
+        self.assertEquals(0.5714285714285714, score)
     

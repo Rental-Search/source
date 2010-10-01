@@ -1,7 +1,11 @@
 # -*- coding: utf-8 -*-
+import logbook
+
 from django.db.models import Q
 
 from eloue.rent.models import Booking
+
+log = logbook.Logger('eloue.rent.subscriptions')
 
 class PatronEngagementScoreCalculator(object):
     def calculate_user_engagement_score(self, patron, start_date, end_date):
