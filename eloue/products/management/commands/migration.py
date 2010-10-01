@@ -47,7 +47,7 @@ COUNTRIES_MAP = {
 
 CATEGORY_MAP = {}
 csv_file = csv.reader(open(local_path('fixtures/categories_map.csv')))
-CATEGORY_MAP = dict([ (int(row[1]), row[0]) for row in csv_file ])
+CATEGORY_MAP = dict([ (int(row[0]), row[1]) for row in csv_file ])
 
 PUBLISH_MAP = { # WARN : We invert value because we mark them as archived rather than published
     'Y':False,
