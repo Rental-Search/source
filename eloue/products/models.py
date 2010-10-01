@@ -86,7 +86,7 @@ class Product(models.Model):
 class Picture(models.Model):
     """A picture"""
     product = models.ForeignKey(Product, related_name='pictures')
-    image = models.ImageField(null=True, blank=True, upload_to='pictures/', storage=S3BotoStorage())
+    image = models.ImageField(null=True, upload_to='pictures/', storage=S3BotoStorage())
     # TODO : We still need to store thumbnails
 
 class Category(models.Model):
