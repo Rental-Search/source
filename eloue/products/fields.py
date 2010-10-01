@@ -29,9 +29,17 @@ class SimpleDate(int):
         return int(value)
     
     def date(self, year):
+        """Returns corresponding date object
+        >>> SimpleDate(283).date(2010)
+        datetime.date(2010, 8, 27)
+        """
         return datetime.date(year, self.month, self.day)
     
     def datetime(self, year):
+        """Returns corresponding datetime object
+        >>> SimpleDate(283).datetime(2010)
+        datetime.datetime(2010, 8, 27, 0, 0)
+        """
         return datetime.datetime(year, self.month, self.day)
     
     @property
@@ -69,6 +77,10 @@ class SimpleDateField(models.IntegerField):
         >>> SimpleDateField().to_python(None)
         >>> SimpleDateField().to_python(2.3)
         2
+        >>> SimpleDateField().to_python("2.3")
+        Traceback (most recent call last):
+        ...
+        ValidationError: [u'This value must be an integer.']
         """
         if value is None:
             return None
