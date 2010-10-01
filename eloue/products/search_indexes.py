@@ -15,6 +15,14 @@ class ProductIndex(RealTimeSearchIndex):
     lng = FloatField(model_attr='address__position__y', null=True)
     
     def prepare_categories(self, obj):
+        """
+        >>> from eloue.products.models import Category
+        >>> parent = Category(slug='parent', parent=None)
+        >>> category = Category(slug='child', parent=parent)
+        >>> product = Product(category=category)
+        >>> ProductIndex(Category).prepare_categories(product)
+        ['child', 'parent']
+        """
         categories = [ obj.category ]
         def _traverse(category, categories=[]):
             if category.parent:
