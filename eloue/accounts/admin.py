@@ -42,10 +42,6 @@ class PatronAdmin(UserAdmin):
                 pass
     send_activation_email.short_description = _(u"Envoyer à nouveau l'email d'activation")
     
-    def __unicode__(self):
-        return self.username
-    
-
 
 class AddressAdmin(admin.ModelAdmin):
     list_display = ('patron', 'address1', 'address2', 'zipcode', 'city', 'country', 'is_geocoded')
