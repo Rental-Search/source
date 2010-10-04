@@ -139,7 +139,6 @@ class PatronTest(TestCase):
     def test_patron_detail_view(self):
         response = self.client.get(reverse('patron_detail', args=['alexandre']))
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.context['patron'].slug, 'alexandre')
     
     def test_patron_detail_compat(self):
         response = self.client.get(reverse('patron_detail_compat', args=['alexandre', 1]))

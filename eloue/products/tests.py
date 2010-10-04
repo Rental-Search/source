@@ -34,6 +34,10 @@ class ProductTest(TestCase):
         )
         self.assertRaises(ValidationError, product.full_clean)
     
+    def test_product_detail_view(self):
+        response = self.client.get(reverse('product_detail', args=['perceuse-visseuse-philips', 1]))
+        self.assertEqual(response.status_code, 200)
+    
 
 class ProductReviewTest(TestCase):
     fixtures = ['patron', 'address', 'category', 'product', 'booking']
