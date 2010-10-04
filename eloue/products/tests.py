@@ -1,14 +1,15 @@
 # -*- coding: utf-8 -*-
 import datetime
 
+from django.core.exceptions import ValidationError
+from django.core.urlresolvers import reverse
 from django.db import IntegrityError
 from django.test import TestCase
-from django.core.exceptions import ValidationError
 
 from eloue.products.models import Product, ProductReview, PatronReview, Price
 
 class ProductTest(TestCase):
-    fixtures = ['patron', 'address', 'category']
+    fixtures = ['patron', 'address', 'category', 'product']
     
     def test_product_creation(self):
         product = Product(
@@ -37,6 +38,10 @@ class ProductTest(TestCase):
     def test_product_detail_view(self):
         response = self.client.get(reverse('product_detail', args=['perceuse-visseuse-philips', 1]))
         self.assertEqual(response.status_code, 200)
+    
+    def test_product_detail_redirect(self):
+        response = self.client.get(reverse('product_detail', args=['perceuse-visseuse', 1]))
+        self.assertRedirects(response, reverse('product_detail', args=['perceuse-visseuse-philips', 1]), status_code=301)
     
 
 class ProductReviewTest(TestCase):
