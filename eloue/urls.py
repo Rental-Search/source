@@ -16,7 +16,7 @@ log = logbook.Logger('eloue')
 try:
     admin.autodiscover()
 except admin.sites.AlreadyRegistered, e:
-    log.warn('Site is already registered : %s' % e.message)
+    log.warn('Site is already registered : %s' % e)
 
 sitemaps = {
     'flatpages':FlatPageSitemap,
