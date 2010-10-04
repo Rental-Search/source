@@ -3,6 +3,7 @@ import datetime
 
 from django.core import mail
 from django.core.exceptions import ValidationError
+from django.core.urlresolvers import reverse
 from django.contrib.gis.geos import Point
 from django.test import TestCase
 
@@ -62,7 +63,7 @@ class AccountManagerTest(TestCase):
         try:
             patron = Patron.objects.create_user('benoitc', 'benoit.woj@e-loue.com', 'benoit')
             patron.full_clean()
-        except ValdiationError, e:
+        except ValidationError, e:
             self.fail(e)
     
 
@@ -128,6 +129,19 @@ class AddressTest(TestCase):
                 zipcode='75003'
             )
             address.full_clean()
-        except ValidationError:
+        except ValidationError, e:
             self.fail(e)
+    
+
+class PatronTest(TestCase):
+    fixtures = ['patron']
+    
+    def test_patron_detail_view(self):
+        response = self.client.get(reverse('patron_detail', args=['alexandre']))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.context['patron'].slug, 'alexandre')
+    
+    def test_patron_detail_compat(self):
+        response = self.client.get(reverse('patron_detail_compat', args=['alexandre', 1]))
+        self.assertRedirects(response, reverse('patron_detail', args=['alexandre']), status_code=301)
     
