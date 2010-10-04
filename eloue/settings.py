@@ -179,9 +179,11 @@ HAYSTACK_ENABLE_REGISTRATIONS = True
 
 # Logging configuration
 try:
-    from logbook.more import ColorizedStderrHandler
-    handler = ColorizedStderrHandler()
-    handler.push_application()
+    import logbook
+    null_handler = logbook.NullHandler()
+    stderr_handler = logbook.StderrHandler(level=logbook.DEBUG if DEBUG else logbook.INFO)
+    null_handler.push_application()
+    stderr_handler.push_application()
 except ImportError:
     pass
 
