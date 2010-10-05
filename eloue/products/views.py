@@ -18,6 +18,10 @@ from eloue.products.models import Product, Category
 PAGINATE_PRODUCTS_BY = getattr(settings, 'PAGINATE_PRODUCTS_BY', 20)
 DEFAULT_RADIUS = getattr(settings, 'DEFAULT_RADIUS', 50)
 
+@cache_page(300)
+def homepage(request):
+    return direct_to_template(request, template='index.html')
+
 @cache_page(900)
 def product_detail(request, slug, product_id):
     product = get_object_or_404(Product, pk=product_id)

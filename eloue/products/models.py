@@ -2,6 +2,7 @@
 from datetime import datetime, timedelta
 
 from django.conf import settings
+from django.core.urlresolvers import get_script_prefix
 from django.db import models
 from django.db.models import permalink
 from django.db.models.signals import post_save
@@ -107,6 +108,11 @@ class Category(models.Model):
         u'Travaux - Bricolage'
         """
         return smart_unicode(self.name)
+    
+    def get_absolute_url(self):
+        return _(u"%(prefix)s/location/par-category/%(category)s/") % { 
+            'prefix':get_script_prefix(), 'category':self.slug
+        }
     
     def save(self, *args, **kwargs):
         if not self.slug:

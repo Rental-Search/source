@@ -7,9 +7,10 @@ from django.contrib import admin
 from django.contrib.auth.views import login, logout_then_login, password_reset, password_reset_confirm, password_reset_done, password_reset_complete
 from django.contrib.sitemaps.views import index, sitemap
 
-from eloue.sitemaps import FlatPageSitemap, PatronSitemap, ProductSitemap
 from eloue.accounts.forms import EmailAuthenticationForm, EmailPasswordResetForm
 from eloue.accounts.views import activate
+from eloue.products.views import homepage
+from eloue.sitemaps import FlatPageSitemap, PatronSitemap, ProductSitemap
 
 log = logbook.Logger('eloue')
 
@@ -53,4 +54,5 @@ urlpatterns = patterns('',
     url(r'^location/', include('eloue.products.urls')),
     url(r'^rent/', include('eloue.rent.urls')),
     url(r'^edit/', include(admin.site.urls)),
+    url(r'^$', homepage, name="home")
 )

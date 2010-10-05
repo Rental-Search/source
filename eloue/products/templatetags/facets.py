@@ -17,7 +17,7 @@ def facet_breadcrumb_link(breadcrumbs, facet):
         output.append(f['url'])
         if f == facet:
             break
-    return '%s%s/' % (get_script_prefix(), '/'.join(output))
+    return '%slocation/%s/' % (get_script_prefix(), '/'.join(output))
 
 class FacetUrlNode(Node):
     def __init__(self, urlbits, additions, removals):
