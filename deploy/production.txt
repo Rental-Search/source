@@ -9,6 +9,7 @@ ipython>=0.10
 logbook>=0.2.1
 lxml>=2.2.7
 markdown>=2.0.3
+mock>=0.7.0b3
 mysql-python>=1.2.3
 python-memcached>=1.44
 python-dateutil>=1.5
