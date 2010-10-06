@@ -34,8 +34,9 @@ class InsuranceTest(TestCase):
         self.assertTrue(settings.INSURANCE_EMAIL in mail.outbox[0].to)
     
     def test_subscriptions_command(self):
-        from eloue.rent.management.commands.subscriptions import Command as SubscriptionsCommand
-        command = SubscriptionsCommand()
+        import eloue.rent.management.commands.subscriptions as subscriptions
+        reload(subscriptions)
+        command = subscriptions.Command()
         command.handle()
         self.assertTrue(self.mock.called)
         self.assertEquals(self.mock.return_value.method_calls[0][0], 'login')
