@@ -106,7 +106,10 @@ MIDDLEWARE_CLASSES = (
 if DEBUG_TOOLBAR:
     MIDDLEWARE_CLASSES += ('debug_toolbar.middleware.DebugToolbarMiddleware',)
 
+# Urls configuration
 ROOT_URLCONF = 'eloue.urls'
+LOGIN_URL = '/login/'
+LOGOUT_URL = '/logout/'
 
 TEMPLATE_DIRS = getattr(local, 'TEMPLATE_DIRS')
 
