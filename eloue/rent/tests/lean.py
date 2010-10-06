@@ -1,0 +1,19 @@
+# -*- coding: utf-8 -*-
+from datetime import datetime
+
+from django.test import TestCase
+
+from eloue.accounts.models import Patron
+from eloue.lean import PatronEngagementScoreCalculator
+
+class ScoreCalculatorTest(TestCase):
+    fixtures = ['patron', 'address', 'product', 'booking']
+    
+    def test_classic_period(self):
+        score_calculator = PatronEngagementScoreCalculator()
+        patron = Patron.objects.get(pk=1)
+        score = score_calculator.calculate_user_engagement_score(
+            patron, datetime(2010, 8, 14), datetime(2010, 8, 20)
+        )
+        self.assertEquals(0.5714285714285714, score)
+    
