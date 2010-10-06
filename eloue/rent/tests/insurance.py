@@ -1,23 +1,15 @@
 # -*- coding: utf-8 -*-
-from datetime import datetime
-from mock import Mock
+from mock import patch
 
 from django.conf import settings
-from django.core.exceptions import ValidationError
 from django.core import mail
 from django.test import TestCase
 
 from eloue.rent.management.commands.billing import Command as BillingCommand
 from eloue.rent.management.commands.reimbursement import Command as ReimbursementCommand
-from eloue.rent.models import Booking
 
 class InsuranceTest(TestCase):
     fixtures = ['patron', 'address', 'category', 'product']
-    
-    def setUp(self):
-        import ftplib
-        self.mock = Mock()
-        ftplib.FTP = self.mock
     
     def test_billing_command(self):
         command = BillingCommand()
@@ -33,16 +25,14 @@ class InsuranceTest(TestCase):
         self.assertEquals(len(mail.outbox[0].attachments), 1)
         self.assertTrue(settings.INSURANCE_EMAIL in mail.outbox[0].to)
     
-    def test_subscriptions_command(self):
+    @patch('ftplib.FTP')
+    def test_subscriptions_command(self, mock):
         import eloue.rent.management.commands.subscriptions as subscriptions
-        reload(subscriptions)
+        reload(subscriptions) # It's loaded before we patch
         command = subscriptions.Command()
         command.handle()
-        self.assertTrue(self.mock.called)
-        self.assertEquals(self.mock.return_value.method_calls[0][0], 'login')
-        self.assertEquals(self.mock.return_value.method_calls[1][0], 'storlines')
-        self.assertEquals(self.mock.return_value.method_calls[2][0], 'quit')
-    
-    def tearDown(self):
-        self.mock.reset_mock()
+        self.assertTrue(mock.called)
+        self.assertEquals(mock.return_value.method_calls[0][0], 'login')
+        self.assertEquals(mock.return_value.method_calls[1][0], 'storlines')
+        self.assertEquals(mock.return_value.method_calls[2][0], 'quit')
     
