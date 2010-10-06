@@ -109,15 +109,15 @@ class Category(models.Model):
         """
         return smart_unicode(self.name)
     
-    def get_absolute_url(self):
-        return _(u"%(prefix)s/location/par-category/%(category)s/") % { 
-            'prefix':get_script_prefix(), 'category':self.slug
-        }
-    
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = slugify(self.name)
         super(Category, self).save(*args, **kwargs)
+    
+    def get_absolute_url(self):
+        return _(u"%(prefix)s/location/par-category/%(category)s/") % { 
+            'prefix':get_script_prefix(), 'category':self.slug
+        }
     
 
 class Property(models.Model):
