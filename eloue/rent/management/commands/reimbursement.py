@@ -50,7 +50,7 @@ class Command(BaseCommand):
                 period.month, period.year
             ), 'ops@e-loue.com',
             [settings.INSURANCE_EMAIL])
-        email.attach('remboursement-eloue-%s/%s.csv' %
+        email.attach('remboursement-eloue-%s-%s.csv' %
             (period.month, period.year), csv_file)
         email.send()
         log.info('Finished monthly insurance reimbursement batch')

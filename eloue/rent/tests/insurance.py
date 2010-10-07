@@ -11,7 +11,7 @@ from django.test import TestCase
 
 from eloue.rent.management.commands.billing import Command as BillingCommand
 from eloue.rent.management.commands.reimbursement import Command as ReimbursementCommand
-from eloue.rent.models import Booking, BOOKING_STATE
+from eloue.rent.models import Booking, Sinister, BOOKING_STATE
 
 class MockDate(datetime.date):
     @classmethod
@@ -64,6 +64,24 @@ class InsuranceTest(TestCase):
             i += 1
         self.assertEquals(i, 2)
         self.assertTrue(settings.INSURANCE_EMAIL in mail.outbox[0].to)
+    
+    @patch('ftplib.FTP')
+    def test_sinister_command(self, mock):
+        import eloue.rent.management.commands.sinister as sinister
+        reload(sinister) # It's loaded before we patch
+        command = sinister.Command()
+        command.handle()
+        self.assertTrue(mock.called)
+        self.assertEquals(mock.return_value.method_calls[0][0], 'login')
+        self.assertEquals(mock.return_value.method_calls[1][0], 'storlines')
+        csv_file = mock.return_value.method_calls[1][1][1]
+        csv_file.seek(0)
+        for row in csv.reader(csv_file, delimiter='|'):
+            try:
+                sinister = Sinister.objects.get(pk=UUID(row[14]))
+            except Sinister.DoesNotExists:
+                self.fail("A non-existing sinister is referenced")
+        self.assertEquals(mock.return_value.method_calls[2][0], 'quit')
     
     @patch('ftplib.FTP')
     def test_subscriptions_command(self, mock):
