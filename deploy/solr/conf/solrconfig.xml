@@ -19,7 +19,12 @@
     <maxFieldLength>10000</maxFieldLength>
     <unlockOnStartup>false</unlockOnStartup>
   </mainIndex>
-  <updateHandler class="solr.DirectUpdateHandler2"></updateHandler>
+  <updateHandler class="solr.DirectUpdateHandler2">
+   <autoCommit>
+      <maxDocs>10000</maxDocs>
+      <maxTime>60000</maxTime>
+    </autoCommit>
+  </updateHandler>
   <query>
     <maxBooleanClauses>1024</maxBooleanClauses>
     <filterCache

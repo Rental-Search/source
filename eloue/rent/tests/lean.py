@@ -15,5 +15,5 @@ class ScoreCalculatorTest(TestCase):
         score = score_calculator.calculate_user_engagement_score(
             patron, datetime(2010, 8, 14), datetime(2010, 8, 20)
         )
-        self.assertEquals(0.5714285714285714, score)
+        self.assertEquals(1.1428571428571428, score)
     
