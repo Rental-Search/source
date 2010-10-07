@@ -2,6 +2,7 @@
 import re, datetime, hashlib, random
 
 from django.contrib.auth.models import UserManager
+from django.db.models import Manager
 
 SHA1_RE = re.compile('^[a-f0-9]{40}$')
 

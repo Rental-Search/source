@@ -4,6 +4,7 @@
     city: 'Paris'
     patron: 1
     zipcode: '75003'
+    country: 'FR'
   model: accounts.address
   pk: 1
 
@@ -13,5 +14,6 @@
     city: 'Paris'
     patron: 2
     zipcode: '75018'
+    country: 'FR'
   model: accounts.address
   pk: 2

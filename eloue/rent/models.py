@@ -110,7 +110,7 @@ class Booking(models.Model):
             self.pin = str(random.randint(1000, 9999))
             self.deposit_amount = self.product.deposit_amount
             if self.product.has_insurance:
-                self.insurance_amount = self.insurance_fee + self.insurance_taxes + self.insurance_commision
+                self.insurance_amount = self.insurance_fee + self.insurance_taxes + self.insurance_commission
             else:
                 self.insurance_amount = D(0)
         super(Booking, self).save(*args, **kwargs)
@@ -199,7 +199,7 @@ class Booking(models.Model):
         return self.total_amount - self.commission
     
     @property
-    def insurance_commision(self):
+    def insurance_commission(self):
         """Return our commission on insurance"""
         return self.total_amount * INSURANCE_COMMISSION
     
