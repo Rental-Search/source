@@ -8,6 +8,7 @@ from tempfile import TemporaryFile
 
 from django.core.mail import EmailMessage
 from django.core.management.base import BaseCommand
+from django.utils.datastructures import SortedDict
 
 log = logbook.Logger('eloue.rent.billing')
 
@@ -22,7 +23,7 @@ class Command(BaseCommand):
         writer = csv.writer(csv_file, delimiter='|')
         period = (date.today() - relativedelta(months=1))
         for booking in Booking.objects.ended().filter(created_at__year=period.year, created_at__month=period.month):
-            row = {}
+            row = SortedDict()
             row['Numéro police'] = settings.POLICY_NUMBER
             row['Numéro partenaire'] = settings.PARTNER_NUMBER
             row['Numéro contrat'] = booking.contract_id
@@ -35,7 +36,7 @@ class Command(BaseCommand):
             row['Com. du partenaire'] = booking.insurance_commission
             row['Taxes assurance à 9%'] = booking.insurance_taxes
             row['Cotisation TTC'] = booking.insurance_amount
-            writer.writerow(row)
+            writer.writerow(row.values())
         log.info('Sending monthly insurance billing by mail')
         email = EmailMessage('Fichier de facturation e-loue.com',
             'Ci-joint le fichier de facturion du %s/%s' % (

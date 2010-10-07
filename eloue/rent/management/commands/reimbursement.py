@@ -8,6 +8,7 @@ from datetime import date
 
 from django.core.mail import EmailMessage
 from django.core.management.base import BaseCommand
+from django.utils.datastructures import SortedDict
 
 log = logbook.Logger('eloue.rent.reimbursement')
 
@@ -22,7 +23,7 @@ class Command(BaseCommand):
         writer = csv.writer(csv_file, delimiter='|')
         period = (date.today() - relativedelta(months=1))
         for booking in Booking.objects.canceled().filter(canceled_at__year=period.year, canceled_at__month=period.month):
-            row = {}
+            row = SortedDict()
             row['Numéro police'] = settings.POLICY_NUMBER
             row['Numéro partenaire'] = settings.PARTNER_NUMBER
             row['Numéro contrat'] = booking.contract_id
@@ -42,7 +43,7 @@ class Command(BaseCommand):
             row['Com. du partenaire'] = booking.insurance_commission
             row['Taxes assurance à 9%'] = booking.insurance_taxes
             row['Cotisation TTC'] = booking.insurance_amount
-            writer.writerow(row)
+            writer.writerow(row.values())
         log.info('Send monthly insurance reimbursement by mail')
         email = EmailMessage('Fichier remboursement e-loue.com',
             'Ci-joint le fichier de remboursement du %s/%s' % (
