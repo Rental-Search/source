@@ -16,3 +16,7 @@
     model: products.product
     pk: 3
 
+-   fields: {address: 1, category: 1, deposit_amount: '700', description: 'Belle voiture de sport', owner: 1, quantity: 1, summary: 'Belle voiture de sport BMW'}
+    model: products.product
+    pk: 4
+

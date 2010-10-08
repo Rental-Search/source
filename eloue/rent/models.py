@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
+import datetime
 import logbook
 import random
 
-from datetime import datetime, timedelta
 from decimal import Decimal as D
 from pyke import knowledge_engine
 from urlparse import urljoin
@@ -52,6 +52,8 @@ INSURANCE_TAXES = D(str(getattr(settings, 'INSURANCE_TAXES', 0.09)))
 
 BOOKING_DAYS = getattr(settings, 'BOOKING_DAYS', 85)
 
+PAYPAL_API_EMAIL = getattr(settings, 'PAYPAL_API_EMAIL')
+
 PACKAGES_UNIT = {
     'hour':UNIT.HOUR,
     'week_end':UNIT.WEEK_END,
@@ -92,7 +94,7 @@ class Booking(models.Model):
     product = models.ForeignKey(Product, related_name='bookings')
     
     contract_id = IntegerAutoField(db_index=True)
-    pin = models.CharField(unique=True, blank=True, max_length=4)
+    pin = models.CharField(blank=True, max_length=4)
     ip = models.IPAddressField(blank=True, null=True)
     
     created_at = models.DateTimeField(blank=True, editable=False)
@@ -106,7 +108,7 @@ class Booking(models.Model):
     @incr_sequence('contract_id', 'rent_booking_contract_id_seq')
     def save(self, *args, **kwargs):
         if not self.pk:
-            self.created_at = datetime.now()
+            self.created_at = datetime.datetime.now()
             self.pin = str(random.randint(1000, 9999))
             self.deposit_amount = self.product.deposit_amount
             if self.product.has_insurance:
@@ -123,7 +125,7 @@ class Booking(models.Model):
             raise ValidationError(_(u"Une location ne peut pas terminer avant d'avoir commencer"))
         if self.total_amount < 0:
             raise ValidationError(_(u"Le prix total d'une location ne peut pas être négatif"))
-        if (self.ended_at - self.started_at) > timedelta(days=settings.BOOKING_DAYS):
+        if (self.ended_at - self.started_at) > datetime.timedelta(days=BOOKING_DAYS):
             raise ValidationError(_(u"La durée d'une location est limitée à 85 jours."))
     
     @staticmethod
@@ -190,27 +192,52 @@ class Booking(models.Model):
     
     @property
     def commission(self):
-        """Return our commission"""
+        """Return our commission
+        
+        >>> booking = Booking(total_amount=10)
+        >>> booking.commission
+        Decimal('1.0')
+        """
         return self.total_amount * COMMISSION
     
     @property
     def net_price(self):
-        """Return net price for owner"""
+        """Return net price for owner
+        
+        >>> booking = Booking(total_amount=10)
+        >>> booking.net_price
+        Decimal('9.0')
+        """
         return self.total_amount - self.commission
     
     @property
     def insurance_commission(self):
-        """Return our commission on insurance"""
+        """Return our commission on insurance
+        
+        >>> booking = Booking(total_amount=10)
+        >>> booking.insurance_commission
+        Decimal('0')
+        """
         return self.total_amount * INSURANCE_COMMISSION
     
     @property
     def insurance_fee(self):
-        """Return insurance commission"""
+        """Return insurance commission
+        
+        >>> booking = Booking(total_amount=10)
+        >>> booking.insurance_fee
+        Decimal('0.540')
+        """
         return self.total_amount * INSURANCE_FEE
     
     @property
     def insurance_taxes(self):
-        """Return insurance taxes"""
+        """Return insurance taxes
+        
+        >>> booking = Booking(total_amount=10)
+        >>> booking.insurance_taxes
+        Decimal('0.04860')
+        """
         return self.insurance_fee * INSURANCE_TAXES
     
     def hold(self, cancel_url=None, return_url=None):
@@ -238,7 +265,7 @@ class Booking(models.Model):
                     "http://%s" % Site.objects.get_current().domain, reverse('pay_ip')
                 ),
                 receiverList = { 'receiver': [
-                    {'primary':True, 'amount':str(self.total_amount), 'email':settings.PAYPAL_API_EMAIL},
+                    {'primary':True, 'amount':str(self.total_amount), 'email':PAYPAL_API_EMAIL},
                     {'primary':False, 'amount':str(self.net_price), 'email':self.owner.email }
                 ]}
             )
@@ -340,7 +367,7 @@ class Sinister(models.Model):
     @incr_sequence('sinister_id', 'rent_sinister_sinister_id_seq')
     def save(self, *args, **kwargs):
         if not self.pk:
-            self.created_at = datetime.now()
+            self.created_at = datetime.datetime.now()
         super(Sinister, self).save(*args, **kwargs)
     
 
