@@ -185,7 +185,7 @@ class Command(BaseCommand):
             elif result['category_id'] != 0:
                 try:
                     category = Category.objects.get(name=CATEGORY_MAP[result['category_id']])
-                except Category.DoesNotExist:
+                except (Category.DoesNotExist, KeyError):
                     log.warning("Can't find category #%s for product #%s" % (result['category_id'], row['product_id']))
             else:
                 log.warning("no valid category for product %d" % row['product_id'])
