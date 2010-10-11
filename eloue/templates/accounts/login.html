@@ -1,1 +1,9 @@
 {% extends "base.html" %}
+
+{% block content %}
+ <form action="" method="post">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <p><input type="submit" value="S'identifier ou s'incrire" /></p>
+ </form>
+{% endblock %}

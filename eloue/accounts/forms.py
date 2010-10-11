@@ -11,14 +11,15 @@ from django.utils.translation import ugettext as _
 
 from eloue.accounts.models import Patron
 
-class EmailAuthenticationForm(AuthenticationForm):
+class EmailAuthenticationForm(forms.Form):
     """Displays the login form and handles the login action."""
     email = forms.EmailField(label=_(u"Email"), max_length=75, required=True, widget=forms.TextInput(attrs={ 
         'autocapitalize':'off', 'autocorrect':'off'
     }))
     password = forms.CharField(label=_(u"Password"), widget=forms.PasswordInput, required=True)
     
-    def __init__(self, *args, **kwargs):
+    def __init__(self, request=None, *args, **kwargs):
+        self.request = request
         self.user_cache = None
         super(EmailAuthenticationForm, self).__init__(*args, **kwargs)
     

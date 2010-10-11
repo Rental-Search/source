@@ -25,6 +25,11 @@
  <body>
   <div id="container">
     <header>
+     {% if not user.is_anonymous %}
+      <a href="{% url auth_logout %}">Se déconnecter</a>
+     {% else %}
+      <a href="{% url auth_login %}">S'identifier</a>
+     {% endif %}
     </header>
     <div id="main">
      {% block content %}
