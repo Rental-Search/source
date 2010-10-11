@@ -10,8 +10,6 @@ from django.template.defaultfilters import slugify
 from django.utils.translation import ugettext_lazy as _
 from django.utils.encoding import smart_unicode
 
-from storages.backends.s3boto import S3BotoStorage
-
 from eloue.accounts.models import Patron, Address
 from eloue.products.fields import SimpleDateField
 from eloue.products.manager import ProductManager
@@ -87,7 +85,7 @@ class Product(models.Model):
 class Picture(models.Model):
     """A picture"""
     product = models.ForeignKey(Product, related_name='pictures')
-    image = models.ImageField(null=True, blank=True, upload_to='pictures/', storage=S3BotoStorage())
+    image = models.ImageField(null=True, blank=True, upload_to='pictures/')
     # TODO : We still need to store thumbnails
 
 class Category(models.Model):
