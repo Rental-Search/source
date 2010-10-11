@@ -6,7 +6,7 @@ from django.core.exceptions import ValidationError
 from django.utils.translation import ugettext_lazy as _
 
 from eloue.accounts.models import Patron
-from eloue.rent.models import Booking
+from eloue.rent.models import Booking, Sinister
 
 log = logbook.Logger('eloue.rent')
 
@@ -44,4 +44,11 @@ class PayIPNForm(forms.Form):
 class BookingForm(forms.ModelForm):
     class Meta:
         model = Booking
+        fields = ('started_at', 'ended_at')
+    
+
+class SinisterForm(forms.ModelForm):
+    class Meta:
+        model = Sinister
+        fields = ('description',)
     
