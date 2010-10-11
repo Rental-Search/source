@@ -5,7 +5,7 @@ from django import forms
 from django.core.exceptions import ValidationError
 from django.utils.translation import ugettext_lazy as _
 
-from eloue.accounts.models import Account
+from eloue.accounts.models import Patron
 from eloue.rent.models import Booking
 
 log = logbook.Logger('eloue.rent')
@@ -23,7 +23,7 @@ class PreApprovalIPNForm(forms.Form):
         
     def clean_sender_email(self):
         sender_email = self.cleaned_data['sender_email']
-        if not Account.objects.filter(paypal_email=sender_email).exists():
+        if not Patron.objects.filter(paypal_email=sender_email).exists():
             raise ValidationError(_("Cette transaction ne semble pas lier à un compte interne"))
     
 
@@ -37,7 +37,7 @@ class PayIPNForm(forms.Form):
     
     def clean_sender_email(self):
         sender_email = self.cleaned_data['sender_email']
-        if not Account.objects.filter(paypal_email=sender_email).exists():
+        if not Patron.objects.filter(paypal_email=sender_email).exists():
             raise ValidationError(_("Cette transaction ne semble pas lier à un compte interne"))
     
 
