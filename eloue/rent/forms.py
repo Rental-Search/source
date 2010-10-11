@@ -1,6 +1,12 @@
 # -*- coding: utf-8 -*-
 import logbook
+
 from django import forms
+from django.core.exceptions import ValidationError
+from django.utils.translation import ugettext_lazy as _
+
+from eloue.accounts.models import Account
+from eloue.rent.models import Booking
 
 log = logbook.Logger('eloue.rent')
 
@@ -17,7 +23,8 @@ class PreApprovalIPNForm(forms.Form):
         
     def clean_sender_email(self):
         sender_email = self.cleaned_data['sender_email']
-        # TODO : Check we have this sender email in database 
+        if not Account.objects.filter(paypal_email=sender_email).exists():
+            raise ValidationError(_("Cette transaction ne semble pas lier à un compte interne"))
     
 
 class PayIPNForm(forms.Form):
@@ -30,5 +37,11 @@ class PayIPNForm(forms.Form):
     
     def clean_sender_email(self):
         sender_email = self.cleaned_data['sender_email']
-        # TODO : Check we have this sender email in database 
+        if not Account.objects.filter(paypal_email=sender_email).exists():
+            raise ValidationError(_("Cette transaction ne semble pas lier à un compte interne"))
+    
+
+class BookingForm(forms.ModelForm):
+    class Meta:
+        model = Booking
     
