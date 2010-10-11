@@ -24,7 +24,7 @@ class PreApprovalIPNForm(forms.Form):
     def clean_sender_email(self):
         sender_email = self.cleaned_data['sender_email']
         if not Patron.objects.filter(paypal_email=sender_email).exists():
-            raise ValidationError(_("Cette transaction ne semble pas lier à un compte interne"))
+            raise ValidationError(_(u"Cette transaction ne semble pas lier à un compte interne"))
     
 
 class PayIPNForm(forms.Form):
@@ -38,7 +38,7 @@ class PayIPNForm(forms.Form):
     def clean_sender_email(self):
         sender_email = self.cleaned_data['sender_email']
         if not Patron.objects.filter(paypal_email=sender_email).exists():
-            raise ValidationError(_("Cette transaction ne semble pas lier à un compte interne"))
+            raise ValidationError(_(u"Cette transaction ne semble pas lier à un compte interne"))
     
 
 class BookingForm(forms.ModelForm):
