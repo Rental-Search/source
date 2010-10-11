@@ -3,7 +3,7 @@ import os
 import yaml
 from optparse import make_option
 
-from django.core.management.base import BaseCommand, CommandError
+from django.core.management.base import BaseCommand
 
 local_path = lambda path: os.path.join(os.path.dirname(__file__), path)
 

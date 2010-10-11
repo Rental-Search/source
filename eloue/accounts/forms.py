@@ -3,7 +3,7 @@ import django.forms as forms
 from django.conf import settings
 from django.contrib.auth import authenticate
 from django.contrib.sites.models import Site
-from django.contrib.auth.forms import AuthenticationForm, PasswordResetForm
+from django.contrib.auth.forms import PasswordResetForm
 from django.contrib.auth.tokens import default_token_generator
 from django.template.loader import render_to_string
 from django.utils.http import int_to_base36

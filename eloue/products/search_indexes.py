@@ -1,6 +1,6 @@
 #-*- coding: utf-8 -*-
 from haystack.sites import site
-from haystack.indexes import RealTimeSearchIndex, CharField, BooleanField, IntegerField, DateField, FloatField, MultiValueField
+from haystack.indexes import RealTimeSearchIndex, CharField, FloatField, MultiValueField
 from haystack.exceptions import AlreadyRegistered
 
 from eloue.products.models import Product
