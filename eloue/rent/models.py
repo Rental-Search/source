@@ -357,7 +357,7 @@ class Booking(models.Model):
 
 class Sinister(models.Model):
     uuid = UUIDField(primary_key=True)
-    sinister_id = IntegerAutoField(db_index=True)
+    sinister_id = IntegerAutoField(unique=True, db_index=True)
     description = models.TextField()
     patron = models.ForeignKey(Patron, related_name='sinisters')
     booking =  models.ForeignKey(Booking, related_name='sinisters')

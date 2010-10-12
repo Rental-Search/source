@@ -1,13 +1,13 @@
--   fields: {address: 1, category: 1, deposit_amount: '250', description: 'Engrenage plantaire  haute
-            performance 2 vitesses : dure de vie suprieure, transmission optimale,
-            fonctionnement rgulier.', owner: 1, quantity: 1,
+-   fields: {address: 1, category: 1, deposit_amount: '250', description: 'Engrenage plantaire haute
+            performance 2 vitesses : durée de vie supérieure, transmission optimale,
+            fonctionnement régulier.', owner: 1, quantity: 1,
         summary: Perceuse visseuse Philips}
     model: products.product
     pk: 1
 
--   fields: {address: 1, category: 1, deposit_amount: '250', description: 'Engrenage plantaire  haute
-            performance 2 vitesses : dure de vie superieure
-            fonctionnement rgulier.', owner: 1, quantity: 1,
+-   fields: {address: 1, category: 1, deposit_amount: '250', description: 'Engrenage plantaire haute
+            performance 2 vitesses : durée de vie supérieure
+            fonctionnement régulier.', owner: 1, quantity: 1,
         summary: Perceuse visseuse Black Decker}
     model: products.product
     pk: 2

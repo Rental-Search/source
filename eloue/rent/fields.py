@@ -89,7 +89,8 @@ class UUIDField(models.CharField):
     def get_prep_value(self, value):
         if not value:
             return
-        assert(isinstance(value, uuid.UUID))
+        if not isinstance(value, uuid.UUID):
+            value = uuid.UUID(value)
         return value.hex
     
     def south_field_triple(self):
