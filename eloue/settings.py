@@ -166,10 +166,26 @@ CACHE_MIDDLEWARE_KEY_PREFIX = getattr(local, 'CACHE_MIDDLEWARE_KEY_PREFIX', None
 # Compress configuration
 COMPRESS = getattr(local, 'COMPRESS', True)
 COMPRESS_VERSION = True
-COMPRESS_JS_FILTERS = getattr(local, 'COMPRESS_JS_FILTERS', None)
-COMPRESS_CSS_FILTERS = getattr(local, 'COMPRESS_CSS_FILTERS', None)
-COMPRESS_CLOSURE_BINARY = getattr(local, 'COMPRESS_CLOSURE_BINARY', 'java -jar compiler.jar')
-CSSTIDY_ARGUMENTS = '--template=highest'
+COMPRESS_JS_FILTERS = getattr(local, 'COMPRESS_JS_FILTERS', ('compress.filters.yui.YUICompressorFilter',))
+COMPRESS_CSS_FILTERS = getattr(local, 'COMPRESS_CSS_FILTERS', ('compress.filters.yui.YUICompressorFilter',))
+COMPRESS_YUI_BINARY = getattr(local, 'COMPRESS_YUI_BINARY', 'java -jar /usr/local/share/java/yuicompressor.jar')
+COMPRESS_CSS = {
+    'master': {
+        'source_filenames': (
+            'css/master.css',
+		),
+        'output_filename': 'css/master.r?.css',
+        'extra_context': {
+            'media': 'screen',
+        },
+    },
+}
+COMPRESS_JS = {
+    'application': {
+        'source_filenames': ('js/jquery.js', 'js/modernizr.js', 'js/application.js'),
+        'output_filename': 'js/application.r?.js',
+    }
+}
 
 # South configuration
 SOUTH_TESTS_MIGRATE = getattr(local, 'SOUTH_TESTS_MIGRATE', True)

@@ -1,3 +1,4 @@
+{% load compressed %}
 <!doctype html>
 <html lang="fr">
  <head>
@@ -8,7 +9,9 @@
   <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0;">
   <link rel="shortcut icon" href="/favicon.ico">
   <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-  {% block head %}{% endblock %}
+  {% block head %}
+   {% compressed_css 'master' %}
+  {% endblock %}
   <script type="text/javascript">
    /*
     var _gaq = _gaq || [];
@@ -38,6 +41,8 @@
     <footer>
     </footer>
   </div>
-  {% block tail %}{% endblock %}
+  {% block tail %}
+   {% compressed_js 'application' %}
+  {% endblock %}
  </body>
 </html>
