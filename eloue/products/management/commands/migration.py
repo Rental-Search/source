@@ -82,6 +82,11 @@ class Command(BaseCommand):
             dest='products',
             default=False,
             help='Migrate products data'
+        ),
+        make_option('--images-path',
+            dest='path',
+            default='/tmp/elouefile',
+            help='Images directory'
         )
     )
     
@@ -154,9 +159,11 @@ class Command(BaseCommand):
 
                 patron.save()
     
-    def import_products(self, cursor):
+    def import_products(self, cursor, path='/tmp/elouefile'):
         from eloue.accounts.models import Patron
         from eloue.products.models import Product, Category
+        print path
+        return
         cursor.execute("""SELECT product_id, product_name, product_s_desc, product_desc, count(product_desc) AS quantity, product_full_image, product_publish, prix, caution, vendor_id, product_lat, product_lng, localisation FROM abs_vm_product GROUP BY product_desc, product_name ORDER BY quantity DESC""")
         result_set = cursor.fetchall()
         for i, row in enumerate(result_set):
@@ -208,8 +215,8 @@ class Command(BaseCommand):
             )
 
             if row['product_full_image']:
-                try: # FIXME : Hardcoded path
-                    picture = open(os.path.join('/Users/tim/Downloads/elouefile', str(row['vendor_id']), row['product_full_image']))
+                try:
+                    picture = open(os.path.join(path, str(row['vendor_id']), row['product_full_image']))
                     # product.pictures.create(image=picture)`
                 except IOError, e:
                     pass # print e
@@ -227,6 +234,6 @@ class Command(BaseCommand):
         if options.get('members'):
             self.import_members(cursor)
         if options.get('products'):
-            self.import_products(cursor)
+            self.import_products(cursor, options.get('path'))
         self.update_sequence()
 
