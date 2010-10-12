@@ -251,6 +251,9 @@ class Address(models.Model):
 class PhoneNumber(models.Model):
     """A phone number"""
     patron = models.ForeignKey(Patron, related_name='phones')
-    number = models.CharField( max_length=255)
+    number = models.CharField(max_length=255)
     kind = models.IntegerField(choices=PHONE_TYPES)
-
+    
+    def __unicode__(self):
+        return smart_unicode(self.number)
+    

@@ -9,7 +9,8 @@ from django.template.loader import render_to_string
 from django.utils.http import int_to_base36
 from django.utils.translation import ugettext as _
 
-from eloue.accounts.models import Patron
+from eloue.accounts.fields import PhoneNumberField
+from eloue.accounts.models import Patron, PhoneNumber
 
 class EmailAuthenticationForm(forms.Form):
     """Displays the login form and handles the login action."""
@@ -85,4 +86,13 @@ class EmailPasswordResetForm(PasswordResetForm):
 class PatronChangeForm(forms.ModelForm):
     class Meta:
         model = Patron
+    
+
+class PhoneNumberForm(forms.ModelForm):
+    number = PhoneNumberField()
+       
+    class Meta:
+        model = PhoneNumber
+        exclude = ('patron')
+    
     
