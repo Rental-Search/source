@@ -34,18 +34,30 @@ Installation
 
     $ pip install -E env -r deploy/development.txt
     $ source env/bin/activate
-  
+
+YUICompressor
+-------------
+    
+    $ wget http://yuilibrary.com/downloads/yuicompressor/yuicompressor-2.4.2.zip
+    $ unzip yuicompressor-2.4.2.zip
+    $ mkdir -p /usr/local/share/java/
+    $ mv yuicompressor-2.4.2/build/yuicompressor-2.4.2.jar /usr/local/share/java/yuicompressor.jar
+
 Usage
 -----
 
 Pour avoir un shell :
 
-    $ python manage.py shell
+    $ python eloue/manage.py shell
 
 Pour faire tourner un serveur :
 
-    $ python manage.py runserver
+    $ python eloue/manage.py runserver
 
 Pour faire tourner les tests :
 
-    $ python manage.py test
+    $ python eloue/manage.py test
+
+Pour compresser les javascripts et les css :
+
+    $ python eloue/manage.py syncompress
