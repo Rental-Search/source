@@ -2,8 +2,11 @@
 from haystack.sites import site
 from haystack.indexes import RealTimeSearchIndex, CharField, FloatField, MultiValueField
 from haystack.exceptions import AlreadyRegistered
+from haystack.query import SearchQuerySet
 
 from eloue.products.models import Product
+
+__all__ = ['ProductIndex', 'product_search']
 
 class ProductIndex(RealTimeSearchIndex):
     summary = CharField(model_attr='summary')
@@ -40,3 +43,6 @@ try:
     site.register(Product, ProductIndex)
 except AlreadyRegistered:
     pass
+
+
+product_search = SearchQuerySet().facet('categories').facet('owner')

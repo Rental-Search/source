@@ -1,11 +1,8 @@
 # -*- coding: utf-8 -*-
 from django.conf.urls.defaults import *
 
-from haystack.query import SearchQuerySet
-
+from eloue.products.search_indexes import product_search
 from eloue.products.views import product_detail, product_list
-
-product_search = SearchQuerySet().facet('categories').facet('owner')
 
 urlpatterns = patterns('',
     url(r'^(?P<slug>[-\w]+)-(?P<product_id>\d+)/$', product_detail, name="product_detail"),

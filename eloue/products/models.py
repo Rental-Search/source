@@ -71,6 +71,10 @@ class Product(models.Model):
         if self.address.patron != self.owner:
             raise ValidationError(_(u"L'adresse n'appartient pas au propriétaire de l'objet"))
     
+    def more_like_this(self):
+        from eloue.products.search_indexes import product_search
+        return product_search.more_like_this(self)[:3]
+    
     @property
     def slug(self):
         return slugify(self.summary)
