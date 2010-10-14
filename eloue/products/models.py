@@ -94,7 +94,7 @@ class Picture(models.Model):
 
 class Category(models.Model):
     """A category"""
-    parent = models.ForeignKey('self', related_name='children', blank=True, null=True)
+    parent = models.ForeignKey('self', related_name='childrens', blank=True, null=True)
     name = models.CharField(max_length=255)
     slug = models.SlugField(unique=True, db_index=True)
     need_insurance = models.BooleanField(default=True, db_index=True)

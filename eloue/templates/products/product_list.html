@@ -1,5 +1,5 @@
 {% extends "base.html" %}
- {% load facets i18n %}
+ {% load facets i18n param category %}
 
 {% block head %}
  {{ block.super }}
@@ -13,12 +13,12 @@
    <form id="search-form" action="{% url product_list %}">
     <div class="grid4 first">
      <label for="id_q" class="big">{% trans "Que voulez vous louer ?" %}</label><br/>
-	 <input id="id_q" type="text" name="q" class="big"/><br />
+     {{ form.q }}
 	 <span>{% trans "Exemple :" %}</span><a href="#">{% trans "Voiture" %}</a>, <a href="#">{% trans "Chèvre" %}</a>, <a href="#">{% trans "Ski" %}</a>, <a href="#">{% trans "Robe" %}</a>
     </div>
 	<div class="grid4">
-	 <label for="id_where" class="big">{% trans "Où ?" %}</label><br />
-	 <input id="id_where" type="text" name="where" class="big"/><br />
+	 <label for="id_where" class="big">{% trans "Où ?" %}</label>
+	 {{ form.where }}
 	 <span>{% trans "Exemple :" %}</span><a href="#">{% trans "Nantes" %}</a>, <a href="#">{% trans "69000" %}</a>, <a href="#">{% trans "11 rue crozatier, 75" %}</a>
 	</div>
     <div class="grid4">
@@ -30,9 +30,11 @@
  <div id="content">
   <div id="results" class="container clearfix">
    <section id="result-list" class="grid9 first">
-	<div id="search-summary" class="grid9 first">
-  	 <h1>{{ paginator.count }} résultat{{ paginator.count|pluralize }} pour <strong>{{ query }}</strong></h1>
-	</div>
+    {% if query %}
+     <div id="search-summary" class="grid9 first">
+  	  <h1>{{ paginator.count }} résultat{{ paginator.count|pluralize }} pour <strong>{{ query }}</strong></h1>
+	 </div>
+    {% endif %}
 	<!--
 	  <ul id="sort-option" class="grid9 first">
 	   <li class="label-sort">Trier par :</li>
@@ -51,7 +53,7 @@
 	    </a>
 	    <div class="list-product-details">
 	     <h3><a href="{{ object.get_absolute_url }}">{{ product.summary }}</a></h3>
-         <a class="list-product-desc">{{ product.description|safe }}</a>
+         <a class="list-product-desc">{{ product.description|removetags:"br"|truncatewords_html:30|safe }}</a>
          {% if product.geo_distance %}
           <div class="list-product-distance">
            {{ product.geo_distance|floatformat }} km{{ product.geo_distance|pluralize }}
@@ -85,25 +87,49 @@
    </section>
    <aside id="facets" class="grid3">
     <div id="accordion" class="grid3 first">
-     <h6><a href="#">Voir tous les résultats</a></h6>
-     <h6 class="open"><a href="#">Auto et Moto</a><em> (2193)</em></h6>
-     <div class="accordion-content grid3 first">
-	  <ul>
-	   <li><a href="#">Voiture</a><em> (1765)</em></li>
-       <li><a href="#">Accessoires autos</a><em> (428)</em></li>
-      </ul>
-     </div>
-	 <h6><a href="#">Transport</a><em> (300)</em></h6>
-	 <h6 class="open"><a href="#">Distances</a></h6>
-	 <div class="accordion-content grid3 first">
-	  <form action="">
-	   <p>
-	    <label for="id-distance">{% trans "Dans rayon de :" %}</label><br />
-	    <input id="id-distance" type="text" /><span>Km</span>
-        <input id="id-distance-submit" type="submit"  value="Go" class="button small grey"/>
-       </p>	
-      </form>
-     </div>
+     <h6><a href="{% facet_url urlbits  %}">Voir tous les résultats</a></h6>
+     {% for field in form %}
+      {% if not field.data %}
+       {% if field.name == 'categories' %}
+        {% for value, count in facets.fields|hash:field.name  %}
+         {% with value|category as category %}
+          <h6>
+           <a href="{% facet_url urlbits field.field.pretty_name value %}">{{ category.name }}</a><em> ({{ count }})</em`>
+          </h6>
+         {% endwith %}
+        {% endfor %}
+       {% endif %}
+      {% else %}
+       {% if field.name == 'categories' %}
+        {% with field.data|category as category %}
+         <h6 class="open"><a href="{% facet_url urlbits -field.field.pretty_name %}">{{ category.name }}</a></h6>
+          <div class="accordion-content grid3 first">
+	       <ul>
+	        {% for value, count in facets.fields|hash:field.name  %}
+             {% with value|category as child %}
+              {% if child != category %}
+               <li><a href="{% facet_url urlbits field.field.pretty_name value %}">{{ child.name }}</a> <em>({{ count }})</em></li>
+              {% endif %}
+             {% endwith %}
+            {% endfor %}
+           </ul>
+          </div>
+        {% endwith %}
+       {% endif %}
+      {% endif %}
+     {% endfor %}
+     {% if where %}
+	  <h6 class="open"><a href="#">Distances</a></h6>
+	  <div class="accordion-content grid3 first">
+	   <form action="{% facet_url urlbits %}" action="get">
+	    <p>
+	     <label for="id-distance">{% trans "Dans rayon de :" %}</label><br />
+	     {{ form.radius }}<span>Km</span>
+         <input id="id-distance-submit" type="submit"  value="Go" class="button small grey"/>
+        </p>	
+       </form>
+      </div>
+     {% endif %}
      <h6 class="open"><a href="#">Dates</a></h6>
 	 <div class="accordion-content grid3 first">
 	  <form>

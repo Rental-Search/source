@@ -12,7 +12,7 @@ from django.views.generic.list_detail import object_detail, object_list
 from haystack.query import SearchQuerySet
 
 from eloue.accounts.models import Patron
-from eloue.products.forms import FacetedSearchForm, ProductSearchForm
+from eloue.products.forms import FacetedSearchForm
 from eloue.products.models import Product, Category
 
 PAGINATE_PRODUCTS_BY = getattr(settings, 'PAGINATE_PRODUCTS_BY', 20)
@@ -20,7 +20,7 @@ DEFAULT_RADIUS = getattr(settings, 'DEFAULT_RADIUS', 50)
 
 @cache_page(300)
 def homepage(request):
-    form = ProductSearchForm()
+    form = FacetedSearchForm()
     return direct_to_template(request, template='index.html', extra_context={ 'form':form })
 
 @cache_page(900)
@@ -43,6 +43,8 @@ def product_list(request, urlbits, sqs = SearchQuerySet(), suggestions = None, p
         sqs = sqs.spatial(lat=lat, long=lng, radius=radius, unit='km').order_by('-score', 'geo_distance')
     
     breadcrumbs = SortedDict()
+    breadcrumbs['q'] = { 'name':'q', 'value':query, 'label':'query' }
+    breadcrumbs['where'] = { 'name':'where', 'value':request.GET.get('where', None), 'label':'where' }
     urlbits = urlbits or ''
     urlbits = filter(None, urlbits.split('/')[::-1])
     while urlbits:
@@ -55,11 +57,11 @@ def product_list(request, urlbits, sqs = SearchQuerySet(), suggestions = None, p
             if bit.endswith(_('categorie')):
                 item = get_object_or_404(Category, slug=value)
                 sqs = sqs.narrow("categories:%s" % value)
-                breadcrumbs[bit] = { 'name':'category', 'value':value, 'label':bit, 'object':item, 'pretty_name':_(u"Catégorie"), 'pretty_value':item.name, 'url':'%s/%s' % (bit, value) }
+                breadcrumbs[bit] = { 'name':'categories', 'value':value, 'label':bit, 'object':item, 'pretty_name':_(u"Catégorie"), 'pretty_value':item.name, 'url':'par-%s/%s' % (bit, value) }
             elif bit.endswith(_('loueur')):
                 item = get_object_or_404(Patron, slug=value)
                 sqs = sqs.narrow("owner:%s" % value)
-                breadcrumbs[bit] = { 'name':'patron', 'value':value, 'label':bit, 'object':item, 'pretty_name':_(u"Loueur"), 'pretty_value':item.username, 'url':'%s/%s' % (bit, value) }
+                breadcrumbs[bit] = { 'name':'owner', 'value':value, 'label':bit, 'object':item, 'pretty_name':_(u"Loueur"), 'pretty_value':item.username, 'url':'par-%s/%s' % (bit, value) }
             else:
                 raise Http404
         elif bit.startswith(_('page')):

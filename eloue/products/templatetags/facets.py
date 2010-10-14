@@ -28,6 +28,8 @@ class FacetUrlNode(Node):
     def render(self, context):
         urlbits = self.urlbits.resolve(context).copy()
         query = self.query.resolve(context)
+        del urlbits['query']
+        del urlbits['where']
         for key, value in self.additions:
             urlbits[key.resolve(context)] = value.resolve(context)
         for key in self.removals:
@@ -35,7 +37,7 @@ class FacetUrlNode(Node):
                 del urlbits[key.resolve(context)]
             except KeyError:
                 pass
-        path = urljoin('location', ''.join([ '%s/%s/' % (key, value) for key, value in urlbits.iteritems() ]))
+        path = urljoin('/location/', ''.join([ '%s/%s/' % (key, value) for key, value in urlbits.iteritems() ]))
         if query:
             return "%s?q=%s" % (path, query)
         else:
@@ -84,6 +86,8 @@ class CanonicalNode(Node):
     
     def render(self, context):
         urlbits = self.urlbits.resolve(context).copy()
+        del urlbits['query']
+        del urlbits['where']
         urlbits = self.sort(urlbits)
         path = urljoin('/location/', ''.join([ '%s/%s/' % (key, value) for key, value in urlbits.iteritems() ]))
         return path
