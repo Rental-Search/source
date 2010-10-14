@@ -1,5 +1,5 @@
 {% extends "base.html" %}
- {% load facets %}
+ {% load facets i18n %}
 
 {% block head %}
  {{ block.super }}
@@ -7,20 +7,131 @@
 {% endblock %}
 
 {% block content %}
- {% if breadcrumbs %}
-  {% for crumb in breadcrumbs.values %}
-   <div itemscope itemptype="http://data-vocabulary.org/Breadcrumb">
-    <a href="{% facet_breadcrumb_link breadcrumbs crumb %}">{{ crumb.pretty_value|capfirst }}</a>
-   </div>{% if not forloop.last %} › {% endif %}
-  {% endfor %}
- {% endif %}
- {% if suggestions %}
-  <p>{{ suggestions }}</p>
- {% endif %}
- <ul>
-  {% for product in product_list %}
-   <li><h3>{{ product.summary }} (#{{ product.pk }})</h3></li>
-  {% endfor %}
- </ul>
- {{ facets }}
+ <div id="top-content">
+  <div id="search" class="container clearfix">
+   <h1>{% trans "Recherchez toutes vos locations sur e-loue" %}</h1>
+   <form id="search-form" action="{% url product_list %}">
+    <div class="grid4 first">
+     <label for="id_q" class="big">{% trans "Que voulez vous louer ?" %}</label><br/>
+	 <input id="id_q" type="text" name="q" class="big"/><br />
+	 <span>{% trans "Exemple :" %}</span><a href="#">{% trans "Voiture" %}</a>, <a href="#">{% trans "Chèvre" %}</a>, <a href="#">{% trans "Ski" %}</a>, <a href="#">{% trans "Robe" %}</a>
+    </div>
+	<div class="grid4">
+	 <label for="id_where" class="big">{% trans "Où ?" %}</label><br />
+	 <input id="id_where" type="text" name="where" class="big"/><br />
+	 <span>{% trans "Exemple :" %}</span><a href="#">{% trans "Nantes" %}</a>, <a href="#">{% trans "69000" %}</a>, <a href="#">{% trans "11 rue crozatier, 75" %}</a>
+	</div>
+    <div class="grid4">
+	 <input type="submit" value="{% trans "Rechercher" %}" class="button big orange"/>
+	</div>
+   </form>
+  </div>
+ </div>
+ <div id="content">
+  <div id="results" class="container clearfix">
+   <section id="result-list" class="grid9 first">
+	<div id="search-summary" class="grid9 first">
+  	 <h1>{{ paginator.count }} résultat{{ paginator.count|pluralize }} pour <strong>{{ query }}</strong></h1>
+	</div>
+	<!--
+	  <ul id="sort-option" class="grid9 first">
+	   <li class="label-sort">Trier par :</li>
+	   <li><a href="#">Les plus récents</a></li>
+       <li><a href="#">Les plus proche</a></li>
+       <li><a href="#">Les prix les plus bas</a></li>
+       <li class="last"><a href="#">Les prix les plus haut</a></li>
+	  </ul>
+	-->
+	<ul id="list-products" class="grid9 first">
+	 {% for product in product_list %}
+	  {% with product.object as object %}
+       <li class="list-product grid9 first">
+	    <a class="list-product-img" href="#">
+	     <img src="images/s3/mini_121.jpg" />
+	    </a>
+	    <div class="list-product-details">
+	     <h3><a href="{{ object.get_absolute_url }}">{{ product.summary }}</a></h3>
+         <a class="list-product-desc">{{ product.description|safe }}</a>
+         {% if product.geo_distance %}
+          <div class="list-product-distance">
+           {{ product.geo_distance }}
+          </div>
+         {% endif %}
+         <div class="list-product-owner"><span>{% trans "Propriétaire : " %}</span><a href="{{ object.owner.get_absolute_url }}">{{ object.owner.username }}</a></div>
+        </div>
+        <div class="list-product-booking">
+         <a href="{{ object.get_absolute_url }}" class="list-product-booking-price">{{ object.prices.day|first }} €/J</a><br />
+         <a href="{{ object.get_absolute_url }}" class="button medium grey">Choisir</a><br />
+	    </div>
+	   </li>
+	  {% endwith %}
+	 {% endfor %}
+	</ul>
+	{% if is_paginated %}
+	 <div id="pager" class="grid9 first">
+      <ul class="grid9 first">
+	   {% if page_obj.has_previous %}
+	    <li class="previous"><a href="{% facet_url urlbits "page" page_obj.previous_page_number %}">{% trans "Précédent" %}</a></li>
+	   {% endif %}
+	   {% for page in paginator.page_range %}
+	    <li class="page-{{ page }} {% if page_obj.number == page %}on{% endif %}"><a href="{% facet_url urlbits "page" page %}">{{ page }}</a></li>    
+	   {% endfor %}
+	   {% if page_obj.has_next %}
+	    <li class="next"><a href="{% facet_url urlbits "page" page_obj.next_page_number %}">{% trans "Suivant" %}</a></li>
+	   {% endif %}
+	  </ul>
+	 </div>
+    {% endif %}
+   </section>
+   <aside id="facets" class="grid3">
+    <div id="accordion" class="grid3 first">
+     <h6><a href="#">Voir tous les résultats</a></h6>
+     <h6 class="open"><a href="#">Auto et Moto</a><em> (2193)</em></h6>
+     <div class="accordion-content grid3 first">
+	  <ul>
+	   <li><a href="#">Voiture</a><em> (1765)</em></li>
+       <li><a href="#">Accessoires autos</a><em> (428)</em></li>
+      </ul>
+     </div>
+	 <h6><a href="#">Transport</a><em> (300)</em></h6>
+	 <h6 class="open"><a href="#">Distances</a></h6>
+	 <div class="accordion-content grid3 first">
+	  <form action="">
+	   <p>
+	    <label for="id-distance">{% trans "Dans rayon de :" %}</label><br />
+	    <input id="id-distance" type="text" /><span>Km</span>
+        <input id="id-distance-submit" type="submit"  value="Go" class="button small grey"/>
+       </p>	
+      </form>
+     </div>
+     <h6 class="open"><a href="#">Dates</a></h6>
+	 <div class="accordion-content grid3 first">
+	  <form>
+	   <p>
+	    <label for="id-start-date">Date de début :</label><br />
+	    <input id="id-start-date" type="text" />
+	   </p>
+	   <p>
+	    <label for="id-end-date">Date de fin :</label><br />
+        <input id="id-end-date" type="text" />
+	   </p>
+	   <input type="submit" value="Go" class="button small grey"/>	
+      </form>
+	 </div>
+	 <h6 class="open"><a href="#">Prix</a></h6>
+	 <div class="accordion-content grid3 first">
+	  <form>
+	   <p>
+		<span>Entre</span>
+		<input id="id-start-price" type="text" />
+		<span> et </span>
+		<input id="id-end-price" type="text" />
+		<input id="id-price-submit" type="submit"  value="Go" class="button small grey"/>
+	   </p>	
+      </form>
+     </div>
+    </div>
+   </aside>
+  </div>
+ </div>
 {% endblock %}

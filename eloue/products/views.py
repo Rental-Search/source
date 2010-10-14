@@ -41,7 +41,7 @@ def product_list(request, urlbits, sqs = SearchQuerySet(), suggestions = None, p
     lat, lng = request.GET.get('lat', None), request.GET.get('lng', None)
     if (lat and lng):
         radius = request.GET.get('radius', DEFAULT_RADIUS)
-        sqs = sqs.spatial(lat=lat, long=lng, radius=radius, unit='km').order_by('geo_distance')
+        sqs = sqs.spatial(lat=lat, long=lng, radius=radius, unit='km').order_by('-score', 'geo_distance')
     
     breadcrumbs = SortedDict()
     urlbits = urlbits or ''

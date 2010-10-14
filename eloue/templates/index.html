@@ -1,28 +1,28 @@
 {% extends "base.html" %}
 
+{% load i18n %}
+
 {% block content %}
-<div id="top-content">
-		<div id="search" class="container clearfix">
-			<h1>Recherchez toutes vos locations sur e-loue</h1>
-			<form id="search-form">
-				<div class="grid4 first">
-					<label for="id_q" class="big">Que voulez vous louer ?</label><br/>
-					<input id="id_q" type="text" name="q" class="big"/><br />
-					<span>Exemple :</span><a href="#">Voiture</a>, <a href="#">Chèvre</a>, <a href="#">Ski</a>, <a href="#">Robe</a>
-				</div>
-				<div class="grid4">
-					<label for="id_where" class="big">Où ?</label><br />
-					<input id="id_where" type="text" name="where" class="big"/><br />
-					<span>Exemple :</span><a href="#">Nantes</a>, <a href="#">69000</a>, <a href="#">11 rue crozatier, 75</a>
-				</div>
-				<div class="grid4">
-					<input type="submit" value="Recherchez" class="button big orange"/>
-				</div>
-			</form><!-- form -->
-		</div><!-- search -->
-</div><!-- top-content -->
-<div id="content">
-	
-</div><!-- content -->
-	
+ <div id="top-content">
+  <div id="search" class="container clearfix">
+   <h1>{% trans "Recherchez toutes vos locations sur e-loue" %}</h1>
+   <form id="search-form" action="{% url product_list %}">
+    <div class="grid4 first">
+     <label for="id_q" class="big">{% trans "Que voulez vous louer ?" %}</label><br/>
+	 <input id="id_q" type="text" name="q" class="big"/><br />
+	 <span>{% trans "Exemple :" %}</span><a href="#">{% trans "Voiture" %}</a>, <a href="#">{% trans "Chèvre" %}</a>, <a href="#">{% trans "Ski" %}</a>, <a href="#">{% trans "Robe" %}</a>
+    </div>
+	<div class="grid4">
+	 <label for="id_where" class="big">{% trans "Où ?" %}</label><br />
+	 <input id="id_where" type="text" name="where" class="big"/><br />
+	 <span>{% trans "Exemple :" %}</span><a href="#">{% trans "Nantes" %}</a>, <a href="#">{% trans "69000" %}</a>, <a href="#">{% trans "11 rue crozatier, 75" %}</a>
+	</div>
+    <div class="grid4">
+	 <input type="submit" value="{% trans "Rechercher" %}" class="button big orange"/>
+	</div>
+   </form>
+  </div>
+ </div>
+ <div id="content">	
+ </div>
 {% endblock %}

@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 from urlparse import urljoin
 
-from django.core.urlresolvers import get_script_prefix
 from django.utils.datastructures import SortedDict
 from django.template import Library, Node, Variable, TemplateSyntaxError
 
@@ -17,7 +16,7 @@ def facet_breadcrumb_link(breadcrumbs, facet):
         output.append(f['url'])
         if f == facet:
             break
-    return '%slocation/%s/' % (get_script_prefix(), '/'.join(output))
+    return '%s/%s/' % ('location', '/'.join(output))
 
 class FacetUrlNode(Node):
     def __init__(self, urlbits, additions, removals):
@@ -36,7 +35,7 @@ class FacetUrlNode(Node):
                 del urlbits[key.resolve(context)]
             except KeyError:
                 pass
-        path = urljoin(get_script_prefix(), ''.join([ '%s/%s/' % (key, value) for key, value in urlbits.iteritems() ]))
+        path = urljoin('location', ''.join([ '%s/%s/' % (key, value) for key, value in urlbits.iteritems() ]))
         if query:
             return "%s?q=%s" % (path, query)
         else:
@@ -86,7 +85,7 @@ class CanonicalNode(Node):
     def render(self, context):
         urlbits = self.urlbits.resolve(context).copy()
         urlbits = self.sort(urlbits)
-        path = urljoin(get_script_prefix(), ''.join([ '%s/%s/' % (key, value) for key, value in urlbits.iteritems() ]))
+        path = urljoin('/location/', ''.join([ '%s/%s/' % (key, value) for key, value in urlbits.iteritems() ]))
         return path
     
 
