@@ -14,6 +14,7 @@ class ProductIndex(RealTimeSearchIndex):
     categories = MultiValueField(faceted=True)
     owner = CharField(model_attr='owner__slug', faceted=True)
     text = CharField(document=True, use_template=True)
+    price = FloatField(faceted=True)
     lat = FloatField(model_attr='address__position__x', null=True)
     lng = FloatField(model_attr='address__position__y', null=True)
     
@@ -35,6 +36,9 @@ class ProductIndex(RealTimeSearchIndex):
         categories = _traverse(obj.category, categories)
         return [ category.slug for category in categories ]
     
+    def prepare_price(self, obj):
+        return obj.prices.day()[0].amount
+    
     def get_queryset(self):
         return Product.objects.active()
     
@@ -45,4 +49,4 @@ except AlreadyRegistered:
     pass
 
 
-product_search = SearchQuerySet().facet('categories').facet('owner')
+product_search = SearchQuerySet().facet('categories').facet('owner').facet('price')

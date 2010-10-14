@@ -1,5 +1,5 @@
 {% extends "base.html" %}
- {% load facets i18n param category %}
+ {% load cache facets i18n param category %}
 
 {% block head %}
  {{ block.super }}
@@ -10,7 +10,7 @@
  <div id="top-content">
   <div id="search" class="container clearfix">
    <h1>{% trans "Recherchez toutes vos locations sur e-loue" %}</h1>
-   <form id="search-form" action="{% url product_list %}">
+   <form id="search-form" action="{% facet_url urlbits %}">
     <div class="grid4 first">
      <label for="id_q" class="big">{% trans "Que voulez vous louer ?" %}</label><br/>
      {{ form.q }}
@@ -46,27 +46,38 @@
 	-->
 	<ul id="list-products" class="grid9 first">
 	 {% for product in product_list %}
-	  {% with product.object as object %}
-       <li class="list-product grid9 first">
-	    <a class="list-product-img" href="#">
-	     <img src="images/s3/mini_121.jpg" />
-	    </a>
-	    <div class="list-product-details">
-	     <h3><a href="{{ object.get_absolute_url }}">{{ product.summary }}</a></h3>
-         <a class="list-product-desc">{{ product.description|removetags:"br"|truncatewords_html:30|safe }}</a>
-         {% if product.geo_distance %}
-          <div class="list-product-distance">
-           {{ product.geo_distance|floatformat }} km{{ product.geo_distance|pluralize }}
+	  {% cache 900 product:row product.pk query %}
+	   {% with product.object as object %}
+        <li class="list-product grid9 first">
+	     <a class="list-product-img" href="#">
+	      <img src="images/s3/mini_121.jpg" />
+	     </a>
+	     <div class="list-product-details">
+	      <h3><a href="{{ object.get_absolute_url }}">{{ product.summary }}</a></h3>
+	      {% with product.highlighted.text|first|removetags:"br p"|truncatewords_html:30|safe as highlight %}
+	       {% if highlight %} 
+			<div class="list-product-desc">{{ highlight }}</div>
+		   {% else %}
+		    <div class="list-product-desc">{{ product.description|removetags:"br p"|truncatewords_html:30|safe }}</div>
+		   {% endif %}
+          {% endwith %}
+          {% if product.geo_distance %}
+           <div class="list-product-distance">
+            {{ product.geo_distance|floatformat }} km{{ product.geo_distance|pluralize }}
+           </div>
+          {% endif %}
+          <div class="list-product-owner">
+           <span>{% trans "Propriétaire : " %}</span>
+           <a href="{{ object.owner.get_absolute_url }}">{{ object.owner.username }}</a>
           </div>
-         {% endif %}
-         <div class="list-product-owner"><span>{% trans "Propriétaire : " %}</span><a href="{{ object.owner.get_absolute_url }}">{{ object.owner.username }}</a></div>
-        </div>
-        <div class="list-product-booking">
-         <a href="{{ object.get_absolute_url }}" class="list-product-booking-price">{{ object.prices.day|first }} €/J</a><br />
-         <a href="{{ object.get_absolute_url }}" class="button medium grey">Choisir</a><br />
-	    </div>
-	   </li>
-	  {% endwith %}
+         </div>
+         <div class="list-product-booking">
+          <a href="{{ object.get_absolute_url }}" class="list-product-booking-price">{{ product.price }} €/J</a><br />
+          <a href="{{ object.get_absolute_url }}" class="button medium grey">Choisir</a><br />
+	     </div>
+	    </li>
+	   {% endwith %}
+	  {% endcache %}
 	 {% endfor %}
 	</ul>
 	{% if is_paginated %}
@@ -87,7 +98,7 @@
    </section>
    <aside id="facets" class="grid3">
     <div id="accordion" class="grid3 first">
-     <h6><a href="{% facet_url urlbits  %}">Voir tous les résultats</a></h6>
+     <h6><a href="{% facet_url urlbits  %}">{% trans "Voir tous les résultats" %}</a></h6>
      {% for field in form %}
       {% if not field.data %}
        {% if field.name == 'categories' %}
@@ -130,32 +141,6 @@
        </form>
       </div>
      {% endif %}
-     <h6 class="open"><a href="#">Dates</a></h6>
-	 <div class="accordion-content grid3 first">
-	  <form>
-	   <p>
-	    <label for="id-start-date">Date de début :</label><br />
-	    <input id="id-start-date" type="text" />
-	   </p>
-	   <p>
-	    <label for="id-end-date">Date de fin :</label><br />
-        <input id="id-end-date" type="text" />
-	   </p>
-	   <input type="submit" value="Go" class="button small grey"/>	
-      </form>
-	 </div>
-	 <h6 class="open"><a href="#">Prix</a></h6>
-	 <div class="accordion-content grid3 first">
-	  <form>
-	   <p>
-		<span>Entre</span>
-		<input id="id-start-price" type="text" />
-		<span> et </span>
-		<input id="id-end-price" type="text" />
-		<input id="id-price-submit" type="submit"  value="Go" class="button small grey"/>
-	   </p>	
-      </form>
-     </div>
     </div>
    </aside>
   </div>

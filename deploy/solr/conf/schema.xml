@@ -96,6 +96,10 @@
     
     <field name="owner_exact" type="string" indexed="true" stored="true" multiValued="false" />
 
+    <field name="price" type="sfloat" indexed="true" stored="true" multiValued="false" />
+
+    <field name="price_exact" type="sfloat" indexed="true" stored="true" multiValued="false" />
+
     <field name="lat" type="tdouble" indexed="true" stored="true" multiValued="false" />
 
     <field name="lng" type="tdouble" indexed="true" stored="true" multiValued="false" />

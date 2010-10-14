@@ -11,6 +11,7 @@ class FacetedSearchForm(SearchForm):
     q = forms.CharField(required=False, max_length=100, widget=forms.TextInput(attrs={'class':'big'}))
     where = forms.CharField(required=False, max_length=100, widget=forms.TextInput(attrs={'class':'big'}))
     radius = forms.IntegerField(required=False)
+    price = FacetField(label=_(u"Prix"), pretty_name=_("par-prix"), required=False)
     categories = FacetField(label=_(u"Catégorie"), pretty_name=_("par-categorie"), required=False, widget=forms.HiddenInput)
     
     def search(self):
