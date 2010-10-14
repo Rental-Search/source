@@ -38,9 +38,8 @@ def product_list(request, urlbits, sqs = SearchQuerySet(), suggestions = None, p
         sqs = sqs.auto_query(query).highlight()
         suggestions = sqs.spelling_suggestion()
     
-    lat, lng = request.GET.get('lat', None), request.GET.get('lng', None)
+    lat, lng, radius = request.GET.get('lat', None), request.GET.get('lng', None), request.GET.get('radius', DEFAULT_RADIUS)
     if (lat and lng):
-        radius = request.GET.get('radius', DEFAULT_RADIUS)
         sqs = sqs.spatial(lat=lat, long=lng, radius=radius, unit='km').order_by('-score', 'geo_distance')
     
     breadcrumbs = SortedDict()
@@ -72,6 +71,7 @@ def product_list(request, urlbits, sqs = SearchQuerySet(), suggestions = None, p
             raise Http404
     form = FacetedSearchForm(dict((facet['name'], facet['value']) for facet in breadcrumbs.values()))
     return object_list(request, sqs, page=page, paginate_by=PAGINATE_PRODUCTS_BY, template_name="products/product_list.html", template_object_name='product', extra_context={ 
-        'facets':sqs.facet_counts(), 'form':form, 'suggestions':suggestions, 'query':query, 'breadcrumbs':breadcrumbs,
+        'facets':sqs.facet_counts(), 'form':form, 'breadcrumbs':breadcrumbs,
+        'lat':lat, 'lng':lng, 'radius':radius, 'suggestions':suggestions, 'query':query,
         'urlbits':dict((facet['label'], facet['value']) for facet in breadcrumbs.values())
     })

@@ -54,7 +54,7 @@
          <a class="list-product-desc">{{ product.description|safe }}</a>
          {% if product.geo_distance %}
           <div class="list-product-distance">
-           {{ product.geo_distance }}
+           {{ product.geo_distance|floatformat }} km{{ product.geo_distance|pluralize }}
           </div>
          {% endif %}
          <div class="list-product-owner"><span>{% trans "Propriétaire : " %}</span><a href="{{ object.owner.get_absolute_url }}">{{ object.owner.username }}</a></div>
