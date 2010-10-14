@@ -7,12 +7,12 @@ from django.db import models
 from django.db.models import permalink
 from django.db.models.signals import post_save
 from django.template.defaultfilters import slugify
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import ugettext as _
 from django.utils.encoding import smart_unicode
 
 from eloue.accounts.models import Patron, Address
 from eloue.products.fields import SimpleDateField
-from eloue.products.manager import ProductManager
+from eloue.products.manager import ProductManager, PriceManager, QuestionManager
 from eloue.products.signals import post_save_answer
 from eloue.products.utils import Enum
 
@@ -167,6 +167,8 @@ class Price(models.Model):
     started_at = SimpleDateField(null=True, blank=True)
     ended_at = SimpleDateField(null=True, blank=True)
     
+    objects = PriceManager()
+    
     class Meta:
         unique_together = ('product', 'unit', 'name')
     
@@ -251,6 +253,8 @@ class Question(models.Model):
     
     product = models.ForeignKey(Product, related_name="questions")
     author = models.ForeignKey(Patron, related_name="questions")
+    
+    objects = QuestionManager()
     
     class Meta:
         ordering = ('modified_at', 'created_at')

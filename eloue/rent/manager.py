@@ -1,25 +1,19 @@
 # -*- coding: utf-8 -*-
+import types
+
 from django.db.models import Manager
 
 class BookingManager(Manager):
-    def asked(self):
+    def __init__(self):
         from eloue.rent.models import BOOKING_STATE
-        return self.get_query_set().filter(booking_state=BOOKING_STATE.ASKED)
+        super(BookingManager, self).__init__()
+        for state in BOOKING_STATE.enum_dict:
+            setattr(self, state.lower(), types.MethodType(self._filter_factory(state), self))
     
-    def canceled(self):
+    @staticmethod
+    def _filter_factory(state):
         from eloue.rent.models import BOOKING_STATE
-        return self.get_query_set().filter(booking_state=BOOKING_STATE.CANCELED)
+        def filter(self):
+            return self.get_query_set().filter(booking_state=BOOKING_STATE[state])
+        return filter
     
-    def pending(self):
-        from eloue.rent.models import BOOKING_STATE
-        return self.get_query_set().filter(booking_state=BOOKING_STATE.PENDING)
-    
-    def ongoing(self):
-        from eloue.rent.models import BOOKING_STATE
-        return self.get_query_set().filter(booking_state=BOOKING_STATE.ONGOING)
-    
-    def ended(self):
-        from eloue.rent.models import BOOKING_STATE
-        return self.get_query_set().filter(booking_state=BOOKING_STATE.ENDED)
-    
-
