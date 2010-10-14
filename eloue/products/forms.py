@@ -7,6 +7,11 @@ from haystack.forms import SearchForm
 from eloue.products.fields import FacetField
 from eloue.products.models import PatronReview, ProductReview, Product
 
+
+class ProductSearchForm(forms.Form):
+    q = forms.CharField(max_length=100, widget=forms.TextInput(attrs={'class':'big'}))
+    where = forms.CharField(max_length=100, widget=forms.TextInput(attrs={'class':'big'}))
+
 class FacetedSearchForm(SearchForm):
     owner = FacetField(label=_(u"Loueur"), pretty_name=_("par-loueur"), required=False, widget=forms.HiddenInput)
     category = FacetField(label=_(u"Catégorie"), pretty_name=_("par-categorie"), required=False, widget=forms.HiddenInput)

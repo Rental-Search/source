@@ -12,7 +12,7 @@ from django.views.generic.list_detail import object_detail, object_list
 from haystack.query import SearchQuerySet
 
 from eloue.accounts.models import Patron
-from eloue.products.forms import FacetedSearchForm
+from eloue.products.forms import FacetedSearchForm, ProductSearchForm
 from eloue.products.models import Product, Category
 
 PAGINATE_PRODUCTS_BY = getattr(settings, 'PAGINATE_PRODUCTS_BY', 20)
@@ -20,7 +20,8 @@ DEFAULT_RADIUS = getattr(settings, 'DEFAULT_RADIUS', 50)
 
 @cache_page(300)
 def homepage(request):
-    return direct_to_template(request, template='index.html')
+    form = ProductSearchForm()
+    return direct_to_template(request, template='index.html', extra_context={ 'form':form })
 
 @cache_page(900)
 def product_detail(request, slug, product_id):
