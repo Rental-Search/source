@@ -1,0 +1,267 @@
+#search input.big{
+  width: 280px;
+}
+
+#search input.button{
+  float:left;
+  margin-top: 26px;
+  margin-left: 0px;
+  width: 306px;
+  height: 34px;
+}
+#search input[type="submit"]{
+  border: none;
+  height: 44px !important;
+}
+
+#search a{
+  color: blue;
+  text-decoration: underline;
+  padding-left: 5px;
+}
+
+#search-summary h1{
+  font-weight: normal;
+  font-size: 1.6em;
+}
+
+#accordion{
+
+}
+
+#accordion .open{
+  background: #F0F0F0 url(../images/filter_block_switch.gif) no-repeat;
+  background-position: 5px 7px;
+  margin-bottom: 0px;
+}
+
+#accordion h6{
+  background: #F0F0F0 url(../images/filter_block_switch.gif) no-repeat;
+  background-position: 3px -41px;
+  float: left;
+  display: inline;
+  width: 189px;
+  font-weight: normal;
+  padding: 5px 10px;
+  padding-left: 23px;
+  margin-bottom: 10px;
+  border: 1px solid #E6E6E6;
+}
+
+#accordion h6 a{
+  color: #A2BC00;
+}
+
+.accordion-content{
+  border-bottom: 1px solid #E6E6E6;
+  border-left: 1px solid #E6E6E6;
+  border-right: 1px solid #E6E6E6;
+  margin-bottom: 10px;
+}
+#accordion ul, #accordion form{
+  padding-left: 20px;
+  padding-top: 10px;
+  margin-bottom: 10px;
+}
+
+#accordion form p{
+  margin-bottom: 5px;
+}
+
+#accordion ul{
+  list-style: none;
+}
+
+#accordion li{
+  margin-bottom: 5px;
+}
+
+#accordion li a{
+  font-size: 0.9em;
+}
+
+#accordion em{
+  font-style: normal;
+  font-size:0.7em;
+  color: #555;
+}
+
+#id-distance{
+  width: 85px;
+  margin-right: 5px;
+}
+
+#id-distance-submit{
+  margin-left: 20px;
+}
+
+#id-start-date, #id-end-date{
+  width: 119px;
+}
+
+#id-start-price, #id-end-price{
+  width: 35px;
+  padding-left: 3px;
+}
+
+#id-price-submit{
+  margin-left: 7px;
+}
+
+#sort-option{
+  background-color: #F0F0F0;
+  float: left;
+  list-style: none;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  margin-bottom: 0px;
+  
+  /*border-left: 1px solid #E6E6E6;
+  border-right: 1px solid #E6E6E6;*/
+}
+
+#sort-option li{
+  float: left;
+  display: inline;
+  margin-left: 0px;
+  padding-left: 15px;
+  padding-right: 15px;
+  border-right: 1px solid #A8A8A8;
+}
+
+#sort-option li a{
+  text-decoration: underline;
+}
+
+#sort-option li.label-sort{
+  border-right: none;
+  padding: 0px;
+  padding-left: 15px;
+  color: gray;
+  font-weight: bold;
+}
+
+#sort-option li.last{
+  border-right: none;
+}
+
+#list-products{
+  border-top: 1px solid #E6E6E6;
+  /*border-bottom: 1px solid #E6E6E6;
+  border-left: 1px solid #E6E6E6;
+  border-right: 1px solid #E6E6E6; */
+}
+
+.list-product{
+  padding-top: 10px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #E6E6E6;
+}
+
+.list-product-img{
+  display: block;
+  float: left;
+  height: 90px;
+  width: 90px;
+  margin-right: 10px;
+  margin-left: 10px;
+}
+
+.list-product-details, .list-product h3, .list-product-owner{
+  width: 490px;
+}
+
+.list-product-details{
+  float: left;
+}
+
+.list-product h3{
+  float: left;
+  font-size: 1.2em;
+  margin-bottom: 0px;
+}
+
+.list-product-desc{
+  display: block;
+  float: left;
+  width: 330px;
+  margin-right: 10px;
+  line-height: 15px;
+  cursor: pointer
+}
+
+.list-product-distance{
+  float: left;
+  width:150px;
+  text-align: center;
+  padding-top: 10px;
+}
+
+.list-product-owner{
+  float: left;
+  width: 490px;
+  margin-top: 14px;
+  color: #B2B2B2;
+}
+
+.list-product-owner a{
+  color: #B2B2B2;
+}
+
+.list-product-booking{
+  float: left;
+  width: 116px;
+  margin-left: 10px;
+  text-align: center;
+  padding-top: 8px;
+}
+
+.list-product-booking a{
+  margin-top: 15px;
+}
+
+.list-product-booking a.button{
+  border: 1px solid #A8A8A8;
+}
+
+.list-product-booking a:hover{
+  text-decoration: none;
+}
+
+.list-product-booking-price, .list-product-booking-price:hover{
+  font-size: 1.5em;
+  color: #A2BC00;
+  font-weight: bold;
+}
+
+.list-product-booking-price:hover{
+  text-decoration: underline !important;
+}
+
+#pager ul{
+  text-align: center;
+}
+
+#pager li{
+  display: inline;
+}
+
+#pager a{
+  padding-left: 10px;
+  padding-right: 10px;
+  font-size: 1.2em;
+}
+
+#pager li.on{
+  font-size: 1.2em;
+  font-weight: bold;
+}
+
+.previous a, .next a{
+  color: #A2BC00;
+  text-decoration: underline;
+}
+
+
+
+
