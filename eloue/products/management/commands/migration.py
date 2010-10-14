@@ -209,7 +209,7 @@ class Command(BaseCommand):
             )
 
             product.prices.create(
-                unit=1, amount=row['prix'], currency='EUR'
+                unit=1, amount=str(row['prix']), currency='EUR'
             )
 
             if row['product_full_image']:
@@ -227,7 +227,7 @@ class Command(BaseCommand):
         db.execute("""SELECT setval('products_product_id_seq', (SELECT MAX(id) FROM products_product))""")
 
     def handle(self, *args, **options):
-        mysql_db = MySQLdb.connect(host='localhost', user='eloueweb', db="eloueweb")
+        mysql_db = MySQLdb.connect(unix_socket='/Applications/MAMP/tmp/mysql/mysql.sock', user='root', passwd='root', db="eloueweb")
         cursor = mysql_db.cursor(MySQLdb.cursors.DictCursor)
         if options.get('members'):
             self.import_members(cursor)

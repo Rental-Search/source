@@ -91,7 +91,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 )
 
 MIDDLEWARE_CLASSES = (
-    'django.middleware.cache.UpdateCacheMiddleware',
+#    'django.middleware.cache.UpdateCacheMiddleware',
     'django.middleware.gzip.GZipMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -101,7 +101,7 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.http.ConditionalGetMiddleware',
     'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
     'django.contrib.redirects.middleware.RedirectFallbackMiddleware',
-    'django.middleware.cache.FetchFromCacheMiddleware'
+#    'django.middleware.cache.FetchFromCacheMiddleware'
 )
 if DEBUG_TOOLBAR:
     MIDDLEWARE_CLASSES += ('debug_toolbar.middleware.DebugToolbarMiddleware',)
@@ -173,6 +173,14 @@ COMPRESS_CSS = {
     'master': {
         'source_filenames': (
             'css/master.css',
+            'css/978.css',
+            'css/button.css',
+            'css/form.css',
+            'css/text.css',
+            'css/style.css',
+            'css/home.css',
+            'css/top-search.css',
+            'css/products-list.css'
 		),
         'output_filename': 'css/master.r?.css',
         'extra_context': {
