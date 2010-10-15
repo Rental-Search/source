@@ -89,3 +89,11 @@
     model: products.price
     pk: 10
 
+-   fields:
+      name : ''
+      amount: "450"
+      currency: "EUR"
+      product: 4
+      unit: 1
+    model: products.price
+    pk: 11

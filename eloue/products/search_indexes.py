@@ -1,10 +1,13 @@
 #-*- coding: utf-8 -*-
+import datetime
+
 from haystack.sites import site
 from haystack.indexes import RealTimeSearchIndex, CharField, FloatField, MultiValueField
 from haystack.exceptions import AlreadyRegistered
 from haystack.query import SearchQuerySet
 
 from eloue.products.models import Product
+from eloue.rent.models import Booking
 
 __all__ = ['ProductIndex', 'product_search']
 
@@ -37,7 +40,9 @@ class ProductIndex(RealTimeSearchIndex):
         return [ category.slug for category in categories ]
     
     def prepare_price(self, obj):
-        return obj.prices.day()[0].amount
+        # It doesn't play well with season
+        now = datetime.datetime.now()
+        return Booking.calculate_price(obj, now, now + datetime.timedelta(days=1))
     
     def get_queryset(self):
         return Product.objects.active()
