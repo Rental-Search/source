@@ -6,22 +6,40 @@ from haystack.forms import SearchForm
 
 from eloue.products.fields import FacetField
 from eloue.products.models import PatronReview, ProductReview, Product
+from eloue.products.utils import Enum
+
+SORT = Enum([
+    ('geo_distance', 'NEAR', _(u"Les plus proches")),
+    ('created_at', 'RECENT', _(u"Les plus récentes")),
+    ('price', 'LOW_PRICE', _(u"Les pris les plus bas")),
+    ('-price', 'HIGH_PRICE', _(u"Les pris les plus haut")),
+])
 
 class FacetedSearchForm(SearchForm):
     q = forms.CharField(required=False, max_length=100, widget=forms.TextInput(attrs={'class':'big'}))
     where = forms.CharField(required=False, max_length=100, widget=forms.TextInput(attrs={'class':'big'}))
     radius = forms.IntegerField(required=False)
+    sort = forms.ChoiceField(required=False, choices=SORT, widget=forms.HiddenInput())
     price = FacetField(label=_(u"Prix"), pretty_name=_("par-prix"), required=False)
-    categories = FacetField(label=_(u"Catégorie"), pretty_name=_("par-categorie"), required=False, widget=forms.HiddenInput)
+    categories = FacetField(label=_(u"Catégorie"), pretty_name=_("par-categorie"), required=False, widget=forms.HiddenInput())
     
     def search(self):
-        sqs = super(FacetedSearchForm, self).search()
+        if self.is_valid():
+            sqs = self.searchqueryset.auto_query(self.cleaned_data['q'])
+            
+            if self.load_all:
+                sqs = sqs.load_all()
+            
+            for key in self.cleaned_data.keys():
+                if self.cleaned_data[key] and key not in ["q", "where", "radius", "sort"]:
+                    sqs = sqs.narrow("%s:%s" % (key, self.cleaned_data[key]))
         
-        for key in self.cleaned_data.keys():
-            if self.cleaned_data[key] and key not in ["q", "where", "radius"]:
-                sqs = sqs.narrow("%s:%s" % (key, self.cleaned_data[key]))
+            if self.cleaned_data['sort']:
+                sqs = sqs.order_by(self.cleaned_data['sort'])
         
-        return sqs
+            return sqs
+        else:
+            return self.searchqueryset
     
 
 class ProductReviewForm(forms.ModelForm):

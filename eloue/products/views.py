@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.conf import settings
+from django.core.cache import cache
 from django.http import Http404
 from django.shortcuts import get_object_or_404
 from django.utils.datastructures import SortedDict
@@ -9,6 +10,7 @@ from django.views.decorators.vary import vary_on_cookie
 from django.views.generic.simple import direct_to_template, redirect_to
 from django.views.generic.list_detail import object_detail, object_list
 
+from geocoders.google import geocoder
 from haystack.query import SearchQuerySet
 
 from eloue.accounts.models import Patron
@@ -38,13 +40,20 @@ def product_list(request, urlbits, sqs = SearchQuerySet(), suggestions = None, p
         sqs = sqs.auto_query(query).highlight()
         suggestions = sqs.spelling_suggestion()
     
-    lat, lng, radius = request.GET.get('lat', None), request.GET.get('lng', None), request.GET.get('radius', DEFAULT_RADIUS)
-    if (lat and lng):
-        sqs = sqs.spatial(lat=lat, long=lng, radius=radius, unit='km').order_by('-score', 'geo_distance')
-    
+    where, radius = request.GET.get('where', None), request.GET.get('radius', None)
+    if where:
+        coordinates = cache.get('where:%s' % where.lower())
+        if not coordinates:
+            geocode = geocoder(settings.GOOGLE_API_KEY)
+            name, coordinates = geocode(where)
+            cache.set('where:%s' % where.lower(), coordinates, 0)
+        sqs = sqs.spatial(lat=coordinates[0], long=coordinates[1], radius=radius if radius else DEFAULT_RADIUS, unit='km')
+        
     breadcrumbs = SortedDict()
-    breadcrumbs['q'] = { 'name':'q', 'value':query, 'label':'query' }
-    breadcrumbs['where'] = { 'name':'where', 'value':request.GET.get('where', None), 'label':'where' }
+    breadcrumbs['q'] = { 'name':'q', 'value':query, 'label':'q', 'facet':False }
+    breadcrumbs['where'] = { 'name':'where', 'value':where, 'label':'where', 'facet':False }
+    breadcrumbs['sort'] = { 'name':'sort', 'value':request.GET.get('sort', None), 'label':'sort', 'facet':False }
+    breadcrumbs['radius'] = { 'name':'radius', 'value':radius, 'label':'radius', 'facet':False }
     urlbits = urlbits or ''
     urlbits = filter(None, urlbits.split('/')[::-1])
     while urlbits:
@@ -57,11 +66,11 @@ def product_list(request, urlbits, sqs = SearchQuerySet(), suggestions = None, p
             if bit.endswith(_('categorie')):
                 item = get_object_or_404(Category, slug=value)
                 sqs = sqs.narrow("categories:%s" % value)
-                breadcrumbs[bit] = { 'name':'categories', 'value':value, 'label':bit, 'object':item, 'pretty_name':_(u"Catégorie"), 'pretty_value':item.name, 'url':'par-%s/%s' % (bit, value) }
+                breadcrumbs[bit] = { 'name':'categories', 'value':value, 'label':bit, 'object':item, 'pretty_name':_(u"Catégorie"), 'pretty_value':item.name, 'url':'par-%s/%s' % (bit, value), 'facet':True }
             elif bit.endswith(_('loueur')):
                 item = get_object_or_404(Patron, slug=value)
                 sqs = sqs.narrow("owner:%s" % value)
-                breadcrumbs[bit] = { 'name':'owner', 'value':value, 'label':bit, 'object':item, 'pretty_name':_(u"Loueur"), 'pretty_value':item.username, 'url':'par-%s/%s' % (bit, value) }
+                breadcrumbs[bit] = { 'name':'owner', 'value':value, 'label':bit, 'object':item, 'pretty_name':_(u"Loueur"), 'pretty_value':item.username, 'url':'par-%s/%s' % (bit, value), 'facet':True }
             else:
                 raise Http404
         elif bit.startswith(_('page')):
@@ -71,9 +80,10 @@ def product_list(request, urlbits, sqs = SearchQuerySet(), suggestions = None, p
                 raise Http404
         else:
             raise Http404
-    form = FacetedSearchForm(dict((facet['name'], facet['value']) for facet in breadcrumbs.values()))
+    form = FacetedSearchForm(dict((facet['name'], facet['value']) for facet in breadcrumbs.values()), searchqueryset=sqs)
+    sqs = form.search()
     return object_list(request, sqs, page=page, paginate_by=PAGINATE_PRODUCTS_BY, template_name="products/product_list.html", template_object_name='product', extra_context={ 
         'facets':sqs.facet_counts(), 'form':form, 'breadcrumbs':breadcrumbs,
-        'lat':lat, 'lng':lng, 'radius':radius, 'suggestions':suggestions, 'query':query,
-        'urlbits':dict((facet['label'], facet['value']) for facet in breadcrumbs.values())
+        'where':where, 'radius':radius, 'suggestions':suggestions, 'query':query,
+        'urlbits':dict((facet['label'], facet['value']) for facet in breadcrumbs.values() if facet['facet'])
     })

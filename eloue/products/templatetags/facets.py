@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from urlparse import urljoin
 
+from django.http import QueryDict
 from django.utils.datastructures import SortedDict
 from django.template import Library, Node, Variable, TemplateSyntaxError
 
@@ -20,26 +21,33 @@ def facet_breadcrumb_link(breadcrumbs, facet):
 
 class FacetUrlNode(Node):
     def __init__(self, urlbits, additions, removals):
-        self.query = Variable('query')
+        self.breadcrumbs = Variable('breadcrumbs')
         self.urlbits = Variable(urlbits)
         self.additions = [(Variable(k), Variable(v)) for k, v in additions]
         self.removals = [Variable(a) for a in removals]
     
     def render(self, context):
+        breadcrumbs = self.breadcrumbs.resolve(context).copy()
         urlbits = self.urlbits.resolve(context).copy()
-        query = self.query.resolve(context)
-        del urlbits['query']
-        del urlbits['where']
+        
+        params = QueryDict("", mutable=True)
+        for key, crumb in breadcrumbs.iteritems():
+            if not crumb['facet']:
+                if crumb['value']:
+                    params[key] = crumb['value']
+                
         for key, value in self.additions:
             urlbits[key.resolve(context)] = value.resolve(context)
+        
         for key in self.removals:
             try:
                 del urlbits[key.resolve(context)]
             except KeyError:
                 pass
+        
         path = urljoin('/location/', ''.join([ '%s/%s/' % (key, value) for key, value in urlbits.iteritems() ]))
-        if query:
-            return "%s?q=%s" % (path, query)
+        if params:
+            return '%s?%s' % (path, params.urlencode())
         else:
             return path
     
@@ -86,8 +94,6 @@ class CanonicalNode(Node):
     
     def render(self, context):
         urlbits = self.urlbits.resolve(context).copy()
-        del urlbits['query']
-        del urlbits['where']
         urlbits = self.sort(urlbits)
         path = urljoin('/location/', ''.join([ '%s/%s/' % (key, value) for key, value in urlbits.iteritems() ]))
         return path
