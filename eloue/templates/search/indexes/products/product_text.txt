@@ -1,3 +1,2 @@
 {{ object.summary }}
 {{ object.description }}
-{{ object.category.name }}

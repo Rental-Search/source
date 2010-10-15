@@ -53,6 +53,7 @@ class Product(models.Model):
     is_allowed = models.BooleanField(_(u'autorisé'), default=True, db_index=True)
     category = models.ForeignKey('Category', related_name='products')
     owner = models.ForeignKey(Patron, related_name='products')
+    created_at = models.DateTimeField(blank=True, editable=False)
     
     objects = ProductManager()
     
@@ -61,6 +62,11 @@ class Product(models.Model):
     
     def __unicode__(self):
         return smart_unicode(self.summary)
+    
+    def save(self, *args, **kwargs):
+        if not self.created_at:
+            self.created_at = datetime.now()
+        super(Product, self).save(*args, **kwargs)
     
     @permalink
     def get_absolute_url(self):
@@ -268,12 +274,12 @@ class Question(models.Model):
         """
         return smart_unicode(self.text)
     
-    def save(self):
+    def save(self, *args, **kwargs):
         if not self.created_at:
             self.created_at = datetime.now()
         else:
             self.modified_at = datetime.now()
-        super(Question, self).save()
+        super(Question, self).save(*args, **kwargs)
     
 
 class Answer(models.Model):
@@ -289,10 +295,10 @@ class Answer(models.Model):
         """
         return smart_unicode(self.text)
     
-    def save(self):
+    def save(self, *args, **kwargs):
         if not self.created_at:
             self.created_at = datetime.now()
-        super(Answer, self).save()
+        super(Answer, self).save(*args, **kwargs)
     
 
 post_save.connect(post_save_answer, sender=Answer)

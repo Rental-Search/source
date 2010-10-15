@@ -86,6 +86,8 @@
     
     <field name="categories_exact" type="string" indexed="true" stored="true" multiValued="true" />
 
+    <field name="created_at" type="date" indexed="true" stored="true" multiValued="false" />
+
     <field name="summary" type="text" indexed="true" stored="true" multiValued="false" />
     
     <field name="description" type="text" indexed="true" stored="true" multiValued="false" />

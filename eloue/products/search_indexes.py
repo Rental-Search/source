@@ -2,7 +2,7 @@
 import datetime
 
 from haystack.sites import site
-from haystack.indexes import RealTimeSearchIndex, CharField, FloatField, MultiValueField
+from haystack.indexes import RealTimeSearchIndex, CharField, DateTimeField, FloatField, MultiValueField
 from haystack.exceptions import AlreadyRegistered
 from haystack.query import SearchQuerySet
 
@@ -12,14 +12,15 @@ from eloue.rent.models import Booking
 __all__ = ['ProductIndex', 'product_search']
 
 class ProductIndex(RealTimeSearchIndex):
-    summary = CharField(model_attr='summary')
-    description = CharField(model_attr='description')
     categories = MultiValueField(faceted=True)
-    owner = CharField(model_attr='owner__slug', faceted=True)
-    text = CharField(document=True, use_template=True)
-    price = FloatField(faceted=True)
+    created_at = DateTimeField(model_attr='created_at')
+    description = CharField(model_attr='description')
     lat = FloatField(model_attr='address__position__x', null=True)
     lng = FloatField(model_attr='address__position__y', null=True)
+    owner = CharField(model_attr='owner__slug', faceted=True)
+    price = FloatField(faceted=True)
+    summary = CharField(model_attr='summary')
+    text = CharField(document=True, use_template=True)
     
     def prepare_categories(self, obj):
         """
