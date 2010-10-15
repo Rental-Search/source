@@ -9,7 +9,7 @@ from django.test import TestCase
 from eloue.products.models import Product, ProductReview, PatronReview, Price
 
 class ProductTest(TestCase):
-    fixtures = ['patron', 'address', 'category', 'product']
+    fixtures = ['patron', 'address', 'category', 'price', 'product']
     
     def test_product_creation(self):
         product = Product(
@@ -45,7 +45,7 @@ class ProductTest(TestCase):
     
 
 class ProductReviewTest(TestCase):
-    fixtures = ['patron', 'address', 'category', 'product', 'booking']
+    fixtures = ['patron', 'address', 'category', 'price', 'product', 'booking']
     
     def test_score_values_negative(self):
         review = ProductReview(score=-1.0, product_id=1, description='Incorrect', reviewer_id=2)
@@ -72,7 +72,7 @@ class ProductReviewTest(TestCase):
     
 
 class PatronReviewTest(TestCase):
-    fixtures = ['patron', 'address', 'category', 'product', 'booking']
+    fixtures = ['patron', 'address', 'category', 'price', 'product', 'booking']
     
     def test_score_values_negative(self):
         review = PatronReview(score=-1.0, patron_id=1, description='Incorrect', reviewer_id=2)
@@ -99,7 +99,7 @@ class PatronReviewTest(TestCase):
     
 
 class PriceTest(TestCase):
-    fixtures = ['patron', 'address', 'category', 'product']
+    fixtures = ['patron', 'address', 'category', 'price', 'product']
     
     def test_amount_values_negative(self):
         price = Price(amount=-1, product_id=1, unit=1, currency='EUR')
@@ -114,7 +114,7 @@ class PriceTest(TestCase):
     
 
 class StandardPriceTest(TestCase):
-    fixtures = ['patron', 'address', 'category', 'product']
+    fixtures = ['patron', 'address', 'category', 'price', 'product']
     
     def setUp(self):
         from django.db import connection
@@ -136,7 +136,7 @@ class StandardPriceTest(TestCase):
     
 
 class SeasonalPriceTest(TestCase):
-    fixtures = ['patron', 'address', 'category', 'product', 'booking']
+    fixtures = ['patron', 'address', 'category', 'price', 'product', 'booking']
     
     def setUp(self):
         from django.db import connection
