@@ -53,7 +53,7 @@
 	      <img src="images/s3/mini_121.jpg" />
 	     </a>
 	     <div class="list-product-details">
-	      <h3><a href="{{ object.get_absolute_url }}">{{ product.summary }}</a></h3>
+	      <h3><a href="{{ object.get_absolute_url }}">{{ product.summary|capfirst }}</a></h3>
 	      {% with product.highlighted.text|first|truncatewords:30|safe as highlight %}
 	       {% if highlight %} 
 			<div class="list-product-desc">{{ highlight }}</div>
