@@ -56,11 +56,11 @@ PUBLISH_MAP = { # WARN : We invert value because we mark them as archived rather
 
 log = logbook.Logger('eloue.migration')
 
-def cleanup_html_entities(text, method='html'):
+def cleanup_html_entities(text):
     """Remove html entitites from text"""
     if text:
         doc = html.fromstring(text)
-        return html.tostring(doc, encoding='utf-8', method=method)
+        return html.tostring(doc, encoding='utf-8', method='text')
     else:
         return text
 
@@ -172,7 +172,7 @@ class Command(BaseCommand):
             else:
                 description = smart_unicode(row['product_desc'], encoding='latin1')
 
-            summary = cleanup_html_entities(summary, method='text')
+            summary = cleanup_html_entities(summary)
             description = cleanup_html_entities(description)
 
             vendor_id = int(row['vendor_id'])

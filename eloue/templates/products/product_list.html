@@ -54,11 +54,11 @@
 	     </a>
 	     <div class="list-product-details">
 	      <h3><a href="{{ object.get_absolute_url }}">{{ product.summary }}</a></h3>
-	      {% with product.highlighted.text|first|removetags:"br p"|truncatewords_html:30|safe as highlight %}
+	      {% with product.highlighted.text|first|truncatewords:30|safe as highlight %}
 	       {% if highlight %} 
 			<div class="list-product-desc">{{ highlight }}</div>
 		   {% else %}
-		    <div class="list-product-desc">{{ product.description|removetags:"br p"|truncatewords_html:30|safe }}</div>
+		    <div class="list-product-desc">{{ product.description|truncatewords:30 }}</div>
 		   {% endif %}
           {% endwith %}
           {% if product.geo_distance %}
