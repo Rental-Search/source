@@ -23,7 +23,7 @@
         deposit_amount: "10"
         booking_state: 1
         payment_state: 0
-        contract_id: 1
+        contract_id: 2
         owner: 2
         borrower: 1
         product: 1
@@ -40,7 +40,7 @@
         deposit_amount: "10"
         booking_state: 2
         payment_state: 0
-        contract_id: 1
+        contract_id: 3
         owner: 2
         borrower: 1
         product: 1
@@ -57,7 +57,7 @@
         deposit_amount: "10"
         booking_state: 4
         payment_state: 0
-        contract_id: 1
+        contract_id: 4
         owner: 2
         borrower: 1
         product: 1
@@ -74,7 +74,7 @@
         deposit_amount: "10"
         booking_state: 1
         payment_state: 2
-        contract_id: 1
+        contract_id: 5
         owner: 2
         borrower: 1
         product: 1
@@ -92,7 +92,7 @@
         deposit_amount: "10"
         booking_state: 1
         payment_state: 9
-        contract_id: 1
+        contract_id: 6
         owner: 2
         borrower: 1
         product: 1
