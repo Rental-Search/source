@@ -43,9 +43,6 @@ class ProductIndex(QueuedSearchIndex):
         return [ category.slug for category in categories ]
     
     def prepare_price(self, obj):
-        if not obj.prices.all():
-            # FIXME : We need to a QueueSearchIndex 
-            return None
         # It doesn't play well with season
         now = datetime.datetime.now()
         return Booking.calculate_price(obj, now, now + datetime.timedelta(days=1))
