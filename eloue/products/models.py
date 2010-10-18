@@ -168,7 +168,7 @@ class Price(models.Model):
     amount = models.DecimalField(max_digits=8, decimal_places=2)
     currency = models.CharField(max_length=3, choices=CURRENCY)
     product = models.ForeignKey(Product, related_name='prices')
-    unit = models.IntegerField(choices=UNIT, db_index=True)
+    unit = models.PositiveSmallIntegerField(choices=UNIT, db_index=True)
     
     started_at = SimpleDateField(null=True, blank=True)
     ended_at = SimpleDateField(null=True, blank=True)
@@ -255,7 +255,7 @@ class Question(models.Model):
     text = models.CharField(max_length=255)
     created_at = models.DateTimeField(editable=False)
     modified_at = models.DateTimeField(editable=False)
-    status = models.IntegerField(choices=STATUS, db_index=True, default=STATUS.DRAFT)
+    status = models.PositiveSmallIntegerField(choices=STATUS, db_index=True, default=STATUS.DRAFT)
     
     product = models.ForeignKey(Product, related_name="questions")
     author = models.ForeignKey(Patron, related_name="questions")

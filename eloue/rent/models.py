@@ -82,8 +82,8 @@ class Booking(models.Model):
     started_at = models.DateTimeField()
     ended_at = models.DateTimeField()
     
-    booking_state = models.IntegerField(default=BOOKING_STATE.ASKED, choices=BOOKING_STATE)
-    payment_state = models.IntegerField(default=PAYMENT_STATE.AUTHORIZED_PENDING, choices=PAYMENT_STATE)
+    booking_state = models.PositiveSmallIntegerField(default=BOOKING_STATE.ASKED, choices=BOOKING_STATE)
+    payment_state = models.PositiveSmallIntegerField(default=PAYMENT_STATE.AUTHORIZED_PENDING, choices=PAYMENT_STATE)
     
     deposit_amount = models.DecimalField(max_digits=8, decimal_places=2)
     insurance_amount = models.DecimalField(max_digits=8, decimal_places=2)

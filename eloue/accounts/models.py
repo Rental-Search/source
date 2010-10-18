@@ -91,7 +91,7 @@ log = logbook.Logger('eloue.accounts')
 
 class Patron(User):
     """A member"""
-    civility = models.IntegerField(null=True, blank=True, choices=CIVILITY_CHOICES)
+    civility = models.PositiveSmallIntegerField(null=True, blank=True, choices=CIVILITY_CHOICES)
     company_name = models.CharField(null=True, blank=True, max_length=255)
     activation_key = models.CharField(null=True, blank=True, max_length=40)
     is_subscribed = models.BooleanField(_(u'newsletter'), default=False, help_text=_(u"Précise si l'utilisateur est abonné à la newsletter"))
@@ -252,7 +252,7 @@ class PhoneNumber(models.Model):
     """A phone number"""
     patron = models.ForeignKey(Patron, related_name='phones')
     number = models.CharField(max_length=255)
-    kind = models.IntegerField(choices=PHONE_TYPES)
+    kind = models.PositiveSmallIntegerField(choices=PHONE_TYPES)
     
     def __unicode__(self):
         return smart_unicode(self.number)
