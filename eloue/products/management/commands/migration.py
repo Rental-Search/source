@@ -165,7 +165,6 @@ class Command(BaseCommand):
         cursor.execute("""SELECT product_id, product_name, product_s_desc, product_desc, count(product_desc) AS quantity, product_full_image, product_publish, prix, caution, vendor_id, product_lat, product_lng, localisation FROM abs_vm_product GROUP BY product_desc, product_name ORDER BY quantity DESC""")
         result_set = cursor.fetchall()
         for i, row in enumerate(result_set):
-            # TODO : Handle created_at field if possible
             log.debug("Import product #%d" % row['product_id'])
             summary = smart_unicode(row['product_name'], encoding='latin1')
             if not row['product_desc'] and row['product_s_desc']:
