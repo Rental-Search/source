@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 from urlparse import urljoin
+from urllib import urlencode
 
-from django.http import QueryDict
-from django.utils.datastructures import SortedDict
+from django.conf import settings
+from django.utils.datastructures import SortedDict, MultiValueDict
+from django.utils.encoding import smart_str
 from django.template import Library, Node, Variable, TemplateSyntaxError
 
 register = Library()
@@ -20,34 +22,41 @@ def facet_breadcrumb_link(breadcrumbs, facet):
     return '%s/%s/' % ('location', '/'.join(output))
 
 class FacetUrlNode(Node):
-    def __init__(self, urlbits, additions, removals):
-        self.breadcrumbs = Variable('breadcrumbs')
-        self.urlbits = Variable(urlbits)
+    def __init__(self, breadcrumbs, additions, removals):
+        self.breadcrumbs = Variable(breadcrumbs)
         self.additions = [(Variable(k), Variable(v)) for k, v in additions]
         self.removals = [Variable(a) for a in removals]
     
+    @staticmethod
+    def urlencode(params, encoding=settings.DEFAULT_CHARSET):
+        output = []
+        for k, list_ in params.lists():
+            k = smart_str(k, encoding)
+            output.extend([urlencode({k: smart_str(v, encoding)}) for v in list_ if v])
+        return '&'.join(output)
+    
     def render(self, context):
         breadcrumbs = self.breadcrumbs.resolve(context).copy()
-        urlbits = self.urlbits.resolve(context).copy()
+        urlbits = dict((facet['label'], facet['value']) for facet in breadcrumbs.values() if facet['facet'])
+        params = MultiValueDict((facet['label'], [facet['value']]) for facet in breadcrumbs.values() if not facet['facet'])
+        additions = dict([ (key.resolve(context), value.resolve(context)) for key, value in self.additions])
+        removals = [ key.resolve(context) for key in self.removals ]
         
-        params = QueryDict("", mutable=True)
-        for key, crumb in breadcrumbs.iteritems():
-            if not crumb['facet']:
-                if crumb['value']:
-                    params[key] = crumb['value']
+        for key, value in additions.iteritems():
+            if key in params:
+                params[key] = value
+            else:
+                urlbits[key] = value
                 
-        for key, value in self.additions:
-            urlbits[key.resolve(context)] = value.resolve(context)
-        
-        for key in self.removals:
-            try:
-                del urlbits[key.resolve(context)]
-            except KeyError:
-                pass
+        for key in removals:
+            if key in params:
+                del params[key]
+            if key in urlbits:
+                del urlbits[key]
         
         path = urljoin('/location/', ''.join([ '%s/%s/' % (key, value) for key, value in urlbits.iteritems() ]))
         if params:
-            return '%s?%s' % (path, params.urlencode())
+            return '%s?%s' % (path, self.urlencode(params))
         else:
             return path
     
@@ -55,18 +64,18 @@ class FacetUrlNode(Node):
 @register.tag('facet_url')
 def do_facet_url(parser, token):
     """
-    {% facet_url urlbits %}
-    {% facet_url urlbits key value %}
-    {% facet_url urlbits key "value again" %}
-    {% facet_url urlbits "key" "value again" %}
-    {% facet_url urlbits -key_to_remove %}
-    {% facet_url urlbits -"key_to_remove" %}
+    {% facet_url breadcrumbs %}
+    {% facet_url breadcrumbs key value %}
+    {% facet_url breadcrumbs key "value again" %}
+    {% facet_url breadcrumbs "key" "value again" %}
+    {% facet_url breadcrumbs -key_to_remove %}
+    {% facet_url breadcrumbs -"key_to_remove" %}
     
     Returns an url based on args like this one : '/filter1/foo/filter2/bar/'.
     """
     bits = token.split_contents()
     additions, removals = [], []
-    urlbits = bits[1]
+    breadcrumbs = bits[1]
     stack = bits[:1:-1]
     while stack:
         bit = stack.pop()
@@ -78,7 +87,7 @@ def do_facet_url(parser, token):
             except IndexError:
                 raise TemplateSyntaxError('Invalid argument length: %r' % token)
             additions.append((bit, next_bit))
-    return FacetUrlNode(urlbits, additions, removals)
+    return FacetUrlNode(breadcrumbs, additions, removals)
 
 class CanonicalNode(Node):
     def __init__(self, urlbits):

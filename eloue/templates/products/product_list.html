@@ -10,7 +10,7 @@
  <div id="top-content">
   <div id="search" class="container clearfix">
    <h1>{% trans "Recherchez toutes vos locations sur e-loue" %}</h1>
-   <form id="search-form" action="{% facet_url urlbits %}">
+   <form id="search-form" action="{% facet_url breadcrumbs %}">
     <div class="grid4 first">
      <label for="id_q" class="big">{% trans "Que voulez vous louer ?" %}</label><br/>
      {{ form.q }}
@@ -35,15 +35,13 @@
   	  <h1>{{ paginator.count }} résultat{{ paginator.count|pluralize }} pour <strong>{{ query }}</strong></h1>
 	 </div>
     {% endif %}
-	<!--
-	  <ul id="sort-option" class="grid9 first">
-	   <li class="label-sort">Trier par :</li>
-	   <li><a href="#">Les plus récents</a></li>
-       <li><a href="#">Les plus proche</a></li>
-       <li><a href="#">Les prix les plus bas</a></li>
-       <li class="last"><a href="#">Les prix les plus haut</a></li>
-	  </ul>
-	-->
+	<ul id="sort-option" class="grid9 first">
+	 <li class="label-sort">{% trans "Trier par :" %}</li>
+	 <li><a href="{% facet_url breadcrumbs "sort" "created_at" %}">{% trans "Les plus récents" %}</a></li>
+     <li><a href="{% facet_url breadcrumbs "sort" "geo_distance" %}">{% trans "Les plus proches" %}</a></li>
+     <li><a href="{% facet_url breadcrumbs "sort" "price" %}">{% trans "Les prix les plus bas" %}</a></li>
+     <li class="last"><a href="{% facet_url breadcrumbs "sort" "-price" %}">{% trans "Les prix les plus haut" %}</a></li>
+	</ul>
 	<ul id="list-products" class="grid9 first">
 	 {% for product in product_list %}
 	  {% cache 900 product:row product.pk query %}
@@ -73,7 +71,7 @@
          </div>
          <div class="list-product-booking">
           <a href="{{ object.get_absolute_url }}" class="list-product-booking-price">{{ product.price }} €/J</a><br />
-          <a href="{{ object.get_absolute_url }}" class="button medium grey">Choisir</a><br />
+          <a href="{{ object.get_absolute_url }}" class="button medium grey">{% trans "Choisir" %}</a><br />
 	     </div>
 	    </li>
 	   {% endwith %}
@@ -84,13 +82,13 @@
 	 <div id="pager" class="grid9 first">
       <ul class="grid9 first">
 	   {% if page_obj.has_previous %}
-	    <li class="previous"><a href="{% facet_url urlbits "page" page_obj.previous_page_number %}">{% trans "Précédent" %}</a></li>
+	    <li class="previous"><a href="{% facet_url breadcrumbs "page" page_obj.previous_page_number %}">{% trans "Précédent" %}</a></li>
 	   {% endif %}
 	   {% for page in paginator.page_range %}
-	    <li class="page-{{ page }} {% if page_obj.number == page %}on{% endif %}"><a href="{% facet_url urlbits "page" page %}">{{ page }}</a></li>    
+	    <li class="page-{{ page }} {% if page_obj.number == page %}on{% endif %}"><a href="{% facet_url breadcrumbs "page" page %}">{{ page }}</a></li>    
 	   {% endfor %}
 	   {% if page_obj.has_next %}
-	    <li class="next"><a href="{% facet_url urlbits "page" page_obj.next_page_number %}">{% trans "Suivant" %}</a></li>
+	    <li class="next"><a href="{% facet_url breadcrumbs "page" page_obj.next_page_number %}">{% trans "Suivant" %}</a></li>
 	   {% endif %}
 	  </ul>
 	 </div>
@@ -98,14 +96,14 @@
    </section>
    <aside id="facets" class="grid3">
     <div id="accordion" class="grid3 first">
-     <h6><a href="{% facet_url urlbits  %}">{% trans "Voir tous les résultats" %}</a></h6>
+     <h6><a href="{% facet_url breadcrumbs  %}">{% trans "Voir tous les résultats" %}</a></h6>
      {% for field in form %}
       {% if not field.data %}
        {% if field.name == 'categories' %}
         {% for value, count in facets.fields|hash:field.name  %}
          {% with value|category as category %}
           <h6>
-           <a href="{% facet_url urlbits field.field.pretty_name value %}">{{ category.name }}</a><em> ({{ count }})</em`>
+           <a href="{% facet_url breadcrumbs field.field.pretty_name value %}">{{ category.name }}</a><em> ({{ count }})</em`>
           </h6>
          {% endwith %}
         {% endfor %}
@@ -113,13 +111,13 @@
       {% else %}
        {% if field.name == 'categories' %}
         {% with field.data|category as category %}
-         <h6 class="open"><a href="{% facet_url urlbits -field.field.pretty_name %}">{{ category.name }}</a></h6>
+         <h6 class="open"><a href="{% facet_url breadcrumbs -field.field.pretty_name %}">{{ category.name }}</a></h6>
           <div class="accordion-content grid3 first">
 	       <ul>
 	        {% for value, count in facets.fields|hash:field.name  %}
              {% with value|category as child %}
               {% if child != category %}
-               <li><a href="{% facet_url urlbits field.field.pretty_name value %}">{{ child.name }}</a> <em>({{ count }})</em></li>
+               <li><a href="{% facet_url breadcrumbs field.field.pretty_name value %}">{{ child.name }}</a> <em>({{ count }})</em></li>
               {% endif %}
              {% endwith %}
             {% endfor %}
@@ -132,8 +130,11 @@
      {% if where %}
 	  <h6 class="open"><a href="#">Distances</a></h6>
 	  <div class="accordion-content grid3 first">
-	   <form action="{% facet_url urlbits %}" action="get">
+	   <form action="{% facet_url breadcrumbs %}" action="get">
 	    <p>
+	     <input type="hidden" value="{{ query }}" name="q"/>
+	     <input type="hidden" value="{{ where }}" name="where"/>
+	     {{ form.sort }}
 	     <label for="id-distance">{% trans "Dans rayon de :" %}</label><br />
 	     {{ form.radius }}<span>Km</span>
          <input id="id-distance-submit" type="submit"  value="Go" class="button small grey"/>
