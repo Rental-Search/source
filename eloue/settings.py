@@ -132,6 +132,7 @@ INSTALLED_APPS = (
     'compress',
     'announcements',
     'haystack',
+    'queued_search',
     'django_nose',
     'accounts',
     'rent',
@@ -204,6 +205,13 @@ HAYSTACK_SEARCH_ENGINE = getattr(local, 'HAYSTACK_SEARCH_ENGINE', 'solr')
 HAYSTACK_SOLR_URL = getattr(local, 'HAYSTACK_SOLR_URL', 'http://localhost:8983/solr')
 HAYSTACK_INCLUDE_SPELLING = True
 HAYSTACK_ENABLE_REGISTRATIONS = True
+
+# Queue configuration
+if DEBUG:
+    QUEUE_BACKEND = 'dummy'
+else:
+    QUEUE_BACKEND = 'sqs'
+    
 
 # Logging configuration
 try:

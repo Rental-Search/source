@@ -2,16 +2,18 @@
 import datetime
 
 from haystack.sites import site
-from haystack.indexes import RealTimeSearchIndex, CharField, DateTimeField, FloatField, MultiValueField
+from haystack.indexes import CharField, DateTimeField, FloatField, MultiValueField
 from haystack.exceptions import AlreadyRegistered
 from haystack.query import SearchQuerySet
+
+from queued_search.indexes import QueuedSearchIndex
 
 from eloue.products.models import Product
 from eloue.rent.models import Booking
 
 __all__ = ['ProductIndex', 'product_search']
 
-class ProductIndex(RealTimeSearchIndex):
+class ProductIndex(QueuedSearchIndex):
     categories = MultiValueField(faceted=True)
     created_at = DateTimeField(model_attr='created_at')
     description = CharField(model_attr='description')
