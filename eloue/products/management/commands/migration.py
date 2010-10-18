@@ -152,7 +152,6 @@ class Command(BaseCommand):
 
                 if user_info['phone_2']:
                     patron.phones.create(number=smart_unicode(cleanup_phone_number(user_info['phone_2']), encoding='latin1'), kind=4)
-
                 
                 if user_info['fax']:
                     patron.phones.create(number=smart_unicode(cleanup_phone_number(user_info['fax']), encoding='latin1'), kind=3)
