@@ -94,7 +94,7 @@ class Booking(models.Model):
     borrower = models.ForeignKey(Patron, related_name='rentals')
     product = models.ForeignKey(Product, related_name='bookings')
     
-    contract_id = IntegerAutoField(db_index=True)
+    contract_id = IntegerAutoField(unique=True, db_index=True)
     pin = models.CharField(blank=True, max_length=4)
     ip = models.IPAddressField(blank=True, null=True)
     

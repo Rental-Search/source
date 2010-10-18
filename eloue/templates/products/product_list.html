@@ -96,10 +96,11 @@
    </section>
    <aside id="facets" class="grid3">
     <div id="accordion" class="grid3 first">
-     <h6><a href="{% facet_url breadcrumbs  %}">{% trans "Voir tous les résultats" %}</a></h6>
+     <h6><a href="{% url product_list %}">{% trans "Voir tous les résultats" %}</a></h6>
      {% for field in form %}
       {% if not field.data %}
        {% if field.name == 'categories' %}
+        {{ facets.fields|hash:field.name|build_tree }}
         {% for value, count in facets.fields|hash:field.name  %}
          {% with value|category as category %}
           <h6>
@@ -110,6 +111,7 @@
        {% endif %}
       {% else %}
        {% if field.name == 'categories' %}
+        {{ facets.fields|hash:field.name|build_tree }}
         {% with field.data|category as category %}
          <h6 class="open"><a href="{% facet_url breadcrumbs -field.field.pretty_name %}">{{ category.name }}</a></h6>
           <div class="accordion-content grid3 first">
