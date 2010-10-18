@@ -10,6 +10,8 @@ from django.template.defaultfilters import slugify
 from django.utils.translation import ugettext as _
 from django.utils.encoding import smart_unicode
 
+from mptt.models import MPTTModel
+
 from eloue.accounts.models import Patron, Address
 from eloue.products.fields import SimpleDateField
 from eloue.products.manager import ProductManager, PriceManager, QuestionManager
@@ -98,7 +100,7 @@ class Picture(models.Model):
     image = models.ImageField(null=True, blank=True, upload_to='pictures/')
     # TODO : We still need to store thumbnails
 
-class Category(models.Model):
+class Category(MPTTModel):
     """A category"""
     parent = models.ForeignKey('self', related_name='childrens', blank=True, null=True)
     name = models.CharField(max_length=255)

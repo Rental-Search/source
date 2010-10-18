@@ -128,6 +128,7 @@ INSTALLED_APPS = (
     'django.contrib.markup',
     'django.contrib.gis',
     'south',
+    'mptt',
     'django_lean.experiments',
     'compress',
     'announcements',
