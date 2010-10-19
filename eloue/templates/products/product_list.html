@@ -104,25 +104,31 @@
        {% if field.name == 'categories' %}
         {% for value, count in facets.fields|hash:field.name  %}
          {% with value|category as category %}
-          <h6><a href="{% facet_url breadcrumbs field.field.pretty_name category.slug %}">{{ category.name }}</a> <em>({{ count }})</em></h6>
+          {% if category.is_root_node %}
+           <h6><a href="{% facet_url breadcrumbs field.field.pretty_name category.slug %}">{{ category.name }}</a> <em>({{ count }})</em></h6>
+          {% endif %}
          {% endwith %}
         {% endfor %}
        {% endif %}
       {% else %}
        {% if field.name == 'categories' %}
         {% with field.data|category as category %}
-         <h6 class="open"><a href="{% facet_url breadcrumbs -field.field.pretty_name %}">{{ category.name }}</a></h6>
-          <div class="accordion-content grid3 first">
-	       <ul>
-	        {% for value, count in facets.fields|hash:field.name  %}
-             {% with value|category as child %}
-              {% if child != category %}
-               <li><a href="{% facet_url breadcrumbs field.field.pretty_name value %}">{{ child.name }}</a> <em>({{ count }})</em></li>
-              {% endif %}
-             {% endwith %}
-            {% endfor %}
-           </ul>
-          </div>
+         {% if category.is_root_node %}
+          <h6 class="open"><a href="{% facet_url breadcrumbs -field.field.pretty_name %}">{{ category.name }}</a></h6>
+         {% else %}
+          <h6 class="open"><a href="{% facet_url breadcrumbs field.field.pretty_name category.parent.slug %}">{{ category.name }}</a></h6>
+         {% endif %}
+         <div class="accordion-content grid3 first">
+	      <ul>
+	       {% for value, count in facets.fields|hash:field.name  %}
+            {% with value|category as child %}
+             {% if child.is_child_node and child != category %}
+              <li><a href="{% facet_url breadcrumbs field.field.pretty_name value %}">{{ child.name }}</a> <em>({{ count }})</em></li>
+             {% endif %}
+            {% endwith %}
+           {% endfor %}
+          </ul>
+         </div>    
         {% endwith %}
        {% endif %}
       {% endif %}
