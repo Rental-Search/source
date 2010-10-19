@@ -27,6 +27,7 @@ sphinx>=1.0.2
 -e git://github.com/e-loue/django-lean.git#egg=django_lean
 -e git://github.com/e-loue/django-lint.git#egg=django-lint
 -e git://github.com/e-loue/django-mptt.git#egg=mptt
+-e git://github.com/e-loue/django-piston.git#egg=piston
 -e git://github.com/e-loue/geocoders.git#egg=geocoders
 -e git://github.com/e-loue/pyke.git#egg=pyke
 -e git://github.com/e-loue/pysolr.git#egg=pysolr
