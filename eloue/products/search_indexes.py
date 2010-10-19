@@ -33,14 +33,8 @@ class ProductIndex(QueuedSearchIndex):
         >>> ProductIndex(Category).prepare_categories(product)
         ['child', 'parent']
         """
-        categories = [ obj.category ]
-        def _traverse(category, categories=[]):
-            if category.parent:
-                categories.append(category.parent)
-                _traverse(category.parent, categories)
-            return categories
-        categories = _traverse(obj.category, categories)
-        return [ category.slug for category in categories ]
+        if obj.category:
+            return [ category.slug for category in obj.category.get_ancestors(ascending=False) ]
     
     def prepare_price(self, obj):
         # It doesn't play well with season

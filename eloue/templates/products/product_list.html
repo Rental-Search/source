@@ -1,5 +1,5 @@
 {% extends "base.html" %}
- {% load cache facets i18n param category %}
+ {% load cache facets i18n param category mptt_tags %}
 
 {% block head %}
  {{ block.super }}
@@ -38,13 +38,15 @@
 	<ul id="sort-option" class="grid9 first">
 	 <li class="label-sort">{% trans "Trier par :" %}</li>
 	 <li><a href="{% facet_url breadcrumbs "sort" "created_at" %}">{% trans "Les plus récents" %}</a></li>
-     <li><a href="{% facet_url breadcrumbs "sort" "geo_distance" %}">{% trans "Les plus proches" %}</a></li>
+	 {% if where %}
+      <li><a href="{% facet_url breadcrumbs "sort" "geo_distance" %}">{% trans "Les plus proches" %}</a></li>
+     {% endif %}
      <li><a href="{% facet_url breadcrumbs "sort" "price" %}">{% trans "Les prix les plus bas" %}</a></li>
      <li class="last"><a href="{% facet_url breadcrumbs "sort" "-price" %}">{% trans "Les prix les plus haut" %}</a></li>
 	</ul>
 	<ul id="list-products" class="grid9 first">
 	 {% for product in product_list %}
-	  {% cache 900 product:row product.pk query %}
+	  {% cache 900 product:row product.pk query where %}
 	   {% with product.object as object %}
         <li class="list-product grid9 first">
 	     <a class="list-product-img" href="#">
@@ -100,18 +102,14 @@
      {% for field in form %}
       {% if not field.data %}
        {% if field.name == 'categories' %}
-        {{ facets.fields|hash:field.name|build_tree }}
         {% for value, count in facets.fields|hash:field.name  %}
          {% with value|category as category %}
-          <h6>
-           <a href="{% facet_url breadcrumbs field.field.pretty_name value %}">{{ category.name }}</a><em> ({{ count }})</em`>
-          </h6>
+          <h6><a href="{% facet_url breadcrumbs field.field.pretty_name category.slug %}">{{ category.name }}</a> <em>({{ count }})</em></h6>
          {% endwith %}
         {% endfor %}
        {% endif %}
       {% else %}
        {% if field.name == 'categories' %}
-        {{ facets.fields|hash:field.name|build_tree }}
         {% with field.data|category as category %}
          <h6 class="open"><a href="{% facet_url breadcrumbs -field.field.pretty_name %}">{{ category.name }}</a></h6>
           <div class="accordion-content grid3 first">
