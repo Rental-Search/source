@@ -24,7 +24,7 @@ class MockDelta(relativedelta):
     
 
 class InsuranceTest(TestCase):
-    fixtures = ['patron', 'address', 'category', 'price', 'product', 'booking', 'sinister']
+    fixtures = ['patron', 'address', 'price', 'product', 'booking', 'sinister']
     
     def setUp(self):
         self.old_date = datetime.date

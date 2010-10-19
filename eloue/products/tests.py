@@ -9,7 +9,7 @@ from django.test import TestCase
 from eloue.products.models import Product, ProductReview, PatronReview, Price
 
 class ProductTest(TestCase):
-    fixtures = ['patron', 'address', 'category', 'price', 'product']
+    fixtures = ['patron', 'address', 'price', 'product']
     
     @transaction.commit_on_success
     def test_product_creation(self):
@@ -19,7 +19,7 @@ class ProductTest(TestCase):
             description=u"Engrenage planétaire à haute performance 2 vitesses : durée de vie supérieure, transmission optimale, fonctionnement régulier.",
             address_id=1,
             quantity=1,
-            category_id=1,
+            category_id=35,
             owner_id=1
         )
         product.save()
@@ -31,7 +31,7 @@ class ProductTest(TestCase):
             description=u"Engrenage planétaire à haute performance 2 vitesses : durée de vie supérieure, transmission optimale, fonctionnement régulier.",
             address_id=1,
             quantity=1,
-            category_id=1,
+            category_id=35,
             owner_id=2
         )
         self.assertRaises(ValidationError, product.full_clean)
@@ -46,7 +46,7 @@ class ProductTest(TestCase):
     
 
 class ProductReviewTest(TestCase):
-    fixtures = ['patron', 'address', 'category', 'price', 'product', 'booking']
+    fixtures = ['patron', 'address', 'price', 'product', 'booking']
     
     def test_score_values_negative(self):
         review = ProductReview(score=-1.0, product_id=1, description='Incorrect', reviewer_id=2)
@@ -73,7 +73,7 @@ class ProductReviewTest(TestCase):
     
 
 class PatronReviewTest(TestCase):
-    fixtures = ['patron', 'address', 'category', 'price', 'product', 'booking']
+    fixtures = ['patron', 'address', 'price', 'product', 'booking']
     
     def test_score_values_negative(self):
         review = PatronReview(score=-1.0, patron_id=1, description='Incorrect', reviewer_id=2)
@@ -100,7 +100,7 @@ class PatronReviewTest(TestCase):
     
 
 class PriceTest(TestCase):
-    fixtures = ['patron', 'address', 'category', 'product']
+    fixtures = ['patron', 'address', 'product']
     
     def test_amount_values_negative(self):
         price = Price(amount=-1, product_id=1, unit=1, currency='EUR')
@@ -115,7 +115,7 @@ class PriceTest(TestCase):
     
 
 class StandardPriceTest(TestCase):
-    fixtures = ['patron', 'address', 'category', 'product']
+    fixtures = ['patron', 'address', 'product']
     
     def setUp(self):
         from django.db import connection
@@ -137,7 +137,7 @@ class StandardPriceTest(TestCase):
     
 
 class SeasonalPriceTest(TestCase):
-    fixtures = ['patron', 'address', 'category', 'product', 'booking']
+    fixtures = ['patron', 'address', 'product', 'booking']
     
     def setUp(self):
         from django.db import connection
