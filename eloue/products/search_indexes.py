@@ -25,14 +25,6 @@ class ProductIndex(QueuedSearchIndex):
     text = CharField(document=True, use_template=True)
     
     def prepare_categories(self, obj):
-        """
-        >>> from eloue.products.models import Category
-        >>> parent = Category(slug='parent', parent=None)
-        >>> category = Category(slug='child', parent=parent)
-        >>> product = Product(category=category)
-        >>> ProductIndex(Category).prepare_categories(product)
-        ['child', 'parent']
-        """
         if obj.category:
             return [ category.slug for category in obj.category.get_ancestors(ascending=False) ]
     
