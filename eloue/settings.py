@@ -170,7 +170,7 @@ COMPRESS = getattr(local, 'COMPRESS', True)
 COMPRESS_VERSION = True
 COMPRESS_JS_FILTERS = getattr(local, 'COMPRESS_JS_FILTERS', ('compress.filters.yui.YUICompressorFilter',))
 COMPRESS_CSS_FILTERS = getattr(local, 'COMPRESS_CSS_FILTERS', ('compress.filters.yui.YUICompressorFilter',))
-COMPRESS_YUI_BINARY = getattr(local, 'COMPRESS_YUI_BINARY', 'java -jar /usr/local/share/java/yuicompressor.jar')
+COMPRESS_YUI_BINARY = getattr(local, 'COMPRESS_YUI_BINARY', '/usr/bin/yui-compressor')
 COMPRESS_CSS = {
     'master': {
         'source_filenames': (
