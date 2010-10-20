@@ -3,9 +3,10 @@ import django.forms as forms
 from django.utils.translation import ugettext as _
 
 from haystack.forms import SearchForm
+from mptt.forms import TreeNodeChoiceField
 
 from eloue.products.fields import FacetField
-from eloue.products.models import PatronReview, ProductReview, Product
+from eloue.products.models import PatronReview, ProductReview, Product, Category
 from eloue.products.utils import Enum
 
 SORT = Enum([
@@ -55,7 +56,9 @@ class ProductReviewForm(forms.ModelForm):
     
 
 class ProductForm(forms.ModelForm):
+    category = TreeNodeChoiceField(queryset=Category.tree.all(), empty_label="---------", level_indicator=u'--')
+    
     class Meta:
         model = Product
-        exclude = ('is_allowed', 'owner', 'currency')
+        exclude = ('is_allowed', 'owner', 'address', 'currency', 'is_archived')
     

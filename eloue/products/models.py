@@ -74,11 +74,6 @@ class Product(models.Model):
     def get_absolute_url(self):
         return ('product_detail', [self.slug, self.pk])
     
-    def clean(self):
-        from django.core.exceptions import ValidationError
-        if self.address.patron != self.owner:
-            raise ValidationError(_(u"L'adresse n'appartient pas au propriétaire de l'objet"))
-    
     def more_like_this(self):
         from eloue.products.search_indexes import product_search
         return product_search.more_like_this(self)[:3]
