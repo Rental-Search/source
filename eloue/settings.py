@@ -212,7 +212,9 @@ if DEBUG:
     QUEUE_BACKEND = 'dummy'
 else:
     QUEUE_BACKEND = 'sqs'
-    
+
+# Email configuration
+EMAIL_BACKEND = getattr(local, 'EMAIL_BACKEND', 'django.core.mail.backends.smtp.EmailBackend')
 
 # Logging configuration
 try:

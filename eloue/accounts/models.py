@@ -119,9 +119,13 @@ class Patron(User):
         if self.pk: # TODO : Might need some improvements and more tests
             if Patron.objects.exclude(pk=self.pk).filter(email=self.email).exists():
                 raise ValidationError(_(u"Un utilisateur utilisant cet email existe déjà"))
+            if Patron.objects.exclude(pk=self.pk).filter(username=self.username).exists():
+                raise ValidationError(_(u"Un utilisateur utilisant ce nom d'utilisateur existe déjà"))
         else:
             if Patron.objects.exists(email=self.email):
                 raise ValidationError(_(u"Un utilisateur utilisant cet email existe déjà"))
+            if Patron.objects.exists(username=self.username):
+                raise ValidationError(_(u"Un utilisateur utilisant ce nom d'utilisateur existe déjà"))
     
     def add_payment_card(self, card_name, card_number, card_owner_birth, card_type, card_verification,
         expiration_date, issue_number=''):
@@ -154,6 +158,12 @@ class Patron(User):
             # response['redirectUrl']
         except PaypalError, e:
             log.error(e)
+    
+    def is_anonymous(self):
+        return False
+    
+    def is_authenticated(self):
+        return True
     
     @property
     def is_verified(self):
@@ -199,7 +209,7 @@ class Address(models.Model):
     zipcode = models.CharField(max_length=9)
     position = models.PointField(null=True, blank=True)
     city = models.CharField(max_length=255)
-    country = models.CharField(max_length=2, choices=COUNTRY_CHOICES)
+    country = models.CharField(max_length=2, choices=COUNTRY_CHOICES, null=False)
     
     objects = models.GeoManager()
     

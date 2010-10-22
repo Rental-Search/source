@@ -1,7 +1,6 @@
 {% extends "base.html" %}
 
 {% block content %}
- <p>Step {{ step }} of {{ step_count }}</p>
  <form action="" method="POST">
   {% csrf_token %}
   {{ form.as_ul }}

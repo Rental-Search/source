@@ -4,11 +4,11 @@ import logbook
 from django.conf import settings
 from django.conf.urls.defaults import *
 from django.contrib import admin
-from django.contrib.auth.views import login, logout_then_login, password_reset, password_reset_confirm, password_reset_done, password_reset_complete
+from django.contrib.auth.views import logout_then_login, password_reset, password_reset_confirm, password_reset_done, password_reset_complete
 from django.contrib.sitemaps.views import index, sitemap
 
-from eloue.accounts.forms import EmailAuthenticationForm, EmailPasswordResetForm
-from eloue.accounts.views import activate
+from eloue.accounts.forms import EmailPasswordResetForm
+from eloue.accounts.views import activate, authenticate
 from eloue.products.views import homepage
 from eloue.sitemaps import FlatPageSitemap, PatronSitemap, ProductSitemap
 
@@ -44,10 +44,7 @@ urlpatterns = patterns('',
         'template_name':'accounts/password_reset_complete.html'
     }, name="password_reset_complete"),
     url(r'^activate/(?P<activation_key>\w+)/$', activate, name='auth_activate'),
-    url(r'^login/$', login, {
-        'template_name':'accounts/login.html',
-        'authentication_form':EmailAuthenticationForm
-    }, name='auth_login'),
+    url(r'^login/$', authenticate, name='auth_login'),
     url(r'^logout/$', logout_then_login, name='auth_logout'),
     url(r'^media/(.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT}),
     url(r'^loueur/', include('eloue.accounts.urls')),
