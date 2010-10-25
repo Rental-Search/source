@@ -209,7 +209,7 @@ class Address(models.Model):
     zipcode = models.CharField(max_length=9)
     position = models.PointField(null=True, blank=True)
     city = models.CharField(max_length=255)
-    country = models.CharField(max_length=2, choices=COUNTRY_CHOICES, null=False)
+    country = models.CharField(max_length=2, choices=COUNTRY_CHOICES)
     
     objects = models.GeoManager()
     
