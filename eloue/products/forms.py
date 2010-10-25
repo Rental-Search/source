@@ -16,6 +16,11 @@ SORT = Enum([
     ('-price', 'HIGH_PRICE', _(u"Les pris les plus haut")),
 ])
 
+
+class ProductSearchForm(forms.Form):
+    q = forms.CharField(max_length=100, widget=forms.TextInput(attrs={'class':'big'}))
+    where = forms.CharField(max_length=100, widget=forms.TextInput(attrs={'class':'big'}))
+
 class FacetedSearchForm(SearchForm):
     q = forms.CharField(required=False, max_length=100, widget=forms.TextInput(attrs={'class':'big'}))
     where = forms.CharField(required=False, max_length=100, widget=forms.TextInput(attrs={'class':'big'}))

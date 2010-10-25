@@ -14,7 +14,7 @@ from geocoders.google import geocoder
 from haystack.query import SearchQuerySet
 
 from eloue.accounts.models import Patron
-from eloue.products.forms import FacetedSearchForm
+from eloue.products.forms import FacetedSearchForm, ProductSearchForm
 from eloue.products.models import Product, Category
 
 PAGINATE_PRODUCTS_BY = getattr(settings, 'PAGINATE_PRODUCTS_BY', 20)
