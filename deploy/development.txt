@@ -2,6 +2,7 @@
 boto>=2.0b2
 coverage>=3.3
 django-compress>=1.0
+django-imagekit>=0.3.3
 django-nose>=0.1.2
 fabric>=0.9
 Imaging==1.1.7
