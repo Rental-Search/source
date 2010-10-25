@@ -129,6 +129,7 @@ INSTALLED_APPS = (
     'django.contrib.gis',
     'south',
     'mptt',
+    'imagekit',
     'django_lean.experiments',
     'compress',
     'announcements',
@@ -243,9 +244,8 @@ if not DEBUG:
 AWS_ACCESS_KEY_ID = getattr(local, 'AWS_ACCESS_KEY_ID', 'AKIAJ3PXVVKSTM3WSZSQ')
 AWS_SECRET_ACCESS_KEY = getattr(local, 'AWS_SECRET_ACCESS_KEY', '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')
 AWS_STORAGE_BUCKET_NAME = getattr(local, 'AWS_STORAGE_BUCKET_NAME', 'eloue')
-AWS_S3_CUSTOM_DOMAIN = getattr(local, 'AWS_S3_CUSTOM_DOMAIN', '')
+AWS_S3_CUSTOM_DOMAIN = getattr(local, 'AWS_S3_CUSTOM_DOMAIN', 'eloue.s3.amazonaws.com')
 AWS_DEFAULT_ACL = getattr(local, 'AWS_DEFAULT_ACL', 'public-read')
-AWS_LOCATION = getattr(local, 'AWS_LOCATION', 'EU')
 AWS_AUTO_CREATE_BUCKET = getattr(local, 'AWS_AUTO_CREATE_BUCKET', False)
 AWS_HEADERS = {
     'Cache-Control':'max-age=31556926,public',

@@ -49,8 +49,12 @@
 	  {% cache 900 product:row product.pk query where %}
 	   {% with product.object as object %}
         <li class="list-product grid9 first">
-	     <a class="list-product-img" href="#">
-	      <img src="images/s3/mini_121.jpg" />
+	     <a class="list-product-img" href="{{ object.get_absolute_url }}">
+	      {% with object.pictures.all|first as picture %}
+	       {% if picture.thumbnail %}
+ 	        <img src="{{ picture.thumbnail.url }}" />
+	       {% endif %}
+	      {% endwith %}
 	     </a>
 	     <div class="list-product-details">
 	      <h3><a href="{{ object.get_absolute_url }}">{{ product.summary|capfirst }}</a></h3>

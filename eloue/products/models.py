@@ -11,6 +11,7 @@ from django.utils.translation import ugettext as _
 from django.utils.encoding import smart_unicode
 
 from mptt.models import MPTTModel
+from imagekit.models import ImageModel
 
 from eloue.accounts.models import Patron, Address
 from eloue.products.fields import SimpleDateField
@@ -89,11 +90,16 @@ class Product(models.Model):
             and self.category.need_insurance
     
 
-class Picture(models.Model):
+class Picture(ImageModel):
     """A picture"""
     product = models.ForeignKey(Product, related_name='pictures')
     image = models.ImageField(null=True, blank=True, upload_to='pictures/')
-    # TODO : We still need to store thumbnails
+    
+    class IKOptions:
+        spec_module = 'eloue.products.specs'
+        image_field = 'image'
+        cache_dir = 'media'
+    
 
 class Category(MPTTModel):
     """A category"""

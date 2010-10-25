@@ -159,8 +159,9 @@ class Command(BaseCommand):
                 patron.save()
     
     def import_products(self, cursor, path='/tmp/elouefile'):
+        from django.core.files import File
         from eloue.accounts.models import Patron
-        from eloue.products.models import Product, Category
+        from eloue.products.models import Product, Picture, Category
         cursor.execute("""SELECT product_id, product_name, product_s_desc, product_desc, count(product_desc) AS quantity, product_full_image, product_publish, prix, caution, vendor_id, product_lat, product_lng, localisation FROM abs_vm_product GROUP BY product_desc, product_name ORDER BY quantity DESC""")
         result_set = cursor.fetchall()
         for i, row in enumerate(result_set):
@@ -213,10 +214,12 @@ class Command(BaseCommand):
 
             if row['product_full_image']:
                 try:
-                    picture = open(os.path.join(path, str(row['vendor_id']), row['product_full_image']))
-                    # product.pictures.create(image=picture)`
+                    image_file = open(os.path.join(path, str(row['vendor_id']), row['product_full_image']))
+                    picture = Picture(product=product, image=File(image_file))
+                    picture.image.name = "%s-%s.jpg" % (slugify(product.summary), product.id)
+                    picture.save()
                 except IOError, e:
-                    pass # print e
+                    print e
 
             product.save()
     

@@ -12,3 +12,5 @@ eloue/media/css/*.r*.css
 docs/_*/
 eloue/rent/rules
 eloue/products/management/commands/fixtures/differences.yaml
+eloue/media/pictures/*
+eloue/media/media/*
