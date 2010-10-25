@@ -18,13 +18,13 @@ SORT = Enum([
 
 
 class ProductSearchForm(forms.Form):
-    q = forms.CharField(max_length=100, widget=forms.TextInput(attrs={'class':'big'}))
-    where = forms.CharField(max_length=100, widget=forms.TextInput(attrs={'class':'big'}))
+    q = forms.CharField(max_length=100, widget=forms.TextInput(attrs={'class':'inb'}))
+    where = forms.CharField(max_length=100, widget=forms.TextInput(attrs={'class':'inb'}))
 
 class FacetedSearchForm(SearchForm):
-    q = forms.CharField(required=False, max_length=100, widget=forms.TextInput(attrs={'class':'big'}))
-    where = forms.CharField(required=False, max_length=100, widget=forms.TextInput(attrs={'class':'big'}))
-    radius = forms.IntegerField(required=False)
+    q = forms.CharField(required=False, max_length=100, widget=forms.TextInput(attrs={'class':'inb'}))
+    where = forms.CharField(required=False, max_length=100, widget=forms.TextInput(attrs={'class':'inb'}))
+    radius = forms.IntegerField(required=False, widget=forms.TextInput(attrs={'class':'ins'}))
     sort = forms.ChoiceField(required=False, choices=SORT, widget=forms.HiddenInput())
     price = FacetField(label=_(u"Prix"), pretty_name=_("par-prix"), required=False)
     categories = FacetField(label=_(u"Catégorie"), pretty_name=_("par-categorie"), required=False, widget=forms.HiddenInput())

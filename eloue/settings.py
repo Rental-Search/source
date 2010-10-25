@@ -175,14 +175,7 @@ COMPRESS_CSS = {
     'master': {
         'source_filenames': (
             'css/master.css',
-            'css/978.css',
-            'css/button.css',
-            'css/form.css',
-            'css/text.css',
-            'css/style.css',
-            'css/home.css',
-            'css/top-search.css',
-            'css/products-list.css'
+            'css/all.css'
 		),
         'output_filename': 'css/master.r?.css',
         'extra_context': {

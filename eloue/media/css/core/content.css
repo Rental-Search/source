@@ -1,0 +1,60 @@
+/* **************** CONTENT OBJECTS ***************** */
+a{color: #000; text-decoration: none;}
+a:hover{text-decoration: underline;}
+a:focus{outline:1px dotted}hr{border:0 #ccc solid;border-top-width:1px;clear:both;height:0}
+strong{font-weight: bold;}
+
+/* **************** HEADER OBJECTS ***************** */
+.top-content{
+  /*border-top: 1px solid #E9E9E9;
+  border-bottom: 1px solid #E9E9E9;*/
+  border-top: 4px solid #A2BC00;
+  border-bottom: 4px solid #A2BC00;
+}
+
+.logo{
+  display:block;
+  height: 55px;
+  padding-top: 10px;
+}
+
+.slogan{
+  height: 22px;
+  padding-top: 30px;
+  font-size: 14px;
+  color: #ababab;
+}
+
+.navBar{
+  margin-top: 10px;
+}
+
+.navBar li{
+  display: inline;
+  float: right;
+  margin-top: 20px;
+  padding-left: 10px;
+  padding-right: 10px;
+  font-size: 13px;
+}
+
+.navBar .first{
+  border: none;
+}
+
+
+.navBar .add{
+  border: none;
+  margin-top: 14px;
+  margin-left: 10px;
+}
+
+.navBar .add a{
+  color: #fff;
+  text-decoration: none;
+}
+
+/* **************** TOP-CONTENT OBJECTS ***************** */
+.top-content h1{
+  color: #6B7B02;
+}
