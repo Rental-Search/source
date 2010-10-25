@@ -1,0 +1,48 @@
+form{}
+
+select{
+  background: none;
+  border: 1px solid #CFD1C7;
+  font-size: 13px;
+  padding: 3px;
+}
+
+input, textarea{
+  margin: 10px 10px 3px 0px; 
+  background: transparent;
+  border: 1px solid #A8A8A8;
+}
+
+textarea:hover, input:hover, input:focus, textarea:focus{
+  border: 1px solid #666;
+}
+
+input[type=submit]{
+  border: none;
+}
+
+.inb{
+  margin: 10px 10px 3px 0px; 
+  height: 26px;
+  padding: 4px 10px 0px 6px;
+  font-size: 18px;
+}
+
+.ins{
+  margin: 0px 5px 3px 0px !important; 
+  height:18px;
+  padding: 2px 5px 0px 3px;
+  font-size: 13px;
+}
+
+label{
+  
+}
+
+.labb{
+  font-size: 17px;
+}
+
+.labs{
+  font-size: 13px;
+}

@@ -1,0 +1,39 @@
+.picB{
+  float: left;
+  width: 472px;
+  margin-right: 10px;
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+.picB img{
+  padding: 10px;
+  border: 1px solid #E9E9E9;
+}
+
+.thumbs{
+  float: left;
+  width: 100px;
+  text-align: center;
+}
+
+.thumbs img{
+  /*padding: 5px;
+  border: 1px solid #E9E9E9;*/
+  margin-bottom: 5px;
+  /*width: 75px;*/
+}
+
+.book{
+  
+}
+
+.descP{
+  font-size: 13px;
+  margin-bottom: 15px;
+}
+
+.priceDP{
+  font-size: 13px;
+}
+

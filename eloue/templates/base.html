@@ -26,24 +26,20 @@
   </script>
  </head>
  <body>
-  <div id="header">
-   <header class="container clearfix">
-	<a href="{% url home %}"><img src="{{ MEDIA_URL }}images/logo.png" alt="e-loue" class="grid2 first" /></a>
-	<div id="slogan" class="grid3">{% trans "Avec e-loue, tout se loue !" %}</div>
-	<nav class="grid7">
-	 <ul id="nav-bar" class="grid7 first">
-	  <li class="add button green"><a href="{% url product_create %}">{% trans "Mettre en location" %}</a></li>
-      {% if not user.is_anonymous %}
-       <li><a href="{% url auth_logout %}">{% trans "Se déconnecter" %}</a></li>
-      {% else %}
-       <li><a href="{% url auth_login %}">{% trans "S'identifier" %}</a></li>
-	   <li><a href="#">{% trans "S'inscrire" %}</a></li>
-      {% endif %}
-	  <li><a href="#">{% trans "La location" %}</a></li>
-	 </ul>
-    </nav>
-   </header>
-  </div>
+  	<header class="head container clearfix">
+			<a href="{% url home %}" class="logo grid2 first">
+			<img src="{{ MEDIA_URL }}images/logo.png" alt="e-loue" width="138px"/>
+			</a>
+			<div class="slogan grid3">Avec e-loue, tout se loue !</div>
+			<nav class="grid7">
+				<ul class="navBar">
+					<li class="add button green"><a href="add-product.html">Mettre en location</a></li>
+					<li><a href="#">Se connecter</a></li>
+					<li><a href="#">S'inscrire</a></li>
+					<li class="first"><a href="products-list.html">La location</a></li>
+				</ul><!-- nav-bar -->
+			</nav>
+		</header>
   {% block content %}
   {% endblock %}
   <footer class="container clearfix"></footer>

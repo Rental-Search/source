@@ -1,0 +1,96 @@
+.help{
+  /*background-color: #EEE;*/
+  height: 400px;
+}
+.addP select{
+  font-size: 17px;
+}
+.addP input{
+  width: 280px;
+}
+
+.addP .txtT{
+  padding-top: 15px;
+}
+
+.addP textarea{
+  width: 280px;
+  padding: 4px 10px 0px 6px;
+  font-size: 16px;
+  margin: 10px 10px 3px 0px;
+  height: 80px;
+}
+
+.addP .price{
+  width: 50px;
+}
+
+.addP .submit, .sign .submit, .new .submit{
+  text-align: right;
+}
+
+.addP .button, .sign .button, .new .button{
+  width: 100px;
+  border: 1px solid #A8A8A8;
+}
+
+.addP .addPic{
+  font-size: 13px;
+  margin-left: 180px;
+}
+
+.addP .pic{
+  font-size: 13px;
+}
+
+.sign td{
+  padding-right: 0px;
+}
+
+.sign input[type=radio]{
+  width: 15px;
+}
+
+.sign input{
+  width: 210px;
+}
+
+.sign .cSign{
+  height: 50px;
+}
+
+.new{}
+
+.new .txtT{
+  padding-top: 15px;
+}
+
+.new input, textarea{
+  width: 340px;
+}
+
+.new select{
+  font-size: 17px;
+}
+
+.new textarea{
+  height: 50px;
+}
+
+.new .address{
+  width: 89px;
+}
+
+.new .town{
+  width: 208px;
+  margin-top: 0px;
+}
+
+.new .zip{
+  width: 100px;
+  margin-top: 0px;
+}
+
+.new .country{
+  width: 360px;
+}
