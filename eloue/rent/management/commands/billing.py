@@ -9,6 +9,7 @@ from tempfile import TemporaryFile
 from django.core.mail import EmailMessage
 from django.core.management.base import BaseCommand
 from django.utils.datastructures import SortedDict
+from django.utils.encoding import smart_str
 
 log = logbook.Logger('eloue.rent.billing')
 
@@ -30,7 +31,7 @@ class Command(BaseCommand):
             row[u'Durée de garantie'] = (booking.ended_at - booking.started_at).days
             row[u'Numéro de commande'] = booking.uuid
             row['Date d\'effet des garanties'] = booking.started_at.strftime("%Y%m%d")
-            row[u'Désignation'] = booking.product.description
+            row[u'Désignation'] = smart_str(booking.product.description)
             row['Prix de la location TTC'] = booking.total_amount
             row['Prix de cession HT'] = booking.insurance_fee
             row['Com. du partenaire'] = booking.insurance_commission

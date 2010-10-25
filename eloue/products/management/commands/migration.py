@@ -56,11 +56,11 @@ PUBLISH_MAP = { # WARN : We invert value because we mark them as archived rather
 
 log = logbook.Logger('eloue.migration')
 
-def cleanup_html_entities(text, method='html'):
+def cleanup_html_entities(text):
     """Remove html entitites from text"""
     if text:
         doc = html.fromstring(text)
-        return html.tostring(doc, encoding='utf-8', method=method)
+        return html.tostring(doc, encoding='utf-8', method='text')
     else:
         return text
 
@@ -82,6 +82,11 @@ class Command(BaseCommand):
             dest='products',
             default=False,
             help='Migrate products data'
+        ),
+        make_option('--images-path',
+            dest='path',
+            default='/tmp/elouefile',
+            help='Images directory'
         )
     )
     
@@ -147,14 +152,13 @@ class Command(BaseCommand):
 
                 if user_info['phone_2']:
                     patron.phones.create(number=smart_unicode(cleanup_phone_number(user_info['phone_2']), encoding='latin1'), kind=4)
-
                 
                 if user_info['fax']:
                     patron.phones.create(number=smart_unicode(cleanup_phone_number(user_info['fax']), encoding='latin1'), kind=3)
 
                 patron.save()
     
-    def import_products(self, cursor):
+    def import_products(self, cursor, path='/tmp/elouefile'):
         from eloue.accounts.models import Patron
         from eloue.products.models import Product, Category
         cursor.execute("""SELECT product_id, product_name, product_s_desc, product_desc, count(product_desc) AS quantity, product_full_image, product_publish, prix, caution, vendor_id, product_lat, product_lng, localisation FROM abs_vm_product GROUP BY product_desc, product_name ORDER BY quantity DESC""")
@@ -167,7 +171,7 @@ class Command(BaseCommand):
             else:
                 description = smart_unicode(row['product_desc'], encoding='latin1')
 
-            summary = cleanup_html_entities(summary, method='text')
+            summary = cleanup_html_entities(summary)
             description = cleanup_html_entities(description)
 
             vendor_id = int(row['vendor_id'])
@@ -208,8 +212,8 @@ class Command(BaseCommand):
             )
 
             if row['product_full_image']:
-                try: # FIXME : Hardcoded path
-                    picture = open(os.path.join('/Users/tim/Downloads/elouefile', str(row['vendor_id']), row['product_full_image']))
+                try:
+                    picture = open(os.path.join(path, str(row['vendor_id']), row['product_full_image']))
                     # product.pictures.create(image=picture)`
                 except IOError, e:
                     pass # print e
@@ -227,6 +231,6 @@ class Command(BaseCommand):
         if options.get('members'):
             self.import_members(cursor)
         if options.get('products'):
-            self.import_products(cursor)
+            self.import_products(cursor, options.get('path'))
         self.update_sequence()
 

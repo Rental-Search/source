@@ -128,10 +128,12 @@ INSTALLED_APPS = (
     'django.contrib.markup',
     'django.contrib.gis',
     'south',
+    'mptt',
     'django_lean.experiments',
     'compress',
     'announcements',
     'haystack',
+    'queued_search',
     'django_nose',
     'accounts',
     'rent',
@@ -160,7 +162,7 @@ SESSION_COOKIE_DOMAIN = local.SESSION_COOKIE_DOMAIN
 # Cache configuration
 CACHE_BACKEND = local.CACHE_BACKEND
 CACHE_MIDDLEWARE_ANONYMOUS_ONLY = True
-CACHE_MIDDLEWARE_SECONDS = 60 * 15
+CACHE_MIDDLEWARE_SECONDS = getattr(local, 'CACHE_MIDDLEWARE_SECONDS', 60 * 15)
 CACHE_MIDDLEWARE_KEY_PREFIX = getattr(local, 'CACHE_MIDDLEWARE_KEY_PREFIX', None)
 
 # Compress configuration
@@ -168,7 +170,7 @@ COMPRESS = getattr(local, 'COMPRESS', True)
 COMPRESS_VERSION = True
 COMPRESS_JS_FILTERS = getattr(local, 'COMPRESS_JS_FILTERS', ('compress.filters.yui.YUICompressorFilter',))
 COMPRESS_CSS_FILTERS = getattr(local, 'COMPRESS_CSS_FILTERS', ('compress.filters.yui.YUICompressorFilter',))
-COMPRESS_YUI_BINARY = getattr(local, 'COMPRESS_YUI_BINARY', 'java -jar /usr/local/share/java/yuicompressor.jar')
+COMPRESS_YUI_BINARY = getattr(local, 'COMPRESS_YUI_BINARY', '/usr/bin/yui-compressor')
 COMPRESS_CSS = {
     'master': {
         'source_filenames': (
@@ -204,6 +206,15 @@ HAYSTACK_SEARCH_ENGINE = getattr(local, 'HAYSTACK_SEARCH_ENGINE', 'solr')
 HAYSTACK_SOLR_URL = getattr(local, 'HAYSTACK_SOLR_URL', 'http://localhost:8983/solr')
 HAYSTACK_INCLUDE_SPELLING = True
 HAYSTACK_ENABLE_REGISTRATIONS = True
+
+# Queue configuration
+if DEBUG:
+    QUEUE_BACKEND = 'dummy'
+else:
+    QUEUE_BACKEND = 'sqs'
+
+# Email configuration
+EMAIL_BACKEND = getattr(local, 'EMAIL_BACKEND', 'django.core.mail.backends.smtp.EmailBackend')
 
 # Logging configuration
 try:

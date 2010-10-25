@@ -86,6 +86,8 @@
     
     <field name="categories_exact" type="string" indexed="true" stored="true" multiValued="true" />
 
+    <field name="created_at" type="date" indexed="true" stored="true" multiValued="false" />
+
     <field name="summary" type="text" indexed="true" stored="true" multiValued="false" />
     
     <field name="description" type="text" indexed="true" stored="true" multiValued="false" />
@@ -95,6 +97,10 @@
     <field name="owner" type="text" indexed="true" stored="true" multiValued="false" />
     
     <field name="owner_exact" type="string" indexed="true" stored="true" multiValued="false" />
+
+    <field name="price" type="sfloat" indexed="true" stored="true" multiValued="false" />
+
+    <field name="price_exact" type="sfloat" indexed="true" stored="true" multiValued="false" />
 
     <field name="lat" type="tdouble" indexed="true" stored="true" multiValued="false" />
 

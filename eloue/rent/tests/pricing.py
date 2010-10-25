@@ -8,7 +8,7 @@ from eloue.products.models import Product
 from eloue.rent.models import Booking
 
 class BookingPriceTest(TestCase):
-    fixtures = ['patron', 'address', 'category', 'product', 'price']
+    fixtures = ['patron', 'address', 'price', 'product']
     
     def setUp(self):
         self.product = Product.objects.get(pk=1)
@@ -88,7 +88,7 @@ class BookingPriceTest(TestCase):
     
 
 class BookingSeasonTest(TestCase):
-    fixtures = ['patron', 'address', 'category', 'product', 'price']
+    fixtures = ['patron', 'address', 'price', 'product']
     
     def test_calculate_day_season(self):
         product = Product.objects.get(pk=3)

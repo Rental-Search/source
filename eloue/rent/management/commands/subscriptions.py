@@ -8,6 +8,7 @@ from tempfile import TemporaryFile
 
 from django.core.management.base import BaseCommand
 from django.utils.datastructures import SortedDict
+from django.utils.encoding import smart_str
 
 log = logbook.Logger('eloue.rent.subscriptions')
 
@@ -26,20 +27,20 @@ class Command(BaseCommand):
             row = SortedDict()
             row['Login locataire'] = booking.borrower.username
             row['Adresse email'] = booking.borrower.email
-            row['Nom'] = booking.borrower.last_name
-            row[u'Prénom'] = booking.borrower.first_name
+            row['Nom'] = smart_str(booking.borrower.last_name)
+            row[u'Prénom'] = smart_str(booking.borrower.first_name)
             address = booking.borrower.addresses.all()[0]
-            row['Adresse 1'] = address.address1
-            row['Adresse 2'] = address.address2
+            row['Adresse 1'] = smart_str(address.address1)
+            row['Adresse 2'] = smart_str(address.address2)
             row['Code postal'] = address.zipcode
-            row['Ville'] = address.city
+            row['Ville'] = smart_str(address.city)
             row['Pays'] = COUNTRY_CHOICES[address.country]
             row['Numéro police'] = settings.POLICY_NUMBER
             row['Numéro partenaire'] = settings.PARTNER_NUMBER
             row['Numéro contrat'] = booking.contract_id
             row['Date d\'effet des garanties'] = booking.started_at.strftime("%Y%m%d")
             row[u'Numéro de commande'] = booking.uuid
-            row[u'Désignation'] = booking.product.description
+            row[u'Désignation'] = smart_str(booking.product.description)
             row['Prix de la location TTC'] = booking.total_amount
             row['Montant de la Caution'] = booking.deposit_amount
             row[u'Durée de garantie'] = (booking.ended_at - booking.started_at).days

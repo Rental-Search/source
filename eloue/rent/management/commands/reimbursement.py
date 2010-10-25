@@ -9,6 +9,7 @@ from datetime import date
 from django.core.mail import EmailMessage
 from django.core.management.base import BaseCommand
 from django.utils.datastructures import SortedDict
+from django.utils.encoding import smart_str
 
 log = logbook.Logger('eloue.rent.reimbursement')
 
@@ -37,7 +38,7 @@ class Command(BaseCommand):
                 row['Type de remboursement'] = 'REMBOURSEMENT'
             else: # This should not happend
                 log.warning("Monthly insurance reimbursement batch failed on booking #%s" % booking.uuid)
-            row[u'Désignation'] = booking.product.description
+            row[u'Désignation'] = smart_str(booking.product.description)
             row['Prix de la location TTC'] = booking.total_amount
             row['Prix de cession HT'] = booking.insurance_fee
             row['Com. du partenaire'] = booking.insurance_commission

@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.contrib import admin
+from mptt.admin import MPTTModelAdmin
 
 from eloue.products.models import Product, Picture, Category, Property, PropertyValue, Price, ProductReview, PatronReview
 
@@ -21,7 +22,7 @@ class ProductAdmin(SearchModelAdmin):
     list_display = ('summary', 'deposit_amount', 'quantity', 'is_archived', 'is_allowed')
     list_filter = ('is_archived', 'is_allowed')
 
-class CategoryAdmin(admin.ModelAdmin):
+class CategoryAdmin(MPTTModelAdmin):
     list_display = ('name', 'parent')
     search_fields = ['name', 'parent__name']
 

@@ -3,7 +3,6 @@ import csv
 import datetime
 from dateutil.relativedelta import relativedelta
 from mock import patch
-from uuid import UUID
 
 from django.conf import settings
 from django.core import mail
@@ -25,7 +24,7 @@ class MockDelta(relativedelta):
     
 
 class InsuranceTest(TestCase):
-    fixtures = ['patron', 'address', 'category', 'product', 'booking']
+    fixtures = ['patron', 'address', 'price', 'product', 'booking', 'sinister']
     
     def setUp(self):
         self.old_date = datetime.date
@@ -42,7 +41,7 @@ class InsuranceTest(TestCase):
         csv_file.seek(0)
         i = 0
         for row in csv.reader(csv_file, delimiter='|'):
-            booking = Booking.objects.get(pk=UUID(row[4]))
+            booking = Booking.objects.get(pk=row[4])
             self.assertEquals(booking.booking_state, BOOKING_STATE.ENDED)
             i += 1
         self.assertEquals(i, 1)
@@ -59,7 +58,7 @@ class InsuranceTest(TestCase):
         csv_file.seek(0)
         i = 0
         for row in csv.reader(csv_file, delimiter='|'):
-            booking = Booking.objects.get(pk=UUID(row[4]))
+            booking = Booking.objects.get(pk=row[4])
             self.assertEquals(booking.booking_state, BOOKING_STATE.CANCELED)
             i += 1
         self.assertEquals(i, 2)
@@ -78,8 +77,8 @@ class InsuranceTest(TestCase):
         csv_file.seek(0)
         for row in csv.reader(csv_file, delimiter='|'):
             try:
-                sinister = Sinister.objects.get(pk=UUID(row[14]))
-            except Sinister.DoesNotExists:
+                sinister = Sinister.objects.get(sinister_id=row[3])
+            except Sinister.DoesNotExist:
                 self.fail("A non-existing sinister is referenced")
         self.assertEquals(mock.return_value.method_calls[2][0], 'quit')
     
@@ -96,7 +95,7 @@ class InsuranceTest(TestCase):
         csv_file.seek(0)
         i = 0
         for row in csv.reader(csv_file, delimiter='|'):
-            booking = Booking.objects.get(pk=UUID(row[13]))
+            booking = Booking.objects.get(pk=row[13])
             self.assertEquals(booking.booking_state, BOOKING_STATE.PENDING)
             i += 1
         self.assertEquals(i, 1)

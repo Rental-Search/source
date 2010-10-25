@@ -91,7 +91,7 @@ log = logbook.Logger('eloue.accounts')
 
 class Patron(User):
     """A member"""
-    civility = models.IntegerField(null=True, blank=True, choices=CIVILITY_CHOICES)
+    civility = models.PositiveSmallIntegerField(null=True, blank=True, choices=CIVILITY_CHOICES)
     company_name = models.CharField(null=True, blank=True, max_length=255)
     activation_key = models.CharField(null=True, blank=True, max_length=40)
     is_subscribed = models.BooleanField(_(u'newsletter'), default=False, help_text=_(u"Précise si l'utilisateur est abonné à la newsletter"))
@@ -119,9 +119,13 @@ class Patron(User):
         if self.pk: # TODO : Might need some improvements and more tests
             if Patron.objects.exclude(pk=self.pk).filter(email=self.email).exists():
                 raise ValidationError(_(u"Un utilisateur utilisant cet email existe déjà"))
+            if Patron.objects.exclude(pk=self.pk).filter(username=self.username).exists():
+                raise ValidationError(_(u"Un utilisateur utilisant ce nom d'utilisateur existe déjà"))
         else:
             if Patron.objects.exists(email=self.email):
                 raise ValidationError(_(u"Un utilisateur utilisant cet email existe déjà"))
+            if Patron.objects.exists(username=self.username):
+                raise ValidationError(_(u"Un utilisateur utilisant ce nom d'utilisateur existe déjà"))
     
     def add_payment_card(self, card_name, card_number, card_owner_birth, card_type, card_verification,
         expiration_date, issue_number=''):
@@ -154,6 +158,12 @@ class Patron(User):
             # response['redirectUrl']
         except PaypalError, e:
             log.error(e)
+    
+    def is_anonymous(self):
+        return False
+    
+    def is_authenticated(self):
+        return True
     
     @property
     def is_verified(self):
@@ -252,7 +262,7 @@ class PhoneNumber(models.Model):
     """A phone number"""
     patron = models.ForeignKey(Patron, related_name='phones')
     number = models.CharField(max_length=255)
-    kind = models.IntegerField(choices=PHONE_TYPES)
+    kind = models.PositiveSmallIntegerField(choices=PHONE_TYPES)
     
     def __unicode__(self):
         return smart_unicode(self.number)

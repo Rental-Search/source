@@ -7,12 +7,14 @@ from django.db import models
 from django.db.models import permalink
 from django.db.models.signals import post_save
 from django.template.defaultfilters import slugify
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import ugettext as _
 from django.utils.encoding import smart_unicode
+
+from mptt.models import MPTTModel
 
 from eloue.accounts.models import Patron, Address
 from eloue.products.fields import SimpleDateField
-from eloue.products.manager import ProductManager
+from eloue.products.manager import ProductManager, PriceManager, QuestionManager
 from eloue.products.signals import post_save_answer
 from eloue.products.utils import Enum
 
@@ -53,6 +55,7 @@ class Product(models.Model):
     is_allowed = models.BooleanField(_(u'autorisé'), default=True, db_index=True)
     category = models.ForeignKey('Category', related_name='products')
     owner = models.ForeignKey(Patron, related_name='products')
+    created_at = models.DateTimeField(blank=True, editable=False)
     
     objects = ProductManager()
     
@@ -62,14 +65,18 @@ class Product(models.Model):
     def __unicode__(self):
         return smart_unicode(self.summary)
     
+    def save(self, *args, **kwargs):
+        if not self.created_at:
+            self.created_at = datetime.now()
+        super(Product, self).save(*args, **kwargs)
+    
     @permalink
     def get_absolute_url(self):
         return ('product_detail', [self.slug, self.pk])
     
-    def clean(self):
-        from django.core.exceptions import ValidationError
-        if self.address.patron != self.owner:
-            raise ValidationError(_(u"L'adresse n'appartient pas au propriétaire de l'objet"))
+    def more_like_this(self):
+        from eloue.products.search_indexes import product_search
+        return product_search.more_like_this(self)[:3]
     
     @property
     def slug(self):
@@ -88,9 +95,9 @@ class Picture(models.Model):
     image = models.ImageField(null=True, blank=True, upload_to='pictures/')
     # TODO : We still need to store thumbnails
 
-class Category(models.Model):
+class Category(MPTTModel):
     """A category"""
-    parent = models.ForeignKey('self', related_name='children', blank=True, null=True)
+    parent = models.ForeignKey('self', related_name='childrens', blank=True, null=True)
     name = models.CharField(max_length=255)
     slug = models.SlugField(unique=True, db_index=True)
     need_insurance = models.BooleanField(default=True, db_index=True)
@@ -158,10 +165,12 @@ class Price(models.Model):
     amount = models.DecimalField(max_digits=8, decimal_places=2)
     currency = models.CharField(max_length=3, choices=CURRENCY)
     product = models.ForeignKey(Product, related_name='prices')
-    unit = models.IntegerField(choices=UNIT, db_index=True)
+    unit = models.PositiveSmallIntegerField(choices=UNIT, db_index=True)
     
     started_at = SimpleDateField(null=True, blank=True)
     ended_at = SimpleDateField(null=True, blank=True)
+    
+    objects = PriceManager()
     
     class Meta:
         unique_together = ('product', 'unit', 'name')
@@ -243,10 +252,12 @@ class Question(models.Model):
     text = models.CharField(max_length=255)
     created_at = models.DateTimeField(editable=False)
     modified_at = models.DateTimeField(editable=False)
-    status = models.IntegerField(choices=STATUS, db_index=True, default=STATUS.DRAFT)
+    status = models.PositiveSmallIntegerField(choices=STATUS, db_index=True, default=STATUS.DRAFT)
     
     product = models.ForeignKey(Product, related_name="questions")
     author = models.ForeignKey(Patron, related_name="questions")
+    
+    objects = QuestionManager()
     
     class Meta:
         ordering = ('modified_at', 'created_at')
@@ -260,12 +271,12 @@ class Question(models.Model):
         """
         return smart_unicode(self.text)
     
-    def save(self):
+    def save(self, *args, **kwargs):
         if not self.created_at:
             self.created_at = datetime.now()
         else:
             self.modified_at = datetime.now()
-        super(Question, self).save()
+        super(Question, self).save(*args, **kwargs)
     
 
 class Answer(models.Model):
@@ -281,10 +292,10 @@ class Answer(models.Model):
         """
         return smart_unicode(self.text)
     
-    def save(self):
+    def save(self, *args, **kwargs):
         if not self.created_at:
             self.created_at = datetime.now()
-        super(Answer, self).save()
+        super(Answer, self).save(*args, **kwargs)
     
 
 post_save.connect(post_save_answer, sender=Answer)

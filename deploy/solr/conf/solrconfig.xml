@@ -76,6 +76,7 @@
     </lst>
     <arr name="last-components">
       <str>spellcheck</str>
+      <str>geodistance</str>
     </arr>
   </requestHandler>
   <searchComponent name="spellcheck" class="solr.SpellCheckComponent">

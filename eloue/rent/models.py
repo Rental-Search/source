@@ -32,17 +32,18 @@ BOOKING_STATE = Enum([
 
 PAYMENT_STATE = Enum([
     (0, 'REJECTED', _(u'Rejeté')),
-    (1, 'CANCELED_PENDING', _(u'En cours de sequestration')),
+    (1, 'CANCELED_PENDING', _(u"En cours de d'annluation")),
     (2, 'CANCELED', _(u'Annulé')),
-    (3, 'AUTHORIZED', _(u'Autorisé')),
-    (4, 'HOLDED_PENDING', _(u'En cours de sequestration')),
-    (5, 'HOLDED', _(u'Sequestré')),
-    (6, 'PAID_PENDING', _(u'En cours de paiment')),
-    (7, 'PAID', _(u'Payé')),
-    (8, 'REFUNDED_PENDING', _(u'En attente de remboursement')),
-    (9, 'REFUNDED', _(u'Remboursé')),
-    (10, 'DEPOSIT_PENDING', _(u'Caution en cours de versement')),
-    (11, 'DEPOSIT', _(u'Caution versée'))
+    (3, 'AUTHORIZED_PENDING', _(u"En cours d'autorisation")),
+    (4, 'AUTHORIZED', _(u'Autorisé')),
+    (5, 'HOLDED_PENDING', _(u'En cours de sequestration')),
+    (6, 'HOLDED', _(u'Sequestré')),
+    (7, 'PAID_PENDING', _(u'En cours de paiment')),
+    (8, 'PAID', _(u'Payé')),
+    (9, 'REFUNDED_PENDING', _(u'En attente de remboursement')),
+    (10, 'REFUNDED', _(u'Remboursé')),
+    (11, 'DEPOSIT_PENDING', _(u'Caution en cours de versement')),
+    (12, 'DEPOSIT', _(u'Caution versée'))
 ])
 
 COMMISSION = D(str(getattr(settings, 'COMMISSION', 0.1)))
@@ -81,8 +82,8 @@ class Booking(models.Model):
     started_at = models.DateTimeField()
     ended_at = models.DateTimeField()
     
-    booking_state = models.IntegerField(default=BOOKING_STATE.ASKED, choices=BOOKING_STATE)
-    payment_state = models.IntegerField(choices=PAYMENT_STATE)
+    booking_state = models.PositiveSmallIntegerField(default=BOOKING_STATE.ASKED, choices=BOOKING_STATE)
+    payment_state = models.PositiveSmallIntegerField(default=PAYMENT_STATE.AUTHORIZED_PENDING, choices=PAYMENT_STATE)
     
     deposit_amount = models.DecimalField(max_digits=8, decimal_places=2)
     insurance_amount = models.DecimalField(max_digits=8, decimal_places=2)
@@ -93,7 +94,7 @@ class Booking(models.Model):
     borrower = models.ForeignKey(Patron, related_name='rentals')
     product = models.ForeignKey(Product, related_name='bookings')
     
-    contract_id = IntegerAutoField(db_index=True)
+    contract_id = IntegerAutoField(unique=True, db_index=True)
     pin = models.CharField(blank=True, max_length=4)
     ip = models.IPAddressField(blank=True, null=True)
     
@@ -165,7 +166,7 @@ class Booking(models.Model):
                 startingDate = datetime.datetime.now(),
                 endingDate = self.ended_at,
                 currencyCode = self.currency,
-                maxTotalAmountOfAllPayments = str(self.total_amount + self.net_price + self.deposit_amount),
+                maxTotalAmountOfAllPayments = str(self.total_amount + self.deposit_amount),
                 cancelUrl = cancel_url,
                 returnUrl = return_url,
                 ipnNotificationUrl = urljoin(
@@ -262,7 +263,7 @@ class Booking(models.Model):
                 currencyCode = self.currency,
                 preapprovalKey = self.preapproval_key,
                 ipnNotificationUrl = urljoin(
-                    "http://%s" % Site.objects.get_current().domain, reverse('pay_ip')
+                    "http://%s" % Site.objects.get_current().domain, reverse('pay_ipn')
                 ),
                 receiverList = { 'receiver': [
                     {'primary':True, 'amount':str(self.total_amount), 'email':PAYPAL_API_EMAIL},
@@ -356,7 +357,7 @@ class Booking(models.Model):
 
 class Sinister(models.Model):
     uuid = UUIDField(primary_key=True)
-    sinister_id = IntegerAutoField(db_index=True)
+    sinister_id = IntegerAutoField(unique=True, db_index=True)
     description = models.TextField()
     patron = models.ForeignKey(Patron, related_name='sinisters')
     booking =  models.ForeignKey(Booking, related_name='sinisters')

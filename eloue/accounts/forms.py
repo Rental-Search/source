@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+import re
+
 import django.forms as forms
 from django.conf import settings
 from django.contrib.auth import authenticate
@@ -9,6 +11,7 @@ from django.template.loader import render_to_string
 from django.utils.http import int_to_base36
 from django.utils.translation import ugettext as _
 
+from eloue.accounts import EMAIL_BLACKLIST
 from eloue.accounts.fields import PhoneNumberField
 from eloue.accounts.models import Patron, PhoneNumber
 
@@ -19,10 +22,16 @@ class EmailAuthenticationForm(forms.Form):
     }))
     password = forms.CharField(label=_(u"Password"), widget=forms.PasswordInput, required=True)
     
-    def __init__(self, request=None, *args, **kwargs):
-        self.request = request
+    def __init__(self, *args, **kwargs):
         self.user_cache = None
         super(EmailAuthenticationForm, self).__init__(*args, **kwargs)
+    
+    def clean_email(self):
+        email = self.cleaned_data.get('email').lower()
+        for rule in EMAIL_BLACKLIST:
+            if re.search(rule, email):
+                raise forms.ValidationError(_(u"Pour garantir un service de qualité et la sécurité des utilisateurs de e-loue.com, vous ne pouvez pas vous enregistrer avec une adresse email jetable."))
+        return email
     
     def clean(self):
         email = self.cleaned_data.get('email')
@@ -30,15 +39,12 @@ class EmailAuthenticationForm(forms.Form):
         
         if email and password:
             email = email.lower()
-            self.user_cache = authenticate(username=email, password=password)
-            if self.user_cache is None:
-                raise forms.ValidationError(_(u"Veuillez saisir une adresse email et un mot de passe valide."))
-            elif not self.user_cache.is_active:
-                raise forms.ValidationError(_(u"Ce compte est inactif parce qu'il n'a pas été activé."))
-        
-        if self.request:
-            if not self.request.session.test_cookie_worked():
-                raise forms.ValidationError(_("Your Web browser doesn't appear to have cookies enabled. Cookies are required for logging in."))
+            if Patron.objects.filter(email=email).exists():
+                self.user_cache = authenticate(username=email, password=password)
+                if self.user_cache is None:
+                    raise forms.ValidationError(_(u"Veuillez saisir une adresse email et un mot de passe valide."))
+                elif not self.user_cache.is_active:
+                    raise forms.ValidationError(_(u"Ce compte est inactif parce qu'il n'a pas été activé."))
         
         return self.cleaned_data
     

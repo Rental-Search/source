@@ -67,7 +67,7 @@ class SimpleDate(int):
         return self / 32
     
 
-class SimpleDateField(models.IntegerField):
+class SimpleDateField(models.PositiveSmallIntegerField):
     __metaclass__ = models.SubfieldBase
     
     def to_python(self, value):
