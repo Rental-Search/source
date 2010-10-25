@@ -57,6 +57,8 @@ class ProductReviewForm(forms.ModelForm):
 
 class ProductForm(forms.ModelForm):
     category = TreeNodeChoiceField(queryset=Category.tree.all(), empty_label="---------", level_indicator=u'--')
+    price = forms.DecimalField(required=True)
+    picture = forms.ImageField()
     
     class Meta:
         model = Product
