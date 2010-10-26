@@ -3,37 +3,41 @@ from django.template import Library
 
 register = Library()
 
-DOT = '.'
+LEADING_PAGE_RANGE_DISPLAYED = TRAILING_PAGE_RANGE_DISPLAYED = 4
+LEADING_PAGE_RANGE = TRAILING_PAGE_RANGE = 2
+NUM_PAGES_OUTSIDE_RANGE = 2 
+ADJACENT_PAGES = 2
+
 
 @register.inclusion_tag('products/pagination.html', takes_context=True)
 def pagination(context):
-    paginator = context['paginator']
-    page_obj = context['page_obj']
-    
-    ON_EACH_SIDE = 3
-    ON_ENDS = 2
-    
-    # If there are 10 or fewer pages, display links to every page.
-    # Otherwise, do some fancy
-    if paginator.num_pages <= 10:
-        page_range = range(paginator.num_pages)
-    else:
-        # Insert "smart" pagination links, so that there are always ON_ENDS
-        # links at either end of the list of pages, and there are always
-        # ON_EACH_SIDE links at either end of the "current page" link.
-        page_range = []
-        if page_obj.number > (ON_EACH_SIDE + ON_ENDS):
-            page_range.extend(range(0, ON_EACH_SIDE - 1))
-            page_range.append(DOT)
-            page_range.extend(range(page_obj.number - ON_EACH_SIDE, page_obj.number + 1))
-        else:
-            page_range.extend(range(0, page_obj.number + 1))
-            if page_obj.number < (paginator.num_pages - ON_EACH_SIDE - ON_ENDS - 1):
-                page_range.extend(range(page_obj.number + 1, page_obj.number + ON_EACH_SIDE + 1))
-                page_range.append(DOT)
-                page_range.extend(range(paginator.num_pages - ON_ENDS, paginator.num_pages))
-            else:
-                page_range.extend(range(page_obj.number + 1, paginator.num_pages))
-
-    context.update({ 'page_range': [ page + 1 if isinstance(page, int) else page for page in page_range ] })
+    is_paginated = context['is_paginated']
+    if is_paginated:
+        in_leading_range = in_trailing_range = False
+        pages_outside_leading_range = pages_outside_trailing_range = range(0)
+        pages = context['pages']
+        page = context['page']
+        
+        if (pages <= LEADING_PAGE_RANGE_DISPLAYED):
+            in_leading_range = in_trailing_range = True
+            page_range = [n for n in range(1, pages + 1) if n > 0 and n <= pages]           
+        elif (page <= LEADING_PAGE_RANGE):
+            in_leading_range = True
+            page_range = [n for n in range(1, LEADING_PAGE_RANGE_DISPLAYED + 1) if n > 0 and n <= pages]
+            pages_outside_leading_range = [n + pages for n in range(0, -NUM_PAGES_OUTSIDE_RANGE, -1)]
+        elif (page > pages - TRAILING_PAGE_RANGE):
+            in_trailing_range = True
+            page_range = [n for n in range(pages - TRAILING_PAGE_RANGE_DISPLAYED + 1, pages + 1) if n > 0 and n <= pages]
+            pages_outside_trailing_range = [n + 1 for n in range(0, NUM_PAGES_OUTSIDE_RANGE)]
+        else: 
+            page_range = [n for n in range(page - ADJACENT_PAGES, page + ADJACENT_PAGES + 1) if n > 0 and n <= pages]
+            pages_outside_leading_range = [n + pages for n in range(0, -NUM_PAGES_OUTSIDE_RANGE, -1)]
+            pages_outside_trailing_range = [n + 1 for n in range(0, NUM_PAGES_OUTSIDE_RANGE)]
+        context.update({
+          "page_range":page_range,
+          "in_leading_range" : in_leading_range,
+          "in_trailing_range" : in_trailing_range,
+          "pages_outside_leading_range": pages_outside_leading_range,
+          "pages_outside_trailing_range": pages_outside_trailing_range  
+        })
     return context
