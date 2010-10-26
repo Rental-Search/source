@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import types
 import re
 
 import django.forms as forms
@@ -135,6 +136,13 @@ def make_missing_data_form(instance):
             del fields[f]
     
     # TODO : add validation
+    def save(self):
+        pass
+    
+    def clean(self):
+        pass
     
     form_class = type('MissingInformationForm', (forms.BaseForm,), { 'base_fields': fields })
+    form_class.save = types.MethodType(save, None, form_class)
+    form_class.clean = types.MethodType(clean, None, form_class)
     return fields != {}, form_class
