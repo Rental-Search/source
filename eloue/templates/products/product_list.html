@@ -1,6 +1,34 @@
 {% extends "base.html" %}
  {% load cache facets i18n param category mptt_tags %}
 
+{% block title %}{% spaceless %}
+ {% if breadcrumbs %}
+	{% if query %}
+	 {% trans "Location" %}
+	 {% for crumb in breadcrumbs.values %}
+	  {% if crumb.facet %}
+	   &rsaquo; {{ crumb.pretty_value|capfirst }}
+	  {% endif %}
+	 {% endfor %} &rsaquo; {{ query }} - {{ block.super }}
+	{% else %}
+	 {% trans "Location" %}
+	 {% for crumb in breadcrumbs.values %}
+	  {% if crumb.facet %}
+	   &rsaquo; {{ crumb.pretty_value|capfirst }}
+	  {% endif %}
+	 {% endfor %} - {{ block.super }}
+  {% endif %}
+ {% else %}
+	{% if query %}
+ 	 {{ query }} - {{ block.super }}
+	{% else %}
+	 {% trans "Location" %} - {{ block.super }}
+	{% endif %}
+ {% endif %}
+{% endspaceless %}{% endblock %}
+
+{% block description %}{% if breadcrumbs %} {% trans "Location" %} {% for crumb in breadcrumbs.values %}{% if crumb.facet %} &rsaquo; {{ crumb.pretty_value|capfirst }}{% endif %}{% endfor %} {% else %} {{ block.super }}{% endif %}{% endblock %}
+
 {% block head %}
  {{ block.super }}
  <link rel="canonical" href="{% canonical_url urlbits %}" />
@@ -28,7 +56,9 @@
 </div><!-- top-content -->
 <div class="content container clearfix">
 	<section class="result grid9 first">
-		<h1>{{ paginator.count }} résultat{{ paginator.count|pluralize }} pour <strong>{{ query }}</strong></h1>
+	  {% if query %}
+		 <h1>{{ paginator.count }} résultat{{ paginator.count|pluralize }} pour <strong>{{ query }}</strong></h1>
+		{% endif %}
 		<ul class="sort grid9 first">
 			<li class="label-sort">
 				{% trans "Trier par :" %}
