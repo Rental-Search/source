@@ -33,10 +33,10 @@
 			<div class="slogan grid3">Avec e-loue, tout se loue !</div>
 			<nav class="grid7">
 				<ul class="navBar">
-					<li class="add button green"><a href="add-product.html">Mettre en location</a></li>
-					<li><a href="#">Se connecter</a></li>
-					<li><a href="#">S'inscrire</a></li>
-					<li class="first"><a href="products-list.html">La location</a></li>
+					<li class="add button green"><a href="{% url product_create %}">Mettre en location</a></li>
+					<li><a href="{% url auth_login %}">Se connecter</a></li>
+					<li><a href="{% url auth_login %}">S'inscrire</a></li>
+					<li class="first"><a href="#">La location</a></li>
 				</ul><!-- nav-bar -->
 			</nav>
 		</header>
