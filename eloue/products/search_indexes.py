@@ -26,7 +26,9 @@ class ProductIndex(QueuedSearchIndex):
     
     def prepare_categories(self, obj):
         if obj.category:
-            return [ category.slug for category in obj.category.get_ancestors(ascending=False) ]
+            categories = [ category.slug for category in obj.category.get_ancestors(ascending=False) ]
+            categories.append(obj.category.slug)
+            return categories
     
     def prepare_price(self, obj):
         # It doesn't play well with season
