@@ -37,7 +37,7 @@
 {% block content %}
 <div class="top-content container clearfix">
 	<search class="grid12 first">
-		<form action="{% facet_url breadcrumbs %}">
+		<form action="{% url product_list %}">
 			<div class="grid4 first">
 				<label for="id_q" class="labb">{% trans "Que voulez vous louer ?" %}</label><br/>
 				{{ form.q }}
