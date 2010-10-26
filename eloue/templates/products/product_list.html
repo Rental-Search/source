@@ -29,7 +29,7 @@
 
 {% block description %}{% if breadcrumbs %} {% trans "Location" %} {% for crumb in breadcrumbs.values %}{% if crumb.facet %} &rsaquo; {{ crumb.pretty_value|capfirst }}{% endif %}{% endfor %} {% else %} {{ block.super }}{% endif %}{% endblock %}
 
-{% block head %}
+{% block   %}
  {{ block.super }}
  <link rel="canonical" href="{% canonical_url urlbits %}" />
 {% endblock %}
