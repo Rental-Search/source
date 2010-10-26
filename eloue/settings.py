@@ -169,14 +169,35 @@ CACHE_MIDDLEWARE_KEY_PREFIX = getattr(local, 'CACHE_MIDDLEWARE_KEY_PREFIX', None
 # Compress configuration
 COMPRESS = getattr(local, 'COMPRESS', True)
 COMPRESS_VERSION = True
+COMPRESS_CSS_URL_REPLACE = {
+    "../":"",
+    "url(":"url(%s" % MEDIA_URL
+}
 COMPRESS_JS_FILTERS = getattr(local, 'COMPRESS_JS_FILTERS', ('compress.filters.yui.YUICompressorFilter',))
-COMPRESS_CSS_FILTERS = getattr(local, 'COMPRESS_CSS_FILTERS', ('compress.filters.yui.YUICompressorFilter',))
+COMPRESS_CSS_FILTERS = getattr(local, 'COMPRESS_CSS_FILTERS', (
+    'compress.filters.yui.YUICompressorFilter',
+    'compress.filters.css_url_replace.CSSURLReplace'
+))
 COMPRESS_YUI_BINARY = getattr(local, 'COMPRESS_YUI_BINARY', '/usr/bin/yui-compressor')
 COMPRESS_CSS = {
     'master': {
         'source_filenames': (
             'css/master.css',
-            'css/all.css'
+            'css/core/content.css',
+            'css/core/libraries.css',
+            'css/core/form/form.css',
+            'css/core/grids/978.css',
+            'css/core/heading/headings.css',
+            'css/core/spacing/space.css',
+            'css/core/table/table.css',
+            'css/core/template/template.css',
+            'css/plugins/addProduct/addProduct.css',
+            'css/plugins/aProduct/aProduct.css',
+            'css/plugins/booking/booking.css',
+            'css/plugins/buttons/button.css',
+            'css/plugins/product-list/product-list.css',
+            'css/plugins/search/search.css',
+            'css/plugins/stepbystep/stepbystep.css'
 		),
         'output_filename': 'css/master.r?.css',
         'extra_context': {
