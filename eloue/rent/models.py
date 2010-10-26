@@ -120,12 +120,8 @@ class Booking(models.Model):
     
     def clean(self):
         from django.core.exceptions import ValidationError
-        if self.owner == self.borrower:
-            raise ValidationError(_(u"Un objet ne peut pas être louer à son propriétaire"))
         if self.started_at >= self.ended_at:
             raise ValidationError(_(u"Une location ne peut pas terminer avant d'avoir commencer"))
-        if self.total_amount < 0:
-            raise ValidationError(_(u"Le prix total d'une location ne peut pas être négatif"))
         if (self.ended_at - self.started_at) > datetime.timedelta(days=BOOKING_DAYS):
             raise ValidationError(_(u"La durée d'une location est limitée à 85 jours."))
     

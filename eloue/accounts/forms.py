@@ -8,12 +8,17 @@ from django.contrib.sites.models import Site
 from django.contrib.auth.forms import PasswordResetForm
 from django.contrib.auth.tokens import default_token_generator
 from django.template.loader import render_to_string
+from django.utils.datastructures import SortedDict
 from django.utils.http import int_to_base36
 from django.utils.translation import ugettext as _
 
 from eloue.accounts import EMAIL_BLACKLIST
 from eloue.accounts.fields import PhoneNumberField
-from eloue.accounts.models import Patron, PhoneNumber
+from eloue.accounts.models import Patron, PhoneNumber, Address
+
+PATRON_FIELDS = ['first_name', 'last_name', 'username']
+ADDRESS_FIELDS = ['address1', 'address2', 'zipcode', 'city', 'country']
+
 
 class EmailAuthenticationForm(forms.Form):
     """Displays the login form and handles the login action."""
@@ -101,4 +106,37 @@ class PhoneNumberForm(forms.ModelForm):
         model = PhoneNumber
         exclude = ('patron')
     
-    
+
+def fields_for_instance(instance, fields=None, exclude=None, widgets=None):
+    field_list = []
+    opts = instance._meta
+    for f in opts.fields + opts.many_to_many:
+        if not f.editable:
+            continue
+        if fields and not f.name in fields:
+            continue
+        if exclude and f.name in exclude:
+            continue
+        if hasattr(instance, f.name) and getattr(instance, f.name):
+            continue
+        if widgets and f.name in widgets:
+            kwargs = {'widget': widgets[f.name]}
+        else:
+            kwargs = {}
+        formfield = f.formfield(**kwargs)
+        if formfield:
+            field_list.append((f.name, formfield))
+    return SortedDict(field_list)
+
+def make_missing_data_form(instance):
+    fields = {}
+    if instance:
+        fields.update(fields_for_instance(instance, fields=PATRON_FIELDS))
+        if instance.addresses.exists():
+            fields.update({ 'address':forms.ModelChoiceField(queryset=instance.addresses.all()) })
+        fields.update(fields_for_instance(Address, exclude=['patron']))
+    else:
+        fields.update(fields_for_instance(Patron, fields=PATRON_FIELDS))
+        fields.update(fields_for_instance(Address, exclude=['patron']))
+    form_class = type('MissingInformationForm', (forms.BaseForm,), { 'base_fields': fields })
+    return fields != {}, form_class

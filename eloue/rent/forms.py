@@ -46,6 +46,13 @@ class BookingForm(forms.ModelForm):
         model = Booking
         fields = ('started_at', 'ended_at')
     
+    def clean(self):
+        started_at = self.cleaned_data['started_at']
+        ended_at = self.cleaned_data['ended_at']
+        product = self.instance.product
+        if (started_at and ended_at):
+            self.cleaned_data['total_amount'] = Booking.calculate_price(product, started_at, ended_at)
+        return self.cleaned_data
 
 class SinisterForm(forms.ModelForm):
     class Meta:

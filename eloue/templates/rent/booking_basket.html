@@ -1,12 +1,11 @@
 {% extends "base.html" %}
 
 {% block content %}
- {{ product }}
  <form action="" method="POST">
   {% csrf_token %}
   {{ form.as_ul }}
   <input type="hidden" name="{{ step_field }}" value="{{ step0 }}" />
   {{ previous_fields|safe }}
   <input type="submit" value="Prochaine étape">
- </form>
+ </form>  
 {% endblock %}

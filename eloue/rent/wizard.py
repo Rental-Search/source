@@ -2,18 +2,19 @@
 from django.conf import settings
 from django.contrib.auth import login
 from django.contrib.formtools.wizard import FormWizard
-from django.views.generic.simple import redirect_to
+from django.views.generic.simple import direct_to_template
 
 from django_lean.experiments.models import GoalRecord
 from django_lean.experiments.utils import WebUser
 
-from eloue.accounts.forms import EmailAuthenticationForm, PATRON_FIELDS, ADDRESS_FIELDS, make_missing_data_form
-from eloue.accounts.models import Patron, Address
-from eloue.products.forms import ProductForm
+from eloue.accounts.forms import EmailAuthenticationForm, make_missing_data_form
+from eloue.accounts.models import Patron
 from eloue.products.models import Product
+from eloue.rent.models import Booking
+from eloue.rent.forms import BookingForm
 
 
-class ProductWizard(FormWizard):
+class BookingWizard(FormWizard):    
     def done(self, request, form_list):
         missing_form = filter(lambda el: el.__name__ == 'MissingInformationForm', form_list)
         if missing_form: # Fill missing information
@@ -34,39 +35,34 @@ class ProductWizard(FormWizard):
         else:
             new_patron = request.user
         
-        # Assign missing data to Patron
-        for field in PATRON_FIELDS:
-            if field in missing_form.cleaned_data:
-                setattr(new_patron, field, missing_form.cleaned_data[field])
-        new_patron.save()
+        booking_form = form_list[0]
+        booking_form.instance.borrower = new_patron
+        booking = booking_form.save()
         
-        # Assign missing data to Address
-        if 'address' in missing_form.cleaned_data:
-            new_address = missing_form.cleaned_data['address']
-        else:
-            new_address = Address(patron=new_patron), False
-            for field in ADDRESS_FIELDS:
-                if field in missing_form.cleaned_data:
-                    setattr(new_address, field, missing_form.cleaned_data[field])
-            new_address.save()
+        booking.preapproval(
+            cancel_url=None,
+            return_url=None,
+            ip_address=request.META['REMOTE_ADDR']
+        )
         
-        # Create product
-        product_form = form_list[0]
-        product_form.instance.owner = new_patron
-        product_form.instance.address = new_address
-        product = product_form.save()
-        
-        GoalRecord.record('new_object', WebUser(request))
-        return redirect_to(request, product.get_absolute_url())
+        GoalRecord.record('rent_object', WebUser(request))
+        return direct_to_template(request, template="rent/booking_preapproval.html", extra_context={
+            'booking':booking,
+        })
     
     def get_form(self, step, data=None):
-        if issubclass(self.form_list[step], ProductForm):
+        if issubclass(self.form_list[step], BookingForm):
+            product = self.extra_context['product']
+            booking = Booking(product=product, owner=product.owner)
             return self.form_list[step](data, prefix=self.prefix_for_step(step), 
-                initial=self.initial.get(step, None), instance=Product())
+                initial=self.initial.get(step, None), instance=booking)
         if issubclass(self.form_list[step], EmailAuthenticationForm):
             return self.form_list[step](None, data, prefix=self.prefix_for_step(step),
                 initial=self.initial.get(step, None))
-        return super(ProductWizard, self).get_form(step, data)
+        return super(BookingWizard, self).get_form(step, data)
+    
+    def parse_params(self, request, *args, **kwargs):
+        self.extra_context['product'] = Product.objects.get(pk=kwargs['product_id'])
     
     def process_step(self, request, form, step):
         if step == 0: # Check if we need the user to be authenticated
@@ -76,9 +72,9 @@ class ProductWizard(FormWizard):
             missing_fields, form_class = make_missing_data_form(form.get_user())
             if missing_fields and not any(map(lambda el: el.__name__ == 'MissingInformationForm', self.form_list)):
                 self.form_list.append(form_class)
-        return super(ProductWizard, self).process_step(request, form, step)
+        return super(BookingWizard, self).process_step(request, form, step)
     
     def get_template(self, step):
-        stage = {0: 'create', 1: 'register', 2:'missing'}.get(step)
-        return 'products/product_%s.html' % stage
+        stage = {0: 'basket', 1: 'register', 2:'missing'}.get(step)
+        return 'rent/booking_%s.html' % stage
     
