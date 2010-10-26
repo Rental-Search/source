@@ -1,5 +1,5 @@
 {% extends "base.html" %}
- {% load cache facets i18n param category mptt_tags %}
+ {% load cache facets i18n param category paginator mptt_tags %}
 
 {% block title %}{% spaceless %}
  {% if breadcrumbs %}
@@ -117,21 +117,7 @@
 				{% endcache %}
 			{% endfor %}
 		</ul><!-- list -->
-		{% if is_paginated %}
-			<div class="pager grid9 first">
-				<ul class="grid9 first">
-					{% if page_obj.has_previous %}
-						<li class="previous"><a href="{% facet_url breadcrumbs "page" page_obj.previous_page_number %}">{% trans "Précédent" %}</a></li>
-					{% endif %}
-					{% for page in paginator.page_range %}
-						<li class="page-{{ page }} {% if page_obj.number == page %}on{% endif %}"><a href="{% facet_url breadcrumbs "page" page %}">{{ page }}</a></li>
-					{% endfor %}
-					{% if page_obj.has_next %}
-						<li class="next"><a href="{% facet_url breadcrumbs "page" page_obj.next_page_number %}">{% trans "Suivant" %}</a></li>
-					{% endif %}
-				</ul> 
-			</div><!-- pager -->
-		{% endif %}
+		{% pagination %}
 	</section><!-- result -->
 	<section class="facet grid3">
 		<h4>{% trans "Catégories" %}</h4>
