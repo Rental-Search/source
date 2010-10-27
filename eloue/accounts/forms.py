@@ -16,9 +16,6 @@ from eloue.accounts import EMAIL_BLACKLIST
 from eloue.accounts.fields import PhoneNumberField
 from eloue.accounts.models import Patron, PhoneNumber, COUNTRY_CHOICES
 
-PATRON_FIELDS = ['first_name', 'last_name', 'username']
-ADDRESS_FIELDS = ['address1', 'address2', 'zipcode', 'city', 'country']
-
 
 class EmailAuthenticationForm(forms.Form):
     """Displays the login form and handles the login action."""
@@ -109,7 +106,11 @@ class PhoneNumberForm(forms.ModelForm):
 
 def make_missing_data_form(instance):
     fields = {
-        'username':forms.CharField(required=True, widget=forms.TextInput(attrs={'class':'inb'})),
+        'username':forms.RegexField(label=_("Username"), max_length=30, regex=r'^[\w.@+-]+$',
+            help_text = _("Required. 30 characters or fewer. Letters, digits and @/./+/-/_ only."),
+            error_messages = {'invalid': _("This value may contain only letters, numbers and @/./+/-/_ characters.")},
+            widget=forms.TextInput(attrs={'class':'inb'})
+        ),
         'last_name':forms.CharField(required=True, widget=forms.TextInput(attrs={'class':'inb'})),
         'first_name':forms.CharField(required=True, widget=forms.TextInput(attrs={'class':'inb'})),
         'last_name':forms.CharField(required=True, widget=forms.TextInput(attrs={'class':'inb'})),
@@ -135,22 +136,22 @@ def make_missing_data_form(instance):
     
     def save(self):
         for attr, value in self.cleaned_data.iteritems():
-            if "__" not in attr:
+            if "addresses" not in attr and "phones" not in attr:
                 setattr(self.instance, attr, value)
         if 'addresses' in self.cleaned_data:
             address = self.cleaned_data['addresses']
         else:
             address = self.instance.addresses.create(
-                address1=self.cleaned_data['address1'],
-                zipcode=self.cleaned_data['zipcode'],
-                city=self.cleaned_data['city'],
-                country=self.cleaned_data['country']
+                address1=self.cleaned_data['addresses__address1'],
+                zipcode=self.cleaned_data['addresses__zipcode'],
+                city=self.cleaned_data['addresses__city'],
+                country=self.cleaned_data['addresses__country']
             )
         if 'phones' in self.cleaned_data:
             phone = self.cleaned_data['phones']
-        elif self.cleaned_data['phone']:
+        elif self.cleaned_data['phones__phone']:
             phone = self.instance.phone.create(
-                number=self.cleaned_data['phone']
+                number=self.cleaned_data['phones__phone']
             )
         else:
             phone = None
@@ -159,6 +160,7 @@ def make_missing_data_form(instance):
     def clean_username(self):
         if Patron.objects.filter(username=self.cleaned_data['username']).exists():
             raise forms.ValidationError(_(u"Ce nom d'utilisateur est déjà pris."))
+        return self.cleaned_data['username']
     
     form_class = type('MissingInformationForm', (forms.BaseForm,), { 'instance':instance, 'base_fields': fields })
     form_class.save = types.MethodType(save, None, form_class)

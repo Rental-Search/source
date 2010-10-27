@@ -63,7 +63,7 @@ class ProductReviewForm(forms.ModelForm):
 class ProductForm(forms.ModelForm):
     category = TreeNodeChoiceField(queryset=Category.tree.all(), empty_label="---------", level_indicator=u'--', widget=forms.Select(attrs={'style':'100%'}))
     summary = forms.CharField(max_length=100, widget=forms.TextInput(attrs={'class':'inb'}))
-    picture = forms.ImageField(required=False, widget=forms.FileInput(attrs={'class':'inb pic'}))
+    picture = forms.ImageField(required=True, widget=forms.FileInput(attrs={'class':'inb pic'}))
     price = forms.DecimalField(required=True, widget=forms.TextInput(attrs={'class':'inb price'}))
     deposit_amount = forms.DecimalField(required=True, widget=forms.TextInput(attrs={'class':'inb price'}))
     quantity = forms.IntegerField(initial=1, widget=forms.TextInput(attrs={'class':'inb qty'}))
