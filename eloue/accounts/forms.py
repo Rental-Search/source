@@ -23,9 +23,9 @@ ADDRESS_FIELDS = ['address1', 'address2', 'zipcode', 'city', 'country']
 class EmailAuthenticationForm(forms.Form):
     """Displays the login form and handles the login action."""
     email = forms.EmailField(label=_(u"Email"), max_length=75, required=True, widget=forms.TextInput(attrs={ 
-        'autocapitalize':'off', 'autocorrect':'off'
+        'autocapitalize':'off', 'autocorrect':'off', 'class':'inb'
     }))
-    password = forms.CharField(label=_(u"Password"), widget=forms.PasswordInput, required=True)
+    password = forms.CharField(label=_(u"Password"), widget=forms.PasswordInput(attrs={'class':'inb'}), required=True)
     
     def __init__(self, request, *args, **kwargs):
         self.user_cache = None
@@ -109,16 +109,16 @@ class PhoneNumberForm(forms.ModelForm):
 
 def make_missing_data_form(instance):
     fields = {
-        'username':forms.CharField(required=True),
-        'last_name':forms.CharField(required=True),
-        'first_name':forms.CharField(required=True),
-        'last_name':forms.CharField(required=True),
-        'addresses__address1':forms.CharField(required=True),
+        'username':forms.CharField(required=True, widget=forms.TextInput(attrs={'class':'inb'})),
+        'last_name':forms.CharField(required=True, widget=forms.TextInput(attrs={'class':'inb'})),
+        'first_name':forms.CharField(required=True, widget=forms.TextInput(attrs={'class':'inb'})),
+        'last_name':forms.CharField(required=True, widget=forms.TextInput(attrs={'class':'inb'})),
+        'addresses__address1':forms.CharField(widget=forms.Textarea(attrs={'class':'inb street', 'placeholder':'Rue'})),
         'addresses__address2':forms.CharField(required=False),
-        'addresses__zipcode':forms.CharField(required=True),
-        'addresses__city':forms.CharField(required=True),
-        'addresses__country':forms.ChoiceField(choices=COUNTRY_CHOICES, required=True),
-        'phones__phone':PhoneNumberField(required=False)
+        'addresses__zipcode':forms.CharField(required=True, widget=forms.TextInput(attrs={'class':'inb zip', 'placeholder':'Code postal'})),
+        'addresses__city':forms.CharField(required=True, widget=forms.TextInput(attrs={'class':'inb town', 'placeholder':'Ville'})),
+        'addresses__country':forms.ChoiceField(choices=COUNTRY_CHOICES, required=True, widget=forms.Select(attrs={'class':'country'})),
+        'phones__phone':PhoneNumberField(required=False, widget=forms.TextInput(attrs={'class':'inb'}))
     }
     if instance and instance.addresses.exists():
         fields['addresses'] = forms.ModelChoiceField(queryset=instance.addresses.all())
