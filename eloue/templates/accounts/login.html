@@ -1,9 +1,44 @@
 {% extends "base.html" %}
 
 {% block content %}
- <form action="" method="post">
-  {% csrf_token %}
-  {{ form.as_p }}
-  <p><input type="submit" value="S'identifier ou s'incrire" /></p>
- </form>
+	<div class="top-content container clearfix">
+		<h1>S'identifier</h1>
+	</div>{# top-content #}
+	<div class="content container clearfix">
+		<div class="grid7 first">
+			{{ form.errors }}
+			<div class="data pam">
+				<form class="sign" action="" method="POST">
+					{% csrf_token %}
+					<table>
+						<tr>
+							<td class="txtR"><label class="labb">Mon adresse email est :</label></td>
+							<td>{{ form.email }}</td>
+						</tr>
+						<tr class="cSign">
+							<td class="txtR txtT"><input  name="create" value="0" type="radio" /></td>
+							<td><label class="labb">Je n'ai pas encore de compte<br /> e-loue</label></td>
+						</tr>
+						<tr>
+							<td class="txtR txtT"><input name="create" value="1" type="radio" /></td>
+							<td><label class="labb">J'ai déjà un compte e-loue et<br /> mon mot de passe est :</label></td>
+						</tr>
+						<tr>
+							<td></td>
+							<td>{{ form.password }}</td>
+						</tr>
+						<tr>
+							<td class="submit" colspan="2">
+								<input type="submit" value="S'identifier" class="button middle grey" />
+							</td>
+						</tr>
+						<tr>
+							<td class="forgot" colspan="2">
+								<a href="{% url password_reset %}">Mot de passe oublié</a>
+							</td>
+						</tr>
+					</table>
+				</form>{# sign #}
+			</div>{# data #}
+	</div>{# content #}
 {% endblock %}
