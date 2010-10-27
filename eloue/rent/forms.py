@@ -42,10 +42,14 @@ class PayIPNForm(forms.Form):
     
 
 class BookingForm(forms.ModelForm):
+    started_at = forms.CharField(required=True, widget=forms.TextInput(attrs={'class':'inb'}))
+    ended_at = forms.CharField(required=True, widget=forms.TextInput(attrs={'class':'inb'}))
+     
     class Meta:
         model = Booking
         fields = ('started_at', 'ended_at')
-    
+       
+        
     def clean(self):
         started_at = self.cleaned_data['started_at']
         ended_at = self.cleaned_data['ended_at']
