@@ -56,9 +56,6 @@ class BookingWizard(FormWizard):
             booking = Booking(product=product, owner=product.owner)
             return self.form_list[step](data, prefix=self.prefix_for_step(step), 
                 initial=self.initial.get(step, None), instance=booking)
-        if issubclass(self.form_list[step], EmailAuthenticationForm):
-            return self.form_list[step](None, data, prefix=self.prefix_for_step(step),
-                initial=self.initial.get(step, None))
         return super(BookingWizard, self).get_form(step, data)
     
     def parse_params(self, request, *args, **kwargs):

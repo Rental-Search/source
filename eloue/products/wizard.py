@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import django.forms as forms
 from django.conf import settings
 from django.contrib.auth import login
 from django.contrib.formtools.wizard import FormWizard
@@ -7,21 +8,18 @@ from django.views.generic.simple import redirect_to
 from django_lean.experiments.models import GoalRecord
 from django_lean.experiments.utils import WebUser
 
-from eloue.accounts.forms import EmailAuthenticationForm, PATRON_FIELDS, ADDRESS_FIELDS, make_missing_data_form
-from eloue.accounts.models import Patron, Address
+from eloue.accounts.forms import EmailAuthenticationForm, make_missing_data_form
+from eloue.accounts.models import Patron
 from eloue.products.forms import ProductForm
 from eloue.products.models import Product
 
 
 class ProductWizard(FormWizard):
     def done(self, request, form_list):
-        missing_form = filter(lambda el: el.__name__ == 'MissingInformationForm', form_list)
-        if missing_form: # Fill missing information
-            missing_form = missing_form[0]
+        missing_form = form_list[-1]
         
-        auth_form = filter(lambda el: isinstance(el, EmailAuthenticationForm), form_list)
-        if auth_form: # Create new Patron
-            auth_form = auth_form[0]
+        if request.user.is_anonymous(): # Create new Patron
+            auth_form = form_list[-2]
             new_patron = auth_form.get_user()
             if not new_patron:
                 new_patron = Patron.objects.create_inactive(missing_form.cleaned_data['username'], 
@@ -34,21 +32,8 @@ class ProductWizard(FormWizard):
         else:
             new_patron = request.user
         
-        # Assign missing data to Patron
-        for field in PATRON_FIELDS:
-            if field in missing_form.cleaned_data:
-                setattr(new_patron, field, missing_form.cleaned_data[field])
-        new_patron.save()
-        
-        # Assign missing data to Address
-        if 'address' in missing_form.cleaned_data:
-            new_address = missing_form.cleaned_data['address']
-        else:
-            new_address = Address(patron=new_patron), False
-            for field in ADDRESS_FIELDS:
-                if field in missing_form.cleaned_data:
-                    setattr(new_address, field, missing_form.cleaned_data[field])
-            new_address.save()
+        missing_form.instance = new_patron
+        new_patron, new_address, new_phone = missing_form.save()
         
         # Create product
         product_form = form_list[0]
@@ -62,23 +47,27 @@ class ProductWizard(FormWizard):
     def get_form(self, step, data=None):
         if issubclass(self.form_list[step], ProductForm):
             return self.form_list[step](data, prefix=self.prefix_for_step(step), 
-                initial=self.initial.get(step, None), instance=Product())
-        if issubclass(self.form_list[step], EmailAuthenticationForm):
-            return self.form_list[step](None, data, prefix=self.prefix_for_step(step),
-                initial=self.initial.get(step, None))
+                initial=self.initial.get(step, None), instance=Product(quantity=1))
         return super(ProductWizard, self).get_form(step, data)
     
-    def process_step(self, request, form, step):
-        if step == 0: # Check if we need the user to be authenticated
-            if request.user.is_anonymous() and EmailAuthenticationForm not in self.form_list:
+    def __call__(self, request, *args, **kwargs):
+        # Check if we need the user to be authenticated
+        if request.user.is_authenticated():
+            if EmailAuthenticationForm in self.form_list:
+                self.form_list.remove(EmailAuthenticationForm)
+        else:
+            if EmailAuthenticationForm not in self.form_list:
                 self.form_list.append(EmailAuthenticationForm)
-        if step == 1: # Check if we have necessary information from this user
-            missing_fields, form_class = make_missing_data_form(form.get_user())
-            if missing_fields and not any(map(lambda el: el.__name__ == 'MissingInformationForm', self.form_list)):
-                self.form_list.append(form_class)
-        return super(ProductWizard, self).process_step(request, form, step)
+        # Check if we have necessary information from this user
+        if not any(map(lambda el: el.__name__ == 'MissingInformationForm', self.form_list)):
+            self.form_list.append(make_missing_data_form(request.user))
+        return super(ProductWizard, self).__call__(request, *args, **kwargs)
     
     def get_template(self, step):
-        stage = {0: 'create', 1: 'register', 2:'missing'}.get(step)
-        return 'products/product_%s.html' % stage
+        if issubclass(self.form_list[step], EmailAuthenticationForm):
+            return 'products/product_register.html'
+        elif issubclass(self.form_list[step], ProductForm):
+            return 'products/product_create.html'
+        else:
+            return 'products/product_missing.html'
     

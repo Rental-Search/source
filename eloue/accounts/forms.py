@@ -27,7 +27,7 @@ class EmailAuthenticationForm(forms.Form):
     }))
     password = forms.CharField(label=_(u"Password"), widget=forms.PasswordInput(attrs={'class':'inb'}), required=True)
     
-    def __init__(self, request, *args, **kwargs):
+    def __init__(self, *args, **kwargs):
         self.user_cache = None
         super(EmailAuthenticationForm, self).__init__(*args, **kwargs)
     
@@ -114,7 +114,6 @@ def make_missing_data_form(instance):
         'first_name':forms.CharField(required=True, widget=forms.TextInput(attrs={'class':'inb'})),
         'last_name':forms.CharField(required=True, widget=forms.TextInput(attrs={'class':'inb'})),
         'addresses__address1':forms.CharField(widget=forms.Textarea(attrs={'class':'inb street', 'placeholder':'Rue'})),
-        'addresses__address2':forms.CharField(required=False),
         'addresses__zipcode':forms.CharField(required=True, widget=forms.TextInput(attrs={'class':'inb zip', 'placeholder':'Code postal'})),
         'addresses__city':forms.CharField(required=True, widget=forms.TextInput(attrs={'class':'inb town', 'placeholder':'Ville'})),
         'addresses__country':forms.ChoiceField(choices=COUNTRY_CHOICES, required=True, widget=forms.Select(attrs={'class':'country'})),
@@ -122,11 +121,14 @@ def make_missing_data_form(instance):
     }
     if instance and instance.addresses.exists():
         fields['addresses'] = forms.ModelChoiceField(queryset=instance.addresses.all())
+        for f in fields.keys():
+            if "addresses" in f:
+                fields[f].required = False 
     if instance and instance.phones.exists():
         fields['phones'] = forms.ModelChoiceField(queryset=instance.phones.all())
         
     for f in fields.keys():
-        if "__" in f:
+        if "__" in f or f in ['addresses', 'phones']:
             continue 
         if hasattr(instance, f) and getattr(instance, f):
             del fields[f]
@@ -140,7 +142,6 @@ def make_missing_data_form(instance):
         else:
             address = self.instance.addresses.create(
                 address1=self.cleaned_data['address1'],
-                address2=self.cleaned_data['address2'],
                 zipcode=self.cleaned_data['zipcode'],
                 city=self.cleaned_data['city'],
                 country=self.cleaned_data['country']
@@ -162,4 +163,4 @@ def make_missing_data_form(instance):
     form_class = type('MissingInformationForm', (forms.BaseForm,), { 'instance':instance, 'base_fields': fields })
     form_class.save = types.MethodType(save, None, form_class)
     form_class.clean_username = types.MethodType(clean_username, None, form_class)
-    return fields != {}, form_class
+    return form_class
