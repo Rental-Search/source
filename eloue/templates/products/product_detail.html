@@ -1,19 +1,79 @@
 {% extends "base.html" %}
-
-{% block description %}{{ product.summary }}{% endblock %}
-
+{% load cache facets i18n param category mptt_tags %}
 {% block content %}
- {{ product.summary }}
- {% for review in product.reviews.all %}
-  <div>
-    <div itemscope itemtype="http://data-vocabulary.org/Review">
-      <span itemprop="itemreviewed">{{ product.summary }}</span>
-      Revu par <span itemprop="reviewer">{{ review.reviewer.username }}</span> le
-      <time itemprop="dtreviewed" datetime="{{ review.created_at|date:"Y-m-d" }}">{{ review.created_at|date:"j N" }}</time>.
-      <span itemprop="summary">{{ review.summary }}</span>
-      <span itemprop="description">{{ review.description|safe }}</span>
-      Score : <span itemprop="rating">{{ review.score }}</span>
-    </div>
-  </div>
- {% endfor %}
+<div class="top-content container clearfix">
+	<search class="grid12 first">
+		<form action="{% url product_list %}">
+			<div class="grid4 first">
+				<label for="id_q" class="labb">{% trans "Que voulez vous louer ?" %}</label><br/>
+				{{ form.q }}<br />
+				<span>{% trans "Exemple :" %}</span><a href="#">{% trans "Voiture" %}</a>, <a href="#">{% trans "Chèvre" %}</a>, <a href="#">{% trans "Ski" %}</a>, <a href="#">{% trans "Robe" %}</a>
+			</div>
+			<div class="grid4">
+				<label for="id_where" class="labb">{% trans "Où ?" %}</label><br />
+				{{ form.where }}<br />
+				<span>{% trans "Exemple :" %}</span><a href="#">{% trans "Nantes" %}</a>, <a href="#">{% trans "69000" %}</a>, <a href="#">{% trans "11 rue crozatier, 75" %}</a>
+			</div>
+			<div class="grid4">
+				<input type="submit" value="{% trans "Rechercher" %}" class="button big orange"/>
+			</div>
+		</form><!-- form -->
+	</search>
+</div><!-- top-content -->
+<div class="content container clearfix">
+	<div class="col1 grid8 first">
+		<h1>{{ product.summary }}</h1>
+		<div class="detailsP">
+		<div class="picB">
+			{% with product.pictures.all|first as picture %}
+				<img src="{{ picture.display.url }}" alt="{{ product.summary }}" />
+			{% endwith %}
+		</div><!-- picB -->
+		</div><!-- details -->
+		<div class="thumbs">
+			{% for picture in product.pictures.all %}
+				{% if picture.thumbnail %}
+       		<a href="#" title="#"><img src="{{ picture.thumbnail.url }}" /></a>
+        {% endif %}
+			{% endfor %}
+		</div><!-- thumbs -->
+		<div class="descP grid8 first">
+			{{ product.description }}
+		</div>
+	</div><!-- col1 -->
+	<div class="col2 grid4">
+	<div class="bookingP grid4 first">
+		<div class="piP grid 4 first">
+			<span class="pP">{{ product.prices.day|first }}</span>
+			<span class="unitP">&euro;/J</span>
+		</div>
+		<form>
+			<div class="grid2 first started_at">
+				<label class="labm">{% trans "Début" %}</label><br/>
+				<input type="text" class="inm" value="23/11/2010"/>
+			</div>
+			<div class="grid2 ended_at">
+				<label class="labm">{% trans "Fin" %}</label><br/>
+				<input type="text" class="inm" value="10/12/2010">
+			</div>
+			<div class="grid4 first">
+				<input type="submit" value="Réserver" class="grey big button" />
+			</div>
+		</form>
+	</div><!-- bookingP -->
+	<div class="propP grid4 first">
+		<ul>
+			{% if product.deposit_amount != 0 %}
+				<li><strong>{% trans "Caution" %} :</strong> {{ product.deposit_amount }} &euro;</li>
+			{% endif %}
+			<li><strong>{% trans "Lieu" %} :</strong> {{ product.address.zipcode }} - {{ product.address.city }}</li>
+			<li><strong>{% trans "Catégorie" %} :</strong> {{ product.category }}</li>
+			<li><strong>{% trans "Propriétaire" %} :</strong> {{ product.owner.username }}
+		</ul>
+	</div><!-- detailsP -->
+	<div class="questionP grid4 first">
+		<a href="#">Poser une question au propriétaire</a>
+	</div><!-- questionP -->
+	</div><!-- col2 -->
+</div><!-- content -->
 {% endblock %}
