@@ -31,6 +31,9 @@ class BookingWizard(CustomFormWizard):
         else:
             new_patron = request.user
         
+        missing_form.instance = new_patron
+        new_patron, new_address, new_phone = missing_form.save()
+        
         booking_form = form_list[0]
         booking_form.instance.total_amount = Booking.calculate_price(booking_form.instance.product, 
             booking_form.cleaned_data['started_at'], booking_form.cleaned_data['ended_at'])
