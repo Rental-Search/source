@@ -6,21 +6,9 @@
 	  {% if page_obj.has_previous %}
 		 <li class="previous"><a href="{% facet_url breadcrumbs "page" page_obj.previous_page_number %}">{% trans "Précédent" %}</a></li>
 	  {% endif %}
-	  {% if not in_leading_range %}
-	   {% for num in pages_outside_trailing_range %}
-		  <li class="page-{{ num }}"><a href="{% facet_url breadcrumbs "page" num %}">{{ num }}</a></li>
-	   {% endfor %}
-	   ...
-    {% endif %}
 	  {% for page in page_range %}
 	   <li class="page-{{ page }} {% if page_obj.number == page %}on{% endif %}"><a href="{% facet_url breadcrumbs "page" page %}">{{ page }}</a></li>
 		{% endfor %}
-	  {% if not in_trailing_range %}
-	   ...
-	   {% for num in pages_outside_leading_range reversed %}
-		  <li class="page-{{ num }}"><a href="{% facet_url breadcrumbs "page" num %}">{{ num }}</a></li>
-	   {% endfor %}
-    {% endif %}
 	  {% if page_obj.has_next %}
 		 <li class="next"><a href="{% facet_url breadcrumbs "page" page_obj.next_page_number %}">{% trans "Suivant" %}</a></li>
 	  {% endif %}
