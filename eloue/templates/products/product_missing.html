@@ -1,11 +1,64 @@
 {% extends "base.html" %}
 
 {% block content %}
- <form action="" method="POST">
-  {% csrf_token %}
-  {{ form.as_ul }}
-  <input type="hidden" name="{{ step_field }}" value="{{ step0 }}" />
-  {{ previous_fields|safe }}
-  <input type="submit" value="Prochaine étape">
- </form>
+	<section class="top-content container clearfix">
+		<div class="grid3 first">
+			<h1>Ajoutez un objet</h1>
+		</div>
+		<div class="grid7">
+			<ol class="sbs">
+				<li class="sbsFirst sbsDone">1.Remplissez la fiche</li>
+				<li class="sbsDo">2.Identifiez-vous</li>
+			</ol>
+		</div>
+	</section>
+	<section class="content container clearfix">
+		<h3>Nouveau sur e-loue ? Enregistrez votre profil :</h3>
+		{{ form.errors }}
+		<div class="data pam">
+			<form class="new" action="" method="POST">
+			  {% csrf_token %}
+				<table class="grid7 first">
+					<tr>
+						<th class="txtT"><label class="labb">Pseudo * :</label></th>
+						<td>{{ form.username }}</td>
+					</tr>
+					<tr>
+						<th class="txtT"><label class="labb">Prénom * :</label></th>
+						<td>{{ form.first_name }}</td>
+					</tr>
+					<tr>
+						<th class="txtT"><label class="labb">Nom * :</label></th>
+						<td>{{ form.last_name }}</td>
+					</tr>
+					<tr>
+						<th class="txtT"><label class="labb">Téléphone :</label></th>
+						<td>{{ form.phones__phone }}</td>
+					</tr>
+					<tr>
+						<th class="txtT address" rowspan="3"><label class="labb">Adresse * :</label></th>
+						<td>{{ form.addresses__address1 }}</td>
+					</tr>
+					<tr>
+						<td>
+							{{ form.addresses__zipcode }}
+							{{ form.addresses__city }}
+						</td>
+					</tr>
+					<tr>
+						<td>
+							{{ form.addresses__country }}
+						</td>
+					</tr>
+					<tr>
+						<td class="submit" colspan="2">
+							<input type="hidden" name="{{ step_field }}" value="{{ step0 }}" />
+						  {{ previous_fields|safe }}
+							<input type="submit" value="Prochaine étape" class="button grey medium"/>
+						</td>
+					</tr>
+				</table>
+			</form>
+		</div>{# data #}
+	</section>{# content #}
 {% endblock %}
