@@ -34,8 +34,12 @@
 			<nav class="grid7">
 				<ul class="navBar">
 					<li class="add button green"><a href="{% url product_create %}">Mettre en location</a></li>
-					<li><a href="{% url auth_login %}">Se connecter</a></li>
-					<li><a href="{% url auth_login %}">S'inscrire</a></li>
+					{% if not user.is_authenticated %}
+					 <li><a href="{% url auth_login %}">Se connecter</a></li>
+					 <li><a href="{% url auth_login %}">S'inscrire</a></li>
+					{% else %}
+ 					 <li><a href="{% url auth_logout %}">Se déconnecter</a></li>
+					{% endif %}
 					<li class="first"><a href="#">La location</a></li>
 				</ul><!-- nav-bar -->
 			</nav>
