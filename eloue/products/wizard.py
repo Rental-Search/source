@@ -49,20 +49,6 @@ class ProductWizard(CustomFormWizard):
                 initial=self.initial.get(step, None), instance=Product(quantity=1))
         return super(ProductWizard, self).get_form(step, data)
     
-    def process_step(self, request, form, step):
-        if request.user.is_authenticated(): # When user is authenticated
-            if EmailAuthenticationForm in self.form_list:
-                self.form_list.remove(EmailAuthenticationForm)
-            if not any(map(lambda el: getattr(el, '__name__', None) == 'MissingInformationForm', self.form_list)):
-                self.form_list.append(make_missing_data_form(request.user))
-        else: # When user is anonymous
-            if EmailAuthenticationForm not in self.form_list:
-                self.form_list.append(EmailAuthenticationForm)
-            if step == 1:
-                if not any(map(lambda el: getattr(el, '__name__', None) == 'MissingInformationForm', self.form_list)):
-                    print form.get_user()
-                    self.form_list.append(make_missing_data_form(form.get_user()))
-    
     def get_template(self, step):
         if issubclass(self.form_list[step], EmailAuthenticationForm):
             return 'products/product_register.html'

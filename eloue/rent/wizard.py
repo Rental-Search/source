@@ -6,7 +6,7 @@ from django.views.generic.simple import direct_to_template
 from django_lean.experiments.models import GoalRecord
 from django_lean.experiments.utils import WebUser
 
-from eloue.accounts.forms import EmailAuthenticationForm, make_missing_data_form
+from eloue.accounts.forms import EmailAuthenticationForm
 from eloue.accounts.models import Patron
 from eloue.products.models import Product
 from eloue.rent.models import Booking
@@ -61,16 +61,13 @@ class BookingWizard(CustomFormWizard):
         self.extra_context['product'] = Product.objects.get(pk=kwargs['product_id'])
     
     def process_step(self, request, form, step):
-        if step == 0: # Check if we need the user to be authenticated
-            if request.user.is_anonymous() and EmailAuthenticationForm not in self.form_list:
-                self.form_list.append(EmailAuthenticationForm)
-        if step == 1: # Check if we have necessary information from this user
-            missing_fields, form_class = make_missing_data_form(form.get_user())
-            if missing_fields and not any(map(lambda el: el.__name__ == 'MissingInformationForm', self.form_list)):
-                self.form_list.append(form_class)
         return super(BookingWizard, self).process_step(request, form, step)
     
     def get_template(self, step):
-        stage = {0: 'basket', 1: 'register', 2:'missing'}.get(step)
-        return 'rent/booking_%s.html' % stage
+        if issubclass(self.form_list[step], EmailAuthenticationForm):
+            return 'rent/booking_register.html'
+        elif issubclass(self.form_list[step], BookingForm):
+            return 'rent/booking_basket.html'
+        else:
+            return 'rent/booking_missing.html'
     

@@ -4,7 +4,24 @@ from django.http import Http404
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_protect
 
+from eloue.accounts.forms import EmailAuthenticationForm, make_missing_data_form
+
+
 class CustomFormWizard(FormWizard):
+    def process_step(self, request, form, step):
+        if request.user.is_authenticated(): # When user is authenticated
+            if EmailAuthenticationForm in self.form_list:
+                self.form_list.remove(EmailAuthenticationForm)
+            if not any(map(lambda el: getattr(el, '__name__', None) == 'MissingInformationForm', self.form_list)):
+                self.form_list.append(make_missing_data_form(request.user))
+        else: # When user is anonymous
+            if EmailAuthenticationForm not in self.form_list:
+                self.form_list.append(EmailAuthenticationForm)
+            if step == 1:
+                if not any(map(lambda el: getattr(el, '__name__', None) == 'MissingInformationForm', self.form_list)):
+                    self.form_list.append(make_missing_data_form(form.get_user()))
+    
+    
     @method_decorator(csrf_protect)
     def __call__(self, request, *args, **kwargs):
         if 'extra_context' in kwargs:
