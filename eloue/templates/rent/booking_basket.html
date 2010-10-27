@@ -1,11 +1,41 @@
 {% extends "base.html" %}
+{% load i18n %}
 
 {% block content %}
- <form action="" method="POST">
-  {% csrf_token %}
-  {{ form.as_ul }}
-  <input type="hidden" name="{{ step_field }}" value="{{ step0 }}" />
-  {{ previous_fields|safe }}
-  <input type="submit" value="Prochaine étape">
- </form>  
+<div class="top-content container clearfix">
+	<h1>{% trans "Panier de réservation"%}
+</div>{# top-content #}
+<div class="content container clearfix">
+	{{ form.errors }}
+	<div class="grid7 first">
+		<h3>Saisissez vos dates de réservation :</h3>
+		<div class="data pam">
+			<form class="booking" action="" method="POST">
+		  	{% csrf_token %}
+				<table class="grid7 first">
+					<tr>
+						<th class="txtT">
+							<label class="labb">Date de début * :</label>
+						</th>
+						<td>
+							{{ form.started_at }}
+						</td>
+					</tr>
+					<tr>
+						<th class="txtT"><label class="labb">Date de fin * :</label></th>
+						<td>{{ form.ended_at }}</td>
+					</tr>
+					<tr>
+						<td class="submit" colspan="2">
+							<input type="hidden" name="{{ step_field }}" value="{{ step0 }}" />
+					  	{{ previous_fields|safe }}
+							<input type="submit" value="Prochaine étape" class="button grey medium"/>
+						</td>
+					</tr>
+				</table>
+			</form>
+		</div>
+	</div>
+	
+</div>{# content #}
 {% endblock %}
