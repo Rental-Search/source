@@ -17,7 +17,7 @@ from eloue.accounts.models import Patron
 from eloue.products.forms import FacetedSearchForm, ProductSearchForm
 from eloue.products.models import Product, Category
 
-PAGINATE_PRODUCTS_BY = getattr(settings, 'PAGINATE_PRODUCTS_BY', 20)
+PAGINATE_PRODUCTS_BY = getattr(settings, 'PAGINATE_PRODUCTS_BY', 10)
 DEFAULT_RADIUS = getattr(settings, 'DEFAULT_RADIUS', 50)
 
 @cache_page(300)
