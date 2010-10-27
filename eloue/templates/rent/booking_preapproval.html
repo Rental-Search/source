@@ -1,9 +1,5 @@
 {% extends "base.html" %}
 
 {% block content %}
- {% if booking.payment_state == 4 %}
-  <a href="https://www.sandbox.paypal.com/webscr?cmd=_ap-preapproval&preapprovalkey={{ booking.preapproval_key }}">Continuer</a>
- {% else %}
-  Oops
- {% endif %}
+
 {% endblock %}
