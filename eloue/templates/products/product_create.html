@@ -1,12 +1,75 @@
 {% extends "base.html" %}
 
 {% block content %}
- {{ product }}
- <form action="" method="POST">
-  {% csrf_token %}
-  {{ form.as_ul }}
-  <input type="hidden" name="{{ step_field }}" value="{{ step0 }}" />
-  {{ previous_fields|safe }}
-  <input type="submit" value="Prochaine étape">
- </form>
+	<section class="top-content container clearfix">
+		<div class="grid3 first">
+			<h1>Ajoutez un objet</h1>
+		</div>
+		<div class="grid7">
+			<ol class="sbs">
+				<li class="sbsFirst sbsDo">1.Remplissez la fiche</li>
+				<li class="sbsDone">2.Identifiez-vous</li>
+			</ol>
+		</div>
+	</section>
+	<section class="content container clearfix">
+		<div class="grid7 first">
+			<h3>Remplissez le formulaire de location ci dessous :</h3>
+			<div class="data pam">
+				{{ form.errors }}
+				<form class="addP" action="" method="POST">
+				  {% csrf_token %}
+					<table class="grid7 first">
+						<tr>
+							<td colspan="2">
+								{{ form.category }}
+							</td>
+						</tr>
+						<tr>
+							<th class="txtT">
+								<label class="labb">Photo :</label>
+							</th>
+							<td>
+								{{ form.picture }}
+							</td>
+						</tr>
+						<tr>
+							<th class="txtT"><label class="labb">Titre * :</label></th>
+							<td>{{ form.summary }}</td>
+						</tr>
+						<tr>
+							<th class="txtT"><label class="labb">Prix location * :</label></th>
+							<td>
+								{{ form.price }}<span>&euro; /jour</span>
+							</td>
+						</tr>
+						<tr>
+							<th class="txtT"><label class="labb">Prix caution :</label></th>
+							<td>
+								{{  form.deposit_amount }}<span>&euro;</span>
+							</td>
+						</tr>
+						<tr>
+							<th class="txtT"><label class="labb">Quantité :</label></th>
+							<td>
+								{{  form.quantity }}<span>&euro;</span>
+							</td>
+						</tr>
+						<tr>
+							<th class="txtT"><label class="labb">Description * :</label></th>
+							<td>
+								{{ form.description}}
+							</td>
+						</tr>
+						<tr>
+							<td class="submit" colspan="2">
+								<input type="hidden" name="{{ step_field }}" value="{{ step0 }}" />
+							  {{ previous_fields|safe }}
+								<input type="submit" value="Prochaine étape" class="button grey medium"/>
+							</td>
+						</tr>
+					</table>
+				 </form>
+			</div>{# data #}
+		</div>
 {% endblock %}

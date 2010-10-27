@@ -1,11 +1,56 @@
 {% extends "base.html" %}
 
 {% block content %}
- <form action="" method="POST">
-  {% csrf_token %}
-  {{ form.as_ul }}
-  <input type="hidden" name="{{ step_field }}" value="{{ step0 }}" />
-  {{ previous_fields|safe }}
-  <input type="submit" value="Prochaine étape">
- </form>
+	<section class="top-content container clearfix">
+		<div class="grid3 first">
+			<h1>Ajoutez un objet</h1>
+		</div>
+		<div class="grid7">
+			<ol class="sbs">
+				<li class="sbsFirst sbsDone">1.Remplissez la fiche</li>
+				<li class="sbsDo">2.Identifiez-vous</li>
+			</ol>
+		</div>
+	</section>
+	<section class="content container clearfix">
+		<div class="grid7 first">
+			<h3>Identification e-loue :</h3>
+			<div class="data pam">
+				{{ form.errors }}
+				<form class="sign" action="" method="POST">
+					{% csrf_token %}
+					<table>
+						<tr>
+							<td class="txtR"><label class="labb">Mon adresse email est :</label></td>
+							<td>{{ form.email }}</td>
+						</tr>
+						<tr class="cSign">
+							<td class="txtR txtT"><input  name="create" value="0" type="radio" /></td>
+							<td><label class="labb">Je n'ai pas encore de compte<br /> e-loue</label></td>
+						</tr>
+						<tr>
+							<td class="txtR txtT"><input name="create" value="1" type="radio" /></td>
+							<td><label class="labb">J'ai déjà un compte e-loue et<br /> mon mot de passe est :</label></td>
+						</tr>
+						<tr>
+							<td></td>
+							<td>{{ form.password }}</td>
+						</tr>
+						<tr>
+							<td class="submit" colspan="2">
+								<input type="hidden" name="{{ step_field }}" value="{{ step0 }}" />
+							  {{ previous_fields|safe }}
+								<input type="submit" value="Prochaine étape" class="button middle grey" />
+							</td>
+						</tr>
+						<tr>
+							<td class="forgot" colspan="2">
+								<a href="#">Mot de passe oublié</a>
+							</td>
+						</tr>
+					</table>
+				</form>{# sign #}
+			</div>{# data #}
+		</div>
+	</section>{# content #}
 {% endblock %}
