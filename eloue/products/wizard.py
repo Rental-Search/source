@@ -20,8 +20,6 @@ class ProductWizard(FormWizard):
     def done(self, request, form_list):
         missing_form = form_list[-1]
         
-        print missing_form.cleaned_data
-        
         if request.user.is_anonymous(): # Create new Patron
             auth_form = form_list[1]
             new_patron = auth_form.get_user()
