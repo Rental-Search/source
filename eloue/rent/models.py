@@ -88,7 +88,7 @@ class Booking(models.Model):
     deposit_amount = models.DecimalField(max_digits=8, decimal_places=2)
     insurance_amount = models.DecimalField(max_digits=8, decimal_places=2)
     total_amount = models.DecimalField(max_digits=8, decimal_places=2)
-    currency = models.CharField(max_length=3, choices=CURRENCY)
+    currency = models.CharField(max_length=3, choices=CURRENCY, default=CURRENCY.EUR)
     
     owner = models.ForeignKey(Patron, related_name='bookings')
     borrower = models.ForeignKey(Patron, related_name='rentals')

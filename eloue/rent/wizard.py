@@ -15,13 +15,10 @@ from eloue.wizard import CustomFormWizard
 
 class BookingWizard(CustomFormWizard):    
     def done(self, request, form_list):
-        missing_form = filter(lambda el: el.__name__ == 'MissingInformationForm', form_list)
-        if missing_form: # Fill missing information
-            missing_form = missing_form[0]
+        missing_form = form_list[-1]
         
-        auth_form = filter(lambda el: isinstance(el, EmailAuthenticationForm), form_list)
-        if auth_form: # Create new Patron
-            auth_form = auth_form[0]
+        if request.user.is_anonymous(): # Create new Patron
+            auth_form = form_list[1]
             new_patron = auth_form.get_user()
             if not new_patron:
                 new_patron = Patron.objects.create_inactive(missing_form.cleaned_data['username'], 
@@ -35,12 +32,14 @@ class BookingWizard(CustomFormWizard):
             new_patron = request.user
         
         booking_form = form_list[0]
+        booking_form.instance.total_amount = Booking.calculate_price(booking_form.instance.product, 
+            booking_form.cleaned_data['started_at'], booking_form.cleaned_data['ended_at'])
         booking_form.instance.borrower = new_patron
         booking = booking_form.save()
         
         booking.preapproval(
-            cancel_url=None,
-            return_url=None,
+            cancel_url="http://cancel.me",
+            return_url="http://return.me",
             ip_address=request.META['REMOTE_ADDR']
         )
         
