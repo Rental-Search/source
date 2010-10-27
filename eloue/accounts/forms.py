@@ -61,7 +61,7 @@ class EmailAuthenticationForm(forms.Form):
 
 class EmailPasswordResetForm(PasswordResetForm):
     email = forms.EmailField(label=_("E-mail"), max_length=75, widget=forms.TextInput(attrs={ 
-        'autocapitalize':'off', 'autocorrect':'off'
+        'autocapitalize':'off', 'autocorrect':'off', 'class':'inb'
     }))
     
     def save(self, domain_override=None, use_https=False, token_generator=default_token_generator, **kwargs):
