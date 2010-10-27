@@ -34,7 +34,7 @@
 }
 
 .submitB .button{
-  width: 110px;
+  width: 150px;
   margin-right: 0px;
 }
 
@@ -62,4 +62,23 @@
   list-style: decimal ;
   outline-width:5px;
 }
+
+
+/*****    *****/
+.booking .txtT{
+  padding-top: 15px;
+}
+.booking input{
+  width: 100px;
+}
+
+.booking .submit{
+  text-align: right;
+}
+
+.booking .submit .button{
+  width: 150px;
+}
+
+
 
