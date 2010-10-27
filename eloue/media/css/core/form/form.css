@@ -28,6 +28,13 @@ input[type=submit]{
   font-size: 18px;
 }
 
+.inm{
+  margin: 5px 10px 3px 0px;
+  height: 24px;
+  padding: 4px 10px 0px 6px;
+  font-size: 16px;
+}
+
 .ins{
   margin: 0px 5px 3px 0px !important; 
   height:18px;
@@ -41,6 +48,10 @@ label{
 
 .labb{
   font-size: 17px;
+}
+
+.labm{
+  font-size: 16px;
 }
 
 .labs{

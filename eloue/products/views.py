@@ -14,7 +14,7 @@ from geocoders.google import geocoder
 from haystack.query import SearchQuerySet
 
 from eloue.accounts.models import Patron
-from eloue.products.forms import FacetedSearchForm, ProductSearchForm
+from eloue.products.forms import FacetedSearchForm
 from eloue.products.models import Product, Category
 
 PAGINATE_PRODUCTS_BY = getattr(settings, 'PAGINATE_PRODUCTS_BY', 10)
@@ -30,7 +30,8 @@ def product_detail(request, slug, product_id):
     product = get_object_or_404(Product, pk=product_id)
     if product.slug != slug:
         return redirect_to(request, product.get_absolute_url())
-    return direct_to_template(request, template='products/product_detail.html', extra_context={ 'product':product })
+    form = FacetedSearchForm()
+    return direct_to_template(request, template='products/product_detail.html', extra_context={ 'product':product, 'form':form})
 
 @cache_page(900)
 @vary_on_cookie

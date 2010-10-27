@@ -1,14 +1,39 @@
+.col1{
+  margin-bottom: 20px;
+}
+
+.col1 h1{
+  font-weight: bold;
+}
+
 .picB{
+  background-color: #F5F5F1;
   float: left;
-  width: 472px;
-  margin-right: 10px;
-  text-align: center;
   margin-bottom: 15px;
+  width: 472px;
+  text-align: center;
+  border: 1px solid #EAEAEA;
 }
 
 .picB img{
-  padding: 10px;
-  border: 1px solid #E9E9E9;
+  padding: 0px 10px;
+  margin: 0px;
+  margin-bottom: -1px;
+}
+
+.detailsP{
+  float: left;
+  margin-right: 10px;
+}
+
+.picB{
+  
+}
+
+.thumbs{
+  float: left;
+  width: 100px;
+  text-align: center;
 }
 
 .thumbs{
@@ -24,16 +49,64 @@
   /*width: 75px;*/
 }
 
-.book{
-  
-}
-
 .descP{
   font-size: 13px;
+}
+
+.bookingP, .propP{
+  margin-bottom: 20px;
+}
+
+.started_at, .ended_at{
+  margin-bottom: 10px;
+}
+
+.bookingP input{
+  background: transparent url("../../../images/calendar.png") no-repeat 110px 4px;
+  width: 118px;
+}
+
+.bookingP input[type="submit"]{
+  background-image: none;
+}
+
+.bookingP .button{
+  margin-top: 0px;
+  height: 32px;
+  width: 305px;
+  font-size: 17px;
+}
+
+.piP{
   margin-bottom: 15px;
 }
 
-.priceDP{
-  font-size: 13px;
+.pP{
+  font-size: 21px;
+  font-weight: bold;
 }
+
+.unitP{
+  font-size: 18px;
+}
+
+.propP ul{
+  background-color: #F5F5F1;
+  padding: 10px;
+  padding-bottom: 5px;
+  margin-bottom: 0px;
+  font-size: 16px;
+}
+
+.propP ul li{
+  margin-bottom: 10px;
+}
+
+.questionP a{
+  background: transparent url("../../../images/mail.png") no-repeat 0 1px;
+  padding-left: 25px;
+  font-size: 16px;
+}
+
+
 
