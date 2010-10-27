@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.conf import settings
 from django.contrib.auth import login
-from django.contrib.formtools.wizard import FormWizard
 from django.views.generic.simple import direct_to_template
 
 from django_lean.experiments.models import GoalRecord
@@ -12,9 +11,9 @@ from eloue.accounts.models import Patron
 from eloue.products.models import Product
 from eloue.rent.models import Booking
 from eloue.rent.forms import BookingForm
+from eloue.wizard import CustomFormWizard
 
-
-class BookingWizard(FormWizard):    
+class BookingWizard(CustomFormWizard):    
     def done(self, request, form_list):
         missing_form = filter(lambda el: el.__name__ == 'MissingInformationForm', form_list)
         if missing_form: # Fill missing information
