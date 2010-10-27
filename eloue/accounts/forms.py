@@ -14,7 +14,7 @@ from django.utils.translation import ugettext as _
 
 from eloue.accounts import EMAIL_BLACKLIST
 from eloue.accounts.fields import PhoneNumberField
-from eloue.accounts.models import Patron, PhoneNumber, Address, COUNTRY_CHOICES
+from eloue.accounts.models import Patron, PhoneNumber, COUNTRY_CHOICES
 
 PATRON_FIELDS = ['first_name', 'last_name', 'username']
 ADDRESS_FIELDS = ['address1', 'address2', 'zipcode', 'city', 'country']
@@ -27,7 +27,7 @@ class EmailAuthenticationForm(forms.Form):
     }))
     password = forms.CharField(label=_(u"Password"), widget=forms.PasswordInput, required=True)
     
-    def __init__(self, *args, **kwargs):
+    def __init__(self, request, *args, **kwargs):
         self.user_cache = None
         super(EmailAuthenticationForm, self).__init__(*args, **kwargs)
     
@@ -113,36 +113,53 @@ def make_missing_data_form(instance):
         'last_name':forms.CharField(required=True),
         'first_name':forms.CharField(required=True),
         'last_name':forms.CharField(required=True),
-        'addresses':forms.ModelChoiceField(queryset=instance.addresses.all()),
         'addresses__address1':forms.CharField(required=True),
         'addresses__address2':forms.CharField(required=False),
         'addresses__zipcode':forms.CharField(required=True),
         'addresses__city':forms.CharField(required=True),
         'addresses__country':forms.ChoiceField(choices=COUNTRY_CHOICES, required=True),
-        'phones':forms.ModelChoiceField(queryset=instance.phones.all()),
-        'phones__phone':forms.CharField(required=False)
+        'phones__phone':PhoneNumberField(required=False)
     }
-    
-    # If there is no exiting addresses or phone numbers
-    if not instance.addresses.exists():
-        del fields['addresses']
-    if not instance.phones.exists():
-        del fields['phones']
-    
+    if instance and instance.addresses.exists():
+        fields['addresses'] = forms.ModelChoiceField(queryset=instance.addresses.all())
+    if instance and instance.phones.exists():
+        fields['phones'] = forms.ModelChoiceField(queryset=instance.phones.all())
+        
     for f in fields.keys():
         if "__" in f:
             continue 
         if hasattr(instance, f) and getattr(instance, f):
             del fields[f]
     
-    # TODO : add validation
     def save(self):
-        pass
+        for attr, value in self.cleaned_data.iteritems():
+            if "__" not in attr:
+                setattr(self.instance, attr, value)
+        if 'addresses' in self.cleaned_data:
+            address = self.cleaned_data['addresses']
+        else:
+            address = self.instance.addresses.create(
+                address1=self.cleaned_data['address1'],
+                address2=self.cleaned_data['address2'],
+                zipcode=self.cleaned_data['zipcode'],
+                city=self.cleaned_data['city'],
+                country=self.cleaned_data['country']
+            )
+        if 'phones' in self.cleaned_data:
+            phone = self.cleaned_data['phones']
+        elif self.cleaned_data['phone']:
+            phone = self.instance.phone.create(
+                number=self.cleaned_data['phone']
+            )
+        else:
+            phone = None
+        return self.instance, address, phone
     
-    def clean(self):
-        pass
+    def clean_username(self):
+        if Patron.objects.filter(username=self.cleaned_data['username']).exists():
+            raise forms.ValidationError(_(u"Ce nom d'utilisateur est déjà pris."))
     
-    form_class = type('MissingInformationForm', (forms.BaseForm,), { 'base_fields': fields })
+    form_class = type('MissingInformationForm', (forms.BaseForm,), { 'instance':instance, 'base_fields': fields })
     form_class.save = types.MethodType(save, None, form_class)
-    form_class.clean = types.MethodType(clean, None, form_class)
+    form_class.clean_username = types.MethodType(clean_username, None, form_class)
     return fields != {}, form_class

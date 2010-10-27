@@ -262,7 +262,7 @@ class PhoneNumber(models.Model):
     """A phone number"""
     patron = models.ForeignKey(Patron, related_name='phones')
     number = models.CharField(max_length=255)
-    kind = models.PositiveSmallIntegerField(choices=PHONE_TYPES)
+    kind = models.PositiveSmallIntegerField(choices=PHONE_TYPES, default=PHONE_TYPES.OTHER)
     
     def __unicode__(self):
         return smart_unicode(self.number)
