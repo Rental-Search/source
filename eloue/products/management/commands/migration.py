@@ -216,7 +216,6 @@ class Command(BaseCommand):
                 try:
                     image_file = open(os.path.join(path, str(row['vendor_id']), row['product_full_image']))
                     picture = Picture(product=product, image=File(image_file))
-                    picture.image.name = "%s-%s.jpg" % (slugify(product.summary), product.id)
                     picture.save()
                 except IOError, e:
                     print e

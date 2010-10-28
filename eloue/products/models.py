@@ -90,10 +90,13 @@ class Product(models.Model):
             and self.category.need_insurance
     
 
+def upload_to(instance, filename):
+    return 'pictures/%s.jpg' % instance.id
+
 class Picture(ImageModel):
     """A picture"""
     product = models.ForeignKey(Product, related_name='pictures', blank=True, null=True)
-    image = models.ImageField(null=True, blank=True, upload_to="pictures/")
+    image = models.ImageField(null=True, blank=True, upload_to=upload_to)
     
     class IKOptions:
         spec_module = 'eloue.products.specs'
