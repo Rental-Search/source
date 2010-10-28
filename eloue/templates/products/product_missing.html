@@ -16,7 +16,7 @@
 		<h3>Nouveau sur e-loue ? Enregistrez votre profil :</h3>
 		{{ form.errors }}
 		<div class="data pam">
-			<form class="new" action="" method="POST">
+			<form class="new" enctype="multipart/form-data" action="" method="POST">
 			  {% csrf_token %}
 				<table class="grid7 first">
 				  {% if form.username %}

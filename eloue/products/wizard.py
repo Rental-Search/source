@@ -6,10 +6,10 @@ from django.views.generic.simple import redirect_to
 from django_lean.experiments.models import GoalRecord
 from django_lean.experiments.utils import WebUser
 
-from eloue.accounts.forms import EmailAuthenticationForm, make_missing_data_form
+from eloue.accounts.forms import EmailAuthenticationForm
 from eloue.accounts.models import Patron
 from eloue.products.forms import ProductForm
-from eloue.products.models import Product, UNIT
+from eloue.products.models import Product, Picture, UNIT
 from eloue.wizard import CustomFormWizard
 
 class ProductWizard(CustomFormWizard):
@@ -40,14 +40,20 @@ class ProductWizard(CustomFormWizard):
         product = product_form.save()
         product.prices.create(unit=UNIT.DAY, amount=product_form.cleaned_data['price'])
         
+        if product_form.cleaned_data.get('picture_id', None):
+            product.pictures.add(Picture.objects.get(pk=product_form.cleaned_data['picture_id']))
+        
         GoalRecord.record('new_object', WebUser(request))
         return redirect_to(request, product.get_absolute_url())
     
-    def get_form(self, step, data=None):
+    def get_form(self, step, data=None, files=None):
         if issubclass(self.form_list[step], ProductForm):
-            return self.form_list[step](data, prefix=self.prefix_for_step(step), 
+            if files and '0-picture' in files: # Hack to get image working
+                data['0-picture_id'] = Picture.objects.create(image=files['0-picture']).id
+                del files['0-picture']
+            return self.form_list[step](data, files, prefix=self.prefix_for_step(step), 
                 initial=self.initial.get(step, None), instance=Product(quantity=1))
-        return super(ProductWizard, self).get_form(step, data)
+        return super(ProductWizard, self).get_form(step, data, files)
     
     def get_template(self, step):
         if issubclass(self.form_list[step], EmailAuthenticationForm):

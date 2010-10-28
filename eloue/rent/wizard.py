@@ -55,13 +55,13 @@ class BookingWizard(CustomFormWizard):
             'booking':booking,
         })
     
-    def get_form(self, step, data=None):
+    def get_form(self, step, data=None, files=None):
         if issubclass(self.form_list[step], BookingForm):
             product = self.extra_context['product']
             booking = Booking(product=product, owner=product.owner)
-            return self.form_list[step](data, prefix=self.prefix_for_step(step), 
+            return self.form_list[step](data, files, prefix=self.prefix_for_step(step), 
                 initial=self.initial.get(step, None), instance=booking)
-        return super(BookingWizard, self).get_form(step, data)
+        return super(BookingWizard, self).get_form(step, data, files)
     
     def parse_params(self, request, *args, **kwargs):
         self.extra_context['product'] = Product.objects.get(pk=kwargs['product_id'])

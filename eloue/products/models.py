@@ -92,7 +92,7 @@ class Product(models.Model):
 
 class Picture(ImageModel):
     """A picture"""
-    product = models.ForeignKey(Product, related_name='pictures')
+    product = models.ForeignKey(Product, related_name='pictures', blank=True, null=True)
     image = models.ImageField(null=True, blank=True, upload_to='pictures/')
     
     class IKOptions:

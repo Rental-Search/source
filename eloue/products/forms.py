@@ -63,13 +63,20 @@ class ProductReviewForm(forms.ModelForm):
 class ProductForm(forms.ModelForm):
     category = TreeNodeChoiceField(queryset=Category.tree.all(), empty_label="---------", level_indicator=u'--', widget=forms.Select(attrs={'style':'100%'}))
     summary = forms.CharField(max_length=100, widget=forms.TextInput(attrs={'class':'inb'}))
-    picture = forms.ImageField(required=True, widget=forms.FileInput(attrs={'class':'inb pic'}))
+    picture_id = forms.IntegerField(required=False, widget=forms.HiddenInput())
+    picture = forms.ImageField(required=False, widget=forms.FileInput(attrs={'class':'inb pic'}))
     price = forms.DecimalField(required=True, widget=forms.TextInput(attrs={'class':'inb price'}))
     deposit_amount = forms.DecimalField(required=True, widget=forms.TextInput(attrs={'class':'inb price'}))
     quantity = forms.IntegerField(initial=1, widget=forms.TextInput(attrs={'class':'inb qty'}))
     description = forms.Textarea()
     
+    def clean_picture(self):
+        picture = self.cleaned_data['picture']
+        picture_id = self.cleaned_data['picture_id']
+        if not (picture or picture_id):
+            raise forms.ValidationError(_(u"Vous devriez ajouter une photo."))
+    
     class Meta:
         model = Product
-        exclude = ('is_allowed', 'owner', 'address', 'currency', 'is_archived')
+        fields = ('category', 'summary', 'picture_id', 'picture', 'price', 'deposit_amount', 'quantity', 'description')
     
