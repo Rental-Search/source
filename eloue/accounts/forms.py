@@ -155,6 +155,7 @@ def make_missing_data_form(instance):
             )
         else:
             phone = None
+        self.instance.save()
         return self.instance, address, phone
     
     def clean_username(self):

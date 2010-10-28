@@ -148,11 +148,6 @@ AUTHENTICATION_BACKENDS = (
 )
 ACCOUNT_ACTIVATION_DAYS = 7
 
-# Upload handlers
-FILE_UPLOAD_HANDLERS = (
-    "django.core.files.uploadhandler.TemporaryFileUploadHandler",
-)
-
 # Tests configuration
 TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
 NOSE_ARGS = getattr(local, 'NOSE_ARGS', ['--stop', '--with-doctest', '--cover-package=eloue', '--with-freshen', '--cover-branches'])
@@ -260,6 +255,8 @@ SESSION_COOKIE_SECURE = getattr(local, 'SESSION_COOKIE_SECURE', True)
 # Storage configuration
 if not DEBUG:
     DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
+else:
+    DEFAULT_FILE_STORAGE = 'storages.backends.overwrite.OverwriteStorage'
 
 # S3 configuration
 AWS_ACCESS_KEY_ID = getattr(local, 'AWS_ACCESS_KEY_ID', 'AKIAJ3PXVVKSTM3WSZSQ')
