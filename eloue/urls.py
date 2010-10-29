@@ -50,6 +50,8 @@ urlpatterns = patterns('',
     url(r'^loueur/', include('eloue.accounts.urls')),
     url(r'^location/', include('eloue.products.urls')),
     url(r'^rent/', include('eloue.rent.urls')),
+    url(r'^experiments/', include('django_lean.experiments.urls')),
+    url(r'^edit/reports/', include('django_lean.experiments.admin_urls')),
     url(r'^edit/', include(admin.site.urls)),
     url(r'^$', homepage, name="home")
 )
