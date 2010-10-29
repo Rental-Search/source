@@ -1,9 +1,13 @@
 # -*- coding: utf-8 -*-
-import re, datetime, hashlib, random
+import datetime
+import hashlib
+import random
+import re
 
 from django.contrib.auth.models import UserManager
 
 SHA1_RE = re.compile('^[a-f0-9]{40}$')
+
 
 class PatronManager(UserManager):
     def exists(self, **kwargs):
@@ -79,7 +83,7 @@ class PatronManager(UserManager):
         To disable the email, call with ``send_email=False``.
         """
         salt = hashlib.sha1(str(random.random())).hexdigest()[:5]
-        activation_key = hashlib.sha1(salt+email).hexdigest()
+        activation_key = hashlib.sha1(salt + email).hexdigest()
         
         new_patron = self.create_user(username, email, password, pk=pk)
         new_patron.is_active = False

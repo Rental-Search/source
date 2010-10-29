@@ -4,6 +4,7 @@ from django.db import models
 from django.core import exceptions
 import django.forms as forms
 
+
 class SimpleDate(int):
     def __new__(cls, value):
         return int.__new__(cls, cls.format(value))

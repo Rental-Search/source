@@ -5,6 +5,7 @@ from django.contrib.flatpages.models import FlatPage
 from eloue.accounts.models import Patron
 from eloue.products.models import Product
 
+
 class PatronSitemap(Sitemap):
     changefreq = "weekly"
     
@@ -20,8 +21,8 @@ class ProductSitemap(Sitemap):
     
 
 class FlatPageSitemap(Sitemap):
-	changefreq = "monthly"
-
-	def items(self):
-		return FlatPage.objects.all()
+    changefreq = "monthly"
+    
+    def items(self):
+        return FlatPage.objects.all()
     

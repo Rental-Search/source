@@ -22,10 +22,12 @@ from eloue.products.wizard import ProductWizard
 PAGINATE_PRODUCTS_BY = getattr(settings, 'PAGINATE_PRODUCTS_BY', 10)
 DEFAULT_RADIUS = getattr(settings, 'DEFAULT_RADIUS', 50)
 
+
 @cache_page(300)
 def homepage(request):
     form = FacetedSearchForm()
     return direct_to_template(request, template='index.html', extra_context={ 'form':form })
+
 
 @cache_page(900)
 def product_detail(request, slug, product_id):
@@ -35,14 +37,16 @@ def product_detail(request, slug, product_id):
     form = FacetedSearchForm()
     return direct_to_template(request, template='products/product_detail.html', extra_context={ 'product':product, 'form':form})
 
+
 @never_cache
 def product_create(request, *args, **kwargs):
     wizard = ProductWizard([ProductForm,EmailAuthenticationForm])
     return wizard(request, *args, **kwargs)
 
+
 @cache_page(900)
 @vary_on_cookie
-def product_list(request, urlbits, sqs = SearchQuerySet(), suggestions = None, page = None):
+def product_list(request, urlbits, sqs=SearchQuerySet(), suggestions=None, page=None):
     query = request.GET.get('q', None)
     if query:
         sqs = sqs.auto_query(query).highlight()
@@ -90,7 +94,7 @@ def product_list(request, urlbits, sqs = SearchQuerySet(), suggestions = None, p
             raise Http404
     form = FacetedSearchForm(dict((facet['name'], facet['value']) for facet in breadcrumbs.values()), searchqueryset=sqs)
     sqs = form.search()
-    return object_list(request, sqs, page=page, paginate_by=PAGINATE_PRODUCTS_BY, template_name="products/product_list.html", template_object_name='product', extra_context={ 
+    return object_list(request, sqs, page=page, paginate_by=PAGINATE_PRODUCTS_BY, template_name="products/product_list.html", template_object_name='product', extra_context={
         'facets':sqs.facet_counts(), 'form':form, 'breadcrumbs':breadcrumbs,
         'where':where, 'radius':radius, 'suggestions':suggestions, 'query':query,
         'urlbits':dict((facet['label'], facet['value']) for facet in breadcrumbs.values() if facet['facet'])

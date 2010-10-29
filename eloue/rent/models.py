@@ -65,7 +65,7 @@ PACKAGES_UNIT = {
 }
 
 PACKAGES = {
-    UNIT.HOUR: lambda amount, delta: amount * (delta.seconds / 60), 
+    UNIT.HOUR: lambda amount, delta: amount * (delta.seconds / 60),
     UNIT.WEEK_END: lambda amount, delta: amount,
     UNIT.DAY: lambda amount, delta: amount * delta.days,
     UNIT.WEEK: lambda amount, delta: amount * delta.days,
@@ -74,6 +74,7 @@ PACKAGES = {
 }
 
 log = logbook.Logger('eloue.rent')
+
 
 class Booking(models.Model):
     """A reservation"""
@@ -150,7 +151,7 @@ class Booking(models.Model):
         """Preapprove payments for borrower from Paypal.
         
         Keywords arguments :
-        cancel_url -- The URL to which the sender’s browser is redirected after the sender cancels the preapproval at paypal.com. 
+        cancel_url -- The URL to which the sender’s browser is redirected after the sender cancels the preapproval at paypal.com.
         return_url -- The URL to which the sender’s browser is redirected after the sender approves the preapproval on paypal.com.
         ip_address -- The ip address of sender.
         
@@ -159,16 +160,16 @@ class Booking(models.Model):
         """
         try:
             response = payments.preapproval(
-                startingDate = datetime.datetime.now(),
-                endingDate = self.ended_at,
-                currencyCode = self.currency,
-                maxTotalAmountOfAllPayments = str(self.total_amount + self.deposit_amount),
-                cancelUrl = cancel_url,
-                returnUrl = return_url,
-                ipnNotificationUrl = urljoin(
+                startingDate=datetime.datetime.now(),
+                endingDate=self.ended_at,
+                currencyCode=self.currency,
+                maxTotalAmountOfAllPayments=str(self.total_amount + self.deposit_amount),
+                cancelUrl=cancel_url,
+                returnUrl=return_url,
+                ipnNotificationUrl=urljoin(
                     "http://%s" % Site.objects.get_current().domain, reverse('preapproval_ipn')
                 ),
-                client_details = {
+                client_details={
                     'ipAddress': ip_address,
                     'partnerName': 'e-loue',
                     'customerType': 'Business' if self.borrower.is_professional else 'Personnal',
@@ -241,27 +242,27 @@ class Booking(models.Model):
         """Take money from borrower and keep it safe for later.
         
         Keywords arguments :
-        cancel_url -- The URL to which the sender’s browser is redirected after the sender cancels the preapproval at paypal.com. 
+        cancel_url -- The URL to which the sender’s browser is redirected after the sender cancels the preapproval at paypal.com.
         return_url -- The URL to which the sender’s browser is redirected after the sender approves the preapproval on paypal.com.
         ip_address -- The ip address of sender.
         
-        Then you should redirect user to : 
+        Then you should redirect user to :
         https://www.paypal.com/webscr?cmd=_ap-payment&paykey={{ pay_key }}
         """
         try:
             response = payments.pay(
                 # FIXME : Patron email might not be related to PayPal account
-                senderEmail = self.borrower.email,
-                actionType = 'PAY_PRIMARY',
-                feesPayer = 'PRIMARYRECEIVER',
-                cancelUrl = cancel_url,
-                returnUrl = return_url,
-                currencyCode = self.currency,
-                preapprovalKey = self.preapproval_key,
-                ipnNotificationUrl = urljoin(
+                senderEmail=self.borrower.email,
+                actionType='PAY_PRIMARY',
+                feesPayer='PRIMARYRECEIVER',
+                cancelUrl=cancel_url,
+                returnUrl=return_url,
+                currencyCode=self.currency,
+                preapprovalKey=self.preapproval_key,
+                ipnNotificationUrl=urljoin(
                     "http://%s" % Site.objects.get_current().domain, reverse('pay_ipn')
                 ),
-                receiverList = { 'receiver': [
+                receiverList={ 'receiver': [
                     {'primary':True, 'amount':str(self.total_amount), 'email':PAYPAL_API_EMAIL},
                     {'primary':False, 'amount':str(self.net_price), 'email':self.owner.email }
                 ]}
@@ -281,7 +282,7 @@ class Booking(models.Model):
         """Return deposit_amount to borrower and pay the owner"""
         try:
             response = payments.execute_payment(
-                payKey = self.pay_key
+                payKey=self.pay_key
             )
             if response['paymentExecStatus'] in ['COMPLETED']:
                 self.payment_state = PAYMENT_STATE.PAID
@@ -295,7 +296,7 @@ class Booking(models.Model):
         """Cancel preapproval for the borrower"""
         try:
             response = payments.cancel_preapproval(
-                preapprovalKey = self.preapproval_key,
+                preapprovalKey=self.preapproval_key,
             )
             if response['responseEnvelope']['ack'] in ["Success", "SuccessWithWarning"]:
                 self.payment_state = PAYMENT_STATE.CANCELED
@@ -312,16 +313,16 @@ class Booking(models.Model):
         
         try:
             response = payments.pay(
-                actionType = 'PAY',
-                senderEmail = self.borrower.email,
-                preapprovalKey = self.preapproval_key,
-                cancelUrl = cancel_url,
-                returnUrl = return_url,
-                currencyCode = self.currency,
-                ipnNotificationUrl = urljoin(
+                actionType='PAY',
+                senderEmail=self.borrower.email,
+                preapprovalKey=self.preapproval_key,
+                cancelUrl=cancel_url,
+                returnUrl=return_url,
+                currencyCode=self.currency,
+                ipnNotificationUrl=urljoin(
                     "http://%s" % Site.objects.get_current().domain, reverse('pay_ipn')
                 ),
-                receiverList = { 'receiver':[
+                receiverList={ 'receiver':[
                     {'amount':str(amount), 'email':self.owner.email},
                 ]}
             )
@@ -339,8 +340,8 @@ class Booking(models.Model):
         """Refund borrower or owner if something as gone wrong"""
         try:
             response = payments.refund(
-                payKey = self.pay_key,
-                currencyCode = self.currency
+                payKey=self.pay_key,
+                currencyCode=self.currency
             )
             if response['refundStatus'] in ['REFUNDED', 'NOT_PAID', 'ALREADY_REVERSED_OR_REFUNDED']:
                 self.payment_state = PAYMENT_STATE.REFUNDED
@@ -356,7 +357,7 @@ class Sinister(models.Model):
     sinister_id = IntegerAutoField(unique=True, db_index=True)
     description = models.TextField()
     patron = models.ForeignKey(Patron, related_name='sinisters')
-    booking =  models.ForeignKey(Booking, related_name='sinisters')
+    booking = models.ForeignKey(Booking, related_name='sinisters')
     product = models.ForeignKey(Product, related_name='sinisters')
     
     created_at = models.DateTimeField(blank=True, editable=False)

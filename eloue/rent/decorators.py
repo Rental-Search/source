@@ -10,6 +10,7 @@ if settings.USE_PAYPAL_SANDBOX:
 else:
     endpoint = "https://www.paypal.com/cgi-bin/webscr?cmd=_notify-validate&%s"
 
+
 def validate_ipn(view_func):
     """Decorator makes sure ipn is coming from Paypal."""
     def _wrapped_view_func(request, *args, **kwargs):
@@ -19,6 +20,7 @@ def validate_ipn(view_func):
                 return HttpResponseForbidden()
         return view_func(request, *args, **kwargs)
     return _wrapped_view_func
+
 
 def incr_sequence(field, sequence_name):
     def wrapper(func):

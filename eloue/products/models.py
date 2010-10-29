@@ -44,6 +44,7 @@ STATUS = Enum([
 
 INSURANCE_MAX_DEPOSIT = getattr(settings, 'INSURANCE_MAX_DEPOSIT', 750)
 
+
 class Product(models.Model):
     """A product"""
     summary = models.CharField(max_length=255)
@@ -93,6 +94,7 @@ class Product(models.Model):
 def upload_to(instance, filename):
     return 'pictures/%s.jpg' % instance.id
 
+
 class Picture(ImageModel):
     """A picture"""
     product = models.ForeignKey(Product, related_name='pictures', blank=True, null=True)
@@ -129,7 +131,7 @@ class Category(MPTTModel):
         super(Category, self).save(*args, **kwargs)
     
     def get_absolute_url(self):
-        return _(u"%(prefix)s/location/par-category/%(category)s/") % { 
+        return _(u"%(prefix)s/location/par-category/%(category)s/") % {
             'prefix':get_script_prefix(), 'category':self.slug
         }
     
@@ -201,7 +203,7 @@ class Price(models.Model):
             ended_at = self.ended_at.datetime(ended_at.year + increase) + timedelta(days=1)
         if started_at <= self.started_at.datetime(started_at.year):
             started_at = self.started_at.datetime(started_at.year) - timedelta(days=1)
-        delta = (ended_at - started_at) 
+        delta = (ended_at - started_at)
         return delta if delta > timedelta(days=0) else timedelta(days=0)
     
 

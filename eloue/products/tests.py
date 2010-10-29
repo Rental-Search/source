@@ -8,6 +8,7 @@ from django.test import TestCase
 
 from eloue.products.models import Product, ProductReview, PatronReview, Price
 
+
 class ProductTest(TestCase):
     fixtures = ['patron', 'address', 'price', 'product']
     
@@ -173,7 +174,7 @@ class SeasonalPriceTest(TestCase):
             started_at=datetime.date.today(),
             ended_at=datetime.date.today() + datetime.timedelta(days=3)
         )
-        self.assertRaises(IntegrityError, Price.objects.create, 
+        self.assertRaises(IntegrityError, Price.objects.create,
             name='Haute saison',
             product_id=1,
             amount=25,

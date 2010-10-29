@@ -6,6 +6,7 @@ from eloue.products.models import Category
 
 register = Library()
 
+
 @register.filter
 def category(value):
     category = cache.get('category:%s' % value)

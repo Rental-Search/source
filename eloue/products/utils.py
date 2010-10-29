@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+
 class Enum(object):
     """
     A small helper class for more readable enumerations,

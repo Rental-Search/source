@@ -19,7 +19,7 @@ from eloue.accounts.models import Patron
 
 class CustomFormWizard(FormWizard):
     def get_form(self, step, data=None, files=None):
-        return self.form_list[step](data, files, prefix=self.prefix_for_step(step), initial=self.initial.get(step, None)) 
+        return self.form_list[step](data, files, prefix=self.prefix_for_step(step), initial=self.initial.get(step, None))
     
     def security_hash(self, request, form):
         data = []
@@ -101,7 +101,7 @@ class CustomFormWizard(FormWizard):
                 form = self.get_form(next_step)
                 self.step = current_step = next_step
         
-        return self.render(form, request, current_step) 
+        return self.render(form, request, current_step)
     
 
 class GenericFormWizard(CustomFormWizard):
@@ -112,7 +112,7 @@ class GenericFormWizard(CustomFormWizard):
             auth_form = form_list[1]
             new_patron = auth_form.get_user()
             if not new_patron:
-                new_patron = Patron.objects.create_inactive(missing_form.cleaned_data['username'], 
+                new_patron = Patron.objects.create_inactive(missing_form.cleaned_data['username'],
                     auth_form.cleaned_data['email'], missing_form.cleaned_data['password1'])
             if not hasattr(new_patron, 'backend'):
                 from django.contrib.auth import load_backend

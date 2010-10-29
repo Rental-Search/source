@@ -4,6 +4,7 @@ from django.utils.encoding import force_unicode
 from django.utils.html import conditional_escape
 from django.utils.safestring import mark_safe
 
+
 class CustomRadioInput(RadioInput):
     def __unicode__(self):
         if 'id' in self.attrs:

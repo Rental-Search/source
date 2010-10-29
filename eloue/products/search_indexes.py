@@ -13,6 +13,7 @@ from eloue.rent.models import Booking
 
 __all__ = ['ProductIndex', 'product_search']
 
+
 class ProductIndex(QueuedSearchIndex):
     categories = MultiValueField(faceted=True)
     created_at = DateTimeField(model_attr='created_at')

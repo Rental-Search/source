@@ -10,6 +10,7 @@ from eloue.rent.models import Booking, Sinister
 
 log = logbook.Logger('eloue.rent')
 
+
 class PreApprovalIPNForm(forms.Form):
     approved = forms.BooleanField(required=True)
     preapproval_key = forms.CharField(required=True)
@@ -48,8 +49,7 @@ class BookingForm(forms.ModelForm):
     class Meta:
         model = Booking
         fields = ('started_at', 'ended_at')
-       
-        
+    
     def clean(self):
         started_at = self.cleaned_data['started_at']
         ended_at = self.cleaned_data['ended_at']
@@ -57,6 +57,7 @@ class BookingForm(forms.ModelForm):
         if (started_at and ended_at):
             self.cleaned_data['total_amount'] = Booking.calculate_price(product, started_at, ended_at)
         return self.cleaned_data
+    
 
 class SinisterForm(forms.ModelForm):
     class Meta:

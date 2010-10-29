@@ -3,14 +3,17 @@ from django.template import Library, Node, Variable, VariableDoesNotExist, Templ
 
 register = Library()
 
+
 @register.filter
 def has_param(request, param):
-    return request.GET.has_key(param)
+    return param in request.GET
+
 
 @register.filter
 def hash(h, key):
-    if h and h.has_key(key):
-        return [(key, value) for (key, value) in h[key] if value ]
+    if h and key in h:
+        return [(key, value) for (key, value) in h[key] if value]
+
 
 class AddParam(Node):
     def __init__(self, params):
@@ -32,7 +35,7 @@ class AddParam(Node):
                 pass
             if value:
                 params[name] = value.resolve(context)
-            elif params.has_key(name):
+            elif name in params:
                 del params[name]
         if params:
             return '%s?%s' % (request.path, params.urlencode())
@@ -44,5 +47,5 @@ class AddParam(Node):
 def merge(parser, token):
     bits = token.contents.split()
     if len(bits) < 2:
-        raise TemplateSyntaxError, "'%s' tag requires an argument" % bits[0]
+        raise TemplateSyntaxError("'%s' tag requires an argument" % bits[0])
     return AddParam(bits[1])

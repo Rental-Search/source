@@ -7,6 +7,7 @@ from django.core.management.base import BaseCommand
 
 local_path = lambda path: os.path.join(os.path.dirname(__file__), path)
 
+
 class Command(BaseCommand):
     help = "Dump or load categories changes"
     option_list = BaseCommand.option_list + (

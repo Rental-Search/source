@@ -8,6 +8,7 @@ from django.test import TestCase
 
 from eloue.accounts.models import Patron, Address
 
+
 class AccountManagerTest(TestCase):
     def test_inactive_account_creation(self):
         patron = Patron.objects.create_inactive('benoit', 'benoit.woj@e-loue.com', 'benoit')
@@ -86,7 +87,7 @@ class AddressTest(TestCase):
             city='Paris',
             zipcode='75003'
         )
-        self.assertRaises(ValidationError, address.full_clean) 
+        self.assertRaises(ValidationError, address.full_clean)
     
     def test_latitude_too_low(self):
         address = Address(position=Point(-270, 40),
@@ -106,7 +107,7 @@ class AddressTest(TestCase):
             city='Paris',
             zipcode='75003'
         )
-        self.assertRaises(ValidationError, address.full_clean) 
+        self.assertRaises(ValidationError, address.full_clean)
     
     def test_longitude_too_low(self):
         address = Address(position=Point(40, -270),
@@ -116,7 +117,7 @@ class AddressTest(TestCase):
             city='Paris',
             zipcode='75003'
         )
-        self.assertRaises(ValidationError, address.full_clean) 
+        self.assertRaises(ValidationError, address.full_clean)
     
     def test_correct_coordinates(self):
         try:

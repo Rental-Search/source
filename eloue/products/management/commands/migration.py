@@ -56,6 +56,7 @@ PUBLISH_MAP = { # WARN : We invert value because we mark them as archived rather
 
 log = logbook.Logger('eloue.migration')
 
+
 def cleanup_html_entities(text):
     """Remove html entitites from text"""
     if text:
@@ -64,9 +65,11 @@ def cleanup_html_entities(text):
     else:
         return text
 
+
 def cleanup_phone_number(phone_number):
     """Cleanup phone number format"""
     return phone_number.replace('O', '0').replace('.', '').replace('o', '').replace(' ', '').replace('/', '')
+
 
 class Command(BaseCommand):
     help = "Migrate data from elouweb to eloue"

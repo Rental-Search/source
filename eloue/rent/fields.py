@@ -3,8 +3,10 @@ import uuid
 
 from django.db import models
 
+
 class IntegerAutoField(models.IntegerField):
     empty_strings_allowed = False
+    
     def __init__(self, *args, **kwargs):
         kwargs['blank'] = True
         super(IntegerAutoField, self).__init__(*args, **kwargs)
@@ -27,6 +29,7 @@ class IntegerAutoField(models.IntegerField):
 
 class UUIDVersionError(Exception):
     pass
+
 
 class UUIDField(models.CharField):
     """
