@@ -2,39 +2,20 @@
 import urllib
 
 from django.conf import settings
-from django.contrib.auth import login
 from django.views.generic.simple import direct_to_template, redirect_to
 
 from django_lean.experiments.models import GoalRecord
 from django_lean.experiments.utils import WebUser
 
-from eloue.accounts.forms import EmailAuthenticationForm, make_missing_data_form
-from eloue.accounts.models import Patron
+from eloue.accounts.forms import EmailAuthenticationForm
 from eloue.products.models import Product
 from eloue.rent.models import Booking, PAYMENT_STATE
 from eloue.rent.forms import BookingForm
-from eloue.wizard import CustomFormWizard
+from eloue.wizard import GenericFormWizard
 
-class BookingWizard(CustomFormWizard):    
+class BookingWizard(GenericFormWizard):    
     def done(self, request, form_list):
-        missing_form = form_list[-1]
-        
-        if request.user.is_anonymous(): # Create new Patron
-            auth_form = form_list[1]
-            new_patron = auth_form.get_user()
-            if not new_patron:
-                new_patron = Patron.objects.create_inactive(missing_form.cleaned_data['username'], 
-                    auth_form.cleaned_data['email'], missing_form.cleaned_data['password'])
-            if not hasattr(new_patron, 'backend'):
-                from django.contrib.auth import load_backend
-                backend = load_backend(settings.AUTHENTICATION_BACKENDS[0])
-                new_patron.backend = "%s.%s" % (backend.__module__, backend.__class__.__name__)
-            login(request, new_patron)
-        else:
-            new_patron = request.user
-        
-        missing_form.instance = new_patron
-        new_patron, new_address, new_phone = missing_form.save()
+        new_patron, new_address, new_phone = super(BookingWizard, self).done(request, form_list)
         
         booking_form = form_list[0]
         booking_form.instance.total_amount = Booking.calculate_price(booking_form.instance.product, 
@@ -50,26 +31,10 @@ class BookingWizard(CustomFormWizard):
         
         if booking.payment_state == PAYMENT_STATE.AUTHORIZED:
             GoalRecord.record('rent_object_pre_paypal', WebUser(request))
-            return redirect_to(settings.PAYPAL_COMMAND % urllib.urlencode({ 'cmd':'_ap-preapproval', 'preapprovalkey':booking.preapprovalkey }))
+            return redirect_to(request, settings.PAYPAL_COMMAND % urllib.urlencode({ 'cmd':'_ap-preapproval', 'preapprovalkey':booking.preapproval_key }))
         return direct_to_template(request, template="rent/booking_preapproval.html", extra_context={
             'booking':booking,
         })
-    
-    def __call__(self, request, *args, **kwargs):
-        if request.user.is_authenticated(): # When user is authenticated
-            if EmailAuthenticationForm in self.form_list:
-                self.form_list.remove(EmailAuthenticationForm)
-            if not any(map(lambda el: getattr(el, '__name__', None) == 'MissingInformationForm', self.form_list)):
-                self.form_list.append(make_missing_data_form(request.user))
-        else: # When user is anonymous
-            if EmailAuthenticationForm not in self.form_list:
-                self.form_list.append(EmailAuthenticationForm)
-            if EmailAuthenticationForm in self.form_list:
-                if not any(map(lambda el: getattr(el, '__name__', None) == 'MissingInformationForm', self.form_list)):
-                    form = self.get_form(self.form_list.index(EmailAuthenticationForm), request.POST, request.FILES)
-                    form.is_valid()
-                    self.form_list.append(make_missing_data_form(form.get_user()))
-        return super(BookingWizard, self).__call__(request, *args, **kwargs)
     
     def get_form(self, step, data=None, files=None):
         if issubclass(self.form_list[step], BookingForm):

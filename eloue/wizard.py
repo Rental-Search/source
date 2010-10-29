@@ -6,11 +6,15 @@ except ImportError:
 
 import django.forms as forms
 from django.conf import settings
+from django.contrib.auth import login
 from django.contrib.formtools.wizard import FormWizard
 from django.http import Http404
 from django.utils.decorators import method_decorator
 from django.utils.hashcompat import md5_constructor
 from django.views.decorators.csrf import csrf_protect
+
+from eloue.accounts.forms import EmailAuthenticationForm, make_missing_data_form
+from eloue.accounts.models import Patron
 
 
 class CustomFormWizard(FormWizard):
@@ -98,4 +102,43 @@ class CustomFormWizard(FormWizard):
                 self.step = current_step = next_step
         
         return self.render(form, request, current_step) 
+    
+
+class GenericFormWizard(CustomFormWizard):
+    def done(self, request, form_list):
+        missing_form = form_list[-1]
+        
+        if request.user.is_anonymous(): # Create new Patron
+            auth_form = form_list[1]
+            new_patron = auth_form.get_user()
+            if not new_patron:
+                new_patron = Patron.objects.create_inactive(missing_form.cleaned_data['username'], 
+                    auth_form.cleaned_data['email'], missing_form.cleaned_data['password1'])
+            if not hasattr(new_patron, 'backend'):
+                from django.contrib.auth import load_backend
+                backend = load_backend(settings.AUTHENTICATION_BACKENDS[0])
+                new_patron.backend = "%s.%s" % (backend.__module__, backend.__class__.__name__)
+            login(request, new_patron)
+        else:
+            new_patron = request.user
+        
+        missing_form.instance = new_patron
+        new_patron, new_address, new_phone = missing_form.save()
+        return new_patron, new_address, new_phone
+    
+    def __call__(self, request, *args, **kwargs):
+        if request.user.is_authenticated(): # When user is authenticated
+            if EmailAuthenticationForm in self.form_list:
+                self.form_list.remove(EmailAuthenticationForm)
+            if not any(map(lambda el: getattr(el, '__name__', None) == 'MissingInformationForm', self.form_list)):
+                self.form_list.append(make_missing_data_form(request.user))
+        else: # When user is anonymous
+            if EmailAuthenticationForm not in self.form_list:
+                self.form_list.append(EmailAuthenticationForm)
+            if EmailAuthenticationForm in self.form_list:
+                if not any(map(lambda el: getattr(el, '__name__', None) == 'MissingInformationForm', self.form_list)):
+                    form = self.get_form(self.form_list.index(EmailAuthenticationForm), request.POST, request.FILES)
+                    form.is_valid() # Here to fill form user_cache
+                    self.form_list.append(make_missing_data_form(form.get_user()))
+        return super(GenericFormWizard, self).__call__(request, *args, **kwargs)
     

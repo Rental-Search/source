@@ -42,8 +42,8 @@ class PayIPNForm(forms.Form):
     
 
 class BookingForm(forms.ModelForm):
-    started_at = forms.CharField(required=True, widget=forms.TextInput(attrs={'class':'inb'}))
-    ended_at = forms.CharField(required=True, widget=forms.TextInput(attrs={'class':'inb'}))
+    started_at = forms.DateTimeField(required=True, widget=forms.TextInput(attrs={'class':'inb'}))
+    ended_at = forms.DateTimeField(required=True, widget=forms.TextInput(attrs={'class':'inb'}))
      
     class Meta:
         model = Booking

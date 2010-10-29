@@ -1,37 +1,17 @@
 # -*- coding: utf-8 -*-
-from django.conf import settings
-from django.contrib.auth import login
 from django.views.generic.simple import redirect_to
 
 from django_lean.experiments.models import GoalRecord
 from django_lean.experiments.utils import WebUser
 
 from eloue.accounts.forms import EmailAuthenticationForm, make_missing_data_form
-from eloue.accounts.models import Patron
 from eloue.products.forms import ProductForm
 from eloue.products.models import Product, Picture, UNIT
-from eloue.wizard import CustomFormWizard
+from eloue.wizard import GenericFormWizard
 
-class ProductWizard(CustomFormWizard):
+class ProductWizard(GenericFormWizard):
     def done(self, request, form_list):
-        missing_form = form_list[-1]
-        
-        if request.user.is_anonymous(): # Create new Patron
-            auth_form = form_list[1]
-            new_patron = auth_form.get_user()
-            if not new_patron:
-                new_patron = Patron.objects.create_inactive(missing_form.cleaned_data['username'], 
-                    auth_form.cleaned_data['email'], missing_form.cleaned_data['password1'])
-            if not hasattr(new_patron, 'backend'):
-                from django.contrib.auth import load_backend
-                backend = load_backend(settings.AUTHENTICATION_BACKENDS[0])
-                new_patron.backend = "%s.%s" % (backend.__module__, backend.__class__.__name__)
-            login(request, new_patron)
-        else:
-            new_patron = request.user
-        
-        missing_form.instance = new_patron
-        new_patron, new_address, new_phone = missing_form.save()
+        new_patron, new_address, new_phone = super(ProductWizard, self).done(request, form_list)    
         
         # Create product
         product_form = form_list[0]
@@ -58,7 +38,7 @@ class ProductWizard(CustomFormWizard):
             if EmailAuthenticationForm in self.form_list:
                 if not any(map(lambda el: getattr(el, '__name__', None) == 'MissingInformationForm', self.form_list)):
                     form = self.get_form(self.form_list.index(EmailAuthenticationForm), request.POST, request.FILES)
-                    form.is_valid()
+                    form.is_valid() # Here to fill form user_cache
                     self.form_list.append(make_missing_data_form(form.get_user()))
         return super(ProductWizard, self).__call__(request, *args, **kwargs)
     
