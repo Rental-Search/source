@@ -6,14 +6,18 @@ from eloue.products.models import Product, Picture, Category, Property, Property
 
 from haystack.admin import SearchModelAdmin
 
+
 class PictureInline(admin.TabularInline):
     model = Picture
+
 
 class PropertyValueInline(admin.TabularInline):
     model = PropertyValue
 
+
 class PriceInline(admin.TabularInline):
     model = Price
+
 
 class ProductAdmin(SearchModelAdmin):
     search_fields = ['summary', 'description']
@@ -22,12 +26,15 @@ class ProductAdmin(SearchModelAdmin):
     list_display = ('summary', 'deposit_amount', 'quantity', 'is_archived', 'is_allowed')
     list_filter = ('is_archived', 'is_allowed')
 
+
 class CategoryAdmin(MPTTModelAdmin):
     list_display = ('name', 'parent')
     search_fields = ['name', 'parent__name']
 
+
 class PropertyAdmin(admin.ModelAdmin):
     pass
+
 
 class ProductReviewAdmin(admin.ModelAdmin):
     raw_id_fields = ("reviewer", "product")

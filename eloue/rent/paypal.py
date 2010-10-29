@@ -11,14 +11,14 @@ accounts = AdaptiveAccounts(
     settings.PAYPAL_API_SIGNATURE,
     settings.PAYPAL_API_APPLICATION_ID,
     settings.PAYPAL_API_EMAIL,
-    sandbox = settings.USE_PAYPAL_SANDBOX
+    sandbox=settings.USE_PAYPAL_SANDBOX
 )
 
 payments = AdaptivePayments(
-    settings.PAYPAL_API_USERNAME, 
-    settings.PAYPAL_API_PASSWORD, 
-    settings.PAYPAL_API_SIGNATURE, 
-    settings.PAYPAL_API_APPLICATION_ID, 
+    settings.PAYPAL_API_USERNAME,
+    settings.PAYPAL_API_PASSWORD,
+    settings.PAYPAL_API_SIGNATURE,
+    settings.PAYPAL_API_APPLICATION_ID,
     settings.PAYPAL_API_EMAIL,
-    sandbox = settings.USE_PAYPAL_SANDBOX
+    sandbox=settings.USE_PAYPAL_SANDBOX
 )

@@ -13,12 +13,13 @@ from eloue.rent.models import Booking, PAYMENT_STATE
 from eloue.rent.forms import BookingForm
 from eloue.wizard import GenericFormWizard
 
-class BookingWizard(GenericFormWizard):    
+
+class BookingWizard(GenericFormWizard):
     def done(self, request, form_list):
         new_patron, new_address, new_phone = super(BookingWizard, self).done(request, form_list)
         
         booking_form = form_list[0]
-        booking_form.instance.total_amount = Booking.calculate_price(booking_form.instance.product, 
+        booking_form.instance.total_amount = Booking.calculate_price(booking_form.instance.product,
             booking_form.cleaned_data['started_at'], booking_form.cleaned_data['ended_at'])
         booking_form.instance.borrower = new_patron
         booking = booking_form.save()
@@ -40,7 +41,7 @@ class BookingWizard(GenericFormWizard):
         if issubclass(self.form_list[step], BookingForm):
             product = self.extra_context['product']
             booking = Booking(product=product, owner=product.owner)
-            return self.form_list[step](data, files, prefix=self.prefix_for_step(step), 
+            return self.form_list[step](data, files, prefix=self.prefix_for_step(step),
                 initial=self.initial.get(step, None), instance=booking)
         return super(BookingWizard, self).get_form(step, data, files)
     

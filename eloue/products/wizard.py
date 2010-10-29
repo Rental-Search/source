@@ -9,9 +9,10 @@ from eloue.products.forms import ProductForm
 from eloue.products.models import Product, Picture, UNIT
 from eloue.wizard import GenericFormWizard
 
+
 class ProductWizard(GenericFormWizard):
     def done(self, request, form_list):
-        new_patron, new_address, new_phone = super(ProductWizard, self).done(request, form_list)    
+        new_patron, new_address, new_phone = super(ProductWizard, self).done(request, form_list)
         
         # Create product
         product_form = form_list[0]
@@ -31,7 +32,7 @@ class ProductWizard(GenericFormWizard):
             if files and '0-picture' in files: # Hack to get image working
                 data['0-picture_id'] = Picture.objects.create(image=files['0-picture']).id
                 del files['0-picture']
-            return self.form_list[step](data, files, prefix=self.prefix_for_step(step), 
+            return self.form_list[step](data, files, prefix=self.prefix_for_step(step),
                 initial=self.initial.get(step, None), instance=Product(quantity=1))
         return super(ProductWizard, self).get_form(step, data, files)
     

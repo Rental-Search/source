@@ -3,6 +3,7 @@ from django.contrib.auth.backends import ModelBackend
 
 from eloue.accounts.models import Patron
 
+
 class PatronModelBackend(ModelBackend):
     def authenticate(self, username=None, password=None):
         try:

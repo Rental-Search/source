@@ -13,6 +13,7 @@ from django.utils.encoding import smart_str
 
 log = logbook.Logger('eloue.rent.reimbursement')
 
+
 class Command(BaseCommand):
     help = "Send monthly insurance reimbursement"
     

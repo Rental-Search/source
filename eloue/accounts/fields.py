@@ -6,6 +6,7 @@ from django.utils.encoding import smart_unicode
 
 DIGITS_ONLY = re.compile('(\(\d\)|[^\d+])')
 
+
 class PhoneNumberField(Field):
     def to_python(self, value):
         """

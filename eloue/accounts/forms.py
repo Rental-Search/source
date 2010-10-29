@@ -26,7 +26,7 @@ STATE_CHOICES = (
 class EmailAuthenticationForm(forms.Form):
     """Displays the login form and handles the login action."""
     exists = forms.TypedChoiceField(required=True, coerce=int, choices=STATE_CHOICES, widget=forms.RadioSelect(renderer=CustomRadioFieldRenderer), initial=1)
-    email = forms.EmailField(label=_(u"Email"), max_length=75, required=True, widget=forms.TextInput(attrs={ 
+    email = forms.EmailField(label=_(u"Email"), max_length=75, required=True, widget=forms.TextInput(attrs={
         'autocapitalize':'off', 'autocorrect':'off', 'class':'inb'
     }))
     password = forms.CharField(label=_(u"Password"), widget=forms.PasswordInput(attrs={'class':'inb'}), required=False)
@@ -69,13 +69,13 @@ class EmailAuthenticationForm(forms.Form):
     
 
 class EmailPasswordResetForm(PasswordResetForm):
-    email = forms.EmailField(label=_("E-mail"), max_length=75, widget=forms.TextInput(attrs={ 
+    email = forms.EmailField(label=_("E-mail"), max_length=75, widget=forms.TextInput(attrs={
         'autocapitalize':'off', 'autocorrect':'off', 'class':'inb'
     }))
     
     def save(self, domain_override=None, use_https=False, token_generator=default_token_generator, **kwargs):
         """Generates a one-use only link for resetting password and sends to the user"""
-        from django.core.mail import EmailMultiAlternatives 
+        from django.core.mail import EmailMultiAlternatives
         for user in self.users_cache:
             if not domain_override:
                 current_site = Site.objects.get_current()
@@ -116,8 +116,8 @@ class PhoneNumberForm(forms.ModelForm):
 def make_missing_data_form(instance):
     fields = {
         'username':forms.RegexField(label=_("Username"), max_length=30, regex=r'^[\w.@+-]+$',
-            help_text = _("Required. 30 characters or fewer. Letters, digits and @/./+/-/_ only."),
-            error_messages = {'invalid': _("This value may contain only letters, numbers and @/./+/-/_ characters.")},
+            help_text=_("Required. 30 characters or fewer. Letters, digits and @/./+/-/_ only."),
+            error_messages={'invalid': _("This value may contain only letters, numbers and @/./+/-/_ characters.")},
             widget=forms.TextInput(attrs={'class':'inb'})
         ),
         'password1':forms.CharField(required=True, widget=forms.PasswordInput(attrs={'class':'inb'})),
@@ -135,7 +135,7 @@ def make_missing_data_form(instance):
         fields['addresses'] = forms.ModelChoiceField(queryset=instance.addresses.all())
         for f in fields.keys():
             if "addresses" in f:
-                fields[f].required = False 
+                fields[f].required = False
     if instance and instance.phones.exists():
         fields['phones'] = forms.ModelChoiceField(queryset=instance.phones.all())
     

@@ -9,6 +9,7 @@ from eloue.accounts.forms import EmailAuthenticationForm, make_missing_data_form
 from eloue.accounts.models import Patron
 from eloue.wizard import CustomFormWizard
 
+
 class AuthenticationWizard(CustomFormWizard):
     def done(self, request, form_list):
         missing_form = form_list[-1]
@@ -16,7 +17,7 @@ class AuthenticationWizard(CustomFormWizard):
         auth_form = form_list[-2]
         new_patron = auth_form.get_user()
         if not new_patron:
-            new_patron = Patron.objects.create_inactive(missing_form.cleaned_data['username'], 
+            new_patron = Patron.objects.create_inactive(missing_form.cleaned_data['username'],
                 auth_form.cleaned_data['email'], missing_form.cleaned_data['password1'])
         if not hasattr(new_patron, 'backend'):
             from django.contrib.auth import load_backend

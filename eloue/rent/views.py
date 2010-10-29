@@ -13,6 +13,7 @@ from eloue.rent.wizard import BookingWizard
 
 log = logbook.Logger('eloue.rent')
 
+
 @require_POST
 @csrf_exempt
 @validate_ipn
@@ -22,6 +23,7 @@ def preapproval_ipn(request):
         pass # TODO : deal with data
     return HttpResponse()
 
+
 @require_POST
 @csrf_exempt
 @validate_ipn
@@ -30,7 +32,8 @@ def pay_ipn(request):
     if form.is_valid():
         pass # TODO : deal with data
     return HttpResponse()
-    
+
+   
 @never_cache
 def booking_create(request, *args, **kwargs):
     wizard = BookingWizard([BookingForm,EmailAuthenticationForm])

@@ -9,6 +9,7 @@ from django.template import Library, Node, Variable, TemplateSyntaxError
 
 register = Library()
 
+
 @register.simple_tag
 def facet_breadcrumb_link(breadcrumbs, facet):
     """
@@ -20,6 +21,7 @@ def facet_breadcrumb_link(breadcrumbs, facet):
         if f == facet:
             break
     return '%s/%s/' % ('location', '/'.join(output))
+
 
 class FacetUrlNode(Node):
     def __init__(self, breadcrumbs, additions, removals):
@@ -88,6 +90,7 @@ def do_facet_url(parser, token):
                 raise TemplateSyntaxError('Invalid argument length: %r' % token)
             additions.append((bit, next_bit))
     return FacetUrlNode(breadcrumbs, additions, removals)
+
 
 class CanonicalNode(Node):
     def __init__(self, urlbits):

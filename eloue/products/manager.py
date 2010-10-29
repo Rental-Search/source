@@ -3,6 +3,7 @@ import types
 
 from django.db.models import Manager
 
+
 class ProductManager(Manager):
     def active(self):
         return self.filter(is_archived=False, is_allowed=True)
@@ -21,6 +22,7 @@ class PriceManager(Manager):
     @staticmethod
     def _filter_factory(unit):
         from eloue.products.models import UNIT
+        
         def filter(self):
             return self.get_query_set().filter(unit=UNIT[unit])
         return filter
@@ -36,6 +38,7 @@ class QuestionManager(Manager):
     @staticmethod
     def _filter_factory(status):
         from eloue.products.models import STATUS
+        
         def filter(self):
             return self.get_query_set().filter(status=STATUS[status])
         return filter

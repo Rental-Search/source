@@ -8,11 +8,14 @@ from django.utils.translation import ugettext_lazy as _
 from eloue.accounts.models import Patron, Address, PhoneNumber
 from eloue.accounts.forms import PatronChangeForm
 
+
 class AddressInline(admin.TabularInline):
     model = Address
 
+
 class PhoneNumberInline(admin.TabularInline):
     model = PhoneNumber
+
 
 class PatronAdmin(UserAdmin):
     fieldsets = (

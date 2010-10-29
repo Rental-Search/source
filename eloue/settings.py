@@ -198,7 +198,7 @@ COMPRESS_CSS = {
             'css/plugins/product-list/product-list.css',
             'css/plugins/search/search.css',
             'css/plugins/stepbystep/stepbystep.css'
-		),
+        ),
         'output_filename': 'css/master.r?.css',
         'extra_context': {
             'media': 'screen',
