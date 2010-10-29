@@ -10,6 +10,7 @@ from django.contrib.formtools.wizard import FormWizard
 from django.http import Http404
 from django.utils.decorators import method_decorator
 from django.utils.hashcompat import md5_constructor
+from django.views.decorators.cache import never_cache
 from django.views.decorators.csrf import csrf_protect
 
 from eloue.accounts.forms import EmailAuthenticationForm, make_missing_data_form
@@ -64,6 +65,7 @@ class CustomFormWizard(FormWizard):
                 prev_fields.append(hidden.render(hash_name, old_data.get(hash_name, self.security_hash(request, old_form))))
         return self.render_template(request, form, ''.join(prev_fields), step, context)
     
+    @never_cache
     @method_decorator(csrf_protect)
     def __call__(self, request, *args, **kwargs):
         if 'extra_context' in kwargs:
