@@ -8,8 +8,12 @@ from django.contrib.auth import authenticate
 from django.contrib.sites.models import Site
 from django.contrib.auth.forms import PasswordResetForm
 from django.contrib.auth.tokens import default_token_generator
+from django.forms.widgets import RadioFieldRenderer, RadioInput
 from django.template.loader import render_to_string
+from django.utils.encoding import force_unicode
+from django.utils.html import conditional_escape
 from django.utils.http import int_to_base36
+from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext as _
 
 from eloue.accounts import EMAIL_BLACKLIST
@@ -17,12 +21,40 @@ from eloue.accounts.fields import PhoneNumberField
 from eloue.accounts.models import Patron, PhoneNumber, COUNTRY_CHOICES
 
 
+STATE_CHOICES = (
+    (0, "Je n'ai pas encore de compte e-loue"),
+    (1, "J'ai déjà un compte e-loue et mon mot de passe est :"),
+)
+
+class CustomRadioInput(RadioInput):
+    def __unicode__(self):
+        if 'id' in self.attrs:
+            label_for = ' for="%s_%s"' % (self.attrs['id'], self.index)
+        else:
+            label_for = ''
+        choice_label = conditional_escape(force_unicode(self.choice_label))
+        return mark_safe(u'<td class="txtR txtT">%s</td><td><label class="labb"%s>%s</label></td>' % (self.tag(), label_for, choice_label))
+    
+
+class CustomRadioFieldRenderer(RadioFieldRenderer):
+    def __iter__(self):
+        for i, choice in enumerate(self.choices):
+            yield CustomRadioInput(self.name, self.value, self.attrs.copy(), choice, i)
+
+    def __getitem__(self, idx):
+        choice = self.choices[idx] # Let the IndexError propogate
+        return CustomRadioInput(self.name, self.value, self.attrs.copy(), choice, idx)
+    
+    def render(self):
+        return mark_safe(u'\n'.join([u'<tr class="cSign">%s</tr>' % force_unicode(w) for w in self]))
+
 class EmailAuthenticationForm(forms.Form):
     """Displays the login form and handles the login action."""
+    exists = forms.TypedChoiceField(required=True, coerce=int, choices=STATE_CHOICES, widget=forms.RadioSelect(renderer=CustomRadioFieldRenderer), initial=1)
     email = forms.EmailField(label=_(u"Email"), max_length=75, required=True, widget=forms.TextInput(attrs={ 
         'autocapitalize':'off', 'autocorrect':'off', 'class':'inb'
     }))
-    password = forms.CharField(label=_(u"Password"), widget=forms.PasswordInput(attrs={'class':'inb'}), required=True)
+    password = forms.CharField(label=_(u"Password"), widget=forms.PasswordInput(attrs={'class':'inb'}), required=False)
     
     def __init__(self, *args, **kwargs):
         self.user_cache = None
@@ -30,23 +62,25 @@ class EmailAuthenticationForm(forms.Form):
     
     def clean_email(self):
         email = self.cleaned_data.get('email').lower()
+        exists = self.cleaned_data.get('exists')
         for rule in EMAIL_BLACKLIST:
             if re.search(rule, email):
                 raise forms.ValidationError(_(u"Pour garantir un service de qualité et la sécurité des utilisateurs de e-loue.com, vous ne pouvez pas vous enregistrer avec une adresse email jetable."))
+        if not exists and Patron.objects.filter(email=email).exists():
+            raise forms.ValidationError(_(u"Un compte existe déjà pour cet email"))
         return email
     
     def clean(self):
         email = self.cleaned_data.get('email')
         password = self.cleaned_data.get('password')
+        exists = self.cleaned_data.get('exists')
         
-        if email and password:
-            email = email.lower()
-            if Patron.objects.filter(email=email).exists():
-                self.user_cache = authenticate(username=email, password=password)
-                if self.user_cache is None:
-                    raise forms.ValidationError(_(u"Veuillez saisir une adresse email et un mot de passe valide."))
-                elif not self.user_cache.is_active:
-                    raise forms.ValidationError(_(u"Ce compte est inactif parce qu'il n'a pas été activé."))
+        if exists:
+            self.user_cache = authenticate(username=email, password=password)
+            if self.user_cache is None:
+                raise forms.ValidationError(_(u"Veuillez saisir une adresse email et un mot de passe valide."))
+            elif not self.user_cache.is_active:
+                raise forms.ValidationError(_(u"Ce compte est inactif parce qu'il n'a pas été activé."))
         
         return self.cleaned_data
     
@@ -111,6 +145,8 @@ def make_missing_data_form(instance):
             error_messages = {'invalid': _("This value may contain only letters, numbers and @/./+/-/_ characters.")},
             widget=forms.TextInput(attrs={'class':'inb'})
         ),
+        'password1':forms.CharField(required=True, widget=forms.PasswordInput(attrs={'class':'inb'})),
+        'password2':forms.CharField(required=True, widget=forms.PasswordInput(attrs={'class':'inb'})),
         'last_name':forms.CharField(required=True, widget=forms.TextInput(attrs={'class':'inb'})),
         'first_name':forms.CharField(required=True, widget=forms.TextInput(attrs={'class':'inb'})),
         'last_name':forms.CharField(required=True, widget=forms.TextInput(attrs={'class':'inb'})),
@@ -127,15 +163,21 @@ def make_missing_data_form(instance):
                 fields[f].required = False 
     if instance and instance.phones.exists():
         fields['phones'] = forms.ModelChoiceField(queryset=instance.phones.all())
-        
+    
+    if instance and instance.password:
+        del fields['password1']
+        del fields['password2']
+    
     for f in fields.keys():
-        if "__" in f or f in ['addresses', 'phones']:
-            continue 
+        if "__" in f or f in ["addresses", "phones", "password"]:
+            continue
         if hasattr(instance, f) and getattr(instance, f):
             del fields[f]
     
     def save(self):
         for attr, value in self.cleaned_data.iteritems():
+            if attr == "password1":
+                self.instance.set_password(value)
             if "addresses" not in attr and "phones" not in attr:
                 setattr(self.instance, attr, value)
         if 'addresses' in self.cleaned_data:
@@ -158,6 +200,13 @@ def make_missing_data_form(instance):
         self.instance.save()
         return self.instance, address, phone
     
+    def clean(self):
+        password1 = self.cleaned_data['password1']
+        password2 = self.cleaned_data['password2']
+        if password1 != password2:
+            raise forms.ValidationError(_(u"Vos mots de passe ne correspondent pas"))
+        return self.cleaned_data
+    
     def clean_username(self):
         if Patron.objects.filter(username=self.cleaned_data['username']).exists():
             raise forms.ValidationError(_(u"Ce nom d'utilisateur est déjà pris."))
@@ -165,5 +214,6 @@ def make_missing_data_form(instance):
     
     form_class = type('MissingInformationForm', (forms.BaseForm,), { 'instance':instance, 'base_fields': fields })
     form_class.save = types.MethodType(save, None, form_class)
+    form_class.clean = types.MethodType(clean, None, form_class)
     form_class.clean_username = types.MethodType(clean_username, None, form_class)
     return form_class

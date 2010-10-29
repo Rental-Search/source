@@ -8,7 +8,7 @@ from django.views.generic.simple import direct_to_template, redirect_to
 from django_lean.experiments.models import GoalRecord
 from django_lean.experiments.utils import WebUser
 
-from eloue.accounts.forms import EmailAuthenticationForm
+from eloue.accounts.forms import EmailAuthenticationForm, make_missing_data_form
 from eloue.accounts.models import Patron
 from eloue.products.models import Product
 from eloue.rent.models import Booking, PAYMENT_STATE
@@ -24,7 +24,7 @@ class BookingWizard(CustomFormWizard):
             new_patron = auth_form.get_user()
             if not new_patron:
                 new_patron = Patron.objects.create_inactive(missing_form.cleaned_data['username'], 
-                    auth_form.cleaned_data['email'], auth_form.cleaned_data['password'])
+                    auth_form.cleaned_data['email'], missing_form.cleaned_data['password'])
             if not hasattr(new_patron, 'backend'):
                 from django.contrib.auth import load_backend
                 backend = load_backend(settings.AUTHENTICATION_BACKENDS[0])
@@ -54,6 +54,22 @@ class BookingWizard(CustomFormWizard):
         return direct_to_template(request, template="rent/booking_preapproval.html", extra_context={
             'booking':booking,
         })
+    
+    def __call__(self, request, *args, **kwargs):
+        if request.user.is_authenticated(): # When user is authenticated
+            if EmailAuthenticationForm in self.form_list:
+                self.form_list.remove(EmailAuthenticationForm)
+            if not any(map(lambda el: getattr(el, '__name__', None) == 'MissingInformationForm', self.form_list)):
+                self.form_list.append(make_missing_data_form(request.user))
+        else: # When user is anonymous
+            if EmailAuthenticationForm not in self.form_list:
+                self.form_list.append(EmailAuthenticationForm)
+            if EmailAuthenticationForm in self.form_list:
+                if not any(map(lambda el: getattr(el, '__name__', None) == 'MissingInformationForm', self.form_list)):
+                    form = self.get_form(self.form_list.index(EmailAuthenticationForm), request.POST, request.FILES)
+                    form.is_valid()
+                    self.form_list.append(make_missing_data_form(form.get_user()))
+        return super(BookingWizard, self).__call__(request, *args, **kwargs)
     
     def get_form(self, step, data=None, files=None):
         if issubclass(self.form_list[step], BookingForm):

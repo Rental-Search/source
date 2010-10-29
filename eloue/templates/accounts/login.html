@@ -15,14 +15,7 @@
 							<td class="txtR"><label class="labb">Mon adresse email est :</label></td>
 							<td>{{ form.email }}</td>
 						</tr>
-						<tr class="cSign">
-							<td class="txtR txtT"><input  name="create" value="0" type="radio" /></td>
-							<td><label class="labb">Je n'ai pas encore de compte<br /> e-loue</label></td>
-						</tr>
-						<tr>
-							<td class="txtR txtT"><input name="create" value="1" type="radio" /></td>
-							<td><label class="labb">J'ai déjà un compte e-loue et<br /> mon mot de passe est :</label></td>
-						</tr>
+						{{ form.exists }}
 						<tr>
 							<td></td>
 							<td>{{ form.password }}</td>

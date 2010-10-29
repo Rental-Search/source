@@ -25,6 +25,18 @@
 						<td>{{ form.username }}</td>
 					 </tr>
 					{% endif %}
+					{% if form.password1 %}
+					 <tr>
+					 	<th class="txtT"><label class="labb">Mot de passe * :</label></th>
+						<td>{{ form.password1 }}</td>
+					 </tr>
+					{% endif %}
+					{% if form.password2 %}
+					 <tr>
+					 	<th class="txtT"><label class="labb">A nouveau * :</label></th>
+						<td>{{ form.password2 }}</td>
+					 </tr>
+					{% endif %}
 					{% if form.first_name %}
 					 <tr>
 						<th class="txtT"><label class="labb">Prénom * :</label></th>

@@ -13,9 +13,11 @@ from django.views.generic.list_detail import object_detail, object_list
 from geocoders.google import geocoder
 from haystack.query import SearchQuerySet
 
+from eloue.accounts.forms import EmailAuthenticationForm
 from eloue.accounts.models import Patron
-from eloue.products.forms import FacetedSearchForm
+from eloue.products.forms import FacetedSearchForm, ProductForm
 from eloue.products.models import Product, Category
+from eloue.products.wizard import ProductWizard
 
 PAGINATE_PRODUCTS_BY = getattr(settings, 'PAGINATE_PRODUCTS_BY', 10)
 DEFAULT_RADIUS = getattr(settings, 'DEFAULT_RADIUS', 50)
@@ -32,6 +34,11 @@ def product_detail(request, slug, product_id):
         return redirect_to(request, product.get_absolute_url())
     form = FacetedSearchForm()
     return direct_to_template(request, template='products/product_detail.html', extra_context={ 'product':product, 'form':form})
+
+@never_cache
+def product_create(request, *args, **kwargs):
+    wizard = ProductWizard([ProductForm,EmailAuthenticationForm])
+    return wizard(request, *args, **kwargs)
 
 @cache_page(900)
 @vary_on_cookie
