@@ -200,9 +200,10 @@ def make_missing_data_form(instance):
         self.instance.save()
         return self.instance, address, phone
     
-    def clean(self):
+    def clean_password2(self):
         password1 = self.cleaned_data['password1']
         password2 = self.cleaned_data['password2']
+        
         if password1 != password2:
             raise forms.ValidationError(_(u"Vos mots de passe ne correspondent pas"))
         return self.cleaned_data
@@ -214,6 +215,6 @@ def make_missing_data_form(instance):
     
     form_class = type('MissingInformationForm', (forms.BaseForm,), { 'instance':instance, 'base_fields': fields })
     form_class.save = types.MethodType(save, None, form_class)
-    form_class.clean = types.MethodType(clean, None, form_class)
+    form_class.clean_password2 = types.MethodType(clean_password2, None, form_class)
     form_class.clean_username = types.MethodType(clean_username, None, form_class)
     return form_class
