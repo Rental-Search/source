@@ -14,7 +14,11 @@
 	</div>
 	<div class="content container clearfix">
 		<div class="grid7 first">
-			<h3>Nouveau sur e-loue ? Enregistrez votre profil :</h3>
+			{% if form.addresses %}
+				<h3>Choisissez une adresse pour l'objet :</h3>
+			{% else %}
+				<h3>Complétez votre profil et choisissez une adresse pour la l'objet :</h3>
+			{% endif %}
 			{{ form.errors }}
 			<div class="data pam">
 				<form class="new" action="" method="POST">
@@ -50,18 +54,32 @@
 							<td>{{ form.last_name }}</td>
 					 	</tr>
 						{% endif %}
-						{% if form.phones %}
-					 	{{ form.phones }}
-						{% endif %}
+						{% if not form.phones %}
 						<tr>
-							<th class="txtT"><label class="labb">Téléphone :</label></th>
+							<th class="txtT">
+								<label class="labb">
+										Téléphone :
+								</label>
+							</th>
 							<td>{{ form.phones__phone }}</td>
 						</tr>
+						{% endif %}
 						{% if form.addresses %}
-					 	{{ form.addresses }}
+						<tr>
+							<th class="txtT"><label class="labb">Adresse * :</label></th>
+							<td>{{ form.addresses }}</td>
+						</tr>
 						{% endif %}
 						<tr>
-							<th class="txtT address" rowspan="3"><label class="labb">Adresse * :</label></th>
+							<th class="txtT address" rowspan="3">
+								<label class="labb">
+									{% if form.addresses %}
+										Nouvelle adresse :
+									{% else %}
+										Adresse *:
+									{% endif %}
+								</label>
+							</th>{# form.addresses__address1.field.required #}
 							<td>{{ form.addresses__address1 }}</td>
 						</tr>
 						<tr>
@@ -84,6 +102,7 @@
 						</tr>
 					</table>
 				</form>
+				<span>* : champ obligatoire</span>
 			</div>{# data #}
 		</div>
 	</div>{# content #}
