@@ -64,6 +64,9 @@
 							<td>{{ form.phones__phone }}</td>
 						</tr>
 						{% endif %}
+						{% if form.phones %}
+							{{ form.phones }}
+						{% endif %}
 						{% if form.addresses %}
 						<tr>
 							<th class="txtT"><label class="labb">Adresse * :</label></th>
