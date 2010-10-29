@@ -167,7 +167,7 @@ def make_missing_data_form(instance):
         if 'phones' in self.cleaned_data:
             phone = self.cleaned_data['phones']
         elif self.cleaned_data['phones__phone']:
-            phone = self.instance.phone.create(
+            phone = self.instance.phones.create(
                 number=self.cleaned_data['phones__phone']
             )
         else:
