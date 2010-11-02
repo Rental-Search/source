@@ -67,9 +67,9 @@
 			{% if product.deposit_amount != 0 %}
 				<li><strong>{% trans "Caution" %} :</strong> {{ product.deposit_amount }} &euro;</li>
 			{% endif %}
-			<li><strong>{% trans "Lieu" %} :</strong> {{ product.address.zipcode }} - {{ product.address.city }}</li>
+			<li><strong>{% trans "Lieu" %} :</strong> {{ product.address.zipcode }} {{ product.address.city|capfirst }}</li>
 			<li><strong>{% trans "Catégorie" %} :</strong> {{ product.category }}</li>
-			<li><strong>{% trans "Propriétaire" %} :</strong> {{ product.owner.username }}
+			<li><strong>{% trans "Propriétaire" %} :</strong> <a href="{{ product.owner.get_absolute_url }}">{{ product.owner.username }}</a>
 		</ul>
 	</div>{# detailsP #}
 	</div>{# col2 #}

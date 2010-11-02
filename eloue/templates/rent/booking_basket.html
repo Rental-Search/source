@@ -23,9 +23,10 @@
 					{{ product.description|truncatewords:30|safe }}
 				</div>
 				<div class="displ">
-					{{ product.address.zipcode }} - {{ product.address.city|capfirst }}
+					
 				</div>
 				<div class="ownpl">
+					<span>Lieu : </span>{{ product.address.zipcode }} {{ product.address.city|capfirst }} - 
 					<span>Propriétaire : </span><a href="#">{{ product.owner }}</a>
 				</div>
 			</div>
