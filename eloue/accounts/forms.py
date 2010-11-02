@@ -9,6 +9,7 @@ from django.contrib.sites.models import Site
 from django.contrib.auth.forms import PasswordResetForm
 from django.contrib.auth.tokens import default_token_generator
 from django.template.loader import render_to_string
+from django.utils.datastructures import SortedDict
 from django.utils.http import int_to_base36
 from django.utils.translation import ugettext as _
 
@@ -114,7 +115,7 @@ class PhoneNumberForm(forms.ModelForm):
     
 
 def make_missing_data_form(instance, required_fields=[]):
-    fields = {
+    fields = SortedDict({
         'username':forms.RegexField(label=_("Username"), max_length=30, regex=r'^[\w.@+-]+$',
             help_text=_("Required. 30 characters or fewer. Letters, digits and @/./+/-/_ only."),
             error_messages={'invalid': _("This value may contain only letters, numbers and @/./+/-/_ characters.")},
@@ -130,18 +131,18 @@ def make_missing_data_form(instance, required_fields=[]):
         'addresses__city':forms.CharField(required=True, widget=forms.TextInput(attrs={'class':'inb town', 'placeholder':'Ville'})),
         'addresses__country':forms.ChoiceField(choices=COUNTRY_CHOICES, required=True, widget=forms.Select(attrs={'class':'country'})),
         'phones__phone':PhoneNumberField(required=True, widget=forms.TextInput(attrs={'class':'inb'}))
-    }
+    })
     
     # Do we have an address ?
     if instance and instance.addresses.exists():
-        fields['addresses'] = forms.ModelChoiceField(queryset=instance.addresses.all(), widget=forms.Select(attrs={'style':'width: 360px;'}))
+        fields['addresses'] = forms.ModelChoiceField(required=False, queryset=instance.addresses.all(), widget=forms.Select(attrs={'style':'width: 360px;'}))
         for f in fields.keys():
             if "addresses" in f:
                 fields[f].required = False
     
     # Do we have a phone number ?
     if instance and instance.phones.exists():
-        fields['phones'] = forms.ModelChoiceField(queryset=instance.phones.all())
+        fields['phones'] = forms.ModelChoiceField(required=False, queryset=instance.phones.all())
         fields['phones__phone'].required = False
     
     # Do we have a password ?
@@ -164,7 +165,7 @@ def make_missing_data_form(instance, required_fields=[]):
                 self.instance.set_password(value)
             if "addresses" not in attr and "phones" not in attr:
                 setattr(self.instance, attr, value)
-        if 'addresses' in self.cleaned_data:
+        if 'addresses' in self.cleaned_data and self.cleaned_data['addresses']:
             address = self.cleaned_data['addresses']
         elif 'addresses__address1' in self.cleaned_data:
             address = self.instance.addresses.create(
@@ -175,7 +176,7 @@ def make_missing_data_form(instance, required_fields=[]):
             )
         else:
             address = None
-        if 'phones' in self.cleaned_data:
+        if 'phones' in self.cleaned_data and self.cleaned_data['phones']:
             phone = self.cleaned_data['phones']
         elif 'phones__phone' in self.cleaned_data:
             phone = self.instance.phones.create(
@@ -198,9 +199,29 @@ def make_missing_data_form(instance, required_fields=[]):
         if Patron.objects.filter(username=self.cleaned_data['username']).exists():
             raise forms.ValidationError(_(u"Ce nom d'utilisateur est déjà pris."))
         return self.cleaned_data['username']
+        
+    def clean_addresses(self):
+        addresses = self.cleaned_data['addresses']
+        address1 = self.cleaned_data['addresses__address1']
+        zipcode = self.cleaned_data['addresses__zipcode']
+        city = self.cleaned_data['addresses__city']
+        country = self.cleaned_data['addresses__country']
+        
+        if not addresses and not (address1 and zipcode and city and country):
+            raise forms.ValidationError(_(u"Vous devez spécifiez une adresse"))
+        return self.cleaned_data['addresses']
+    
+    def clean_phones(self):
+        phones = self.cleaned_data['phones']
+        phone = self.cleaned_data['phones__phone']
+        
+        if not phones and not phone:
+            raise forms.ValidationError(_(u"Vous devez spécifiez un numéro de téléphone"))
     
     form_class = type('MissingInformationForm', (forms.BaseForm,), { 'instance':instance, 'base_fields': fields })
     form_class.save = types.MethodType(save, None, form_class)
     form_class.clean_password2 = types.MethodType(clean_password2, None, form_class)
     form_class.clean_username = types.MethodType(clean_username, None, form_class)
+    form_class.clean_phones = types.MethodType(clean_phones, None, form_class)
+    form_class.clean_addresses = types.MethodType(clean_addresses, None, form_class)
     return fields != {}, form_class
