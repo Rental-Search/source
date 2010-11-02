@@ -121,10 +121,11 @@ class Booking(models.Model):
     
     def clean(self):
         from django.core.exceptions import ValidationError
-        if self.started_at >= self.ended_at:
-            raise ValidationError(_(u"Une location ne peut pas terminer avant d'avoir commencer"))
-        if (self.ended_at - self.started_at) > datetime.timedelta(days=BOOKING_DAYS):
-            raise ValidationError(_(u"La durée d'une location est limitée à 85 jours."))
+        if self.started_at and self.ended_at:
+            if self.started_at >= self.ended_at:
+                raise ValidationError(_(u"Une location ne peut pas terminer avant d'avoir commencer"))
+            if (self.ended_at - self.started_at) > datetime.timedelta(days=BOOKING_DAYS):
+                raise ValidationError(_(u"La durée d'une location est limitée à 85 jours."))
     
     @staticmethod
     def calculate_price(product, started_at, ended_at):

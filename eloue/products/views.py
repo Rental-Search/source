@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+import datetime
+
 from django.conf import settings
 from django.core.cache import cache
 from django.http import Http404
@@ -18,6 +20,8 @@ from eloue.accounts.models import Patron
 from eloue.products.forms import FacetedSearchForm, ProductForm
 from eloue.products.models import Product, Category
 from eloue.products.wizard import ProductWizard
+from eloue.rent.forms import BookingForm
+from eloue.rent.models import Booking
 
 PAGINATE_PRODUCTS_BY = getattr(settings, 'PAGINATE_PRODUCTS_BY', 10)
 DEFAULT_RADIUS = getattr(settings, 'DEFAULT_RADIUS', 50)
@@ -34,8 +38,13 @@ def product_detail(request, slug, product_id):
     product = get_object_or_404(Product, pk=product_id)
     if product.slug != slug:
         return redirect_to(request, product.get_absolute_url())
-    form = FacetedSearchForm()
-    return direct_to_template(request, template='products/product_detail.html', extra_context={ 'product':product, 'form':form})
+    search_form = FacetedSearchForm()
+    booking_form = BookingForm(prefix='0', instance=Booking(product=product, owner=product.owner), initial={
+        'started_at':[datetime.date.today().strftime('%d/%m/%Y'), '08:00:00'],
+        'ended_at':[(datetime.date.today() + datetime.timedelta(days=1)).strftime('%d/%m/%Y'), '19:00:00']
+    })
+    return direct_to_template(request, template='products/product_detail.html', extra_context={ 'product':product, 
+        'booking_form':booking_form, 'search_form':search_form})
 
 
 @never_cache
