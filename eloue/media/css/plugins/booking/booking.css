@@ -65,18 +65,18 @@
 
 
 /*****    *****/
-.booking .txtT{
+.booking-date .txtT{
   padding-top: 15px;
 }
-.booking input{
+.booking-date input{
   width: 100px;
 }
 
-.booking .submit{
+.booking-date .submit{
   text-align: right;
 }
 
-.booking .submit .button{
+.booking-date .submit .button{
   width: 150px;
 }
 
