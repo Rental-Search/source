@@ -17,13 +17,13 @@ DEFAULT_FROM_EMAIL = 'noreply@e-loue.com'
 
 DATABASES = {
     'default':{
-        'NAME':getattr(local, 'DATABASE_NAME', '../eloue.db'),
-        'ENGINE':getattr(local, 'DATABASE_ENGINE', 'django.db.backends.sqlite3'),
-        'USER':getattr(local, 'DATABASE_USER', ''),
+        'NAME':getattr(local, 'DATABASE_NAME', 'eloue'),
+        'ENGINE':getattr(local, 'DATABASE_ENGINE', 'django.contrib.gis.db.backends.postgis'),
+        'USER':getattr(local, 'DATABASE_USER', 'eloue'),
         'PASSWORD':getattr(local, 'DATABASE_PASSWORD', ''),
         'HOST':getattr(local, 'DATABASE_HOST', ''),
         'PORT':getattr(local, 'DATABASE_PORT', ''),
-        'OPTIONS':getattr(local, 'DATABASE_OPTIONS', {})
+        'OPTIONS':getattr(local, 'DATABASE_OPTIONS', { 'autocommit':True })
     }
 }
 
