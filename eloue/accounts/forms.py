@@ -113,7 +113,7 @@ class PhoneNumberForm(forms.ModelForm):
         exclude = ('patron')
     
 
-def make_missing_data_form(instance):
+def make_missing_data_form(instance, required_fields=[]):
     fields = {
         'username':forms.RegexField(label=_("Username"), max_length=30, regex=r'^[\w.@+-]+$',
             help_text=_("Required. 30 characters or fewer. Letters, digits and @/./+/-/_ only."),
@@ -129,21 +129,30 @@ def make_missing_data_form(instance):
         'addresses__zipcode':forms.CharField(required=True, widget=forms.TextInput(attrs={'class':'inb zip', 'placeholder':'Code postal'})),
         'addresses__city':forms.CharField(required=True, widget=forms.TextInput(attrs={'class':'inb town', 'placeholder':'Ville'})),
         'addresses__country':forms.ChoiceField(choices=COUNTRY_CHOICES, required=True, widget=forms.Select(attrs={'class':'country'})),
-        'phones__phone':PhoneNumberField(required=False, widget=forms.TextInput(attrs={'class':'inb'}))
+        'phones__phone':PhoneNumberField(required=True, widget=forms.TextInput(attrs={'class':'inb'}))
     }
+    
+    # Do we have an address ?
     if instance and instance.addresses.exists():
         fields['addresses'] = forms.ModelChoiceField(queryset=instance.addresses.all())
         for f in fields.keys():
             if "addresses" in f:
                 fields[f].required = False
+    
+    # Do we have a phone number ?
     if instance and instance.phones.exists():
         fields['phones'] = forms.ModelChoiceField(queryset=instance.phones.all())
+        fields['phones__phone'].required = False
     
+    # Do we have a password ?
     if instance and instance.password:
         del fields['password1']
         del fields['password2']
     
     for f in fields.keys():
+        if f not in required_fields:
+            del fields[f]
+            continue
         if "__" in f or f in ["addresses", "phones", "password"]:
             continue
         if hasattr(instance, f) and getattr(instance, f):
@@ -157,17 +166,19 @@ def make_missing_data_form(instance):
                 setattr(self.instance, attr, value)
         if 'addresses' in self.cleaned_data:
             address = self.cleaned_data['addresses']
-        else:
+        elif 'addresses__address1' in self.cleaned_data:
             address = self.instance.addresses.create(
                 address1=self.cleaned_data['addresses__address1'],
                 zipcode=self.cleaned_data['addresses__zipcode'],
                 city=self.cleaned_data['addresses__city'],
                 country=self.cleaned_data['addresses__country']
             )
+        else:
+            address = None
         if 'phones' in self.cleaned_data:
             phone = self.cleaned_data['phones']
-        elif self.cleaned_data['phones__phone']:
-            phone = self.instance.phone.create(
+        elif 'phones__phone' in self.cleaned_data:
+            phone = self.instance.phones.create(
                 number=self.cleaned_data['phones__phone']
             )
         else:
@@ -192,4 +203,4 @@ def make_missing_data_form(instance):
     form_class.save = types.MethodType(save, None, form_class)
     form_class.clean_password2 = types.MethodType(clean_password2, None, form_class)
     form_class.clean_username = types.MethodType(clean_username, None, form_class)
-    return form_class
+    return fields != {}, form_class

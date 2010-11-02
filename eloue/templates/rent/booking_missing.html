@@ -53,13 +53,16 @@
 					{% if form.phones %}
 					 {{ form.phones }}
 					{% endif %}
+					{% if form.phones__phone %}
 					<tr>
 						<th class="txtT"><label class="labb">Téléphone :</label></th>
 						<td>{{ form.phones__phone }}</td>
 					</tr>
+					{% endif %}
 					{% if form.addresses %}
 					 {{ form.addresses }}
 					{% endif %}
+					{% if form.addresses__address1 %}
 					<tr>
 						<th class="txtT address" rowspan="3"><label class="labb">Adresse * :</label></th>
 						<td>{{ form.addresses__address1 }}</td>
@@ -75,6 +78,7 @@
 							{{ form.addresses__country }}
 						</td>
 					</tr>
+					{% endif %}
 					<tr>
 						<td class="submit" colspan="2">
 							<input type="hidden" name="{{ step_field }}" value="{{ step0 }}" />

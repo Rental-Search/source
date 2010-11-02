@@ -7,14 +7,16 @@ from django.views.generic.simple import redirect_to
 
 from eloue.accounts.forms import EmailAuthenticationForm, make_missing_data_form
 from eloue.accounts.models import Patron
-from eloue.wizard import CustomFormWizard
+from eloue.wizard import MultiPartFormWizard
 
 
-class AuthenticationWizard(CustomFormWizard):
+class AuthenticationWizard(MultiPartFormWizard):
+    required_fields = ['username', 'password1', 'password2']
+    
     def done(self, request, form_list):
-        missing_form = form_list[-1]
+        missing_form = next((form for form in form_list if getattr(form.__class__, '__name__', None) == 'MissingInformationForm'), None)
         
-        auth_form = form_list[-2]
+        auth_form = next((form for form in form_list if isinstance(form, EmailAuthenticationForm)), None)
         new_patron = auth_form.get_user()
         if not new_patron:
             new_patron = Patron.objects.create_inactive(missing_form.cleaned_data['username'],
@@ -25,8 +27,9 @@ class AuthenticationWizard(CustomFormWizard):
             new_patron.backend = "%s.%s" % (backend.__module__, backend.__class__.__name__)
         login(request, new_patron)
         
-        missing_form.instance = new_patron
-        new_patron, new_address, new_phone = missing_form.save()
+        if missing_form: # Okay, there's nothing missing here
+            missing_form.instance = new_patron
+            new_patron, new_address, new_phone = missing_form.save()
         
         if request.user.is_active:
             messages.success(request, _(u"Bienvenue !"))
@@ -45,10 +48,12 @@ class AuthenticationWizard(CustomFormWizard):
         if EmailAuthenticationForm not in self.form_list:
             self.form_list.append(EmailAuthenticationForm)
         if EmailAuthenticationForm in self.form_list:
-            if not any(map(lambda el: getattr(el, '__name__', None) == 'MissingInformationForm', self.form_list)):
+            if not next((form for form in self.form_list if getattr(form, '__name__', None) == 'MissingInformationForm'), None):
                 form = self.get_form(self.form_list.index(EmailAuthenticationForm), request.POST, request.FILES)
-                form.is_valid() # Here to fill form user_cache
-                self.form_list.append(make_missing_data_form(form.get_user()))
+                form.is_valid()
+                missing_fields, missing_form = make_missing_data_form(form.get_user(), self.required_fields)
+                if missing_fields:
+                    self.form_list.append(missing_form)
         return super(AuthenticationWizard, self).__call__(request, *args, **kwargs)
     
     def get_template(self, step):

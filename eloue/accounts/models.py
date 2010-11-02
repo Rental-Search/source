@@ -224,12 +224,9 @@ class Address(models.Model):
         u'11, rue debelleyme  75003 Paris'
         >>> address = Address(address1='11, rue debelleyme', zipcode='75003', city='Paris', position=Point((48.8613232, 2.3631101)))
         >>> address.__unicode__()
-        u'11, rue debelleyme  75003 Paris (48.8613232, 2.3631101)'
+        u'11, rue debelleyme  75003 Paris'
         """
-        if self.position:
-            return smart_unicode("%s %s %s %s (%s, %s)" % (self.address1, self.address2 if self.address2 else '', self.zipcode, self.city, self.position.x, self.position.y))
-        else:
-            return smart_unicode("%s %s %s %s" % (self.address1, self.address2 if self.address2 else '', self.zipcode, self.city))
+        return smart_unicode("%s %s %s %s" % (self.address1, self.address2 if self.address2 else '', self.zipcode, self.city))
     
     def save(self, *args, **kwargs):
         if not self.position: # TODO : improve that part

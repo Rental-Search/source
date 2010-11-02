@@ -2,21 +2,41 @@
 import urllib
 
 from django.conf import settings
+from django.contrib.auth import login
 from django.views.generic.simple import direct_to_template, redirect_to
 
 from django_lean.experiments.models import GoalRecord
 from django_lean.experiments.utils import WebUser
 
 from eloue.accounts.forms import EmailAuthenticationForm
+from eloue.accounts.models import Patron
 from eloue.products.models import Product
 from eloue.rent.models import Booking, PAYMENT_STATE
 from eloue.rent.forms import BookingForm
 from eloue.wizard import GenericFormWizard
 
 
-class BookingWizard(GenericFormWizard):
+class BookingWizard(GenericFormWizard):    
     def done(self, request, form_list):
-        new_patron, new_address, new_phone = super(BookingWizard, self).done(request, form_list)
+        missing_form = next((form for form in form_list if getattr(form.__class__, '__name__', None) == 'MissingInformationForm'), None)
+        
+        if request.user.is_anonymous(): # Create new Patron
+            auth_form = next((form for form in form_list if isinstance(form, EmailAuthenticationForm)), None)
+            new_patron = auth_form.get_user()
+            if not new_patron:
+                new_patron = Patron.objects.create_inactive(missing_form.cleaned_data['username'],
+                    auth_form.cleaned_data['email'], missing_form.cleaned_data['password1'])
+            if not hasattr(new_patron, 'backend'):
+                from django.contrib.auth import load_backend
+                backend = load_backend(settings.AUTHENTICATION_BACKENDS[0])
+                new_patron.backend = "%s.%s" % (backend.__module__, backend.__class__.__name__)
+            login(request, new_patron)
+        else:
+            new_patron = request.user
+        
+        if missing_form:
+            missing_form.instance = new_patron
+            new_patron, new_address, new_phone = missing_form.save()
         
         booking_form = form_list[0]
         booking_form.instance.total_amount = Booking.calculate_price(booking_form.instance.product,
