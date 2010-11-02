@@ -15,7 +15,7 @@ from eloue.wizard import GenericFormWizard
 
 class ProductWizard(GenericFormWizard):
     def done(self, request, form_list):
-        missing_form = next((form for form in form_list if getattr(form.__class__, '__name__', None) == 'MissingInformationForm'), None) 
+        missing_form = next((form for form in form_list if getattr(form.__class__, '__name__', None) == 'MissingInformationForm'), None)
         
         if request.user.is_anonymous(): # Create new Patron
             auth_form = next((form for form in form_list if isinstance(form, EmailAuthenticationForm)), None)

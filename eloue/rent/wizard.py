@@ -16,7 +16,7 @@ from eloue.rent.forms import BookingForm
 from eloue.wizard import GenericFormWizard
 
 
-class BookingWizard(GenericFormWizard):    
+class BookingWizard(GenericFormWizard):
     def done(self, request, form_list):
         missing_form = next((form for form in form_list if getattr(form.__class__, '__name__', None) == 'MissingInformationForm'), None)
         
