@@ -5,6 +5,9 @@ from django.contrib.auth import login
 from django.utils.translation import ugettext as _
 from django.views.generic.simple import redirect_to
 
+from django_lean.experiments.models import GoalRecord
+from django_lean.experiments.utils import WebUser
+
 from eloue.accounts.forms import EmailAuthenticationForm, make_missing_data_form
 from eloue.accounts.models import Patron
 from eloue.wizard import MultiPartFormWizard
@@ -32,8 +35,10 @@ class AuthenticationWizard(MultiPartFormWizard):
             new_patron, new_address, new_phone = missing_form.save()
         
         if request.user.is_active:
+            GoalRecord.record('authentication', WebUser(request))
             messages.success(request, _(u"Bienvenue !"))
         else: # TODO : Maybe warning or info is better suited here, we need to see with design
+            GoalRecord.record('registration', WebUser(request))
             messages.success(request, _(u"Bienvenue ! Nous vous avons envoyé un lien de validation par email. Cette validation est impérative pour terminer votre enregistrement."))
         return redirect_to(request, self.redirect_path)
     
