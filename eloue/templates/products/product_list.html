@@ -100,7 +100,7 @@
 									{% endif %}
 								{% endwith %}
 								<div class="displ">
-									{{ product.address.zipcode }} - {{ product.address.city }}<br />	
+									{{ object.address.zipcode }} - {{ object.address.city }}<br />	
 								{% if product.geo_distance %}
 									{{ product.geo_distance|floatformat }} km{{ product.geo_distance|pluralize }}
 								{% endif %}
