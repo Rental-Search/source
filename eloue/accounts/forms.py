@@ -134,7 +134,7 @@ def make_missing_data_form(instance, required_fields=[]):
     
     # Do we have an address ?
     if instance and instance.addresses.exists():
-        fields['addresses'] = forms.ModelChoiceField(queryset=instance.addresses.all())
+        fields['addresses'] = forms.ModelChoiceField(queryset=instance.addresses.all(), widget=forms.Select(attrs={'style':'width: 360px;'}))
         for f in fields.keys():
             if "addresses" in f:
                 fields[f].required = False
@@ -148,7 +148,7 @@ def make_missing_data_form(instance, required_fields=[]):
     if instance and instance.password:
         del fields['password1']
         del fields['password2']
-    
+        
     for f in fields.keys():
         if f not in required_fields:
             del fields[f]

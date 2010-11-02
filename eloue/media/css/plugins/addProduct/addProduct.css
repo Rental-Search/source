@@ -47,6 +47,10 @@
   padding-right: 0px;
 }
 
+.sign .txtR{
+  width: 300px;
+}
+
 .sign input[type=radio]{
   width: 15px;
 }
@@ -87,7 +91,7 @@
 }
 
 .new .address{
-  width: 89px;
+  width: 145px;
 }
 
 .new .town{
@@ -102,4 +106,8 @@
 
 .new .country{
   width: 360px;
+}
+
+.new .number{
+  width: 200px;
 }

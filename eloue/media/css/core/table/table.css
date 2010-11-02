@@ -15,4 +15,4 @@ th, td{/*vertical-align:top;*/}
 .txtT, table .txtT td, table .txtT th, .data .txtT th, .data .txtT td{vertical-align:top;}
 .txtB, table .txtB td, table .txtB th, .data .txtB th, .data .txtB td{vertical-align:bottom;}
 .txtM, table .txtM td, table .txtM th, .data .txtM th, .data .txtM td{vertical-align:middle;}
-.data th,.data td{padding:3px 20px}
+.data th,.data td{padding:3px 10px}

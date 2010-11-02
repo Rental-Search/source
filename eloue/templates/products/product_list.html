@@ -99,9 +99,12 @@
 										<div class="descpl">{{ highlight }}</div>
 									{% endif %}
 								{% endwith %}
+								<div class="displ">
+									{{ product.address.zipcode }} - {{ product.address.city }}<br />	
 								{% if product.geo_distance %}
-									<div class="displ">{{ product.geo_distance|floatformat }} km{{ product.geo_distance|pluralize }}</div>
+									{{ product.geo_distance|floatformat }} km{{ product.geo_distance|pluralize }}
 								{% endif %}
+								</div>
 								<div class="ownpl">
 									<span>{% trans "Propriétaire : " %}</span><a href="{{ object.owner.get_absolute_url }}">{{ object.owner.username }}</a>
 								</div>
