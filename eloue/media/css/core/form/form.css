@@ -8,6 +8,10 @@ select{
   margin-top: 10px;
 }
 
+.sels{
+  font-size: 11px;
+}
+
 input, textarea{
   margin: 10px 10px 3px 0px; 
   background: transparent;
