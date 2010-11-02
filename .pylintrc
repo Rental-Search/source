@@ -1,0 +1,14 @@
+[MASTER]
+profile=no
+persistent=yes
+ignore=pricing_bc.py,compiled_pyke_files.py
+
+[MESSAGES CONTROL]
+disable=C0103,R0903,W0142,C0324,R0201,C0111,W0232,W0702,W0703,W0201
+
+[REPORTS]
+include-ids=yes
+reports=no
+
+[TYPECHECK]
+generated-members=objects,pending
