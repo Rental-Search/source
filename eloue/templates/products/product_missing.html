@@ -54,19 +54,24 @@
 							<td>{{ form.last_name }}</td>
 					 	</tr>
 						{% endif %}
-						{% if not form.phones %}
+						{% if form.phones %}
+						<tr>
+							<th class="txtT"><label class="labb">Téléphone * :</label></th>
+							<td>{{ form.phones }}</td>
+						</tr>
+						{% endif %}
 						<tr>
 							<th class="txtT">
 								<label class="labb">
-										Téléphone :
+										{% if form.phones %}
+											Nouveau Numéro :
+										{% else %}
+											Téléphone * :
+										{% endif %}
 								</label>
 							</th>
 							<td>{{ form.phones__phone }}</td>
 						</tr>
-						{% endif %}
-						{% if form.phones %}
-							{{ form.phones }}
-						{% endif %}
 						{% if form.addresses %}
 						<tr>
 							<th class="txtT"><label class="labb">Adresse * :</label></th>
