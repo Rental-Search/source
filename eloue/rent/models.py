@@ -122,6 +122,8 @@ class Booking(models.Model):
     def clean(self):
         from django.core.exceptions import ValidationError
         if self.started_at and self.ended_at:
+            if started_at <= datetime.datetime.now() or ended_at <= datetime.datetime.now():
+                raise forms.ValidationError(_(u"Vous ne pouvez pas louer a ces dates"))
             if self.started_at >= self.ended_at:
                 raise ValidationError(_(u"Une location ne peut pas terminer avant d'avoir commencer"))
             if (self.ended_at - self.started_at) > datetime.timedelta(days=BOOKING_DAYS):
