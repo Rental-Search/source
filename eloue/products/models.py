@@ -50,7 +50,7 @@ class Product(models.Model):
     """A product"""
     summary = models.CharField(max_length=255)
     deposit_amount = models.DecimalField(max_digits=8, decimal_places=2)
-    currency = models.CharField(max_length=3, choices=CURRENCY)
+    currency = models.CharField(max_length=3, choices=CURRENCY, default=CURRENCY.EUR)
     description = models.TextField()
     address = models.ForeignKey(Address, related_name='products')
     quantity = models.IntegerField()
@@ -175,7 +175,7 @@ class Price(models.Model):
     """A price"""
     name = models.CharField(blank=True, max_length=255)
     amount = models.DecimalField(max_digits=8, decimal_places=2)
-    currency = models.CharField(max_length=3, choices=CURRENCY)
+    currency = models.CharField(max_length=3, choices=CURRENCY, default=CURRENCY.EUR)
     product = models.ForeignKey(Product, related_name='prices')
     unit = models.PositiveSmallIntegerField(choices=UNIT, db_index=True)
     
