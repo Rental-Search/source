@@ -25,18 +25,6 @@ class ProductTest(TestCase):
         )
         product.save()
     
-    def test_product_owner_address(self):
-        product = Product(
-            summary="Perceuse visseuse Philips",
-            deposit_amount=250,
-            description=u"Engrenage planétaire à haute performance 2 vitesses : durée de vie supérieure, transmission optimale, fonctionnement régulier.",
-            address_id=1,
-            quantity=1,
-            category_id=35,
-            owner_id=2
-        )
-        self.assertRaises(ValidationError, product.full_clean)
-    
     def test_product_detail_view(self):
         response = self.client.get(reverse('product_detail', args=['perceuse-visseuse-philips', 1]))
         self.assertEqual(response.status_code, 200)
