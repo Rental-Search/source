@@ -6,21 +6,11 @@
 		<form action="{% url product_list %}">
 			<div class="grid4 first">
 				<label for="id_q" class="labb">{% trans "Que voulez vous louer ?" %}</label><br/>
-<<<<<<< HEAD
 				{{ search_form.q }}<br />
-				<span>{% trans "Exemple :" %}</span><a href="#">{% trans "Voiture" %}</a>, <a href="#">{% trans "Chèvre" %}</a>, <a href="#">{% trans "Ski" %}</a>, <a href="#">{% trans "Robe" %}</a>
 			</div>
 			<div class="grid4">
 				<label for="id_where" class="labb">{% trans "Où ?" %}</label><br />
 				{{ search_form.where }}<br />
-				<span>{% trans "Exemple :" %}</span><a href="#">{% trans "Nantes" %}</a>, <a href="#">{% trans "69000" %}</a>, <a href="#">{% trans "11 rue crozatier, 75" %}</a>
-=======
-				{{ form.q }}<br />
-			</div>
-			<div class="grid4">
-				<label for="id_where" class="labb">{% trans "Où ?" %}</label><br />
-				{{ form.where }}<br />
->>>>>>> create account details templates
 			</div>
 			<div class="grid4">
 				<input type="submit" value="{% trans "Rechercher" %}" class="button big orange"/>
@@ -85,5 +75,4 @@
 	</div><!-- questionP -->
 	</div><!-- col2 -->
 </div><!-- content -->
->>>>>>> create account details templates
 {% endblock %}
