@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import uuid
 from datetime import datetime, timedelta
 
 from django.conf import settings
@@ -92,8 +93,7 @@ class Product(models.Model):
     
 
 def upload_to(instance, filename):
-    return 'pictures/%s.jpg' % instance.id
-
+    return 'pictures/%s.jpg' % uuid.uuid4().hex
 
 class Picture(ImageModel):
     """A picture"""
@@ -104,6 +104,7 @@ class Picture(ImageModel):
         spec_module = 'eloue.products.specs'
         image_field = 'image'
         cache_dir = 'media'
+        cache_filename_format = "%(specname)s_%(filename)s.%(extension)s"
     
 
 class Category(MPTTModel):
