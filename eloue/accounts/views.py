@@ -11,6 +11,8 @@ from eloue.accounts.forms import EmailAuthenticationForm
 from eloue.accounts.models import Patron
 from eloue.accounts.wizard import AuthenticationWizard
 
+from eloue.products.forms import FacetedSearchForm
+
 log = Logger('eloue.accounts')
 
 
@@ -25,9 +27,11 @@ def activate(request, activation_key):
 @cache_page(900)
 def patron_detail(request, slug, patron_id=None):
     if patron_id: # This is here to be compatible with the old app
-        return redirect_to(request, reverse('patron_detail', args=[slug]))
+        form = FacetedSearchForm()
+        return redirect_to(request, reverse('patron_detail', args=[slug]),  extra_context={'form':form})
     else:
-        return object_detail(request, queryset=Patron.objects.all(), slug=slug, template_object_name='patron')
+        form = FacetedSearchForm()
+        return object_detail(request, queryset=Patron.objects.all(), slug=slug, template_object_name='patron', extra_context={'form':form})
 
 
 @never_cache
