@@ -95,6 +95,7 @@ class Product(models.Model):
 def upload_to(instance, filename):
     return 'pictures/%s.jpg' % uuid.uuid4().hex
 
+
 class Picture(ImageModel):
     """A picture"""
     product = models.ForeignKey(Product, related_name='pictures', blank=True, null=True)

@@ -10,5 +10,9 @@ disable=C0103,R0903,W0142,C0324,R0201,C0111,W0232,W0702,W0703,W0201
 include-ids=yes
 reports=no
 
+[FORMAT]
+max-line-length=140
+max-module-lines=1000
+
 [TYPECHECK]
-generated-members=objects,pending
+generated-members=objects,pending,tree

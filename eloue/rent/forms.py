@@ -39,6 +39,7 @@ TIME_CHOICE = (
     ('23:00:00', '23h')
 )
 
+
 class DateTimeWidget(forms.MultiWidget):
     def __init__(self, *args, **kwargs):
         widgets = (

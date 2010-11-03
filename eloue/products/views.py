@@ -43,7 +43,7 @@ def product_detail(request, slug, product_id):
         'started_at':[datetime.date.today().strftime('%d/%m/%Y'), '08:00:00'],
         'ended_at':[(datetime.date.today() + datetime.timedelta(days=1)).strftime('%d/%m/%Y'), '19:00:00']
     })
-    return direct_to_template(request, template='products/product_detail.html', extra_context={ 'product':product, 
+    return direct_to_template(request, template='products/product_detail.html', extra_context={ 'product':product,
         'booking_form':booking_form, 'search_form':search_form})
 
 

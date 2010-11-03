@@ -123,7 +123,6 @@ def make_missing_data_form(instance, required_fields=[]):
         ),
         'password1':forms.CharField(required=True, widget=forms.PasswordInput(attrs={'class':'inb'})),
         'password2':forms.CharField(required=True, widget=forms.PasswordInput(attrs={'class':'inb'})),
-        'last_name':forms.CharField(required=True, widget=forms.TextInput(attrs={'class':'inb'})),
         'first_name':forms.CharField(required=True, widget=forms.TextInput(attrs={'class':'inb'})),
         'last_name':forms.CharField(required=True, widget=forms.TextInput(attrs={'class':'inb'})),
         'addresses__address1':forms.CharField(widget=forms.Textarea(attrs={'class':'inb street', 'placeholder':'Rue'})),
