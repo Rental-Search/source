@@ -215,7 +215,7 @@ class Command(BaseCommand):
                 unit=1, amount=str(row['prix']), currency='EUR'
             )
 
-            faulty_product_images = [4856, 5197, 5227, 8787, 10720, 10830, 11770, 11830, 12389, 3980, 3997, 1040, 12188]
+            faulty_product_images = [4856, 5197, 5227, 8787, 10720, 10830, 11770, 11830, 12389, 3980, 3997, 1040, 12188, 11161, 12181]
             if row['product_full_image'] and product.pk not in faulty_product_images:
                 try:
                     image_file = open(os.path.join(path, str(row['vendor_id']), row['product_full_image']))
