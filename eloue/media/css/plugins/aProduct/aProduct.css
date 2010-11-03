@@ -103,8 +103,10 @@
 }
 
 .questionP a{
+  display: block;
   background: transparent url("../../../images/mail.png") no-repeat 0 1px;
   padding-left: 25px;
+  padding-top: 1px;
   font-size: 16px;
 }
 

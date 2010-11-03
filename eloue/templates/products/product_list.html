@@ -90,23 +90,23 @@
 							</a>
 							<div class="dpl">
 								<h3>
-									<a href="{{ object.get_absolute_url }}">{{ product.summary|capfirst }}</a>
+									<a href="{{ object.get_absolute_url }}">{{ product.summary|capfirst|truncatewords:5 }}</a>
 								</h3>
-								{% with product.highlighted.text|first|truncatewords:30|safe as highlight %}
+								{% with product.highlighted.text|first|truncatewords:18|safe as highlight %}
 									{% if highlight %} 
 										<div class="descpl">{{ highlight }}</div>
 									{% else %}
 										<div class="descpl">{{ highlight }}</div>
 									{% endif %}
 								{% endwith %}
-								<div class="displ">
-									{{ product.address.zipcode }} - {{ product.address.city }}<br />	
+								<div class="displ">	
 								{% if product.geo_distance %}
-									{{ product.geo_distance|floatformat }} km{{ product.geo_distance|pluralize }}
+									<p>{{ product.geo_distance|floatformat }} km{{ product.geo_distance|pluralize }}</p>
 								{% endif %}
 								</div>
 								<div class="ownpl">
-									<span>{% trans "Propriétaire : " %}</span><a href="{{ object.owner.get_absolute_url }}">{{ object.owner.username }}</a>
+									<span>{% trans "Lieu"%} : </span>{{ object.address.zipcode }} {{ object.address.city|capfirst }} - 
+									<span>{% trans "Propriétaire" %} : </span><a href="{{ object.owner.get_absolute_url }}">{{ object.owner.username }}</a>
 								</div>
 							</div><!-- dpl -->
 							<div class="bpl">

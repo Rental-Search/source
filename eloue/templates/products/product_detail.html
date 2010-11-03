@@ -7,12 +7,10 @@
 			<div class="grid4 first">
 				<label for="id_q" class="labb">{% trans "Que voulez vous louer ?" %}</label><br/>
 				{{ search_form.q }}<br />
-				<span>{% trans "Exemple :" %}</span><a href="#">{% trans "Voiture" %}</a>, <a href="#">{% trans "Chèvre" %}</a>, <a href="#">{% trans "Ski" %}</a>, <a href="#">{% trans "Robe" %}</a>
 			</div>
 			<div class="grid4">
 				<label for="id_where" class="labb">{% trans "Où ?" %}</label><br />
 				{{ search_form.where }}<br />
-				<span>{% trans "Exemple :" %}</span><a href="#">{% trans "Nantes" %}</a>, <a href="#">{% trans "69000" %}</a>, <a href="#">{% trans "11 rue crozatier, 75" %}</a>
 			</div>
 			<div class="grid4">
 				<input type="submit" value="{% trans "Rechercher" %}" class="button big orange"/>
@@ -64,14 +62,17 @@
 	</div>{# bookingP #}
 	<div class="propP grid4 first">
 		<ul>
-			{% if product.deposit_amount != 0 %}
+			{% if product.deposit_amount %}
 				<li><strong>{% trans "Caution" %} :</strong> {{ product.deposit_amount }} &euro;</li>
 			{% endif %}
-			<li><strong>{% trans "Lieu" %} :</strong> {{ product.address.zipcode }} - {{ product.address.city }}</li>
+			<li><strong>{% trans "Lieu" %} :</strong> {{ product.address.zipcode }} {{ product.address.city|capfirst }}</li>
 			<li><strong>{% trans "Catégorie" %} :</strong> {{ product.category }}</li>
-			<li><strong>{% trans "Propriétaire" %} :</strong> {{ product.owner.username }}
+			<li><strong>{% trans "Propriétaire" %} :</strong> <a href="{{ product.owner.get_absolute_url }}">{{ product.owner.username }}</a></li>
 		</ul>
-	</div>{# detailsP #}
-	</div>{# col2 #}
-</div>{# content #}
+	</div><!-- detailsP -->
+	<div class="questionP grid4 first">
+		<a href="#">Poser une question au propriétaire</a>
+	</div><!-- questionP -->
+	</div><!-- col2 -->
+</div><!-- content -->
 {% endblock %}

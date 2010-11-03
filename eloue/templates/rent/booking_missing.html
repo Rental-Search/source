@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="top-content container first">
+<div class="top-content container clearfix">
 	<div class="grid3 first">
 		<h1>Réservez</h1>
 	</div>
@@ -12,7 +12,7 @@
 		</ol>
 	</div>
 </div>{# top-content #}
-<div class="content container first">
+<div class="content container clearfix">
 	<div class="grid7 first">
 		<h3>Nouveau sur e-loue ? Enregistrez votre profil :</h3>
 		{{ form.errors }}
@@ -51,20 +51,42 @@
 					 </tr>
 					{% endif %}
 					{% if form.phones %}
-					 {{ form.phones }}
+					<tr>
+						<th class="txtT"><label class="labb">Téléphone * :</label></th>
+						<td>{{ form.phones }}</td>
+					</tr>
 					{% endif %}
 					{% if form.phones__phone %}
 					<tr>
-						<th class="txtT"><label class="labb">Téléphone :</label></th>
+						<th class="txtT">
+							<label class="labb">
+									{% if form.phones %}
+										Nouveau Numéro :
+									{% else %}
+										Téléphone * :
+									{% endif %}
+							</label>
+						</th>
 						<td>{{ form.phones__phone }}</td>
 					</tr>
 					{% endif %}
 					{% if form.addresses %}
-					 {{ form.addresses }}
+					<tr>
+						<th class="txtT"><label class="labb">Adresse * :</label></th>
+						<td>{{ form.addresses }}</td>
+					</tr>
 					{% endif %}
 					{% if form.addresses__address1 %}
 					<tr>
-						<th class="txtT address" rowspan="3"><label class="labb">Adresse * :</label></th>
+						<th class="txtT address" rowspan="3">
+							<label class="labb">
+								{% if form.addresses %}
+									Nouvelle adresse :
+								{% else %}
+									Adresse *:
+								{% endif %}
+							</label>
+						</th>{# form.addresses__address1.field.required #}
 						<td>{{ form.addresses__address1 }}</td>
 					</tr>
 					<tr>

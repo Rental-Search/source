@@ -1,5 +1,75 @@
 {% include "base.html" %}
-
+{% load i18n %}
 {% block content %}
- {{ patron.first_name }} {{ patron.last_name }}
+<div class="top-content container clearfix">
+	<search class="grid12 first">
+		<form action="{% url product_list %}">
+			<div class="grid4 first">
+				<label for="id_q" class="labb">{% trans "Que voulez vous louer ?" %}</label><br/>
+				{{ form.q }}<br />
+			</div>
+			<div class="grid4">
+				<label for="id_where" class="labb">{% trans "Où ?" %}</label><br />
+				{{ form.where }}<br />
+			</div>
+			<div class="grid4">
+				<input type="submit" value="{% trans "Rechercher" %}" class="button big orange"/>
+			</div>
+		</form><!-- form -->
+	</search>
+</div>{# top-content #}
+<div class="content container clearfix">
+	<div class="col2 grid3 first">
+		<div class="propP grid3 first">
+			<ul>
+				<li><strong>{% trans "Propriétaire" %} :</strong> {{ patron.username }}</a></li>
+				{% with patron.addresses.all|first as address %}
+					<li><strong>{% trans "Lieu" %} :</strong> {{ address.zipcode }} {{ address.city|capfirst }}</li>
+				{% endwith %}
+			</ul>
+		</div><!-- detailsP -->
+		<div class="questionP grid3 first">
+			<a href="#">Poser une question au propriétaire</a>
+		</div><!-- questionP -->
+	</div>
+	<div class="col1 grid9">
+		{% if patron.products %}
+			<h1>{{ patron.products.count}} location{{ patron.products.count|pluralize }}</h1>
+		{% else %}
+			<h1>Pas de location</h1>
+		{% endif %}
+		<ul class="list grid9 first">
+		{% for product in patron.products.all %}
+			<li class="pl grid9 first">
+				<a class="imgpl" href="{{ product.get_absolute_url }}">
+				 {% with product.pictures.all|first as picture %}
+          {% if picture.thumbnail %}
+           <img src="{{ picture.thumbnail.url }}" alt="product.summary" />
+          {% endif %}
+         {% endwith %}
+				</a>
+				<div class="dpl">
+					<h3>
+						<a href="{{ product.get_absolute_url }}">{{ product.summary|capfirst|truncatewords:5 }}</a>
+					</h3>
+					<div class="descpl">{{ product.description|truncatewords:18 }}</div>
+					<div class="displ">	
+					</div>
+					<div class="ownpl">
+						<span>{% trans "Lieu"%} : </span>{{ product.address.zipcode }} {{ product.address.city|capfirst }}
+					</div>
+				</div><!-- dpl -->
+				<div class="bpl">
+					<a href="{{ product.get_absolute_url }}" class="pbpl">
+						{{ product.prices.day|first }} &euro;/J
+					</a><br />
+					<a href="{{ product.get_absolute_url }}" class="button medium grey">{% trans "Choisir" %}</a>
+				</div>
+			</li>
+		{% endfor %}
+		</ul>
+	</div>{# result #}
+	</div>
+</div>{# content #}
+
 {% endblock %}

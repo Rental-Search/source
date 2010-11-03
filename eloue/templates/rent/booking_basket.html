@@ -5,12 +5,54 @@
 <div class="top-content container clearfix">
 	<h1>{% trans "Panier de réservation"%}
 </div>{# top-content #}
-<div class="content container clearfix">
+<div class="booking content container clearfix">
+	<div class="cart grid9 first">
+		<div class="headB grid9 first">	
+			<strong>Du</strong> samedi 23 octobre 2010 <strong>au</strong> mercredi 27 octobre 2010
+			<a herf="#">(Modifier les dates)</a>
+		</div>
+		<div class="resumeB grid9 first">
+			<a class="imgpl" href="#">
+				<img src="images/s3/mini_121.jpg" />
+			</a>
+			<div class="dpl">
+				<h3>
+					<a href="#">{{ product.summary }}</a>
+				</h3>
+				<div class="descpl">
+					{{ product.description|truncatewords:30|safe }}
+				</div>
+				<div class="displ">
+					
+				</div>
+				<div class="ownpl">
+					<span>Lieu : </span>{{ product.address.zipcode }} {{ product.address.city|capfirst }} - 
+					<span>Propriétaire : </span><a href="#">{{ product.owner }}</a>
+				</div>
+			</div>
+			<div class="bpl">
+			 {{ product.prices.day|first }}&euro;/J
+			</div>
+		</div><!-- resumeB -->
+		<div class="totalB grid9 first">
+			<strong>Total : </strong> 114€
+		</div><!-- totalB -->
+		<div class="submitB grid9 first">
+				<a href="#">Annulé</a> <span>ou</span> <input type="submit" value="Valider" class="grey button medium">
+		</div><!-- totalB -->
+	</div><!-- cart -->
+	<div class="infoB grid3">
+		<h5>Etapes de réservation</h5>
+		<ol>
+			<li>Identifiez-vous</li>
+			<li>Enregistrez votre paiement</li>
+		</ol>
+	</div><!-- infoB -->
 	{{ form.errors }}
 	<div class="grid7 first">
-		<h3>Saisissez vos dates de réservation :</h3>
+		<h4>Modifier vos dates de réservation :</h4>
 		<div class="data pam">
-			<form class="booking" action="" method="POST">
+			<form class="booking-date" action="" method="POST">
 		  	{% csrf_token %}
 				<table class="grid7 first">
 					<tr>
@@ -29,13 +71,12 @@
 						<td class="submit" colspan="2">
 							<input type="hidden" name="{{ step_field }}" value="{{ step0 }}" />
 					  	{{ previous_fields|safe }}
-							<input type="submit" value="Prochaine étape" class="button grey medium"/>
+							<input type="submit" value="Valider" class="button grey medium"/>
 						</td>
 					</tr>
 				</table>
 			</form>
 		</div>
 	</div>
-	
 </div>{# content #}
 {% endblock %}
