@@ -14,3 +14,23 @@ $("input[name='1-exists']").change(function(event) {
     var radio = event.target;
     disableField(radio.value, $("input[name='1-password']"));
 });
+
+
+    var minDateValue;
+    var maxDateValue;
+    
+	$('#id_0-started_at_0').datepicker({
+		dateFormat: 'dd/mm/yy',
+		minDate: 0,
+		maxDate: '+85d',
+		onSelect: function(dateText, inst) {
+		    $('#id_0-ended_at_0').val(dateText);
+		    $( "#id_0-ended_at_0" ).datepicker( "option", "minDate", dateText);
+		}
+	});
+	
+	$('#id_0-ended_at_0').datepicker({
+		dateFormat: 'dd/mm/yy',
+		maxDate: '+85d'
+	});
+	

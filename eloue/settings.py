@@ -197,7 +197,10 @@ COMPRESS_CSS = {
             'css/plugins/buttons/button.css',
             'css/plugins/product-list/product-list.css',
             'css/plugins/search/search.css',
-            'css/plugins/stepbystep/stepbystep.css'
+            'css/plugins/stepbystep/stepbystep.css',
+            'css/plugins/ui/jquery.ui.core.css',
+            'css/plugins/ui/jquery.ui.datepicker.css',
+            'css/plugins/ui/jquery.ui.theme.css'
         ),
         'output_filename': 'css/master.r?.css',
         'extra_context': {
@@ -207,7 +210,14 @@ COMPRESS_CSS = {
 }
 COMPRESS_JS = {
     'application': {
-        'source_filenames': ('js/jquery.js', 'js/modernizr.js', 'js/application.js'),
+        'source_filenames': (
+            'js/jquery.js',
+            'js/ui/jquery.ui.core.js',
+            'js/ui/jquery.ui.widget.js',
+            'js/ui/jquery.ui.datepicker.js',
+            'js/ui/jquery.ui.datepicker-fr.js',
+            'js/modernizr.js', 
+            'js/application.js'),
         'output_filename': 'js/application.r?.js',
     }
 }

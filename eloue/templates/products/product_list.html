@@ -96,7 +96,7 @@
 									{% if highlight %} 
 										<div class="descpl">{{ highlight }}</div>
 									{% else %}
-										<div class="descpl">{{ highlight }}</div>
+										<div class="descpl">{{ product.description|truncatewords:18 }}</div>
 									{% endif %}
 								{% endwith %}
 								<div class="displ">	

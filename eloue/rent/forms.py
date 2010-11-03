@@ -43,7 +43,7 @@ TIME_CHOICE = (
 class DateTimeWidget(forms.MultiWidget):
     def __init__(self, *args, **kwargs):
         widgets = (
-            forms.TextInput(attrs={'class':'inm'}),
+            forms.TextInput(attrs={'class':'inm dps'}),
             forms.Select(choices=TIME_CHOICE, attrs={'class':'sells'}),
         )
         super(DateTimeWidget, self).__init__(widgets, *args, **kwargs)
