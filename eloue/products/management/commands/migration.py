@@ -215,7 +215,7 @@ class Command(BaseCommand):
                 unit=1, amount=str(row['prix']), currency='EUR'
             )
 
-            if row['product_full_image']:
+            if row['product_full_image'] and product.pk not in [11161]:
                 try:
                     image_file = open(os.path.join(path, str(row['vendor_id']), row['product_full_image']))
                     product.pictures.create(image=File(image_file))
