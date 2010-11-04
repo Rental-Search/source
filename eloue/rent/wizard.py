@@ -13,6 +13,7 @@ from eloue.accounts.models import Patron
 from eloue.products.models import Product
 from eloue.rent.models import Booking, PAYMENT_STATE
 from eloue.rent.forms import BookingForm
+from eloue.rent.utils import combine
 from eloue.wizard import GenericFormWizard
 
 
@@ -66,7 +67,14 @@ class BookingWizard(GenericFormWizard):
         return super(BookingWizard, self).get_form(step, data, files)
     
     def parse_params(self, request, *args, **kwargs):
-        self.extra_context['product'] = Product.objects.get(pk=kwargs['product_id'])
+        product = Product.objects.get(pk=kwargs['product_id'])
+        start_parts = (request.POST.get('0-started_at_0', None), request.POST.get('0-started_at_1', None))
+        end_parts = (request.POST.get('0-ended_at_0', None), request.POST.get('0-ended_at_1', None))
+        if any(start_parts) and any(end_parts):
+            self.extra_context['total_amount'] = Booking.calculate_price(product, 
+                combine(*start_parts), combine(*end_parts))
+        self.extra_context['has_dates'] = any(start_parts) and any(end_parts)
+        self.extra_context['product'] = product
     
     def process_step(self, request, form, step):
         return super(BookingWizard, self).process_step(request, form, step)

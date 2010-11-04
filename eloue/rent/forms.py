@@ -54,8 +54,17 @@ class DateTimeWidget(forms.MultiWidget):
         return [None, None]
     
 
+class HiddenDateTimeWidget(DateTimeWidget):
+    is_hidden = True
+    
+    def __init__(self, *args, **kwargs):
+        super(HiddenDateTimeWidget, self).__init__(*args, **kwargs)
+        self.widgets = map(lambda widget: forms.HiddenInput(), self.widgets)
+    
+
 class DateTimeField(forms.MultiValueField):
     widget = DateTimeWidget
+    hidden_widget = HiddenDateTimeWidget
     
     def __init__(self, *args, **kwargs):
         fields = (

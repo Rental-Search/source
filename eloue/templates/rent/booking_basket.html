@@ -8,8 +8,9 @@
 <div class="booking content container clearfix">
 	<div class="cart grid9 first">
 		<div class="headB grid9 first">	
-			<strong>Du</strong> {{ form.started_at.data|combine|date:"l j F Y" }} <strong>au</strong> {{ form.ended_at.data|combine|date:"l j F Y" }}
-			<a href="#">(Modifier les dates)</a>
+		 {% if has_dates %}
+			 <strong>Du</strong> {{ form.started_at.data|combine|date:"l j F Y" }} <strong>au</strong> {{ form.ended_at.data|combine|date:"l j F Y" }} <a href="#">(Modifier les dates)</a>
+		 {% endif %}	
 		</div>
 		<div class="resumeB grid9 first">
 			<a class="imgpl">
@@ -38,12 +39,20 @@
 			 {{ product.prices.day|first }}&euro;/J
 			</div>
 		</div><!-- resumeB -->
-		<div class="totalB grid9 first">
-			<strong>Total : </strong> 114€
-		</div><!-- totalB -->
-		<div class="submitB grid9 first">
-				<a href="#">Annulé</a> <span>ou</span> <input type="submit" value="Valider" class="grey button medium">
-		</div><!-- totalB -->
+		{% if has_dates %}
+		 <div class="totalB grid9 first">
+			<strong>{% trans "Total :" %}</strong> {{ total_amount }}€
+		 </div><!-- totalB -->
+		 <div class="submitB grid9 first">
+		  <form class="booking-date" action="" method="POST">
+		   {{ form.started_at.as_hidden }}
+		   {{ form.ended_at.as_hidden }}
+		   <input type="hidden" name="{{ step_field }}" value="{{ step0 }}" />
+       {{ previous_fields|safe }}{% csrf_token %}	
+		   <a href="{{ product.get_absolute_url }}">{% trans "Annuler" %}</a> <span>ou</span> <input type="submit" value="Valider" class="grey button medium">
+		  </form>
+		 </div><!-- totalB -->
+		{% endif %}
 	</div><!-- cart -->
 	<div class="infoB grid3">
 		<h5>Etapes de réservation</h5>
@@ -73,6 +82,7 @@
 					</tr>
 					<tr>
 						<td class="submit" colspan="2">
+						  {{ form.basket }}
 							<input type="hidden" name="{{ step_field }}" value="{{ step0 }}" />
 					  	{{ previous_fields|safe }}
 							<input type="submit" value="Valider" class="button grey medium"/>
