@@ -169,7 +169,7 @@ class Booking(models.Model):
         try:
             response = payments.preapproval(
                 startingDate=datetime.datetime.now(),
-                endingDate=self.ended_at,
+                endingDate=self.ended_at, # MAYBE : Increase date to a full year
                 currencyCode=self.currency,
                 maxTotalAmountOfAllPayments=str(self.total_amount + self.deposit_amount),
                 cancelUrl=cancel_url,
