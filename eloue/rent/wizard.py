@@ -13,7 +13,7 @@ from django_lean.experiments.utils import WebUser
 from eloue.accounts.forms import EmailAuthenticationForm
 from eloue.accounts.models import Patron
 from eloue.products.models import Product
-from eloue.rent.models import Booking, PAYMENT_STATE
+from eloue.rent.models import Booking
 from eloue.rent.forms import BookingForm
 from eloue.rent.utils import combine
 from eloue.wizard import GenericFormWizard
@@ -55,7 +55,7 @@ class BookingWizard(GenericFormWizard):
             ip_address=request.META['REMOTE_ADDR']
         )
         
-        if booking.payment_state == PAYMENT_STATE.AUTHORIZED:
+        if booking.payment_state == Booking.PAYMENT_STATE.AUTHORIZED:
             GoalRecord.record('rent_object_pre_paypal', WebUser(request))
             return redirect_to(request, settings.PAYPAL_COMMAND % urllib.urlencode({ 'cmd':'_ap-preapproval', 'preapprovalkey':booking.preapproval_key }))
         return direct_to_template(request, template="rent/booking_preapproval.html", extra_context={

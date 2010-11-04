@@ -19,7 +19,7 @@ class Command(BaseCommand):
     
     def handle(self, *args, **options):
         from django.conf import settings
-        from eloue.rent.models import Booking, PAYMENT_STATE
+        from eloue.rent.models import Booking
         log.info('Starting monthly insurance reimbursement batch')
         csv_file = TemporaryFile()
         writer = csv.writer(csv_file, delimiter='|')
@@ -33,9 +33,9 @@ class Command(BaseCommand):
             row[u'Numéro de commande'] = booking.uuid
             row['Prix de la location TTC'] = booking.total_amount
             row['Date du remboursement'] = booking.canceled_at.strftime("%Y%m%d")
-            if booking.payment_state <= PAYMENT_STATE.CANCELED:
+            if booking.payment_state <= Booking.PAYMENT_STATE.CANCELED:
                 row['Type de remboursement'] = 'ANNULATION'
-            elif booking.payment_state <= PAYMENT_STATE.REFUNDED:
+            elif booking.payment_state <= Booking.PAYMENT_STATE.REFUNDED:
                 row['Type de remboursement'] = 'REMBOURSEMENT'
             else: # This should not happend
                 log.warning("Monthly insurance reimbursement batch failed on booking #%s" % booking.uuid)
