@@ -2,7 +2,7 @@
 {% load i18n %}
 {% block content %}
 <div class="top-content container clearfix">
-	<search class="grid12 first">
+	<div class="search grid12 first">
 		<form action="{% url product_list %}">
 			<div class="grid4 first">
 				<label for="id_q" class="labb">{% trans "Que voulez-vous louer ?" %}</label><br/>
@@ -16,7 +16,7 @@
 				<input type="submit" value="{% trans "Rechercher" %}" class="button big orange"/>
 			</div>
 		</form>{# form #}
-	</search>
+	</div>
 </div>{# top-content #}
 <div class="content container clearfix">
 	<div class="col1 grid8 first">

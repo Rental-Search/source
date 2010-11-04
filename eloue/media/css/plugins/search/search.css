@@ -1,17 +1,17 @@
-search{
+.search{
   padding-top: 10px;
   padding-bottom: 20px;
 }
-search form{
+.search form{
   float: left;
 }
 
-search .inb{
+.search .inb{
   width: 287px;
   margin-top: 5px;
 }
 
-search .button{
+.search .button{
   float:left;
   margin-top: 22px;
   width: 305px;
@@ -19,12 +19,12 @@ search .button{
   font-size: 17px;
 }
 
-search span{
+.search span{
   margin-left: 0px;
   font-size: 13px;
 }
 
-search a{
+.search a{
   text-decoration: underline;
   padding-left: 5px;
   font-size: 13px;

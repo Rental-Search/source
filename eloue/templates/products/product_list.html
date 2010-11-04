@@ -36,7 +36,7 @@
 
 {% block content %}
 <div class="top-content container clearfix">
-	<search class="grid12 first">
+	<div class="search grid12 first">
 		<form action="{% url product_list %}">
 			<div class="grid4 first">
 				<label for="id_q" class="labb">{% trans "Que voulez-vous louer ?" %}</label><br/>
@@ -52,10 +52,10 @@
 				<input type="submit" value="{% trans "Rechercher" %}" class="button big orange"/>
 			</div>
 		</form><!-- form -->
-	</search>
+	</div>
 </div><!-- top-content -->
 <div class="content container clearfix">
-	<section class="result grid9 first">
+	<div class="result grid9 first">
 	  {% if query %}
 		 <h1>{{ paginator.count }} résultat{{ paginator.count|pluralize }} pour <strong>{{ query }}</strong></h1>
 		{% endif %}
@@ -121,8 +121,8 @@
 			{% endfor %}
 		</ul><!-- list -->
 		{% pagination %}
-	</section><!-- result -->
-	<section class="facet grid3">
+	</div><!-- result -->
+	<div class="facet grid3">
 		<h4>{% trans "Catégories" %}</h4>
 		<div class="acc grid3 first">
 			<h5><a href="{% url product_list %}">{% trans "Voir tous les résultats" %}</a></h5>
@@ -202,6 +202,6 @@
 			</form>
 		</div><!-- dist -->
 		{% endif %}
-	</section><!-- facet -->
+	</div><!-- facet -->
 </div><!-- content -->
 {% endblock %}

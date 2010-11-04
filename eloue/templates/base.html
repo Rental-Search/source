@@ -26,12 +26,12 @@
   </script>
  </head>
  <body>
-  	<header class="head container clearfix">
+  	<div class="head container clearfix">
 			<a href="{% url home %}" class="logo grid2 first">
 			<img src="{{ MEDIA_URL }}images/logo.png" alt="e-loue" width="138px"/>
 			</a>
 			<div class="slogan grid3">Avec e-loue, tout se loue !</div>
-			<nav class="grid7">
+			<div class="grid7">
 				<ul class="navBar">
 					<li class="add button green"><a href="{% url product_create %}">Mettre en location</a></li>
 					{% if not user.is_authenticated %}
@@ -41,11 +41,11 @@
 					{% endif %}
 					<li class="first"><a href="#">La location</a></li>
 				</ul><!-- nav-bar -->
-			</nav>
-		</header>
+			</div>
+		</div>
   {% block content %}
   {% endblock %}
-  <footer class="container clearfix"></footer>
+  <div class="container clearfix"></div>
   {% block tail %}
    {% compressed_js 'application' %}
   {% endblock %}
