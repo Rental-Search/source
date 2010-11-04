@@ -58,13 +58,13 @@ $(document).ready(function() {
         minDate: 0,
         maxDate: '+360d',
         onSelect: function(dateText, inst) {
-            $('#id_0-ended_at_0').val(dateText);
-            $( "#id_0-ended_at_0" ).datepicker( "option", "minDate", dateText);
-        }
+    	    var ended_at = $('#id_0-ended_at_0');
+    	    ended_at.val(dateText);
+    	    ended_at.datepicker( "option", "minDate", dateText);
+    	}
     });
     
     $('#id_0-ended_at_0').datepicker({
-        dateFormat: 'dd/mm/yy',
-        maxDate: '+85d'
+        dateFormat: 'dd/mm/yy'
     });
 });
