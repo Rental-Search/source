@@ -1,11 +1,13 @@
 # -*- coding: utf-8 -*-
 import datetime
+import hashlib
 
 from django.conf import settings
 from django.core.cache import cache
 from django.http import Http404
 from django.shortcuts import get_object_or_404
 from django.utils.datastructures import SortedDict
+from django.utils.encoding import smart_str
 from django.utils.translation import ugettext as _
 from django.views.decorators.cache import never_cache, cache_page
 from django.views.decorators.vary import vary_on_cookie
@@ -64,11 +66,13 @@ def product_list(request, urlbits, sqs=SearchQuerySet(), suggestions=None, page=
     
     where, radius = request.GET.get('where', None), request.GET.get('radius', None)
     if where:
-        coordinates = cache.get('where:%s' % where.lower())
+        where = smart_str(where.strip().lower())
+        hash_key = hashlib.md5(where).hexdigest()
+        coordinates = cache.get('where:%s' % hash_key)
         if not coordinates:
             geocode = geocoder(settings.GOOGLE_API_KEY)
-            name, coordinates = geocode(where)
-            cache.set('where:%s' % where.lower(), coordinates, 0)
+            name, coordinates = geocode(smart_str(where))
+            cache.set('where:%s' % hash_key, coordinates, 0)
         sqs = sqs.spatial(lat=coordinates[0], long=coordinates[1], radius=radius if radius else DEFAULT_RADIUS, unit='km')
         
     breadcrumbs = SortedDict()
