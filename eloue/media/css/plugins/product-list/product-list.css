@@ -166,7 +166,7 @@
 }
 
 .acc h5{
-  background: transparent url(../../../images/filter_block_switch.gif) no-repeat;
+  background: transparent url("../../../images/filter_block_switch.gif") no-repeat;
   background-position: 5px -40px;
   padding-top: 10px;
   padding-bottom: 10px;
@@ -178,7 +178,7 @@
 }
 
 .acc h5.open{
-  background: transparent url(../../../images/filter_block_switch.gif) no-repeat;
+  background: transparent url("../../../images/filter_block_switch.gif") no-repeat;
   background-position: 6px 10px;
   text-indent: 24px;
   border-bottom: none;
@@ -186,7 +186,7 @@
 }
 
 .acc h6{
-  background: transparent url(../../../images/filter_block_switch.gif) no-repeat;
+  background: transparent url("../../../images/filter_block_switch.gif") no-repeat;
   background-position: 5px -46px;
   text-indent: 20px;
   padding-top: 5px;
@@ -194,7 +194,7 @@
 }
 
 .acc h6.open{
-  background: transparent url(../../../images/filter_block_switch.gif) no-repeat;
+  background: transparent url("../../../images/filter_block_switch.gif") no-repeat;
   background-position: 5px 10px;
   padding-bottom: 10px;
   padding-top: 10px;
