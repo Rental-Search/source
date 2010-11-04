@@ -46,6 +46,7 @@ def booking_create(request, *args, **kwargs):
 def booking_success(request, booking_id):
     booking = get_object_or_404(Booking, pk=booking_id)
     booking.payment_state = Booking.PAYMENT_STATE.AUTHORIZED  # FIXME : Idealist point of view
+    booking.send_acceptation_email()
     booking.save()
     return direct_to_template(request, template="rent/booking_success.html")
 

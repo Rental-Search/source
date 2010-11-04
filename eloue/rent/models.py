@@ -8,9 +8,11 @@ from pyke import knowledge_engine
 from urlparse import urljoin
 
 from django.conf import settings
+from django.core.mail import EmailMultiAlternatives
 from django.core.urlresolvers import reverse
 from django.contrib.sites.models import Site
 from django.db import models
+from django.template.loader import render_to_string
 from django.utils.translation import ugettext_lazy as _
 
 from eloue.accounts.models import Patron
@@ -193,6 +195,14 @@ class Booking(models.Model):
             log.error(e)
             self.payment_state = PAYMENT_STATE.REJECTED
         self.save()
+    
+    def send_acceptation_email(self):
+        subject = render_to_string('rent/acceptation_email_subject.txt', { 'site':Site.objects.get_current() })
+        text_content = render_to_string('rent/acceptation_email.txt', { 'site':Site.objects.get_current() })
+        html_content = render_to_string('rent/acceptation_email.html', { 'site':Site.objects.get_current() })
+        message = EmailMultiAlternatives(subject, text_content, settings.DEFAULT_FROM_EMAIL, [self.booking.owner.email])
+        message.attach_alternative(html_content, "text/html")
+        message.send()
     
     @property
     def commission(self):
