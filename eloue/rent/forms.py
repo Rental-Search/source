@@ -109,6 +109,7 @@ class PayIPNForm(forms.Form):
 class BookingForm(forms.ModelForm):
     started_at = DateTimeField(required=True)
     ended_at = DateTimeField(required=True)
+    basket = forms.BooleanField(widget=forms.HiddenInput(), required=False, initial=False)
         
     class Meta:
         model = Booking
@@ -117,6 +118,9 @@ class BookingForm(forms.ModelForm):
     def clean(self):
         started_at = self.cleaned_data.get('started_at', None)
         ended_at = self.cleaned_data.get('ended_at', None)
+        
+        if self.cleaned_data.get('basket'):
+            raise forms.ValidationError(_(u"Un dernier coup d'oeil"))
         
         product = self.instance.product
         if (started_at and ended_at):

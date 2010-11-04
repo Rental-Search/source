@@ -40,6 +40,7 @@ def product_detail(request, slug, product_id):
         return redirect_to(request, product.get_absolute_url())
     search_form = FacetedSearchForm()
     booking_form = BookingForm(prefix='0', instance=Booking(product=product, owner=product.owner), initial={
+        'basket':True,
         'started_at':[datetime.date.today().strftime('%d/%m/%Y'), '08:00:00'],
         'ended_at':[(datetime.date.today() + datetime.timedelta(days=1)).strftime('%d/%m/%Y'), '19:00:00']
     })

@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load i18n %}
+{% load i18n booking %}
 
 {% block content %}
 <div class="top-content container clearfix">
@@ -8,12 +8,16 @@
 <div class="booking content container clearfix">
 	<div class="cart grid9 first">
 		<div class="headB grid9 first">	
-			<strong>Du</strong> samedi 23 octobre 2010 <strong>au</strong> mercredi 27 octobre 2010
-			<a herf="#">(Modifier les dates)</a>
+			<strong>Du</strong> {{ form.started_at.data|combine|date:"l j F Y" }} <strong>au</strong> {{ form.ended_at.data|combine|date:"l j F Y" }}
+			<a href="#">(Modifier les dates)</a>
 		</div>
 		<div class="resumeB grid9 first">
-			<a class="imgpl" href="#">
-				<img src="images/s3/mini_121.jpg" />
+			<a class="imgpl">
+			 {% with product.pictures.all|first as picture %}
+			  {% if picture.thumbnail %}
+			   <img src="{{ picture.thumbnail.url }}" />
+			  {% endif %}
+			 {% endwith %}
 			</a>
 			<div class="dpl">
 				<h3>
