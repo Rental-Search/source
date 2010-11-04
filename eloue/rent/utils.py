@@ -8,6 +8,7 @@ from django.utils import formats
 def combine(date_part, time_part):
     if not (date_part or time_part):
         return None
+    
     def to_python(value):
         for format in formats.get_format('DATE_INPUT_FORMATS'):
             try:
