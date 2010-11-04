@@ -201,7 +201,7 @@ class Booking(models.Model):
         subject = render_to_string('rent/acceptation_email_subject.txt', { 'site':Site.objects.get_current() })
         text_content = render_to_string('rent/acceptation_email.txt', { 'site':Site.objects.get_current() })
         html_content = render_to_string('rent/acceptation_email.html', { 'site':Site.objects.get_current() })
-        message = EmailMultiAlternatives(subject, text_content, settings.DEFAULT_FROM_EMAIL, [self.booking.owner.email])
+        message = EmailMultiAlternatives(subject, text_content, settings.DEFAULT_FROM_EMAIL, [self.owner.email])
         message.attach_alternative(html_content, "text/html")
         message.send()
     
