@@ -85,6 +85,7 @@ def symlink():
         releases()
     run("ln -nfs %(current_release)s %(current_path)s" % { 'current_release':env.current_release, 'current_path':env.current_path })
     run("ln -nfs %(shared_path)s/log %(current_release)s/log" % { 'shared_path':env.shared_path, 'current_release':env.current_release })
+    run("ln -nfs %(shared_path)s/pictures %(current_release)s/eloue/media/pictures" % { 'shared_path':env.shared_path, 'current_release':env.current_release })
     run("ln -nfs %(shared_path)s/system/local.py %(current_release)s/%(app_name)s/local.py" % { 'shared_path':env.shared_path, 'current_release':env.current_release, 'app_name':env.app_name })
     run("ln -nfs %(current_release)s/env/src/django/django/contrib/admin/media %(current_release)s/%(app_name)s/media/admin" % { 'current_release':env.current_release, 'app_name':env.app_name })
 
