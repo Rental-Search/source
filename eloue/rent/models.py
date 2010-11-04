@@ -107,6 +107,8 @@ class Booking(models.Model):
     
     objects = BookingManager()
     
+    PAYMENT_STATE = PAYMENT_STATE
+    
     @incr_sequence('contract_id', 'rent_booking_contract_id_seq')
     def save(self, *args, **kwargs):
         if not self.pk:

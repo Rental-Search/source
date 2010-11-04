@@ -3,6 +3,8 @@ import urllib
 
 from django.conf import settings
 from django.contrib.auth import login
+from django.contrib.sites.models import Site
+from django.core.urlresolvers import reverse
 from django.views.generic.simple import direct_to_template, redirect_to
 
 from django_lean.experiments.models import GoalRecord
@@ -45,9 +47,11 @@ class BookingWizard(GenericFormWizard):
         booking_form.instance.borrower = new_patron
         booking = booking_form.save()
         
+        domain = Site.objects.get_current().domain
         booking.preapproval(
-            cancel_url="http://cancel.me",
-            return_url="http://return.me",
+            # FIXME : This should be https
+            cancel_url="http://%s%s" % (domain, reverse("booking_failure", args=[booking.pk.hex])),
+            return_url="http://%s%s" % (domain, reverse("booking_success", args=[booking.pk.hex])),
             ip_address=request.META['REMOTE_ADDR']
         )
         
