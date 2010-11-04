@@ -62,7 +62,7 @@ class ProductReviewForm(forms.ModelForm):
     
 
 class ProductForm(forms.ModelForm):
-    category = TreeNodeChoiceField(queryset=Category.tree.all(), empty_label="---------", level_indicator=u'--', widget=forms.Select(attrs={'style':'100%'}))
+    category = TreeNodeChoiceField(queryset=Category.tree.all(), empty_label="Choisissez une catégorie", level_indicator=u'--', widget=forms.Select(attrs={'style':'100%'}))
     summary = forms.CharField(max_length=100, widget=forms.TextInput(attrs={'class':'inb'}))
     picture_id = forms.IntegerField(required=False, widget=forms.HiddenInput())
     picture = forms.ImageField(required=False, widget=forms.FileInput(attrs={'class':'inb pic'}))
