@@ -9,7 +9,7 @@
     is_staff: false
     is_superuser: false
     last_login: 2010-08-18 15:35:00.180475
-    password: sha1$6014d$07264a609bb1293fa9f07b7a9acbe9194eb4c1bd
+    password: sha1$42bf7$e95c84726a184c99db95c259f5e5d71f524dd4ee
     user_permissions: []
   model: auth.user
   pk: 1
@@ -61,7 +61,7 @@
     is_staff: false
     is_superuser: false
     last_login: 2010-08-18 15:35:00.180475
-    password: sha1$6014d$07264a609bb1293fa9f07b7a9acbe9194eb4c1bd
+    password: sha1$92184$fe8ea4af5e26354dba14edc19b1eec481b39c5f8
     user_permissions: []
   model: auth.user
   pk: 3
