@@ -120,6 +120,35 @@ class AccountWizardTest(TestCase):
         scheme, netloc, path, query, fragment = urlsplit(response['Location'])
         redirect_response = response.client.get(path, QueryDict(query))
         self.assertTrue(redirect_response.context['user'].is_authenticated())
+        self.assertTrue(not redirect_response.context['user'].is_active)
+    
+    def test_second_step_with_existing_username(self):
+        response = self.client.post(reverse('auth_login'), {
+            '1-username':'alexandre',
+            '1-password1':'sucop',
+            '1-password2':'sucop',
+            'wizard_step':1,
+            '0-email':'hocus.pocus@e-loue.com',
+            '0-exists':0,
+            '0-password':'',
+            'hash_0':'b5d8e7ffcc52f852c688983ecb30ead6'
+        })
+        self.assertTrue(response.status_code, 200)
+        self.assertFormError(response, 'form', 'username', _(u"Ce nom d'utilisateur est déjà pris."))
+    
+    def test_second_step_with_mismatching_password(self):
+        response = self.client.post(reverse('auth_login'), {
+            '1-username':'hocus-pocus',
+            '1-password1':'sucop',
+            '1-password2':'pocus',
+            'wizard_step':1,
+            '0-email':'hocus.pocus@e-loue.com',
+            '0-exists':0,
+            '0-password':'',
+            'hash_0':'b5d8e7ffcc52f852c688983ecb30ead6'
+        })
+        self.assertTrue(response.status_code, 200)
+        self.assertFormError(response, 'form', 'password2', _(u"Vos mots de passe ne correspondent pas"))
     
     def tearDown(self):
         settings.SECRET_KEY = self.old_secret_key
