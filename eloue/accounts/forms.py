@@ -216,6 +216,7 @@ def make_missing_data_form(instance, required_fields=[]):
         
         if not phones and not phone:
             raise forms.ValidationError(_(u"Vous devez spécifiez un numéro de téléphone"))
+        return phones
     
     form_class = type('MissingInformationForm', (forms.BaseForm,), { 'instance':instance, 'base_fields': fields })
     form_class.save = types.MethodType(save, None, form_class)
