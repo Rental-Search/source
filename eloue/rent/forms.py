@@ -39,11 +39,13 @@ TIME_CHOICE = (
     ('23:00:00', '23h')
 )
 
+DATE_FORMAT = ['%d/%m/%Y', '%d-%m-%Y', '%d %m %Y', '%d %m %y', '%d/%m/%y', '%d-%m-%y']
+
 
 class DateTimeWidget(forms.MultiWidget):
-    def __init__(self, *args, **kwargs):
+    def __init__(self, attrs=None, date_format=None, time_format=None, *args, **kwargs):
         widgets = (
-            forms.TextInput(attrs={'class':'inm dps'}),
+            forms.DateInput(attrs={'class':'inm dps'}, format=date_format),
             forms.Select(choices=TIME_CHOICE, attrs={'class':'sells'}),
         )
         super(DateTimeWidget, self).__init__(widgets, *args, **kwargs)
@@ -65,10 +67,20 @@ class HiddenDateTimeWidget(DateTimeWidget):
 class DateTimeField(forms.MultiValueField):
     widget = DateTimeWidget
     hidden_widget = HiddenDateTimeWidget
+    default_error_messages = {
+        'invalid_date': _(u'Enter a valid date.'),
+        'invalid_time': _(u'Enter a valid time.'),
+    }
     
-    def __init__(self, *args, **kwargs):
+    def __init__(self, input_date_formats=None, *args, **kwargs):
+        errors = self.default_error_messages.copy()
+        if 'error_messages' in kwargs:
+            errors.update(kwargs['error_messages'])
+        localize = kwargs.get('localize', False)
         fields = (
-            forms.DateField(input_formats=['%d/%m/%Y', '%d-%m-%Y', '%d %m %Y', '%d %m %y', '%d/%m/%y', '%d-%m-%y']),
+            forms.DateField(input_formats=input_date_formats,
+                      error_messages={'invalid': errors['invalid_date']},
+                      localize=localize),
             forms.ChoiceField(choices=TIME_CHOICE)
         )
         super(DateTimeField, self).__init__(fields, *args, **kwargs)
@@ -116,8 +128,8 @@ class PayIPNForm(forms.Form):
     
 
 class BookingForm(forms.ModelForm):
-    started_at = DateTimeField(required=True)
-    ended_at = DateTimeField(required=True)
+    started_at = DateTimeField(required=True, input_date_formats=DATE_FORMAT)
+    ended_at = DateTimeField(required=True, input_date_formats=DATE_FORMAT)
     basket = forms.BooleanField(widget=forms.HiddenInput(), required=False, initial=False)
         
     class Meta:
