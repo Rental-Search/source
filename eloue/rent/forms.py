@@ -124,13 +124,15 @@ class BookingForm(forms.ModelForm):
         model = Booking
         fields = ('started_at', 'ended_at')
     
+    def clean_basket(self):
+        if self.cleaned_data.get('basket'):
+            raise forms.ValidationError(_(u"Un dernier coup d'oeil"))
+        return self.cleaned_data['basket']
+    
     def clean(self):
         started_at = self.cleaned_data.get('started_at', None)
         ended_at = self.cleaned_data.get('ended_at', None)
-        
-        if self.cleaned_data.get('basket'):
-            raise forms.ValidationError(_(u"Un dernier coup d'oeil"))
-        
+                
         product = self.instance.product
         if (started_at and ended_at):
             self.cleaned_data['total_amount'] = Booking.calculate_price(product, started_at, ended_at)
