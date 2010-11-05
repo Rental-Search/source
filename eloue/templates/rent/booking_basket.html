@@ -7,6 +7,8 @@
 </div>{# top-content #}
 <div class="booking content container clearfix">
 	<div class="cart grid9 first">
+		{{ form.non_field_errors }}
+		
 		<div class="headB grid9 first">	
 		 {% if has_dates %}
 			 <strong>Du</strong> {{ form.started_at.data|combine|date:"l j F Y" }} <strong>au</strong> {{ form.ended_at.data|combine|date:"l j F Y" }} <a href="#">(Modifier les dates)</a>
@@ -22,7 +24,7 @@
 			</a>
 			<div class="dpl">
 				<h3>
-					<a href="#">{{ product.summary }}</a>
+					{{ product.summary }}
 				</h3>
 				<div class="descpl">
 					{{ product.description|truncatewords:30|safe }}
@@ -61,7 +63,6 @@
 			<li>Enregistrez votre paiement</li>
 		</ol>
 	</div><!-- infoB -->
-	{{ form.errors }}
 	<div class="grid7 first">
 		<h4>Modifier vos dates de réservation :</h4>
 		<div class="data pam">
