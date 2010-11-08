@@ -53,8 +53,8 @@ def booking_create(request, *args, **kwargs):
 
 
 def booking_success(request, booking_id):
-    return object_detail(request, queryset=Booking.objects.all(), object_id=booking_id, template_object_name='booking')
+    return object_detail(request, queryset=Booking.objects.all(), object_id=booking_id, template_name='rent/booking_success.html', template_object_name='booking')
 
 
 def booking_failure(request, booking_id):
-    return object_detail(request, queryset=Booking.objects.all(), object_id=booking_id, template_object_name='booking')
+    return object_detail(request, queryset=Booking.objects.all(), object_id=booking_id, template_name='rent/booking_failure.html',  template_object_name='booking')
