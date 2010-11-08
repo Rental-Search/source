@@ -1,15 +1,17 @@
 {% load i18n %}
 {% blocktrans with booking.owner.username as owner and booking.borrower.username as borrower and booking.product.category.name as category and booking.product.summary as summary and booking.started_at|date:"DATETIME_FORMAT" as starting_at and booking.started_at|timesince:booking.ended_at as duration %}
- Bonjour {{ owner }},
+ Bonjour {{ borrower }}, 
 
- {{ borrower }} souhaite louer l’un de vos objets. Voici les détails de sa proposition : 
+ Nous avons bien pris en compte votre demande de location et venons d’informer {{ owner }} de votre proposition. 
+  
+ Voici donc les différents éléments qui lui ont été transmis : 
 
  Type : {{ category }}
- Objet : {{ summary }}
- Début de la location : {{ starting_at }}
+ Objet : {{ summary }} 
+ Début de la location : {{ starting_at }} 
  Durée de la location : {{ duration }}
 
- Pour lui répondre et/ou accepter cette location, il vous suffit d’aller dans l’onglet propositions de votre compte e-loue.com.
+ Vous serez prochainement informé(e) de sa réponse. Pour rappel : votre compte ne sera débité que si le propriétaire accepte la location. 
 {% endblocktrans %}
 
 {% trans "L'équipe e-loue" %}

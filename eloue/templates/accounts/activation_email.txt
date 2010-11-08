@@ -1,7 +1,10 @@
 {% load i18n %}
-{% blocktrans %}Votre enregistrement est presque terminé.{% endblocktrans %}
+{% blocktrans with patron.username as username %}
+  Bonjour {{ username }},
+
+  Nous vous remercions de vous être enregistré(e) sur e-loue.com. Afin d’activer votre compte et rejoindre notre communauté de loueurs, il vous reste une toute dernière étape : cliquer sur le lien ci-dessous.
+{% endblocktrans %}
 
 http://{{ site.domain }}{% url auth_activate activation_key %}
 
-{% trans "Merci d'utiliser e-loue !" %}
-{% trans "L'équipe" %}.
+{% trans "L'équipe e-loue" %}.

@@ -89,11 +89,11 @@ class EmailPasswordResetForm(PasswordResetForm):
                 'domain': domain,
                 'site_name': site_name,
                 'uid': int_to_base36(user.id),
-                'user': user,
+                'patron': user,
                 'token': token_generator.make_token(user),
                 'protocol': use_https and 'https' or 'http',
             }
-            subject = render_to_string('accounts/password_reset_email_subject.txt', { 'site':Site.objects.get_current() })
+            subject = render_to_string('accounts/password_reset_email_subject.txt', { 'patron':user, 'site':Site.objects.get_current() })
             text_content = render_to_string('accounts/password_reset_email.txt', context)
             html_content = render_to_string('accounts/password_reset_email.html', context)
             message = EmailMultiAlternatives(subject, text_content, settings.DEFAULT_FROM_EMAIL, [user.email])

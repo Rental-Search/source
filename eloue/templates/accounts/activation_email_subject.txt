@@ -1,1 +1,1 @@
-{% load i18n %}{% trans "e-loue - Lien d'activation" %}
+{% load i18n %}{% trans "Validation de votre inscription" %}
