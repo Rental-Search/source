@@ -2,11 +2,10 @@
 import logbook
 
 from django.http import HttpResponse
-from django.shortcuts import get_object_or_404
 from django.views.decorators.http import require_POST
 from django.views.decorators.cache import never_cache
 from django.views.decorators.csrf import csrf_exempt
-from django.views.generic.simple import direct_to_template
+from django.views.generic.list_detail import object_detail
 
 from eloue.accounts.forms import EmailAuthenticationForm
 from eloue.rent.decorators import validate_ipn
@@ -51,14 +50,8 @@ def booking_create(request, *args, **kwargs):
 
 
 def booking_success(request, booking_id):
-    booking = get_object_or_404(Booking, pk=booking_id)
-    return direct_to_template(request, template="rent/booking_success.html", context={
-        'booking':booking
-    })
+    return object_detail(request, queryset=Booking.objects.all(), object_id=booking_id, template_object_name='booking')
 
 
 def booking_failure(request, booking_id):
-    booking = get_object_or_404(Booking, pk=booking_id)
-    return direct_to_template(request, template="rent/booking_failure.html", context={
-        'booking':booking
-    })
+    return object_detail(request, queryset=Booking.objects.all(), object_id=booking_id, template_object_name='booking')
