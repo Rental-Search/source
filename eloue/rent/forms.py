@@ -9,7 +9,6 @@ from django.core import validators
 from django.core.exceptions import ValidationError
 from django.utils.translation import ugettext_lazy as _
 
-from eloue.accounts.models import Patron
 from eloue.rent.models import Booking, Sinister
 
 log = logbook.Logger('eloue.rent')
@@ -124,14 +123,15 @@ class PayIPNForm(forms.Form):
     action_type = forms.CharField(required=True)
     fees_payer = forms.CharField(required=True)
     pay_key = forms.CharField(required=True)
-    payment_request_date = forms.DateTimeField(required=True)
+    payment_request_date = ISO8601DateTimeField(required=True)
     sender_email = forms.CharField(required=True)
     status = forms.CharField(required=True)
     
-    def clean_sender_email(self):
-        sender_email = self.cleaned_data['sender_email']
-        if not Patron.objects.filter(paypal_email=sender_email).exists():
-            raise ValidationError(_(u"Cette transaction ne semble pas lier à un compte interne"))
+    def clean_pay_key(self):
+        pay_key = self.cleaned_data['pay_key']
+        if not Booking.objects.filter(pay_key=pay_key).exists():
+            raise ValidationError(_(u"Cette transaction ne semble pas lier à une transaction interne"))
+        return pay_key
     
 
 class BookingForm(forms.ModelForm):
