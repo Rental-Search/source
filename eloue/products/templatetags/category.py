@@ -9,6 +9,15 @@ register = Library()
 
 @register.filter
 def category(value):
+    """
+    >>> obj = category('parc')
+    >>> obj.slug
+    u'parc'
+    >>> obj.name
+    u'Parc'
+    >>> category('porc')
+    'None'
+    """
     category = cache.get('category:%s' % value)
     if category is None:
         try:
