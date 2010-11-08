@@ -100,12 +100,18 @@ class Picture(ImageModel):
     """A picture"""
     product = models.ForeignKey(Product, related_name='pictures', blank=True, null=True)
     image = models.ImageField(null=True, blank=True, upload_to=upload_to)
+    created_at = models.DateTimeField(blank=True, editable=False)
     
     class IKOptions:
         spec_module = 'eloue.products.specs'
         image_field = 'image'
         cache_dir = 'media'
         cache_filename_format = "%(specname)s_%(filename)s.%(extension)s"
+    
+    def save(self, *args, **kwargs):
+        if not self.created_at:
+            self.created_at = datetime.now()
+        super(Picture, self).save(*args, **kwargs)
     
 
 class Category(MPTTModel):
