@@ -59,6 +59,12 @@
 	  {% if query %}
 		 <h1>{{ paginator.count }} résultat{{ paginator.count|pluralize }} pour <strong>{{ query }}</strong></h1>
 		{% endif %}
+		{% if suggestions %}
+			<div class="sugg grid9 first">
+				Vous vouliez peut-être dire ? : <a href="?q={{ suggestions }}">{{ suggestions }}</a>
+			</div>
+		{% endif %}
+		{% if product_list %}
 		<ul class="sort grid9 first">
 			<li class="label-sort">
 				{% trans "Trier par :" %}
@@ -121,6 +127,7 @@
 			{% endfor %}
 		</ul><!-- list -->
 		{% pagination %}
+		{% endif %}
 	</div><!-- result -->
 	<div class="facet grid3">
 		<h4>{% trans "Catégories" %}</h4>
