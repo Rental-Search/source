@@ -39,7 +39,10 @@ def preapproval_ipn(request):
 def pay_ipn(request):
     form = PayIPNForm(request.POST)
     if form.is_valid():
-        pass # TODO : deal with data
+        booking = Booking.objects.get(pay_key=form.cleaned_data['pay_key'])
+        if form.cleaned_data['action_type'] == 'PAY_PRIMARY' and form.cleaned_data['status'] == 'INCOMPLETE':
+            booking.payment_state = Booking.PAYMENT_STATE.HOLDED
+        booking.save()
     return HttpResponse()
 
    

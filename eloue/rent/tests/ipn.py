@@ -73,4 +73,7 @@ class TestPaypalIPN(TestCase):
         }
         response = self.client.post(reverse('pay_ipn'), urllib.urlencode(data), content_type='application/x-www-form-urlencoded; charset=windows-1252;')
         self.failUnlessEqual(response.status_code, 200)
+        booking = Booking.objects.get(pay_key="AP-1G646418FF723264N")
+        self.assertEquals(booking.payment_state, Booking.PAYMENT_STATE.HOLDED)
+    
     

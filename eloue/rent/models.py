@@ -198,6 +198,7 @@ class Booking(models.Model):
         self.save()
     
     def send_acceptation_email(self):
+        # TODO : Send me
         context = {
             'booking':self,
             'site':Site.objects.get_current()
@@ -210,6 +211,7 @@ class Booking(models.Model):
         message.send()
     
     def send_notification_email(self):
+        # TODO : Send me
         context = {
             'booking':self,
             'site':Site.objects.get_current()
