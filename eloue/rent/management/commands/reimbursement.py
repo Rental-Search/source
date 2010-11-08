@@ -24,7 +24,9 @@ class Command(BaseCommand):
         csv_file = TemporaryFile()
         writer = csv.writer(csv_file, delimiter='|')
         period = (date.today() - relativedelta(months=1))
-        for booking in Booking.objects.canceled().filter(canceled_at__year=period.year, canceled_at__month=period.month):
+        for booking in Booking.objects.filter(payment_state__in=[
+                Booking.PAYMENT_STATE.CANCELED, Booking.PAYMENT_STATE.REFUNDED
+            ]).filter(canceled_at__year=period.year, canceled_at__month=period.month):
             row = SortedDict()
             row['Numéro police'] = settings.POLICY_NUMBER
             row['Numéro partenaire'] = settings.PARTNER_NUMBER
@@ -33,12 +35,10 @@ class Command(BaseCommand):
             row[u'Numéro de commande'] = booking.uuid
             row['Prix de la location TTC'] = booking.total_amount
             row['Date du remboursement'] = booking.canceled_at.strftime("%Y%m%d")
-            if booking.payment_state <= Booking.PAYMENT_STATE.CANCELED:
+            if booking.payment_state == Booking.PAYMENT_STATE.CANCELED:
                 row['Type de remboursement'] = 'ANNULATION'
-            elif booking.payment_state <= Booking.PAYMENT_STATE.REFUNDED:
+            elif booking.payment_state == Booking.PAYMENT_STATE.REFUNDED:
                 row['Type de remboursement'] = 'REMBOURSEMENT'
-            else: # This should not happend
-                log.warning("Monthly insurance reimbursement batch failed on booking #%s" % booking.uuid)
             row[u'Désignation'] = smart_str(booking.product.description)
             row['Prix de la location TTC'] = booking.total_amount
             row['Prix de cession HT'] = booking.insurance_fee
