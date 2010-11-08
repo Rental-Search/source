@@ -100,8 +100,6 @@ class Patron(User):
     modified_at = models.DateTimeField(_('date de modification'), editable=False)
     last_ip = models.IPAddressField(null=True, blank=True)
     slug = models.SlugField( unique=True, db_index=True)
-    paypal_email = models.EmailField(null=True, blank=True)
-    account_key = models.CharField(max_length=255, blank=True, null=True, editable=False)
     
     objects = PatronManager()
     

@@ -268,8 +268,6 @@ class Booking(models.Model):
         """
         try:
             response = payments.pay(
-                # FIXME : Patron email might not be related to PayPal account
-                senderEmail=self.borrower.email,
                 actionType='PAY_PRIMARY',
                 feesPayer='PRIMARYRECEIVER',
                 cancelUrl=cancel_url,
@@ -331,7 +329,6 @@ class Booking(models.Model):
         try:
             response = payments.pay(
                 actionType='PAY',
-                senderEmail=self.borrower.email,
                 preapprovalKey=self.preapproval_key,
                 cancelUrl=cancel_url,
                 returnUrl=return_url,
