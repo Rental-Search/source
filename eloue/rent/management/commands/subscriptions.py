@@ -32,7 +32,7 @@ class Command(BaseCommand):
             row[u'Prénom'] = smart_str(booking.borrower.first_name)
             address = booking.borrower.addresses.all()[0]
             row['Adresse 1'] = smart_str(address.address1)
-            row['Adresse 2'] = smart_str(address.address2)
+            row['Adresse 2'] = smart_str(address.address2) if address.address2 else None
             row['Code postal'] = address.zipcode
             row['Ville'] = smart_str(address.city)
             row['Pays'] = COUNTRY_CHOICES[address.country]
