@@ -46,7 +46,7 @@ class ProductWizard(GenericFormWizard):
             product.pictures.add(Picture.objects.get(pk=product_form.cleaned_data['picture_id']))
         
         GoalRecord.record('new_object', WebUser(request))
-        return redirect_to(request, product.get_absolute_url())
+        return redirect_to(request, product.get_absolute_url(), permanent=False)
     
     def get_form(self, step, data=None, files=None):
         if issubclass(self.form_list[step], ProductForm):

@@ -71,6 +71,12 @@ class ProductForm(forms.ModelForm):
     quantity = forms.IntegerField(initial=1, widget=forms.TextInput(attrs={'class':'inb qty'}))
     description = forms.Textarea()
     
+    def clean_quantity(self):
+        quantity = self.cleaned_data['quantity']
+        if quantity < 1:
+            raise forms.ValidationError(_(u"Vous devriez au moins louer un object"))
+        return quantity
+    
     def clean_picture(self):
         picture = self.cleaned_data['picture']
         picture_id = self.cleaned_data['picture_id']
