@@ -22,8 +22,19 @@ log = logbook.Logger('eloue.rent')
 @validate_ipn
 def preapproval_ipn(request):
     form = PreApprovalIPNForm(request.POST)
+    print form.cleaned_data
     if form.is_valid():
-        pass # TODO : deal with data
+        try:
+            booking = Booking.objects.get(preapproval_key=form.cleaned_data['preapproval_key'])
+            if form.cleaned_data['approved'] and form.cleaned_data['status'] == 'ACTIVE':
+                booking.payment_state = Booking.PAYMENT_STATE.AUTHORIZED
+                booking.borrower.paypal_email = form.cleaned_data['sender_email']
+            else:
+                booking.payment_state = Booking.PAYMENT_STATE.REJECTED
+            booking.save()
+        except Booking.DoesNotExist:
+            log.error("Can't find booking matching preapproval key : '%s'" % form.cleaned_data['preapproval_key'])
+    print form.errors
     return HttpResponse()
 
 
@@ -45,14 +56,13 @@ def booking_create(request, *args, **kwargs):
 
 def booking_success(request, booking_id):
     booking = get_object_or_404(Booking, pk=booking_id)
-    booking.payment_state = Booking.PAYMENT_STATE.AUTHORIZED  # FIXME : Idealist point of view
-    booking.send_acceptation_email()
-    booking.save()
-    return direct_to_template(request, template="rent/booking_success.html")
+    return direct_to_template(request, template="rent/booking_success.html", context={
+        'booking':booking
+    })
 
 
 def booking_failure(request, booking_id):
     booking = get_object_or_404(Booking, pk=booking_id)
-    booking.payment_state = Booking.PAYMENT_STATE.CANCELED  # FIXME : Idealist point of view
-    booking.save()
-    return direct_to_template(request, template="rent/booking_failure.html")
+    return direct_to_template(request, template="rent/booking_failure.html", context={
+        'booking':booking
+    })

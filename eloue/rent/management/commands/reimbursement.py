@@ -24,9 +24,7 @@ class Command(BaseCommand):
         csv_file = TemporaryFile()
         writer = csv.writer(csv_file, delimiter='|')
         period = (date.today() - relativedelta(months=1))
-        for booking in Booking.objects.filter(payment_state__in=[
-                Booking.PAYMENT_STATE.CANCELED, Booking.PAYMENT_STATE.REFUNDED
-            ]).filter(canceled_at__year=period.year, canceled_at__month=period.month):
+        for booking in Booking.objects.canceled().filter(canceled_at__year=period.year, canceled_at__month=period.month):
             row = SortedDict()
             row['Numéro police'] = settings.POLICY_NUMBER
             row['Numéro partenaire'] = settings.PARTNER_NUMBER

@@ -4,8 +4,12 @@ import urllib
 from django.test import TestCase
 from django.core.urlresolvers import reverse
 
+from eloue.rent.models import Booking
+
 
 class TestPaypalIPN(TestCase):
+    fixtures = ['patron', 'phones', 'address', 'price', 'product', 'booking']
+    
     def test_preapproval_ipn(self):
         data = {
             'approved':'true',
@@ -32,6 +36,9 @@ class TestPaypalIPN(TestCase):
         }
         response = self.client.post(reverse('preapproval_ipn'), urllib.urlencode(data), content_type='application/x-www-form-urlencoded; charset=windows-1252;')
         self.failUnlessEqual(response.status_code, 200)
+        booking = Booking.objects.get(preapproval_key="PA-2NS525738W954192E")
+        self.assertEquals(booking.payment_state, Booking.PAYMENT_STATE.AUTHORIZED)
+        self.assertEquals(booking.borrower.paypal_email, 'eloue_1283761258_per@tryphon.org')
     
     def test_pay_ipn(self):
         data = {

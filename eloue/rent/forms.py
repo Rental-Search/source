@@ -2,6 +2,8 @@
 import datetime
 import logbook
 
+from dateutil import parser
+
 from django import forms
 from django.core import validators
 from django.core.exceptions import ValidationError
@@ -41,6 +43,11 @@ TIME_CHOICE = (
 
 DATE_FORMAT = ['%d/%m/%Y', '%d-%m-%Y', '%d %m %Y', '%d %m %y', '%d/%m/%y', '%d-%m-%y']
 
+
+class ISO8601DateTimeField(forms.Field):
+    def to_python(self, value):
+        return parser.parse(value)
+    
 
 class DateTimeWidget(forms.MultiWidget):
     def __init__(self, attrs=None, date_format=None, time_format=None, *args, **kwargs):
@@ -97,20 +104,19 @@ class DateTimeField(forms.MultiValueField):
     
 
 class PreApprovalIPNForm(forms.Form):
-    approved = forms.BooleanField(required=True)
+    approved = forms.TypedChoiceField(required=True, coerce=lambda x: x == 'true', choices=(('true', 'True'), ('false', 'False')))
     preapproval_key = forms.CharField(required=True)
     currency_code = forms.CharField()
-    starting_date = forms.DateTimeField(required=True)
-    ending_date = forms.DateTimeField(required=True)
+    starting_date = ISO8601DateTimeField(required=True)
+    ending_date = ISO8601DateTimeField(required=True)
     max_total_amount_of_all_payments = forms.DecimalField(max_digits=8, decimal_places=2, required=True)
     sender_email = forms.CharField(required=True)
     status = forms.CharField(required=True)
-    verify_sign = forms.CharField()
         
-    def clean_sender_email(self):
-        sender_email = self.cleaned_data['sender_email']
-        if not Patron.objects.filter(paypal_email=sender_email).exists():
-            raise ValidationError(_(u"Cette transaction ne semble pas lier à un compte interne"))
+    def clean_preapproval_key(self):
+        preapproval_key = self.cleaned_data['preapproval_key']
+        if not Booking.objects.filter(preapproval_key=preapproval_key).exists():
+            raise ValidationError(_(u"Cette transaction ne semble pas lier à un transaction interne"))
     
 
 class PayIPNForm(forms.Form):

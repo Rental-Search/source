@@ -269,6 +269,7 @@ class Booking(models.Model):
         try:
             response = payments.pay(
                 actionType='PAY_PRIMARY',
+                senderEmail=self.borrower.paypal_email,
                 feesPayer='PRIMARYRECEIVER',
                 cancelUrl=cancel_url,
                 returnUrl=return_url,
@@ -329,6 +330,7 @@ class Booking(models.Model):
         try:
             response = payments.pay(
                 actionType='PAY',
+                senderEmail=self.borrower.paypal_email,
                 preapprovalKey=self.preapproval_key,
                 cancelUrl=cancel_url,
                 returnUrl=return_url,
