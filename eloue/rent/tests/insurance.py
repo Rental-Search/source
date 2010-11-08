@@ -24,7 +24,7 @@ class MockDelta(relativedelta):
     
 
 class InsuranceTest(TestCase):
-    fixtures = ['patron', 'address', 'price', 'product', 'booking', 'sinister']
+    fixtures = ['patron', 'phones', 'address', 'price', 'product', 'booking', 'sinister']
     
     def setUp(self):
         self.old_date = datetime.date
@@ -98,7 +98,7 @@ class InsuranceTest(TestCase):
             booking = Booking.objects.get(pk=row[13])
             self.assertEquals(booking.booking_state, Booking.BOOKING_STATE.PENDING)
             i += 1
-        self.assertEquals(i, 1)
+        self.assertEquals(i, 2)
         self.assertEquals(mock.return_value.method_calls[2][0], 'quit')
     
     def tearDown(self):

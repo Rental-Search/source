@@ -7,3 +7,13 @@
         created_at: 2010-08-15 11:00:10
     model: rent.sinister
     pk: aaf26618b6654a05bf3cc57ade322928
+
+-   fields:
+        product: 1
+        sinister_id: 2
+        booking: 349ce9ba628abfdfc9cb3a72608d9a7e
+        patron: 1
+        description: Chute depuis un toit.
+        created_at: 2010-08-15 11:00:10
+    model: rent.sinister
+    pk: 05bf3cc57ade322928aaf26618b6654a
