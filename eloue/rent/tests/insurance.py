@@ -61,7 +61,7 @@ class InsuranceTest(TestCase):
             booking = Booking.objects.get(pk=row[4])
             self.assertEquals(booking.booking_state, Booking.BOOKING_STATE.CANCELED)
             i += 1
-        self.assertEquals(i, 2)
+        self.assertEquals(i, 3)
         self.assertTrue(settings.INSURANCE_EMAIL in mail.outbox[0].to)
     
     @patch('ftplib.FTP')
