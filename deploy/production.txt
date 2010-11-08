@@ -6,7 +6,7 @@ django-nose>=0.1.2
 fabric>=0.9
 Imaging==1.1.7
 ipython>=0.10
-logbook>=0.2.1
+logbook>=0.3
 lxml>=2.2.7
 markdown>=2.0.3
 mock>=0.7.0b3
