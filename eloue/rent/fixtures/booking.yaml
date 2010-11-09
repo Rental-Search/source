@@ -4,7 +4,7 @@
         total_amount: "20"
         insurance_amount: "1.294920"
         deposit_amount: "10"
-        booking_state: 1
+        booking_state: 2
         payment_state: 3
         contract_id: 1
         owner: 1
@@ -23,7 +23,7 @@
         total_amount: "20"
         insurance_amount: "1.294920"
         deposit_amount: "10"
-        booking_state: 1
+        booking_state: 2
         payment_state: 0
         contract_id: 2
         owner: 2
@@ -40,13 +40,14 @@
         total_amount: "20"
         insurance_amount: "1.294920"
         deposit_amount: "10"
-        booking_state: 2
+        booking_state: 3
         payment_state: 0
         contract_id: 3
         owner: 2
         borrower: 1
         product: 1
         pin: 3412
+        preapproval_key: PA-3GS72427VU067670D
         created_at: 2010-08-15 09:00:10
     model: rent.booking
     pk: a72608d9a7e349ce9ba628abfdfc9cb3
@@ -57,7 +58,7 @@
         total_amount: "20"
         insurance_amount: "1.294920"
         deposit_amount: "10"
-        booking_state: 4
+        booking_state: 5
         payment_state: 0
         contract_id: 4
         owner: 2
@@ -74,7 +75,7 @@
         total_amount: "20"
         insurance_amount: "1.294920"
         deposit_amount: "10"
-        booking_state: 1
+        booking_state: 2
         payment_state: 2
         contract_id: 5
         owner: 2
@@ -92,7 +93,7 @@
         total_amount: "20"
         insurance_amount: "1.294920"
         deposit_amount: "10"
-        booking_state: 1
+        booking_state: 2
         payment_state: 9
         contract_id: 6
         owner: 2
@@ -110,7 +111,7 @@
         total_amount: "20"
         insurance_amount: "1.294920"
         deposit_amount: "10"
-        booking_state: 1
+        booking_state: 2
         payment_state: 10
         contract_id: 7
         owner: 2
@@ -128,13 +129,14 @@
         total_amount: "20"
         insurance_amount: "1.294920"
         deposit_amount: "10"
-        booking_state: 2
+        booking_state: 3
         payment_state: 0
         contract_id: 8
         owner: 1
         borrower: 2
         product: 1
         pin: 3427
+        preapproval_key: PA-2NS525738W954192E
         created_at: 2010-08-15 09:00:10
     model: rent.booking
     pk: 349ce9ba628abfdfc9cb3a72608d9a7e

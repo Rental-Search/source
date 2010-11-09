@@ -26,6 +26,7 @@ def preapproval_ipn(request):
         if form.cleaned_data['approved'] and form.cleaned_data['status'] == 'ACTIVE':
             # Changing state
             booking.payment_state = Booking.PAYMENT_STATE.AUTHORIZED
+            booking.booking_state = Booking.BOOKING_STATE.ASKED
             booking.borrower.paypal_email = form.cleaned_data['sender_email']
             booking.borrower.save()
             # Sending emails
@@ -33,6 +34,7 @@ def preapproval_ipn(request):
             booking.send_notification_email()
         else:
             booking.payment_state = Booking.PAYMENT_STATE.REJECTED
+            booking.booking_state = Booking.BOOKING_STATE.REJECTED
         booking.save()
     return HttpResponse()
 

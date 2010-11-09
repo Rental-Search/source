@@ -42,6 +42,7 @@ class TestPaypalIPN(TestCase):
         self.assertTrue('timothee.peignier@e-loue.com' in mail.outbox[1].to)
         booking = Booking.objects.get(preapproval_key="PA-2NS525738W954192E")
         self.assertEquals(booking.payment_state, Booking.PAYMENT_STATE.AUTHORIZED)
+        self.assertEquals(booking.booking_state, Booking.BOOKING_STATE.ASKED)
         self.assertEquals(booking.borrower.paypal_email, 'eloue_1283761258_per@tryphon.org')
     
     def test_pay_ipn(self):

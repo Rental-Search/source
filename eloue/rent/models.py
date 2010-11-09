@@ -26,10 +26,11 @@ from eloue.rent.paypal import payments, PaypalError
 
 BOOKING_STATE = Enum([
     (0, 'ASKED', _(u'Demandé')),
-    (1, 'CANCELED', _(u'Annulé')),
-    (2, 'PENDING', _(u'En attente')),
-    (3, 'ONGOING', _(u'En cours')),
-    (4, 'ENDED', _(u'Terminé')),
+    (1, 'REJECTED', _(u'Rejeté')),
+    (2, 'CANCELED', _(u'Annulé')),
+    (3, 'PENDING', _(u'En attente')),
+    (4, 'ONGOING', _(u'En cours')),
+    (5, 'ENDED', _(u'Terminé')),
 ])
 
 PAYMENT_STATE = Enum([
