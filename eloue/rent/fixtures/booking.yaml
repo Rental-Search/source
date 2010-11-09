@@ -136,7 +136,7 @@
         borrower: 2
         product: 1
         pin: 3427
-        preapproval_key: PA-2NS525738W954192E
+        preapproval_key: PA-2NS525738W954192F
         created_at: 2010-08-15 09:00:10
     model: rent.booking
     pk: 349ce9ba628abfdfc9cb3a72608d9a7e
