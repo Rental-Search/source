@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import urllib
 
+from django.core import mail
 from django.test import TestCase
 from django.core.urlresolvers import reverse
 
@@ -36,6 +37,9 @@ class TestPaypalIPN(TestCase):
         }
         response = self.client.post(reverse('preapproval_ipn'), urllib.urlencode(data), content_type='application/x-www-form-urlencoded; charset=windows-1252;')
         self.failUnlessEqual(response.status_code, 200)
+        self.assertEquals(len(mail.outbox), 2)
+        self.assertTrue('alexandre.woog@e-loue.com' in mail.outbox[0].to)
+        self.assertTrue('timothee.peignier@e-loue.com' in mail.outbox[1].to)
         booking = Booking.objects.get(preapproval_key="PA-2NS525738W954192E")
         self.assertEquals(booking.payment_state, Booking.PAYMENT_STATE.AUTHORIZED)
         self.assertEquals(booking.borrower.paypal_email, 'eloue_1283761258_per@tryphon.org')
