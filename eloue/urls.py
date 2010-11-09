@@ -9,6 +9,7 @@ from django.contrib.sitemaps.views import index, sitemap
 
 from eloue.accounts.forms import EmailPasswordResetForm
 from eloue.accounts.views import activate, authenticate
+from eloue.api import api_v1
 from eloue.products.views import homepage
 from eloue.sitemaps import FlatPageSitemap, PatronSitemap, ProductSitemap
 
@@ -53,5 +54,6 @@ urlpatterns = patterns('',
     url(r'^experiments/', include('django_lean.experiments.urls')),
     url(r'^edit/reports/', include('django_lean.experiments.admin_urls')),
     url(r'^edit/', include(admin.site.urls)),
+    url(r'^api/', include(api_v1.urls)),
     url(r'^$', homepage, name="home")
 )
