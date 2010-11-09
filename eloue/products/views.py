@@ -1,24 +1,21 @@
 # -*- coding: utf-8 -*-
 import datetime
-import hashlib
 
 from django.conf import settings
-from django.core.cache import cache
 from django.http import Http404
 from django.shortcuts import get_object_or_404
 from django.utils.datastructures import SortedDict
-from django.utils.encoding import smart_str
 from django.utils.translation import ugettext as _
 from django.views.decorators.cache import never_cache, cache_page
 from django.views.decorators.vary import vary_on_cookie
 from django.views.generic.simple import direct_to_template, redirect_to
-from django.views.generic.list_detail import object_detail, object_list
+from django.views.generic.list_detail import object_list
 
-from geocoders.google import geocoder
 from haystack.query import SearchQuerySet
 
 from eloue.accounts.forms import EmailAuthenticationForm
 from eloue.accounts.models import Patron
+from eloue.geocoder import Geocoder
 from eloue.products.forms import FacetedSearchForm, ProductForm
 from eloue.products.models import Product, Category
 from eloue.products.wizard import ProductWizard
@@ -64,16 +61,10 @@ def product_list(request, urlbits, sqs=SearchQuerySet(), suggestions=None, page=
         sqs = sqs.auto_query(query).highlight()
         suggestions = sqs.spelling_suggestion()
     
-    where, radius = request.GET.get('where', None), request.GET.get('radius', None)
+    where, radius = request.GET.get('where', DEFAULT_RADIUS), request.GET.get('radius', None)
     if where:
-        where = smart_str(where.strip().lower())
-        hash_key = hashlib.md5(where).hexdigest()
-        coordinates = cache.get('where:%s' % hash_key)
-        if not coordinates:
-            geocode = geocoder(settings.GOOGLE_API_KEY)
-            name, coordinates = geocode(smart_str(where))
-            cache.set('where:%s' % hash_key, coordinates, 0)
-        sqs = sqs.spatial(lat=coordinates[0], long=coordinates[1], radius=radius if radius else DEFAULT_RADIUS, unit='km')
+        lat, lon = Geocoder.geocode(where)
+        sqs = sqs.spatial(lat=lat, long=lon, radius=radius, unit='km')
         
     breadcrumbs = SortedDict()
     breadcrumbs['q'] = { 'name':'q', 'value':query, 'label':'q', 'facet':False }

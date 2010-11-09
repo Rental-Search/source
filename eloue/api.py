@@ -1,16 +1,12 @@
 # -*- coding: utf-8 -*-
-import hashlib
-
 from tastypie import fields
 from tastypie.api import Api
 from tastypie.constants import ALL_WITH_RELATIONS
 from tastypie.resources import ModelResource
 
 from django.conf import settings
-from django.core.cache import cache
-from django.utils.encoding import smart_str
-from geocoders.google import geocoder
 
+from eloue.geocoder import Geocoder
 from eloue.products.models import Product, Category
 from eloue.products.search_indexes import product_search
 
@@ -49,21 +45,15 @@ class ProductRessource(ModelResource):
             orm_filters = {"pk__in": [ i.pk for i in sqs ]}
         
         if "where" in filters:
-            # FIXME : This is copy paste from product view, we need to factorize
-            where = smart_str(filters['where'].strip().lower())
+            lat, lon = Geocoder.geocode(filters['where'])
             radius = filters.get('radius', DEFAULT_RADIUS)
-            hash_key = hashlib.md5(where).hexdigest()
-            coordinates = cache.get('where:%s' % hash_key)
-            if not coordinates:
-                geocode = geocoder(settings.GOOGLE_API_KEY)
-                name, coordinates = geocode(smart_str(where))
-                cache.set('where:%s' % hash_key, coordinates, 0)
-            sqs = sqs.spatial(lat=coordinates[0], long=coordinates[1], radius=radius, unit='km')
+            if lat and lon:
+                sqs = sqs.spatial(lat=lat, long=lon, radius=radius, unit='km')
         
         orm_filters = {"pk__in": [ i.pk for i in sqs ]} 
         return orm_filters
     
 
-api_v1 = Api(api_name='v1')
+api_v1 = Api(api_name='1.0')
 api_v1.register(CategoryRessource())
 api_v1.register(ProductRessource())
