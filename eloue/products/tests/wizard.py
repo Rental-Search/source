@@ -6,7 +6,10 @@ from django.core.urlresolvers import reverse
 from django.test import TestCase
 from django.utils.translation import ugettext as _
 
+from mock import patch
+
 from eloue.products.models import Picture
+from eloue.wizard import MultiPartFormWizard
 
 local_path = lambda path: os.path.join(os.path.dirname(__file__), path)
 
@@ -39,7 +42,9 @@ class ProductWizardTest(TestCase):
         self.assertTemplateUsed(response, 'products/product_register.html')
         self.assertEquals(Picture.objects.count(), 2)
     
-    def test_second_step_as_anonymous(self):
+    @patch.object(MultiPartFormWizard, 'security_hash')
+    def test_second_step_as_anonymous(self, mock_method):
+        mock_method.return_value = '6941fd7b20d720833717a1f92e8027af'
         response = self.client.post(reverse('product_create'), {
             '0-category':484,
             '0-picture_id':1,
@@ -57,7 +62,9 @@ class ProductWizardTest(TestCase):
         self.assertTrue(response.status_code, 200)
         self.assertTemplateUsed(response, 'products/product_missing.html')
     
-    def test_third_step_as_anonymous(self):
+    @patch.object(MultiPartFormWizard, 'security_hash')
+    def test_third_step_as_anonymous(self, mock_method):
+        mock_method.return_value = '6941fd7b20d720833717a1f92e8027af'
         response = self.client.post(reverse('product_create'), {
             '0-category':484,
             '0-picture_id':1,
@@ -75,7 +82,7 @@ class ProductWizardTest(TestCase):
             '2-addresses__city':'Paris',
             '2-addresses__country':'FR',
             'hash_0':'6941fd7b20d720833717a1f92e8027af',
-            'hash_1':'f4d8f4af9bcbe43812214e7f85b51d41',
+            'hash_1':'6941fd7b20d720833717a1f92e8027af',
             'wizard_step':2
         })
         self.assertRedirects(response, reverse('product_detail', args=['bentley-brooklands', 5]))

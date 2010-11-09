@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from mock import patch
 from urllib import urlencode
 from urlparse import urlsplit
 
@@ -7,6 +8,9 @@ from django.core.urlresolvers import reverse
 from django.http import QueryDict
 from django.test import TestCase
 from django.utils.translation import ugettext as _
+
+from eloue.wizard import MultiPartFormWizard
+
 
 class AccountWizardTest(TestCase):
     fixtures = ['patron']
@@ -104,7 +108,9 @@ class AccountWizardTest(TestCase):
         self.assertTrue(response.status_code, 200)
         self.assertContains(response, "Pseudo")
     
-    def test_second_step(self):
+    @patch.object(MultiPartFormWizard, 'security_hash')
+    def test_second_step(self, mock_return):
+        mock_return.return_value = 'b5d8e7ffcc52f852c688983ecb30ead6'
         response = self.client.post(reverse('auth_login'), {
             '1-username':'hocus-pocus',
             '1-password1':'sucop',
@@ -122,7 +128,9 @@ class AccountWizardTest(TestCase):
         self.assertTrue(redirect_response.context['user'].is_authenticated())
         self.assertTrue(not redirect_response.context['user'].is_active)
     
-    def test_second_step_with_existing_username(self):
+    @patch.object(MultiPartFormWizard, 'security_hash')
+    def test_second_step_with_existing_username(self, mock_return):
+        mock_return.return_value = 'b5d8e7ffcc52f852c688983ecb30ead6'
         response = self.client.post(reverse('auth_login'), {
             '1-username':'alexandre',
             '1-password1':'sucop',
@@ -136,7 +144,9 @@ class AccountWizardTest(TestCase):
         self.assertTrue(response.status_code, 200)
         self.assertFormError(response, 'form', 'username', _(u"Ce nom d'utilisateur est déjà pris."))
     
-    def test_second_step_with_mismatching_password(self):
+    @patch.object(MultiPartFormWizard, 'security_hash')
+    def test_second_step_with_mismatching_password(self, mock_return):
+        mock_return.return_value = 'b5d8e7ffcc52f852c688983ecb30ead6'
         response = self.client.post(reverse('auth_login'), {
             '1-username':'hocus-pocus',
             '1-password1':'sucop',
