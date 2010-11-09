@@ -66,7 +66,6 @@ class MultiPartFormWizard(FormWizard):
         # TODO: Move "hash_%d" to a method to make it configurable.
         for i in range(current_step):
             form = self.get_form(i, request.POST, request.FILES)
-            print request.POST.get("hash_%d" % i, ''), self.security_hash(request, form)
             if request.POST.get("hash_%d" % i, '') != self.security_hash(request, form):
                 return self.render_hash_failure(request, i)
             self.process_step(request, form, i)
