@@ -41,6 +41,8 @@ class Command(BaseCommand):
             row['Numéro contrat'] = booking.contract_id
             row['Date d\'effet des garanties'] = booking.started_at.strftime("%Y%m%d")
             row[u'Numéro de commande'] = booking.uuid
+            row['Type de produit'] = booking.product.category.name
+            row['Informations complémentaires produit'] = smart_str(booking.product.summary)
             row[u'Désignation'] = smart_str(booking.product.description)
             row['Prix de la location TTC'] = booking.total_amount
             row['Montant de la Caution'] = booking.deposit_amount

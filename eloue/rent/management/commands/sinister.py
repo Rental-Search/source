@@ -39,9 +39,6 @@ class Command(BaseCommand):
             row[u'Numéro police'] = settings.POLICY_NUMBER
             row[u'Numéro partenaire'] = settings.PARTNER_NUMBER
             row[u'Numéro contrat'] = sinister.booking.contract_id
-            row['Date d\'effet des garanties'] = settings.POLICY_NUMBER
-            row['Numéro partenaire'] = settings.PARTNER_NUMBER
-            row['Numéro contrat'] = sinister.booking.contract_id
             row['Date d\'effet des garanties'] = sinister.booking.started_at.strftime("%Y%m%d")
             row[u'Numéro de commande'] = sinister.booking.uuid
             row[u'Type de produit'] = smart_str(sinister.booking.product.category.name)
