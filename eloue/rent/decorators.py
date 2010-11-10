@@ -23,13 +23,31 @@ def validate_ipn(view_func):
 
 
 def incr_sequence(field, sequence_name):
-    def wrapper(func):
+    def wrapper(view_func):
         def inner_wrapper(self, *args, **kwargs):
             if not getattr(self, field):
                 cursor = connection.cursor()
                 cursor.execute("SELECT nextval(%s)", [sequence_name])
                 row = cursor.fetchone()
                 setattr(self, field, row[0])
-            return func(self, *args, **kwargs)
+            return view_func(self, *args, **kwargs)
+        return inner_wrapper
+    return wrapper
+
+
+def ownership_required(model, object_key='object_id'):
+    def wrapper(view_func):
+        def inner_wrapper(request, *args, **kwargs):
+            user = request.user
+            grant = False
+            object_id = kwargs.get(object_key, None)
+            if object_id:
+                names = [rel.get_accessor_name() for rel in user._meta.get_all_related_objects() if rel.model == model]
+                names = map(lambda name: getattr(user, name).filter(pk=object_id).exists(), names)
+                if names:
+                    grant = any(names)
+            if not grant:
+                return HttpResponseForbidden()
+            return view_func(request, *args, **kwargs)
         return inner_wrapper
     return wrapper

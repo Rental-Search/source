@@ -9,7 +9,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.generic.list_detail import object_detail
 
 from eloue.accounts.forms import EmailAuthenticationForm
-from eloue.rent.decorators import validate_ipn
+from eloue.rent.decorators import validate_ipn, ownership_required
 from eloue.rent.forms import BookingForm, PreApprovalIPNForm, PayIPNForm
 from eloue.rent.models import Booking
 from eloue.rent.wizard import BookingWizard
@@ -68,5 +68,39 @@ def booking_failure(request, booking_id):
 
 
 @login_required
+@ownership_required(model=Booking, object_key='booking_id')
 def booking_detail(request, booking_id):
     return object_detail(request, queryset=Booking.objects.all(), object_id=booking_id, template_name='rent/booking_detail.html', template_object_name='booking')
+
+
+@login_required
+@ownership_required(model=Booking, object_key='booking_id')
+def booking_accept(request, booking_id):
+    if request.POST:
+        pass
+    return object_detail(request, queryset=Booking.objects.all(), object_id=booking_id, template_name='rent/booking_detail.html', template_object_name='booking')
+
+
+@login_required
+@ownership_required(model=Booking, object_key='booking_id')
+def booking_refuse(request, booking_id):
+    if request.POST:
+        pass
+    return object_detail(request, queryset=Booking.objects.all(), object_id=booking_id, template_name='rent/booking_detail.html', template_object_name='booking')
+
+
+@login_required
+@ownership_required(model=Booking, object_key='booking_id')
+def booking_close(request, booking_id):
+    if request.POST:
+        pass
+    return object_detail(request, queryset=Booking.objects.all(), object_id=booking_id, template_name='rent/booking_detail.html', template_object_name='booking')
+
+
+@login_required
+@ownership_required(model=Booking, object_key='booking_id')
+def booking_incident(request, booking_id):
+    if request.POST:
+        pass
+    return object_detail(request, queryset=Booking.objects.all(), object_id=booking_id, template_name='rent/booking_detail.html', template_object_name='booking')
+
