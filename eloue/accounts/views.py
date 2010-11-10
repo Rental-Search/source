@@ -24,6 +24,12 @@ def activate(request, activation_key):
     return direct_to_template(request, 'accounts/activate.html', extra_context={ 'is_actived':is_actived, 'expiration_days':settings.ACCOUNT_ACTIVATION_DAYS })
 
 
+@never_cache
+def authenticate(request, *args, **kwargs):
+    wizard = AuthenticationWizard([EmailAuthenticationForm])
+    return wizard(request, *args, **kwargs)
+
+
 @cache_page(900)
 def patron_detail(request, slug, patron_id=None):
     if patron_id: # This is here to be compatible with the old app
@@ -33,8 +39,3 @@ def patron_detail(request, slug, patron_id=None):
         form = FacetedSearchForm()
         return object_detail(request, queryset=Patron.objects.all(), slug=slug, template_object_name='patron', extra_context={'form':form})
 
-
-@never_cache
-def authenticate(request, *args, **kwargs):
-    wizard = AuthenticationWizard([EmailAuthenticationForm])
-    return wizard(request, *args, **kwargs)

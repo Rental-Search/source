@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import datetime
 import logbook
+import types
 import random
 
 from decimal import Decimal as D
@@ -31,6 +32,8 @@ BOOKING_STATE = Enum([
     (3, 'PENDING', _(u'En attente')),
     (4, 'ONGOING', _(u'En cours')),
     (5, 'ENDED', _(u'Terminé')),
+    (6, 'INCIDENT', _(u'Incident')),
+    (7, 'CLOSED', _(u'Cloturé')),
 ])
 
 PAYMENT_STATE = Enum([
@@ -135,6 +138,17 @@ class Booking(models.Model):
             if (self.ended_at - self.started_at) > datetime.timedelta(days=BOOKING_DAYS):
                 raise ValidationError(_(u"La durée d'une location est limitée à 85 jours."))
     
+    def __init__(self, *args, **kwargs):
+        super(Booking, self).__init__(*args, **kwargs)
+        for state in BOOKING_STATE.enum_dict:
+            setattr(self, "is_%s" % state.lower(), types.MethodType(self._is_factory(state), self))
+    
+    @staticmethod
+    def _is_factory(state):
+        def is_state(self):
+            return self.booking_state == getattr(BOOKING_STATE, state)
+        return is_state
+        
     @staticmethod
     def calculate_price(product, started_at, ended_at):
         delta = ended_at - started_at

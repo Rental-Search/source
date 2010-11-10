@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import logbook
 
+from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.views.decorators.http import require_POST
 from django.views.decorators.cache import never_cache
@@ -64,3 +65,8 @@ def booking_success(request, booking_id):
 
 def booking_failure(request, booking_id):
     return object_detail(request, queryset=Booking.objects.all(), object_id=booking_id, template_name='rent/booking_failure.html',  template_object_name='booking')
+
+
+@login_required
+def booking_detail(request, booking_id):
+    return object_detail(request, queryset=Booking.objects.all(), object_id=booking_id, template_name='rent/booking_detail.html', template_object_name='booking')

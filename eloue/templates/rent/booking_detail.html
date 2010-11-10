@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block content %}
+ <div class="content container clearfix">
+ {% if request.user == booking.owner %}
+   <p>Vous avez {% if booking.is_asked %}une proposition de location pour{% else %}mis en location{% endif %} l'object "<em>{{ booking.product.summary }}</em>" entre le <strong>{{ booking.started_at|date:"l j F Y" }}</strong> et le <strong>{{ booking.ended_at|date:"l j F Y" }}</strong> (soit environ <em>{{ booking.started_at|timesince:booking.ended_at }}</em>)  pour la somme de <strong>{{ booking.total_amount }}</strong> {{ booking.currency }}.</p>
+  {% if booking.is_asked %}
+   <p>Voulez-vous <a href="">refuser cette location</a> ou <a href="">l'accepter</a> ?</p>
+  {% endif %}
+  {% if booking.is_ended %}
+   <p>La location est maintenant terminé, souhaitez vous <a href="">déclarer un incident</a> ou <a href="">cloturer la location</a> ?</p>
+  {% endif %}
+ {% endif %}
+ {% if request.user == booking.borrower %}
+   Vous avez loué l'object "<em>{{ booking.product.summary }}</em>" entre le <strong>{{ booking.started_at|date:"l j F Y" }}</strong> et le <strong>{{ booking.ended_at|date:"l j F Y" }}</strong> (soit environ <em>{{ booking.started_at|timesince:booking.ended_at }}</em>)  pour la somme de <strong>{{ booking.total_amount }}</strong> {{ booking.currency }}.
+ {% endif %}
+ </div>
+{% endblock %}

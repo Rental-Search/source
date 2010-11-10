@@ -11,6 +11,7 @@ from eloue.accounts.forms import EmailPasswordResetForm
 from eloue.accounts.views import activate, authenticate
 from eloue.api import api_v1
 from eloue.products.views import homepage
+from eloue.rent.views import booking_detail
 from eloue.sitemaps import FlatPageSitemap, PatronSitemap, ProductSitemap
 
 log = logbook.Logger('eloue')
@@ -48,6 +49,7 @@ urlpatterns = patterns('',
     url(r'^login/$', authenticate, name='auth_login'),
     url(r'^logout/$', logout_then_login, name='auth_logout'),
     url(r'^media/(.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT}),
+    url(r'^account/booking/(?P<booking_id>[0-9a-f]{32})/$', booking_detail, name="booking_detail"),
     url(r'^loueur/', include('eloue.accounts.urls')),
     url(r'^location/', include('eloue.products.urls')),
     url(r'^rent/', include('eloue.rent.urls')),
