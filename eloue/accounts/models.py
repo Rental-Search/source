@@ -181,6 +181,8 @@ class Address(models.Model):
     
     objects = models.GeoManager()
     
+    COUNTRIES = COUNTRY_CHOICES
+    
     class Meta:
         verbose_name_plural = _('addresses')
     

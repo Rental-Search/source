@@ -19,6 +19,7 @@ from django.utils.translation import ugettext_lazy as _
 from eloue.accounts.models import Patron
 from eloue.products.models import CURRENCY, UNIT, Product
 from eloue.products.utils import Enum
+from eloue.rent.contract import ContractGenerator
 from eloue.rent.decorators import incr_sequence
 from eloue.rent.fields import UUIDField, IntegerAutoField
 from eloue.rent.manager import BookingManager
@@ -212,29 +213,44 @@ class Booking(models.Model):
             self.payment_state = PAYMENT_STATE.REJECTED
         self.save()
     
-    def send_acceptation_email(self):
-        # TODO : Send me
+    def send_ask_email(self):
         context = {
             'booking':self,
             'site':Site.objects.get_current()
         }
-        subject = render_to_string('rent/acceptation_email_subject.txt', context)
-        text_content = render_to_string('rent/acceptation_email.txt', context)
-        html_content = render_to_string('rent/acceptation_email.html', context)
+        subject = render_to_string('rent/owner_ask_email_subject.txt', context)
+        text_content = render_to_string('rent/owner_ask_email.txt', context)
+        html_content = render_to_string('rent/owner_ask_email.html', context)
         message = EmailMultiAlternatives(subject, text_content, settings.DEFAULT_FROM_EMAIL, [self.owner.email])
         message.attach_alternative(html_content, "text/html")
         message.send()
+        subject = render_to_string('rent/borrower_ask_email_subject.txt', context)
+        text_content = render_to_string('rent/borrower_ask_email.txt', context)
+        html_content = render_to_string('rent/borrower_ask_email.html', context)
+        message = EmailMultiAlternatives(subject, text_content, settings.DEFAULT_FROM_EMAIL, [self.borrower.email])
+        message.attach_alternative(html_content, "text/html")
+        message.send()
     
-    def send_notification_email(self):
-        # TODO : Send me
+    def send_acceptation_email(self):
+        contract_generator = ContractGenerator()
+        contract = contract_generator(self)
+        content = contract.getvalue()
         context = {
             'booking':self,
             'site':Site.objects.get_current()
         }
-        subject = render_to_string('rent/notification_email_subject.txt', context)
-        text_content = render_to_string('rent/notification_email.txt', context)
-        html_content = render_to_string('rent/notification_email.html', context)
+        subject = render_to_string('rent/owner_acceptation_email_subject.txt', context)
+        text_content = render_to_string('rent/owner_acceptation_email.txt', context)
+        html_content = render_to_string('rent/owner_acceptation_email.html', context)
         message = EmailMultiAlternatives(subject, text_content, settings.DEFAULT_FROM_EMAIL, [self.borrower.email])
+        message.attach('contrat.pdf', content, 'application/pdf')
+        message.attach_alternative(html_content, "text/html")
+        message.send()
+        subject = render_to_string('rent/borrower_acceptation_email_subject.txt', context)
+        text_content = render_to_string('rent/borrower_acceptation_email.txt', context)
+        html_content = render_to_string('rent/borrower_acceptation_email.html', context)
+        message = EmailMultiAlternatives(subject, text_content, settings.DEFAULT_FROM_EMAIL, [self.borrower.email])
+        message.attach('contrat.pdf', content, 'application/pdf')
         message.attach_alternative(html_content, "text/html")
         message.send()
     

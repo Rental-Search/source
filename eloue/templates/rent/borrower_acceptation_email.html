@@ -1,0 +1,22 @@
+{% load i18n %}{% blocktrans with booking.owner.get_full_name as owner_name and booking.borrower.get_full_name as borrower_name and booking.product.summary as summary and booking.product.category.name as category and booking.product.summary as summary and booking.owner.phones.all|first as owner_phone and booking.started_at|date:"DATETIME_FORMAT" as starting_at and booking.started_at|timesince:booking.ended_at as duration and booking.owner.email as owner_email %}
+<p>Bonjour {{ borrower_name }},</p>
+
+<p>Votre proposition de location suivante a été acceptée :</p>
+<ul>
+ <li><strong>Type :</strong> {{ category }}</li>
+ <li><strong>Objet :</strong> {{ summary }}</li>
+ <li><strong>Début de la location :</strong> {{ starting_at }}</li>
+ <li><strong>Durée de la location :</strong> {{ duration }}</li>
+</ul>
+
+<p>Vous trouverez en pièce jointe votre contrat de location. Il ne vous reste donc plus qu'à contacter {{ owner_name }} pour le faire profiter de votre {{ summary }}.</p>
+
+<ul>
+ <li><strong>Numéro de téléphone :</strong> {{ owner_phone }}</li>
+ <li><strong>Adresse électronique :</strong> {{ owner_email }}</li>
+</ul>
+ 
+<p>Bonne location !</p>
+
+<p>L'équipe e-loue</p>
+{% endblocktrans %}

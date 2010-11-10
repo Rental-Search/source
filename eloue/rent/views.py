@@ -3,10 +3,12 @@ import logbook
 
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
+from django.shortcuts import get_object_or_404
 from django.views.decorators.http import require_POST
 from django.views.decorators.cache import never_cache
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic.list_detail import object_detail
+from django.views.generic.simple import direct_to_template
 
 from eloue.accounts.forms import EmailAuthenticationForm
 from eloue.rent.decorators import validate_ipn, ownership_required
@@ -30,9 +32,8 @@ def preapproval_ipn(request):
             booking.booking_state = Booking.BOOKING_STATE.ASKED
             booking.borrower.paypal_email = form.cleaned_data['sender_email']
             booking.borrower.save()
-            # Sending emails
-            booking.send_acceptation_email()
-            booking.send_notification_email()
+            # Sending email
+            booking.send_ask_email()
         else:
             booking.payment_state = Booking.PAYMENT_STATE.REJECTED
             booking.booking_state = Booking.BOOKING_STATE.REJECTED
@@ -76,31 +77,39 @@ def booking_detail(request, booking_id):
 @login_required
 @ownership_required(model=Booking, object_key='booking_id')
 def booking_accept(request, booking_id):
+    booking = get_object_or_404(Booking, pk=booking_id)
     if request.POST:
-        pass
-    return object_detail(request, queryset=Booking.objects.all(), object_id=booking_id, template_name='rent/booking_detail.html', template_object_name='booking')
+        booking.booking_state = Booking.BOOKING_STATE.PENDING
+        booking.send_acceptation_email()
+        booking.save()
+    return direct_to_template(request, 'rent/booking_accept.html', extra_context={ 'booking':booking })
 
 
 @login_required
 @ownership_required(model=Booking, object_key='booking_id')
-def booking_refuse(request, booking_id):
+def booking_reject(request, booking_id):
+    booking = get_object_or_404(Booking, pk=booking_id)
     if request.POST:
-        pass
-    return object_detail(request, queryset=Booking.objects.all(), object_id=booking_id, template_name='rent/booking_detail.html', template_object_name='booking')
+        booking.booking_state = Booking.BOOKING_STATE.REJECTED
+        booking.send_rejection_email()
+        booking.save()
+    return direct_to_template(request, 'rent/booking_reject.html', extra_context={ 'booking':booking })
 
 
 @login_required
 @ownership_required(model=Booking, object_key='booking_id')
 def booking_close(request, booking_id):
+    booking = get_object_or_404(Booking, pk=booking_id)
     if request.POST:
         pass
-    return object_detail(request, queryset=Booking.objects.all(), object_id=booking_id, template_name='rent/booking_detail.html', template_object_name='booking')
+    return direct_to_template(request, 'rent/booking_close.html', extra_context={ 'booking':booking })
 
 
 @login_required
 @ownership_required(model=Booking, object_key='booking_id')
 def booking_incident(request, booking_id):
+    booking = get_object_or_404(Booking, pk=booking_id)
     if request.POST:
         pass
-    return object_detail(request, queryset=Booking.objects.all(), object_id=booking_id, template_name='rent/booking_detail.html', template_object_name='booking')
+    return direct_to_template(request, 'rent/booking_incident.html', extra_context={ 'booking':booking })
 
