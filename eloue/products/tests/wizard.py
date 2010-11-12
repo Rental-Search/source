@@ -1,10 +1,8 @@
 # -*- coding: utf-8 -*-
 import os
 
-from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.test import TestCase
-from django.utils.translation import ugettext as _
 
 from mock import patch
 
@@ -16,10 +14,6 @@ local_path = lambda path: os.path.join(os.path.dirname(__file__), path)
 
 class ProductWizardTest(TestCase):
     fixtures = ['patron', 'address', 'price', 'product', 'picture']
-    
-    def setUp(self):
-        self.old_secret_key = settings.SECRET_KEY
-        settings.SECRET_KEY = "123"
     
     def test_zero_step(self):
         response = self.client.get(reverse('product_create'))
@@ -86,7 +80,4 @@ class ProductWizardTest(TestCase):
             'wizard_step':2
         })
         self.assertRedirects(response, reverse('product_detail', args=['bentley-brooklands', 5]))
-    
-    def tearDown(self):
-        settings.SECRET_KEY = self.old_secret_key
     

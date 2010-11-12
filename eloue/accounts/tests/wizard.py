@@ -15,10 +15,6 @@ from eloue.wizard import MultiPartFormWizard
 class AccountWizardTest(TestCase):
     fixtures = ['patron']
     
-    def setUp(self):
-        self.old_secret_key = settings.SECRET_KEY
-        settings.SECRET_KEY = "123"
-    
     def test_zero_step(self):
         response = self.client.get(reverse('auth_login'))
         self.assertEquals(response.status_code, 200)
@@ -159,7 +155,4 @@ class AccountWizardTest(TestCase):
         })
         self.assertTrue(response.status_code, 200)
         self.assertFormError(response, 'form', 'password2', _(u"Vos mots de passe ne correspondent pas"))
-    
-    def tearDown(self):
-        settings.SECRET_KEY = self.old_secret_key
     
