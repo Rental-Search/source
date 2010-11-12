@@ -8,9 +8,7 @@ Type : {{ category }}
 Objet : {{ summary }} 
 Début de la location : {{ starting_at }} 
 Durée de la location : {{ duration }}
-
 {% endblocktrans %}
-
 {% with booking.product.more_like_this as related_products %}
 {% if related_products %}
  {% trans "Cependant, d’autres objets similaires peuvent peut-être vous intéresser :" %}
@@ -21,11 +19,11 @@ Durée de la location : {{ duration }}
   {% endwith %}
  {% endfor %}
 {% endif %}
-
-{% blocktrans with booking.product.category.get_absolute_url as category_url %}
+{% endwith %}
+{% blocktrans with booking.product.category.get_absolute_url as category_url and site.domain as domain %}
 Retrouvez tous les objets de cette catégorie sur e-loue.com :
 
-http://{{ site.domain }}{{ category_url }}
+http://{{ domain }}{{ category_url }}
  
 L'équipe e-loue
 {% endblocktrans %}
