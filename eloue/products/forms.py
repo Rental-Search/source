@@ -18,14 +18,14 @@ SORT = Enum([
 
 
 class ProductSearchForm(forms.Form):
-    q = forms.CharField(max_length=100, widget=forms.TextInput(attrs={'class':'inb'}))
-    where = forms.CharField(max_length=100, widget=forms.TextInput(attrs={'class':'inb'}))
+    q = forms.CharField(max_length=100, widget=forms.TextInput(attrs={'class': 'inb'}))
+    where = forms.CharField(max_length=100, widget=forms.TextInput(attrs={'class': 'inb'}))
 
 
 class FacetedSearchForm(SearchForm):
-    q = forms.CharField(required=False, max_length=100, widget=forms.TextInput(attrs={'class':'inb'}))
-    where = forms.CharField(required=False, max_length=100, widget=forms.TextInput(attrs={'class':'inb'}))
-    radius = forms.IntegerField(required=False, widget=forms.TextInput(attrs={'class':'ins'}))
+    q = forms.CharField(required=False, max_length=100, widget=forms.TextInput(attrs={'class': 'inb'}))
+    where = forms.CharField(required=False, max_length=100, widget=forms.TextInput(attrs={'class': 'inb'}))
+    radius = forms.IntegerField(required=False, widget=forms.TextInput(attrs={'class': 'ins'}))
     sort = forms.ChoiceField(required=False, choices=SORT, widget=forms.HiddenInput())
     price = FacetField(label=_(u"Prix"), pretty_name=_("par-prix"), required=False)
     categories = FacetField(label=_(u"Catégorie"), pretty_name=_("par-categorie"), required=False, widget=forms.HiddenInput())
@@ -62,13 +62,13 @@ class ProductReviewForm(forms.ModelForm):
     
 
 class ProductForm(forms.ModelForm):
-    category = TreeNodeChoiceField(queryset=Category.tree.all(), empty_label="Choisissez une catégorie", level_indicator=u'--', widget=forms.Select(attrs={'style':'100%'}))
-    summary = forms.CharField(max_length=100, widget=forms.TextInput(attrs={'class':'inb'}))
+    category = TreeNodeChoiceField(queryset=Category.tree.all(), empty_label="Choisissez une catégorie", level_indicator=u'--', widget=forms.Select(attrs={'style': '100%'}))
+    summary = forms.CharField(max_length=100, widget=forms.TextInput(attrs={'class': 'inb'}))
     picture_id = forms.IntegerField(required=False, widget=forms.HiddenInput())
-    picture = forms.ImageField(required=False, widget=forms.FileInput(attrs={'class':'inb pic'}))
-    price = forms.DecimalField(required=True, widget=forms.TextInput(attrs={'class':'inb price'}))
-    deposit_amount = forms.DecimalField(required=True, widget=forms.TextInput(attrs={'class':'inb price'}))
-    quantity = forms.IntegerField(initial=1, widget=forms.TextInput(attrs={'class':'inb qty'}))
+    picture = forms.ImageField(required=False, widget=forms.FileInput(attrs={'class': 'inb pic'}))
+    price = forms.DecimalField(required=True, widget=forms.TextInput(attrs={'class': 'inb price'}))
+    deposit_amount = forms.DecimalField(required=True, widget=forms.TextInput(attrs={'class': 'inb price'}))
+    quantity = forms.IntegerField(initial=1, widget=forms.TextInput(attrs={'class': 'inb qty'}))
     description = forms.Textarea()
     
     def clean_quantity(self):

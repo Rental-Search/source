@@ -144,7 +144,7 @@ class Category(MPTTModel):
     
     def get_absolute_url(self):
         return _(u"%(prefix)s/location/par-category/%(category)s/") % {
-            'prefix':get_script_prefix(), 'category':self.slug
+            'prefix': get_script_prefix(), 'category': self.slug
         }
     
 

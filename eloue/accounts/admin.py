@@ -31,7 +31,7 @@ class PatronAdmin(UserAdmin):
     list_filter = ('is_active', 'is_staff', 'is_superuser', 'is_professional')
     save_on_top = True
     ordering = ['-date_joined']
-    inlines = [ AddressInline, PhoneNumberInline ]
+    inlines = [AddressInline, PhoneNumberInline]
     form = PatronChangeForm
     actions = ['send_activation_email']
     search_fields = ('username', 'first_name', 'last_name', 'email', 'phones__number', 'addresses__city', 'company_name')
@@ -53,8 +53,8 @@ class AddressAdmin(admin.ModelAdmin):
     save_on_top = True
     search_fields = ('address1', 'address2', 'zipcode', 'city')
     fieldsets = (
-        (None, {'fields':('address1', 'address2', 'zipcode', 'city')}),
-        (_('Geolocation'), {'classes':('collapse',), 'fields':('position',)})
+        (None, {'fields': ('address1', 'address2', 'zipcode', 'city')}),
+        (_('Geolocation'), {'classes': ('collapse',), 'fields': ('position',)})
     )
 
 admin.site.register(Address, AddressAdmin)

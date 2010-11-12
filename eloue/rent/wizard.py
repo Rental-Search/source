@@ -75,7 +75,7 @@ class BookingWizard(GenericFormWizard):
         start_parts = (request.POST.get('0-started_at_0', None), request.POST.get('0-started_at_1', None))
         end_parts = (request.POST.get('0-ended_at_0', None), request.POST.get('0-ended_at_1', None))
         if any(start_parts) and any(end_parts):
-            self.extra_context['total_amount'] = Booking.calculate_price(product, 
+            self.extra_context['total_amount'] = Booking.calculate_price(product,
                 combine(*start_parts), combine(*end_parts))
         self.extra_context['has_dates'] = any(start_parts) and any(end_parts)
         self.extra_context['product'] = product

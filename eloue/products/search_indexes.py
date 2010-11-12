@@ -27,7 +27,7 @@ class ProductIndex(QueuedSearchIndex):
     
     def prepare_categories(self, obj):
         if obj.category:
-            categories = [ category.slug for category in obj.category.get_ancestors(ascending=False) ]
+            categories = [category.slug for category in obj.category.get_ancestors(ascending=False)]
             categories.append(obj.category.slug)
             return categories
     

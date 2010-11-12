@@ -31,7 +31,7 @@ class ContractGenerator(object):
     
     def load_template(self, booking):
         """Load template pdf"""
-        return PdfFileReader(open(local_path("contract/standard_template.pdf"))) 
+        return PdfFileReader(open(local_path("contract/standard_template.pdf")))
     
     def generate_carbon(self, booking):
         "Create and draw the carbon"
@@ -39,7 +39,7 @@ class ContractGenerator(object):
         carbon = canvas.Canvas(carbon_file)
         carbon = self.draw(carbon, booking)
         carbon.save()
-        return PdfFileReader(carbon_file)    
+        return PdfFileReader(carbon_file)
     
     def draw(self, canvas, booking):
         """Draw stuff in the carbon"""

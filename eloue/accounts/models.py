@@ -99,7 +99,7 @@ class Patron(User):
     is_professional = models.BooleanField(_('professionnel'), default=False, help_text=_(u"Précise si l'utilisateur est un professionnel"))
     modified_at = models.DateTimeField(_('date de modification'), editable=False)
     last_ip = models.IPAddressField(null=True, blank=True)
-    slug = models.SlugField( unique=True, db_index=True)
+    slug = models.SlugField(unique=True, db_index=True)
     paypal_email = models.EmailField(null=True, blank=True)
     
     objects = PatronManager()
@@ -147,9 +147,9 @@ class Patron(User):
             return False
     
     def send_activation_email(self):
-        subject = render_to_string('accounts/activation_email_subject.txt', { 'patron':self, 'site':Site.objects.get_current() })
-        text_content = render_to_string('accounts/activation_email.txt', { 'patron':self, 'activation_key':self.activation_key, 'expiration_days':settings.ACCOUNT_ACTIVATION_DAYS, 'site':Site.objects.get_current() })
-        html_content = render_to_string('accounts/activation_email.html', { 'patron':self, 'activation_key':self.activation_key, 'expiration_days':settings.ACCOUNT_ACTIVATION_DAYS, 'site':Site.objects.get_current() })
+        subject = render_to_string('accounts/activation_email_subject.txt', {'patron': self, 'site': Site.objects.get_current()})
+        text_content = render_to_string('accounts/activation_email.txt', {'patron': self, 'activation_key': self.activation_key, 'expiration_days': settings.ACCOUNT_ACTIVATION_DAYS, 'site': Site.objects.get_current()})
+        html_content = render_to_string('accounts/activation_email.html', {'patron': self, 'activation_key': self.activation_key, 'expiration_days': settings.ACCOUNT_ACTIVATION_DAYS, 'site': Site.objects.get_current()})
         message = EmailMultiAlternatives(subject, text_content, settings.DEFAULT_FROM_EMAIL, [self.email])
         message.attach_alternative(html_content, "text/html")
         message.send()

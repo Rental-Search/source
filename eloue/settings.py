@@ -16,14 +16,14 @@ SERVER_EMAIL = 'noreply@e-loue.com'
 DEFAULT_FROM_EMAIL = 'noreply@e-loue.com'
 
 DATABASES = {
-    'default':{
-        'NAME':getattr(local, 'DATABASE_NAME', 'eloue'),
-        'ENGINE':getattr(local, 'DATABASE_ENGINE', 'django.contrib.gis.db.backends.postgis'),
-        'USER':getattr(local, 'DATABASE_USER', 'eloue'),
-        'PASSWORD':getattr(local, 'DATABASE_PASSWORD', ''),
-        'HOST':getattr(local, 'DATABASE_HOST', ''),
-        'PORT':getattr(local, 'DATABASE_PORT', ''),
-        'OPTIONS':getattr(local, 'DATABASE_OPTIONS', { 'autocommit':True })
+    'default': {
+        'NAME': getattr(local, 'DATABASE_NAME', 'eloue'),
+        'ENGINE': getattr(local, 'DATABASE_ENGINE', 'django.contrib.gis.db.backends.postgis'),
+        'USER': getattr(local, 'DATABASE_USER', 'eloue'),
+        'PASSWORD': getattr(local, 'DATABASE_PASSWORD', ''),
+        'HOST': getattr(local, 'DATABASE_HOST', ''),
+        'PORT': getattr(local, 'DATABASE_PORT', ''),
+        'OPTIONS': getattr(local, 'DATABASE_OPTIONS', {'autocommit': True})
     }
 }
 
@@ -170,8 +170,8 @@ CACHE_MIDDLEWARE_KEY_PREFIX = getattr(local, 'CACHE_MIDDLEWARE_KEY_PREFIX', None
 COMPRESS = getattr(local, 'COMPRESS', True)
 COMPRESS_VERSION = True
 COMPRESS_CSS_URL_REPLACE = {
-    "../":"",
-    "url(\"":"url(\"%s" % MEDIA_URL,
+    "../": "",
+    "url(\"": "url(\"%s" % MEDIA_URL,
 }
 COMPRESS_JS_FILTERS = getattr(local, 'COMPRESS_JS_FILTERS', ('compress.filters.yui.YUICompressorFilter',))
 COMPRESS_CSS_FILTERS = getattr(local, 'COMPRESS_CSS_FILTERS', (
@@ -216,7 +216,7 @@ COMPRESS_JS = {
             'js/ui/jquery.ui.widget.js',
             'js/ui/jquery.ui.datepicker.js',
             'js/ui/jquery.ui.datepicker-fr.js',
-            'js/modernizr.js', 
+            'js/modernizr.js',
             'js/application.js'),
         'output_filename': 'js/application.r?.js',
     }
@@ -276,7 +276,7 @@ AWS_S3_CUSTOM_DOMAIN = getattr(local, 'AWS_S3_CUSTOM_DOMAIN', 'eloue.s3.amazonaw
 AWS_DEFAULT_ACL = getattr(local, 'AWS_DEFAULT_ACL', 'public-read')
 AWS_AUTO_CREATE_BUCKET = getattr(local, 'AWS_AUTO_CREATE_BUCKET', False)
 AWS_HEADERS = {
-    'Cache-Control':'max-age=31556926,public',
+    'Cache-Control': 'max-age=31556926,public',
 }
 
 # Paypal configuration

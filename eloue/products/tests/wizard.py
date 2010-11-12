@@ -23,14 +23,14 @@ class ProductWizardTest(TestCase):
     def test_first_step_as_anonymous(self):
         f = open(local_path('../fixtures/bentley.jpg'))
         response = self.client.post(reverse('product_create'), {
-            '0-category':484,
-            '0-picture':f,
-            '0-summary':'Bentley Brooklands',
-            '0-price':'150',
-            '0-deposit_amount':'1500',
-            '0-quantity':1,
-            '0-description':'Voiture de luxe tout confort',            
-            'wizard_step':0
+            '0-category': 484,
+            '0-picture': f,
+            '0-summary': 'Bentley Brooklands',
+            '0-price': '150',
+            '0-deposit_amount': '1500',
+            '0-quantity': 1,
+            '0-description': 'Voiture de luxe tout confort',
+            'wizard_step': 0
         })
         self.assertTrue(response.status_code, 200)
         self.assertTemplateUsed(response, 'products/product_register.html')
@@ -40,18 +40,18 @@ class ProductWizardTest(TestCase):
     def test_second_step_as_anonymous(self, mock_method):
         mock_method.return_value = '6941fd7b20d720833717a1f92e8027af'
         response = self.client.post(reverse('product_create'), {
-            '0-category':484,
-            '0-picture_id':1,
-            '0-summary':'Bentley Brooklands',
-            '0-price':'150',
-            '0-deposit_amount':'1500',
-            '0-quantity':1,
-            '0-description':'Voiture de luxe tout confort',
-            '1-email':'alexandre.woog@e-loue.com',
-            '1-exists':1,
-            '1-password':'alexandre',
-            'hash_0':'6941fd7b20d720833717a1f92e8027af',
-            'wizard_step':1
+            '0-category': 484,
+            '0-picture_id': 1,
+            '0-summary': 'Bentley Brooklands',
+            '0-price': '150',
+            '0-deposit_amount': '1500',
+            '0-quantity': 1,
+            '0-description': 'Voiture de luxe tout confort',
+            '1-email': 'alexandre.woog@e-loue.com',
+            '1-exists': 1,
+            '1-password': 'alexandre',
+            'hash_0': '6941fd7b20d720833717a1f92e8027af',
+            'wizard_step': 1
         })
         self.assertTrue(response.status_code, 200)
         self.assertTemplateUsed(response, 'products/product_missing.html')
@@ -60,24 +60,24 @@ class ProductWizardTest(TestCase):
     def test_third_step_as_anonymous(self, mock_method):
         mock_method.return_value = '6941fd7b20d720833717a1f92e8027af'
         response = self.client.post(reverse('product_create'), {
-            '0-category':484,
-            '0-picture_id':1,
-            '0-summary':'Bentley Brooklands',
-            '0-price':'150',
-            '0-deposit_amount':'1500',
-            '0-quantity':1,
-            '0-description':'Voiture de luxe tout confort',
-            '1-email':'alexandre.woog@e-loue.com',
-            '1-exists':1,
-            '1-password':'alexandre',
-            '2-phones__phone':'0123456789',
-            '2-addresses__address1':'11, rue debelleyme',
-            '2-addresses__zipcode':'75003',
-            '2-addresses__city':'Paris',
-            '2-addresses__country':'FR',
-            'hash_0':'6941fd7b20d720833717a1f92e8027af',
-            'hash_1':'6941fd7b20d720833717a1f92e8027af',
-            'wizard_step':2
+            '0-category': 484,
+            '0-picture_id': 1,
+            '0-summary': 'Bentley Brooklands',
+            '0-price': '150',
+            '0-deposit_amount': '1500',
+            '0-quantity': 1,
+            '0-description': 'Voiture de luxe tout confort',
+            '1-email': 'alexandre.woog@e-loue.com',
+            '1-exists': 1,
+            '1-password': 'alexandre',
+            '2-phones__phone': '0123456789',
+            '2-addresses__address1': '11, rue debelleyme',
+            '2-addresses__zipcode': '75003',
+            '2-addresses__city': 'Paris',
+            '2-addresses__country': 'FR',
+            'hash_0': '6941fd7b20d720833717a1f92e8027af',
+            'hash_1': '6941fd7b20d720833717a1f92e8027af',
+            'wizard_step': 2
         })
         self.assertRedirects(response, reverse('product_detail', args=['bentley-brooklands', 5]))
     

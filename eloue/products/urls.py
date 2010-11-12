@@ -10,5 +10,5 @@ urlpatterns = patterns('',
     url(r'^ajouter/$', product_create, name="product_create"),
     url(r'^(?P<slug>[-\w]+)-(?P<product_id>\d+)/louer/$', booking_create, name="booking_create"),
     url(r'^(?P<slug>[-\w]+)-(?P<product_id>\d+)/$', product_detail, name="product_detail"),
-    url(r'^([^/].+/)?$', product_list, { 'sqs':product_search }, name="product_list"),
+    url(r'^([^/].+/)?$', product_list, {'sqs': product_search}, name="product_list"),
 )

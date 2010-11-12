@@ -28,9 +28,9 @@ class EmailAuthenticationForm(forms.Form):
     """Displays the login form and handles the login action."""
     exists = forms.TypedChoiceField(required=True, coerce=int, choices=STATE_CHOICES, widget=forms.RadioSelect(renderer=CustomRadioFieldRenderer), initial=1)
     email = forms.EmailField(label=_(u"Email"), max_length=75, required=True, widget=forms.TextInput(attrs={
-        'autocapitalize':'off', 'autocorrect':'off', 'class':'inb'
+        'autocapitalize': 'off', 'autocorrect': 'off', 'class': 'inb'
     }))
-    password = forms.CharField(label=_(u"Password"), widget=forms.PasswordInput(attrs={'class':'inb'}), required=False)
+    password = forms.CharField(label=_(u"Password"), widget=forms.PasswordInput(attrs={'class': 'inb'}), required=False)
     
     def __init__(self, *args, **kwargs):
         self.user_cache = None
@@ -71,7 +71,7 @@ class EmailAuthenticationForm(forms.Form):
 
 class EmailPasswordResetForm(PasswordResetForm):
     email = forms.EmailField(label=_("E-mail"), max_length=75, widget=forms.TextInput(attrs={
-        'autocapitalize':'off', 'autocorrect':'off', 'class':'inb'
+        'autocapitalize': 'off', 'autocorrect': 'off', 'class': 'inb'
     }))
     
     def save(self, domain_override=None, use_https=False, token_generator=default_token_generator, **kwargs):
@@ -93,7 +93,7 @@ class EmailPasswordResetForm(PasswordResetForm):
                 'token': token_generator.make_token(user),
                 'protocol': use_https and 'https' or 'http',
             }
-            subject = render_to_string('accounts/password_reset_email_subject.txt', { 'patron':user, 'site':Site.objects.get_current() })
+            subject = render_to_string('accounts/password_reset_email_subject.txt', {'patron': user, 'site': Site.objects.get_current()})
             text_content = render_to_string('accounts/password_reset_email.txt', context)
             html_content = render_to_string('accounts/password_reset_email.html', context)
             message = EmailMultiAlternatives(subject, text_content, settings.DEFAULT_FROM_EMAIL, [user.email])
@@ -116,25 +116,28 @@ class PhoneNumberForm(forms.ModelForm):
 
 def make_missing_data_form(instance, required_fields=[]):
     fields = SortedDict({
-        'username':forms.RegexField(label=_("Username"), max_length=30, regex=r'^[\w.@+-]+$',
+        'username': forms.RegexField(label=_("Username"), max_length=30, regex=r'^[\w.@+-]+$',
             help_text=_("Required. 30 characters or fewer. Letters, digits and @/./+/-/_ only."),
             error_messages={'invalid': _("This value may contain only letters, numbers and @/./+/-/_ characters.")},
-            widget=forms.TextInput(attrs={'class':'inb'})
+            widget=forms.TextInput(attrs={'class': 'inb'})
         ),
-        'password1':forms.CharField(required=True, widget=forms.PasswordInput(attrs={'class':'inb'})),
-        'password2':forms.CharField(required=True, widget=forms.PasswordInput(attrs={'class':'inb'})),
-        'first_name':forms.CharField(required=True, widget=forms.TextInput(attrs={'class':'inb'})),
-        'last_name':forms.CharField(required=True, widget=forms.TextInput(attrs={'class':'inb'})),
-        'addresses__address1':forms.CharField(widget=forms.Textarea(attrs={'class':'inb street', 'placeholder':'Rue'})),
-        'addresses__zipcode':forms.CharField(required=True, widget=forms.TextInput(attrs={'class':'inb zip', 'placeholder':'Code postal'})),
-        'addresses__city':forms.CharField(required=True, widget=forms.TextInput(attrs={'class':'inb town', 'placeholder':'Ville'})),
-        'addresses__country':forms.ChoiceField(choices=COUNTRY_CHOICES, required=True, widget=forms.Select(attrs={'class':'country'})),
-        'phones__phone':PhoneNumberField(required=True, widget=forms.TextInput(attrs={'class':'inb'}))
+        'password1': forms.CharField(required=True, widget=forms.PasswordInput(attrs={'class': 'inb'})),
+        'password2': forms.CharField(required=True, widget=forms.PasswordInput(attrs={'class': 'inb'})),
+        'first_name': forms.CharField(required=True, widget=forms.TextInput(attrs={'class': 'inb'})),
+        'last_name': forms.CharField(required=True, widget=forms.TextInput(attrs={'class': 'inb'})),
+        'addresses__address1': forms.CharField(widget=forms.Textarea(attrs={'class': 'inb street', 'placeholder': 'Rue'})),
+        'addresses__zipcode': forms.CharField(required=True, widget=forms.TextInput(attrs={
+            'class': 'inb zip', 'placeholder': 'Code postal'
+        })),
+        'addresses__city': forms.CharField(required=True, widget=forms.TextInput(attrs={'class': 'inb town', 'placeholder': 'Ville'})),
+        'addresses__country': forms.ChoiceField(choices=COUNTRY_CHOICES, required=True, widget=forms.Select(attrs={'class': 'country'})),
+        'phones__phone': PhoneNumberField(required=True, widget=forms.TextInput(attrs={'class': 'inb'}))
     })
     
     # Do we have an address ?
     if instance and instance.addresses.exists():
-        fields['addresses'] = forms.ModelChoiceField(required=False, queryset=instance.addresses.all(), widget=forms.Select(attrs={'style':'width: 360px;'}))
+        fields['addresses'] = forms.ModelChoiceField(required=False,
+            queryset=instance.addresses.all(), widget=forms.Select(attrs={'style': 'width: 360px;'}))
         for f in fields.keys():
             if "addresses" in f:
                 fields[f].required = False
@@ -218,7 +221,7 @@ def make_missing_data_form(instance, required_fields=[]):
             raise forms.ValidationError(_(u"Vous devez spécifiez un numéro de téléphone"))
         return phones
     
-    form_class = type('MissingInformationForm', (forms.BaseForm,), { 'instance':instance, 'base_fields': fields })
+    form_class = type('MissingInformationForm', (forms.BaseForm,), {'instance': instance, 'base_fields': fields})
     form_class.save = types.MethodType(save, None, form_class)
     form_class.clean_password2 = types.MethodType(clean_password2, None, form_class)
     form_class.clean_username = types.MethodType(clean_username, None, form_class)

@@ -29,7 +29,7 @@ DEFAULT_RADIUS = getattr(settings, 'DEFAULT_RADIUS', 50)
 @cache_page(300)
 def homepage(request):
     form = FacetedSearchForm()
-    return direct_to_template(request, template='index.html', extra_context={ 'form':form })
+    return direct_to_template(request, template='index.html', extra_context={'form': form})
 
 
 @cache_page(900)
@@ -39,17 +39,17 @@ def product_detail(request, slug, product_id):
         return redirect_to(request, product.get_absolute_url())
     search_form = FacetedSearchForm()
     booking_form = BookingForm(prefix='0', instance=Booking(product=product, owner=product.owner), initial={
-        'basket':True,
-        'started_at':[datetime.date.today().strftime('%d/%m/%Y'), '08:00:00'],
-        'ended_at':[(datetime.date.today() + datetime.timedelta(days=1)).strftime('%d/%m/%Y'), '19:00:00']
+        'basket': True,
+        'started_at': [datetime.date.today().strftime('%d/%m/%Y'), '08:00:00'],
+        'ended_at': [(datetime.date.today() + datetime.timedelta(days=1)).strftime('%d/%m/%Y'), '19:00:00']
     })
-    return direct_to_template(request, template='products/product_detail.html', extra_context={ 'product':product,
-        'booking_form':booking_form, 'search_form':search_form})
+    return direct_to_template(request, template='products/product_detail.html', extra_context={'product': product,
+        'booking_form': booking_form, 'search_form': search_form})
 
 
 @never_cache
 def product_create(request, *args, **kwargs):
-    wizard = ProductWizard([ProductForm,EmailAuthenticationForm])
+    wizard = ProductWizard([ProductForm, EmailAuthenticationForm])
     return wizard(request, *args, **kwargs)
 
 
@@ -67,10 +67,10 @@ def product_list(request, urlbits, sqs=SearchQuerySet(), suggestions=None, page=
         sqs = sqs.spatial(lat=lat, long=lon, radius=radius, unit='km')
         
     breadcrumbs = SortedDict()
-    breadcrumbs['q'] = { 'name':'q', 'value':query, 'label':'q', 'facet':False }
-    breadcrumbs['where'] = { 'name':'where', 'value':where, 'label':'where', 'facet':False }
-    breadcrumbs['sort'] = { 'name':'sort', 'value':request.GET.get('sort', None), 'label':'sort', 'facet':False }
-    breadcrumbs['radius'] = { 'name':'radius', 'value':radius, 'label':'radius', 'facet':False }
+    breadcrumbs['q'] = {'name': 'q', 'value': query, 'label': 'q', 'facet': False}
+    breadcrumbs['where'] = {'name': 'where', 'value': where, 'label': 'where', 'facet': False}
+    breadcrumbs['sort'] = {'name': 'sort', 'value': request.GET.get('sort', None), 'label': 'sort', 'facet': False}
+    breadcrumbs['radius'] = {'name': 'radius', 'value': radius, 'label': 'radius', 'facet': False}
     urlbits = urlbits or ''
     urlbits = filter(None, urlbits.split('/')[::-1])
     while urlbits:
@@ -83,11 +83,11 @@ def product_list(request, urlbits, sqs=SearchQuerySet(), suggestions=None, page=
             if bit.endswith(_('categorie')):
                 item = get_object_or_404(Category, slug=value)
                 sqs = sqs.narrow("categories:%s" % value)
-                breadcrumbs[bit] = { 'name':'categories', 'value':value, 'label':bit, 'object':item, 'pretty_name':_(u"Catégorie"), 'pretty_value':item.name, 'url':'par-%s/%s' % (bit, value), 'facet':True }
+                breadcrumbs[bit] = {'name': 'categories', 'value': value, 'label': bit, 'object': item, 'pretty_name': _(u"Catégorie"), 'pretty_value': item.name, 'url': 'par-%s/%s' % (bit, value), 'facet': True}
             elif bit.endswith(_('loueur')):
                 item = get_object_or_404(Patron, slug=value)
                 sqs = sqs.narrow("owner:%s" % value)
-                breadcrumbs[bit] = { 'name':'owner', 'value':value, 'label':bit, 'object':item, 'pretty_name':_(u"Loueur"), 'pretty_value':item.username, 'url':'par-%s/%s' % (bit, value), 'facet':True }
+                breadcrumbs[bit] = {'name': 'owner', 'value': value, 'label': bit, 'object': item, 'pretty_name': _(u"Loueur"), 'pretty_value': item.username, 'url': 'par-%s/%s' % (bit, value), 'facet': True}
             else:
                 raise Http404
         elif bit.startswith(_('page')):
@@ -100,7 +100,7 @@ def product_list(request, urlbits, sqs=SearchQuerySet(), suggestions=None, page=
     form = FacetedSearchForm(dict((facet['name'], facet['value']) for facet in breadcrumbs.values()), searchqueryset=sqs)
     sqs = form.search()
     return object_list(request, sqs, page=page, paginate_by=PAGINATE_PRODUCTS_BY, template_name="products/product_list.html", template_object_name='product', extra_context={
-        'facets':sqs.facet_counts(), 'form':form, 'breadcrumbs':breadcrumbs,
-        'where':where, 'radius':radius, 'suggestions':suggestions, 'query':query,
-        'urlbits':dict((facet['label'], facet['value']) for facet in breadcrumbs.values() if facet['facet'])
+        'facets': sqs.facet_counts(), 'form': form, 'breadcrumbs': breadcrumbs,
+        'where': where, 'radius': radius, 'suggestions': suggestions, 'query': query,
+        'urlbits': dict((facet['label'], facet['value']) for facet in breadcrumbs.values() if facet['facet'])
     })

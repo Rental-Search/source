@@ -42,8 +42,8 @@ class Command(BaseCommand):
         data = []
         for product in Product.objects.iterator():
             data.append({
-                'pk':product.pk,
-                'category':product.category.pk
+                'pk': product.pk,
+                'category': product.category.pk
             })
         yaml.dump(data, open(local_path('fixtures/differences.yaml'), 'w'))
     

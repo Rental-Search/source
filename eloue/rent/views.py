@@ -113,6 +113,6 @@ def booking_incident(request, booking_id):
     booking = get_object_or_404(Booking, pk=booking_id)
     if request.POST: # TODO : Do we need more ?!
         booking.booking = Booking.BOOKING_STATE.INCIDENT
-        booking.save() 
+        booking.save()
     return direct_to_template(request, 'rent/booking_incident.html', extra_context={ 'booking':booking })
 

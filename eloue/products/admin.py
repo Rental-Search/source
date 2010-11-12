@@ -21,7 +21,7 @@ class PriceInline(admin.TabularInline):
 
 class ProductAdmin(SearchModelAdmin):
     search_fields = ['summary', 'description']
-    inlines = [ PictureInline, PropertyValueInline, PriceInline ]
+    inlines = [PictureInline, PropertyValueInline, PriceInline]
     raw_id_fields = ("owner", "address")
     list_display = ('summary', 'deposit_amount', 'quantity', 'is_archived', 'is_allowed')
     list_filter = ('is_archived', 'is_allowed')

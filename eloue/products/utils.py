@@ -23,7 +23,7 @@ class Enum(object):
     """
     def __init__(self, enum_list):
         self.enum_list = [(item[0], item[2]) for item in enum_list]
-        self.enum_dict = dict([ (item[1], item[0]) for item in enum_list ])
+        self.enum_dict = dict([(item[1], item[0]) for item in enum_list])
     
     def __contains__(self, v):
         return (v in self.enum_list)
