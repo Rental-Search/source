@@ -35,16 +35,17 @@ def incr_sequence(field, sequence_name):
     return wrapper
 
 
-def ownership_required(model, object_key='object_id'):
-    # TODO : We might need to be able to make a strict check between owner or borrower ownership.
+def ownership_required(model, object_key='object_id', ownership=None):
     def wrapper(view_func):
         def inner_wrapper(request, *args, **kwargs):
             user = request.user
             grant = False
             object_id = kwargs.get(object_key, None)
             if object_id:
-                names = [rel.get_accessor_name() for rel in user._meta.get_all_related_objects() if rel.model == model]
-                names = map(lambda name: getattr(user, name).filter(pk=object_id).exists(), names)
+                names = [(rel.get_accessor_name(), rel.field.name) for rel in user._meta.get_all_related_objects() if rel.model == model]
+                if ownership:
+                    names = filter(lambda name: name[1] in ownership, names)
+                names = map(lambda name: getattr(user, name[0]).filter(pk=object_id).exists(), names)
                 if names:
                     grant = any(names)
             if not grant:
