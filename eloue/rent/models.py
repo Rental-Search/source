@@ -19,7 +19,6 @@ from django.utils.translation import ugettext_lazy as _
 from eloue.accounts.models import Patron
 from eloue.products.models import CURRENCY, UNIT, Product
 from eloue.products.utils import Enum
-from eloue.rent.contract import ContractGenerator
 from eloue.rent.decorators import incr_sequence
 from eloue.rent.fields import UUIDField, IntegerAutoField
 from eloue.rent.manager import BookingManager
@@ -232,6 +231,7 @@ class Booking(models.Model):
         message.send()
     
     def send_acceptation_email(self):
+        from eloue.rent.contract import ContractGenerator
         contract_generator = ContractGenerator()
         contract = contract_generator(self)
         content = contract.getvalue()

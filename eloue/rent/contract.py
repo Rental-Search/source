@@ -6,10 +6,10 @@ try:
 except ImportError:
     from StringIO import StringIO
 
-from tempfile import TemporaryFile
-
 from pyPdf import PdfFileWriter, PdfFileReader
 from reportlab.pdfgen import canvas
+
+from eloue.rent.utils import spellout
 
 local_path = lambda path: os.path.join(os.path.dirname(__file__), path)
 
@@ -82,6 +82,6 @@ class ContractGenerator(object):
         canvas.showPage()
         canvas.setFont("Helvetica", 10)
         
-        canvas.drawString(71, 640, "%s %s / %s %s" % (booking.deposit_amount, booking.currency, booking.deposit_amount, booking.currency))
+        canvas.drawString(71, 640, "%s %s / %s" % (booking.deposit_amount, booking.currency, spellout(booking.deposit_amount, unit='euro', decimal='cent')))
         return canvas
     
