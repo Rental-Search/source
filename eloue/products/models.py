@@ -46,6 +46,7 @@ STATUS = Enum([
 INSURANCE_MAX_DEPOSIT = getattr(settings, 'INSURANCE_MAX_DEPOSIT', 750)
 DEFAULT_RADIUS = getattr(settings, 'DEFAULT_RADIUS', 50)
 
+
 class Product(models.Model):
     """A product"""
     summary = models.CharField(max_length=255)

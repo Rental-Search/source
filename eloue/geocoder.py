@@ -8,8 +8,7 @@ from django.utils.encoding import smart_str
 from geocoders.google import geocoder
 
 
-class Geocoder(object):
-    # TODO : Badly written 
+class Geocoder(object):  # TODO : Badly written
     @classmethod
     def geocode(cls, where):
         where = cls.format_place(where)
@@ -27,4 +26,3 @@ class Geocoder(object):
     @classmethod
     def hash_key(cls, where):
         return hashlib.md5(where).hexdigest()
-    

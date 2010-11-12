@@ -21,7 +21,7 @@ class CategoryRessource(ModelResource):
         resource_name = 'category'
         allowed_methods = ['get']
         fields = ['id', 'name', 'slug']
-    
+
 
 class ProductRessource(ModelResource):
     category = fields.ForeignKey(CategoryRessource, 'category', full=True)
@@ -32,7 +32,7 @@ class ProductRessource(ModelResource):
         resource_name = 'product'
         fields = ['summary', 'description', 'deposit_amount', 'resource_uri']
         filtering = {
-            'category':ALL_WITH_RELATIONS,
+            'category': ALL_WITH_RELATIONS,
         }
     
     def build_filters(self, filters=None):
@@ -42,7 +42,6 @@ class ProductRessource(ModelResource):
         sqs = product_search
         if "q" in filters:
             sqs = sqs.auto_query(filters['q'])
-            orm_filters = {"pk__in": [ i.pk for i in sqs ]}
         
         if "where" in filters:
             lat, lon = Geocoder.geocode(filters['where'])
@@ -50,7 +49,7 @@ class ProductRessource(ModelResource):
             if lat and lon:
                 sqs = sqs.spatial(lat=lat, long=lon, radius=radius, unit='km')
         
-        orm_filters = {"pk__in": [ i.pk for i in sqs ]} 
+        orm_filters = {"pk__in": [i.pk for i in sqs]}
         return orm_filters
     
 

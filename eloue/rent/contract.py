@@ -77,8 +77,7 @@ class ContractGenerator(object):
         canvas.drawString(245, 313, booking.started_at.strftime("%d %B %Y à %Hh%M."))
         canvas.drawString(198, 282, booking.ended_at.strftime("%d %B %Y à %Hh%M."))
         canvas.drawString(166, 220, "%s %s." % (booking.total_amount, booking.currency))
-        
-        
+                
         # Change page
         canvas.showPage()
         canvas.setFont("Helvetica", 10)
