@@ -101,7 +101,9 @@ def booking_reject(request, booking_id):
 def booking_close(request, booking_id):
     booking = get_object_or_404(Booking, pk=booking_id)
     if request.POST:
-        pass
+        booking.pay()
+        booking.booking_state = Booking.BOOKING_STATE.CLOSED
+        booking.save()
     return direct_to_template(request, 'rent/booking_close.html', extra_context={ 'booking':booking })
 
 
@@ -109,7 +111,8 @@ def booking_close(request, booking_id):
 @ownership_required(model=Booking, object_key='booking_id')
 def booking_incident(request, booking_id):
     booking = get_object_or_404(Booking, pk=booking_id)
-    if request.POST:
-        pass
+    if request.POST: # TODO : Do we need more ?!
+        booking.booking = Booking.BOOKING_STATE.INCIDENT
+        booking.save() 
     return direct_to_template(request, 'rent/booking_incident.html', extra_context={ 'booking':booking })
 

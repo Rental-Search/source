@@ -11,7 +11,7 @@ from eloue.accounts.forms import EmailPasswordResetForm
 from eloue.accounts.views import activate, authenticate
 from eloue.api import api_v1
 from eloue.products.views import homepage
-from eloue.rent.views import booking_detail, booking_accept, booking_reject
+from eloue.rent.views import booking_detail, booking_accept, booking_reject, booking_incident, booking_close
 from eloue.sitemaps import FlatPageSitemap, PatronSitemap, ProductSitemap
 
 log = logbook.Logger('eloue')
@@ -52,6 +52,8 @@ urlpatterns = patterns('',
     url(r'^account/booking/(?P<booking_id>[0-9a-f]{32})/$', booking_detail, name="booking_detail"),
     url(r'^account/booking/(?P<booking_id>[0-9a-f]{32})/accept/$', booking_accept, name="booking_accept"),
     url(r'^account/booking/(?P<booking_id>[0-9a-f]{32})/reject/$', booking_reject, name="booking_reject"),
+    url(r'^account/booking/(?P<booking_id>[0-9a-f]{32})/incident/$', booking_incident, name="booking_incident"),
+    url(r'^account/booking/(?P<booking_id>[0-9a-f]{32})/close/$', booking_close, name="booking_close"),
     url(r'^loueur/', include('eloue.accounts.urls')),
     url(r'^location/', include('eloue.products.urls')),
     url(r'^rent/', include('eloue.rent.urls')),

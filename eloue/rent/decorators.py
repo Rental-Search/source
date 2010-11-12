@@ -36,6 +36,7 @@ def incr_sequence(field, sequence_name):
 
 
 def ownership_required(model, object_key='object_id'):
+    # TODO : We might need to be able to make a strict check between owner or borrower ownership.
     def wrapper(view_func):
         def inner_wrapper(request, *args, **kwargs):
             user = request.user
