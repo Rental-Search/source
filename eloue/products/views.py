@@ -61,7 +61,7 @@ def product_list(request, urlbits, sqs=SearchQuerySet(), suggestions=None, page=
         sqs = sqs.auto_query(query).highlight()
         suggestions = sqs.spelling_suggestion()
     
-    where, radius = request.GET.get('where', DEFAULT_RADIUS), request.GET.get('radius', None)
+    where, radius = request.GET.get('where', None), request.GET.get('radius', DEFAULT_RADIUS)
     if where:
         lat, lon = Geocoder.geocode(where)
         sqs = sqs.spatial(lat=lat, long=lon, radius=radius, unit='km')

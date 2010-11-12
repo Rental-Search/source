@@ -63,7 +63,6 @@ class MultiPartFormWizard(FormWizard):
             raise Http404('Step %s does not exist' % current_step)
         
         # For each previous step, verify the hash and process.
-        # TODO: Move "hash_%d" to a method to make it configurable.
         for i in range(current_step):
             form = self.get_form(i, request.POST, request.FILES)
             if request.POST.get("hash_%d" % i, '') != self.security_hash(request, form):
