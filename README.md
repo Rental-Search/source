@@ -4,7 +4,7 @@ E-Loue
 Pré-requis
 ----------
 
-    $ brew install git subversion python pip jpeg libyaml postgresql postgis gdal solr
+    $ brew install git subversion python pip jpeg libyaml postgresql postgis gdal solr yuicompressor
     $ pip install mercurial virtualenv pyflakes
     
 Base de données
@@ -34,14 +34,6 @@ Installation
 
     $ pip install -E env -r deploy/development.txt
     $ source env/bin/activate
-
-YUICompressor
--------------
-    
-    $ wget http://yuilibrary.com/downloads/yuicompressor/yuicompressor-2.4.2.zip
-    $ unzip yuicompressor-2.4.2.zip
-    $ mkdir -p /usr/local/share/java/
-    $ mv yuicompressor-2.4.2/build/yuicompressor-2.4.2.jar /usr/local/share/java/yuicompressor.jar
 
 Usage
 -----
