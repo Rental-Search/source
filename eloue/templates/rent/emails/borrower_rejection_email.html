@@ -1,0 +1,32 @@
+{% load i18n %}
+{% blocktrans with booking.borrower.username as borrower_name and booking.owner.username as owner_name and booking.product.summary as summary and booking.product.category.name as category and booking.product.summary as summary and booking.started_at|date:"DATETIME_FORMAT" as starting_at and booking.started_at|timesince:booking.ended_at as duration %}
+<p>Bonjour {{ borrower_name }},</p>
+
+<p>Hélas, {{ owner_name }} a refusé votre proposition de location suivante :</p>
+
+<ul>
+ <li><strong>Type :</strong> {{ category }}</li>
+ <li><strong>Objet :</strong> {{ summary }}</li>
+ <li><strong>Début de la location :</strong> {{ starting_at }}</li>
+ <li><strong>Durée de la location :</strong> {{ duration }}</li>
+</ul>
+{% endblocktrans %}
+
+{% with booking.product.more_like_this as related_products %}
+{% if related_products %}
+ <p>{% trans "Cependant, d’autres objets similaires peuvent peut-être vous intéresser :" %}</p>
+ <ul>
+  {% for result in booking.more_like_this %}
+   {% with result.object as product %}
+    <li><a href="http://{{ site.domain }}{{ product.get_absolute_url }}">{{ product.summary }}</a> ({{ product.address.zipcode }})</li>
+   {% endwith %}
+  {% endfor %}
+ </ul>
+{% endif %}
+
+{% blocktrans with booking.product.category.get_absolute_url as category_url %}
+<p>Retrouvez tous les objets de cette catégorie sur <a href="http://{{ site.domain }}{{ category_url }}">e-loue.com</a>.</p>
+
+<p>L'équipe e-loue</p>
+{% endblocktrans %}
+

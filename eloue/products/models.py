@@ -44,7 +44,7 @@ STATUS = Enum([
 ])
 
 INSURANCE_MAX_DEPOSIT = getattr(settings, 'INSURANCE_MAX_DEPOSIT', 750)
-
+DEFAULT_RADIUS = getattr(settings, 'DEFAULT_RADIUS', 50)
 
 class Product(models.Model):
     """A product"""
@@ -79,7 +79,10 @@ class Product(models.Model):
     
     def more_like_this(self):
         from eloue.products.search_indexes import product_search
-        return product_search.more_like_this(self)[:3]
+        return product_search.spatial(
+            lat=self.address.position.x, long=self.address.position.y,
+            radius=DEFAULT_RADIUS, unit='km'
+        ).more_like_this(self)[:3]
     
     @property
     def slug(self):

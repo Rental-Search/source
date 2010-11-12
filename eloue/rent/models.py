@@ -218,15 +218,15 @@ class Booking(models.Model):
             'booking':self,
             'site':Site.objects.get_current()
         }
-        subject = render_to_string('rent/owner_ask_email_subject.txt', context)
-        text_content = render_to_string('rent/owner_ask_email.txt', context)
-        html_content = render_to_string('rent/owner_ask_email.html', context)
+        subject = render_to_string('rent/emails/owner_ask_email_subject.txt', context)
+        text_content = render_to_string('rent/emails/owner_ask_email.txt', context)
+        html_content = render_to_string('rent/emails/owner_ask_email.html', context)
         message = EmailMultiAlternatives(subject, text_content, settings.DEFAULT_FROM_EMAIL, [self.owner.email])
         message.attach_alternative(html_content, "text/html")
         message.send()
-        subject = render_to_string('rent/borrower_ask_email_subject.txt', context)
-        text_content = render_to_string('rent/borrower_ask_email.txt', context)
-        html_content = render_to_string('rent/borrower_ask_email.html', context)
+        subject = render_to_string('rent/emails/borrower_ask_email_subject.txt', context)
+        text_content = render_to_string('rent/emails/borrower_ask_email.txt', context)
+        html_content = render_to_string('rent/emails/borrower_ask_email.html', context)
         message = EmailMultiAlternatives(subject, text_content, settings.DEFAULT_FROM_EMAIL, [self.borrower.email])
         message.attach_alternative(html_content, "text/html")
         message.send()
@@ -239,18 +239,30 @@ class Booking(models.Model):
             'booking':self,
             'site':Site.objects.get_current()
         }
-        subject = render_to_string('rent/owner_acceptation_email_subject.txt', context)
-        text_content = render_to_string('rent/owner_acceptation_email.txt', context)
-        html_content = render_to_string('rent/owner_acceptation_email.html', context)
+        subject = render_to_string('rent/emails/owner_acceptation_email_subject.txt', context)
+        text_content = render_to_string('rent/emails/owner_acceptation_email.txt', context)
+        html_content = render_to_string('rent/emails/owner_acceptation_email.html', context)
+        message = EmailMultiAlternatives(subject, text_content, settings.DEFAULT_FROM_EMAIL, [self.owner.email])
+        message.attach('contrat.pdf', content, 'application/pdf')
+        message.attach_alternative(html_content, "text/html")
+        message.send()
+        subject = render_to_string('rent/emails/borrower_acceptation_email_subject.txt', context)
+        text_content = render_to_string('rent/emails/borrower_acceptation_email.txt', context)
+        html_content = render_to_string('rent/emails/borrower_acceptation_email.html', context)
         message = EmailMultiAlternatives(subject, text_content, settings.DEFAULT_FROM_EMAIL, [self.borrower.email])
         message.attach('contrat.pdf', content, 'application/pdf')
         message.attach_alternative(html_content, "text/html")
         message.send()
-        subject = render_to_string('rent/borrower_acceptation_email_subject.txt', context)
-        text_content = render_to_string('rent/borrower_acceptation_email.txt', context)
-        html_content = render_to_string('rent/borrower_acceptation_email.html', context)
+    
+    def send_rejection_email(self):
+        context = {
+            'booking':self,
+            'site':Site.objects.get_current()
+        }
+        subject = render_to_string('rent/emails/borrower_rejection_email_subject.txt', context)
+        text_content = render_to_string('rent/emails/borrower_rejection_email.txt', context)
+        html_content = render_to_string('rent/emails/borrower_rejection_email.html', context)
         message = EmailMultiAlternatives(subject, text_content, settings.DEFAULT_FROM_EMAIL, [self.borrower.email])
-        message.attach('contrat.pdf', content, 'application/pdf')
         message.attach_alternative(html_content, "text/html")
         message.send()
     
