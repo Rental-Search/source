@@ -1,13 +1,17 @@
 # -*- coding: utf-8 -*-
 import django.forms as forms
+from django.conf import settings
+from django.core.validators import EMPTY_VALUES
 from django.utils.translation import ugettext as _
 
 from haystack.forms import SearchForm
 from mptt.forms import TreeNodeChoiceField
 
+from eloue.geocoder import Geocoder
 from eloue.products.fields import FacetField
 from eloue.products.models import PatronReview, ProductReview, Product, Category
 from eloue.products.utils import Enum
+
 
 SORT = Enum([
     ('geo_distance', 'NEAR', _(u"Les plus proches")),
@@ -15,6 +19,8 @@ SORT = Enum([
     ('price', 'LOW_PRICE', _(u"Les pris les plus bas")),
     ('-price', 'HIGH_PRICE', _(u"Les pris les plus haut")),
 ])
+
+DEFAULT_RADIUS = getattr(settings, 'DEFAULT_RADIUS', 50)
 
 
 class ProductSearchForm(forms.Form):
@@ -30,13 +36,28 @@ class FacetedSearchForm(SearchForm):
     price = FacetField(label=_(u"Prix"), pretty_name=_("par-prix"), required=False)
     categories = FacetField(label=_(u"Catégorie"), pretty_name=_("par-categorie"), required=False, widget=forms.HiddenInput())
     
+    def clean_radius(self):
+        radius = self.cleaned_data.get('radius', None)
+        if radius in EMPTY_VALUES:
+            radius = DEFAULT_RADIUS
+        return radius
+    
     def search(self):
         if self.is_valid():
-            sqs = self.searchqueryset.auto_query(self.cleaned_data['q'])
+            sqs = self.searchqueryset
+            
+            query = self.cleaned_data.get('q', None)
+            if query:
+                sqs = self.searchqueryset.auto_query(query).highlight()
+
+            where, radius = self.cleaned_data.get('where', None), self.cleaned_data.get('radius', DEFAULT_RADIUS)
+            if where:
+                lat, lon = Geocoder.geocode(where)
+                sqs = sqs.spatial(lat=lat, long=lon, radius=radius, unit='km')
             
             if self.load_all:
                 sqs = sqs.load_all()
-            
+                        
             for key in self.cleaned_data.keys():
                 if self.cleaned_data[key] and key not in ["q", "where", "radius", "sort"]:
                     sqs = sqs.narrow("%s:%s" % (key, self.cleaned_data[key]))

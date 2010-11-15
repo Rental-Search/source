@@ -3,13 +3,13 @@
 
 {% block title %}{% spaceless %}
  {% if breadcrumbs %}
-	{% if query %}
+	{% if form.cleaned_data.q %}
 	 {% trans "Location" %}
 	 {% for crumb in breadcrumbs.values %}
 	  {% if crumb.facet %}
 	   &rsaquo; {{ crumb.pretty_value|capfirst }}
 	  {% endif %}
-	 {% endfor %} &rsaquo; {{ query }} - {{ block.super }}
+	 {% endfor %} &rsaquo; {{ form.cleaned_data.q }} - {{ block.super }}
 	{% else %}
 	 {% trans "Location" %}
 	 {% for crumb in breadcrumbs.values %}
@@ -19,8 +19,8 @@
 	 {% endfor %} - {{ block.super }}
   {% endif %}
  {% else %}
-	{% if query %}
- 	 {{ query }} - {{ block.super }}
+	{% if form.cleaned_data.q %}
+ 	 {{ form.cleaned_data.q }} - {{ block.super }}
 	{% else %}
 	 {% trans "Location" %} - {{ block.super }}
 	{% endif %}
@@ -56,8 +56,8 @@
 </div><!-- top-content -->
 <div class="content container clearfix">
 	<div class="result grid9 first">
-	  {% if query %}
-		 <h1>{{ paginator.count }} résultat{{ paginator.count|pluralize }} pour <strong>{{ query }}</strong></h1>
+	  {% if form.cleaned_data.q %}
+		 <h1>{{ paginator.count }} résultat{{ paginator.count|pluralize }} pour <strong>{{ form.cleaned_data.q }}</strong></h1>
 		{% endif %}
 		{% if suggestions %}
 			<div class="sugg grid9 first">
@@ -72,7 +72,7 @@
 			<li>
 				<a href="{% facet_url breadcrumbs "sort" "created_at" %}">{% trans "Les plus récents" %}</a>
 			</li>
-			{% if where %}
+			{% if form.cleaned_data.where %}
 			<li><a href="{% facet_url breadcrumbs "sort" "geo_distance" %}">{% trans "Les plus proches" %}</a></li>
 			{% endif %}
 			<li>
@@ -84,7 +84,7 @@
 		</ul><!-- sort option -->
 		<ul class="list grid9 first">
 			{% for product in product_list %}
-				{% cache 900 product:row product.pk query where %}
+				{% cache 900 product:row product.pk form.cleaned_data.q form.cleaned_data.where %}
 					{% with product.object as object %}
 						<li class="pl grid9 first">
 							<a class="imgpl" href="{{ object.get_absolute_url }}">
@@ -194,13 +194,13 @@
 				{% endif %}
 			{% endfor %}
 		</div><!-- acc -->
-		{% if where %}
+		{% if form.cleaned_data.where %}
 		<h4>{% trans "Distance" %}</h4>
 		<div class="dist grid3 first">
 			<form action="{% facet_url breadcrumbs %}" action="get">
 				<p>
-					<input type="hidden" value="{{ query }}" name="q"/>
-			    <input type="hidden" value="{{ where }}" name="where"/>
+					<input type="hidden" value="{{ form.cleaned_data.q }}" name="q"/>
+			    <input type="hidden" value="{{ form.cleaned_data.where }}" name="where"/>
 					{{ form.sort }}
 					<label class="labs">Dans rayon de :</label><br />
 					{{ form.radius }}<span>Km</span>
