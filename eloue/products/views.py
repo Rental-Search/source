@@ -33,23 +33,6 @@ def homepage(request):
     return direct_to_template(request, template='index.html', extra_context={'form': form})
 
 
-@cache_page(900)
-def product_detail(request, slug, product_id):
-    product = get_object_or_404(Product, pk=product_id)
-    if product.slug != slug:
-        return redirect_to(request, product.get_absolute_url())
-    search_form = FacetedSearchForm()
-    started_at = datetime.datetime.now() + datetime.timedelta(hours=1)
-    ended_at = datetime.datetime.now() + datetime.timedelta(days=1)
-    booking_form = BookingForm(prefix='0', instance=Booking(product=product, owner=product.owner), initial={
-        'basket': True,
-        'started_at': [started_at.strftime('%d/%m/%Y'), started_at.strftime("%H:00:00")],
-        'ended_at': [ended_at.strftime('%d/%m/%Y'), '19:00:00']
-    })
-    return direct_to_template(request, template='products/product_detail.html', extra_context={'product': product,
-        'booking_form': booking_form, 'search_form': search_form})
-
-
 @never_cache
 def product_create(request, *args, **kwargs):
     wizard = ProductWizard([ProductForm, EmailAuthenticationForm])

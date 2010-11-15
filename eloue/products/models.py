@@ -76,7 +76,7 @@ class Product(models.Model):
     
     @permalink
     def get_absolute_url(self):
-        return ('product_detail', [self.slug, self.pk])
+        return ('booking_create', [self.slug, self.pk])
     
     def more_like_this(self):
         from eloue.products.search_indexes import product_search

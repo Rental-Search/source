@@ -8,9 +8,10 @@ from django.views.decorators.http import require_POST
 from django.views.decorators.cache import never_cache
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic.list_detail import object_detail
-from django.views.generic.simple import direct_to_template
+from django.views.generic.simple import direct_to_template, redirect_to
 
 from eloue.accounts.forms import EmailAuthenticationForm
+from eloue.products.models import Product
 from eloue.rent.decorators import validate_ipn, ownership_required
 from eloue.rent.forms import BookingForm, PreApprovalIPNForm, PayIPNForm
 from eloue.rent.models import Booking
@@ -56,7 +57,10 @@ def pay_ipn(request):
    
 @never_cache
 def booking_create(request, *args, **kwargs):
-    wizard = BookingWizard([BookingForm,EmailAuthenticationForm])
+    product = get_object_or_404(Product, pk=kwargs['product_id'])
+    if product.slug != kwargs['slug']:
+        return redirect_to(request, product.get_absolute_url())
+    wizard = BookingWizard([BookingForm, EmailAuthenticationForm])
     return wizard(request, *args, **kwargs)
 
 

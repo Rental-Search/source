@@ -79,5 +79,5 @@ class ProductWizardTest(TestCase):
             'hash_1': '6941fd7b20d720833717a1f92e8027af',
             'wizard_step': 2
         })
-        self.assertRedirects(response, reverse('product_detail', args=['bentley-brooklands', 5]))
+        self.assertRedirects(response, reverse('booking_create', args=['bentley-brooklands', 5]))
     

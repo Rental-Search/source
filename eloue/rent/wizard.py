@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import datetime
 import urllib
 
 from django.conf import settings
@@ -12,6 +13,7 @@ from django_lean.experiments.utils import WebUser
 
 from eloue.accounts.forms import EmailAuthenticationForm
 from eloue.accounts.models import Patron
+from eloue.products.forms import FacetedSearchForm
 from eloue.products.models import Product
 from eloue.rent.models import Booking
 from eloue.rent.forms import BookingForm
@@ -66,8 +68,15 @@ class BookingWizard(GenericFormWizard):
         if issubclass(self.form_list[step], BookingForm):
             product = self.extra_context['product']
             booking = Booking(product=product, owner=product.owner)
+            started_at = datetime.datetime.now() + datetime.timedelta(hours=1)
+            ended_at = datetime.datetime.now() + datetime.timedelta(days=1)
+            initial = {
+                'started_at': [started_at.strftime('%d/%m/%Y'), started_at.strftime("%H:00:00")],
+                'ended_at': [ended_at.strftime('%d/%m/%Y'), '19:00:00']
+            }
+            initial.update(self.initial.get(step, {}))
             return self.form_list[step](data, files, prefix=self.prefix_for_step(step),
-                initial=self.initial.get(step, None), instance=booking)
+                initial=initial, instance=booking)
         return super(BookingWizard, self).get_form(step, data, files)
     
     def parse_params(self, request, *args, **kwargs):
@@ -79,15 +88,13 @@ class BookingWizard(GenericFormWizard):
                 combine(*start_parts), combine(*end_parts))
         self.extra_context['has_dates'] = any(start_parts) and any(end_parts)
         self.extra_context['product'] = product
-    
-    def process_step(self, request, form, step):
-        return super(BookingWizard, self).process_step(request, form, step)
+        self.extra_context['search_form'] = FacetedSearchForm()
     
     def get_template(self, step):
         if issubclass(self.form_list[step], EmailAuthenticationForm):
             return 'rent/booking_register.html'
         elif issubclass(self.form_list[step], BookingForm):
-            return 'rent/booking_basket.html'
+            return 'products/product_detail.html'
         else:
             return 'rent/booking_missing.html'
     

@@ -48,11 +48,11 @@
 		<form action="{% url booking_create product.slug,product.id %}" method="post">
 			<div class="grid2 first started_at">
 				<label class="labm">{% trans "Début" %}</label><br/>
-				{{ booking_form.started_at }}
+				{{ form.started_at }}
 			</div>{# started_at #}
 			<div class="grid2 ended_at">
 				<label class="labm">{% trans "Fin" %}</label><br/>
-				{{ booking_form.ended_at }}
+				{{ form.ended_at }}
 			</div>{# ended_at #}
 			<div class="grid4 first">
 			  {% csrf_token %}<input type="hidden" name="wizard_step" value="0" />

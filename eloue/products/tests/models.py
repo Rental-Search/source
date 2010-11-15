@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 from django.core.exceptions import ValidationError
-from django.core.urlresolvers import reverse
 from django.db import transaction
 from django.test import TestCase
 
@@ -22,14 +21,6 @@ class ProductTest(TestCase):
             owner_id=1
         )
         product.save()
-    
-    def test_product_detail_view(self):
-        response = self.client.get(reverse('product_detail', args=['perceuse-visseuse-philips', 1]))
-        self.assertEqual(response.status_code, 200)
-    
-    def test_product_detail_redirect(self):
-        response = self.client.get(reverse('product_detail', args=['perceuse-visseuse', 1]))
-        self.assertRedirects(response, reverse('product_detail', args=['perceuse-visseuse-philips', 1]), status_code=301)
     
 
 class ProductReviewTest(TestCase):
