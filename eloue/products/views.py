@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import datetime
+import time
 
 from django.conf import settings
 from django.http import Http404
@@ -38,10 +39,12 @@ def product_detail(request, slug, product_id):
     if product.slug != slug:
         return redirect_to(request, product.get_absolute_url())
     search_form = FacetedSearchForm()
+    started_at = datetime.datetime.now() + datetime.timedelta(hours=1)
+    ended_at = datetime.datetime.now() + datetime.timedelta(days=1)
     booking_form = BookingForm(prefix='0', instance=Booking(product=product, owner=product.owner), initial={
         'basket': True,
-        'started_at': [datetime.date.today().strftime('%d/%m/%Y'), '08:00:00'],
-        'ended_at': [(datetime.date.today() + datetime.timedelta(days=1)).strftime('%d/%m/%Y'), '19:00:00']
+        'started_at': [started_at.strftime('%d/%m/%Y'), started_at.strftime("%H:00:00")],
+        'ended_at': [ended_at.strftime('%d/%m/%Y'), '19:00:00']
     })
     return direct_to_template(request, template='products/product_detail.html', extra_context={'product': product,
         'booking_form': booking_form, 'search_form': search_form})

@@ -55,7 +55,6 @@
 				{{ booking_form.ended_at }}
 			</div>{# ended_at #}
 			<div class="grid4 first">
-			  {{ booking_form.basket }}
 			  {% csrf_token %}<input type="hidden" name="wizard_step" value="0" />
 				<input type="submit" value="Réserver" class="grey big button" />
 			</div>
