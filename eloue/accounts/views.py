@@ -7,6 +7,7 @@ from django.views.decorators.cache import never_cache, cache_page
 from django.views.generic.simple import direct_to_template, redirect_to
 from django.views.generic.list_detail import object_detail
 
+from eloue.decorators import secure_required
 from eloue.accounts.forms import EmailAuthenticationForm
 from eloue.accounts.models import Patron
 from eloue.accounts.wizard import AuthenticationWizard
@@ -17,6 +18,7 @@ log = Logger('eloue.accounts')
 
 
 @never_cache
+@secure_required
 def activate(request, activation_key):
     """Activate account"""
     activation_key = activation_key.lower() # Normalize before trying anything with it.
@@ -25,6 +27,7 @@ def activate(request, activation_key):
 
 
 @never_cache
+@secure_required
 def authenticate(request, *args, **kwargs):
     wizard = AuthenticationWizard([EmailAuthenticationForm])
     return wizard(request, *args, **kwargs)

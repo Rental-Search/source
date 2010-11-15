@@ -11,6 +11,7 @@ from django.views.generic.list_detail import object_list
 
 from haystack.query import SearchQuerySet
 
+from eloue.decorators import secure_required
 from eloue.accounts.forms import EmailAuthenticationForm
 from eloue.accounts.models import Patron
 from eloue.products.forms import FacetedSearchForm, ProductForm
@@ -28,6 +29,7 @@ def homepage(request):
 
 
 @never_cache
+@secure_required
 def product_create(request, *args, **kwargs):
     wizard = ProductWizard([ProductForm, EmailAuthenticationForm])
     return wizard(request, *args, **kwargs)

@@ -10,6 +10,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.generic.list_detail import object_detail
 from django.views.generic.simple import direct_to_template, redirect_to
 
+from eloue.decorators import secure_required
 from eloue.accounts.forms import EmailAuthenticationForm
 from eloue.products.models import Product
 from eloue.rent.decorators import validate_ipn, ownership_required
@@ -56,6 +57,7 @@ def pay_ipn(request):
 
    
 @never_cache
+@secure_required
 def booking_create(request, *args, **kwargs):
     product = get_object_or_404(Product, pk=kwargs['product_id'])
     if product.slug != kwargs['slug']:
