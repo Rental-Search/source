@@ -26,26 +26,28 @@
   </script>
  </head>
  <body>
-  	<div class="head container clearfix">
-			<a href="{% url home %}" class="logo grid2 first">
-			<img src="{{ MEDIA_URL }}images/logo.png" alt="e-loue" width="138px"/>
-			</a>
-			<div class="slogan grid3">Avec e-loue, tout se loue !</div>
-			<div class="grid7">
-				<ul class="navBar">
-					<li class="add button green"><a href="{% url product_create %}">Mettre en location</a></li>
-					{% if not user.is_authenticated %}
-					 <li><a href="{% url auth_login %}">S'inscrire ou Se Connecter</a></li>
-					{% else %}
- 					 <li><a href="{% url auth_logout %}">Se déconnecter</a></li>
-					{% endif %}
-					<li class="first"><a href="#">La location</a></li>
-				</ul><!-- nav-bar -->
-			</div>
-		</div>
+		<div id="wrapper" class="xgrid">
+			<div id="header" class="clearfix">
+				<div class="logo x2">
+					<a href='{% url home %}'>
+						<img src="{{ MEDIA_URL }}images/logo.png" alt="e-loue"/>
+					</a>
+				</div>
+				<div class="x10 omega">
+					<ul class="nav-bar">
+						<li class="nav"><a href="{% url product_create %}" class="btn medium-green"  >{% trans "Mettre en location" %}</a></li>
+						{% if not user.is_authenticated %}
+							<li class="nav"><a href="{% url auth_login %}" class="nav-link" >{% trans "S'inscrire ou se connecter" %}</a></li>
+						{% else %}
+							<li class="nav"><a href="{% url auth_logout %}" class="nav-link" >{% trans "Se déconnecter" %}</a></li>
+						{% endif %}
+						<li class="nav"><a href="#" class="nav-link">Comment ça marche ?</a></li>
+					</ul>
+				</div>
+			</div>{# header #}
   {% block content %}
   {% endblock %}
-  <div class="container clearfix"></div>
+  </div>
   {% block tail %}
    {% compressed_js 'application' %}
   {% endblock %}
