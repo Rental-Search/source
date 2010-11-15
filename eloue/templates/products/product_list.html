@@ -152,7 +152,7 @@
 			<h3>Catégories</h3>
 		</div>
 		<div class="portlet-top">
-			<a href="{% url product_list %}">Voir tous les résultats</a>
+			<a href="{% facet_url breadcrumbs -"par-categorie" %}">Voir tous les résultats</a>
 		</div>
 		<div class="portlet-bottom">
 			{% for field in form %}
