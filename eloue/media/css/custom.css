@@ -1,0 +1,429 @@
+/* *************************************************
+  Home page
+************************************************** */
+.product-home { text-align: center; margin-bottom: 20px;}
+  
+  .product-home-title
+  {
+    color: #6EB924 !important;
+    font-size: 16px;
+  }
+  
+  .category-home ul li{ list-style-type: none;}
+
+
+/* *************************************************
+  Product page
+************************************************** */
+.product {}
+
+  .product-pic
+  {
+    float: left;
+    background: #F5F5F1 url("../images/pic-bg.png") repeat 0 0;
+    border: 1px solid #EAEAEA;
+    margin-bottom: 15px;
+    padding-top: 3px;
+    text-align: center;
+    width: 472px;
+  }
+  
+  .product-thumbs
+  {
+    float: left;
+    text-align: center;
+    width: 100px;
+  }
+  
+  .product-desc
+  {
+    line-height: 1.30em;
+    color: #364c59;
+  }
+  
+  .product-booking-top
+  {
+    border: 1px solid #BFD1E2;
+    padding: 10px 0px;
+    -moz-border-radius-topleft: 5px;
+    -moz-border-radius-topright: 5px;
+    -webkit-border-top-left-radius: 5px;
+		-webkit-border-top-right-radius: 5px;
+		border-top-left-radius: 5px;
+		border-top-right-radius: 5px;
+		background: -webkit-gradient(linear, 0 0, 0 50%, from(#d6e5f2), to(#e4eff9));
+    background: -moz-linear-gradient(top, #d6e5f2, #e4eff9);
+    background-color: #d6e5f2;
+    color: #364C59;
+  }
+    .product-price, .booking-total { float: left; width: 260px; margin: 0px 20px 10px 20px; }
+  
+      .product-price .price
+      {
+        font-size: 24px;
+        font-weight: bold;
+      }
+
+      .product-price .unit
+      {
+        font-weight: bold;
+      }
+      
+    .booking-date-start, .booking-date-end {
+      float: left;
+      margin-left: 20px;
+      margin-bottom: 20px;
+      width: 120px;
+    }
+    
+      .booking-date-start input, .booking-date-end input 
+      {
+        background: #FFF url("../images/icone-calendrier.png") no-repeat 98px 7px; 
+        width: 109px;
+      }
+    
+    .booking-total
+    {
+      background: transparent url("../images/separateur2.png") no-repeat 0 0;
+      padding-top: 20px;
+    }
+    
+      .booking-total p
+      {
+        text-align: right;
+      }
+      
+      .booking-total .day
+      {
+        font-weight: bold;
+        margin-left: 20px;
+      }
+      
+      .booking-total .total-price
+      {
+        font-size: 24px;
+        color: #FF7200;
+        font-weight: bold;
+      }
+  
+  .product-booking-bottom
+  {
+    background: #d6e5f2 url("../images/booking-bottom-bg.png") repeat 0  0;
+    border-top: none;
+    border-right: 1px solid #BFD1E2;
+    border-left: 1px solid #BFD1E2;
+    border-bottom: 1px solid #BFD1E2;
+    padding: 10px 0px;
+    -moz-border-radius-bottomleft: 5px;
+    -moz-border-radius-bottomright: 5px;
+    -webkit-border-bottom-left-radius: 5px;
+		-webkit-border-bottom-right-radius: 5px;
+		border-bottom-left-radius: 5px;
+		border-bottom-right-radius: 5px;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .product-properties { color: #364C59;}
+  
+    .product-properties .p-value
+    {
+      font-weight: bold;
+    }
+  
+    .product-properties .owner
+    {
+      color: #6EB924 !important;
+    }
+
+
+/* *************************************************
+    Result page
+************************************************** */
+
+.result {}
+
+.suggestion
+{
+  padding: 10px 0px;
+}
+
+.sort
+{
+  border: 1px solid #b9cad4;
+  -moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border-radius: 5px;
+	background: -webkit-gradient(linear, 0 0, 0 50%, from(#f6f7f8), to(#eff0f1));
+  background: -moz-linear-gradient(top, #f6f7f8, #eff0f1);
+  background-color: #f6f7f8;
+  margin-bottom: 10px;
+  margin-left: 0px;
+}
+  .sort li
+  {
+    float: left;
+    display: inline;
+    padding: 9px 10px 6px;
+    font-size: 12px;
+    font-weight: bold;
+    margin-bottom: 0px;
+    border-left: 1px solid #b9cad4;
+  }
+    .sort a
+    {
+      color: #98a7af;
+    }
+    
+    .sort li:hover a
+    {
+      color: #364C59 !important;
+      text-decoration: none;
+    }
+  
+  .sort .label-sort
+  {
+    font-weight: normal;
+    border-left: none;
+  }
+  
+  .sort .label-sort:hover
+  {
+    background: none;
+  }
+  
+  .sort .last-sort
+  {
+   border-right: 1px solid #b9cad4;
+  }
+  
+  .sort .label-select, .sort li:hover
+  {
+    background: -webkit-gradient(linear, 0 0, 0 50%, from(#d6e5f2), to(#e4eff9));
+    background: -moz-linear-gradient(top, #d6e5f2, #e4eff9);
+    background-color: #d6e5f2;
+  }
+    .sort .label-select a
+    {
+      color: #364C59 !important;
+    }
+    
+.facet-dist {}
+
+  .facet-dist .ins
+  {
+    width: 35px;
+    text-align: right;
+  }
+  
+  .facet-dist .unit
+  {
+    margin-left: 3px;
+    margin-right: 5px;
+    font-weight: bold;
+  }
+  
+  .facet-dist .portlet-bottom p
+  {
+    font-size: 12px;
+    line-height: 18px;
+  }
+  
+  .facet-dist .town
+  {
+    font-weight: bold;
+  }
+  
+  .facet-dist .position
+  {
+    font-weight: bold;
+    color: #6EB924;
+  }
+
+.facet-cat {}
+
+  .facet-cat ul
+  {
+    margin-top: 0px;
+    margin-bottom: 0px;
+  }
+  
+    .facet-cat li
+    {
+      background: transparent url("../images/branch-close.png") no-repeat 0px 1px;
+      list-style-type: none;
+      margin-bottom: 0px;
+      padding-left: 15px;
+    }
+    
+    .facet-cat li.open
+    {
+      background: transparent url("../images/branch-open.png") no-repeat 0px 3px;
+      padding-left: 15px;
+    }
+
+  .facet-cat a
+  {
+    display: block;
+    color: #6EB924;
+    font-weight: bold;
+    font-size: 12px;
+    padding-bottom: 10px;
+  }
+  
+  .facet-cat .portlet-top a
+  {
+    padding-top: 10px;
+  }
+  
+  .facet-cat .root{
+    padding-top: 10px;
+  }
+  
+    .facet-cat .node
+    {
+     margin-left: 15px;
+    }
+    
+      .facet-cat .leaf
+      {
+        margin-left: 15px;
+      }
+      
+        .facet-cat .leaf li
+        {
+          background-image: none;
+        }
+
+/* *************************************************
+  signup page
+************************************************** */
+
+.signup {}
+
+
+  .signup p {margin-bottom: 15px;}
+  
+    .signup .email, .signup .question
+    {
+      font-weight: bold;
+    }
+    
+    .signup #id_email, .signup #id_password
+    {
+      margin-left: 20px;
+    }
+    
+    .signup #id_email
+    {
+      width: 300px;
+      margin-bottom: 15px;
+    }
+    
+    .signup #id_password
+    {
+      width: 210px;
+      margin-right: 20px;
+    } 
+    
+    .signup .pd-forget
+    {
+      color: #6EB924;
+    }
+    
+/* *************************************************
+  more-info page
+************************************************** */
+    
+.more-info{}
+  
+  .more-info td
+  {
+    padding-bottom: 0px;
+  }
+  .more-info input, .more-info textarea
+  {
+    width: 300px;
+  }
+  
+  .more-info textarea
+  {
+    height: 40px;
+  }
+  
+  .more-info select
+  {
+    width: 325px;
+  }
+  
+  .more-info th
+  {
+    width: 120px;
+    text-align: left;
+    padding-top: 15px;
+  }
+  
+  .more-info .street
+  {
+    margin-bottom: 0px;
+  }
+  
+  .more-info .zipcode
+  {
+    width: 100px;
+    margin-right: 10px;
+    margin-top: 0px;
+    margin-bottom: 0px;
+  }
+  
+  .more-info .town
+  {
+    width: 170px;
+    margin-top: 0px;
+    margin-bottom: 0px;
+  }
+
+/* *************************************************
+  new rental page
+************************************************** */
+
+.new {}
+
+  .new th
+  {
+    width: 120px;
+    text-align: left;
+    padding-top: 15px;
+  }
+  
+  .new td
+  {
+    padding-bottom: 0px;
+  }
+
+  .new input { width: 300px;}
+  
+  .new select 
+  { 
+    width: 445px;
+  }
+  
+  .new textarea
+  {
+    width: 300px;
+    height: 120px;
+  }
+  
+  .new .price
+  {
+    text-align: right;
+    width: 50px;
+  }
+  
+  .new .unit
+  {
+    font-size: 16px;
+  }
+
+
+      
