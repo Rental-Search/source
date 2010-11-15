@@ -184,21 +184,8 @@ COMPRESS_CSS = {
     'master': {
         'source_filenames': (
             'css/master.css',
-            'css/core/content.css',
-            'css/core/libraries.css',
-            'css/core/form/form.css',
-            'css/core/grids/978.css',
-            'css/core/heading/headings.css',
-            'css/core/spacing/space.css',
-            'css/core/table/table.css',
-            'css/core/template/template.css',
-            'css/plugins/addProduct/addProduct.css',
-            'css/plugins/aProduct/aProduct.css',
-            'css/plugins/booking/booking.css',
-            'css/plugins/buttons/button.css',
-            'css/plugins/product-list/product-list.css',
-            'css/plugins/search/search.css',
-            'css/plugins/stepbystep/stepbystep.css',
+            'css/screen.css',
+            'css/custom.css',
             'css/plugins/ui/jquery.ui.core.css',
             'css/plugins/ui/jquery.ui.datepicker.css',
             'css/plugins/ui/jquery.ui.theme.css'
