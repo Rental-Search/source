@@ -20,7 +20,7 @@ class MockBooking(Booking):
     def objects(cls):
         return cls.objects
 
-class InsuranceTest(TestCase):
+class PaymentsTest(TestCase):
     fixtures = ['patron', 'phones', 'address', 'price', 'product', 'booking', 'sinister']
     
     def setUp(self):
