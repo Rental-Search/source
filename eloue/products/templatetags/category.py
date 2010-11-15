@@ -19,7 +19,7 @@ def category(value):
     'None'
     """
     category = cache.get('category:%s' % value)
-    if category is None:
+    if not category:
         try:
             category = Category.objects.get(slug=value)
         except Category.DoesNotExist:
