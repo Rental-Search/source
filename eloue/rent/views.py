@@ -13,7 +13,7 @@ from django.views.generic.simple import direct_to_template, redirect_to
 from eloue.accounts.forms import EmailAuthenticationForm
 from eloue.products.models import Product
 from eloue.rent.decorators import validate_ipn, ownership_required
-from eloue.rent.forms import BookingForm, PreApprovalIPNForm, PayIPNForm
+from eloue.rent.forms import BookingForm, BookingConfirmationForm, PreApprovalIPNForm, PayIPNForm
 from eloue.rent.models import Booking
 from eloue.rent.wizard import BookingWizard
 
@@ -60,7 +60,7 @@ def booking_create(request, *args, **kwargs):
     product = get_object_or_404(Product, pk=kwargs['product_id'])
     if product.slug != kwargs['slug']:
         return redirect_to(request, product.get_absolute_url())
-    wizard = BookingWizard([BookingForm, EmailAuthenticationForm])
+    wizard = BookingWizard([BookingForm, EmailAuthenticationForm, BookingConfirmationForm])
     return wizard(request, *args, **kwargs)
 
 

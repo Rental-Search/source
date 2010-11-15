@@ -137,16 +137,10 @@ class PayIPNForm(forms.Form):
 class BookingForm(forms.ModelForm):
     started_at = DateTimeField(required=True, input_date_formats=DATE_FORMAT)
     ended_at = DateTimeField(required=True, input_date_formats=DATE_FORMAT)
-    basket = forms.BooleanField(widget=forms.HiddenInput(), required=False, initial=False)
         
     class Meta:
         model = Booking
         fields = ('started_at', 'ended_at')
-    
-    def clean_basket(self):
-        if self.cleaned_data.get('basket'):
-            raise forms.ValidationError(_(u"Un dernier coup d'oeil"))
-        return self.cleaned_data['basket']
     
     def clean(self):
         started_at = self.cleaned_data.get('started_at', None)
@@ -157,6 +151,9 @@ class BookingForm(forms.ModelForm):
             self.cleaned_data['total_amount'] = Booking.calculate_price(product, started_at, ended_at)
         return self.cleaned_data
     
+
+class BookingConfirmationForm(forms.Form):
+    pass
 
 class SinisterForm(forms.ModelForm):
     class Meta:

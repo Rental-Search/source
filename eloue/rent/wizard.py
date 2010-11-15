@@ -16,7 +16,7 @@ from eloue.accounts.models import Patron
 from eloue.products.forms import FacetedSearchForm
 from eloue.products.models import Product
 from eloue.rent.models import Booking
-from eloue.rent.forms import BookingForm
+from eloue.rent.forms import BookingForm, BookingConfirmationForm
 from eloue.rent.utils import combine
 from eloue.wizard import GenericFormWizard
 
@@ -95,6 +95,8 @@ class BookingWizard(GenericFormWizard):
             return 'rent/booking_register.html'
         elif issubclass(self.form_list[step], BookingForm):
             return 'products/product_detail.html'
+        elif issubclass(self.form_list[step], BookingConfirmationForm):
+            return 'rent/booking_confirm.html'
         else:
             return 'rent/booking_missing.html'
     
