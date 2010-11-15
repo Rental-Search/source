@@ -28,9 +28,9 @@ class EmailAuthenticationForm(forms.Form):
     """Displays the login form and handles the login action."""
     exists = forms.TypedChoiceField(required=True, coerce=int, choices=STATE_CHOICES, widget=forms.RadioSelect(renderer=CustomRadioFieldRenderer), initial=1)
     email = forms.EmailField(label=_(u"Email"), max_length=75, required=True, widget=forms.TextInput(attrs={
-        'autocapitalize': 'off', 'autocorrect': 'off', 'class': 'inb'
+        'autocapitalize': 'off', 'autocorrect': 'off', 'class': 'inm'
     }))
-    password = forms.CharField(label=_(u"Password"), widget=forms.PasswordInput(attrs={'class': 'inb'}), required=False)
+    password = forms.CharField(label=_(u"Password"), widget=forms.PasswordInput(attrs={'class': 'inm'}), required=False)
     
     def __init__(self, *args, **kwargs):
         self.user_cache = None
@@ -119,25 +119,25 @@ def make_missing_data_form(instance, required_fields=[]):
         'username': forms.RegexField(label=_("Username"), max_length=30, regex=r'^[\w.@+-]+$',
             help_text=_("Required. 30 characters or fewer. Letters, digits and @/./+/-/_ only."),
             error_messages={'invalid': _("This value may contain only letters, numbers and @/./+/-/_ characters.")},
-            widget=forms.TextInput(attrs={'class': 'inb'})
+            widget=forms.TextInput(attrs={'class': 'inm'})
         ),
-        'password1': forms.CharField(required=True, widget=forms.PasswordInput(attrs={'class': 'inb'})),
-        'password2': forms.CharField(required=True, widget=forms.PasswordInput(attrs={'class': 'inb'})),
-        'first_name': forms.CharField(required=True, widget=forms.TextInput(attrs={'class': 'inb'})),
-        'last_name': forms.CharField(required=True, widget=forms.TextInput(attrs={'class': 'inb'})),
-        'addresses__address1': forms.CharField(widget=forms.Textarea(attrs={'class': 'inb street', 'placeholder': 'Rue'})),
+        'password1': forms.CharField(required=True, widget=forms.PasswordInput(attrs={'class': 'inm'})),
+        'password2': forms.CharField(required=True, widget=forms.PasswordInput(attrs={'class': 'inm'})),
+        'first_name': forms.CharField(required=True, widget=forms.TextInput(attrs={'class': 'inm'})),
+        'last_name': forms.CharField(required=True, widget=forms.TextInput(attrs={'class': 'inm'})),
+        'addresses__address1': forms.CharField(widget=forms.Textarea(attrs={'class': 'inm street', 'placeholder': 'Rue'})),
         'addresses__zipcode': forms.CharField(required=True, widget=forms.TextInput(attrs={
-            'class': 'inb zip', 'placeholder': 'Code postal'
+            'class': 'inm zipcode', 'placeholder': 'Code postal'
         })),
-        'addresses__city': forms.CharField(required=True, widget=forms.TextInput(attrs={'class': 'inb town', 'placeholder': 'Ville'})),
-        'addresses__country': forms.ChoiceField(choices=COUNTRY_CHOICES, required=True, widget=forms.Select(attrs={'class': 'country'})),
-        'phones__phone': PhoneNumberField(required=True, widget=forms.TextInput(attrs={'class': 'inb'}))
+        'addresses__city': forms.CharField(required=True, widget=forms.TextInput(attrs={'class': 'inm town', 'placeholder': 'Ville'})),
+        'addresses__country': forms.ChoiceField(choices=COUNTRY_CHOICES, required=True, widget=forms.Select(attrs={'class': 'selm'})),
+        'phones__phone': PhoneNumberField(required=True, widget=forms.TextInput(attrs={'class': 'inm'}))
     })
     
     # Do we have an address ?
     if instance and instance.addresses.exists():
         fields['addresses'] = forms.ModelChoiceField(required=False,
-            queryset=instance.addresses.all(), widget=forms.Select(attrs={'style': 'width: 360px;'}))
+            queryset=instance.addresses.all(), widget=forms.Select(attrs={'class': 'selm'}))
         for f in fields.keys():
             if "addresses" in f:
                 fields[f].required = False

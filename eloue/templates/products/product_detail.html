@@ -52,9 +52,11 @@
 			<label class="labm">{% trans "Fin" %} :</label><br />
 			{{ form.ended_at }}
 		</div>
+		<!--
 		<div class="booking-total">
 			<p>Total : <span class="day">2 jours,</span> soit <span class="total-price">140€</span></p>
 		</div>
+		-->
 	</div>
 	<div class="product-booking-bottom x4">
 		{% csrf_token %}<input type="hidden" name="wizard_step" value="0" />
@@ -84,4 +86,5 @@
 		</table>
 	</div>
 </div>{# content #}
+
 {% endblock %}

@@ -85,13 +85,13 @@ class ProductReviewForm(forms.ModelForm):
     
 
 class ProductForm(forms.ModelForm):
-    category = TreeNodeChoiceField(queryset=Category.tree.all(), empty_label="Choisissez une catégorie", level_indicator=u'--', widget=forms.Select(attrs={'style': '100%'}))
-    summary = forms.CharField(max_length=100, widget=forms.TextInput(attrs={'class': 'inb'}))
+    category = TreeNodeChoiceField(queryset=Category.tree.all(), empty_label="Choisissez une catégorie", level_indicator=u'--', widget=forms.Select(attrs={'class': 'selm'}))
+    summary = forms.CharField(max_length=100, widget=forms.TextInput(attrs={'class': 'inm'}))
     picture_id = forms.IntegerField(required=False, widget=forms.HiddenInput())
-    picture = forms.ImageField(required=False, widget=forms.FileInput(attrs={'class': 'inb pic'}))
-    price = forms.DecimalField(required=True, widget=forms.TextInput(attrs={'class': 'inb price'}))
-    deposit_amount = forms.DecimalField(required=True, widget=forms.TextInput(attrs={'class': 'inb price'}))
-    quantity = forms.IntegerField(initial=1, widget=forms.TextInput(attrs={'class': 'inb qty'}))
+    picture = forms.ImageField(required=False, widget=forms.FileInput(attrs={'class': 'inm'}))
+    price = forms.DecimalField(required=True, widget=forms.TextInput(attrs={'class': 'inm price'}))
+    deposit_amount = forms.DecimalField(required=True, widget=forms.TextInput(attrs={'class': 'inm price'}))
+    quantity = forms.IntegerField(initial=1, widget=forms.TextInput(attrs={'class': 'inm price'}))
     description = forms.Textarea()
     
     def clean_quantity(self):

@@ -314,16 +314,17 @@
       margin-left: 20px;
     }
     
-    .signup #id_email
+    .signup #id_1-email
     {
       width: 300px;
       margin-bottom: 15px;
     }
     
-    .signup #id_password
+    .signup #id_1-password
     {
       width: 210px;
       margin-right: 20px;
+      margin-left: 174px;
     } 
     
     .signup .pd-forget
@@ -378,7 +379,7 @@
   
   .more-info .town
   {
-    width: 170px;
+    width: 167px;
     margin-top: 0px;
     margin-bottom: 0px;
   }

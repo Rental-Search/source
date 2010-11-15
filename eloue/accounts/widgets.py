@@ -12,7 +12,7 @@ class CustomRadioInput(RadioInput):
         else:
             label_for = ''
         choice_label = conditional_escape(force_unicode(self.choice_label))
-        return mark_safe(u'<td class="txtR txtT">%s</td><td><label class="labb"%s>%s</label></td>' % (self.tag(), label_for, choice_label))
+        return mark_safe(u'%s<label %s>%s</label>' % (self.tag(), label_for, choice_label))
     
 
 class CustomRadioFieldRenderer(RadioFieldRenderer):
@@ -25,5 +25,5 @@ class CustomRadioFieldRenderer(RadioFieldRenderer):
         return CustomRadioInput(self.name, self.value, self.attrs.copy(), choice, idx)
     
     def render(self):
-        return mark_safe(u'\n'.join([u'<tr class="cSign">%s</tr>' % force_unicode(w) for w in self]))
+        return mark_safe(u'\n'.join([u'<p>%s</p>' % force_unicode(w) for w in self]))
     

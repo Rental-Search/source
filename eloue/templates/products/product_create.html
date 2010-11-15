@@ -1,76 +1,60 @@
 {% extends "base.html" %}
 
 {% block content %}
-	<div class="top-content container clearfix">
-		<div class="grid3 first">
-			<h1>Ajoutez un objet</h1>
+<div id="content" class="clearfix">
+	<div class="sbs x12">
+		<div class="sbs-header">
+			<h1>Mettre en location</h1>
 		</div>
-		<div class="grid7">
-			<ol class="sbs">
-				<li class="sbsFirst sbsDo">1.Remplissez la fiche</li>
-				<li class="sbsDone">2.Identifiez-vous</li>
-			</ol>
-		</div>
+		<ol class="sbs-steps">
+			<li class="on">1.Remplissez la fiche</li>
+			<li class="off">2.Identifiez-vous</li>
+		</ol>
+		<a href="#" class="btn big-blue">obtenir de l'aide</a>
 	</div>
-	<div class="content container clearfix">
-		<div class="grid7 first">
-			<h3>Remplissez le formulaire de location ci dessous :</h3>
-			<div class="data pam">
-				{{ form.errors }}
-				<form class="addP" enctype="multipart/form-data" action="" method="POST">
-				  {% csrf_token %}
-					<table class="grid7 first">
-						<tr>
-							<td colspan="2">
-								{{ form.category }}
-							</td>
-						</tr>
-						<tr>
-							<th class="txtT">
-								<label class="labb">Photo * :</label>
-							</th>
-							<td>
-								{{ form.picture }}
-							</td>
-						</tr>
-						<tr>
-							<th class="txtT"><label class="labb">Titre * :</label></th>
-							<td>{{ form.summary }}</td>
-						</tr>
-						<tr>
-							<th class="txtT"><label class="labb">Prix location * :</label></th>
-							<td>
-								{{ form.price }}<span>&euro; /jour</span>
-							</td>
-						</tr>
-						<tr>
-							<th class="txtT"><label class="labb">Prix caution :</label></th>
-							<td>
-								{{  form.deposit_amount }}<span>&euro;</span>
-							</td>
-						</tr>
-						<tr>
-							<th class="txtT"><label class="labb">Quantité :</label></th>
-							<td>
-								{{  form.quantity }}
-							</td>
-						</tr>
-						<tr>
-							<th class="txtT"><label class="labb">Description * :</label></th>
-							<td>
-								{{ form.description}}
-							</td>
-						</tr>
-						<tr>
-							<td class="submit" colspan="2">
-								<input type="hidden" name="{{ step_field }}" value="{{ step0 }}" />
-							  {{ previous_fields|safe }}
-								<input type="submit" value="Prochaine étape" class="button grey medium"/>
-							</td>
-						</tr>
-					</table>
-				 </form>
-				<span>* : champ obligatoire</span>
-			</div>{# data #}
+	<div class="content-header x12">
+		<h2>Remplissez le formulaire de location</h2>
+	</div>
+	<div class="new x9">
+		{{ form.errors }}
+		<form class="form" enctype="multipart/form-data" action="" method="POST">
+		  {% csrf_token %}
+			<table>
+				<tr>
+					<td colspan="2">
+						{{ form.category }}
+					</td>
+				</tr>
+				<tr>
+					<th><label>Photo * :</label></th>
+					<td>{{ form.picture }}</td>
+				</tr>
+				<tr>
+					<th><label>Titre * :</label></th>
+					<td>{{ form.summary }}</td>
+				</tr>
+				<tr>
+					<th><label>Prix location * :</label></th>
+					<td>{{ form.price }} <span class="unit">&euro;</span> par jour</td>
+				</tr>
+				<tr>
+					<th><label>Caution :</label></th>
+					<td>{{  form.deposit_amount }} <span class="unit">&euro;</span></td>
+				</tr>
+				<tr>
+					<th><label>Quantité * :</label></th>
+					<td>{{  form.quantity }}</td>
+				</tr>
+				<tr>
+					<th><label>Description * :</label></th>
+					<td>{{ form.description}}</td>
+				</tr>
+			</table>
 		</div>
+		<div class="submit-wizard x9">
+			<a href="#">Annuler</a> ou 
+			<input type="submit" class="btn big-green" value="Continuer &rarr;" />
+		</form>
+		</div>
+</div>{# content #}	
 {% endblock %}
