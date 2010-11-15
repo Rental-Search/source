@@ -35,180 +35,145 @@
 {% endblock %}
 
 {% block content %}
-<div class="top-content container clearfix">
-	<div class="search grid12 first">
-		<form action="{% url product_list %}">
-			<div class="grid4 first">
-				<label for="id_q" class="labb">{% trans "Que voulez-vous louer ?" %}</label><br/>
-				{{ form.q }}
-				<span>{% trans "Exemple :" %}</span><a href="#">{% trans "Voiture" %}</a>, <a href="#">{% trans "Chèvre" %}</a>, <a href="#">{% trans "Ski" %}</a>, <a href="#">{% trans "Robe" %}</a>
-			</div>
-			<div class="grid4">
-				<label for="id_where" class="labb">{% trans "Où ?" %}</label><br />
-				{{ form.where }}
-				<span>{% trans "Exemple :" %}</span><a href="#">{% trans "Nantes" %}</a>, <a href="#">{% trans "69000" %}</a>, <a href="#">{% trans "11 rue crozatier, 75" %}</a>
-			</div>
-			<div class="grid4">
-				<input type="submit" value="{% trans "Rechercher" %}" class="button big orange"/>
-			</div>
-		</form><!-- form -->
+<div id="top-content" class="search clearfix">
+	<form class="form" action="{% url product_list %}">
+	<div class="search-what x5">
+		<label for="id_q">{% trans "Que voulez-vous louer ?" %}</label><br />
+		{{ form.q }}<br />
+		<span>{% trans "Exemple :" %} </span> <a href="location/?q=voiture">{% trans "Voiture" %}</a>, <a href="#">{% trans "Chèvre" %}</a>, <a href="#">{% trans "Ski" %}</a>, <a href="#">{% trans "Robe" %}</a>
 	</div>
-</div><!-- top-content -->
-<div class="content container clearfix">
-	<div class="result grid9 first">
-	  {% if form.cleaned_data.q %}
-		 <h1>{{ paginator.count }} résultat{{ paginator.count|pluralize }} pour <strong>{{ form.cleaned_data.q }}</strong></h1>
+	<div class="search-where x5">
+		<label>{% trans "Où ?" %}</label><br />
+		{{ form.where }}<br />
+	</div>
+	<div class="search-find x2">
+		<input type="submit" value="{% trans "Rechercher" %}" class="btn big-orange"/>
+	</div>
+	</form>
+</div>{# top-content #}
+<div id="content" class="result clearfix">
+	<div class="content-header x12">
+		{% if form.cleaned_data.q %}
+		<h1>{{ paginator.count }} résultat{{ paginator.count|pluralize }} pour <strong>{{ form.cleaned_data.q }}</strong></h1>
 		{% endif %}
-		{% if suggestions %}
-			<div class="sugg grid9 first">
-				Vous vouliez peut-être dire ? <a href="{% facet_url breadcrumbs "q" suggestions %}">{{ suggestions }}</a>
-			</div>
-		{% endif %}
-		{% if product_list %}
-		<ul class="sort grid9 first">
-			<li class="label-sort">
-				{% trans "Trier par :" %}
-			</li>
-			<li>
-				<a href="{% facet_url breadcrumbs "sort" "created_at" %}">{% trans "Les plus récents" %}</a>
-			</li>
-			{% if form.cleaned_data.where %}
-			<li><a href="{% facet_url breadcrumbs "sort" "geo_distance" %}">{% trans "Les plus proches" %}</a></li>
-			{% endif %}
-			<li>
-				<a href="{% facet_url breadcrumbs "sort" "price" %}">{% trans "Les prix les plus bas" %}</a>
-			</li>
-	    <li class="last">
-				<a href="{% facet_url breadcrumbs "sort" "-price" %}">{% trans "Les prix les plus haut" %}</a>
-			</li>
-		</ul><!-- sort option -->
-		<ul class="list grid9 first">
-			{% for product in product_list %}
-				{% cache 900 product:row product.pk form.cleaned_data.q form.cleaned_data.where %}
-					{% with product.object as object %}
-						<li class="pl grid9 first">
-							<a class="imgpl" href="{{ object.get_absolute_url }}">
-							 {% with object.pictures.all|first as picture %}
-     	          {% if picture.thumbnail %}
- 	               <img src="{{ picture.thumbnail.url }}" alt="product.summary" />
-	              {% endif %}
-	             {% endwith %}
+	</div>
+	{% if suggestions %}
+	<div class="suggestion x12">
+		Vous vouliez peut-être dire ? <a href="{% facet_url breadcrumbs "q" suggestions %}">{{ suggestions }}</a>
+	</div>
+	{% endif%}
+	{% if product_list %}
+	<div class="x8">
+			<ul class="sort x8 first">
+				<li class="label-sort">
+					{% trans "Trier par :" %}
+				</li>
+				<li>
+					<a href="{% facet_url breadcrumbs "sort" "created_at" %}">{% trans "Les plus récents" %}</a>
+				</li>
+				{% if form.cleaned_data.where %}
+				<li><a href="{% facet_url breadcrumbs "sort" "geo_distance" %}">{% trans "Les plus proches" %}</a></li>
+				{% endif %}
+				<li>
+					<a href="{% facet_url breadcrumbs "sort" "price" %}">{% trans "Les prix les plus bas" %}</a>
+				</li>
+		    <li class="last-sort">
+					<a href="{% facet_url breadcrumbs "sort" "-price" %}">{% trans "Les prix les plus haut" %}</a>
+				</li>
+			</ul>
+			<ul class="product-list x8 first">
+				{% for product in product_list %}
+					{% cache 900 product:row product.pk form.cleaned_data.q form.cleaned_data.where %}
+						{% with product.object as object %}
+						<li class="x8 first">
+							<a class="pl-img" href="{{ object.get_absolute_url }}">
+								{% with object.pictures.all|first as picture %}
+	     	          {% if picture.thumbnail %}
+	 	               <img src="{{ picture.thumbnail.url }}" alt="product.summary" />
+		              {% endif %}
+		             {% endwith %}
 							</a>
-							<div class="dpl">
-								<h3>
-									<a href="{{ object.get_absolute_url }}">{{ product.summary|capfirst|truncate:50 }}</a>
-								</h3>
+							<div class="pl-header">
+								<h2><a href="{{ object.get_absolute_url }}">{{ product.summary|capfirst|truncate:50 }}</a></h2>
+							</div>
+							<div class="pl-content">
 								{% with product.highlighted.text|first|truncate:180|safe as highlight %}
-									{% if highlight %} 
-										<div class="descpl">{{ highlight }}</div>
+									{% if highlight %}
+									<div class="pl-desc">{{ highlight }}</div>
 									{% else %}
-										<div class="descpl">{{ product.description|truncate:180 }}</div>
+									<div class="pl-desc">{{ product.description|truncate:180 }}</div>
 									{% endif %}
 								{% endwith %}
-								<div class="displ">	
-								{% if product.geo_distance %}
-									<p>{{ product.geo_distance|floatformat }} km{{ product.geo_distance|pluralize }}</p>
-								{% endif %}
+								<div class="pl-distance">
+									{% if product.geo_distance %}
+										{{ product.geo_distance|floatformat }} km{{ product.geo_distance|pluralize }}
+									{% endif %}
 								</div>
-								<div class="ownpl">
-									<span>{% trans "Lieu"%} : </span>{{ object.address.zipcode }} {{ object.address.city|capfirst }} - 
-									<span>{% trans "Propriétaire" %} : </span><a href="{{ object.owner.get_absolute_url }}">{{ object.owner.username }}</a>
+								<div class="pl-price">
+									<span class="price">{{ product.price }}&euro;</span><br />
+									<span class="unit">par jour</span>
 								</div>
-							</div><!-- dpl -->
-							<div class="bpl">
-								<a href="{{ object.get_absolute_url }}" class="pbpl">
-									{{ product.price }} &euro;/J
-								</a><br />
-								<a href="{{ object.get_absolute_url }}" class="button medium grey">{% trans "Choisir" %}</a>
+								<div class="pl-btn">
+									<a href="{{ object.get_absolute_url }}" class="btn small-blue">{% trans "Réserver" %} &rarr;</a>
+								</div>
+							</div>
+							<div class="pl-footer">
+								Par <a href="{{ object.owner.get_absolute_url }}" class="owner">{{ object.owner.username }}</a> | {{ object.address.city|capfirst }}, {{ object.address.zipcode }}
 							</div>
 						</li>
-					{% endwith %}
-				{% endcache %}
-			{% endfor %}
-		</ul><!-- list -->
-		{% pagination %}
-		{% endif %}
-	</div><!-- result -->
-	<div class="facet grid3">
-		<h4>{% trans "Catégories" %}</h4>
-		<div class="acc grid3 first">
-			<h5><a href="{% facet_url breadcrumbs -"par-categorie" %}">{% trans "Voir tous les résultats" %}</a></h5>
-			{% for field in form %}
-				{% if not field.data %}
-					{% if field.name == 'categories' %}
-						{% for value, count in facets.fields|hash:field.name  %}
-							{% with value|category as category %}
-								{% if category.is_root_node %}
-									<h5><a href="{% facet_url breadcrumbs field.field.pretty_name category.slug %}">{{ category.name }}</a> <em>({{ count }})</em></h5>
-								{% endif %}
-							{% endwith %}
-						{% endfor %}
-					{% endif %}
-				{% else %}
-					{% if field.name == 'categories' %}
-						{% with field.data|category as category %}
-							{% if category.is_root_node %}
-								<h5 class="open"><a href="{% facet_url breadcrumbs -field.field.pretty_name %}">{{ category.name }}</a></h5>
-								<ul class="acccon">
-									{% for value, count in facets.fields|hash:field.name  %}
-										{% with value|category as child %}
-											{% if child.is_child_node and not child.is_leaf_node %}
-												<li><h6><a href="{% facet_url breadcrumbs field.field.pretty_name value %}">{{ child.name }}</a><em> ({{ count }})</em></h6></li>
-											{% endif%}
-										{% endwith %}
-									{% endfor %}
-								</ul>
-							{% endif %}
-							{% if category.is_leaf_node %}
-								<h5 class="open"><a href="{% facet_url breadcrumbs -field.field.pretty_name %}">{{ category.parent.parent.name }}</a></h5>
-								<ul class="acccon">
-									<li><h6 class="open"><a href="{% facet_url breadcrumbs field.field.pretty_name category.parent.slug %}">{{ category.parent.name }}</a></h6></li>
-								<ul>
-								<ul class="acconsub">
-									{% for value, count in facets.fields|hash:field.name  %}
-										{% with value|category as child %}
-											{% if child.is_leaf_node %}
-												<li class="select"><a href="{% facet_url breadcrumbs field.field.pretty_name category.parent.slug%}">{{ child.name }}</a><em> ({{ count }})</em></li>
-											{% endif %}
-										{% endwith %}
-									{% endfor %}
-								</ul>
-							{% endif %}
-							{% if category.is_child_node and not category.is_leaf_node %}
-								<h5 class="open"><a href="{% facet_url breadcrumbs -field.field.pretty_name %}">{{ category.parent.name }}</a></h5>
-								<ul class="acccon">
-									<li><h6 class="open"><a href="{% facet_url breadcrumbs field.field.pretty_name category.parent.slug %}">{{ category.name }}</a></h6></li>
-									<ul class="acconsub">
-										{% for value, count in facets.fields|hash:field.name  %}
-											{% with value|category as child %}
-												{% if child.is_leaf_node %}
-													<li><a href="{% facet_url breadcrumbs field.field.pretty_name value%}">{{ child.name }}</a><em> ({{ count }})</em></li>
-												{% endif %}
-											{% endwith %}
-										{% endfor %}
-									</ul>
-								</ul>
-							{% endif %}
 						{% endwith %}
-					{% endif %}
-				{% endif %}
-			{% endfor %}
-		</div><!-- acc -->
-		{% if form.cleaned_data.where %}
-		<h4>{% trans "Distance" %}</h4>
-		<div class="dist grid3 first">
-			<form action="{% facet_url breadcrumbs %}" action="get">
+					{% endcache %}
+				{% endfor %}
+			</ul>{# list #}
+			{% pagination %}
+	</div>
+	{% if form.cleaned_data.where %}
+	<div class="facet-dist portlet x4">
+		<div class="portlet-header">
+			<h3>{% trans "Distance" %}</h3>
+		</div>
+		<div class="portlet-top">
+			<form action="{% facet_url breadcrumbs %}" class="form">
 				<p>
 					<input type="hidden" value="{{ form.cleaned_data.q }}" name="q"/>
 			    <input type="hidden" value="{{ form.cleaned_data.where }}" name="where"/>
 					{{ form.sort }}
-					<label class="labs">Dans rayon de :</label><br />
-					{{ form.radius }}<span>Km</span>
-					<input type="submit"  value=">>" class="button small grey"/>
+					<label class="labs">{% trans "Restreindre les résultats à un rayon de" %}</label><br />
+					{{ form.radius }}
+					<span class="unit">Km</span>
+					<input type="submit" value="Mettre à jour" class="btn medium-blue"/>
 				</p>
 			</form>
-		</div><!-- dist -->
-		{% endif %}
-	</div><!-- facet -->
-</div><!-- content -->
+		</div>
+	</div>
+	{% endif %}
+	<div class="facet-cat portlet x4">
+		<div class="portlet-header">
+			<h3>Catégories</h3>
+		</div>
+		<div class="portlet-top">
+			<a href="{% url product_list %}">Voir tous les résultats</a>
+		</div>
+		<div class="portlet-bottom">
+			{% for field in form %}
+				{% if not field.data %}
+					{% if field.name == 'categories' %}
+					<ul class="root">
+						{% for value, count in facets.fields|hash:field.name  %}
+							{% with value|category as category %}
+								{% if category.is_root_node %}
+								<li>
+									<a href="{% facet_url breadcrumbs field.field.pretty_name category.slug %}">{{ category.name }}</a> 
+								</li>
+								{% endif%}
+							{% endwith %}
+						{% endfor %}
+					</ul>
+					{% endif%}
+				{% endif %}
+			{% endfor %}
+		</div>
+	</div>
+	{% endif %}{# if product_list #}
+</div>{# content #}
 {% endblock %}
