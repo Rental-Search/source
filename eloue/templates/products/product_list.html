@@ -1,5 +1,5 @@
 {% extends "base.html" %}
- {% load cache facets i18n param category paginator mptt_tags %}
+ {% load cache facets i18n param category product paginator mptt_tags %}
 
 {% block title %}{% spaceless %}
  {% if breadcrumbs %}
@@ -96,13 +96,13 @@
 							</a>
 							<div class="dpl">
 								<h3>
-									<a href="{{ object.get_absolute_url }}">{{ product.summary|capfirst|truncatewords:5 }}</a>
+									<a href="{{ object.get_absolute_url }}">{{ product.summary|capfirst|truncate:50 }}</a>
 								</h3>
-								{% with product.highlighted.text|first|truncatewords:18|safe as highlight %}
+								{% with product.highlighted.text|first|truncate:180|safe as highlight %}
 									{% if highlight %} 
 										<div class="descpl">{{ highlight }}</div>
 									{% else %}
-										<div class="descpl">{{ product.description|truncatewords:18 }}</div>
+										<div class="descpl">{{ product.description|truncate:180 }}</div>
 									{% endif %}
 								{% endwith %}
 								<div class="displ">	
