@@ -45,6 +45,7 @@ urlpatterns = patterns('',
     url(r'^reset/complete/$', password_reset_complete, {
         'template_name': 'accounts/password_reset_complete.html'
     }, name="password_reset_complete"),
+    url(r'^faq/', include('faq.urls')),
     url(r'^activate/(?P<activation_key>\w+)/$', activate, name='auth_activate'),
     url(r'^login/$', authenticate, name='auth_login'),
     url(r'^logout/$', logout_then_login, name='auth_logout'),

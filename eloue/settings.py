@@ -132,6 +132,7 @@ INSTALLED_APPS = (
     'imagekit',
     'django_lean.experiments',
     'compress',
+    'faq',
     'announcements',
     'haystack',
     'queued_search',
