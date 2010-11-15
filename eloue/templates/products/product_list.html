@@ -132,7 +132,7 @@
 	<div class="facet grid3">
 		<h4>{% trans "Catégories" %}</h4>
 		<div class="acc grid3 first">
-			<h5><a href="{% url product_list %}">{% trans "Voir tous les résultats" %}</a></h5>
+			<h5><a href="{% facet_url breadcrumbs -"par-categorie" %}">{% trans "Voir tous les résultats" %}</a></h5>
 			{% for field in form %}
 				{% if not field.data %}
 					{% if field.name == 'categories' %}
