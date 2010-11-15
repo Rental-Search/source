@@ -45,10 +45,12 @@ class FacetedSearchForm(SearchForm):
     def search(self):
         if self.is_valid():
             sqs = self.searchqueryset
+            suggestions = None
             
             query = self.cleaned_data.get('q', None)
             if query:
                 sqs = self.searchqueryset.auto_query(query).highlight()
+                suggestions = sqs.spelling_suggestion()
 
             where, radius = self.cleaned_data.get('where', None), self.cleaned_data.get('radius', DEFAULT_RADIUS)
             if where:
@@ -65,9 +67,9 @@ class FacetedSearchForm(SearchForm):
             if self.cleaned_data['sort']:
                 sqs = sqs.order_by(self.cleaned_data['sort'])
         
-            return sqs
+            return sqs, suggestions
         else:
-            return self.searchqueryset
+            return self.searchqueryset, None
     
 
 class ProductReviewForm(forms.ModelForm):
