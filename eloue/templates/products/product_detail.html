@@ -38,7 +38,8 @@
 			{{ product.description|linebreaksp }}
 		</div>
 	</div>{# col1 #}
-	<div class="product-booking-top x4">
+	<div class="col2 x4">
+	<div class="product-booking-top x4 first">
 		<div class="product-price">
 			<span class="price">{{ product.prices.day|first }}&euro;</span>
 			<span class="unit">par jour</span>
@@ -58,12 +59,12 @@
 		</div>
 		-->
 	</div>
-	<div class="product-booking-bottom x4">
+	<div class="product-booking-bottom x4 first">
 		{% csrf_token %}<input type="hidden" name="wizard_step" value="0" />
 		<input type="submit" value="{% trans "Réserver" %} &rarr;" class="btn big-green" />
 		</form>
 	</div>
-	<div class="product-properties x4">
+	<div class="product-properties x4 first">
 		<table>
 			{% if product.deposit_amount %}
 			<tr>
