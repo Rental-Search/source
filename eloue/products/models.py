@@ -199,7 +199,11 @@ class Price(models.Model):
         unique_together = ('product', 'unit', 'name')
     
     def __unicode__(self):
-        return smart_unicode(self.amount)
+        currency = self.currency
+        for name, symbol in CURRENCY:
+            if name == self.currency:
+                currency = symbol
+        return smart_unicode("%s %s" % (self.amount, currency))
     
     def clean(self):
         from django.core.exceptions import ValidationError

@@ -1,23 +1,24 @@
 {% extends "base.html" %}
+{% load i18n product %}
 {% block content %}
 <div id="content" class="clearfix">
 	<div class="sbs x12">
 		<div class="sbs-header">
-			<h1>Réservation</h1>
+			<h1>{% trans "Réservation" %}</h1>
 		</div>
 		<ol class="sbs-steps">
 			{% if not user.is_authenticated %}
-				<li class="off">1.Identifiez-vous</li>
-				<li class="on">2.Confirmez votre réservation</li>
+				<li class="off">{% trans "1.Identifiez-vous" %}</li>
+				<li class="on">{% trans "2.Confirmez votre réservation" %}</li>
 			{% else %}
-				<li class="on">Confirmez votre réservation</li>
+				<li class="on">{% trans "Confirmez votre réservation" %}</li>
 			{% endif %}
 		</ol>
-		<a href="#" class="btn big-blue">obtenir de l'aide</a>
+		<a href="#" class="btn big-blue">{% trans "Obtenir de l'aide" %}</a>
 	</div>
 	<div class="booking x8">
 		<div class="content-header x8 first">
-			<h2>Objet réservé</h2>
+		 <h2>{% trans "Objet réservé" %}</h2>
 		</div>
 		<div class="booking-product x8 first">
 			<a class="pl-img" href="{{ object.get_absolute_url }}">
@@ -36,8 +37,10 @@
 					
 				</div>
 				<div class="pl-price">
-					<span class="price">{{ product.prices.day|first }}&euro;</span><br />
-					<span class="unit">par jour</span>
+				    {% with product.prices.day|first as price %}
+					 <span class="price">{{ price }}</span><br />
+					 <span class="unit">par {{ price.unit|unit }}</span>
+					{% endwith %}
 				</div>
 			</div>
 			<div class="pl-footer">
@@ -117,11 +120,11 @@
 				</tr>
 				<tr>
 					<th>Prix par jour :</th>
-					<td class="number">{{ product.prices.day|first }}&euro;</td>
+					<td class="number">{{ product.prices.day|first }}</td>
 				</tr>
 				<tr>
-					<th>Nombre de jours :</th>
-					<td class="number">2</td>
+					<th>Durée de la location :</th>
+					<td class="number"></td>
 				</tr>
 				<tr class="total">
 					<th>Total :</th>
@@ -130,15 +133,15 @@
 			</table>
 		</div>
 		<div class="content-header x8 first">
-			<h2>Paiement</h2>
+		 <h2>{% trans "Paiement" %}</h2>
 		</div>
 		<div class="booking-paiement x8 first">
-			Sur la prochaine page veuillez fournir vos informations de paiement.<br />
-			Vous ne serez débité que si le propriétaire accepte votre demande (dans les 32 heures).<br /> 
-			Si le propriétaire refuse ou ne répond pas, vous ne serez pas prélèvé.<br />
+		 Sur la prochaine page veuillez fournir vos informations de paiement.<br />
+		 Vous ne serez débité que si le propriétaire accepte votre demande (dans les 32 heures).<br /> 
+		 Si le propriétaire refuse ou ne répond pas, vous ne serez pas prélevé.<br />
 		</div>
 		<div class="booking-submit x8 first">
-			<a href="#">Annuler</a> ou 
+			<a href="{{ product.get_absolute_url }}">Annuler</a> ou 
 			<a href="#" class="btn big-green">Continuer &rarr;</a>
 		</div>
 	</div>{# col1 #}

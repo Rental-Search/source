@@ -1,5 +1,9 @@
 {% extends "base.html" %}
 {% load i18n product %}
+
+{% block title %}{{ block.super }} - {{ product.summary|capitalize }}{% endblock %}
+{% block description %}{{ product.summary }} {{ product.description }}{% endblock %}
+
 {% block content %}
 <div id="top-content" class="search clearfix">
 	<form class="form" action="{% url product_list %}">
@@ -19,7 +23,7 @@
 </div>{# top-content #}
 <div id="content" class="product clearfix">
 	<div class="content-header x12">
-		<h1>{{ product.summary }}</h1>
+		<h1>{{ product.summary|capitalize }}</h1>
 	</div>
 	<div class="col1 x8">
 		<div class="product-pic">
@@ -41,8 +45,10 @@
 	<div class="col2 x4">
 	<div class="product-booking-top x4 first">
 		<div class="product-price">
-			<span class="price">{{ product.prices.day|first }}&euro;</span>
-			<span class="unit">par jour</span>
+		 {% with product.prices.day|first as price %}
+		  <span class="price">{{ price }}</span>
+		  <span class="unit">par {{ price.unit|unit }}</span>
+		 {% endwith %}
 		</div>
 		<form action="{% url booking_create product.slug,product.id %}" method="post" class="form">
 		<div class="booking-date-start">
@@ -69,7 +75,7 @@
 			{% if product.deposit_amount %}
 			<tr>
 				<td>{% trans "Caution" %} :</td>
-				<td class="p-value">{{ product.deposit_amount }}&euro;</td>
+				<td class="p-value">{{ product.deposit_amount }}{{ product.currency|currency }}</td>
 			</tr>
 			{% endif %}
 			<tr>

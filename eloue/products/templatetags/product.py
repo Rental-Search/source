@@ -9,6 +9,8 @@ from django.utils.safestring import SafeData, mark_safe
 
 register = Library()
 
+from eloue.products.models import CURRENCY, UNIT
+
 
 @register.filter
 @stringfilter
@@ -57,3 +59,25 @@ def linebreaksp(value, autoescape=None):
     return mark_safe(linebreaks(value, autoescape))
 linebreaksp.is_safe = True
 linebreaksp.needs_autoescape = True
+
+@register.filter
+@stringfilter
+def unit(value):
+    """
+    >>> unit(1)
+    u'jour'
+    """
+    return UNIT[int(value)][1]
+
+
+@register.filter
+@stringfilter
+def currency(value):
+    """
+    >>> currency('USD')
+    u'$'
+    """
+    for name, symbol in CURRENCY:
+        if name == value:
+            return symbol
+
