@@ -16,7 +16,7 @@ from django.utils.translation import ugettext as _
 from eloue.accounts import EMAIL_BLACKLIST
 from eloue.accounts.fields import PhoneNumberField
 from eloue.accounts.models import Patron, PhoneNumber, COUNTRY_CHOICES
-from eloue.accounts.widgets import CustomRadioFieldRenderer
+from eloue.accounts.widgets import ParagraphRadioFieldRenderer
 
 STATE_CHOICES = (
     (0, "Je n'ai pas encore de compte e-loue"),
@@ -26,7 +26,7 @@ STATE_CHOICES = (
 
 class EmailAuthenticationForm(forms.Form):
     """Displays the login form and handles the login action."""
-    exists = forms.TypedChoiceField(required=True, coerce=int, choices=STATE_CHOICES, widget=forms.RadioSelect(renderer=CustomRadioFieldRenderer), initial=1)
+    exists = forms.TypedChoiceField(required=True, coerce=int, choices=STATE_CHOICES, widget=forms.RadioSelect(renderer=ParagraphRadioFieldRenderer), initial=1)
     email = forms.EmailField(label=_(u"Email"), max_length=75, required=True, widget=forms.TextInput(attrs={
         'autocapitalize': 'off', 'autocorrect': 'off', 'class': 'inm'
     }))
