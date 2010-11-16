@@ -1,49 +1,42 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="top-content container clearfix">
-	<div class="grid3 first">
-		<h1>Réservez</h1>
-	</div>
-	<div class="grid7">
-		<ol class="sbs">
-			<li class="sbsFirst sbsDo">1.Identifiez-vous</li>
-			<li class="sbsDone">2.Enregistrez votre paiement</li>
+<div id="content" class="clearfix">
+	<div class="sbs x12">
+		<div class="sbs-header">
+			<h1>Réservation</h1>
+		</div>
+		<ol class="sbs-steps">
+				<li class="on">1.Identifiez-vous</li>
+				<li class="off">2.Confirmez votre réservation</li>
 		</ol>
+		<a href="#" class="btn big-blue">obtenir de l'aide</a>
 	</div>
-</div>{# top-content #}
-<div class="content container clearfix">
-	<div class="grid7 first">
-		<h3>Identification e-loue :</h3>
-		<div class="data pam">
-			{{ form.errors }}
-			<form class="sign" action="" method="POST">
-				{% csrf_token %}
-				<table>
-					<tr>
-						<td class="txtR"><label class="labb">Mon adresse email est :</label></td>
-						<td>{{ form.email }}</td>
-					</tr>
-					{{ form.exists }}
-					<tr>
-						<td></td>
-						<td>{{ form.password }}</td>
-					</tr>
-					<tr>
-						<td class="submit" colspan="2">
-							<input type="hidden" name="{{ step_field }}" value="{{ step0 }}" />
-						  {{ previous_fields|safe }}
-							<input type="submit" value="Prochaine étape" class="button middle grey" />
-						</td>
-					</tr>
-					<tr>
-						<td class="forgot" colspan="2">
-							<a href="{% url password_reset %}">Mot de passe oublié</a>
-						</td>
-					</tr>
-				</table>
-			</form>{# sign #}
-		</div>{# data #}
+	<div class="content-header x12">
+		<h2>Identification</h2>
+	</div>
+	<div class="x9">
+	<div class="signup x9 first">
+		{{ form.errors }}
+		<form class="form" enctype="multipart/form-data" action="" method="POST">
+			{% csrf_token %}
+		<p>
+			<label class="email">Votre adresse email est :</label> {{ form.email }}
+		</p>
+		<p class="question">Avez-vous un compte e-loue ?</p>
+		{{ form.exists }}
+		<p class="password">
+			{{ form.password }}
+			<a href="{% url password_reset %}" class="pd-forget">Mot de passe oublié</a>
+		</p>
+		
+	</div>
+	<div class="submit-wizard x9 first">
+		<input type="hidden" name="{{ step_field }}" value="{{ step0 }}" />
+	  {{ previous_fields|safe }}
+		<a href="#">Annuler</a> ou 
+		<input type="submit" class="btn big-green" value="Continuer &rarr;" />
+	</form>
 	</div>
 </div>{# content #}
 {% endblock %}

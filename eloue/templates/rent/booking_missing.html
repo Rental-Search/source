@@ -1,116 +1,117 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="top-content container clearfix">
-	<div class="grid3 first">
-		<h1>Réservez</h1>
-	</div>
-	<div class="grid7">
-		<ol class="sbs">
-			<li class="sbsFirst sbsDo">1.Identifiez-vous</li>
-			<li class="sbsDone">2.Enregistrez votre paiement</li>
+<div id="content" class="clearfix">
+	<div class="sbs x12">
+		<div class="sbs-header">
+			<h1>Réservation</h1>
+		</div>
+		<ol class="sbs-steps">
+				<li class="on">1.Identifiez-vous</li>
+				<li class="off">2.Confirmez votre réservation</li>
 		</ol>
+		<a href="#" class="btn big-blue">obtenir de l'aide</a>
 	</div>
-</div>{# top-content #}
-<div class="content container clearfix">
-	<div class="grid7 first">
-		<h3>Nouveau sur e-loue ? Enregistrez votre profil :</h3>
+	<div class="content-header x12">
+		<h2>Identification</h2>
+	</div>
+	<div class="more-info x9">
 		{{ form.errors }}
-		<div class="data pam">
-			<form class="new" action="" method="POST">
-			  {% csrf_token %}
-				<table class="grid7 first">
-				  {% if form.username %}
-					 <tr>
-					 	<th class="txtT"><label class="labb">Pseudo * :</label></th>
-						<td>{{ form.username }}</td>
-					 </tr>
-					{% endif %}
-					{% if form.password1 %}
-					 <tr>
-					 	<th class="txtT"><label class="labb">Mot de passe * :</label></th>
-						<td>{{ form.password1 }}</td>
-					 </tr>
-					{% endif %}
-					{% if form.password2 %}
-					 <tr>
-					 	<th class="txtT"><label class="labb">A nouveau * :</label></th>
-						<td>{{ form.password2 }}</td>
-					 </tr>
-					{% endif %}
-					{% if form.first_name %}
-					 <tr>
-						<th class="txtT"><label class="labb">Prénom * :</label></th>
-						<td>{{ form.first_name }}</td>
-					 </tr>
-					{% endif %}
-					{% if form.last_name %}
-					 <tr>
-						<th class="txtT"><label class="labb">Nom * :</label></th>
-						<td>{{ form.last_name }}</td>
-					 </tr>
-					{% endif %}
-					{% if form.phones %}
-					<tr>
-						<th class="txtT"><label class="labb">Téléphone * :</label></th>
-						<td>{{ form.phones }}</td>
-					</tr>
-					{% endif %}
-					{% if form.phones__phone %}
-					<tr>
-						<th class="txtT">
-							<label class="labb">
-									{% if form.phones %}
-										Nouveau Numéro :
-									{% else %}
-										Téléphone * :
-									{% endif %}
-							</label>
-						</th>
-						<td>{{ form.phones__phone }}</td>
-					</tr>
-					{% endif %}
-					{% if form.addresses %}
-					<tr>
-						<th class="txtT"><label class="labb">Adresse * :</label></th>
-						<td>{{ form.addresses }}</td>
-					</tr>
-					{% endif %}
-					{% if form.addresses__address1 %}
-					<tr>
-						<th class="txtT address" rowspan="3">
-							<label class="labb">
-								{% if form.addresses %}
-									Nouvelle adresse :
-								{% else %}
-									Adresse *:
-								{% endif %}
-							</label>
-						</th>{# form.addresses__address1.field.required #}
-						<td>{{ form.addresses__address1 }}</td>
-					</tr>
-					<tr>
-						<td>
-							{{ form.addresses__zipcode }}
-							{{ form.addresses__city }}
-						</td>
-					</tr>
-					<tr>
-						<td>
-							{{ form.addresses__country }}
-						</td>
-					</tr>
-					{% endif %}
-					<tr>
-						<td class="submit" colspan="2">
-							<input type="hidden" name="{{ step_field }}" value="{{ step0 }}" />
-						  {{ previous_fields|safe }}
-							<input type="submit" value="Prochaine étape" class="button grey medium"/>
-						</td>
-					</tr>
-				</table>
-			</form>
-		</div>{# data #}
+		<form class="form" action="" method="POST">
+			{% csrf_token %}
+		<table>
+			{% if form.username %}
+			<tr>
+				<th><label>Pseudo * :</label></th>
+				<td>{{ form.username }}</td>
+			</tr>
+			{% endif %}
+			{% if form.password1 %}
+			<tr>
+				<th><label>Mot de passe * :</label></th>
+				<td>{{ form.password1 }}</td>
+			</tr>
+			{% endif %}
+			{% if form.password2 %}
+			<tr>
+				<th><label>A nouveau * :</label></th>
+				<td>{{ form.password2 }}</td>
+			</tr>
+			{% endif %}
+			{% if form.first_name %}
+			<tr>
+				<th><label>Prénom * :</label></th>
+				<td>{{ form.first_name }}</td>
+			</tr>
+			{% endif %}
+			{% if form.last_name %}
+			<tr>
+				<th><label>Nom * :</label></th>
+				<td>{{ form.last_name }}</td>
+			</tr>
+			{% endif%}
+			{% if form.phones %}
+			<tr>
+				<th><label>Téléphone * :</label></th>
+				<td>{{ form.phones }}</td>
+			</tr>
+			{% endif %}
+			{% if form.phones__phone %}
+			<tr>
+				<th>
+					<label>
+							{% if form.phones %}
+								Nouveau Numéro :
+							{% else %}
+								Téléphone * :
+							{% endif %}
+					</label>
+				</th>
+				<td>{{ form.phones__phone }}</td>
+			</tr>
+			{% endif %}
+			{% if form.addresses %}
+			<tr>
+				<th><label>Adresse * :</label></th>
+				<td>{{ form.addresses }}</td>
+			</tr>
+			{% endif %}
+			{% if form.addresses__address1 %}
+			<tr>
+				<th rowspan="3">
+					<label>
+						{% if form.addresses %}
+							Nouvelle adresse :
+						{% else %}
+							Adresse * :
+						{% endif %}
+					</label>
+				</th>
+				<td>
+					{{ form.addresses__address1 }}
+				</td>
+			</tr>
+			<tr>
+				<td>
+					{{ form.addresses__zipcode }}
+					{{ form.addresses__city }}
+				</td>
+			</tr>
+			<tr>
+				<td>
+					{{ form.addresses__country }}
+				</td>
+			</tr>
+			{% endif %}
+		</table>
+	</div>
+	<div class="submit-wizard x9">
+		<input type="hidden" name="{{ step_field }}" value="{{ step0 }}" />
+  	{{ previous_fields|safe }}
+		<a href="#">Annuler</a> ou 
+		<input type="submit" class="btn big-green" value="Continuer &rarr;" />
+	</form>
 	</div>
 </div>{# content #}
+
 {% endblock %}
