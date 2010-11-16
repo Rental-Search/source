@@ -5,6 +5,7 @@ from django.test import TestCase
 from eloue.rent.contract import ContractGenerator
 from eloue.rent.models import Booking
 
+
 class ContractTest(TestCase):
     fixtures = ['patron', 'phones', 'address', 'price', 'product', 'booking']
     

@@ -62,12 +62,12 @@ BOOKING_DAYS = getattr(settings, 'BOOKING_DAYS', 85)
 PAYPAL_API_EMAIL = getattr(settings, 'PAYPAL_API_EMAIL')
 
 PACKAGES_UNIT = {
-    'hour':UNIT.HOUR,
-    'week_end':UNIT.WEEK_END,
-    'day':UNIT.DAY,
-    'week':UNIT.WEEK,
-    'two_weeks':UNIT.TWO_WEEKS,
-    'month':UNIT.MONTH
+    'hour': UNIT.HOUR,
+    'week_end': UNIT.WEEK_END,
+    'day': UNIT.DAY,
+    'week': UNIT.WEEK,
+    'two_weeks': UNIT.TWO_WEEKS,
+    'month': UNIT.MONTH
 }
 
 PACKAGES = {
@@ -214,8 +214,8 @@ class Booking(models.Model):
     
     def send_ask_email(self):
         context = {
-            'booking':self,
-            'site':Site.objects.get_current()
+            'booking': self,
+            'site': Site.objects.get_current()
         }
         subject = render_to_string('rent/emails/owner_ask_email_subject.txt', context)
         text_content = render_to_string('rent/emails/owner_ask_email.txt', context)
@@ -236,8 +236,8 @@ class Booking(models.Model):
         contract = contract_generator(self)
         content = contract.getvalue()
         context = {
-            'booking':self,
-            'site':Site.objects.get_current()
+            'booking': self,
+            'site': Site.objects.get_current()
         }
         subject = render_to_string('rent/emails/owner_acceptation_email_subject.txt', context)
         text_content = render_to_string('rent/emails/owner_acceptation_email.txt', context)
@@ -256,8 +256,8 @@ class Booking(models.Model):
     
     def send_rejection_email(self):
         context = {
-            'booking':self,
-            'site':Site.objects.get_current()
+            'booking': self,
+            'site': Site.objects.get_current()
         }
         subject = render_to_string('rent/emails/borrower_rejection_email_subject.txt', context)
         text_content = render_to_string('rent/emails/borrower_rejection_email.txt', context)
@@ -339,16 +339,16 @@ class Booking(models.Model):
                 ipnNotificationUrl=urljoin(
                     "http://%s" % Site.objects.get_current().domain, reverse('pay_ipn')
                 ),
-                receiverList={ 'receiver': [
+                receiverList={'receiver': [
                     {'primary':True, 'amount':str(self.total_amount), 'email':PAYPAL_API_EMAIL},
-                    {'primary':False, 'amount':str(self.net_price), 'email':self.owner.email }
+                    {'primary':False, 'amount':str(self.net_price), 'email':self.owner.email}
                 ]}
             )
             if response['paymentExecStatus'] in ['CREATED', 'INCOMPLETE']:
                 self.payment_state = PAYMENT_STATE.HOLDED
             elif response['paymentExecStatus'] in ['PROCESSING', 'PENDING']:
                 self.payment_state = PAYMENT_STATE.HOLDED_PENDING
-            else: # FIXME : Hazardous, in this case only INCOMPLETE is the only valid response
+            else:  # FIXME : Hazardous, in this case only INCOMPLETE is the only valid response
                 log.warn(response['paymentExecStatus'])
             self.pay_key = response['payKey']
         except PaypalError, e:
@@ -399,7 +399,7 @@ class Booking(models.Model):
                 ipnNotificationUrl=urljoin(
                     "http://%s" % Site.objects.get_current().domain, reverse('pay_ipn')
                 ),
-                receiverList={ 'receiver':[
+                receiverList={'receiver': [
                     {'amount':str(amount), 'email':self.owner.email},
                 ]}
             )

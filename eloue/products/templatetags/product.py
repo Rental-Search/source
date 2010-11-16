@@ -44,11 +44,12 @@ def capitalize(value):
     """
     return value.capitalize()
 
+
 @register.filter
 @stringfilter
 def linebreaksp(value, autoescape=None):
     def linebreaks(value, autoescape=None):
-        value = re.sub(r'\r\n|\r|\n', '\n', force_unicode(value)) # normalize newlines
+        value = re.sub(r'\r\n|\r|\n', '\n', force_unicode(value))  # normalize newlines
         paras = re.split('\n', value)
         if autoescape:
             paras = [u'<p>%s</p>' % escape(p.strip()) for p in paras]
@@ -59,6 +60,7 @@ def linebreaksp(value, autoescape=None):
     return mark_safe(linebreaks(value, autoescape))
 linebreaksp.is_safe = True
 linebreaksp.needs_autoescape = True
+
 
 @register.filter
 @stringfilter

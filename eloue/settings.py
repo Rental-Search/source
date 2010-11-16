@@ -287,14 +287,14 @@ else:
     PAYPAL_COMMAND = "https://www.paypal.com/webscr?%s"
 
 # Business configuration
-BOOKING_DAYS = 85 # Max booking days
-COMMISSION = 0.1 # Our commission percentage
-POLICY_NUMBER = None # Our insurance policy number
-PARTNER_NUMBER = None # Our insurance partner number
-INSURANCE_FEE = 0.054 # Use to calculate transfer price
-INSURANCE_TAXES = 0.09 # Use to calculate taxes on insurance
-INSURANCE_FTP_HOST = None # Our insurance ftp server host
-INSURANCE_FTP_USER = None # Our insurance ftp server username
-INSURANCE_FTP_PASSWORD = None # Our insurance ftp server password
-INSURANCE_FTP_CWD = None # Our insurance ftp server directory
-INSURANCE_EMAIL = None # Our insurance email
+BOOKING_DAYS = 85  # Max booking days
+COMMISSION = 0.1  # Our commission percentage
+POLICY_NUMBER = None  # Our insurance policy number
+PARTNER_NUMBER = None  # Our insurance partner number
+INSURANCE_FEE = 0.054  # Use to calculate transfer price
+INSURANCE_TAXES = 0.09  # Use to calculate taxes on insurance
+INSURANCE_FTP_HOST = None  # Our insurance ftp server host
+INSURANCE_FTP_USER = None  # Our insurance ftp server username
+INSURANCE_FTP_PASSWORD = None  # Our insurance ftp server password
+INSURANCE_FTP_CWD = None  # Our insurance ftp server directory
+INSURANCE_EMAIL = None  # Our insurance email

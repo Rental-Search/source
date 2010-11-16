@@ -24,7 +24,7 @@ class BookingWizard(GenericFormWizard):
     def done(self, request, form_list):
         missing_form = next((form for form in form_list if getattr(form.__class__, '__name__', None) == 'MissingInformationForm'), None)
         
-        if request.user.is_anonymous(): # Create new Patron
+        if request.user.is_anonymous():  # Create new Patron
             auth_form = next((form for form in form_list if isinstance(form, EmailAuthenticationForm)), None)
             new_patron = auth_form.get_user()
             if not new_patron:
@@ -58,9 +58,9 @@ class BookingWizard(GenericFormWizard):
         
         if booking.payment_state == Booking.PAYMENT_STATE.AUTHORIZED:
             GoalRecord.record('rent_object_pre_paypal', WebUser(request))
-            return redirect_to(request, settings.PAYPAL_COMMAND % urllib.urlencode({ 'cmd':'_ap-preapproval', 'preapprovalkey':booking.preapproval_key }))
+            return redirect_to(request, settings.PAYPAL_COMMAND % urllib.urlencode({'cmd': '_ap-preapproval', 'preapprovalkey': booking.preapproval_key}))
         return direct_to_template(request, template="rent/booking_preapproval.html", extra_context={
-            'booking':booking,
+            'booking': booking,
         })
     
     def get_form(self, step, data=None, files=None):

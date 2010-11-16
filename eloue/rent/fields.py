@@ -45,8 +45,8 @@ class UUIDField(models.CharField):
             raise UUIDVersionError("UUID version %s is not supported." % version)
         self.auto = auto
         self.version = version
-        kwargs['max_length'] = 32 # Set this as a fixed value, we store UUIDs in text.
-        if auto: # Do not let the user edit UUIDs if they are auto-assigned.
+        kwargs['max_length'] = 32  # Set this as a fixed value, we store UUIDs in text.
+        if auto:  # Do not let the user edit UUIDs if they are auto-assigned.
             kwargs['editable'] = False
             kwargs['blank'] = True
             kwargs['unique'] = True

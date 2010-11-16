@@ -12,6 +12,7 @@ from eloue.rent.management.commands.billing import Command as BillingCommand
 from eloue.rent.management.commands.reimbursement import Command as ReimbursementCommand
 from eloue.rent.models import Booking, Sinister
 
+
 class MockDate(datetime.date):
     @classmethod
     def today(cls):
@@ -67,7 +68,7 @@ class InsuranceTest(TestCase):
     @patch('ftplib.FTP')
     def test_sinister_command(self, mock):
         import eloue.rent.management.commands.sinister as sinister
-        reload(sinister) # It's loaded before we patch
+        reload(sinister)  # It's loaded before we patch
         command = sinister.Command()
         command.handle()
         self.assertTrue(mock.called)
@@ -85,7 +86,7 @@ class InsuranceTest(TestCase):
     @patch('ftplib.FTP')
     def test_subscriptions_command(self, mock):
         import eloue.rent.management.commands.subscriptions as subscriptions
-        reload(subscriptions) # It's loaded before we patch
+        reload(subscriptions)  # It's loaded before we patch
         command = subscriptions.Command()
         command.handle()
         self.assertTrue(mock.called)

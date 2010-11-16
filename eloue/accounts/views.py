@@ -21,7 +21,7 @@ log = Logger('eloue.accounts')
 @secure_required
 def activate(request, activation_key):
     """Activate account"""
-    activation_key = activation_key.lower() # Normalize before trying anything with it.
+    activation_key = activation_key.lower()  # Normalize before trying anything with it.
     is_actived = Patron.objects.activate(activation_key)
     return direct_to_template(request, 'accounts/activate.html', extra_context={'is_actived': is_actived, 'expiration_days': settings.ACCOUNT_ACTIVATION_DAYS})
 
@@ -35,9 +35,9 @@ def authenticate(request, *args, **kwargs):
 
 @cache_page(900)
 def patron_detail(request, slug, patron_id=None):
-    if patron_id: # This is here to be compatible with the old app
+    if patron_id:  # This is here to be compatible with the old app
         form = FacetedSearchForm()
-        return redirect_to(request, reverse('patron_detail', args=[slug]),  extra_context={'form': form})
+        return redirect_to(request, reverse('patron_detail', args=[slug]), extra_context={'form': form})
     else:
         form = FacetedSearchForm()
         return object_detail(request, queryset=Patron.objects.all(), slug=slug, template_object_name='patron', extra_context={'form': form})

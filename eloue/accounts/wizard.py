@@ -30,14 +30,14 @@ class AuthenticationWizard(MultiPartFormWizard):
             new_patron.backend = "%s.%s" % (backend.__module__, backend.__class__.__name__)
         login(request, new_patron)
         
-        if missing_form: # Okay, there's nothing missing here
+        if missing_form:  # Okay, there's nothing missing here
             missing_form.instance = new_patron
             new_patron, new_address, new_phone = missing_form.save()
         
         if request.user.is_active:
             GoalRecord.record('authentication', WebUser(request))
             messages.success(request, _(u"Bienvenue !"))
-        else: # TODO : Maybe warning or info is better suited here, we need to see with design
+        else:  # TODO : Maybe warning or info is better suited here, we need to see with design
             GoalRecord.record('registration', WebUser(request))
             messages.success(request, _(u"Bienvenue ! Nous vous avons envoyé un lien de validation par email. Cette validation est impérative pour terminer votre enregistrement."))
         return redirect_to(request, self.redirect_path)

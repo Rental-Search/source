@@ -21,6 +21,6 @@ def pagination(context):
             page_range = [n for n in range(page - window, page + window) if n > 0 and n <= pages]
         
         context.update({
-          "page_range":page_range,
+          "page_range": page_range,
         })
     return context

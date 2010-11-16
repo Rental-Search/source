@@ -70,7 +70,8 @@ def booking_price(request, slug, product_id):
         total_price = smart_str(form.cleaned_data['total_amount'])
         return HttpResponse(simplejson.dumps({'duration': duration, 'total_price': total_price}), mimetype='application/json')
     else:
-        return HttpResponse(simplejson.dumps({'errors':form.errors.values()}), mimetype='application/json')
+        return HttpResponse(simplejson.dumps({'errors': form.errors.values()}), mimetype='application/json')
+
 
 @never_cache
 @secure_required
@@ -87,7 +88,7 @@ def booking_success(request, booking_id):
 
 
 def booking_failure(request, booking_id):
-    return object_detail(request, queryset=Booking.objects.all(), object_id=booking_id, template_name='rent/booking_failure.html',  template_object_name='booking')
+    return object_detail(request, queryset=Booking.objects.all(), object_id=booking_id, template_name='rent/booking_failure.html', template_object_name='booking')
 
 
 @login_required
@@ -104,7 +105,7 @@ def booking_accept(request, booking_id):
         booking.booking_state = Booking.BOOKING_STATE.PENDING
         booking.send_acceptation_email()
         booking.save()
-    return direct_to_template(request, 'rent/booking_accept.html', extra_context={ 'booking':booking })
+    return direct_to_template(request, 'rent/booking_accept.html', extra_context={'booking': booking})
 
 
 @login_required
@@ -115,7 +116,7 @@ def booking_reject(request, booking_id):
         booking.booking_state = Booking.BOOKING_STATE.REJECTED
         booking.send_rejection_email()
         booking.save()
-    return direct_to_template(request, 'rent/booking_reject.html', extra_context={ 'booking':booking })
+    return direct_to_template(request, 'rent/booking_reject.html', extra_context={'booking': booking})
 
 
 @login_required
@@ -126,15 +127,15 @@ def booking_close(request, booking_id):
         booking.pay()
         booking.booking_state = Booking.BOOKING_STATE.CLOSED
         booking.save()
-    return direct_to_template(request, 'rent/booking_close.html', extra_context={ 'booking':booking })
+    return direct_to_template(request, 'rent/booking_close.html', extra_context={'booking': booking})
 
 
 @login_required
 @ownership_required(model=Booking, object_key='booking_id', ownership=['owner', 'borrower'])
 def booking_incident(request, booking_id):
     booking = get_object_or_404(Booking, pk=booking_id)
-    if request.POST: # TODO : Do we need more ?!
+    if request.POST:  # TODO : Do we need more ?!
         booking.booking = Booking.BOOKING_STATE.INCIDENT
         booking.save()
-    return direct_to_template(request, 'rent/booking_incident.html', extra_context={ 'booking':booking })
+    return direct_to_template(request, 'rent/booking_incident.html', extra_context={'booking': booking})
 

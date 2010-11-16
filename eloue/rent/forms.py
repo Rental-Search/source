@@ -53,8 +53,8 @@ class ISO8601DateTimeField(forms.Field):
 class DateTimeWidget(forms.MultiWidget):
     def __init__(self, attrs=None, date_format=None, time_format=None, *args, **kwargs):
         widgets = (
-            forms.DateInput(attrs={'class':'ins dps'}, format=date_format),
-            forms.HiddenInput(attrs={'class':'sells'}),
+            forms.DateInput(attrs={'class': 'ins dps'}, format=date_format),
+            forms.HiddenInput(attrs={'class': 'sells'}),
         )
         super(DateTimeWidget, self).__init__(widgets, *args, **kwargs)
     
@@ -159,6 +159,7 @@ class BookingForm(forms.ModelForm):
 
 class BookingConfirmationForm(forms.Form):
     pass
+
 
 class SinisterForm(forms.ModelForm):
     class Meta:

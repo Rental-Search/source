@@ -7,6 +7,7 @@ from django.test import TestCase
 
 from eloue.rent.models import Booking
 
+
 class MockDateTime(datetime.datetime):
     @classmethod
     def now(cls):

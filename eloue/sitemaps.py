@@ -25,4 +25,3 @@ class FlatPageSitemap(Sitemap):
     
     def items(self):
         return FlatPage.objects.all()
-    

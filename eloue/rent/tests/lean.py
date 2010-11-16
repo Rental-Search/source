@@ -6,6 +6,7 @@ from django.test import TestCase
 from eloue.accounts.models import Patron
 from eloue.lean import PatronEngagementScoreCalculator
 
+
 class ScoreCalculatorTest(TestCase):
     fixtures = ['patron', 'address', 'price', 'product', 'booking']
     

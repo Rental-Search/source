@@ -107,22 +107,22 @@ class GenericFormWizard(MultiPartFormWizard):
         'addresses__address1', 'addresses__zipcode', 'addresses__city', 'addresses__country']
         
     def __call__(self, request, *args, **kwargs):
-        if request.user.is_authenticated(): # When user is authenticated
+        if request.user.is_authenticated():  # When user is authenticated
             if EmailAuthenticationForm in self.form_list:
                 self.form_list.remove(EmailAuthenticationForm)
             if not any(map(lambda el: getattr(el, '__name__', None) == 'MissingInformationForm', self.form_list)):
                 missing_fields, missing_form = make_missing_data_form(request.user, self.required_fields)
-                if missing_fields: # FIXME : Optimistic insert
+                if missing_fields:  # FIXME : Optimistic insert
                     self.form_list.insert(1, missing_form)
-        else: # When user is anonymous
+        else:  # When user is anonymous
             if EmailAuthenticationForm not in self.form_list:
                 self.form_list.append(EmailAuthenticationForm)
             if EmailAuthenticationForm in self.form_list:
                 if not next((form for form in self.form_list if getattr(form, '__name__', None) == 'MissingInformationForm'), None):
                     form = self.get_form(self.form_list.index(EmailAuthenticationForm), request.POST, request.FILES)
-                    form.is_valid() # Here to fill form user_cache
+                    form.is_valid()  # Here to fill form user_cache
                     missing_fields, missing_form = make_missing_data_form(form.get_user(), self.required_fields)
-                    if missing_fields: # FIXME : Optimistic insert
+                    if missing_fields:  # FIXME : Optimistic insert
                         self.form_list.insert(2, missing_form)
         return super(GenericFormWizard, self).__call__(request, *args, **kwargs)
     

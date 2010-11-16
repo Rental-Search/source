@@ -17,7 +17,7 @@ class ProductWizard(GenericFormWizard):
     def done(self, request, form_list):
         missing_form = next((form for form in form_list if getattr(form.__class__, '__name__', None) == 'MissingInformationForm'), None)
         
-        if request.user.is_anonymous(): # Create new Patron
+        if request.user.is_anonymous():  # Create new Patron
             auth_form = next((form for form in form_list if isinstance(form, EmailAuthenticationForm)), None)
             new_patron = auth_form.get_user()
             if not new_patron:
@@ -50,7 +50,7 @@ class ProductWizard(GenericFormWizard):
     
     def get_form(self, step, data=None, files=None):
         if issubclass(self.form_list[step], ProductForm):
-            if files and '0-picture' in files: # Hack to get image working
+            if files and '0-picture' in files:  # Hack to get image working
                 data['0-picture_id'] = Picture.objects.create(image=files['0-picture']).id
                 del files['0-picture']
             return self.form_list[step](data, files, prefix=self.prefix_for_step(step),

@@ -41,8 +41,8 @@ class FacetUrlNode(Node):
         breadcrumbs = self.breadcrumbs.resolve(context).copy()
         urlbits = dict((facet['label'], facet['value']) for facet in breadcrumbs.values() if facet['facet'])
         params = MultiValueDict((facet['label'], [facet['value']]) for facet in breadcrumbs.values() if not facet['facet'])
-        additions = dict([ (key.resolve(context), value.resolve(context)) for key, value in self.additions])
-        removals = [ key.resolve(context) for key in self.removals ]
+        additions = dict([(key.resolve(context), value.resolve(context)) for key, value in self.additions])
+        removals = [key.resolve(context) for key in self.removals]
         
         for key, value in additions.iteritems():
             if key in params:
@@ -56,7 +56,7 @@ class FacetUrlNode(Node):
             if key in urlbits:
                 del urlbits[key]
         
-        path = urljoin('/location/', ''.join([ '%s/%s/' % (key, value) for key, value in urlbits.iteritems() ]))
+        path = urljoin('/location/', ''.join(['%s/%s/' % (key, value) for key, value in urlbits.iteritems()]))
         if params:
             return '%s?%s' % (path, self.urlencode(params))
         else:
@@ -107,7 +107,7 @@ class CanonicalNode(Node):
     def render(self, context):
         urlbits = self.urlbits.resolve(context).copy()
         urlbits = self.sort(urlbits)
-        path = urljoin('/location/', ''.join([ '%s/%s/' % (key, value) for key, value in urlbits.iteritems() ]))
+        path = urljoin('/location/', ''.join(['%s/%s/' % (key, value) for key, value in urlbits.iteritems()]))
         return path
     
 

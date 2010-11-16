@@ -116,7 +116,7 @@ class Patron(User):
     
     def clean(self):
         from django.core.exceptions import ValidationError
-        if self.pk: # TODO : Might need some improvements and more tests
+        if self.pk:  # TODO : Might need some improvements and more tests
             if Patron.objects.exclude(pk=self.pk).filter(email=self.email).exists():
                 raise ValidationError(_(u"Un utilisateur utilisant cet email existe déjà"))
             if Patron.objects.exclude(pk=self.pk).filter(username=self.username).exists():
@@ -198,7 +198,7 @@ class Address(models.Model):
         return smart_unicode("%s %s %s %s" % (self.address1, self.address2 if self.address2 else '', self.zipcode, self.city))
     
     def save(self, *args, **kwargs):
-        if not self.position: # TODO : improve that part
+        if not self.position:  # TODO : improve that part
             geocode = geocoder(settings.GOOGLE_API_KEY)
             name, (lat, lon) = geocode(smart_str("%s %s %s %s" % (self.address1, self.address2, self.zipcode, self.city)))
             if lat and lon:

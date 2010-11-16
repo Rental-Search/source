@@ -10,7 +10,7 @@ class ParagraphRadioFieldRenderer(RadioFieldRenderer):
             yield RadioInput(self.name, self.value, self.attrs.copy(), choice, i)
     
     def __getitem__(self, idx):
-        choice = self.choices[idx] # Let the IndexError propogate
+        choice = self.choices[idx]  # Let the IndexError propogate
         return RadioInput(self.name, self.value, self.attrs.copy(), choice, idx)
     
     def render(self):

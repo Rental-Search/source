@@ -9,6 +9,7 @@ from mock import patch
 
 from eloue.rent.models import Booking
 
+
 class MockDateTime(datetime.datetime):
     @classmethod
     def now(cls):
@@ -19,6 +20,7 @@ class MockBooking(Booking):
     @classmethod
     def objects(cls):
         return cls.objects
+    
 
 class PaymentsTest(TestCase):
     fixtures = ['patron', 'phones', 'address', 'price', 'product', 'booking', 'sinister']
@@ -30,7 +32,7 @@ class PaymentsTest(TestCase):
     @patch.object(Booking, 'hold')
     def test_hold_command(self, mock_method):
         import eloue.rent.management.commands.hold as hold
-        reload(hold) # It's loaded before we patch
+        reload(hold)  # It's loaded before we patch
         command = hold.Command()
         command.handle()
         self.assertTrue(mock_method.called)

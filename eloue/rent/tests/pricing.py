@@ -9,6 +9,7 @@ from pyke.knowledge_engine import CanNotProve
 from eloue.products.models import Product
 from eloue.rent.models import Booking
 
+
 class BookingPriceTest(TestCase):
     fixtures = ['patron', 'address', 'price', 'product']
     
