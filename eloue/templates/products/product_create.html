@@ -16,38 +16,93 @@
 		<h2>Remplissez le formulaire de location</h2>
 	</div>
 	<div class="new x9">
-		{{ form.errors }}
+		
 		<form class="form" enctype="multipart/form-data" action="" method="POST">
 		  {% csrf_token %}
+			
 			<table>
 				<tr>
-					<td colspan="2">
+					<td colspan="2" {% if form.category.errors %} class="error-field" {% endif %}>
 						{{ form.category }}
+						{% if form.category.errors %}
+					 		{% for error in form.category.errors %}
+								<br />
+						  	<span class="error">{{ error|escape }}</span>
+							{% endfor %}
+					{% endif %}
 					</td>
 				</tr>
 				<tr>
 					<th><label>Photo * :</label></th>
-					<td>{{ form.picture }}</td>
+					<td {% if form.picture.errors %} class="error-field" {% endif %}>
+					{{ form.picture }}
+					{% if form.picture.errors %}
+					{% for error in form.picture.errors %}
+										<br />
+						        <span class="error">{{ error|escape }}</span>
+						    {% endfor %}
+						{% endif %}
+					</td>
 				</tr>
 				<tr>
 					<th><label>Titre * :</label></th>
-					<td>{{ form.summary }}</td>
+					<td {% if form.summary.errors %} class="error-field" {% endif %}>
+						{{ form.summary }}
+						{% if form.summary.errors %}
+						    {% for error in form.summary.errors %}
+										<br />
+						        <span class="error">{{ error|escape }}</span>
+						    {% endfor %}
+						{% endif %}
+					</td>
 				</tr>
 				<tr>
 					<th><label>Prix location * :</label></th>
-					<td>{{ form.price }} <span class="unit">&euro;</span> par jour</td>
+					<td {% if form.price.errors %} class="error-field" {% endif %}>
+						{{ form.price }} <span class="unit">&euro;</span> par jour
+						{% if form.price.errors %}
+						    {% for error in form.price.errors %}
+										<br />
+						        <span class="error">{{ error|escape }}</span>
+						    {% endfor %}
+						{% endif %}
+					</td>
 				</tr>
 				<tr>
 					<th><label>Caution :</label></th>
-					<td>{{  form.deposit_amount }} <span class="unit">&euro;</span></td>
+					<td {% if form.deposit_amount.errors %} class="error-field" {% endif %}>
+						{{  form.deposit_amount }} <span class="unit">&euro;</span>
+						{% if form.deposit_amount.errors %}
+						    {% for error in form.deposit_amount.errors %}
+										<br />
+						        <span class="error">{{ error|escape }}</span>
+						    {% endfor %}
+						{% endif %}
+					</td>
 				</tr>
 				<tr>
 					<th><label>Quantité * :</label></th>
-					<td>{{  form.quantity }}</td>
+					<td {% if form.quantity.errors %} class="error-field" {% endif %}>
+						{{  form.quantity }}
+						{% if form.quantity.errors %}
+						    {% for error in form.quantity.errors %}
+										<br />
+						        <span class="error">{{ error|escape }}</span>
+						    {% endfor %}
+						{% endif %}
+					</td>
 				</tr>
 				<tr>
 					<th><label>Description * :</label></th>
-					<td>{{ form.description}}</td>
+					<td {% if form.description.errors %} class="error-field" {% endif %}>
+						{{ form.description}}
+						{% if form.description.errors %}
+						    {% for error in form.description.errors %}
+										<br />
+						        <span class="error">{{ error|escape }}</span>
+						    {% endfor %}
+						{% endif %}
+					</td>
 				</tr>
 			</table>
 		</div>

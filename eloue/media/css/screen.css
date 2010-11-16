@@ -652,6 +652,7 @@ html[xmlns] .clearfix {
         margin-top: 7px;
         margin-bottom: 5px;
         border: none;
+        height: 23px;
       }
 
     select
@@ -670,6 +671,17 @@ html[xmlns] .clearfix {
       {
         font-size: 14px;
       }
+      
+    .error
+    {
+      color: red;
+      font-size: 12px;
+    }
+    
+    .error-field input, .error-field select, .error-field textarea
+    {
+      border: 1px solid red;
+    }
 
 
 
