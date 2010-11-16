@@ -519,7 +519,24 @@
       text-align: right;
     }
   
+/* *************************************************
+  public profil page
+************************************************** */
+
+.public-profil {}
   
+  .pp-info 
+  {
+    background-color: #ECF6FF;
+    padding: 10px 0px; 
+  }
+    .pp-info p
+    {
+      font-weight: bold;
+      padding: 0px 10px;
+    }
+
+
 
 
       
