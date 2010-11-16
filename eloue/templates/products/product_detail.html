@@ -47,10 +47,10 @@
 		<div class="product-price">
 		 {% with product.prices.day|first as price %}
 		  <span class="price">{{ price }}</span>
-		  <span class="unit">par {{ price.unit|unit }}</span>
+		  <span class="unit">{% blocktrans with price.unit|unit as unit %}par {{ unit }}{% endblocktrans %}</span>
 		 {% endwith %}
 		</div>
-		<form action="{% url booking_create product.slug,product.id %}" method="post" class="form">
+		<form id="booking_create" action="{% url booking_create product.slug,product.id %}" method="post" class="form">
 		<div class="booking-date-start">
 			<label class="labm">{% trans "Début" %} :</label><br />
 			{{ form.started_at }}
@@ -59,11 +59,9 @@
 			<label class="labm">{% trans "Fin" %} :</label><br />
 			{{ form.ended_at }}
 		</div>
-		<!--
-		<div class="booking-total">
-			<p>Total : <span class="day">2 jours,</span> soit <span class="total-price">140€</span></p>
+		<div id="booking-total" class="booking-total">
+		 <p>{% trans "Total : " %}<span class="day">1 jour,</span> soit <span class="total-price">{{ product.prices.day|first }}</span></p>
 		</div>
-		-->
 	</div>
 	<div class="product-booking-bottom x4 first">
 		{% csrf_token %}<input type="hidden" name="wizard_step" value="0" />

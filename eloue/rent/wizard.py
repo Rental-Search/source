@@ -69,10 +69,11 @@ class BookingWizard(GenericFormWizard):
             product = self.extra_context['product']
             booking = Booking(product=product, owner=product.owner)
             started_at = datetime.datetime.now() + datetime.timedelta(hours=1)
-            ended_at = datetime.datetime.now() + datetime.timedelta(days=1)
+            ended_at = started_at + datetime.timedelta(days=1)
             initial = {
                 'started_at': [started_at.strftime('%d/%m/%Y'), started_at.strftime("%H:00:00")],
-                'ended_at': [ended_at.strftime('%d/%m/%Y'), '19:00:00']
+                'ended_at': [ended_at.strftime('%d/%m/%Y'), ended_at.strftime("%H:00:00")],
+                'total_amount': Booking.calculate_price(product, started_at, ended_at)
             }
             initial.update(self.initial.get(step, {}))
             return self.form_list[step](data, files, prefix=self.prefix_for_step(step),
@@ -81,12 +82,6 @@ class BookingWizard(GenericFormWizard):
     
     def parse_params(self, request, *args, **kwargs):
         product = Product.objects.get(pk=kwargs['product_id'])
-        start_parts = (request.POST.get('0-started_at_0', None), request.POST.get('0-started_at_1', None))
-        end_parts = (request.POST.get('0-ended_at_0', None), request.POST.get('0-ended_at_1', None))
-        if any(start_parts) and any(end_parts):
-            self.extra_context['total_amount'] = Booking.calculate_price(product,
-                combine(*start_parts), combine(*end_parts))
-        self.extra_context['has_dates'] = any(start_parts) and any(end_parts)
         self.extra_context['product'] = product
         self.extra_context['search_form'] = FacetedSearchForm()
     

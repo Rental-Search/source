@@ -2,8 +2,11 @@
 import logbook
 
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseNotAllowed
 from django.shortcuts import get_object_or_404
+from django.utils import simplejson
+from django.utils.encoding import smart_str
+from django.utils.timesince import timesince
 from django.views.decorators.http import require_POST
 from django.views.decorators.cache import never_cache
 from django.views.decorators.csrf import csrf_exempt
@@ -55,7 +58,20 @@ def pay_ipn(request):
         booking.save()
     return HttpResponse()
 
-   
+
+@require_POST
+def booking_price(request, slug, product_id):
+    if not request.is_ajax():
+        return HttpResponseNotAllowed("Method Not Allowed")
+    product = get_object_or_404(Product, pk=product_id)
+    form = BookingForm(request.POST, prefix="0", instance=Booking(product=product))
+    if form.is_valid():
+        duration = timesince(form.cleaned_data['started_at'], form.cleaned_data['ended_at'])
+        total_price = smart_str(form.cleaned_data['total_amount'])
+        return HttpResponse(simplejson.dumps({'duration': duration, 'total_price': total_price}), mimetype='application/json')
+    else:
+        return HttpResponse(simplejson.dumps({'errors':form.errors.values()}), mimetype='application/json')
+
 @never_cache
 @secure_required
 def booking_create(request, *args, **kwargs):
