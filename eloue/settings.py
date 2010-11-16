@@ -140,7 +140,6 @@ INSTALLED_APPS = (
     'accounts',
     'rent',
     'products',
-    'quack'
 )
 
 # Authentification configuration
