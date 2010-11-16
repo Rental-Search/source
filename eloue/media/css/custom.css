@@ -359,7 +359,7 @@
   
   .more-info th
   {
-    width: 120px;
+    width: 140px;
     text-align: left;
     padding-top: 15px;
   }
@@ -382,6 +382,11 @@
     width: 167px;
     margin-top: 0px;
     margin-bottom: 0px;
+  }
+  
+  .more-info .country
+  {
+    margin-top: 0px;
   }
 
 /* *************************************************
