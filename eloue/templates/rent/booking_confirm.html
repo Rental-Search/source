@@ -21,6 +21,8 @@
 		 <h2>{% trans "Objet réservé" %}</h2>
 		</div>
 		<div class="booking-product x8 first">
+		 <form class="form" enctype="multipart/form-data" action="" method="POST">
+			{% csrf_token %}
 			<a class="pl-img" href="{{ object.get_absolute_url }}">
 				{% with product.pictures.all|first as picture %}
           {% if picture.thumbnail %}
@@ -141,9 +143,12 @@
 		 Si le propriétaire refuse ou ne répond pas, vous ne serez pas prélevé.<br />
 		</div>
 		<div class="booking-submit x8 first">
-			<a href="{{ product.get_absolute_url }}">Annuler</a> ou 
-			<a href="#" class="btn big-green">Continuer &rarr;</a>
+		    <input type="hidden" name="{{ step_field }}" value="{{ step0 }}" />
+	        {{ previous_fields|safe }}
+			<a href="{{ product.get_absolute_url }}">Annuler</a> ou
+		    <input type="submit" class="btn big-green" value="Continuer &rarr;" />
 		</div>
+	  </form>
 	</div>{# col1 #}
 </div>{# content #}
 {% endblock %}

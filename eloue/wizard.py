@@ -102,6 +102,7 @@ class MultiPartFormWizard(FormWizard):
     
 
 class GenericFormWizard(MultiPartFormWizard):
+    """A not so generic form wizard"""
     required_fields = ['username', 'password1', 'password2', 'first_name', 'last_name', 'phones', 'phones__phone', 'addresses',
         'addresses__address1', 'addresses__zipcode', 'addresses__city', 'addresses__country']
         
@@ -111,8 +112,8 @@ class GenericFormWizard(MultiPartFormWizard):
                 self.form_list.remove(EmailAuthenticationForm)
             if not any(map(lambda el: getattr(el, '__name__', None) == 'MissingInformationForm', self.form_list)):
                 missing_fields, missing_form = make_missing_data_form(request.user, self.required_fields)
-                if missing_fields:
-                    self.form_list.append(missing_form)
+                if missing_fields: # FIXME : Optimistic insert
+                    self.form_list.insert(1, missing_form)
         else: # When user is anonymous
             if EmailAuthenticationForm not in self.form_list:
                 self.form_list.append(EmailAuthenticationForm)
@@ -121,7 +122,7 @@ class GenericFormWizard(MultiPartFormWizard):
                     form = self.get_form(self.form_list.index(EmailAuthenticationForm), request.POST, request.FILES)
                     form.is_valid() # Here to fill form user_cache
                     missing_fields, missing_form = make_missing_data_form(form.get_user(), self.required_fields)
-                    if missing_fields:
-                        self.form_list.append(missing_form)
+                    if missing_fields: # FIXME : Optimistic insert
+                        self.form_list.insert(2, missing_form)
         return super(GenericFormWizard, self).__call__(request, *args, **kwargs)
     

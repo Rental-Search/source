@@ -94,7 +94,7 @@
 		             {% endwith %}
 							</a>
 							<div class="pl-header">
-								<h2><a href="{{ object.get_absolute_url }}">{{ product.summary|capfirst|truncate:50 }}</a></h2>
+								<h2><a href="{{ object.get_absolute_url }}">{{ product.summary|capitalize|truncate:50 }}</a></h2>
 							</div>
 							<div class="pl-content">
 								{% with product.highlighted.text|first|truncate:106|safe as highlight %}

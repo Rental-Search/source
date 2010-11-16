@@ -27,16 +27,16 @@
 		{{ form.exists }}
 		<p class="password">
 			{{ form.password }}
-			<a href="{% url password_reset %}" class="pd-forget">Mot de passe oublié</a>
+			<a href="{% url password_reset %}" class="pd-forget">Mot de passe oublié ?</a>
 		</p>
 		
 	</div>
 	<div class="submit-wizard x9 first">
 		<input type="hidden" name="{{ step_field }}" value="{{ step0 }}" />
-	  {{ previous_fields|safe }}
-		<a href="#">Annuler</a> ou 
+	    {{ previous_fields|safe }}
+		<a href="{{ product.get_absolute_url }}">Annuler</a> ou 
 		<input type="submit" class="btn big-green" value="Continuer &rarr;" />
-	</form>
 	</div>
+	</form>
 </div>{# content #}
 {% endblock %}
