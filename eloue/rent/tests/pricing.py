@@ -4,6 +4,8 @@ from decimal import Decimal as D
 
 from django.test import TestCase
 
+from pyke.knowledge_engine import CanNotProve
+
 from eloue.products.models import Product
 from eloue.rent.models import Booking
 
@@ -85,6 +87,25 @@ class BookingPriceTest(TestCase):
         ended_at = started_at + timedelta(days=18)
         price = Booking.calculate_price(product, started_at, ended_at)
         self.assertEquals(price, D('126'))
+    
+    def test_calculate_strict_day_price(self):
+        product = Product.objects.get(pk=4)
+        started_at = datetime.now()
+        ended_at = started_at + timedelta(days=1)
+        price = Booking.calculate_price(product, started_at, ended_at)
+        self.assertEquals(price, D('450'))
+    
+    def test_calculate_strict_day_with_hours_price(self):
+        product = Product.objects.get(pk=4)
+        started_at = datetime.now()
+        ended_at = started_at + timedelta(days=1, hours=4)
+        self.assertRaises(CanNotProve, Booking.calculate_price, product, started_at, ended_at)
+    
+    def test_calculate_strict_with_hours_price(self):
+        product = Product.objects.get(pk=4)
+        started_at = datetime.now()
+        ended_at = started_at + timedelta(hours=4)
+        self.assertRaises(CanNotProve, Booking.calculate_price, product, started_at, ended_at)
     
 
 class BookingSeasonTest(TestCase):

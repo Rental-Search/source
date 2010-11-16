@@ -9,6 +9,8 @@ from django.core import validators
 from django.core.exceptions import ValidationError
 from django.utils.translation import ugettext_lazy as _
 
+from pyke.knowledge_engine import CanNotProve
+
 from eloue.rent.models import Booking, Sinister
 
 log = logbook.Logger('eloue.rent')
@@ -148,7 +150,10 @@ class BookingForm(forms.ModelForm):
                 
         product = self.instance.product
         if (started_at and ended_at):
-            self.cleaned_data['total_amount'] = Booking.calculate_price(product, started_at, ended_at)
+            try:
+                self.cleaned_data['total_amount'] = Booking.calculate_price(product, started_at, ended_at)
+            except CanNotProve:
+                raise ValidationError(_(u"Vous ne pouvez pas louer cet objet pour ces dates"))
         return self.cleaned_data
     
 

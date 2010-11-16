@@ -33,18 +33,22 @@ day_package
         check $week_end != True
         check $delta.days < 7
         check $delta.days >= 1
+        check $delta.seconds == 0
 
 hour_package
     use pricing(hour, $start_at, $ended_at, $delta)
     when
         prices.price(0, $amount)
         check $delta.days < 1
+        check $delta.seconds > 0
 
 day_package_for_week
     use pricing(day, $started_at, $ended_at, $delta)
     when
         prices.price(1, $amount)
         check $delta.days < 14
+        check $delta.days >= 1
+        check $delta.seconds == 0
         notany
             prices.price(3, $amount)
             prices.price(4, $amount)
@@ -55,6 +59,8 @@ day_package_for_two_weeks
     when
         prices.price(1, $amount)
         check $delta.days < calendar.monthrange($started_at.year, $started_at.month)[1]
+        check $delta.days >= 1
+        check $delta.seconds == 0
         notany
             prices.price(3, $amount)
             prices.price(4, $amount)
@@ -65,6 +71,8 @@ day_package_for_month
     when
         prices.price(1, $amount)
         check $delta.days >= calendar.monthrange($started_at.year, $started_at.month)[1]
+        check $delta.days >= 1
+        check $delta.seconds == 0
         notany
             prices.price(3, $amount)
             prices.price(4, $amount)
