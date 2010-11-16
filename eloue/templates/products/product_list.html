@@ -89,7 +89,7 @@
 							<a class="pl-img" href="{{ object.get_absolute_url }}">
 								{% with object.pictures.all|first as picture %}
 	     	          {% if picture.thumbnail %}
-	 	               <img src="{{ picture.thumbnail.url }}" alt="product.summary" />
+	 	               <img src="{{ picture.thumbnail.url }}" alt="{{ product.summary }}" />
 		              {% endif %}
 		             {% endwith %}
 							</a>
