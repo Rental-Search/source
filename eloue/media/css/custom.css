@@ -425,6 +425,101 @@
   {
     font-size: 16px;
   }
+  
+
+/* *************************************************
+  confirm booking page
+************************************************** */
+
+.booking {}
+  
+  .booking-product
+  {
+    margin-bottom: 30px;
+  }
+  
+    .booking-product .pl-distance
+    {
+      width: 205px;
+    }
+    
+  .booking-resume
+  {
+    background: #faffe4;
+    border: 1px solid #ded9a0;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+    font-size: 16px;
+    margin-bottom: 30px;
+  }
+    
+    .booking-resume table
+    {
+      margin-bottom: 0px;
+    }
+      
+      .booking-resume tr
+      {
+        height: 52px;
+        border-bottom: 1px solid #ded9a0;
+      }
+      
+      .booking-resume th
+      {
+        padding-left: 20px;
+        text-align: left;
+        vertical-align: middle;
+      }
+      
+      .booking-resume td
+      {
+        vertical-align: middle;
+      }
+      
+      .booking-resume td.number, .booking-resume th.total
+      {
+        font-weight: bold;
+      }
+      
+      .booking-resume .total .number
+      {
+        font-size: 30px;
+        color: #FF7200 ;
+      }
+      
+      .booking-resume .total
+      {
+        background: #fbf4a5 !important;
+      }
+    
+    .booking-resume input 
+    {
+      background: #FFF url("../images/icone-calendrier.png") no-repeat 98px 7px; 
+      width: 109px;
+      margin-right: 5px;
+      margin-top: 5px;
+      margin-bottom:5px;
+    }
+  
+    .booking-resume select
+    {
+      height: 30px;
+      margin-top: 5px;
+      margin-bottom:5px;
+    }
+    
+    .booking-paiement
+    {
+      margin-bottom: 30px;
+    }
+    
+    .booking-submit
+    {
+      text-align: right;
+    }
+  
+  
 
 
       

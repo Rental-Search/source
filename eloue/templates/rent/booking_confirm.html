@@ -1,1 +1,146 @@
 {% extends "base.html" %}
+{% block content %}
+<div id="content" class="clearfix">
+	<div class="sbs x12">
+		<div class="sbs-header">
+			<h1>Réservation</h1>
+		</div>
+		<ol class="sbs-steps">
+			{% if not user.is_authenticated %}
+				<li class="off">1.Identifiez-vous</li>
+				<li class="on">2.Confirmez votre réservation</li>
+			{% else %}
+				<li class="on">Confirmez votre réservation</li>
+			{% endif %}
+		</ol>
+		<a href="#" class="btn big-blue">obtenir de l'aide</a>
+	</div>
+	<div class="booking x8">
+		<div class="content-header x8 first">
+			<h2>Objet réservé</h2>
+		</div>
+		<div class="booking-product x8 first">
+			<a class="pl-img" href="{{ object.get_absolute_url }}">
+				{% with product.pictures.all|first as picture %}
+          {% if picture.thumbnail %}
+           <img src="{{ picture.thumbnail.url }}" alt="product.summary" />
+          {% endif %}
+         {% endwith %}
+			</a>
+			<div class="pl-header">
+				<h2><a href="{{ product.get_absolute_url }}">{{ product.summary|capfirst }}</a></h2>
+			</div>
+			<div class="pl-content">
+				<div class="pl-desc">{{ product.description }}</div>
+				<div class="pl-distance">
+					
+				</div>
+				<div class="pl-price">
+					<span class="price">{{ product.prices.day|first }}&euro;</span><br />
+					<span class="unit">par jour</span>
+				</div>
+			</div>
+			<div class="pl-footer">
+				Par <a href="{{ product.owner.get_absolute_url }}" class="owner">{{ product.owner.username }}</a> | {{ product.address.city|capfirst }}, {{ product.address.zipcode }}
+			</div>
+		</div>
+		<div class="content-header x8 first">
+			<h2>Dates et total</h2>
+		</div>
+		<div class="booking-resume x8 first">
+			<table>
+				<tr>
+					<th>Début :</th>
+					<td>
+						<p>
+						<input id="id_0-started_at_0" type="text" class="ins dps hasDatepicker" value="15/11/2010" name="0-started_at_0">
+						<select id="id_0-ended_at_1" class="sells" name="0-ended_at_1">
+						<option value="00:00:00">00h</option>
+						<option value="01:00:00">01h</option>
+						<option value="02:00:00">02h</option>
+						<option value="03:00:00">03h</option>
+						<option value="04:00:00">04h</option>
+						<option value="05:00:00">05h</option>
+						<option value="06:00:00">06h</option>
+						<option value="07:00:00">07h</option>
+						<option value="08:00:00">08h</option>
+						<option value="09:00:00">09h</option>
+						<option value="10:00:00">10h</option>
+						<option value="11:00:00">11h</option>
+						<option value="12:00:00">12h</option>
+						<option value="13:00:00">13h</option>
+						<option value="14:00:00">14h</option>
+						<option value="15:00:00">15h</option>
+						<option value="16:00:00">16h</option>
+						<option value="17:00:00">17h</option>
+						<option value="18:00:00">18h</option>
+						<option value="19:00:00" selected="selected">19h</option>
+						<option value="20:00:00">20h</option>
+						<option value="21:00:00">21h</option>
+						<option value="22:00:00">22h</option>
+						<option value="23:00:00">23h</option>
+						</select>
+						</p>
+					</td>
+				</tr>
+				<tr>
+					<th>Fin :</th>
+					<td>
+						<input id="id_0-ended_at_0" type="text" class="ins dps hasDatepicker" value="16/11/2010" name="0-ended_at_0">
+						<select id="id_0-ended_at_1" class="sells" name="0-ended_at_1">
+						<option value="00:00:00">00h</option>
+						<option value="01:00:00">01h</option>
+						<option value="02:00:00">02h</option>
+						<option value="03:00:00">03h</option>
+						<option value="04:00:00">04h</option>
+						<option value="05:00:00">05h</option>
+						<option value="06:00:00">06h</option>
+						<option value="07:00:00">07h</option>
+						<option value="08:00:00">08h</option>
+						<option value="09:00:00">09h</option>
+						<option value="10:00:00">10h</option>
+						<option value="11:00:00">11h</option>
+						<option value="12:00:00">12h</option>
+						<option value="13:00:00">13h</option>
+						<option value="14:00:00">14h</option>
+						<option value="15:00:00">15h</option>
+						<option value="16:00:00">16h</option>
+						<option value="17:00:00">17h</option>
+						<option value="18:00:00">18h</option>
+						<option value="19:00:00" selected="selected">19h</option>
+						<option value="20:00:00">20h</option>
+						<option value="21:00:00">21h</option>
+						<option value="22:00:00">22h</option>
+						<option value="23:00:00">23h</option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th>Prix par jour :</th>
+					<td class="number">{{ product.prices.day|first }}&euro;</td>
+				</tr>
+				<tr>
+					<th>Nombre de jours :</th>
+					<td class="number">2</td>
+				</tr>
+				<tr class="total">
+					<th>Total :</th>
+					<td class="number">300&euro;</td>
+				</tr>
+			</table>
+		</div>
+		<div class="content-header x8 first">
+			<h2>Paiement</h2>
+		</div>
+		<div class="booking-paiement x8 first">
+			Sur la prochaine page veuillez fournir vos informations de paiement.<br />
+			Vous ne serez débité que si le propriétaire accepte votre demande (dans les 32 heures).<br /> 
+			Si le propriétaire refuse ou ne répond pas, vous ne serez pas prélèvé.<br />
+		</div>
+		<div class="booking-submit x8 first">
+			<a href="#">Annuler</a> ou 
+			<a href="#" class="btn big-green">Continuer &rarr;</a>
+		</div>
+	</div>{# col1 #}
+</div>{# content #}
+{% endblock %}
