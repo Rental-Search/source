@@ -67,11 +67,11 @@ class BookingWizard(GenericFormWizard):
         if issubclass(self.form_list[step], BookingForm):
             product = self.extra_context['product']
             booking = Booking(product=product, owner=product.owner)
-            started_at = datetime.datetime.now() + datetime.timedelta(hours=1)
+            started_at = datetime.datetime.now() + datetime.timedelta(days=1)
             ended_at = started_at + datetime.timedelta(days=1)
             initial = {
-                'started_at': [started_at.strftime('%d/%m/%Y'), started_at.strftime("%H:00:00")],
-                'ended_at': [ended_at.strftime('%d/%m/%Y'), ended_at.strftime("%H:00:00")],
+                'started_at': [started_at.strftime('%d/%m/%Y'), started_at.strftime("08:00:00")],
+                'ended_at': [ended_at.strftime('%d/%m/%Y'), ended_at.strftime("08:00:00")],
                 'total_amount': Booking.calculate_price(product, started_at, ended_at)
             }
             initial.update(self.initial.get(step, {}))
