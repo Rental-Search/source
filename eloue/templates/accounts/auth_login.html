@@ -1,15 +1,15 @@
 {% extends "base.html" %}
 
 {% block content %}
-	<div id="content" class="register clearfix">
-		<div class="content-header x12">
-			<h1>Identification</h1>
-		</div>
-		<div class="x9">
+<div id="content" class="register clearfix">
+	<div class="content-header x12">
+		<h1>Identification</h1>
+	</div>
+	<div class="x9">
 		<div class="signup x9 first">
 			{{ form.errors }}
 			<form class="form" enctype="multipart/form-data" action="" method="POST">
-				{% csrf_token %}
+			{% csrf_token %}
 			<p class="email">
 				<label >Votre adresse email est :</label> {{ form.email }}
 			</p>
@@ -19,14 +19,14 @@
 				{{ form.password }}
 				<a href="{% url password_reset %}" class="pd-forget">Mot de passe oublié</a>
 			</p>
-
 		</div>
 		<div class="submit-wizard x9 first">
 			<input type="hidden" name="{{ step_field }}" value="{{ step0 }}" />
-		  {{ previous_fields|safe }}
+	  	{{ previous_fields|safe }}
 			<a href="#">Annuler</a> ou 
 			<input type="submit" class="btn big-green" value="Continuer &rarr;" />
 		</form>
 		</div>
-	</div>{# content #}
+	</div>
+</div>{# content #}
 {% endblock %}
