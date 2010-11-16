@@ -57,67 +57,13 @@
 				<tr>
 					<th>Début :</th>
 					<td>
-						<p>
-						<input id="id_0-started_at_0" type="text" class="ins dps hasDatepicker" value="15/11/2010" name="0-started_at_0">
-						<select id="id_0-ended_at_1" class="sells" name="0-ended_at_1">
-						<option value="00:00:00">00h</option>
-						<option value="01:00:00">01h</option>
-						<option value="02:00:00">02h</option>
-						<option value="03:00:00">03h</option>
-						<option value="04:00:00">04h</option>
-						<option value="05:00:00">05h</option>
-						<option value="06:00:00">06h</option>
-						<option value="07:00:00">07h</option>
-						<option value="08:00:00">08h</option>
-						<option value="09:00:00">09h</option>
-						<option value="10:00:00">10h</option>
-						<option value="11:00:00">11h</option>
-						<option value="12:00:00">12h</option>
-						<option value="13:00:00">13h</option>
-						<option value="14:00:00">14h</option>
-						<option value="15:00:00">15h</option>
-						<option value="16:00:00">16h</option>
-						<option value="17:00:00">17h</option>
-						<option value="18:00:00">18h</option>
-						<option value="19:00:00" selected="selected">19h</option>
-						<option value="20:00:00">20h</option>
-						<option value="21:00:00">21h</option>
-						<option value="22:00:00">22h</option>
-						<option value="23:00:00">23h</option>
-						</select>
-						</p>
+						{{ preview.started_at|date:"l j F Y à H\hi"|capfirst }}
 					</td>
 				</tr>
 				<tr>
 					<th>Fin :</th>
 					<td>
-						<input id="id_0-ended_at_0" type="text" class="ins dps hasDatepicker" value="16/11/2010" name="0-ended_at_0">
-						<select id="id_0-ended_at_1" class="sells" name="0-ended_at_1">
-						<option value="00:00:00">00h</option>
-						<option value="01:00:00">01h</option>
-						<option value="02:00:00">02h</option>
-						<option value="03:00:00">03h</option>
-						<option value="04:00:00">04h</option>
-						<option value="05:00:00">05h</option>
-						<option value="06:00:00">06h</option>
-						<option value="07:00:00">07h</option>
-						<option value="08:00:00">08h</option>
-						<option value="09:00:00">09h</option>
-						<option value="10:00:00">10h</option>
-						<option value="11:00:00">11h</option>
-						<option value="12:00:00">12h</option>
-						<option value="13:00:00">13h</option>
-						<option value="14:00:00">14h</option>
-						<option value="15:00:00">15h</option>
-						<option value="16:00:00">16h</option>
-						<option value="17:00:00">17h</option>
-						<option value="18:00:00">18h</option>
-						<option value="19:00:00" selected="selected">19h</option>
-						<option value="20:00:00">20h</option>
-						<option value="21:00:00">21h</option>
-						<option value="22:00:00">22h</option>
-						<option value="23:00:00">23h</option>
-						</select>
+                        {{ preview.ended_at|date:"l j F Y à H\hi"|capfirst }}
 					</td>
 				</tr>
 				<tr>
@@ -126,11 +72,11 @@
 				</tr>
 				<tr>
 					<th>Durée de la location :</th>
-					<td class="number"></td>
+					<td class="number">{{ preview.started_at|timesince:preview.ended_at }}</td>
 				</tr>
 				<tr class="total">
 					<th>Total :</th>
-					<td class="number">300&euro;</td>
+					<td class="number">{{ preview.total_amount }} €</td>
 				</tr>
 			</table>
 		</div>

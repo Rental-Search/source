@@ -17,7 +17,6 @@ from eloue.products.forms import FacetedSearchForm
 from eloue.products.models import Product
 from eloue.rent.models import Booking
 from eloue.rent.forms import BookingForm, BookingConfirmationForm
-from eloue.rent.utils import combine
 from eloue.wizard import GenericFormWizard
 
 
@@ -79,6 +78,11 @@ class BookingWizard(GenericFormWizard):
             return self.form_list[step](data, files, prefix=self.prefix_for_step(step),
                 initial=initial, instance=booking)
         return super(BookingWizard, self).get_form(step, data, files)
+    
+    def process_step(self, request, form, step):
+        form = self.get_form(0, request.POST, request.FILES)
+        if form.is_valid():
+            self.extra_context['preview'] = form.cleaned_data
     
     def parse_params(self, request, *args, **kwargs):
         product = Product.objects.get(pk=kwargs['product_id'])

@@ -57,17 +57,17 @@ $(document).ready(function() {
     });
     
     // Date picker
-    $('#id_0-started_at_0').datepicker({
+    $('input[name$=started_at_0]').datepicker({
         dateFormat: 'dd/mm/yy',
         minDate: 0,
         maxDate: '+360d',
         onSelect: function(dateText, inst) {
-            var ended_at = $('#id_0-ended_at_0');
+            var ended_at = $('input[name$=ended_at_0]');
             ended_at.val(dateText);
             ended_at.datepicker( "option", "minDate", dateText);
         }
     });
-    $('#id_0-ended_at_0').datepicker({
+    $('input[name$=ended_at_0]').datepicker({
         dateFormat: 'dd/mm/yy'
     });
     
