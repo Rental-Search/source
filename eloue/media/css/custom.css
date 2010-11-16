@@ -304,23 +304,23 @@
 
   .signup p {margin-bottom: 15px;}
   
-    .signup .email, .signup .question
+    .signup .email label, .signup .question
     {
       font-weight: bold;
     }
     
-    .signup #id_email, .signup #id_password
+    .signup .email input, .signup .password input
     {
       margin-left: 20px;
     }
     
-    .signup #id_1-email
+    .signup .email input
     {
       width: 300px;
       margin-bottom: 15px;
     }
     
-    .signup #id_1-password
+    .signup .password input
     {
       width: 210px;
       margin-right: 20px;

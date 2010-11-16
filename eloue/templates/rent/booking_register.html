@@ -20,8 +20,8 @@
 		{{ form.errors }}
 		<form class="form" enctype="multipart/form-data" action="" method="POST">
 			{% csrf_token %}
-		<p>
-			<label class="email">Votre adresse email est :</label> {{ form.email }}
+		<p class="email">
+			<label>Votre adresse email est :</label> {{ form.email }}
 		</p>
 		<p class="question">Avez-vous un compte e-loue ?</p>
 		{{ form.exists }}

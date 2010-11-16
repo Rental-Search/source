@@ -20,6 +20,7 @@
 			{% endif %}
 		</div>
 		<div class="more-info x9">
+			{{ form.errors }}
 			<form class="form" action="" method="POST">
 				{% csrf_token %}
 			<table>
