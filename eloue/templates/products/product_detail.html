@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load i18n %}
+{% load i18n product %}
 {% block content %}
 <div class="top-content container clearfix">
 	<div class="search grid12 first">
@@ -36,7 +36,7 @@
 			{% endfor %}
 		</div>{# thumbs #}
 		<div class="descP grid8 first">
-			{{ product.description }}
+			{{ product.description|linebreaksp }}
 		</div>
 	</div>{# col1 #}
 	<div class="col2 grid4">
