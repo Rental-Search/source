@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load i18n mptt_tags product %}
+{% load i18n mptt_tags product cache %}
 
 {% block title %}{{ block.super }} - Plateforme pour louer ou mettre en location tout type d'objet : materiel, reception, mariage, sono, utilitaires, ski ...{% endblock %}
 
@@ -25,29 +25,31 @@
 	</div>{# top-content #}
 	<div id="content" class="clearfix">
 		<div class="content-header x12">
-			<h2>Catégories</h2>
+		 <h2>{% trans "Catégories" %}</h2>
 		</div>
-		{% full_tree_for_model products.Category as categories %}
-		{% for column in categories|partition:4 %}
-		 <div class="x3">
-		  {% for category in column %}
-		   {% if category.is_root_node %}
-		    {% drilldown_tree_for_node category as drilldown cumulative count products.Product.category in product_count %}
-		    {% for node,structure in drilldown|tree_info %}
-		     {% if node.is_root_node %}
-		      <div class="category-home x3 first">
-		       <h3>{{ node.name }}</h3>
-		       <ul>
-		     {% else %}
-		      {% if node.product_count %}
-		       <li><a href="{{ node.get_absolute_url }}">{{ node.name }} ({{ node.product_count }})</a></li>
-		      {% endif %}
-		     {% if structure.closed_levels|length >= 2 %}</ul></div>{% endif %}
-		    {% endif %}
-		   {% endfor %}
-		  {% endif %}
-		 {% endfor %}
+		{% cache 900 categories %}
+		 {% full_tree_for_model products.Category as categories %}
+		 {% for column in categories|partition:4 %}
+		  <div class="x3">
+		   {% for category in column %}
+		    {% if category.is_root_node %}
+		     {% drilldown_tree_for_node category as drilldown cumulative count products.Product.category in product_count %}
+		     {% for node,structure in drilldown|tree_info %}
+		      {% if node.is_root_node %}
+		       <div class="category-home x3 first">
+		        <h3>{{ node.name }}</h3>
+		        <ul>
+		      {% else %}
+		       {% if node.product_count %}
+		        <li><a href="{{ node.get_absolute_url }}">{{ node.name }} ({{ node.product_count }})</a></li>
+		       {% endif %}
+		      {% if structure.closed_levels|length >= 2 %}</ul></div>{% endif %}
+		     {% endif %}
+		    {% endfor %}
+		   {% endif %}
+		  {% endfor %}
 		 </div>
-	 {% endfor %}
+	    {% endfor %}
+	   {% endcache %}
 	</div>{# content #}
 {% endblock %}
