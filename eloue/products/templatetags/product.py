@@ -20,7 +20,7 @@ def truncate(value, max_length):
     u'this is a text sample'
     >>> truncate("this is a text sample", 18)
     u'this is a text...'
-    >>> truncate("this is a text sample", 15)
+    >>> truncate("this is a text sample", 14)
     u'this is a text...'
     """
     if len(value) <= max_length:
@@ -78,8 +78,11 @@ def currency(value):
     """
     >>> currency('USD')
     u'$'
+    >>> currency('AUD')
+    u''
     """
     for name, symbol in CURRENCY:
         if name == value:
             return symbol
+    return u''
 
