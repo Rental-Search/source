@@ -23,21 +23,16 @@ SORT = Enum([
 DEFAULT_RADIUS = getattr(settings, 'DEFAULT_RADIUS', 50)
 
 
-class ProductSearchForm(forms.Form):
-    q = forms.CharField(max_length=100, widget=forms.TextInput(attrs={'class': 'inb'}))
-    where = forms.CharField(max_length=100, widget=forms.TextInput(attrs={'class': 'inb'}))
-
-
 class FacetedSearchForm(SearchForm):
     q = forms.CharField(required=False, max_length=100, widget=forms.TextInput(attrs={'class': 'inb'}))
-    where = forms.CharField(required=False, max_length=100, widget=forms.TextInput(attrs={'class': 'inb'}))
-    radius = forms.IntegerField(required=False, widget=forms.TextInput(attrs={'class': 'ins'}))
+    l = forms.CharField(required=False, max_length=100, widget=forms.TextInput(attrs={'class': 'inb'}))
+    r = forms.IntegerField(required=False, widget=forms.TextInput(attrs={'class': 'ins'}))
     sort = forms.ChoiceField(required=False, choices=SORT, widget=forms.HiddenInput())
     price = FacetField(label=_(u"Prix"), pretty_name=_("par-prix"), required=False)
     categories = FacetField(label=_(u"Catégorie"), pretty_name=_("par-categorie"), required=False, widget=forms.HiddenInput())
     
-    def clean_radius(self):
-        radius = self.cleaned_data.get('radius', None)
+    def clean_r(self):
+        radius = self.cleaned_data.get('r', None)
         if radius in EMPTY_VALUES:
             radius = DEFAULT_RADIUS
         return radius
@@ -52,16 +47,16 @@ class FacetedSearchForm(SearchForm):
                 sqs = self.searchqueryset.auto_query(query).highlight()
                 suggestions = sqs.spelling_suggestion()
 
-            where, radius = self.cleaned_data.get('where', None), self.cleaned_data.get('radius', DEFAULT_RADIUS)
-            if where:
-                lat, lon = Geocoder.geocode(where)
+            location, radius = self.cleaned_data.get('l', None), self.cleaned_data.get('r', DEFAULT_RADIUS)
+            if location:
+                lat, lon = Geocoder.geocode(location)
                 sqs = sqs.spatial(lat=lat, long=lon, radius=radius, unit='km')
             
             if self.load_all:
                 sqs = sqs.load_all()
                         
             for key in self.cleaned_data.keys():
-                if self.cleaned_data[key] and key not in ["q", "where", "radius", "sort"]:
+                if self.cleaned_data[key] and key not in ["q", "l", "r", "sort"]:
                     sqs = sqs.narrow("%s:%s" % (key, self.cleaned_data[key]))
         
             if self.cleaned_data['sort']:

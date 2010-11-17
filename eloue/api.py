@@ -43,9 +43,9 @@ class ProductRessource(ModelResource):
         if "q" in filters:
             sqs = sqs.auto_query(filters['q'])
         
-        if "where" in filters:
-            lat, lon = Geocoder.geocode(filters['where'])
-            radius = filters.get('radius', DEFAULT_RADIUS)
+        if "l" in filters:
+            lat, lon = Geocoder.geocode(filters['l'])
+            radius = filters.get('r', DEFAULT_RADIUS)
             if lat and lon:
                 sqs = sqs.spatial(lat=lat, long=lon, radius=radius, unit='km')
         

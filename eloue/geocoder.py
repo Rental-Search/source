@@ -10,19 +10,19 @@ from geocoders.google import geocoder
 
 class Geocoder(object):  # TODO : Badly written
     @classmethod
-    def geocode(cls, where):
-        where = cls.format_place(where)
-        coordinates = cache.get('where:%s' % cls.hash_key(where))
+    def geocode(cls, location):
+        location = cls.format_place(location)
+        coordinates = cache.get('location:%s' % cls.hash_key(location))
         if not coordinates:
             geocode = geocoder(settings.GOOGLE_API_KEY)
-            name, coordinates = geocode(where)
-            cache.set('where:%s' % cls.hash_key(where), coordinates, 0)
+            name, coordinates = geocode(location)
+            cache.set('location:%s' % cls.hash_key(location), coordinates, 0)
         return coordinates[0], coordinates[1]
     
     @classmethod
-    def format_place(cls, where):
-        return smart_str(where.strip().lower())
+    def format_place(cls, location):
+        return smart_str(location.strip().lower())
     
     @classmethod
-    def hash_key(cls, where):
-        return hashlib.md5(where).hexdigest()
+    def hash_key(cls, location):
+        return hashlib.md5(location).hexdigest()

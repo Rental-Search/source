@@ -44,9 +44,9 @@ def product_list(request, urlbits, sqs=SearchQuerySet(), suggestions=None, page=
         
     breadcrumbs = SortedDict()
     breadcrumbs['q'] = {'name': 'q', 'value': form.cleaned_data.get('q', None), 'label': 'q', 'facet': False}
-    breadcrumbs['where'] = {'name': 'where', 'value': form.cleaned_data.get('where', None), 'label': 'where', 'facet': False}
+    breadcrumbs['l'] = {'name': 'l', 'value': form.cleaned_data.get('l', None), 'label': 'l', 'facet': False}
+    breadcrumbs['r'] = {'name': 'r', 'value': form.cleaned_data.get('r', None), 'label': 'r', 'facet': False}
     breadcrumbs['sort'] = {'name': 'sort', 'value': form.cleaned_data.get('sort', None), 'label': 'sort', 'facet': False}
-    breadcrumbs['radius'] = {'name': 'radius', 'value': form.cleaned_data.get('radius', None), 'label': 'radius', 'facet': False}
     
     urlbits = urlbits or ''
     urlbits = filter(None, urlbits.split('/')[::-1])

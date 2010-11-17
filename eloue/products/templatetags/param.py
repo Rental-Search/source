@@ -13,7 +13,7 @@ def has_param(request, param):
     >>> request.GET = {'q': 'banana'}
     >>> has_param(request, 'q')
     True
-    >>> has_param(request, 'where')
+    >>> has_param(request, 'l')
     False
     """
     return param in request.GET

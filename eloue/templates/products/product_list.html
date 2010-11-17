@@ -44,7 +44,7 @@
 	</div>
 	<div class="search-where x5">
 		<label>{% trans "Où ?" %}</label><br />
-		{{ form.where }}<br />
+		{{ form.l }}<br />
 	</div>
 	<div class="search-find x2">
 		<input type="submit" value="{% trans "Rechercher" %}" class="btn big-orange"/>
@@ -71,7 +71,7 @@
 				<li>
 					<a href="{% facet_url breadcrumbs "sort" "created_at" %}">{% trans "Les plus récents" %}</a>
 				</li>
-				{% if form.cleaned_data.where %}
+				{% if form.cleaned_data.l %}
 				<li><a href="{% facet_url breadcrumbs "sort" "geo_distance" %}">{% trans "Les plus proches" %}</a></li>
 				{% endif %}
 				<li>
@@ -83,7 +83,7 @@
 			</ul>
 			<ul class="product-list x8 first">
 				{% for product in product_list %}
-					{% cache 900 product:row product.pk form.cleaned_data.q form.cleaned_data.where %}
+					{% cache 900 product:row product.pk form.cleaned_data.q form.cleaned_data.l %}
 						{% with product.object as object %}
 						<li class="x8 first">
 							<a class="pl-img" href="{{ object.get_absolute_url }}">
@@ -127,7 +127,7 @@
 			</ul>{# list #}
 			{% pagination %}
 	</div>
-	{% if form.cleaned_data.where %}
+	{% if form.cleaned_data.l %}
 	<div class="facet-dist portlet x4">
 		<div class="portlet-header">
 			<h3>{% trans "Distance" %}</h3>
@@ -136,10 +136,10 @@
 			<form action="{% facet_url breadcrumbs %}" class="form">
 				<p>
 					<input type="hidden" value="{{ form.cleaned_data.q }}" name="q"/>
-			    <input type="hidden" value="{{ form.cleaned_data.where }}" name="where"/>
+			    <input type="hidden" value="{{ form.cleaned_data.l }}" name="l"/>
 					{{ form.sort }}
 					<label class="labs">{% trans "Restreindre les résultats à un rayon de" %}</label><br />
-					{{ form.radius }}
+					{{ form.r }}
 					<span class="unit">Km</span>
 					<input type="submit" value="Mettre à jour" class="btn medium-blue"/>
 				</p>
