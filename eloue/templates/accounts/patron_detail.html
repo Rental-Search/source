@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load i18n %}
+{% load i18n product %}
 {% block content %}
 <div id="top-content" class="search clearfix">
 	<form class="form" action="{% url product_list %}">
@@ -55,8 +55,10 @@
 							
 						</div>
 						<div class="pl-price">
-							<span class="price">{{ product.prices.day|first }}&euro;</span><br />
-							<span class="unit">par jour</span>
+						  {% with product.prices.day|first as price %}
+							<span class="price">{{ price }}</span><br />
+							<span class="unit">par {{ price.unit|unit }}</span>
+						  {% endwith %}
 						</div>
 						<div class="pl-btn">
 							<a href="{{ product.get_absolute_url }}" class="btn small-blue">{% trans "Réserver" %} &rarr;</a>
