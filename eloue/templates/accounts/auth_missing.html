@@ -1,92 +1,209 @@
 {% extends "base.html" %}
 
 {% block content %}
-	<div class="top-content container clearfix">
-		<div class="grid3 first">
-			<h1>Ajoutez un objet</h1>
-		</div>
-		<div class="grid7">
-			<ol class="sbs">
-				<li class="sbsFirst sbsDone">1.Remplissez la fiche</li>
-				<li class="sbsDo">2.Identifiez-vous</li>
+	<div id="content" class="clearfix">
+		<div class="sbs x12">
+			<div class="sbs-header">
+				<h1>Inscription</h1>
+			</div>
+			<ol class="sbs-steps">
+				<li class="on">Identifiez-vous</li>
 			</ol>
+			<a href="#" class="btn big-blue">obtenir de l'aide</a>
 		</div>
-	</div>
-	<div class="content container clearfix">
-		<div class="grid7 first">
-			<h3>Nouveau sur e-loue ? Enregistrez votre profil :</h3>
-			{{ form.errors }}
-			<div class="data pam">
-				<form class="new" action="" method="POST">
-			  	{% csrf_token %}
-					<table class="grid7 first">
-				  	{% if form.username %}
-					 	<tr>
-					 		<th class="txtT"><label class="labb">Pseudo * :</label></th>
-							<td>{{ form.username }}</td>
-					 	</tr>
+		<div class="content-header x12">
+			{% if form.addresses %}
+				<h2>Choisissez une adresse pour l'objet :</h2>
+			{% else %}
+				<h2>Complétez votre profil et choisissez une adresse pour la l'objet :</h2>
+			{% endif %}
+		</div>
+		<div class="more-info x9">
+			<form class="form" action="" method="POST">
+				{% csrf_token %}
+			<table>
+				{% if form.username %}
+				<tr>
+					<th><label>Pseudo * :</label></th>
+					<td {% if form.username.errors %} class="error-field" {% endif %}>
+						{{ form.username }}
+						{% if form.username.errors %}
+						    {% for error in form.username.errors %}
+										<br />
+						        <span class="error">{{ error|escape }}</span>
+						    {% endfor %}
 						{% endif %}
-            {% if form.password1 %}
-					  <tr>
-					 	  <th class="txtT"><label class="labb">Mot de passe * :</label></th>
-						  <td>{{ form.password1 }}</td>
-					  </tr>
-					  {% endif %}
-					  {% if form.password2 %}
-					  <tr>
-					 	  <th class="txtT"><label class="labb">A nouveau * :</label></th>
-						  <td>{{ form.password2 }}</td>
-					  </tr>
-					  {% endif %}
-						{% if form.first_name %}
-					 	<tr>
-							<th class="txtT"><label class="labb">Prénom * :</label></th>
-							<td>{{ form.first_name }}</td>
-					 	</tr>
+					</td>
+				</tr>
+				{% endif %}
+				{% if form.password1 %}
+				<tr>
+					<th><label>Mot de passe * :</label></th>
+					<td {% if form.password1.errors %} class="error-field" {% endif %}>
+						{{ form.password1 }}
+						{% if form.password1.errors %}
+						    {% for error in form.password1.errors %}
+										<br />
+						        <span class="error">{{ error|escape }}</span>
+						    {% endfor %}
 						{% endif %}
-						{% if form.last_name %}
-					 	<tr>
-							<th class="txtT"><label class="labb">Nom * :</label></th>
-							<td>{{ form.last_name }}</td>
-					 	</tr>
+					</td>
+				</tr>
+				{% endif %}
+				{% if form.password2 %}
+				<tr>
+					<th><label>A nouveau * :</label></th>
+					<td {% if form.password2.errors %} class="error-field" {% endif %}>
+						{{ form.password2 }}
+						{% if form.password2.errors %}
+						    {% for error in form.password2.errors %}
+										<br />
+						        <span class="error">{{ error|escape }}</span>
+						    {% endfor %}
 						{% endif %}
-						{% if form.phones %}
-					 	{{ form.phones }}
+					</td>
+				</tr>
+				{% endif %}
+				{% if form.first_name %}
+				<tr>
+					<th><label>Prénom * :</label></th>
+					<td {% if form.first_name.errors %} class="error-field" {% endif %}>
+						{{ form.first_name }}
+						{% if form.first_name.errors %}
+						    {% for error in form.first_name.errors %}
+										<br />
+						        <span class="error">{{ error|escape }}</span>
+						    {% endfor %}
 						{% endif %}
-						{% if form.addresses %}
-						<tr>
-							<th class="txtT"><label class="labb">Téléphone :</label></th>
-							<td>{{ form.phones__phone }}</td>
-						</tr>
-					 	{{ form.addresses }}
+					</td>
+				</tr>
+				{% endif %}
+				{% if form.last_name %}
+				<tr>
+					<th><label>Nom * :</label></th>
+					<td {% if form.last_name.errors %} class="error-field" {% endif %}>
+						{{ form.last_name }}
+						{% if form.last_name.errors %}
+						    {% for error in form.last_name.errors %}
+										<br />
+						        <span class="error">{{ error|escape }}</span>
+						    {% endfor %}
 						{% endif %}
-						{% if form.addresses_address1 %}
-						<tr>
-							<th class="txtT address" rowspan="3"><label class="labb">Adresse * :</label></th>
-							<td>{{ form.addresses__address1 }}</td>
-						</tr>
-						<tr>
-							<td>
-								{{ form.addresses__zipcode }}
-								{{ form.addresses__city }}
-							</td>
-						</tr>
-						<tr>
-							<td>
-								{{ form.addresses__country }}
-							</td>
-						</tr>
+					</td>
+				</tr>
+				{% endif%}
+				{% if form.phones %}
+				<tr>
+					<th><label>Téléphone * :</label></th>
+					<td {% if form.phones.errors %} class="error-field" {% endif %}>
+						{{ form.phones }}
+						{% if form.phones.errors %}
+						    {% for error in form.phones.errors %}
+										<br />
+						        <span class="error">{{ error|escape }}</span>
+						    {% endfor %}
 						{% endif %}
-						<tr>
-							<td class="submit" colspan="2">
-								<input type="hidden" name="{{ step_field }}" value="{{ step0 }}" />
-						  	    {{ previous_fields|safe }}
-								<input type="submit" value="Prochaine étape" class="button grey medium"/>
-							</td>
-						</tr>
-					</table>
-				</form>
-			</div>{# data #}
+					</td>
+				</tr>
+				{% endif %}
+				{% if form.phones__phone %}
+				<tr>
+					<th>
+						<label>
+								{% if form.phones %}
+									Nouveau Numéro :
+								{% else %}
+									Téléphone * :
+								{% endif %}
+						</label>
+					</th>
+					<td {% if form.phones__phone.errors %} class="error-field" {% endif %}>
+						{{ form.phones__phone }}
+						{% if form.phones__phone.errors %}
+						    {% for error in form.phones__phone.errors %}
+										<br />
+						        <span class="error">{{ error|escape }}</span>
+						    {% endfor %}
+						{% endif %}
+					</td>
+				</tr>
+				{% endif %}
+				{% if form.addresses %}
+				<tr>
+					<th><label>Adresse * :</label></th>
+					<td {% if form.addresses.errors %} class="error-field" {% endif %}>
+						{{ form.addresses }}
+						{% if form.addresses.errors %}
+						    {% for error in form.addresses.errors %}
+										<br />
+						        <span class="error">{{ error|escape }}</span>
+						    {% endfor %}
+						{% endif %}
+					</td>
+				</tr>
+				{% endif %}
+				{% if form.addresses__address1 %}
+				<tr>
+					<th rowspan="3">
+						<label>
+							{% if form.addresses %}
+								Nouvelle adresse :
+							{% else %}
+								Adresse * :
+							{% endif %}
+						</label>
+					</th>
+					<td {% if form.addresses__address1.errors %} class="error-field" {% endif %}>
+						{{ form.addresses__address1 }}
+						{% if form.addresses__address1.errors %}
+						    {% for error in form.addresses__address1.errors %}
+										<br />
+						        <span class="error">{{ error|escape }}</span>
+						    {% endfor %}
+						{% endif %}
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<span {% if form.addresses__zipcode.errors %} class="error-field" {% endif %}>
+							{{ form.addresses__zipcode }}
+						</span>
+						<span {% if form.addresses__city.errors %} class="error-field" {% endif %}>
+							{{ form.addresses__city }}
+						</span>
+						{% if form.addresses__zipcode.errors%}
+						    {% for error in form.addresses__zipcode.errors %}
+										<br />
+						        <span class="error">{{ error|escape }}</span>
+						    {% endfor %}
+						{% endif %}
+						{% if form.addresses__city.errors %}
+						    {% for error in form.addresses__city.errors %}									
+						        <span class="error">{{ error|escape }}</span>
+						    {% endfor %}
+						{% endif %}
+					</td>
+				</tr>
+				<tr>
+					<td {% if form.addresses__country.errors %} class="error-field" {% endif %}>
+						{{ form.addresses__country }}
+						{% if form.addresses__country.errors %}
+						    {% for error in form.addresses__country.errors %}
+										<br />
+						        <span class="error">{{ error|escape }}</span>
+						    {% endfor %}
+						{% endif %}
+					</td>
+				</tr>
+				{% endif %}
+			</table>
+		</div>
+		<div class="submit-wizard x9">
+			<input type="hidden" name="{{ step_field }}" value="{{ step0 }}" />
+	  	{{ previous_fields|safe }}
+			<a href="{% url home %}">Annuler</a> ou 
+			<input type="submit" class="btn big-green" value="Continuer &rarr;" />
+		</form>
 		</div>
 	</div>{# content #}
 {% endblock %}
