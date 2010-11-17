@@ -143,8 +143,8 @@ class Category(MPTTModel):
         super(Category, self).save(*args, **kwargs)
     
     def get_absolute_url(self):
-        return _(u"%(prefix)s/location/par-category/%(category)s/") % {
-            'prefix': get_script_prefix(), 'category': self.slug
+        return _(u"location/par-categorie/%(category)s/") % {
+            'category': self.slug
         }
     
 
