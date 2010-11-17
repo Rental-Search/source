@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-
+{% load i18n product %}
 {% block content %}
 <div id="content" class="clearfix">
 	<div class="sbs x12">
@@ -7,8 +7,13 @@
 			<h1>Réservation</h1>
 		</div>
 		<ol class="sbs-steps">
-				<li class="on">1.Identifiez-vous</li>
-				<li class="off">2.Confirmez votre réservation</li>
+			{% if not user.is_authenticated %}
+				<li class="on">{% trans "1.Identifiez-vous" %}</li>
+				<li class="off">{% trans "2.Confirmez votre réservation" %}</li>
+			{% else %}
+				<li class="on">{% trans "1.Information de contact" %}</li>
+				<li class="off">{% trans "2.Confirmez votre réservation" %}</li>
+			{% endif %}
 		</ol>
 		<a href="#" class="btn big-blue">obtenir de l'aide</a>
 	</div>
