@@ -11,6 +11,8 @@ ADMINS = (
 
 MANAGERS = ADMINS
 
+INTERNAL_IPS = ('127.0.0.1',)
+
 # Email configuration
 SERVER_EMAIL = 'noreply@e-loue.com'
 DEFAULT_FROM_EMAIL = 'noreply@e-loue.com'
@@ -141,6 +143,8 @@ INSTALLED_APPS = (
     'rent',
     'products',
 )
+if DEBUG_TOOLBAR:
+    INSTALLED_APPS += ('debug_toolbar',)
 
 # Authentification configuration
 AUTHENTICATION_BACKENDS = (
