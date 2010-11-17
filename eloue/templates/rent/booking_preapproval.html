@@ -1,14 +1,11 @@
 {% extends "base.html" %}
+{% load i18n %}
 
 {% block content %}
 <div class="top-content container clearfix">
-	<h1>Oops..</h1>
+	<h1>{% trans "Oops.." %}</h1>
 </div>{# top-content #}
 <div class="content container clearfix">
- {% if booking.payment_state == 4 %}
-  <a href="https://www.sandbox.paypal.com/webscr?cmd=_ap-preapproval&preapprovalkey={{ booking.preapproval_key }}">Continuer</a>
- {% else %}
-  <span>Un erreur est survenu lors de l'enregistrement de votre paiement</span>
- {% endif %}
+ <span>{% trans "Une erreur est survenu lors de l'enregistrement de votre paiement." %}</span>
 </div>{# content #}
 {% endblock %}

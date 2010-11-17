@@ -8,7 +8,7 @@
 	<div class="x9">
 		<div class="signup x9 first">
 			{{ form.non_field_errors }}
-			<form class="form" enctype="multipart/form-data" action="" method="POST">
+			<form class="form" action="" method="POST">
 			{% csrf_token %}
 			<p class="email">
 				<label >Votre adresse email est :</label> {{ form.email }}

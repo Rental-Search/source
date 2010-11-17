@@ -21,7 +21,7 @@
 		 <h2>{% trans "Objet réservé" %}</h2>
 		</div>
 		<div class="booking-product x8 first">
-		 <form class="form" enctype="multipart/form-data" action="" method="POST">
+		 <form class="form" action="" method="POST">
 			{% csrf_token %}
 			<a class="pl-img" href="{{ object.get_absolute_url }}">
 				{% with product.pictures.all|first as picture %}
