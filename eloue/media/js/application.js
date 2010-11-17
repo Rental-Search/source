@@ -84,7 +84,10 @@ $(document).ready(function() {
             }
         });
     }
-    bookingPrice($('#booking_create'));
+    var booking_create = $('#booking_create');
+    if (booking_create.length > 0) {
+        bookingPrice(booking_create);
+    }
     $('#booking_create').change(function(event) {
         var form = $(this);
         bookingPrice(form);
