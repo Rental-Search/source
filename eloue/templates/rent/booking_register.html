@@ -48,7 +48,7 @@
 		<div class="submit-wizard x9 first">
 			<input type="hidden" name="{{ step_field }}" value="{{ step0 }}" />
 	  	{{ previous_fields|safe }}
-			<a href="#">Annuler</a> ou 
+			<a href="{{ product.get_absolute_url }}">Annuler</a> ou 
 			<input type="submit" class="btn big-green" value="Continuer &rarr;" />
 		</form>
 		</div>
