@@ -734,6 +734,12 @@ html[xmlns] .clearfix {
         font-size: 14px;
       }
       
+    .errorlist li
+    {
+      list-style-type: none;
+      color: red;
+    }
+      
     .error
     {
       color: red;

@@ -17,26 +17,41 @@
 	</div>
 	<div class="x9">
 		<div class="signup x9 first">
-		{{ form.errors }}
-		<form class="form" enctype="multipart/form-data" action="" method="POST">
+			{{ form.non_field_errors }}
+			<form class="form" enctype="multipart/form-data" action="" method="POST">
 			{% csrf_token %}
 			<p class="email">
-				<label>Votre adresse email est :</label> {{ form.email }}
+				<label >Votre adresse email est :</label> {{ form.email }}
+				{% if form.email.errors %}
+				    {% for error in form.email.errors %}
+				        <span class="error">{{ error|escape }}</span>
+				    {% endfor %}
+				{% endif %}
 			</p>
 			<p class="question">Avez-vous un compte e-loue ?</p>
 			{{ form.exists }}
+			{% if form.exists.errors %}
+			    {% for error in form.exists.errors %}
+			        <span class="error">{{ error|escape }}</span>
+			    {% endfor %}
+			{% endif %}
 			<p class="password">
 				{{ form.password }}
-				<a href="{% url password_reset %}" class="pd-forget">Mot de passe oublié ?</a>
+				<a href="{% url password_reset %}" class="pd-forget">Mot de passe oublié</a>
+				{% if form.password.errors %}
+				    {% for error in form.password.errors %}
+				        <span class="error">{{ error|escape }}</span>
+				    {% endfor %}
+				{% endif %}
 			</p>
 		</div>
 		<div class="submit-wizard x9 first">
 			<input type="hidden" name="{{ step_field }}" value="{{ step0 }}" />
-			{{ previous_fields|safe }}
-			<a href="{{ product.get_absolute_url }}">Annuler</a> ou 
+	  	{{ previous_fields|safe }}
+			<a href="#">Annuler</a> ou 
 			<input type="submit" class="btn big-green" value="Continuer &rarr;" />
-		</div>
 		</form>
+		</div>
 	</div>
 </div>{# content #}
 {% endblock %}

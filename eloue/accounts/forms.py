@@ -144,7 +144,7 @@ def make_missing_data_form(instance, required_fields=[]):
     
     # Do we have a phone number ?
     if instance and instance.phones.exists():
-        fields['phones'] = forms.ModelChoiceField(required=False, queryset=instance.phones.all())
+        fields['phones'] = forms.ModelChoiceField(required=False, queryset=instance.phones.all(), widget=forms.Select(attrs={'class': 'selm'}))
         fields['phones__phone'].required = False
     
     # Do we have a password ?
