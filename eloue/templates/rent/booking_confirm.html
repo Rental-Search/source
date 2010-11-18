@@ -32,10 +32,10 @@
          {% endwith %}
 			</a>
 			<div class="pl-header">
-				<h2><a href="{{ product.get_absolute_url }}">{{ product.summary|capfirst }}</a></h2>
+				<h2><a href="{{ product.get_absolute_url }}">{{ product.summary|capfirst|truncate:50 }}</a></h2>
 			</div>
 			<div class="pl-content">
-				<div class="pl-desc">{{ product.description }}</div>
+				<div class="pl-desc">{{ product.description|truncate:100 }}</div>
 				<div class="pl-distance">
 					
 				</div>
