@@ -66,6 +66,23 @@
 					</td>
 				</tr>
 				{% endif %}
+				{% if form.is_professional %}
+				 <tr>
+	 			  <td colspan="2">{{ form.is_professional }} <label>Vous êtes un professionnel</label></td>
+				 </tr>
+				 <tr>
+				   <th><label>Le nom de votre société :</label></td>
+				   <td {% if form.company_name.errors %} class="error-field" {% endif %}>
+						{{ form.company_name }}
+						{% if form.company_name.errors %}
+						    {% for error in form.company_name.errors %}
+										<br />
+						        <span class="error">{{ error|escape }}</span>
+						    {% endfor %}
+						{% endif %}
+					</td>
+				 </tr>
+				{% endif %}
 				{% if form.first_name %}
 				<tr>
 					<th><label>Prénom * :</label></th>

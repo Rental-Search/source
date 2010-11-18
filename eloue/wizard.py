@@ -103,8 +103,11 @@ class MultiPartFormWizard(FormWizard):
 
 class GenericFormWizard(MultiPartFormWizard):
     """A not so generic form wizard"""
-    required_fields = ['username', 'password1', 'password2', 'first_name', 'last_name', 'phones', 'phones__phone', 'addresses',
-        'addresses__address1', 'addresses__zipcode', 'addresses__city', 'addresses__country']
+    required_fields = [
+        'username', 'password1', 'password2', 'is_professional', 'company_name', 'first_name', 'last_name',
+        'phones', 'phones__phone', 'addresses',
+        'addresses__address1', 'addresses__zipcode', 'addresses__city', 'addresses__country'
+    ]
         
     def __call__(self, request, *args, **kwargs):
         if request.user.is_authenticated():  # When user is authenticated

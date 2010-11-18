@@ -123,6 +123,8 @@ def make_missing_data_form(instance, required_fields=[]):
         ),
         'password1': forms.CharField(required=True, widget=forms.PasswordInput(attrs={'class': 'inm'})),
         'password2': forms.CharField(required=True, widget=forms.PasswordInput(attrs={'class': 'inm'})),
+        'is_professional': forms.BooleanField(required=False, initial=False),
+        'company_name': forms.CharField(required=False, widget=forms.TextInput(attrs={'class': 'inm'})),
         'first_name': forms.CharField(required=True, widget=forms.TextInput(attrs={'class': 'inm'})),
         'last_name': forms.CharField(required=True, widget=forms.TextInput(attrs={'class': 'inm'})),
         'addresses__address1': forms.CharField(widget=forms.Textarea(attrs={'class': 'inm street', 'placeholder': 'Rue'})),
@@ -151,7 +153,12 @@ def make_missing_data_form(instance, required_fields=[]):
     if instance and instance.password:
         del fields['password1']
         del fields['password2']
-        
+    
+    # Are we in presence of a pro ?    
+    if instance and instance.is_professional != None:
+        del fields['is_professional']
+        del fields['company_name']
+    
     for f in fields.keys():
         if f not in required_fields:
             del fields[f]
@@ -213,6 +220,13 @@ def make_missing_data_form(instance, required_fields=[]):
             raise forms.ValidationError(_(u"Vous devez spécifiez une adresse"))
         return self.cleaned_data['addresses']
     
+    def clean_company_name(self):
+        is_professional = self.cleaned_data.get('is_professional')
+        company_name = self.cleaned_data.get('company_name', None)
+        if is_professional and not company_name:
+            raise forms.ValidationError(_(u"Vous devez entrer le nom de votre société"))
+        return company_name
+    
     def clean_phones(self):
         phones = self.cleaned_data['phones']
         phone = self.cleaned_data['phones__phone']
@@ -227,4 +241,5 @@ def make_missing_data_form(instance, required_fields=[]):
     form_class.clean_username = types.MethodType(clean_username, None, form_class)
     form_class.clean_phones = types.MethodType(clean_phones, None, form_class)
     form_class.clean_addresses = types.MethodType(clean_addresses, None, form_class)
+    form_class.clean_company_name = types.MethodType(clean_company_name, None, form_class)
     return fields != {}, form_class
