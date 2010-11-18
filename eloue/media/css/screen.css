@@ -256,6 +256,12 @@ html[xmlns] .clearfix {
     padding-top: 13px;
     margin-bottom: 20px;
   }
+    #header .x2
+    {
+      margin-left: 0px;
+      width: 180px;
+    }
+    
     .nav-bar{}
 
     .nav
