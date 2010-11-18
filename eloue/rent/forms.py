@@ -117,7 +117,7 @@ class PreApprovalIPNForm(forms.Form):
     def clean_preapproval_key(self):
         preapproval_key = self.cleaned_data['preapproval_key']
         if not Booking.objects.filter(preapproval_key=preapproval_key).exists():
-            raise ValidationError(_(u"Cette transaction ne semble pas lier à un transaction interne"))
+            raise ValidationError(_(u"Cette transaction ne semble pas lier à une transaction interne"))
         return preapproval_key
     
 

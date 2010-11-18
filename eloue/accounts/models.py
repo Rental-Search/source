@@ -101,6 +101,8 @@ class Patron(User):
     modified_at = models.DateTimeField(_('date de modification'), editable=False)
     last_ip = models.IPAddressField(null=True, blank=True)
     slug = models.SlugField(unique=True, db_index=True)
+    account_id = models.CharField(null=True, blank=True, max_length=255)
+    account_key = models.CharField(null=True, blank=True, max_length=255)
     paypal_email = models.EmailField(null=True, blank=True)
     
     objects = PatronManager()
@@ -145,7 +147,7 @@ class Patron(User):
                     'postalCode': address.zipcode,
                     'countryCode': address.country
                 },
-                emailAddress=self.email,
+                emailAddress=self.paypal_email or self.email,
                 name={
                     'firstName': self.first_name,
                     'lastName': self.last_name
@@ -157,12 +159,15 @@ class Patron(User):
                 currencyCode='EUR',
                 createAccountWebOptions={
                     'returnUrl': 'http://return.me',
-                    'returnUrlDescription': _(u"Retour à e-loue"),
+                    'returnUrlDescription': ugettext(u"e-loue"),
                     'showAddCreditCard': False
                 },
                 suppressWelcomeEmail=True,
-                notificationURL='http://ipn.me'
+                notificationURL='http://www.postbin.org/1fi02go'  # reverse("create_account_ipn")
             )
+            self.account_key = response['createAccountKey']
+            self.account_id = response['accountId']
+            self.save()
             return response['redirectURL']
         except PaypalError, e:
             log.error(e)

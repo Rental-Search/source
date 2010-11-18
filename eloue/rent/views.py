@@ -13,10 +13,10 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.generic.list_detail import object_detail
 from django.views.generic.simple import direct_to_template, redirect_to
 
-from eloue.decorators import secure_required
+from eloue.decorators import validate_ipn, secure_required
 from eloue.accounts.forms import EmailAuthenticationForm
 from eloue.products.models import Product
-from eloue.rent.decorators import validate_ipn, ownership_required
+from eloue.rent.decorators import ownership_required
 from eloue.rent.forms import BookingForm, BookingConfirmationForm, PreApprovalIPNForm, PayIPNForm
 from eloue.rent.models import Booking
 from eloue.rent.wizard import BookingWizard

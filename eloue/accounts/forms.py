@@ -24,6 +24,18 @@ STATE_CHOICES = (
 )
 
 
+class CreateAccountIPNForm(forms.Form):
+    first_name = forms.CharField(required=False)
+    last_name = forms.CharField(required=False)
+    account_key = forms.CharField(required=True)
+    
+    def clean_account_key(self):
+        account_key = self.cleaned_data['account_key']
+        if not Patron.objects.filter(account_key=account_key).exists():
+            raise forms.ValidationError(_(u"Cette transaction ne semble pas lier à une transaction interne"))
+        return account_key
+    
+
 class EmailAuthenticationForm(forms.Form):
     """Displays the login form and handles the login action."""
     exists = forms.TypedChoiceField(required=True, coerce=int, choices=STATE_CHOICES, widget=forms.RadioSelect(renderer=ParagraphRadioFieldRenderer), initial=1)
