@@ -5,6 +5,10 @@ DEBUG = getattr(local, 'DEBUG', False)
 DEBUG_TOOLBAR = getattr(local, 'DEBUG_TOOLBAR', False)
 TEMPLATE_DEBUG = DEBUG
 
+DEBUG_TOOLBAR_CONFIG = {
+    'INTERCEPT_REDIRECTS': False,
+}
+
 ADMINS = (
     ('Operational Team', 'ops@e-loue.com'),
 )
