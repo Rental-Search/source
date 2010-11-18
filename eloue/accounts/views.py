@@ -3,9 +3,10 @@ from logbook import Logger
 
 from django.conf import settings
 from django.core.urlresolvers import reverse
+from django.shortcuts import get_object_or_404
 from django.views.decorators.cache import never_cache, cache_page
 from django.views.generic.simple import direct_to_template, redirect_to
-from django.views.generic.list_detail import object_detail
+from django.views.generic.list_detail import object_list
 
 from eloue.decorators import secure_required
 from eloue.accounts.forms import EmailAuthenticationForm
@@ -13,6 +14,8 @@ from eloue.accounts.models import Patron
 from eloue.accounts.wizard import AuthenticationWizard
 
 from eloue.products.forms import FacetedSearchForm
+
+PAGINATE_PRODUCTS_BY = getattr(settings, 'PAGINATE_PRODUCTS_BY', 10)
 
 log = Logger('eloue.accounts')
 
@@ -34,11 +37,10 @@ def authenticate(request, *args, **kwargs):
 
 
 @cache_page(900)
-def patron_detail(request, slug, patron_id=None):
+def patron_detail(request, slug, patron_id=None, page=None):
     if patron_id:  # This is here to be compatible with the old app
-        form = FacetedSearchForm()
-        return redirect_to(request, reverse('patron_detail', args=[slug]), extra_context={'form': form})
-    else:
-        form = FacetedSearchForm()
-        return object_detail(request, queryset=Patron.objects.all(), slug=slug, template_object_name='patron', extra_context={'form': form})
+        return redirect_to(request, reverse('patron_detail', args=[slug]))
+    form = FacetedSearchForm()
+    patron = get_object_or_404(Patron, slug=slug)
+    return object_list(request, patron.products.all(), page=page, paginate_by=PAGINATE_PRODUCTS_BY, template_name='accounts/patron_detail.html', template_object_name='product', extra_context={'form': form, 'patron': patron})
 

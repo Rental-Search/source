@@ -17,7 +17,7 @@ from imagekit.models import ImageModel
 from eloue.accounts.models import Patron, Address
 from eloue.products.fields import SimpleDateField
 from eloue.products.manager import ProductManager, PriceManager, QuestionManager
-from eloue.products.signals import post_save_answer
+from eloue.products.signals import post_save_answer, post_save_product
 from eloue.products.utils import Enum
 
 UNIT = Enum([
@@ -326,3 +326,4 @@ class Answer(models.Model):
     
 
 post_save.connect(post_save_answer, sender=Answer)
+post_save.connect(post_save_product, sender=Product)
