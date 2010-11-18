@@ -19,6 +19,7 @@
     civility: 2
     slug: alexandre
     paypal_email: eloue_1283761216_per@tryphon.org
+    is_professional: false
     groups: []
     modified_at: 2010-08-17 09:00:10
     user_permissions: []
