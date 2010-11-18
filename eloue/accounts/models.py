@@ -8,6 +8,7 @@ from django.contrib.auth.models import User
 from django.contrib.sites.models import Site
 from django.contrib.gis.geos import Point
 from django.core.mail import EmailMultiAlternatives
+from django.core.urlresolvers import reverse
 from django.db.models import permalink
 from django.utils.encoding import smart_unicode, smart_str
 from django.utils.translation import ugettext_lazy as _
@@ -19,7 +20,7 @@ from geocoders.google import geocoder
 
 from eloue.accounts.manager import PatronManager
 from eloue.products.utils import Enum
-from eloue.rent.paypal import accounts, PaypalError
+from eloue.paypal import accounts, PaypalError
 
 CIVILITY_CHOICES = Enum([
     (0, 'MME', _('Madame')),
@@ -132,6 +133,40 @@ class Patron(User):
     
     def is_authenticated(self):
         return True
+    
+    def create_account(self):
+        try:
+            address = self.addresses.all()[0]
+            response = accounts.create_account(
+                accountType='Premier',
+                address={
+                    'line1': address.address1,
+                    'city': address.city,
+                    'postalCode': address.zipcode,
+                    'countryCode': address.country
+                },
+                emailAddress=self.email,
+                name={
+                    'firstName': self.first_name,
+                    'lastName': self.last_name
+                },
+                registrationType="Web",
+                citizenshipCountryCode=address.country,
+                preferredLanguageCode='fr_FR',
+                contactPhoneNumber=self.phones.all()[0].number,
+                currencyCode='EUR',
+                createAccountWebOptions={
+                    'returnUrl': 'http://return.me',
+                    'returnUrlDescription': _(u"Retour à e-loue"),
+                    'showAddCreditCard': False
+                },
+                suppressWelcomeEmail=True,
+                notificationURL='http://ipn.me'
+            )
+            return response['redirectURL']
+        except PaypalError, e:
+            log.error(e)
+            return None
     
     @property
     def is_verified(self):

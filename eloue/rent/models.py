@@ -22,7 +22,7 @@ from eloue.products.utils import Enum
 from eloue.rent.decorators import incr_sequence
 from eloue.rent.fields import UUIDField, IntegerAutoField
 from eloue.rent.manager import BookingManager
-from eloue.rent.paypal import payments, PaypalError
+from eloue.paypal import payments, PaypalError
 
 
 BOOKING_STATE = Enum([
