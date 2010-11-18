@@ -97,7 +97,7 @@ class Patron(User):
     company_name = models.CharField(null=True, blank=True, max_length=255)
     activation_key = models.CharField(null=True, blank=True, max_length=40)
     is_subscribed = models.BooleanField(_(u'newsletter'), default=False, help_text=_(u"Précise si l'utilisateur est abonné à la newsletter"))
-    is_professional = models.NullBooleanField(_('professionnel'), null=True, default=None, help_text=_(u"Précise si l'utilisateur est un professionnel"))
+    is_professional = models.NullBooleanField(_('professionnel'), default=None, help_text=_(u"Précise si l'utilisateur est un professionnel"))
     modified_at = models.DateTimeField(_('date de modification'), editable=False)
     last_ip = models.IPAddressField(null=True, blank=True)
     slug = models.SlugField(unique=True, db_index=True)
