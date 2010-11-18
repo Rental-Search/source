@@ -45,7 +45,7 @@
 		 {% for product in product_list %}
 		  {% cache 900 product:patron:row product.id %}
 			<li class="x8 first">
-			 <a class="pl-img" href="{{ object.get_absolute_url }}">
+			 <a class="pl-img" href="{{ product.get_absolute_url }}">
 			  {% with product.pictures.all|first as picture %}
 		       {% if picture.thumbnail %}
 				<img src="{{ picture.thumbnail.url }}" alt="product.summary" />
