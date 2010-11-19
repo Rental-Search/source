@@ -9,11 +9,9 @@ from pyke import knowledge_engine
 from urlparse import urljoin
 
 from django.conf import settings
-from django.core.mail import EmailMultiAlternatives
 from django.core.urlresolvers import reverse
 from django.contrib.sites.models import Site
 from django.db import models
-from django.template.loader import render_to_string
 from django.utils.translation import ugettext_lazy as _
 
 from eloue.accounts.models import Patron
@@ -23,7 +21,7 @@ from eloue.rent.decorators import incr_sequence
 from eloue.rent.fields import UUIDField, IntegerAutoField
 from eloue.rent.manager import BookingManager
 from eloue.paypal import payments, PaypalError
-
+from eloue.utils import create_alternative_email
 
 BOOKING_STATE = Enum([
     (0, 'ASKED', _(u'Demandé')),
@@ -58,7 +56,7 @@ INSURANCE_COMMISSION = D(str(getattr(settings, 'INSURANCE_COMMISSION', 0)))
 INSURANCE_TAXES = D(str(getattr(settings, 'INSURANCE_TAXES', 0.09)))
 
 BOOKING_DAYS = getattr(settings, 'BOOKING_DAYS', 85)
-
+USE_HTTPS = getattr(settings, 'USE_HTTPS', True)
 PAYPAL_API_EMAIL = getattr(settings, 'PAYPAL_API_EMAIL')
 
 PACKAGES_UNIT = {
@@ -181,6 +179,8 @@ class Booking(models.Model):
         The you should redirect user to :
         https://www.paypal.com/webscr?cmd=_ap-preapproval&preapprovalkey={{ preapproval_key }}
         """
+        domain = Site.objects.get_current().domain
+        protocol = "https" if USE_HTTPS else "http"
         try:
             now = datetime.datetime.now()
             response = payments.preapproval(
@@ -191,7 +191,7 @@ class Booking(models.Model):
                 cancelUrl=cancel_url,
                 returnUrl=return_url,
                 ipnNotificationUrl=urljoin(
-                    "http://%s" % Site.objects.get_current().domain, reverse('preapproval_ipn')
+                    "%s://%s" % (protocol, domain), reverse('preapproval_ipn')
                 ),
                 client_details={
                     'ipAddress': ip_address,
@@ -213,57 +213,28 @@ class Booking(models.Model):
         self.save()
     
     def send_ask_email(self):
-        context = {
-            'booking': self,
-            'site': Site.objects.get_current()
-        }
-        subject = render_to_string('rent/emails/owner_ask_email_subject.txt', context)
-        text_content = render_to_string('rent/emails/owner_ask_email.txt', context)
-        html_content = render_to_string('rent/emails/owner_ask_email.html', context)
-        message = EmailMultiAlternatives(subject, text_content, settings.DEFAULT_FROM_EMAIL, [self.owner.email])
-        message.attach_alternative(html_content, "text/html")
+        context = {'booking': self}
+        message = create_alternative_email('rent/emails/owner_ask', context, settings.DEFAULT_FROM_EMAIL, [self.owner.email])
         message.send()
-        subject = render_to_string('rent/emails/borrower_ask_email_subject.txt', context)
-        text_content = render_to_string('rent/emails/borrower_ask_email.txt', context)
-        html_content = render_to_string('rent/emails/borrower_ask_email.html', context)
-        message = EmailMultiAlternatives(subject, text_content, settings.DEFAULT_FROM_EMAIL, [self.borrower.email])
-        message.attach_alternative(html_content, "text/html")
+        message = create_alternative_email('rent/emails/borrower_ask', context, settings.DEFAULT_FROM_EMAIL, [self.borrower.email])
         message.send()
     
     def send_acceptation_email(self):
         from eloue.rent.contract import ContractGenerator
+        context = {'booking': self}
         contract_generator = ContractGenerator()
         contract = contract_generator(self)
         content = contract.getvalue()
-        context = {
-            'booking': self,
-            'site': Site.objects.get_current()
-        }
-        subject = render_to_string('rent/emails/owner_acceptation_email_subject.txt', context)
-        text_content = render_to_string('rent/emails/owner_acceptation_email.txt', context)
-        html_content = render_to_string('rent/emails/owner_acceptation_email.html', context)
-        message = EmailMultiAlternatives(subject, text_content, settings.DEFAULT_FROM_EMAIL, [self.owner.email])
+        message = create_alternative_email('rent/emails/owner_acceptation', context, settings.DEFAULT_FROM_EMAIL, [self.owner.email])
         message.attach('contrat.pdf', content, 'application/pdf')
-        message.attach_alternative(html_content, "text/html")
         message.send()
-        subject = render_to_string('rent/emails/borrower_acceptation_email_subject.txt', context)
-        text_content = render_to_string('rent/emails/borrower_acceptation_email.txt', context)
-        html_content = render_to_string('rent/emails/borrower_acceptation_email.html', context)
-        message = EmailMultiAlternatives(subject, text_content, settings.DEFAULT_FROM_EMAIL, [self.borrower.email])
+        message = create_alternative_email('rent/emails/borrower_acceptation', context, settings.DEFAULT_FROM_EMAIL, [self.borrower.email])
         message.attach('contrat.pdf', content, 'application/pdf')
-        message.attach_alternative(html_content, "text/html")
         message.send()
     
     def send_rejection_email(self):
-        context = {
-            'booking': self,
-            'site': Site.objects.get_current()
-        }
-        subject = render_to_string('rent/emails/borrower_rejection_email_subject.txt', context)
-        text_content = render_to_string('rent/emails/borrower_rejection_email.txt', context)
-        html_content = render_to_string('rent/emails/borrower_rejection_email.html', context)
-        message = EmailMultiAlternatives(subject, text_content, settings.DEFAULT_FROM_EMAIL, [self.borrower.email])
-        message.attach_alternative(html_content, "text/html")
+        context = {'booking': self}
+        message = create_alternative_email('rent/emails/borrower_rejection', context, settings.DEFAULT_FROM_EMAIL, [self.borrower.email])
         message.send()
     
     @property
@@ -327,6 +298,8 @@ class Booking(models.Model):
         Then you should redirect user to :
         https://www.paypal.com/webscr?cmd=_ap-payment&paykey={{ pay_key }}
         """
+        domain = Site.objects.get_current().domain
+        protocol = "https" if USE_HTTPS else "http"
         try:
             response = payments.pay(
                 actionType='PAY_PRIMARY',
@@ -337,7 +310,7 @@ class Booking(models.Model):
                 currencyCode=self.currency,
                 preapprovalKey=self.preapproval_key,
                 ipnNotificationUrl=urljoin(
-                    "http://%s" % Site.objects.get_current().domain, reverse('pay_ipn')
+                    "%s://%s" % (protocol, domain), reverse('pay_ipn')
                 ),
                 receiverList={'receiver': [
                     {'primary':True, 'amount':str(self.total_amount), 'email':PAYPAL_API_EMAIL},
@@ -388,6 +361,8 @@ class Booking(models.Model):
         if not amount or amount > self.deposit_amount:
             amount = self.deposit_amount
         
+        domain = Site.objects.get_current().domain
+        protocol = "https" if USE_HTTPS else "http"
         try:
             response = payments.pay(
                 actionType='PAY',
@@ -397,7 +372,7 @@ class Booking(models.Model):
                 returnUrl=return_url,
                 currencyCode=self.currency,
                 ipnNotificationUrl=urljoin(
-                    "http://%s" % Site.objects.get_current().domain, reverse('pay_ipn')
+                    "%s://%s" % (protocol, domain), reverse('pay_ipn')
                 ),
                 receiverList={'receiver': [
                     {'amount':str(amount), 'email':self.owner.email},

@@ -5,14 +5,11 @@ import logbook
 from django.contrib.gis.db import models
 from django.conf import settings
 from django.contrib.auth.models import User
-from django.contrib.sites.models import Site
 from django.contrib.gis.geos import Point
-from django.core.mail import EmailMultiAlternatives
 from django.db.models import permalink
 from django.utils.encoding import smart_unicode, smart_str
 from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import ugettext
-from django.template.loader import render_to_string
 from django.template.defaultfilters import slugify
 
 from geocoders.google import geocoder
@@ -20,6 +17,7 @@ from geocoders.google import geocoder
 from eloue.accounts.manager import PatronManager
 from eloue.products.utils import Enum
 from eloue.paypal import accounts, PaypalError
+from eloue.utils import create_alternative_email
 
 CIVILITY_CHOICES = Enum([
     (0, 'MME', _('Madame')),
@@ -193,11 +191,11 @@ class Patron(User):
             return False
     
     def send_activation_email(self):
-        subject = render_to_string('accounts/activation_email_subject.txt', {'patron': self, 'site': Site.objects.get_current()})
-        text_content = render_to_string('accounts/activation_email.txt', {'patron': self, 'activation_key': self.activation_key, 'expiration_days': settings.ACCOUNT_ACTIVATION_DAYS, 'site': Site.objects.get_current()})
-        html_content = render_to_string('accounts/activation_email.html', {'patron': self, 'activation_key': self.activation_key, 'expiration_days': settings.ACCOUNT_ACTIVATION_DAYS, 'site': Site.objects.get_current()})
-        message = EmailMultiAlternatives(subject, text_content, settings.DEFAULT_FROM_EMAIL, [self.email])
-        message.attach_alternative(html_content, "text/html")
+        context = {
+            'patron': self, 'activation_key': self.activation_key,
+            'expiration_days': settings.ACCOUNT_ACTIVATION_DAYS
+        }
+        message = create_alternative_email('accounts/activation', context, settings.DEFAULT_FROM_EMAIL, [self.email])
         message.send()
     
     def is_expired(self):

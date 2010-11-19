@@ -1,9 +1,9 @@
 {% load i18n %}
 {% blocktrans with patron.username as username %}
  <p>Bonjour {{ username }},</p>
- <p>Nous vous remercions de vous être enregistré(e) sur <a href="http://www.e-loue.com">e-loue.com</a>. Afin d’activer votre compte et rejoindre notre communauté de loueurs, il vous reste une toute dernière étape : cliquer sur le lien ci-dessous.</p>
+ <p>Nous vous remercions de vous être enregistré(e) sur <a href="{{ protocol }}://{{ site.domain }}">{{ site.domain }}</a>. Afin d’activer votre compte et rejoindre notre communauté de loueurs, il vous reste une toute dernière étape : cliquer sur le lien ci-dessous.</p>
 {% endblocktrans %}
 
-<p><a href="http://{{ site.domain }}{% url auth_activate activation_key %}">http://{{ site.domain }}{% url auth_activate activation_key %}</a></p>
+<p><a href="{{ protocol }}://{{ site.domain }}{% url auth_activate activation_key %}">{{ protocol }}://{{ site.domain }}{% url auth_activate activation_key %}</a></p>
 
 <p>{% trans "L'équipe e-loue" %}.</p>
