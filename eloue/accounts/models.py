@@ -8,7 +8,6 @@ from django.contrib.auth.models import User
 from django.contrib.sites.models import Site
 from django.contrib.gis.geos import Point
 from django.core.mail import EmailMultiAlternatives
-from django.core.urlresolvers import reverse
 from django.db.models import permalink
 from django.utils.encoding import smart_unicode, smart_str
 from django.utils.translation import ugettext_lazy as _
@@ -101,8 +100,6 @@ class Patron(User):
     modified_at = models.DateTimeField(_('date de modification'), editable=False)
     last_ip = models.IPAddressField(null=True, blank=True)
     slug = models.SlugField(unique=True, db_index=True)
-    account_id = models.CharField(null=True, blank=True, max_length=255)
-    account_key = models.CharField(null=True, blank=True, max_length=255)
     paypal_email = models.EmailField(null=True, blank=True)
     
     objects = PatronManager()
@@ -136,7 +133,18 @@ class Patron(User):
     def is_authenticated(self):
         return True
     
-    def create_account(self):
+    def has_paypal(self):
+        """Indicates if user has an "verified" paypal account
+        >>> patron = Patron(paypal_email=None)
+        >>> patron.has_paypal()
+        False
+        >>> patron = Patron(paypal_email="elmo@paypal.com")
+        >>> patron.has_paypal()
+        True
+        """
+        return self.paypal_email != None
+    
+    def create_account(self, return_url=None):
         try:
             address = self.addresses.all()[0]
             response = accounts.create_account(
@@ -158,15 +166,13 @@ class Patron(User):
                 contactPhoneNumber=self.phones.all()[0].number,
                 currencyCode='EUR',
                 createAccountWebOptions={
-                    'returnUrl': 'http://return.me',
+                    'returnUrl': return_url,
                     'returnUrlDescription': ugettext(u"e-loue"),
                     'showAddCreditCard': False
                 },
                 suppressWelcomeEmail=True,
-                notificationURL='http://www.postbin.org/1fi02go'  # reverse("create_account_ipn")
             )
-            self.account_key = response['createAccountKey']
-            self.account_id = response['accountId']
+            self.paypal_email = self.paypal_email or self.email
             self.save()
             return response['redirectURL']
         except PaypalError, e:

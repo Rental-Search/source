@@ -55,5 +55,4 @@ def create_account_ipn(request):
     form = CreateAccountIPNForm(request.POST)
     if form.is_valid():
         patron = Patron.objects.get(account_key=form.cleaned_data['account_key'])
-        # TODO : UH, NOTHING TO DO HERE :|
     return HttpResponse()
