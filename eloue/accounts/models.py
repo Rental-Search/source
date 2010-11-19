@@ -5,21 +5,19 @@ import logbook
 from django.contrib.gis.db import models
 from django.conf import settings
 from django.contrib.auth.models import User
-from django.contrib.sites.models import Site
 from django.contrib.gis.geos import Point
-from django.core.mail import EmailMultiAlternatives
 from django.db.models import permalink
 from django.utils.encoding import smart_unicode, smart_str
 from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import ugettext
-from django.template.loader import render_to_string
 from django.template.defaultfilters import slugify
 
 from geocoders.google import geocoder
 
 from eloue.accounts.manager import PatronManager
 from eloue.products.utils import Enum
-from eloue.rent.paypal import accounts, PaypalError
+from eloue.paypal import accounts, PaypalError
+from eloue.utils import create_alternative_email
 
 CIVILITY_CHOICES = Enum([
     (0, 'MME', _('Madame')),
@@ -96,7 +94,7 @@ class Patron(User):
     company_name = models.CharField(null=True, blank=True, max_length=255)
     activation_key = models.CharField(null=True, blank=True, max_length=40)
     is_subscribed = models.BooleanField(_(u'newsletter'), default=False, help_text=_(u"Précise si l'utilisateur est abonné à la newsletter"))
-    is_professional = models.NullBooleanField(_('professionnel'), null=True, default=None, help_text=_(u"Précise si l'utilisateur est un professionnel"))
+    is_professional = models.NullBooleanField(_('professionnel'), blank=True, default=None, help_text=_(u"Précise si l'utilisateur est un professionnel"))
     modified_at = models.DateTimeField(_('date de modification'), editable=False)
     last_ip = models.IPAddressField(null=True, blank=True)
     slug = models.SlugField(unique=True, db_index=True)
@@ -133,6 +131,52 @@ class Patron(User):
     def is_authenticated(self):
         return True
     
+    def has_paypal(self):
+        """Indicates if user has an "verified" paypal account
+        >>> patron = Patron(paypal_email=None)
+        >>> patron.has_paypal()
+        False
+        >>> patron = Patron(paypal_email="elmo@paypal.com")
+        >>> patron.has_paypal()
+        True
+        """
+        return self.paypal_email != None
+    
+    def create_account(self, return_url=None):
+        try:
+            address = self.addresses.all()[0]
+            response = accounts.create_account(
+                accountType='Premier',
+                address={
+                    'line1': address.address1,
+                    'city': address.city,
+                    'postalCode': address.zipcode,
+                    'countryCode': address.country
+                },
+                emailAddress=self.paypal_email or self.email,
+                name={
+                    'firstName': self.first_name,
+                    'lastName': self.last_name
+                },
+                registrationType="Web",
+                citizenshipCountryCode=address.country,
+                preferredLanguageCode='fr_FR',
+                contactPhoneNumber=self.phones.all()[0].number,
+                currencyCode='EUR',
+                createAccountWebOptions={
+                    'returnUrl': return_url,
+                    'returnUrlDescription': ugettext(u"e-loue"),
+                    'showAddCreditCard': False
+                },
+                suppressWelcomeEmail=True,
+            )
+            self.paypal_email = self.paypal_email or self.email
+            self.save()
+            return response['redirectURL']
+        except PaypalError, e:
+            log.error(e)
+            return None
+    
     @property
     def is_verified(self):
         try:
@@ -147,11 +191,11 @@ class Patron(User):
             return False
     
     def send_activation_email(self):
-        subject = render_to_string('accounts/activation_email_subject.txt', {'patron': self, 'site': Site.objects.get_current()})
-        text_content = render_to_string('accounts/activation_email.txt', {'patron': self, 'activation_key': self.activation_key, 'expiration_days': settings.ACCOUNT_ACTIVATION_DAYS, 'site': Site.objects.get_current()})
-        html_content = render_to_string('accounts/activation_email.html', {'patron': self, 'activation_key': self.activation_key, 'expiration_days': settings.ACCOUNT_ACTIVATION_DAYS, 'site': Site.objects.get_current()})
-        message = EmailMultiAlternatives(subject, text_content, settings.DEFAULT_FROM_EMAIL, [self.email])
-        message.attach_alternative(html_content, "text/html")
+        context = {
+            'patron': self, 'activation_key': self.activation_key,
+            'expiration_days': settings.ACCOUNT_ACTIVATION_DAYS
+        }
+        message = create_alternative_email('accounts/activation', context, settings.DEFAULT_FROM_EMAIL, [self.email])
         message.send()
     
     def is_expired(self):

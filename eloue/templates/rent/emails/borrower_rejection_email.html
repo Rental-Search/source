@@ -18,7 +18,7 @@
  <ul>
   {% for result in booking.more_like_this %}
    {% with result.object as product %}
-    <li><a href="http://{{ site.domain }}{{ product.get_absolute_url }}">{{ product.summary }}</a> ({{ product.address.zipcode }})</li>
+    <li><a href="{{ protocol }}://{{ site.domain }}{{ product.get_absolute_url }}">{{ product.summary }}</a> ({{ product.address.zipcode }})</li>
    {% endwith %}
   {% endfor %}
  </ul>
@@ -26,7 +26,7 @@
 {% endwith %}
 
 {% blocktrans with booking.product.category.get_absolute_url as category_url and site.domain as domain %}
-<p>Retrouvez tous les objets de cette catégorie sur <a href="http://{{ domain }}{{ category_url }}">e-loue.com</a>.</p>
+<p>Retrouvez tous les objets de cette catégorie sur <a href="{{ protocol }}://{{ domain }}{{ category_url }}">e-loue.com</a>.</p>
 
 <p>L'équipe e-loue</p>
 {% endblocktrans %}

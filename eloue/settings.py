@@ -285,7 +285,7 @@ if USE_PAYPAL_SANDBOX:
     PAYPAL_API_PASSWORD = getattr(local, 'PAYPAL_SANDBOX_API_PASSWORD', "1266353174")
     PAYPAL_API_SIGNATURE = getattr(local, 'PAYPAL_SANDBOX_API_SIGNATURE', "ACFP1tIskAXJ.m25BMGIQFW.gpwvAQpVs6wPW462vdrnRb5OjB-r5Jsu")
     PAYPAL_API_APPLICATION_ID = getattr(local, 'PAYPAL_SANDBOX_API_APPLICATION_ID', 'APP-80W284485P519543T')
-    PAYPAL_API_EMAIL = getattr(local, 'PAYPAL_API_EMAIL', 'sand_1266353156_biz@tryphon.org')
+    PAYPAL_API_EMAIL = getattr(local, 'PAYPAL_API_EMAIL', 'timothee.peignier@tryphon.org')
     PAYPAL_COMMAND = "https://www.sandbox.paypal.com/webscr?%s"
 else:
     PAYPAL_API_USERNAME = getattr(local, 'PAYPAL_API_USERNAME')

@@ -7,6 +7,8 @@ from django.utils.datastructures import SortedDict, MultiValueDict
 from django.utils.encoding import smart_str
 from django.template import Library, Node, Variable, TemplateSyntaxError
 
+DEFAULT_RADIUS = getattr(settings, 'DEFAULT_RADIUS', 50)
+
 register = Library()
 
 
@@ -40,7 +42,7 @@ class FacetUrlNode(Node):
     def render(self, context):
         breadcrumbs = self.breadcrumbs.resolve(context).copy()
         urlbits = dict((facet['label'], facet['value']) for facet in breadcrumbs.values() if facet['facet'])
-        params = MultiValueDict((facet['label'], [facet['value']]) for facet in breadcrumbs.values() if not facet['facet'])
+        params = MultiValueDict((facet['label'], [facet['value']]) for facet in breadcrumbs.values() if facet['value'] and not facet['facet'] and not (facet['label'] == 'r' and facet['value'] == DEFAULT_RADIUS))
         additions = dict([(key.resolve(context), value.resolve(context)) for key, value in self.additions])
         removals = [key.resolve(context) for key in self.removals]
         

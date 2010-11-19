@@ -39,9 +39,14 @@
 						{% if not user.is_authenticated %}
 							<li class="nav"><a href="{% url auth_login %}" class="nav-link" >{% trans "S'inscrire ou se connecter" %}</a></li>
 						{% else %}
-							<li class="nav"><a href="{% url auth_logout %}" class="nav-link" >{% trans "Se déconnecter" %}</a></li>
+							<li class="nav"><a href="{% url auth_logout %}" class="nav-link">{% trans "Se déconnecter" %}</a></li>
 						{% endif %}
-						<li class="nav"><a href="#" class="nav-link">Comment ça marche ?</a></li>
+						{% if request.user.is_anonymous %}
+						 <li class="nav"><a href="#" class="nav-link">{% trans "Comment ça marche ?" %}</a></li>
+						{% else %}
+						 <li class="nav"><a href="{% url dashboard %}" class="nav-link">{% trans "Tableau de bord" %}</a></li>
+						 <li class="nav">{% blocktrans with request.user.first_name as first_name %}Bienvenue, {{ first_name }}!{% endblocktrans %}</li>    
+						{% endif %}
 					</ul>
 				</div>
 			</div>{# header #}
@@ -52,7 +57,7 @@
 					<h4>{% trans "Lien utile" %}</h4>
 					<ul>
 						<li><a href="{% url home %}">{% trans "Accueil" %}</a></li>
-						<li><a href="#">{% trans "Mon compte" %}</a></li>
+						<li><a href="{% url dashboard %}">{% trans "Mon compte" %}</a></li>
 						<li><a href="{% url product_create %}">{% trans "Mettre en location" %}</a></li>
 					</ul>
 				</div>

@@ -37,9 +37,9 @@ class AuthenticationWizard(MultiPartFormWizard):
         if request.user.is_active:
             GoalRecord.record('authentication', WebUser(request))
             messages.success(request, _(u"Bienvenue !"))
-        else:  # TODO : Maybe warning or info is better suited here, we need to see with design
+        else:
             GoalRecord.record('registration', WebUser(request))
-            messages.success(request, _(u"Bienvenue ! Nous vous avons envoyé un lien de validation par email. Cette validation est impérative pour terminer votre enregistrement."))
+            messages.info(request, _(u"Bienvenue ! Nous vous avons envoyé un lien de validation par email. Cette validation est impérative pour terminer votre enregistrement."))
         return redirect_to(request, self.redirect_path)
     
     def parse_params(self, request, *args, **kwargs):

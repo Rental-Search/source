@@ -19,6 +19,8 @@ from eloue.rent.models import Booking
 from eloue.rent.forms import BookingForm, BookingConfirmationForm
 from eloue.wizard import GenericFormWizard
 
+USE_HTTPS = getattr(settings, 'USE_HTTPS', True)
+
 
 class BookingWizard(GenericFormWizard):
     def done(self, request, form_list):
@@ -49,10 +51,10 @@ class BookingWizard(GenericFormWizard):
         booking = booking_form.save()
         
         domain = Site.objects.get_current().domain
+        protocol = "https" if USE_HTTPS else "http"
         booking.preapproval(
-            # FIXME : This should be https
-            cancel_url="http://%s%s" % (domain, reverse("booking_failure", args=[booking.pk.hex])),
-            return_url="http://%s%s" % (domain, reverse("booking_success", args=[booking.pk.hex])),
+            cancel_url="%s://%s%s" % (protocol, domain, reverse("booking_failure", args=[booking.pk.hex])),
+            return_url="%s://%s%s" % (protocol, domain, reverse("booking_success", args=[booking.pk.hex])),
             ip_address=request.META['REMOTE_ADDR']
         )
         
