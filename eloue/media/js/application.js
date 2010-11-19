@@ -89,7 +89,7 @@ $(document).ready(function() {
     
     // Price calculations
     var bookingPrice = function(form) {
-        var template = '{{#errors}}{{ errors }}{{/errors}}{{^errors}}<p>Total :<span class="day">{{ duration }},</span> soit <span class="total-price">{{ total_price }} €</span></p>{{/errors}}';
+        var template = '{{#errors}}{{ errors }}{{/errors}}{{^errors}}<p>Total :<span class="day">{{ duration }},</span> soit <span class="total-price">{{ total_price }}&euro;</span></p>{{/errors}}';
         $.ajax({
             type: 'POST',
             url: 'price/',
