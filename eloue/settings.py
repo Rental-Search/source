@@ -134,6 +134,7 @@ INSTALLED_APPS = (
     'django.contrib.markup',
     'django.contrib.gis',
     'south',
+    'django_extensions',
     'mptt',
     'imagekit',
     'django_lean.experiments',
