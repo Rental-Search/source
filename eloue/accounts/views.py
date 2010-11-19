@@ -10,7 +10,7 @@ from django.views.generic.simple import direct_to_template, redirect_to
 from django.views.generic.list_detail import object_list
 
 from eloue.decorators import secure_required
-from eloue.accounts.forms import EmailAuthenticationForm
+from eloue.accounts.forms import EmailAuthenticationForm, PatronEditForm
 from eloue.accounts.models import Patron
 from eloue.accounts.wizard import AuthenticationWizard
 
@@ -43,9 +43,30 @@ def patron_detail(request, slug, patron_id=None, page=None):
         return redirect_to(request, reverse('patron_detail', args=[slug]))
     form = FacetedSearchForm()
     patron = get_object_or_404(Patron, slug=slug)
-    return object_list(request, patron.products.all(), page=page, paginate_by=PAGINATE_PRODUCTS_BY, template_name='accounts/patron_detail.html', template_object_name='product', extra_context={'form': form, 'patron': patron})
+    return object_list(request, patron.products.all(), page=page, paginate_by=PAGINATE_PRODUCTS_BY,
+        template_name='accounts/patron_detail.html', template_object_name='product', extra_context={'form': form, 'patron': patron})
+
+
+@login_required
+def patron_edit(request):
+    form = PatronEditForm(request.POST or None)
+    if form.is_valid():
+        patron = form.save()
+    return direct_to_template(request, 'accounts/patron_edit.html', extra_context={'form': form, 'patron':request.user})
 
 
 @login_required
 def dashboard(request):
     return direct_to_template(request, 'accounts/dashboard.html')
+
+
+@login_required
+def patron_bookings(request, page=None):
+    return object_list(request, request.user.bookings.all(), page=page, paginate_by=10, template_name='accounts/patron_bookings.html',
+        template_object_name='booking')
+
+
+@login_required
+def patron_rentals(request, page=None):
+    return object_list(request, request.user.rentals.all(), page=page, paginate_by=10, template_name='accounts/patron_rentals.html',
+        template_object_name='booking')

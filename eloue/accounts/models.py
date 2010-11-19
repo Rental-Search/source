@@ -104,7 +104,10 @@ class Patron(User):
     
     def save(self, *args, **kwargs):
         if not self.slug:
-            self.slug = slugify(self.username)
+            if self.is_professional:
+                self.slug = slugify(self.company_name)
+            else:
+                self.slug = slugify(self.username)
         self.modified_at = datetime.datetime.now()
         super(Patron, self).save(*args, **kwargs)
     
