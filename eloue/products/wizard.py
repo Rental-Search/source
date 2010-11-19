@@ -54,7 +54,7 @@ class ProductWizard(GenericFormWizard):
                 data['0-picture_id'] = Picture.objects.create(image=files['0-picture']).id
                 del files['0-picture']
             return self.form_list[step](data, files, prefix=self.prefix_for_step(step),
-                initial=self.initial.get(step, None), instance=Product(quantity=1))
+                initial=self.initial.get(step, None), instance=Product(quantity=1, deposit_amount=0))
         return super(ProductWizard, self).get_form(step, data, files)
     
     def get_template(self, step):

@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from decimal import Decimal as D
+
 import django.forms as forms
 from django.conf import settings
 from django.core.validators import EMPTY_VALUES
@@ -46,7 +48,7 @@ class FacetedSearchForm(SearchForm):
             if query:
                 sqs = self.searchqueryset.auto_query(query).highlight()
                 suggestions = sqs.spelling_suggestion()
-
+            
             location, radius = self.cleaned_data.get('l', None), self.cleaned_data.get('r', DEFAULT_RADIUS)
             if location:
                 lat, lon = Geocoder.geocode(location)
@@ -85,7 +87,7 @@ class ProductForm(forms.ModelForm):
     picture_id = forms.IntegerField(required=False, widget=forms.HiddenInput())
     picture = forms.ImageField(required=False, widget=forms.FileInput(attrs={'class': 'inm'}))
     price = forms.DecimalField(required=True, widget=forms.TextInput(attrs={'class': 'inm price'}))
-    deposit_amount = forms.DecimalField(required=True, widget=forms.TextInput(attrs={'class': 'inm price'}))
+    deposit_amount = forms.DecimalField(initial=0, required=False, max_digits=8, decimal_places=2, widget=forms.TextInput(attrs={'class': 'inm price'}))
     quantity = forms.IntegerField(initial=1, widget=forms.TextInput(attrs={'class': 'inm price'}))
     description = forms.Textarea()
     
@@ -94,6 +96,12 @@ class ProductForm(forms.ModelForm):
         if quantity < 1:
             raise forms.ValidationError(_(u"Vous devriez au moins louer un object"))
         return quantity
+    
+    def clean_deposit_amount(self):
+        deposit_amount = self.cleaned_data['deposit_amount']
+        if deposit_amount in EMPTY_VALUES:
+            deposit_amount = D('0')
+        return deposit_amount
     
     def clean_picture(self):
         picture = self.cleaned_data['picture']
