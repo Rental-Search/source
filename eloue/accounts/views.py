@@ -2,17 +2,15 @@
 from logbook import Logger
 
 from django.conf import settings
+from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
-from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 from django.views.decorators.cache import never_cache, cache_page
-from django.views.decorators.csrf import csrf_exempt
-from django.views.decorators.http import require_POST
 from django.views.generic.simple import direct_to_template, redirect_to
 from django.views.generic.list_detail import object_list
 
-from eloue.decorators import validate_ipn, secure_required
-from eloue.accounts.forms import CreateAccountIPNForm, EmailAuthenticationForm
+from eloue.decorators import secure_required
+from eloue.accounts.forms import EmailAuthenticationForm
 from eloue.accounts.models import Patron
 from eloue.accounts.wizard import AuthenticationWizard
 
@@ -48,11 +46,6 @@ def patron_detail(request, slug, patron_id=None, page=None):
     return object_list(request, patron.products.all(), page=page, paginate_by=PAGINATE_PRODUCTS_BY, template_name='accounts/patron_detail.html', template_object_name='product', extra_context={'form': form, 'patron': patron})
 
 
-@require_POST
-@csrf_exempt
-@validate_ipn
-def create_account_ipn(request):
-    form = CreateAccountIPNForm(request.POST)
-    if form.is_valid():
-        patron = Patron.objects.get(account_key=form.cleaned_data['account_key'])
-    return HttpResponse()
+@login_required
+def dashboard(request):
+    return direct_to_template(request, 'accounts/dashboard.html')

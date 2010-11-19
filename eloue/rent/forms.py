@@ -161,6 +161,14 @@ class BookingConfirmationForm(forms.Form):
     pass
 
 
+class BookingStateForm(forms.ModelForm):
+    booking_state = forms.ChoiceField(choices=Booking.BOOKING_STATE, widget=forms.HiddenInput())
+    
+    class Meta:
+        model = Booking
+        fields = ('booking_state')
+    
+
 class SinisterForm(forms.ModelForm):
     class Meta:
         model = Sinister

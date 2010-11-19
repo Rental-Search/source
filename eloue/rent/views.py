@@ -1,12 +1,14 @@
 # -*- coding: utf-8 -*-
 import logbook
 
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseNotAllowed
 from django.shortcuts import get_object_or_404
 from django.utils import simplejson
 from django.utils.encoding import smart_str
 from django.utils.timesince import timesince
+from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.http import require_POST
 from django.views.decorators.cache import never_cache
 from django.views.decorators.csrf import csrf_exempt
@@ -17,7 +19,7 @@ from eloue.decorators import validate_ipn, secure_required
 from eloue.accounts.forms import EmailAuthenticationForm
 from eloue.products.models import Product
 from eloue.rent.decorators import ownership_required
-from eloue.rent.forms import BookingForm, BookingConfirmationForm, PreApprovalIPNForm, PayIPNForm
+from eloue.rent.forms import BookingForm, BookingConfirmationForm, BookingStateForm, PreApprovalIPNForm, PayIPNForm
 from eloue.rent.models import Booking
 from eloue.rent.wizard import BookingWizard
 
@@ -83,50 +85,59 @@ def booking_create(request, *args, **kwargs):
     return wizard(request, *args, **kwargs)
 
 
+@login_required
 def booking_success(request, booking_id):
-    return object_detail(request, queryset=Booking.objects.all(), object_id=booking_id, template_name='rent/booking_success.html', template_object_name='booking')
+    return object_detail(request, queryset=Booking.objects.all(), object_id=booking_id,
+        template_name='rent/booking_success.html', template_object_name='booking')
 
 
+@login_required
 def booking_failure(request, booking_id):
-    return object_detail(request, queryset=Booking.objects.all(), object_id=booking_id, template_name='rent/booking_failure.html', template_object_name='booking')
+    return object_detail(request, queryset=Booking.objects.all(), object_id=booking_id,
+        template_name='rent/booking_failure.html', template_object_name='booking')
 
 
 @login_required
 @ownership_required(model=Booking, object_key='booking_id', ownership=['owner', 'borrower'])
 def booking_detail(request, booking_id):
-    return object_detail(request, queryset=Booking.objects.all(), object_id=booking_id, template_name='rent/booking_detail.html', template_object_name='booking')
+    return object_detail(request, queryset=Booking.objects.all(), object_id=booking_id,
+        template_name='rent/booking_detail.html', template_object_name='booking')
 
 
 @login_required
 @ownership_required(model=Booking, object_key='booking_id', ownership=['owner'])
 def booking_accept(request, booking_id):
-    booking = get_object_or_404(Booking, pk=booking_id)
-    if request.POST:
-        booking.booking_state = Booking.BOOKING_STATE.PENDING
+    form = BookingStateForm(request.POST or None,
+        initial={'booking_state': Booking.BOOKING_STATE.PENDING},
+        instance=get_object_or_404(Booking, pk=booking_id))
+    if form.is_valid():
+        booking = form.save()
         booking.send_acceptation_email()
-        booking.save()
     return direct_to_template(request, 'rent/booking_accept.html', extra_context={'booking': booking})
 
 
 @login_required
 @ownership_required(model=Booking, object_key='booking_id', ownership=['owner'])
 def booking_reject(request, booking_id):
-    booking = get_object_or_404(Booking, pk=booking_id)
-    if request.POST:
-        booking.booking_state = Booking.BOOKING_STATE.REJECTED
+    form = BookingStateForm(request.POST or None,
+        initial={'booking_state': Booking.BOOKING_STATE.REJECTED},
+        instance=get_object_or_404(Booking, pk=booking_id))
+    if form.is_valid():
+        booking = form.save()
         booking.send_rejection_email()
-        booking.save()
-    return direct_to_template(request, 'rent/booking_reject.html', extra_context={'booking': booking})
+        messages.add_messages(request, messages.SUCCESS, _(u"Cette réservation à bien été refusée"))
+    return redirect_to(request, booking.get_absolute_url())
 
 
 @login_required
 @ownership_required(model=Booking, object_key='booking_id', ownership=['owner'])
 def booking_close(request, booking_id):
-    booking = get_object_or_404(Booking, pk=booking_id)
-    if request.POST:
+    form = BookingStateForm(request.POST or None,
+        initial={'booking_state': Booking.BOOKING_STATE.PENDING},
+        instance=get_object_or_404(Booking, pk=booking_id))
+    if form.is_valid():
+        booking = form.save()
         booking.pay()
-        booking.booking_state = Booking.BOOKING_STATE.CLOSED
-        booking.save()
     return direct_to_template(request, 'rent/booking_close.html', extra_context={'booking': booking})
 
 
