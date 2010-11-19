@@ -86,12 +86,14 @@ def booking_create(request, *args, **kwargs):
 
 
 @login_required
+@ownership_required(model=Booking, object_key='booking_id', ownership=['borrower'])
 def booking_success(request, booking_id):
     return object_detail(request, queryset=Booking.objects.all(), object_id=booking_id,
         template_name='rent/booking_success.html', template_object_name='booking')
 
 
 @login_required
+@ownership_required(model=Booking, object_key='booking_id', ownership=['borrower'])
 def booking_failure(request, booking_id):
     return object_detail(request, queryset=Booking.objects.all(), object_id=booking_id,
         template_name='rent/booking_failure.html', template_object_name='booking')
