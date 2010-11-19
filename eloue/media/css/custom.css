@@ -364,6 +364,11 @@
     padding-top: 15px;
   }
   
+  .more-info .company-name
+  {
+    display: none;
+  }
+  
   .more-info .street
   {
     margin-bottom: 0px;
