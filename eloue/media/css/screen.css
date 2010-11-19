@@ -270,6 +270,11 @@ html[xmlns] .clearfix {
       display: inline;
       padding-left: 42px;
     }
+    
+    .nav-bar .welcome
+    {
+      padding-top: 18px;
+    }
 
       .nav-link
       {
@@ -281,6 +286,7 @@ html[xmlns] .clearfix {
       .nav .btn{
         margin-top: 10px;
       }
+      
 
   #top-content { margin-bottom: 20px;}
 
