@@ -708,6 +708,11 @@ html[xmlns] .clearfix {
         margin-top: 7px;
         margin-bottom: 10px;
       }
+      
+      input[type=checkbox]
+      {
+        width: 20px !important;
+      }
 
       input[type=radio]
       {

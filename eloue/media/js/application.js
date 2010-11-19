@@ -20,6 +20,22 @@ $(document).ready(function() {
        } 
     });
     
+    // Company name field display/none
+    var isProfessionalInput = $("input[name$='is_professional']");
+    var companyNameInput = $(".company-name");
+    
+    var exists = $("input[name$='is_professional']:checked").val();
+    
+    if (exists == 'on') { companyNameInput.show();}
+    
+    $(":checkbox").click( function(){
+        if (isProfessionalInput.is(':checked')) {
+            companyNameInput.show();
+        } else {
+            companyNameInput.hide();
+        }
+    });
+    
     // Phone field enabler/disabler
     var phoneSelect = $("select[name$='phones']");
     var phoneInput = $("input[name$='phones__phone']");
