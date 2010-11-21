@@ -36,7 +36,11 @@ class MetaBase():
 
 class UserSpecificResource(ModelResource):
     """
+    Base class for a resource that restrain the possible actions to the scope of the user
+    For GET: Only user owned objects are returned
+    For POST: The objects created are automatically owned by the user
     """
+    # TODO : Make it work the same way with obj_get than with get_list
 
     USER_FIELD_NAME = "patron"
 
@@ -140,6 +144,12 @@ class ProductResource(UserSpecificResource):
         return orm_filters
 
     def obj_create(self, bundle, **kwargs):
+        """
+        On product creation, if the request contains a "picture" parameter
+        Creates a file with the content of the field
+        And creates a picture linked to the product
+        """
+
         picture_data = bundle.data.get("picture", None)
         if picture_data: bundle.data.pop("picture")
         updated_bundle = UserSpecificResource.obj_create(self, bundle, **kwargs)
@@ -158,6 +168,10 @@ class ProductResource(UserSpecificResource):
         return updated_bundle
 
     def dehydrate(self, bundle, request=None):
+        """
+        Automatically add the location price
+        If the request contains date_start and date_end parameters
+        """
         from datetime import date
         from time import strptime
 
@@ -171,8 +185,7 @@ class ProductResource(UserSpecificResource):
 
 
 class PriceResource(ModelResource):
-    """
-    """
+
     product = fields.ForeignKey(ProductResource, 'product', full=False)
 
     class Meta(MetaBase):
@@ -182,8 +195,9 @@ class PriceResource(ModelResource):
         allowed_methods = ['get', 'post']
 
 class UserResource(ModelResource):
-    """
-    """
+    
+    # TODO : Add security checks for user creation
+
     class Meta(MetaBase):
         queryset = Patron.objects.all()
         resource_name = "user"
@@ -191,8 +205,11 @@ class UserResource(ModelResource):
         fields = ['username', 'id']
 
     def obj_create(self, bundle, **kwargs):
+        """
+        Creates a new inactive user
+        """
         data = bundle.data
-        bundle.obj = Patron.objects.create_inactive(data["username"], data["email"], data["password"], False)
+        bundle.obj = Patron.objects.create_inactive(data["username"], data["email"], data["password"])
         return bundle
 
 api_v1 = Api(api_name='1.0')
