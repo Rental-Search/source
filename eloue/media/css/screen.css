@@ -270,6 +270,11 @@ html[xmlns] .clearfix {
       display: inline;
       padding-left: 42px;
     }
+    
+    .nav-bar .welcome
+    {
+      padding-top: 18px;
+    }
 
       .nav-link
       {
@@ -281,6 +286,7 @@ html[xmlns] .clearfix {
       .nav .btn{
         margin-top: 10px;
       }
+      
 
   #top-content { margin-bottom: 20px;}
 
@@ -707,6 +713,11 @@ html[xmlns] .clearfix {
         padding: 10px 5px 8px;
         margin-top: 7px;
         margin-bottom: 10px;
+      }
+      
+      input[type=checkbox]
+      {
+        width: 20px !important;
       }
 
       input[type=radio]

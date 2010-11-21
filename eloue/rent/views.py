@@ -127,7 +127,7 @@ def booking_reject(request, booking_id):
     if form.is_valid():
         booking = form.save()
         booking.send_rejection_email()
-        messages.add_messages(request, messages.SUCCESS, _(u"Cette réservation à bien été refusée"))
+        messages.add_messages(request, messages.SUCCESS, _(u"Cette réservation a bien été refusée"))
     return redirect_to(request, booking.get_absolute_url())
 
 
@@ -140,8 +140,8 @@ def booking_close(request, booking_id):
     if form.is_valid():
         booking = form.save()
         booking.pay()
-    return direct_to_template(request, 'rent/booking_close.html', extra_context={'booking': booking})
-
+        messages.add_messages(request, messages.SUCCESS, _(u"Cette réservation a bien été cloturée"))
+    return redirect_to(request, booking.get_absolute_url())
 
 @login_required
 @ownership_required(model=Booking, object_key='booking_id', ownership=['owner', 'borrower'])

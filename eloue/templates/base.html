@@ -45,60 +45,61 @@
 						 <li class="nav"><a href="#" class="nav-link">{% trans "Comment ça marche ?" %}</a></li>
 						{% else %}
 						 <li class="nav"><a href="{% url dashboard %}" class="nav-link">{% trans "Tableau de bord" %}</a></li>
-						 <li class="nav">{% blocktrans with request.user.first_name as first_name %}Bienvenue, {{ first_name }}!{% endblocktrans %}</li>    
+						 <li class="nav welcome">{% blocktrans with request.user.first_name as first_name %} Bienvenue, {{ first_name }}!{% endblocktrans %}</li>    
 						{% endif %}
 					</ul>
 				</div>
 			</div>{# header #}
   {% block content %}
   {% endblock %}
-			<div id="footer" class="clearfix">
-				<div class="x3">
-					<h4>{% trans "Lien utile" %}</h4>
-					<ul>
-						<li><a href="{% url home %}">{% trans "Accueil" %}</a></li>
-						<li><a href="{% url dashboard %}">{% trans "Mon compte" %}</a></li>
-						<li><a href="{% url product_create %}">{% trans "Mettre en location" %}</a></li>
-					</ul>
-				</div>
-				<div class="x3">
-					<h4>{% trans "Info" %}</h4>
-					<ul>
-						<li><a href="#">{% trans "Espace professionnel" %}</a></li>
-						<li><a href="#">{% trans "Assurance tranquillité" %}</a></li>
-						<li><a href="#">{% trans "Conditions générales" %}</a></li>
-						<li><a href="#">{% trans "Respect de la vie privée" %}</a></li>
-					</ul>
-				</div>
-				<div class="x3">
-					<h4>{% trans "Support" %}</h4>
-					<ul>
-						<li><a href="#">{% trans "Aide" %}</a></li>
-						<li><a href="#">{% trans "Contactez-nous" %}</a></li>
-						<li><a href="#">{% trans "Espace presse" %}</a></li>
-						<li><a href="#">{% trans "Qui sommes nous ?" %}</a></li>
-					</ul>
-				</div>
-				<div class="x3">
-					<h4>{% trans "Communauté" %}</h4>
-					<ul>
-						<li><a href="http://blog.e-loue.com">{% trans "Blog" %}</a></li>
-						<li><a href="https://twitter.com/eloue">{% trans "Twitter" %}</a></li>
-						<li><a href="https://www.facebook.com/pages/e-louecom/104685226447">{% trans "Facebook" %}</a></li>
-						<li><a href="#">{% trans "Sites partenaires" %}</a></li>
-					</ul>
-				</div>
-				<div class="x12 twitter-box">
-					<p>L'objet insolite de la semaine : le stylo-espion ... que vous pouvez louer pour filmer tout ce que vous souhaitez... <a href="http://fb.me/NLUmubhE">http://fb.me/NLUmubhE</a></p>
-					<div class="twitter-dialogue">
-				</div>
+  	</div>
+		<div id="footer" class="xgrid">
+			<div class="x3">
+				<h4>{% trans "Lien utile" %}</h4>
+				<ul>
+					<li><a href="{% url home %}">{% trans "Accueil" %}</a></li>
+					<li><a href="{% url dashboard %}">{% trans "Mon compte" %}</a></li>
+					<li><a href="{% url product_create %}">{% trans "Mettre en location" %}</a></li>
+				</ul>
 			</div>
-			<div class="x12 twitter-info">
-				<p>
-					<a href="">12 novembre à 18h</a> sur <a href="">Twitter</a>
-				</p>
+			<div class="x3">
+				<h4>{% trans "Info" %}</h4>
+				<ul>
+					<li><a href="#">{% trans "Espace professionnel" %}</a></li>
+					<li><a href="#">{% trans "Assurance tranquillité" %}</a></li>
+					<li><a href="#">{% trans "Conditions générales" %}</a></li>
+					<li><a href="#">{% trans "Respect de la vie privée" %}</a></li>
+				</ul>
 			</div>
-  </div>
+			<div class="x3">
+				<h4>{% trans "Support" %}</h4>
+				<ul>
+					<li><a href="#">{% trans "Aide" %}</a></li>
+					<li><a href="#">{% trans "Contactez-nous" %}</a></li>
+					<li><a href="#">{% trans "Espace presse" %}</a></li>
+					<li><a href="#">{% trans "Qui sommes nous ?" %}</a></li>
+				</ul>
+			</div>
+			<div class="x3">
+				<h4>{% trans "Communauté" %}</h4>
+				<ul>
+					<li><a href="http://blog.e-loue.com">{% trans "Blog" %}</a></li>
+					<li><a href="https://twitter.com/eloue">{% trans "Twitter" %}</a></li>
+					<li><a href="https://www.facebook.com/pages/e-louecom/104685226447">{% trans "Facebook" %}</a></li>
+					<li><a href="#">{% trans "Sites partenaires" %}</a></li>
+				</ul>
+			</div>
+			<div class="x12 twitter-box">
+				<p>L'objet insolite de la semaine : le stylo-espion ... que vous pouvez louer pour filmer tout ce que vous souhaitez... <a href="http://fb.me/NLUmubhE">http://fb.me/NLUmubhE</a></p>
+				<div class="twitter-dialogue">
+			</div>
+		</div>
+		<div class="x12 twitter-info">
+			<p>
+				<a href="">12 novembre à 18h</a> sur <a href="">Twitter</a>
+			</p>
+		</div>
+	</div>
   {% block tail %}
    {% compressed_js 'application' %}
   {% endblock %}

@@ -20,6 +20,22 @@ $(document).ready(function() {
        } 
     });
     
+    // Company name field display/none
+    var isProfessionalInput = $("input[name$='is_professional']");
+    var companyNameInput = $(".company-name");
+    
+    var exists = $("input[name$='is_professional']:checked").val();
+    
+    if (exists == 'on') { companyNameInput.show();}
+    
+    $(":checkbox").click( function(){
+        if (isProfessionalInput.is(':checked')) {
+            companyNameInput.show();
+        } else {
+            companyNameInput.hide();
+        }
+    });
+    
     // Phone field enabler/disabler
     var phoneSelect = $("select[name$='phones']");
     var phoneInput = $("input[name$='phones__phone']");
@@ -73,7 +89,7 @@ $(document).ready(function() {
     
     // Price calculations
     var bookingPrice = function(form) {
-        var template = '{{#errors}}{{ errors }}{{/errors}}{{^errors}}<p>Total :<span class="day">{{ duration }},</span> soit <span class="total-price">{{ total_price }} €</span></p>{{/errors}}';
+        var template = '{{#errors}}{{ errors }}{{/errors}}{{^errors}}<p>Total :<span class="day">{{ duration }},</span> soit <span class="total-price">{{ total_price }}&euro;</span></p>{{/errors}}';
         $.ajax({
             type: 'POST',
             url: 'price/',

@@ -8,6 +8,7 @@ from django.contrib.auth import authenticate
 from django.contrib.sites.models import Site
 from django.contrib.auth.forms import PasswordResetForm
 from django.contrib.auth.tokens import default_token_generator
+from django.forms.fields import EMPTY_VALUES
 from django.template.loader import render_to_string
 from django.utils.datastructures import SortedDict
 from django.utils.http import int_to_base36
@@ -101,9 +102,29 @@ class EmailPasswordResetForm(PasswordResetForm):
             message.send()
     
 
-class PatronChangeForm(forms.ModelForm):
+class PatronEditForm(forms.ModelForm):
+    def clean_email(self):
+        email = self.cleaned_data['email'].lower()
+        if email in EMPTY_VALUES:
+            raise forms.ValidationError(_(u"This field is required."))
+        for rule in EMAIL_BLACKLIST:
+            if re.search(rule, email):
+                raise forms.ValidationError(_(u"Pour garantir un service de qualité et la sécurité des utilisateurs de Croisé dans le métro, vous ne pouvez pas vous enregistrer avec une adresse email jetable. Ne craignez rien, vous ne recevrez aucun courrier indésirable."))
+        try:
+            Patron.objects.exclude(pk=self.instance.pk).get(email=email)
+            raise forms.ValidationError(_(u"Un compte avec cet email existe déjà"))
+        except Patron.DoesNotExist:
+            return email
+    
     class Meta:
         model = Patron
+        fields = ('civility', 'username', 'first_name', 'last_name',
+            'email', 'is_professional', 'company_name', 'is_subscribed')
+    
+
+class PatronChangeForm(forms.ModelForm):
+    class Meta:
+        model = Patron    
     
 
 class PhoneNumberForm(forms.ModelForm):

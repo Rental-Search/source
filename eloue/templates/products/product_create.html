@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load i18n mptt_tags  %}
 
 {% block content %}
 <div id="content" class="clearfix">
@@ -23,7 +24,20 @@
 			<table>
 				<tr>
 					<td colspan="2" {% if form.category.errors %} class="error-field" {% endif %}>
-						{{ form.category }}
+						{% full_tree_for_model products.Category as categories %}
+						<select id="id_0-category" class="selm" name="0-category">
+							{% if not form.category.data %}
+								<option value="" selected="selected">Choisissez une catégorie</option>
+							{% endif %}
+						    {% for node,structure in categories|tree_info:"ancestors" %}
+						        {% if node.is_leaf_node %}
+						            <option value="{{ node.pk }}" {% if form.category.data == node.id %}selected="selected"{% endif %}>
+						                {{ structure.ancestors|tree_path }} :: {{ node }}
+						            </option>
+						        {% endif %}
+						    {% endfor %}
+						</select>
+						
 						{% if form.category.errors %}
 					 		{% for error in form.category.errors %}
 								<br />
