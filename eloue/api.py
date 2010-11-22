@@ -14,7 +14,7 @@ from tastypie.http import HttpCreated
 
 from django.conf import settings
 
-from eloue.geocoder import Geocoder
+from eloue.geocoder import GoogleGeocoder
 from eloue.products.models import Product, Category, Picture, Price, upload_to
 from eloue.products.search_indexes import product_search
 from eloue.accounts.models import Address, PhoneNumber, Patron
@@ -142,7 +142,7 @@ class ProductResource(UserSpecificResource):
             sqs = sqs.auto_query(filters['q'])
         
         if "l" in filters:
-            lat, lon = Geocoder.geocode(filters['l'])
+            name, (lat, lon) = GoogleGeocoder().geocode(filters['l'])
             radius = filters.get('r', DEFAULT_RADIUS)
             if lat and lon:
                 sqs = sqs.spatial(lat=lat, long=lon, radius=radius, unit='km')

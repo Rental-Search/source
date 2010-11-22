@@ -9,7 +9,7 @@ from django.utils.translation import ugettext as _
 from haystack.forms import SearchForm
 from mptt.forms import TreeNodeChoiceField
 
-from eloue.geocoder import Geocoder
+from eloue.geocoder import GoogleGeocoder
 from eloue.products.fields import FacetField
 from eloue.products.models import PatronReview, ProductReview, Product, Category
 from eloue.products.utils import Enum
@@ -51,7 +51,7 @@ class FacetedSearchForm(SearchForm):
             
             location, radius = self.cleaned_data.get('l', None), self.cleaned_data.get('r', DEFAULT_RADIUS)
             if location:
-                lat, lon = Geocoder.geocode(location)
+                name, (lat, lon) = GoogleGeocoder().geocode(location)
                 sqs = sqs.spatial(lat=lat, long=lon, radius=radius, unit='km')
             
             if self.load_all:

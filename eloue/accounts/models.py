@@ -12,9 +12,8 @@ from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import ugettext
 from django.template.defaultfilters import slugify
 
-from geocoders.google import geocoder
-
 from eloue.accounts.manager import PatronManager
+from eloue.geocoder import GoogleGeocoder
 from eloue.products.utils import Enum
 from eloue.paypal import accounts, PaypalError
 from eloue.utils import create_alternative_email
@@ -245,9 +244,8 @@ class Address(models.Model):
         return smart_unicode("%s %s %s %s" % (self.address1, self.address2 if self.address2 else '', self.zipcode, self.city))
     
     def save(self, *args, **kwargs):
-        if not self.position:  # TODO : improve that part
-            geocode = geocoder(settings.GOOGLE_API_KEY)
-            name, (lat, lon) = geocode(smart_str("%s %s %s %s" % (self.address1, self.address2, self.zipcode, self.city)))
+        if not self.position:
+            name, (lat, lon) = GoogleGeocoder().geocode(smart_str("%s %s %s %s" % (self.address1, self.address2, self.zipcode, self.city)))
             if lat and lon:
                 self.position = Point(lat, lon)
         super(Address, self).save(*args, **kwargs)
