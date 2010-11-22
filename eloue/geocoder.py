@@ -16,7 +16,7 @@ class Geocoder(object):
     
     def geocode(self, location):
         location = self.format_place(location)
-        coordinates, cache_hit = None, False
+        name, coordinates, cache_hit = None, None, False
         if self.use_cache:
             coordinates = cache.get('location:%s' % self.hash_key(location))
             cache_hit = True
