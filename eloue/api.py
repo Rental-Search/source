@@ -104,7 +104,7 @@ class CategoryResource(ModelResource):
         fields = ['id', 'name', 'slug']
     
 
-class PictureResource(ModelResource):    
+class PictureResource(ModelResource):
     class Meta:
         queryset = Picture.objects.all()
         resource_name = 'picture'
@@ -135,13 +135,12 @@ class UserResource(ModelResource):  # TODO : Add security checks for user creati
     
 
 class PriceResource(ModelResource):
-    
     class Meta(MetaBase):
         queryset = Price.objects.all()
         resource_name = "price"
         fields = []
         allowed_methods = ['get', 'post']
-
+    
 
 class ProductResource(UserSpecificResource):
     category = fields.ForeignKey(CategoryResource, 'category', full=True, null=True)
@@ -172,7 +171,6 @@ class ProductResource(UserSpecificResource):
         }
 
     def build_filters(self, filters=None):
-
         if filters is None:
             filters = {}
 
@@ -227,7 +225,7 @@ class ProductResource(UserSpecificResource):
             Price(product=updated_bundle.obj, unit=1, amount=int(day_price_data)).save()
 
         return updated_bundle
-
+    
     def dehydrate(self, bundle, request=None):
         """
         Automatically add the location price if the request
@@ -245,6 +243,7 @@ class ProductResource(UserSpecificResource):
 
         bundle.data["price"] = Booking.calculate_price(bundle.obj, date_start, date_end)
         return bundle
+    
 
 api_v1 = Api(api_name='1.0')
 api_v1.register(CategoryResource())
