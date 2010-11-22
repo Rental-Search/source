@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from urllib import unquote
 from base64 import decodestring
 
 from tastypie import fields
@@ -30,6 +31,7 @@ class JSONSerializer(Serializer):
         'json': 'application/json',
         'jsonp': 'text/javascript',
     }
+
 
 class MetaBase():
     """Define meta attributes that must be shared between all resources"""
@@ -101,6 +103,10 @@ class AddressResource(UserSpecificResource):
         resource_name = "address"
         allowed_methods = ['get', 'post']
     
+    def dehydrate(self, bundle, request=None):
+        if bundle.obj.position:
+            bundle.data["position"] = {'lat': bundle.obj.position.x, 'lng': bundle.obj.position.y}
+        return bundle
 
 class CategoryResource(ModelResource):
     class Meta:
@@ -197,9 +203,17 @@ class ProductResource(UserSpecificResource):
                 if lat and lon:
                     sqs = sqs.spatial(lat=lat, long=lon, radius=radius, unit='km')
                 orm_filters.pop('l')
+                
+            if "r" in filters:
+                orm_filters.pop('r')
             
             orm_filters.update({"pk__in": [i.pk for i in sqs]})
-
+        
+        if "date_start" in filters:
+            orm_filters.pop('date_start')
+        
+        if "date_end" in filters:
+            orm_filters.pop('date_end')
         return orm_filters
 
     def obj_create(self, bundle, **kwargs):
@@ -242,12 +256,12 @@ class ProductResource(UserSpecificResource):
         from dateutil import parser
 
         if "date_start" in request.GET and "date_end" in request.GET:
-            date_start = parser.parse(request.GET["date_start"])
-            date_end = parser.parse(request.GET["date_end"])
+            date_start = parser.parse(unquote(request.GET["date_start"]))
+            date_end = parser.parse(unquote(request.GET["date_end"]))
         else:
             date_start = datetime.now() + timedelta(days=1)
             date_end = date_start + timedelta(days=1)
-
+        
         bundle.data["price"] = Booking.calculate_price(bundle.obj, date_start, date_end)
         return bundle
     

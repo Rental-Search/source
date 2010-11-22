@@ -3,6 +3,7 @@
     address2: null
     city: 'Paris'
     patron: 1
+    position: POINT(48.8613232 2.3631101)
     zipcode: '75003'
     country: 'FR'
   model: accounts.address
@@ -13,6 +14,7 @@
     address2: null
     city: 'Paris'
     patron: 2
+    position: POINT(48.8916787 2.3439435)
     zipcode: '75018'
     country: 'FR'
   model: accounts.address
