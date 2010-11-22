@@ -7,8 +7,9 @@ from tastypie.constants import ALL_WITH_RELATIONS
 from tastypie.resources import ModelResource
 from tastypie.authentication import Authentication, BasicAuthentication
 from tastypie.authorization import DjangoAuthorization
-from tastypie.utils import dict_strip_unicode_keys
 from tastypie.http import HttpCreated
+from tastypie.utils import dict_strip_unicode_keys
+from tastypie.serializers import Serializer
 
 from django.conf import settings
 
@@ -23,10 +24,18 @@ __all__ = ['api_v1']
 DEFAULT_RADIUS = getattr(settings, 'DEFAULT_RADIUS', 50)
 
 
+class JSONSerializer(Serializer):
+    formats = ['json', 'jsonp']
+    content_types = {
+        'json': 'application/json',
+        'jsonp': 'text/javascript',
+    }
+
 class MetaBase():
     """Define meta attributes that must be shared between all resources"""
     authentication = Authentication()
     authorization = DjangoAuthorization()
+    serializer = JSONSerializer()
 
 
 class UserSpecificResource(ModelResource):
