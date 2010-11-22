@@ -1,3 +1,20 @@
 {% extends "base.html" %}
 {% load i18n %}
 
+{% block content %}
+<div id="menu" class="clearfix">
+	<ul class="x12">
+		<li class="menu-tab first selected">{% trans "Tableau de bord" %}</li>
+		<li class="menu-tab"><a href="#">{% trans "Propriétaire" %}</a></li>
+		<li class="menu-tab"><a href="#">{% trans "Locataire" %}</a></li>
+		<li class="menu-tab"><a href="#">{% trans "Messages" %}</a></li>
+		<li class="menu-tab"><a href="#">{% trans "Mon compte" %}</a></li>
+	</ul>
+</div>
+<div id="content-dash" class="clearfix">
+	<div class="content-header x12">
+		<h1>Tableau de board</h1>
+	</div>
+</div>
+{% endblock %}
+

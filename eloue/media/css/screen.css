@@ -132,7 +132,6 @@ table td { vertical-align: top; }
 
 .clearfix {
   width: 980px;
-	display: inline-block;
 }
 
 html[xmlns] .clearfix {
@@ -335,7 +334,8 @@ html[xmlns] .clearfix {
         padding-top: 22px;
       }
 
-  #content { 
+  #content 
+  { 
     background-color: #FFF;
     border: 1px solid #ccdbe9;
     box-shadow: 1px 1px 1px rgba(0,0,0,.2);
@@ -346,6 +346,20 @@ html[xmlns] .clearfix {
     border-radius: 5px;
     margin-bottom: 20px;
     padding: 10px 0px;
+  }
+  
+  #content-dash
+  {
+    background-color: #FFF;
+    border: 1px solid #ccdbe9;
+    -moz-border-radius-bottomleft: 5px;
+    -moz-border-radius-bottomright: 5px;
+    -webkit-border-bottom-left-radius: 5px;
+		-webkit-border-bottom-right-radius: 5px;
+		border-top-bottom-radius: 5px;
+		border-top-bottom-radius: 5px;
+		padding: 10px 0px;
+		margin-bottom: 20px;
   }
 
     .content-header
