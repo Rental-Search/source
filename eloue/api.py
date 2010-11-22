@@ -132,13 +132,23 @@ class UserResource(ModelResource):  # TODO : Add security checks for user creati
         data = bundle.data
         bundle.obj = Patron.objects.create_inactive(data["username"], data["email"], data["password"])
         return bundle
+    
+
+class PriceResource(ModelResource):
+    
+    class Meta(MetaBase):
+        queryset = Price.objects.all()
+        resource_name = "price"
+        fields = []
+        allowed_methods = ['get', 'post']
 
 
 class ProductResource(UserSpecificResource):
     category = fields.ForeignKey(CategoryResource, 'category', full=True, null=True)
     address = fields.ForeignKey(AddressResource, 'address', full=True, null=True)
     owner = fields.ForeignKey(UserResource, 'owner', full=False, null=True)
-    pictures = fields.ToManyField(PictureResource, 'pictures', full=True)
+    pictures = fields.ToManyField(PictureResource, 'pictures', full=True, null=True)
+    prices = fields.ToManyField(PriceResource, 'prices', full=True, null=True)
     
     USER_FIELD_NAME = "owner"
     FILTER_GET_REQUESTS = False
@@ -170,18 +180,21 @@ class ProductResource(UserSpecificResource):
         # So we pop the user parameter out, and call directly the ModelResource constructor
         filters.pop("user")
         orm_filters = UserSpecificResource.build_filters(self, filters)
-        sqs = product_search
 
-        if "q" in filters:
-            sqs = sqs.auto_query(filters['q'])
+        if "q" in filters or "l" in filters:
+            sqs = product_search
 
-        if "l" in filters:
-            lat, lon = Geocoder.geocode(filters['l'])
-            radius = filters.get('r', DEFAULT_RADIUS)
-            if lat and lon:
-                sqs = sqs.spatial(lat=lat, long=lon, radius=radius, unit='km')
+            if "q" in filters:
+                sqs = sqs.auto_query(filters['q'])
 
-        orm_filters.update({"pk__in": [i.pk for i in sqs]})
+            if "l" in filters:
+                lat, lon = Geocoder.geocode(filters['l'])
+                radius = filters.get('r', DEFAULT_RADIUS)
+                if lat and lon:
+                    sqs = sqs.spatial(lat=lat, long=lon, radius=radius, unit='km')
+
+            orm_filters.update({"pk__in": [i.pk for i in sqs]})
+
         return orm_filters
 
     def obj_create(self, bundle, **kwargs):
@@ -194,6 +207,7 @@ class ProductResource(UserSpecificResource):
         from django.core.files.storage import default_storage
 
         picture_data = bundle.data.get("picture", None)
+        day_price_data = bundle.data.get("day_price", None)
         if picture_data:
             bundle.data.pop("picture")
         updated_bundle = UserSpecificResource.obj_create(self, bundle, **kwargs)
@@ -205,9 +219,13 @@ class ProductResource(UserSpecificResource):
             img_path = upload_to(picture, "")
             img_file = ContentFile(decodestring(picture_data))
             img_path = default_storage.save(img_path, img_file)
-            print default_storage.open(img_path)
             picture.image.name = img_path
             picture.save()
+
+        # Add a day price to the object if there isnt any yet
+        if day_price_data:
+            Price(product=updated_bundle.obj, unit=1, amount=int(day_price_data)).save()
+
         return updated_bundle
 
     def dehydrate(self, bundle, request=None):
@@ -217,26 +235,16 @@ class ProductResource(UserSpecificResource):
         """
         from datetime import datetime, timedelta
         from dateutil import parser
-        
+
         if "date_start" in request.GET and "date_end" in request.GET:
             date_start = parser.parse(request.GET["date_start"])
             date_end = parser.parse(request.GET["date_end"])
         else:
             date_start = datetime.now() + timedelta(days=1)
             date_end = date_start + timedelta(days=1)
+
         bundle.data["price"] = Booking.calculate_price(bundle.obj, date_start, date_end)
         return bundle
-    
-
-class PriceResource(ModelResource):
-    product = fields.ForeignKey(ProductResource, 'product', full=False)
-    
-    class Meta(MetaBase):
-        queryset = Price.objects.all()
-        resource_name = "price"
-        fields = []
-        allowed_methods = ['get', 'post']
-
 
 api_v1 = Api(api_name='1.0')
 api_v1.register(CategoryResource())
