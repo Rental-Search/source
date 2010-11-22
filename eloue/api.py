@@ -39,6 +39,7 @@ class UserSpecificResource(ModelResource):
     """
     # TODO : Make it work the same way with obj_get than with get_list
     USER_FIELD_NAME = "patron"
+    FILTER_GET_REQUESTS = True
     
     def get_list(self, request, **kwargs):
         # Inject the request user in keyword arguments, to get it in obj_get_list
@@ -47,15 +48,23 @@ class UserSpecificResource(ModelResource):
     def obj_get_list(self, filters=None, user=None, **kwargs):
         # Get back the user object injected in get_list, and add it to the filters
         # If FILTER_GET_REQUESTS is true
-        mfilters = dict(filters)
+        mfilters = {}
+        for key, val in filters.items():
+            mfilters[key] = val
         mfilters["user"] = user
         return ModelResource.obj_get_list(self, mfilters, **kwargs)
     
     def build_filters(self, filters):
         # Filter on user
-        f = {}
-        f[self.USER_FIELD_NAME] = filters["user"]
-        return f
+        if self.FILTER_GET_REQUESTS:
+            orm_filters = {}
+            orm_filters[self.USER_FIELD_NAME] = filters["user"]
+            filters.pop("user")
+            orm_filters.update(super(UserSpecificResource, self).build_filters(filters))
+        else:
+            orm_filters = filters
+
+        return orm_filters
     
     def post_list(self, request, **kwargs):
         """
@@ -108,12 +117,31 @@ class PictureResource(ModelResource):
         return bundle
     
 
+class UserResource(ModelResource):  # TODO : Add security checks for user creation
+    class Meta(MetaBase):
+        queryset = Patron.objects.all()
+        resource_name = "user"
+        allowed_methods = ['get', 'post']
+        fields = ['username', 'id']
+        filtering = {
+            'username': ALL_WITH_RELATIONS,
+        }
+    
+    def obj_create(self, bundle, **kwargs):
+        """Creates a new inactive user"""
+        data = bundle.data
+        bundle.obj = Patron.objects.create_inactive(data["username"], data["email"], data["password"])
+        return bundle
+
+
 class ProductResource(UserSpecificResource):
     category = fields.ForeignKey(CategoryResource, 'category', full=True, null=True)
     address = fields.ForeignKey(AddressResource, 'address', full=True, null=True)
+    owner = fields.ForeignKey(UserResource, 'owner', full=False, null=True)
     pictures = fields.ToManyField(PictureResource, 'pictures', full=True)
     
     USER_FIELD_NAME = "owner"
+    FILTER_GET_REQUESTS = False
     
     def dispatch(self, request_type, request, **kwargs):
         # Ugly hack around django WSGIRequest bug ...
@@ -130,49 +158,58 @@ class ProductResource(UserSpecificResource):
         fields = ['id', 'quantity', 'summary', 'description', 'deposit_amount']
         filtering = {
             'category': ALL_WITH_RELATIONS,
-            'owner': ALL_WITH_RELATIONS
+            'owner': ALL_WITH_RELATIONS,
         }
-    
+
     def build_filters(self, filters=None):
+
         if filters is None:
             filters = {}
-        orm_filters = super(UserSpecificResource, self).build_filters(filters)
+
+        # We dont want this resource to be user specific on GET
+        # So we pop the user parameter out, and call directly the ModelResource constructor
+        filters.pop("user")
+        orm_filters = UserSpecificResource.build_filters(self, filters)
         sqs = product_search
+
         if "q" in filters:
             sqs = sqs.auto_query(filters['q'])
-        
+
         if "l" in filters:
             lat, lon = Geocoder.geocode(filters['l'])
             radius = filters.get('r', DEFAULT_RADIUS)
             if lat and lon:
                 sqs = sqs.spatial(lat=lat, long=lon, radius=radius, unit='km')
-        
-        orm_filters = {"pk__in": [i.pk for i in sqs]}
+
+        orm_filters.update({"pk__in": [i.pk for i in sqs]})
         return orm_filters
-    
+
     def obj_create(self, bundle, **kwargs):
         """
         On product creation, if the request contains a "picture" parameter
         Creates a file with the content of the field
         And creates a picture linked to the product
         """
+        from django.core.files.base import ContentFile
+        from django.core.files.storage import default_storage
+
         picture_data = bundle.data.get("picture", None)
         if picture_data:
             bundle.data.pop("picture")
         updated_bundle = UserSpecificResource.obj_create(self, bundle, **kwargs)
-        
+
         # Create the picture object if there is a picture in the request
         if picture_data:
             picture = Picture(product=updated_bundle.obj)
             # Write the image content to a file
             img_path = upload_to(picture, "")
-            img = file(os.path.join(settings.MEDIA_ROOT, img_path), "w")
-            img.write(decodestring(picture_data))
-            img.close()
+            img_file = ContentFile(decodestring(picture_data))
+            img_path = default_storage.save(img_path, img_file)
+            print default_storage.open(img_path)
             picture.image.name = img_path
             picture.save()
         return updated_bundle
-    
+
     def dehydrate(self, bundle, request=None):
         """
         Automatically add the location price if the request
@@ -199,21 +236,7 @@ class PriceResource(ModelResource):
         resource_name = "price"
         fields = []
         allowed_methods = ['get', 'post']
-    
 
-class UserResource(ModelResource):  # TODO : Add security checks for user creation
-    class Meta(MetaBase):
-        queryset = Patron.objects.all()
-        resource_name = "user"
-        allowed_methods = ['get', 'post']
-        fields = ['username', 'id']
-    
-    def obj_create(self, bundle, **kwargs):
-        """Creates a new inactive user"""
-        data = bundle.data
-        bundle.obj = Patron.objects.create_inactive(data["username"], data["email"], data["password"])
-        return bundle
-    
 
 api_v1 = Api(api_name='1.0')
 api_v1.register(CategoryResource())
