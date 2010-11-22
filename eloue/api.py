@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-import os
-
 from base64 import decodestring
 
 from tastypie import fields
@@ -177,20 +175,21 @@ class ProductResource(UserSpecificResource):
         # We dont want this resource to be user specific on GET
         # So we pop the user parameter out, and call directly the ModelResource constructor
         filters.pop("user")
-        orm_filters = UserSpecificResource.build_filters(self, filters)
-
+        orm_filters = super(ProductResource, self).build_filters(filters)
         if "q" in filters or "l" in filters:
             sqs = product_search
 
             if "q" in filters:
                 sqs = sqs.auto_query(filters['q'])
+                orm_filters.pop('q')
 
             if "l" in filters:
-                lat, lon = Geocoder.geocode(filters['l'])
+                name, (lat, lon) = GoogleGeocoder().geocode(filters['l'])
                 radius = filters.get('r', DEFAULT_RADIUS)
                 if lat and lon:
                     sqs = sqs.spatial(lat=lat, long=lon, radius=radius, unit='km')
-
+                orm_filters.pop('l')
+            
             orm_filters.update({"pk__in": [i.pk for i in sqs]})
 
         return orm_filters
