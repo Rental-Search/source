@@ -5,7 +5,7 @@ from tastypie import fields
 from tastypie.api import Api
 from tastypie.constants import ALL_WITH_RELATIONS
 from tastypie.resources import ModelResource
-from tastypie.authentication import BasicAuthentication
+from tastypie.authentication import Authentication, BasicAuthentication
 from tastypie.authorization import DjangoAuthorization
 from tastypie.utils import dict_strip_unicode_keys
 from tastypie.http import HttpCreated
@@ -25,7 +25,7 @@ DEFAULT_RADIUS = getattr(settings, 'DEFAULT_RADIUS', 50)
 
 class MetaBase():
     """Define meta attributes that must be shared between all resources"""
-    authentication = BasicAuthentication()
+    authentication = Authentication()
     authorization = DjangoAuthorization()
 
 
@@ -61,7 +61,6 @@ class UserSpecificResource(ModelResource):
             orm_filters.update(super(UserSpecificResource, self).build_filters(filters))
         else:
             orm_filters = filters
-
         return orm_filters
     
     def post_list(self, request, **kwargs):
