@@ -8,7 +8,7 @@ from django.contrib.auth.views import logout_then_login, password_reset, passwor
 from django.contrib.sitemaps.views import index, sitemap
 
 from eloue.accounts.forms import EmailPasswordResetForm
-from eloue.accounts.views import activate, authenticate, dashboard, patron_edit
+from eloue.accounts.views import activate, authenticate, dashboard, patron_edit, patron_bookings
 from eloue.api import api_v1
 from eloue.products.views import homepage
 from eloue.rent.views import booking_detail, booking_accept, booking_reject, booking_incident, booking_close
@@ -59,6 +59,7 @@ urlpatterns = patterns('',
     url(r'^location/', include('eloue.products.urls')),
     url(r'^dashboard/$', dashboard, name="dashboard"),
     url(r'^dashboard/edit/$', patron_edit, name="patron_edit"),
+    url(r'^dashboard/owner/$', patron_bookings, name="patron_bookings"),
     url(r'^rent/', include('eloue.rent.urls')),
     url(r'^experiments/', include('django_lean.experiments.urls')),
     url(r'^edit/reports/', include('django_lean.experiments.admin_urls')),
