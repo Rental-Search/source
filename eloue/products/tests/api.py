@@ -15,8 +15,6 @@ class ApiProductResourceTest(TestCase):
     fixtures = ['patron', 'address', 'price', 'product']
     
     def setUp(self):
-        from django.conf import settings
-        settings.DEBUG = True
         self.index = site.get_index(Product)
         for product in Product.objects.all():
             self.index.update_object(product)
