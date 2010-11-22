@@ -49,11 +49,11 @@ class UserSpecificResource(ModelResource):
     # TODO : Make it work the same way with obj_get than with get_list
     USER_FIELD_NAME = "patron"
     FILTER_GET_REQUESTS = True
-    
+
     def get_list(self, request, **kwargs):
         # Inject the request user in keyword arguments, to get it in obj_get_list
         return ModelResource.get_list(self, request, user=request.user, **kwargs)
-    
+
     def obj_get_list(self, filters=None, user=None, **kwargs):
         # Get back the user object injected in get_list, and add it to the filters
         # If FILTER_GET_REQUESTS is true
@@ -62,31 +62,32 @@ class UserSpecificResource(ModelResource):
             mfilters[key] = val
         mfilters["user"] = user
         return ModelResource.obj_get_list(self, mfilters, **kwargs)
-    
+
     def build_filters(self, filters):
         # Filter on user
-        if self.FILTER_GET_REQUESTS:
-            orm_filters = {}
-            orm_filters[self.USER_FIELD_NAME] = filters["user"]
-            filters.pop("user")
-            orm_filters.update(super(UserSpecificResource, self).build_filters(filters))
-        else:
-            orm_filters = filters
+
+        if not self.FILTER_GET_REQUESTS:
+            return filters
+
+        orm_filters = {}
+        orm_filters[self.USER_FIELD_NAME] = filters["user"]
+        filters.pop("user")
+        orm_filters.update(super(UserSpecificResource, self).build_filters(filters))
         return orm_filters
-    
+
     def post_list(self, request, **kwargs):
         """
         Copy of the tastypie post_list implementation
         Necessary to send the user to obj_create
         """
         deserialized = self.deserialize(request, request.raw_post_data, format=request.META.get('CONTENT_TYPE', 'application/json'))
-        
+
         bundle = self.build_bundle(data=dict_strip_unicode_keys(deserialized))
         # Add the user to the fields to be added
         kwargs[self.USER_FIELD_NAME] = request.user
         updated_bundle = self.obj_create(bundle, **kwargs)
         return HttpCreated(location=self.get_resource_uri(updated_bundle))
-    
+
 
 class PhoneNumberResource(UserSpecificResource):
     """Resource that sends back the phone numbers linked to the user"""
@@ -94,7 +95,7 @@ class PhoneNumberResource(UserSpecificResource):
         queryset = PhoneNumber.objects.all()
         resource_name = "phonenumber"
         allowed_methods = ['get', 'post']
-    
+
 
 class AddressResource(UserSpecificResource):
     """Resource that sends back the addresses linked to the user"""
@@ -186,34 +187,25 @@ class ProductResource(UserSpecificResource):
         if filters is None:
             filters = {}
 
-        # We dont want this resource to be user specific on GET
-        # So we pop the user parameter out, and call directly the ModelResource constructor
-        filters.pop("user")
         orm_filters = super(ProductResource, self).build_filters(filters)
+
         if "q" in filters or "l" in filters:
             sqs = product_search
 
             if "q" in filters:
                 sqs = sqs.auto_query(filters['q'])
-                orm_filters.pop('q')
 
             if "l" in filters:
                 name, (lat, lon) = GoogleGeocoder().geocode(filters['l'])
                 radius = filters.get('r', DEFAULT_RADIUS)
                 if lat and lon:
                     sqs = sqs.spatial(lat=lat, long=lon, radius=radius, unit='km')
-                orm_filters.pop('l')
-                
-            if "r" in filters:
-                orm_filters.pop('r')
-            
+
             orm_filters.update({"pk__in": [i.pk for i in sqs]})
-        
-        if "date_start" in filters:
-            orm_filters.pop('date_start')
-        
-        if "date_end" in filters:
-            orm_filters.pop('date_end')
+
+        for kw in ["date_start", "date_end", "q", "l", "r"]:
+            if kw in filters: del orm_filters[kw]
+
         return orm_filters
 
     def obj_create(self, bundle, **kwargs):
