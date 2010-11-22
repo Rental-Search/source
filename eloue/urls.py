@@ -8,7 +8,7 @@ from django.contrib.auth.views import logout_then_login, password_reset, passwor
 from django.contrib.sitemaps.views import index, sitemap
 
 from eloue.accounts.forms import EmailPasswordResetForm
-from eloue.accounts.views import activate, authenticate, dashboard, patron_edit, patron_bookings
+from eloue.accounts.views import activate, authenticate, authenticate_headless, dashboard, patron_edit
 from eloue.api import api_v1
 from eloue.products.views import homepage
 from eloue.rent.views import booking_detail, booking_accept, booking_reject, booking_incident, booking_close
@@ -48,6 +48,7 @@ urlpatterns = patterns('',
     url(r'^faq/', include('faq.urls')),
     url(r'^activate/(?P<activation_key>\w+)/$', activate, name='auth_activate'),
     url(r'^login/$', authenticate, name='auth_login'),
+    url(r'^login_headless/$', authenticate_headless, name='auth_login_headless'),
     url(r'^logout/$', logout_then_login, name='auth_logout'),
     url(r'^media/(.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT}),
     url(r'^account/booking/(?P<booking_id>[0-9a-f]{32})/$', booking_detail, name="booking_detail"),
@@ -65,5 +66,6 @@ urlpatterns = patterns('',
     url(r'^edit/reports/', include('django_lean.experiments.admin_urls')),
     url(r'^edit/', include(admin.site.urls)),
     url(r'^api/', include(api_v1.urls)),
+    url(r'^oauth/', include('oauth_provider.urls')),
     url(r'^$', homepage, name="home")
 )

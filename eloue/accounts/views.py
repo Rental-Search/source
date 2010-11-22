@@ -8,6 +8,9 @@ from django.shortcuts import get_object_or_404
 from django.views.decorators.cache import never_cache, cache_page
 from django.views.generic.simple import direct_to_template, redirect_to
 from django.views.generic.list_detail import object_list
+from django.core.context_processors import csrf
+from django.views.decorators.csrf import csrf_protect
+from django.http import HttpResponse, HttpResponseBadRequest
 
 from eloue.decorators import secure_required
 from eloue.accounts.forms import EmailAuthenticationForm, PatronEditForm
@@ -35,6 +38,18 @@ def activate(request, activation_key):
 def authenticate(request, *args, **kwargs):
     wizard = AuthenticationWizard([EmailAuthenticationForm])
     return wizard(request, *args, **kwargs)
+
+
+def authenticate_headless(request):
+    print request.POST
+    form = EmailAuthenticationForm(request.POST or None)
+
+    if form.is_valid():
+        return HttpResponse()
+    elif request.method == "GET":
+        return HttpResponse(csrf(request)["csrf_token"]._proxy____func())
+
+    return HttpResponseBadRequest()
 
 
 @cache_page(900)
