@@ -14,7 +14,7 @@ from tastypie.http import HttpCreated
 
 from django.conf import settings
 
-from eloue.geocoder import Geocoder
+from eloue.geocoder import GoogleGeocoder
 from eloue.products.models import Product, Category, Picture, Price, upload_to
 from eloue.products.search_indexes import product_search
 from eloue.accounts.models import Address, PhoneNumber, Patron
