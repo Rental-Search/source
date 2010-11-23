@@ -232,7 +232,7 @@ html[xmlns] .clearfix {
     line-height: 30px;
   }
   
-  .small-blue, .medium-blue, .big-blue
+  .small-blue, .medium-blue, .big-blue, .btn-profil
   {
     font-size: 14px;
     color: #364c59 !important;
@@ -262,6 +262,14 @@ html[xmlns] .clearfix {
   {
     background: transparent url("../images/btn-blue3.png") no-repeat 0 0; 
     width: 125px;
+    height: 29px;
+    line-height: 30px; 
+  }
+  
+  .btn-profil
+  {
+    background: transparent url("../images/btn-blue4.png") no-repeat 0 0; 
+    width: 190px;
     height: 29px;
     line-height: 30px; 
   }
@@ -805,6 +813,32 @@ html[xmlns] .clearfix {
       background: transparent url("../images/separateur2.png") no-repeat 0 0;
       padding-top: 10px;
     }
+    
+  .box-info
+  {
+    padding: 10px 0;
+  }
+    .box-info-header
+    {
+      border-bottom : 1px dashed #b9cad4;
+      margin-bottom: 10px;
+    }
+    
+    .box-info-content
+    {
+      padding: 0 10px;
+    }
+      .box-info-content a { color: #6EB924; }
+      
+      .box-info-content ul
+      {
+        list-style-position:inside;
+      }
+      
+        .box-info-content li
+        {
+          list-style-image: url("../images/list-style-info.png");
+        }
 
   .pages { text-align: center;}
 
