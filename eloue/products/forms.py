@@ -113,3 +113,11 @@ class ProductForm(forms.ModelForm):
         model = Product
         fields = ('category', 'summary', 'picture_id', 'picture', 'price', 'deposit_amount', 'quantity', 'description')
     
+
+class ProductEditForm(forms.ModelForm):
+    price = forms.DecimalField(required=True, widget=forms.TextInput(attrs={'class': 'inm price'}))
+    
+    class Meta:
+        model = Product
+        fields = ('category', 'summary', 'price', 'deposit_amount', 'quantity', 'description')
+    

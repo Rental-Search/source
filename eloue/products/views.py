@@ -1,12 +1,13 @@
 # -*- coding: utf-8 -*-
 from django.conf import settings
+from django.contrib.auth.decorators import login_required
 from django.http import Http404
 from django.shortcuts import get_object_or_404
 from django.utils.datastructures import SortedDict
 from django.utils.translation import ugettext as _
 from django.views.decorators.cache import never_cache, cache_page
 from django.views.decorators.vary import vary_on_cookie
-from django.views.generic.simple import direct_to_template
+from django.views.generic.simple import direct_to_template, redirect_to
 from django.views.generic.list_detail import object_list
 
 from haystack.query import SearchQuerySet
@@ -14,7 +15,7 @@ from haystack.query import SearchQuerySet
 from eloue.decorators import secure_required
 from eloue.accounts.forms import EmailAuthenticationForm
 from eloue.accounts.models import Patron
-from eloue.products.forms import FacetedSearchForm, ProductForm
+from eloue.products.forms import FacetedSearchForm, ProductForm, ProductEditForm
 from eloue.products.models import Category
 from eloue.products.wizard import ProductWizard
 
@@ -33,6 +34,15 @@ def homepage(request):
 def product_create(request, *args, **kwargs):
     wizard = ProductWizard([ProductForm, EmailAuthenticationForm])
     return wizard(request, *args, **kwargs)
+
+
+@login_required
+def product_edit(request, *args, **kwargs):
+    form = ProductEditForm(request.POST or None)
+    if form.is_valid():
+        product = form.save()
+        return redirect_to(request, product.get_absolute_url())
+    return direct_to_template(request, 'product/product_edit.html', extra_context={'product': product, 'form': form})
 
 
 @cache_page(900)
