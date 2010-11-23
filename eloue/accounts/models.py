@@ -155,7 +155,7 @@ class Patron(User):
                     'postalCode': address.zipcode,
                     'countryCode': address.country
                 },
-                emailAddress=self.paypal_email or self.email,
+                emailAddress=self.paypal_email,
                 name={
                     'firstName': self.first_name,
                     'lastName': self.last_name
@@ -172,11 +172,11 @@ class Patron(User):
                 },
                 suppressWelcomeEmail=True,
             )
-            self.paypal_email = self.paypal_email or self.email
-            self.save()
             return response['redirectURL']
         except PaypalError, e:
             log.error(e)
+            self.paypal_email = None
+            self.save()
             return None
     
     @property

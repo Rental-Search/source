@@ -127,6 +127,12 @@ class PatronChangeForm(forms.ModelForm):
         model = Patron    
     
 
+class PatronPaypalForm(forms.ModelForm):
+    class Meta:
+        model = Patron
+        fields = ('paypal_email',)
+    
+
 class PhoneNumberForm(forms.ModelForm):
     number = PhoneNumberField()
        

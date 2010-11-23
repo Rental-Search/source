@@ -5,6 +5,7 @@ from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.sites.models import Site
 from django.core.urlresolvers import reverse
 from django.shortcuts import get_object_or_404
 from django.utils.translation import ugettext_lazy as _
@@ -13,7 +14,7 @@ from django.views.generic.simple import direct_to_template, redirect_to
 from django.views.generic.list_detail import object_list
 
 from eloue.decorators import secure_required
-from eloue.accounts.forms import EmailAuthenticationForm, PatronEditForm
+from eloue.accounts.forms import EmailAuthenticationForm, PatronEditForm, PatronPaypalForm
 from eloue.accounts.models import Patron
 from eloue.accounts.wizard import AuthenticationWizard
 
@@ -21,6 +22,7 @@ from eloue.products.forms import FacetedSearchForm
 from eloue.rent.models import Booking
 
 PAGINATE_PRODUCTS_BY = getattr(settings, 'PAGINATE_PRODUCTS_BY', 10)
+USE_HTTPS = getattr(settings, 'USE_HTTPS', True)
 
 log = Logger('eloue.accounts')
 
@@ -66,6 +68,25 @@ def patron_edit_password(request):
         form.save()
         messages.success(request, _(u"Votre mot de passe à bien été modifié"))
     return direct_to_template(request, 'accounts/patron_password.html', extra_context={'form': form, 'patron': request.user})
+
+
+@login_required
+def patron_paypal(request):
+    form = PatronPaypalForm(request.POST or None,
+        initial={'paypal_email': request.user.email}, instance=request.user)
+    redirect_path = request.REQUEST.get('next', '')
+    if not redirect_path or '//' in redirect_path or ' ' in redirect_path:
+        redirect_path = reverse('dashboard')
+    if form.is_valid():
+        patron = form.save()
+        protocol = 'https' if USE_HTTPS else 'http'
+        domain = Site.objects.get_current().domain
+        return_url = "%s://%s%s?paypal=true" % (protocol, domain, redirect_path)
+        paypal_redirect = patron.create_account(return_url=return_url)
+        if paypal_redirect:
+            return redirect_to(request, paypal_redirect)
+        messages.error(request, _(u"Nous n'avons pas pu créer votre compte paypal"))
+    return direct_to_template(request, 'accounts/patron_paypal.html', extra_context={'form': form, 'next': redirect_path})
 
 
 @login_required

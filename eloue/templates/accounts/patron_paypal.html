@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block content %}
+Si vous avez un compte paypal :
+ <form action="" method="post">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <input type="hidden" name="next" value="{{ next }}" />
+  <input type="submit" value="Utiliser mon compte" />
+ </form>
+Sinon nous allons en créer un pour vous :
+ <form action="" method="post">
+  {% csrf_token %}
+  {{ form.paypal_email.as_hidden }}
+  <input type="hidden" name="next" value="{{ next }}" />
+  <input type="submit" value="Créer mon compte" />
+ </form>
+{% endblock %}

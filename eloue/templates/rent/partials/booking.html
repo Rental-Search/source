@@ -30,12 +30,20 @@
  <div class="bk-status">
   {% if booking.booking_state == booking.BOOKING_STATE.ASKED %}
    <img src="{{ MEDIA_URL }}images/status_wait.png" alt="{% trans "En attente" %}" class="wait" />
-   <form class="bk-accept" action="{% url booking_accept booking.pk.hex %}" method="post">
+   {% if booking.owner.has_paypal %}
+    <form action="{% url booking_accept booking.pk.hex %}" method="post">
+     {% csrf_token %}
+     <input type="hidden" name="booking_state" value="{{ booking.BOOKING_STATE.PENDING }}"/>
+     <button class="bk-accept btn small-green">{% trans "Accepter" %}</button>
+    </form>
+   {% else %}
+    <a href="{% url patron_paypal %}?next={{ booking.get_absolute_url }}" class="bk-accept btn small-green">{% trans "Accepter" %}</a>
+   {% endif %}
+   <form class="bk-refuse" action="{% url booking_reject booking.pk.hex %}" method="post">
     {% csrf_token %}
-    <input type="hidden" name="booking_state" value="{{ booking.BOOKING_STATE.PENDING }}"/>
-    <button type="submit" class="bk-accept btn small-green">{% trans "Accepter" %}</button>
+    <input type="hidden" name="booking_state" value="{{ booking.BOOKING_STATE.REJECTED }}"/>
+    <button class="bk-refuse btn small-orange">{% trans "Refuser" %}</button>
    </form>
-   <a class="bk-refuse btn small-orange" href="{% url booking_reject booking.pk.hex %}">{% trans "Refuser" %}</a>
   {% endif %}
   {% if booking.booking_state == booking.BOOKING_STATE.REJECTED %}
    <img src="{{ MEDIA_URL }}images/status_rejected.png" alt="{% trans "Rejetée" %}" class="rejected">
