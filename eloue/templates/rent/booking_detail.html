@@ -1,6 +1,151 @@
 {% extends "base.html" %}
-
+{% load i18n product %}
 {% block content %}
+<div id="menu" class="clearfix">
+	<ul class="x12">
+		<li class='menu-tab first'><a href="{% url dashboard %}">{% trans "Tableau de bord" %}</a></li>
+		<li class='menu-tab selected'>{% trans "Propriétaire" %}</li>
+		<li class='menu-tab'><a href="#">{% trans "Locataire" %}</a></li>
+		<li class='menu-tab'><a href="#">{% trans "Messages" %}</a></li>
+		<li class='menu-tab'><a href="#">{% trans "Mon compte" %}</a></li>
+	</ul>
+</div>
+<div id="sub-menu" class="clearfix">
+	<ul class="x12">
+		<li class="sub-tab first selected">{% trans "Locations actives" %}</li>
+		<li class="sub-tab"><a href="{% url owner_history %}">{% trans "Historique des locations" %}</a></li>
+		<li class="sub-tab"><a href="#">{% trans "Mes objets" %}</a></li>
+		<li class="sub-tab"><a href="{% url product_create %}">{% trans "Ajouter un objet" %}</a></li>
+	</ul>
+</div>
+<div id="content-dash" class="clearfix">
+	<div class="booking x8">
+		<div class="content-header x8 first">
+		 <h2>{% trans "Résumé" %}</h2>
+		</div>
+		<div class="booking-product x8 first">
+			<a class="pl-img" href="{{ booking.product.get_absolute_url }}">
+				{% with booking.product.pictures.all|first as picture %}
+          {% if picture.thumbnail %}
+           <img src="{{ picture.thumbnail.url }}" alt="booking.product.summary" />
+          {% endif %}
+         {% endwith %}
+			</a>
+			<div class="pl-header">
+				<h2><a href="{{ booking.product.get_absolute_url }}">{{ booking.product.summary|capfirst|truncate:50 }}</a></h2>
+			</div>
+			<div class="pl-content">
+				<div class="pl-desc">{{ booking.product.description|truncate:100 }}</div>
+				<div class="pl-distance">
+				</div>
+				<div class="pl-price">
+				    {% with booking.product.prices.day|first as price %}
+					 <span class="price">{{ price }}</span><br />
+					 <span class="unit">par {{ price.unit|unit }}</span>
+					{% endwith %}
+				</div>
+			</div>
+			{% if request.user == booking.borrower %}
+				<div class="pl-footer">
+					Propriétaire :	 <a href="{{ booking.product.owner.get_absolute_url }}" class="owner">{{ booking.product.owner.username }}</a> | {{ booking.product.address.city|capfirst }}, {{ booking.product.address.zipcode }}
+				</div>
+			{% endif %}
+			{% if request.user == booking.owner %}
+				<div class="pl-footer">
+					Locataire : <a href="{{ booking.borrower.get_absolute_url }}" class="owner">{{ booking.borrower.get_full_name }}</a>
+				</div>
+			{% endif%}
+		</div>
+		<div class="content-header x8 first">
+			<h2>Dates et total</h2>
+		</div>
+		<div class="booking-resume x8 first">
+			<table>
+				<tr>
+					<th>Début :</th>
+					<td>
+						{{ booking.started_at|date:"l j F Y"|capfirst }}
+					</td>
+				</tr>
+				<tr>
+					<th>Fin :</th>
+					<td>
+                        {{ booking.ended_at|date:"l j F Y"|capfirst }}
+					</td>
+				</tr>
+				<tr>
+					<th>Prix par jour :</th>
+					<td class="number">{{ booking.product.prices.day|first }}</td>
+				</tr>
+				<tr>
+					<th>Durée de la location :</th>
+					<td class="number">{{ booking.started_at|timesince:booking.ended_at }}</td>
+				</tr>
+				<tr class="total">
+					<th>Total :</th>
+					<td class="number">{{ booking.total_amount }} €</td>
+				</tr>
+			</table>
+		</div>
+	</div>
+	<div class="portlet x3">
+		<div class="portlet-header">
+			<h3>Statuts de la location</h3>
+		</div>
+		<div class="portlet-content">
+			<div class="bk-status">
+				{% if booking.booking_state == booking.BOOKING_STATE.ASKED %}
+			   <img src="{{ MEDIA_URL }}images/status_wait.png" alt="{% trans "En attente" %}" class="wait" />
+			   <form class="bk-accept" action="{% url booking_accept booking.pk.hex %}" method="post">
+			    {% csrf_token %}
+			    <input type="hidden" name="booking_state" value="{{ booking.BOOKING_STATE.PENDING }}"/>
+			    <button type="submit" class="bk-accept btn small-green">{% trans "Accepter" %}</button>
+			   </form>
+			   <a class="bk-refuse btn small-orange" href="{% url booking_reject booking.pk.hex %}">{% trans "Refuser" %}</a>
+			  {% endif %}
+			  {% if booking.booking_state == booking.BOOKING_STATE.REJECTED %}
+			   <img src="{{ MEDIA_URL }}images/status_rejected.png" alt="{% trans "Rejetée" %}" class="rejected">
+			  {% endif %}
+			  {% if booking.booking_state == booking.BOOKING_STATE.PENDING %}
+			   <img src="{{ MEDIA_URL }}images/status_booking.png" alt="{% trans "Réservée" %}" class="booking">
+			   <form class="bk-cancel" action="{% url booking_cancel booking.pk.hex %}" method="post">
+			    {% csrf_token %}
+			    <input type="hidden" name="booking_state" value="{{ booking.BOOKING_STATE.CANCELED }}"/>
+			    <button class="bk-cancel btn bk-orange">{% trans "Annuler" %}</button>
+			   </form>
+			  {% endif %}
+			  {% if booking.booking_state == booking.BOOKING_STATE.ONGOING %}
+			   <img src="{{ MEDIA_URL }}images/status_renting.png" alt="{% trans "En cours" %}" class="renting">
+			   <a href="{% url booking_incident booking.pk.hex %}" class="bk-warning">{% trans "Signaler un incident" %}</a>
+			  {% endif %}
+			  {% if booking.booking_state == booking.BOOKING_STATE.ENDED %}
+			   <img src="{{ MEDIA_URL }}images/status_finish.png" alt="{% trans "Terminée" %}" class="finish">
+			   <form class="bk-cancel" action="{% url booking_close booking.pk.hex %}" method="post">
+			    {% csrf_token %}
+			    <input type="hidden" name="booking_state" value="{{ booking.BOOKING_STATE.CLOSED }}"/>
+			    <button class="bk-cancel btn bk-green">{% trans "Clôturer" %}</button>
+			   </form>
+			  {% endif %}
+			  {% if booking.booking_state == booking.BOOKING_STATE.CLOSED %}
+			   <img src="{{ MEDIA_URL }}images/status_ended.png" alt="{% trans "Clôturée" %}" class="ended">
+			   <a href="{% url booking_incident booking.pk.hex %}" class="bk-warning">{% trans "Signaler un incident" %}</a>
+			  {% endif %}
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
  <div class="content container clearfix">
  {% if request.user == booking.owner %}
    <p>Vous avez {% if booking.is_asked %}une proposition de location pour{% else %}mis en location{% endif %} l'object "<em>{{ booking.product.summary }}</em>" entre le <strong>{{ booking.started_at|date:"l j F Y" }}</strong> et le <strong>{{ booking.ended_at|date:"l j F Y" }}</strong> (soit environ <em>{{ booking.started_at|timesince:booking.ended_at }}</em>)  pour la somme de <strong>{{ booking.total_amount }}</strong> {{ booking.currency }}.</p>

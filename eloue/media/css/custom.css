@@ -571,6 +571,20 @@
     font-size: 18px;
   }
 
+/* *************************************************
+  doashbord page
+************************************************** */
+#content-dash .portlet
+{
+  background: #FFF !important;
+}
+.portlet-content .bk-status
+{
+  background-color: #fff ;
+  margin-left: 23px;
+  margin-top: 10px;
+}
+
 
 
       
