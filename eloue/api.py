@@ -143,13 +143,13 @@ class UserResource(ModelResource):  # TODO : Add security checks for user creati
         filtering = {
             'username': ALL_WITH_RELATIONS,
         }
-    
+
     def obj_create(self, bundle, **kwargs):
         """Creates a new inactive user"""
         data = bundle.data
         bundle.obj = Patron.objects.create_inactive(data["username"], data["email"], data["password"])
         return bundle
-    
+
 
 class PriceResource(ModelResource):
     class Meta(MetaBase):
@@ -157,7 +157,7 @@ class PriceResource(ModelResource):
         resource_name = "price"
         fields = []
         allowed_methods = ['get', 'post']
-    
+
 
 class ProductResource(UserSpecificResource):
     category = fields.ForeignKey(CategoryResource, 'category', full=True, null=True)
@@ -165,10 +165,10 @@ class ProductResource(UserSpecificResource):
     owner = fields.ForeignKey(UserResource, 'owner', full=False, null=True)
     pictures = fields.ToManyField(PictureResource, 'pictures', full=True, null=True)
     prices = fields.ToManyField(PriceResource, 'prices', full=True, null=True)
-    
+
     USER_FIELD_NAME = "owner"
     FILTER_GET_REQUESTS = False
-    
+
     def dispatch(self, request_type, request, **kwargs):
         # Ugly hack around django WSGIRequest bug ...
         # When sending big requests (containing a picture for example), the basic auth header is disappearing
@@ -176,7 +176,7 @@ class ProductResource(UserSpecificResource):
         # TODO: This really needs further investigation
         request.__repr__()
         return UserSpecificResource.dispatch(self, request_type, request, **kwargs)
-    
+
     class Meta(MetaBase):
         queryset = Product.objects.all()
         allowed_methods = ['get', 'post']
@@ -242,7 +242,7 @@ class ProductResource(UserSpecificResource):
             Price(product=updated_bundle.obj, unit=1, amount=int(day_price_data)).save()
 
         return updated_bundle
-    
+
     def dehydrate(self, bundle, request=None):
         """
         Automatically add the location price if the request
@@ -257,10 +257,10 @@ class ProductResource(UserSpecificResource):
         else:
             date_start = datetime.now() + timedelta(days=1)
             date_end = date_start + timedelta(days=1)
-        
+
         bundle.data["price"] = Booking.calculate_price(bundle.obj, date_start, date_end)
         return bundle
-    
+
 
 api_v1 = Api(api_name='1.0')
 api_v1.register(CategoryResource())

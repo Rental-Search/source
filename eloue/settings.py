@@ -146,6 +146,7 @@ INSTALLED_APPS = (
     'accounts',
     'rent',
     'products',
+    'oauth_provider',
 )
 if DEBUG_TOOLBAR:
     INSTALLED_APPS += ('debug_toolbar',)
@@ -314,3 +315,5 @@ INSURANCE_EMAIL = None  # Our insurance email
 
 # Search configuration
 DEFAULT_RADIUS = 215
+
+OAUTH_PROVIDER_KEY_SIZE = 32
