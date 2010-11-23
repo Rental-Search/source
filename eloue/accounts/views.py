@@ -2,9 +2,12 @@
 from logbook import Logger
 
 from django.conf import settings
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import PasswordChangeForm
 from django.core.urlresolvers import reverse
 from django.shortcuts import get_object_or_404
+from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.cache import never_cache, cache_page
 from django.views.generic.simple import direct_to_template, redirect_to
 from django.views.generic.list_detail import object_list
@@ -53,7 +56,16 @@ def patron_edit(request):
     form = PatronEditForm(request.POST or None, instance=request.user)
     if form.is_valid():
         patron = form.save()
-    return direct_to_template(request, 'accounts/patron_edit.html', extra_context={'form': form, 'patron':request.user})
+    return direct_to_template(request, 'accounts/patron_edit.html', extra_context={'form': form, 'patron': request.user})
+
+
+@login_required
+def patron_edit_password(request):
+    form = PasswordChangeForm(request.user, request.POST or None)
+    if form.is_valid():
+        form.save()
+        messages.success(request, _(u"Votre mot de passe à bien été modifié"))
+    return direct_to_template(request, 'accounts/patron_password.html', extra_context={'form': form, 'patron': request.user})
 
 
 @login_required
