@@ -50,7 +50,7 @@ def patron_detail(request, slug, patron_id=None, page=None):
 
 @login_required
 def patron_edit(request):
-    form = PatronEditForm(request.POST or None)
+    form = PatronEditForm(request.POST or None, instance=request.user)
     if form.is_valid():
         patron = form.save()
     return direct_to_template(request, 'accounts/patron_edit.html', extra_context={'form': form, 'patron':request.user})
