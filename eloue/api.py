@@ -57,10 +57,14 @@ class UserSpecificResource(ModelResource):
     def obj_get_list(self, filters=None, user=None, **kwargs):
         # Get back the user object injected in get_list, and add it to the filters
         # If FILTER_GET_REQUESTS is true
+
         mfilters = {}
         for key, val in filters.items():
             mfilters[key] = val
-        mfilters["user"] = user
+
+        if self.FILTER_GET_REQUESTS:
+            mfilters["user"] = user
+
         return ModelResource.obj_get_list(self, mfilters, **kwargs)
 
     def build_filters(self, filters):
