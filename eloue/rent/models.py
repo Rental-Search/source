@@ -192,7 +192,7 @@ class Booking(models.Model):
                 startingDate=now,
                 endingDate=now + datetime.timedelta(days=360),
                 currencyCode=self.currency,
-                maxTotalAmountOfAllPayments=str(self.total_amount + self.deposit_amount),
+                maxTotalAmountOfAllPayments=str(self.total_amount),
                 cancelUrl=cancel_url,
                 returnUrl=return_url,
                 ipnNotificationUrl=urljoin(
