@@ -207,7 +207,10 @@
 <div class="submit-wizard x9">
 	<input type="hidden" name="{{ step_field }}" value="{{ step0 }}" />
 	{{ previous_fields|safe }}
-	<a href="{% url home %}">Annuler</a> ou 
-	<input type="submit" class="btn big-green" value="Continuer &rarr;" />
+	{% if product %}
+	 <a href="{{ product.get_absolute_url }}">Annuler</a> ou 
+	{% else %}
+	 <a href="{% url home %}">Annuler</a> ou 
+	{% endif %}<input type="submit" class="btn big-green" value="Continuer &rarr;" />
 </form>
 </div>
