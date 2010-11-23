@@ -1,5 +1,30 @@
 {% extends "base.html" %}
+{% load i18n product %}
 
 {% block content %}
-
+<div id="menu" class="clearfix">
+	<ul class="x12">
+		<li class='menu-tab first'><a href="{% url dashboard %}">{% trans "Tableau de bord" %}</a></li>
+		<li class='menu-tab'><a href="{% url owner_booking %}">{% trans "Propriétaire" %}</li>
+		<li class='menu-tab selected'><a href="{% url borrower_booking %}">{% trans "Locataire" %}</a></li>
+		<li class='menu-tab'><a href="#">{% trans "Messages" %}</a></li>
+		<li class='menu-tab'><a href="{% url patron_edit %}">{% trans "Mon compte" %}</a></li>
+	</ul>
+</div>
+<div id="sub-menu" class="clearfix">
+	<ul class="x12">
+		<li class="sub-tab first"><a href="{% url borrower_booking %}">{% trans "Locations actives" %}</a></li>
+		<li class="sub-tab selected"><a href="{% url borrower_history %}">{% trans "Historique des locations" %}</a></li>
+	</ul>
+</div>
+<div id="content-dash" class="clearfix">
+	<div class="content-header x12">
+		<h1>{% trans "Historiques des locations" %}</h1>
+	</div>
+	<ul class="booking-list x12">
+	 {% for booking in booking_list %}
+	    {% include "rent/partials/booking.html" %}
+	 {% endfor %}
+	</ul>{# booking-list #}
+</div>
 {% endblock %}
