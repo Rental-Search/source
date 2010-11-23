@@ -12,6 +12,11 @@ from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.cache import never_cache, cache_page
 from django.views.generic.simple import direct_to_template, redirect_to
 from django.views.generic.list_detail import object_list
+from django.core.context_processors import csrf
+from django.views.decorators.csrf import csrf_protect
+from django.http import HttpResponse, HttpResponseBadRequest
+from django.contrib.auth import authenticate as auth_authenticate, login
+from oauth_provider.models import Token
 
 from eloue.decorators import secure_required
 from eloue.accounts.forms import EmailAuthenticationForm, PatronEditForm, PatronPaypalForm
@@ -42,6 +47,29 @@ def authenticate(request, *args, **kwargs):
     wizard = AuthenticationWizard([EmailAuthenticationForm])
     return wizard(request, *args, **kwargs)
 
+
+def authenticate_headless(request):
+    mdict = {}
+    for k in ["password", "email", "exists"]:
+        if k in request.POST:
+            mdict[k] = request.POST[k]
+    form = EmailAuthenticationForm(mdict or None)
+
+    if form.is_valid():
+        login(request, form.get_user())
+        return HttpResponse()
+
+    elif request.method == "GET":
+        return HttpResponse(csrf(request)["csrf_token"]._proxy____func())
+
+    return HttpResponseBadRequest()
+
+def oauth_authorize(request,*args, **kwargs):
+    return HttpResponse(csrf(request)["csrf_token"]._proxy____func())
+
+def oauth_callback(request, *args, **kwargs):
+    token = Token.objects.get(key=kwargs['oauth_token'])
+    return HttpResponse(token.verifier)
 
 @cache_page(900)
 def patron_detail(request, slug, patron_id=None, page=None):

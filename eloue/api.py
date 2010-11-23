@@ -12,6 +12,11 @@ from tastypie.http import HttpCreated
 from tastypie.utils import dict_strip_unicode_keys
 from tastypie.serializers import Serializer
 
+from oauth_provider.decorators import CheckOAuth
+from oauth_provider.store import store, InvalidTokenError
+from oauth_provider.utils import get_oauth_request
+from oauth2 import Error
+
 from django.conf import settings
 
 from eloue.geocoder import GoogleGeocoder
@@ -25,6 +30,29 @@ __all__ = ['api_v1']
 DEFAULT_RADIUS = getattr(settings, 'DEFAULT_RADIUS', 50)
 
 
+class OAuthentication(Authentication):
+
+    def is_authenticated(self, request, **kwargs):
+        if CheckOAuth.is_valid_request(request):
+            oauth_request = get_oauth_request(request)
+            consumer = store.get_consumer(request, oauth_request, oauth_request.get_parameter('oauth_consumer_key'))
+            try:
+                token = store.get_access_token(request, oauth_request, consumer, oauth_request.get_parameter('oauth_token'))
+            except InvalidTokenError:
+                return False
+
+            try:
+                parameters = CheckOAuth.validate_token(request, consumer, token)
+            except Error, e:
+                return False
+
+            if consumer and token:
+                request.user = token.user
+                return True
+
+        return False
+
+
 class JSONSerializer(Serializer):
     formats = ['json', 'jsonp']
     content_types = {
@@ -35,12 +63,28 @@ class JSONSerializer(Serializer):
 
 class MetaBase():
     """Define meta attributes that must be shared between all resources"""
-    authentication = Authentication()
+    authentication = OAuthentication()
     authorization = DjangoAuthorization()
     serializer = JSONSerializer()
 
 
-class UserSpecificResource(ModelResource):
+class OAuthResource(ModelResource):
+
+    def obj_get_list(self, filters=None, user=None, **kwargs):
+        """
+        Removes every oauth related key
+        There is probably a better way but i can't find it
+        """
+
+        mfilters = {}
+        for key, val in filters.items():
+            if not key.startswith("oauth_"):
+                mfilters[key] = val
+
+        return super(OAuthResource, self).obj_get_list(mfilters, **kwargs)
+
+
+class UserSpecificResource(OAuthResource):
     """
     Base class for a resource that restrain the possible actions to the scope of the user
     For GET: Only user owned objects are returned
@@ -52,7 +96,7 @@ class UserSpecificResource(ModelResource):
 
     def get_list(self, request, **kwargs):
         # Inject the request user in keyword arguments, to get it in obj_get_list
-        return ModelResource.get_list(self, request, user=request.user, **kwargs)
+        return OAuthResource.get_list(self, request, user=request.user, **kwargs)
 
     def obj_get_list(self, filters=None, user=None, **kwargs):
         # Get back the user object injected in get_list, and add it to the filters
@@ -65,18 +109,21 @@ class UserSpecificResource(ModelResource):
         if self.FILTER_GET_REQUESTS:
             mfilters["user"] = user
 
-        return ModelResource.obj_get_list(self, mfilters, **kwargs)
+        return OAuthResource.obj_get_list(self, mfilters, **kwargs)
 
     def build_filters(self, filters):
         # Filter on user
 
+        orm_filters = {}
+        user = filters.pop("user") if "user" in filters else None
+        orm_filters.update(super(UserSpecificResource, self).build_filters(filters))
+
         if not self.FILTER_GET_REQUESTS:
             return filters
 
-        orm_filters = {}
-        orm_filters[self.USER_FIELD_NAME] = filters["user"]
-        filters.pop("user")
-        orm_filters.update(super(UserSpecificResource, self).build_filters(filters))
+        if user:
+            orm_filters[self.USER_FIELD_NAME] = user
+
         return orm_filters
 
     def post_list(self, request, **kwargs):
@@ -121,7 +168,7 @@ class CategoryResource(ModelResource):
         fields = ['id', 'name', 'slug']
     
 
-class PictureResource(ModelResource):
+class PictureResource(OAuthResource):
     class Meta:
         queryset = Picture.objects.all()
         resource_name = 'picture'
@@ -134,7 +181,7 @@ class PictureResource(ModelResource):
         return bundle
     
 
-class UserResource(ModelResource):  # TODO : Add security checks for user creation
+class UserResource(OAuthResource):  # TODO : Add security checks for user creation
     class Meta(MetaBase):
         queryset = Patron.objects.all()
         resource_name = "user"
@@ -143,21 +190,21 @@ class UserResource(ModelResource):  # TODO : Add security checks for user creati
         filtering = {
             'username': ALL_WITH_RELATIONS,
         }
-    
+
     def obj_create(self, bundle, **kwargs):
         """Creates a new inactive user"""
         data = bundle.data
         bundle.obj = Patron.objects.create_inactive(data["username"], data["email"], data["password"])
         return bundle
-    
 
-class PriceResource(ModelResource):
+
+class PriceResource(OAuthResource):
     class Meta(MetaBase):
         queryset = Price.objects.all()
         resource_name = "price"
         fields = []
         allowed_methods = ['get', 'post']
-    
+
 
 class ProductResource(UserSpecificResource):
     category = fields.ForeignKey(CategoryResource, 'category', full=True, null=True)
@@ -165,10 +212,10 @@ class ProductResource(UserSpecificResource):
     owner = fields.ForeignKey(UserResource, 'owner', full=False, null=True)
     pictures = fields.ToManyField(PictureResource, 'pictures', full=True, null=True)
     prices = fields.ToManyField(PriceResource, 'prices', full=True, null=True)
-    
+
     USER_FIELD_NAME = "owner"
     FILTER_GET_REQUESTS = False
-    
+
     def dispatch(self, request_type, request, **kwargs):
         # Ugly hack around django WSGIRequest bug ...
         # When sending big requests (containing a picture for example), the basic auth header is disappearing
@@ -176,7 +223,7 @@ class ProductResource(UserSpecificResource):
         # TODO: This really needs further investigation
         request.__repr__()
         return UserSpecificResource.dispatch(self, request_type, request, **kwargs)
-    
+
     class Meta(MetaBase):
         queryset = Product.objects.all()
         allowed_methods = ['get', 'post']
@@ -242,7 +289,7 @@ class ProductResource(UserSpecificResource):
             Price(product=updated_bundle.obj, unit=1, amount=int(day_price_data)).save()
 
         return updated_bundle
-    
+
     def dehydrate(self, bundle, request=None):
         """
         Automatically add the location price if the request
@@ -257,10 +304,10 @@ class ProductResource(UserSpecificResource):
         else:
             date_start = datetime.now() + timedelta(days=1)
             date_end = date_start + timedelta(days=1)
-        
+
         bundle.data["price"] = Booking.calculate_price(bundle.obj, date_start, date_end)
         return bundle
-    
+
 
 api_v1 = Api(api_name='1.0')
 api_v1.register(CategoryResource())
