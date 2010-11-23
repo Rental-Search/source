@@ -150,6 +150,11 @@ INSTALLED_APPS = (
 if DEBUG_TOOLBAR:
     INSTALLED_APPS += ('debug_toolbar',)
 
+LOCAL_APPS = getattr(local, 'INSTALLED_APPS', None)
+if LOCAL_APPS:
+    INSTALLED_APPS += LOCAL_APPS
+
+
 # Authentification configuration
 AUTHENTICATION_BACKENDS = (
     'eloue.accounts.auth.PatronModelBackend',
