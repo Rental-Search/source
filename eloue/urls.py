@@ -9,7 +9,7 @@ from django.contrib.sitemaps.views import index, sitemap
 
 from eloue.accounts.forms import EmailPasswordResetForm
 from eloue.accounts.views import activate, authenticate, dashboard, patron_edit, owner_booking, owner_history, \
-    borrower_booking, borrower_history, patron_edit_password, patron_paypal
+    borrower_booking, borrower_history, patron_edit_password, patron_paypal, owner_product
 from eloue.api import api_v1
 from eloue.products.views import homepage
 from eloue.rent.views import booking_detail, booking_accept, booking_reject, booking_incident, booking_close, booking_cancel
@@ -65,6 +65,7 @@ urlpatterns = patterns('',
     url(r'^dashboard/account/paypal/$', patron_paypal, name="patron_paypal"),
     url(r'^dashboard/owner/booking/(page/(?P<page>\d+)/)?$', owner_booking, name="owner_booking"),
     url(r'^dashboard/owner/history/(page/(?P<page>\d+)/)?$', owner_history, name="owner_history"),
+    url(r'^dashboard/owner/product/(page/(?P<page>\d+)/)?$', owner_product, name="owner_product"),
     url(r'^dashboard/borrower/booking/(page/(?P<page>\d+)/)?$', borrower_booking, name="borrower_booking"),
     url(r'^dashboard/borrower/history/(page/(?P<page>\d+)/)?$', borrower_history, name="borrower_history"),
     url(r'^rent/', include('eloue.rent.urls')),
