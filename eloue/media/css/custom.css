@@ -487,7 +487,7 @@
     }
 
 /* *************************************************
-   doashbord page
+   doashbord layout page
 ************************************************** */
 #menu{
   background: -webkit-gradient(linear, 0 0, 0 50%, from(#d6e5f2), to(#e4eff9));
@@ -552,6 +552,25 @@
   	-moz-text-shadow: 1px 1px 1px #FFF;
   	-webkit-text-shadow: 1px 1px 1px #FFF;
   }
-  
+
+/* *************************************************
+  doashbord page
+************************************************** */
+
+.welcome-dash
+{
+  background-color: #f3f8fa;
+  padding: 10px 0;
+  text-align: center;
+  margin-bottom: 20px;
+}
+  .welcome-dash .pseudo
+  {
+    margin-bottom: 10px;
+    font-weight: bold;
+    font-size: 18px;
+  }
+
+
 
       
