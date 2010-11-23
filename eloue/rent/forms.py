@@ -166,7 +166,7 @@ class BookingStateForm(forms.ModelForm):
     
     class Meta:
         model = Booking
-        fields = ('booking_state')
+        fields = ('booking_state',)
     
 
 class SinisterForm(forms.ModelForm):

@@ -1,0 +1,68 @@
+{% load i18n product %}
+<li class="x12 first">
+ <div class="bk">
+  <div class="bk-dates">
+   {{ booking.started_at|date:"d/m/Y" }}<br>
+   <span>&darr;</span><br />
+   {{ booking.ended_at|date:"d/m/Y" }}
+  </div>
+  <div class="bk-desc">
+   {% with booking.product as product %}
+    <a class="bk-product-img" href="{{ product.get_absolute_url }}">
+ 	 {% with product.pictures.all|first as picture %}
+	  <img width="70" src="{{ picture.thumbnail.url }}" />
+	 {% endwith %}
+	</a>
+	<h5>{{ product.summary|capfirst }}</h5>
+	<div class="bk-borrower">
+	 <img src="{{ MEDIA_URL }}images/bk_borrower_img.png">
+	 <h5><a href="{{ booking.borrower.get_absolute_url }}">{{ booking.borrower.get_full_name }}</a></h5>
+	</div>
+	<div class="bk-price">
+	 {{ booking.total_amount }} {{ booking.currency|currency }}
+	</div>
+	<div class="bk-details">
+	 <a href="{{ booking.get_absolute_url }}" class="btn medium-blue">{% trans "Voir le détails" %}</a>
+	</div>
+   </div>
+  {% endwith %}
+ </div>{# bk #}
+ <div class="bk-status">
+  {% if booking.booking_state == booking.BOOKING_STATE.ASKED %}
+   <img src="{{ MEDIA_URL }}images/status_wait.png" alt="{% trans "En attente" %}" class="wait" />
+   <form class="bk-accept" action="{% url booking_accept booking.pk.hex %}" method="post">
+    {% csrf_token %}
+    <input type="hidden" name="booking_state" value="{{ booking.BOOKING_STATE.PENDING }}"/>
+    <button type="submit" class="bk-accept btn small-green">{% trans "Accepter" %}</button>
+   </form>
+   <a class="bk-refuse btn small-orange" href="{% url booking_reject booking.pk.hex %}">{% trans "Refuser" %}</a>
+  {% endif %}
+  {% if booking.booking_state == booking.BOOKING_STATE.REJECTED %}
+   <img src="{{ MEDIA_URL }}images/status_rejected.png" alt="{% trans "Rejetée" %}" class="rejected">
+  {% endif %}
+  {% if booking.booking_state == booking.BOOKING_STATE.PENDING %}
+   <img src="{{ MEDIA_URL }}images/status_booking.png" alt="{% trans "Réservée" %}" class="booking">
+   <form class="bk-cancel" action="{% url booking_cancel booking.pk.hex %}" method="post">
+    {% csrf_token %}
+    <input type="hidden" name="booking_state" value="{{ booking.BOOKING_STATE.CANCELED }}"/>
+    <button class="bk-cancel btn bk-orange">{% trans "Annuler" %}</button>
+   </form>
+  {% endif %}
+  {% if booking.booking_state == booking.BOOKING_STATE.ONGOING %}
+   <img src="{{ MEDIA_URL }}images/status_renting.png" alt="{% trans "En cours" %}" class="renting">
+   <a href="{% url booking_incident booking.pk.hex %}" class="bk-warning">{% trans "Signaler un incident" %}</a>
+  {% endif %}
+  {% if booking.booking_state == booking.BOOKING_STATE.ENDED %}
+   <img src="{{ MEDIA_URL }}images/status_finish.png" alt="{% trans "Terminée" %}" class="finish">
+   <form class="bk-cancel" action="{% url booking_close booking.pk.hex %}" method="post">
+    {% csrf_token %}
+    <input type="hidden" name="booking_state" value="{{ booking.BOOKING_STATE.CLOSED }}"/>
+    <button class="bk-cancel btn bk-green">{% trans "Clôturer" %}</button>
+   </form>
+  {% endif %}
+  {% if booking.booking_state == booking.BOOKING_STATE.CLOSED %}
+   <img src="{{ MEDIA_URL }}images/status_ended.png" alt="{% trans "Clôturée" %}" class="ended">
+   <a href="{% url booking_incident booking.pk.hex %}" class="bk-warning">{% trans "Signaler un incident" %}</a>
+  {% endif %}
+ </div>
+</li>

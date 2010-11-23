@@ -108,4 +108,9 @@ $(document).ready(function() {
         var form = $(this);
         bookingPrice(form);
     });
+    
+    // Confirm booking rejection
+    $('form.bk-refuse').submit(function(event) {
+       return confirm('Êtes-vous sûr de vouloir refuser cette location ?');
+    });
 });

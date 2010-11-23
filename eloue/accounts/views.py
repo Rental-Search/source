@@ -15,6 +15,7 @@ from eloue.accounts.models import Patron
 from eloue.accounts.wizard import AuthenticationWizard
 
 from eloue.products.forms import FacetedSearchForm
+from eloue.rent.models import Booking
 
 PAGINATE_PRODUCTS_BY = getattr(settings, 'PAGINATE_PRODUCTS_BY', 10)
 
@@ -61,12 +62,14 @@ def dashboard(request):
 
 
 @login_required
-def patron_bookings(request, page=None):
-    return object_list(request, request.user.bookings.all(), page=page, paginate_by=10, template_name='accounts/patron_bookings.html',
+def owner_booking(request, page=None):
+    queryset = request.user.bookings.exclude(booking_state=Booking.BOOKING_STATE.CLOSED)
+    return object_list(request, queryset, page=page, paginate_by=10, template_name='accounts/owner_booking.html',
         template_object_name='booking')
 
 
 @login_required
-def patron_rentals(request, page=None):
-    return object_list(request, request.user.rentals.all(), page=page, paginate_by=10, template_name='accounts/patron_rentals.html',
+def owner_history(request, page=None):
+    queryset = request.user.bookings.filter(booking_state=Booking.BOOKING_STATE.CLOSED)
+    return object_list(request, queryset, page=page, paginate_by=10, template_name='accounts/owner_history.html',
         template_object_name='booking')

@@ -12,6 +12,7 @@ from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.contrib.sites.models import Site
 from django.db import models
+from django.db.models import permalink
 from django.utils.translation import ugettext_lazy as _
 
 from eloue.accounts.models import Patron
@@ -135,6 +136,10 @@ class Booking(models.Model):
                 raise ValidationError(_(u"Une location ne peut pas terminer avant d'avoir commencer"))
             if (self.ended_at - self.started_at) > datetime.timedelta(days=BOOKING_DAYS):
                 raise ValidationError(_(u"La durée d'une location est limitée à 85 jours."))
+    
+    @permalink
+    def get_absolute_url(self):
+        return ('booking_detail', [self.pk.hex])
     
     def __init__(self, *args, **kwargs):
         super(Booking, self).__init__(*args, **kwargs)

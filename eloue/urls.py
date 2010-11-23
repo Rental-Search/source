@@ -8,10 +8,10 @@ from django.contrib.auth.views import logout_then_login, password_reset, passwor
 from django.contrib.sitemaps.views import index, sitemap
 
 from eloue.accounts.forms import EmailPasswordResetForm
-from eloue.accounts.views import activate, authenticate, dashboard, patron_edit, patron_bookings
+from eloue.accounts.views import activate, authenticate, dashboard, patron_edit, owner_booking, owner_history
 from eloue.api import api_v1
 from eloue.products.views import homepage
-from eloue.rent.views import booking_detail, booking_accept, booking_reject, booking_incident, booking_close
+from eloue.rent.views import booking_detail, booking_accept, booking_reject, booking_incident, booking_close, booking_cancel
 from eloue.sitemaps import FlatPageSitemap, PatronSitemap, ProductSitemap
 
 log = logbook.Logger('eloue')
@@ -52,6 +52,7 @@ urlpatterns = patterns('',
     url(r'^media/(.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT}),
     url(r'^account/booking/(?P<booking_id>[0-9a-f]{32})/$', booking_detail, name="booking_detail"),
     url(r'^account/booking/(?P<booking_id>[0-9a-f]{32})/accept/$', booking_accept, name="booking_accept"),
+    url(r'^account/booking/(?P<booking_id>[0-9a-f]{32})/cancel/$', booking_cancel, name="booking_cancel"),
     url(r'^account/booking/(?P<booking_id>[0-9a-f]{32})/reject/$', booking_reject, name="booking_reject"),
     url(r'^account/booking/(?P<booking_id>[0-9a-f]{32})/incident/$', booking_incident, name="booking_incident"),
     url(r'^account/booking/(?P<booking_id>[0-9a-f]{32})/close/$', booking_close, name="booking_close"),
@@ -59,7 +60,8 @@ urlpatterns = patterns('',
     url(r'^location/', include('eloue.products.urls')),
     url(r'^dashboard/$', dashboard, name="dashboard"),
     url(r'^dashboard/edit/$', patron_edit, name="patron_edit"),
-    url(r'^dashboard/owner/$', patron_bookings, name="patron_bookings"),
+    url(r'^dashboard/owner/booking/$', owner_booking, name="owner_booking"),
+    url(r'^dashboard/owner/history/$', owner_history, name="owner_history"),
     url(r'^rent/', include('eloue.rent.urls')),
     url(r'^experiments/', include('django_lean.experiments.urls')),
     url(r'^edit/reports/', include('django_lean.experiments.admin_urls')),

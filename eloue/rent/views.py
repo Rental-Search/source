@@ -109,9 +109,11 @@ def booking_detail(request, booking_id):
 @login_required
 @ownership_required(model=Booking, object_key='booking_id', ownership=['owner'])
 def booking_accept(request, booking_id):
+    # TODO : It's much more complex than this
+    booking = get_object_or_404(Booking, pk=booking_id)
     form = BookingStateForm(request.POST or None,
         initial={'booking_state': Booking.BOOKING_STATE.PENDING},
-        instance=get_object_or_404(Booking, pk=booking_id))
+        instance=booking)
     if form.is_valid():
         booking = form.save()
         booking.send_acceptation_email()
@@ -121,26 +123,45 @@ def booking_accept(request, booking_id):
 @login_required
 @ownership_required(model=Booking, object_key='booking_id', ownership=['owner'])
 def booking_reject(request, booking_id):
+    booking = get_object_or_404(Booking, pk=booking_id)
     form = BookingStateForm(request.POST or None,
         initial={'booking_state': Booking.BOOKING_STATE.REJECTED},
-        instance=get_object_or_404(Booking, pk=booking_id))
+        instance=booking)
     if form.is_valid():
         booking = form.save()
         booking.send_rejection_email()
-        messages.add_messages(request, messages.SUCCESS, _(u"Cette réservation a bien été refusée"))
+        messages.add_message(request, messages.SUCCESS, _(u"Cette réservation a bien été refusée"))
+    messages.add_message(request, messages.ERROR, _(u"Cette réservation n'a pu être refusée"))
+    return redirect_to(request, booking.get_absolute_url())
+
+
+@login_required
+@ownership_required(model=Booking, object_key='booking_id', ownership=['owner'])
+def booking_cancel(request, booking_id):
+    booking = get_object_or_404(Booking, pk=booking_id)
+    form = BookingStateForm(request.POST or None,
+        initial={'booking_state': Booking.BOOKING_STATE.CANCELED},
+        instance=booking)
+    if form.is_valid():
+        booking = form.save()
+        # TODO : Send email to owner and/or borrower
+        messages.add_message(request, messages.SUCCESS, _(u"Cette réservation a bien été annulée"))
+    messages.add_message(request, messages.ERROR, _(u"Cette réservation n'a pu être annulée"))
     return redirect_to(request, booking.get_absolute_url())
 
 
 @login_required
 @ownership_required(model=Booking, object_key='booking_id', ownership=['owner'])
 def booking_close(request, booking_id):
+    booking = get_object_or_404(Booking, pk=booking_id)
     form = BookingStateForm(request.POST or None,
         initial={'booking_state': Booking.BOOKING_STATE.PENDING},
-        instance=get_object_or_404(Booking, pk=booking_id))
+        instance=booking)
     if form.is_valid():
         booking = form.save()
         booking.pay()
-        messages.add_messages(request, messages.SUCCESS, _(u"Cette réservation a bien été cloturée"))
+        messages.add_message(request, messages.SUCCESS, _(u"Cette réservation a bien été cloturée"))
+    messages.add_message(request, messages.ERROR, _(u"Cette réservation n'a pu être cloturée"))
     return redirect_to(request, booking.get_absolute_url())
 
 @login_required

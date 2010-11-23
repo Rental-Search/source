@@ -14,5 +14,6 @@
  {% if request.user == booking.borrower %}
    Vous avez loué l'object "<em>{{ booking.product.summary }}</em>" entre le <strong>{{ booking.started_at|date:"l j F Y" }}</strong> et le <strong>{{ booking.ended_at|date:"l j F Y" }}</strong> (soit environ <em>{{ booking.started_at|timesince:booking.ended_at }}</em>)  pour la somme de <strong>{{ booking.total_amount }}</strong> {{ booking.currency }}.
  {% endif %}
+ {{ booking.booking_state }}
  </div>
 {% endblock %}
