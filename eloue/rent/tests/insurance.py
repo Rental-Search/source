@@ -43,7 +43,7 @@ class InsuranceTest(TestCase):
         i = 0
         for row in csv.reader(csv_file, delimiter='|'):
             booking = Booking.objects.get(pk=row[4])
-            self.assertEquals(booking.booking_state, Booking.BOOKING_STATE.ENDED)
+            self.assertEquals(booking.state, Booking.STATE.ENDED)
             i += 1
         self.assertEquals(i, 1)
         self.assertTrue(settings.INSURANCE_EMAIL in mail.outbox[0].to)
@@ -60,7 +60,7 @@ class InsuranceTest(TestCase):
         i = 0
         for row in csv.reader(csv_file, delimiter='|'):
             booking = Booking.objects.get(pk=row[4])
-            self.assertEquals(booking.booking_state, Booking.BOOKING_STATE.CANCELED)
+            self.assertEquals(booking.state, Booking.STATE.CANCELED)
             i += 1
         self.assertEquals(i, 3)
         self.assertTrue(settings.INSURANCE_EMAIL in mail.outbox[0].to)
@@ -97,7 +97,7 @@ class InsuranceTest(TestCase):
         i = 0
         for row in csv.reader(csv_file, delimiter='|'):
             booking = Booking.objects.get(pk=row[13])
-            self.assertEquals(booking.booking_state, Booking.BOOKING_STATE.PENDING)
+            self.assertEquals(booking.state, Booking.STATE.PENDING)
             i += 1
         self.assertEquals(i, 2)
         self.assertEquals(mock.return_value.method_calls[2][0], 'quit')

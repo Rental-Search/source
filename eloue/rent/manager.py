@@ -17,6 +17,6 @@ class BookingManager(Manager):
         from eloue.rent.models import BOOKING_STATE
         
         def filter(self):
-            return self.get_query_set().filter(booking_state=BOOKING_STATE[state])
+            return self.get_query_set().filter(state=BOOKING_STATE[state])
         return filter
     

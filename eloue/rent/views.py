@@ -35,15 +35,13 @@ def preapproval_ipn(request):
         booking = Booking.objects.get(preapproval_key=form.cleaned_data['preapproval_key'])
         if form.cleaned_data['approved'] and form.cleaned_data['status'] == 'ACTIVE':
             # Changing state
-            booking.payment_state = Booking.PAYMENT_STATE.AUTHORIZED
-            booking.booking_state = Booking.BOOKING_STATE.ASKED
+            booking.state = Booking.STATE.ASKED
             booking.borrower.paypal_email = form.cleaned_data['sender_email']
             booking.borrower.save()
             # Sending email
             booking.send_ask_email()
         else:
-            booking.payment_state = Booking.PAYMENT_STATE.REJECTED
-            booking.booking_state = Booking.BOOKING_STATE.REJECTED
+            booking.state = Booking.STATE.REJECTED
         booking.save()
     return HttpResponse()
 
@@ -56,7 +54,9 @@ def pay_ipn(request):
     if form.is_valid():
         booking = Booking.objects.get(pay_key=form.cleaned_data['pay_key'])
         if form.cleaned_data['action_type'] == 'PAY_PRIMARY' and form.cleaned_data['status'] == 'INCOMPLETE':
-            booking.payment_state = Booking.PAYMENT_STATE.HOLDED
+            booking.state = Booking.STATE.ONGOING
+        else: # FIXME : naïve
+            booking.state = Booking.STATE.CLOSED
         booking.save()
     return HttpResponse()
 
@@ -112,7 +112,7 @@ def booking_detail(request, booking_id):
 def booking_accept(request, booking_id):
     booking = get_object_or_404(Booking, pk=booking_id)
     form = BookingStateForm(request.POST or None,
-        initial={'booking_state': Booking.BOOKING_STATE.PENDING},
+        initial={'state': Booking.STATE.PENDING},
         instance=booking)
     if form.is_valid():
         booking = form.save()
@@ -125,7 +125,7 @@ def booking_accept(request, booking_id):
 def booking_reject(request, booking_id):
     booking = get_object_or_404(Booking, pk=booking_id)
     form = BookingStateForm(request.POST or None,
-        initial={'booking_state': Booking.BOOKING_STATE.REJECTED},
+        initial={'state': Booking.STATE.REJECTED},
         instance=booking)
     if form.is_valid():
         booking = form.save()
@@ -140,7 +140,7 @@ def booking_reject(request, booking_id):
 def booking_cancel(request, booking_id):
     booking = get_object_or_404(Booking, pk=booking_id)
     form = BookingStateForm(request.POST or None,
-        initial={'booking_state': Booking.BOOKING_STATE.CANCELED},
+        initial={'state': Booking.STATE.CANCELED},
         instance=booking)
     if form.is_valid():
         booking = form.save()
@@ -155,7 +155,7 @@ def booking_cancel(request, booking_id):
 def booking_close(request, booking_id):
     booking = get_object_or_404(Booking, pk=booking_id)
     form = BookingStateForm(request.POST or None,
-        initial={'booking_state': Booking.BOOKING_STATE.PENDING},
+        initial={'state': Booking.STATE.PENDING},
         instance=booking)
     if form.is_valid():
         booking = form.save()
@@ -168,8 +168,8 @@ def booking_close(request, booking_id):
 @ownership_required(model=Booking, object_key='booking_id', ownership=['owner', 'borrower'])
 def booking_incident(request, booking_id):
     booking = get_object_or_404(Booking, pk=booking_id)
-    if request.POST:  # TODO : Do we need more ?!
-        booking.booking = Booking.BOOKING_STATE.INCIDENT
+    if request.POST:  # FIXME : add form with message sent to incident@e-loue.com
+        booking.state = Booking.STATE.INCIDENT
         booking.save()
     return direct_to_template(request, 'rent/booking_incident.html', extra_context={'booking': booking})
 

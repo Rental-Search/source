@@ -4,8 +4,7 @@
         total_amount: "20"
         insurance_amount: "1.294920"
         deposit_amount: "10"
-        booking_state: 2
-        payment_state: 3
+        state: canceled
         contract_id: 1
         owner: 1
         borrower: 2
@@ -23,8 +22,7 @@
         total_amount: "20"
         insurance_amount: "1.294920"
         deposit_amount: "10"
-        booking_state: 2
-        payment_state: 0
+        state: canceled
         contract_id: 2
         owner: 2
         borrower: 1
@@ -40,8 +38,7 @@
         total_amount: "20"
         insurance_amount: "1.294920"
         deposit_amount: "10"
-        booking_state: 3
-        payment_state: 0
+        state: pending
         contract_id: 3
         owner: 2
         borrower: 1
@@ -58,8 +55,7 @@
         total_amount: "20"
         insurance_amount: "1.294920"
         deposit_amount: "10"
-        booking_state: 5
-        payment_state: 0
+        state: ended
         contract_id: 4
         owner: 2
         borrower: 1
@@ -75,8 +71,7 @@
         total_amount: "20"
         insurance_amount: "1.294920"
         deposit_amount: "10"
-        booking_state: 2
-        payment_state: 2
+        state: canceled
         contract_id: 5
         owner: 2
         borrower: 1
@@ -93,8 +88,7 @@
         total_amount: "20"
         insurance_amount: "1.294920"
         deposit_amount: "10"
-        booking_state: 2
-        payment_state: 9
+        state: canceled
         contract_id: 6
         owner: 2
         borrower: 1
@@ -111,8 +105,7 @@
         total_amount: "20"
         insurance_amount: "1.294920"
         deposit_amount: "10"
-        booking_state: 2
-        payment_state: 10
+        state: canceled
         contract_id: 7
         owner: 2
         borrower: 1
@@ -129,8 +122,7 @@
         total_amount: "20"
         insurance_amount: "1.294920"
         deposit_amount: "10"
-        booking_state: 3
-        payment_state: 0
+        state: pending
         contract_id: 8
         owner: 1
         borrower: 2

@@ -139,7 +139,7 @@ class PayIPNForm(forms.Form):
 class BookingForm(forms.ModelForm):
     started_at = DateTimeField(required=True, input_date_formats=DATE_FORMAT)
     ended_at = DateTimeField(required=True, input_date_formats=DATE_FORMAT)
-        
+    
     class Meta:
         model = Booking
         fields = ('started_at', 'ended_at')
@@ -162,11 +162,11 @@ class BookingConfirmationForm(forms.Form):
 
 
 class BookingStateForm(forms.ModelForm):
-    booking_state = forms.ChoiceField(choices=Booking.BOOKING_STATE, widget=forms.HiddenInput())
+    state = forms.ChoiceField(choices=Booking.STATE, widget=forms.HiddenInput())
     
     class Meta:
         model = Booking
-        fields = ('booking_state',)
+        fields = ('state',)
     
 
 class SinisterForm(forms.ModelForm):

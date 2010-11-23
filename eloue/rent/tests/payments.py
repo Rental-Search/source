@@ -36,8 +36,6 @@ class PaymentsTest(TestCase):
         command = hold.Command()
         command.handle()
         self.assertTrue(mock_method.called)
-        for booking in Booking.objects.filter(pk__in=['a72608d9a7e349ce9ba628abfdfc9cb3', '349ce9ba628abfdfc9cb3a72608d9a7e']):
-            self.assertEquals(booking.booking_state, Booking.BOOKING_STATE.ONGOING)
     
     def tearDown(self):
         datetime.datetime = self.old_datetime

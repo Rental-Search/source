@@ -41,8 +41,7 @@ class TestPaypalIPN(TestCase):
         self.assertTrue('alexandre.woog@e-loue.com' in mail.outbox[0].to)
         self.assertTrue('timothee.peignier@e-loue.com' in mail.outbox[1].to)
         booking = Booking.objects.get(preapproval_key="PA-2NS525738W954192E")
-        self.assertEquals(booking.payment_state, Booking.PAYMENT_STATE.AUTHORIZED)
-        self.assertEquals(booking.booking_state, Booking.BOOKING_STATE.ASKED)
+        self.assertEquals(booking.state, Booking.STATE.ASKED)
         self.assertEquals(booking.borrower.paypal_email, 'eloue_1283761258_per@tryphon.org')
     
     def test_pay_ipn(self):
@@ -79,6 +78,6 @@ class TestPaypalIPN(TestCase):
         response = self.client.post(reverse('pay_ipn'), urllib.urlencode(data), content_type='application/x-www-form-urlencoded; charset=windows-1252;')
         self.failUnlessEqual(response.status_code, 200)
         booking = Booking.objects.get(pay_key="AP-1G646418FF723264N")
-        self.assertEquals(booking.payment_state, Booking.PAYMENT_STATE.HOLDED)
+        self.assertEquals(booking.state, Booking.STATE.ONGOING)
     
     

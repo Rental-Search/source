@@ -33,9 +33,9 @@ class Command(BaseCommand):
             row[u'Numéro de commande'] = booking.uuid
             row['Prix de la location TTC'] = booking.total_amount
             row['Date du remboursement'] = booking.canceled_at.strftime("%Y%m%d")
-            if booking.payment_state == Booking.PAYMENT_STATE.CANCELED:
+            if booking.state == Booking.STATE.CANCELED:
                 row['Type de remboursement'] = 'ANNULATION'
-            elif booking.payment_state == Booking.PAYMENT_STATE.REFUNDED:
+            elif booking.state == Booking.STATE.REFUNDED:
                 row['Type de remboursement'] = 'REMBOURSEMENT'
             row[u'Désignation'] = smart_str(booking.product.description)
             row['Prix de la location TTC'] = booking.total_amount

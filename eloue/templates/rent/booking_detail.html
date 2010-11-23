@@ -94,39 +94,39 @@
 		</div>
 		<div class="portlet-content">
 			<div class="bk-status">
-				{% if booking.booking_state == booking.BOOKING_STATE.ASKED %}
+			  {% if booking.state == booking.STATE.ASKED %}
 			   <img src="{{ MEDIA_URL }}images/status_wait.png" alt="{% trans "En attente" %}" class="wait" />
 			   <form class="bk-accept" action="{% url booking_accept booking.pk.hex %}" method="post">
 			    {% csrf_token %}
-			    <input type="hidden" name="booking_state" value="{{ booking.BOOKING_STATE.PENDING }}"/>
+			    <input type="hidden" name="state" value="{{ booking.STATE.PENDING }}"/>
 			    <button type="submit" class="bk-accept btn small-green">{% trans "Accepter" %}</button>
 			   </form>
 			   <a class="bk-refuse btn small-orange" href="{% url booking_reject booking.pk.hex %}">{% trans "Refuser" %}</a>
 			  {% endif %}
-			  {% if booking.booking_state == booking.BOOKING_STATE.REJECTED %}
+			  {% if booking.state == booking.STATE.REJECTED %}
 			   <img src="{{ MEDIA_URL }}images/status_rejected.png" alt="{% trans "Rejetée" %}" class="rejected">
 			  {% endif %}
-			  {% if booking.booking_state == booking.BOOKING_STATE.PENDING %}
+			  {% if booking.state == booking.STATE.PENDING %}
 			   <img src="{{ MEDIA_URL }}images/status_booking.png" alt="{% trans "Réservée" %}" class="booking">
 			   <form class="bk-cancel" action="{% url booking_cancel booking.pk.hex %}" method="post">
 			    {% csrf_token %}
-			    <input type="hidden" name="booking_state" value="{{ booking.BOOKING_STATE.CANCELED }}"/>
+			    <input type="hidden" name="state" value="{{ booking.STATE.CANCELED }}"/>
 			    <button class="bk-cancel btn bk-orange">{% trans "Annuler" %}</button>
 			   </form>
 			  {% endif %}
-			  {% if booking.booking_state == booking.BOOKING_STATE.ONGOING %}
+			  {% if booking.state == booking.STATE.ONGOING %}
 			   <img src="{{ MEDIA_URL }}images/status_renting.png" alt="{% trans "En cours" %}" class="renting">
 			   <a href="{% url booking_incident booking.pk.hex %}" class="bk-warning">{% trans "Signaler un incident" %}</a>
 			  {% endif %}
-			  {% if booking.booking_state == booking.BOOKING_STATE.ENDED %}
+			  {% if booking.state == booking.STATE.ENDED %}
 			   <img src="{{ MEDIA_URL }}images/status_finish.png" alt="{% trans "Terminée" %}" class="finish">
 			   <form class="bk-cancel" action="{% url booking_close booking.pk.hex %}" method="post">
 			    {% csrf_token %}
-			    <input type="hidden" name="booking_state" value="{{ booking.BOOKING_STATE.CLOSED }}"/>
+			    <input type="hidden" name="state" value="{{ booking.STATE.CLOSED }}"/>
 			    <button class="bk-cancel btn bk-green">{% trans "Clôturer" %}</button>
 			   </form>
 			  {% endif %}
-			  {% if booking.booking_state == booking.BOOKING_STATE.CLOSED %}
+			  {% if booking.state == booking.STATE.CLOSED %}
 			   <img src="{{ MEDIA_URL }}images/status_ended.png" alt="{% trans "Clôturée" %}" class="ended">
 			   <a href="{% url booking_incident booking.pk.hex %}" class="bk-warning">{% trans "Signaler un incident" %}</a>
 			  {% endif %}

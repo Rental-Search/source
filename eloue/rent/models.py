@@ -5,6 +5,8 @@ import types
 import random
 
 from decimal import Decimal as D
+from fsm.fields import FSMField
+from fsm import transition
 from pyke import knowledge_engine
 from urlparse import urljoin
 
@@ -25,30 +27,17 @@ from eloue.paypal import payments, PaypalError
 from eloue.utils import create_alternative_email
 
 BOOKING_STATE = Enum([
-    (0, 'ASKED', _(u'Demandé')),
-    (1, 'REJECTED', _(u'Rejeté')),
-    (2, 'CANCELED', _(u'Annulé')),
-    (3, 'PENDING', _(u'En attente')),
-    (4, 'ONGOING', _(u'En cours')),
-    (5, 'ENDED', _(u'Terminé')),
-    (6, 'INCIDENT', _(u'Incident')),
-    (7, 'CLOSED', _(u'Cloturé')),
-])
-
-PAYMENT_STATE = Enum([
-    (0, 'REJECTED', _(u'Rejeté')),
-    (1, 'CANCELED_PENDING', _(u"En cours de d'annluation")),
-    (2, 'CANCELED', _(u'Annulé')),
-    (3, 'AUTHORIZED_PENDING', _(u"En cours d'autorisation")),
-    (4, 'AUTHORIZED', _(u'Autorisé')),
-    (5, 'HOLDED_PENDING', _(u'En cours de sequestration')),
-    (6, 'HOLDED', _(u'Sequestré')),
-    (7, 'PAID_PENDING', _(u'En cours de paiment')),
-    (8, 'PAID', _(u'Payé')),
-    (9, 'REFUNDED_PENDING', _(u'En attente de remboursement')),
-    (10, 'REFUNDED', _(u'Remboursé')),
-    (11, 'DEPOSIT_PENDING', _(u'Caution en cours de versement')),
-    (12, 'DEPOSIT', _(u'Caution versée'))
+    ('authorized', 'AUTHORIZED', _(u'Autorisé')),
+    ('asked', 'ASKED', _(u'Demandé')),
+    ('rejected', 'REJECTED', _(u'Rejeté')),
+    ('canceled', 'CANCELED', _(u'Annulé')),
+    ('pending', 'PENDING', _(u'En attente')),
+    ('ongoing', 'ONGOING', _(u'En cours')),
+    ('ended', 'ENDED', _(u'Terminé')),
+    ('incident', 'INCIDENT', _(u'Incident')),
+    ('refunded', 'REFUNDED', _(u'Remboursé')),
+    ('deposit', 'DEPOSIT', _(u'Caution versée')),
+    ('closed', 'CLOSED', _(u'Cloturé')),
 ])
 
 COMMISSION = D(str(getattr(settings, 'COMMISSION', 0.1)))
@@ -88,8 +77,7 @@ class Booking(models.Model):
     started_at = models.DateTimeField()
     ended_at = models.DateTimeField()
     
-    booking_state = models.PositiveSmallIntegerField(default=BOOKING_STATE.ASKED, choices=BOOKING_STATE)
-    payment_state = models.PositiveSmallIntegerField(default=PAYMENT_STATE.AUTHORIZED_PENDING, choices=PAYMENT_STATE)
+    state = FSMField(default='authorized', choices=BOOKING_STATE)
     
     deposit_amount = models.DecimalField(max_digits=8, decimal_places=2)
     insurance_amount = models.DecimalField(max_digits=8, decimal_places=2)
@@ -112,8 +100,7 @@ class Booking(models.Model):
     
     objects = BookingManager()
     
-    PAYMENT_STATE = PAYMENT_STATE
-    BOOKING_STATE = BOOKING_STATE
+    STATE = BOOKING_STATE
     
     @incr_sequence('contract_id', 'rent_booking_contract_id_seq')
     def save(self, *args, **kwargs):
@@ -149,7 +136,7 @@ class Booking(models.Model):
     @staticmethod
     def _is_factory(state):
         def is_state(self):
-            return self.booking_state == getattr(BOOKING_STATE, state)
+            return self.state == getattr(BOOKING_STATE, state)
         return is_state
         
     @staticmethod
@@ -173,6 +160,7 @@ class Booking(models.Model):
         
         return amount
     
+    @transition(source='authorized', target='asked') 
     def preapproval(self, cancel_url=None, return_url=None, ip_address=None):
         """Preapprove payments for borrower from Paypal.
         
@@ -205,16 +193,11 @@ class Booking(models.Model):
                     'customerId': str(self.borrower.pk)
                 }
             )
-            if response['responseEnvelope']['ack'] in ['Success', 'SuccessWithWarning']:
-                log.info("Preapproval accepted")
-                self.payment_state = PAYMENT_STATE.AUTHORIZED
-                self.preapproval_key = response['preapprovalKey']
-            else:
-                log.info("Preapproval rejected")
-                self.payment_state = PAYMENT_STATE.REJECTED
+            self.preapproval_key = response['preapprovalKey']
+            self.state = BOOKING_STATE.REJECTED
         except PaypalError, e:
+            self.state = BOOKING_STATE.REJECTED
             log.error(e)
-            self.payment_state = PAYMENT_STATE.REJECTED
         self.save()
     
     def send_ask_email(self):
@@ -292,6 +275,7 @@ class Booking(models.Model):
         """
         return self.insurance_fee * INSURANCE_TAXES
     
+    @transition(source='pending', target='ongoing')
     def hold(self, cancel_url=None, return_url=None):
         """Take money from borrower and keep it safe for later.
         
@@ -309,7 +293,7 @@ class Booking(models.Model):
             response = payments.pay(
                 actionType='PAY_PRIMARY',
                 senderEmail=self.borrower.paypal_email,
-                feesPayer='PRIMARYRECEIVER',
+                feesPayer='SECONDARYONLY',
                 cancelUrl=cancel_url,
                 returnUrl=return_url,
                 currencyCode=self.currency,
@@ -322,91 +306,59 @@ class Booking(models.Model):
                     {'primary':False, 'amount':str(self.net_price), 'email':self.owner.email}
                 ]}
             )
-            if response['paymentExecStatus'] in ['CREATED', 'INCOMPLETE']:
-                self.payment_state = PAYMENT_STATE.HOLDED
-            elif response['paymentExecStatus'] in ['PROCESSING', 'PENDING']:
-                self.payment_state = PAYMENT_STATE.HOLDED_PENDING
-            else:  # FIXME : Hazardous, in this case only INCOMPLETE is the only valid response
-                log.warn(response['paymentExecStatus'])
             self.pay_key = response['payKey']
+            self.save()
         except PaypalError, e:
             log.error(e)
-        self.save()
     
+    @transition(source='ended', target='closed')
     def pay(self):
         """Return deposit_amount to borrower and pay the owner"""
         try:
             response = payments.execute_payment(
                 payKey=self.pay_key
             )
-            if response['paymentExecStatus'] in ['COMPLETED']:
-                self.payment_state = PAYMENT_STATE.PAID
-            else:
-                self.payment_state = PAYMENT_STATE.PAID_PENDING
-            self.save()
         except PaypalError, e:
             log.error(e)
     
+    @transition(source='authorized', target='canceled', save=True)
     def cancel(self):
         """Cancel preapproval for the borrower"""
-        try:
-            response = payments.cancel_preapproval(
-                preapprovalKey=self.preapproval_key,
-            )
-            if response['responseEnvelope']['ack'] in ["Success", "SuccessWithWarning"]:
-                self.payment_state = PAYMENT_STATE.CANCELED
-            else:
-                self.payment_state = PAYMENT_STATE.CANCELED_PENDING
-        except PaypalError, e:
-            log.error(e)
-        self.save()
+        response = payments.cancel_preapproval(
+            preapprovalKey=self.preapproval_key,
+        )
     
+    @transition(source='incident', target='deposit', save=True)
     def litigation(self, amount=None, cancel_url='', return_url=''):
         """Giving caution to owner"""
+        # FIXME : Deposit amount isn't considered in preapproval amount
         if not amount or amount > self.deposit_amount:
             amount = self.deposit_amount
         
         domain = Site.objects.get_current().domain
         protocol = "https" if USE_HTTPS else "http"
-        try:
-            response = payments.pay(
-                actionType='PAY',
-                senderEmail=self.borrower.paypal_email,
-                preapprovalKey=self.preapproval_key,
-                cancelUrl=cancel_url,
-                returnUrl=return_url,
-                currencyCode=self.currency,
-                ipnNotificationUrl=urljoin(
-                    "%s://%s" % (protocol, domain), reverse('pay_ipn')
-                ),
-                receiverList={'receiver': [
-                    {'amount':str(amount), 'email':self.owner.email},
-                ]}
-            )
-            if response['paymentExecStatus'] in ['CREATED', 'COMPELTED']:
-                self.payment_state = PAYMENT_STATE.DEPOSIT
-            elif response['paymentExecStatus'] in ['PROCESSING', 'PENDING']:
-                self.payment_state = PAYMENT_STATE.DEPOSIT_PENDING
-            else:
-                log.warn(response['paymentExecStatus'])
-            self.save()
-        except PaypalError, e:
-            log.error(e)
+        response = payments.pay(
+            actionType='PAY',
+            senderEmail=self.borrower.paypal_email,
+            preapprovalKey=self.preapproval_key,
+            cancelUrl=cancel_url,
+            returnUrl=return_url,
+            currencyCode=self.currency,
+            ipnNotificationUrl=urljoin(
+                "%s://%s" % (protocol, domain), reverse('pay_ipn')
+            ),
+            receiverList={'receiver': [
+                {'amount':str(amount), 'email':self.owner.email},
+            ]}
+        )
     
+    @transition(source='incident', target='refunded', save=True)
     def refund(self):
         """Refund borrower or owner if something as gone wrong"""
-        try:
-            response = payments.refund(
-                payKey=self.pay_key,
-                currencyCode=self.currency
-            )
-            if response['refundStatus'] in ['REFUNDED', 'NOT_PAID', 'ALREADY_REVERSED_OR_REFUNDED']:
-                self.payment_state = PAYMENT_STATE.REFUNDED
-            else:
-                self.payment_state = PAYMENT_STATE.REFUNDED_PENDING
-            self.save()
-        except PaypalError, e:
-            log.error(e)
+        response = payments.refund(
+            payKey=self.pay_key,
+            currencyCode=self.currency
+        )
     
 
 class Sinister(models.Model):

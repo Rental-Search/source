@@ -27,6 +27,7 @@ sphinx>=1.0.2
 -e git://github.com/e-loue/freshen.git#egg=freshen
 -e git://github.com/e-loue/django-compress.git#egg=compress
 -e git://github.com/e-loue/django-haystack.git#egg=haystack
+-e git://github.com/e-loue/django-fsm.git#egg=fsm
 -e git://github.com/e-loue/django-storages.git#egg=storages
 -e git://github.com/e-loue/django-tastypie.git#egg=tastypie
 -e git://github.com/e-loue/django-lean.git#egg=django_lean

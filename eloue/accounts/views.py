@@ -96,14 +96,14 @@ def dashboard(request):
 
 @login_required
 def owner_booking(request, page=None):
-    queryset = request.user.bookings.exclude(booking_state__in=[Booking.BOOKING_STATE.CLOSED, Booking.BOOKING_STATE.REJECTED])
+    queryset = request.user.bookings.exclude(state__in=[Booking.STATE.CLOSED, Booking.STATE.REJECTED])
     return object_list(request, queryset, page=page, paginate_by=10, template_name='accounts/owner_booking.html',
         template_object_name='booking')
 
 
 @login_required
 def owner_history(request, page=None):
-    queryset = request.user.bookings.filter(booking_state__in=[Booking.BOOKING_STATE.CLOSED, Booking.BOOKING_STATE.REJECTED])
+    queryset = request.user.bookings.filter(state__in=[Booking.STATE.CLOSED, Booking.STATE.REJECTED])
     return object_list(request, queryset, page=page, paginate_by=10, template_name='accounts/owner_history.html',
         template_object_name='booking')
 
@@ -117,13 +117,13 @@ def owner_product(request, page=None):
 
 @login_required
 def borrower_booking(request, page=None):
-    queryset = request.user.rentals.exclude(booking_state__in=[Booking.BOOKING_STATE.CLOSED, Booking.BOOKING_STATE.REJECTED])
+    queryset = request.user.rentals.exclude(state__in=[Booking.STATE.CLOSED, Booking.STATE.REJECTED])
     return object_list(request, queryset, page=page, paginate_by=10, template_name='accounts/borrower_booking.html',
         template_object_name='booking')
 
 
 @login_required
 def borrower_history(request, page=None):
-    queryset = request.user.rentals.filter(booking_state__in=[Booking.BOOKING_STATE.CLOSED, Booking.BOOKING_STATE.REJECTED])
+    queryset = request.user.rentals.filter(state__in=[Booking.STATE.CLOSED, Booking.STATE.REJECTED])
     return object_list(request, queryset, page=page, paginate_by=10, template_name='accounts/borrower_history.html',
         template_object_name='booking')

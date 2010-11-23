@@ -26,8 +26,7 @@ class BookingTest(TestCase):
             started_at=datetime.datetime.now(),
             ended_at=datetime.datetime.now() + datetime.timedelta(days=3),
             total_amount=10,
-            booking_state=4,
-            payment_state=1,
+            state=4,
             owner_id=1,
             borrower_id=2,
             product_id=1
@@ -39,8 +38,7 @@ class BookingTest(TestCase):
             started_at=datetime.datetime.now() + datetime.timedelta(days=3),
             ended_at=datetime.datetime.now(),
             total_amount=10,
-            booking_state=4,
-            payment_state=1,
+            state=4,
             owner_id=1,
             borrower_id=2,
             product_id=1
@@ -52,8 +50,7 @@ class BookingTest(TestCase):
             started_at=datetime.datetime.now(),
             ended_at=datetime.datetime.now() + datetime.timedelta(days=3),
             total_amount=10,
-            booking_state=4,
-            payment_state=1,
+            state=4,
             owner_id=1,
             borrower_id=1,
             product_id=1
@@ -65,8 +62,7 @@ class BookingTest(TestCase):
             started_at=datetime.datetime.now(),
             ended_at=datetime.datetime.now() + datetime.timedelta(days=3),
             total_amount=-10,
-            booking_state=4,
-            payment_state=1,
+            state=4,
             owner_id=1,
             borrower_id=2,
             product_id=1
@@ -78,8 +74,7 @@ class BookingTest(TestCase):
             started_at=datetime.datetime.now(),
             ended_at=datetime.datetime.now() + datetime.timedelta(days=3),
             total_amount=10,
-            booking_state=4,
-            payment_state=1,
+            state=4,
             owner_id=1,
             borrower_id=2,
             product_id=1
@@ -92,8 +87,7 @@ class BookingTest(TestCase):
             started_at=datetime.datetime.now(),
             ended_at=datetime.datetime.now() + datetime.timedelta(days=90),
             total_amount=10,
-            booking_state=4,
-            payment_state=1,
+            state=4,
             owner_id=1,
             borrower_id=2,
             product_id=1
@@ -105,8 +99,7 @@ class BookingTest(TestCase):
             started_at=datetime.datetime.now(),
             ended_at=datetime.datetime.now() + datetime.timedelta(days=80),
             total_amount=10,
-            booking_state=4,
-            payment_state=1,
+            state=4,
             owner_id=1,
             borrower_id=2,
             product_id=4
@@ -118,8 +111,7 @@ class BookingTest(TestCase):
             started_at=datetime.datetime.now(),
             ended_at=datetime.datetime.now() + datetime.timedelta(days=80),
             total_amount=10,
-            booking_state=4,
-            payment_state=1,
+            state=4,
             owner_id=1,
             borrower_id=2,
             product_id=3
