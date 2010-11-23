@@ -73,3 +73,24 @@ def owner_history(request, page=None):
     queryset = request.user.bookings.filter(booking_state=Booking.BOOKING_STATE.CLOSED)
     return object_list(request, queryset, page=page, paginate_by=10, template_name='accounts/owner_history.html',
         template_object_name='booking')
+
+
+@login_required
+def owner_product(request, page=None):
+    queryset = request.user.products.all()
+    return object_list(request, queryset, page=page, paginate_by=10, template_name='accounts/owner_product.html',
+        template_object_name='product')
+
+
+@login_required
+def borrower_booking(request, page=None):
+    queryset = request.user.rentals.exclude(booking_state=Booking.BOOKING_STATE.CLOSED)
+    return object_list(request, queryset, page=page, paginate_by=10, template_name='accounts/borrower_booking.html',
+        template_object_name='booking')
+
+
+@login_required
+def borrower_history(request, page=None):
+    queryset = request.user.rentals.filter(booking_state=Booking.BOOKING_STATE.CLOSED)
+    return object_list(request, queryset, page=page, paginate_by=10, template_name='accounts/borrower_history.html',
+        template_object_name='booking')

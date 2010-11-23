@@ -8,7 +8,7 @@ from django.contrib.auth.views import logout_then_login, password_reset, passwor
 from django.contrib.sitemaps.views import index, sitemap
 
 from eloue.accounts.forms import EmailPasswordResetForm
-from eloue.accounts.views import activate, authenticate, dashboard, patron_edit, owner_booking, owner_history
+from eloue.accounts.views import activate, authenticate, dashboard, patron_edit, owner_booking, owner_history, borrower_booking, borrower_history
 from eloue.api import api_v1
 from eloue.products.views import homepage
 from eloue.rent.views import booking_detail, booking_accept, booking_reject, booking_incident, booking_close, booking_cancel
@@ -59,9 +59,11 @@ urlpatterns = patterns('',
     url(r'^loueur/', include('eloue.accounts.urls')),
     url(r'^location/', include('eloue.products.urls')),
     url(r'^dashboard/$', dashboard, name="dashboard"),
-    url(r'^dashboard/edit/$', patron_edit, name="patron_edit"),
-    url(r'^dashboard/owner/booking/$', owner_booking, name="owner_booking"),
-    url(r'^dashboard/owner/history/$', owner_history, name="owner_history"),
+    url(r'^dashboard/account/profile/$', patron_edit, name="patron_edit"),
+    url(r'^dashboard/owner/booking/(page/(?P<page>\d+)/)?$', owner_booking, name="owner_booking"),
+    url(r'^dashboard/owner/history/(page/(?P<page>\d+)/)?$', owner_history, name="owner_history"),
+    url(r'^dashboard/borrower/booking/(page/(?P<page>\d+)/)?$', borrower_booking, name="borrower_booking"),
+    url(r'^dashboard/borrower/history/(page/(?P<page>\d+)/)?$', borrower_history, name="borrower_history"),
     url(r'^rent/', include('eloue.rent.urls')),
     url(r'^experiments/', include('django_lean.experiments.urls')),
     url(r'^edit/reports/', include('django_lean.experiments.admin_urls')),
