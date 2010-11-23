@@ -102,8 +102,9 @@ def booking_failure(request, booking_id):
 @login_required
 @ownership_required(model=Booking, object_key='booking_id', ownership=['owner', 'borrower'])
 def booking_detail(request, booking_id):
+    paypal = request.GET.get('paypal', False)
     return object_detail(request, queryset=Booking.objects.all(), object_id=booking_id,
-        template_name='rent/booking_detail.html', template_object_name='booking')
+        template_name='rent/booking_detail.html', template_object_name='booking', extra_context={'paypal': paypal})
 
 
 @login_required
