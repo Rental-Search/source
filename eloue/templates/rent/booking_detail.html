@@ -12,7 +12,7 @@
 </div>
 <div id="sub-menu" class="clearfix">
 	<ul class="x12">
-		<li class="sub-tab first selected">{% trans "Locations actives" %}</li>
+		<li class="sub-tab first"><a href="{% url owner_booking %}">{% trans "Locations actives" %}</a></li>
 		<li class="sub-tab"><a href="{% url owner_history %}">{% trans "Historique des locations" %}</a></li>
 		<li class="sub-tab"><a href="#">{% trans "Mes objets" %}</a></li>
 		<li class="sub-tab"><a href="{% url product_create %}">{% trans "Ajouter un objet" %}</a></li>
@@ -90,7 +90,7 @@
 	</div>
 	<div class="portlet x3">
 		<div class="portlet-header">
-			<h3>Statuts de la location</h3>
+			<h3>{% trans "Statut de la location" %}</h3>
 		</div>
 		<div class="portlet-content">
 			<div class="bk-status">
@@ -134,31 +134,4 @@
 		</div>
 	</div>
 </div>
-
-
-
-
-
-
-
-
-
-
-
-
- <div class="content container clearfix">
- {% if request.user == booking.owner %}
-   <p>Vous avez {% if booking.is_asked %}une proposition de location pour{% else %}mis en location{% endif %} l'object "<em>{{ booking.product.summary }}</em>" entre le <strong>{{ booking.started_at|date:"l j F Y" }}</strong> et le <strong>{{ booking.ended_at|date:"l j F Y" }}</strong> (soit environ <em>{{ booking.started_at|timesince:booking.ended_at }}</em>)  pour la somme de <strong>{{ booking.total_amount }}</strong> {{ booking.currency }}.</p>
-  {% if booking.is_asked %}
-   <p>Voulez-vous <a href="">refuser cette location</a> ou <a href="">l'accepter</a> ?</p>
-  {% endif %}
-  {% if booking.is_ended %}
-   <p>La location est maintenant terminé, souhaitez vous <a href="">déclarer un incident</a> ou <a href="">cloturer la location</a> ?</p>
-  {% endif %}
- {% endif %}
- {% if request.user == booking.borrower %}
-   Vous avez loué l'object "<em>{{ booking.product.summary }}</em>" entre le <strong>{{ booking.started_at|date:"l j F Y" }}</strong> et le <strong>{{ booking.ended_at|date:"l j F Y" }}</strong> (soit environ <em>{{ booking.started_at|timesince:booking.ended_at }}</em>)  pour la somme de <strong>{{ booking.total_amount }}</strong> {{ booking.currency }}.
- {% endif %}
- {{ booking.booking_state }}
- </div>
 {% endblock %}

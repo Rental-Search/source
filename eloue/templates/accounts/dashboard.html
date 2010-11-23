@@ -15,23 +15,23 @@
 	<div class="x3">
 		<div class="welcome-dash x3 first">
 			<p class="pseudo">{{ user.username }}</p>
-			<a href="#" class="btn btn-profil">Modifier votre profil</a>
+			<a href="{% url patron_edit %}" class="btn btn-profil">{% trans "Modifier votre profil" %}</a>
 		</div>
 		<div class="box-info x3 first">
 			<div class="box-info-header">
-				<h5>Liens utiles</h5>
+				<h5>{% trans "Liens utiles" %}</h5>
 			</div>
 			<div class="box-info-content">
 				<ul>
-					<li><a href="#">Comment ça marche ?</a></li>
-					<li><a href="#">Mettre en location</a></li>
-					<li><a href="#">Changer mon emplacement</a></li>
+					<li><a href="#">{% trans "Comment ça marche ?" %}</a></li>
+					<li><a href="{% url product_create %}">{% trans "Mettre en location" %}</a></li>
+					<li><a href="#">{% trans "Changer mon emplacement" %}</a></li>
 				</ul>
 			</div>
 		</div>
 	</div>
 	<div class="content-header x9">
-		<h1>Tableau de bord</h1>
+		<h1>{% trans "Tableau de bord" %}</h1>
 	</div>
 </div>
 {% endblock %}
