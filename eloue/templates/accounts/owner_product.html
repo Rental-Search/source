@@ -51,7 +51,7 @@
 			   			{% endwith %}
 			  		</div>
 			  		<div class="pl-btn">
-			   			<a href="{{ product.get_absolute_url }}" class="btn small-blue">{% trans "Modifier" %}</a>
+			   			<a href="{% url product_edit product.slug product.pk %}" class="btn small-blue">{% trans "Modifier" %}</a>
 			  		</div>
 			 		</div>
 			 		<div class="pl-footer">

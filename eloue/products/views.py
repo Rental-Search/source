@@ -16,7 +16,7 @@ from eloue.decorators import secure_required
 from eloue.accounts.forms import EmailAuthenticationForm
 from eloue.accounts.models import Patron
 from eloue.products.forms import FacetedSearchForm, ProductForm, ProductEditForm
-from eloue.products.models import Category
+from eloue.products.models import Category, Product
 from eloue.products.wizard import ProductWizard
 
 PAGINATE_PRODUCTS_BY = getattr(settings, 'PAGINATE_PRODUCTS_BY', 10)
@@ -37,12 +37,13 @@ def product_create(request, *args, **kwargs):
 
 
 @login_required
-def product_edit(request, *args, **kwargs):
-    form = ProductEditForm(request.POST or None)
+def product_edit(request, slug, product_id):
+    product = get_object_or_404(Product, pk=product_id)
+    form = ProductEditForm(request.POST or None, instance=product)
     if form.is_valid():
         product = form.save()
         return redirect_to(request, product.get_absolute_url())
-    return direct_to_template(request, 'product/product_edit.html', extra_context={'product': product, 'form': form})
+    return direct_to_template(request, 'products/product_edit.html', extra_context={'product': product, 'form': form})
 
 
 @cache_page(900)
