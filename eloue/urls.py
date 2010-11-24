@@ -8,7 +8,7 @@ from django.contrib.auth.views import logout_then_login, password_reset, passwor
 from django.contrib.sitemaps.views import index, sitemap
 
 from eloue.accounts.forms import EmailPasswordResetForm
-from eloue.accounts.views import activate, authenticate, dashboard, patron_edit, owner_booking, owner_history, \
+from eloue.accounts.views import activate, authenticate, authenticate_headless, dashboard, patron_edit, owner_booking, owner_history, \
     borrower_booking, borrower_history, patron_edit_password, patron_paypal, owner_product
 from eloue.api import api_v1
 from eloue.products.views import homepage
