@@ -182,6 +182,7 @@ CACHE_MIDDLEWARE_KEY_PREFIX = getattr(local, 'CACHE_MIDDLEWARE_KEY_PREFIX', None
 
 # Compress configuration
 COMPRESS = getattr(local, 'COMPRESS', True)
+COMPRESS_AUTO = getattr(local, 'COMPRESS_AUTO', False)
 COMPRESS_VERSION = True
 COMPRESS_CSS_URL_REPLACE = {
     "../": "",
