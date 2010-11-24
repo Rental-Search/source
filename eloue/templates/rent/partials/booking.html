@@ -14,14 +14,13 @@
 	 {% endwith %}
 	</a>
 	<h5>{{ product.summary|capfirst }}</h5>
-	{% if request.user == booking.owner %}
+	{% if user == booking.owner %}
 	<div class="bk-borrower">
 		<img src="{{ MEDIA_URL }}images/bk_borrower_img.png">
 		<h5><a href="{{ booking.borrower.get_absolute_url }}">{{ booking.borrower.get_full_name }}</a></h5>
 	</div>
-	{% endif %}
-	{% if request.user == booking.borrower %}
-	<div class="bk-borrower">
+	{% else %}
+ 	<div class="bk-borrower">
 		<img src="{{ MEDIA_URL }}images/bk_borrower_img.png">
 		<h5><a href="{{ booking.owner.get_absolute_url }}">{{ booking.owner.get_full_name }}</a></h5>
 	</div>
@@ -38,20 +37,22 @@
  <div class="bk-status">
   {% if booking.state == booking.STATE.ASKED %}
    <img src="{{ MEDIA_URL }}images/status_wait.png" alt="{% trans "En attente" %}" class="wait" />
-   {% if booking.owner.has_paypal %}
-    <form action="{% url booking_accept booking.pk.hex %}" method="post">
+   {% if booking.owner == user %}
+    {% if booking.owner.has_paypal %}
+     <form action="{% url booking_accept booking.pk.hex %}" method="post">
+      {% csrf_token %}
+      <input type="hidden" name="state" value="{{ booking.STATE.PENDING }}"/>
+      <button class="bk-accept btn small-green">{% trans "Accepter" %}</button>
+     </form>
+    {% else %}
+     <a href="{% url patron_paypal %}?next={{ booking.get_absolute_url }}" class="bk-accept btn small-green">{% trans "Accepter" %}</a>
+    {% endif %}
+    <form class="bk-refuse" action="{% url booking_reject booking.pk.hex %}" method="post">
      {% csrf_token %}
-     <input type="hidden" name="state" value="{{ booking.STATE.PENDING }}"/>
-     <button class="bk-accept btn small-green">{% trans "Accepter" %}</button>
+     <input type="hidden" name="state" value="{{ booking.STATE.REJECTED }}"/>
+     <button class="bk-refuse btn small-orange">{% trans "Refuser" %}</button>
     </form>
-   {% else %}
-    <a href="{% url patron_paypal %}?next={{ booking.get_absolute_url }}" class="bk-accept btn small-green">{% trans "Accepter" %}</a>
    {% endif %}
-   <form class="bk-refuse" action="{% url booking_reject booking.pk.hex %}" method="post">
-    {% csrf_token %}
-    <input type="hidden" name="state" value="{{ booking.STATE.REJECTED }}"/>
-    <button class="bk-refuse btn small-orange">{% trans "Refuser" %}</button>
-   </form>
   {% endif %}
   {% if booking.state == booking.STATE.REJECTED %}
    <img src="{{ MEDIA_URL }}images/status_rejected.png" alt="{% trans "Rejetée" %}" class="rejected">
@@ -70,11 +71,13 @@
   {% endif %}
   {% if booking.state == booking.STATE.ENDED %}
    <img src="{{ MEDIA_URL }}images/status_finish.png" alt="{% trans "Terminée" %}" class="finish">
-   <form class="bk-cancel" action="{% url booking_close booking.pk.hex %}" method="post">
-    {% csrf_token %}
-    <input type="hidden" name="state" value="{{ booking.STATE.CLOSED }}"/>
-    <button class="bk-cancel btn bk-green">{% trans "Clôturer" %}</button>
-   </form>
+   {% if booking.owner == user %}
+    <form class="bk-cancel" action="{% url booking_close booking.pk.hex %}" method="post">
+     {% csrf_token %}
+     <input type="hidden" name="state" value="{{ booking.STATE.CLOSED }}"/>
+     <button class="bk-cancel btn bk-green">{% trans "Clôturer" %}</button>
+    </form>
+   {% endif %}
   {% endif %}
   {% if booking.state == booking.STATE.CLOSED %}
    <img src="{{ MEDIA_URL }}images/status_ended.png" alt="{% trans "Clôturée" %}" class="ended">
