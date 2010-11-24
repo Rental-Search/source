@@ -19,6 +19,7 @@ $(document).ready(function() {
            }
        } 
     });
+    $("input[name$='old_password']").removeAttr('disabled');
     
     // Company name field display/none
     var isProfessionalInput = $("input[name$='is_professional']");

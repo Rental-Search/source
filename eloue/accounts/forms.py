@@ -6,7 +6,7 @@ import django.forms as forms
 from django.conf import settings
 from django.contrib.auth import authenticate
 from django.contrib.sites.models import Site
-from django.contrib.auth.forms import PasswordResetForm
+from django.contrib.auth.forms import PasswordResetForm, PasswordChangeForm
 from django.contrib.auth.tokens import default_token_generator
 from django.forms.fields import EMPTY_VALUES
 from django.template.loader import render_to_string
@@ -16,7 +16,7 @@ from django.utils.translation import ugettext as _
 
 from eloue.accounts import EMAIL_BLACKLIST
 from eloue.accounts.fields import PhoneNumberField
-from eloue.accounts.models import Patron, PhoneNumber, COUNTRY_CHOICES
+from eloue.accounts.models import Patron, PhoneNumber, COUNTRY_CHOICES, CIVILITY_CHOICES
 from eloue.accounts.widgets import ParagraphRadioFieldRenderer
 
 STATE_CHOICES = (
@@ -103,6 +103,19 @@ class EmailPasswordResetForm(PasswordResetForm):
     
 
 class PatronEditForm(forms.ModelForm):
+    civility = forms.ChoiceField(choices=CIVILITY_CHOICES, widget=forms.Select(attrs={'class': 'selm'}))
+    username = forms.RegexField(label=_("Username"), max_length=30, regex=r'^[\w.@+-]+$',
+        help_text=_("Required. 30 characters or fewer. Letters, digits and @/./+/-/_ only."),
+        error_messages={'invalid': _("This value may contain only letters, numbers and @/./+/-/_ characters.")},
+        widget=forms.TextInput(attrs={'class': 'inm'}))
+    first_name = forms.CharField(required=True, widget=forms.TextInput(attrs={'class': 'inm'}))
+    last_name = forms.CharField(required=True, widget=forms.TextInput(attrs={'class': 'inm'}))
+    email = forms.EmailField(label=_("E-mail"), max_length=75, widget=forms.TextInput(attrs={
+        'autocapitalize': 'off', 'autocorrect': 'off', 'class': 'inm'}))
+    is_professional = forms.BooleanField(required=False, initial=False)
+    company_name = forms.CharField(required=False, widget=forms.TextInput(attrs={'class': 'inm'}))
+    is_subscribed = forms.BooleanField(required=False, initial=False)
+    
     def clean_email(self):
         email = self.cleaned_data['email'].lower()
         if email in EMPTY_VALUES:
@@ -120,6 +133,28 @@ class PatronEditForm(forms.ModelForm):
         model = Patron
         fields = ('civility', 'username', 'first_name', 'last_name',
             'email', 'is_professional', 'company_name', 'is_subscribed')
+            
+            
+class PatronPasswordChangeForm(PasswordChangeForm):
+    """
+    A form that lets a user change his/her password by entering
+    their old password.
+    """
+    old_password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'inm'}))
+    new_password1 = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'inm'}))
+    new_password2 = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'inm'}))
+	
+    def clean_old_password(self):
+        """
+        Validates that the old_password field is correct.
+        """
+        old_password = self.cleaned_data["old_password"]
+        if not self.user.check_password(old_password):
+            raise forms.ValidationError(_("Your old password was entered incorrectly. Please enter it again."))
+
+        return old_password
+	    
+    PasswordChangeForm.base_fields.keyOrder = ['old_password', 'new_password1', 'new_password2']
     
 
 class PatronChangeForm(forms.ModelForm):
