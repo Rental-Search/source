@@ -30,8 +30,48 @@
 			</div>
 		</div>
 	</div>
-	<div class="content-header x9">
-		<h1>{% trans "Tableau de bord" %}</h1>
+	<div class="x9">
+		<div class="content-header x9 first">
+			<h1>{% trans "Bienvenue sur e-loue ! Que pouvez-vous faire ensuite ?" %}</h1>
+		</div>
+		<div class="new-user box-info-content x9">
+			<ul>
+				<li><a href="{% url product_create %}">{% trans "Mettez en location" %}</a></li>
+				<li><a href="{% url patron_edit %}">{% trans "Editez votre profil" %}</a></li>
+				<li><a href="{% url home %}">{% trans "Cherchez une location" %}</a></li>
+				<li><a href="#">{% trans "En savoir plus sur e-loue" %}</a></li>
+			</ul>
+		</div>
+		<div class="content-header x9 first">
+			<h2>{% trans "Locations en tant que <strong>propriétaire</strong>" %}</h2>
+		</div>
+		<div class="resume-dash x9 first">
+			<div class="resume-box-dash x2 first">
+			<a href="{% url owner_booking %}" class="highlight">3</a><br />
+			<span>Locations<br />en attente</span>
+			</div>
+			<div class="resume-box-dash x2">
+				<a href="{% url owner_booking %}">5</a><br />
+				<span>Locations<br />actives</span>
+			</div>
+			<div class="resume-box-dash x2">
+				<a href="{% url owner_booking %}">10</a><br />
+				<span>Objet<br />en location</span>
+			</div>
+		</div>
+		<div class="content-header x9 first">
+			<h2>{% trans "Locations en tant que <strong>locataire</strong>" %}</h2>
+		</div>
+		<div class="resume-dash x9 first">
+			<div class="resume-box-dash x2 first">
+				<a href="{% url owner_booking %}" class="highlight">3</a><br />
+				<span>Locations<br />en attente</span>
+			</div>
+			<div class="resume-box-dash x2">
+				<a href="{% url owner_booking %}">5</a><br />
+				<span>Locations<br />actives</span>
+			</div>
+		</div>
 	</div>
 </div>
 {% endblock %}

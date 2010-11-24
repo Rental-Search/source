@@ -571,6 +571,31 @@
     font-size: 18px;
   }
 
+.new-user.box-info-content a { color: #364C59;}
+.new-user.box-info-content li 
+{
+  list-style-type: none;
+  list-style-image: none;
+}
+  
+.resume-dash{ margin-bottom: 20px;}
+
+  .resume-box-dash
+  {
+    background-color: #f5f7f9;
+    text-align: center;
+    padding: 10px 0;
+    font-weight: bold;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+  }
+    .resume-box-dash a { font-size: 48px; }
+    
+    .resume-box-dash a.highlight { color: #FF7200;}
+    
+    .resume-box-dash span { font-size: 12px; }
+
 /* *************************************************
   doashbord page
 ************************************************** */
