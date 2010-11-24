@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{% load i18n markup %}
+
+{% block title %}{{ block.super }} - {{ flatpage.title }}{% endblock %}
+
+{% block content %}
+ {{ floatpage.content|markdown }}
+{% endblock %}
