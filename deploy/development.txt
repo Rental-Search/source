@@ -5,7 +5,6 @@ django-imagekit>=0.3.3
 django-nose>=0.1.2
 fabric>=0.9
 Imaging==1.1.7
-ipython>=0.10
 logbook>=0.3
 lxml>=2.2.7
 markdown>=2.0.3
@@ -20,6 +19,7 @@ psycopg2>=2.2.2
 reportlab>=2.5
 south>=0.7
 sphinx>=1.0.2
+-e git://github.com/e-loue/ipython.git#egg=ipython
 -e git://github.com/e-loue/pycrypto.git#egg=pycrypto
 -e git://github.com/e-loue/python-oauth2.git#egg=oauth2
 -e svn+http://code.djangoproject.com/svn/django/branches/releases/1.2.X#egg=django
