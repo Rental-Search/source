@@ -38,6 +38,24 @@ def staging():
     env.campfire_domain = "e-loue"
     env.github_url = "https://github.com/e-loue/eloue"
 
+def sandbox():
+    env.name = "sandbox"
+    env.user = "tim"
+    env.hosts = ['sandbox.local',]
+    env.base_dir = "/var/www"
+    env.app_name = "eloue"
+    env.domain_name = "e-loue.com"
+    env.domain_path = "%(base_dir)s/%(domain_name)s" % {'base_dir': env.base_dir, 'domain_name': env.domain_name}
+    env.current_path = "%(domain_path)s/current" % {'domain_path': env.domain_path}
+    env.releases_path = "%(domain_path)s/releases" % {'domain_path': env.domain_path}
+    env.shared_path = "%(domain_path)s/shared" % {'domain_path': env.domain_path}
+    env.git_clone = "git@github.com:e-loue/eloue.git"
+    env.env_file = "deploy/production.txt"
+    env.campfire_room = "Chit chat"
+    env.campfire_token = "b96565fb9b8f49f0e18a6a194d7ac97812e154d6"
+    env.campfire_domain = "e-loue"
+    env.github_url = "https://github.com/e-loue/eloue"
+
 @runs_once
 def releases():
     """List a releases made"""
@@ -177,7 +195,6 @@ def rollback():
 
 def cold():
     """Deploys and starts a `cold' application"""
-    notify()
     update()
     migrate()
     start()
