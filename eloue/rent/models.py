@@ -26,7 +26,7 @@ from eloue.rent.manager import BookingManager
 from eloue.paypal import payments, PaypalError
 from eloue.utils import create_alternative_email
 
-BOOKING_STATE = Enum([ # FIXME : NAME THOSE PROPERLY
+BOOKING_STATE = Enum([
     ('authorizing', 'AUTHORIZING', _(u"En cours d'autorisation")),
     ('authorized', 'AUTHORIZED', _(u"En attente")),
     ('rejected', 'REJECTED', _(u'Rejeté')),
@@ -39,6 +39,7 @@ BOOKING_STATE = Enum([ # FIXME : NAME THOSE PROPERLY
     ('deposit', 'DEPOSIT', _(u'Caution versée')),
     ('closing', 'CLOSING', _(u"En attende de clôture")),
     ('closed', 'CLOSED', _(u'Clôturé')),
+    ('outdated', 'OUTDATED', _(u"Dépassé"))
 ])
 
 COMMISSION = D(str(getattr(settings, 'COMMISSION', 0.1)))
