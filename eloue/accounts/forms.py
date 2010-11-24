@@ -16,7 +16,7 @@ from django.utils.translation import ugettext as _
 
 from eloue.accounts import EMAIL_BLACKLIST
 from eloue.accounts.fields import PhoneNumberField
-from eloue.accounts.models import Patron, PhoneNumber, COUNTRY_CHOICES, CIVILITY_CHOICES
+from eloue.accounts.models import Patron, PhoneNumber, COUNTRY_CHOICES
 from eloue.accounts.widgets import ParagraphRadioFieldRenderer
 
 STATE_CHOICES = (
@@ -103,7 +103,6 @@ class EmailPasswordResetForm(PasswordResetForm):
     
 
 class PatronEditForm(forms.ModelForm):
-    civility = forms.ChoiceField(choices=CIVILITY_CHOICES, widget=forms.Select(attrs={'class': 'selm'}))
     username = forms.RegexField(label=_("Username"), max_length=30, regex=r'^[\w.@+-]+$',
         help_text=_("Required. 30 characters or fewer. Letters, digits and @/./+/-/_ only."),
         error_messages={'invalid': _("This value may contain only letters, numbers and @/./+/-/_ characters.")},
@@ -115,6 +114,10 @@ class PatronEditForm(forms.ModelForm):
     is_professional = forms.BooleanField(required=False, initial=False)
     company_name = forms.CharField(required=False, widget=forms.TextInput(attrs={'class': 'inm'}))
     is_subscribed = forms.BooleanField(required=False, initial=False)
+    
+    def __init__(self, *args, **kwargs):
+        super(PatronEditForm, self).__init__(*args, **kwargs)
+        self.fields['civility'].widget.attrs['class'] = "selm"
     
     def clean_email(self):
         email = self.cleaned_data['email'].lower()
@@ -151,7 +154,6 @@ class PatronPasswordChangeForm(PasswordChangeForm):
         old_password = self.cleaned_data["old_password"]
         if not self.user.check_password(old_password):
             raise forms.ValidationError(_("Your old password was entered incorrectly. Please enter it again."))
-
         return old_password
 	    
     PasswordChangeForm.base_fields.keyOrder = ['old_password', 'new_password1', 'new_password2']

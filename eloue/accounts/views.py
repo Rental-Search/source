@@ -48,6 +48,7 @@ def authenticate(request, *args, **kwargs):
     return wizard(request, *args, **kwargs)
 
 
+@never_cache
 def authenticate_headless(request):
     mdict = {}
     for k in ["password", "email", "exists"]:
@@ -64,12 +65,16 @@ def authenticate_headless(request):
 
     return HttpResponseBadRequest()
 
+@never_cache
 def oauth_authorize(request,*args, **kwargs):
     return HttpResponse(csrf(request)["csrf_token"]._proxy____func())
 
+
+@never_cache
 def oauth_callback(request, *args, **kwargs):
     token = Token.objects.get(key=kwargs['oauth_token'])
     return HttpResponse(token.verifier)
+
 
 @cache_page(900)
 def patron_detail(request, slug, patron_id=None, page=None):
@@ -86,6 +91,7 @@ def patron_edit(request):
     form = PatronEditForm(request.POST or None, instance=request.user)
     if form.is_valid():
         patron = form.save()
+        messages.success(request, _(u"Vos informations ont bien été modifiées"))
     return direct_to_template(request, 'accounts/patron_edit.html', extra_context={'form': form, 'patron': request.user})
 
 
