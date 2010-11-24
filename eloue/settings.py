@@ -116,7 +116,7 @@ if DEBUG_TOOLBAR:
 ROOT_URLCONF = 'eloue.urls'
 LOGIN_URL = '/login/'
 LOGOUT_URL = '/logout/'
-LOGIN_REDIRECT_URL = '/'
+LOGIN_REDIRECT_URL = '/dashboard/'
 
 TEMPLATE_DIRS = getattr(local, 'TEMPLATE_DIRS')
 
