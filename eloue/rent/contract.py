@@ -9,7 +9,7 @@ except ImportError:
 from pyPdf import PdfFileWriter, PdfFileReader
 from reportlab.pdfgen import canvas
 
-from django.utils.encoding import smart_str
+from django.utils.encoding import smart_str, force_unicode
 
 from eloue.rent.utils import spellout
 
@@ -85,6 +85,6 @@ class ContractGenerator(object):
         canvas.setFont("Helvetica", 10)
         
         spelled_number = spellout(booking.deposit_amount, unit='euro', decimal='cent')
-        canvas.drawString(71, 640, smart_str("%s %s / %s" % (booking.deposit_amount, booking.currency, smart_str(spelled_number))))
+        canvas.drawString(71, 640, "%s %s / %s" % (booking.deposit_amount, booking.currency, force_unicode(spelled_number)))
         return canvas
     

@@ -43,3 +43,12 @@ class ContractTest(TestCase):
         text = reader.getPage(2).extractText()
         self.assertTrue("%s %s / dix euros" % (booking.deposit_amount, booking.currency) in text)
     
+    def test_zero_deposit_amount(self):
+        booking = Booking.objects.all()[0]
+        booking.deposit_amount = 0
+        booking.save()
+        generator = ContractGenerator()
+        contract = generator(booking)
+        reader = PdfFileReader(contract)
+        self.assertEquals(reader.getNumPages(), 4)
+    
