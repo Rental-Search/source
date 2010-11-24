@@ -194,7 +194,6 @@ class Booking(models.Model):
                 }
             )
             self.preapproval_key = response['preapprovalKey']
-            self.state = BOOKING_STATE.REJECTED
         except PaypalError, e:
             self.state = BOOKING_STATE.REJECTED
             log.error(e)
