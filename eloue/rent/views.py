@@ -117,6 +117,7 @@ def booking_accept(request, booking_id):
     if form.is_valid():
         booking = form.save()
         booking.send_acceptation_email()
+        booking.save()
     return redirect_to(request, booking.get_absolute_url())
 
 
@@ -154,12 +155,11 @@ def booking_cancel(request, booking_id):
 @ownership_required(model=Booking, object_key='booking_id', ownership=['owner'])
 def booking_close(request, booking_id):
     booking = get_object_or_404(Booking, pk=booking_id)
-    form = BookingStateForm(request.POST or None,
-        initial={'state': Booking.STATE.PENDING},
-        instance=booking)
-    if form.is_valid():
-        booking = form.save()
+    print "pre", booking.state
+    if request.POST:
+        print "before", booking.state
         booking.pay()
+        print "after", booking.state
         messages.success(request, _(u"Cette réservation a bien été cloturée"))
     messages.error(request, _(u"Cette réservation n'a pu être cloturée"))
     return redirect_to(request, booking.get_absolute_url())

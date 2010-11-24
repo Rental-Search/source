@@ -35,7 +35,7 @@
   {% endwith %}
  </div>{# bk #}
  <div class="bk-status">
-  {% if booking.state == booking.STATE.ASKED %}
+  {% if booking.state == booking.STATE.AUTHORIZED %}
    <img src="{{ MEDIA_URL }}images/status_wait.png" alt="{% trans "En attente" %}" class="wait" />
    {% if booking.owner == user %}
     {% if booking.owner.has_paypal %}

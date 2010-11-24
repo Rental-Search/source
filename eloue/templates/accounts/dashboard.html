@@ -47,7 +47,7 @@
 		</div>
 		<div class="resume-dash x9 first">
 			<div class="resume-box-dash x2 first">
-			 {% with user.bookings.asked|length as counter %}
+			 {% with user.bookings.authorized|length as counter %}
 			  <a href="{% url owner_booking %}" class="highlight">{{ counter }}</a><br />
 			  {% blocktrans count counter as counter %}
                 <span>Location<br />en attente</span>
@@ -82,7 +82,7 @@
 		</div>
 		<div class="resume-dash x9 first">
 			<div class="resume-box-dash x2 first">
-			 {% with user.rentals.asked|length as counter %}
+			 {% with user.rentals.authorized|length as counter %}
 				<a href="{% url borrower_booking %}" class="highlight">{{ counter }}</a><br />
 				{% blocktrans count counter as counter %}
                  <span>Location<br />en attente</span>

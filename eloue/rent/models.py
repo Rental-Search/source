@@ -26,18 +26,19 @@ from eloue.rent.manager import BookingManager
 from eloue.paypal import payments, PaypalError
 from eloue.utils import create_alternative_email
 
-BOOKING_STATE = Enum([
-    ('authorized', 'AUTHORIZED', _(u'Autorisé')),
-    ('asked', 'ASKED', _(u'Demandé')),
+BOOKING_STATE = Enum([ # FIXME : NAME THOSE PROPERLY
+    ('authorizing', 'AUTHORIZING', _(u"En cours d'autorisation")),
+    ('authorized', 'AUTHORIZED', _(u"En attente")),
     ('rejected', 'REJECTED', _(u'Rejeté')),
     ('canceled', 'CANCELED', _(u'Annulé')),
-    ('pending', 'PENDING', _(u'En attente')),
+    ('pending', 'PENDING', _(u'A venir')),
     ('ongoing', 'ONGOING', _(u'En cours')),
     ('ended', 'ENDED', _(u'Terminé')),
     ('incident', 'INCIDENT', _(u'Incident')),
     ('refunded', 'REFUNDED', _(u'Remboursé')),
     ('deposit', 'DEPOSIT', _(u'Caution versée')),
-    ('closed', 'CLOSED', _(u'Cloturé')),
+    ('closing', 'CLOSING', _(u"En attende de clôture")),
+    ('closed', 'CLOSED', _(u'Clôturé')),
 ])
 
 COMMISSION = D(str(getattr(settings, 'COMMISSION', 0.1)))
@@ -77,7 +78,7 @@ class Booking(models.Model):
     started_at = models.DateTimeField()
     ended_at = models.DateTimeField()
     
-    state = FSMField(default='authorized', choices=BOOKING_STATE)
+    state = FSMField(default='authorizing', choices=BOOKING_STATE)
     
     deposit_amount = models.DecimalField(max_digits=8, decimal_places=2)
     insurance_amount = models.DecimalField(max_digits=8, decimal_places=2)
@@ -160,7 +161,7 @@ class Booking(models.Model):
         
         return amount
     
-    @transition(source='authorized', target='asked') 
+    @transition(source='authorizing', target='authorized') 
     def preapproval(self, cancel_url=None, return_url=None, ip_address=None):
         """Preapprove payments for borrower from Paypal.
         
@@ -310,7 +311,7 @@ class Booking(models.Model):
         except PaypalError, e:
             log.error(e)
     
-    @transition(source='ended', target='closed')
+    @transition(source='ended', target='closing', save=True)
     def pay(self):
         """Return deposit_amount to borrower and pay the owner"""
         try:
