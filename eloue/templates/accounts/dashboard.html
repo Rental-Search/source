@@ -47,16 +47,34 @@
 		</div>
 		<div class="resume-dash x9 first">
 			<div class="resume-box-dash x2 first">
-			<a href="{% url owner_booking %}" class="highlight">3</a><br />
-			<span>Locations<br />en attente</span>
+			 {% with user.bookings.asked|length as counter %}
+			  <a href="{% url owner_booking %}" class="highlight">{{ counter }}</a><br />
+			  {% blocktrans count counter as counter %}
+                <span>Location<br />en attente</span>
+              {% plural %}
+			    <span>Locations<br />en attente</span>
+              {% endblocktrans %}
+			 {% endwith %}
 			</div>
 			<div class="resume-box-dash x2">
-				<a href="{% url owner_booking %}">5</a><br />
-				<span>Locations<br />actives</span>
+			 {% with user.bookings.pending|length as counter %}
+			  <a href="{% url owner_booking %}">{{ counter }}</a><br />
+			  {% blocktrans count counter as counter %}
+                <span>Location<br />active</span>
+              {% plural %}
+			    <span>Locations<br />actives</span>
+              {% endblocktrans %}
+			 {% endwith %}
 			</div>
 			<div class="resume-box-dash x2">
-				<a href="{% url owner_booking %}">10</a><br />
-				<span>Objet<br />en location</span>
+			 {% with user.bookings.ongoing|length as counter %}
+			  <a href="{% url owner_booking %}">{{ counter }}</a><br />
+			  {% blocktrans count counter as counter %}
+                <span>Objet<br />en location</span>
+              {% plural %}
+ 			    <span>Objets<br />en location</span>
+              {% endblocktrans %}
+			 {% endwith %}
 			</div>
 		</div>
 		<div class="content-header x9 first">
@@ -64,12 +82,24 @@
 		</div>
 		<div class="resume-dash x9 first">
 			<div class="resume-box-dash x2 first">
-				<a href="{% url owner_booking %}" class="highlight">3</a><br />
-				<span>Locations<br />en attente</span>
+			 {% with user.rentals.asked|length as counter %}
+				<a href="{% url borrower_booking %}" class="highlight">{{ counter }}</a><br />
+				{% blocktrans count counter as counter %}
+                 <span>Location<br />en attente</span>
+                {% plural %}
+			     <span>Locations<br />en attente</span>
+               {% endblocktrans %}
+			 {% endwith %}
 			</div>
 			<div class="resume-box-dash x2">
-				<a href="{% url owner_booking %}">5</a><br />
-				<span>Locations<br />actives</span>
+			 {% with user.rentals.pending|length as counter %}
+			  <a href="{% url borrower_booking %}">{{ counter }}</a><br />
+			  {% blocktrans count counter as counter %}
+                <span>Location<br />active</span>
+              {% plural %}
+			    <span>Locations<br />actives</span>
+              {% endblocktrans %}
+			 {% endwith %}
 			</div>
 		</div>
 	</div>
