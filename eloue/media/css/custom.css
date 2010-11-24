@@ -518,7 +518,7 @@
   
   .menu-tab a, .sub-tab a { color: #9eb0ba; }
   
-  .menu-tab a:hover,.sub-tab a:hover, .menu-tab.selected, .sub-tab.selected {  color: #364C59; }
+  .menu-tab a:hover,.sub-tab a:hover, .menu-tab.selected a, .sub-tab.selected a{  color: #364C59; }
   
   .menu-tab a:hover,.sub-tab a:hover { text-decoration: none; }
   

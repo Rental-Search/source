@@ -4,15 +4,15 @@
 <div id="menu" class="clearfix">
 	<ul class="x12">
 		<li class='menu-tab first'><a href="{% url dashboard %}">{% trans "Tableau de bord" %}</a></li>
-		<li class='menu-tab selected'>{% trans "Propriétaire" %}</li>
-		<li class='menu-tab'><a href="#">{% trans "Locataire" %}</a></li>
+		<li class='menu-tab selected'><a href="{% url owner_booking %}">{% trans "Propriétaire" %}</a></li>
+		<li class='menu-tab'><a href="{% url borrower_booking %}">{% trans "Locataire" %}</a></li>
 		<li class='menu-tab'><a href="#">{% trans "Messages" %}</a></li>
 		<li class='menu-tab'><a href="#">{% trans "Mon compte" %}</a></li>
 	</ul>
 </div>
 <div id="sub-menu" class="clearfix">
 	<ul class="x12">
-		<li class="sub-tab first"><a href="{% url owner_booking %}">{% trans "Locations actives" %}</a></li>
+		<li class="sub-tab first selected"><a href="{% url owner_booking %}">{% trans "Locations actives" %}</a></li>
 		<li class="sub-tab"><a href="{% url owner_history %}">{% trans "Historique des locations" %}</a></li>
 		<li class="sub-tab"><a href="#">{% trans "Mes objets" %}</a></li>
 		<li class="sub-tab"><a href="{% url product_create %}">{% trans "Ajouter un objet" %}</a></li>
@@ -39,10 +39,6 @@
 				<div class="pl-distance">
 				</div>
 				<div class="pl-price">
-				    {% with booking.product.prices.day|first as price %}
-					 <span class="price">{{ price }}</span><br />
-					 <span class="unit">par {{ price.unit|unit }}</span>
-					{% endwith %}
 				</div>
 			</div>
 			{% if request.user == booking.borrower %}
