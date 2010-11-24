@@ -19,6 +19,7 @@ psycopg2>=2.2.2
 reportlab>=2.5
 south>=0.7
 sphinx>=1.0.2
+unittest2>=0.5.1
 -e git://github.com/e-loue/pyPdf.git#egg=pyPdf
 -e git://github.com/e-loue/pycrypto.git#egg=pycrypto
 -e git://github.com/e-loue/python-oauth2.git#egg=oauth2
