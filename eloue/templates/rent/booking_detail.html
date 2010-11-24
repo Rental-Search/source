@@ -92,12 +92,14 @@
 			<div class="bk-status">
 			  {% if booking.state == booking.STATE.ASKED %}
 			   <img src="{{ MEDIA_URL }}images/status_wait.png" alt="{% trans "En attente" %}" class="wait" />
-			   <form class="bk-accept" action="{% url booking_accept booking.pk.hex %}" method="post">
-			    {% csrf_token %}
-			    <input type="hidden" name="state" value="{{ booking.STATE.PENDING }}"/>
-			    <button type="submit" class="bk-accept btn small-green">{% trans "Accepter" %}</button>
-			   </form>
-			   <a class="bk-refuse btn small-orange" href="{% url booking_reject booking.pk.hex %}">{% trans "Refuser" %}</a>
+			   {% if booking.owner == user %}   
+			    <form class="bk-accept" action="{% url booking_accept booking.pk.hex %}" method="post">
+			     {% csrf_token %}
+			     <input type="hidden" name="state" value="{{ booking.STATE.PENDING }}"/>
+			     <button type="submit" class="bk-accept btn small-green">{% trans "Accepter" %}</button>
+			    </form>
+			    <a class="bk-refuse btn small-orange" href="{% url booking_reject booking.pk.hex %}">{% trans "Refuser" %}</a>
+			   {% endif %}
 			  {% endif %}
 			  {% if booking.state == booking.STATE.REJECTED %}
 			   <img src="{{ MEDIA_URL }}images/status_rejected.png" alt="{% trans "Rejetée" %}" class="rejected">
@@ -116,11 +118,13 @@
 			  {% endif %}
 			  {% if booking.state == booking.STATE.ENDED %}
 			   <img src="{{ MEDIA_URL }}images/status_finish.png" alt="{% trans "Terminée" %}" class="finish">
-			   <form class="bk-cancel" action="{% url booking_close booking.pk.hex %}" method="post">
-			    {% csrf_token %}
-			    <input type="hidden" name="state" value="{{ booking.STATE.CLOSED }}"/>
-			    <button class="bk-cancel btn bk-green">{% trans "Clôturer" %}</button>
-			   </form>
+			   {% if booking.owner == user %}
+			    <form class="bk-cancel" action="{% url booking_close booking.pk.hex %}" method="post">
+			     {% csrf_token %}
+			     <input type="hidden" name="state" value="{{ booking.STATE.CLOSED }}"/>
+			     <button class="bk-cancel btn bk-green">{% trans "Clôturer" %}</button>
+			    </form>
+			   {% endif %}
 			  {% endif %}
 			  {% if booking.state == booking.STATE.CLOSED %}
 			   <img src="{{ MEDIA_URL }}images/status_ended.png" alt="{% trans "Clôturée" %}" class="ended">
