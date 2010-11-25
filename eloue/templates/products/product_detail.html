@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load i18n product %}
 
-{% block title %}{{ block.super }} - {{ product.summary|capitalize }}{% endblock %}
+{% block title %}{{ product.summary|capitalize }} - {{ block.super }}{% endblock %}
 {% block description %}{{ product.summary }} {{ product.description }}{% endblock %}
 
 {% block content %}
