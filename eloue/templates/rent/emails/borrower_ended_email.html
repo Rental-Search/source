@@ -1,0 +1,12 @@
+{% load i18n %}
+{% blocktrans with booking.borrower.username as username and booking.product.summary as summary and booking.started_at|date:"DATETIME_FORMAT" as starting_at and booking.started_at|timesince:booking.ended_at as duration and booking.get_absolute_url as booking_url %}
+<p>Bonjour {{ username }},</p>
+
+<p>La location de l’objet {{ summary }}, qui a débutée le {{ starting_at }} pour une durée de {{ duration }}, vient de finir.</p>
+
+<p>Nous espérons que tout s’est déroulé selon votre convenance, et que vous êtes satisfaite(e) de votre location.</p>
+
+<p>Si vous avez rencontré un quelconque problème, pensez à nous <a href="{{ protocol }}://{{ domain }}{{ booking_url }}">signaler l'incident</a>.
+ 
+<p>L'équipe e-loue</p>
+{% endblocktrans %}

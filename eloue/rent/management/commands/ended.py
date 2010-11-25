@@ -17,8 +17,11 @@ class Command(BaseCommand):
         from eloue.rent.models import Booking
         log.info('Starting hourly ender mover process')
         dtime = datetime.now() + timedelta(hours=1)
-        Booking.objects.ongoing().filter(started_at__contains=' %02d' % dtime.hour,
+        for booking in Booking.objects.ongoing().filter(started_at__contains=' %02d' % dtime.hour,
             started_at__day=dtime.day, started_at__month=dtime.month,
-            started_at__year=dtime.year).update(state=Booking.STATE.ENDED)
+            started_at__year=dtime.year):
+            booking.state=Booking.STATE.ENDED
+            booking.send_ended_email()
+            booking.save()
         log.info('Finished hourly ender mover process')
     
