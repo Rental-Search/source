@@ -221,6 +221,7 @@ def soft():
         releases()
     notify()
     run("cd %(current_release)s; git pull -q deploy master" % {'current_release': env.current_release})
+    migrate()
     compress()
     restart()
 
