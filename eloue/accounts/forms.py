@@ -114,6 +114,8 @@ class PatronEditForm(forms.ModelForm):
     is_professional = forms.BooleanField(required=False, initial=False)
     company_name = forms.CharField(required=False, widget=forms.TextInput(attrs={'class': 'inm'}))
     is_subscribed = forms.BooleanField(required=False, initial=False)
+    paypal_email = forms.EmailField(label=_(u"E-mail paypal"), max_length=75, widget=forms.TextInput(attrs={
+        'autocapitalize': 'off', 'autocorrect': 'off', 'class': 'inm'}))
     
     def __init__(self, *args, **kwargs):
         super(PatronEditForm, self).__init__(*args, **kwargs)
