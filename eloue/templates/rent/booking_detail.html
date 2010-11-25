@@ -1,22 +1,73 @@
-{% extends "base.html" %}
+r{% extends "base.html" %}
 {% load i18n product %}
+
+{% block title %}
+{% if booking.state == booking.STATE.AUTHORIZING %}
+	{% if booking.borrower == user %}
+		Location en cours de validation
+	{% endif %}
+{% endif %}
+{% if booking.state == booking.STATE.AUTHORIZED %}
+ 	Location réservée
+{% endif %}
+{% if booking.state == booking.STATE.REJECTED %}
+	Location rejetée
+{% endif %}
+{% if booking.state == booking.STATE.PENDING %}
+ 	Location à venir
+{% endif %}
+{% if booking.state == booking.STATE.ONGOING %}
+ 	Location en cours
+{% endif %}
+{% if booking.state == booking.STATE.ENDED %}
+ Location terminée
+{% endif %}
+{% if booking.state == booking.STATE.CLOSING %}
+	Location en cours de clôture
+{% endif %}
+{% if booking.state == booking.STATE.CLOSED %}
+ Location clôturer
+{% endif %}
+ - {{ block.super }} 
+{% endblock %}
+
 {% block content %}
 <div id="menu" class="clearfix">
 	<ul class="x12">
 		<li class='menu-tab first'><a href="{% url dashboard %}">{% trans "Tableau de bord" %}</a></li>
-		<li class='menu-tab selected'><a href="{% url owner_booking %}">{% trans "Propriétaire" %}</a></li>
-		<li class='menu-tab'><a href="{% url borrower_booking %}">{% trans "Locataire" %}</a></li>
+		<li class='menu-tab {% if booking.owner == user %} selected {% endif %}'><a href="{% url owner_booking %}">{% trans "Propriétaire" %}</a></li>
+		<li class='menu-tab {% if booking.borrower == user %} selected 	{% endif %}'><a href="{% url borrower_booking %}">{% trans "Locataire" %}</a></li>
 		<li class='menu-tab'><a href="#">{% trans "Messages" %}</a></li>
 		<li class='menu-tab'><a href="{% url patron_edit %}">{% trans "Mon compte" %}</a></li>
 	</ul>
 </div>
 <div id="sub-menu" class="clearfix">
+	{% if booking.owner == user %}
 	<ul class="x12">
-		<li class="sub-tab first selected"><a href="{% url owner_booking %}">{% trans "Locations actives" %}</a></li>
-		<li class="sub-tab"><a href="{% url owner_history %}">{% trans "Historique des locations" %}</a></li>
+		<li class="sub-tab first 
+			{% if not booking.state == booking.STATE.CLOSED and not booking.state == booking.STATE.REJECTED %}
+				selected 
+			{% endif %}"><a href="{% url owner_booking %}">{% trans "Locations actives" %}</a></li>
+		<li class="sub-tab
+			{% if booking.state == booking.STATE.CLOSED or booking.state == booking.STATE.REJECTED %}
+				selected 
+			{% endif %}"><a href="{% url owner_history %}">{% trans "Historique des locations" %}</a></li>
 		<li class="sub-tab"><a href="{% url owner_product %}">{% trans "Mes objets" %}</a></li>
 		<li class="sub-tab"><a href="{% url product_create %}">{% trans "Ajouter un objet" %}</a></li>
 	</ul>
+	{% endif %}
+	{% if booking.borrower == user %}
+		<ul class="x12">
+			<li class="sub-tab first
+			{% if not booking.state == booking.STATE.CLOSED and not booking.state == booking.STATE.REJECTED %}
+				selected 
+			{% endif %}"><a href="{% url borrower_booking %}">{% trans "Locations actives" %}</a></li>
+			<li class="sub-tab
+			{% if booking.state == booking.STATE.CLOSED or booking.state == booking.STATE.REJECTED %}
+				selected 
+			{% endif %}"><a href="{% url borrower_history %}">{% trans "Historique des locations" %}</a></li>
+		</ul>
+	{% endif %}
 </div>
 <div id="content-dash" class="clearfix">
 	<div class="booking x8">
@@ -134,6 +185,12 @@
 			    </form>
 			   {% endif %}
 			  {% endif %}
+				{% if booking.state == booking.STATE.CLOSING %}
+					<p class="waiting">
+						<img src="{{ MEDIA_URL }}images/waiting.gif" alt="{% trans "en cours" %}" /><br />
+						<span>{% trans "En cours de clôture" %}...</span>
+					</p>
+				{% endif %}
 			  {% if booking.state == booking.STATE.CLOSED %}
 			   <img src="{{ MEDIA_URL }}images/status_ended.png" alt="{% trans "Clôturée" %}" class="ended">
 			   <a href="{% url booking_incident booking.pk.hex %}" class="bk-warning">{% trans "Signaler un incident" %}</a>
