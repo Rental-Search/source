@@ -10,7 +10,7 @@
 	<div class="search-what x5">
 		<label for="id_q">{% trans "Que voulez-vous louer ?" %}</label><br />
 		{{ search_form.q }}<br />
-		<span>{% trans "Exemple :" %} </span> <a href="location/?q=voiture">{% trans "Voiture" %}</a>, <a href="#">{% trans "Chèvre" %}</a>, <a href="#">{% trans "Ski" %}</a>, <a href="#">{% trans "Robe" %}</a>
+		<span>{% trans "Exemple :" %} </span> <a href="{% url product_list %}?q=voiture">{% trans "Voiture" %}</a>, <a href="{% url product_list %}?q=chèvre">{% trans "Chèvre" %}</a>, <a href="{% url product_list %}?q=ski">{% trans "Ski" %}</a>, <a href="{% url product_list %}?q=robe">{% trans "Robe" %}</a>
 	</div>
 	<div class="search-where x5">
 		<label>{% trans "Où ?" %}</label><br />
