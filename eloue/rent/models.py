@@ -246,6 +246,13 @@ class Booking(models.Model):
         message = create_alternative_email('rent/emails/borrower_ended', context, settings.DEFAULT_FROM_EMAIL, [self.borrower.email])
         message.send()
     
+    def send_closed_email(self):
+        context = {'booking': self}
+        message = create_alternative_email('rent/emails/owner_closed', context, settings.DEFAULT_FROM_EMAIL, [self.owner.email])
+        message.send()
+        message = create_alternative_email('rent/emails/borrower_closed', context, settings.DEFAULT_FROM_EMAIL, [self.borrower.email])
+        message.send()
+    
     @property
     def commission(self):
         """Return our commission

@@ -1,0 +1,12 @@
+{% load i18n %}
+{% blocktrans with booking.borrower.username as username and booking.owner.username as owner and booking.total_amount as total_amount and booking.get_absolute_url as booking_url  %}
+Bonjour {{ username }},
+
+{{ owner }} vient de clôturer votre location. Aussi, un prélèvement de {{ total_amount }} euros vient de lui être viré.
+ 
+Si vous rencontrez un quelconque problème, nous vous invitons à nous signaler l'incident :
+
+{{ protocol }}://{{ domain }}{{ booking_url}}
+ 
+L'équipe e-loue
+{% endblocktrans %}

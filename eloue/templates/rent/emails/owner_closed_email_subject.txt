@@ -1,0 +1,1 @@
+{% load i18n %}{% trans "Clôture de votre location" %}
