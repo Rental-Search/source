@@ -137,7 +137,7 @@ class PatronEditForm(forms.ModelForm):
     class Meta:
         model = Patron
         fields = ('civility', 'username', 'first_name', 'last_name',
-            'email', 'is_professional', 'company_name', 'is_subscribed')
+            'email', 'is_professional', 'company_name', 'is_subscribed', 'paypal_email')
             
             
 class PatronPasswordChangeForm(PasswordChangeForm):
