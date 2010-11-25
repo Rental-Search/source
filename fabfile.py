@@ -134,10 +134,18 @@ def migrate():
         releases()
     run("source %(current_release)s/env/bin/activate; cd %(current_release)s; python %(app_name)s/manage.py migrate" % {'current_release': env.current_release, 'app_name': env.app_name})
 
+def compress():
+    """Run the synccompress tasj"""
+    if not 'current_release' in env:
+        releases()
+    with cd(env.current_release):
+        run("env/bin/python %(app_name)s/manage.py synccompress" % {'app_name': env.app_name})
+
 def migrations():
     """Deploy and run pending migrations"""
     update_code()
     update_env()
+    compress()
     migrate()
     symlink()
     restart()
@@ -197,12 +205,14 @@ def cold():
     """Deploys and starts a `cold' application"""
     update()
     migrate()
+    compress()
     start()
 
 def deploy():
     """Deploys your project. This calls both `update' and `restart'"""
     notify()
     update()
+    compress()
     restart()
 
 def soft():
@@ -211,6 +221,7 @@ def soft():
         releases()
     notify()
     run("cd %(current_release)s; git pull -q deploy master" % {'current_release': env.current_release})
+    compress()
     restart()
 
 def notify():
