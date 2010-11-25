@@ -616,6 +616,21 @@
 ************************************************** */
 .new-password th { width: 175px;}
 
+/* *************************************************
+  incident page
+************************************************** */
+
+.incident { margin-bottom: 20px;}
+  .incident textarea 
+  { 
+    width: 355px;
+    height: 90px;
+  }
+  
+.incident-info
+{
+  color: #6EB924;
+}
 
 
 

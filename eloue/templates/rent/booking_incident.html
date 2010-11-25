@@ -1,5 +1,147 @@
 {% extends "base.html" %}
+{% load i18n product%}
+{% block title %}Déclarez un incident - {{ block.super }}{% endblock %}
+
 
 {% block content %}
- 
+
+<div id="menu" class="clearfix">
+	<ul class="x12">
+		<li class='menu-tab first'><a href="{% url dashboard %}">{% trans "Tableau de bord" %}</a></li>
+		<li class='menu-tab {% if booking.owner == user %} selected {% endif %}'><a href="{% url owner_booking %}">{% trans "Propriétaire" %}</a></li>
+		<li class='menu-tab {% if booking.borrower == user %} selected 	{% endif %}'><a href="{% url borrower_booking %}">{% trans "Locataire" %}</a></li>
+		<li class='menu-tab'><a href="#">{% trans "Messages" %}</a></li>
+		<li class='menu-tab'><a href="{% url patron_edit %}">{% trans "Mon compte" %}</a></li>
+	</ul>
+</div>
+<div id="sub-menu" class="clearfix">
+	{% if booking.owner == user %}
+	<ul class="x12">
+		<li class="sub-tab first 
+			{% if not booking.state == booking.STATE.CLOSED and not booking.state == booking.STATE.REJECTED %}
+				selected 
+			{% endif %}"><a href="{% url owner_booking %}">{% trans "Locations actives" %}</a></li>
+		<li class="sub-tab
+			{% if booking.state == booking.STATE.CLOSED or booking.state == booking.STATE.REJECTED %}
+				selected 
+			{% endif %}"><a href="{% url owner_history %}">{% trans "Historique des locations" %}</a></li>
+		<li class="sub-tab"><a href="{% url owner_product %}">{% trans "Mes objets" %}</a></li>
+		<li class="sub-tab"><a href="{% url product_create %}">{% trans "Ajouter un objet" %}</a></li>
+	</ul>
+	{% endif %}
+	{% if booking.borrower == user %}
+		<ul class="x12">
+			<li class="sub-tab first
+			{% if not booking.state == booking.STATE.CLOSED and not booking.state == booking.STATE.REJECTED %}
+				selected 
+			{% endif %}"><a href="{% url borrower_booking %}">{% trans "Locations actives" %}</a></li>
+			<li class="sub-tab
+			{% if booking.state == booking.STATE.CLOSED or booking.state == booking.STATE.REJECTED %}
+				selected 
+			{% endif %}"><a href="{% url borrower_history %}">{% trans "Historique des locations" %}</a></li>
+		</ul>
+	{% endif %}
+</div>
+<div id="content-dash" class="clearfix">
+	<div class="incident booking x8">
+		<div class="content-header x8 first">
+		 <h2>{% trans "Résumé" %}</h2>
+		</div>
+		<div class="booking-product x8 first">
+			<a class="pl-img" href="{{ booking.product.get_absolute_url }}">
+				{% with booking.product.pictures.all|first as picture %}
+          {% if picture.thumbnail %}
+           <img src="{{ picture.thumbnail.url }}" alt="booking.product.summary" />
+          {% endif %}
+         {% endwith %}
+			</a>
+			<div class="pl-header">
+				<h2><a href="{{ booking.product.get_absolute_url }}">{{ booking.product.summary|capfirst|truncate:50 }}</a></h2>
+			</div>
+			<div class="pl-content">
+				<div class="pl-desc">{{ booking.product.description|truncate:100 }}</div>
+				<div class="pl-distance">
+				</div>
+				<div class="pl-price">
+				</div>
+			</div>
+			{% if request.user == booking.borrower %}
+				<div class="pl-footer">
+					Propriétaire :	 <a href="{{ booking.product.owner.get_absolute_url }}" class="owner">{{ booking.product.owner.username }}</a> | {{ booking.product.address.city|capfirst }}, {{ booking.product.address.zipcode }}
+				</div>
+			{% endif %}
+			{% if request.user == booking.owner %}
+				<div class="pl-footer">
+					Locataire : <a href="{{ booking.borrower.get_absolute_url }}" class="owner">{{ booking.borrower.get_full_name }}</a>
+				</div>
+			{% endif%}
+		</div>
+		<div class="content-header x8 first">
+			<h2>Dates et total</h2>
+		</div>
+		<div class="booking-resume x8 first">
+			<table>
+				<tr>
+					<th>Début :</th>
+					<td>
+						{{ booking.started_at|date:"l j F Y"|capfirst }}
+					</td>
+				</tr>
+				<tr>
+					<th>Fin :</th>
+					<td>
+                        {{ booking.ended_at|date:"l j F Y"|capfirst }}
+					</td>
+				</tr>
+				<tr>
+					<th>Statuts :</th>
+					<td>{{ booking.state }}</td>
+				</tr>
+				<tr>
+					<th>Prix par jour :</th>
+					<td class="number">{{ booking.product.prices.day|first }}</td>
+				</tr>
+				<tr>
+					<th>Durée de la location :</th>
+					<td class="number">{{ booking.started_at|timesince:booking.ended_at }}</td>
+				</tr>
+				<tr class="total">
+					<th>Total :</th>
+					<td class="number">{{ booking.total_amount }} €</td>
+				</tr>
+			</table>
+		</div>
+		<div class="content-header x8 first">
+			<h2>{% trans "Déclarez votre incident" %}</h2>
+		</div>
+		<div class="x8 first">
+			<form action="" method="POST">
+				{% csrf_token %}
+				<p {% if form.message.errors %} class="error-field" {% endif %}>
+					{{ form.message }}
+					{% if form.message.errors %}
+						{% for error in form.message.errors %}
+							<br />
+			      	<span class="error">{{ error|escape }}</span>
+			    	{% endfor %}
+					{% endif %}
+				</p>
+			</div>
+			<div class="submit-wizard x8 first">
+				<a href="{% url borrower_history %}">Annuler</a> ou 
+				<input type="submit" class="btn big-green" value="Envoyer" />
+			</form>
+		</div>
+	</div>
+	<div class="box-info x4">
+		<div class="box-info-header">
+			<h5>{% trans "Information" %}</h5>
+		</div>
+		<div class="box-info-content">
+			<p class="incident-info">
+				Déclarer un incident si la location ne se déroule pas correctement.<br />
+			</p>
+		</div>
+	</div>
+</div>
 {% endblock %}
