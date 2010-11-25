@@ -2,15 +2,13 @@
 {% load i18n product %}
 
 {% block title %}
-e-loue - 
 {% if booking.state == booking.STATE.AUTHORIZING %}
 	{% if booking.borrower == user %}
-		Location en cours de validation...
+		Location en cours de validation
 	{% endif %}
 {% endif %}
 {% if booking.state == booking.STATE.AUTHORIZED %}
  	Location réservée
- {% endif %}
 {% endif %}
 {% if booking.state == booking.STATE.REJECTED %}
 	Location rejetée
@@ -24,12 +22,13 @@ e-loue -
 {% if booking.state == booking.STATE.ENDED %}
  Location terminée
 {% endif %}
+{% if booking.state == booking.STATE.CLOSING %}
+	Location en cours de clôture
+{% endif %}
 {% if booking.state == booking.STATE.CLOSED %}
  Location clôturer
 {% endif %}
-
-
-
+ - {{ block.super }} 
 {% endblock %}
 {% block content %}
 <div id="menu" class="clearfix">
@@ -165,6 +164,12 @@ e-loue -
 			    </form>
 			   {% endif %}
 			  {% endif %}
+				{% if booking.state == booking.STATE.CLOSING %}
+					<p class="waiting">
+						<img src="{{ MEDIA_URL }}images/waiting.gif" alt="{% trans "en cours" %}" /><br />
+						<span>{% trans "En cours de clôture" %}...</span>
+					</p>
+				{% endif %}
 			  {% if booking.state == booking.STATE.CLOSED %}
 			   <img src="{{ MEDIA_URL }}images/status_ended.png" alt="{% trans "Clôturée" %}" class="ended">
 			   <a href="{% url booking_incident booking.pk.hex %}" class="bk-warning">{% trans "Signaler un incident" %}</a>
