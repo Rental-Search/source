@@ -2,6 +2,7 @@ r{% extends "base.html" %}
 {% load i18n product %}
 
 {% block title %}
+e-loue - 
 {% if booking.state == booking.STATE.AUTHORIZING %}
 	{% if booking.borrower == user %}
 		Location en cours de validation
