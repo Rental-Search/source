@@ -29,6 +29,10 @@
  Location clôturer
 {% endif %}
  - {{ block.super }} 
+{% if booking.state == booking.STATE.CLOSED %}
+ Location clôturer
+{% endif %}
+
 {% endblock %}
 {% block content %}
 <div id="menu" class="clearfix">
