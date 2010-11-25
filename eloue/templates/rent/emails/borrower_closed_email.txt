@@ -6,7 +6,7 @@ Bonjour {{ username }},
  
 Si vous rencontrez un quelconque problème, nous vous invitons à nous signaler l'incident :
 
-{{ protocol }}://{{ domain }}{{ booking_url}}
+{{ protocol }}://{{ domain }}{{ booking_url }}
  
 L'équipe e-loue
 {% endblocktrans %}
