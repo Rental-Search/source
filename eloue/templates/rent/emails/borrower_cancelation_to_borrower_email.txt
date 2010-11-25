@@ -1,0 +1,15 @@
+{% load i18n %}
+{% blocktrans with booking.borrower.username as username and booking.product.category.name as category and booking.product.summary as summary  and booking.started_at|date:"DATETIME_FORMAT" as starting_at and booking.started_at|timesince:booking.ended_at as duration %}
+Bonjour {{ username }},
+
+Vous avez manifesté votre souhait d'annuler la location suivante :
+
+Type : {{ category }} 
+Objet : {{ summary }} 
+Début de la location : {{ starting_at }} 
+Durée de la location : {{ duration }}
+
+Conformément à votre demande, nous vous confirmons que cette location a bien été annulée et donc qu'aucun débit n'aura lieu.
+ 
+L'équipe e-loue
+{% endblocktrans %}

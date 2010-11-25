@@ -226,6 +226,19 @@ class Booking(models.Model):
         message = create_alternative_email('rent/emails/borrower_rejection', context, settings.DEFAULT_FROM_EMAIL, [self.borrower.email])
         message.send()
     
+    def send_cancelation_email(self, source=None):
+        context = {'booking': self}
+        if self.owner == source:
+            message = create_alternative_email('rent/emails/owner_cancelation_to_owner', context, settings.DEFAULT_FROM_EMAIL, [self.owner.email])
+            message.send()
+            message = create_alternative_email('rent/emails/owner_cancelation_to_borrower', context, settings.DEFAULT_FROM_EMAIL, [self.borrower.email])
+            message.send()
+        else:
+            message = create_alternative_email('rent/emails/borrower_cancelation_to_owner', context, settings.DEFAULT_FROM_EMAIL, [self.owner.email])
+            message.send()
+            message = create_alternative_email('rent/emails/borrower_cancelation_to_borrower', context, settings.DEFAULT_FROM_EMAIL, [self.borrower.email])
+            message.send()
+    
     @property
     def commission(self):
         """Return our commission

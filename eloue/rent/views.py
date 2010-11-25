@@ -143,7 +143,7 @@ def booking_cancel(request, booking_id):
     booking = get_object_or_404(Booking, pk=booking_id)
     if request.POST:
         booking.cancel()
-        # TODO : Send email to owner and/or borrower
+        booking.send_cancelation_email(source=request.user)
         messages.success(request, _(u"Cette réservation a bien été annulée"))
     messages.error(request, _(u"Cette réservation n'a pu être annulée"))
     return redirect_to(request, booking.get_absolute_url())

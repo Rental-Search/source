@@ -1,13 +1,15 @@
 {% load i18n %}
-{% blocktrans with booking.borrower.username as borrower_name and booking.owner.username as owner_name and booking.product.summary as summary and booking.product.category.name as category and booking.product.summary as summary and booking.started_at|date:"DATETIME_FORMAT" as starting_at and booking.started_at|timesince:booking.ended_at as duration %}
-Bonjour {{ borrower_name }}, 
+{% blocktrans with booking.borrower.username as username and booking.owner.username as owner and booking.product.category.name as category and booking.product.summary as summary  and booking.started_at|date:"DATETIME_FORMAT" as starting_at and booking.started_at|timesince:booking.ended_at as duration %}
+Bonjour {{ username }}, 
 
-Hélas, {{ owner_name }} a refusé votre proposition de location suivante : 
+Malgré son précédent accord, {{ owner }} a décidé d'annuler la location suivante : 
 
 Type : {{ category }} 
 Objet : {{ summary }} 
 Début de la location : {{ starting_at }} 
 Durée de la location : {{ duration }}
+ 
+Nous vous confirmons qu'aucun débit n'aura lieu.
 {% endblocktrans %}
 {% with booking.product.more_like_this as related_products %}
 {% if related_products %}
@@ -27,4 +29,3 @@ Retrouvez tous les objets de cette catégorie sur e-loue.com :
  
 L'équipe e-loue
 {% endblocktrans %}
-
