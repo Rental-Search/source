@@ -80,13 +80,13 @@
          <div class="pages x8 first">
           <ul class="pages-list">
 	       {% if page_obj.has_previous %}
-		    <li class="previous"><a href="{% url patron_detail_page patron.slug page_obj.previous_page_number %}">&#171; {% trans "Page précédente" %}</a></li>
+		    <li class="previous"><a href="{% url patron_detail patron.slug page_obj.previous_page_number %}">&#171; {% trans "Page précédente" %}</a></li>
 	       {% endif %}
 	       {% for page in page_range %}
-		    <li class="page-{{ page }} {% if page_obj.number == page %}select{% endif %}"><a href="{% url patron_detail_page patron.slug page %}">{{ page }}</a></li>
+		    <li class="page-{{ page }} {% if page_obj.number == page %}select{% endif %}"><a href="{% url patron_detail patron.slug page %}">{{ page }}</a></li>
 		   {% endfor %}
 	       {% if page_obj.has_next %}
-		    <li class="next"><a href="{% url patron_detail_page patron.slug page_obj.next_page_number %}">{% trans "Page suivante" %} &#187;</a></li>
+		    <li class="next"><a href="{% url patron_detail patron.slug page_obj.next_page_number %}">{% trans "Page suivante" %} &#187;</a></li>
 	       {% endif %}
 	      </ul> 
          </div>{# pager #}
