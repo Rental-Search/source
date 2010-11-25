@@ -777,7 +777,7 @@ html[xmlns] .clearfix {
           .bk-warning
           {
             background: transparent url("../images/warning.png") no-repeat 132px 3px;
-            color: #6EB924;
+            color: #6EB924 !important;
             padding-top: 3px;
           }
   
