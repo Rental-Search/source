@@ -31,9 +31,9 @@ class PaymentsTest(TestCase):
     
     @patch.object(Booking, 'hold')
     def test_hold_command(self, mock_method):
-        import eloue.rent.management.commands.hold as hold
-        reload(hold)  # It's loaded before we patch
-        command = hold.Command()
+        import eloue.rent.management.commands.ongoing as ongoing
+        reload(ongoing)  # It's loaded before we patch
+        command = ongoing.Command()
         command.handle()
         self.assertTrue(mock_method.called)
     

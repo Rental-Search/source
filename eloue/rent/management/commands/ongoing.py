@@ -10,15 +10,16 @@ from django.core.management.base import BaseCommand
 
 USE_HTTPS = getattr(settings, 'USE_HTTPS', True)
 
-log = logbook.Logger('eloue.rent.hold')
+log = logbook.Logger('eloue.rent.ongoing')
 
 
 class Command(BaseCommand):
-    help = "Hold payments on a hourly basis"
+    help = "Start a renting by holding money on a hourly basis"
     
     def handle(self, *args, **options):
+        """Find ongoing rent, hold money and the ipn callback do the rest by moving them in ONGOING state"""
         from eloue.rent.models import Booking
-        log.info('Starting hourly payment holder process')
+        log.info('Starting hourly ongoing mover process')
         domain = Site.objects.get_current().domain
         protocol = "https" if USE_HTTPS else "http"
         dtime = datetime.now() + timedelta(hours=1)
@@ -27,5 +28,5 @@ class Command(BaseCommand):
                 cancel_url="%s://%s%s" % (protocol, domain, reverse("booking_failure", args=[booking.pk.hex])),
                 return_url="%s://%s%s" % (protocol, domain, reverse("booking_success", args=[booking.pk.hex])),
             )
-        log.info('Finished hourly payment holder process')
+        log.info('Finished hourly ongoing mover process')
     
