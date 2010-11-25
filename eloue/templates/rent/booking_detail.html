@@ -5,7 +5,7 @@
 e-loue - 
 {% if booking.state == booking.STATE.AUTHORIZING %}
 	{% if booking.borrower == user %}
-		Location en cours de validation...
+		Location en cours de validation
 	{% endif %}
 {% endif %}
 {% if booking.state == booking.STATE.AUTHORIZED %}
