@@ -174,3 +174,6 @@ class SinisterForm(forms.ModelForm):
         model = Sinister
         fields = ('description',)
     
+
+class IncidentForm(forms.Form):
+    message = forms.CharField(required=True)

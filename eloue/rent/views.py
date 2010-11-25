@@ -3,6 +3,7 @@ import logbook
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.core.mail import send_mail
 from django.http import HttpResponse, HttpResponseNotAllowed
 from django.shortcuts import get_object_or_404
 from django.utils import simplejson
@@ -19,7 +20,7 @@ from eloue.decorators import validate_ipn, secure_required
 from eloue.accounts.forms import EmailAuthenticationForm
 from eloue.products.models import Product
 from eloue.rent.decorators import ownership_required
-from eloue.rent.forms import BookingForm, BookingConfirmationForm, BookingStateForm, PreApprovalIPNForm, PayIPNForm
+from eloue.rent.forms import BookingForm, BookingConfirmationForm, BookingStateForm, PreApprovalIPNForm, PayIPNForm, IncidentForm
 from eloue.rent.models import Booking
 from eloue.rent.wizard import BookingWizard
 
@@ -140,11 +141,8 @@ def booking_reject(request, booking_id):
 @ownership_required(model=Booking, object_key='booking_id', ownership=['owner'])
 def booking_cancel(request, booking_id):
     booking = get_object_or_404(Booking, pk=booking_id)
-    form = BookingStateForm(request.POST or None,
-        initial={'state': Booking.STATE.CANCELED},
-        instance=booking)
-    if form.is_valid():
-        booking = form.save()
+    if request.POST:
+        booking.cancel()
         # TODO : Send email to owner and/or borrower
         messages.success(request, _(u"Cette réservation a bien été annulée"))
     messages.error(request, _(u"Cette réservation n'a pu être annulée"))
@@ -161,12 +159,15 @@ def booking_close(request, booking_id):
     messages.error(request, _(u"Cette réservation n'a pu être cloturée"))
     return redirect_to(request, booking.get_absolute_url())
 
+
 @login_required
 @ownership_required(model=Booking, object_key='booking_id', ownership=['owner', 'borrower'])
 def booking_incident(request, booking_id):
     booking = get_object_or_404(Booking, pk=booking_id)
-    if request.POST:  # FIXME : add form with message sent to incident@e-loue.com
+    form = IncidentForm(request.POST or None)
+    if form.is_valid():
+        send_mail(u"Déclaration d'incident", form.cleaned_data['message'], request.user.email, ['incident@e-loue.com'])
         booking.state = Booking.STATE.INCIDENT
         booking.save()
-    return direct_to_template(request, 'rent/booking_incident.html', extra_context={'booking': booking})
+    return direct_to_template(request, 'rent/booking_incident.html', extra_context={'booking': booking, 'form': form})
 
