@@ -90,6 +90,14 @@
 		</div>
 		<div class="portlet-content">
 			<div class="bk-status">
+				{% if booking.state == booking.STATE.AUTHORIZING %}
+					{% if booking.borrower == user %}
+					<p class="waiting">
+						<img src="{{ MEDIA_URL }}images/waiting.gif" alt="{% trans "en cours" %}" /><br />
+						<span>En cours de validation...</span>
+					</p>
+					{% endif %}
+				{% endif %}
 			  {% if booking.state == booking.STATE.AUTHORIZED %}
 			   <img src="{{ MEDIA_URL }}images/status_wait.png" alt="{% trans "En attente" %}" class="wait" />
 			   {% if booking.owner == user %}   

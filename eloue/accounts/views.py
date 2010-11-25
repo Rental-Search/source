@@ -130,7 +130,7 @@ def dashboard(request):
 
 @login_required
 def owner_booking(request, page=None):
-    queryset = request.user.bookings.exclude(state__in=[Booking.STATE.CLOSED, Booking.STATE.REJECTED])
+    queryset = request.user.bookings.exclude(state__in=[Booking.STATE.AUTHORIZING, Booking.STATE.CLOSED, Booking.STATE.REJECTED])
     return object_list(request, queryset, page=page, paginate_by=10, template_name='accounts/owner_booking.html',
         template_object_name='booking')
 
