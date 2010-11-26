@@ -21,6 +21,27 @@ $(document).ready(function() {
     });
     $("input[name$='old_password']").removeAttr('disabled');
     
+    // Email PayPal account enable/disable
+    var paypalEmailInput = $("input[name$='paypal_email']");
+    if (paypalEmailInput.attr('type') != 'hidden') {
+        if (parseInt(exists, 10)) { 
+            paypalEmailInput.removeAttr('disabled');
+        } else {
+            paypalEmailInput.attr('disabled', 'disabled');
+        }
+    }
+    $("input[name$='exists']").change(function(event) {
+       var radio = $(event.target);
+       if (paypalEmailInput.attr('type') != 'hidden') {
+           if (parseInt(radio.val(), 10)) { 
+               paypalEmailInput.removeAttr('disabled');
+           } else {
+               paypalEmailInput.attr('disabled', 'disabled');
+           }
+       } 
+    });
+    
+    
     // Company name field display/none
     var isProfessionalInput = $("input[name$='is_professional']");
     var companyNameInput = $(".company-name");

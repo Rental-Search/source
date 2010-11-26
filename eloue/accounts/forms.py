@@ -24,6 +24,11 @@ STATE_CHOICES = (
     (1, "J'ai déjà un compte e-loue et mon mot de passe est :"),
 )
 
+PAYPAL_ACCOUNT_CHOICES = (
+    (0, "Je n'ai pas encore de compte PayPal"),
+    (1, "J'ai déjà un compte PayPal et mon email est :"),
+)
+
 
 class EmailAuthenticationForm(forms.Form):
     """Displays the login form and handles the login action."""
@@ -165,6 +170,9 @@ class PatronChangeForm(forms.ModelForm):
     
 
 class PatronPaypalForm(forms.ModelForm):
+    paypal_exists = forms.TypedChoiceField(required=True, coerce=int, choices=PAYPAL_ACCOUNT_CHOICES, widget=forms.RadioSelect(renderer=ParagraphRadioFieldRenderer), initial=1)
+    paypal_email = forms.EmailField(label=_("E-mail"), max_length=75, widget=forms.TextInput(attrs={
+        'autocapitalize': 'off', 'autocorrect': 'off', 'class': 'inm'}))
     class Meta:
         model = Patron
         fields = ('paypal_email',)

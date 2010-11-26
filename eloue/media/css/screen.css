@@ -1075,5 +1075,7 @@ html[xmlns] .clearfix {
       border: 1px solid red;
     }
 
-
-
+  .paypal-verified
+  {
+    text-align: center;
+  }
