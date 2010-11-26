@@ -3,8 +3,8 @@ from fabric.api import env, run, sudo, local, put, runs_once, cd
 def production():
     """Defines production environment"""
     env.name = "production"
-    env.user = "deploy"
-    env.hosts = ['192.168.0.25',]
+    env.user = "tim"
+    env.hosts = ['goat.e-loue.com',]
     env.base_dir = "/var/www"
     env.app_name = "eloue"
     env.domain_name = "e-loue.com"
@@ -132,7 +132,8 @@ def migrate():
     """Run the migrate task"""
     if not env.has_key('current_release'):
         releases()
-    run("source %(current_release)s/env/bin/activate; cd %(current_release)s; python %(app_name)s/manage.py migrate" % {'current_release': env.current_release, 'app_name': env.app_name})
+    with cd(env.current_release):
+        run("source env/bin/activate; python %(app_name)s/manage.py syncdb --migrate --noinput" % {'app_name': env.app_name})
 
 def compress():
     """Run the synccompress tasj"""
