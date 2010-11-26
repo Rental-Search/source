@@ -627,6 +627,11 @@
     height: 90px;
   }
   
+  .incident .submit-wizard
+  {
+    margin-top: 20px;
+  }
+  
 .incident-info
 {
   color: #6EB924;
