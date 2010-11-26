@@ -2,7 +2,7 @@
 	{{ form.non_field_errors }}
 	<form class="form" action="" method="POST">
 	{% csrf_token %}
-	<p class="email">
+	<p class="email {% if form.email.errors %} error-field {% endif %}">
 		<label >Votre adresse email est :</label> {{ form.email }}
 		{% if form.email.errors %}
 		    {% for error in form.email.errors %}
