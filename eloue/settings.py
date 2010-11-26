@@ -317,6 +317,7 @@ INSURANCE_EMAIL = None  # Our insurance email
 # Search configuration
 DEFAULT_RADIUS = 215
 
+# OAuth configuration
 OAUTH_PROVIDER_KEY_SIZE = 32
 OAUTH_AUTHORIZE_VIEW = "eloue.accounts.views.oauth_authorize"
 OAUTH_CALLBACK_VIEW = "eloue.accounts.views.oauth_callback"
