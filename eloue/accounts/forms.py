@@ -170,9 +170,19 @@ class PatronChangeForm(forms.ModelForm):
     
 
 class PatronPaypalForm(forms.ModelForm):
-    paypal_exists = forms.TypedChoiceField(required=True, coerce=int, choices=PAYPAL_ACCOUNT_CHOICES, widget=forms.RadioSelect(renderer=ParagraphRadioFieldRenderer), initial=1)
-    paypal_email = forms.EmailField(label=_("E-mail"), max_length=75, widget=forms.TextInput(attrs={
+    paypal_email = forms.EmailField(required=False, label=_("E-mail"), max_length=75, widget=forms.TextInput(attrs={
         'autocapitalize': 'off', 'autocorrect': 'off', 'class': 'inm'}))
+    paypal_exists = forms.TypedChoiceField(required=True, coerce=int, choices=PAYPAL_ACCOUNT_CHOICES, widget=forms.RadioSelect(renderer=ParagraphRadioFieldRenderer), initial=1)
+    
+    def clean(self):
+        paypal_email = self.cleaned_data.get('paypal_email', None)
+        paypal_exists = self.cleaned_data['paypal_exists']
+        if paypal_exists and not paypal_email:
+            raise forms.ValidationError(_(u"Vous devez entrer votre email Paypal"))
+        if not paypal_exists and not paypal_email:
+            self.cleaned_data['paypal_email'] = self.instance.email
+        return self.cleaned_data
+    
     class Meta:
         model = Patron
         fields = ('paypal_email',)

@@ -4,6 +4,7 @@ import logbook
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
+from django.core.urlresolvers import reverse
 from django.http import HttpResponse, HttpResponseNotAllowed
 from django.shortcuts import get_object_or_404
 from django.utils import simplejson
@@ -112,6 +113,8 @@ def booking_detail(request, booking_id):
 @ownership_required(model=Booking, object_key='booking_id', ownership=['owner'])
 def booking_accept(request, booking_id):
     booking = get_object_or_404(Booking, pk=booking_id)
+    if not booking.owner.has_paypal():
+        return redirect_to(request, "%s?next=%s" % (reverse('patron_paypal'), booking.get_absolute_url))
     form = BookingStateForm(request.POST or None,
         initial={'state': Booking.STATE.PENDING},
         instance=booking)

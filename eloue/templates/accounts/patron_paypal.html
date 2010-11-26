@@ -26,22 +26,21 @@
 	</div>
 	<div class="x9">
 		<div class="signup x9 first">
-			{{ form.non_field_errors }}
+		    {{ form.non_field_errors }}
 			<form class="form" action="" method="POST">
 				{% csrf_token %}
 				<p class="question">Avez-vous un compte e-loue ?</p>
 				{{ form.paypal_exists }}
 				<p class="password {% if form.paypal_email.errors %} error-field {% endif %}">
-					{{ form.paypal_email }}
-					{% if form.password.errors %}
-			    	{% for error in form.password.errors %}
-			        <span class="error">{{ error|escape }}</span>
-			    	{% endfor %}
-					{% endif %}
+				 {{ form.paypal_email }}
+				 {% if form.paypal_email.errors %}
+			      {% for error in form.paypal_email.errors %}
+			       <span class="error">{{ paypal_email|escape }}</span>
+			      {% endfor %}
+				 {% endif %}
 				</p>
 			</div>
 			<div class="submit-wizard x9 first">
-				{{ form.paypal_email.as_hidden }}
 				<a href="{% url owner_booking %}">Annuler</a> ou 
 				<input type="submit" class="btn big-green" value="Continuer &rarr;" />
 			</form>

@@ -4,7 +4,6 @@ from logbook import Logger
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.sites.models import Site
 from django.core.urlresolvers import reverse
 from django.shortcuts import get_object_or_404
@@ -13,9 +12,8 @@ from django.views.decorators.cache import never_cache, cache_page
 from django.views.generic.simple import direct_to_template, redirect_to
 from django.views.generic.list_detail import object_list
 from django.core.context_processors import csrf
-from django.views.decorators.csrf import csrf_protect
 from django.http import HttpResponse, HttpResponseBadRequest
-from django.contrib.auth import authenticate as auth_authenticate, login
+from django.contrib.auth import login
 from oauth_provider.models import Token
 
 from eloue.decorators import secure_required
