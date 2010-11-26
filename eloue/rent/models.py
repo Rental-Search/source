@@ -321,7 +321,7 @@ class Booking(models.Model):
             response = payments.pay(
                 actionType='PAY_PRIMARY',
                 senderEmail=self.borrower.paypal_email,
-                feesPayer='SECONDARYONLY',
+                feesPayer='PRIMARYONLY',
                 cancelUrl=cancel_url,
                 returnUrl=return_url,
                 currencyCode=self.currency,
