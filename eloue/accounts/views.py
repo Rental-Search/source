@@ -5,6 +5,7 @@ from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.sites.models import Site
+from django.core.mail import EmailMessage
 from django.core.urlresolvers import reverse
 from django.shortcuts import get_object_or_404
 from django.utils.translation import ugettext_lazy as _
@@ -166,6 +167,19 @@ def borrower_history(request, page=None):
 def contact(request):
     form = ContactForm(request.POST or None)
     if form.is_valid():
-        form.save()
-        messages.success(request, _(u"Votre message bien été envoyé"))
+        if form.cleaned_data.get('cc_myself'):
+            email = EmailMessage(form.cleaned_data['subject'], form.cleaned_data['message'], settings.DEFAULT_FROM_EMAIL,
+                ['contact@e-loue.com'], [form.cleaned_data['sender']],
+                headers = {'Reply-To': form.cleaned_data['sender']})
+        else:
+            email = EmailMessage(form.cleaned_data['subject'], form.cleaned_data['message'], settings.DEFAULT_FROM_EMAIL,
+                ['contact@e-loue.com'], [],
+                headers = {'Reply-To': form.cleaned_data['sender']})    
+        email.send()
     return direct_to_template(request, 'accounts/contact.html', extra_context={'form': form})
+
+    
+    
+    
+    
+    
