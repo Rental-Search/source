@@ -36,7 +36,8 @@ def activate(request, activation_key):
     """Activate account"""
     activation_key = activation_key.lower()  # Normalize before trying anything with it.
     is_actived = Patron.objects.activate(activation_key)
-    return direct_to_template(request, 'accounts/activate.html', extra_context={'is_actived': is_actived, 'expiration_days': settings.ACCOUNT_ACTIVATION_DAYS})
+    return direct_to_template(request, 'accounts/activate.html', extra_context={'is_actived': is_actived,
+        'expiration_days': settings.ACCOUNT_ACTIVATION_DAYS})
 
 
 @never_cache
@@ -117,6 +118,8 @@ def patron_paypal(request):
         paypal_redirect = patron.create_account(return_url=return_url)
         if paypal_redirect:
             return redirect_to(request, paypal_redirect)
+        self.paypal_email = None
+        self.save()
         messages.error(request, _(u"Nous n'avons pas pu créer votre compte paypal"))
     return direct_to_template(request, 'accounts/patron_paypal.html', extra_context={'form': form, 'next': redirect_path})
 
