@@ -269,7 +269,7 @@ class Booking(models.Model):
         
         >>> booking = Booking(total_amount=10)
         >>> booking.net_price
-        Decimal('9.0')
+        Decimal('8.0')
         """
         return self.total_amount - self.commission
     
