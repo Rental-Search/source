@@ -7,8 +7,7 @@
   <title>{% block title %}e-loue{% endblock %}</title>
   <meta name="description" content="{% block description %}Plateforme pour louer ou mettre en location tout type d'objet : materiel, reception, mariage, sono, utilitaires, ski ...{% endblock %}">
   <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0;">
-  <link rel="shortcut icon" href="/favicon.ico">
-  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="shortcut icon" href="{{ MEDIA_URL }}favicon.ico">
   {% block head %}
    {% compressed_css 'master' %}
   {% endblock %}
