@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import re
 from decimal import Decimal as D
 
 import django.forms as forms
@@ -48,6 +49,9 @@ class FacetedSearchForm(SearchForm):
             if query:
                 sqs = self.searchqueryset.auto_query(query).highlight()
                 suggestions = sqs.spelling_suggestion()
+                if suggestions:
+                    suggestions = re.sub('AND\s*', '', suggestions)
+                    suggestions = re.sub('[\(\)]+', '', suggestions)
             
             location, radius = self.cleaned_data.get('l', None), self.cleaned_data.get('r', DEFAULT_RADIUS)
             if location:
