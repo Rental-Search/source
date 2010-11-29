@@ -9,7 +9,8 @@ except ImportError:
 from pyPdf import PdfFileWriter, PdfFileReader
 from reportlab.pdfgen import canvas
 
-from django.utils.encoding import smart_str, force_unicode
+from django.utils.dateformat import format
+from django.utils.encoding import force_unicode
 
 from eloue.rent.utils import spellout
 
@@ -76,8 +77,8 @@ class ContractGenerator(object):
         # Product related
         canvas.drawString(71, 582, booking.product.summary)
         canvas.drawString(225, 345, "%s." % timesince(booking.started_at, booking.ended_at))
-        canvas.drawString(245, 313, booking.started_at.strftime("%d %B %Y à %Hh%M."))
-        canvas.drawString(198, 282, booking.ended_at.strftime("%d %B %Y à %Hh%M."))
+        canvas.drawString(245, 313, format(booking.started_at, "%d %F %Y à %Hh%M."))
+        canvas.drawString(198, 282, format(booking.ended_at, "%d %F %Y à %Hh%M."))
         canvas.drawString(166, 220, "%s %s." % (booking.total_amount, booking.currency))
                 
         # Change page
