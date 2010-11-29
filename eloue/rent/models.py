@@ -259,7 +259,7 @@ class Booking(models.Model):
         
         >>> booking = Booking(total_amount=10)
         >>> booking.commission
-        Decimal('1.0')
+        Decimal('2.0')
         """
         return self.total_amount * COMMISSION
     
