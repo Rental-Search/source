@@ -1,5 +1,4 @@
 -f http://effbot.org/downloads/Imaging-1.1.7.tar.gz
-boto>=2.0b2
 coverage>=3.3
 django-imagekit>=0.3.3
 django-nose>=0.1.2
@@ -19,6 +18,7 @@ psycopg2>=2.2.2
 reportlab>=2.5
 south>=0.7
 sphinx>=1.0.2
+-e git://github.com/e-loue/boto.git#egg=boto
 -e git://github.com/e-loue/pyPdf.git#egg=pyPdf
 -e git://github.com/e-loue/pycrypto.git#egg=pycrypto
 -e git://github.com/e-loue/python-oauth2.git#egg=oauth2
