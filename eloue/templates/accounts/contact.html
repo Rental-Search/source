@@ -13,7 +13,7 @@
 			{% csrf_token %}
 			<table>
 				<tr>
-					<th><label>Votre email * :</label></th>
+					<th><label>Email * :</label></th>
 					<td {% if form.sender.errors %} class="error-field" {% endif %}>
 						{{ form.sender }}
 						{% if form.sender.errors %}
@@ -50,7 +50,7 @@
 				</tr>
 				<tr>
 					<td colspan="2">
-						{{ form.cc_myself}} <label>Je souhaite recevoir une copie de ce message.</label>
+						{{ form.cc_myself}} <label for="id_cc_myself">Je souhaite recevoir une copie de ce message.</label>
 					</td>
 				</tr>
 			</table>
