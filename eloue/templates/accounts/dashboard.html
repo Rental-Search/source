@@ -69,7 +69,7 @@
 			</div>
 			<div class="resume-box-dash x2">
 			 {% with user.products.all|length as counter %}
-			  <a href="{% url owner_booking %}">{{ counter }}</a><br />
+			  <a href="{% url owner_product %}">{{ counter }}</a><br />
 			  {% blocktrans count counter as counter %}
                 <span>Objet<br />en location</span>
               {% plural %}
