@@ -114,7 +114,7 @@ def booking_detail(request, booking_id):
 def booking_accept(request, booking_id):
     booking = get_object_or_404(Booking, pk=booking_id)
     if not booking.owner.has_paypal():
-        return redirect_to(request, "%s?next=%s" % (reverse('patron_paypal'), booking.get_absolute_url))
+        return redirect_to(request, "%s?next=%s" % (reverse('patron_paypal'), booking.get_absolute_url()))
     form = BookingStateForm(request.POST or None,
         initial={'state': Booking.STATE.PENDING},
         instance=booking)
