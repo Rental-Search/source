@@ -17,7 +17,7 @@ from django.contrib.auth import login
 from oauth_provider.models import Token
 
 from eloue.decorators import secure_required
-from eloue.accounts.forms import EmailAuthenticationForm, PatronEditForm, PatronPaypalForm, PatronPasswordChangeForm
+from eloue.accounts.forms import EmailAuthenticationForm, PatronEditForm, PatronPaypalForm, PatronPasswordChangeForm, ContactForm
 from eloue.accounts.models import Patron
 from eloue.accounts.wizard import AuthenticationWizard
 
@@ -159,3 +159,10 @@ def borrower_history(request, page=None):
     queryset = request.user.rentals.filter(state__in=[Booking.STATE.CLOSED, Booking.STATE.REJECTED])
     return object_list(request, queryset, page=page, paginate_by=10, template_name='accounts/borrower_history.html',
         template_object_name='booking')
+
+def contact(request):
+    form = ContactForm(request.POST or None)
+    if form.is_valid():
+        form.save()
+        messages.success(request, _(u"Votre message bien été envoyé"))
+    return direct_to_template(request, 'accounts/contact.html', extra_context={'form': form})

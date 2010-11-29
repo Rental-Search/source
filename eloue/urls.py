@@ -9,7 +9,7 @@ from django.contrib.sitemaps.views import index, sitemap
 
 from eloue.accounts.forms import EmailPasswordResetForm
 from eloue.accounts.views import activate, authenticate, authenticate_headless, dashboard, patron_edit, owner_booking, owner_history, \
-    borrower_booking, borrower_history, patron_edit_password, patron_paypal, owner_product
+    borrower_booking, borrower_history, patron_edit_password, patron_paypal, owner_product, contact
 from eloue.api import api_v1
 from eloue.products.views import homepage
 from eloue.rent.views import booking_detail, booking_accept, booking_reject, booking_incident, booking_close, booking_cancel
@@ -47,6 +47,7 @@ urlpatterns = patterns('',
         'template_name': 'accounts/password_reset_complete.html'
     }, name="password_reset_complete"),
     url(r'^faq/', include('faq.urls')),
+    url(r'^contact/$', contact, name="contact"),
     url(r'^activate/(?P<activation_key>\w+)/$', activate, name='auth_activate'),
     url(r'^login/$', authenticate, name='auth_login'),
     url(r'^login_headless/$', authenticate_headless, name='auth_login_headless'),
