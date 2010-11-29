@@ -169,11 +169,11 @@ def contact(request):
     if form.is_valid():
         if form.cleaned_data.get('cc_myself'):
             email = EmailMessage(form.cleaned_data['subject'], form.cleaned_data['message'], settings.DEFAULT_FROM_EMAIL,
-                ['contact@e-loue.com'], [form.cleaned_data['sender']],
-                headers = {'Reply-To': form.cleaned_data['sender']})
+                ['contact@e-loue.com'],
+                headers = {'Reply-To': form.cleaned_data['sender'], 'Cc': form.cleaned_data['sender']})
         else:
             email = EmailMessage(form.cleaned_data['subject'], form.cleaned_data['message'], settings.DEFAULT_FROM_EMAIL,
-                ['contact@e-loue.com'], [],
+                ['contact@e-loue.com'],
                 headers = {'Reply-To': form.cleaned_data['sender']})    
         email.send()
     return direct_to_template(request, 'accounts/contact.html', extra_context={'form': form})
