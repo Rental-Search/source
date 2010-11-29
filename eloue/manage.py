@@ -1,4 +1,8 @@
 #!/usr/bin/env python
+import os
+os.environ['AWS_ACCESS_KEY_ID'] = 'AKIAJ3PXVVKSTM3WSZSQ'
+os.environ['AWS_SECRET_ACCESS_KEY'] = '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'
+
 from django.core.management import execute_manager
 try:
     import settings  # Assumed to be in the same directory.
