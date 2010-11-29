@@ -3,7 +3,6 @@ import uuid
 from datetime import datetime, timedelta
 
 from django.conf import settings
-from django.core.urlresolvers import get_script_prefix
 from django.db import models
 from django.db.models import permalink
 from django.db.models.signals import post_save
@@ -74,6 +73,7 @@ class Product(models.Model):
             self.created_at = datetime.now()
         if not self.address.is_geocoded():
             self.address.geocode()
+            self.address.save()
         super(Product, self).save(*args, **kwargs)
     
     @permalink

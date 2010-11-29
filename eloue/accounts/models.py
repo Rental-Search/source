@@ -258,7 +258,6 @@ class Address(models.Model):
         name, (lat, lon) = GoogleGeocoder().geocode(smart_str("%s %s %s %s" % (self.address1, self.address2, self.zipcode, self.city)))
         if lat and lon:
             self.position = Point(lat, lon)
-        self.save()
     
     def is_geocoded(self):
         """
