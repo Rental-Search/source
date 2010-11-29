@@ -119,15 +119,22 @@ class ProductForm(forms.ModelForm):
     
 
 class ProductEditForm(forms.ModelForm):
-    category = TreeNodeChoiceField(queryset=Category.tree.all(), empty_label="Choisissez une catégorie", level_indicator=u'--', widget=forms.Select(attrs={'class': 'selm'}))
+    category = TreeNodeChoiceField(queryset=Category.tree.all(), empty_label="Choisissez une catégorie", level_indicator=u'--')
     summary = forms.CharField(max_length=100, widget=forms.TextInput(attrs={'class': 'inm'}))
     price = forms.DecimalField(required=True, widget=forms.TextInput(attrs={'class': 'inm price'}))
     deposit_amount = forms.DecimalField(initial=0, required=False, max_digits=8, decimal_places=2, widget=forms.TextInput(attrs={'class': 'inm price'}))
     quantity = forms.IntegerField(initial=1, widget=forms.TextInput(attrs={'class': 'inm price'}))
     description = forms.Textarea()
-
+    
+    def __init__(self, *args, **kwargs):
+        super(ProductEditForm, self).__init__(*args, **kwargs)
+        self.fields['category'].widget.attrs['class'] = "selm"
+    
+    def save(self, *args, **kwargs):
+        self.instance.prices.update(amount=self.cleaned_data['price'])
+        return super(ProductEditForm, self).save(*args, **kwargs)
     
     class Meta:
         model = Product
-        fields = ('category', 'summary', 'price', 'deposit_amount', 'quantity', 'description')
+        fields = ('category', 'summary', 'deposit_amount', 'quantity', 'description')
     

@@ -39,7 +39,8 @@ def product_create(request, *args, **kwargs):
 @login_required
 def product_edit(request, slug, product_id):
     product = get_object_or_404(Product, pk=product_id)
-    form = ProductEditForm(request.POST or None, instance=product)
+    price = product.prices.day()[0]
+    form = ProductEditForm(request.POST or None, instance=product, initial={'price': price.amount, 'category':product.category.id})
     if form.is_valid():
         product = form.save()
         return redirect_to(request, product.get_absolute_url())
