@@ -77,8 +77,8 @@ class ContractGenerator(object):
         # Product related
         canvas.drawString(71, 582, booking.product.summary)
         canvas.drawString(225, 345, "%s." % timesince(booking.started_at, booking.ended_at))
-        canvas.drawString(245, 313, format(booking.started_at, "%d %F %Y à %Hh%M."))
-        canvas.drawString(198, 282, format(booking.ended_at, "%d %F %Y à %Hh%M."))
+        canvas.drawString(245, 313, format(booking.started_at, "d F Y à H\hi."))
+        canvas.drawString(198, 282, format(booking.ended_at, "d F Y à H\hi."))
         canvas.drawString(166, 220, "%s %s." % (booking.total_amount, booking.currency))
                 
         # Change page
