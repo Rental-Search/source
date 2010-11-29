@@ -72,6 +72,8 @@ class Product(models.Model):
     def save(self, *args, **kwargs):
         if not self.created_at:
             self.created_at = datetime.now()
+        if not self.address.is_geocoded():
+            self.address.geocode()
         super(Product, self).save(*args, **kwargs)
     
     @permalink
