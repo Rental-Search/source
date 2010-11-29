@@ -264,6 +264,7 @@
     - "Remorque moto"
     - "Remorque animaux"
     - "Tracteur"
+    - "Porte voiture"
   "Engins agricoles":
     - "Tracteur"
     - "Matériel de fenaison"
@@ -282,6 +283,15 @@
     - "Camping-car"
     - "Camion aménagé"
 "High-tech":
+  "Téléphone":
+    - "Assisstant personnel"
+    - "Chargeur téléphone"
+    - "Fax"
+    - "Talkie-Walkie"
+    - "Téléphone Fixe"
+    - "Téléphone portable"
+    - "Téléphone sattelitte"
+    - "Téléphone IP"
   "Ordinateur":
     - "Mac portable"
     - "Mac Bureau"
@@ -339,6 +349,25 @@
     - "GPS moto"
     - "Avertisseur de radar"
 "Image et son":
+  "Télévision":
+    - "TV LCD"
+    - "TV LED"
+    - "Plasma"
+    - "accessoires TV"
+  "Projecteur":
+    - "Video projecteur"
+    - "Projecteur diapo"
+    - "Projecteur de transparent"
+  "Home cinema":
+    - "Système 2.1"
+    - "Système 5.1"
+    - "Bare de son"
+  "Baladeur":
+    - "iPod"
+    - "Lecteur MP3/MP4"
+    - "Accesoires baladeur"
+    - "Enceinte iPod/iPhone"
+    - "Enceinte portatif"
   "Hifi":
     - "Chaines Hifi"
     - "Amplificateur"
@@ -432,6 +461,13 @@
     - "Pompe à bras"
     - "Pompe d'évacuation"
     - "Tuyaux d'arrosage"
+  "Accesoires Animaux":
+    - "Âne"
+    - "Chat"
+    - "Cheval"
+    - "Oiseaux"
+    - "Rongeurs"
+    - "Tortues, reptiles"
 "Lieu":
   "Appartement":
     - "Studio"
@@ -454,6 +490,8 @@
     - "Vélo enfant"
     - "Vélo adulte"
     - "Bmx"
+    - "Tandem"
+    - "Accessoire vélo"
   "Bateau":
     - "Bateau à console centrale"
     - "Bateau à coque metallique soudée"
