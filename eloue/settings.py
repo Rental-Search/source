@@ -293,11 +293,11 @@ USE_PAYPAL_SANDBOX = getattr(local, 'USE_PAYPAL_SANDBOX', DEBUG)
 VALIDATE_IPN = getattr(local, 'VALIDATE_IPN', True)
 PAYPAL_MERCHANT_REFERRAL = "Z6GVNB75VNCTU"
 if USE_PAYPAL_SANDBOX:
-    PAYPAL_API_USERNAME = getattr(local, 'PAYPAL_SANDBOX_API_USERNAME', "sand_1266353156_biz_api1.tryphon.org")
-    PAYPAL_API_PASSWORD = getattr(local, 'PAYPAL_SANDBOX_API_PASSWORD', "1266353174")
-    PAYPAL_API_SIGNATURE = getattr(local, 'PAYPAL_SANDBOX_API_SIGNATURE', "ACFP1tIskAXJ.m25BMGIQFW.gpwvAQpVs6wPW462vdrnRb5OjB-r5Jsu")
+    PAYPAL_API_USERNAME = getattr(local, 'PAYPAL_SANDBOX_API_USERNAME', "benoit.woj_api1.e-loue.com")
+    PAYPAL_API_PASSWORD = getattr(local, 'PAYPAL_SANDBOX_API_PASSWORD', "34Z24TURKD2FJXDX")
+    PAYPAL_API_SIGNATURE = getattr(local, 'PAYPAL_SANDBOX_API_SIGNATURE', "ATyjR-cGlnW5vguT2T3LQhvPyZkLAuciTdL9GTRAigYudx6OGB385TPR")
     PAYPAL_API_APPLICATION_ID = getattr(local, 'PAYPAL_SANDBOX_API_APPLICATION_ID', 'APP-80W284485P519543T')
-    PAYPAL_API_EMAIL = getattr(local, 'PAYPAL_API_EMAIL', 'timothee.peignier@tryphon.org')
+    PAYPAL_API_EMAIL = getattr(local, 'PAYPAL_API_EMAIL', 'benoit.woj@e-loue.com')
     PAYPAL_COMMAND = "https://www.sandbox.paypal.com/webscr?%s"
 else:
     PAYPAL_API_USERNAME = getattr(local, 'PAYPAL_API_USERNAME', "benoit.woj_api1.e-loue.com")
