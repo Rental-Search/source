@@ -7,13 +7,14 @@ from tastypie.api import Api
 from tastypie.constants import ALL_WITH_RELATIONS
 from tastypie.resources import ModelResource
 from tastypie.authentication import Authentication
-from tastypie.authorization import DjangoAuthorization
+from tastypie.authorization import Authorization
 from tastypie.http import HttpCreated
 from tastypie.utils import dict_strip_unicode_keys
 from tastypie.serializers import Serializer
 
+from oauth_provider.consts import OAUTH_PARAMETERS_NAMES
 from oauth_provider.decorators import CheckOAuth
-from oauth_provider.store import store, InvalidTokenError
+from oauth_provider.store import store, InvalidTokenError, InvalidConsumerError
 from oauth_provider.utils import get_oauth_request
 from oauth2 import Error
 
@@ -30,16 +31,50 @@ __all__ = ['api_v1']
 DEFAULT_RADIUS = getattr(settings, 'DEFAULT_RADIUS', 50)
 
 
+def is_valid_request(request, parameters=OAUTH_PARAMETERS_NAMES):
+    """
+    Checks whether the required parameters are either in
+    the http-authorization header sent by some clients,
+    which is by the way the preferred method according to
+    OAuth spec, but otherwise fall back to `GET` and `POST`.
+    """
+    is_in = lambda l: all((p in l) for p in parameters)
+    auth_params = request.META.get("HTTP_AUTHORIZATION", [])
+    return is_in(auth_params) or is_in(request.REQUEST)
+
+
 class OAuthentication(Authentication):
     def is_authenticated(self, request, **kwargs):
-        if CheckOAuth.is_valid_request(request):
+        if is_valid_request(request, ['oauth_consumer_key']):
+            # Just checking if you're allowed to be there
             oauth_request = get_oauth_request(request)
+            try:
+                consumer = store.get_consumer(request, oauth_request, oauth_request.get_parameter('oauth_consumer_key'))
+                return True
+            except InvalidConsumerError:
+                return False
+        return False
+    
+
+class OAuthAuthorization(Authorization):
+    def is_authorized(self, request, object=None):
+        if is_valid_request(request, ['oauth_consumer_key']):  # Read-only part
+            oauth_request = get_oauth_request(request) 
+            if issubclass(self.resource_meta.object_class, Product) and request.method == 'GET':
+                try:
+                    consumer = store.get_consumer(request, oauth_request, oauth_request.get_parameter('oauth_consumer_key'))
+                    return True
+                except InvalidConsumerError:
+                    return False
+        
+        if is_valid_request(request):  # Read/Write part 
+            oauth_request = get_oauth_request(request) 
             consumer = store.get_consumer(request, oauth_request, oauth_request.get_parameter('oauth_consumer_key'))
             try:
                 token = store.get_access_token(request, oauth_request, consumer, oauth_request.get_parameter('oauth_token'))
             except InvalidTokenError:
                 return False
-            
+        
             try:
                 parameters = CheckOAuth.validate_token(request, consumer, token)
             except Error, e:
@@ -62,7 +97,7 @@ class JSONSerializer(Serializer):
 class MetaBase():
     """Define meta attributes that must be shared between all resources"""
     authentication = OAuthentication()
-    authorization = DjangoAuthorization()
+    authorization = OAuthAuthorization()
     serializer = JSONSerializer()
 
 
