@@ -349,7 +349,7 @@ class Booking(models.Model):
         except PaypalError, e:
             log.error(e)
     
-    @transition(source='authorized', target='canceled', save=True)
+    @transition(source=['authorized','pending'], target='canceled', save=True)
     def cancel(self):
         """Cancel preapproval for the borrower"""
         response = payments.cancel_preapproval(
