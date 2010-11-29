@@ -1079,3 +1079,24 @@ html[xmlns] .clearfix {
   {
     text-align: center;
   }
+  
+  .flatpage{}
+    .flatpage h2
+    {
+      padding-top: 15px;
+    }
+    .flatpage p
+    {
+      margin-bottom: 10px;
+    }
+    
+    .flatpage ul
+    {
+      list-style-position: inside;
+    }
+    
+    .flatpage ol
+    {
+      list-style-position: inside;
+      list-style-type: decimal;
+    }

@@ -1,8 +1,12 @@
 {% extends "base.html" %}
 {% load i18n markup %}
 
-{% block title %}{{ block.super }} - {{ flatpage.title }}{% endblock %}
+{% block title %}{{ flatpage.title }} - {{ block.super }}{% endblock %}
 
 {% block content %}
- {{ floatpage.content|markdown }}
+<div id="content" class="clearfix">
+	<div class="flatpage x12">
+ 		{{ flatpage.content|markdown }}
+	</div>
+</div>
 {% endblock %}
