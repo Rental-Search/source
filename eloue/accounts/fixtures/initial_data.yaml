@@ -1,6 +1,558 @@
 -   fields: {domain: goat.e-loue.com, name: e-loue}
     model: sites.site
     pk: 1
+-   fields:
+        content: "L\u2019assurance de vos biens\r\n================\r\nParce qu\u2019\
+            il n\u2019est pas toujours facile de proposer ses biens en location, surtout\
+            \ s\u2019ils sont charg\xE9s de souvenirs \u2026 Parce que vous pouvez\
+            \ craindre que vos locataires les d\xE9t\xE9riore accidentellement \u2026\
+            \ Parce que vous souhaitez pouvoir louer en toute s\xE9r\xE9nit\xE9 vos\
+            \ pr\xE9cieux objets \u2026 Pour toutes ces raisons, e-loue.com assure\
+            \ vos locations !\r\n\r\nEn quoi consiste l\u2019assurance propos\xE9\
+            e par e-loue.com ? Est-elle payante ? Comment proc\xE9der en cas de casse\
+            \ de votre objet ? Voici toutes les r\xE9ponses \xE0 vos questions.\r\n\
+            \r\nQuelles sont les modalit\xE9s de l\u2019assurance ?\r\n---------------------------------\r\
+            \nL\u2019assurance que nous vous proposons, et qui ne s\u2019adresse qu\u2019\
+            aux particuliers et non aux professionnels, est gratuite et automatiquement\
+            \ souscrite pour les locations r\xE9pondant aux crit\xE8res qui vous seront\
+            \ pr\xE9sent\xE9s plus loin.\r\n\r\nEn voici les principales modalit\xE9\
+            s :\r\n\r\n- L\u2019assurance est gratuite !\r\n- Elle ne porte que sur\
+            \ le bien que vous louez\r\n- Elle dure le temps de la location\r\n- Elle\
+            \ couvre la casse accidentelle de votre objet par le locataire pendant\
+            \ la location\r\n- En revanche, elle ne fonctionne pas pour le vol\r\n\
+            - Ni pour les locations situ\xE9es hors de la France M\xE9tropolitaine\r\
+            \n\r\nQue faire en cas de casse ?\r\n---------------------\r\nApr\xE8\
+            s vous \xEAtre assur\xE9(e) que le dommage est bien couvert par l\u2019\
+            assurance, vous disposez de 5 jours pour envoyer un courrier \xE0 :\r\n\
+            \r\nGestion Assurances - AssurOne Group\r\nBP 30200\r\n95210 SAINT GRATIEN\r\
+            \n\r\nDes pi\xE8ces justificatives vous seront naturellement demand\xE9\
+            es. Pour plus de d\xE9tail, nous vous invitons \xE0 vous reporter au contrat\
+            \ d\u2019assurance en bas de page.\r\n\r\n[Contrat d\u2019assurance](http://example.com/)\r\
+            \n\r\n\r\n\r\n"
+        enable_comments: false
+        registration_required: false
+        sites: [1]
+        template_name: ''
+        title: "Assurance tranquillit\xE9"
+        url: /assurance-tranquillite/
+    model: flatpages.flatpage
+    pk: 4
+-   fields:
+        content: "PREAMBULE\r\n---------\r\n\r\nL\u2019utilisation du  site e-loue\
+            \ vaut acceptation des conditions g\xE9n\xE9rales. Si vous ne les acceptez\
+            \ pas, veuillez ne pas utiliser le site.\r\n \r\nLe service d'annonces\
+            \ en ligne www.e-loue.com est g\xE9r\xE9 par la soci\xE9t\xE9 e-loue permet\
+            \ la mise en relation de propri\xE9taires annonceurs (ci-apr\xE8s les\
+            \ Propri\xE9taires) et de locataires d\u2019objets. Les Propri\xE9taires\
+            \ et les Locataires sont ci-apr\xE8s d\xE9sign\xE9s conjointement les\
+            \ Membres. La Plateforme e-loue permet la conclusion de contrats de location\
+            \ des Objets entre Propri\xE9taires et Locataires, mais n\u2019en est\
+            \ pas responsable. Les Membres sont seuls d\xE9cisionnaires de la concr\xE9\
+            tisation la location des Objets et seuls responsables du contrat de location.\
+            \ \r\n \r\nL'acceptation des pr\xE9sentes Conditions G\xE9n\xE9rales d'utilisation\
+            \ de la Plateforme e-loue par les Membres vaut mandat donn\xE9 e-loue\
+            \ pour mettre en relation Propri\xE9taires et Locataires et op\xE9rer\
+            \ les Transactions effectu\xE9es sur le site de e-loue selon les modalit\xE9\
+            s ci-apr\xE8s.\r\n \r\nVersion au 26 novembre 2010.\r\n \r\n1. D\xE9finitions\r\
+            \n----------\r\n \r\nPlateforme de e-loue : signifie la structure fonctionnelle\
+            \ et organisationnelle mise en place par e-loue permettant la Mise en\
+            \ Relation de Propri\xE9taires et de Locataires d\u2019objets. \r\n \r\
+            \n__Objet__ : signifie les Objets mentionn\xE9s \xE0 la Documentation\
+            \ e-loue, susceptibles de faire l'objet d'une Mise en Relation par la\
+            \ Plateforme e-loue. \r\n \r\n__Objet Interdit__ : signifie les Objets\
+            \ contraires aux bonnes m\u0153urs et aux lois et r\xE8glements en vigueur.\
+            \ Il s'agit notamment des Objets qui seraient des copies non autoris\xE9\
+            es ou constitueraient des objets contrefaisants au sens du Code de la\
+            \ Propri\xE9t\xE9 intellectuelle ou des objets non autoris\xE9s en vertu\
+            \ de dispositions l\xE9gislatives, r\xE9glementaires ou contractuelles.\
+            \ La liste des objets interdits est d\xE9crite dans la suite de la documentation.\r\
+            \n \r\n__Propri\xE9taire__ : signifie un Membre effectuant une offre de\
+            \ location d'un Objet sur la Plateforme e-loue.\r\n \r\n__Locataire__\
+            \ : signifie un Membre ayant indiqu\xE9 son acceptation de l'offre d'un\
+            \ Propri\xE9taire. \r\n \r\n__Membre__ : signifie au singulier ou au pluriel\
+            \ un Propri\xE9taire ou un Locataire susceptible de faire usage de la\
+            \ Plateforme E-loue apr\xE8s acceptation des Conditions G\xE9n\xE9rales.\
+            \ Tout Membre s'engage \xE0 fournir des informations exactes quant \xE0\
+            \ son identit\xE9, adresse et autres donn\xE9es n\xE9cessaires \xE0 l'acc\xE8\
+            s \xE0 la Plateforme E-loue et \xE0 mettre \xE0 jour toute modification\
+            \ concernant ces informations\r\n \r\n__Prix__ : signifie le prix par\
+            \ jour propos\xE9 par le Propri\xE9taire pour son offre de location d'un\
+            \ Objet. Le Prix constitue l'assiette de la Commission de e-loue.\r\n\
+            \ \r\n__Commission__ : signifie la r\xE9mun\xE9ration per\xE7ue par e-loue\
+            \ au titre de l'utilisation de la Plateforme e-loue.\r\nPrix de la Transaction\
+            \ : signifie le prix total de l\u2019objet payable par le Locataire. Eventuellement\
+            \ si une transaction se fait a distance, des frais de port peuvent \xEA\
+            tre demand\xE9s. Ils seront indiqu\xE9s clairement dans les commentaires\
+            \ de l\u2019annonce.\r\nContrat de location : signifie la convention pass\xE9\
+            e entre le propri\xE9taire et le locataire faisant naitre pour l\u2019\
+            un l\u2019obligation de transfert de la jouissance de la chose et pour\
+            \ l\u2019autre l\u2019obligation d\u2019en verser une contre partie financi\xE8\
+            re fix\xE9e au pr\xE9alable ou inscrit au contrat.\r\nParticulier : Personne\
+            \ utilisant la plateforme e-loue \xE0 titre personnel\r\nProfessionnel\
+            \ : Personne utilisant la plateforme au titre de son entreprise \r\n \r\
+            \n2. Objet\r\n------\r\n\r\nLes pr\xE9sentes conditions g\xE9n\xE9rales\
+            \ d'utilisation de la Plateforme E-loue ont pour objet de d\xE9finir des\
+            \ conditions par lesquelles les Membres sont autoris\xE9s \xE0 utiliser\
+            \ la Plateforme E-loue aux fins d'op\xE9rer leur Mise en Relation.\r\n\
+            \ \r\n3. Engagements de E-LOUE\r\n----------------------\r\n\r\n3.1. E-loue\
+            \ s'engage \xE0 tout mettre en \u0153uvre pour maintenir le site dans\
+            \ un \xE9tat op\xE9rationnel. \r\nIl s'agit toutefois d'une obligation\
+            \ de moyen et en aucun cas une obligation de r\xE9sultat. \r\n \r\n3.2\
+            \ E-loue s'engage \xE0 transmettre \xE0 l'annonceur par E-mail tous les\
+            \ messages post\xE9es par les personnes int\xE9ress\xE9es par son annonce\
+            \ ainsi que de tenir \xE0 sa disposition toutes les informations relatives\
+            \ \xE0 son annonce. \r\n \r\n3.3 Du fait des caract\xE9ristiques et des\
+            \ limites d\xB4Internet, que le client d\xE9clare conna\xEEtre, ne peut\
+            \ en aucune mani\xE8re \xEAtre tenu responsable des vitesses d\xB4acc\xE8\
+            s, des ralentissements et des difficult\xE9s d\xB4acc\xE8s au site. \r\
+            \n \r\n3.4 E-loue se r\xE9serve le droit d\xB4interrompre temporairement\
+            \ l\xB4accessibilit\xE9 \xE0 ses services pour des raisons de maintenance\
+            \ et/ou d\xB4am\xE9lioration. Cependant, s\xB4engage \xE0 tout mettre\
+            \ en oeuvre pour minimiser ce type d\xB4interruption.\r\n \r\n3.5 E-loue\
+            \ n'offre aucune garantie de continuit\xE9 de service. \r\nA ce titre,\
+            \ la responsabilit\xE9 des administrateurs du site E-loue ne pourra \xEA\
+            tre recherch\xE9e en cas de dommages (co\xFBts, perte de profits, perte\
+            \ de donn\xE9es, dommages directs ou indirects) qui pourraient na\xEE\
+            tre de l'utilisation du Service et de l'impossibilit\xE9 d'y avoir acc\xE8\
+            s et/ou de sa fermeture.\r\n \r\n \r\n4. Processus de Location\r\n-------------------\r\
+            \n \r\n4.1 Le propri\xE9taire d\xE9pose une annonce sur le site. Lorsqu\u2019\
+            un internaute (le locataire de l\u2019objet) est int\xE9ress\xE9, il fait\
+            \ une demande de location. Il enregistre alors ses coordonn\xE9es bancaires\
+            \ et fait une demande d\u2019autorisation de pr\xE9l\xE8vement bancaire.\
+            \ Le propri\xE9taire re\xE7oit la demande, si elle lui convient (dates,\
+            \ informations sur le locataire\u2026) alors il valide la transaction.\
+            \ Le locataire sera d\xE9bit\xE9 le premier jour de la location. Le propri\xE9\
+            taire enregistre \xE9galement ses coordonn\xE9es bancaires afin de pouvoir\
+            \ \xEAtre pay\xE9 \xE0 la fin de la transaction. Suite \xE0 la validation,\
+            \ le site e-loue communique aux deux contreparties toutes les informations\
+            \ du contrat et les coordonn\xE9es afin qu\u2019ils puissent entrer en\
+            \ contact.\r\n\r\nSi jamais la transaction ne s\u2019est finalement pas\
+            \ d\xE9roul\xE9e, alors une demande est faite par le locataire pour ne\
+            \ pas \xEAtre d\xE9bit\xE9. A la fin de la location, le propri\xE9taire\
+            \ revient sur le site et cl\xF4ture la transaction, il est \xE0 ce moment\
+            \ pay\xE9 du montant total de la transaction moins la commission que nous\
+            \ appliquons. Nous sommes libres de faire des contr\xF4les et d\u2019\
+            appliquer des sanctions en cas de fraude. \r\n \r\n4.2 A l'occasion du\
+            \ paiement par le locataire, le locataire donne mandat \xE0 e-loue, sous\
+            \ condition suspensive et \xE0 concurrence de l'Utilisation pour le process\
+            \ de location, d'utiliser tout ou partie du montant de du paiement aux\
+            \ fins (a) de payer le propri\xE9taire en fin de location (b) de payer\
+            \ les frais li\xE9s \xE0 la transaction.\r\ne-loue s\u2019engage \xE0\
+            \ disposer cet argent sur un compte s\xE9questre aupr\xE8s de son partenaire\
+            \ bancaire.\r\n \r\n \r\n5. Tarifs\r\n------\r\n \r\n5.1 L\u2019utilisation\
+            \ de la plateforme e-loue est gratuite,  ainsi que l\u2019inscription\
+            \ et les frais d\u2019insertion d\u2019une annonce. Une commission de\
+            \ 20% de la transaction est pr\xE9lev\xE9e, \xE0 la charge du propri\xE9\
+            taire. Ainsi lorsque le propri\xE9taire re\xE7oit le virement \xE0 la\
+            \ fin de la transaction, la commission est alors directement d\xE9duite\
+            \ du montant total qu\u2019il per\xE7oit. Ce montant de commission comprend\
+            \  les frais li\xE9s au paiement et l\u2019assurance lorsque le bien est\
+            \ assurable.\r\n\r\n5.2 E-loue peut modifier \xE0 tout moment sa politique\
+            \ relative aux frais de mise en ligne et aux commissions ainsi que les\
+            \ tarifs de ses services. Ces modifications prendront effet d\xE8s leur\
+            \ mise en ligne et s\u2019appliqueront \xE0 toutes les transactions post\xE9\
+            rieures \xE0 cette mise en ligne. Veuillez donc consulter r\xE9guli\xE8\
+            rement ces Conditions G\xE9n\xE9rales et notamment avant toute transaction\
+            \ sur le site.\r\n \r\n \r\n6. Obligations des membres\r\n-----------------------\r\
+            \n \r\n6.1 Nos services sont r\xE9serv\xE9s aux personnes juridiquement\
+            \ capables ou autoris\xE9s de souscrire des contrats de location. Nos\
+            \ services ne sont pas disponibles pour les mineurs. Nous nous r\xE9servons\
+            \ le droit de supprimer le compte d\u2019un membre quelque soit le motif,\
+            \ notamment s\u2019il ne respecte pas les conditions g\xE9n\xE9rales ou\
+            \ qu\u2019il est engag\xE9 dans des actes frauduleux en rapport avec le\
+            \ site\r\n \r\n6.2 L'utilisateur engage sa responsabilit\xE9 sur les informations\
+            \ annonc\xE9es.\r\n \r\n6.3 Il ne doit annoncer aucune information mensong\xE8\
+            re ou exag\xE9r\xE9e.\r\n \r\n6.4 Il s'engage \xE0 produire une annonce\
+            \ dont le contenu n'est pas de nature \xE0 porter pr\xE9judice \xE0 autrui\
+            \ ni \xE0 enfreindre les lois et r\xE8glements en vigueur.\r\n \r\n6.5\
+            \ Il doit accepter de recevoir par E-mail les messages de toute personne\
+            \ int\xE9ress\xE9e par son annonce.\r\n \r\n6.6 Il s'engage \xE0 r\xE9\
+            pondre \xE0 toute personne int\xE9ress\xE9e par son annonce.\r\n \r\n\
+            6.7 Il s'engage \xE0 supprimer son annonce d\xE8s lors que sa location\
+            \ ne sera plus disponible.\r\n \r\n \r\n7. Obligations des propri\xE9\
+            taires\r\n---------------------------\r\n \r\n7.1 Le Propri\xE9taire s'engage\
+            \ \xE0 ce que toute offre d'un Objet corresponde \xE0 un bien mat\xE9\
+            riel dont il dispose de la pleine et enti\xE8re propri\xE9t\xE9 et capacit\xE9\
+            \ de location, disponible aux dates indiqu\xE9es. \r\n \r\n7.2 Le Propri\xE9\
+            taire s'engage \xE0 d\xE9crire l\u2019Objet offert \xE0 la location selon\
+            \ les crit\xE8res retenus par E-loue dans la Documentation E-loue. La\
+            \ description de l\u2019Objet doit correspondre \xE0 ses caract\xE9ristiques\
+            \ effectives. Le Propri\xE9taire mentionnera : la d\xE9nomination du objet,\
+            \ les caract\xE9ristiques du Objet, son \xE9tat d\u2019usage dans la description\
+            \ s\u2019il y a une particularit\xE9 \xE0 sp\xE9cifier, le Prix de la\
+            \ Transaction, et les autres informations \xE9ventuellement demand\xE9\
+            es. \r\n \r\n7.3 Le Propri\xE9taire est seul responsable de la bonne ex\xE9\
+            cution de l'obligation d'informer les Locataires des caract\xE9ristiques\
+            \ essentielles du bien et, le cas \xE9ch\xE9ant, de l'\xE9valuation des\
+            \ frais de port qui peuvent \xEAtre inclus ou non dans le prix de la location.\
+            \ Il est seul responsable de la description des biens qu'il propose \xE0\
+            \ la location. Il garantit E-loue de toute r\xE9clamation relative au\
+            \ contenu et \xE0 la forme de ladite description. Le Propri\xE9taire s'engage\
+            \ \xE0 effectuer toutes validations, v\xE9rifications et apporter toutes\
+            \ pr\xE9cisions n\xE9cessaires de sorte que le descriptif et les \xE9\
+            l\xE9ments de l'offre soient fid\xE8les et n'induisent pas le Locataire\
+            \ en erreur. En cas d'erreur du descriptif, des \xE9l\xE9ments de l'offre\
+            \ et/ou dans l'\xE9valuation des frais de port, le Propri\xE9taire assumera\
+            \ seuls les surco\xFBts \xE9ventuels et aucune r\xE9clamation de sa part\
+            \ ne sera recevable \xE0 ce titre tant aupr\xE8s du Locataire que de E-loue.\
+            \ \r\n \r\n7.4 Dans le descriptif de l\u2019annonce, le professionnel\
+            \ s\u2019engage \xE0 ne pas sp\xE9cifier son adresse email, son num\xE9\
+            ro de t\xE9l\xE9phone, les coordonn\xE9es de son magasin\u2026En effet\
+            \ le processus de location est le m\xEAme que pour les particuliers, et\
+            \ donc ces informations ne seront communiqu\xE9es au locataire que lorsque\
+            \ la demande de location sera valid\xE9e.\r\nIl ne s\u2019agit pas d\u2019\
+            une plateforme de publicit\xE9 mais d\u2019une plateforme de location.\r\
+            \n \r\n7.5 Le Propri\xE9taire est seul responsable de la bonne ex\xE9\
+            cution de l'obligation de livrer l\u2019Objet command\xE9. Si la livraison\
+            \ a \xE9t\xE9 convenue par voie postale, Le Propri\xE9taire s'engage \xE0\
+            \ adresser, \xE0 ses frais, l\u2019Objet convenablement emball\xE9 aux\
+            \ dates pr\xE9vues l'adresse du Locataire. L\u2019Objet voyage aux risques\
+            \ et aux frais du Propri\xE9taire. \r\n \r\n7.6 Lors de l'exp\xE9dition\
+            \ au Locataire du Objet, le Propri\xE9taire s'engage \xE0 n'ins\xE9rer\
+            \ aucune publicit\xE9 pour lui-m\xEAme ou pour quiconque, sous quelque\
+            \ forme que ce soit (message, plaquette, prospectus, stick autocollant,\
+            \ etc...). Les coordonn\xE9es du Locataire doivent \xEAtre utilis\xE9\
+            es uniquement pour les besoins de l'ex\xE9cution de la commande et des\
+            \ obligations l\xE9gales qui s'y rattachent. Toute autre utilisation,\
+            \ location,  relocation ou copie de la part du Propri\xE9taire sont explicitement\
+            \ interdites. \r\n \r\n7.7 Obligations des Propri\xE9taires professionnels\r\
+            \n \r\n7.7.1 Le Propri\xE9taire agissant \xE0 titre professionnel doit\
+            \ s'identifier aupr\xE8s de E-loue en cette qualit\xE9 lors de l\u2019\
+            inscription. E-loue se r\xE9serve le droit de ne pas contracter avec un\
+            \ Propri\xE9taire professionnel. \r\n \r\n7.7.2 E-loue rappelle au Propri\xE9\
+            taire agissant \xE0 titre professionnel son obligation de respecter les\
+            \ lois et r\xE8glements relatifs \xE0 l'exercice d'une activit\xE9 commerciale\
+            \ de location \xE0 distance \xE0 titre professionnel. Il devra notamment\
+            \ s'assurer de ses obligations d\xE9claratives de nature sociale ou fiscale.\r\
+            \n \r\n7.7.3 Le Propri\xE9taire s'engage \xE0 \xE9tablir au profit du\
+            \ Locataire une attestation nominative de la location op\xE9r\xE9e et\
+            \ une facture conforme aux exigences l\xE9gales d\xE9signant le Objet\
+            \ lou\xE9 et le Prix de la Transaction. Cette attestation devra notamment\
+            \ mentionner l'existence et les modalit\xE9s d'exercice du droit de r\xE9\
+            tractation aupr\xE8s de E-loue pour le Locataire.\r\n \r\n7.8 Dispositions\
+            \ financi\xE8res \r\nLe propri\xE9taire s\u2019engage \xE0 payer les frais\
+            \ de commission, d\xE8s qu\u2019un locataire a valid\xE9 une offre. Ces\
+            \ frais sont pour le moment totalement gratuits, mais ils sont susceptibles\
+            \ de changer.\r\n \r\n \r\n8. Obligations Des Locataires\r\n-----------------------\r\
+            \n \r\n8.1 Pour toute transaction, E-loue pourra \xEAtre amen\xE9, \xE0\
+            \ titre exceptionnel et dans le but de lutter contre les \xE9ventuelles\
+            \ fraudes, \xE0 proc\xE9der \xE0 une validation de l'identit\xE9 du Locataire.\
+            \ A d\xE9faut de la fourniture des informations requises par E-loue dans\
+            \ le cadre de la validation de l'identit\xE9, E-loue pourra annuler la\
+            \ Transaction op\xE9r\xE9e par le Locataire. \r\n \r\n8.2 Le Locataire\
+            \ s'engage \xE0 poss\xE9der une bo\xEEte aux lettres normalis\xE9e conforme\
+            \ aux recommandations des services postaux (dimension de la bo\xEEte aux\
+            \ lettres, indication des coordonn\xE9es des r\xE9sidents, etc...), dans\
+            \ le cas ou la transaction est d\xE9cid\xE9e d\u2019\xEAtre achemin\xE9\
+            e par voie postale.\r\n \r\n8.3 Le Locataire s'engage \xE0 informer e-loue\
+            \ via le bouton \xAB Annuler \xBB pr\xE9sent dans \xAB Mon compte \xBB\
+            \ au maximum le jour du d\xE9but de la location si la location ne s\u2019\
+            est pas finalement pas faite, et dans ce cas e-loue le remboursera des\
+            \ frais de transaction pour la location qu\u2019il a pay\xE9, sans aucune\
+            \ commission, dans le seul cas ou la location ne s\u2019est pas faite\
+            \ a cause du propri\xE9taire. Si la location ne s\u2019est pas faite \xE0\
+            \ cause du locataire lui-m\xEAme, conform\xE9ment \xE0 la r\xE9glementation,\
+            \ les Remboursements sont r\xE9alis\xE9s \xE0 la valeur nominale du paiement\
+            \ sans autres frais que ceux strictement requis par l'op\xE9ration de\
+            \ remboursement, lesquels sont fix\xE9s forfaitairement \xE0 4% du montant\
+            \ du paiement.\r\nLe d\xE9faut de r\xE9ponse de sa part pass\xE9 le jour\
+            \ du d\xE9but de location vaudra infirmation de l'offre de location. \r\
+            \nE-loue est le seul juge pour d\xE9cider du remboursement.\r\nEn cas\
+            \ de d\xE9faut d\u2019une location, E-loue se r\xE9serve le droit de mener\
+            \ une investigation afin de v\xE9rifier que la location ne s\u2019est\
+            \ r\xE9ellement pas faite. Dans le cas contraire une proc\xE9dure judiciaire\
+            \ sera engag\xE9e. De plus si le nombre de d\xE9fauts para\xEEt suspicieux,\
+            \ e-loue se r\xE9serve le droit de supprimer le compte de n\u2019importe\
+            \ quel membre.\r\n \r\n \r\n9.  Contrat de location\r\n------------------\r\
+            \n\r\nDans le cadre de la proc\xE9dure de location entre un propri\xE9\
+            taire et un locataire, E-loue met \xE0 disposition des propri\xE9taires\
+            \ et des locataires un contrat de location standard, qui est propre \xE0\
+            \ e-loue met qui pr\xE9sente de fortes similitudes avec des contrats de\
+            \ locations professionnels type, ou bien m\xEAme des mod\xE8les de contrat\
+            \ sur Internet. Ce dernier inclut selon le type de location des informations\
+            \ sur la transaction. Il s\u2019agit d\u2019un contrat type mis \xE0 disposition\
+            \ par E-loue.com \xE0 titre purement indicatif. E-loue se d\xE9charge\
+            \ de toute responsabilit\xE9 quant au mod\xE8le et \xE0 son contenu et\
+            \ \xE0 l\u2019utilisation qui peut en \xEAtre faite, chaque location n\xE9\
+            cessitant un contrat propre adapt\xE9 \xE0 la transaction et au droit\
+            \ qui lui est applicable. Les propri\xE9taires et les locataires sont\
+            \ invit\xE9s \xE0 cet \xE9gard \xE0 prendre conseil \xE9ventuellement\
+            \ aupr\xE8s de leur conseiller juridique.\r\n \r\n \r\n10. Simulateur\
+            \ de revenus\r\n---------------------\r\n\r\nL\u2019algorithme utilis\xE9\
+            \ pour l\u2019ensemble des calculs est propri\xE9t\xE9 exclusive d\u2019\
+            E-LOUE, et de ce fait prot\xE9g\xE9. Il s\u2019agit d\u2019un service\
+            \ propos\xE9 \xE0 l\u2019ensemble des utilisateurs du site. La fiabilit\xE9\
+            \ des r\xE9sultats ne peut \xEAtre reproch\xE9e au site E-loue, qui n\u2019\
+            a aucune obligation de r\xE9sultat et de moyen pour les r\xE9sultats du\
+            \ simulateur.\r\n \r\n \r\n11. Assurance\r\n------------\r\n\r\nCf conditions\
+            \ sp\xE9cifiques Assurance tranquillit\xE9 \r\n  \r\n12. Responsabilit\xE9\
+            \r\n----------------\r\n \r\n12.1. Fonction de E-loue : E-loue n'est pas\
+            \ une soci\xE9t\xE9 de location mais est une plateforme sur internet d\u2019\
+            annonces de locations. E-loue.com h\xE9berge seulement le contenu des\
+            \ annonces mises en ligne par les propri\xE9taires (textes, images, etc.)\
+            \ et le site n\u2019.est donc qu\u2019une plate-forme \xE9lectronique\
+            \ mise \xE0 disposition de ses utilisateurs, en vue de mettre en contact\
+            \ propri\xE9taires et locataires d\u2019objets. Nous n'exer\xE7ons ainsi\
+            \ aucun contr\xF4le sur la qualit\xE9, la s\xE9curit\xE9 ou la licit\xE9\
+            \ des objets r\xE9pertori\xE9s, la v\xE9racit\xE9 ou l'exactitude des\
+            \ annonces mises en ligne, la capacit\xE9 des propri\xE9taires \xE0 louer\
+            \ lesdits biens ni la capacit\xE9 des locataires \xE0 louer ou \xE0 payer\
+            \ la location desdits biens. Nous ne pouvons pas assurer que le locataire\
+            \ conclura effectivement la transaction. Toute caution requise par le\
+            \ propri\xE9taire, sous quelque forme que ce soit reste la responsabilit\xE9\
+            \ exclusive du propri\xE9taire, celle-ci pouvant \xEAtre demand\xE9e par\
+            \ ch\xE8que, emprunte bancaire\u2026 . E-loue ne prend en aucun cas en\
+            \ charge un d\xE9p\xF4t de garantie sous quelque forme que ce soit, ni\
+            \ le contr\xF4le de l\u2019identit\xE9 exacte du propri\xE9taire ou du\
+            \ locataire.\r\n \r\n12.2 Fiabilit\xE9 des transactions et prudence des\
+            \ membres : E-loue.com ne peut pas confirmer l'identit\xE9 de chaque membre.\
+            \ E-loue met \xE0 disposition des ses membres et utilisateurs un syst\xE8\
+            me dit de \"commentaires\" ou \"notations\" pour leur permettre d'\xE9\
+            valuer la personne avec qui ils traitent \xE0 l'issue d'une transaction\
+            \ ou pendant celle-ci. Les locataires et/ou propri\xE9taire ont ainsi\
+            \ la possibilit\xE9 de mettre en ligne leurs commentaires sur les membres\
+            \ avec lesquels ils ont effectu\xE9s leurs transactions. Cette \xE9valuation\
+            \ positive pourra \xEAtre, pour certains propri\xE9taires une condition\
+            \ \xE0 la location de ses biens. L\u2019\xE9valuation s\u2019appliquera\
+            \ \xE9galement au propri\xE9taire afin, pour les locataires, d\u2019\xE9\
+            valuer le propri\xE9taire pendant ou \xE0 l\u2019issue de la transaction\
+            \ dite \xAB location \xBB.\r\nL\u2019objet ou le bien lou\xE9 peut \xE9\
+            galement \xEAtre \xE9valu\xE9 \xE0 l\u2019issue de la transaction par\
+            \ le locataire.\r\n \r\n12.3 D\xE9charge de responsabilit\xE9 : Puisque\
+            \ E-loue.com n'intervient pas dans les transactions entre propri\xE9taire\
+            \ et locataire, les membres d\xE9gagent E-loue de toute responsabilit\xE9\
+            \ (ainsi que l\u2019ensemble de ses dirigeants et employ\xE9s) en cas\
+            \ de litige entre plusieurs membres, de r\xE9clamation, ou tout dommage\
+            \ pr\xE9sent ou futur, pr\xE9sum\xE9 ou non, constat\xE9 ou non, r\xE9\
+            sultant de mani\xE8re directe ou indirecte de l\u2019utilisation des services\
+            \ de E-loue.\r\nAinsi en cas de dommage ou d\xE9g\xE2ts lors de l\u2019\
+            utilisation d\u2019un objet lou\xE9, qui peut \xEAtre ou non d\xE9fectueux,\
+            \ e-loue n\u2019est en aucun cas responsable. E-loue a en effet uniquement\
+            \ servi de mise en relation du locataire avec le propri\xE9taire. \r\n\
+            \ \r\n12.4 Limitations des responsabilit\xE9s : Le site fournit des informations,\
+            \ recommandations, commentaires qui peuvent \xEAtre inexacts, d\xE9pass\xE9\
+            s, incomplets, offensants, dommageables ou trompeurs : E-loue d\xE9cline\
+            \ toute responsabilit\xE9 sur les contenus dont il ne peut v\xE9rifier\
+            \ la v\xE9racit\xE9, l\u2019authenticit\xE9 ou l\u2019exhaustivit\xE9\
+            . La responsabilit\xE9 du site n\u2019est en rien engag\xE9e quant aux\
+            \ qualit\xE9s r\xE9elles ou suppos\xE9es des objets et services propos\xE9\
+            s par ses membres. Faites donc toujours preuve de prudence et de bon sens\
+            \ quand vous utilisez le site. N\u2019oubliez jamais qu\u2019il se peut\
+            \ que vous ayez affaire \xE0 des mineurs ou \xE0 des personnes malintentionn\xE9\
+            es. Si vous utilisez le site, vous convenez que E-loue n\u2019est pas\
+            \ responsable des actes ou omissions des utilisateurs et des membres et\
+            \ acceptez les risques vis\xE9s dans les pr\xE9sentes Conditions G\xE9\
+            n\xE9rales et le pr\xE9sent article.\r\nE-loue n\u2019approuve ni ne valide\
+            \ les transactions effectu\xE9es sur le site et les membres et utilisateurs\
+            \ sont seuls responsables de la l\xE9galit\xE9 de leurs actes. E-loue\
+            \ n\u2019accepte aucune responsabilit\xE9 li\xE9e \xE0 une \xE9ventuelle\
+            \ dangerosit\xE9 ou d\xE9fectuosit\xE9 des objets mis en location sur\
+            \ le site, pouvant porter atteinte \xE0 la sant\xE9 ou \xE0 l\u2019int\xE9\
+            grit\xE9 physique et n\u2019apporte aucune garantie \xE0 ce sujet. N\u2019\
+            en d\xE9duisez donc pas que tous les objets mis en location sont sans\
+            \ danger pour les personnes ou leurs biens. Les membres et utilisateurs\
+            \ sont seuls responsables du contr\xF4le et de la v\xE9rification que\
+            \ les objets offerts en location et lou\xE9s sont bien autoris\xE9s \xE0\
+            \ la location en vertu des l\xE9gislations applicables. Certains produits\
+            \ sont interdits \xE0 la location, c\u2019est pourquoi vous ne les trouverez\
+            \ pas dans l\u2019arborescence cat\xE9gories/sous-cat\xE9gorie objets.\
+            \ Aussi vous \xEAtes tenus responsables si vous ajoutez un objet interdit\
+            \ \xE0 la location. Veuillez nous signaler si une annonce concernant un\
+            \ objet suppos\xE9 interdit \xE0 la location est en ligne sur le site,\
+            \ afin qu\u2019on la supprime. Vous \xEAtes tenus responsables en cas\
+            \ de location d\u2019un produit interdit.\r\nE-loue ne fait aucune d\xE9\
+            claration ou garantie, expresse ou tacite, concernant le site, les offres\
+            \ de location, leur pr\xE9sentation ou leur contenu, y compris la garantie\
+            \ de qualit\xE9 marchande, d\u2019aptitude \xE0 un emploi particulier,\
+            \ la non-violation du droit d\u2019auteur, de marques commerciales ou\
+            \ d\u2019autres droits de propri\xE9t\xE9 intellectuelle, la libert\xE9\
+            \ de tous les services, les travaux ou autres mat\xE9riels de contenu,\
+            \ contre les virus, les vers, les chevaux de Troie ou tout autre code\
+            \ aux traits hostiles, perturbateurs ou destructeurs.\r\nSans pr\xE9judice\
+            \ des stipulations pr\xE9vues au paragraphe pr\xE9c\xE9dent, E-loue ne\
+            \ peut \xEAtre tenu pour responsable d\u2019aucune perte ou alt\xE9ration\
+            \ de donn\xE9es, d\u2019aucune perte de profit, de chiffre d\u2019affaires,\
+            \ de temps, d\u2019opportunit\xE9 ou de tout autre dommage indirect, que\
+            \ ladite perte ou ledit dommage r\xE9sulte d\u2019une n\xE9gligence ou\
+            \ de toute autre cause.\r\nSi le membre ou l\u2019utilisateur est consommateur,\
+            \ les droits qui lui sont accord\xE9s par la loi ne sont pas remis en\
+            \ cause par la pr\xE9sente clause.\r\n \r\n13. Dispositions g\xE9n\xE9\
+            rales\r\n---------------------\r\n\r\n13.1 E-loue a la facult\xE9 de modifier\
+            \ les pr\xE9sentes Conditions G\xE9n\xE9rales en fonction de l'\xE9volution\
+            \ de son offre et du march\xE9. Toute modification prendra effet imm\xE9\
+            diatement pour les offres en ligne d\xE8s leur notification aux Membres\
+            \ par tout moyen choisi par E-loue. Elles ne s'appliqueront pas pour les\
+            \ transactions en cours au moment de leur entr\xE9e en vigueur. Occasionnellement\
+            \ E-loue pourra changer de code, num\xE9ro de t\xE9l\xE9phone, effectuer\
+            \ une d\xE9num\xE9rotation, interrompre le service pour des raisons op\xE9\
+            rationnelles, de maintenance ou en cas d'urgence. \r\n \r\n13.2 Le Membre\
+            \ se connectera \xE0 la Plateforme E-loue au moyen de ses propres \xE9\
+            quipements et terminaux de t\xE9l\xE9communication. E-loue ne met \xE0\
+            \ disposition du Membre aucun moyen mat\xE9riel, installation t\xE9l\xE9\
+            phonique, \xE9quipement terminal ou autres, ni logiciel ou abonnement.\r\
+            \n \r\n13.3 En cas de force majeure, les obligations de la partie emp\xEA\
+            ch\xE9e seront suspendues, notamment en cas :\r\n- d'acte ou omission\
+            \ du gouvernement ou d'autorit\xE9s sup\xE9rieures comp\xE9tentes,\r\n\
+            - de blocage ou d\xE9faillance des r\xE9seaux de t\xE9l\xE9communications,\r\
+            \n- d'insurrections, guerre civile, guerre, op\xE9rations militaires,\
+            \ \xE9tat d'urgence national ou local, feu, foudre, explosion, gr\xE8\
+            ve, inondation, temp\xEAte, fait d'un tiers. \r\n  \r\n13.4 L'invalidit\xE9\
+            \ d'une ou plusieurs clauses des Dispositions G\xE9n\xE9rales d'utilisation\
+            \ de la Plateforme E-loue n'entra\xEEnera pas la nullit\xE9 de celles-ci.\
+            \ \r\n \r\n13.5 Le pr\xE9sent contrat est soumis \xE0 la Loi Fran\xE7\
+            aise. Tout litige avec un Membre agissant \xE0 titre professionnel et\
+            \ n\xE9 \xE0 l'occasion de son interpr\xE9tation et/ou de son ex\xE9cution\
+            \ est de la comp\xE9tence du Tribunal de commerce de Paris.\r\n \r\n13.6\
+            \ L\u2019utilisation des applications externes utilis\xE9es par e-loue\
+            \ entraine l\u2019acceptation implicite des conditions g\xE9n\xE9rales\
+            \ de ces applications.\r\n \r\n \r\n14. Gestion des donn\xE9es personnelles\r\
+            \n------------------------------\r\n\r\nVous disposez d'un droit d'acc\xE8\
+            s, de modification, de rectification et de suppression des donn\xE9es\
+            \ vous concernant (loi \"Informatique et Libert\xE9s\" du 6 janvier 1978).\
+            \ Les internautes qui s\u2019inscrivent et deviennent membres acceptent\
+            \ explicitement de recevoir des emails provenant de e-loue. Sauf votre\
+            \ consentement, ces donn\xE9es ne sont divulgu\xE9es \xE0 aucun tiers\
+            \ et ne servent qu'au fonctionnement du site. Les donn\xE9es nominatives\
+            \ relatives aux Membres sont collect\xE9es, enregistr\xE9es et stock\xE9\
+            es en conformit\xE9 avec les dispositions de la Loi relative \xE0 l'informatique,\
+            \ aux fichiers et aux libert\xE9s du 6 janvier 1978. Les Membres disposent\
+            \ du droit d'acc\xE8s et de rectification pr\xE9vu par la loi aupr\xE8\
+            s de e-loue responsable de la Plateforme. Pour tout renseignement, adressez-vous\
+            \ directement \xE0 e-loue.\r\n\r\nLe pseudo et le mot de passe choisis\
+            \ par un membre sont strictement confidentiels, et il s\u2019engage \xE0\
+            \ ne pas les communiquer. Les membres sont seuls responsables en cas d'utilisation\
+            \ \xE0 leur insu par une autre personne utilisant leurs identifiants.\r\
+            \n \r\n \r\n15. Taxes et impositions\r\n---------------------\r\n\r\n\
+            Contrairement \xE0 E-loue qui n\u2019est pas partie aux locations de biens,\
+            \ les utilisateurs, membres, locataires et propri\xE9taires sont seuls\
+            \ redevables de tous les imp\xF4ts, taxes et commissions r\xE9sultant\
+            \ de l'utilisation de nos services et de notre site. E-loue se d\xE9gage\
+            \ donc de toute responsabilit\xE9 pour les taxes sur les transactions\
+            \ effectu\xE9es sur ou via son site.\r\n \r\n \r\n \r\n \r\nE-loue \r\n\
+            SAS - RCS Paris 509 679 593\r\nTVA Intracommunautaire : FR49509679593"
+        enable_comments: false
+        registration_required: false
+        sites: [1]
+        template_name: ''
+        title: "Conditions g\xE9n\xE9rales"
+        url: /conditions-generales/
+    model: flatpages.flatpage
+    pk: 1
+-   fields:
+        content: "A la une !\r\n----------\r\nCet hiver, pour vos vacances aux skis,\
+            \ ne d\xE9pensez plus d'argent en achetant vos affaires de ski (gants,\
+            \ pantalon, masque...) que vous ne r\xE9utiliserez que tr\xE8s rarement\
+            \ (voir jamais) et qui vous encombrent toute l'ann\xE9e : louez-les !\r\
+            \n\r\nPresentation e-loue\r\n-----------------\r\ne-loue est une plateforme\
+            \ internet innovante destin\xE9e aux particuliers et aux professionnel.\
+            \ Elle permet \xE0 tous ses membres de louer ou mettre en location tout\
+            \ type d\u2019objet (perceuse, v\xE9lo, raquette de tennis, bijoux, robes,\
+            \ console de jeux,etc.).\r\n\r\nLa soci\xE9t\xE9 e-loue, cr\xE9\xE9e en\
+            \ 2009.\r\n\r\n[Dossier de presse](http://example.com/)\r\n\r\nContact\
+            \ presse\r\n-------------\r\n**Benjamin MARCHAND-LENOIR**<br />\r\n*benjamin.marchandlenoir@e-loue.com*"
+        enable_comments: false
+        registration_required: false
+        sites: [1]
+        template_name: ''
+        title: Espace presse
+        url: /espace-presse/
+    model: flatpages.flatpage
+    pk: 6
+-   fields:
+        content: "Pourquoi proposer vos articles en location sur e-loue ?\r\n-------------------------------------------\r\
+            \n* Gagnez des clients et augmentez votre chiffre d\u2019affaires facilement\r\
+            \n* Accroissez votre pr\xE9sence sur le web\r\n* Augmentez votre visibilit\xE9\
+            /notori\xE9t\xE9 en apparaissant sur un site reconnu pour la location\r\
+            \n\r\nLes Avantages\r\n-------------------------------------------\r\n\
+            * L\u2019insertion de vos annonces est gratuite\r\n* Service commercial\
+            \ gratuit et personnalis\xE9\r\n* Int\xE9gration de votre catalogue gratuite\
+            \ et imm\xE9diate par le service technique\r\n* Outils de gestion personnalis\xE9\
+            s: stocks, calendrier de r\xE9servation, mise en ligne des annonces\r\n\
+            * Annonces illimit\xE9es\r\n* Votre boutique en ligne disponible 24h/24\
+            \ et 7j/7\r\n* Pr\xE9sence de vos articles dans tous les moteurs de recherche\r\
+            \n\r\nComment \xE7a fonctionne ?\r\n------------------------------------------\r\
+            \nC'est tr\xE8s simple cliquez sur le bouton \"Mettre en location\" en\
+            \ haut \xE0 droite de la page."
+        enable_comments: false
+        registration_required: false
+        sites: [1]
+        template_name: ''
+        title: Espace professionnel
+        url: /espace-professionnel/
+    model: flatpages.flatpage
+    pk: 3
+-   fields:
+        content: "La mission\r\n------------\r\ne-loue est une plateforme Internet\
+            \ simple et performant permettant \xE0 n\u2019importe quel particulier\
+            \ ou professionnel de mettre en location ses objets, et chercher des objets\
+            \ \xE0 louer. \r\nNos objectifs sont :\r\n\r\n- L\u2019augmentation du\
+            \ pouvoir d\u2019achat (autant des propri\xE9taires que des locataires)\
+            \ qui font des \xE9conomies et gagnent de l\u2019argent.\r\n- Le respect\
+            \ environnemental : la location permet d\u2019\xE9viter la surconsommation.\r\
+            \n- Le plaisir : permettre \xE0 un internaute de louer des objets qu\u2019\
+            il n\u2019aurait pas pu financi\xE8rement s\u2019acheter (technologie,\
+            \ luxe\u2026), d\xE9velopper les relations humaines en rencontrant du\
+            \ monde lors des transactions.\r\n- Le cot\xE9 pratique : am\xE9liorer\
+            \ la vie quotidienne en proposant un service, permettre la proximit\xE9\
+            \ des locations gr\xE2ce au syst\xE8me de carte propos\xE9.\r\n- La solidarit\xE9\
+            \ : a travers l\u2019association e-loue c\u0153ur, mais aussi louer son\
+            \ objet signifie gagner de l\u2019argent mais aussi rendre service, aider\
+            \ quelqu\u2019un.\r\n\r\nL'id\xE9e\r\n---------\r\nIl y a plusieurs mois\
+            \ d\xE9j\xE0, lors d\u2019un d\xE9m\xE9nagement, nous nous sommes retrouv\xE9\
+            s un Samedi apr\xE8s-midi \xE0 devoir monter un meuble. Malheureusement,\
+            \ nous avions besoin d\u2019une perceuse et aucun de nous deux n\u2019\
+            en poss\xE9dait. Nous avons song\xE9 \xE0 en acheter une mais pour une\
+            \ ou deux utilisations, d\xE9bourser une telle somme ne valait pas le\
+            \ coup. Puis nous avons song\xE9 \xE0 en louer une dans une enseigne de\
+            \ location, mais la cha\xEEne de magasin qui le propose (sur Paris) est\
+            \ assez loin du lieu ou nous nous trouvons, la location propos\xE9e assez\
+            \ ch\xE8re, et c\u2019\xE9tait compliqu\xE9 pour rapporter l\u2019objet\
+            \ pendant les horaires d\u2019ouverture du magasin. Ensuite nous avons\
+            \ demand\xE9 \xE0 nos connaissances si elles avaient une perceuse \xE0\
+            \ nous pr\xEAter, mais manque de chance nous n\u2019avons trouv\xE9 personne.\
+            \ Nous avons donc fini par en trouver une aupr\xE8s de nos voisins, mais\
+            \ nous nous sommes dit, si aucun des voisins pr\xE9sents dans notre immeuble\
+            \ n\u2019en avait, cela aurait \xE9t\xE9 dommage de passer \xE0 c\xF4\
+            t\xE9 d\u2019autres personnes du quartier qui auraient pu en poss\xE9\
+            der. Nous avons alors eu l\u2019id\xE9e de cr\xE9er une plateforme Internet\
+            \ permettant la location entre particuliers, et aussi professionnels,\
+            \ ce qui n\u2019existait pas."
+        enable_comments: false
+        registration_required: false
+        sites: [1]
+        template_name: ''
+        title: Qui sommes nous ?
+        url: /qui-sommes-nous/
+    model: flatpages.flatpage
+    pk: 5
+-   fields:
+        content: "Respect de la vie priv\xE9\r\n===============\r\n\r\nNous attachons\
+            \ une grande importance au respect de votre priv\xE9e, c\u2019est pourquoi\
+            \ nous nous engageons \xE0 :\r\n\r\n* Ne pas rendre publiques vos donn\xE9\
+            es personnelles, telles que vos nom, pr\xE9nom, num\xE9ro de t\xE9l\xE9\
+            phone, adresse \xE9lectronique \u2026\r\n\r\n* Ne communiquer vos coordonn\xE9\
+            es (notamment t\xE9l\xE9phonique et \xE9lectronique) qu\u2019apr\xE8s\
+            \ votre accord, et \xE0 votre futur locataire seulement\r\n\r\n* Ne jamais\
+            \ divulguer vos informations bancaires, et ce \xE0 qui que ce soit\r\n\
+            \r\nAfin de vous garantir un niveau de s\xE9curit\xE9 optimal, nous utilisons\
+            \ par ailleurs un protocole SSL. Ce protocole crypte toute transmission\
+            \ de donn\xE9es entre votre ordinateur et notre site Internet. Ainsi,\
+            \ vous pouvez surfer et louer en toute s\xE9curit\xE9 : vos informations\
+            \ ne peuvent pas \xEAtre intercept\xE9es ou consult\xE9es par un tiers.\r\
+            \n\r\nEnfin, nous collaborons avec Paypal, 1er organisme de paiement en\
+            \ ligne au monde. Vos informations financi\xE8res sont s\xE9curis\xE9\
+            es et totalement couvertes contre la fraude.\r\n\r\nPour toute question\
+            \ relative \xE0 la protection de vos donn\xE9es, n\u2019h\xE9sitez pas\
+            \ \xE0 nous contacter sur notre compte Twitter ou \xE0 contact@e-loue.com\
+            \ \r\n"
+        enable_comments: false
+        registration_required: false
+        sites: [1]
+        template_name: ''
+        title: "Respect de la vie priv\xE9e"
+        url: /respect-vie-privee/
+    model: flatpages.flatpage
+    pk: 2
 -   fields: {level: 2, lft: 3, name: "Meubles \xE0 langer", need_insurance: true,
         parent: 7, rght: 4, slug: meubles-a-langer, tree_id: 432}
     model: products.category
