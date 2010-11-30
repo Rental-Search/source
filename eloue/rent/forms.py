@@ -125,7 +125,6 @@ class PayIPNForm(forms.Form):
     action_type = forms.CharField(required=True)
     fees_payer = forms.CharField(required=True)
     pay_key = forms.CharField(required=True)
-    payment_request_date = ISO8601DateTimeField(required=True)
     sender_email = forms.CharField(required=True)
     status = forms.CharField(required=True)
     
