@@ -553,6 +553,10 @@
         url: /respect-vie-privee/
     model: flatpages.flatpage
     pk: 2
+-   fields: {level: 0, lft: 1, name: Divers, need_insurance: true, parent: null, rght: 2,
+        slug: divers, tree_id: 513}
+    model: products.category
+    pk: 687
 -   fields: {level: 2, lft: 3, name: "Meubles \xE0 langer", need_insurance: true,
         parent: 7, rght: 4, slug: meubles-a-langer, tree_id: 432}
     model: products.category

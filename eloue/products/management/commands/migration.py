@@ -189,15 +189,14 @@ class Command(BaseCommand):
             cursor.execute("""SELECT category_id FROM abs_vm_product_category_xref WHERE product_id = %s""" % row['product_id'])
             result = cursor.fetchone()
             if not result:
-                log.warning("no category for product %d" % row['product_id'])
+                category = Category.objects.get(slug='divers')
             elif result['category_id'] != 0:
                 try:
                     category = Category.objects.get(name=CATEGORY_MAP[result['category_id']])
                 except (Category.DoesNotExist, KeyError):
-                    log.warning("Can't find category #%s for product #%s" % (result['category_id'], row['product_id']))
+                    category = Category.objects.get(slug='divers')
             else:
-                log.warning("no valid category for product %d" % row['product_id'])
-                continue
+                category = Category.objects.get(slug='divers')
             
             product = Product.objects.create(
                 pk=row['product_id'],
