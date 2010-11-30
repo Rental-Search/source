@@ -138,3 +138,9 @@ class ProductEditForm(forms.ModelForm):
         model = Product
         fields = ('category', 'summary', 'deposit_amount', 'quantity', 'description')
     
+
+class ProductAdminForm(forms.ModelForm):
+    category = TreeNodeChoiceField(queryset=Category.tree.all(), empty_label="Choisissez une catégorie", level_indicator=u'--')
+    
+    class Meta:
+        model = Product

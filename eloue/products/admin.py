@@ -2,6 +2,7 @@
 from django.contrib import admin
 from mptt.admin import MPTTModelAdmin
 
+from eloue.products.forms import ProductAdminForm
 from eloue.products.models import Product, Picture, Category, Property, PropertyValue, Price, ProductReview, PatronReview, Curiosity
 
 from haystack.admin import SearchModelAdmin
@@ -25,6 +26,7 @@ class ProductAdmin(SearchModelAdmin):
     raw_id_fields = ("owner", "address")
     list_display = ('summary', 'category','deposit_amount', 'quantity', 'is_archived', 'is_allowed')
     list_filter = ('is_archived', 'is_allowed')
+    form = ProductAdminForm
 
 
 class CategoryAdmin(MPTTModelAdmin):
