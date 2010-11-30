@@ -146,6 +146,13 @@ html[xmlns] .clearfix {
 
 .clear { clear: both; }
 
+.btn-paypal
+{
+  background: transparent url("../images/btn1_for_hub.gif");
+  height: 42px;
+  width: 440px;
+  border: none;
+}
 
 .btn
 {

@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% load i18n markup %}
+
+{% block title %}{{ flatpage.title }} - {{ block.super }}{% endblock %}
+
+{% block content %}
+<div id="content" class="clearfix">
+	<div class='x12'>
+		<h1>Comment ça marche ?</h1>
+		<p>e-loue permet de louer ou de mettre en location tout type d'objet</p>
+	</div>
+	<div class="x6">
+		<h2>Propriétaire</h2>
+		<ol>
+			<li>Mettez vos objets en location</li>
+			<li>Répondez aux demandes de location</li>
+			<li>Rencontrez le locataire</li>
+		</ol>
+	</div>
+	<div class="x6">
+		<h2>Locataire</h2>
+		<ol>
+			<li>Trouvez votre objet idéal</li>
+			<li>Réservez le</li>
+			<li>Rencontrez le propriétaire</li>
+		</ol>
+	</div>
+	<div class="x12">
+	</div>
+</div>
+{% endblock %}

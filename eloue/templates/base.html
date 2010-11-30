@@ -41,7 +41,7 @@
 							<li class="nav"><a href="{% url auth_logout %}" class="nav-link">{% trans "Se déconnecter" %}</a></li>
 						{% endif %}
 						{% if request.user.is_anonymous %}
-						 <li class="nav"><a href="#" class="nav-link">{% trans "Comment ça marche ?" %}</a></li>
+						 <li class="nav"><a href="/comment-ca-marche/" class="nav-link">{% trans "Comment ça marche ?" %}</a></li>
 						{% else %}
 						 <li class="nav"><a href="{% url dashboard %}" class="nav-link">{% trans "Tableau de bord" %}</a></li>
 						 <li class="nav welcome">{% blocktrans with request.user.first_name as first_name %} Bienvenue, {{ first_name }}!{% endblocktrans %}</li>    
