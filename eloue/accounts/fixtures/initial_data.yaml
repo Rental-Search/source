@@ -553,6 +553,282 @@
         url: /respect-vie-privee/
     model: flatpages.flatpage
     pk: 2
+-   fields:
+        created: 2010-11-30 14:32:42.280469
+        description: ''
+        modified: 2010-11-30 15:13:07.113640
+        sites: [1]
+        slug: aide-la-location
+        status: 2
+        template_name: ''
+        title: "Aide \xE0 la location"
+    model: faq.topic
+    pk: 4
+-   fields:
+        created: 2010-11-30 13:57:56.988030
+        description: ''
+        modified: 2010-11-30 14:02:59.257604
+        sites: [1]
+        slug: decouvrir-e-loue
+        status: 2
+        template_name: ''
+        title: "D\xE9couvrir e-loue"
+    model: faq.topic
+    pk: 1
+-   fields:
+        created: 2010-11-30 14:23:17.641569
+        description: ''
+        modified: 2010-11-30 14:43:28.185113
+        sites: [1]
+        slug: la-location-sur-e-loue
+        status: 2
+        template_name: ''
+        title: La location sur e-loue
+    model: faq.topic
+    pk: 3
+-   fields:
+        created: 2010-11-30 14:20:48.813348
+        description: ''
+        modified: 2010-11-30 15:06:09.982957
+        sites: [1]
+        slug: les-premiers-pas-sur-e-loue
+        status: 2
+        template_name: ''
+        title: Les premiers pas sur e-loue
+    model: faq.topic
+    pk: 2
+-   fields:
+        created: 2010-11-30 14:38:45.327401
+        description: ''
+        modified: 2010-11-30 14:43:28.221563
+        sites: [1]
+        slug: services-e-loue
+        status: 2
+        template_name: ''
+        title: Services e-loue
+    model: faq.topic
+    pk: 5
+-   fields: {answer: "Il suffit de cliquez sur le bouton \"Mettre en location\" en\
+            \ haut \xE0 droite de la page.", created: !!timestamp '2010-11-30 14:24:23.696520',
+        modified: null, ordering: 1, question: 'Comment mettre un objet en location
+            sur e-loue ?', slug: comment-mettre-un-objet-en-location-sur-e-loue, status: 2,
+        topic: 3}
+    model: faq.question
+    pk: 8
+-   fields: {answer: "Nous faisons tout notre possible pour r\xE9pondre \xE0 tout\
+            \ mail de demande d'aide ou d'information.\r\nMerci de remplir le formulaire\
+            \ sur la page [contact](/contact/)", created: !!timestamp '2010-11-30
+            14:39:44.809381', modified: null, ordering: 1, question: 'Comment se fait-on
+            aider en cas de besoin ?', slug: comment-se-fait-aider-en-cas-de-besoin,
+        status: 2, topic: 5}
+    model: faq.question
+    pk: 22
+-   fields: {answer: "1. Cliquez sur \u201CS'inscrire ou se connecter\u201C en haut\
+            \ \xE0 droite.\r\n2. Suivez les instructions \xE9crient sur la page.\r\
+            \n3. Consultez vos emails et ouvrez le mail que vous venez de recevoir\
+            \ de la part d\u2019e-loue qui confirme votre inscription.\r\n4. Cliquez\
+            \ sur le lien inscrit dans le message pour valider l\u2019inscription.\
+            \ IMPORTANT : Le mail peut \xEAtre arriv\xE9 dans les spam", created: !!timestamp '2010-11-30
+            14:21:25.534710', modified: !!timestamp '2010-11-30 15:06:09.996595',
+        ordering: 1, question: "Comment s\u2019inscrire sur e-loue ?", slug: comment-sinscrire-sur-e-loue,
+        status: 2, topic: 2}
+    model: faq.question
+    pk: 5
+-   fields: {answer: "Ce sont les propri\xE9taires qui d\xE9cident du prix. La personne\
+            \ qui propose un bien \xE0 louer propose un prix de location par jour\
+            \ et fixe un montant de caution.", created: !!timestamp '2010-11-30 14:33:17.734554',
+        modified: null, ordering: 1, question: 'Qui fixe les prix de location ?',
+        slug: qui-fixe-les-prix-de-location, status: 2, topic: 4}
+    model: faq.question
+    pk: 13
+-   fields: {answer: "Tout le monde peut utiliser e-loue : les particuliers mais aussi\
+            \ les professionnels. La proximit\xE9 est un avantage pour louer ses objets,\
+            \ c\u2019est pourquoi lorsque vous faites une recherche d\u2019objets\
+            \ une carte affiche les r\xE9sultats des objets proches de chez vous.",
+        created: !!timestamp '2010-11-30 13:58:28.857180', modified: null, ordering: 1,
+        question: 'Qui peut utiliser e-loue ?', slug: qui-peut-utiliser-e-loue, status: 2,
+        topic: 1}
+    model: faq.question
+    pk: 1
+-   fields: {answer: "1. Cliquez sur \u201CS'inscrire ou se connecter\u201C en haut\
+            \ \xE0 droite.\r\n2. Remplir les champs obligatoires : email + mot de\
+            \ passe.\r\n3. Cliquer sur \u201CContinuer\u201C.", created: !!timestamp '2010-11-30
+            14:21:51.579304', modified: !!timestamp '2010-11-30 15:06:10.004134',
+        ordering: 2, question: "Comment s\u2019identifier sur e-loue ?", slug: comment-sidentifier-sur-e-loue,
+        status: 2, topic: 2}
+    model: faq.question
+    pk: 6
+-   fields: {answer: "Le contrat de location qui est vous est envoy\xE9 lorsqu\u2019\
+            une demande de location est confirm\xE9 est optionnel. Il est propos\xE9\
+            \ \xE0 titre d'exemple. Cependant l'\xE9quipe e-loue vous recommande fortement\
+            \ de l'utiliser.", created: !!timestamp '2010-11-30 14:33:52.629960',
+        modified: null, ordering: 2, question: "Faut-il toujours utiliser le contrat\
+            \ propos\xE9 ?", slug: faut-il-toujours-utiliser-le-contrat-propose, status: 2,
+        topic: 4}
+    model: faq.question
+    pk: 14
+-   fields: {answer: "Oui, l\u2019inscription \xE0 e-loue est gratuite et sans engagement.\
+            \ Vous devez uniquement vous engager \xE0 respecter les r\xE8gles du site.",
+        created: !!timestamp '2010-11-30 14:19:58.594884', modified: !!timestamp '2010-11-30
+            14:22:55.775035', ordering: 2, question: "L\u2019inscription \xE0 e-loue\
+            \ est-elle gratuite ?", slug: linscription-e-loue-est-elle-gratuite, status: 2,
+        topic: 1}
+    model: faq.question
+    pk: 2
+-   fields: {answer: "[Conditions g\xE9n\xE9rales d\u2019Utilisation](/conditions-generales/)",
+        created: !!timestamp '2010-11-30 14:40:30.902086', modified: null, ordering: 2,
+        question: "Que contiennent les conditions g\xE9n\xE9rales d\u2019utilisation\
+            \ ?", slug: que-contiennent-les-conditions-generales-dutilisat, status: 2,
+        topic: 5}
+    model: faq.question
+    pk: 23
+-   fields: {answer: "Ce n'est pas obligatoire mais fortement recommand\xE9. La valeur\
+            \ de la caution demand\xE9e doit \xEAtre propos\xE9e par le propri\xE9\
+            taire. La caution, remise sous forme de ch\xE8que, doit \xEAtre restitu\xE9\
+            e \xE0 la restitution de l'objet lou\xE9.", created: !!timestamp '2010-11-30
+            14:34:31.488983', modified: null, ordering: 3, question: "Faut-il toujours\
+            \ d\xE9poser une caution ?", slug: faut-il-toujours-deposer-une-caution,
+        status: 2, topic: 4}
+    model: faq.question
+    pk: 15
+-   fields: {answer: "Il est possible de quasiment tout louer : v\xE9hicules, instruments\
+            \ de musique, informatique, outillage, jouets, consoles de jeux, mat\xE9\
+            riel de sport...\r\nPour classer tous les objets, nous avons cr\xE9\xE9\
+            s cat\xE9gorie/sous cat\xE9gorie/famille d\u2019objets. Lorsque vous inscrivez\
+            \ un objet, il doit faire obligatoirement partie d\u2019une famille d\u2019\
+            objets. Si vous n\u2019en trouvez aucune qui corresponde parfaitement\
+            \ \xE0 vos objets, envoyez nous un mail et nous la rajouterons.\r\nL'\xE9\
+            quipe du site e-loue se r\xE9serve le droit de supprimer les annonces\
+            \ contraires \xE0 la loi ou aux bonnes m\u0153urs.", created: !!timestamp '2010-11-30
+            14:20:17.571551', modified: !!timestamp '2010-11-30 14:22:55.805365',
+        ordering: 3, question: 'Peut-on tout louer ?', slug: peut-tout-louer, status: 2,
+        topic: 1}
+    model: faq.question
+    pk: 3
+-   fields: {answer: "1. Cliquez sur \u201CS'inscrire ou se connecter\u201C en haut\
+            \ \xE0 droite.\r\n2. Remplir les champs email et cliquez sur \"Mot de\
+            \ passe oubli\xE9\"\r\n3. Consulter vos mails et ouvrer le mail que vous\
+            \ venez de recevoir de la part d\u2019e-loue. Un nouveau mot de passe\
+            \ vous est indiqu\xE9. IMPORTANT : Le mail peut \xEAtre arriv\xE9 dans\
+            \ les spam", created: !!timestamp '2010-11-30 14:22:38.046259', modified: !!timestamp '2010-11-30
+            15:06:10.011026', ordering: 3, question: "Que faire si j\u2019ai oubli\xE9\
+            \ mon mot de passe ?", slug: que-faire-si-jai-oublie-mon-mot-de-passe,
+        status: 2, topic: 2}
+    model: faq.question
+    pk: 7
+-   fields: {answer: "Allez sur la page d'accueil et remplissez le champ \"Que voulez-vous\
+            \ louer ?\" puis cliquez sur le bouton \"Rechercher\".\r\nSi vous voulez\
+            \ trouver un objet pr\xE8s de chez vous ou plus g\xE9n\xE9ralement \xE0\
+            \ un endroit, il suffit de renseigner le champ \"O\xF9\". ", created: !!timestamp '2010-11-30
+            14:26:55.144854', modified: !!timestamp '2010-11-30 15:50:10.663458',
+        ordering: 4, question: "Comment chercher un objet \xE0 louer ?", slug: comment-chercher-un-objet-louer,
+        status: 2, topic: 3}
+    model: faq.question
+    pk: 9
+-   fields: {answer: "Nous vous recommandons de fixer une valeur de caution correspondant\
+            \ \xE0 la valeur de l\u2019objet que vous louez en son \xE9tat actuel.\
+            \ En cas de perte ou de destruction, vous pouvez ainsi couvrir la valeur\
+            \ de ce que vous perdez.", created: !!timestamp '2010-11-30 14:34:57.629153',
+        modified: null, ordering: 4, question: "De quel montant doit \xEAtre la caution\
+            \ ?", slug: de-quel-montant-doit-etre-la-caution, status: 2, topic: 4}
+    model: faq.question
+    pk: 16
+-   fields: {answer: "Il est interdit de louer certaines choses \xE9videntes : ce\
+            \ qui ne vous appartient pas, les \xEAtres humains \xE9videmment, les\
+            \ armes ou tout ce que la morale et la loi interdisent. Il vous appartient\
+            \ de v\xE9rifier les droits/licences que vous avez pour mettre un objet\
+            \ en location, notamment dans les domaines de la musique, du cin\xE9ma.",
+        created: !!timestamp '2010-11-30 14:20:34.256265', modified: !!timestamp '2010-11-30
+            14:22:55.816284', ordering: 4, question: "Qu\u2019est-il interdit de louer\
+            \ ?", slug: quest-il-interdit-de-louer, status: 2, topic: 1}
+    model: faq.question
+    pk: 4
+-   fields: {answer: "Oui il suffit de se rendre sur un objet qui vous int\xE9resse\
+            \ et dans la fiche d\xE9taill\xE9e il est possible de poser une question\
+            \ au propri\xE9taire.", created: !!timestamp '2010-11-30 14:27:12.587957',
+        modified: !!timestamp '2010-11-30 15:50:41.791565', ordering: 5, question: "Peut-on\
+            \ poser une question \xE0 un membre ?", slug: peut-poser-une-question-un-membre,
+        status: 1, topic: 3}
+    model: faq.question
+    pk: 10
+-   fields: {answer: "C\u2019est le r\xF4le de la caution de d\xE9couvrir ce risque.\
+            \ Si l\u2019objet est 100% endommag\xE9, la caution vous sert \xE0 le\
+            \ racheter. S\u2019il ne s\u2019agit que d\u2019un dommage l\xE9ger, proposez\
+            \ au locataire de ne conserver qu\u2019une partie de la caution pour compenser\
+            \ cet endommagement.\r\n", created: !!timestamp '2010-11-30 14:35:54.024265',
+        modified: null, ordering: 5, question: "Que faire si l\u2019objet qu\u2019\
+            on me rend est ab\xEEm\xE9 ?", slug: que-faire-si-lobjet-qu-me-rend-est-abime,
+        status: 1, topic: 4}
+    model: faq.question
+    pk: 17
+-   fields: {answer: "1. Apr\xE8s avoir trouv\xE9 dans la liste de r\xE9sultat l\u2019\
+            objet que vous voulez louer cliquez sur \u201CR\xE9server\u201C.\r\n2.\
+            \ Remplissez la date de d\xE9part et la date de fin de votre location\
+            \ dans la colonne de droite de la fiche produit.\r\n3. Cliquez sur R\xE9\
+            server et suivez les instructions\r\nUne demande location sera envoy\xE9\
+            e au propri\xE9taire, s\u2019il accepte vous serez mis en relation avec\
+            \ lui.", created: !!timestamp '2010-11-30 14:29:27.387583', modified: !!timestamp '2010-11-30
+            15:50:53.682048', ordering: 6, question: 'Comment louer un objet ?', slug: comment-louer-un-objet,
+        status: 2, topic: 3}
+    model: faq.question
+    pk: 11
+-   fields: {answer: "Pas obligatoirement mais pour certains objets, comme une voiture\
+            \ ou un logement par exemple, v\xE9rifiez avec votre assureur que l\u2019\
+            usage par un tiers est couvert. Et aussi pour des objets de valeur importante,\
+            \ vous pouvez utiliser le service assurance que notre partenaire vous\
+            \ propose. Vous n\u2019avez qu\u2019\xE0 remplir le formulaire sur la\
+            \ page assurance de notre site.", created: !!timestamp '2010-11-30 14:36:33.997550',
+        modified: null, ordering: 6, question: 'Faut-il prendre une assurance pour
+            louer certaines choses ?', slug: faut-il-prendre-une-assurance-pour-louer-certaines,
+        status: 1, topic: 4}
+    model: faq.question
+    pk: 18
+-   fields: {answer: "Allez sur votre liste de location active en tant que propri\xE9\
+            taire en cliquant sur le lien inclus dans le mail de la demande la location\
+            \ ou tout simplement en vous connectant sur votre tableau de bord.\r\n\
+            \r\nUne fois sur le la liste de vos location active, cliquez sur le bouton\
+            \ \"Accepter\" ou \"Refuser\" selon votre r\xE9ponse \xE0 la demande.\r\
+            \n\r\n", created: !!timestamp '2010-11-30 14:32:24.214155', modified: !!timestamp '2010-11-30
+            15:51:06.381359', ordering: 7, question: 'Comment accepter une demande
+            de location ?', slug: comment-accepter-une-demande-de-location, status: 2,
+        topic: 3}
+    model: faq.question
+    pk: 12
+-   fields: {answer: "Le propri\xE9taire d\u2019objet ins\xE8re gratuitement son objet,\
+            \ il paiera une commission sur le montant de la location si son objet\
+            \ est lou\xE9.", created: !!timestamp '2010-11-30 14:37:16.454879', modified: null,
+        ordering: 7, question: 'Le service est-il payant ?', slug: le-service-est-il-payant,
+        status: 2, topic: 4}
+    model: faq.question
+    pk: 19
+-   fields: {answer: "Il est interd\xEEt d\u2019\xE9changer lors des messages entre\
+            \ propri\xE9taires et \xE9ventuels locataires ses coordonn\xE9es. D\u2019\
+            ailleurs notre syst\xE8me de s\xE9curit\xE9 informatique emp\xEAche ces\
+            \ \xE9changes d\u2019informations.\r\nLes coordonn\xE9es vous seront transmises\
+            \ au moment ou le propri\xE9taire valide la demande de location. Ainsi\
+            \ vous pourrez entrer en contact avec lui afin qu\u2019il vous transmette\
+            \ l\u2019objet lou\xE9.", created: !!timestamp '2010-11-30 14:37:45.376522',
+        modified: null, ordering: 8, question: "Comment conna\xEEtre les coordonn\xE9\
+            es du propri\xE9taire ou locataire ?", slug: comment-connaitre-les-coordonnees-du-proprietaire-,
+        status: 2, topic: 4}
+    model: faq.question
+    pk: 20
+-   fields: {answer: "Il n\u2019est pas possible d\u2019avoir les coordonnes sans\
+            \ payer une commission.\r\nEn plus e-loue vous permet de louer en toute\
+            \ s\xE9curit\xE9, en effet pour les deux contreparties nous avons: coordonn\xE9\
+            es, syst\xE8me de notation et de commentaires, mais aussi: contrat de\
+            \ location, possibilit\xE9 d\u2019assurance, enregistrement des donn\xE9\
+            es dans notre base. En plus pour le locataire, il n\u2019y a aucune commission.\
+            \ Pour le propri\xE9taire, sachant qu\u2019il connait \xE0 l\u2019 avance\
+            \ les commissions qu\u2019il va payer, et comme c\u2019est lui qui fixe\
+            \ le prix de la location, il peut donc choisir le prix qu\u2019il veut\
+            \ gagner commission comprise. Donc avec ce syst\xE8me, tout le monde est\
+            \ gagnant.", created: !!timestamp '2010-11-30 14:38:29.743729', modified: null,
+        ordering: 9, question: "Peut-on effectuer une location sans passer par e-loue,\
+            \ notamment pour \xE9viter des commissions ?", slug: peut-effectuer-une-location-sans-passer-par-e-loue,
+        status: 2, topic: 4}
+    model: faq.question
+    pk: 21
 -   fields: {level: 0, lft: 1, name: Divers, need_insurance: true, parent: null, rght: 2,
         slug: divers, tree_id: 513}
     model: products.category
