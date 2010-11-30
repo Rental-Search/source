@@ -1,5 +1,5 @@
 {% load i18n %}
-{% blocktrans with booking.borrower.username as username and booking.product.summary as summary and booking.started_at|date:"DATETIME_FORMAT" as starting_at and booking.started_at|timesince:booking.ended_at as duration and booking.get_absolute_url as booking_url %}
+{% blocktrans with booking.borrower.username as username and booking.product.summary as summary and booking.started_at|date:"DATETIME_FORMAT" as starting_at and booking.started_at|timesince:booking.ended_at as duration and booking.get_absolute_url as booking_url and site.domain as domain %}
 <p>Bonjour {{ username }},</p>
 
 <p>La location de l’objet {{ summary }}, qui a débutée le {{ starting_at }} pour une durée de {{ duration }}, vient de finir.</p>
