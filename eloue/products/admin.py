@@ -2,7 +2,7 @@
 from django.contrib import admin
 from mptt.admin import MPTTModelAdmin
 
-from eloue.products.models import Product, Picture, Category, Property, PropertyValue, Price, ProductReview, PatronReview
+from eloue.products.models import Product, Picture, Category, Property, PropertyValue, Price, ProductReview, PatronReview, Curiosity
 
 from haystack.admin import SearchModelAdmin
 
@@ -44,8 +44,14 @@ class PatronReviewAdmin(admin.ModelAdmin):
     raw_id_fields = ("reviewer", "patron")
 
 
+class CuriosityAdmin(admin.ModelAdmin):
+    list_display = ('product',  )
+    raw_id_fields = ("product", )
+
+
 admin.site.register(Product, ProductAdmin)
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Property, PropertyAdmin)
+admin.site.register(Curiosity, CuriosityAdmin)
 admin.site.register(ProductReview, ProductReviewAdmin)
 admin.site.register(PatronReview, PatronReviewAdmin)

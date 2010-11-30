@@ -16,7 +16,7 @@ from eloue.decorators import secure_required
 from eloue.accounts.forms import EmailAuthenticationForm
 from eloue.accounts.models import Patron
 from eloue.products.forms import FacetedSearchForm, ProductForm, ProductEditForm
-from eloue.products.models import Category, Product
+from eloue.products.models import Category, Product, Curiosity
 from eloue.products.wizard import ProductWizard
 
 PAGINATE_PRODUCTS_BY = getattr(settings, 'PAGINATE_PRODUCTS_BY', 10)
@@ -25,8 +25,9 @@ DEFAULT_RADIUS = getattr(settings, 'DEFAULT_RADIUS', 50)
 
 @cache_page(300)
 def homepage(request):
+    curiosities = Curiosity.objects.all()
     form = FacetedSearchForm()
-    return direct_to_template(request, template='index.html', extra_context={'form': form})
+    return direct_to_template(request, template='index.html', extra_context={'form': form, 'curiosities': curiosities})
 
 
 @never_cache

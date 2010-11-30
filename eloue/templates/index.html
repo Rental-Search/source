@@ -25,6 +25,28 @@
 	</div>{# top-content #}
 	<div id="content" class="clearfix">
 		<div class="content-header x12">
+			<h2>Les curiosités d'e-loue</h2>
+		</div>
+		{% cache 900 curiosities%}
+		{% for curiosity in curiosities %}
+		<div class="product-home x2">
+			<p class="product-home-img">
+				<a href="{{ curiosity.product.get_absolute_url }}">
+					{% with curiosity.product.pictures.all|first as picture %}
+						<img src="{{ picture.display.url }}" alt="{{ product.summary }}"/>
+					{% endwith %}
+				</a>
+			</p>
+			<p>
+				<a href="" class="product-home-title">{{ curiosity.product.summary|capfirst }}</a><br />
+				 {% with curiosity.product.prices.day|first as price %}
+				  <span>{{ price }}/jour</span>
+				 {% endwith %}
+			</p>
+		</div>
+		{% endfor %}
+		{% endcache %}
+		<div class="content-header x12">
 		 <h2>{% trans "Catégories" %}</h2>
 		</div>
 		{% cache 900 categories %}

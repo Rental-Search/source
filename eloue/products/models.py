@@ -325,7 +325,12 @@ class Answer(models.Model):
         if not self.created_at:
             self.created_at = datetime.now()
         super(Answer, self).save(*args, **kwargs)
+        
+class Curiosity(models.Model):
+    product = models.ForeignKey(Product, related_name='curiosities')
     
+    class Meta:
+        verbose_name_plural = "curiosities"
 
 post_save.connect(post_save_answer, sender=Answer)
 post_save.connect(post_save_product, sender=Product)

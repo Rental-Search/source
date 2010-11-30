@@ -9,6 +9,18 @@
     font-size: 16px;
   }
   
+  .product-home-img a
+  {
+    display: block; 
+    height: 120px; 
+    padding-bottom: 10px;
+  }
+  
+  .product-home-img img
+  {
+    width: 120px;
+  }
+  
   .category-home ul li{ list-style-type: none;}
 
 
