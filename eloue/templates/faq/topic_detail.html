@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{{ topic.title }} - {{ block.super }}{% endblock %}
+
+{% block description %}
+ {% blocktrans with topic.title|lower as section %}
+  Les questions les plus fréquemment posées sur e-loue à propos de {{ section }}
+ {% endblocktrans %}
+{% endblock %}
+
+{% block content %}
+ <h2>{{ topic.title }}s</h2>
+ {% if topic.description %}
+  <p>{{ topic.description }}</p>
+ {% endif %}
+ {% for question in question_list %}
+  <h3 id="{{ question.slug }}">{{ question.question }}</h3>
+  {{ question.answer|markdown }}
+ {% endfor %}
+{% endblock %}
