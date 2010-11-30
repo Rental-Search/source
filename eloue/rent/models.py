@@ -318,37 +318,31 @@ class Booking(models.Model):
         """
         domain = Site.objects.get_current().domain
         protocol = "https" if USE_HTTPS else "http"
-        try:
-            response = payments.pay(
-                actionType='PAY_PRIMARY',
-                senderEmail=self.borrower.paypal_email,
-                feesPayer='PRIMARYRECEIVER',
-                cancelUrl=cancel_url,
-                returnUrl=return_url,
-                currencyCode=self.currency,
-                preapprovalKey=self.preapproval_key,
-                ipnNotificationUrl=urljoin(
-                    "%s://%s" % (protocol, domain), reverse('pay_ipn')
-                ),
-                receiverList={'receiver': [
-                    {'primary':True, 'amount':str(math.ceil(self.total_amount)), 'email':PAYPAL_API_EMAIL},
-                    {'primary':False, 'amount':str(math.ceil(self.net_price)), 'email':self.owner.email}
-                ]}
-            )
-            self.pay_key = response['payKey']
-            self.save()
-        except PaypalError, e:
-            log.error(e)
+        response = payments.pay(
+            actionType='PAY_PRIMARY',
+            senderEmail=self.borrower.paypal_email,
+            feesPayer='PRIMARYRECEIVER',
+            cancelUrl=cancel_url,
+            returnUrl=return_url,
+            currencyCode=self.currency,
+            preapprovalKey=self.preapproval_key,
+            ipnNotificationUrl=urljoin(
+                "%s://%s" % (protocol, domain), reverse('pay_ipn')
+            ),
+            receiverList={'receiver': [
+                {'primary':True, 'amount':str(math.ceil(self.total_amount)), 'email':PAYPAL_API_EMAIL},
+                {'primary':False, 'amount':str(math.ceil(self.net_price)), 'email':self.owner.paypal_email}
+            ]}
+        )
+        self.pay_key = response['payKey']
+        self.save()
     
     @transition(source='ended', target='closing', save=True)
     def pay(self):
         """Return deposit_amount to borrower and pay the owner"""
-        try:
-            response = payments.execute_payment(
-                payKey=self.pay_key
-            )
-        except PaypalError, e:
-            log.error(e)
+        response = payments.execute_payment(
+            payKey=self.pay_key
+        )
     
     @transition(source=['authorized','pending'], target='canceled', save=True)
     def cancel(self):
@@ -377,7 +371,7 @@ class Booking(models.Model):
                 "%s://%s" % (protocol, domain), reverse('pay_ipn')
             ),
             receiverList={'receiver': [
-                {'amount':str(math.floor(amount)), 'email':self.owner.email},
+                {'amount':str(math.floor(amount)), 'email':self.owner.paypal_email},
             ]}
         )
     
