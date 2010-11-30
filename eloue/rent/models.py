@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import datetime
 import logbook
+import math
 import types
 import random
 
@@ -182,7 +183,7 @@ class Booking(models.Model):
                 startingDate=now,
                 endingDate=now + datetime.timedelta(days=360),
                 currencyCode=self.currency,
-                maxTotalAmountOfAllPayments=str(self.total_amount),
+                maxTotalAmountOfAllPayments=str(math.ceil(self.total_amount)),
                 cancelUrl=cancel_url,
                 returnUrl=return_url,
                 ipnNotificationUrl=urljoin(
@@ -330,8 +331,8 @@ class Booking(models.Model):
                     "%s://%s" % (protocol, domain), reverse('pay_ipn')
                 ),
                 receiverList={'receiver': [
-                    {'primary':True, 'amount':str(self.total_amount), 'email':PAYPAL_API_EMAIL},
-                    {'primary':False, 'amount':str(self.net_price), 'email':self.owner.email}
+                    {'primary':True, 'amount':str(math.ceil(self.total_amount)), 'email':PAYPAL_API_EMAIL},
+                    {'primary':False, 'amount':str(math.ceil(self.net_price)), 'email':self.owner.email}
                 ]}
             )
             self.pay_key = response['payKey']
@@ -376,7 +377,7 @@ class Booking(models.Model):
                 "%s://%s" % (protocol, domain), reverse('pay_ipn')
             ),
             receiverList={'receiver': [
-                {'amount':str(amount), 'email':self.owner.email},
+                {'amount':str(math.floor(amount)), 'email':self.owner.email},
             ]}
         )
     
