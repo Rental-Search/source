@@ -159,7 +159,7 @@ def booking_close(request, booking_id):
     booking = get_object_or_404(Booking, pk=booking_id)
     if request.POST:
         booking.pay()
-        booking.send_closed_mail()
+        booking.send_closed_email()
         messages.success(request, _(u"Cette réservation a bien été cloturée"))
     messages.error(request, _(u"Cette réservation n'a pu être cloturée"))
     return redirect_to(request, booking.get_absolute_url())

@@ -1,5 +1,5 @@
 {% load i18n %}
-{% blocktrans with booking.borrower.username as username and booking.owner.username as owner and booking.total_amount as total_amount and booking.get_absolute_url as booking_url  %}
+{% blocktrans with booking.borrower.username as username and booking.owner.username as owner and booking.total_amount as total_amount and booking.get_absolute_url as booking_url and site.domain as domain %}
 Bonjour {{ username }},
 
 {{ owner }} vient de clôturer votre location. Aussi, un prélèvement de {{ total_amount }} euros vient de lui être viré.
