@@ -829,6 +829,418 @@
         status: 2, topic: 4}
     model: faq.question
     pk: 21
+-   fields: {level: 2, lft: 83, name: Oiseaux, need_insurance: true, parent: 719,
+        rght: 84, slug: oiseaux, tree_id: 390}
+    model: products.category
+    pk: 723
+-   fields: {level: 2, lft: 109, name: Tandem, need_insurance: true, parent: 247,
+        rght: 110, slug: tandem, tree_id: 172}
+    model: products.category
+    pk: 688
+-   fields: {level: 2, lft: 203, name: Mini-motos, need_insurance: true, parent: 585,
+        rght: 204, slug: mini-motos, tree_id: 172}
+    model: products.category
+    pk: 589
+-   fields: {level: 2, lft: 117, name: "H\xE9licopt\xE8re mono-turbine", need_insurance: true,
+        parent: 251, rght: 118, slug: helicoptere-mono-turbine, tree_id: 172}
+    model: products.category
+    pk: 591
+-   fields: {level: 2, lft: 205, name: Chasse, need_insurance: true, parent: 585,
+        rght: 206, slug: chasse, tree_id: 172}
+    model: products.category
+    pk: 592
+-   fields: {level: 2, lft: 207, name: "Course \xE0 pied", need_insurance: true, parent: 585,
+        rght: 208, slug: course-a-pied, tree_id: 172}
+    model: products.category
+    pk: 593
+-   fields: {level: 2, lft: 209, name: Equitation, need_insurance: true, parent: 585,
+        rght: 210, slug: equitation, tree_id: 172}
+    model: products.category
+    pk: 594
+-   fields: {level: 2, lft: 211, name: Golf, need_insurance: true, parent: 585, rght: 212,
+        slug: golf, tree_id: 172}
+    model: products.category
+    pk: 595
+-   fields: {level: 2, lft: 213, name: "Karat\xE9", need_insurance: true, parent: 585,
+        rght: 214, slug: karate, tree_id: 172}
+    model: products.category
+    pk: 596
+-   fields: {level: 2, lft: 215, name: Natation, need_insurance: true, parent: 585,
+        rght: 216, slug: natation, tree_id: 172}
+    model: products.category
+    pk: 597
+-   fields: {level: 2, lft: 217, name: "Plong\xE9e", need_insurance: true, parent: 585,
+        rght: 218, slug: plongee, tree_id: 172}
+    model: products.category
+    pk: 598
+-   fields: {level: 2, lft: 219, name: Snowboard, need_insurance: true, parent: 585,
+        rght: 220, slug: snowboard, tree_id: 172}
+    model: products.category
+    pk: 599
+-   fields: {level: 2, lft: 143, name: "Fl\xE9chettes", need_insurance: true, parent: 585,
+        rght: 144, slug: flechettes, tree_id: 172}
+    model: products.category
+    pk: 220
+-   fields: {level: 2, lft: 141, name: Fitness, need_insurance: true, parent: 585,
+        rght: 142, slug: fitness, tree_id: 172}
+    model: products.category
+    pk: 219
+-   fields: {level: 2, lft: 139, name: Escalade, need_insurance: true, parent: 585,
+        rght: 140, slug: escalade, tree_id: 172}
+    model: products.category
+    pk: 218
+-   fields: {level: 2, lft: 137, name: "D\xE9riveur", need_insurance: true, parent: 585,
+        rght: 138, slug: deriveur, tree_id: 172}
+    model: products.category
+    pk: 217
+-   fields: {level: 2, lft: 135, name: Danse classique, need_insurance: true, parent: 585,
+        rght: 136, slug: danse-classique, tree_id: 172}
+    model: products.category
+    pk: 216
+-   fields: {level: 2, lft: 133, name: Cerf-volant, need_insurance: true, parent: 585,
+        rght: 134, slug: cerf-volant, tree_id: 172}
+    model: products.category
+    pk: 215
+-   fields: {level: 2, lft: 131, name: "Cano\xEA-kayak", need_insurance: true, parent: 585,
+        rght: 132, slug: canoe-kayak, tree_id: 172}
+    model: products.category
+    pk: 214
+-   fields: {level: 2, lft: 129, name: Boxes, need_insurance: true, parent: 585, rght: 130,
+        slug: boxes, tree_id: 172}
+    model: products.category
+    pk: 213
+-   fields: {level: 2, lft: 127, name: Bodyboard, need_insurance: true, parent: 585,
+        rght: 128, slug: bodyboard, tree_id: 172}
+    model: products.category
+    pk: 212
+-   fields: {level: 2, lft: 125, name: Badminton, need_insurance: true, parent: 585,
+        rght: 126, slug: badminton, tree_id: 172}
+    model: products.category
+    pk: 211
+-   fields: {level: 2, lft: 123, name: Alpiniste, need_insurance: true, parent: 585,
+        rght: 124, slug: alpiniste, tree_id: 172}
+    model: products.category
+    pk: 210
+-   fields: {level: 2, lft: 121, name: Squash, need_insurance: true, parent: 585,
+        rght: 122, slug: squash, tree_id: 172}
+    model: products.category
+    pk: 2
+-   fields: {level: 2, lft: 197, name: Basket-Ball, need_insurance: true, parent: 585,
+        rght: 198, slug: basket-ball, tree_id: 172}
+    model: products.category
+    pk: 586
+-   fields: {level: 2, lft: 199, name: Tae knon do, need_insurance: true, parent: 585,
+        rght: 200, slug: tae-knon-do, tree_id: 172}
+    model: products.category
+    pk: 587
+-   fields: {level: 2, lft: 201, name: Trotinnette, need_insurance: true, parent: 585,
+        rght: 202, slug: trotinnette, tree_id: 172}
+    model: products.category
+    pk: 588
+-   fields: {level: 2, lft: 115, name: "Helicopt\xE8re bi-turbine", need_insurance: true,
+        parent: 251, rght: 116, slug: helicoptere-bi-turbine, tree_id: 172}
+    model: products.category
+    pk: 252
+-   fields: {level: 1, lft: 100, name: "V\xE9lo", need_insurance: true, parent: 172,
+        rght: 113, slug: velo, tree_id: 172}
+    model: products.category
+    pk: 247
+-   fields: {level: 2, lft: 187, name: Tennis de table, need_insurance: true, parent: 585,
+        rght: 188, slug: tennis-de-table, tree_id: 172}
+    model: products.category
+    pk: 242
+-   fields: {level: 2, lft: 161, name: "P\xEAche", need_insurance: true, parent: 585,
+        rght: 162, slug: peche, tree_id: 172}
+    model: products.category
+    pk: 229
+-   fields: {level: 2, lft: 159, name: Padel, need_insurance: true, parent: 585, rght: 160,
+        slug: padel, tree_id: 172}
+    model: products.category
+    pk: 228
+-   fields: {level: 2, lft: 157, name: Modern Jazz, need_insurance: true, parent: 585,
+        rght: 158, slug: modern-jazz, tree_id: 172}
+    model: products.category
+    pk: 227
+-   fields: {level: 2, lft: 155, name: Marche, need_insurance: true, parent: 585,
+        rght: 156, slug: marche, tree_id: 172}
+    model: products.category
+    pk: 226
+-   fields: {level: 2, lft: 153, name: Kung Fu, need_insurance: true, parent: 585,
+        rght: 154, slug: kung-fu, tree_id: 172}
+    model: products.category
+    pk: 225
+-   fields: {level: 2, lft: 151, name: Judo, need_insurance: true, parent: 585, rght: 152,
+        slug: judo, tree_id: 172}
+    model: products.category
+    pk: 224
+-   fields: {level: 2, lft: 149, name: Handball, need_insurance: true, parent: 585,
+        rght: 150, slug: handball, tree_id: 172}
+    model: products.category
+    pk: 223
+-   fields: {level: 2, lft: 147, name: Gymnastique, need_insurance: true, parent: 585,
+        rght: 148, slug: gymnastique, tree_id: 172}
+    model: products.category
+    pk: 222
+-   fields: {level: 2, lft: 145, name: Football, need_insurance: true, parent: 585,
+        rght: 146, slug: football, tree_id: 172}
+    model: products.category
+    pk: 221
+-   fields: {level: 0, lft: 1, name: Loisirs, need_insurance: true, parent: null,
+        rght: 222, slug: loisirs, tree_id: 172}
+    model: products.category
+    pk: 172
+-   fields: {level: 1, lft: 120, name: Sport, need_insurance: true, parent: 172, rght: 221,
+        slug: sport, tree_id: 172}
+    model: products.category
+    pk: 585
+-   fields: {level: 2, lft: 125, name: "T\xE9l\xE9phone portable", need_insurance: true,
+        parent: 691, rght: 128, slug: telephone-portable, tree_id: 253}
+    model: products.category
+    pk: 697
+-   fields: {level: 2, lft: 123, name: Video projecteur, need_insurance: true, parent: 705,
+        rght: 124, slug: video-projecteur, tree_id: 335}
+    model: products.category
+    pk: 706
+-   fields: {level: 2, lft: 143, name: Accessoires baladeur, need_insurance: true,
+        parent: 713, rght: 144, slug: accessoires-baladeur, tree_id: 335}
+    model: products.category
+    pk: 716
+-   fields: {level: 2, lft: 111, name: "Accessoires v\xE9lo", need_insurance: true,
+        parent: 247, rght: 112, slug: accessoire-velo, tree_id: 172}
+    model: products.category
+    pk: 689
+-   fields: {level: 3, lft: 126, name: "T\xE9l\xE9phone satellite", need_insurance: true,
+        parent: 697, rght: 127, slug: telephone-satellite, tree_id: 253}
+    model: products.category
+    pk: 698
+-   fields: {level: 2, lft: 125, name: Projecteur diapo, need_insurance: true, parent: 705,
+        rght: 126, slug: projecteur-diapo, tree_id: 335}
+    model: products.category
+    pk: 707
+-   fields: {level: 2, lft: 145, name: Enceinte iPod/iPhone, need_insurance: true,
+        parent: 713, rght: 146, slug: enceinte-ipod-iphone, tree_id: 335}
+    model: products.category
+    pk: 717
+-   fields: {level: 2, lft: 85, name: Rongeurs, need_insurance: true, parent: 719,
+        rght: 86, slug: rongeurs, tree_id: 390}
+    model: products.category
+    pk: 724
+-   fields: {level: 2, lft: 43, name: Semoir, need_insurance: true, parent: 673, rght: 44,
+        slug: semoir, tree_id: 495}
+    model: products.category
+    pk: 507
+-   fields: {level: 2, lft: 41, name: "Mat\xE9rieil d'elevage", need_insurance: true,
+        parent: 673, rght: 42, slug: materieil-delevage, tree_id: 495}
+    model: products.category
+    pk: 506
+-   fields: {level: 2, lft: 39, name: "Mat\xE9riel de transport", need_insurance: true,
+        parent: 673, rght: 40, slug: materiel-de-transport, tree_id: 495}
+    model: products.category
+    pk: 505
+-   fields: {level: 1, lft: 8, name: Remorque, need_insurance: true, parent: 495,
+        rght: 17, slug: remorque, tree_id: 495}
+    model: products.category
+    pk: 498
+-   fields: {level: 2, lft: 19, name: "Camion am\xE9nag\xE9", need_insurance: true,
+        parent: 508, rght: 20, slug: camion-amenage, tree_id: 495}
+    model: products.category
+    pk: 509
+-   fields: {level: 2, lft: 25, name: Autocar, need_insurance: true, parent: 510,
+        rght: 26, slug: autocar, tree_id: 495}
+    model: products.category
+    pk: 511
+-   fields: {level: 1, lft: 18, name: Transport de loisir, need_insurance: true, parent: 495,
+        rght: 23, slug: transport-de-loisir, tree_id: 495}
+    model: products.category
+    pk: 508
+-   fields: {level: 1, lft: 24, name: Transport de personne, need_insurance: true,
+        parent: 495, rght: 29, slug: transport-de-personne, tree_id: 495}
+    model: products.category
+    pk: 510
+-   fields: {level: 0, lft: 1, name: Transport, need_insurance: true, parent: null,
+        rght: 50, slug: transport, tree_id: 495}
+    model: products.category
+    pk: 495
+-   fields: {level: 2, lft: 21, name: Camping-car, need_insurance: true, parent: 508,
+        rght: 22, slug: camping-car, tree_id: 495}
+    model: products.category
+    pk: 676
+-   fields: {level: 2, lft: 37, name: "Outil d'\xE9pandage", need_insurance: true,
+        parent: 673, rght: 38, slug: outil-depandage, tree_id: 495}
+    model: products.category
+    pk: 504
+-   fields: {level: 2, lft: 35, name: Outil du sol, need_insurance: true, parent: 673,
+        rght: 36, slug: outil-du-sol, tree_id: 495}
+    model: products.category
+    pk: 503
+-   fields: {level: 2, lft: 33, name: "Mat\xE9riel de fenaison", need_insurance: true,
+        parent: 673, rght: 34, slug: materiel-de-fenaison, tree_id: 495}
+    model: products.category
+    pk: 502
+-   fields: {level: 2, lft: 31, name: Tracteur, need_insurance: true, parent: 673,
+        rght: 32, slug: tracteur, tree_id: 495}
+    model: products.category
+    pk: 501
+-   fields: {level: 2, lft: 45, name: Appareil de manutention, need_insurance: true,
+        parent: 673, rght: 46, slug: appareil-de-manutention, tree_id: 495}
+    model: products.category
+    pk: 674
+-   fields: {level: 1, lft: 30, name: Engins agricoles, need_insurance: true, parent: 495,
+        rght: 49, slug: engins-agricoles, tree_id: 495}
+    model: products.category
+    pk: 673
+-   fields: {level: 2, lft: 47, name: "Mat\xE9riel de r\xE9colte", need_insurance: true,
+        parent: 673, rght: 48, slug: materiel-de-recolte, tree_id: 495}
+    model: products.category
+    pk: 675
+-   fields: {level: 2, lft: 27, name: Minibus, need_insurance: true, parent: 510,
+        rght: 28, slug: minibus, tree_id: 495}
+    model: products.category
+    pk: 677
+-   fields: {level: 2, lft: 15, name: Porte voiture, need_insurance: true, parent: 498,
+        rght: 16, slug: porte-voiture, tree_id: 495}
+    model: products.category
+    pk: 690
+-   fields: {level: 2, lft: 129, name: "T\xE9l\xE9phone IP", need_insurance: true,
+        parent: 691, rght: 130, slug: telephone-ip, tree_id: 253}
+    model: products.category
+    pk: 699
+-   fields: {level: 2, lft: 127, name: Projecteur de transparent, need_insurance: true,
+        parent: 705, rght: 128, slug: projecteur-de-transparent, tree_id: 335}
+    model: products.category
+    pk: 708
+-   fields: {level: 2, lft: 147, name: Enceinte portative, need_insurance: true, parent: 713,
+        rght: 148, slug: enceinte-portative, tree_id: 335}
+    model: products.category
+    pk: 718
+-   fields: {level: 2, lft: 87, name: Tortues et reptiles, need_insurance: true, parent: 719,
+        rght: 88, slug: tortues-et-reptiles, tree_id: 390}
+    model: products.category
+    pk: 725
+-   fields: {level: 1, lft: 76, name: Accessoires animaux, need_insurance: true, parent: 390,
+        rght: 89, slug: accessoires-animaux, tree_id: 390}
+    model: products.category
+    pk: 719
+-   fields: {level: 1, lft: 114, name: "T\xE9l\xE9phone", need_insurance: true, parent: 253,
+        rght: 131, slug: telephone, tree_id: 253}
+    model: products.category
+    pk: 691
+-   fields: {level: 1, lft: 112, name: "T\xE9l\xE9vision", need_insurance: true, parent: 335,
+        rght: 121, slug: television, tree_id: 335}
+    model: products.category
+    pk: 700
+-   fields: {level: 1, lft: 130, name: Home cinema, need_insurance: true, parent: 335,
+        rght: 137, slug: home-cinema, tree_id: 335}
+    model: products.category
+    pk: 709
+-   fields: {level: 0, lft: 1, name: Image et son, need_insurance: true, parent: null,
+        rght: 150, slug: image-et-son, tree_id: 335}
+    model: products.category
+    pk: 335
+-   fields: {level: 2, lft: 115, name: Assistant personnel, need_insurance: true,
+        parent: 691, rght: 116, slug: assistant-personnel, tree_id: 253}
+    model: products.category
+    pk: 692
+-   fields: {level: 2, lft: 113, name: TV LCD, need_insurance: true, parent: 700,
+        rght: 114, slug: tv-lcd, tree_id: 335}
+    model: products.category
+    pk: 701
+-   fields: {level: 2, lft: 131, name: "Syst\xE8me 2.1", need_insurance: true, parent: 709,
+        rght: 132, slug: systeme-21, tree_id: 335}
+    model: products.category
+    pk: 710
+-   fields: {level: 2, lft: 77, name: "\xC2ne", need_insurance: true, parent: 719,
+        rght: 78, slug: ane, tree_id: 390}
+    model: products.category
+    pk: 720
+-   fields: {level: 2, lft: 117, name: "Chargeur t\xE9l\xE9phone", need_insurance: true,
+        parent: 691, rght: 118, slug: chargeur-telephone, tree_id: 253}
+    model: products.category
+    pk: 693
+-   fields: {level: 2, lft: 115, name: "T\xE9l\xE9 LED", need_insurance: true, parent: 700,
+        rght: 116, slug: tele-led, tree_id: 335}
+    model: products.category
+    pk: 702
+-   fields: {level: 2, lft: 133, name: "Syst\xE8me 5.1", need_insurance: true, parent: 709,
+        rght: 134, slug: systeme-51, tree_id: 335}
+    model: products.category
+    pk: 711
+-   fields: {level: 2, lft: 79, name: Chat, need_insurance: true, parent: 719, rght: 80,
+        slug: chat, tree_id: 390}
+    model: products.category
+    pk: 721
+-   fields: {level: 2, lft: 119, name: Fax, need_insurance: true, parent: 691, rght: 120,
+        slug: fax, tree_id: 253}
+    model: products.category
+    pk: 694
+-   fields: {level: 2, lft: 117, name: Plasma, need_insurance: true, parent: 700,
+        rght: 118, slug: plasma, tree_id: 335}
+    model: products.category
+    pk: 703
+-   fields: {level: 2, lft: 135, name: Barre de son, need_insurance: true, parent: 709,
+        rght: 136, slug: barre-de-son, tree_id: 335}
+    model: products.category
+    pk: 712
+-   fields: {level: 2, lft: 81, name: Cheval, need_insurance: true, parent: 719, rght: 82,
+        slug: cheval, tree_id: 390}
+    model: products.category
+    pk: 722
+-   fields: {level: 1, lft: 114, name: "H\xE9licopt\xE8re", need_insurance: true,
+        parent: 172, rght: 119, slug: helicoptere, tree_id: 172}
+    model: products.category
+    pk: 251
+-   fields: {level: 2, lft: 195, name: "Char \xE0 voile", need_insurance: true, parent: 585,
+        rght: 196, slug: char-a-voile, tree_id: 172}
+    model: products.category
+    pk: 246
+-   fields: {level: 2, lft: 193, name: Segway, need_insurance: true, parent: 585,
+        rght: 194, slug: segway, tree_id: 172}
+    model: products.category
+    pk: 245
+-   fields: {level: 2, lft: 191, name: Volley-ball, need_insurance: true, parent: 585,
+        rght: 192, slug: volley-ball, tree_id: 172}
+    model: products.category
+    pk: 244
+-   fields: {level: 2, lft: 189, name: "Tir \xE0 l'arc", need_insurance: true, parent: 585,
+        rght: 190, slug: tir-a-larc, tree_id: 172}
+    model: products.category
+    pk: 243
+-   fields: {level: 2, lft: 185, name: Tennis, need_insurance: true, parent: 585,
+        rght: 186, slug: tennis, tree_id: 172}
+    model: products.category
+    pk: 241
+-   fields: {level: 2, lft: 183, name: Surf, need_insurance: true, parent: 585, rght: 184,
+        slug: surf, tree_id: 172}
+    model: products.category
+    pk: 240
+-   fields: {level: 2, lft: 181, name: Sports US, need_insurance: true, parent: 585,
+        rght: 182, slug: sports-us, tree_id: 172}
+    model: products.category
+    pk: 239
+-   fields: {level: 2, lft: 179, name: Sport de glace, need_insurance: true, parent: 585,
+        rght: 180, slug: sport-de-glace, tree_id: 172}
+    model: products.category
+    pk: 238
+-   fields: {level: 2, lft: 177, name: Ski, need_insurance: true, parent: 585, rght: 178,
+        slug: ski, tree_id: 172}
+    model: products.category
+    pk: 237
+-   fields: {level: 2, lft: 175, name: Skateboard, need_insurance: true, parent: 585,
+        rght: 176, slug: skateboard, tree_id: 172}
+    model: products.category
+    pk: 236
+-   fields: {level: 2, lft: 173, name: Rugby, need_insurance: true, parent: 585, rght: 174,
+        slug: rugby, tree_id: 172}
+    model: products.category
+    pk: 235
+-   fields: {level: 2, lft: 171, name: Roller, need_insurance: true, parent: 585,
+        rght: 172, slug: roller, tree_id: 172}
+    model: products.category
+    pk: 234
+-   fields: {level: 2, lft: 169, name: "Randonn\xE9e", need_insurance: true, parent: 585,
+        rght: 170, slug: randonnee, tree_id: 172}
+    model: products.category
+    pk: 233
 -   fields: {level: 0, lft: 1, name: Divers, need_insurance: true, parent: null, rght: 2,
         slug: divers, tree_id: 513}
     model: products.category
@@ -941,74 +1353,6 @@
         rght: 6, slug: jeux-de-bistrot, tree_id: 172}
     model: products.category
     pk: 175
--   fields: {level: 1, lft: 110, name: "H\xE9licopt\xE8re", need_insurance: true,
-        parent: 172, rght: 115, slug: helicoptere, tree_id: 172}
-    model: products.category
-    pk: 251
--   fields: {level: 2, lft: 191, name: "Char \xE0 voile", need_insurance: true, parent: 585,
-        rght: 192, slug: char-a-voile, tree_id: 172}
-    model: products.category
-    pk: 246
--   fields: {level: 2, lft: 189, name: Segway, need_insurance: true, parent: 585,
-        rght: 190, slug: segway, tree_id: 172}
-    model: products.category
-    pk: 245
--   fields: {level: 2, lft: 187, name: Volley-ball, need_insurance: true, parent: 585,
-        rght: 188, slug: volley-ball, tree_id: 172}
-    model: products.category
-    pk: 244
--   fields: {level: 2, lft: 185, name: "Tir \xE0 l'arc", need_insurance: true, parent: 585,
-        rght: 186, slug: tir-a-larc, tree_id: 172}
-    model: products.category
-    pk: 243
--   fields: {level: 2, lft: 181, name: Tennis, need_insurance: true, parent: 585,
-        rght: 182, slug: tennis, tree_id: 172}
-    model: products.category
-    pk: 241
--   fields: {level: 2, lft: 179, name: Surf, need_insurance: true, parent: 585, rght: 180,
-        slug: surf, tree_id: 172}
-    model: products.category
-    pk: 240
--   fields: {level: 2, lft: 177, name: Sports US, need_insurance: true, parent: 585,
-        rght: 178, slug: sports-us, tree_id: 172}
-    model: products.category
-    pk: 239
--   fields: {level: 2, lft: 175, name: Sport de glace, need_insurance: true, parent: 585,
-        rght: 176, slug: sport-de-glace, tree_id: 172}
-    model: products.category
-    pk: 238
--   fields: {level: 2, lft: 173, name: Ski, need_insurance: true, parent: 585, rght: 174,
-        slug: ski, tree_id: 172}
-    model: products.category
-    pk: 237
--   fields: {level: 2, lft: 171, name: Skateboard, need_insurance: true, parent: 585,
-        rght: 172, slug: skateboard, tree_id: 172}
-    model: products.category
-    pk: 236
--   fields: {level: 2, lft: 169, name: Rugby, need_insurance: true, parent: 585, rght: 170,
-        slug: rugby, tree_id: 172}
-    model: products.category
-    pk: 235
--   fields: {level: 2, lft: 167, name: Roller, need_insurance: true, parent: 585,
-        rght: 168, slug: roller, tree_id: 172}
-    model: products.category
-    pk: 234
--   fields: {level: 2, lft: 165, name: "Randonn\xE9e", need_insurance: true, parent: 585,
-        rght: 166, slug: randonnee, tree_id: 172}
-    model: products.category
-    pk: 233
--   fields: {level: 2, lft: 163, name: Raid, need_insurance: true, parent: 585, rght: 164,
-        slug: raid, tree_id: 172}
-    model: products.category
-    pk: 232
--   fields: {level: 2, lft: 161, name: "Planche \xE0 voile", need_insurance: true,
-        parent: 585, rght: 162, slug: planche-a-voile, tree_id: 172}
-    model: products.category
-    pk: 231
--   fields: {level: 2, lft: 159, name: "P\xE9tanque", need_insurance: true, parent: 585,
-        rght: 160, slug: petanque, tree_id: 172}
-    model: products.category
-    pk: 230
 -   fields: {level: 2, lft: 3, name: Imprimantes jet d'encre, need_insurance: true,
         parent: 254, rght: 4, slug: imprimantes-jet-dencre, tree_id: 253}
     model: products.category
@@ -1085,6 +1429,30 @@
         rght: 24, slug: charme-et-erotisme, tree_id: 297}
     model: products.category
     pk: 309
+-   fields: {level: 2, lft: 167, name: Raid, need_insurance: true, parent: 585, rght: 168,
+        slug: raid, tree_id: 172}
+    model: products.category
+    pk: 232
+-   fields: {level: 2, lft: 165, name: "Planche \xE0 voile", need_insurance: true,
+        parent: 585, rght: 166, slug: planche-a-voile, tree_id: 172}
+    model: products.category
+    pk: 231
+-   fields: {level: 2, lft: 163, name: "P\xE9tanque", need_insurance: true, parent: 585,
+        rght: 164, slug: petanque, tree_id: 172}
+    model: products.category
+    pk: 230
+-   fields: {level: 2, lft: 121, name: Talkie-Walkie, need_insurance: true, parent: 691,
+        rght: 122, slug: talkie-walkie, tree_id: 253}
+    model: products.category
+    pk: 695
+-   fields: {level: 2, lft: 119, name: Accessoires TV, need_insurance: true, parent: 700,
+        rght: 120, slug: accessoires-tv, tree_id: 335}
+    model: products.category
+    pk: 704
+-   fields: {level: 1, lft: 138, name: Baladeur, need_insurance: true, parent: 335,
+        rght: 149, slug: baladeur, tree_id: 335}
+    model: products.category
+    pk: 713
 -   fields: {level: 2, lft: 23, name: Ceinture abdominale, need_insurance: true, parent: 619,
         rght: 24, slug: ceinture-abdominale, tree_id: 323}
     model: products.category
@@ -1361,18 +1729,6 @@
         rght: 4, slug: fourgon-petit-volume, tree_id: 495}
     model: products.category
     pk: 497
--   fields: {level: 2, lft: 41, name: Semoir, need_insurance: true, parent: 673, rght: 42,
-        slug: semoir, tree_id: 495}
-    model: products.category
-    pk: 507
--   fields: {level: 2, lft: 39, name: "Mat\xE9rieil d'elevage", need_insurance: true,
-        parent: 673, rght: 40, slug: materieil-delevage, tree_id: 495}
-    model: products.category
-    pk: 506
--   fields: {level: 2, lft: 37, name: "Mat\xE9riel de transport", need_insurance: true,
-        parent: 673, rght: 38, slug: materiel-de-transport, tree_id: 495}
-    model: products.category
-    pk: 505
 -   fields: {level: 1, lft: 2, name: Entretien, need_insurance: true, parent: 512,
         rght: 17, slug: entretien, tree_id: 512}
     model: products.category
@@ -1515,46 +1871,6 @@
         rght: 108, slug: velo-adulte, tree_id: 172}
     model: products.category
     pk: 590
--   fields: {level: 2, lft: 199, name: Mini-motos, need_insurance: true, parent: 585,
-        rght: 200, slug: mini-motos, tree_id: 172}
-    model: products.category
-    pk: 589
--   fields: {level: 2, lft: 113, name: "H\xE9licopt\xE8re mono-turbine", need_insurance: true,
-        parent: 251, rght: 114, slug: helicoptere-mono-turbine, tree_id: 172}
-    model: products.category
-    pk: 591
--   fields: {level: 2, lft: 201, name: Chasse, need_insurance: true, parent: 585,
-        rght: 202, slug: chasse, tree_id: 172}
-    model: products.category
-    pk: 592
--   fields: {level: 2, lft: 203, name: "Course \xE0 pied", need_insurance: true, parent: 585,
-        rght: 204, slug: course-a-pied, tree_id: 172}
-    model: products.category
-    pk: 593
--   fields: {level: 2, lft: 205, name: Equitation, need_insurance: true, parent: 585,
-        rght: 206, slug: equitation, tree_id: 172}
-    model: products.category
-    pk: 594
--   fields: {level: 2, lft: 207, name: Golf, need_insurance: true, parent: 585, rght: 208,
-        slug: golf, tree_id: 172}
-    model: products.category
-    pk: 595
--   fields: {level: 2, lft: 209, name: "Karat\xE9", need_insurance: true, parent: 585,
-        rght: 210, slug: karate, tree_id: 172}
-    model: products.category
-    pk: 596
--   fields: {level: 2, lft: 211, name: Natation, need_insurance: true, parent: 585,
-        rght: 212, slug: natation, tree_id: 172}
-    model: products.category
-    pk: 597
--   fields: {level: 2, lft: 213, name: "Plong\xE9e", need_insurance: true, parent: 585,
-        rght: 214, slug: plongee, tree_id: 172}
-    model: products.category
-    pk: 598
--   fields: {level: 2, lft: 215, name: Snowboard, need_insurance: true, parent: 585,
-        rght: 216, slug: snowboard, tree_id: 172}
-    model: products.category
-    pk: 599
 -   fields: {level: 2, lft: 19, name: Imprimantes jet d'encre multifonction, need_insurance: true,
         parent: 254, rght: 20, slug: imprimantes-jet-dencre-multifonction, tree_id: 253}
     model: products.category
@@ -2396,122 +2712,6 @@
         slug: bmx, tree_id: 172}
     model: products.category
     pk: 250
--   fields: {level: 2, lft: 139, name: "Fl\xE9chettes", need_insurance: true, parent: 585,
-        rght: 140, slug: flechettes, tree_id: 172}
-    model: products.category
-    pk: 220
--   fields: {level: 2, lft: 137, name: Fitness, need_insurance: true, parent: 585,
-        rght: 138, slug: fitness, tree_id: 172}
-    model: products.category
-    pk: 219
--   fields: {level: 2, lft: 135, name: Escalade, need_insurance: true, parent: 585,
-        rght: 136, slug: escalade, tree_id: 172}
-    model: products.category
-    pk: 218
--   fields: {level: 2, lft: 133, name: "D\xE9riveur", need_insurance: true, parent: 585,
-        rght: 134, slug: deriveur, tree_id: 172}
-    model: products.category
-    pk: 217
--   fields: {level: 2, lft: 131, name: Danse classique, need_insurance: true, parent: 585,
-        rght: 132, slug: danse-classique, tree_id: 172}
-    model: products.category
-    pk: 216
--   fields: {level: 2, lft: 129, name: Cerf-volant, need_insurance: true, parent: 585,
-        rght: 130, slug: cerf-volant, tree_id: 172}
-    model: products.category
-    pk: 215
--   fields: {level: 2, lft: 127, name: "Cano\xEA-kayak", need_insurance: true, parent: 585,
-        rght: 128, slug: canoe-kayak, tree_id: 172}
-    model: products.category
-    pk: 214
--   fields: {level: 2, lft: 125, name: Boxes, need_insurance: true, parent: 585, rght: 126,
-        slug: boxes, tree_id: 172}
-    model: products.category
-    pk: 213
--   fields: {level: 2, lft: 123, name: Bodyboard, need_insurance: true, parent: 585,
-        rght: 124, slug: bodyboard, tree_id: 172}
-    model: products.category
-    pk: 212
--   fields: {level: 2, lft: 121, name: Badminton, need_insurance: true, parent: 585,
-        rght: 122, slug: badminton, tree_id: 172}
-    model: products.category
-    pk: 211
--   fields: {level: 2, lft: 119, name: Alpiniste, need_insurance: true, parent: 585,
-        rght: 120, slug: alpiniste, tree_id: 172}
-    model: products.category
-    pk: 210
--   fields: {level: 2, lft: 117, name: Squash, need_insurance: true, parent: 585,
-        rght: 118, slug: squash, tree_id: 172}
-    model: products.category
-    pk: 2
--   fields: {level: 2, lft: 193, name: Basket-Ball, need_insurance: true, parent: 585,
-        rght: 194, slug: basket-ball, tree_id: 172}
-    model: products.category
-    pk: 586
--   fields: {level: 2, lft: 195, name: Tae knon do, need_insurance: true, parent: 585,
-        rght: 196, slug: tae-knon-do, tree_id: 172}
-    model: products.category
-    pk: 587
--   fields: {level: 2, lft: 197, name: Trotinnette, need_insurance: true, parent: 585,
-        rght: 198, slug: trotinnette, tree_id: 172}
-    model: products.category
-    pk: 588
--   fields: {level: 2, lft: 111, name: "Helicopt\xE8re bi-turbine", need_insurance: true,
-        parent: 251, rght: 112, slug: helicoptere-bi-turbine, tree_id: 172}
-    model: products.category
-    pk: 252
--   fields: {level: 1, lft: 100, name: "V\xE9lo", need_insurance: true, parent: 172,
-        rght: 109, slug: velo, tree_id: 172}
-    model: products.category
-    pk: 247
--   fields: {level: 2, lft: 183, name: Tennis de table, need_insurance: true, parent: 585,
-        rght: 184, slug: tennis-de-table, tree_id: 172}
-    model: products.category
-    pk: 242
--   fields: {level: 2, lft: 157, name: "P\xEAche", need_insurance: true, parent: 585,
-        rght: 158, slug: peche, tree_id: 172}
-    model: products.category
-    pk: 229
--   fields: {level: 2, lft: 155, name: Padel, need_insurance: true, parent: 585, rght: 156,
-        slug: padel, tree_id: 172}
-    model: products.category
-    pk: 228
--   fields: {level: 2, lft: 153, name: Modern Jazz, need_insurance: true, parent: 585,
-        rght: 154, slug: modern-jazz, tree_id: 172}
-    model: products.category
-    pk: 227
--   fields: {level: 2, lft: 151, name: Marche, need_insurance: true, parent: 585,
-        rght: 152, slug: marche, tree_id: 172}
-    model: products.category
-    pk: 226
--   fields: {level: 2, lft: 149, name: Kung Fu, need_insurance: true, parent: 585,
-        rght: 150, slug: kung-fu, tree_id: 172}
-    model: products.category
-    pk: 225
--   fields: {level: 2, lft: 147, name: Judo, need_insurance: true, parent: 585, rght: 148,
-        slug: judo, tree_id: 172}
-    model: products.category
-    pk: 224
--   fields: {level: 2, lft: 145, name: Handball, need_insurance: true, parent: 585,
-        rght: 146, slug: handball, tree_id: 172}
-    model: products.category
-    pk: 223
--   fields: {level: 2, lft: 143, name: Gymnastique, need_insurance: true, parent: 585,
-        rght: 144, slug: gymnastique, tree_id: 172}
-    model: products.category
-    pk: 222
--   fields: {level: 2, lft: 141, name: Football, need_insurance: true, parent: 585,
-        rght: 142, slug: football, tree_id: 172}
-    model: products.category
-    pk: 221
--   fields: {level: 0, lft: 1, name: Loisirs, need_insurance: true, parent: null,
-        rght: 218, slug: loisirs, tree_id: 172}
-    model: products.category
-    pk: 172
--   fields: {level: 1, lft: 116, name: Sport, need_insurance: true, parent: 172, rght: 217,
-        slug: sport, tree_id: 172}
-    model: products.category
-    pk: 585
 -   fields: {level: 2, lft: 33, name: Sega, need_insurance: true, parent: 263, rght: 34,
         slug: sega, tree_id: 253}
     model: products.category
@@ -2740,10 +2940,6 @@
         rght: 97, slug: eclairage, tree_id: 335}
     model: products.category
     pk: 370
--   fields: {level: 0, lft: 1, name: Image et son, need_insurance: true, parent: null,
-        rght: 112, slug: image-et-son, tree_id: 335}
-    model: products.category
-    pk: 335
 -   fields: {level: 2, lft: 61, name: Subwoofer, need_insurance: true, parent: 354,
         rght: 62, slug: subwoofer, tree_id: 335}
     model: products.category
@@ -2917,10 +3113,6 @@
         rght: 75, slug: arrosage, tree_id: 390}
     model: products.category
     pk: 414
--   fields: {level: 0, lft: 1, name: Jardinage, need_insurance: true, parent: null,
-        rght: 76, slug: jardinage, tree_id: 390}
-    model: products.category
-    pk: 390
 -   fields: {level: 2, lft: 25, name: "Coupe-bordure et cisaille \xE0 gazon", need_insurance: true,
         parent: 391, rght: 26, slug: coupe-bordure-et-cisaille-a-gazon, tree_id: 390}
     model: products.category
@@ -2945,6 +3137,10 @@
         parent: 402, rght: 60, slug: dresse-bordure-cisaille-a-gazon, tree_id: 390}
     model: products.category
     pk: 647
+-   fields: {level: 0, lft: 1, name: Jardinage, need_insurance: true, parent: null,
+        rght: 90, slug: jardinage, tree_id: 390}
+    model: products.category
+    pk: 390
 -   fields: {level: 2, lft: 61, name: Hache merlin  hachette masser et coin, need_insurance: true,
         parent: 402, rght: 62, slug: hache-merlin-hachette-masser-et-coin, tree_id: 390}
     model: products.category
@@ -3090,10 +3286,6 @@
         rght: 94, slug: couverts, tree_id: 418}
     model: products.category
     pk: 468
--   fields: {level: 1, lft: 8, name: Remorque, need_insurance: true, parent: 495,
-        rght: 15, slug: remorque, tree_id: 495}
-    model: products.category
-    pk: 498
 -   fields: {level: 1, lft: 92, name: Art de la table, need_insurance: true, parent: 418,
         rght: 111, slug: art-de-la-table, tree_id: 418}
     model: products.category
@@ -3118,10 +3310,6 @@
         slug: 50-cc, tree_id: 3}
     model: products.category
     pk: 665
--   fields: {level: 2, lft: 17, name: "Camion am\xE9nag\xE9", need_insurance: true,
-        parent: 508, rght: 18, slug: camion-amenage, tree_id: 495}
-    model: products.category
-    pk: 509
 -   fields: {level: 2, lft: 47, name: Voiture sans permis, need_insurance: true, parent: 667,
         rght: 48, slug: voiture-sans-permis, tree_id: 3}
     model: products.category
@@ -3162,22 +3350,6 @@
         slug: camion, tree_id: 495}
     model: products.category
     pk: 496
--   fields: {level: 2, lft: 23, name: Autocar, need_insurance: true, parent: 510,
-        rght: 24, slug: autocar, tree_id: 495}
-    model: products.category
-    pk: 511
--   fields: {level: 1, lft: 16, name: Transport de loisir, need_insurance: true, parent: 495,
-        rght: 21, slug: transport-de-loisir, tree_id: 495}
-    model: products.category
-    pk: 508
--   fields: {level: 1, lft: 22, name: Transport de personne, need_insurance: true,
-        parent: 495, rght: 27, slug: transport-de-personne, tree_id: 495}
-    model: products.category
-    pk: 510
--   fields: {level: 0, lft: 1, name: Transport, need_insurance: true, parent: null,
-        rght: 48, slug: transport, tree_id: 495}
-    model: products.category
-    pk: 495
 -   fields: {level: 2, lft: 5, name: Utilitaire, need_insurance: true, parent: 496,
         rght: 6, slug: utilitaire, tree_id: 495}
     model: products.category
@@ -3198,50 +3370,10 @@
         parent: 605, rght: 112, slug: lecteur-graveur-externe, tree_id: 253}
     model: products.category
     pk: 607
--   fields: {level: 2, lft: 19, name: Camping-car, need_insurance: true, parent: 508,
-        rght: 20, slug: camping-car, tree_id: 495}
-    model: products.category
-    pk: 676
--   fields: {level: 2, lft: 35, name: "Outil d'\xE9pandage", need_insurance: true,
-        parent: 673, rght: 36, slug: outil-depandage, tree_id: 495}
-    model: products.category
-    pk: 504
--   fields: {level: 2, lft: 33, name: Outil du sol, need_insurance: true, parent: 673,
-        rght: 34, slug: outil-du-sol, tree_id: 495}
-    model: products.category
-    pk: 503
--   fields: {level: 2, lft: 31, name: "Mat\xE9riel de fenaison", need_insurance: true,
-        parent: 673, rght: 32, slug: materiel-de-fenaison, tree_id: 495}
-    model: products.category
-    pk: 502
--   fields: {level: 2, lft: 29, name: Tracteur, need_insurance: true, parent: 673,
-        rght: 30, slug: tracteur, tree_id: 495}
-    model: products.category
-    pk: 501
--   fields: {level: 2, lft: 43, name: Appareil de manutention, need_insurance: true,
-        parent: 673, rght: 44, slug: appareil-de-manutention, tree_id: 495}
-    model: products.category
-    pk: 674
--   fields: {level: 1, lft: 28, name: Engins agricoles, need_insurance: true, parent: 495,
-        rght: 47, slug: engins-agricoles, tree_id: 495}
-    model: products.category
-    pk: 673
--   fields: {level: 2, lft: 45, name: "Mat\xE9riel de r\xE9colte", need_insurance: true,
-        parent: 673, rght: 46, slug: materiel-de-recolte, tree_id: 495}
-    model: products.category
-    pk: 675
--   fields: {level: 2, lft: 25, name: Minibus, need_insurance: true, parent: 510,
-        rght: 26, slug: minibus, tree_id: 495}
-    model: products.category
-    pk: 677
 -   fields: {level: 1, lft: 92, name: "P\xE9riph\xE9riques", need_insurance: true,
         parent: 253, rght: 113, slug: peripheriques, tree_id: 253}
     model: products.category
     pk: 605
--   fields: {level: 0, lft: 1, name: High-tech, need_insurance: true, parent: null,
-        rght: 114, slug: high-tech, tree_id: 253}
-    model: products.category
-    pk: 253
 -   fields: {level: 2, lft: 109, name: "Cl\xE9 USB", need_insurance: true, parent: 605,
         rght: 110, slug: cle-usb, tree_id: 253}
     model: products.category
@@ -3314,6 +3446,14 @@
         rght: 36, slug: cuiseur-vapeur, tree_id: 512}
     model: products.category
     pk: 521
+-   fields: {level: 0, lft: 1, name: High-tech, need_insurance: true, parent: null,
+        rght: 132, slug: high-tech, tree_id: 253}
+    model: products.category
+    pk: 253
+-   fields: {level: 2, lft: 139, name: iPod, need_insurance: true, parent: 713, rght: 140,
+        slug: ipod, tree_id: 335}
+    model: products.category
+    pk: 714
 -   fields: {level: 2, lft: 37, name: Raclette, need_insurance: true, parent: 678,
         rght: 38, slug: raclette, tree_id: 512}
     model: products.category
@@ -3582,3 +3722,15 @@
         rght: 62, slug: laser-de-mesure, tree_id: 35}
     model: products.category
     pk: 686
+-   fields: {level: 2, lft: 123, name: "T\xE9l\xE9phone fixe", need_insurance: true,
+        parent: 691, rght: 124, slug: telephone-fixe, tree_id: 253}
+    model: products.category
+    pk: 696
+-   fields: {level: 1, lft: 122, name: Projecteur, need_insurance: true, parent: 335,
+        rght: 129, slug: projecteur, tree_id: 335}
+    model: products.category
+    pk: 705
+-   fields: {level: 2, lft: 141, name: Lecteur MP3/MP4, need_insurance: true, parent: 713,
+        rght: 142, slug: lecteur-mp3-mp4, tree_id: 335}
+    model: products.category
+    pk: 715
