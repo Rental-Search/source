@@ -91,6 +91,10 @@
 				<td class="p-value">{{ product.address.city|capfirst }}, {{ product.address.zipcode }}</td>
 			</tr>
 			<tr>
+				<td>{% trans "Quantité" %} :</td>
+				<td class="p-value">{{ product.quantity }}</td>
+			</tr>
+			<tr>
 				<td>{% trans "Catégorie" %} :</td>
 				<td class="p-value"><a href="{{ product.category.get_absolute_url }}">{{ product.category }}</a></td>
 			</tr>
