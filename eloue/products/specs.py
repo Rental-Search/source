@@ -44,10 +44,9 @@ class ResizeDisplay(processors.Resize):
     width = 450
 
 
-class ResizeHome(CenteredResize):
+class ResizeHome(processors.Resize):
     width = 120
     height = 140
-    crop = True
 
 
 class Rotate(processors.Transpose):
