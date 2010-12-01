@@ -39,7 +39,7 @@
 			<p class="product-home-img">
 				<a href="{{ curiosity.product.get_absolute_url }}">
 					{% with curiosity.product.pictures.all|first as picture %}
-						<img src="{{ picture.display.url }}" alt="{{ product.summary }}"/>
+						<img src="{{ picture.home.url }}" alt="{{ product.summary }}"/>
 					{% endwith %}
 				</a>
 			</p>
