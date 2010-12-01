@@ -59,7 +59,7 @@ class FacetUrlNode(Node):
                 del urlbits[key]
         
         path = urljoin('/location/', ''.join(['%s/%s/' % (key, value) for key, value in urlbits.iteritems()]))
-        if params:
+        if any([value for key, value in params.iteritems()]):
             return '%s?%s' % (path, self.urlencode(params))
         else:
             return path
