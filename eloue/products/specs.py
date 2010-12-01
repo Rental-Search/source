@@ -44,6 +44,12 @@ class ResizeDisplay(processors.Resize):
     width = 450
 
 
+class ResizeHome(CenteredResize):
+    width = 120
+    height = 140
+    crop = True
+
+
 class Rotate(processors.Transpose):
     method = 'auto'
 
@@ -54,12 +60,18 @@ class Enhance(processors.Adjustment):
 
 
 class Thumbnail(ImageSpec):
-    pre_cache = False
+    pre_cache = True
     access_as = 'thumbnail'
     processors = [Rotate, ResizeThumb, Enhance]
 
 
 class Display(ImageSpec):
-    pre_cache = False
+    pre_cache = True
     access_as = 'display'
     processors = [Rotate, ResizeDisplay, Enhance]
+
+
+class Home(ImageSpec):
+    pre_cache = True
+    access_as = 'home'
+    processors = [Rotate, ResizeHome, Enhance]
