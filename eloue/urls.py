@@ -7,7 +7,7 @@ from django.contrib import admin
 from django.contrib.auth.views import logout_then_login, password_reset, password_reset_confirm, password_reset_done, password_reset_complete
 from django.contrib.sitemaps.views import index, sitemap
 
-from eloue.accounts.forms import EmailPasswordResetForm
+from eloue.accounts.forms import EmailPasswordResetForm, PatronSetPasswordForm
 from eloue.accounts.views import activate, authenticate, authenticate_headless, dashboard, patron_edit, owner_booking, owner_history, \
     borrower_booking, borrower_history, patron_edit_password, patron_paypal, owner_product, contact
 from eloue.api import api_v1
@@ -41,6 +41,7 @@ urlpatterns = patterns('',
         'template_name': 'accounts/password_reset_done.html'
     }, name="password_reset_done"),
     url(r'^reset/(?P<uidb36>[0-9A-Za-z]+)-(?P<token>.+)/$', password_reset_confirm, {
+        'set_password_form': PatronSetPasswordForm,
         'template_name': 'accounts/password_reset_confirm.html'
     }, name="password_reset_confirm"),
     url(r'^reset/complete/$', password_reset_complete, {

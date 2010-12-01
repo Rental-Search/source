@@ -6,7 +6,7 @@ import django.forms as forms
 from django.conf import settings
 from django.contrib.auth import authenticate
 from django.contrib.sites.models import Site
-from django.contrib.auth.forms import PasswordResetForm, PasswordChangeForm
+from django.contrib.auth.forms import PasswordResetForm, PasswordChangeForm, SetPasswordForm
 from django.contrib.auth.tokens import default_token_generator
 from django.forms.fields import EMPTY_VALUES
 from django.template.loader import render_to_string
@@ -333,3 +333,12 @@ class ContactForm(forms.Form):
         'autocapitalize': 'off', 'autocorrect': 'off', 'class': 'inm'
     }))
     cc_myself = forms.BooleanField(required=False)
+    
+
+
+class PatronSetPasswordForm(SetPasswordForm):
+    def __init__(self, user, *args, **kwargs):
+        super(PatronSetPasswordForm, self).__init__(user, *args, **kwargs)
+        self.fields['new_password1'].widget.attrs['class'] = 'inm'
+        self.fields['new_password2'].widget.attrs['class'] = 'inm'
+    
