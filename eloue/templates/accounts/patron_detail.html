@@ -9,16 +9,22 @@
 <div id="top-content" class="search clearfix">
 	<form class="form" action="{% url product_list %}">
 	<div class="search-what x5">
-		<label for="id_q">{% trans "Que voulez-vous louer ?" %}</label><br />
-		{{ form.q }}<br />
-		<span>{% trans "Exemple :" %} </span> <a href="{% url product_list %}?q=voiture">{% trans "Voiture" %}</a>, <a href="{% url product_list %}?q=chèvre">{% trans "Chèvre" %}</a>, <a href="{% url product_list %}?q=ski">{% trans "Ski" %}</a>, <a href="{% url product_list %}?q=robe">{% trans "Robe" %}</a>
+		<p>
+			<label for="id_q">{% trans "Que voulez-vous louer ?" %}</label><br />
+			{{ form.q }}<br />
+			<span>{% trans "Exemple :" %} </span> <a href="{% url product_list %}?q=voiture">{% trans "Voiture" %}</a>, <a href="{% url product_list %}?q=chèvre">{% trans "Chèvre" %}</a>, <a href="{% url product_list %}?q=ski">{% trans "Ski" %}</a>, <a href="{% url product_list %}?q=robe">{% trans "Robe" %}</a>
+		</p>
 	</div>
 	<div class="search-where x5">
-		<label>{% trans "Où ?" %}</label><br />
-		{{ form.l }}<br />
+		<p>
+			<label>{% trans "Où ?" %}</label><br />
+			{{ form.l }}<br />
+		</p>
 	</div>
 	<div class="search-find x2">
-		<input type="submit" value="{% trans "Rechercher" %}" class="btn big-orange"/>
+		<p>
+			<input type="submit" value="{% trans "Rechercher" %}" class="btn big-orange"/>
+		</p>
 	</div>
 	</form>
 </div>{# top-content #}

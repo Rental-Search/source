@@ -8,13 +8,17 @@
 <div id="top-content" class="search clearfix">
 	<form class="form" action="{% url product_list %}">
 	<div class="search-what x5">
-		<label for="id_q">{% trans "Que voulez-vous louer ?" %}</label><br />
-		{{ search_form.q }}<br />
-		<span>{% trans "Exemple :" %} </span> <a href="{% url product_list %}?q=voiture">{% trans "Voiture" %}</a>, <a href="{% url product_list %}?q=chèvre">{% trans "Chèvre" %}</a>, <a href="{% url product_list %}?q=ski">{% trans "Ski" %}</a>, <a href="{% url product_list %}?q=robe">{% trans "Robe" %}</a>
+		<p>
+			<label for="id_q">{% trans "Que voulez-vous louer ?" %}</label><br />
+			{{ search_form.q }}<br />
+			<span>{% trans "Exemple :" %} </span> <a href="{% url product_list %}?q=voiture">{% trans "Voiture" %}</a>, <a href="{% url product_list %}?q=chèvre">{% trans "Chèvre" %}</a>, <a href="{% url product_list %}?q=ski">{% trans "Ski" %}</a>, <a href="{% url product_list %}?q=robe">{% trans "Robe" %}</a>
+		</p>
 	</div>
 	<div class="search-where x5">
-		<label>{% trans "Où ?" %}</label><br />
-		{{ search_form.l }}<br />
+		<p>
+			<label>{% trans "Où ?" %}</label><br />
+			{{ search_form.l }}<br />
+		</p>
 	</div>
 	<div class="search-find x2">
 		<input type="submit" value="{% trans "Rechercher" %}" class="btn big-orange"/>
@@ -52,12 +56,16 @@
 		</div>
 		<form id="booking_create" action="{% url booking_create product.slug,product.id %}" method="post" class="form">
 		<div class="booking-date-start">
-			<label class="labm">{% trans "Début" %} :</label><br />
-			{{ form.started_at }}
+			<p>
+				<label class="labm">{% trans "Début" %} :</label><br />
+				{{ form.started_at }}
+			</p>
 		</div>
 		<div class="booking-date-end">
-			<label class="labm">{% trans "Fin" %} :</label><br />
-			{{ form.ended_at }}
+			<p>
+				<label class="labm">{% trans "Fin" %} :</label><br />
+				{{ form.ended_at }}
+			</p>
 		</div>
 		<div id="booking-total" class="booking-total">
 		 <p>{% trans "Total : " %}<span class="day">1 jour,</span> soit <span class="total-price">{{ product.prices.day|first }}</span></p>
@@ -65,7 +73,9 @@
 	</div>
 	<div class="product-booking-bottom x4 first">
 		{% csrf_token %}<input type="hidden" name="wizard_step" value="0" />
-		<input type="submit" value="{% trans "Réserver" %} &rarr;" class="btn big-green" />
+		<p>
+			<input type="submit" value="{% trans "Réserver" %} &rarr;" class="btn big-green" />
+		</p>
 		</form>
 	</div>
 	<div class="product-properties x4 first">

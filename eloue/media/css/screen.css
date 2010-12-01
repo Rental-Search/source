@@ -1032,6 +1032,7 @@ html[xmlns] .clearfix {
       input[type=checkbox]
       {
         width: 20px !important;
+        border: none;
       }
 
       input[type=radio]
