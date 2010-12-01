@@ -11,3 +11,8 @@ def post_save_answer(sender, instance, created, **kwargs):
 def post_save_product(sender, instance, created, **kwargs):
     cache.delete(cache_key('product:row', instance.id, None, None))
     cache.delete(cache_key('product:patron:row', instance.id))
+
+
+def post_save_curiosity(sender, instance, created, **kwargs):
+    cache.delete(cache_key('curiosities'))
+
