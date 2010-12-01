@@ -274,9 +274,10 @@ class ProductResource(UserSpecificResource):
 
             orm_filters.update({"pk__in": [i.pk for i in sqs]})
 
-        for kw in ["date_start", "date_end", "q", "l", "r"]:
-            if kw in filters: del orm_filters[kw]
-
+        for kw in ["date_start", "date_end", "q", "l", "r", "limit", "offset"]:
+            if kw in filters:
+                del orm_filters[kw]
+        
         return orm_filters
     
     def obj_create(self, bundle, **kwargs):
