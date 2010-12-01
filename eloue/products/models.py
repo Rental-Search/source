@@ -7,8 +7,9 @@ from django.db import models
 from django.db.models import permalink
 from django.db.models.signals import post_save
 from django.template.defaultfilters import slugify
-from django.utils.translation import ugettext as _
 from django.utils.encoding import smart_unicode
+from django.utils.html import strip_tags
+from django.utils.translation import ugettext as _
 
 from mptt.models import MPTTModel
 from imagekit.models import ImageModel
@@ -69,6 +70,8 @@ class Product(models.Model):
         return smart_unicode(self.summary)
     
     def save(self, *args, **kwargs):
+        self.summary = strip_tags(self.summary)
+        self.description = strip_tags(self.description)
         if not self.created_at:
             self.created_at = datetime.now()
         if not self.address.is_geocoded():
