@@ -60,7 +60,7 @@
 <div id="content" class="result clearfix">
 	<div class="content-header x12">
 		{% if form.cleaned_data.q %}
-		<h1>{{ paginator.count }} résultat{{ paginator.count|pluralize }} pour <strong>{{ form.cleaned_data.q }}</strong></h1>
+		<h1>Résultat{{ paginator.count|pluralize }} pour <strong>{{ form.cleaned_data.q }}</strong></h1>
 		{% endif %}
 	</div>
 	{% if suggestions %}
