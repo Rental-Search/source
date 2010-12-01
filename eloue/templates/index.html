@@ -44,7 +44,7 @@
 				</a>
 			</p>
 			<p>
-				<a href="" class="product-home-title">{{ curiosity.product.summary|capfirst }}</a><br />
+				<a href="" class="product-home-title">{{ curiosity.product.summary|lower|capfirst }}</a><br />
 				 {% with curiosity.product.prices.day|first as price %}
 				  <span>{{ price }}/jour</span>
 				 {% endwith %}
