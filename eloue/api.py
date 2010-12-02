@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import logbook
 from urllib import unquote
 from base64 import decodestring
 
@@ -27,6 +28,8 @@ from eloue.accounts.models import Address, PhoneNumber, Patron
 from eloue.rent.models import Booking
 
 __all__ = ['api_v1']
+
+log = logbook.Logger('eloue.api')
 
 DEFAULT_RADIUS = getattr(settings, 'DEFAULT_RADIUS', 50)
 
@@ -66,7 +69,6 @@ class OAuthAuthorization(Authorization):
                     return True
                 except InvalidConsumerError:
                     return False
-        
         if is_valid_request(request):  # Read/Write part 
             oauth_request = get_oauth_request(request) 
             consumer = store.get_consumer(request, oauth_request, oauth_request.get_parameter('oauth_consumer_key'))
@@ -162,7 +164,7 @@ class UserSpecificResource(OAuthResource):
         deserialized = self.deserialize(request, request.raw_post_data, format=request.META.get('CONTENT_TYPE', 'application/json'))
         bundle = self.build_bundle(data=dict_strip_unicode_keys(deserialized))
         # Add the user to the fields to be added
-        kwargs[self.USER_FIELD_NAME] = request.user
+        kwargs[self.USER_FIELD_NAME] = Patron.objects.get(pk=request.user)
         updated_bundle = self.obj_create(bundle, **kwargs)
         return HttpCreated(location=self.get_resource_uri(updated_bundle))
     

@@ -3734,3 +3734,6 @@
         rght: 142, slug: lecteur-mp3-mp4, tree_id: 335}
     model: products.category
     pk: 715
+-   fields: {is_readonly: false, name: all, url: /api/1.0/}
+    model: oauth_provider.resource
+    pk: 1
