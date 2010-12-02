@@ -329,6 +329,7 @@ class ProductResource(UserSpecificResource):
             date_end = date_start + timedelta(days=1)
 
         bundle.data["price"] = Booking.calculate_price(bundle.obj, date_start, date_end)
+        bundle.data["absolute_url"] = bundle.obj.get_absolute_url()
         return bundle
     
 
