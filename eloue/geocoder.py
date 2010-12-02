@@ -32,9 +32,19 @@ class Geocoder(object):
         raise NotImplementedError
     
     def format_place(self, location):
+        """
+        >>> geocoder = Geocoder()
+        >>> geocoder.format_place(" paris, FRANCE ")
+        'paris, france'
+        """
         return smart_str(location.strip().lower())
     
     def hash_key(self, location):
+        """
+        >>> geocoder = Geocoder()
+        >>> geocoder.hash_key("paris")
+        'ccbee73cd81c7f42405e1920409247ec'
+        """
         return hashlib.md5(location).hexdigest()
     
 
