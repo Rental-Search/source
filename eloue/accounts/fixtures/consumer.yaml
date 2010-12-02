@@ -1,0 +1,4 @@
+-   fields: {description: e-loue iPhone application, key: 451cffaa88bd49e881068349b093598a,
+        name: iPhone Application, secret: j5rdVtVhKu4VfykM, status: 1, user: null}
+    model: oauth_provider.consumer
+    pk: 1
