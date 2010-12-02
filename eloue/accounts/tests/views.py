@@ -95,3 +95,8 @@ class PatronTest(TestCase):
         })
         self.assertEquals(response.status_code, 200)
     
+    def test_patron_dashboard(self):
+        self.client.login(username='alexandre.woog@e-loue.com', password='alexandre')
+        response = self.client.get(reverse('dashboard'))
+        self.assertEquals(response.status_code, 200)
+    
