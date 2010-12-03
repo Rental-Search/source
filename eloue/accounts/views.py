@@ -59,7 +59,6 @@ def authenticate_headless(request):
     if form.is_valid():
         login(request, form.get_user())
         return HttpResponse()
-
     elif request.method == "GET":
         return HttpResponse(csrf(request)["csrf_token"]._proxy____func())
 
