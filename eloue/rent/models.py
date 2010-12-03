@@ -267,10 +267,13 @@ class Booking(models.Model):
     @property
     def total_commission(self):
         """ Return all the commission
+<<<<<<< HEAD
         
         >>> booking = Booking(total_amount=10)
         >>> booking.total_commission
         Decimal('2.040')
+=======
+>>>>>>> 851709c11a7102a90cf50989ea6aed5ae06d453c
         """
         return self.commission + self.insurance_fee
     

@@ -687,18 +687,32 @@
 .ht-col{
 }
 
+<<<<<<< HEAD
   .ht-col h1
   {
     background: transparent url("../images/content-h-bg.png") repeat-x 0 bottom;
+=======
+  .ht-col h2
+  {
+    background: transparent url("../images/content-h-bg.png") repeat-x 0 bottom;
+    font-size: 20px;
+>>>>>>> 851709c11a7102a90cf50989ea6aed5ae06d453c
     font-weight: bold;
     text-align: center;
     padding: 15px 0;
     margin: 0 30px;
+<<<<<<< HEAD
     line-height: 38px;
   }
     .ht-col h1 strong
     {
       font-size: 48px;
+=======
+  }
+    .ht-col h2 strong
+    {
+      font-size: 32px;
+>>>>>>> 851709c11a7102a90cf50989ea6aed5ae06d453c
     }
     
     .ht-col ol
@@ -741,7 +755,6 @@
       {
         color: #9EB0BA;
       }
-      
         .ht-desc span
         {
           color: #364C59;
