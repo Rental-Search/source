@@ -132,13 +132,35 @@
 				</tr>
 			</table>
 		</div>
-	</div>
-	<div class="portlet x3">
-		<div class="portlet-header">
-			<h3>{% trans "Statut de la location" %}</h3>
+		{% if booking.owner == user and booking.state == booking.STATE.CLOSED %}
+		<div class="content-header x8 first">
+			<h2>Détails de la transaction</h2>
 		</div>
-		<div class="portlet-content">
-			{% include "rent/partials/booking_status.html" %}
+		<div class="booking-resume x8 first">
+			<table>
+				<tr>
+					<th>Avant commission :</th>
+					<td class="number">{{ booking.total_amount }} &euro;</td>
+				</tr>
+				<tr>
+					<th>Commission :</th>
+					<td class="number">{{ booking.total_commission|floatformat:2 }} &euro;</td>
+				</tr>
+				<tr class="total">
+					<th>Montant net perçu :</th>
+					<td class="number">{{ booking.net_price|floatformat:2 }} €</td>
+				</tr>
+			</table>
+		</div>
+		{% endif %}
+		</div>
+		<div class="portlet x3">
+			<div class="portlet-header">
+				<h3>{% trans "Statut de la location" %}</h3>
+			</div>
+			<div class="portlet-content">
+				{% include "rent/partials/booking_status.html" %}
+			</div>
 		</div>
 	</div>
 </div>
