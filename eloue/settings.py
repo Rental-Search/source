@@ -309,7 +309,7 @@ else:
 
 # Business configuration
 BOOKING_DAYS = 85  # Max booking days
-COMMISSION = 0.2  # Our commission percentage
+COMMISSION = 0.15  # Our commission percentage
 POLICY_NUMBER = None  # Our insurance policy number
 PARTNER_NUMBER = None  # Our insurance partner number
 INSURANCE_FEE = 0.054  # Use to calculate transfer price
