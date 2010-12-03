@@ -675,74 +675,68 @@
 /* **************************************************
   How-to page
 **************************************************** */
-
-.how-to-header
-{
-  text-align: center;
-}
-  .how-to-header h1
-  {
-    color:#7C4D32 !important;
-    font-size: 38px;
-  }
-  
-  .how-to-header p
-  {
-    font-size: 16px;
-  }
-
-.how-to-col
-{
-  float: left;
-  background-color: #FFF;
-  border: 1px solid #ccdbe9;
-  box-shadow: 1px 1px 1px rgba(0,0,0,.2);
-  -moz-box-shadow: 1px 1px 1px rgba(0,0,0,.25);
-  -webkit-box-shadow: 1px 1px 1px rgba(0,0,0,.25);
-  -moz-border-radius: 5px;
-  -webkit-border-radius: 5px;
-  border-radius: 5px;
-  margin-bottom: 20px;
-  padding: 10px 0px;
-} 
-
-.how-to-col.clearfix { width: 478px;}
-
-  .how-to-col h2 
-  { 
-    text-align: center;
-    font-size: 26px;
-  }
-  .how-to-col ol 
-  { 
-    padding-left: 120px;
-    font-size: 22px;
-    list-style-type: decimal;
-    margin-bottom: 20px;
-  }
-    .how-to-col li { margin-bottom: 30px;}
-    
-  .how-to-col p{ text-align: center;}
-  
-  .how-to-col img
-  {
-    -webkit-box-shadow: rgba(50, 50, 50, 0.398438) 1px 1px 9px;
-    border: 1px solid #D6D6D6;
-    padding: 10px;
-  }
-  
-#owner 
+.ht-title h1 { font-weight: bold;}
+.ht-baseLine 
 { 
-  height: 478px;
-  margin-right: 20px;
+  color: #9EB0BA;
+  text-align: right;
+  font-size: 18px;
+  padding-top: 4px;
 }
 
-#borrower
-{
-  height: 478px;
+.ht-col{
 }
 
-  #borrower ol{
-    height: 173px;
+  .ht-col h2
+  {
+    background: transparent url("../images/content-h-bg.png") repeat-x 0 bottom;
+    font-size: 20px;
+    font-weight: bold;
+    text-align: center;
+    padding: 15px 0;
+    margin: 0 30px;
   }
+    .ht-col h2 strong
+    {
+      font-size: 32px;
+    }
+    
+    .ht-col ol
+    {
+      padding: 10px 0;
+      margin: 0 30px;
+    }
+    
+    .ht-col li
+    {
+      margin: 10px 0;
+      height: 90px;
+    }
+      
+      .ht-number
+      {
+        display: block;
+        float: left;
+        height: 60px;
+        width: 60px;
+        margin-right: 10px;
+      }
+      
+       .ht-n1-g { background: transparent url("../images/steps_number.png") no-repeat 0px 0px; }
+       .ht-n2-g { background: transparent url("../images/steps_number.png") no-repeat 0px -60px; }
+       .ht-n3-g { background: transparent url("../images/steps_number.png") no-repeat 0px -120px; }
+       
+       .ht-number.orange { background-color: #FF7200; }
+       
+      
+      .ht-desc
+      {
+        color: #9EB0BA;
+      }
+      
+        .ht-desc b
+        {
+          color: #364C59;
+          font-size: 22px;
+        }
   
