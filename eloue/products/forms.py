@@ -53,6 +53,7 @@ class FacetedSearchForm(SearchForm):
                     suggestions = re.sub('AND\s*', '', suggestions)
                     suggestions = re.sub('[\(\)]+', '', suggestions)
                     suggestions = suggestions.replace('django_ct:product.product', '')
+                    suggestions = suggestions.strip()
             
             location, radius = self.cleaned_data.get('l', None), self.cleaned_data.get('r', DEFAULT_RADIUS)
             if location:
