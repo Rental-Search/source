@@ -69,7 +69,7 @@
 		        <ul>
 		      {% else %}
 		       {% if node.product_count %}
-		        <li><a href="{{ node.get_absolute_url }}">{{ node.name }} ({{ node.product_count }})</a></li>
+		        <li><a href="{{ node.get_absolute_url }}">{{ node.name }}</a></li>
 		       {% endif %}
 		      {% if structure.closed_levels|length >= 2 %}</ul></div>{% endif %}
 		     {% endif %}
