@@ -32,14 +32,16 @@
 	<div class="col1 x8">
 		<div class="product-pic">
 			{% with product.pictures.all|first as picture %}
-				<img src="{{ picture.display.url }}" alt="{{ product.summary }}" />
+			 {% if picture %}
+			  <img src="{{ picture.display.url }}" alt="{{ product.summary }}" />
+			 {% endif %}
 			{% endwith %}
 		</div>
 		<div class="product-thumbs">
 			{% for picture in product.pictures.all %}
-				{% if picture.thumbnail %}
-       		<a href="#"><img src="{{ picture.thumbnail.url }}" /></a>
-        {% endif %}
+			 {% if picture.thumbnail %}
+       		  <a href="#"><img src="{{ picture.thumbnail.url }}" /></a>
+             {% endif %}
 			{% endfor %}
 		</div>
 		<div class="product-desc x8 first">
