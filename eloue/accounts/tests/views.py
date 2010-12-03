@@ -1,16 +1,19 @@
 # -*- coding: utf-8 -*-
-from django.core.urlresolvers import reverse
 import django.forms as forms
+
+from django.conf import settings
+from django.core import mail
+from django.core.urlresolvers import reverse
 from django.test import TestCase
 from django.utils.translation import ugettext as _
 
-from eloue.accounts.forms import PatronPasswordChangeForm
+from eloue.accounts.forms import PatronPasswordChangeForm, ContactForm
 from eloue.accounts.models import Patron
 
 
 class PatronTest(TestCase):
     fixtures = ['patron']
-    
+        
     def test_patron_detail_view(self):
         response = self.client.get(reverse('patron_detail', args=['alexandre']))
         self.assertEqual(response.status_code, 200)
@@ -99,4 +102,42 @@ class PatronTest(TestCase):
         self.client.login(username='alexandre.woog@e-loue.com', password='alexandre')
         response = self.client.get(reverse('dashboard'))
         self.assertEquals(response.status_code, 200)
+    
+    def test_contact_form(self):
+        response = self.client.get(reverse('contact'))
+        self.assertEquals(response.status_code, 200)
+        self.assertTrue('form' in response.context)
+        self.assertTrue(isinstance(response.context['form'], ContactForm))
+    
+    def test_contact_with_cc(self):
+        response = self.client.post(reverse('contact'), {
+            'subject': "J'ai un sujet pour vous",
+            'message': "J'ai un message pour vous.",
+            'sender': "moi@mondomaine.com",
+            'cc_myself': True
+        })
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(mail.outbox), 1)
+        self.assertEqual(mail.outbox[0].subject, "J'ai un sujet pour vous")
+        self.assertEqual(mail.outbox[0].body, "J'ai un message pour vous.")
+        self.assertEqual(mail.outbox[0].from_email, settings.DEFAULT_FROM_EMAIL)
+        self.assertTrue('contact@e-loue.com' in mail.outbox[0].to)
+        self.assertEqual(mail.outbox[0].extra_headers['Cc'], "moi@mondomaine.com")
+        self.assertEqual(mail.outbox[0].extra_headers['Reply-To'], "moi@mondomaine.com")
+    
+    def test_contact_without_cc(self):
+        response = self.client.post(reverse('contact'), {
+            'subject': "J'ai un sujet pour vous",
+            'message': "J'ai un message pour vous.",
+            'sender': "moi@mondomaine.com",
+            'cc_myself': False
+        })
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(mail.outbox), 1)
+        self.assertEqual(mail.outbox[0].subject, "J'ai un sujet pour vous")
+        self.assertEqual(mail.outbox[0].body, "J'ai un message pour vous.")
+        self.assertEqual(mail.outbox[0].from_email, settings.DEFAULT_FROM_EMAIL)
+        self.assertTrue('contact@e-loue.com' in mail.outbox[0].to)
+        self.assertEqual(mail.outbox[0].extra_headers['Reply-To'], "moi@mondomaine.com")
+        self.assertFalse('Cc' in mail.outbox[0].extra_headers)
     
