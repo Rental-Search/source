@@ -1,5 +1,5 @@
 {% load i18n %}
-{% blocktrans with booking.owner.username as owner and booking.borrower.username as borrower and booking.product.category.name as category and booking.product.summary as summary and booking.started_at|date:"DATETIME_FORMAT" as starting_at and booking.started_at|timesince:booking.ended_at as duration %}
+{% blocktrans with booking.owner.username as owner and booking.borrower.username as borrower and booking.product.category.name as category and booking.product.summary as summary and booking.started_at|date:"DATETIME_FORMAT" as starting_at and booking.started_at|timesince:booking.ended_at as duration and booking.get_absolute_url as booking_url and site.domain as domain %}
  Bonjour {{ owner }},
 
  {{ borrower }} souhaite louer l’un de vos objets. Voici les détails de sa proposition : 
@@ -9,7 +9,10 @@
  Début de la location : {{ starting_at }}
  Durée de la location : {{ duration }}
 
- Pour lui répondre et/ou accepter cette location, il vous suffit d’aller dans l’onglet propositions de votre compte e-loue.com.
+ Pour lui répondre et/ou accepter cette location, il vous suffit d’aller dans l’onglet propositions de votre compte e-loue.com :
+ 
+ {{ protocol }}://{{ domain }}{{ booking_url }}
+
 {% endblocktrans %}
 
 {% trans "L'équipe e-loue" %}
