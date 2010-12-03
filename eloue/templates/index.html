@@ -63,7 +63,7 @@
 		    {% if category.is_root_node %}
 		     {% drilldown_tree_for_node category as drilldown cumulative count products.Product.category in product_count %}
 		     {% for node,structure in drilldown|tree_info %}
-		      {% if node.is_root_node %}
+		      {% if node.is_root_node and node.slug != 'divers' %}
 		       <div class="category-home x3 first">
 		        <h3>{{ node.name }}</h3>
 		        <ul>
