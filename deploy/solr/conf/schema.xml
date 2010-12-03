@@ -82,6 +82,10 @@
     <field name="django_ct" type="string"   indexed="true"  stored="true"  multiValued="false" />
     <field name="django_id" type="string"   indexed="true"  stored="true"  multiValued="false" />
     
+    <field name="title" type="text" indexed="true" stored="true" multiValued="false" />
+
+    <field name="url" type="string" indexed="false" stored="true" multiValued="false" />
+    
     <field name="categories" type="text" indexed="true" stored="true" multiValued="true" />
     
     <field name="categories_exact" type="string" indexed="true" stored="true" multiValued="true" />

@@ -12,7 +12,7 @@ from django.views.generic.list_detail import object_list
 
 from haystack.query import SearchQuerySet
 
-from eloue.decorators import secure_required
+from eloue.decorators import ownership_required, secure_required
 from eloue.accounts.forms import EmailAuthenticationForm
 from eloue.accounts.models import Patron
 from eloue.products.forms import FacetedSearchForm, ProductForm, ProductEditForm
@@ -38,6 +38,7 @@ def product_create(request, *args, **kwargs):
 
 
 @login_required
+@ownership_required(model=Product, object_key='product_id', ownership=['owner'])
 def product_edit(request, slug, product_id):
     product = get_object_or_404(Product, pk=product_id)
     price = product.prices.day()[0]

@@ -59,7 +59,6 @@ def authenticate_headless(request):
     if form.is_valid():
         login(request, form.get_user())
         return HttpResponse()
-
     elif request.method == "GET":
         return HttpResponse(csrf(request)["csrf_token"]._proxy____func())
 
@@ -90,7 +89,7 @@ def patron_detail(request, slug, patron_id=None, page=None):
 def patron_edit(request):
     form = PatronEditForm(request.POST or None, instance=request.user)
     if form.is_valid():
-        patron = form.save()
+        form.save()
         messages.success(request, _(u"Vos informations ont bien été modifiées"))
     return direct_to_template(request, 'accounts/patron_edit.html', extra_context={'form': form, 'patron': request.user})
 
@@ -119,8 +118,8 @@ def patron_paypal(request):
         paypal_redirect = patron.create_account(return_url=return_url)
         if paypal_redirect:
             return redirect_to(request, paypal_redirect)
-        self.paypal_email = None
-        self.save()
+        patron.paypal_email = None
+        patron.save()
         messages.error(request, _(u"Nous n'avons pas pu créer votre compte paypal"))
     return direct_to_template(request, 'accounts/patron_paypal.html', extra_context={'form': form, 'next': redirect_path})
 
@@ -164,17 +163,15 @@ def borrower_history(request, page=None):
     return object_list(request, queryset, page=page, paginate_by=10, template_name='accounts/borrower_history.html',
         template_object_name='booking')
 
+
 def contact(request):
     form = ContactForm(request.POST or None)
     if form.is_valid():
+        headers = {'Reply-To': form.cleaned_data['sender']}
         if form.cleaned_data.get('cc_myself'):
-            email = EmailMessage(form.cleaned_data['subject'], form.cleaned_data['message'], settings.DEFAULT_FROM_EMAIL,
-                ['contact@e-loue.com'],
-                headers = {'Reply-To': form.cleaned_data['sender'], 'Cc': form.cleaned_data['sender']})
-        else:
-            email = EmailMessage(form.cleaned_data['subject'], form.cleaned_data['message'], settings.DEFAULT_FROM_EMAIL,
-                ['contact@e-loue.com'],
-                headers = {'Reply-To': form.cleaned_data['sender']})    
+            headers['Cc'] = form.cleaned_data['sender']
+        email = EmailMessage(form.cleaned_data['subject'], form.cleaned_data['message'],
+                settings.DEFAULT_FROM_EMAIL, ['contact@e-loue.com'], headers=headers)
         email.send()
     return direct_to_template(request, 'accounts/contact.html', extra_context={'form': form})
 

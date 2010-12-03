@@ -12,7 +12,6 @@
    {% compressed_css 'master' %}
   {% endblock %}
   <script type="text/javascript">
-   /*
     var _gaq = _gaq || [];
     _gaq.push(['_setAccount', 'UA-8258979-1']);
     _gaq.push(['_trackPageview']);
@@ -21,7 +20,6 @@
       ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
       var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
     })();
-   */
   </script>
  </head>
  <body>
@@ -73,7 +71,7 @@
 			<div class="x3">
 				<h4>{% trans "Support" %}</h4>
 				<ul>
-					<li><a href="/faq/">{% trans "Aide" %}</a></li>
+					<li><a href="{% url faq-topic-list %}">{% trans "Aide" %}</a></li>
 					<li><a href="{% url contact %}">{% trans "Contactez-nous" %}</a></li>
 					<li><a href="/espace-presse/">{% trans "Espace presse" %}</a></li>
 					<li><a href="/qui-sommes-nous/">{% trans "Qui sommes nous ?" %}</a></li>
@@ -85,7 +83,6 @@
 					<li><a href="http://blog.e-loue.com">{% trans "Blog" %}</a></li>
 					<li><a href="https://twitter.com/eloue">{% trans "Twitter" %}</a></li>
 					<li><a href="https://www.facebook.com/pages/e-louecom/104685226447">{% trans "Facebook" %}</a></li>
-					<li><a href="#">{% trans "Sites partenaires" %}</a></li>
 				</ul>
 			</div>
 			<div class="x12 twitter-box">

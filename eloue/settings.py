@@ -303,13 +303,13 @@ else:
     PAYPAL_API_USERNAME = getattr(local, 'PAYPAL_API_USERNAME', "benoit.woj_api1.e-loue.com")
     PAYPAL_API_PASSWORD = getattr(local, 'PAYPAL_API_PASSWORD', "34Z24TURKD2FJXDX")
     PAYPAL_API_SIGNATURE = getattr(local, 'PAYPAL_API_SIGNATURE', "ATyjR-cGlnW5vguT2T3LQhvPyZkLAuciTdL9GTRAigYudx6OGB385TPR")
-    PAYPAL_API_APPLICATION_ID = getattr(local, 'PAYPAL_API_APPLICATION_ID')
+    PAYPAL_API_APPLICATION_ID = getattr(local, 'PAYPAL_API_APPLICATION_ID', 'APP-2DL1603058460020J')
     PAYPAL_API_EMAIL = getattr(local, 'PAYPAL_API_EMAIL', "benoit.woj@e-loue.com")
     PAYPAL_COMMAND = "https://www.paypal.com/webscr?%s"
 
 # Business configuration
 BOOKING_DAYS = 85  # Max booking days
-COMMISSION = 0.2  # Our commission percentage
+COMMISSION = 0.15  # Our commission percentage
 POLICY_NUMBER = None  # Our insurance policy number
 PARTNER_NUMBER = None  # Our insurance partner number
 INSURANCE_FEE = 0.054  # Use to calculate transfer price
@@ -327,3 +327,6 @@ DEFAULT_RADIUS = 215
 OAUTH_PROVIDER_KEY_SIZE = 32
 OAUTH_AUTHORIZE_VIEW = "eloue.accounts.views.oauth_authorize"
 OAUTH_CALLBACK_VIEW = "eloue.accounts.views.oauth_callback"
+
+# Performance configuration
+USE_ETAGS = False

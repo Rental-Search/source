@@ -37,7 +37,7 @@
     is_staff: false
     is_superuser: false
     last_login: 2010-08-18 15:35:00.180475
-    password: sha1$6014d$07264a609bb1293fa9f07b7a9acbe9194eb4c1bd
+    password: sha1$134fb$a4c67091dfa747157e0d69c7cb12be581cd5357d
     user_permissions: []
   model: auth.user
   pk: 2
