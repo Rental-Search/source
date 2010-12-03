@@ -687,18 +687,18 @@
 .ht-col{
 }
 
-  .ht-col h2
+  .ht-col h1
   {
     background: transparent url("../images/content-h-bg.png") repeat-x 0 bottom;
-    font-size: 20px;
     font-weight: bold;
     text-align: center;
     padding: 15px 0;
     margin: 0 30px;
+    line-height: 38px;
   }
-    .ht-col h2 strong
+    .ht-col h1 strong
     {
-      font-size: 32px;
+      font-size: 48px;
     }
     
     .ht-col ol
@@ -719,12 +719,20 @@
         float: left;
         height: 60px;
         width: 60px;
+        margin-top: 5px;
         margin-right: 10px;
+        margin-bottom: 15px;
       }
       
        .ht-n1-g { background: transparent url("../images/steps_number.png") no-repeat 0px 0px; }
        .ht-n2-g { background: transparent url("../images/steps_number.png") no-repeat 0px -60px; }
        .ht-n3-g { background: transparent url("../images/steps_number.png") no-repeat 0px -120px; }
+       .ht-n4-g { background: transparent url("../images/steps_number.png") no-repeat 0px -180px; }
+       
+       .ht-n1-o { background: transparent url("../images/steps_number.png") no-repeat -60px 0px; }
+       .ht-n2-o { background: transparent url("../images/steps_number.png") no-repeat -60px -59px; }
+       .ht-n3-o { background: transparent url("../images/steps_number.png") no-repeat -60px -119px; }
+       .ht-n4-o { background: transparent url("../images/steps_number.png") no-repeat -60px -179px; }
        
        .ht-number.orange { background-color: #FF7200; }
        
@@ -734,9 +742,30 @@
         color: #9EB0BA;
       }
       
-        .ht-desc b
+        .ht-desc span
         {
           color: #364C59;
-          font-size: 22px;
+          font-size: 23px;
+          line-height: 32px;
         }
+        
+      .ht-fonction.x12
+      {
+        background-color: #f5f7f9;
+        width: 800px;
+        margin-left: 60px;
+        -moz-border-radius: 5px;
+  	    -webkit-border-radius: 5px;
+  	    border-radius: 5px;
+  	    padding: 10px 0;
+      }
+      
+        .ht-fonction h1
+        {
+          text-align:center;
+          background: transparent url("../images/content-h-bg.png") repeat-x 0 bottom;
+          margin: 0 40px;
+          padding-bottom: 20px;
+          font-weight:  bold;
+        }  
   
