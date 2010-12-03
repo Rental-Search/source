@@ -35,21 +35,23 @@
 		</div>
 		{% cache 900 curiosities %}
 		{% for curiosity in curiosities %}
-		<div class="product-home x2">
-			<p class="product-home-img">
-				<a href="{{ curiosity.product.get_absolute_url }}">
-					{% with curiosity.product.pictures.all|first as picture %}
-						<img src="{{ picture.home.url }}" alt="{{ product.summary }}"/>
-					{% endwith %}
-				</a>
-			</p>
-			<p>
-				<a href="" class="product-home-title">{{ curiosity.product.summary|lower|capfirst }}</a><br />
-				 {% with curiosity.product.prices.day|first as price %}
-				  <span>{{ price }}/jour</span>
-				 {% endwith %}
-			</p>
-		</div>
+		 {% with curiosity.product as product %}
+		  <div class="product-home x2">
+		   <p class="product-home-img">
+		 	<a href="{{ product.get_absolute_url }}">
+  		     {% with product.pictures.all|first as picture %}
+			  <img src="{{ picture.home.url }}" alt="{{ product.summary }}"/>
+			 {% endwith %}
+			</a>
+		   </p>
+	  	   <p>
+			<a href="{{ product.get_absolute_url }}" class="product-home-title">{{ product.summary|lower|capfirst }}</a><br />
+			{% with product.prices.day|first as price %}
+			 <span>{{ price }}/jour</span>
+			{% endwith %}
+		   </p>
+		  </div>
+		 {% endwith %}
 		{% endfor %}
 		{% endcache %}
 		<div class="content-header x12">
