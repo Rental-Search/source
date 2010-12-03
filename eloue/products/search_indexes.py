@@ -46,4 +46,4 @@ except AlreadyRegistered:
     pass
 
 
-product_search = SearchQuerySet().facet('categories').facet('owner').facet('price')
+product_search = SearchQuerySet().models(Product).facet('categories').facet('owner').facet('price')
