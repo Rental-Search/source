@@ -78,7 +78,8 @@ def oauth_callback(request, *args, **kwargs):
 @cache_page(900)
 def patron_detail(request, slug, patron_id=None, page=None):
     if patron_id:  # This is here to be compatible with the old app
-        return redirect_to(request, reverse('patron_detail', args=[slug]))
+        patron = get_object_or_404(Patron, pk=patron_id)
+        return redirect_to(request, patron.get_absolute_url())
     form = FacetedSearchForm()
     patron = get_object_or_404(Patron, slug=slug)
     return object_list(request, patron.products.all(), page=page, paginate_by=PAGINATE_PRODUCTS_BY,
