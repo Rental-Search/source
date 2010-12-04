@@ -135,6 +135,9 @@ class Booking(models.Model):
         super(Booking, self).__init__(*args, **kwargs)
         for state in BOOKING_STATE.enum_dict:
             setattr(self, "is_%s" % state.lower(), types.MethodType(self._is_factory(state), self))
+
+    def __unicode__(self):
+	return self.product.summary
     
     @staticmethod
     def _is_factory(state):
