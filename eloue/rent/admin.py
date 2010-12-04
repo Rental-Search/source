@@ -5,9 +5,9 @@ from eloue.rent.models import Booking
 
 
 class BookingAdmin(admin.ModelAdmin):
-    list_filter = ('started_at', 'ended_at', 'state')
-    raw_id_fields = ('owner', 'borrower')
-    list_display = ('product__summary', 'started_at', 'ended_at', 'created_at', 'total_amount')
+    list_filter = ('started_at', 'ended_at', 'state', 'created_at')
+    raw_id_fields = ('owner', 'borrower', 'product')
+    list_display = ('uuid', 'started_at', 'ended_at', 'created_at', 'total_amount', 'state')
 
 
 admin.site.register(Booking, BookingAdmin)
