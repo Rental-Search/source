@@ -684,8 +684,7 @@
   padding-top: 4px;
 }
 
-.ht-col{
-}
+.ht-col{ margin-bottom: 20px;}
 
   .ht-col h1
   {
@@ -715,7 +714,6 @@
       
       .ht-number
       {
-        display: block;
         float: left;
         height: 60px;
         width: 60px;
@@ -751,11 +749,11 @@
       .ht-fonction.x12
       {
         background-color: #f5f7f9;
-        width: 800px;
+        width: 860px;
         margin-left: 60px;
-        -moz-border-radius: 5px;
-  	    -webkit-border-radius: 5px;
-  	    border-radius: 5px;
+        -moz-border-radius: 15px;
+  	    -webkit-border-radius: 15px;
+  	    border-radius: 15px;
   	    padding: 10px 0;
       }
       
@@ -765,6 +763,44 @@
           background: transparent url("../images/content-h-bg.png") repeat-x 0 bottom;
           margin: 0 40px;
           padding-bottom: 20px;
+          margin-bottom: 20px;
           font-weight:  bold;
-        }  
+        } 
+        
+        .ht-f-col
+        {
+          float: left;
+          width: 370px;
+          margin-left: 40px;
+          
+        } 
+        
+          .ht-f-col li
+          {
+            list-style-type: none;
+            height: 70px;
+            margin: 20px 0;
+          }
+            .ht-icon
+            {
+              display: block;
+              float: left;
+              width: 80px;
+              height: 70px;
+              margin-right: 20px;
+            }
+              .assurancy { background: transparent url("../images/fonction.png") no-repeat 0px 0px; }
+              .car { background: transparent url("../images/fonction.png") no-repeat -80px 0px; }
+              .laptop { background: transparent url("../images/fonction.png") no-repeat -160px 0px; }
+              
+              .lock { background: transparent url("../images/fonction.png") no-repeat 0px -70px; }
+              .people { background: transparent url("../images/fonction.png") no-repeat -80px -70px; }
+              .money { background: transparent url("../images/fonction.png") no-repeat -160px -70px; }
+              
+            .ht-f-desc span
+            {
+              font-size: 18px;
+              font-weight: bold;
+              line-height: 26px;
+            }
   
