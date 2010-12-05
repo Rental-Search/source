@@ -18,7 +18,7 @@ class Command(BaseCommand):
         log.info('Starting hourly outdater mover process')
         Booking.objects.filter(
             state__in=[Booking.STATE.AUTHORIZING, Booking.STATE.AUTHORIZED],
-            started_at__gte=datetime.now()
+            started_at__lt=datetime.now()
         ).update(state=Booking.STATE.OUTDATED)
         log.info('Finished hourly outdater mover process')
     
