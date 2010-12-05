@@ -254,9 +254,12 @@ EMAIL_BACKEND = getattr(local, 'EMAIL_BACKEND', 'django.core.mail.backends.smtp.
 try:
     import logbook
     null_handler = logbook.NullHandler()
-    stderr_handler = logbook.StderrHandler(level=logbook.DEBUG if DEBUG else logbook.INFO)
+    if DEBUG:
+        log_handler = logbook.StderrHandler(level=logbook.DEBUG)
+    else:
+        log_handler = logbook.SyslogHandler(level=logbook.INFO)
     null_handler.push_application()
-    stderr_handler.push_application()
+    log_handler.push_application()
 except ImportError:
     pass
 
