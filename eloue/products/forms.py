@@ -52,7 +52,7 @@ class FacetedSearchForm(SearchForm):
                 if suggestions:
                     suggestions = re.sub('AND\s*', '', suggestions)
                     suggestions = re.sub('[\(\)]+', '', suggestions)
-                    suggestions = suggestions.replace('django_ct:product.product', '')
+                    suggestions = re.sub('django_ct:[a-zA-Z\.]*', '', suggestions)
                     suggestions = suggestions.strip()
                 if suggestions == query:
                     suggestions = None
