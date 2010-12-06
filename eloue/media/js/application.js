@@ -112,11 +112,14 @@ $(document).ready(function() {
     // Price calculations
     var bookingPrice = function(form) {
         var template = '{{#errors}}{{ errors }}{{/errors}}{{^errors}}<p>Total :<span class="day">{{ duration }},</span> soit <span class="total-price">{{ total_price }}&euro;</span></p>{{/errors}}';
+        var serializedForm = $.grep(form.serializeArray(), function(el) {
+            return (el.name.indexOf('csrfmiddlewaretoken') != -1) || (el.name.indexOf('wizard_step') != -1);
+        }, true);
         $.ajax({
-            type: 'POST',
+            type: 'GET',
             url: 'price/',
             dataType: 'json',
-            data: form.serialize(),
+            data: $.param(serializedForm),
             success: function(data) {
                 $("#booking-total").html(Mustache.to_html(template, data));
             }

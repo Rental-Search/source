@@ -12,7 +12,7 @@ from django.utils import simplejson
 from django.utils.encoding import smart_str
 from django.utils.timesince import timesince
 from django.utils.translation import ugettext_lazy as _
-from django.views.decorators.http import require_POST
+from django.views.decorators.http import require_POST, require_GET
 from django.views.decorators.cache import never_cache
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic.list_detail import object_detail
@@ -63,12 +63,12 @@ def pay_ipn(request):
     return HttpResponse()
 
 
-@require_POST
+@require_GET
 def booking_price(request, slug, product_id):
     if not request.is_ajax():
         return HttpResponseNotAllowed("Method Not Allowed")
     product = get_object_or_404(Product, pk=product_id)
-    form = BookingForm(request.POST, prefix="0", instance=Booking(product=product))
+    form = BookingForm(request.GET, prefix="0", instance=Booking(product=product))
     if form.is_valid():
         duration = timesince(form.cleaned_data['started_at'], form.cleaned_data['ended_at'])
         total_price = smart_str(form.cleaned_data['total_amount'])
