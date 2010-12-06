@@ -45,6 +45,7 @@ class BookingWizard(GenericFormWizard):
             new_patron, new_address, new_phone = missing_form.save()
         
         booking_form = form_list[0]
+        booking_form.instance.ip = request.META.get('REMOTE_ADDR', None)
         booking_form.instance.total_amount = Booking.calculate_price(booking_form.instance.product,
             booking_form.cleaned_data['started_at'], booking_form.cleaned_data['ended_at'])
         booking_form.instance.borrower = new_patron

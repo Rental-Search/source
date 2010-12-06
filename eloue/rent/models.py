@@ -363,6 +363,7 @@ class Booking(models.Model):
         response = payments.cancel_preapproval(
             preapprovalKey=self.preapproval_key,
         )
+        self.canceled_at = datetime.datetime.now()
     
     @transition(source='incident', target='deposit', save=True)
     def litigation(self, amount=None, cancel_url='', return_url=''):
