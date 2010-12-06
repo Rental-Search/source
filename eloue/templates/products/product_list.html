@@ -103,11 +103,11 @@
 								<h2><a href="{{ object.get_absolute_url }}">{{ product.summary|capitalize|truncate:50 }}</a></h2>
 							</div>
 							<div class="pl-content">
-								{% with product.highlighted.text|first|truncate:106|safe as highlight %}
+								{% with product.highlighted.text|first|truncate:91|safe as highlight %}
 									{% if highlight %}
 									<div class="pl-desc">{{ highlight }}</div>
 									{% else %}
-									<div class="pl-desc">{{ product.description|truncate:100 }}</div>
+									<div class="pl-desc">{{ product.description|truncate:91 }}</div>
 									{% endif %}
 								{% endwith %}
 								<div class="pl-distance">
