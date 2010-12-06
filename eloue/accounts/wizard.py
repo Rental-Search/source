@@ -40,7 +40,7 @@ class AuthenticationWizard(MultiPartFormWizard):
         else:
             GoalRecord.record('registration', WebUser(request))
             messages.info(request, _(u"Bienvenue ! Nous vous avons envoyé un lien de validation par email. Cette validation est impérative pour terminer votre enregistrement."))
-        return redirect_to(request, self.redirect_path)
+        return redirect_to(request, self.redirect_path, permanent=False)
     
     def parse_params(self, request, *args, **kwargs):
         redirect_path = request.REQUEST.get('next', '')
