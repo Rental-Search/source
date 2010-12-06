@@ -30,6 +30,13 @@
   </script>
  </head>
  <body>
+		{% if messages %}
+		    {% for message in messages %}
+				<div id="notification" class="notification {% if message.tags %} {{ message.tags }}"{% endif %}>
+					<span id="notification-text">{{ message }}</span>
+				</div>
+		    {% endfor %}
+		{% endif %}
 		<div id="wrapper" class="xgrid">
 			<div id="header" class="clearfix">
 				<div class="logo x2">
@@ -104,7 +111,8 @@
 		</div>
 	</div>
   {% block tail %}
-   {% compressed_js 'application' %}
+		{% compressed_js 'application' %}
+		
   {% endblock %}
  </body>
 </html>
