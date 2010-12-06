@@ -26,7 +26,7 @@ class AccountWizardTest(TestCase):
             '0-password': 'alexandre',
             'wizard_step': 0
         })
-        self.assertRedirects(response, settings.LOGIN_REDIRECT_URL, status_code=301)
+        self.assertRedirects(response, settings.LOGIN_REDIRECT_URL, status_code=302)
         
         scheme, netloc, path, query, fragment = urlsplit(response['Location'])
         redirect_response = response.client.get(path, QueryDict(query))
@@ -40,7 +40,7 @@ class AccountWizardTest(TestCase):
             '0-password': 'alexandre',
             'wizard_step': 0
         })
-        self.assertRedirects(response, reverse('auth_login'), status_code=301)
+        self.assertRedirects(response, reverse('auth_login'), status_code=302)
         
         scheme, netloc, path, query, fragment = urlsplit(response['Location'])
         redirect_response = response.client.get(path, QueryDict(query))
@@ -117,7 +117,7 @@ class AccountWizardTest(TestCase):
             '0-password': '',
             'hash_0': 'b5d8e7ffcc52f852c688983ecb30ead6'
         })
-        self.assertRedirects(response, settings.LOGIN_REDIRECT_URL, status_code=301)
+        self.assertRedirects(response, settings.LOGIN_REDIRECT_URL, status_code=302)
         
         scheme, netloc, path, query, fragment = urlsplit(response['Location'])
         redirect_response = response.client.get(path, QueryDict(query))
