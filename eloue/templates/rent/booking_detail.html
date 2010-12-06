@@ -1,6 +1,33 @@
 {% extends "base.html" %}
 {% load i18n product %}
 
+{% block gaq %}
+ {% if paypal %}
+  {% with booking.product as product %}
+   _gaq.push(['_addTrans',
+    '{{ booking.uuid.hex }}',
+    'e-loue',
+    '{{ booking.total_amount }}',
+    '0',
+    '0',
+    '{{ product.address.city }}',
+    '{{ product.address.zipcode }}',
+    '{{ product.address.country }}'
+   ]);
+
+   _gaq.push(['_addItem',
+    '{{ booking.uuid.hex }}',
+    '{{ product.id }}',
+    '{{ product.summary }}',
+    '{{ product.category.name }}',
+    '{{ product.prices.day|first }}',
+    '1'
+   ]);
+  {% endwith %}
+  _gaq.push(['_trackTrans']);
+ {% endif %}
+{% endblock %}
+
 {% block title %}
 {% if booking.state == booking.STATE.AUTHORIZING %}
 	{% if booking.borrower == user %}
