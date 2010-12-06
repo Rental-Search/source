@@ -18,6 +18,9 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.generic.list_detail import object_detail
 from django.views.generic.simple import direct_to_template, redirect_to
 
+from django_lean.experiments.models import GoalRecord
+from django_lean.experiments.utils import WebUser
+
 from eloue.decorators import ownership_required, validate_ipn, secure_required
 from eloue.accounts.forms import EmailAuthenticationForm
 from eloue.products.models import Product
@@ -121,6 +124,7 @@ def booking_accept(request, booking_id):
     if form.is_valid():
         booking = form.save()
         booking.send_acceptation_email()
+        GoalRecord.record('rent_object_accepted', WebUser(request))
         booking.save()
     return redirect_to(request, booking.get_absolute_url())
 
@@ -135,6 +139,7 @@ def booking_reject(request, booking_id):
     if form.is_valid():
         booking = form.save()
         booking.send_rejection_email()
+        GoalRecord.record('rent_object_rejected', WebUser(request))
         messages.success(request,_(u"Cette réservation a bien été refusée"))
     messages.error(request, _(u"Cette réservation n'a pu être refusée"))
     return redirect_to(request, booking.get_absolute_url())
