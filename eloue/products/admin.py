@@ -21,11 +21,14 @@ class PriceInline(admin.TabularInline):
 
 
 class ProductAdmin(SearchModelAdmin):
+    date_hierarchy = 'created_at'
     search_fields = ['summary', 'description']
     inlines = [PictureInline, PropertyValueInline, PriceInline]
     raw_id_fields = ("owner", "address")
-    list_display = ('summary', 'category','deposit_amount', 'quantity', 'is_archived', 'is_allowed')
+    list_display = ('summary', 'category','deposit_amount', 'quantity', 'is_archived', 'is_allowed', 'created_at')
     list_filter = ('is_archived', 'is_allowed')
+    list_editable = ('category',)
+    ordering = ['created_at']
     form = ProductAdminForm
 
 
