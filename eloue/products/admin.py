@@ -29,6 +29,7 @@ class ProductAdmin(SearchModelAdmin):
     list_filter = ('is_archived', 'is_allowed')
     list_editable = ('category',)
     ordering = ['-created_at']
+    list_per_page = 20
     form = ProductAdminForm
 
 
