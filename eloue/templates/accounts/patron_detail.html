@@ -1,9 +1,9 @@
 {% extends "base.html" %}
 {% load i18n product cache paginator %}
 
-{% block title %}{{ patron.username }} - {{ block.super }}{% endblock %}
+{% block title %}{{ patron.username }}{% endblock %}
 
-{% block description %}{{ block. }}{% endblock %}
+{% block description %}{% blocktrans with patron.username %}Toutes les locations de {{ username }}{% endblocktrans %}{% endblock %}
 
 {% block content %}
 <div id="top-content" class="search clearfix">
@@ -43,7 +43,7 @@
 	</div>
 	<div class="col2 x9">
 		{% if patron.products %}
-			<h2>{{ patron.products.count}} location{{ patron.products.count|pluralize }}</h2>
+			<h2>{{ patron.products.count }} location{{ patron.products.count|pluralize }}</h2>
 		{% else %}
 			<h2>Pas de location</h2>
 		{% endif %}

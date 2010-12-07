@@ -1,11 +1,13 @@
 {% extends "base.html" %}
-{% block title %}Complétez votre profil - {{ block.super }}{% endblock %}
+{% load i18n %}
+
+{% block title %}{% trans "Complétez votre profil" %}{% endblock %}
 
 {% block content %}
 	<div id="content" class="clearfix">
 		<div class="sbs x12">
 			<div class="sbs-header">
-				<h1>Mettre en location</h1>
+				<h1>{% trans "Mettre en location" %}</h1>
 			</div>
 			<ol class="sbs-steps">
 				<li class="off">1.Remplissez la fiche</li>

@@ -4,8 +4,8 @@
  <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-  <title>{% block title %}e-loue{% endblock %}</title>
-  <meta name="description" content="{% block description %}Plateforme pour louer ou mettre en location tout type d'objet : materiel, reception, mariage, sono, utilitaires, ski ...{% endblock %}">
+  <title>{% spaceless %}{% block title %}{% endblock %} {% if is_paginated and page_obj.has_previous %}- {% trans "Page" %} {{ page_obj.number }}{% endif %} - e-loue{% endspaceless %}</title>
+  <meta name="description" content="{% spaceless %}{% block description %}Plateforme pour louer ou mettre en location tout type d'objet : materiel, reception, mariage, sono, utilitaires, ski{% endblock %}{% if is_paginated and page_obj.has_previous %} Page {{ page_obj.number }}{% endif %}{% endspaceless %}">
   <meta name="google-site-verification" content="JxKbPmnlcJagHiSTQcwcZaA2XWBbpU1ZVHmJ6529HT0" />
   <link rel="shortcut icon" href="{{ MEDIA_URL }}favicon.ico">
   {% block head %}

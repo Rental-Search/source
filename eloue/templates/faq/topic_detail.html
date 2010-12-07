@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load i18n markup %}
 
-{% block title %}{{ topic.title }} - {{ block.super }}{% endblock %}
+{% block title %}{{ topic.title }}{% endblock %}
 
 {% block description %}
  {% blocktrans with topic.title|lower as section %}

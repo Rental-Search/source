@@ -3,27 +3,27 @@
 
 {% block title %}{% spaceless %}
  {% if breadcrumbs %}
-	{% if form.cleaned_data.q %}
-	 {% trans "Location" %}
-	 {% for crumb in breadcrumbs.values %}
-	  {% if crumb.facet %}
-	   &rsaquo; {{ crumb.pretty_value|capfirst }}
-	  {% endif %}
-	 {% endfor %} &rsaquo; {{ form.cleaned_data.q }} - {{ block.super }}
-	{% else %}
-	 {% trans "Location" %}
-	 {% for crumb in breadcrumbs.values %}
-	  {% if crumb.facet %}
-	   &rsaquo; {{ crumb.pretty_value|capfirst }}
-	  {% endif %}
-	 {% endfor %} - {{ block.super }}
+  {% if form.cleaned_data.q %}
+   {% trans "Location" %}
+   {% for crumb in breadcrumbs.values %}
+    {% if crumb.facet %}
+     &rsaquo; {{ crumb.pretty_value|capfirst }}
+    {% endif %}
+   {% endfor %} &rsaquo; {{ form.cleaned_data.q }}
+  {% else %}
+   {% trans "Location" %}
+   {% for crumb in breadcrumbs.values %}
+    {% if crumb.facet %}
+	 &rsaquo; {{ crumb.pretty_value|capfirst }}
+	{% endif %}
+   {% endfor %}
   {% endif %}
  {% else %}
-	{% if form.cleaned_data.q %}
- 	 {{ form.cleaned_data.q }} - {{ block.super }}
-	{% else %}
-	 {% trans "Location" %} - {{ block.super }}
-	{% endif %}
+  {% if form.cleaned_data.q %}
+   {{ form.cleaned_data.q }}
+  {% else %}
+   {% trans "Location" %}
+  {% endif %}
  {% endif %}
 {% endspaceless %}{% endblock %}
 
