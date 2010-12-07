@@ -73,11 +73,9 @@ def product_list(request, urlbits, sqs=SearchQuerySet(), suggestions=None, page=
                 raise Http404
             if bit.endswith(_('categorie')):
                 item = get_object_or_404(Category, slug=value)
-                sqs = sqs.narrow("categories:%s" % value)
                 breadcrumbs[bit] = {'name': 'categories', 'value': value, 'label': bit, 'object': item, 'pretty_name': _(u"Catégorie"), 'pretty_value': item.name, 'url': 'par-%s/%s' % (bit, value), 'facet': True}
             elif bit.endswith(_('loueur')):
                 item = get_object_or_404(Patron, slug=value)
-                sqs = sqs.narrow("owner:%s" % value)
                 breadcrumbs[bit] = {'name': 'owner', 'value': value, 'label': bit, 'object': item, 'pretty_name': _(u"Loueur"), 'pretty_value': item.username, 'url': 'par-%s/%s' % (bit, value), 'facet': True}
             else:
                 raise Http404

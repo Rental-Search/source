@@ -67,7 +67,7 @@ class FacetedSearchForm(SearchForm):
                         
             for key in self.cleaned_data.keys():
                 if self.cleaned_data[key] and key not in ["q", "l", "r", "sort"]:
-                    sqs = sqs.narrow("%s:%s" % (key, self.cleaned_data[key]))
+                    sqs = sqs.narrow("%s_exact:%s" % (key, self.cleaned_data[key]))
         
             if self.cleaned_data['sort']:
                 sqs = sqs.order_by(self.cleaned_data['sort'])
