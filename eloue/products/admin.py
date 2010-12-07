@@ -28,7 +28,7 @@ class ProductAdmin(SearchModelAdmin):
     list_display = ('summary', 'category','deposit_amount', 'quantity', 'is_archived', 'is_allowed', 'created_at')
     list_filter = ('is_archived', 'is_allowed')
     list_editable = ('category',)
-    ordering = ['created_at']
+    ordering = ['-created_at']
     form = ProductAdminForm
 
 
