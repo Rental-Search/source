@@ -152,6 +152,7 @@ html[xmlns] .clearfix {
   height: 42px;
   width: 440px;
   border: none;
+  cursor: pointer;
 }
 
 .btn
