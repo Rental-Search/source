@@ -3,7 +3,7 @@
 
 {% block title %}{{ patron.username }}{% endblock %}
 
-{% block description %}{% blocktrans with patron.username %}Toutes les locations de {{ username }}{% endblocktrans %}{% endblock %}
+{% block description %}{% blocktrans with patron.username as username %}Toutes les locations de {{ username }}{% endblocktrans %}{% endblock %}
 
 {% block content %}
 <div id="top-content" class="search clearfix">
