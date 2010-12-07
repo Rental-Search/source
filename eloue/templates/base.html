@@ -16,6 +16,11 @@
     _gaq.push(['_setAccount', 'UA-8258979-1']);
     _gaq.push(['_setDomainName', 'www.e-loue.com']);
     _gaq.push(['_trackPageview']);
+    {% spaceless %}{% if user.is_authenticated %}
+     _gaq.push(['_setVar', 'authenticated']);
+    {% else %}
+     _gaq.push(['_setVar', 'anonymous']);
+    {% endif %}{% endspaceless %
     {% block gaq %}{% endblock %}
     (function() {
       var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
