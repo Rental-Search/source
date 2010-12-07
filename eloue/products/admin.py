@@ -5,8 +5,6 @@ from mptt.admin import MPTTModelAdmin
 from eloue.products.forms import ProductAdminForm
 from eloue.products.models import Product, Picture, Category, Property, PropertyValue, Price, ProductReview, PatronReview, Curiosity
 
-from haystack.admin import SearchModelAdmin
-
 
 class PictureInline(admin.TabularInline):
     model = Picture
@@ -20,9 +18,9 @@ class PriceInline(admin.TabularInline):
     model = Price
 
 
-class ProductAdmin(SearchModelAdmin):
+class ProductAdmin(admin.ModelAdmin):
     date_hierarchy = 'created_at'
-    search_fields = ['summary', 'description']
+    search_fields = ['summary', 'description', 'category__name', 'owner__username', 'owner__email']
     inlines = [PictureInline, PropertyValueInline, PriceInline]
     raw_id_fields = ("owner", "address")
     list_display = ('summary', 'category','deposit_amount', 'quantity', 'is_archived', 'is_allowed', 'created_at')
