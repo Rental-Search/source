@@ -9,6 +9,7 @@ from django.contrib.sites.models import Site
 from django.contrib.auth.forms import PasswordResetForm, PasswordChangeForm, SetPasswordForm
 from django.contrib.auth.tokens import default_token_generator
 from django.forms.fields import EMPTY_VALUES
+from django.template.defaultfilters import slugify
 from django.template.loader import render_to_string
 from django.utils.datastructures import SortedDict
 from django.utils.http import int_to_base36
@@ -288,6 +289,8 @@ def make_missing_data_form(instance, required_fields=[]):
     
     def clean_username(self):
         if Patron.objects.filter(username=self.cleaned_data['username']).exists():
+            raise forms.ValidationError(_(u"Ce nom d'utilisateur est déjà pris."))
+        if Patron.objects.filter(slug=slugify(self.cleaned_data['username'])).exists():
             raise forms.ValidationError(_(u"Ce nom d'utilisateur est déjà pris."))
         return self.cleaned_data['username']
         
