@@ -20,7 +20,7 @@
      _gaq.push(['_setVar', 'authenticated']);
     {% else %}
      _gaq.push(['_setVar', 'anonymous']);
-    {% endif %}{% endspaceless %
+    {% endif %}{% endspaceless %}
     {% block gaq %}{% endblock %}
     (function() {
       var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
@@ -45,7 +45,7 @@
 						{% else %}
 							<li class="nav"><a href="{% url auth_logout %}" class="nav-link">{% trans "Se déconnecter" %}</a></li>
 						{% endif %}
-						{% if request.user.is_anonymous %}
+						{% if user.is_anonymous %}
 						 <li class="nav"><a href="/comment-ca-marche/" class="nav-link">{% trans "Comment ça marche ?" %}</a></li>
 						{% else %}
 						 <li class="nav"><a href="{% url dashboard %}" class="nav-link">{% trans "Tableau de bord" %}</a></li>
