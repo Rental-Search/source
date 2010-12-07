@@ -27,7 +27,7 @@ local_path = lambda path: os.path.join(os.path.dirname(__file__), path)
 
 
 class ApiProductResourceTest(TestCase):
-    fixtures = ['patron', 'address', 'oauth', 'price', 'product']
+    fixtures = ['category', 'patron', 'address', 'oauth', 'price', 'product']
     
     def setUp(self):
         self.index = site.get_index(Product)

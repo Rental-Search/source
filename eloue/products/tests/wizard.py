@@ -13,7 +13,7 @@ local_path = lambda path: os.path.join(os.path.dirname(__file__), path)
 
 
 class ProductWizardTest(TestCase):
-    fixtures = ['patron', 'address', 'price', 'product', 'picture']
+    fixtures = ['category', 'patron', 'address', 'price', 'product', 'picture']
     
     def test_zero_step(self):
         response = self.client.get(reverse('product_create'))

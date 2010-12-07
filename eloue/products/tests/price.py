@@ -9,7 +9,7 @@ from eloue.products.models import Product, Price
 
 
 class PriceTest(TestCase):
-    fixtures = ['patron', 'address', 'product']
+    fixtures = ['category', 'patron', 'address', 'product']
     
     def test_amount_values_negative(self):
         price = Price(amount=-1, product_id=1, unit=1, currency='EUR')
@@ -24,7 +24,7 @@ class PriceTest(TestCase):
     
 
 class StandardPriceTest(TestCase):
-    fixtures = ['patron', 'address', 'product']
+    fixtures = ['category', 'patron', 'address', 'product']
     
     def setUp(self):
         from django.db import connection
@@ -46,7 +46,7 @@ class StandardPriceTest(TestCase):
     
 
 class SeasonalPriceTest(TestCase):
-    fixtures = ['patron', 'address', 'product', 'booking']
+    fixtures = ['category', 'patron', 'address', 'product', 'booking']
     
     def setUp(self):
         from django.db import connection

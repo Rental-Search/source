@@ -24,7 +24,7 @@ class MockDateTime(datetime.datetime):
     
 
 class BookingWizardTest(TestCase):
-    fixtures = ['patron', 'address', 'price', 'product']
+    fixtures = ['category', 'patron', 'address', 'price', 'product']
     
     def setUp(self):
         self.product = Product.objects.get(pk=1)

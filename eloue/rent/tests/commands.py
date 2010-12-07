@@ -23,7 +23,7 @@ class MockBooking(Booking):
     
 
 class PaymentsTest(TestCase):
-    fixtures = ['patron', 'phones', 'address', 'price', 'product', 'booking', 'sinister']
+    fixtures = ['category', 'patron', 'phones', 'address', 'price', 'product', 'booking', 'sinister']
     
     def setUp(self):
         self.old_datetime = datetime.datetime

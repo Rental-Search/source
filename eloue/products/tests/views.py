@@ -7,7 +7,7 @@ from eloue.products.models import Product
 
 
 class ProductViewsTest(TestCase):
-    fixtures = ['patron', 'address', 'price', 'product']
+    fixtures = ['category', 'patron', 'address', 'price', 'product']
     
     def test_home_page(self):
         response = self.client.get(reverse('home'))

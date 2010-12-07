@@ -15,7 +15,7 @@ class MockDateTime(datetime.datetime):
     
 
 class BookingTest(TestCase):
-    fixtures = ['patron', 'address', 'price', 'product']
+    fixtures = ['category', 'patron', 'address', 'price', 'product']
     
     def setUp(self):
         self.old_datetime = datetime.datetime

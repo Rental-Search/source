@@ -7,7 +7,7 @@ from eloue.products.models import Product, ProductReview, PatronReview
 
 
 class ProductTest(TestCase):
-    fixtures = ['patron', 'address', 'price', 'product']
+    fixtures = ['category', 'patron', 'address', 'price', 'product']
     
     @transaction.commit_on_success
     def test_product_creation(self):
@@ -24,7 +24,7 @@ class ProductTest(TestCase):
     
 
 class ProductReviewTest(TestCase):
-    fixtures = ['patron', 'address', 'price', 'product', 'booking']
+    fixtures = ['category', 'patron', 'address', 'price', 'product', 'booking']
     
     def test_score_values_negative(self):
         review = ProductReview(score=-1.0, product_id=1, description='Incorrect', reviewer_id=2)
@@ -51,7 +51,7 @@ class ProductReviewTest(TestCase):
     
 
 class PatronReviewTest(TestCase):
-    fixtures = ['patron', 'address', 'price', 'product', 'booking']
+    fixtures = ['category', 'patron', 'address', 'price', 'product', 'booking']
     
     def test_score_values_negative(self):
         review = PatronReview(score=-1.0, patron_id=1, description='Incorrect', reviewer_id=2)

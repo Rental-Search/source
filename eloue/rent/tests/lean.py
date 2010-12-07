@@ -8,7 +8,7 @@ from eloue.lean import PatronEngagementScoreCalculator
 
 
 class ScoreCalculatorTest(TestCase):
-    fixtures = ['patron', 'address', 'price', 'product', 'booking']
+    fixtures = ['category', 'patron', 'address', 'price', 'product', 'booking']
     
     def test_classic_period(self):
         score_calculator = PatronEngagementScoreCalculator()

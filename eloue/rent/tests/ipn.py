@@ -9,7 +9,7 @@ from eloue.rent.models import Booking
 
 
 class TestPaypalIPN(TestCase):
-    fixtures = ['patron', 'phones', 'address', 'price', 'product', 'booking']
+    fixtures = ['category', 'patron', 'phones', 'address', 'price', 'product', 'booking']
     
     def test_preapproval_ipn(self):
         data = {

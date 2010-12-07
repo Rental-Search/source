@@ -3,8 +3,8 @@ from django.core.urlresolvers import reverse
 from django.test import TestCase
 
 
-class BookingTest(TestCase):
-    fixtures = ['patron', 'address', 'price', 'product', 'booking', 'sinister']
+class BookingViewsTest(TestCase):
+    fixtures = ['category', 'patron', 'address', 'price', 'product', 'booking', 'sinister']
     
     def test_preapproval_success(self):
         self.client.login(username='alexandre.woog@e-loue.com', password='alexandre')
