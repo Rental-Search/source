@@ -131,6 +131,7 @@ class Category(MPTTModel):
     need_insurance = models.BooleanField(default=True, db_index=True)
     
     class Meta:
+        ordering = ['name']
         verbose_name = _('category')
         verbose_name_plural = _('categories')
     
