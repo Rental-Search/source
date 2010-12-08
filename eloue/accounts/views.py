@@ -5,7 +5,7 @@ from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.sites.models import Site
-from django.core.mail import EmailMessage
+from django.core.mail import EmailMessage, BadHeaderError
 from django.core.urlresolvers import reverse
 from django.shortcuts import get_object_or_404
 from django.utils.translation import ugettext_lazy as _
@@ -173,7 +173,13 @@ def contact(request):
             headers['Cc'] = form.cleaned_data['sender']
         email = EmailMessage(form.cleaned_data['subject'], form.cleaned_data['message'],
                 settings.DEFAULT_FROM_EMAIL, ['contact@e-loue.com'], headers=headers)
-        email.send()
+        try:
+            email.send()
+            form = ContactForm()
+            messages.success(request, _(u"Votre message a bien été envoyé"))
+        except BadHeaderError:
+            messages.error(request, _(u"Erreur lors de l'envoi du message"))
+            
     return direct_to_template(request, 'accounts/contact.html', extra_context={'form': form})
 
     
