@@ -2,9 +2,15 @@
 from httplib2 import Http
 
 from django.conf import settings
-from django.http import HttpResponseRedirect, HttpResponseForbidden
+from django.contrib.sites.models import Site
+from django.http import HttpResponsePermanentRedirect, HttpResponseForbidden
 
-if settings.USE_PAYPAL_SANDBOX:
+AFFILIATE_TAG = getattr(settings, 'AFFILIATE_TAG', None)
+USE_HTTPS = getattr(settings, 'USE_HTTPS', True)
+USE_PAYPAL_SANDBOX = getattr(settings, 'USE_PAYPAL_SANDBOX', False)
+VALIDATE_IPN = getattr(settings, 'VALIDATE_IPN', True)
+
+if USE_PAYPAL_SANDBOX:
     endpoint = "https://www.sandbox.paypal.com/cgi-bin/webscr?cmd=_notify-validate&%s"
 else:
     endpoint = "https://www.paypal.com/cgi-bin/webscr?cmd=_notify-validate&%s"
@@ -13,7 +19,7 @@ else:
 def validate_ipn(view_func):
     """Decorator makes sure ipn is coming from Paypal."""
     def _wrapped_view_func(request, *args, **kwargs):
-        if getattr(settings, 'VALIDATE_IPN', True):
+        if VALIDATE_IPN:
             response, content = Http().request(endpoint % request.raw_post_data)
             if not content == 'VERIFIED':
                 return HttpResponseForbidden()
@@ -25,10 +31,12 @@ def secure_required(view_func):
     """Decorator makes sure URL is accessed over https."""
     def _wrapped_view_func(request, *args, **kwargs):
         if not request.is_secure():
-            if getattr(settings, 'USE_HTTPS', True):
-                request_url = request.build_absolute_uri(request.get_full_path())
-                secure_url = request_url.replace('http://', 'https://')
-                return HttpResponseRedirect(secure_url)
+            if USE_HTTPS:
+                site = Site.objects.get(domain="www.e-loue.com")
+                secure_url = "https://%s%s" % (site.domain, request.path)
+                if AFFILIATE_TAG:
+                    secure_url += "?tag=%s" % AFFILIATE_TAG
+                return HttpResponsePermanentRedirect(secure_url)
         return view_func(request, *args, **kwargs)
     return _wrapped_view_func
 

@@ -23,6 +23,9 @@ class ProductWizard(GenericFormWizard):
             if not new_patron:
                 new_patron = Patron.objects.create_inactive(missing_form.cleaned_data['username'],
                     auth_form.cleaned_data['email'], missing_form.cleaned_data['password1'])
+                if self.affiliate_tag:
+                    # Assign affiliate tag, no need to save, since missing_form should do it for us
+                    new_patron.affiliate = self.affiliate_tag
             if not hasattr(new_patron, 'backend'):
                 from django.contrib.auth import load_backend
                 backend = load_backend(settings.AUTHENTICATION_BACKENDS[0])
@@ -47,6 +50,9 @@ class ProductWizard(GenericFormWizard):
         
         GoalRecord.record('new_object', WebUser(request))
         return redirect_to(request, product.get_absolute_url(), permanent=False)
+    
+    def parse_params(self, request, *args, **kwargs):
+        self.affiliate_tag = request.REQUEST.get('tag', None)
     
     def get_form(self, step, data=None, files=None):
         if issubclass(self.form_list[step], ProductForm):

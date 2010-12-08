@@ -24,6 +24,9 @@ class AuthenticationWizard(MultiPartFormWizard):
         if not new_patron:
             new_patron = Patron.objects.create_inactive(missing_form.cleaned_data['username'],
                 auth_form.cleaned_data['email'], missing_form.cleaned_data['password1'])
+            if self.affiliate_tag:
+                # Assign affiliate tag, no need to save, since missing_form should do it for us
+                new_patron.affiliate = self.affiliate_tag
         if not hasattr(new_patron, 'backend'):
             from django.contrib.auth import load_backend
             backend = load_backend(settings.AUTHENTICATION_BACKENDS[0])
@@ -48,6 +51,7 @@ class AuthenticationWizard(MultiPartFormWizard):
             self.redirect_path = settings.LOGIN_REDIRECT_URL
         else:
             self.redirect_path = redirect_path
+        self.affiliate_tag = request.REQUEST.get('tag', None)
     
     def __call__(self, request, *args, **kwargs):
         if EmailAuthenticationForm not in self.form_list:

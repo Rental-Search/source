@@ -20,7 +20,7 @@ class PhoneNumberInline(admin.TabularInline):
 class PatronAdmin(UserAdmin):
     fieldsets = (
         (None, {'fields': ('username', 'password')}),
-        (_('Personal info'), {'fields': ('civility', 'first_name', 'last_name', 'email', 'slug')}),
+        (_('Personal info'), {'fields': ('civility', 'first_name', 'last_name', 'email', 'slug', 'affiliate')}),
         (_('Company info'), {'fields': ('is_professional', 'company_name')}),
         (_('Permissions'), {'fields': ('is_staff', 'is_active', 'is_superuser', 'user_permissions')}),
         (_('Important dates'), {'fields': ('last_login', 'date_joined')}),
@@ -30,7 +30,7 @@ class PatronAdmin(UserAdmin):
     list_display = ('username', 'first_name', 'last_name', 'email', 'company_name',
         'is_staff', 'is_active', 'is_expired', 'is_professional', 'date_joined', 'modified_at')
     date_hierarchy = 'date_joined'
-    list_filter = ('is_active', 'is_staff', 'is_superuser', 'is_professional')
+    list_filter = ('is_active', 'is_staff', 'is_superuser', 'is_professional', 'affiliate')
     save_on_top = True
     ordering = ['-date_joined']
     inlines = [AddressInline, PhoneNumberInline]

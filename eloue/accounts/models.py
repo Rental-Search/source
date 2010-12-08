@@ -95,7 +95,7 @@ class Patron(User):
     is_subscribed = models.BooleanField(_(u'newsletter'), default=False, help_text=_(u"Précise si l'utilisateur est abonné à la newsletter"))
     is_professional = models.NullBooleanField(_('professionnel'), blank=True, default=None, help_text=_(u"Précise si l'utilisateur est un professionnel"))
     modified_at = models.DateTimeField(_('date de modification'), editable=False)
-    last_ip = models.IPAddressField(null=True, blank=True)
+    affiliate = models.CharField(null=True, blank=True, max_length=10)
     slug = models.SlugField(unique=True, db_index=True)
     paypal_email = models.EmailField(null=True, blank=True)
     
