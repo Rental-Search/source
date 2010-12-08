@@ -51,10 +51,6 @@ def sandbox():
     env.shared_path = "%(domain_path)s/shared" % {'domain_path': env.domain_path}
     env.git_clone = "git@github.com:e-loue/eloue.git"
     env.env_file = "deploy/production.txt"
-    env.campfire_room = "Chit chat"
-    env.campfire_token = "b96565fb9b8f49f0e18a6a194d7ac97812e154d6"
-    env.campfire_domain = "e-loue"
-    env.github_url = "https://github.com/e-loue/eloue"
 
 @runs_once
 def releases():
@@ -229,8 +225,10 @@ def soft():
 def notify():
     """Notify campfire of a deploy"""
     from pinder import Campfire
-    if not env.has_key('current_release'):
+    if not 'current_release' in env:
         releases()
+    if not 'campfire_domain' in env:
+        return
     c = Campfire(env.campfire_domain, env.campfire_token, ssl=True)
     room = c.find_room_by_name(env.campfire_room)
     deployed = run("cd %(current_release)s; git rev-parse HEAD" % {'current_release': env.current_release})[:7]
