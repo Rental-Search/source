@@ -117,6 +117,10 @@ class Booking(models.Model):
                 self.insurance_amount = D(0)
         super(Booking, self).save(*args, **kwargs)
     
+    @permalink
+    def get_absolute_url(self):
+        return ('booking_detail', [self.pk.hex])
+    
     def clean(self):
         from django.core.exceptions import ValidationError
         if self.started_at and self.ended_at:
@@ -127,18 +131,14 @@ class Booking(models.Model):
             if (self.ended_at - self.started_at) > datetime.timedelta(days=BOOKING_DAYS):
                 raise ValidationError(_(u"La durée d'une location est limitée à 85 jours."))
     
-    @permalink
-    def get_absolute_url(self):
-        return ('booking_detail', [self.pk.hex])
-    
+    def __unicode__(self):
+	    return self.product.summary
+        
     def __init__(self, *args, **kwargs):
         super(Booking, self).__init__(*args, **kwargs)
         for state in BOOKING_STATE.enum_dict:
             setattr(self, "is_%s" % state.lower(), types.MethodType(self._is_factory(state), self))
 
-    def __unicode__(self):
-	return self.product.summary
-    
     @staticmethod
     def _is_factory(state):
         def is_state(self):
