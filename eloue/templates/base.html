@@ -30,6 +30,13 @@
   </script>
  </head>
  <body>
+		{% if messages %}
+		    {% for message in messages %}
+				<div id="notification" class="notification {% if message.tags %} {{ message.tags }}"{% endif %}>
+					<span id="notification-text">{{ message }}</span>
+				</div>
+		    {% endfor %}
+		{% endif %}
 		<div id="wrapper" class="xgrid">
 			<div id="header" class="clearfix">
 				<div class="logo x2">
@@ -59,7 +66,7 @@
   	</div>
 		<div id="footer" class="xgrid">
 			<div class="x3">
-				<h4>{% trans "Lien utile" %}</h4>
+				<h4>{% trans "Liens utiles" %}</h4>
 				<ul>
 					<li><a href="{% url home %}">{% trans "Accueil" %}</a></li>
 					<li><a href="{% url dashboard %}">{% trans "Mon compte" %}</a></li>
@@ -104,7 +111,8 @@
 		</div>
 	</div>
   {% block tail %}
-   {% compressed_js 'application' %}
+		{% compressed_js 'application' %}
+		
   {% endblock %}
  </body>
 </html>

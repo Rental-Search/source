@@ -1,4 +1,5 @@
 $(document).ready(function() {
+    
     // Password field enabler/disabler
     var exists = $("input[name$='exists']:checked").val();
     var passwordInput = $("input[name$='password']");
@@ -138,4 +139,22 @@ $(document).ready(function() {
     $('form.bk-refuse').submit(function(event) {
        return confirm('Êtes-vous sûr de vouloir refuser cette location ?');
     });
+    
+    //Flash message slidedown
+    var notification = $("#notification");
+    
+    if ( notification.html() ) {
+      notification.slideDown("slow");
+      setTimeout('hideNotification()' ,
+            4000 // 4 seconds
+            );
+      notification.click(function() {
+        hideNotification();
+      });
+    }
+    
 });
+
+function hideNotification() {
+    $("#notification").slideUp("slow");
+}
