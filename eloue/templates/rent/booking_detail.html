@@ -170,7 +170,7 @@
 				</tr>
 				<tr>
 					<th>Commission :</th>
-					<td class="number">{{ booking.total_commission|quantize }} &euro;</td>
+					<td class="number">{{ booking.total_commission|quantize:.00,ceiling }} &euro;</td>
 				</tr>
 				<tr class="total">
 					<th>Montant net perçu :</th>
