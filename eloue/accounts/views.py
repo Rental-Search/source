@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+import smtplib
+import socket
 from logbook import Logger
 
 from django.conf import settings
@@ -166,20 +168,21 @@ def borrower_history(request, page=None):
 
 
 def contact(request):
-    form = ContactForm(request.POST or None)
-    if form.is_valid():
-        headers = {'Reply-To': form.cleaned_data['sender']}
-        if form.cleaned_data.get('cc_myself'):
-            headers['Cc'] = form.cleaned_data['sender']
-        email = EmailMessage(form.cleaned_data['subject'], form.cleaned_data['message'],
+    if request.method == 'POST':
+        form = ContactForm(request.POST)
+        if form.is_valid():
+            headers = {'Reply-To': form.cleaned_data['sender']}
+            if form.cleaned_data.get('cc_myself'):
+                headers['Cc'] = form.cleaned_data['sender']
+            email = EmailMessage(form.cleaned_data['subject'], form.cleaned_data['message'],
                 settings.DEFAULT_FROM_EMAIL, ['contact@e-loue.com'], headers=headers)
-        try:
-            email.send()
-            form = ContactForm()
-            messages.success(request, _(u"Votre message a bien été envoyé"))
-        except BadHeaderError:
-            messages.error(request, _(u"Erreur lors de l'envoi du message"))
-            
+            try:
+                email.send()
+                messages.success(request, _(u"Votre message a bien été envoyé"))
+            except (BadHeaderError, smtplib.SMTPException, socket.error):
+                messages.error(request, _(u"Erreur lors de l'envoi du message"))
+    else:
+        form = ContactForm()
     return direct_to_template(request, 'accounts/contact.html', extra_context={'form': form})
 
     
