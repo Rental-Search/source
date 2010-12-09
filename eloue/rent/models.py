@@ -343,8 +343,8 @@ class Booking(models.Model):
                 "%s://%s" % (protocol, domain), reverse('pay_ipn')
             ),
             receiverList={'receiver': [
-                {'primary':True, 'amount':str(math.ceil(self.total_amount)), 'email':PAYPAL_API_EMAIL},
-                {'primary':False, 'amount':str(math.ceil(self.net_price)), 'email':self.owner.paypal_email}
+                {'primary':True, 'amount':str(self.total_amount), 'email':PAYPAL_API_EMAIL},
+                {'primary':False, 'amount':str(self.net_price), 'email':self.owner.paypal_email}
             ]}
         )
         self.pay_key = response['payKey']
