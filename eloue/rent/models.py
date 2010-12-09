@@ -1,11 +1,10 @@
 # -*- coding: utf-8 -*-
 import datetime
 import logbook
-import math
 import types
 import random
 
-from decimal import Decimal as D
+from decimal import Decimal as D, ROUND_CEILING, ROUND_FLOOR
 from fsm.fields import FSMField
 from fsm import transition
 from pyke import knowledge_engine
@@ -186,7 +185,7 @@ class Booking(models.Model):
                 startingDate=now,
                 endingDate=now + datetime.timedelta(days=360),
                 currencyCode=self.currency,
-                maxTotalAmountOfAllPayments=str(math.ceil(self.total_amount)),
+                maxTotalAmountOfAllPayments=str(self.total_amount.quantize(D(".00"), ROUND_CEILING)),
                 cancelUrl=cancel_url,
                 returnUrl=return_url,
                 ipnNotificationUrl=urljoin(
@@ -343,8 +342,8 @@ class Booking(models.Model):
                 "%s://%s" % (protocol, domain), reverse('pay_ipn')
             ),
             receiverList={'receiver': [
-                {'primary':True, 'amount':str(self.total_amount), 'email':PAYPAL_API_EMAIL},
-                {'primary':False, 'amount':str(self.net_price), 'email':self.owner.paypal_email}
+                {'primary':True, 'amount':str(self.total_amount.quantize(D(".00"), ROUND_CEILING)), 'email':PAYPAL_API_EMAIL},
+                {'primary':False, 'amount':str(self.net_price.quantize(D(".00"), ROUND_FLOOR)), 'email':self.owner.paypal_email}
             ]}
         )
         self.pay_key = response['payKey']
@@ -385,7 +384,7 @@ class Booking(models.Model):
                 "%s://%s" % (protocol, domain), reverse('pay_ipn')
             ),
             receiverList={'receiver': [
-                {'amount':str(math.floor(amount)), 'email':self.owner.paypal_email},
+                {'amount':str(amount.quantize(D('.00'), ROUND_FLOOR)), 'email':self.owner.paypal_email},
             ]}
         )
     
