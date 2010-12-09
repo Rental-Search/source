@@ -30,5 +30,5 @@ def quantize(value, arg=None):
     if not precision:
         precision = ".00"
     if (not rounding) or (rounding not in options):
-        rounding = "floor"
+        rounding = "ceiling"
     return number.quantize(decimal.Decimal(precision), rounding=options[rounding])

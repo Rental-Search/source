@@ -154,7 +154,7 @@
 				</tr>
 				<tr class="total">
 					<th>Total :</th>
-					<td class="number">{{ booking.total_amount }} €</td>
+					<td class="number">{{ booking.total_amount|quantize }} €</td>
 				</tr>
 			</table>
 		</div>
@@ -166,15 +166,15 @@
 			<table>
 				<tr>
 					<th>Avant commission :</th>
-					<td class="number">{{ booking.total_amount }} &euro;</td>
+					<td class="number">{{ booking.total_amount|quantize }} &euro;</td>
 				</tr>
 				<tr>
 					<th>Commission :</th>
-					<td class="number">{{ booking.total_commission|quantize:".00,ceiling" }} &euro;</td>
+					<td class="number">{{ booking.total_commission|quantize }} &euro;</td>
 				</tr>
 				<tr class="total">
 					<th>Montant net perçu :</th>
-					<td class="number">{{ booking.net_price|quantize }} €</td>
+					<td class="number">{{ booking.net_price|quantize:".00,floor" }} €</td>
 				</tr>
 			</table>
 		</div>
