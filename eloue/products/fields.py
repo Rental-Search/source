@@ -110,6 +110,12 @@ class SimpleDateField(models.PositiveSmallIntegerField):
             return int((32 * value.month) + value.day)
         return int(value)
     
+    def south_field_triple(self):
+        from south.modelsinspector import introspector
+        field_class = "django.db.models.fields.PositiveSmallIntegerField"
+        args, kwargs = introspector(self)
+        return (field_class, args, kwargs)
+    
 
 class FacetField(forms.CharField):
     def __init__(self, pretty_name=None, *args, **kwargs):
