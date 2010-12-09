@@ -42,7 +42,7 @@ BOOKING_STATE = Enum([
     ('outdated', 'OUTDATED', _(u"Dépassé"))
 ])
 
-COMMISSION = D(str(getattr(settings, 'COMMISSION', 0.1)))
+COMMISSION = D(str(getattr(settings, 'COMMISSION', 0.15)))
 INSURANCE_FEE = D(str(getattr(settings, 'INSURANCE_FEE', 0.0594)))
 INSURANCE_COMMISSION = D(str(getattr(settings, 'INSURANCE_COMMISSION', 0)))
 INSURANCE_TAXES = D(str(getattr(settings, 'INSURANCE_TAXES', 0.09)))
