@@ -125,6 +125,13 @@ class PatronEditForm(forms.ModelForm):
         super(PatronEditForm, self).__init__(*args, **kwargs)
         self.fields['civility'].widget.attrs['class'] = "selm"
     
+    def clean_company_name(self):
+        is_professional = self.cleaned_data.get('is_professional')
+        company_name = self.cleaned_data.get('company_name', None)
+        if is_professional and not company_name:
+            raise forms.ValidationError(_(u"Vous devez entrer le nom de votre société"))
+        return company_name
+    
     def clean_email(self):
         email = self.cleaned_data['email'].lower()
         if email in EMPTY_VALUES:
