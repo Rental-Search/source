@@ -45,7 +45,9 @@ class Migration(SchemaMigration):
             ('created_at', self.gf('django.db.models.fields.DateTimeField')(blank=True)),
         ))
         db.send_create_signal('rent', ['Sinister'])
-
+        
+        db.execute("CREATE SEQUENCE rent_booking_contract_id_seq")
+        db.execute("CREATE SEQUENCE rent_sinister_sinister_id_seq")
 
     def backwards(self, orm):
         # Deleting model 'Booking'
