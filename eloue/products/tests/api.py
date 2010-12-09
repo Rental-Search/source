@@ -2,17 +2,14 @@
 from base64 import encodestring
 import oauth2 as oauth
 import os
-import time
 import urlparse
 
-from urllib import urlencode
 from datetime import datetime, timedelta
 from decimal import Decimal as D
 from haystack import site
 
-from django.conf import settings
 from django.core.urlresolvers import reverse
-from django.test import TestCase
+from django.test import Client, TestCase
 from django.utils import simplejson
 
 from eloue.products.models import Product
@@ -26,7 +23,7 @@ OAUTH_TOKEN_SECRET = 'jSdFZCdLgzTCRxcG'
 local_path = lambda path: os.path.join(os.path.dirname(__file__), path)
 
 
-class ApiProductResourceTest(TestCase):
+class ApiTest(TestCase):
     fixtures = ['category', 'patron', 'address', 'oauth', 'price', 'product']
     
     def setUp(self):
@@ -34,9 +31,12 @@ class ApiProductResourceTest(TestCase):
         for product in Product.objects.all():
             self.index.update_object(product)
     
-    def _get_request(self, method='GET', parameters=None):
+    def _get_request(self, method='GET', parameters=None, use_token=True):
         consumer = oauth.Consumer(OAUTH_CONSUMER_KEY, OAUTH_CONSUMER_SECRET)
-        token = oauth.Token(OAUTH_TOKEN_KEY, OAUTH_TOKEN_SECRET)
+        if use_token:
+            token = oauth.Token(OAUTH_TOKEN_KEY, OAUTH_TOKEN_SECRET)
+        else:
+            token = None
         request = oauth.Request.from_consumer_and_token(consumer, token, http_method=method, parameters=parameters)
         request.sign_request(oauth.SignatureMethod_PLAINTEXT(), consumer, token)
         return request
@@ -46,6 +46,28 @@ class ApiProductResourceTest(TestCase):
         headers['HTTP_AUTHORIZATION'] = headers['Authorization']
         del headers['Authorization']
         return headers
+    
+    def test_login_headless(self):
+        client = Client(enforce_csrf_checks=True)
+        response = client.get(reverse("auth_login_headless"))
+        self.assertTrue(response.status_code, 200)
+        csrf_token = response.content
+        response = client.post(reverse("auth_login_headless"), {
+            "password": 'alexandre',
+            "email": 'alexandre.woog@e-loue.com',
+            "exists": 1,
+            "csrfmiddlewaretoken": csrf_token
+        })
+        self.assertTrue(response.status_code, 200)
+    
+    def test_request_token(self):
+        self.client.login(username='alexandre.woog@e-loue.com', password='alexandre')
+        request = self._get_request(method='GET', use_token=False)
+        response = self.client.get(reverse('oauth_request_token'), {'oauth_callback': 'oob'},
+            **self._get_headers(request))
+        self.assertTrue(response.status_code, 200)
+        request_token = dict(urlparse.parse_qsl(response.content))
+        self.assertTrue('oauth_token' in request_token)
     
     def test_product_list(self):
         response = self.client.get(reverse("api_dispatch_list", args=['1.0', 'product']),
