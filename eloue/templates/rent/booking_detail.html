@@ -158,7 +158,7 @@
 				</tr>
 			</table>
 		</div>
-		{% if booking.owner == user and booking.state == booking.STATE.CLOSED %}
+		{# if booking.owner == user and booking.state == booking.STATE.CLOSED #}
 		<div class="content-header x8 first">
 			<h2>Détails de la transaction</h2>
 		</div>
@@ -170,7 +170,7 @@
 				</tr>
 				<tr>
 					<th>Commission :</th>
-					<td class="number">{{ booking.total_commission|quantize:.00,ceiling }} &euro;</td>
+					<td class="number">{{ booking.total_commission|quantize:".00,ceiling" }} &euro;</td>
 				</tr>
 				<tr class="total">
 					<th>Montant net perçu :</th>
@@ -178,7 +178,7 @@
 				</tr>
 			</table>
 		</div>
-		{% endif %}
+		{# endif #}
 		</div>
 		<div class="portlet x3">
 			<div class="portlet-header">
