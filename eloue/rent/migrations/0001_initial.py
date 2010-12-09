@@ -6,6 +6,10 @@ from django.db import models
 
 
 class Migration(SchemaMigration):
+    depends_on = (
+        ("products", "0001_initial"),
+    )
+    
     def forwards(self, orm):        
         # Adding model 'Booking'
         db.create_table('rent_booking', (
@@ -20,7 +24,7 @@ class Migration(SchemaMigration):
             ('owner', self.gf('django.db.models.fields.related.ForeignKey')(related_name='bookings', to=orm['accounts.Patron'])),
             ('borrower', self.gf('django.db.models.fields.related.ForeignKey')(related_name='rentals', to=orm['accounts.Patron'])),
             ('product', self.gf('django.db.models.fields.related.ForeignKey')(related_name='bookings', to=orm['products.Product'])),
-            ('contract_id', self.gf('django.db.models.fields.AutoField')(db_index=True, unique=True, blank=True)),
+            ('contract_id', self.gf('django.db.models.fields.IntegerField')(db_index=True, unique=True, blank=True)),
             ('pin', self.gf('django.db.models.fields.CharField')(max_length=4, blank=True)),
             ('ip', self.gf('django.db.models.fields.IPAddressField')(max_length=15, null=True, blank=True)),
             ('created_at', self.gf('django.db.models.fields.DateTimeField')(blank=True)),
@@ -33,7 +37,7 @@ class Migration(SchemaMigration):
         # Adding model 'Sinister'
         db.create_table('rent_sinister', (
             ('uuid', self.gf('django.db.models.fields.CharField')(unique=True, max_length=32, primary_key=True)),
-            ('sinister_id', self.gf('django.db.models.fields.AutoField')(db_index=True, unique=True, blank=True)),
+            ('sinister_id', self.gf('django.db.models.fields.IntegerField')(db_index=True, unique=True, blank=True)),
             ('description', self.gf('django.db.models.fields.TextField')()),
             ('patron', self.gf('django.db.models.fields.related.ForeignKey')(related_name='sinisters', to=orm['accounts.Patron'])),
             ('booking', self.gf('django.db.models.fields.related.ForeignKey')(related_name='sinisters', to=orm['rent.Booking'])),
@@ -143,7 +147,7 @@ class Migration(SchemaMigration):
             'Meta': {'object_name': 'Booking'},
             'borrower': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'rentals'", 'to': "orm['accounts.Patron']"}),
             'canceled_at': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
-            'contract_id': ('django.db.models.fields.AutoField', [], {'db_index': 'True', 'unique': 'True', 'blank': 'True'}),
+            'contract_id': ('django.db.models.fields.IntegerField', [], {'db_index': 'True', 'unique': 'True', 'blank': 'True'}),
             'created_at': ('django.db.models.fields.DateTimeField', [], {'blank': 'True'}),
             'currency': ('django.db.models.fields.CharField', [], {'default': "'EUR'", 'max_length': '3'}),
             'deposit_amount': ('django.db.models.fields.DecimalField', [], {'max_digits': '8', 'decimal_places': '2'}),
@@ -167,7 +171,7 @@ class Migration(SchemaMigration):
             'description': ('django.db.models.fields.TextField', [], {}),
             'patron': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'sinisters'", 'to': "orm['accounts.Patron']"}),
             'product': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'sinisters'", 'to': "orm['products.Product']"}),
-            'sinister_id': ('django.db.models.fields.AutoField', [], {'db_index': 'True', 'unique': 'True', 'blank': 'True'}),
+            'sinister_id': ('django.db.models.fields.IntegerField', [], {'db_index': 'True', 'unique': 'True', 'blank': 'True'}),
             'uuid': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '32', 'primary_key': 'True'})
         }
     }
