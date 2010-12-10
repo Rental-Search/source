@@ -9,7 +9,11 @@
 {% endif %}
 <div id="wrapper" class="xgrid">
 	<div id="header" class="clearfix">
-		<div class="x12">
+		<div class="logo x2">
+			Avec
+			<img src="{{ MEDIA_URL }}images/logo.png" alt="e-loue" width="90px"/>
+		</div>
+		<div class="x10 omega">
 			<ul class="nav-bar">
 				<li class="nav"><a href="{% url product_create %}" class="btn medium-green"  >{% trans "Mettre en location" %}</a></li>
 				{% if not user.is_authenticated %}
