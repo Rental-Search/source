@@ -1,7 +1,10 @@
 /*****
 20min
 ******/
-
+.mn-doc, .mn-pub-container, .mn-pub-mention
+{
+  background: #ECF6FF url("../images/body-bg.png") repeat 0 0;
+}
 .mn-ft  ul, .mn-ft ol			{ margin-left: 0px; margin-bottom: 0; }
 .mn-ft li ul,
 .mn-ft li ol			{ margin-top: 0; }
@@ -308,7 +311,7 @@ html[xmlns] .clearfix {
   body
   {
     color: #364C59;
-    /*background: #ECF6FF url("../images/body-bg.png") repeat 0 0;*/
+    background: #ECF6FF url("../images/body-bg.png") repeat 0 0;
     font: 14px arial,sans-serif;
   }
   
