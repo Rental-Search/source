@@ -585,8 +585,8 @@ html[xmlns] .clearfix {
   {
     background: transparent !important;
   }
-  
-  .cancel-sort a{
+  .cancel-sort a
+  {
     color: #f46868 !important;
   }
   
