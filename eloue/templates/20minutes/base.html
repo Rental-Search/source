@@ -1,3 +1,77 @@
+{% load i18n %}
 {% include "header.html" %}
+{% if messages %}
+    {% for message in messages %}
+		<div id="notification" class="notification {% if message.tags %} {{ message.tags }}"{% endif %}>
+			<span id="notification-text">{{ message }}</span>
+		</div>
+    {% endfor %}
+{% endif %}
+<div id="wrapper" class="xgrid">
+	<div id="header" class="clearfix">
+		<div class="x12">
+			<ul class="nav-bar">
+				<li class="nav"><a href="{% url product_create %}" class="btn medium-green"  >{% trans "Mettre en location" %}</a></li>
+				{% if not user.is_authenticated %}
+					<li class="nav"><a href="{% url auth_login %}" class="nav-link" >{% trans "S'inscrire ou se connecter" %}</a></li>
+				{% else %}
+					<li class="nav"><a href="{% url auth_logout %}" class="nav-link">{% trans "Se déconnecter" %}</a></li>
+				{% endif %}
+				{% if user.is_anonymous %}
+				 <li class="nav"><a href="/comment-ca-marche/" class="nav-link">{% trans "Comment ça marche ?" %}</a></li>
+				{% else %}
+				 <li class="nav"><a href="{% url dashboard %}" class="nav-link">{% trans "Tableau de bord" %}</a></li>
+				 <li class="nav welcome">{% blocktrans with request.user.first_name as first_name %} Bienvenue, {{ first_name }}!{% endblocktrans %}</li>    
+				{% endif %}
+			</ul>
+		</div>
+	</div>{# header #}
 {% block content %}{% endblock %}
+</div>
+<div id="footer" class="xgrid">
+	<div class="x3">
+		<h4>{% trans "Liens utiles" %}</h4>
+		<ul>
+			<li><a href="{% url home %}">{% trans "Accueil" %}</a></li>
+			<li><a href="{% url dashboard %}">{% trans "Mon compte" %}</a></li>
+			<li><a href="{% url product_create %}">{% trans "Mettre en location" %}</a></li>
+		</ul>
+	</div>
+	<div class="x3">
+		<h4>{% trans "Info" %}</h4>
+		<ul>
+			<li><a href="/espace-professionnel/">{% trans "Espace professionnel" %}</a></li>
+			<li><a href="/assurance-tranquillite/">{% trans "Assurance tranquillité" %}</a></li>
+			<li><a href="/conditions-generales/">{% trans "Conditions générales" %}</a></li>
+			<li><a href="/respect-vie-privee/">{% trans "Respect de la vie privée" %}</a></li>
+		</ul>
+	</div>
+	<div class="x3">
+		<h4>{% trans "Support" %}</h4>
+		<ul>
+			<li><a href="{% url faq-topic-list %}">{% trans "Aide" %}</a></li>
+			<li><a href="{% url contact %}">{% trans "Contactez-nous" %}</a></li>
+			<li><a href="/espace-presse/">{% trans "Espace presse" %}</a></li>
+			<li><a href="/qui-sommes-nous/">{% trans "Qui sommes nous ?" %}</a></li>
+		</ul>
+	</div>
+	<div class="x3">
+		<h4>{% trans "Communauté" %}</h4>
+		<ul>
+			<li><a href="http://blog.e-loue.com">{% trans "Blog" %}</a></li>
+			<li><a href="https://twitter.com/eloue">{% trans "Twitter" %}</a></li>
+			<li><a href="https://www.facebook.com/pages/e-louecom/104685226447">{% trans "Facebook" %}</a></li>
+		</ul>
+	</div>
+	<div class="x12 twitter-box">
+		<p>L'objet insolite de la semaine : le stylo-espion ... que vous pouvez louer pour filmer tout ce que vous souhaitez... <a href="http://fb.me/NLUmubhE">http://fb.me/NLUmubhE</a></p>
+		<div class="twitter-dialogue">
+	</div>
+</div>
+<div class="x12 twitter-info">
+	<p>
+		<a href="">12 novembre à 18h</a> sur <a href="">Twitter</a>
+	</p>
+</div>
+</div>
 {% include "footer.html" %}
