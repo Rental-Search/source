@@ -34,6 +34,6 @@ class Command(BaseCommand):
             footer.write(content.encode('utf-8'))
             footer.close()
         except (httplib2.HttpLib2Error, IOError), e:
-            log.error("Downloading footer and header failed", e)
+            log.exception("Downloading footer and header failed")
         log.info('Starting downloading footer and header')
     
