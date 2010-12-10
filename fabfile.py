@@ -222,6 +222,14 @@ def soft():
     compress()
     restart()
 
+def diff():
+    """Show diff between current and deployed code"""
+    if not 'current_release' in env:
+        releases()
+    deployed = run("cd %(current_release)s; git rev-parse HEAD" % {'current_release': env.current_release})[:7]
+    deploying = local("git rev-parse HEAD")[:7]
+    local("git difftool %(deployed)s...%(deploying)s" % {'deployed':deployed, 'deploying':deploying})
+
 def notify():
     """Notify campfire of a deploy"""
     from pinder import Campfire
