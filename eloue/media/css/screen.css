@@ -531,21 +531,25 @@ html[xmlns] .clearfix {
     {
       float: left;
       display: inline;
-      padding: 8px 10px 7px;
+      padding: 0 10px;
       font-size: 12px;
       font-weight: bold;
       margin-bottom: 0px;
       border-left: 1px solid #b9cad4;
+      cursor: pointer;
     }
     
-    .sort a
+    .sort li a
     {
+      display: block;
       color: #98a7af;
+      padding-top: 8px;
+      padding-bottom: 7px;
     }
 
     .sort li:hover a
     {
-      color: #364C59 !important;
+      color: #364C59 ;
       text-decoration: none;
     }
 
@@ -553,6 +557,8 @@ html[xmlns] .clearfix {
   {
     font-weight: normal;
     border-left: none;
+    padding-top: 8px;
+    padding-bottom: 7px;
   }
 
   .sort .label-sort:hover
@@ -565,17 +571,30 @@ html[xmlns] .clearfix {
    border-right: 1px solid #b9cad4;
   }
 
-  .sort .label-select, .sort li:hover
+  .sort .label-selected, .sort li:hover
   {
     background: -webkit-gradient(linear, 0 0, 0 50%, from(#d6e5f2), to(#e4eff9));
     background: -moz-linear-gradient(top, #d6e5f2, #e4eff9);
     background-color: #d6e5f2;
   }
-    .sort .label-select a
+    .sort .label-selected a
     {
       color: #364C59 !important;
     }
-    
+  .cancel-sort:hover
+  {
+    background: transparent !important;
+  }
+  
+  .cancel-sort a{
+    color: #f46868 !important;
+  }
+  
+  .cancel-sort:hover a
+  {
+    color: #a10a0a !important;
+  }
+  
   .product-list{}
 
     .product-list li
