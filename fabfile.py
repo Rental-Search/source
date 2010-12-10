@@ -50,7 +50,6 @@ def sandbox():
     env.releases_path = "%(domain_path)s/releases" % {'domain_path': env.domain_path}
     env.shared_path = "%(domain_path)s/shared" % {'domain_path': env.domain_path}
     env.git_clone = "git@github.com:e-loue/eloue.git"
-    env.git_branch = "20minutes"
     env.env_file = "deploy/production.txt"
 
 @runs_once
@@ -93,8 +92,9 @@ def checkout():
     env.current_release = "%(releases_path)s/%(time).0f" % {'releases_path':  env.releases_path, 'time':  time()}
     with cd(env.releases_path):
         run("git clone -q -o deploy --depth 1 %(git_clone)s %(current_release)s" % {'git_clone':  env.git_clone, 'current_release':  env.current_release})
+    with cd(env.current_release):
         if 'git_branch' in env:
-            run("git checkout -b branch origin/%(git_branch)s" % {'git_branch': env.git_branch})
+            run("git checkout -b branch deploy/%(git_branch)s" % {'git_branch': env.git_branch})
 
 def update():
     """Copies your project and updates environment and symlink"""
@@ -140,15 +140,6 @@ def compress():
         releases()
     with cd(env.current_release):
         run("env/bin/python %(app_name)s/manage.py synccompress" % {'app_name': env.app_name})
-
-def migrations():
-    """Deploy and run pending migrations"""
-    update_code()
-    update_env()
-    compress()
-    migrate()
-    symlink()
-    restart()
 
 def cleanup():
     """Clean up old releases"""
@@ -212,6 +203,7 @@ def deploy():
     """Deploys your project. This calls both `update' and `restart'"""
     notify()
     update()
+    migrate()
     compress()
     restart()
 
@@ -224,6 +216,7 @@ def soft():
         if 'git_branch' not in env:
             env.git_branch = "master"
         run("git pull -q deploy %(git_branch)s" % {'git_branch': env.git_branch})
+    permissions()
     migrate()
     compress()
     restart()
