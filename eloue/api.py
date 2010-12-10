@@ -191,11 +191,17 @@ class AddressResource(UserSpecificResource):
     
 
 class CategoryResource(ModelResource):
+    parent = fields.ForeignKey('self', 'parent', full=False, null=True)
+    
     class Meta:
         queryset = Category.objects.all()
         resource_name = 'category'
         allowed_methods = ['get']
         fields = ['id', 'name', 'slug']
+        filtering = {
+            "id": ALL_WITH_RELATIONS,
+            "parent": ALL_WITH_RELATIONS,
+        }
     
 
 class PictureResource(OAuthResource):
