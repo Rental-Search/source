@@ -144,6 +144,7 @@ INSTALLED_APPS = (
     'mptt',
     'imagekit',
     'django_lean.experiments',
+    'rollout',
     'compress',
     'faq',
     'announcements',
