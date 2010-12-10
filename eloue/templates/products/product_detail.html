@@ -54,7 +54,7 @@
 		<div class="product-price">
 		 {% with product.prices.day|first as price %}
 		  <span class="price">{{ price }}</span>
-		  <span class="unit">{% blocktrans with price.unit|unit as unit %}par {{ unit }}{% endblocktrans %}</span>
+		  <span class="unit">{% blocktrans with price.unit|unit as unit %} / par {{ unit }}{% endblocktrans %}</span>
 		 {% endwith %}
 		</div>
 		<form id="booking_create" action="" method="post" class="form">
