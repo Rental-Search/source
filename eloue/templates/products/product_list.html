@@ -74,18 +74,25 @@
 				<li class="label-sort">
 					{% trans "Trier par :" %}
 				</li>
-				<li>
+				<li {% if form.sort.data == "created_at" %} class="label-selected" {% endif %}>
 					<a href="{% facet_url breadcrumbs "sort" "created_at" %}">{% trans "Les plus récents" %}</a>
 				</li>
 				{% if form.cleaned_data.l %}
-				<li><a href="{% facet_url breadcrumbs "sort" "geo_distance" %}">{% trans "Les plus proches" %}</a></li>
+				<li {% if form.sort.data == "geo_distance" %} class="label-selected" {% endif %}>
+					<a href="{% facet_url breadcrumbs "sort" "geo_distance" %}">{% trans "Les plus proches" %}</a>
+				</li>
 				{% endif %}
-				<li>
+				<li {% if form.sort.data == "price" %} class="label-selected" {% endif %}>
 					<a href="{% facet_url breadcrumbs "sort" "price" %}">{% trans "Les prix les plus bas" %}</a>
 				</li>
-		    <li class="last-sort">
+		    <li class="last-sort {% if form.sort.data == "-price" %} label-selected {% endif %}">
 					<a href="{% facet_url breadcrumbs "sort" "-price" %}">{% trans "Les prix les plus haut" %}</a>
 				</li>
+				{% if form.sort.data %}
+				<li class="cancel-sort">
+					<a href="{% facet_url breadcrumbs -"sort" %}">X</a>
+				</li>
+				{% endif %}
 			</ul>
 			<ul class="product-list x8 first">
 				{% for product in product_list %}
