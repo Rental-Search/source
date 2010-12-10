@@ -80,7 +80,7 @@ vertical-align: baseline
 .xbreak { clear: both; }
 
 .xgrid:after {
-content: ".";
+content: "\0020";
 display: block;
 clear: both;
 visibility: hidden;
@@ -90,7 +90,7 @@ height: 0;
 
 
 h1,h2,h3,
-h4,h5,h6		{ margin-bottom: .71em; }
+h4,h5,h6		{ font-weight:bold; margin-bottom: .71em; }
 
 h1 				{ font-size: 24px; color: #546B78; line-height: 1em; font-weight: normal;}
 h2 				{ font-size: 18px; font-weight: normal; color: #364C59; margin-bottom: 0.93em }
@@ -369,8 +369,20 @@ html[xmlns] .clearfix {
         margin-top: 10px;
       }
       
+  #top-content, #content, #footer
+  {
+    box-shadow: 1px 1px 0px rgba(193, 208, 222, 0.75);
+	  -moz-box-shadow: 1px 1px 0px rgba(193, 208, 222, 0.75);
+	  -webkit-box-shadow: 1px 1px 0px rgba(193, 208, 222, 0.75);
+  }
 
-  #top-content { margin-bottom: 20px;}
+  #top-content 
+  { 
+    text-shadow: 0px 1px 0px rgba(255, 255, 255, 0.5);
+  	-moz-text-shadow: 0px 1px 0px rgba(255, 255, 255, 0.5);
+  	-webkit-text-shadow: 0px 1px 0px rgba(255, 255, 255, 0.5);
+    margin-bottom: 20px; 
+  }
 
       .search
       {
@@ -379,9 +391,6 @@ html[xmlns] .clearfix {
         background-color: #d6e5f2;
         border: 1px solid #BFD1E2;
         padding: 10px 0px;
-        box-shadow: 1px 1px 1px rgba(0,0,0,.2);
-  	    -moz-box-shadow: 1px 1px 1px rgba(0,0,0,.25);
-  	    -webkit-box-shadow: 1px 1px 1px rgba(0,0,0,.25);
         -moz-border-radius: 5px;
   	    -webkit-border-radius: 5px;
   	    border-radius: 5px;
@@ -421,9 +430,6 @@ html[xmlns] .clearfix {
   { 
     background-color: #FFF;
     border: 1px solid #ccdbe9;
-    box-shadow: 1px 1px 1px rgba(0,0,0,.2);
-    -moz-box-shadow: 1px 1px 1px rgba(0,0,0,.25);
-    -webkit-box-shadow: 1px 1px 1px rgba(0,0,0,.25);
     -moz-border-radius: 5px;
     -webkit-border-radius: 5px;
     border-radius: 5px;
@@ -455,7 +461,6 @@ html[xmlns] .clearfix {
   {
     background-color: #e3eef2;
     border: 1px solid #ccdbe9;
-    box-shadow: 1px 1px 1px rgba(0,0,0,.2);
     -moz-border-radius-topleft: 5px;
     -moz-border-radius-topright: 5px;
     -webkit-border-top-left-radius: 5px;
@@ -463,7 +468,7 @@ html[xmlns] .clearfix {
 		border-top-left-radius: 5px;
 		border-top-right-radius: 5px;
     padding: 20px 0px;
-    font-weight: bold;
+    font-weight: normal;
   }
     #footer li
     {
@@ -496,7 +501,7 @@ html[xmlns] .clearfix {
     
       .twitter-box p
       {
-        padding: 5px 5px 5px 35px;
+        padding:12px 5px 5px 38px;
       }
       
       .twitter-info
@@ -586,22 +591,22 @@ html[xmlns] .clearfix {
       background-color: #B9CAD4;
       display: block;
       float: left;
-      margin-right: 5px;
+      margin-right:15px;
       height: 90px;
       width: 90px;
     }
 
     .pl-header, .pl-content, .pl-footer{
       float: left;
-      width: 525px;
+      width: 515px;
     }
       .pl-header h2
       {
-        margin-bottom: 0.59em;
+        margin-bottom: 3px;
         font-weight: bold;
       }
 
-    .pl-content{ height: 40px; margin-bottom: 5px;}
+    .pl-content{ height: auto; margin-bottom: 0px;}
 
       .pl-desc
       {
@@ -609,6 +614,8 @@ html[xmlns] .clearfix {
         width: 200px;
         font-size: 12px;
         margin-right: 5px;
+        line-height:1.5;
+        margin-bottom:4px;
       }
 
       .pl-distance
@@ -625,7 +632,7 @@ html[xmlns] .clearfix {
       .pl-price
       {
         float: left;
-        width: 105px;
+        width: 90px;
         margin-right: 5px;
         text-align: center;
         font-weight: bold;
