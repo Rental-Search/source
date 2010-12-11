@@ -4,7 +4,7 @@ from django.contrib.sitemaps import Sitemap
 from django.contrib.flatpages.models import FlatPage
 
 from eloue.accounts.models import Patron
-from eloue.products.models import Product
+from eloue.products.models import Product, Category
 
 USE_HTTPS = getattr(settings, 'USE_HTTPS', True)
 
@@ -37,4 +37,11 @@ class FlatPageSitemap(SecureSitemap):
     
     def items(self):
         return FlatPage.objects.all()
+    
+
+class CategorySitemap(SecureSitemap):
+    changefreq = "daily"
+    
+    def items(self):
+        return Category.objects.all()
     
