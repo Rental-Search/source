@@ -13,7 +13,7 @@ from eloue.accounts.views import activate, authenticate, authenticate_headless, 
 from eloue.api import api_v1
 from eloue.products.views import homepage
 from eloue.rent.views import booking_detail, booking_accept, booking_reject, booking_incident, booking_close, booking_cancel
-from eloue.sitemaps import FlatPageSitemap, PatronSitemap, ProductSitemap
+from eloue.sitemaps import CategorySitemap, FlatPageSitemap, PatronSitemap, ProductSitemap
 
 log = logbook.Logger('eloue')
 
@@ -23,6 +23,7 @@ except admin.sites.AlreadyRegistered, e:
     log.warn('Site is already registered : %s' % e)
 
 sitemaps = {
+    'category': CategorySitemap,
     'flatpages': FlatPageSitemap,
     'patrons': PatronSitemap,
     'products': ProductSitemap
