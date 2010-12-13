@@ -7,11 +7,10 @@ from base64 import decodestring
 from tastypie import fields
 from tastypie.api import Api
 from tastypie.constants import ALL_WITH_RELATIONS
-from tastypie.resources import ModelResource
 from tastypie.authentication import Authentication
 from tastypie.authorization import Authorization
-from tastypie.http import HttpCreated
-from tastypie.utils import dict_strip_unicode_keys
+from tastypie.exceptions import NotFound
+from tastypie.resources import ModelResource
 from tastypie.serializers import Serializer
 
 from oauth_provider.consts import OAUTH_PARAMETERS_NAMES
@@ -21,6 +20,7 @@ from oauth_provider.utils import get_oauth_request
 from oauth2 import Error
 
 from django.conf import settings
+from django.conf.urls.defaults import url
 
 from eloue.geocoder import GoogleGeocoder
 from eloue.products.models import Product, Category, Picture, Price, upload_to
@@ -128,16 +128,12 @@ class MetaBase():
 
 
 class OAuthResource(ModelResource):
-    def obj_get_list(self, filters=None, user=None, **kwargs):
-        """
-        Removes every oauth related key
-        There is probably a better way but i can't find it
-        """
-        mfilters = {}
+    def build_filters(self, filters=None):
+        filters = super(OAuthResource, self).build_filters(filters)
         for key, val in filters.items():
-            if not key.startswith("oauth_"):
-                mfilters[key] = val
-        return super(OAuthResource, self).obj_get_list(mfilters, **kwargs)
+            if key.startswith("oauth_"):
+               del filters[key]
+        return filters
     
 
 class UserSpecificResource(OAuthResource):
@@ -150,27 +146,28 @@ class UserSpecificResource(OAuthResource):
     USER_FIELD_NAME = "patron"
     FILTER_GET_REQUESTS = True
     
-    def get_list(self, request, **kwargs):
-        # Inject the request user in keyword arguments, to get it in obj_get_list
-        return OAuthResource.get_list(self, request, user=request.user, **kwargs)
-    
-    def obj_get_list(self, filters=None, user=None, **kwargs):
+    def obj_get_list(self, request=None, **kwargs):
         # Get back the user object injected in get_list, and add it to the filters
         # If FILTER_GET_REQUESTS is true
-        mfilters = {}
-        for key, val in filters.items():
-            mfilters[key] = val
+        filters = None
+        
+        if hasattr(request, 'GET'):
+            filters = request.GET
         
         if self.FILTER_GET_REQUESTS:
-            mfilters["user"] = user
+            filters["user"] = request.user
         
-        return OAuthResource.obj_get_list(self, mfilters, **kwargs)
+        applicable_filters = self.build_filters(filters=filters)
+        
+        try:
+            return self.get_object_list(request).filter(**applicable_filters)
+        except ValueError, e:
+            raise NotFound("Invalid resource lookup data provided (mismatched type).")
     
     def build_filters(self, filters):
-        # Filter on user
         orm_filters = {}
+        filters = super(UserSpecificResource, self).build_filters(filters)
         user = filters.pop("user") if "user" in filters else None
-        orm_filters.update(super(UserSpecificResource, self).build_filters(filters))
         
         if not self.FILTER_GET_REQUESTS:
             return filters
@@ -179,18 +176,6 @@ class UserSpecificResource(OAuthResource):
             orm_filters[self.USER_FIELD_NAME] = user
         
         return orm_filters
-    
-    def post_list(self, request, **kwargs):
-        """
-        Copy of the tastypie post_list implementation
-        Necessary to send the user to obj_create
-        """
-        deserialized = self.deserialize(request, request.raw_post_data, format=request.META.get('CONTENT_TYPE', 'application/json'))
-        bundle = self.build_bundle(data=dict_strip_unicode_keys(deserialized))
-        # Add the user to the fields to be added
-        kwargs[self.USER_FIELD_NAME] = Patron.objects.get(pk=request.user)
-        updated_bundle = self.obj_create(bundle, **kwargs)
-        return HttpCreated(location=self.get_resource_uri(updated_bundle))
     
 
 class PhoneNumberResource(UserSpecificResource):
@@ -227,6 +212,32 @@ class CategoryResource(ModelResource):
             "parent": ALL_WITH_RELATIONS,
         }
         serializer = PlistSerializer()
+    
+    def build_tree(self):
+        def build_node(node):
+            bits = []
+            for child in node.get_children():
+                bits.append(build_node(child))
+            bundle = self.full_dehydrate(node)
+            bundle.data['children'] = bits
+            return bundle.data
+        roots = Category.tree.root_nodes()
+        return [build_node(node) for node in roots]
+    
+    def get_tree(self, request, **kwargs):
+        self.method_check(request, allowed=['get'])
+        self.is_authenticated(request)
+        self.throttle_check(request)
+        self.log_throttled_access(request)
+        return self.create_response(request, self.build_tree())
+    
+    def base_urls(self):
+        return super(CategoryResource, self).base_urls()
+    
+    def override_urls(self):
+        return [
+            url(r"^(?P<resource_name>%s)/tree/$" % self._meta.resource_name, self.wrap_view('get_tree'), name="api_get_tree"),
+        ]
     
 
 class PictureResource(OAuthResource):
@@ -281,6 +292,7 @@ class ProductResource(UserSpecificResource):
         queryset = Product.objects.all()
         allowed_methods = ['get', 'post']
         resource_name = 'product'
+        include_absolute_url = True
         fields = ['id', 'quantity', 'summary', 'description', 'deposit_amount']
         filtering = {
             'category': ALL_WITH_RELATIONS,
@@ -306,14 +318,10 @@ class ProductResource(UserSpecificResource):
                     sqs = sqs.spatial(lat=lat, long=lon, radius=radius, unit='km')
 
             orm_filters.update({"pk__in": [i.pk for i in sqs]})
-
-        for kw in ["date_start", "date_end", "q", "l", "r", "limit", "offset"]:
-            if kw in filters:
-                del orm_filters[kw]
         
         return orm_filters
     
-    def obj_create(self, bundle, **kwargs):
+    def obj_create(self, bundle, request=None, **kwargs):
         """
         On product creation, if the request contains a "picture" parameter
         Creates a file with the content of the field
@@ -326,6 +334,7 @@ class ProductResource(UserSpecificResource):
         day_price_data = bundle.data.get("day_price", None)
         if picture_data:
             bundle.data.pop("picture")
+        bundle.data[self.USER_FIELD_NAME] = UserResource().get_resource_uri(request.user)
         updated_bundle = UserSpecificResource.obj_create(self, bundle, **kwargs)
 
         # Create the picture object if there is a picture in the request
@@ -360,7 +369,6 @@ class ProductResource(UserSpecificResource):
             date_end = date_start + timedelta(days=1)
 
         bundle.data["price"] = Booking.calculate_price(bundle.obj, date_start, date_end)
-        bundle.data["absolute_url"] = bundle.obj.get_absolute_url()
         return bundle
     
 
