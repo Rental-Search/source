@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import logbook
+import plistlib
 from urllib import unquote
 from base64 import decodestring
 
@@ -62,15 +63,15 @@ class OAuthentication(Authentication):
 class OAuthAuthorization(Authorization):
     def is_authorized(self, request, object=None):
         if is_valid_request(request, ['oauth_consumer_key']):  # Read-only part
-            oauth_request = get_oauth_request(request) 
+            oauth_request = get_oauth_request(request)
             if issubclass(self.resource_meta.object_class, Product) and request.method == 'GET':
                 try:
                     consumer = store.get_consumer(request, oauth_request, oauth_request.get_parameter('oauth_consumer_key'))
                     return True
                 except InvalidConsumerError:
                     return False
-        if is_valid_request(request):  # Read/Write part 
-            oauth_request = get_oauth_request(request) 
+        if is_valid_request(request):  # Read/Write part
+            oauth_request = get_oauth_request(request)
             consumer = store.get_consumer(request, oauth_request, oauth_request.get_parameter('oauth_consumer_key'))
             try:
                 token = store.get_access_token(request, oauth_request, consumer, oauth_request.get_parameter('oauth_token'))
@@ -95,6 +96,29 @@ class JSONSerializer(Serializer):
         'jsonp': 'text/javascript',
     }
 
+
+class PlistSerializer(Serializer):
+    formats = ['json', 'jsonp', 'plist']
+    content_types = {
+        'json': 'application/json',
+        'jsonp': 'text/javascript',
+        'plist': 'text/plist'
+    }
+    
+    def to_simple(self, data, options):
+        if isinstance(data, dict):
+            data = dict((key, self.to_simple(val, options)) for (key, val) in data.iteritems() if val)
+        return super(PlistSerializer, self).to_simple(data, options)
+    
+    def to_plist(self, data, options=None):
+        options = options or {}
+        data = self.to_simple(data, options)
+        
+        return plistlib.writePlistToString(data)
+    
+    def from_plist(self, content):
+        return plistlib.readPlistFromString(content)
+    
 
 class MetaBase():
     """Define meta attributes that must be shared between all resources"""
@@ -202,6 +226,7 @@ class CategoryResource(ModelResource):
             "id": ALL_WITH_RELATIONS,
             "parent": ALL_WITH_RELATIONS,
         }
+        serializer = PlistSerializer()
     
 
 class PictureResource(OAuthResource):
@@ -226,7 +251,7 @@ class UserResource(OAuthResource):  # TODO : Add security checks for user creati
         filtering = {
             'username': ALL_WITH_RELATIONS,
         }
-
+    
     def obj_create(self, bundle, **kwargs):
         """Creates a new inactive user"""
         data = bundle.data
