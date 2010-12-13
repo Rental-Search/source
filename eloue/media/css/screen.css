@@ -1146,7 +1146,10 @@ html[xmlns] .clearfix {
     .flatpage p
     {
       margin-bottom: 10px;
+      line-height: 20px;
     }
+    
+    .flatpage a { color: #6eb924;}
     
     .flatpage ul
     {
@@ -1158,3 +1161,125 @@ html[xmlns] .clearfix {
       list-style-position: inside;
       list-style-type: decimal;
     }
+    
+    .flatpage li
+    {
+      list-style-image: url("../images/list-style-info.png");
+    }
+    
+    .fl-bloc-header, .fl-bloc-content
+    {
+      margin-right: 20px;
+      margin-left: 20px;
+    }
+    
+    .fl-bloc-header
+    {
+      background: transparent url("../images/content-h-bg.png") repeat-x 0 bottom;
+    }
+      .fl-bloc-header h2 
+      { 
+        padding-bottom: 10px;
+        margin-bottom: 0px;
+        font-size: 24px;
+        font-weight: normal;
+      }
+      
+    .fl-bloc-content p { margin-top: 10px;}
+    
+      .press-links
+      {
+        height: 300px;
+        overflow: auto;
+        padding-top: 20px;
+      }
+      
+      .fl-sidebar {}
+        .fl-sidebar-header
+        {
+          background: transparent url("../images/booking-bottom-bg.png") repeat 0 0;
+          border: 1px solid #b9cad4;
+          padding-top: 10px;
+          -moz-border-radius-topleft: 5px;
+          -moz-border-radius-topright: 5px;
+          -webkit-border-top-left-radius: 5px;
+      		-webkit-border-top-right-radius: 5px;
+      		border-top-left-radius: 5px;
+      		border-top-right-radius: 5px;
+          margin-right: 20px;
+          margin-left: 20px;
+          margin-top: 15px;
+        }
+        
+          .fl-sidebar-header h3, .fl-sidebar-box h3, .fl-sidebar-list h3
+          {
+            color: #364c59;
+            font-weight: normal;
+            text-indent: 10px;
+          }
+          
+        .fl-sidebar-content
+        {
+          background-color: #f5f7f9;
+          border-right: 1px solid #b9cad4;
+          border-left: 1px solid #b9cad4;
+          border-bottom: 1px solid #b9cad4;
+          -moz-border-radius-bottomleft: 5px;
+          -moz-border-radius-bottomright: 5px;
+          -webkit-border-bottom-left-radius: 5px;
+      		-webkit-border-bottom-right-radius: 5px;
+      		border-bottom-left-radius: 5px;
+      		border-bottom-right-radius: 5px;
+          margin-right: 20px;
+          margin-left: 20px;
+          padding: 15px 20px;
+        }
+          .fl-sidebar-content ul { margin-bottom: 0px; }
+        
+        .fl-sidebar-box
+        {
+          background-color: #f5f7f9;
+          padding: 20px;
+          margin-right: 20px;
+          margin-left: 20px;
+          margin-top: 15px;
+        }
+        
+          .fl-sidebar-box h3
+          {
+            background: transparent url("../images/content-h-bg.png") repeat-x 0 bottom;
+            padding-bottom: 15px;
+            text-indent: 0px;
+          }
+          
+          .fl-sidebar-box img
+          {
+            float: left;
+            border: 1px solid #9eb0ba;
+            padding: 2px;
+            margin-right: 10px;
+          }
+          
+          .fl-sidebar-box .contact-name
+          {
+            line-height: 20px;
+          }
+          
+        .fl-sidebar-list
+        {
+          padding: 20px;
+          margin-right: 20px;
+          margin-left: 20px;
+          margin-top: 15px;
+        }
+          .fl-sidebar-list h3
+          {
+            padding-bottom: 15px;
+            text-indent: 0px;
+            border-bottom: 1px dashed #b9cad4;
+          }
+          
+          .fl-sidebar-list li
+          {
+            color: #829ba8 !important;
+          }
