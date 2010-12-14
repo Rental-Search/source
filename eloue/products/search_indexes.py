@@ -20,16 +20,26 @@ class ProductIndex(QueuedSearchIndex):
     description = CharField(model_attr='description')
     lat = FloatField(model_attr='address__position__x', null=True)
     lng = FloatField(model_attr='address__position__y', null=True)
-    owner = CharField(model_attr='owner__slug', faceted=True)
+    city = CharField(model_attr='address__city', indexed=False)
+    zipcode = CharField(model_attr='address__zipcode', indexed=False)
+    owner = CharField(model_attr='owner__username', faceted=True)
+    owner_url = CharField(model_attr='owner__get_absolute_url', indexed=False)
     price = FloatField(faceted=True)
     summary = CharField(model_attr='summary')
     text = CharField(document=True, use_template=True)
+    url = CharField(model_attr='get_absolute_url', indexed=False)
+    thumbnail = CharField(indexed=False)
     
     def prepare_categories(self, obj):
         if obj.category:
             categories = [category.slug for category in obj.category.get_ancestors(ascending=False)]
             categories.append(obj.category.slug)
             return categories
+    
+    def prepare_thumbnail(self, obj):
+        if obj.pictures.all():
+            picture = obj.pictures.all()[0]
+            return picture.thumbnail.url
     
     def prepare_price(self, obj):
         # It doesn't play well with season
