@@ -269,6 +269,8 @@ EMAIL_BACKEND = getattr(local, 'EMAIL_BACKEND', 'django.core.mail.backends.smtp.
 # Logging configuration
 try:
     import logbook
+    import logbook.compat
+    logbook.compat.redirect_logging()
     null_handler = logbook.NullHandler()
     if DEBUG:
         log_handler = logbook.StderrHandler(level=logbook.DEBUG)
