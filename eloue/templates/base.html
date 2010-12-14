@@ -1,4 +1,4 @@
-{% load compressed i18n %}
+{% load compressed i18n markup %}
 <!doctype html>
 <html lang="fr">
  <head>
@@ -99,16 +99,20 @@
 					<li><a href="https://www.facebook.com/pages/e-louecom/104685226447">{% trans "Facebook" %}</a></li>
 				</ul>
 			</div>
-			<div class="x12 twitter-box">
-				<p>L'objet insolite de la semaine : le stylo-espion ... que vous pouvez louer pour filmer tout ce que vous souhaitez... <a href="http://fb.me/NLUmubhE">http://fb.me/NLUmubhE</a></p>
-				<div class="twitter-dialogue">
+			{% if site_wide_announcements %}
+			{% with site_wide_announcements|first as announcement %}
+				<div class="x12 twitter-box">
+					{{ announcement.content|markdown }}
+					<div class="twitter-dialogue">
+					</div>
+				</div>
+				<div class="x12 twitter-info">
+				<p>
+					<span class="twitter-time">{{ announcement.creation_date|date:"l j F Y"|capfirst }}<span> sur <a href="http://blog.e-loue.com">e-loue blog</a>
+				</p>
 			</div>
-		</div>
-		<div class="x12 twitter-info">
-			<p>
-				<a href="">12 novembre à 18h</a> sur <a href="">Twitter</a>
-			</p>
-		</div>
+		{% endwith %}
+		{% endif %}
 	</div>
   {% block tail %}
 		{% compressed_js 'application' %}

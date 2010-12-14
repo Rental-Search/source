@@ -30,6 +30,7 @@ sitemaps = {
 }
 
 urlpatterns = patterns('',
+    url(r"^announcements/", include("announcements.urls")),
     url(r'^sitemap.xml$', index, {'sitemaps': sitemaps}, name="sitemap"),
     url(r'^sitemap-(?P<section>.+).xml$', sitemap, {'sitemaps': sitemaps}),
     url(r'^reset/$', password_reset, {

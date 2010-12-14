@@ -4,9 +4,14 @@
 {% block title %}{{ flatpage.title }}{% endblock %}
 
 {% block content %}
-<div id="content" class="clearfix">
+<div id="menu" class="clearfix">
+	<div class="ht-title x4">
+		<h1>{{ flatpage.title }}</h1>
+	</div>
+</div>
+<div id="content-dash" class="clearfix">
 	<div class="flatpage x12">
  		{{ flatpage.content|markdown }}
 	</div>
-</div>
+</div>{# content-dash #}
 {% endblock %}
