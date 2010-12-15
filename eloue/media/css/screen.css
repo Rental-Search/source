@@ -509,7 +509,7 @@ html[xmlns] .clearfix {
       background: #fdffe4 url("../images/bg_partner.png") repeat 0 0;
       float: left;
       width: 218px;
-      height: 87px;
+      height: 107px;
       border-top: 1px solid #ded9a0;
       border-right: 1px solid #ded9a0;
       border-bottom: 1px solid #ded9a0;
@@ -519,9 +519,10 @@ html[xmlns] .clearfix {
   		-webkit-border-top-right-radius: 5px;
   		border-top-right-radius: 5px;
   		border-bottom-right-radius: 5px;
-	    padding: 20px 0;
+	    padding: 10px 0;
 	    margin-bottom: 20px;
 	    margin-right: 20px;
+	    text-align: center;
     }
       
   #footer
