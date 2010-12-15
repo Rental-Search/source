@@ -153,6 +153,14 @@ $(document).ready(function() {
       });
     }
     
+    //Partner slideshow
+    $('.slide').cycle({
+    		fx:             'fade',
+    		timeout:        6000,
+        cleartype:      true,
+        cleartypeNoBg:  true
+    });
+    
 });
 
 function hideNotification() {

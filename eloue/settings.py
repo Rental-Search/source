@@ -242,6 +242,7 @@ COMPRESS_JS = {
             'js/ui/jquery.ui.datepicker-fr.js',
             'js/modernizr.js',
             'js/mustache.js',
+            'js/jquery.cycle.all.latest.js',
             'js/application.js'),
         'output_filename': 'js/application.r?.js',
     }
