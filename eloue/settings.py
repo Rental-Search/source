@@ -274,7 +274,7 @@ try:
     logbook.compat.redirect_logging()
     null_handler = logbook.NullHandler()
     if DEBUG:
-        log_handler = logbook.StderrHandler(level=logbook.DEBUG)
+        log_handler = logbook.StderrHandler(level=logbook.INFO)
     else:
         log_handler = logbook.SyslogHandler(level=logbook.INFO)
     null_handler.push_application()
