@@ -32,9 +32,13 @@
 								<option value="" selected="selected">Choisissez une catégorie</option>
 							{% endif %}
 						    {% for node,structure in categories|tree_info:"ancestors" %}
+										{% if not node.is_root_node and not node.is_leaf_node %}
+											</optgroup>
+											<optgroup label="{{ node }}">
+										{% endif %}
 						        {% if node.is_leaf_node %}
 						            <option value="{{ node.pk }}" {% if form.category.data == node.id %}selected="selected"{% endif %}>
-						                {{ structure.ancestors|tree_path }} :: {{ node }}
+						                {{ node }}
 						            </option>
 						        {% endif %}
 						    {% endfor %}
