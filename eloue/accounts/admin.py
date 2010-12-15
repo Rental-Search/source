@@ -25,7 +25,7 @@ class PatronAdmin(UserAdmin):
         (None, {'fields': ('username', 'password')}),
         (_('Personal info'), {'fields': ('civility', 'first_name', 'last_name', 'email', 'slug', 'affiliate')}),
         (_('Company info'), {'fields': ('is_professional', 'company_name')}),
-        (_('Permissions'), {'fields': ('is_staff', 'is_active', 'is_superuser', 'user_permissions')}),
+        (_('Permissions'), {'fields': ('is_staff', 'is_active', 'is_superuser', 'is_subscribed', 'user_permissions')}),
         (_('Important dates'), {'fields': ('last_login', 'date_joined')}),
         (_('Paypal'), {'classes': ('collapse',), 'fields': ('paypal_email',)}),
         (_('Groups'), {'classes': ('collapse',), 'fields': ('groups',)}),
