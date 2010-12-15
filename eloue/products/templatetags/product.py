@@ -46,6 +46,11 @@ def capitalize(value):
 
 
 @register.filter
+def nofollow(value):
+    return "sources" in value.id
+
+
+@register.filter
 @stringfilter
 def linebreaksp(value, autoescape=None):
     def linebreaks(value, autoescape=None):

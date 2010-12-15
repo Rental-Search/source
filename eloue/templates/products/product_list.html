@@ -98,13 +98,13 @@
 				{% for product in product_list %}
 				 {% cache 900 product:row product.pk form.cleaned_data.q form.cleaned_data.l %}
 				  <li class="x8 first">
-				   <a class="pl-img" href="{{ product.url }}">
+				   <a class="pl-img" href="{{ product.url|safe }}" {% if product|nofollow %}rel="nofollow"{% endif %}>
                     {% if product.thumbnail %}
-	 	             <img src="{{ product.thumbnail }}" alt="{{ product.summary }}" />
+	 	             <img width="90" height="90" src="{{ product.thumbnail }}" alt="{{ product.summary }}" />
 		            {% endif %}
 				   </a>
 				   <div class="pl-header">
-				    <h2><a href="{{ product.url }}">{{ product.summary|capitalize|truncate:50 }}</a></h2>
+				    <h2><a href="{{ product.url|safe }}" {% if product|nofollow %}rel="nofollow"{% endif %}>{{ product.summary|capitalize|truncate:50 }}</a></h2>
 				   </div>
 				   <div class="pl-content">
 					{% with product.highlighted.text|first|truncate:91|safe as highlight %}
@@ -124,11 +124,11 @@
 					 <span class="unit">par jour</span>
 					</div>
 					<div class="pl-btn">
-					 <a href="{{ product.url }}" class="btn small-blue">{% trans "Réserver" %} &rarr;</a>
+					 <a href="{{ product.url|safe }}" {% if product|nofollow %}rel="nofollow"{% endif %} class="btn small-blue">{% trans "Réserver" %} &rarr;</a>
 					</div>
 				   </div>
 				   <div class="pl-footer">
-				 	Par <a href="{{ product.owner_url }}" class="owner">{{ product.owner }}</a> | {{ product.city|capfirst }}, {{ product.zipcode }}
+				 	Par <a href="{{ product.owner_url }}" {% if product|nofollow %}rel="nofollow"{% endif %} class="owner">{{ product.owner }}</a> | {{ product.city|capfirst }}{% if product.zipcode %}, {{ product.zipcode }}{% endif %}
 				   </div>
 				  </li>
 			   {% endcache %}

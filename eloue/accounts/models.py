@@ -255,7 +255,7 @@ class Address(models.Model):
                 raise ValidationError(_(u"Coordonnées géographiques incorrectes"))
     
     def geocode(self):
-        name, (lat, lon) = GoogleGeocoder().geocode(smart_str("%s %s %s %s" % (self.address1, self.address2, self.zipcode, self.city)))
+        name, (lat, lon) = GoogleGeocoder().geocode("%s %s %s %s" % (self.address1, self.address2, self.zipcode, self.city))
         if lat and lon:
             self.position = Point(lat, lon)
     

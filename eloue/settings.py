@@ -356,3 +356,8 @@ OAUTH_CALLBACK_VIEW = "eloue.accounts.views.oauth_callback"
 
 # Performance configuration
 USE_ETAGS = False
+
+# Affiliation configuraton
+AFFILIATION_SOURCES = ['lv', 'skiplanet']
+AFFILIATION_BATCHSIZE = 1000
+LV_FTP = "ftp.bo.location-et-vacances.com"
