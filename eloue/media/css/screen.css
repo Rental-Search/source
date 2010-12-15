@@ -447,8 +447,8 @@ html[xmlns] .clearfix {
     -moz-border-radius-bottomright: 5px;
     -webkit-border-bottom-left-radius: 5px;
 		-webkit-border-bottom-right-radius: 5px;
-		border-top-bottom-radius: 5px;
-		border-top-bottom-radius: 5px;
+		border-top-left-radius: 5px;
+		border-top-right-radius: 5px;
 		padding: 10px 0px;
 		margin-bottom: 20px;
   }
@@ -459,6 +459,71 @@ html[xmlns] .clearfix {
       margin-bottom: 10px;
     }
     
+    .content-guarantees
+    {
+      float: left;
+      width: 720px;
+      height: 87px;
+      background-color: #fdffe4;
+      border-top: 1px solid #ded9a0;
+      border-left: 1px solid #ded9a0;
+      border-bottom: 1px solid #ded9a0;
+      -moz-border-radius-bottomleft: 5px;
+      -moz-border-radius-topleft: 5px;
+      -webkit-border-bottom-left-radius: 5px;
+  		-webkit-border-top-left-radius: 5px;
+  		border-top-left-radius: 5px;
+  		border-bottom-left-radius: 5px;
+	    padding: 20px 0;
+	    margin-bottom: 20px;
+	    margin-left: 20px;
+    }
+      .guarantees
+      {
+        float: left;
+        width: 680px;
+        margin-left: 20px;
+      }
+        .guarantees h2
+        {
+          background: transparent url("../images/content-h-bg.png") repeat-x 0 bottom;
+          padding-bottom: 10px;
+        }
+        
+        .g-payment, .g-assurancy
+        {
+          float: left;
+          width: 255px;
+          height: 40px;
+          padding-left: 50px;
+        }
+        .g-payment 
+        { 
+          background: transparent url("../images/lock.png") no-repeat 0 0;
+          margin-right: 70px;
+        }
+        .g-assurancy { background: transparent url("../images/assurancy.png") no-repeat 0 0; }
+    
+    .content-partner
+    {
+      background: #fdffe4 url("../images/bg_partner.png") repeat 0 0;
+      float: left;
+      width: 218px;
+      height: 87px;
+      border-top: 1px solid #ded9a0;
+      border-right: 1px solid #ded9a0;
+      border-bottom: 1px solid #ded9a0;
+      -moz-border-radius-bottomright: 5px;
+      -moz-border-radius-topright: 5px;
+      -webkit-border-bottom-right-radius: 5px;
+  		-webkit-border-top-right-radius: 5px;
+  		border-top-right-radius: 5px;
+  		border-bottom-right-radius: 5px;
+	    padding: 20px 0;
+	    margin-bottom: 20px;
+	    margin-right: 20px;
+    }
+      
   #footer
   {
     background-color: #e3eef2;
