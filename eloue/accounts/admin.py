@@ -1,8 +1,11 @@
 # -*- coding: utf-8 -*-
+import csv
 import smtplib
 
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
+from django.http import HttpResponse
+from django.utils.encoding import smart_str
 from django.utils.translation import ugettext_lazy as _
 
 from eloue.accounts.models import Patron, Address, PhoneNumber
@@ -35,9 +38,19 @@ class PatronAdmin(UserAdmin):
     ordering = ['-date_joined']
     inlines = [AddressInline, PhoneNumberInline]
     form = PatronChangeForm
-    actions = ['send_activation_email']
+    actions = ['export_as_csv', 'send_activation_email']
     search_fields = ('username', 'first_name', 'last_name', 'email', 'phones__number', 'addresses__city', 'company_name')
 
+
+    def export_as_csv(self, request, queryset):
+        response = HttpResponse(mimetype='text/csv')
+        response['Content-Disposition'] = 'attachment; filename=%s.csv' % self.model._meta.db_table
+        w = csv.writer(response, delimiter=',')
+        for obj in queryset:
+            w.writerow([smart_str(getattr(obj, field.name)) for field in self.model._meta.fields])
+        return response
+    export_as_csv.short_description = _(u"Exporter en csv")
+    
     def send_activation_email(self, request, queryset):
         for patron in queryset:
             if patron.is_expired() or patron.is_active:
