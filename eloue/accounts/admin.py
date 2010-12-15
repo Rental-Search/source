@@ -40,8 +40,7 @@ class PatronAdmin(UserAdmin):
     form = PatronChangeForm
     actions = ['export_as_csv', 'send_activation_email']
     search_fields = ('username', 'first_name', 'last_name', 'email', 'phones__number', 'addresses__city', 'company_name')
-
-
+    
     def export_as_csv(self, request, queryset):
         response = HttpResponse(mimetype='text/csv')
         response['Content-Disposition'] = 'attachment; filename=%s.csv' % self.model._meta.db_table
