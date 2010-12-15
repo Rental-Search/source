@@ -506,7 +506,7 @@ html[xmlns] .clearfix {
     
     .content-partner
     {
-      background: #fdffe4 url("../images/bg_partner.png") repeat 0 0;
+      background: transparent url("../images/bg_partner.png") repeat 0 0;
       float: left;
       width: 218px;
       height: 107px;
@@ -522,8 +522,10 @@ html[xmlns] .clearfix {
 	    padding: 10px 0;
 	    margin-bottom: 20px;
 	    margin-right: 20px;
-	    text-align: center;
     }
+      .content-partner .slide { display: block; }
+      .content-partner .pp { margin-top: 3px; margin-left: 60px; }
+      .content-partner .as { display: none; margin-top: 8px; margin-left: 30px; }
       
   #footer
   {
