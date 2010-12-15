@@ -1,11 +1,20 @@
 {% extends "base.html" %}
-<div id="menu" class="clearfix">
-	<div class="ht-title x4">
-		<h1>La page demandée est introuvable</h1>
-	</div>
-</div>
-<div id="content-dash" class="clearfix">
-	<div class="flatpage x12">
- 		Si l'erreur persiste, merci de nous <a href="{% url contact %}">contacter</a>
-	</div>
-</div>{# content-dash #}
+{% load i18n %}
+
+{% block title %}{% trans "La page demandée est introuvable" %}{% endblock %}
+
+{% block content %}
+ <div id="menu" class="clearfix">
+  <div class="ht-title x4">
+   <h1>{% trans "La page demandée est introuvable" %}</h1>
+  </div>
+ </div>
+ <div id="content-dash" class="clearfix">
+  <div class="flatpage x12">
+   {% url contact as contact_url %}
+   {% blocktrans %}
+    Si l'erreur persiste, merci de nous <a href="{{ contact_url }}">contacter</a>.
+   {% endblocktrans %}
+  </div>
+ </div>{# content-dash #}
+{% endblock content %}
