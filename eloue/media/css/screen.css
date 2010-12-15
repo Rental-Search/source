@@ -183,10 +183,12 @@ html[xmlns] .clearfix {
   {
     background: transparent url("../images/btn-green.png") no-repeat 0 0;
     width: 165px;
-    height: 31px;
+    height: 32px;
     font-size: 14px;
     line-height: 31px;
   }
+    .medium-green:hover { background: transparent url("../images/btn-green.png") no-repeat 0 -32px; }
+    .medium-green:active { background: transparent url("../images/btn-green.png") no-repeat 0 -64px; }
   
   .big-green
   {
@@ -196,7 +198,7 @@ html[xmlns] .clearfix {
     font-size: 18px;
     line-height: 34px;
   }
-  
+    
   .bk-green
   {
     background: transparent url("../images/btn-bk-green.png") no-repeat 0 0;
@@ -223,6 +225,8 @@ html[xmlns] .clearfix {
    font-size: 18px;
    line-height: 34px;
   }
+    .big-orange:hover { background: transparent url("../images/btn-orange.png") no-repeat 0 -38px; }
+    .big-orange:active { background: transparent url("../images/btn-orange.png") no-repeat 0 -76px; } 
   
   .bk-orange
   {
@@ -379,18 +383,23 @@ html[xmlns] .clearfix {
 
       .search
       {
-        background: -webkit-gradient(linear, 0 0, 0 50%, from(#d6e5f2), to(#e4eff9));
-        background: -moz-linear-gradient(top, #d6e5f2, #e4eff9);
-        background-color: #d6e5f2;
+        -webkit-box-shadow:1px 1px 0 rgba(193, 208, 222, 0.75), inset 0px 1px 0px rgba(255,255,255,0.7);
+        -moz-box-shadow: 1px 1px 0 rgba(193, 208, 222, 0.75),inset 0px 1px 0px rgba(255,255,255,0.7);
+        box-shadow: 1px 1px 0 rgba(193, 208, 222, 0.75),inset 0px 1px 0px rgba(255,255,255,0.7);
+        background: #E4EFF9; /* old browsers */
+        background: -moz-linear-gradient(top, #E4EFF9 0%, #D6E5F2 99%); /* firefox */
+        background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#E4EFF9), color-stop(99%,#D6E5F2)); /* webkit */
+        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#E4EFF9', endColorstr='#D6E5F2',GradientType=0 ); /* ie */
         border: 1px solid #BFD1E2;
         padding: 10px 0px;
         -moz-border-radius: 5px;
   	    -webkit-border-radius: 5px;
   	    border-radius: 5px;
+  	    
       }
       .search-header
       {
-        background: transparent url("../images/separateur2.png") no-repeat 482px 13px;
+        background: transparent url("../images/separateur2.png") no-repeat 305px 13px;
       }
       .search-header h1
       {
@@ -416,7 +425,7 @@ html[xmlns] .clearfix {
 
       .search-find
       {
-        padding-top: 22px;
+        padding-top: 23px;
       }
 
   #content 
@@ -1058,7 +1067,7 @@ html[xmlns] .clearfix {
         font-size: 16px;
         padding: 7px 10px;
         margin-top: 7px;
-        margin-bottom: 10px; 
+        margin-bottom: 10px;
       }
 
       .inm
