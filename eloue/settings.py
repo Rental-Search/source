@@ -221,6 +221,7 @@ COMPRESS_CSS = {
     },
     'twenty': {
         'source_filenames': (
+            'css/master.css',
             'css/screen.css',
             'css/custom.css',
             'css/20m.css',

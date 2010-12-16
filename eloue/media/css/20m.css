@@ -18,5 +18,14 @@ body .m-ft , body .mn-shorcuts, body .mn-hat, body .mn-doc, body .mn-ft
 }
 .logo { padding-top: 10px;}
 #wrapper { font-size: 14px;}
-#footer {font-size: 14px;}
-.category-home li { margin-bottom: 0.5em; }
+#footer 
+{
+  font-size: 14px;
+  -moz-border-radius-bottomleft: 5px;
+  -moz-border-radius-bottomright: 5px;
+  -webkit-border-bottom-left-radius: 5px;
+	-webkit-border-bottom-right-radius: 5px;
+	border-bottom-left-radius: 5px;
+	border-bottom-right-radius: 5px;
+}
+#footer li, .category-home li { margin-bottom: 0.5em; }
