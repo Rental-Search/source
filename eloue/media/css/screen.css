@@ -435,7 +435,7 @@ html[xmlns] .clearfix {
     border-radius: 5px;
     margin-bottom: 20px;
     padding: 10px 0px;
-  }
+  }  
   
   #content-dash
   {
@@ -445,8 +445,8 @@ html[xmlns] .clearfix {
     -moz-border-radius-bottomright: 5px;
     -webkit-border-bottom-left-radius: 5px;
 		-webkit-border-bottom-right-radius: 5px;
-		border-top-left-radius: 5px;
-		border-top-right-radius: 5px;
+		border-bottom-left-radius: 5px;
+		border-bottom-right-radius: 5px;
 		padding: 10px 0px;
 		margin-bottom: 20px;
   }
