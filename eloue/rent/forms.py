@@ -5,6 +5,7 @@ import logbook
 from dateutil import parser
 
 from django import forms
+from django.conf import settings
 from django.core import validators
 from django.core.exceptions import ValidationError
 from django.utils.translation import ugettext_lazy as _
@@ -41,6 +42,8 @@ TIME_CHOICE = (
     ('22:00:00', '22h'),
     ('23:00:00', '23h')
 )
+
+BOOKING_DAYS = getattr(settings, 'BOOKING_DAYS', 85)
 
 DATE_FORMAT = ['%d/%m/%Y', '%d-%m-%Y', '%d %m %Y', '%d %m %y', '%d/%m/%y', '%d-%m-%y']
 
@@ -153,6 +156,14 @@ class BookingForm(forms.ModelForm):
                 self.cleaned_data['total_amount'] = Booking.calculate_price(product, started_at, ended_at)
             except CanNotProve:
                 raise ValidationError(_(u"Vous ne pouvez pas louer cet objet pour ces dates"))
+                
+        if started_at and ended_at:
+            if started_at <= datetime.datetime.now() or ended_at <= datetime.datetime.now():
+                raise ValidationError(_(u"Vous ne pouvez pas louer a ces dates"))
+            if started_at >= ended_at:
+                raise ValidationError(_(u"Une location ne peut pas terminer avant d'avoir commencer"))
+            if (ended_at - started_at) > datetime.timedelta(days=BOOKING_DAYS):
+                raise ValidationError(_(u"La durée d'une location est limitée à 85 jours."))
         return self.cleaned_data
     
 
