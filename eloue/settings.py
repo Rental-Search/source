@@ -221,6 +221,8 @@ COMPRESS_CSS = {
     },
     'twenty': {
         'source_filenames': (
+            'css/screen.css',
+            'css/custom.css',
             'css/20m.css',
             'css/plugins/ui/jquery.ui.core.css',
             'css/plugins/ui/jquery.ui.datepicker.css',
