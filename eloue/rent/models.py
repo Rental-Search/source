@@ -81,7 +81,7 @@ class Booking(models.Model):
     state = FSMField(default='authorizing', choices=BOOKING_STATE)
     
     deposit_amount = models.DecimalField(max_digits=8, decimal_places=2)
-    insurance_amount = models.DecimalField(max_digits=8, decimal_places=2)
+    insurance_amount = models.DecimalField(max_digits=8, decimal_places=2, blank=True)
     total_amount = models.DecimalField(max_digits=8, decimal_places=2)
     currency = models.CharField(max_length=3, choices=CURRENCY, default=CURRENCY.EUR)
     
