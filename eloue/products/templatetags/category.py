@@ -15,5 +15,5 @@ def category(value):
             category = Category.objects.get(slug=value)
         except Category.DoesNotExist:
             category = 'None'
-        cache.add('category:%s' % value, category, 0)
+        cache.add('category:%s' % value, category)
     return category

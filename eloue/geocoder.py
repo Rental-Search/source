@@ -25,7 +25,7 @@ class Geocoder(object):
             name, coordinates = self._geocode(location)
         
         if not cache_hit and self.use_cache:
-            cache.set('location:%s' % self.hash_key(location), coordinates, 0)
+            cache.set('location:%s' % self.hash_key(location), coordinates)
         return name, coordinates
     
     def _geocode(self, location):
