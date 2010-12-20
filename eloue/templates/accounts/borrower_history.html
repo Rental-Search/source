@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load i18n product %}
+{% load i18n product paginator%}
 {% block title %}Historique de vos locations en tant que locataire{% endblock %}
 
 {% block content %}
@@ -26,5 +26,21 @@
 	    {% include "rent/partials/booking.html" %}
 	 {% endfor %}
 	</ul>{# booking-list #}
+	{% pagination %}
+  {% if is_paginated %}
+     <div class="pages x8 first">
+      <ul class="pages-list">
+     {% if page_obj.has_previous %}
+    <li class="previous"><a href="{% url owner_product page_obj.previous_page_number %}">&#171; {% trans "Page précédente" %}</a></li>
+     {% endif %}
+     {% for page in page_range %}
+    <li class="page-{{ page }} {% if page_obj.number == page %}select{% endif %}"><a href="{% url owner_product page %}">{{ page }}</a></li>
+   {% endfor %}
+     {% if page_obj.has_next %}
+    <li class="next"><a href="{% url owner_product page_obj.next_page_number %}">{% trans "Page suivante" %} &#187;</a></li>
+     {% endif %}
+    </ul> 
+     </div>{# pager #}
+    {% endif %}
 </div>
 {% endblock %}
