@@ -47,7 +47,6 @@ INSURANCE_FEE = D(str(getattr(settings, 'INSURANCE_FEE', 0.0594)))
 INSURANCE_COMMISSION = D(str(getattr(settings, 'INSURANCE_COMMISSION', 0)))
 INSURANCE_TAXES = D(str(getattr(settings, 'INSURANCE_TAXES', 0.09)))
 
-BOOKING_DAYS = getattr(settings, 'BOOKING_DAYS', 85)
 USE_HTTPS = getattr(settings, 'USE_HTTPS', True)
 PAYPAL_API_EMAIL = getattr(settings, 'PAYPAL_API_EMAIL')
 
@@ -82,7 +81,7 @@ class Booking(models.Model):
     state = FSMField(default='authorizing', choices=BOOKING_STATE)
     
     deposit_amount = models.DecimalField(max_digits=8, decimal_places=2)
-    insurance_amount = models.DecimalField(max_digits=8, decimal_places=2)
+    insurance_amount = models.DecimalField(max_digits=8, decimal_places=2, blank=True)
     total_amount = models.DecimalField(max_digits=8, decimal_places=2)
     currency = models.CharField(max_length=3, choices=CURRENCY, default=CURRENCY.EUR)
     
@@ -128,16 +127,6 @@ class Booking(models.Model):
         for state in BOOKING_STATE.enum_dict:
             setattr(self, "is_%s" % state.lower(), types.MethodType(self._is_factory(state), self))
     
-    def clean(self):
-        from django.core.exceptions import ValidationError
-        if self.started_at and self.ended_at:
-            if self.started_at <= datetime.datetime.now() or self.ended_at <= datetime.datetime.now():
-                raise ValidationError(_(u"Vous ne pouvez pas louer a ces dates"))
-            if self.started_at >= self.ended_at:
-                raise ValidationError(_(u"Une location ne peut pas terminer avant d'avoir commencer"))
-            if (self.ended_at - self.started_at) > datetime.timedelta(days=BOOKING_DAYS):
-                raise ValidationError(_(u"La durée d'une location est limitée à 85 jours."))
-
     @staticmethod
     def _is_factory(state):
         def is_state(self):
