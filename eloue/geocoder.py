@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import hashlib
+import logging
 import urllib
 
 from django.conf import settings
@@ -16,17 +17,19 @@ class Geocoder(object):
     
     def geocode(self, location):
         location = self.format_place(location)
-        name, coordinates, cache_hit = None, None, False
+        name, lat, lon, cache_hit = None, None, None, False
         if self.use_cache:
-            coordinates = cache.get('location:%s' % self.hash_key(location))
-            cache_hit = True
-            
-        if coordinates == None:
-            name, coordinates = self._geocode(location)
+            cache_value = cache.get('location:%s' % self.hash_key(location))
+            if cache_value != None:
+                name, (lat, lon) = cache_value
+                cache_hit = True
+        
+        if not cache_hit and (lat == None or lon == None):
+            name, (lat, lon) = self._geocode(location)
         
         if not cache_hit and self.use_cache:
-            cache.set('location:%s' % self.hash_key(location), coordinates)
-        return name, coordinates
+            cache.set('location:%s' % self.hash_key(location), (name, (lat, lon)), 0)
+        return name, (lat, lon)
     
     def _geocode(self, location):
         raise NotImplementedError
