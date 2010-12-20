@@ -27,12 +27,11 @@
   
   .category-home ul li{ list-style-type: none;}
 
-
 /* *************************************************
   Product page
 ************************************************** */
 .product {}
-
+  .col1, .col2 { margin-bottom: 30px; }
   .product-pic
   {
     float: left;
@@ -56,6 +55,7 @@
     line-height: 1.30em;
     color: #364c59;
   }
+    .product-desc p { margin-bottom: 10px; }
   
   .product-booking-top
   {

@@ -106,7 +106,7 @@ class ProductForm(forms.ModelForm):
         return quantity
     
     def clean_deposit_amount(self):
-        deposit_amount = self.cleaned_data['deposit_amount']
+        deposit_amount = self.cleaned_data.get('deposit_amount', None)
         if deposit_amount in EMPTY_VALUES:
             deposit_amount = D('0')
         return deposit_amount
@@ -133,6 +133,12 @@ class ProductEditForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(ProductEditForm, self).__init__(*args, **kwargs)
         self.fields['category'].widget.attrs['class'] = "selm"
+    
+    def clean_deposit_amount(self):
+        deposit_amount = self.cleaned_data.get('deposit_amount', None)
+        if deposit_amount in EMPTY_VALUES:
+            deposit_amount = D('0')
+        return deposit_amount
     
     def save(self, *args, **kwargs):
         self.instance.prices.update(amount=self.cleaned_data['price'])
