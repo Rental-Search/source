@@ -9,7 +9,7 @@ eloue.db
 eloue/local.py
 eloue/media/js/*.r*.js
 eloue/media/css/*.r*.css
-docs/_*/
+docs/_build/doctrees/
 eloue/rent/rules
 eloue/products/management/commands/fixtures/differences.yaml
 eloue/media/pictures/*
