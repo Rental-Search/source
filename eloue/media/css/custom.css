@@ -701,7 +701,7 @@
     font-weight: bold;
     text-align: center;
     padding: 15px 0;
-    margin: 0 30px;
+    margin: 0 40px;
     line-height: 38px;
   }
     .ht-col h1 strong
@@ -712,13 +712,13 @@
     .ht-col ol
     {
       padding: 10px 0;
-      margin: 0 30px;
+      margin: 0 40px;
     }
     
     .ht-col li
     {
-      margin: 10px 0;
-      height: 90px;
+      margin: 10px 0 15px;
+      height: 95px;
     }
       
       .ht-number
@@ -728,7 +728,7 @@
         width: 60px;
         margin-top: 5px;
         margin-right: 10px;
-        margin-bottom: 15px;
+        margin-bottom: 20px;
       }
       
        .ht-n1-g { background: transparent url("../images/steps_number.png") no-repeat 0px 0px; }
