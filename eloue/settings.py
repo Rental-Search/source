@@ -278,9 +278,9 @@ try:
     logbook.compat.redirect_logging()
     null_handler = logbook.NullHandler()
     if DEBUG:
-        log_handler = logbook.StderrHandler(level=logbook.INFO)
+        log_handler = logbook.StderrHandler(level=logbook.WARNING)
     else:
-        log_handler = logbook.SyslogHandler(level=logbook.INFO)
+        log_handler = logbook.SyslogHandler(level=logbook.WARNING)
     null_handler.push_application()
     log_handler.push_application()
 except ImportError:
