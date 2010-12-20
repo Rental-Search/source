@@ -52,19 +52,14 @@ def authenticate(request, *args, **kwargs):
 
 @never_cache
 def authenticate_headless(request):
-    mdict = {}
-    for k in ["password", "email", "exists"]:
-        if k in request.POST:
-            mdict[k] = request.POST[k]
-    form = EmailAuthenticationForm(mdict or None)
-
+    form = EmailAuthenticationForm(request.POST or None)
     if form.is_valid():
         login(request, form.get_user())
         return HttpResponse()
     elif request.method == "GET":
         return HttpResponse(csrf(request)["csrf_token"]._proxy____func())
-
     return HttpResponseBadRequest()
+
 
 @never_cache
 def oauth_authorize(request,*args, **kwargs):

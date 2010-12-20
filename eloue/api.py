@@ -266,7 +266,7 @@ class UserResource(OAuthResource):  # TODO : Add security checks for user creati
     def obj_create(self, bundle, **kwargs):
         """Creates a new inactive user"""
         data = bundle.data
-        bundle.obj = Patron.objects.create_inactive(data["username"], data["email"], data["password"])
+        bundle.obj = Patron.objects.create_user(data["username"], data["email"], data["password"])
         return bundle
     
 

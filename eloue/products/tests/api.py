@@ -12,6 +12,7 @@ from django.core.urlresolvers import reverse
 from django.test import Client, TestCase
 from django.utils import simplejson
 
+from eloue.accounts.models import Patron
 from eloue.products.models import Product
 from eloue.rent.models import Booking
 
@@ -132,6 +133,24 @@ class ApiTest(TestCase):
         self.assertEquals(product.category.id, 390)
         self.assertEquals(product.address.id, 1)
         self.assertEquals(product.pictures.count(), 1)
+    
+    def test_account_creation(self):
+        post_data = {
+            'username': 'chuck',
+            'password': 'begood',
+            'email': 'chuck.berry@chess-records.com'
+         }
+        request = self._get_request(method='POST')
+        response = self.client.post(reverse("api_dispatch_list", args=['1.0', 'user']),
+            data=simplejson.dumps(post_data),
+            content_type='application/json',
+            **self._get_headers(request))
+        self.assertEquals(response.status_code, 201)
+        self.assertTrue('Location' in response)
+        patron = Patron.objects.get(pk=int(response['Location'].split('/')[-2]))
+        self.assertEquals(patron.username, 'chuck')
+        self.assertEquals(patron.email, 'chuck.berry@chess-records.com')
+        self.assertEquals(patron.is_active, True)
     
     def tearDown(self):
         for product in Product.objects.all():
