@@ -48,7 +48,7 @@ class PatronManager(UserManager):
                 return patron
         return False
     
-    def create_inactive(self, username, email, password, send_email=True, pk=None):
+    def create_inactive(self, username, email, password, send_email=True):
         """
         Create a new, inactive ``Patron`` and email its activation key to the
         ``Patron``, returning the new ``Patron``.
@@ -58,7 +58,7 @@ class PatronManager(UserManager):
         salt = hashlib.sha1(str(random.random())).hexdigest()[:5]
         activation_key = hashlib.sha1(salt + email).hexdigest()
         
-        new_patron = self.create_user(username, email, password, pk=pk)
+        new_patron = self.create_user(username, email, password)
         new_patron.is_active = False
         new_patron.activation_key = activation_key
         new_patron.save()
