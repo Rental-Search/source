@@ -41,11 +41,10 @@ class PatronManager(UserManager):
                 patron = self.get(activation_key=activation_key)
             except self.model.DoesNotExist:
                 return False
-            if not patron.is_expired():
-                patron.is_active = True
-                patron.activation_key = None
-                patron.save()
-                return patron
+            patron.is_active = True
+            patron.activation_key = None
+            patron.save()
+            return patron
         return False
     
     def create_inactive(self, username, email, password, send_email=True):
