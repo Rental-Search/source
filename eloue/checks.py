@@ -3,7 +3,7 @@ import re
 import inspect
 
 from freshen.checks import *
-from django.test.testcases import TransactionTestCase
+from django.test.testcases import TestCase
 
 __all__ = ['ok_', 'eq_', 'make_decorator', 'raises', 'set_trace', 'timed',
             'with_setup', 'TimeExpired', 'istest', 'nottest']
@@ -16,7 +16,7 @@ def pep8(name):
     return caps.sub(lambda m: '_' + m.groups()[0].lower(), name)
 
 
-class Dummy(TransactionTestCase):
+class Dummy(TestCase):
     def nop():
         pass
 
