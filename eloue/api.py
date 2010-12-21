@@ -253,7 +253,7 @@ class PictureResource(OAuthResource):
         return bundle
     
 
-class UserResource(OAuthResource):  # TODO : Add security checks for user creation
+class UserResource(OAuthResource):
     class Meta(MetaBase):
         queryset = Patron.objects.all()
         resource_name = "user"
