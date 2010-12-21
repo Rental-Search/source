@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import random
+import unittest2
 from datetime import datetime, timedelta
 
 from freshen import *

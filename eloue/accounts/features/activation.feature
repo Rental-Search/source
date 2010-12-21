@@ -12,11 +12,3 @@ Feature: Activate my account
     When I activate my account
     Then I should see a welcome message
     And I should be able to login
-  
-  Scenario: Activate expired inactive user
-    Given I've created my account 9 days ago
-    When I activate my account
-    Then I should see a error message
-    Then I should not be able to login
-
-    
