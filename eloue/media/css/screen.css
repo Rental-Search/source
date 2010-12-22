@@ -519,7 +519,7 @@ html[xmlns] .clearfix {
   		border-bottom-right-radius: 5px;
 	    padding: 10px 0;
 	    margin-bottom: 20px;
-	    margin-right: 20px;
+	    margin-right: 19px;
     }
       .content-partner .slide { display: block; }
       .content-partner .pp { margin-top: 3px; margin-left: 60px; }
@@ -1127,7 +1127,7 @@ html[xmlns] .clearfix {
 
       .inb
       {
-        height: 20px;
+        height: 21px;
         -moz-border-radius: 3px;
     	  -webkit-border-radius: 3px;
     	  border-radius: 3px;
