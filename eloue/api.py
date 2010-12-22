@@ -16,7 +16,7 @@ from tastypie.serializers import Serializer
 from oauth_provider.consts import OAUTH_PARAMETERS_NAMES
 from oauth_provider.decorators import CheckOAuth
 from oauth_provider.store import store, InvalidTokenError, InvalidConsumerError
-from oauth_provider.utils import get_oauth_request
+from oauth_provider.utils import get_oauth_request, verify_oauth_request
 from oauth2 import Error
 
 from django.conf import settings
@@ -75,12 +75,11 @@ class OAuthAuthorization(Authorization):
             consumer = store.get_consumer(request, oauth_request, oauth_request.get_parameter('oauth_consumer_key'))
             try:
                 token = store.get_access_token(request, oauth_request, consumer, oauth_request.get_parameter('oauth_token'))
-            except InvalidTokenError:
+            except InvalidTokenError, e:
+                log.exception(e)
                 return False
         
-            try:
-                parameters = CheckOAuth.validate_token(request, consumer, token)
-            except Error, e:
+            if not verify_oauth_request(request, oauth_request, consumer, token=token):
                 return False
             
             if consumer and token:
@@ -152,7 +151,7 @@ class UserSpecificResource(OAuthResource):
         filters = None
         
         if hasattr(request, 'GET'):
-            filters = request.GET
+            filters = request.GET.copy()
         
         if self.FILTER_GET_REQUESTS:
             filters["user"] = request.user
