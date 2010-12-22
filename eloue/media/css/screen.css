@@ -181,14 +181,14 @@ html[xmlns] .clearfix {
 
   .medium-green
   {
-    background: transparent url("../images/btn-green.png") no-repeat 0 0;
+    background: transparent url("../images/btn-green1-2.png") no-repeat 0 0;
     width: 165px;
     height: 32px;
     font-size: 14px;
     line-height: 31px;
   }
-    .medium-green:hover { background: transparent url("../images/btn-green.png") no-repeat 0 -32px; }
-    .medium-green:active { background: transparent url("../images/btn-green.png") no-repeat 0 -64px; }
+    .medium-green:hover { background: transparent url("../images/btn-green1-2.png") no-repeat 0 -32px; }
+    .medium-green:active { background: transparent url("../images/btn-green1-2.png") no-repeat 0 -64px; }
   
   .big-green
   {
@@ -219,14 +219,14 @@ html[xmlns] .clearfix {
 
   .big-orange
   {
-   background: transparent url("../images/btn-orange.png") no-repeat 0 0; 
+   background: transparent url("../images/btn-orange1-2.png") no-repeat 0 0; 
    width: 140px;
    height: 38px;
    font-size: 18px;
    line-height: 34px;
   }
-    .big-orange:hover { background: transparent url("../images/btn-orange.png") no-repeat 0 -38px; }
-    .big-orange:active { background: transparent url("../images/btn-orange.png") no-repeat 0 -76px; } 
+    .big-orange:hover { background: transparent url("../images/btn-orange1-2.png") no-repeat 0 -38px; }
+    .big-orange:active { background: transparent url("../images/btn-orange1-2.png") no-repeat 0 -76px; } 
   
   .bk-orange
   {
@@ -484,7 +484,7 @@ html[xmlns] .clearfix {
       }
         .guarantees h2
         {
-          background: transparent url("../images/content-h-bg.png") repeat-x 0 bottom;
+          background: transparent url("../images/guarantee-h-bg.png.png") repeat-x 0 bottom;
           padding-bottom: 10px;
         }
         
@@ -1211,6 +1211,8 @@ html[xmlns] .clearfix {
     {
       border: 1px solid red;
     }
+    
+    .required-field { margin-bottom: 10px; }
 
   .paypal-verified
   {
