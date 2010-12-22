@@ -76,7 +76,6 @@ class OAuthAuthorization(Authorization):
             try:
                 token = store.get_access_token(request, oauth_request, consumer, oauth_request.get_parameter('oauth_token'))
             except InvalidTokenError, e:
-                log.exception(e)
                 return False
         
             if not verify_oauth_request(request, oauth_request, consumer, token=token):
