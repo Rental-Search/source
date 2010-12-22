@@ -73,10 +73,18 @@ def product_list(request, urlbits, sqs=SearchQuerySet(), suggestions=None, page=
                 raise Http404
             if bit.endswith(_('categorie')):
                 item = get_object_or_404(Category, slug=value)
-                breadcrumbs[bit] = {'name': 'categories', 'value': value, 'label': bit, 'object': item, 'pretty_name': _(u"Catégorie"), 'pretty_value': item.name, 'url': 'par-%s/%s' % (bit, value), 'facet': True}
+                breadcrumbs[bit] = {
+                    'name': 'categories', 'value': value, 'label': bit, 'object': item,
+                    'pretty_name': _(u"Catégorie"), 'pretty_value': item.name,
+                    'url': 'par-%s/%s' % (bit, value), 'facet': True
+                }
             elif bit.endswith(_('loueur')):
                 item = get_object_or_404(Patron, slug=value)
-                breadcrumbs[bit] = {'name': 'owner', 'value': value, 'label': bit, 'object': item, 'pretty_name': _(u"Loueur"), 'pretty_value': item.username, 'url': 'par-%s/%s' % (bit, value), 'facet': True}
+                breadcrumbs[bit] = {
+                    'name': 'owner', 'value': value, 'label': bit, 'object': item,
+                    'pretty_name': _(u"Loueur"), 'pretty_value': item.username,
+                    'url': 'par-%s/%s' % (bit, value), 'facet': True
+                }
             else:
                 raise Http404
         elif bit.startswith(_('page')):
@@ -88,7 +96,8 @@ def product_list(request, urlbits, sqs=SearchQuerySet(), suggestions=None, page=
             raise Http404
     form = FacetedSearchForm(dict((facet['name'], facet['value']) for facet in breadcrumbs.values()), searchqueryset=sqs)
     sqs, suggestions = form.search()
-    return object_list(request, sqs, page=page, paginate_by=PAGINATE_PRODUCTS_BY, template_name="products/product_list.html", template_object_name='product', extra_context={
-        'facets': sqs.facet_counts(), 'form': form, 'breadcrumbs': breadcrumbs, 'suggestions': suggestions,
-        'urlbits': dict((facet['label'], facet['value']) for facet in breadcrumbs.values() if facet['facet'])
+    return object_list(request, sqs, page=page, paginate_by=PAGINATE_PRODUCTS_BY, template_name="products/product_list.html",
+        template_object_name='product', extra_context={
+            'facets': sqs.facet_counts(), 'form': form, 'breadcrumbs': breadcrumbs, 'suggestions': suggestions,
+            'urlbits': dict((facet['label'], facet['value']) for facet in breadcrumbs.values() if facet['facet'])
     })

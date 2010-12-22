@@ -60,12 +60,12 @@
 <div id="content" class="result clearfix">
 	<div class="content-header x12">
 		{% if form.cleaned_data.q %}
-		<h1>Résultat{{ paginator.count|pluralize }} pour <strong>{{ form.cleaned_data.q }}</strong></h1>
+		 <h1>Résultat{{ paginator.count|pluralize }} pour <strong>{{ form.cleaned_data.q }}</strong></h1>
 		{% endif %}
 	</div>
 	{% if suggestions %}
 	<div class="suggestion x12">
-		Vous vouliez peut-être dire ? <a href="{% facet_url breadcrumbs "q" suggestions %}">{{ suggestions }}</a>
+	 {% trans "Vous vouliez peut-être dire ?" %} <a href="{% facet_url breadcrumbs "q" suggestions %}">{{ suggestions }}</a>
 	</div>
 	{% endif%}
 	{% if product_list %}
@@ -173,10 +173,10 @@
 	{% endif %}
 	<div class="facet-cat portlet x4">
 		<div class="portlet-header">
-			<h3>Catégories</h3>
+			<h3>{% trans "Catégories" %}</h3>
 		</div>
 		<div class="portlet-top">
-			<a href="{% facet_url breadcrumbs -"par-categorie" %}">Voir tous les résultats</a>
+			<a href="{% facet_url breadcrumbs -"par-categorie" %}">{% trans "Voir tous les résultats" %}</a>
 		</div>
 		<div class="portlet-bottom">
 			{% for field in form %}

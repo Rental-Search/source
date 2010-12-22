@@ -7,6 +7,8 @@ from django.core.cache import cache
 from django.utils.encoding import smart_str
 from django.utils import simplejson
 
+from geopy import Point, distance
+
 GOOGLE_API_KEY = getattr(settings, 'GOOGLE_API_KEY', 'ABQIAAAA7bPNcG5t1-bTyW9iNmI-jRRqVDjnV4vohYMgEqqi0RF2UFYT-xSSwfcv2yfC-sACkmL4FuG-A_bScQ')
 
 
@@ -16,19 +18,19 @@ class Geocoder(object):
     
     def geocode(self, location):
         location = self.format_place(location)
-        name, lat, lon, cache_hit = None, None, None, False
+        name, lat, lon, radius, cache_hit = None, None, None, None, False
         if self.use_cache:
             cache_value = cache.get('location:%s' % self.hash_key(location))
             if cache_value != None:
-                name, (lat, lon) = cache_value
+                name, (lat, lon), radius = cache_value
                 cache_hit = True
         
         if not cache_hit and (lat == None or lon == None):
-            name, (lat, lon) = self._geocode(location)
+            name, (lat, lon), radius = self._geocode(location)
         
         if not cache_hit and self.use_cache:
-            cache.set('location:%s' % self.hash_key(location), (name, (lat, lon)), 0)
-        return name, (lat, lon)
+            cache.set('location:%s' % self.hash_key(location), (name, (lat, lon), radius), 0)
+        return name, (lat, lon), radius
     
     def _geocode(self, location):
         raise NotImplementedError
@@ -66,7 +68,15 @@ class GoogleGeocoder(Geocoder):
             lon = json['results'][0]['geometry']['location']['lng']
             lat = json['results'][0]['geometry']['location']['lat']
         except (KeyError, IndexError):
-            return None, (None, None)
+            return None, (None, None), None
+        try: # trying to return at least lat, lon
+            sw = Point(json['results'][0]['geometry']['bounds']['southwest']['lat'],
+                json['results'][0]['geometry']['viewport']['southwest']['lng'])
+            ne = Point(json['results'][0]['geometry']['bounds']['northeast']['lat'],
+                json['results'][0]['geometry']['viewport']['northeast']['lng'])
+            radius = (distance.distance(sw, ne).km // 2) + 1
+        except (KeyError, IndexError):
+            return None, (lat, lon), None
         name = json['results'][0]['formatted_address']
-        return name, (lat, lon)
+        return name, (lat, lon), int(radius)
     

@@ -1,6 +1,7 @@
 -f http://effbot.org/downloads/Imaging-1.1.7.tar.gz
 django-imagekit>=0.3.3
 django-nose>=0.1.2
+geopy>=0.94
 Imaging==1.1.7
 logbook>=0.3
 lxml=>2.2.8

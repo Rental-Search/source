@@ -81,17 +81,19 @@ JSON_OUTPUT = StringIO("""{
 class GeocoderTest(TestCase):
     @patch.object(Geocoder, '_geocode')
     def test_geocoder_without_cache(self, mock_method):
-        mock_method.return_value = ('11 Rue Debelleyme, 75003 Paris, France', (48.8613232, 2.3631101))
-        name, coordinates = Geocoder(use_cache=False).geocode('11 rue debelleyme, 75003 Paris')
+        mock_method.return_value = ('11 Rue Debelleyme, 75003 Paris, France', (48.8613232, 2.3631101), 1)
+        name, coordinates, radius = Geocoder(use_cache=False).geocode('11 rue debelleyme, 75003 Paris')
         self.assertTrue(mock_method.called)
         self.assertTrue(isinstance(coordinates, tuple))
         self.assertTrue(isinstance(name, basestring))
+        self.assertTrue(isinstance(radius, int))
     
     @patch('urllib.urlopen')
     def test_google_geocoder(self, mock_func):
         mock_func.return_value = JSON_OUTPUT
-        name, coordinates = GoogleGeocoder(use_cache=False).geocode('11 rue debelleyme, 75003 Paris')
+        name, coordinates, radius = GoogleGeocoder(use_cache=False).geocode('11 rue debelleyme, 75003 Paris')
         self.assertTrue(mock_func.called)
         self.assertTrue(isinstance(coordinates, tuple))
         self.assertTrue(isinstance(name, basestring))
+        self.assertTrue(isinstance(radius, int))
     

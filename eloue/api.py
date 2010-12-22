@@ -312,8 +312,8 @@ class ProductResource(UserSpecificResource):
                 sqs = sqs.auto_query(filters['q'])
 
             if "l" in filters:
-                name, (lat, lon) = GoogleGeocoder().geocode(filters['l'])
-                radius = filters.get('r', DEFAULT_RADIUS)
+                name, (lat, lon), radius = GoogleGeocoder().geocode(filters['l'])
+                radius = filters.get('r', radius if radius else DEFAULT_RADIUS)
                 if lat and lon:
                     sqs = sqs.spatial(lat=lat, long=lon, radius=radius, unit='km')
 

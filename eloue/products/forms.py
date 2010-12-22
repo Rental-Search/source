@@ -35,7 +35,10 @@ class FacetedSearchForm(SearchForm):
     categories = FacetField(label=_(u"Catégorie"), pretty_name=_("par-categorie"), required=False, widget=forms.HiddenInput())
     
     def clean_r(self):
+        location = self.cleaned_data.get('l', None)
         radius = self.cleaned_data.get('r', None)
+        if location not in EMPTY_VALUES and radius in EMPTY_VALUES:
+            name, coordinates, radius = GoogleGeocoder().geocode(location)
         if radius in EMPTY_VALUES:
             radius = DEFAULT_RADIUS
         return radius
@@ -59,7 +62,7 @@ class FacetedSearchForm(SearchForm):
             
             location, radius = self.cleaned_data.get('l', None), self.cleaned_data.get('r', DEFAULT_RADIUS)
             if location:
-                name, (lat, lon) = GoogleGeocoder().geocode(location)
+                name, (lat, lon), _ = GoogleGeocoder().geocode(location)
                 sqs = sqs.spatial(lat=lat, long=lon, radius=radius, unit='km')
             
             if self.load_all:
