@@ -31,6 +31,7 @@ def homepage(request):
 
 
 @never_cache
+@secure_required
 def product_create(request, *args, **kwargs):
     wizard = ProductWizard([ProductForm, EmailAuthenticationForm])
     return wizard(request, *args, **kwargs)
