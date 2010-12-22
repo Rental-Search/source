@@ -57,7 +57,7 @@
 		  <span class="unit">{% blocktrans with price.unit|unit as unit %} / par {{ unit }}{% endblocktrans %}</span>
 		 {% endwith %}
 		</div>
-		<form id="booking_create" action="" method="post" class="form">
+		<form id="booking_create" action="{% if not debug %}https://www.e-loue.com{% endif %}{{ product.get_absolute_url }}" method="post" class="form">
 		<div class="booking-date-start">
 			<p>
 				<label class="labm">{% trans "Début" %} :</label><br />
