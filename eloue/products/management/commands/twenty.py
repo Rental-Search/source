@@ -22,6 +22,7 @@ class Command(BaseCommand):
             response, content = http.request("http://www.20minutes.fr/api/v1/layout/header?partner=eloue")
             content = smart_unicode(content, encoding='latin1')
             content = content.replace("<!-- {{PARTNER_ASSETS}} -->", "{% load compressed %}{% block head %}{% compressed_css 'twenty' %}{% endblock %}")
+            content = content.replace("<title>20minutes.fr</title>", "<title>{% block title %}20minutes.fr{% block%}</title>")
             header = open(os.path.join(settings.TEMPLATE_DIRS[0], 'header.html'), 'w')
             header.write(content.encode('utf-8'))
             header.close()
