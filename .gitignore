@@ -1,5 +1,6 @@
 *.pyc
 *.tmproj
+*.rdb
 nosetests.xml
 .DS_Store
 .noseids
