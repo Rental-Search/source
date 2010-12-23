@@ -70,6 +70,12 @@ class OAuthAuthorization(Authorization):
                     return True
                 except InvalidConsumerError:
                     return False
+            if issubclass(self.resource_meta.object_class, Patron) and request.method == 'POST':
+                try:
+                    consumer = store.get_consumer(request, oauth_request, oauth_request.get_parameter('oauth_consumer_key'))
+                    return True
+                except InvalidConsumerError:
+                    return False
         if is_valid_request(request):  # Read/Write part
             oauth_request = get_oauth_request(request)
             consumer = store.get_consumer(request, oauth_request, oauth_request.get_parameter('oauth_consumer_key'))
