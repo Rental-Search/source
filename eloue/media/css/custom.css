@@ -26,7 +26,87 @@
   .category-home h3 a {color: #6EB924;}
   
   .category-home ul li{ list-style-type: none;}
-
+  
+  .content-community
+  {
+   float: left;
+   background-color: #f5f5f5;
+   border-top: 1px solid #ccdbe9;
+   width: 980px;
+   padding: 10px 0;
+   -moz-border-radius-bottomleft: 5px;
+   -moz-border-radius-bottomright: 5px;
+   -webkit-border-bottom-left-radius: 5px;
+  	-webkit-border-bottom-right-radius: 5px;
+  	border-bottom-left-radius: 5px;
+  	border-bottom-right-radius: 5px;
+  }
+    .content-community h3 
+    { 
+      color : #364c59;
+      font-weight: normal;
+    }
+    
+   .presse-icons h3
+   {
+     background: transparent url("../images/content-h-bg.png") repeat-x 0 bottom;
+     padding-bottom: 10px;
+     line-height: 18px;
+   }
+   
+   .community-portlet 
+   { 
+     border: 1px solid #b9cad4; 
+     -moz-border-radius: 5px;
+     -webkit-border-radius: 5px;
+     border-radius: 5px;
+   }
+     .community-portlet-header
+     {
+       background: #E4EFF9 url("../images/booking-bottom-bg.png") repeat 0 0;
+       border-bottom: 1px solid #b9cad4;
+       padding-top: 10px;
+       -moz-border-radius-topleft: 5px;
+       -moz-border-radius-topright: 5px;
+       -webkit-border-top-left-radius: 5px;
+   		 -webkit-border-top-right-radius: 5px;
+   		 border-top-left-radius: 5px;
+   		 border-top-right-radius: 5px;
+   		 z-index: 2;
+     }
+      .community-portlet-header h3
+      {
+        text-indent: 10px;
+        margin-bottom: 10px;
+        z-index: 1;
+      }
+    .community-portlet-content { margin: 10px 0; }
+      .community-portlet-content li
+      {
+        display: inline;
+        float: left;
+        list-style-type: none;
+        padding-right: 10px;
+        width: 140px;
+      }
+      .community-portlet-content .fb-icon,.community-portlet-content .tw-icon
+      {
+        display: block;
+        float: left;
+        height: 33px;
+        width: 33px;
+        margin-left: 10px;
+        margin-right: 10px;
+      }
+        .fb-icon { background: transparent url("../images/social_icons.png") no-repeat 0 0; }
+        .tw-icon { background: transparent url("../images/social_icons.png") no-repeat 0 -33px; }
+        
+      .community-portlet-content a 
+      { 
+        font-size: 12px;
+        font-weight: bold;
+        color: #6eb924; 
+      }
 /* *************************************************
   Product page
 ************************************************** */
