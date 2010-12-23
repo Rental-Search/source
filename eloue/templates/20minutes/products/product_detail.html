@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+{% load i18n product %}
+
+{% block title %}{{ product.summary|capitalize }}{% endblock %}
+
+{% block description %}{{ product.summary }} {{ product.description }}{% endblock %}
+
+{% block content %}
+<div id="top-content" class="search clearfix">
+	<form class="form" action="{% url product_list %}">
+	<div class="search-what x5">
+		<p>
+			<label for="id_q">{% trans "Que voulez-vous louer ?" %}</label><br />
+			{{ search_form.q }}<br />
+			<span>{% trans "Exemple :" %} </span> <a href="{% url product_list %}?q=voiture">{% trans "Voiture" %}</a>, <a href="{% url product_list %}?q=chèvre">{% trans "Chèvre" %}</a>, <a href="{% url product_list %}?q=ski">{% trans "Ski" %}</a>, <a href="{% url product_list %}?q=robe">{% trans "Robe" %}</a>
+		</p>
+	</div>
+	<div class="search-where x5">
+		<p>
+			<label>{% trans "Où ?" %}</label><br />
+			{{ search_form.l }}<br />
+		</p>
+	</div>
+	<div class="search-find x2">
+		<input type="submit" value="{% trans "Rechercher" %}" class="btn big-orange"/>
+	</div>
+	</form>
+</div>{# top-content #}
+<div id="content" class="product clearfix">
+	<div class="content-header x12">
+		<h1>{{ product.summary|capitalize }}</h1>
+	</div>
+	<div class="col1 x8">
+		<div class="product-pic">
+			{% with product.pictures.all|first as picture %}
+			 {% if picture %}
+			  <img src="{{ picture.display.url }}" alt="{{ product.summary }}" />
+			 {% endif %}
+			{% endwith %}
+		</div>
+		<div class="product-thumbs">
+			{% for picture in product.pictures.all %}
+			 {% if picture.thumbnail %}
+       		  <a href="#"><img src="{{ picture.thumbnail.url }}" /></a>
+             {% endif %}
+			{% endfor %}
+		</div>
+		<div class="product-desc x8 first">
+			{{ product.description|linebreaksp }}
+		</div>
+	</div>{# col1 #}
+	<div class="col2 x4">
+	<div class="product-booking-top x4">
+		<div class="product-price">
+		 {% with product.prices.day|first as price %}
+		  <span class="price">{{ price }}</span>
+		  <span class="unit">{% blocktrans with price.unit|unit as unit %} / par {{ unit }}{% endblocktrans %}</span>
+		 {% endwith %}
+		</div>
+	</div>
+	<div class="product-booking-bottom x4">
+		<a href="https://www.e-loue.com{{ product.get_absolute_url }}" class="btn big-green">{% trans "Réserver" %} &rarr;</a>
+	</div>
+	<div class="product-properties x4 first">
+		<table>
+			{% if product.deposit_amount %}
+			<tr>
+				<td>{% trans "Caution" %} :</td>
+				<td class="p-value">{{ product.deposit_amount }}{{ product.currency|currency }}</td>
+			</tr>
+			{% endif %}
+			<tr>
+				<td>{% trans "Lieu" %} :</td>
+				<td class="p-value">{{ product.address.city|capfirst }}, {{ product.address.zipcode }}</td>
+			</tr>
+			<tr>
+				<td>{% trans "Quantité" %} :</td>
+				<td class="p-value">{{ product.quantity }}</td>
+			</tr>
+			<tr>
+				<td>{% trans "Catégorie" %} :</td>
+				<td class="p-value"><a href="{{ product.category.get_absolute_url }}">{{ product.category }}</a></td>
+			</tr>
+			<tr>
+				<td>{% trans "Propriétaire" %} :</td>
+				<td class="p-value"><a href="{{ product.owner.get_absolute_url }}" class="owner">{{ product.owner.username }}</a></td>
+			</tr>
+		</table>
+	</div>
+</div>
+</div>{# content #}
+
+{% endblock %}
