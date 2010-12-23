@@ -195,10 +195,16 @@ class UserResource(OAuthResource):
 
 class PhoneNumberResource(UserSpecificResource):
     """Resource that sends back the phone numbers linked to the user"""
+    patron = fields.ForeignKey(UserResource, 'patron', full=False, null=True)
+    
     class Meta(MetaBase):
         queryset = PhoneNumber.objects.all()
         resource_name = "phonenumber"
         allowed_methods = ['get', 'post']
+    
+    def obj_create(self, bundle, request=None, **kwargs):
+        bundle.data['patron'] = UserResource().get_resource_uri(request.user)
+        return super(AddressResource, self).obj_create(bundle, request, **kwargs)
     
 
 class AddressResource(UserSpecificResource):
