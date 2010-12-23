@@ -14,13 +14,13 @@ from tastypie.resources import ModelResource
 from tastypie.serializers import Serializer
 
 from oauth_provider.consts import OAUTH_PARAMETERS_NAMES
-from oauth_provider.decorators import CheckOAuth
 from oauth_provider.store import store, InvalidTokenError, InvalidConsumerError
 from oauth_provider.utils import get_oauth_request, verify_oauth_request
-from oauth2 import Error
 
 from django.conf import settings
 from django.conf.urls.defaults import url
+from django.core.files.base import ContentFile
+from django.core.files.storage import default_storage
 
 from eloue.geocoder import GoogleGeocoder
 from eloue.products.models import Product, Category, Picture, Price, upload_to
@@ -82,7 +82,7 @@ class OAuthAuthorization(Authorization):
                 return False
             
             if consumer and token:
-                request.user = token.user
+                request.user = token.user.patron
                 return True
         return False
     
@@ -141,7 +141,6 @@ class UserSpecificResource(OAuthResource):
     For POST: The objects created are automatically owned by the user
     """
     # TODO : Make it work the same way with obj_get than with get_list
-    USER_FIELD_NAME = "patron"
     FILTER_GET_REQUESTS = True
     
     def obj_get_list(self, request=None, **kwargs):
@@ -171,9 +170,27 @@ class UserSpecificResource(OAuthResource):
             return filters
         
         if user:
-            orm_filters[self.USER_FIELD_NAME] = user
+            orm_filters['patron'] = user
         
         return orm_filters
+    
+
+class UserResource(OAuthResource):
+    class Meta(MetaBase):
+        queryset = Patron.objects.all()
+        resource_name = "user"
+        allowed_methods = ['get', 'post']
+        fields = ['username', 'id', 'email']
+        filtering = {
+            'username': ALL_WITH_RELATIONS,
+            'email': ALL_WITH_RELATIONS
+        }
+    
+    def obj_create(self, bundle, **kwargs):
+        """Creates a new inactive user"""
+        data = bundle.data
+        bundle.obj = Patron.objects.create_user(data["username"], data["email"], data["password"])
+        return bundle
     
 
 class PhoneNumberResource(UserSpecificResource):
@@ -186,6 +203,8 @@ class PhoneNumberResource(UserSpecificResource):
 
 class AddressResource(UserSpecificResource):
     """Resource that sends back the addresses linked to the user"""
+    patron = fields.ForeignKey(UserResource, 'patron', full=False, null=True)
+    
     class Meta(MetaBase):
         queryset = Address.objects.all()
         resource_name = "address"
@@ -195,6 +214,10 @@ class AddressResource(UserSpecificResource):
         if bundle.obj.position:
             bundle.data["position"] = {'lat': bundle.obj.position.x, 'lng': bundle.obj.position.y}
         return bundle
+    
+    def obj_create(self, bundle, request=None, **kwargs):
+        bundle.data['patron'] = UserResource().get_resource_uri(request.user)
+        return super(AddressResource, self).obj_create(bundle, request, **kwargs)
     
 
 class CategoryResource(ModelResource):
@@ -251,23 +274,6 @@ class PictureResource(OAuthResource):
         return bundle
     
 
-class UserResource(OAuthResource):
-    class Meta(MetaBase):
-        queryset = Patron.objects.all()
-        resource_name = "user"
-        allowed_methods = ['get', 'post']
-        fields = ['username', 'id']
-        filtering = {
-            'username': ALL_WITH_RELATIONS,
-        }
-    
-    def obj_create(self, bundle, **kwargs):
-        """Creates a new inactive user"""
-        data = bundle.data
-        bundle.obj = Patron.objects.create_user(data["username"], data["email"], data["password"])
-        return bundle
-    
-
 class PriceResource(OAuthResource):
     class Meta(MetaBase):
         queryset = Price.objects.all()
@@ -283,7 +289,6 @@ class ProductResource(UserSpecificResource):
     pictures = fields.ToManyField(PictureResource, 'pictures', full=True, null=True)
     prices = fields.ToManyField(PriceResource, 'prices', full=True, null=True)
 
-    USER_FIELD_NAME = "owner"
     FILTER_GET_REQUESTS = False
     
     class Meta(MetaBase):
@@ -325,19 +330,17 @@ class ProductResource(UserSpecificResource):
         Creates a file with the content of the field
         And creates a picture linked to the product
         """
-        from django.core.files.base import ContentFile
-        from django.core.files.storage import default_storage
-
         picture_data = bundle.data.get("picture", None)
         day_price_data = bundle.data.get("day_price", None)
         if picture_data:
             bundle.data.pop("picture")
-        bundle.data[self.USER_FIELD_NAME] = UserResource().get_resource_uri(request.user)
-        updated_bundle = UserSpecificResource.obj_create(self, bundle, **kwargs)
+            
+        bundle.data['patron'] = UserResource().get_resource_uri(request.user)
+        bundle = super(ProductResource, self).obj_create(bundle, request, **kwargs)
 
         # Create the picture object if there is a picture in the request
         if picture_data:
-            picture = Picture(product=updated_bundle.obj)
+            picture = Picture(product=bundle.obj)
             # Write the image content to a file
             img_path = upload_to(picture, "")
             img_file = ContentFile(decodestring(picture_data))
@@ -347,9 +350,9 @@ class ProductResource(UserSpecificResource):
 
         # Add a day price to the object if there isnt any yet
         if day_price_data:
-            Price(product=updated_bundle.obj, unit=1, amount=int(day_price_data)).save()
+            Price(product=bundle.obj, unit=1, amount=int(day_price_data)).save()
 
-        return updated_bundle
+        return bundle
     
     def dehydrate(self, bundle, request=None):
         """
