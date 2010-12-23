@@ -81,7 +81,7 @@ def booking_price(request, slug, product_id):
 
 
 @never_cache
-@secure_required
+#@secure_required
 def booking_create(request, *args, **kwargs):
     product = get_object_or_404(Product, pk=kwargs['product_id'])
     if product.slug != kwargs['slug']:
