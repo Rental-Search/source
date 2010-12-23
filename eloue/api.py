@@ -294,7 +294,7 @@ class ProductResource(UserSpecificResource):
     owner = fields.ForeignKey(UserResource, 'owner', full=False, null=True)
     pictures = fields.ToManyField(PictureResource, 'pictures', full=True, null=True)
     prices = fields.ToManyField(PriceResource, 'prices', full=True, null=True)
-
+    
     FILTER_GET_REQUESTS = False
     
     class Meta(MetaBase):
@@ -311,21 +311,21 @@ class ProductResource(UserSpecificResource):
     def build_filters(self, filters=None):
         if filters is None:
             filters = {}
-
+        
         orm_filters = super(ProductResource, self).build_filters(filters)
-
+        
         if "q" in filters or "l" in filters:
             sqs = product_search
-
+            
             if "q" in filters:
                 sqs = sqs.auto_query(filters['q'])
-
+            
             if "l" in filters:
                 name, (lat, lon), radius = GoogleGeocoder().geocode(filters['l'])
                 radius = filters.get('r', radius if radius else DEFAULT_RADIUS)
                 if lat and lon:
                     sqs = sqs.spatial(lat=lat, long=lon, radius=radius, unit='km')
-
+            
             orm_filters.update({"pk__in": [i.pk for i in sqs]})
         
         return orm_filters
@@ -340,10 +340,10 @@ class ProductResource(UserSpecificResource):
         day_price_data = bundle.data.get("day_price", None)
         if picture_data:
             bundle.data.pop("picture")
-            
-        bundle.data['patron'] = UserResource().get_resource_uri(request.user)
+        
+        bundle.data['owner'] = UserResource().get_resource_uri(request.user)
         bundle = super(ProductResource, self).obj_create(bundle, request, **kwargs)
-
+        
         # Create the picture object if there is a picture in the request
         if picture_data:
             picture = Picture(product=bundle.obj)
@@ -353,11 +353,11 @@ class ProductResource(UserSpecificResource):
             img_path = default_storage.save(img_path, img_file)
             picture.image.name = img_path
             picture.save()
-
+        
         # Add a day price to the object if there isnt any yet
         if day_price_data:
             Price(product=bundle.obj, unit=1, amount=int(day_price_data)).save()
-
+        
         return bundle
     
     def dehydrate(self, bundle, request=None):
@@ -367,17 +367,18 @@ class ProductResource(UserSpecificResource):
         """
         from datetime import datetime, timedelta
         from dateutil import parser
-
+        
         if "date_start" in request.GET and "date_end" in request.GET:
             date_start = parser.parse(unquote(request.GET["date_start"]))
             date_end = parser.parse(unquote(request.GET["date_end"]))
         else:
             date_start = datetime.now() + timedelta(days=1)
             date_end = date_start + timedelta(days=1)
-
+        
         bundle.data["price"] = Booking.calculate_price(bundle.obj, date_start, date_end)
         return bundle
     
+
 
 api_v1 = Api(api_name='1.0')
 api_v1.register(CategoryResource())
