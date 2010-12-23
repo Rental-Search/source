@@ -37,7 +37,7 @@ def parse_doc(element):
     else:
         categories = ['lieu']
     lat, lon = BaseSource().get_coordinates("%s %s" % (element.localisation.ville, element.localisation.pays_libelle))
-    price = D(element.prix_mini.pyval) / D('7')
+    price = D(str(element.prix_mini.pyval)) / D('7')
     return Product({
         'id': '%s.%s' % (SourceClass().get_prefix(), element.get('id')),
         'summary': element.nom_hergement.pyval,
