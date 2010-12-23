@@ -63,7 +63,7 @@
    }
      .community-portlet-header
      {
-       background: transparent url("../images/booking-bottom-bg.png") repeat 0 0;
+       background: #E4EFF9 url("../images/booking-bottom-bg.png") repeat 0 0;
        border-bottom: 1px solid #b9cad4;
        padding-top: 10px;
        -moz-border-radius-topleft: 5px;
@@ -72,11 +72,13 @@
    		 -webkit-border-top-right-radius: 5px;
    		 border-top-left-radius: 5px;
    		 border-top-right-radius: 5px;
+   		 z-index: 2;
      }
       .community-portlet-header h3
       {
         text-indent: 10px;
         margin-bottom: 10px;
+        z-index: 1;
       }
     .community-portlet-content { margin: 10px 0; }
       .community-portlet-content li
