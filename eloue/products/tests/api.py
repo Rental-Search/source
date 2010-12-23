@@ -139,7 +139,7 @@ class ApiTest(TestCase):
             'username': 'chuck',
             'password': 'begood',
             'email': 'chuck.berry@chess-records.com'
-         }
+        }
         request = self._get_request(method='POST')
         response = self.client.post(reverse("api_dispatch_list", args=['1.0', 'user']),
             data=simplejson.dumps(post_data),
