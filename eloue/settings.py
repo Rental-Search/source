@@ -267,7 +267,9 @@ SEARCH_QUEUE_LOG_LEVEL = logging.INFO
 if DEBUG:
     QUEUE_BACKEND = 'dummy'
 else:
-    QUEUE_BACKEND = 'sqs'
+    QUEUE_BACKEND = 'redisd'
+QUEUE_REDIS_CONNECTION = getattr(local, 'QUEUE_REDIS_CONNECTION', 'localhost:6379')
+QUEUE_REDIS_DB = getattr(local, 'QUEUE_REDIS_DB', 1)
 
 # Email configuration
 EMAIL_BACKEND = getattr(local, 'EMAIL_BACKEND', 'django.core.mail.backends.smtp.EmailBackend')
