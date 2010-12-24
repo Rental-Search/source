@@ -319,7 +319,6 @@ class ProductResource(UserSpecificResource):
             filters = {}
         
         orm_filters = super(ProductResource, self).build_filters(filters)
-        
         if "q" in filters or "l" in filters:
             sqs = product_search
             
@@ -332,7 +331,14 @@ class ProductResource(UserSpecificResource):
                 if lat and lon:
                     sqs = sqs.spatial(lat=lat, long=lon, radius=radius, unit='km')
             
-            orm_filters.update({"pk__in": [i.pk for i in sqs]})
+            pk = []
+            for p in sqs:
+                try:
+                    pk.append(int(p.pk))
+                except ValueError:
+                    pass
+            
+            orm_filters.update({"pk__in": pk})
         
         return orm_filters
     
