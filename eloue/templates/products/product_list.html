@@ -96,7 +96,6 @@
 			</ul>
 			<ul class="product-list x8 first">
 				{% for product in product_list %}
-				 {% cache 900 product:row product.pk form.cleaned_data.q form.cleaned_data.l %}
 				  <li class="x8 first">
 				   <a class="pl-img" href="{{ product.url|safe }}" {% if product|nofollow %}rel="nofollow"{% endif %}>
                     {% if product.thumbnail %}
@@ -131,7 +130,6 @@
 				 	Par <a href="{{ product.owner_url }}" {% if product|nofollow %}rel="nofollow"{% endif %} class="owner">{{ product.owner }}</a> | {{ product.city|capfirst }}{% if product.zipcode %}, {{ product.zipcode }}{% endif %}
 				   </div>
 				  </li>
-			   {% endcache %}
 		  	  {% endfor %}
 			</ul>{# list #}
 			{% pagination %}
