@@ -14,7 +14,7 @@ def _run(command, shell=True, pty=True, combine_stderr=True, sudo=False, user=No
         real_command = '%s "%s"' % (env.shell,
             _shell_escape(cwd + real_command))
         # Remove cwd from context
-        env.set('cwd', '')
+        env.cwd = ''
     if output.debug:
         print("[%s] run: %s" % (env.host_string, real_command))
     elif output.running:
