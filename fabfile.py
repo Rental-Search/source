@@ -1,4 +1,26 @@
 from fabric.api import env, run, sudo, local, put, runs_once, cd
+from fabric.operations import _shell_escape
+from fabric.state import output
+
+
+def _run(command, shell=True, pty=True, combine_stderr=True, sudo=False, user=None):
+    real_command = command
+    if shell:
+        # Handle cwd munging via 'cd' context manager
+        cwd = env.get('cwd', '')
+        if cwd:
+            cwd = 'cd %s && ' % _shell_escape(cwd)
+        # Construct final real, full command
+        real_command = '%s "%s"' % (env.shell,
+            _shell_escape(cwd + real_command))
+        # Remove cwd from context
+        env.set('cwd', '')
+    if output.debug:
+        print("[%s] run: %s" % (env.host_string, real_command))
+    elif output.running:
+        print("[%s] run: %s" % (env.host_string, command))
+    local("ssh -A %s '%s'" % (env.host_string, real_command))
+
 
 def production():
     """Defines production environment"""
@@ -91,10 +113,10 @@ def checkout():
     from time import time
     env.current_release = "%(releases_path)s/%(time).0f" % {'releases_path':  env.releases_path, 'time':  time()}
     with cd(env.releases_path):
-        run("git clone -q -o deploy --depth 1 %(git_clone)s %(current_release)s" % {'git_clone':  env.git_clone, 'current_release':  env.current_release})
+        _run("git clone -q -o deploy --depth 1 %(git_clone)s %(current_release)s" % {'git_clone':  env.git_clone, 'current_release':  env.current_release})
     with cd(env.current_release):
         if 'git_branch' in env:
-            run("git checkout -b branch deploy/%(git_branch)s" % {'git_branch': env.git_branch})
+            _run("git checkout -b branch deploy/%(git_branch)s" % {'git_branch': env.git_branch})
 
 def update():
     """Copies your project and updates environment and symlink"""
@@ -215,7 +237,7 @@ def soft():
     with cd(env.current_release):
         if 'git_branch' not in env:
             env.git_branch = "master"
-        run("git pull -q deploy %(git_branch)s" % {'git_branch': env.git_branch})
+        _run("git pull -q deploy %(git_branch)s" % {'git_branch': env.git_branch})
     permissions()
     migrate()
     compress()
