@@ -259,11 +259,14 @@ class CategoryResource(ModelResource):
             bundle.data['children'] = bits
             return bundle.data
         roots = Category.tree.root_nodes()
-        return [build_node(node) for node in roots]
+        nodes = []
+        for root in roots:
+            nodes.extend(root.get_descendants())
+        return [build_node(node) for node in nodes]
     
     def get_tree(self, request, **kwargs):
-        self.method_check(request, allowed=['get'])
-        self.is_authenticated(request)
+        #self.method_check(request, allowed=['get'])
+        #self.is_authenticated(request)
         self.throttle_check(request)
         self.log_throttled_access(request)
         return self.create_response(request, self.build_tree())
