@@ -9,7 +9,7 @@ from tastypie.api import Api
 from tastypie.constants import ALL_WITH_RELATIONS
 from tastypie.authentication import Authentication
 from tastypie.authorization import Authorization
-from tastypie.exceptions import NotFound
+from tastypie.exceptions import NotFound, BadRequest
 from tastypie.resources import ModelResource
 from tastypie.serializers import Serializer
 
@@ -21,6 +21,7 @@ from django.conf import settings
 from django.conf.urls.defaults import url
 from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
+from django.db import IntegrityError
 
 from eloue.geocoder import GoogleGeocoder
 from eloue.products.models import Product, Category, Picture, Price, upload_to
@@ -195,7 +196,10 @@ class UserResource(OAuthResource):
     def obj_create(self, bundle, **kwargs):
         """Creates a new inactive user"""
         data = bundle.data
-        bundle.obj = Patron.objects.create_user(data["username"], data["email"], data["password"])
+        try:
+            bundle.obj = Patron.objects.create_user(data["username"], data["email"], data["password"])
+        except IntegrityError, e:
+            raise BadRequest(e)
         return bundle
     
 
