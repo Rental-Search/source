@@ -89,19 +89,31 @@
 		</div>
 		<div class="booking-paiement x8 first">
 		 Sur la prochaine page veuillez fournir vos informations de paiement.<br />
-		 Vous ne serez débité que si le propriétaire accepte votre demande (dans les 32 heures).<br /> 
+		 Vous ne serez <strong>débité</strong> que <strong>si le propriétaire accepte</strong> votre demande (dans les 32 heures).<br /> 
 		 Si le propriétaire refuse ou ne répond pas, vous ne serez pas prélevé.<br />
 		</div>
 		<div class="booking-submit x8 first">
 		    <input type="hidden" name="{{ step_field }}" value="{{ step0 }}" />
 	        {{ previous_fields|safe }}
 			<a href="{{ product.get_absolute_url }}">Annuler</a> ou
-		    <input type="submit" class="btn-paypal" value="" />
+		    <input type="submit" class="btn big-green" value="Payez" />
 		</div>
 	  </form>
 	</div>{# col1 #}
-	<div class="x3 paypal-verified">
-		<img src="{{ MEDIA_URL }}/images/PayPal_verified.png" alt="e-loue PayPal verified" />
+	<div class="sidebar-box x4">
+		<h3>Louez en toute sécurité !</h3>
+		<ul class="guarantee-list">
+			<li class="guarantee-list-pp">
+				Grâce à <strong>PayPal</strong>, bénéficiez du paiement le plus sécurisé au monde.
+			</li>
+			<li class="guarantee-list-tw">
+				Notre <strong>partenaire assureur</strong> garantit l'objets en cas de casse.
+			</li>
+		</ul>
+	</div>
+	<div class="partner-gurantees-list x4">
+		<p>Notre partenaire</p>
+		<img src="{{ MEDIA_URL }}images/paypal2.png" />
 	</div>
 </div>{# content #}
 {% endblock %}

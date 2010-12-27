@@ -579,12 +579,76 @@
     .booking-paiement
     {
       margin-bottom: 30px;
+      line-height: 20px;
     }
     
     .booking-submit
     {
       text-align: right;
+      margin-bottom: 20px;
     }
+  .sidebar-box
+  {
+    background-color: #F5F7F9;
+    -moz-border-radius-topleft: 5px;
+    -moz-border-radius-topright: 5px;
+    -webkit-border-top-left-radius: 5px;
+		-webkit-border-top-right-radius: 5px;
+		border-top-left-radius: 5px;
+		border-top-right-radius: 5px;
+    padding: 10px 0px;
+  }
+    .sidebar-box h3 
+    { 
+      background: transparent url("../images/content-h-bg.png") repeat-x 0px 100%;
+      font-weight: normal;
+      color: #546b78;
+      margin:0 20px 20px;
+      padding-bottom: 10px;
+    }
+    
+    .guarantee-list
+    {
+      margin: 0px 20px;
+      list-style-position: inside;
+      margin-bottom: 10px;
+    }
+      .guarantee-list-pp, .guarantee-list-tw
+      {
+        list-style-type: none;
+        padding-top: 0px;
+        padding-bottom: 5px;
+        padding-left: 40px;
+      }
+      .guarantee-list-pp
+      {
+        background: transparent url("../images/lock.png") no-repeat  0 3px;
+        margin-bottom: 20px;
+      }
+      
+      .guarantee-list-tw
+      {
+        background: transparent url("../images/assurancy.png") no-repeat  0 3px;
+        margin-bottom: 0;
+      }
+    .partner-gurantees-list
+    {
+      background: transparent url("../images/pattern_guarantees.png") repeat 0 0;
+      padding: 10px 0;
+      text-align: center;
+      -moz-border-radius-bottomleft: 5px;
+      -moz-border-radius-bottomright: 5px;
+      -webkit-border-bottom-left-radius: 5px;
+  		-webkit-border-bottom-right-radius: 5px;
+  		border-bottom-left-radius: 5px;
+  		border-bottom-right-radius: 5px;
+    }
+      .partner-gurantees-list p 
+      {
+        margin-bottom: 5px;
+        font-weight: bold;
+      }
+        
   
 /* *************************************************
   public profil page
