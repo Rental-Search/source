@@ -249,6 +249,9 @@ COMPRESS_JS = {
             'js/jquery.cycle.all.latest.js',
             'js/application.js'),
         'output_filename': 'js/application.r?.js',
+        'extra_context': {
+            'defer': True,
+        },
     }
 }
 
