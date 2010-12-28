@@ -1,33 +1,31 @@
 {% extends "base.html" %}
- {% load cache facets i18n param category product paginator mptt_tags %}
+ {% load cache facets i18n param category product paginator mptt_tags seo %}
 
-{% block title %}{% spaceless %}
- {% if breadcrumbs %}
+{% block title %}
+ {% trans "Location " %}
+ {% for crumb in breadcrumbs|facets %}
+   &rsaquo; {{ crumb.pretty_value|capfirst }}
+ {% endfor %}
+ {% if form.cleaned_data.l %}
+  &rsaquo; {{ form.cleaned_data.l|capfirst }}
   {% if form.cleaned_data.q %}
-   {% trans "Location" %}
-   {% for crumb in breadcrumbs.values %}
-    {% if crumb.facet %}
-     &rsaquo; {{ crumb.pretty_value|capfirst }}
-    {% endif %}
-   {% endfor %} &rsaquo; {{ form.cleaned_data.q }}
-  {% else %}
-   {% trans "Location" %}
-   {% for crumb in breadcrumbs.values %}
-    {% if crumb.facet %}
-	 &rsaquo; {{ crumb.pretty_value|capfirst }}
-	{% endif %}
-   {% endfor %}
-  {% endif %}
- {% else %}
-  {% if form.cleaned_data.q %}
-   {{ form.cleaned_data.q }}
-  {% else %}
-   {% trans "Location" %}
+    &rsaquo; "{{ form.cleaned_data.q }}"
   {% endif %}
  {% endif %}
-{% endspaceless %}{% endblock %}
+{% endblock %}
 
-{% block description %}{% if breadcrumbs %} {% trans "Location" %} {% for crumb in breadcrumbs.values %}{% if crumb.facet %} &rsaquo; {{ crumb.pretty_value|capfirst }}{% endif %}{% endfor %} {% else %} {{ block.super }}{% endif %}{% endblock %}
+{% block description %}
+ {% trans "Location " %}
+ {% for crumb in breadcrumbs|facets %}
+   &rsaquo; {{ crumb.pretty_value|capfirst }}
+ {% endfor %}
+ {% if form.cleaned_data.l %}
+  &rsaquo; {{ form.cleaned_data.l|capfirst }}
+  {% if form.cleaned_data.q %}
+    &rsaquo; "{{ form.cleaned_data.q }}"
+  {% endif %}
+ {% endif %}
+{% endblock %}
 
 {% block  head %}
  {{ block.super }}

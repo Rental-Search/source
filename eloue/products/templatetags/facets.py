@@ -123,3 +123,8 @@ def do_canonical_url(parser, token):
     bits = token.split_contents()
     urlbits = bits[1]
     return CanonicalNode(urlbits)
+
+
+@register.filter
+def facets(breadcrumbs):
+    return [value for value in breadcrumbs.values() if value['facet']]
