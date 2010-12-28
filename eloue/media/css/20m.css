@@ -18,6 +18,10 @@ body .m-ft , body .mn-shorcuts, body .mn-hat, body .mn-doc, body .mn-ft
 }
 .logo { padding-top: 10px;}
 #wrapper { font-size: 14px;}
+
+.community-portlet-content .fb, .community-portlet-content .tw { margin-bottom: 7px; }
+
+
 #footer 
 {
   font-size: 14px;
