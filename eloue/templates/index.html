@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load i18n mptt_tags product cache %}
 
-{% block title %}Plateforme pour louer ou mettre en location tout type d'objet : materiel, reception, mariage, sono, utilitaires, ski{% endblock %}
+{% block title %}{% trans "Plateforme pour louer ou mettre en location tout type d'objet : materiel, reception, mariage, sono, utilitaires, ski" %}{% endblock %}
 
 {% block content %}
 	<div id="top-content" class="search clearfix">
@@ -31,7 +31,7 @@
 	</div>{# top-content #}
 	<div id="content" class="clearfix">
 		<div class="content-header x12">
-			<h2>Les curiosités d'e-loue</h2>
+			<h2>{% trans "Les curiosités d'e-loue" %}</h2>
 		</div>
 		{% cache 900 curiosities %}
 		{% for curiosity in curiosities %}
@@ -56,13 +56,17 @@
 		{% endcache %}
 		<div class="content-guarantees">
 			<div class="guarantees">
-				<h2>Avec les garanties e-loue, louez en toute sécurité !</h2>
+				<h2>{% trans "Avec les garanties e-loue, louez en toute sécurité !" %}</h2>
 				<div class="guarantee">
 					<div class="g-payment">
-						<p>Grâce à <strong>PayPal</strong>, bénéficiez du paiement le plus sécurisé au monde.</p>
+					    {% blocktrans %}
+					     <p>Grâce à <strong>PayPal</strong>, bénéficiez du paiement le plus sécurisé au monde.</p>
+					    {% endblocktrans %}
 					</div>
 					<div class="g-assurancy">
-						<p>Notre <strong>partenaire assureur</strong> garantit vos objets en cas de casse.</p>
+					    {% blocktrans %}
+						 <p>Notre <strong>partenaire assureur</strong> garantit vos objets en cas de casse.</p>
+						{% endblocktrans %}
 					</div>
 				</div>
 			</div>
@@ -103,13 +107,13 @@
 		<div class="content-community">
 			<div class="presse-icons x8">
 				<h3>Ils parlent de nous</h3>
-				<a href="/espace-presse/" title="Voir l'espace presse">
-					<img src="{{ MEDIA_URL }}/images/presse_icons.png" alt="e-loue dans les média"/>
+				<a href="/espace-presse/" title="{% trans "Voir l'espace presse" %}">
+					<img src="{{ MEDIA_URL }}/images/presse_icons.png" alt="{% trans "e-loue dans les média" %}"/>
 				</a>
 			</div>
 			<div class="community-portlet x4">
 				<div class="community-portlet-header">
-					<h3>Rejoignez notre communauté</h3>
+					<h3>{% trans "Rejoignez notre communauté" %}</h3>
 				</div>
 				<ul class="community-portlet-content">
 					<li class="fb">
