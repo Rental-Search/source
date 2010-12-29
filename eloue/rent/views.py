@@ -125,7 +125,7 @@ def booking_accept(request, booking_id):
         booking.send_acceptation_email()
         GoalRecord.record('rent_object_accepted', WebUser(request))
         booking.save()
-    return redirect_to(request, booking.get_absolute_url())
+    return redirect_to(request, "%s?paypal=true" % booking.get_absolute_url())
 
 
 @login_required
