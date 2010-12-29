@@ -44,3 +44,21 @@ class ProductViewsTest(TestCase):
         response = self.client.get(reverse('product_edit', args=['perceuse-visseuse-philips', 1]))
         self.assertEqual(response.status_code, 403)
     
+    def test_product_list(self):
+        response = self.client.get('/location/')
+        self.assertEqual(response.status_code, 200)
+        response = self.client.get('/location/page/1/')
+        self.assertEqual(response.status_code, 200)
+        response = self.client.get('/location/page/')
+        self.assertEqual(response.status_code, 404)
+        response = self.client.get('/location/par-categorie/nsfw/')
+        self.assertEqual(response.status_code, 404)
+        response = self.client.get('/location/par-loueur/secret/')
+        self.assertEqual(response.status_code, 404)
+        response = self.client.get('/location/par-categorie/')
+        self.assertEqual(response.status_code, 404)
+        response = self.client.get('/location/par-condiment/ketchup/')
+        self.assertEqual(response.status_code, 404)
+        response = self.client.get('/location/condiment/ketchup/')
+        self.assertEqual(response.status_code, 404)
+    
