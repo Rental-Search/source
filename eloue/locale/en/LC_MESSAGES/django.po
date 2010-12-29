@@ -1,0 +1,3236 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2010-12-29 11:19+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: accounts/admin.py:26
+msgid "Personal info"
+msgstr ""
+
+#: accounts/admin.py:27
+msgid "Company info"
+msgstr ""
+
+#: accounts/admin.py:28
+msgid "Permissions"
+msgstr ""
+
+#: accounts/admin.py:29
+msgid "Important dates"
+msgstr ""
+
+#: accounts/admin.py:30
+msgid "Paypal"
+msgstr ""
+
+#: accounts/admin.py:31
+msgid "Groups"
+msgstr ""
+
+#: accounts/admin.py:51
+msgid "Exporter en csv"
+msgstr ""
+
+#: accounts/admin.py:61
+msgid "Envoyer à nouveau l'email d'activation"
+msgstr ""
+
+#: accounts/admin.py:71
+msgid "Geolocation"
+msgstr ""
+
+#: accounts/forms.py:37 accounts/forms.py:80 accounts/forms.py:118
+#: accounts/forms.py:342
+msgid "Email"
+msgstr ""
+
+#: accounts/forms.py:40
+msgid "Password"
+msgstr ""
+
+#: accounts/forms.py:51 accounts/tests/wizard.py:87
+msgid ""
+"Pour garantir un service de qualité et la sécurité des utilisateurs de e-"
+"loue.com, vous ne pouvez pas vous enregistrer avec une adresse email jetable."
+msgstr ""
+
+#: accounts/forms.py:53 accounts/tests/wizard.py:96
+msgid "Un compte existe déjà pour cet email"
+msgstr ""
+
+#: accounts/forms.py:64 accounts/tests/wizard.py:67
+#: accounts/tests/wizard.py:77
+msgid "Veuillez saisir une adresse email et un mot de passe valide."
+msgstr ""
+
+#: accounts/forms.py:66 accounts/tests/wizard.py:57
+msgid "Ce compte est inactif parce qu'il n'a pas été activé."
+msgstr ""
+
+#: accounts/forms.py:112 accounts/forms.py:209
+msgid "Pseudo"
+msgstr ""
+
+#: accounts/forms.py:113 accounts/forms.py:210
+msgid "Required. 30 characters or fewer. Letters, digits and @/./+/-/_ only."
+msgstr ""
+
+#: accounts/forms.py:114 accounts/forms.py:211
+msgid "This value may contain only letters, numbers and @/./+/-/_ characters."
+msgstr ""
+
+#: accounts/forms.py:116 accounts/forms.py:218
+msgid "Prénom"
+msgstr ""
+
+#: accounts/forms.py:117 accounts/forms.py:219
+msgid "Nom"
+msgstr ""
+
+#: accounts/forms.py:120 accounts/forms.py:216
+msgid "Êtes-vous un professionnel ?"
+msgstr ""
+
+#: accounts/forms.py:121 accounts/forms.py:217
+msgid "Nom de la société"
+msgstr ""
+
+#: accounts/forms.py:132 accounts/forms.py:319
+msgid "Vous devez entrer le nom de votre société"
+msgstr ""
+
+#: accounts/forms.py:138 accounts/tests/views.py:70
+msgid "This field is required."
+msgstr ""
+
+#: accounts/forms.py:141 accounts/tests/views.py:83
+msgid ""
+"Pour garantir un service de qualité et la sécurité des utilisateurs de "
+"Croisé dans le métro, vous ne pouvez pas vous enregistrer avec une adresse "
+"email jetable. Ne craignez rien, vous ne recevrez aucun courrier indésirable."
+msgstr ""
+
+#: accounts/forms.py:144 accounts/tests/views.py:57
+msgid "Un compte avec cet email existe déjà"
+msgstr ""
+
+#: accounts/forms.py:169
+msgid "Your old password was entered incorrectly. Please enter it again."
+msgstr ""
+
+#: accounts/forms.py:181
+msgid "E-mail"
+msgstr ""
+
+#: accounts/forms.py:189
+msgid "Vous devez entrer votre email Paypal"
+msgstr ""
+
+#: accounts/forms.py:214
+msgid "Mot de passe"
+msgstr ""
+
+#: accounts/forms.py:215 templates/accounts/patron_password.html:52
+msgid "A nouveau"
+msgstr ""
+
+#: accounts/forms.py:226 accounts/forms.py:239
+#: templates/accounts/partials/missing.html:122
+msgid "Téléphone"
+msgstr ""
+
+#: accounts/forms.py:231
+msgid "Addresse"
+msgstr ""
+
+#: accounts/forms.py:294 accounts/tests/wizard.py:157
+msgid "Vos mots de passe ne correspondent pas"
+msgstr ""
+
+#: accounts/forms.py:299 accounts/forms.py:301 accounts/tests/wizard.py:141
+msgid "Ce nom d'utilisateur est déjà pris."
+msgstr ""
+
+#: accounts/forms.py:312
+msgid "Vous devez spécifiez une adresse"
+msgstr ""
+
+#: accounts/forms.py:327
+msgid "Vous devez spécifiez un numéro de téléphone"
+msgstr ""
+
+#: accounts/forms.py:340
+msgid "Sujet"
+msgstr ""
+
+#: accounts/forms.py:341
+msgid "Message"
+msgstr ""
+
+#: accounts/forms.py:345
+msgid "Je souhaite recevoir une copie de ce message."
+msgstr ""
+
+#: accounts/models.py:22
+msgid "Madame"
+msgstr ""
+
+#: accounts/models.py:23
+msgid "Mademoiselle"
+msgstr ""
+
+#: accounts/models.py:24
+msgid "Monsieur"
+msgstr ""
+
+#: accounts/models.py:28
+msgid "France"
+msgstr ""
+
+#: accounts/models.py:29
+msgid "Belgique"
+msgstr ""
+
+#: accounts/models.py:30
+msgid "Luxembourg"
+msgstr ""
+
+#: accounts/models.py:31
+msgid "Réunion"
+msgstr ""
+
+#: accounts/models.py:32
+msgid "Allemagne"
+msgstr ""
+
+#: accounts/models.py:33
+msgid "Andore"
+msgstr ""
+
+#: accounts/models.py:34
+msgid "Autriche"
+msgstr ""
+
+#: accounts/models.py:35
+msgid "Canada"
+msgstr ""
+
+#: accounts/models.py:36
+msgid "Chypre"
+msgstr ""
+
+#: accounts/models.py:37
+msgid "Danemark"
+msgstr ""
+
+#: accounts/models.py:38
+msgid "Espagne"
+msgstr ""
+
+#: accounts/models.py:39
+msgid "États-Unis"
+msgstr ""
+
+#: accounts/models.py:40
+msgid "Finlande"
+msgstr ""
+
+#: accounts/models.py:41
+msgid "Grèce"
+msgstr ""
+
+#: accounts/models.py:42
+msgid "Guadeloupe"
+msgstr ""
+
+#: accounts/models.py:43
+msgid "Guernesey"
+msgstr ""
+
+#: accounts/models.py:44
+msgid "Guyane Française"
+msgstr ""
+
+#: accounts/models.py:45
+msgid "Hongrie"
+msgstr ""
+
+#: accounts/models.py:46
+msgid "Irlande"
+msgstr ""
+
+#: accounts/models.py:47
+msgid "Islande"
+msgstr ""
+
+#: accounts/models.py:48
+msgid "Italie"
+msgstr ""
+
+#: accounts/models.py:49
+msgid "Japon"
+msgstr ""
+
+#: accounts/models.py:50
+msgid "Jersey"
+msgstr ""
+
+#: accounts/models.py:51
+msgid "Lettonie"
+msgstr ""
+
+#: accounts/models.py:52
+msgid "Liechtenstein"
+msgstr ""
+
+#: accounts/models.py:53
+msgid "Lituanie"
+msgstr ""
+
+#: accounts/models.py:54
+msgid "Malte"
+msgstr ""
+
+#: accounts/models.py:55
+msgid "Martinique"
+msgstr ""
+
+#: accounts/models.py:56
+msgid "Maurice"
+msgstr ""
+
+#: accounts/models.py:57
+msgid "Mayotte"
+msgstr ""
+
+#: accounts/models.py:58
+msgid "Monaco"
+msgstr ""
+
+#: accounts/models.py:59
+msgid "Maroc"
+msgstr ""
+
+#: accounts/models.py:60
+msgid "Norvège"
+msgstr ""
+
+#: accounts/models.py:61
+msgid "Nouvelle-Calédonie"
+msgstr ""
+
+#: accounts/models.py:62
+msgid "Pays-Bas"
+msgstr ""
+
+#: accounts/models.py:63
+msgid "Pologne"
+msgstr ""
+
+#: accounts/models.py:64
+msgid "Polynésie Française"
+msgstr ""
+
+#: accounts/models.py:65
+msgid "Portugal"
+msgstr ""
+
+#: accounts/models.py:66
+msgid "Roumanie"
+msgstr ""
+
+#: accounts/models.py:67
+msgid "Royaume-Uni"
+msgstr ""
+
+#: accounts/models.py:68
+msgid "Russie, Fédération de"
+msgstr ""
+
+#: accounts/models.py:69
+msgid "Saint-Pierre-et-Miquelon"
+msgstr ""
+
+#: accounts/models.py:70
+msgid "Saint-Siège (État de la cité du Vatican)"
+msgstr ""
+
+#: accounts/models.py:71
+msgid "Suède"
+msgstr ""
+
+#: accounts/models.py:72
+msgid "Suisse"
+msgstr ""
+
+#: accounts/models.py:73
+msgid "Tchèque, République"
+msgstr ""
+
+#: accounts/models.py:74
+msgid "Terres Australes Françaises"
+msgstr ""
+
+#: accounts/models.py:75
+msgid "Tunisie"
+msgstr ""
+
+#: accounts/models.py:76
+msgid "Turquie"
+msgstr ""
+
+#: accounts/models.py:80
+msgid "Domicile"
+msgstr ""
+
+#: accounts/models.py:81
+msgid "Travail"
+msgstr ""
+
+#: accounts/models.py:82
+msgid "Mobile"
+msgstr ""
+
+#: accounts/models.py:83
+msgid "Fax"
+msgstr ""
+
+#: accounts/models.py:84
+msgid "Autre"
+msgstr ""
+
+#: accounts/models.py:92
+msgid "Civilité"
+msgstr ""
+
+#: accounts/models.py:95
+msgid "newsletter"
+msgstr ""
+
+#: accounts/models.py:95
+msgid "Précise si l'utilisateur est abonné à la newsletter"
+msgstr ""
+
+#: accounts/models.py:96
+msgid "professionnel"
+msgstr ""
+
+#: accounts/models.py:96
+msgid "Précise si l'utilisateur est un professionnel"
+msgstr ""
+
+#: accounts/models.py:97
+msgid "date de modification"
+msgstr ""
+
+#: accounts/models.py:121 accounts/models.py:126
+msgid "Un utilisateur utilisant cet email existe déjà"
+msgstr ""
+
+#: accounts/models.py:123 accounts/models.py:128
+msgid "Un utilisateur utilisant ce nom d'utilisateur existe déjà"
+msgstr ""
+
+#: accounts/models.py:170 templates/base.html:7
+#: templates/admin/base_site.html:4 templates/admin/base_site.html.py:7
+msgid "e-loue"
+msgstr ""
+
+#: accounts/models.py:215
+msgid "Expiré"
+msgstr ""
+
+#: accounts/models.py:233
+msgid "addresses"
+msgstr ""
+
+#: accounts/models.py:255
+msgid "Coordonnées géographiques incorrectes"
+msgstr ""
+
+#: accounts/models.py:273
+msgid "Géolocalisé"
+msgstr ""
+
+#: accounts/views.py:89
+msgid "Vos informations ont bien été modifiées"
+msgstr ""
+
+#: accounts/views.py:98
+msgid "Votre mot de passe à bien été modifié"
+msgstr ""
+
+#: accounts/views.py:119
+msgid "Nous n'avons pas pu créer votre compte paypal"
+msgstr ""
+
+#: accounts/views.py:173
+msgid "Votre message a bien été envoyé"
+msgstr ""
+
+#: accounts/views.py:175
+msgid "Erreur lors de l'envoi du message"
+msgstr ""
+
+#: accounts/wizard.py:42
+msgid "Bienvenue !"
+msgstr ""
+
+#: accounts/wizard.py:45
+msgid ""
+"Bienvenue ! Nous vous avons envoyé un lien de validation par email. Cette "
+"validation est impérative pour terminer votre enregistrement."
+msgstr ""
+
+#: products/forms.py:20 templates/products/product_list.html:80
+msgid "Les plus proches"
+msgstr ""
+
+#: products/forms.py:21
+msgid "Les plus récentes"
+msgstr ""
+
+#: products/forms.py:22
+msgid "Les pris les plus bas"
+msgstr ""
+
+#: products/forms.py:23
+msgid "Les pris les plus haut"
+msgstr ""
+
+#: products/forms.py:34
+msgid "Prix"
+msgstr ""
+
+#: products/forms.py:34
+msgid "par-prix"
+msgstr ""
+
+#: products/forms.py:35 products/views.py:78
+#: templates/20minutes/products/product_detail.html:81
+#: templates/products/product_detail.html:105
+msgid "Catégorie"
+msgstr ""
+
+#: products/forms.py:35
+msgid "par-categorie"
+msgstr ""
+
+#: products/forms.py:108
+msgid "Vous devriez au moins louer un object"
+msgstr ""
+
+#: products/forms.py:121
+msgid "Vous devriez ajouter une photo."
+msgstr ""
+
+#: products/models.py:24
+msgid "heure"
+msgstr ""
+
+#: products/models.py:25
+msgid "jour"
+msgstr ""
+
+#: products/models.py:26
+msgid "week-end"
+msgstr ""
+
+#: products/models.py:27
+msgid "semaine"
+msgstr ""
+
+#: products/models.py:28
+msgid "deux semaines"
+msgstr ""
+
+#: products/models.py:29
+msgid "mois"
+msgstr ""
+
+#: products/models.py:33
+msgid "€"
+msgstr ""
+
+#: products/models.py:34
+msgid "$"
+msgstr ""
+
+#: products/models.py:35
+msgid "£"
+msgstr ""
+
+#: products/models.py:36
+msgid "¥"
+msgstr ""
+
+#: products/models.py:40
+msgid "brouillon"
+msgstr ""
+
+#: products/models.py:41
+msgid "privé"
+msgstr ""
+
+#: products/models.py:42
+msgid "public"
+msgstr ""
+
+#: products/models.py:43
+msgid "supprimé"
+msgstr ""
+
+#: products/models.py:58
+msgid "archivé"
+msgstr ""
+
+#: products/models.py:59
+msgid "autorisé"
+msgstr ""
+
+#: products/models.py:67
+msgid "product"
+msgstr ""
+
+#: products/models.py:135
+msgid "category"
+msgstr ""
+
+#: products/models.py:136
+msgid "categories"
+msgstr ""
+
+#: products/models.py:152
+#, python-format
+msgid "/location/par-categorie/%(category)s/"
+msgstr ""
+
+#: products/models.py:163
+msgid "properties"
+msgstr ""
+
+#: products/models.py:217
+msgid "Le prix ne peut pas être négatif"
+msgstr ""
+
+#: products/models.py:255
+msgid "Score can't be higher than 1"
+msgstr ""
+
+#: products/models.py:257
+msgid "Score can't be a negative value"
+msgstr ""
+
+#: products/models.py:266
+msgid "Vous ne pouvez pas commenter vos propres locations"
+msgstr ""
+
+#: products/models.py:268
+msgid "Vous ne pouvez pas commenter un produit que vous n'avez pas loué"
+msgstr ""
+
+#: products/models.py:278
+msgid "Vous ne pouvez pas commenter votre profil"
+msgstr ""
+
+#: products/models.py:280
+msgid ""
+"Vous ne pouvez pas commenter le profil d'un loueur avec lequel n'avez pas "
+"effectué de réservations"
+msgstr ""
+
+#: products/views.py:69
+msgid "par-"
+msgstr ""
+
+#: products/views.py:74
+msgid "categorie"
+msgstr ""
+
+#: products/views.py:81
+msgid "loueur"
+msgstr ""
+
+#: products/views.py:85
+msgid "Loueur"
+msgstr ""
+
+#: products/views.py:90
+msgid "page"
+msgstr ""
+
+#: rent/admin.py:13
+msgid "Borrower & Owner"
+msgstr ""
+
+#: rent/admin.py:14
+msgid "Payment"
+msgstr ""
+
+#: rent/admin.py:25
+msgid "Product"
+msgstr ""
+
+#: rent/admin.py:32
+msgid "Borrower"
+msgstr ""
+
+#: rent/admin.py:37
+msgid "Borrower email"
+msgstr ""
+
+#: rent/admin.py:43
+msgid "Borrower phone"
+msgstr ""
+
+#: rent/admin.py:50
+msgid "Owner"
+msgstr ""
+
+#: rent/admin.py:55
+msgid "Owner email"
+msgstr ""
+
+#: rent/admin.py:61
+msgid "Owner phone"
+msgstr ""
+
+#: rent/forms.py:82 rent/forms.py:102
+msgid "Enter a valid date."
+msgstr ""
+
+#: rent/forms.py:83 rent/forms.py:104
+msgid "Enter a valid time."
+msgstr ""
+
+#: rent/forms.py:123 rent/forms.py:137
+msgid "Cette transaction ne semble pas lier à une transaction interne"
+msgstr ""
+
+#: rent/forms.py:158
+msgid "Vous ne pouvez pas louer cet objet pour ces dates"
+msgstr ""
+
+#: rent/forms.py:162
+msgid "Vous ne pouvez pas louer a ces dates"
+msgstr ""
+
+#: rent/forms.py:164
+msgid "Une location ne peut pas terminer avant d'avoir commencer"
+msgstr ""
+
+#: rent/forms.py:166
+msgid "La durée d'une location est limitée à 85 jours."
+msgstr ""
+
+#: rent/models.py:30
+msgid "En cours d'autorisation"
+msgstr ""
+
+#: rent/models.py:31 templates/rent/partials/booking_status.html:12
+msgid "En attente"
+msgstr ""
+
+#: rent/models.py:32
+msgid "Rejeté"
+msgstr ""
+
+#: rent/models.py:33
+msgid "Annulé"
+msgstr ""
+
+#: rent/models.py:34
+msgid "A venir"
+msgstr ""
+
+#: rent/models.py:35 templates/rent/partials/booking_status.html:38
+msgid "En cours"
+msgstr ""
+
+#: rent/models.py:36
+msgid "Terminé"
+msgstr ""
+
+#: rent/models.py:37
+msgid "Incident"
+msgstr ""
+
+#: rent/models.py:38
+msgid "Remboursé"
+msgstr ""
+
+#: rent/models.py:39
+msgid "Caution versée"
+msgstr ""
+
+#: rent/models.py:40
+msgid "En attende de clôture"
+msgstr ""
+
+#: rent/models.py:41
+msgid "Clôturé"
+msgstr ""
+
+#: rent/models.py:42
+msgid "Dépassé"
+msgstr ""
+
+#: rent/views.py:142
+msgid "Cette réservation a bien été refusée"
+msgstr ""
+
+#: rent/views.py:143
+msgid "Cette réservation n'a pu être refusée"
+msgstr ""
+
+#: rent/views.py:154
+msgid "Cette réservation a bien été annulée"
+msgstr ""
+
+#: rent/views.py:155
+msgid "Cette réservation n'a pu être annulée"
+msgstr ""
+
+#: rent/views.py:166
+msgid "Cette réservation a bien été cloturée"
+msgstr ""
+
+#: rent/views.py:167
+msgid "Cette réservation n'a pu être cloturée"
+msgstr ""
+
+#: templates/404.html:4
+msgid "La page demandée est introuvable"
+msgstr ""
+
+#: templates/404.html:9
+msgid "La page est introuvable"
+msgstr ""
+
+#: templates/404.html:15
+#, python-format
+msgid ""
+"\n"
+"    Si l'erreur persiste, merci de nous <a href=\"%(contact_url)s"
+"\">contacter</a>.\n"
+"   "
+msgstr ""
+
+#: templates/500.html:8
+msgid "e-loue - La page est pour le moment indisponible"
+msgstr ""
+
+#: templates/500.html:51 templates/500.html.py:76 templates/base.html:49
+#: templates/base.html.py:73 templates/20minutes/base.html:20
+#: templates/20minutes/base.html.py:43 templates/accounts/dashboard.html:27
+#: templates/products/product_create.html:4
+#: templates/products/product_create.html:10
+#: templates/products/product_missing.html:10
+#: templates/products/product_register.html:10
+msgid "Mettre en location"
+msgstr ""
+
+#: templates/500.html:52 templates/500.html.py:78 templates/base.html:56
+#: templates/base.html.py:75 templates/20minutes/base.html:27
+#: templates/accounts/dashboard.html:29
+msgid "Comment ça marche ?"
+msgstr ""
+
+#: templates/500.html:58
+msgid "La page est pour le moment indisponible"
+msgstr ""
+
+#: templates/500.html:64
+msgid ""
+"\n"
+"\t\t\t    Si l'erreur persiste, merci de nous <a href=\"mailto:contact@e-"
+"loue.com\">contact@e-loue.com</a>.\n"
+"\t\t\t   "
+msgstr ""
+
+#: templates/500.html:72 templates/base.html:69
+#: templates/20minutes/base.html:39 templates/accounts/dashboard.html:23
+msgid "Liens utiles"
+msgstr ""
+
+#: templates/500.html:74 templates/base.html:71
+#: templates/20minutes/base.html:41
+msgid "Accueil"
+msgstr ""
+
+#: templates/500.html:75 templates/base.html:72
+#: templates/20minutes/base.html:42
+#: templates/accounts/borrower_booking.html:12
+#: templates/accounts/borrower_history.html:12
+#: templates/accounts/dashboard.html:12
+#: templates/accounts/owner_booking.html:12
+#: templates/accounts/owner_history.html:12
+#: templates/accounts/owner_product.html:12
+#: templates/accounts/patron_edit.html:12
+#: templates/accounts/patron_password.html:12
+#: templates/accounts/patron_paypal.html:12
+#: templates/products/product_edit.html:12
+#: templates/rent/booking_detail.html:66
+#: templates/rent/booking_incident.html:12
+msgid "Mon compte"
+msgstr ""
+
+#: templates/500.html:83 templates/base.html:80
+#: templates/20minutes/base.html:47
+msgid "Info"
+msgstr ""
+
+#: templates/500.html:85 templates/base.html:82
+#: templates/20minutes/base.html:49
+msgid "Espace professionnel"
+msgstr ""
+
+#: templates/500.html:86 templates/base.html:83
+#: templates/20minutes/base.html:50
+msgid "Assurance tranquillité"
+msgstr ""
+
+#: templates/500.html:87 templates/base.html:84
+#: templates/20minutes/base.html:51
+msgid "Conditions générales"
+msgstr ""
+
+#: templates/500.html:88 templates/base.html:85
+#: templates/20minutes/base.html:52
+msgid "Respect de la vie privée"
+msgstr ""
+
+#: templates/500.html:92 templates/base.html:89
+#: templates/20minutes/base.html:56
+msgid "Support"
+msgstr ""
+
+#: templates/500.html:94 templates/base.html:91
+#: templates/20minutes/base.html:58
+msgid "Aide"
+msgstr ""
+
+#: templates/500.html:95 templates/base.html:92
+#: templates/20minutes/base.html:59 templates/accounts/contact.html:9
+msgid "Contactez-nous"
+msgstr ""
+
+#: templates/500.html:96 templates/base.html:93
+#: templates/20minutes/base.html:60
+msgid "Espace presse"
+msgstr ""
+
+#: templates/500.html:97 templates/base.html:94
+#: templates/20minutes/base.html:61
+msgid "Qui sommes nous ?"
+msgstr ""
+
+#: templates/500.html:101 templates/base.html:98
+#: templates/20minutes/base.html:65
+msgid "Communauté"
+msgstr ""
+
+#: templates/500.html:103 templates/base.html:100
+#: templates/20minutes/base.html:67
+msgid "Blog"
+msgstr ""
+
+#: templates/500.html:104 templates/base.html:101
+#: templates/20minutes/base.html:68
+msgid "Twitter"
+msgstr ""
+
+#: templates/500.html:105 templates/base.html:102
+#: templates/20minutes/base.html:69
+msgid "Facebook"
+msgstr ""
+
+#: templates/activation_email_subject.txt:1
+#: templates/accounts/activation_email_subject.txt:1
+msgid "Validation de votre inscription"
+msgstr ""
+
+#: templates/base.html:7
+msgid "Page"
+msgstr ""
+
+#: templates/base.html:51 templates/20minutes/base.html:22
+msgid "S'inscrire ou se connecter"
+msgstr ""
+
+#: templates/base.html:53 templates/20minutes/base.html:24
+msgid "Se déconnecter"
+msgstr ""
+
+#: templates/base.html:58 templates/20minutes/base.html:29
+#: templates/accounts/borrower_booking.html:9
+#: templates/accounts/borrower_history.html:9
+#: templates/accounts/dashboard.html:9 templates/accounts/owner_booking.html:9
+#: templates/accounts/owner_history.html:9
+#: templates/accounts/owner_product.html:9
+#: templates/accounts/patron_edit.html:9
+#: templates/accounts/patron_password.html:9
+#: templates/accounts/patron_paypal.html:9
+#: templates/products/product_edit.html:9
+#: templates/rent/booking_detail.html:63
+#: templates/rent/booking_incident.html:9
+msgid "Tableau de bord"
+msgstr ""
+
+#: templates/base.html:59 templates/20minutes/base.html:30
+#, python-format
+msgid " Bienvenue, %(first_name)s!"
+msgstr ""
+
+#: templates/base.html:114
+msgid "sur"
+msgstr ""
+
+#: templates/base.html:114
+msgid "e-loue blog"
+msgstr ""
+
+#: templates/index.html:4
+msgid ""
+"Plateforme pour louer ou mettre en location tout type d'objet : materiel, "
+"reception, mariage, sono, utilitaires, ski"
+msgstr ""
+
+#: templates/index.html:9
+msgid "Avec e-loue, tout se loue !"
+msgstr ""
+
+#: templates/index.html:14 templates/20minutes/products/product_detail.html:13
+#: templates/accounts/patron_detail.html:15
+#: templates/products/product_detail.html:13
+#: templates/products/product_list.html:40
+msgid "Que voulez-vous louer ?"
+msgstr ""
+
+#: templates/index.html:16 templates/20minutes/products/product_detail.html:15
+#: templates/accounts/patron_detail.html:17
+#: templates/products/product_detail.html:15
+#: templates/products/product_list.html:42
+msgid "Exemple :"
+msgstr ""
+
+#: templates/index.html:16 templates/20minutes/products/product_detail.html:15
+#: templates/accounts/patron_detail.html:17
+#: templates/products/product_detail.html:15
+#: templates/products/product_list.html:42
+msgid "Voiture"
+msgstr ""
+
+#: templates/index.html:16 templates/20minutes/products/product_detail.html:15
+#: templates/accounts/patron_detail.html:17
+#: templates/products/product_detail.html:15
+#: templates/products/product_list.html:42
+msgid "Chèvre"
+msgstr ""
+
+#: templates/index.html:16 templates/20minutes/products/product_detail.html:15
+#: templates/accounts/patron_detail.html:17
+#: templates/products/product_detail.html:15
+#: templates/products/product_list.html:42
+msgid "Ski"
+msgstr ""
+
+#: templates/index.html:16 templates/20minutes/products/product_detail.html:15
+#: templates/accounts/patron_detail.html:17
+#: templates/products/product_detail.html:15
+#: templates/products/product_list.html:42
+msgid "Robe"
+msgstr ""
+
+#: templates/index.html:21 templates/20minutes/products/product_detail.html:20
+#: templates/accounts/patron_detail.html:22
+#: templates/products/product_detail.html:20
+#: templates/products/product_list.html:47
+msgid "Où ?"
+msgstr ""
+
+#: templates/index.html:27 templates/20minutes/products/product_detail.html:25
+#: templates/accounts/patron_detail.html:28
+#: templates/products/product_detail.html:25
+#: templates/products/product_list.html:53
+msgid "Rechercher"
+msgstr ""
+
+#: templates/index.html:34
+msgid "Les curiosités d'e-loue"
+msgstr ""
+
+#: templates/index.html:59
+msgid "Avec les garanties e-loue, louez en toute sécurité !"
+msgstr ""
+
+#: templates/index.html:62
+msgid ""
+"\n"
+"\t\t\t\t\t     <p>Grâce à <strong>PayPal</strong>, bénéficiez du paiement le "
+"plus sécurisé au monde.</p>\n"
+"\t\t\t\t\t    "
+msgstr ""
+
+#: templates/index.html:67
+msgid ""
+"\n"
+"\t\t\t\t\t\t <p>Notre <strong>partenaire assureur</strong> garantit vos "
+"objets en cas de casse.</p>\n"
+"\t\t\t\t\t\t"
+msgstr ""
+
+#: templates/index.html:81 templates/products/product_list.html:172
+msgid "Catégories"
+msgstr ""
+
+#: templates/index.html:110
+msgid "Voir l'espace presse"
+msgstr ""
+
+#: templates/index.html:111
+msgid "e-loue dans les média"
+msgstr ""
+
+#: templates/index.html:116
+msgid "Rejoignez notre communauté"
+msgstr ""
+
+#: templates/20minutes/products/product_detail.html:57
+#: templates/products/product_detail.html:57
+#, python-format
+msgid " / par %(unit)s"
+msgstr ""
+
+#: templates/20minutes/products/product_detail.html:62
+#: templates/products/product_list.html:124
+msgid "Réserver"
+msgstr ""
+
+#: templates/20minutes/products/product_detail.html:68
+#: templates/products/product_detail.html:92
+msgid "Caution"
+msgstr ""
+
+#: templates/20minutes/products/product_detail.html:73
+#: templates/products/product_detail.html:97
+msgid "Lieu"
+msgstr ""
+
+#: templates/20minutes/products/product_detail.html:77
+#: templates/products/product_detail.html:101
+msgid "Quantité"
+msgstr ""
+
+#: templates/20minutes/products/product_detail.html:85
+#: templates/accounts/borrower_booking.html:10
+#: templates/accounts/borrower_history.html:10
+#: templates/accounts/dashboard.html:10
+#: templates/accounts/owner_booking.html:10
+#: templates/accounts/owner_history.html:10
+#: templates/accounts/owner_product.html:10
+#: templates/accounts/patron_edit.html:10
+#: templates/accounts/patron_password.html:10
+#: templates/accounts/patron_paypal.html:10
+#: templates/products/product_detail.html:109
+#: templates/products/product_edit.html:10
+#: templates/rent/booking_detail.html:64
+#: templates/rent/booking_incident.html:10
+msgid "Propriétaire"
+msgstr ""
+
+#: templates/accounts/activate.html:4
+msgid "Activation de votre compte"
+msgstr ""
+
+#: templates/accounts/activate.html:9
+msgid "Activation"
+msgstr ""
+
+#: templates/accounts/activate.html:13
+msgid "Merci d'avoir activé votre compte !"
+msgstr ""
+
+#: templates/accounts/activate.html:14
+msgid "Vous pouvez vous y connecter dés à présent."
+msgstr ""
+
+#: templates/accounts/activate.html:16
+msgid "Votre compte n'a pu être activé"
+msgstr ""
+
+#: templates/accounts/activate.html:18
+msgid ""
+"Ceci peut-arriver si le lien que nous vous avons envoyé par email a été "
+"coupé, assurez-vous que celui-ci est complet."
+msgstr ""
+
+#: templates/accounts/activation_email.html:2
+#, python-format
+msgid ""
+"\n"
+" <p>Bonjour %(username)s,</p>\n"
+" <p>Nous vous remercions de vous être enregistré(e) sur <a href=\"%(protocol)"
+"s://%(domain)s\">%(domain)s</a>. Afin d’activer votre compte et rejoindre "
+"notre communauté de loueurs, il vous reste une toute dernière étape : "
+"cliquer sur le lien ci-dessous.</p>\n"
+msgstr ""
+
+#: templates/accounts/activation_email.html:9
+#: templates/accounts/activation_email.txt:10
+#: templates/accounts/password_reset_email.html:14
+#: templates/accounts/password_reset_email.txt:14
+#: templates/rent/emails/borrower_ask_email.html:17
+#: templates/rent/emails/borrower_ask_email.txt:17
+#: templates/rent/emails/owner_ask_email.html:16
+#: templates/rent/emails/owner_ask_email.txt:18
+msgid "L'équipe e-loue"
+msgstr ""
+
+#: templates/accounts/activation_email.txt:2
+#, python-format
+msgid ""
+"\n"
+"  Bonjour %(username)s,\n"
+"\n"
+"  Nous vous remercions de vous être enregistré(e) sur e-loue.com. Afin "
+"d’activer votre compte et rejoindre notre communauté de loueurs, il vous "
+"reste une toute dernière étape : cliquer sur le lien ci-dessous.\n"
+msgstr ""
+
+#: templates/accounts/auth_login.html:4 templates/accounts/auth_login.html:9
+#: templates/products/product_register.html:4
+#: templates/products/product_register.html:19
+#: templates/rent/booking_missing.html:24
+#: templates/rent/booking_register.html:4
+#: templates/rent/booking_register.html:19
+msgid "Identification"
+msgstr ""
+
+#: templates/accounts/auth_missing.html:4
+#: templates/products/product_missing.html:4
+#: templates/rent/booking_missing.html:4
+msgid "Complétez votre profil"
+msgstr ""
+
+#: templates/accounts/auth_missing.html:9
+msgid "Informations nécessaires pour la création de votre compte"
+msgstr ""
+
+#: templates/accounts/borrower_booking.html:4
+msgid "Vos locations actives en tant que locataire"
+msgstr ""
+
+#: templates/accounts/borrower_booking.html:11
+#: templates/accounts/borrower_history.html:11
+#: templates/accounts/dashboard.html:11
+#: templates/accounts/owner_booking.html:11
+#: templates/accounts/owner_history.html:11
+#: templates/accounts/owner_product.html:11
+#: templates/accounts/patron_edit.html:11
+#: templates/accounts/patron_password.html:11
+#: templates/accounts/patron_paypal.html:11
+#: templates/products/product_edit.html:11
+#: templates/rent/booking_detail.html:65
+#: templates/rent/booking_incident.html:11
+msgid "Locataire"
+msgstr ""
+
+#: templates/accounts/borrower_booking.html:17
+#: templates/accounts/borrower_booking.html:23
+#: templates/accounts/borrower_history.html:17
+#: templates/accounts/owner_booking.html:17
+#: templates/accounts/owner_booking.html:25
+#: templates/accounts/owner_history.html:17
+#: templates/accounts/owner_product.html:17
+#: templates/accounts/patron_paypal.html:17
+#: templates/products/product_edit.html:17
+#: templates/rent/booking_detail.html:75 templates/rent/booking_detail.html:88
+#: templates/rent/booking_incident.html:21
+#: templates/rent/booking_incident.html:35
+msgid "Locations actives"
+msgstr ""
+
+#: templates/accounts/borrower_booking.html:18
+#: templates/accounts/borrower_history.html:18
+#: templates/accounts/owner_booking.html:18
+#: templates/accounts/owner_history.html:18
+#: templates/accounts/owner_history.html:25
+#: templates/accounts/owner_product.html:18
+#: templates/accounts/patron_paypal.html:18
+#: templates/products/product_edit.html:18
+#: templates/rent/booking_detail.html:79 templates/rent/booking_detail.html:92
+#: templates/rent/booking_incident.html:25
+#: templates/rent/booking_incident.html:39
+msgid "Historique des locations"
+msgstr ""
+
+#: templates/accounts/borrower_booking.html:35
+#: templates/accounts/borrower_history.html:35
+#: templates/accounts/owner_booking.html:37
+#: templates/accounts/owner_history.html:37
+#: templates/accounts/owner_product.html:69
+#: templates/accounts/patron_detail.html:93
+#: templates/products/product_list.html:138
+msgid "Page précédente"
+msgstr ""
+
+#: templates/accounts/borrower_booking.html:41
+#: templates/accounts/borrower_history.html:41
+#: templates/accounts/owner_booking.html:43
+#: templates/accounts/owner_history.html:43
+#: templates/accounts/owner_product.html:75
+#: templates/accounts/patron_detail.html:99
+#: templates/products/product_list.html:144
+msgid "Page suivante"
+msgstr ""
+
+#: templates/accounts/borrower_history.html:4
+msgid "Historique de vos locations en tant que locataire"
+msgstr ""
+
+#: templates/accounts/borrower_history.html:23
+msgid "Historiques des locations"
+msgstr ""
+
+#: templates/accounts/contact.html:4
+msgid "Contactez e-loue"
+msgstr ""
+
+#: templates/accounts/contact.html:59
+#: templates/accounts/partials/missing.html:408
+#: templates/products/product_edit.html:113
+msgid "* = champ obligatoire"
+msgstr ""
+
+#: templates/accounts/contact.html:62 templates/accounts/patron_edit.html:137
+#: templates/accounts/patron_password.html:66
+#: templates/accounts/patron_paypal.html:44
+#: templates/accounts/partials/login.html:35
+#: templates/accounts/partials/missing.html:414
+#: templates/accounts/partials/missing.html:416
+#: templates/products/product_create.html:133
+#: templates/products/product_edit.html:116
+#: templates/rent/booking_confirm.html:100
+#: templates/rent/booking_incident.html:129
+#: templates/rent/partials/booking_status.html:34
+msgid "Annuler"
+msgstr ""
+
+#: templates/accounts/contact.html:62 templates/accounts/patron_edit.html:137
+#: templates/accounts/patron_password.html:66
+#: templates/accounts/patron_paypal.html:44
+#: templates/accounts/partials/login.html:35
+#: templates/accounts/partials/missing.html:414
+#: templates/accounts/partials/missing.html:416
+#: templates/products/product_create.html:133
+#: templates/products/product_edit.html:116
+#: templates/rent/booking_confirm.html:100
+#: templates/rent/booking_incident.html:129
+msgid "ou"
+msgstr ""
+
+#: templates/accounts/contact.html:63 templates/rent/booking_incident.html:130
+msgid "Envoyer"
+msgstr ""
+
+#: templates/accounts/dashboard.html:4
+msgid "Votre tableau de bord"
+msgstr ""
+
+#: templates/accounts/dashboard.html:19
+msgid "Modifier votre profil"
+msgstr ""
+
+#: templates/accounts/dashboard.html:28
+msgid "Accéder à mes objets"
+msgstr ""
+
+#: templates/accounts/dashboard.html:36
+msgid "Bienvenue sur e-loue ! Que pouvez-vous faire ensuite ?"
+msgstr ""
+
+#: templates/accounts/dashboard.html:40
+msgid "Mettez en location"
+msgstr ""
+
+#: templates/accounts/dashboard.html:41
+msgid "Editez votre profil"
+msgstr ""
+
+#: templates/accounts/dashboard.html:42
+msgid "Cherchez une location"
+msgstr ""
+
+#: templates/accounts/dashboard.html:46
+msgid "Locations en tant que <strong>propriétaire</strong>"
+msgstr ""
+
+#: templates/accounts/dashboard.html:52
+msgid ""
+"\n"
+"                <span>Location<br />en attente</span>\n"
+"              "
+msgid_plural ""
+"\n"
+"\t\t\t    <span>Locations<br />en attente</span>\n"
+"              "
+msgstr[0] ""
+msgstr[1] ""
+
+#: templates/accounts/dashboard.html:62 templates/accounts/dashboard.html:97
+msgid ""
+"\n"
+"                <span>Location<br />active</span>\n"
+"              "
+msgid_plural ""
+"\n"
+"\t\t\t    <span>Locations<br />actives</span>\n"
+"              "
+msgstr[0] ""
+msgstr[1] ""
+
+#: templates/accounts/dashboard.html:72
+msgid ""
+"\n"
+"                <span>Objet<br />en location</span>\n"
+"              "
+msgid_plural ""
+"\n"
+" \t\t\t    <span>Objets<br />en location</span>\n"
+"              "
+msgstr[0] ""
+msgstr[1] ""
+
+#: templates/accounts/dashboard.html:81
+msgid "Locations en tant que <strong>locataire</strong>"
+msgstr ""
+
+#: templates/accounts/dashboard.html:87
+msgid ""
+"\n"
+"                 <span>Location<br />en attente</span>\n"
+"                "
+msgid_plural ""
+"\n"
+"\t\t\t     <span>Locations<br />en attente</span>\n"
+"               "
+msgstr[0] ""
+msgstr[1] ""
+
+#: templates/accounts/owner_booking.html:4
+msgid "Vos locations actives en tant que propriétaire"
+msgstr ""
+
+#: templates/accounts/owner_booking.html:19
+#: templates/accounts/owner_history.html:19
+#: templates/accounts/owner_product.html:19
+#: templates/accounts/patron_paypal.html:19
+#: templates/products/product_edit.html:19
+#: templates/rent/booking_detail.html:80
+#: templates/rent/booking_incident.html:26
+msgid "Mes objets"
+msgstr ""
+
+#: templates/accounts/owner_booking.html:20
+#: templates/accounts/owner_history.html:20
+#: templates/accounts/owner_product.html:20
+#: templates/accounts/patron_paypal.html:20
+#: templates/products/product_edit.html:20
+#: templates/rent/booking_detail.html:81
+#: templates/rent/booking_incident.html:27
+msgid "Ajouter un objet"
+msgstr ""
+
+#: templates/accounts/owner_history.html:4
+msgid "Historique de vos locations en tant que propriétaire"
+msgstr ""
+
+#: templates/accounts/owner_product.html:4
+#: templates/products/product_edit.html:4
+msgid "Vos produits mis en locations"
+msgstr ""
+
+#: templates/accounts/owner_product.html:26
+msgid "Objets en location"
+msgstr ""
+
+#: templates/accounts/owner_product.html:28
+#: templates/accounts/patron_detail.html:52
+msgid "Pas de location"
+msgstr ""
+
+#: templates/accounts/owner_product.html:51
+#: templates/accounts/patron_detail.html:74
+msgid "par"
+msgstr ""
+
+#: templates/accounts/owner_product.html:55
+#: templates/accounts/password_reset_confirm.html:54
+msgid "Modifier"
+msgstr ""
+
+#: templates/accounts/password_reset_complete.html:4
+#: templates/accounts/password_reset_complete.html:9
+msgid "Password reset complete"
+msgstr ""
+
+#: templates/accounts/password_reset_complete.html:12
+msgid "Your password has been set.  You may go ahead and log in now."
+msgstr ""
+
+#: templates/accounts/password_reset_complete.html:13
+msgid "Log in"
+msgstr ""
+
+#: templates/accounts/password_reset_confirm.html:5
+#: templates/accounts/password_reset_form.html:4
+#: templates/accounts/password_reset_form.html:9
+msgid "Password reset"
+msgstr ""
+
+#: templates/accounts/password_reset_confirm.html:12
+msgid "Enter new password"
+msgstr ""
+
+#: templates/accounts/password_reset_confirm.html:20
+msgid ""
+"Please enter your new password twice so we can verify you typed it in "
+"correctly."
+msgstr ""
+
+#: templates/accounts/password_reset_confirm.html:25
+msgid "New password:"
+msgstr ""
+
+#: templates/accounts/password_reset_confirm.html:39
+msgid "Confirm password:"
+msgstr ""
+
+#: templates/accounts/password_reset_confirm.html:59
+msgid "Password reset unsuccessful"
+msgstr ""
+
+#: templates/accounts/password_reset_confirm.html:62
+msgid ""
+"The password reset link was invalid, possibly because it has already been "
+"used.  Please request a new password reset."
+msgstr ""
+
+#: templates/accounts/password_reset_done.html:4
+#: templates/accounts/password_reset_done.html:9
+msgid "Password reset successful"
+msgstr ""
+
+#: templates/accounts/password_reset_done.html:12
+msgid ""
+"We've e-mailed you instructions for setting your password to the e-mail "
+"address you submitted. You should be receiving it shortly."
+msgstr ""
+
+#: templates/accounts/password_reset_email.html:2
+#, python-format
+msgid ""
+"\n"
+"<p>Bonjour %(username)s,</p>\n"
+" \n"
+"<p>Nous venons de recevoir une notification d’oubli de mot de passe.</p>\n"
+"<p>Il vous suffit de cliquer sur le lien ci-après pour en déterminer un "
+"nouveau :</p>\n"
+msgstr ""
+
+#: templates/accounts/password_reset_email.html:11
+msgid ""
+"\n"
+" <p>Vous n’aviez pas demandé ce changement ? Vous pensez qu’il s’agit d’une "
+"erreur ? Avant tout, rassurez-vous : vous êtes le/la seul(e) à recevoir ce "
+"message. Il vous suffit donc de vous connecter à votre compte avec le "
+"nouveau mot de passe puis d’aller dans votre profil pour en changer.</p>\n"
+msgstr ""
+
+#: templates/accounts/password_reset_email.txt:2
+#, python-format
+msgid ""
+"\n"
+" Bonjour %(username)s,\n"
+" \n"
+" Nous venons de recevoir une notification d’oubli de mot de passe. \n"
+" \n"
+" Il vous suffit de cliquer sur le lien ci-après pour en déterminer un "
+"nouveau :\n"
+msgstr ""
+
+#: templates/accounts/password_reset_email.txt:11
+msgid ""
+"\n"
+" Vous n’aviez pas demandé ce changement ? Vous pensez qu’il s’agit d’une "
+"erreur ? Avant tout, rassurez-vous : vous êtes le/la seul(e) à recevoir ce "
+"message. Il vous suffit donc de vous connecter à votre compte avec le "
+"nouveau mot de passe puis d’aller dans votre profil pour en changer. \n"
+msgstr ""
+
+#: templates/accounts/password_reset_email_subject.txt:1
+msgid "Oubli de votre mot de passe"
+msgstr ""
+
+#: templates/accounts/password_reset_form.html:13
+msgid ""
+"Forgotten your password? Enter your e-mail address below, and we'll e-mail "
+"instructions for setting a new one."
+msgstr ""
+
+#: templates/accounts/password_reset_form.html:18
+msgid "E-mail address:"
+msgstr ""
+
+#: templates/accounts/password_reset_form.html:22
+msgid "Réinitialiser"
+msgstr ""
+
+#: templates/accounts/patron_detail.html:7
+#, python-format
+msgid "Toutes les locations de %(username)s"
+msgstr ""
+
+#: templates/accounts/patron_detail.html:48
+#, python-format
+msgid ""
+"\n"
+"\t      <h2>%(count)s location%(pluralize)s</h2>\n"
+"\t     "
+msgstr ""
+
+#: templates/accounts/patron_detail.html:78
+#: templates/products/product_detail.html:84
+msgid "Réserver &rarr;"
+msgstr ""
+
+#: templates/accounts/patron_edit.html:4
+#: templates/accounts/patron_edit.html:17
+#: templates/accounts/patron_password.html:17
+msgid "Votre profil"
+msgstr ""
+
+#: templates/accounts/patron_edit.html:18
+#: templates/accounts/patron_password.html:18
+msgid "Modification du mot de passe"
+msgstr ""
+
+#: templates/accounts/patron_edit.html:123
+msgid "Souhaitez-vous recevoir des informations de e-loue ?"
+msgstr ""
+
+#: templates/accounts/patron_edit.html:138
+#: templates/accounts/patron_password.html:67
+#: templates/products/product_edit.html:117
+msgid "Sauvegarder"
+msgstr ""
+
+#: templates/accounts/patron_password.html:4
+msgid "Changez votre mot de passe"
+msgstr ""
+
+#: templates/accounts/patron_password.html:27
+msgid "Mot de passe actuel"
+msgstr ""
+
+#: templates/accounts/patron_password.html:40
+msgid "Nouveau mot de passe"
+msgstr ""
+
+#: templates/accounts/patron_paypal.html:4
+msgid "Votre compte PayPal"
+msgstr ""
+
+#: templates/accounts/patron_paypal.html:25
+msgid "Vérification de votre compte PayPal"
+msgstr ""
+
+#: templates/accounts/patron_paypal.html:32
+#: templates/accounts/partials/login.html:15
+msgid "Avez-vous un compte e-loue ?"
+msgstr ""
+
+#: templates/accounts/patron_paypal.html:45
+#: templates/accounts/partials/login.html:36
+#: templates/accounts/partials/missing.html:417
+#: templates/products/product_create.html:134
+msgid "Continuer &rarr;"
+msgstr ""
+
+#: templates/accounts/patron_paypal.html:50
+msgid "e-loue PayPal verified"
+msgstr ""
+
+#: templates/accounts/partials/login.html:8
+msgid "Votre adresse email est :"
+msgstr ""
+
+#: templates/accounts/partials/login.html:24
+msgid "Mot de passe oublié"
+msgstr ""
+
+#: templates/accounts/partials/missing.html:120
+msgid "Nouveau Numéro :"
+msgstr ""
+
+#: templates/accounts/partials/missing.html:156
+msgid "Nouvelle adresse :"
+msgstr ""
+
+#: templates/accounts/partials/missing.html:158
+msgid "Adresse"
+msgstr ""
+
+#: templates/accounts/partials/missing.html:207
+#, python-format
+msgid ""
+"\n"
+"\t\t\t<th>\n"
+"\t\t\t\tConditions<br/ > générales :\n"
+"\t\t\t</th>\n"
+"\t\t\t<td>\n"
+"\t\t\t\t<code class=\"cg\">\n"
+"\t\t\t\t\tPREAMBULE<br /><br />\n"
+"\n"
+"\t\t\t\t\tL’utilisation du site e-loue vaut acceptation des conditions "
+"générales. Si vous ne les acceptez pas, veuillez ne pas utiliser le site."
+"<br />\n"
+"\t\t\t\t\t\n"
+"\t\t\t\t\tLe service d'annonces en ligne www.e-loue.com est géré par la "
+"société e-loue permet la mise en relation de propriétaires annonceurs (ci-"
+"après les Propriétaires) et de locataires d’objets. Les Propriétaires et les "
+"Locataires sont ci-après désignés conjointement les Membres. La Plateforme e-"
+"loue permet la conclusion de contrats de location des Objets entre "
+"Propriétaires et Locataires, mais n’en est pas responsable. Les Membres sont "
+"seuls décisionnaires de la concrétisation la location des Objets et seuls "
+"responsables du contrat de location.<br />\n"
+"\n"
+"\t\t\t\t\tL'acceptation des présentes Conditions Générales d'utilisation de "
+"la Plateforme e-loue par les Membres vaut mandat donné e-loue pour mettre en "
+"relation Propriétaires et Locataires et opérer les Transactions effectuées "
+"sur le site de e-loue selon les modalités ci-après.<br />\n"
+"\n"
+"\t\t\t\t\tVersion au 26 novembre 2010.<br />\n"
+"\n"
+"\t\t\t\t\t<br />\n"
+"\t\t\t\t\t1. Définitions\n"
+"\t\t\t\t\t<br /><br />\n"
+"\n"
+"\t\t\t\t\tPlateforme de e-loue : signifie la structure fonctionnelle et "
+"organisationnelle mise en place par e-loue permettant la Mise en Relation de "
+"Propriétaires et de Locataires d’objets.<br /><br />\n"
+"\n"
+"\t\t\t\t\tObjet : signifie les Objets mentionnés à la Documentation e-loue, "
+"susceptibles de faire l'objet d'une Mise en Relation par la Plateforme e-"
+"loue.<br /><br />\n"
+"\n"
+"\t\t\t\t\tObjet Interdit : signifie les Objets contraires aux bonnes mœurs "
+"et aux lois et règlements en vigueur. Il s'agit notamment des Objets qui "
+"seraient des copies non autorisées ou constitueraient des objets "
+"contrefaisants au sens du Code de la Propriété intellectuelle ou des objets "
+"non autorisés en vertu de dispositions législatives, réglementaires ou "
+"contractuelles. La liste des objets interdits est décrite dans la suite de "
+"la documentation.<br /><br />\n"
+"\n"
+"\t\t\t\t\tPropriétaire : signifie un Membre effectuant une offre de location "
+"d'un Objet sur la Plateforme e-loue.<br /><br />\n"
+"\n"
+"\t\t\t\t\tLocataire : signifie un Membre ayant indiqué son acceptation de "
+"l'offre d'un Propriétaire.<br /><br />\n"
+"\n"
+"\t\t\t\t\tMembre : signifie au singulier ou au pluriel un Propriétaire ou un "
+"Locataire susceptible de faire usage de la Plateforme E-loue après "
+"acceptation des Conditions Générales. Tout Membre s'engage à fournir des "
+"informations exactes quant à son identité, adresse et autres données "
+"nécessaires à l'accès à la Plateforme E-loue et à mettre à jour toute "
+"modification concernant ces informations<br /><br />\n"
+"\n"
+"\t\t\t\t\tPrix : signifie le prix par jour proposé par le Propriétaire pour "
+"son offre de location d'un Objet. Le Prix constitue l'assiette de la "
+"Commission de e-loue.<br /><br />\n"
+"\n"
+"\t\t\t\t\tCommission : signifie la rémunération perçue par e-loue au titre "
+"de l'utilisation de la Plateforme e-loue. Prix de la Transaction : signifie "
+"le prix total de l’objet payable par le Locataire. Eventuellement si une "
+"transaction se fait a distance, des frais de port peuvent être demandés. Ils "
+"seront indiqués clairement dans les commentaires de l’annonce. Contrat de "
+"location : signifie la convention passée entre le propriétaire et le "
+"locataire faisant naitre pour l’un l’obligation de transfert de la "
+"jouissance de la chose et pour l’autre l’obligation d’en verser une contre "
+"partie financière fixée au préalable ou inscrit au contrat. Particulier : "
+"Personne utilisant la plateforme e-loue à titre personnel Professionnel : "
+"Personne utilisant la plateforme au titre de son entreprise<br /><br />\n"
+"\n"
+"\t\t\t\t\t<br />\n"
+"\t\t\t\t\t2. Objet\n"
+"\t\t\t\t\t<br /><br />\n"
+"\n"
+"\t\t\t\t\tLes présentes conditions générales d'utilisation de la Plateforme "
+"E-loue ont pour objet de définir des conditions par lesquelles les Membres "
+"sont autorisés à utiliser la Plateforme E-loue aux fins d'opérer leur Mise "
+"en Relation.<br />\n"
+"\n"
+"\t\t\t\t\t<br />\n"
+"\t\t\t\t\t3. Engagements de E-LOUE\n"
+"\t\t\t\t\t<br /><br />\n"
+"\n"
+"\t\t\t\t\t3.1. E-loue s'engage à tout mettre en œuvre pour maintenir le site "
+"dans un état opérationnel. Il s'agit toutefois d'une obligation de moyen et "
+"en aucun cas une obligation de résultat.<br />\n"
+"\n"
+"\t\t\t\t\t3.2 E-loue s'engage à transmettre à l'annonceur par E-mail tous "
+"les messages postées par les personnes intéressées par son annonce ainsi que "
+"de tenir à sa disposition toutes les informations relatives à son annonce."
+"<br />\n"
+"\n"
+"\t\t\t\t\t3.3 Du fait des caractéristiques et des limites d´Internet, que le "
+"client déclare connaître, ne peut en aucune manière être tenu responsable "
+"des vitesses d´accès, des ralentissements et des difficultés d´accès au site."
+"<br />\n"
+"\n"
+"\t\t\t\t\t3.4 E-loue se réserve le droit d´interrompre temporairement l"
+"´accessibilité à ses services pour des raisons de maintenance et/ou d"
+"´amélioration. Cependant, s´engage à tout mettre en oeuvre pour minimiser ce "
+"type d´interruption.<br />\n"
+"\n"
+"\t\t\t\t\t3.5 E-loue n'offre aucune garantie de continuité de service. A ce "
+"titre, la responsabilité des administrateurs du site E-loue ne pourra être "
+"recherchée en cas de dommages (coûts, perte de profits, perte de données, "
+"dommages directs ou indirects) qui pourraient naître de l'utilisation du "
+"Service et de l'impossibilité d'y avoir accès et/ou de sa fermeture.<br />\n"
+"\n"
+"\t\t\t\t\t<br />\n"
+"\t\t\t\t\t4. Processus de Location\n"
+"\t\t\t\t\t<br /><br />\n"
+"\n"
+"\t\t\t\t\t4.1 Le propriétaire dépose une annonce sur le site. Lorsqu’un "
+"internaute (le locataire de l’objet) est intéressé, il fait une demande de "
+"location. Il enregistre alors ses coordonnées bancaires et fait une demande "
+"d’autorisation de prélèvement bancaire. Le propriétaire reçoit la demande, "
+"si elle lui convient (dates, informations sur le locataire…) alors il valide "
+"la transaction. Le locataire sera débité le premier jour de la location. Le "
+"propriétaire enregistre également ses coordonnées bancaires afin de pouvoir "
+"être payé à la fin de la transaction. Suite à la validation, le site e-loue "
+"communique aux deux contreparties toutes les informations du contrat et les "
+"coordonnées afin qu’ils puissent entrer en contact.<br />\n"
+"\n"
+"\t\t\t\t\tSi jamais la transaction ne s’est finalement pas déroulée, alors "
+"une demande est faite par le locataire pour ne pas être débité. A la fin de "
+"la location, le propriétaire revient sur le site et clôture la transaction, "
+"il est à ce moment payé du montant total de la transaction moins la "
+"commission que nous appliquons. Nous sommes libres de faire des contrôles et "
+"d’appliquer des sanctions en cas de fraude.<br />\n"
+"\n"
+"\t\t\t\t\t4.2 A l'occasion du paiement par le locataire, le locataire donne "
+"mandat à e-loue, sous condition suspensive et à concurrence de l'Utilisation "
+"pour le process de location, d'utiliser tout ou partie du montant de du "
+"paiement aux fins (a) de payer le propriétaire en fin de location (b) de "
+"payer les frais liés à la transaction. e-loue s’engage à disposer cet argent "
+"sur un compte séquestre auprès de son partenaire bancaire.<br />\n"
+"\n"
+"\t\t\t\t\t<br />\n"
+"\t\t\t\t\t5. Tarifs\n"
+"\t\t\t\t\t<br /><br />\n"
+"\n"
+"\t\t\t\t\t5.1 L’utilisation de la plateforme e-loue est gratuite, ainsi que "
+"l’inscription et les frais d’insertion d’une annonce. Une commission de 20%% "
+"de la transaction est prélevée, à la charge du propriétaire. Ainsi lorsque "
+"le propriétaire reçoit le virement à la fin de la transaction, la commission "
+"est alors directement déduite du montant total qu’il perçoit. Ce montant de "
+"commission comprend les frais liés au paiement et l’assurance lorsque le "
+"bien est assurable.<br />\n"
+"\n"
+"\t\t\t\t\t5.2 E-loue peut modifier à tout moment sa politique relative aux "
+"frais de mise en ligne et aux commissions ainsi que les tarifs de ses "
+"services. Ces modifications prendront effet dès leur mise en ligne et "
+"s’appliqueront à toutes les transactions postérieures à cette mise en ligne. "
+"Veuillez donc consulter régulièrement ces Conditions Générales et notamment "
+"avant toute transaction sur le site.<br />\n"
+"\n"
+"\t\t\t\t\t6. Obligations des membres<br /><br />\n"
+"\n"
+"\t\t\t\t\t6.1 Nos services sont réservés aux personnes juridiquement "
+"capables ou autorisés de souscrire des contrats de location. Nos services ne "
+"sont pas disponibles pour les mineurs. Nous nous réservons le droit de "
+"supprimer le compte d’un membre quelque soit le motif, notamment s’il ne "
+"respecte pas les conditions générales ou qu’il est engagé dans des actes "
+"frauduleux en rapport avec le site<br />\n"
+"\n"
+"\t\t\t\t\t6.2 L'utilisateur engage sa responsabilité sur les informations "
+"annoncées.<br />\n"
+"\n"
+"\t\t\t\t\t6.3 Il ne doit annoncer aucune information mensongère ou exagérée."
+"<br />\n"
+"\n"
+"\t\t\t\t\t6.4 Il s'engage à produire une annonce dont le contenu n'est pas "
+"de nature à porter préjudice à autrui ni à enfreindre les lois et règlements "
+"en vigueur.<br />\n"
+"\n"
+"\t\t\t\t\t6.5 Il doit accepter de recevoir par E-mail les messages de toute "
+"personne intéressée par son annonce.<br />\n"
+"\n"
+"\t\t\t\t\t6.6 Il s'engage à répondre à toute personne intéressée par son "
+"annonce.<br />\n"
+"\n"
+"\t\t\t\t\t6.7 Il s'engage à supprimer son annonce dès lors que sa location "
+"ne sera plus disponible.<br />\n"
+"\n"
+"\t\t\t\t\t<br />\n"
+"\t\t\t\t\t7. Obligations des propriétaires\n"
+"\t\t\t\t\t<br /><br />\n"
+"\n"
+"\t\t\t\t\t7.1 Le Propriétaire s'engage à ce que toute offre d'un Objet "
+"corresponde à un bien matériel dont il dispose de la pleine et entière "
+"propriété et capacité de location, disponible aux dates indiquées.<br />\n"
+"\n"
+"\t\t\t\t\t7.2 Le Propriétaire s'engage à décrire l’Objet offert à la "
+"location selon les critères retenus par E-loue dans la Documentation E-loue. "
+"La description de l’Objet doit correspondre à ses caractéristiques "
+"effectives. Le Propriétaire mentionnera : la dénomination du objet, les "
+"caractéristiques du Objet, son état d’usage dans la description s’il y a une "
+"particularité à spécifier, le Prix de la Transaction, et les autres "
+"informations éventuellement demandées.<br />\n"
+"\n"
+"\t\t\t\t\t7.3 Le Propriétaire est seul responsable de la bonne exécution de "
+"l'obligation d'informer les Locataires des caractéristiques essentielles du "
+"bien et, le cas échéant, de l'évaluation des frais de port qui peuvent être "
+"inclus ou non dans le prix de la location. Il est seul responsable de la "
+"description des biens qu'il propose à la location. Il garantit E-loue de "
+"toute réclamation relative au contenu et à la forme de ladite description. "
+"Le Propriétaire s'engage à effectuer toutes validations, vérifications et "
+"apporter toutes précisions nécessaires de sorte que le descriptif et les "
+"éléments de l'offre soient fidèles et n'induisent pas le Locataire en "
+"erreur. En cas d'erreur du descriptif, des éléments de l'offre et/ou dans "
+"l'évaluation des frais de port, le Propriétaire assumera seuls les surcoûts "
+"éventuels et aucune réclamation de sa part ne sera recevable à ce titre tant "
+"auprès du Locataire que de E-loue.<br />\n"
+"\n"
+"\t\t\t\t\t7.4 Dans le descriptif de l’annonce, le professionnel s’engage à "
+"ne pas spécifier son adresse email, son numéro de téléphone, les coordonnées "
+"de son magasin…En effet le processus de location est le même que pour les "
+"particuliers, et donc ces informations ne seront communiquées au locataire "
+"que lorsque la demande de location sera validée. Il ne s’agit pas d’une "
+"plateforme de publicité mais d’une plateforme de location.<br />\n"
+"\n"
+"\t\t\t\t\t7.5 Le Propriétaire est seul responsable de la bonne exécution de "
+"l'obligation de livrer l’Objet commandé. Si la livraison a été convenue par "
+"voie postale, Le Propriétaire s'engage à adresser, à ses frais, l’Objet "
+"convenablement emballé aux dates prévues l'adresse du Locataire. L’Objet "
+"voyage aux risques et aux frais du Propriétaire.<br />\n"
+"\n"
+"\t\t\t\t\t7.6 Lors de l'expédition au Locataire du Objet, le Propriétaire "
+"s'engage à n'insérer aucune publicité pour lui-même ou pour quiconque, sous "
+"quelque forme que ce soit (message, plaquette, prospectus, stick "
+"autocollant, etc...). Les coordonnées du Locataire doivent être utilisées "
+"uniquement pour les besoins de l'exécution de la commande et des obligations "
+"légales qui s'y rattachent. Toute autre utilisation, location, relocation ou "
+"copie de la part du Propriétaire sont explicitement interdites.<br />\n"
+"\n"
+"\t\t\t\t\t7.7 Obligations des Propriétaires professionnels<br />\n"
+"\n"
+"\t\t\t\t\t7.7.1 Le Propriétaire agissant à titre professionnel doit "
+"s'identifier auprès de E-loue en cette qualité lors de l’inscription. E-loue "
+"se réserve le droit de ne pas contracter avec un Propriétaire professionnel."
+"<br />\n"
+"\n"
+"\t\t\t\t\t7.7.2 E-loue rappelle au Propriétaire agissant à titre "
+"professionnel son obligation de respecter les lois et règlements relatifs à "
+"l'exercice d'une activité commerciale de location à distance à titre "
+"professionnel. Il devra notamment s'assurer de ses obligations déclaratives "
+"de nature sociale ou fiscale.<br />\n"
+"\n"
+"\t\t\t\t\t7.7.3 Le Propriétaire s'engage à établir au profit du Locataire "
+"une attestation nominative de la location opérée et une facture conforme aux "
+"exigences légales désignant le Objet loué et le Prix de la Transaction. "
+"Cette attestation devra notamment mentionner l'existence et les modalités "
+"d'exercice du droit de rétractation auprès de E-loue pour le Locataire.<br /"
+">\n"
+"\n"
+"\t\t\t\t\t7.8 Dispositions financières Le propriétaire s’engage à payer les "
+"frais de commission, dès qu’un locataire a validé une offre. Ces frais sont "
+"pour le moment totalement gratuits, mais ils sont susceptibles de changer."
+"<br />\n"
+"\n"
+"\t\t\t\t\t<br />\n"
+"\t\t\t\t\t8. Obligations Des Locataires\n"
+"\t\t\t\t\t<br /><br />\n"
+"\n"
+"\t\t\t\t\t8.1 Pour toute transaction, E-loue pourra être amené, à titre "
+"exceptionnel et dans le but de lutter contre les éventuelles fraudes, à "
+"procéder à une validation de l'identité du Locataire. A défaut de la "
+"fourniture des informations requises par E-loue dans le cadre de la "
+"validation de l'identité, E-loue pourra annuler la Transaction opérée par le "
+"Locataire.<br />\n"
+"\n"
+"\t\t\t\t\t8.2 Le Locataire s'engage à posséder une boîte aux lettres "
+"normalisée conforme aux recommandations des services postaux (dimension de "
+"la boîte aux lettres, indication des coordonnées des résidents, etc...), "
+"dans le cas ou la transaction est décidée d’être acheminée par voie postale."
+"<br />\n"
+"\n"
+"\t\t\t\t\t8.3 Le Locataire s'engage à informer e-loue via le bouton « Annuler "
+"» présent dans « Mon compte » au maximum le jour du début de la location si "
+"la location ne s’est pas finalement pas faite, et dans ce cas e-loue le "
+"remboursera des frais de transaction pour la location qu’il a payé, sans "
+"aucune commission, dans le seul cas ou la location ne s’est pas faite a "
+"cause du propriétaire. Si la location ne s’est pas faite à cause du "
+"locataire lui-même, conformément à la réglementation, les Remboursements "
+"sont réalisés à la valeur nominale du paiement sans autres frais que ceux "
+"strictement requis par l'opération de remboursement, lesquels sont fixés "
+"forfaitairement à 4%% du montant du paiement. Le défaut de réponse de sa "
+"part passé le jour du début de location vaudra infirmation de l'offre de "
+"location. E-loue est le seul juge pour décider du remboursement. En cas de "
+"défaut d’une location, E-loue se réserve le droit de mener une investigation "
+"afin de vérifier que la location ne s’est réellement pas faite. Dans le cas "
+"contraire une procédure judiciaire sera engagée. De plus si le nombre de "
+"défauts paraît suspicieux, e-loue se réserve le droit de supprimer le compte "
+"de n’importe quel membre.<br />\n"
+"\n"
+"\t\t\t\t\t<br />\n"
+"\t\t\t\t\t9. Contrat de location\n"
+"\t\t\t\t\t<br /><br />\n"
+"\n"
+"\t\t\t\t\tDans le cadre de la procédure de location entre un propriétaire et "
+"un locataire, E-loue met à disposition des propriétaires et des locataires "
+"un contrat de location standard, qui est propre à e-loue met qui présente de "
+"fortes similitudes avec des contrats de locations professionnels type, ou "
+"bien même des modèles de contrat sur Internet. Ce dernier inclut selon le "
+"type de location des informations sur la transaction. Il s’agit d’un contrat "
+"type mis à disposition par E-loue.com à titre purement indicatif. E-loue se "
+"décharge de toute responsabilité quant au modèle et à son contenu et à "
+"l’utilisation qui peut en être faite, chaque location nécessitant un contrat "
+"propre adapté à la transaction et au droit qui lui est applicable. Les "
+"propriétaires et les locataires sont invités à cet égard à prendre conseil "
+"éventuellement auprès de leur conseiller juridique.<br />\n"
+"\n"
+"\t\t\t\t\t<br />\n"
+"\t\t\t\t\t10. Simulateur de revenus\n"
+"\t\t\t\t\t<br /><br />\n"
+"\n"
+"\t\t\t\t\tL’algorithme utilisé pour l’ensemble des calculs est propriété "
+"exclusive d’E-LOUE, et de ce fait protégé. Il s’agit d’un service proposé à "
+"l’ensemble des utilisateurs du site. La fiabilité des résultats ne peut être "
+"reprochée au site E-loue, qui n’a aucune obligation de résultat et de moyen "
+"pour les résultats du simulateur.<br />\n"
+"\n"
+"\t\t\t\t\t<br />11. Assurance\n"
+"\t\t\t\t\t<br /><br />\n"
+"\n"
+"\t\t\t\t\tCf conditions spécifiques Assurance tranquillité<br />\n"
+"\n"
+"\t\t\t\t\t<br />\n"
+"\t\t\t\t\t12. Responsabilité\n"
+"\t\t\t\t\t<br /><br />\n"
+"\n"
+"\t\t\t\t\t12.1. Fonction de E-loue : E-loue n'est pas une société de "
+"location mais est une plateforme sur internet d’annonces de locations. E-"
+"loue.com héberge seulement le contenu des annonces mises en ligne par les "
+"propriétaires (textes, images, etc.) et le site n’.est donc qu’une plate-"
+"forme électronique mise à disposition de ses utilisateurs, en vue de mettre "
+"en contact propriétaires et locataires d’objets. Nous n'exerçons ainsi aucun "
+"contrôle sur la qualité, la sécurité ou la licité des objets répertoriés, la "
+"véracité ou l'exactitude des annonces mises en ligne, la capacité des "
+"propriétaires à louer lesdits biens ni la capacité des locataires à louer ou "
+"à payer la location desdits biens. Nous ne pouvons pas assurer que le "
+"locataire conclura effectivement la transaction. Toute caution requise par "
+"le propriétaire, sous quelque forme que ce soit reste la responsabilité "
+"exclusive du propriétaire, celle-ci pouvant être demandée par chèque, "
+"emprunte bancaire… . E-loue ne prend en aucun cas en charge un dépôt de "
+"garantie sous quelque forme que ce soit, ni le contrôle de l’identité exacte "
+"du propriétaire ou du locataire.<br />\n"
+"\n"
+"\t\t\t\t\t12.2 Fiabilité des transactions et prudence des membres : E-loue."
+"com ne peut pas confirmer l'identité de chaque membre. E-loue met à "
+"disposition des ses membres et utilisateurs un système dit de \"commentaires"
+"\" ou \"notations\" pour leur permettre d'évaluer la personne avec qui ils "
+"traitent à l'issue d'une transaction ou pendant celle-ci. Les locataires et/"
+"ou propriétaire ont ainsi la possibilité de mettre en ligne leurs "
+"commentaires sur les membres avec lesquels ils ont effectués leurs "
+"transactions. Cette évaluation positive pourra être, pour certains "
+"propriétaires une condition à la location de ses biens. L’évaluation "
+"s’appliquera également au propriétaire afin, pour les locataires, d’évaluer "
+"le propriétaire pendant ou à l’issue de la transaction dite « location ». "
+"L’objet ou le bien loué peut également être évalué à l’issue de la "
+"transaction par le locataire.<br />\n"
+"\n"
+"\t\t\t\t\t12.3 Décharge de responsabilité : Puisque E-loue.com n'intervient "
+"pas dans les transactions entre propriétaire et locataire, les membres "
+"dégagent E-loue de toute responsabilité (ainsi que l’ensemble de ses "
+"dirigeants et employés) en cas de litige entre plusieurs membres, de "
+"réclamation, ou tout dommage présent ou futur, présumé ou non, constaté ou "
+"non, résultant de manière directe ou indirecte de l’utilisation des services "
+"de E-loue. Ainsi en cas de dommage ou dégâts lors de l’utilisation d’un "
+"objet loué, qui peut être ou non défectueux, e-loue n’est en aucun cas "
+"responsable. E-loue a en effet uniquement servi de mise en relation du "
+"locataire avec le propriétaire.<br />\n"
+"\n"
+"\t\t\t\t\t12.4 Limitations des responsabilités : Le site fournit des "
+"informations, recommandations, commentaires qui peuvent être inexacts, "
+"dépassés, incomplets, offensants, dommageables ou trompeurs : E-loue décline "
+"toute responsabilité sur les contenus dont il ne peut vérifier la véracité, "
+"l’authenticité ou l’exhaustivité. La responsabilité du site n’est en rien "
+"engagée quant aux qualités réelles ou supposées des objets et services "
+"proposés par ses membres. Faites donc toujours preuve de prudence et de bon "
+"sens quand vous utilisez le site. N’oubliez jamais qu’il se peut que vous "
+"ayez affaire à des mineurs ou à des personnes malintentionnées. Si vous "
+"utilisez le site, vous convenez que E-loue n’est pas responsable des actes "
+"ou omissions des utilisateurs et des membres et acceptez les risques visés "
+"dans les présentes Conditions Générales et le présent article. E-loue "
+"n’approuve ni ne valide les transactions effectuées sur le site et les "
+"membres et utilisateurs sont seuls responsables de la légalité de leurs "
+"actes. E-loue n’accepte aucune responsabilité liée à une éventuelle "
+"dangerosité ou défectuosité des objets mis en location sur le site, pouvant "
+"porter atteinte à la santé ou à l’intégrité physique et n’apporte aucune "
+"garantie à ce sujet. N’en déduisez donc pas que tous les objets mis en "
+"location sont sans danger pour les personnes ou leurs biens. Les membres et "
+"utilisateurs sont seuls responsables du contrôle et de la vérification que "
+"les objets offerts en location et loués sont bien autorisés à la location en "
+"vertu des législations applicables. Certains produits sont interdits à la "
+"location, c’est pourquoi vous ne les trouverez pas dans l’arborescence "
+"catégories/sous-catégorie objets. Aussi vous êtes tenus responsables si vous "
+"ajoutez un objet interdit à la location. Veuillez nous signaler si une "
+"annonce concernant un objet supposé interdit à la location est en ligne sur "
+"le site, afin qu’on la supprime. Vous êtes tenus responsables en cas de "
+"location d’un produit interdit. E-loue ne fait aucune déclaration ou "
+"garantie, expresse ou tacite, concernant le site, les offres de location, "
+"leur présentation ou leur contenu, y compris la garantie de qualité "
+"marchande, d’aptitude à un emploi particulier, la non-violation du droit "
+"d’auteur, de marques commerciales ou d’autres droits de propriété "
+"intellectuelle, la liberté de tous les services, les travaux ou autres "
+"matériels de contenu, contre les virus, les vers, les chevaux de Troie ou "
+"tout autre code aux traits hostiles, perturbateurs ou destructeurs. Sans "
+"préjudice des stipulations prévues au paragraphe précédent, E-loue ne peut "
+"être tenu pour responsable d’aucune perte ou altération de données, d’aucune "
+"perte de profit, de chiffre d’affaires, de temps, d’opportunité ou de tout "
+"autre dommage indirect, que ladite perte ou ledit dommage résulte d’une "
+"négligence ou de toute autre cause. Si le membre ou l’utilisateur est "
+"consommateur, les droits qui lui sont accordés par la loi ne sont pas remis "
+"en cause par la présente clause.<br />\n"
+"\n"
+"\t\t\t\t\t<br />\n"
+"\t\t\t\t\t13. Dispositions générales\n"
+"\t\t\t\t\t<br /><br />\n"
+"\n"
+"\t\t\t\t\t13.1 E-loue a la faculté de modifier les présentes Conditions "
+"Générales en fonction de l'évolution de son offre et du marché. Toute "
+"modification prendra effet immédiatement pour les offres en ligne dès leur "
+"notification aux Membres par tout moyen choisi par E-loue. Elles ne "
+"s'appliqueront pas pour les transactions en cours au moment de leur entrée "
+"en vigueur. Occasionnellement E-loue pourra changer de code, numéro de "
+"téléphone, effectuer une dénumérotation, interrompre le service pour des "
+"raisons opérationnelles, de maintenance ou en cas d'urgence.<br />\n"
+"\n"
+"\t\t\t\t\t13.2 Le Membre se connectera à la Plateforme E-loue au moyen de "
+"ses propres équipements et terminaux de télécommunication. E-loue ne met à "
+"disposition du Membre aucun moyen matériel, installation téléphonique, "
+"équipement terminal ou autres, ni logiciel ou abonnement.<br />\n"
+"\n"
+"\t\t\t\t\t13.3 En cas de force majeure, les obligations de la partie "
+"empêchée seront suspendues, notamment en cas : - d'acte ou omission du "
+"gouvernement ou d'autorités supérieures compétentes, - de blocage ou "
+"défaillance des réseaux de télécommunications, - d'insurrections, guerre "
+"civile, guerre, opérations militaires, état d'urgence national ou local, "
+"feu, foudre, explosion, grève, inondation, tempête, fait d'un tiers.<br />\n"
+"\n"
+"\t\t\t\t\t13.4 L'invalidité d'une ou plusieurs clauses des Dispositions "
+"Générales d'utilisation de la Plateforme E-loue n'entraînera pas la nullité "
+"de celles-ci.<br />\n"
+"\n"
+"\t\t\t\t\t13.5 Le présent contrat est soumis à la Loi Française. Tout litige "
+"avec un Membre agissant à titre professionnel et né à l'occasion de son "
+"interprétation et/ou de son exécution est de la compétence du Tribunal de "
+"commerce de Paris.<br />\n"
+"\n"
+"\t\t\t\t\t13.6 L’utilisation des applications externes utilisées par e-loue "
+"entraine l’acceptation implicite des conditions générales de ces "
+"applications.<br />\n"
+"\n"
+"\t\t\t\t\t<br />\n"
+"\t\t\t\t\t14. Gestion des données personnelles\n"
+"\t\t\t\t\t<br /><br />\n"
+"\n"
+"\t\t\t\t\tVous disposez d'un droit d'accès, de modification, de "
+"rectification et de suppression des données vous concernant (loi "
+"\"Informatique et Libertés\" du 6 janvier 1978). Les internautes qui "
+"s’inscrivent et deviennent membres acceptent explicitement de recevoir des "
+"emails provenant de e-loue. Sauf votre consentement, ces données ne sont "
+"divulguées à aucun tiers et ne servent qu'au fonctionnement du site. Les "
+"données nominatives relatives aux Membres sont collectées, enregistrées et "
+"stockées en conformité avec les dispositions de la Loi relative à "
+"l'informatique, aux fichiers et aux libertés du 6 janvier 1978. Les Membres "
+"disposent du droit d'accès et de rectification prévu par la loi auprès de e-"
+"loue responsable de la Plateforme. Pour tout renseignement, adressez-vous "
+"directement à e-loue.<br />\n"
+"\n"
+"\t\t\t\t\tLe pseudo et le mot de passe choisis par un membre sont "
+"strictement confidentiels, et il s’engage à ne pas les communiquer. Les "
+"membres sont seuls responsables en cas d'utilisation à leur insu par une "
+"autre personne utilisant leurs identifiants.<br />\n"
+"\n"
+"\t\t\t\t\t<br />\n"
+"\t\t\t\t\t15. Taxes et impositions\n"
+"\t\t\t\t\t<br /><br />\n"
+"\n"
+"\t\t\t\t\tContrairement à E-loue qui n’est pas partie aux locations de "
+"biens, les utilisateurs, membres, locataires et propriétaires sont seuls "
+"redevables de tous les impôts, taxes et commissions résultant de "
+"l'utilisation de nos services et de notre site. E-loue se dégage donc de "
+"toute responsabilité pour les taxes sur les transactions effectuées sur ou "
+"via son site.<br />\n"
+"\n"
+"\t\t\t\t\tE-loue SAS - RCS Paris 509 679 593 TVA Intracommunautaire : "
+"FR49509679593<br />\n"
+"\t\t\t\t</code>\n"
+"\t\t\t</td>\n"
+"\t\t  "
+msgstr ""
+
+#: templates/accounts/partials/missing.html:401
+msgid ""
+"\n"
+"\t\t\t\tEn cliquant sur <strong>\"Continuer &rarr;\"</strong> en dessous, "
+"vous acceptez <a href=\"/conditions-generales/\" target=\"_blank\">les "
+"conditions générales</a>.\n"
+"\t\t\t "
+msgstr ""
+
+#: templates/faq/topic_detail.html:7
+#, python-format
+msgid ""
+"\n"
+"  Les questions les plus fréquemment posées sur e-loue à propos de %(section)"
+"s\n"
+" "
+msgstr ""
+
+#: templates/faq/topic_list.html:4
+msgid "Foire aux questions"
+msgstr ""
+
+#: templates/faq/topic_list.html:7
+msgid "Les questions les plus fréquemment posées sur e-loue"
+msgstr ""
+
+#: templates/faq/topic_list.html:13
+msgid "Questions Fréquentes"
+msgstr ""
+
+#: templates/products/product_create.html:13
+#: templates/products/product_missing.html:13
+#: templates/products/product_register.html:13
+msgid "1. Remplissez la fiche"
+msgstr ""
+
+#: templates/products/product_create.html:14
+#: templates/products/product_missing.html:14
+#: templates/products/product_register.html:14
+msgid "2. Identifiez-vous"
+msgstr ""
+
+#: templates/products/product_create.html:16
+#: templates/products/product_missing.html:16
+#: templates/products/product_register.html:16
+#: templates/rent/booking_confirm.html:21
+#: templates/rent/booking_missing.html:21
+#: templates/rent/booking_register.html:16
+msgid "Obtenir de l'aide"
+msgstr ""
+
+#: templates/products/product_create.html:19
+msgid "Remplissez le formulaire de location"
+msgstr ""
+
+#: templates/products/product_detail.html:63
+msgid "Début"
+msgstr ""
+
+#: templates/products/product_detail.html:69
+msgid "Fin"
+msgstr ""
+
+#: templates/products/product_detail.html:74
+#, python-format
+msgid ""
+"\n"
+"\t\t  <p>Total : <span class=\"day\">1 jour,</span> soit <span class=\"total-"
+"price\">%(day_price)s</span></p>\n"
+"\t\t "
+msgstr ""
+
+#: templates/products/product_edit.html:53
+msgid "Titre * :"
+msgstr ""
+
+#: templates/products/product_edit.html:65
+msgid "Prix location * :"
+msgstr ""
+
+#: templates/products/product_edit.html:67
+#: templates/products/product_list.html:121
+msgid "par jour"
+msgstr ""
+
+#: templates/products/product_edit.html:77
+msgid "Caution :"
+msgstr ""
+
+#: templates/products/product_edit.html:89
+msgid "Quantité * :"
+msgstr ""
+
+#: templates/products/product_edit.html:101
+msgid "Description * :"
+msgstr ""
+
+#: templates/products/product_list.html:5
+#: templates/products/product_list.html:18
+msgid "Location "
+msgstr ""
+
+#: templates/products/product_list.html:66
+msgid "Vous vouliez peut-être dire ?"
+msgstr ""
+
+#: templates/products/product_list.html:73
+msgid "Trier par :"
+msgstr ""
+
+#: templates/products/product_list.html:76
+msgid "Les plus récents"
+msgstr ""
+
+#: templates/products/product_list.html:84
+msgid "Les prix les plus bas"
+msgstr ""
+
+#: templates/products/product_list.html:87
+msgid "Les prix les plus haut"
+msgstr ""
+
+#: templates/products/product_list.html:116
+msgid "km"
+msgstr ""
+
+#: templates/products/product_list.html:153
+msgid "Distance"
+msgstr ""
+
+#: templates/products/product_list.html:161
+msgid "Restreindre les résultats à un rayon de"
+msgstr ""
+
+#: templates/products/product_list.html:163
+msgid "Km"
+msgstr ""
+
+#: templates/products/product_list.html:164
+msgid "Mettre à jour"
+msgstr ""
+
+#: templates/products/product_list.html:175
+msgid "Voir tous les résultats"
+msgstr ""
+
+#: templates/products/product_missing.html:20
+msgid "Choisissez une adresse pour l'objet :"
+msgstr ""
+
+#: templates/products/product_missing.html:22
+msgid "Complétez votre profil et choisissez une adresse pour la l'objet :"
+msgstr ""
+
+#: templates/rent/booking_confirm.html:4
+msgid "Confirmez votre réservation"
+msgstr ""
+
+#: templates/rent/booking_confirm.html:10
+#: templates/rent/booking_missing.html:10
+#: templates/rent/booking_register.html:10
+msgid "Réservation"
+msgstr ""
+
+#: templates/rent/booking_confirm.html:14
+msgid "1.Identifiez-vous"
+msgstr ""
+
+#: templates/rent/booking_confirm.html:15
+#: templates/rent/booking_confirm.html:18
+msgid "2.Confirmez votre réservation"
+msgstr ""
+
+#: templates/rent/booking_confirm.html:17
+msgid "1.Information de contact"
+msgstr ""
+
+#: templates/rent/booking_confirm.html:25
+msgid "Objet réservé"
+msgstr ""
+
+#: templates/rent/booking_confirm.html:57
+#: templates/rent/booking_detail.html:131
+#: templates/rent/booking_incident.html:78
+msgid "Dates et total"
+msgstr ""
+
+#: templates/rent/booking_confirm.html:62
+#: templates/rent/booking_detail.html:136
+#: templates/rent/booking_incident.html:83
+msgid "Début :"
+msgstr ""
+
+#: templates/rent/booking_confirm.html:68
+#: templates/rent/booking_detail.html:142
+#: templates/rent/booking_incident.html:89
+msgid "Fin :"
+msgstr ""
+
+#: templates/rent/booking_confirm.html:74
+#: templates/rent/booking_detail.html:148
+#: templates/rent/booking_incident.html:99
+msgid "Prix par jour :"
+msgstr ""
+
+#: templates/rent/booking_confirm.html:78
+#: templates/rent/booking_detail.html:152
+#: templates/rent/booking_incident.html:103
+msgid "Durée de la location :"
+msgstr ""
+
+#: templates/rent/booking_confirm.html:82
+#: templates/rent/booking_detail.html:156
+#: templates/rent/booking_incident.html:107
+msgid "Total :"
+msgstr ""
+
+#: templates/rent/booking_confirm.html:88
+msgid "Paiement"
+msgstr ""
+
+#: templates/rent/booking_confirm.html:91
+msgid ""
+"\n"
+"\t\t  Sur la prochaine page veuillez fournir vos informations de paiement."
+"<br />\n"
+"\t\t  Vous ne serez <strong>débité</strong> que <strong>si le propriétaire "
+"accepte</strong> votre demande (dans les 32 heures).<br /> \n"
+"\t\t  Si le propriétaire refuse ou ne répond pas, vous ne serez pas prélevé."
+"<br />\n"
+"\t\t "
+msgstr ""
+
+#: templates/rent/booking_confirm.html:101
+msgid "Payez"
+msgstr ""
+
+#: templates/rent/booking_confirm.html:106
+msgid "Louez en toute sécurité !"
+msgstr ""
+
+#: templates/rent/booking_confirm.html:109
+msgid ""
+"\n"
+"\t\t\t  Grâce à <strong>PayPal</strong>, bénéficiez du paiement le plus "
+"sécurisé au monde.\n"
+"\t\t\t "
+msgstr ""
+
+#: templates/rent/booking_confirm.html:114
+msgid ""
+"\n"
+"\t\t\t  Notre <strong>partenaire assureur</strong> garantit l'objets en cas "
+"de casse.\n"
+"\t\t\t "
+msgstr ""
+
+#: templates/rent/booking_confirm.html:121
+msgid "Notre partenaire"
+msgstr ""
+
+#: templates/rent/booking_detail.html:34
+msgid "Location en cours de validation"
+msgstr ""
+
+#: templates/rent/booking_detail.html:38
+msgid "Location réservée"
+msgstr ""
+
+#: templates/rent/booking_detail.html:41
+msgid "Location rejetée"
+msgstr ""
+
+#: templates/rent/booking_detail.html:44
+msgid "Location à venir"
+msgstr ""
+
+#: templates/rent/booking_detail.html:47
+msgid "Location en cours"
+msgstr ""
+
+#: templates/rent/booking_detail.html:50
+msgid "Location terminée"
+msgstr ""
+
+#: templates/rent/booking_detail.html:53
+msgid "Location en cours de clôture"
+msgstr ""
+
+#: templates/rent/booking_detail.html:56
+msgid "Location clôturer"
+msgstr ""
+
+#: templates/rent/booking_detail.html:99
+#: templates/rent/booking_incident.html:46
+msgid "Résumé"
+msgstr ""
+
+#: templates/rent/booking_detail.html:121
+#: templates/rent/booking_incident.html:68
+msgid "Propriétaire :"
+msgstr ""
+
+#: templates/rent/booking_detail.html:126
+#: templates/rent/booking_incident.html:73
+msgid "Locataire :"
+msgstr ""
+
+#: templates/rent/booking_detail.html:163
+msgid "Détails de la transaction"
+msgstr ""
+
+#: templates/rent/booking_detail.html:168
+msgid "Avant commission :"
+msgstr ""
+
+#: templates/rent/booking_detail.html:172
+msgid "Commission :"
+msgstr ""
+
+#: templates/rent/booking_detail.html:176
+msgid "Montant net perçu :"
+msgstr ""
+
+#: templates/rent/booking_detail.html:185
+msgid "Statut de la location"
+msgstr ""
+
+#: templates/rent/booking_incident.html:4
+msgid "Déclarez un incident"
+msgstr ""
+
+#: templates/rent/booking_incident.html:95
+msgid "Statut :"
+msgstr ""
+
+#: templates/rent/booking_incident.html:113
+msgid "Déclarez votre incident"
+msgstr ""
+
+#: templates/rent/booking_incident.html:136
+msgid "Information"
+msgstr ""
+
+#: templates/rent/booking_incident.html:140
+msgid "Déclarer un incident si la location ne se déroule pas correctement."
+msgstr ""
+
+#: templates/rent/booking_missing.html:14
+#: templates/rent/booking_register.html:13
+msgid "1. Identifiez-vous"
+msgstr ""
+
+#: templates/rent/booking_missing.html:15
+#: templates/rent/booking_missing.html:18
+#: templates/rent/booking_register.html:14
+msgid "2. Confirmez votre réservation"
+msgstr ""
+
+#: templates/rent/booking_missing.html:17
+msgid "1. Information de contact"
+msgstr ""
+
+#: templates/rent/booking_preapproval.html:4
+msgid "Erreur d'enregistrement de votre paiement"
+msgstr ""
+
+#: templates/rent/booking_preapproval.html:8
+msgid "Oops.."
+msgstr ""
+
+#: templates/rent/booking_preapproval.html:11
+msgid "Une erreur est survenu lors de l'enregistrement de votre paiement."
+msgstr ""
+
+#: templates/rent/booking_success.html:4
+msgid "Réservation enregistrée avec succès"
+msgstr ""
+
+#: templates/rent/booking_success.html:8
+msgid "Réservation terminée avec succès"
+msgstr ""
+
+#: templates/rent/booking_success.html:11
+msgid "Le propriétaire a été informé de votre réservation."
+msgstr ""
+
+#: templates/rent/emails/borrower_acceptation_email.html:1
+#, python-format
+msgid ""
+"\n"
+"<p>Bonjour %(borrower_name)s,</p>\n"
+"\n"
+"<p>Votre proposition de location suivante a été acceptée :</p>\n"
+"<ul>\n"
+" <li><strong>Type :</strong> %(category)s</li>\n"
+" <li><strong>Objet :</strong> %(summary)s</li>\n"
+" <li><strong>Début de la location :</strong> %(starting_at)s</li>\n"
+" <li><strong>Durée de la location :</strong> %(duration)s</li>\n"
+"</ul>\n"
+"\n"
+"<p>Vous trouverez en pièce jointe votre contrat de location. Il ne vous "
+"reste donc plus qu'à contacter %(owner_name)s pour profiter de votre %"
+"(summary)s.</p>\n"
+"\n"
+"<ul>\n"
+" <li><strong>Numéro de téléphone :</strong> %(owner_phone)s</li>\n"
+" <li><strong>Adresse électronique :</strong> %(owner_email)s</li>\n"
+"</ul>\n"
+" \n"
+"<p>Bonne location !</p>\n"
+"\n"
+"<p>L'équipe e-loue</p>\n"
+msgstr ""
+
+#: templates/rent/emails/borrower_acceptation_email.txt:1
+#, python-format
+msgid ""
+"\n"
+"Bonjour %(borrower_name)s,\n"
+"\n"
+"Votre proposition de location suivante a été acceptée : \n"
+"\n"
+"Type : %(category)s \n"
+"Objet : %(summary)s\n"
+"Début de la location : %(starting_at)s \n"
+"Durée de la location : %(duration)s\n"
+" \n"
+"Vous trouverez en pièce jointe votre contrat de location. Il ne vous reste "
+"donc plus qu'à contacter %(owner_name)s pour profiter de votre %(summary)s.\n"
+" \n"
+"Numéro de téléphone : %(owner_phone)s\n"
+"Adresse électronique : %(owner_email)s\n"
+" \n"
+"Bonne location !\n"
+"\n"
+"L'équipe e-loue\n"
+msgstr ""
+
+#: templates/rent/emails/borrower_acceptation_email_subject.txt:1
+#: templates/rent/emails/owner_acceptation_email_subject.txt:1
+msgid "Confirmation de votre location"
+msgstr ""
+
+#: templates/rent/emails/borrower_ask_email.html:2
+#, python-format
+msgid ""
+"\n"
+" <p>Bonjour %(borrower)s,</p>\n"
+"\n"
+" <p>Nous avons bien pris en compte votre demande de location et venons "
+"d’informer %(owner)s de votre proposition.</p>\n"
+"  \n"
+" <p>Voici donc les différents éléments qui lui ont été transmis :</p> \n"
+" <ul>\n"
+"  <li><strong>Type :</strong> %(category)s</li>\n"
+"  <li><strong>Objet :</strong> %(summary)s</li>\n"
+"  <li><strong>Début de la location :</strong> %(starting_at)s</li> \n"
+"  <li><strong>Durée de la location :</strong> %(duration)s</li>\n"
+" </ul>\n"
+" \n"
+" <p>Vous serez prochainement informé(e) de sa réponse. Pour rappel : votre "
+"compte ne sera débité que si le propriétaire accepte la location.</p>\n"
+msgstr ""
+
+#: templates/rent/emails/borrower_ask_email.txt:2
+#, python-format
+msgid ""
+"\n"
+" Bonjour %(borrower)s, \n"
+"\n"
+" Nous avons bien pris en compte votre demande de location et venons "
+"d’informer %(owner)s de votre proposition. \n"
+"  \n"
+" Voici donc les différents éléments qui lui ont été transmis : \n"
+"\n"
+" Type : %(category)s\n"
+" Objet : %(summary)s \n"
+" Début de la location : %(starting_at)s \n"
+" Durée de la location : %(duration)s\n"
+"\n"
+" Vous serez prochainement informé(e) de sa réponse. Pour rappel : votre "
+"compte ne sera débité que si le propriétaire accepte la location. \n"
+msgstr ""
+
+#: templates/rent/emails/borrower_ask_email_subject.txt:1
+msgid "Votre demande de location"
+msgstr ""
+
+#: templates/rent/emails/borrower_cancelation_to_borrower_email.html:2
+#, python-format
+msgid ""
+"\n"
+"<p>Bonjour %(username)s,</p>\n"
+"\n"
+"<p>Vous avez manifesté votre souhait d'annuler la location suivante :</p>\n"
+"\n"
+" <ul>\n"
+"  <li><strong>Type :</strong> %(category)s</li>\n"
+"  <li><strong>Objet :</strong> %(summary)s</li>\n"
+"  <li><strong>Début de la location :</strong> %(starting_at)s</li> \n"
+"  <li><strong>Durée de la location :</strong> %(duration)s</li>\n"
+" </ul>\n"
+"\n"
+"<p>Conformément à votre demande, nous vous confirmons que cette location a "
+"bien été annulée et donc qu'aucun débit n'aura lieu.</p>\n"
+" \n"
+"<p>L'équipe e-loue</p>\n"
+msgstr ""
+
+#: templates/rent/emails/borrower_cancelation_to_borrower_email.txt:2
+#, python-format
+msgid ""
+"\n"
+"Bonjour %(username)s,\n"
+"\n"
+"Vous avez manifesté votre souhait d'annuler la location suivante :\n"
+"\n"
+"Type : %(category)s \n"
+"Objet : %(summary)s \n"
+"Début de la location : %(starting_at)s \n"
+"Durée de la location : %(duration)s\n"
+"\n"
+"Conformément à votre demande, nous vous confirmons que cette location a bien "
+"été annulée et donc qu'aucun débit n'aura lieu.\n"
+" \n"
+"L'équipe e-loue\n"
+msgstr ""
+
+#: templates/rent/emails/borrower_cancelation_to_borrower_email_subject.txt:1
+#: templates/rent/emails/borrower_cancelation_to_owner_email_subject.txt:1
+#: templates/rent/emails/owner_cancelation_to_borrower_email_subject.txt:1
+#: templates/rent/emails/owner_cancelation_to_owner_email_subject.txt:1
+msgid "Annulation de votre location"
+msgstr ""
+
+#: templates/rent/emails/borrower_cancelation_to_owner_email.html:2
+#, python-format
+msgid ""
+"\n"
+"<p>Bonjour %(username)s,</p>\n"
+"\n"
+"<p>Hélas, %(borrower)s a décidé de se rétracter. La location suivante est "
+"donc annulée :</p>\n"
+"\n"
+"<ul>\n"
+" <li><strong>Type :</strong> %(category)s</li>\n"
+" <li><strong>Objet :</strong> %(summary)s</li>\n"
+" <li><strong>Début de la location :</strong> %(starting_at)s</li>\n"
+" <li><strong>Durée de la location :</strong> %(duration)s</li>\n"
+"</ul>\n"
+" \n"
+"<p>L'équipe e-loue</p>\n"
+msgstr ""
+
+#: templates/rent/emails/borrower_cancelation_to_owner_email.txt:2
+#, python-format
+msgid ""
+"\n"
+"Bonjour %(username)s,\n"
+"\n"
+"Hélas, %(borrower)s a décidé de se rétracter. La location suivante est donc "
+"annulée :\n"
+"\n"
+"Type : %(category)s\n"
+"Objet : %(summary)s\n"
+"Début de la location : %(starting_at)s\n"
+"Durée de la location : %(duration)s\n"
+"\n"
+"L'équipe e-loue\n"
+msgstr ""
+
+#: templates/rent/emails/borrower_closed_email.html:2
+#, python-format
+msgid ""
+"\n"
+"<p>Bonjour %(username)s,</p>\n"
+"\n"
+"<p>Votre location a été clôturée. De plus %(owner)s a bien reçu votre "
+"virement.</p>\n"
+" \n"
+"<p>Si vous rencontrez un quelconque problème, nous vous invitons à nous <a "
+"href=\"%(protocol)s://%(domain)s%(booking_url)s\">signaler l'incident</a>.</"
+"p>\n"
+" \n"
+"<p>L'équipe e-loue</p>\n"
+msgstr ""
+
+#: templates/rent/emails/borrower_closed_email.txt:2
+#, python-format
+msgid ""
+"\n"
+"Bonjour %(username)s,\n"
+"\n"
+"Votre location a été clôturée. De plus %(owner)s a bien reçu votre "
+"virement.\n"
+"\n"
+"Si vous rencontrez un quelconque problème, nous vous invitons à nous "
+"signaler l'incident :\n"
+"\n"
+"%(protocol)s://%(domain)s%(booking_url)s\n"
+" \n"
+"L'équipe e-loue\n"
+msgstr ""
+
+#: templates/rent/emails/borrower_closed_email_subject.txt:1
+#: templates/rent/emails/owner_closed_email_subject.txt:1
+msgid "Clôture de votre location"
+msgstr ""
+
+#: templates/rent/emails/borrower_ended_email.html:2
+#, python-format
+msgid ""
+"\n"
+"<p>Bonjour %(username)s,</p>\n"
+"\n"
+"<p>La location de l’objet %(summary)s, qui a débutée le %(starting_at)s pour "
+"une durée de %(duration)s, vient de finir.</p>\n"
+"\n"
+"<p>Nous espérons que tout s’est déroulé selon votre convenance, et que vous "
+"êtes satisfaite(e) de votre location.</p>\n"
+"\n"
+"<p>Si vous avez rencontré un quelconque problème, pensez à nous <a href=\"%"
+"(protocol)s://%(domain)s%(booking_url)s\">signaler l'incident</a>.\n"
+" \n"
+"<p>L'équipe e-loue</p>\n"
+msgstr ""
+
+#: templates/rent/emails/borrower_ended_email.txt:2
+#, python-format
+msgid ""
+"\n"
+"Bonjour %(username)s, \n"
+"\n"
+"La location de l’objet %(summary)s, qui a débutée le %(starting_at)s pour "
+"une durée de %(duration)s, vient de finir. \n"
+"\n"
+"Nous espérons que tout s’est déroulé selon votre convenance, et que vous "
+"êtes satisfaite(e) de votre location.\n"
+"\n"
+"Si vous avez rencontré un quelconque problème, pensez à nous signaler "
+"l'incident : \n"
+"\n"
+"%(protocol)s://%(domain)s%(booking_url)s\n"
+" \n"
+"L'équipe e-loue\n"
+msgstr ""
+
+#: templates/rent/emails/borrower_ended_email_subject.txt:1
+#: templates/rent/emails/owner_ended_email_subject.txt:1
+msgid "Fin de votre location"
+msgstr ""
+
+#: templates/rent/emails/borrower_rejection_email.html:2
+#, python-format
+msgid ""
+"\n"
+"<p>Bonjour %(borrower_name)s,</p>\n"
+"\n"
+"<p>Hélas, %(owner_name)s a refusé votre proposition de location suivante :</"
+"p>\n"
+"\n"
+"<ul>\n"
+" <li><strong>Type :</strong> %(category)s</li>\n"
+" <li><strong>Objet :</strong> %(summary)s</li>\n"
+" <li><strong>Début de la location :</strong> %(starting_at)s</li>\n"
+" <li><strong>Durée de la location :</strong> %(duration)s</li>\n"
+"</ul>\n"
+msgstr ""
+
+#: templates/rent/emails/borrower_rejection_email.html:17
+#: templates/rent/emails/borrower_rejection_email.txt:14
+#: templates/rent/emails/owner_cancelation_to_borrower_email.html:18
+#: templates/rent/emails/owner_cancelation_to_borrower_email.txt:16
+msgid ""
+"Cependant, d’autres objets similaires peuvent peut-être vous intéresser :"
+msgstr ""
+
+#: templates/rent/emails/borrower_rejection_email.html:28
+#, python-format
+msgid ""
+"\n"
+"<p>Retrouvez tous les objets de cette catégorie sur <a href=\"%(protocol)s://"
+"%(domain)s%(category_url)s\">e-loue.com</a>.</p>\n"
+"\n"
+"<p>L'équipe e-loue</p>\n"
+msgstr ""
+
+#: templates/rent/emails/borrower_rejection_email.txt:2
+#, python-format
+msgid ""
+"\n"
+"Bonjour %(borrower_name)s, \n"
+"\n"
+"Hélas, %(owner_name)s a refusé votre proposition de location suivante : \n"
+"\n"
+"Type : %(category)s \n"
+"Objet : %(summary)s \n"
+"Début de la location : %(starting_at)s \n"
+"Durée de la location : %(duration)s\n"
+msgstr ""
+
+#: templates/rent/emails/borrower_rejection_email.txt:23
+#: templates/rent/emails/owner_cancelation_to_borrower_email.txt:25
+#, python-format
+msgid ""
+"\n"
+"Retrouvez tous les objets de cette catégorie sur e-loue.com :\n"
+"\n"
+"%(protocol)s://%(domain)s%(category_url)s\n"
+" \n"
+"L'équipe e-loue\n"
+msgstr ""
+
+#: templates/rent/emails/borrower_rejection_email_subject.txt:1
+msgid "Votre proposition de location a été refusée"
+msgstr ""
+
+#: templates/rent/emails/owner_acceptation_email.html:1
+#, python-format
+msgid ""
+"\n"
+"<p>Bonjour %(owner_name)s,</p>\n"
+"\n"
+"<p>Vous venez d'accepter la proposition de location suivante :</p>\n"
+"\n"
+"<ul>\n"
+" <li><strong>Type :</strong> %(category)s</li>\n"
+" <li><strong>Objet :</strong> %(summary)s</li>\n"
+" <li><strong>Début de la location :</strong> %(starting_at)s</li>\n"
+" <li><strong>Durée de la location :</strong> %(duration)s</li>\n"
+"</ul>\n"
+"\n"
+"<p>Vous trouverez en pièce jointe votre contrat de location. Il ne vous "
+"reste donc plus qu'à contacter %(borrower_name)s pour le faire profiter de "
+"votre %(summary)s.</p>\n"
+" \n"
+"<ul>\n"
+" <li><strong>Numéro de téléphone :</strong> %(borrower_phone)s</li>\n"
+" <li><strong>Adresse électronique :</strong> %(borrower_email)s</li>\n"
+"</ul>\n"
+" \n"
+"<p>Bonne location !</p>\n"
+"\n"
+"<p>L'équipe e-loue</p>\n"
+msgstr ""
+
+#: templates/rent/emails/owner_acceptation_email.txt:1
+#, python-format
+msgid ""
+"\n"
+"Bonjour %(owner_name)s,\n"
+"\n"
+"Vous venez d'accepter la proposition de location suivante :\n"
+"\n"
+"Type : %(category)s \n"
+"Objet : %(summary)s\n"
+"Début de la location : %(starting_at)s \n"
+"Durée de la location : %(duration)s\n"
+" \n"
+"Vous trouverez en pièce jointe votre contrat de location. Il ne vous reste "
+"donc plus qu'à contacter %(borrower_name)s pour le faire profiter de votre %"
+"(summary)s.\n"
+" \n"
+"Numéro de téléphone : %(borrower_phone)s\n"
+"Adresse électronique : %(borrower_email)s\n"
+" \n"
+"Bonne location !\n"
+"\n"
+"L'équipe e-loue\n"
+msgstr ""
+
+#: templates/rent/emails/owner_ask_email.html:2
+#, python-format
+msgid ""
+"\n"
+"<p>Bonjour %(owner)s,</p>\n"
+"\n"
+"<p>%(borrower)s souhaite louer l’un de vos objets. Voici les détails de sa "
+"proposition :</p>\n"
+"\n"
+"<ul>\n"
+" <li><strong>Type :</strong> %(category)s</li>\n"
+" <li><strong>Objet :</strong> %(summary)s</li>\n"
+" <li><strong>Début de la location :</strong> %(starting_at)s</li>\n"
+" <li><strong>Durée de la location :</strong> %(duration)s</li>\n"
+"</ul>\n"
+"\n"
+"<p>Pour lui répondre et/ou accepter cette location, il vous suffit d’aller "
+"dans <a href=\"%(protocol)s://%(domain)s%(booking_url)s\">l’onglet "
+"propositions</a> de votre compte e-loue.com.<p>\n"
+msgstr ""
+
+#: templates/rent/emails/owner_ask_email.txt:2
+#, python-format
+msgid ""
+"\n"
+" Bonjour %(owner)s,\n"
+"\n"
+" %(borrower)s souhaite louer l’un de vos objets. Voici les détails de sa "
+"proposition : \n"
+"\n"
+" Type : %(category)s\n"
+" Objet : %(summary)s\n"
+" Début de la location : %(starting_at)s\n"
+" Durée de la location : %(duration)s\n"
+"\n"
+" Pour lui répondre et/ou accepter cette location, il vous suffit d’aller "
+"dans l’onglet propositions de votre compte e-loue.com :\n"
+" \n"
+" %(protocol)s://%(domain)s%(booking_url)s\n"
+"\n"
+msgstr ""
+
+#: templates/rent/emails/owner_ask_email_subject.txt:1
+msgid "Demande de location de l'un de vos objets !"
+msgstr ""
+
+#: templates/rent/emails/owner_cancelation_to_borrower_email.html:2
+#, python-format
+msgid ""
+"\n"
+"<p>Bonjour %(username)s,</p>\n"
+"\n"
+"<p>Malgré son précédent accord, %(owner)s a décidé d'annuler la location "
+"suivante :</p>\n"
+"\n"
+"<ul>\n"
+" <li><strong>Type :</strong> %(category)s</li>\n"
+" <li><strong>Objet :</strong> %(summary)s</li>\n"
+" <li><strong>Début de la location :</strong> %(starting_at)s</li>\n"
+" <li><strong>Durée de la location :</strong> %(duration)s</li>\n"
+"</ul>\n"
+" \n"
+"<p>Nous vous confirmons qu'aucun débit n'aura lieu.</p>\n"
+msgstr ""
+
+#: templates/rent/emails/owner_cancelation_to_borrower_email.html:28
+#, python-format
+msgid ""
+"\n"
+"<p>Retrouvez tous les objets de cette catégorie sur e-loue.com :\n"
+"\n"
+"%(protocol)s://%(domain)s%(category_url)s\n"
+" \n"
+"<p>L'équipe e-loue</p>\n"
+msgstr ""
+
+#: templates/rent/emails/owner_cancelation_to_borrower_email.txt:2
+#, python-format
+msgid ""
+"\n"
+"Bonjour %(username)s, \n"
+"\n"
+"Malgré son précédent accord, %(owner)s a décidé d'annuler la location "
+"suivante : \n"
+"\n"
+"Type : %(category)s \n"
+"Objet : %(summary)s \n"
+"Début de la location : %(starting_at)s \n"
+"Durée de la location : %(duration)s\n"
+" \n"
+"Nous vous confirmons qu'aucun débit n'aura lieu.\n"
+msgstr ""
+
+#: templates/rent/emails/owner_cancelation_to_owner_email.html:2
+#, python-format
+msgid ""
+"\n"
+"<p>Bonjour %(username)s,</p>\n"
+"\n"
+"<p>Vous avez manifesté votre souhait d'annuler la location suivante :</p>\n"
+"\n"
+"<ul>\n"
+"  <li><strong>Type :</strong> %(category)s</li>\n"
+"  <li><strong>Objet :</strong> %(summary)s</li>\n"
+"  <li><strong>Début de la location :</strong> %(starting_at)s</li> \n"
+"  <li><strong>Durée de la location :</strong> %(duration)s</li>\n"
+" </ul>\n"
+"\n"
+"<p>Conformément à votre demande, nous vous confirmons que cette location a "
+"bien été annulée.</p>\n"
+" \n"
+"<p>L'équipe e-loue</p>\n"
+msgstr ""
+
+#: templates/rent/emails/owner_cancelation_to_owner_email.txt:2
+#, python-format
+msgid ""
+"\n"
+"Bonjour %(username)s, \n"
+"\n"
+"Vous avez manifesté votre souhait d'annuler la location suivante : \n"
+"\n"
+"Type : %(category)s \n"
+"Objet : %(summary)s \n"
+"Début de la location : %(starting_at)s \n"
+"Durée de la location : %(duration)s\n"
+"\n"
+"Conformément à votre demande, nous vous confirmons que cette location a bien "
+"été annulée.\n"
+" \n"
+"L'équipe e-loue\n"
+msgstr ""
+
+#: templates/rent/emails/owner_closed_email.html:2
+#, python-format
+msgid ""
+"\n"
+"<p>Bonjour %(username)s,</p>\n"
+"\n"
+"<p>Vous venez de clôturer la location de l’objet %(summary)s, qui a débutée "
+"le %(starting_at)s pour une durée de %(duration)s jour(s).  \n"
+"Le paiement de {montant de la loc} est donc en cours et devrait être visible "
+"dans les prochaines minutes.</p>\n"
+" \n"
+"<p>Si vous le souhaitez, vous pouvez éditer une facture en cliquant sur le "
+"lien ci-après : %(protocol)s://%(domain)s%(booking_url)s.</p>\n"
+"\n"
+"<p>Naturellement, si vous rencontrez une quelconque difficulté, n'hésitez "
+"pas à nous contacter.</p>\n"
+" \n"
+"<p>L'équipe e-loue</p>\n"
+msgstr ""
+
+#: templates/rent/emails/owner_closed_email.txt:2
+#, python-format
+msgid ""
+"\n"
+"Bonjour %(username)s,\n"
+"\n"
+"Vous venez de clôturer la location de l’objet %(summary)s, qui a débutée le %"
+"(starting_at)s pour une durée de %(duration)s jour(s).  \n"
+"Le paiement de {montant de la loc} est donc en cours et devrait être visible "
+"dans les prochaines minutes.\n"
+" \n"
+"Si vous le souhaitez, vous pouvez éditer une facture en cliquant sur le lien "
+"ci-après :\n"
+"\n"
+"%(protocol)s://%(domain)s%(booking_url)s\n"
+"\n"
+"Naturellement, si vous rencontrez une quelconque difficulté, n'hésitez pas à "
+"nous contacter.\n"
+" \n"
+"L'équipe e-loue\n"
+msgstr ""
+
+#: templates/rent/emails/owner_ended_email.html:2
+#, python-format
+msgid ""
+"\n"
+"<p>Bonjour %(username)s,</p>\n"
+"\n"
+"<p>La location de l’objet %(summary)s, qui a débutée le %(starting_at)s pour "
+"une durée de %(duration)s, vient de finir.</p>\n"
+"\n"
+"<p>Nous espérons que tout s’est déroulé selon votre convenance et vous "
+"rappelons qu'il vous faut vous connecter sur votre compte e-loue pour <a "
+"href=\"%(protocol)s://%(domain)s%(booking_url)s\">clôturer cette location</"
+"a>.</p>\n"
+"\n"
+"<p>Une fois cette étape effectuée, vous recevrez votre paiement.</p>\n"
+"\n"
+"<p>L'équipe e-loue</p> \n"
+msgstr ""
+
+#: templates/rent/emails/owner_ended_email.txt:2
+#, python-format
+msgid ""
+"\n"
+"Bonjour %(username)s,\n"
+"\n"
+"La location de l’objet %(summary)s, qui a débutée le %(starting_at)s pour "
+"une durée de %(duration)s, vient de finir.\n"
+"\n"
+"Nous espérons que tout s’est déroulé selon votre convenance et vous "
+"rappelons qu'il vous faut vous connecter sur votre compte e-loue pour "
+"clôturer cette location :\n"
+"\n"
+"%(protocol)s://%(domain)s%(booking_url)s\n"
+"\n"
+"Une fois cette étape effectuée, vous recevrez votre paiement.\n"
+"\n"
+"L'équipe e-loue \n"
+msgstr ""
+
+#: templates/rent/partials/booking.html:32
+msgid "Voir les détails"
+msgstr ""
+
+#: templates/rent/partials/booking_status.html:6
+#: templates/rent/partials/booking_status.html:53
+msgid "en cours"
+msgstr ""
+
+#: templates/rent/partials/booking_status.html:7
+msgid "En cours de validation"
+msgstr ""
+
+#: templates/rent/partials/booking_status.html:17
+msgid "Accepter"
+msgstr ""
+
+#: templates/rent/partials/booking_status.html:22
+msgid "Refuser"
+msgstr ""
+
+#: templates/rent/partials/booking_status.html:27
+msgid "Rejetée"
+msgstr ""
+
+#: templates/rent/partials/booking_status.html:30
+msgid "Réservée"
+msgstr ""
+
+#: templates/rent/partials/booking_status.html:39
+#: templates/rent/partials/booking_status.html:59
+msgid "Signaler un incident"
+msgstr ""
+
+#: templates/rent/partials/booking_status.html:42
+msgid "Terminée"
+msgstr ""
+
+#: templates/rent/partials/booking_status.html:47
+msgid "Clôturer"
+msgstr ""
+
+#: templates/rent/partials/booking_status.html:54
+msgid "En cours de clôture"
+msgstr ""
+
+#: templates/rent/partials/booking_status.html:58
+msgid "Clôturée"
+msgstr ""
