@@ -15,7 +15,7 @@ from django.views.decorators.cache import never_cache, cache_page
 from django.views.generic.simple import direct_to_template, redirect_to
 from django.views.generic.list_detail import object_list
 from django.core.context_processors import csrf
-from django.http import HttpResponse, HttpResponseBadRequest
+from django.http import HttpResponse
 from django.contrib.auth import login
 from oauth_provider.models import Token
 
@@ -56,9 +56,7 @@ def authenticate_headless(request):
     if form.is_valid():
         login(request, form.get_user())
         return HttpResponse()
-    elif request.method == "GET":
-        return HttpResponse(csrf(request)["csrf_token"]._proxy____func())
-    return HttpResponseBadRequest()
+    return HttpResponse(csrf(request)["csrf_token"]._proxy____func())
 
 
 @never_cache
