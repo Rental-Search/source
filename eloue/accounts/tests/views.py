@@ -141,3 +141,33 @@ class PatronTest(TestCase):
         self.assertEqual(mail.outbox[0].extra_headers['Reply-To'], "moi@mondomaine.com")
         self.assertFalse('Cc' in mail.outbox[0].extra_headers)
     
+    def test_borrower_history(self):
+        self.client.login(username='alexandre.woog@e-loue.com', password='alexandre')
+        response = self.client.get(reverse('borrower_history'))
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue('booking_list' in response.context)
+    
+    def test_borrower_booking(self):
+        self.client.login(username='alexandre.woog@e-loue.com', password='alexandre')
+        response = self.client.get(reverse('borrower_booking'))
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue('booking_list' in response.context)
+    
+    def test_owner_product(self):
+        self.client.login(username='alexandre.woog@e-loue.com', password='alexandre')
+        response = self.client.get(reverse('owner_product'))
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue('product_list' in response.context)
+    
+    def test_owner_history(self):
+        self.client.login(username='alexandre.woog@e-loue.com', password='alexandre')
+        response = self.client.get(reverse('owner_history'))
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue('booking_list' in response.context)
+    
+    def test_owner_booking(self):
+        self.client.login(username='alexandre.woog@e-loue.com', password='alexandre')
+        response = self.client.get(reverse('owner_booking'))
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue('booking_list' in response.context)
+    
