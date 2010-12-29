@@ -31,29 +31,29 @@
 {% block title %}
 {% if booking.state == booking.STATE.AUTHORIZING %}
 	{% if booking.borrower == user %}
-		Location en cours de validation
+		{% trans "Location en cours de validation" %}
 	{% endif %}
 {% endif %}
 {% if booking.state == booking.STATE.AUTHORIZED %}
- 	Location réservée
+ 	{% trans "Location réservée" %}
 {% endif %}
 {% if booking.state == booking.STATE.REJECTED %}
-	Location rejetée
+	{% trans "Location rejetée" %}
 {% endif %}
 {% if booking.state == booking.STATE.PENDING %}
- 	Location à venir
+ 	{% trans "Location à venir" %}
 {% endif %}
 {% if booking.state == booking.STATE.ONGOING %}
- 	Location en cours
+ 	{% trans "Location en cours" %}
 {% endif %}
 {% if booking.state == booking.STATE.ENDED %}
- Location terminée
+ {% trans "Location terminée" %}
 {% endif %}
 {% if booking.state == booking.STATE.CLOSING %}
-	Location en cours de clôture
+	{% trans "Location en cours de clôture" %}
 {% endif %}
 {% if booking.state == booking.STATE.CLOSED %}
- Location clôturer
+ {% trans "Location clôturer" %}
 {% endif %}
 {% endblock %}
 
@@ -118,62 +118,62 @@
 			</div>
 			{% if request.user == booking.borrower %}
 				<div class="pl-footer">
-					Propriétaire :	 <a href="{{ booking.product.owner.get_absolute_url }}" class="owner">{{ booking.product.owner.username }}</a> | {{ booking.product.address.city|capfirst }}, {{ booking.product.address.zipcode }}
+					{% trans "Propriétaire :" %}	 <a href="{{ booking.product.owner.get_absolute_url }}" class="owner">{{ booking.product.owner.username }}</a> | {{ booking.product.address.city|capfirst }}, {{ booking.product.address.zipcode }}
 				</div>
 			{% endif %}
 			{% if request.user == booking.owner %}
 				<div class="pl-footer">
-					Locataire : <a href="{{ booking.borrower.get_absolute_url }}" class="owner">{{ booking.borrower.get_full_name }}</a>
+					{% trans "Locataire :" %} <a href="{{ booking.borrower.get_absolute_url }}" class="owner">{{ booking.borrower.get_full_name }}</a>
 				</div>
 			{% endif%}
 		</div>
 		<div class="content-header x8 first">
-			<h2>Dates et total</h2>
+			<h2>{% trans "Dates et total" %}</h2>
 		</div>
 		<div class="booking-resume x8 first">
 			<table>
 				<tr>
-					<th>Début :</th>
+					<th>{% trans "Début :" %}</th>
 					<td>
 						{{ booking.started_at|date:"l j F Y"|capfirst }}
 					</td>
 				</tr>
 				<tr>
-					<th>Fin :</th>
+					<th>{% trans "Fin :" %}</th>
 					<td>
                         {{ booking.ended_at|date:"l j F Y"|capfirst }}
 					</td>
 				</tr>
 				<tr>
-					<th>Prix par jour :</th>
+					<th>{% trans "Prix par jour :" %}</th>
 					<td class="number">{{ booking.product.prices.day|first }}</td>
 				</tr>
 				<tr>
-					<th>Durée de la location :</th>
+					<th>{% trans "Durée de la location :" %}</th>
 					<td class="number">{{ booking.started_at|timesince:booking.ended_at }}</td>
 				</tr>
 				<tr class="total">
-					<th>Total :</th>
+					<th>{% trans "Total :" %}</th>
 					<td class="number">{{ booking.total_amount|quantize }} €</td>
 				</tr>
 			</table>
 		</div>
 		{% if booking.owner == user and booking.state == booking.STATE.CLOSED %}
 		<div class="content-header x8 first">
-			<h2>Détails de la transaction</h2>
+			<h2>{% trans "Détails de la transaction" %}</h2>
 		</div>
 		<div class="booking-resume x8 first">
 			<table>
 				<tr>
-					<th>Avant commission :</th>
+					<th>{% trans "Avant commission :" %}</th>
 					<td class="number">{{ booking.total_amount|quantize }} &euro;</td>
 				</tr>
 				<tr>
-					<th>Commission :</th>
+					<th>{% trans "Commission :" %}</th>
 					<td class="number">{{ booking.total_commission|quantize }} &euro;</td>
 				</tr>
 				<tr class="total">
-					<th>Montant net perçu :</th>
+					<th>{% trans "Montant net perçu :" %}</th>
 					<td class="number">{{ booking.net_price|quantize:".00,floor" }} €</td>
 				</tr>
 			</table>

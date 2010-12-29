@@ -4,7 +4,7 @@
  <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-  <title>{% filter striplinebreak %}{% block title %}{% endblock %} {% if is_paginated and page_obj.has_previous %}- {% trans "Page" %} {{ page_obj.number }}{% endif %} - e-loue{% endfilter %}</title>
+  <title>{% filter striplinebreak %}{% block title %}{% endblock %} {% if is_paginated and page_obj.has_previous %}- {% trans "Page" %} {{ page_obj.number }}{% endif %} - {% trans "e-loue" %}{% endfilter %}</title>
   <meta name="description" content="{% filter striplinebreak %}{% block description %}Plateforme pour louer ou mettre en location tout type d'objet : materiel, reception, mariage, sono, utilitaires, ski{% endblock %}{% if is_paginated and page_obj.has_previous %} Page {{ page_obj.number }}{% endif %}{% endfilter %}">
   <meta name="google-site-verification" content="JxKbPmnlcJagHiSTQcwcZaA2XWBbpU1ZVHmJ6529HT0" />
   <link rel="shortcut icon" href="{{ MEDIA_URL }}favicon.ico">
@@ -111,7 +111,7 @@
 				</div>
 				<div class="x12 twitter-info">
 				<p>
-					<span class="twitter-time">{{ announcement.creation_date|date:"l j F Y"|capfirst }}<span> sur <a href="http://blog.e-loue.com">e-loue blog</a>
+					<span class="twitter-time">{{ announcement.creation_date|date:"l j F Y"|capfirst }}<span> {% trans "sur" %} <a href="http://blog.e-loue.com">{% trans "e-loue blog" %}</a>
 				</p>
 			</div>
 		{% endwith %}

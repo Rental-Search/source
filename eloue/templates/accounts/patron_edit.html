@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load i18n product paginator %}
 
-{% block title %}Votre profil{% endblock %}
+{% block title %}{% trans "Votre profil" %}{% endblock %}
 
 {% block content %}
 <div id="menu" class="clearfix">
@@ -26,7 +26,7 @@
 			{% if form.is_professional %}
 			<tr>
 				<td colspan="2" {% if form.is_professional.errors %} class="error-field" {% endif %}>
-					<label>Êtes-vous un professionnel ? :</label>
+					<label>{{ form.is_professional.label }} {% if form.is_professional.field.required %}*{% endif %} :</label>
 					{{ form.is_professional }} oui
 					{% if form.is_professional.errors %}
 					    {% for error in form.is_professional.errors %}
@@ -37,7 +37,7 @@
 				</td>
 			</tr>
 			<tr class="company-name">
-				<th><label>Nom de la société * :</label></th>
+				<th><label>{{ form.company_name.label }} {% if form.company_name.field.required %}*{% endif %} :</label></th>
 				<td {% if form.company_name.errors %} class="error-field" {% endif %}>
 					{{ form.company_name }}
 					{% if form.company_name.errors %}
@@ -51,7 +51,7 @@
 			{% endif %}
 			{% if form.email %}
 			<tr>
-				<th><label>Email * :</label></th>
+				<th><label>{{ form.email.label }} {% if form.email.field.required %}*{% endif %} :</label></th>
 				<td {% if form.email.errors %} class="error-field" {% endif %}>
 					{{ form.email }}
 					{% if form.email.errors %}
@@ -65,7 +65,7 @@
 			{% endif %}
 			{% if form.username %}
 			<tr>
-				<th><label>Pseudo * :</label></th>
+				<th><label>{{ form.username.label }} {% if form.username.field.required %}*{% endif %} :</label></th>
 				<td {% if form.username.errors %} class="error-field" {% endif %}>
 					{{ form.username }}
 					{% if form.username.errors %}
@@ -79,7 +79,7 @@
 			{% endif %}
 			{% if form.civility %}
 			<tr>
-				<th><label>Civilité * :</label></th>
+				<th><label>{{ form.civility.label }} {% if form.civility.field.required %}*{% endif %} :</label></th>
 				<td {% if form.civility.errors %} class="error-field" {% endif %}>
 					{{ form.civility }}
 					{% if form.civility.errors %}
@@ -93,7 +93,7 @@
 			{% endif %}
 			{% if form.first_name %}
 			<tr>
-				<th><label>Prénom * :</label></th>
+				<th><label>{{ form.first_name.label }} {% if form.first_name.field.required %}*{% endif %} :</label></th>
 				<td {% if form.first_name.errors %} class="error-field" {% endif %}>
 					{{ form.first_name }}
 					{% if form.first_name.errors %}
@@ -107,7 +107,7 @@
 			{% endif %}
 			{% if form.last_name %}
 			<tr>
-				<th><label>Nom * :</label></th>
+				<th><label>{{ form.last_name.label }} {% if form.last_name.field.required %}*{% endif %} :</label></th>
 				<td {% if form.last_name.errors %} class="error-field" {% endif %}>
 					{{ form.last_name }}
 					{% if form.last_name.errors %}
@@ -120,7 +120,7 @@
 			</tr>
 			<tr>
 				<td colspan="2" {% if form.is_professional.errors %} class="error-field" {% endif %}>
-					<label>Souhaitez-vous recevoir des informations de e-loue ? :</label>
+					<label>{% trans "Souhaitez-vous recevoir des informations de e-loue ?" %} :</label>
 					{{ form.is_subscribed }} oui
 					{% if form.is_professional.errors %}
 					    {% for error in form.is_professional.errors %}
@@ -134,8 +134,8 @@
 		</table>
 	</div>
 	<div class="submit-wizard x9">
-		<a href="{% url patron_edit %}">Annuler</a> ou 
-		<input type="submit" class="btn big-green" value="Sauvegarder" />
+		<a href="{% url patron_edit %}">{% trans "Annuler" %}</a> {% trans "ou" %} 
+		<input type="submit" class="btn big-green" value="{% trans "Sauvegarder" %}" />
 	</form>
 	</div>
 </div>

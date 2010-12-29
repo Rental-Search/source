@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load i18n product paginator %}
 
-{% block title %}Vos produits mis en locations{% endblock %}
+{% block title %}{% trans "Vos produits mis en locations" %}{% endblock %}
 
 {% block content %}
 <div id="menu" class="clearfix">
@@ -48,7 +48,7 @@
 			  		<div class="pl-price">
 			   			{% with product.prices.day|first as price %}
 							<span class="price">{{ price }}</span><br />
-							<span class="unit">par {{ price.unit|unit }}</span>
+							<span class="unit">{% trans "par" %} {{ price.unit|unit }}</span>
 			   			{% endwith %}
 			  		</div>
 			  		<div class="pl-btn">

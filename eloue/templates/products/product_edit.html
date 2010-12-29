@@ -64,7 +64,7 @@
 				<tr>
 					<th><label>{% trans "Prix location * :" %}</label></th>
 					<td {% if form.price.errors %} class="error-field" {% endif %}>
-						{{ form.price }} <span class="unit">&euro;</span> par jour
+						{{ form.price }} <span class="unit">&euro;</span> {% trans "par jour" %}
 						{% if form.price.errors %}
 						    {% for error in form.price.errors %}
 										<br />

@@ -5,7 +5,7 @@
 		{% if form.is_professional %}
 		<tr>
 			<td colspan="2" {% if form.is_professional.errors %} class="error-field" {% endif %}>
-				<label>Êtes-vous un professionnel ? :</label>
+				<label>{{ form.is_professional.label }} {% if form.is_professional.field.required %}*{% endif%} :</label>
 				{{ form.is_professional }} oui
 				{% if form.is_professional.errors %}
 				    {% for error in form.is_professional.errors %}
@@ -16,7 +16,7 @@
 			</td>
 		</tr>
 		<tr class="company-name">
-			<th><label>Nom de la société * :</label></th>
+			<th><label>{{ form.company_name.label }} {% if form.company_name.field.required %}*{% endif %} :</label></th>
 			<td {% if form.company_name.errors %} class="error-field" {% endif %}>
 				{{ form.company_name }}
 				{% if form.company_name.errors %}
@@ -30,7 +30,7 @@
 		{% endif %}
 		{% if form.username %}
 		<tr>
-			<th><label>Pseudo * :</label></th>
+			<th><label>{{ form.username.label }} {% if form.username.field.required %}*{% endif %} :</label></th>
 			<td {% if form.username.errors %} class="error-field" {% endif %}>
 				{{ form.username }}
 				{% if form.username.errors %}
@@ -44,7 +44,7 @@
 		{% endif %}
 		{% if form.password1 %}
 		<tr>
-			<th><label>Mot de passe * :</label></th>
+			<th><label>{{ form.password1.label }} {% if form.password1.field.required %}*{% endif %} :</label></th>
 			<td {% if form.password1.errors %} class="error-field" {% endif %}>
 				{{ form.password1 }}
 				{% if form.password1.errors %}
@@ -58,7 +58,7 @@
 		{% endif %}
 		{% if form.password2 %}
 		<tr>
-			<th><label>A nouveau * :</label></th>
+			<th><label>{{ form.password2.label }} {% if form.password2.field.required %}*{% endif %} :</label></th>
 			<td {% if form.password2.errors %} class="error-field" {% endif %}>
 				{{ form.password2 }}
 				{% if form.password2.errors %}
@@ -72,7 +72,7 @@
 		{% endif %}
 		{% if form.first_name %}
 		<tr>
-			<th><label>Prénom * :</label></th>
+			<th><label>{{ form.first_name.label }} {% if form.first_name.field.required %}*{% endif %} :</label></th>
 			<td {% if form.first_name.errors %} class="error-field" {% endif %}>
 				{{ form.first_name }}
 				{% if form.first_name.errors %}
@@ -86,7 +86,7 @@
 		{% endif %}
 		{% if form.last_name %}
 		<tr>
-			<th><label>Nom * :</label></th>
+			<th><label>{{ form.last_name.label }} {% if form.last_name.field.required %}*{% endif %} :</label></th>
 			<td {% if form.last_name.errors %} class="error-field" {% endif %}>
 				{{ form.last_name }}
 				{% if form.last_name.errors %}
@@ -100,7 +100,7 @@
 		{% endif%}
 		{% if form.phones %}
 		<tr>
-			<th><label>Téléphone * :</label></th>
+			<th><label>{{ form.phones.label }} {% if form.phones.field.required %}*{% endif %} :</label></th>
 			<td {% if form.phones.errors %} class="error-field" {% endif %}>
 				{{ form.phones }}
 				{% if form.phones.errors %}
@@ -117,9 +117,9 @@
 			<th>
 				<label>
 						{% if form.phones %}
-							Nouveau Numéro :
+							{% trans "Nouveau Numéro :" %}
 						{% else %}
-							Téléphone * :
+							{% trans "Téléphone" %} * :
 						{% endif %}
 				</label>
 			</th>
@@ -136,7 +136,7 @@
 		{% endif %}
 		{% if form.addresses %}
 		<tr>
-			<th><label>Adresse * :</label></th>
+			<th><label>{{ form.addresses.label }} {% if form.addresses.field.required %}*{% endif %}:</label></th>
 			<td {% if form.addresses.errors %} class="error-field" {% endif %}>
 				{{ form.addresses }}
 				{% if form.addresses.errors %}
@@ -153,9 +153,9 @@
 			<th rowspan="3">
 				<label>
 					{% if form.addresses %}
-						Nouvelle adresse :
+						{% trans "Nouvelle adresse :" %}
 					{% else %}
-						Adresse * :
+						{% trans "Adresse" %} * :
 					{% endif %}
 				</label>
 			</th>
@@ -204,6 +204,7 @@
 		{% endif %}
 		{% if form.username %}
 		<tr>
+		 {% blocktrans %}
 			<th>
 				Conditions<br/ > générales :
 			</th>
@@ -391,25 +392,28 @@
 					E-loue SAS - RCS Paris 509 679 593 TVA Intracommunautaire : FR49509679593<br />
 				</code>
 			</td>
+		  {% endblocktrans %}
 		</tr>
 		<tr>
 			<th>
 			</th>
 			<td class="terms">
+			 {% blocktrans %}
 				En cliquant sur <strong>"Continuer &rarr;"</strong> en dessous, vous acceptez <a href="/conditions-generales/" target="_blank">les conditions générales</a>.
+			 {% endblocktrans %}
 			</th>
 		</tr>
 		{% endif %}
 	</table>
-	<p class="required-field">* = champ obligatoire</p>
+	<p class="required-field">{% trans "* = champ obligatoire" %}</p>
 </div>
 <div class="submit-wizard x9">
 	<input type="hidden" name="{{ step_field }}" value="{{ step0 }}" />
 	{{ previous_fields|safe }}
 	{% if product %}
-	 <a href="{{ product.get_absolute_url }}">Annuler</a> ou 
+	 <a href="{{ product.get_absolute_url }}">{% trans "Annuler" %}</a> {% trans "ou" %} 
 	{% else %}
-	 <a href="{% url home %}">Annuler</a> ou 
-	{% endif %}<input type="submit" class="btn big-green" value="Continuer &rarr;" />
+	 <a href="{% url home %}">{% trans "Annuler" %}</a> {% trans "ou" %} 
+	{% endif %}<input type="submit" class="btn big-green" value="{% trans "Continuer &rarr;" %}" />
 </form>
 </div>

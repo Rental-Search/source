@@ -77,7 +77,7 @@ class EmailAuthenticationForm(forms.Form):
     
 
 class EmailPasswordResetForm(PasswordResetForm):
-    email = forms.EmailField(label=_("E-mail"), max_length=75, widget=forms.TextInput(attrs={
+    email = forms.EmailField(label=_("Email"), max_length=75, widget=forms.TextInput(attrs={
         'autocapitalize': 'off', 'autocorrect': 'off', 'class': 'inb'
     }))
     
@@ -109,16 +109,16 @@ class EmailPasswordResetForm(PasswordResetForm):
     
 
 class PatronEditForm(forms.ModelForm):
-    username = forms.RegexField(label=_("Username"), max_length=30, regex=r'^[\w.@+-]+$',
+    username = forms.RegexField(label=_(u"Pseudo"), max_length=30, regex=r'^[\w.@+-]+$',
         help_text=_("Required. 30 characters or fewer. Letters, digits and @/./+/-/_ only."),
         error_messages={'invalid': _("This value may contain only letters, numbers and @/./+/-/_ characters.")},
         widget=forms.TextInput(attrs={'class': 'inm'}))
-    first_name = forms.CharField(required=True, widget=forms.TextInput(attrs={'class': 'inm'}))
-    last_name = forms.CharField(required=True, widget=forms.TextInput(attrs={'class': 'inm'}))
-    email = forms.EmailField(label=_("E-mail"), max_length=75, widget=forms.TextInput(attrs={
+    first_name = forms.CharField(label=_(u"Prénom"), required=True, widget=forms.TextInput(attrs={'class': 'inm'}))
+    last_name = forms.CharField(label=_(u"Nom"), required=True, widget=forms.TextInput(attrs={'class': 'inm'}))
+    email = forms.EmailField(label=_(u"Email"), max_length=75, widget=forms.TextInput(attrs={
         'autocapitalize': 'off', 'autocorrect': 'off', 'class': 'inm'}))
-    is_professional = forms.BooleanField(required=False, initial=False)
-    company_name = forms.CharField(required=False, widget=forms.TextInput(attrs={'class': 'inm'}))
+    is_professional = forms.BooleanField(label=_(u"Êtes-vous un professionnel ?"), required=False, initial=False)
+    company_name = forms.CharField(label=_(u"Nom de la société"), required=False, widget=forms.TextInput(attrs={'class': 'inm'}))
     is_subscribed = forms.BooleanField(required=False, initial=False)
     
     def __init__(self, *args, **kwargs):
@@ -206,29 +206,29 @@ class PhoneNumberForm(forms.ModelForm):
 
 def make_missing_data_form(instance, required_fields=[]):
     fields = SortedDict({
-        'username': forms.RegexField(label=_("Username"), max_length=30, regex=r'^[\w.@+-]+$',
+        'username': forms.RegexField(label=_(u"Pseudo"), max_length=30, regex=r'^[\w.@+-]+$',
             help_text=_("Required. 30 characters or fewer. Letters, digits and @/./+/-/_ only."),
             error_messages={'invalid': _("This value may contain only letters, numbers and @/./+/-/_ characters.")},
             widget=forms.TextInput(attrs={'class': 'inm'})
         ),
-        'password1': forms.CharField(required=True, widget=forms.PasswordInput(attrs={'class': 'inm'})),
-        'password2': forms.CharField(required=True, widget=forms.PasswordInput(attrs={'class': 'inm'})),
-        'is_professional': forms.BooleanField(required=False, initial=False),
-        'company_name': forms.CharField(required=False, widget=forms.TextInput(attrs={'class': 'inm'})),
-        'first_name': forms.CharField(required=True, widget=forms.TextInput(attrs={'class': 'inm'})),
-        'last_name': forms.CharField(required=True, widget=forms.TextInput(attrs={'class': 'inm'})),
+        'password1': forms.CharField(label=_(u"Mot de passe"), required=True, widget=forms.PasswordInput(attrs={'class': 'inm'})),
+        'password2': forms.CharField(label=_(u"A nouveau"), required=True, widget=forms.PasswordInput(attrs={'class': 'inm'})),
+        'is_professional': forms.BooleanField(label=_(u"Êtes-vous un professionnel ?"), required=False, initial=False),
+        'company_name': forms.CharField(label=_(u"Nom de la société"), required=False, widget=forms.TextInput(attrs={'class': 'inm'})),
+        'first_name': forms.CharField(label=_(u"Prénom"), required=True, widget=forms.TextInput(attrs={'class': 'inm'})),
+        'last_name': forms.CharField(label=_(u"Nom"), required=True, widget=forms.TextInput(attrs={'class': 'inm'})),
         'addresses__address1': forms.CharField(widget=forms.Textarea(attrs={'class': 'inm street', 'placeholder': 'Rue'})),
         'addresses__zipcode': forms.CharField(required=True, widget=forms.TextInput(attrs={
             'class': 'inm zipcode', 'placeholder': 'Code postal'
         })),
         'addresses__city': forms.CharField(required=True, widget=forms.TextInput(attrs={'class': 'inm town', 'placeholder': 'Ville'})),
         'addresses__country': forms.ChoiceField(choices=COUNTRY_CHOICES, required=True, widget=forms.Select(attrs={'class': 'selm'})),
-        'phones__phone': PhoneNumberField(required=True, widget=forms.TextInput(attrs={'class': 'inm'}))
+        'phones__phone': PhoneNumberField(label=_(u"Téléphone"), required=True, widget=forms.TextInput(attrs={'class': 'inm'}))
     })
     
     # Do we have an address ?
     if instance and instance.addresses.exists():
-        fields['addresses'] = forms.ModelChoiceField(required=False,
+        fields['addresses'] = forms.ModelChoiceField(label=_(u"Addresse"), required=False,
             queryset=instance.addresses.all(), widget=forms.Select(attrs={'class': 'selm'}))
         for f in fields.keys():
             if "addresses" in f:
@@ -236,7 +236,7 @@ def make_missing_data_form(instance, required_fields=[]):
     
     # Do we have a phone number ?
     if instance and instance.phones.exists():
-        fields['phones'] = forms.ModelChoiceField(required=False, queryset=instance.phones.all(), widget=forms.Select(attrs={'class': 'selm'}))
+        fields['phones'] = forms.ModelChoiceField(label=_(u"Téléphone"), required=False, queryset=instance.phones.all(), widget=forms.Select(attrs={'class': 'selm'}))
         fields['phones__phone'].required = False
     
     # Do we have a password ?
@@ -337,12 +337,12 @@ def make_missing_data_form(instance, required_fields=[]):
     return fields != {}, form_class
     
 class ContactForm(forms.Form):
-    subject = forms.CharField(max_length=100, required=True, widget=forms.TextInput(attrs={'class': 'inm'}))
-    message = forms.CharField(required=True, widget=forms.Textarea(attrs={'class': 'inm'}))
+    subject = forms.CharField(label=_(u"Sujet"), max_length=100, required=True, widget=forms.TextInput(attrs={'class': 'inm'}))
+    message = forms.CharField(label=_(u"Message"), required=True, widget=forms.Textarea(attrs={'class': 'inm'}))
     sender = forms.EmailField(label=_(u"Email"), max_length=75, required=True, widget=forms.TextInput(attrs={
         'autocapitalize': 'off', 'autocorrect': 'off', 'class': 'inm'
     }))
-    cc_myself = forms.BooleanField(required=False)
+    cc_myself = forms.BooleanField(label=_(u"Je souhaite recevoir une copie de ce message."), required=False)
     
 
 

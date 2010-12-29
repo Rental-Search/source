@@ -54,7 +54,7 @@
 		<div class="product-price">
 		 {% with product.prices.day|first as price %}
 		  <span class="price">{{ price }}</span>
-		  <span class="unit">{% blocktrans with price.unit|unit as unit %} / par {{ unit }}{% endblocktrans %}</span>
+		  <span class="unit">{% blocktrans with price.unit|unit as unit %} / {% trans "par" %} {{ unit }}{% endblocktrans %}</span>
 		 {% endwith %}
 		</div>
 		<form id="booking_create" action="" method="post" class="form">
@@ -71,7 +71,9 @@
 			</p>
 		</div>
 		<div id="booking-total" class="booking-total">
-		 <p>{% trans "Total : " %}<span class="day">1 jour,</span> soit <span class="total-price">{{ product.prices.day|first }}</span></p>
+		 {% blocktrans with product.product.day|first as day_price %}
+		  <p>Total : <span class="day">1 jour,</span> soit <span class="total-price">{{ day_price }}</span></p>
+		 {% endblocktrans %}
 		</div>
 	</div>
 	<div class="product-booking-bottom x4 first">
@@ -79,7 +81,7 @@
 		<input type="hidden" name="{{ step_field }}" value="{{ step0 }}" />
 	    {{ previous_fields|safe }}
 		<p>
-			<input type="submit" value="{% trans "Réserver" %} &rarr;" class="btn big-green" />
+			<input type="submit" value="{% trans "Réserver &rarr;" %}" class="btn big-green" />
 		</p>
 		</form>
 	</div>

@@ -113,12 +113,12 @@
 					{% endwith %}
 					<div class="pl-distance">
 					 {% if product.geo_distance %}
-					  {{ product.geo_distance|floatformat }} km{{ product.geo_distance|pluralize }}
+					  {{ product.geo_distance|floatformat }} {% trans "km" %}{{ product.geo_distance|pluralize }}
 					 {% endif %}
 					</div>
 					<div class="pl-price">
 					 <span class="price">{{ product.price }}&euro;</span><br />
-					 <span class="unit">par jour</span>
+					 <span class="unit">{% trans "par jour" %}</span>
 					</div>
 					<div class="pl-btn">
 					 <a href="{{ product.url|safe }}" {% if product|nofollow %}rel="nofollow"{% endif %} class="btn small-blue">{% trans "Réserver" %} &rarr;</a>
@@ -160,8 +160,8 @@
 					{{ form.sort }}
 					<label class="labs">{% trans "Restreindre les résultats à un rayon de" %}</label><br />
 					{{ form.r }}
-					<span class="unit">Km</span>
-					<input type="submit" value="Mettre à jour" class="btn medium-blue"/>
+					<span class="unit">{% trans "Km" %}</span>
+					<input type="submit" value="{% trans "Mettre à jour" %}" class="btn medium-blue"/>
 				</p>
 			</form>
 		</div>

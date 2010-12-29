@@ -1,22 +1,22 @@
 {% extends "base.html" %}
 {% load i18n product %}
 
-{% block title %}Identification{% endblock %}
+{% block title %}{% trans "Identification" %}{% endblock %}
 
 {% block content %}
 <div id="content" class="clearfix">
 	<div class="sbs x12">
 		<div class="sbs-header">
-			<h1>Réservation</h1>
+			<h1>{% trans "Réservation" %}</h1>
 		</div>
 		<ol class="sbs-steps">
-				<li class="on">1.Identifiez-vous</li>
-				<li class="off">2.Confirmez votre réservation</li>
+				<li class="on">{% trans "1. Identifiez-vous" %}</li>
+				<li class="off">{% trans "2. Confirmez votre réservation" %}</li>
 		</ol>
-		<a href="{% url faq-topic-list %}" class="btn big-blue">Obtenir de l'aide</a>
+		<a href="{% url faq-topic-list %}" class="btn big-blue">{% trans "Obtenir de l'aide" %}</a>
 	</div>
 	<div class="content-header x12">
-		<h2>Identification</h2>
+		<h2>{% trans "Identification" %}</h2>
 	</div>
 	<div class="x9">
 		{% include "accounts/partials/login.html" %}

@@ -1,14 +1,14 @@
 {% extends "base.html" %}
 {% load i18n %}
 
-{% block title %}Réservation enregistrée avec succès{% endblock %}
+{% block title %}{% trans "Réservation enregistrée avec succès" %}{% endblock %}
 
 {% block content %}
 <div class="top-conten	t container clearfix">
 	<h1>{% trans "Réservation terminée avec succès"%}</h1>
 </div>{# top-content #}
 <div class="content container clearfix">
-	<p>Le propriétaire a été informé de votre réservation.</p>
+	<p>{% trans "Le propriétaire a été informé de votre réservation." %}</p>
 </div><!-- content -->
 
 {% endblock %}

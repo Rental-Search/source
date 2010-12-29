@@ -3,7 +3,9 @@
 
 {% block title %}{{ patron.username }}{% endblock %}
 
-{% block description %}{% blocktrans with patron.username as username %}Toutes les locations de {{ username }}{% endblocktrans %}{% endblock %}
+{% block description %}
+ {% blocktrans with patron.username as username %}Toutes les locations de {{ username }}{% endblocktrans %}
+{% endblock %}
 
 {% block content %}
 <div id="top-content" class="search clearfix">
@@ -43,9 +45,11 @@
 	</div>
 	<div class="col2 x9">
 		{% if patron.products %}
-			<h2>{{ patron.products.count }} location{{ patron.products.count|pluralize }}</h2>
+	     {% blocktrans with patron.products.count as count and patron.products.count|pluralize as pluralize %}
+	      <h2>{{ count }} location{{ pluralize }}</h2>
+	     {% endblocktrans %}
 		{% else %}
-			<h2>Pas de location</h2>
+			<h2>{% trans "Pas de location" %}</h2>
 		{% endif %}
 		<ul class="product-list x8 first">
 		 {% for product in product_list %}
@@ -67,11 +71,11 @@
 			  <div class="pl-price">
 			   {% with product.prices.day|first as price %}
 				<span class="price">{{ price }}</span><br />
-				<span class="unit">par {{ price.unit|unit }}</span>
+				<span class="unit">{% trans "par" %} {{ price.unit|unit }}</span>
 			   {% endwith %}
 			  </div>
 			  <div class="pl-btn">
-			   <a href="{{ product.get_absolute_url }}" class="btn small-blue">{% trans "Réserver" %} &rarr;</a>
+			   <a href="{{ product.get_absolute_url }}" class="btn small-blue">{% trans "Réserver &rarr;" %}</a>
 			  </div>
 			 </div>
 			 <div class="pl-footer">

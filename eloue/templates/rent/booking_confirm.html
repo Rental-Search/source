@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load i18n product %}
 
-{% block title %}Confirmez votre réservation{% endblock %}
+{% block title %}{% trans "Confirmez votre réservation" %}{% endblock %}
 
 {% block content %}
 <div id="content" class="clearfix">
@@ -54,32 +54,32 @@
 			</div>
 		</div>
 		<div class="content-header x8 first">
-			<h2>Dates et total</h2>
+			<h2>{% trans "Dates et total" %}</h2>
 		</div>
 		<div class="booking-resume x8 first">
 			<table>
 				<tr>
-					<th>Début :</th>
+					<th>{% trans "Début :" %}</th>
 					<td>
 						{{ preview.started_at|date:"l j F Y"|capfirst }}
 					</td>
 				</tr>
 				<tr>
-					<th>Fin :</th>
+					<th>{% trans "Fin :" %}</th>
 					<td>
                         {{ preview.ended_at|date:"l j F Y"|capfirst }}
 					</td>
 				</tr>
 				<tr>
-					<th>Prix par jour :</th>
+					<th>{% trans "Prix par jour :" %}</th>
 					<td class="number">{{ product.prices.day|first }}</td>
 				</tr>
 				<tr>
-					<th>Durée de la location :</th>
+					<th>{% trans "Durée de la location :" %}</th>
 					<td class="number">{{ preview.started_at|timesince:preview.ended_at }}</td>
 				</tr>
 				<tr class="total">
-					<th>Total :</th>
+					<th>{% trans "Total :" %}</th>
 					<td class="number">{{ preview.total_amount }} €</td>
 				</tr>
 			</table>
@@ -88,31 +88,37 @@
 		 <h2>{% trans "Paiement" %}</h2>
 		</div>
 		<div class="booking-paiement x8 first">
-		 Sur la prochaine page veuillez fournir vos informations de paiement.<br />
-		 Vous ne serez <strong>débité</strong> que <strong>si le propriétaire accepte</strong> votre demande (dans les 32 heures).<br /> 
-		 Si le propriétaire refuse ou ne répond pas, vous ne serez pas prélevé.<br />
+		 {% blocktrans %}
+		  Sur la prochaine page veuillez fournir vos informations de paiement.<br />
+		  Vous ne serez <strong>débité</strong> que <strong>si le propriétaire accepte</strong> votre demande (dans les 32 heures).<br /> 
+		  Si le propriétaire refuse ou ne répond pas, vous ne serez pas prélevé.<br />
+		 {% endblocktrans %}
 		</div>
 		<div class="booking-submit x8 first">
 		    <input type="hidden" name="{{ step_field }}" value="{{ step0 }}" />
 	        {{ previous_fields|safe }}
-			<a href="{{ product.get_absolute_url }}">Annuler</a> ou
-		    <input type="submit" class="btn big-green" value="Payez" />
+			<a href="{{ product.get_absolute_url }}">{% trans "Annuler" %}</a> {% trans "ou" %}
+		    <input type="submit" class="btn big-green" value="{% trans "Payez" %}" />
 		</div>
 	  </form>
 	</div>{# col1 #}
 	<div class="sidebar-box x4">
-		<h3>Louez en toute sécurité !</h3>
+		<h3>{% trans "Louez en toute sécurité !" %}</h3>
 		<ul class="guarantee-list">
 			<li class="guarantee-list-pp">
-				Grâce à <strong>PayPal</strong>, bénéficiez du paiement le plus sécurisé au monde.
+			 {% blocktrans %}
+			  Grâce à <strong>PayPal</strong>, bénéficiez du paiement le plus sécurisé au monde.
+			 {% endblocktrans %}
 			</li>
 			<li class="guarantee-list-tw">
-				Notre <strong>partenaire assureur</strong> garantit l'objets en cas de casse.
+			 {% blocktrans %}
+			  Notre <strong>partenaire assureur</strong> garantit l'objets en cas de casse.
+			 {% endblocktrans %}
 			</li>
 		</ul>
 	</div>
 	<div class="partner-gurantees-list x4">
-		<p>Notre partenaire</p>
+		<p>{% trans "Notre partenaire" %}</p>
 		<img src="{{ MEDIA_URL }}images/paypal2.png" />
 	</div>
 </div>{# content #}
