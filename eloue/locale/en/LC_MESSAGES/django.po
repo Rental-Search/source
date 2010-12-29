@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-12-29 11:19+0100\n"
+"POT-Creation-Date: 2010-12-29 12:04+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -148,7 +148,7 @@ msgid "A nouveau"
 msgstr ""
 
 #: accounts/forms.py:226 accounts/forms.py:239
-#: templates/accounts/partials/missing.html:122
+#: templates/accounts/partials/missing.html:124
 msgid "Téléphone"
 msgstr ""
 
@@ -1311,7 +1311,7 @@ msgid "Contactez e-loue"
 msgstr ""
 
 #: templates/accounts/contact.html:59
-#: templates/accounts/partials/missing.html:408
+#: templates/accounts/partials/missing.html:410
 #: templates/products/product_edit.html:113
 msgid "* = champ obligatoire"
 msgstr ""
@@ -1320,8 +1320,8 @@ msgstr ""
 #: templates/accounts/patron_password.html:66
 #: templates/accounts/patron_paypal.html:44
 #: templates/accounts/partials/login.html:35
-#: templates/accounts/partials/missing.html:414
 #: templates/accounts/partials/missing.html:416
+#: templates/accounts/partials/missing.html:418
 #: templates/products/product_create.html:133
 #: templates/products/product_edit.html:116
 #: templates/rent/booking_confirm.html:100
@@ -1334,8 +1334,8 @@ msgstr ""
 #: templates/accounts/patron_password.html:66
 #: templates/accounts/patron_paypal.html:44
 #: templates/accounts/partials/login.html:35
-#: templates/accounts/partials/missing.html:414
 #: templates/accounts/partials/missing.html:416
+#: templates/accounts/partials/missing.html:418
 #: templates/products/product_create.html:133
 #: templates/products/product_edit.html:116
 #: templates/rent/booking_confirm.html:100
@@ -1666,7 +1666,7 @@ msgstr ""
 
 #: templates/accounts/patron_paypal.html:45
 #: templates/accounts/partials/login.html:36
-#: templates/accounts/partials/missing.html:417
+#: templates/accounts/partials/missing.html:419
 #: templates/products/product_create.html:134
 msgid "Continuer &rarr;"
 msgstr ""
@@ -1683,19 +1683,19 @@ msgstr ""
 msgid "Mot de passe oublié"
 msgstr ""
 
-#: templates/accounts/partials/missing.html:120
-msgid "Nouveau Numéro :"
-msgstr ""
-
-#: templates/accounts/partials/missing.html:156
-msgid "Nouvelle adresse :"
+#: templates/accounts/partials/missing.html:122
+msgid "Nouveau Numéro"
 msgstr ""
 
 #: templates/accounts/partials/missing.html:158
+msgid "Nouvelle adresse :"
+msgstr ""
+
+#: templates/accounts/partials/missing.html:160
 msgid "Adresse"
 msgstr ""
 
-#: templates/accounts/partials/missing.html:207
+#: templates/accounts/partials/missing.html:209
 #, python-format
 msgid ""
 "\n"
@@ -2199,7 +2199,7 @@ msgid ""
 "\t\t  "
 msgstr ""
 
-#: templates/accounts/partials/missing.html:401
+#: templates/accounts/partials/missing.html:403
 msgid ""
 "\n"
 "\t\t\t\tEn cliquant sur <strong>\"Continuer &rarr;\"</strong> en dessous, "
