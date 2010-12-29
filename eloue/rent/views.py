@@ -69,7 +69,7 @@ def pay_ipn(request):
 @require_GET
 def booking_price(request, slug, product_id):
     if not request.is_ajax():
-        return HttpResponseNotAllowed("Method Not Allowed")
+        return HttpResponseNotAllowed(['GET', 'XHR'])
     product = get_object_or_404(Product, pk=product_id)
     form = BookingForm(request.GET, prefix="0", instance=Booking(product=product))
     if form.is_valid():
