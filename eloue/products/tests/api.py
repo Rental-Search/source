@@ -106,7 +106,7 @@ class ApiTest(TestCase):
         self.assertEquals(json['meta']['total_count'], Product.objects.count())
         for product in json['objects']:
             self.assertEquals(D(product['price']),
-                Booking.calculate_price(Product.objects.get(pk=product['id']), start_at, end_at))
+                Booking.calculate_price(Product.objects.get(pk=product['id']), start_at, end_at)[1])
     
     def test_product_creation(self):
         f = open(local_path('../fixtures/bentley.jpg'))

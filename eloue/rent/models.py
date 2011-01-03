@@ -152,7 +152,7 @@ class Booking(models.Model):
         for price in product.prices.filter(unit=unit, started_at__isnull=False, ended_at__isnull=False):
             amount += package(price.amount, price.delta(started_at, ended_at))
         
-        return amount
+        return unit, amount
     
     @transition(source='authorizing', target='authorized') 
     def preapproval(self, cancel_url=None, return_url=None, ip_address=None):

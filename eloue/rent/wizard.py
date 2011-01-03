@@ -50,7 +50,7 @@ class BookingWizard(GenericFormWizard):
         booking_form = form_list[0]
         booking_form.instance.ip = request.META.get('REMOTE_ADDR', None)
         booking_form.instance.total_amount = Booking.calculate_price(booking_form.instance.product,
-            booking_form.cleaned_data['started_at'], booking_form.cleaned_data['ended_at'])
+            booking_form.cleaned_data['started_at'], booking_form.cleaned_data['ended_at'])[1]
         booking_form.instance.borrower = new_patron
         booking = booking_form.save()
         
@@ -79,7 +79,7 @@ class BookingWizard(GenericFormWizard):
             initial = {
                 'started_at': [started_at.strftime('%d/%m/%Y'), started_at.strftime("08:00:00")],
                 'ended_at': [ended_at.strftime('%d/%m/%Y'), ended_at.strftime("08:00:00")],
-                'total_amount': Booking.calculate_price(product, started_at, ended_at)
+                'total_amount': Booking.calculate_price(product, started_at, ended_at)[1]
             }
             initial.update(self.initial.get(step, {}))
             return self.form_list[step](data, files, prefix=self.prefix_for_step(step),

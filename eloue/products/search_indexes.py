@@ -44,7 +44,8 @@ class ProductIndex(QueuedSearchIndex):
     def prepare_price(self, obj):
         # It doesn't play well with season
         now = datetime.datetime.now()
-        return Booking.calculate_price(obj, now, now + datetime.timedelta(days=1))
+        unit, amount = Booking.calculate_price(obj, now, now + datetime.timedelta(days=1))
+        return amount
     
     def get_queryset(self):
         return Product.objects.active()

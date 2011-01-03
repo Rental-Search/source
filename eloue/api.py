@@ -394,7 +394,7 @@ class ProductResource(UserSpecificResource):
             date_start = datetime.now() + timedelta(days=1)
             date_end = date_start + timedelta(days=1)
         
-        bundle.data["price"] = Booking.calculate_price(bundle.obj, date_start, date_end)
+        bundle.data["unit"], bundle.data["price"] = Booking.calculate_price(bundle.obj, date_start, date_end)
         return bundle
     
 

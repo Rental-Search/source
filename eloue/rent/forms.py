@@ -153,7 +153,7 @@ class BookingForm(forms.ModelForm):
         product = self.instance.product
         if (started_at and ended_at):
             try:
-                self.cleaned_data['total_amount'] = Booking.calculate_price(product, started_at, ended_at)
+                self.cleaned_data['total_amount'] = Booking.calculate_price(product, started_at, ended_at)[1]
             except CanNotProve:
                 raise ValidationError(_(u"Vous ne pouvez pas louer cet objet pour ces dates"))
                 

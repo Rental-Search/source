@@ -60,12 +60,21 @@
 
 -   fields:
         name: ''
+        amount: "7"
+        currency: "EUR"
+        product: 2
+        unit: 4
+    model: products.price
+    pk: 8
+
+-   fields:
+        name: ''
         amount: "0.6"
         currency: "EUR"
         product: 2
         unit: 0
     model: products.price
-    pk: 8
+    pk: 9
 
 -   fields:
         name: "Haute saison"
@@ -76,7 +85,7 @@
         started_at: 213
         ended_at: 310
     model: products.price
-    pk: 9
+    pk: 10
 
 -   fields:
         name: "Basse saison"
@@ -87,7 +96,7 @@
         started_at: 311
         ended_at: 212
     model: products.price
-    pk: 10
+    pk: 11
 
 -   fields:
       name : ''
@@ -96,4 +105,4 @@
       product: 4
       unit: 1
     model: products.price
-    pk: 11
+    pk: 12
