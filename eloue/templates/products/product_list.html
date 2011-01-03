@@ -1,5 +1,5 @@
 {% extends "base.html" %}
- {% load cache facets i18n param category product paginator mptt_tags seo %}
+ {% load cache facets i18n param category product paginator mptt_tags seo booking %}
 
 {% block title %}
  {% trans "Location " %}
@@ -117,7 +117,7 @@
 					 {% endif %}
 					</div>
 					<div class="pl-price">
-					 <span class="price">{{ product.price }}&euro;</span><br />
+					 <span class="price">{{ product.price|quantize }}&euro;</span><br />
 					 <span class="unit">{% trans "par jour" %}</span>
 					</div>
 					<div class="pl-btn">
