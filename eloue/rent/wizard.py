@@ -52,7 +52,7 @@ class BookingWizard(GenericFormWizard):
         booking_form = form_list[0]
         
         if new_patron == booking_form.instance.product.owner:
-            messages.info(request, _(u"Vous ne pouvez pas louer vos propres objets"))
+            messages.error(request, _(u"Vous ne pouvez pas louer vos propres objets"))
             return redirect_to(request, booking_form.instance.product.get_absolute_url())
         
         booking_form.instance.ip = request.META.get('REMOTE_ADDR', None)
