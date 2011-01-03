@@ -3,9 +3,11 @@ import datetime
 import urllib
 
 from django.conf import settings
+from django.contrib import messages
 from django.contrib.auth import login
 from django.contrib.sites.models import Site
 from django.core.urlresolvers import reverse
+from django.utils.translation import ugettext_lazy as _
 from django.views.generic.simple import direct_to_template, redirect_to
 
 from django_lean.experiments.models import GoalRecord
@@ -48,6 +50,11 @@ class BookingWizard(GenericFormWizard):
             new_patron, new_address, new_phone = missing_form.save()
         
         booking_form = form_list[0]
+        
+        if new_patron == booking_form.instance.product.owner:
+            messages.info(request, _(u"Vous ne pouvez pas louer vos propres objets"))
+            return redirect_to(booking_form.instance.product.get_absolute_url())
+        
         booking_form.instance.ip = request.META.get('REMOTE_ADDR', None)
         booking_form.instance.total_amount = Booking.calculate_price(booking_form.instance.product,
             booking_form.cleaned_data['started_at'], booking_form.cleaned_data['ended_at'])[1]
