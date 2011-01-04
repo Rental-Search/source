@@ -5,7 +5,6 @@ from django.conf import settings
 from django.contrib.sites.models import Site
 from django.http import HttpResponsePermanentRedirect, HttpResponseForbidden
 
-AFFILIATE_TAG = getattr(settings, 'AFFILIATE_TAG', None)
 USE_HTTPS = getattr(settings, 'USE_HTTPS', True)
 USE_PAYPAL_SANDBOX = getattr(settings, 'USE_PAYPAL_SANDBOX', False)
 VALIDATE_IPN = getattr(settings, 'VALIDATE_IPN', True)
@@ -34,8 +33,6 @@ def secure_required(view_func):
             if USE_HTTPS:
                 site = Site.objects.get(domain="www.e-loue.com")
                 secure_url = "https://%s%s" % (site.domain, request.path)
-                if AFFILIATE_TAG:
-                    secure_url += "?tag=%s" % AFFILIATE_TAG
                 return HttpResponsePermanentRedirect(secure_url)
         return view_func(request, *args, **kwargs)
     return _wrapped_view_func
