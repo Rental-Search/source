@@ -21,6 +21,8 @@ class PhoneNumberField(Field):
         u'+33953870296'
         >>> field.to_python("732-757-2923")
         u'7327572923'
+        >>> field.to_python(None)
+        u''
         """
         if not value:
             return u''
