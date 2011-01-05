@@ -1,12 +1,5 @@
 {% load compressed i18n markup %}
 {% include "header.html" %}
-{% if messages %}
-    {% for message in messages %}
-		<div id="notification" class="notification {% if message.tags %} {{ message.tags }}"{% endif %}>
-			<span id="notification-text">{{ message }}</span>
-		</div>
-    {% endfor %}
-{% endif %}
 <div id="wrapper" class="xgrid">
 	<div id="header" class="clearfix">
 		<div class="logo x2">

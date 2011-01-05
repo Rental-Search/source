@@ -23,6 +23,7 @@ class Command(BaseCommand):
             content = smart_unicode(content, encoding='latin1')
             content = content.replace("<!-- {{PARTNER_ASSETS}} -->", "{% load compressed %}{% block head %}{% compressed_css 'twenty' %}{% endblock %}")
             content = content.replace("<title>20minutes.fr</title>", "<title>Tout louer en ligne avec 20minutes.fr et e-loue.com</title>")
+            content = content.replace("""<div class="mn-doc">""", """{% if messages %}{% for message in messages %}<div id="notification" class="notification {% if message.tags %} {{ message.tags }}"{% endif %}><span id="notification-text">{{ message }}</span></div>{% endfor %}{% endif %}<div class="mn-doc">""")
             header = open(os.path.join(settings.TEMPLATE_DIRS[0], 'header.html'), 'w')
             header.write(content.encode('utf-8'))
             header.close()
