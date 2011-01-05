@@ -9,7 +9,7 @@ SITE_ID = 2
 
 USE_HTTPS = True
 
-SESSION_COOKIE_DOMAIN = 'eloue.20minutes.fr'
+SESSION_COOKIE_DOMAIN = 'e-loue.20minutes.fr'
 
 CACHE_MIDDLEWARE_KEY_PREFIX = '20m'
 
