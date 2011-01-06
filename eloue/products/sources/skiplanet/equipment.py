@@ -33,7 +33,7 @@ def parse_equipment(args):
 
 class SourceClass(BaseSource):
     def get_prefix(self):
-        return 'sources.skiplanet'
+        return 'sources.skiplanet.equipment'
     
     def get_equipment(self, pool):
         response, content = Http().request("http://www.ski-planet.com/affiliation/flux-materiel.xml")

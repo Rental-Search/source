@@ -71,7 +71,7 @@ class SourceClass(BaseSource):
                     'categories': ['auto-et-moto', 'voiture'],
                     #'lat': lat, 'lng': lon,
                     'city': match.Route.PickUp.Location.get('locName'),
-                    'price': match.Price.pyval / 3,
+                    'price': match.Price.pyval,
                     'owner': 'elocationdevoitures', 
                     'owner_url': 'http://www.elocationdevoitures.fr/',
                     'url': 'http://www.elocationdevoitures.fr/SearchResults.do?country=%(country)s&city=%(city)s&location=%(location)s&dropLocation=%(location)s&puYear=%(pickup_year)d&puMonth=%(pickup_month)d&puDay=%(pickup_day)d&puHour=12&puMinute=20&doYear=%(dropoff_year)d&doMonth=%(dropoff_month)d&doDay=%(dropoff_day)d&doHour=12&doMinute=30&driversAge=%(age)d&affiliateCode=eloue_fr' % {
