@@ -3,7 +3,7 @@ from decimal import Decimal as D
 from httplib2 import Http
 from lxml import objectify
 
-from . import BaseSource, Product
+from .. import BaseSource, Product
 
 
 def parse_flat(args):
