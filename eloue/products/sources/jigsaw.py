@@ -4,7 +4,7 @@ import re
 from datetime import datetime, timedelta
 from httplib2 import Http
 from lxml import objectify
-from urllib import urlencode, quote_plus
+from urllib import urlencode
 
 from django.utils.encoding import smart_str
 
@@ -12,6 +12,10 @@ from . import BaseSource, Product
 
 
 class SourceClass(BaseSource):
+    def request(self, xml):
+        response, content = Http().request("http://www.elocationdevoitures.fr/service/ServiceRequest.do?%s" % urlencode({'xml': xml}))
+        return objectify.fromstring(content)         
+    
     def build_xml(self, params):
         xml = """<SearchRQ>
             <Credentials username="eloue_fr" password="eloue" remoteIp="127.0.0.1" />
@@ -29,24 +33,22 @@ class SourceClass(BaseSource):
 
     def get_cities(self):
         cities = []
-        for location in ['France - Continent', 'France - Corse']:
-             response, content = Http().request("http://www.elocationdevoitures.fr/service/ServiceRequest.do?xml=%s" % quote_plus('<PickUpCityListRQ><Credentials username="eloue_fr" password="eloue" remoteIp="127.0.0.1" /><Country>%(country)s</Country></PickUpCityListRQ>' % {'country': location}))
-             root = objectify.fromstring(content)
-             for city in root.xpath('//City'):
-                 cities.append({'location': location, 'city': smart_str(city.pyval)})
+        for country in ['France - Continent', 'France - Corse']:
+            root = self.request("""<PickUpCityListRQ><Credentials username="eloue_fr" password="eloue" remoteIp="127.0.0.1" /><Country>%(country)s</Country></PickUpCityListRQ>""" % {'country': country})
+            for city in root.xpath('//City'):
+                cities.append({'country': country, 'city': smart_str(city.pyval)})
         return cities
     
     def get_locations(self):
         locations = []
         for city in self.get_cities():
-            response, content = Http().request("http://www.elocationdevoitures.fr/service/ServiceRequest.do?xml=%s" % quote_plus('<PickUpLocationListRQ><Credentials username="eloue_fr" password="eloue" remoteIp="127.0.0.1" /><Country>%(location)s</Country><City>%(city)s</City></PickUpLocationListRQ>' % city))
-            root = objectify.fromstring(content)
+            root = self.request("""<PickUpLocationListRQ><Credentials username="eloue_fr" password="eloue" remoteIp="127.0.0.1" /><Country>%(country)s</Country><City>%(city)s</City></PickUpLocationListRQ>""" % city)
             for location in root.xpath('//Location'):
                 locations.append({
                     'id': location.get('id'),
                     'name': location.pyval,
                     'city': city['city'],
-                    'country': city['location'],
+                    'country': city['country'],
                 })
         return locations
     
@@ -55,15 +57,12 @@ class SourceClass(BaseSource):
         pickup_date = datetime.now() + timedelta(days=7)
         dropoff_date = pickup_date + timedelta(days=1)
         for location in self.get_locations():
-            response, content = Http().request("http://www.elocationdevoitures.fr/service/ServiceRequest.do?%s" % urlencode({
-                'xml': self.build_xml({ 'age': 25, 'location': location['id'],
-                    'pickup_year': pickup_date.year, 'pickup_month': pickup_date.month, 'pickup_day': pickup_date.day, 'pickup_hour': 12, 'pickup_minute': 30,
-                    'dropoff_year': dropoff_date.year, 'dropoff_month': dropoff_date.month, 'dropoff_day': dropoff_date.day, 'dropoff_hour': 12, 'dropoff_minute': 30,
-                })
+            root = self.request(self.build_xml({ 'age': 25, 'location': location['id'],
+                'pickup_year': pickup_date.year, 'pickup_month': pickup_date.month, 'pickup_day': pickup_date.day, 'pickup_hour': 12, 'pickup_minute': 30,
+                'dropoff_year': dropoff_date.year, 'dropoff_month': dropoff_date.month, 'dropoff_day': dropoff_date.day, 'dropoff_hour': 12, 'dropoff_minute': 30,
             }))
-            root = objectify.fromstring(content)
             for match in root.xpath('//Match'):
-                lat, lon = BaseSource().get_coordinates("%s" % (match.Route.PickUp.Location.get('locName'),))
+                lat, lon = BaseSource().get_coordinates(match.Route.PickUp.Location.get('locName'))
                 docs.append(Product({
                     'id': '%s.%s' % (SourceClass().get_prefix(), match.Vehicle.get('id')),
                     'summary': match.Vehicle.Name.pyval,
