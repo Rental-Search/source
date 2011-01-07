@@ -2,12 +2,13 @@
 import datetime
 import logbook
 
+from django.core.exceptions import ValidationError
 from django.contrib.gis.db import models
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.contrib.gis.geos import Point
 from django.db.models import permalink
-from django.utils.encoding import smart_unicode, smart_str
+from django.utils.encoding import smart_unicode
 from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import ugettext
 from django.template.defaultfilters import slugify
@@ -115,7 +116,6 @@ class Patron(User):
         return ('patron_detail', [self.slug])
     
     def clean(self):
-        from django.core.exceptions import ValidationError
         if self.pk:  # TODO : Might need some improvements and more tests
             if Patron.objects.exclude(pk=self.pk).filter(email=self.email).exists():
                 raise ValidationError(_(u"Un utilisateur utilisant cet email existe déjà"))
@@ -141,8 +141,16 @@ class Patron(User):
         >>> patron = Patron(paypal_email="elmo@paypal.com")
         >>> patron.has_paypal()
         True
+        >>> patron = Patron(paypal_email="")
+        >>> patron.has_paypal()
+        False
         """
-        return self.paypal_email != None
+        from django.core.validators import validate_email
+        try:
+            validate_email(self.paypal_email)
+            return True
+        except ValidationError:
+            return False
     
     def create_account(self, return_url=None):
         try:
