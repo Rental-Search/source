@@ -69,7 +69,7 @@ class SourceClass(BaseSource):
                     'summary': match.Vehicle.Name.pyval,
                     'description': match.Vehicle.Description.pyval,
                     'categories': ['auto-et-moto', 'voiture'],
-                    #'lat': lat, 'lng': lon,
+                    'lat': lat, 'lng': lon,
                     'city': match.Route.PickUp.Location.get('locName'),
                     'price': match.Price.pyval,
                     'owner': 'elocationdevoitures', 
