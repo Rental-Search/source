@@ -123,7 +123,7 @@ msgstr "Are you a professional?"
 
 #: accounts/forms.py:121 accounts/forms.py:217
 msgid "Nom de la société"
-msgstr "Comapny name"
+msgstr "Company name"
 
 #: accounts/forms.py:132 accounts/forms.py:319
 msgid "Vous devez entrer le nom de votre société"

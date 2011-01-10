@@ -102,7 +102,7 @@ class AccountWizardTest(TestCase):
             'wizard_step': 0
         })
         self.assertTrue(response.status_code, 200)
-        self.assertContains(response, "Pseudo")
+        self.assertContains(response, "1-username")
     
     @patch.object(MultiPartFormWizard, 'security_hash')
     def test_second_step(self, mock_return):
