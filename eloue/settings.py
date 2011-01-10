@@ -61,6 +61,7 @@ USE_I18N = True
 # If you set this to False, Django will not format dates, numbers and
 # calendars according to the current locale
 USE_L10N = True
+FORMAT_MODULE_PATH = 'eloue.formats'
 
 # Absolute path to the directory that holds media.
 # Example: "/home/media/media.lawrence.com/"
