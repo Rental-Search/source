@@ -21,13 +21,13 @@ from eloue.accounts.models import Patron, PhoneNumber, COUNTRY_CHOICES
 from eloue.accounts.widgets import ParagraphRadioFieldRenderer
 
 STATE_CHOICES = (
-    (0, "Je n'ai pas encore de compte e-loue"),
-    (1, "J'ai déjà un compte e-loue et mon mot de passe est :"),
+    (0, _(u"Je n'ai pas encore de compte e-loue")),
+    (1, _(u"J'ai déjà un compte e-loue et mon mot de passe est :")),
 )
 
 PAYPAL_ACCOUNT_CHOICES = (
-    (0, "Je n'ai pas encore de compte PayPal"),
-    (1, "J'ai déjà un compte PayPal et mon email est :"),
+    (0, _(u"Je n'ai pas encore de compte PayPal")),
+    (1, _(u"J'ai déjà un compte PayPal et mon email est :")),
 )
 
 
@@ -217,11 +217,11 @@ def make_missing_data_form(instance, required_fields=[]):
         'company_name': forms.CharField(label=_(u"Nom de la société"), required=False, widget=forms.TextInput(attrs={'class': 'inm'})),
         'first_name': forms.CharField(label=_(u"Prénom"), required=True, widget=forms.TextInput(attrs={'class': 'inm'})),
         'last_name': forms.CharField(label=_(u"Nom"), required=True, widget=forms.TextInput(attrs={'class': 'inm'})),
-        'addresses__address1': forms.CharField(widget=forms.Textarea(attrs={'class': 'inm street', 'placeholder': 'Rue'})),
+        'addresses__address1': forms.CharField(widget=forms.Textarea(attrs={'class': 'inm street', 'placeholder': _(u'Rue')})),
         'addresses__zipcode': forms.CharField(required=True, widget=forms.TextInput(attrs={
-            'class': 'inm zipcode', 'placeholder': 'Code postal'
+            'class': 'inm zipcode', 'placeholder': _(u'Code postal')
         })),
-        'addresses__city': forms.CharField(required=True, widget=forms.TextInput(attrs={'class': 'inm town', 'placeholder': 'Ville'})),
+        'addresses__city': forms.CharField(required=True, widget=forms.TextInput(attrs={'class': 'inm town', 'placeholder': _(u'Ville')})),
         'addresses__country': forms.ChoiceField(choices=COUNTRY_CHOICES, required=True, widget=forms.Select(attrs={'class': 'selm'})),
         'phones__phone': PhoneNumberField(label=_(u"Téléphone"), required=True, widget=forms.TextInput(attrs={'class': 'inm'}))
     })
