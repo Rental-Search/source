@@ -251,6 +251,7 @@ class CategoryResource(ModelResource):
         serializer = PlistSerializer()
     
     def build_tree(self):
+        from mptt.utils import tree_item_iterator
         def build_node(node):
             bits = []
             for child in node.get_children():
@@ -261,7 +262,7 @@ class CategoryResource(ModelResource):
         roots = Category.tree.root_nodes()
         nodes = []
         for root in roots:
-            nodes.extend(root.get_descendants())
+            nodes.extend(root.get_children())
         return [build_node(node) for node in nodes]
     
     def get_tree(self, request, **kwargs):
