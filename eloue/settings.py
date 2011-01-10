@@ -236,6 +236,15 @@ COMPRESS_CSS = {
             'media': 'screen',
         },
     },
+		'mobile': {
+			'source_filenames': (
+				'css/mobile.css',
+			),
+			'output_filename': 'css/mobile.r?.css',
+			'extra_context': {
+				'media': 'screen',
+			},
+		},
 }
 COMPRESS_JS = {
     'application': {
