@@ -251,7 +251,6 @@ class CategoryResource(ModelResource):
         serializer = PlistSerializer()
     
     def build_tree(self):
-        from mptt.utils import tree_item_iterator
         def build_node(node):
             bits = []
             for child in node.get_children():
