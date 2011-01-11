@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
 import types
 
+from django.contrib.gis.db.models import GeoManager
 from django.db.models import Manager
 
 
-class ProductManager(Manager):
+class ProductManager(GeoManager):
     def active(self):
         return self.filter(is_archived=False, is_allowed=True)
     
