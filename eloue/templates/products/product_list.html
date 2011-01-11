@@ -8,9 +8,9 @@
  {% endfor %}
  {% if form.cleaned_data.l %}
   &rsaquo; {{ form.cleaned_data.l|capfirst }}
-  {% if form.cleaned_data.q %}
-    &rsaquo; "{{ form.cleaned_data.q }}"
-  {% endif %}
+ {% endif %}
+ {% if form.cleaned_data.q %}
+   &rsaquo; "{{ form.cleaned_data.q }}"
  {% endif %}
 {% endblock %}
 
@@ -21,9 +21,9 @@
  {% endfor %}
  {% if form.cleaned_data.l %}
   &rsaquo; {{ form.cleaned_data.l|capfirst }}
-  {% if form.cleaned_data.q %}
+ {% endif %}
+ {% if form.cleaned_data.q %}
     &rsaquo; "{{ form.cleaned_data.q }}"
-  {% endif %}
  {% endif %}
 {% endblock %}
 

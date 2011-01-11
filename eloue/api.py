@@ -21,6 +21,8 @@ from django.conf import settings
 from django.conf.urls.defaults import url
 from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
+from django.contrib.gis.geos import Point
+from django.contrib.gis.measure import Distance
 from django.db import IntegrityError
 
 from eloue.geocoder import GoogleGeocoder
@@ -307,6 +309,7 @@ class ProductResource(UserSpecificResource):
     owner = fields.ForeignKey(UserResource, 'owner', full=False, null=True)
     pictures = fields.ToManyField(PictureResource, 'pictures', full=True, null=True)
     prices = fields.ToManyField(PriceResource, 'prices', full=True, null=True)
+    distance = fields.RelatedField(Distance, 'distance', null=True)
     
     FILTER_GET_REQUESTS = False
     
@@ -316,6 +319,7 @@ class ProductResource(UserSpecificResource):
         resource_name = 'product'
         include_absolute_url = True
         fields = ['id', 'quantity', 'summary', 'description', 'deposit_amount']
+        ordering = ['distance']
         filtering = {
             'category': ALL_WITH_RELATIONS,
             'owner': ALL_WITH_RELATIONS,
@@ -349,6 +353,13 @@ class ProductResource(UserSpecificResource):
         
         return orm_filters
     
+    def get_object_list(self, request):
+        object_list = super(ProductResource, self).get_object_list(request)
+        if "l" in request.GET:
+            name, (lat, lon), radius = GoogleGeocoder().geocode(request.GET['l'])
+            object_list = object_list.distance(Point((lat, lon)), field_name='address__position')
+        return object_list
+    
     def obj_create(self, bundle, request=None, **kwargs):
         """
         On product creation, if the request contains a "picture" parameter
@@ -356,7 +367,7 @@ class ProductResource(UserSpecificResource):
         And creates a picture linked to the product
         """
         picture_data = bundle.data.get("picture", None)
-        day_price_data = bundle.data.get("day_price", None)
+        day_price_data = bundle.data.get("price", None)
         if picture_data:
             bundle.data.pop("picture")
         
@@ -394,6 +405,8 @@ class ProductResource(UserSpecificResource):
             date_start = datetime.now() + timedelta(days=1)
             date_end = date_start + timedelta(days=1)
         
+        if bundle.data["distance"]:
+            bundle.data["distance"] = bundle.data["distance"].km
         bundle.data["unit"], bundle.data["price"] = Booking.calculate_price(bundle.obj, date_start, date_end)
         return bundle
     
