@@ -367,7 +367,7 @@ class ProductResource(UserSpecificResource):
         And creates a picture linked to the product
         """
         picture_data = bundle.data.get("picture", None)
-        day_price_data = bundle.data.get("day_price", None)
+        day_price_data = bundle.data.get("price", None)
         if picture_data:
             bundle.data.pop("picture")
         
