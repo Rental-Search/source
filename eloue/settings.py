@@ -52,6 +52,12 @@ TIME_ZONE = 'Europe/Paris'
 # http://www.i18nguy.com/unicode/language-identifiers.html
 LANGUAGE_CODE = 'fr'
 
+ugettext = lambda s: s
+LANGUAGES = (
+    ('fr', ugettext('Français')),
+    ('en', ugettext('English')),
+)
+
 SITE_ID = 1
 
 # If you set this to False, Django will make some optimizations so as not
@@ -374,6 +380,6 @@ OAUTH_CALLBACK_VIEW = "eloue.accounts.views.oauth_callback"
 USE_ETAGS = False
 
 # Affiliation configuraton
-AFFILIATION_SOURCES = getattr(local, 'AFFILIATION_SOURCES', ['lv', 'skiplanet.equipment'])
+AFFILIATION_SOURCES = getattr(local, 'AFFILIATION_SOURCES', ['lv', 'skiplanet.equipment', 'jigsaw'])
 AFFILIATION_BATCHSIZE = 1000
 LV_FTP = "ftp.bo.location-et-vacances.com"
