@@ -4,12 +4,12 @@
 {% block title %}{% trans "Contactez e-loue" %}{% endblock %}
 
 {% block content %}
-<div id="menu" class="clearfix">
-	<div class="ht-title x4">
-		<h1>{% trans "Contactez-nous" %}</h1>
-	</div>
-</div>
 <div id="content-dash" class="clearfix">
+	<div id="menu" class="dash">
+		<div class="ht-title x4">
+			<h1>{% trans "Contactez-nous" %}</h1>
+		</div>
+	</div>
 	<div class="contact more-info x9">
 	<form class="form" action="{% url contact %}" method="POST">
 		{% csrf_token %}
