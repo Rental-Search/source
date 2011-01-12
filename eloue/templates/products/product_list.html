@@ -55,7 +55,25 @@
 	</div>
 	</form>
 </div>{# top-content #}
-<div id="content" class="result clearfix">
+<div id="content-product" class="result clearfix">
+	<div class="breadcrumb">
+		<ul class="x12 breadcrumbs">
+			<li class="first"><a href="{% url home %}">{% trans "Accueil" %}</a></li>
+			{% for crumb in breadcrumbs|facets %}
+			<li><a href="">{{ crumb.pretty_value|capfirst }}</a></li>
+			{% endfor %}
+			{% if form.cleaned_data.q %}
+				{% if form.cleaned_data.l %}
+				<li><a href="{% facet_url breadcrumbs -"sort" -"l" -"r" %}">{% trans "location" %} "{{ form.cleaned_data.q }}"</a></li>
+				{% else %}
+				<li>{% trans "location" %} "{{ form.cleaned_data.q }}"</li>
+				{% endif %}
+			{% endif %}
+			{% if form.cleaned_data.l %}
+			<li>{{ form.cleaned_data.l|capfirst }}</li>
+			{% endif %}
+		</ul>
+	</div>
 	<div class="content-header x12">
 		{% if form.cleaned_data.q %}
 		 <h1>Résultat{{ paginator.count|pluralize }} pour <strong>{{ form.cleaned_data.q }}</strong></h1>

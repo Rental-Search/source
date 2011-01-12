@@ -26,7 +26,13 @@
 	</div>
 	</form>
 </div>{# top-content #}
-<div id="content" class="product clearfix">
+<div id="content-product" class="product clearfix">
+	<div class="breadcrumb">
+		<ul class="x12 breadcrumbs">
+			<li class="first"><a href="{% url home %}">{% trans "Accueil" %}</a></li>
+			<li><a href="">{{ product.summary|capitalize }}</a></li>
+		</ul>
+	</div>
 	<div class="content-header x12">
 		<h1>{{ product.summary|capitalize }}</h1>
 	</div>

@@ -40,3 +40,4 @@ sphinx>=1.0.2
 -e git://github.com/e-loue/rollout.git#egg=rollout
 -e git://github.com/e-loue/queues.git#egg=queues
 -e git://github.com/e-loue/queued_search.git#egg=queued_search
+PIL
