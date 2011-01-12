@@ -35,6 +35,18 @@ class BookingWizardTest(TestCase):
         response = self.client.get(reverse('booking_create', args=[self.product.slug, self.product.id]))
         self.assertEquals(response.status_code, 200)
     
+    def test_zero_step_archived(self):
+        self.product.is_archived = True
+        self.product.save()
+        response = self.client.get(reverse('booking_create', args=[self.product.slug, self.product.id]))
+        self.assertEquals(response.status_code, 404)
+    
+    def test_zero_step_allowed(self):
+        self.product.is_allowed = False
+        self.product.save()
+        response = self.client.get(reverse('booking_create', args=[self.product.slug, self.product.id]))
+        self.assertEquals(response.status_code, 404)
+    
     def test_zero_step_redirect(self):
         response = self.client.get(reverse('booking_create', args=['perceuse-visseuse', self.product.id]))
         self.assertRedirects(response, reverse('booking_create', args=[self.product.slug, self.product.id]), status_code=301)

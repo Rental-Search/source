@@ -91,7 +91,7 @@ def start():
 
 def restart():
     """Restarts your application"""
-    sudo("/etc/init.d/apache2 force-reload")
+    sudo("/etc/init.d/apache2 reload")
 
 def stop():
     """Stop the application servers"""

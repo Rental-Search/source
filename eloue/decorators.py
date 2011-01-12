@@ -4,6 +4,7 @@ from httplib2 import Http
 from django.conf import settings
 from django.contrib.sites.models import Site
 from django.http import HttpResponsePermanentRedirect, HttpResponseForbidden
+from django.utils import translation
 
 USE_HTTPS = getattr(settings, 'USE_HTTPS', True)
 USE_PAYPAL_SANDBOX = getattr(settings, 'USE_PAYPAL_SANDBOX', False)
@@ -56,3 +57,11 @@ def ownership_required(model, object_key='object_id', ownership=None):
             return view_func(request, *args, **kwargs)
         return inner_wrapper
     return wrapper
+
+def activate_language(method):
+    def _wrapped_method(*args, **options):
+        translation.activate(settings.LANGUAGE_CODE)
+        return_value = method(*args, **options)
+        translation.deactivate()
+        return return_value
+    return _wrapped_method
