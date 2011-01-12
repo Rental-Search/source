@@ -4,15 +4,15 @@
 {% block title %}{% trans "Votre tableau de bord" %}{% endblock %}
 
 {% block content %}
-<div id="menu" class="clearfix">
-	<ul class="x12">
-		<li class="menu-tab first selected">{% trans "Tableau de bord" %}</li>
-		<li class="menu-tab"><a href="{% url owner_booking %}">{% trans "Propriétaire" %}</a></li>
-		<li class="menu-tab"><a href="{% url borrower_booking %}">{% trans "Locataire" %}</a></li>
-		<li class="menu-tab"><a href="{% url patron_edit %}">{% trans "Mon compte" %}</a></li>
-	</ul>
-</div>
 <div id="content-dash" class="clearfix">
+	<div id="menu" class="dash">
+		<ul class="x12">
+			<li class="menu-tab first selected">{% trans "Tableau de bord" %}</li>
+			<li class="menu-tab"><a href="{% url owner_booking %}">{% trans "Propriétaire" %}</a></li>
+			<li class="menu-tab"><a href="{% url borrower_booking %}">{% trans "Locataire" %}</a></li>
+			<li class="menu-tab"><a href="{% url patron_edit %}">{% trans "Mon compte" %}</a></li>
+		</ul>
+	</div>
 	<div class="x3">
 		<div class="welcome-dash x3 first">
 			<p class="pseudo">{{ user.username }}</p>

@@ -4,21 +4,21 @@
 {% block title %}{% trans "Votre profil" %}{% endblock %}
 
 {% block content %}
-<div id="menu" class="clearfix">
-	<ul class="x12">
-		<li class='menu-tab first'><a href="{% url dashboard %}">{% trans "Tableau de bord" %}</a></li>
-		<li class='menu-tab'><a href="{% url owner_booking %}">{% trans "Propriétaire" %}</a></li>
-		<li class='menu-tab'><a href="{% url borrower_booking %}">{% trans "Locataire" %}</a></li>
-		<li class='menu-tab selected'><a href="{% url patron_edit %}">{% trans "Mon compte" %}</a></li>
-	</ul>
-</div>
-<div id="sub-menu" class="clearfix">
-	<ul class="x12">
-		<li class="sub-tab first selected"><a href="{% url patron_edit %}">{% trans "Votre profil" %}</a></li>
-		<li class="sub-tab"><a href="{% url patron_edit_password %}">{% trans "Modification du mot de passe" %}</a></li>
-	</ul>
-</div>
 <div id="content-dash" class="clearfix">
+	<div id="menu">
+		<ul class="x12">
+			<li class='menu-tab first'><a href="{% url dashboard %}">{% trans "Tableau de bord" %}</a></li>
+			<li class='menu-tab'><a href="{% url owner_booking %}">{% trans "Propriétaire" %}</a></li>
+			<li class='menu-tab'><a href="{% url borrower_booking %}">{% trans "Locataire" %}</a></li>
+			<li class='menu-tab selected'><a href="{% url patron_edit %}">{% trans "Mon compte" %}</a></li>
+		</ul>
+	</div>
+	<div id="sub-menu">
+		<ul class="x12">
+			<li class="sub-tab first selected"><a href="{% url patron_edit %}">{% trans "Votre profil" %}</a></li>
+			<li class="sub-tab"><a href="{% url patron_edit_password %}">{% trans "Modification du mot de passe" %}</a></li>
+		</ul>
+	</div>
 	<div class="more-info x9">
 		<form class="form" action="" method="POST">
 			{% csrf_token %}

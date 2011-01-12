@@ -366,7 +366,7 @@ html[xmlns] .clearfix {
         margin-top: 10px;
       }
       
-  #top-content, #content, #footer
+  #top-content, #content, #footer, #content-product, #content-dash
   {
     box-shadow: 1px 1px 0px rgba(193, 208, 222, 0.75);
 	  -moz-box-shadow: 1px 1px 0px rgba(193, 208, 222, 0.75);
@@ -436,22 +436,8 @@ html[xmlns] .clearfix {
     margin-bottom: 20px;
     padding: 10px 0px 0px;
   }
-  
-  #content-dash
-  {
-    background-color: #FFF;
-    border: 1px solid #ccdbe9;
-    -moz-border-radius-bottomleft: 5px;
-    -moz-border-radius-bottomright: 5px;
-    -webkit-border-bottom-left-radius: 5px;
-		-webkit-border-bottom-right-radius: 5px;
-		border-bottom-left-radius: 5px;
-		border-bottom-right-radius: 5px;
-		padding: 10px 0px;
-		margin-bottom: 20px;
-  }
 
-	#content-product
+	#content-product, #content-dash
 	{
 		background-color: #FFF;
     border: 1px solid #ccdbe9;
