@@ -3,6 +3,7 @@ import datetime
 import logbook
 import types
 import random
+import urllib
 
 from decimal import Decimal as D, ROUND_CEILING, ROUND_FLOOR
 from fsm.fields import FSMField
@@ -192,6 +193,17 @@ class Booking(models.Model):
             self.state = BOOKING_STATE.REJECTED
             log.error(e)
         self.save()
+    
+    def send_recovery_email(self):
+        context = {
+            'booking': self,
+            'preapproval_url':settings.PAYPAL_COMMAND % urllib.urlencode({
+                'cmd': '_ap-preapproval',
+                'preapprovalkey': self.preapproval_key
+            })
+        }
+        message = create_alternative_email('rent/emails/borrower_recovery', context, settings.DEFAULT_FROM_EMAIL, [self.borrower.email])
+        message.send()
     
     def send_ask_email(self):
         context = {'booking': self}

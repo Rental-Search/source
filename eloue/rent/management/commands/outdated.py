@@ -6,12 +6,15 @@ from datetime import datetime, timedelta
 from django.conf import settings
 from django.core.management.base import BaseCommand
 
+from eloue.decorators import activate_language
+
 log = logbook.Logger('eloue.rent.outdated')
 
 
 class Command(BaseCommand):
     help = "Find outdated rentals and move them in OUTDATED state."
     
+    @activate_language
     def handle(self, *args, **options):
         """Find outdated rentals and move them in OUTDATED state."""
         from eloue.rent.models import Booking

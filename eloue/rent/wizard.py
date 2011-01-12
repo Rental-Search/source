@@ -8,6 +8,7 @@ from django.contrib.auth import login
 from django.contrib.sites.models import Site
 from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext_lazy as _
+from django.shortcuts import get_object_or_404
 from django.views.generic.simple import direct_to_template, redirect_to
 
 from django_lean.experiments.models import GoalRecord
@@ -99,7 +100,7 @@ class BookingWizard(GenericFormWizard):
             self.extra_context['preview'] = form.cleaned_data
     
     def parse_params(self, request, *args, **kwargs):
-        product = Product.objects.get(pk=kwargs['product_id'])
+        product = get_object_or_404(Product.objects.active(), pk=kwargs['product_id'])
         self.extra_context['product'] = product
         self.extra_context['search_form'] = FacetedSearchForm()
     

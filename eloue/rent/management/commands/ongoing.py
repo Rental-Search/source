@@ -8,6 +8,8 @@ from django.contrib.sites.models import Site
 from django.core.urlresolvers import reverse
 from django.core.management.base import BaseCommand
 
+from eloue.decorators import activate_language
+
 USE_HTTPS = getattr(settings, 'USE_HTTPS', True)
 
 log = logbook.Logger('eloue.rent.ongoing')
@@ -16,6 +18,7 @@ log = logbook.Logger('eloue.rent.ongoing')
 class Command(BaseCommand):
     help = "Start a renting by holding money on a hourly basis"
     
+    @activate_language
     def handle(self, *args, **options):
         """Find ongoing rent, hold money and the ipn callback do the rest by moving them in ONGOING state"""
         from eloue.rent.models import Booking
