@@ -58,6 +58,8 @@ LANGUAGES = (
     ('en', ugettext('English')),
 )
 
+DEFAULT_CURRENCY = 'EUR'
+
 SITE_ID = 1
 
 # If you set this to False, Django will make some optimizations so as not
