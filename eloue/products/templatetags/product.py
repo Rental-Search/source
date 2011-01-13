@@ -1,15 +1,19 @@
 # -*- coding: utf-8 -*-
+import locale
 import re
+
+from decimal import Decimal as D
 
 from django.template import Library
 from django.template.defaultfilters import stringfilter
 from django.utils.encoding import force_unicode
 from django.utils.html import escape
 from django.utils.safestring import SafeData, mark_safe
+from django.utils import translation
 
 register = Library()
 
-from eloue.products.models import CURRENCY, UNIT
+from eloue.products.models import UNIT
 
 
 @register.filter
@@ -81,15 +85,18 @@ def unit(value):
 @stringfilter
 def currency(value):
     """
-    >>> currency('USD')
-    u'$'
-    >>> currency('AUD')
-    u''
+    Display price with monetary currency from the current locale.
+    It totally ignores currency linked with value.
     """
-    for name, symbol in CURRENCY:
-        if name == value:
-            return symbol
-    return u''
+    old_locale = locale.getlocale()
+    try:
+        locale.setlocale(locale.LC_ALL, 
+            translation.to_locale("%s.UTF-8" % translation.get_language()))
+        return locale.currency(D(value), True, True)
+    except (TypeError, locale.Error):
+        return D(value)
+    finally:
+        locale.setlocale(locale.LC_ALL, old_locale)
 
 
 @register.filter
