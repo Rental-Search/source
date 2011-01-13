@@ -447,6 +447,7 @@ html[xmlns] .clearfix {
     margin-bottom: 20px;
     padding: 0px 0px 0px;
 	}
+	#content-dash { padding-bottom: 20px; }
 	
 		.breadcrumb
 		{
