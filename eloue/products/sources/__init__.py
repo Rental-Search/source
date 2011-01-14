@@ -28,7 +28,7 @@ class Product(dict):
             'categories_exact': self['categories'],
             'owner_exact': self['owner'],
             'price_exact': self['price'],
-            'thumbnail': self._camo_url(self['thumbnail']),
+            'thumbnail': self._camo_url(self['thumbnail']) if 'thumbnail' in self and self['thumbnail'] else None,
         })
     
     def _camo_url(self, url):
