@@ -451,7 +451,6 @@ html[xmlns] .clearfix {
 	
 		.breadcrumb
 		{
-			display: block;
 			float: left;
 		  background-color: #f3f8fa;
 		  border-bottom: 1px solid #ccdbe9;
@@ -463,24 +462,28 @@ html[xmlns] .clearfix {
 		  border-top-left-radius: 5px;
 		  border-top-right-radius: 5px;
 			margin-bottom: 15px;
+			overflow: hidden;
 		}
 			
 			.breadcrumbs
 			{
-				margin: 0;
 				padding: 0;
+				margin: 0;
+				height: 24px;
+				overflow: hidden;
 			}
 			.breadcrumbs li
 			{
-				background: transparent url("../images/b-sign.png") no-repeat 0 0;
+				background: transparent url("../images/b-sign.png") no-repeat right -2px;
 				display: inline;
-				float: left;
-				padding: 5px 31px;
+				padding: 5px 31px 5px 20px;
 				margin: 0;
-				height: 18px;
+				line-height: 25px;
 				font-weight: bold;
+				overflow: hidden;
+				font-size: 12px;
 			}
-			.breadcrumbs li.first { background: none; }
+			.breadcrumbs .lastb { background: none; }
 			.breadcrumbs li a { font-weight: normal; }
 			
 

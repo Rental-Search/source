@@ -29,10 +29,15 @@
 <div id="content-product" class="product clearfix">
 	<div class="breadcrumb">
 		<ul class="x12 breadcrumbs">
-			<li class="first"><a href="{% url home %}">{% trans "Accueil" %}</a></li>
-			<li><a href="">{{ product.summary|capitalize }}</a></li>
+			<li><a href="{% url home %}">{% trans "Accueil" %}</a></li>
+			{% for category in product.category.get_ancestors %}
+			 <li><a href="{{ category.get_absolute_url }}">{{ category.name|capfirst }}</a></li>
+			{% endfor %}
+			<li><a href="{{ product.category.get_absolute_url }}">{% trans "Location" %} {{ product.category|capfirst }}</a></li>
+			<li class="lastb">{{ product.summary|capitalize }}</li>
 		</ul>
 	</div>
+	
 	<div class="content-header x12">
 		<h1>{{ product.summary|capitalize }}</h1>
 	</div>
