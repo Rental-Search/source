@@ -376,3 +376,6 @@ USE_ETAGS = False
 AFFILIATION_SOURCES = getattr(local, 'AFFILIATION_SOURCES', ['lv', 'skiplanet.equipment', 'jigsaw'])
 AFFILIATION_BATCHSIZE = 1000
 LV_FTP = "ftp.bo.location-et-vacances.com"
+
+# Camo configuration
+CAMO_KEY = getattr(local, 'CAMO_KEY')

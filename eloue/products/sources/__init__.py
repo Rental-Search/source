@@ -1,7 +1,11 @@
 # -*- coding: utf-8 -*-
+import hashlib
+import hmac
+
 from datetime import datetime
 from pysolr import Solr
 from multiprocessing import Pool, cpu_count
+from urlparse import urlparse, urljoin
 
 from django.conf import settings
 from django.utils import importlib
@@ -11,6 +15,8 @@ from eloue.geocoder import GoogleGeocoder
 SOURCES = getattr(settings, 'AFFILIATION_SOURCES', ['skiplanet', 'lv'])
 BATCHSIZE = getattr(settings, 'AFFILIATION_BATCHSIZE', 1000)
 
+CAMO_URL = getattr(settings, 'CAMO_URL', 'https://media.e-loue.com/proxy/')
+CAMO_KEY = getattr(settings, 'CAMO_KEY')
 
 class Product(dict):
     def __init__(self, *args, **kwargs):  # TODO: Need improvement
@@ -22,7 +28,20 @@ class Product(dict):
             'categories_exact': self['categories'],
             'owner_exact': self['owner'],
             'price_exact': self['price'],
+            'thumbnail': self._camo_url(self['thumbnail']),
         })
+    
+    def _camo_url(self, url):
+        parts = urlparse(url)
+        parts = {
+            'scheme': parts.scheme,
+            'hostname': parts.hostname,
+            'path': parts.path if not parts.path.startswith('//') else parts.path[1:],
+            'params': parts.params
+        }
+        url = urljoin("%(scheme)s://%(hostname)s" % parts, "%(path)s?%(params)s" % parts)
+        digest = hmac.new(CAMO_KEY, url, hashlib.sha1).hexdigest()
+        return "%s%s?url=%s" % (CAMO_URL, digest, url)
     
 
 class BaseSource(object):
