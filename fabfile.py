@@ -1,7 +1,7 @@
-from fabric.api import env, run, sudo, local, put, runs_once, cd
+from functools import wraps
+from fabric.api import env, run, sudo, local, put, runs_once, cd, abort
 from fabric.operations import _shell_escape
 from fabric.state import output
-
 
 def _run(command, shell=True, pty=True, combine_stderr=True, sudo=False, user=None):
     real_command = command
@@ -21,6 +21,24 @@ def _run(command, shell=True, pty=True, combine_stderr=True, sudo=False, user=No
         print("[%s] run: %s" % (env.host_string, command))
     local("ssh -A %s '%s'" % (env.host_string, real_command))
 
+def notify(func):
+    """Notify campfire of a deploy"""
+    @wraps(func)
+    def decorated(*args, **kwargs):
+        from pinder import Campfire
+        if not 'campfire_domain' in env:
+            return
+        if not 'current_release' in env:
+            releases()
+        deployed = run("cd %(current_release)s; git rev-parse HEAD" % {'current_release': env.current_release})[:7]
+        deploying = local("git rev-parse HEAD")[:7]
+        return_value = func(*args, **kwargs)
+        c = Campfire(env.campfire_domain, env.campfire_token, ssl=True)
+        room = c.find_room_by_name(env.campfire_room)
+        compare_url = "%(repo_url)s/compare/%(deployed)s...%(deploying)s" % {'repo_url': env.github_url, 'deployed':deployed, 'deploying':deploying}
+        room.speak("%s has deployed new code on %s : %s" % (env.user, env.name, compare_url))
+        return return_value
+    return decorated
 
 def production():
     """Defines production environment"""
@@ -222,19 +240,19 @@ def cold():
     compress()
     start()
 
+@notify
 def deploy():
     """Deploys your project. This calls both `update' and `restart'"""
-    notify()
     update()
     migrate()
     compress()
     restart()
 
+@notify
 def soft():
     """Deploys your project without updating the environnement"""
     if not env.has_key('current_release'):
         releases()
-    notify()
     with cd(env.current_release):
         if 'git_branch' not in env:
             env.git_branch = "master"
@@ -251,17 +269,3 @@ def diff():
     deployed = run("cd %(current_release)s; git rev-parse HEAD" % {'current_release': env.current_release})[:7]
     deploying = local("git rev-parse HEAD")[:7]
     local("git difftool %(deployed)s...%(deploying)s" % {'deployed':deployed, 'deploying':deploying})
-
-def notify():
-    """Notify campfire of a deploy"""
-    from pinder import Campfire
-    if not 'current_release' in env:
-        releases()
-    if not 'campfire_domain' in env:
-        return
-    c = Campfire(env.campfire_domain, env.campfire_token, ssl=True)
-    room = c.find_room_by_name(env.campfire_room)
-    deployed = run("cd %(current_release)s; git rev-parse HEAD" % {'current_release': env.current_release})[:7]
-    deploying = local("git rev-parse HEAD")[:7]
-    compare_url = "%(repo_url)s/compare/%(deployed)s...%(deploying)s" % {'repo_url': env.github_url, 'deployed':deployed, 'deploying':deploying}
-    room.speak("deploying new code on %s : %s" % (env.name, compare_url))
