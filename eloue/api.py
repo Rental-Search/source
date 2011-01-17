@@ -198,10 +198,7 @@ class UserResource(OAuthResource):
     def obj_create(self, bundle, **kwargs):
         """Creates a new inactive user"""
         data = bundle.data
-        try:
-            bundle.obj = Patron.objects.create_user(data["username"], data["email"], data["password"])
-        except IntegrityError, e:
-            raise BadRequest(e)
+        bundle.obj = Patron.objects.create_user(data["username"], data["email"], data["password"])
         return bundle
     
 

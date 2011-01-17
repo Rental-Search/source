@@ -9,6 +9,7 @@ from decimal import Decimal as D
 from haystack import site
 
 from django.core.urlresolvers import reverse
+from django.db import transaction
 from django.test import Client, TestCase
 from django.utils import simplejson
 
@@ -151,6 +152,32 @@ class ApiTest(TestCase):
         self.assertEquals(patron.username, 'chuck')
         self.assertEquals(patron.email, 'chuck.berry@chess-records.com')
         self.assertEquals(patron.is_active, True)
+    
+    @transaction.commit_on_success
+    def test_account_creation_with_duplicate_email(self):
+        post_data = {
+            'username': 'chuck.berry',
+            'password': 'begood',
+            'email': 'chuck.berry@chess-records.com'
+        }
+        request = self._get_request(method='POST')
+        response = self.client.post(reverse("api_dispatch_list", args=['1.0', 'user']),
+            data=simplejson.dumps(post_data),
+            content_type='application/json',
+            **self._get_headers(request))
+        self.assertEquals(response.status_code, 201)
+        self.assertTrue('Location' in response)
+        post_data = {
+            'username': 'berry.chuck',
+            'password': 'begood',
+            'email': 'chuck.berry@chess-records.com'
+        }
+        request = self._get_request(method='POST')
+        response = self.client.post(reverse("api_dispatch_list", args=['1.0', 'user']),
+            data=simplejson.dumps(post_data),
+            content_type='application/json',
+            **self._get_headers(request))
+        self.assertEquals(response.status_code, 500)
     
     def tearDown(self):
         for product in Product.objects.all():
