@@ -177,7 +177,7 @@ class ApiTest(TestCase):
             data=simplejson.dumps(post_data),
             content_type='application/json',
             **self._get_headers(request))
-        self.assertEquals(response.status_code, 500)
+        self.assertEquals(response.status_code, 400)
     
     def tearDown(self):
         for product in Product.objects.all():
