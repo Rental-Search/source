@@ -25,6 +25,11 @@ a:visited	{ color: #364C59; }
 a:focus, a:hover{ text-decoration: underline; }
 
 ul { list-style: none; }
+ul, ol
+{
+	padding: 0;
+	margin: 0;
+}
 
 body
 {
@@ -37,6 +42,18 @@ body
 {
 	clear: both;
 }
+
+h1 
+{ 
+	font-size: 16px;
+	margin-bottom: 10px;
+}
+h2 { font-size: 14px; }
+
+
+p { margin-bottom: 10px; }
+
+
 
 #header {}
 	.top-header 
@@ -97,18 +114,25 @@ body
 					padding: 5px 0 6px;
 				}
 				
-#content
+#content-home, #content
 {
 	background-color: #fff;
 	padding-top: 15px;
-	height: 300px;
 	border-bottom: 1px solid #CCDBE9;
 }
+	#content-home h1 { color: #7C4D32; }
+	.container
+	{
+		padding: 10px;
+	}
+	
+	.product-list {}
 
 #footer
 {
 	height: 30px;
 	font-size: 11px;
+	padding-bottom: 20px;
 	margin: 15px 0 10px;
 }
 	#footer p 
@@ -117,3 +141,104 @@ body
 		margin-bottom: 5px;
 		padding: 0 5px;
 	}
+
+.form
+	label { font-size: 12px; }
+	input 
+	{ 
+		padding: 4px 5px;
+		margin: 5px 0;
+		width: 96%;
+		height: 15px;
+	}
+	
+input[type="submit"]
+{
+	padding: 5px;
+	border: none;
+	font-weight: bold;
+	color: #fff;
+	text-shadow: transparent 0 -1px 0;
+	text-overflow: ellipsis;
+	text-decoration: none;
+	white-space: nowrap;
+	letter-spacing: 1px;
+	border: none;
+	border-radius: 3px;
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	-webkit-appearance: none;
+}
+	.big-orange 
+	{ 
+		background-color: #FF7200;
+		width: 100%;
+		height: 30px;
+		font-size: 14px;
+	}
+
+.arrow-right
+{
+	display: block;
+	background: transparent url("../images/arrow-right.png");
+	float: right;
+	height: 20px;
+	width: 13px;
+}
+
+.product-list { border-top: 1px dashed #B9CAD4; }
+
+.pl-product 
+{
+	height: 50px;
+	padding: 5px 0;
+	font-size: 14px;
+	font-weight: normal;
+	background: url("../images/arrow-right.png") no-repeat right center;
+	border-bottom: 1px dashed #B9CAD4;
+}
+
+	.pl-product a 
+	{
+		height: 50px;
+		padding: 0;
+		overflow: hidden;
+	}
+
+	.pl-img 
+	{
+		display: block;
+		position: absolute;
+		width: 50px;
+		height: 50px;
+		background: #EEE;
+	}
+
+	.pl-desc 
+	{
+		padding-left: 55px;
+		padding-right: 30px;
+	}
+
+	.pl-desc  p {
+		margin-bottom: 3px;
+	}
+	
+	.pl-desc .price
+	{
+		color: #FF7200;
+		font-size: 11px;
+	}
+
+	.pl-desc .from {
+		color: #999;
+		font-size: 11px;
+		overflow: hidden;
+	}
+
+
+
+
+
+
+

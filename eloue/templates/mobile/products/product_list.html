@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+ {% load cache facets i18n param category product paginator mptt_tags seo booking %}
+
+{% block title %}
+ {% trans "Location " %}
+ {% for crumb in breadcrumbs|facets %}
+   &rsaquo; {{ crumb.pretty_value|capfirst }}
+ {% endfor %}
+ {% if form.cleaned_data.l %}
+  &rsaquo; {{ form.cleaned_data.l|capfirst }}
+ {% endif %}
+ {% if form.cleaned_data.q %}
+   &rsaquo; "{{ form.cleaned_data.q }}"
+ {% endif %}
+{% endblock %}
+
+{% block description %}
+ {% trans "Location " %}
+ {% for crumb in breadcrumbs|facets %}
+   &rsaquo; {{ crumb.pretty_value|capfirst }}
+ {% endfor %}
+ {% if form.cleaned_data.l %}
+  &rsaquo; {{ form.cleaned_data.l|capfirst }}
+ {% endif %}
+ {% if form.cleaned_data.q %}
+    &rsaquo; "{{ form.cleaned_data.q }}"
+ {% endif %}
+{% endblock %}
+
+{% block  head %}
+ {{ block.super }}
+ <link rel="canonical" href="{% canonical_url urlbits %}" />
+{% endblock %}
+{% block content %}
+<div id="content">
+	<div class="container">
+		{% if form.cleaned_data.q %}
+		 <h1>Résultat{{ paginator.count|pluralize }} pour <strong>{{ form.cleaned_data.q }}</strong></h1>
+		{% endif %}
+		<ul class="product-list">
+			{% for product in product_list %}
+			<li class="pl-product">
+				<a href="{{ product.url|safe }}"  {% if product|nofollow %}rel="nofollow"{% endif %}>
+					<span class="pl-img">
+						<img src="{{ product.thumbnail }}" alt="{{ product.summary }}" width="50" height="50">
+					</span>
+					<div class="pl-desc">
+						<p><strong>{{ product.summary|capitalize|truncate:28 }}</strong></p>
+						<p class="price">{{ product.price|quantize }}&euro;/J</p>
+						<p class="from">
+							{{ product.city|capfirst }}{% if product.zipcode %}, {{ product.zipcode }}{% endif %}
+							 {% if product.geo_distance %}
+							
+								| {{ product.geo_distance|floatformat }} {% trans "km" %}{{ product.geo_distance|pluralize }}
+							 {% endif %}
+						</p>
+					</div>
+					</a>
+				</li>
+				{% endfor %}
+		</ul>{# list #}
+	</div>
+</div>
+{% endblock %}

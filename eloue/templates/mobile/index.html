@@ -5,7 +5,22 @@
 {% block title %}{% trans "Plateforme pour louer ou mettre en location tout type d'objet : materiel, reception, mariage, sono, utilitaires, ski" %}{% endblock %}
 
 {% block content %}
-<div id="content">
-	<h1>Avec e-loue, tout se loue !</h1>
+<div id="content-home">
+	<div class="container">
+		<h1>Avec e-loue, tout se loue !</h1>
+		<form class="form" action="{% url product_list %}">
+			<p>
+				<label for="id_q">{% trans "Que voulez-vous louer ?" %}</label><br />
+				{{ form.q }}<br />
+			</p>
+			<p>
+				<label>{% trans "Où ?" %}</label><br />
+				{{ form.l }}<br />
+			</p>
+			<p>
+				<input type="submit" value="{% trans "Rechercher" %}" class="btn big-orange"/>
+			</p>
+		</form>
+	</div>
 </div>
 {% endblock %}
