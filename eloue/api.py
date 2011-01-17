@@ -9,7 +9,8 @@ from tastypie.api import Api
 from tastypie.constants import ALL_WITH_RELATIONS
 from tastypie.authentication import Authentication
 from tastypie.authorization import Authorization
-from tastypie.exceptions import NotFound, BadRequest
+from tastypie.exceptions import NotFound, ImmediateHttpResponse
+from tastypie.http import HttpBadRequest
 from tastypie.resources import ModelResource
 from tastypie.serializers import Serializer
 
@@ -198,7 +199,10 @@ class UserResource(OAuthResource):
     def obj_create(self, bundle, **kwargs):
         """Creates a new inactive user"""
         data = bundle.data
-        bundle.obj = Patron.objects.create_user(data["username"], data["email"], data["password"])
+        try:
+            bundle.obj = Patron.objects.create_user(data["username"], data["email"], data["password"])
+        except IntegrityError, e:
+            raise ImmediateHttpResponse(response=HttpBadRequest())
         return bundle
     
 
