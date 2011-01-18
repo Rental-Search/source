@@ -36,15 +36,6 @@
 					<a href="{% url auth_logout %}" class="signout">{% trans "Se déconnecter" %}</a>
 				{% endif %}
 			</div>
-			<div class="nav-header">
-				<ul class="nav">
-					<li id="welcome" class="selected"><a href="#">Bienvenue</a></li>
-					<li id="how-to"><a href="#">+ d'infos</a></li>
-					<li id="you"><a href="#">Cherchez</li>
-					<li id="add"><a href="#">Ajoutez</a></li>
-				</ul>
-				<div class="clear"></div>
-			</div>
 		</div>
 		{% block content %}
 		{% endblock %}
