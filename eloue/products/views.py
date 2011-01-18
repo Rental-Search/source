@@ -29,6 +29,11 @@ def homepage(request):
     form = FacetedSearchForm()
     return direct_to_template(request, template='index.html', extra_context={'form': form, 'curiosities': curiosities})
 
+@cache_page(300)
+def search(request):
+	form = FacetedSearchForm()
+	return direct_to_template(request, template='products/search.html', extra_context={'form': form })
+
 
 @never_cache
 @secure_required

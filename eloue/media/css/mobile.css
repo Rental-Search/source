@@ -102,6 +102,7 @@ p { margin-bottom: 10px; }
 				background-color: #fff !important;
 				border-top: 1px solid #CCDBE9;
 				border-bottom: none !important;
+				z-index: 1;
 			}
 				.selected a { font-weight: bold; }
 				

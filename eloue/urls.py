@@ -11,7 +11,7 @@ from eloue.accounts.forms import EmailPasswordResetForm, PatronSetPasswordForm
 from eloue.accounts.views import activate, authenticate, authenticate_headless, dashboard, patron_edit, owner_booking, owner_history, \
     borrower_booking, borrower_history, patron_edit_password, patron_paypal, owner_product, contact
 from eloue.api import api_v1
-from eloue.products.views import homepage
+from eloue.products.views import homepage, search
 from eloue.rent.views import booking_detail, booking_accept, booking_reject, booking_incident, booking_close, booking_cancel
 from eloue.sitemaps import CategorySitemap, FlatPageSitemap, PatronSitemap, ProductSitemap
 
@@ -84,5 +84,6 @@ urlpatterns = patterns('',
     url(r'^edit/', include(admin.site.urls)),
     url(r'^api/', include(api_v1.urls)),
     url(r'^oauth/', include('oauth_provider.urls')),
-    url(r'^$', homepage, name="home")
+    url(r'^$', homepage, name="home"),
+		url(r'^recherche/$', search, name="search")
 )

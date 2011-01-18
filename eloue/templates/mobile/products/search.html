@@ -1,14 +1,14 @@
 {% extends "base.html" %}
 
-{% load i18n mptt_tags product cache %}
+{% load i18n mptt_tags cache %}
 
-{% block title %}{% trans "Plateforme pour louer ou mettre en location tout type d'objet : materiel, reception, mariage, sono, utilitaires, ski" %}{% endblock %}
+{% block title %}{% trans "Rechercher une location" %}{% endblock %}
 
 {% block content %}
 <div class="nav-header">
 	<ul class="nav">
-		<li id="welcome" class="selected"><a href="{% url home %}">Bienvenue</a></li>
-		<li id="you"><a href="{% url search %}">Recherchez</li>
+		<li id="welcome"><a href="{% url home %}">Bienvenue</a></li>
+		<li id="you" class="selected"><a href="{% url search %}">Recherchez</li>
 		<li id="add"><a href="#">Ajoutez</a></li>
 	</ul>
 	<div class="clear"></div>
