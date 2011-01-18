@@ -387,4 +387,4 @@ AFFILIATION_BATCHSIZE = 1000
 LV_FTP = "ftp.bo.location-et-vacances.com"
 
 # Camo configuration
-CAMO_KEY = getattr(local, 'CAMO_KEY')
+CAMO_KEY = getattr(local, 'CAMO_KEY', 'OKNZYL69Ml3oISfEmJvtzFjhUeBbugxPDXanydwi4HGWrRTqcQ')
