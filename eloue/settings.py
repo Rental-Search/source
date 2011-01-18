@@ -58,6 +58,8 @@ LANGUAGES = (
     ('en', ugettext('English')),
 )
 
+DEFAULT_CURRENCY = 'EUR'
+
 SITE_ID = 1
 
 # If you set this to False, Django will make some optimizations so as not
@@ -383,3 +385,6 @@ USE_ETAGS = False
 AFFILIATION_SOURCES = getattr(local, 'AFFILIATION_SOURCES', ['lv', 'skiplanet.equipment', 'jigsaw'])
 AFFILIATION_BATCHSIZE = 1000
 LV_FTP = "ftp.bo.location-et-vacances.com"
+
+# Camo configuration
+CAMO_KEY = getattr(local, 'CAMO_KEY')

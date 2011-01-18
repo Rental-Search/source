@@ -43,6 +43,8 @@ BOOKING_STATE = Enum([
     ('outdated', 'OUTDATED', _(u"Dépassé"))
 ])
 
+DEFAULT_CURRENCY = getattr(settings, 'DEFAULT_CURRENCY', 'EUR')
+
 COMMISSION = D(str(getattr(settings, 'COMMISSION', 0.15)))
 INSURANCE_FEE = D(str(getattr(settings, 'INSURANCE_FEE', 0.0594)))
 INSURANCE_COMMISSION = D(str(getattr(settings, 'INSURANCE_COMMISSION', 0)))
@@ -84,7 +86,7 @@ class Booking(models.Model):
     deposit_amount = models.DecimalField(max_digits=8, decimal_places=2)
     insurance_amount = models.DecimalField(max_digits=8, decimal_places=2, blank=True)
     total_amount = models.DecimalField(max_digits=8, decimal_places=2)
-    currency = models.CharField(max_length=3, choices=CURRENCY, default=CURRENCY.EUR)
+    currency = models.CharField(max_length=3, choices=CURRENCY, default=DEFAULT_CURRENCY)
     
     owner = models.ForeignKey(Patron, related_name='bookings')
     borrower = models.ForeignKey(Patron, related_name='rentals')

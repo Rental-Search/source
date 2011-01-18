@@ -85,6 +85,8 @@ PHONE_TYPES = Enum([
     (4, 'OTHER', _('Autre'))
 ])
 
+DEFAULT_CURRENCY = getattr(settings, 'DEFAULT_CURRENCY', 'EUR')
+
 log = logbook.Logger('eloue.accounts')
 
 
@@ -172,7 +174,7 @@ class Patron(User):
                 citizenshipCountryCode=address.country,
                 preferredLanguageCode='fr_FR',
                 contactPhoneNumber=self.phones.all()[0].number,
-                currencyCode='EUR',
+                currencyCode=DEFAULT_CURRENCY,
                 createAccountWebOptions={
                     'returnUrl': return_url,
                     'returnUrlDescription': ugettext(u"e-loue"),
