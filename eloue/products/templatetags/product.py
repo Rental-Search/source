@@ -95,7 +95,6 @@ def currency(value):
         locale.setlocale(locale.LC_ALL, new_locale)
         return locale.currency(D(value), True, True)
     except (TypeError, locale.Error):
-        logging.exception("Something went wrong")
         return D(value)
     finally:
         locale.setlocale(locale.LC_ALL, old_locale)

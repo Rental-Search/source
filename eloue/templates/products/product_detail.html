@@ -90,7 +90,7 @@
 			{% if product.deposit_amount %}
 			<tr>
 				<td>{% trans "Caution" %} :</td>
-				<td class="p-value">{{ product.deposit_amount|currency }}</td>
+				<td class="p-value">{{ product.deposit_amount|quantize|currency }}</td>
 			</tr>
 			{% endif %}
 			<tr>
