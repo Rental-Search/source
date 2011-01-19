@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import locale
+import logging
 import re
 
 from decimal import Decimal as D
@@ -94,6 +95,7 @@ def currency(value):
             translation.to_locale("%s.UTF-8" % translation.get_language()))
         return locale.currency(D(value), True, True)
     except (TypeError, locale.Error):
+        logging.exception("Something went wrong")
         return D(value)
     finally:
         locale.setlocale(locale.LC_ALL, old_locale)
