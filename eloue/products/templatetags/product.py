@@ -91,8 +91,8 @@ def currency(value):
     """
     old_locale = locale.getlocale()
     try:
-        locale.setlocale(locale.LC_ALL, 
-            translation.to_locale("%s.utf8" % translation.get_language()))
+        new_locale = locale.normalize(translation.to_locale("%s.utf8" % translation.get_language()))
+        locale.setlocale(locale.LC_ALL, new_locale)
         return locale.currency(D(value), True, True)
     except (TypeError, locale.Error):
         logging.exception("Something went wrong")
