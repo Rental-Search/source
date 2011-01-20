@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load i18n product%}
+{% load i18n product %}
 
 {% block title %}{% trans "Déclarez un incident" %}{% endblock %}
 
@@ -105,7 +105,7 @@
 				</tr>
 				<tr class="total">
 					<th>{% trans "Total :" %}</th>
-					<td class="number">{{ booking.total_amount }} €</td>
+					<td class="number">{{ booking.total_amount|currency }}</td>
 				</tr>
 			</table>
 		</div>

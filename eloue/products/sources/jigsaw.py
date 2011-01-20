@@ -10,7 +10,6 @@ from django.utils.encoding import smart_str
 
 from . import BaseSource, Product
 
-
 class SourceClass(BaseSource):
     def request(self, xml):
         response, content = Http().request("http://www.elocationdevoitures.fr/service/ServiceRequest.do?%s" % urlencode({'xml': xml}))
@@ -18,7 +17,7 @@ class SourceClass(BaseSource):
     
     def build_xml(self, params):
         xml = """<SearchRQ>
-            <Credentials username="eloue_fr" password="eloue" remoteIp="127.0.0.1" />
+            <Credentials username="eloue_fr" password="eloue" remoteIp="46.51.172.206" />
             <PickUp>
              <Location id="%(location)s" />
              <Date year="%(pickup_year)d" month="%(pickup_month)d" day="%(pickup_day)d" hour="%(pickup_hour)d" minute="%(pickup_minute)d"/>
@@ -34,7 +33,7 @@ class SourceClass(BaseSource):
     def get_cities(self):
         cities = []
         for country in ['France - Continent', 'France - Corse']:
-            root = self.request("""<PickUpCityListRQ><Credentials username="eloue_fr" password="eloue" remoteIp="127.0.0.1" /><Country>%(country)s</Country></PickUpCityListRQ>""" % {'country': country})
+            root = self.request("""<PickUpCityListRQ><Credentials username="eloue_fr" password="eloue" remoteIp="46.51.172.206" /><Country>%(country)s</Country></PickUpCityListRQ>""" % {'country': country})
             for city in root.xpath('//City'):
                 cities.append({'country': country, 'city': smart_str(city.pyval)})
         return cities
@@ -42,7 +41,7 @@ class SourceClass(BaseSource):
     def get_locations(self):
         locations = []
         for city in self.get_cities():
-            root = self.request("""<PickUpLocationListRQ><Credentials username="eloue_fr" password="eloue" remoteIp="127.0.0.1" /><Country>%(country)s</Country><City>%(city)s</City></PickUpLocationListRQ>""" % city)
+            root = self.request("""<PickUpLocationListRQ><Credentials username="eloue_fr" password="eloue" remoteIp="46.51.172.206" /><Country>%(country)s</Country><City>%(city)s</City></PickUpLocationListRQ>""" % city)
             for location in root.xpath('//Location'):
                 locations.append({
                     'id': location.get('id'),

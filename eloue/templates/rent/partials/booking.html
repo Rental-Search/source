@@ -26,7 +26,7 @@
 	</div>
 	{% endif %}
 	<div class="bk-price">
-	 {{ booking.total_amount }} {{ booking.currency|currency }}
+	 {{ booking.total_amount|currency }}
 	</div>
 	<div class="bk-details">
 	 <a href="{{ booking.get_absolute_url }}" class="btn medium-blue">{% trans "Voir les détails" %}</a>

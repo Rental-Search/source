@@ -131,7 +131,7 @@
 					 {% endif %}
 					</div>
 					<div class="pl-price">
-					 <span class="price">{{ product.price|quantize }}&euro;</span><br />
+					 <span class="price">{{ product.price|quantize|currency }}</span><br />
 					 <span class="unit">{% trans "par jour" %}</span>
 					</div>
 					<div class="pl-btn">

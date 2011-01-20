@@ -50,12 +50,12 @@ TIME_ZONE = 'Europe/Paris'
 
 # Language code for this installation. All choices can be found here:
 # http://www.i18nguy.com/unicode/language-identifiers.html
-LANGUAGE_CODE = 'fr'
+LANGUAGE_CODE = 'fr-fr'
 
 ugettext = lambda s: s
 LANGUAGES = (
-    ('fr', ugettext('Français')),
-    ('en', ugettext('English')),
+    ('fr-fr', ugettext('Français')),
+    ('en-gb', ugettext('English')),
 )
 
 DEFAULT_CURRENCY = 'EUR'
