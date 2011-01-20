@@ -63,14 +63,14 @@
 				{% if form.cleaned_data.l or form.cleaned_data.q %}
 					<li><a href="{% facet_url breadcrumbs -"l" -"r" -"q" %}">{{ crumb.pretty_value|capfirst }}</a></li>
 				{% else %}
-					<li>{{ crumb.pretty_value|capfirst }}</a></li>
+					<li class="lastb">{{ crumb.pretty_value|capfirst }}</a></li>
 				{% endif %}
 			{% endfor %}
 			{% if form.cleaned_data.q %}
 				{% if form.cleaned_data.l %}
 					<li><a href="{% facet_url breadcrumbs -"l" -"r" %}">{% trans "location" %} "{{ form.cleaned_data.q }}"</a></li>
 				{% else %}
-					<li>{% trans "location" %} "{{ form.cleaned_data.q }}"</li>
+					<li class="lastb">{% trans "location" %} "{{ form.cleaned_data.q }}"</li>
 				{% endif %}
 			{% endif %}
 			{% if form.cleaned_data.l %}
