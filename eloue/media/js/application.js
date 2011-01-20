@@ -11,7 +11,7 @@ $(document).ready(function() {
             'height'        : 495,
             'href'          : this.href = this.href.replace(new RegExp("watch\\?v=", "i"), 'v/') + '&autoplay=1',
             'type'          : 'swf',
-            'swf'           : {'allowfullscreen':'true', 'wmode':'opaque'},
+            'swf'           : {'allowfullscreen':'true', 'wmode':'opaque'}
         });
         return false;
     });
