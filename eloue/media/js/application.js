@@ -1,5 +1,22 @@
 $(document).ready(function() {
-    
+    //display TF1 video
+		$("a.movie-link-play").click(function() {
+			$.fancybox({
+        'padding'             : 0,
+				'titleShow'						: 'false',
+        'autoScale'   : false,
+        'transitionIn'        : 'none',
+        'transitionOut'       : 'none',
+        'width'               : 680,
+        'height'              : 495,
+        'href'                : this.href = this.href.replace(new RegExp("watch\\?v=", "i"), 'v/') + '&autoplay=1',
+        'type'                : 'swf',    // <--add a comma here
+        'swf'                 : {'allowfullscreen':'true', 'wmode':'opaque'} // <-- flashvars here'swf'
+        });
+       return false;
+		});
+		
+		
     // Password field enabler/disabler
     var exists = $("input[name$='exists']:checked").val();
     var passwordInput = $("input[name$='password']");
@@ -160,7 +177,6 @@ $(document).ready(function() {
         cleartype:      true,
         cleartypeNoBg:  true
     });
-    
 });
 
 function hideNotification() {

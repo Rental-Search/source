@@ -1,7 +1,7 @@
 /* *************************************************
   Home page
 ************************************************** */
-.product-home { text-align: center; margin-bottom: 30px;}
+.product-home { text-align: center; padding-bottom: 30px;}
   
   .product-home-title
   {
@@ -105,8 +105,37 @@
       { 
         font-size: 12px;
         font-weight: bold;
-        color: #6eb924; 
+        color: #6eb924;
       }
+
+.movie-link 
+{ 
+	position: relative;
+	text-align: center;
+}
+	.movie-link img
+	{
+		padding: 4px;
+		border: 1px solid #BFD1E2;
+		-moz-border-radius: 5px;
+		-webkit-border-radius: 5px;
+		border-radius: 5px;
+	}
+	.movie-link-play
+	{
+		display: block;
+		position: absolute;
+		background: transparent url("../images/play.png") no-repeat 0 0;
+		height: 86px;
+		width: 86px;
+		top: 53px;
+		left: 108px;
+		text-indent: -9999px;
+		cursor: pointer;
+	}
+	
+	
+	
 /* *************************************************
   Product page
 ************************************************** */
