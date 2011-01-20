@@ -36,7 +36,7 @@ class Command(BaseCommand):
                     content = content.replace(original_url, camo_url)
                 else:
                     parts = urlparse.urlparse(original_url)
-                    content = content.replace(original_url, "https://media.e-loue.com/20m%s" % parts.path)
+                    content = content.replace(original_url, "https://media.e-loue.com/20mn%s" % parts.path)
             header = open(os.path.join(settings.TEMPLATE_DIRS[0], 'header.html'), 'w')
             header.write(content.encode('utf-8'))
             header.close()
@@ -52,7 +52,7 @@ class Command(BaseCommand):
                     content = content.replace(original_url, camo_url)
                 else:
                     parts = urlparse.urlparse(original_url)
-                    content = content.replace(original_url, "https://media.e-loue.com/20m%s" % parts.path)
+                    content = content.replace(original_url, "https://media.e-loue.com/20mn%s" % parts.path)
             footer = open(os.path.join(settings.TEMPLATE_DIRS[0], 'footer.html'), 'w')
             footer.write(content.encode('utf-8'))
             footer.close()
