@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load i18n product %}
+{% load i18n product booking %}
 
 {% block title %}{{ product.summary|capitalize }}{% endblock %}
 
@@ -90,7 +90,7 @@
 			{% if product.deposit_amount %}
 			<tr>
 				<td>{% trans "Caution" %} :</td>
-				<td class="p-value">{{ product.deposit_amount }}{{ product.currency|currency }}</td>
+				<td class="p-value">{{ product.deposit_amount|quantize|currency }}</td>
 			</tr>
 			{% endif %}
 			<tr>
