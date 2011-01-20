@@ -77,7 +77,6 @@ def staging():
     env.campfire_token = "b96565fb9b8f49f0e18a6a194d7ac97812e154d6"
     env.campfire_domain = "e-loue"
     env.github_url = "https://github.com/e-loue/eloue"
-    env.git_branch = "currency"
 
 def sandbox():
     env.name = "sandbox"
