@@ -222,7 +222,8 @@ COMPRESS_CSS = {
             'css/custom.css',
             'css/plugins/ui/jquery.ui.core.css',
             'css/plugins/ui/jquery.ui.datepicker.css',
-            'css/plugins/ui/jquery.ui.theme.css'
+            'css/plugins/ui/jquery.ui.theme.css',
+						'css/jquery.fancybox-1.3.4.css',
         ),
         'output_filename': 'css/master.r?.css',
         'extra_context': {
@@ -237,7 +238,8 @@ COMPRESS_CSS = {
             'css/20m.css',
             'css/plugins/ui/jquery.ui.core.css',
             'css/plugins/ui/jquery.ui.datepicker.css',
-            'css/plugins/ui/jquery.ui.theme.css'
+            'css/plugins/ui/jquery.ui.theme.css',
+						'css/jquery.fancybox-1.3.4.css',
         ),
         'output_filename': 'css/twenty.r?.css',
         'extra_context': {
@@ -256,6 +258,7 @@ COMPRESS_JS = {
             'js/modernizr.js',
             'js/mustache.js',
             'js/jquery.cycle.all.latest.js',
+						'js/jquery.fancybox-1.3.4.pack.js',
             'js/application.js'),
         'output_filename': 'js/application.r?.js',
         'extra_context': {
