@@ -61,7 +61,7 @@
 			<li><a href="{% url home %}">{% trans "Accueil" %}</a></li>
 			{% for crumb in breadcrumbs|facets %}
 				{% if form.cleaned_data.l or form.cleaned_data.q %}
-					<li><a href="#">{{ crumb.pretty_value|capfirst }}</a></li>
+					<li><a href="{% facet_url breadcrumbs -"l" -"r" -"q" %}">{{ crumb.pretty_value|capfirst }}</a></li>
 				{% else %}
 					<li>{{ crumb.pretty_value|capfirst }}</a></li>
 				{% endif %}
