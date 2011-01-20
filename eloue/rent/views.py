@@ -21,7 +21,7 @@ from django.views.generic.simple import direct_to_template, redirect_to
 from django_lean.experiments.models import GoalRecord
 from django_lean.experiments.utils import WebUser
 
-from eloue.decorators import ownership_required, validate_ipn
+from eloue.decorators import ownership_required, validate_ipn, secure_required
 from eloue.accounts.forms import EmailAuthenticationForm
 from eloue.products.models import Product
 from eloue.rent.forms import BookingForm, BookingConfirmationForm, BookingStateForm, PreApprovalIPNForm, PayIPNForm, IncidentForm
