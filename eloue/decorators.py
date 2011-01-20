@@ -32,7 +32,7 @@ def secure_required(view_func):
     def _wrapped_view_func(request, *args, **kwargs):
         if not request.is_secure():
             if USE_HTTPS:
-                site = Site.objects.get(domain="www.e-loue.com")
+                site = Site.objects.get_current()
                 secure_url = "https://%s%s" % (site.domain, request.path)
                 return HttpResponsePermanentRedirect(secure_url)
         return view_func(request, *args, **kwargs)

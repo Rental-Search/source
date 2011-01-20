@@ -35,7 +35,7 @@
 				<h2>{% trans "Les curiosités d'e-loue" %}</h2>
 			</div>
 			{% cache 900 curiosities %}
-			{% for curiosity in curiosities %}
+			{% for curiosity in curiosities|slice:":4" %}
 			 {% with curiosity.product as product %}
 				{% if forloop.first %}
 			  	<div class="product-home x2 first">
@@ -65,7 +65,7 @@
 				<h2>{% trans "e-loue sur" %} <img src="{{ MEDIA_URL}}images/logo_tf1.png" alt="logo tf1"></h2>
 			</div>
 			<div class="movie-link x4 first">
-				<a href="http://www.youtube.com/watch?v=7jlrt0pQxfw" title="Lire l'extrait de l'émission Près de chez vous sur e-loue" class="movie-link-play" traget="_blanck">Lire la vidéo</a>
+				<a href="https://www.youtube.com/watch?v=7jlrt0pQxfw" title="Lire l'extrait de l'émission Près de chez vous sur e-loue" class="movie-link-play" traget="_blanck">Lire la vidéo</a>
 				<img src="{{ MEDIA_URL }}images/movie_link.png" alt="e-loue dans l'émission Près de chez vous" />
 			</div>
 		</div>{# col 2 #}

@@ -207,6 +207,7 @@ COMPRESS_VERSION = True
 COMPRESS_CSS_URL_REPLACE = {
     "../": "",
     "url(\"": "url(\"%s" % MEDIA_URL,
+    "url(\'": "url(\'%s" % MEDIA_URL,
 }
 COMPRESS_JS_FILTERS = getattr(local, 'COMPRESS_JS_FILTERS', ('compress.filters.yui.YUICompressorFilter',))
 COMPRESS_CSS_FILTERS = getattr(local, 'COMPRESS_CSS_FILTERS', (
@@ -223,7 +224,7 @@ COMPRESS_CSS = {
             'css/plugins/ui/jquery.ui.core.css',
             'css/plugins/ui/jquery.ui.datepicker.css',
             'css/plugins/ui/jquery.ui.theme.css',
-						'css/jquery.fancybox-1.3.4.css',
+            'css/jquery.fancybox.css',
         ),
         'output_filename': 'css/master.r?.css',
         'extra_context': {
@@ -239,7 +240,7 @@ COMPRESS_CSS = {
             'css/plugins/ui/jquery.ui.core.css',
             'css/plugins/ui/jquery.ui.datepicker.css',
             'css/plugins/ui/jquery.ui.theme.css',
-						'css/jquery.fancybox-1.3.4.css',
+            'css/jquery.fancybox.css',
         ),
         'output_filename': 'css/twenty.r?.css',
         'extra_context': {
@@ -258,7 +259,7 @@ COMPRESS_JS = {
             'js/modernizr.js',
             'js/mustache.js',
             'js/jquery.cycle.all.latest.js',
-						'js/jquery.fancybox-1.3.4.pack.js',
+            'js/jquery.fancybox.js',
             'js/application.js'),
         'output_filename': 'js/application.r?.js',
         'extra_context': {
