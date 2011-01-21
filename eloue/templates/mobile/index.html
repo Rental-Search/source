@@ -7,15 +7,14 @@
 {% block content %}
 <div class="nav-header">
 	<ul class="nav">
-		<li id="welcome" class="selected"><a href="{% url home %}">Bienvenue</a></li>
-		<li id="you"><a href="{% url search %}">Recherchez</li>
-		<li id="add"><a href="#">Ajoutez</a></li>
+		<li id="welcome" class="selected"><a href="{% url home %}">{% trans "Bienvenue" %}</a></li>
+		<li id="you"><a href="{% url search %}">{% trans "Rechercher" %}</li>
 	</ul>
 	<div class="clear"></div>
 </div>
 <div id="content-home">
 	<div class="container">
-		<h1>Avec e-loue, tout se loue !</h1>
+		<h1>{% trans "Avec e-loue, tout se loue !" %}</h1>
 		<form class="form" action="{% url product_list %}">
 			<p>
 				<label for="id_q">{% trans "Que voulez-vous louer ?" %}</label><br />
