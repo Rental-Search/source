@@ -19,7 +19,7 @@ from django.http import HttpResponse
 from django.contrib.auth import login
 from oauth_provider.models import Token
 
-from eloue.decorators import secure_required
+from eloue.decorators import secure_required, mobify
 from eloue.accounts.forms import EmailAuthenticationForm, PatronEditForm, PatronPaypalForm, PatronPasswordChangeForm, ContactForm
 from eloue.accounts.models import Patron
 from eloue.accounts.wizard import AuthenticationWizard
@@ -160,6 +160,7 @@ def borrower_history(request, page=None):
         template_object_name='booking')
 
 
+@mobify
 def contact(request):
     form = ContactForm(request.POST or None)
     if form.is_valid():

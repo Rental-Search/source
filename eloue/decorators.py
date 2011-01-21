@@ -1,10 +1,13 @@
 # -*- coding: utf-8 -*-
+import re
+
 from httplib2 import Http
 
 from django.conf import settings
 from django.contrib.sites.models import Site
 from django.http import HttpResponsePermanentRedirect, HttpResponseForbidden
 from django.utils import translation
+from django.views.generic.simple import redirect_to
 
 USE_HTTPS = getattr(settings, 'USE_HTTPS', True)
 USE_PAYPAL_SANDBOX = getattr(settings, 'USE_PAYPAL_SANDBOX', False)
@@ -14,6 +17,13 @@ if USE_PAYPAL_SANDBOX:
     endpoint = "https://www.sandbox.paypal.com/cgi-bin/webscr?cmd=_notify-validate&%s"
 else:
     endpoint = "https://www.paypal.com/cgi-bin/webscr?cmd=_notify-validate&%s"
+
+
+MOBILE = getattr(settings, 'MOBILE', False)
+MOBILE_REDIRECT_BASE = getattr(settings, 'MOBILE_REDIRECT_BASE', 'https://m.e-loue.com')
+RE_MOBILE = re.compile(r"(iphone|ipod|lg|htc|vodafone|netfront|samsung|blackberry|android|palm|windows\s+ce|opera\s+mobi|opera\s+mini)", re.I)
+RE_DESKTOP = re.compile(r"(windows|linux|os\s+[x9]|solaris|bsd|ipad)", re.I)
+RE_BOT = re.compile(r"(spider|crawl|slurp|bot|google|yahoo|msn)", re.I)
 
 
 def validate_ipn(view_func):
@@ -65,3 +75,22 @@ def activate_language(method):
         translation.deactivate()
         return return_value
     return _wrapped_method
+
+def get_user_agent(request):
+    # Some mobile browsers put the User-Agent in a HTTP-X header
+    return request.META.get('HTTP_X_OPERAMINI_PHONE_UA') or \
+           request.META.get('HTTP_X_SKYFIRE_PHONE') or \
+           request.META.get('HTTP_USER_AGENT', '')
+
+def is_mobile(user_agent):
+    """Anything that looks like a phone is a phone."""
+    return bool(RE_MOBILE.search(user_agent))
+
+def mobify(view_func=None):
+    def wrapper(request, *args, **kwargs):
+        user_agent = get_user_agent(request)
+        if not MOBILE and is_mobile(user_agent):
+            return redirect_to(request, "%s%s" % (MOBILE_REDIRECT_BASE, request.get_full_path()))
+        else:
+            return view_func(request, *args, **kwargs)
+    return wrapper

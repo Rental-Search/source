@@ -12,7 +12,7 @@ from django.views.generic.list_detail import object_list
 
 from haystack.query import SearchQuerySet
 
-from eloue.decorators import ownership_required, secure_required
+from eloue.decorators import ownership_required, secure_required, mobify
 from eloue.accounts.forms import EmailAuthenticationForm
 from eloue.accounts.models import Patron
 from eloue.products.forms import FacetedSearchForm, ProductForm, ProductEditForm
@@ -22,12 +22,13 @@ from eloue.products.wizard import ProductWizard
 PAGINATE_PRODUCTS_BY = getattr(settings, 'PAGINATE_PRODUCTS_BY', 10)
 DEFAULT_RADIUS = getattr(settings, 'DEFAULT_RADIUS', 50)
 
-
+@mobify
 @cache_page(300)
 def homepage(request):
     curiosities = Curiosity.objects.all()
     form = FacetedSearchForm()
     return direct_to_template(request, template='index.html', extra_context={'form': form, 'curiosities': curiosities})
+
 
 @cache_page(300)
 def search(request):
@@ -54,6 +55,7 @@ def product_edit(request, slug, product_id):
     return direct_to_template(request, 'products/product_edit.html', extra_context={'product': product, 'form': form})
 
 
+@mobify
 @cache_page(900)
 @vary_on_cookie
 def product_list(request, urlbits, sqs=SearchQuerySet(), suggestions=None, page=None):

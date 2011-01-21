@@ -392,3 +392,7 @@ LV_FTP = "ftp.bo.location-et-vacances.com"
 
 # Camo configuration
 CAMO_KEY = getattr(local, 'CAMO_KEY', 'OKNZYL69Ml3oISfEmJvtzFjhUeBbugxPDXanydwi4HGWrRTqcQ')
+
+# Mobile configuration
+MOBILE = getattr(local, 'MOBILE', False)
+MOBILE_REDIRECT_BASE = getattr(local, 'MOBILE_REDIRECT_BASE', 'https://m.e-loue.com')

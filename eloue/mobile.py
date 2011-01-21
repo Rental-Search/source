@@ -10,3 +10,5 @@ TEMPLATE_DIRS = (
     local_path('templates/mobile/'),
     local_path('templates/'),
 )
+
+MOBILE = True
