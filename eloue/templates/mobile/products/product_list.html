@@ -57,9 +57,11 @@
 			{% for product in product_list %}
 			<li class="pl-product">
 				<a href="{{ product.url|safe }}"  {% if product|nofollow %}rel="nofollow"{% endif %}>
-					<span class="pl-img">
+				  {% if product.thumbnail %}
+					 <span class="pl-img">
 						<img src="{{ product.thumbnail }}" alt="{{ product.summary }}" width="50" height="50">
-					</span>
+					 </span>
+					{% endif %}
 					<div class="pl-desc">
 						<p class="title"><strong>{{ product.summary|capitalize|truncate:25 }}</strong></p>
 						<p class="price">{{ product.price|quantize }}&euro;/J</p>
