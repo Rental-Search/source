@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+ {% load cache facets i18n param category product paginator mptt_tags seo booking %}
+
+{% block title %}
+ {% trans "Location " %}
+ {% for crumb in breadcrumbs|facets %}
+   &rsaquo; {{ crumb.pretty_value|capfirst }}
+ {% endfor %}
+ {% if form.cleaned_data.l %}
+  &rsaquo; {{ form.cleaned_data.l|capfirst }}
+ {% endif %}
+ {% if form.cleaned_data.q %}
+   &rsaquo; "{{ form.cleaned_data.q }}"
+ {% endif %}
+{% endblock %}
+
+{% block description %}
+ {% trans "Location " %}
+ {% for crumb in breadcrumbs|facets %}
+   &rsaquo; {{ crumb.pretty_value|capfirst }}
+ {% endfor %}
+ {% if form.cleaned_data.l %}
+  &rsaquo; {{ form.cleaned_data.l|capfirst }}
+ {% endif %}
+ {% if form.cleaned_data.q %}
+    &rsaquo; "{{ form.cleaned_data.q }}"
+ {% endif %}
+{% endblock %}
+
+{% block  head %}
+ {{ block.super }}
+ <link rel="canonical" href="{% canonical_url urlbits %}" />
+{% endblock %}
+{% block content %}
+<div class="nav-header">
+	<ul class="nav">
+		<li id="welcome"><a href="{% url home %}">Bienvenue</a></li>
+		<li id="you"><a href="{% url search %}">Recherchez</li>
+		<li id="add"><a href="#">Ajoutez</a></li>
+	</ul>
+	<div class="clear"></div>
+</div>
+<div id="content">
+	<div class="container">
+		{% if form.cleaned_data.q %}
+		 <h1>
+			Résultat{{ paginator.count|pluralize }} pour <strong>{{ form.cleaned_data.q }}</strong>{% if form.cleaned_data.l %}, {{ form.cleaned_data.l }}{% endif %}
+		</h1>
+		{% else %}
+		<a href="{% url home %}" class="search-link">{% trans "rechercher" %}</a>
+		{% endif %}
+		<ul class="product-list">
+			{% for product in product_list %}
+			<li class="pl-product">
+				<a href="{{ product.url|safe }}"  {% if product|nofollow %}rel="nofollow"{% endif %}>
+					<span class="pl-img">
+						<img src="{{ product.thumbnail }}" alt="{{ product.summary }}" width="50" height="50">
+					</span>
+					<div class="pl-desc">
+						<p class="title"><strong>{{ product.summary|capitalize|truncate:25 }}</strong></p>
+						<p class="price">{{ product.price|quantize }}&euro;/J</p>
+						<p class="from">
+							{{ product.city|capfirst }}{% if product.zipcode %}, {{ product.zipcode }}{% endif %}
+							 {% if product.geo_distance %}
+							
+								| {{ product.geo_distance|floatformat }} {% trans "km" %}{{ product.geo_distance|pluralize }}
+							 {% endif %}
+						</p>
+					</div>
+					</a>
+				</li>
+				{% endfor %}
+		</ul>{# list #}
+		{% pagination %}
+			{% if is_paginated %}
+				<div class="pagination">
+					{% if page_obj.has_previous %}
+	        <a href="{% facet_url breadcrumbs "page" page_obj.previous_page_number %}" class="btn small-blue previous">&#171; {% trans "Prec" %}</a></li>
+          {% endif %}
+					{% if page_obj.has_next %}
+	        <a href="{% facet_url breadcrumbs "page" page_obj.next_page_number %}" class="btn small-blue next">{% trans "Suiv" %} &#187;</a></li>
+          {% endif %}
+				</div>
+			{% endif %}
+	</div>
+</div>
+{% endblock %}

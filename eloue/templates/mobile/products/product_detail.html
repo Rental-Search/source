@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% load i18n product %}
+
+{% block title %}{{ product.summary|capitalize }}{% endblock %}
+
+{% block description %}{{ product.summary }} {{ product.description }}{% endblock %}
+
+{% block content %}
+<div class="nav-header">
+	<ul class="nav">
+		<li id="welcome"><a href="{% url home %}">Bienvenue</a></li>
+		<li id="you"><a href="{% url search %}">Recherchez</li>
+		<li id="add"><a href="#">Ajoutez</a></li>
+	</ul>
+	<div class="clear"></div>
+</div>
+<div id="content">
+	<div class="container">
+		<h1>
+			{{ product.summary|capitalize }}
+		</h1>
+		<div class="product-thumbs">
+			{% for picture in product.pictures.all %}
+			 {% if picture.thumbnail %}
+       		  <a href="#"><img src="{{ picture.thumbnail.url }}" width="50" height="50"/></a>
+       {% endif %}
+			{% endfor %}
+		</div>
+		<div class="col1">
+			<div class="product-pic">
+				{% with product.pictures.all|first as picture %}
+				 {% if picture %}
+				  <img src="{{ picture.display.url }}" alt="{{ product.summary }}" width="230" />
+				 {% endif %}
+				{% endwith %}
+			</div>
+			<div class="clear"></div>
+			<div class="product-desc">
+				{{ product.description|linebreaksp }}
+			</div>
+			<div class="product-properties">
+				<table>
+					{% if product.deposit_amount %}
+					<tr>
+						<td>{% trans "Caution" %} :</td>
+						<td class="p-value">{{ product.deposit_amount }}{{ product.currency|currency }}</td>
+					</tr>
+					{% endif %}
+					<tr>
+						<td>{% trans "Lieu" %} :</td>
+						<td class="p-value">{{ product.address.city|capfirst }}, {{ product.address.zipcode }}</td>
+					</tr>
+					<tr>
+						<td>{% trans "Quantité" %} :</td>
+						<td class="p-value">{{ product.quantity }}</td>
+					</tr>
+					<tr>
+						<td>{% trans "Catégorie" %} :</td>
+						<td class="p-value"><a href="{{ product.category.get_absolute_url }}">{{ product.category }}</a></td>
+					</tr>
+					<tr>
+						<td>{% trans "Propriétaire" %} :</td>
+						<td class="p-value">{{ product.owner.username }}</td>
+					</tr>
+				</table>
+			</div>
+		</div>{# col1 #}
+		<div class="clear"></div>
+	</div>{# container #}
+</div>{# content #}
+{% endblock %}

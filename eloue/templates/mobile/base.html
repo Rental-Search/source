@@ -1,0 +1,58 @@
+{% load compressed i18n markup seo %}	
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr" lang="fr">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<meta content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;" name="viewport">
+		<title>{% filter striplinebreak %}{% block title %}{% endblock %} {% if is_paginated and page_obj.has_previous %}- {% trans "Page" %} {{ page_obj.number }}{% endif %} - {% trans "e-loue" %}{% endfilter %}</title>
+	  <meta name="description" content="{% filter striplinebreak %}{% block description %}Plateforme pour louer ou mettre en location tout type d'objet : materiel, reception, mariage, sono, utilitaires, ski{% endblock %}{% if is_paginated and page_obj.has_previous %} Page {{ page_obj.number }}{% endif %}{% endfilter %}">
+	  <meta name="google-site-verification" content="JxKbPmnlcJagHiSTQcwcZaA2XWBbpU1ZVHmJ6529HT0" />
+	  <link rel="shortcut icon" href="{{ MEDIA_URL }}favicon.ico">
+	  {% block head %}
+	   {% compressed_css 'mobile' %}
+	  {% endblock %}
+	  <script type="text/javascript">
+	    var _gaq = _gaq || [];
+	    _gaq.push(['_setAccount', 'UA-8258979-1']);
+	    _gaq.push(['_setDomainName', 'www.e-loue.com']);
+	    _gaq.push(['_trackPageview']);
+	    {% spaceless %}{% if user.is_authenticated %}
+	     _gaq.push(['_setVar', 'authenticated']);
+	    {% else %}
+	     _gaq.push(['_setVar', 'anonymous']);
+	    {% endif %}{% endspaceless %}
+	    {% block gaq %}{% endblock %}
+	  </script>
+	</head>
+	<body>
+		<div id="header">
+			<div class="top-header">
+				<a href='{% url home %}' class="logo">
+					<img src="{{ MEDIA_URL }}images/logo_m.png" alt="e-loue"/>
+				</a>
+				{% if not user.is_authenticated %}
+					<a href="{% url auth_login %}" class="signup" >{% trans "S'inscrire ou se connecter" %}</a>
+				{% else %}
+					<a href="{% url auth_logout %}" class="signout">{% trans "Se déconnecter" %}</a>
+				{% endif %}
+			</div>
+		</div>
+		{% block content %}
+		{% endblock %}
+		<div id="footer">
+			<p>
+				<a href="/conditions-generales/">{% trans "Conditions générales" %}</a>
+				|
+				<a href="/respect-vie-privee/">{% trans "Respect de la vie privée" %}</a>
+			</p>
+			<p>
+				<a href="/assurance-tranquillite/">{% trans "Assurance tranquillité" %}</a>
+				|
+				<a href="{% url contact %}">{% trans "Contactez-nous" %}</a>
+			</p>
+			<p>
+				Copyright &copy; 2010 e-loue
+			</p>
+		</div>
+	</body>
+</html>
