@@ -30,11 +30,6 @@
 				<a href='{% url home %}' class="logo">
 					<img src="{{ MEDIA_URL }}images/logo_m.png" alt="e-loue"/>
 				</a>
-				{% if not user.is_authenticated %}
-					<a href="{% url auth_login %}" class="signup" >{% trans "S'inscrire ou se connecter" %}</a>
-				{% else %}
-					<a href="{% url auth_logout %}" class="signout">{% trans "Se déconnecter" %}</a>
-				{% endif %}
 			</div>
 		</div>
 		{% block content %}
