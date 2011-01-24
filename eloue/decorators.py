@@ -90,7 +90,7 @@ def mobify(view_func=None):
     def wrapper(request, *args, **kwargs):
         user_agent = get_user_agent(request)
         if not MOBILE and is_mobile(user_agent):
-            return redirect_to(request, "%s%s" % (MOBILE_REDIRECT_BASE, request.get_full_path()))
+            return HttpResponsePermanentRedirect("%s%s" % (MOBILE_REDIRECT_BASE, request.get_full_path()))
         else:
             return view_func(request, *args, **kwargs)
     return wrapper
