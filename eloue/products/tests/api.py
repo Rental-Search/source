@@ -112,7 +112,7 @@ class ApiTest(TestCase):
     def test_product_creation(self):
         f = open(local_path('../fixtures/bentley.jpg'))
         post_data = {
-            'summary':'Tondeuse',
+            'summary': 'Tondeuse',
             'description': 'Merveilleuse tondeuse',
             'quantity': 1,
             'deposit_amount': 150,

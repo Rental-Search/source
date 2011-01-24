@@ -23,13 +23,14 @@ def parse_equipment(args):
         'lat': lat, 'lng': lon,
         'city': shop.Ville.pyval.capitalize(), 'zipcode': shop.CP.pyval,
         'price': tarif.d1.pyval,
-        'owner': 'skiplanet', 
+        'owner': 'skiplanet',
         'owner_url': 'http://www.ski-planet.com/',
         'url': 'http://www.ski-planet.com/skiset/location-materiel-ski.php?partner=e-loue&ResortID=%s&ShopId=%s' % (
             station.get('id'), shop.get('id')
         ),
         'django_id': 'skiplanet.%s' % tarif.get('id'),
     })
+
 
 class SourceClass(BaseSource):
     def get_prefix(self):

@@ -10,10 +10,11 @@ from django.utils.encoding import smart_str
 
 from . import BaseSource, Product
 
+
 class SourceClass(BaseSource):
     def request(self, xml):
         response, content = Http().request("http://www.elocationdevoitures.fr/service/ServiceRequest.do?%s" % urlencode({'xml': xml}))
-        return objectify.fromstring(content)         
+        return objectify.fromstring(content)
     
     def build_xml(self, params):
         xml = """<SearchRQ>
@@ -56,7 +57,8 @@ class SourceClass(BaseSource):
         pickup_date = datetime.now() + timedelta(days=7)
         dropoff_date = pickup_date + timedelta(days=1)
         for location in self.get_locations():
-            root = self.request(self.build_xml({ 'age': 25, 'location': location['id'],
+            root = self.request(self.build_xml({
+                'age': 25, 'location': location['id'],
                 'pickup_year': pickup_date.year, 'pickup_month': pickup_date.month, 'pickup_day': pickup_date.day, 'pickup_hour': 12, 'pickup_minute': 30,
                 'dropoff_year': dropoff_date.year, 'dropoff_month': dropoff_date.month, 'dropoff_day': dropoff_date.day, 'dropoff_hour': 12, 'dropoff_minute': 30,
             }))
@@ -70,7 +72,7 @@ class SourceClass(BaseSource):
                     'lat': lat, 'lng': lon,
                     'city': match.Route.PickUp.Location.get('locName'),
                     'price': match.Price.pyval,
-                    'owner': 'elocationdevoitures', 
+                    'owner': 'elocationdevoitures',
                     'owner_url': 'http://www.elocationdevoitures.fr/',
                     'url': 'http://www.elocationdevoitures.fr/SearchResults.do?country=%(country)s&city=%(city)s&location=%(location)s&dropLocation=%(location)s&puYear=%(pickup_year)d&puMonth=%(pickup_month)d&puDay=%(pickup_day)d&puHour=12&puMinute=20&doYear=%(dropoff_year)d&doMonth=%(dropoff_month)d&doDay=%(dropoff_day)d&doHour=12&doMinute=30&driversAge=%(age)d&affiliateCode=eloue_fr' % {
                         'age': 25, 'location': location['id'], 'city': location['city'], 'country': location['country'],

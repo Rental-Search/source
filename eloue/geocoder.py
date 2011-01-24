@@ -69,7 +69,7 @@ class GoogleGeocoder(Geocoder):
             lat = json['results'][0]['geometry']['location']['lat']
         except (KeyError, IndexError):
             return None, (None, None), None
-        try: # trying to return at least lat, lon
+        try:  # trying to return at least lat, lon
             sw = Point(json['results'][0]['geometry']['bounds']['southwest']['lat'],
                 json['results'][0]['geometry']['viewport']['southwest']['lng'])
             ne = Point(json['results'][0]['geometry']['bounds']['northeast']['lat'],

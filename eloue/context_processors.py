@@ -9,5 +9,6 @@ def site(request):
     except Site.DoesNotExist:
         return {'site': None}
 
+
 def debug(request):
     return {'debug': settings.DEBUG}

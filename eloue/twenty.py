@@ -18,4 +18,5 @@ AFFILIATE_TAG = '20m'
 TEMPLATE_DIRS = (
     local_path('templates/20minutes/'),
     local_path('templates/'),
-) 
+)
+ 
