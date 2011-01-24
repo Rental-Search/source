@@ -22,8 +22,8 @@
     height: 140px; 
     padding-bottom: 10px;
   }
-  
-  .category-home h3 a {color: #6EB924;}
+	.category-home h3 { font-weight: bold; }
+  	.category-home h3 a {color: #6EB924;}
   
   .category-home ul li{ list-style-type: none;}
   
@@ -45,6 +45,7 @@
     { 
       color : #364c59;
       font-weight: normal;
+			font-family: 'Ubuntu', arial, serif;
     }
     
    .presse-icons h3
@@ -52,6 +53,7 @@
      background: transparent url("../images/content-h-bg.png") repeat-x 0 bottom;
      padding-bottom: 10px;
      line-height: 18px;
+		 font-family: 'Ubuntu', arial, serif;
    }
    
    .community-portlet 
@@ -65,6 +67,7 @@
      {
        background: #E4EFF9 url("../images/booking-bottom-bg.png") repeat 0 0;
        border-bottom: 1px solid #b9cad4;
+			 font-family: 'Ubuntu', arial, serif;
        padding-top: 10px;
        -moz-border-radius-topleft: 5px;
        -moz-border-radius-topright: 5px;
@@ -634,6 +637,7 @@
       color: #546b78;
       margin:0 20px 20px;
       padding-bottom: 10px;
+			font-family: 'Ubuntu', arial, serif;
     }
     
     .guarantee-list
@@ -857,7 +861,8 @@
 /* **************************************************
   How-to page
 **************************************************** */
-.ht-title h1 { font-weight: bold;}
+.ht-title h1 { font-family: 'Ubuntu', arial, serif; }
+
 .ht-baseLine 
 { 
   color: #9EB0BA;
