@@ -7,7 +7,6 @@ from django.conf import settings
 from django.contrib.sites.models import Site
 from django.http import HttpResponsePermanentRedirect, HttpResponseForbidden
 from django.utils import translation
-from django.views.generic.simple import redirect_to
 
 USE_HTTPS = getattr(settings, 'USE_HTTPS', True)
 USE_PAYPAL_SANDBOX = getattr(settings, 'USE_PAYPAL_SANDBOX', False)
