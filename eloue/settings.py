@@ -209,6 +209,7 @@ COMPRESS_CSS_URL_REPLACE = {
     "../": "",
     "url(\"": "url(\"%s" % MEDIA_URL,
     "url(\'": "url(\'%s" % MEDIA_URL,
+    "src=\'": "src='%s" % MEDIA_URL,
 }
 COMPRESS_JS_FILTERS = getattr(local, 'COMPRESS_JS_FILTERS', ('compress.filters.yui.YUICompressorFilter',))
 COMPRESS_CSS_FILTERS = getattr(local, 'COMPRESS_CSS_FILTERS', (
