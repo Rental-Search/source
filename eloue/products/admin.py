@@ -23,7 +23,7 @@ class ProductAdmin(admin.ModelAdmin):
     search_fields = ['summary', 'description', 'category__name', 'owner__username', 'owner__email']
     inlines = [PictureInline, PropertyValueInline, PriceInline]
     raw_id_fields = ("owner", "address")
-    list_display = ('summary', 'category','deposit_amount', 'quantity', 'is_archived', 'is_allowed', 'created_at')
+    list_display = ('summary', 'category', 'deposit_amount', 'quantity', 'is_archived', 'is_allowed', 'created_at')
     list_filter = ('is_archived', 'is_allowed')
     list_editable = ('category',)
     ordering = ['-created_at']
@@ -50,8 +50,8 @@ class PatronReviewAdmin(admin.ModelAdmin):
 
 
 class CuriosityAdmin(admin.ModelAdmin):
-    list_display = ('product',  )
-    raw_id_fields = ("product", )
+    list_display = ('product',)
+    raw_id_fields = ("product",)
 
 
 admin.site.register(Product, ProductAdmin)

@@ -186,4 +186,4 @@ class SinisterForm(forms.ModelForm):
     
 
 class IncidentForm(forms.Form):
-    message = forms.CharField(required=True, widget = forms.Textarea(attrs={'placeholder':'Décrivez votre incident'}))
+    message = forms.CharField(required=True, widget=forms.Textarea(attrs={'placeholder': _(u"Décrivez votre incident")}))

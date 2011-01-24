@@ -60,7 +60,7 @@ def pay_ipn(request):
         booking = Booking.objects.get(pay_key=form.cleaned_data['pay_key'])
         if form.cleaned_data['action_type'] == 'PAY_PRIMARY' and form.cleaned_data['status'] == 'INCOMPLETE':
             booking.state = Booking.STATE.ONGOING
-        else: # FIXME : naïve
+        else:  # FIXME : naïve
             booking.state = Booking.STATE.CLOSED
         booking.save()
     return HttpResponse()
@@ -141,7 +141,7 @@ def booking_reject(request, booking_id):
         booking = form.save()
         booking.send_rejection_email()
         GoalRecord.record('rent_object_rejected', WebUser(request))
-        messages.success(request,_(u"Cette réservation a bien été refusée"))
+        messages.success(request, _(u"Cette réservation a bien été refusée"))
     messages.error(request, _(u"Cette réservation n'a pu être refusée"))
     return redirect_to(request, booking.get_absolute_url())
 

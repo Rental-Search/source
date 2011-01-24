@@ -21,6 +21,7 @@ def cache_key(fragment_name, *args):
     hasher = md5_constructor(u':'.join([urlquote(arg) for arg in args]))
     return 'template.cache.%s.%s' % (fragment_name, hasher.hexdigest())
 
+
 def create_alternative_email(prefix, context, from_email, recipient_list):
     context.update({
         'site': Site.objects.get_current(),
@@ -32,6 +33,7 @@ def create_alternative_email(prefix, context, from_email, recipient_list):
     message = EmailMultiAlternatives(subject, text_content, from_email, recipient_list)
     message.attach_alternative(html_content, "text/html")
     return message
+
 
 def generate_camo_url(url):
     parts = urlparse(url)
