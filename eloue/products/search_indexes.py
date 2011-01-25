@@ -1,6 +1,8 @@
 #-*- coding: utf-8 -*-
 import datetime
 
+from django.conf import settings
+
 from haystack.sites import site
 from haystack.indexes import CharField, DateTimeField, FloatField, MultiValueField
 from haystack.exceptions import AlreadyRegistered
@@ -25,10 +27,14 @@ class ProductIndex(QueuedSearchIndex):
     owner = CharField(model_attr='owner__username', faceted=True)
     owner_url = CharField(model_attr='owner__get_absolute_url', indexed=False)
     price = FloatField(faceted=True)
+    sites = MultiValueField(faceted=True)
     summary = CharField(model_attr='summary')
     text = CharField(document=True, use_template=True)
     url = CharField(model_attr='get_absolute_url', indexed=False)
     thumbnail = CharField(indexed=False)
+    
+    def prepare_sites(self, obj):
+        return [site.id for site in obj.sites.all()]
     
     def prepare_categories(self, obj):
         if obj.category:
@@ -57,4 +63,4 @@ except AlreadyRegistered:
     pass
 
 
-product_search = SearchQuerySet().models(Product).facet('categories').facet('owner').facet('price')
+product_search = SearchQuerySet().models(Product).facet('site').facet('categories').facet('owner').facet('price').narrow('site:%s' % settings.SITE_ID)

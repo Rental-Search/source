@@ -1,21 +1,19 @@
 # encoding: utf-8
 import datetime
-
 from south.db import db
-from south.v2 import SchemaMigration
-
+from south.v2 import DataMigration
 from django.db import models
 
+class Migration(DataMigration):
 
-class Migration(SchemaMigration):
     def forwards(self, orm):
-        # Adding field 'Booking.site'
-        db.add_column('rent_booking', 'site', self.gf('django.db.models.fields.related.ForeignKey')(default=1, related_name='bookings', to=orm['sites.Site']), keep_default=False)
-    
+        "Write your forwards methods here."
+
+
     def backwards(self, orm):
-        # Deleting field 'Booking.site'
-        db.delete_column('rent_booking', 'site_id')
-    
+        "Write your backwards methods here."
+
+
     models = {
         'accounts.address': {
             'Meta': {'object_name': 'Address'},
@@ -38,7 +36,7 @@ class Migration(SchemaMigration):
             'is_subscribed': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'modified_at': ('django.db.models.fields.DateTimeField', [], {}),
             'paypal_email': ('django.db.models.fields.EmailField', [], {'max_length': '75', 'null': 'True', 'blank': 'True'}),
-            'site': ('django.db.models.fields.related.ForeignKey', [], {'default': '1', 'related_name': "'patrons'", 'to': "orm['sites.Site']"}),
+            'sites': ('django.db.models.fields.related.ManyToManyField', [], {'related_name': "'patrons'", 'symmetrical': 'False', 'to': "orm['sites.Site']"}),
             'slug': ('django.db.models.fields.SlugField', [], {'unique': 'True', 'max_length': '50', 'db_index': 'True'}),
             'user_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['auth.User']", 'unique': 'True', 'primary_key': 'True'})
         },
@@ -78,6 +76,13 @@ class Migration(SchemaMigration):
             'model': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '100'})
         },
+        'products.answer': {
+            'Meta': {'object_name': 'Answer'},
+            'created_at': ('django.db.models.fields.DateTimeField', [], {}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'question': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'answers'", 'to': "orm['products.Question']"}),
+            'text': ('django.db.models.fields.CharField', [], {'max_length': '255'})
+        },
         'products.category': {
             'Meta': {'ordering': "['name']", 'object_name': 'Category'},
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
@@ -89,6 +94,41 @@ class Migration(SchemaMigration):
             'rght': ('django.db.models.fields.PositiveIntegerField', [], {'db_index': 'True'}),
             'slug': ('django.db.models.fields.SlugField', [], {'unique': 'True', 'max_length': '50', 'db_index': 'True'}),
             'tree_id': ('django.db.models.fields.PositiveIntegerField', [], {'db_index': 'True'})
+        },
+        'products.curiosity': {
+            'Meta': {'object_name': 'Curiosity'},
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'product': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'curiosities'", 'to': "orm['products.Product']"}),
+            'sites': ('django.db.models.fields.related.ManyToManyField', [], {'related_name': "'curiosities'", 'symmetrical': 'False', 'to': "orm['sites.Site']"})
+        },
+        'products.patronreview': {
+            'Meta': {'object_name': 'PatronReview'},
+            'created_at': ('django.db.models.fields.DateTimeField', [], {'blank': 'True'}),
+            'description': ('django.db.models.fields.TextField', [], {}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'ip': ('django.db.models.fields.IPAddressField', [], {'max_length': '15', 'null': 'True', 'blank': 'True'}),
+            'patron': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'reviews'", 'to': "orm['accounts.Patron']"}),
+            'reviewer': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'patronreview_reviews'", 'to': "orm['accounts.Patron']"}),
+            'score': ('django.db.models.fields.FloatField', [], {}),
+            'summary': ('django.db.models.fields.CharField', [], {'max_length': '255', 'blank': 'True'})
+        },
+        'products.picture': {
+            'Meta': {'object_name': 'Picture'},
+            'created_at': ('django.db.models.fields.DateTimeField', [], {'blank': 'True'}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'image': ('django.db.models.fields.files.ImageField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
+            'product': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'pictures'", 'null': 'True', 'to': "orm['products.Product']"})
+        },
+        'products.price': {
+            'Meta': {'unique_together': "(('product', 'unit', 'name'),)", 'object_name': 'Price'},
+            'amount': ('django.db.models.fields.DecimalField', [], {'max_digits': '8', 'decimal_places': '2'}),
+            'currency': ('django.db.models.fields.CharField', [], {'default': "'EUR'", 'max_length': '3'}),
+            'ended_at': ('django.db.models.fields.PositiveSmallIntegerField', [], {'null': 'True', 'blank': 'True'}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'name': ('django.db.models.fields.CharField', [], {'max_length': '255', 'blank': 'True'}),
+            'product': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'prices'", 'to': "orm['products.Product']"}),
+            'started_at': ('django.db.models.fields.PositiveSmallIntegerField', [], {'null': 'True', 'blank': 'True'}),
+            'unit': ('django.db.models.fields.PositiveSmallIntegerField', [], {'db_index': 'True'})
         },
         'products.product': {
             'Meta': {'object_name': 'Product'},
@@ -103,40 +143,42 @@ class Migration(SchemaMigration):
             'is_archived': ('django.db.models.fields.BooleanField', [], {'default': 'False', 'db_index': 'True'}),
             'owner': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'products'", 'to': "orm['accounts.Patron']"}),
             'quantity': ('django.db.models.fields.IntegerField', [], {}),
-            'site': ('django.db.models.fields.related.ForeignKey', [], {'default': '1', 'related_name': "'products'", 'to': "orm['sites.Site']"}),
+            'sites': ('django.db.models.fields.related.ManyToManyField', [], {'related_name': "'products'", 'symmetrical': 'False', 'to': "orm['sites.Site']"}),
             'summary': ('django.db.models.fields.CharField', [], {'max_length': '255'})
         },
-        'rent.booking': {
-            'Meta': {'object_name': 'Booking'},
-            'borrower': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'rentals'", 'to': "orm['accounts.Patron']"}),
-            'canceled_at': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
-            'contract_id': ('django.db.models.fields.IntegerField', [], {'db_index': 'True', 'unique': 'True', 'blank': 'True'}),
-            'created_at': ('django.db.models.fields.DateTimeField', [], {'blank': 'True'}),
-            'currency': ('django.db.models.fields.CharField', [], {'default': "'EUR'", 'max_length': '3'}),
-            'deposit_amount': ('django.db.models.fields.DecimalField', [], {'max_digits': '8', 'decimal_places': '2'}),
-            'ended_at': ('django.db.models.fields.DateTimeField', [], {}),
-            'insurance_amount': ('django.db.models.fields.DecimalField', [], {'max_digits': '8', 'decimal_places': '2', 'blank': 'True'}),
-            'ip': ('django.db.models.fields.IPAddressField', [], {'max_length': '15', 'null': 'True', 'blank': 'True'}),
-            'owner': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'bookings'", 'to': "orm['accounts.Patron']"}),
-            'pay_key': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
-            'pin': ('django.db.models.fields.CharField', [], {'max_length': '4', 'blank': 'True'}),
-            'preapproval_key': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
-            'product': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'bookings'", 'to': "orm['products.Product']"}),
-            'site': ('django.db.models.fields.related.ForeignKey', [], {'default': '1', 'related_name': "'bookings'", 'to': "orm['sites.Site']"}),
-            'started_at': ('django.db.models.fields.DateTimeField', [], {}),
-            'state': ('django.db.models.fields.CharField', [], {'default': "'authorizing'", 'max_length': '50'}),
-            'total_amount': ('django.db.models.fields.DecimalField', [], {'max_digits': '8', 'decimal_places': '2'}),
-            'uuid': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '32', 'primary_key': 'True'})
-        },
-        'rent.sinister': {
-            'Meta': {'object_name': 'Sinister'},
-            'booking': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'sinisters'", 'to': "orm['rent.Booking']"}),
+        'products.productreview': {
+            'Meta': {'object_name': 'ProductReview'},
             'created_at': ('django.db.models.fields.DateTimeField', [], {'blank': 'True'}),
             'description': ('django.db.models.fields.TextField', [], {}),
-            'patron': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'sinisters'", 'to': "orm['accounts.Patron']"}),
-            'product': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'sinisters'", 'to': "orm['products.Product']"}),
-            'sinister_id': ('django.db.models.fields.IntegerField', [], {'db_index': 'True', 'unique': 'True', 'blank': 'True'}),
-            'uuid': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '32', 'primary_key': 'True'})
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'ip': ('django.db.models.fields.IPAddressField', [], {'max_length': '15', 'null': 'True', 'blank': 'True'}),
+            'product': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'reviews'", 'to': "orm['products.Product']"}),
+            'reviewer': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'productreview_reviews'", 'to': "orm['accounts.Patron']"}),
+            'score': ('django.db.models.fields.FloatField', [], {}),
+            'summary': ('django.db.models.fields.CharField', [], {'max_length': '255', 'blank': 'True'})
+        },
+        'products.property': {
+            'Meta': {'object_name': 'Property'},
+            'category': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'properties'", 'to': "orm['products.Category']"}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'name': ('django.db.models.fields.CharField', [], {'max_length': '255'})
+        },
+        'products.propertyvalue': {
+            'Meta': {'unique_together': "(('property', 'product'),)", 'object_name': 'PropertyValue'},
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'product': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'properties'", 'to': "orm['products.Product']"}),
+            'property': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'values'", 'to': "orm['products.Property']"}),
+            'value': ('django.db.models.fields.CharField', [], {'max_length': '255'})
+        },
+        'products.question': {
+            'Meta': {'ordering': "('modified_at', 'created_at')", 'object_name': 'Question'},
+            'author': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'questions'", 'to': "orm['accounts.Patron']"}),
+            'created_at': ('django.db.models.fields.DateTimeField', [], {}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'modified_at': ('django.db.models.fields.DateTimeField', [], {}),
+            'product': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'questions'", 'to': "orm['products.Product']"}),
+            'status': ('django.db.models.fields.PositiveSmallIntegerField', [], {'default': '0', 'db_index': 'True'}),
+            'text': ('django.db.models.fields.CharField', [], {'max_length': '255'})
         },
         'sites.site': {
             'Meta': {'ordering': "('domain',)", 'object_name': 'Site', 'db_table': "'django_site'"},
@@ -146,4 +188,4 @@ class Migration(SchemaMigration):
         }
     }
 
-    complete_apps = ['rent']
+    complete_apps = ['products']

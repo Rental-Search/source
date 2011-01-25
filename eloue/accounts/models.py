@@ -103,7 +103,7 @@ class Patron(User):
     affiliate = models.CharField(null=True, blank=True, max_length=10)
     slug = models.SlugField(unique=True, db_index=True)
     paypal_email = models.EmailField(null=True, blank=True)
-    site = models.ForeignKey(Site, related_name='patrons', default=settings.SITE_ID)
+    sites = models.ManyToManyField(Site, related_name='patrons')
     
     on_site = CurrentSiteManager()
     objects = PatronManager()

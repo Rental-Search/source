@@ -63,7 +63,7 @@ class Product(models.Model):
     category = models.ForeignKey('Category', related_name='products')
     owner = models.ForeignKey(Patron, related_name='products')
     created_at = models.DateTimeField(blank=True, editable=False)
-    site = models.ForeignKey(Site, related_name='products', default=settings.SITE_ID)
+    sites = models.ManyToManyField(Site, related_name='products')
     
     on_site = CurrentSiteProductManager()
     objects = ProductManager()
@@ -338,7 +338,7 @@ class Answer(models.Model):
 
 class Curiosity(models.Model):
     product = models.ForeignKey(Product, related_name='curiosities')
-    site = models.ForeignKey(Site, related_name='curiosities', default=settings.SITE_ID)
+    sites = models.ManyToManyField(Site, related_name='curiosities')
     
     on_site = CurrentSiteManager()
     objects = models.Manager()

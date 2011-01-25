@@ -9,16 +9,28 @@ from django.db import models
 
 class Migration(SchemaMigration):
     def forwards(self, orm):
-        # Adding field 'Curiosity.site'
-        db.add_column('products_curiosity', 'site', self.gf('django.db.models.fields.related.ForeignKey')(default=1, related_name='curiosities', to=orm['sites.Site']), keep_default=False)
-        # Adding field 'Product.site'
-        db.add_column('products_product', 'site', self.gf('django.db.models.fields.related.ForeignKey')(default=1, related_name='products', to=orm['sites.Site']), keep_default=False)
+        # Adding M2M table for field sites on 'Curiosity'
+        db.create_table('products_curiosity_sites', (
+            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
+            ('curiosity', models.ForeignKey(orm['products.curiosity'], null=False)),
+            ('site', models.ForeignKey(orm['sites.site'], null=False))
+        ))
+        db.create_unique('products_curiosity_sites', ['curiosity_id', 'site_id'])
+
+        # Adding M2M table for field sites on 'Product'
+        db.create_table('products_product_sites', (
+            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
+            ('product', models.ForeignKey(orm['products.product'], null=False)),
+            ('site', models.ForeignKey(orm['sites.site'], null=False))
+        ))
+        db.create_unique('products_product_sites', ['product_id', 'site_id'])
     
     def backwards(self, orm):
-        # Deleting field 'Curiosity.site'
-        db.delete_column('products_curiosity', 'site_id')
-        # Deleting field 'Product.site'
-        db.delete_column('products_product', 'site_id')
+        # Removing M2M table for field sites on 'Curiosity'
+        db.delete_table('products_curiosity_sites')
+
+        # Removing M2M table for field sites on 'Product'
+        db.delete_table('products_product_sites')
     
     models = {
         'accounts.address': {
@@ -42,7 +54,7 @@ class Migration(SchemaMigration):
             'is_subscribed': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'modified_at': ('django.db.models.fields.DateTimeField', [], {}),
             'paypal_email': ('django.db.models.fields.EmailField', [], {'max_length': '75', 'null': 'True', 'blank': 'True'}),
-            'site': ('django.db.models.fields.related.ForeignKey', [], {'default': '1', 'related_name': "'patrons'", 'to': "orm['sites.Site']"}),
+            'sites': ('django.db.models.fields.related.ManyToManyField', [], {'related_name': "'patrons'", 'symmetrical': 'False', 'to': "orm['sites.Site']"}),
             'slug': ('django.db.models.fields.SlugField', [], {'unique': 'True', 'max_length': '50', 'db_index': 'True'}),
             'user_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['auth.User']", 'unique': 'True', 'primary_key': 'True'})
         },
@@ -105,7 +117,7 @@ class Migration(SchemaMigration):
             'Meta': {'object_name': 'Curiosity'},
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'product': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'curiosities'", 'to': "orm['products.Product']"}),
-            'site': ('django.db.models.fields.related.ForeignKey', [], {'default': '1', 'related_name': "'curiosities'", 'to': "orm['sites.Site']"})
+            'sites': ('django.db.models.fields.related.ManyToManyField', [], {'related_name': "'curiosities'", 'symmetrical': 'False', 'to': "orm['sites.Site']"})
         },
         'products.patronreview': {
             'Meta': {'object_name': 'PatronReview'},
@@ -149,7 +161,7 @@ class Migration(SchemaMigration):
             'is_archived': ('django.db.models.fields.BooleanField', [], {'default': 'False', 'db_index': 'True'}),
             'owner': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'products'", 'to': "orm['accounts.Patron']"}),
             'quantity': ('django.db.models.fields.IntegerField', [], {}),
-            'site': ('django.db.models.fields.related.ForeignKey', [], {'default': '1', 'related_name': "'products'", 'to': "orm['sites.Site']"}),
+            'sites': ('django.db.models.fields.related.ManyToManyField', [], {'related_name': "'products'", 'symmetrical': 'False', 'to': "orm['sites.Site']"}),
             'summary': ('django.db.models.fields.CharField', [], {'max_length': '255'})
         },
         'products.productreview': {

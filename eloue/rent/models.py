@@ -103,7 +103,7 @@ class Booking(models.Model):
     preapproval_key = models.CharField(null=True, editable=False, blank=True, max_length=255)
     pay_key = models.CharField(null=True, editable=False, blank=True, max_length=255)
     
-    site = models.ForeignKey(Site, related_name='bookings', default=settings.SITE_ID)
+    sites = models.ManyToManyField(Site, related_name='bookings')
     
     on_site = CurrentSiteManager()
     objects = BookingManager()
