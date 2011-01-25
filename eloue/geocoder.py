@@ -10,6 +10,7 @@ from django.utils import simplejson
 from geopy import Point, distance
 
 GOOGLE_API_KEY = getattr(settings, 'GOOGLE_API_KEY', 'ABQIAAAA7bPNcG5t1-bTyW9iNmI-jRRqVDjnV4vohYMgEqqi0RF2UFYT-xSSwfcv2yfC-sACkmL4FuG-A_bScQ')
+GOOGLE_REGION_CODE = getattr(settings, 'GOOGLE_REGION_CODE', 'fr')
 
 
 class Geocoder(object):
@@ -60,7 +61,7 @@ class GoogleGeocoder(Geocoder):
                 'address': location,
                 'oe': 'utf8',
                 'sensor': 'false',
-                'region': 'fr',
+                'region': GOOGLE_REGION_CODE,
                 'key': GOOGLE_API_KEY
             })
         ))
