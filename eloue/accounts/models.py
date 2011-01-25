@@ -3,7 +3,7 @@ import datetime
 import logbook
 
 from django.core.exceptions import ValidationError
-from django.contrib.sites.manager import CurrentSiteManager
+from django.contrib.sites.managers import CurrentSiteManager
 from django.contrib.sites.models import Site
 from django.contrib.gis.db import models
 from django.conf import settings

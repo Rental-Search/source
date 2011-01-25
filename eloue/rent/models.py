@@ -13,7 +13,7 @@ from urlparse import urljoin
 
 from django.conf import settings
 from django.core.urlresolvers import reverse
-from django.contrib.sites.manager import CurrentSiteManager
+from django.contrib.sites.managers import CurrentSiteManager
 from django.contrib.sites.models import Site
 from django.db import models
 from django.db.models import permalink

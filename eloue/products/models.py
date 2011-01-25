@@ -4,7 +4,7 @@ from datetime import datetime, timedelta
 
 from django.conf import settings
 from django.contrib.gis.db import models
-from django.contrib.sites.manager import CurrentSiteManager
+from django.contrib.sites.managers import CurrentSiteManager
 from django.contrib.sites.models import Site
 from django.db.models import permalink
 from django.db.models.signals import post_save
