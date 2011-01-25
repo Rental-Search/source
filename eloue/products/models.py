@@ -341,6 +341,7 @@ class Curiosity(models.Model):
     site = models.ForeignKey(Site, related_name='curiosities', default=settings.SITE_ID)
     
     on_site = CurrentSiteManager()
+    objects = models.Manager()
     
     class Meta:
         verbose_name_plural = "curiosities"
