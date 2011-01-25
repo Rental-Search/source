@@ -70,7 +70,7 @@ def pay_ipn(request):
 def booking_price(request, slug, product_id):
     if not request.is_ajax():
         return HttpResponseNotAllowed(['GET', 'XHR'])
-    product = get_object_or_404(Product, pk=product_id)
+    product = get_object_or_404(Product.on_site, pk=product_id)
     form = BookingForm(request.GET, prefix="0", instance=Booking(product=product))
     if form.is_valid():
         duration = timesince(form.cleaned_data['started_at'], form.cleaned_data['ended_at'])
@@ -84,7 +84,7 @@ def booking_price(request, slug, product_id):
 @never_cache
 @secure_required
 def booking_create(request, *args, **kwargs):
-    product = get_object_or_404(Product, pk=kwargs['product_id'])
+    product = get_object_or_404(Product.on_site, pk=kwargs['product_id'])
     if product.slug != kwargs['slug']:
         return redirect_to(request, product.get_absolute_url())
     wizard = BookingWizard([BookingForm, EmailAuthenticationForm, BookingConfirmationForm])
@@ -94,14 +94,14 @@ def booking_create(request, *args, **kwargs):
 @login_required
 @ownership_required(model=Booking, object_key='booking_id', ownership=['borrower'])
 def booking_success(request, booking_id):
-    return object_detail(request, queryset=Booking.objects.all(), object_id=booking_id,
+    return object_detail(request, queryset=Booking.on_site.all(), object_id=booking_id,
         template_name='rent/booking_success.html', template_object_name='booking')
 
 
 @login_required
 @ownership_required(model=Booking, object_key='booking_id', ownership=['borrower'])
 def booking_failure(request, booking_id):
-    return object_detail(request, queryset=Booking.objects.all(), object_id=booking_id,
+    return object_detail(request, queryset=Booking.on_site.all(), object_id=booking_id,
         template_name='rent/booking_failure.html', template_object_name='booking')
 
 
@@ -109,7 +109,7 @@ def booking_failure(request, booking_id):
 @ownership_required(model=Booking, object_key='booking_id', ownership=['owner', 'borrower'])
 def booking_detail(request, booking_id):
     paypal = request.GET.get('paypal', False)
-    return object_detail(request, queryset=Booking.objects.all(), object_id=booking_id,
+    return object_detail(request, queryset=Booking.on_site.all(), object_id=booking_id,
         template_name='rent/booking_detail.html', template_object_name='booking', extra_context={'paypal': paypal})
 
 

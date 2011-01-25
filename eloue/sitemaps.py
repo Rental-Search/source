@@ -22,14 +22,14 @@ class PatronSitemap(SecureSitemap):
     changefreq = "weekly"
     
     def items(self):
-        return Patron.objects.all()
+        return Patron.on_site.all()
     
 
 class ProductSitemap(SecureSitemap):
     changefreq = "weekly"
     
     def items(self):
-        return Product.objects.active()
+        return Product.on_site.active()
     
 
 class FlatPageSitemap(SecureSitemap):

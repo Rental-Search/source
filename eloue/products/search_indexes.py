@@ -48,7 +48,7 @@ class ProductIndex(QueuedSearchIndex):
         return amount
     
     def get_queryset(self):
-        return Product.objects.active()
+        return Product.on_site.active()
     
 
 try:

@@ -2,6 +2,7 @@
 import types
 
 from django.contrib.gis.db.models import GeoManager
+from django.contrib.sites.managers import CurrentSiteManager
 from django.db.models import Manager
 
 
@@ -12,6 +13,10 @@ class ProductManager(GeoManager):
     def archived(self):
         return self.filter(is_archived=True, is_allowed=True)
     
+
+class CurrentSiteProductManager(ProductManager, CurrentSiteManager):
+    pass
+
 
 class PriceManager(Manager):
     def __init__(self):

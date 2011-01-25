@@ -5,6 +5,7 @@
         description: 'Engrenage plantaire haute performance 2 vitesses : durée de vie supérieure, transmission optimale, fonctionnement régulier.'
         owner: 1
         quantity: 1
+        site: 1
         summary: Perceuse visseuse Philips
         created_at: 2010-08-15 09:00:10
     model: products.product
@@ -17,6 +18,7 @@
         description: 'Engrenage plantaire haute performance 2 vitesses : durée de vie supérieure fonctionnement régulier.'
         owner: 1
         quantity: 1
+        site: 1
         summary: Perceuse visseuse Black Decker
         created_at: 2010-08-15 09:00:10
     model: products.product
@@ -29,6 +31,7 @@
         description: 'Belle maison de bord de plage'
         owner: 1
         quantity: 1
+        site: 1
         summary: 'Maison de vacances au bord de la plage'
         created_at: 2010-08-15 09:00:10
     model: products.product
@@ -41,6 +44,7 @@
         description: 'Belle voiture de sport'
         owner: 1
         quantity: 1
+        site: 1
         summary: 'Belle voiture de sport BMW'
         created_at: 2010-08-15 09:00:10
     model: products.product

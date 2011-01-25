@@ -18,7 +18,7 @@ from imagekit.models import ImageModel
 
 from eloue.accounts.models import Patron, Address
 from eloue.products.fields import SimpleDateField
-from eloue.products.manager import ProductManager, PriceManager, QuestionManager
+from eloue.products.manager import ProductManager, PriceManager, QuestionManager, CurrentSiteProductManager
 from eloue.products.signals import post_save_answer, post_save_product, post_save_curiosity
 from eloue.products.utils import Enum
 
@@ -65,7 +65,7 @@ class Product(models.Model):
     created_at = models.DateTimeField(blank=True, editable=False)
     site = models.ForeignKey(Site, related_name='products', default=settings.SITE_ID)
     
-    on_site = CurrentSiteManager()
+    on_site = CurrentSiteProductManager()
     objects = ProductManager()
     
     class Meta:
