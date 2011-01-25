@@ -4,6 +4,8 @@ from datetime import datetime, timedelta
 
 from django.conf import settings
 from django.contrib.gis.db import models
+from django.contrib.sites.manager import CurrentSiteManager
+from django.contrib.sites.models import Site
 from django.db.models import permalink
 from django.db.models.signals import post_save
 from django.template.defaultfilters import slugify
@@ -61,7 +63,9 @@ class Product(models.Model):
     category = models.ForeignKey('Category', related_name='products')
     owner = models.ForeignKey(Patron, related_name='products')
     created_at = models.DateTimeField(blank=True, editable=False)
+    site = models.ForeignKey(Site, related_name='products', default=settings.SITE_ID)
     
+    on_site = CurrentSiteManager()
     objects = ProductManager()
     
     class Meta:
@@ -334,6 +338,9 @@ class Answer(models.Model):
 
 class Curiosity(models.Model):
     product = models.ForeignKey(Product, related_name='curiosities')
+    site = models.ForeignKey(Site, related_name='curiosities', default=settings.SITE_ID)
+    
+    on_site = CurrentSiteManager()
     
     class Meta:
         verbose_name_plural = "curiosities"

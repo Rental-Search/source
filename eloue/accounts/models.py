@@ -3,6 +3,8 @@ import datetime
 import logbook
 
 from django.core.exceptions import ValidationError
+from django.contrib.sites.manager import CurrentSiteManager
+from django.contrib.sites.models import Site
 from django.contrib.gis.db import models
 from django.conf import settings
 from django.contrib.auth.models import User
@@ -101,7 +103,9 @@ class Patron(User):
     affiliate = models.CharField(null=True, blank=True, max_length=10)
     slug = models.SlugField(unique=True, db_index=True)
     paypal_email = models.EmailField(null=True, blank=True)
+    site = models.ForeignKey(Site, related_name='patrons', default=settings.SITE_ID)
     
+    on_site = CurrentSiteManager()
     objects = PatronManager()
     
     def save(self, *args, **kwargs):

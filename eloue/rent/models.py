@@ -13,6 +13,7 @@ from urlparse import urljoin
 
 from django.conf import settings
 from django.core.urlresolvers import reverse
+from django.contrib.sites.manager import CurrentSiteManager
 from django.contrib.sites.models import Site
 from django.db import models
 from django.db.models import permalink
@@ -102,6 +103,9 @@ class Booking(models.Model):
     preapproval_key = models.CharField(null=True, editable=False, blank=True, max_length=255)
     pay_key = models.CharField(null=True, editable=False, blank=True, max_length=255)
     
+    site = models.ForeignKey(Site, related_name='bookings', default=settings.SITE_ID)
+    
+    on_site = CurrentSiteManager()
     objects = BookingManager()
     
     STATE = BOOKING_STATE
