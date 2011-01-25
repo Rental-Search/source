@@ -60,7 +60,7 @@ def authenticate_headless(request):
 
 
 @never_cache
-def oauth_authorize(request,*args, **kwargs):
+def oauth_authorize(request, *args, **kwargs):
     return HttpResponse(csrf(request)["csrf_token"]._proxy____func())
 
 

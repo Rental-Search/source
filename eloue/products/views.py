@@ -22,6 +22,7 @@ from eloue.products.wizard import ProductWizard
 PAGINATE_PRODUCTS_BY = getattr(settings, 'PAGINATE_PRODUCTS_BY', 10)
 DEFAULT_RADIUS = getattr(settings, 'DEFAULT_RADIUS', 50)
 
+
 @mobify
 @cache_page(300)
 def homepage(request):
@@ -33,8 +34,8 @@ def homepage(request):
 @mobify
 @cache_page(300)
 def search(request):
-	form = FacetedSearchForm()
-	return direct_to_template(request, template='products/search.html', extra_context={'form': form })
+    form = FacetedSearchForm()
+    return direct_to_template(request, template='products/search.html', extra_context={'form': form})
 
 
 @never_cache
@@ -49,7 +50,7 @@ def product_create(request, *args, **kwargs):
 def product_edit(request, slug, product_id):
     product = get_object_or_404(Product, pk=product_id)
     price = product.prices.day()[0]
-    form = ProductEditForm(request.POST or None, instance=product, initial={'price': price.amount, 'category':product.category.id})
+    form = ProductEditForm(request.POST or None, instance=product, initial={'price': price.amount, 'category': product.category.id})
     if form.is_valid():
         product = form.save()
         return redirect_to(request, product.get_absolute_url())

@@ -140,7 +140,7 @@ class OAuthResource(ModelResource):
         filters = super(OAuthResource, self).build_filters(filters)
         for key, val in filters.items():
             if key.startswith("oauth_"):
-               del filters[key]
+                del filters[key]
         return filters
     
 
@@ -411,7 +411,6 @@ class ProductResource(UserSpecificResource):
         bundle.data["unit"], bundle.data["price"] = Booking.calculate_price(bundle.obj, date_start, date_end)
         return bundle
     
-
 
 api_v1 = Api(api_name='1.0')
 api_v1.register(CategoryResource())

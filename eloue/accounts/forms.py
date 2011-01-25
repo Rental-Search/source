@@ -159,7 +159,7 @@ class PatronPasswordChangeForm(PasswordChangeForm):
     old_password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'inm'}))
     new_password1 = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'inm'}))
     new_password2 = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'inm'}))
-	
+    
     def clean_old_password(self):
         """
         Validates that the old_password field is correct.
@@ -168,13 +168,12 @@ class PatronPasswordChangeForm(PasswordChangeForm):
         if not self.user.check_password(old_password):
             raise forms.ValidationError(_("Your old password was entered incorrectly. Please enter it again."))
         return old_password
-	    
     PasswordChangeForm.base_fields.keyOrder = ['old_password', 'new_password1', 'new_password2']
     
 
 class PatronChangeForm(forms.ModelForm):
     class Meta:
-        model = Patron    
+        model = Patron
     
 
 class PatronPaypalForm(forms.ModelForm):
@@ -244,7 +243,7 @@ def make_missing_data_form(instance, required_fields=[]):
         del fields['password1']
         del fields['password2']
     
-    # Are we in presence of a pro ?    
+    # Are we in presence of a pro ?
     if instance and instance.is_professional != None:
         del fields['is_professional']
         del fields['company_name']
@@ -336,6 +335,7 @@ def make_missing_data_form(instance, required_fields=[]):
     form_class.clean_company_name = types.MethodType(clean_company_name, None, form_class)
     return fields != {}, form_class
     
+
 class ContactForm(forms.Form):
     subject = forms.CharField(label=_(u"Sujet"), max_length=100, required=True, widget=forms.TextInput(attrs={'class': 'inm'}))
     message = forms.CharField(label=_(u"Message"), required=True, widget=forms.Textarea(attrs={'class': 'inm'}))
@@ -343,7 +343,6 @@ class ContactForm(forms.Form):
         'autocapitalize': 'off', 'autocorrect': 'off', 'class': 'inm'
     }))
     cc_myself = forms.BooleanField(label=_(u"Je souhaite recevoir une copie de ce message."), required=False)
-    
 
 
 class PatronSetPasswordForm(SetPasswordForm):

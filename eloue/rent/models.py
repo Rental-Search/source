@@ -123,8 +123,8 @@ class Booking(models.Model):
         return ('booking_detail', [self.pk.hex])
     
     def __unicode__(self):
-	    return self.product.summary
-        
+        return self.product.summary
+    
     def __init__(self, *args, **kwargs):
         super(Booking, self).__init__(*args, **kwargs)
         for state in BOOKING_STATE.enum_dict:
@@ -157,7 +157,7 @@ class Booking(models.Model):
         
         return unit, amount
     
-    @transition(source='authorizing', target='authorized') 
+    @transition(source='authorizing', target='authorized')
     def preapproval(self, cancel_url=None, return_url=None, ip_address=None):
         """Preapprove payments for borrower from Paypal.
         
@@ -199,7 +199,7 @@ class Booking(models.Model):
     def send_recovery_email(self):
         context = {
             'booking': self,
-            'preapproval_url':settings.PAYPAL_COMMAND % urllib.urlencode({
+            'preapproval_url': settings.PAYPAL_COMMAND % urllib.urlencode({
                 'cmd': '_ap-preapproval',
                 'preapprovalkey': self.preapproval_key
             })
@@ -246,7 +246,7 @@ class Booking(models.Model):
             message.send()
     
     def send_ended_email(self):
-        context= {'booking': self}
+        context = {'booking': self}
         message = create_alternative_email('rent/emails/owner_ended', context, settings.DEFAULT_FROM_EMAIL, [self.owner.email])
         message.send()
         message = create_alternative_email('rent/emails/borrower_ended', context, settings.DEFAULT_FROM_EMAIL, [self.borrower.email])
@@ -359,7 +359,7 @@ class Booking(models.Model):
             payKey=self.pay_key
         )
     
-    @transition(source=['authorized','pending'], target='canceled', save=True)
+    @transition(source=['authorized', 'pending'], target='canceled', save=True)
     def cancel(self):
         """Cancel preapproval for the borrower"""
         response = payments.cancel_preapproval(

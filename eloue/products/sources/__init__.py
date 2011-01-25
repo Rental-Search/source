@@ -19,10 +19,11 @@ BATCHSIZE = getattr(settings, 'AFFILIATION_BATCHSIZE', 1000)
 CAMO_URL = getattr(settings, 'CAMO_URL', 'https://media.e-loue.com/proxy/')
 CAMO_KEY = getattr(settings, 'CAMO_KEY')
 
+
 class Product(dict):
     def __init__(self, *args, **kwargs):  # TODO: Need improvement
         super(Product, self).__init__(*args, **kwargs)
-        self.update({ 
+        self.update({
             'created_at': datetime.now(),
             'django_ct': 'products.product',
             'text': "%s %s" % (self['summary'], self['description']),

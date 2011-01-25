@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-import local, logging
+import local
+import logging
 
 DEBUG = getattr(local, 'DEBUG', False)
 DEBUG_TOOLBAR = getattr(local, 'DEBUG_TOOLBAR', False)
@@ -208,6 +209,7 @@ COMPRESS_CSS_URL_REPLACE = {
     "../": "",
     "url(\"": "url(\"%s" % MEDIA_URL,
     "url(\'": "url(\'%s" % MEDIA_URL,
+    "src=\'": "src='%s" % MEDIA_URL,
 }
 COMPRESS_JS_FILTERS = getattr(local, 'COMPRESS_JS_FILTERS', ('compress.filters.yui.YUICompressorFilter',))
 COMPRESS_CSS_FILTERS = getattr(local, 'COMPRESS_CSS_FILTERS', (
@@ -247,15 +249,15 @@ COMPRESS_CSS = {
             'media': 'screen',
         },
     },
-		'mobile': {
-			'source_filenames': (
-				'css/mobile.css',
-			),
-			'output_filename': 'css/mobile.r?.css',
-			'extra_context': {
-				'media': 'screen',
-			},
-		},
+    'mobile': {
+        'source_filenames': (
+            'css/mobile.css',
+        ),
+        'output_filename': 'css/mobile.r?.css',
+        'extra_context': {
+            'media': 'screen',
+        },
+    },
 }
 COMPRESS_JS = {
     'application': {
@@ -320,6 +322,7 @@ LEAN_ENGAGEMENT_CALCULATOR = 'eloue.lean.PatronEngagementScoreCalculator'
 # Geocoding API
 GOOGLE_API_KEY = 'ABQIAAAA7bPNcG5t1-bTyW9iNmI-jRRqVDjnV4vohYMgEqqi0RF2UFYT-xSSwfcv2yfC-sACkmL4FuG-A_bScQ'
 YAHOO_API_KEY = 'nnZZkyvV34Fkk9DOWOpYJL7C41.ispEvSVAXbA3Dhu894gljv877.G6KewexGZKhs7S6dSwxCvM-'
+GOOGLE_REGION_CODE = getattr(local, 'GOOGLE_REGION_CODE', 'fr')
 
 # SSL configuration
 USE_HTTPS = getattr(local, 'USE_HTTPS', True)

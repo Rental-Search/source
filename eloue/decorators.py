@@ -7,7 +7,6 @@ from django.conf import settings
 from django.contrib.sites.models import Site
 from django.http import HttpResponsePermanentRedirect, HttpResponseForbidden
 from django.utils import translation
-from django.views.generic.simple import redirect_to
 
 USE_HTTPS = getattr(settings, 'USE_HTTPS', True)
 USE_PAYPAL_SANDBOX = getattr(settings, 'USE_PAYPAL_SANDBOX', False)
@@ -68,6 +67,7 @@ def ownership_required(model, object_key='object_id', ownership=None):
         return inner_wrapper
     return wrapper
 
+
 def activate_language(method):
     def _wrapped_method(*args, **options):
         translation.activate(settings.LANGUAGE_CODE)
@@ -76,21 +76,24 @@ def activate_language(method):
         return return_value
     return _wrapped_method
 
+
 def get_user_agent(request):
     # Some mobile browsers put the User-Agent in a HTTP-X header
     return request.META.get('HTTP_X_OPERAMINI_PHONE_UA') or \
            request.META.get('HTTP_X_SKYFIRE_PHONE') or \
            request.META.get('HTTP_USER_AGENT', '')
 
+
 def is_mobile(user_agent):
     """Anything that looks like a phone is a phone."""
     return bool(RE_MOBILE.search(user_agent))
+
 
 def mobify(view_func=None):
     def wrapper(request, *args, **kwargs):
         user_agent = get_user_agent(request)
         if not MOBILE and is_mobile(user_agent):
-            return redirect_to(request, "%s%s" % (MOBILE_REDIRECT_BASE, request.get_full_path()))
+            return HttpResponsePermanentRedirect("%s%s" % (MOBILE_REDIRECT_BASE, request.get_full_path()))
         else:
             return view_func(request, *args, **kwargs)
     return wrapper

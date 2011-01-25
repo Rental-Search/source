@@ -24,12 +24,12 @@ def quantize(value, arg=None):
     """
     number = decimal.Decimal(str(value))
     options = {
-	    "ceiling": decimal.ROUND_CEILING,
-	    "up": decimal.ROUND_UP,
-	    "floor": decimal.ROUND_FLOOR,
-	    "down": decimal.ROUND_DOWN,
-	    "half-down": decimal.ROUND_HALF_DOWN,
-	    "half-up": decimal.ROUND_HALF_UP
+        "ceiling": decimal.ROUND_CEILING,
+        "up": decimal.ROUND_UP,
+        "floor": decimal.ROUND_FLOOR,
+        "down": decimal.ROUND_DOWN,
+        "half-down": decimal.ROUND_HALF_DOWN,
+        "half-up": decimal.ROUND_HALF_UP
     }
     precision, rounding = None, None
     if arg:

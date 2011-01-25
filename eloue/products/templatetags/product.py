@@ -127,4 +127,4 @@ def partition(iterator, n):
     except (ValueError, TypeError):
         return [iterator]
     p = len(iterator) / n
-    return [iterator[p*i:p*(i+1)] for i in range(n - 1)] + [iterator[p*(i+1):]]
+    return [iterator[p * i:p * (i + 1)] for i in range(n - 1)] + [iterator[p * (i + 1):]]

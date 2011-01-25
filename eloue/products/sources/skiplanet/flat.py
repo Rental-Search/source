@@ -43,7 +43,7 @@ class SourceClass(BaseSource):
         root = objectify.fromstring(content)
         residences = []
         for station in root.xpath('//Station'):
-            residences.extend([ (station, residence) for residence in station.xpath('//Residence')])
+            residences.extend([(station, residence) for residence in station.xpath('//Residence')])
         return pool.map(parse_flat, residences, len(residences) // BaseSource.processes)
     
     def get_docs(self):
