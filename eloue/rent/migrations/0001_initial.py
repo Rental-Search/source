@@ -1,7 +1,9 @@
 # encoding: utf-8
 import datetime
+
 from south.db import db
 from south.v2 import SchemaMigration
+
 from django.db import models
 
 
@@ -10,7 +12,7 @@ class Migration(SchemaMigration):
         ("products", "0001_initial"),
     )
     
-    def forwards(self, orm):        
+    def forwards(self, orm):
         # Adding model 'Booking'
         db.create_table('rent_booking', (
             ('uuid', self.gf('django.db.models.fields.CharField')(unique=True, max_length=32, primary_key=True)),
@@ -48,15 +50,14 @@ class Migration(SchemaMigration):
         
         db.execute("CREATE SEQUENCE rent_booking_contract_id_seq")
         db.execute("CREATE SEQUENCE rent_sinister_sinister_id_seq")
-
+    
     def backwards(self, orm):
         # Deleting model 'Booking'
         db.delete_table('rent_booking')
 
         # Deleting model 'Sinister'
         db.delete_table('rent_sinister')
-
-
+    
     models = {
         'accounts.address': {
             'Meta': {'object_name': 'Address'},

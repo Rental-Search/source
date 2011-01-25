@@ -1,7 +1,9 @@
 # encoding: utf-8
 import datetime
+
 from south.db import db
 from south.v2 import SchemaMigration
+
 from django.db import models
 
 
@@ -136,8 +138,7 @@ class Migration(SchemaMigration):
             ('product', self.gf('django.db.models.fields.related.ForeignKey')(related_name='curiosities', to=orm['products.Product'])),
         ))
         db.send_create_signal('products', ['Curiosity'])
-
-
+    
     def backwards(self, orm):
         # Removing unique constraint on 'Price', fields ['product', 'unit', 'name']
         db.delete_unique('products_price', ['product_id', 'unit', 'name'])
@@ -177,8 +178,7 @@ class Migration(SchemaMigration):
 
         # Deleting model 'Curiosity'
         db.delete_table('products_curiosity')
-
-
+    
     models = {
         'accounts.address': {
             'Meta': {'object_name': 'Address'},
