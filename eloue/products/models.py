@@ -21,6 +21,7 @@ from eloue.products.fields import SimpleDateField
 from eloue.products.manager import ProductManager, PriceManager, QuestionManager, CurrentSiteProductManager
 from eloue.products.signals import post_save_answer, post_save_product, post_save_curiosity
 from eloue.products.utils import Enum
+from eloue.signals import post_save_sites
 
 UNIT = Enum([
     (0, 'HOUR', _(u'heure')),
@@ -350,3 +351,5 @@ class Curiosity(models.Model):
 post_save.connect(post_save_answer, sender=Answer)
 post_save.connect(post_save_product, sender=Product)
 post_save.connect(post_save_curiosity, sender=Curiosity)
+post_save.connect(post_save_sites, sender=Curiosity)
+post_save.connect(post_save_sites, sender=Product)

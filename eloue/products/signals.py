@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from django.conf import settings
 from django.core.cache import cache
 
 from eloue.utils import cache_key
