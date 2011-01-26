@@ -1,0 +1,28 @@
+body { background: #ECF6FF url("../images/lupa/body-bg.gif") repeat 0 0; }
+
+.nav-link, .search-what a, .product-home-title, .category-home h3 a { color: #eb39e1 !important; }
+
+.product-home span
+{
+	color: #637a86;
+}
+
+#content
+{
+  box-shadow: 1px 1px 0px rgba(193, 208, 222, 0.75);
+  -moz-box-shadow: 1px 1px 0px rgba(193, 208, 222, 0.75);
+  -webkit-box-shadow: 1px 1px 0px rgba(193, 208, 222, 0.75);
+}
+
+.search
+{
+  background: #fbebcc; /* old browsers */
+  background: -moz-linear-gradient(top, #fbebcc 0%, #fbebcc 99%); /* firefox */
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#fbebcc), color-stop(99%,#fbebcc)); /* webkit */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fbebcc', endColorstr='#fbebcc',GradientType=0 ); /* ie */
+  border: 1px solid #d5ac5f;
+  padding: 10px 0px;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  border-radius: 5px;
+}

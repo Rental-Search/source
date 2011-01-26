@@ -227,6 +227,7 @@ COMPRESS_CSS = {
             'css/plugins/ui/jquery.ui.datepicker.css',
             'css/plugins/ui/jquery.ui.theme.css',
             'css/jquery.fancybox.css',
+						'css/lupa.css',
         ),
         'output_filename': 'css/master.r?.css',
         'extra_context': {
