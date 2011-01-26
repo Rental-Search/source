@@ -8,6 +8,7 @@ from django.http import HttpResponse
 from django.utils.encoding import smart_str
 from django.utils.translation import ugettext_lazy as _
 
+from eloue.admin import CurrentSiteAdmin
 from eloue.accounts.models import Patron, Address, PhoneNumber
 from eloue.accounts.forms import PatronChangeForm
 
@@ -20,7 +21,7 @@ class PhoneNumberInline(admin.TabularInline):
     model = PhoneNumber
 
 
-class PatronAdmin(UserAdmin):
+class PatronAdmin(UserAdmin, CurrentSiteAdmin):
     fieldsets = (
         (None, {'fields': ('username', 'password')}),
         (_('Personal info'), {'fields': ('civility', 'first_name', 'last_name', 'email', 'slug', 'affiliate')}),
