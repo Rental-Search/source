@@ -6,7 +6,7 @@
 {% block content %}
 	<div id="top-content" class="search clearfix">
 		<div class="search-header x12">
-			<h1>{% trans "Avec e-loue, tout se loue !" %}</h1>
+			<h1>{% trans "Avec e-loue, tout se loue ! (sauf les femmes)" %}</h1>
 		</div>
 		<form class="form" action="{% url product_list %}">
 		<div class="search-what x5">
@@ -62,11 +62,10 @@
 		</div>{# col 1 #}
 		<div class="x4">
 			<div class="content-header x4 first">
-				<h2>{% trans "e-loue sur" %} <img src="{{ MEDIA_URL}}images/logo_tf1.png" alt="logo tf1"></h2>
+				<h2>{% trans "Découvrez la vérité !" %}</h2>
 			</div>
-			<div class="movie-link x4 first">
-				<a href="https://www.youtube.com/watch?v=7jlrt0pQxfw" title="Lire l'extrait de l'émission Près de chez vous sur e-loue" class="movie-link-play" traget="_blanck">Lire la vidéo</a>
-				<img src="{{ MEDIA_URL }}images/movie_link.png" alt="e-loue dans l'émission Près de chez vous" />
+			<div class="lupa x4 first">
+				<a href="#" class="lupa-folder-link">Tout savoir sur loueunepetiteamie.com</a>
 			</div>
 		</div>{# col 2 #}
 		<div class="content-guarantees">

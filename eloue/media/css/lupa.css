@@ -14,6 +14,8 @@ body { background: #ECF6FF url("../images/lupa/body-bg.gif") repeat 0 0; }
   -webkit-box-shadow: 1px 1px 0px rgba(193, 208, 222, 0.75);
 }
 
+#content { border: 1px solid #e5a6e3;}
+
 .search
 {
   background: #fbebcc; /* old browsers */
@@ -26,3 +28,31 @@ body { background: #ECF6FF url("../images/lupa/body-bg.gif") repeat 0 0; }
   -webkit-border-radius: 5px;
   border-radius: 5px;
 }
+	.search-header { background: transparent url("../images/lupa/separateur.png") no-repeat 495px 13px; }
+	.search-header h1{ color: #8e28af !important; } 
+
+.lupa 
+{ 
+	position: relative;
+	height: 210px;
+	border-bottom: 2px solid #b9cad4;
+}
+	.lupa-folder-link
+	{
+		background: transparent url("../images/lupa/lupa_bg.png") no-repeat 0 0;
+		display: block;
+		position: absolute;
+		top: -22px;
+		left: 0px;
+		text-indent: -9999px;
+		height: 232px;
+		width: 312px;
+	}
+	
+.big-orange { background: transparent url("../images/lupa/btn-jaune.png") no-repeat 0 0; }
+  .big-orange:hover { background: transparent url("../images/lupa/btn-jaune.png") no-repeat 0 -38px; }
+  .big-orange:active { background: transparent url("../images/lupa/btn-jaune.png") no-repeat 0 -76px; }
+
+.medium-green{ background: transparent url("../images/lupa/btn-rose.png") no-repeat 0 0; }
+  .medium-green:hover { background: transparent url("../images/lupa/btn-rose.png") no-repeat 0 -32px; }
+  .medium-green:active { background: transparent url("../images/lupa/btn-rose.png") no-repeat 0 -64px; }
