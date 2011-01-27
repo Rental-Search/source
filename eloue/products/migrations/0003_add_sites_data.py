@@ -10,7 +10,7 @@ from django.db import models
 
 class Migration(DataMigration):
     depends_on = (
-        ("products", "0002_add_sites"),
+        ("products", "0002_add_sites_schema"),
     )
     
     def forwards(self, orm):
