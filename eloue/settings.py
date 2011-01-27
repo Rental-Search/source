@@ -227,7 +227,6 @@ COMPRESS_CSS = {
             'css/plugins/ui/jquery.ui.datepicker.css',
             'css/plugins/ui/jquery.ui.theme.css',
             'css/jquery.fancybox.css',
-						'css/lupa.css',
         ),
         'output_filename': 'css/master.r?.css',
         'extra_context': {
@@ -259,6 +258,15 @@ COMPRESS_CSS = {
             'media': 'screen',
         },
     },
+    'lupa': {
+        'source_filenames': (
+            'css/lupa.css',
+        ),
+        'output_filename': 'css/lupa.r?.css',
+        'extra_context': {
+            'media': 'screen',
+        }
+    }
 }
 COMPRESS_JS = {
     'application': {

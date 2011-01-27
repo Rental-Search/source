@@ -1,12 +1,23 @@
 {% extends "base.html" %}
-{% load i18n mptt_tags product cache %}
+{% load i18n compressed mptt_tags product cache lupa %}
 
 {% block title %}{% trans "Location entre particuliers ou professionnels de tout type d'objet" %}{% endblock %}
+
+{% block head %}
+ {{ block.super }}
+ {% if request|from_lupa %}
+  {% compressed_css 'lupa' %}
+ {% endif %}
+{% endblock %}
 
 {% block content %}
 	<div id="top-content" class="search clearfix">
 		<div class="search-header x12">
+		 {% if request|from_lupa %}
 			<h1>{% trans "Avec e-loue, tout se loue ! (sauf les femmes)" %}</h1>
+		 {% else %}
+		  <h1>{% trans "Avec e-loue, tout se loue !" %}</h1>
+		 {% endif %}
 		</div>
 		<form class="form" action="{% url product_list %}">
 		<div class="search-what x5">
@@ -30,46 +41,76 @@
 		</form>
 	</div>{# top-content #}
 	<div id="content" class="clearfix">
-	<div class="x12">
-			<div class="content-header x12 first">
-				<h2>{% trans "Les curiosités d'e-loue" %}</h2>
-			</div>
-			{% cache 900 curiosities %}
-			{% for curiosity in curiosities|slice:":6" %}
-			 {% with curiosity.product as product %}
-				{% if forloop.first %}
+ 	 <div class="{% if request|from_lupa %}x8{% else %}x12{% endif %}">
+		<div class="content-header {% if request|from_lupa %}x8{% else %}x12{% endif %} first">
+		 <h2>{% trans "Les curiosités d'e-loue" %}</h2>
+		</div>
+		{% with request|from_lupa as lupa %}
+		 {% cache 900 curiosities lupa %}
+		  {% if lupa %}
+		   {% for curiosity in curiosities|slice:":4" %}
+		    {% with curiosity.product as product %}
+		 	   {% if forloop.first %}
 			  	<div class="product-home x2 first">
-				{% else %}
-					<div class="product-home x2">
-				{% endif %}
+			   {% else %}
+			 	  <div class="product-home x2">
+			   {% endif %}
 			   <p class="product-home-img">
+			 	  <a href="{{ product.get_absolute_url }}">
+	  	    {% with product.pictures.all|first as picture %}
+				   <img src="{{ picture.home.url }}" alt="{{ product.summary }}"/>
+				  {% endwith %}
+				 </a>
+			  </p>
+		    <p>
+			 	 <a href="{{ product.get_absolute_url }}" class="product-home-title">{{ product.summary|lower|capfirst }}</a>
+				 {% with product.prices.day|first as price %}
+				  <span>{{ price }}/jour</span>
+				 {% endwith %}
+			  </p>
+			 </div>
+		  {% endwith %}
+		 {% endfor %}
+	  {% else %}
+	   {% for curiosity in curiosities|slice:":6" %}
+		  {% with curiosity.product as product %}
+		 	 {% if forloop.first %}
+			 	<div class="product-home x2 first">
+			 {% else %}
+			 	<div class="product-home x2">
+			 {% endif %}
+			 <p class="product-home-img">
 			 	<a href="{{ product.get_absolute_url }}">
-	  		     {% with product.pictures.all|first as picture %}
+	  	   {% with product.pictures.all|first as picture %}
 				  <img src="{{ picture.home.url }}" alt="{{ product.summary }}"/>
 				 {% endwith %}
 				</a>
-			   </p>
-		  	   <p>
+			 </p>
+		   <p>
 				<a href="{{ product.get_absolute_url }}" class="product-home-title">{{ product.summary|lower|capfirst }}</a>
 				{% with product.prices.day|first as price %}
 				 <span>{{ price }}/jour</span>
 				{% endwith %}
-			   </p>
-			  </div>
-			 {% endwith %}
-			{% endfor %}
-			{% endcache %}
-		</div>{# col 1 #}
-		<div class="x4">
-			<div class="content-header x4 first">
-				<h2>{% trans "Découvrez la vérité !" %}</h2>
+			 </p>
 			</div>
-			<div class="lupa x4 first">
-				<a href="#" class="lupa-folder-link">Tout savoir sur loueunepetiteamie.com</a>
-			</div>
-		</div>{# col 2 #}
-		<div class="content-guarantees">
-			<div class="guarantees">
+		 {% endwith %}
+		{% endfor %}	 
+	 {% endif %}
+	{% endcache %}
+	{% endwith %}
+	 </div>
+	{% if request|from_lupa %}
+	 <div class="x4">
+		<div class="content-header x4 first">
+		 <h2>{% trans "Découvrez la vérité !" %}</h2>
+		</div>
+	  <div class="lupa x4 first">
+		 <a href="#" class="lupa-folder-link">Tout savoir sur loueunepetiteamie.com</a>
+		</div>
+	</div>
+	{% endif %}
+	<div class="content-guarantees">
+	 <div class="guarantees">
 				<h2>{% trans "Avec les garanties e-loue, louez en toute sécurité !" %}</h2>
 				<div class="guarantee">
 					<div class="g-payment">
