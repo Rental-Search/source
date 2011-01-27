@@ -12,7 +12,7 @@ def category(value):
     category = cache.get('category:%s' % value)
     if not category:
         try:
-            category = Category.objects.get(slug=value)
+            category = Category.on_site.get(slug=value)
         except Category.DoesNotExist:
             category = 'None'
         cache.set('category:%s' % value, category, 0)

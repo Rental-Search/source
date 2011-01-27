@@ -138,6 +138,7 @@ class Category(MPTTModel):
     sites = models.ManyToManyField(Site, related_name='categories')
     
     on_site = CurrentSiteManager()
+    objects = models.Manager()
     
     class Meta:
         ordering = ['name']

@@ -43,5 +43,5 @@ class CategorySitemap(SecureSitemap):
     changefreq = "daily"
     
     def items(self):
-        return Category.objects.all()
+        return Category.on_site.all()
     
