@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.vary import vary_on_headers
 from django.http import Http404
 from django.shortcuts import get_object_or_404
 from django.utils.datastructures import SortedDict
@@ -25,6 +26,7 @@ DEFAULT_RADIUS = getattr(settings, 'DEFAULT_RADIUS', 50)
 
 @mobify
 @cache_page(300)
+@vary_on_headers('Referer')
 def homepage(request):
     curiosities = Curiosity.objects.all()
     form = FacetedSearchForm()
