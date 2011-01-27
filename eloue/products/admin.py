@@ -50,7 +50,7 @@ class PatronReviewAdmin(admin.ModelAdmin):
     raw_id_fields = ("reviewer", "patron")
 
 
-class CuriosityAdmin(admin.ModelAdmin):
+class CuriosityAdmin(CurrentSiteAdmin):
     list_display = ('product',)
     raw_id_fields = ("product",)
 
