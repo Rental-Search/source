@@ -395,10 +395,7 @@ html[xmlns] .clearfix {
   	    -webkit-border-radius: 5px;
   	    border-radius: 5px;
       }
-      .search-header
-      {
-        background: transparent url("../images/separateur2.png") no-repeat 305px 13px;
-      }
+      .search-header { background: transparent url("../images/separateur2.png") no-repeat 305px 13px; }
       .search-header h1
       {
         color:#7C4D32 !important;

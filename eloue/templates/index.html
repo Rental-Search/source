@@ -6,7 +6,7 @@
 {% block content %}
 	<div id="top-content" class="search clearfix">
 		<div class="search-header x12">
-			<h1>{% trans "Avec e-loue, tout se loue !" %}</h1>
+			<h1>{% trans "Avec e-loue, tout se loue ! (sauf les femmes)" %}</h1>
 		</div>
 		<form class="form" action="{% url product_list %}">
 		<div class="search-what x5">
@@ -59,7 +59,15 @@
 			 {% endwith %}
 			{% endfor %}
 			{% endcache %}
-		</div>
+		</div>{# col 1 #}
+		<div class="x4">
+			<div class="content-header x4 first">
+				<h2>{% trans "Découvrez la vérité !" %}</h2>
+			</div>
+			<div class="lupa x4 first">
+				<a href="#" class="lupa-folder-link">Tout savoir sur loueunepetiteamie.com</a>
+			</div>
+		</div>{# col 2 #}
 		<div class="content-guarantees">
 			<div class="guarantees">
 				<h2>{% trans "Avec les garanties e-loue, louez en toute sécurité !" %}</h2>
