@@ -9,9 +9,9 @@ body { background: #ECF6FF url("../images/lupa/body-bg.gif") repeat 0 0; }
 
 #content
 {
-  box-shadow: 1px 1px 0px rgba(193, 208, 222, 0.75);
-  -moz-box-shadow: 1px 1px 0px rgba(193, 208, 222, 0.75);
-  -webkit-box-shadow: 1px 1px 0px rgba(193, 208, 222, 0.75);
+  box-shadow: 1px 1px 0px #dea4dc;
+  -moz-box-shadow: 1px 1px 0px #dea4dc;
+  -webkit-box-shadow: 1px 1px 0px #dea4dc;
 }
 
 #content { border: 1px solid #e5a6e3;}
