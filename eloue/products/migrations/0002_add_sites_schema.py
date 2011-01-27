@@ -24,6 +24,14 @@ class Migration(SchemaMigration):
             ('site', models.ForeignKey(orm['sites.site'], null=False))
         ))
         db.create_unique('products_product_sites', ['product_id', 'site_id'])
+        
+        # Adding M2M table for field sites on 'Category'
+        db.create_table('products_category_sites', (
+            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
+            ('category', models.ForeignKey(orm['products.category'], null=False)),
+            ('site', models.ForeignKey(orm['sites.site'], null=False))
+        ))
+        db.create_unique('products_category_sites', ['category_id', 'site_id'])
     
     def backwards(self, orm):
         # Removing M2M table for field sites on 'Curiosity'
@@ -31,6 +39,9 @@ class Migration(SchemaMigration):
 
         # Removing M2M table for field sites on 'Product'
         db.delete_table('products_product_sites')
+        
+        # Removing M2M table for field sites on 'Category'
+        db.delete_table('products_category_sites')
     
     models = {
         'accounts.address': {
@@ -111,6 +122,7 @@ class Migration(SchemaMigration):
             'parent': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'childrens'", 'null': 'True', 'to': "orm['products.Category']"}),
             'rght': ('django.db.models.fields.PositiveIntegerField', [], {'db_index': 'True'}),
             'slug': ('django.db.models.fields.SlugField', [], {'unique': 'True', 'max_length': '50', 'db_index': 'True'}),
+            'sites': ('django.db.models.fields.related.ManyToManyField', [], {'related_name': "'categories'", 'symmetrical': 'False', 'to': "orm['sites.Site']"}),
             'tree_id': ('django.db.models.fields.PositiveIntegerField', [], {'db_index': 'True'})
         },
         'products.curiosity': {

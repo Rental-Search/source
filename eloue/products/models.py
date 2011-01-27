@@ -135,6 +135,9 @@ class Category(MPTTModel):
     name = models.CharField(max_length=255)
     slug = models.SlugField(unique=True, db_index=True)
     need_insurance = models.BooleanField(default=True, db_index=True)
+    sites = models.ManyToManyField(Site, related_name='categories')
+    
+    on_site = CurrentSiteManager()
     
     class Meta:
         ordering = ['name']

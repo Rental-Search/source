@@ -1,19 +1,31 @@
 # encoding: utf-8
 import datetime
+
 from south.db import db
 from south.v2 import DataMigration
+
+from django.contrib.sites.models import Site
 from django.db import models
 
+
 class Migration(DataMigration):
-
+    depends_on = (
+        ("products", "0002_add_sites"),
+    )
+    
     def forwards(self, orm):
-        "Write your forwards methods here."
-
-
+        sites = Site.objects.filter(pk__lte=3).values_list('id', flat=True)
+        for product in orm.Product.objects.iterator():
+            product.sites.add(*sites)
+        for category in orm.Category.objects.iterator():
+            category.sites.add(*sites)
+    
     def backwards(self, orm):
-        "Write your backwards methods here."
-
-
+        for product in orm.Product.objects.iterator():
+            product.sites.clear()
+        for category in orm.Category.objects.iterator():
+            category.sites.clear()
+    
     models = {
         'accounts.address': {
             'Meta': {'object_name': 'Address'},
@@ -93,6 +105,7 @@ class Migration(DataMigration):
             'parent': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'childrens'", 'null': 'True', 'to': "orm['products.Category']"}),
             'rght': ('django.db.models.fields.PositiveIntegerField', [], {'db_index': 'True'}),
             'slug': ('django.db.models.fields.SlugField', [], {'unique': 'True', 'max_length': '50', 'db_index': 'True'}),
+            'sites': ('django.db.models.fields.related.ManyToManyField', [], {'related_name': "'categories'", 'symmetrical': 'False', 'to': "orm['sites.Site']"}),
             'tree_id': ('django.db.models.fields.PositiveIntegerField', [], {'db_index': 'True'})
         },
         'products.curiosity': {
