@@ -206,15 +206,14 @@ COMPRESS_AUTO = getattr(local, 'COMPRESS_AUTO', False)
 COMPRESS_VERSION_REMOVE_OLD = False
 COMPRESS_VERSION = True
 COMPRESS_CSS_URL_REPLACE = {
-    "../": "",
-    "url(\"": "url(\"%s" % MEDIA_URL,
-    "url(\'": "url(\'%s" % MEDIA_URL,
-    "src=\'": "src='%s" % MEDIA_URL,
+    r"\.\.\/": "",
+    r"url\([\'|\"]([^(|\'|\"|\)]*)[\'|\"|\)]+": lambda m: "url(\"%s%s\")" % (MEDIA_URL, m.group(1)) if not m.group(1).startswith("http") else "url(\"%s\")" % m.group(1),
+    r"src=[\'|\"]([^(\'|\")]*)[\'|\"]": lambda m: "src=\"%s%s\"" % (MEDIA_URL, m.group(1)),
 }
 COMPRESS_JS_FILTERS = getattr(local, 'COMPRESS_JS_FILTERS', ('compress.filters.yui.YUICompressorFilter',))
 COMPRESS_CSS_FILTERS = getattr(local, 'COMPRESS_CSS_FILTERS', (
-    'compress.filters.yui.YUICompressorFilter',
-    'compress.filters.css_url_replace.CSSURLReplace'
+    'compress.filters.css_url_replace.CSSURLReplace',
+    'compress.filters.yui.YUICompressorFilter'
 ))
 COMPRESS_YUI_BINARY = getattr(local, 'COMPRESS_YUI_BINARY', '/usr/bin/yui-compressor')
 COMPRESS_CSS = {
