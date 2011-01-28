@@ -46,17 +46,43 @@
 		 <h2>{% trans "Les curiosités d'e-loue" %}</h2>
 		</div>
 		{% with request|from_lupa as lupa %}
-		 {% cache 900 curiosities lupa %}
 		  {% if lupa %}
-		   {% for curiosity in curiosities|slice:":4" %}
-		    {% with curiosity.product as product %}
-		 	   {% if forloop.first %}
-			  	<div class="product-home x2 first">
-			   {% else %}
-			 	  <div class="product-home x2">
-			   {% endif %}
-			   <p class="product-home-img">
-			 	  <a href="{{ product.get_absolute_url }}">
+		   {% cache 900 curiosities:lupa %}
+		    {% for curiosity in curiosities|slice:":4" %}
+		     {% with curiosity.product as product %}
+		 	    {% if forloop.first %}
+			   	<div class="product-home x2 first">
+			    {% else %}
+			 	   <div class="product-home x2">
+			    {% endif %}
+			    <p class="product-home-img">
+			 	   <a href="{{ product.get_absolute_url }}">
+	  	     {% with product.pictures.all|first as picture %}
+				    <img src="{{ picture.home.url }}" alt="{{ product.summary }}"/>
+				   {% endwith %}
+				  </a>
+			   </p>
+		     <p>
+			 	  <a href="{{ product.get_absolute_url }}" class="product-home-title">{{ product.summary|lower|capfirst }}</a>
+				  {% with product.prices.day|first as price %}
+				   <span>{{ price }}/jour</span>
+				  {% endwith %}
+			   </p>
+			  </div>
+		   {% endwith %}
+		  {% endfor %}
+	   {% endcache %}
+	  {% else %}
+	   {% cache 900 curiosities %}
+ 	    {% for curiosity in curiosities|slice:":6" %}
+		   {% with curiosity.product as product %}
+		 	  {% if forloop.first %}
+			 	 <div class="product-home x2 first">
+			  {% else %}
+			  	<div class="product-home x2">
+			  {% endif %}
+			  <p class="product-home-img">
+			 	 <a href="{{ product.get_absolute_url }}">
 	  	    {% with product.pictures.all|first as picture %}
 				   <img src="{{ picture.home.url }}" alt="{{ product.summary }}"/>
 				  {% endwith %}
@@ -70,33 +96,9 @@
 			  </p>
 			 </div>
 		  {% endwith %}
-		 {% endfor %}
-	  {% else %}
-	   {% for curiosity in curiosities|slice:":6" %}
-		  {% with curiosity.product as product %}
-		 	 {% if forloop.first %}
-			 	<div class="product-home x2 first">
-			 {% else %}
-			 	<div class="product-home x2">
-			 {% endif %}
-			 <p class="product-home-img">
-			 	<a href="{{ product.get_absolute_url }}">
-	  	   {% with product.pictures.all|first as picture %}
-				  <img src="{{ picture.home.url }}" alt="{{ product.summary }}"/>
-				 {% endwith %}
-				</a>
-			 </p>
-		   <p>
-				<a href="{{ product.get_absolute_url }}" class="product-home-title">{{ product.summary|lower|capfirst }}</a>
-				{% with product.prices.day|first as price %}
-				 <span>{{ price }}/jour</span>
-				{% endwith %}
-			 </p>
-			</div>
-		 {% endwith %}
-		{% endfor %}	 
+		 {% endfor %}	 
+	  {% endcache %}
 	 {% endif %}
-	{% endcache %}
 	{% endwith %}
 	 </div>
 	{% if request|from_lupa %}
