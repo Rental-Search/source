@@ -526,7 +526,7 @@ html[xmlns] .clearfix {
       }
         .guarantees h2
         {
-          background: transparent url("../images/guarantee-h-bg.png.png") repeat-x 0 bottom;
+          background: transparent url("../images/guarantee-h-bg.png") repeat-x 0 bottom;
           padding-bottom: 10px;
 					font-family: 'Ubuntu', arial, serif;
         }
