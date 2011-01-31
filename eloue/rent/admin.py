@@ -18,7 +18,13 @@ class BookingAdmin(admin.ModelAdmin):
     list_display = ('product_name', 'borrower_url', 'borrower_phone', 'borrower_email', 'owner_url', 'owner_phone', 'owner_email',
         'started_at', 'ended_at', 'created_at', 'total_amount', 'state')
     ordering = ['-created_at']
+    actions = ['send_recovery_email']
     search_fields = ['product__summary', 'owner__username', 'owner__email', 'borrower__email', 'borrower__username']
+    
+    def send_recovery_email(self, request, queryset):
+        for booking in queryset:
+            booking.send_recovery_email()
+    send_recovery_email.short_description = _(u"Envoyer un email de relance")
     
     def product_name(self, obj):
         return obj.product.summary
