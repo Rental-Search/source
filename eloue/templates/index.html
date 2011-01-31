@@ -45,7 +45,6 @@
 		<div class="content-header x8 first">
 		 <h2>{% trans "Les curiosités d'e-loue" %}</h2>
 		</div>
-		{% with request|from_lupa as lupa %}
 		 {% cache 900 curiosities %}
 	   {% for curiosity in curiosities|slice:":4" %}
 		  {% with curiosity.product as product %}
@@ -71,7 +70,6 @@
 		 {% endwith %}
 		{% endfor %}	 
 	{% endcache %}
-	{% endwith %}
 	 </div>
 	 <div class="x4">
 		<div class="content-header x4 first">
