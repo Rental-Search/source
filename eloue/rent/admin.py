@@ -23,7 +23,8 @@ class BookingAdmin(admin.ModelAdmin):
     
     def send_recovery_email(self, request, queryset):
         for booking in queryset:
-            booking.send_recovery_email()
+            if booking.state == Booking.STATE.AUTHORIZING:
+                booking.send_recovery_email()
     send_recovery_email.short_description = _(u"Envoyer un email de relance")
     
     def product_name(self, obj):
