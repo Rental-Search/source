@@ -138,6 +138,25 @@
 	}
 	
 	
+	.lupa 
+	{ 
+		position: relative;
+		height: 210px;
+		border-bottom: 2px solid #b9cad4;
+	}
+		.lupa-folder-link
+		{
+			background: transparent url("../images/lupa/lupa_bg.png") no-repeat 0 0;
+			display: block;
+			position: absolute;
+			top: -22px;
+			left: 0px;
+			text-indent: -9999px;
+			height: 232px;
+			width: 312px;
+		}
+	
+	
 	
 /* *************************************************
   Product page
