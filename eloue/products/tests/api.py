@@ -117,6 +117,7 @@ class ApiTest(TestCase):
             'summary': 'Tondeuse',
             'description': 'Merveilleuse tondeuse',
             'quantity': 1,
+            'price': "15.2",
             'deposit_amount': 150,
             'picture': encodestring(f.read()),
             'category': '/api/1.0/category/390/',

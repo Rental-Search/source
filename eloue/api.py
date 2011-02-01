@@ -3,6 +3,7 @@ import logbook
 import plistlib
 from urllib import unquote
 from base64 import decodestring
+from decimal import Decimal as D
 
 from tastypie import fields
 from tastypie.api import Api
@@ -387,7 +388,7 @@ class ProductResource(UserSpecificResource):
         
         # Add a day price to the object if there isnt any yet
         if day_price_data:
-            Price(product=bundle.obj, unit=1, amount=int(day_price_data)).save()
+            Price(product=bundle.obj, unit=1, amount=D(day_price_data)).save()
         
         return bundle
     
