@@ -1,21 +1,4 @@
 $(document).ready(function() {
-    // Display TF1 video
-    $("a.movie-link-play").click(function() {
-        $.fancybox({
-            'padding'       : 0,
-            'titleShow'     : 'false',
-            'autoScale'     : false,
-            'transitionIn'  : 'none',
-            'transitionOut' : 'none',
-            'width'         : 680,
-            'height'        : 495,
-            'href'          : this.href = this.href.replace(new RegExp("watch\\?v=", "i"), 'v/') + '&autoplay=1',
-            'type'          : 'swf',
-            'swf'           : {'allowfullscreen':'true', 'wmode':'opaque'}
-        });
-        return false;
-    });
-    	
     // Password field enabler/disabler
     var exists = $("input[name$='exists']:checked").val();
     var passwordInput = $("input[name$='password']");
