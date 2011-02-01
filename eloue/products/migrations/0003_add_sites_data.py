@@ -2,182 +2,29 @@
 import datetime
 
 from south.db import db
-from south.v2 import SchemaMigration
+from south.v2 import DataMigration
 
+from django.contrib.sites.models import Site
 from django.db import models
 
 
-class Migration(SchemaMigration):
+class Migration(DataMigration):
+    depends_on = (
+        ("products", "0002_add_sites_schema"),
+    )
+    
     def forwards(self, orm):
-        # Adding model 'Product'
-        db.create_table('products_product', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('summary', self.gf('django.db.models.fields.CharField')(max_length=255)),
-            ('deposit_amount', self.gf('django.db.models.fields.DecimalField')(max_digits=8, decimal_places=2)),
-            ('currency', self.gf('django.db.models.fields.CharField')(default='EUR', max_length=3)),
-            ('description', self.gf('django.db.models.fields.TextField')()),
-            ('address', self.gf('django.db.models.fields.related.ForeignKey')(related_name='products', to=orm['accounts.Address'])),
-            ('quantity', self.gf('django.db.models.fields.IntegerField')()),
-            ('is_archived', self.gf('django.db.models.fields.BooleanField')(default=False, db_index=True)),
-            ('is_allowed', self.gf('django.db.models.fields.BooleanField')(default=True, db_index=True)),
-            ('category', self.gf('django.db.models.fields.related.ForeignKey')(related_name='products', to=orm['products.Category'])),
-            ('owner', self.gf('django.db.models.fields.related.ForeignKey')(related_name='products', to=orm['accounts.Patron'])),
-            ('created_at', self.gf('django.db.models.fields.DateTimeField')(blank=True)),
-        ))
-        db.send_create_signal('products', ['Product'])
-
-        # Adding model 'Picture'
-        db.create_table('products_picture', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('product', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='pictures', null=True, to=orm['products.Product'])),
-            ('image', self.gf('django.db.models.fields.files.ImageField')(max_length=100, null=True, blank=True)),
-            ('created_at', self.gf('django.db.models.fields.DateTimeField')(blank=True)),
-        ))
-        db.send_create_signal('products', ['Picture'])
-
-        # Adding model 'Category'
-        db.create_table('products_category', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('parent', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='childrens', null=True, to=orm['products.Category'])),
-            ('name', self.gf('django.db.models.fields.CharField')(max_length=255)),
-            ('slug', self.gf('django.db.models.fields.SlugField')(unique=True, max_length=50, db_index=True)),
-            ('need_insurance', self.gf('django.db.models.fields.BooleanField')(default=True, db_index=True)),
-            ('lft', self.gf('django.db.models.fields.PositiveIntegerField')(db_index=True)),
-            ('rght', self.gf('django.db.models.fields.PositiveIntegerField')(db_index=True)),
-            ('tree_id', self.gf('django.db.models.fields.PositiveIntegerField')(db_index=True)),
-            ('level', self.gf('django.db.models.fields.PositiveIntegerField')(db_index=True)),
-        ))
-        db.send_create_signal('products', ['Category'])
-
-        # Adding model 'Property'
-        db.create_table('products_property', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('category', self.gf('django.db.models.fields.related.ForeignKey')(related_name='properties', to=orm['products.Category'])),
-            ('name', self.gf('django.db.models.fields.CharField')(max_length=255)),
-        ))
-        db.send_create_signal('products', ['Property'])
-
-        # Adding model 'PropertyValue'
-        db.create_table('products_propertyvalue', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('property', self.gf('django.db.models.fields.related.ForeignKey')(related_name='values', to=orm['products.Property'])),
-            ('value', self.gf('django.db.models.fields.CharField')(max_length=255)),
-            ('product', self.gf('django.db.models.fields.related.ForeignKey')(related_name='properties', to=orm['products.Product'])),
-        ))
-        db.send_create_signal('products', ['PropertyValue'])
-
-        # Adding unique constraint on 'PropertyValue', fields ['property', 'product']
-        db.create_unique('products_propertyvalue', ['property_id', 'product_id'])
-
-        # Adding model 'Price'
-        db.create_table('products_price', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('name', self.gf('django.db.models.fields.CharField')(max_length=255, blank=True)),
-            ('amount', self.gf('django.db.models.fields.DecimalField')(max_digits=8, decimal_places=2)),
-            ('currency', self.gf('django.db.models.fields.CharField')(default='EUR', max_length=3)),
-            ('product', self.gf('django.db.models.fields.related.ForeignKey')(related_name='prices', to=orm['products.Product'])),
-            ('unit', self.gf('django.db.models.fields.PositiveSmallIntegerField')(db_index=True)),
-            ('started_at', self.gf('django.db.models.fields.PositiveSmallIntegerField')(null=True, blank=True)),
-            ('ended_at', self.gf('django.db.models.fields.PositiveSmallIntegerField')(null=True, blank=True)),
-        ))
-        db.send_create_signal('products', ['Price'])
-
-        # Adding unique constraint on 'Price', fields ['product', 'unit', 'name']
-        db.create_unique('products_price', ['product_id', 'unit', 'name'])
-
-        # Adding model 'ProductReview'
-        db.create_table('products_productreview', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('summary', self.gf('django.db.models.fields.CharField')(max_length=255, blank=True)),
-            ('score', self.gf('django.db.models.fields.FloatField')()),
-            ('description', self.gf('django.db.models.fields.TextField')()),
-            ('created_at', self.gf('django.db.models.fields.DateTimeField')(blank=True)),
-            ('ip', self.gf('django.db.models.fields.IPAddressField')(max_length=15, null=True, blank=True)),
-            ('reviewer', self.gf('django.db.models.fields.related.ForeignKey')(related_name='productreview_reviews', to=orm['accounts.Patron'])),
-            ('product', self.gf('django.db.models.fields.related.ForeignKey')(related_name='reviews', to=orm['products.Product'])),
-        ))
-        db.send_create_signal('products', ['ProductReview'])
-
-        # Adding model 'PatronReview'
-        db.create_table('products_patronreview', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('summary', self.gf('django.db.models.fields.CharField')(max_length=255, blank=True)),
-            ('score', self.gf('django.db.models.fields.FloatField')()),
-            ('description', self.gf('django.db.models.fields.TextField')()),
-            ('created_at', self.gf('django.db.models.fields.DateTimeField')(blank=True)),
-            ('ip', self.gf('django.db.models.fields.IPAddressField')(max_length=15, null=True, blank=True)),
-            ('reviewer', self.gf('django.db.models.fields.related.ForeignKey')(related_name='patronreview_reviews', to=orm['accounts.Patron'])),
-            ('patron', self.gf('django.db.models.fields.related.ForeignKey')(related_name='reviews', to=orm['accounts.Patron'])),
-        ))
-        db.send_create_signal('products', ['PatronReview'])
-
-        # Adding model 'Question'
-        db.create_table('products_question', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('text', self.gf('django.db.models.fields.CharField')(max_length=255)),
-            ('created_at', self.gf('django.db.models.fields.DateTimeField')()),
-            ('modified_at', self.gf('django.db.models.fields.DateTimeField')()),
-            ('status', self.gf('django.db.models.fields.PositiveSmallIntegerField')(default=0, db_index=True)),
-            ('product', self.gf('django.db.models.fields.related.ForeignKey')(related_name='questions', to=orm['products.Product'])),
-            ('author', self.gf('django.db.models.fields.related.ForeignKey')(related_name='questions', to=orm['accounts.Patron'])),
-        ))
-        db.send_create_signal('products', ['Question'])
-
-        # Adding model 'Answer'
-        db.create_table('products_answer', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('text', self.gf('django.db.models.fields.CharField')(max_length=255)),
-            ('created_at', self.gf('django.db.models.fields.DateTimeField')()),
-            ('question', self.gf('django.db.models.fields.related.ForeignKey')(related_name='answers', to=orm['products.Question'])),
-        ))
-        db.send_create_signal('products', ['Answer'])
-
-        # Adding model 'Curiosity'
-        db.create_table('products_curiosity', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('product', self.gf('django.db.models.fields.related.ForeignKey')(related_name='curiosities', to=orm['products.Product'])),
-        ))
-        db.send_create_signal('products', ['Curiosity'])
+        sites = Site.objects.filter(pk__lte=3).values_list('id', flat=True)
+        for product in orm.Product.objects.iterator():
+            product.sites.add(*sites)
+        for category in orm.Category.objects.iterator():
+            category.sites.add(*sites)
     
     def backwards(self, orm):
-        # Removing unique constraint on 'Price', fields ['product', 'unit', 'name']
-        db.delete_unique('products_price', ['product_id', 'unit', 'name'])
-
-        # Removing unique constraint on 'PropertyValue', fields ['property', 'product']
-        db.delete_unique('products_propertyvalue', ['property_id', 'product_id'])
-
-        # Deleting model 'Product'
-        db.delete_table('products_product')
-
-        # Deleting model 'Picture'
-        db.delete_table('products_picture')
-
-        # Deleting model 'Category'
-        db.delete_table('products_category')
-
-        # Deleting model 'Property'
-        db.delete_table('products_property')
-
-        # Deleting model 'PropertyValue'
-        db.delete_table('products_propertyvalue')
-
-        # Deleting model 'Price'
-        db.delete_table('products_price')
-
-        # Deleting model 'ProductReview'
-        db.delete_table('products_productreview')
-
-        # Deleting model 'PatronReview'
-        db.delete_table('products_patronreview')
-
-        # Deleting model 'Question'
-        db.delete_table('products_question')
-
-        # Deleting model 'Answer'
-        db.delete_table('products_answer')
-
-        # Deleting model 'Curiosity'
-        db.delete_table('products_curiosity')
+        for product in orm.Product.objects.iterator():
+            product.sites.clear()
+        for category in orm.Category.objects.iterator():
+            category.sites.clear()
     
     models = {
         'accounts.address': {
@@ -194,13 +41,14 @@ class Migration(SchemaMigration):
         'accounts.patron': {
             'Meta': {'object_name': 'Patron', '_ormbases': ['auth.User']},
             'activation_key': ('django.db.models.fields.CharField', [], {'max_length': '40', 'null': 'True', 'blank': 'True'}),
+            'affiliate': ('django.db.models.fields.CharField', [], {'max_length': '10', 'null': 'True', 'blank': 'True'}),
             'civility': ('django.db.models.fields.PositiveSmallIntegerField', [], {'null': 'True', 'blank': 'True'}),
             'company_name': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
             'is_professional': ('django.db.models.fields.NullBooleanField', [], {'default': 'None', 'null': 'True', 'blank': 'True'}),
             'is_subscribed': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'last_ip': ('django.db.models.fields.IPAddressField', [], {'max_length': '15', 'null': 'True', 'blank': 'True'}),
             'modified_at': ('django.db.models.fields.DateTimeField', [], {}),
             'paypal_email': ('django.db.models.fields.EmailField', [], {'max_length': '75', 'null': 'True', 'blank': 'True'}),
+            'sites': ('django.db.models.fields.related.ManyToManyField', [], {'related_name': "'patrons'", 'symmetrical': 'False', 'to': "orm['sites.Site']"}),
             'slug': ('django.db.models.fields.SlugField', [], {'unique': 'True', 'max_length': '50', 'db_index': 'True'}),
             'user_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['auth.User']", 'unique': 'True', 'primary_key': 'True'})
         },
@@ -257,12 +105,14 @@ class Migration(SchemaMigration):
             'parent': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'childrens'", 'null': 'True', 'to': "orm['products.Category']"}),
             'rght': ('django.db.models.fields.PositiveIntegerField', [], {'db_index': 'True'}),
             'slug': ('django.db.models.fields.SlugField', [], {'unique': 'True', 'max_length': '50', 'db_index': 'True'}),
+            'sites': ('django.db.models.fields.related.ManyToManyField', [], {'related_name': "'categories'", 'symmetrical': 'False', 'to': "orm['sites.Site']"}),
             'tree_id': ('django.db.models.fields.PositiveIntegerField', [], {'db_index': 'True'})
         },
         'products.curiosity': {
             'Meta': {'object_name': 'Curiosity'},
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'product': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'curiosities'", 'to': "orm['products.Product']"})
+            'product': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'curiosities'", 'to': "orm['products.Product']"}),
+            'sites': ('django.db.models.fields.related.ManyToManyField', [], {'related_name': "'curiosities'", 'symmetrical': 'False', 'to': "orm['sites.Site']"})
         },
         'products.patronreview': {
             'Meta': {'object_name': 'PatronReview'},
@@ -306,6 +156,7 @@ class Migration(SchemaMigration):
             'is_archived': ('django.db.models.fields.BooleanField', [], {'default': 'False', 'db_index': 'True'}),
             'owner': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'products'", 'to': "orm['accounts.Patron']"}),
             'quantity': ('django.db.models.fields.IntegerField', [], {}),
+            'sites': ('django.db.models.fields.related.ManyToManyField', [], {'related_name': "'products'", 'symmetrical': 'False', 'to': "orm['sites.Site']"}),
             'summary': ('django.db.models.fields.CharField', [], {'max_length': '255'})
         },
         'products.productreview': {
@@ -341,6 +192,12 @@ class Migration(SchemaMigration):
             'product': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'questions'", 'to': "orm['products.Product']"}),
             'status': ('django.db.models.fields.PositiveSmallIntegerField', [], {'default': '0', 'db_index': 'True'}),
             'text': ('django.db.models.fields.CharField', [], {'max_length': '255'})
+        },
+        'sites.site': {
+            'Meta': {'ordering': "('domain',)", 'object_name': 'Site', 'db_table': "'django_site'"},
+            'domain': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'name': ('django.db.models.fields.CharField', [], {'max_length': '50'})
         }
     }
 

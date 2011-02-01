@@ -130,6 +130,10 @@
     
     <field name="city" type="string" indexed="false" stored="true" multiValued="false" />
 
+    <field name="sites" type="text" indexed="true" stored="true" multiValued="true" />
+    
+    <field name="sites_exact" type="string" indexed="true" stored="true" multiValued="true" />
+    
     <field name="zipcode" type="string" indexed="false" stored="true" multiValued="false" />
   </fields>
 

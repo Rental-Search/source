@@ -62,6 +62,7 @@ LANGUAGES = (
 DEFAULT_CURRENCY = 'EUR'
 
 SITE_ID = 1
+DEFAULT_SITES = getattr(local, "DEFAULT_SITES", [1, 2, 3])
 
 # If you set this to False, Django will make some optimizations so as not
 # to load the internationalization machinery.

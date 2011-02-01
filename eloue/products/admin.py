@@ -2,6 +2,7 @@
 from django.contrib import admin
 from mptt.admin import MPTTModelAdmin
 
+from eloue.admin import CurrentSiteAdmin
 from eloue.products.forms import ProductAdminForm
 from eloue.products.models import Product, Picture, Category, Property, PropertyValue, Price, ProductReview, PatronReview, Curiosity
 
@@ -18,7 +19,7 @@ class PriceInline(admin.TabularInline):
     model = Price
 
 
-class ProductAdmin(admin.ModelAdmin):
+class ProductAdmin(CurrentSiteAdmin):
     date_hierarchy = 'created_at'
     search_fields = ['summary', 'description', 'category__name', 'owner__username', 'owner__email']
     inlines = [PictureInline, PropertyValueInline, PriceInline]
@@ -49,7 +50,7 @@ class PatronReviewAdmin(admin.ModelAdmin):
     raw_id_fields = ("reviewer", "patron")
 
 
-class CuriosityAdmin(admin.ModelAdmin):
+class CuriosityAdmin(CurrentSiteAdmin):
     list_display = ('product',)
     raw_id_fields = ("product",)
 

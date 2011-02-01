@@ -1,7 +1,9 @@
 # encoding: utf-8
 import datetime
+
 from south.db import db
 from south.v2 import SchemaMigration
+
 from django.db import models
 
 
@@ -43,8 +45,7 @@ class Migration(SchemaMigration):
             ('kind', self.gf('django.db.models.fields.PositiveSmallIntegerField')(default=4)),
         ))
         db.send_create_signal('accounts', ['PhoneNumber'])
-
-
+    
     def backwards(self, orm):
         # Deleting model 'Patron'
         db.delete_table('accounts_patron')
@@ -54,8 +55,7 @@ class Migration(SchemaMigration):
 
         # Deleting model 'PhoneNumber'
         db.delete_table('accounts_phonenumber')
-
-
+    
     models = {
         'accounts.address': {
             'Meta': {'object_name': 'Address'},

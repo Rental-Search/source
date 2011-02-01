@@ -28,7 +28,7 @@ DEFAULT_RADIUS = getattr(settings, 'DEFAULT_RADIUS', 50)
 @cache_page(300)
 @vary_on_headers('Referer')
 def homepage(request):
-    curiosities = Curiosity.objects.all()
+    curiosities = Curiosity.on_site.all()
     form = FacetedSearchForm()
     return direct_to_template(request, template='index.html', extra_context={'form': form, 'curiosities': curiosities})
 
@@ -50,7 +50,7 @@ def product_create(request, *args, **kwargs):
 @login_required
 @ownership_required(model=Product, object_key='product_id', ownership=['owner'])
 def product_edit(request, slug, product_id):
-    product = get_object_or_404(Product, pk=product_id)
+    product = get_object_or_404(Product.on_site, pk=product_id)
     price = product.prices.day()[0]
     form = ProductEditForm(request.POST or None, instance=product, initial={'price': price.amount, 'category': product.category.id})
     if form.is_valid():
@@ -90,7 +90,7 @@ def product_list(request, urlbits, sqs=SearchQuerySet(), suggestions=None, page=
                     'url': 'par-%s/%s' % (bit, value), 'facet': True
                 }
             elif bit.endswith(_('loueur')):
-                item = get_object_or_404(Patron, slug=value)
+                item = get_object_or_404(Patron.on_site, slug=value)
                 breadcrumbs[bit] = {
                     'name': 'owner', 'value': value, 'label': bit, 'object': item,
                     'pretty_name': _(u"Loueur"), 'pretty_value': item.username,

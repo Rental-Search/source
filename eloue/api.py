@@ -243,7 +243,7 @@ class CategoryResource(ModelResource):
     parent = fields.ForeignKey('self', 'parent', full=False, null=True)
     
     class Meta:
-        queryset = Category.objects.all()
+        queryset = Category.on_site.all()
         resource_name = 'category'
         allowed_methods = ['get']
         fields = ['id', 'name', 'slug']
@@ -315,7 +315,7 @@ class ProductResource(UserSpecificResource):
     FILTER_GET_REQUESTS = False
     
     class Meta(MetaBase):
-        queryset = Product.objects.all()
+        queryset = Product.on_site.all()
         allowed_methods = ['get', 'post']
         resource_name = 'product'
         include_absolute_url = True

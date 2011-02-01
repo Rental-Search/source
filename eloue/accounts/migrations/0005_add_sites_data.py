@@ -2,17 +2,25 @@
 import datetime
 
 from south.db import db
-from south.v2 import SchemaMigration
+from south.v2 import DataMigration
 
+from django.contrib.sites.models import Site
 from django.db import models
 
 
-class Migration(SchemaMigration):
-    def forwards(self, orm):
-        db.create_unique('auth_user', ['email'])
+class Migration(DataMigration):
+    depends_on = (
+        ("accounts", "0004_add_sites_schema"),
+    )
     
+    def forwards(self, orm):
+        sites = Site.objects.filter(pk__lte=3).values_list('id', flat=True)
+        for patron in orm.Patron.objects.iterator():
+            patron.sites.add(*sites)
+
     def backwards(self, orm):
-        db.delete_unique('auth_user', ['email'])
+        for patron in orm.Patron.objects.iterator():
+            patron.sites.clear()
     
     models = {
         'accounts.address': {
@@ -36,6 +44,7 @@ class Migration(SchemaMigration):
             'is_subscribed': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'modified_at': ('django.db.models.fields.DateTimeField', [], {}),
             'paypal_email': ('django.db.models.fields.EmailField', [], {'max_length': '75', 'null': 'True', 'blank': 'True'}),
+            'sites': ('django.db.models.fields.related.ManyToManyField', [], {'related_name': "'patrons'", 'symmetrical': 'False', 'to': "orm['sites.Site']"}),
             'slug': ('django.db.models.fields.SlugField', [], {'unique': 'True', 'max_length': '50', 'db_index': 'True'}),
             'user_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['auth.User']", 'unique': 'True', 'primary_key': 'True'})
         },
@@ -81,6 +90,12 @@ class Migration(SchemaMigration):
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'model': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '100'})
+        },
+        'sites.site': {
+            'Meta': {'ordering': "('domain',)", 'object_name': 'Site', 'db_table': "'django_site'"},
+            'domain': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'name': ('django.db.models.fields.CharField', [], {'max_length': '50'})
         }
     }
 

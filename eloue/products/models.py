@@ -4,6 +4,8 @@ from datetime import datetime, timedelta
 
 from django.conf import settings
 from django.contrib.gis.db import models
+from django.contrib.sites.managers import CurrentSiteManager
+from django.contrib.sites.models import Site
 from django.db.models import permalink
 from django.db.models.signals import post_save
 from django.template.defaultfilters import slugify
@@ -16,9 +18,10 @@ from imagekit.models import ImageModel
 
 from eloue.accounts.models import Patron, Address
 from eloue.products.fields import SimpleDateField
-from eloue.products.manager import ProductManager, PriceManager, QuestionManager
+from eloue.products.manager import ProductManager, PriceManager, QuestionManager, CurrentSiteProductManager
 from eloue.products.signals import post_save_answer, post_save_product, post_save_curiosity
 from eloue.products.utils import Enum
+from eloue.signals import post_save_sites
 
 UNIT = Enum([
     (0, 'HOUR', _(u'heure')),
@@ -61,7 +64,9 @@ class Product(models.Model):
     category = models.ForeignKey('Category', related_name='products')
     owner = models.ForeignKey(Patron, related_name='products')
     created_at = models.DateTimeField(blank=True, editable=False)
+    sites = models.ManyToManyField(Site, related_name='products')
     
+    on_site = CurrentSiteProductManager()
     objects = ProductManager()
     
     class Meta:
@@ -130,6 +135,10 @@ class Category(MPTTModel):
     name = models.CharField(max_length=255)
     slug = models.SlugField(unique=True, db_index=True)
     need_insurance = models.BooleanField(default=True, db_index=True)
+    sites = models.ManyToManyField(Site, related_name='categories')
+    
+    on_site = CurrentSiteManager()
+    objects = models.Manager()
     
     class Meta:
         ordering = ['name']
@@ -334,6 +343,10 @@ class Answer(models.Model):
 
 class Curiosity(models.Model):
     product = models.ForeignKey(Product, related_name='curiosities')
+    sites = models.ManyToManyField(Site, related_name='curiosities')
+    
+    on_site = CurrentSiteManager()
+    objects = models.Manager()
     
     class Meta:
         verbose_name_plural = "curiosities"
@@ -342,3 +355,6 @@ class Curiosity(models.Model):
 post_save.connect(post_save_answer, sender=Answer)
 post_save.connect(post_save_product, sender=Product)
 post_save.connect(post_save_curiosity, sender=Curiosity)
+post_save.connect(post_save_sites, sender=Curiosity)
+post_save.connect(post_save_sites, sender=Product)
+post_save.connect(post_save_sites, sender=Category)

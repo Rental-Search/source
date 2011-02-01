@@ -9,10 +9,17 @@ from django.db import models
 
 class Migration(SchemaMigration):
     def forwards(self, orm):
-        db.create_unique('auth_user', ['email'])
+        # Adding M2M table for field sites on 'Patron'
+        db.create_table('accounts_patron_sites', (
+            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
+            ('patron', models.ForeignKey(orm['accounts.patron'], null=False)),
+            ('site', models.ForeignKey(orm['sites.site'], null=False))
+        ))
+        db.create_unique('accounts_patron_sites', ['patron_id', 'site_id'])
     
     def backwards(self, orm):
-        db.delete_unique('auth_user', ['email'])
+        # Removing M2M table for field sites on 'Patron'
+        db.delete_table('accounts_patron_sites')
     
     models = {
         'accounts.address': {
@@ -36,6 +43,7 @@ class Migration(SchemaMigration):
             'is_subscribed': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'modified_at': ('django.db.models.fields.DateTimeField', [], {}),
             'paypal_email': ('django.db.models.fields.EmailField', [], {'max_length': '75', 'null': 'True', 'blank': 'True'}),
+            'sites': ('django.db.models.fields.related.ManyToManyField', [], {'related_name': "'patrons'", 'symmetrical': 'False', 'to': "orm['sites.Site']"}),
             'slug': ('django.db.models.fields.SlugField', [], {'unique': 'True', 'max_length': '50', 'db_index': 'True'}),
             'user_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['auth.User']", 'unique': 'True', 'primary_key': 'True'})
         },
@@ -81,6 +89,12 @@ class Migration(SchemaMigration):
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'model': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '100'})
+        },
+        'sites.site': {
+            'Meta': {'ordering': "('domain',)", 'object_name': 'Site', 'db_table': "'django_site'"},
+            'domain': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'name': ('django.db.models.fields.CharField', [], {'max_length': '50'})
         }
     }
 

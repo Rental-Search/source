@@ -1,7 +1,9 @@
 # encoding: utf-8
 import datetime
+
 from south.db import db
 from south.v2 import SchemaMigration
+
 from django.db import models
 
 
@@ -13,7 +15,7 @@ class Migration(SchemaMigration):
         # Adding field 'Patron.affiliate'
         db.add_column('accounts_patron', 'affiliate', self.gf('django.db.models.fields.CharField')(max_length=10, null=True, blank=True), keep_default=False)
     
-    def backwards(self, orm):    
+    def backwards(self, orm):
         # Adding field 'Patron.last_ip'
         db.add_column('accounts_patron', 'last_ip', self.gf('django.db.models.fields.IPAddressField')(max_length=15, null=True, blank=True), keep_default=False)
         

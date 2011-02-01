@@ -3,11 +3,14 @@ import datetime
 import logbook
 
 from django.core.exceptions import ValidationError
+from django.contrib.sites.managers import CurrentSiteManager
+from django.contrib.sites.models import Site
 from django.contrib.gis.db import models
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.contrib.gis.geos import Point
 from django.db.models import permalink
+from django.db.models.signals import post_save
 from django.utils.encoding import smart_unicode
 from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import ugettext
@@ -17,6 +20,7 @@ from eloue.accounts.manager import PatronManager
 from eloue.geocoder import GoogleGeocoder
 from eloue.products.utils import Enum
 from eloue.paypal import accounts, PaypalError
+from eloue.signals import post_save_sites
 from eloue.utils import create_alternative_email
 
 CIVILITY_CHOICES = Enum([
@@ -101,7 +105,9 @@ class Patron(User):
     affiliate = models.CharField(null=True, blank=True, max_length=10)
     slug = models.SlugField(unique=True, db_index=True)
     paypal_email = models.EmailField(null=True, blank=True)
+    sites = models.ManyToManyField(Site, related_name='patrons')
     
+    on_site = CurrentSiteManager()
     objects = PatronManager()
     
     def save(self, *args, **kwargs):
@@ -292,3 +298,5 @@ class PhoneNumber(models.Model):
     def __unicode__(self):
         return smart_unicode(self.number)
     
+
+post_save.connect(post_save_sites, sender=Patron)

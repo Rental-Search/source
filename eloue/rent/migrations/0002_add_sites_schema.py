@@ -8,55 +8,18 @@ from django.db import models
 
 
 class Migration(SchemaMigration):
-    depends_on = (
-        ("products", "0001_initial"),
-    )
-    
     def forwards(self, orm):
-        # Adding model 'Booking'
-        db.create_table('rent_booking', (
-            ('uuid', self.gf('django.db.models.fields.CharField')(unique=True, max_length=32, primary_key=True)),
-            ('started_at', self.gf('django.db.models.fields.DateTimeField')()),
-            ('ended_at', self.gf('django.db.models.fields.DateTimeField')()),
-            ('state', self.gf('django.db.models.fields.CharField')(default='authorizing', max_length=50)),
-            ('deposit_amount', self.gf('django.db.models.fields.DecimalField')(max_digits=8, decimal_places=2)),
-            ('insurance_amount', self.gf('django.db.models.fields.DecimalField')(max_digits=8, decimal_places=2)),
-            ('total_amount', self.gf('django.db.models.fields.DecimalField')(max_digits=8, decimal_places=2)),
-            ('currency', self.gf('django.db.models.fields.CharField')(default='EUR', max_length=3)),
-            ('owner', self.gf('django.db.models.fields.related.ForeignKey')(related_name='bookings', to=orm['accounts.Patron'])),
-            ('borrower', self.gf('django.db.models.fields.related.ForeignKey')(related_name='rentals', to=orm['accounts.Patron'])),
-            ('product', self.gf('django.db.models.fields.related.ForeignKey')(related_name='bookings', to=orm['products.Product'])),
-            ('contract_id', self.gf('django.db.models.fields.IntegerField')(db_index=True, unique=True, blank=True)),
-            ('pin', self.gf('django.db.models.fields.CharField')(max_length=4, blank=True)),
-            ('ip', self.gf('django.db.models.fields.IPAddressField')(max_length=15, null=True, blank=True)),
-            ('created_at', self.gf('django.db.models.fields.DateTimeField')(blank=True)),
-            ('canceled_at', self.gf('django.db.models.fields.DateTimeField')(null=True, blank=True)),
-            ('preapproval_key', self.gf('django.db.models.fields.CharField')(max_length=255, null=True, blank=True)),
-            ('pay_key', self.gf('django.db.models.fields.CharField')(max_length=255, null=True, blank=True)),
+        # Adding M2M table for field sites on 'Booking'
+        db.create_table('rent_booking_sites', (
+            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
+            ('booking', models.ForeignKey(orm['rent.booking'], null=False)),
+            ('site', models.ForeignKey(orm['sites.site'], null=False))
         ))
-        db.send_create_signal('rent', ['Booking'])
-
-        # Adding model 'Sinister'
-        db.create_table('rent_sinister', (
-            ('uuid', self.gf('django.db.models.fields.CharField')(unique=True, max_length=32, primary_key=True)),
-            ('sinister_id', self.gf('django.db.models.fields.IntegerField')(db_index=True, unique=True, blank=True)),
-            ('description', self.gf('django.db.models.fields.TextField')()),
-            ('patron', self.gf('django.db.models.fields.related.ForeignKey')(related_name='sinisters', to=orm['accounts.Patron'])),
-            ('booking', self.gf('django.db.models.fields.related.ForeignKey')(related_name='sinisters', to=orm['rent.Booking'])),
-            ('product', self.gf('django.db.models.fields.related.ForeignKey')(related_name='sinisters', to=orm['products.Product'])),
-            ('created_at', self.gf('django.db.models.fields.DateTimeField')(blank=True)),
-        ))
-        db.send_create_signal('rent', ['Sinister'])
-        
-        db.execute("CREATE SEQUENCE rent_booking_contract_id_seq")
-        db.execute("CREATE SEQUENCE rent_sinister_sinister_id_seq")
+        db.create_unique('rent_booking_sites', ['booking_id', 'site_id'])
     
     def backwards(self, orm):
-        # Deleting model 'Booking'
-        db.delete_table('rent_booking')
-
-        # Deleting model 'Sinister'
-        db.delete_table('rent_sinister')
+        # Removing M2M table for field sites on 'Booking'
+        db.delete_table('rent_booking_sites')
     
     models = {
         'accounts.address': {
@@ -73,13 +36,14 @@ class Migration(SchemaMigration):
         'accounts.patron': {
             'Meta': {'object_name': 'Patron', '_ormbases': ['auth.User']},
             'activation_key': ('django.db.models.fields.CharField', [], {'max_length': '40', 'null': 'True', 'blank': 'True'}),
+            'affiliate': ('django.db.models.fields.CharField', [], {'max_length': '10', 'null': 'True', 'blank': 'True'}),
             'civility': ('django.db.models.fields.PositiveSmallIntegerField', [], {'null': 'True', 'blank': 'True'}),
             'company_name': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
             'is_professional': ('django.db.models.fields.NullBooleanField', [], {'default': 'None', 'null': 'True', 'blank': 'True'}),
             'is_subscribed': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'last_ip': ('django.db.models.fields.IPAddressField', [], {'max_length': '15', 'null': 'True', 'blank': 'True'}),
             'modified_at': ('django.db.models.fields.DateTimeField', [], {}),
             'paypal_email': ('django.db.models.fields.EmailField', [], {'max_length': '75', 'null': 'True', 'blank': 'True'}),
+            'sites': ('django.db.models.fields.related.ManyToManyField', [], {'related_name': "'patrons'", 'symmetrical': 'False', 'to': "orm['sites.Site']"}),
             'slug': ('django.db.models.fields.SlugField', [], {'unique': 'True', 'max_length': '50', 'db_index': 'True'}),
             'user_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['auth.User']", 'unique': 'True', 'primary_key': 'True'})
         },
@@ -144,6 +108,7 @@ class Migration(SchemaMigration):
             'is_archived': ('django.db.models.fields.BooleanField', [], {'default': 'False', 'db_index': 'True'}),
             'owner': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'products'", 'to': "orm['accounts.Patron']"}),
             'quantity': ('django.db.models.fields.IntegerField', [], {}),
+            'sites': ('django.db.models.fields.related.ManyToManyField', [], {'related_name': "'products'", 'symmetrical': 'False', 'to': "orm['sites.Site']"}),
             'summary': ('django.db.models.fields.CharField', [], {'max_length': '255'})
         },
         'rent.booking': {
@@ -155,13 +120,14 @@ class Migration(SchemaMigration):
             'currency': ('django.db.models.fields.CharField', [], {'default': "'EUR'", 'max_length': '3'}),
             'deposit_amount': ('django.db.models.fields.DecimalField', [], {'max_digits': '8', 'decimal_places': '2'}),
             'ended_at': ('django.db.models.fields.DateTimeField', [], {}),
-            'insurance_amount': ('django.db.models.fields.DecimalField', [], {'max_digits': '8', 'decimal_places': '2'}),
+            'insurance_amount': ('django.db.models.fields.DecimalField', [], {'max_digits': '8', 'decimal_places': '2', 'blank': 'True'}),
             'ip': ('django.db.models.fields.IPAddressField', [], {'max_length': '15', 'null': 'True', 'blank': 'True'}),
             'owner': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'bookings'", 'to': "orm['accounts.Patron']"}),
             'pay_key': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
             'pin': ('django.db.models.fields.CharField', [], {'max_length': '4', 'blank': 'True'}),
             'preapproval_key': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
             'product': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'bookings'", 'to': "orm['products.Product']"}),
+            'sites': ('django.db.models.fields.related.ManyToManyField', [], {'related_name': "'bookings'", 'symmetrical': 'False', 'to': "orm['sites.Site']"}),
             'started_at': ('django.db.models.fields.DateTimeField', [], {}),
             'state': ('django.db.models.fields.CharField', [], {'default': "'authorizing'", 'max_length': '50'}),
             'total_amount': ('django.db.models.fields.DecimalField', [], {'max_digits': '8', 'decimal_places': '2'}),
@@ -176,6 +142,12 @@ class Migration(SchemaMigration):
             'product': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'sinisters'", 'to': "orm['products.Product']"}),
             'sinister_id': ('django.db.models.fields.IntegerField', [], {'db_index': 'True', 'unique': 'True', 'blank': 'True'}),
             'uuid': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '32', 'primary_key': 'True'})
+        },
+        'sites.site': {
+            'Meta': {'ordering': "('domain',)", 'object_name': 'Site', 'db_table': "'django_site'"},
+            'domain': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'name': ('django.db.models.fields.CharField', [], {'max_length': '50'})
         }
     }
 

@@ -8,6 +8,7 @@ from datetime import datetime, timedelta
 from decimal import Decimal as D
 from haystack import site
 
+from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.db import transaction
 from django.test import Client, TestCase
@@ -86,6 +87,7 @@ class ApiTest(TestCase):
         self.assertEquals(json['meta']['total_count'], 2)
     
     def test_product_search_with_location(self):
+        settings.DEBUG = True
         response = self.client.get(reverse("api_dispatch_list", args=['1.0', 'product']), {
             'q': 'perceuse', 'l': '48.8613232, 2.3631101', 'r': 1,
             'oauth_consumer_key': OAUTH_CONSUMER_KEY

@@ -13,9 +13,11 @@ from urlparse import urljoin
 
 from django.conf import settings
 from django.core.urlresolvers import reverse
+from django.contrib.sites.managers import CurrentSiteManager
 from django.contrib.sites.models import Site
 from django.db import models
 from django.db.models import permalink
+from django.db.models.signals import post_save
 from django.utils.translation import ugettext_lazy as _
 
 from eloue.accounts.models import Patron
@@ -25,6 +27,7 @@ from eloue.rent.decorators import incr_sequence
 from eloue.rent.fields import UUIDField, IntegerAutoField
 from eloue.rent.manager import BookingManager
 from eloue.paypal import payments, PaypalError
+from eloue.signals import post_save_sites
 from eloue.utils import create_alternative_email
 
 BOOKING_STATE = Enum([
@@ -102,6 +105,9 @@ class Booking(models.Model):
     preapproval_key = models.CharField(null=True, editable=False, blank=True, max_length=255)
     pay_key = models.CharField(null=True, editable=False, blank=True, max_length=255)
     
+    sites = models.ManyToManyField(Site, related_name='bookings')
+    
+    on_site = CurrentSiteManager()
     objects = BookingManager()
     
     STATE = BOOKING_STATE
@@ -417,3 +423,4 @@ class Sinister(models.Model):
         super(Sinister, self).save(*args, **kwargs)
     
 
+post_save.connect(post_save_sites, sender=Booking)

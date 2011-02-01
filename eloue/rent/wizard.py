@@ -100,7 +100,7 @@ class BookingWizard(GenericFormWizard):
             self.extra_context['preview'] = form.cleaned_data
     
     def parse_params(self, request, *args, **kwargs):
-        product = get_object_or_404(Product.objects.active(), pk=kwargs['product_id'])
+        product = get_object_or_404(Product.on_site.active(), pk=kwargs['product_id'])
         self.extra_context['product'] = product
         self.extra_context['search_form'] = FacetedSearchForm()
     

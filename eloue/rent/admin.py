@@ -3,10 +3,11 @@ from django.contrib import admin
 from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext_lazy as _
 
+from eloue.admin import CurrentSiteAdmin
 from eloue.rent.models import Booking
 
 
-class BookingAdmin(admin.ModelAdmin):
+class BookingAdmin(CurrentSiteAdmin):
     date_hierarchy = 'created_at'
     fieldsets = (
         (None, {'fields': ('state', 'product', 'started_at', 'ended_at')}),

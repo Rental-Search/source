@@ -7,6 +7,9 @@
 -   fields: {domain: m.e-loue.com, name: e-loue}
     model: sites.site
     pk: 3
+-   fields: {domain: e-loue.nc, name: e-loue}
+    model: sites.site
+    pk: 4
 -   fields: {is_readonly: false, name: all, url: /api/1.0/}
     model: oauth_provider.resource
     pk: 1
