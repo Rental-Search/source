@@ -18,3 +18,8 @@ AFFILIATE_TAG = 'nc'
 GOOGLE_REGION_CODE = 'nc'
 
 DEFAULT_SITES = [4]
+
+TEMPLATE_DIRS = (
+    local_path('templates/nc/'),
+    local_path('templates/'),
+)
