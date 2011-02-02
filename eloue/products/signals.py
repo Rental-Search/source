@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-from django.conf import settings
 from django.core.cache import cache
+from django.contrib.sites.models import Site
 
 from eloue.utils import cache_key
 
@@ -15,5 +15,5 @@ def post_save_product(sender, instance, created, **kwargs):
 
 
 def post_save_curiosity(sender, instance, created, **kwargs):
-    cache.delete(cache_key('curiosities'))
+    cache.delete(cache_key('curiosities', Site.objects.get_current()))
 
