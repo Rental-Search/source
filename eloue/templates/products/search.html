@@ -56,7 +56,7 @@
 		<div class="content-header x12">
 		 <h2>{% trans "Catégories" %}</h2>
 		</div>
-		{% cache 900 categories %}
+		{% cache 900 categories site %}
 		 {% full_tree_for_model products.Category as categories %}
 		 {% for column in categories|partition:4 %}
 		  <div class="x3">

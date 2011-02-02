@@ -53,7 +53,7 @@
 		{% endif %}
 		<ul class="product-list x8 first">
 		 {% for product in product_list %}
-		  {% cache 900 product:patron:row product.id %}
+		  {% cache 900 product:patron:row product.id site %}
 			<li class="x8 first">
 			 <a class="pl-img" href="{{ product.get_absolute_url }}">
 			  {% with product.pictures.all|first as picture %}
