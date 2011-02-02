@@ -80,9 +80,6 @@ class Product(models.Model):
         self.description = strip_tags(self.description)
         if not self.created_at:
             self.created_at = datetime.now()
-        if not self.address.is_geocoded():
-            self.address.geocode()
-            self.address.save()
         super(Product, self).save(*args, **kwargs)
     
     @permalink

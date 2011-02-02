@@ -260,8 +260,7 @@ class Address(models.Model):
         return smart_unicode("%s %s %s %s" % (self.address1, self.address2 if self.address2 else '', self.zipcode, self.city))
     
     def save(self, *args, **kwargs):
-        if not self.is_geocoded():
-            self.geocode()
+        self.position = self.geocode()
         super(Address, self).save(*args, **kwargs)
     
     def clean(self):
@@ -273,7 +272,7 @@ class Address(models.Model):
     def geocode(self):
         name, (lat, lon), radius = GoogleGeocoder().geocode("%s %s %s %s" % (self.address1, self.address2, self.zipcode, self.city))
         if lat and lon:
-            self.position = Point(lat, lon)
+            return Point(lat, lon)
     
     def is_geocoded(self):
         """
