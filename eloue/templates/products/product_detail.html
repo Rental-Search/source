@@ -43,13 +43,11 @@
 	</div>
 	<div class="col1 x8">
 		<div class="product-pic">
-		  {% cache 900 product:picture product.id %}
-			 {% with product.pictures.all|first as picture %}
-			  {% if picture %}
-			   <img src="{{ picture.display.url }}" alt="{{ product.summary }}" />
-			  {% endif %}
-			 {% endwith %}
-		 {% endcache %}
+		 {% with product.pictures.all|first as picture %}
+		  {% if picture %}
+		   <img src="{{ picture.display.url }}" alt="{{ product.summary }}" />
+		  {% endif %}
+		 {% endwith %}
 		</div>
 		<div class="product-thumbs">
 			{% for picture in product.pictures.all %}
