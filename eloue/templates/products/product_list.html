@@ -94,8 +94,8 @@
 				<li class="label-sort">
 					{% trans "Trier par :" %}
 				</li>
-				<li {% if form.sort.data == "created_at" %} class="label-selected" {% endif %}>
-					<a href="{% facet_url breadcrumbs "sort" "created_at" %}">{% trans "Les plus récents" %}</a>
+				<li {% if form.sort.data == "-created_at" %} class="label-selected" {% endif %}>
+					<a href="{% facet_url breadcrumbs "sort" "-created_at" %}">{% trans "Les plus récents" %}</a>
 				</li>
 				{% if form.cleaned_data.l %}
 				<li {% if form.sort.data == "geo_distance" %} class="label-selected" {% endif %}>

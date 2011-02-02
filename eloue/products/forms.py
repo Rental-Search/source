@@ -18,7 +18,7 @@ from eloue.products.utils import Enum
 
 SORT = Enum([
     ('geo_distance', 'NEAR', _(u"Les plus proches")),
-    ('created_at', 'RECENT', _(u"Les plus récentes")),
+    ('-created_at', 'RECENT', _(u"Les plus récentes")),
     ('price', 'LOW_PRICE', _(u"Les pris les plus bas")),
     ('-price', 'HIGH_PRICE', _(u"Les pris les plus haut")),
 ])
