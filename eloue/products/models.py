@@ -348,6 +348,9 @@ class Curiosity(models.Model):
     on_site = CurrentSiteManager()
     objects = models.Manager()
     
+    def __unicode__(self):
+        return smart_unicode(self.product.summary)
+    
     class Meta:
         verbose_name_plural = "curiosities"
     
