@@ -265,6 +265,21 @@ COMPRESS_CSS = {
         'extra_context': {
             'media': 'screen',
         }
+    },
+	'nc': {
+        'source_filenames': (
+			'css/master.css',
+			'css/screen.css',
+			'css/custom.css',
+            'css/nc.css',
+			'css/plugins/ui/jquery.ui.core.css',
+			'css/plugins/ui/jquery.ui.datepicker.css',
+			'css/plugins/ui/jquery.ui.theme.css'
+        ),
+        'output_filename': 'css/nc.r?.css',
+        'extra_context': {
+            'media': 'screen',
+        }
     }
 }
 COMPRESS_JS = {

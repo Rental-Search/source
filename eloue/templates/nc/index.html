@@ -1,0 +1,149 @@
+{% extends "base.html" %}
+{% load i18n compressed mptt_tags product cache %}
+
+{% block title %}{% trans "Location entre particuliers ou professionnels de tout type d'objet" %}{% endblock %}
+
+
+{% block content %}
+	<div id="top-content" class="search clearfix">
+		<div class="search-header x12">
+		  <h1>{% trans "Avec e-loue, tout se loue !" %}</h1>
+		</div>
+		<form class="form" action="{% url product_list %}">
+		<div class="search-what x5">
+			<p>
+				<label for="id_q">{% trans "Que voulez-vous louer ?" %}</label><br />
+				{{ form.q }}<br />
+				<span>{% trans "Exemple :" %} </span> <a href="{% url product_list %}?q=voiture">{% trans "Voiture" %}</a>, <a href="{% url product_list %}?q=chèvre">{% trans "Chèvre" %}</a>, <a href="{% url product_list %}?q=ski">{% trans "Ski" %}</a>, <a href="{% url product_list %}?q=robe">{% trans "Robe" %}</a>
+			</p>
+		</div>
+		<div class="search-where x5">
+			<p>
+				<label>{% trans "Où ?" %}</label><br />
+				{{ form.l }}<br />
+			</p>
+		</div>
+		<div class="search-find x2">
+			<p>
+				<input type="submit" value="{% trans "Rechercher" %}" class="btn big-orange"/>
+			</p>
+		</div>
+		</form>
+	</div>{# top-content #}
+	<div id="content" class="clearfix">
+ 	 <div class="curiosities x8">
+		<div class="content-header x8 first">
+		 <h2>{% trans "Les curiosités d'e-loue" %}</h2>
+		</div>
+		 {% cache 900 curiosities site %}
+	   {% for curiosity in curiosities|slice:":4" %}
+		  {% with curiosity.product as product %}
+		 	 {% if forloop.first %}
+			 	<div class="product-home x2 first">
+			 {% else %}
+			 	<div class="product-home x2">
+			 {% endif %}
+			 <p class="product-home-img">
+			 	<a href="{{ product.get_absolute_url }}">
+	  	   {% with product.pictures.all|first as picture %}
+				  <img src="{{ picture.home.url }}" alt="{{ product.summary }}"/>
+				 {% endwith %}
+				</a>
+			 </p>
+		   <p>
+				<a href="{{ product.get_absolute_url }}" class="product-home-title">{{ product.summary|lower|capfirst }}</a>
+				{% with product.prices.day|first as price %}
+				 <span>{{ price }}/jour</span>
+				{% endwith %}
+			 </p>
+			</div>
+		 {% endwith %}
+		{% endfor %}	 
+	{% endcache %}
+	 </div>
+	 <div class="pub-content x4">
+		<div>
+			<p class="pub-size">
+				PUB<br />
+				300 x 250 pixels
+			</p>
+		</div>
+	 </div>
+	<div class="content-guarantees">
+	 <div class="guarantees">
+				<h2>{% trans "Avec les garanties e-loue, louez en toute sécurité !" %}</h2>
+				<div class="guarantee">
+					<div class="g-payment">
+					    {% blocktrans %}
+					     <p>Grâce à <strong>PayPal</strong>, bénéficiez du paiement le plus sécurisé au monde.</p>
+					    {% endblocktrans %}
+					</div>
+					<div class="g-assurancy">
+					    {% blocktrans %}
+						 <p>Un <strong>contrat de location</strong> est proposé par e-loue</p>
+						{% endblocktrans %}
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="content-partner">
+			<a href="/comment-ca-marche/" class="slide">
+				<img src="{{ MEDIA_URL }}images/pp-verification-seal.gif" alt="PayPal" class="pp" width="100" height="100"/>
+			</a>
+		</div>
+		<div class="content-header x12">
+		 <h2>{% trans "Catégories" %}</h2>
+		</div>
+		{% cache 900 categories site %}
+		 {% full_tree_for_model products.Category as categories %}
+		 {% for column in categories|partition:4 %}
+		  <div class="x3">
+		   {% for category in column %}
+		    {% if category.is_root_node %}
+		     {% drilldown_tree_for_node category as drilldown cumulative count products.Product.category in product_count %}
+		     {% for node,structure in drilldown|tree_info %}
+		      {% if node.is_root_node and node.slug != 'divers' %}
+		       <div class="category-home x3 first">
+		        <h3><a href="{{ node.get_absolute_url }}">{{ node.name }}</a></h3>
+		        <ul>
+		      {% else %}
+		       {% if node.product_count %}
+		        <li><a href="{{ node.get_absolute_url }}">{{ node.name }}</a></li>
+		       {% endif %}
+		      {% if structure.closed_levels|length >= 2 %}</ul></div>{% endif %}
+		     {% endif %}
+		    {% endfor %}
+		   {% endif %}
+		  {% endfor %}
+		 </div>
+	    {% endfor %}
+	   {% endcache %}
+		<div class="content-community">
+			<div class="presse-icons x8">
+				<h3>Ils parlent de nous</h3>
+				<a href="/espace-presse/" title="{% trans "Voir l'espace presse" %}">
+					
+				</a>
+			</div>
+			<div class="community-portlet x4">
+				<div class="community-portlet-header">
+					<h3>{% trans "Rejoignez notre communauté" %}</h3>
+				</div>
+				<ul class="community-portlet-content">
+					<li class="fb">
+						<a href="https://www.facebook.com/profil.php?id=100001930466811&ref=t">
+							<span class="fb-icon"></span>
+							Devenez fan<br />sur Facebook
+						</a>
+					</li>
+					<li class="tw">
+						<a href="https://twitter.com/eloue">
+							<span class="tw-icon"></span>
+							Suivez-nous<br />sur Twitter
+						</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>{# content #}
+{% endblock %}
