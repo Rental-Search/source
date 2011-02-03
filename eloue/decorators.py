@@ -20,7 +20,7 @@ else:
 
 MOBILE = getattr(settings, 'MOBILE', False)
 MOBILE_REDIRECT_BASE = getattr(settings, 'MOBILE_REDIRECT_BASE', 'https://m.e-loue.com')
-RE_MOBILE = re.compile(r"(iphone|ipod|lg|htc|vodafone|netfront|samsung|blackberry|android|palm|windows\s+ce|opera\s+mobi|opera\s+mini)", re.I)
+RE_MOBILE = re.compile(r"(iphone|ipod|lg|htc|vodafone|netfront|samsung|symbianos|blackberry|android|palm|windows\s+ce|opera\s+mobi|opera\s+mini)", re.I)
 RE_DESKTOP = re.compile(r"(windows|linux|os\s+[x9]|solaris|bsd|ipad)", re.I)
 RE_BOT = re.compile(r"(spider|crawl|slurp|bot|google|yahoo|msn)", re.I)
 
