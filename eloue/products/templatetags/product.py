@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 import locale
-import logging
 import re
 
 from decimal import Decimal as D
@@ -11,6 +10,7 @@ from django.utils.encoding import force_unicode
 from django.utils.html import escape
 from django.utils.safestring import SafeData, mark_safe
 from django.utils import translation
+from django.utils.formats import get_format
 
 register = Library()
 
@@ -98,6 +98,11 @@ def currency(value):
         return D(value)
     finally:
         locale.setlocale(locale.LC_ALL, old_locale)
+
+
+@register.simple_tag
+def currency_symbol():
+    return get_format('CURRENCY_SYMBOL')
 
 
 @register.filter

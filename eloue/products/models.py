@@ -10,6 +10,7 @@ from django.db.models import permalink
 from django.db.models.signals import post_save
 from django.template.defaultfilters import slugify
 from django.utils.encoding import smart_unicode
+from django.utils.formats import get_format
 from django.utils.html import strip_tags
 from django.utils.translation import ugettext as _
 
@@ -48,7 +49,7 @@ STATUS = Enum([
 
 INSURANCE_MAX_DEPOSIT = getattr(settings, 'INSURANCE_MAX_DEPOSIT', 750)
 DEFAULT_RADIUS = getattr(settings, 'DEFAULT_RADIUS', 50)
-DEFAULT_CURRENCY = getattr(settings, 'DEFAULT_CURRENCY', 'EUR')
+DEFAULT_CURRENCY = get_format('CURRENCY')
 
 
 class Product(models.Model):

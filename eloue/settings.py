@@ -59,8 +59,6 @@ LANGUAGES = (
     ('en-gb', ugettext('English')),
 )
 
-DEFAULT_CURRENCY = 'EUR'
-
 SITE_ID = 1
 DEFAULT_SITES = getattr(local, "DEFAULT_SITES", [1, 2, 3])
 

@@ -12,6 +12,7 @@ from django.contrib.gis.geos import Point
 from django.db.models import permalink
 from django.db.models.signals import post_save
 from django.utils.encoding import smart_unicode
+from django.utils.formats import get_format
 from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import ugettext
 from django.template.defaultfilters import slugify
@@ -89,7 +90,7 @@ PHONE_TYPES = Enum([
     (4, 'OTHER', _('Autre'))
 ])
 
-DEFAULT_CURRENCY = getattr(settings, 'DEFAULT_CURRENCY', 'EUR')
+DEFAULT_CURRENCY = get_format('CURRENCY')
 
 log = logbook.Logger('eloue.accounts')
 
