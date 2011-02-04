@@ -422,4 +422,4 @@ MOBILE_REDIRECT_BASE = getattr(local, 'MOBILE_REDIRECT_BASE', 'https://m.e-loue.
 
 # Franc Pacifique
 CONVERT_XPF = False
-XPF_EXCHANGE_RATE = 0.00838
+XPF_EXCHANGE_RATE = '0.00838'
