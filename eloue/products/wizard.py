@@ -43,7 +43,10 @@ class ProductWizard(GenericFormWizard):
         product_form.instance.owner = new_patron
         product_form.instance.address = new_address
         product = product_form.save()
-        product.prices.create(unit=UNIT.DAY, amount=product_form.cleaned_data['price'])
+        product.prices.create(
+            unit=UNIT.DAY,
+            amount=product_form.cleaned_data['price']
+        )
         
         if product_form.cleaned_data.get('picture_id', None):
             product.pictures.add(Picture.objects.get(pk=product_form.cleaned_data['picture_id']))

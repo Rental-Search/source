@@ -27,6 +27,7 @@ from eloue.products.models import Product
 from eloue.rent.forms import BookingForm, BookingConfirmationForm, BookingStateForm, PreApprovalIPNForm, PayIPNForm, IncidentForm
 from eloue.rent.models import Booking
 from eloue.rent.wizard import BookingWizard
+from eloue.utils import currency, convert_to_xpf
 
 log = logbook.Logger('eloue.rent')
 
@@ -74,7 +75,10 @@ def booking_price(request, slug, product_id):
     form = BookingForm(request.GET, prefix="0", instance=Booking(product=product))
     if form.is_valid():
         duration = timesince(form.cleaned_data['started_at'], form.cleaned_data['ended_at'])
-        total_price = smart_str(form.cleaned_data['total_amount'])
+        if not settings.CONVERT_XPF:
+            total_price = smart_str(currency(form.cleaned_data['total_amount']))
+        else:
+            total_price = smart_str("%s F" % convert_to_xpf(form.cleaned_data['total_amount']))
         return HttpResponse(simplejson.dumps({'duration': duration, 'total_price': total_price}), mimetype='application/json')
     else:
         return HttpResponse(simplejson.dumps({'errors': form.errors.values()}), mimetype='application/json')

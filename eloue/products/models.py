@@ -10,6 +10,7 @@ from django.db.models import permalink
 from django.db.models.signals import post_save
 from django.template.defaultfilters import slugify
 from django.utils.encoding import smart_unicode
+from django.utils.formats import get_format
 from django.utils.html import strip_tags
 from django.utils.translation import ugettext as _
 
@@ -22,6 +23,7 @@ from eloue.products.manager import ProductManager, PriceManager, QuestionManager
 from eloue.products.signals import post_save_answer, post_save_product, post_save_curiosity
 from eloue.products.utils import Enum
 from eloue.signals import post_save_sites
+from eloue.utils import convert_to_xpf
 
 UNIT = Enum([
     (0, 'HOUR', _(u'heure')),
@@ -48,7 +50,7 @@ STATUS = Enum([
 
 INSURANCE_MAX_DEPOSIT = getattr(settings, 'INSURANCE_MAX_DEPOSIT', 750)
 DEFAULT_RADIUS = getattr(settings, 'DEFAULT_RADIUS', 50)
-DEFAULT_CURRENCY = getattr(settings, 'DEFAULT_CURRENCY', 'EUR')
+DEFAULT_CURRENCY = get_format('CURRENCY')
 
 
 class Product(models.Model):
@@ -216,7 +218,10 @@ class Price(models.Model):
         for name, symbol in CURRENCY:
             if name == self.currency:
                 currency = symbol
-        return smart_unicode("%s %s" % (self.amount, currency))
+        if settings.CONVERT_XPF:
+            return smart_unicode("%s F" % convert_to_xpf(self.amount))
+        else:
+            return smart_unicode("%s %s" % (self.amount, currency))
     
     def clean(self):
         from django.core.exceptions import ValidationError

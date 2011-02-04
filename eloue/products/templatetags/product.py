@@ -1,16 +1,13 @@
 # -*- coding: utf-8 -*-
-import locale
-import logging
 import re
 
-from decimal import Decimal as D
-
+from django.conf import settings
 from django.template import Library
 from django.template.defaultfilters import stringfilter
 from django.utils.encoding import force_unicode
 from django.utils.html import escape
 from django.utils.safestring import SafeData, mark_safe
-from django.utils import translation
+from django.utils.formats import get_format
 
 register = Library()
 
@@ -85,19 +82,15 @@ def unit(value):
 @register.filter
 @stringfilter
 def currency(value):
-    """
-    Display price with monetary currency from the current locale.
-    It totally ignores currency linked with value.
-    """
-    old_locale = locale.getlocale()
-    try:
-        new_locale = locale.normalize(translation.to_locale("%s.utf8" % translation.get_language()))
-        locale.setlocale(locale.LC_ALL, new_locale)
-        return locale.currency(D(value), True, True)
-    except (TypeError, locale.Error):
-        return D(value)
-    finally:
-        locale.setlocale(locale.LC_ALL, old_locale)
+    from eloue.utils import currency
+    return currency(value)
+
+
+@register.simple_tag
+def currency_symbol():
+    if settings.CONVERT_XPF:
+        return u"F"
+    return get_format('CURRENCY_SYMBOL')
 
 
 @register.filter
@@ -105,21 +98,21 @@ def partition(iterator, n):
     """
     Break a list into ``n`` pieces. The last list may be larger than the rest if
     the list doesn't break cleanly. That is::
-
+        
         >>> l = range(10)
-
+        
         >>> partition(l, 2)
         [[0, 1, 2, 3, 4], [5, 6, 7, 8, 9]]
-
+        
         >>> partition(l, 3)
         [[0, 1, 2], [3, 4, 5], [6, 7, 8, 9]]
-
+        
         >>> partition(l, 4)
         [[0, 1], [2, 3], [4, 5], [6, 7, 8, 9]]
-
+        
         >>> partition(l, 5)
         [[0, 1], [2, 3], [4, 5], [6, 7], [8, 9]]
-
+    
     """
     try:
         n = int(n)

@@ -67,7 +67,7 @@
 				<tr>
 					<th>{% trans "Fin :" %}</th>
 					<td>
-                        {{ preview.ended_at|date:"l j F Y"|capfirst }}
+            {{ preview.ended_at|date:"l j F Y"|capfirst }}
 					</td>
 				</tr>
 				<tr>
@@ -80,7 +80,7 @@
 				</tr>
 				<tr class="total">
 					<th>{% trans "Total :" %}</th>
-					<td class="number">{{ preview.total_amount }} €</td>
+					<td class="number">{{ preview.total_amount|currency }}</td>
 				</tr>
 			</table>
 		</div>

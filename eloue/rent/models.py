@@ -18,6 +18,7 @@ from django.contrib.sites.models import Site
 from django.db import models
 from django.db.models import permalink
 from django.db.models.signals import post_save
+from django.utils.formats import get_format
 from django.utils.translation import ugettext_lazy as _
 
 from eloue.accounts.models import Patron
@@ -46,7 +47,7 @@ BOOKING_STATE = Enum([
     ('outdated', 'OUTDATED', _(u"Dépassé"))
 ])
 
-DEFAULT_CURRENCY = getattr(settings, 'DEFAULT_CURRENCY', 'EUR')
+DEFAULT_CURRENCY = get_format('CURRENCY')
 
 COMMISSION = D(str(getattr(settings, 'COMMISSION', 0.15)))
 INSURANCE_FEE = D(str(getattr(settings, 'INSURANCE_FEE', 0.0594)))
