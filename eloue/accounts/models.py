@@ -64,7 +64,7 @@ COUNTRY_CHOICES = Enum([
     ('MC', 'MC', _(u'Monaco')),
     ('MA', 'MA', _(u'Maroc')),
     ('NO', 'NO', _(u'Norvège')),
-    ('FR', 'NC', _(u'Nouvelle-Calédonie')),
+    ('NC', 'NC', _(u'Nouvelle-Calédonie')),
     ('NL', 'NL', _(u'Pays-Bas')),
     ('PL', 'PL', _(u'Pologne')),
     ('PF', 'PF', _(u'Polynésie Française')),
