@@ -170,7 +170,7 @@ class Patron(User):
                     'line1': address.address1,
                     'city': address.city,
                     'postalCode': address.zipcode,
-                    'countryCode': address.country
+                    'countryCode': address.country if address.country != COUNTRY_CHOICES.NC else COUNTRY_CHOICES.FR
                 },
                 emailAddress=self.paypal_email,
                 name={
