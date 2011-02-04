@@ -7,15 +7,17 @@ local_path = lambda path: os.path.join(os.path.dirname(__file__), path)
 
 SITE_ID = 4
 
-USE_HTTPS = True
+USE_HTTPS = False
 
-SESSION_COOKIE_DOMAIN = 'e-loue.nc'
+SESSION_COOKIE_DOMAIN = None  # 'e-loue.nc'
 
 CACHE_MIDDLEWARE_KEY_PREFIX = 'nc'
 
 AFFILIATE_TAG = 'nc'
 
 GOOGLE_REGION_CODE = 'nc'
+
+CONVERT_XPF = True
 
 DEFAULT_SITES = [4]
 

@@ -264,15 +264,15 @@ COMPRESS_CSS = {
             'media': 'screen',
         }
     },
-	'nc': {
+    'nc': {
         'source_filenames': (
-			'css/master.css',
-			'css/screen.css',
-			'css/custom.css',
+            'css/master.css',
+            'css/screen.css',
+            'css/custom.css',
             'css/nc.css',
-			'css/plugins/ui/jquery.ui.core.css',
-			'css/plugins/ui/jquery.ui.datepicker.css',
-			'css/plugins/ui/jquery.ui.theme.css'
+            'css/plugins/ui/jquery.ui.core.css',
+            'css/plugins/ui/jquery.ui.datepicker.css',
+            'css/plugins/ui/jquery.ui.theme.css'
         ),
         'output_filename': 'css/nc.r?.css',
         'extra_context': {
@@ -419,3 +419,7 @@ CAMO_KEY = getattr(local, 'CAMO_KEY', 'OKNZYL69Ml3oISfEmJvtzFjhUeBbugxPDXanydwi4
 # Mobile configuration
 MOBILE = getattr(local, 'MOBILE', False)
 MOBILE_REDIRECT_BASE = getattr(local, 'MOBILE_REDIRECT_BASE', 'https://m.e-loue.com')
+
+# Franc Pacifique
+CONVERT_XPF = False
+XPF_EXCHANGE_RATE = 0.00838

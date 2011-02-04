@@ -14,6 +14,7 @@ from eloue.geocoder import GoogleGeocoder
 from eloue.products.fields import FacetField
 from eloue.products.models import PatronReview, ProductReview, Product, Category
 from eloue.products.utils import Enum
+from eloue.utils import convert_from_xpf, convert_to_xpf
 
 
 SORT = Enum([
@@ -112,7 +113,15 @@ class ProductForm(forms.ModelForm):
         deposit_amount = self.cleaned_data.get('deposit_amount', None)
         if deposit_amount in EMPTY_VALUES:
             deposit_amount = D('0')
+        if settings.CONVERT_XPF:
+            return convert_from_xpf(deposit_amount)
         return deposit_amount
+    
+    def clean_price(self):
+        price = self.cleaned_data.get('price', None)
+        if settings.CONVERT_XPF:
+            return convert_from_xpf(price)
+        return price
     
     def clean_picture(self):
         picture = self.cleaned_data['picture']
@@ -137,10 +146,18 @@ class ProductEditForm(forms.ModelForm):
         super(ProductEditForm, self).__init__(*args, **kwargs)
         self.fields['category'].widget.attrs['class'] = "selm"
     
+    def clean_price(self):
+        price = self.cleaned_data.get('price', None)
+        if settings.CONVERT_XPF:
+            return convert_from_xpf(price)
+        return price
+    
     def clean_deposit_amount(self):
         deposit_amount = self.cleaned_data.get('deposit_amount', None)
         if deposit_amount in EMPTY_VALUES:
             deposit_amount = D('0')
+        if settings.CONVERT_XPF:
+            return convert_from_xpf(deposit_amount)
         return deposit_amount
     
     def save(self, *args, **kwargs):

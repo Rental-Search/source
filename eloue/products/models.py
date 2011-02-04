@@ -23,6 +23,7 @@ from eloue.products.manager import ProductManager, PriceManager, QuestionManager
 from eloue.products.signals import post_save_answer, post_save_product, post_save_curiosity
 from eloue.products.utils import Enum
 from eloue.signals import post_save_sites
+from eloue.utils import convert_to_xpf
 
 UNIT = Enum([
     (0, 'HOUR', _(u'heure')),
@@ -217,7 +218,10 @@ class Price(models.Model):
         for name, symbol in CURRENCY:
             if name == self.currency:
                 currency = symbol
-        return smart_unicode("%s %s" % (self.amount, currency))
+        if settings.CONVERT_XPF:
+            return smart_unicode("%s F" % convert_to_xpf(self.amount))
+        else:
+            return smart_unicode("%s %s" % (self.amount, currency))
     
     def clean(self):
         from django.core.exceptions import ValidationError
