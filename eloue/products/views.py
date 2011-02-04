@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.conf import settings
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.vary import vary_on_headers
 from django.http import Http404
@@ -17,7 +18,7 @@ from eloue.decorators import ownership_required, secure_required, mobify
 from eloue.accounts.forms import EmailAuthenticationForm
 from eloue.accounts.models import Patron
 from eloue.products.forms import FacetedSearchForm, ProductForm, ProductEditForm
-from eloue.products.models import Category, Product, Curiosity
+from eloue.products.models import Category, Product, Curiosity, UNIT
 from eloue.products.wizard import ProductWizard
 
 PAGINATE_PRODUCTS_BY = getattr(settings, 'PAGINATE_PRODUCTS_BY', 10)
@@ -51,14 +52,16 @@ def product_create(request, *args, **kwargs):
 @ownership_required(model=Product, object_key='product_id', ownership=['owner'])
 def product_edit(request, slug, product_id):
     product = get_object_or_404(Product.on_site, pk=product_id)
-    price = product.prices.day()[0]
-    form = ProductEditForm(request.POST or None, instance=product, initial={
-        'price': price.amount,
+    initial = {
         'category': product.category.id,
         'deposit_amount': product.deposit_amount
-    })
+    }
+    for price in product.prices.all():
+        initial['%s_price' % UNIT.reverted[price.unit].lower()] = price.amount
+    form = ProductEditForm(request.POST or None, instance=product, initial=initial)
     if form.is_valid():
         product = form.save()
+        messages.success(request, _(u"Votre produit a bien été édité !"))
         return redirect_to(request, product.get_absolute_url())
     return direct_to_template(request, 'products/product_edit.html', extra_context={'product': product, 'form': form})
 

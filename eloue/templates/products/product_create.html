@@ -15,16 +15,15 @@
 		</ol>
 		<a href="{% url faq-topic-list %}" class="btn big-blue">{% trans "Obtenir de l'aide" %}</a>
 	</div>
-	<div class="content-header x12">
-		<h2>{% trans "Remplissez le formulaire de location" %}</h2>
-	</div>
-	<div class="new x9">
-		
-		<form class="form" enctype="multipart/form-data" action="" method="POST">
-		  {% csrf_token %}
-			
-			<table>
-				<tr>
+	<div class="x6">
+		<div class="content-header x6 first">
+			<h2>1. {% trans "Catégorie" %}</h2>
+		</div>
+		<div class="new x6 first">
+			<form class="form" enctype="multipart/form-data" action="" method="POST">
+			  {% csrf_token %}
+				<table>
+					<tr>
 					<td colspan="2" {% if form.category.errors %} class="error-field" {% endif %}>
 						{% full_tree_for_model products.Category as categories %}
 						<select id="id_0-category" class="selm" name="0-category">
@@ -54,82 +53,131 @@
 					{% endif %}
 					</td>
 				</tr>
-				<tr>
-					<th><label>{{ form.picture.label }} * :</label></th>
-					<td {% if form.picture.errors %} class="error-field" {% endif %}>
-					{{ form.picture }}
-					{% if form.picture.errors %}
-					{% for error in form.picture.errors %}
-										<br />
-						        <span class="error">{{ error|escape }}</span>
-						    {% endfor %}
-						{% endif %}
-					</td>
-				</tr>
-				<tr>
-					<th><label>{{ form.summary.label }} {% if form.summary.field.required %}*{% endif %} :</label></th>
-					<td {% if form.summary.errors %} class="error-field" {% endif %}>
-						{{ form.summary }}
-						{% if form.summary.errors %}
-						    {% for error in form.summary.errors %}
-										<br />
-						        <span class="error">{{ error|escape }}</span>
-						    {% endfor %}
-						{% endif %}
-					</td>
-				</tr>
-				<tr>
-					<th><label>{{ form.price.label }} {% if form.price.field.required %}*{% endif %} :</label></th>
-					<td {% if form.price.errors %} class="error-field" {% endif %}>
-						{{ form.price }} <span class="unit">{% currency_symbol %}</span> {% trans "par jour" %}
-						{% if form.price.errors %}
-						    {% for error in form.price.errors %}
-										<br />
-						        <span class="error">{{ error|escape }}</span>
-						    {% endfor %}
-						{% endif %}
-					</td>
-				</tr>
-				<tr>
-					<th><label>{{ form.deposit_amount.label }} {% if form.deposit_amount.field.required %}*{% endif %} :</label></th>
-					<td {% if form.deposit_amount.errors %} class="error-field" {% endif %}>
-						{{  form.deposit_amount }} <span class="unit">{% currency_symbol %}</span>
-						{% if form.deposit_amount.errors %}
-						    {% for error in form.deposit_amount.errors %}
-										<br />
-						        <span class="error">{{ error|escape }}</span>
-						    {% endfor %}
-						{% endif %}
-					</td>
-				</tr>
-				<tr>
-					<th><label>{{ form.quantity.label }} {% if form.quantity.field.required %}*{% endif %} :</label></th>
-					<td {% if form.quantity.errors %} class="error-field" {% endif %}>
-						{{  form.quantity }}
-						{% if form.quantity.errors %}
-						    {% for error in form.quantity.errors %}
-										<br />
-						        <span class="error">{{ error|escape }}</span>
-						    {% endfor %}
-						{% endif %}
-					</td>
-				</tr>
-				<tr>
-					<th><label>{{ form.description.label }} {% if form.description.field.required %}*{% endif %} :</label></th>
-					<td {% if form.description.errors %} class="error-field" {% endif %}>
-						{{ form.description}}
-						{% if form.description.errors %}
-						    {% for error in form.description.errors %}
-										<br />
-						        <span class="error">{{ error|escape }}</span>
-						    {% endfor %}
-						{% endif %}
-					</td>
-				</tr>
 			</table>
-			<p class="required-field">{% trans "* = champ obligatoire" %}</p>
 		</div>
-		<div class="submit-wizard x9">
+	</div>
+	<div class="x6">
+		<div class="content-header x6 first">
+			<h2>2. {% trans "Informations" %}</h2>
+		</div>
+		<div class="new x6 first">
+			<form class="form" enctype="multipart/form-data" action="" method="POST">
+			  {% csrf_token %}
+				<table>
+					<tr>
+						<th><label>{{ form.picture.label }} * :</label></th>
+						<td {% if form.picture.errors %} class="error-field" {% endif %}>
+						{{ form.picture }}
+						{% if form.picture.errors %}
+						{% for error in form.picture.errors %}
+											<br />
+							        <span class="error">{{ error|escape }}</span>
+							    {% endfor %}
+							{% endif %}
+						</td>
+					</tr>
+					<tr>
+						<th><label>{{ form.summary.label }} {% if form.summary.field.required %}*{% endif %} :</label></th>
+						<td {% if form.summary.errors %} class="error-field" {% endif %}>
+							{{ form.summary }}
+							{% if form.summary.errors %}
+							    {% for error in form.summary.errors %}
+											<br />
+							        <span class="error">{{ error|escape }}</span>
+							    {% endfor %}
+							{% endif %}
+						</td>
+					</tr>
+					<tr>
+						<th><label>{{ form.deposit_amount.label }} {% if form.deposit_amount.field.required %}*{% endif %} :</label></th>
+						<td {% if form.deposit_amount.errors %} class="error-field" {% endif %}>
+							{{  form.deposit_amount }} <span class="unit">{% currency_symbol %}</span>
+							{% if form.deposit_amount.errors %}
+							    {% for error in form.deposit_amount.errors %}
+											<br />
+							        <span class="error">{{ error|escape }}</span>
+							    {% endfor %}
+							{% endif %}
+						</td>
+					</tr>
+					<tr>
+						<th><label>{{ form.quantity.label }} {% if form.quantity.field.required %}*{% endif %} :</label></th>
+						<td {% if form.quantity.errors %} class="error-field" {% endif %}>
+							{{  form.quantity }}
+							{% if form.quantity.errors %}
+							    {% for error in form.quantity.errors %}
+											<br />
+							        <span class="error">{{ error|escape }}</span>
+							    {% endfor %}
+							{% endif %}
+						</td>
+					</tr>
+					<tr>
+						<th><label>{{ form.description.label }} {% if form.description.field.required %}*{% endif %} :</label></th>
+						<td {% if form.description.errors %} class="error-field" {% endif %}>
+							{{ form.description }}
+							{% if form.description.errors %}
+							    {% for error in form.description.errors %}
+											<br />
+							        <span class="error">{{ error|escape }}</span>
+							    {% endfor %}
+							{% endif %}
+						</td>
+					</tr>
+				</table>
+			</div>
+		</div>
+		<div class="content-header x12">
+			<h2>3. {% trans "Prix de location" %}</h2>
+		</div>
+		<div class="x12">
+			<div class="tabsPrices">
+				<ul>
+					<li><a href="#tabs-1">{% trans "Prix simplifiés"%}</a></li>
+				</ul>
+				<div id="tabs-1">
+					<h5>{% trans "Prix par défaut :" %}</h5>
+					{% blocktrans %}
+					 <p>Vous pouvez ne remplir qu’une seule case et cliquer sur l’icône <img src="{{MEDIA_URL}}/images/mini_calculator.png" alt="Calculer les prix de location automatiquement" /> pour calculer les autres valeurs automatiquement.</p>
+					{% endblocktrans %}
+					<div class="prices-form">
+						<ul class="prices-list">
+							<li class="price-by-hour {% if form.hour_price.errors %} error-field {% endif %}">
+							  {{ form.hour_price }}
+								<label class="labs "><span class="current-symbol">{% currency_symbol %}</span> {{ form.hour_price.label }}{% if form.hour_price.field.required %}*{% endif %}</label>
+							</li>
+							<li {% if form.day_price.errors %} class="error-field" {% endif %}>
+								{{ form.day_price }}
+								<label class="labs"><span class="current-symbol">{% currency_symbol %}</span> {{ form.day_price.label }}{% if form.day_price.field.required %}*{% endif %}</label>
+							</li>
+							<li {% if form.week_end_price.errors %} class="error-field" {% endif %}>
+								{{ form.week_end_price }}
+								<label class="labs"><span class="current-symbol">{% currency_symbol %}</span> {{ form.week_end_price.label }}{% if form.week_end_price.field.required %}*{% endif %}</label>
+							</li>
+							<li {% if form.week_price.errors %} class="error-field" {% endif %}>
+								{{ form.week_price }}
+								<label class="labs"><span class="current-symbol">{% currency_symbol %}</span> {{ form.week_price.label }}{% if form.week_price.field.required %}*{% endif %}</label>
+							</li>
+							<li {% if form.two_weeks_price.errors %} class="error-field" {% endif %}>
+								{{ form.two_weeks_price }}
+								<label class="labs"><span class="current-symbol">{% currency_symbol %}</span> {{ form.two_weeks_price.label }}{% if form.two_weeks_price.field.required %}*{% endif %}</label>
+							</li>
+							<li class="price-by-month {% if form.month_price.errors %} error-field {% endif %}">
+								{{ form.month_price }}
+								<label class="labs"><span class="current-symbol">{% currency_symbol %}</span> {{ form.month_price.label }}{% if form.month_price.field.required %}*{% endif %}</label>
+							</li>
+							<li class="calculator">
+								<a href="#">{% trans "Calculer" %}</a>
+							</li>
+							<li class="supp-list-prices">
+							</li>
+						</ul>
+					</div>
+				</div>
+ 		 </div>
+		<p class="required-field">{% trans "* = champ obligatoire" %}</p>
+		</div>
+		<div class="submit-wizard x12">
 			<a href="{% url home %}">{% trans "Annuler" %}</a> {% trans "ou" %} 
 			<input type="submit" class="btn big-green" value="{% trans "Continuer &rarr;" %}" />
 		</form>
