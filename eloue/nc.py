@@ -7,9 +7,9 @@ local_path = lambda path: os.path.join(os.path.dirname(__file__), path)
 
 SITE_ID = 4
 
-USE_HTTPS = False
+USE_HTTPS = True
 
-SESSION_COOKIE_DOMAIN = None  # 'e-loue.nc'
+SESSION_COOKIE_DOMAIN = 'e-loue.nc'
 
 CACHE_MIDDLEWARE_KEY_PREFIX = 'nc'
 

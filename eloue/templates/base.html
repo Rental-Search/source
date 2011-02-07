@@ -52,7 +52,7 @@
 							<li class="nav"><a href="{% url auth_logout %}" class="nav-link">{% trans "Se déconnecter" %}</a></li>
 						{% endif %}
 						{% if user.is_anonymous %}
-						 <li class="nav"><a href="/comment-ca-marche/" class="nav-link">{% trans "Comment ça marche ?" %}</a></li>
+						 <li class="nav"><a href="{% trans "/comment-ca-marche/" %}" class="nav-link">{% trans "Comment ça marche ?" %}</a></li>
 						{% else %}
 						 <li class="nav"><a href="{% url dashboard %}" class="nav-link">{% trans "Tableau de bord" %}</a></li>
 						 <li class="nav welcome">{% blocktrans with request.user.first_name as first_name %} Bienvenue, {{ first_name }}!{% endblocktrans %}</li>    
@@ -71,17 +71,17 @@
 					<li><a href="{% url dashboard %}">{% trans "Mon compte" %}</a></li>
 					<li><a href="{% url product_create %}">{% trans "Mettre en location" %}</a></li>
 					{% if user.is_authenticated %}
-						<li><a href="/comment-ca-marche/">{% trans "Comment ça marche ?" %}</a></li>
+						<li><a href="{% trans "/comment-ca-marche/" %}">{% trans "Comment ça marche ?" %}</a></li>
 					{% endif %}
 				</ul>
 			</div>
 			<div class="x3">
 				<h4>{% trans "Info" %}</h4>
 				<ul>
-					<li><a href="/espace-professionnel/">{% trans "Espace professionnel" %}</a></li>
-					<li><a href="/assurance-tranquillite/">{% trans "Assurance tranquillité" %}</a></li>
-					<li><a href="/conditions-generales/">{% trans "Conditions générales" %}</a></li>
-					<li><a href="/respect-vie-privee/">{% trans "Respect de la vie privée" %}</a></li>
+					<li><a href="{% trans "/espace-professionnel/" %}">{% trans "Espace professionnel" %}</a></li>
+					<li><a href="{% trans "/assurance-tranquillite/" %}">{% trans "Assurance tranquillité" %}</a></li>
+					<li><a href="{% trans "/conditions-generales/" %}">{% trans "Conditions générales" %}</a></li>
+					<li><a href="{% trans "/respect-vie-privee/" %}">{% trans "Respect de la vie privée" %}</a></li>
 				</ul>
 			</div>
 			<div class="x3">
@@ -89,8 +89,8 @@
 				<ul>
 					<li><a href="{% url faq-topic-list %}">{% trans "Aide" %}</a></li>
 					<li><a href="{% url contact %}">{% trans "Contactez-nous" %}</a></li>
-					<li><a href="/espace-presse/">{% trans "Espace presse" %}</a></li>
-					<li><a href="/qui-sommes-nous/">{% trans "Qui sommes nous ?" %}</a></li>
+					<li><a href="{% trans "/espace-presse/" %}">{% trans "Espace presse" %}</a></li>
+					<li><a href="{% trans "/qui-sommes-nous/" %}">{% trans "Qui sommes nous ?" %}</a></li>
 				</ul>
 			</div>
 			<div class="x3">

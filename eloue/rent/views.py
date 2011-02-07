@@ -78,7 +78,7 @@ def booking_price(request, slug, product_id):
         if not settings.CONVERT_XPF:
             total_price = smart_str(currency(form.cleaned_data['total_amount']))
         else:
-            total_price = smart_str("%s F" % convert_to_xpf(form.cleaned_data['total_amount']))
+            total_price = smart_str("%s XPF" % convert_to_xpf(form.cleaned_data['total_amount']))
         return HttpResponse(simplejson.dumps({'duration': duration, 'total_price': total_price}), mimetype='application/json')
     else:
         return HttpResponse(simplejson.dumps({'errors': form.errors.values()}), mimetype='application/json')

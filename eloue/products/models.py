@@ -19,7 +19,7 @@ from imagekit.models import ImageModel
 
 from eloue.accounts.models import Patron, Address
 from eloue.products.fields import SimpleDateField
-from eloue.products.manager import ProductManager, PriceManager, QuestionManager, CurrentSiteProductManager
+from eloue.products.manager import ProductManager, PriceManager, QuestionManager, CurrentSiteProductManager, TreeManager
 from eloue.products.signals import post_save_answer, post_save_product, post_save_curiosity
 from eloue.products.utils import Enum
 from eloue.signals import post_save_sites
@@ -138,6 +138,7 @@ class Category(MPTTModel):
     
     on_site = CurrentSiteManager()
     objects = models.Manager()
+    tree = TreeManager()
     
     class Meta:
         ordering = ['name']
@@ -219,7 +220,7 @@ class Price(models.Model):
             if name == self.currency:
                 currency = symbol
         if settings.CONVERT_XPF:
-            return smart_unicode("%s F" % convert_to_xpf(self.amount))
+            return smart_unicode("%s XPF" % convert_to_xpf(self.amount))
         else:
             return smart_unicode("%s %s" % (self.amount, currency))
     

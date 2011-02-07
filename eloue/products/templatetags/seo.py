@@ -4,7 +4,6 @@ import re
 from django.template import Library
 from django.utils.safestring import mark_safe
 from django.utils.encoding import force_unicode
-from django.utils.functional import allow_lazy
 
 register = Library()
 

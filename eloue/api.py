@@ -86,7 +86,7 @@ class OAuthAuthorization(Authorization):
             consumer = store.get_consumer(request, oauth_request, oauth_request.get_parameter('oauth_consumer_key'))
             try:
                 token = store.get_access_token(request, oauth_request, consumer, oauth_request.get_parameter('oauth_token'))
-            except InvalidTokenError, e:
+            except InvalidTokenError:
                 return False
         
             if not verify_oauth_request(request, oauth_request, consumer, token=token):
@@ -169,7 +169,7 @@ class UserSpecificResource(OAuthResource):
         
         try:
             return self.get_object_list(request).filter(**applicable_filters)
-        except ValueError, e:
+        except ValueError:
             raise NotFound("Invalid resource lookup data provided (mismatched type).")
     
     def build_filters(self, filters):
@@ -202,7 +202,7 @@ class UserResource(OAuthResource):
         data = bundle.data
         try:
             bundle.obj = Patron.objects.create_user(data["username"], data["email"], data["password"])
-        except IntegrityError, e:
+        except IntegrityError:
             raise ImmediateHttpResponse(response=HttpBadRequest())
         return bundle
     
