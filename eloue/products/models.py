@@ -220,7 +220,7 @@ class Price(models.Model):
             if name == self.currency:
                 currency = symbol
         if settings.CONVERT_XPF:
-            return smart_unicode("%s F" % convert_to_xpf(self.amount))
+            return smart_unicode("%s XPF" % convert_to_xpf(self.amount))
         else:
             return smart_unicode("%s %s" % (self.amount, currency))
     
