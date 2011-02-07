@@ -7,6 +7,8 @@ from django.db import models
 from django.db.models import Manager
 from django.db.models.fields import FieldDoesNotExist
 
+from mptt.managers import TreeManager as OriginalTreeManager
+
 
 class ProductManager(GeoManager):
     def active(self):
@@ -86,3 +88,7 @@ class QuestionManager(Manager):
         return filter
     
 
+class TreeManager(OriginalTreeManager):
+    def get_query_set(self):
+        return super(TreeManager, self).get_query_set().filter(sites__id__exact=settings.SITE_ID).order_by(self.tree_id_attr, self.left_attr)
+    
