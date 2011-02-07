@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 import datetime
 
-from django.conf import settings
-from django.core import mail
 from django.test import TestCase
 
 from mock import patch

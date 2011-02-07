@@ -105,4 +105,4 @@ two_weeks_package_for_month
             prices.price(5, $amount)
 
 bc_extras
-    import datetime, calendar
+    import calendar

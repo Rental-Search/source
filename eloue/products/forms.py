@@ -14,7 +14,7 @@ from eloue.geocoder import GoogleGeocoder
 from eloue.products.fields import FacetField
 from eloue.products.models import PatronReview, ProductReview, Product, Category
 from eloue.products.utils import Enum
-from eloue.utils import convert_from_xpf, convert_to_xpf
+from eloue.utils import convert_from_xpf
 
 
 SORT = Enum([

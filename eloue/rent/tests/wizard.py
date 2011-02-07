@@ -1,11 +1,10 @@
 # -*- coding: utf-8 -*-
 import datetime
 
-from mock import patch, Mock
+from mock import patch
 
 from django.core.urlresolvers import reverse
 from django.test import TestCase
-from django.utils.translation import ugettext as _
 
 from eloue.products.models import Product
 from eloue.rent.models import Booking

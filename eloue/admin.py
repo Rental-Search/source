@@ -29,6 +29,5 @@ class CustomFlatPageAdmin(FlatPageAdmin):
             return super(FlatPageAdmin, self).queryset(request).filter(**{'sites__id__exact': settings.SITE_ID})
     
 
-
 admin.site.unregister(FlatPage)
 admin.site.register(FlatPage, CustomFlatPageAdmin)

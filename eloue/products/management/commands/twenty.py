@@ -56,7 +56,7 @@ class Command(BaseCommand):
             footer = open(os.path.join(settings.TEMPLATE_DIRS[0], 'footer.html'), 'w')
             footer.write(content.encode('utf-8'))
             footer.close()
-        except (httplib2.HttpLib2Error, IOError), e:
+        except (httplib2.HttpLib2Error, IOError):
             log.exception("Downloading footer and header failed")
         log.info('Starting downloading footer and header')
     

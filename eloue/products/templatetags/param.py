@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from django.template import Library, Node, Variable, VariableDoesNotExist, TemplateSyntaxError, resolve_variable
+from django.template import Library
 
 register = Library()
 

@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
 import logbook
 
-from datetime import datetime, timedelta
+from datetime import datetime
 
-from django.conf import settings
 from django.core.management.base import BaseCommand
 
 from eloue.decorators import activate_language
