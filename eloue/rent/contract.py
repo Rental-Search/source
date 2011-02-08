@@ -86,7 +86,7 @@ class ContractGenerator(object):
         canvas.showPage()
         canvas.setFont("Helvetica", 10)
         
-        spelled_number = spellout(booking.deposit_amount, unit=_('euro'), decimal=_('cent'))
+        spelled_number = spellout(booking.deposit_amount, unit=_('currency_unit'), decimal=_('currency_decimal'))
         canvas.drawString(71, 640, "%s %s / %s" % (booking.deposit_amount, booking.currency, force_unicode(spelled_number)))
         return canvas
     

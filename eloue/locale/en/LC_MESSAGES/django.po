@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-02-08 17:10+0100\n"
+"POT-Creation-Date: 2011-02-08 17:58+0100\n"
 "PO-Revision-Date: 2011-02-08 11:14+0100\n"
 "Last-Translator: \n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -792,11 +792,11 @@ msgid "Owner phone"
 msgstr "Owner phone"
 
 #: rent/contract.py:89
-msgid "euro"
+msgid "currency_unit"
 msgstr "pound"
 
 #: rent/contract.py:89
-msgid "cent"
+msgid "currency_decimal"
 msgstr "penny"
 
 #: rent/forms.py:82 rent/forms.py:102
@@ -883,6 +883,142 @@ msgstr "Finalised"
 msgid "Dépassé"
 msgstr "Exceeded"
 
+#: rent/utils.py:94
+msgid "milliard"
+msgstr "billion"
+
+#: rent/utils.py:100
+msgid "million"
+msgstr "million"
+
+#: rent/utils.py:109 rent/utils.py:124
+msgid "cent"
+msgstr "hundred"
+
+#: rent/utils.py:119
+msgid "mille"
+msgstr "thousand"
+
+#: rent/utils.py:135
+msgid "zéro"
+msgstr "zero"
+
+#: rent/utils.py:145
+msgid "et"
+msgstr "and"
+
+#: rent/utils.py:153
+msgid "moins"
+msgstr "minus"
+
+#: rent/utils.py:156
+msgid "un"
+msgstr "one"
+
+#: rent/utils.py:156
+msgid "deux"
+msgstr "two"
+
+#: rent/utils.py:156
+msgid "trois"
+msgstr "three"
+
+#: rent/utils.py:156
+msgid "quatre"
+msgstr "four"
+
+#: rent/utils.py:156
+msgid "cinq"
+msgstr "five"
+
+#: rent/utils.py:156
+msgid "six"
+msgstr "six"
+
+#: rent/utils.py:156
+msgid "sept"
+msgstr "seven"
+
+#: rent/utils.py:156
+msgid "huit"
+msgstr "eight"
+
+#: rent/utils.py:156
+msgid "neuf"
+msgstr "nine"
+
+#: rent/utils.py:156 rent/utils.py:160 rent/tests/contract.py:46
+msgid "dix"
+msgstr "ten"
+
+#: rent/utils.py:157
+msgid "onze"
+msgstr "eleven"
+
+#: rent/utils.py:157
+msgid "douze"
+msgstr "twelve"
+
+#: rent/utils.py:157
+msgid "treize"
+msgstr "thirteen"
+
+#: rent/utils.py:157
+msgid "quatorze"
+msgstr "fourteen"
+
+#: rent/utils.py:157
+msgid "quinze"
+msgstr "fifteen"
+
+#: rent/utils.py:157
+msgid "seize"
+msgstr "fifteen"
+
+#: rent/utils.py:157
+msgid "dix-sept"
+msgstr "seventeen"
+
+#: rent/utils.py:157
+msgid "dix-huit"
+msgstr "eighteen"
+
+#: rent/utils.py:157
+msgid "dix-neuf"
+msgstr "nineteen"
+
+#: rent/utils.py:160
+msgid "vingt"
+msgstr "twenty"
+
+#: rent/utils.py:160
+msgid "trente"
+msgstr "thirty"
+
+#: rent/utils.py:160
+msgid "quarante"
+msgstr "forty"
+
+#: rent/utils.py:160
+msgid "cinquante"
+msgstr "fifty"
+
+#: rent/utils.py:160
+msgid "soixante"
+msgstr "sixty"
+
+#: rent/utils.py:160
+msgid "soixante-dix"
+msgstr "seventy"
+
+#: rent/utils.py:160
+msgid "quatre-vingt"
+msgstr "eighty"
+
+#: rent/utils.py:160
+msgid "quatre-vingt-dix"
+msgstr "ninety"
+
 #: rent/views.py:148
 msgid "Cette réservation a bien été refusée"
 msgstr "This booking has been declined."
@@ -910,6 +1046,10 @@ msgstr "This booking could not be finalised."
 #: rent/wizard.py:56
 msgid "Vous ne pouvez pas louer vos propres objets"
 msgstr "You cannot rent your own rentals"
+
+#: rent/tests/contract.py:46
+msgid "euro"
+msgstr "pound"
 
 #: templates/404.html:4
 msgid "La page demandée est introuvable"

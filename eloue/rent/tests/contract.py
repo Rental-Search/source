@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 from pyPdf import PdfFileReader
+
 from django.test import TestCase
+from django.utils.translation import ugettext as _
 
 from eloue.rent.contract import ContractGenerator
 from eloue.rent.models import Booking
@@ -41,7 +43,7 @@ class ContractTest(TestCase):
         contract = generator(booking)
         reader = PdfFileReader(contract)
         text = reader.getPage(2).extractText()
-        self.assertTrue("%s %s / dix euros" % (booking.deposit_amount, booking.currency) in text)
+        self.assertTrue("%s %s / %s %ss" % (booking.deposit_amount, booking.currency, _("dix"), _("euro")) in text)
     
     def test_zero_deposit_amount(self):
         booking = Booking.objects.all()[0]

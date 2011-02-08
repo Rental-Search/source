@@ -3,6 +3,7 @@ import datetime
 import time
 
 from django.utils import formats
+from django.utils.translation import ugettext as _
 
 from eloue.rent.forms import DATE_FORMAT
 
@@ -90,13 +91,13 @@ def spellout(number, unit="", decimal=""):
         hundreds = False
         if number >= 1000000000:
             base = int(number / 1000000000)
-            output += "%s milliard" % spell(base)
+            output += "%s %s" % (spell(base), _("milliard"))
             if base > 1:
                 output += "s"
             number = number - base * 1000000000
         if number >= 1000000:
             base = int(number / 1000000)
-            output += "%s million" % spell(base)
+            output += "%s %s" % (spell(base), _("million"))
             if base > 1:
                 output += "s"
             number = number - base * 1000000
@@ -105,7 +106,7 @@ def spellout(number, unit="", decimal=""):
                 base = int(number / 100000)
                 if base > 1:
                     output += " %s" % spell(base)
-                output += " cent"
+                output += " %s" % _("cent")
                 hundreds = True
                 number = number - base * 100000
                 if int(number / 1000) == 0 and base > 1:
@@ -115,12 +116,12 @@ def spellout(number, unit="", decimal=""):
                 if (base == 1 and hundreds) or base > 1:
                     output += " %s" % spell(base)
                 number = number - base * 1000
-            output += " mille"
+            output += " %s" % _("mille")
         if number >= 100:
             base = int(number / 100)
             if base > 1:
                 output += " %s" % spell(base)
-            output += " cent"
+            output += " %s" % _("cent")
             number = number - base * 100
             if number == 0 and base > 1:
                 output += "s"
@@ -131,7 +132,7 @@ def spellout(number, unit="", decimal=""):
     integer = int(number)
     fractional = int(round((number - integer) * 100, 0))
     if integer == 0:
-        output = "zéro"
+        output = _("zéro")
     else:
         output = decompose(abs(integer))
     if integer > 1 or integer < -1:
@@ -141,7 +142,7 @@ def spellout(number, unit="", decimal=""):
         output += " %s" % unit
     if fractional > 0:
         if decimal != '':
-            output += " et"
+            output += " %s" % _("et")
         output += decompose(fractional)
         if fractional > 1 or fractional < -1:
             if decimal != '':
@@ -149,12 +150,12 @@ def spellout(number, unit="", decimal=""):
         else:
             output += " %s" % decimal
     if number < 0:
-        output = "moins %s" % output
+        output = "%s %s" % (_("moins"), output)
     return output.replace('  ', ' ').strip()
 spellout.numbers = [
-    "", "un", "deux", "trois", "quatre", "cinq", "six", "sept", "huit", "neuf", "dix",
-    "onze", "douze", "treize", "quatorze", "quinze", "seize", "dix-sept", "dix-huit", "dix-neuf"
+    "", _("un"), _("deux"), _("trois"), _("quatre"), _("cinq"), _("six"), _("sept"), _("huit"), _("neuf"), _("dix"),
+    _("onze"), _("douze"), _("treize"), _("quatorze"), _("quinze"), _("seize"), _("dix-sept"), _("dix-huit"), _("dix-neuf")
 ]
 spellout.tens = [
-    "", "dix", "vingt", "trente", "quarante", "cinquante", "soixante", "soixante-dix", "quatre-vingt", "quatre-vingt-dix"
+    "", _("dix"), _("vingt"), _("trente"), _("quarante"), _("cinquante"), _("soixante"), _("soixante-dix"), _("quatre-vingt"), _("quatre-vingt-dix")
 ]
