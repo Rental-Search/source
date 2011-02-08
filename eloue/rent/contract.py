@@ -11,6 +11,7 @@ from reportlab.pdfgen import canvas
 
 from django.utils.dateformat import format
 from django.utils.encoding import force_unicode
+from django.utils.translation import ugettext as _
 
 from eloue.rent.utils import spellout
 
@@ -85,7 +86,7 @@ class ContractGenerator(object):
         canvas.showPage()
         canvas.setFont("Helvetica", 10)
         
-        spelled_number = spellout(booking.deposit_amount, unit='euro', decimal='cent')
+        spelled_number = spellout(booking.deposit_amount, unit=_('euro'), decimal=_('cent'))
         canvas.drawString(71, 640, "%s %s / %s" % (booking.deposit_amount, booking.currency, force_unicode(spelled_number)))
         return canvas
     

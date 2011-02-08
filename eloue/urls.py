@@ -6,6 +6,8 @@ from django.conf.urls.defaults import *
 from django.contrib import admin
 from django.contrib.auth.views import logout_then_login, password_reset, password_reset_confirm, password_reset_done, password_reset_complete
 from django.contrib.sitemaps.views import index, sitemap
+from django.utils import translation
+from django.utils.translation import ugettext as _
 
 from eloue.accounts.forms import EmailPasswordResetForm, PatronSetPasswordForm
 from eloue.accounts.views import activate, authenticate, authenticate_headless, dashboard, patron_edit, owner_booking, owner_history, \
@@ -28,6 +30,9 @@ sitemaps = {
     'patrons': PatronSitemap,
     'products': ProductSitemap
 }
+
+if settings.DEBUG:
+    translation.activate(settings.LANGUAGE_CODE)
 
 urlpatterns = patterns('',
     url(r"^announcements/", include("announcements.urls")),
@@ -76,9 +81,9 @@ urlpatterns = patterns('',
     url(r'^dashboard/booking/(?P<booking_id>[0-9a-f]{32})/incident/$', booking_incident, name="booking_incident"),
     url(r'^dashboard/booking/(?P<booking_id>[0-9a-f]{32})/close/$', booking_close, name="booking_close"),
     url(r'^media/(.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT}),
-    url(r'^loueur/', include('eloue.accounts.urls')),
-    url(r'^location/', include('eloue.products.urls')),
-    url(r'^rent/', include('eloue.rent.urls')),
+    url(r'^%s' % _("loueur/"), include('eloue.accounts.urls')),
+    url(r'^%s' % _("location/"), include('eloue.products.urls')),
+    url(r'^booking/', include('eloue.rent.urls')),
     url(r'^experiments/', include('django_lean.experiments.urls')),
     url(r'^edit/reports/', include('django_lean.experiments.admin_urls')),
     url(r'^edit/', include(admin.site.urls)),

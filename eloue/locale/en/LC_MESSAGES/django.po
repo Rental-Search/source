@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-02-08 10:42+0100\n"
-"PO-Revision-Date: 2011-02-08 10:42+0100\n"
+"POT-Creation-Date: 2011-02-08 14:43+0100\n"
+"PO-Revision-Date: 2011-02-08 11:14+0100\n"
 "Last-Translator: \n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -22,6 +22,14 @@ msgstr "French "
 #: settings.py:59
 msgid "English"
 msgstr "English"
+
+#: urls.py:83
+msgid "loueur/"
+msgstr "renter/"
+
+#: urls.py:84
+msgid "location/"
+msgstr "rent/"
 
 #: accounts/admin.py:27
 msgid "Personal info"
@@ -574,7 +582,7 @@ msgstr "by-category"
 
 #: products/forms.py:97
 msgid "Choisissez une catégorie"
-msgstr "Choose an address for the item :"
+msgstr "Choose a category"
 
 #: products/forms.py:98
 msgid "Titre"
@@ -582,7 +590,7 @@ msgstr "Title :"
 
 #: products/forms.py:100
 msgid "Photo"
-msgstr "picture"
+msgstr "Picture"
 
 #: products/forms.py:101
 msgid "Prix location"
@@ -782,6 +790,14 @@ msgstr "Owner email"
 #: rent/admin.py:69
 msgid "Owner phone"
 msgstr "Owner phone"
+
+#: rent/contract.py:89
+msgid "euro"
+msgstr "pound"
+
+#: rent/contract.py:89
+msgid "cent"
+msgstr "penny"
 
 #: rent/forms.py:82 rent/forms.py:102
 msgid "Enter a valid date."
@@ -1165,11 +1181,19 @@ msgstr "What do you want to rent?"
 msgid "Exemple :"
 msgstr "Example:"
 
+#: templates/index.html:27 templates/products/search.html:16
+msgid "voiture"
+msgstr "car"
+
 #: templates/index.html:27 templates/accounts/patron_detail.html:17
 #: templates/nc/index.html:17 templates/products/product_detail.html:15
 #: templates/products/product_list.html:42 templates/products/search.html:16
 msgid "Voiture"
 msgstr "Car"
+
+#: templates/index.html:27 templates/products/search.html:16
+msgid "chèvre"
+msgstr "goat"
 
 #: templates/index.html:27 templates/accounts/patron_detail.html:17
 #: templates/nc/index.html:17 templates/products/product_detail.html:15
@@ -1177,11 +1201,19 @@ msgstr "Car"
 msgid "Chèvre"
 msgstr "Goat"
 
+#: templates/index.html:27 templates/products/search.html:16
+msgid "ski"
+msgstr "ski"
+
 #: templates/index.html:27 templates/accounts/patron_detail.html:17
 #: templates/nc/index.html:17 templates/products/product_detail.html:15
 #: templates/products/product_list.html:42 templates/products/search.html:16
 msgid "Ski"
 msgstr "Ski"
+
+#: templates/index.html:27 templates/products/search.html:16
+msgid "robe"
+msgstr "dress"
 
 #: templates/index.html:27 templates/accounts/patron_detail.html:17
 #: templates/nc/index.html:17 templates/products/product_detail.html:15
@@ -3132,22 +3164,6 @@ msgstr "Choose an address for the item :"
 #: templates/products/product_missing.html:22
 msgid "Complétez votre profil et choisissez une adresse pour la l'objet :"
 msgstr "Fill in your profile and choose an address for the item :"
-
-#: templates/products/search.html:16
-msgid "voiture"
-msgstr "car"
-
-#: templates/products/search.html:16
-msgid "chèvre"
-msgstr "goat"
-
-#: templates/products/search.html:16
-msgid "ski"
-msgstr "Skiing"
-
-#: templates/products/search.html:16
-msgid "robe"
-msgstr "dress"
 
 #: templates/rent/booking_confirm.html:4
 msgid "Confirmez votre réservation"
