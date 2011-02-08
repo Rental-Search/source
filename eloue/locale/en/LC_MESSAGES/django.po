@@ -7,22 +7,21 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-02-07 16:22+0100\n"
-"PO-Revision-Date: 2011-01-10 10:48+0100\n"
-"Last-Translator: Andy <andy@aol.com>\n"
+"POT-Creation-Date: 2011-02-08 10:42+0100\n"
+"PO-Revision-Date: 2011-02-08 10:42+0100\n"
+"Last-Translator: \n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
 #: settings.py:58
-#, fuzzy
 msgid "Français"
-msgstr "French Guiana"
+msgstr "French "
 
 #: settings.py:59
 msgid "English"
-msgstr ""
+msgstr "English"
 
 #: accounts/admin.py:27
 msgid "Personal info"
@@ -62,11 +61,11 @@ msgstr "Geolocation"
 
 #: accounts/forms.py:24
 msgid "Je n'ai pas encore de compte e-loue"
-msgstr ""
+msgstr "i have still not registered on e-loue"
 
 #: accounts/forms.py:25
 msgid "J'ai déjà un compte e-loue et mon mot de passe est :"
-msgstr ""
+msgstr "i already have  an e-loue account and my password is :"
 
 #: accounts/forms.py:29
 msgid "Je n'ai pas encore de compte PayPal"
@@ -74,7 +73,7 @@ msgstr "We haven't been able to create your paypal account"
 
 #: accounts/forms.py:30
 msgid "J'ai déjà un compte PayPal et mon email est :"
-msgstr ""
+msgstr "i already have a Paypal account and my email is :"
 
 #: accounts/forms.py:37 accounts/forms.py:80 accounts/forms.py:118
 #: accounts/forms.py:342
@@ -578,18 +577,16 @@ msgid "Choisissez une catégorie"
 msgstr "Choose an address for the item :"
 
 #: products/forms.py:98
-#, fuzzy
 msgid "Titre"
-msgstr "Title * :"
+msgstr "Title :"
 
 #: products/forms.py:100
 msgid "Photo"
-msgstr ""
+msgstr "picture"
 
 #: products/forms.py:101
-#, fuzzy
 msgid "Prix location"
-msgstr "Rental price * :"
+msgstr "Rental price :"
 
 #: products/forms.py:102 templates/mobile/products/product_detail.html:44
 #: templates/products/product_detail.html:103
@@ -756,7 +753,7 @@ msgstr "Payment"
 
 #: rent/admin.py:29
 msgid "Envoyer un email de relance"
-msgstr ""
+msgstr "Send an chaser"
 
 #: rent/admin.py:33
 msgid "Product"
@@ -815,7 +812,6 @@ msgid "La durée d'une location est limitée à 85 jours."
 msgstr "The rental period is limited to 85 days."
 
 #: rent/forms.py:189
-#, fuzzy
 msgid "Décrivez votre incident"
 msgstr "Declare your incident"
 
@@ -938,9 +934,8 @@ msgstr "Rent"
 #: templates/500.html:52 templates/500.html.py:78 templates/base.html:55
 #: templates/base.html.py:74 templates/index.html:100
 #: templates/accounts/dashboard.html:29 templates/products/search.html:51
-#, fuzzy
 msgid "/comment-ca-marche/"
-msgstr "How it works"
+msgstr "/how-it-works/"
 
 #: templates/500.html:52 templates/500.html.py:78 templates/base.html:55
 #: templates/base.html.py:74 templates/20minutes/base.html:20
@@ -1001,9 +996,8 @@ msgid "Info"
 msgstr "Info"
 
 #: templates/500.html:85 templates/base.html:81
-#, fuzzy
 msgid "/espace-professionnel/"
-msgstr "Professional area"
+msgstr "/professional-area/"
 
 #: templates/500.html:85 templates/base.html:81
 #: templates/20minutes/base.html:42 templates/nc/base.html:87
@@ -1011,9 +1005,8 @@ msgid "Espace professionnel"
 msgstr "Professional area"
 
 #: templates/500.html:86 templates/base.html:82 templates/mobile/base.html:44
-#, fuzzy
 msgid "/assurance-tranquillite/"
-msgstr "Worry free insurance policy"
+msgstr "Tranquility Insurance"
 
 #: templates/500.html:86 templates/base.html:82
 #: templates/20minutes/base.html:43 templates/mobile/base.html:44
@@ -1022,9 +1015,8 @@ msgid "Assurance tranquillité"
 msgstr "Worry free insurance policy"
 
 #: templates/500.html:87 templates/base.html:83 templates/mobile/base.html:39
-#, fuzzy
 msgid "/conditions-generales/"
-msgstr "Terms and Conditions"
+msgstr "/terms-and-conditions/"
 
 #: templates/500.html:87 templates/base.html:83
 #: templates/20minutes/base.html:44 templates/mobile/base.html:39
@@ -1033,9 +1025,8 @@ msgid "Conditions générales"
 msgstr "Terms and Conditions"
 
 #: templates/500.html:88 templates/base.html:84 templates/mobile/base.html:41
-#, fuzzy
 msgid "/respect-vie-privee/"
-msgstr "Respect for privacy"
+msgstr "/privacy-policy/"
 
 #: templates/500.html:88 templates/base.html:84
 #: templates/20minutes/base.html:45 templates/mobile/base.html:41
@@ -1061,9 +1052,8 @@ msgstr "Contact us"
 
 #: templates/500.html:96 templates/base.html:92 templates/index.html:135
 #: templates/products/search.html:86
-#, fuzzy
 msgid "/espace-presse/"
-msgstr "Press"
+msgstr "/press/"
 
 #: templates/500.html:96 templates/base.html:92
 #: templates/20minutes/base.html:53 templates/nc/base.html:98
@@ -1071,9 +1061,8 @@ msgid "Espace presse"
 msgstr "Press"
 
 #: templates/500.html:97 templates/base.html:93
-#, fuzzy
 msgid "/qui-sommes-nous/"
-msgstr "About us"
+msgstr "/about-us/"
 
 #: templates/500.html:97 templates/base.html:93
 #: templates/20minutes/base.html:54 templates/nc/base.html:99
@@ -1152,9 +1141,9 @@ msgstr "the e-loue blog"
 #: templates/index.html:4 templates/nc/index.html:4
 msgid "Location entre particuliers ou professionnels de tout type d'objet"
 msgstr ""
+"Rental between private individuals or professionals of any type of object"
 
 #: templates/index.html:17
-#, fuzzy
 msgid "Avec e-loue tout se loue, sauf les petites amies !"
 msgstr "On e-loue, everything is for rent!"
 
@@ -1225,7 +1214,7 @@ msgstr "E-loue curiosity shop"
 
 #: templates/index.html:76
 msgid "Découvrez la vérité !"
-msgstr ""
+msgstr "Find out the truth"
 
 #: templates/index.html:84 templates/nc/index.html:74
 #: templates/products/search.html:35
@@ -1262,6 +1251,10 @@ msgstr ""
 msgid "Catégories"
 msgstr "Categories"
 
+#: templates/index.html:134
+msgid "Ils parlent de nous"
+msgstr ""
+
 #: templates/index.html:135 templates/nc/index.html:124
 #: templates/products/search.html:86
 msgid "Voir l'espace presse"
@@ -1275,6 +1268,27 @@ msgstr "e-loue in the news"
 #: templates/products/search.html:92
 msgid "Rejoignez notre communauté"
 msgstr "Join our community"
+
+#: templates/index.html:145
+msgid ""
+"\n"
+"\t\t\t\t\t\t<a href=\"https://www.facebook.com/pages/e-louecom/104685226447"
+"\">\n"
+"\t\t\t\t\t\t\t<span class=\"fb-icon\"></span>\n"
+"\t\t\t\t\t\t\tDevenez fan<br />sur Facebook\n"
+"\t\t\t\t\t\t</a>\n"
+"\t\t\t\t\t "
+msgstr ""
+
+#: templates/index.html:153
+msgid ""
+"\n"
+"\t\t\t\t\t\t<a href=\"https://twitter.com/eloue\">\n"
+"\t\t\t\t\t\t\t<span class=\"tw-icon\"></span>\n"
+"\t\t\t\t\t\t\tSuivez-nous<br />sur Twitter\n"
+"\t\t\t\t\t\t</a>\n"
+"\t\t\t\t\t "
+msgstr ""
 
 #: templates/accounts/activate.html:4
 msgid "Activation de votre compte"
@@ -1519,17 +1533,14 @@ msgid "Bienvenue sur e-loue ! Que pouvez-vous faire ensuite ?"
 msgstr "Welcome to e-loue! What can you do next?"
 
 #: templates/accounts/dashboard.html:40
-#, fuzzy
 msgid "Mettre un objet en location"
-msgstr "Rent"
+msgstr "Rent your stuff"
 
 #: templates/accounts/dashboard.html:41
-#, fuzzy
 msgid "Editer votre profil"
 msgstr "Edit your profile"
 
 #: templates/accounts/dashboard.html:42
-#, fuzzy
 msgid "Chercher une location"
 msgstr "Search for a rental"
 
@@ -2930,7 +2941,6 @@ msgstr ""
 #: templates/mobile/products/product_detail.html:11
 #: templates/mobile/products/product_list.html:37
 #: templates/mobile/products/search.html:10
-#, fuzzy
 msgid "Bienvenue"
 msgstr "Welcome!"
 
@@ -2948,9 +2958,8 @@ msgid "Location "
 msgstr "Location "
 
 #: templates/mobile/products/product_list.html:49
-#, fuzzy
 msgid "rechercher"
-msgstr "Search"
+msgstr "search"
 
 #: templates/mobile/products/product_list.html:53
 #: templates/products/product_list.html:88
@@ -2964,25 +2973,21 @@ msgstr "km"
 
 #: templates/mobile/products/product_list.html:84
 msgid "Prec"
-msgstr ""
+msgstr "prev"
 
 #: templates/mobile/products/product_list.html:87
-#, fuzzy
 msgid "Suiv"
-msgstr "Switzerland"
+msgstr "next"
 
 #: templates/mobile/products/search.html:5
-#, fuzzy
 msgid "Rechercher une location"
 msgstr "Search for a rental"
 
 #: templates/mobile/products/search.html:17
-#, fuzzy
 msgid "Recherchez une location"
 msgstr "Search for a rental"
 
 #: templates/nc/index.html:82
-#, fuzzy
 msgid ""
 "\n"
 "\t\t\t\t\t\t <p>Un <strong>contrat de location</strong> est proposé par e-"
@@ -2990,8 +2995,8 @@ msgid ""
 "\t\t\t\t\t\t"
 msgstr ""
 "\n"
-"\t\t\t\t\t\t <p>Our <strong>partner insurance company</strong> guarantees "
-"your items in case of damage.</p>\n"
+"\t\t\t\t\t\t <p>A <strong>contract</strong> is made available through e-loue."
+"</p>\n"
 "\t\t\t\t\t\t"
 
 #: templates/products/product_create.html:13
@@ -3026,9 +3031,8 @@ msgid "par jour"
 msgstr "per day"
 
 #: templates/products/product_detail.html:36
-#, fuzzy
 msgid "Location"
-msgstr "Location "
+msgstr "Rental"
 
 #: templates/products/product_detail.html:68
 #, python-format
@@ -3078,9 +3082,8 @@ msgstr "Description * :"
 
 #: templates/products/product_list.html:71
 #: templates/products/product_list.html:73
-#, fuzzy
 msgid "location"
-msgstr "Geolocation"
+msgstr "Rental"
 
 #: templates/products/product_list.html:95
 msgid "Trier par :"
@@ -3131,24 +3134,20 @@ msgid "Complétez votre profil et choisissez une adresse pour la l'objet :"
 msgstr "Fill in your profile and choose an address for the item :"
 
 #: templates/products/search.html:16
-#, fuzzy
 msgid "voiture"
-msgstr "Car"
+msgstr "car"
 
 #: templates/products/search.html:16
-#, fuzzy
 msgid "chèvre"
-msgstr "Goat"
+msgstr "goat"
 
 #: templates/products/search.html:16
-#, fuzzy
 msgid "ski"
-msgstr "Ski"
+msgstr "Skiing"
 
 #: templates/products/search.html:16
-#, fuzzy
 msgid "robe"
-msgstr "Dress"
+msgstr "dress"
 
 #: templates/rent/booking_confirm.html:4
 msgid "Confirmez votre réservation"
@@ -3841,7 +3840,7 @@ msgid "Fin de votre location"
 msgstr "End of your rental"
 
 #: templates/rent/emails/borrower_recovery_email.html:2
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "\n"
 " <p>Bonjour %(username)s,</p>\n"
@@ -3866,7 +3865,7 @@ msgstr ""
 "\n"
 "<p>Hello %(username)s,</p>\n"
 "\n"
-"<p>You have expressed your desire to cacel the following rental :</p>\n"
+"<p>You have expressed your desire to cancel the following rental :</p>\n"
 "\n"
 "<ul>\n"
 "  <li><strong>Type :</strong> %(category)s</li>\n"
@@ -3878,10 +3877,13 @@ msgstr ""
 "<p>In accordance with your request, we confirm that this rental has been "
 "canceled.</p>\n"
 " \n"
+"\n"
+" <p><a href=\"%(preapproval_url)s\">%(preapproval_url)s</a></p>\n"
+"\n"
 "<p>The e-loue team</p>\n"
 
 #: templates/rent/emails/borrower_recovery_email.txt:2
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "\n"
 "Bonjour %(borrower)s,\n"
@@ -3902,7 +3904,7 @@ msgid ""
 "L'équipe e-loue\n"
 msgstr ""
 "\n"
-"Hello %(username)s, \n"
+"Hello %(borrower)s, \n"
 "\n"
 "You have expressed your desire to cancel the following rental : \n"
 "\n"
@@ -3911,9 +3913,11 @@ msgstr ""
 "Rental start : %(starting_at)s \n"
 "Rental period : %(duration)s\n"
 "\n"
-"In accordance with your request, we confirm that the rental has been "
-"canceled.\n"
+"To resume your booking, simply click on the link below\n"
 " \n"
+"\n"
+"%(preapproval_url)s\n"
+"\n"
 "The e-loue team\n"
 
 #: templates/rent/emails/borrower_rejection_email.html:2
@@ -4338,7 +4342,7 @@ msgstr ""
 "The e-loue team\n"
 
 #: templates/rent/emails/owner_closed_email.html:2
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "\n"
 "<p>Bonjour %(username)s,</p>\n"
@@ -4361,7 +4365,7 @@ msgstr ""
 "\n"
 "<p> You have just closed a rental for the item  %(summary)s, that started on "
 "%(starting_at)s for a period of %(duration)s day(s).  \n"
-"The payment of {rental price} is therefore pending and should be available "
+"The payment of %(total_amount)s is therefore pending and should be available "
 "in the following minutes.</p>\n"
 " \n"
 "<p>If you wish, you can edit an invoice by clicking on the following link : %"
@@ -4373,7 +4377,7 @@ msgstr ""
 "<p>The e-loue team</p>\n"
 
 #: templates/rent/emails/owner_closed_email.txt:2
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "\n"
 "Bonjour %(username)s,\n"
@@ -4398,7 +4402,7 @@ msgstr ""
 "\n"
 "You have just closed the rental of the item %(summary)s, that started on %"
 "(starting_at)s for a period of %(duration)s day(s).  \n"
-"The payment of {rental price} is therefore pending and should be available "
+"The payment of %(total_amount)s is therefore pending and should be available "
 "in the following minutes.\n"
 " \n"
 "If you wish, you can edit an invoice by clicking on the following link :\n"
