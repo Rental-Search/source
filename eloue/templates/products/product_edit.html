@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load i18n mptt_tags%}
+{% load i18n mptt_tags product %}
 
 {% block title %}{% trans "Vos produits mis en locations" %}{% endblock %}
 
@@ -63,7 +63,7 @@
 				<tr>
 					<th><label>{% trans "Prix location * :" %}</label></th>
 					<td {% if form.price.errors %} class="error-field" {% endif %}>
-						{{ form.price }} <span class="unit">&euro;</span> {% trans "par jour" %}
+						{{ form.price }} <span class="unit">{% currency_symbol %}</span> {% trans "par jour" %}
 						{% if form.price.errors %}
 						    {% for error in form.price.errors %}
 										<br />
@@ -75,7 +75,7 @@
 				<tr>
 					<th><label>{% trans "Caution :" %}</label></th>
 					<td {% if form.deposit_amount.errors %} class="error-field" {% endif %}>
-						{{  form.deposit_amount }} <span class="unit">&euro;</span>
+						{{  form.deposit_amount }} <span class="unit">{% currency_symbol %}</span>
 						{% if form.deposit_amount.errors %}
 						    {% for error in form.deposit_amount.errors %}
 										<br />
