@@ -909,7 +909,7 @@ msgstr "This booking could not be finalised."
 
 #: rent/wizard.py:56
 msgid "Vous ne pouvez pas louer vos propres objets"
-msgstr "You cannot comment on your own rentals"
+msgstr "You cannot rent your own rentals"
 
 #: templates/404.html:4
 msgid "La page demandée est introuvable"
