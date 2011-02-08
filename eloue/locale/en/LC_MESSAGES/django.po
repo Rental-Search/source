@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-02-08 17:58+0100\n"
+"POT-Creation-Date: 2011-02-08 18:03+0100\n"
 "PO-Revision-Date: 2011-02-08 11:14+0100\n"
 "Last-Translator: \n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -790,6 +790,10 @@ msgstr "Owner email"
 #: rent/admin.py:69
 msgid "Owner phone"
 msgstr "Owner phone"
+
+#: rent/contract.py:81 rent/contract.py:82
+msgid "d F Y à H\\hi."
+msgstr ""
 
 #: rent/contract.py:89
 msgid "currency_unit"
