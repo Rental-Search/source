@@ -12,7 +12,7 @@ TIME_ZONE = 'Europe/London'
 
 LANGUAGE_CODE = 'en-uk'
 
-SESSION_COOKIE_DOMAIN = 'e-loue.uk'
+SESSION_COOKIE_DOMAIN = None # 'e-loue.uk'
 
 CACHE_MIDDLEWARE_KEY_PREFIX = 'uk'
 
