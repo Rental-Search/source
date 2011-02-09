@@ -36,6 +36,9 @@ def spellout(number, unit="", decimal=""):
     """
     Spell out numbers the dirty way.
     
+    >>> from django.conf import settings
+    >>> from django.utils import translation
+    >>> translation.activate(settings.LANGUAGE_CODE)
     >>> spellout(123.45, 'euro', 'cent')
     'cent vingt trois euros et quarante cinq cents'
     >>> spellout(12.30, 'heure', 'minute')
@@ -66,6 +69,7 @@ def spellout(number, unit="", decimal=""):
     'z\\xc3\\xa9ro'
     >>> spellout(-650.92)
     'moins six cent cinquante'
+    >>> translation.deactivate()
     """
     def spell(number):
         output = ""
@@ -132,7 +136,7 @@ def spellout(number, unit="", decimal=""):
     integer = int(number)
     fractional = int(round((number - integer) * 100, 0))
     if integer == 0:
-        output = _("zéro")
+        output = _(u"zéro")
     else:
         output = decompose(abs(integer))
     if integer > 1 or integer < -1:
