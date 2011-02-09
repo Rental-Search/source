@@ -26,8 +26,8 @@
 			{% if form.is_professional %}
 			<tr>
 				<td colspan="2" {% if form.is_professional.errors %} class="error-field" {% endif %}>
-					<label>{{ form.is_professional.label }} {% if form.is_professional.field.required %}*{% endif %} :</label>
-					{{ form.is_professional }} oui
+					<label for="id_is_professional">{{ form.is_professional.label }} {% if form.is_professional.field.required %}*{% endif %} :</label>
+					{{ form.is_professional }} {% trans "oui" %}
 					{% if form.is_professional.errors %}
 					    {% for error in form.is_professional.errors %}
 									<br />
@@ -120,8 +120,8 @@
 			</tr>
 			<tr>
 				<td colspan="2" {% if form.is_professional.errors %} class="error-field" {% endif %}>
-					<label>{% trans "Souhaitez-vous recevoir des informations de e-loue ?" %} :</label>
-					{{ form.is_subscribed }} oui
+					<label for="id_is_subscribed">{% trans "Souhaitez-vous recevoir des informations de e-loue ?" %} :</label>
+					{{ form.is_subscribed }} {% trans "oui" %}
 					{% if form.is_professional.errors %}
 					    {% for error in form.is_professional.errors %}
 									<br />

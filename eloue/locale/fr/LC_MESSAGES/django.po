@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-02-07 16:22+0100\n"
+"POT-Creation-Date: 2011-02-08 17:58+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -23,6 +23,14 @@ msgstr ""
 
 #: settings.py:59
 msgid "English"
+msgstr ""
+
+#: urls.py:83
+msgid "loueur/"
+msgstr ""
+
+#: urls.py:84
+msgid "location/"
 msgstr ""
 
 #: accounts/admin.py:27
@@ -776,6 +784,14 @@ msgstr ""
 msgid "Owner phone"
 msgstr ""
 
+#: rent/contract.py:89
+msgid "currency_unit"
+msgstr "euro"
+
+#: rent/contract.py:89
+msgid "currency_decimal"
+msgstr "cent"
+
 #: rent/forms.py:82 rent/forms.py:102
 msgid "Enter a valid date."
 msgstr ""
@@ -860,6 +876,142 @@ msgstr ""
 msgid "Dépassé"
 msgstr ""
 
+#: rent/utils.py:94
+msgid "milliard"
+msgstr ""
+
+#: rent/utils.py:100
+msgid "million"
+msgstr ""
+
+#: rent/utils.py:109 rent/utils.py:124
+msgid "cent"
+msgstr ""
+
+#: rent/utils.py:119
+msgid "mille"
+msgstr ""
+
+#: rent/utils.py:135
+msgid "zéro"
+msgstr ""
+
+#: rent/utils.py:145
+msgid "et"
+msgstr ""
+
+#: rent/utils.py:153
+msgid "moins"
+msgstr ""
+
+#: rent/utils.py:156
+msgid "un"
+msgstr ""
+
+#: rent/utils.py:156
+msgid "deux"
+msgstr ""
+
+#: rent/utils.py:156
+msgid "trois"
+msgstr ""
+
+#: rent/utils.py:156
+msgid "quatre"
+msgstr ""
+
+#: rent/utils.py:156
+msgid "cinq"
+msgstr ""
+
+#: rent/utils.py:156
+msgid "six"
+msgstr ""
+
+#: rent/utils.py:156
+msgid "sept"
+msgstr ""
+
+#: rent/utils.py:156
+msgid "huit"
+msgstr ""
+
+#: rent/utils.py:156
+msgid "neuf"
+msgstr ""
+
+#: rent/utils.py:156 rent/utils.py:160 rent/tests/contract.py:46
+msgid "dix"
+msgstr ""
+
+#: rent/utils.py:157
+msgid "onze"
+msgstr ""
+
+#: rent/utils.py:157
+msgid "douze"
+msgstr ""
+
+#: rent/utils.py:157
+msgid "treize"
+msgstr ""
+
+#: rent/utils.py:157
+msgid "quatorze"
+msgstr ""
+
+#: rent/utils.py:157
+msgid "quinze"
+msgstr ""
+
+#: rent/utils.py:157
+msgid "seize"
+msgstr ""
+
+#: rent/utils.py:157
+msgid "dix-sept"
+msgstr ""
+
+#: rent/utils.py:157
+msgid "dix-huit"
+msgstr ""
+
+#: rent/utils.py:157
+msgid "dix-neuf"
+msgstr ""
+
+#: rent/utils.py:160
+msgid "vingt"
+msgstr ""
+
+#: rent/utils.py:160
+msgid "trente"
+msgstr ""
+
+#: rent/utils.py:160
+msgid "quarante"
+msgstr ""
+
+#: rent/utils.py:160
+msgid "cinquante"
+msgstr ""
+
+#: rent/utils.py:160
+msgid "soixante"
+msgstr ""
+
+#: rent/utils.py:160
+msgid "soixante-dix"
+msgstr ""
+
+#: rent/utils.py:160
+msgid "quatre-vingt"
+msgstr ""
+
+#: rent/utils.py:160
+msgid "quatre-vingt-dix"
+msgstr ""
+
 #: rent/views.py:148
 msgid "Cette réservation a bien été refusée"
 msgstr ""
@@ -886,6 +1038,10 @@ msgstr ""
 
 #: rent/wizard.py:56
 msgid "Vous ne pouvez pas louer vos propres objets"
+msgstr ""
+
+#: rent/tests/contract.py:46
+msgid "euro"
 msgstr ""
 
 #: templates/404.html:4
@@ -1149,10 +1305,20 @@ msgstr ""
 msgid "Exemple :"
 msgstr ""
 
+#: templates/index.html:27 templates/products/product_list.html:42
+#: templates/products/search.html:16
+msgid "voiture"
+msgstr ""
+
 #: templates/index.html:27 templates/accounts/patron_detail.html:17
 #: templates/nc/index.html:17 templates/products/product_detail.html:15
 #: templates/products/product_list.html:42 templates/products/search.html:16
 msgid "Voiture"
+msgstr ""
+
+#: templates/index.html:27 templates/products/product_list.html:42
+#: templates/products/search.html:16
+msgid "chèvre"
 msgstr ""
 
 #: templates/index.html:27 templates/accounts/patron_detail.html:17
@@ -1161,10 +1327,20 @@ msgstr ""
 msgid "Chèvre"
 msgstr ""
 
+#: templates/index.html:27 templates/products/product_list.html:42
+#: templates/products/search.html:16
+msgid "ski"
+msgstr ""
+
 #: templates/index.html:27 templates/accounts/patron_detail.html:17
 #: templates/nc/index.html:17 templates/products/product_detail.html:15
 #: templates/products/product_list.html:42 templates/products/search.html:16
 msgid "Ski"
+msgstr ""
+
+#: templates/index.html:27 templates/products/product_list.html:42
+#: templates/products/search.html:16
+msgid "robe"
 msgstr ""
 
 #: templates/index.html:27 templates/accounts/patron_detail.html:17
@@ -1227,6 +1403,10 @@ msgstr ""
 msgid "Catégories"
 msgstr ""
 
+#: templates/index.html:134
+msgid "Ils parlent de nous"
+msgstr ""
+
 #: templates/index.html:135 templates/nc/index.html:124
 #: templates/products/search.html:86
 msgid "Voir l'espace presse"
@@ -1239,6 +1419,27 @@ msgstr ""
 #: templates/index.html:141 templates/nc/index.html:130
 #: templates/products/search.html:92
 msgid "Rejoignez notre communauté"
+msgstr ""
+
+#: templates/index.html:145
+msgid ""
+"\n"
+"\t\t\t\t\t\t<a href=\"https://www.facebook.com/pages/e-louecom/104685226447"
+"\">\n"
+"\t\t\t\t\t\t\t<span class=\"fb-icon\"></span>\n"
+"\t\t\t\t\t\t\tDevenez fan<br />sur Facebook\n"
+"\t\t\t\t\t\t</a>\n"
+"\t\t\t\t\t "
+msgstr ""
+
+#: templates/index.html:153
+msgid ""
+"\n"
+"\t\t\t\t\t\t<a href=\"https://twitter.com/eloue\">\n"
+"\t\t\t\t\t\t\t<span class=\"tw-icon\"></span>\n"
+"\t\t\t\t\t\t\tSuivez-nous<br />sur Twitter\n"
+"\t\t\t\t\t\t</a>\n"
+"\t\t\t\t\t "
 msgstr ""
 
 #: templates/accounts/activate.html:4
@@ -1734,6 +1935,11 @@ msgstr ""
 #: templates/accounts/patron_edit.html:19
 #: templates/accounts/patron_password.html:19
 msgid "Modification du mot de passe"
+msgstr ""
+
+#: templates/accounts/patron_edit.html:30
+#: templates/accounts/patron_edit.html:124
+msgid "oui"
 msgstr ""
 
 #: templates/accounts/patron_edit.html:123
@@ -2371,6 +2577,10 @@ msgstr ""
 msgid "Vous vouliez peut-être dire ?"
 msgstr ""
 
+#: templates/mobile/products/product_list.html:67
+msgid "/J"
+msgstr ""
+
 #: templates/mobile/products/product_list.html:72
 #: templates/products/product_list.html:138
 msgid "km"
@@ -2528,22 +2738,6 @@ msgstr ""
 
 #: templates/products/product_missing.html:22
 msgid "Complétez votre profil et choisissez une adresse pour la l'objet :"
-msgstr ""
-
-#: templates/products/search.html:16
-msgid "voiture"
-msgstr ""
-
-#: templates/products/search.html:16
-msgid "chèvre"
-msgstr ""
-
-#: templates/products/search.html:16
-msgid "ski"
-msgstr ""
-
-#: templates/products/search.html:16
-msgid "robe"
 msgstr ""
 
 #: templates/rent/booking_confirm.html:4
