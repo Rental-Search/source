@@ -7,10 +7,10 @@
 -   fields: {domain: m.e-loue.com, name: e-loue}
     model: sites.site
     pk: 3
--   fields: {domain: e-loue.nc, name: e-loue}
+-   fields: {domain: www.e-loue.nc, name: e-loue}
     model: sites.site
     pk: 4
--   fields: {domain: e-loue.uk, name: e-loue}
+-   fields: {domain: www.e-loue.uk, name: e-loue}
     model: sites.site
     pk: 5
 -   fields: {domain: m.e-loue.uk, name: e-loue}
