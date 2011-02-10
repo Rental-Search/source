@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-02-10 16:40+0100\n"
+"POT-Creation-Date: 2011-02-10 18:09+0100\n"
 "PO-Revision-Date: 2011-02-08 11:14+0100\n"
 "Last-Translator: \n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -30,6 +30,10 @@ msgstr "renter/"
 #: urls.py:84
 msgid "location/"
 msgstr "rent/"
+
+#: urls.py:92
+msgid "recherche"
+msgstr "search"
 
 #: accounts/admin.py:27
 msgid "Personal info"
@@ -730,6 +734,10 @@ msgid ""
 msgstr ""
 "You cannot comment on a borrower's profile with whom you haven't done any "
 "bookings"
+
+#: products/urls.py:11
+msgid "ajouter"
+msgstr "add"
 
 #: products/views.py:85
 msgid "par-"
