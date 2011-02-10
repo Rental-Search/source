@@ -80,7 +80,11 @@
 	</div>
 	<div class="content-header x12">
 		{% if form.cleaned_data.q %}
-		 <h1>Résultat{{ paginator.count|pluralize }} pour <strong>{{ form.cleaned_data.q }}</strong></h1>
+		 {% blocktrans with form.cleaned_data.q as keywords count paginator.count as count %}
+		 <h1>Résultat pour <strong>{{ keywords }}</strong></h1>
+		 {% plural %}
+		 <h1>Résultats pour <strong>{{ keywords }}</strong></h1>
+		 {% endblocktrans%}
 		{% endif %}
 	</div>
 	{% if suggestions %}

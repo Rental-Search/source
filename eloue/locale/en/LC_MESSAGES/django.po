@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-02-10 18:09+0100\n"
+"POT-Creation-Date: 2011-02-10 18:18+0100\n"
 "PO-Revision-Date: 2011-02-08 11:14+0100\n"
 "Last-Translator: \n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -550,7 +550,7 @@ msgstr ""
 "Welcome! We have sent you an activation link by email. It is mandatory to "
 "activate your account to finish the registration process."
 
-#: products/forms.py:21 templates/products/product_list.html:102
+#: products/forms.py:21 templates/products/product_list.html:106
 msgid "Les plus proches"
 msgstr "Closest"
 
@@ -1435,7 +1435,7 @@ msgstr ""
 "\t\t\t\t\t\t"
 
 #: templates/index.html:106 templates/nc/index.html:95
-#: templates/products/product_list.html:194 templates/products/search.html:57
+#: templates/products/product_list.html:198 templates/products/search.html:57
 msgid "Catégories"
 msgstr "Categories"
 
@@ -1653,7 +1653,7 @@ msgstr "Rental history"
 #: templates/accounts/owner_history.html:37
 #: templates/accounts/owner_product.html:69
 #: templates/accounts/patron_detail.html:93
-#: templates/products/product_list.html:160
+#: templates/products/product_list.html:164
 msgid "Page précédente"
 msgstr "Previous page"
 
@@ -1663,7 +1663,7 @@ msgstr "Previous page"
 #: templates/accounts/owner_history.html:43
 #: templates/accounts/owner_product.html:75
 #: templates/accounts/patron_detail.html:99
-#: templates/products/product_list.html:166
+#: templates/products/product_list.html:170
 msgid "Page suivante"
 msgstr "Next page"
 
@@ -3168,7 +3168,7 @@ msgid "rechercher"
 msgstr "search"
 
 #: templates/mobile/products/product_list.html:53
-#: templates/products/product_list.html:88
+#: templates/products/product_list.html:92
 msgid "Vous vouliez peut-être dire ?"
 msgstr "You may have wanted to say?"
 
@@ -3177,7 +3177,7 @@ msgid "/J"
 msgstr "/D"
 
 #: templates/mobile/products/product_list.html:72
-#: templates/products/product_list.html:138
+#: templates/products/product_list.html:142
 msgid "km"
 msgstr "km"
 
@@ -3236,7 +3236,7 @@ msgstr "Fill in the rental form"
 
 #: templates/products/product_create.html:84
 #: templates/products/product_edit.html:66
-#: templates/products/product_list.html:143
+#: templates/products/product_list.html:147
 msgid "par jour"
 msgstr "per day"
 
@@ -3295,43 +3295,62 @@ msgstr "Description * :"
 msgid "location"
 msgstr "Rental"
 
-#: templates/products/product_list.html:95
+#: templates/products/product_list.html:83
+#, python-format
+msgid ""
+"\n"
+"\t\t <h1>Résultat pour <strong>%(keywords)s</strong></h1>\n"
+"\t\t "
+msgid_plural ""
+"\n"
+"\t\t <h1>Résultats pour <strong>%(keywords)s</strong></h1>\n"
+"\t\t "
+msgstr[0] ""
+"\n"
+"\t\t <h1>Result for <strong>%(keywords)s</strong></h1>\n"
+"\t\t "
+msgstr[1] ""
+"\n"
+"\t\t <h1>Results for <strong>%(keywords)s</strong></h1>\n"
+"\t\t "
+
+#: templates/products/product_list.html:99
 msgid "Trier par :"
 msgstr "Sort by :"
 
-#: templates/products/product_list.html:98
+#: templates/products/product_list.html:102
 msgid "Les plus récents"
 msgstr "Newest"
 
-#: templates/products/product_list.html:106
+#: templates/products/product_list.html:110
 msgid "Les prix les plus bas"
 msgstr "Lowest prices"
 
-#: templates/products/product_list.html:109
+#: templates/products/product_list.html:113
 msgid "Les prix les plus haut"
 msgstr "Highest prices"
 
-#: templates/products/product_list.html:146
+#: templates/products/product_list.html:150
 msgid "Réserver"
 msgstr "Book"
 
-#: templates/products/product_list.html:175
+#: templates/products/product_list.html:179
 msgid "Distance"
 msgstr "Distance"
 
-#: templates/products/product_list.html:183
+#: templates/products/product_list.html:187
 msgid "Restreindre les résultats à un rayon de"
 msgstr "Limit results to a radius of"
 
-#: templates/products/product_list.html:185
+#: templates/products/product_list.html:189
 msgid "Km"
 msgstr "Km"
 
-#: templates/products/product_list.html:186
+#: templates/products/product_list.html:190
 msgid "Mettre à jour"
 msgstr "Update"
 
-#: templates/products/product_list.html:197
+#: templates/products/product_list.html:201
 msgid "Voir tous les résultats"
 msgstr "See all results"
 
