@@ -7,7 +7,6 @@ from django.utils.translation import ugettext as _
 
 from eloue.rent.forms import DATE_FORMAT
 
-
 def combine(date_part, time_part):
     """
     Combine date and time to a datetime object.
@@ -33,40 +32,7 @@ combine.date_format = DATE_FORMAT
 
 
 def spellout(number, unit="", decimal=""):
-    """
-    Spell out numbers the dirty way.
-    
-    >>> spellout(123.45, 'euro', 'cent')
-    'cent vingt trois euros et quarante cinq cents'
-    >>> spellout(12.30, 'heure', 'minute')
-    'douze heures et trente minutes'
-    >>> spellout(12.03, 'heure', 'minute')
-    'douze heures et trois minutes'
-    >>> spellout(12.30, 'heure')
-    'douze heures trente'
-    >>> spellout(1.8, 'mètre')
-    'un m\\xc3\\xa8tre quatre-vingt'
-    >>> spellout(2.5, 'litre')
-    'deux litres cinquante'
-    >>> spellout(3.5)
-    'trois cinquante'
-    >>> spellout(300)
-    'trois cents'
-    >>> spellout(301)
-    'trois cent un'
-    >>> spellout(1000)
-    'mille'
-    >>> spellout(1001)
-    'mille un'
-    >>> spellout(1400)
-    'mille quatre cents'
-    >>> spellout(1401)
-    'mille quatre cent un'
-    >>> spellout(0)
-    'z\\xc3\\xa9ro'
-    >>> spellout(-650.92)
-    'moins six cent cinquante'
-    """
+    """Spell out numbers the dirty way."""
     def spell(number):
         output = ""
         if number < 20:
@@ -132,7 +98,7 @@ def spellout(number, unit="", decimal=""):
     integer = int(number)
     fractional = int(round((number - integer) * 100, 0))
     if integer == 0:
-        output = _("zéro")
+        output = _(u"zéro")
     else:
         output = decompose(abs(integer))
     if integer > 1 or integer < -1:
