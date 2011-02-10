@@ -30,6 +30,8 @@ class Product(dict):
             'categories_exact': self['categories'],
             'owner_exact': self['owner'],
             'price_exact': self['price'],
+            'sites': settings.DEFAULT_SITES,
+            'sites_exact': settings.DEFAULT_SITES,
             'thumbnail': generate_camo_url(self['thumbnail']) if 'thumbnail' in self and self['thumbnail'] else None,
         })
     
