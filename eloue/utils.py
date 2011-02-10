@@ -3,7 +3,7 @@ import hashlib
 import hmac
 import locale
 
-from decimal import Decimal as D
+from decimal import ROUND_UP, ROUND_DOWN, Decimal as D
 from urlparse import urlparse, urljoin
 
 from django.conf import settings
@@ -68,9 +68,9 @@ def currency(value):
 
 def convert_to_xpf(value):
     amount = value / D(settings.XPF_EXCHANGE_RATE)
-    return amount.quantize(D(".00"))
+    return amount.quantize(D(".00"), rounding=ROUND_DOWN)
 
 
 def convert_from_xpf(value):
     amount = value * D(settings.XPF_EXCHANGE_RATE)
-    return amount.quantize(D(".00"))
+    return amount.quantize(D("0.0000"), rounding=ROUND_UP)
