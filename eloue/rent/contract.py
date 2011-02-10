@@ -9,6 +9,7 @@ except ImportError:
 from pyPdf import PdfFileWriter, PdfFileReader
 from reportlab.pdfgen import canvas
 
+from django.conf import settings
 from django.utils.dateformat import format
 from django.utils.encoding import force_unicode
 from django.utils.translation import ugettext as _
@@ -35,7 +36,10 @@ class ContractGenerator(object):
     
     def load_template(self, booking):
         """Load template pdf"""
-        return PdfFileReader(open(local_path("contract/standard_template.pdf")))
+        if settings.LANGUAGE_CODE == 'fr-fr':
+            return PdfFileReader(open(local_path("contract/fr_template.pdf")))
+        elif settings.LANGUAGE_CODE == 'en-uk':
+            return PdfFileReader(open(local_path("contract/uk_template.pdf")))
     
     def generate_carbon(self, booking):
         "Create and draw the carbon"

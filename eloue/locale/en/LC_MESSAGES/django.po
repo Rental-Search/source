@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-02-08 18:03+0100\n"
+"POT-Creation-Date: 2011-02-10 16:40+0100\n"
 "PO-Revision-Date: 2011-02-08 11:14+0100\n"
 "Last-Translator: \n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -791,15 +791,15 @@ msgstr "Owner email"
 msgid "Owner phone"
 msgstr "Owner phone"
 
-#: rent/contract.py:81 rent/contract.py:82
+#: rent/contract.py:85 rent/contract.py:86
 msgid "d F Y à H\\hi."
-msgstr ""
+msgstr "F d Y at H\\hi."
 
-#: rent/contract.py:89
+#: rent/contract.py:93
 msgid "currency_unit"
 msgstr "pound"
 
-#: rent/contract.py:89
+#: rent/contract.py:93
 msgid "currency_decimal"
 msgstr "penny"
 
@@ -887,139 +887,139 @@ msgstr "Finalised"
 msgid "Dépassé"
 msgstr "Exceeded"
 
-#: rent/utils.py:94
+#: rent/utils.py:60
 msgid "milliard"
 msgstr "billion"
 
-#: rent/utils.py:100
+#: rent/utils.py:66
 msgid "million"
 msgstr "million"
 
-#: rent/utils.py:109 rent/utils.py:124
+#: rent/utils.py:75 rent/utils.py:90
 msgid "cent"
 msgstr "hundred"
 
-#: rent/utils.py:119
+#: rent/utils.py:85
 msgid "mille"
 msgstr "thousand"
 
-#: rent/utils.py:135
+#: rent/utils.py:101
 msgid "zéro"
 msgstr "zero"
 
-#: rent/utils.py:145
+#: rent/utils.py:111
 msgid "et"
 msgstr "and"
 
-#: rent/utils.py:153
+#: rent/utils.py:119
 msgid "moins"
 msgstr "minus"
 
-#: rent/utils.py:156
+#: rent/utils.py:122
 msgid "un"
 msgstr "one"
 
-#: rent/utils.py:156
+#: rent/utils.py:122
 msgid "deux"
 msgstr "two"
 
-#: rent/utils.py:156
+#: rent/utils.py:122
 msgid "trois"
 msgstr "three"
 
-#: rent/utils.py:156
+#: rent/utils.py:122
 msgid "quatre"
 msgstr "four"
 
-#: rent/utils.py:156
+#: rent/utils.py:122
 msgid "cinq"
 msgstr "five"
 
-#: rent/utils.py:156
+#: rent/utils.py:122
 msgid "six"
 msgstr "six"
 
-#: rent/utils.py:156
+#: rent/utils.py:122
 msgid "sept"
 msgstr "seven"
 
-#: rent/utils.py:156
+#: rent/utils.py:122
 msgid "huit"
 msgstr "eight"
 
-#: rent/utils.py:156
+#: rent/utils.py:122
 msgid "neuf"
 msgstr "nine"
 
-#: rent/utils.py:156 rent/utils.py:160 rent/tests/contract.py:46
+#: rent/utils.py:122 rent/utils.py:126 rent/tests/contract.py:46
 msgid "dix"
 msgstr "ten"
 
-#: rent/utils.py:157
+#: rent/utils.py:123
 msgid "onze"
 msgstr "eleven"
 
-#: rent/utils.py:157
+#: rent/utils.py:123
 msgid "douze"
 msgstr "twelve"
 
-#: rent/utils.py:157
+#: rent/utils.py:123
 msgid "treize"
 msgstr "thirteen"
 
-#: rent/utils.py:157
+#: rent/utils.py:123
 msgid "quatorze"
 msgstr "fourteen"
 
-#: rent/utils.py:157
+#: rent/utils.py:123
 msgid "quinze"
 msgstr "fifteen"
 
-#: rent/utils.py:157
+#: rent/utils.py:123
 msgid "seize"
 msgstr "fifteen"
 
-#: rent/utils.py:157
+#: rent/utils.py:123
 msgid "dix-sept"
 msgstr "seventeen"
 
-#: rent/utils.py:157
+#: rent/utils.py:123
 msgid "dix-huit"
 msgstr "eighteen"
 
-#: rent/utils.py:157
+#: rent/utils.py:123
 msgid "dix-neuf"
 msgstr "nineteen"
 
-#: rent/utils.py:160
+#: rent/utils.py:126
 msgid "vingt"
 msgstr "twenty"
 
-#: rent/utils.py:160
+#: rent/utils.py:126
 msgid "trente"
 msgstr "thirty"
 
-#: rent/utils.py:160
+#: rent/utils.py:126
 msgid "quarante"
 msgstr "forty"
 
-#: rent/utils.py:160
+#: rent/utils.py:126
 msgid "cinquante"
 msgstr "fifty"
 
-#: rent/utils.py:160
+#: rent/utils.py:126
 msgid "soixante"
 msgstr "sixty"
 
-#: rent/utils.py:160
+#: rent/utils.py:126
 msgid "soixante-dix"
 msgstr "seventy"
 
-#: rent/utils.py:160
+#: rent/utils.py:126
 msgid "quatre-vingt"
 msgstr "eighty"
 
-#: rent/utils.py:160
+#: rent/utils.py:126
 msgid "quatre-vingt-dix"
 msgstr "ninety"
 
