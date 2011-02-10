@@ -1433,7 +1433,7 @@ msgstr "Categories"
 
 #: templates/index.html:134
 msgid "Ils parlent de nous"
-msgstr ""
+msgstr "They talk about us"
 
 #: templates/index.html:135 templates/nc/index.html:124
 #: templates/products/search.html:86
@@ -1459,6 +1459,13 @@ msgid ""
 "\t\t\t\t\t\t</a>\n"
 "\t\t\t\t\t "
 msgstr ""
+"\n"
+"\t\t\t\t\t\t<a href=\"https://www.facebook.com/pages/e-louecom/104685226447"
+"\">\n"
+"\t\t\t\t\t\t\t<span class=\"fb-icon\"></span>\n"
+"\t\t\t\t\t\t\tFollow us<br />on Facebook\n"
+"\t\t\t\t\t\t</a>\n"
+"\t\t\t\t\t "
 
 #: templates/index.html:153
 msgid ""
@@ -1469,6 +1476,12 @@ msgid ""
 "\t\t\t\t\t\t</a>\n"
 "\t\t\t\t\t "
 msgstr ""
+"\n"
+"\t\t\t\t\t\t<a href=\"https://twitter.com/eloue\">\n"
+"\t\t\t\t\t\t\t<span class=\"tw-icon\"></span>\n"
+"\t\t\t\t\t\t\tFollow us<br />on Twitter\n"
+"\t\t\t\t\t\t</a>\n"
+"\t\t\t\t\t "
 
 #: templates/accounts/activate.html:4
 msgid "Activation de votre compte"
