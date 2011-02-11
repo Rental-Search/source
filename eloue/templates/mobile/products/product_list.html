@@ -43,8 +43,13 @@
 	<div class="container">
 		{% if form.cleaned_data.q %}
 		 <h1>
-			Résultat{{ paginator.count|pluralize }} pour <strong>{{ form.cleaned_data.q }}</strong>{% if form.cleaned_data.l %}, {{ form.cleaned_data.l }}{% endif %}
-		</h1>
+		  {% blocktrans with form.cleaned_data.q as keywords count paginator.count as counter %}
+		   Résultat pour <strong>{{ keywords }}</strong>
+		  {% plural %}
+		   Résultats pour <strong>{{ keywords }}</strong>
+		  {% endblocktrans %}
+		  {% if form.cleaned_data.l %}, {{ form.cleaned_data.l }}{% endif %}
+		 </h1>
 		{% else %}
 		<a href="{% url home %}" class="search-link">{% trans "rechercher" %}</a>
 		{% endif %}

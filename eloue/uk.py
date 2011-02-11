@@ -6,7 +6,7 @@ local_path = lambda path: os.path.join(os.path.dirname(__file__), path)
 
 SITE_ID = 5
 
-USE_HTTPS = False
+USE_HTTPS = False # True
 
 TIME_ZONE = 'Europe/London'
 
@@ -26,3 +26,5 @@ TEMPLATE_DIRS = (
     local_path('templates/uk/'),
     local_path('templates/'),
 )
+
+MOBILE_REDIRECT_BASE = 'https://m.e-loue.uk'

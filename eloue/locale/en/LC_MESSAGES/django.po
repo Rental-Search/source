@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-02-10 18:18+0100\n"
+"POT-Creation-Date: 2011-02-11 10:25+0100\n"
 "PO-Revision-Date: 2011-02-08 11:14+0100\n"
 "Last-Translator: \n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -3163,29 +3163,48 @@ msgstr "Location"
 msgid "Location "
 msgstr "Location "
 
-#: templates/mobile/products/product_list.html:49
+#: templates/mobile/products/product_list.html:46
+#, python-format
+msgid ""
+"\n"
+"\t\t   Résultat pour <strong>%(keywords)s</strong>\n"
+"\t\t  "
+msgid_plural ""
+"\n"
+"\t\t   Résultats pour <strong>%(keywords)s</strong>\n"
+"\t\t  "
+msgstr[0] ""
+"\n"
+"\t\t   Result for <strong>%(keywords)s</strong>\n"
+"\t\t "
+msgstr[1] ""
+"\n"
+"\t\t   Results for <strong>%(keywords)s</strong>\n"
+"\t\t "
+
+#: templates/mobile/products/product_list.html:54
 msgid "rechercher"
 msgstr "search"
 
-#: templates/mobile/products/product_list.html:53
+#: templates/mobile/products/product_list.html:58
 #: templates/products/product_list.html:92
 msgid "Vous vouliez peut-être dire ?"
 msgstr "You may have wanted to say?"
 
-#: templates/mobile/products/product_list.html:67
+#: templates/mobile/products/product_list.html:72
 msgid "/J"
 msgstr "/D"
 
-#: templates/mobile/products/product_list.html:72
+#: templates/mobile/products/product_list.html:77
 #: templates/products/product_list.html:142
 msgid "km"
 msgstr "km"
 
-#: templates/mobile/products/product_list.html:84
+#: templates/mobile/products/product_list.html:89
 msgid "Prec"
 msgstr "prev"
 
-#: templates/mobile/products/product_list.html:87
+#: templates/mobile/products/product_list.html:92
 msgid "Suiv"
 msgstr "next"
 
