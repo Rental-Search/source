@@ -12,7 +12,7 @@ TIME_ZONE = 'Europe/London'
 
 LANGUAGE_CODE = 'en-uk'
 
-SESSION_COOKIE_DOMAIN = None # 'e-loue.uk'
+SESSION_COOKIE_DOMAIN = None # 'erentmarket.com'
 
 CACHE_MIDDLEWARE_KEY_PREFIX = 'uk'
 
@@ -27,4 +27,4 @@ TEMPLATE_DIRS = (
     local_path('templates/'),
 )
 
-MOBILE_REDIRECT_BASE = 'https://m.e-loue.uk'
+MOBILE_REDIRECT_BASE = 'https://m.erentmarket.com'
