@@ -1723,7 +1723,7 @@ msgstr "Your control panel"
 
 #: templates/accounts/dashboard.html:19
 msgid "Modifier votre profil"
-msgstr "Change your profile information"
+msgstr "Edit your profile"
 
 #: templates/accounts/dashboard.html:28
 msgid "Accéder à mes objets"
