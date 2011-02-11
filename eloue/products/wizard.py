@@ -61,6 +61,12 @@ class ProductWizard(GenericFormWizard):
                 del files['0-picture']
             return self.form_list[step](data, files, prefix=self.prefix_for_step(step),
                 initial=self.initial.get(step, None), instance=Product(quantity=1, deposit_amount=0))
+        if not issubclass(self.form_list[step], (ProductForm, EmailAuthenticationForm)):
+            initial = {
+                'addresses__country': settings.LANGUAGE_CODE.split('-')[1].upper(),
+            }
+            return self.form_list[step](data, files, prefix=self.prefix_for_step(step),
+                initial=initial)
         return super(ProductWizard, self).get_form(step, data, files)
     
     def get_template(self, step):

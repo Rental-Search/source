@@ -10,7 +10,7 @@ USE_HTTPS = False # True
 
 TIME_ZONE = 'Europe/London'
 
-LANGUAGE_CODE = 'en-uk'
+LANGUAGE_CODE = 'en-gb'
 
 SESSION_COOKIE_DOMAIN = None # 'erentmarket.com'
 

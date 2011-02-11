@@ -92,6 +92,12 @@ class BookingWizard(GenericFormWizard):
             initial.update(self.initial.get(step, {}))
             return self.form_list[step](data, files, prefix=self.prefix_for_step(step),
                 initial=initial, instance=booking)
+        if not issubclass(self.form_list[step], (BookingForm, EmailAuthenticationForm, BookingConfirmationForm)):
+            initial = {
+                'addresses__country': settings.LANGUAGE_CODE.split('-')[1].upper(),
+            }
+            return self.form_list[step](data, files, prefix=self.prefix_for_step(step),
+                initial=initial)
         return super(BookingWizard, self).get_form(step, data, files)
     
     def process_step(self, request, form, step):
