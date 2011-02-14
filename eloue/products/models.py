@@ -56,7 +56,7 @@ DEFAULT_CURRENCY = get_format('CURRENCY')
 class Product(models.Model):
     """A product"""
     summary = models.CharField(max_length=255)
-    deposit_amount = models.DecimalField(max_digits=8, decimal_places=2)
+    deposit_amount = models.DecimalField(max_digits=10, decimal_places=4)
     currency = models.CharField(max_length=3, choices=CURRENCY, default=DEFAULT_CURRENCY)
     description = models.TextField()
     address = models.ForeignKey(Address, related_name='products')
@@ -201,7 +201,7 @@ class PropertyValue(models.Model):
 class Price(models.Model):
     """A price"""
     name = models.CharField(blank=True, max_length=255)
-    amount = models.DecimalField(max_digits=8, decimal_places=2)
+    amount = models.DecimalField(max_digits=10, decimal_places=4)
     currency = models.CharField(max_length=3, choices=CURRENCY, default=DEFAULT_CURRENCY)
     product = models.ForeignKey(Product, related_name='prices')
     unit = models.PositiveSmallIntegerField(choices=UNIT, db_index=True)
