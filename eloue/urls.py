@@ -89,5 +89,5 @@ urlpatterns = patterns('',
     url(r'^api/', include(api_v1.urls)),
     url(r'^oauth/', include('oauth_provider.urls')),
     url(r'^$', homepage, name="home"),
-    url(r'^recherche/$', search, name="search")
+    url(r'^%s/$' % _('recherche'), search, name="search")
 )

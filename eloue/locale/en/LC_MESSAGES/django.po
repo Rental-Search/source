@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-02-08 18:03+0100\n"
+"POT-Creation-Date: 2011-02-11 14:00+0100\n"
 "PO-Revision-Date: 2011-02-08 11:14+0100\n"
 "Last-Translator: \n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -30,6 +30,10 @@ msgstr "renter/"
 #: urls.py:84
 msgid "location/"
 msgstr "rent/"
+
+#: urls.py:92
+msgid "recherche"
+msgstr "search"
 
 #: accounts/admin.py:27
 msgid "Personal info"
@@ -69,11 +73,11 @@ msgstr "Geolocation"
 
 #: accounts/forms.py:24
 msgid "Je n'ai pas encore de compte e-loue"
-msgstr "i have still not registered on e-loue"
+msgstr "I have still not registered on eRentmarket"
 
 #: accounts/forms.py:25
 msgid "J'ai déjà un compte e-loue et mon mot de passe est :"
-msgstr "i already have  an e-loue account and my password is :"
+msgstr "I already have an eRentmarket account and my password is :"
 
 #: accounts/forms.py:29
 msgid "Je n'ai pas encore de compte PayPal"
@@ -97,8 +101,8 @@ msgid ""
 "Pour garantir un service de qualité et la sécurité des utilisateurs de e-"
 "loue.com, vous ne pouvez pas vous enregistrer avec une adresse email jetable."
 msgstr ""
-"To guarantee the quality of our service and the security of the e-loue.com "
-"users, you cannot use a disposable email address to register with us."
+"To guarantee the quality of our service and the security of the erentmarket."
+"com users, you cannot use a disposable email address to register with us."
 
 #: accounts/forms.py:53 accounts/tests/wizard.py:96
 msgid "Un compte existe déjà pour cet email"
@@ -496,7 +500,7 @@ msgstr "A user with this username already exists"
 #: templates/admin/base_site.html:4 templates/admin/base_site.html.py:7
 #: templates/mobile/base.html:7 templates/nc/base.html:7
 msgid "e-loue"
-msgstr "e-loue"
+msgstr "eRentmarket"
 
 #: accounts/models.py:232
 msgid "Expiré"
@@ -546,7 +550,7 @@ msgstr ""
 "Welcome! We have sent you an activation link by email. It is mandatory to "
 "activate your account to finish the registration process."
 
-#: products/forms.py:21 templates/products/product_list.html:102
+#: products/forms.py:21 templates/products/product_list.html:106
 msgid "Les plus proches"
 msgstr "Closest"
 
@@ -731,6 +735,10 @@ msgstr ""
 "You cannot comment on a borrower's profile with whom you haven't done any "
 "bookings"
 
+#: products/urls.py:11
+msgid "ajouter"
+msgstr "add"
+
 #: products/views.py:85
 msgid "par-"
 msgstr "by-"
@@ -791,15 +799,15 @@ msgstr "Owner email"
 msgid "Owner phone"
 msgstr "Owner phone"
 
-#: rent/contract.py:81 rent/contract.py:82
+#: rent/contract.py:85 rent/contract.py:86
 msgid "d F Y à H\\hi."
-msgstr ""
+msgstr "F d Y at H\\hi."
 
-#: rent/contract.py:89
+#: rent/contract.py:93
 msgid "currency_unit"
 msgstr "pound"
 
-#: rent/contract.py:89
+#: rent/contract.py:93
 msgid "currency_decimal"
 msgstr "penny"
 
@@ -887,139 +895,139 @@ msgstr "Finalised"
 msgid "Dépassé"
 msgstr "Exceeded"
 
-#: rent/utils.py:94
+#: rent/utils.py:60
 msgid "milliard"
 msgstr "billion"
 
-#: rent/utils.py:100
+#: rent/utils.py:66
 msgid "million"
 msgstr "million"
 
-#: rent/utils.py:109 rent/utils.py:124
+#: rent/utils.py:75 rent/utils.py:90
 msgid "cent"
 msgstr "hundred"
 
-#: rent/utils.py:119
+#: rent/utils.py:85
 msgid "mille"
 msgstr "thousand"
 
-#: rent/utils.py:135
+#: rent/utils.py:101
 msgid "zéro"
 msgstr "zero"
 
-#: rent/utils.py:145
+#: rent/utils.py:111
 msgid "et"
 msgstr "and"
 
-#: rent/utils.py:153
+#: rent/utils.py:119
 msgid "moins"
 msgstr "minus"
 
-#: rent/utils.py:156
+#: rent/utils.py:122
 msgid "un"
 msgstr "one"
 
-#: rent/utils.py:156
+#: rent/utils.py:122
 msgid "deux"
 msgstr "two"
 
-#: rent/utils.py:156
+#: rent/utils.py:122
 msgid "trois"
 msgstr "three"
 
-#: rent/utils.py:156
+#: rent/utils.py:122
 msgid "quatre"
 msgstr "four"
 
-#: rent/utils.py:156
+#: rent/utils.py:122
 msgid "cinq"
 msgstr "five"
 
-#: rent/utils.py:156
+#: rent/utils.py:122
 msgid "six"
 msgstr "six"
 
-#: rent/utils.py:156
+#: rent/utils.py:122
 msgid "sept"
 msgstr "seven"
 
-#: rent/utils.py:156
+#: rent/utils.py:122
 msgid "huit"
 msgstr "eight"
 
-#: rent/utils.py:156
+#: rent/utils.py:122
 msgid "neuf"
 msgstr "nine"
 
-#: rent/utils.py:156 rent/utils.py:160 rent/tests/contract.py:46
+#: rent/utils.py:122 rent/utils.py:126 rent/tests/contract.py:46
 msgid "dix"
 msgstr "ten"
 
-#: rent/utils.py:157
+#: rent/utils.py:123
 msgid "onze"
 msgstr "eleven"
 
-#: rent/utils.py:157
+#: rent/utils.py:123
 msgid "douze"
 msgstr "twelve"
 
-#: rent/utils.py:157
+#: rent/utils.py:123
 msgid "treize"
 msgstr "thirteen"
 
-#: rent/utils.py:157
+#: rent/utils.py:123
 msgid "quatorze"
 msgstr "fourteen"
 
-#: rent/utils.py:157
+#: rent/utils.py:123
 msgid "quinze"
 msgstr "fifteen"
 
-#: rent/utils.py:157
+#: rent/utils.py:123
 msgid "seize"
 msgstr "fifteen"
 
-#: rent/utils.py:157
+#: rent/utils.py:123
 msgid "dix-sept"
 msgstr "seventeen"
 
-#: rent/utils.py:157
+#: rent/utils.py:123
 msgid "dix-huit"
 msgstr "eighteen"
 
-#: rent/utils.py:157
+#: rent/utils.py:123
 msgid "dix-neuf"
 msgstr "nineteen"
 
-#: rent/utils.py:160
+#: rent/utils.py:126
 msgid "vingt"
 msgstr "twenty"
 
-#: rent/utils.py:160
+#: rent/utils.py:126
 msgid "trente"
 msgstr "thirty"
 
-#: rent/utils.py:160
+#: rent/utils.py:126
 msgid "quarante"
 msgstr "forty"
 
-#: rent/utils.py:160
+#: rent/utils.py:126
 msgid "cinquante"
 msgstr "fifty"
 
-#: rent/utils.py:160
+#: rent/utils.py:126
 msgid "soixante"
 msgstr "sixty"
 
-#: rent/utils.py:160
+#: rent/utils.py:126
 msgid "soixante-dix"
 msgstr "seventy"
 
-#: rent/utils.py:160
+#: rent/utils.py:126
 msgid "quatre-vingt"
 msgstr "eighty"
 
-#: rent/utils.py:160
+#: rent/utils.py:126
 msgid "quatre-vingt-dix"
 msgstr "ninety"
 
@@ -1078,7 +1086,7 @@ msgstr ""
 
 #: templates/500.html:8
 msgid "e-loue - La page est pour le moment indisponible"
-msgstr "e-loue - The page is currently unavailable"
+msgstr "eRentmarket - The page is currently unavailable"
 
 #: templates/500.html:51 templates/500.html.py:76 templates/base.html:48
 #: templates/base.html.py:72 templates/20minutes/base.html:13
@@ -1116,8 +1124,8 @@ msgid ""
 "\t\t\t   "
 msgstr ""
 "\n"
-"\t\t\t    If the error persists, please <a href=\"mailto:contact@e-loue.com"
-"\">contact us @e-loue.com</a>.\n"
+"\t\t\t    If the error persists, please <a href=\"mailto:contact@erentmarket."
+"com\">contact us @erentmarket.com</a>.\n"
 "\t\t\t   "
 
 #: templates/500.html:72 templates/base.html:68
@@ -1296,7 +1304,7 @@ msgstr "to"
 
 #: templates/base.html:113 templates/nc/base.html:119
 msgid "e-loue blog"
-msgstr "the e-loue blog"
+msgstr "the eRentmarket blog"
 
 #: templates/index.html:4 templates/nc/index.html:4
 msgid "Location entre particuliers ou professionnels de tout type d'objet"
@@ -1305,12 +1313,12 @@ msgstr ""
 
 #: templates/index.html:17
 msgid "Avec e-loue tout se loue, sauf les petites amies !"
-msgstr "On e-loue, everything is for rent!"
+msgstr "On eRentmarket, everything is for rent!"
 
 #: templates/index.html:19 templates/mobile/index.html:17
 #: templates/nc/index.html:10 templates/products/search.html:9
 msgid "Avec e-loue, tout se loue !"
-msgstr "On e-loue, everything is for rent!"
+msgstr "On eRentmarket, everything is for rent!"
 
 #: templates/index.html:25 templates/accounts/patron_detail.html:15
 #: templates/mobile/index.html:20 templates/mobile/products/search.html:20
@@ -1390,7 +1398,7 @@ msgstr "Search"
 
 #: templates/index.html:46 templates/nc/index.html:36
 msgid "Les curiosités d'e-loue"
-msgstr "E-loue curiosity shop"
+msgstr "eRentmarket curiosity shop"
 
 #: templates/index.html:76
 msgid "Découvrez la vérité !"
@@ -1399,7 +1407,7 @@ msgstr "Find out the truth"
 #: templates/index.html:84 templates/nc/index.html:74
 #: templates/products/search.html:35
 msgid "Avec les garanties e-loue, louez en toute sécurité !"
-msgstr "Rent safely by relying on e-loue!"
+msgstr "Rent safely by relying on eRentmarket!"
 
 #: templates/index.html:87 templates/nc/index.html:77
 #: templates/products/search.html:38
@@ -1427,13 +1435,13 @@ msgstr ""
 "\t\t\t\t\t\t"
 
 #: templates/index.html:106 templates/nc/index.html:95
-#: templates/products/product_list.html:194 templates/products/search.html:57
+#: templates/products/product_list.html:198 templates/products/search.html:57
 msgid "Catégories"
 msgstr "Categories"
 
 #: templates/index.html:134
 msgid "Ils parlent de nous"
-msgstr ""
+msgstr "They talk about us"
 
 #: templates/index.html:135 templates/nc/index.html:124
 #: templates/products/search.html:86
@@ -1442,7 +1450,7 @@ msgstr "Go to Press"
 
 #: templates/index.html:136 templates/products/search.html:87
 msgid "e-loue dans les média"
-msgstr "e-loue in the news"
+msgstr "eRentmarket in the news"
 
 #: templates/index.html:141 templates/nc/index.html:130
 #: templates/products/search.html:92
@@ -1459,6 +1467,13 @@ msgid ""
 "\t\t\t\t\t\t</a>\n"
 "\t\t\t\t\t "
 msgstr ""
+"\n"
+"\t\t\t\t\t\t<a href=\"https://www.facebook.com/pages/erentmarket."
+"com/104685226447\">\n"
+"\t\t\t\t\t\t\t<span class=\"fb-icon\"></span>\n"
+"\t\t\t\t\t\t\tFollow us<br />on Facebook\n"
+"\t\t\t\t\t\t</a>\n"
+"\t\t\t\t\t "
 
 #: templates/index.html:153
 msgid ""
@@ -1469,6 +1484,12 @@ msgid ""
 "\t\t\t\t\t\t</a>\n"
 "\t\t\t\t\t "
 msgstr ""
+"\n"
+"\t\t\t\t\t\t<a href=\"https://twitter.com/erentmarket\">\n"
+"\t\t\t\t\t\t\t<span class=\"tw-icon\"></span>\n"
+"\t\t\t\t\t\t\tFollow us<br />on Twitter\n"
+"\t\t\t\t\t\t</a>\n"
+"\t\t\t\t\t "
 
 #: templates/accounts/activate.html:4
 msgid "Activation de votre compte"
@@ -1523,7 +1544,7 @@ msgstr ""
 #: templates/rent/emails/owner_ask_email.html:16
 #: templates/rent/emails/owner_ask_email.txt:18
 msgid "L'équipe e-loue"
-msgstr "The e-loue team"
+msgstr "The eRentmarket team"
 
 #: templates/accounts/activation_email.txt:2
 #, python-format
@@ -1538,7 +1559,7 @@ msgstr ""
 "\n"
 "  Hello %(username)s,\n"
 "\n"
-"  Thank you for registering with e-loue.com.In order to activate your "
+"  Thank you for registering with erentmarket.com. In order to activate your "
 "account and join our renters' community there's one last thing to do: click "
 "on the following link.\n"
 
@@ -1632,7 +1653,7 @@ msgstr "Rental history"
 #: templates/accounts/owner_history.html:37
 #: templates/accounts/owner_product.html:69
 #: templates/accounts/patron_detail.html:93
-#: templates/products/product_list.html:160
+#: templates/products/product_list.html:164
 msgid "Page précédente"
 msgstr "Previous page"
 
@@ -1642,7 +1663,7 @@ msgstr "Previous page"
 #: templates/accounts/owner_history.html:43
 #: templates/accounts/owner_product.html:75
 #: templates/accounts/patron_detail.html:99
-#: templates/products/product_list.html:166
+#: templates/products/product_list.html:170
 msgid "Page suivante"
 msgstr "Next page"
 
@@ -1656,7 +1677,7 @@ msgstr "Rental history"
 
 #: templates/accounts/contact.html:4
 msgid "Contactez e-loue"
-msgstr "Contact e-loue"
+msgstr "Contact eRentMarket"
 
 #: templates/accounts/contact.html:59
 #: templates/accounts/partials/missing.html:410
@@ -1702,7 +1723,7 @@ msgstr "Your control panel"
 
 #: templates/accounts/dashboard.html:19
 msgid "Modifier votre profil"
-msgstr "Change your profile information"
+msgstr "Edit your profile"
 
 #: templates/accounts/dashboard.html:28
 msgid "Accéder à mes objets"
@@ -1710,7 +1731,7 @@ msgstr "Go to my items"
 
 #: templates/accounts/dashboard.html:36
 msgid "Bienvenue sur e-loue ! Que pouvez-vous faire ensuite ?"
-msgstr "Welcome to e-loue! What can you do next?"
+msgstr "Welcome to eRentmarket! What can you do next?"
 
 #: templates/accounts/dashboard.html:40
 msgid "Mettre un objet en location"
@@ -2041,7 +2062,7 @@ msgstr "yes"
 
 #: templates/accounts/patron_edit.html:123
 msgid "Souhaitez-vous recevoir des informations de e-loue ?"
-msgstr "Do you wish to receive information from e-loue? "
+msgstr "Do you wish to receive information from eRentmarket? "
 
 #: templates/accounts/patron_edit.html:138
 #: templates/accounts/patron_password.html:67
@@ -2072,7 +2093,7 @@ msgstr "Verifying your PayPal account"
 #: templates/accounts/patron_paypal.html:32
 #: templates/accounts/partials/login.html:15
 msgid "Avez-vous un compte e-loue ?"
-msgstr "Do you already have an e-loue account?"
+msgstr "Do you already have an eRentmarket account?"
 
 #: templates/accounts/patron_paypal.html:45
 #: templates/accounts/partials/login.html:36
@@ -2083,7 +2104,7 @@ msgstr "Next &rarr;"
 
 #: templates/accounts/patron_paypal.html:50
 msgid "e-loue PayPal verified"
-msgstr "e-loue PayPal verified"
+msgstr "eRentmarket PayPal verified"
 
 #: templates/accounts/partials/login.html:8
 msgid "Votre adresse email est :"
@@ -2616,22 +2637,23 @@ msgstr ""
 "\t\t\t\t<code class=\"cg\">\n"
 "\t\t\t\t\tPREAMBLE<br /><br />\n"
 "\n"
-"\t\t\t\t\tThe use of the e-loue website implies that you agree to the Terms "
-"and Conditions. If you do not agree to them, please refrain from using our "
-"website.<br />\n"
+"\t\t\t\t\tThe use of the erentmarket website implies that you agree to the "
+"Terms and Conditions. If you do not agree to them, please refrain from using "
+"our website.<br />\n"
 "\t\t\t\t\t\n"
-"\t\t\t\t\tThe online listing service www.e-loue.com is managed by the e-loue "
-"company that connects owners who list their items (hereinafter known as "
-"owners) and borrowers. Hereinafter, owners and borrowers are known as "
-"Members. The e-loue platform allows the conclusion of a rental agreement "
-"between the owners and the borrowers involving the listed items, but it "
-"cannot be held responsible for it. The members are the sole decision makers "
-"when it comes to the rental agreement and solely responsible for it.<br />\n"
+"\t\t\t\t\tThe online listing service www.erentmarket.com is managed by the "
+"erentmarketcompany that connects owners who list their items (hereinafter "
+"known as owners) and borrowers. Hereinafter, owners and borrowers are known "
+"as Members. The erentmarket platform allows the conclusion of a rental "
+"agreement between the owners and the borrowers involving the listed items, "
+"but it cannot be held responsible for it. The members are the sole decision "
+"makers when it comes to the rental agreement and solely responsible for it."
+"<br />\n"
 "\n"
-"\t\t\t\t\tThe members’ agreement to the e-loue platform Terms and Conditions "
-"represents e-loue’s mandate to connect owners and borrowers and to manage "
-"the transactions that are made on the e-loue website following the "
-"conditions hereunder.<br />\n"
+"\t\t\t\t\tThe members’ agreement to the erentmarket platform Terms and "
+"Conditions represents erentmarket’s mandate to connect owners and borrowers "
+"and to manage the transactions that are made on the erentmarket website "
+"following the conditions hereunder.<br />\n"
 "\n"
 "\t\t\t\t\tNovember 26th 2010 Version.<br />\n"
 "\n"
@@ -2639,13 +2661,13 @@ msgstr ""
 "\t\t\t\t\t1. Definitions\n"
 "\t\t\t\t\t<br /><br />\n"
 "\n"
-"\t\t\t\t\tThe e-loue platform : represents the functional and organisational "
-"structure that e-loue created to connect item owners and borrowers. .<br /"
-"><br />\n"
+"\t\t\t\t\tThe erentmarket platform : represents the functional and "
+"organisational structure that erentmarket created to connect item owners and "
+"borrowers. .<br /><br />\n"
 "\n"
-"\t\t\t\t\tItem: represents the items referred to in the e-loue Documentation "
-"that would be liable to create the connection through the e-loue platform."
-"<br /><br />\n"
+"\t\t\t\t\tItem: represents the items referred to in the erentmarket "
+"Documentation that would be liable to create the connection through the "
+"erentmarket platform.<br /><br />\n"
 "\n"
 "\t\t\t\t\tProhibited Item: represents the items that are a breach of moral "
 "standards and do not respect laws and regulations. These include items that "
@@ -2655,66 +2677,66 @@ msgstr ""
 "is included hereunder.<br /><br />\n"
 "\n"
 "\t\t\t\t\tOwner: represents the member who lists an item that they wish to "
-"rent out on the e-loue platform.<br /><br />\n"
+"rent out on the erentmarket platform.<br /><br />\n"
 "\n"
 "\t\t\t\t\tBorrower: represents the member who has agreed to the owner’s "
 "rental listing.<br /><br />\n"
 "\n"
 "\t\t\t\t\tMember: represents –either in its singular or plural form – an "
-"owner or a borrower who might be using the e-loue platform after having "
+"owner or a borrower who might be using the erentmarket platform after having "
 "agreed to the Terms and Conditions. All members agree to provide accurate "
 "information about their identity, address and any other information that is "
-"needed in order to access the e-loue platform and to upgrade any of the "
+"needed in order to access the erentmarket platform and to upgrade any of the "
 "changes that might occur concerning this information.<br /><br />\n"
 "\n"
 "\t\t\t\t\tPrice: represents the asking price per day for the item that the "
 "owner is renting out. The price is the basis of the commission charged by e-"
 "loue.<br /><br />\n"
 "\n"
-"\t\t\t\t\tCommission: represents the fees that e-loue charges for the use of "
-"the e-loue platform. Transaction fee: represents the total price that the "
-"borrower has to pay for the item. In case of a long distance transaction, "
-"shipping costs might be also charged. Rental agreement: represents the "
-"agreement that has been reached between the owner and the borrower, creating "
-"the obligation of the item’s usage transfer for one party and, for the other "
-"party, the obligation to pay a financial compensation that has been settled "
-"in advance or mentioned in the contract.Individual: a person using the e-"
-"loue platform as an individual. Professional: a person using the e-loue "
-"platform for business purposes. <br /><br />\n"
+"\t\t\t\t\tCommission: represents the fees that erentmarket charges for the "
+"use of the erentmarket platform. Transaction fee: represents the total price "
+"that the borrower has to pay for the item. In case of a long distance "
+"transaction, shipping costs might be also charged. Rental agreement: "
+"represents the agreement that has been reached between the owner and the "
+"borrower, creating the obligation of the item’s usage transfer for one party "
+"and, for the other party, the obligation to pay a financial compensation "
+"that has been settled in advance or mentioned in the contract.Individual: a "
+"person using the e-loue platform as an individual. Professional: a person "
+"using the erentmarket platform for business purposes. <br /><br />\n"
 "\n"
 "\t\t\t\t\t<br />\n"
 "\t\t\t\t\t2. Purpose\n"
 "\t\t\t\t\t<br /><br />\n"
 "\n"
-"\t\t\t\t\tThe e-loue platform Terms and Conditions are designed to define "
-"the terms of use of the e-loue platform by its members, in order to "
-"establish the rental connection between them. <br />\n"
+"\t\t\t\t\tThe erentmarket platform Terms and Conditions are designed to "
+"define the terms of use of the erentmarket platform by its members, in order "
+"to establish the rental connection between them. <br />\n"
 "\n"
 "\t\t\t\t\t<br />\n"
-"\t\t\t\t\t3. E-LOUE Engagements\n"
+"\t\t\t\t\t3. eRentmarket Engagements\n"
 "\t\t\t\t\t<br /><br />\n"
 "\n"
-"\t\t\t\t\t3.1.  E-loue commits to take all possible action to keep the "
+"\t\t\t\t\t3.1.  eRentmarket commits to take all possible action to keep the "
 "website operational. However, this is a duty-based service and not a "
 "performance-based service<br />\n"
 "\n"
-"\t\t\t\t\t3.2.  E-loue commits to contact the owner by email forwarding all "
-"the messages that interested parties have sent to him, as well as to keep "
-"all the information relating to his listing at his disposal. <br />\n"
+"\t\t\t\t\t3.2.  eRentmarket commits to contact the owner by email forwarding "
+"all the messages that interested parties have sent to him, as well as to "
+"keep all the information relating to his listing at his disposal. <br />\n"
 "\n"
 "\t\t\t\t\t3.3.  Given the specificities and the limits of internet, which "
-"the client declares to be aware of, e-loue cannot be held responsible for "
-"lack of speed, slowdowns and access difficulties.<br />\n"
+"the client declares to be aware of, erentmarket cannot be held responsible "
+"for lack of speed, slowdowns and access difficulties.<br />\n"
 "\n"
-"\t\t\t\t\t3.4.  E-loue reserves the right to temporarily stop the access to "
-"its services for maintenance and/or upgrade procedures. Nevertheless, it "
-"commits to make all the necessary efforts in order to minimize such types of "
-"interruptions.<br />\n"
+"\t\t\t\t\t3.4.  eRentmarket reserves the right to temporarily stop the "
+"access to its services for maintenance and/or upgrade procedures. "
+"Nevertheless, it commits to make all the necessary efforts in order to "
+"minimize such types of interruptions.<br />\n"
 "\n"
-"\t\t\t\t\t3.5.  E-loue does not offer any service continuity guarantee. As "
-"such, the E-loue webmasters’ cannot be held accountable for any damages that "
-"might have occurred due to the use of service and the impossibility to "
-"access the website, or its closing down.<br />\n"
+"\t\t\t\t\t3.5.  eRentmarket does not offer any service continuity guarantee. "
+"As such, the eRentmarket webmasters’ cannot be held accountable for any "
+"damages that might have occurred due to the use of service and the "
+"impossibility to access the website, or its closing down.<br />\n"
 "\n"
 "\t\t\t\t\t<br />\n"
 "\t\t\t\t\t4. Rental Process\n"
@@ -2727,8 +2749,8 @@ msgstr ""
 "borrower’s information, etc.), he confirms the transaction. The borrower "
 "will be charged for the price of rental on the first day of the rental "
 "period. The owner also has to register his bank details in order to be paid "
-"at the end of the transaction. Following confirmation, e-loue provides both "
-"parties the information which is stipulated in the contract and their "
+"at the end of the transaction. Following confirmation, erentmarket provides "
+"both parties the information which is stipulated in the contract and their "
 "information in order for them to be able to contact each other.<br />\n"
 "\n"
 "\t\t\t\t\tIf ever the transaction does not go through, the borrower has to "
@@ -2738,10 +2760,10 @@ msgstr ""
 "deduction of our fees. We are free to proceed to any control procedures and "
 "to enforce penalties in case of fraud.<br />\n"
 "\n"
-"\t\t\t\t\t4.2.  When the borrower proceeds to payment, he allows e-loue – "
-"under suspensive conditions and up to the limit of usage for the rental "
+"\t\t\t\t\t4.2.  When the borrower proceeds to payment, he allows erentmarket "
+"– under suspensive conditions and up to the limit of usage for the rental "
 "process – to use all or part of the payment made to (a) pay the owner at the "
-"end of the transaction; (b) to pay the costs of the transaction. E-loue "
+"end of the transaction; (b) to pay the costs of the transaction. eRentmarket "
 "commits to deposit this money in an escrow account managed by its banking "
 "partner. <br />\n"
 "\n"
@@ -2749,18 +2771,18 @@ msgstr ""
 "\t\t\t\t\t5. Fees\n"
 "\t\t\t\t\t<br /><br />\n"
 "\n"
-"\t\t\t\t\t5.1.  The use of the e-loue platform is free as well as "
+"\t\t\t\t\t5.1.  The use of the eRentmarket platform is free as well as "
 "registration and listing an ad for an item. A 20%% commission is levied at "
 "the owner’s expense. Thus, when the owner receives his payment at the end of "
 "the transaction, the commission has already been deducted of the total that "
 "was due to him. This commission includes all charges related to payment and "
 "to insurance, in case the item is insurable.<br />\n"
 "\n"
-"\t\t\t\t\t5.2.  E-loue may at any given time modify its policy concerning "
-"fees for online posting, commissions or service fees. These changes will be "
-"effective the moment that they go online and apply to all transactions "
-"ulterior to this process. We invite you to please check the Terms and "
-"Conditions section regularly and especially before agreeing to any "
+"\t\t\t\t\t5.2.  eRentmarket may at any given time modify its policy "
+"concerning fees for online posting, commissions or service fees. These "
+"changes will be effective the moment that they go online and apply to all "
+"transactions ulterior to this process. We invite you to please check the "
+"Terms and Conditions section regularly and especially before agreeing to any "
 "transaction on the website.<br />\n"
 "\n"
 "\t\t\t\t\t6. Members' Obligations<br /><br />\n"
@@ -2799,24 +2821,25 @@ msgstr ""
 "available at the requested rental date.<br />\n"
 "\n"
 "\t\t\t\t\t7.2.  The owner commits to describing the rented item following "
-"the E-loue conditions mentioned in the E-loue Documentation. The description "
-"of the object has to correspond to its actual characteristics. The owner "
-"will state: the item’s name, characteristics, its condition, the price of "
-"the transaction and any other relevant information if requested.<br />\n"
+"the eRentmarket conditions mentioned in the eRentmarket Documentation. The "
+"description of the object has to correspond to its actual characteristics. "
+"The owner will state: the item’s name, characteristics, its condition, the "
+"price of the transaction and any other relevant information if requested."
+"<br />\n"
 "\n"
 "\t\t\t\t\t7.3.  The owner is solely responsible for the proper information "
 "of the borrower concerning the item’s essential features and, if needed, the "
 "assessment of postage fees that may or may not be included in the rental "
 "price. The owner is solely responsible for the description of the items that "
-"he is renting out. He has to ensure E-loue of any complaint that has been "
-"made concerning the content or form of the description. The owner agrees to "
-"uptake any validations, checks and to provide the necessary details "
-"pertaining to the item in order to make the description and all the elements "
-"of the rental offer as accurate as possible and to avoid misleading the "
-"borrower. In case an error is found in the description, the rental offer’s "
-"elements and/or in the assessment of the postage fees, the owner will be "
-"solely responsible for any additional costs and all complaints on his part "
-"will not be admissible to the borrower or E-loue.<br />\n"
+"he is renting out. He has to ensure eRentmarket of any complaint that has "
+"been made concerning the content or form of the description. The owner "
+"agrees to uptake any validations, checks and to provide the necessary "
+"details pertaining to the item in order to make the description and all the "
+"elements of the rental offer as accurate as possible and to avoid misleading "
+"the borrower. In case an error is found in the description, the rental "
+"offer’s elements and/or in the assessment of the postage fees, the owner "
+"will be solely responsible for any additional costs and all complaints on "
+"his part will not be admissible to the borrower or eRentmarket.<br />\n"
 "\n"
 "\t\t\t\t\t7.4.  In the listing’s description, the professional commits not "
 "to give out their email address, telephone number, headquarters’ contact "
@@ -2841,21 +2864,21 @@ msgstr ""
 "\n"
 "\t\t\t\t\t7.7.  Professional Owners’ Obligations<br />\n"
 "\n"
-"\t\t\t\t\t7.7.1.  Professional owners must identify themselves to E-loue as "
-"such, during the registration process. E-loue retains the right to refuse to "
-"sign a contract with a professional owner.<br />\n"
+"\t\t\t\t\t7.7.1.  Professional owners must identify themselves to "
+"eRentmarket as such, during the registration process. eRentmarket retains "
+"the right to refuse to sign a contract with a professional owner.<br />\n"
 "\n"
-"\t\t\t\t\t7.7.2.  E-loue reminds professional owners that they have to abide "
-"by the laws and regulations of long-distance rental business activities. "
-"They have to agree to the respect of social and fiscal declaratory "
-"obligations.<br />\n"
+"\t\t\t\t\t7.7.2.  eRentmarket reminds professional owners that they have to "
+"abide by the laws and regulations of long-distance rental business "
+"activities. They have to agree to the respect of social and fiscal "
+"declaratory obligations.<br />\n"
 "\n"
 "\t\t\t\t\t7.7.3.  The owner commits to provide an individual statement to "
 "the borrower concerning the executed rental, as well as an invoice, "
 "complying with statutory requirements, naming the rented item and the price "
 "of transaction. This statement must include the existence and the terms of "
-"trade concerning the right for withdrawal of the borrower from E-loue.<br /"
-">\n"
+"trade concerning the right for withdrawal of the borrower from eRentmarket."
+"<br />\n"
 "\n"
 "\t\t\t\t\t7.8.  Financial clauses: The owner agrees to pay the commission "
 "fees once a borrower validates an offer. These fees are currently free of "
@@ -2866,58 +2889,58 @@ msgstr ""
 "\t\t\t\t\t<br /><br />\n"
 "\n"
 "\t\t\t\t\t8.1.  In exceptional circumstances and in order to fight potential "
-"fraudulent behaviour, E-loue could conduct identity checks of the borrowers. "
-"The failure to provide the information requested by E-loue when conducting "
-"identity checks might lead to the annulment of the borrower’s transaction."
-"<br />\n"
+"fraudulent behaviour, eRentmarket could conduct identity checks of the "
+"borrowers. The failure to provide the information requested by eRentmarket "
+"when conducting identity checks might lead to the annulment of the "
+"borrower’s transaction.<br />\n"
 "\n"
 "\t\t\t\t\t8.2.  In case of a long-distance rental transaction, the borrower "
 "commits to having a mailbox that is in accordance with the postal services’ "
 "standard recommendations (dimensions, contact information, etc.).<br />\n"
 "\n"
-"\t\t\t\t\t8.3.  The borrower commits to informing E-loue of the annulment of "
-"the rental at the latest on the first day of the rental period, by clicking "
-"on the “Cancel” button, which is in the “My Account” section. In this case "
-"and only if the transaction was cancelled because of the owner, E-loue is "
-"going to reimburse the transaction fees that he has already paid, without "
-"perceiving any commission. If the transaction is cancelled because of the "
-"borrower, according to the current legislation, the reimbursements will be "
-"done at par value, without other additional costs than those strictly "
-"required by the reimbursement transaction, which are laid flat 4%% of the "
-"amount. The lack of a reply from the borrower at the latest on the first day "
-"of the rental period equals the refutation of the rental offer. E-loue is "
-"solely competent of deciding to reimburse or not. In case of non-rental, E-"
-"loue retains the right to investigate in order to check if the rental has "
-"not been actually executed. In case it is proven that it has, legal "
-"proceedings will be initiated. Moreover, if the amount of rental annulments "
-"is deemed to be suspicious, E-loue retains the right to cancel any member’s "
-"account.<br />\n"
+"\t\t\t\t\t8.3.  The borrower commits to informing eRentmarket of the "
+"annulment of the rental at the latest on the first day of the rental period, "
+"by clicking on the “Cancel” button, which is in the “My Account” section. In "
+"this case and only if the transaction was cancelled because of the owner, "
+"eRentmarket is going to reimburse the transaction fees that he has already "
+"paid, without perceiving any commission. If the transaction is cancelled "
+"because of the borrower, according to the current legislation, the "
+"reimbursements will be done at par value, without other additional costs "
+"than those strictly required by the reimbursement transaction, which are "
+"laid flat 4%% of the amount. The lack of a reply from the borrower at the "
+"latest on the first day of the rental period equals the refutation of the "
+"rental offer. eRentmarket is solely competent of deciding to reimburse or "
+"not. In case of non-rental, E-loue retains the right to investigate in order "
+"to check if the rental has not been actually executed. In case it is proven "
+"that it has, legal proceedings will be initiated. Moreover, if the amount of "
+"rental annulments is deemed to be suspicious, eRentmarket retains the right "
+"to cancel any member’s account.<br />\n"
 "\n"
 "\t\t\t\t\t<br />\n"
 "\t\t\t\t\t9. Rental Contract\n"
 "\t\t\t\t\t<br /><br />\n"
 "\n"
-"\t\t\t\t\tAs part of the rental process between owner and borrower, E-loue "
-"provides them a standard rental contract, which is specific to E-loue, but "
-"which is very similar to standard professional rental contracts or other "
-"samples that you might find on the internet. According to the type of "
-"rental, it includes information that pertains to the transaction. It is a "
-"standard contract provided by e-loue.com as way of an example. E-loue takes "
-"no responsibility for the design, the contents or the potential use of the "
-"contract; every rental needs a customized contract which is adapted to the "
-"transaction that is being made and to the laws that regulate it. In this "
-"regard, owners and borrowers are welcome to seek out their legal "
-"counsellors’ advice.<br />\n"
+"\t\t\t\t\tAs part of the rental process between owner and borrower, "
+"eRentmarket provides them a standard rental contract, which is specific to "
+"eRentmarket, but which is very similar to standard professional rental "
+"contracts or other samples that you might find on the internet. According to "
+"the type of rental, it includes information that pertains to the "
+"transaction. It is a standard contract provided by eRentmarket.com as way of "
+"an example. eRentmarket takes no responsibility for the design, the contents "
+"or the potential use of the contract; every rental needs a customized "
+"contract which is adapted to the transaction that is being made and to the "
+"laws that regulate it. In this regard, owners and borrowers are welcome to "
+"seek out their legal counsellors’ advice.<br />\n"
 "\n"
 "\t\t\t\t\t<br />\n"
 "\t\t\t\t\t10. Income Calculator\n"
 "\t\t\t\t\t<br /><br />\n"
 "\n"
 "\t\t\t\t\tThe algorithm that is used for all the website’s calculations is "
-"the exclusive property of E-loue and thus, protected by law. It is a service "
-"that is provided to all the website’s users. E-loue cannot be held "
-"responsible for the reliability of the results having no obligation as to "
-"the results or the methods that the simulator uses.<br />\n"
+"the exclusive property of eRentmarket and thus, protected by law. It is a "
+"service that is provided to all the website’s users. eRentmarket cannot be "
+"held responsible for the reliability of the results having no obligation as "
+"to the results or the methods that the simulator uses.<br />\n"
 "\n"
 "\t\t\t\t\t<br />11. Insurance Policy\n"
 "\t\t\t\t\t<br /><br />\n"
@@ -2928,98 +2951,99 @@ msgstr ""
 "\t\t\t\t\t12. Liabilities\n"
 "\t\t\t\t\t<br /><br />\n"
 "\n"
-"\t\t\t\t\t112.1.  E-loue duties: E-loue is not a rental company, but an "
-"online platform for rental listings. E-loue.com only hosts the content of "
-"the listings that the owners publish (text, images, etc.) and thus, the "
-"website merely provides an electronic platform to its users in order to make "
-"a connection between item owners and borrowers. Hence, we do not have any "
-"control on the quality, the safety or the legal aspect of the listed items, "
-"the truth or accuracy of the listings, the owners’ ability to rent out the "
-"items that they list or the borrowers’ capacity to rent or pay the rent that "
-"is required. We cannot guarantee that the borrower will actually conclude "
-"the transaction. Any security deposit that is requested by the owner, in any "
-"form whatsoever, remains the sole responsibility of the owner, may it be "
-"requested by check, bank loans, etc. E-loue does not claim any security "
-"deposit whatsoever and it does not check the validity of the owner’s or "
-"borrower’s identities.<br />\n"
+"\t\t\t\t\t112.1.  eRentmarket duties: eRentmarket is not a rental company, "
+"but an online platform for rental listings. eRentmarket.com only hosts the "
+"content of the listings that the owners publish (text, images, etc.) and "
+"thus, the website merely provides an electronic platform to its users in "
+"order to make a connection between item owners and borrowers. Hence, we do "
+"not have any control on the quality, the safety or the legal aspect of the "
+"listed items, the truth or accuracy of the listings, the owners’ ability to "
+"rent out the items that they list or the borrowers’ capacity to rent or pay "
+"the rent that is required. We cannot guarantee that the borrower will "
+"actually conclude the transaction. Any security deposit that is requested by "
+"the owner, in any form whatsoever, remains the sole responsibility of the "
+"owner, may it be requested by check, bank loans, etc. eRentmarket does not "
+"claim any security deposit whatsoever and it does not check the validity of "
+"the owner’s or borrower’s identities.<br />\n"
 "\n"
-"\t\t\t\t\t112.2.  Transaction security and precautionary measures: E-loue "
-"cannot confirm the identities of all its members. E-loue provides its "
-"members with a “comments” and “rating” system to allow them to evaluate the "
-"person with whom they have concluded or are in the middle of a transaction. "
-"Hence, the borrowers and/or the owners can post their comments about the "
-"members with whom they have been dealing with. A positive evaluation could "
-"represent an important condition for a rental agreement. The evaluation will "
-"also concern the owners so that borrowers grade the owner during or at the "
-"end of the rental transaction. The rented item can also be evaluated by the "
-"borrower at the end of the rental transaction.<br />\n"
+"\t\t\t\t\t112.2.  Transaction security and precautionary measures: "
+"eRentmarket cannot confirm the identities of all its members. eRentmarket "
+"provides its members with a “comments” and “rating” system to allow them to "
+"evaluate the person with whom they have concluded or are in the middle of a "
+"transaction. Hence, the borrowers and/or the owners can post their comments "
+"about the members with whom they have been dealing with. A positive "
+"evaluation could represent an important condition for a rental agreement. "
+"The evaluation will also concern the owners so that borrowers grade the "
+"owner during or at the end of the rental transaction. The rented item can "
+"also be evaluated by the borrower at the end of the rental transaction.<br /"
+">\n"
 "\n"
-"\t\t\t\t\t12.3.  Disclaimer: Since E-loue is not involved in the rental "
-"process between the owner and the borrower, E-loue (as well as its managers "
-"and employees) cannot be held liable in any way whatsoever in the event of a "
-"dispute between its members, of a complaint or any current or future damage, "
-"alleged or not, recognized or not, which results in a direct or indirect "
-"manner from the E-loue service usage. Hence, in case the rental item suffers "
-"any damage, may it be a working item or not, E-loue cannot be held "
-"accountable for it. E-loue is but a means to connect owners and borrowers."
-"<br />\n"
+"\t\t\t\t\t12.3.  Disclaimer: Since eRentmarket is not involved in the rental "
+"process between the owner and the borrower, eRentmarket (as well as its "
+"managers and employees) cannot be held liable in any way whatsoever in the "
+"event of a dispute between its members, of a complaint or any current or "
+"future damage, alleged or not, recognized or not, which results in a direct "
+"or indirect manner from the eRentmarket service usage. Hence, in case the "
+"rental item suffers any damage, may it be a working item or not, eRentmarket "
+"cannot be held accountable for it. eRentmarket is but a means to connect "
+"owners and borrowers.<br />\n"
 "\n"
 "\t\t\t\t\t12.4.  Limitations of liability: The website provides information, "
 "recommendations and comments that could be inaccurate, outdated, incomplete, "
-"offensive, harmful or misleading. E-loue disclaims any responsibility over "
-"the accuracy of the content that it cannot verify, its authenticity or "
+"offensive, harmful or misleading. eRentmarket disclaims any responsibility "
+"over the accuracy of the content that it cannot verify, its authenticity or "
 "completeness. The website cannot be held responsible in any way over the "
 "real or implied features of the items or services that the members list on "
 "it. Please be always cautious and use common sense when you use the website. "
 "Keep in mind that you might be dealing with minors or ill-intentioned "
-"people. If you use the website, you agree that E-loue is not responsible for "
-"the users’ or members’ doings or omissions, and you accept all the risks "
-"that are presented in this article and in the Terms and Conditions section. "
-"E-loue does not support or validate the transactions concluded on the "
-"website and the members and users are the only ones responsible for the "
-"lawfulness of their actions.E-loue is not liable and cannot offer any "
-"guarantees for any potentially dangerous or defective items listed on the "
-"website might have, including features that might be hazardous for health or "
-"physical integrity. Please refrain from believing that all the listed items "
-"are perfectly safe for personal use or your property. The members and users "
-"are solely responsible for the control and check of the rental entitlement "
-"of the listed and rented items following the law. The rental of some items "
-"is prohibited and that is why you will not be able to find them browsing the "
-"categories/subcategories sections. You are going to be held accountable if "
-"you decide to list a prohibited item on the website. Please let us know if a "
-"listing containing information about a supposedly prohibited item is on our "
-"website so that we can proceed to remove it. You are responsible for renting "
-"out a prohibited item. E-loue does not expressly or implicitly declare or "
-"guarantee the listings published on the website, their description or "
-"content, including the warranty of quality, particular purpose, non-"
-"infringement of copyright, trademark rules or other intellectual property "
-"rights, as well as the lack of virus, worm, Trojan horse or any other "
-"hostile, disruptive or destructive codes that could attack the services and "
-"content published on the website. Notwithstanding the preceding paragraphs’ "
-"stipulations, E-loue cannot be held responsible for any corruption or data "
-"failure, any loss of profit, turnover, time, opportunities or any other "
-"indirect damages that could occur, even if such loss or damage results from "
-"a negligence act or any other cause. If the member or user is a consumer, "
-"the rights that are granted to him by law cannot be undermined by this "
-"clause. <br />\n"
+"people. If you use the website, you agree that eRentmarket is not "
+"responsible for the users’ or members’ doings or omissions, and you accept "
+"all the risks that are presented in this article and in the Terms and "
+"Conditions section. eRentmarket does not support or validate the "
+"transactions concluded on the website and the members and users are the only "
+"ones responsible for the lawfulness of their actions.eRentmarket is not "
+"liable and cannot offer any guarantees for any potentially dangerous or "
+"defective items listed on the website might have, including features that "
+"might be hazardous for health or physical integrity. Please refrain from "
+"believing that all the listed items are perfectly safe for personal use or "
+"your property. The members and users are solely responsible for the control "
+"and check of the rental entitlement of the listed and rented items following "
+"the law. The rental of some items is prohibited and that is why you will not "
+"be able to find them browsing the categories/subcategories sections. You are "
+"going to be held accountable if you decide to list a prohibited item on the "
+"website. Please let us know if a listing containing information about a "
+"supposedly prohibited item is on our website so that we can proceed to "
+"remove it. You are responsible for renting out a prohibited item. "
+"eRentmarket does not expressly or implicitly declare or guarantee the "
+"listings published on the website, their description or content, including "
+"the warranty of quality, particular purpose, non-infringement of copyright, "
+"trademark rules or other intellectual property rights, as well as the lack "
+"of virus, worm, Trojan horse or any other hostile, disruptive or destructive "
+"codes that could attack the services and content published on the website. "
+"Notwithstanding the preceding paragraphs’ stipulations, eRentmarket cannot "
+"be held responsible for any corruption or data failure, any loss of profit, "
+"turnover, time, opportunities or any other indirect damages that could "
+"occur, even if such loss or damage results from a negligence act or any "
+"other cause. If the member or user is a consumer, the rights that are "
+"granted to him by law cannot be undermined by this clause. <br />\n"
 "\n"
 "\t\t\t\t\t<br />\n"
 "\t\t\t\t\t13. General Clauses\n"
 "\t\t\t\t\t<br /><br />\n"
 "\n"
-"\t\t\t\t\t13.1. E-loue has the right to change the terms and Conditions "
+"\t\t\t\t\t13.1. eRentmarket has the right to change the terms and Conditions "
 "according to its offer’s evolution and the market’s developments. Any change "
 "will take effect immediately for the listings already online by making the "
-"members aware of them through the channels that E-loue considers as proper. "
-"They will not apply to the transactions that are in progress at the time of "
-"their entry into force. E-loue may occasionally change its codes, telephone "
-"number, perform a denumbering process, interrupt its services for "
-"operational, maintenance or emergency reasons.<br />\n"
+"members aware of them through the channels that eRentmarket considers as "
+"proper. They will not apply to the transactions that are in progress at the "
+"time of their entry into force. eRentmarket may occasionally change its "
+"codes, telephone number, perform a denumbering process, interrupt its "
+"services for operational, maintenance or emergency reasons.<br />\n"
 "\n"
-"\t\t\t\t\t13.2. Members will log on to the E-loue platform by using their "
-"own equipment and telecommunications terminals. E-loue does not provide any "
-"hardware, telephone or other terminal equipment, software or subscriptions "
-"to its members.<br />\n"
+"\t\t\t\t\t13.2. Members will log on to the eRentmarket platform by using "
+"their own equipment and telecommunications terminals. eRentmarket does not "
+"provide any hardware, telephone or other terminal equipment, software or "
+"subscriptions to its members.<br />\n"
 "\n"
 "\t\t\t\t\t13.3.  In case of force majeure, the obligations pertaining to the "
 "party that is unable to comply will be suspended, especially in case of: - "
@@ -3028,7 +3052,7 @@ msgstr ""
 "war, military operations, national or local state of emergency, fire, "
 "lighting, explosion, strike, flood, storm or a third party’s actions.<br />\n"
 "\n"
-"\t\t\t\t\t13.4.  The invalidity of one or more of the E-loue platform’s "
+"\t\t\t\t\t13.4.  The invalidity of one or more of the eRentmarket platform’s "
 "General Clauses does not entail their nullity.<br />\n"
 "\n"
 "\t\t\t\t\t13.5.  The present contract is subject to the French law. Any "
@@ -3036,7 +3060,7 @@ msgstr ""
 "which is due to the interpretation and/or the enforcement of the law is "
 "within the competence of the Paris Commercial Court.<br />\n"
 "\n"
-"\t\t\t\t\t13.6.  The use of outer application programs that E-loue uses "
+"\t\t\t\t\t13.6.  The use of outer application programs that eRentmarket uses "
 "entails the implicit agreement to their terms and conditions.<br />\n"
 "\n"
 "\t\t\t\t\t<br />\n"
@@ -3046,13 +3070,13 @@ msgstr ""
 "\t\t\t\t\tYou have a right to access, modify, change and delete your "
 "personal data (“Informatique et Libertés” act, January 6th 1978). Users who "
 "register and become members of the website explicitly agree to receive "
-"emails from e-loue. Unless you consent to it, this data is not disclosed to "
-"any third party and is not used to any other purpose than the website’s "
-"functioning. The members’ personal data is gathered, saved and stored in "
-"accordance with the stipulations of the January 6th 1978 act concerning "
-"computing, data and liberties. The law allows members to access and modify "
-"their personal data which is stored on the e-loue platform. For more "
-"information, please contact e-loue directly.<br />\n"
+"emails from eRentmarket. Unless you consent to it, this data is not "
+"disclosed to any third party and is not used to any other purpose than the "
+"website’s functioning. The members’ personal data is gathered, saved and "
+"stored in accordance with the stipulations of the January 6th 1978 act "
+"concerning computing, data and liberties. The law allows members to access "
+"and modify their personal data which is stored on the eRentmarket platform. "
+"For more information, please contact eRentmarket directly.<br />\n"
 "\n"
 "\t\t\t\t\tThe username and the password that a member choses are strictly "
 "confidential and he agrees to keep their confidentiality. Members are solely "
@@ -3063,11 +3087,11 @@ msgstr ""
 "\t\t\t\t\t15. Fees and charges\n"
 "\t\t\t\t\t<br /><br />\n"
 "\n"
-"\t\t\t\t\tE-loue does not take part in the rental process and as such, "
+"\t\t\t\t\teRentmarket does not take part in the rental process and as such, "
 "users, members, borrowers and owners are solely responsible for all taxes, "
 "fees and commissions resulting from the use of our services and out website. "
-"Therefore, E-loue cannot be held liable for taxes on the transaction that "
-"have been made on or via the website.<br />\n"
+"Therefore, eRentmarket cannot be held liable for taxes on the transaction "
+"that have been made on or via the website.<br />\n"
 "\n"
 "\t\t\t\t\tE-loue SAS - RCS Paris 509 679 593 VAT Number : FR49509679593<br /"
 ">\n"
@@ -3098,7 +3122,7 @@ msgid ""
 " "
 msgstr ""
 "\n"
-"  The most frequently asked questions on e-loue about %(section)s\n"
+"  The most frequently asked questions on eRentmarket about %(section)s\n"
 " "
 
 #: templates/faq/topic_list.html:4
@@ -3107,7 +3131,7 @@ msgstr "Frequently asked questions"
 
 #: templates/faq/topic_list.html:7
 msgid "Les questions les plus fréquemment posées sur e-loue"
-msgstr "Questions most frequently asked on e-loue"
+msgstr "Questions most frequently asked on eRentmarket"
 
 #: templates/faq/topic_list.html:14
 msgid "Questions Fréquentes"
@@ -3142,29 +3166,48 @@ msgstr "Location"
 msgid "Location "
 msgstr "Location "
 
-#: templates/mobile/products/product_list.html:49
+#: templates/mobile/products/product_list.html:46
+#, python-format
+msgid ""
+"\n"
+"\t\t   Résultat pour <strong>%(keywords)s</strong>\n"
+"\t\t  "
+msgid_plural ""
+"\n"
+"\t\t   Résultats pour <strong>%(keywords)s</strong>\n"
+"\t\t  "
+msgstr[0] ""
+"\n"
+"\t\t   Result for <strong>%(keywords)s</strong>\n"
+"\t\t "
+msgstr[1] ""
+"\n"
+"\t\t   Results for <strong>%(keywords)s</strong>\n"
+"\t\t "
+
+#: templates/mobile/products/product_list.html:54
 msgid "rechercher"
 msgstr "search"
 
-#: templates/mobile/products/product_list.html:53
-#: templates/products/product_list.html:88
+#: templates/mobile/products/product_list.html:58
+#: templates/products/product_list.html:92
 msgid "Vous vouliez peut-être dire ?"
 msgstr "You may have wanted to say?"
 
-#: templates/mobile/products/product_list.html:67
+#: templates/mobile/products/product_list.html:72
 msgid "/J"
 msgstr "/D"
 
-#: templates/mobile/products/product_list.html:72
-#: templates/products/product_list.html:138
+#: templates/mobile/products/product_list.html:77
+#: templates/products/product_list.html:142
 msgid "km"
 msgstr "km"
 
-#: templates/mobile/products/product_list.html:84
+#: templates/mobile/products/product_list.html:89
 msgid "Prec"
 msgstr "prev"
 
-#: templates/mobile/products/product_list.html:87
+#: templates/mobile/products/product_list.html:92
 msgid "Suiv"
 msgstr "next"
 
@@ -3184,8 +3227,8 @@ msgid ""
 "\t\t\t\t\t\t"
 msgstr ""
 "\n"
-"\t\t\t\t\t\t <p>A <strong>contract</strong> is made available through e-loue."
-"</p>\n"
+"\t\t\t\t\t\t <p>A <strong>contract</strong> is made available through "
+"eRentmarket.</p>\n"
 "\t\t\t\t\t\t"
 
 #: templates/products/product_create.html:13
@@ -3215,7 +3258,7 @@ msgstr "Fill in the rental form"
 
 #: templates/products/product_create.html:84
 #: templates/products/product_edit.html:66
-#: templates/products/product_list.html:143
+#: templates/products/product_list.html:147
 msgid "par jour"
 msgstr "per day"
 
@@ -3274,43 +3317,62 @@ msgstr "Description * :"
 msgid "location"
 msgstr "Rental"
 
-#: templates/products/product_list.html:95
+#: templates/products/product_list.html:83
+#, python-format
+msgid ""
+"\n"
+"\t\t <h1>Résultat pour <strong>%(keywords)s</strong></h1>\n"
+"\t\t "
+msgid_plural ""
+"\n"
+"\t\t <h1>Résultats pour <strong>%(keywords)s</strong></h1>\n"
+"\t\t "
+msgstr[0] ""
+"\n"
+"\t\t <h1>Result for <strong>%(keywords)s</strong></h1>\n"
+"\t\t "
+msgstr[1] ""
+"\n"
+"\t\t <h1>Results for <strong>%(keywords)s</strong></h1>\n"
+"\t\t "
+
+#: templates/products/product_list.html:99
 msgid "Trier par :"
 msgstr "Sort by :"
 
-#: templates/products/product_list.html:98
+#: templates/products/product_list.html:102
 msgid "Les plus récents"
 msgstr "Newest"
 
-#: templates/products/product_list.html:106
+#: templates/products/product_list.html:110
 msgid "Les prix les plus bas"
 msgstr "Lowest prices"
 
-#: templates/products/product_list.html:109
+#: templates/products/product_list.html:113
 msgid "Les prix les plus haut"
 msgstr "Highest prices"
 
-#: templates/products/product_list.html:146
+#: templates/products/product_list.html:150
 msgid "Réserver"
 msgstr "Book"
 
-#: templates/products/product_list.html:175
+#: templates/products/product_list.html:179
 msgid "Distance"
 msgstr "Distance"
 
-#: templates/products/product_list.html:183
+#: templates/products/product_list.html:187
 msgid "Restreindre les résultats à un rayon de"
 msgstr "Limit results to a radius of"
 
-#: templates/products/product_list.html:185
+#: templates/products/product_list.html:189
 msgid "Km"
 msgstr "Km"
 
-#: templates/products/product_list.html:186
+#: templates/products/product_list.html:190
 msgid "Mettre à jour"
 msgstr "Update"
 
-#: templates/products/product_list.html:197
+#: templates/products/product_list.html:201
 msgid "Voir tous les résultats"
 msgstr "See all results"
 
@@ -3618,7 +3680,7 @@ msgstr ""
 " \n"
 "<p>Have a good rental !</p>\n"
 "\n"
-"<p>The e-loue team</p>\n"
+"<p>The eRentmarket team</p>\n"
 
 #: templates/rent/emails/borrower_acceptation_email.txt:1
 #, python-format
@@ -3661,7 +3723,7 @@ msgstr ""
 " \n"
 "Have a good rental !\n"
 "\n"
-"The e-loue team\n"
+"The eRentmarket team\n"
 
 #: templates/rent/emails/borrower_acceptation_email_subject.txt:1
 #: templates/rent/emails/owner_acceptation_email_subject.txt:1
@@ -3779,7 +3841,7 @@ msgstr ""
 "<p>In accordance with your request, we confirm that this rental has been "
 "indeed canceled and therefore your account will not be debited.</p>\n"
 " \n"
-"<p>The e-loue team</p>\n"
+"<p>The eRentmarket team</p>\n"
 
 #: templates/rent/emails/borrower_cancelation_to_borrower_email.txt:2
 #, python-format
@@ -3812,7 +3874,7 @@ msgstr ""
 "In accordance with your request, we confirm that this rental has been indeed "
 "canceled and therefore your account will not be debited.\n"
 " \n"
-"The e-loue team\n"
+"The eRentmarket team\n"
 
 #: templates/rent/emails/borrower_cancelation_to_borrower_email_subject.txt:1
 #: templates/rent/emails/borrower_cancelation_to_owner_email_subject.txt:1
@@ -3852,7 +3914,7 @@ msgstr ""
 " <li><strong>Rental period :</strong> %(duration)s</li>\n"
 "</ul>\n"
 " \n"
-"<p>The e-loue team</p>\n"
+"<p>The eRentmarket team</p>\n"
 
 #: templates/rent/emails/borrower_cancelation_to_owner_email.txt:2
 #, python-format
@@ -3881,7 +3943,7 @@ msgstr ""
 "Rental start : %(starting_at)s\n"
 "Rental period : %(duration)s\n"
 "\n"
-"The e-loue team\n"
+"The eRentmarket team\n"
 
 #: templates/rent/emails/borrower_closed_email.html:2
 #, python-format
@@ -3907,7 +3969,7 @@ msgstr ""
 "<p>If you encounter any problems, please let us know <a href=\"%(protocol)"
 "s://%(domain)s%(booking_url)s\">what happened</a>.</p>\n"
 " \n"
-"<p>The e-loue team</p>\n"
+"<p>The eRentmarket team</p>\n"
 
 #: templates/rent/emails/borrower_closed_email.txt:2
 #, python-format
@@ -3935,7 +3997,7 @@ msgstr ""
 "\n"
 "%(protocol)s://%(domain)s%(booking_url)s\n"
 " \n"
-"The e-loue team\n"
+"The eRentmarket team\n"
 
 #: templates/rent/emails/borrower_closed_email_subject.txt:1
 #: templates/rent/emails/owner_closed_email_subject.txt:1
@@ -3971,7 +4033,7 @@ msgstr ""
 "<p>If you have encountered any problems, please let us know <a href=\"%"
 "(protocol)s://%(domain)s%(booking_url)s\">what happened</a>.\n"
 " \n"
-"<p>The e-loue team</p>\n"
+"<p>The eRentmarket team</p>\n"
 
 #: templates/rent/emails/borrower_ended_email.txt:2
 #, python-format
@@ -4005,7 +4067,7 @@ msgstr ""
 "\n"
 "%(protocol)s://%(domain)s%(booking_url)s\n"
 " \n"
-"The e-loue team\n"
+"The eRentmarket team\n"
 
 #: templates/rent/emails/borrower_ended_email_subject.txt:1
 #: templates/rent/emails/owner_ended_email_subject.txt:1
@@ -4053,7 +4115,7 @@ msgstr ""
 "\n"
 " <p><a href=\"%(preapproval_url)s\">%(preapproval_url)s</a></p>\n"
 "\n"
-"<p>The e-loue team</p>\n"
+"<p>The eRentmarket team</p>\n"
 
 #: templates/rent/emails/borrower_recovery_email.txt:2
 #, python-format
@@ -4091,7 +4153,7 @@ msgstr ""
 "\n"
 "%(preapproval_url)s\n"
 "\n"
-"The e-loue team\n"
+"The eRentmarket team\n"
 
 #: templates/rent/emails/borrower_rejection_email.html:2
 #, python-format
@@ -4141,9 +4203,9 @@ msgid ""
 msgstr ""
 "\n"
 "<p>Find all the items of this category on <a href=\"%(protocol)s://%(domain)s"
-"%(category_url)s\">e-loue.com</a>.</p>\n"
+"%(category_url)s\">erentmarket.com</a>.</p>\n"
 "\n"
-"<p>The e-loue team</p>\n"
+"<p>The eRentmarket team</p>\n"
 
 #: templates/rent/emails/borrower_rejection_email.txt:2
 #, python-format
@@ -4181,11 +4243,11 @@ msgid ""
 "L'équipe e-loue\n"
 msgstr ""
 "\n"
-"You will find all the items of this category on e-loue.com :\n"
+"You will find all the items of this category on erentmarket.com :\n"
 "\n"
 "%(protocol)s://%(domain)s%(category_url)s\n"
 " \n"
-"The e-loue team\n"
+"The eRentmarket team\n"
 
 #: templates/rent/emails/borrower_rejection_email_subject.txt:1
 msgid "Votre proposition de location a été refusée"
@@ -4241,7 +4303,7 @@ msgstr ""
 " \n"
 "<p>Have a good rental !</p>\n"
 "\n"
-"<p>The e-loue team</p>\n"
+"<p>The eRentmarket team</p>\n"
 
 #: templates/rent/emails/owner_acceptation_email.txt:1
 #, python-format
@@ -4285,7 +4347,7 @@ msgstr ""
 " \n"
 "Have a good rental !\n"
 "\n"
-"The e-loue team\n"
+"The eRentmarket team\n"
 
 #: templates/rent/emails/owner_ask_email.html:2
 #, python-format
@@ -4356,7 +4418,7 @@ msgstr ""
 " Rental period : %(duration)s\n"
 "\n"
 " To reply and/or agree to this rental, you just need to go to the requests "
-"tab in your e-loue.com account :\n"
+"tab in your erentmarket.com account :\n"
 " \n"
 " %(protocol)s://%(domain)s%(booking_url)s\n"
 "\n"
@@ -4409,11 +4471,11 @@ msgid ""
 "<p>L'équipe e-loue</p>\n"
 msgstr ""
 "\n"
-"<p>You can find all the items of this category on e-loue.com :\n"
+"<p>You can find all the items of this category on erentmarket.com :\n"
 "\n"
 "%(protocol)s://%(domain)s%(category_url)s\n"
 " \n"
-"<p>The e-loue team</p>\n"
+"<p>The eRentmarket team</p>\n"
 
 #: templates/rent/emails/owner_cancelation_to_borrower_email.txt:2
 #, python-format
@@ -4479,7 +4541,7 @@ msgstr ""
 "<p>In accordance with your request, we confirm that this rental has been "
 "canceled.</p>\n"
 " \n"
-"<p>The e-loue team</p>\n"
+"<p>The eRentmarket team</p>\n"
 
 #: templates/rent/emails/owner_cancelation_to_owner_email.txt:2
 #, python-format
@@ -4512,7 +4574,7 @@ msgstr ""
 "In accordance with your request, we confirm that the rental has been "
 "canceled.\n"
 " \n"
-"The e-loue team\n"
+"The eRentmarket team\n"
 
 #: templates/rent/emails/owner_closed_email.html:2
 #, python-format
@@ -4547,7 +4609,7 @@ msgstr ""
 "<p>Of course, if you happen to encounter any difficulties, please feel free "
 "to contact us.</p>\n"
 " \n"
-"<p>The e-loue team</p>\n"
+"<p>The eRentmarket team</p>\n"
 
 #: templates/rent/emails/owner_closed_email.txt:2
 #, python-format
@@ -4585,7 +4647,7 @@ msgstr ""
 "Of course, if you happen to encounter any difficulties, please feel free to "
 "contact us.\n"
 " \n"
-"The e-loue team \n"
+"The eRentmarket team \n"
 
 #: templates/rent/emails/owner_ended_email.html:2
 #, python-format
@@ -4612,12 +4674,12 @@ msgstr ""
 "period of %(duration)s, has now ended.</p>\n"
 "\n"
 "<p>We hope that everything went according to your liking and we remind you "
-"that you have to log in to your e-loue account  <a href=\"%(protocol)s://%"
-"(domain)s%(booking_url)s\">to close this rental</a>.</p>\n"
+"that you have to log in to your erentmarket account  <a href=\"%(protocol)"
+"s://%(domain)s%(booking_url)s\">to close this rental</a>.</p>\n"
 "\n"
 "<p>Once, this step is done, you will receive your payment.</p>\n"
 "\n"
-"<p>The e-loue team</p> \n"
+"<p>The erentmarket team</p> \n"
 
 #: templates/rent/emails/owner_ended_email.txt:2
 #, python-format
@@ -4645,7 +4707,7 @@ msgstr ""
 "period of %(duration)s, has now ended.\n"
 "\n"
 "We hope that everything went according to your liking and we remind you that "
-"you have to log in to your e-loue account to close this rental :\n"
+"you have to log in to your eRentmarket account to close this rental :\n"
 "\n"
 "%(protocol)s://%(domain)s%(booking_url)s\n"
 "\n"
