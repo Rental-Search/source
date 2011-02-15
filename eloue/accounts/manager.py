@@ -4,11 +4,12 @@ import random
 import re
 
 from django.contrib.auth.models import UserManager
+from django.contrib.gis.db.models import GeoManager
 
 SHA1_RE = re.compile('^[a-f0-9]{40}$')
 
 
-class PatronManager(UserManager):
+class PatronManager(UserManager, GeoManager):
     def exists(self, **kwargs):
         try:
             self.get(**kwargs)

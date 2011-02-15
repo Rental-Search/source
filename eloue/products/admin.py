@@ -4,7 +4,7 @@ from mptt.admin import MPTTModelAdmin
 
 from eloue.admin import CurrentSiteAdmin
 from eloue.products.forms import ProductAdminForm
-from eloue.products.models import Product, Picture, Category, Property, PropertyValue, Price, ProductReview, PatronReview, Curiosity
+from eloue.products.models import Alert, Product, Picture, Category, Property, PropertyValue, Price, ProductReview, PatronReview, Curiosity
 
 
 class PictureInline(admin.TabularInline):
@@ -55,9 +55,14 @@ class CuriosityAdmin(CurrentSiteAdmin):
     raw_id_fields = ("product",)
 
 
+class AlertAdmin(admin.ModelAdmin):
+    pass
+
+
 admin.site.register(Product, ProductAdmin)
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Property, PropertyAdmin)
 admin.site.register(Curiosity, CuriosityAdmin)
 admin.site.register(ProductReview, ProductReviewAdmin)
 admin.site.register(PatronReview, PatronReviewAdmin)
+admin.site.register(Alert, AlertAdmin)
