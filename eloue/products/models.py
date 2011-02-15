@@ -28,7 +28,7 @@ from eloue.products.manager import ProductManager, PriceManager, QuestionManager
 from eloue.products.signals import post_save_answer, post_save_product, post_save_curiosity
 from eloue.products.utils import Enum
 from eloue.signals import post_save_sites
-from eloue.utils import convert_to_xpf
+from eloue.utils import convert_to_xpf, create_alternative_email
 
 UNIT = Enum([
     (0, 'HOUR', _(u'heure')),
@@ -394,7 +394,10 @@ class Alert(models.Model):
     
     def send_alerts(self):
         for patron in self.nearest_addresses:
-            pass  # TODO : send email
+            create_alternative_email('products/emails/alert', {
+                'patron': patron,
+                'alert': self
+            }, settings.DEFAULT_FROM_EMAIL, [self.patron.email])
     
     class Meta:
         get_latest_by = 'created_at'
