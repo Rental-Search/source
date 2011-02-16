@@ -372,6 +372,10 @@ class Alert(models.Model):
     location = models.CharField(max_length=255)
     position = models.PointField(null=True, blank=True)
     created_at = models.DateTimeField(editable=False)
+    sites = models.ManyToManyField(Site, related_name='alerts')
+    
+    on_site = CurrentSiteManager()
+    objects = models.Manager()
     
     def __unicode__(self):
         return smart_unicode(self.designation)
