@@ -16,9 +16,9 @@ from haystack.query import SearchQuerySet
 from eloue.decorators import ownership_required, secure_required, mobify
 from eloue.accounts.forms import EmailAuthenticationForm
 from eloue.accounts.models import Patron
-from eloue.products.forms import FacetedSearchForm, ProductForm, ProductEditForm
+from eloue.products.forms import AlertForm, FacetedSearchForm, ProductForm, ProductEditForm
 from eloue.products.models import Alert, Category, Product, Curiosity
-from eloue.products.wizard import ProductWizard
+from eloue.products.wizard import AlertWizard, ProductWizard
 from eloue.utils import convert_to_xpf
 
 PAGINATE_PRODUCTS_BY = getattr(settings, 'PAGINATE_PRODUCTS_BY', 10)
@@ -117,6 +117,13 @@ def product_list(request, urlbits, sqs=SearchQuerySet(), suggestions=None, page=
             'facets': sqs.facet_counts(), 'form': form, 'breadcrumbs': breadcrumbs, 'suggestions': suggestions,
             'urlbits': dict((facet['label'], facet['value']) for facet in breadcrumbs.values() if facet['facet'])
     })
+
+
+@never_cache
+@secure_required
+def alert_create(request, *args, **kwargs):
+    wizard = AlertWizard([AlertForm, EmailAuthenticationForm])
+    return wizard(request, *args, **kwargs)
 
 
 @cache_page(900)

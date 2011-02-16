@@ -366,11 +366,9 @@ class Curiosity(models.Model):
     
 
 class Alert(models.Model):
-    email = models.EmailField()
+    patron = models.ForeignKey(Patron, related_name='alerts')
     designation = models.CharField(max_length=255)
     description = models.CharField(max_length=255)
-    location = models.CharField(max_length=255)
-    position = models.PointField(null=True, blank=True)
     created_at = models.DateTimeField(editable=False)
     sites = models.ManyToManyField(Site, related_name='alerts')
     
@@ -390,6 +388,10 @@ class Alert(models.Model):
             self.created_at = datetime.now()
         self.position = self.geocode()
         super(Alert, self).save(*args, **kwargs)
+    
+    @property
+    def position(self):
+        return self.patron.addresses[0].position
     
     @property
     def nearest_patrons(self):

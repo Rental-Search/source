@@ -179,5 +179,5 @@ class ProductAdminForm(forms.ModelForm):
 class AlertForm(forms.ModelForm):
     class Meta:
         model = Alert
-        exclude = ('created_at', 'position')
+        exclude = ('created_at', 'patron')
     

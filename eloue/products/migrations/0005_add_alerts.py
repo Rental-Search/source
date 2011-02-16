@@ -6,17 +6,14 @@ from south.v2 import SchemaMigration
 
 from django.db import models
 
-
 class Migration(SchemaMigration):
-    def forwards(self, orm):
+    def forwards(self, orm):    
         # Adding model 'Alert'
         db.create_table('products_alert', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('email', self.gf('django.db.models.fields.EmailField')(max_length=75)),
+            ('patron', self.gf('django.db.models.fields.related.ForeignKey')(related_name='alerts', to=orm['accounts.Patron'])),
             ('designation', self.gf('django.db.models.fields.CharField')(max_length=255)),
             ('description', self.gf('django.db.models.fields.CharField')(max_length=255)),
-            ('location', self.gf('django.db.models.fields.CharField')(max_length=255)),
-            ('position', self.gf('django.contrib.gis.db.models.fields.PointField')(null=True, blank=True)),
             ('created_at', self.gf('django.db.models.fields.DateTimeField')()),
         ))
         db.send_create_signal('products', ['Alert'])
@@ -28,12 +25,6 @@ class Migration(SchemaMigration):
             ('site', models.ForeignKey(orm['sites.site'], null=False))
         ))
         db.create_unique('products_alert_sites', ['alert_id', 'site_id'])
-        
-        # Changing field 'Price.amount'
-        db.alter_column('products_price', 'amount', self.gf('django.db.models.fields.DecimalField')(max_digits=10, decimal_places=4))
-        
-        # Changing field 'Product.deposit_amount'
-        db.alter_column('products_product', 'deposit_amount', self.gf('django.db.models.fields.DecimalField')(max_digits=10, decimal_places=4))
     
     def backwards(self, orm):
         # Deleting model 'Alert'
@@ -41,12 +32,6 @@ class Migration(SchemaMigration):
         
         # Removing M2M table for field sites on 'Alert'
         db.delete_table('products_alert_sites')
-        
-        # Changing field 'Price.amount'
-        db.alter_column('products_price', 'amount', self.gf('django.db.models.fields.DecimalField')(max_digits=8, decimal_places=4))
-        
-        # Changing field 'Product.deposit_amount'
-        db.alter_column('products_product', 'deposit_amount', self.gf('django.db.models.fields.DecimalField')(max_digits=8, decimal_places=4))
     
     models = {
         'accounts.address': {
@@ -115,10 +100,8 @@ class Migration(SchemaMigration):
             'created_at': ('django.db.models.fields.DateTimeField', [], {}),
             'description': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
             'designation': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
-            'email': ('django.db.models.fields.EmailField', [], {'max_length': '75'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'location': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
-            'position': ('django.contrib.gis.db.models.fields.PointField', [], {'null': 'True', 'blank': 'True'}),
+            'patron': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'alerts'", 'to': "orm['accounts.Patron']"}),
             'sites': ('django.db.models.fields.related.ManyToManyField', [], {'related_name': "'alerts'", 'symmetrical': 'False', 'to': "orm['sites.Site']"})
         },
         'products.answer': {
