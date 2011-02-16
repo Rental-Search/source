@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 import logbook
 
+from decimal import Decimal as D
+
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -76,9 +78,9 @@ def booking_price(request, slug, product_id):
     if form.is_valid():
         duration = timesince(form.cleaned_data['started_at'], form.cleaned_data['ended_at'])
         if not settings.CONVERT_XPF:
-            total_price = smart_str(currency(form.cleaned_data['total_amount']))
+            total_price = smart_str(currency(form.cleaned_data['total_amount'].quantize(D("0.00"))))
         else:
-            total_price = smart_str("%s XPF" % convert_to_xpf(form.cleaned_data['total_amount']))
+            total_price = smart_str("%s XPF" % convert_to_xpf(form.cleaned_data['total_amount']).quantize(D("0.00")))
         return HttpResponse(simplejson.dumps({'duration': duration, 'total_price': total_price}), mimetype='application/json')
     else:
         return HttpResponse(simplejson.dumps({'errors': form.errors.values()}), mimetype='application/json')

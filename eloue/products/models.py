@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 import uuid
+
 from datetime import datetime, timedelta
+from decimal import Decimal as D
 
 from django.conf import settings
 from django.contrib.gis.db import models
@@ -220,9 +222,9 @@ class Price(models.Model):
             if name == self.currency:
                 currency = symbol
         if settings.CONVERT_XPF:
-            return smart_unicode("%s XPF" % convert_to_xpf(self.amount))
+            return smart_unicode("%s XPF" % convert_to_xpf(self.amount).quantize(D('0.00')))
         else:
-            return smart_unicode("%s %s" % (self.amount, currency))
+            return smart_unicode("%s %s" % (self.amount.quantize(D('0.00')), currency))
     
     def clean(self):
         from django.core.exceptions import ValidationError
