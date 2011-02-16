@@ -1,7 +1,8 @@
 $(document).ready(function() {
     // Password field enabler/disabler
+    var passwordInput, paypalEmailInput, isProfessionalInput, companyNameInput, phoneSelect, phoneInput, addressSelect, addressInput, bookingCreate, notification;
     var exists = $("input[name$='exists']:checked").val();
-    var passwordInput = $("input[name$='password']");
+    passwordInput = $("input[name$='password']");
     if (passwordInput.attr('type') != 'hidden') {
         if (parseInt(exists, 10)) { 
             passwordInput.removeAttr('disabled');
@@ -22,7 +23,7 @@ $(document).ready(function() {
     $("input[name$='old_password']").removeAttr('disabled');
     
     // Email PayPal account enable/disable
-    var paypalEmailInput = $("input[name$='paypal_email']");
+    paypalEmailInput= $("input[name$='paypal_email']");
     if (paypalEmailInput.attr('type') != 'hidden') {
         if (parseInt(exists, 10)) { 
             paypalEmailInput.removeAttr('disabled');
@@ -43,8 +44,8 @@ $(document).ready(function() {
     
     
     // Company name field display/none
-    var isProfessionalInput = $("input[name$='is_professional']");
-    var companyNameInput = $(".company-name");
+    isProfessionalInput = $("input[name$='is_professional']");
+    companyNameInput = $(".company-name");
     
     var exists = $("input[name$='is_professional']:checked").val();
     
@@ -59,8 +60,8 @@ $(document).ready(function() {
     });
     
     // Phone field enabler/disabler
-    var phoneSelect = $("select[name$='phones']");
-    var phoneInput = $("input[name$='phones__phone']");
+    phoneSelect = $("select[name$='phones']");
+    phoneInput = $("input[name$='phones__phone']");
     if (phoneSelect.val() && phoneInput.attr('type') != 'hidden') {
         phoneInput.attr('disabled', 'disabled');
     }
@@ -74,8 +75,8 @@ $(document).ready(function() {
     });
     
     // Address field enabler/disabler
-    var addressSelect = $("select[name$='addresses']");
-    var addressInput = $(["input[name*='addresses__']", "textarea[name*='addresses__']", "select[name*='addresses__']"]);
+    addressSelect = $("select[name$='addresses']");
+    addressInput = $(["input[name*='addresses__']", "textarea[name*='addresses__']", "select[name*='addresses__']"]);
     if (addressSelect.val() && addressInput.attr('type') != 'hidden') {
         addressInput.each(function(i, el) {
             $(el).attr('disabled', 'disabled');
@@ -111,8 +112,9 @@ $(document).ready(function() {
     
     // Price calculations
     var bookingPrice = function(form) {
-        var template = '{{#errors}}{{ errors }}{{/errors}}{{^errors}}<p>Total :<span class="day">{{ duration }},</span> soit <span class="total-price">{{ total_price }}</span></p>{{/errors}}';
-        var serializedForm = $.grep(form.serializeArray(), function(el) {
+        var template, serializedForm;
+        template = '{{#errors}}{{ errors }}{{/errors}}{{^errors}}<p>Total :<span class="day">{{ duration }},</span> soit <span class="total-price">{{ total_price }}</span></p>{{/errors}}';
+        serializedForm = $.grep(form.serializeArray(), function(el) {
             return (el.name.indexOf('csrfmiddlewaretoken') != -1) || (el.name.indexOf('wizard_step') != -1);
         }, true);
         $.ajax({
@@ -125,13 +127,12 @@ $(document).ready(function() {
             }
         });
     }
-    var booking_create = $('#booking_create');
-    if (booking_create.length > 0) {
-        bookingPrice(booking_create);
+    bookingCreate = $('#booking_create');
+    if (bookingCreate.length > 0) {
+        bookingPrice(bookingCreate);
     }
     $('#booking_create').change(function(event) {
-        var form = $(this);
-        bookingPrice(form);
+        bookingPrice($(this));
     });
     
     // Confirm booking rejection
@@ -140,9 +141,8 @@ $(document).ready(function() {
     });
     
     //Flash message slidedown
-    var notification = $("#notification");
-    
-    if ( notification.html() ) {
+    notification = $("#notification");
+    if (notification.html()) {
       notification.slideDown("slow");
       setTimeout('hideNotification()' ,
             4000 // 4 seconds
