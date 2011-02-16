@@ -394,10 +394,11 @@ class Alert(models.Model):
     
     def send_alerts(self):
         for patron in self.nearest_addresses:
-            create_alternative_email('products/emails/alert', {
+            message = create_alternative_email('products/emails/alert', {
                 'patron': patron,
                 'alert': self
             }, settings.DEFAULT_FROM_EMAIL, [self.patron.email])
+            message.send()
     
     class Meta:
         get_latest_by = 'created_at'
