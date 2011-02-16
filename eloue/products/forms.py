@@ -12,7 +12,7 @@ from mptt.forms import TreeNodeChoiceField
 
 from eloue.geocoder import GoogleGeocoder
 from eloue.products.fields import FacetField
-from eloue.products.models import PatronReview, ProductReview, Product, Category
+from eloue.products.models import Alert, PatronReview, ProductReview, Product, Category
 from eloue.products.utils import Enum
 from eloue.utils import convert_from_xpf
 
@@ -174,3 +174,10 @@ class ProductAdminForm(forms.ModelForm):
     
     class Meta:
         model = Product
+
+
+class AlertForm(forms.ModelForm):
+    class Meta:
+        model = Alert
+        exclude = ('created_at', 'position')
+    
