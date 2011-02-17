@@ -41,5 +41,5 @@ class BookingViewsTest(TestCase):
         self.assertTrue('duration' in json)
         self.assertTrue('total_price' in json)
         self.assertEquals(json['total_price'], '28.00')
-        self.assertEquals(json['duration'], '4 jours')
+        self.assertEquals(json['duration'], '4 days')
     
