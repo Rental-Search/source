@@ -1,4 +1,4 @@
-/*!
+/*
  * jQuery UI Widget 1.8.6
  *
  * Copyright 2010, AUTHORS.txt (http://jqueryui.com/about)
