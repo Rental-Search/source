@@ -1,1 +1,47 @@
 {% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}
+	{% trans "Alertes locations" %}
+{% endblock %}
+
+{% block description %}
+	{% trans "Demandes de location des locataires qui n'ont pas trouvé l'objet qu'ils veulent louer près de chez eux." %}
+{% endblock %}
+
+{% block content %}
+<div id="top-content" class="search clearfix">
+	<form class="form" action="{% url product_list %}">
+	<div class="search-what x5">
+		<p>
+			<label for="id_q">{% trans "Que voulez-vous louer ?" %}</label><br />
+			{{ form.q }}<br />
+			<span>{% trans "Exemple :" %} </span> <a href="{% url product_list %}?q={% trans "voiture" %}">{% trans "Voiture" %}</a>, <a href="{% url product_list %}?q={% trans "chèvre" %}">{% trans "Chèvre" %}</a>, <a href="{% url product_list %}?q={% trans "ski" %}">{% trans "Ski" %}</a>, <a href="{% url product_list %}?q={% trans "robe" %}">{% trans "Robe" %}</a>
+		</p>
+	</div>
+	<div class="search-where x5">
+		<p>
+			<label>{% trans "Où ?" %}</label><br />
+			{{ form.l }}<br />
+		</p>
+	</div>
+	<div class="search-find x2">
+		<p>
+			<input type="submit" value="{% trans "Rechercher" %}" class="btn big-orange"/>
+		</p>
+	</div>
+	</form>
+</div>{# top-content #}
+<div id="content-product" class="result clearfix">
+	<div class="breadcrumb">
+		<ul class="x12 breadcrumbs">
+			<li><a href="{% url home %}">{% trans "Accueil" %}</a></li>
+			<li>{% trans "Alertes locations" %}</li>
+		</ul>
+	</div>
+	<div class="content-header x12">
+		<h1>Alertes Locations dans toutes la France</h1>
+	</div>
+</div>{# content-product #}
+
+{% endblock %}
