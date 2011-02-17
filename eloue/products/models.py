@@ -6,6 +6,8 @@ from decimal import Decimal as D
 
 from django.conf import settings
 from django.contrib.gis.db import models
+from django.contrib.gis.geos import Point
+from django.contrib.gis.measure import Distance
 from django.contrib.sites.managers import CurrentSiteManager
 from django.contrib.sites.models import Site
 from django.db.models import permalink
@@ -20,12 +22,13 @@ from mptt.models import MPTTModel
 from imagekit.models import ImageModel
 
 from eloue.accounts.models import Patron, Address
+from eloue.geocoder import GoogleGeocoder
 from eloue.products.fields import SimpleDateField
 from eloue.products.manager import ProductManager, PriceManager, QuestionManager, CurrentSiteProductManager, TreeManager
 from eloue.products.signals import post_save_answer, post_save_product, post_save_curiosity
 from eloue.products.utils import Enum
 from eloue.signals import post_save_sites
-from eloue.utils import convert_to_xpf
+from eloue.utils import convert_to_xpf, create_alternative_email
 
 UNIT = Enum([
     (0, 'HOUR', _(u'heure')),
@@ -53,6 +56,8 @@ STATUS = Enum([
 INSURANCE_MAX_DEPOSIT = getattr(settings, 'INSURANCE_MAX_DEPOSIT', 750)
 DEFAULT_RADIUS = getattr(settings, 'DEFAULT_RADIUS', 50)
 DEFAULT_CURRENCY = get_format('CURRENCY')
+
+ALERT_RADIUS = getattr(settings, 'ALERT_RADIUS', 200)
 
 
 class Product(models.Model):
@@ -358,6 +363,51 @@ class Curiosity(models.Model):
     
     class Meta:
         verbose_name_plural = "curiosities"
+    
+
+class Alert(models.Model):
+    patron = models.ForeignKey(Patron, related_name='alerts')
+    designation = models.CharField(max_length=255)
+    description = models.CharField(max_length=255)
+    created_at = models.DateTimeField(editable=False)
+    sites = models.ManyToManyField(Site, related_name='alerts')
+    
+    on_site = CurrentSiteManager()
+    objects = models.Manager()
+    
+    def __unicode__(self):
+        return smart_unicode(self.designation)
+    
+    def geocode(self):
+        name, (lat, lon), radius = GoogleGeocoder().geocode(self.location)
+        if lat and lon:
+            return Point(lat, lon)
+    
+    def save(self, *args, **kwargs):
+        if not self.created_at:
+            self.created_at = datetime.now()
+        self.position = self.geocode()
+        super(Alert, self).save(*args, **kwargs)
+    
+    @property
+    def position(self):
+        return self.patron.addresses[0].position
+    
+    @property
+    def nearest_patrons(self):
+        nearest_addresses = Address.objects.distance(self.position).filter(position__distance_lt=(self.position, Distance(km=ALERT_RADIUS))).order_by('distance')
+        return Patron.objects.distinct().filter(addresses__in=nearest_addresses)[:10]
+    
+    def send_alerts(self):
+        for patron in self.nearest_addresses:
+            message = create_alternative_email('products/emails/alert', {
+                'patron': patron,
+                'alert': self
+            }, settings.DEFAULT_FROM_EMAIL, [self.patron.email])
+            message.send()
+    
+    class Meta:
+        get_latest_by = 'created_at'
     
 
 post_save.connect(post_save_answer, sender=Answer)
