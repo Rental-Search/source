@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 from django.contrib import admin
+
 from mptt.admin import MPTTModelAdmin
+from mptt.forms import TreeNodeChoiceField
 
 from eloue.admin import CurrentSiteAdmin
 from eloue.products.forms import ProductAdminForm
@@ -30,7 +32,15 @@ class ProductAdmin(CurrentSiteAdmin):
     ordering = ['-created_at']
     list_per_page = 20
     form = ProductAdminForm
-
+    
+    def formfield_for_dbfield(self, db_field, **kwargs):
+        if db_field.name == 'category':
+            kwargs['form_class'] = TreeNodeChoiceField
+            kwargs['empty_label'] = u"Choisissez une catégorie"
+            kwargs['level_indicator'] = u"--"
+            kwargs['queryset'] = Category.tree.all()
+        return super(ProductAdmin, self).formfield_for_dbfield(db_field, **kwargs)
+    
 
 class CategoryAdmin(MPTTModelAdmin):
     list_display = ('name', 'parent')
