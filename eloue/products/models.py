@@ -386,7 +386,7 @@ class Alert(models.Model):
     def save(self, *args, **kwargs):
         if not self.created_at:
             self.created_at = datetime.now()
-        self.position = self.geocode()
+        #self.position = self.geocode()
         super(Alert, self).save(*args, **kwargs)
     
     @property
