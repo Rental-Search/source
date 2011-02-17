@@ -83,7 +83,7 @@ class BookingWizard(GenericFormWizard):
             product = self.extra_context['product']
             booking = Booking(product=product, owner=product.owner)
             started_at = datetime.datetime.now() + datetime.timedelta(days=1)
-            ended_at = started_at
+            ended_at = started_at + datetime.timedelta(days=1)
             initial = {
                 'started_at': [started_at.strftime('%d/%m/%Y'), started_at.strftime("08:00:00")],
                 'ended_at': [ended_at.strftime('%d/%m/%Y'), ended_at.strftime("08:00:00")],
