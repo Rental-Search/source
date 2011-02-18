@@ -34,16 +34,12 @@
 		{% endif %}
 		<div id="wrapper" class="xgrid">
 			<div id="header" class="clearfix">
-				<div class="logo x2">
+				<div class="logo x4">
 					<a href="{% url home %}">
-					  {% if request|from_lupa %}
-						 <img src="{{ MEDIA_URL }}images/lupa/eloue-rose.png" alt="e-loue"/>
-						{% else %}
-						  <img src="{{ MEDIA_URL }}images/logo.png" alt="e-loue"/>
-						{% endif %}
+						<img src="{{ MEDIA_URL }}images/logo_uk.png" alt="e-loue"/>
 					</a>
 				</div>
-				<div class="x10 omega">
+				<div class="x8 omega">
 					<ul class="nav-bar">
 						<li class="nav"><a href="{% url product_create %}" class="btn medium-green"  >{% trans "Mettre en location" %}</a></li>
 						{% if not user.is_authenticated %}
