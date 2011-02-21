@@ -167,8 +167,10 @@ def contact(request):
         headers = {'Reply-To': form.cleaned_data['sender']}
         if form.cleaned_data.get('cc_myself'):
             headers['Cc'] = form.cleaned_data['sender']
+        
+        domain = ".".join(Site.objects.get_current().domain.split('.')[1:])
         email = EmailMessage(form.cleaned_data['subject'], form.cleaned_data['message'],
-            settings.DEFAULT_FROM_EMAIL, ['contact@e-loue.com'], headers=headers)
+            settings.DEFAULT_FROM_EMAIL, ['contact@%s' % domain], headers=headers)
         try:
             email.send()
             messages.success(request, _(u"Votre message a bien été envoyé"))
