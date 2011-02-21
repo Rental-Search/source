@@ -19,7 +19,6 @@ from eloue.accounts.models import Patron
 from eloue.products.forms import FacetedSearchForm, ProductForm, ProductEditForm
 from eloue.products.models import Category, Product, Curiosity
 from eloue.products.wizard import ProductWizard
-from eloue.utils import convert_to_xpf
 
 PAGINATE_PRODUCTS_BY = getattr(settings, 'PAGINATE_PRODUCTS_BY', 10)
 DEFAULT_RADIUS = getattr(settings, 'DEFAULT_RADIUS', 50)
@@ -54,9 +53,9 @@ def product_edit(request, slug, product_id):
     product = get_object_or_404(Product.on_site, pk=product_id)
     price = product.prices.day()[0]
     form = ProductEditForm(request.POST or None, instance=product, initial={
-        'price': price.amount if not settings.CONVERT_XPF else convert_to_xpf(price.amount),
+        'price': price.amount,
         'category': product.category.id,
-        'deposit_amount': product.deposit_amount if not settings.CONVERT_XPF else convert_to_xpf(product.deposit_amount)
+        'deposit_amount': product.deposit_amount
     })
     if form.is_valid():
         product = form.save()
