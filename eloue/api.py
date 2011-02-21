@@ -11,9 +11,10 @@ from tastypie.constants import ALL_WITH_RELATIONS
 from tastypie.authentication import Authentication
 from tastypie.authorization import Authorization
 from tastypie.exceptions import NotFound, ImmediateHttpResponse
-from tastypie.http import HttpBadRequest
+from tastypie.http import HttpBadRequest, HttpCreated
 from tastypie.resources import ModelResource
 from tastypie.serializers import Serializer
+from tastypie.utils import dict_strip_unicode_keys
 
 from oauth_provider.consts import OAUTH_PARAMETERS_NAMES
 from oauth_provider.store import store, InvalidTokenError, InvalidConsumerError
@@ -354,6 +355,14 @@ class ProductResource(UserSpecificResource):
             orm_filters.update({"pk__in": pk})
         
         return orm_filters
+    
+    def post_list(self, request, **kwargs):
+        """Stop making it return standard location header"""
+        deserialized = self.deserialize(request, request.raw_post_data, format=request.META.get('CONTENT_TYPE', 'application/json'))
+        bundle = self.build_bundle(data=dict_strip_unicode_keys(deserialized))
+        self.is_valid(bundle, request)
+        updated_bundle = self.obj_create(bundle, request=request)
+        return HttpCreated(location=updated_bundle.obj.get_absolute_url())
     
     def get_object_list(self, request):
         object_list = super(ProductResource, self).get_object_list(request)
