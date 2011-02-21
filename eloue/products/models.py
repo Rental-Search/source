@@ -2,7 +2,6 @@
 import uuid
 
 from datetime import datetime, timedelta
-from decimal import Decimal as D
 
 from django.conf import settings
 from django.contrib.gis.db import models
@@ -25,7 +24,7 @@ from eloue.products.manager import ProductManager, PriceManager, QuestionManager
 from eloue.products.signals import post_save_answer, post_save_product, post_save_curiosity
 from eloue.products.utils import Enum
 from eloue.signals import post_save_sites
-from eloue.utils import convert_to_xpf
+from eloue.utils import currency
 
 UNIT = Enum([
     (0, 'HOUR', _(u'heure')),
@@ -40,7 +39,8 @@ CURRENCY = Enum([
     ('EUR', 'EUR', _(u'€')),
     ('USD', 'USD', _(u'$')),
     ('GBP', 'GPB', _(u'£')),
-    ('JPY', 'YEN', _(u'¥'))
+    ('JPY', 'YEN', _(u'¥')),
+    ('XPF', 'XPF', _(u'F'))
 ])
 
 STATUS = Enum([
@@ -52,13 +52,13 @@ STATUS = Enum([
 
 INSURANCE_MAX_DEPOSIT = getattr(settings, 'INSURANCE_MAX_DEPOSIT', 750)
 DEFAULT_RADIUS = getattr(settings, 'DEFAULT_RADIUS', 50)
-DEFAULT_CURRENCY = get_format('CURRENCY')
+DEFAULT_CURRENCY = get_format('CURRENCY') if not settings.CONVERT_XPF else "XPF"
 
 
 class Product(models.Model):
     """A product"""
     summary = models.CharField(max_length=255)
-    deposit_amount = models.DecimalField(max_digits=10, decimal_places=4)
+    deposit_amount = models.DecimalField(max_digits=10, decimal_places=2)
     currency = models.CharField(max_length=3, choices=CURRENCY, default=DEFAULT_CURRENCY)
     description = models.TextField()
     address = models.ForeignKey(Address, related_name='products')
@@ -203,7 +203,7 @@ class PropertyValue(models.Model):
 class Price(models.Model):
     """A price"""
     name = models.CharField(blank=True, max_length=255)
-    amount = models.DecimalField(max_digits=10, decimal_places=4)
+    amount = models.DecimalField(max_digits=10, decimal_places=2)
     currency = models.CharField(max_length=3, choices=CURRENCY, default=DEFAULT_CURRENCY)
     product = models.ForeignKey(Product, related_name='prices')
     unit = models.PositiveSmallIntegerField(choices=UNIT, db_index=True)
@@ -217,14 +217,7 @@ class Price(models.Model):
         unique_together = ('product', 'unit', 'name')
     
     def __unicode__(self):
-        currency = self.currency
-        for name, symbol in CURRENCY:
-            if name == self.currency:
-                currency = symbol
-        if settings.CONVERT_XPF:
-            return smart_unicode("%s XPF" % convert_to_xpf(self.amount).quantize(D('0.00')))
-        else:
-            return smart_unicode("%s %s" % (self.amount.quantize(D('0.00')), currency))
+        return smart_unicode(currency(self.amount))
     
     def clean(self):
         from django.core.exceptions import ValidationError
