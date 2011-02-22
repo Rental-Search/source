@@ -15,6 +15,10 @@ CACHE_MIDDLEWARE_KEY_PREFIX = 'dcns'
 
 AFFILIATE_TAG = 'dcns'
 
+AUTHENTICATION_BACKENDS = (
+    'eloue.accounts.auth.PrivatePatronModelBackend',
+)
+
 MIDDLEWARE_CLASSES += ('eloue.middleware.RequireLoginMiddleware',)
 
 DEFAULT_SITES = [7]
