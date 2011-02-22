@@ -9,7 +9,7 @@ SITE_ID = 4
 
 USE_HTTPS = False
 
-SESSION_COOKIE_DOMAIN = 'e-loue.nc'
+SESSION_COOKIE_DOMAIN = None #'e-loue.nc'
 
 CACHE_MIDDLEWARE_KEY_PREFIX = 'nc'
 

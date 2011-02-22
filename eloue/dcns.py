@@ -9,11 +9,15 @@ SITE_ID = 7
 
 USE_HTTPS = False
 
-SESSION_COOKIE_DOMAIN = 'e-loue.dcnsgroup.com'
+SESSION_COOKIE_DOMAIN = None #'e-loue.dcnsgroup.com'
 
 CACHE_MIDDLEWARE_KEY_PREFIX = 'dcns'
 
 AFFILIATE_TAG = 'dcns'
+
+MIDDLEWARE_CLASSES += ('eloue.middleware.RequireLoginMiddleware',)
+
+DEFAULT_SITES = [7]
 
 TEMPLATE_DIRS = (
     local_path('templates/dcns/'),
