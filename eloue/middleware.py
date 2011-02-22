@@ -22,7 +22,6 @@ class RequireLoginMiddleware(object):
 	def process_view(self, request, view_func, view_args, view_kwargs):
 		print request.user.is_authenticated()
 		if request.user.is_authenticated():
-			print request.user.is_authenticated()
 			return None
 		if view_func in [authenticate, serve, logout_then_login, password_reset, password_reset_confirm, password_reset_done, password_reset_complete ]:
 			return None
