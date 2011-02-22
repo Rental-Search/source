@@ -43,3 +43,27 @@ class BookingViewsTest(TestCase):
         self.assertEquals(json['total_price'], '28.00')
         self.assertEquals(json['duration'], '4 days')
     
+    def test_booking_price_error(self):
+        started_at = self._next_weekday(0)
+        ended_at = started_at - timedelta(days=3)
+        response = self.client.get(reverse('booking_price', args=['perceuse-visseuse-philips', '1']), {
+            '0-started_at_0': started_at.strftime("%d/%m/%Y"),
+            '0-started_at_1': '08:00:00',
+            '0-ended_at_0': ended_at.strftime("%d/%m/%Y"),
+            '0-ended_at_1': '08:00:00'
+        }, HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+        self.assertEquals(response.status_code, 200)
+        json = simplejson.loads(response.content)
+        self.assertTrue('errors' in json)
+    
+    def test_booking_price_not_ajax(self):
+        started_at = self._next_weekday(0)
+        ended_at = started_at + timedelta(days=3)
+        response = self.client.get(reverse('booking_price', args=['perceuse-visseuse-philips', '1']), {
+            '0-started_at_0': started_at.strftime("%d/%m/%Y"),
+            '0-started_at_1': '08:00:00',
+            '0-ended_at_0': ended_at.strftime("%d/%m/%Y"),
+            '0-ended_at_1': '08:00:00'
+        })
+        self.assertEquals(response.status_code, 405)
+    
