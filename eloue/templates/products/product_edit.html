@@ -23,8 +23,7 @@
 	</div>
 	<div class="new x9">
 		<form class="form" enctype="multipart/form-data" action="" method="POST">
-		  {% csrf_token %}
-			
+		  {% csrf_token %}			
 			<table>
 				<tr>
 					<td colspan="2" {% if form.category.errors %} class="error-field" {% endif %}>
@@ -39,13 +38,20 @@
 					</td>
 				</tr>
 				<tr>
-					<th><label>Photo * :</label></th>
+					<th><label>{{ form.picture.label }} {% if form.picture.field.required %}*{% endif %}:</label></th>
 					<td>
 						{% for picture in product.pictures.all %}
 							{% if picture.thumbnail %}
 			       		<a href="#"><img src="{{ picture.thumbnail.url }}" /></a>
 			        {% endif %}
 						{% endfor %}
+						{{ form.picture }}
+						{% if form.picture.errors %}
+						    {% for error in form.picture.errors %}
+										<br />
+						        <span class="error">{{ error|escape }}</span>
+						    {% endfor %}
+						{% endif %}
 					</td>
 				</tr>
 				<tr>

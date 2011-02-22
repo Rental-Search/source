@@ -52,7 +52,7 @@ def product_create(request, *args, **kwargs):
 def product_edit(request, slug, product_id):
     product = get_object_or_404(Product.on_site, pk=product_id)
     price = product.prices.day()[0]
-    form = ProductEditForm(request.POST or None, instance=product, initial={
+    form = ProductEditForm(data=request.POST or None, files=request.FILES or None, instance=product, initial={
         'price': price.amount,
         'category': product.category.id,
         'deposit_amount': product.deposit_amount
