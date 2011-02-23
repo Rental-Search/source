@@ -132,6 +132,10 @@ class Picture(ImageModel):
             self.created_at = datetime.now()
         super(Picture, self).save(*args, **kwargs)
     
+    def delete(self, *args, **kwargs):
+        self.image.delete()
+        super(Picture, self).delete(*args, **kwargs)
+    
     class IKOptions:
         spec_module = 'eloue.products.specs'
         image_field = 'image'
