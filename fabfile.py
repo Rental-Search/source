@@ -43,7 +43,7 @@ def notify(func):
 def production():
     """Defines production environment"""
     env.name = "production"
-    env.user = "tim"
+    env.user = "benoitw"
     env.hosts = ['goat.e-loue.com',]
     env.base_dir = "/var/www"
     env.app_name = "eloue"
