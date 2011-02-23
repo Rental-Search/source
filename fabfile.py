@@ -62,7 +62,7 @@ def production():
 def staging():
     """Defines staging environment"""
     env.name = "staging"
-    env.user = "tim"
+    env.user = "benoitw"
     env.hosts = ['staging.e-loue.com',]
     env.base_dir = "/var/www"
     env.app_name = "eloue"
@@ -80,7 +80,7 @@ def staging():
 
 def sandbox():
     env.name = "sandbox"
-    env.user = "tim"
+    env.user = "benoitw"
     env.hosts = ['sandbox.local',]
     env.base_dir = "/var/www"
     env.app_name = "eloue"
