@@ -224,6 +224,7 @@ COMPRESS_CSS = {
             'css/custom.css',
             'css/plugins/ui/jquery.ui.core.css',
             'css/plugins/ui/jquery.ui.datepicker.css',
+			'css/plugins/ui/jquery.ui.tabs.css',
             'css/plugins/ui/jquery.ui.theme.css'
         ),
         'output_filename': 'css/master.r?.css',
@@ -239,6 +240,7 @@ COMPRESS_CSS = {
             'css/20m.css',
             'css/plugins/ui/jquery.ui.core.css',
             'css/plugins/ui/jquery.ui.datepicker.css',
+			'css/plugins/ui/jquery.ui.tabs.css',
             'css/plugins/ui/jquery.ui.theme.css'
         ),
         'output_filename': 'css/twenty.r?.css',
@@ -272,6 +274,22 @@ COMPRESS_CSS = {
             'css/nc.css',
             'css/plugins/ui/jquery.ui.core.css',
             'css/plugins/ui/jquery.ui.datepicker.css',
+			'css/plugins/ui/jquery.ui.tabs.css',
+            'css/plugins/ui/jquery.ui.theme.css'
+        ),
+        'output_filename': 'css/nc.r?.css',
+        'extra_context': {
+            'media': 'screen',
+        }
+    },
+	'uk': {
+        'source_filenames': (
+            'css/master.css',
+            'css/screen.css',
+            'css/custom.css',
+            'css/uk.css',
+            'css/plugins/ui/jquery.ui.core.css',
+            'css/plugins/ui/jquery.ui.datepicker.css',
             'css/plugins/ui/jquery.ui.theme.css'
         ),
         'output_filename': 'css/nc.r?.css',
@@ -288,6 +306,7 @@ COMPRESS_JS = {
             'js/ui/jquery.ui.widget.js',
             'js/ui/jquery.ui.datepicker.js',
             'js/ui/jquery.ui.datepicker-fr.js',
+			'js/ui/jquery.ui.tabs.js',
             'js/modernizr.js',
             'js/mustache.js',
             'js/jquery.cycle.all.latest.js',

@@ -39,6 +39,15 @@ UNIT = Enum([
     (5, 'MONTH', _(u'mois'))
 ])
 
+UNITS = {
+    0: lambda amount: amount,
+    1: lambda amount: amount,
+    2: lambda amount: amount,
+    3: lambda amount: amount / 7,
+    4: lambda amount: amount / 14,
+    5: lambda amount: amount / 30,
+}
+
 CURRENCY = Enum([
     ('EUR', 'EUR', _(u'€')),
     ('USD', 'USD', _(u'$')),
@@ -221,6 +230,10 @@ class Price(models.Model):
     
     class Meta:
         unique_together = ('product', 'unit', 'name')
+    
+    @property
+    def day_amount(self):
+        return UNITS[self.unit](self.amount)
     
     def __unicode__(self):
         return smart_unicode(currency(self.amount))

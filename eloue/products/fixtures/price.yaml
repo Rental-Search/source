@@ -1,6 +1,6 @@
 -   fields:
         name: ''
-        amount: "0.3"
+        amount: "1"
         currency: "EUR"
         product: 1
         unit: 0
@@ -9,7 +9,7 @@
 
 -   fields:
         name: ''
-        amount: "7"
+        amount: "24"
         currency: "EUR"
         product: 1
         unit: 1
@@ -18,7 +18,7 @@
 
 -   fields:
         name: ''
-        amount: "12"
+        amount: "36"
         currency: "EUR"
         product: 1
         unit: 2
@@ -27,7 +27,7 @@
 
 -   fields:
         name: ''
-        amount: "5"
+        amount: "90"
         product: 1
         unit: 3
     model: products.price
@@ -35,7 +35,7 @@
 
 -   fields:
         name: ''
-        amount: "4"
+        amount: "135"
         product: 1
         unit: 4
     model: products.price
@@ -43,7 +43,7 @@
 
 -   fields:
         name: ''
-        amount: "3"
+        amount: "200"
         product: 1
         unit: 5
     model: products.price
@@ -60,7 +60,7 @@
 
 -   fields:
         name: ''
-        amount: "7"
+        amount: "95"
         currency: "EUR"
         product: 2
         unit: 4

@@ -150,19 +150,19 @@ class Booking(models.Model):
         engine = knowledge_engine.engine((__file__, '.rules'))
         engine.activate('pricing')
         for price in product.prices.iterator():
-            engine.assert_('prices', 'price', (price.unit, price.amount))
+            engine.assert_('prices', 'price', (price.unit, price.day_amount))
         vals, plans = engine.prove_1_goal('pricing.pricing($type, $started_at, $ended_at, $delta)', started_at=started_at, ended_at=ended_at, delta=delta)
         engine.reset()
         
         amount, unit = D(0), PACKAGES_UNIT[vals['type']]
         package = PACKAGES[unit]
         for price in product.prices.filter(unit=unit, started_at__isnull=True, ended_at__isnull=True):
-            amount += package(price.amount, delta)
+            amount += package(price.day_amount, delta)
         
         for price in product.prices.filter(unit=unit, started_at__isnull=False, ended_at__isnull=False):
-            amount += package(price.amount, price.delta(started_at, ended_at))
+            amount += package(price.day_amount, price.delta(started_at, ended_at))
         
-        return unit, amount
+        return unit, amount.quantize(D(".00"))
     
     @transition(source='authorizing', target='authorized')
     def preapproval(self, cancel_url=None, return_url=None, ip_address=None):

@@ -40,7 +40,7 @@ class BookingViewsTest(TestCase):
         json = simplejson.loads(response.content)
         self.assertTrue('duration' in json)
         self.assertTrue('total_price' in json)
-        self.assertEquals(json['total_price'], '28.00')
+        self.assertEquals(json['total_price'], '96.00')
         self.assertEquals(json['duration'], '4 days')
     
     def test_booking_price_error(self):

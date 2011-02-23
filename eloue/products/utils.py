@@ -43,3 +43,13 @@ class Enum(object):
     def __iter__(self):
         return self.enum_list.__iter__()
     
+    def keys(self):
+        return self.enum_dict.keys()
+    
+    def values(self):
+        return self.enum_dict.values()
+    
+    @property
+    def reverted(self):
+        return dict(zip(self.enum_dict.itervalues(), self.enum_dict.iterkeys()))
+    
