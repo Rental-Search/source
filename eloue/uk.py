@@ -13,6 +13,8 @@ SESSION_COOKIE_DOMAIN = None # 'erentmarket.com'
 
 CACHE_MIDDLEWARE_KEY_PREFIX = 'uk'
 
+USE_HTTPS = False
+
 AFFILIATE_TAG = 'uk'
 
 GOOGLE_REGION_CODE = '.co.uk'
