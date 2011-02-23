@@ -146,6 +146,10 @@ class BookingForm(forms.ModelForm):
         model = Booking
         fields = ('started_at', 'ended_at')
     
+    def clean_ended_at(self):
+        ended_at = self.cleaned_data.get('ended_at', None)
+        return ended_at + datetime.timedelta(days=1)
+    
     def clean(self):
         started_at = self.cleaned_data.get('started_at', None)
         ended_at = self.cleaned_data.get('ended_at', None)

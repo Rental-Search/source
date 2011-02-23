@@ -29,7 +29,7 @@ from eloue.rent.fields import UUIDField, IntegerAutoField
 from eloue.rent.manager import BookingManager
 from eloue.paypal import payments, PaypalError
 from eloue.signals import post_save_sites
-from eloue.utils import create_alternative_email
+from eloue.utils import create_alternative_email, convert_from_xpf
 
 BOOKING_STATE = Enum([
     ('authorizing', 'AUTHORIZING', _(u"En cours d'autorisation")),
@@ -47,7 +47,7 @@ BOOKING_STATE = Enum([
     ('outdated', 'OUTDATED', _(u"Dépassé"))
 ])
 
-DEFAULT_CURRENCY = get_format('CURRENCY')
+DEFAULT_CURRENCY = get_format('CURRENCY') if not settings.CONVERT_XPF else "XPF"
 
 COMMISSION = D(str(getattr(settings, 'COMMISSION', 0.15)))
 INSURANCE_FEE = D(str(getattr(settings, 'INSURANCE_FEE', 0.0594)))
@@ -178,13 +178,17 @@ class Booking(models.Model):
         """
         domain = Site.objects.get_current().domain
         protocol = "https" if USE_HTTPS else "http"
+        if settings.CONVERT_XPF:
+            total_amount = convert_from_xpf(self.total_amount)
+        else:
+            total_amount = self.total_amount
         try:
             now = datetime.datetime.now()
             response = payments.preapproval(
                 startingDate=now,
                 endingDate=now + datetime.timedelta(days=360),
-                currencyCode=self.currency,
-                maxTotalAmountOfAllPayments=str(self.total_amount.quantize(D(".00"), ROUND_CEILING)),
+                currencyCode=self._currency,
+                maxTotalAmountOfAllPayments=str(total_amount.quantize(D(".00"), ROUND_CEILING)),
                 cancelUrl=cancel_url,
                 returnUrl=return_url,
                 ipnNotificationUrl=urljoin(
@@ -340,20 +344,26 @@ class Booking(models.Model):
         """
         domain = Site.objects.get_current().domain
         protocol = "https" if USE_HTTPS else "http"
+        if settings.CONVERT_XPF:
+            total_amount = convert_from_xpf(self.total_amount)
+            net_price = convert_from_xpf(self.net_price)
+        else:
+            total_amount = self.total_amount
+            net_price = self.net_price
         response = payments.pay(
             actionType='PAY_PRIMARY',
             senderEmail=self.borrower.paypal_email,
             feesPayer='PRIMARYRECEIVER',
             cancelUrl=cancel_url,
             returnUrl=return_url,
-            currencyCode=self.currency,
+            currencyCode=self._currency,
             preapprovalKey=self.preapproval_key,
             ipnNotificationUrl=urljoin(
                 "%s://%s" % (protocol, domain), reverse('pay_ipn')
             ),
             receiverList={'receiver': [
-                {'primary':True, 'amount':str(self.total_amount.quantize(D(".00"), ROUND_CEILING)), 'email':PAYPAL_API_EMAIL},
-                {'primary':False, 'amount':str(self.net_price.quantize(D(".00"), ROUND_FLOOR)), 'email':self.owner.paypal_email}
+                {'primary':True, 'amount':str(total_amount.quantize(D(".00"), ROUND_CEILING)), 'email':PAYPAL_API_EMAIL},
+                {'primary':False, 'amount':str(net_price.quantize(D(".00"), ROUND_FLOOR)), 'email':self.owner.paypal_email}
             ]}
         )
         self.pay_key = response['payKey']
@@ -382,14 +392,14 @@ class Booking(models.Model):
             amount = self.deposit_amount
         
         domain = Site.objects.get_current().domain
-        protocol = "https" if USE_HTTPS else "http"
+        protocol = "https" if USE_HTTPS else "http"    
         response = payments.pay(
             actionType='PAY',
             senderEmail=self.borrower.paypal_email,
             preapprovalKey=self.preapproval_key,
             cancelUrl=cancel_url,
             returnUrl=return_url,
-            currencyCode=self.currency,
+            currencyCode=self._currency,
             ipnNotificationUrl=urljoin(
                 "%s://%s" % (protocol, domain), reverse('pay_ipn')
             ),
@@ -403,8 +413,15 @@ class Booking(models.Model):
         """Refund borrower or owner if something as gone wrong"""
         response = payments.refund(
             payKey=self.pay_key,
-            currencyCode=self.currency
+            currencyCode=self._currency
         )
+    
+    @property
+    def _currency(self):
+        if settings.CONVERT_XPF:
+            return "EUR"
+        else:
+            return self.currency
     
 
 class Sinister(models.Model):

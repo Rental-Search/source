@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-02-11 14:00+0100\n"
+"POT-Creation-Date: 2011-02-21 17:18+0100\n"
 "PO-Revision-Date: 2011-02-08 11:14+0100\n"
 "Last-Translator: \n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -530,11 +530,11 @@ msgstr "Your password has been successfully changed"
 msgid "Nous n'avons pas pu créer votre compte paypal"
 msgstr "We haven't been able to create your paypal account"
 
-#: accounts/views.py:174
+#: accounts/views.py:176
 msgid "Votre message a bien été envoyé"
 msgstr "Your message has been successfully sent"
 
-#: accounts/views.py:176
+#: accounts/views.py:178
 msgid "Erreur lors de l'envoi du message"
 msgstr "An error occurred when sending the message"
 
@@ -550,184 +550,188 @@ msgstr ""
 "Welcome! We have sent you an activation link by email. It is mandatory to "
 "activate your account to finish the registration process."
 
-#: products/forms.py:21 templates/products/product_list.html:106
+#: products/forms.py:20 templates/products/product_list.html:106
 msgid "Les plus proches"
 msgstr "Closest"
 
-#: products/forms.py:22
+#: products/forms.py:21
 msgid "Les plus récentes"
 msgstr "Newest"
 
-#: products/forms.py:23
+#: products/forms.py:22
 msgid "Les pris les plus bas"
 msgstr "Lowest prices"
 
-#: products/forms.py:24
+#: products/forms.py:23
 msgid "Les pris les plus haut"
 msgstr "Highest prices"
 
-#: products/forms.py:35
+#: products/forms.py:34
 msgid "Prix"
 msgstr "Price"
 
-#: products/forms.py:35
+#: products/forms.py:34
 msgid "par-prix"
 msgstr "by price"
 
-#: products/forms.py:36 products/views.py:94
+#: products/forms.py:35 products/views.py:93
 #: templates/mobile/products/product_detail.html:57
 #: templates/products/product_detail.html:116
 msgid "Catégorie"
 msgstr "Category"
 
-#: products/forms.py:36
+#: products/forms.py:35
 msgid "par-categorie"
 msgstr "by-category"
 
-#: products/forms.py:97
+#: products/forms.py:96
 msgid "Choisissez une catégorie"
 msgstr "Choose a category"
 
-#: products/forms.py:98
+#: products/forms.py:97
 msgid "Titre"
 msgstr "Title :"
 
-#: products/forms.py:100
+#: products/forms.py:99
 msgid "Photo"
 msgstr "Picture"
 
-#: products/forms.py:101
+#: products/forms.py:100
 msgid "Prix location"
 msgstr "Rental price :"
 
-#: products/forms.py:102 templates/mobile/products/product_detail.html:44
+#: products/forms.py:101 templates/mobile/products/product_detail.html:44
 #: templates/products/product_detail.html:103
 msgid "Caution"
 msgstr "Security deposit"
 
-#: products/forms.py:103 templates/mobile/products/product_detail.html:53
+#: products/forms.py:102 templates/mobile/products/product_detail.html:53
 #: templates/products/product_detail.html:112
 msgid "Quantité"
 msgstr "Quantity"
 
-#: products/forms.py:109
+#: products/forms.py:108
 msgid "Vous devriez au moins louer un object"
 msgstr "You have to rent at least one item"
 
-#: products/forms.py:130
+#: products/forms.py:121
 msgid "Vous devriez ajouter une photo."
 msgstr "You should add a photo."
 
-#: products/models.py:29
+#: products/models.py:30
 msgid "heure"
 msgstr "time"
 
-#: products/models.py:30
+#: products/models.py:31
 msgid "jour"
 msgstr "day"
 
-#: products/models.py:31
+#: products/models.py:32
 msgid "week-end"
 msgstr "weekend"
 
-#: products/models.py:32
+#: products/models.py:33
 msgid "semaine"
 msgstr "week"
 
-#: products/models.py:33
+#: products/models.py:34
 msgid "deux semaines"
 msgstr "two weeks"
 
-#: products/models.py:34
+#: products/models.py:35
 msgid "mois"
 msgstr "month"
 
-#: products/models.py:38
+#: products/models.py:39
 msgid "€"
 msgstr "€"
 
-#: products/models.py:39
+#: products/models.py:40
 msgid "$"
 msgstr "$"
 
-#: products/models.py:40
+#: products/models.py:41
 msgid "£"
 msgstr "£"
 
-#: products/models.py:41
+#: products/models.py:42
 msgid "¥"
 msgstr "¥"
 
-#: products/models.py:45
+#: products/models.py:43
+msgid "F"
+msgstr "F"
+
+#: products/models.py:47
 msgid "brouillon"
 msgstr "draft"
 
-#: products/models.py:46
+#: products/models.py:48
 msgid "privé"
 msgstr "private"
 
-#: products/models.py:47
+#: products/models.py:49
 msgid "public"
 msgstr "public"
 
-#: products/models.py:48
+#: products/models.py:50
 msgid "supprimé"
 msgstr "deleted"
 
-#: products/models.py:64
+#: products/models.py:66
 msgid "archivé"
 msgstr "archived"
 
-#: products/models.py:65
+#: products/models.py:67
 msgid "autorisé"
 msgstr "authorized"
 
-#: products/models.py:75
+#: products/models.py:77
 msgid "product"
 msgstr "product"
 
-#: products/models.py:145
+#: products/models.py:147
 msgid "category"
 msgstr "category"
 
-#: products/models.py:146
+#: products/models.py:148
 msgid "categories"
 msgstr "categories"
 
-#: products/models.py:162
+#: products/models.py:164
 #, python-format
 msgid "/location/par-categorie/%(category)s/"
 msgstr "/rent/by-category/%(category)s/"
 
-#: products/models.py:173
+#: products/models.py:175
 msgid "properties"
 msgstr "properties"
 
-#: products/models.py:230
+#: products/models.py:225
 msgid "Le prix ne peut pas être négatif"
 msgstr "The price cannot be a negative value"
 
-#: products/models.py:268
+#: products/models.py:263
 msgid "Score can't be higher than 1"
 msgstr "Score can't be higher than 1"
 
-#: products/models.py:270
+#: products/models.py:265
 msgid "Score can't be a negative value"
 msgstr "Score can't be a negative value"
 
-#: products/models.py:279
+#: products/models.py:274
 msgid "Vous ne pouvez pas commenter vos propres locations"
 msgstr "You cannot comment on your own rentals"
 
-#: products/models.py:281
+#: products/models.py:276
 msgid "Vous ne pouvez pas commenter un produit que vous n'avez pas loué"
 msgstr "You cannot comment on a product that you have not rented"
 
-#: products/models.py:291
+#: products/models.py:286
 msgid "Vous ne pouvez pas commenter votre profil"
 msgstr "You cannot comment on your own profile"
 
-#: products/models.py:293
+#: products/models.py:288
 msgid ""
 "Vous ne pouvez pas commenter le profil d'un loueur avec lequel n'avez pas "
 "effectué de réservations"
@@ -739,23 +743,23 @@ msgstr ""
 msgid "ajouter"
 msgstr "add"
 
-#: products/views.py:85
+#: products/views.py:84
 msgid "par-"
 msgstr "by-"
 
-#: products/views.py:90
+#: products/views.py:89
 msgid "categorie"
 msgstr "category"
 
-#: products/views.py:97
+#: products/views.py:96
 msgid "loueur"
 msgstr "borrower"
 
-#: products/views.py:101
+#: products/views.py:100
 msgid "Loueur"
 msgstr "Borrower"
 
-#: products/views.py:106
+#: products/views.py:105
 msgid "page"
 msgstr "page"
 
@@ -823,23 +827,23 @@ msgstr "Enter a valid time."
 msgid "Cette transaction ne semble pas lier à une transaction interne"
 msgstr "This transaction doesn't seem to be linked to an internal transaction"
 
-#: rent/forms.py:158
+#: rent/forms.py:162
 msgid "Vous ne pouvez pas louer cet objet pour ces dates"
 msgstr "This item is not available to rent for the specified dates"
 
-#: rent/forms.py:162
+#: rent/forms.py:166
 msgid "Vous ne pouvez pas louer a ces dates"
 msgstr "You can't rent on these dates"
 
-#: rent/forms.py:164
+#: rent/forms.py:168
 msgid "Une location ne peut pas terminer avant d'avoir commencer"
 msgstr "A rental cannot end before having started"
 
-#: rent/forms.py:166
+#: rent/forms.py:170
 msgid "La durée d'une location est limitée à 85 jours."
 msgstr "The rental period is limited to 85 days."
 
-#: rent/forms.py:189
+#: rent/forms.py:193
 msgid "Décrivez votre incident"
 msgstr "Declare your incident"
 
@@ -1031,27 +1035,27 @@ msgstr "eighty"
 msgid "quatre-vingt-dix"
 msgstr "ninety"
 
-#: rent/views.py:148
+#: rent/views.py:145
 msgid "Cette réservation a bien été refusée"
 msgstr "This booking has been declined."
 
-#: rent/views.py:149
+#: rent/views.py:146
 msgid "Cette réservation n'a pu être refusée"
 msgstr "This booking could not be declined."
 
-#: rent/views.py:160
+#: rent/views.py:157
 msgid "Cette réservation a bien été annulée"
 msgstr "This booking has been canceled."
 
-#: rent/views.py:161
+#: rent/views.py:158
 msgid "Cette réservation n'a pu être annulée"
 msgstr "This booking could not be canceled."
 
-#: rent/views.py:172
+#: rent/views.py:169
 msgid "Cette réservation a bien été cloturée"
 msgstr "This booking has been finalised."
 
-#: rent/views.py:173
+#: rent/views.py:170
 msgid "Cette réservation n'a pu être cloturée"
 msgstr "This booking could not be finalised."
 

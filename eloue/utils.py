@@ -55,7 +55,7 @@ def currency(value):
     """It totally ignores currency linked with value."""
     old_locale = locale.getlocale()
     if settings.CONVERT_XPF:
-        return "%s XPF" % convert_to_xpf(D(value))
+        return "%s XPF" % D(value)
     try:
         new_locale = locale.normalize(translation.to_locale("%s.utf8" % translation.get_language()))
         locale.setlocale(locale.LC_ALL, new_locale)
@@ -66,11 +66,6 @@ def currency(value):
         locale.setlocale(locale.LC_ALL, old_locale)
 
 
-def convert_to_xpf(value):
-    amount = value / D(settings.XPF_EXCHANGE_RATE)
-    return amount.quantize(D(".00"), rounding=ROUND_DOWN)
-
-
 def convert_from_xpf(value):
     amount = value * D(settings.XPF_EXCHANGE_RATE)
-    return amount.quantize(D("0.0000"), rounding=ROUND_UP)
+    return amount.quantize(D("0.00"), rounding=ROUND_UP)
