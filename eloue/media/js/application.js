@@ -199,8 +199,8 @@ $(document).ready(function() {
       inputs.each(function(index, input) {
         var val, prev;
         input = $(input);
-        val = parseFloat(input.val().replace(',', '.'));
-        if(val !== '') {
+        if(input.val()) {
+          val = parseFloat(input.val().replace(',', '.'));
           prev = val;
           inputs.slice(0, index).reverse().each(function(i, previous) {
             previous = $(previous);
