@@ -30,8 +30,10 @@ def notify(func):
             return
         if not 'current_release' in env:
             releases()
-        deployed = run("cd %(current_release)s; git rev-parse HEAD" % {'current_release': env.current_release})[:7]
-        deploying = local("git rev-parse HEAD")[:7]
+        if 'git_branch' not in env:
+            env.git_branch = "master"
+        deployed = run("cd %(current_release)s; git rev-parse HEAD" % env)[:7]
+        deploying = run("cd %(current_release)s; git fetch deploy; git rev-parse deploy/%(git_branch)s" % env)[:7]
         return_value = func(*args, **kwargs)
         c = Campfire(env.campfire_domain, env.campfire_token, ssl=True)
         room = c.find_room_by_name(env.campfire_room)
@@ -265,6 +267,8 @@ def diff():
     """Show diff between current and deployed code"""
     if not 'current_release' in env:
         releases()
-    deployed = run("cd %(current_release)s; git rev-parse HEAD" % {'current_release': env.current_release})[:7]
-    deploying = local("git rev-parse HEAD")[:7]
+    if 'git_branch' not in env:
+        env.git_branch = "master"
+    deployed = run("cd %(current_release)s; git rev-parse HEAD" % env)[:7]
+    deploying = run("cd %(current_release)s; git fetch deploy; git rev-parse deploy/%(git_branch)s" % env)[:7]
     local("git difftool %(deployed)s...%(deploying)s" % {'deployed':deployed, 'deploying':deploying})
