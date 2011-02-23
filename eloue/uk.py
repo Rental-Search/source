@@ -1,12 +1,9 @@
 import os
 
 from eloue.settings import *
-
 local_path = lambda path: os.path.join(os.path.dirname(__file__), path)
 
 SITE_ID = 5
-
-USE_HTTPS = False # True
 
 TIME_ZONE = 'Europe/London'
 

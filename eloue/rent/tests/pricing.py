@@ -20,61 +20,61 @@ class BookingPriceTest(TestCase):
         started_at = datetime.now()
         ended_at = started_at + timedelta(0, 240)
         unit, price = Booking.calculate_price(self.product, started_at, ended_at)
-        self.assertEquals(price, D('1.2'))
+        self.assertEquals(price, D('4'))
         self.assertEquals(unit, UNIT.HOUR)
     
     def test_calculate_week_end_price(self):
         started_at = datetime(2010, 9, 17, 9, 00)
         ended_at = started_at + timedelta(days=3)
         unit, price = Booking.calculate_price(self.product, started_at, ended_at)
-        self.assertEquals(price, D('12'))
+        self.assertEquals(price, D('36'))
         self.assertEquals(unit, UNIT.WEEK_END)
     
     def test_calculate_day_price(self):
         started_at = datetime(2010, 9, 20, 9, 00)
         ended_at = started_at + timedelta(days=4)
         unit, price = Booking.calculate_price(self.product, started_at, ended_at)
-        self.assertEquals(price, D('28'))
+        self.assertEquals(price, D('96'))
         self.assertEquals(unit, UNIT.DAY)
     
     def test_calculate_week_price(self):
         started_at = datetime.now()
         ended_at = started_at + timedelta(days=7)
         unit, price = Booking.calculate_price(self.product, started_at, ended_at)
-        self.assertEquals(price, D('35'))
+        self.assertEquals(price, D('90'))
         self.assertEquals(unit, UNIT.WEEK)
     
     def test_calculate_two_weeks_price(self):
         started_at = datetime.now()
         ended_at = started_at + timedelta(days=14)
         unit, price = Booking.calculate_price(self.product, started_at, ended_at)
-        self.assertEquals(price, D('56'))
+        self.assertEquals(price, D('135'))
         self.assertEquals(unit, UNIT.TWO_WEEKS)
     
     def test_calculate_leap_two_weeks(self):
         started_at = datetime(2011, 3, 4, 9)
         ended_at = started_at + timedelta(days=29)
         unit, price = Booking.calculate_price(self.product, started_at, ended_at)
-        self.assertEquals(price, D('116'))
+        self.assertEquals(price, D('279.64'))
         self.assertEquals(unit, UNIT.TWO_WEEKS)
         started_at = datetime(2011, 3, 4, 9)
         ended_at = started_at + timedelta(days=30)
         unit, price = Booking.calculate_price(self.product, started_at, ended_at)
-        self.assertEquals(price, D('120'))
+        self.assertEquals(price, D('289.29'))
         self.assertEquals(unit, UNIT.TWO_WEEKS)
     
     def test_calculate_leap_month(self):
         started_at = datetime(2011, 2, 4, 9)
         ended_at = started_at + timedelta(days=28)
         unit, price = Booking.calculate_price(self.product, started_at, ended_at)
-        self.assertEquals(price, D('84'))
+        self.assertEquals(price, D('186.67'))
         self.assertEquals(unit, UNIT.MONTH)
     
     def test_calculate_month_price(self):
         started_at = datetime.now()
         ended_at = started_at + timedelta(days=45)
         unit, price = Booking.calculate_price(self.product, started_at, ended_at)
-        self.assertEquals(price, D('135'))
+        self.assertEquals(price, D('300'))
         self.assertEquals(unit, UNIT.MONTH)
     
     def test_calculate_default_price(self):
@@ -98,7 +98,7 @@ class BookingPriceTest(TestCase):
         started_at = datetime.now()
         ended_at = started_at + timedelta(days=18)
         unit, price = Booking.calculate_price(product, started_at, ended_at)
-        self.assertEquals(price, D('126'))
+        self.assertEquals(price, D('122.14'))
         self.assertEquals(unit, UNIT.TWO_WEEKS)
     
     def test_calculate_strict_day_price(self):

@@ -28,7 +28,7 @@ class ProductViewsTest(TestCase):
         response = self.client.post(reverse('product_edit', args=['perceuse-visseuse-philips', 1]), {
             'category': 1,
             'summary': 'Perceuse visseuse Philips',
-            'price': 100,
+            'day_price': 100,
             'deposit_amount': 250,
             'quantity': 1,
             'description': "Engrenage plantaire haute performance 2 vitesses."

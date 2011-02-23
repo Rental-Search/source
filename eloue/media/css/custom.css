@@ -282,7 +282,180 @@
     {
       color: #6EB924 !important;
     }
-
+	
+	.tabsPrices.ui-widget-content
+	{
+		border: none;
+	}
+		.tabsPrices h5 { color: #546b78; }
+		.tabsPrices p 
+		{ 
+			font-size: 12px;
+			margin-bottom: 10px;
+			color: #546b78;
+		}
+		.tabsPrices .ui-tabs-nav
+		{
+			border-bottom: 1px solid #b9cad4;
+		}
+			.tabsPrices .ui-widget-header .ui-state-default
+			{
+				background-color: #f5f7f9;
+				border: 1px solid #b9cad4;
+			}
+				.tabsPrices .ui-widget-header .ui-state-default a
+				{
+					color: #9eb0ba;
+				}
+			.tabsPrices .ui-widget-header .ui-state-active
+			{
+				background-color: #FFF;
+				border: 1px solid #b9cad4;
+			}
+				.tabsPrices .ui-widget-header .ui-state-active a
+				{
+					color: #546b78;
+				}
+				
+		.tabsPrices .ui-tabs-panel { padding: 20px 0 !important;}
+		
+		.prices-form
+		{
+			background-color: #f3f8fa;
+			border: 1px solid #b9cad4;
+			padding-top: 0;
+			-moz-border-radius: 3px;
+  	  -webkit-border-radius: 3px;
+  	  border-radius: 3px;
+			margin-bottom: 20px;
+		}
+		
+		.tabsPrices .season 
+		{ 
+			padding-top: 20px;
+			border-top: 1px dashed #b9cad4;
+		}
+		
+		
+			.prices-list
+			{ 
+				margin-bottom: 0px;
+				padding: 0 0 0 10px;
+				list-style-type: none !important;
+			}
+			.prices-list:after
+			{
+				content: ".";
+				display: block;
+				clear: both;
+				visibility: hidden;
+				line-height: 0;
+				height: 0;
+			}
+				.prices-list li 
+				{ 
+					display: inline;
+					float: left;
+					padding: 0 10px 0 0;
+					margin: 0;
+					width: 141px;
+				}
+					li.price-by-hour { width: 110.5px; }
+					li.price-by-month { width: 111px; }
+					.prices-form .labs 
+					{ 
+						color: #546b78 !important;
+						font-weight: normal;
+						font-family: Verdana;
+					}
+					
+					.prices-form .ins
+					{
+						width: 34px;
+						margin-right: 5px;
+						margin-top: 10px;
+						font-size: 14px;
+						text-align: right;
+					}
+					
+					.prices-form .current-symbol { font-size: 16px; }
+			
+		.prices-list .calculator
+		{
+			padding-right: 33px;
+			width: 15px;
+		}		
+			.prices-list .calculator a
+			{
+				background: transparent url("../images/calculator.png") no-repeat 0 0;
+				display: block;
+				height: 17px;
+				width: 15px;
+				text-indent: -9999px;
+				margin-top: 18px;
+				margin-bottom: 17px;
+			}
+		
+		
+		.prices-list .supp-list-prices
+		{
+			background: #ECF6FF url("../images/patern2.png") repeat 0 0;
+			padding: 17px 0 16px;
+			margin-left: 0px;
+			width: 27px;
+			border-left: 1px solid #b9cad4;
+			-moz-border-radius-topright: 5px;
+		  -moz-border-radius-bottomright: 5px;
+		  -webkit-border-top-right-radius: 5px;
+		  -webkit-border-bottom-right-radius: 5px;
+		  border-top-right-radius: 5px;
+		  border-bottom-right-radius: 5px;
+			height: 19px;
+		}
+			.prices-list .supp-list-prices a
+			{
+				display: block;
+				background: transparent url("../images/supp2.png") no-repeat 0 0;
+				height: 19px;
+				width: 18px;
+				text-indent: -9999px;
+				margin-left: 5px;	
+			}
+			
+			.add-date { text-align: right; }
+				.add-date a { font-size: 13px; }
+		
+		#season .prices-form
+		{
+			-moz-border-radius-topleft: 0px;
+			-webkit-border-top-left-radius: 0px;
+			border-top-left-radius: 0px;
+		}
+		
+		.dates-form
+		{
+			background: #ECF6FF url("../images/patern2.png") repeat 0 0;
+			border-right: 1px solid #BFD1E2;
+	    border-left: 1px solid #BFD1E2;
+	    border-top: 1px solid #BFD1E2;
+			-moz-border-radius-topright: 5px;
+		  -moz-border-radius-topleft: 5px;
+		  -webkit-border-top-right-radius: 5px;
+		  -webkit-border-top-left-radius: 5px;
+			border-top-right-radius: 5px;
+		  border-top-left-radius: 5px;
+			padding: 0 0 0 10px;
+			width: 240px;
+		}
+			.dates-form .ins 
+			{ 
+				background: #FFF url("../images/icone-calendrier.png") no-repeat 60px 7px; 
+				width: 70px;
+				height: 10px;
+				font-size: 12px;
+				margin: 5px 10px 5px 10px;
+			}
+				
 
 /* *************************************************
     Result page
@@ -506,6 +679,7 @@
 ************************************************** */
 
 .new {}
+	.new table { margin-bottom: 10px; }
 
   .new th
   {
