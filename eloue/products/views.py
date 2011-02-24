@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.conf import settings
 from django.contrib import messages
+from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.vary import vary_on_headers
 from django.http import Http404
@@ -62,7 +63,6 @@ def product_edit(request, slug, product_id):
     if form.is_valid():
         product = form.save()
         messages.success(request, _(u"Votre produit a bien été édité !"))
-        return redirect_to(request, product.get_absolute_url())
     return direct_to_template(request, 'products/product_edit.html', extra_context={'product': product, 'form': form})
 
 
