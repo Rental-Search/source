@@ -15,6 +15,7 @@ class Migration(SchemaMigration):
             ('designation', self.gf('django.db.models.fields.CharField')(max_length=255)),
             ('description', self.gf('django.db.models.fields.CharField')(max_length=255)),
             ('created_at', self.gf('django.db.models.fields.DateTimeField')()),
+            ('address', self.gf('django.db.models.fields.related.ForeignKey')(related_name='alerts', to=orm['accounts.Address']))
         ))
         db.send_create_signal('products', ['Alert'])
         
