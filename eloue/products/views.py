@@ -17,9 +17,9 @@ from haystack.query import SearchQuerySet
 from eloue.decorators import ownership_required, secure_required, mobify
 from eloue.accounts.forms import EmailAuthenticationForm
 from eloue.accounts.models import Patron
-from eloue.products.forms import FacetedSearchForm, ProductForm, ProductEditForm
+from eloue.products.forms import FacetedSearchForm, ProductForm, ProductEditForm, AlertForm
 from eloue.products.models import Category, Product, Curiosity, UNIT, Alert
-from eloue.products.wizard import ProductWizard
+from eloue.products.wizard import ProductWizard, AlertWizard
 
 
 PAGINATE_PRODUCTS_BY = getattr(settings, 'PAGINATE_PRODUCTS_BY', 10)

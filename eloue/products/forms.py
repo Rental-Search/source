@@ -181,6 +181,9 @@ class ProductAdminForm(forms.ModelForm):
 
 
 class AlertForm(forms.ModelForm):
+    designation = forms.CharField(max_length=100, widget=forms.TextInput(attrs={'class': 'inm'}))
+    description = forms.CharField(label=_(u"Description"), widget=forms.Textarea())
+    
     class Meta:
         model = Alert
         exclude = ('created_at', 'patron')

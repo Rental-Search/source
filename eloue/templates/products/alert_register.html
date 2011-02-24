@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Créer une alerte" %}{% endblock %}
+
+{% block content %}
+<div id="content" class="clearfix">
+	<div class="sbs x12">
+		<div class="sbs-header">
+			<h1>{% trans "Créer une alerte" %}</h1>
+		</div>
+		<ol class="sbs-steps">
+			<li class="off">{% trans "1. Remplissez la fiche" %}</li>
+			<li class="on">{% trans "2. Identifiez-vous" %}</li>
+		</ol>
+		<a href="{% url faq-topic-list %}" class="btn big-blue">{% trans "Obtenir de l'aide" %}</a>
+	</div>
+	<div class="content-header x12">
+		{% if form.addresses %}
+			<h2>{% trans "Choisissez une adresse pour l'objet :" %}</h2>
+		{% else %}
+			<h2>{% trans "Complétez votre profil et choisissez une adresse pour la l'objet :" %}</h2>
+		{% endif %}
+	</div>
+	{% include "accounts/partials/missing.html" %}
+</div>
+
+{% endblock%}
