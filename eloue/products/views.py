@@ -58,7 +58,7 @@ def product_edit(request, slug, product_id):
     }
     for price in product.prices.all():
         initial['%s_price' % UNIT.reverted[price.unit].lower()] = price.amount
-    form = ProductEditForm(request.POST or None, instance=product, initial=initial)
+    form = ProductEditForm(data=request.POST or None, files=request.FILES or None, instance=product, initial=initial)
     if form.is_valid():
         product = form.save()
         messages.success(request, _(u"Votre produit a bien été édité !"))
