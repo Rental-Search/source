@@ -3,6 +3,7 @@ from django.conf import settings
 from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
+from django.core.urlresolvers import reverse
 from django.views.decorators.vary import vary_on_headers
 from django.http import Http404
 from django.shortcuts import get_object_or_404
@@ -64,6 +65,18 @@ def product_edit(request, slug, product_id):
         product = form.save()
         messages.success(request, _(u"Votre produit a bien été édité !"))
     return direct_to_template(request, 'products/product_edit.html', extra_context={'product': product, 'form': form})
+
+
+@login_required
+@ownership_required(model=Product, object_key='product_id', ownership=['owner'])
+def product_delete(request, slug, product_id):
+    product = get_object_or_404(Product.on_site, pk=product_id)
+    if request.method == "POST":
+        product.delete()
+        messages.success(request, _(u"Votre objet à bien été supprimée"))
+        return redirect_to(request, reverse('owner_product'))
+    else:
+        return direct_to_template(request, template='products/product_delete.html', extra_context={'product': product})
 
 
 @mobify

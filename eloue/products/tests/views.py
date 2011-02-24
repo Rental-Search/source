@@ -62,3 +62,19 @@ class ProductViewsTest(TestCase):
         response = self.client.get('/location/condiment/ketchup/')
         self.assertEqual(response.status_code, 404)
     
+    def test_product_delete(self):
+        self.client.login(username='alexandre.woog@e-loue.com', password='alexandre')
+        response = self.client.post(reverse('product_delete', args=['perceuse-visseuse-philips', 1]))
+        self.assertRedirects(response, reverse('owner_product'), status_code=301)
+        try:
+            Product.objects.get(pk=1)
+            self.fail()
+        except Product.DoesNotExist:
+            pass
+    
+    def test_product_delete_confirmation(self):
+        self.client.login(username='alexandre.woog@e-loue.com', password='alexandre')
+        response = self.client.get(reverse('product_delete', args=['perceuse-visseuse-philips', 1]))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'products/product_delete.html')
+    
