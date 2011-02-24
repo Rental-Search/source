@@ -31,16 +31,15 @@
 				<table>
 					<tr>
 						<td colspan="2" {% if form.category.errors %} class="error-field" {% endif %}>
-						    {{ form.category }}
-
-							{% if form.category.errors %}
-						 		{% for error in form.category.errors %}
-									<br />
-							  	<span class="error">{{ error|escape }}</span>
-								{% endfor %}
+						{{ form.category }}
+						{% if form.category.errors %}
+							{% for error in form.category.errors %}
+							<br />
+							<span class="error">{{ error|escape }}</span>
+							{% endfor %}
 						{% endif %}
-					</td>
-				</tr>
+						</td>
+					</tr>
 			</table>
 		</div>
 	</div>
@@ -53,13 +52,20 @@
 			  {% csrf_token %}
 				<table>
 					<tr>
-						<th><label>Photo * :</label></th>
+						<th><label>{{ form.picture.label }} {% if form.picture.field.required %}*{% endif %}:</label></th>
 						<td>
 							{% for picture in product.pictures.all %}
 								{% if picture.thumbnail %}
 				       		<a href="#"><img src="{{ picture.thumbnail.url }}" /></a>
 				        {% endif %}
 							{% endfor %}
+							{{ form.picture }}
+							{% if form.picture.errors %}
+							    {% for error in form.picture.errors %}
+											<br />
+							        <span class="error">{{ error|escape }}</span>
+							    {% endfor %}
+							{% endif %}
 						</td>
 					</tr>
 					<tr>
