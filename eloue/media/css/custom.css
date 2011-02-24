@@ -822,6 +822,7 @@
 		border-top-left-radius: 5px;
 		border-top-right-radius: 5px;
     padding: 10px 0px;
+    margin-bottom: 20px;
   }
     .sidebar-box h3 
     { 
@@ -1183,4 +1184,20 @@
               font-weight: bold;
               line-height: 26px;
             }
+            
+/* **************************************************
+  Alerts
+**************************************************** */
+#alerts .bk { width: 620px;}
+#alerts .bk-dates {line-height: 20px;}
+#alerts .bk-desc { width: 380px; height: 80px;}
+#alerts .bk-action
+{
+  float: left;
+  padding-top: 10px;
+  width: 140px;
+  text-align: center;
+}
+  #alerts .bk-action a { line-height: 30px; }
+
   

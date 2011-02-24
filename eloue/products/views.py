@@ -18,7 +18,7 @@ from eloue.decorators import ownership_required, secure_required, mobify
 from eloue.accounts.forms import EmailAuthenticationForm
 from eloue.accounts.models import Patron
 from eloue.products.forms import FacetedSearchForm, ProductForm, ProductEditForm
-from eloue.products.models import Category, Product, Curiosity, UNIT
+from eloue.products.models import Category, Product, Curiosity, UNIT, Alert
 from eloue.products.wizard import ProductWizard
 
 
