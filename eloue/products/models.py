@@ -27,8 +27,7 @@ from eloue.products.manager import ProductManager, PriceManager, QuestionManager
 from eloue.products.signals import post_save_answer, post_save_product, post_save_curiosity
 from eloue.products.utils import Enum
 from eloue.signals import post_save_sites
-from eloue.utils import currency
-
+from eloue.utils import currency, create_alternative_email
 
 UNIT = Enum([
     (0, 'HOUR', _(u'heure')),
@@ -377,6 +376,7 @@ class Alert(models.Model):
     designation = models.CharField(max_length=255)
     description = models.CharField(max_length=255)
     created_at = models.DateTimeField(editable=False)
+    address = models.ForeignKey(Address, related_name='alerts')
     sites = models.ManyToManyField(Site, related_name='alerts')
     
     on_site = CurrentSiteManager()
@@ -393,12 +393,11 @@ class Alert(models.Model):
     def save(self, *args, **kwargs):
         if not self.created_at:
             self.created_at = datetime.now()
-        #self.position = self.geocode()
         super(Alert, self).save(*args, **kwargs)
     
     @property
     def position(self):
-        return self.patron.addresses[0].position
+        return self.address.position
     
     @property
     def nearest_patrons(self):
