@@ -110,6 +110,7 @@ class AlertWizard(GenericFormWizard):
         # Create and send alerts
         alert_form = form_list[0]
         alert_form.instance.patron = new_patron
+        #alert_form.instance.address = new_address
         alert = alert_form.save()
         
         alert.send_alerts()

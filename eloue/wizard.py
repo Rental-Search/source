@@ -97,7 +97,7 @@ class MultiPartFormWizard(FormWizard):
             else:
                 form = self.get_form(next_step)
                 self.step = current_step = next_step
-        
+        print form.errors
         return self.render(form, request, current_step)
     
 

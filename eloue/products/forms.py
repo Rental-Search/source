@@ -186,5 +186,5 @@ class AlertForm(forms.ModelForm):
     
     class Meta:
         model = Alert
-        exclude = ('created_at', 'patron')
+        exclude = ('description', 'designation')
     
