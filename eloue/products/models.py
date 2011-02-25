@@ -419,6 +419,7 @@ class Alert(models.Model):
 post_save.connect(post_save_answer, sender=Answer)
 post_save.connect(post_save_product, sender=Product)
 post_save.connect(post_save_curiosity, sender=Curiosity)
+post_save.connect(post_save_sites, sender=Alert)
 post_save.connect(post_save_sites, sender=Curiosity)
 post_save.connect(post_save_sites, sender=Product)
 post_save.connect(post_save_sites, sender=Category)
