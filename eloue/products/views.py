@@ -132,9 +132,10 @@ def alert_create(request, *args, **kwargs):
 @cache_page(900)
 @vary_on_cookie
 def alert_list(request, sqs=SearchQuerySet(), page=None):
-	form = AlertSearchForm(request.GET, searchqueryset=sqs)
-	return object_list(request, form.search(), page=page, paginate_by=PAGINATE_PRODUCTS_BY, template_name="products/alert_list.html",
-        template_object_name='alert', extra_context={'form': form})
+    form = FacetedSearchForm()
+    search_alert_form = AlertSearchForm(request.GET, searchqueryset=sqs)
+    return object_list(request, search_alert_form.search(), page=page, paginate_by=PAGINATE_PRODUCTS_BY, template_name="products/alert_list.html",
+        template_object_name='alert', extra_context={'form': form, 'search_alert_form':search_alert_form})
 
 
 @login_required
