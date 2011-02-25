@@ -31,7 +31,8 @@ sitemaps = {
     'products': ProductSitemap
 }
 
-translation.activate(settings.LANGUAGE_CODE) # Force language for test and dev
+if settings.DEBUG:
+    translation.activate(settings.LANGUAGE_CODE)  # Force language for test and dev
 
 urlpatterns = patterns('',
     url(r"^announcements/", include("announcements.urls")),

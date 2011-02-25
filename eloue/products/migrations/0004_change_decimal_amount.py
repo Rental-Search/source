@@ -21,8 +21,7 @@ class Migration(SchemaMigration):
 
         # Changing field 'Product.deposit_amount'
         db.alter_column('products_product', 'deposit_amount', self.gf('django.db.models.fields.DecimalField')(max_digits=8, decimal_places=2))
-
-
+    
     models = {
         'accounts.address': {
             'Meta': {'object_name': 'Address'},
