@@ -405,7 +405,7 @@ class Alert(models.Model):
         return Patron.objects.distinct().filter(addresses__in=nearest_addresses)[:10]
     
     def send_alerts(self):
-        for patron in self.nearest_addresses:
+        for patron in self.nearest_patrons:
             message = create_alternative_email('products/emails/alert', {
                 'patron': patron,
                 'alert': self

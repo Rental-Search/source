@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.conf import settings
 from django.contrib.auth import login
+from django.core.urlresolvers import reverse
 from django.views.generic.simple import redirect_to
 
 from django_lean.experiments.models import GoalRecord
@@ -110,11 +111,11 @@ class AlertWizard(GenericFormWizard):
         # Create and send alerts
         alert_form = form_list[0]
         alert_form.instance.patron = new_patron
-        #alert_form.instance.address = new_address
+        alert_form.instance.address = new_address
         alert = alert_form.save()
         
         alert.send_alerts()
-        return redirect_to(request, new_patron.get_absolute_url(), permanent=False)
+        return redirect_to(request, reverse("dashboard"), permanent=False)
     
     def get_template(self, step):
         if issubclass(self.form_list[step], EmailAuthenticationForm):
