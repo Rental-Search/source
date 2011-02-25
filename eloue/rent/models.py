@@ -391,7 +391,7 @@ class Booking(models.Model):
             amount = self.deposit_amount
         
         domain = Site.objects.get_current().domain
-        protocol = "https" if USE_HTTPS else "http"    
+        protocol = "https" if USE_HTTPS else "http"
         response = payments.pay(
             actionType='PAY',
             senderEmail=self.borrower.paypal_email,

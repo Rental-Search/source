@@ -6,9 +6,7 @@ local_path = lambda path: os.path.join(os.path.dirname(__file__), path)
 
 SITE_ID = 6
 
-USE_HTTPS = False # True
-
-SESSION_COOKIE_DOMAIN = None # 'm.erentmarket.com'
+SESSION_COOKIE_DOMAIN = None  # 'm.erentmarket.com'
 
 CACHE_MIDDLEWARE_KEY_PREFIX = 'uk:mobile'
 
