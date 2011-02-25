@@ -115,7 +115,7 @@ class AlertWizard(GenericFormWizard):
         alert = alert_form.save()
         
         alert.send_alerts()
-        return redirect_to(request, reverse("dashboard"), permanent=False)
+        return redirect_to(request, reverse("alert_list"), permanent=False)
     
     def get_template(self, step):
         if issubclass(self.form_list[step], EmailAuthenticationForm):

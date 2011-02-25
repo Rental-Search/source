@@ -135,3 +135,9 @@ def alert_list(request, sqs=SearchQuerySet(), page=None):
 	form = AlertSearchForm(request.GET, searchqueryset=sqs)
 	return object_list(request, form.search(), page=page, paginate_by=PAGINATE_PRODUCTS_BY, template_name="products/alert_list.html",
         template_object_name='alert', extra_context={'form': form})
+
+
+@login_required
+def alert_inform(request, alert_id):
+    # TODO
+    return redirect_to(request, reverse("alert_list"), permanent=False)

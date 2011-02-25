@@ -58,7 +58,7 @@
 				</div>
 				<div class="bk-action">
 					<a href="{% url product_create %}">{% trans "Mettre en location" %}</a><br />
-					<a href="#" title="Avertir le locataire que j'ai mis cet objet en location">{% trans "Avertir" %}</a>
+					<a href="{% url alert_inform alert.pk %}" title="Avertir le locataire que j'ai mis cet objet en location">{% trans "Avertir" %}</a>
 				</div>
 			</div>
 		</li>
