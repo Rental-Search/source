@@ -12,7 +12,7 @@ from mptt.forms import TreeNodeChoiceField
 
 from eloue.geocoder import GoogleGeocoder
 from eloue.products.fields import FacetField
-from eloue.products.models import Alert, PatronReview, ProductReview, Product, Category
+from eloue.products.models import Alert, PatronReview, ProductReview, Product, Category, UNIT
 from eloue.products.utils import Enum
 
 
@@ -78,7 +78,37 @@ class FacetedSearchForm(SearchForm):
             return sqs, suggestions
         else:
             return self.searchqueryset, None
+    
 
+class AlertSearchForm(SearchForm):
+    l = forms.CharField(required=False, max_length=100, widget=forms.TextInput(attrs={'class': 'inb', 'tabindex': '2'}))
+    r = forms.IntegerField(required=False, widget=forms.TextInput(attrs={'class': 'ins'}))
+    
+    def clean_r(self):
+        location = self.cleaned_data.get('l', None)
+        radius = self.cleaned_data.get('r', None)
+        if location not in EMPTY_VALUES and radius in EMPTY_VALUES:
+            name, coordinates, radius = GoogleGeocoder().geocode(location)
+        if radius in EMPTY_VALUES:
+            radius = DEFAULT_RADIUS
+        return radius
+    
+    def search(self):
+        if self.is_valid():
+            sqs = self.searchqueryset
+            
+            location, radius = self.cleaned_data.get('l', None), self.cleaned_data.get('r', DEFAULT_RADIUS)
+            if location:
+                name, (lat, lon), _ = GoogleGeocoder().geocode(location)
+                sqs = sqs.spatial(lat=lat, long=lon, radius=radius, unit='km')
+            
+            if self.load_all:
+                sqs = sqs.load_all()
+            
+            return sqs
+        else:
+            return self.searchqueryset
+    
 
 class ProductReviewForm(forms.ModelForm):
     class Meta:

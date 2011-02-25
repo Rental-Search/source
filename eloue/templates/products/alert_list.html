@@ -57,8 +57,8 @@
 					<p>{{ alert.description}}</p>
 				</div>
 				<div class="bk-action">
-					<a href="{% url product_create %}">Mettre en location</a><br />
-					<a href='#' title="Avertir le locataire que j'ai mis cet objet en location	">Avertir</a>
+					<a href="{% url product_create %}">{% trans "Mettre en location" %}</a><br />
+					<a href="#" title="Avertir le locataire que j'ai mis cet objet en location">{% trans "Avertir" %}</a>
 				</div>
 			</div>
 		</li>
@@ -83,7 +83,7 @@
 	{% endif %}
 	</div>
 	<div class="sidebar-box x4">
-		<h3>Alertes location !</h3>
+		<h3>{% trans "Alertes location !" %}</h3>
 		<ol class="guarantee-list">
 			<li>
 				<strong>Mettre en  location</strong> l'objet demandé
@@ -95,21 +95,21 @@
 	</div>
 	<div class="facet-dist portlet x4">
 		<div class="portlet-header">
-			<h3>Rechercher une  alerte</h3>
+			<h3>{% trans "Rechercher une alerte" %}</h3>
 		</div>
 		<div class="portlet-top">
-			<form action="/location/?q=robe+&amp;r=11&amp;l=paris" class="form">
+			<form action="" class="form">
 				<p style="margin-bottom: 10px;">
-					<label class="labm">Où ?</label><br />
-					<input class='inm' type="text" name="town" style="width: 235px" />
+					<label class="labm">{% trans "Où ?" %}</label><br />
+					<input class="inm" type="text" name="l" style="width: 235px" />
 				</p>
 				<p style="margin-bottom: 10px;">
-					<label class="labs">Restreindre les résultats à un rayon de :</label><br>
+					<label class="labs">{% trans "Restreindre les résultats à un rayon de :" %}</label><br>
 					<input id="id_r" type="text" class="ins" value="11" name="r">
-					<span class="unit">Km</span>
+					<span class="unit">{% trans "Km" %}</span>
 				</p>
 				<p style="text-align: right;">
-					<input type="submit" value="Mettre à jour" class="btn medium-blue">
+					<input type="submit" value="{% trans "Mettre à jour" %}" class="btn medium-blue">
 				</p>
 			</form>
 		</div>

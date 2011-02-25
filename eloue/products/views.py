@@ -17,7 +17,7 @@ from haystack.query import SearchQuerySet
 from eloue.decorators import ownership_required, secure_required, mobify
 from eloue.accounts.forms import EmailAuthenticationForm
 from eloue.accounts.models import Patron
-from eloue.products.forms import FacetedSearchForm, ProductForm, ProductEditForm, AlertForm
+from eloue.products.forms import AlertSearchForm, FacetedSearchForm, ProductForm, ProductEditForm, AlertForm
 from eloue.products.models import Category, Product, Curiosity, UNIT, Alert
 from eloue.products.wizard import ProductWizard, AlertWizard
 
@@ -131,7 +131,7 @@ def alert_create(request, *args, **kwargs):
 
 @cache_page(900)
 @vary_on_cookie
-def alert_list(request, page=None):
-	form = FacetedSearchForm()
-	return object_list(request, Alert.on_site.all(), page=page, paginate_by=PAGINATE_PRODUCTS_BY, template_name="products/alert_list.html",
+def alert_list(request, sqs=SearchQuerySet(), page=None):
+	form = AlertSearchForm(request.GET, searchqueryset=sqs)
+	return object_list(request, form.search(), page=page, paginate_by=PAGINATE_PRODUCTS_BY, template_name="products/alert_list.html",
         template_object_name='alert', extra_context={'form': form})
