@@ -15,12 +15,13 @@
 		</ol>
 		<a href="{% url faq-topic-list %}" class="btn big-blue">{% trans "Obtenir de l'aide" %}</a>
 	</div>
-	<div class="content-header x6">
-		<h2>{% trans "Informations sur l'objet que vous voulez louez" %}</h2>
+	<div class="content-header x12">
+		{% if form.addresses %}
+			<h2>{% trans "Choisissez une adresse pour l'objet :" %}</h2>
+		{% else %}
+			<h2>{% trans "Complétez votre profil et choisissez une adresse pour la l'objet :" %}</h2>
+		{% endif %}
 	</div>
-	<div class="x9">
-		{% include "accounts/partials/login.html" %}
-	</div>
+	{% include "accounts/partials/missing.html" %}
 </div>
-
 {% endblock%}

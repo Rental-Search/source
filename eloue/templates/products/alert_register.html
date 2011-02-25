@@ -16,12 +16,10 @@
 		<a href="{% url faq-topic-list %}" class="btn big-blue">{% trans "Obtenir de l'aide" %}</a>
 	</div>
 	<div class="content-header x12">
-		{% if form.addresses %}
-			<h2>{% trans "Choisissez une adresse pour l'objet :" %}</h2>
-		{% else %}
-			<h2>{% trans "Complétez votre profil et choisissez une adresse pour la l'objet :" %}</h2>
-		{% endif %}
+		<h2>{% trans "Identification" %}</h2>
 	</div>
-	{% include "accounts/partials/missing.html" %}
-</div>
+	<div class="x9">
+		{% include "accounts/partials/login.html" %}
+	</div>
+</div>{# content #}
 {% endblock%}
