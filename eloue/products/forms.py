@@ -81,8 +81,8 @@ class FacetedSearchForm(SearchForm):
     
 
 class AlertSearchForm(SearchForm):
-    l = forms.CharField(required=False, max_length=100, widget=forms.TextInput(attrs={'class': 'inb', 'tabindex': '2'}))
-    r = forms.IntegerField(required=False, widget=forms.TextInput(attrs={'class': 'ins'}))
+    l = forms.CharField(label=_(u"Où ?"), required=False, max_length=100, widget=forms.TextInput(attrs={'class': 'inb', 'tabindex': '2'}))
+    r = forms.IntegerField(label=_(u"Restreindre les résultats à un rayon de :"), required=False, widget=forms.TextInput(attrs={'class': 'ins'}))
     
     def clean_r(self):
         location = self.cleaned_data.get('l', None)

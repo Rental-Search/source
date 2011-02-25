@@ -100,12 +100,12 @@
 		<div class="portlet-top">
 			<form action="" class="form">
 				<p style="margin-bottom: 10px;">
-					<label class="labm">{% trans "Où ?" %}</label><br />
-					<input class="inm" type="text" name="l" style="width: 235px" />
+					<label class="labm">{{ form.l.label }}</label><br />
+					{{ form.l }}
 				</p>
 				<p style="margin-bottom: 10px;">
-					<label class="labs">{% trans "Restreindre les résultats à un rayon de :" %}</label><br>
-					<input id="id_r" type="text" class="ins" value="11" name="r">
+					<label class="labs">{{ form.r.label }}</label><br>
+					{{ form.r }}
 					<span class="unit">{% trans "Km" %}</span>
 				</p>
 				<p style="text-align: right;">
