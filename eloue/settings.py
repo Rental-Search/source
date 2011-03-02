@@ -292,7 +292,7 @@ COMPRESS_CSS = {
             'css/plugins/ui/jquery.ui.datepicker.css',
             'css/plugins/ui/jquery.ui.theme.css'
         ),
-        'output_filename': 'css/nc.r?.css',
+        'output_filename': 'css/uk.r?.css',
         'extra_context': {
             'media': 'screen',
         }
