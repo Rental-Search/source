@@ -1,6 +1,11 @@
 /*****
 uk
 ******/
+#header .x4 
+{
+   margin-left: 0px;
+   width: 340px;
+}
 .search-header {
 	background: transparent url("../images/separateur2.png") no-repeat 450px 13px;
 }

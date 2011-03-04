@@ -290,6 +290,7 @@ COMPRESS_CSS = {
             'css/uk.css',
             'css/plugins/ui/jquery.ui.core.css',
             'css/plugins/ui/jquery.ui.datepicker.css',
+            'css/plugins/ui/jquery.ui.tabs.css',
             'css/plugins/ui/jquery.ui.theme.css'
         ),
         'output_filename': 'css/uk.r?.css',
