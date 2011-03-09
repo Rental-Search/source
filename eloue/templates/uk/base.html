@@ -98,16 +98,8 @@
 			</div>
 			{% if site_wide_announcements %}
 			{% with site_wide_announcements|first as announcement %}
-				<div class="x12 twitter-box">
-					{{ announcement.content|markdown }}
-					<div class="twitter-dialogue">
-					</div>
-				</div>
 				<div class="x12 twitter-info">
-				<p>
-					<span class="twitter-time">{{ announcement.creation_date|date:"l j F Y"|capfirst }}<span> {% trans "sur" %} <a href="http://blog.e-loue.com">{% trans "e-loue blog" %}</a>
-				</p>
-			</div>
+				</div>
 		{% endwith %}
 		{% endif %}
 	</div>
