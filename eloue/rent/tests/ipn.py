@@ -18,31 +18,32 @@ class TestPaypalIPN(TestCase):
             'currency_code': 'EUR',
             'current_number_of_payments': '0',
             'current_period_attempts': '0',
-            'current_total_amount_of_all_payments': '0.0',
+            'current_total_amount_of_all_payments': '0.00',
             'date_of_month': '0',
             'day_of_week': 'NO_DAY_SPECIFIED',
-            'ending_date': '2010-09-16T11:28:20.0-07:00',
+            'ending_date': '2012-03-16T19:58:14.000-07:00',
             'max_number_of_payments': 'null',
-            'max_total_amount_of_all_payments': '112.6',
+            'max_total_amount_of_all_payments': '6.00',
             'notify_version': 'UNVERSIONED',
             'payment_period': '0',
             'pin_type': 'NOT_REQUIRED',
-            'preapproval_key': 'PA-2NS525738W954192E',
-            'sender_email': 'eloue_1283761258_per@tryphon.org',
-            'starting_date': '2010-09-13T11:28:20.0-07:00',
+            'preapproval_key': 'PA-7BT08456PP218331A',
+            'sender_email': 'benoit_1300355065_per@e-loue.com',
+            'starting_date': '2011-03-22T19:58:14.000-07:00',
             'status': 'ACTIVE',
             'test_ipn': '1',
             'transaction_type': 'Adaptive Payment PREAPPROVAL',
-            'verify_sign': 'An5ns1Kso7MWUdW4ErQKJJJ4qi4-Av.UjqUcxQnthRSekpwrT2LmjDTm'
+            'verify_sign': 'An5ns1Kso7MWUdW4ErQKJJJ4qi4-AI.Rl138QygzSioU5-cNTBIVgqfx'
         }
+        
         response = self.client.post(reverse('preapproval_ipn'), urllib.urlencode(data), content_type='application/x-www-form-urlencoded; charset=windows-1252;')
         self.failUnlessEqual(response.status_code, 200)
         self.assertEquals(len(mail.outbox), 2)
         self.assertTrue('alexandre.woog@e-loue.com' in mail.outbox[0].to)
         self.assertTrue('timothee.peignier@e-loue.com' in mail.outbox[1].to)
-        booking = Booking.objects.get(preapproval_key="PA-2NS525738W954192E")
+        booking = Booking.objects.get(preapproval_key="PA-7BT08456PP218331A")
         self.assertEquals(booking.state, Booking.STATE.AUTHORIZED)
-        self.assertEquals(booking.borrower.paypal_email, 'eloue_1283761258_per@tryphon.org')
+        self.assertEquals(booking.borrower.paypal_email, 'benoit_1300355065_per@e-loue.com')
     
     def test_pay_ipn(self):
         data = {
