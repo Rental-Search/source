@@ -6,6 +6,8 @@ from django.conf import settings
 from django.utils.datastructures import SortedDict, MultiValueDict
 from django.utils.encoding import smart_str
 from django.template import Library, Node, Variable, TemplateSyntaxError
+from django.utils.translation import ugettext as _
+
 
 DEFAULT_RADIUS = getattr(settings, 'DEFAULT_RADIUS', 50)
 
@@ -22,7 +24,7 @@ def facet_breadcrumb_link(breadcrumbs, facet):
         output.append(f['url'])
         if f == facet:
             break
-    return '%s/%s/' % ('location', '/'.join(output))
+    return '%s%s/' % (_('location/'), '/'.join(output))
 
 
 class FacetUrlNode(Node):
@@ -58,7 +60,7 @@ class FacetUrlNode(Node):
             if key in urlbits:
                 del urlbits[key]
         
-        path = urljoin('/location/', ''.join(['%s/%s/' % (key, value) for key, value in urlbits.iteritems()]))
+        path = urljoin('/%s' % _("location/"), ''.join(['%s/%s/' % (key, value) for key, value in urlbits.iteritems()]))
         if any([value for key, value in params.iteritems()]):
             return '%s?%s' % (path, self.urlencode(params))
         else:
@@ -109,7 +111,7 @@ class CanonicalNode(Node):
     def render(self, context):
         urlbits = self.urlbits.resolve(context).copy()
         urlbits = self.sort(urlbits)
-        path = urljoin('/location/', ''.join(['%s/%s/' % (key, value) for key, value in urlbits.iteritems()]))
+        path = urljoin('/%s' % _("location/"), ''.join(['%s/%s/' % (key, value) for key, value in urlbits.iteritems()]))
         return path
     
 
