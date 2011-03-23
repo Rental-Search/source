@@ -156,6 +156,11 @@ class ProductEditForm(forms.ModelForm):
             deposit_amount = D('0')
         return deposit_amount
     
+    def clean_picture(self):
+        picture = self.cleaned_data.get('picture', None)
+        self.new_picture = picture
+        return picture
+    
     def save(self, *args, **kwargs):
         for unit in UNIT.keys():
             field = "%s_price" % unit.lower()
@@ -167,8 +172,9 @@ class ProductEditForm(forms.ModelForm):
                 if not created:
                     instance.amount = self.cleaned_data[field]
                     instance.save()
-        self.instance.pictures.all().delete()  # TODO : Do something less stupid here
-        self.instance.pictures.add(Picture.objects.create(image=self.cleaned_data['picture']))
+        if self.new_picture:
+            self.instance.pictures.all().delete()  # TODO : Do something less stupid here
+            self.instance.pictures.add(Picture.objects.create(image=self.cleaned_data['picture']))
         return super(ProductEditForm, self).save(*args, **kwargs)
     
     class Meta:
