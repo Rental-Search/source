@@ -177,7 +177,22 @@ class Category(MPTTModel):
         return _(u"/location/par-categorie/%(category)s/") % {
             'category': self.slug
         }
-    
+
+class StaticPage(models.Model):
+    """
+    The static page which give the user a tip of rent.
+    The advise of products, etc.
+    """
+    title = models.CharField(max_length=255, db_index=True)
+    author = models.CharField(max_length=255, db_index=True)
+    created_at = models.DateTimeField(editable=False)
+    modified_at = models.DateTimeField(editable=False)
+    category = models.ForeignKey('Category', related_name='static_pages')
+    url_link = models.URLField(verify_exists=True, unique=True)
+
+    class Meta:
+        ordering = ('modified_at', 'created_at')
+        get_latest_by = 'modified_at'
 
 class Property(models.Model):
     """A property"""
