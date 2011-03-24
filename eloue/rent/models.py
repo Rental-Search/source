@@ -176,7 +176,7 @@ class Booking(models.Model):
         https://www.paypal.com/webscr?cmd=_ap-preapproval&preapprovalkey={{ preapproval_key }}
         """
         domain = Site.objects.get_current().domain
-        protocol = "https" if USE_HTTPS else "http"
+        protocol = "https"
         if settings.CONVERT_XPF:
             total_amount = convert_from_xpf(self.total_amount)
         else:
@@ -342,7 +342,7 @@ class Booking(models.Model):
         https://www.paypal.com/webscr?cmd=_ap-payment&paykey={{ pay_key }}
         """
         domain = Site.objects.get_current().domain
-        protocol = "https" if USE_HTTPS else "http"
+        protocol = "https"
         if settings.CONVERT_XPF:
             total_amount = convert_from_xpf(self.total_amount)
             net_price = convert_from_xpf(self.net_price)
@@ -391,7 +391,7 @@ class Booking(models.Model):
             amount = self.deposit_amount
         
         domain = Site.objects.get_current().domain
-        protocol = "https" if USE_HTTPS else "http"
+        protocol = "https"
         response = payments.pay(
             actionType='PAY',
             senderEmail=self.borrower.paypal_email,
