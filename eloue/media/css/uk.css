@@ -11,3 +11,21 @@ uk
 }
 
 .twitter-info { background: transparent url("../images/copyright-erentmarket.png") no-repeat top right; }
+
+.welcome-eRentmarket 
+{ 
+  position: relative;
+  height: 211px;
+  margin-bottom: 20px;
+}
+  .welcome-link 
+  {
+    background: transparent url("../images/uk/welcome_erentmarket.png") no-repeat 0 0;
+    display: block;
+    position: absolute;
+    top: -22px;
+    left: 0px;
+    text-indent: -9999px;
+    height: 234px;
+    width: 301px;
+  }
