@@ -29,3 +29,12 @@ uk
     height: 234px;
     width: 301px;
   }
+  
+.ht-col p 
+{ 
+  padding: 10px 0;
+  margin: 0 40px;
+  font-size: 22px;
+  line-height: 28px;
+  text-align: justify;
+}

@@ -9,7 +9,7 @@ TIME_ZONE = 'Europe/London'
 
 LANGUAGE_CODE = 'en-gb'
 
-SESSION_COOKIE_DOMAIN = 'erentmarket.com'
+SESSION_COOKIE_DOMAIN = None #'erentmarket.com'
 
 CACHE_MIDDLEWARE_KEY_PREFIX = 'uk'
 
