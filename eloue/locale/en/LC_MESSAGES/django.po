@@ -3126,7 +3126,7 @@ msgid ""
 "\t\t\t "
 msgstr ""
 "\n"
-"\t\t\t  Our <strong>partner insurance company</strong> guarantees your items in case of damage.\n"
+"\t\t\t  The <strong>guaranty and the rental agreement</strong> securize your items in case of damage.\n"
 "\t\t\t "
 
 #: templates/rent/booking_detail.html:34
