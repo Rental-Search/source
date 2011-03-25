@@ -1648,7 +1648,7 @@ msgid ""
 "\t\t\t\t\t\t"
 msgstr ""
 "\n"
-"\t\t\t\t\t\t <p>Our <strong>partner insurance company</strong> guarantees your items in case of damage.</p>\n"
+"\t\t\t\t\t\t <p>The <strong>guaranty and the rental agreement</strong> securize your items in case of damage.</p>\n"
 "\t\t\t\t\t\t"
 
 #: templates/index.html:106
