@@ -72,6 +72,10 @@ class BookingWizard(GenericFormWizard):
         
         if booking.state != Booking.STATE.REJECTED:
             GoalRecord.record('rent_object_pre_paypal', WebUser(request))
+            if booking.payment_type == "nopay":
+                from django.views.generic.list_detail import object_detail
+                return object_detail(request, queryset=Booking.on_site.all(), object_id=booking.pk.hex, #test
+                     template_name='rent/booking_success.html', template_object_name='booking')
             return redirect_to(request, settings.PAYPAL_COMMAND % urllib.urlencode({'cmd': '_ap-preapproval',
                 'preapprovalkey': booking.preapproval_key}))
         return direct_to_template(request, template="rent/booking_preapproval.html", extra_context={

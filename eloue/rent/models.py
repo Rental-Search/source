@@ -26,9 +26,16 @@ from eloue.products.utils import Enum
 from eloue.rent.decorators import incr_sequence
 from eloue.rent.fields import UUIDField, IntegerAutoField
 from eloue.rent.manager import BookingManager, CurrentSiteBookingManager
-from eloue.paypal import payments, PaypalError
+from eloue.payments.paypal_payment import AdaptivePapalPayments, PaypalError
+from eloue.payments.non_payment import NonPayments
 from eloue.signals import post_save_sites
 from eloue.utils import create_alternative_email, convert_from_xpf
+
+
+PAY_PROCESSORS = {
+    "nopay": NonPayments,
+    "paypal": AdaptivePapalPayments
+}
 
 BOOKING_STATE = Enum([
     ('authorizing', 'AUTHORIZING', _(u"En cours d'autorisation")),
@@ -114,6 +121,7 @@ class Booking(models.Model):
     
     @incr_sequence('contract_id', 'rent_booking_contract_id_seq')
     def save(self, *args, **kwargs):
+        
         if not self.pk:
             self.created_at = datetime.datetime.now()
             self.pin = str(random.randint(1000, 9999))
@@ -132,6 +140,7 @@ class Booking(models.Model):
         return self.product.summary
     
     def __init__(self, *args, **kwargs):
+        self.payment_type = "nopay" # for test sake
         super(Booking, self).__init__(*args, **kwargs)
         for state in BOOKING_STATE.enum_dict:
             setattr(self, "is_%s" % state.lower(), types.MethodType(self._is_factory(state), self))
@@ -175,6 +184,8 @@ class Booking(models.Model):
         The you should redirect user to :
         https://www.paypal.com/webscr?cmd=_ap-preapproval&preapprovalkey={{ preapproval_key }}
         """
+        self.payment_processor = PAY_PROCESSORS[self.payment_type](self) # give me a field like paypal/nopay, etc, I can instance an object.
+        print "#######  payment processor ######", type(self.payment_processor)
         domain = Site.objects.get_current().domain
         protocol = "https"
         if settings.CONVERT_XPF:
@@ -182,25 +193,7 @@ class Booking(models.Model):
         else:
             total_amount = self.total_amount
         try:
-            now = datetime.datetime.now()
-            response = payments.preapproval(
-                startingDate=now,
-                endingDate=now + datetime.timedelta(days=360),
-                currencyCode=self._currency,
-                maxTotalAmountOfAllPayments=str(total_amount.quantize(D(".00"), ROUND_CEILING)),
-                cancelUrl=cancel_url,
-                returnUrl=return_url,
-                ipnNotificationUrl=urljoin(
-                    "%s://%s" % (protocol, domain), reverse('preapproval_ipn')
-                ),
-                client_details={
-                    'ipAddress': ip_address,
-                    'partnerName': 'e-loue',
-                    'customerType': 'Business' if self.borrower.is_professional else 'Personnal',
-                    'customerId': str(self.borrower.pk)
-                }
-            )
-            self.preapproval_key = response['preapprovalKey']
+            self.payment_processor.preapproval(cancel_url, return_url, ip_address, domain, protocol, total_amount)
         except PaypalError, e:
             self.state = BOOKING_STATE.REJECTED
             log.error(e)
@@ -349,39 +342,18 @@ class Booking(models.Model):
         else:
             total_amount = self.total_amount
             net_price = self.net_price
-        response = payments.pay(
-            actionType='PAY_PRIMARY',
-            senderEmail=self.borrower.paypal_email,
-            feesPayer='PRIMARYRECEIVER',
-            cancelUrl=cancel_url,
-            returnUrl=return_url,
-            currencyCode=self._currency,
-            preapprovalKey=self.preapproval_key,
-            ipnNotificationUrl=urljoin(
-                "%s://%s" % (protocol, domain), reverse('pay_ipn')
-            ),
-            receiverList={'receiver': [
-                {'primary':True, 'amount':str(total_amount.quantize(D(".00"), ROUND_CEILING)), 'email':PAYPAL_API_EMAIL},
-                {'primary':False, 'amount':str(net_price.quantize(D(".00"), ROUND_FLOOR)), 'email':self.owner.paypal_email}
-            ]}
-        )
-        self.pay_key = response['payKey']
+            self.payment_processor.pay(cancel_url, return_url, domain, protocol, total_amount, net_price)
         self.save()
     
     @transition(source='ended', target='closing', save=True)
     def pay(self):
         """Return deposit_amount to borrower and pay the owner"""
-        response = payments.execute_payment(
-            payKey=self.pay_key
-        )
+        self.payment_processor.execute_payment()
     
     @transition(source=['authorized', 'pending'], target='canceled', save=True)
     def cancel(self):
         """Cancel preapproval for the borrower"""
-        response = payments.cancel_preapproval(
-            preapprovalKey=self.preapproval_key,
-        )
-        self.canceled_at = datetime.datetime.now()
+        self.payment_processor.cancel_preapproval()
     
     @transition(source='incident', target='deposit', save=True)
     def litigation(self, amount=None, cancel_url='', return_url=''):
@@ -392,28 +364,12 @@ class Booking(models.Model):
         
         domain = Site.objects.get_current().domain
         protocol = "https"
-        response = payments.pay(
-            actionType='PAY',
-            senderEmail=self.borrower.paypal_email,
-            preapprovalKey=self.preapproval_key,
-            cancelUrl=cancel_url,
-            returnUrl=return_url,
-            currencyCode=self._currency,
-            ipnNotificationUrl=urljoin(
-                "%s://%s" % (protocol, domain), reverse('pay_ipn')
-            ),
-            receiverList={'receiver': [
-                {'amount':str(amount.quantize(D('.00'), ROUND_FLOOR)), 'email':self.owner.paypal_email},
-            ]}
-        )
+        self.payment_processor.give_caution(amount, cancel_url, return_url, domain, protocol)
     
     @transition(source='incident', target='refunded', save=True)
     def refund(self):
         """Refund borrower or owner if something as gone wrong"""
-        response = payments.refund(
-            payKey=self.pay_key,
-            currencyCode=self._currency
-        )
+        self.payment_processor.refund()
     
     @property
     def _currency(self):

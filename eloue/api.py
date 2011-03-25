@@ -29,7 +29,7 @@ from django.contrib.gis.measure import Distance
 from django.db import IntegrityError
 
 from eloue.geocoder import GoogleGeocoder
-from eloue.products.models import Product, Category, Picture, Price, upload_to
+from eloue.products.models import Product, Category, Picture, Price, upload_to#, StaticPage
 from eloue.products.search_indexes import product_search
 from eloue.accounts.models import Address, PhoneNumber, Patron
 from eloue.rent.models import Booking
@@ -283,8 +283,7 @@ class CategoryResource(ModelResource):
         return [
             url(r"^(?P<resource_name>%s)/tree/$" % self._meta.resource_name, self.wrap_view('get_tree'), name="api_get_tree"),
         ]
-    
-
+        
 class PictureResource(OAuthResource):
     class Meta:
         queryset = Picture.objects.all()
@@ -305,7 +304,28 @@ class PriceResource(OAuthResource):
         fields = []
         allowed_methods = ['get', 'post']
     
-
+"""
+class StaticPageResource(ModelResource):
+    
+    category = fields.ForeignKey('self', 'category', full=False, null=True)
+    
+    class Meta(MetaBase):
+        queryset = StaticPage.objects.all()
+        resource_name = 'static_page'
+        allowed_methods = ['get', 'post']
+        fields = ['id', 'title', 'created_at', 'author', 'category', 'url_link']
+        
+    def obj_create(self, bundle, request=None, **kwargs):
+        title = bundle.data.get("title", None)
+        author = bundle.data.get("author", None)
+        category = bundle.data.get("category", None)
+        url_link = bundle.data.get("url", None)
+        
+        #bundle.data['category'] =  
+        return super(AddressResource, self).obj_create(bundle, request, **kwargs)
+"""      
+        
+        
 class ProductResource(UserSpecificResource):
     category = fields.ForeignKey(CategoryResource, 'category', full=True, null=True)
     address = fields.ForeignKey(AddressResource, 'address', full=True, null=True)
@@ -398,7 +418,7 @@ class ProductResource(UserSpecificResource):
         # Add a day price to the object if there isnt any yet
         if day_price_data:
             Price(product=bundle.obj, unit=1, amount=D(day_price_data)).save()
-        
+        print "######## bundle ########", bundle
         return bundle
     
     def dehydrate(self, bundle, request=None):
