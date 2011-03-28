@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load i18n paginator%}
+{% load i18n paginator facets %}
 
 {% block title %}
 	{% trans "Alertes locations" %}
@@ -36,7 +36,10 @@
 	<div class="breadcrumb">
 		<ul class="x12 breadcrumbs">
 			<li><a href="{% url home %}">{% trans "Accueil" %}</a></li>
-			<li>{% trans "Alertes locations" %}</li>
+			{% if search_alert_form.cleaned_data.l %}
+			    <li><a href="/location/alertes/">{% trans "Alertes locations" %}</a></li>
+				<li class="lastb">{{ search_alert_form.cleaned_data.l|capfirst }}</li>
+			{% endif %}
 		</ul>
 	</div>
 	<div class="x8">
@@ -82,21 +85,6 @@
      {% endif %}
 	{% endif %}
 	</div>
-	<div class="sidebar-box x4">
-		<h3>{% trans "Alertes location !" %}</h3>
-		<ol class="guarantee-list">
-			<li>
-			  {% blocktrans %}
-				 <strong>Mettre en  location</strong> l'objet demandé
-			  {% endblocktrans %}
-			</li>
-			<li>
-			  {% blocktrans %}
- 				 <strong>Avertir le locataire</strong> que j'ai mis cet objet en location
-			  {% endblocktrans %}
-			</li>
-		</ol>
-	</div>
 	<div class="facet-dist portlet x4">
 		<div class="portlet-header">
 			<h3>{% trans "Rechercher une alerte" %}</h3>
@@ -117,6 +105,21 @@
 				</p>
 			</form>
 		</div>
+	</div>
+	<div class="sidebar-box x4">
+		<h3>{% trans "Alertes location !" %}</h3>
+		<ol class="guarantee-list">
+			<li>
+			  {% blocktrans %}
+				 <strong>Mettre en  location</strong> l'objet demandé
+			  {% endblocktrans %}
+			</li>
+			<li>
+			  {% blocktrans %}
+ 				 <strong>Avertir le locataire</strong> que j'ai mis cet objet en location
+			  {% endblocktrans %}
+			</li>
+		</ol>
 	</div>
 </div>{# content-product #}
 

@@ -15,9 +15,6 @@
 		</ol>
 		<a href="{% url faq-topic-list %}" class="btn big-blue">{% trans "Obtenir de l'aide" %}</a>
 	</div>
-	<div class="content-header x8">
-		<h2>{% trans "Informations sur l'objet que vous voulez louez" %}</h2>
-	</div>
 	<div class="new x8">
 		<form class="form" enctype="multipart/form-data" action="{% url alert_create %}" method="POST">
 			{% csrf_token %}
