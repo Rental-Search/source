@@ -39,16 +39,15 @@ def preapproval_ipn(request):
     form = PreApprovalIPNForm(request.POST)
     if form.is_valid():
         booking = Booking.objects.get(preapproval_key=form.cleaned_data['preapproval_key'])
-        if booking.state == Booking.STATE.AUTHORIZING:
-            if form.cleaned_data['approved'] and form.cleaned_data['status'] == 'ACTIVE':
-                # Changing state
-                booking.state = Booking.STATE.AUTHORIZED
-                booking.borrower.paypal_email = form.cleaned_data['sender_email']
-                booking.borrower.save()
-                # Sending email
-                booking.send_ask_email()
-            else:
-                booking.state = Booking.STATE.REJECTED
+        if form.cleaned_data['approved'] and form.cleaned_data['status'] == 'ACTIVE':
+            # Changing state
+            booking.state = Booking.STATE.AUTHORIZED
+            booking.borrower.paypal_email = form.cleaned_data['sender_email']
+            booking.borrower.save()
+            # Sending email
+            booking.send_ask_email()
+        else:
+            booking.state = Booking.STATE.REJECTED
         booking.save()
     return HttpResponse()
 
