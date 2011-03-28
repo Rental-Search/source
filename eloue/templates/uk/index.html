@@ -63,7 +63,7 @@
 		   <p>
 				<a href="{{ product.get_absolute_url }}" class="product-home-title">{{ product.summary|lower|capfirst }}</a>
 				{% with product.prices.day|first as price %}
-				 <span>{{ price }}/jour</span>
+				 <span>{{ price }}/{% trans "jour" %}</span>
 				{% endwith %}
 			 </p>
 			</div>
