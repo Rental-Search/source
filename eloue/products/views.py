@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.conf import settings
 from django.contrib import messages
+from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.vary import vary_on_headers
 from django.http import Http404
@@ -59,11 +60,10 @@ def product_edit(request, slug, product_id):
     }
     for price in product.prices.all():
         initial['%s_price' % UNIT.reverted[price.unit].lower()] = price.amount
-    form = ProductEditForm(request.POST or None, instance=product, initial=initial)
+    form = ProductEditForm(data=request.POST or None, files=request.FILES or None, instance=product, initial=initial)
     if form.is_valid():
         product = form.save()
         messages.success(request, _(u"Votre produit a bien été édité !"))
-        return redirect_to(request, product.get_absolute_url())
     return direct_to_template(request, 'products/product_edit.html', extra_context={'product': product, 'form': form})
 
 

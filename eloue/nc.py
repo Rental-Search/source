@@ -7,6 +7,8 @@ SITE_ID = 4
 
 SESSION_COOKIE_DOMAIN = 'e-loue.nc'
 
+USE_HTTPS = False
+
 CACHE_MIDDLEWARE_KEY_PREFIX = 'nc'
 
 AFFILIATE_TAG = 'nc'

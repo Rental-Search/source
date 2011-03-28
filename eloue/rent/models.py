@@ -13,7 +13,6 @@ from urlparse import urljoin
 
 from django.conf import settings
 from django.core.urlresolvers import reverse
-from django.contrib.sites.managers import CurrentSiteManager
 from django.contrib.sites.models import Site
 from django.db import models
 from django.db.models import permalink
@@ -26,7 +25,7 @@ from eloue.products.models import CURRENCY, UNIT, Product
 from eloue.products.utils import Enum
 from eloue.rent.decorators import incr_sequence
 from eloue.rent.fields import UUIDField, IntegerAutoField
-from eloue.rent.manager import BookingManager
+from eloue.rent.manager import BookingManager, CurrentSiteBookingManager
 from eloue.paypal import payments, PaypalError
 from eloue.signals import post_save_sites
 from eloue.utils import create_alternative_email, convert_from_xpf
@@ -108,7 +107,7 @@ class Booking(models.Model):
     
     sites = models.ManyToManyField(Site, related_name='bookings')
     
-    on_site = CurrentSiteManager()
+    on_site = CurrentSiteBookingManager()
     objects = BookingManager()
     
     STATE = BOOKING_STATE
@@ -177,7 +176,7 @@ class Booking(models.Model):
         https://www.paypal.com/webscr?cmd=_ap-preapproval&preapprovalkey={{ preapproval_key }}
         """
         domain = Site.objects.get_current().domain
-        protocol = "https" if USE_HTTPS else "http"
+        protocol = "https"
         if settings.CONVERT_XPF:
             total_amount = convert_from_xpf(self.total_amount)
         else:
@@ -343,7 +342,7 @@ class Booking(models.Model):
         https://www.paypal.com/webscr?cmd=_ap-payment&paykey={{ pay_key }}
         """
         domain = Site.objects.get_current().domain
-        protocol = "https" if USE_HTTPS else "http"
+        protocol = "https"
         if settings.CONVERT_XPF:
             total_amount = convert_from_xpf(self.total_amount)
             net_price = convert_from_xpf(self.net_price)
@@ -392,7 +391,7 @@ class Booking(models.Model):
             amount = self.deposit_amount
         
         domain = Site.objects.get_current().domain
-        protocol = "https" if USE_HTTPS else "http"    
+        protocol = "https"
         response = payments.pay(
             actionType='PAY',
             senderEmail=self.borrower.paypal_email,

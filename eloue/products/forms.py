@@ -12,7 +12,7 @@ from mptt.forms import TreeNodeChoiceField
 
 from eloue.geocoder import GoogleGeocoder
 from eloue.products.fields import FacetField
-from eloue.products.models import Alert, PatronReview, ProductReview, Product, Category, UNIT
+from eloue.products.models import Alert, PatronReview, ProductReview, Product, Picture, Category, UNIT
 from eloue.products.utils import Enum
 
 
@@ -167,6 +167,7 @@ class ProductEditForm(forms.ModelForm):
     summary = forms.CharField(max_length=100, widget=forms.TextInput(attrs={'class': 'inm'}))
     deposit_amount = forms.DecimalField(initial=0, required=False, max_digits=8, decimal_places=2, widget=forms.TextInput(attrs={'class': 'inm price'}), localize=True)
     quantity = forms.IntegerField(initial=1, widget=forms.TextInput(attrs={'class': 'inm price'}))
+    picture = forms.ImageField(label=_(u"Photo"), required=False, widget=forms.FileInput(attrs={'class': 'inm'}))
     description = forms.CharField(label=_(u"Description"), widget=forms.Textarea())
     
     hour_price = forms.DecimalField(label=_(u"l'heure"), required=False, widget=forms.TextInput(attrs={'class': 'ins'}), localize=True)
@@ -186,6 +187,11 @@ class ProductEditForm(forms.ModelForm):
             deposit_amount = D('0')
         return deposit_amount
     
+    def clean_picture(self):
+        picture = self.cleaned_data.get('picture', None)
+        self.new_picture = picture
+        return picture
+    
     def save(self, *args, **kwargs):
         for unit in UNIT.keys():
             field = "%s_price" % unit.lower()
@@ -197,6 +203,9 @@ class ProductEditForm(forms.ModelForm):
                 if not created:
                     instance.amount = self.cleaned_data[field]
                     instance.save()
+        if self.new_picture:
+            self.instance.pictures.all().delete()  # TODO : Do something less stupid here
+            self.instance.pictures.add(Picture.objects.create(image=self.cleaned_data['picture']))
         return super(ProductEditForm, self).save(*args, **kwargs)
     
     class Meta:
