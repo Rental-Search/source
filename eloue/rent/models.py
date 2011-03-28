@@ -13,7 +13,6 @@ from urlparse import urljoin
 
 from django.conf import settings
 from django.core.urlresolvers import reverse
-from django.contrib.sites.managers import CurrentSiteManager
 from django.contrib.sites.models import Site
 from django.db import models
 from django.db.models import permalink
@@ -26,7 +25,7 @@ from eloue.products.models import CURRENCY, UNIT, Product
 from eloue.products.utils import Enum
 from eloue.rent.decorators import incr_sequence
 from eloue.rent.fields import UUIDField, IntegerAutoField
-from eloue.rent.manager import BookingManager
+from eloue.rent.manager import BookingManager, CurrentSiteBookingManager
 from eloue.paypal import payments, PaypalError
 from eloue.signals import post_save_sites
 from eloue.utils import create_alternative_email, convert_from_xpf
@@ -108,7 +107,7 @@ class Booking(models.Model):
     
     sites = models.ManyToManyField(Site, related_name='bookings')
     
-    on_site = CurrentSiteManager()
+    on_site = CurrentSiteBookingManager()
     objects = BookingManager()
     
     STATE = BOOKING_STATE
@@ -150,19 +149,19 @@ class Booking(models.Model):
         engine = knowledge_engine.engine((__file__, '.rules'))
         engine.activate('pricing')
         for price in product.prices.iterator():
-            engine.assert_('prices', 'price', (price.unit, price.amount))
+            engine.assert_('prices', 'price', (price.unit, price.day_amount))
         vals, plans = engine.prove_1_goal('pricing.pricing($type, $started_at, $ended_at, $delta)', started_at=started_at, ended_at=ended_at, delta=delta)
         engine.reset()
         
         amount, unit = D(0), PACKAGES_UNIT[vals['type']]
         package = PACKAGES[unit]
         for price in product.prices.filter(unit=unit, started_at__isnull=True, ended_at__isnull=True):
-            amount += package(price.amount, delta)
+            amount += package(price.day_amount, delta)
         
         for price in product.prices.filter(unit=unit, started_at__isnull=False, ended_at__isnull=False):
-            amount += package(price.amount, price.delta(started_at, ended_at))
+            amount += package(price.day_amount, price.delta(started_at, ended_at))
         
-        return unit, amount
+        return unit, amount.quantize(D(".00"))
     
     @transition(source='authorizing', target='authorized')
     def preapproval(self, cancel_url=None, return_url=None, ip_address=None):
@@ -177,7 +176,7 @@ class Booking(models.Model):
         https://www.paypal.com/webscr?cmd=_ap-preapproval&preapprovalkey={{ preapproval_key }}
         """
         domain = Site.objects.get_current().domain
-        protocol = "https" if USE_HTTPS else "http"
+        protocol = "https"
         if settings.CONVERT_XPF:
             total_amount = convert_from_xpf(self.total_amount)
         else:
@@ -343,7 +342,7 @@ class Booking(models.Model):
         https://www.paypal.com/webscr?cmd=_ap-payment&paykey={{ pay_key }}
         """
         domain = Site.objects.get_current().domain
-        protocol = "https" if USE_HTTPS else "http"
+        protocol = "https"
         if settings.CONVERT_XPF:
             total_amount = convert_from_xpf(self.total_amount)
             net_price = convert_from_xpf(self.net_price)
@@ -392,7 +391,7 @@ class Booking(models.Model):
             amount = self.deposit_amount
         
         domain = Site.objects.get_current().domain
-        protocol = "https" if USE_HTTPS else "http"    
+        protocol = "https"
         response = payments.pay(
             actionType='PAY',
             senderEmail=self.borrower.paypal_email,

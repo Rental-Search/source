@@ -88,6 +88,12 @@ def currency(value):
 
 @register.simple_tag
 def currency_symbol():
+    """
+    >>> settings.CONVERT_XPF = True
+    >>> currency_symbol()
+    u'XPF'
+    >>> settings.CONVERT_XPF = False
+    """
     if settings.CONVERT_XPF:
         return u"XPF"
     return get_format('CURRENCY_SYMBOL')

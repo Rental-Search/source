@@ -198,7 +198,7 @@
 			<h3>{% trans "Catégories" %}</h3>
 		</div>
 		<div class="portlet-top">
-			<a href="{% facet_url breadcrumbs -"par-categorie" %}">{% trans "Voir tous les résultats" %}</a>
+			<a href="{% facet_url breadcrumbs -form.categories.field.pretty_name %}">{% trans "Voir tous les résultats" %}</a>
 		</div>
 		<div class="portlet-bottom">
 			{% for field in form %}

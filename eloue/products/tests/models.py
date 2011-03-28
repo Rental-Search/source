@@ -1,9 +1,14 @@
 # -*- coding: utf-8 -*-
+import os
+
+from django.core.files import File
 from django.core.exceptions import ValidationError
 from django.db import transaction
 from django.test import TestCase
 
-from eloue.products.models import Product, ProductReview, PatronReview
+from eloue.products.models import Picture, Product, ProductReview, PatronReview
+
+local_path = lambda path: os.path.join(os.path.dirname(__file__), path)
 
 
 class ProductTest(TestCase):
@@ -21,6 +26,16 @@ class ProductTest(TestCase):
             owner_id=1
         )
         product.save()
+    
+
+class PictureTest(TestCase):
+    def test_ensure_delete(self):
+        f = open(local_path('../fixtures/bentley.jpg'))
+        picture = Picture.objects.create(image=File(f))
+        image_path = picture.image.path
+        self.assertTrue(os.path.exists(image_path))
+        picture.delete()
+        self.assertFalse(os.path.exists(image_path))
     
 
 class ProductReviewTest(TestCase):

@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import types
 
+from django.contrib.sites.managers import CurrentSiteManager
 from django.db.models import Manager
 
 
@@ -20,3 +21,6 @@ class BookingManager(Manager):
             return self.get_query_set().filter(state=BOOKING_STATE[state])
         return filter
     
+
+class CurrentSiteBookingManager(CurrentSiteManager, BookingManager):
+    pass

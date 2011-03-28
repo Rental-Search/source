@@ -75,7 +75,6 @@
 				<h4>{% trans "Info" %}</h4>
 				<ul>
 					<li><a href="{% trans "/espace-professionnel/" %}">{% trans "Espace professionnel" %}</a></li>
-					<li><a href="{% trans "/assurance-tranquillite/" %}">{% trans "Assurance tranquillité" %}</a></li>
 					<li><a href="{% trans "/conditions-generales/" %}">{% trans "Conditions générales" %}</a></li>
 					<li><a href="{% trans "/respect-vie-privee/" %}">{% trans "Respect de la vie privée" %}</a></li>
 				</ul>
@@ -92,29 +91,21 @@
 			<div class="x3">
 				<h4>{% trans "Communauté" %}</h4>
 				<ul>
-					<li><a href="http://blog.e-loue.com">{% trans "Blog" %}</a></li>
-					<li><a href="https://twitter.com/eloue">{% trans "Twitter" %}</a></li>
-					<li><a href="https://www.facebook.com/pages/e-louecom/104685226447">{% trans "Facebook" %}</a></li>
+					{#<li><a href="http://blog.e-loue.com">{% trans "Blog" %}</a></li>#}
+					<li><a href="https://twitter.com/erentmarket">{% trans "Twitter" %}</a></li>
+					<li><a href="https://www.facebook.com/pages/ERentmarket/145297458864278">{% trans "Facebook" %}</a></li>
 				</ul>
 			</div>
 			{% if site_wide_announcements %}
 			{% with site_wide_announcements|first as announcement %}
-				<div class="x12 twitter-box">
-					{{ announcement.content|markdown }}
-					<div class="twitter-dialogue">
-					</div>
-				</div>
 				<div class="x12 twitter-info">
-				<p>
-					<span class="twitter-time">{{ announcement.creation_date|date:"l j F Y"|capfirst }}<span> {% trans "sur" %} <a href="http://blog.e-loue.com">{% trans "e-loue blog" %}</a>
-				</p>
-			</div>
+				</div>
 		{% endwith %}
 		{% endif %}
 	</div>
-  {% block tail %}
-		{% compressed_js 'application' %}
-  {% endblock %}
+  	{% block tail %}
+			{% compressed_js 'application' %}
+	{% endblock %}
   <script type="text/javascript">  (function() {
     var ga = document.createElement('script');     ga.type = 'text/javascript'; ga.async = true;
     ga.src = ('https:'   == document.location.protocol ? 'https://ssl'   : 'http://www') + '.google-analytics.com/ga.js';

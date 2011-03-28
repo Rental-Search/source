@@ -1,6 +1,40 @@
 /*****
 uk
 ******/
+#header .x4 
+{
+   margin-left: 0px;
+   width: 340px;
+}
 .search-header {
 	background: transparent url("../images/separateur2.png") no-repeat 450px 13px;
+}
+
+.twitter-info { background: transparent url("../images/copyright-erentmarket.png") no-repeat top right; }
+
+.welcome-eRentmarket 
+{ 
+  position: relative;
+  height: 211px;
+  margin-bottom: 20px;
+}
+  .welcome-link 
+  {
+    background: transparent url("../images/uk/welcome_erentmarket.png") no-repeat 0 0;
+    display: block;
+    position: absolute;
+    top: -22px;
+    left: 0px;
+    text-indent: -9999px;
+    height: 234px;
+    width: 301px;
+  }
+  
+.ht-col p 
+{ 
+  padding: 10px 0;
+  margin: 0 40px;
+  font-size: 22px;
+  line-height: 28px;
+  text-align: justify;
 }

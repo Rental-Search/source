@@ -177,7 +177,7 @@ def booking_incident(request, booking_id):
     booking = get_object_or_404(Booking, pk=booking_id)
     form = IncidentForm(request.POST or None)
     if form.is_valid():
-        send_mail(u"Déclaration d'incident", form.cleaned_data['message'], settings.DEFAULT_FROM_EMAIL, ['incident@e-loue.com'])
+        send_mail(u"Déclaration d'incident", form.cleaned_data['message'], settings.DEFAULT_FROM_EMAIL, ['contact@e-loue.com'])
         booking.state = Booking.STATE.INCIDENT
         booking.save()
     return direct_to_template(request, 'rent/booking_incident.html', extra_context={'booking': booking, 'form': form})

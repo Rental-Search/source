@@ -226,6 +226,7 @@ COMPRESS_CSS = {
             'css/custom.css',
             'css/plugins/ui/jquery.ui.core.css',
             'css/plugins/ui/jquery.ui.datepicker.css',
+            'css/plugins/ui/jquery.ui.tabs.css',
             'css/plugins/ui/jquery.ui.theme.css'
         ),
         'output_filename': 'css/master.r?.css',
@@ -241,6 +242,7 @@ COMPRESS_CSS = {
             'css/20m.css',
             'css/plugins/ui/jquery.ui.core.css',
             'css/plugins/ui/jquery.ui.datepicker.css',
+            'css/plugins/ui/jquery.ui.tabs.css',
             'css/plugins/ui/jquery.ui.theme.css'
         ),
         'output_filename': 'css/twenty.r?.css',
@@ -274,6 +276,7 @@ COMPRESS_CSS = {
             'css/nc.css',
             'css/plugins/ui/jquery.ui.core.css',
             'css/plugins/ui/jquery.ui.datepicker.css',
+            'css/plugins/ui/jquery.ui.tabs.css',
             'css/plugins/ui/jquery.ui.theme.css'
         ),
         'output_filename': 'css/nc.r?.css',
@@ -281,7 +284,7 @@ COMPRESS_CSS = {
             'media': 'screen',
         }
     },
-	'uk': {
+    'uk': {
         'source_filenames': (
             'css/master.css',
             'css/screen.css',
@@ -289,9 +292,10 @@ COMPRESS_CSS = {
             'css/uk.css',
             'css/plugins/ui/jquery.ui.core.css',
             'css/plugins/ui/jquery.ui.datepicker.css',
+            'css/plugins/ui/jquery.ui.tabs.css',
             'css/plugins/ui/jquery.ui.theme.css'
         ),
-        'output_filename': 'css/nc.r?.css',
+        'output_filename': 'css/uk.r?.css',
         'extra_context': {
             'media': 'screen',
         }
@@ -305,6 +309,7 @@ COMPRESS_JS = {
             'js/ui/jquery.ui.widget.js',
             'js/ui/jquery.ui.datepicker.js',
             'js/ui/jquery.ui.datepicker-fr.js',
+            'js/ui/jquery.ui.tabs.js',
             'js/modernizr.js',
             'js/mustache.js',
             'js/jquery.cycle.all.latest.js',
@@ -387,9 +392,9 @@ USE_PAYPAL_SANDBOX = getattr(local, 'USE_PAYPAL_SANDBOX', DEBUG)
 VALIDATE_IPN = getattr(local, 'VALIDATE_IPN', True)
 PAYPAL_MERCHANT_REFERRAL = "Z6GVNB75VNCTU"
 if USE_PAYPAL_SANDBOX:
-    PAYPAL_API_USERNAME = getattr(local, 'PAYPAL_SANDBOX_API_USERNAME', "benoit_1259230485_biz_api1.e-loue.com")
-    PAYPAL_API_PASSWORD = getattr(local, 'PAYPAL_SANDBOX_API_PASSWORD', "1259230494")
-    PAYPAL_API_SIGNATURE = getattr(local, 'PAYPAL_SANDBOX_API_SIGNATURE', "AFcWxV21C7fd0v3bYYYRCpSSRl31AzwEpvMSJA3-42VmMkY-QpA.F5zC")
+    PAYPAL_API_USERNAME = getattr(local, 'PAYPAL_SANDBOX_API_USERNAME', "benoit_1300354701_biz_api1.e-loue.com")
+    PAYPAL_API_PASSWORD = getattr(local, 'PAYPAL_SANDBOX_API_PASSWORD', "1300354722")
+    PAYPAL_API_SIGNATURE = getattr(local, 'PAYPAL_SANDBOX_API_SIGNATURE', "An5ns1Kso7MWUdW4ErQKJJJ4qi4-A0HCXVSBNN6Gj25nz33zT0f6ZfAK")
     PAYPAL_API_APPLICATION_ID = getattr(local, 'PAYPAL_SANDBOX_API_APPLICATION_ID', 'APP-80W284485P519543T')
     PAYPAL_API_EMAIL = getattr(local, 'PAYPAL_API_EMAIL', 'benoit.woj@e-loue.com')
     PAYPAL_COMMAND = "https://www.sandbox.paypal.com/webscr?%s"

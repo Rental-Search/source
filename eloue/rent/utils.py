@@ -7,6 +7,7 @@ from django.utils.translation import ugettext as _
 
 from eloue.rent.forms import DATE_FORMAT
 
+
 def combine(date_part, time_part):
     """
     Combine date and time to a datetime object.
