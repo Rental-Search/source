@@ -131,6 +131,8 @@ class Booking(models.Model):
             else:
                 self.insurance_amount = D(0)
         super(Booking, self).save(*args, **kwargs)
+        self.payment_type = "paypal" # for test sake
+        self.payment_processor = PAY_PROCESSORS[self.payment_type](self) # give me a field like paypal/nopay, etc, I can instance an object.
     
     @permalink
     def get_absolute_url(self):
@@ -140,7 +142,7 @@ class Booking(models.Model):
         return self.product.summary
     
     def __init__(self, *args, **kwargs):
-        self.payment_type = "nopay" # for test sake
+        
         super(Booking, self).__init__(*args, **kwargs)
         for state in BOOKING_STATE.enum_dict:
             setattr(self, "is_%s" % state.lower(), types.MethodType(self._is_factory(state), self))
@@ -184,9 +186,10 @@ class Booking(models.Model):
         The you should redirect user to :
         https://www.paypal.com/webscr?cmd=_ap-preapproval&preapprovalkey={{ preapproval_key }}
         """
-        self.payment_processor = PAY_PROCESSORS[self.payment_type](self) # give me a field like paypal/nopay, etc, I can instance an object.
+        
         print "#######  payment processor ######", type(self.payment_processor)
         domain = Site.objects.get_current().domain
+        print "######### domain #####", domain
         protocol = "https"
         if settings.CONVERT_XPF:
             total_amount = convert_from_xpf(self.total_amount)
@@ -194,6 +197,7 @@ class Booking(models.Model):
             total_amount = self.total_amount
         try:
             self.payment_processor.preapproval(cancel_url, return_url, ip_address, domain, protocol, total_amount)
+            print "######### preproval called #######"
         except PaypalError, e:
             self.state = BOOKING_STATE.REJECTED
             log.error(e)

@@ -52,6 +52,17 @@ def preapproval_ipn(request):
         booking.save()
     return HttpResponse()
 
+def fake_preapproval_ipn(request):
+    """
+    Only used by non payment module.
+    """
+    print "###### fake preapproval ipn called ########"
+    booking_pk = request.POST.get("booking_pk")
+    booking = Booking.objects.get(uuid=booking_pk)
+    booking.state = Booking.STATE.AUTHORIZED # authorizing -> authorized ::preapproval, preapproval_ipn
+    booking.send_ask_email()
+    booking.save()
+    return HttpResponse()
 
 @require_POST
 @csrf_exempt
@@ -66,7 +77,20 @@ def pay_ipn(request):
             booking.state = Booking.STATE.CLOSED
         booking.save()
     return HttpResponse()
-
+    
+def fake_pay_ipn(request):
+    """
+    Only for non payment usage.
+    """
+    print "###### fake pay ipn called ########"
+    booking_pk = request.POST.get("booking_pk")
+    booking = Booking.objects.get(uuid=booking_pk)
+    if booking.state == Booking.STATE.PENDING:
+        booking.state = Booking.STATE.ONGOING
+    if booking.state ==  Booking.STATE.CLOSING:
+        booking.state =  Booking.STATE.CLOSED
+    booking.save()
+    return HttpResponse()
 
 @require_GET
 def booking_price(request, slug, product_id):

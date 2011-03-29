@@ -47,6 +47,9 @@ class AdaptivePapalPayments(AbstractPayment):
     def preapproval(self, cancel_url, return_url, ip_address, domain, protocol, total_amount):
         print "####papal preapproval method called###"
         now = datetime.datetime.now()
+        print "######preapproval paypal######", urljoin(
+            "%s://%s" % (protocol, domain), reverse('preapproval_ipn')
+        )
         response = self.payments.preapproval(
             startingDate=now,
             endingDate=now + datetime.timedelta(days=360),
