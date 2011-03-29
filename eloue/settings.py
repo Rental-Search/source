@@ -257,15 +257,6 @@ COMPRESS_CSS = {
             'media': 'screen',
         },
     },
-    'lupa': {
-        'source_filenames': (
-            'css/lupa.css',
-        ),
-        'output_filename': 'css/lupa.r?.css',
-        'extra_context': {
-            'media': 'screen',
-        }
-    },
     'nc': {
         'source_filenames': (
             'css/master.css',
