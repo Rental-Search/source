@@ -6,10 +6,84 @@
 {% block content %}
 <div id="content-dash" class="clearfix">
 	<div id="menu" class="dash">
-		<div class="ht-title x4">
+		<div class="ht-title x12">
 			<h1>{{ flatpage.title }}</h1>
 		</div>
 	</div>
-	{{ flatpage.content|markdown }}
+	<div class="x7 iphone-col1">
+        <ul class="iphone-features clearfix">
+	        <li class="increase">
+	            <strong>Augmenter</strong><br />
+	            ses revenus
+	        </li>
+	        <li class="protect">
+	            <strong>Protéger</strong><br />
+	            la planète
+	        </li>
+	        <li class="profitable last">
+	            <strong>Rentabiliser</strong><br />
+	            ses biens
+	        </li>
+	    </ul>
+	    <a href="#" class="iphone-dl-link">Télécharger l'application mobile e-loue</a>
+	    <div class="iphone-desc">
+	        <div class="iphone-desc-header">
+	            <h2>La première application pour TOUT louer !</h2>
+	        </div>
+	        <p>
+	            Vous avez chez vous des objets peu utilisés? Vous cherchez à rentabiliser des achats? Vous vous apprêtez à jeter
+	            du vieux matériel? <br />Grâce à l’application e-loue, vous allez pouvoir leur donner une seconde vie tout en en
+	            tirant une source de revenu supplémentaire. En 3 clics seulement, vous les proposez en location à toute la
+	            communauté de loueurs de e­loue.com. 
+	        </p>
+	    </div>
+	    <div class="iphone-desc">
+	        <div class="iphone-desc-header">
+	            <h2>Tout type d'objet</h2>
+	        </div>
+	        <p>
+	           Vous pouvez proposer tout type d’objet : outil de bricolage, véhicule, vêtement, ustensile de cuisine, console de
+	           jeux vidéo, matériel High-­‐Tech, immobilier de vacance ... Bien sûr, chaque location que vous effectuez sur
+	           e-loue est encadrée par un contrat de location, et votre objet peut être assuré contre toute éventuelle
+	           détérioration. A l’issue de la location, vous recevez votre paiement en toute sécurité. En louant vos objets, vous
+	           menez une action écologique en limitant la surconsommation et ses conséquences (émission de CO2 due à la
+	           surproduction, pollution à grande échelle, réduction de votre quantité de déchets ...). 
+	        </p>
+	    </div>
+	</div>
+	<div class="x5 iphone-col2">
+	    <div class="iphone-slides">
+	        <div id="slideshow">
+	            <img src="{{ MEDIA_URL }}images/iphone/add_rental.png" width="251" height="376" />
+	            <img src="{{ MEDIA_URL }}images/iphone/product_form.png" width="251" height="376" />
+	            <img src="{{ MEDIA_URL }}images/iphone/booking_success.png" width="251" height="376" />
+	            <img src="{{ MEDIA_URL }}images/iphone/search.png" width="251" height="376" />
+	        </div>
+	    </div>
+	    <div id="nav-slideshow">
+	    </div>
+	    <div class="fl-sidebar-header">
+	        <h3>Mode d’emploi</h3>
+	    </div>
+	    <div class="fl-sidebar-content">
+	        <p>
+	            L’application est très simple d’utilisation : 
+	        </p>
+	        <ul>
+	            <li>
+	                Vous prenez en photo l’objet que vous souhaitez proposer en location.
+	            </li>
+	            <li>
+	                Vous remplissez un court formulaire (titre, montant de la location, éventuelle caution ...).
+	            </li>
+	            <li class="last">
+	                Vous créez votre compte si ce n'est pas déjà fait et vous publiez.
+	            </li>
+	        </ul>
+	        <p>
+	            Si un loueur est intéressé par votre annonce vous serez contacté(e)<br /> par e-mail!
+	        </p>
+	    </div>
+	</div>
 </div>{# content-dash #}
 {% endblock %}
