@@ -1242,6 +1242,16 @@
     margin-top: 105px;
     margin-left: 26px;
   }
+  
+.iphone-refection
+{
+  background: transparent url("../images/iphone/reflection.png") no-repeat 0 0;
+  position: absolute;
+  top: -78px;
+  right: 43px;
+  width: 153px;
+  height: 440px;
+}
 
 #nav-slideshow 
 { 
@@ -1321,4 +1331,6 @@
     text-align: justify;
   }
     .iphone-col2 .fl-sidebar-content li.last { margin-bottom: 0px; }
+    
+
     
