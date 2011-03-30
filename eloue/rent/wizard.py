@@ -64,11 +64,22 @@ class BookingWizard(GenericFormWizard):
         
         domain = Site.objects.get_current().domain
         protocol = "https" if USE_HTTPS else "http"
+        print ">>> preapproval begin >>>>" 
+        
+        #booking.preapproval(
+        #    cancel_url="%s://%s%s" % (protocol, domain, reverse("booking_failure", args=[booking.pk.hex])),
+        #    return_url="%s://%s%s" % (protocol, domain, reverse("booking_success", args=[booking.pk.hex])),
+        #    ip_address=request.META['REMOTE_ADDR']
+        #)
+        
         booking.preapproval(
             cancel_url="%s://%s%s" % (protocol, domain, reverse("booking_failure", args=[booking.pk.hex])),
-            return_url="%s://%s%s" % (protocol, domain, reverse("booking_success", args=[booking.pk.hex])),
+            return_url="http://www.postbin.org/1fi02go",
             ip_address=request.META['REMOTE_ADDR']
         )
+        
+        print ">>> preapproval end >>>>", booking.preapproval_key
+        
         
         if booking.state != Booking.STATE.REJECTED:
             GoalRecord.record('rent_object_pre_paypal', WebUser(request))

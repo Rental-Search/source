@@ -6,24 +6,6 @@ from eloue import settings
 USE_HTTPS = getattr(settings, 'USE_HTTPS', True)
 
 
-
-def setup_env():
-    from django.core.management import setup_environ
-
-    import os
-    from optparse import OptionParser
-
-    usage = "usage: %prog -s SETTINGS | --settings=SETTINGS"
-    parser = OptionParser(usage)
-    parser.add_option('-s', '--settings', dest='settings', metavar='SETTINGS',
-                      help="The Django settings module to use")
-    (options, args) = parser.parse_args()
-    if not options.settings:
-        parser.error("You must specify a settings module")
-
-    os.environ['DJANGO_SETTINGS_MODULE'] = options.settings
-
-
 def get_status(uuid):
     booking = Booking.objects.get(uuid=uuid)
     return booking.state
@@ -36,9 +18,9 @@ def process_booking_step_one(uuid):
     booking.state = Booking.STATE.AUTHORIZED # authorizing -> authorized ::preapproval, preapproval_ipn
     booking.send_ask_email()
     booking.save()
-    booking.state = Booking.STATE.PENDING #ipn ignored, authorized -> pending ::booking_accept
-    booking.send_acceptation_email()
-    booking.save()
+    #booking.state = Booking.STATE.PENDING #ipn ignored, authorized -> pending ::booking_accept
+    #booking.send_acceptation_email()
+    #booking.save()
     
 def process_booking_step_two(uuid):
     """
@@ -47,9 +29,13 @@ def process_booking_step_two(uuid):
     booking = Booking.objects.get(uuid=uuid)
     domain = Site.objects.get_current().domain
     protocol = "https" if USE_HTTPS else "http" # ::command ongoing, hold, pay_ipn
+    #booking.hold(
+    #    cancel_url="%s://%s%s" % (protocol, domain, reverse("booking_failure", args=[booking.pk.hex])),
+    #    return_url="%s://%s%s" % (protocol, domain, reverse("booking_success", args=[booking.pk.hex])),
+    #)
     booking.hold(
         cancel_url="%s://%s%s" % (protocol, domain, reverse("booking_failure", args=[booking.pk.hex])),
-        return_url="%s://%s%s" % (protocol, domain, reverse("booking_success", args=[booking.pk.hex])),
+        return_url="http://www.postbin.org/1fi02go",
     )
     booking.state = Booking.STATE.ONGOING 
     booking.save()
@@ -88,7 +74,7 @@ def test_httplib(uuid):
     print "###### http close #######"
     """
     import urllib2
-    theurl = "http://192.168.0.28:8000/booking/ipn/fake_preapproval_ipn&self.booking_pk=%s"%uuid
+    theurl = "http://192.168.0.28:8000/booking/ipn/fakepreapproval/?booking_pk=%s"%uuid
     req = urllib2.Request(url=theurl)
     f = urllib2.urlopen(req)
     print f.read()
