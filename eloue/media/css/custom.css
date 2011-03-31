@@ -155,6 +155,7 @@
     width: 138px;
     height: 45px;
     text-indent: -9999px;
+    cursor: pointer;
   }
   .app-iphone .available, .app-iphone p { margin-bottom: 20px; }
   .app-iphone .more-details
