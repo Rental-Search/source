@@ -53,32 +53,6 @@ class SourceClass(BaseSource):
         return locations
     
     def get_docs(self):
-        """
-        The format of the return is as follows:
-        
-        {'categories_exact': ['auto-et-moto', 'voiture'], 
-        'owner_exact': 'elocationdevoitures', 
-        'description': u"Pour les couples ou les petites familles qui souhaitent un v\xe9hicule avec espace suppl\xe9mentaire, cette quatre-portes interm\xe9diaire avec l'air conditionn\xe9 sera parfaite ", 
-        'text': u"Citroen C5 Pour les couples ou les petites familles qui souhaitent un v\xe9hicule avec espace suppl\xe9mentaire, cette quatre-portes interm\xe9diaire avec l'air conditionn\xe9 sera parfaite ", 
-        'price': 114.04, 
-        'django_ct': 'products.product', 
-        'owner': 'elocationdevoitures', 
-        'lat': 43.92148, 
-        'lng': 4.786, 
-        'id': 'source.jigsaw.53356827', 
-        'categories': ['auto-et-moto', 'voiture'], 
-        'city': 'Avignon Gare de TGV', 
-        'django_id': 'jigsaw.53356827', 
-        'sites_exact': [1, 2, 3], 
-        'url': 'http://www.elocationdevoitures.fr/SearchResults.do?country=France - Continent&city=Avignon&location=3052&dropLocation=3052&puYear=2011&puMonth=3&puDay=31&puHour=12&puMinute=20&doYear=2011&doMonth=4&doDay=1&doHour=12&doMinute=30&driversAge=25&affiliateCode=eloue_fr', 
-        'created_at': datetime.datetime(2011, 3, 24, 11, 2, 6, 188509), 
-        'sites': [1, 2, 3], 
-        'summary': 'Citroen C5', 
-        'owner_url': 'http://www.elocationdevoitures.fr/', 
-        'price_exact': 114.04, 
-        'thumbnail': 'https://media.e-loue.com/proxy/2205a9a908df217c61657df0d8f85fc5a86734bf?url=http://www.elocationdevoitures.fr/images/car_images/D/citroen_c5.jpg'}
-        """
-        print "get voiture docs called"
         docs = []
         pickup_date = datetime.now() + timedelta(days=7)
         dropoff_date = pickup_date + timedelta(days=1)
@@ -108,7 +82,6 @@ class SourceClass(BaseSource):
                     'thumbnail': match.Vehicle.ImageURL.pyval,
                     'django_id': 'jigsaw.%s' % match.Vehicle.get('id')
                 }))
-        print "######### docs #######", docs
         return docs
     
     def get_prefix(self):

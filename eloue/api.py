@@ -303,28 +303,7 @@ class PriceResource(OAuthResource):
         resource_name = "price"
         fields = []
         allowed_methods = ['get', 'post']
-    
-"""
-class StaticPageResource(ModelResource):
-    
-    category = fields.ForeignKey('self', 'category', full=False, null=True)
-    
-    class Meta(MetaBase):
-        queryset = StaticPage.objects.all()
-        resource_name = 'static_page'
-        allowed_methods = ['get', 'post']
-        fields = ['id', 'title', 'created_at', 'author', 'category', 'url_link']
-        
-    def obj_create(self, bundle, request=None, **kwargs):
-        title = bundle.data.get("title", None)
-        author = bundle.data.get("author", None)
-        category = bundle.data.get("category", None)
-        url_link = bundle.data.get("url", None)
-        
-        #bundle.data['category'] =  
-        return super(AddressResource, self).obj_create(bundle, request, **kwargs)
-"""      
-        
+
         
 class ProductResource(UserSpecificResource):
     category = fields.ForeignKey(CategoryResource, 'category', full=True, null=True)

@@ -82,10 +82,8 @@ def product_list(request, urlbits, sqs=SearchQuerySet(), suggestions=None, page=
     
     urlbits = urlbits or ''
     urlbits = filter(None, urlbits.split('/')[::-1])
-    print "############ urlbits #########", urlbits
     while urlbits:
         bit = urlbits.pop()
-        print "##### bit #####"
         if bit.startswith(_('par-')):
             try:
                 value = urlbits.pop()
@@ -116,7 +114,6 @@ def product_list(request, urlbits, sqs=SearchQuerySet(), suggestions=None, page=
             raise Http404
     form = FacetedSearchForm(dict((facet['name'], facet['value']) for facet in breadcrumbs.values()), searchqueryset=sqs)
     sqs, suggestions = form.search()
-    #print "######## sqs #######", sqs, dir(sqs[0]), sqs[0].categories_exact, sqs[0].price, sqs[0].url, sqs[0].owner_url
     return object_list(request, sqs, page=page, paginate_by=PAGINATE_PRODUCTS_BY, template_name="products/product_list.html",
         template_object_name='product', extra_context={
             'facets': sqs.facet_counts(), 'form': form, 'breadcrumbs': breadcrumbs, 'suggestions': suggestions,

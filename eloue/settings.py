@@ -394,7 +394,7 @@ if USE_PAYPAL_SANDBOX:
     PAYPAL_API_PASSWORD = getattr(local, 'PAYPAL_SANDBOX_API_PASSWORD', "1300354722")
     PAYPAL_API_SIGNATURE = getattr(local, 'PAYPAL_SANDBOX_API_SIGNATURE', "An5ns1Kso7MWUdW4ErQKJJJ4qi4-A0HCXVSBNN6Gj25nz33zT0f6ZfAK")
     PAYPAL_API_APPLICATION_ID = getattr(local, 'PAYPAL_SANDBOX_API_APPLICATION_ID', 'APP-80W284485P519543T')
-    PAYPAL_API_EMAIL = getattr(local, 'PAYPAL_API_EMAIL', 'benoit.woj@e-loue.com')
+    PAYPAL_API_EMAIL = getattr(local, 'PAYPAL_API_EMAIL', 'test_1301562706_biz@e-loue.com')
     PAYPAL_COMMAND = "https://www.sandbox.paypal.com/webscr?%s"
 else:
     PAYPAL_API_USERNAME = getattr(local, 'PAYPAL_API_USERNAME', "benoit.woj_api1.e-loue.com")
@@ -429,7 +429,7 @@ OAUTH_CALLBACK_VIEW = "eloue.accounts.views.oauth_callback"
 USE_ETAGS = False
 
 # Affiliation configuraton
-AFFILIATION_SOURCES = getattr(local, 'AFFILIATION_SOURCES', ['lv', 'skiplanet.equipment', 'jigsaw', 'static_pages'])
+AFFILIATION_SOURCES = getattr(local, 'AFFILIATION_SOURCES', ['lv', 'skiplanet.equipment', 'jigsaw'])
 AFFILIATION_BATCHSIZE = 1000
 LV_FTP = "ftp.bo.location-et-vacances.com"
 

@@ -29,13 +29,9 @@ def process_booking_step_two(uuid):
     booking = Booking.objects.get(uuid=uuid)
     domain = Site.objects.get_current().domain
     protocol = "https" if USE_HTTPS else "http" # ::command ongoing, hold, pay_ipn
-    #booking.hold(
-    #    cancel_url="%s://%s%s" % (protocol, domain, reverse("booking_failure", args=[booking.pk.hex])),
-    #    return_url="%s://%s%s" % (protocol, domain, reverse("booking_success", args=[booking.pk.hex])),
-    #)
     booking.hold(
         cancel_url="%s://%s%s" % (protocol, domain, reverse("booking_failure", args=[booking.pk.hex])),
-        return_url="http://www.postbin.org/1fi02go",
+        return_url="%s://%s%s" % (protocol, domain, reverse("booking_success", args=[booking.pk.hex])),
     )
     booking.state = Booking.STATE.ONGOING 
     booking.save()
@@ -53,11 +49,17 @@ def process_booking_step_three(uuid):
 
 def process_booking_step_four(uuid):
     """
-    state ended -> closing -> closed
+    state ended -> closing
     """
     booking = Booking.objects.get(uuid=uuid)
     booking.pay() #ended -> closing, time ignored ::pay
     booking.send_closed_email()
+
+def process_booking_step_five(uuid):
+    """
+    closing -> closed
+    """
+    booking = Booking.objects.get(uuid=uuid) 
     booking.state = Booking.STATE.CLOSED #ipn ignored, closing -> closed ::pay_ipn
     booking.save()
     

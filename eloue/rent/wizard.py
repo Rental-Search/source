@@ -66,15 +66,9 @@ class BookingWizard(GenericFormWizard):
         protocol = "https" if USE_HTTPS else "http"
         print ">>> preapproval begin >>>>" 
         
-        #booking.preapproval(
-        #    cancel_url="%s://%s%s" % (protocol, domain, reverse("booking_failure", args=[booking.pk.hex])),
-        #    return_url="%s://%s%s" % (protocol, domain, reverse("booking_success", args=[booking.pk.hex])),
-        #    ip_address=request.META['REMOTE_ADDR']
-        #)
-        
         booking.preapproval(
             cancel_url="%s://%s%s" % (protocol, domain, reverse("booking_failure", args=[booking.pk.hex])),
-            return_url="http://www.postbin.org/1fi02go",
+            return_url="%s://%s%s" % (protocol, domain, reverse("booking_success", args=[booking.pk.hex])),
             ip_address=request.META['REMOTE_ADDR']
         )
         

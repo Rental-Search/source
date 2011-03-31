@@ -340,11 +340,12 @@ class Booking(models.Model):
         """
         self.pay_key = self.payment_processor.pay(cancel_url, return_url)
         self.save()
-    
+
     @transition(source='ended', target='closing', save=True)
     @transition(source='closing', target='closed', conditions=[not_need_ipn], save=True)
     def pay(self):
         """Return deposit_amount to borrower and pay the owner"""
+        print ">>>> pay >>>>"
         self.payment_processor.execute_payment()
     
     @transition(source=['authorized', 'pending'], target='canceled', save=True)

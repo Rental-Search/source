@@ -13,7 +13,7 @@ from django.utils import importlib
 from eloue.geocoder import GoogleGeocoder
 from eloue.utils import generate_camo_url
 
-SOURCES = getattr(settings, 'AFFILIATION_SOURCES', ['skiplanet', 'lv', 'static_pages'])
+SOURCES = getattr(settings, 'AFFILIATION_SOURCES', ['skiplanet', 'lv'])
 BATCHSIZE = getattr(settings, 'AFFILIATION_BATCHSIZE', 1000)
 
 CAMO_URL = getattr(settings, 'CAMO_URL', 'https://media.e-loue.com/proxy/')
@@ -47,18 +47,6 @@ class Product(dict):
         digest = hmac.new(CAMO_KEY, url, hashlib.sha1).hexdigest()
         return "%s%s?url=%s" % (CAMO_URL, digest, url)
 
-
-class StaticPage(dict):
-    def __init__(self, *args, **kwargs):
-        super(StaticPage, self).__init__(*args, **kwargs)
-        self.update({
-            'search_created_at': datetime.now(),
-            'django_ct': 'wordpress.staticpage',
-            'sites': 'http://localhost:8888/',
-            'categories_exact': self['categories'], # the necesary field
-            'title_exact': self['title'], # the necesary field
-            'url_link_exact': self['url'], # the necesary field
-        })
     
 
 class BaseSource(object):
