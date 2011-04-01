@@ -145,7 +145,7 @@ class Booking(models.Model):
     
     def __init__(self, *args, **kwargs):
         
-        self.payment_type = "paypal" # for test sake, nopay or paypal
+        self.payment_type = "nopay" # for test sake, nopay or paypal
         self.payment_processor = PAY_PROCESSORS[self.payment_type](self) # give me a field like paypal/nopay, etc, I can instance an object.
         
         super(Booking, self).__init__(*args, **kwargs)
@@ -342,7 +342,7 @@ class Booking(models.Model):
         self.save()
 
     @transition(source='ended', target='closing', save=True)
-    @transition(source='closing', target='closed', conditions=[not_need_ipn], save=True)
+    @smart_transition(source='closing', target='closed', conditions=[not_need_ipn], save=True)
     def pay(self):
         """Return deposit_amount to borrower and pay the owner"""
         print ">>>> pay >>>>"

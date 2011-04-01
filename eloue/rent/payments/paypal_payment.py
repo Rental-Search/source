@@ -12,7 +12,7 @@ from eloue.utils import convert_from_xpf
 
 
 
-__all__ = ['PaypalError', 'accounts', 'payments']
+__all__ = ['PaypalError', 'accounts']
 
 accounts = AdaptiveAccounts(
     settings.PAYPAL_API_USERNAME,
@@ -45,7 +45,7 @@ class AdaptivePapalPayments(AbstractPayment):
         
     
     def preapproval(self, cancel_url, return_url, ip_address):
-        print ">>>> preapproval called >>>"
+
         now = datetime.datetime.now()
         domain = Site.objects.get_current().domain
         protocol = "https"
@@ -54,7 +54,7 @@ class AdaptivePapalPayments(AbstractPayment):
             total_amount = convert_from_xpf(self.booking.total_amount)
         else:
             total_amount = self.booking.total_amount
-        print ">>>> parameter called >>>>>>"
+
         response = self.payments.preapproval(
             startingDate=now,
             endingDate=now + datetime.timedelta(days=360),
@@ -70,7 +70,6 @@ class AdaptivePapalPayments(AbstractPayment):
                 'customerId': str(self.booking.borrower.pk)
             }
         )
-        print ">>>>> paypal preapproval called >>>>>"
         return response['preapprovalKey']
 
         
