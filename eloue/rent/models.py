@@ -33,10 +33,7 @@ from eloue.signals import post_save_sites
 from eloue.utils import create_alternative_email, convert_from_xpf
 
 
-PAY_PROCESSORS = {
-    "nopay": NonPayments,
-    "paypal": AdaptivePapalPayments
-}
+PAY_PROCESSORS = (NonPayments, AdaptivePapalPayments)
 
 BOOKING_STATE = Enum([
     ('authorizing', 'AUTHORIZING', _(u"En cours d'autorisation")),
@@ -124,7 +121,7 @@ class Booking(models.Model):
     
     @incr_sequence('contract_id', 'rent_booking_contract_id_seq')
     def save(self, *args, **kwargs):
-        
+  
         if not self.pk:
             self.created_at = datetime.datetime.now()
             self.pin = str(random.randint(1000, 9999))
@@ -135,7 +132,6 @@ class Booking(models.Model):
                 self.insurance_amount = D(0)
         super(Booking, self).save(*args, **kwargs)
         
-    
     @permalink
     def get_absolute_url(self):
         return ('booking_detail', [self.pk.hex])
@@ -144,10 +140,8 @@ class Booking(models.Model):
         return self.product.summary
     
     def __init__(self, *args, **kwargs):
-        
-        self.payment_type = "nopay" # for test sake, nopay or paypal
-        self.payment_processor = PAY_PROCESSORS[self.payment_type](self) # give me a field like paypal/nopay, etc, I can instance an object.
-        
+        print "kwargs >>>>>>>>", kwargs
+        #self.payment_processor = PAY_PROCESSORS[self.product.payment_type](self) # give me a field like paypal/nopay, etc, I can instance an object.
         super(Booking, self).__init__(*args, **kwargs)
         for state in BOOKING_STATE.enum_dict:
             setattr(self, "is_%s" % state.lower(), types.MethodType(self._is_factory(state), self))
@@ -157,6 +151,10 @@ class Booking(models.Model):
         def is_state(self):
             return self.state == getattr(BOOKING_STATE, state)
         return is_state
+        
+    def init_payment_processor(self):
+        self.payment_processor = PAY_PROCESSORS[self.product.payment_type](self)
+        
         
     @staticmethod
     def calculate_price(product, started_at, ended_at):
@@ -197,7 +195,7 @@ class Booking(models.Model):
         print ">>>>> payment processor type >>>>>>", type(self.payment_processor)
         try:
             self.preapproval_key = self.payment_processor.preapproval(cancel_url, return_url, ip_address)
-        except PaypalError, e: #TODO, move the paypal error into the payments module
+        except PaypalError, e: 
             self.state = BOOKING_STATE.REJECTED
             log.error(e)
         self.save()

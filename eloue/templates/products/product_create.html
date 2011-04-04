@@ -175,6 +175,25 @@
 					</div>
 				</div>
  		 </div>
+		<div class="more-info x9">
+			<table>
+			{% if form.payment_type %}
+			<tr>
+				<th><label>{{ form.payment_type.label }} {% if form.payment_type.field.required %}*{% endif %} :</label></th>
+				<td {% if form.payment_type.errors %} class="error-field" {% endif %}>
+					{{ form.payment_type }}
+					{% if form.payment_type.errors %}
+				 		{% for error in form.payment_type.errors %}
+							<br />
+					  	<span class="error">{{ error|escape }}</span>
+						{% endfor %}
+				{% endif %}
+				</td>
+			</tr>
+			{% endif %}
+			</table>
+		</div>
+		
 		<p class="required-field">{% trans "* = champ obligatoire" %}</p>
 		</div>
 		<div class="submit-wizard x12">

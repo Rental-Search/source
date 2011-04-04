@@ -24,6 +24,7 @@ def process_booking_step_two(uuid):
     state pending -> ongoing, as time passed (time control), needed for test non-payment
     """
     booking = Booking.objects.get(uuid=uuid)
+    booking.init_payment_processor()
     domain = Site.objects.get_current().domain
     protocol = "https" if USE_HTTPS else "http" # ::command ongoing, hold, pay_ipn
     booking.hold(

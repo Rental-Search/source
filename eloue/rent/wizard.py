@@ -17,7 +17,7 @@ from django_lean.experiments.utils import WebUser
 from eloue.accounts.forms import EmailAuthenticationForm
 from eloue.accounts.models import Patron
 from eloue.products.forms import FacetedSearchForm
-from eloue.products.models import Product
+from eloue.products.models import Product, PAYMENT_TYPE
 from eloue.rent.models import Booking
 from eloue.rent.forms import BookingForm, BookingConfirmationForm
 from eloue.wizard import GenericFormWizard
@@ -60,8 +60,11 @@ class BookingWizard(GenericFormWizard):
         booking_form.instance.total_amount = Booking.calculate_price(booking_form.instance.product,
             booking_form.cleaned_data['started_at'], booking_form.cleaned_data['ended_at'])[1]
         booking_form.instance.borrower = new_patron
+        print "payment type>>>>", booking_form.instance.product.payment_type
+        payment_type = booking_form.instance.product.payment_type
         booking = booking_form.save()
-        
+        print "save booking>>>>>", booking, booking.product, booking.product.payment_type
+        booking.init_payment_processor()
         domain = Site.objects.get_current().domain
         protocol = "https" if USE_HTTPS else "http"
         print ">>> preapproval begin >>>>" 
@@ -77,7 +80,7 @@ class BookingWizard(GenericFormWizard):
         
         if booking.state != Booking.STATE.REJECTED:
             GoalRecord.record('rent_object_pre_paypal', WebUser(request))
-            if booking.payment_type == "nopay":
+            if payment_type == PAYMENT_TYPE.NOPAY:
                 from django.views.generic.list_detail import object_detail
                 return object_detail(request, queryset=Booking.on_site.all(), object_id=booking.pk.hex, #test
                      template_name='rent/booking_success.html', template_object_name='booking')

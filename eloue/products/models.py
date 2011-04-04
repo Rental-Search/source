@@ -59,6 +59,11 @@ STATUS = Enum([
     (3, 'REMOVED', _(u'supprimé'))
 ])
 
+PAYMENT_TYPE = Enum([
+    (0, 'NOPAY', _(u'non payment')),
+    (1, 'PAYPAL', _(u'paypal payment'))
+])
+
 INSURANCE_MAX_DEPOSIT = getattr(settings, 'INSURANCE_MAX_DEPOSIT', 750)
 DEFAULT_RADIUS = getattr(settings, 'DEFAULT_RADIUS', 50)
 DEFAULT_CURRENCY = get_format('CURRENCY') if not settings.CONVERT_XPF else "XPF"
@@ -78,7 +83,7 @@ class Product(models.Model):
     owner = models.ForeignKey(Patron, related_name='products')
     created_at = models.DateTimeField(blank=True, editable=False)
     sites = models.ManyToManyField(Site, related_name='products')
-    
+    payment_type = models.PositiveSmallIntegerField(_(u"Type de payments"), default=PAYMENT_TYPE.PAYPAL, choices=PAYMENT_TYPE)
     on_site = CurrentSiteProductManager()
     objects = ProductManager()
     

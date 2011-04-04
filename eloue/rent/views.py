@@ -23,7 +23,7 @@ from django_lean.experiments.utils import WebUser
 
 from eloue.decorators import ownership_required, validate_ipn, secure_required, mobify
 from eloue.accounts.forms import EmailAuthenticationForm
-from eloue.products.models import Product
+from eloue.products.models import Product, PAYMENT_TYPE
 from eloue.rent.forms import BookingForm, BookingConfirmationForm, BookingStateForm, PreApprovalIPNForm, PayIPNForm, IncidentForm
 from eloue.rent.models import Booking
 from eloue.rent.wizard import BookingWizard
@@ -119,7 +119,7 @@ def booking_detail(request, booking_id):
 @ownership_required(model=Booking, object_key='booking_id', ownership=['owner'])
 def booking_accept(request, booking_id):
     booking = get_object_or_404(Booking, pk=booking_id)
-    if booking.payment_type!="nopay":
+    if booking.product.payment_type!=PAYMENT_TYPE.NOPAY:
         if not booking.owner.has_paypal():
             return redirect_to(request, "%s?next=%s" % (reverse('patron_paypal'), booking.get_absolute_url()))
     form = BookingStateForm(request.POST or None,
@@ -166,6 +166,7 @@ def booking_cancel(request, booking_id):
 def booking_close(request, booking_id):
     booking = get_object_or_404(Booking, pk=booking_id)
     if request.POST:
+        booking.init_payment_processor() #TODO not clean
         booking.pay()
         booking.send_closed_email()
         messages.success(request, _(u"Cette réservation a bien été cloturée"))
