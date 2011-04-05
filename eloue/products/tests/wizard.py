@@ -30,6 +30,7 @@ class ProductWizardTest(TestCase):
             '0-deposit_amount': '1500',
             '0-quantity': 1,
             '0-description': 'Voiture de luxe tout confort',
+            "0-payment_type":1,
             'wizard_step': 0
         })
         self.assertTrue(response.status_code, 200)
@@ -67,6 +68,7 @@ class ProductWizardTest(TestCase):
             '0-deposit_amount': '1500',
             '0-quantity': 1,
             '0-description': 'Voiture de luxe tout confort',
+            "0-payment_type":1,
             '1-email': 'alexandre.woog@e-loue.com',
             '1-exists': 1,
             '1-password': 'alexandre',

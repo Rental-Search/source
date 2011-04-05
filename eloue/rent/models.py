@@ -117,8 +117,6 @@ class Booking(models.Model):
     
     STATE = BOOKING_STATE
     
-    NOT_NEED_IPN = True
-    
     @incr_sequence('contract_id', 'rent_booking_contract_id_seq')
     def save(self, *args, **kwargs):
   
@@ -140,7 +138,6 @@ class Booking(models.Model):
         return self.product.summary
     
     def __init__(self, *args, **kwargs):
-        print "kwargs >>>>>>>>", kwargs
         #self.payment_processor = PAY_PROCESSORS[self.product.payment_type](self) # give me a field like paypal/nopay, etc, I can instance an object.
         super(Booking, self).__init__(*args, **kwargs)
         for state in BOOKING_STATE.enum_dict:
