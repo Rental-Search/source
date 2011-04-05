@@ -122,36 +122,5 @@
 		 </div>
 	    {% endfor %}
 	   {% endcache %}
-		<div class="content-community">
-			<div class="presse-icons x8">
-				<h3>{% trans "Ils parlent de nous" %}</h3>
-				<a href="{% trans "/espace-presse/" %}" title="{% trans "Voir l'espace presse" %}">
-					<img src="{{ MEDIA_URL }}/images/presse_icons.png" alt="{% trans "e-loue dans les média" %}"/>
-				</a>
-			</div>
-			<div class="community-portlet x4">
-				<div class="community-portlet-header">
-					<h3>{% trans "Rejoignez notre communauté" %}</h3>
-				</div>
-				<ul class="community-portlet-content">
-					<li class="fb">
-					 {% blocktrans %}
-						<a href="https://www.facebook.com/pages/e-louecom/104685226447">
-							<span class="fb-icon"></span>
-							Devenez fan<br />sur Facebook
-						</a>
-					 {% endblocktrans %}
-					</li>
-					<li class="tw">
-					 {% blocktrans %}
-						<a href="https://twitter.com/eloue">
-							<span class="tw-icon"></span>
-							Suivez-nous<br />sur Twitter
-						</a>
-					 {% endblocktrans %}
-					</li>
-				</ul>
-			</div>
-		</div>
 	</div>{# content #}
 {% endblock %}
