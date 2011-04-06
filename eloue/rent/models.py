@@ -322,6 +322,7 @@ class Booking(models.Model):
         return self.insurance_fee * INSURANCE_TAXES
     
     @transition(source='pending', target='ongoing')
+    @smart_transition(source='pending', target='ongoing', conditions=[not_need_ipn], save=True)
     def hold(self, cancel_url=None, return_url=None):
         """Take money from borrower and keep it safe for later.
         

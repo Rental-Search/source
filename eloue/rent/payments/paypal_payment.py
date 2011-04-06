@@ -62,7 +62,7 @@ class AdaptivePapalPayments(AbstractPayment):
             maxTotalAmountOfAllPayments=str(total_amount.quantize(D(".00"), ROUND_CEILING)),
             cancelUrl=cancel_url,
             returnUrl=return_url,
-            ipnNotificationUrl='http://www.postbin.org/1fi02go',
+            ipnNotificationUrl=urljoin("%s://%s" % (protocol, domain), reverse('preapproval_ipn')),
             client_details={
                 'ipAddress': ip_address,
                 'partnerName': 'e-loue',
@@ -93,7 +93,7 @@ class AdaptivePapalPayments(AbstractPayment):
             returnUrl=return_url,
             currencyCode=self.booking._currency,
             preapprovalKey=self.booking.preapproval_key,
-            ipnNotificationUrl='http://www.postbin.org/1fi02go',
+            ipnNotificationUrl=urljoin("%s://%s" % (protocol, domain), reverse('pay_ipn')),
             receiverList={'receiver': [
                 {'primary':True, 'amount':str(total_amount.quantize(D(".00"), ROUND_CEILING)), 'email':settings.PAYPAL_API_EMAIL},
                 {'primary':False, 'amount':str(net_price.quantize(D(".00"), ROUND_FLOOR)), 'email':self.booking.owner.paypal_email}

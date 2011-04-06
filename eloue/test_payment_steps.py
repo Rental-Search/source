@@ -31,8 +31,8 @@ def process_booking_step_two(uuid):
         cancel_url="%s://%s%s" % (protocol, domain, reverse("booking_failure", args=[booking.pk.hex])),
         return_url="%s://%s%s" % (protocol, domain, reverse("booking_success", args=[booking.pk.hex])),
     )
-    booking.state = Booking.STATE.ONGOING 
-    booking.save()
+    #booking.state = Booking.STATE.ONGOING 
+    #booking.save()
     
 
 def process_booking_step_three(uuid):
