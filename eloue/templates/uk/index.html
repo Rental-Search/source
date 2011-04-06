@@ -1,23 +1,16 @@
 {% extends "base.html" %}
-{% load i18n compressed mptt_tags product cache lupa %}
+{% load i18n compressed mptt_tags product cache %}
 
 {% block title %}{% trans "Location entre particuliers ou professionnels de tout type d'objet" %}{% endblock %}
 
 {% block head %}
  {{ block.super }}
- {% if request|from_lupa %}
-  {% compressed_css 'lupa' %}
- {% endif %}
 {% endblock %}
 
 {% block content %}
 	<div id="top-content" class="search clearfix">
 		<div class="search-header x12">
-		 {% if request|from_lupa %}
-			<h1>{% trans "Avec e-loue tout se loue, sauf les petites amies !" %}</h1>
-		 {% else %}
 		  <h1>{% trans "Avec e-loue, tout se loue !" %}</h1>
-		 {% endif %}
 		</div>
 		<form class="form" action="{% url product_list %}">
 		<div class="search-what x5">

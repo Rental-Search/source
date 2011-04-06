@@ -2,7 +2,7 @@
  {% load cache facets i18n param category product paginator mptt_tags seo booking %}
 
 {% block title %}
- {% trans "Location " %}
+ {% trans "Location" %}
  {% for crumb in breadcrumbs|facets %}
    &rsaquo; {{ crumb.pretty_value|capfirst }}
  {% endfor %}
