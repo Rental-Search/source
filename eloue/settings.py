@@ -290,6 +290,47 @@ COMPRESS_CSS = {
         'extra_context': {
             'media': 'screen',
         }
+    },
+    'dcns': {
+        'source_filenames': (
+            'css/dcns/screen.css',
+            'css/dcns/custom.css',
+            'css/plugins/ui/jquery.ui.core.css',
+            'css/plugins/ui/jquery.ui.datepicker.css',
+            'css/plugins/ui/jquery.ui.tabs.css',
+            'css/plugins/ui/jquery.ui.theme.css'
+        ),
+        'output_filename': 'css/dcns.r?.css',
+        'extra_context': {
+            'media': 'screen',
+        }
+    },
+    'ie': {
+        'source_filenames': (
+            'css/ie/ie.css',
+        ),
+        'output_filename': 'css/ie.r?.css',
+        'extra_context': {
+            'media': 'screen',
+        }
+    },
+    'ie6': {
+        'source_filenames': (
+            'css/ie/ie6.css',
+        ),
+        'output_filename': 'css/ie6.r?.css',
+        'extra_context': {
+            'media': 'screen',
+        }
+    },
+    'ie7': {
+        'source_filenames': (
+            'css/ie/ie7.css',
+        ),
+        'output_filename': 'css/ie7.r?.css',
+        'extra_context': {
+            'media': 'screen',
+        }
     }
 }
 COMPRESS_JS = {
