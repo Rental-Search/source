@@ -36,9 +36,12 @@ log = logbook.Logger('eloue.rent')
 @csrf_exempt
 @validate_ipn
 def preapproval_ipn(request):
+    print ">>>>>>>>> preapproval called >>>>>>>>>"
     form = PreApprovalIPNForm(request.POST)
     if form.is_valid():
+        print ">>>>>>>>> preapproval form valid >>>>>>>>>"
         booking = Booking.objects.get(preapproval_key=form.cleaned_data['preapproval_key'])
+        print ">>>>>>>>> preapproval booking with preapproval key >>>>>>>>>"
         if booking.state == Booking.STATE.AUTHORIZING:
             if form.cleaned_data['approved'] and form.cleaned_data['status'] == 'ACTIVE':
                 # Changing state

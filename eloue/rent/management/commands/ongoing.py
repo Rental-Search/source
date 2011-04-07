@@ -32,5 +32,8 @@ class Command(BaseCommand):
                 cancel_url="%s://%s%s" % (protocol, domain, reverse("booking_failure", args=[booking.pk.hex])),
                 return_url="%s://%s%s" % (protocol, domain, reverse("booking_success", args=[booking.pk.hex])),
             )
+            if booking.not_need_ipn():
+                booking.state = Booking.STATE.ONGOING
+                booking.save()
         log.info('Finished hourly ongoing mover process')
     

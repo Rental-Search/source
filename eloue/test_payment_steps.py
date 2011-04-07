@@ -26,14 +26,13 @@ def process_booking_step_two(uuid):
     booking = Booking.objects.get(uuid=uuid)
     booking.init_payment_processor()
     domain = Site.objects.get_current().domain
-    protocol = "https" if USE_HTTPS else "http" # ::command ongoing, hold, pay_ipn
+    protocol = "https" if USE_HTTPS else "http" # ::command ongoing, hold, pay_ipn to be ignored by nonpay
     booking.hold(
         cancel_url="%s://%s%s" % (protocol, domain, reverse("booking_failure", args=[booking.pk.hex])),
         return_url="%s://%s%s" % (protocol, domain, reverse("booking_success", args=[booking.pk.hex])),
     )
-    #booking.state = Booking.STATE.ONGOING 
-    #booking.save()
-    
+    booking.state = Booking.STATE.ONGOING
+    booking.save()
 
 def process_booking_step_three(uuid):
     """
