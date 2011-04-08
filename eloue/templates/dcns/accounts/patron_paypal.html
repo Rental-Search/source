@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% load i18n product %}
+
+{% block title %}{% trans "Votre compte PayPal" %}{% endblock %}
+
+{% block content %}
+<div id="content" class="xgrid">
+    <div class="content-top">
+        <ul id="menu" class="x12">
+            <li class="menu-tab first"><a href="{% url dashboard %}">{% trans "Tableau de bord" %}</a></li>
+			<li class="menu-tab">{% trans "Propriétaire" %}</li>
+			<li class="menu-tab"><a href="{% url borrower_booking %}">{% trans "Locataire" %}</a></li>
+			<li class="menu-tab"><a href="{% url patron_edit %}">{% trans "Mon compte" %}</a></li>
+        </ul>
+    </div>
+    <div id="sub-menu">
+        <ul class="x12">
+            <li class="sub-tab first"><a href="{% url patron_edit %}">{% trans "Votre profil" %}</a></li>
+			<li class="sub-tab">{% trans "Modification du mot de passe" %}</li>
+        </ul>
+    </div>
+    
+</div>
+{% endblock %}

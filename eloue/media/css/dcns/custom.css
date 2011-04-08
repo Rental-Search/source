@@ -860,7 +860,7 @@
 }
   .bk-status p
   {
-    padding: 10px 5px;
+    padding: 5px;
     text-align: center;
     margin: 0;
     line-height: 1.2em;
@@ -962,6 +962,18 @@
       margin-right: 15px;
     }
 
+    #submit-wizard
+    {
+      text-align: right;
+    }
+      #submit-wizard p
+      {
+        border-top: 1px solid #DCE4E9;
+        padding-top: 10px;
+        padding-bottom: 10px;
+      }
+      #submit-wizard .btn { margin-right: 85px; }
+
 /* --------------------------------------------------------------
 
     Wizard add rental
@@ -1059,3 +1071,33 @@
     height: 44px;
     padding-right: 0px;
   }
+
+/* --------------------------------------------------------------
+
+    Login page
+
+-------------------------------------------------------------- */
+.email input { width: 300px; }
+.email label, .question { font-weight: bold; }
+.exist, .question, .password { margin-left: 170px; }
+.email 
+{  
+  margin-bottom: 10px !important; 
+}
+.password 
+{
+  margin-top: 10px;
+  margin-bottom: 20px !important; 
+}
+  .password input { width: 170px; }
+  .password a 
+  { 
+    color: #6EB924; 
+    font-size: 0.85em; 
+  }
+  
+/* --------------------------------------------------------------
+
+    more info
+
+-------------------------------------------------------------- */
