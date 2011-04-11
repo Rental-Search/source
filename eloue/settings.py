@@ -22,11 +22,12 @@ INTERNAL_IPS = ('127.0.0.1',)
 SERVER_EMAIL = 'noreply@e-loue.com'
 DEFAULT_FROM_EMAIL = 'noreply@e-loue.com'
 
-EMAIL_HOST = getattr(local, 'EMAIL_HOST', 'smtp.gmail.com')
+EMAIL_HOST = getattr(local, 'EMAIL_HOST', 'smtp.postmarkapp.com')
 EMAIL_USE_TLS = getattr(local, 'EMAIL_USE_TLS', True)
-EMAIL_PORT = getattr(local, 'EMAIL_PORT', 587)
-EMAIL_HOST_USER = getattr(local, 'EMAIL_HOST_USER', '')
-EMAIL_HOST_PASSWORD = getattr(local, 'EMAIL_HOST_PASSWORD', '')
+EMAIL_PORT = getattr(local, 'EMAIL_PORT', 2525)
+EMAIL_HOST_USER = getattr(local, 'EMAIL_HOST_USER', '0765ca4c-42d1-46a8-86a1-2e8bb210dbad')
+EMAIL_HOST_PASSWORD = getattr(local, 'EMAIL_HOST_PASSWORD', '0765ca4c-42d1-46a8-86a1-2e8bb210dbad')
+
 
 DATABASES = {
     'default': {
