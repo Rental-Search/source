@@ -266,6 +266,7 @@ form.inline p { margin-bottom:0; }
   height: 20px;
   font-size: 1.2em;
   padding: 7px 10px;
+  margin-right: 2px !important;
 }
 
 .inm 
@@ -275,6 +276,7 @@ form.inline p { margin-bottom:0; }
   padding: 5px 9px 6px;
   margin-top: 7px;
   margin-bottom: 5px;
+  margin-right: 2px !important;
 }
 
 .ins
@@ -284,6 +286,7 @@ form.inline p { margin-bottom:0; }
   padding: 10px 5px 8px;
   margin-top: 7px;
   margin-bottom: 10px;
+  margin-right: 2px !important;
 }
 
 /* select size

@@ -1071,13 +1071,14 @@
     height: 44px;
     padding-right: 0px;
   }
+input.price { color: #000; }
 
 /* --------------------------------------------------------------
 
     Login page
 
 -------------------------------------------------------------- */
-.email input { width: 300px; }
+.email input { width: 300px; margin-left: 5px; }
 .email label, .question { font-weight: bold; }
 .exist, .question, .password { margin-left: 170px; }
 .email 
@@ -1101,3 +1102,5 @@
     more info
 
 -------------------------------------------------------------- */
+.more-info th { width: 145px; }
+.more-info .inm, .more-info textarea { width: 300px; }

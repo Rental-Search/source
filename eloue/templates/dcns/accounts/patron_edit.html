@@ -22,7 +22,7 @@
     <div class="x8 p2">
         <form class="form" action="" method="POST">
     		{% csrf_token %}
-    		<table>
+    		<table class="more-info">
     			{% if form.is_professional %}
     			<tr>
     				<td colspan="2" {% if form.is_professional.errors %} class="error-field" {% endif %}>
@@ -132,6 +132,7 @@
     			</tr>
     			{% endif%}
     		</table>
+    		<p class="required-field">{% trans "* = champ obligatoire" %}</p>
     </div>
     <div id="submit-wizard" class="x12">
          <p>
