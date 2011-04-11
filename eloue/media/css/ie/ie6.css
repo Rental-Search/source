@@ -23,4 +23,7 @@
 .prices-form label { font-size: 0.9em; }
 .prices-form .supp-list-prices { height: 53px; }
 .prices-form .calculator { margin-top: 10px; }
+
+/* booking date */
+.started-date { margin-right: 10px; }
   

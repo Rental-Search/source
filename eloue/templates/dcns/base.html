@@ -50,7 +50,7 @@
   {% block content %}
   {% endblock %}
   <div id="footer" class="xgrid">
-      <div class="x3">
+      <div class="x4">
 			<h4>{% trans "Liens utiles" %}</h4>
 			<ul>
 				<li><a href="{% url home %}">{% trans "Accueil" %}</a></li>
@@ -61,46 +61,23 @@
 				{% endif %}
 			</ul>
 		</div>
-		<div class="x3">
+		<div class="x4">
 			<h4>{% trans "Info" %}</h4>
 			<ul>
-				<li><a href="{% trans "/espace-professionnel/" %}">{% trans "Espace professionnel" %}</a></li>
 				<li><a href="{% trans "/assurance-tranquillite/" %}">{% trans "Assurance tranquillité" %}</a></li>
 				<li><a href="{% trans "/conditions-generales/" %}">{% trans "Conditions générales" %}</a></li>
 				<li><a href="{% trans "/respect-vie-privee/" %}">{% trans "Respect de la vie privée" %}</a></li>
 			</ul>
 		</div>
-		<div class="x3">
+		<div class="x4">
 			<h4>{% trans "Support" %}</h4>
 			<ul>
 				<li><a href="{% url faq-topic-list %}">{% trans "Aide" %}</a></li>
 				<li><a href="{% url contact %}">{% trans "Contactez-nous" %}</a></li>
-				<li><a href="{% trans "/espace-presse/" %}">{% trans "Espace presse" %}</a></li>
 				<li><a href="{% trans "/qui-sommes-nous/" %}">{% trans "Qui sommes nous ?" %}</a></li>
 			</ul>
 		</div>
-		<div class="x3">
-			<h4>{% trans "Communauté" %}</h4>
-			<ul>
-				<li><a href="http://blog.e-loue.com">{% trans "Blog" %}</a></li>
-				<li><a href="https://twitter.com/eloue">{% trans "Twitter" %}</a></li>
-				<li><a href="https://www.facebook.com/pages/e-louecom/104685226447">{% trans "Facebook" %}</a></li>
-			</ul>
-		</div>
-		{% if site_wide_announcements %}
-		{% with site_wide_announcements|first as announcement %}
-			<div class="x12 twitter-box">
-				{{ announcement.content|markdown }}
-				<div class="twitter-dialogue">
-				</div>
-			</div>
-			<div class="x12 twitter-info">
-			<p>
-				<span class="twitter-time">{{ announcement.creation_date|date:"l j F Y"|capfirst }}<span> {% trans "sur" %} <a href="http://blog.e-loue.com">{% trans "e-loue blog" %}</a>
-			</p>
-		</div>
-	{% endwith %}
-	{% endif %}
+		<div class="x12 twitter-info"></div>
     </div>
   {% block tail %}
 		{% compressed_js 'application' %}

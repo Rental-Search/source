@@ -275,7 +275,6 @@ form.inline p { margin-bottom:0; }
   font-size: 14px;
   padding: 5px 9px 6px;
   margin-top: 7px;
-  margin-bottom: 5px;
   margin-right: 2px !important;
 }
 
@@ -285,7 +284,6 @@ form.inline p { margin-bottom:0; }
   font-size: 0.85em;
   padding: 10px 5px 8px;
   margin-top: 7px;
-  margin-bottom: 10px;
   margin-right: 2px !important;
 }
 
@@ -300,20 +298,42 @@ font-size: 14px;
 
 /* Success, info, notice and error/alert boxes
 -------------------------------------------------------------- */
-.error,
-.alert, 
-.notice,
-.success, 
-.info 			{ padding: 0.8em; margin-bottom: 1em; border: 2px solid #ddd; }
+.error
+{ padding: 0.8em; margin-bottom: 1em; border: 2px solid #ddd; }
 
-.error, .alert { background: #fbe3e4; color: #8a1f11; border-color: #fbc2c4; }
-.notice     { background: #fff6bf; color: #514721; border-color: #ffd324; }
-.success    { background: #e6efc2; color: #264409; border-color: #c6d880; }
-.info 			{ background: #d5edf8; color: #205791; border-color: #92cae4; }
-.error a, .alert a { color: #8a1f11; }
-.notice a   { color: #514721; }
-.success a  { color: #264409; }
-.info a			{ color: #205791; }
+.error { background: #fbe3e4; color: #8a1f11; border-color: #fbc2c4; }
+
+.error a { color: #8a1f11; }
+
+.notification
+{
+    z-index: 1;
+    background-color: #fff;
+    display: none;
+    text-align: center;
+    width: 100%;
+    position: fixed;
+    height: 24px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    margin: 0;
+    font-weight: bold;
+    font-size: 1.2em;
+    overflow: visible;
+    cursor: pointer;
+}
+
+.notification.success, .notification.info
+{
+  background: transparent url("../../images/info_flash.png") repeat-x 0 0;
+  color: #9f8f58;
+}
+
+.notification.error, .notification.warning
+{
+  background: transparent url("../../images/error_flash.png") repeat-x 0 0;
+  color: #f46868;
+}
 
 /* --------------------------------------------------------------
 

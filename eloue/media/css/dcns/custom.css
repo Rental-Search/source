@@ -5,7 +5,7 @@
 -------------------------------------------------------------- */
 #header 
 { 
-  margin-top: 15px;
+  padding-top: 15px;
   margin-bottom: 20px; 
 }
   #header .x2 { margin-left: 0px; }
@@ -463,7 +463,6 @@
          Pages
 
 -------------------------------------------------------------- */
-
 .pages { text-align: center; }
   .pages-list li
   {
@@ -480,7 +479,6 @@
          and box-footer 
 
 -------------------------------------------------------------- */
-
 .box-tools 
 { 
   border: 1px solid #B9CAD4;
@@ -565,7 +563,6 @@
     font-size: 1.3em;
     text-align: center;
   }
-
   
 /* --------------------------------------------------------------
 
@@ -593,7 +590,6 @@
         breadcrumb
 
 -------------------------------------------------------------- */    
-
 .breadcrumb 
 {
   float: left;
@@ -648,7 +644,7 @@
   width: 118px;
   margin-bottom: 0;
 }
-  .started-date { margin-right: 13px; }
+  .started-date { margin-right: 22px; }
 #booking-dates p input 
 { 
   background: white url("../../images/icone-calendrier.png") no-repeat 91px 7px;
@@ -676,7 +672,6 @@
       picture carousel
 
 -------------------------------------------------------------- */
-
 .product-pic 
 {
   float: left;
@@ -710,8 +705,6 @@
   Menu
   
 -------------------------------------------------------------- */
-
-
 #menu .first, #sub-menu .first { margin-left: 0; }
 
 #menu a, #sub-menu a { color: #9EB0BA; }
@@ -848,7 +841,7 @@
 
 /* --------------------------------------------------------------
 
-    Booking list
+    Booking status
 
 -------------------------------------------------------------- */
 .bk-status
@@ -1102,5 +1095,162 @@ input.price { color: #000; }
     more info
 
 -------------------------------------------------------------- */
-.more-info th { width: 145px; }
+.more-info th { width: 145px; text-align: right; }
 .more-info .inm, .more-info textarea { width: 300px; }
+.more-info textarea 
+{ 
+  height: 40px;
+  margin-bottom: 0;
+}
+.more-info .zipcode 
+{
+  width: 100px;
+  margin-right: 10px !important;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+.more-info .town 
+{
+  width: 167px;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+/* --------------------------------------------------------------
+
+    how-to page
+
+-------------------------------------------------------------- */
+.ht-title h1 { font-family: 'Ubuntu', arial, serif; }
+
+.ht-baseLine 
+{ 
+  color: #9EB0BA;
+  text-align: right;
+  font-size: 18px;
+  padding-top: 4px;
+}
+
+.ht-col{ margin-bottom: 20px; text-align: left;}
+
+  .ht-col h1
+  {
+    background: transparent url("../../images/content-h-bg.png") repeat-x 0 bottom;
+    font-weight: bold;
+    text-align: center;
+    padding: 15px 0;
+    margin: 0 40px;
+    line-height: 38px;
+  }
+    .ht-col h1 strong
+    {
+      font-size: 48px;
+    }
+    
+    .ht-col ol
+    {
+      padding: 10px 0;
+      margin: 0 40px;
+      list-style-type: none;
+    }
+    
+    .ht-col li
+    {
+      margin: 10px 0 15px;
+      height: 95px;
+      line-height: 1.3em;
+      margin-bottom: 20px;
+    }
+      
+      .ht-number
+      {
+        float: left;
+        height: 60px;
+        width: 60px;
+        margin-top: 5px;
+        margin-right: 10px;
+        margin-bottom: 20px;
+      }
+      
+       .ht-n1-g { background: transparent url("../../images/steps_number.png") no-repeat 0px 0px; }
+       .ht-n2-g { background: transparent url("../../images/steps_number.png") no-repeat 0px -60px; }
+       .ht-n3-g { background: transparent url("../../images/steps_number.png") no-repeat 0px -120px; }
+       .ht-n4-g { background: transparent url("../../images/steps_number.png") no-repeat 0px -180px; }
+       
+       .ht-n1-o { background: transparent url("../../images/steps_number.png") no-repeat -60px 0px; }
+       .ht-n2-o { background: transparent url("../../images/steps_number.png") no-repeat -60px -59px; }
+       .ht-n3-o { background: transparent url("../../images/steps_number.png") no-repeat -60px -119px; }
+       .ht-n4-o { background: transparent url("../../images/steps_number.png") no-repeat -60px -179px; }
+       
+       .ht-number.orange { background-color: #FF7200; }
+       
+      
+      .ht-desc
+      {
+        color: #9EB0BA;
+      }
+        .ht-desc span
+        {
+          color: #364C59;
+          font-size: 23px;
+          line-height: 32px;
+        }
+        
+      .ht-fonction
+      {
+        background-color: #f5f7f9;
+        width: 860px;
+        margin-left: 60px;
+        -moz-border-radius: 15px;
+  	    -webkit-border-radius: 15px;
+  	    border-radius: 15px;
+  	    padding: 10px 0;
+  	    margin-bottom: 20px;
+      }
+      
+        .ht-fonction h1
+        {
+          text-align:center;
+          background: transparent url("../../images/content-h-bg.png") repeat-x 0 bottom;
+          margin: 0 40px;
+          padding-bottom: 20px;
+          margin-bottom: 20px;
+          font-weight:  bold;
+        } 
+        
+        .ht-f-col
+        {
+          float: left;
+          width: 370px;
+          margin-left: 40px;
+          
+        } 
+        
+          .ht-f-col li
+          {
+            list-style-type: none;
+            height: 70px;
+            margin: 20px 0;
+          }
+            .ht-icon
+            {
+              display: block;
+              float: left;
+              width: 80px;
+              height: 70px;
+              margin-right: 20px;
+            }
+              .assurancy { background: transparent url("../../images/fonction.png") no-repeat 0px 0px; }
+              .car { background: transparent url("../../images/fonction.png") no-repeat -80px 0px; }
+              .laptop { background: transparent url("../../images/fonction.png") no-repeat -160px 0px; }
+              
+              .lock { background: transparent url("../../images/fonction.png") no-repeat 0px -70px; }
+              .people { background: transparent url("../../images/fonction.png") no-repeat -80px -70px; }
+              .money { background: transparent url("../../images/fonction.png") no-repeat -160px -70px; }
+              
+            .ht-f-desc span
+            {
+              font-size: 18px;
+              font-weight: bold;
+              line-height: 26px;
+            }
