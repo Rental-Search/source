@@ -1,23 +1,16 @@
 {% extends "base.html" %}
-{% load i18n compressed mptt_tags product cache lupa %}
+{% load i18n compressed mptt_tags product cache %}
 
 {% block title %}{% trans "Location entre particuliers ou professionnels de tout type d'objet" %}{% endblock %}
 
 {% block head %}
  {{ block.super }}
- {% if request|from_lupa %}
-  {% compressed_css 'lupa' %}
- {% endif %}
 {% endblock %}
 
 {% block content %}
 	<div id="top-content" class="search clearfix">
 		<div class="search-header x12">
-		 {% if request|from_lupa %}
-			<h1>{% trans "Avec e-loue tout se loue, sauf les petites amies !" %}</h1>
-		 {% else %}
 		  <h1>{% trans "Avec e-loue, tout se loue !" %}</h1>
-		 {% endif %}
 		</div>
 		<form class="form" action="{% url product_list %}">
 		<div class="search-what x5">
@@ -63,7 +56,7 @@
 		   <p>
 				<a href="{{ product.get_absolute_url }}" class="product-home-title">{{ product.summary|lower|capfirst }}</a>
 				{% with product.prices.day|first as price %}
-				 <span>{{ price }}/jour</span>
+				 <span>{{ price }}/{% trans "jour" %}</span>
 				{% endwith %}
 			 </p>
 			</div>
@@ -73,10 +66,10 @@
 	 </div>
 	 <div class="x4">
 		<div class="content-header x4 first">
-		 <h2>Welcome !</h2>
+		 <h2>What is eRentmarket ?</h2>
 		</div>
-	  <div class="lupa x4 first">
-		 <a href="http://erentmarket.s3.amazonaws.com/welcome.pdf" class="lupa-folder-link">Tout savoir sur loueunepetiteamie.com</a>
+	  <div class="welcome-eRentmarket x4 first">
+		 <a href={% trans "/what-is-erentmarket/" %} class="welcome-link">Tout savoir sur loueunepetiteamie.com</a>
 		</div>
 	</div>
 	<div class="content-guarantees">

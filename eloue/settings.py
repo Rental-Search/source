@@ -22,11 +22,12 @@ INTERNAL_IPS = ('127.0.0.1',)
 SERVER_EMAIL = 'noreply@e-loue.com'
 DEFAULT_FROM_EMAIL = 'noreply@e-loue.com'
 
-EMAIL_HOST = getattr(local, 'EMAIL_HOST', 'smtp.gmail.com')
+EMAIL_HOST = getattr(local, 'EMAIL_HOST', 'smtp.postmarkapp.com')
 EMAIL_USE_TLS = getattr(local, 'EMAIL_USE_TLS', True)
-EMAIL_PORT = getattr(local, 'EMAIL_PORT', 587)
+EMAIL_PORT = getattr(local, 'EMAIL_PORT', 2525)
 EMAIL_HOST_USER = getattr(local, 'EMAIL_HOST_USER', '')
 EMAIL_HOST_PASSWORD = getattr(local, 'EMAIL_HOST_PASSWORD', '')
+
 
 DATABASES = {
     'default': {
@@ -256,15 +257,6 @@ COMPRESS_CSS = {
         'extra_context': {
             'media': 'screen',
         },
-    },
-    'lupa': {
-        'source_filenames': (
-            'css/lupa.css',
-        ),
-        'output_filename': 'css/lupa.r?.css',
-        'extra_context': {
-            'media': 'screen',
-        }
     },
     'nc': {
         'source_filenames': (
