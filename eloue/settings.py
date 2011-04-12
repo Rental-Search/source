@@ -22,11 +22,12 @@ INTERNAL_IPS = ('127.0.0.1',)
 SERVER_EMAIL = 'noreply@e-loue.com'
 DEFAULT_FROM_EMAIL = 'noreply@e-loue.com'
 
-EMAIL_HOST = getattr(local, 'EMAIL_HOST', 'smtp.gmail.com')
+EMAIL_HOST = getattr(local, 'EMAIL_HOST', 'smtp.postmarkapp.com')
 EMAIL_USE_TLS = getattr(local, 'EMAIL_USE_TLS', True)
-EMAIL_PORT = getattr(local, 'EMAIL_PORT', 587)
-EMAIL_HOST_USER = getattr(local, 'EMAIL_HOST_USER', '')
-EMAIL_HOST_PASSWORD = getattr(local, 'EMAIL_HOST_PASSWORD', '')
+EMAIL_PORT = getattr(local, 'EMAIL_PORT', 2525)
+EMAIL_HOST_USER = getattr(local, 'EMAIL_HOST_USER', '0765ca4c-42d1-46a8-86a1-2e8bb210dbad')
+EMAIL_HOST_PASSWORD = getattr(local, 'EMAIL_HOST_PASSWORD', '0765ca4c-42d1-46a8-86a1-2e8bb210dbad')
+
 
 DATABASES = {
     'default': {
@@ -428,7 +429,7 @@ if USE_PAYPAL_SANDBOX:
     PAYPAL_API_PASSWORD = getattr(local, 'PAYPAL_SANDBOX_API_PASSWORD', "1300354722")
     PAYPAL_API_SIGNATURE = getattr(local, 'PAYPAL_SANDBOX_API_SIGNATURE', "An5ns1Kso7MWUdW4ErQKJJJ4qi4-A0HCXVSBNN6Gj25nz33zT0f6ZfAK")
     PAYPAL_API_APPLICATION_ID = getattr(local, 'PAYPAL_SANDBOX_API_APPLICATION_ID', 'APP-80W284485P519543T')
-    PAYPAL_API_EMAIL = getattr(local, 'PAYPAL_API_EMAIL', 'benoit.woj@e-loue.com')
+    PAYPAL_API_EMAIL = getattr(local, 'PAYPAL_API_EMAIL', 'test_1301562706_biz@e-loue.com') #TODO, maybe this address, bug of sandbox? benoit.woj@e-loue.com
     PAYPAL_COMMAND = "https://www.sandbox.paypal.com/webscr?%s"
 else:
     PAYPAL_API_USERNAME = getattr(local, 'PAYPAL_API_USERNAME', "benoit.woj_api1.e-loue.com")

@@ -134,6 +134,23 @@
     pk: 349ce9ba628abfdfc9cb3a72608d9a7e
 
 -   fields:
+        started_at: 2010-08-19 09:00:10
+        ended_at: 2010-08-29 09:00:10
+        total_amount: "20"
+        insurance_amount: "1.294920"
+        deposit_amount: "10"
+        state: ongoing
+        contract_id: 12
+        owner: 1
+        borrower: 2
+        product: 3
+        pin: 3425
+        preapproval_key: PA-2NS525738W954192F
+        created_at: 2010-08-15 09:00:10
+    model: rent.booking
+    pk: 349ce9ba628abfdfc9cb3a72608d9a7d
+
+-   fields:
         started_at: 2011-03-23 08:00:00
         ended_at: 2011-03-25 08:00:00
         total_amount: "6.00"
@@ -149,3 +166,46 @@
         created_at: 2011-03-22 19:58:14
     model: rent.booking
     pk: 1661f5f6-f9e1-4b43-813b-3c1913a7c26d
+     
+-   fields:
+        started_at: 2011-03-24 08:00:00
+        ended_at: 2011-03-26 08:00:00
+        total_amount: "10.00"
+        insurance_amount: "1.294920"
+        deposit_amount: "30.00"
+        state: pending
+        contract_id: 10
+        owner: 1
+        borrower: 2
+        product: 5
+        pin: 2463
+        preapproval_key: PA-7BT08456PP218336
+        created_at: 2011-03-22 19:58:14
+    model: rent.booking
+    pk: 349ce9ba628abfdfc9cb3a72608dab6d
+    
+-   fields:
+        started_at: 2011-03-24 08:00:00
+        ended_at: 2011-03-26 08:00:00
+        total_amount: "10.00"
+        insurance_amount: "1.294920"
+        deposit_amount: "30.00"
+        state: ongoing
+        contract_id: 11
+        owner: 1
+        borrower: 2
+        product: 5
+        pin: 2466
+        preapproval_key: PA-7BT08456PP218336
+        created_at: 2011-03-22 19:58:14
+    model: rent.booking
+    pk: 349ce9ba628abfdfc9cb3a72608dab66
+    
+      
+        
+        
+            
+    
+       
+    
+    

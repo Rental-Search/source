@@ -80,5 +80,6 @@ class TestPaypalIPN(TestCase):
         self.failUnlessEqual(response.status_code, 200)
         booking = Booking.objects.get(pay_key="AP-1G646418FF723264N")
         self.assertEquals(booking.state, Booking.STATE.ONGOING)
+        
     
     

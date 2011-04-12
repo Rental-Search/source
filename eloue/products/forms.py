@@ -108,6 +108,10 @@ class ProductForm(forms.ModelForm):
     two_weeks_price = forms.DecimalField(label=_(u"les 15 jours"), required=False, widget=forms.TextInput(attrs={'class': 'ins'}), localize=True)
     month_price = forms.DecimalField(label=_(u"le mois"), required=False, widget=forms.TextInput(attrs={'class': 'ins'}), localize=True)
     
+    def __init__(self, *args, **kwargs):
+        super(ProductForm, self).__init__(*args, **kwargs)
+        self.fields['payment_type'].widget.attrs['class'] = "selm"
+    
     def clean_quantity(self):
         quantity = self.cleaned_data['quantity']
         if quantity < 1:
@@ -128,7 +132,7 @@ class ProductForm(forms.ModelForm):
     
     class Meta:
         model = Product
-        fields = ('category', 'summary', 'picture_id', 'picture', 'deposit_amount', 'quantity', 'description')
+        fields = ('payment_type', 'category', 'summary', 'picture_id', 'picture', 'deposit_amount', 'quantity', 'description')
 
 
 class ProductEditForm(forms.ModelForm):
