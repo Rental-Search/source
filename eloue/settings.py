@@ -19,8 +19,8 @@ MANAGERS = ADMINS
 INTERNAL_IPS = ('127.0.0.1',)
 
 # Email configuration
-SERVER_EMAIL = 'noreply@e-loue.com'
-DEFAULT_FROM_EMAIL = 'noreply@e-loue.com'
+SERVER_EMAIL = 'contact@e-loue.com'
+DEFAULT_FROM_EMAIL = 'contact@e-loue.com'
 
 EMAIL_HOST = getattr(local, 'EMAIL_HOST', 'smtp.postmarkapp.com')
 EMAIL_USE_TLS = getattr(local, 'EMAIL_USE_TLS', True)
