@@ -29,7 +29,7 @@ from django.contrib.gis.measure import Distance
 from django.db import IntegrityError
 
 from eloue.geocoder import GoogleGeocoder
-from eloue.products.models import Product, Category, Picture, Price, upload_to
+from eloue.products.models import Product, Category, Picture, Price, upload_to#, StaticPage
 from eloue.products.search_indexes import product_search
 from eloue.accounts.models import Address, PhoneNumber, Patron
 from eloue.rent.models import Booking
@@ -283,8 +283,7 @@ class CategoryResource(ModelResource):
         return [
             url(r"^(?P<resource_name>%s)/tree/$" % self._meta.resource_name, self.wrap_view('get_tree'), name="api_get_tree"),
         ]
-    
-
+        
 class PictureResource(OAuthResource):
     class Meta:
         queryset = Picture.objects.all()
@@ -304,8 +303,8 @@ class PriceResource(OAuthResource):
         resource_name = "price"
         fields = []
         allowed_methods = ['get', 'post']
-    
 
+        
 class ProductResource(UserSpecificResource):
     category = fields.ForeignKey(CategoryResource, 'category', full=True, null=True)
     address = fields.ForeignKey(AddressResource, 'address', full=True, null=True)
@@ -398,7 +397,7 @@ class ProductResource(UserSpecificResource):
         # Add a day price to the object if there isnt any yet
         if day_price_data:
             Price(product=bundle.obj, unit=1, amount=D(day_price_data)).save()
-        
+        print "######## bundle ########", bundle
         return bundle
     
     def dehydrate(self, bundle, request=None):
