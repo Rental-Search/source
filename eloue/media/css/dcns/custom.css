@@ -84,7 +84,6 @@
     font-size: 14px;
     line-height: 30px;
   }
-  
   .big-orange
   {
    background: transparent url("../../images/btn-big-orange.png") no-repeat 0 0; 
@@ -93,6 +92,16 @@
    font-size: 18px;
    line-height: 34px;
   }
+  .bk-orange
+  {
+    background: transparent url("../../images/btn-bk-orange.png") no-repeat 0 0; 
+    width: 150px;
+    height: 30px;
+    font-size: 14px;
+    line-height: 30px;
+    margin-left: 8px;
+  }
+  
   
   .small-blue
   {
@@ -275,6 +284,9 @@
   {
     padding-top: 10px;
   }
+  
+  .pp { margin-left: 60px; }
+  .assurone { margin-left: 30px; }
   
 /* --------------------------------------------------------------
 

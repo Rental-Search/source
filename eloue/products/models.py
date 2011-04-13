@@ -60,8 +60,8 @@ STATUS = Enum([
 ])
 
 PAYMENT_TYPE = Enum([
-    (0, 'NOPAY', _(u'non payment')),
-    (1, 'PAYPAL', _(u'paypal payment'))
+    (0, 'NOPAY', _(u'Le locataire me paye directement et mon objet n\'est pas assuré')),
+    (1, 'PAYPAL', _(u'Le locataire paye en ligne et mon objet est assuré'))
 ])
 
 INSURANCE_MAX_DEPOSIT = getattr(settings, 'INSURANCE_MAX_DEPOSIT', 750)

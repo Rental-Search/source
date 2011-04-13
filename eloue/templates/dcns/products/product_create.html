@@ -175,7 +175,38 @@
                     <li class="supp-list-prices"></li>
 			    </ul>
 			</div>
-			<p class="required-field">{% trans "* = champ obligatoire" %}</p>
+        </div>
+    </div>
+    <div class="content-header x12">
+        <h2>4. Choisissez votre mode de paiement</h2>
+    </div>
+    <div class="x8">
+        <table class="new">
+		{% if form.payment_type %}
+		<tr>
+			<td colspan="2" {% if form.payment_type.errors %} class="error-field" {% endif %}>
+				{{ form.payment_type }}
+				{% if form.payment_type.errors %}
+			 		{% for error in form.payment_type.errors %}
+						<br />
+				  	<span class="error">{{ error|escape }}</span>
+					{% endfor %}
+			{% endif %}
+			</td>
+		</tr>
+		{% endif %}
+		</table>
+		<p class="required-field">{% trans "* = champ obligatoire" %}</p>
+    </div>
+    <div class="x4">
+        <div class="box-info">
+            <h3>Deux type de paiements</h2>
+            <ol style="padding-left: 20px; padding-right: 10px;">
+                <li><strong>Vous souhaitez êtes payé directement :</strong><br/><small>Le locataire ne paye pas en ligne, il vous versera l'argent de la location au moment de l'échange de l'objet</small></li>
+                <li>
+                    <strong>Vous souhaitez que le locataire<br/> paye en ligne :</strong></br><small> L'argent vous sera versé à la fin de location, votre objet est assuré pendant la location et vous êtes sur d'être payé.</small>
+                </li>
+            </ol>
         </div>
     </div>
     <div id="submit-wizard" class="x12">
