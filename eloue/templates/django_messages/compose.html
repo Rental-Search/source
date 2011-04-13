@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}{% trans "Votre tableau de bord" %}{% endblock %}
+
+{% block content %}
+<div id="content-dash" class="clearfix">
+	<div id="menu" class="dash">
+		<ul class="x12">
+			<li class="menu-tab first selected">{% trans "Tableau de bord" %}</li>
+			<li class="menu-tab"><a href="{% url owner_booking %}">{% trans "Propriétaire" %}</a></li>
+			<li class="menu-tab"><a href="{% url borrower_booking %}">{% trans "Locataire" %}</a></li>
+			<li class="menu-tab"><a href="{% url patron_edit %}">{% trans "Mon compte" %}</a></li>
+			<li class="menu-tab"><a href="{% url messages_inbox %}">{% blocktrans %}Messages({{ messages_inbox_count }}){% endblocktrans %}</a></li>
+		</ul>
+	</div>
+	<div id="sub-menu">
+		<ul class="x12">
+			<li class="sub-tab first selected"><a href="{% url messages_inbox %}">{% trans "Messages reçus"%}</a></li>
+			<li class="sub-tab"><a href="{% url messages_compose %}">{% trans "Composer messages" %}</a></li>
+			<li class="sub-tab"><a href="{% url messages_outbox %}">{% trans "Messages envoyés" %}</a></li>
+			<li class="sub-tab"><a href="{% url messages_trash %}">{% trans "Messages supprimés" %}</a></li>
+		</ul>
+	</div>
+	<div class="content-header x12">
+		<h1>{% trans "Compose Message" %}</h1>
+	</div>
+	<div class="x12">
+		<form action="" method="post">
+		{% csrf_token %} 
+		<table>
+		{{ form.as_table }}
+		</table>
+		<input type="submit" value="{% trans "Send" %} &raquo;"/>
+		</form>
+	</div>
+</div>
+{% endblock%}

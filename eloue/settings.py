@@ -19,15 +19,14 @@ MANAGERS = ADMINS
 INTERNAL_IPS = ('127.0.0.1',)
 
 # Email configuration
-SERVER_EMAIL = 'noreply@e-loue.com'
-DEFAULT_FROM_EMAIL = 'noreply@e-loue.com'
+SERVER_EMAIL = 'contact@e-loue.com'
+DEFAULT_FROM_EMAIL = 'contact@e-loue.com'
 
 EMAIL_HOST = getattr(local, 'EMAIL_HOST', 'smtp.postmarkapp.com')
 EMAIL_USE_TLS = getattr(local, 'EMAIL_USE_TLS', True)
 EMAIL_PORT = getattr(local, 'EMAIL_PORT', 2525)
 EMAIL_HOST_USER = getattr(local, 'EMAIL_HOST_USER', '')
 EMAIL_HOST_PASSWORD = getattr(local, 'EMAIL_HOST_PASSWORD', '')
-
 
 DATABASES = {
     'default': {
@@ -111,6 +110,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.request',
     'django.contrib.messages.context_processors.messages',
     'announcements.context_processors.site_wide_announcements',
+    'django_messages.context_processors.inbox',
     'eloue.context_processors.site',
     'eloue.context_processors.debug',
 )
@@ -168,6 +168,7 @@ INSTALLED_APPS = (
     'rent',
     'products',
     'oauth_provider',
+    'django_messages',
 )
 if DEBUG_TOOLBAR:
     INSTALLED_APPS += ('debug_toolbar',)
