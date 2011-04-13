@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.conf import settings
 from django.contrib.auth import login
+from django.core.urlresolvers import reverse
 from django.views.generic.simple import redirect_to
 
 from django_lean.experiments.models import GoalRecord
@@ -8,7 +9,7 @@ from django_lean.experiments.utils import WebUser
 
 from eloue.accounts.forms import EmailAuthenticationForm
 from eloue.accounts.models import Patron
-from eloue.products.forms import ProductForm
+from eloue.products.forms import AlertForm, ProductForm
 from eloue.products.models import Product, Picture, UNIT
 from eloue.wizard import GenericFormWizard
 
@@ -80,4 +81,47 @@ class ProductWizard(GenericFormWizard):
             return 'products/product_create.html'
         else:
             return 'products/product_missing.html'
+    
+
+class AlertWizard(GenericFormWizard):
+    def done(self, request, form_list):
+        missing_form = next((form for form in form_list if getattr(form.__class__, '__name__', None) == 'MissingInformationForm'), None)
+        
+        if request.user.is_anonymous():  # Create new Patron
+            auth_form = next((form for form in form_list if isinstance(form, EmailAuthenticationForm)), None)
+            new_patron = auth_form.get_user()
+            if not new_patron:
+                new_patron = Patron.objects.create_inactive(missing_form.cleaned_data['username'],
+                    auth_form.cleaned_data['email'], missing_form.cleaned_data['password1'])
+                if hasattr(settings, 'AFFILIATE_TAG'):
+                    # Assign affiliate tag, no need to save, since missing_form should do it for us
+                    new_patron.affiliate = settings.AFFILIATE_TAG
+            if not hasattr(new_patron, 'backend'):
+                from django.contrib.auth import load_backend
+                backend = load_backend(settings.AUTHENTICATION_BACKENDS[0])
+                new_patron.backend = "%s.%s" % (backend.__module__, backend.__class__.__name__)
+            login(request, new_patron)
+        else:
+            new_patron = request.user
+        
+        if missing_form:
+            missing_form.instance = new_patron
+            new_patron, new_address, new_phone = missing_form.save()
+        
+        # Create and send alerts
+        alert_form = form_list[0]
+        alert_form.instance.patron = new_patron
+        alert_form.instance.address = new_address
+        alert = alert_form.save()
+        
+        alert.send_alerts()
+        return redirect_to(request, reverse("alert_list"), permanent=False)
+    
+    def get_template(self, step):
+        if issubclass(self.form_list[step], EmailAuthenticationForm):
+            return 'products/alert_register.html'
+        elif issubclass(self.form_list[step], AlertForm):
+            return 'products/alert_create.html'
+        else:
+            return 'products/alert_missing.html'
     
