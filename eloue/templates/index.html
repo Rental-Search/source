@@ -1,23 +1,16 @@
 {% extends "base.html" %}
-{% load i18n compressed mptt_tags product cache lupa %}
+{% load i18n compressed mptt_tags product cache %}
 
 {% block title %}{% trans "Location entre particuliers ou professionnels de tout type d'objet" %}{% endblock %}
 
 {% block head %}
  {{ block.super }}
- {% if request|from_lupa %}
-  {% compressed_css 'lupa' %}
- {% endif %}
 {% endblock %}
 
 {% block content %}
 	<div id="top-content" class="search clearfix">
 		<div class="search-header x12">
-		 {% if request|from_lupa %}
-			<h1>{% trans "Avec e-loue tout se loue, sauf les petites amies !" %}</h1>
-		 {% else %}
 		  <h1>{% trans "Avec e-loue, tout se loue !" %}</h1>
-		 {% endif %}
 		</div>
 		<form class="form" action="{% url product_list %}">
 		<div class="search-what x5">
@@ -71,12 +64,19 @@
 		{% endfor %}	 
 	{% endcache %}
 	 </div>
-	 <div class="x4">
+	 <div class="x4 app-iphone">
 		<div class="content-header x4 first">
-		 <h2>{% trans "Découvrez la vérité !" %}</h2>
+		 <h2>{% trans "e-loue sur iPhone" %}</h2>
 		</div>
-	  <div class="lupa x4 first">
-		 <a href="https://loueunepetiteamie.s3.amazonaws.com/dossier_loueunepetiteamie.pdf" class="lupa-folder-link">Tout savoir sur loueunepetiteamie.com</a>
+		<div class="x2 first">
+		    <img src="{{ MEDIA_URL }}images/iphone/iphone.png" alt="{% trans "location entre particulier avec e-loue sur iphone" %}">
+		</div>
+		<div class="x2">
+		    <p>
+		        La première application iphone qui vous permet de tout louer!
+		    </p>
+		    <a  href="http://itunes.apple.com/fr/app/e-loue-mobile-app/id427538545" title="Cliquez pour télécharger l'application iphone e-loue" class="available">Disponible sur l'App Store</a>
+		    <a href="/mobile/iphone" title="Détails sur l'application iphone e-loue" class="more-details">En savoir plus ...</a>
 		</div>
 	</div>
 	<div class="content-guarantees">

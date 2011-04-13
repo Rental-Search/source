@@ -136,27 +136,34 @@
 		text-indent: -9999px;
 		cursor: pointer;
 	}
-	
-	
-	.lupa 
-	{ 
-		position: relative;
-		height: 210px;
-		border-bottom: 2px solid #b9cad4;
-	}
-		.lupa-folder-link
-		{
-			background: transparent url("../images/lupa/lupa_bg.png") no-repeat 0 0;
-			display: block;
-			position: absolute;
-			top: -22px;
-			left: 0px;
-			text-indent: -9999px;
-			height: 232px;
-			width: 312px;
-		}
-	
-	
+
+.app-iphone 
+{
+  border-bottom: 2px solid #546b78;
+}
+  .app-iphone img { margin-bottom: -3px; }
+  .app-iphone p 
+  {
+    font-family: Ubuntu; 
+    font-size: 16px; 
+    line-height: 20px;
+  }
+  .app-iphone .available
+  {
+    display: block;
+    background: transparent url("../images/iphone/available_on_appstore.png") no-repeat 0 0;
+    width: 138px;
+    height: 45px;
+    text-indent: -9999px;
+    cursor: pointer;
+  }
+  .app-iphone .available, .app-iphone p { margin-bottom: 20px; }
+  .app-iphone .more-details
+  {
+    color: #6eb924;
+    font-weight: bold;
+  }
+  
 	
 /* *************************************************
   Product page
@@ -1184,6 +1191,7 @@
               font-weight: bold;
               line-height: 26px;
             }
+
             
 /* **************************************************
   Alerts
@@ -1201,3 +1209,147 @@
   #alerts .bk-action a { line-height: 30px; }
 
   
+
+
+/* **************************************************
+  iPhone page
+**************************************************** */
+.iphone-col1 
+{
+  position: relative;
+  margin-top: 25px;
+}
+  .iphone-features { width: 520px; margin-bottom: 140px; margin-left: 40px;}
+    .iphone-features li
+    {
+      float: left;
+      display: inline;
+      width: 140px;
+      text-align: center;
+      font-size: 16px;
+      padding-top: 151px;
+      margin-right: 40px; 
+    }
+    .iphone-features li.last { margin-right: 0;}
+
+    .iphone-features li strong
+    {
+      font-size: 24px;
+      font-weight: bold;
+    }
+    .increase 
+    { 
+      background: transparent url("../images/iphone/piggy_bank.png") no-repeat 0 0;
+    }
+    .protect 
+    {
+      background: transparent url("../images/iphone/world.png") no-repeat 0 0; 
+    }
+    .profitable 
+    {
+      background: transparent url("../images/iphone/camera.png") no-repeat 0 0; 
+    }
+  
+.iphone-slides
+{
+  background: transparent url("../images/iphone/big_iphone.png") no-repeat 0 0;
+  position: absolute;
+  top: -85px;
+  right: 40px;
+  width: 300px;
+  height: 584px;
+}
+  #slideshow
+  {
+    margin-top: 105px;
+    margin-left: 26px;
+  }
+  
+.iphone-refection
+{
+  background: transparent url("../images/iphone/reflection.png") no-repeat 0 0;
+  position: absolute;
+  top: -78px;
+  right: 43px;
+  width: 153px;
+  height: 440px;
+}
+
+#nav-slideshow 
+{ 
+  margin-left: 154px;
+  margin-bottom: 50px;
+}
+  #nav-slideshow a
+  {
+    background: transparent url("../images/iphone/markers.png") no-repeat -13px 0;
+    display: block;
+    float: left;
+    margin-right: 8px;
+    height: 12px;
+    width: 12px;
+    text-indent: -9999px;
+  }
+  
+  #nav-slideshow a.activeSlide { background: transparent url("../images/iphone/markers.png") no-repeat 0 0; }
+
+.iphone-dl-link
+{
+  background: transparent url("../images/iphone/dl_app.png") no-repeat 0 0;
+  display: block;
+  position: absolute;
+  height: 65px;
+  width: 562px;
+  top: 240px;
+  left: 40px;
+  text-indent: -9999px;
+}
+
+.iphone-desc { width: 500px; margin-bottom: 40px; margin-left: 40px; }
+  .iphone-desc-header
+  {
+    background: transparent url("../images/content-h-bg.png") repeat-x 0 bottom;
+    margin-bottom: 15px;
+  }
+    .iphone-desc-header h2
+    {
+      font-family: ubuntu;
+      padding-bottom: 10px;
+      margin-bottom: 0px;
+      font-size: 24px;
+      font-weight: normal;
+    }
+  .iphone-desc p
+  {
+    line-height: 20px;
+    text-align: justify;
+  }
+
+.iphone-col2
+{
+  margin-top: 25px;
+  position: relative;
+  padding-top: 520px;
+}
+  .iphone-col2 .fl-sidebar-header, .iphone-col2 .fl-sidebar-content
+  {
+    width: 298px;
+    margin-left: 42px;
+    margin-right: 40px;
+    padding: 0;
+  }
+  
+  .iphone-col2 .fl-sidebar-header { padding-top: 15px; }
+  
+  .iphone-col2 .fl-sidebar-content p { padding: 20px;}
+    
+  .iphone-col2 .fl-sidebar-content ul { margin: 0 50px; }
+  
+  .iphone-col2 .fl-sidebar-content li
+  {
+    list-style-image: url("../images/list-style-info.png");
+    list-style-position: outside;
+    margin-bottom: 15px;
+    text-align: justify;
+  }
+    .iphone-col2 .fl-sidebar-content li.last { margin-bottom: 0px; }

@@ -220,6 +220,21 @@ $(document).ready(function() {
         }
       });
     });
+    
+    //slideshow for iphone page
+    jQuery(document).ready(function() {
+        jQuery('#slideshow').cycle({ 
+            delay:  3000, 
+            speed:  800,
+            pager: '#nav-slideshow'
+        }); 
+
+        function selectMarker() { 
+            /*jQuery('.slideshow_marker').removeClass('active_marker');
+            jQuery('#slideshow_marker_' + this.alt).addClass('active_marker');*/
+        };
+
+    });
 
 });
 

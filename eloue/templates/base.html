@@ -1,4 +1,4 @@
-{% load compressed i18n markup seo lupa %}
+{% load compressed i18n markup seo %}
 <!doctype html>
 <html lang="fr">
  <head>
@@ -36,11 +36,7 @@
 			<div id="header" class="clearfix">
 				<div class="logo x2">
 					<a href="{% url home %}">
-					  {% if request|from_lupa %}
-						 <img src="{{ MEDIA_URL }}images/lupa/eloue-rose.png" alt="e-loue"/>
-						{% else %}
-						  <img src="{{ MEDIA_URL }}images/logo.png" alt="e-loue"/>
-						{% endif %}
+					    <img src="{{ MEDIA_URL }}images/logo.png" alt="e-loue"/>
 					</a>
 				</div>
 				<div class="x10 omega">
