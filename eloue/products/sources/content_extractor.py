@@ -1,6 +1,11 @@
+import re
+import logbook
 from lxml import etree
 from urllib import urlopen
-import re
+from decimal import Decimal as D
+
+log = logbook.Logger('eloue.rent.sources')
+
 re_num = re.compile("[0-9]*\,?[0-9]+")
 
 def __make_get_set_base_url():
@@ -17,8 +22,12 @@ def __make_get_set_base_url():
 get_base_url, set_base_url = __make_get_set_base_url()
 
 def html_tree(url):
-    html_page = urlopen(get_base_url() + url)
-    return etree.parse(html_page, etree.HTMLParser())
+    try:
+        html_page = urlopen(get_base_url() + url)
+        return etree.parse(html_page, etree.HTMLParser())
+    except Exception, e:
+        log.exception("Exception: %s".format(e))
+        return
 
 def tree_from_link(a):
     return html_tree(a.get("href"))
@@ -26,11 +35,13 @@ def tree_from_link(a):
 def follow_all(extractor, a_list):
     for a in a_list:
         href = a.get("href")
-        for p in extractor(html_tree(href), href=href):
+        tree = html_tree(href)
+        if not tree: return
+        for p in extractor(tree, href=href):
             yield p
 
 def extract_price(string, sep=","):
-    return float(re_num.findall(string)[0].replace(",", "."))
+    return D(re_num.findall(string)[0].replace(",", "."))
 
 def id_gen():
     i = 1

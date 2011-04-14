@@ -1,6 +1,9 @@
 from . import BaseSource, Product
 from content_extractor import *
 import re
+import logbook
+
+log = logbook.Logger('eloue.rent.sources')
 
 CATEGORIES = {}
 
@@ -51,14 +54,14 @@ class SourceClass(BaseSource):
                 'lat' : 0, 'lng' : 0,
                 'city' : 'Paris',
                 'price': extract_price(html_tree.find(XP_PRICE).text),
-                'owner' : 'kiloutou',
+                'owner' : 'loxam',
                 'owner_url' : BASE_URL + "/",
                 'url' : BASE_URL + href,
                 'thumbnail' : thumbnail,
                 'django_id' : 'loxam.%d' % c_id
             })
         except Exception, e:
-            pass
+            log.exception("Exception : {0}".format(e))
 
     def get_prefix(self):
         return 'source.loxam'
