@@ -10,7 +10,7 @@ from django.conf import settings
 from django.contrib.auth.models import User
 from django.contrib.gis.geos import Point
 from django.db.models import permalink
-from django.db.models.signals import post_save
+from django.db.models import signals
 from django.utils.encoding import smart_unicode
 from django.utils.formats import get_format
 from django.utils.translation import ugettext_lazy as _
@@ -22,7 +22,7 @@ from eloue.geocoder import GoogleGeocoder
 from eloue.products.utils import Enum
 from eloue.paypal import accounts, PaypalError
 from eloue.signals import post_save_sites
-from eloue.utils import create_alternative_email
+from eloue.utils import create_alternative_email, message_filter
 
 CIVILITY_CHOICES = Enum([
     (0, 'MME', _('Madame')),
@@ -299,4 +299,8 @@ class PhoneNumber(models.Model):
         return smart_unicode(self.number)
     
 
-post_save.connect(post_save_sites, sender=Patron)
+signals.post_save.connect(post_save_sites, sender=Patron)
+from django_messages.models import Message 
+signals.pre_save.connect(message_filter, sender=Message)
+
+
