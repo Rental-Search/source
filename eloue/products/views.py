@@ -12,6 +12,7 @@ from django.views.decorators.cache import never_cache, cache_page
 from django.views.decorators.vary import vary_on_cookie
 from django.views.generic.simple import direct_to_template, redirect_to
 from django.views.generic.list_detail import object_list
+from django.views.generic.list_detail import object_detail
 
 from haystack.query import SearchQuerySet
 
@@ -20,7 +21,7 @@ from eloue.accounts.forms import EmailAuthenticationForm
 from eloue.accounts.models import Patron
 from eloue.products.forms import AlertSearchForm, FacetedSearchForm, ProductForm, ProductEditForm, AlertForm
 from eloue.products.models import Category, Product, Curiosity, UNIT, Alert
-from eloue.products.wizard import ProductWizard, AlertWizard
+from eloue.products.wizard import ProductWizard, AlertWizard, AlertAnswerWizard
 
 
 PAGINATE_PRODUCTS_BY = getattr(settings, 'PAGINATE_PRODUCTS_BY', 10)
@@ -138,7 +139,14 @@ def alert_list(request, sqs=SearchQuerySet(), page=None):
         template_object_name='alert', extra_context={'form': form, 'search_alert_form':search_alert_form})
 
 
+@never_cache
+@secure_required
+def alert_inform(request, *args, **kwargs):
+    wizard = AlertAnswerWizard([ProductForm, EmailAuthenticationForm])
+    return wizard(request, *args, **kwargs)
+
+
 @login_required
-def alert_inform(request, alert_id):
-    # TODO
-    return redirect_to(request, reverse("alert_list"), permanent=False)
+def alert_inform_success(request, alert_id):
+    return object_detail(request, queryset=Alert.objects.all(), object_id=alert_id,
+        template_name='products/alert_unform_success.html', template_object_name='alert')

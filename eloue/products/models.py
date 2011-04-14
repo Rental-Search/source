@@ -420,6 +420,10 @@ class Alert(models.Model):
                 'alert': self
             }, settings.DEFAULT_FROM_EMAIL, [self.patron.email])
             message.send()
+            
+    @permalink
+    def get_absolute_url(self):
+        return ('alert_inform', [self.pk])
     
     class Meta:
         get_latest_by = 'created_at'

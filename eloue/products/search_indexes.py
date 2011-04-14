@@ -65,6 +65,7 @@ class AlertIndex(QueuedSearchIndex):
     lng = FloatField(model_attr='address__position__y', null=True)
     text = CharField(document=True, use_template=True)
     sites = MultiValueField(faceted=True)
+    url = CharField(model_attr='get_absolute_url', indexed=False)
     
     def prepare_sites(self, obj):
         return [site.id for site in obj.sites.all()]
