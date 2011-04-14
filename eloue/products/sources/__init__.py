@@ -15,7 +15,7 @@ from eloue.geocoder import GoogleGeocoder
 from eloue.utils import generate_camo_url
 
 SOURCES = getattr(settings, 'AFFILIATION_SOURCES', ['skiplanet', 'lv'])
-BATCHSIZE = 3 # getattr(settings, 'AFFILIATION_BATCHSIZE', 1000)
+BATCHSIZE = getattr(settings, 'AFFILIATION_BATCHSIZE', 1000)
 
 CAMO_URL = getattr(settings, 'CAMO_URL', 'https://media.e-loue.com/proxy/')
 CAMO_KEY = getattr(settings, 'CAMO_KEY')
