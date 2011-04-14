@@ -18,12 +18,10 @@ BASE_URL = "http://www.loxam.fr/"
 
 class SourceClass(BaseSource):
 
-    set_base_url(BASE_URL)
     id = id_gen()
 
     def __init__(self, *args, **kwargs):
         BaseSource.__init__(self, *args, **kwargs)
-        set_base_url(BASE_URL)
 
     def get_categories(self, html_tree):
         for p in follow_all(self.get_subcat,
@@ -58,7 +56,7 @@ class SourceClass(BaseSource):
                 'owner_url' : BASE_URL + "/",
                 'url' : BASE_URL + href,
                 'thumbnail' : thumbnail,
-                'django_id' : 'loxam.%d' % c_id
+                'django_id' : u'loxam.%d' % c_id
             })
         except Exception, e:
             log.exception("Exception : {0}".format(e))
@@ -67,6 +65,7 @@ class SourceClass(BaseSource):
         return 'source.loxam'
 
     def get_docs(self):
+        set_base_url(BASE_URL)
         for product in self.get_categories(html_tree("/")):
             yield product
 

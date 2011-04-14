@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import hashlib
 import hmac
+import logbook
 
 from datetime import datetime
 from pysolr import Solr
@@ -14,8 +15,9 @@ from django.utils import importlib
 from eloue.geocoder import GoogleGeocoder
 from eloue.utils import generate_camo_url
 
+log = logbook.Logger('eloue.rent.sources')
 SOURCES = getattr(settings, 'AFFILIATION_SOURCES', ['skiplanet', 'lv'])
-BATCHSIZE = getattr(settings, 'AFFILIATION_BATCHSIZE', 1000)
+BATCHSIZE = 20 # getattr(settings, 'AFFILIATION_BATCHSIZE', 10)
 
 CAMO_URL = getattr(settings, 'CAMO_URL', 'https://media.e-loue.com/proxy/')
 CAMO_KEY = getattr(settings, 'CAMO_KEY')
@@ -89,6 +91,7 @@ class SourceManager(object):
                 else: return
 
         for batch in next_docs():
+            log.info("appending batch")
             self.__class__.solr.add(batch)
             self.__class__.solr.commit()
 
