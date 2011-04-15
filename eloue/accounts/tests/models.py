@@ -6,7 +6,7 @@ from django.core import mail
 from django.core.exceptions import ValidationError
 from django.contrib.gis.geos import Point
 from django.test import TestCase
-
+from django.contrib.auth.models import User
 from eloue.accounts.models import Patron, Address
 
 
@@ -48,7 +48,8 @@ class AccountManagerTest(TestCase):
         self.assertTrue(Patron.objects.exists(pk=patron.pk))
         patron.delete()
         self.assertFalse(Patron.objects.exists(pk=patron.pk))
-    
+      
+        
     def test_delete_expired(self):
         patron = Patron.objects.create_inactive('benoitw', 'benoit.woj@e-loue.com', 'benoit')
         patron.date_joined = datetime.datetime.now() - datetime.timedelta(days=8)

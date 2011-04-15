@@ -436,3 +436,8 @@ MOBILE_REDIRECT_BASE = getattr(local, 'MOBILE_REDIRECT_BASE', 'https://m.e-loue.
 # Franc Pacifique
 CONVERT_XPF = False
 XPF_EXCHANGE_RATE = '0.00838'
+
+# Message 
+REPLACE_STRING = getattr(local, "REPLACE_STRING", "### eloue suggests clients to hide their informations if the booking is not valid yet ###")
+
+
