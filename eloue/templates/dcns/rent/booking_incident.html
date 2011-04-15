@@ -1,7 +1,34 @@
 {% extends "base.html" %}
-{% load i18n product %}
+{% load i18n product booking %}
 
-{% block title %}{% trans "Déclarez un incident" %}{% endblock %}
+{% block title %}
+{% if booking.state == booking.STATE.AUTHORIZING %}
+	{% if booking.borrower == user %}
+		{% trans "Location en cours de validation" %}
+	{% endif %}
+{% endif %}
+{% if booking.state == booking.STATE.AUTHORIZED %}
+ 	{% trans "Location réservée" %}
+{% endif %}
+{% if booking.state == booking.STATE.REJECTED %}
+	{% trans "Location rejetée" %}
+{% endif %}
+{% if booking.state == booking.STATE.PENDING %}
+ 	{% trans "Location à venir" %}
+{% endif %}
+{% if booking.state == booking.STATE.ONGOING %}
+ 	{% trans "Location en cours" %}
+{% endif %}
+{% if booking.state == booking.STATE.ENDED %}
+ {% trans "Location terminée" %}
+{% endif %}
+{% if booking.state == booking.STATE.CLOSING %}
+	{% trans "Location en cours de clôture" %}
+{% endif %}
+{% if booking.state == booking.STATE.CLOSED %}
+ {% trans "Location clôturer" %}
+{% endif %}
+{% endblock %}
 
 {% block content %}
 <div id="content" class="xgrid">
@@ -131,12 +158,35 @@
             </table>
         </div>
         {% endif %}
-    </div>
-    <div class="x4">
-        <div class="box-tools">
-            <h3>{% trans "Information" %}</h3>
-            <div class="box-tools-bottom">
-                <p>{% trans "Déclarer un incident si la location ne se déroule pas correctement." %}</p>
+        <div class="content-header x8 first">
+			<h2>{% trans "Déclarez votre incident" %}</h2>
+		</div>
+		<div class="x8 first">
+			<form action="" method="POST">
+				{% csrf_token %}
+				<p {% if form.message.errors %} class="error-field" {% endif %}>
+					{{ form.message }}
+					{% if form.message.errors %}
+						{% for error in form.message.errors %}
+							<br />
+			      	<span class="error">{{ error|escape }}</span>
+			    	{% endfor %}
+					{% endif %}
+				</p>
+			</div>
+			<div id="submit-wizard" class="x8 first">
+			    <p>
+				    <a href="{% url borrower_history %}">{% trans "Annuler" %}</a> {% trans "ou" %} 
+    				<input type="submit" class="btn big-green" value="{% trans "Envoyer" %}" />
+    			</p>
+			</form>
+		</div>
+	</div>
+	<div class="x3">
+        <div class="box-tools" style="background-color: #FFF;">
+            <h3>{% trans "Statut de la location" %}</h3>
+            <div class="box-tools-bottom clearfix">
+                {% include "rent/partials/booking_status.html" %}
             </div>
         </div>
     </div>
