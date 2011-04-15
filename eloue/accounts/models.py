@@ -121,6 +121,14 @@ class Patron(User):
         self.modified_at = datetime.datetime.now()
         super(Patron, self).save(*args, **kwargs)
     
+    def __eq__(self, other):
+        """
+        To resolve the user comparing problems in other projet lib.
+        """
+        if isinstance(other, User):
+            if other.pk == self.pk:
+                return True
+    
     @permalink
     def get_absolute_url(self):
         return ('patron_detail', [self.slug])

@@ -2,6 +2,7 @@
 from django.conf import settings
 import re
 
+
 def post_save_sites(sender, instance, created, **kwargs):
     instance.sites.add(*settings.DEFAULT_SITES)
 
@@ -30,11 +31,16 @@ def message_site_filter(sender, instance, signal, *args, **kwargs):
     """
     Filter to forbiden passing message between users from different sites.
     """
-    sender_sites = instance.sender.sites.all()
-    recipient_sites = instance.recipient.sites.all()
-    if set(sender_sites) & set(recipient_sites):
-        print ">>>>>>>>>have right to send>>>>>>>>"
-        pass
-    else:
-        print ">>>>>>>>>no right to send>>>>>>>>"
-        instance.recipient = None
+    from eloue.accounts.models import Patron
+    if instance.sender and instance.recipient:
+        patron_sender = Patron.objects.get(pk=instance.sender.pk)
+        patron_recipient = Patron.objects.get(pk=instance.recipient.pk)
+        sender_sites = patron_sender.sites.all()
+        recipient_sites = patron_recipient.sites.all()
+        if set(sender_sites) & set(recipient_sites):
+            pass
+        else:
+            instance.recipient = None
+    
+    
+    
