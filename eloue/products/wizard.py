@@ -170,6 +170,7 @@ class AlertAnswerWizard(GenericFormWizard):
         GoalRecord.record('new_object', WebUser(request))
 
         alert = self.extra_context['alert']
+        alert.send_alerts_answer(product)
         
         return redirect_to(request, reverse("alert_inform_success", args=[alert.pk]), permanent=False)
 
@@ -199,4 +200,3 @@ class AlertAnswerWizard(GenericFormWizard):
             return 'products/product_create.html'
         else:
             return 'products/product_missing.html'
-    

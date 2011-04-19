@@ -420,6 +420,13 @@ class Alert(models.Model):
                 'alert': self
             }, settings.DEFAULT_FROM_EMAIL, [self.patron.email])
             message.send()
+    
+    def send_alerts_answer(self, product):
+        message = create_alternative_email('products/emails/alert_answer', {
+            'product': product,
+            'alert': self
+        }, settings.DEFAULT_FROM_EMAIL, [self.patron.email])
+        message.send()
             
     @permalink
     def get_absolute_url(self):
