@@ -9,13 +9,20 @@ from django.utils.translation import ugettext as _
 
 from haystack.forms import SearchForm
 from mptt.forms import TreeNodeChoiceField
-
+from eloue.accounts.models import Patron
 from eloue.geocoder import GoogleGeocoder
 from eloue.products.fields import FacetField
-from eloue.products.models import PatronReview, ProductReview, Product, Picture, Category, UNIT
+from eloue.products.models import PatronReview, ProductReview, Product, Picture, Category, UNIT, ProductRelatedMessage
 from eloue.products.utils import Enum
+from django_messages.forms import ComposeForm
+import datetime
 
-
+if "notification" in settings.INSTALLED_APPS:
+    from notification import models as notification
+else:
+    notification = None
+    
+    
 SORT = Enum([
     ('geo_distance', 'NEAR', _(u"Les plus proches")),
     ('-created_at', 'RECENT', _(u"Les plus récentes")),
@@ -91,6 +98,37 @@ class ProductReviewForm(forms.ModelForm):
         model = ProductReview
         exclude = ('created_at', 'ip', 'reviewer', 'product')
 
+class MessageEditForm(ComposeForm):
+    
+    def __init__(self, *args, **kwargs):
+        super(MessageEditForm, self).__init__(*args, **kwargs)
+       
+    def save(self, product, sender, parent_msg=None):
+        print ">>>>>>> save called  >>>>>>>>"
+        recipients = self.cleaned_data['recipient']
+        subject = self.cleaned_data['subject']
+        body = self.cleaned_data['body']
+        message_list = []
+        for r in recipients:
+            msg = ProductRelatedMessage(
+                sender = sender,
+                recipient = r,
+                subject = subject,
+                body = body,
+            )
+            product.messages.add(msg) # To implement a layer to wrap the message lib
+            if parent_msg is not None:
+                msg.parent_msg = parent_msg
+                parent_msg.replied_at = datetime.datetime.now()
+                parent_msg.save()
+            msg.save()
+            message_list.append(msg)
+            if notification:
+                if parent_msg is not None:
+                    notification.send([r], "messages_reply_received", {'message': msg,})
+                else:
+                    notification.send([r], "messages_received", {'message': msg,})
+        return message_list
 
 class ProductForm(forms.ModelForm):
     category = TreeNodeChoiceField(queryset=Category.tree.all(), empty_label=_(u"Choisissez une catégorie"), level_indicator=u'--', widget=forms.Select(attrs={'class': 'selm'}))
@@ -173,14 +211,15 @@ class ProductEditForm(forms.ModelForm):
                     instance.amount = self.cleaned_data[field]
                     instance.save()
         if self.new_picture:
-            self.instance.pictures.all().delete()  # TODO : Do something less stupid here
+            self.instance.pictures.all().delete() 
             self.instance.pictures.add(Picture.objects.create(image=self.cleaned_data['picture']))
         return super(ProductEditForm, self).save(*args, **kwargs)
     
     class Meta:
         model = Product
         fields = ('category', 'summary', 'deposit_amount', 'quantity', 'description')
-    
+
+  
 
 class ProductAdminForm(forms.ModelForm):
     category = TreeNodeChoiceField(queryset=Category.tree.all(), empty_label="Choisissez une catégorie", level_indicator=u'--')

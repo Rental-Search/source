@@ -12,15 +12,21 @@ from django.views.decorators.cache import never_cache, cache_page
 from django.views.decorators.vary import vary_on_cookie
 from django.views.generic.simple import direct_to_template, redirect_to
 from django.views.generic.list_detail import object_list
+from django.shortcuts import render_to_response
+from django.template import RequestContext
 
+from django.http import Http404, HttpResponseRedirect
 from haystack.query import SearchQuerySet
 
 from eloue.decorators import ownership_required, secure_required, mobify
 from eloue.accounts.forms import EmailAuthenticationForm
 from eloue.accounts.models import Patron
-from eloue.products.forms import FacetedSearchForm, ProductForm, ProductEditForm
-from eloue.products.models import Category, Product, Curiosity, UNIT
+from eloue.products.forms import FacetedSearchForm, ProductForm, ProductEditForm, MessageEditForm
+from django_messages.forms import ComposeForm
+from eloue.products.models import Category, Product, Curiosity, UNIT, ProductRelatedMessage
 from eloue.products.wizard import ProductWizard
+from django_messages.utils import format_quote
+
 
 PAGINATE_PRODUCTS_BY = getattr(settings, 'PAGINATE_PRODUCTS_BY', 10)
 DEFAULT_RADIUS = getattr(settings, 'DEFAULT_RADIUS', 50)
@@ -65,6 +71,45 @@ def product_edit(request, slug, product_id):
         messages.success(request, _(u"Votre produit a bien été édité !"))
     return direct_to_template(request, 'products/product_edit.html', extra_context={'product': product, 'form': form})
 
+def reply_product_related_message(request, message_id, form_class=MessageEditForm,
+    template_name='django_messages/compose.html', success_url=None, recipient_filter=None,
+    quote=format_quote):
+    
+    parent = get_object_or_404(ProductRelatedMessage, id=message_id)
+    product = parent.product
+    
+    if parent.sender != request.user and parent.recipient != request.user:
+        raise Http404
+
+    if request.method == "POST":
+        sender = request.user
+        form = form_class(request.POST)
+        if form.is_valid():
+            form.save(product=product, sender=request.user, parent_msg=parent)
+            messages.add_message(request, messages.SUCCESS, _(u"Message successfully sent."))
+            if success_url is None:
+                success_url = reverse('messages_inbox')
+            return HttpResponseRedirect(success_url)
+    else:
+        form = form_class({
+            'body': quote(parent.sender, parent.body),
+            'subject': _(u"Re: %(subject)s") % {'subject': parent.subject},
+            'recipient': [parent.sender,]
+            })
+    return render_to_response(template_name, {
+        'form': form,
+    }, context_instance=RequestContext(request))
+reply_product_related_message = login_required(reply_product_related_message)
+    
+
+def message_edit(request, product_id):
+    product = get_object_or_404(Product, pk=product_id)
+    sender = request.user
+    messages_form = MessageEditForm(data=request.POST)
+    if messages_form.is_valid():
+        messages_form.save(product=product, sender=request.user)
+        messages.success(request, _(u"Une question du produit a été envoyé !"))
+    return direct_to_template(request, 'products/product_detail.html', extra_context={'product': product, 'messages_form':messages_form})    
 
 @mobify
 @cache_page(900)

@@ -59,6 +59,30 @@
 		<div class="product-desc x8 first">
 			{{ product.description|linebreaksp }}
 		</div>
+		
+			<div class="product-desc x8 first">
+				 {% for message in product.messages.all %}
+				   {% if message %}
+				    <table>
+				 		<tr><td>{{ message.subject }}</td></tr>
+						<tr><td>{{ message.body }}</td></tr>
+					</table>
+				  {% endif %}
+				 {% endfor %}
+			</div>
+			
+		<div>
+			<form action="" method="post">
+				{% csrf_token %} 
+				<table>
+				{{ messages_form.as_table }}
+				</table>
+			{% if messages_form %}
+				<input type="submit" value="{% trans "Send" %} &raquo;"/>
+			{% endif %}
+			</form>
+		</div>
+	
 	</div>{# col1 #}
 	<div class="col2 x4">
 	<div class="product-booking-top x4 first">
@@ -119,6 +143,9 @@
 			<tr>
 				<td>{% trans "Propriétaire" %} :</td>
 				<td class="p-value"><a href="{{ product.owner.get_absolute_url }}" class="owner">{{ product.owner.username }}</a></td>
+			</tr>
+			<tr>
+				<a href="{% url message_edit product.pk %}" class="p-value">{% trans "Demander une question à propo de produit" %}</a>
 			</tr>
 		</table>
 	</div>

@@ -25,6 +25,8 @@ from eloue.products.signals import post_save_answer, post_save_product, post_sav
 from eloue.products.utils import Enum
 from eloue.signals import post_save_sites
 from eloue.utils import currency
+from django_messages.models import Message 
+from eloue.accounts.models import Patron
 
 UNIT = Enum([
     (0, 'HOUR', _(u'heure')),
@@ -212,7 +214,10 @@ class PropertyValue(models.Model):
         """
         return smart_unicode(self.value)
     
-
+class ProductRelatedMessage(Message):
+    
+    product = models.ForeignKey(Product, related_name='messages', blank=True, null=True)
+    
 class Price(models.Model):
     """A price"""
     name = models.CharField(blank=True, max_length=255)
