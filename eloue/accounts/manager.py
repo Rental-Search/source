@@ -2,6 +2,7 @@
 import hashlib
 import random
 import re
+import datetime
 
 from django.contrib.auth.models import UserManager
 from django.contrib.gis.db.models import GeoManager
@@ -61,6 +62,30 @@ class PatronManager(UserManager, GeoManager):
         new_patron = self.create_user(username, email, password)
         new_patron.is_active = False
         new_patron.activation_key = activation_key
+        new_patron.save()
+        
+        if send_email:
+            new_patron.send_activation_email()
+        return new_patron
+    
+    def upgrade_inactive(self, username, email, password, send_email=True):
+        
+        salt = hashlib.sha1(str(random.random())).hexdigest()[:5]
+        activation_key = hashlib.sha1(salt + email).hexdigest()
+        
+        now = datetime.datetime.now()
+        
+        new_patron = self.model.objects.get(email=email)
+        
+        new_patron.username = username
+        new_patron.is_staff = False
+        new_patron.is_active = False
+        new_patron.activation_key = activation_key
+        new_patron.is_superuser = False
+        new_patron.last_login = now
+        new_patron.date_joined = now
+        new_patron.set_password(password)
+        
         new_patron.save()
         
         if send_email:

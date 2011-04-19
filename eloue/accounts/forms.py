@@ -65,6 +65,7 @@ class EmailAuthenticationForm(forms.Form):
         exists = self.cleaned_data.get('exists')
         
         if exists:
+            print ">>>>> if exist"
             self.user_cache = authenticate(username=email, password=password)
             if self.user_cache is None:
                 raise forms.ValidationError(_(u"Veuillez saisir une adresse email et un mot de passe valide."))
