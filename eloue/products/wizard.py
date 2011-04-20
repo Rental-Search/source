@@ -90,9 +90,11 @@ class ProductWizard(GenericFormWizard):
 class MessageWizard(GenericFormWizard):
     
 
-    def __call__(self, request, product_id, *args, **kwargs):
+    def __call__(self, request, product_id, recipient_id, *args, **kwargs):
         product = get_object_or_404(Product, pk=product_id)
+        recipient = get_object_or_404(Patron, pk=recipient_id)
         self.extra_context.update({'product': product})
+        self.extra_context.update({'recipient': recipient})
         return super(MessageWizard, self).__call__(request, *args, **kwargs)
         
     def done(self, request, form_list):
@@ -130,9 +132,10 @@ class MessageWizard(GenericFormWizard):
         
         # Create message
         product = self.extra_context["product"]
+        recipient = self.extra_context["recipient"]
         message_form = form_list[0]
-        message_form.data = request.POST
-        message_form.save(product=product, sender=new_patron)
+        print ">>>>>>>>> message form data >>>>>>>>", request.POST
+        message_form.save(product=product, sender=new_patron, recipient=recipient)
         messages.success(request, _(u"Une question du produit a été envoyé !"))
 
         GoalRecord.record('new_object', WebUser(request))

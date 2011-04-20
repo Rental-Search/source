@@ -75,7 +75,7 @@
 			<form action="" method="post">
 				{% csrf_token %} 
 				<table>
-				{{ messages_form.as_table }}
+					{{ messages_form.as_table }}
 				</table>
 			{% if messages_form %}
 				<input type="submit" value="{% trans "Send" %} &raquo;"/>
@@ -145,7 +145,7 @@
 				<td class="p-value"><a href="{{ product.owner.get_absolute_url }}" class="owner">{{ product.owner.username }}</a></td>
 			</tr>
 			<tr>
-				<a href="{% url message_edit product.pk %}" class="p-value">{% trans "Demander une question à propo de produit" %}</a>
+				<a href="{% url message_edit product.pk product.owner.pk %}" class="p-value">{% trans "Demander une question à propo de produit" %}</a>
 			</tr>
 		</table>
 	</div>

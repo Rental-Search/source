@@ -98,36 +98,38 @@ class ProductReviewForm(forms.ModelForm):
         model = ProductReview
         exclude = ('created_at', 'ip', 'reviewer', 'product')
 
-class MessageEditForm(ComposeForm):
+class MessageEditForm(forms.Form):
     
+    subject = forms.CharField(label=_(u"Subject"))
+    body = forms.CharField(label=_(u"Body"),
+        widget=forms.Textarea(attrs={'rows': '12', 'cols':'55'}))
+        
     def __init__(self, *args, **kwargs):
         super(MessageEditForm, self).__init__(*args, **kwargs)
        
-    def save(self, product, sender, parent_msg=None):
-        print ">>>>>>> save called  >>>>>>>>"
-        recipients = self.cleaned_data['recipient']
+    def save(self, product, sender, recipient, parent_msg=None):
+       
         subject = self.cleaned_data['subject']
         body = self.cleaned_data['body']
         message_list = []
-        for r in recipients:
-            msg = ProductRelatedMessage(
+        msg = ProductRelatedMessage(
                 sender = sender,
-                recipient = r,
+                recipient = recipient,
                 subject = subject,
                 body = body,
             )
-            product.messages.add(msg) # To implement a layer to wrap the message lib
+        product.messages.add(msg) # To implement a layer to wrap the message lib
+        if parent_msg is not None:
+            msg.parent_msg = parent_msg
+            parent_msg.replied_at = datetime.datetime.now()
+            parent_msg.save()
+        msg.save()
+        message_list.append(msg)
+        if notification:
             if parent_msg is not None:
-                msg.parent_msg = parent_msg
-                parent_msg.replied_at = datetime.datetime.now()
-                parent_msg.save()
-            msg.save()
-            message_list.append(msg)
-            if notification:
-                if parent_msg is not None:
-                    notification.send([r], "messages_reply_received", {'message': msg,})
-                else:
-                    notification.send([r], "messages_received", {'message': msg,})
+                notification.send([recipient], "messages_reply_received", {'message': msg,})
+            else:
+                notification.send([recipient], "messages_received", {'message': msg,})
         return message_list
 
 class ProductForm(forms.ModelForm):

@@ -87,7 +87,7 @@ def reply_product_related_message(request, message_id, form_class=MessageEditFor
         sender = request.user
         form = form_class(request.POST)
         if form.is_valid():
-            form.save(product=product, sender=request.user, parent_msg=parent)
+            form.save(product=product, sender=request.user, recipient=parent.sender, parent_msg=parent)
             messages.add_message(request, messages.SUCCESS, _(u"Message successfully sent."))
             if success_url is None:
                 success_url = reverse('messages_inbox')
@@ -96,7 +96,7 @@ def reply_product_related_message(request, message_id, form_class=MessageEditFor
         form = form_class({
             'body': quote(parent.sender, parent.body),
             'subject': _(u"Re: %(subject)s") % {'subject': parent.subject},
-            'recipient': [parent.sender,]
+            'recipient': parent.sender
             })
     return render_to_response(template_name, {
         'form': form,
@@ -104,9 +104,9 @@ def reply_product_related_message(request, message_id, form_class=MessageEditFor
     
 @never_cache
 @secure_required
-def message_edit(request, product_id):
+def message_edit(request, product_id, recipient_id):
     messages_form = MessageWizard([MessageEditForm, EmailAuthenticationForm])
-    return messages_form(request, product_id)
+    return messages_form(request, product_id, recipient_id)
     """
     product = get_object_or_404(Product, pk=product_id)
     sender = request.user
