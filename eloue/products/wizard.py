@@ -115,7 +115,8 @@ class AlertWizard(GenericFormWizard):
         alert_form.instance.address = new_address
         alert = alert_form.save()
         
-        alert.send_alerts()
+        if not settings.AUTHENTICATION_BACKENDS[0] == 'eloue.accounts.auth.PrivatePatronModelBackend':
+            alert.send_alerts()
         return redirect_to(request, reverse("alert_list"), permanent=False)
     
     def get_template(self, step):

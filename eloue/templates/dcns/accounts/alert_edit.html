@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Votre tableau de bord" %}{% endblock %}
+
+{% block content %}
+<div id="content" class="xgrid">
+    <div class="content-top">
+        <ul id="menu" class="x12">
+            <li class="menu-tab first"><a href="{% url dashboard %}">{% trans "Tableau de bord" %}</a></li>
+			<li class="menu-tab selected"><a href="{% url owner_booking %}">{% trans "Propriétaire" %}</a></li>
+			<li class="menu-tab"><a href="{% url borower_booking %}">{% trans "Locataire" %}</a></li>
+			<li class="menu-tab">{% trans "Locataire" %}</li>
+			<li class="menu-tab"><a href="{% url patron_edit %}">{% trans "Mon compte" %}</a></li>
+       </ul>
+    </div>
+</div>
+{% endblock %}

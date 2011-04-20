@@ -23,30 +23,40 @@
 	</div>
 	    {% endfor %}
 	{% endif %}
+	<div id="top-header" class="xgrid">
+	</div>
 	<div id="header" class="xgrid">
-        <div class="x2">
-            <a href="{% url home %}" class="logo">
-                <img src="{{ MEDIA_URL }}images/logo.png" alt="e-loue" />
-            </a>
-        </div>
         <div class="x10">
             <ul class="nav-bar">
-				<li class="nav"><a href="{% url product_create %}" class="btn medium-green"  >{% trans "Mettre en location" %}</a></li>
-				{% if not user.is_authenticated %}
-					<li class="nav"><a href="{% url auth_login %}" class="nav-link" >{% trans "S'inscrire ou se connecter" %}</a></li>
-				{% else %}
-					<li class="nav"><a href="{% url auth_logout %}" class="nav-link">{% trans "Se déconnecter" %}</a></li>
-				{% endif %}
-				{% if user.is_anonymous %}
-				 <li class="nav"><a href="{% trans "/comment-ca-marche/" %}" class="nav-link">{% trans "Comment ça marche ?" %}</a></li>
-				{% else %}
-				 <li class="nav"><a href="{% url dashboard %}" class="nav-link">{% trans "Tableau de bord" %}</a></li>
-				 <li class="nav welcome">{% blocktrans with request.user.first_name as first_name %} Bienvenue, {{ first_name }}!{% endblocktrans %}</li>    
-				{% endif %}
+                <li class="nav" style="padding-left: 0px;">
+                    <a href="{% url home %}" class="nav-link">{% trans "Accueil" %}</a>
+                </li>
+                {% if user.is_anonymous %}
+    			 <li class="nav">
+    			    <a href="{% trans "/comment-ca-marche/" %}" class="nav-link">
+    			        {% trans "Comment ça marche ?" %}
+    			    </a>
+    			</li>
+    			{% else %}
+    			<li class="nav">
+    			    <a href="{% url dashboard %}" class="nav-link">{% trans "Tableau de bord" %}</a>
+    			</li>
+    			{%  endif %}
+    			{% if not user.is_authenticated %}
+    			<li class="nav">
+    				<a href="{% url auth_login %}" class="nav-link" >{% trans "S'inscrire ou se connecter" %}</a>
+    			</li>
+    			{% else %}
+    			<li class="nav">
+    				<a href="{% url auth_logout %}" class="nav-link">{% trans "Se déconnecter" %}</a>
+    			</li>
+    			{% endif %}
 			</ul>
         </div>
+        <div class="x2">
+            <a href="{% url product_create %}" class="btn medium-green"  >{% trans "Mettre en location" %}</a>
+        </div>
     </div><!-- header -->
-			
   {% block content %}
   {% endblock %}
   <div id="footer" class="xgrid">
@@ -77,7 +87,6 @@
 				<li><a href="{% trans "/qui-sommes-nous/" %}">{% trans "Qui sommes nous ?" %}</a></li>
 			</ul>
 		</div>
-		<div class="x12 twitter-info"></div>
     </div>
   {% block tail %}
 		{% compressed_js 'application' %}
