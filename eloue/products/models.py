@@ -28,6 +28,9 @@ from eloue.utils import currency
 from django_messages.models import Message 
 from eloue.accounts.models import Patron
 
+from django.db.models import signals
+from eloue.signals import message_content_filter, message_site_filter
+
 UNIT = Enum([
     (0, 'HOUR', _(u'heure')),
     (1, 'DAY', _(u'jour')),
@@ -217,7 +220,13 @@ class PropertyValue(models.Model):
 class ProductRelatedMessage(Message):
     
     product = models.ForeignKey(Product, related_name='messages', blank=True, null=True)
-    
+
+if "notification" not in settings.INSTALLED_APPS:
+    from django_messages.utils import new_message_email
+    signals.post_save.connect(new_message_email, sender=ProductRelatedMessage)
+    signals.pre_save.connect(message_content_filter, sender=ProductRelatedMessage)
+    signals.pre_save.connect(message_site_filter, sender=ProductRelatedMessage)
+
 class Price(models.Model):
     """A price"""
     name = models.CharField(blank=True, max_length=255)

@@ -8,9 +8,15 @@ from django_lean.experiments.utils import WebUser
 
 from eloue.accounts.forms import EmailAuthenticationForm
 from eloue.accounts.models import Patron
-from eloue.products.forms import ProductForm
+from eloue.products.forms import ProductForm, MessageEditForm
 from eloue.products.models import Product, Picture, UNIT
 from eloue.wizard import GenericFormWizard
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_protect
+from django.shortcuts import get_object_or_404
+from django.contrib import messages
+from django.utils.translation import ugettext as _
+from django.views.generic.simple import direct_to_template, redirect_to
 
 
 class ProductWizard(GenericFormWizard):
@@ -80,4 +86,68 @@ class ProductWizard(GenericFormWizard):
             return 'products/product_create.html'
         else:
             return 'products/product_missing.html'
+            
+class MessageWizard(GenericFormWizard):
     
+
+    def __call__(self, request, product_id, *args, **kwargs):
+        product = get_object_or_404(Product, pk=product_id)
+        self.extra_context.update({'product': product})
+        return super(MessageWizard, self).__call__(request, *args, **kwargs)
+        
+    def done(self, request, form_list):
+        #TODO Repeat codes, needs some refactoring 
+        """
+        product = get_object_or_404(Product, pk=product_id)
+        sender = request.user
+        messages_form = MessageEditForm(data=request.POST)
+        if messages_form.is_valid():
+            messages_form.save(product=product, sender=request.user)
+            messages.success(request, _(u"Une question du produit a été envoyé !"))
+        return direct_to_template(request, 'products/product_detail.html', extra_context={'product': product, 'messages_form':messages_form})    
+        """
+        missing_form = next((form for form in form_list if getattr(form.__class__, '__name__', None) == 'MissingInformationForm'), None)
+        if request.user.is_anonymous():  # Create new Patron
+            auth_form = next((form for form in form_list if isinstance(form, EmailAuthenticationForm)), None)
+            new_patron = auth_form.get_user()
+            if not new_patron:
+                new_patron = Patron.objects.create_inactive(missing_form.cleaned_data['username'],
+                    auth_form.cleaned_data['email'], missing_form.cleaned_data['password1'])
+                if hasattr(settings, 'AFFILIATE_TAG'):
+                    # Assign affiliate tag, no need to save, since missing_form should do it for us
+                    new_patron.affiliate = settings.AFFILIATE_TAG
+            if not hasattr(new_patron, 'backend'):
+                from django.contrib.auth import load_backend
+                backend = load_backend(settings.AUTHENTICATION_BACKENDS[0])
+                new_patron.backend = "%s.%s" % (backend.__module__, backend.__class__.__name__)
+            login(request, new_patron)
+        else:
+            new_patron = request.user
+        
+        if missing_form:
+            missing_form.instance = new_patron
+            new_patron, new_address, new_phone = missing_form.save()
+        
+        # Create message
+        product = self.extra_context["product"]
+        message_form = form_list[0]
+        message_form.data = request.POST
+        message_form.save(product=product, sender=new_patron)
+        messages.success(request, _(u"Une question du produit a été envoyé !"))
+
+        GoalRecord.record('new_object', WebUser(request))
+        
+        return direct_to_template(request, 'products/product_detail.html', extra_context={'product': product, 'messages_form':message_form})   
+        
+    def get_template(self, step):
+        if issubclass(self.form_list[step], EmailAuthenticationForm):
+            return 'products/product_register.html'
+        elif issubclass(self.form_list[step], MessageEditForm):
+            print '>>>>>>> messages form called  >>>>>>'
+            return 'products/message_edit.html'
+        else:
+            return 'products/product_missing.html'
+
+
+
+

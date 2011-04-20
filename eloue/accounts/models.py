@@ -23,7 +23,7 @@ from eloue.products.utils import Enum
 from eloue.paypal import accounts, PaypalError
 from eloue.signals import post_save_sites
 from eloue.utils import create_alternative_email
-from eloue.signals import message_content_filter, message_site_filter
+
 
 CIVILITY_CHOICES = Enum([
     (0, 'MME', _('Madame')),
@@ -309,7 +309,5 @@ class PhoneNumber(models.Model):
     
 
 signals.post_save.connect(post_save_sites, sender=Patron)
-from django_messages.models import Message 
-signals.pre_save.connect(message_content_filter, sender=Message)
-signals.pre_save.connect(message_site_filter, sender=Message)
+
 

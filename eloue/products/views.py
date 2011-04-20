@@ -24,7 +24,7 @@ from eloue.accounts.models import Patron
 from eloue.products.forms import FacetedSearchForm, ProductForm, ProductEditForm, MessageEditForm
 from django_messages.forms import ComposeForm
 from eloue.products.models import Category, Product, Curiosity, UNIT, ProductRelatedMessage
-from eloue.products.wizard import ProductWizard
+from eloue.products.wizard import ProductWizard, MessageWizard
 from django_messages.utils import format_quote
 
 
@@ -70,7 +70,9 @@ def product_edit(request, slug, product_id):
         product = form.save()
         messages.success(request, _(u"Votre produit a bien été édité !"))
     return direct_to_template(request, 'products/product_edit.html', extra_context={'product': product, 'form': form})
+    
 
+@login_required
 def reply_product_related_message(request, message_id, form_class=MessageEditForm,
     template_name='django_messages/compose.html', success_url=None, recipient_filter=None,
     quote=format_quote):
@@ -99,10 +101,13 @@ def reply_product_related_message(request, message_id, form_class=MessageEditFor
     return render_to_response(template_name, {
         'form': form,
     }, context_instance=RequestContext(request))
-reply_product_related_message = login_required(reply_product_related_message)
     
-
+@never_cache
+@secure_required
 def message_edit(request, product_id):
+    messages_form = MessageWizard([MessageEditForm, EmailAuthenticationForm])
+    return messages_form(request, product_id)
+    """
     product = get_object_or_404(Product, pk=product_id)
     sender = request.user
     messages_form = MessageEditForm(data=request.POST)
@@ -110,7 +115,7 @@ def message_edit(request, product_id):
         messages_form.save(product=product, sender=request.user)
         messages.success(request, _(u"Une question du produit a été envoyé !"))
     return direct_to_template(request, 'products/product_detail.html', extra_context={'product': product, 'messages_form':messages_form})    
-
+    """
 @mobify
 @cache_page(900)
 @vary_on_cookie
