@@ -150,3 +150,14 @@ def alert_inform(request, *args, **kwargs):
 def alert_inform_success(request, alert_id):
     return object_detail(request, queryset=Alert.objects.all(), object_id=alert_id,
         template_name='products/alert_unform_success.html', template_object_name='alert')
+
+
+@login_required
+def alert_delete(request, alert_id):
+    alert = get_object_or_404(Alert, pk=alert_id)
+    if request.method == "POST":
+        alert.delete()
+        messages.success(request, _(u"Votre alerte à bien été supprimée"))
+        return redirect_to(request, reverse('alert_edit'))
+    else:
+        return direct_to_template(request, template='products/alert_delete.html', extra_context={'alert': alert})
