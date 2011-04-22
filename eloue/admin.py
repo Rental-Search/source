@@ -5,10 +5,11 @@ from django.contrib.flatpages.models import FlatPage
 from django.contrib.flatpages.admin import FlatPageAdmin
 
 
+
 class CurrentSiteAdmin(admin.ModelAdmin):
     def queryset(self, request):
         if request.user.is_superuser:
-            queryset = self.model.objects.get_query_set()
+            queryset = self.model.objects.get_query_set().filter(**{'sites__id__exact': settings.SITE_ID})
             ordering = self.ordering or ()  # otherwise we might try to *None, which is bad ;)
             if ordering:
                 queryset = queryset.order_by(*ordering)

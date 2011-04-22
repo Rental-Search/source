@@ -23,7 +23,7 @@ from django_lean.experiments.utils import WebUser
 
 from eloue.decorators import ownership_required, validate_ipn, secure_required, mobify
 from eloue.accounts.forms import EmailAuthenticationForm
-from eloue.products.models import Product
+from eloue.products.models import Product, PAYMENT_TYPE
 from eloue.rent.forms import BookingForm, BookingConfirmationForm, BookingStateForm, PreApprovalIPNForm, PayIPNForm, IncidentForm
 from eloue.rent.models import Booking
 from eloue.rent.wizard import BookingWizard
@@ -36,8 +36,10 @@ log = logbook.Logger('eloue.rent')
 @csrf_exempt
 @validate_ipn
 def preapproval_ipn(request):
+    print ">>>>>>>>> preapproval called >>>>>>>>>"
     form = PreApprovalIPNForm(request.POST)
     if form.is_valid():
+        print ">>>>>>>>> preapproval form valid >>>>>>>>>"
         booking = Booking.objects.get(preapproval_key=form.cleaned_data['preapproval_key'])
         if form.cleaned_data['approved'] and form.cleaned_data['status'] == 'ACTIVE':
             # Changing state
@@ -57,7 +59,9 @@ def preapproval_ipn(request):
 @validate_ipn
 def pay_ipn(request):
     form = PayIPNForm(request.POST)
+    print ">>>>>> form called  >>>>>>>>>"
     if form.is_valid():
+        print ">>>>>>>>>> form valide >>>>>>>>>>>"
         booking = Booking.objects.get(pay_key=form.cleaned_data['pay_key'])
         if form.cleaned_data['action_type'] == 'PAY_PRIMARY' and form.cleaned_data['status'] == 'INCOMPLETE':
             booking.state = Booking.STATE.ONGOING
@@ -118,8 +122,9 @@ def booking_detail(request, booking_id):
 @ownership_required(model=Booking, object_key='booking_id', ownership=['owner'])
 def booking_accept(request, booking_id):
     booking = get_object_or_404(Booking, pk=booking_id)
-    if not booking.owner.has_paypal():
-        return redirect_to(request, "%s?next=%s" % (reverse('patron_paypal'), booking.get_absolute_url()))
+    if booking.product.payment_type!=PAYMENT_TYPE.NOPAY:
+        if not booking.owner.has_paypal():
+            return redirect_to(request, "%s?next=%s" % (reverse('patron_paypal'), booking.get_absolute_url()))
     form = BookingStateForm(request.POST or None,
         initial={'state': Booking.STATE.PENDING},
         instance=booking)
@@ -152,6 +157,7 @@ def booking_reject(request, booking_id):
 def booking_cancel(request, booking_id):
     booking = get_object_or_404(Booking, pk=booking_id)
     if request.POST:
+        booking.init_payment_processor()
         booking.cancel()
         booking.send_cancelation_email(source=request.user)
         messages.success(request, _(u"Cette réservation a bien été annulée"))
@@ -164,6 +170,7 @@ def booking_cancel(request, booking_id):
 def booking_close(request, booking_id):
     booking = get_object_or_404(Booking, pk=booking_id)
     if request.POST:
+        booking.init_payment_processor()
         booking.pay()
         booking.send_closed_email()
         messages.success(request, _(u"Cette réservation a bien été cloturée"))
@@ -177,7 +184,7 @@ def booking_incident(request, booking_id):
     booking = get_object_or_404(Booking, pk=booking_id)
     form = IncidentForm(request.POST or None)
     if form.is_valid():
-        send_mail(u"Déclaration d'incident", form.cleaned_data['message'], settings.DEFAULT_FROM_EMAIL, ['incident@e-loue.com'])
+        send_mail(u"Déclaration d'incident", form.cleaned_data['message'], settings.DEFAULT_FROM_EMAIL, ['contact@e-loue.com'])
         booking.state = Booking.STATE.INCIDENT
         booking.save()
     return direct_to_template(request, 'rent/booking_incident.html', extra_context={'booking': booking, 'form': form})

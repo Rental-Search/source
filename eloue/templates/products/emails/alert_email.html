@@ -1,0 +1,12 @@
+<p>Bonjour {{ patron.username }},</p>
+
+<p>Un utilisateur d'e-loue souhaite louer un(e) {{ alert.designation }} près de chez vous.</p>
+
+<ul>
+ <li>Vous possédez cet objet ? Alors venez sur e-loue le <a href="{% url product_create %}">proposer en location !</a></li>
+ <li>Vous n'en possédez pas ? Vous pouvez quand même <a href="{% url product_create %}">proposer d'autres objets</a> (similaire ou non !) et ainsi les rentabiliser.</li>
+</ul>
+
+<p>Nous vous souhaitons de bonnes locations.</p>
+
+<p>L'équipe e-loue</p>

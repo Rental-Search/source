@@ -30,6 +30,7 @@ class ProductWizardTest(TestCase):
             '0-deposit_amount': '1500',
             '0-quantity': 1,
             '0-description': 'Voiture de luxe tout confort',
+            "0-payment_type":1,
             'wizard_step': 0
         })
         self.assertTrue(response.status_code, 200)
@@ -67,6 +68,7 @@ class ProductWizardTest(TestCase):
             '0-deposit_amount': '1500',
             '0-quantity': 1,
             '0-description': 'Voiture de luxe tout confort',
+            "0-payment_type":1,
             '1-email': 'alexandre.woog@e-loue.com',
             '1-exists': 1,
             '1-password': 'alexandre',
@@ -79,5 +81,5 @@ class ProductWizardTest(TestCase):
             'hash_1': '6941fd7b20d720833717a1f92e8027af',
             'wizard_step': 2
         })
-        self.assertRedirects(response, reverse('booking_create', args=['bentley-brooklands', 5]))
+        self.assertRedirects(response, reverse('booking_create', args=['bentley-brooklands', 6]))
     

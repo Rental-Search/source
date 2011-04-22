@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Vos alerts" %}{% endblock %}
+
+{% block content %}
+<div id="content" class="xgrid">
+    <div class="content-top">
+        <ul id="menu" class="x12">
+            <li class="menu-tab first"><a href="{% url dashboard %}">{% trans "Tableau de bord" %}</a></li>
+			<li class="menu-tab selected"><a href="{% url owner_booking %}">{% trans "Propriétaire" %}</a></li>
+			<li class="menu-tab"><a href="{% url borrower_booking %}">{% trans "Locataire" %}</a></li>
+			<li class="menu-tab">{% trans "Alertes" %}</li>
+			<li class="menu-tab"><a href="{% url patron_edit %}">{% trans "Mon compte" %}</a></li>
+       </ul>
+    </div>
+    <div class="content-header x12" style="margin-top: 20px;">
+		{% if alert_list %}
+			<h1>{% trans "Vos alertes" %}</h1>
+		{% else %}
+			<h1>{% trans "Pas d'arlertes" %}</h2>
+		{% endif %}
+	</div>
+	<ul  id="booking_list" class="x8">
+	    {% for alert in alert_list %}
+	    <li style="border-bottom: 1px dashed #B9CAD4; padding: 10px 0;" class="clearfix">
+	        <div class="bk">
+	            <div class="bk-dates">
+	                <p style="font-size: 12px; padding-top: 25px;">
+	                    Créé le<br/>
+	                    19/04/2011
+	                </p>
+	            </div>
+	            <div class="bk-desc" style="padding: 0px; width:510px; margin-right: 0px">
+	                <div style="float: left; width: 340px; margin-right: 10px;">
+	                    <h2 style="margin-bottom: 10px;">Une perceuse</h2>
+    	                <p>
+    	                    <strong>Votre besoin:</strong><br/>
+    	                    Percer des trous dans un mur en bétons.
+    	                </p>
+    	            </div>
+    	            <div style="float: left; width: 140px; text-align: center;">
+    	                <form id="alert-delete" action="{% url alert_delete alert.pk %}" method="post">
+    	                    {% csrf_token %}
+                            <button class="btn medium-blue" style="margin-top: 10px;">{% trans "Supprimer" %}</button>
+    	                </form>
+    	            </div>
+	            </div>
+	        </div>
+	    </li>
+	    {% endfor %}
+	</ul>
+</div>
+{% endblock %}

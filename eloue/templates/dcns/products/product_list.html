@@ -1,0 +1,227 @@
+{% extends "base.html" %}
+ {% load cache facets i18n param category product paginator mptt_tags seo booking %}
+
+{% block title %}
+ {% trans "Location" %}
+ {% for crumb in breadcrumbs|facets %}
+   &rsaquo; {{ crumb.pretty_value|capfirst }}
+ {% endfor %}
+ {% if form.cleaned_data.l %}
+  &rsaquo; {{ form.cleaned_data.l|capfirst }}
+ {% endif %}
+ {% if form.cleaned_data.q %}
+   &rsaquo; "{{ form.cleaned_data.q }}"
+ {% endif %}
+{% endblock %}
+
+{% block description %}
+ {% trans "Location " %}
+ {% for crumb in breadcrumbs|facets %}
+   &rsaquo; {{ crumb.pretty_value|capfirst }}
+ {% endfor %}
+ {% if form.cleaned_data.l %}
+  &rsaquo; {{ form.cleaned_data.l|capfirst }}
+ {% endif %}
+ {% if form.cleaned_data.q %}
+    &rsaquo; "{{ form.cleaned_data.q }}"
+ {% endif %}
+{% endblock %}
+
+{% block  head %}
+ {{ block.super }}
+ <link rel="canonical" href="{% canonical_url urlbits %}" />
+{% endblock %}
+
+{% block content %}
+<div id="search" class="xgrid">
+	<form class="form" action="{% url product_list %}">
+	<div class="x5">
+		<p>
+			<label for="id_q">{% trans "Que voulez-vous louer ?" %}</label><br />
+			{{ form.q }}<br />
+			<span>{% trans "Exemple :" %} </span> <a href="{% url product_list %}?q={% trans "voiture" %}">{% trans "Voiture" %}</a>, <a href="{% url product_list %}?q={% trans "chèvre" %}">{% trans "Chèvre" %}</a>, <a href="{% url product_list %}?q={% trans "ski" %}">{% trans "Ski" %}</a>, <a href="{% url product_list %}?q={% trans "robe" %}">{% trans "Robe" %}</a>
+		</p>
+	</div>
+	<div class="x5">
+		<p>
+			<label>{% trans "Où ?" %}</label><br />
+			{{ form.l }}<br />
+		</p>
+	</div>
+	<div class="x2">
+		<p>
+			<input type="submit" value="{% trans "Rechercher" %}" class="btn big-orange"/>
+		</p>
+	</div>
+	</form>
+</div>
+<div id="content" class="xgrid">
+    <div class="breadcrumb">
+        <ul class="x12 breadcrumbs">
+            <li><a href="{% url home %}">{% trans "Accueil" %}</a></li>
+            {% for crumb in breadcrumbs|facets %}
+				{% if form.cleaned_data.l or form.cleaned_data.q %}
+					<li><a href="{% facet_url breadcrumbs -"l" -"r" -"q" %}">{{ crumb.pretty_value|capfirst }}</a></li>
+				{% else %}
+					<li class="lastb">{{ crumb.pretty_value|capfirst }}</a></li>
+				{% endif %}
+			{% endfor %}
+			{% if form.cleaned_data.q %}
+				{% if form.cleaned_data.l %}
+					<li><a href="{% facet_url breadcrumbs -"l" -"r" %}">{% trans "location" %} "{{ form.cleaned_data.q }}"</a></li>
+				{% else %}
+					<li class="lastb">{% trans "location" %} "{{ form.cleaned_data.q }}"</li>
+				{% endif %}
+			{% endif %}
+			{% if form.cleaned_data.l %}
+				<li class="lastb">{{ form.cleaned_data.l|capfirst }}</li>
+			{% endif %}
+        </ul>
+    </div>
+    {% if form.cleaned_data.q %}
+    <div class="x12 content-header">
+	 {% blocktrans with form.cleaned_data.q as keywords count paginator.count as count %}
+	 <h1>Résultat pour <strong>{{ keywords }}</strong></h1>
+	 {% plural %}
+	 <h1>Résultats pour <strong>{{ keywords }}</strong></h1>
+	 {% endblocktrans%}
+    </div>
+    {% endif %}
+    {% if suggestions %}
+	<div class="suggestion x12">
+	 {% trans "Vous vouliez peut-être dire ?" %} <a href="{% facet_url breadcrumbs "q" suggestions %}">{{ suggestions }}</a>
+	</div>
+	{% endif%}
+	{% if product_list %}
+	<div id="results" class="x8">
+	     <ul class="filters">
+            <li class="label-sort">
+               <span>{% trans "Trier par :" %}</span>
+            </li>
+            <li {% if form.sort.data == "-created_at" %} class="label-selected" {% endif %}>
+				<a href="{% facet_url breadcrumbs "sort" "-created_at" %}">{% trans "Les plus récents" %}</a>
+			</li>
+            {% if form.cleaned_data.l %}
+			<li {% if form.sort.data == "geo_distance" %} class="label-selected" {% endif %}>
+				<a href="{% facet_url breadcrumbs "sort" "geo_distance" %}">{% trans "Les plus proches" %}</a>
+			</li>
+			{% endif %}
+			<li {% if form.sort.data == "price" %} class="label-selected" {% endif %}>
+				<a href="{% facet_url breadcrumbs "sort" "price" %}">{% trans "Les prix les plus bas" %}</a>
+			</li>
+	    <li class="last-sort {% if form.sort.data == "-price" %} label-selected {% endif %}">
+				<a href="{% facet_url breadcrumbs "sort" "-price" %}">{% trans "Les prix les plus haut" %}</a>
+			</li>
+			{% if form.sort.data %}
+			<li class="cancel-sort">
+				<a href="{% facet_url breadcrumbs -"sort" %}">X</a>
+			</li>
+			{% endif %}
+        </ul>
+	    <ul class="product-list">
+    	    {% for product in product_list %}
+    	    <li>
+                <a class="pl-img" href="{{ product.url|safe }}" {% if product|nofollow %}rel="nofollow"{% endif %}>
+                    <img width="90" src="images/pictures/thumbnail_2ddd0434269c4788bc1d8f3ba81835a2.jpg" alt="0.50 EURO LE KM">
+                </a>
+                <div class="pl-header">
+                    <h2><a href="{{ product.url|safe }}" {% if product|nofollow %}rel="nofollow"{% endif %}>{{ product.summary|capitalize|truncate:50 }}</a></h2>
+                </div>
+                <div class="pl-content">
+                    {% with product.highlighted.text|first|truncate:91|safe as highlight %}
+    			 	 {% if highlight %}
+    				  <div class="pl-desc">{{ highlight }}</div>
+    				 {% else %}
+    				  <div class="pl-desc">{{ product.description|truncate:91 }}</div>
+    				 {% endif %}
+    				{% endwith %}
+                    <div class="pl-distance">
+                     {% if product.geo_distance %}
+    				  {{ product.geo_distance|floatformat }} {% trans "km" %}{{ product.geo_distance|pluralize }}
+    				 {% endif %}
+                    </div>
+                    <div class="pl-price">
+                        <span class="price">{{ product.price|quantize|currency }}</span><br />
+    				    <span class="unit">{% trans "par jour" %}</span>
+                    </div>
+                    <div class="pl-btn">
+                        <a href="{{ product.url|safe }}" {% if product|nofollow %}rel="nofollow"{% endif %} class="btn small-blue">{% trans "Réserver" %} &rarr;</a>
+                    </div>
+                </div>
+                <div class="pl-footer">
+    			 	Par <a href="{{ product.owner_url }}" {% if product|nofollow %}rel="nofollow"{% endif %} class="owner">{{ product.owner }}</a> | {{ product.city|capfirst }}{% if product.zipcode %}, {{ product.zipcode }}{% endif %}
+                </div>
+            </li>
+            {% endfor %}
+    	</ul>
+    	{% pagination %}
+        {% if is_paginated %}
+    	<div class="pages">
+            <ul class="pages-list">
+                
+                {% if page_obj.has_previous %}
+    		        <li class="previous"><a href="{% facet_url breadcrumbs "page" page_obj.previous_page_number %}">&#171; {% trans "Page précédente" %}</a></li>
+    	           {% endif %}
+    	           {% for page in page_range %}
+    		        <li class="page-{{ page }} {% if page_obj.number == page %}select{% endif %}"><a href="{% facet_url breadcrumbs "page" page %}">{{ page }}</a></li>
+    		       {% endfor %}
+    	           {% if page_obj.has_next %}
+    		        <li class="next"><a href="{% facet_url breadcrumbs "page" page_obj.next_page_number %}">{% trans "Page suivante" %} &#187;</a></li>
+    	           {% endif %}
+            </ul>
+        </div>
+        {% endif %}
+    </div>
+	{% endif %}
+	<div id="facets" class="x4">
+	    {% if form.cleaned_data.l %}
+	    <div class="box-tools">
+	        <h3>{% trans "Distance" %}</h3>
+	        <div class="box-tools-bottom">
+	            <form action="{% facet_url breadcrumbs %}" class="form">
+	                <input type="hidden" value="{{ form.cleaned_data.q }}" name="q"/>
+			        <input type="hidden" value="{{ form.cleaned_data.l }}" name="l"/>
+					{{ form.sort }}
+	                <p>
+                        <label class="labs">{% trans "Restreindre les résultats à un rayon de" %}</label><br />
+    					
+                    </p>
+                    <p class="box-tools-distance">
+                        {{ form.r }}
+                        <abbr  title="kilomètre">{% trans "Km" %}</abbr>
+                        <input type="submit" value="{% trans "Mettre à jour" %}" class="btn medium-blue"/>
+                    </p>
+	            </form>
+	        </div>
+	    </div>
+	    {% endif %}
+	    <div class="box-tools">
+	        <h3>{% trans "Catégories" %}</h3>
+	        <div class="box-tools-top">
+                <a href="{% facet_url breadcrumbs -form.categories.field.pretty_name %}">
+                    {% trans "Voir tous les résultats" %}
+                </a>
+            </div>
+            <div class="box-tools-bottom">
+            {% for field in form %}
+			  {% if not field.data %}
+				 {% if field.name == 'categories' %}
+				 <ul class="box-tools-tree">
+				{% for value, count in facets.fields|hash:field.name  %}
+					{% with value|category as category %}
+						{% if category.is_root_node %}
+						<li>
+							<a href="{% facet_url breadcrumbs field.field.pretty_name category.slug %}">{{ category.name }}</a> 
+						</li>
+						{% endif %}
+					{% endwith %}
+			    {% endfor %}
+				 </ul>
+				 {% endif %}
+			  {% endif %}
+			{% endfor%}
+            </div>
+	    </div>
+	</div>
+</div>
+{% endblock %}

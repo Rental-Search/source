@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+{% load i18n paginator facets %}
+
+{% block title %}
+	{% trans "Alertes locations" %}
+{% endblock %}
+
+{% block description %}
+	{% trans "Demandes de location des locataires qui n'ont pas trouvé l'objet qu'ils veulent louer près de chez eux." %}
+{% endblock %}
+
+{% block content %}
+<div id="search" class="xgrid">
+    <div class="x12">
+	  <h1>{% trans "Avec e-loue, tout se loue !" %}</h1>
+	</div>
+	<form class="form" action="{% url product_list %}">
+	<div class="x5">
+		<p>
+			<label for="id_q">{% trans "Que voulez-vous louer ?" %}</label><br />
+			{{ form.q }}<br />
+			<span>{% trans "Exemple :" %} </span> <a href="{% url product_list %}?q={% trans "voiture" %}">{% trans "Voiture" %}</a>, <a href="{% url product_list %}?q={% trans "chèvre" %}">{% trans "Chèvre" %}</a>, <a href="{% url product_list %}?q={% trans "ski" %}">{% trans "Ski" %}</a>, <a href="{% url product_list %}?q={% trans "robe" %}">{% trans "Robe" %}</a>
+		</p>
+	</div>
+	<div class="x5">
+		<p>
+			<label>{% trans "Où ?" %}</label><br />
+			{{ form.l }}<br />
+		</p>
+	</div>
+	<div class="x2">
+		<p>
+			<input type="submit" value="{% trans "Rechercher" %}" class="btn big-orange"/>
+		</p>
+	</div>
+	</form>
+</div>
+<div id="content" class="xgrid">
+    <div class="breadcrumb">
+        <ul class="x12 breadcrumbs">
+            <li><a href="{% url home %}">{% trans "Accueil" %}</a></li>
+        </ul>
+    </div>
+    <div class="content-header x12">
+		<h1>Alertes Locations</h1>
+	</div>
+	{% if alert_list %}
+	<ul  id="booking_list" class="x8">
+	    {% for alert in alert_list %}
+	    <li style="border-bottom: 1px dashed #B9CAD4; padding: 10px 0;" class="clearfix">
+	        <div class="bk">
+	            <div class="bk-dates">
+	                <p style="font-size: 12px; padding-top: 25px;">
+	                    Créé le<br/>
+	                    19/04/2011
+	                </p>
+	            </div>
+	            <div class="bk-desc" style="padding: 0px; width:510px; margin-right: 0px">
+	                <div style="float: left; width: 340px; margin-right: 10px;">
+	                    <h2 style="margin-bottom: 10px;"><a href="#">Benoit</a> voudrait réserver : une perceuse</h2>
+    	                <p>
+    	                    <strong>Son besoin:</strong><br/>
+    	                    Percer des trous dans un mur en bétons.
+    	                </p>
+    	            </div>
+    	            <div style="float: left; width: 140px; text-align: center;">
+    	                <a href="{{ alert.url }}" class="btn medium-green" style="margin-top: 10px;">{% trans "Mettre en location" %}</a>
+    	            </div>
+	            </div>
+	        </div>
+	    </li>
+	    {% endfor %}
+	</ul>
+    {% else %}
+        <div class="x8">
+            <h1>Il n'y a pas d'arlert</h1>
+        </div>
+    {% endif %}
+    <div class="x4">
+        <div class="box-tools">
+	        <h3>{% trans "Rechercher une alerte" %}</h3>
+	        <div class="box-tools-bottom">
+	            <form action="" class="inline">
+	                <p>
+    					<label class="labm">{{ search_alert_form.l.label }}</label><br />
+    					{{ search_alert_form.l }}
+    				</p>
+	                <p>
+                        <label class="labs">{% trans "Restreindre les résultats à un rayon de" %}</label><br />
+                    </p
+                    <p class="box-tools-distance">
+                        {{ search_alert_form.r }}
+                        <abbr  title="kilomètre">{% trans "Km" %}</abbr>
+                    </p>
+                    <p style="margin-top: 10px;">
+                        <input type="submit" value="{% trans "Mettre à jour" %}" class="btn medium-blue"/>
+                    </p>
+	            </form>
+	        </div>
+	    </div>
+    </div>
+</div>
+{% endblock %}

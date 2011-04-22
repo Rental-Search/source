@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% load i18n markup %}
+
+{% block title %}{{ flatpage.title }}{% endblock %}
+
+{% block content %}
+<div id="content-dash" class="clearfix">
+	<div id="menu" class="dash">
+		<div class="ht-title x4">
+			<h1>{{ flatpage.title }}</h1>
+		</div>
+		<div class="ht-baseLine x8">
+			<span>Rent & save with eRentmarket, the rental community !</span>
+		</div>
+	</div>
+    <div class="x12" style="text-align:center; margin-bottom: 15px;">
+            <img src="{{ MEDIA_URL }}images/uk/rentMarket2.png" />
+    </div>
+    {{ flatpage.content|markdown }}
+</div>{# content-dash #}
+{% endblock %}

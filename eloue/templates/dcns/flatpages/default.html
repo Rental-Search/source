@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% load i18n markup %}
+
+{% block title %}{{ flatpage.title }}{% endblock %}
+
+{% block content %}
+<div id="content" class="xgrid">
+    <div class="content-top">
+        <h1>{{ flatpage.title }}</h1>
+    </div>
+    <div class="x12" style="text-align: justify; margin-top: 10px;">
+        {{ flatpage.content|markdown }}
+    </div>
+</div>
+{% endblock %}
