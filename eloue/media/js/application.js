@@ -160,6 +160,10 @@ $(document).ready(function() {
     $('#alert-delete').submit(function(event) {
         return confirm('Êtes-vous sûr de vouloir supprimer cette alerte ?');
     });
+    
+    $('#product-delete').submit(function(event) {
+        return confirm('Êtes-vous sûr de vouloir supprimer cet objet ?');
+    });
 
     //Flash message slidedown
     notification = $("#notification");

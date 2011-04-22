@@ -19,7 +19,7 @@
 	{% if messages %}
 	    {% for message in messages %}
 	    <div id="notification" class="notification {% if message.tags %} {{ message.tags }}"{% endif %}>
-    	    <span id="notification-text">message </span>
+    	    <span id="notification-text">{{ message }}</span>
     	</div>
 	    {% endfor %}
 	{% endif %}
