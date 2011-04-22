@@ -40,7 +40,7 @@
     	                </p>
     	            </div>
     	            <div style="float: left; width: 140px; text-align: center;">
-    	                <form action="{% url alert_delete alert.pk %}" method="post">
+    	                <form id="alert-delete" action="{% url alert_delete alert.pk %}" method="post">
     	                    {% csrf_token %}
                             <button class="btn medium-blue" style="margin-top: 10px;">{% trans "Supprimer" %}</button>
     	                </form>

@@ -156,6 +156,10 @@ $(document).ready(function() {
     $('form.bk-refuse').submit(function(event) {
         return confirm('Êtes-vous sûr de vouloir refuser cette location ?');
     });
+    
+    $('#alert-delete').submit(function(event) {
+        return confirm('Êtes-vous sûr de vouloir supprimer cette alerte ?');
+    });
 
     //Flash message slidedown
     notification = $("#notification");

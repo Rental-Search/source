@@ -8,7 +8,7 @@
     <div class="content-top">
         <h1>Contactez-nous</h1>
     </div>
-	<div class="x8 p2">
+	<div id="contact" class="x8 p2">
 	    <form class="form" action="{% url contact %}" method="POST">
 	    {% csrf_token %}
 	    <table class="more-info">
@@ -49,7 +49,8 @@
 				</td>
 			</tr>
 			<tr>
-				<td colspan="2">
+			    <th></th>
+				<td>
 			 	 {{ form.cc_myself}} <label for="id_cc_myself">{{ form.cc_myself.label }}</label>
 				</td>
 			</tr>

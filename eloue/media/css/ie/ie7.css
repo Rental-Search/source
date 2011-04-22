@@ -14,3 +14,9 @@
 
 .prices-form label { font-size: 0.9em; }
 .prices-form .supp-list-prices { height: 49px; }
+
+/* guarantees */
+.assurancy-partner { text-align: left; }
+.assurancy-slide { margin-left: 0; }
+.pp { margin-top: 10px; margin-left: 63px; }
+.assurone { margin-top: 13px; margin-left: 33px; }
