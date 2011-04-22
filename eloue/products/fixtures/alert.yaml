@@ -1,0 +1,9 @@
+-   fields:
+        patron: 1
+        designation: 'Perceuse'
+        description: 'Une perceuse pour percer dans le bois'
+        address: 1
+        sites: [1, 2, 3]
+        created_at: 2010-08-15 09:00:10
+    model: products.alert
+    pk: 1

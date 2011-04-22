@@ -82,4 +82,55 @@ class ProductWizardTest(TestCase):
             'wizard_step': 2
         })
         self.assertRedirects(response, reverse('booking_create', args=['bentley-brooklands', 6]))
+
+
+class AlertWizardTest(TestCase):
+    fixtures = ['patron', 'address']
     
+    def test_zero_step(self):
+        response = self.client.get(reverse('alert_create'))
+        self.assertEquals(response.status_code, 200)
+        self.assertTemplateUsed(response, 'products/alert_create.html')
+    
+    def test_first_step_as_anonymous(self):
+        response = self.client.post(reverse('alert_create'), {
+            '0-designation': 'Perceuse',
+            '0-description': 'J ai besoin d une perceuse pour percer des trou dans le béton'
+        })
+        self.assertTrue(response.status_code, 200)
+        self.assertTemplateUsed(response, 'products/alert_register.html')
+    
+    @patch.object(MultiPartFormWizard, 'security_hash')
+    def test_second_step_as_anonymous(self, mock_method):
+        mock_method.return_value = '6941fd7b20d720833717a1f92e8027af'
+        response = self.client.post(reverse('alert_create'), {
+            '0-designation': 'Perceuse',
+            '0-description': 'J ai besoin d une perceuse pour percer des trou dans le béton',
+            '1-email': 'alexandre.woog@e-loue.com',
+            '1-exists': 1,
+            '1-password': 'alexandre',
+            'hash_0': '6941fd7b20d720833717a1f92e8027af',
+            'wizard_step': 1
+        })
+        self.assertTrue(response.status_code, 200)
+        self.assertTemplateUsed(response, 'products/alert_missing.html')
+    
+    @patch.object(MultiPartFormWizard, 'security_hash')
+    def test_third_step_as_anonymous(self, mock_method):
+        mock_method.return_value = '6941fd7b20d720833717a1f92e8027af'
+        response = self.client.post(reverse('alert_create'), {
+            '0-designation': 'Perceuse',
+            '0-description': 'J ai besoin d une perceuse pour percer des trou dans le béton',
+            '1-email': 'alexandre.woog@e-loue.com',
+            '1-exists': 1,
+            '1-password': 'alexandre',
+            '2-phones__phone': '0123456789',
+            '2-addresses__address1': '11, rue debelleyme',
+            '2-addresses__zipcode': '75003',
+            '2-addresses__city': 'Paris',
+            '2-addresses__country': 'FR',
+            'hash_0': '6941fd7b20d720833717a1f92e8027af',
+            'hash_1': '6941fd7b20d720833717a1f92e8027af',
+            'wizard_step': 2
+        })
+        self.assertRedirects(response, reverse('alert_list'))
