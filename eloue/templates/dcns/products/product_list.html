@@ -118,7 +118,7 @@
 			</li>
 			{% endif %}
         </ul>
-	    <ul class="product-list">
+        <ul class="product-list">
     	    {% for product in product_list %}
     	    <li>
                 <a class="pl-img" href="{{ product.url|safe }}" {% if product|nofollow %}rel="nofollow"{% endif %}>
@@ -172,6 +172,12 @@
         </div>
         {% endif %}
     </div>
+    {% else %}
+    <div class="x8">
+	    <p>Nous n'avons pas de résultat pour votre recherche.</p>
+	    <p>Nous vous invitons à créer une alerte permettant d'avertir les membres proches de chez vous de votre rechercher.</p>
+	    <p style="text-align: center;"><a href="{% url alert_create %}" class="btn long-blue">Créer une alerte</a></p>
+	</div>
 	{% endif %}
 	<div id="facets" class="x4">
 	    {% if form.cleaned_data.l %}
