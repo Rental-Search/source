@@ -1183,6 +1183,7 @@ html[xmlns] .clearfix {
         padding: 7px 10px;
         margin-top: 7px;
         margin-bottom: 10px;
+        margin-left: 0px;
       }
 
       .inm

@@ -2,6 +2,7 @@
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import login
+from django.contrib.sites.models import Site
 from django.utils.translation import ugettext as _
 from django.views.generic.simple import redirect_to
 
@@ -22,8 +23,12 @@ class AuthenticationWizard(MultiPartFormWizard):
         auth_form = next((form for form in form_list if isinstance(form, EmailAuthenticationForm)), None)
         new_patron = auth_form.get_user()
         if not new_patron:
-            new_patron = Patron.objects.create_inactive(missing_form.cleaned_data['username'],
-                auth_form.cleaned_data['email'], missing_form.cleaned_data['password1'])
+            if settings.AUTHENTICATION_BACKENDS[0] == 'eloue.accounts.auth.PrivatePatronModelBackend':
+                new_patron = Patron.objects.upgrade_inactive(missing_form.cleaned_data['username'],
+                    auth_form.cleaned_data['email'], missing_form.cleaned_data['password1'])
+            else:
+                new_patron = Patron.objects.create_inactive(missing_form.cleaned_data['username'],
+                    auth_form.cleaned_data['email'], missing_form.cleaned_data['password1'])
             if hasattr(settings, 'AFFILIATE_TAG'):
                 # Assign affiliate tag, no need to save, since missing_form should do it for us
                 new_patron.affiliate = settings.AFFILIATE_TAG

@@ -21,6 +21,7 @@ class BookingViewsTest(TestCase):
         self.client.login(username='alexandre.woog@e-loue.com', password='alexandre')
         response = self.client.get(reverse('booking_success', args=['8fd2f3df67e2488496899aeb22601b15']))
         self.assertEquals(response.status_code, 200)
+        
     
     def test_preapproval_failure(self):
         self.client.login(username='alexandre.woog@e-loue.com', password='alexandre')
@@ -66,4 +67,8 @@ class BookingViewsTest(TestCase):
             '0-ended_at_1': '08:00:00'
         })
         self.assertEquals(response.status_code, 405)
+
+        
+        
+        
     

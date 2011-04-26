@@ -1,0 +1,39 @@
+{% load i18n %}
+<div class="x8 p2">
+    {{ form.non_field_errors }}
+	<form class="inline" action="" method="POST">
+	{% csrf_token %}
+    <p class="email">
+        <label>{% trans "Votre adresse email est :" %}</label> {{ form.email }}
+		{% if form.email.errors %}
+		    {% for error in form.email.errors %}
+		        <span class="error">{{ error|escape }}</span>
+		    {% endfor %}
+		{% endif %}
+    </p>
+    <p class="question">{% trans "Avez-vous un compte ?" %}</p>
+    {{ form.exists }}
+	{% if form.exists.errors %}
+	    {% for error in form.exists.errors %}
+	        <span class="error">{{ error|escape }}</span>
+	    {% endfor %}
+	{% endif %}
+    <p class="password">
+		{{ form.password }}
+		<a href="{% url password_reset %}" class="pd-forget">{% trans "Mot de passe oublié" %}</a>
+		{% if form.password.errors %}
+		    {% for error in form.password.errors %}
+		        <span class="error">{{ error|escape }}</span>
+		    {% endfor %}
+		{% endif %}
+	</p>
+</div>
+<div id="submit-wizard" class="x12">
+    <p>
+	    <input type="hidden" name="{{ step_field }}" value="{{ step0 }}" />
+    	{{ previous_fields|safe }}
+    	<a href="{% url home %}">{% trans "Annuler" %}</a> {% trans "ou" %} 
+    	<input type="submit" class="btn big-green" value="{% trans "Continuer &rarr;" %}" />
+    </p>
+</form>
+</div>

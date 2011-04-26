@@ -156,6 +156,14 @@ $(document).ready(function() {
     $('form.bk-refuse').submit(function(event) {
         return confirm('Êtes-vous sûr de vouloir refuser cette location ?');
     });
+    
+    $('#alert-delete').submit(function(event) {
+        return confirm('Êtes-vous sûr de vouloir supprimer cette alerte ?');
+    });
+    
+    $('#product-delete').submit(function(event) {
+        return confirm('Êtes-vous sûr de vouloir supprimer cet objet ?');
+    });
 
     //Flash message slidedown
     notification = $("#notification");
@@ -185,6 +193,7 @@ $(document).ready(function() {
     $('#new-start-date').datepicker({
         dateFormat: 'dd/mm'
     });
+
     $('#new-end-date').datepicker({
         dateFormat: 'dd/mm'
     });

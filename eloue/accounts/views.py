@@ -101,17 +101,20 @@ def patron_edit_password(request):
 
 @login_required
 def patron_paypal(request):
+    print "enter patron payal >>>>"
     form = PatronPaypalForm(request.POST or None,
         initial={'paypal_email': request.user.email}, instance=request.user)
     redirect_path = request.REQUEST.get('next', '')
     if not redirect_path or '//' in redirect_path or ' ' in redirect_path:
         redirect_path = reverse('dashboard')
     if form.is_valid():
+        print "continuer clicked >>>>>"
         patron = form.save()
         protocol = 'https' if USE_HTTPS else 'http'
         domain = Site.objects.get_current().domain
         return_url = "%s://%s%s?paypal=true" % (protocol, domain, redirect_path)
         paypal_redirect = patron.create_account(return_url=return_url)
+        print "paypal_redirect >>>>>", paypal_redirect
         if paypal_redirect:
             return redirect_to(request, paypal_redirect)
         patron.paypal_email = None
@@ -158,6 +161,12 @@ def borrower_history(request, page=None):
     queryset = request.user.rentals.filter(state__in=[Booking.STATE.CLOSED, Booking.STATE.REJECTED])
     return object_list(request, queryset, page=page, paginate_by=10, template_name='accounts/borrower_history.html',
         template_object_name='booking')
+
+@login_required
+def alert_edit(request, page=None):
+    queryset = request.user.alerts.all()
+    return object_list(request, queryset, page=page, paginate_by=10, template_name='accounts/alert_edit.html',
+        template_object_name='alert')
 
 
 @mobify

@@ -1,0 +1,22 @@
+/* fix margin bottom  bug */
+.curiosity { padding-bottom: 20px; }
+
+/* no list style image for flatepage's list */
+.flatpage li, .box-links li 
+{ 
+  list-style-image: none; 
+  list-style-type: circle; 
+}
+
+/* fix margin bottom bug*/
+#menu { padding-bottom: 1.2em; }
+#content { padding-bottom: 20px; }
+
+.prices-form label { font-size: 0.9em; }
+.prices-form .supp-list-prices { height: 49px; }
+
+/* guarantees */
+.assurancy-partner { text-align: left; }
+.assurancy-slide { margin-left: 0; }
+.pp { margin-top: 10px; margin-left: 63px; }
+.assurone { margin-top: 13px; margin-left: 33px; }

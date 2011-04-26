@@ -22,7 +22,7 @@
 		<div class="new x6 first">
 			<form class="form" enctype="multipart/form-data" action="" method="POST">
 			  {% csrf_token %}
-				<table>
+				<table >
 					<tr>
 					<td colspan="2" {% if form.category.errors %} class="error-field" {% endif %}>
 						{% full_tree_for_model products.Category as categories %}

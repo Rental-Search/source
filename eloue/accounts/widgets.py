@@ -14,5 +14,5 @@ class ParagraphRadioFieldRenderer(RadioFieldRenderer):
         return RadioInput(self.name, self.value, self.attrs.copy(), choice, idx)
     
     def render(self):
-        return mark_safe(u'\n'.join([u'<p>%s</p>' % force_unicode(w) for w in self]))
+        return mark_safe(u'\n'.join([u'<p class="exist">%s</p>' % force_unicode(w) for w in self]))
     
