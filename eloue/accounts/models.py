@@ -189,7 +189,6 @@ class Patron(User):
                 },
                 suppressWelcomeEmail=True,
             )
-            print "response >>>>>", response
             return response['redirectURL']
         except PaypalError, e:
             log.error(e)

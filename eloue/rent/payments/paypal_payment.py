@@ -104,29 +104,23 @@ class AdaptivePapalPayments(AbstractPayment):
 
      
     def refund(self):
-        print "##########paypal refund method called#############"
         response = self.payments.refund(
             payKey=self.booking.pay_key,
             currencyCode=self.booking._currency
         )
     
     def execute_payment(self):
-        print "##########paypal execute method called#############"
         response = self.payments.execute_payment(
             payKey=self.booking.pay_key
         )
     
     def cancel_preapproval(self):
-        print "##########paypal cancel method called#############"
         response = self.payments.cancel_preapproval(
                 preapprovalKey=self.booking.preapproval_key,
             )
         self.booking.canceled_at = datetime.datetime.now()
         
     def give_caution(self, amount, cancel_url, return_url):
-        
-        print "##########paypal give caution method called#############"
-        
         if not amount or amount > self.booking.deposit_amount:
             amount = self.booking.deposit_amount
         

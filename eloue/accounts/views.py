@@ -101,20 +101,17 @@ def patron_edit_password(request):
 
 @login_required
 def patron_paypal(request):
-    print "enter patron payal >>>>"
     form = PatronPaypalForm(request.POST or None,
         initial={'paypal_email': request.user.email}, instance=request.user)
     redirect_path = request.REQUEST.get('next', '')
     if not redirect_path or '//' in redirect_path or ' ' in redirect_path:
         redirect_path = reverse('dashboard')
     if form.is_valid():
-        print "continuer clicked >>>>>"
         patron = form.save()
         protocol = 'https' if USE_HTTPS else 'http'
         domain = Site.objects.get_current().domain
         return_url = "%s://%s%s?paypal=true" % (protocol, domain, redirect_path)
         paypal_redirect = patron.create_account(return_url=return_url)
-        print "paypal_redirect >>>>>", paypal_redirect
         if paypal_redirect:
             return redirect_to(request, paypal_redirect)
         patron.paypal_email = None

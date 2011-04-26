@@ -397,7 +397,6 @@ class ProductResource(UserSpecificResource):
         # Add a day price to the object if there isnt any yet
         if day_price_data:
             Price(product=bundle.obj, unit=1, amount=D(day_price_data)).save()
-        print "######## bundle ########", bundle
         return bundle
     
     def dehydrate(self, bundle, request=None):

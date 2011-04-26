@@ -36,10 +36,8 @@ log = logbook.Logger('eloue.rent')
 @csrf_exempt
 @validate_ipn
 def preapproval_ipn(request):
-    print ">>>>>>>>> preapproval called >>>>>>>>>"
     form = PreApprovalIPNForm(request.POST)
     if form.is_valid():
-        print ">>>>>>>>> preapproval form valid >>>>>>>>>"
         booking = Booking.objects.get(preapproval_key=form.cleaned_data['preapproval_key'])
         if form.cleaned_data['approved'] and form.cleaned_data['status'] == 'ACTIVE':
             # Changing state
@@ -59,9 +57,7 @@ def preapproval_ipn(request):
 @validate_ipn
 def pay_ipn(request):
     form = PayIPNForm(request.POST)
-    print ">>>>>> form called  >>>>>>>>>"
     if form.is_valid():
-        print ">>>>>>>>>> form valide >>>>>>>>>>>"
         booking = Booking.objects.get(pay_key=form.cleaned_data['pay_key'])
         if form.cleaned_data['action_type'] == 'PAY_PRIMARY' and form.cleaned_data['status'] == 'INCOMPLETE':
             booking.state = Booking.STATE.ONGOING

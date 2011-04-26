@@ -189,7 +189,6 @@ class Booking(models.Model):
         The you should redirect user to :
         https://www.paypal.com/webscr?cmd=_ap-preapproval&preapprovalkey={{ preapproval_key }}
         """
-        print ">>>>> payment processor type >>>>>>", type(self.payment_processor)
         try:
             self.preapproval_key = self.payment_processor.preapproval(cancel_url, return_url, ip_address)
         except PaypalError, e: 
@@ -340,7 +339,6 @@ class Booking(models.Model):
     @smart_transition(source='closing', target='closed', conditions=[not_need_ipn], save=True)
     def pay(self):
         """Return deposit_amount to borrower and pay the owner"""
-        print ">>>> pay >>>>"
         self.payment_processor.execute_payment()
     
     @transition(source=['authorized', 'pending'], target='canceled', save=True)

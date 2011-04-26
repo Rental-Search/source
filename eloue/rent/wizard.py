@@ -60,22 +60,17 @@ class BookingWizard(GenericFormWizard):
         booking_form.instance.total_amount = Booking.calculate_price(booking_form.instance.product,
             booking_form.cleaned_data['started_at'], booking_form.cleaned_data['ended_at'])[1]
         booking_form.instance.borrower = new_patron
-        print "payment type>>>>", booking_form.instance.product.payment_type
         payment_type = booking_form.instance.product.payment_type
         booking = booking_form.save()
-        print "save booking>>>>>", booking, booking.product, booking.product.payment_type
         booking.init_payment_processor()
         domain = Site.objects.get_current().domain
         protocol = "https" if USE_HTTPS else "http"
-        print ">>> preapproval begin >>>>" 
         
         booking.preapproval(
             cancel_url="%s://%s%s" % (protocol, domain, reverse("booking_failure", args=[booking.pk.hex])),
             return_url="%s://%s%s" % (protocol, domain, reverse("booking_success", args=[booking.pk.hex])),
             ip_address=request.META['REMOTE_ADDR']
         )
-        
-        print ">>> preapproval end >>>>", booking.preapproval_key
         
         
         if booking.state != Booking.STATE.REJECTED:
