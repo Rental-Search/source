@@ -297,6 +297,12 @@ class PhoneNumber(models.Model):
     
     def __unicode__(self):
         return smart_unicode(self.number)
+
+        
+class PatronAccepted(models.Model):
+    """Patron accpeted to create an account for private plateform"""
+    email = models.EmailField()
+    sites = models.ManyToManyField(Site, related_name='patrons_accepted')
     
 
 post_save.connect(post_save_sites, sender=Patron)

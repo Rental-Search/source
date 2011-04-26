@@ -17,7 +17,7 @@ from django.utils.translation import ugettext as _
 
 from eloue.accounts import EMAIL_BLACKLIST
 from eloue.accounts.fields import PhoneNumberField
-from eloue.accounts.models import Patron, PhoneNumber, COUNTRY_CHOICES
+from eloue.accounts.models import Patron, PhoneNumber, COUNTRY_CHOICES, PatronAccepted
 from eloue.accounts.widgets import ParagraphRadioFieldRenderer
 
 STATE_CHOICES = (
@@ -55,7 +55,7 @@ class EmailAuthenticationForm(forms.Form):
                 raise forms.ValidationError(_(u"Un compte existe déjà pour cet email"))
                 
         if settings.AUTHENTICATION_BACKENDS[0] == 'eloue.accounts.auth.PrivatePatronModelBackend':
-            if not exists and not Patron.objects.filter(email=email, sites=Site.objects.get_current()).exists():
+            if not exists and not PatronAccepted.objects.filter(email=email, sites=Site.objects.get_current()).exists():
                 raise forms.ValidationError(_(u"Une addresse email dcns est obligatoire"))
         return email
     
