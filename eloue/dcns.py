@@ -14,6 +14,8 @@ CACHE_MIDDLEWARE_KEY_PREFIX = 'dcns'
 
 AFFILIATE_TAG = 'dcns'
 
+LOGIN_REDIRECT_URL = '/'
+
 AUTHENTICATION_BACKENDS = (
     'eloue.accounts.auth.PrivatePatronModelBackend',
 )

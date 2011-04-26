@@ -1,9 +1,11 @@
 # -*- coding: utf-8 -*-
 from django.conf import settings
+from django.contrib import messages
 from django.contrib.auth import login
 from django.core.urlresolvers import reverse
 from django.views.generic.simple import redirect_to, direct_to_template
 from django.shortcuts import get_object_or_404
+from django.utils.translation import ugettext as _
 
 from django_lean.experiments.models import GoalRecord
 from django_lean.experiments.utils import WebUser
@@ -117,6 +119,8 @@ class AlertWizard(GenericFormWizard):
         
         if not settings.AUTHENTICATION_BACKENDS[0] == 'eloue.accounts.auth.PrivatePatronModelBackend':
             alert.send_alerts()
+        
+        messages.success(request, _(u"Votre alerte a bien été créée"))
         return redirect_to(request, reverse("alert_list"), permanent=False)
     
     def get_template(self, step):

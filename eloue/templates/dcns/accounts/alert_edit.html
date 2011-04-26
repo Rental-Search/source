@@ -21,22 +21,22 @@
 			<h1>{% trans "Pas d'arlertes" %}</h2>
 		{% endif %}
 	</div>
+	{% if alert_list %}
 	<ul  id="booking_list" class="x8">
 	    {% for alert in alert_list %}
 	    <li style="border-bottom: 1px dashed #B9CAD4; padding: 10px 0;" class="clearfix">
 	        <div class="bk">
 	            <div class="bk-dates">
 	                <p style="font-size: 12px; padding-top: 25px;">
-	                    Créé le<br/>
-	                    19/04/2011
+	                    {% trans "Créé le" %}<br/>
+	                    {{ alert.created_at|date:"d/m/Y" }}
 	                </p>
 	            </div>
 	            <div class="bk-desc" style="padding: 0px; width:510px; margin-right: 0px">
 	                <div style="float: left; width: 340px; margin-right: 10px;">
-	                    <h2 style="margin-bottom: 10px;">Une perceuse</h2>
+	                    <h2 style="margin-bottom: 10px;">{{ alert.designation }}</h2>
     	                <p>
-    	                    <strong>Votre besoin:</strong><br/>
-    	                    Percer des trous dans un mur en bétons.
+    	                    {{ alert.description }}
     	                </p>
     	            </div>
     	            <div style="float: left; width: 140px; text-align: center;">
@@ -50,5 +50,14 @@
 	    </li>
 	    {% endfor %}
 	</ul>
+	{% else %}
+	<div class="8">
+	    <div class="x8">
+    	    <p>{% trans "Vous n'avez pas créé d'alerts." %}</p>
+    	    <p>{% trans "Nous vous invitons à créer une alerte permettant d'avertir les membres proches de chez vous de votre rechercher." %}</p>
+    	    <p style="text-align: center;"><a href="{% url alert_create %}" class="btn long-blue">{% trans "Créer une alerte" %}</a></p>
+    	</div>
+	</div>
+	{% endif%}
 </div>
 {% endblock %}

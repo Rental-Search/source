@@ -52,15 +52,14 @@
 	            <div class="bk-dates">
 	                <p style="font-size: 12px; padding-top: 25px;">
 	                    Créé le<br/>
-	                    19/04/2011
+	                    {{ alert.created_at|date:"d/m/Y" }}
 	                </p>
 	            </div>
 	            <div class="bk-desc" style="padding: 0px; width:510px; margin-right: 0px">
 	                <div style="float: left; width: 340px; margin-right: 10px;">
-	                    <h2 style="margin-bottom: 10px;"><a href="#">Benoit</a> voudrait réserver : une perceuse</h2>
+	                    <h2 style="margin-bottom: 10px;"><a href="#">{{ alert.patron.username }}</a> {% trans "voudrait réserver :" %} {{ alert.designation }}</h2>
     	                <p>
-    	                    <strong>Son besoin:</strong><br/>
-    	                    Percer des trous dans un mur en bétons.
+    	                    {{ alert.description }}
     	                </p>
     	            </div>
     	            <div style="float: left; width: 140px; text-align: center;">
@@ -96,6 +95,13 @@
                         <input type="submit" value="{% trans "Mettre à jour" %}" class="btn medium-blue"/>
                     </p>
 	            </form>
+	        </div>
+	    </div>
+	    <div class="box-tools">
+	        <h3>{% trans "Créer une alerte" %}</h3>
+	        <div class="box-tools-bottom">
+        	    <p style="text-align: justify;">{% trans "Nous vous invitons à créer une alerte permettant d'avertir les membres proches de chez vous de votre rechercher." %}</p>
+        	    <p style="text-align: center;"><a href="{% url alert_create %}" class="btn long-blue">{% trans "Créer une alerte" %}</a></p>
 	        </div>
 	    </div>
     </div>
