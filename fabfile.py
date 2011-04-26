@@ -19,7 +19,7 @@ def _run(command, shell=True, pty=True, combine_stderr=True, sudo=False, user=No
         print("[%s] run: %s" % (env.host_string, real_command))
     elif output.running:
         print("[%s] run: %s" % (env.host_string, command))
-    local("ssh -A %s '%s@%s'" % (env.host_string, real_command))
+    local("ssh -A %s@%s '%s'" % (env.user, env.host_string, real_command))
 
 def notify(func):
     """Notify campfire of a deploy"""
