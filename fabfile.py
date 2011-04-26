@@ -19,7 +19,7 @@ def _run(command, shell=True, pty=True, combine_stderr=True, sudo=False, user=No
         print("[%s] run: %s" % (env.host_string, real_command))
     elif output.running:
         print("[%s] run: %s" % (env.host_string, command))
-    local("ssh -A %s '%s'" % (env.host_string, real_command))
+    local("ssh -A %s '%s@%s'" % (env.host_string, real_command))
 
 def notify(func):
     """Notify campfire of a deploy"""
@@ -80,10 +80,11 @@ def staging():
     env.campfire_domain = "e-loue"
     env.github_url = "https://github.com/e-loue/eloue"
 
-def sandbox():
-    env.name = "sandbox"
+def monkeysandbox():
+    """Defines sandbox environment"""
+    env.name = "monkeysandbox"
     env.user = "benoitw"
-    env.hosts = ['sandbox.local',]
+    env.hosts = ['monkeysandbox',]
     env.base_dir = "/var/www"
     env.app_name = "eloue"
     env.domain_name = "e-loue.com"
@@ -91,8 +92,12 @@ def sandbox():
     env.current_path = "%(domain_path)s/current" % {'domain_path': env.domain_path}
     env.releases_path = "%(domain_path)s/releases" % {'domain_path': env.domain_path}
     env.shared_path = "%(domain_path)s/shared" % {'domain_path': env.domain_path}
-    env.git_clone = "git@github.com:e-loue/eloue.git"
+    env.git_clone = "git@github.com:benoitw/eloue.git"
     env.env_file = "deploy/production.txt"
+    env.campfire_room = "Chit chat"
+    env.campfire_token = "b96565fb9b8f49f0e18a6a194d7ac97812e154d6"
+    env.campfire_domain = "e-loue"
+    env.github_url = "https://github.com/benoitw/eloue"
 
 @runs_once
 def releases():
