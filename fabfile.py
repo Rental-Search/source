@@ -83,7 +83,7 @@ def staging():
 def monkeysandbox():
     """Defines sandbox environment"""
     env.name = "monkeysandbox"
-    env.user = "benoitw"
+    env.user = "lin"
     env.hosts = ['monkeysandbox',]
     env.base_dir = "/var/www"
     env.app_name = "eloue"
@@ -92,12 +92,12 @@ def monkeysandbox():
     env.current_path = "%(domain_path)s/current" % {'domain_path': env.domain_path}
     env.releases_path = "%(domain_path)s/releases" % {'domain_path': env.domain_path}
     env.shared_path = "%(domain_path)s/shared" % {'domain_path': env.domain_path}
-    env.git_clone = "git@github.com:benoitw/eloue.git"
+    env.git_clone = "git@github.com:linliu/eloue.git"
     env.env_file = "deploy/production.txt"
     env.campfire_room = "Chit chat"
     env.campfire_token = "b96565fb9b8f49f0e18a6a194d7ac97812e154d6"
     env.campfire_domain = "e-loue"
-    env.github_url = "https://github.com/benoitw/eloue"
+    env.github_url = "https://github.com/linliu/eloue"
 
 @runs_once
 def releases():
