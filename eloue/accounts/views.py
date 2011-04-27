@@ -159,6 +159,12 @@ def borrower_history(request, page=None):
     return object_list(request, queryset, page=page, paginate_by=10, template_name='accounts/borrower_history.html',
         template_object_name='booking')
 
+@login_required
+def alert_edit(request, page=None):
+    queryset = request.user.alerts.all()
+    return object_list(request, queryset, page=page, paginate_by=10, template_name='accounts/alert_edit.html',
+        template_object_name='alert')
+
 
 @mobify
 def contact(request):

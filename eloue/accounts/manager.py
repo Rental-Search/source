@@ -2,13 +2,15 @@
 import hashlib
 import random
 import re
+import datetime
 
 from django.contrib.auth.models import UserManager
+from django.contrib.gis.db.models import GeoManager
 
 SHA1_RE = re.compile('^[a-f0-9]{40}$')
 
 
-class PatronManager(UserManager):
+class PatronManager(UserManager, GeoManager):
     def exists(self, **kwargs):
         try:
             self.get(**kwargs)
@@ -65,6 +67,7 @@ class PatronManager(UserManager):
         if send_email:
             new_patron.send_activation_email()
         return new_patron
+        
     
     def delete_expired(self):
         """

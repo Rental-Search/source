@@ -107,6 +107,8 @@
     <field name="summary" type="text" indexed="true" stored="true" multiValued="false" />
     
     <field name="description" type="text" indexed="true" stored="true" multiValued="false" />
+
+    <field name="designation" type="text" indexed="true" stored="true" multiValued="false" />
     
     <field name="text" type="text" indexed="true" stored="true" multiValued="false" />
 

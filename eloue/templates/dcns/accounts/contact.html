@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Contactez e-loue" %}{% endblock %}
+
+{% block content %}
+<div id="content" class="xgrid">
+    <div class="content-top">
+        <h1>Contactez-nous</h1>
+    </div>
+	<div id="contact" class="x8 p2">
+	    <form class="form" action="{% url contact %}" method="POST">
+	    {% csrf_token %}
+	    <table class="more-info">
+			<tr>
+				<th><label>{{ form.sender.label }} {% if form.sender.field.required %}*{% endif %} :</label></th>
+				<td {% if form.sender.errors %} class="error-field" {% endif %}>
+					{{ form.sender }}
+					{% if form.sender.errors %}
+						{% for error in form.sender.errors %}
+							<br />
+						  <span class="error">{{ error|escape }}</span>
+						{% endfor %}
+					{% endif %}
+				</td>
+			</tr>
+			<tr>
+				<th><label>{{ form.subject.label }} {% if form.subject.field.required %}*{% endif %} :</label></th>
+				<td {% if form.subject.errors %} class="error-field" {% endif %}>
+					{{ form.subject }}
+					{% if form.subject.errors %}
+						{% for error in form.subject.errors %}
+							<br />
+						  <span class="error">{{ error|escape }}</span>
+						{% endfor %}
+					{% endif %}
+				</td>
+			</tr>
+			<tr>
+				<th><label>{{ form.message.label }} {% if form.message.field.required %}*{% endif %} :</label></th>
+				<td {% if form.message.errors %} class="error-field" {% endif %}>
+					{{ form.message }}
+					{% if form.message.errors %}
+						{% for error in form.message.errors %}
+							<br />
+						  <span class="error">{{ error|escape }}</span>
+					 	{% endfor %}
+					{% endif %}
+				</td>
+			</tr>
+			<tr>
+			    <th></th>
+				<td>
+			 	 {{ form.cc_myself}} <label for="id_cc_myself">{{ form.cc_myself.label }}</label>
+				</td>
+			</tr>
+		</table>
+		<p class="required-field">{% trans "* = champ obligatoire" %}</p>
+	</div>
+	<div id="submit-wizard" class="x12">
+	    <p>
+		    <a href="{% url home %}">{% trans "Annuler" %}</a> {% trans "ou" %} 
+    		<input type="submit" class="btn big-green" value="{% trans "Envoyer" %}" />
+    	</p>
+	</form>
+	</div>
+</div>
+{% endblock %}

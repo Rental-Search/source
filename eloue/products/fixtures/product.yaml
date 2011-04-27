@@ -50,3 +50,22 @@
     model: products.product
     pk: 4
 
+-   fields:
+        address: 1
+        category: 1
+        deposit_amount: '100'
+        description: 'Voiture neuf'
+        owner: 1
+        quantity: 1
+        sites: [1, 2, 3]
+        summary: 'Bonne voiture Benz'
+        created_at: 2010-08-15 09:00:10
+        payment_type: 0
+    model: products.product
+    pk: 5
+    
+        
+
+
+
+        

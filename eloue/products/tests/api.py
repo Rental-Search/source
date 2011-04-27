@@ -130,7 +130,7 @@ class ApiTest(TestCase):
             **self._get_headers(request))
         self.assertEquals(response.status_code, 201)
         self.assertTrue('Location' in response)
-        product = Product.objects.get(pk=5)
+        product = Product.objects.get(pk=6)
         self.assertTrue(response["Location"].endswith(product.get_absolute_url()))
         self.assertEquals(product.summary, 'Tondeuse')
         self.assertEquals(product.description, 'Merveilleuse tondeuse')

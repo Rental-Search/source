@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% load i18n cache %}
+
+{% block title %}{% trans "Réponse envoyé avec success"%}{% endblock %}
+
+{% block description %}{% trans "La réponse à l'alerte à bien été envoyé" %}{% endblock %}
+
+{% block content %}
+<div id="content-home" class="xgrid">
+    <div class="x12 content-header">
+        <h1>{% trans "Votre réponse à l'alerte a bien été envoyé" %}</h1>
+    </div>
+    <div class="x12">
+        <p>{{ alert.designation }}
+        <p>Si la personne est intéresser alors elle vous enverra une demande de réservartion</p>
+    </div>
+</div>
+{% endblock %} 

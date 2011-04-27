@@ -1,0 +1,35 @@
+/* fix margin inheritance bug */
+.inb { margin-left: 0px; }
+#search .x2 { margin-top: 20px; }
+
+* html .guarantees {display:inline;overflow-x:hidden;}
+
+/* no list style image for flatepage's list */
+
+.flatpage li, .box-links li
+{ 
+  list-style-image: none; 
+  list-style-type: circle; 
+}
+
+/* fix margin bottom bug for the menu */
+#menu { padding-bottom: 1.2em; }
+#content { padding-bottom: 20px; }
+.bk-desc { padding: 0; }
+.bk img { padding: 0; margin: 0; }
+.bk-accept { margin-left: 2px; }
+.bk-refuse { margin-left: 2px; }
+
+.prices-form label { font-size: 0.9em; }
+.prices-form .supp-list-prices { height: 53px; }
+.prices-form .calculator { margin-top: 10px; }
+
+/* booking date */
+.started-date { margin-right: 10px; }
+
+
+/* guarantees */
+.assurancy-partner { text-align: left; }
+.assurancy-slide { margin-left: 0; }
+.pp { margin-top: 10px; margin-left: 63px; }
+.assurone { margin-top: 13px; margin-left: 33px; }

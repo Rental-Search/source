@@ -17,7 +17,7 @@ from django.utils.translation import ugettext as _
 
 from eloue.accounts import EMAIL_BLACKLIST
 from eloue.accounts.fields import PhoneNumberField
-from eloue.accounts.models import Patron, PhoneNumber, COUNTRY_CHOICES
+from eloue.accounts.models import Patron, PhoneNumber, COUNTRY_CHOICES, PatronAccepted
 from eloue.accounts.widgets import ParagraphRadioFieldRenderer
 
 STATE_CHOICES = (
@@ -35,9 +35,9 @@ class EmailAuthenticationForm(forms.Form):
     """Displays the login form and handles the login action."""
     exists = forms.TypedChoiceField(required=True, coerce=int, choices=STATE_CHOICES, widget=forms.RadioSelect(renderer=ParagraphRadioFieldRenderer), initial=1)
     email = forms.EmailField(label=_(u"Email"), max_length=75, required=True, widget=forms.TextInput(attrs={
-        'autocapitalize': 'off', 'autocorrect': 'off', 'class': 'inm'
+        'autocapitalize': 'off', 'autocorrect': 'off', 'class': 'inm', 'tabindex': '1'
     }))
-    password = forms.CharField(label=_(u"Password"), widget=forms.PasswordInput(attrs={'class': 'inm'}), required=False)
+    password = forms.CharField(label=_(u"Password"), widget=forms.PasswordInput(attrs={'class': 'inm', 'tabindex': '2'}), required=False)
     
     def __init__(self, *args, **kwargs):
         self.user_cache = None
@@ -49,8 +49,14 @@ class EmailAuthenticationForm(forms.Form):
         for rule in EMAIL_BLACKLIST:
             if re.search(rule, email):
                 raise forms.ValidationError(_(u"Pour garantir un service de qualité et la sécurité des utilisateurs de e-loue.com, vous ne pouvez pas vous enregistrer avec une adresse email jetable."))
-        if not exists and Patron.objects.filter(email=email).exists():
-            raise forms.ValidationError(_(u"Un compte existe déjà pour cet email"))
+        
+        if not settings.AUTHENTICATION_BACKENDS[0] == 'eloue.accounts.auth.PrivatePatronModelBackend':
+            if not exists and Patron.objects.filter(email=email).exists():
+                raise forms.ValidationError(_(u"Un compte existe déjà pour cet email"))
+                
+        if settings.AUTHENTICATION_BACKENDS[0] == 'eloue.accounts.auth.PrivatePatronModelBackend':
+            if not exists and not PatronAccepted.objects.filter(email=email, sites=Site.objects.get_current()).exists():
+                raise forms.ValidationError(_(u"Une addresse email dcns est obligatoire"))
         return email
     
     def clean(self):

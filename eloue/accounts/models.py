@@ -20,7 +20,7 @@ from django.template.defaultfilters import slugify
 from eloue.accounts.manager import PatronManager
 from eloue.geocoder import GoogleGeocoder
 from eloue.products.utils import Enum
-from eloue.paypal import accounts, PaypalError
+from eloue.rent.payments.paypal_payment import accounts, PaypalError
 from eloue.signals import post_save_sites
 from eloue.utils import create_alternative_email
 
@@ -297,6 +297,12 @@ class PhoneNumber(models.Model):
     
     def __unicode__(self):
         return smart_unicode(self.number)
+
+        
+class PatronAccepted(models.Model):
+    """Patron accpeted to create an account for private plateform"""
+    email = models.EmailField()
+    sites = models.ManyToManyField(Site, related_name='patrons_accepted')
     
 
 post_save.connect(post_save_sites, sender=Patron)

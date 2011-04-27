@@ -9,7 +9,7 @@ from django.utils.encoding import smart_str
 from django.utils.translation import ugettext_lazy as _
 
 from eloue.admin import CurrentSiteAdmin
-from eloue.accounts.models import Patron, Address, PhoneNumber
+from eloue.accounts.models import Patron, Address, PhoneNumber, PatronAccepted
 from eloue.accounts.forms import PatronChangeForm
 
 
@@ -23,7 +23,7 @@ class PhoneNumberInline(admin.TabularInline):
 
 class PatronAdmin(UserAdmin, CurrentSiteAdmin):
     fieldsets = (
-        (None, {'fields': ('username', 'password')}),
+        (None, {'fields': ('username', 'password', 'sites')}),
         (_('Personal info'), {'fields': ('civility', 'first_name', 'last_name', 'email', 'slug', 'affiliate')}),
         (_('Company info'), {'fields': ('is_professional', 'company_name')}),
         (_('Permissions'), {'fields': ('is_staff', 'is_active', 'is_superuser', 'is_subscribed', 'user_permissions')}),
@@ -72,5 +72,7 @@ class AddressAdmin(admin.ModelAdmin):
         (_('Geolocation'), {'classes': ('collapse',), 'fields': ('position',)})
     )
 
+
 admin.site.register(Address, AddressAdmin)
 admin.site.register(Patron, PatronAdmin)
+admin.site.register(PatronAccepted)

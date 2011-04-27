@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Réservation enregistrée avec succès" %}{% endblock %}
+
+{% block content %}
+<div id="content-home" class="xgrid">
+    <div class="x12">
+        <h1>{% trans "Réservation terminée avec succès"%}</h1>
+        <p>{% trans "Le propriétaire a été informé de votre réservation." %}</p>
+    </div>
+</div>
+{% endblock %}

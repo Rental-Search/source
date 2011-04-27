@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Foire aux questions" %}{% endblock %}
+
+{% block description %}
+  {% trans "Les questions les plus fréquemment posées sur e-loue" %}
+{% endblock %}
+
+{% block content %}
+<div id="content" class="xgrid">
+    <div class="content-top" style="margin-bottom: 10px;">
+        <h1>{% trans "Questions Fréquentes" %}</h1>
+    </div>
+    {% for topic in topic_list %}
+    <div class="x12">
+        <h2><a href="{{ topic.get_absolute_url }}">{{ topic.title }}</a></h2>
+        <ul>
+       		{% for question in topic.questions.all %}
+        	<li><a href="{{ topic.get_absolute_url }}#{{ question.slug }}">{{ question.question }}</a></li>
+       		{% endfor %}
+      	</ul>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Erreur d'enregistrement de votre paiement" %}{% endblock %}
+
+{% block content %}
+<div id="content-home" class="xgrid">
+    <div class="x12">
+        <h1>{% trans "Oops.." %}</h1>
+        <p>{% trans "Une erreur est survenu lors de l'enregistrement de votre paiement." %}</p>
+    </div>
+</div>
+{% endblock %}

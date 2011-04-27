@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Identification" %}{% endblock %}
+
+{% block content %}
+<div id="content-home" class="xgrid">
+    <div class="content-header x12">
+		<h1>{% trans "Identification" %}</h1>
+	</div>
+	{% include "accounts/partials/login.html" %}
+</div>
+{% endblock %}

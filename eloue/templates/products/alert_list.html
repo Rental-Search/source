@@ -1,0 +1,126 @@
+{% extends "base.html" %}
+{% load i18n paginator facets %}
+
+{% block title %}
+	{% trans "Alertes locations" %}
+{% endblock %}
+
+{% block description %}
+	{% trans "Demandes de location des locataires qui n'ont pas trouvé l'objet qu'ils veulent louer près de chez eux." %}
+{% endblock %}
+
+{% block content %}
+<div id="top-content" class="search clearfix">
+	<form class="form" action="{% url product_list %}">
+	<div class="search-what x5">
+		<p>
+			<label for="id_q">{% trans "Que voulez-vous louer ?" %}</label><br />
+			{{ form.q }}<br />
+			<span>{% trans "Exemple :" %} </span> <a href="{% url product_list %}?q={% trans "voiture" %}">{% trans "Voiture" %}</a>, <a href="{% url product_list %}?q={% trans "chèvre" %}">{% trans "Chèvre" %}</a>, <a href="{% url product_list %}?q={% trans "ski" %}">{% trans "Ski" %}</a>, <a href="{% url product_list %}?q={% trans "robe" %}">{% trans "Robe" %}</a>
+		</p>
+	</div>
+	<div class="search-where x5">
+		<p>
+			<label>{% trans "Où ?" %}</label><br />
+			{{ form.l }}<br />
+		</p>
+	</div>
+	<div class="search-find x2">
+		<p>
+			<input type="submit" value="{% trans "Rechercher" %}" class="btn big-orange"/>
+		</p>
+	</div>
+	</form>
+</div>{# top-content #}
+<div id="content-product" class="result clearfix">
+	<div class="breadcrumb">
+		<ul class="x12 breadcrumbs">
+			<li><a href="{% url home %}">{% trans "Accueil" %}</a></li>
+			{% if search_alert_form.cleaned_data.l %}
+			    <li><a href="/location/alertes/">{% trans "Alertes locations" %}</a></li>
+				<li class="lastb">{{ search_alert_form.cleaned_data.l|capfirst }}</li>
+			{% endif %}
+		</ul>
+	</div>
+	<div class="x8">
+	<div class="content-header x8 first">
+		<h1>Alertes Locations dans toutes la France</h1>
+	</div>
+	{% if alert_list %}
+	<ul id="alerts" class="booking-list x8 first">
+		{% for alert in alert_list %}
+		<li class="x8 first">
+			<div class="bk">
+				<div class="bk-dates">
+					{% trans "Créée le"%}<br/>
+					{{ alert.created_at|date:"d/m/Y" }}
+				</div>
+				<div class="bk-desc">
+					<h5>{{ alert.designation }}</h5>
+					<p>{{ alert.description}}</p>
+				</div>
+				<div class="bk-action">
+					<a href="{% url product_create %}">{% trans "Mettre en location" %}</a><br />
+					<a href="{% url alert_inform alert.pk %}" title="Avertir le locataire que j'ai mis cet objet en location">{% trans "Avertir" %}</a>
+				</div>
+			</div>
+		</li>
+		{% endfor %}
+	</ul>
+	{% pagination %}
+      {% if is_paginated %}
+       <div class="pages x8 first">
+        <ul class="pages-list">
+        {% if page_obj.has_previous %}
+        <li class="previous"><a href="#">&#171; {% trans "Page précédente" %}</a></li>
+        {% endif %}
+        {% for page in page_range %}
+        <li class="page-{{ page }} {% if page_obj.number == page %}select{% endif %}"><a href="#">{{ page }}</a></li>
+       {% endfor %}
+        {% if page_obj.has_next %}
+        <li class="next"><a href="#">{% trans "Page suivante" %} &#187;</a></li>
+        {% endif %}
+       </ul> 
+      </div>{# pager #}
+     {% endif %}
+	{% endif %}
+	</div>
+	<div class="facet-dist portlet x4">
+		<div class="portlet-header">
+			<h3>{% trans "Rechercher une alerte" %}</h3>
+		</div>
+		<div class="portlet-top">
+			<form action="" class="form">
+				<p style="margin-bottom: 10px;">
+					<label class="labm">{{ search_alert_form.l.label }}</label><br />
+					{{ search_alert_form.l }}
+				</p>
+				<p style="margin-bottom: 10px;">
+					<label class="labs">{{ search_alert_form.r.label }}</label><br>
+					{{ search_alert_form.r }}
+					<span class="unit">{% trans "Km" %}</span>
+				</p>
+				<p style="text-align: right;">
+					<input type="submit" value="{% trans "Mettre à jour" %}" class="btn medium-blue">
+				</p>
+			</form>
+		</div>
+	</div>
+	<div class="sidebar-box x4">
+		<h3>{% trans "Alertes location !" %}</h3>
+		<ol class="guarantee-list">
+			<li>
+			  {% blocktrans %}
+				 <strong>Mettre en  location</strong> l'objet demandé
+			  {% endblocktrans %}
+			</li>
+			<li>
+			  {% blocktrans %}
+ 				 <strong>Avertir le locataire</strong> que j'ai mis cet objet en location
+			  {% endblocktrans %}
+			</li>
+		</ol>
+	</div>
+</div>{# content-product #}
+
+{% endblock %}
