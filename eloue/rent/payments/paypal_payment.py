@@ -54,7 +54,6 @@ class AdaptivePapalPayments(AbstractPayment):
             total_amount = convert_from_xpf(self.booking.total_amount)
         else:
             total_amount = self.booking.total_amount
-        return_url = "http://sandbox.e-loue.com/dashboard/" #for test sake
         response = self.payments.preapproval(
             startingDate=now,
             endingDate=now + datetime.timedelta(days=360),
@@ -79,7 +78,6 @@ class AdaptivePapalPayments(AbstractPayment):
         protocol = "https"
         total_amount = None
         net_price = None
-        return_url = "http://sandbox.e-loue.com/dashboard/" #for test sake
         if settings.CONVERT_XPF:
             total_amount = convert_from_xpf(self.booking.total_amount)
             net_price = convert_from_xpf(self.booking.net_price)
