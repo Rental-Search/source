@@ -110,6 +110,7 @@ def patron_paypal(request):
         patron = form.save()
         protocol = 'https' if USE_HTTPS else 'http'
         domain = Site.objects.get_current().domain
+        domain = "http://sandbox.e-loue.com/"
         return_url = "%s://%s%s?paypal=true" % (protocol, domain, redirect_path)
         paypal_redirect = patron.create_account(return_url=return_url)
         if paypal_redirect:
