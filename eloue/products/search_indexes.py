@@ -61,6 +61,8 @@ class AlertIndex(QueuedSearchIndex):
     designation = CharField(model_attr='designation')
     description = CharField(model_attr='description')
     created_at = DateTimeField(model_attr='created_at')
+    patron = CharField(model_attr='patron__username', null=True)
+    patron_url = CharField(model_attr='patron__get_absolute_url')
     lat = FloatField(model_attr='address__position__x', null=True)
     lng = FloatField(model_attr='address__position__y', null=True)
     text = CharField(document=True, use_template=True)

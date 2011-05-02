@@ -67,7 +67,7 @@
 		 <h2>{% trans "Comment ça marche ?" %}</h2>
 		</div>
 	    <div class="x4 first" style='position: relative;'>
-	        <a href="/what-is-erentmarket/" class="welcome-link">Tout savoir sur loueunepetiteamie.com</a>
+	        <a href="/comment-ca-marche/" class="welcome-link">Louez vos objets entre co</a>
 	    </div>
 	</div>
 	<div class="x12 horizontal-assurancy">
@@ -98,28 +98,18 @@
     <div class="content-header x12">
         <h2>{% trans "Demandes de location"%}</h2>
     </div>
-    <div class="x3" style="margin-bottom: 20px;">
-        <p style="margin-bottom: 6px; padding-bottom: 2px; border-bottom: 1px dashed #B9CAD4; font-size: 12px;">Aujourd'hui à Nanterre</p>
-        <a href="#" style="color: #6EB924; font-weight: bold;">Emilie Dupont</a> cherche :<br />
-        <a href="#" style="color: #364C59;font-weight: bold; font-size: 16px;">Perceuse sans fil</a><br />
-        <a href="#" style="color: #6EB924; font-size: 12px; text-align: right;">> Répondre à la demande</a> 
+    {% for alert in alerts %}
+    <div class="request x3">
+        <p class="request-header">le {{ alert.created_at|date:"d F Y" }}</p>
+        <a href="{{ alert.patron.get_absolute_url }}" class="requester">{{ alert.patron.username }}</a> cherche :<br />
+        <p class="request-designation">{{ alert.designation }}</p>
+        <a href="{% url alert_inform alert.pk %}" class="request-answer">> Répondre à la demande</a> 
     </div>
-    <div class="x3" style="margin-bottom: 20px;">
-        <p style="margin-bottom: 6px; padding-bottom: 2px; border-bottom: 1px dashed #B9CAD4; font-size: 12px;">Aujourd'hui à Nanterre</p>
-        <a href="#" style="color: #6EB924; font-weight: bold;">JeanMartin75</a> cherche :<br />
-        <a href="#" style="color: #364C59;font-weight: bold; font-size: 16px;">Peluche géante crocodile</a><br />
-        <a href="#" style="color: #6EB924; font-size: 12px;">> Répondre à la demande</a> 
-    </div>
-    <div class="x3" style="margin-bottom: 20px;">
-        <p style="margin-bottom: 6px; padding-bottom: 2px; border-bottom: 1px dashed #B9CAD4; font-size: 12px;">Aujourd'hui à Nanterre</p>
-        <a href="#" style="color: #6EB924; font-weight: bold;">Eloïse</a> cherche :<br/>
-        <a href="#" style="color: #364C59;font-weight: bold; font-size: 16px;">Matériel sono pour soirées</a><br />
-        <a href="#" style="color: #6EB924; font-size: 12px;">> Répondre à la demande</a> 
-    </div>
+    {% endfor %}
     <div class="x3">
         <div class="box-welcome" style="text-align: center;">
             <p style="font-size: 12px;">Répondez aux autres demandes de location</p>
-            <a href="#" class="btn long-blue">Accéder aux demandes</a>
+            <a href="{% url alert_list %}" class="btn long-blue">Accéder aux demandes</a>
         </div>
     </div>
 	<div class="content-header x12">

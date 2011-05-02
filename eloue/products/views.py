@@ -35,7 +35,8 @@ DEFAULT_RADIUS = getattr(settings, 'DEFAULT_RADIUS', 50)
 def homepage(request):
     curiosities = Curiosity.on_site.all()
     form = FacetedSearchForm()
-    return direct_to_template(request, template='index.html', extra_context={'form': form, 'curiosities': curiosities})
+    alerts = Alert.on_site.all()[:3]
+    return direct_to_template(request, template='index.html', extra_context={'form': form, 'curiosities': curiosities, 'alerts':alerts})
 
 
 @mobify

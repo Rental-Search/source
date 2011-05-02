@@ -272,7 +272,33 @@
     request
 
 -------------------------------------------------------------- */
-
+.request { margin-bottom: 20px; }
+.request-header
+{
+  margin-bottom: 6px; 
+  padding-bottom: 2px; 
+  border-bottom: 1px dashed #B9CAD4; 
+  font-size: 12px;
+}
+.requester
+{
+  color: #6EB924; 
+  font-weight: bold;
+}
+.request-designation
+{
+  color: #364C59;
+  font-weight: bold; 
+  font-size: 16px; 
+  margin: 1px 0 1px 0;
+  line-height:20px;
+}
+.request-answer
+{
+  color: #6EB924; 
+  font-size: 12px; 
+  text-align: right;
+}
 
 
 

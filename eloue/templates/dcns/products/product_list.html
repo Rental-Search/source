@@ -175,8 +175,8 @@
     {% else %}
     <div class="x8">
 	    <p>{% trans "Nous n'avons pas de résultat pour votre recherche." %}</p>
-	    <p>{% trans "Nous vous invitons à créer une alerte permettant d'avertir les membres proches de chez vous de votre rechercher." %}</p>
-	    <p style="text-align: center;"><a href="{% url alert_create %}" class="btn long-blue">{% trans "Créer une alerte" %}</a></p>
+            	    <p>{% trans "Nous vous invitons à créer une demande location. Si un membre possède cette objet alors il répondra à votre demande." %}</p>
+	    <p style="text-align: center;"><a href="{% url alert_create %}" class="btn long-blue">{% trans "Créer une demande" %}</a></p>
 	</div>
 	{% endif %}
 	<div id="facets" class="x4">
@@ -201,6 +201,7 @@
 	        </div>
 	    </div>
 	    {% endif %}
+	    {% if product_list %}
 	    <div class="box-tools">
 	        <h3>{% trans "Catégories" %}</h3>
 	        <div class="box-tools-top">
@@ -228,6 +229,14 @@
 			{% endfor%}
             </div>
 	    </div>
+	    <div class="box-tools">
+	        <h3>{% trans "Demande de location"%}</h3>
+	         <div class="box-tools-bottom">
+                <p style="text-align: justify;">{% trans "Vous ne trouvez pas l'objet que vous recherchez ?" %}</p>
+                <p style="text-align: center;"><a href="{% url alert_create %}" class="btn long-blue">{% trans "Créer une demande" %}</a></p>
+        	</div>
+	    </div>
+	    {% endif %}
 	</div>
 </div>
 {% endblock %}

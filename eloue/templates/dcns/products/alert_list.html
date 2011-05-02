@@ -42,7 +42,7 @@
         </ul>
     </div>
     <div class="content-header x12">
-		<h1>Alertes Locations</h1>
+		<h1>{% trans "Demandes de location" %}</h1>
 	</div>
 	{% if alert_list %}
 	<ul  id="booking_list" class="x8">
@@ -57,13 +57,14 @@
 	            </div>
 	            <div class="bk-desc" style="padding: 0px; width:510px; margin-right: 0px">
 	                <div style="float: left; width: 340px; margin-right: 10px;">
-	                    <h2 style="margin-bottom: 10px;"><a href="#">{{ alert.patron.username }}</a> {% trans "voudrait réserver :" %} {{ alert.designation }}</h2>
+	                    <a href="{{ alert.patron_url }}" style="color:#6EB924;">{{ alert.patron }}</a> {% trans "cherche :" %}
+	                    <h4 style="margin: 5px 0;">{{ alert.designation }}</h4>
     	                <p>
     	                    {{ alert.description }}
     	                </p>
     	            </div>
-    	            <div style="float: left; width: 140px; text-align: center;">
-    	                <a href="{{ alert.url }}" class="btn medium-green" style="margin-top: 10px;">{% trans "Mettre en location" %}</a>
+    	            <div style="float: left; width: 140px; text-align: center; padding-top: 23px;">
+    	                <a href="{{ alert.url }}" style="color: #6EB924">{% trans "> Répondre à la demande" %}</a>
     	            </div>
 	            </div>
 	        </div>
@@ -72,12 +73,12 @@
 	</ul>
     {% else %}
         <div class="x8">
-            <h1>Il n'y a pas d'arlert</h1>
+            <h1>Il n'y a pas de demande de location</h1>
         </div>
     {% endif %}
     <div class="x4">
         <div class="box-tools">
-	        <h3>{% trans "Rechercher une alerte" %}</h3>
+	        <h3>{% trans "Rechercher une demande" %}</h3>
 	        <div class="box-tools-bottom">
 	            <form action="" class="inline">
 	                <p>
@@ -98,10 +99,10 @@
 	        </div>
 	    </div>
 	    <div class="box-tools">
-	        <h3>{% trans "Créer une alerte" %}</h3>
+	        <h3>{% trans "Créer une demande de location" %}</h3>
 	        <div class="box-tools-bottom">
-        	    <p style="text-align: justify;">{% trans "Nous vous invitons à créer une alerte permettant d'avertir les membres proches de chez vous de votre rechercher." %}</p>
-        	    <p style="text-align: center;"><a href="{% url alert_create %}" class="btn long-blue">{% trans "Créer une alerte" %}</a></p>
+        	    <p style="text-align: justify;">{% trans "Nous vous invitons à créer une demande de location permettant d'avertir les membres proches de chez vous." %}</p>
+        	    <p style="text-align: center;"><a href="{% url alert_create %}" class="btn long-blue">{% trans "Créer une demande" %}</a></p>
 	        </div>
 	    </div>
     </div>
