@@ -95,6 +95,7 @@
             </div>
         </div>
     </div>
+    {% if alerts.count == 3 %}
     <div class="content-header x12">
         <h2>{% trans "Demandes de location"%}</h2>
     </div>
@@ -112,6 +113,7 @@
             <a href="{% url alert_list %}" class="btn long-blue">Accéder aux demandes</a>
         </div>
     </div>
+    {% endif %}
 	<div class="content-header x12">
 	 <h2>{% trans "Catégories" %}</h2>
 	</div>
