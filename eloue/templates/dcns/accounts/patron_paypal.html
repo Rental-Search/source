@@ -10,6 +10,7 @@
             <li class="menu-tab first"><a href="{% url dashboard %}">{% trans "Tableau de bord" %}</a></li>
 			<li class="menu-tab">{% trans "Propriétaire" %}</li>
 			<li class="menu-tab"><a href="{% url borrower_booking %}">{% trans "Locataire" %}</a></li>
+			<li class="menu-tab"><a href="{% url alert_edit %}">{% trans "Alertes" %}</a></li>
 			<li class="menu-tab"><a href="{% url patron_edit %}">{% trans "Mon compte" %}</a></li>
         </ul>
     </div>
@@ -38,7 +39,7 @@
 				 {% endif %}
 				</p>
 			</div>
-			<div class="submit-wizard x9 first">
+			<div class="submit-wizard x9">
 				<a href="{% url owner_booking %}">{% trans "Annuler" %}</a> {% trans "ou" %} 
 				<input type="submit" class="btn big-green" value="{% trans "Continuer &rarr;" %}" />
 			</form>

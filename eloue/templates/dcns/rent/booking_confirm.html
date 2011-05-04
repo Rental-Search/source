@@ -80,16 +80,6 @@
                 </tr>
             </table>
 		</div>
-		<div class="content-header x8 first">
-		    <h2>{% trans "Paiement" %}</h2>
-		</div>
-		<div class="booking-paiement x8 first" style="margin-bottom: 20px;">
-		 {% blocktrans %}
-		  Sur la prochaine page veuillez fournir vos informations de paiement.<br />
-		  Vous ne serez <strong>débité</strong> que <strong>si le propriétaire accepte</strong> votre demande (dans les 32 heures).<br /> 
-		  Si le propriétaire refuse ou ne répond pas, vous ne serez pas prélevé.<br />
-		 {% endblocktrans %}
-		</div>
 		<div id="submit-wizard" class="x8 first">
 		    <p>
 		        <input type="hidden" name="{{ step_field }}" value="{{ step0 }}" />
@@ -100,5 +90,17 @@
 		</div>
 	  </form>
     </div>
+    <div class="x4">
+          <div class="box-info">
+              <h3>{% trans "Paiement" %}</h3>
+              <p>
+                  {% if product.payment_type == 0 %}
+                  {% trans "Le paiement est hors ligne. Vous payerez le propriétaire le premier jour de la location."%}
+                  {% else %}
+                  {% trans "Le paiement est en ligne. Vous allez être redirigé vers Paypal pour payer, vous ne serez débité que le premier jour de la location."%}
+                  {% endif %}
+              </p>
+          </div> 
+	  </div>
 </div>
 {% endblock %}

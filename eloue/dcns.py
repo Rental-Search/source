@@ -12,6 +12,8 @@ SESSION_COOKIE_DOMAIN = None #'e-loue.dcnsgroup.com'
 
 CACHE_MIDDLEWARE_KEY_PREFIX = 'dcns'
 
+COMMISSION = 0.10  # Our commission percentage
+
 AFFILIATE_TAG = 'dcns'
 
 LOGIN_REDIRECT_URL = '/'

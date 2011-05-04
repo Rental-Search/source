@@ -164,27 +164,6 @@
                 </tr>
             </table>
         </div>
-        {% if booking.owner == user and booking.state == booking.STATE.CLOSED %}
-        <div class="content-header x8 first">
-            <h2>{% trans "Détails de la transaction" %}</h2>
-        </div>
-        <div class="x8 first">
-            <table class="booking-resume">
-                <tr>
-                    <th>{% trans "Avant commission :" %}</th>
-                    <td class="number">{{ booking.total_amount|quantize|currency }}</td>
-                </tr>
-                <tr>
-                    <th>{% trans "Commission :" %}</th>
-                    <td>{{ booking.total_commission|quantize|currency }}</td>
-                </tr>
-                <tr class="total">
-                    <th>{% trans "Montant net perçu :" %}</th>
-                    <td class="number">{{ booking.net_price|quantize:".00,floor"|currency }}</td>
-                </tr>
-            </table>
-        </div>
-        {% endif %}
     </div>
     <div class="x3">
         <div class="box-tools" style="background-color: #FFF;">

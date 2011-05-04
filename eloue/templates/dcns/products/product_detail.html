@@ -126,6 +126,16 @@
     			</tr>
     		</table>
         </div>
+        <div class="box-info">
+            <h3>{% trans "Paiement" %}</h3>
+            <p>
+                {% if product.payment_type == 0 %}
+                {% trans "Le paiement est hors ligne. Vous payerez le propriétaire le premier jour de la location."%}
+                {% else %}
+                {% trans "Le paiement est en ligne. Vous payer au moment de la réservation. Vous ne serez débité que le premier jour de la location."%}
+                {% endif %}
+            </p>
+        </div>
     </div>
 </div>
     
