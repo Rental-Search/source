@@ -172,16 +172,6 @@
 	          </ul> 
             </div>{# pager #}
            {% endif %}
-		<div class="content-header x12">
-			{% if form.cleaned_data.q %}
-			 {% blocktrans with form.cleaned_data.q as keywords count paginator.count as count %}
-			 <h1>Pas de résultat pour <strong>{{ keywords }}</strong></h1>
-			 posifu
-			 {% plural %}
-			 <h1>Résultats pour <strong>{{ keywords }}</strong></h1>
-			 {% endblocktrans%}
-			{% endif %}
-		</div>
   	</div>
 	{% if form.cleaned_data.l %}
 	<div class="facet-dist portlet x4">
@@ -245,9 +235,6 @@
 	 {% trans "Vous vouliez peut-être dire ?" %} <a href="{% facet_url breadcrumbs "q" suggestions %}">{{ suggestions }}</a>
 	</div>
 	{% endif%}
-	<div class="x12">
-		<a href="{% url alert_create %}">Créer une alert</a>
-	</div>
 	{% endif %}{# if product_list #}
 </div>{# content #}
 {% endblock %}
