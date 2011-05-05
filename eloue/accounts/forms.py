@@ -21,8 +21,8 @@ from eloue.accounts.models import Patron, PhoneNumber, COUNTRY_CHOICES, PatronAc
 from eloue.accounts.widgets import ParagraphRadioFieldRenderer
 
 STATE_CHOICES = (
-    (0, _(u"Je n'ai pas encore de compte e-loue")),
-    (1, _(u"J'ai déjà un compte e-loue et mon mot de passe est :")),
+    (0, _(u"Je n'ai pas encore de compte")),
+    (1, _(u"J'ai déjà un compte et mon mot de passe est :")),
 )
 
 PAYPAL_ACCOUNT_CHOICES = (

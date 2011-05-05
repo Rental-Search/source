@@ -92,15 +92,18 @@
     </div>
     <div class="x4">
           <div class="box-info">
-              <h3>{% trans "Paiement" %}</h3>
+              {% if product.payment_type == 0 %}
+              <h3>{% trans "Paiement hors ligne" %}</h3>
               <p>
-                  {% if product.payment_type == 0 %}
-                  {% trans "Le paiement est hors ligne. Vous payerez le propriétaire le premier jour de la location."%}
-                  {% else %}
-                  {% trans "Le paiement est en ligne. Vous allez être redirigé vers Paypal pour payer, vous ne serez débité que le premier jour de la location."%}
-                  {% endif %}
+                  {% trans "Le propriétaire souhaite le paiement hors ligne (chèque/espèce). Vous le payerez le premier jour de la location."%}
               </p>
-          </div> 
-	  </div>
+              {% else %}
+              <h3>{% trans "Paiement en ligne" %}</h3>
+              <p>
+                {% trans "Le propriétaire souhaite le paiement en ligne. Vous payez au moment de la réservation via PayPal. Le montant est débité lors du premier jour de location."%}
+              {% endif %}
+              </p>
+         </div> 
+	</div>
 </div>
 {% endblock %}

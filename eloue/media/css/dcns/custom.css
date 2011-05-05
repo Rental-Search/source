@@ -67,7 +67,7 @@
   
   .small-green 
   {
-    background: transparent url("../../images/btn-small-green.png") no-repeat 0 0;
+    background: transparent url("../../images/dcns/btn-small-green.png") no-repeat 0 0;
     width: 72px;
     height: 30px;
     font-size: 14px;
@@ -76,7 +76,7 @@
   
   .medium-green
   {
-    background: transparent url("../../images/btn-medium-green.png") no-repeat 0 0;
+    background: transparent url("../../images/dcns/btn-medium-green.png") no-repeat 0 0;
     width: 165px;
     height: 32px;
     font-size: 14px;
@@ -84,7 +84,7 @@
   }
   .big-green 
   {
-    background: transparent url("../../images/btn-big-green.png") no-repeat 0 0;
+    background: transparent url("../../images/dcns/btn-big-green.png") no-repeat 0 0;
     width: 141px;
     height: 38px;
     font-size: 18px;
@@ -93,7 +93,7 @@
   
   .long-green
   {
-    background: transparent url("../../images/btn-long-green.png") no-repeat 0 0;
+    background: transparent url("../../images/dcns/btn-long-green.png") no-repeat 0 0;
     width: 150px;
     height: 30px;
     font-size: 14px;
@@ -102,7 +102,7 @@
   
   .small-orange 
   {
-    background: transparent url("../../images/btn-small-orange.png") no-repeat 0 0;
+    background: transparent url("../../images/dcns/btn-small-orange.png") no-repeat 0 0;
     width: 72px;
     height: 30px;
     font-size: 14px;
@@ -110,7 +110,7 @@
   }
   .big-orange
   {
-   background: transparent url("../../images/btn-big-orange.png") no-repeat 0 0; 
+   background: transparent url("../../images/dcns/btn-big-orange.png") no-repeat 0 0; 
    width: 140px;
    height: 38px;
    font-size: 18px;
@@ -118,7 +118,7 @@
   }
   .bk-orange
   {
-    background: transparent url("../../images/btn-bk-orange.png") no-repeat 0 0; 
+    background: transparent url("../../images/dcns/btn-bk-orange.png") no-repeat 0 0; 
     width: 150px;
     height: 30px;
     font-size: 14px;
@@ -129,7 +129,7 @@
   
   .small-blue
   {
-    background: transparent url("https://media.e-loue.com/images/btn-blue.png") no-repeat 0 0;
+    background: transparent url("../../images/dcns/btn-blue.png") no-repeat 0 0;
     width: 95px;
     height: 29px;
     line-height: 29px;
@@ -141,7 +141,7 @@
   }
   .medium-blue
   {
-    background: transparent url("../../images/btn-medium-blue.png") no-repeat 0 0;
+    background: transparent url("../../images/dcns/btn-medium-blue.png") no-repeat 0 0;
     width: 105px;
     height: 29px;
     line-height: 27px;
@@ -155,7 +155,7 @@
   
   .big-blue 
   {
-    background: transparent url("../../images/btn-big-blue.png") no-repeat 0 0;
+    background: transparent url("../../images/dcns/btn-big-blue.png") no-repeat 0 0;
     width: 125px;
     height: 29px;
     line-height: 30px;
@@ -169,7 +169,7 @@
   
   .long-blue 
   {
-    background: transparent url("../../images/btn-long-blue.png") no-repeat 0 0;
+    background: transparent url("../../images/dcns/btn-long-blue.png") no-repeat 0 0;
     width: 190px;
     height: 29px;
     line-height: 30px;
@@ -195,7 +195,7 @@
   padding-bottom: 10px;
   margin-bottom: 20px;
 }
-  #search .x12 { background: transparent url("../../images/separateur.png") no-repeat 345px 13px; }
+  #search .x12 { background: transparent url("../../images/dcns/separateur.png") no-repeat 305px 13px; }
   #search h1 { color: #7C4D32; }
   #search p { margin-bottom: 0; }
   #search a, #search span { font-size: 0.85em; }
@@ -228,7 +228,7 @@
 
   .content-header
   {
-    background: transparent url("../../images/content-header-bg.png") repeat-x 0 bottom;
+    background: transparent url("../../images/dcns/content-header-bg.png") repeat-x 0 bottom;
     margin-bottom: 1.5em;
   }
   
@@ -237,17 +237,6 @@
     content
 
 -------------------------------------------------------------- */  
-
-  .welcome-link {
-  background: transparent url("../../images/dcns/how.gif") no-repeat 0 0;
-  display: block;
-  position: absolute;
-  top: -20px;
-  left: 0;
-  text-indent: -9999px;
-  height: 234px;
-  width: 301px;
-  }
   
 /* --------------------------------------------------------------
 
@@ -341,14 +330,14 @@
   }
   .g-payment
   {
-    background: transparent url("https://media.e-loue.com/images/lock.png") no-repeat 0 0;
+    background: transparent url("../../images/dcns/lock.png") no-repeat 0 0;
     margin-right: 70px;
   }
-  .g-assurancy { background: transparent url("https://media.e-loue.com/images/assurancy.png") no-repeat 0 0; }
+  .g-assurancy { background: transparent url("../../images/dcns/assurancy.png") no-repeat 0 0; }
   
   .assurancy-partner 
   {
-    background: transparent url("https://media.e-loue.com/images/bg_partner.png") repeat 0 0;
+    background: transparent url("../../images/dcns/bg_partner.png") repeat 0 0;
     width:220px;
     text-align: center;
     margin-left: 20px;
@@ -401,14 +390,14 @@
 .twitter-box 
 {
   position: relative;
-  background: white url("../../images/eloue_icon.png") no-repeat 10px 11px;
+  background: white url("../../images/dcns/eloue_icon.png") no-repeat 10px 11px;
   border: 1px solid #CCDBE9;
   height: 42px;
   margin-top: 20px;
 }
   .twitter-dialogue 
   {
-    background: transparent url("https://media.e-loue.com/images/twitter-dialogue.png") no-repeat 0 0;
+    background: transparent url("../../images/dcns/twitter-dialogue.png") no-repeat 0 0;
     height: 21px;
     width: 15px;
     position: absolute;
@@ -423,7 +412,7 @@
 
 .twitter-info 
   {
-  background: transparent url("../../images/copyright.png") no-repeat top right;
+  background: transparent url("../../images/dcns/copyright.png") no-repeat top right;
   margin-top: 18px;
   height: 24px;
 }
@@ -573,7 +562,7 @@
 }
   .box-tools h3
   {
-    background: #D6E5F2 url("../../images/box_tools_header.png") repeat 0 0;
+    background: #D6E5F2 url("../../images/dcns/box_tools_header.png") repeat 0 0;
     padding: 10px 0;
     text-indent: 10px;
     color: #364C59;
@@ -581,7 +570,7 @@
   }
   .box-tools-top
   {
-    background: #D6E5F2 url("../../images/separateur.png") no-repeat 0 bottom;
+    background: #D6E5F2 url("../../images/dcns/separateur.png") no-repeat 0 bottom;
     padding-bottom: 1em;
     margin: 0 20px;
   }
@@ -592,7 +581,7 @@
 
   .box-tools-footer
   {
-    background: #D6E5F2 url("../../images/box_tools_header.png") repeat 0 0;
+    background: #D6E5F2 url("../../images/dcns/box_tools_header.png") repeat 0 0;
     border-top: 1px solid #B9CAD4;
     padding: 10px 20px;
   }
@@ -601,7 +590,7 @@
    
     .box-tools-tree li 
     {
-      background: #D6E5F2 url("../../images/branch-close.png") no-repeat 0 5px;
+      background: #D6E5F2 url("../../images/dcns/branch-close.png") no-repeat 0 5px;
       padding-left: 15px;
     }
     .box-tools-distance .ins 
@@ -625,7 +614,7 @@
 }
   .box-info h3 
   {
-    background: transparent url("../../images/content-h-bg.png") repeat-x 0 bottom;
+    background: transparent url("../../images/dcns/content-h-bg.png") repeat-x 0 bottom;
     padding-bottom: 15px;
     text-indent: 0;
     color: #364C59;
@@ -668,7 +657,7 @@
     color: #364C59;
   }
   .box-links ul { list-style-position: inside; }
-  .box-links li { list-style-image: url("https://media.e-loue.com/images/list-style-info.png"); }
+  .box-links li { list-style-image: url("../../images/dcns/list-style-info.png"); }
   .box-links li a { color: #6EB924; }
     
 /* --------------------------------------------------------------
@@ -694,7 +683,7 @@
   }
     .breadcrumbs li 
     {
-      background: transparent url("../../images/b-sign.png") no-repeat right -2px;
+      background: transparent url("../../images/dcns/b-sign.png") no-repeat right -2px;
       display: inline;
       padding: 5px 31px 5px 20px;
       margin: 0;
@@ -733,7 +722,7 @@
   .started-date { margin-right: 22px; }
 #booking-dates p input 
 { 
-  background: white url("../../images/icone-calendrier.png") no-repeat 91px 7px;
+  background: white url("../../images/dcns/icone-calendrier.png") no-repeat 91px 7px;
   width: 100px;
 }
 
@@ -761,7 +750,7 @@
 .product-pic 
 {
   float: left;
-  background: #F5F5F1 url("../../images/pic-bg.png") repeat 0 0;
+  background: #F5F5F1 url("../../images/dcns/pic-bg.png") repeat 0 0;
   border: 1px solid #EAEAEA;
   margin-bottom: 15px;
   padding-top: 3px;
@@ -784,7 +773,7 @@
 
 .flatpage ul { list-style-position: inside; }
 
-.flatpage li { list-style-image: url("https://media.e-loue.com/images/list-style-info.png"); }
+.flatpage li { list-style-image: url("../../images/dcns/list-style-info.png"); }
 
 /* --------------------------------------------------------------
 
@@ -859,7 +848,7 @@
   }
     .bk-dates
     {
-      background: transparent url("../../images/bk_dates_bg.png") repeat 0 0;
+      background: transparent url("../../images/dcns/bk_dates_bg.png") repeat 0 0;
       float: left;
       width: 90px;
       height: 90px;
@@ -949,7 +938,7 @@
 
     .bk-warning 
     {
-      background: transparent url("https://media.e-loue.com/images/warning.png") no-repeat 133px 3px;
+      background: transparent url("../../images/dcns/warning.png") no-repeat 133px 3px;
       color: #6EB924!important;
       padding-top: 3px;
       font-size: 0.9em;
@@ -1014,7 +1003,7 @@
 }
   .wizard-header
   {
-    background: transparent url("../../images/sbs-header-bg.png") no-repeat top right;
+    background: transparent url("../../images/dcns/sbs-header-bg.png") no-repeat top right;
     float: left;
     padding: 10px 25px 10px 10px;
   }
@@ -1135,7 +1124,7 @@
   .prices-form .ins { width: 34px; text-align: right; }
   .prices-form .calculator a 
   {
-    background: transparent url("../../images/calculator.png") no-repeat 0 0;
+    background: transparent url("../../images/dcns/calculator.png") no-repeat 0 0;
     display: block;
     height: 17px;
     width: 15px;
@@ -1145,7 +1134,7 @@
   .prices-form .supp-list-prices 
   {
     float: right;
-    background: #ECF6FF url("https://media.e-loue.com/images/patern2.png") repeat 0 0;
+    background: #ECF6FF url("../../images/dcns/patern2.png") repeat 0 0;
     margin-left: 0;
     width: 27px;
     border-left: 1px solid #B9CAD4;
@@ -1233,7 +1222,7 @@ input.price { color: #000; }
 
   .ht-col h1
   {
-    background: transparent url("../../images/content-h-bg.png") repeat-x 0 bottom;
+    background: transparent url("../../images/dcns/content-h-bg.png") repeat-x 0 bottom;
     font-weight: bold;
     text-align: center;
     padding: 15px 0;
@@ -1270,15 +1259,15 @@ input.price { color: #000; }
         margin-bottom: 20px;
       }
       
-       .ht-n1-g { background: transparent url("../../images/steps_number.png") no-repeat 0px 0px; }
-       .ht-n2-g { background: transparent url("../../images/steps_number.png") no-repeat 0px -60px; }
-       .ht-n3-g { background: transparent url("../../images/steps_number.png") no-repeat 0px -120px; }
-       .ht-n4-g { background: transparent url("../../images/steps_number.png") no-repeat 0px -180px; }
+       .ht-n1-g { background: transparent url("../../images/dcns/steps_number.png") no-repeat 0px 0px; }
+       .ht-n2-g { background: transparent url("../../images/dcns/steps_number.png") no-repeat 0px -60px; }
+       .ht-n3-g { background: transparent url("../../images/dcns/steps_number.png") no-repeat 0px -120px; }
+       .ht-n4-g { background: transparent url("../../images/dcns/steps_number.png") no-repeat 0px -180px; }
        
-       .ht-n1-o { background: transparent url("../../images/steps_number.png") no-repeat -60px 0px; }
-       .ht-n2-o { background: transparent url("../../images/steps_number.png") no-repeat -60px -59px; }
-       .ht-n3-o { background: transparent url("../../images/steps_number.png") no-repeat -60px -119px; }
-       .ht-n4-o { background: transparent url("../../images/steps_number.png") no-repeat -60px -179px; }
+       .ht-n1-o { background: transparent url("../../images/dcns/steps_number.png") no-repeat -60px 0px; }
+       .ht-n2-o { background: transparent url("../../images/dcns/steps_number.png") no-repeat -60px -59px; }
+       .ht-n3-o { background: transparent url("../../images/dcns/steps_number.png") no-repeat -60px -119px; }
+       .ht-n4-o { background: transparent url("../../images/dcns/steps_number.png") no-repeat -60px -179px; }
        
        .ht-number.orange { background-color: #FF7200; }
        
@@ -1309,7 +1298,7 @@ input.price { color: #000; }
         .ht-fonction h1
         {
           text-align:center;
-          background: transparent url("../../images/content-h-bg.png") repeat-x 0 bottom;
+          background: transparent url("../../images/dcns/content-h-bg.png") repeat-x 0 bottom;
           margin: 0 40px;
           padding-bottom: 20px;
           margin-bottom: 20px;
@@ -1338,13 +1327,13 @@ input.price { color: #000; }
               height: 70px;
               margin-right: 20px;
             }
-              .assurancy { background: transparent url("../../images/fonction.png") no-repeat 0px 0px; }
-              .car { background: transparent url("../../images/fonction.png") no-repeat -80px 0px; }
-              .laptop { background: transparent url("../../images/fonction.png") no-repeat -160px 0px; }
+              .assurancy { background: transparent url("../../images/dcns/fonction.png") no-repeat 0px 0px; }
+              .car { background: transparent url("../../images/dcns/fonction.png") no-repeat -80px 0px; }
+              .laptop { background: transparent url("../../images/dcns/fonction.png") no-repeat -160px 0px; }
               
-              .lock { background: transparent url("../../images/fonction.png") no-repeat 0px -70px; }
-              .people { background: transparent url("../../images/fonction.png") no-repeat -80px -70px; }
-              .money { background: transparent url("../../images/fonction.png") no-repeat -160px -70px; }
+              .lock { background: transparent url("../../images/dcns/fonction.png") no-repeat 0px -70px; }
+              .people { background: transparent url("../../images/dcns/fonction.png") no-repeat -80px -70px; }
+              .money { background: transparent url("../../images/dcns/fonction.png") no-repeat -160px -70px; }
               
             .ht-f-desc span
             {

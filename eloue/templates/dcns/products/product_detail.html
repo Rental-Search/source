@@ -7,9 +7,6 @@
 
 {% block content %}
 <div id="search" class="xgrid">
-    <div class="x12">
-	  <h1>{% trans "Avec e-loue, tout se loue !" %}</h1>
-	</div>
 	<form class="form" action="{% url product_list %}">
 	<div class="x5">
 		<p>
@@ -127,15 +124,18 @@
     		</table>
         </div>
         <div class="box-info">
-            <h3>{% trans "Paiement" %}</h3>
-            <p>
-                {% if product.payment_type == 0 %}
-                {% trans "Le paiement est hors ligne. Vous payerez le propriétaire le premier jour de la location."%}
-                {% else %}
-                {% trans "Le paiement est en ligne. Vous payer au moment de la réservation. Vous ne serez débité que le premier jour de la location."%}
-                {% endif %}
-            </p>
-        </div>
+              {% if product.payment_type == 0 %}
+              <h3>{% trans "Paiement hors ligne" %}</h3>
+              <p>
+                  {% trans "Le propriétaire souhaite le paiement hors ligne (chèque/espèce). Vous le payerez le premier jour de la location."%}
+              </p>
+              {% else %}
+              <h3>{% trans "Paiement en ligne" %}</h3>
+              <p>
+                {% trans "Le propriétaire souhaite le paiement en ligne. Vous payez au moment de la réservation via PayPal. Le montant est débité lors du premier jour de location."%}
+              {% endif %}
+              </p>
+         </div>
     </div>
 </div>
     

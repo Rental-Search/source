@@ -10,7 +10,7 @@
 {% block content %}
 	<div id="search" class="xgrid">
         <div class="x12">
-		  <h1>{% trans "Location entre collaborateur" %}</h1>
+		  <h1>{% trans "Location entre collègues" %}</h1>
 		</div>
 		<form class="form" action="{% url product_list %}">
 		<div class="x5">
@@ -36,7 +36,7 @@
 	<div id="content-home" class="xgrid">
  	 <div class="x8">
 		<div class="content-header x8 first">
-		 <h2>{% trans "Les curiosités d'e-loue" %}</h2>
+		 <h2>{% trans "A louer en ce moment" %}</h2>
 		</div>
 		 {% cache 900 curiosities site %}
 	     {% for curiosity in curiosities|slice:":4" %}
@@ -63,17 +63,19 @@
 	{% endcache %}
 	 </div>
 	 <div class="x4">
-		<div class="content-header x4 first">
+		<div class="content-header x4 first" style="margin-bottom: 3px;">
 		 <h2>{% trans "Comment ça marche ?" %}</h2>
 		</div>
-	    <div class="x4 first" style='position: relative;'>
-	        <a href="/comment-ca-marche/" class="welcome-link">Louez vos objets entre co</a>
+	    <div class="x4 first" style="margin-bottom: 20px;">
+	        <a href="/comment-ca-marche/" class="welcome-link">
+	           <img src="{{ MEDIA_URL }}images/dcns/how.gif" />
+	        </a>
 	    </div>
 	</div>
 	<div class="x12 horizontal-assurancy">
 	    <div class="guarantees">
 	        <div class="content-header">
-    			<h2>{% trans "Avec les garanties e-loue, louez en toute sécurité !" %}</h2>
+    			<h2>{% trans "Avec nos garanties, louez en toute sécurité !" %}</h2>
     		</div>
 			<div class="g-payment">
 			    {% blocktrans %}
@@ -90,7 +92,7 @@
             <div class="assurancy-slide">
                 <a href="{% trans "/comment-ca-marche/" %}" class="slide">
                     <img src="{{ MEDIA_URL }}images/pp-verification-seal.gif" alt="PayPal" width="100" height="100" class="pp"/>
-                    <img src="{{ MEDIA_URL }}images/assurone.png" alt="Assurone" width="157" height="90" class="assurone"/>
+                    <img src="{{ MEDIA_URL }}images/dcns/assurone.png" alt="Assurone" width="157" height="90" class="assurone"/>
                 </a>
             </div>
         </div>
