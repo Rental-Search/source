@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "La page demandée est introuvable" %}{% endblock %}
+
+{% block content %}
+<div id="content-home" class="xgrid">
+    <div class="x12">
+       {% url contact as contact_url %}
+       {% blocktrans %}
+        Si l'erreur persiste, merci de nous <a href="{{ contact_url }}">contacter</a>.
+       {% endblocktrans %}
+      </div>
+</div>
+{% endblock %}
