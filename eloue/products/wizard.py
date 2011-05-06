@@ -121,7 +121,7 @@ class AlertWizard(GenericFormWizard):
             alert.send_alerts()
         
         messages.success(request, _(u"Votre alerte a bien été créée"))
-        return redirect_to(request, reverse("alert_list"), permanent=False)
+        return redirect_to(request, reverse("alert_edit"), permanent=False)
     
     def get_template(self, step):
         if issubclass(self.form_list[step], EmailAuthenticationForm):
