@@ -346,6 +346,13 @@
   .assurancy-slide
   {
     padding-top: 10px;
+    position: relative;
+  }
+  
+  .assurancy-slide a 
+  {
+    display: block;
+    position: relative;
   }
   
   .pp { margin-left: 60px; }
@@ -1119,7 +1126,7 @@
   .prices-form li 
   { 
     float: left;
-    padding-right: 15px;
+    padding-right: 12px;
   }
   .prices-form .ins { width: 34px; text-align: right; }
   .prices-form .calculator a 
