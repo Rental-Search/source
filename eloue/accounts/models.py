@@ -200,9 +200,10 @@ class Patron(User):
     def is_verified(self):
         try:
             response = accounts.get_verified_status(
-                emailAddress=self.email,
+                emailAddress=self.paypal_email,
                 firstName=self.first_name,
-                lastName=self.last_name
+                lastName=self.last_name,
+                matchCriteria="NAME"
             )
             return response['accountStatus'] == 'VERIFIED'
         except PaypalError, e:
