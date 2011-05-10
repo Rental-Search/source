@@ -123,6 +123,8 @@ class PatronEditForm(forms.ModelForm):
     last_name = forms.CharField(label=_(u"Nom"), required=True, widget=forms.TextInput(attrs={'class': 'inm'}))
     email = forms.EmailField(label=_(u"Email"), max_length=75, widget=forms.TextInput(attrs={
         'autocapitalize': 'off', 'autocorrect': 'off', 'class': 'inm'}))
+    paypal_email = forms.EmailField(label=_(u"PayPal Email"), required=False, max_length=75, widget=forms.TextInput(attrs={
+            'autocapitalize': 'off', 'autocorrect': 'off', 'class': 'inm'}))
     is_professional = forms.BooleanField(label=_(u"Êtes-vous un professionnel ?"), required=False, initial=False)
     company_name = forms.CharField(label=_(u"Nom de la société"), required=False, widget=forms.TextInput(attrs={'class': 'inm'}))
     is_subscribed = forms.BooleanField(required=False, initial=False)
@@ -154,7 +156,7 @@ class PatronEditForm(forms.ModelForm):
     class Meta:
         model = Patron
         fields = ('civility', 'username', 'first_name', 'last_name',
-            'email', 'is_professional', 'company_name', 'is_subscribed')
+            'email', 'paypal_email', 'is_professional', 'company_name', 'is_subscribed')
             
             
 class PatronPasswordChangeForm(PasswordChangeForm):
@@ -190,10 +192,14 @@ class PatronPaypalForm(forms.ModelForm):
     def clean(self):
         paypal_email = self.cleaned_data.get('paypal_email', None)
         paypal_exists = self.cleaned_data['paypal_exists']
-        if paypal_exists and not paypal_email:
-            raise forms.ValidationError(_(u"Vous devez entrer votre email Paypal"))
-        if not paypal_exists and not paypal_email:
-            self.cleaned_data['paypal_email'] = self.instance.email
+        self.paypal_exists = False
+        if paypal_exists:
+            self.paypal_exists = True
+        if not paypal_email:
+            if paypal_exists:
+                raise forms.ValidationError(_(u"Vous devez entrer votre email Paypal"))
+            else:
+                self.cleaned_data['paypal_email'] = self.instance.email
         return self.cleaned_data
     
     class Meta:

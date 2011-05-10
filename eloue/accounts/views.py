@@ -26,6 +26,7 @@ from eloue.accounts.wizard import AuthenticationWizard
 
 from eloue.products.forms import FacetedSearchForm
 from eloue.rent.models import Booking
+import time
 
 PAGINATE_PRODUCTS_BY = getattr(settings, 'PAGINATE_PRODUCTS_BY', 10)
 USE_HTTPS = getattr(settings, 'USE_HTTPS', True)
@@ -84,9 +85,24 @@ def patron_detail(request, slug, patron_id=None, page=None):
 @login_required
 def patron_edit(request):
     form = PatronEditForm(request.POST or None, instance=request.user)
+    paypal = request.GET.get('paypal', False)
+    redirect_path = request.REQUEST.get('next', '')
     if form.is_valid():
-        form.save()
-        messages.success(request, _(u"Vos informations ont bien été modifiées"))
+        patron = form.save()
+        if paypal: 
+            if patron.is_verified:
+                protocol = 'https' if USE_HTTPS else 'http'
+                domain = Site.objects.get_current().domain
+                domain = "localhost:8000" # for test sake
+                if not redirect_path or '//' in redirect_path or ' ' in redirect_path:
+                    redirect_path = reverse('dashboard')
+                return_url = "%s://%s%s?paypal=true" % (protocol, domain, redirect_path)
+                messages.success(request, _(u"Vos informations ont bien été modifiées et votre compte paypal est vérifié"))    
+                return redirect_to(request, return_url)
+            else:
+                messages.error(request, _(u"Vos informations ont bien été modifiées mais nous n'avons pas pu vérifier votre compte paypal"))
+        else:
+            messages.success(request, _(u"Vos informations ont bien été modifiées"))    
     return direct_to_template(request, 'accounts/patron_edit.html', extra_context={'form': form, 'patron': request.user})
 
 
@@ -108,11 +124,23 @@ def patron_paypal(request):
         redirect_path = reverse('dashboard')
     if form.is_valid():
         patron = form.save()
+        
         protocol = 'https' if USE_HTTPS else 'http'
         domain = Site.objects.get_current().domain
+        domain = "localhost:8000" # for test sake
+        
         return_url = "%s://%s%s?paypal=true" % (protocol, domain, redirect_path)
+        profile_edit_url = "%s://%s%s?next=%s&paypal=true"% (protocol, domain, reverse('patron_edit'), redirect_path)
         paypal_redirect = patron.create_account(return_url=return_url)
-        if paypal_redirect:
+        
+        if form.paypal_exists:
+            if patron.is_verified:
+                messages.success(request, _(u"Votre compte paypal est vérifié"))
+                return redirect_to(request, return_url)
+            else:
+                messages.error(request, _(u"Nous n'avons pas pu vérifier votre compte paypal, veuillez modifier votre nom ou prénom ou email paypal"))
+                return redirect_to(request, profile_edit_url)
+        elif paypal_redirect:
             return redirect_to(request, paypal_redirect)
         patron.paypal_email = None
         patron.save()

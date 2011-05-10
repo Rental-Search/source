@@ -121,6 +121,8 @@ def booking_accept(request, booking_id):
     if booking.product.payment_type!=PAYMENT_TYPE.NOPAY:
         if not booking.owner.has_paypal():
             return redirect_to(request, "%s?next=%s" % (reverse('patron_paypal'), booking.get_absolute_url()))
+        elif not booking.owner.is_verified:
+            return redirect_to(request, "%s?next=%s" % (reverse('patron_edit'), booking.get_absolute_url()))
     form = BookingStateForm(request.POST or None,
         initial={'state': Booking.STATE.PENDING},
         instance=booking)
