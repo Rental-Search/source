@@ -49,14 +49,10 @@ class EmailAuthenticationForm(forms.Form):
         for rule in EMAIL_BLACKLIST:
             if re.search(rule, email):
                 raise forms.ValidationError(_(u"Pour garantir un service de qualité et la sécurité des utilisateurs de e-loue.com, vous ne pouvez pas vous enregistrer avec une adresse email jetable."))
-        
-        if not settings.AUTHENTICATION_BACKENDS[0] == 'eloue.accounts.auth.PrivatePatronModelBackend':
-            if not exists and Patron.objects.filter(email=email).exists():
-                raise forms.ValidationError(_(u"Un compte existe déjà pour cet email"))
+    
+        if not exists and Patron.objects.filter(email=email).exists():
+            raise forms.ValidationError(_(u"Un compte existe déjà pour cet email"))
                 
-        if settings.AUTHENTICATION_BACKENDS[0] == 'eloue.accounts.auth.PrivatePatronModelBackend':
-            if not exists and not PatronAccepted.objects.filter(email=email, sites=Site.objects.get_current()).exists():
-                raise forms.ValidationError(_(u"Une addresse email dcns est obligatoire"))
         return email
     
     def clean(self):
