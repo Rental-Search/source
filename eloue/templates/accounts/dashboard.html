@@ -4,50 +4,43 @@
 {% block title %}{% trans "Votre tableau de bord" %}{% endblock %}
 
 {% block content %}
-<div id="content-dash" class="clearfix">
-	<div id="menu" class="dash">
-		<ul class="x12">
-			<li class="menu-tab first selected">{% trans "Tableau de bord" %}</li>
+<div id="content" class="xgrid">
+    <div class="content-top">
+        <ul id="menu" class="x12">
+            <li class="menu-tab first selected">{% trans "Tableau de bord" %}</li>
 			<li class="menu-tab"><a href="{% url owner_booking %}">{% trans "Propriétaire" %}</a></li>
 			<li class="menu-tab"><a href="{% url borrower_booking %}">{% trans "Locataire" %}</a></li>
 			<li class="menu-tab"><a href="{% url patron_edit %}">{% trans "Mon compte" %}</a></li>
-		</ul>
-	</div>
-	<div class="x3">
-		<div class="welcome-dash x3 first">
-			<p class="pseudo">{{ user.username }}</p>
-			<a href="{% url patron_edit %}" class="btn btn-profil">{% trans "Modifier votre profil" %}</a>
-		</div>
-		<div class="box-info x3 first">
-			<div class="box-info-header">
-				<h5>{% trans "Liens utiles" %}</h5>
-			</div>
-			<div class="box-info-content">
-				<ul>
-					<li><a href="{% url product_create %}">{% trans "Mettre en location" %}</a></li>
-					<li><a href="{% url owner_product %}">{% trans "Accéder à mes objets" %}</a></li>
-					<li><a href="{% trans "/comment-ca-marche/" %}">{% trans "Comment ça marche ?"%}</a></li>
-				</ul>
-			</div>
-		</div>
-	</div>
-	<div class="x9">
-		<div class="content-header x9 first">
-			<h2>{% trans "Bienvenue sur e-loue ! Que pouvez-vous faire ensuite ?" %}</h2>
-		</div>
-		<div class="new-user box-info-content x9">
-			<ul>
-				<li><a href="{% url product_create %}">{% trans "Mettre un objet en location" %}</a></li>
-				<li><a href="{% url patron_edit %}">{% trans "Editer votre profil" %}</a></li>
-				<li><a href="{% url home %}">{% trans "Chercher une location" %}</a></li>
-			</ul>
-		</div>
-		<div class="content-header x9 first">
-			<h2>{% trans "Locations en tant que <strong>propriétaire</strong>" %}</h2>
-		</div>
-		<div class="resume-dash x9 first">
-			<div class="resume-box-dash x2 first">
-			 {% with user.bookings.authorized|length as counter %}
+        </ul>
+    </div>
+    <div class="x3" style="margin-top: 20px;">
+        <div class="box-welcome" style="text-align: center;">
+            <p>{{ user.username }}</p>
+            <a href="{% url patron_edit %}" class="btn long-blue">{% trans "Modifier votre profil" %}</a>
+        </div>
+        <div class="box-links">
+            <h3>{% trans "Liens utiles" %}</h3>
+            <ul>
+                <li><a href="{% url product_create %}">{% trans "Mettre en location" %}</a></li>
+                <li><a href="{% url owner_product %}">{% trans "Accéder à mes objets" %}</a></li>
+                <li><a href="{% trans "/comment-ca-marche/" %}">{% trans "Comment ça marche ?"%}</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="x9" style="margin-top: 20px;">
+        <div class="content-header x9 first">
+            <h2>{% trans "Bienvenue sur e-loue ! Que pouvez-vous faire ensuite ?" %}</h2>
+        </div>
+        <ul class="x8">
+            <li><a href="{% url product_create %}">{% trans "Mettre un objet en location" %}</a></li>
+			<li><a href="{% url patron_edit %}">{% trans "Editer votre profil" %}</a></li>
+			<li><a href="{% url home %}">{% trans "Chercher une location" %}</a></li>
+        </ul>
+        <div class="content-header x9 first">
+            <h2>{% trans "Locations en tant que <strong>propriétaire</strong>" %}</h2>
+        </div>
+        <div class="stat-number x2">
+            {% with user.bookings.authorized|length as counter %}
 			  <a href="{% url owner_booking %}" class="highlight">{{ counter }}</a><br />
 			  {% blocktrans count counter as counter %}
                 <span>Location<br />en attente</span>
@@ -55,9 +48,9 @@
 			    <span>Locations<br />en attente</span>
               {% endblocktrans %}
 			 {% endwith %}
-			</div>
-			<div class="resume-box-dash x2">
-			 {% with user.bookings.pending|length as counter %}
+        </div>
+        <div class="stat-number x2">
+            {% with user.bookings.pending|length as counter %}
 			  <a href="{% url owner_booking %}">{{ counter }}</a><br />
 			  {% blocktrans count counter as counter %}
                 <span>Location<br />active</span>
@@ -65,9 +58,9 @@
 			    <span>Locations<br />actives</span>
               {% endblocktrans %}
 			 {% endwith %}
-			</div>
-			<div class="resume-box-dash x2">
-			 {% with user.products.all|length as counter %}
+        </div>
+        <div class="stat-number x2">
+            {% with user.products.all|length as counter %}
 			  <a href="{% url owner_product %}">{{ counter }}</a><br />
 			  {% blocktrans count counter as counter %}
                 <span>Objet<br />en location</span>
@@ -75,14 +68,12 @@
  			    <span>Objets<br />en location</span>
               {% endblocktrans %}
 			 {% endwith %}
-			</div>
-		</div>
-		<div class="content-header x9 first">
-			<h2>{% trans "Locations en tant que <strong>locataire</strong>" %}</h2>
-		</div>
-		<div class="resume-dash x9 first">
-			<div class="resume-box-dash x2 first">
-			 {% with user.rentals.authorized|length as counter %}
+        </div>
+        <div class="content-header x9 first">
+            <h2>{% trans "Locations en tant que <strong>locataire</strong>" %}</h2>
+        </div>
+        <div class="stat-number x2">
+            {% with user.rentals.authorized|length as counter %}
 				<a href="{% url borrower_booking %}" class="highlight">{{ counter }}</a><br />
 				{% blocktrans count counter as counter %}
                  <span>Location<br />en attente</span>
@@ -90,9 +81,9 @@
 			     <span>Locations<br />en attente</span>
                {% endblocktrans %}
 			 {% endwith %}
-			</div>
-			<div class="resume-box-dash x2">
-			 {% with user.rentals.pending|length as counter %}
+        </div>
+        <div class="stat-number x2">
+            {% with user.rentals.pending|length as counter %}
 			  <a href="{% url borrower_booking %}">{{ counter }}</a><br />
 			  {% blocktrans count counter as counter %}
                 <span>Location<br />active</span>
@@ -100,9 +91,7 @@
 			    <span>Locations<br />actives</span>
               {% endblocktrans %}
 			 {% endwith %}
-			</div>
-		</div>
-	</div>
+        </div>
+    </div>
 </div>
 {% endblock %}
-

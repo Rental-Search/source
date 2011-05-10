@@ -4,12 +4,10 @@
 {% block title %}{% trans "Identification" %}{% endblock %}
 
 {% block content %}
-<div id="content" class="register clearfix">
-	<div class="content-header x12">
+<div id="content-home" class="xgrid">
+    <div class="content-header x12">
 		<h1>{% trans "Identification" %}</h1>
 	</div>
-	<div class="x9">
-		{% include "accounts/partials/login.html" %}
-	</div>
-</div>{# content #}
+	{% include "accounts/partials/login.html" %}
+</div>
 {% endblock %}

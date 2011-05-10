@@ -222,7 +222,6 @@ COMPRESS_YUI_BINARY = getattr(local, 'COMPRESS_YUI_BINARY', '/usr/bin/yui-compre
 COMPRESS_CSS = {
     'master': {
         'source_filenames': (
-            'css/master.css',
             'css/screen.css',
             'css/custom.css',
             'css/plugins/ui/jquery.ui.core.css',

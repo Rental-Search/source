@@ -4,16 +4,14 @@
 {% block title %}{% trans "Contactez e-loue" %}{% endblock %}
 
 {% block content %}
-<div id="content-dash" class="clearfix">
-	<div id="menu" class="dash">
-		<div class="ht-title x4">
-			<h1>{% trans "Contactez-nous" %}</h1>
-		</div>
-	</div>
-	<div class="contact more-info x9">
-	<form class="form" action="{% url contact %}" method="POST">
-		{% csrf_token %}
-		<table>
+<div id="content" class="xgrid">
+    <div class="content-top">
+        <h1>Contactez-nous</h1>
+    </div>
+	<div id="contact" class="x8 p2">
+	    <form class="form" action="{% url contact %}" method="POST">
+	    {% csrf_token %}
+	    <table class="more-info">
 			<tr>
 				<th><label>{{ form.sender.label }} {% if form.sender.field.required %}*{% endif %} :</label></th>
 				<td {% if form.sender.errors %} class="error-field" {% endif %}>
@@ -51,16 +49,19 @@
 				</td>
 			</tr>
 			<tr>
-				<td colspan="2">
+			    <th></th>
+				<td>
 			 	 {{ form.cc_myself}} <label for="id_cc_myself">{{ form.cc_myself.label }}</label>
 				</td>
 			</tr>
 		</table>
 		<p class="required-field">{% trans "* = champ obligatoire" %}</p>
 	</div>
-	<div class="submit-wizard x9">
-		<a href="{% url home %}">{% trans "Annuler" %}</a> {% trans "ou" %} 
-		<input type="submit" class="btn big-green" value="{% trans "Envoyer" %}" />
+	<div id="submit-wizard" class="x12">
+	    <p>
+		    <a href="{% url home %}">{% trans "Annuler" %}</a> {% trans "ou" %} 
+    		<input type="submit" class="btn big-green" value="{% trans "Envoyer" %}" />
+    	</p>
 	</form>
 	</div>
 </div>

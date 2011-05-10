@@ -4,26 +4,29 @@
 {% block title %}{% trans "Complétez votre profil" %}{% endblock %}
 
 {% block content %}
-<div id="content" class="clearfix">
-	<div class="sbs x12">
-		<div class="sbs-header">
-			<h1>{% trans "Réservation" %}</h1>
-		</div>
-		<ol class="sbs-steps">
-			{% if not user.is_authenticated %}
-				<li class="on">{% trans "1. Identifiez-vous" %}</li>
-				<li class="off">{% trans "2. Confirmez votre réservation" %}</li>
-			{% else %}
-				<li class="on">{% trans "1. Information de contact" %}</li>
-				<li class="off">{% trans "2. Confirmez votre réservation" %}</li>
-			{% endif %}
-		</ol>
-		<a href="{% url faq-topic-list %}" class="btn big-blue">{% trans "Obtenir de l'aide" %}</a>
-	</div>
-	<div class="content-header x12">
-		<h2>{% trans "Identification" %}</h2>
+<div id="content-home" class="xgrid">
+    <div id="wizard" class="x12">
+        <div class="wizard-header">
+            <h1>{% trans "Réservation" %}</h1>
+        </div>
+         <ol class="sbs-steps">
+ 			{% if not user.is_authenticated %}
+ 				<li class="on">{% trans "1. Identifiez-vous" %}</li>
+ 				<li>{% trans "2. Confirmez votre réservation" %}</li>
+ 			{% else %}
+ 				<li class="on">{% trans "1. Information de contact" %}</li>
+ 				<li>{% trans "2. Confirmez votre réservation" %}</li>
+ 			{% endif %}
+ 		</ol>
+        <a href="{% url faq-topic-list %}" class="btn big-blue">{% trans "Obtenir de l'aide" %}</a>
+    </div>
+    <div class="content-header x12">
+		{% if form.addresses %}
+			<h2>{% trans "Choisissez une adresse pour l'objet :" %}</h2>
+		{% else %}
+			<h2>{% trans "Complétez votre profil et choisissez une adresse pour la l'objet :" %}</h2>
+		{% endif %}
 	</div>
 	{% include "accounts/partials/missing.html" %}
-</div>{# content #}
-
+</div>
 {% endblock %}
