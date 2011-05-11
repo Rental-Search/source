@@ -1,5 +1,83 @@
 /* --------------------------------------------------------------
 
+   radius
+
+-------------------------------------------------------------- */
+
+/* radius all */
+#search, #content, #content-home, .box-tools, .box-info, .stat-number, .booking-resume, .horizontal-assurancy, .filters
+{
+  -moz-border-radius:5px;
+  -webkit-border-radius:5px;
+  border-radius:5px;
+}
+/* radius top¨*/
+#footer, .box-tools h3, .breadcrumb, .content-top
+{
+  -moz-border-radius:5px 5px 0px 0px;
+  -webkit-border-radius:5px 5px 0px 0px;
+  border-radius:5px 5px 0px 0px;
+}
+
+/* radius bottom */
+.content-community, .box-tools-footer, .total
+{
+  -moz-border-radius:0px 0px 5px 5px;
+  -webkit-border-radius:0px 0px 5px 5px;
+  border-radius:0px 0px 5px 5px;
+}
+
+/* radius right */
+.assurancy-partner
+{
+  -moz-border-radius: 0px 5px 5px 0px;
+  -webkit-border-radius: 0px 5px 5px 0px;
+  border-radius: 0px 5px 5px 0px;
+}
+
+/* --------------------------------------------------------------
+
+   shadow
+
+-------------------------------------------------------------- */
+/* blue */
+#search, #content, #content-home, #footer
+{
+  box-shadow: 1px 1px 0px rgba(193, 208, 222, 0.75);
+  -moz-box-shadow: 1px 1px 0px rgba(193, 208, 222, 0.75);
+  -webkit-box-shadow: 1px 1px 0px rgba(193, 208, 222, 0.75); 
+}
+
+/* white */
+.inb
+{
+  -webkit-box-shadow: 0 1px 0 rgba(255, 255, 255, 0.4);
+  -moz-box-shadow: 0 1px 0 rgba(255, 255, 255, 0.4);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.4);
+}
+
+/* --------------------------------------------------------------
+
+   text-shadow
+
+-------------------------------------------------------------- */
+#search
+{
+  text-shadow: 0px 1px 0px rgba(255, 255, 255, 0.5);
+  -moz-text-shadow: 0px 1px 0px rgba(255, 255, 255, 0.5);
+  -webkit-text-shadow: 0px 1px 0px rgba(255, 255, 255, 0.5);
+}
+
+/* --------------------------------------------------------------
+
+  body
+
+-------------------------------------------------------------- */
+
+body { background: #ECF6FF url("../images/body-bg.png") repeat 0 0; }
+
+/* --------------------------------------------------------------
+
    top-header
 
 -------------------------------------------------------------- */
@@ -76,12 +154,15 @@
   
   .medium-green
   {
-    background: transparent url("../images/btn-medium-green.png") no-repeat 0 0;
+    background: transparent url("../images/btn-green1-2.png") no-repeat 0 0;
     width: 165px;
     height: 32px;
     font-size: 14px;
     line-height: 31px;
   }
+    .medium-green:hover { background: transparent url("../images/btn-green1-2.png") no-repeat 0 -32px; }
+    .medium-green:active { background: transparent url("../images/btn-green1-2.png") no-repeat 0 -64px; }
+    
   .big-green 
   {
     background: transparent url("../images/btn-big-green.png") no-repeat 0 0;
@@ -110,12 +191,15 @@
   }
   .big-orange
   {
-   background: transparent url("../images/btn-big-orange.png") no-repeat 0 0; 
+   background: transparent url("../images/btn-orange1-2.png") no-repeat 0 0; 
    width: 140px;
    height: 38px;
    font-size: 18px;
    line-height: 34px;
   }
+    .big-orange:hover { background: transparent url("../images/btn-orange1-2.png") no-repeat 0 -38px; }
+    .big-orange:active { background: transparent url("../images/btn-orange1-2.png") no-repeat 0 -76px; }
+    
   .bk-orange
   {
     background: transparent url("../images/btn-bk-orange.png") no-repeat 0 0; 
@@ -189,7 +273,10 @@
 -------------------------------------------------------------- */
 #search 
 {
-  background: #E4EFF9;
+  background: #E4EFF9; /* old browser */
+  background: -moz-linear-gradient(top, #E4EFF9 0%, #D6E5F2 99%); /* firefox */
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#E4EFF9), color-stop(99%,#D6E5F2)); /* webkit */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#E4EFF9', endColorstr='#D6E5F2',GradientType=0 ); /* ie */
   border: 1px solid #BFD1E2;
   padding-top: 10px;
   padding-bottom: 10px;
@@ -200,7 +287,7 @@
   #search p { margin-bottom: 0; }
   #search a, #search span { font-size: 0.85em; }
   #search a { color: #6EB924; }
-  #search .x2 { margin-top: 26px; }
+  #search .x2 { margin-top: 28px; }
   
 
 /* --------------------------------------------------------------
@@ -231,12 +318,6 @@
     background: transparent url("../images/content-header-bg.png") repeat-x 0 bottom;
     margin-bottom: 1.5em;
   }
-  
-/* --------------------------------------------------------------
-
-    content
-
--------------------------------------------------------------- */
 
 .app-iphone { border-bottom: 2px solid #546B78; }
 .app-iphone img { margin-bottom: -6px; }
@@ -289,12 +370,13 @@
     padding-bottom: 10px;
   }
   .community-portlet-content .fb-icon, .community-portlet-content .tw-icon {
-  display: block;
-  float: left;
-  height: 33px;
-  width: 33px;
-  margin-left: 10px;
-  margin-right: 10px;
+    display: block;
+    float: left;
+    height: 33px;
+    width: 33px;
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-top: 5px;
   }
   .fb-icon { background: transparent url("../images/social_icons.png") no-repeat 0 0; }
   .tw-icon { background: transparent url("../images/social_icons.png") no-repeat 0 -33px; }
@@ -350,8 +432,6 @@
   text-align: right;
 }
 
-
-
 /* --------------------------------------------------------------
 
      product mics
@@ -362,7 +442,7 @@
 
 /* --------------------------------------------------------------
 
-     assurancy
+     horizontal assurancy
 
 -------------------------------------------------------------- */
 .horizontal-assurancy
@@ -418,6 +498,27 @@
   
   .pp { margin-left: 60px; }
   .assurone { margin-left: 30px; }
+
+/* --------------------------------------------------------------
+
+      horizontal assurancy
+
+-------------------------------------------------------------- */
+.vertical-assurancy li
+{
+  padding-bottom: 5px;
+  padding-left: 40px;
+}
+  .va-pp
+  {
+    background: transparent url("../images/lock.png") no-repeat 0 3px;
+    margin-bottom: 20px;
+  }
+  .va-assurone
+  {
+    background: transparent url("../images/assurancy.png") no-repeat 0 3px;
+    margin-bottom: 0;
+  }
   
 /* --------------------------------------------------------------
 
@@ -500,7 +601,10 @@
   float: left;
   width: 618px;
   border: 1px solid #B9CAD4;
-  background-color: #F6F7F8;
+  background: #F6F7F8;
+  background: -webkit-gradient(linear,0 0,0 50%,from(#F6F7F8),to(#EFF0F1));
+  background: -moz-linear-gradient(top,#F6F7F8,#EFF0F1);
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#F6F7F8', endColorstr='#EFF0F1',GradientType=0 ); /* ie */
 }  
   .filters li 
   { 
@@ -512,7 +616,8 @@
     .filters li a { font-size: 0.85em; }
   
   .label-sort span { font-size: 0.85em; }
-    .label-sort:hover { background-color: #F6F7F8 !important; }
+    .label-sort:hover  { background-color: #F6F7F8 !important; }
+    .label-selected { background-color: #d6e5f2; }
   .cancel-sort { border-right: none !important; }
     .cancel-sort a { color: #F46868!important; }
 
@@ -1417,3 +1522,110 @@ input.price { color: #000; }
 
 -------------------------------------------------------------- */
 #contact textarea { height: 200px; }
+
+/* --------------------------------------------------------------
+
+    mobile iphone page
+
+-------------------------------------------------------------- */
+#iphone-col1 
+{
+  position: relative;
+  margin-top: 25px;
+}
+  .iphone-dl-link 
+  {
+    background: transparent url("../images/iphone/dl_app.png") no-repeat 0 0;
+    display: block;
+    position: absolute;
+    height: 65px;
+    width: 562px;
+    top: 240px;
+    left: 40px;
+    text-indent: -9999px;
+  }
+  
+  .iphone-desc
+  {
+    float: left;
+    width: 480px;
+    padding-left: 40px;
+  }
+    .iphone-desc p { text-align: justify; }
+    .iphone-desc .content-header { float: left; width: 480px; }
+    .iphone-desc .content-header h2 { font-size: 24px; margin-bottom: 10px; }
+    
+    #iphone-features { margin-bottom: 140px; }
+      #iphone-features li
+      {
+        float: left;
+        display: inline;
+        width: 140px;
+        text-align: center;
+        font-size: 16px;
+        padding-top: 151px;
+        margin-right: 30px;
+      }
+        #iphone-features strong 
+        {
+          font-size: 24px;
+          font-weight: bold;
+        }
+        #iphone-features li.last { margin-right: 0px; }
+        
+        .increase { background: transparent url("../images/iphone/piggy_bank.png") no-repeat 0 0; }
+        .protect { background: transparent url("../images/iphone/world.png") no-repeat 0 0; }
+        .profitable { background: transparent url("../images/iphone/camera.png") no-repeat 0 0; }
+        
+#iphone-col2
+{
+  position: relative;
+  margin-top: 25px;
+  padding-top: 540px;
+}
+  #iphone-col2 .box-tools
+  {
+    width: 300px;
+    margin-left: 40px;
+  }
+    #iphone-col2 .box-tools p { padding: 0 20px; }
+    #iphone-col2 .box-tools ul { padding: 0 50px; }
+      #iphone-col2 .box-tools ul li
+      {
+        list-style-image: url("../images/list-style-info.png");
+        list-style-position: outside;
+        margin-bottom: 15px;
+        text-align: justify;
+      }
+      
+  .iphone-slides 
+  {
+    background: transparent url("../images/iphone/big_iphone.png") no-repeat 0 0;
+    position: absolute;
+    top: -65px;
+    right: 40px;
+    width: 300px;
+    height: 584px;
+  }
+  #slideshow { margin-top: 105px; margin-left: 26px; }
+  .iphone-refection 
+  {
+    background: transparent url("../images/iphone/reflection.png") no-repeat 0 0;
+    position: absolute;
+    top: -78px;
+    right: 43px;
+    width: 153px;
+    height: 440px;
+  }
+  #nav-slideshow { margin-left: 154px; margin-bottom: 50px; }
+    #nav-slideshow a 
+    {
+      background: transparent url("../images/iphone/markers.png") no-repeat -13px 0;
+      display: block;
+      float: left;
+      margin-right: 8px;
+      height: 12px;
+      width: 12px;
+      text-indent: -9999px;
+    }
+      #nav-slideshow a.activeSlide { background: transparent url("../images/iphone/markers.png") no-repeat 0 0; }

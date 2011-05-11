@@ -59,6 +59,7 @@ $(document).ready(function() {
     // Company name field display/none
     isProfessionalInput = $("input[name$='is_professional']");
     companyNameInput = $(".company-name");
+    companyNameInput.hide();
 
     var exists = $("input[name$='is_professional']:checked").val();
 

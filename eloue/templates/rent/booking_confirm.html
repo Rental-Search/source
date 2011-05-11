@@ -92,6 +92,21 @@
     </div>
     <div class="x4">
           <div class="box-info">
+              <h3>{% trans "Louez en toute sécurité !" %}</h3>
+              <ul class="vertical-assurancy">
+                  <li class="va-pp">
+                      {% blocktrans %}
+                        Grâce à <strong>PayPal</strong>, bénéficiez du paiement le plus sécurisé au monde.
+                      {% endblocktrans %}
+                  </li>
+                  <li class="va-assurone">
+                      {% blocktrans %}
+                        Notre <strong>partenaire assureur</strong> garantit l'objets en cas de casse.
+                      {% endblocktrans %}
+                  </li>
+              </ul>
+          </div>
+          <div class="box-info">
               {% if product.payment_type == 0 %}
               <h3>{% trans "Paiement hors ligne" %}</h3>
               <p>
@@ -100,9 +115,12 @@
               {% else %}
               <h3>{% trans "Paiement en ligne" %}</h3>
               <p>
-                {% trans "Le propriétaire souhaite le paiement en ligne. Vous payez au moment de la réservation via PayPal. Le montant est débité lors du premier jour de location."%}
-              {% endif %}
+                {% blocktrans %}
+                Le paiement se fait en ligne. Vous payez au moment de la réservation via PayPal.<br/>
+                <strong>Le montant est débité lors du premier jour de location</strong>.
+                {% endblocktrans %}
               </p>
+              {% endif %}
          </div> 
 	</div>
 </div>

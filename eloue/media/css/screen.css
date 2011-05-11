@@ -327,13 +327,13 @@ font-size: 14px;
 
 .notification.success, .notification.info
 {
-  background: transparent url("../../images/info_flash.png") repeat-x 0 0;
+  background: transparent url("../images/info_flash.png") repeat-x 0 0;
   color: #9f8f58;
 }
 
 .notification.error, .notification.warning
 {
-  background: transparent url("../../images/error_flash.png") repeat-x 0 0;
+  background: transparent url("../images/error_flash.png") repeat-x 0 0;
   color: #f46868;
 }
 

@@ -124,16 +124,9 @@
     		</table>
         </div>
         <div class="box-info">
-              {% if product.payment_type == 0 %}
-              <h3>{% trans "Paiement hors ligne" %}</h3>
-              <p>
-                  {% trans "Le propriétaire souhaite le paiement hors ligne (chèque/espèce). Vous le payerez le premier jour de la location."%}
-              </p>
-              {% else %}
               <h3>{% trans "Paiement en ligne" %}</h3>
               <p>
-                {% trans "Le propriétaire souhaite le paiement en ligne. Vous payez au moment de la réservation via PayPal. Le montant est débité lors du premier jour de location."%}
-              {% endif %}
+                {% trans "Vous payez en ligne au moment de la réservation via PayPal.<br/> <strong>Le montant est débité lors du premier jour de location.</strong>"%}
               </p>
          </div>
     </div>
