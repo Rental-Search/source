@@ -19,6 +19,9 @@ from eloue.accounts import EMAIL_BLACKLIST
 from eloue.accounts.fields import PhoneNumberField
 from eloue.accounts.models import Patron, PhoneNumber, COUNTRY_CHOICES, PatronAccepted
 from eloue.accounts.widgets import ParagraphRadioFieldRenderer
+from eloue.utils import form_errors_append
+from eloue.rent.payments.paypal_payment import verify_paypal_account
+
 
 STATE_CHOICES = (
     (0, _(u"Je n'ai pas encore de compte e-loue")),
@@ -115,6 +118,7 @@ class EmailPasswordResetForm(PasswordResetForm):
     
 
 class PatronEditForm(forms.ModelForm):
+    
     username = forms.RegexField(label=_(u"Pseudo"), max_length=30, regex=r'^[\w.@+-]+$',
         help_text=_("Required. 30 characters or fewer. Letters, digits and @/./+/-/_ only."),
         error_messages={'invalid': _("This value may contain only letters, numbers and @/./+/-/_ characters.")},
@@ -132,7 +136,25 @@ class PatronEditForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(PatronEditForm, self).__init__(*args, **kwargs)
         self.fields['civility'].widget.attrs['class'] = "selm"
+        
+        #if kwargs.has_key('sender'):
+        #    if kwargs['sender']:
+        #        self.sender = kwargs['sender']
+        #self.receiver = kwargs['receiver']
     
+    def __call__(self):
+        paypal_email = self.instance.paypal_email
+        if paypal_email:
+            is_verified = verify_paypal_account(
+                    email=paypal_email,
+                    first_name=self.instance.first_name,
+                    last_name=self.instance.last_name
+                    )
+            if not is_verified:
+                form_errors_append(self, 'paypal_email', 'Votre paypal email ne correspond pas à votre nom et prénom')
+                form_errors_append(self, 'first_name', 'Votre prénom ne correspond pas à votre nom et paypal email')
+                form_errors_append(self, 'last_name', 'Votre nom ne correspond pas à votre prénom et paypal email')
+                
     def clean_company_name(self):
         is_professional = self.cleaned_data.get('is_professional')
         company_name = self.cleaned_data.get('company_name', None)
@@ -152,7 +174,30 @@ class PatronEditForm(forms.ModelForm):
             raise forms.ValidationError(_(u"Un compte avec cet email existe déjà"))
         except Patron.DoesNotExist:
             return email
-    
+   
+    def clean(self):
+        paypal_email = self.cleaned_data.get('paypal_email', None)
+        first_name = self.cleaned_data.get('first_name', None)
+        last_name = self.cleaned_data.get('last_name', None)
+        if paypal_email:
+            is_verified = verify_paypal_account(
+                        email=paypal_email,
+                        first_name=first_name,
+                        last_name=last_name
+                        )
+            if not is_verified:
+                print ">>>>>>in form clean non verified>>>>>>>>"
+                form_errors_append(self, 'paypal_email', 'Votre paypal email ne correspond pas à votre nom et prénom')
+                form_errors_append(self, 'first_name', 'Votre prénom ne correspond pas à votre nom et paypal email')
+                form_errors_append(self, 'last_name', 'Votre nom ne correspond pas à votre prénom et paypal email')
+            else:
+                self.instance.paypal_email = paypal_email
+                self.instance.first_name = first_name
+                self.instance.last_name = last_name
+                self.instance.save()
+            print ">>>>>>>>form errors>>>>>>>>>>>", self.errors
+        return self.cleaned_data
+        
     class Meta:
         model = Patron
         fields = ('civility', 'username', 'first_name', 'last_name',

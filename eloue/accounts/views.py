@@ -27,6 +27,7 @@ from eloue.accounts.wizard import AuthenticationWizard
 from eloue.products.forms import FacetedSearchForm
 from eloue.rent.models import Booking
 import time
+from multiprocessing import Pipe
 
 PAGINATE_PRODUCTS_BY = getattr(settings, 'PAGINATE_PRODUCTS_BY', 10)
 USE_HTTPS = getattr(settings, 'USE_HTTPS', True)
@@ -83,11 +84,25 @@ def patron_detail(request, slug, patron_id=None, page=None):
 
 
 @login_required
-def patron_edit(request):
-    form = PatronEditForm(request.POST or None, instance=request.user)
+def patron_edit(request, *args, **kwargs):
+    print ">>>>>>>>enter patron edit >>>>>>"
     paypal = request.GET.get('paypal', False)
     redirect_path = request.REQUEST.get('next', '')
+    patron = request.user
+    """
+    sender, receiver = Pipe()
+    
+    if kwargs.has_key('patron_id'):
+        patron_id = kwargs['patron_id']  
+        if patron_id:
+            patron = Patron.objects.get(pk=patron_id)
+    """
+    print ">>>>>> form before >>>>>"
+    form = PatronEditForm(request.POST or None, instance=patron)
+    form()
+    print ">>>>>> form after >>>>>"
     if form.is_valid():
+        print '>>>>>>>>>>>> form is valid >>>>>>>>>>'
         patron = form.save()
         if paypal: 
             if patron.is_verified:
@@ -102,8 +117,9 @@ def patron_edit(request):
             else:
                 messages.error(request, _(u"Vos informations ont bien été modifiées mais nous n'avons pas pu vérifier votre compte paypal"))
         else:
-            messages.success(request, _(u"Vos informations ont bien été modifiées"))    
-    return direct_to_template(request, 'accounts/patron_edit.html', extra_context={'form': form, 'patron': request.user})
+            messages.success(request, _(u"Vos informations ont bien été modifiées")) 
+    print ">>>>>>second form init >>>>>>>>"
+    return direct_to_template(request, 'accounts/patron_edit.html', extra_context={'form': form, 'patron': patron})
 
 
 @login_required
@@ -130,7 +146,7 @@ def patron_paypal(request):
         domain = "localhost:8000" # for test sake
         
         return_url = "%s://%s%s?paypal=true" % (protocol, domain, redirect_path)
-        profile_edit_url = "%s://%s%s?next=%s&paypal=true"% (protocol, domain, reverse('patron_edit'), redirect_path)
+        profile_edit_url = "%s://%s%s?next=%s&paypal=true&patron_id=%s"% (protocol, domain, reverse('patron_edit'), redirect_path, request.user.pk)
         paypal_redirect = patron.create_account(return_url=return_url)
         
         if form.paypal_exists:

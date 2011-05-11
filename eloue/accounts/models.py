@@ -23,6 +23,7 @@ from eloue.products.utils import Enum
 from eloue.rent.payments.paypal_payment import accounts, PaypalError
 from eloue.signals import post_save_sites
 from eloue.utils import create_alternative_email
+from eloue.rent.payments.paypal_payment import accounts, verify_paypal_account
 
 CIVILITY_CHOICES = Enum([
     (0, 'MME', _('Madame')),
@@ -198,17 +199,7 @@ class Patron(User):
     
     @property
     def is_verified(self):
-        try:
-            response = accounts.get_verified_status(
-                emailAddress=self.paypal_email,
-                firstName=self.first_name,
-                lastName=self.last_name,
-                matchCriteria="NAME"
-            )
-            return response['accountStatus'] == 'VERIFIED'
-        except PaypalError, e:
-            log.error(e)
-            return False
+        return verify_paypal_account(email=self.paypal_email, first_name=self.first_name, last_name=self.last_name)
     
     def send_activation_email(self):
         context = {
