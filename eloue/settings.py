@@ -236,7 +236,6 @@ COMPRESS_CSS = {
     },
     'twenty': {
         'source_filenames': (
-            'css/master.css',
             'css/screen.css',
             'css/custom.css',
             'css/20m.css',
@@ -261,7 +260,6 @@ COMPRESS_CSS = {
     },
     'nc': {
         'source_filenames': (
-            'css/master.css',
             'css/screen.css',
             'css/custom.css',
             'css/nc.css',
@@ -277,7 +275,6 @@ COMPRESS_CSS = {
     },
     'uk': {
         'source_filenames': (
-            'css/master.css',
             'css/screen.css',
             'css/custom.css',
             'css/uk.css',
@@ -333,6 +330,7 @@ COMPRESS_CSS = {
         }
     }
 }
+
 COMPRESS_JS = {
     'application': {
         'source_filenames': (

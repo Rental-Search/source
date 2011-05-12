@@ -78,6 +78,7 @@
 			{% endif %}
         </ul>
     </div>
+    {% if product_list %}
     {% if form.cleaned_data.q %}
     <div class="x12 content-header">
 	 {% blocktrans with form.cleaned_data.q as keywords count paginator.count as count %}
@@ -92,7 +93,6 @@
 	 {% trans "Vous vouliez peut-être dire ?" %} <a href="{% facet_url breadcrumbs "q" suggestions %}">{{ suggestions }}</a>
 	</div>
 	{% endif%}
-	{% if product_list %}
 	<div id="results" class="x8">
 	     <ul class="filters">
             <li class="label-sort">
@@ -173,11 +173,24 @@
         {% endif %}
     </div>
     {% else %}
-    <div class="x8">
-	    <p>{% trans "Nous n'avons pas de résultat pour votre recherche." %}</p>
-            	    <p>{% trans "Nous vous invitons à créer une demande location. Si un membre possède cette objet alors il répondra à votre demande." %}</p>
-	    <p style="text-align: center;"><a href="{% url alert_create %}" class="btn long-blue">{% trans "Créer une demande" %}</a></p>
+    {% if form.cleaned_data.q %}
+    <div class="x12 content-header">
+        {% blocktrans with form.cleaned_data.q as keywords count paginator.count as count %}
+    	 <h1>Pas de résultat pour <strong>{{ keywords }}</strong></h1>
+    	 {% plural %}
+    	 <h1>Pas de résultats pour <strong>{{ keywords }}</strong></h1>
+    	 {% endblocktrans%}
+    </div>
+    {% else %}
+    <div class="x12 content-header">
+        <h1>{% trans "Pas de résultat" %}</h1>
+    </div>
+    {% endif %}
+    {% if suggestions %}
+	<div class="suggestion x12">
+	 {% trans "Vous vouliez peut-être dire ?" %} <a href="{% facet_url breadcrumbs "q" suggestions %}">{{ suggestions }}</a>
 	</div>
+	{% endif%}
 	{% endif %}
 	<div id="facets" class="x4">
 	    {% if form.cleaned_data.l %}

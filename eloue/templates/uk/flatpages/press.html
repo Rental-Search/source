@@ -4,56 +4,48 @@
 {% block title %}{{ flatpage.title }}{% endblock %}
 
 {% block content %}
-<div id="content-dash" class="flatpage clearfix">
-	<div id="menu" class="dash">
-		<div class="ht-title x4">
-			<h1>{{ flatpage.title }}</h1>
-		</div>
-	</div>
-	<div class="fl-content x7">
-		<div class="fl-bloc-header">
-			<h2>eRentmarket presentation</h2>
-		</div>
-		<div class="fl-bloc-content">
-			<p>
-				eRentmarket is an innovative internet platform for individual and professional customers. All eRentmarket members can rent or rent out all types of items: drills, bicycles, tennis rackets, jewellery, dresses, games, etc.).
+<div id="content" class="xgrid">
+	<div class="content-top">
+        <h1>{{ flatpage.title }}</h1>
+    </div>
+    <div class="x7" style="margin-top: 20px;">
+	    <div class="content-header x7 first">
+            <h2>eRentmarket presentation</h2>
+        </div>
+    	<div class="x7 first">
+            <p>
+    			eRentmarket is an innovative internet platform for individual and professional customers. All eRentmarket members can rent or rent out all types of items: drills, bicycles, tennis rackets, jewellery, dresses, games, etc.).
 
-				eRentmarket company, founded in 2009. 
-			</p>
-		</div>
-		<div class="fl-bloc-header">
-			<h2>They talk about us</h2>
-		</div>
-		<div class="fl-bloc-content">
-				<ul class="press-links scroll-pane">
-					
-				</ul>
-		</div>
-	</div>{# fl-content #}
-	<div class="fl-sidebar x5">
-		<div class="fl-sidebar-header">
-			<h3>Download</h3>
-		</div>
-		<div class="fl-sidebar-content">
-			<ul>
+				eRentmarket company, founded in 2009.
+    		</p>
+        </div>
+        <div class="content-header x7 first" style="margin-bottom: 0px !important;">
+            <h2>They talk about us</h2>
+        </div>
+        <div class="x7 first">
+        </div>
+    </div>
+    <div class="x5">
+        <div class="box-tools" style="margin-top: 20px;">
+            <h3>Download</h3>
+            <ul style="text-indent: 20px;">
 				<li><a href="https://erentmarket.s3.amazonaws.com/pressKit/20110323_press_kit.pdf">Press kit [ PDF ]</a></li>
 				{#<li><a href="#">Copies d'écran [ ZIP ]</a></li>#}
 				<li><a href="https://erentmarket.s3.amazonaws.com/pressKit/erentMarket.pdf">Logo [ EPS ]</a></li>
 			</ul>
-		</div>
-		<div class="fl-sidebar-box">
-			<h3>Press contact</h3>
-			<img src="{{ MEDIA_URL}}images/contact_press.jpg" alt="Benjamin Marchand-Lenoir | Contact presse" />
+        </div>
+        <div class="box-info">
+            <h3>Press contact</h3>
+            <img src="{{ MEDIA_URL}}images/contact_press.jpg" alt="Benjamin Marchand-Lenoir | Contact presse" style="float: left; border: 1px solid #9EB0BA; padding: 2px; margin-right: 10px;"/>
 			<p>
-				<span class="contact-name">Thomas</span><br /><br />
-				<a href="mailto:benjamin.marchand-lenoir@erentmarket.com">press@erentmarket.com</a>
+				<span class="contact-name">Thomas</span><br />
+				<a href="mailto:press@erentmarket.com" style="color: #6EB924">press@erentmarket.com</a>
 			</p>
-		</div>
-		<div class="fl-sidebar-list">
-			<h3>Press Releases</h3>
-			
-		</div>
-	</div>
+        </div>
+        <div class="box-links">
+            <h3>Communiqués de Presse</h3>
+        </div>
+    </div>
 </div>{# content-dash #}
 
 

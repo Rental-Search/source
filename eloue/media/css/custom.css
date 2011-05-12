@@ -5,7 +5,7 @@
 -------------------------------------------------------------- */
 
 /* radius all */
-#search, #content, #content-home, .box-tools, .box-info, .stat-number, .booking-resume, .horizontal-assurancy, .filters
+#search, #content, #content-home, .box-tools, .box-info, .stat-number, .booking-resume, .horizontal-assurancy, .filters, .prices-form
 {
   -moz-border-radius:5px;
   -webkit-border-radius:5px;
@@ -28,7 +28,7 @@
 }
 
 /* radius right */
-.assurancy-partner
+.assurancy-partner, .supp-list-prices
 {
   -moz-border-radius: 0px 5px 5px 0px;
   -webkit-border-radius: 0px 5px 5px 0px;
@@ -1226,6 +1226,7 @@ body { background: #ECF6FF url("../images/body-bg.png") repeat 0 0; }
 {
   width: 300px;
   height: 120px;
+  font-size: 14px;
 }
 
 .new .price 
@@ -1237,16 +1238,16 @@ body { background: #ECF6FF url("../images/body-bg.png") repeat 0 0; }
 
 .new select { width: 445px; }
 
+.new .desc-input { vertical-align: top; }
+.new .desc-input label { line-height: 50px; }
+
 
 /* --------------------------------------------------------------
 
   Tab prices
 
 -------------------------------------------------------------- */
-.tabsPrices.ui-widget-content
-{
-	border: none !important;
-}
+.tabsPrices.ui-widget-content { border: none !important; }
 	.tabsPrices h5 { color: #546b78; }
 	.tabsPrices p 
 	{ 
@@ -1263,19 +1264,13 @@ body { background: #ECF6FF url("../images/body-bg.png") repeat 0 0; }
 			background-color: #f5f7f9;
 			border: 1px solid #b9cad4;
 		}
-			.tabsPrices .ui-widget-header .ui-state-default a
-			{
-				color: #9eb0ba;
-			}
+			.tabsPrices .ui-widget-header .ui-state-default a { color: #9eb0ba; }
 		.tabsPrices .ui-widget-header .ui-state-active
 		{
 			background-color: #FFF;
 			border: 1px solid #b9cad4;
 		}
-			.tabsPrices .ui-widget-header .ui-state-active a
-			{
-				color: #546b78;
-			}
+			.tabsPrices .ui-widget-header .ui-state-active a { color: #546b78; }
 
 /* --------------------------------------------------------------
 
@@ -1361,7 +1356,7 @@ input.price { color: #000; }
 }
 .more-info .town 
 {
-  width: 167px;
+  width: 170px;
   margin-top: 0;
   margin-bottom: 0;
 }
@@ -1376,6 +1371,10 @@ input.price { color: #000; }
   padding: 8px 0 8px 8px;
 }
 
+.more-info .new-address { vertical-align: top; }
+  .more-info .new-address { line-height: 50px; }
+.more-info .street-field { padding: 0px 10px 4px 5px; line-height: 11px; }
+.more-info .country-field .selm{ margin-top: 0; width: 320px; }
 /* --------------------------------------------------------------
 
     how-to page
