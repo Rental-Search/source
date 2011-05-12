@@ -21,6 +21,7 @@ from eloue.accounts.models import Patron, PhoneNumber, COUNTRY_CHOICES, PatronAc
 from eloue.accounts.widgets import ParagraphRadioFieldRenderer
 from eloue.utils import form_errors_append
 from eloue.rent.payments.paypal_payment import verify_paypal_account
+from django.dispatch import dispatcher
 
 
 STATE_CHOICES = (
@@ -32,6 +33,7 @@ PAYPAL_ACCOUNT_CHOICES = (
     (0, _(u"Je n'ai pas encore de compte PayPal")),
     (1, _(u"J'ai déjà un compte PayPal et mon email est :")),
 )
+
 
 
 class EmailAuthenticationForm(forms.Form):
@@ -136,19 +138,31 @@ class PatronEditForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(PatronEditForm, self).__init__(*args, **kwargs)
         self.fields['civility'].widget.attrs['class'] = "selm"
+        raw_paypal_email = None
+        first_name = None
+        last_name = None
+        for name, field in self.fields.items():
+            prefixed_name = self.add_prefix(name)
+            data_value = field.widget.value_from_datadict(self.data, self.files, prefixed_name)
+            if name == "paypal_email" and data_value:
+                raw_paypal_email = data_value
+            if name == "first_name" and data_value:
+                first_name = data_value
+            if name == "last_name" and data_value:
+                last_name = data_value
         
-        #if kwargs.has_key('sender'):
-        #    if kwargs['sender']:
-        #        self.sender = kwargs['sender']
-        #self.receiver = kwargs['receiver']
-    
-    def __call__(self):
-        paypal_email = self.instance.paypal_email
-        if paypal_email:
+        if not raw_paypal_email:
+            raw_paypal_email = self.instance.paypal_email
+        if not first_name:
+            first_name = self.instance.first_name
+        if not last_name:
+            last_name = self.instance.last_name
+        
+        if raw_paypal_email:
             is_verified = verify_paypal_account(
-                    email=paypal_email,
-                    first_name=self.instance.first_name,
-                    last_name=self.instance.last_name
+                    email=raw_paypal_email,
+                    first_name=first_name,
+                    last_name=last_name
                     )
             if not is_verified:
                 form_errors_append(self, 'paypal_email', 'Votre paypal email ne correspond pas à votre nom et prénom')
@@ -186,16 +200,9 @@ class PatronEditForm(forms.ModelForm):
                         last_name=last_name
                         )
             if not is_verified:
-                print ">>>>>>in form clean non verified>>>>>>>>"
                 form_errors_append(self, 'paypal_email', 'Votre paypal email ne correspond pas à votre nom et prénom')
                 form_errors_append(self, 'first_name', 'Votre prénom ne correspond pas à votre nom et paypal email')
                 form_errors_append(self, 'last_name', 'Votre nom ne correspond pas à votre prénom et paypal email')
-            else:
-                self.instance.paypal_email = paypal_email
-                self.instance.first_name = first_name
-                self.instance.last_name = last_name
-                self.instance.save()
-            print ">>>>>>>>form errors>>>>>>>>>>>", self.errors
         return self.cleaned_data
         
     class Meta:

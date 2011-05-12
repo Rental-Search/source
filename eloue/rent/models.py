@@ -138,7 +138,6 @@ class Booking(models.Model):
         return self.product.summary
     
     def __init__(self, *args, **kwargs):
-        #self.payment_processor = PAY_PROCESSORS[self.product.payment_type](self) # give me a field like paypal/nopay, etc, I can instance an object.
         super(Booking, self).__init__(*args, **kwargs)
         for state in BOOKING_STATE.enum_dict:
             setattr(self, "is_%s" % state.lower(), types.MethodType(self._is_factory(state), self))
