@@ -7,4 +7,4 @@ Un utilisateur d'e-loue souhaite louer un(e) {{ alert.designation }} près de ch
 
 Nous vous souhaitons de bonnes locations.
 
-L'équipe e-loue
+L'équipe {{ site.name }}

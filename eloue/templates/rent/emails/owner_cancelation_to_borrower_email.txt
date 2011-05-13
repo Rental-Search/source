@@ -22,10 +22,10 @@ Nous vous confirmons qu'aucun débit n'aura lieu.
  {% endfor %}
 {% endif %}
 {% endwith %}
-{% blocktrans with booking.product.category.get_absolute_url as category_url and site.domain as domain %}
-Retrouvez tous les objets de cette catégorie sur e-loue.com :
+{% blocktrans with booking.product.category.get_absolute_url as category_url and site.domain as domain and site.name as site_name %}
+Retrouvez tous les objets de cette catégorie sur {{ domain }} :
 
 {{ protocol }}://{{ domain }}{{ category_url }}
  
-L'équipe e-loue
+L'équipe {{ site_name }}
 {% endblocktrans %}

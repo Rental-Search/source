@@ -1,5 +1,5 @@
 {% load i18n %}
-{% blocktrans with booking.owner.username as owner and booking.borrower.username as borrower and booking.product.category.name as category and booking.product.summary as summary and booking.started_at|date:"DATETIME_FORMAT" as starting_at and booking.started_at|timesince:booking.ended_at as duration %}
+{% blocktrans with booking.owner.username as owner and booking.borrower.username as borrower and booking.product.category.name as category and booking.product.summary as summary and booking.started_at|date:"DATETIME_FORMAT" as starting_at and booking.started_at|timesince:booking.ended_at as duration and site.name as site_name %}
  Bonjour {{ borrower }}, 
 
  Nous avons bien pris en compte votre demande de location et venons d’informer {{ owner }} de votre proposition. 
@@ -11,7 +11,8 @@
  Début de la location : {{ starting_at }} 
  Durée de la location : {{ duration }}
 
- Vous serez prochainement informé(e) de sa réponse. Pour rappel : votre compte ne sera débité que si le propriétaire accepte la location. 
+ Vous serez prochainement informé(e) de sa réponse. Pour rappel : votre compte ne sera débité que si le propriétaire accepte la location.
+ 
+ L'équipe {{ site_name }}
+ 
 {% endblocktrans %}
-
-{% trans "L'équipe e-loue" %}

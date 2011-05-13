@@ -10,4 +10,4 @@ Vous pouvez faire une réservation en accédant à la fiche de l'objet :
 Nous vous souhaitons de bonnes locations.
 
 
-L'équipe e-loue
+L'équipe {{ site.name }}
