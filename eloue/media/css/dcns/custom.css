@@ -1337,10 +1337,12 @@ input.price { color: #000; }
               .assurancy { background: transparent url("../../images/dcns/fonction.png") no-repeat 0px 0px; }
               .car { background: transparent url("../../images/dcns/fonction.png") no-repeat -80px 0px; }
               .laptop { background: transparent url("../../images/dcns/fonction.png") no-repeat -160px 0px; }
+              .environment { background: transparent url("../../images/dcns/fonction.png") no-repeat -240px 0px; }
               
               .lock { background: transparent url("../../images/dcns/fonction.png") no-repeat 0px -70px; }
               .people { background: transparent url("../../images/dcns/fonction.png") no-repeat -80px -70px; }
               .money { background: transparent url("../../images/dcns/fonction.png") no-repeat -160px -70px; }
+              .moderate { background: transparent url("../../images/dcns/fonction.png") no-repeat -240px -70px; }
               
             .ht-f-desc span
             {
