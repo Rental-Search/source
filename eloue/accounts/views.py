@@ -92,7 +92,7 @@ def patron_edit(request, *args, **kwargs):
     if form.is_valid():
         patron = form.save()
         if paypal: 
-            if patron.is_verified:
+            if patron.is_verified == "VERIFIED":
                 protocol = 'https' if USE_HTTPS else 'http'
                 domain = Site.objects.get_current().domain
                 domain = "localhost:8000" # for test sake
@@ -102,7 +102,10 @@ def patron_edit(request, *args, **kwargs):
                 messages.success(request, _(u"Vos informations ont bien été modifiées et votre compte paypal est vérifié"))    
                 return redirect_to(request, return_url)
             else:
-                messages.error(request, _(u"Vos informations ont bien été modifiées mais nous n'avons pas pu vérifier votre compte paypal"))
+                if patron.is_verified == "UNVERIFIED":
+                    messages.error(request, _(u"Votre paypal compte n'est pas vérifié, veuillez vérifier votre compte et modifier votre nom ou prénom ou email paypal"))
+                elif patron.is_verified == "INVALID":
+                    messages.error(request, _(u"Votre Paypal compte est invalide, veuillez modifier votre nom ou prénom ou email paypal"))
         else:
             messages.success(request, _(u"Vos informations ont bien été modifiées")) 
     return direct_to_template(request, 'accounts/patron_edit.html', extra_context={'form': form, 'patron': patron})
@@ -119,31 +122,45 @@ def patron_edit_password(request):
 
 @login_required
 def patron_paypal(request):
+    print ">>>>>>enter patron paypal>>>>>"
     form = PatronPaypalForm(request.POST or None,
         initial={'paypal_email': request.user.email}, instance=request.user)
     redirect_path = request.REQUEST.get('next', '')
+    booking_id = redirect_path.split("/")[-2]
+    print ">>>>>>redirect_path>>>>>>>", booking_id 
+    from eloue.rent.models import Booking
+    booking = Booking.objects.get(uuid=booking_id)
+    print ">>>>>>>>>>booking>>>>>>>>", booking
     if not redirect_path or '//' in redirect_path or ' ' in redirect_path:
         redirect_path = reverse('dashboard')
+    print ">>>>form>>>>>", form
     if form.is_valid():
-        patron = form.save()
         
+        patron = form.save()
         protocol = 'https' if USE_HTTPS else 'http'
         domain = Site.objects.get_current().domain
         domain = "localhost:8000" # for test sake
-        
+        print ">>>>form is valid>>>>>>>", patron.first_name, patron.last_name, patron.paypal_email
         return_url = "%s://%s%s?paypal=true" % (protocol, domain, redirect_path)
         profile_edit_url = "%s://%s%s?next=%s&paypal=true"% (protocol, domain, reverse('patron_edit'), redirect_path)
-        paypal_redirect = patron.create_account(return_url=return_url)
         
         if form.paypal_exists:
-            if patron.is_verified:
+            if patron.is_verified == "VERIFIED":
+                print ">>>>> is_verified  >>>>>", patron.is_verified, patron, patron.paypal_email
                 messages.success(request, _(u"Votre compte paypal est vérifié"))
+                print "return url >>>>>>", return_url
                 return redirect_to(request, return_url)
             else:
-                messages.error(request, _(u"Nous n'avons pas pu vérifier votre compte paypal, veuillez modifier votre nom ou prénom ou email paypal"))
+                if patron.is_verified == "UNVERIFIED":
+                    messages.error(request, _(u"Votre paypal compte n'est pas vérifié, veuillez modifier votre nom ou prénom ou email paypal"))
+                elif patron.is_verified == "INVALID":
+                    messages.error(request, _(u"Votre Paypal compte est invalide, veuillez modifier votre nom ou prénom ou email paypal"))
+                print "profile_edit_url >>>>>>", profile_edit_url
                 return redirect_to(request, profile_edit_url)
-        elif paypal_redirect:
-            return redirect_to(request, paypal_redirect)
+        else: 
+            paypal_redirect = patron.create_account(return_url=return_url)
+            if paypal_redirect:
+                return redirect_to(request, paypal_redirect)
         patron.paypal_email = None
         patron.save()
         messages.error(request, _(u"Nous n'avons pas pu créer votre compte paypal"))

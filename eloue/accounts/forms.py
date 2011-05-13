@@ -20,7 +20,7 @@ from eloue.accounts.fields import PhoneNumberField
 from eloue.accounts.models import Patron, PhoneNumber, COUNTRY_CHOICES, PatronAccepted
 from eloue.accounts.widgets import ParagraphRadioFieldRenderer
 from eloue.utils import form_errors_append
-from eloue.rent.payments.paypal_payment import verify_paypal_account
+from eloue.payments.paypal_payment import verify_paypal_account
 from django.dispatch import dispatcher
 
 
@@ -164,10 +164,14 @@ class PatronEditForm(forms.ModelForm):
                     first_name=first_name,
                     last_name=last_name
                     )
-            if not is_verified:
-                form_errors_append(self, 'paypal_email', 'Votre paypal email ne correspond pas à votre nom et prénom')
-                form_errors_append(self, 'first_name', 'Votre prénom ne correspond pas à votre nom et paypal email')
-                form_errors_append(self, 'last_name', 'Votre nom ne correspond pas à votre prénom et paypal email')
+            if is_verified == 'UNVERIFIED':
+                form_errors_append(self, 'paypal_email', "Votre paypal email ne correspond pas à votre nom et prénom, papal email n'est pas vérifié")
+                form_errors_append(self, 'first_name', "Votre prénom ne correspond pas à votre nom et paypal email, papal email n'est pas vérifié")
+                form_errors_append(self, 'last_name', "Votre nom ne correspond pas à votre prénom et paypal email, papal email n'est pas vérifié")
+            elif is_verified == 'INVALID':
+                form_errors_append(self, 'paypal_email', "Votre paypal email ne correspond pas à votre nom et prénom, papal email n'est pas valide")
+                form_errors_append(self, 'first_name', "Votre prénom ne correspond pas à votre nom et paypal email, papal email n'est pas valide")
+                form_errors_append(self, 'last_name', "Votre nom ne correspond pas à votre prénom et paypal email, papal email n'est pas valide")
                 
     def clean_company_name(self):
         is_professional = self.cleaned_data.get('is_professional')
@@ -199,10 +203,14 @@ class PatronEditForm(forms.ModelForm):
                         first_name=first_name,
                         last_name=last_name
                         )
-            if not is_verified:
-                form_errors_append(self, 'paypal_email', 'Votre paypal email ne correspond pas à votre nom et prénom')
-                form_errors_append(self, 'first_name', 'Votre prénom ne correspond pas à votre nom et paypal email')
-                form_errors_append(self, 'last_name', 'Votre nom ne correspond pas à votre prénom et paypal email')
+            if is_verified == 'UNVERIFIED':
+                form_errors_append(self, 'paypal_email', "Votre paypal email ne correspond pas à votre nom et prénom, papal email n'est pas vérifié")
+                form_errors_append(self, 'first_name', "Votre prénom ne correspond pas à votre nom et paypal email, papal email n'est pas vérifié")
+                form_errors_append(self, 'last_name', "Votre nom ne correspond pas à votre prénom et paypal email, papal email n'est pas vérifié")
+            elif is_verified == 'INVALID':
+                form_errors_append(self, 'paypal_email', "Votre paypal email ne correspond pas à votre nom et prénom, papal email n'est pas valide")
+                form_errors_append(self, 'first_name', "Votre prénom ne correspond pas à votre nom et paypal email, papal email n'est pas valide")
+                form_errors_append(self, 'last_name', "Votre nom ne correspond pas à votre prénom et paypal email, papal email n'est pas valide")
         return self.cleaned_data
         
     class Meta:

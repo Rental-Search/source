@@ -26,9 +26,9 @@ from eloue.products.utils import Enum
 from eloue.rent.decorators import incr_sequence
 from eloue.rent.fields import UUIDField, IntegerAutoField
 from eloue.rent.manager import BookingManager, CurrentSiteBookingManager
-from eloue.rent.payments.paypal_payment import AdaptivePapalPayments, PaypalError
-from eloue.rent.payments.non_payment import NonPayments
-from eloue.rent.payments.fsm_transition import smart_transition
+from eloue.payments.paypal_payment import AdaptivePapalPayments, PaypalError
+from eloue.payments.non_payment import NonPayments
+from eloue.payments.fsm_transition import smart_transition
 from eloue.signals import post_save_sites
 from eloue.utils import create_alternative_email, convert_from_xpf
 

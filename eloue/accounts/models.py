@@ -20,10 +20,9 @@ from django.template.defaultfilters import slugify
 from eloue.accounts.manager import PatronManager
 from eloue.geocoder import GoogleGeocoder
 from eloue.products.utils import Enum
-from eloue.rent.payments.paypal_payment import accounts, PaypalError
 from eloue.signals import post_save_sites
 from eloue.utils import create_alternative_email
-from eloue.rent.payments.paypal_payment import accounts, verify_paypal_account
+from eloue.payments.paypal_payment import accounts, verify_paypal_account, PaypalError
 
 CIVILITY_CHOICES = Enum([
     (0, 'MME', _('Madame')),
