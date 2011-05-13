@@ -4,8 +4,10 @@
 
   Nous vous remercions de vous être enregistré(e) sur e-loue.com. Afin d’activer votre compte et rejoindre notre communauté de loueurs, il vous reste une toute dernière étape : cliquer sur le lien ci-dessous.
 
+{% endblocktrans %}
+
 {{ protocol }}://{{ site.domain }}{% url auth_activate activation_key %}
 
-L'équipe {{ site_name }}.
+{% trans "L'équipe" %} {{ site.name }}.
 
-{% endblocktrans %}
+

@@ -3,8 +3,9 @@
  <p>Bonjour {{ username }},</p>
  <p>Nous vous remercions de vous être enregistré(e) sur <a href="{{ protocol }}://{{ domain }}">{{ domain }}</a>. Afin d’activer votre compte et rejoindre notre communauté de loueurs, il vous reste une toute dernière étape : cliquer sur le lien ci-dessous.</p>
 
+{% endblocktrans %}
+
 <p><a href="{{ protocol }}://{{ site.domain }}{% url auth_activate activation_key %}">{{ protocol }}://{{ site.domain }}{% url auth_activate activation_key %}</a></p>
 
-<p>L'équipe {{ site_name }}.</p>
+<p>{% trans "L'équipe" %} {{ site.name }}.</p>
 
-{% endblocktrans %}

@@ -100,7 +100,7 @@
 				</td>
 			</tr>
 			<tr>
-				<th><label>{{ form.description.label }} {% if form.description.field.required %}*{% endif %} :</label></th>
+				<th class="desc-input"><label>{{ form.description.label }} {% if form.description.field.required %}*{% endif %} :</label></th>
 				<td {% if form.description.errors %} class="error-field" {% endif %}>
 					{{ form.description }}
 					{% if form.description.errors %}
