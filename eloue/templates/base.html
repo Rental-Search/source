@@ -9,7 +9,10 @@
   <meta name="google-site-verification" content="JxKbPmnlcJagHiSTQcwcZaA2XWBbpU1ZVHmJ6529HT0" />
   <link rel="shortcut icon" href="{{ MEDIA_URL }}favicon.ico">
   {% block head %}
+   <!--[if lt IE 8]>{% compressed_css 'ie' %}<![endif]-->
    {% compressed_css 'master' %}
+   <!--[if IE 6]>{% compressed_css 'ie6' %}<![endif]-->
+   <!--[if IE 7]>{% compressed_css 'ie7' %}<![endif]-->
   {% endblock %}
   <script type="text/javascript">
     var _gaq = _gaq || [];
