@@ -1,14 +1,15 @@
 # -*- coding: utf-8 -*-
 from django.conf import settings
 from paypalx import PaypalError, AdaptivePayments, AdaptiveAccounts
-from eloue.rent.payments.abstract_payment import AbstractPayment
+from eloue.payments.abstract_payment import AbstractPayment
 import datetime
 from decimal import Decimal as D, ROUND_CEILING, ROUND_FLOOR
 from urlparse import urljoin
 from django.core.urlresolvers import reverse
 from django.contrib.sites.models import Site
 from eloue.utils import convert_from_xpf
-
+import logbook
+log = logbook.Logger('eloue.accounts')
 
 
 
@@ -23,7 +24,18 @@ accounts = AdaptiveAccounts(
     sandbox=settings.USE_PAYPAL_SANDBOX
 )
 
-
+def verify_paypal_account(email, first_name, last_name):
+    try:
+        response = accounts.get_verified_status(
+            emailAddress=email,
+            firstName=first_name, 
+            lastName=last_name, 
+            matchCriteria="NAME"
+            )
+        return response['accountStatus']
+    except PaypalError, e:
+        log.error(e)
+        return "INVALID"
 
 class AdaptivePapalPayments(AbstractPayment):
     

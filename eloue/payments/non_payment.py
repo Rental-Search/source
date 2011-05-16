@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from eloue.rent.payments.abstract_payment import AbstractPayment
+from eloue.payments.abstract_payment import AbstractPayment
 
 
 

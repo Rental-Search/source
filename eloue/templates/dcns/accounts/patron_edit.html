@@ -38,6 +38,20 @@
     				</td>
     			</tr>
     			{% endif %}
+				{% if form.paypal_email %}
+				<tr>
+					<th><label>{{ form.paypal_email.label }} {% if form.paypal_email.field.required %}*{% endif %} :</label></th>
+					<td {% if form.paypal_email.errors %} class="error-field" {% endif %}>
+						{{ form.paypal_email }}
+						{% if form.paypal_email.errors %}
+							{% for error in form.paypal_email.errors %}
+								<br />
+								<span class="error">{{ error|escape }}</span>
+							{% endfor %}
+						{% endif %}
+					</td>
+				</tr>
+				{% endif %}
     			{% if form.username %}
     			<tr>
     				<th><label>{{ form.username.label }} {% if form.username.field.required %}*{% endif %} :</label></th>
