@@ -72,7 +72,6 @@ linebreaksp.needs_autoescape = True
 @register.filter
 @stringfilter
 def unit(value):
-    print ">>>>>>> value >>>>>>>>", value
     """
     >>> unit(1)
     u'jour'
