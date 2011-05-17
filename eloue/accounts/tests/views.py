@@ -6,7 +6,7 @@ from django.core import mail
 from django.core.urlresolvers import reverse
 from django.test import TestCase
 from django.utils.translation import ugettext as _
-
+from django.contrib.sites.models import Site
 from eloue.accounts.forms import PatronPasswordChangeForm, ContactForm
 from eloue.accounts.models import Patron
 
@@ -94,20 +94,20 @@ class PatronTest(TestCase):
         
     def test_patron_paypal(self):
         self.client.login(username='lin.liu@e-loue.com', password='lin')
-                
+        domain = Site.objects.get_current().domain        
         response = self.client.post(reverse('patron_paypal'), {
             'paypal_exists': 1,
             'paypal_email': 'invalid@e-loue.com',
             'next': '/dashboard/booking/349ce9ba628abfdfc9cb3a72608dab68/'})
-        
-        self.assertRedirects(response, "http://localhost:8000/dashboard/account/profile/?next=/dashboard/booking/349ce9ba628abfdfc9cb3a72608dab68/&paypal=true", status_code=301)
+        url = "http://%s/dashboard/account/profile/?next=/dashboard/booking/349ce9ba628abfdfc9cb3a72608dab68/&paypal=true"%domain
+        self.assertRedirects(response, url, status_code=301)
         
         response = self.client.post(reverse('patron_paypal'), {
             'paypal_exists': 1,
             'paypal_email': 'test_verified_status@e-loue.com',
             'next': '/dashboard/booking/349ce9ba628abfdfc9cb3a72608dab68/'})
-
-        self.assertRedirects(response, 'http://localhost:8000/dashboard/booking/349ce9ba628abfdfc9cb3a72608dab68/?paypal=true', status_code=301)
+        url = "http://%s/dashboard/booking/349ce9ba628abfdfc9cb3a72608dab68/?paypal=true"%domain
+        self.assertRedirects(response, url, status_code=301)
         
         
     def test_patron_edit_email_already_exists(self):
