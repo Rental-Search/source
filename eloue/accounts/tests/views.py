@@ -12,7 +12,7 @@ from eloue.accounts.models import Patron
 
 
 class PatronTest(TestCase):
-    fixtures = ['category', 'patron', 'address','product', 'booking']
+    fixtures = ['category', 'patron', 'address', 'price', 'product', 'booking']
         
     def test_patron_detail_view(self):
         response = self.client.get(reverse('patron_detail', args=['alexandre']))

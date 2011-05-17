@@ -73,7 +73,7 @@
         quantity: 1
         sites: [1, 2, 3]
         summary: 'Bonne voiture Benz de Lin'
-        created_at: 2010-08-15 09:00:10
+        created_at: 2010-08-15 10:00:10
     model: products.product
     pk: 6
 
