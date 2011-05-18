@@ -147,7 +147,7 @@ class PatronEditForm(forms.ModelForm):
             if name == "last_name" and data_value:
                 last_name = data_value
         
-        if not raw_paypal_email:
+        if not raw_paypal_email and not first_name and not last_name:
             raw_paypal_email = self.instance.paypal_email
         if not first_name:
             first_name = self.instance.first_name
