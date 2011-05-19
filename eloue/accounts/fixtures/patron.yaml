@@ -96,7 +96,7 @@
   pk: 4
 
 - fields:
-    activation_key: 0b275c5d0858087288438d1b746015dae7307e3e
+    activation_key: 0b275c5d0858087288438d1b746015dae7307e6e
     civility: 2
     slug: lin
     groups: []
