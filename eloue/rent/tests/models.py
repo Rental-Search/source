@@ -7,7 +7,7 @@ from django.test import TestCase
 
 from eloue.rent.models import Booking
 from eloue.rent import models
-from eloue.rent.payments.paypal_payment import AdaptivePapalPayments
+from eloue.payments.paypal_payment import AdaptivePapalPayments
 from mock import patch
 
 

@@ -26,9 +26,9 @@ from eloue.products.utils import Enum
 from eloue.rent.decorators import incr_sequence
 from eloue.rent.fields import UUIDField, IntegerAutoField
 from eloue.rent.manager import BookingManager, CurrentSiteBookingManager
-from eloue.rent.payments.paypal_payment import AdaptivePapalPayments, PaypalError
-from eloue.rent.payments.non_payment import NonPayments
-from eloue.rent.payments.fsm_transition import smart_transition
+from eloue.payments.paypal_payment import AdaptivePapalPayments, PaypalError
+from eloue.payments.non_payment import NonPayments
+from eloue.payments.fsm_transition import smart_transition
 from eloue.signals import post_save_sites
 from eloue.utils import create_alternative_email, convert_from_xpf
 
@@ -138,7 +138,6 @@ class Booking(models.Model):
         return self.product.summary
     
     def __init__(self, *args, **kwargs):
-        #self.payment_processor = PAY_PROCESSORS[self.product.payment_type](self) # give me a field like paypal/nopay, etc, I can instance an object.
         super(Booking, self).__init__(*args, **kwargs)
         for state in BOOKING_STATE.enum_dict:
             setattr(self, "is_%s" % state.lower(), types.MethodType(self._is_factory(state), self))
