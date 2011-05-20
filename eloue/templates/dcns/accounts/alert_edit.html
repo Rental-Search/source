@@ -10,15 +10,15 @@
             <li class="menu-tab first"><a href="{% url dashboard %}">{% trans "Tableau de bord" %}</a></li>
 			<li class="menu-tab selected"><a href="{% url owner_booking %}">{% trans "Propriétaire" %}</a></li>
 			<li class="menu-tab"><a href="{% url borrower_booking %}">{% trans "Locataire" %}</a></li>
-			<li class="menu-tab">{% trans "Alertes" %}</li>
+			<li class="menu-tab">{% trans "Demandes de location" %}</li>
 			<li class="menu-tab"><a href="{% url patron_edit %}">{% trans "Mon compte" %}</a></li>
        </ul>
     </div>
     <div class="content-header x12" style="margin-top: 20px;">
 		{% if alert_list %}
-			<h1>{% trans "Vos alertes" %}</h1>
+			<h1>{% trans "Vos demandes de location" %}</h1>
 		{% else %}
-			<h1>{% trans "Pas d'arlertes" %}</h2>
+			<h1>{% trans "Pas de demande de location" %}</h2>
 		{% endif %}
 	</div>
 	{% if alert_list %}
