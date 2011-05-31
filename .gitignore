@@ -5,6 +5,9 @@ nosetests.xml
 .DS_Store
 .noseids
 .coverage
+.project
+.pydevproject
+.settings/
 env
 eloue.db
 eloue/local.py

@@ -61,7 +61,7 @@ class BookingWizardTest(TestCase):
         self.assertTrue(response.status_code, 200)
         self.assertTemplateUsed(response, 'rent/booking_register.html')
         self.assertEquals(response.context['preview']['started_at'], datetime.datetime(2010, 10, 18, 8, 0))
-        self.assertEquals(response.context['preview']['ended_at'], datetime.datetime(2010, 10, 20, 8, 0))
+        self.assertEquals(response.context['preview']['ended_at'], datetime.datetime(2010, 10, 19, 8, 0))
         self.assertTrue('total_amount' in response.context['preview'])
     
     @patch.object(MultiPartFormWizard, 'security_hash')
