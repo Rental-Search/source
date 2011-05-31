@@ -498,6 +498,7 @@ body { background: #ECF6FF url("../images/body-bg.png") repeat 0 0; }
   
   .pp { margin-left: 60px; }
   .assurone { margin-left: 30px; }
+  .mma { margin-left: 10px; margin-top: 15px; }
 
 /* --------------------------------------------------------------
 
@@ -942,11 +943,18 @@ body { background: #ECF6FF url("../images/body-bg.png") repeat 0 0; }
   Flatpage
   
 -------------------------------------------------------------- */
-#flatepage { margin-bottom: 20px; }
+#flatpage 
+{ 
+  margin-bottom: 20px;
+  text-align: justify; 
+  margin-top: 10px; 
+}
 
-.flatpage ul { list-style-position: inside; }
+#flatpage ul { list-style-position: inside; }
 
-.flatpage li { list-style-image: url("../images/list-style-info.png"); }
+#flatpage li { list-style-image: url("../images/list-style-info.png"); }
+
+#flatpage li ul { margin-left: 20px; }
 
 /* --------------------------------------------------------------
 
