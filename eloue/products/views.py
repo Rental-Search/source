@@ -82,7 +82,6 @@ def reply_product_related_message(request, message_id, form_class=MessageEditFor
     
     if parent.sender != request.user and parent.recipient != request.user:
         raise Http404
-
     if request.method == "POST":
         sender = request.user
         form = form_class(request.POST)
@@ -101,21 +100,15 @@ def reply_product_related_message(request, message_id, form_class=MessageEditFor
     return render_to_response(template_name, {
         'form': form,
     }, context_instance=RequestContext(request))
-    
+
+
 @never_cache
 @secure_required
 def message_edit(request, product_id, recipient_id):
-    messages_form = MessageWizard([MessageEditForm, EmailAuthenticationForm])
-    return messages_form(request, product_id, recipient_id)
-    """
-    product = get_object_or_404(Product, pk=product_id)
-    sender = request.user
-    messages_form = MessageEditForm(data=request.POST)
-    if messages_form.is_valid():
-        messages_form.save(product=product, sender=request.user)
-        messages.success(request, _(u"Une question du produit a été envoyé !"))
-    return direct_to_template(request, 'products/product_detail.html', extra_context={'product': product, 'messages_form':messages_form})    
-    """
+    message_wizard = MessageWizard([MessageEditForm, EmailAuthenticationForm])
+    return message_wizard(request, product_id, recipient_id)
+
+
 @mobify
 @cache_page(900)
 @vary_on_cookie

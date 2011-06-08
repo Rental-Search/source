@@ -216,16 +216,6 @@ class PropertyValue(models.Model):
         u'Mercedes'
         """
         return smart_unicode(self.value)
-    
-class ProductRelatedMessage(Message):
-    
-    product = models.ForeignKey(Product, related_name='messages', blank=True, null=True)
-
-if "notification" not in settings.INSTALLED_APPS:
-    from django_messages.utils import new_message_email
-    signals.post_save.connect(new_message_email, sender=ProductRelatedMessage)
-    signals.pre_save.connect(message_content_filter, sender=ProductRelatedMessage)
-    signals.pre_save.connect(message_site_filter, sender=ProductRelatedMessage)
 
 class Price(models.Model):
     """A price"""
@@ -382,7 +372,16 @@ class Curiosity(models.Model):
     
     class Meta:
         verbose_name_plural = "curiosities"
+        
+class ProductRelatedMessage(Message):
+    product = models.ForeignKey(Product, related_name='messages', blank=True, null=True)
     
+    
+if "notification" not in settings.INSTALLED_APPS:
+    from django_messages.utils import new_message_email
+    signals.post_save.connect(new_message_email, sender=ProductRelatedMessage)
+    signals.pre_save.connect(message_content_filter, sender=ProductRelatedMessage)
+    signals.pre_save.connect(message_site_filter, sender=ProductRelatedMessage) 
 
 post_save.connect(post_save_answer, sender=Answer)
 post_save.connect(post_save_product, sender=Product)

@@ -73,6 +73,4 @@ def convert_from_xpf(value):
 
 
 
-    
-
 

@@ -120,6 +120,7 @@ class PatronEditForm(forms.ModelForm):
     is_professional = forms.BooleanField(label=_(u"Êtes-vous un professionnel ?"), required=False, initial=False)
     company_name = forms.CharField(label=_(u"Nom de la société"), required=False, widget=forms.TextInput(attrs={'class': 'inm'}))
     is_subscribed = forms.BooleanField(required=False, initial=False)
+    new_messages_alerted = forms.BooleanField(required=False, initial=False)
     
     def __init__(self, *args, **kwargs):
         super(PatronEditForm, self).__init__(*args, **kwargs)
@@ -148,7 +149,7 @@ class PatronEditForm(forms.ModelForm):
     class Meta:
         model = Patron
         fields = ('civility', 'username', 'first_name', 'last_name',
-            'email', 'is_professional', 'company_name', 'is_subscribed')
+            'email', 'is_professional', 'company_name', 'is_subscribed', 'new_messages_alerted')
             
             
 class PatronPasswordChangeForm(PasswordChangeForm):
@@ -224,7 +225,7 @@ def make_missing_data_form(instance, required_fields=[]):
         'addresses__country': forms.ChoiceField(choices=COUNTRY_CHOICES, required=True, widget=forms.Select(attrs={'class': 'selm'})),
         'phones__phone': PhoneNumberField(label=_(u"Téléphone"), required=True, widget=forms.TextInput(attrs={'class': 'inm'}))
     })
-    
+
     # Do we have an address ?
     if instance and instance.addresses.exists():
         fields['addresses'] = forms.ModelChoiceField(label=_(u"Addresse"), required=False,
@@ -236,27 +237,30 @@ def make_missing_data_form(instance, required_fields=[]):
     # Do we have a phone number ?
     if instance and instance.phones.exists():
         fields['phones'] = forms.ModelChoiceField(label=_(u"Téléphone"), required=False, queryset=instance.phones.all(), widget=forms.Select(attrs={'class': 'selm'}))
-        fields['phones__phone'].required = False
+        if fields.has_key('phones__phone'):
+            fields['phones__phone'].required = False
     
     # Do we have a password ?
-    if instance and instance.password:
-        del fields['password1']
-        del fields['password2']
+    if fields.has_key('password1'):
+        if instance and getattr(instance, 'password', None):
+            del fields['password1']
+            del fields['password2']
     
     # Are we in presence of a pro ?
-    if instance and instance.is_professional != None:
-        del fields['is_professional']
-        del fields['company_name']
-    
+    if fields.has_key('is_professional'):
+        if instance and getattr(instance, 'is_professional', None)!=None:
+            del fields['is_professional']
+            del fields['company_name']
+            
     for f in fields.keys():
-        if f not in required_fields:
+        if required_fields and f not in required_fields:
             del fields[f]
             continue
         if "__" in f or f in ["addresses", "phones", "password"]:
             continue
         if hasattr(instance, f) and getattr(instance, f):
             del fields[f]
-    
+            
     def save(self):
         for attr, value in self.cleaned_data.iteritems():
             if attr == "password1":
@@ -335,7 +339,7 @@ def make_missing_data_form(instance, required_fields=[]):
     form_class.clean_company_name = types.MethodType(clean_company_name, None, form_class)
     return fields != {}, form_class
     
-
+    
 class ContactForm(forms.Form):
     subject = forms.CharField(label=_(u"Sujet"), max_length=100, required=True, widget=forms.TextInput(attrs={'class': 'inm'}))
     message = forms.CharField(label=_(u"Message"), required=True, widget=forms.Textarea(attrs={'class': 'inm'}))

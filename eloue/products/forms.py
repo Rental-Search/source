@@ -16,6 +16,7 @@ from eloue.products.models import PatronReview, ProductReview, Product, Picture,
 from eloue.products.utils import Enum
 from django_messages.forms import ComposeForm
 import datetime
+from django.db.models import signals
 
 if "notification" in settings.INSTALLED_APPS:
     from notification import models as notification
@@ -108,10 +109,17 @@ class MessageEditForm(forms.Form):
         super(MessageEditForm, self).__init__(*args, **kwargs)
        
     def save(self, product, sender, recipient, parent_msg=None):
-       
+        
         subject = self.cleaned_data['subject']
         body = self.cleaned_data['body']
         message_list = []
+        if not hasattr(recipient, 'new_messages_alerted'):
+            patron = Patron.objects.get(pk=recipient.pk)
+            print ">>>>>>>get patron>>>>>>>>", patron
+            recipient = patron
+        if not recipient.new_messages_alerted:
+            from django_messages.utils import new_message_email
+            signals.post_save.disconnect(new_message_email, ProductRelatedMessage)
         msg = ProductRelatedMessage(
                 sender = sender,
                 recipient = recipient,
@@ -228,3 +236,5 @@ class ProductAdminForm(forms.ModelForm):
     
     class Meta:
         model = Product
+
+
