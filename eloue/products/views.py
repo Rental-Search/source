@@ -21,7 +21,7 @@ from haystack.query import SearchQuerySet
 from eloue.decorators import ownership_required, secure_required, mobify
 from eloue.accounts.forms import EmailAuthenticationForm
 from eloue.accounts.models import Patron
-from eloue.products.forms import FacetedSearchForm, ProductForm, ProductEditForm, MessageEditForm
+from eloue.products.forms import FacetedSearchForm, ProductForm, ProductEditForm, MessageEditForm, MessageComposeForm
 from django_messages.forms import ComposeForm
 from eloue.products.models import Category, Product, Curiosity, UNIT, ProductRelatedMessage
 from eloue.products.wizard import ProductWizard, MessageWizard
@@ -70,7 +70,29 @@ def product_edit(request, slug, product_id):
         product = form.save()
         messages.success(request, _(u"Votre produit a bien été édité !"))
     return direct_to_template(request, 'products/product_edit.html', extra_context={'product': product, 'form': form})
-    
+
+@login_required
+def compose_product_related_message(request, recipient=None, form_class=MessageComposeForm,
+    template_name='django_messages/compose.html', success_url=None, recipient_filter=None):
+    if request.method == "POST":
+        sender = request.user
+        form = form_class(request.POST, recipient_filter=recipient_filter)
+        if form.is_valid():
+            form.save(sender=request.user)
+            messages.add_message(request, messages.SUCCESS, _(u"Message successfully sent."))
+            if success_url is None:
+                success_url = reverse('messages_inbox')
+            if request.GET.has_key('next'):
+                success_url = request.GET['next']
+            return HttpResponseRedirect(success_url)
+    else:
+        form = form_class()
+        if recipient is not None:
+            recipients = [u.username for u in User.objects.filter(username__in=[r.strip() for r in recipient.split('+')])]
+            form.fields['recipient'].initial = ','.join(recipients)
+    return render_to_response(template_name, {
+        'form': form,
+        }, context_instance=RequestContext(request))
 
 @login_required
 def reply_product_related_message(request, message_id, form_class=MessageEditForm,

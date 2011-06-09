@@ -120,7 +120,7 @@ class PatronEditForm(forms.ModelForm):
     is_professional = forms.BooleanField(label=_(u"Êtes-vous un professionnel ?"), required=False, initial=False)
     company_name = forms.CharField(label=_(u"Nom de la société"), required=False, widget=forms.TextInput(attrs={'class': 'inm'}))
     is_subscribed = forms.BooleanField(required=False, initial=False)
-    new_messages_alerted = forms.BooleanField(required=False, initial=False)
+    new_messages_alerted = forms.BooleanField(required=False, initial=True)
     
     def __init__(self, *args, **kwargs):
         super(PatronEditForm, self).__init__(*args, **kwargs)

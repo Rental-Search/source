@@ -102,7 +102,7 @@ class Patron(User):
     company_name = models.CharField(null=True, blank=True, max_length=255)
     activation_key = models.CharField(null=True, blank=True, max_length=40)
     is_subscribed = models.BooleanField(_(u'newsletter'), default=False, help_text=_(u"Précise si l'utilisateur est abonné à la newsletter"))
-    new_messages_alerted = models.BooleanField(_(u'alerts if new messages come'), default=False, help_text=_(u"Précise si l'utilisateur est informé par email s'il a nouveaux messages"))
+    new_messages_alerted = models.BooleanField(_(u'alerts if new messages come'), default=True, help_text=_(u"Précise si l'utilisateur est informé par email s'il a nouveaux messages"))
     is_professional = models.NullBooleanField(_('professionnel'), blank=True, default=None, help_text=_(u"Précise si l'utilisateur est un professionnel"))
     modified_at = models.DateTimeField(_('date de modification'), editable=False)
     affiliate = models.CharField(null=True, blank=True, max_length=10)

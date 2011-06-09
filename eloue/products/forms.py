@@ -17,6 +17,7 @@ from eloue.products.utils import Enum
 from django_messages.forms import ComposeForm
 import datetime
 from django.db.models import signals
+from django_messages.utils import new_message_email
 
 if "notification" in settings.INSTALLED_APPS:
     from notification import models as notification
@@ -115,18 +116,19 @@ class MessageEditForm(forms.Form):
         message_list = []
         if not hasattr(recipient, 'new_messages_alerted'):
             patron = Patron.objects.get(pk=recipient.pk)
-            print ">>>>>>>get patron>>>>>>>>", patron
-            recipient = patron
+            recipient = patron # Hacking to make messages work
         if not recipient.new_messages_alerted:
-            from django_messages.utils import new_message_email
             signals.post_save.disconnect(new_message_email, ProductRelatedMessage)
+        else:
+            signals.post_save.connect(new_message_email, ProductRelatedMessage)
         msg = ProductRelatedMessage(
                 sender = sender,
                 recipient = recipient,
                 subject = subject,
                 body = body,
             )
-        product.messages.add(msg) # To implement a layer to wrap the message lib
+        if product:
+            product.messages.add(msg) # To implement a layer to wrap the message lib
         if parent_msg is not None:
             msg.parent_msg = parent_msg
             parent_msg.replied_at = datetime.datetime.now()
@@ -138,6 +140,40 @@ class MessageEditForm(forms.Form):
                 notification.send([recipient], "messages_reply_received", {'message': msg,})
             else:
                 notification.send([recipient], "messages_received", {'message': msg,})
+        return message_list
+
+class MessageComposeForm(ComposeForm):
+    
+    def save(self, sender, parent_msg=None):
+        recipients = self.cleaned_data['recipient']
+        subject = self.cleaned_data['subject']
+        body = self.cleaned_data['body']
+        message_list = []
+        for r in recipients:
+            if not hasattr(r, 'new_messages_alerted'):
+                patron = Patron.objects.get(pk=r.pk)
+                r = patron # Hacking to make messages work
+            if not r.new_messages_alerted:
+                signals.post_save.disconnect(new_message_email, ProductRelatedMessage)
+            else:
+                signals.post_save.connect(new_message_email, ProductRelatedMessage)
+            msg = ProductRelatedMessage(
+                sender = sender,
+                recipient = r,
+                subject = subject,
+                body = body,
+            )
+            if parent_msg is not None:
+                msg.parent_msg = parent_msg
+                parent_msg.replied_at = datetime.datetime.now()
+                parent_msg.save()
+            msg.save()
+            message_list.append(msg)
+            if notification:
+                if parent_msg is not None:
+                    notification.send([r], "messages_reply_received", {'message': msg,})
+                else:
+                    notification.send([r], "messages_received", {'message': msg,})
         return message_list
 
 class ProductForm(forms.ModelForm):
