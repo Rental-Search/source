@@ -166,9 +166,9 @@ INSTALLED_APPS = (
     'django_nose',
     'accounts',
     'rent',
+    'django_messages',
     'products',
     'oauth_provider',
-    'django_messages',
 )
 if DEBUG_TOOLBAR:
     INSTALLED_APPS += ('debug_toolbar',)
