@@ -17,7 +17,7 @@ from eloue.products.utils import Enum
 from django_messages.forms import ComposeForm
 import datetime
 from django.db.models import signals
-from django_messages.utils import new_message_email
+from django_messages import utils
 
 if "notification" in settings.INSTALLED_APPS:
     from notification import models as notification
@@ -118,9 +118,9 @@ class MessageEditForm(forms.Form):
             patron = Patron.objects.get(pk=recipient.pk)
             recipient = patron # Hacking to make messages work
         if not recipient.new_messages_alerted:
-            signals.post_save.disconnect(new_message_email, ProductRelatedMessage)
+            signals.post_save.disconnect(utils.new_message_email, ProductRelatedMessage)
         else:
-            signals.post_save.connect(new_message_email, ProductRelatedMessage)
+            signals.post_save.connect(utils.new_message_email, ProductRelatedMessage)
         msg = ProductRelatedMessage(
                 sender = sender,
                 recipient = recipient,
@@ -154,9 +154,9 @@ class MessageComposeForm(ComposeForm):
                 patron = Patron.objects.get(pk=r.pk)
                 r = patron # Hacking to make messages work
             if not r.new_messages_alerted:
-                signals.post_save.disconnect(new_message_email, ProductRelatedMessage)
+                signals.post_save.disconnect(utils.new_message_email, ProductRelatedMessage)
             else:
-                signals.post_save.connect(new_message_email, ProductRelatedMessage)
+                signals.post_save.connect(utils.new_message_email, ProductRelatedMessage)
             msg = ProductRelatedMessage(
                 sender = sender,
                 recipient = r,

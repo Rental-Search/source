@@ -39,7 +39,7 @@
 		{{ message.body|linebreaksbr }}<br /><br />
 
 		{% ifequal message.recipient.pk user.pk %}
-		<a href="{% url product_related_messages_reply message.id %}">{% trans "Reply" %}</a>
+		<a href="{% url reply_product_related_message message.id %}">{% trans "Reply" %}</a>
 		{% endifequal %}
 		<a href="{% url messages_delete message.id %}">{% trans "Delete" %}</a>
 	</div>

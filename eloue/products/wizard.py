@@ -142,11 +142,11 @@ class MessageWizard(GenericFormWizard):
         
     def get_template(self, step):
         if issubclass(self.form_list[step], EmailAuthenticationForm):
-            return 'products/product_register.html'
+            return 'django_messages/message_register.html'
         elif issubclass(self.form_list[step], MessageEditForm):
             return 'products/message_edit.html'
         else:
-            return 'products/product_missing.html'
+            return 'django_messages/message_missing.html'
 
 
 

@@ -29,7 +29,7 @@ from django_messages.models import Message
 from eloue.accounts.models import Patron
 
 from django.db.models import signals
-from eloue.signals import message_content_filter, message_site_filter
+from eloue import signals as eloue_signals
 
 UNIT = Enum([
     (0, 'HOUR', _(u'heure')),
@@ -378,10 +378,10 @@ class ProductRelatedMessage(Message):
     
     
 if "notification" not in settings.INSTALLED_APPS:
-    from django_messages.utils import new_message_email
-    signals.post_save.connect(new_message_email, sender=ProductRelatedMessage)
-    signals.pre_save.connect(message_content_filter, sender=ProductRelatedMessage)
-    signals.pre_save.connect(message_site_filter, sender=ProductRelatedMessage) 
+    from django_messages import utils
+    signals.post_save.connect(utils.new_message_email, sender=ProductRelatedMessage)
+    signals.pre_save.connect(eloue_signals.message_content_filter, sender=ProductRelatedMessage)
+    signals.pre_save.connect(eloue_signals.message_site_filter, sender=ProductRelatedMessage) 
 
 post_save.connect(post_save_answer, sender=Answer)
 post_save.connect(post_save_product, sender=Product)
