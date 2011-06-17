@@ -4,175 +4,179 @@
 {% block title %}{% trans "Vos produits mis en locations" %}{% endblock %}
 
 {% block content %}
-<div id="content-dash" class="clearfix">
-	<div id="menu" class="clearfix">
-		<ul class="x12">
-			<li class="menu-tab first"><a href="{% url dashboard %}">{% trans "Tableau de bord" %}</a></li>
-			<li class="menu-tab selected"><a href="{% url owner_booking %}">{% trans "Propriétaire" %}</a></li>
+<div id="content" class="xgrid">
+    <div class="content-top">
+        <ul id="menu" class="x12">
+            <li class="menu-tab first"><a href="{% url dashboard %}">{% trans "Tableau de bord" %}</a></li>
+			<li class="menu-tab selected">{% trans "Propriétaire" %}</li>
 			<li class="menu-tab"><a href="{% url borrower_booking %}">{% trans "Locataire" %}</a></li>
 			<li class="menu-tab"><a href="{% url patron_edit %}">{% trans "Mon compte" %}</a></li>
 			<li class="menu-tab"><a href="{% url messages_inbox %}">{% blocktrans %}Messages({{ messages_inbox_count }}){% endblocktrans %}</a></li>
-		</ul>
-	</div>
-	<div id="sub-menu" class="clearfix">
-		<ul class="x12">
-			<li class="sub-tab first"><a href="{% url owner_booking %}">{% trans "Locations actives" %}</a></li>
+        </ul>
+    </div>
+    <div id="sub-menu">
+        <ul class="x12">
+            <li class="sub-tab first"><a href="{% url owner_booking %}">{% trans "Locations actives" %}</a></li>
 			<li class="sub-tab"><a href="{% url owner_history %}">{% trans "Historique des locations" %}</a></li>
-			<li class="sub-tab selected"><a href="{% url owner_product %}">{% trans "Mes objets" %}</a></li>
+			<li class="sub-tab selected">{% trans "Mes objets" %}</li>
 			<li class="sub-tab"><a href="{% url product_create %}">{% trans "Ajouter un objet" %}</a></li>
-		</ul>
-	</div>
-	<div class="x6">
-		<div class="content-header x6 first">
-			<h2>1. {% trans "Catégorie" %}</h2>
-		</div>
-		<div class="new x6 first">
-			<form class="form" enctype="multipart/form-data" action="" method="POST">
-			  {% csrf_token %}
-				<table>
-					<tr>
-						<td colspan="2" {% if form.category.errors %} class="error-field" {% endif %}>
-						{{ form.category }}
-						{% if form.category.errors %}
-							{% for error in form.category.errors %}
-							<br />
-							<span class="error">{{ error|escape }}</span>
-							{% endfor %}
-						{% endif %}
-						</td>
-					</tr>
-			</table>
-		</div>
-	</div>
-	<div class="x6">
-		<div class="content-header x6 first">
-			<h2>2. {% trans "Informations" %}</h2>
-		</div>
-		<div class="new x6 first">
-			<form class="form" enctype="multipart/form-data" action="" method="POST">
-			  {% csrf_token %}
-				<table>
-					<tr>
-						<th><label>{{ form.picture.label }} {% if form.picture.field.required %}*{% endif %}:</label></th>
-						<td>
-							{% for picture in product.pictures.all %}
-								{% if picture.thumbnail %}
-				       		<a href="#"><img src="{{ picture.thumbnail.url }}" /></a>
-				        {% endif %}
-							{% endfor %}
-							{{ form.picture }}
-							{% if form.picture.errors %}
-							    {% for error in form.picture.errors %}
-											<br />
-							        <span class="error">{{ error|escape }}</span>
-							    {% endfor %}
-							{% endif %}
-						</td>
-					</tr>
-					<tr>
-						<th><label>{{ form.summary.label }} {% if form.summary.field.required %}*{% endif %} :</label></th>
-						<td {% if form.summary.errors %} class="error-field" {% endif %}>
-							{{ form.summary }}
-							{% if form.summary.errors %}
-							    {% for error in form.summary.errors %}
-											<br />
-							        <span class="error">{{ error|escape }}</span>
-							    {% endfor %}
-							{% endif %}
-						</td>
-					</tr>
-					<tr>
-						<th><label>{{ form.deposit_amount.label }} {% if form.deposit_amount.field.required %}*{% endif %} :</label></th>
-						<td {% if form.deposit_amount.errors %} class="error-field" {% endif %}>
-							{{  form.deposit_amount }} <span class="unit">{% currency_symbol %}</span>
-							{% if form.deposit_amount.errors %}
-							    {% for error in form.deposit_amount.errors %}
-											<br />
-							        <span class="error">{{ error|escape }}</span>
-							    {% endfor %}
-							{% endif %}
-						</td>
-					</tr>
-					<tr>
-						<th><label>{{ form.quantity.label }} {% if form.quantity.field.required %}*{% endif %} :</label></th>
-						<td {% if form.quantity.errors %} class="error-field" {% endif %}>
-							{{  form.quantity }}
-							{% if form.quantity.errors %}
-							    {% for error in form.quantity.errors %}
-											<br />
-							        <span class="error">{{ error|escape }}</span>
-							    {% endfor %}
-							{% endif %}
-						</td>
-					</tr>
-					<tr>
-						<th><label>{{ form.description.label }} {% if form.description.field.required %}*{% endif %} :</label></th>
-						<td {% if form.description.errors %} class="error-field" {% endif %}>
-							{{ form.description }}
-							{% if form.description.errors %}
-							    {% for error in form.description.errors %}
-											<br />
-							        <span class="error">{{ error|escape }}</span>
-							    {% endfor %}
-							{% endif %}
-						</td>
-					</tr>
-				</table>
+        </ul>
+    </div>
+    <form class="inline" enctype="multipart/form-data" action="" method="POST">
+    <div class="x6">
+        <div class="content-header x6 first">
+            <h2>1. Catégorie</h2>
+        </div>
+        {% csrf_token %}
+		<table class="new">
+			<tr>
+				<td colspan="2" {% if form.category.errors %} class="error-field" {% endif %}>
+				{{ form.category }}
+				{% if form.category.errors %}
+					{% for error in form.category.errors %}
+					<br />
+					<span class="error">{{ error|escape }}</span>
+					{% endfor %}
+				{% endif %}
+				</td>
+			</tr>
+		</table>
+    </div>
+    <div class="x6">
+        <div class="content-header x6 first">
+            <h2>2. Information</h2>
+        </div>
+        <table class="new">
+            <tr>
+				<th><label>{{ form.picture.label }} {% if form.picture.field.required %}*{% endif %}:</label></th>
+				<td>
+					{% for picture in product.pictures.all %}
+						{% if picture.thumbnail %}
+		       		<a href="#"><img src="{{ picture.thumbnail.url }}" /></a>
+		        {% endif %}
+					{% endfor %}
+					{{ form.picture }}
+					{% if form.picture.errors %}
+					    {% for error in form.picture.errors %}
+									<br />
+					        <span class="error">{{ error|escape }}</span>
+					    {% endfor %}
+					{% endif %}
+				</td>
+			</tr>
+			<tr>
+				<th><label>{{ form.summary.label }} {% if form.summary.field.required %}*{% endif %} :</label></th>
+				<td {% if form.summary.errors %} class="error-field" {% endif %}>
+					{{ form.summary }}
+					{% if form.summary.errors %}
+					    {% for error in form.summary.errors %}
+									<br />
+					        <span class="error">{{ error|escape }}</span>
+					    {% endfor %}
+					{% endif %}
+				</td>
+			</tr>
+			<tr>
+				<th><label>{{ form.deposit_amount.label }} {% if form.deposit_amount.field.required %}*{% endif %} :</label></th>
+				<td {% if form.deposit_amount.errors %} class="error-field" {% endif %}>
+					{{  form.deposit_amount }} <span class="unit">{% currency_symbol %}</span>
+					{% if form.deposit_amount.errors %}
+					    {% for error in form.deposit_amount.errors %}
+									<br />
+					        <span class="error">{{ error|escape }}</span>
+					    {% endfor %}
+					{% endif %}
+				</td>
+			</tr>
+			<tr>
+				<th><label>{{ form.quantity.label }} {% if form.quantity.field.required %}*{% endif %} :</label></th>
+				<td {% if form.quantity.errors %} class="error-field" {% endif %}>
+					{{  form.quantity }}
+					{% if form.quantity.errors %}
+					    {% for error in form.quantity.errors %}
+									<br />
+					        <span class="error">{{ error|escape }}</span>
+					    {% endfor %}
+					{% endif %}
+				</td>
+			</tr>
+			<tr>
+				<th class="desc-input"><label>{{ form.description.label }} {% if form.description.field.required %}*{% endif %} :</label></th>
+				<td {% if form.description.errors %} class="error-field" {% endif %}>
+					{{ form.description }}
+					{% if form.description.errors %}
+					    {% for error in form.description.errors %}
+									<br />
+					        <span class="error">{{ error|escape }}</span>
+					    {% endfor %}
+					{% endif %}
+				</td>
+			</tr>
+        </table>
+    </div>
+    <div class="content-header x12">
+        <h2>3. {% trans "Prix de location" %}</h2>
+    </div>
+    <div class="x12">
+        <div class="tabsPrices">
+            <ul>
+				<li><a href="#tabs-1">{% trans "Prix simplifiés"%}</a></li>
+			</ul>
+			<div id="tabs-1">
+			    <h5>{% trans "Prix par défaut :" %}</h5>
+			    {% blocktrans %}
+			    <p>Vous pouvez ne remplir qu’une seule case et cliquer sur l’icône <img src="{{MEDIA_URL}}/images/mini_calculator.png" alt="Calculer les prix de location automatiquement" /> pour calculer les autres valeurs automatiquement.</p>
+			    {% endblocktrans %}
+			    <ul class="prices-form clearfix">
+			        <li>
+			            <p>
+			             {{ form.hour_price }}
+							<label class="labs "><span class="current-symbol">{% currency_symbol %}</span> {{ form.hour_price.label }}{% if form.hour_price.field.required %}*{% endif %}</label>
+						</p>
+			        </li>
+			        <li>
+			            <p>
+			                {{ form.day_price }}
+							<label class="labs"><span class="current-symbol">{% currency_symbol %}</span> {{ form.day_price.label }}{% if form.day_price.field.required %}*{% endif %}</label>
+			            </p>
+			        </li>
+			        <li>
+			            <p>
+			                {{ form.week_end_price }}
+							<label class="labs"><span class="current-symbol">{% currency_symbol %}</span> {{ form.week_end_price.label }}{% if form.week_end_price.field.required %}*{% endif %}</label>
+			             </p>
+			        </li>
+			        <li>
+			            <p>
+			                {{ form.week_price }}
+							<label class="labs"><span class="current-symbol">{% currency_symbol %}</span> {{ form.week_price.label }}{% if form.week_price.field.required %}*{% endif %}</label>
+			            </p>
+			        </li>
+			        <li>
+			            <p>
+			                {{ form.two_weeks_price }}
+							<label class="labs"><span class="current-symbol">{% currency_symbol %}</span> {{ form.two_weeks_price.label }}{% if form.two_weeks_price.field.required %}*{% endif %}</label>
+			            </p>
+			        </li>
+			        <li>
+			            <p>
+			                {{ form.month_price }}
+							<label class="labs"><span class="current-symbol">{% currency_symbol %}</span> {{ form.month_price.label }}{% if form.month_price.field.required %}*{% endif %}</label>
+			            </p>
+			        </li>
+			        <li class="calculator"><a href="#">{% trans "Calculer" %}</a></li>
+                    <li class="supp-list-prices"></li>
+			    </ul>
 			</div>
-		</div>
-		<div class="content-header x12">
-			<h2>3. {% trans "Prix de location" %}</h2>
-		</div>
-		<div class="x12">
-			<div class="tabsPrices">
-				<ul>
-					<li><a href="#tabs-1">{% trans "Prix simplifiés"%}</a></li>
-				</ul>
-				<div id="tabs-1">
-					<h5>{% trans "Prix par défaut :" %}</h5>
-					{% blocktrans %}
-					 <p>Vous pouvez ne remplir qu’une seule case et cliquer sur l’icône <img src="{{MEDIA_URL}}/images/mini_calculator.png" alt="Calculer les prix de location automatiquement" /> pour calculer les autres valeurs automatiquement.</p>
-					{% endblocktrans %}
-					<div class="prices-form">
-						<ul class="prices-list">
-							<li class="price-by-hour {% if form.hour_price.errors %} error-field {% endif %}">
-							  {{ form.hour_price }}
-								<label class="labs "><span class="current-symbol">{% currency_symbol %}</span> {{ form.hour_price.label }}{% if form.hour_price.field.required %}*{% endif %}</label>
-							</li>
-							<li {% if form.day_price.errors %} class="error-field" {% endif %}>
-								{{ form.day_price }}
-								<label class="labs"><span class="current-symbol">{% currency_symbol %}</span> {{ form.day_price.label }}{% if form.day_price.field.required %}*{% endif %}</label>
-							</li>
-							<li {% if form.week_end_price.errors %} class="error-field" {% endif %}>
-								{{ form.week_end_price }}
-								<label class="labs"><span class="current-symbol">{% currency_symbol %}</span> {{ form.week_end_price.label }}{% if form.week_end_price.field.required %}*{% endif %}</label>
-							</li>
-							<li {% if form.week_price.errors %} class="error-field" {% endif %}>
-								{{ form.week_price }}
-								<label class="labs"><span class="current-symbol">{% currency_symbol %}</span> {{ form.week_price.label }}{% if form.week_price.field.required %}*{% endif %}</label>
-							</li>
-							<li {% if form.two_weeks_price.errors %} class="error-field" {% endif %}>
-								{{ form.two_weeks_price }}
-								<label class="labs"><span class="current-symbol">{% currency_symbol %}</span> {{ form.two_weeks_price.label }}{% if form.two_weeks_price.field.required %}*{% endif %}</label>
-							</li>
-							<li class="price-by-month {% if form.month_price.errors %} error-field {% endif %}">
-								{{ form.month_price }}
-								<label class="labs"><span class="current-symbol">{% currency_symbol %}</span> {{ form.month_price.label }}{% if form.month_price.field.required %}*{% endif %}</label>
-							</li>
-							<li class="calculator">
-								<a href="#">{% trans "Calculer" %}</a>
-							</li>
-							<li class="supp-list-prices">
-							</li>
-						</ul>
-					</div>
-				</div>
- 		 </div>
-		<p class="required-field">{% trans "* = champ obligatoire" %}</p>
-		</div>
-	<div class="submit-wizard x12">
-		<a href="{% url owner_product %}">{% trans "Annuler" %}</a> {% trans "ou" %} 
-		<input type="submit" class="btn big-green" value="{% trans "Sauvegarder" %}" />
+			<p class="required-field">{% trans "* = champ obligatoire" %}</p>
+        </div>
+    </div>
+    <div id="submit-wizard" class="x12">
+        <p>
+            <a href="{% url product_delete product.slug product.pk %}" style="padding-right: 500px; color: #900;">{% trans "Supprimer cet objet" %}</a>
+		    <a href="{% url owner_product %}">{% trans "Annuler" %}</a> {% trans "ou" %} 
+    		<input type="submit" class="btn big-green" value="{% trans "Sauvegarder" %}" />
+		</p>
 	</form>
 	</div>
 </div>

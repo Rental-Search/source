@@ -20,9 +20,9 @@ from django.template.defaultfilters import slugify
 from eloue.accounts.manager import PatronManager
 from eloue.geocoder import GoogleGeocoder
 from eloue.products.utils import Enum
-from eloue.paypal import accounts, PaypalError
 from eloue.signals import post_save_sites
 from eloue.utils import create_alternative_email
+from eloue.payments.paypal_payment import accounts, verify_paypal_account, PaypalError
 
 
 CIVILITY_CHOICES = Enum([
@@ -208,16 +208,7 @@ class Patron(User):
     
     @property
     def is_verified(self):
-        try:
-            response = accounts.get_verified_status(
-                emailAddress=self.email,
-                firstName=self.first_name,
-                lastName=self.last_name
-            )
-            return response['accountStatus'] == 'VERIFIED'
-        except PaypalError, e:
-            log.error(e)
-            return False
+        return verify_paypal_account(email=self.paypal_email, first_name=self.first_name, last_name=self.last_name)
     
     def send_activation_email(self):
         context = {
@@ -307,8 +298,15 @@ class PhoneNumber(models.Model):
     
     def __unicode__(self):
         return smart_unicode(self.number)
+
+        
+class PatronAccepted(models.Model):
+    """Patron accpeted to create an account for private plateform"""
+    email = models.EmailField()
+    sites = models.ManyToManyField(Site, related_name='patrons_accepted')
     
 
 signals.post_save.connect(post_save_sites, sender=Patron)
+
 
 

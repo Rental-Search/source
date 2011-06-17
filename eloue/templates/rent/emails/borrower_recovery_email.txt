@@ -1,5 +1,5 @@
 {% load i18n %}
-{% blocktrans with booking.borrower.username as borrower and booking.product.category.name as category and booking.product.summary as summary and booking.started_at|date:"DATETIME_FORMAT" as starting_at and booking.started_at|timesince:booking.ended_at as duration %}
+{% blocktrans with booking.borrower.username as borrower and booking.product.category.name as category and booking.product.summary as summary and booking.started_at|date:"DATETIME_FORMAT" as starting_at and booking.started_at|timesince:booking.ended_at as duration and site.name as site_name %}
 Bonjour {{ borrower }},
 
 Nous avons remarqué que vous n’êtes pas aller jusqu’au bout de la réservation suivante :
@@ -13,5 +13,5 @@ Pour reprendre votre réservation, il vous suffit de cliquer sur le lien ci dess
 
 {{ preapproval_url }}
 
-L'équipe e-loue
+L'équipe {{  site_name }}
 {% endblocktrans %}

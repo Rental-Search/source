@@ -1,5 +1,5 @@
 {% load i18n %}
-{% blocktrans with booking.borrower.username as username and booking.owner.username as owner and booking.get_absolute_url as booking_url and site.domain as domain %}
+{% blocktrans with booking.borrower.username as username and booking.owner.username as owner and booking.get_absolute_url as booking_url and site.domain as domain and site.name as site_name %}
 Bonjour {{ username }},
 
 Votre location a été clôturée. De plus {{ owner }} a bien reçu votre virement.
@@ -8,5 +8,5 @@ Si vous rencontrez un quelconque problème, nous vous invitons à nous signaler 
 
 {{ protocol }}://{{ domain }}{{ booking_url }}
  
-L'équipe e-loue
+L'équipe {{ site_name }}
 {% endblocktrans %}

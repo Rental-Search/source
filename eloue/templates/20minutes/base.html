@@ -1,80 +1,83 @@
 {% load compressed i18n markup %}
 {% include "header.html" %}
-<div id="wrapper" class="xgrid">
-	<div id="header" class="clearfix">
-		<div class="logo x2">
-			Avec
-			<a href='/'>
-				<img src="{{ MEDIA_URL }}images/logo.png" alt="e-loue" width="90px"/>
-			</a>
-		</div>
-		<div class="x10 omega">
-			<ul class="nav-bar">
-				<li class="nav"><a href="{% url product_create %}" class="btn medium-green"  >{% trans "Mettre en location" %}</a></li>
-				{% if not user.is_authenticated %}
-					<li class="nav"><a href="{% url auth_login %}" class="nav-link" >{% trans "S'inscrire ou se connecter" %}</a></li>
-				{% else %}
-					<li class="nav"><a href="{% url auth_logout %}" class="nav-link">{% trans "Se déconnecter" %}</a></li>
-				{% endif %}
-				{% if user.is_anonymous %}
-				 <li class="nav"><a href="/comment-ca-marche/" class="nav-link">{% trans "Comment ça marche ?" %}</a></li>
-				{% else %}
-				 <li class="nav"><a href="{% url dashboard %}" class="nav-link">{% trans "Tableau de bord" %}</a></li>
-				 <li class="nav welcome">{% blocktrans with request.user.first_name as first_name %} Bienvenue, {{ first_name }}!{% endblocktrans %}</li>    
+<div id="header" class="xgrid">
+    <div class="logo x2">
+		Avec
+		<a href='/'>
+			<img src="{{ MEDIA_URL }}images/logo.png" alt="e-loue" width="90px"/>
+		</a>
+	</div>
+	<div class="x10">
+        <ul class="nav-bar">
+			<li class="nav"><a href="{% url product_create %}" class="btn medium-green"  >{% trans "Mettre en location" %}</a></li>
+			{% if not user.is_authenticated %}
+				<li class="nav"><a href="{% url auth_login %}" class="nav-link" >{% trans "S'inscrire ou se connecter" %}</a></li>
+			{% else %}
+				<li class="nav"><a href="{% url auth_logout %}" class="nav-link">{% trans "Se déconnecter" %}</a></li>
+			{% endif %}
+			{% if user.is_anonymous %}
+			 <li class="nav"><a href="{% trans "/comment-ca-marche/" %}" class="nav-link">{% trans "Comment ça marche ?" %}</a></li>
+			{% else %}
+			<li class="nav"><a href="{% url dashboard %}" class="nav-link">{% trans "Tableau de bord" %}</a></li>  
+			 <li class="nav welcome">{% blocktrans with request.user.first_name as first_name %} Bienvenue, {{ first_name }}!{% endblocktrans %}</li>
+			{% endif %}
+        </ul>
+    </div>
+<div>
+    {% block content %}
+    {% endblock %}
+  	<div id="footer" class="xgrid">
+  	    <div class="x3">
+			<h4>{% trans "Liens utiles" %}</h4>
+			<ul>
+				<li><a href="{% url home %}">{% trans "Accueil" %}</a></li>
+				<li><a href="{% url dashboard %}">{% trans "Mon compte" %}</a></li>
+				<li><a href="{% url product_create %}">{% trans "Mettre en location" %}</a></li>
+				{% if user.is_authenticated %}
+					<li><a href="{% trans "/comment-ca-marche/" %}">{% trans "Comment ça marche ?" %}</a></li>
 				{% endif %}
 			</ul>
 		</div>
-	</div>{# header #}
-{% block content %}{% endblock %}
-</div>
-<div id="footer" class="xgrid">
-	<div class="x3">
-		<h4>{% trans "Liens utiles" %}</h4>
-		<ul>
-			<li><a href="{% url home %}">{% trans "Accueil" %}</a></li>
-			<li><a href="{% url dashboard %}">{% trans "Mon compte" %}</a></li>
-			<li><a href="{% url product_create %}">{% trans "Mettre en location" %}</a></li>
-		</ul>
-	</div>
-	<div class="x3">
-		<h4>{% trans "Info" %}</h4>
-		<ul>
-			<li><a href="/espace-professionnel/">{% trans "Espace professionnel" %}</a></li>
-			<li><a href="/assurance-tranquillite/">{% trans "Assurance tranquillité" %}</a></li>
-			<li><a href="/conditions-generales/">{% trans "Conditions générales" %}</a></li>
-			<li><a href="/respect-vie-privee/">{% trans "Respect de la vie privée" %}</a></li>
-		</ul>
-	</div>
-	<div class="x3">
-		<h4>{% trans "Support" %}</h4>
-		<ul>
-			<li><a href="{% url faq-topic-list %}">{% trans "Aide" %}</a></li>
-			<li><a href="{% url contact %}">{% trans "Contactez-nous" %}</a></li>
-			<li><a href="/espace-presse/">{% trans "Espace presse" %}</a></li>
-			<li><a href="/qui-sommes-nous/">{% trans "Qui sommes nous ?" %}</a></li>
-		</ul>
-	</div>
-	<div class="x3">
-		<h4>{% trans "Communauté" %}</h4>
-		<ul>
-			<li><a href="http://blog.e-loue.com">{% trans "Blog" %}</a></li>
-			<li><a href="https://twitter.com/eloue">{% trans "Twitter" %}</a></li>
-			<li><a href="https://www.facebook.com/pages/e-louecom/104685226447">{% trans "Facebook" %}</a></li>
-		</ul>
-	</div>
-	{% if site_wide_announcements %}
-	{% with site_wide_announcements|first as announcement %}
-		<div class="x12 twitter-box">
-			{{ announcement.content|markdown }}
-			<div class="twitter-dialogue">
-			</div>
+		<div class="x3">
+			<h4>{% trans "Info" %}</h4>
+			<ul>
+				<li><a href="{% trans "/espace-professionnel/" %}">{% trans "Espace professionnel" %}</a></li>
+				<li><a href="{% trans "/assurance-tranquillite/" %}">{% trans "Assurance tranquillité" %}</a></li>
+				<li><a href="{% trans "/conditions-generales/" %}">{% trans "Conditions générales" %}</a></li>
+				<li><a href="{% trans "/respect-vie-privee/" %}">{% trans "Respect de la vie privée" %}</a></li>
+			</ul>
 		</div>
-		<div class="x12 twitter-info">
-		<p>
-			<span class="twitter-time">{{ announcement.creation_date|date:"l j F Y"|capfirst }}<span> sur <a href="http://blog.e-loue.com">e-loue blog</a>
-		</p>
-	</div>
-{% endwith %}
-{% endif %}
-</div>
+		<div class="x3">
+			<h4>{% trans "Support" %}</h4>
+			<ul>
+				<li><a href="{% url faq-topic-list %}">{% trans "Aide" %}</a></li>
+				<li><a href="{% url contact %}">{% trans "Contactez-nous" %}</a></li>
+				<li><a href="{% trans "/espace-presse/" %}">{% trans "Espace presse" %}</a></li>
+				<li><a href="{% trans "/qui-sommes-nous/" %}">{% trans "Qui sommes nous ?" %}</a></li>
+			</ul>
+		</div>
+		<div class="x3">
+			<h4>{% trans "Communauté" %}</h4>
+			<ul>
+				<li><a href="http://blog.e-loue.com">{% trans "Blog" %}</a></li>
+				<li><a href="https://twitter.com/eloue">{% trans "Twitter" %}</a></li>
+				<li><a href="https://www.facebook.com/pages/e-louecom/104685226447">{% trans "Facebook" %}</a></li>
+			</ul>
+		</div>
+		{% if site_wide_announcements %}
+		{% with site_wide_announcements|first as announcement %}
+			<div class="x12 twitter-box">
+				{{ announcement.content|markdown }}
+				<div class="twitter-dialogue">
+				</div>
+			</div>
+			<div class="x12 twitter-info">
+			<p>
+				<span class="twitter-time">{{ announcement.creation_date|date:"l j F Y"|capfirst }}<span> {% trans "sur" %} <a href="http://blog.e-loue.com">{% trans "e-loue blog" %}</a>
+			</p>
+		</div>
+	{% endwith %}
+	{% endif %}
+  	</div>
+  	
 {% include "footer.html" %}

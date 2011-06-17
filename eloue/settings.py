@@ -115,20 +115,22 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'eloue.context_processors.debug',
 )
 
+
 MIDDLEWARE_CLASSES = (
     'django.middleware.cache.UpdateCacheMiddleware',
     'django.middleware.gzip.GZipMiddleware',
     'eloue.middleware.SpacelessMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
+	'django.contrib.sessions.middleware.SessionMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.middleware.http.ConditionalGetMiddleware',
     'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
     'django.contrib.redirects.middleware.RedirectFallbackMiddleware',
-    'django.middleware.cache.FetchFromCacheMiddleware'
+    'django.middleware.cache.FetchFromCacheMiddleware',
 )
+
 if DEBUG_TOOLBAR:
     MIDDLEWARE_CLASSES += ('debug_toolbar.middleware.DebugToolbarMiddleware',)
 
@@ -221,7 +223,6 @@ COMPRESS_YUI_BINARY = getattr(local, 'COMPRESS_YUI_BINARY', '/usr/bin/yui-compre
 COMPRESS_CSS = {
     'master': {
         'source_filenames': (
-            'css/master.css',
             'css/screen.css',
             'css/custom.css',
             'css/plugins/ui/jquery.ui.core.css',
@@ -236,7 +237,6 @@ COMPRESS_CSS = {
     },
     'twenty': {
         'source_filenames': (
-            'css/master.css',
             'css/screen.css',
             'css/custom.css',
             'css/20m.css',
@@ -261,7 +261,6 @@ COMPRESS_CSS = {
     },
     'nc': {
         'source_filenames': (
-            'css/master.css',
             'css/screen.css',
             'css/custom.css',
             'css/nc.css',
@@ -277,7 +276,6 @@ COMPRESS_CSS = {
     },
     'uk': {
         'source_filenames': (
-            'css/master.css',
             'css/screen.css',
             'css/custom.css',
             'css/uk.css',
@@ -290,8 +288,50 @@ COMPRESS_CSS = {
         'extra_context': {
             'media': 'screen',
         }
+    },
+    'dcns': {
+        'source_filenames': (
+            'css/dcns/screen.css',
+            'css/dcns/custom.css',
+            'css/plugins/ui/jquery.ui.core.css',
+            'css/plugins/ui/jquery.ui.datepicker.css',
+            'css/plugins/ui/jquery.ui.tabs.css',
+            'css/plugins/ui/jquery.ui.theme.css'
+        ),
+        'output_filename': 'css/dcns.r?.css',
+        'extra_context': {
+            'media': 'screen',
+        }
+    },
+    'ie': {
+        'source_filenames': (
+            'css/ie/ie.css',
+        ),
+        'output_filename': 'css/ie.r?.css',
+        'extra_context': {
+            'media': 'screen',
+        }
+    },
+    'ie6': {
+        'source_filenames': (
+            'css/ie/ie6.css',
+        ),
+        'output_filename': 'css/ie6.r?.css',
+        'extra_context': {
+            'media': 'screen',
+        }
+    },
+    'ie7': {
+        'source_filenames': (
+            'css/ie/ie7.css',
+        ),
+        'output_filename': 'css/ie7.r?.css',
+        'extra_context': {
+            'media': 'screen',
+        }
     }
 }
+
 COMPRESS_JS = {
     'application': {
         'source_filenames': (
@@ -387,7 +427,7 @@ if USE_PAYPAL_SANDBOX:
     PAYPAL_API_PASSWORD = getattr(local, 'PAYPAL_SANDBOX_API_PASSWORD', "1300354722")
     PAYPAL_API_SIGNATURE = getattr(local, 'PAYPAL_SANDBOX_API_SIGNATURE', "An5ns1Kso7MWUdW4ErQKJJJ4qi4-A0HCXVSBNN6Gj25nz33zT0f6ZfAK")
     PAYPAL_API_APPLICATION_ID = getattr(local, 'PAYPAL_SANDBOX_API_APPLICATION_ID', 'APP-80W284485P519543T')
-    PAYPAL_API_EMAIL = getattr(local, 'PAYPAL_API_EMAIL', 'benoit.woj@e-loue.com')
+    PAYPAL_API_EMAIL = getattr(local, 'PAYPAL_API_EMAIL', 'test_1301562706_biz@e-loue.com') #TODO, maybe this address, bug of sandbox? benoit.woj@e-loue.com
     PAYPAL_COMMAND = "https://www.sandbox.paypal.com/webscr?%s"
 else:
     PAYPAL_API_USERNAME = getattr(local, 'PAYPAL_API_USERNAME', "benoit.woj_api1.e-loue.com")

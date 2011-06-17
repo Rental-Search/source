@@ -10,13 +10,11 @@
 {% endblock %}
 
 {% block content %}
-<div id="content-dash" class="clearfix">
-	<div id="menu" class="clearfix">
-		<div class="ht-title x4">
-			<h1>{{ topic.title }}</h1>
-		</div>
-	</div>
-	<div class="flatpage x12">
+<div id="content" class="xgrid">
+    <div class="content-top" style="margin-bottom: 10px;">
+        <h1>{{ topic.title }}</h1>
+    </div>
+    <div class="x12">
   	{% if topic.description %}
   	<p>{{ topic.description }}</p>
  		{% endif %}
@@ -25,5 +23,5 @@
   	{{ question.answer|markdown }}
  		{% endfor %}
 	</div>
-</div>{# content-dash #}
+</div>
 {% endblock %}

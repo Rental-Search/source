@@ -27,9 +27,13 @@ class Command(BaseCommand):
         protocol = "https" if USE_HTTPS else "http"
         dtime = datetime.now() + timedelta(hours=1)
         for booking in Booking.objects.pending().filter(started_at__contains=' %02d' % dtime.hour, started_at__day=dtime.day, started_at__month=dtime.month, started_at__year=dtime.year):
+            booking.init_payment_processor()
             booking.hold(
                 cancel_url="%s://%s%s" % (protocol, domain, reverse("booking_failure", args=[booking.pk.hex])),
                 return_url="%s://%s%s" % (protocol, domain, reverse("booking_success", args=[booking.pk.hex])),
             )
+            if booking.not_need_ipn():
+                booking.state = Booking.STATE.ONGOING
+                booking.save()
         log.info('Finished hourly ongoing mover process')
     

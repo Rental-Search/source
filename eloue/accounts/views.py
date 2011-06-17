@@ -26,6 +26,8 @@ from eloue.accounts.wizard import AuthenticationWizard
 
 from eloue.products.forms import FacetedSearchForm
 from eloue.rent.models import Booking
+import time
+
 
 PAGINATE_PRODUCTS_BY = getattr(settings, 'PAGINATE_PRODUCTS_BY', 10)
 USE_HTTPS = getattr(settings, 'USE_HTTPS', True)
@@ -82,12 +84,30 @@ def patron_detail(request, slug, patron_id=None, page=None):
 
 
 @login_required
-def patron_edit(request):
-    form = PatronEditForm(request.POST or None, instance=request.user)
+def patron_edit(request, *args, **kwargs):
+    paypal = request.GET.get('paypal', False)
+    redirect_path = request.REQUEST.get('next', '')
+    patron = request.user
+    form = PatronEditForm(request.POST or None, instance=patron)
     if form.is_valid():
-        form.save()
-        messages.success(request, _(u"Vos informations ont bien été modifiées"))
-    return direct_to_template(request, 'accounts/patron_edit.html', extra_context={'form': form, 'patron': request.user})
+        patron = form.save()
+        if paypal: 
+            if patron.is_verified == "VERIFIED":
+                protocol = 'https' if USE_HTTPS else 'http'
+                domain = Site.objects.get_current().domain
+                if not redirect_path or '//' in redirect_path or ' ' in redirect_path:
+                    redirect_path = reverse('dashboard')
+                return_url = "%s://%s%s?paypal=true" % (protocol, domain, redirect_path)
+                messages.success(request, _(u"Vos informations ont bien été modifiées et votre compte paypal est vérifié"))    
+                return redirect_to(request, return_url)
+            else:
+                if patron.is_verified == "UNVERIFIED":
+                    messages.error(request, _(u"Votre paypal compte n'est pas vérifié, veuillez vérifier votre compte et modifier votre nom ou prénom ou email paypal"))
+                elif patron.is_verified == "INVALID":
+                    messages.error(request, _(u"Votre Paypal compte est invalide, veuillez modifier votre nom ou prénom ou email paypal"))
+        else:
+            messages.success(request, _(u"Vos informations ont bien été modifiées")) 
+    return direct_to_template(request, 'accounts/patron_edit.html', extra_context={'form': form, 'patron': patron})
 
 
 @login_required
@@ -104,16 +124,33 @@ def patron_paypal(request):
     form = PatronPaypalForm(request.POST or None,
         initial={'paypal_email': request.user.email}, instance=request.user)
     redirect_path = request.REQUEST.get('next', '')
+    booking_id = redirect_path.split("/")[-2]
+    from eloue.rent.models import Booking
+    booking = Booking.objects.get(uuid=booking_id)
     if not redirect_path or '//' in redirect_path or ' ' in redirect_path:
         redirect_path = reverse('dashboard')
     if form.is_valid():
+        
         patron = form.save()
         protocol = 'https' if USE_HTTPS else 'http'
         domain = Site.objects.get_current().domain
         return_url = "%s://%s%s?paypal=true" % (protocol, domain, redirect_path)
-        paypal_redirect = patron.create_account(return_url=return_url)
-        if paypal_redirect:
-            return redirect_to(request, paypal_redirect)
+        profile_edit_url = "%s://%s%s?next=%s&paypal=true"% (protocol, domain, reverse('patron_edit'), redirect_path)
+        
+        if form.paypal_exists:
+            if patron.is_verified == "VERIFIED":
+                messages.success(request, _(u"Votre compte paypal est vérifié"))
+                return redirect_to(request, return_url)
+            else:
+                if patron.is_verified == "UNVERIFIED":
+                    messages.error(request, _(u"Votre paypal compte n'est pas vérifié, veuillez modifier votre nom ou prénom ou email paypal"))
+                elif patron.is_verified == "INVALID":
+                    messages.error(request, _(u"Votre Paypal compte est invalide, veuillez modifier votre nom ou prénom ou email paypal"))
+                return redirect_to(request, profile_edit_url)
+        else: 
+            paypal_redirect = patron.create_account(return_url=return_url)
+            if paypal_redirect:
+                return redirect_to(request, paypal_redirect)
         patron.paypal_email = None
         patron.save()
         messages.error(request, _(u"Nous n'avons pas pu créer votre compte paypal"))
@@ -158,6 +195,12 @@ def borrower_history(request, page=None):
     queryset = request.user.rentals.filter(state__in=[Booking.STATE.CLOSED, Booking.STATE.REJECTED])
     return object_list(request, queryset, page=page, paginate_by=10, template_name='accounts/borrower_history.html',
         template_object_name='booking')
+
+@login_required
+def alert_edit(request, page=None):
+    queryset = request.user.alerts.all()
+    return object_list(request, queryset, page=page, paginate_by=10, template_name='accounts/alert_edit.html',
+        template_object_name='alert')
 
 
 @mobify

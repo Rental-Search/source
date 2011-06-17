@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+{% load i18n paginator facets %}
+
+{% block title %}
+	{% trans "Alertes locations" %}
+{% endblock %}
+
+{% block description %}
+	{% trans "Demandes de location des locataires qui n'ont pas trouvé l'objet qu'ils veulent louer près de chez eux." %}
+{% endblock %}
+
+{% block content %}
+<div id="search" class="xgrid">
+	<form class="form" action="{% url product_list %}">
+	<div class="x5">
+		<p>
+			<label for="id_q">{% trans "Que recherchez-vous ?" %}</label><br />
+			{{ form.q }}<br />
+			<span>{% trans "Exemple :" %} </span> <a href="{% url product_list %}?q={% trans "voiture" %}">{% trans "Voiture" %}</a>, <a href="{% url product_list %}?q={% trans "chèvre" %}">{% trans "Chèvre" %}</a>, <a href="{% url product_list %}?q={% trans "ski" %}">{% trans "Ski" %}</a>, <a href="{% url product_list %}?q={% trans "robe" %}">{% trans "Robe" %}</a>
+		</p>
+	</div>
+	<div class="x5">
+		<p>
+			<label>{% trans "Où ?" %}</label><br />
+			{{ form.l }}<br />
+		</p>
+	</div>
+	<div class="x2">
+		<p>
+			<input type="submit" value="{% trans "Rechercher" %}" class="btn big-orange"/>
+		</p>
+	</div>
+	</form>
+</div>
+<div id="content" class="xgrid">
+    <div class="breadcrumb">
+        <ul class="x12 breadcrumbs">
+            <li><a href="{% url home %}">{% trans "Accueil" %}</a></li>
+        </ul>
+    </div>
+    <div class="content-header x12">
+		<h1>{% trans "Demandes de location" %}</h1>
+	</div>
+	{% if alert_list %}
+	<ul  id="booking_list" class="x8">
+	    {% for alert in alert_list %}
+	    <li style="border-bottom: 1px dashed #B9CAD4; padding: 10px 0;" class="clearfix">
+	        <div class="bk">
+	            <div class="bk-dates">
+	                <p style="font-size: 12px; padding-top: 25px;">
+	                    Créé le<br/>
+	                    {{ alert.created_at|date:"d/m/Y" }}
+	                </p>
+	            </div>
+	            <div class="bk-desc" style="padding: 0px; width:510px; margin-right: 0px">
+	                <div style="float: left; width: 340px; margin-right: 10px;">
+	                    <a href="{{ alert.patron_url }}" style="color:#6EB924;">{{ alert.patron }}</a> {% trans "cherche :" %}
+	                    <h4 style="margin: 5px 0;">{{ alert.designation }}</h4>
+    	                <p>
+    	                    {{ alert.description }}
+    	                </p>
+    	            </div>
+    	            <div style="float: left; width: 140px; text-align: center; padding-top: 23px;">
+    	                <a href="{{ alert.url }}" style="color: #6EB924">{% trans "> Répondre à la demande" %}</a>
+    	            </div>
+	            </div>
+	        </div>
+	    </li>
+	    {% endfor %}
+	</ul>
+    {% else %}
+        <div class="x8">
+            <h1>Il n'y a pas de demande de location</h1>
+        </div>
+    {% endif %}
+    <div class="x4">
+        <div class="box-tools">
+	        <h3>{% trans "Rechercher une demande" %}</h3>
+	        <div class="box-tools-bottom">
+	            <form action="" class="inline">
+	                <p>
+    					<label class="labm">{{ search_alert_form.l.label }}</label><br />
+    					{{ search_alert_form.l }}
+    				</p>
+	                <p>
+                        <label class="labs">{% trans "Restreindre les résultats à un rayon de" %}</label><br />
+                    </p
+                    <p class="box-tools-distance">
+                        {{ search_alert_form.r }}
+                        <abbr  title="kilomètre">{% trans "Km" %}</abbr>
+                    </p>
+                    <p style="margin-top: 10px;">
+                        <input type="submit" value="{% trans "Mettre à jour" %}" class="btn medium-blue"/>
+                    </p>
+	            </form>
+	        </div>
+	    </div>
+	    <div class="box-tools">
+	        <h3>{% trans "Créer une demande de location" %}</h3>
+	        <div class="box-tools-bottom">
+        	    <p style="text-align: justify;">{% trans "Nous vous invitons à créer une demande de location permettant d'avertir les membres proches de chez vous." %}</p>
+        	    <p style="text-align: center;"><a href="{% url alert_create %}" class="btn long-blue">{% trans "Créer une demande" %}</a></p>
+	        </div>
+	    </div>
+    </div>
+</div>
+{% endblock %}

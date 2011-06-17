@@ -1,4 +1,4 @@
-{% load i18n %}{% blocktrans with booking.owner.get_full_name as owner_name and booking.borrower.get_full_name as borrower_name and booking.product.summary as summary and booking.product.category.name as category and booking.product.summary as summary and booking.borrower.phones.all|first as borrower_phone and booking.started_at|date:"DATETIME_FORMAT" as starting_at and booking.started_at|timesince:booking.ended_at as duration and booking.borrower.email as borrower_email %}
+{% load i18n %}{% blocktrans with booking.owner.get_full_name as owner_name and booking.borrower.get_full_name as borrower_name and booking.product.summary as summary and booking.product.category.name as category and booking.product.summary as summary and booking.borrower.phones.all|first as borrower_phone and booking.started_at|date:"DATETIME_FORMAT" as starting_at and booking.started_at|timesince:booking.ended_at as duration and booking.borrower.email as borrower_email and site.name as site_name %}
 <p>Bonjour {{ owner_name }},</p>
 
 <p>Vous venez d'accepter la proposition de location suivante :</p>
@@ -19,5 +19,5 @@
  
 <p>Bonne location !</p>
 
-<p>L'équipe e-loue</p>
+<p>L'équipe {{ site_name }}</p>
 {% endblocktrans %}

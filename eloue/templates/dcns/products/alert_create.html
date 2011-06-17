@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Créer une alerte" %}{% endblock %}
+
+{% block content %}
+<div id="content-home" class="xgrid">
+    <div id="wizard" class="x12">
+        <div class="wizard-header">
+            <h1>{% trans "Créer une demande de location" %}</h1>
+        </div>
+         <ol>
+            <li class="first on">{% trans "1. Remplissez la fiche" %}</li>
+            <li>{% trans "2. Identifiez-vous" %}</li>
+        </ol>
+    </div>
+    <div class="content-header x12">
+        <h2>Demander aux membres l'objet que vous voulez louer</h2>
+    </div>
+    <form class="inline" enctype="multipart/form-data" action="{% url alert_create %}" method="POST">
+    <div class="x8">
+        {% csrf_token %}
+		<table>
+			<tr>
+				<th><label>{{ form.designation.label }} {% if form.designation.field.required %}*{% endif %} :</label></th>
+				<td {% if form.summary.errors %} class="error-field" {% endif %}>
+					{{ form.designation }}
+					{% if form.designation.errors %}
+					    {% for error in form.designation.errors %}
+									<br />
+					        <span class="error">{{ error|escape }}</span>
+					    {% endfor %}
+					{% endif %}
+				</td>
+			</tr>
+			<tr>
+				<th><label>{{ form.description.label }} {% if form.description.field.required %}*{% endif %} :</label></th>
+				<td {% if form.summary.errors %} class="error-field" {% endif %}>
+					{{ form.description }}
+					{% if form.description.errors %}
+					    {% for error in form.description.errors %}
+									<br />
+					        <span class="error">{{ error|escape }}</span>
+					    {% endfor %}
+					{% endif %}
+				</td>
+			</tr>
+		</table>
+	    <p class="required-field">{% trans "* = champ obligatoire" %}</p>  
+    </div>
+    <div class="x4">
+        <div class="box-info">
+            <h3>Infos</h3>
+            <p>
+                En créant une demande vous allez demander aux membres les plus proches de chez vous s'ils peuvent louer l'objet que vous demander.
+            </p>
+            <p>
+                Si un membre peut louer l'objet que vous demander, alors vous serez contacter par email.
+            </p>
+        </div>
+    </div>
+    <div id="submit-wizard" class="x12">
+        <p>
+		    <input type="hidden" name="{{ step_field }}" value="{{ step0 }}" />
+    		{{ previous_fields|safe }}
+    		<a href="{% url home %}">{% trans "Annuler" %}</a> {% trans "ou" %} 
+    		<input type="submit" class="btn big-green" value="{% trans "Continuer &rarr;" %}" />
+    	</p>
+	</form>
+    </div>
+</div>
+{% endblock %}

@@ -25,9 +25,9 @@
 {% endif %}
 {% endwith %}
 
-{% blocktrans with booking.product.category.get_absolute_url as category_url and site.domain as domain %}
-<p>Retrouvez tous les objets de cette catégorie sur <a href="{{ protocol }}://{{ domain }}{{ category_url }}">e-loue.com</a>.</p>
+{% blocktrans with booking.product.category.get_absolute_url as category_url and site.domain as domain and site.name as site_name %}
+<p>Retrouvez tous les objets de cette catégorie sur <a href="{{ protocol }}://{{ domain }}{{ category_url }}">{{ domain }}</a>.</p>
 
-<p>L'équipe e-loue</p>
+<p>L'équipe {{ site_name }}</p>
 {% endblocktrans %}
 

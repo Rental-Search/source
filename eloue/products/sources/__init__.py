@@ -46,6 +46,7 @@ class Product(dict):
         url = urljoin("%(scheme)s://%(hostname)s" % parts, "%(path)s?%(params)s" % parts)
         digest = hmac.new(CAMO_KEY, url, hashlib.sha1).hexdigest()
         return "%s%s?url=%s" % (CAMO_URL, digest, url)
+
     
 
 class BaseSource(object):

@@ -80,7 +80,6 @@ class ProductViewsTest(TestCase):
         response = self.client.get('/location/condiment/ketchup/')
         self.assertEqual(response.status_code, 404)
     
-    
     def test_compose_product_related_message(self):
         self.client.login(username='alexandre.woog@e-loue.com', password='alexandre')
         recipient = Patron.objects.get(email='timothee.peignier@e-loue.com')
@@ -116,7 +115,37 @@ class ProductViewsTest(TestCase):
         self.assertEqual(len(messages), 2)
         self.assertEqual(messages[0].product, messages[1].product)
 
+    def test_product_delete(self):
+        self.client.login(username='alexandre.woog@e-loue.com', password='alexandre')
+        response = self.client.post(reverse('product_delete', args=['perceuse-visseuse-philips', 1]))
+        self.assertRedirects(response, reverse('owner_product'), status_code=301)
+        try:
+            Product.objects.get(pk=1)
+            self.fail()
+        except Product.DoesNotExist:
+            pass
+    
+    def test_product_delete_confirmation(self):
+        self.client.login(username='alexandre.woog@e-loue.com', password='alexandre')
+        response = self.client.get(reverse('product_delete', args=['perceuse-visseuse-philips', 1]))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'products/product_delete.html')
+    
+    def test_alert_list(self):
+        response = self.client.get('/location/alertes/')
+        self.assertEqual(response.status_code, 200)
+        response = self.client.get('/location/alertes/page/')
+        self.assertEqual(response.status_code, 404)
+        
+    def test_alert_edit(self):
+        self.client.login(username='alexandre.woog@e-loue.com', password='alexandre')
+        response = self.client.get(reverse('alert_edit'))
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue('alert_list' in response.context)
+    
+    def test_alert_delete(self):
+        self.client.login(username='alexandre.woog@e-loue.com', password='alexandre')
+        response = self.client.post(reverse('alert_delete', args=[1]))
+        self.assertTrue(response.status_code, 200)
+        
 
-        
-        
-        

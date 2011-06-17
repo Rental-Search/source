@@ -2,6 +2,7 @@
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import login
+from django.contrib.sites.models import Site
 from django.utils.translation import ugettext as _
 from django.views.generic.simple import redirect_to
 

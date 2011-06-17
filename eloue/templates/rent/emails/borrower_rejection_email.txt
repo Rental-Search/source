@@ -20,11 +20,11 @@ Durée de la location : {{ duration }}
  {% endfor %}
 {% endif %}
 {% endwith %}
-{% blocktrans with booking.product.category.get_absolute_url as category_url and site.domain as domain %}
+{% blocktrans with booking.product.category.get_absolute_url as category_url and site.domain as domain and site.name as site_name %}
 Retrouvez tous les objets de cette catégorie sur e-loue.com :
 
 {{ protocol }}://{{ domain }}{{ category_url }}
  
-L'équipe e-loue
+L'équipe {{ site_name }}
 {% endblocktrans %}
 

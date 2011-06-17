@@ -1,0 +1,11 @@
+<p>Bonjour {{ alert.patron.username }},</p>
+
+<p>Un utilisateur de e-loue à répondu à votre alerte pour louer un(e) {{ alert.designation }}.</p>
+
+<p>Vous pouvez faire une réservation en accédant à la fiche de l'objet :</p>
+
+<a href="{{ protocol }}://{{ domain }}{{ product.get_absolute_url }}">signaler l'incident</a>
+
+<p>Nous vous souhaitons de bonnes locations.</p>
+
+<p>L'équipe {{ site.name }}</p>

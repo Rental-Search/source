@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-02-08 17:58+0100\n"
+"POT-Creation-Date: 2011-04-21 15:33+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,20 +17,25 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n>1;\n"
 
-#: settings.py:58
+#: settings.py:59
 msgid "Français"
 msgstr ""
 
-#: settings.py:59
+#: settings.py:60
 msgid "English"
 msgstr ""
 
-#: urls.py:83
+#: urls.py:84
 msgid "loueur/"
 msgstr ""
 
-#: urls.py:84
+#: urls.py:85 products/templatetags/facets.py:27
+#: products/templatetags/facets.py:63 products/templatetags/facets.py:114
 msgid "location/"
+msgstr ""
+
+#: urls.py:93
+msgid "recherche"
 msgstr ""
 
 #: accounts/admin.py:27
@@ -85,8 +90,8 @@ msgstr ""
 msgid "J'ai déjà un compte PayPal et mon email est :"
 msgstr ""
 
-#: accounts/forms.py:37 accounts/forms.py:80 accounts/forms.py:118
-#: accounts/forms.py:342
+#: accounts/forms.py:37 accounts/forms.py:86 accounts/forms.py:124
+#: accounts/forms.py:348
 msgid "Email"
 msgstr ""
 
@@ -100,132 +105,138 @@ msgid ""
 "loue.com, vous ne pouvez pas vous enregistrer avec une adresse email jetable."
 msgstr ""
 
-#: accounts/forms.py:53 accounts/tests/wizard.py:96
+#: accounts/forms.py:55 accounts/tests/wizard.py:96
 msgid "Un compte existe déjà pour cet email"
 msgstr ""
 
-#: accounts/forms.py:64 accounts/tests/wizard.py:67
+#: accounts/forms.py:59
+msgid "Une addresse email dcns est obligatoire"
+msgstr ""
+
+#: accounts/forms.py:70 accounts/tests/wizard.py:67
 #: accounts/tests/wizard.py:77
 msgid "Veuillez saisir une adresse email et un mot de passe valide."
 msgstr ""
 
-#: accounts/forms.py:66 accounts/tests/wizard.py:57
+#: accounts/forms.py:72 accounts/tests/wizard.py:57
 msgid "Ce compte est inactif parce qu'il n'a pas été activé."
 msgstr ""
 
-#: accounts/forms.py:112 accounts/forms.py:208
+#: accounts/forms.py:118 accounts/forms.py:214
 msgid "Pseudo"
 msgstr ""
 
-#: accounts/forms.py:113 accounts/forms.py:209
+#: accounts/forms.py:119 accounts/forms.py:215
 msgid "Required. 30 characters or fewer. Letters, digits and @/./+/-/_ only."
 msgstr ""
 
-#: accounts/forms.py:114 accounts/forms.py:210
+#: accounts/forms.py:120 accounts/forms.py:216
 msgid "This value may contain only letters, numbers and @/./+/-/_ characters."
 msgstr ""
 
-#: accounts/forms.py:116 accounts/forms.py:217
+#: accounts/forms.py:122 accounts/forms.py:223
 msgid "Prénom"
 msgstr ""
 
-#: accounts/forms.py:117 accounts/forms.py:218
+#: accounts/forms.py:123 accounts/forms.py:224
 msgid "Nom"
 msgstr ""
 
-#: accounts/forms.py:120 accounts/forms.py:215
+#: accounts/forms.py:126 accounts/forms.py:221
 msgid "Êtes-vous un professionnel ?"
 msgstr ""
 
-#: accounts/forms.py:121 accounts/forms.py:216
+#: accounts/forms.py:127 accounts/forms.py:222
 msgid "Nom de la société"
 msgstr ""
 
-#: accounts/forms.py:132 accounts/forms.py:318
+#: accounts/forms.py:138 accounts/forms.py:324
 msgid "Vous devez entrer le nom de votre société"
 msgstr ""
 
-#: accounts/forms.py:138 accounts/tests/views.py:70
+#: accounts/forms.py:144 accounts/tests/views.py:70
 msgid "This field is required."
 msgstr ""
 
-#: accounts/forms.py:141 accounts/tests/views.py:83
+#: accounts/forms.py:147 accounts/tests/views.py:83
 msgid ""
 "Pour garantir un service de qualité et la sécurité des utilisateurs de "
 "Croisé dans le métro, vous ne pouvez pas vous enregistrer avec une adresse "
 "email jetable. Ne craignez rien, vous ne recevrez aucun courrier indésirable."
 msgstr ""
 
-#: accounts/forms.py:144 accounts/tests/views.py:57
+#: accounts/forms.py:150 accounts/tests/views.py:57
 msgid "Un compte avec cet email existe déjà"
 msgstr ""
 
-#: accounts/forms.py:169
+#: accounts/forms.py:175
 msgid "Your old password was entered incorrectly. Please enter it again."
 msgstr ""
 
-#: accounts/forms.py:180
+#: accounts/forms.py:186
 msgid "E-mail"
 msgstr ""
 
-#: accounts/forms.py:188
+#: accounts/forms.py:194
 msgid "Vous devez entrer votre email Paypal"
 msgstr ""
 
-#: accounts/forms.py:213
+#: accounts/forms.py:219
 msgid "Mot de passe"
 msgstr ""
 
-#: accounts/forms.py:214 templates/accounts/patron_password.html:52
+#: accounts/forms.py:220 templates/accounts/patron_password.html:52
+#: templates/dcns/accounts/patron_password.html:51
 msgid "A nouveau"
 msgstr ""
 
-#: accounts/forms.py:219
+#: accounts/forms.py:225
 msgid "Rue"
 msgstr ""
 
-#: accounts/forms.py:221
+#: accounts/forms.py:227
 msgid "Code postal"
 msgstr ""
 
-#: accounts/forms.py:223
+#: accounts/forms.py:229
 msgid "Ville"
 msgstr ""
 
-#: accounts/forms.py:225 accounts/forms.py:238
-#: templates/accounts/partials/missing.html:124
+#: accounts/forms.py:231 accounts/forms.py:244
+#: templates/accounts/partials/missing.html:123
+#: templates/dcns/accounts/partials/missing.html:97
 msgid "Téléphone"
 msgstr ""
 
-#: accounts/forms.py:230
+#: accounts/forms.py:236
 msgid "Addresse"
 msgstr ""
 
-#: accounts/forms.py:293 accounts/tests/wizard.py:157
+#: accounts/forms.py:299 accounts/tests/wizard.py:157
 msgid "Vos mots de passe ne correspondent pas"
 msgstr ""
 
-#: accounts/forms.py:298 accounts/forms.py:300 accounts/tests/wizard.py:141
+#: accounts/forms.py:304 accounts/forms.py:306 accounts/tests/wizard.py:141
 msgid "Ce nom d'utilisateur est déjà pris."
 msgstr ""
 
-#: accounts/forms.py:311
+#: accounts/forms.py:317
 msgid "Vous devez spécifiez une adresse"
 msgstr ""
 
-#: accounts/forms.py:326
+#: accounts/forms.py:332
 msgid "Vous devez spécifiez un numéro de téléphone"
 msgstr ""
 
-#: accounts/forms.py:340
+#: accounts/forms.py:346
 msgid "Sujet"
 msgstr ""
 
-#: accounts/forms.py:341
+#: accounts/forms.py:347
 msgid "Message"
 msgstr ""
 
-#: accounts/forms.py:345
+#: accounts/forms.py:351
 msgid "Je souhaite recevoir une copie de ce message."
 msgstr ""
 
@@ -489,25 +500,26 @@ msgstr ""
 msgid "Un utilisateur utilisant ce nom d'utilisateur existe déjà"
 msgstr ""
 
-#: accounts/models.py:187 templates/base.html:7
+#: accounts/models.py:188 templates/base.html:7
 #: templates/admin/base_site.html:4 templates/admin/base_site.html.py:7
-#: templates/mobile/base.html:7 templates/nc/base.html:7
+#: templates/dcns/base.html:7 templates/mobile/base.html:7
+#: templates/nc/base.html:7 templates/uk/base.html:7
 msgid "e-loue"
 msgstr ""
 
-#: accounts/models.py:232
+#: accounts/models.py:234
 msgid "Expiré"
 msgstr ""
 
-#: accounts/models.py:250
+#: accounts/models.py:252
 msgid "addresses"
 msgstr ""
 
-#: accounts/models.py:271
+#: accounts/models.py:273
 msgid "Coordonnées géographiques incorrectes"
 msgstr ""
 
-#: accounts/models.py:289
+#: accounts/models.py:291
 msgid "Géolocalisé"
 msgstr ""
 
@@ -519,228 +531,308 @@ msgstr ""
 msgid "Votre mot de passe à bien été modifié"
 msgstr ""
 
-#: accounts/views.py:119
+#: accounts/views.py:123
 msgid "Nous n'avons pas pu créer votre compte paypal"
 msgstr ""
 
-#: accounts/views.py:174
+#: accounts/views.py:186
 msgid "Votre message a bien été envoyé"
 msgstr ""
 
-#: accounts/views.py:176
+#: accounts/views.py:188
 msgid "Erreur lors de l'envoi du message"
 msgstr ""
 
-#: accounts/wizard.py:42
+#: accounts/wizard.py:47
 msgid "Bienvenue !"
 msgstr ""
 
-#: accounts/wizard.py:45
+#: accounts/wizard.py:50
 msgid ""
 "Bienvenue ! Nous vous avons envoyé un lien de validation par email. Cette "
 "validation est impérative pour terminer votre enregistrement."
 msgstr ""
 
-#: products/forms.py:21 templates/products/product_list.html:102
+#: products/forms.py:20 templates/dcns/products/product_list.html:106
+#: templates/products/product_list.html:106
 msgid "Les plus proches"
 msgstr ""
 
-#: products/forms.py:22
+#: products/forms.py:21
 msgid "Les plus récentes"
 msgstr ""
 
-#: products/forms.py:23
+#: products/forms.py:22
 msgid "Les pris les plus bas"
 msgstr ""
 
-#: products/forms.py:24
+#: products/forms.py:23
 msgid "Les pris les plus haut"
 msgstr ""
 
-#: products/forms.py:35
+#: products/forms.py:34
 msgid "Prix"
 msgstr ""
 
-#: products/forms.py:35
+#: products/forms.py:34
 msgid "par-prix"
 msgstr ""
 
-#: products/forms.py:36 products/views.py:94
+#: products/forms.py:35 products/views.py:98
+#: templates/dcns/products/product_detail.html:120
 #: templates/mobile/products/product_detail.html:57
+#: templates/products/product_create.html:20
 #: templates/products/product_detail.html:116
+#: templates/products/product_edit.html:26
 msgid "Catégorie"
 msgstr ""
 
-#: products/forms.py:36
+#: products/forms.py:35
 msgid "par-categorie"
 msgstr ""
 
-#: products/forms.py:97
+#: products/forms.py:85 templates/index.html:25
+#: templates/accounts/patron_detail.html:22 templates/dcns/index.html:25
+#: templates/dcns/accounts/patron_detail.html:25
+#: templates/dcns/products/alert_list.html:27
+#: templates/dcns/products/product_detail.html:23
+#: templates/dcns/products/product_list.html:47 templates/mobile/index.html:24
+#: templates/mobile/products/search.html:24 templates/nc/index.html:22
+#: templates/products/alert_list.html:24
+#: templates/products/product_detail.html:20
+#: templates/products/product_list.html:47 templates/products/search.html:21
+#: templates/uk/index.html:25
+msgid "Où ?"
+msgstr ""
+
+#: products/forms.py:86
+msgid "Restreindre les résultats à un rayon de :"
+msgstr ""
+
+#: products/forms.py:127
 msgid "Choisissez une catégorie"
 msgstr ""
 
-#: products/forms.py:98
+#: products/forms.py:128
 msgid "Titre"
 msgstr ""
 
-#: products/forms.py:100
+#: products/forms.py:130 products/forms.py:174
 msgid "Photo"
 msgstr ""
 
-#: products/forms.py:101
-msgid "Prix location"
-msgstr ""
-
-#: products/forms.py:102 templates/mobile/products/product_detail.html:44
+#: products/forms.py:131 templates/dcns/products/product_detail.html:107
+#: templates/mobile/products/product_detail.html:44
 #: templates/products/product_detail.html:103
 msgid "Caution"
 msgstr ""
 
-#: products/forms.py:103 templates/mobile/products/product_detail.html:53
+#: products/forms.py:132 templates/dcns/products/product_detail.html:116
+#: templates/mobile/products/product_detail.html:53
 #: templates/products/product_detail.html:112
 msgid "Quantité"
 msgstr ""
 
-#: products/forms.py:109
+#: products/forms.py:133 products/forms.py:175 products/forms.py:229
+msgid "Description"
+msgstr ""
+
+#: products/forms.py:135 products/forms.py:177
+msgid "l'heure"
+msgstr ""
+
+#: products/forms.py:136 products/forms.py:178
+msgid "la journée"
+msgstr ""
+
+#: products/forms.py:137 products/forms.py:179
+msgid "le week-end"
+msgstr ""
+
+#: products/forms.py:138 products/forms.py:180
+msgid "la semaine"
+msgstr ""
+
+#: products/forms.py:139 products/forms.py:181
+msgid "les 15 jours"
+msgstr ""
+
+#: products/forms.py:140 products/forms.py:182
+msgid "le mois"
+msgstr ""
+
+#: products/forms.py:149
 msgid "Vous devriez au moins louer un object"
 msgstr ""
 
-#: products/forms.py:130
+#: products/forms.py:162
 msgid "Vous devriez ajouter une photo."
 msgstr ""
 
-#: products/models.py:29
+#: products/models.py:33
 msgid "heure"
 msgstr ""
 
-#: products/models.py:30
+#: products/models.py:34 templates/uk/index.html:59
 msgid "jour"
 msgstr ""
 
-#: products/models.py:31
+#: products/models.py:35
 msgid "week-end"
 msgstr ""
 
-#: products/models.py:32
+#: products/models.py:36
 msgid "semaine"
 msgstr ""
 
-#: products/models.py:33
+#: products/models.py:37
 msgid "deux semaines"
 msgstr ""
 
-#: products/models.py:34
+#: products/models.py:38
 msgid "mois"
 msgstr ""
 
-#: products/models.py:38
+#: products/models.py:51
 msgid "€"
 msgstr ""
 
-#: products/models.py:39
+#: products/models.py:52
 msgid "$"
 msgstr ""
 
-#: products/models.py:40
+#: products/models.py:53
 msgid "£"
 msgstr ""
 
-#: products/models.py:41
+#: products/models.py:54
 msgid "¥"
 msgstr ""
 
-#: products/models.py:45
+#: products/models.py:55
+msgid "F"
+msgstr ""
+
+#: products/models.py:59
 msgid "brouillon"
 msgstr ""
 
-#: products/models.py:46
+#: products/models.py:60
 msgid "privé"
 msgstr ""
 
-#: products/models.py:47
+#: products/models.py:61
 msgid "public"
 msgstr ""
 
-#: products/models.py:48
+#: products/models.py:62
 msgid "supprimé"
 msgstr ""
 
-#: products/models.py:64
+#: products/models.py:66
+msgid "Le locataire me paye directement et mon objet n'est pas assuré"
+msgstr ""
+
+#: products/models.py:67
+msgid "Le locataire paye en ligne et mon objet est assuré"
+msgstr ""
+
+#: products/models.py:85
 msgid "archivé"
 msgstr ""
 
-#: products/models.py:65
+#: products/models.py:86
 msgid "autorisé"
 msgstr ""
 
-#: products/models.py:75
+#: products/models.py:91
+msgid "Type de payments"
+msgstr ""
+
+#: products/models.py:96
 msgid "product"
 msgstr ""
 
-#: products/models.py:145
+#: products/models.py:170
 msgid "category"
 msgstr ""
 
-#: products/models.py:146
+#: products/models.py:171
 msgid "categories"
 msgstr ""
 
-#: products/models.py:162
+#: products/models.py:187
 #, python-format
 msgid "/location/par-categorie/%(category)s/"
 msgstr ""
 
-#: products/models.py:173
+#: products/models.py:198
 msgid "properties"
 msgstr ""
 
-#: products/models.py:230
+#: products/models.py:252
 msgid "Le prix ne peut pas être négatif"
 msgstr ""
 
-#: products/models.py:268
+#: products/models.py:290
 msgid "Score can't be higher than 1"
 msgstr ""
 
-#: products/models.py:270
+#: products/models.py:292
 msgid "Score can't be a negative value"
 msgstr ""
 
-#: products/models.py:279
+#: products/models.py:301
 msgid "Vous ne pouvez pas commenter vos propres locations"
 msgstr ""
 
-#: products/models.py:281
+#: products/models.py:303
 msgid "Vous ne pouvez pas commenter un produit que vous n'avez pas loué"
 msgstr ""
 
-#: products/models.py:291
+#: products/models.py:313
 msgid "Vous ne pouvez pas commenter votre profil"
 msgstr ""
 
-#: products/models.py:293
+#: products/models.py:315
 msgid ""
 "Vous ne pouvez pas commenter le profil d'un loueur avec lequel n'avez pas "
 "effectué de réservations"
 msgstr ""
 
-#: products/views.py:85
+#: products/urls.py:11
+msgid "ajouter"
+msgstr ""
+
+#: products/urls.py:12 products/urls.py:14
+msgid "alertes"
+msgstr ""
+
+#: products/urls.py:13
+msgid "alertes/ajouter"
+msgstr ""
+
+#: products/views.py:67
+msgid "Votre produit a bien été édité !"
+msgstr ""
+
+#: products/views.py:89
 msgid "par-"
 msgstr ""
 
-#: products/views.py:90
+#: products/views.py:94
 msgid "categorie"
 msgstr ""
 
-#: products/views.py:97
+#: products/views.py:101
 msgid "loueur"
 msgstr ""
 
-#: products/views.py:101
+#: products/views.py:105
 msgid "Loueur"
 msgstr ""
 
-#: products/views.py:106
+#: products/views.py:110
 msgid "page"
 msgstr ""
 
@@ -784,11 +876,15 @@ msgstr ""
 msgid "Owner phone"
 msgstr ""
 
-#: rent/contract.py:89
+#: rent/contract.py:85 rent/contract.py:86
+msgid "d F Y à H\\hi."
+msgstr ""
+
+#: rent/contract.py:93
 msgid "currency_unit"
 msgstr "euro"
 
-#: rent/contract.py:89
+#: rent/contract.py:93
 msgid "currency_decimal"
 msgstr "cent"
 
@@ -804,235 +900,237 @@ msgstr ""
 msgid "Cette transaction ne semble pas lier à une transaction interne"
 msgstr ""
 
-#: rent/forms.py:158
+#: rent/forms.py:162
 msgid "Vous ne pouvez pas louer cet objet pour ces dates"
 msgstr ""
 
-#: rent/forms.py:162
+#: rent/forms.py:166
 msgid "Vous ne pouvez pas louer a ces dates"
 msgstr ""
 
-#: rent/forms.py:164
+#: rent/forms.py:168
 msgid "Une location ne peut pas terminer avant d'avoir commencer"
 msgstr ""
 
-#: rent/forms.py:166
+#: rent/forms.py:170
 msgid "La durée d'une location est limitée à 85 jours."
 msgstr ""
 
-#: rent/forms.py:189
+#: rent/forms.py:193
 msgid "Décrivez votre incident"
 msgstr ""
 
-#: rent/models.py:35
+#: rent/models.py:39
 msgid "En cours d'autorisation"
 msgstr ""
 
-#: rent/models.py:36 templates/rent/partials/booking_status.html:12
+#: rent/models.py:40 templates/dcns/rent/partials/booking_status.html:13
+#: templates/rent/partials/booking_status.html:12
 msgid "En attente"
 msgstr ""
 
-#: rent/models.py:37
+#: rent/models.py:41
 msgid "Rejeté"
 msgstr ""
 
-#: rent/models.py:38
+#: rent/models.py:42
 msgid "Annulé"
 msgstr ""
 
-#: rent/models.py:39
+#: rent/models.py:43
 msgid "A venir"
 msgstr ""
 
-#: rent/models.py:40 templates/rent/partials/booking_status.html:38
+#: rent/models.py:44 templates/dcns/rent/partials/booking_status.html:45
+#: templates/rent/partials/booking_status.html:38
 msgid "En cours"
 msgstr ""
 
-#: rent/models.py:41
+#: rent/models.py:45
 msgid "Terminé"
 msgstr ""
 
-#: rent/models.py:42
+#: rent/models.py:46
 msgid "Incident"
 msgstr ""
 
-#: rent/models.py:43
+#: rent/models.py:47
 msgid "Remboursé"
 msgstr ""
 
-#: rent/models.py:44
+#: rent/models.py:48
 msgid "Caution versée"
 msgstr ""
 
-#: rent/models.py:45
+#: rent/models.py:49
 msgid "En attende de clôture"
 msgstr ""
 
-#: rent/models.py:46
+#: rent/models.py:50
 msgid "Clôturé"
 msgstr ""
 
-#: rent/models.py:47
+#: rent/models.py:51
 msgid "Dépassé"
 msgstr ""
 
-#: rent/utils.py:94
+#: rent/utils.py:61
 msgid "milliard"
 msgstr ""
 
-#: rent/utils.py:100
+#: rent/utils.py:67
 msgid "million"
 msgstr ""
 
-#: rent/utils.py:109 rent/utils.py:124
+#: rent/utils.py:76 rent/utils.py:91
 msgid "cent"
 msgstr ""
 
-#: rent/utils.py:119
+#: rent/utils.py:86
 msgid "mille"
 msgstr ""
 
-#: rent/utils.py:135
+#: rent/utils.py:102
 msgid "zéro"
 msgstr ""
 
-#: rent/utils.py:145
+#: rent/utils.py:112
 msgid "et"
 msgstr ""
 
-#: rent/utils.py:153
+#: rent/utils.py:120
 msgid "moins"
 msgstr ""
 
-#: rent/utils.py:156
+#: rent/utils.py:123
 msgid "un"
 msgstr ""
 
-#: rent/utils.py:156
+#: rent/utils.py:123
 msgid "deux"
 msgstr ""
 
-#: rent/utils.py:156
+#: rent/utils.py:123
 msgid "trois"
 msgstr ""
 
-#: rent/utils.py:156
+#: rent/utils.py:123
 msgid "quatre"
 msgstr ""
 
-#: rent/utils.py:156
+#: rent/utils.py:123
 msgid "cinq"
 msgstr ""
 
-#: rent/utils.py:156
+#: rent/utils.py:123
 msgid "six"
 msgstr ""
 
-#: rent/utils.py:156
+#: rent/utils.py:123
 msgid "sept"
 msgstr ""
 
-#: rent/utils.py:156
+#: rent/utils.py:123
 msgid "huit"
 msgstr ""
 
-#: rent/utils.py:156
+#: rent/utils.py:123
 msgid "neuf"
 msgstr ""
 
-#: rent/utils.py:156 rent/utils.py:160 rent/tests/contract.py:46
+#: rent/utils.py:123 rent/utils.py:127 rent/tests/contract.py:47
 msgid "dix"
 msgstr ""
 
-#: rent/utils.py:157
+#: rent/utils.py:124
 msgid "onze"
 msgstr ""
 
-#: rent/utils.py:157
+#: rent/utils.py:124
 msgid "douze"
 msgstr ""
 
-#: rent/utils.py:157
+#: rent/utils.py:124
 msgid "treize"
 msgstr ""
 
-#: rent/utils.py:157
+#: rent/utils.py:124
 msgid "quatorze"
 msgstr ""
 
-#: rent/utils.py:157
+#: rent/utils.py:124
 msgid "quinze"
 msgstr ""
 
-#: rent/utils.py:157
+#: rent/utils.py:124
 msgid "seize"
 msgstr ""
 
-#: rent/utils.py:157
+#: rent/utils.py:124
 msgid "dix-sept"
 msgstr ""
 
-#: rent/utils.py:157
+#: rent/utils.py:124
 msgid "dix-huit"
 msgstr ""
 
-#: rent/utils.py:157
+#: rent/utils.py:124
 msgid "dix-neuf"
 msgstr ""
 
-#: rent/utils.py:160
+#: rent/utils.py:127
 msgid "vingt"
 msgstr ""
 
-#: rent/utils.py:160
+#: rent/utils.py:127
 msgid "trente"
 msgstr ""
 
-#: rent/utils.py:160
+#: rent/utils.py:127
 msgid "quarante"
 msgstr ""
 
-#: rent/utils.py:160
+#: rent/utils.py:127
 msgid "cinquante"
 msgstr ""
 
-#: rent/utils.py:160
+#: rent/utils.py:127
 msgid "soixante"
 msgstr ""
 
-#: rent/utils.py:160
+#: rent/utils.py:127
 msgid "soixante-dix"
 msgstr ""
 
-#: rent/utils.py:160
+#: rent/utils.py:127
 msgid "quatre-vingt"
 msgstr ""
 
-#: rent/utils.py:160
+#: rent/utils.py:127
 msgid "quatre-vingt-dix"
 msgstr ""
 
-#: rent/views.py:148
+#: rent/views.py:150
 msgid "Cette réservation a bien été refusée"
 msgstr ""
 
-#: rent/views.py:149
+#: rent/views.py:151
 msgid "Cette réservation n'a pu être refusée"
 msgstr ""
 
-#: rent/views.py:160
+#: rent/views.py:163
 msgid "Cette réservation a bien été annulée"
 msgstr ""
 
-#: rent/views.py:161
+#: rent/views.py:164
 msgid "Cette réservation n'a pu être annulée"
 msgstr ""
 
-#: rent/views.py:172
+#: rent/views.py:176
 msgid "Cette réservation a bien été cloturée"
 msgstr ""
 
-#: rent/views.py:173
+#: rent/views.py:177
 msgid "Cette réservation n'a pu être cloturée"
 msgstr ""
 
@@ -1040,7 +1138,7 @@ msgstr ""
 msgid "Vous ne pouvez pas louer vos propres objets"
 msgstr ""
 
-#: rent/tests/contract.py:46
+#: rent/tests/contract.py:47
 msgid "euro"
 msgstr ""
 
@@ -1065,27 +1163,40 @@ msgstr ""
 msgid "e-loue - La page est pour le moment indisponible"
 msgstr ""
 
-#: templates/500.html:51 templates/500.html.py:76 templates/base.html:48
-#: templates/base.html.py:72 templates/20minutes/base.html:13
+#: templates/500.html:51 templates/500.html.py:76 templates/base.html:44
+#: templates/base.html.py:68 templates/20minutes/base.html:13
 #: templates/20minutes/base.html.py:36 templates/accounts/dashboard.html:27
-#: templates/nc/base.html:54 templates/nc/base.html.py:78
+#: templates/dcns/base.html:57 templates/dcns/base.html.py:68
+#: templates/dcns/accounts/dashboard.html:24
+#: templates/dcns/products/alert_list.html:67
+#: templates/dcns/products/product_create.html:4
+#: templates/dcns/products/product_create.html:10
+#: templates/dcns/products/product_missing.html:10 templates/nc/base.html:54
+#: templates/nc/base.html.py:78 templates/products/alert_list.html:63
 #: templates/products/product_create.html:4
 #: templates/products/product_create.html:10
 #: templates/products/product_missing.html:10
-#: templates/products/product_register.html:10
+#: templates/products/product_register.html:10 templates/uk/base.html:44
+#: templates/uk/base.html.py:68
 msgid "Mettre en location"
 msgstr ""
 
-#: templates/500.html:52 templates/500.html.py:78 templates/base.html:55
-#: templates/base.html.py:74 templates/index.html:100
-#: templates/accounts/dashboard.html:29 templates/products/search.html:51
+#: templates/500.html:52 templates/500.html.py:78 templates/base.html:51
+#: templates/base.html.py:70 templates/index.html:100
+#: templates/accounts/dashboard.html:29 templates/dcns/base.html:36
+#: templates/dcns/base.html.py:70 templates/dcns/index.html:91
+#: templates/dcns/accounts/dashboard.html:26 templates/products/search.html:51
+#: templates/uk/base.html:51 templates/uk/base.html.py:70
+#: templates/uk/index.html:93
 msgid "/comment-ca-marche/"
 msgstr ""
 
-#: templates/500.html:52 templates/500.html.py:78 templates/base.html:55
-#: templates/base.html.py:74 templates/20minutes/base.html:20
-#: templates/accounts/dashboard.html:29 templates/nc/base.html:61
-#: templates/nc/base.html.py:80
+#: templates/500.html:52 templates/500.html.py:78 templates/base.html:51
+#: templates/base.html.py:70 templates/20minutes/base.html:20
+#: templates/accounts/dashboard.html:29 templates/dcns/base.html:37
+#: templates/dcns/base.html.py:70 templates/dcns/accounts/dashboard.html:26
+#: templates/nc/base.html:61 templates/nc/base.html.py:80
+#: templates/uk/base.html:51 templates/uk/base.html.py:70
 msgid "Comment ça marche ?"
 msgstr ""
 
@@ -1101,20 +1212,25 @@ msgid ""
 "\t\t\t   "
 msgstr ""
 
-#: templates/500.html:72 templates/base.html:68
+#: templates/500.html:72 templates/base.html:64
 #: templates/20minutes/base.html:32 templates/accounts/dashboard.html:23
-#: templates/nc/base.html:74
+#: templates/dcns/base.html:64 templates/dcns/accounts/dashboard.html:22
+#: templates/nc/base.html:74 templates/uk/base.html:64
 msgid "Liens utiles"
 msgstr ""
 
-#: templates/500.html:74 templates/base.html:70
-#: templates/20minutes/base.html:34 templates/nc/base.html:76
+#: templates/500.html:74 templates/base.html:66
+#: templates/20minutes/base.html:34 templates/dcns/base.html:32
+#: templates/dcns/base.html.py:66 templates/dcns/products/alert_list.html:41
+#: templates/dcns/products/product_detail.html:37
+#: templates/dcns/products/product_list.html:61 templates/nc/base.html:76
+#: templates/products/alert_list.html:38
 #: templates/products/product_detail.html:32
-#: templates/products/product_list.html:61
+#: templates/products/product_list.html:61 templates/uk/base.html:66
 msgid "Accueil"
 msgstr ""
 
-#: templates/500.html:75 templates/base.html:71
+#: templates/500.html:75 templates/base.html:67
 #: templates/20minutes/base.html:35
 #: templates/accounts/borrower_booking.html:13
 #: templates/accounts/borrower_history.html:13
@@ -1124,109 +1240,139 @@ msgstr ""
 #: templates/accounts/owner_product.html:13
 #: templates/accounts/patron_edit.html:13
 #: templates/accounts/patron_password.html:13
-#: templates/accounts/patron_paypal.html:13 templates/nc/base.html:77
+#: templates/accounts/patron_paypal.html:13 templates/dcns/base.html:67
+#: templates/dcns/accounts/alert_edit.html:14
+#: templates/dcns/accounts/borrower_booking.html:13
+#: templates/dcns/accounts/borrower_history.html:13
+#: templates/dcns/accounts/dashboard.html:13
+#: templates/dcns/accounts/owner_booking.html:13
+#: templates/dcns/accounts/owner_history.html:13
+#: templates/dcns/accounts/owner_product.html:13
+#: templates/dcns/accounts/patron_edit.html:13
+#: templates/dcns/accounts/patron_password.html:13
+#: templates/dcns/accounts/patron_paypal.html:13
+#: templates/dcns/products/product_edit.html:13
+#: templates/dcns/rent/booking_detail.html:67
+#: templates/dcns/rent/booking_incident.html:40 templates/nc/base.html:77
 #: templates/products/product_edit.html:13
 #: templates/rent/booking_detail.html:67
-#: templates/rent/booking_incident.html:12
+#: templates/rent/booking_incident.html:12 templates/uk/base.html:67
 msgid "Mon compte"
 msgstr ""
 
-#: templates/500.html:83 templates/base.html:79
-#: templates/20minutes/base.html:40 templates/nc/base.html:85
+#: templates/500.html:83 templates/base.html:75
+#: templates/20minutes/base.html:40 templates/dcns/base.html:75
+#: templates/nc/base.html:85 templates/uk/base.html:75
 msgid "Info"
 msgstr ""
 
-#: templates/500.html:85 templates/base.html:81
+#: templates/500.html:85 templates/base.html:77 templates/uk/base.html:77
 msgid "/espace-professionnel/"
 msgstr ""
 
-#: templates/500.html:85 templates/base.html:81
+#: templates/500.html:85 templates/base.html:77
 #: templates/20minutes/base.html:42 templates/nc/base.html:87
+#: templates/uk/base.html:77
 msgid "Espace professionnel"
 msgstr ""
 
-#: templates/500.html:86 templates/base.html:82 templates/mobile/base.html:44
+#: templates/500.html:86 templates/base.html:78 templates/dcns/base.html:77
+#: templates/mobile/base.html:44
 msgid "/assurance-tranquillite/"
 msgstr ""
 
-#: templates/500.html:86 templates/base.html:82
-#: templates/20minutes/base.html:43 templates/mobile/base.html:44
-#: templates/nc/base.html:88
+#: templates/500.html:86 templates/base.html:78
+#: templates/20minutes/base.html:43 templates/dcns/base.html:77
+#: templates/mobile/base.html:44
 msgid "Assurance tranquillité"
 msgstr ""
 
-#: templates/500.html:87 templates/base.html:83 templates/mobile/base.html:39
+#: templates/500.html:87 templates/base.html:79 templates/dcns/base.html:78
+#: templates/mobile/base.html:39 templates/uk/base.html:78
 msgid "/conditions-generales/"
 msgstr ""
 
-#: templates/500.html:87 templates/base.html:83
-#: templates/20minutes/base.html:44 templates/mobile/base.html:39
-#: templates/nc/base.html:89
+#: templates/500.html:87 templates/base.html:79
+#: templates/20minutes/base.html:44 templates/dcns/base.html:78
+#: templates/mobile/base.html:39 templates/nc/base.html:88
+#: templates/uk/base.html:78
 msgid "Conditions générales"
 msgstr ""
 
-#: templates/500.html:88 templates/base.html:84 templates/mobile/base.html:41
+#: templates/500.html:88 templates/base.html:80 templates/dcns/base.html:79
+#: templates/mobile/base.html:41 templates/uk/base.html:79
 msgid "/respect-vie-privee/"
 msgstr ""
 
-#: templates/500.html:88 templates/base.html:84
-#: templates/20minutes/base.html:45 templates/mobile/base.html:41
-#: templates/nc/base.html:90
+#: templates/500.html:88 templates/base.html:80
+#: templates/20minutes/base.html:45 templates/dcns/base.html:79
+#: templates/mobile/base.html:41 templates/nc/base.html:89
+#: templates/uk/base.html:79
 msgid "Respect de la vie privée"
 msgstr ""
 
-#: templates/500.html:92 templates/base.html:88
-#: templates/20minutes/base.html:49 templates/nc/base.html:94
+#: templates/500.html:92 templates/base.html:84
+#: templates/20minutes/base.html:49 templates/dcns/base.html:83
+#: templates/nc/base.html:93 templates/uk/base.html:83
 msgid "Support"
 msgstr ""
 
-#: templates/500.html:94 templates/base.html:90
-#: templates/20minutes/base.html:51 templates/nc/base.html:96
+#: templates/500.html:94 templates/base.html:86
+#: templates/20minutes/base.html:51 templates/dcns/base.html:85
+#: templates/nc/base.html:95 templates/uk/base.html:85
 msgid "Aide"
 msgstr ""
 
-#: templates/500.html:95 templates/base.html:91
+#: templates/500.html:95 templates/base.html:87
 #: templates/20minutes/base.html:52 templates/accounts/contact.html:10
-#: templates/nc/base.html:97
+#: templates/dcns/base.html:86 templates/nc/base.html:96
+#: templates/uk/base.html:86
 msgid "Contactez-nous"
 msgstr ""
 
-#: templates/500.html:96 templates/base.html:92 templates/index.html:135
-#: templates/products/search.html:86
+#: templates/500.html:96 templates/base.html:88 templates/index.html:135
+#: templates/products/search.html:86 templates/uk/base.html:87
+#: templates/uk/index.html:127
 msgid "/espace-presse/"
 msgstr ""
 
-#: templates/500.html:96 templates/base.html:92
-#: templates/20minutes/base.html:53 templates/nc/base.html:98
+#: templates/500.html:96 templates/base.html:88
+#: templates/20minutes/base.html:53 templates/nc/base.html:97
+#: templates/uk/base.html:87
 msgid "Espace presse"
 msgstr ""
 
-#: templates/500.html:97 templates/base.html:93
+#: templates/500.html:97 templates/base.html:89 templates/dcns/base.html:87
+#: templates/uk/base.html:88
 msgid "/qui-sommes-nous/"
 msgstr ""
 
-#: templates/500.html:97 templates/base.html:93
-#: templates/20minutes/base.html:54 templates/nc/base.html:99
+#: templates/500.html:97 templates/base.html:89
+#: templates/20minutes/base.html:54 templates/dcns/base.html:87
+#: templates/nc/base.html:98 templates/uk/base.html:88
 msgid "Qui sommes nous ?"
 msgstr ""
 
-#: templates/500.html:101 templates/base.html:97
-#: templates/20minutes/base.html:58 templates/nc/base.html:103
+#: templates/500.html:101 templates/base.html:93
+#: templates/20minutes/base.html:58 templates/nc/base.html:102
+#: templates/uk/base.html:92
 msgid "Communauté"
 msgstr ""
 
-#: templates/500.html:103 templates/base.html:99
-#: templates/20minutes/base.html:60 templates/nc/base.html:105
+#: templates/500.html:103 templates/base.html:95
+#: templates/20minutes/base.html:60 templates/nc/base.html:104
 msgid "Blog"
 msgstr ""
 
-#: templates/500.html:104 templates/base.html:100
-#: templates/20minutes/base.html:61 templates/nc/base.html:106
+#: templates/500.html:104 templates/base.html:96
+#: templates/20minutes/base.html:61 templates/nc/base.html:105
+#: templates/uk/base.html:95
 msgid "Twitter"
 msgstr ""
 
-#: templates/500.html:105 templates/base.html:101
-#: templates/20minutes/base.html:62 templates/nc/base.html:107
+#: templates/500.html:105 templates/base.html:97
+#: templates/20minutes/base.html:62 templates/nc/base.html:106
+#: templates/uk/base.html:96
 msgid "Facebook"
 msgstr ""
 
@@ -1235,21 +1381,25 @@ msgstr ""
 msgid "Validation de votre inscription"
 msgstr ""
 
-#: templates/base.html:7 templates/mobile/base.html:7 templates/nc/base.html:7
+#: templates/base.html:7 templates/dcns/base.html:7
+#: templates/mobile/base.html:7 templates/nc/base.html:7
+#: templates/uk/base.html:7
 msgid "Page"
 msgstr ""
 
-#: templates/base.html:50 templates/20minutes/base.html:15
-#: templates/nc/base.html:56
+#: templates/base.html:46 templates/20minutes/base.html:15
+#: templates/dcns/base.html:47 templates/nc/base.html:56
+#: templates/uk/base.html:46
 msgid "S'inscrire ou se connecter"
 msgstr ""
 
-#: templates/base.html:52 templates/20minutes/base.html:17
-#: templates/nc/base.html:58
+#: templates/base.html:48 templates/20minutes/base.html:17
+#: templates/dcns/base.html:51 templates/nc/base.html:58
+#: templates/uk/base.html:48
 msgid "Se déconnecter"
 msgstr ""
 
-#: templates/base.html:57 templates/20minutes/base.html:22
+#: templates/base.html:53 templates/20minutes/base.html:22
 #: templates/accounts/borrower_booking.html:10
 #: templates/accounts/borrower_history.html:10
 #: templates/accounts/dashboard.html:10
@@ -1258,131 +1408,209 @@ msgstr ""
 #: templates/accounts/owner_product.html:10
 #: templates/accounts/patron_edit.html:10
 #: templates/accounts/patron_password.html:10
-#: templates/accounts/patron_paypal.html:10 templates/nc/base.html:63
+#: templates/accounts/patron_paypal.html:10 templates/dcns/base.html:42
+#: templates/dcns/accounts/alert_edit.html:10
+#: templates/dcns/accounts/borrower_booking.html:10
+#: templates/dcns/accounts/borrower_history.html:10
+#: templates/dcns/accounts/dashboard.html:10
+#: templates/dcns/accounts/owner_booking.html:10
+#: templates/dcns/accounts/owner_history.html:10
+#: templates/dcns/accounts/owner_product.html:10
+#: templates/dcns/accounts/patron_edit.html:10
+#: templates/dcns/accounts/patron_password.html:10
+#: templates/dcns/accounts/patron_paypal.html:10
+#: templates/dcns/products/product_edit.html:10
+#: templates/dcns/rent/booking_detail.html:64
+#: templates/dcns/rent/booking_incident.html:37 templates/nc/base.html:63
 #: templates/products/product_edit.html:10
 #: templates/rent/booking_detail.html:64
-#: templates/rent/booking_incident.html:9
+#: templates/rent/booking_incident.html:9 templates/uk/base.html:53
 msgid "Tableau de bord"
 msgstr ""
 
-#: templates/base.html:58 templates/20minutes/base.html:23
-#: templates/nc/base.html:64
+#: templates/base.html:54 templates/20minutes/base.html:23
+#: templates/nc/base.html:64 templates/uk/base.html:54
 #, python-format
 msgid " Bienvenue, %(first_name)s!"
 msgstr ""
 
-#: templates/base.html:113 templates/nc/base.html:119
+#: templates/base.html:109 templates/nc/base.html:118
 msgid "sur"
 msgstr ""
 
-#: templates/base.html:113 templates/nc/base.html:119
+#: templates/base.html:109 templates/nc/base.html:118
 msgid "e-loue blog"
 msgstr ""
 
-#: templates/index.html:4 templates/nc/index.html:4
+#: templates/index.html:4 templates/dcns/index.html:4
+#: templates/nc/index.html:4 templates/uk/index.html:4
 msgid "Location entre particuliers ou professionnels de tout type d'objet"
 msgstr ""
 
-#: templates/index.html:17
-msgid "Avec e-loue tout se loue, sauf les petites amies !"
-msgstr ""
-
-#: templates/index.html:19 templates/mobile/index.html:17
-#: templates/nc/index.html:10 templates/products/search.html:9
+#: templates/index.html:13 templates/dcns/accounts/patron_detail.html:13
+#: templates/dcns/products/alert_list.html:15
+#: templates/dcns/products/product_detail.html:11
+#: templates/mobile/index.html:17 templates/nc/index.html:10
+#: templates/products/search.html:9 templates/uk/index.html:13
 msgid "Avec e-loue, tout se loue !"
 msgstr ""
 
-#: templates/index.html:25 templates/accounts/patron_detail.html:15
-#: templates/mobile/index.html:20 templates/mobile/products/search.html:20
-#: templates/nc/index.html:15 templates/products/product_detail.html:13
+#: templates/index.html:18 templates/accounts/patron_detail.html:15
+#: templates/dcns/index.html:18 templates/dcns/accounts/patron_detail.html:18
+#: templates/dcns/products/alert_list.html:20
+#: templates/dcns/products/product_detail.html:16
+#: templates/dcns/products/product_list.html:40 templates/mobile/index.html:20
+#: templates/mobile/products/search.html:20 templates/nc/index.html:15
+#: templates/products/alert_list.html:17
+#: templates/products/product_detail.html:13
 #: templates/products/product_list.html:40 templates/products/search.html:14
+#: templates/uk/index.html:18
 msgid "Que voulez-vous louer ?"
 msgstr ""
 
-#: templates/index.html:27 templates/accounts/patron_detail.html:17
-#: templates/nc/index.html:17 templates/products/product_detail.html:15
+#: templates/index.html:20 templates/accounts/patron_detail.html:17
+#: templates/dcns/index.html:20 templates/dcns/accounts/patron_detail.html:20
+#: templates/dcns/products/alert_list.html:22
+#: templates/dcns/products/product_detail.html:18
+#: templates/dcns/products/product_list.html:42 templates/nc/index.html:17
+#: templates/products/alert_list.html:19
+#: templates/products/product_detail.html:15
 #: templates/products/product_list.html:42 templates/products/search.html:16
+#: templates/uk/index.html:20
 msgid "Exemple :"
 msgstr ""
 
-#: templates/index.html:27 templates/products/product_list.html:42
-#: templates/products/search.html:16
+#: templates/index.html:20 templates/dcns/index.html:20
+#: templates/dcns/accounts/patron_detail.html:20
+#: templates/dcns/products/alert_list.html:22
+#: templates/dcns/products/product_detail.html:18
+#: templates/dcns/products/product_list.html:42
+#: templates/products/alert_list.html:19
+#: templates/products/product_list.html:42 templates/products/search.html:16
+#: templates/uk/index.html:20
 msgid "voiture"
 msgstr ""
 
-#: templates/index.html:27 templates/accounts/patron_detail.html:17
-#: templates/nc/index.html:17 templates/products/product_detail.html:15
+#: templates/index.html:20 templates/accounts/patron_detail.html:17
+#: templates/dcns/index.html:20 templates/dcns/accounts/patron_detail.html:20
+#: templates/dcns/products/alert_list.html:22
+#: templates/dcns/products/product_detail.html:18
+#: templates/dcns/products/product_list.html:42 templates/nc/index.html:17
+#: templates/products/alert_list.html:19
+#: templates/products/product_detail.html:15
 #: templates/products/product_list.html:42 templates/products/search.html:16
+#: templates/uk/index.html:20
 msgid "Voiture"
 msgstr ""
 
-#: templates/index.html:27 templates/products/product_list.html:42
-#: templates/products/search.html:16
+#: templates/index.html:20 templates/dcns/index.html:20
+#: templates/dcns/accounts/patron_detail.html:20
+#: templates/dcns/products/alert_list.html:22
+#: templates/dcns/products/product_detail.html:18
+#: templates/dcns/products/product_list.html:42
+#: templates/products/alert_list.html:19
+#: templates/products/product_list.html:42 templates/products/search.html:16
+#: templates/uk/index.html:20
 msgid "chèvre"
 msgstr ""
 
-#: templates/index.html:27 templates/accounts/patron_detail.html:17
-#: templates/nc/index.html:17 templates/products/product_detail.html:15
+#: templates/index.html:20 templates/accounts/patron_detail.html:17
+#: templates/dcns/index.html:20 templates/dcns/accounts/patron_detail.html:20
+#: templates/dcns/products/alert_list.html:22
+#: templates/dcns/products/product_detail.html:18
+#: templates/dcns/products/product_list.html:42 templates/nc/index.html:17
+#: templates/products/alert_list.html:19
+#: templates/products/product_detail.html:15
 #: templates/products/product_list.html:42 templates/products/search.html:16
+#: templates/uk/index.html:20
 msgid "Chèvre"
 msgstr ""
 
-#: templates/index.html:27 templates/products/product_list.html:42
-#: templates/products/search.html:16
+#: templates/index.html:20 templates/dcns/index.html:20
+#: templates/dcns/accounts/patron_detail.html:20
+#: templates/dcns/products/alert_list.html:22
+#: templates/dcns/products/product_detail.html:18
+#: templates/dcns/products/product_list.html:42
+#: templates/products/alert_list.html:19
+#: templates/products/product_list.html:42 templates/products/search.html:16
+#: templates/uk/index.html:20
 msgid "ski"
 msgstr ""
 
-#: templates/index.html:27 templates/accounts/patron_detail.html:17
-#: templates/nc/index.html:17 templates/products/product_detail.html:15
+#: templates/index.html:20 templates/accounts/patron_detail.html:17
+#: templates/dcns/index.html:20 templates/dcns/accounts/patron_detail.html:20
+#: templates/dcns/products/alert_list.html:22
+#: templates/dcns/products/product_detail.html:18
+#: templates/dcns/products/product_list.html:42 templates/nc/index.html:17
+#: templates/products/alert_list.html:19
+#: templates/products/product_detail.html:15
 #: templates/products/product_list.html:42 templates/products/search.html:16
+#: templates/uk/index.html:20
 msgid "Ski"
 msgstr ""
 
-#: templates/index.html:27 templates/products/product_list.html:42
-#: templates/products/search.html:16
+#: templates/index.html:20 templates/dcns/index.html:20
+#: templates/dcns/accounts/patron_detail.html:20
+#: templates/dcns/products/alert_list.html:22
+#: templates/dcns/products/product_detail.html:18
+#: templates/dcns/products/product_list.html:42
+#: templates/products/alert_list.html:19
+#: templates/products/product_list.html:42 templates/products/search.html:16
+#: templates/uk/index.html:20
 msgid "robe"
 msgstr ""
 
-#: templates/index.html:27 templates/accounts/patron_detail.html:17
-#: templates/nc/index.html:17 templates/products/product_detail.html:15
+#: templates/index.html:20 templates/accounts/patron_detail.html:17
+#: templates/dcns/index.html:20 templates/dcns/accounts/patron_detail.html:20
+#: templates/dcns/products/alert_list.html:22
+#: templates/dcns/products/product_detail.html:18
+#: templates/dcns/products/product_list.html:42 templates/nc/index.html:17
+#: templates/products/alert_list.html:19
+#: templates/products/product_detail.html:15
 #: templates/products/product_list.html:42 templates/products/search.html:16
+#: templates/uk/index.html:20
 msgid "Robe"
 msgstr ""
 
-#: templates/index.html:32 templates/accounts/patron_detail.html:22
-#: templates/mobile/index.html:24 templates/mobile/products/search.html:24
-#: templates/nc/index.html:22 templates/products/product_detail.html:20
-#: templates/products/product_list.html:47 templates/products/search.html:21
-msgid "Où ?"
-msgstr ""
-
-#: templates/index.html:38 templates/accounts/patron_detail.html:28
-#: templates/mobile/index.html:11 templates/mobile/index.html.py:28
+#: templates/index.html:31 templates/accounts/patron_detail.html:28
+#: templates/dcns/index.html:31 templates/dcns/accounts/patron_detail.html:31
+#: templates/dcns/products/alert_list.html:33
+#: templates/dcns/products/product_detail.html:29
+#: templates/dcns/products/product_list.html:53 templates/mobile/index.html:11
+#: templates/mobile/index.html.py:28
 #: templates/mobile/flatpages/default.html:10
 #: templates/mobile/products/product_detail.html:12
 #: templates/mobile/products/product_list.html:38
 #: templates/mobile/products/search.html:11
 #: templates/mobile/products/search.html:28 templates/nc/index.html:28
+#: templates/products/alert_list.html:30
 #: templates/products/product_detail.html:25
 #: templates/products/product_list.html:53 templates/products/search.html:27
+#: templates/uk/index.html:31
 msgid "Rechercher"
 msgstr ""
 
-#: templates/index.html:46 templates/nc/index.html:36
+#: templates/index.html:39 templates/dcns/index.html:39
+#: templates/nc/index.html:36 templates/uk/index.html:39
 msgid "Les curiosités d'e-loue"
 msgstr ""
 
-#: templates/index.html:76
-msgid "Découvrez la vérité !"
+#: templates/index.html:69
+msgid "e-loue sur iPhone"
 msgstr ""
 
-#: templates/index.html:84 templates/nc/index.html:74
-#: templates/products/search.html:35
+#: templates/index.html:72
+msgid "location entre particulier avec e-loue sur iphone"
+msgstr ""
+
+#: templates/index.html:84 templates/dcns/index.html:76
+#: templates/nc/index.html:74 templates/products/search.html:35
+#: templates/uk/index.html:77
 msgid "Avec les garanties e-loue, louez en toute sécurité !"
 msgstr ""
 
 #: templates/index.html:87 templates/nc/index.html:77
-#: templates/products/search.html:38
+#: templates/products/search.html:38 templates/uk/index.html:80
 msgid ""
 "\n"
 "\t\t\t\t\t     <p>Grâce à <strong>PayPal</strong>, bénéficiez du paiement le "
@@ -1391,6 +1619,7 @@ msgid ""
 msgstr ""
 
 #: templates/index.html:92 templates/products/search.html:43
+#: templates/uk/index.html:85
 msgid ""
 "\n"
 "\t\t\t\t\t\t <p>Notre <strong>partenaire assureur</strong> garantit vos "
@@ -1398,30 +1627,33 @@ msgid ""
 "\t\t\t\t\t\t"
 msgstr ""
 
-#: templates/index.html:106 templates/nc/index.html:95
-#: templates/products/product_list.html:194 templates/products/search.html:57
+#: templates/index.html:106 templates/dcns/index.html:99
+#: templates/dcns/products/product_list.html:199 templates/nc/index.html:95
+#: templates/products/product_list.html:211 templates/products/search.html:57
+#: templates/uk/index.html:98
 msgid "Catégories"
 msgstr ""
 
-#: templates/index.html:134
+#: templates/index.html:134 templates/uk/index.html:126
 msgid "Ils parlent de nous"
 msgstr ""
 
 #: templates/index.html:135 templates/nc/index.html:124
-#: templates/products/search.html:86
+#: templates/products/search.html:86 templates/uk/index.html:127
 msgid "Voir l'espace presse"
 msgstr ""
 
 #: templates/index.html:136 templates/products/search.html:87
+#: templates/uk/index.html:128
 msgid "e-loue dans les média"
 msgstr ""
 
 #: templates/index.html:141 templates/nc/index.html:130
-#: templates/products/search.html:92
+#: templates/products/search.html:92 templates/uk/index.html:133
 msgid "Rejoignez notre communauté"
 msgstr ""
 
-#: templates/index.html:145
+#: templates/index.html:145 templates/uk/index.html:137
 msgid ""
 "\n"
 "\t\t\t\t\t\t<a href=\"https://www.facebook.com/pages/e-louecom/104685226447"
@@ -1432,7 +1664,7 @@ msgid ""
 "\t\t\t\t\t "
 msgstr ""
 
-#: templates/index.html:153
+#: templates/index.html:153 templates/uk/index.html:145
 msgid ""
 "\n"
 "\t\t\t\t\t\t<a href=\"https://twitter.com/eloue\">\n"
@@ -1442,27 +1674,31 @@ msgid ""
 "\t\t\t\t\t "
 msgstr ""
 
-#: templates/accounts/activate.html:4
+#: templates/accounts/activate.html:4 templates/dcns/accounts/activate.html:4
 msgid "Activation de votre compte"
 msgstr ""
 
-#: templates/accounts/activate.html:9
+#: templates/accounts/activate.html:9 templates/dcns/accounts/activate.html:9
 msgid "Activation"
 msgstr ""
 
 #: templates/accounts/activate.html:13
+#: templates/dcns/accounts/activate.html:13
 msgid "Merci d'avoir activé votre compte !"
 msgstr ""
 
 #: templates/accounts/activate.html:14
+#: templates/dcns/accounts/activate.html:14
 msgid "Vous pouvez vous y connecter dés à présent."
 msgstr ""
 
 #: templates/accounts/activate.html:16
+#: templates/dcns/accounts/activate.html:16
 msgid "Votre compte n'a pu être activé"
 msgstr ""
 
 #: templates/accounts/activate.html:18
+#: templates/dcns/accounts/activate.html:18
 msgid ""
 "Ceci peut-arriver si le lien que nous vous avons envoyé par email a été "
 "coupé, assurez-vous que celui-ci est complet."
@@ -1502,6 +1738,11 @@ msgid ""
 msgstr ""
 
 #: templates/accounts/auth_login.html:4 templates/accounts/auth_login.html:9
+#: templates/dcns/accounts/auth_login.html:4
+#: templates/dcns/accounts/auth_login.html:9
+#: templates/dcns/rent/booking_register.html:4
+#: templates/dcns/rent/booking_register.html:24
+#: templates/products/alert_register.html:19
 #: templates/products/product_register.html:4
 #: templates/products/product_register.html:19
 #: templates/rent/booking_missing.html:24
@@ -1511,16 +1752,22 @@ msgid "Identification"
 msgstr ""
 
 #: templates/accounts/auth_missing.html:4
+#: templates/dcns/products/alert_missing.html:4
+#: templates/dcns/products/product_missing.html:4
+#: templates/dcns/rent/booking_missing.html:4
 #: templates/products/product_missing.html:4
 #: templates/rent/booking_missing.html:4
 msgid "Complétez votre profil"
 msgstr ""
 
 #: templates/accounts/auth_missing.html:9
+#: templates/dcns/accounts/auth_missing.html:9
 msgid "Informations nécessaires pour la création de votre compte"
 msgstr ""
 
 #: templates/accounts/borrower_booking.html:4
+#: templates/dcns/accounts/borrower_booking.html:4
+#: templates/dcns/accounts/borrower_history.html:4
 msgid "Vos locations actives en tant que locataire"
 msgstr ""
 
@@ -1533,6 +1780,20 @@ msgstr ""
 #: templates/accounts/patron_edit.html:11
 #: templates/accounts/patron_password.html:11
 #: templates/accounts/patron_paypal.html:11
+#: templates/dcns/accounts/alert_edit.html:11
+#: templates/dcns/accounts/borrower_booking.html:11
+#: templates/dcns/accounts/borrower_history.html:11
+#: templates/dcns/accounts/dashboard.html:11
+#: templates/dcns/accounts/owner_booking.html:11
+#: templates/dcns/accounts/owner_history.html:11
+#: templates/dcns/accounts/owner_product.html:11
+#: templates/dcns/accounts/patron_edit.html:11
+#: templates/dcns/accounts/patron_password.html:11
+#: templates/dcns/accounts/patron_paypal.html:11
+#: templates/dcns/products/product_detail.html:124
+#: templates/dcns/products/product_edit.html:11
+#: templates/dcns/rent/booking_detail.html:65
+#: templates/dcns/rent/booking_incident.html:38
 #: templates/mobile/products/product_detail.html:61
 #: templates/products/product_detail.html:120
 #: templates/products/product_edit.html:11
@@ -1550,6 +1811,20 @@ msgstr ""
 #: templates/accounts/patron_edit.html:12
 #: templates/accounts/patron_password.html:12
 #: templates/accounts/patron_paypal.html:12
+#: templates/dcns/accounts/alert_edit.html:12
+#: templates/dcns/accounts/alert_edit.html:13
+#: templates/dcns/accounts/borrower_booking.html:12
+#: templates/dcns/accounts/borrower_history.html:12
+#: templates/dcns/accounts/dashboard.html:12
+#: templates/dcns/accounts/owner_booking.html:12
+#: templates/dcns/accounts/owner_history.html:12
+#: templates/dcns/accounts/owner_product.html:12
+#: templates/dcns/accounts/patron_edit.html:12
+#: templates/dcns/accounts/patron_password.html:12
+#: templates/dcns/accounts/patron_paypal.html:12
+#: templates/dcns/products/product_edit.html:12
+#: templates/dcns/rent/booking_detail.html:66
+#: templates/dcns/rent/booking_incident.html:39
 #: templates/products/product_edit.html:12
 #: templates/rent/booking_detail.html:66
 #: templates/rent/booking_incident.html:11
@@ -1564,6 +1839,23 @@ msgstr ""
 #: templates/accounts/owner_history.html:18
 #: templates/accounts/owner_product.html:18
 #: templates/accounts/patron_paypal.html:18
+#: templates/dcns/accounts/borrower_booking.html:18
+#: templates/dcns/accounts/borrower_booking.html:23
+#: templates/dcns/accounts/borrower_history.html:18
+#: templates/dcns/accounts/borrower_history.html:23
+#: templates/dcns/accounts/owner_booking.html:18
+#: templates/dcns/accounts/owner_booking.html:25
+#: templates/dcns/accounts/owner_history.html:18
+#: templates/dcns/accounts/owner_product.html:18
+#: templates/dcns/products/product_edit.html:18
+#: templates/dcns/rent/booking_detail.html:75
+#: templates/dcns/rent/booking_detail.html:77
+#: templates/dcns/rent/booking_detail.html:92
+#: templates/dcns/rent/booking_detail.html:94
+#: templates/dcns/rent/booking_incident.html:48
+#: templates/dcns/rent/booking_incident.html:50
+#: templates/dcns/rent/booking_incident.html:65
+#: templates/dcns/rent/booking_incident.html:67
 #: templates/products/product_edit.html:18
 #: templates/rent/booking_detail.html:76 templates/rent/booking_detail.html:89
 #: templates/rent/booking_incident.html:21
@@ -1578,6 +1870,21 @@ msgstr ""
 #: templates/accounts/owner_history.html:25
 #: templates/accounts/owner_product.html:19
 #: templates/accounts/patron_paypal.html:19
+#: templates/dcns/accounts/borrower_booking.html:19
+#: templates/dcns/accounts/borrower_history.html:19
+#: templates/dcns/accounts/owner_booking.html:19
+#: templates/dcns/accounts/owner_history.html:19
+#: templates/dcns/accounts/owner_history.html:25
+#: templates/dcns/accounts/owner_product.html:19
+#: templates/dcns/products/product_edit.html:19
+#: templates/dcns/rent/booking_detail.html:82
+#: templates/dcns/rent/booking_detail.html:84
+#: templates/dcns/rent/booking_detail.html:99
+#: templates/dcns/rent/booking_detail.html:101
+#: templates/dcns/rent/booking_incident.html:55
+#: templates/dcns/rent/booking_incident.html:57
+#: templates/dcns/rent/booking_incident.html:72
+#: templates/dcns/rent/booking_incident.html:74
 #: templates/products/product_edit.html:19
 #: templates/rent/booking_detail.html:80 templates/rent/booking_detail.html:93
 #: templates/rent/booking_incident.html:25
@@ -1591,7 +1898,15 @@ msgstr ""
 #: templates/accounts/owner_history.html:37
 #: templates/accounts/owner_product.html:69
 #: templates/accounts/patron_detail.html:93
-#: templates/products/product_list.html:160
+#: templates/dcns/accounts/borrower_booking.html:35
+#: templates/dcns/accounts/borrower_history.html:35
+#: templates/dcns/accounts/owner_booking.html:37
+#: templates/dcns/accounts/owner_history.html:37
+#: templates/dcns/accounts/owner_product.html:73
+#: templates/dcns/accounts/patron_detail.html:98
+#: templates/dcns/products/product_list.html:163
+#: templates/products/alert_list.html:75
+#: templates/products/product_list.html:164
 msgid "Page précédente"
 msgstr ""
 
@@ -1601,7 +1916,15 @@ msgstr ""
 #: templates/accounts/owner_history.html:43
 #: templates/accounts/owner_product.html:75
 #: templates/accounts/patron_detail.html:99
-#: templates/products/product_list.html:166
+#: templates/dcns/accounts/borrower_booking.html:41
+#: templates/dcns/accounts/borrower_history.html:41
+#: templates/dcns/accounts/owner_booking.html:43
+#: templates/dcns/accounts/owner_history.html:43
+#: templates/dcns/accounts/owner_product.html:79
+#: templates/dcns/accounts/patron_detail.html:108
+#: templates/dcns/products/product_list.html:169
+#: templates/products/alert_list.html:81
+#: templates/products/product_list.html:170
 msgid "Page suivante"
 msgstr ""
 
@@ -1613,14 +1936,22 @@ msgstr ""
 msgid "Historiques des locations"
 msgstr ""
 
-#: templates/accounts/contact.html:4
+#: templates/accounts/contact.html:4 templates/dcns/accounts/contact.html:4
 msgid "Contactez e-loue"
 msgstr ""
 
 #: templates/accounts/contact.html:59
-#: templates/accounts/partials/missing.html:410
-#: templates/products/product_create.html:130
-#: templates/products/product_edit.html:112
+#: templates/accounts/partials/missing.html:409
+#: templates/dcns/accounts/contact.html:57
+#: templates/dcns/accounts/patron_edit.html:97
+#: templates/dcns/accounts/patron_password.html:63
+#: templates/dcns/accounts/partials/missing.html:383
+#: templates/dcns/products/alert_create.html:49
+#: templates/dcns/products/product_create.html:220
+#: templates/dcns/products/product_edit.html:170
+#: templates/products/alert_create.html:47
+#: templates/products/product_create.html:197
+#: templates/products/product_edit.html:170
 msgid "* = champ obligatoire"
 msgstr ""
 
@@ -1628,10 +1959,22 @@ msgstr ""
 #: templates/accounts/patron_password.html:66
 #: templates/accounts/patron_paypal.html:44
 #: templates/accounts/partials/login.html:35
-#: templates/accounts/partials/missing.html:416
-#: templates/accounts/partials/missing.html:418
-#: templates/products/product_create.html:133
-#: templates/products/product_edit.html:115
+#: templates/accounts/partials/missing.html:415
+#: templates/accounts/partials/missing.html:417
+#: templates/dcns/accounts/contact.html:61
+#: templates/dcns/accounts/patron_paypal.html:42
+#: templates/dcns/accounts/partials/login.html:35
+#: templates/dcns/accounts/partials/missing.html:390
+#: templates/dcns/accounts/partials/missing.html:392
+#: templates/dcns/products/alert_create.html:66
+#: templates/dcns/products/product_edit.html:175
+#: templates/dcns/rent/booking_confirm.html:97
+#: templates/dcns/rent/booking_incident.html:179
+#: templates/dcns/rent/partials/booking_status.html:39
+#: templates/nc/rent/booking_confirm.html:100
+#: templates/products/alert_create.html:52
+#: templates/products/product_create.html:200
+#: templates/products/product_edit.html:173
 #: templates/rent/booking_confirm.html:100
 #: templates/rent/booking_incident.html:129
 #: templates/rent/partials/booking_status.html:34
@@ -1642,52 +1985,75 @@ msgstr ""
 #: templates/accounts/patron_password.html:66
 #: templates/accounts/patron_paypal.html:44
 #: templates/accounts/partials/login.html:35
-#: templates/accounts/partials/missing.html:416
-#: templates/accounts/partials/missing.html:418
-#: templates/products/product_create.html:133
-#: templates/products/product_edit.html:115
+#: templates/accounts/partials/missing.html:415
+#: templates/accounts/partials/missing.html:417
+#: templates/dcns/accounts/contact.html:61
+#: templates/dcns/accounts/patron_paypal.html:42
+#: templates/dcns/accounts/partials/login.html:35
+#: templates/dcns/accounts/partials/missing.html:390
+#: templates/dcns/accounts/partials/missing.html:392
+#: templates/dcns/products/alert_create.html:66
+#: templates/dcns/products/product_edit.html:175
+#: templates/dcns/rent/booking_confirm.html:97
+#: templates/dcns/rent/booking_incident.html:179
+#: templates/nc/rent/booking_confirm.html:100
+#: templates/products/alert_create.html:52
+#: templates/products/product_create.html:200
+#: templates/products/product_edit.html:173
 #: templates/rent/booking_confirm.html:100
 #: templates/rent/booking_incident.html:129
 msgid "ou"
 msgstr ""
 
-#: templates/accounts/contact.html:63 templates/rent/booking_incident.html:130
+#: templates/accounts/contact.html:63 templates/dcns/accounts/contact.html:62
+#: templates/dcns/rent/booking_incident.html:180
+#: templates/rent/booking_incident.html:130
 msgid "Envoyer"
 msgstr ""
 
 #: templates/accounts/dashboard.html:4
+#: templates/dcns/accounts/alert_edit.html:4
+#: templates/dcns/accounts/dashboard.html:4
 msgid "Votre tableau de bord"
 msgstr ""
 
 #: templates/accounts/dashboard.html:19
+#: templates/dcns/accounts/dashboard.html:19
 msgid "Modifier votre profil"
 msgstr ""
 
 #: templates/accounts/dashboard.html:28
+#: templates/dcns/accounts/dashboard.html:25
 msgid "Accéder à mes objets"
 msgstr ""
 
 #: templates/accounts/dashboard.html:36
+#: templates/dcns/accounts/dashboard.html:32
 msgid "Bienvenue sur e-loue ! Que pouvez-vous faire ensuite ?"
 msgstr ""
 
 #: templates/accounts/dashboard.html:40
+#: templates/dcns/accounts/dashboard.html:35
 msgid "Mettre un objet en location"
 msgstr ""
 
 #: templates/accounts/dashboard.html:41
+#: templates/dcns/accounts/dashboard.html:36
 msgid "Editer votre profil"
 msgstr ""
 
 #: templates/accounts/dashboard.html:42
+#: templates/dcns/accounts/dashboard.html:37
 msgid "Chercher une location"
 msgstr ""
 
 #: templates/accounts/dashboard.html:46
+#: templates/dcns/accounts/dashboard.html:40
 msgid "Locations en tant que <strong>propriétaire</strong>"
 msgstr ""
 
 #: templates/accounts/dashboard.html:52
+#: templates/dcns/accounts/dashboard.html:45
 msgid ""
 "\n"
 "                <span>Location<br />en attente</span>\n"
@@ -1700,6 +2066,8 @@ msgstr[0] ""
 msgstr[1] ""
 
 #: templates/accounts/dashboard.html:62 templates/accounts/dashboard.html:97
+#: templates/dcns/accounts/dashboard.html:55
+#: templates/dcns/accounts/dashboard.html:88
 msgid ""
 "\n"
 "                <span>Location<br />active</span>\n"
@@ -1712,6 +2080,7 @@ msgstr[0] ""
 msgstr[1] ""
 
 #: templates/accounts/dashboard.html:72
+#: templates/dcns/accounts/dashboard.html:65
 msgid ""
 "\n"
 "                <span>Objet<br />en location</span>\n"
@@ -1724,10 +2093,12 @@ msgstr[0] ""
 msgstr[1] ""
 
 #: templates/accounts/dashboard.html:81
+#: templates/dcns/accounts/dashboard.html:73
 msgid "Locations en tant que <strong>locataire</strong>"
 msgstr ""
 
 #: templates/accounts/dashboard.html:87
+#: templates/dcns/accounts/dashboard.html:78
 msgid ""
 "\n"
 "                 <span>Location<br />en attente</span>\n"
@@ -1740,6 +2111,7 @@ msgstr[0] ""
 msgstr[1] ""
 
 #: templates/accounts/owner_booking.html:4
+#: templates/dcns/accounts/owner_booking.html:4
 msgid "Vos locations actives en tant que propriétaire"
 msgstr ""
 
@@ -1747,6 +2119,12 @@ msgstr ""
 #: templates/accounts/owner_history.html:20
 #: templates/accounts/owner_product.html:20
 #: templates/accounts/patron_paypal.html:20
+#: templates/dcns/accounts/owner_booking.html:20
+#: templates/dcns/accounts/owner_history.html:20
+#: templates/dcns/accounts/owner_product.html:20
+#: templates/dcns/products/product_edit.html:20
+#: templates/dcns/rent/booking_detail.html:87
+#: templates/dcns/rent/booking_incident.html:60
 #: templates/products/product_edit.html:20
 #: templates/rent/booking_detail.html:81
 #: templates/rent/booking_incident.html:26
@@ -1757,6 +2135,12 @@ msgstr ""
 #: templates/accounts/owner_history.html:21
 #: templates/accounts/owner_product.html:21
 #: templates/accounts/patron_paypal.html:21
+#: templates/dcns/accounts/owner_booking.html:21
+#: templates/dcns/accounts/owner_history.html:21
+#: templates/dcns/accounts/owner_product.html:21
+#: templates/dcns/products/product_edit.html:21
+#: templates/dcns/rent/booking_detail.html:88
+#: templates/dcns/rent/booking_incident.html:61
 #: templates/products/product_edit.html:21
 #: templates/rent/booking_detail.html:82
 #: templates/rent/booking_incident.html:27
@@ -1764,75 +2148,97 @@ msgid "Ajouter un objet"
 msgstr ""
 
 #: templates/accounts/owner_history.html:4
+#: templates/dcns/accounts/owner_history.html:4
 msgid "Historique de vos locations en tant que propriétaire"
 msgstr ""
 
 #: templates/accounts/owner_product.html:4
+#: templates/dcns/accounts/owner_product.html:4
 #: templates/products/product_edit.html:4
 msgid "Vos produits mis en locations"
 msgstr ""
 
 #: templates/accounts/owner_product.html:26
+#: templates/dcns/accounts/owner_product.html:26
 msgid "Objets en location"
 msgstr ""
 
 #: templates/accounts/owner_product.html:28
 #: templates/accounts/patron_detail.html:52
+#: templates/dcns/accounts/owner_product.html:28
+#: templates/dcns/accounts/patron_detail.html:55
 msgid "Pas de location"
 msgstr ""
 
 #: templates/accounts/owner_product.html:51
 #: templates/accounts/patron_detail.html:74
+#: templates/dcns/accounts/owner_product.html:55
+#: templates/dcns/accounts/patron_detail.html:81
 msgid "par"
 msgstr ""
 
 #: templates/accounts/owner_product.html:55
 #: templates/accounts/password_reset_confirm.html:54
+#: templates/dcns/accounts/owner_product.html:59
+#: templates/dcns/accounts/password_reset_confirm.html:54
 msgid "Modifier"
 msgstr ""
 
 #: templates/accounts/password_reset_complete.html:4
 #: templates/accounts/password_reset_complete.html:9
+#: templates/dcns/accounts/password_reset_complete.html:4
+#: templates/dcns/accounts/password_reset_complete.html:9
 msgid "Password reset complete"
 msgstr ""
 
 #: templates/accounts/password_reset_complete.html:12
+#: templates/dcns/accounts/password_reset_complete.html:12
 msgid "Your password has been set.  You may go ahead and log in now."
 msgstr ""
 
 #: templates/accounts/password_reset_complete.html:13
+#: templates/dcns/accounts/password_reset_complete.html:13
 msgid "Log in"
 msgstr ""
 
 #: templates/accounts/password_reset_confirm.html:5
 #: templates/accounts/password_reset_form.html:4
 #: templates/accounts/password_reset_form.html:9
+#: templates/dcns/accounts/password_reset_confirm.html:5
+#: templates/dcns/accounts/password_reset_form.html:4
+#: templates/dcns/accounts/password_reset_form.html:9
 msgid "Password reset"
 msgstr ""
 
 #: templates/accounts/password_reset_confirm.html:12
+#: templates/dcns/accounts/password_reset_confirm.html:12
 msgid "Enter new password"
 msgstr ""
 
 #: templates/accounts/password_reset_confirm.html:20
+#: templates/dcns/accounts/password_reset_confirm.html:20
 msgid ""
 "Please enter your new password twice so we can verify you typed it in "
 "correctly."
 msgstr ""
 
 #: templates/accounts/password_reset_confirm.html:25
+#: templates/dcns/accounts/password_reset_confirm.html:25
 msgid "New password:"
 msgstr ""
 
 #: templates/accounts/password_reset_confirm.html:39
+#: templates/dcns/accounts/password_reset_confirm.html:39
 msgid "Confirm password:"
 msgstr ""
 
 #: templates/accounts/password_reset_confirm.html:59
+#: templates/dcns/accounts/password_reset_confirm.html:59
 msgid "Password reset unsuccessful"
 msgstr ""
 
 #: templates/accounts/password_reset_confirm.html:62
+#: templates/dcns/accounts/password_reset_confirm.html:62
 msgid ""
 "The password reset link was invalid, possibly because it has already been "
 "used.  Please request a new password reset."
@@ -1840,10 +2246,13 @@ msgstr ""
 
 #: templates/accounts/password_reset_done.html:4
 #: templates/accounts/password_reset_done.html:9
+#: templates/dcns/accounts/password_reset_done.html:4
+#: templates/dcns/accounts/password_reset_done.html:9
 msgid "Password reset successful"
 msgstr ""
 
 #: templates/accounts/password_reset_done.html:12
+#: templates/dcns/accounts/password_reset_done.html:12
 msgid ""
 "We've e-mailed you instructions for setting your password to the e-mail "
 "address you submitted. You should be receiving it shortly."
@@ -1895,25 +2304,30 @@ msgid "Oubli de votre mot de passe"
 msgstr ""
 
 #: templates/accounts/password_reset_form.html:13
+#: templates/dcns/accounts/password_reset_form.html:13
 msgid ""
 "Forgotten your password? Enter your e-mail address below, and we'll e-mail "
 "instructions for setting a new one."
 msgstr ""
 
 #: templates/accounts/password_reset_form.html:18
+#: templates/dcns/accounts/password_reset_form.html:18
 msgid "E-mail address:"
 msgstr ""
 
 #: templates/accounts/password_reset_form.html:22
+#: templates/dcns/accounts/password_reset_form.html:22
 msgid "Réinitialiser"
 msgstr ""
 
 #: templates/accounts/patron_detail.html:7
+#: templates/dcns/accounts/patron_detail.html:7
 #, python-format
 msgid "Toutes les locations de %(username)s"
 msgstr ""
 
 #: templates/accounts/patron_detail.html:48
+#: templates/dcns/accounts/patron_detail.html:51
 #, python-format
 msgid ""
 "\n"
@@ -1922,6 +2336,8 @@ msgid ""
 msgstr ""
 
 #: templates/accounts/patron_detail.html:78
+#: templates/dcns/accounts/patron_detail.html:85
+#: templates/dcns/products/product_detail.html:98
 #: templates/products/product_detail.html:95
 msgid "Réserver &rarr;"
 msgstr ""
@@ -1929,11 +2345,18 @@ msgstr ""
 #: templates/accounts/patron_edit.html:4
 #: templates/accounts/patron_edit.html:18
 #: templates/accounts/patron_password.html:18
+#: templates/dcns/accounts/patron_edit.html:4
+#: templates/dcns/accounts/patron_edit.html:18
+#: templates/dcns/accounts/patron_password.html:18
+#: templates/dcns/accounts/patron_paypal.html:18
 msgid "Votre profil"
 msgstr ""
 
 #: templates/accounts/patron_edit.html:19
 #: templates/accounts/patron_password.html:19
+#: templates/dcns/accounts/patron_edit.html:19
+#: templates/dcns/accounts/patron_password.html:19
+#: templates/dcns/accounts/patron_paypal.html:19
 msgid "Modification du mot de passe"
 msgstr ""
 
@@ -1948,67 +2371,85 @@ msgstr ""
 
 #: templates/accounts/patron_edit.html:138
 #: templates/accounts/patron_password.html:67
-#: templates/products/product_edit.html:116
+#: templates/dcns/products/product_edit.html:176
+#: templates/products/product_edit.html:174
 msgid "Sauvegarder"
 msgstr ""
 
 #: templates/accounts/patron_password.html:4
+#: templates/dcns/accounts/patron_password.html:4
 msgid "Changez votre mot de passe"
 msgstr ""
 
 #: templates/accounts/patron_password.html:27
+#: templates/dcns/accounts/patron_password.html:26
 msgid "Mot de passe actuel"
 msgstr ""
 
 #: templates/accounts/patron_password.html:40
+#: templates/dcns/accounts/patron_password.html:39
 msgid "Nouveau mot de passe"
 msgstr ""
 
 #: templates/accounts/patron_paypal.html:4
+#: templates/dcns/accounts/patron_paypal.html:4
 msgid "Votre compte PayPal"
 msgstr ""
 
 #: templates/accounts/patron_paypal.html:25
+#: templates/dcns/accounts/patron_paypal.html:23
 msgid "Vérification de votre compte PayPal"
 msgstr ""
 
 #: templates/accounts/patron_paypal.html:32
 #: templates/accounts/partials/login.html:15
+#: templates/dcns/accounts/patron_paypal.html:30
 msgid "Avez-vous un compte e-loue ?"
 msgstr ""
 
 #: templates/accounts/patron_paypal.html:45
 #: templates/accounts/partials/login.html:36
-#: templates/accounts/partials/missing.html:419
-#: templates/products/product_create.html:134
+#: templates/accounts/partials/missing.html:418
+#: templates/dcns/accounts/patron_paypal.html:43
+#: templates/dcns/accounts/partials/login.html:36
+#: templates/dcns/accounts/partials/missing.html:393
+#: templates/dcns/products/alert_create.html:67
+#: templates/products/alert_create.html:53
+#: templates/products/product_create.html:201
 msgid "Continuer &rarr;"
 msgstr ""
 
 #: templates/accounts/patron_paypal.html:50
+#: templates/dcns/accounts/patron_paypal.html:48
 msgid "e-loue PayPal verified"
 msgstr ""
 
 #: templates/accounts/partials/login.html:8
+#: templates/dcns/accounts/partials/login.html:7
 msgid "Votre adresse email est :"
 msgstr ""
 
 #: templates/accounts/partials/login.html:24
+#: templates/dcns/accounts/partials/login.html:23
 msgid "Mot de passe oublié"
 msgstr ""
 
-#: templates/accounts/partials/missing.html:122
+#: templates/accounts/partials/missing.html:121
+#: templates/dcns/accounts/partials/missing.html:95
 msgid "Nouveau Numéro"
 msgstr ""
 
-#: templates/accounts/partials/missing.html:158
+#: templates/accounts/partials/missing.html:157
+#: templates/dcns/accounts/partials/missing.html:131
 msgid "Nouvelle adresse :"
 msgstr ""
 
-#: templates/accounts/partials/missing.html:160
+#: templates/accounts/partials/missing.html:159
+#: templates/dcns/accounts/partials/missing.html:133
 msgid "Adresse"
 msgstr ""
 
-#: templates/accounts/partials/missing.html:209
+#: templates/accounts/partials/missing.html:208
 #, python-format
 msgid ""
 "\n"
@@ -2160,7 +2601,7 @@ msgid ""
 "\t\t\t\t\t<br /><br />\n"
 "\n"
 "\t\t\t\t\t5.1 L’utilisation de la plateforme e-loue est gratuite, ainsi que "
-"l’inscription et les frais d’insertion d’une annonce. Une commission de 20%% "
+"l’inscription et les frais d’insertion d’une annonce. Une commission de 15%% "
 "de la transaction est prélevée, à la charge du propriétaire. Ainsi lorsque "
 "le propriétaire reçoit le virement à la fin de la transaction, la commission "
 "est alors directement déduite du montant total qu’il perçoit. Ce montant de "
@@ -2512,13 +2953,1194 @@ msgid ""
 "\t\t  "
 msgstr ""
 
-#: templates/accounts/partials/missing.html:403
+#: templates/accounts/partials/missing.html:402
 msgid ""
 "\n"
 "\t\t\t\tEn cliquant sur <strong>\"Continuer &rarr;\"</strong> en dessous, "
 "vous acceptez <a href=\"/conditions-generales/\" target=\"_blank\">les "
 "conditions générales</a>.\n"
 "\t\t\t "
+msgstr ""
+
+#: templates/dcns/index.html:13
+msgid "Location entre collaborateur"
+msgstr ""
+
+#: templates/dcns/index.html:67
+msgid "Louez vos objets entre colaborateur"
+msgstr ""
+
+#: templates/dcns/index.html:79
+msgid ""
+"\n"
+"\t\t\t     <p>Grâce à <strong>PayPal</strong>, bénéficiez du paiement le "
+"plus sécurisé au monde.</p>\n"
+"\t\t\t    "
+msgstr ""
+
+#: templates/dcns/index.html:84
+msgid ""
+"\n"
+"\t\t\t\t <p>Notre <strong>partenaire assureur</strong> garantit vos objets "
+"en cas de casse.</p>\n"
+"\t\t\t\t"
+msgstr ""
+
+#: templates/dcns/accounts/auth_missing.html:4
+msgid "Identifiction"
+msgstr ""
+
+#: templates/dcns/accounts/owner_product.html:49
+#: templates/dcns/products/product_list.html:140
+#: templates/mobile/products/product_list.html:77
+#: templates/products/product_list.html:142
+msgid "km"
+msgstr ""
+
+#: templates/dcns/accounts/partials/login.html:14
+msgid "Avez-vous un compte ?"
+msgstr ""
+
+#: templates/dcns/accounts/partials/missing.html:182
+#, python-format
+msgid ""
+"\n"
+"    \t\t\t<th>\n"
+"    \t\t\t\tConditions<br/ > générales :\n"
+"    \t\t\t</th>\n"
+"    \t\t\t<td>\n"
+"    \t\t\t\t<code class=\"cg\">\n"
+"    \t\t\t\t\tPREAMBULE<br /><br />\n"
+"\n"
+"    \t\t\t\t\tL’utilisation du site e-loue vaut acceptation des conditions "
+"générales. Si vous ne les acceptez pas, veuillez ne pas utiliser le site."
+"<br />\n"
+"\n"
+"    \t\t\t\t\tLe service d'annonces en ligne www.e-loue.com est géré par la "
+"société e-loue permet la mise en relation de propriétaires annonceurs (ci-"
+"après les Propriétaires) et de locataires d’objets. Les Propriétaires et les "
+"Locataires sont ci-après désignés conjointement les Membres. La Plateforme e-"
+"loue permet la conclusion de contrats de location des Objets entre "
+"Propriétaires et Locataires, mais n’en est pas responsable. Les Membres sont "
+"seuls décisionnaires de la concrétisation la location des Objets et seuls "
+"responsables du contrat de location.<br />\n"
+"\n"
+"    \t\t\t\t\tL'acceptation des présentes Conditions Générales d'utilisation "
+"de la Plateforme e-loue par les Membres vaut mandat donné e-loue pour mettre "
+"en relation Propriétaires et Locataires et opérer les Transactions "
+"effectuées sur le site de e-loue selon les modalités ci-après.<br />\n"
+"\n"
+"    \t\t\t\t\tVersion au 26 novembre 2010.<br />\n"
+"\n"
+"    \t\t\t\t\t<br />\n"
+"    \t\t\t\t\t1. Définitions\n"
+"    \t\t\t\t\t<br /><br />\n"
+"\n"
+"    \t\t\t\t\tPlateforme de e-loue : signifie la structure fonctionnelle et "
+"organisationnelle mise en place par e-loue permettant la Mise en Relation de "
+"Propriétaires et de Locataires d’objets.<br /><br />\n"
+"\n"
+"    \t\t\t\t\tObjet : signifie les Objets mentionnés à la Documentation e-"
+"loue, susceptibles de faire l'objet d'une Mise en Relation par la Plateforme "
+"e-loue.<br /><br />\n"
+"\n"
+"    \t\t\t\t\tObjet Interdit : signifie les Objets contraires aux bonnes "
+"mœurs et aux lois et règlements en vigueur. Il s'agit notamment des Objets "
+"qui seraient des copies non autorisées ou constitueraient des objets "
+"contrefaisants au sens du Code de la Propriété intellectuelle ou des objets "
+"non autorisés en vertu de dispositions législatives, réglementaires ou "
+"contractuelles. La liste des objets interdits est décrite dans la suite de "
+"la documentation.<br /><br />\n"
+"\n"
+"    \t\t\t\t\tPropriétaire : signifie un Membre effectuant une offre de "
+"location d'un Objet sur la Plateforme e-loue.<br /><br />\n"
+"\n"
+"    \t\t\t\t\tLocataire : signifie un Membre ayant indiqué son acceptation "
+"de l'offre d'un Propriétaire.<br /><br />\n"
+"\n"
+"    \t\t\t\t\tMembre : signifie au singulier ou au pluriel un Propriétaire "
+"ou un Locataire susceptible de faire usage de la Plateforme E-loue après "
+"acceptation des Conditions Générales. Tout Membre s'engage à fournir des "
+"informations exactes quant à son identité, adresse et autres données "
+"nécessaires à l'accès à la Plateforme E-loue et à mettre à jour toute "
+"modification concernant ces informations<br /><br />\n"
+"\n"
+"    \t\t\t\t\tPrix : signifie le prix par jour proposé par le Propriétaire "
+"pour son offre de location d'un Objet. Le Prix constitue l'assiette de la "
+"Commission de e-loue.<br /><br />\n"
+"\n"
+"    \t\t\t\t\tCommission : signifie la rémunération perçue par e-loue au "
+"titre de l'utilisation de la Plateforme e-loue. Prix de la Transaction : "
+"signifie le prix total de l’objet payable par le Locataire. Eventuellement "
+"si une transaction se fait a distance, des frais de port peuvent être "
+"demandés. Ils seront indiqués clairement dans les commentaires de l’annonce. "
+"Contrat de location : signifie la convention passée entre le propriétaire et "
+"le locataire faisant naitre pour l’un l’obligation de transfert de la "
+"jouissance de la chose et pour l’autre l’obligation d’en verser une contre "
+"partie financière fixée au préalable ou inscrit au contrat. Particulier : "
+"Personne utilisant la plateforme e-loue à titre personnel Professionnel : "
+"Personne utilisant la plateforme au titre de son entreprise<br /><br />\n"
+"\n"
+"    \t\t\t\t\t<br />\n"
+"    \t\t\t\t\t2. Objet\n"
+"    \t\t\t\t\t<br /><br />\n"
+"\n"
+"    \t\t\t\t\tLes présentes conditions générales d'utilisation de la "
+"Plateforme E-loue ont pour objet de définir des conditions par lesquelles "
+"les Membres sont autorisés à utiliser la Plateforme E-loue aux fins d'opérer "
+"leur Mise en Relation.<br />\n"
+"\n"
+"    \t\t\t\t\t<br />\n"
+"    \t\t\t\t\t3. Engagements de E-LOUE\n"
+"    \t\t\t\t\t<br /><br />\n"
+"\n"
+"    \t\t\t\t\t3.1. E-loue s'engage à tout mettre en œuvre pour maintenir le "
+"site dans un état opérationnel. Il s'agit toutefois d'une obligation de "
+"moyen et en aucun cas une obligation de résultat.<br />\n"
+"\n"
+"    \t\t\t\t\t3.2 E-loue s'engage à transmettre à l'annonceur par E-mail "
+"tous les messages postées par les personnes intéressées par son annonce "
+"ainsi que de tenir à sa disposition toutes les informations relatives à son "
+"annonce.<br />\n"
+"\n"
+"    \t\t\t\t\t3.3 Du fait des caractéristiques et des limites d´Internet, "
+"que le client déclare connaître, ne peut en aucune manière être tenu "
+"responsable des vitesses d´accès, des ralentissements et des difficultés d"
+"´accès au site.<br />\n"
+"\n"
+"    \t\t\t\t\t3.4 E-loue se réserve le droit d´interrompre temporairement l"
+"´accessibilité à ses services pour des raisons de maintenance et/ou d"
+"´amélioration. Cependant, s´engage à tout mettre en oeuvre pour minimiser ce "
+"type d´interruption.<br />\n"
+"\n"
+"    \t\t\t\t\t3.5 E-loue n'offre aucune garantie de continuité de service. A "
+"ce titre, la responsabilité des administrateurs du site E-loue ne pourra "
+"être recherchée en cas de dommages (coûts, perte de profits, perte de "
+"données, dommages directs ou indirects) qui pourraient naître de "
+"l'utilisation du Service et de l'impossibilité d'y avoir accès et/ou de sa "
+"fermeture.<br />\n"
+"\n"
+"    \t\t\t\t\t<br />\n"
+"    \t\t\t\t\t4. Processus de Location\n"
+"    \t\t\t\t\t<br /><br />\n"
+"\n"
+"    \t\t\t\t\t4.1 Le propriétaire dépose une annonce sur le site. Lorsqu’un "
+"internaute (le locataire de l’objet) est intéressé, il fait une demande de "
+"location. Il enregistre alors ses coordonnées bancaires et fait une demande "
+"d’autorisation de prélèvement bancaire. Le propriétaire reçoit la demande, "
+"si elle lui convient (dates, informations sur le locataire…) alors il valide "
+"la transaction. Le locataire sera débité le premier jour de la location. Le "
+"propriétaire enregistre également ses coordonnées bancaires afin de pouvoir "
+"être payé à la fin de la transaction. Suite à la validation, le site e-loue "
+"communique aux deux contreparties toutes les informations du contrat et les "
+"coordonnées afin qu’ils puissent entrer en contact.<br />\n"
+"\n"
+"    \t\t\t\t\tSi jamais la transaction ne s’est finalement pas déroulée, "
+"alors une demande est faite par le locataire pour ne pas être débité. A la "
+"fin de la location, le propriétaire revient sur le site et clôture la "
+"transaction, il est à ce moment payé du montant total de la transaction "
+"moins la commission que nous appliquons. Nous sommes libres de faire des "
+"contrôles et d’appliquer des sanctions en cas de fraude.<br />\n"
+"\n"
+"    \t\t\t\t\t4.2 A l'occasion du paiement par le locataire, le locataire "
+"donne mandat à e-loue, sous condition suspensive et à concurrence de "
+"l'Utilisation pour le process de location, d'utiliser tout ou partie du "
+"montant de du paiement aux fins (a) de payer le propriétaire en fin de "
+"location (b) de payer les frais liés à la transaction. e-loue s’engage à "
+"disposer cet argent sur un compte séquestre auprès de son partenaire "
+"bancaire.<br />\n"
+"\n"
+"    \t\t\t\t\t<br />\n"
+"    \t\t\t\t\t5. Tarifs\n"
+"    \t\t\t\t\t<br /><br />\n"
+"\n"
+"    \t\t\t\t\t5.1 L’utilisation de la plateforme e-loue est gratuite, ainsi "
+"que l’inscription et les frais d’insertion d’une annonce. Une commission de "
+"15%% de la transaction est prélevée, à la charge du propriétaire. Ainsi "
+"lorsque le propriétaire reçoit le virement à la fin de la transaction, la "
+"commission est alors directement déduite du montant total qu’il perçoit. Ce "
+"montant de commission comprend les frais liés au paiement et l’assurance "
+"lorsque le bien est assurable.<br />\n"
+"\n"
+"    \t\t\t\t\t5.2 E-loue peut modifier à tout moment sa politique relative "
+"aux frais de mise en ligne et aux commissions ainsi que les tarifs de ses "
+"services. Ces modifications prendront effet dès leur mise en ligne et "
+"s’appliqueront à toutes les transactions postérieures à cette mise en ligne. "
+"Veuillez donc consulter régulièrement ces Conditions Générales et notamment "
+"avant toute transaction sur le site.<br />\n"
+"\n"
+"    \t\t\t\t\t6. Obligations des membres<br /><br />\n"
+"\n"
+"    \t\t\t\t\t6.1 Nos services sont réservés aux personnes juridiquement "
+"capables ou autorisés de souscrire des contrats de location. Nos services ne "
+"sont pas disponibles pour les mineurs. Nous nous réservons le droit de "
+"supprimer le compte d’un membre quelque soit le motif, notamment s’il ne "
+"respecte pas les conditions générales ou qu’il est engagé dans des actes "
+"frauduleux en rapport avec le site<br />\n"
+"\n"
+"    \t\t\t\t\t6.2 L'utilisateur engage sa responsabilité sur les "
+"informations annoncées.<br />\n"
+"\n"
+"    \t\t\t\t\t6.3 Il ne doit annoncer aucune information mensongère ou "
+"exagérée.<br />\n"
+"\n"
+"    \t\t\t\t\t6.4 Il s'engage à produire une annonce dont le contenu n'est "
+"pas de nature à porter préjudice à autrui ni à enfreindre les lois et "
+"règlements en vigueur.<br />\n"
+"\n"
+"    \t\t\t\t\t6.5 Il doit accepter de recevoir par E-mail les messages de "
+"toute personne intéressée par son annonce.<br />\n"
+"\n"
+"    \t\t\t\t\t6.6 Il s'engage à répondre à toute personne intéressée par son "
+"annonce.<br />\n"
+"\n"
+"    \t\t\t\t\t6.7 Il s'engage à supprimer son annonce dès lors que sa "
+"location ne sera plus disponible.<br />\n"
+"\n"
+"    \t\t\t\t\t<br />\n"
+"    \t\t\t\t\t7. Obligations des propriétaires\n"
+"    \t\t\t\t\t<br /><br />\n"
+"\n"
+"    \t\t\t\t\t7.1 Le Propriétaire s'engage à ce que toute offre d'un Objet "
+"corresponde à un bien matériel dont il dispose de la pleine et entière "
+"propriété et capacité de location, disponible aux dates indiquées.<br />\n"
+"\n"
+"    \t\t\t\t\t7.2 Le Propriétaire s'engage à décrire l’Objet offert à la "
+"location selon les critères retenus par E-loue dans la Documentation E-loue. "
+"La description de l’Objet doit correspondre à ses caractéristiques "
+"effectives. Le Propriétaire mentionnera : la dénomination du objet, les "
+"caractéristiques du Objet, son état d’usage dans la description s’il y a une "
+"particularité à spécifier, le Prix de la Transaction, et les autres "
+"informations éventuellement demandées.<br />\n"
+"\n"
+"    \t\t\t\t\t7.3 Le Propriétaire est seul responsable de la bonne exécution "
+"de l'obligation d'informer les Locataires des caractéristiques essentielles "
+"du bien et, le cas échéant, de l'évaluation des frais de port qui peuvent "
+"être inclus ou non dans le prix de la location. Il est seul responsable de "
+"la description des biens qu'il propose à la location. Il garantit E-loue de "
+"toute réclamation relative au contenu et à la forme de ladite description. "
+"Le Propriétaire s'engage à effectuer toutes validations, vérifications et "
+"apporter toutes précisions nécessaires de sorte que le descriptif et les "
+"éléments de l'offre soient fidèles et n'induisent pas le Locataire en "
+"erreur. En cas d'erreur du descriptif, des éléments de l'offre et/ou dans "
+"l'évaluation des frais de port, le Propriétaire assumera seuls les surcoûts "
+"éventuels et aucune réclamation de sa part ne sera recevable à ce titre tant "
+"auprès du Locataire que de E-loue.<br />\n"
+"\n"
+"    \t\t\t\t\t7.4 Dans le descriptif de l’annonce, le professionnel s’engage "
+"à ne pas spécifier son adresse email, son numéro de téléphone, les "
+"coordonnées de son magasin…En effet le processus de location est le même que "
+"pour les particuliers, et donc ces informations ne seront communiquées au "
+"locataire que lorsque la demande de location sera validée. Il ne s’agit pas "
+"d’une plateforme de publicité mais d’une plateforme de location.<br />\n"
+"\n"
+"    \t\t\t\t\t7.5 Le Propriétaire est seul responsable de la bonne exécution "
+"de l'obligation de livrer l’Objet commandé. Si la livraison a été convenue "
+"par voie postale, Le Propriétaire s'engage à adresser, à ses frais, l’Objet "
+"convenablement emballé aux dates prévues l'adresse du Locataire. L’Objet "
+"voyage aux risques et aux frais du Propriétaire.<br />\n"
+"\n"
+"    \t\t\t\t\t7.6 Lors de l'expédition au Locataire du Objet, le "
+"Propriétaire s'engage à n'insérer aucune publicité pour lui-même ou pour "
+"quiconque, sous quelque forme que ce soit (message, plaquette, prospectus, "
+"stick autocollant, etc...). Les coordonnées du Locataire doivent être "
+"utilisées uniquement pour les besoins de l'exécution de la commande et des "
+"obligations légales qui s'y rattachent. Toute autre utilisation, location, "
+"relocation ou copie de la part du Propriétaire sont explicitement interdites."
+"<br />\n"
+"\n"
+"    \t\t\t\t\t7.7 Obligations des Propriétaires professionnels<br />\n"
+"\n"
+"    \t\t\t\t\t7.7.1 Le Propriétaire agissant à titre professionnel doit "
+"s'identifier auprès de E-loue en cette qualité lors de l’inscription. E-loue "
+"se réserve le droit de ne pas contracter avec un Propriétaire professionnel."
+"<br />\n"
+"\n"
+"    \t\t\t\t\t7.7.2 E-loue rappelle au Propriétaire agissant à titre "
+"professionnel son obligation de respecter les lois et règlements relatifs à "
+"l'exercice d'une activité commerciale de location à distance à titre "
+"professionnel. Il devra notamment s'assurer de ses obligations déclaratives "
+"de nature sociale ou fiscale.<br />\n"
+"\n"
+"    \t\t\t\t\t7.7.3 Le Propriétaire s'engage à établir au profit du "
+"Locataire une attestation nominative de la location opérée et une facture "
+"conforme aux exigences légales désignant le Objet loué et le Prix de la "
+"Transaction. Cette attestation devra notamment mentionner l'existence et les "
+"modalités d'exercice du droit de rétractation auprès de E-loue pour le "
+"Locataire.<br />\n"
+"\n"
+"    \t\t\t\t\t7.8 Dispositions financières Le propriétaire s’engage à payer "
+"les frais de commission, dès qu’un locataire a validé une offre. Ces frais "
+"sont pour le moment totalement gratuits, mais ils sont susceptibles de "
+"changer.<br />\n"
+"\n"
+"    \t\t\t\t\t<br />\n"
+"    \t\t\t\t\t8. Obligations Des Locataires\n"
+"    \t\t\t\t\t<br /><br />\n"
+"\n"
+"    \t\t\t\t\t8.1 Pour toute transaction, E-loue pourra être amené, à titre "
+"exceptionnel et dans le but de lutter contre les éventuelles fraudes, à "
+"procéder à une validation de l'identité du Locataire. A défaut de la "
+"fourniture des informations requises par E-loue dans le cadre de la "
+"validation de l'identité, E-loue pourra annuler la Transaction opérée par le "
+"Locataire.<br />\n"
+"\n"
+"    \t\t\t\t\t8.2 Le Locataire s'engage à posséder une boîte aux lettres "
+"normalisée conforme aux recommandations des services postaux (dimension de "
+"la boîte aux lettres, indication des coordonnées des résidents, etc...), "
+"dans le cas ou la transaction est décidée d’être acheminée par voie postale."
+"<br />\n"
+"\n"
+"    \t\t\t\t\t8.3 Le Locataire s'engage à informer e-loue via le bouton « "
+"Annuler » présent dans « Mon compte » au maximum le jour du début de la "
+"location si la location ne s’est pas finalement pas faite, et dans ce cas e-"
+"loue le remboursera des frais de transaction pour la location qu’il a payé, "
+"sans aucune commission, dans le seul cas ou la location ne s’est pas faite a "
+"cause du propriétaire. Si la location ne s’est pas faite à cause du "
+"locataire lui-même, conformément à la réglementation, les Remboursements "
+"sont réalisés à la valeur nominale du paiement sans autres frais que ceux "
+"strictement requis par l'opération de remboursement, lesquels sont fixés "
+"forfaitairement à 4%% du montant du paiement. Le défaut de réponse de sa "
+"part passé le jour du début de location vaudra infirmation de l'offre de "
+"location. E-loue est le seul juge pour décider du remboursement. En cas de "
+"défaut d’une location, E-loue se réserve le droit de mener une investigation "
+"afin de vérifier que la location ne s’est réellement pas faite. Dans le cas "
+"contraire une procédure judiciaire sera engagée. De plus si le nombre de "
+"défauts paraît suspicieux, e-loue se réserve le droit de supprimer le compte "
+"de n’importe quel membre.<br />\n"
+"\n"
+"    \t\t\t\t\t<br />\n"
+"    \t\t\t\t\t9. Contrat de location\n"
+"    \t\t\t\t\t<br /><br />\n"
+"\n"
+"    \t\t\t\t\tDans le cadre de la procédure de location entre un "
+"propriétaire et un locataire, E-loue met à disposition des propriétaires et "
+"des locataires un contrat de location standard, qui est propre à e-loue met "
+"qui présente de fortes similitudes avec des contrats de locations "
+"professionnels type, ou bien même des modèles de contrat sur Internet. Ce "
+"dernier inclut selon le type de location des informations sur la "
+"transaction. Il s’agit d’un contrat type mis à disposition par E-loue.com à "
+"titre purement indicatif. E-loue se décharge de toute responsabilité quant "
+"au modèle et à son contenu et à l’utilisation qui peut en être faite, chaque "
+"location nécessitant un contrat propre adapté à la transaction et au droit "
+"qui lui est applicable. Les propriétaires et les locataires sont invités à "
+"cet égard à prendre conseil éventuellement auprès de leur conseiller "
+"juridique.<br />\n"
+"\n"
+"    \t\t\t\t\t<br />\n"
+"    \t\t\t\t\t10. Simulateur de revenus\n"
+"    \t\t\t\t\t<br /><br />\n"
+"\n"
+"    \t\t\t\t\tL’algorithme utilisé pour l’ensemble des calculs est propriété "
+"exclusive d’E-LOUE, et de ce fait protégé. Il s’agit d’un service proposé à "
+"l’ensemble des utilisateurs du site. La fiabilité des résultats ne peut être "
+"reprochée au site E-loue, qui n’a aucune obligation de résultat et de moyen "
+"pour les résultats du simulateur.<br />\n"
+"\n"
+"    \t\t\t\t\t<br />11. Assurance\n"
+"    \t\t\t\t\t<br /><br />\n"
+"\n"
+"    \t\t\t\t\tCf conditions spécifiques Assurance tranquillité<br />\n"
+"\n"
+"    \t\t\t\t\t<br />\n"
+"    \t\t\t\t\t12. Responsabilité\n"
+"    \t\t\t\t\t<br /><br />\n"
+"\n"
+"    \t\t\t\t\t12.1. Fonction de E-loue : E-loue n'est pas une société de "
+"location mais est une plateforme sur internet d’annonces de locations. E-"
+"loue.com héberge seulement le contenu des annonces mises en ligne par les "
+"propriétaires (textes, images, etc.) et le site n’.est donc qu’une plate-"
+"forme électronique mise à disposition de ses utilisateurs, en vue de mettre "
+"en contact propriétaires et locataires d’objets. Nous n'exerçons ainsi aucun "
+"contrôle sur la qualité, la sécurité ou la licité des objets répertoriés, la "
+"véracité ou l'exactitude des annonces mises en ligne, la capacité des "
+"propriétaires à louer lesdits biens ni la capacité des locataires à louer ou "
+"à payer la location desdits biens. Nous ne pouvons pas assurer que le "
+"locataire conclura effectivement la transaction. Toute caution requise par "
+"le propriétaire, sous quelque forme que ce soit reste la responsabilité "
+"exclusive du propriétaire, celle-ci pouvant être demandée par chèque, "
+"emprunte bancaire… . E-loue ne prend en aucun cas en charge un dépôt de "
+"garantie sous quelque forme que ce soit, ni le contrôle de l’identité exacte "
+"du propriétaire ou du locataire.<br />\n"
+"\n"
+"    \t\t\t\t\t12.2 Fiabilité des transactions et prudence des membres : E-"
+"loue.com ne peut pas confirmer l'identité de chaque membre. E-loue met à "
+"disposition des ses membres et utilisateurs un système dit de \"commentaires"
+"\" ou \"notations\" pour leur permettre d'évaluer la personne avec qui ils "
+"traitent à l'issue d'une transaction ou pendant celle-ci. Les locataires et/"
+"ou propriétaire ont ainsi la possibilité de mettre en ligne leurs "
+"commentaires sur les membres avec lesquels ils ont effectués leurs "
+"transactions. Cette évaluation positive pourra être, pour certains "
+"propriétaires une condition à la location de ses biens. L’évaluation "
+"s’appliquera également au propriétaire afin, pour les locataires, d’évaluer "
+"le propriétaire pendant ou à l’issue de la transaction dite « location ». "
+"L’objet ou le bien loué peut également être évalué à l’issue de la "
+"transaction par le locataire.<br />\n"
+"\n"
+"    \t\t\t\t\t12.3 Décharge de responsabilité : Puisque E-loue.com "
+"n'intervient pas dans les transactions entre propriétaire et locataire, les "
+"membres dégagent E-loue de toute responsabilité (ainsi que l’ensemble de ses "
+"dirigeants et employés) en cas de litige entre plusieurs membres, de "
+"réclamation, ou tout dommage présent ou futur, présumé ou non, constaté ou "
+"non, résultant de manière directe ou indirecte de l’utilisation des services "
+"de E-loue. Ainsi en cas de dommage ou dégâts lors de l’utilisation d’un "
+"objet loué, qui peut être ou non défectueux, e-loue n’est en aucun cas "
+"responsable. E-loue a en effet uniquement servi de mise en relation du "
+"locataire avec le propriétaire.<br />\n"
+"\n"
+"    \t\t\t\t\t12.4 Limitations des responsabilités : Le site fournit des "
+"informations, recommandations, commentaires qui peuvent être inexacts, "
+"dépassés, incomplets, offensants, dommageables ou trompeurs : E-loue décline "
+"toute responsabilité sur les contenus dont il ne peut vérifier la véracité, "
+"l’authenticité ou l’exhaustivité. La responsabilité du site n’est en rien "
+"engagée quant aux qualités réelles ou supposées des objets et services "
+"proposés par ses membres. Faites donc toujours preuve de prudence et de bon "
+"sens quand vous utilisez le site. N’oubliez jamais qu’il se peut que vous "
+"ayez affaire à des mineurs ou à des personnes malintentionnées. Si vous "
+"utilisez le site, vous convenez que E-loue n’est pas responsable des actes "
+"ou omissions des utilisateurs et des membres et acceptez les risques visés "
+"dans les présentes Conditions Générales et le présent article. E-loue "
+"n’approuve ni ne valide les transactions effectuées sur le site et les "
+"membres et utilisateurs sont seuls responsables de la légalité de leurs "
+"actes. E-loue n’accepte aucune responsabilité liée à une éventuelle "
+"dangerosité ou défectuosité des objets mis en location sur le site, pouvant "
+"porter atteinte à la santé ou à l’intégrité physique et n’apporte aucune "
+"garantie à ce sujet. N’en déduisez donc pas que tous les objets mis en "
+"location sont sans danger pour les personnes ou leurs biens. Les membres et "
+"utilisateurs sont seuls responsables du contrôle et de la vérification que "
+"les objets offerts en location et loués sont bien autorisés à la location en "
+"vertu des législations applicables. Certains produits sont interdits à la "
+"location, c’est pourquoi vous ne les trouverez pas dans l’arborescence "
+"catégories/sous-catégorie objets. Aussi vous êtes tenus responsables si vous "
+"ajoutez un objet interdit à la location. Veuillez nous signaler si une "
+"annonce concernant un objet supposé interdit à la location est en ligne sur "
+"le site, afin qu’on la supprime. Vous êtes tenus responsables en cas de "
+"location d’un produit interdit. E-loue ne fait aucune déclaration ou "
+"garantie, expresse ou tacite, concernant le site, les offres de location, "
+"leur présentation ou leur contenu, y compris la garantie de qualité "
+"marchande, d’aptitude à un emploi particulier, la non-violation du droit "
+"d’auteur, de marques commerciales ou d’autres droits de propriété "
+"intellectuelle, la liberté de tous les services, les travaux ou autres "
+"matériels de contenu, contre les virus, les vers, les chevaux de Troie ou "
+"tout autre code aux traits hostiles, perturbateurs ou destructeurs. Sans "
+"préjudice des stipulations prévues au paragraphe précédent, E-loue ne peut "
+"être tenu pour responsable d’aucune perte ou altération de données, d’aucune "
+"perte de profit, de chiffre d’affaires, de temps, d’opportunité ou de tout "
+"autre dommage indirect, que ladite perte ou ledit dommage résulte d’une "
+"négligence ou de toute autre cause. Si le membre ou l’utilisateur est "
+"consommateur, les droits qui lui sont accordés par la loi ne sont pas remis "
+"en cause par la présente clause.<br />\n"
+"\n"
+"    \t\t\t\t\t<br />\n"
+"    \t\t\t\t\t13. Dispositions générales\n"
+"    \t\t\t\t\t<br /><br />\n"
+"\n"
+"    \t\t\t\t\t13.1 E-loue a la faculté de modifier les présentes Conditions "
+"Générales en fonction de l'évolution de son offre et du marché. Toute "
+"modification prendra effet immédiatement pour les offres en ligne dès leur "
+"notification aux Membres par tout moyen choisi par E-loue. Elles ne "
+"s'appliqueront pas pour les transactions en cours au moment de leur entrée "
+"en vigueur. Occasionnellement E-loue pourra changer de code, numéro de "
+"téléphone, effectuer une dénumérotation, interrompre le service pour des "
+"raisons opérationnelles, de maintenance ou en cas d'urgence.<br />\n"
+"\n"
+"    \t\t\t\t\t13.2 Le Membre se connectera à la Plateforme E-loue au moyen "
+"de ses propres équipements et terminaux de télécommunication. E-loue ne met "
+"à disposition du Membre aucun moyen matériel, installation téléphonique, "
+"équipement terminal ou autres, ni logiciel ou abonnement.<br />\n"
+"\n"
+"    \t\t\t\t\t13.3 En cas de force majeure, les obligations de la partie "
+"empêchée seront suspendues, notamment en cas : - d'acte ou omission du "
+"gouvernement ou d'autorités supérieures compétentes, - de blocage ou "
+"défaillance des réseaux de télécommunications, - d'insurrections, guerre "
+"civile, guerre, opérations militaires, état d'urgence national ou local, "
+"feu, foudre, explosion, grève, inondation, tempête, fait d'un tiers.<br />\n"
+"\n"
+"    \t\t\t\t\t13.4 L'invalidité d'une ou plusieurs clauses des Dispositions "
+"Générales d'utilisation de la Plateforme E-loue n'entraînera pas la nullité "
+"de celles-ci.<br />\n"
+"\n"
+"    \t\t\t\t\t13.5 Le présent contrat est soumis à la Loi Française. Tout "
+"litige avec un Membre agissant à titre professionnel et né à l'occasion de "
+"son interprétation et/ou de son exécution est de la compétence du Tribunal "
+"de commerce de Paris.<br />\n"
+"\n"
+"    \t\t\t\t\t13.6 L’utilisation des applications externes utilisées par e-"
+"loue entraine l’acceptation implicite des conditions générales de ces "
+"applications.<br />\n"
+"\n"
+"    \t\t\t\t\t<br />\n"
+"    \t\t\t\t\t14. Gestion des données personnelles\n"
+"    \t\t\t\t\t<br /><br />\n"
+"\n"
+"    \t\t\t\t\tVous disposez d'un droit d'accès, de modification, de "
+"rectification et de suppression des données vous concernant (loi "
+"\"Informatique et Libertés\" du 6 janvier 1978). Les internautes qui "
+"s’inscrivent et deviennent membres acceptent explicitement de recevoir des "
+"emails provenant de e-loue. Sauf votre consentement, ces données ne sont "
+"divulguées à aucun tiers et ne servent qu'au fonctionnement du site. Les "
+"données nominatives relatives aux Membres sont collectées, enregistrées et "
+"stockées en conformité avec les dispositions de la Loi relative à "
+"l'informatique, aux fichiers et aux libertés du 6 janvier 1978. Les Membres "
+"disposent du droit d'accès et de rectification prévu par la loi auprès de e-"
+"loue responsable de la Plateforme. Pour tout renseignement, adressez-vous "
+"directement à e-loue.<br />\n"
+"\n"
+"    \t\t\t\t\tLe pseudo et le mot de passe choisis par un membre sont "
+"strictement confidentiels, et il s’engage à ne pas les communiquer. Les "
+"membres sont seuls responsables en cas d'utilisation à leur insu par une "
+"autre personne utilisant leurs identifiants.<br />\n"
+"\n"
+"    \t\t\t\t\t<br />\n"
+"    \t\t\t\t\t15. Taxes et impositions\n"
+"    \t\t\t\t\t<br /><br />\n"
+"\n"
+"    \t\t\t\t\tContrairement à E-loue qui n’est pas partie aux locations de "
+"biens, les utilisateurs, membres, locataires et propriétaires sont seuls "
+"redevables de tous les impôts, taxes et commissions résultant de "
+"l'utilisation de nos services et de notre site. E-loue se dégage donc de "
+"toute responsabilité pour les taxes sur les transactions effectuées sur ou "
+"via son site.<br />\n"
+"\n"
+"    \t\t\t\t\tE-loue SAS - RCS Paris 509 679 593 TVA Intracommunautaire : "
+"FR49509679593<br />\n"
+"    \t\t\t\t</code>\n"
+"    \t\t\t</td>\n"
+"    \t\t  "
+msgstr ""
+
+#: templates/dcns/accounts/partials/missing.html:376
+msgid ""
+"\n"
+"    \t\t\t\tEn cliquant sur <strong>\"Continuer &rarr;\"</strong> en "
+"dessous, vous acceptez <a href=\"/conditions-generales/\" target=\"_blank"
+"\">les conditions générales</a>.\n"
+"    \t\t\t "
+msgstr ""
+
+#: templates/dcns/faq/topic_list.html:4 templates/faq/topic_list.html:4
+msgid "Foire aux questions"
+msgstr ""
+
+#: templates/dcns/faq/topic_list.html:7 templates/faq/topic_list.html:7
+msgid "Les questions les plus fréquemment posées sur e-loue"
+msgstr ""
+
+#: templates/dcns/faq/topic_list.html:13 templates/faq/topic_list.html:14
+msgid "Questions Fréquentes"
+msgstr ""
+
+#: templates/dcns/products/alert_create.html:4
+#: templates/dcns/products/alert_create.html:10
+#: templates/dcns/products/alert_missing.html:10
+#: templates/products/alert_create.html:4
+#: templates/products/alert_create.html:10
+#: templates/products/alert_missing.html:4
+#: templates/products/alert_missing.html:10
+#: templates/products/alert_register.html:4
+#: templates/products/alert_register.html:10
+msgid "Créer une alerte"
+msgstr ""
+
+#: templates/dcns/products/alert_create.html:13
+#: templates/dcns/products/alert_missing.html:13
+#: templates/dcns/products/product_create.html:13
+#: templates/dcns/products/product_missing.html:13
+#: templates/products/alert_create.html:13
+#: templates/products/alert_missing.html:13
+#: templates/products/alert_register.html:13
+#: templates/products/product_create.html:13
+#: templates/products/product_missing.html:13
+#: templates/products/product_register.html:13
+msgid "1. Remplissez la fiche"
+msgstr ""
+
+#: templates/dcns/products/alert_create.html:14
+#: templates/dcns/products/alert_missing.html:14
+#: templates/dcns/products/product_create.html:14
+#: templates/dcns/products/product_missing.html:14
+#: templates/products/alert_create.html:14
+#: templates/products/alert_missing.html:14
+#: templates/products/alert_register.html:14
+#: templates/products/product_create.html:14
+#: templates/products/product_missing.html:14
+#: templates/products/product_register.html:14
+msgid "2. Identifiez-vous"
+msgstr ""
+
+#: templates/dcns/products/alert_list.html:5
+#: templates/products/alert_list.html:5 templates/products/alert_list.html:40
+msgid "Alertes locations"
+msgstr ""
+
+#: templates/dcns/products/alert_list.html:9
+#: templates/products/alert_list.html:9
+msgid ""
+"Demandes de location des locataires qui n'ont pas trouvé l'objet qu'ils "
+"veulent louer près de chez eux."
+msgstr ""
+
+#: templates/dcns/products/alert_list.html:81
+#: templates/products/alert_list.html:90
+msgid "Rechercher une alerte"
+msgstr ""
+
+#: templates/dcns/products/alert_list.html:89
+#: templates/dcns/products/product_list.html:186
+#: templates/products/product_list.html:200
+msgid "Restreindre les résultats à un rayon de"
+msgstr ""
+
+#: templates/dcns/products/alert_list.html:93
+#: templates/dcns/products/product_list.html:191
+#: templates/products/alert_list.html:101
+#: templates/products/product_list.html:202
+msgid "Km"
+msgstr ""
+
+#: templates/dcns/products/alert_list.html:96
+#: templates/dcns/products/product_list.html:192
+#: templates/products/alert_list.html:104
+#: templates/products/product_list.html:203
+msgid "Mettre à jour"
+msgstr ""
+
+#: templates/dcns/products/alert_missing.html:16
+#: templates/dcns/products/product_create.html:16
+#: templates/dcns/products/product_missing.html:16
+#: templates/dcns/rent/booking_confirm.html:21
+#: templates/dcns/rent/booking_missing.html:21
+#: templates/dcns/rent/booking_register.html:21
+#: templates/nc/rent/booking_confirm.html:21
+#: templates/products/alert_create.html:16
+#: templates/products/alert_missing.html:16
+#: templates/products/alert_register.html:16
+#: templates/products/product_create.html:16
+#: templates/products/product_missing.html:16
+#: templates/products/product_register.html:16
+#: templates/rent/booking_confirm.html:21
+#: templates/rent/booking_missing.html:21
+#: templates/rent/booking_register.html:16
+msgid "Obtenir de l'aide"
+msgstr ""
+
+#: templates/dcns/products/alert_missing.html:20
+#: templates/dcns/products/product_missing.html:20
+#: templates/dcns/rent/booking_missing.html:25
+#: templates/products/alert_missing.html:20
+#: templates/products/product_missing.html:20
+msgid "Choisissez une adresse pour l'objet :"
+msgstr ""
+
+#: templates/dcns/products/alert_missing.html:22
+#: templates/dcns/products/product_missing.html:22
+#: templates/dcns/rent/booking_missing.html:27
+#: templates/products/alert_missing.html:22
+#: templates/products/product_missing.html:22
+msgid "Complétez votre profil et choisissez une adresse pour la l'objet :"
+msgstr ""
+
+#: templates/dcns/products/alert_unform_success.html:4
+msgid "Réponse envoyé avec success"
+msgstr ""
+
+#: templates/dcns/products/alert_unform_success.html:6
+msgid "La réponse à l'alerte à bien été envoyé"
+msgstr ""
+
+#: templates/dcns/products/alert_unform_success.html:11
+msgid "Votre réponse à l'alerte a bien été envoyé"
+msgstr ""
+
+#: templates/dcns/products/product_create.html:125
+#: templates/dcns/products/product_edit.html:117
+#: templates/products/product_create.html:131
+#: templates/products/product_edit.html:123
+msgid "Prix de location"
+msgstr ""
+
+#: templates/dcns/products/product_create.html:130
+#: templates/dcns/products/product_edit.html:122
+#: templates/products/product_create.html:136
+#: templates/products/product_edit.html:128
+msgid "Prix simplifiés"
+msgstr ""
+
+#: templates/dcns/products/product_create.html:133
+#: templates/dcns/products/product_edit.html:125
+#: templates/products/product_create.html:139
+#: templates/products/product_edit.html:131
+msgid "Prix par défaut :"
+msgstr ""
+
+#: templates/dcns/products/product_create.html:134
+#: templates/dcns/products/product_edit.html:126
+#, python-format
+msgid ""
+"\n"
+"\t\t\t    <p>Vous pouvez ne remplir qu’une seule case et cliquer sur l’icône "
+"<img src=\"%(MEDIA_URL)s/images/mini_calculator.png\" alt=\"Calculer les "
+"prix de location automatiquement\" /> pour calculer les autres valeurs "
+"automatiquement.</p>\n"
+"\t\t\t    "
+msgstr ""
+
+#: templates/dcns/products/product_create.html:174
+#: templates/dcns/products/product_edit.html:166
+#: templates/products/product_create.html:170
+#: templates/products/product_edit.html:162
+msgid "Calculer"
+msgstr ""
+
+#: templates/dcns/products/product_detail.html:4
+#: templates/dcns/products/product_detail.html:41
+#: templates/dcns/products/product_list.html:5
+#: templates/products/product_detail.html:4
+#: templates/products/product_detail.html:36
+#: templates/products/product_list.html:5
+msgid "Location"
+msgstr ""
+
+#: templates/dcns/products/product_detail.html:73
+#: templates/products/product_detail.html:68
+#, python-format
+msgid " / par %(unit)s"
+msgstr ""
+
+#: templates/dcns/products/product_detail.html:79
+#: templates/products/product_detail.html:74
+msgid "Début"
+msgstr ""
+
+#: templates/dcns/products/product_detail.html:83
+#: templates/products/product_detail.html:80
+msgid "Fin"
+msgstr ""
+
+#: templates/dcns/products/product_detail.html:89
+#, python-format
+msgid ""
+"\n"
+"        \t\t  <p>Total : <span class=\"day\">1 jour,</span> soit <span class="
+"\"total-price\">%(day_price)s</span></p>\n"
+"        \t\t "
+msgstr ""
+
+#: templates/dcns/products/product_detail.html:112
+#: templates/mobile/products/product_detail.html:49
+#: templates/products/product_detail.html:108
+msgid "Lieu"
+msgstr ""
+
+#: templates/dcns/products/product_edit.html:4
+msgid "Modification de"
+msgstr ""
+
+#: templates/dcns/products/product_list.html:18
+#: templates/mobile/products/product_list.html:5
+#: templates/mobile/products/product_list.html:18
+#: templates/products/product_list.html:18
+msgid "Location "
+msgstr ""
+
+#: templates/dcns/products/product_list.html:71
+#: templates/dcns/products/product_list.html:73
+#: templates/products/product_list.html:71
+#: templates/products/product_list.html:73
+msgid "location"
+msgstr ""
+
+#: templates/dcns/products/product_list.html:83
+#, python-format
+msgid ""
+"\n"
+"\t <h1>Résultat pour <strong>%(keywords)s</strong></h1>\n"
+"\t "
+msgid_plural ""
+"\n"
+"\t <h1>Résultats pour <strong>%(keywords)s</strong></h1>\n"
+"\t "
+msgstr[0] ""
+msgstr[1] ""
+
+#: templates/dcns/products/product_list.html:92
+#: templates/mobile/products/product_list.html:58
+#: templates/products/product_list.html:93
+#: templates/products/product_list.html:248
+msgid "Vous vouliez peut-être dire ?"
+msgstr ""
+
+#: templates/dcns/products/product_list.html:99
+#: templates/products/product_list.html:99
+msgid "Trier par :"
+msgstr ""
+
+#: templates/dcns/products/product_list.html:102
+#: templates/products/product_list.html:102
+msgid "Les plus récents"
+msgstr ""
+
+#: templates/dcns/products/product_list.html:110
+#: templates/products/product_list.html:110
+msgid "Les prix les plus bas"
+msgstr ""
+
+#: templates/dcns/products/product_list.html:113
+#: templates/products/product_list.html:113
+msgid "Les prix les plus haut"
+msgstr ""
+
+#: templates/dcns/products/product_list.html:145
+#: templates/products/product_list.html:147
+msgid "par jour"
+msgstr ""
+
+#: templates/dcns/products/product_list.html:148
+#: templates/products/product_list.html:150
+msgid "Réserver"
+msgstr ""
+
+#: templates/dcns/products/product_list.html:179
+#: templates/products/product_list.html:192
+msgid "Distance"
+msgstr ""
+
+#: templates/dcns/products/product_list.html:202
+#: templates/products/product_list.html:214
+msgid "Voir tous les résultats"
+msgstr ""
+
+#: templates/dcns/rent/booking_confirm.html:4
+#: templates/nc/rent/booking_confirm.html:4
+#: templates/rent/booking_confirm.html:4
+msgid "Confirmez votre réservation"
+msgstr ""
+
+#: templates/dcns/rent/booking_confirm.html:10
+#: templates/dcns/rent/booking_missing.html:10
+#: templates/dcns/rent/booking_register.html:10
+#: templates/nc/rent/booking_confirm.html:10
+#: templates/rent/booking_confirm.html:10
+#: templates/rent/booking_missing.html:10
+#: templates/rent/booking_register.html:10
+msgid "Réservation"
+msgstr ""
+
+#: templates/dcns/rent/booking_confirm.html:14
+#: templates/dcns/rent/booking_missing.html:14
+#: templates/dcns/rent/booking_register.html:14
+#: templates/rent/booking_missing.html:14
+#: templates/rent/booking_register.html:13
+msgid "1. Identifiez-vous"
+msgstr ""
+
+#: templates/dcns/rent/booking_confirm.html:15
+#: templates/dcns/rent/booking_confirm.html:18
+#: templates/dcns/rent/booking_missing.html:15
+#: templates/dcns/rent/booking_missing.html:18
+#: templates/dcns/rent/booking_register.html:15
+#: templates/dcns/rent/booking_register.html:18
+#: templates/rent/booking_missing.html:15
+#: templates/rent/booking_missing.html:18
+#: templates/rent/booking_register.html:14
+msgid "2. Confirmez votre réservation"
+msgstr ""
+
+#: templates/dcns/rent/booking_confirm.html:17
+#: templates/dcns/rent/booking_missing.html:17
+#: templates/dcns/rent/booking_register.html:17
+#: templates/rent/booking_missing.html:17
+msgid "1. Information de contact"
+msgstr ""
+
+#: templates/dcns/rent/booking_confirm.html:25
+#: templates/nc/rent/booking_confirm.html:25
+#: templates/rent/booking_confirm.html:25
+msgid "Objet réservé"
+msgstr ""
+
+#: templates/dcns/rent/booking_confirm.html:57
+#: templates/dcns/rent/booking_detail.html:141
+#: templates/dcns/rent/booking_incident.html:114
+#: templates/nc/rent/booking_confirm.html:57
+#: templates/rent/booking_confirm.html:57
+#: templates/rent/booking_detail.html:131
+#: templates/rent/booking_incident.html:78
+msgid "Dates et total"
+msgstr ""
+
+#: templates/dcns/rent/booking_confirm.html:62
+#: templates/dcns/rent/booking_detail.html:146
+#: templates/dcns/rent/booking_incident.html:119
+#: templates/nc/rent/booking_confirm.html:62
+#: templates/rent/booking_confirm.html:62
+#: templates/rent/booking_detail.html:136
+#: templates/rent/booking_incident.html:83
+msgid "Début :"
+msgstr ""
+
+#: templates/dcns/rent/booking_confirm.html:66
+#: templates/dcns/rent/booking_detail.html:150
+#: templates/dcns/rent/booking_incident.html:123
+#: templates/nc/rent/booking_confirm.html:68
+#: templates/rent/booking_confirm.html:68
+#: templates/rent/booking_detail.html:142
+#: templates/rent/booking_incident.html:89
+msgid "Fin :"
+msgstr ""
+
+#: templates/dcns/rent/booking_confirm.html:70
+#: templates/dcns/rent/booking_detail.html:154
+#: templates/dcns/rent/booking_incident.html:127
+#: templates/nc/rent/booking_confirm.html:74
+#: templates/rent/booking_confirm.html:74
+#: templates/rent/booking_detail.html:148
+#: templates/rent/booking_incident.html:99
+msgid "Prix par jour :"
+msgstr ""
+
+#: templates/dcns/rent/booking_confirm.html:74
+#: templates/dcns/rent/booking_detail.html:158
+#: templates/dcns/rent/booking_incident.html:131
+#: templates/nc/rent/booking_confirm.html:78
+#: templates/rent/booking_confirm.html:78
+#: templates/rent/booking_detail.html:152
+#: templates/rent/booking_incident.html:103
+msgid "Durée de la location :"
+msgstr ""
+
+#: templates/dcns/rent/booking_confirm.html:78
+#: templates/dcns/rent/booking_detail.html:162
+#: templates/dcns/rent/booking_incident.html:135
+#: templates/nc/rent/booking_confirm.html:82
+#: templates/rent/booking_confirm.html:82
+#: templates/rent/booking_detail.html:156
+#: templates/rent/booking_incident.html:107
+msgid "Total :"
+msgstr ""
+
+#: templates/dcns/rent/booking_confirm.html:84
+#: templates/nc/rent/booking_confirm.html:88
+#: templates/rent/booking_confirm.html:88
+msgid "Paiement"
+msgstr ""
+
+#: templates/dcns/rent/booking_confirm.html:87
+#: templates/nc/rent/booking_confirm.html:91
+#: templates/rent/booking_confirm.html:91
+msgid ""
+"\n"
+"\t\t  Sur la prochaine page veuillez fournir vos informations de paiement."
+"<br />\n"
+"\t\t  Vous ne serez <strong>débité</strong> que <strong>si le propriétaire "
+"accepte</strong> votre demande (dans les 32 heures).<br /> \n"
+"\t\t  Si le propriétaire refuse ou ne répond pas, vous ne serez pas prélevé."
+"<br />\n"
+"\t\t "
+msgstr ""
+
+#: templates/dcns/rent/booking_confirm.html:98
+#: templates/nc/rent/booking_confirm.html:101
+#: templates/rent/booking_confirm.html:101
+msgid "Payez"
+msgstr ""
+
+#: templates/dcns/rent/booking_detail.html:34
+#: templates/dcns/rent/booking_incident.html:7
+#: templates/rent/booking_detail.html:34
+msgid "Location en cours de validation"
+msgstr ""
+
+#: templates/dcns/rent/booking_detail.html:38
+#: templates/dcns/rent/booking_incident.html:11
+#: templates/rent/booking_detail.html:38
+msgid "Location réservée"
+msgstr ""
+
+#: templates/dcns/rent/booking_detail.html:41
+#: templates/dcns/rent/booking_incident.html:14
+#: templates/rent/booking_detail.html:41
+msgid "Location rejetée"
+msgstr ""
+
+#: templates/dcns/rent/booking_detail.html:44
+#: templates/dcns/rent/booking_incident.html:17
+#: templates/rent/booking_detail.html:44
+msgid "Location à venir"
+msgstr ""
+
+#: templates/dcns/rent/booking_detail.html:47
+#: templates/dcns/rent/booking_incident.html:20
+#: templates/rent/booking_detail.html:47
+msgid "Location en cours"
+msgstr ""
+
+#: templates/dcns/rent/booking_detail.html:50
+#: templates/dcns/rent/booking_incident.html:23
+#: templates/rent/booking_detail.html:50
+msgid "Location terminée"
+msgstr ""
+
+#: templates/dcns/rent/booking_detail.html:53
+#: templates/dcns/rent/booking_incident.html:26
+#: templates/rent/booking_detail.html:53
+msgid "Location en cours de clôture"
+msgstr ""
+
+#: templates/dcns/rent/booking_detail.html:56
+#: templates/dcns/rent/booking_incident.html:29
+#: templates/rent/booking_detail.html:56
+msgid "Location clôturer"
+msgstr ""
+
+#: templates/dcns/rent/booking_detail.html:109
+#: templates/dcns/rent/booking_incident.html:82
+#: templates/rent/booking_detail.html:99
+#: templates/rent/booking_incident.html:46
+msgid "Résumé"
+msgstr ""
+
+#: templates/dcns/rent/booking_detail.html:131
+#: templates/dcns/rent/booking_incident.html:104
+#: templates/rent/booking_detail.html:121
+#: templates/rent/booking_incident.html:68
+msgid "Propriétaire :"
+msgstr ""
+
+#: templates/dcns/rent/booking_detail.html:136
+#: templates/dcns/rent/booking_incident.html:109
+#: templates/rent/booking_detail.html:126
+#: templates/rent/booking_incident.html:73
+msgid "Locataire :"
+msgstr ""
+
+#: templates/dcns/rent/booking_detail.html:169
+#: templates/dcns/rent/booking_incident.html:142
+#: templates/rent/booking_detail.html:163
+msgid "Détails de la transaction"
+msgstr ""
+
+#: templates/dcns/rent/booking_detail.html:174
+#: templates/dcns/rent/booking_incident.html:147
+#: templates/rent/booking_detail.html:168
+msgid "Avant commission :"
+msgstr ""
+
+#: templates/dcns/rent/booking_detail.html:178
+#: templates/dcns/rent/booking_incident.html:151
+#: templates/rent/booking_detail.html:172
+msgid "Commission :"
+msgstr ""
+
+#: templates/dcns/rent/booking_detail.html:182
+#: templates/dcns/rent/booking_incident.html:155
+#: templates/rent/booking_detail.html:176
+msgid "Montant net perçu :"
+msgstr ""
+
+#: templates/dcns/rent/booking_detail.html:191
+#: templates/dcns/rent/booking_incident.html:187
+#: templates/rent/booking_detail.html:185
+msgid "Statut de la location"
+msgstr ""
+
+#: templates/dcns/rent/booking_incident.html:162
+#: templates/rent/booking_incident.html:113
+msgid "Déclarez votre incident"
+msgstr ""
+
+#: templates/dcns/rent/booking_preapproval.html:4
+#: templates/rent/booking_preapproval.html:4
+msgid "Erreur d'enregistrement de votre paiement"
+msgstr ""
+
+#: templates/dcns/rent/booking_preapproval.html:9
+#: templates/rent/booking_preapproval.html:8
+msgid "Oops.."
+msgstr ""
+
+#: templates/dcns/rent/booking_preapproval.html:10
+#: templates/rent/booking_preapproval.html:11
+msgid "Une erreur est survenu lors de l'enregistrement de votre paiement."
+msgstr ""
+
+#: templates/dcns/rent/booking_success.html:4
+#: templates/rent/booking_success.html:4
+msgid "Réservation enregistrée avec succès"
+msgstr ""
+
+#: templates/dcns/rent/booking_success.html:9
+#: templates/rent/booking_success.html:8
+msgid "Réservation terminée avec succès"
+msgstr ""
+
+#: templates/dcns/rent/booking_success.html:10
+#: templates/rent/booking_success.html:11
+msgid "Le propriétaire a été informé de votre réservation."
+msgstr ""
+
+#: templates/dcns/rent/partials/booking.html:34
+#: templates/rent/partials/booking.html:32
+msgid "Voir les détails"
+msgstr ""
+
+#: templates/dcns/rent/partials/booking_status.html:6
+#: templates/dcns/rent/partials/booking_status.html:63
+#: templates/rent/partials/booking_status.html:6
+#: templates/rent/partials/booking_status.html:53
+msgid "en cours"
+msgstr ""
+
+#: templates/dcns/rent/partials/booking_status.html:7
+#: templates/rent/partials/booking_status.html:7
+msgid "En cours de validation"
+msgstr ""
+
+#: templates/dcns/rent/partials/booking_status.html:18
+#: templates/rent/partials/booking_status.html:17
+msgid "Accepter"
+msgstr ""
+
+#: templates/dcns/rent/partials/booking_status.html:23
+#: templates/rent/partials/booking_status.html:22
+msgid "Refuser"
+msgstr ""
+
+#: templates/dcns/rent/partials/booking_status.html:30
+#: templates/rent/partials/booking_status.html:27
+msgid "Rejetée"
+msgstr ""
+
+#: templates/dcns/rent/partials/booking_status.html:35
+#: templates/rent/partials/booking_status.html:30
+msgid "Réservée"
+msgstr ""
+
+#: templates/dcns/rent/partials/booking_status.html:46
+#: templates/dcns/rent/partials/booking_status.html:70
+#: templates/rent/partials/booking_status.html:39
+#: templates/rent/partials/booking_status.html:59
+msgid "Signaler un incident"
+msgstr ""
+
+#: templates/dcns/rent/partials/booking_status.html:51
+#: templates/rent/partials/booking_status.html:42
+msgid "Terminée"
+msgstr ""
+
+#: templates/dcns/rent/partials/booking_status.html:56
+#: templates/rent/partials/booking_status.html:47
+msgid "Clôturer"
+msgstr ""
+
+#: templates/dcns/rent/partials/booking_status.html:64
+#: templates/rent/partials/booking_status.html:54
+msgid "En cours de clôture"
+msgstr ""
+
+#: templates/dcns/rent/partials/booking_status.html:69
+#: templates/rent/partials/booking_status.html:58
+msgid "Clôturée"
 msgstr ""
 
 #: templates/faq/topic_detail.html:7
@@ -2528,18 +4150,6 @@ msgid ""
 "  Les questions les plus fréquemment posées sur e-loue à propos de %(section)"
 "s\n"
 " "
-msgstr ""
-
-#: templates/faq/topic_list.html:4
-msgid "Foire aux questions"
-msgstr ""
-
-#: templates/faq/topic_list.html:7
-msgid "Les questions les plus fréquemment posées sur e-loue"
-msgstr ""
-
-#: templates/faq/topic_list.html:14
-msgid "Questions Fréquentes"
 msgstr ""
 
 #: templates/mobile/index.html:5 templates/products/search.html:4
@@ -2555,42 +4165,32 @@ msgstr ""
 msgid "Bienvenue"
 msgstr ""
 
-#: templates/mobile/products/product_detail.html:49
-#: templates/products/product_detail.html:108
-msgid "Lieu"
-msgstr ""
+#: templates/mobile/products/product_list.html:46
+#, python-format
+msgid ""
+"\n"
+"\t\t   Résultat pour <strong>%(keywords)s</strong>\n"
+"\t\t  "
+msgid_plural ""
+"\n"
+"\t\t   Résultats pour <strong>%(keywords)s</strong>\n"
+"\t\t  "
+msgstr[0] ""
+msgstr[1] ""
 
-#: templates/mobile/products/product_list.html:5
-#: templates/mobile/products/product_list.html:18
-#: templates/products/product_detail.html:4
-#: templates/products/product_list.html:5
-#: templates/products/product_list.html:18
-msgid "Location "
-msgstr ""
-
-#: templates/mobile/products/product_list.html:49
+#: templates/mobile/products/product_list.html:54
 msgid "rechercher"
 msgstr ""
 
-#: templates/mobile/products/product_list.html:53
-#: templates/products/product_list.html:88
-msgid "Vous vouliez peut-être dire ?"
-msgstr ""
-
-#: templates/mobile/products/product_list.html:67
+#: templates/mobile/products/product_list.html:72
 msgid "/J"
 msgstr ""
 
-#: templates/mobile/products/product_list.html:72
-#: templates/products/product_list.html:138
-msgid "km"
-msgstr ""
-
-#: templates/mobile/products/product_list.html:84
+#: templates/mobile/products/product_list.html:89
 msgid "Prec"
 msgstr ""
 
-#: templates/mobile/products/product_list.html:87
+#: templates/mobile/products/product_list.html:92
 msgid "Suiv"
 msgstr ""
 
@@ -2610,52 +4210,91 @@ msgid ""
 "\t\t\t\t\t\t"
 msgstr ""
 
-#: templates/products/product_create.html:13
-#: templates/products/product_missing.html:13
-#: templates/products/product_register.html:13
-msgid "1. Remplissez la fiche"
+#: templates/nc/rent/booking_confirm.html:14
+#: templates/rent/booking_confirm.html:14
+msgid "1.Identifiez-vous"
 msgstr ""
 
-#: templates/products/product_create.html:14
-#: templates/products/product_missing.html:14
-#: templates/products/product_register.html:14
-msgid "2. Identifiez-vous"
+#: templates/nc/rent/booking_confirm.html:15
+#: templates/nc/rent/booking_confirm.html:18
+#: templates/rent/booking_confirm.html:15
+#: templates/rent/booking_confirm.html:18
+msgid "2.Confirmez votre réservation"
 msgstr ""
 
-#: templates/products/product_create.html:16
-#: templates/products/product_missing.html:16
-#: templates/products/product_register.html:16
-#: templates/rent/booking_confirm.html:21
-#: templates/rent/booking_missing.html:21
-#: templates/rent/booking_register.html:16
-msgid "Obtenir de l'aide"
+#: templates/nc/rent/booking_confirm.html:17
+#: templates/rent/booking_confirm.html:17
+msgid "1.Information de contact"
 msgstr ""
 
-#: templates/products/product_create.html:19
-msgid "Remplissez le formulaire de location"
+#: templates/nc/rent/booking_confirm.html:106
+#: templates/rent/booking_confirm.html:106
+msgid "Louez en toute sécurité !"
 msgstr ""
 
-#: templates/products/product_create.html:84
-#: templates/products/product_edit.html:66
-#: templates/products/product_list.html:143
-msgid "par jour"
+#: templates/nc/rent/booking_confirm.html:109
+#: templates/rent/booking_confirm.html:109
+msgid ""
+"\n"
+"\t\t\t  Grâce à <strong>PayPal</strong>, bénéficiez du paiement le plus "
+"sécurisé au monde.\n"
+"\t\t\t "
 msgstr ""
 
-#: templates/products/product_detail.html:36
-msgid "Location"
+#: templates/nc/rent/booking_confirm.html:114
+msgid ""
+"\n"
+"\t\t\t  Un <strong>contrat de location</strong> est proposé par e-loue.\n"
+"\t\t\t "
 msgstr ""
 
-#: templates/products/product_detail.html:68
+#: templates/nc/rent/booking_confirm.html:121
+#: templates/rent/booking_confirm.html:121
+msgid "Notre partenaire"
+msgstr ""
+
+#: templates/products/alert_list.html:55
+msgid "Créée le"
+msgstr ""
+
+#: templates/products/alert_list.html:64
+msgid "Avertir"
+msgstr ""
+
+#: templates/products/alert_list.html:110
+msgid "Alertes location !"
+msgstr ""
+
+#: templates/products/alert_list.html:113
+msgid ""
+"\n"
+"\t\t\t\t <strong>Mettre en  location</strong> l'objet demandé\n"
+"\t\t\t  "
+msgstr ""
+
+#: templates/products/alert_list.html:118
+msgid ""
+"\n"
+" \t\t\t\t <strong>Avertir le locataire</strong> que j'ai mis cet objet en "
+"location\n"
+"\t\t\t  "
+msgstr ""
+
+#: templates/products/product_create.html:61
+#: templates/products/product_edit.html:48
+msgid "Informations"
+msgstr ""
+
+#: templates/products/product_create.html:140
+#: templates/products/product_edit.html:132
 #, python-format
-msgid " / par %(unit)s"
-msgstr ""
-
-#: templates/products/product_detail.html:74
-msgid "Début"
-msgstr ""
-
-#: templates/products/product_detail.html:80
-msgid "Fin"
+msgid ""
+"\n"
+"\t\t\t\t\t <p>Vous pouvez ne remplir qu’une seule case et cliquer sur "
+"l’icône <img src=\"%(MEDIA_URL)s/images/mini_calculator.png\" alt=\"Calculer "
+"les prix de location automatiquement\" /> pour calculer les autres valeurs "
+"automatiquement.</p>\n"
+"\t\t\t\t\t"
 msgstr ""
 
 #: templates/products/product_detail.html:85
@@ -2667,173 +4306,45 @@ msgid ""
 "\t\t "
 msgstr ""
 
-#: templates/products/product_edit.html:52
-msgid "Titre * :"
-msgstr ""
-
-#: templates/products/product_edit.html:64
-msgid "Prix location * :"
-msgstr ""
-
-#: templates/products/product_edit.html:76
-msgid "Caution :"
-msgstr ""
-
-#: templates/products/product_edit.html:88
-msgid "Quantité * :"
-msgstr ""
-
-#: templates/products/product_edit.html:100
-msgid "Description * :"
-msgstr ""
-
-#: templates/products/product_list.html:71
-#: templates/products/product_list.html:73
-msgid "location"
-msgstr ""
-
-#: templates/products/product_list.html:95
-msgid "Trier par :"
-msgstr ""
-
-#: templates/products/product_list.html:98
-msgid "Les plus récents"
-msgstr ""
-
-#: templates/products/product_list.html:106
-msgid "Les prix les plus bas"
-msgstr ""
-
-#: templates/products/product_list.html:109
-msgid "Les prix les plus haut"
-msgstr ""
-
-#: templates/products/product_list.html:146
-msgid "Réserver"
-msgstr ""
-
-#: templates/products/product_list.html:175
-msgid "Distance"
-msgstr ""
-
-#: templates/products/product_list.html:183
-msgid "Restreindre les résultats à un rayon de"
-msgstr ""
-
-#: templates/products/product_list.html:185
-msgid "Km"
-msgstr ""
-
-#: templates/products/product_list.html:186
-msgid "Mettre à jour"
-msgstr ""
-
-#: templates/products/product_list.html:197
-msgid "Voir tous les résultats"
-msgstr ""
-
-#: templates/products/product_missing.html:20
-msgid "Choisissez une adresse pour l'objet :"
-msgstr ""
-
-#: templates/products/product_missing.html:22
-msgid "Complétez votre profil et choisissez une adresse pour la l'objet :"
-msgstr ""
-
-#: templates/rent/booking_confirm.html:4
-msgid "Confirmez votre réservation"
-msgstr ""
-
-#: templates/rent/booking_confirm.html:10
-#: templates/rent/booking_missing.html:10
-#: templates/rent/booking_register.html:10
-msgid "Réservation"
-msgstr ""
-
-#: templates/rent/booking_confirm.html:14
-msgid "1.Identifiez-vous"
-msgstr ""
-
-#: templates/rent/booking_confirm.html:15
-#: templates/rent/booking_confirm.html:18
-msgid "2.Confirmez votre réservation"
-msgstr ""
-
-#: templates/rent/booking_confirm.html:17
-msgid "1.Information de contact"
-msgstr ""
-
-#: templates/rent/booking_confirm.html:25
-msgid "Objet réservé"
-msgstr ""
-
-#: templates/rent/booking_confirm.html:57
-#: templates/rent/booking_detail.html:131
-#: templates/rent/booking_incident.html:78
-msgid "Dates et total"
-msgstr ""
-
-#: templates/rent/booking_confirm.html:62
-#: templates/rent/booking_detail.html:136
-#: templates/rent/booking_incident.html:83
-msgid "Début :"
-msgstr ""
-
-#: templates/rent/booking_confirm.html:68
-#: templates/rent/booking_detail.html:142
-#: templates/rent/booking_incident.html:89
-msgid "Fin :"
-msgstr ""
-
-#: templates/rent/booking_confirm.html:74
-#: templates/rent/booking_detail.html:148
-#: templates/rent/booking_incident.html:99
-msgid "Prix par jour :"
-msgstr ""
-
-#: templates/rent/booking_confirm.html:78
-#: templates/rent/booking_detail.html:152
-#: templates/rent/booking_incident.html:103
-msgid "Durée de la location :"
-msgstr ""
-
-#: templates/rent/booking_confirm.html:82
-#: templates/rent/booking_detail.html:156
-#: templates/rent/booking_incident.html:107
-msgid "Total :"
-msgstr ""
-
-#: templates/rent/booking_confirm.html:88
-msgid "Paiement"
-msgstr ""
-
-#: templates/rent/booking_confirm.html:91
+#: templates/products/product_list.html:84
+#, python-format
 msgid ""
 "\n"
-"\t\t  Sur la prochaine page veuillez fournir vos informations de paiement."
-"<br />\n"
-"\t\t  Vous ne serez <strong>débité</strong> que <strong>si le propriétaire "
-"accepte</strong> votre demande (dans les 32 heures).<br /> \n"
-"\t\t  Si le propriétaire refuse ou ne répond pas, vous ne serez pas prélevé."
-"<br />\n"
+"\t\t <h1>Résultat pour <strong>%(keywords)s</strong></h1>\n"
 "\t\t "
-msgstr ""
+msgid_plural ""
+"\n"
+"\t\t <h1>Résultats pour <strong>%(keywords)s</strong></h1>\n"
+"\t\t "
+msgstr[0] ""
+msgstr[1] ""
 
-#: templates/rent/booking_confirm.html:101
-msgid "Payez"
-msgstr ""
-
-#: templates/rent/booking_confirm.html:106
-msgid "Louez en toute sécurité !"
-msgstr ""
-
-#: templates/rent/booking_confirm.html:109
+#: templates/products/product_list.html:177
+#, python-format
 msgid ""
 "\n"
-"\t\t\t  Grâce à <strong>PayPal</strong>, bénéficiez du paiement le plus "
-"sécurisé au monde.\n"
-"\t\t\t "
-msgstr ""
+"\t\t\t\t\t <h1>Pas de résultat pour <strong>%(keywords)s</strong></h1>\n"
+"\t\t\t\t\t posifu\n"
+"\t\t\t\t\t "
+msgid_plural ""
+"\n"
+"\t\t\t\t\t <h1>Résultats pour <strong>%(keywords)s</strong></h1>\n"
+"\t\t\t\t\t "
+msgstr[0] ""
+msgstr[1] ""
+
+#: templates/products/product_list.html:239
+#, python-format
+msgid ""
+"\n"
+"\t\t <h1>Pas de résultat pour <strong>%(keywords)s</strong></h1>\n"
+"\t\t "
+msgid_plural ""
+"\n"
+"\t\t <h1>Pas de résultats pour <strong>%(keywords)s</strong></h1>\n"
+"\t\t "
+msgstr[0] ""
+msgstr[1] ""
 
 #: templates/rent/booking_confirm.html:114
 msgid ""
@@ -2841,77 +4352,6 @@ msgid ""
 "\t\t\t  Notre <strong>partenaire assureur</strong> garantit l'objets en cas "
 "de casse.\n"
 "\t\t\t "
-msgstr ""
-
-#: templates/rent/booking_confirm.html:121
-msgid "Notre partenaire"
-msgstr ""
-
-#: templates/rent/booking_detail.html:34
-msgid "Location en cours de validation"
-msgstr ""
-
-#: templates/rent/booking_detail.html:38
-msgid "Location réservée"
-msgstr ""
-
-#: templates/rent/booking_detail.html:41
-msgid "Location rejetée"
-msgstr ""
-
-#: templates/rent/booking_detail.html:44
-msgid "Location à venir"
-msgstr ""
-
-#: templates/rent/booking_detail.html:47
-msgid "Location en cours"
-msgstr ""
-
-#: templates/rent/booking_detail.html:50
-msgid "Location terminée"
-msgstr ""
-
-#: templates/rent/booking_detail.html:53
-msgid "Location en cours de clôture"
-msgstr ""
-
-#: templates/rent/booking_detail.html:56
-msgid "Location clôturer"
-msgstr ""
-
-#: templates/rent/booking_detail.html:99
-#: templates/rent/booking_incident.html:46
-msgid "Résumé"
-msgstr ""
-
-#: templates/rent/booking_detail.html:121
-#: templates/rent/booking_incident.html:68
-msgid "Propriétaire :"
-msgstr ""
-
-#: templates/rent/booking_detail.html:126
-#: templates/rent/booking_incident.html:73
-msgid "Locataire :"
-msgstr ""
-
-#: templates/rent/booking_detail.html:163
-msgid "Détails de la transaction"
-msgstr ""
-
-#: templates/rent/booking_detail.html:168
-msgid "Avant commission :"
-msgstr ""
-
-#: templates/rent/booking_detail.html:172
-msgid "Commission :"
-msgstr ""
-
-#: templates/rent/booking_detail.html:176
-msgid "Montant net perçu :"
-msgstr ""
-
-#: templates/rent/booking_detail.html:185
-msgid "Statut de la location"
 msgstr ""
 
 #: templates/rent/booking_incident.html:4
@@ -2922,55 +4362,12 @@ msgstr ""
 msgid "Statut :"
 msgstr ""
 
-#: templates/rent/booking_incident.html:113
-msgid "Déclarez votre incident"
-msgstr ""
-
 #: templates/rent/booking_incident.html:136
 msgid "Information"
 msgstr ""
 
 #: templates/rent/booking_incident.html:140
 msgid "Déclarer un incident si la location ne se déroule pas correctement."
-msgstr ""
-
-#: templates/rent/booking_missing.html:14
-#: templates/rent/booking_register.html:13
-msgid "1. Identifiez-vous"
-msgstr ""
-
-#: templates/rent/booking_missing.html:15
-#: templates/rent/booking_missing.html:18
-#: templates/rent/booking_register.html:14
-msgid "2. Confirmez votre réservation"
-msgstr ""
-
-#: templates/rent/booking_missing.html:17
-msgid "1. Information de contact"
-msgstr ""
-
-#: templates/rent/booking_preapproval.html:4
-msgid "Erreur d'enregistrement de votre paiement"
-msgstr ""
-
-#: templates/rent/booking_preapproval.html:8
-msgid "Oops.."
-msgstr ""
-
-#: templates/rent/booking_preapproval.html:11
-msgid "Une erreur est survenu lors de l'enregistrement de votre paiement."
-msgstr ""
-
-#: templates/rent/booking_success.html:4
-msgid "Réservation enregistrée avec succès"
-msgstr ""
-
-#: templates/rent/booking_success.html:8
-msgid "Réservation terminée avec succès"
-msgstr ""
-
-#: templates/rent/booking_success.html:11
-msgid "Le propriétaire a été informé de votre réservation."
 msgstr ""
 
 #: templates/rent/emails/borrower_acceptation_email.html:1
@@ -3618,52 +5015,6 @@ msgid ""
 "L'équipe e-loue \n"
 msgstr ""
 
-#: templates/rent/partials/booking.html:32
-msgid "Voir les détails"
-msgstr ""
-
-#: templates/rent/partials/booking_status.html:6
-#: templates/rent/partials/booking_status.html:53
-msgid "en cours"
-msgstr ""
-
-#: templates/rent/partials/booking_status.html:7
-msgid "En cours de validation"
-msgstr ""
-
-#: templates/rent/partials/booking_status.html:17
-msgid "Accepter"
-msgstr ""
-
-#: templates/rent/partials/booking_status.html:22
-msgid "Refuser"
-msgstr ""
-
-#: templates/rent/partials/booking_status.html:27
-msgid "Rejetée"
-msgstr ""
-
-#: templates/rent/partials/booking_status.html:30
-msgid "Réservée"
-msgstr ""
-
-#: templates/rent/partials/booking_status.html:39
-#: templates/rent/partials/booking_status.html:59
-msgid "Signaler un incident"
-msgstr ""
-
-#: templates/rent/partials/booking_status.html:42
-msgid "Terminée"
-msgstr ""
-
-#: templates/rent/partials/booking_status.html:47
-msgid "Clôturer"
-msgstr ""
-
-#: templates/rent/partials/booking_status.html:54
-msgid "En cours de clôture"
-msgstr ""
-
-#: templates/rent/partials/booking_status.html:58
-msgid "Clôturée"
+#: templates/uk/index.html:72
+msgid "/what-is-erentmarket/"
 msgstr ""

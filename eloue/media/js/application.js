@@ -37,14 +37,15 @@ $(document).ready(function() {
     $("input[name$='old_password']").removeAttr('disabled');
 
     // Email PayPal account enable/disable
-    paypalEmailInput = $("input[name$='paypal_email']");
+    /*paypalEmailInput = $("input[name$='paypal_email']");
     if (paypalEmailInput.attr('type') != 'hidden') {
         if (parseInt(exists, 10)) {
             paypalEmailInput.removeAttr('disabled');
         } else {
             paypalEmailInput.attr('disabled', 'disabled');
         }
-    }
+    }*/
+    
     $("input[name$='exists']").change(function(event) {
         var radio = $(event.target);
         if (paypalEmailInput.attr('type') != 'hidden') {
@@ -55,10 +56,11 @@ $(document).ready(function() {
             }
         }
     });
-
+    
     // Company name field display/none
     isProfessionalInput = $("input[name$='is_professional']");
     companyNameInput = $(".company-name");
+    companyNameInput.hide();
 
     var exists = $("input[name$='is_professional']:checked").val();
 
@@ -156,6 +158,14 @@ $(document).ready(function() {
     $('form.bk-refuse').submit(function(event) {
         return confirm('Êtes-vous sûr de vouloir refuser cette location ?');
     });
+    
+    $('#alert-delete').submit(function(event) {
+        return confirm('Êtes-vous sûr de vouloir supprimer cette alerte ?');
+    });
+    
+    $('#product-delete').submit(function(event) {
+        return confirm('Êtes-vous sûr de vouloir supprimer cet objet ?');
+    });
 
     //Flash message slidedown
     notification = $("#notification");
@@ -185,6 +195,7 @@ $(document).ready(function() {
     $('#new-start-date').datepicker({
         dateFormat: 'dd/mm'
     });
+
     $('#new-end-date').datepicker({
         dateFormat: 'dd/mm'
     });

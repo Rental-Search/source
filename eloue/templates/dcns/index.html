@@ -1,0 +1,146 @@
+{% extends "base.html" %}
+{% load i18n compressed mptt_tags product cache %}
+
+{% block title %}{% trans "Location entre particuliers ou professionnels de tout type d'objet" %}{% endblock %}
+
+{% block head %}
+ {{ block.super }}
+{% endblock %}
+
+{% block content %}
+	<div id="search" class="xgrid">
+        <div class="x12">
+		  <h1>{% trans "Location entre collègues" %}</h1>
+		</div>
+		<form class="form" action="{% url product_list %}">
+		<div class="x5">
+			<p>
+				<label for="id_q">{% trans "Que recherchez-vous ?" %}</label><br />
+				{{ form.q }}<br />
+				<span>{% trans "Exemple :" %} </span> <a href="{% url product_list %}?q={% trans "voiture" %}">{% trans "Voiture" %}</a>, <a href="{% url product_list %}?q={% trans "chèvre" %}">{% trans "Chèvre" %}</a>, <a href="{% url product_list %}?q={% trans "ski" %}">{% trans "Ski" %}</a>, <a href="{% url product_list %}?q={% trans "robe" %}">{% trans "Robe" %}</a>
+			</p>
+		</div>
+		<div class="x5">
+			<p>
+				<label>{% trans "Où ?" %}</label><br />
+				{{ form.l }}<br />
+			</p>
+		</div>
+		<div class="x2">
+			<p>
+				<input type="submit" value="{% trans "Rechercher" %}" class="btn big-orange"/>
+			</p>
+		</div>
+		</form>
+	</div>{# top-content #}
+	<div id="content-home" class="xgrid">
+ 	 <div class="x8">
+		<div class="content-header x8 first">
+		 <h2>{% trans "A louer en ce moment" %}</h2>
+		</div>
+		 {% cache 900 curiosities site %}
+	     {% for curiosity in curiosities|slice:":4" %}
+		  {% with curiosity.product as product %}
+		 	 {% if forloop.first %}
+			 	<div class="x2 first curiosity">
+			 {% else %}
+			 	<div class="x2 curiosity">
+			 {% endif %}
+			 	<a href="{{ product.get_absolute_url }}" class="curiosity-img">
+	  	   {% with product.pictures.all|first as picture %}
+				  <img src="{{ picture.home.url }}" alt="{{ product.summary }}"/>
+				 {% endwith %}
+				</a>
+				<h3>
+				    <a href="{{ product.get_absolute_url }}">{{ product.summary|lower|capfirst }}</a>
+				</h3>
+				{% with product.prices.day|first as price %}
+                <span class="price">{{ price }}/jour</span>
+                {% endwith %}   
+			</div>
+		 {% endwith %}
+		{% endfor %}	 
+	{% endcache %}
+	 </div>
+	 <div class="x4">
+		<div class="content-header x4 first" style="margin-bottom: 3px;">
+		 <h2>{% trans "Comment ça marche ?" %}</h2>
+		</div>
+	    <div class="x4 first" style="margin-bottom: 20px;">
+	        <a href="/comment-ca-marche/" class="welcome-link">
+	           <img src="{{ MEDIA_URL }}images/dcns/how.gif" />
+	        </a>
+	    </div>
+	</div>
+	<div class="x12 horizontal-assurancy">
+	    <div class="guarantees">
+	        <div class="content-header">
+    			<h2>{% trans "Avec nos garanties, louez en toute sécurité !" %}</h2>
+    		</div>
+			<div class="g-payment">
+			    {% blocktrans %}
+			     <p>Grâce à <strong>PayPal</strong>, bénéficiez du paiement le plus sécurisé au monde.</p>
+			    {% endblocktrans %}
+			</div>
+			<div class="g-assurancy">
+			    {% blocktrans %}
+				 <p>Notre <strong>partenaire assureur</strong> garantit vos objets en cas de casse.</p>
+				{% endblocktrans %}
+			</div>
+		</div>
+		<div class="assurancy-partner">
+            <div class="assurancy-slide">
+                <a href="{% trans "/comment-ca-marche/" %}" class="slide">
+                    <img src="{{ MEDIA_URL }}images/pp-verification-seal.gif" alt="PayPal" width="100" height="100" class="pp"/>
+                    <img src="{{ MEDIA_URL }}images/dcns/assurone.png" alt="Assurone" width="157" height="90" class="assurone"/>
+                </a>
+            </div>
+        </div>
+    </div>
+    {% if alerts.count == 3 %}
+    <div class="content-header x12">
+        <h2>{% trans "Demandes de location"%}</h2>
+    </div>
+    {% for alert in alerts %}
+    <div class="request x3">
+        <p class="request-header">le {{ alert.created_at|date:"d F Y" }}</p>
+        <a href="{{ alert.patron.get_absolute_url }}" class="requester">{{ alert.patron.username }}</a> cherche :<br />
+        <p class="request-designation">{{ alert.designation }}</p>
+        <a href="{% url alert_inform alert.pk %}" class="request-answer">> Répondre à la demande</a> 
+    </div>
+    {% endfor %}
+    <div class="x3">
+        <div class="box-welcome" style="text-align: center;">
+            <p style="font-size: 12px;">Répondez aux autres demandes de location</p>
+            <a href="{% url alert_list %}" class="btn long-blue">Accéder aux demandes</a>
+        </div>
+    </div>
+    {% endif %}
+	<div class="content-header x12">
+	 <h2>{% trans "Catégories" %}</h2>
+	</div>
+	{% cache 900 categories site %}
+	 {% full_tree_for_model products.Category as categories %}
+	 {% for column in categories|partition:4 %}
+	  <div class="x3 categories">
+	   {% for category in column %}
+	    {% if category.is_root_node %}
+	     {% drilldown_tree_for_node category as drilldown cumulative count products.Product.category in product_count %}
+	     {% for node,structure in drilldown|tree_info %}
+	      {% if node.is_root_node and node.slug != 'divers' %}
+	      <h3><a href="{{ node.get_absolute_url }}">{{ node.name }}</a></h3>
+	      <ul>
+	      {% else %}
+	       {% if node.product_count %}
+	        <li><a href="{{ node.get_absolute_url }}">{{ node.name }}</a></li>
+	       {% endif %}
+	      {% if structure.closed_levels|length >= 2 %}</ul>{% endif %}
+	     {% endif %}
+	    {% endfor %}
+	   {% endif %}
+	  {% endfor %}
+	 </div>
+    {% endfor %}
+   {% endcache %}
+</div>{# content #}
+{% endblock %}

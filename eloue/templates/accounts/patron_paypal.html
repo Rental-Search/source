@@ -4,13 +4,14 @@
 {% block title %}{% trans "Votre compte PayPal" %}{% endblock %}
 
 {% block content %}
-<div id="content-dash" class="clearfix">
-	<div id="menu">
-		<ul class="x12">
-			<li class="menu-tab first"><a href="{% url dashboard %}">{% trans "Tableau de bord" %}</a></li>
-			<li class="menu-tab selected"><a href="{% url owner_booking %}">{% trans "Propriétaire" %}</a></li>
+<div id="content" class="xgrid">
+    <div class="content-top">
+        <ul id="menu" class="x12">
+            <li class="menu-tab first"><a href="{% url dashboard %}">{% trans "Tableau de bord" %}</a></li>
+			<li class="menu-tab">{% trans "Propriétaire" %}</li>
 			<li class="menu-tab"><a href="{% url borrower_booking %}">{% trans "Locataire" %}</a></li>
 			<li class="menu-tab"><a href="{% url patron_edit %}">{% trans "Mon compte" %}</a></li>
+<<<<<<< HEAD
 			<li class="menu-tab"><a href="{% url messages_inbox %}">{% blocktrans %}Messages({{ messages_inbox_count }}){% endblocktrans %}</a></li>
 		</ul>
 	</div>
@@ -23,32 +24,43 @@
 		</ul>
 	</div>
 	<div class="content-header x12">
+=======
+        </ul>
+    </div>
+    <div id="sub-menu">
+        <ul class="x12">
+            <li class="sub-tab first"><a href="{% url patron_edit %}">{% trans "Votre profil" %}</a></li>
+			<li class="sub-tab">{% trans "Modification du mot de passe" %}</li>
+        </ul>
+    </div>
+    <div class="content-header x12">
+>>>>>>> master
 		<h1>{% trans "Vérification de votre compte PayPal"%}</h1>
 	</div>
 	<div class="x9">
-		<div class="signup x9 first">
 		    {{ form.non_field_errors }}
 			<form class="form" action="" method="POST">
-				{% csrf_token %}
-				<p class="question">{% trans "Avez-vous un compte e-loue ?" %}</p>
-				{{ form.paypal_exists }}
-				<p class="password {% if form.paypal_email.errors %} error-field {% endif %}">
-				 {{ form.paypal_email }}
-				 {% if form.paypal_email.errors %}
-			      {% for error in form.paypal_email.errors %}
-			       <span class="error">{{ paypal_email|escape }}</span>
-			      {% endfor %}
-				 {% endif %}
-				</p>
-			</div>
-			<div class="submit-wizard x9 first">
-				<a href="{% url owner_booking %}">{% trans "Annuler" %}</a> {% trans "ou" %} 
-				<input type="submit" class="btn big-green" value="{% trans "Continuer &rarr;" %}" />
-			</form>
-		</div>
+			{% csrf_token %}
+			<p class="question">{% trans "Avez-vous un compte e-loue ?" %}</p>
+			{{ form.paypal_exists }}
+			<p class="password {% if form.paypal_email.errors %} error-field {% endif %}">
+			{{ form.paypal_email }}
+			{% if form.paypal_email.errors %}
+			    {% for error in form.paypal_email.errors %}
+			    <span class="error">{{ paypal_email|escape }}</span>
+			    {% endfor %}
+		    {% endif %}
+			</p>
 	</div>
 	<div class="x3 paypal-verified">
 		<img src="{{ MEDIA_URL }}/images/PayPal_verified.png" alt="{% trans "e-loue PayPal verified" %}" />
 	</div>
+	<div id="submit-wizard" class="x12">
+	    <p>
+		    <a href="{% url owner_booking %}">{% trans "Annuler" %}</a> {% trans "ou" %} 
+    		<input type="submit" class="btn big-green" value="{% trans "Continuer &rarr;" %}" />
+    	</p>
+	</form>
+	</div>  
 </div>
 {% endblock %}

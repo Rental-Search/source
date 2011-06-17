@@ -12,8 +12,10 @@ from django.views.decorators.cache import never_cache, cache_page
 from django.views.decorators.vary import vary_on_cookie
 from django.views.generic.simple import direct_to_template, redirect_to
 from django.views.generic.list_detail import object_list
+
 from django.shortcuts import render_to_response
 from django.template import RequestContext
+from django.views.generic.list_detail import object_detail
 
 from django.http import Http404, HttpResponseRedirect
 from haystack.query import SearchQuerySet
@@ -21,11 +23,14 @@ from haystack.query import SearchQuerySet
 from eloue.decorators import ownership_required, secure_required, mobify
 from eloue.accounts.forms import EmailAuthenticationForm
 from eloue.accounts.models import Patron
-from eloue.products.forms import FacetedSearchForm, ProductForm, ProductEditForm, MessageEditForm, MessageComposeForm
+
+from eloue.products.forms import AlertSearchForm, AlertForm, FacetedSearchForm, ProductForm, ProductEditForm, MessageEditForm, MessageComposeForm
+
+from eloue.products.models import Category, Product, Curiosity, UNIT, ProductRelatedMessage, Alert
+from eloue.products.wizard import ProductWizard, MessageWizard, AlertWizard, AlertAnswerWizard
 from django_messages.forms import ComposeForm
-from eloue.products.models import Category, Product, Curiosity, UNIT, ProductRelatedMessage
-from eloue.products.wizard import ProductWizard, MessageWizard
 from django_messages.utils import format_quote
+
 
 
 PAGINATE_PRODUCTS_BY = getattr(settings, 'PAGINATE_PRODUCTS_BY', 10)
@@ -38,7 +43,8 @@ DEFAULT_RADIUS = getattr(settings, 'DEFAULT_RADIUS', 50)
 def homepage(request):
     curiosities = Curiosity.on_site.all()
     form = FacetedSearchForm()
-    return direct_to_template(request, template='index.html', extra_context={'form': form, 'curiosities': curiosities})
+    alerts = Alert.on_site.all()[:3]
+    return direct_to_template(request, template='index.html', extra_context={'form': form, 'curiosities': curiosities, 'alerts':alerts})
 
 
 @mobify
@@ -131,6 +137,18 @@ def message_edit(request, product_id, recipient_id):
     return message_wizard(request, product_id, recipient_id)
 
 
+@login_required
+@ownership_required(model=Product, object_key='product_id', ownership=['owner'])
+def product_delete(request, slug, product_id):
+    product = get_object_or_404(Product.on_site, pk=product_id)
+    if request.method == "POST":
+        product.delete()
+        messages.success(request, _(u"Votre objet à bien été supprimée"))
+        return redirect_to(request, reverse('owner_product'))
+    else:
+        return direct_to_template(request, template='products/product_delete.html', extra_context={'product': product})
+
+
 @mobify
 @cache_page(900)
 @vary_on_cookie
@@ -184,3 +202,43 @@ def product_list(request, urlbits, sqs=SearchQuerySet(), suggestions=None, page=
             'facets': sqs.facet_counts(), 'form': form, 'breadcrumbs': breadcrumbs, 'suggestions': suggestions,
             'urlbits': dict((facet['label'], facet['value']) for facet in breadcrumbs.values() if facet['facet'])
     })
+
+
+@never_cache
+@secure_required
+def alert_create(request, *args, **kwargs):
+    wizard = AlertWizard([AlertForm, EmailAuthenticationForm])
+    return wizard(request, *args, **kwargs)
+
+
+@cache_page(900)
+@vary_on_cookie
+def alert_list(request, sqs=SearchQuerySet(), page=None):
+    form = FacetedSearchForm()
+    search_alert_form = AlertSearchForm(request.GET, searchqueryset=sqs)
+    return object_list(request, search_alert_form.search(), page=page, paginate_by=PAGINATE_PRODUCTS_BY, template_name="products/alert_list.html",
+        template_object_name='alert', extra_context={'form': form, 'search_alert_form':search_alert_form})
+
+
+@never_cache
+@secure_required
+def alert_inform(request, *args, **kwargs):
+    wizard = AlertAnswerWizard([ProductForm, EmailAuthenticationForm])
+    return wizard(request, *args, **kwargs)
+
+
+@login_required
+def alert_inform_success(request, alert_id):
+    return object_detail(request, queryset=Alert.objects.all(), object_id=alert_id,
+        template_name='products/alert_unform_success.html', template_object_name='alert')
+
+
+@login_required
+def alert_delete(request, alert_id):
+    alert = get_object_or_404(Alert, pk=alert_id)
+    if request.method == "POST":
+        alert.delete()
+        messages.success(request, _(u"Votre alerte à bien été supprimée"))
+        return redirect_to(request, reverse('alert_edit'))
+    else:
+        return direct_to_template(request, template='products/alert_delete.html', extra_context={'alert': alert})
