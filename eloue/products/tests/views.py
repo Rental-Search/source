@@ -7,7 +7,7 @@ from eloue.products.models import Product, ProductRelatedMessage
 from django_messages import utils
 from django_messages.utils import new_message_email
 from eloue.signals import message_content_filter, message_site_filter
-from eloue import signals
+
 
 class ProductViewsTest(TestCase):
     fixtures = ['category', 'patron', 'address', 'price', 'product']
@@ -21,11 +21,9 @@ class ProductViewsTest(TestCase):
                 *args, **kwargs):
             self.called = True
         utils.new_message_email = dummy_new_message_email
-    
+
     def tearDown(self):
         utils.new_message_email = new_message_email
-        signals.message_content_filter = message_content_filter
-        signals.message_site_filter = message_site_filter 
         
     def test_home_page(self):
         response = self.client.get(reverse('home'))

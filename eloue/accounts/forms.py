@@ -20,7 +20,7 @@ from eloue.accounts.fields import PhoneNumberField
 from eloue.accounts.models import Patron, PhoneNumber, COUNTRY_CHOICES, PatronAccepted
 from eloue.accounts.widgets import ParagraphRadioFieldRenderer
 from eloue.utils import form_errors_append
-from eloue.payments.paypal_payment import verify_paypal_account
+from eloue.payments import paypal_payment
 from django.dispatch import dispatcher
 
 
@@ -156,7 +156,7 @@ class PatronEditForm(forms.ModelForm):
             last_name = self.instance.last_name
         
         if raw_paypal_email:
-            is_verified = verify_paypal_account(
+            is_verified = paypal_payment.verify_paypal_account(
                     email=raw_paypal_email,
                     first_name=first_name,
                     last_name=last_name
@@ -195,7 +195,7 @@ class PatronEditForm(forms.ModelForm):
         first_name = self.cleaned_data.get('first_name', None)
         last_name = self.cleaned_data.get('last_name', None)
         if paypal_email:
-            is_verified = verify_paypal_account(
+            is_verified = paypal_payment.verify_paypal_account(
                         email=paypal_email,
                         first_name=first_name,
                         last_name=last_name

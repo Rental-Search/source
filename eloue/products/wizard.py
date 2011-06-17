@@ -128,24 +128,24 @@ class MessageWizard(GenericFormWizard):
                 if hasattr(settings, 'AFFILIATE_TAG'):
                     #Assign affiliate tag, no need to save, since missing_form should do it for us
                     new_patron.affiliate = settings.AFFILIATE_TAG
-                if not hasattr(new_patron, 'backend'):
-                    from django.contrib.auth import load_backend
-                    backend = load_backend(settings.AUTHENTICATION_BACKENDS[0])
-                    new_patron.backend = "%s.%s" % (backend.__module__, backend.__class__.__name__)
-                login(request, new_patron)
-            else:
-                new_patron = request.user
-            if missing_form:
-                missing_form.instance = new_patron
-                new_patron, new_address, new_phone = missing_form.save()
-            # Create message
-            product = self.extra_context["product"]
-            recipient = self.extra_context["recipient"]
-            message_form = form_list[0]
-            message_form.save(product=product, sender=new_patron, recipient=recipient)
-            messages.success(request, _(u"Une question du produit a été envoyé !"))
-            GoalRecord.record('new_object', WebUser(request))
-            return redirect_to(request, product.get_absolute_url())
+            if not hasattr(new_patron, 'backend'):
+                from django.contrib.auth import load_backend
+                backend = load_backend(settings.AUTHENTICATION_BACKENDS[0])
+                new_patron.backend = "%s.%s" % (backend.__module__, backend.__class__.__name__)
+            login(request, new_patron)
+        else:
+            new_patron = request.user
+        if missing_form:
+            missing_form.instance = new_patron
+            new_patron, new_address, new_phone = missing_form.save()
+        # Create message
+        product = self.extra_context["product"]
+        recipient = self.extra_context["recipient"]
+        message_form = form_list[0]
+        message_form.save(product=product, sender=new_patron, recipient=recipient)
+        messages.success(request, _(u"Une question du produit a été envoyé !"))
+        GoalRecord.record('new_object', WebUser(request))
+        return redirect_to(request, product.get_absolute_url())
 
     def get_template(self, step):
         if issubclass(self.form_list[step], EmailAuthenticationForm):

@@ -22,8 +22,8 @@ from eloue.geocoder import GoogleGeocoder
 from eloue.products.utils import Enum
 from eloue.signals import post_save_sites
 from eloue.utils import create_alternative_email
-from eloue.payments.paypal_payment import accounts, verify_paypal_account, PaypalError
-
+from eloue.payments.paypal_payment import accounts, PaypalError
+from eloue.payments import paypal_payment
 
 CIVILITY_CHOICES = Enum([
     (0, 'MME', _('Madame')),
@@ -208,7 +208,7 @@ class Patron(User):
     
     @property
     def is_verified(self):
-        return verify_paypal_account(email=self.paypal_email, first_name=self.first_name, last_name=self.last_name)
+        return paypal_payment.verify_paypal_account(email=self.paypal_email, first_name=self.first_name, last_name=self.last_name)
     
     def send_activation_email(self):
         context = {

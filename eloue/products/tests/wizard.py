@@ -126,7 +126,7 @@ class AlertWizardTest(TestCase):
         self.assertTrue(response.status_code, 200)
         self.assertTemplateUsed(response, 'products/alert_register.html')
 
-
+    @patch.object(MultiPartFormWizard, 'security_hash')
     def test_second_step_as_anonymous(self, mock_method):
         mock_method.return_value = '6941fd7b20d720833717a1f92e8027af'
         response = self.client.post(reverse('alert_create'), {
