@@ -9,6 +9,7 @@ from mock import patch
 from eloue.products.models import Picture
 from eloue.wizard import MultiPartFormWizard
 from eloue.products.models import Product, ProductRelatedMessage
+from eloue.accounts.models import Address
 local_path = lambda path: os.path.join(os.path.dirname(__file__), path)
 
 class ProductWizardTest(TestCase):
@@ -151,8 +152,8 @@ class AlertWizardTest(TestCase):
             '1-exists': 1,
             '1-password': 'alexandre',
             '2-phones__phone': '0123456789',
-            '2-addresses__address1': '11, rue debelleyme',
-            '2-addresses__zipcode': '75003',
+            '2-addresses__address1': '7, rue claude chahu',
+            '2-addresses__zipcode': '75016',
             '2-addresses__city': 'Paris',
             '2-addresses__country': 'FR',
             'hash_0': '6941fd7b20d720833717a1f92e8027af',
@@ -160,4 +161,5 @@ class AlertWizardTest(TestCase):
             'wizard_step': 2
         })
         self.assertRedirects(response, reverse('alert_edit'))
+
 

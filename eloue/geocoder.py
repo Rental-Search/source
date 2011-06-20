@@ -31,6 +31,7 @@ class Geocoder(object):
         
         if not cache_hit and self.use_cache:
             cache.set('location:%s' % self.hash_key(location), (name, (lat, lon), radius), 0)
+        print "########name, (lat, lon), radius>>>>>>>>>", name, (lat, lon), radius
         return name, (lat, lon), radius
     
     def _geocode(self, location):
@@ -56,6 +57,7 @@ class Geocoder(object):
 class GoogleGeocoder(Geocoder):
     # http://code.google.com/apis/maps/documentation/geocoding/index.html
     def _geocode(self, location):
+        print ">>>>>>location>>>>>>>>", location
         json = simplejson.load(urllib.urlopen(
             'http://maps.googleapis.com/maps/api/geocode/json?' + urllib.urlencode({
                 'address': location,
@@ -65,6 +67,7 @@ class GoogleGeocoder(Geocoder):
                 'key': GOOGLE_API_KEY
             })
         ))
+        print ">>>>>>_geocode>>>>>>>", json
         try:
             lon = json['results'][0]['geometry']['location']['lng']
             lat = json['results'][0]['geometry']['location']['lat']

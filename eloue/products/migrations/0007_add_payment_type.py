@@ -80,6 +80,16 @@ class Migration(SchemaMigration):
             'model': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '100'})
         },
+        'products.alert': {
+            'Meta': {'object_name': 'Alert'},
+            'address': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'alerts'", 'to': "orm['accounts.Address']"}),
+            'created_at': ('django.db.models.fields.DateTimeField', [], {}),
+            'description': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
+            'designation': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'patron': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'alerts'", 'to': "orm['accounts.Patron']"}),
+            'sites': ('django.db.models.fields.related.ManyToManyField', [], {'related_name': "'alerts'", 'symmetrical': 'False', 'to': "orm['sites.Site']"})
+        },
         'products.answer': {
             'Meta': {'object_name': 'Answer'},
             'created_at': ('django.db.models.fields.DateTimeField', [], {}),

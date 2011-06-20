@@ -99,6 +99,16 @@ class Migration(SchemaMigration):
             'sent_at': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
             'subject': ('django.db.models.fields.CharField', [], {'max_length': '120'})
         },
+        'products.alert': {
+            'Meta': {'object_name': 'Alert'},
+            'address': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'alerts'", 'to': "orm['accounts.Address']"}),
+            'created_at': ('django.db.models.fields.DateTimeField', [], {}),
+            'description': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
+            'designation': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'patron': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'alerts'", 'to': "orm['accounts.Patron']"}),
+            'sites': ('django.db.models.fields.related.ManyToManyField', [], {'related_name': "'alerts'", 'symmetrical': 'False', 'to': "orm['sites.Site']"})
+        },
         'products.answer': {
             'Meta': {'object_name': 'Answer'},
             'created_at': ('django.db.models.fields.DateTimeField', [], {}),
@@ -166,6 +176,7 @@ class Migration(SchemaMigration):
             'is_allowed': ('django.db.models.fields.BooleanField', [], {'default': 'True', 'db_index': 'True'}),
             'is_archived': ('django.db.models.fields.BooleanField', [], {'default': 'False', 'db_index': 'True'}),
             'owner': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'products'", 'to': "orm['accounts.Patron']"}),
+            'payment_type': ('django.db.models.fields.PositiveSmallIntegerField', [], {'default': '1'}),
             'quantity': ('django.db.models.fields.IntegerField', [], {}),
             'sites': ('django.db.models.fields.related.ManyToManyField', [], {'related_name': "'products'", 'symmetrical': 'False', 'to': "orm['sites.Site']"}),
             'summary': ('django.db.models.fields.CharField', [], {'max_length': '255'})
