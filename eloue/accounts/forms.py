@@ -34,9 +34,9 @@ PAYPAL_ACCOUNT_CHOICES = (
     (1, _(u"J'ai déjà un compte PayPal et mon email est :")),
 )
 
-is_pro_choices = (
-	(0,u"Non"),
-	(1,u"Oui")
+IS_PRO_CHOICES = (
+	(0, _(u"Non")),
+	(1, _(u"Oui")),
 )
 
 
@@ -118,28 +118,7 @@ class EmailPasswordResetForm(PasswordResetForm):
             message = EmailMultiAlternatives(subject, text_content, settings.DEFAULT_FROM_EMAIL, [user.email])
             message.attach_alternative(html_content, "text/html")
             message.send()
-    
- #For render the radio button horizontally
- 
-APPROVAL_CHOICES = (
-  (1, mark_safe(_('<img src="%(media_url)simg/thumbs_up.gif" alt="approve" title="approve">' %
-                  {'media_url': settings.MEDIA_URL, },
-                  ))),
-  (2, mark_safe(_('<img src="%(media_url)simg/thumbs_down.gif" alt="disapprove" title="disapprove">' %
-                  {'media_url': settings.MEDIA_URL, },
-                  ))),
-  (0, mark_safe(_('<img src="%(media_url)simg/question_mark.gif" alt="undecided" title="undecided">' %
-                  {'media_url': settings.MEDIA_URL, },
-                  ))),
-)
-class HorizontalRadioRenderer(forms.RadioSelect.renderer):
-    """renders horizontal radio buttons.
-    found here:
-    https://wikis.utexas.edu/display/~bm6432/Django-Modifying+RadioSelect+Widget+to+have+horizontal+buttons
-    """
 
-    def render(self):
-        return mark_safe(u'\n'.join([u'%s\n' % w for w in self]))
 
 class PatronEditForm(forms.ModelForm):
     
@@ -154,7 +133,7 @@ class PatronEditForm(forms.ModelForm):
     paypal_email = forms.EmailField(label=_(u"Email PayPal"), required=False, max_length=75, widget=forms.TextInput(attrs={
             'autocapitalize': 'off', 'autocorrect': 'off', 'class': 'inm'}))
 	    
-    is_professional = forms.ChoiceField(label=_(u"Êtes-vous un professionnel ?"), choices=is_pro_choices, widget=forms.RadioSelect(renderer=HorizontalRadioRenderer), required=False)
+    is_professional = forms.BooleanField(label=_(u"Êtes-vous un professionnel ?"), required=False, initial=False)
     
     company_name = forms.CharField(label=_(u"Nom de la société"), required=False, widget=forms.TextInput(attrs={'class': 'inm'}))
     is_subscribed = forms.BooleanField(required=False, initial=False)
