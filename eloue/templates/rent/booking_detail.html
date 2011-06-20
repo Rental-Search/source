@@ -72,9 +72,9 @@
             {% if booking.owner == user %}
             <li class="sub-tab first selected">
                 {% if not booking.state == booking.STATE.CLOSED and not booking.state == booking.STATE.REJECTED %}
-                {% trans "Locations actives" %}
+                {% trans "Locations en cours" %}
                 {% else %}
-                <a href="{% url owner_booking %}">{% trans "Locations actives" %}</a>
+                <a href="{% url owner_booking %}">{% trans "Locations en cours" %}</a>
                 {% endif %}
             </li>
 			<li class="sub-tab">
@@ -89,9 +89,9 @@
 		    {% else %}
 		    <li class="sub-tab first">
 		        {% if not booking.state == booking.STATE.CLOSED and not booking.state == booking.STATE.REJECTED %}
-		        {% trans "Locations actives" %}
+		        {% trans "Locations en cours" %}
 		        {% else %}
-		        <a href="{% url borrower_booking %}">{% trans "Locations actives" %}</a>
+		        <a href="{% url borrower_booking %}">{% trans "Locations en cours" %}</a>
 		        {% endif %}
 		    </li>
 			<li class="sub-tab">

@@ -60,12 +60,12 @@ $(document).ready(function() {
     // Company name field display/none
     companyNameInput = $(".company-name");
 // Set the value to non if nothing selected
-    $(function() {
-    	var $radios = $('input:radio[name=is_professional]');
-    	if($radios.is(':checked') === false) {
-           $radios.filter('[value=0]').attr('checked', true);
-        }
-    });
+//     $(function() {
+//     	var $radios = $('input:radio[name=is_professional]');
+//     	if($radios.is(':checked') === false) {
+//            $radios.filter('[value=0]').attr('checked', true);
+//         }
+//     });
 
     if( $("input[name$='is_professional']:checked").val() == 1){		
 	

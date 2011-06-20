@@ -27,13 +27,14 @@
         		<tr>
         			<td colspan="2" {% if form.is_professional.errors %} class="error-field" {% endif %}>
         				<label>{{ form.is_professional.label }} {% if form.is_professional.field.required %}*{% endif%} :</label>
-        				{{ form.is_professional }} oui
+        				{{ form.is_professional }}
         				{% if form.is_professional.errors %}
         				    {% for error in form.is_professional.errors %}
         								<br />
         				        <span class="error">{{ error|escape }}</span>
         				    {% endfor %}
         				{% endif %}
+					
         			</td>
         		</tr>
         		<tr class="company-name">
@@ -48,7 +49,7 @@
         				{% endif %}
         			</td>
         		</tr>
-        		{% endif %}
+        	    {% endif %}
     			{% if form.email %}
     			<tr>
     				<th><label>{{ form.email.label }} {% if form.email.field.required %}*{% endif %} :</label></th>
@@ -134,11 +135,10 @@
     			</tr>
     			{% endif %}
     		</table>
-    		<p class="required-field">{% trans "* = champ obligatoire" %}</p>
+    		<p class="required-field">{% trans "* champ obligatoire" %}</p>
     </div>
     <div id="submit-wizard" class="x12">
          <p>
-    		<a href="{% url home %}">Annuler</a> ou
     		<input type="submit" class="btn big-green" value="Sauvegarder" />
     	</p>
     </div>

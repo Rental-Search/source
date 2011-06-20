@@ -149,7 +149,7 @@
 			</div>
 			<div id="submit-wizard" class="x8 first">
 			    <p>
-				    <!--<a href="{% url borrower_history %}">{% trans "Annuler" %}</a> {% trans "ou" %} -->
+				    <a href="{% url borrower_history %}">{% trans "Annuler" %}</a> {% trans "ou" %} 
     				<input type="submit" class="btn big-green" value="{% trans "Envoyer" %}" />
     			</p>
 			</form>

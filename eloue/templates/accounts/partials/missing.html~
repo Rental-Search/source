@@ -424,6 +424,7 @@
     	{% if product %}
     	<!-- <a href="{{ product.get_absolute_url }}">{% trans "Annuler" %}</a> {% trans "ou" %} -->
     	{% else %}
+    	 <a href="{% url home %}">{% trans "Annuler" %}</a> {% trans "ou" %} 
     	{% endif %}<input type="submit" class="btn big-green" value="{% trans "Continuer &rarr;" %}" />
     </p>
 </form>

@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load i18n product paginator%}
 
-{% block title %}{% trans "Vos locations actives en tant que locataire" %}{% endblock %}
+{% block title %}{% trans "Vos locations en cours en tant que locataire" %}{% endblock %}
 
 {% block content %}
 <div id="content" class="xgrid">
@@ -15,12 +15,12 @@
     </div>
     <div id="sub-menu">
         <ul class="x12">
-            <li class="sub-tab first"><a href="{% url borrower_booking %}">{% trans "Locations actives" %}</a></li>
+            <li class="sub-tab first"><a href="{% url borrower_booking %}">{% trans "Locations en cours" %}</a></li>
 			<li class="sub-tab">{% trans "Historique des locations" %}</li>
         </ul>
     </div>
     <div class="content-header x12">
-		<h1>{% trans "Locations actives" %}</h1>
+		<h1>{% trans "Historique des locations" %}</h1>
 	</div>
 	<ul id="booking-list" class="x12">
 	{% for booking in booking_list %}

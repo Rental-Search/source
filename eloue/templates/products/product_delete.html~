@@ -54,7 +54,7 @@
     <form id="product-delete" class="inline" enctype="multipart/form-data" action="" method="POST">
         {% csrf_token %}
         <p>
-		   <!-- <a href="{% url product_edit product.slug product.pk %}">{% trans "Annuler" %}</a> {% trans "ou" %} -->
+		    <a href="{% url product_edit product.slug product.pk %}">{% trans "Annuler" %}</a> {% trans "ou" %} 
     		<input type="submit" class="btn big-green" value="{% trans "Supprimer" %}" />
 		</p>
 	</form>

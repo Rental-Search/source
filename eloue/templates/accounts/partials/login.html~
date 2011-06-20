@@ -32,6 +32,7 @@
     <p>
 	    <input type="hidden" name="{{ step_field }}" value="{{ step0 }}" />
     	{{ previous_fields|safe }}
+    	<a href="{% url home %}">{% trans "Annuler" %}</a> {% trans "ou" %} 
     	<input type="submit" class="btn big-green" value="{% trans "Continuer &rarr;" %}" />
     </p>
 </form>

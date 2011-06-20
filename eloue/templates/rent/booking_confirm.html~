@@ -84,7 +84,7 @@
 		    <p>
 		        <input type="hidden" name="{{ step_field }}" value="{{ step0 }}" />
     	        {{ previous_fields|safe }}
-    	        {% trans "Vous allez être redirigé(e) sur Paypal mais ne serez pas débité(e)" %}
+    	        <a href="{{ product.get_absolute_url }}">{% trans "Vous allez être redirigé(e) sur Paypal mais ne serez pas débité(e)" %}</a> 
     		    <input type="submit" class="btn big-green" value="{% trans "Continuer" %}" />
     		</p>
 		</div>

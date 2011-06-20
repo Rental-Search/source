@@ -19,23 +19,21 @@
             <a href="{% url patron_edit %}" class="btn long-blue">{% trans "Modifier votre profil" %}</a>
         </div>
         <div class="box-links">
-            <h3>{% trans "Liens utiles" %}</h3>
             <ul>
-                <li><a href="{% url product_create %}">{% trans "Mettre en location" %}</a></li>
+                <li><a href="{% url product_create %}">{% trans "Mettre un objet en location" %}</a></li>
+                <li><a href="{% url product_list %}">{% trans "Rechercher une location" %}</a></li>
                 <li><a href="{% url owner_product %}">{% trans "Accéder à mes objets" %}</a></li>
                 <li><a href="{% trans "/comment-ca-marche/" %}">{% trans "Comment ça marche ?"%}</a></li>
             </ul>
         </div>
     </div>
     <div class="x9" style="margin-top: 20px;">
-        <div class="content-header x9 first">
-            <h2>{% trans "Bienvenue sur e-loue ! Que pouvez-vous faire ensuite ?" %}</h2>
+        <!--<div class="content-header x9 first">
+            <h2>{% trans "Que pouvez-vous faire ensuite ?" %}</h2>
         </div>
         <ul class="x8">
-            <li><a href="{% url product_create %}">{% trans "Mettre un objet en location" %}</a></li>
 			<li><a href="{% url patron_edit %}">{% trans "Editer votre profil" %}</a></li>
-			<li><a href="{% url home %}">{% trans "Chercher une location" %}</a></li>
-        </ul>
+        </ul>-->
         <div class="content-header x9 first">
             <h2>{% trans "Locations en tant que <strong>propriétaire</strong>" %}</h2>
         </div>
@@ -43,9 +41,9 @@
             {% with user.bookings.authorized|length as counter %}
 			  <a href="{% url owner_booking %}" class="highlight">{{ counter }}</a><br />
 			  {% blocktrans count counter as counter %}
-                <span>Location<br />en attente</span>
+                <span>Location<br />à valider</span>
               {% plural %}
-			    <span>Locations<br />en attente</span>
+			    <span>Locations<br />à valider</span>
               {% endblocktrans %}
 			 {% endwith %}
         </div>
@@ -53,9 +51,9 @@
             {% with user.bookings.pending|length as counter %}
 			  <a href="{% url owner_booking %}">{{ counter }}</a><br />
 			  {% blocktrans count counter as counter %}
-                <span>Location<br />active</span>
+                <span>Location<br />en cours</span>
               {% plural %}
-			    <span>Locations<br />actives</span>
+			    <span>Locations<br />en cours</span>
               {% endblocktrans %}
 			 {% endwith %}
         </div>
@@ -76,9 +74,9 @@
             {% with user.rentals.authorized|length as counter %}
 				<a href="{% url borrower_booking %}" class="highlight">{{ counter }}</a><br />
 				{% blocktrans count counter as counter %}
-                 <span>Location<br />en attente</span>
+                 <span>Location<br />en attente de validation</span>
                 {% plural %}
-			     <span>Locations<br />en attente</span>
+			     <span>Locations<br />en attente de validation</span>
                {% endblocktrans %}
 			 {% endwith %}
         </div>
@@ -86,9 +84,9 @@
             {% with user.rentals.pending|length as counter %}
 			  <a href="{% url borrower_booking %}">{{ counter }}</a><br />
 			  {% blocktrans count counter as counter %}
-                <span>Location<br />active</span>
+                <span>Location<br />en cours</span>
               {% plural %}
-			    <span>Locations<br />actives</span>
+			    <span>Locations<br />en cours</span>
               {% endblocktrans %}
 			 {% endwith %}
         </div>
