@@ -24,6 +24,7 @@
 			<p>
 				<label>{% trans "Où ?" %}</label><br />
 				{{ form.l }}<br />
+				<span>{% trans "Exemple :" %} </span> <a href="{% url product_list %}?l={% trans "Paris, 75012" %}">{% trans "Paris, 75012" %}</a>
 			</p>
 		</div>
 		<div class="x2">
@@ -124,7 +125,7 @@
        <div class="content-community">
            <div class="x8">
                <div class="content-header x8 first">
-                   <h2>Ils parlent de nous !</h2>
+                   <h2>{% trans "Ils parlent de nous !" %}</h2>
                </div>
                <a href="{% trans "/espace-presse/" %}" title="{% trans "Espace presse" %}">
     		       <img src="{{ MEDIA_URL }}/images/presse_icons_uk.png" alt="{% trans "e-loue dans les média" %}"/>
@@ -132,18 +133,18 @@
 	      </div>
   	      <div class="x4">
   	          <div class="box-tools clearfix">
-  	              <h3>Rejoignez notre communauté</h3>
+  	              <h3>{% trans "Rejoignez notre communauté" %}</h3>
   	              <ul class="community-portlet-content">
   	                  <li class="fb">
   	                      <a href="https://www.facebook.com/pages/e-louecom/104685226447">
   	                          <span class="fb-icon"></span>
-                  			  Devenez fan<br>sur Facebook
+                  			  {% trans "Devenez fan<br>sur Facebook" %}
                   		  </a>
                       </li>
                       <li class="tw">
                           <a href="https://twitter.com/eloue">
                               <span class="tw-icon"></span>
-                  			  Suivez-nous<br>sur Twitter
+                  			  {% trans "Suivez-nous<br>sur Twitter" %}
                   		  </a>
                   	  </li>
                   </ul>

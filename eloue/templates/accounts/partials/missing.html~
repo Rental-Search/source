@@ -5,16 +5,16 @@
         <table class="more-info">
             {% if form.is_professional %}
     		<tr>
-    			<td colspan="2" {% if form.is_professional.errors %} class="error-field" {% endif %}>
-    				<label>{{ form.is_professional.label }} {% if form.is_professional.field.required %}*{% endif%} :</label>
-    				{{ form.is_professional }} oui
+    			<th><label>{{ form.is_professional.label }} {% if form.is_professional.field.required %}*{% endif%} :</label></th>
+			<td {% if form.is_professional.errors %} class="error-field" {% endif %}>
+				{{ form.is_professional }}
     				{% if form.is_professional.errors %}
     				    {% for error in form.is_professional.errors %}
     								<br />
     				        <span class="error">{{ error|escape }}</span>
     				    {% endfor %}
     				{% endif %}
-    			</td>
+			</td>
     		</tr>
     		<tr class="company-name">
     			<th><label>{{ form.company_name.label }} {% if form.company_name.field.required %}*{% endif %} :</label></th>
@@ -110,8 +110,7 @@
     				        <span class="error">{{ error|escape }}</span>
     				    {% endfor %}
     				{% endif %}
-<!-- 				 added by xinlei-->
-				<a id="link_add_phone" href="http://"> Ajouter un nouveau numéro ?</a>
+				<a id="link_add_phone" href="http://"> {% trans "Ajouter un nouveau numéro ?" %}</a>
     			</td>
 			
     		</tr>
@@ -153,7 +152,7 @@
     				        <span class="error">{{ error|escape }}</span>
     				    {% endfor %}
     				{% endif %}
-				<a id="link_add_addr" href="http://"> Ajouter une nouvelle addresse ?</a>
+				<a id="link_add_addr" href="http://"> {% trans "Ajouter une nouvelle addresse ?" %}</a>
     			</td>
     		</tr>
     		{% endif %}
@@ -424,7 +423,6 @@
     	{% if product %}
     	<!-- <a href="{{ product.get_absolute_url }}">{% trans "Annuler" %}</a> {% trans "ou" %} -->
     	{% else %}
-    	 <a href="{% url home %}">{% trans "Annuler" %}</a> {% trans "ou" %} 
     	{% endif %}<input type="submit" class="btn big-green" value="{% trans "Continuer &rarr;" %}" />
     </p>
 </form>
