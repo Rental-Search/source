@@ -45,6 +45,12 @@ class Migration(SchemaMigration):
             'slug': ('django.db.models.fields.SlugField', [], {'unique': 'True', 'max_length': '50', 'db_index': 'True'}),
             'user_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['auth.User']", 'unique': 'True', 'primary_key': 'True'})
         },
+        'accounts.patronaccepted': {
+            'Meta': {'object_name': 'PatronAccepted'},
+            'email': ('django.db.models.fields.EmailField', [], {'max_length': '75'}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'sites': ('django.db.models.fields.related.ManyToManyField', [], {'related_name': "'patrons_accepted'", 'symmetrical': 'False', 'to': "orm['sites.Site']"})
+        },
         'accounts.phonenumber': {
             'Meta': {'object_name': 'PhoneNumber'},
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
