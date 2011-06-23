@@ -14,16 +14,18 @@ from django.views.decorators.vary import vary_on_cookie
 from django.views.generic.simple import direct_to_template, redirect_to
 from django.views.generic.list_detail import object_list
 from django.views.generic.list_detail import object_detail
-
+from django.views.decorators.csrf import csrf_exempt
 from haystack.query import SearchQuerySet
-
+from django.http import HttpResponse
 from eloue.decorators import ownership_required, secure_required, mobify
 from eloue.accounts.forms import EmailAuthenticationForm
 from eloue.accounts.models import Patron
 from eloue.products.forms import AlertSearchForm, FacetedSearchForm, ProductForm, ProductEditForm, AlertForm
 from eloue.products.models import Category, Product, Curiosity, UNIT, Alert
 from eloue.products.wizard import ProductWizard, AlertWizard, AlertAnswerWizard
-
+from eloue.products.search_indexes import alert_search, product_search 
+from django.views.decorators.http import require_POST, require_GET
+import re
 
 PAGINATE_PRODUCTS_BY = getattr(settings, 'PAGINATE_PRODUCTS_BY', 10)
 DEFAULT_RADIUS = getattr(settings, 'DEFAULT_RADIUS', 50)
@@ -175,3 +177,38 @@ def alert_delete(request, alert_id):
         return redirect_to(request, reverse('alert_edit'))
     else:
         return direct_to_template(request, template='products/alert_delete.html', extra_context={'alert': alert})
+
+def suggestion(request): 
+    word = request.GET['q']
+    results_categories = SearchQuerySet().filter(categories__startswith=word)
+    results_description = SearchQuerySet().filter(description__contains=word)
+    results_summary = SearchQuerySet().filter(summary__contains=word)
+    resp_list = []
+    for result in results_categories:
+        if len(result.categories)>1:
+            for category in result.categories:
+                if category.startswith(word):
+                    if "-" in category:
+                        resp_list.append(category.split("-")[0])
+                    else:
+                        resp_list.append(category)
+        else:
+            if "-" in category[0]:
+                resp_list.append(categories[0].split("-")[0])
+            else:
+                resp_list.append(result.categories[0])
+    for result in results_summary:
+        for m in re.finditer(r"(\w+)%s(\w+)"%word, result.summary):
+            resp_list.append(m.group(0))                
+    for result in results_description:
+        for m in re.finditer(r"(\w+)%s(\w+)"%word, result.description):
+            resp_list.append(m.group(0))
+    resp_list = list(set(resp_list))
+    print ">>>>>>>resp_list>>>>>", resp_list
+    resp_list = resp_list[:10]
+    resp = ""
+    for el in resp_list:
+        resp += "\n%s"%el
+    return HttpResponse(resp)
+        
+        

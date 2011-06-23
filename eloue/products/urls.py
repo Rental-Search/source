@@ -4,7 +4,7 @@ from django.utils.translation import ugettext as _
 
 
 from eloue.products.search_indexes import alert_search, product_search
-from eloue.products.views import product_create, product_list, product_edit, product_delete, alert_list, alert_create, alert_inform, alert_inform_success, alert_delete
+from eloue.products.views import product_create, product_list, product_edit, product_delete, alert_list, alert_create, alert_inform, alert_inform_success, alert_delete, suggestion
 from eloue.rent.views import booking_create, booking_price
 
 

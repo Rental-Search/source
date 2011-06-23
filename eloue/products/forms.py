@@ -74,7 +74,6 @@ class FacetedSearchForm(SearchForm):
             
             if self.cleaned_data['sort']:
                 sqs = sqs.order_by(self.cleaned_data['sort'])
-            
             return sqs, suggestions
         else:
             return self.searchqueryset, None

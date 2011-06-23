@@ -343,6 +343,7 @@ COMPRESS_JS = {
             'js/modernizr.js',
             'js/mustache.js',
             'js/jquery.cycle.all.latest.js',
+            'js/jquery.autocomplete.js',
             'js/application.js'),
         'output_filename': 'js/application.r?.js',
         'extra_context': {
