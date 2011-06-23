@@ -49,7 +49,6 @@ class ProductWizard(GenericFormWizard):
         if missing_form:
             missing_form.instance = new_patron
             new_patron, new_address, new_phone = missing_form.save()
-            print ">>>>>>new_address>>>>>>>", new_address, new_address.position
         # Create product
         product_form = form_list[0]
         product_form.instance.owner = new_patron
@@ -143,15 +142,14 @@ class MessageWizard(GenericFormWizard):
         recipient = self.extra_context["recipient"]
         message_form = form_list[0]
         message_form.save(product=product, sender=new_patron, recipient=recipient)
-        messages.success(request, _(u"Une question du produit a été envoyé !"))
-        GoalRecord.record('new_object', WebUser(request))
+        messages.success(request, _(u"Votre message a bien été envoyé au propriétaire"))
         return redirect_to(request, product.get_absolute_url())
 
     def get_template(self, step):
         if issubclass(self.form_list[step], EmailAuthenticationForm):
             return 'django_messages/message_register.html'
         elif issubclass(self.form_list[step], MessageEditForm):
-            return 'products/message_edit.html'
+            return 'django_messages/message_create.html'
         else:
             return 'django_messages/message_missing.html'
     

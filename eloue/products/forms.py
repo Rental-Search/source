@@ -18,6 +18,7 @@ from django_messages.forms import ComposeForm
 import datetime
 from django.db.models import signals
 from django_messages import utils
+from django_messages.fields import CommaSeparatedUserField
 
 if "notification" in settings.INSTALLED_APPS:
     from notification import models as notification
@@ -131,17 +132,15 @@ class ProductReviewForm(forms.ModelForm):
         model = ProductReview
         exclude = ('created_at', 'ip', 'reviewer', 'product')
 
+
 class MessageEditForm(forms.Form):
-    
-    subject = forms.CharField(label=_(u"Subject"))
-    body = forms.CharField(label=_(u"Body"),
-        widget=forms.Textarea(attrs={'rows': '12', 'cols':'55'}))
-        
+    recipient = CommaSeparatedUserField(label=_(u"Recipient"), widget=forms.TextInput(attrs={'class': 'inm'}))
+    subject = forms.CharField(label=_(u"Subject"), widget=forms.TextInput(attrs={'class': 'inm'}) )
+    body = forms.CharField(label=_(u"Body"), widget=forms.Textarea(attrs={'class': 'inm'}))
     def __init__(self, *args, **kwargs):
         super(MessageEditForm, self).__init__(*args, **kwargs)
        
     def save(self, product, sender, recipient, parent_msg=None):
-        
         subject = self.cleaned_data['subject']
         body = self.cleaned_data['body']
         message_list = []
@@ -173,7 +172,14 @@ class MessageEditForm(forms.Form):
                 notification.send([recipient], "messages_received", {'message': msg,})
         return message_list
 
+
 class MessageComposeForm(ComposeForm):
+    """
+    A simple default form for private messages.
+    """
+    recipient = CommaSeparatedUserField(label=_(u"Recipient"), widget=forms.TextInput(attrs={'class': 'inm'}))
+    subject = forms.CharField(label=_(u"Subject"), widget=forms.TextInput(attrs={'class': 'inm'}) )
+    body = forms.CharField(label=_(u"Body"), widget=forms.Textarea(attrs={'class': 'inm'}))
     
     def save(self, sender, parent_msg=None):
         recipients = self.cleaned_data['recipient']
@@ -206,6 +212,7 @@ class MessageComposeForm(ComposeForm):
                 else:
                     notification.send([r], "messages_received", {'message': msg,})
         return message_list
+
 
 class ProductForm(forms.ModelForm):
     category = TreeNodeChoiceField(queryset=Category.tree.all(), empty_label=_(u"Choisissez une catégorie"), level_indicator=u'--', widget=forms.Select(attrs={'class': 'selm'}))

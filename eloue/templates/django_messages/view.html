@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% load i18n %}
-{% block title %}{% trans "Votre tableau de bord" %}{% endblock %}
+{% block title %}{% trans "Message" %} : {{ message.subject }}{% endblock %}
 
 {% block content %}
 <div id="content" class="xgrid">
@@ -16,30 +16,21 @@
 	<div id="sub-menu">
 		<ul class="x12">
 			<li class="sub-tab first selected"><a href="{% url messages_inbox %}">{% trans "Messages reçus"%}</a></li>
-			<li class="sub-tab"><a href="{% url compose_product_related_message %}">{% trans "Composer messages" %}</a></li>
+			<li class="sub-tab"><a href="{% url compose_product_related_message %}">{% trans "Nouveau message" %}</a></li>
 			<li class="sub-tab"><a href="{% url messages_outbox %}">{% trans "Messages envoyés" %}</a></li>
 			<li class="sub-tab"><a href="{% url messages_trash %}">{% trans "Messages supprimés" %}</a></li>
 		</ul>
 	</div>
 	<div class="content-header x12">
-		<h1>{% trans "Inbox" %}</h1>
+		<h1 class="message-subject">{{ message.subject }}</h1>
+		<p class="message-meta">De <strong>{{ message.sender }}</strong>, <i>le {{ message.sent_at|date:_("DATETIME_FORMAT")}}</i></p>
 	</div>
-	<div class="x12">
-		<h1>{% trans "View Message" %}</h1>
-		<dl class="message-headers">
-    		<dt>{% trans "Subject" %}</dt>
-    		<dd><strong>{{ message.subject }}</strong></dd>
-    		<dt>{% trans "Sender" %}</dt>
-    		<dd>{{ message.sender }}</dd>
-    		<dt>{% trans "Date" %} </dt>
-    		<dd>{{ message.sent_at|date:_("DATETIME_FORMAT")}}</dd>
-    		<dt>{% trans "Recipient" %}</dt>
-    		<dd>{{ message.recipient }}</dd>
-		</dl>
+	<div class="x12">   
 		{{ message.body|linebreaksbr }}<br /><br />
-
+	</div>
+	<div id="message-action" class="x12">
 		{% ifequal message.recipient.pk user.pk %}
-		<a href="{% url reply_product_related_message message.id %}">{% trans "Reply" %}</a>
+		<a href="{% url reply_product_related_message message.id %}">{% trans "Reply" %}</a> -
 		{% endifequal %}
 		<a href="{% url messages_delete message.id %}">{% trans "Delete" %}</a>
 	</div>

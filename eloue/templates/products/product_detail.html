@@ -122,7 +122,7 @@
     				<td class="p-value"><a href="{{ product.owner.get_absolute_url }}" class="owner">{{ product.owner.username }}</a></td>
     			</tr>
 				<tr>
-					<a href="{% url message_edit product.pk product.owner.pk %}" class="p-value">{% trans "Demander une question à propo de ce produit" %}</a>
+					<a href="{% url message_create product.pk product.owner.pk %}" class="p-value">{% trans "Demander une question à propo de ce produit" %}</a>
 				</tr>
     		</table>
         </div>

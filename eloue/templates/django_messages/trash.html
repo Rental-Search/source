@@ -15,10 +15,9 @@
 	</div>
 	<div id="sub-menu">
 		<ul class="x12">
-			<li class="sub-tab first selected"><a href="{% url messages_inbox %}">{% trans "Messages reçus"%}</a></li>
-			<li class="sub-tab"><a href="{% url compose_product_related_message %}">{% trans "Composer messages" %}</a></li>
+			<li class="sub-tab first"><a href="{% url messages_inbox %}">{% trans "Messages reçus"%}</a></li>
 			<li class="sub-tab"><a href="{% url messages_outbox %}">{% trans "Messages envoyés" %}</a></li>
-			<li class="sub-tab"><a href="{% url messages_trash %}">{% trans "Messages supprimés" %}</a></li>
+			<li class="sub-tab selected">{% trans "Messages supprimés" %}</li>
 		</ul>
 	</div>
 	<div class="content-header x12">
@@ -26,28 +25,32 @@
 	</div>
 	<div class="x12">
 		{% if message_list %} 
-		<table class="messages">
-		    <thead>
-		        <tr><th>{% trans "Sender" %}</th><th>{% trans "Subject" %}</th><th>{% trans "Date" %}</th><th>{% trans "Action" %}</th></tr>
-		    </thead>
-		    <tbody>
-		{% for message in message_list %} 
-		    <tr>
-		        <td>{{ message.sender }}</td>
-		        <td> 
-		        {{ message.subject }}
-		        </td>
-		        <td>{{ message.sent_at|date:_("DATETIME_FORMAT") }}</td>
-		        <td><a href="{% url messages_undelete message.id %}">{% trans "undelete" %}</a></td>
-		    </tr>
-		{% endfor %}
-		    </tbody>
-		</table>
-		{% else %}
-		<p>{% trans "No messages." %}</p>
-		{% endif %}   
-		<br />
-		<p>{% trans "Deleted Messages are removed from the trash at unregular intervals, don't rely on this feature for long-time storage." %}</p>
+        <table class="messages">
+            <thead>
+                <tr><th>{% trans "Subject" %}</th><th>{% trans "Sender" %}</th><th>{% trans "Reçu le" %}</th><th>{% trans "Action" %}</th></tr>
+            </thead>
+            <tbody>
+        {% for message in message_list %} 
+            <tr>
+                <td>
+                    {% if message.new %}<strong>{% endif %}
+                    {% if message.replied %}<em>{% endif %}
+                    <a href="{{message.get_absolute_url }}">{{ message.subject }}</a>
+                    {% if message.replied %}</em>{% endif %}
+                    {% if message.new %}</strong>{% endif %}</td>
+                <td>{{ message.sender }}</td>
+                <td>{{ message.sent_at|date:_("DATETIME_FORMAT") }}</td>
+                <td>
+                    <a href="{{message.get_absolute_url }}">{% trans "Lire" %}</a> -
+                    <a href="{% url messages_undelete message.id %}">{% trans "undelete" %}</a>
+                </td>
+            </tr>
+        {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p>{% trans "No messages." %}</p>
+        {% endif %}
 	</div>
 </div>
 {% endblock %}

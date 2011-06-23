@@ -104,7 +104,6 @@ def compose_product_related_message(request, recipient=None, form_class=MessageC
 def reply_product_related_message(request, message_id, form_class=MessageEditForm,
     template_name='django_messages/compose.html', success_url=None, recipient_filter=None,
     quote=format_quote):
-    
     parent = get_object_or_404(ProductRelatedMessage, id=message_id)
     product = parent.product
     
@@ -132,7 +131,7 @@ def reply_product_related_message(request, message_id, form_class=MessageEditFor
 
 @never_cache
 @secure_required
-def message_edit(request, product_id, recipient_id):
+def message_create(request, product_id, recipient_id):
     message_wizard = MessageWizard([MessageEditForm, EmailAuthenticationForm])
     return message_wizard(request, product_id, recipient_id)
 

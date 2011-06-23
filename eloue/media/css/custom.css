@@ -1636,3 +1636,20 @@ input.price { color: #000; }
       text-indent: -9999px;
     }
       #nav-slideshow a.activeSlide { background: transparent url("../images/iphone/markers.png") no-repeat 0 0; }
+      
+
+/* --------------------------------------------------------------
+
+        messages
+
+-------------------------------------------------------------- */
+.message-body textarea { height: 180px; }
+
+.message-subject { margin-bottom: 5px; }
+.message-meta { margin-bottom: 1em; }
+#message-action 
+{ 
+  padding-top: 10px;
+  padding-bottom: 10px;
+  border-top: 1px solid #B9CAD4;
+}
