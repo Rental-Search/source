@@ -134,9 +134,10 @@ class ProductReviewForm(forms.ModelForm):
 
 
 class MessageEditForm(forms.Form):
-    recipient = CommaSeparatedUserField(label=_(u"Recipient"), widget=forms.TextInput(attrs={'class': 'inm'}))
+
     subject = forms.CharField(label=_(u"Subject"), widget=forms.TextInput(attrs={'class': 'inm'}) )
     body = forms.CharField(label=_(u"Body"), widget=forms.Textarea(attrs={'class': 'inm'}))
+    
     def __init__(self, *args, **kwargs):
         super(MessageEditForm, self).__init__(*args, **kwargs)
        
