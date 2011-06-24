@@ -57,33 +57,24 @@ $(document).ready(function() {
         }
     });
     
-    // Company name field display/none
+// Company name field display/none
+    isProfessionalInput = $("input[name$='is_professional']");
     companyNameInput = $(".company-name");
-// Set the value to non if nothing selected
-//     $(function() {
-//     	var $radios = $('input:radio[name=is_professional]');
-//     	if($radios.is(':checked') === false) {
-//            $radios.filter('[value=0]').attr('checked', true);
-//         }
-//     });
+    companyNameInput.hide();
 
-    if( $("input[name$='is_professional']:checked").val() == 1){		
-	
-// 	$("input[name$='is_professional']") = true;
-	$("input[name$='is_professional']").filter("[value=1]").attr("checked",true);
- 	companyNameInput.show();
-    } else if ($("input[name$='is_professional']:checked").val() == 0){
-	$("input[name$='is_professional']").filter("[value=0]").attr("checked",true);
-	companyNameInput.hide();
-    } else {}
-// $("input[name$='is_professional']").get(0).checked = true
-    $("input[name$='is_professional']").click(function() {
-	if ($("input[name$='is_professional']:checked").val() == 0) {
-            companyNameInput.hide();
+    var exists = $("input[name$='is_professional']:checked").val();
+
+    if (exists == 'on') {
+        companyNameInput.show();
+    }
+    $(":checkbox").click(function() {
+        if (isProfessionalInput.is(':checked')) {
+            companyNameInput.show();
         } else {
-             companyNameInput.show();
+            companyNameInput.hide();
         }
     });
+
 
     // New number field display/none
     	newPhoneInput = $(".add_new_phone");
