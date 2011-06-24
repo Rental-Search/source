@@ -4,7 +4,7 @@ jQuery.fn.reverse = function() {
 
 $(document).ready(function() {
     // geocode
-if ($("input[name$='l']")){    
+if ($("input[name$='l']") && $("input[name$='l']").val() == ''){					   	    
     var geocoder;
     var latitude;
     var longitude;
@@ -13,9 +13,7 @@ if ($("input[name$='l']")){
     geocoder = new google.maps.Geocoder();
            
     if (navigator.geolocation){
-	alert("-2 enter navigator");
         navigator.geolocation.getCurrentPosition(function(position){
-		alert("-1 enter navigator");
 		latitude = position.coords.latitude;
 		longitude = position.coords.longitude;
 		altitude = position.coords.altitude;
@@ -24,30 +22,15 @@ if ($("input[name$='l']")){
       			if (status == google.maps.GeocoderStatus.OK) {
 				for(i = 0 ; i <= results[0].address_components.length-1 ; i++){						
 					if(results[0].address_components[i].types[0] == "locality"){
-						user_location = results[0].address_components[i].long_name;
-						if ($("input[name$='l']").val() == ''){						   	
-							$("input[name$='l']").val(results[0].address_components[i].long_name);						
-							//alert("first user_location  0 "+user_location);
-						}
-						//$("input[name$='l']").val(results[0].address_components[i].long_name);
+						user_location = results[0].address_components[i].long_name;					   	
+						$("input[name$='l']").val(results[0].address_components[i].long_name);						
 						break;
 					}
 				}
         		} else {alert("Geocode was not successful for the following reason: " + status);}
-     	        }); 
-	$("input[name$='l']").change(function(){
-		if ($("input[name$='l']").val() != ''){
-			user_location=$("input[name$='l']").val();
-			$("input[name$='l']").val(user_location);
-     			//alert("changed user_location : 1 "+user_location);
-			//alert("second : "+$("input[name$='l']").val());
-		}
+     	        }); 	
 	});
-	
-	});
-	//alert("default value 2 " + user_location);
-	//$("input[name$='l']").val(user_location);
-     } else {alert("Votre navigateur ne prend pas en compte la géolocalisation HTML5");}
+     } else {}
 }
  	
     		
