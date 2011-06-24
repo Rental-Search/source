@@ -193,8 +193,8 @@ def suggestion(request):
                     else:
                         resp_list.append(category)
         else:
-            if "-" in category[0]:
-                resp_list.append(categories[0].split("-")[0])
+            if "-" in result.categories[0]:
+                resp_list.append(result.categories[0].split("-")[0])
             else:
                 resp_list.append(result.categories[0])
     for result in results_summary:
@@ -204,7 +204,6 @@ def suggestion(request):
         for m in re.finditer(r"(\w+)%s(\w+)"%word, result.description):
             resp_list.append(m.group(0))
     resp_list = list(set(resp_list))
-    print ">>>>>>>resp_list>>>>>", resp_list
     resp_list = resp_list[:10]
     resp = ""
     for el in resp_list:
