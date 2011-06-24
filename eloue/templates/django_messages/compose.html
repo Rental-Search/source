@@ -27,6 +27,7 @@
 	    <form action="" method="post">
 	    {% csrf_token %} 
 	    <table class="more-info">
+	        {% if form.recipient %}
 	        <tr>
 				<th><label>{{ form.recipient.label }} * :</label></th>
 				<td {% if form.picture.errors %} class="error-field" {% endif %}>
@@ -39,6 +40,7 @@
 				{% endif %}
 				</td>
 			</tr>
+			{% endif %}
 	        <tr>
 				<th><label>{{ form.subject.label }} * :</label></th>
 				<td {% if form.picture.errors %} class="error-field" {% endif %}>
