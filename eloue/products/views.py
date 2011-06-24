@@ -26,10 +26,11 @@ from eloue.products.wizard import ProductWizard, AlertWizard, AlertAnswerWizard
 from eloue.products.search_indexes import alert_search, product_search 
 from django.views.decorators.http import require_POST, require_GET
 import re
+import redis
 
 PAGINATE_PRODUCTS_BY = getattr(settings, 'PAGINATE_PRODUCTS_BY', 10)
 DEFAULT_RADIUS = getattr(settings, 'DEFAULT_RADIUS', 50)
-
+redis = redis.Redis(host='localhost', port=6379, db=0)
 
 @mobify
 @cache_page(300)
@@ -180,9 +181,11 @@ def alert_delete(request, alert_id):
 
 def suggestion(request): 
     word = request.GET['q']
+    resp = redis.get(word)
+    if resp:
+        print ">>>>resp>>>>>", resp
+        return HttpResponse(resp)
     results_categories = SearchQuerySet().filter(categories__startswith=word)
-    results_description = SearchQuerySet().filter(description__contains=word)
-    results_summary = SearchQuerySet().filter(summary__contains=word)
     resp_list = []
     for result in results_categories:
         if len(result.categories)>1:
@@ -197,17 +200,22 @@ def suggestion(request):
                 resp_list.append(result.categories[0].split("-")[0])
             else:
                 resp_list.append(result.categories[0])
+    
+    results_description = SearchQuerySet().filter(description__contains=word)
+    results_summary = SearchQuerySet().filter(summary__contains=word)
     for result in results_summary:
-        for m in re.finditer(r"(\w+)%s(\w+)"%word, result.summary):
-            resp_list.append(m.group(0))                
+        for m in re.finditer(r"^%s(\w+)$"%word, result.summary):
+            resp_list.append(m.group(0))             
     for result in results_description:
-        for m in re.finditer(r"(\w+)%s(\w+)"%word, result.description):
+        for m in re.finditer(r"^%s(\w+)$"%word, result.description):
             resp_list.append(m.group(0))
     resp_list = list(set(resp_list))
-    resp_list = resp_list[:10]
+    print ">>>>>resp_list 1>>>>>>>", resp_list
+    resp_list = resp_list[-10:]
     resp = ""
     for el in resp_list:
         resp += "\n%s"%el
+    redis.set(word, resp)
     return HttpResponse(resp)
         
         
