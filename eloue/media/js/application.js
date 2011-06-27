@@ -3,6 +3,9 @@ jQuery.fn.reverse = function() {
 };
 
 $(document).ready(function() {
+    
+    alert(window.location)
+    
     // Password field enabler/disabler
     var passwordInput,
     paypalEmailInput,
@@ -110,12 +113,57 @@ $(document).ready(function() {
             });
         }
     });
+    
+    alert(window.location)
+    
+    var url = window.location
+
+    var booking = url.split("/")[0]
+    alert(booking);
+    var booking_id = booking.split("-")[-1]
+    if booking_id{
+        alert(booking_id);
+    }
+    
+    $.ajax({
+        type: 'GET',
+        url: 'occupied_date/',
+        dataType: 'json',
+        data: $.param(booking_id),
+        success: function(data) {
+            var noWeekendsOrHolidays = data
+            alert(noWeekendsOrHolidays)
+        }
+    });
+    
+    var disabledDays = ["2-21-2010","2-24-2010","2-27-2010","2-28-2010","3-3-2010","3-17-2010","4-2-2010","4-3-2010","4-4-2010","4-5-2010"];
+
+    /* utility functions */
+    function nationalDays(date) {
+      var m = date.getMonth(), d = date.getDate(), y = date.getFullYear();
+      //console.log('Checking (raw): ' + m + '-' + d + '-' + y);
+      for (i = 0; i < disabledDays.length; i++) {
+        if($.inArray((m+1) + '-' + d + '-' + y,disabledDays) != -1 || new Date() > date) {
+          //console.log('bad:  ' + (m+1) + '-' + d + '-' + y + ' / ' + disabledDays[i]);
+          return [false];
+        }
+      }
+      //console.log('good:  ' + (m+1) + '-' + d + '-' + y);
+      return [true];
+    }
+    
+    function noWeekendsOrHolidays(date) {
+      var noWeekend = jQuery.datepicker.noWeekends(date);
+      return noWeekend[0] ? nationalDays(date) : noWeekend;
+    }
+    
 
     // Date picker
     $('input[name$=started_at_0]').datepicker({
         dateFormat: 'dd/mm/yy',
         minDate: 0,
         maxDate: '+360d',
+        beforeShowDay: noWeekendsOrHolidays,
         onSelect: function(dateText, inst) {
             var ended_at = $('input[name$=ended_at_0]');
             ended_at.val(dateText);
@@ -125,7 +173,7 @@ $(document).ready(function() {
     $('input[name$=ended_at_0]').datepicker({
         dateFormat: 'dd/mm/yy'
     });
-
+    
     // Price calculations
     bookingPrice = function(form) {
         var template,

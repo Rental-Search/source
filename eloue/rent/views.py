@@ -28,6 +28,7 @@ from eloue.rent.forms import BookingForm, BookingConfirmationForm, BookingStateF
 from eloue.rent.models import Booking
 from eloue.rent.wizard import BookingWizard
 from eloue.utils import currency
+from datetime import datetime, timedelta
 
 log = logbook.Logger('eloue.rent')
 
@@ -65,6 +66,26 @@ def pay_ipn(request):
             booking.state = Booking.STATE.CLOSED
         booking.save()
     return HttpResponse()
+
+def datespan(startDate, endDate, delta=timedelta(days=1)):
+    currentDate = startDate
+    while currentDate < endDate:
+        yield currentDate
+        currentDate += delta
+
+def product_occupied_date(request, product_id, *args, **kwargs):
+    product = get_object_or_404(Product.on_site, pk=product_id)
+    bookings = Booking.objects.filter(product=product).exclude(state=closing).exclude(state=closed)
+    the_oldest_date = datetime(2007, 3, 30) # for test sake
+    now = datetime.now()
+    date = datespan(the_oldest_date, now)
+    for booking in bookings:
+        if booking.started_at < now:
+            date.extend(datespan(now, booking.ended_at))
+        else:
+            date.extend(datespan(booking.started_at, booking.ended_at))
+    date = list(set(date))
+    return HttpResponse(simplejson.dumps({'date': datespan}), mimetype='application/json')
 
 
 @require_GET
