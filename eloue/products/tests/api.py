@@ -17,9 +17,6 @@ from django.utils import simplejson
 from eloue.accounts.models import Patron
 from eloue.products.models import Product
 from eloue.rent.models import Booking
-from eloue.geocoder import GoogleGeocoder
-
-from mock import patch
 
 
 OAUTH_CONSUMER_KEY = '451cffaa88bd49e881068349b093598a'
@@ -91,9 +88,7 @@ class ApiTest(TestCase):
         self.assertEquals(json['meta']['total_count'], 2)
         
         
-    @patch.object(GoogleGeocoder, 'geocode')
-    def test_product_search_with_location(self, mock_geocode):
-        mock_geocode.return_value = None, (48.8613232, 2.3631101), None
+    def test_product_search_with_location(self):
         settings.DEBUG = True
         response = self.client.get(reverse("api_dispatch_list", args=['1.0', 'product']), {
             'q': 'perceuse', 'l': '48.8613232, 2.3631101', 'r': 1,
