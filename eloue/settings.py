@@ -393,9 +393,7 @@ except ImportError:
 LEAN_ENGAGEMENT_CALCULATOR = 'eloue.lean.PatronEngagementScoreCalculator'
 
 # Geocoding API
-GOOGLE_API_KEY = 'ABQIAAAA7bPNcG5t1-bTyW9iNmI-jRRqVDjnV4vohYMgEqqi0RF2UFYT-xSSwfcv2yfC-sACkmL4FuG-A_bScQ'
 YAHOO_API_KEY = 'nnZZkyvV34Fkk9DOWOpYJL7C41.ispEvSVAXbA3Dhu894gljv877.G6KewexGZKhs7S6dSwxCvM-'
-GOOGLE_REGION_CODE = getattr(local, 'GOOGLE_REGION_CODE', 'fr')
 
 # SSL configuration
 USE_HTTPS = getattr(local, 'USE_HTTPS', True)

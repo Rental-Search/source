@@ -19,6 +19,7 @@ class Geocoder(object):
     
     def geocode(self, location):
         location = self.format_place(location)
+        print ">>>>>location>>>>", location
         name, lat, lon, radius, cache_hit = None, None, None, None, False
         if self.use_cache:
             cache_value = cache.get('location:%s' % self.hash_key(location))
@@ -59,10 +60,7 @@ class GoogleGeocoder(Geocoder):
         json = simplejson.load(urllib.urlopen(
             'http://maps.googleapis.com/maps/api/geocode/json?' + urllib.urlencode({
                 'address': location,
-                'oe': 'utf8',
-                'sensor': 'false',
-                'region': GOOGLE_REGION_CODE,
-                'key': GOOGLE_API_KEY
+                'sensor': 'false'
             })
         ))
         try:
