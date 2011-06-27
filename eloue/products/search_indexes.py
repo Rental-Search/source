@@ -4,7 +4,7 @@ import datetime
 from django.conf import settings
 
 from haystack.sites import site
-from haystack.indexes import CharField, DateTimeField, FloatField, MultiValueField
+from haystack.indexes import CharField, DateTimeField, FloatField, MultiValueField, EdgeNgramField
 from haystack.exceptions import AlreadyRegistered
 from haystack.query import SearchQuerySet
 
@@ -17,9 +17,9 @@ __all__ = ['ProductIndex', 'product_search', 'AlertIndex', 'alert_search']
 
 
 class ProductIndex(QueuedSearchIndex):
-    categories = MultiValueField(faceted=True)
+    categories = EdgeNgramField(faceted=True)
     created_at = DateTimeField(model_attr='created_at')
-    description = CharField(model_attr='description')
+    description = EdgeNgramField(model_attr='description')
     lat = FloatField(model_attr='address__position__x', null=True)
     lng = FloatField(model_attr='address__position__y', null=True)
     city = CharField(model_attr='address__city', indexed=False)
@@ -28,7 +28,7 @@ class ProductIndex(QueuedSearchIndex):
     owner_url = CharField(model_attr='owner__get_absolute_url', indexed=False)
     price = FloatField(faceted=True)
     sites = MultiValueField(faceted=True)
-    summary = CharField(model_attr='summary')
+    summary = EdgeNgramField(model_attr='summary')
     text = CharField(document=True, use_template=True)
     url = CharField(model_attr='get_absolute_url', indexed=False)
     thumbnail = CharField(indexed=False)
