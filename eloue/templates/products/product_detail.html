@@ -97,6 +97,13 @@
         		</form>
             </div>
         </div>
+        <div id="owner-info" class="box-welcome">
+            <img src="{{ MEDIA_URL }}images/default_avatar.png" alt="{% trans "loueur"%}{{ product.owner.username }}">
+            <p class="pseudo">
+                {{ product.owner.username }}
+            </p>
+            <a href="{% url message_create product.pk product.owner.pk %}" class="btn long-blue">{% trans "Contactez-moi"%}</a>
+        </div>
         <div class="product-properties">
             <table>
     			{% if product.deposit_amount %}
@@ -121,9 +128,6 @@
     				<td>{% trans "Propriétaire" %} :</td>
     				<td class="p-value"><a href="{{ product.owner.get_absolute_url }}" class="owner">{{ product.owner.username }}</a></td>
     			</tr>
-				<tr>
-					<a href="{% url message_create product.pk product.owner.pk %}" class="p-value">{% trans "Demander une question à propo de ce produit" %}</a>
-				</tr>
     		</table>
         </div>
         <div class="box-info">

@@ -916,6 +916,15 @@ body { background: #ECF6FF url("../images/body-bg.png") repeat 0 0; }
 .product-properties .p-value { font-weight: bold; }
 .product-properties .owner { color: #6EB924!important; }
 
+#owner-info { height: 80px; }
+  #owner-info img 
+  {
+    float: left; 
+    border: 1px solid #9EB0BA; 
+    padding: 2px; 
+    margin-right: 10px;
+  }
+
 /* --------------------------------------------------------------
 
       picture carousel
