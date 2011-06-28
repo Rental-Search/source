@@ -69,23 +69,25 @@ def pay_ipn(request):
 
 def datespan(startDate, endDate, delta=timedelta(days=1)):
     currentDate = startDate
+    result = [currentDate]
     while currentDate < endDate:
-        yield currentDate
         currentDate += delta
+        result.append(currentDate)
+    return result
 
-def product_occupied_date(request, product_id, *args, **kwargs):
+def product_occupied_date(request, slug, product_id):
     product = get_object_or_404(Product.on_site, pk=product_id)
-    bookings = Booking.objects.filter(product=product).exclude(state=closing).exclude(state=closed)
-    the_oldest_date = datetime(2007, 3, 30) # for test sake
+    bookings = Booking.objects.filter(product=product).exclude(state="closing").exclude(state="closed")
     now = datetime.now()
-    date = datespan(the_oldest_date, now)
+    date = []
     for booking in bookings:
         if booking.started_at < now:
             date.extend(datespan(now, booking.ended_at))
         else:
             date.extend(datespan(booking.started_at, booking.ended_at))
-    date = list(set(date))
-    return HttpResponse(simplejson.dumps({'date': datespan}), mimetype='application/json')
+    formated_date = [str(d.year) + '-' + str(d.month) + '-' + str(d.day) for d in date]
+    formated_date = list(set(formated_date))
+    return HttpResponse(simplejson.dumps(formated_date), mimetype='application/json')
 
 
 @require_GET

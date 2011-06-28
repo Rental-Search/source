@@ -5,7 +5,7 @@ from django.utils.translation import ugettext as _
 
 from eloue.products.search_indexes import alert_search, product_search
 from eloue.products.views import product_create, product_list, product_edit, product_delete, alert_list, alert_create, alert_inform, alert_inform_success, alert_delete
-from eloue.rent.views import booking_create, booking_price
+from eloue.rent.views import booking_create, booking_price, product_occupied_date
 
 
 urlpatterns = patterns('',
@@ -19,5 +19,6 @@ urlpatterns = patterns('',
     url(r'^(?P<slug>[-\w]+)-(?P<product_id>\d+)/edit/$', product_edit, name="product_edit"),
     url(r'^(?P<slug>[-\w]+)-(?P<product_id>\d+)/price/$', booking_price, name="booking_price"),
     url(r'^(?P<slug>[-\w]+)-(?P<product_id>\d+)/$', booking_create, name="booking_create"),
+    url(r'^(?P<slug>[-\w]+)-(?P<product_id>\d+)/occupied_date/$', product_occupied_date, name="product_occupied_date"),
     url(r'^([^/].+/)?$', product_list, {'sqs': product_search}, name="product_list"),
 )
