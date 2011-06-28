@@ -17,7 +17,7 @@ __all__ = ['ProductIndex', 'product_search', 'AlertIndex', 'alert_search']
 
 
 class ProductIndex(QueuedSearchIndex):
-    categories = EdgeNgramField(faceted=True)
+    categories = MultiValueField(faceted=True)
     created_at = DateTimeField(model_attr='created_at')
     description = EdgeNgramField(model_attr='description')
     lat = FloatField(model_attr='address__position__x', null=True)
@@ -55,7 +55,7 @@ class ProductIndex(QueuedSearchIndex):
     
     def get_queryset(self):
         return Product.on_site.active()
-    
+        
 
 class AlertIndex(QueuedSearchIndex):
     designation = CharField(model_attr='designation')
@@ -85,3 +85,4 @@ except AlreadyRegistered:
 
 product_search = SearchQuerySet().models(Product).facet('sites').facet('categories').facet('owner').facet('price').narrow('sites:%s' % settings.SITE_ID)
 alert_search = SearchQuerySet().models(Alert)
+

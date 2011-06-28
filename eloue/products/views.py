@@ -183,9 +183,8 @@ def suggestion(request):
     word = request.GET['q']
     resp = redis.get(word)
     if resp:
-        print ">>>>resp>>>>>", resp
         return HttpResponse(resp)
-    results_categories = SearchQuerySet().filter(categories__startswith=word)
+    results_categories = SearchQuerySet().filter(categories__startswith=word).models(Product)
     resp_list = []
     for result in results_categories:
         if len(result.categories)>1:
@@ -200,17 +199,15 @@ def suggestion(request):
                 resp_list.append(result.categories[0].split("-")[0])
             else:
                 resp_list.append(result.categories[0])
-    
-    results_description = SearchQuerySet().filter(description__contains=word)
-    results_summary = SearchQuerySet().filter(summary__contains=word)
+    results_description = SearchQuerySet().autocomplete(description=word)
+    results_summary = SearchQuerySet().autocomplete(summary=word)
     for result in results_summary:
         for m in re.finditer(r"^%s(\w+)$"%word, result.summary):
-            resp_list.append(m.group(0))             
+            resp_list.append(m.group(0))          
     for result in results_description:
         for m in re.finditer(r"^%s(\w+)$"%word, result.description):
             resp_list.append(m.group(0))
     resp_list = list(set(resp_list))
-    print ">>>>>resp_list 1>>>>>>>", resp_list
     resp_list = resp_list[-10:]
     resp = ""
     for el in resp_list:
