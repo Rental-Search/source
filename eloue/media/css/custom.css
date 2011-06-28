@@ -916,7 +916,13 @@ body { background: #ECF6FF url("../images/body-bg.png") repeat 0 0; }
 .product-properties .p-value { font-weight: bold; }
 .product-properties .owner { color: #6EB924!important; }
 
-#owner-info { height: 80px; }
+#owner-info 
+{ 
+  height: 80px;
+  -moz-border-radius:5px;
+  -webkit-border-radius:5px;
+  border-radius:5px; 
+}
   #owner-info img 
   {
     float: left; 
