@@ -1,0 +1,13 @@
+#Tue May 31 13:00:38 CEST 2011
+eclipse.preferences.version=1
+encoding//eloue/accounts/admin.py=utf-8
+encoding//eloue/accounts/models.py=utf-8
+encoding//eloue/accounts/views.py=utf-8
+encoding//eloue/accounts/widgets.py=utf-8
+encoding//eloue/accounts/wizard.py=utf-8
+encoding//eloue/products/utils.py=utf-8
+encoding//eloue/rent/contract.py=utf-8
+encoding//eloue/rent/forms.py=utf-8
+encoding//eloue/rent/models.py=utf-8
+encoding//eloue/rent/views.py=utf-8
+encoding//eloue/rent/wizard.py=utf-8
