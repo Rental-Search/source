@@ -194,18 +194,21 @@ def suggestion(request):
                         resp_list.append(category.split("-")[0])
                     else:
                         resp_list.append(category)
+                    
         else:
-            if "-" in result.categories[0]:
-                resp_list.append(result.categories[0].split("-")[0])
-            else:
-                resp_list.append(result.categories[0])
+            category = result.categories[0]
+            if category.startswith(word):
+                if "-" in category:
+                    resp_list.append(category.split("-")[0])
+                else:
+                    resp_list.append(category)
     results_description = SearchQuerySet().autocomplete(description=word)
     results_summary = SearchQuerySet().autocomplete(summary=word)
     for result in results_summary:
-        for m in re.finditer(r"^%s(\w+)$"%word, result.summary):
-            resp_list.append(m.group(0))          
+        for m in re.finditer(r"^%s(\w+)"%word, result.summary, re.I):
+            resp_list.append(m.group(0))
     for result in results_description:
-        for m in re.finditer(r"^%s(\w+)$"%word, result.description):
+        for m in re.finditer(r"^%s(\w+)"%word, result.description, re.I):
             resp_list.append(m.group(0))
     resp_list = list(set(resp_list))
     resp_list = resp_list[-10:]
