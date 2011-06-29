@@ -71,7 +71,7 @@ def pay_ipn(request):
 
 def product_occupied_date(request, slug, product_id):
     product = get_object_or_404(Product.on_site, pk=product_id)
-    bookings = Booking.objects.filter(product=product).exclude(state="closing").exclude(state="closed")
+    bookings = Booking.objects.filter(product=product).filter(state='')
     dates = get_product_occupied_date(bookings)
     formated_date = [str(d.year) + '-' + str(d.month) + '-' + str(d.day) for d in dates]
     formated_date = list(set(formated_date))

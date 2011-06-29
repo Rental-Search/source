@@ -16,7 +16,8 @@ $(document).ready(function() {
     bookingCreate,
     bookingPrice,
     notification,
-    disabledDays; //added attr
+    disabledDays, //added attr
+    defaultEndDate; //added attr
     var exists = $("input[name$='exists']:checked").val();
     passwordInput = $("input[name$='password']");
     if (passwordInput.attr('type') != 'hidden') {
@@ -127,11 +128,11 @@ $(document).ready(function() {
       var m = date.getMonth(), d = date.getDate(), y = date.getFullYear();
       for (i = 0; i < disabledDays.length; i++) {
         if($.inArray(y +'-'+ (m+1) + '-' + d, disabledDays) != -1 || new Date() > date) {
-          console.log('bad:  ' + y +'-'+ (m+1) + '-' + d + ' / ' + disabledDays[i]);
+          //console.log('bad:  ' + y +'-'+ (m+1) + '-' + d + ' / ' + disabledDays[i]);
           return [false];
         }
       }
-      console.log('good:  ' + y +'-'+ (m+1) + '-' + d);
+      //console.log('good:  ' + y +'-'+ (m+1) + '-' + d);
       return [true];
     }
 
@@ -142,9 +143,24 @@ $(document).ready(function() {
         maxDate: '+360d',
         beforeShowDay: occupiedDays,
         onSelect: function(dateText, inst) {
+            console.log('defaultDate 1 >>>>'+ dateText + '  /' + inst);
+            var array = dateText.split('/');
+            var day = parseInt(array[0])+1;
+            var dayStr;
+            if(day<10){
+                dayStr = '' + '0' + day;
+            }
+            else{
+                dayStr = '' + day;
+            }
+            var newDate = array[1] + '/' + dayStr + '/' + array[2];
+            console.log('defaultDate 2 >>>>'+ newDate);
             var ended_at = $('input[name$=ended_at_0]');
             ended_at.val(dateText);
-            ended_at.datepicker("option", "minDate", dateText);
+            //ended_at.datepicker("option", "minDate", dateText);
+            //defaultEndDate = new Date(newDate);
+            console.log('defaultDate 3 >>>>'+ new Date (newDate));
+            ended_at.datepicker({setDate: new Date (newDate)});
         }
     });
     
