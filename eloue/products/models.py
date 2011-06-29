@@ -410,16 +410,20 @@ class Alert(models.Model):
     
     @property
     def nearest_patrons(self):
-        nearest_addresses = Address.objects.distance(self.position).filter(position__distance_lt=(self.position, Distance(km=ALERT_RADIUS))).order_by('distance')
-        return Patron.objects.distinct().filter(addresses__in=nearest_addresses)[:10]
+        if self.position:
+            nearest_addresses = Address.objects.distance(self.position).filter(position__distance_lt=(self.position, Distance(km=ALERT_RADIUS))).order_by('distance')
+            return Patron.objects.distinct().filter(addresses__in=nearest_addresses)[:10]
+        else:
+            return None
     
     def send_alerts(self):
-        for patron in self.nearest_patrons:
-            message = create_alternative_email('products/emails/alert', {
-                'patron': patron,
-                'alert': self
-            }, settings.DEFAULT_FROM_EMAIL, [self.patron.email])
-            message.send()
+        if self.nearest_patrons:
+            for patron in self.nearest_patrons:
+                message = create_alternative_email('products/emails/alert', {
+                    'patron': patron,
+                    'alert': self
+                    }, settings.DEFAULT_FROM_EMAIL, [self.patron.email])
+                message.send()
     
     def send_alerts_answer(self, product):
         message = create_alternative_email('products/emails/alert_answer', {

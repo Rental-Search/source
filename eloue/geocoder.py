@@ -61,8 +61,7 @@ class GoogleGeocoder(Geocoder):
                 'address': location,
                 'oe': 'utf8',
                 'sensor': 'false',
-                'region': GOOGLE_REGION_CODE,
-                'key': GOOGLE_API_KEY
+                'region': GOOGLE_REGION_CODE
             })
         ))
         try:
