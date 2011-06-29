@@ -10,7 +10,7 @@ from django.conf import settings
 from django.contrib.auth.models import User
 from django.contrib.gis.geos import Point
 from django.db.models import permalink
-from django.db.models.signals import post_save
+from django.db.models import signals
 from django.utils.encoding import smart_unicode
 from django.utils.formats import get_format
 from django.utils.translation import ugettext_lazy as _
@@ -22,7 +22,8 @@ from eloue.geocoder import GoogleGeocoder
 from eloue.products.utils import Enum
 from eloue.signals import post_save_sites
 from eloue.utils import create_alternative_email
-from eloue.payments.paypal_payment import accounts, verify_paypal_account, PaypalError
+from eloue.payments.paypal_payment import accounts, PaypalError
+from eloue.payments import paypal_payment
 
 CIVILITY_CHOICES = Enum([
     (0, 'MME', _('Madame')),
@@ -101,6 +102,7 @@ class Patron(User):
     company_name = models.CharField(null=True, blank=True, max_length=255)
     activation_key = models.CharField(null=True, blank=True, max_length=40)
     is_subscribed = models.BooleanField(_(u'newsletter'), default=False, help_text=_(u"Précise si l'utilisateur est abonné à la newsletter"))
+    new_messages_alerted = models.BooleanField(_(u'alerts if new messages come'), default=True, help_text=_(u"Précise si l'utilisateur est informé par email s'il a nouveaux messages"))
     is_professional = models.NullBooleanField(_('professionnel'), blank=True, default=None, help_text=_(u"Précise si l'utilisateur est un professionnel"))
     modified_at = models.DateTimeField(_('date de modification'), editable=False)
     affiliate = models.CharField(null=True, blank=True, max_length=10)
@@ -119,6 +121,14 @@ class Patron(User):
                 self.slug = slugify(self.username)
         self.modified_at = datetime.datetime.now()
         super(Patron, self).save(*args, **kwargs)
+    
+    def __eq__(self, other):
+        """
+        To resolve the user comparing problems in other projet lib.
+        """
+        if isinstance(other, User):
+            if other.pk == self.pk:
+                return True
     
     @permalink
     def get_absolute_url(self):
@@ -198,7 +208,7 @@ class Patron(User):
     
     @property
     def is_verified(self):
-        return verify_paypal_account(email=self.paypal_email, first_name=self.first_name, last_name=self.last_name)
+        return paypal_payment.verify_paypal_account(email=self.paypal_email, first_name=self.first_name, last_name=self.last_name)
     
     def send_activation_email(self):
         context = {
@@ -253,6 +263,7 @@ class Address(models.Model):
     
     def save(self, *args, **kwargs):
         self.position = self.geocode()
+        print ">>>>>>self.position>>>>>>", self.position
         super(Address, self).save(*args, **kwargs)
     
     def clean(self):
@@ -263,6 +274,7 @@ class Address(models.Model):
     
     def geocode(self):
         name, (lat, lon), radius = GoogleGeocoder().geocode("%s %s %s %s" % (self.address1, self.address2, self.zipcode, self.city))
+        print ">>>>>>>>>geocode>>>>>>>>>", (lat, lon)
         if lat and lon:
             return Point(lat, lon)
     
@@ -296,5 +308,7 @@ class PatronAccepted(models.Model):
     sites = models.ManyToManyField(Site, related_name='patrons_accepted')
     
 
-post_save.connect(post_save_sites, sender=Patron)
+signals.post_save.connect(post_save_sites, sender=Patron)
+
+
 

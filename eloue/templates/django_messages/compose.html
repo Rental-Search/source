@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}{% trans "Votre tableau de bord" %}{% endblock %}
+
+{% block content %}
+<div id="content" class="xgrid">
+    <div class="content-top">
+        <ul id="menu" class="x12">
+			<li class="menu-tab first"><a href="{% url dashboard %}">{% trans "Tableau de bord" %}</a></li>
+			<li class="menu-tab"><a href="{% url owner_booking %}">{% trans "Propriétaire" %}</a></li>
+			<li class="menu-tab"><a href="{% url borrower_booking %}">{% trans "Locataire" %}</a></li>
+			<li class="menu-tab"><a href="{% url patron_edit %}">{% trans "Mon compte" %}</a></li>
+			<li class="menu-tab"><a href="{% url messages_inbox %}">{% blocktrans %}Messages({{ messages_inbox_count }}){% endblocktrans %}</a></li>
+		</ul>
+	</div>
+	<div id="sub-menu">
+		<ul class="x12">
+			<li class="sub-tab first selected"><a href="{% url messages_inbox %}">{% trans "Messages reçus"%}</a></li>
+			<li class="sub-tab"><a href="{% url messages_outbox %}">{% trans "Messages envoyés" %}</a></li>
+			<li class="sub-tab"><a href="{% url messages_trash %}">{% trans "Messages supprimés" %}</a></li>
+		</ul>
+	</div>
+	<div class="content-header x12">
+		<h1>{% trans "Nouveau Message" %}</h1>
+	</div>
+	<div class="x8 p2">
+	    <form action="" method="post">
+	    {% csrf_token %} 
+	    <table class="more-info">
+	        {% if form.recipient %}
+	        <tr>
+				<th><label>{{ form.recipient.label }} * :</label></th>
+				<td {% if form.picture.errors %} class="error-field" {% endif %}>
+				{{ form.recipient }}
+				{% if form.recipient.errors %}
+				    {% for error in form.recipient.errors %}
+						<br />
+					    <span class="error">{{ error|escape }}</span>
+					{% endfor %}
+				{% endif %}
+				</td>
+			</tr>
+			{% endif %}
+	        <tr>
+				<th><label>{{ form.subject.label }} * :</label></th>
+				<td {% if form.picture.errors %} class="error-field" {% endif %}>
+				{{ form.subject }}
+				{% if form.subject.errors %}
+				{% for error in form.subject.errors %}
+									<br />
+					        <span class="error">{{ error|escape }}</span>
+					    {% endfor %}
+					{% endif %}
+				</td>
+			</tr>
+			<tr class="message-body">
+				<th><label>{{ form.body.label }} * :</label></th>
+				<td {% if form.picture.errors %} class="error-field" {% endif %}>
+				{{ form.body }}
+				{% if form.body.errors %}
+				{% for error in form.body.errors %}
+									<br />
+					        <span class="error">{{ error|escape }}</span>
+					    {% endfor %}
+					{% endif %}
+				</td>
+			</tr>
+	    </table>
+	</div>
+	<div class="x12">
+        <p class="required-field">{% trans "* = champ obligatoire" %}</p>
+    </div>
+    <div id="submit-wizard" class="x12">
+        <p>
+            <a href="{% url messages_inbox %}">Annuler</a> ou
+		    <input type="submit" class="btn big-green" value="Envoyer &rarr;" />
+		</p>
+	</form>
+	</div>
+</div>
+{% endblock%}
+
+

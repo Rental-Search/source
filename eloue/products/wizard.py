@@ -10,11 +10,20 @@ from django.utils.translation import ugettext as _
 from django_lean.experiments.models import GoalRecord
 from django_lean.experiments.utils import WebUser
 
-from eloue.accounts.forms import EmailAuthenticationForm
+from eloue.accounts.forms import EmailAuthenticationForm, make_missing_data_form
 from eloue.accounts.models import Patron
-from eloue.products.forms import AlertForm, ProductForm
+
+from eloue.products.forms import AlertForm, ProductForm, MessageEditForm
+
 from eloue.products.models import Product, Picture, UNIT, Alert
+
 from eloue.wizard import GenericFormWizard
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_protect
+from django.shortcuts import get_object_or_404
+from django.contrib import messages
+from django.utils.translation import ugettext as _
+from django.views.generic.simple import direct_to_template, redirect_to
 
 
 class ProductWizard(GenericFormWizard):
@@ -40,7 +49,6 @@ class ProductWizard(GenericFormWizard):
         if missing_form:
             missing_form.instance = new_patron
             new_patron, new_address, new_phone = missing_form.save()
-        
         # Create product
         product_form = form_list[0]
         product_form.instance.owner = new_patron
@@ -84,12 +92,71 @@ class ProductWizard(GenericFormWizard):
             return 'products/product_create.html'
         else:
             return 'products/product_missing.html'
+            
+class MessageWizard(GenericFormWizard):
     
+    required_fields = ['username', 'password1', 'password2']
+    
+    def __call__(self, request, product_id, recipient_id, *args, **kwargs):
+        product = get_object_or_404(Product, pk=product_id)
+        recipient = get_object_or_404(Patron, pk=recipient_id)
+        self.extra_context.update({'product': product})
+        self.extra_context.update({'recipient': recipient})
+        if request.user.is_authenticated():
+            return super(MessageWizard, self).__call__(request, *args, **kwargs)
+        if EmailAuthenticationForm not in self.form_list:
+            self.form_list.append(EmailAuthenticationForm)
+        if EmailAuthenticationForm in self.form_list:
+            if not next((form for form in self.form_list if getattr(form, '__name__', None) == 'MissingInformationForm'), None):
+                form = self.get_form(self.form_list.index(EmailAuthenticationForm), request.POST, request.FILES)
+                form.is_valid()
+                missing_fields, missing_form = make_missing_data_form(form.get_user(), self.required_fields)
+                if missing_fields:
+                    self.form_list.append(missing_form)
+        return super(MessageWizard, self).__call__(request, *args, **kwargs)
+        
+    def done(self, request, form_list):
+        #TODO Repeat codes, needs some refactoring
+        missing_form = next((form for form in form_list if getattr(form.__class__, '__name__', None) == 'MissingInformationForm'), None)
+        if request.user.is_anonymous():  # Create new Patron
+            auth_form = next((form for form in form_list if isinstance(form, EmailAuthenticationForm)), None)
+            new_patron = auth_form.get_user()
+            if not new_patron:
+                new_patron = Patron.objects.create_inactive(missing_form.cleaned_data['username'],
+                    auth_form.cleaned_data['email'], missing_form.cleaned_data['password1'])
+                if hasattr(settings, 'AFFILIATE_TAG'):
+                    #Assign affiliate tag, no need to save, since missing_form should do it for us
+                    new_patron.affiliate = settings.AFFILIATE_TAG
+            if not hasattr(new_patron, 'backend'):
+                from django.contrib.auth import load_backend
+                backend = load_backend(settings.AUTHENTICATION_BACKENDS[0])
+                new_patron.backend = "%s.%s" % (backend.__module__, backend.__class__.__name__)
+            login(request, new_patron)
+        else:
+            new_patron = request.user
+        if missing_form:
+            missing_form.instance = new_patron
+            new_patron, new_address, new_phone = missing_form.save()
+        # Create message
+        product = self.extra_context["product"]
+        recipient = self.extra_context["recipient"]
+        message_form = form_list[0]
+        message_form.save(product=product, sender=new_patron, recipient=recipient)
+        messages.success(request, _(u"Votre message a bien été envoyé au propriétaire"))
+        return redirect_to(request, product.get_absolute_url())
 
+    def get_template(self, step):
+        if issubclass(self.form_list[step], EmailAuthenticationForm):
+            return 'django_messages/message_register.html'
+        elif issubclass(self.form_list[step], MessageEditForm):
+            return 'django_messages/message_create.html'
+        else:
+            return 'django_messages/message_missing.html'
+    
 class AlertWizard(GenericFormWizard):
     def done(self, request, form_list):
         missing_form = next((form for form in form_list if getattr(form.__class__, '__name__', None) == 'MissingInformationForm'), None)
-        
+
         if request.user.is_anonymous():  # Create new Patron
             auth_form = next((form for form in form_list if isinstance(form, EmailAuthenticationForm)), None)
             new_patron = auth_form.get_user()
@@ -106,23 +173,23 @@ class AlertWizard(GenericFormWizard):
             login(request, new_patron)
         else:
             new_patron = request.user
-        
+
         if missing_form:
             missing_form.instance = new_patron
             new_patron, new_address, new_phone = missing_form.save()
-        
+            print ">>>>>>>>new_address>>>>>>>", new_address
         # Create and send alerts
         alert_form = form_list[0]
         alert_form.instance.patron = new_patron
         alert_form.instance.address = new_address
         alert = alert_form.save()
-        
+
         if not settings.AUTHENTICATION_BACKENDS[0] == 'eloue.accounts.auth.PrivatePatronModelBackend':
             alert.send_alerts()
-        
+
         messages.success(request, _(u"Votre alerte a bien été créée"))
         return redirect_to(request, reverse("alert_edit"), permanent=False)
-    
+
     def get_template(self, step):
         if issubclass(self.form_list[step], EmailAuthenticationForm):
             return 'products/alert_register.html'
@@ -130,7 +197,7 @@ class AlertWizard(GenericFormWizard):
             return 'products/alert_create.html'
         else:
             return 'products/alert_missing.html'
-
+    
 class AlertAnswerWizard(GenericFormWizard):
     def done(self, request, form_list):
         missing_form = next((form for form in form_list if getattr(form.__class__, '__name__', None) == 'MissingInformationForm'), None)
@@ -205,3 +272,5 @@ class AlertAnswerWizard(GenericFormWizard):
             return 'products/product_create.html'
         else:
             return 'products/product_missing.html'
+            
+        

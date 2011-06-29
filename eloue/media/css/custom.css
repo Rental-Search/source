@@ -916,6 +916,21 @@ body { background: #ECF6FF url("../images/body-bg.png") repeat 0 0; }
 .product-properties .p-value { font-weight: bold; }
 .product-properties .owner { color: #6EB924!important; }
 
+#owner-info 
+{ 
+  height: 80px;
+  -moz-border-radius:5px;
+  -webkit-border-radius:5px;
+  border-radius:5px; 
+}
+  #owner-info img 
+  {
+    float: left; 
+    border: 1px solid #9EB0BA; 
+    padding: 2px; 
+    margin-right: 10px;
+  }
+
 /* --------------------------------------------------------------
 
       picture carousel
@@ -1636,3 +1651,31 @@ input.price { color: #000; }
       text-indent: -9999px;
     }
       #nav-slideshow a.activeSlide { background: transparent url("../images/iphone/markers.png") no-repeat 0 0; }
+      
+
+/* --------------------------------------------------------------
+
+        messages
+
+-------------------------------------------------------------- */
+.message-body textarea { height: 180px; }
+
+.message-subject { margin-bottom: 5px; }
+.message-meta { margin-bottom: 1em; }
+#message-action 
+{ 
+  padding-top: 10px;
+  padding-bottom: 10px;
+  border-top: 1px solid #B9CAD4;
+}
+
+
+/* --------------------------------------------------------------
+
+        partners
+
+-------------------------------------------------------------- */
+.partners
+{
+  margin: 10px 0;
+}
