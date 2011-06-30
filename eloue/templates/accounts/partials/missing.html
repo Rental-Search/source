@@ -7,7 +7,7 @@
     		<tr>
     			<th><label>{{ form.is_professional.label }} {% if form.is_professional.field.required %}*{% endif%} :</label></th>
 			<td {% if form.is_professional.errors %} class="error-field" {% endif %}>
-				{{ form.is_professional }}
+				{{ form.is_professional }} oui
     				{% if form.is_professional.errors %}
     				    {% for error in form.is_professional.errors %}
     								<br />
@@ -113,7 +113,7 @@
 				<a id="link_add_phone" href="#"> Ajouter un nouveau numéro ?</a>
     			</td>
 			
-    		</tr>
+    		</tr>		
     		{% endif %}
 
 
