@@ -150,7 +150,7 @@ class BookingForm(forms.ModelForm):
         started_at = self.cleaned_data.get('started_at', None)
         ended_at = self.cleaned_data.get('ended_at', None)
         product = self.instance.product
-        bookings = Booking.objects.filter(product=product).filter(Q(state="authorized")|Q(state="pending")|Q(state="ongoing"))
+        bookings = Booking.objects.filter(product=product).filter(Q(state="pending")|Q(state="ongoing"))
         booked_dates = get_product_occupied_date(bookings)
         if (started_at and ended_at):
             try:
