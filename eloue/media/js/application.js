@@ -3,6 +3,7 @@ jQuery.fn.reverse = function() {
 };
 
 $(document).ready(function() {
+alert("fslfjsdlkf");
     // geocode
 //if ($("input[name$='l']") && $("input[name$='l']").val() == '' && !$(".email")){
 if(1>2){					   	    
@@ -22,11 +23,7 @@ if(1>2){
     		geocoder.geocode( { 'address': address}, function(results, status) {
       			if (status == google.maps.GeocoderStatus.OK) {
 				for(i = 0 ; i <= results[0].address_components.length-1 ; i++){						
-					//if(results[0].address_components[i].types[0] == "locality"){
-						//user_location = results[0].address_components[i].long_name;					   	
-						//$("input[name$='l']").val(results[0].address_components[i].long_name);						
-						//break;
-					//}
+					
 				}
         		} else {}
      	        }); 	
@@ -111,14 +108,15 @@ if(1>2){
 
     // New number field display/none
     	newPhoneInput = $(".add_new_phone");
-	newPhoneInput.hide();
+	//newPhoneInput.hide();
+	console.log(">>>>>>>>>enter newPhoneInput>>>>>>>>");
  	$("a#link_add_phone").click(function(){		
 		newPhoneInput.show();		
  	});
 
     // New adress field display/none
     	newAddrInput = $(".add_new_addr");
-	newAddrInput.hide();
+	//newAddrInput.hide();
 	$("a#link_add_addr").click(function(){		
 		newAddrInput.show();		
 	});
