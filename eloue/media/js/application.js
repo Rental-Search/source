@@ -3,10 +3,8 @@ jQuery.fn.reverse = function() {
 };
 
 $(document).ready(function() {
-alert("fslfjsdlkf");
     // geocode
-//if ($("input[name$='l']") && $("input[name$='l']").val() == '' && !$(".email")){
-if(1>2){					   	    
+if ($("input[name$='l']") && $("input[name$='l']").val() == '' && !$("input[name$='0-email']") ){
     var geocoder;
     var latitude;
     var longitude;
@@ -107,19 +105,23 @@ if(1>2){
 
 
     // New number field display/none
-    	newPhoneInput = $(".add_new_phone");
-	//newPhoneInput.hide();
+    if($("#select_phone")){	
+	newPhoneInput = $(".add_new_phone");
+	newPhoneInput.hide();
 	console.log(">>>>>>>>>enter newPhoneInput>>>>>>>>");
  	$("a#link_add_phone").click(function(){		
 		newPhoneInput.show();		
  	});
+    }
 
     // New adress field display/none
-    	newAddrInput = $(".add_new_addr");
+    if($("#select_addr")){    	
+	newAddrInput = $(".add_new_addr");
 	//newAddrInput.hide();
 	$("a#link_add_addr").click(function(){		
 		newAddrInput.show();		
 	});
+    }
 
     // Phone field enabler/disabler
     phoneSelect = $("select[name$='phones']");
