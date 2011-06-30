@@ -13,6 +13,8 @@ from django.utils.translation import ugettext_lazy as _
 from pyke.knowledge_engine import CanNotProve
 
 from eloue.rent.models import Booking, Sinister
+from eloue.rent.utils import get_product_occupied_date, datespan, DATE_FORMAT
+from django.db.models import Q
 
 log = logbook.Logger('eloue.rent')
 
@@ -44,8 +46,6 @@ TIME_CHOICE = (
 )
 
 BOOKING_DAYS = getattr(settings, 'BOOKING_DAYS', 85)
-
-DATE_FORMAT = ['%d/%m/%Y', '%d-%m-%Y', '%d %m %Y', '%d %m %y', '%d/%m/%y', '%d-%m-%y']
 
 
 class ISO8601DateTimeField(forms.Field):
@@ -149,21 +149,24 @@ class BookingForm(forms.ModelForm):
     def clean(self):
         started_at = self.cleaned_data.get('started_at', None)
         ended_at = self.cleaned_data.get('ended_at', None)
-                
         product = self.instance.product
+        bookings = Booking.objects.filter(product=product).filter(Q(state="authorized")|Q(state="pending")|Q(state="ongoing"))
+        booked_dates = get_product_occupied_date(bookings)
         if (started_at and ended_at):
             try:
                 self.cleaned_data['total_amount'] = Booking.calculate_price(product, started_at, ended_at)[1]
             except CanNotProve:
                 raise ValidationError(_(u"Vous ne pouvez pas louer cet objet pour ces dates"))
-                
         if started_at and ended_at:
+            booking_dates = datespan(started_at, ended_at)
             if started_at <= datetime.datetime.now() or ended_at <= datetime.datetime.now():
                 raise ValidationError(_(u"Vous ne pouvez pas louer a ces dates"))
             if started_at >= ended_at:
                 raise ValidationError(_(u"Une location ne peut pas terminer avant d'avoir commencer"))
             if (ended_at - started_at) > datetime.timedelta(days=BOOKING_DAYS):
                 raise ValidationError(_(u"La durée d'une location est limitée à 85 jours."))
+            if set(booked_dates) & set(booking_dates):
+                raise ValidationError(_(u"Ces dates sont déjà prises pour ce produit."))
         return self.cleaned_data
     
 
