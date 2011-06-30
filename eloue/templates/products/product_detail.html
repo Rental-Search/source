@@ -92,7 +92,7 @@
         		<input type="hidden" name="{{ step_field }}" value="{{ step0 }}" />
         	    {{ previous_fields|safe }}
         		<p>
-        			<input type="submit" value="{% trans "Réserver &rarr;" %}" class="btn big-green" />
+        			<input type="submit" value="{% trans "Louer &rarr;" %}" class="btn big-green" />
         		</p>
         		</form>
             </div>
@@ -115,10 +115,6 @@
     			<tr>
     				<td>{% trans "Lieu" %} :</td>
     				<td class="p-value">{{ product.address.city|capfirst }}, {{ product.address.zipcode }}</td>
-    			</tr>
-    			<tr>
-    				<td>{% trans "Quantité" %} :</td>
-    				<td class="p-value">{{ product.quantity }}</td>
     			</tr>
     			<tr>
     				<td>{% trans "Catégorie" %} :</td>

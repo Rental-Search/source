@@ -1,20 +1,20 @@
 {% load i18n %}
-<div class="x8 p2">
+<div class="x9 p2">
     <form class="form" action="" method="POST">
     	{% csrf_token %}
         <table class="more-info">
             {% if form.is_professional %}
     		<tr>
-    			<td colspan="2" {% if form.is_professional.errors %} class="error-field" {% endif %}>
-    				<label>{{ form.is_professional.label }} {% if form.is_professional.field.required %}*{% endif%} :</label>
-    				{{ form.is_professional }} oui
+    			<th><label>{{ form.is_professional.label }} {% if form.is_professional.field.required %}*{% endif%} :</label></th>
+			<td {% if form.is_professional.errors %} class="error-field" {% endif %}>
+				{{ form.is_professional }}
     				{% if form.is_professional.errors %}
     				    {% for error in form.is_professional.errors %}
     								<br />
     				        <span class="error">{{ error|escape }}</span>
     				    {% endfor %}
     				{% endif %}
-    			</td>
+			</td>
     		</tr>
     		<tr class="company-name">
     			<th><label>{{ form.company_name.label }} {% if form.company_name.field.required %}*{% endif %} :</label></th>
@@ -110,15 +110,20 @@
     				        <span class="error">{{ error|escape }}</span>
     				    {% endfor %}
     				{% endif %}
+<!-- 				 added by xinlei-->
+				<a id="link_add_phone" href="http://"> Ajouter un nouveau numéro ?</a>
     			</td>
+			
     		</tr>
     		{% endif %}
+
+
     		{% if form.phones__phone %}
-    		<tr>
+    		<tr class = "add_new_phone">
     			<th>
     				<label>
     						{% if form.phones %}
-    							{% trans "Nouveau Numéro" %} :
+							{% trans "Nouveau Numéro" %} 
     						{% else %}
     							{% trans "Téléphone" %} * :
     						{% endif %}
@@ -135,9 +140,11 @@
     			</td>
     		</tr>
     		{% endif %}
+
+
     		{% if form.addresses %}
     		<tr>
-    			<th><label>{{ form.addresses.label }} {% if form.addresses.field.required %}*{% endif %}:</label></th>
+    			<th><label>{{ form.addresses.label }} {% if form.addresses.field.required %} * {% endif %}:</label></th>
     			<td {% if form.addresses.errors %} class="error-field" {% endif %}>
     				{{ form.addresses }}
     				{% if form.addresses.errors %}
@@ -146,11 +153,13 @@
     				        <span class="error">{{ error|escape }}</span>
     				    {% endfor %}
     				{% endif %}
+				<a id="link_add_addr" href="http://"> Ajouter une nouvelle addresse ?</a>
     			</td>
     		</tr>
     		{% endif %}
+
     		{% if form.addresses__address1 %}
-    		<tr>
+    		<tr class = "add_new_addr">
     			<th rowspan="3" class="new-address">
     				<label>
     					{% if form.addresses %}
@@ -170,7 +179,7 @@
     				{% endif %}
     			</td>
     		</tr>
-    		<tr>
+    		<tr class = "add_new_addr">
     			<td>
     				<span {% if form.addresses__zipcode.errors %} class="error-field" {% endif %}>
     					{{ form.addresses__zipcode }}
@@ -191,7 +200,7 @@
     				{% endif %}
     			</td>
     		</tr>
-    		<tr>
+    		<tr class = "add_new_addr">
     			<td  class="country-field {% if form.addresses__country.errors %}error-field {% endif %}" >
     				{{ form.addresses__country }}
     				{% if form.addresses__country.errors %}
@@ -406,16 +415,15 @@
     		</tr>
     		{% endif %}
     	</table>
-    	<p class="required-field">{% trans "* = champ obligatoire" %}</p>
+    	<!--<p class="required-field">{% trans "* champ obligatoire" %}</p>-->
 </div>
 <div id="submit-wizard" class="x12">
     <p>
 	    <input type="hidden" name="{{ step_field }}" value="{{ step0 }}" />
     	{{ previous_fields|safe }}
     	{% if product %}
-    	 <a href="{{ product.get_absolute_url }}">{% trans "Annuler" %}</a> {% trans "ou" %} 
+    	<!-- <a href="{{ product.get_absolute_url }}">{% trans "Annuler" %}</a> {% trans "ou" %} -->
     	{% else %}
-    	 <a href="{% url home %}">{% trans "Annuler" %}</a> {% trans "ou" %} 
     	{% endif %}<input type="submit" class="btn big-green" value="{% trans "Continuer &rarr;" %}" />
     </p>
 </form>

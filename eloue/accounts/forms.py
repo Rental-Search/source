@@ -22,7 +22,7 @@ from eloue.accounts.widgets import ParagraphRadioFieldRenderer
 from eloue.utils import form_errors_append
 from eloue.payments import paypal_payment
 from django.dispatch import dispatcher
-
+from django.utils.safestring import mark_safe
 
 STATE_CHOICES = (
     (0, _(u"Je n'ai pas encore de compte")),
@@ -32,6 +32,11 @@ STATE_CHOICES = (
 PAYPAL_ACCOUNT_CHOICES = (
     (0, _(u"Je n'ai pas encore de compte PayPal")),
     (1, _(u"J'ai déjà un compte PayPal et mon email est :")),
+)
+
+IS_PRO_CHOICES = (
+	(0, _(u"Non")),
+	(1, _(u"Oui")),
 )
 
 
@@ -113,21 +118,23 @@ class EmailPasswordResetForm(PasswordResetForm):
             message = EmailMultiAlternatives(subject, text_content, settings.DEFAULT_FROM_EMAIL, [user.email])
             message.attach_alternative(html_content, "text/html")
             message.send()
-    
+
 
 class PatronEditForm(forms.ModelForm):
     
     username = forms.RegexField(label=_(u"Pseudo"), max_length=30, regex=r'^[\w.@+-]+$',
-        help_text=_("Required. 30 characters or fewer. Letters, digits and @/./+/-/_ only."),
-        error_messages={'invalid': _("This value may contain only letters, numbers and @/./+/-/_ characters.")},
-        widget=forms.TextInput(attrs={'class': 'inm'}))
+    help_text=_("Required. 30 characters or fewer. Letters, digits and @/./+/-/_ only."),
+    error_messages={'invalid': _("This value may contain only letters, numbers and @/./+/-/_ characters.")},
+    widget=forms.TextInput(attrs={'class': 'inm'}))
     first_name = forms.CharField(label=_(u"Prénom"), required=True, widget=forms.TextInput(attrs={'class': 'inm'}))
     last_name = forms.CharField(label=_(u"Nom"), required=True, widget=forms.TextInput(attrs={'class': 'inm'}))
     email = forms.EmailField(label=_(u"Email"), max_length=75, widget=forms.TextInput(attrs={
         'autocapitalize': 'off', 'autocorrect': 'off', 'class': 'inm'}))
-    paypal_email = forms.EmailField(label=_(u"PayPal Email"), required=False, max_length=75, widget=forms.TextInput(attrs={
+    paypal_email = forms.EmailField(label=_(u"Email PayPal"), required=False, max_length=75, widget=forms.TextInput(attrs={
             'autocapitalize': 'off', 'autocorrect': 'off', 'class': 'inm'}))
+	    
     is_professional = forms.BooleanField(label=_(u"Êtes-vous un professionnel ?"), required=False, initial=False)
+    
     company_name = forms.CharField(label=_(u"Nom de la société"), required=False, widget=forms.TextInput(attrs={'class': 'inm'}))
     is_subscribed = forms.BooleanField(required=False, initial=False)
     new_messages_alerted = forms.BooleanField(required=False, initial=True)
@@ -216,6 +223,8 @@ class PatronEditForm(forms.ModelForm):
             'email', 'paypal_email', 'is_professional', 'company_name', 'is_subscribed', 'new_messages_alerted')
 
             
+
+
             
 class PatronPasswordChangeForm(PasswordChangeForm):
     """
@@ -282,7 +291,7 @@ def make_missing_data_form(instance, required_fields=[]):
         ),
         'password1': forms.CharField(label=_(u"Mot de passe"), max_length=128, required=True, widget=forms.PasswordInput(attrs={'class': 'inm'})),
         'password2': forms.CharField(label=_(u"A nouveau"), max_length=128, required=True, widget=forms.PasswordInput(attrs={'class': 'inm'})),
-        'is_professional': forms.BooleanField(label=_(u"Êtes-vous un professionnel ?"), required=False, initial=False),
+        'is_professional': forms.ChoiceField(label=_(u"Êtes-vous un professionnel ?"), required=False, initial=False),
         'company_name': forms.CharField(label=_(u"Nom de la société"), required=False, max_length=255, widget=forms.TextInput(attrs={'class': 'inm'})),
         'first_name': forms.CharField(label=_(u"Prénom"), max_length=30, required=True, widget=forms.TextInput(attrs={'class': 'inm'})),
         'last_name': forms.CharField(label=_(u"Nom"), max_length=30, required=True, widget=forms.TextInput(attrs={'class': 'inm'})),

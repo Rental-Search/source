@@ -24,6 +24,7 @@
 			<p>
 				<label>{% trans "Où ?" %}</label><br />
 				{{ form.l }}<br />
+				<span>{% trans "Exemple :" %} </span> <a href="{% url product_list %}?l={% trans "Paris, 75012" %}">{% trans "Paris, 75012" %}</a>
 			</p>
 		</div>
 		<div class="x2">
@@ -82,7 +83,7 @@
      	<div class="x12 horizontal-assurancy">
     	    <div class="guarantees">
     	        <div class="content-header">
-        			<h2>{% trans "Avec les garanties e-loue, louez en toute sécurité !" %}</h2>
+        			<h2>{% trans "Avec les garanties e-loue, louez en toute sérénité !" %}</h2>
         		</div>
     			<div class="g-payment">
     			    {% blocktrans %}
@@ -117,11 +118,11 @@
     	     {% drilldown_tree_for_node category as drilldown cumulative count products.Product.category in product_count %}
     	     {% for node,structure in drilldown|tree_info %}
     	      {% if node.is_root_node and node.slug != 'divers' %}
-    	      <h3><a href="{{ node.get_absolute_url }}">{{ node.name }}</a></h3>
+    	      <h3><a href="{{ node.get_absolute_url }}"> {% trans "Location "%} {{ node.name }}</a></h3>
     	      <ul>
     	      {% else %}
     	       {% if node.product_count %}
-    	        <li><a href="{{ node.get_absolute_url }}">{{ node.name }}</a></li>
+    	        <li><a href="{{ node.get_absolute_url }}">{% trans "Location "%}{{ node.name }}</a></li>
     	       {% endif %}
     	      {% if structure.closed_levels|length >= 2 %}</ul>{% endif %}
     	     {% endif %}
