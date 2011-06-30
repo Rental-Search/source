@@ -21,7 +21,11 @@ if ($("input[name$='l']") && $("input[name$='l']").val() == '' && !$("input[name
     		geocoder.geocode( { 'address': address}, function(results, status) {
       			if (status == google.maps.GeocoderStatus.OK) {
 				for(i = 0 ; i <= results[0].address_components.length-1 ; i++){						
-					
+					if(results[0].address_components[i].types[0] == "locality"){
+						user_location = results[0].address_components[i].long_name;  
+						$("input[name$='l']").val(results[0].address_components[i].long_name);
+						break;
+					}
 				}
         		} else {}
      	        }); 	
@@ -108,7 +112,6 @@ if ($("input[name$='l']") && $("input[name$='l']").val() == '' && !$("input[name
     if($("#select_phone")){	
 	newPhoneInput = $(".add_new_phone");
 	newPhoneInput.hide();
-	console.log(">>>>>>>>>enter newPhoneInput>>>>>>>>");
  	$("a#link_add_phone").click(function(){		
 		newPhoneInput.show();		
  	});
@@ -117,7 +120,7 @@ if ($("input[name$='l']") && $("input[name$='l']").val() == '' && !$("input[name
     // New adress field display/none
     if($("#select_addr")){    	
 	newAddrInput = $(".add_new_addr");
-	//newAddrInput.hide();
+	newAddrInput.hide();
 	$("a#link_add_addr").click(function(){		
 		newAddrInput.show();		
 	});
