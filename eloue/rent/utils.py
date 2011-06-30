@@ -45,7 +45,6 @@ def get_product_occupied_date(bookings):
     for booking in bookings:
         if booking.started_at < now:
             date.extend(datespan(now, booking.ended_at))
-            print ">>>>>datespan(now, booking.ended_at)>>>>>", datespan(now, booking.ended_at)
         else:
             date.extend(datespan(booking.started_at, booking.ended_at))
     return date

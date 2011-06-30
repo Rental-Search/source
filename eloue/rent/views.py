@@ -17,7 +17,7 @@ from django.views.decorators.cache import never_cache
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic.list_detail import object_detail
 from django.views.generic.simple import direct_to_template, redirect_to
-
+from django.db.models import Q
 from django_lean.experiments.models import GoalRecord
 from django_lean.experiments.utils import WebUser
 
@@ -71,7 +71,7 @@ def pay_ipn(request):
 
 def product_occupied_date(request, slug, product_id):
     product = get_object_or_404(Product.on_site, pk=product_id)
-    bookings = Booking.objects.filter(product=product).filter(state='')
+    bookings = Booking.objects.filter(product=product).filter(Q(state="authorized")|Q(state="pending")|Q(state="ongoing"))
     dates = get_product_occupied_date(bookings)
     formated_date = [str(d.year) + '-' + str(d.month) + '-' + str(d.day) for d in dates]
     formated_date = list(set(formated_date))

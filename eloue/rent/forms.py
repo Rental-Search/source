@@ -14,7 +14,7 @@ from pyke.knowledge_engine import CanNotProve
 
 from eloue.rent.models import Booking, Sinister
 from eloue.rent.utils import get_product_occupied_date, datespan, DATE_FORMAT
-
+from django.db.models import Q
 
 log = logbook.Logger('eloue.rent')
 
@@ -150,14 +150,13 @@ class BookingForm(forms.ModelForm):
         started_at = self.cleaned_data.get('started_at', None)
         ended_at = self.cleaned_data.get('ended_at', None)
         product = self.instance.product
-        bookings = Booking.objects.filter(product=product).exclude(state="closing").exclude(state="closed")
+        bookings = Booking.objects.filter(product=product).filter(Q(state="authorized")|Q(state="pending")|Q(state="ongoing"))
         booked_dates = get_product_occupied_date(bookings)
         if (started_at and ended_at):
             try:
                 self.cleaned_data['total_amount'] = Booking.calculate_price(product, started_at, ended_at)[1]
             except CanNotProve:
                 raise ValidationError(_(u"Vous ne pouvez pas louer cet objet pour ces dates"))
-                
         if started_at and ended_at:
             booking_dates = datespan(started_at, ended_at)
             if started_at <= datetime.datetime.now() or ended_at <= datetime.datetime.now():
