@@ -1,18 +1,17 @@
 {% load i18n %}
 {% blocktrans with message.recipient.username as recipient and message.sender.username as sender%}
 
-<p>Bonjour {{ recipient }},</p>
+Bonjour {{ recipient }},
 
-<p>Vous avez reçu un message de {{ sender }} qui contient le message suivant :</p>
+Vous avez reçu un message de {{ sender }} qui contient le message suivant :
 {% endblocktrans %}
 
-<p>{{ message.body|safe }}</p>
+{{ message.body|safe }}
 
 
 
-<p>------</p>
-<p>L'equipe {{ site_url }}</p>
-<p>
-    {% trans "Inbox" %}: {{ site_url }}{% url messages_inbox %}</br/>
-    {% trans "Reply" %}: {{ site_url }}{% url messages_reply message.pk %}
-</p>
+------
+L'equipe {{ site_url }}
+
+{% trans "Inbox" %}: {{ site_url }}{% url messages_inbox %}
+{% trans "Reply" %}: {{ site_url }}{% url messages_reply message.pk %}
