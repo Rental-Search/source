@@ -28,7 +28,6 @@ EMAIL_PORT = getattr(local, 'EMAIL_PORT', 2525)
 EMAIL_HOST_USER = getattr(local, 'EMAIL_HOST_USER', '')
 EMAIL_HOST_PASSWORD = getattr(local, 'EMAIL_HOST_PASSWORD', '')
 
-
 DATABASES = {
     'default': {
         'NAME': getattr(local, 'DATABASE_NAME', 'eloue'),
@@ -111,6 +110,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.request',
     'django.contrib.messages.context_processors.messages',
     'announcements.context_processors.site_wide_announcements',
+    'django_messages.context_processors.inbox',
     'eloue.context_processors.site',
     'eloue.context_processors.debug',
 )
@@ -168,6 +168,7 @@ INSTALLED_APPS = (
     'django_nose',
     'accounts',
     'rent',
+    'django_messages',
     'products',
     'oauth_provider',
 )
@@ -475,3 +476,8 @@ MOBILE_REDIRECT_BASE = getattr(local, 'MOBILE_REDIRECT_BASE', 'https://m.e-loue.
 # Franc Pacifique
 CONVERT_XPF = False
 XPF_EXCHANGE_RATE = '0.00838'
+
+# Message 
+REPLACE_STRING = getattr(local, "REPLACE_STRING", "")
+
+

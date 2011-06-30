@@ -98,6 +98,7 @@ class Migration(SchemaMigration):
         },
         'products.alert': {
             'Meta': {'object_name': 'Alert'},
+            'address': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'alerts'", 'to': "orm['accounts.Address']"}),
             'created_at': ('django.db.models.fields.DateTimeField', [], {}),
             'description': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
             'designation': ('django.db.models.fields.CharField', [], {'max_length': '255'}),

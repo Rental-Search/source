@@ -9,13 +9,23 @@ from django.utils.translation import ugettext as _
 
 from haystack.forms import SearchForm
 from mptt.forms import TreeNodeChoiceField
-
+from eloue.accounts.models import Patron
 from eloue.geocoder import GoogleGeocoder
 from eloue.products.fields import FacetField
-from eloue.products.models import Alert, PatronReview, ProductReview, Product, Picture, Category, UNIT, PAYMENT_TYPE
+from eloue.products.models import Alert, PatronReview, ProductReview, Product, Picture, Category, UNIT, PAYMENT_TYPE, ProductRelatedMessage
 from eloue.products.utils import Enum
+from django_messages.forms import ComposeForm
+import datetime
+from django.db.models import signals
+from django_messages import utils
+from django_messages.fields import CommaSeparatedUserField
 
-
+if "notification" in settings.INSTALLED_APPS:
+    from notification import models as notification
+else:
+    notification = None
+    
+    
 SORT = Enum([
     ('geo_distance', 'NEAR', _(u"Les plus proches")),
     ('-created_at', 'RECENT', _(u"Les plus récentes")),
@@ -123,6 +133,88 @@ class ProductReviewForm(forms.ModelForm):
         exclude = ('created_at', 'ip', 'reviewer', 'product')
 
 
+class MessageEditForm(forms.Form):
+
+    subject = forms.CharField(label=_(u"Subject"), widget=forms.TextInput(attrs={'class': 'inm'}) )
+    body = forms.CharField(label=_(u"Body"), widget=forms.Textarea(attrs={'class': 'inm'}))
+    
+    def __init__(self, *args, **kwargs):
+        super(MessageEditForm, self).__init__(*args, **kwargs)
+       
+    def save(self, product, sender, recipient, parent_msg=None):
+        subject = self.cleaned_data['subject']
+        body = self.cleaned_data['body']
+        message_list = []
+        if not hasattr(recipient, 'new_messages_alerted'):
+            patron = Patron.objects.get(pk=recipient.pk)
+            recipient = patron # Hacking to make messages work
+        if not recipient.new_messages_alerted:
+            signals.post_save.disconnect(utils.new_message_email, ProductRelatedMessage)
+        else:
+            signals.post_save.connect(utils.new_message_email, ProductRelatedMessage)
+        msg = ProductRelatedMessage(
+                sender = sender,
+                recipient = recipient,
+                subject = subject,
+                body = body,
+            )
+        if product:
+            product.messages.add(msg) # To implement a layer to wrap the message lib
+        if parent_msg is not None:
+            msg.parent_msg = parent_msg
+            parent_msg.replied_at = datetime.datetime.now()
+            parent_msg.save()
+        msg.save()
+        message_list.append(msg)
+        if notification:
+            if parent_msg is not None:
+                notification.send([recipient], "messages_reply_received", {'message': msg,})
+            else:
+                notification.send([recipient], "messages_received", {'message': msg,})
+        return message_list
+
+
+class MessageComposeForm(ComposeForm):
+    """
+    A simple default form for private messages.
+    """
+    recipient = CommaSeparatedUserField(label=_(u"Recipient"), widget=forms.TextInput(attrs={'class': 'inm'}))
+    subject = forms.CharField(label=_(u"Subject"), widget=forms.TextInput(attrs={'class': 'inm'}) )
+    body = forms.CharField(label=_(u"Body"), widget=forms.Textarea(attrs={'class': 'inm'}))
+    
+    def save(self, sender, parent_msg=None):
+        recipients = self.cleaned_data['recipient']
+        subject = self.cleaned_data['subject']
+        body = self.cleaned_data['body']
+        message_list = []
+        for r in recipients:
+            if not hasattr(r, 'new_messages_alerted'):
+                patron = Patron.objects.get(pk=r.pk)
+                r = patron # Hacking to make messages work
+            if not r.new_messages_alerted:
+                signals.post_save.disconnect(utils.new_message_email, ProductRelatedMessage)
+            else:
+                signals.post_save.connect(utils.new_message_email, ProductRelatedMessage)
+            msg = ProductRelatedMessage(
+                sender = sender,
+                recipient = r,
+                subject = subject,
+                body = body,
+            )
+            if parent_msg is not None:
+                msg.parent_msg = parent_msg
+                parent_msg.replied_at = datetime.datetime.now()
+                parent_msg.save()
+            msg.save()
+            message_list.append(msg)
+            if notification:
+                if parent_msg is not None:
+                    notification.send([r], "messages_reply_received", {'message': msg,})
+                else:
+                    notification.send([r], "messages_received", {'message': msg,})
+        return message_list
+
+
 class ProductForm(forms.ModelForm):
     category = TreeNodeChoiceField(queryset=Category.tree.all(), empty_label=_(u"Choisissez une catégorie"), level_indicator=u'--', widget=forms.Select(attrs={'class': 'selm'}))
     summary = forms.CharField(label=_(u"Titre"), max_length=100, widget=forms.TextInput(attrs={'class': 'inm'}))
@@ -212,21 +304,21 @@ class ProductEditForm(forms.ModelForm):
                     instance.amount = self.cleaned_data[field]
                     instance.save()
         if self.new_picture:
-            self.instance.pictures.all().delete()  # TODO : Do something less stupid here
+            self.instance.pictures.all().delete() 
             self.instance.pictures.add(Picture.objects.create(image=self.cleaned_data['picture']))
         return super(ProductEditForm, self).save(*args, **kwargs)
     
     class Meta:
         model = Product
         fields = ('category', 'summary', 'deposit_amount', 'quantity', 'description')
-    
+
+  
 
 class ProductAdminForm(forms.ModelForm):
     category = TreeNodeChoiceField(queryset=Category.tree.all(), empty_label="Choisissez une catégorie", level_indicator=u'--')
     
     class Meta:
         model = Product
-
 
 class AlertForm(forms.ModelForm):
     designation = forms.CharField(max_length=100, widget=forms.TextInput(attrs={'class': 'inm'}))
@@ -235,4 +327,6 @@ class AlertForm(forms.ModelForm):
     class Meta:
         model = Alert
         fields = ('description', 'designation')
-    
+
+
+
