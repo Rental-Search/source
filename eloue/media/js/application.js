@@ -4,7 +4,8 @@ jQuery.fn.reverse = function() {
 
 $(document).ready(function() {
     // geocode
-if ($("input[name$='l']") && $("input[name$='l']").val() == ''){					   	    
+//if ($("input[name$='l']") && $("input[name$='l']").val() == '' && !$(".email")){
+if(1>2){					   	    
     var geocoder;
     var latitude;
     var longitude;
@@ -21,11 +22,11 @@ if ($("input[name$='l']") && $("input[name$='l']").val() == ''){
     		geocoder.geocode( { 'address': address}, function(results, status) {
       			if (status == google.maps.GeocoderStatus.OK) {
 				for(i = 0 ; i <= results[0].address_components.length-1 ; i++){						
-					if(results[0].address_components[i].types[0] == "locality"){
-						user_location = results[0].address_components[i].long_name;					   	
-						$("input[name$='l']").val(results[0].address_components[i].long_name);						
-						break;
-					}
+					//if(results[0].address_components[i].types[0] == "locality"){
+						//user_location = results[0].address_components[i].long_name;					   	
+						//$("input[name$='l']").val(results[0].address_components[i].long_name);						
+						//break;
+					//}
 				}
         		} else {}
      	        }); 	
