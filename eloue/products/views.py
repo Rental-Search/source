@@ -182,8 +182,8 @@ def alert_delete(request, alert_id):
 def suggestion(request): 
     word = request.GET['q']
     resp = redis.get(word)
-    #if resp:
-    #    return HttpResponse(resp)
+    if resp:
+        return HttpResponse(resp)
     results_categories = SearchQuerySet().filter(categories__startswith=word).models(Product)
     resp_list = []
     for result in results_categories:
@@ -210,7 +210,6 @@ def suggestion(request):
         for m in re.finditer(r"^%s(\w+)"%word, result.description, re.I):
             resp_list.append(m.group(0).lower())
     resp_list = list(set(resp_list))
-    print ">>>>>>resp_list>>>>>>", resp_list
     resp_list = resp_list[-10:]
     resp = ""
     for el in resp_list:
