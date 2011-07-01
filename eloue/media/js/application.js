@@ -76,7 +76,7 @@ $(document).ready(function() {
             companyNameInput.hide();
         }
     });
-
+    
     // Phone field enabler/disabler
     phoneSelect = $("select[name$='phones']");
     phoneInput = $("input[name$='phones__phone']");
@@ -286,7 +286,10 @@ $(document).ready(function() {
         };
 
     });
-
+    
+    //autocomplete
+    $("#id_q").focus().autocomplete("http://localhost:8000/suggestion/");
+    
 });
 
 function hideNotification() {

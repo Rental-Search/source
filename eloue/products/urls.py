@@ -3,7 +3,9 @@ from django.conf.urls.defaults import *
 from django.utils.translation import ugettext as _
 
 from eloue.products.search_indexes import alert_search, product_search
-from eloue.products.views import product_create, product_list, product_edit, message_create, reply_product_related_message, compose_product_related_message, product_delete, alert_list, alert_create, alert_inform, alert_inform_success, alert_delete
+
+from eloue.products.views import product_create, product_list, product_edit, message_create, reply_product_related_message, compose_product_related_message, \
+    product_delete, alert_list, alert_create, alert_inform, alert_inform_success, alert_delete
 from eloue.rent.views import booking_create, booking_price, product_occupied_date
 
 
