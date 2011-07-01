@@ -27,6 +27,13 @@ from eloue.products.manager import ProductManager, PriceManager, QuestionManager
 from eloue.products.signals import post_save_answer, post_save_product, post_save_curiosity
 from eloue.products.utils import Enum
 from eloue.signals import post_save_sites
+
+from django_messages.models import Message 
+from eloue.accounts.models import Patron
+
+from django.db.models import signals
+from eloue import signals as eloue_signals
+
 from eloue.utils import currency, create_alternative_email
 
 UNIT = Enum([
@@ -221,7 +228,6 @@ class PropertyValue(models.Model):
         u'Mercedes'
         """
         return smart_unicode(self.value)
-    
 
 class Price(models.Model):
     """A price"""
@@ -378,7 +384,16 @@ class Curiosity(models.Model):
     
     class Meta:
         verbose_name_plural = "curiosities"
+        
+class ProductRelatedMessage(Message):
+    product = models.ForeignKey(Product, related_name='messages', blank=True, null=True)
     
+    
+if "notification" not in settings.INSTALLED_APPS:
+    from django_messages import utils
+    signals.post_save.connect(utils.new_message_email, sender=ProductRelatedMessage)
+    signals.pre_save.connect(eloue_signals.message_content_filter, sender=ProductRelatedMessage)
+    signals.pre_save.connect(eloue_signals.message_site_filter, sender=ProductRelatedMessage) 
 
 class Alert(models.Model):
     patron = models.ForeignKey(Patron, related_name='alerts')
@@ -410,16 +425,20 @@ class Alert(models.Model):
     
     @property
     def nearest_patrons(self):
-        nearest_addresses = Address.objects.distance(self.position).filter(position__distance_lt=(self.position, Distance(km=ALERT_RADIUS))).order_by('distance')
-        return Patron.objects.distinct().filter(addresses__in=nearest_addresses)[:10]
-    
+        if self.position:
+            nearest_addresses = Address.objects.distance(self.position).filter(position__distance_lt=(self.position, Distance(km=ALERT_RADIUS))).order_by('distance')
+            return Patron.objects.distinct().filter(addresses__in=nearest_addresses)[:10]
+        else:
+            return None 
+
     def send_alerts(self):
-        for patron in self.nearest_patrons:
-            message = create_alternative_email('products/emails/alert', {
-                'patron': patron,
-                'alert': self
-            }, settings.DEFAULT_FROM_EMAIL, [self.patron.email])
-            message.send()
+        if self.nearest_patrons:
+            for patron in self.nearest_patrons:
+                message = create_alternative_email('products/emails/alert', {
+                    'patron': patron,
+                    'alert': self
+                    }, settings.DEFAULT_FROM_EMAIL, [self.patron.email])
+                message.send()
     
     def send_alerts_answer(self, product):
         message = create_alternative_email('products/emails/alert_answer', {

@@ -4,6 +4,7 @@
 {% block title %}{% trans "Déclarez un incident" %}{% endblock %}
 
 {% block content %}
+
 <div id="content" class="xgrid">
     <div class="content-top">
         <ul id="menu" class="x12">
@@ -11,6 +12,7 @@
 			<li class="menu-tab">{% if booking.owner == user %}{% trans "Propriétaire" %}{% else %}<a href="{% url owner_booking %}">{% trans "Propriétaire" %}</a>{% endif %}</li>
 			<li class="menu-tab">{% if booking.borrower == user %}{% trans "Locataire" %}{% else %}<a href="{% url borrower_booking %}">{% trans "Locataire" %}</a>{% endif %} </li>
 			<li class="menu-tab"><a href="{% url patron_edit %}">{% trans "Mon compte" %}</a></li>
+			<li class="menu-tab"><a href="{% url messages_inbox %}">{% blocktrans %}Messages({{ messages_inbox_count }}){% endblocktrans %}</a></li>
         </ul>
     </div>
     <div id="sub-menu">

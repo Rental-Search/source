@@ -13,7 +13,9 @@ from eloue.accounts.forms import EmailPasswordResetForm, PatronSetPasswordForm
 from eloue.accounts.views import activate, authenticate, authenticate_headless, dashboard, patron_edit, owner_booking, owner_history, \
     borrower_booking, borrower_history, patron_edit_password, patron_paypal, owner_product, contact, alert_edit
 from eloue.api import api_v1
-from eloue.products.views import homepage, search, suggestion
+
+from eloue.products.views import homepage, search, compose_product_related_message, reply_product_related_message, suggestion
+
 from eloue.rent.views import booking_detail, booking_accept, booking_reject, booking_incident, booking_close, booking_cancel
 from eloue.sitemaps import CategorySitemap, FlatPageSitemap, PatronSitemap, ProductSitemap
 
@@ -81,6 +83,9 @@ urlpatterns = patterns('',
     url(r'^dashboard/booking/(?P<booking_id>[0-9a-f]{32})/reject/$', booking_reject, name="booking_reject"),
     url(r'^dashboard/booking/(?P<booking_id>[0-9a-f]{32})/incident/$', booking_incident, name="booking_incident"),
     url(r'^dashboard/booking/(?P<booking_id>[0-9a-f]{32})/close/$', booking_close, name="booking_close"),
+    url(r'^dashboard/messages/new', compose_product_related_message, name='compose_product_related_message'),
+    url(r'^dashboard/messages/(?P<message_id>[\d]+)/reply/$', reply_product_related_message, name='reply_product_related_message'),
+    url(r'^dashboard/messages/', include('django_messages.urls')),
     url(r'^media/(.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT}),
     url(r'^%s' % _("loueur/"), include('eloue.accounts.urls')),
     url(r'^%s' % _("location/"), include('eloue.products.urls')),

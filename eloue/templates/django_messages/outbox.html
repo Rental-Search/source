@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}{% trans "Votre tableau de bord" %}{% endblock %}
+
+{% block content %}
+<div id="content" class="xgrid">
+    <div class="content-top">
+        <ul id="menu" class="x12">
+			<li class="menu-tab first"><a href="{% url dashboard %}">{% trans "Tableau de bord" %}</a></li>
+			<li class="menu-tab"><a href="{% url owner_booking %}">{% trans "Propriétaire" %}</a></li>
+			<li class="menu-tab"><a href="{% url borrower_booking %}">{% trans "Locataire" %}</a></li>
+			<li class="menu-tab"><a href="{% url patron_edit %}">{% trans "Mon compte" %}</a></li>
+			<li class="menu-tab">{% blocktrans %}Messages({{ messages_inbox_count }}){% endblocktrans %}</li>
+		</ul>
+	</div>
+	<div id="sub-menu">
+		<ul class="x12">
+			<li class="sub-tab first"><a href="{% url messages_inbox %}">{% trans "Messages reçus"%}</a></li>
+			<li class="sub-tab selected">{% trans "Messages envoyés" %}</li>
+			<li class="sub-tab"><a href="{% url messages_trash %}">{% trans "Messages supprimés" %}</a></li>
+		</ul>
+	</div>
+	<div class="content-header x12">
+		<h1>{% trans "Messages envoyés" %}</h1>
+	</div>
+	<div class="x12">
+	    {% if message_list %} 
+        <table class="messages">
+            <thead>
+                <tr><th>{% trans "Subject" %}</th><th>{% trans "Sender" %}</th><th>{% trans "Reçu le" %}</th><th>{% trans "Action" %}</th></tr>
+            </thead>
+            <tbody>
+        {% for message in message_list %} 
+            <tr>
+                <td>
+                    {% if message.new %}<strong>{% endif %}
+                    {% if message.replied %}<em>{% endif %}
+                    <a href="{{message.get_absolute_url }}">{{ message.subject }}</a>
+                    {% if message.replied %}</em>{% endif %}
+                    {% if message.new %}</strong>{% endif %}</td>
+                <td>{{ message.sender }}</td>
+                <td>{{ message.sent_at|date:_("DATETIME_FORMAT") }}</td>
+                <td>
+                    <a href="{{message.get_absolute_url }}">{% trans "Lire" %}</a>
+                </td>
+            </tr>
+        {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p>{% trans "No messages." %}</p>
+        {% endif %}
+	</div>
+</div>
+{% endblock%}

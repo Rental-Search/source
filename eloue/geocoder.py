@@ -59,7 +59,9 @@ class GoogleGeocoder(Geocoder):
         json = simplejson.load(urllib.urlopen(
             'http://maps.googleapis.com/maps/api/geocode/json?' + urllib.urlencode({
                 'address': location,
-                'sensor': 'false'
+                'oe': 'utf8',
+                'sensor': 'false',
+                'region': GOOGLE_REGION_CODE
             })
         ))
         try:
