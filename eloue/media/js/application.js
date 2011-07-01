@@ -157,7 +157,7 @@ $(document).ready(function() {
     // Date picker
     $('input[name$=started_at_0]').datepicker({
         dateFormat: 'dd/mm/yy',
-        minDate: 0,
+        minDate: 1,
         maxDate: '+360d',
         beforeShowDay: occupiedDays,
         onSelect: function(dateText, inst) {
