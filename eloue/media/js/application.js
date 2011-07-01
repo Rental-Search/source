@@ -4,7 +4,7 @@ jQuery.fn.reverse = function() {
 
 $(document).ready(function() {
     // geocode
-if ($("input[name$='l']") && $("input[name$='l']").val() == '' && !$("input[name$='0-email']") ){
+if ($("input[name$='l']") && $("input[name$='l']").val() == '' && ($("input[name$='0-email']").length==0) ){
     var geocoder;
     var latitude;
     var longitude;
@@ -109,7 +109,7 @@ if ($("input[name$='l']") && $("input[name$='l']").val() == '' && !$("input[name
 
 
     // New number field display/none
-    if($("#select_phone")){	
+    if($("#select_phone").length==1){	
 	newPhoneInput = $(".add_new_phone");
 	newPhoneInput.hide();
  	$("a#link_add_phone").click(function(){		
@@ -118,7 +118,7 @@ if ($("input[name$='l']") && $("input[name$='l']").val() == '' && !$("input[name
     }
 
     // New adress field display/none
-    if($("#select_addr")){    	
+    if($("#select_addr").length==1){    	
 	newAddrInput = $(".add_new_addr");
 	newAddrInput.hide();
 	$("a#link_add_addr").click(function(){		
