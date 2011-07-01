@@ -4,14 +4,14 @@ jQuery.fn.reverse = function() {
 
 $(document).ready(function() {
     // geocode
-	if (form.l){    
+/*	if (form.l){    
     var geocoder;
     var latitude;
     var longitude;
     var altitude;
     var user_location;  
   
-    geocoder = new google.maps.Geocoder();
+    //geocoder = new google.maps.Geocoder();
            
     if (navigator.geolocation){
       navigator.geolocation.getCurrentPosition(function(position){
@@ -32,7 +32,7 @@ $(document).ready(function() {
 		});
 	 } else {alert("Votre navigateur ne prend pas en compte la géolocalisation HTML5");}
  	}
-    		
+    	*/	
     
     // Password field enabler/disabler
     var passwordInput,
