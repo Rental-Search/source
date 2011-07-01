@@ -182,8 +182,8 @@ def alert_delete(request, alert_id):
 def suggestion(request): 
     word = request.GET['q']
     resp = redis.get(word)
-    if resp:
-        return HttpResponse(resp)
+    #if resp:
+    #    return HttpResponse(resp)
     results_categories = SearchQuerySet().filter(categories__startswith=word).models(Product)
     resp_list = []
     for result in results_categories:
@@ -191,26 +191,26 @@ def suggestion(request):
             for category in result.categories:
                 if category.startswith(word):
                     if "-" in category:
-                        resp_list.append(category.split("-")[0])
+                        resp_list.append(category.split("-")[0].lower())
                     else:
-                        resp_list.append(category)
-                    
+                        resp_list.append(category.lower())      
         else:
             category = result.categories[0]
             if category.startswith(word):
                 if "-" in category:
-                    resp_list.append(category.split("-")[0])
+                    resp_list.append(category.split("-")[0].lower())
                 else:
-                    resp_list.append(category)
+                    resp_list.append(category.lower())
     results_description = SearchQuerySet().autocomplete(description=word)
     results_summary = SearchQuerySet().autocomplete(summary=word)
     for result in results_summary:
         for m in re.finditer(r"^%s(\w+)"%word, result.summary, re.I):
-            resp_list.append(m.group(0))
+            resp_list.append(m.group(0).lower())
     for result in results_description:
         for m in re.finditer(r"^%s(\w+)"%word, result.description, re.I):
-            resp_list.append(m.group(0))
+            resp_list.append(m.group(0).lower())
     resp_list = list(set(resp_list))
+    print ">>>>>>resp_list>>>>>>", resp_list
     resp_list = resp_list[-10:]
     resp = ""
     for el in resp_list:
