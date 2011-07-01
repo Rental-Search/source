@@ -5,8 +5,7 @@ import time
 from django.utils import formats
 from django.utils.translation import ugettext as _
 
-from eloue.rent.forms import DATE_FORMAT
-
+DATE_FORMAT = ['%d/%m/%Y', '%d-%m-%Y', '%d %m %Y', '%d %m %y', '%d/%m/%y', '%d-%m-%y']
 
 def combine(date_part, time_part):
     """
@@ -31,6 +30,24 @@ def combine(date_part, time_part):
     return datetime.datetime.combine(date_part, time_part)
 combine.date_format = DATE_FORMAT
 
+
+def datespan(startDate, endDate, delta=datetime.timedelta(days=1)):
+    currentDate = startDate
+    result = [currentDate]
+    while currentDate < endDate:
+        currentDate += delta
+        result.append(currentDate)
+    return result
+
+def get_product_occupied_date(bookings):
+    now = datetime.datetime.now()
+    date = []
+    for booking in bookings:
+        if booking.started_at < now:
+            date.extend(datespan(now, booking.ended_at))
+        else:
+            date.extend(datespan(booking.started_at, booking.ended_at))
+    return date
 
 def spellout(number, unit="", decimal=""):
     """Spell out numbers the dirty way."""
