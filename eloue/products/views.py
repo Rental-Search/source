@@ -3,7 +3,6 @@ from django.conf import settings
 from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
-from django.core.urlresolvers import reverse
 from django.views.decorators.vary import vary_on_headers
 from django.http import Http404
 from django.shortcuts import get_object_or_404
@@ -13,16 +12,25 @@ from django.views.decorators.cache import never_cache, cache_page
 from django.views.decorators.vary import vary_on_cookie
 from django.views.generic.simple import direct_to_template, redirect_to
 from django.views.generic.list_detail import object_list
+
+from django.shortcuts import render_to_response
+from django.template import RequestContext
 from django.views.generic.list_detail import object_detail
 
+from django.http import Http404, HttpResponseRedirect
 from haystack.query import SearchQuerySet
 
 from eloue.decorators import ownership_required, secure_required, mobify
 from eloue.accounts.forms import EmailAuthenticationForm
 from eloue.accounts.models import Patron
-from eloue.products.forms import AlertSearchForm, FacetedSearchForm, ProductForm, ProductEditForm, AlertForm
-from eloue.products.models import Category, Product, Curiosity, UNIT, Alert
-from eloue.products.wizard import ProductWizard, AlertWizard, AlertAnswerWizard
+
+from eloue.products.forms import AlertSearchForm, AlertForm, FacetedSearchForm, ProductForm, ProductEditForm, MessageEditForm, MessageComposeForm
+
+from eloue.products.models import Category, Product, Curiosity, UNIT, ProductRelatedMessage, Alert
+from eloue.products.wizard import ProductWizard, MessageWizard, AlertWizard, AlertAnswerWizard
+from django_messages.forms import ComposeForm
+from django_messages.utils import format_quote
+
 
 
 PAGINATE_PRODUCTS_BY = getattr(settings, 'PAGINATE_PRODUCTS_BY', 10)
@@ -68,6 +76,64 @@ def product_edit(request, slug, product_id):
         product = form.save()
         messages.success(request, _(u"Votre produit a bien été édité !"))
     return direct_to_template(request, 'products/product_edit.html', extra_context={'product': product, 'form': form})
+
+@login_required
+def compose_product_related_message(request, recipient=None, form_class=MessageComposeForm,
+    template_name='django_messages/compose.html', success_url=None, recipient_filter=None):
+    if request.method == "POST":
+        sender = request.user
+        form = form_class(request.POST, recipient_filter=recipient_filter)
+        if form.is_valid():
+            form.save(sender=request.user)
+            messages.add_message(request, messages.SUCCESS, _(u"Message successfully sent."))
+            if success_url is None:
+                success_url = reverse('messages_inbox')
+            if request.GET.has_key('next'):
+                success_url = request.GET['next']
+            return HttpResponseRedirect(success_url)
+    else:
+        form = form_class()
+        if recipient is not None:
+            recipients = [u.username for u in User.objects.filter(username__in=[r.strip() for r in recipient.split('+')])]
+            form.fields['recipient'].initial = ','.join(recipients)
+    return render_to_response(template_name, {
+        'form': form,
+        }, context_instance=RequestContext(request))
+
+@login_required
+def reply_product_related_message(request, message_id, form_class=MessageEditForm,
+    template_name='django_messages/compose.html', success_url=None, recipient_filter=None,
+    quote=format_quote):
+    parent = get_object_or_404(ProductRelatedMessage, id=message_id)
+    product = parent.product
+    
+    if parent.sender != request.user and parent.recipient != request.user:
+        raise Http404
+    if request.method == "POST":
+        sender = request.user
+        form = form_class(request.POST)
+        if form.is_valid():
+            form.save(product=product, sender=request.user, recipient=parent.sender, parent_msg=parent)
+            messages.add_message(request, messages.SUCCESS, _(u"Message successfully sent."))
+            if success_url is None:
+                success_url = reverse('messages_inbox')
+            return HttpResponseRedirect(success_url)
+    else:
+        form = form_class({
+            'body': quote(parent.sender, parent.body),
+            'subject': _(u"Re: %(subject)s") % {'subject': parent.subject},
+            'recipient': parent.sender
+            })
+    return render_to_response(template_name, {
+        'form': form,
+    }, context_instance=RequestContext(request))
+
+
+@never_cache
+@secure_required
+def message_create(request, product_id, recipient_id):
+    message_wizard = MessageWizard([MessageEditForm, EmailAuthenticationForm])
+    return message_wizard(request, product_id, recipient_id)
 
 
 @login_required

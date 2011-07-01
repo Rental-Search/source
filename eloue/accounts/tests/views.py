@@ -9,10 +9,25 @@ from django.utils.translation import ugettext as _
 from django.contrib.sites.models import Site
 from eloue.accounts.forms import PatronPasswordChangeForm, ContactForm
 from eloue.accounts.models import Patron
+from eloue.payments import paypal_payment
+from eloue.payments.paypal_payment import verify_paypal_account
 
+def dummy_verify_paypal_account(email, first_name, last_name):
+    if first_name=='Lin' and last_name=='LIU' and email=='unverified_paypal_account@e-loue.com':
+        return 'UNVERIFIED'
+    elif first_name=='Lin' and last_name=='LIU' and email=='invalid@e-loue.com':
+        return 'INVALID'
+    elif first_name=='Lin' and last_name=='LIU' and email=='test_verified_status@e-loue.com':
+        return 'VERIFIED'
 
 class PatronTest(TestCase):
     fixtures = ['category', 'patron', 'address', 'price', 'product', 'booking']
+    
+    def setUp(self):
+        paypal_payment.verify_paypal_account = dummy_verify_paypal_account
+    
+    def tearDown(self):
+        paypal_payment.verify_paypal_account = verify_paypal_account
         
     def test_patron_detail_view(self):
         response = self.client.get(reverse('patron_detail', args=['alexandre']))

@@ -8,14 +8,18 @@ class Migration(SchemaMigration):
 
     def forwards(self, orm):
         
-        # Adding field 'Product.payment_type'
-        db.add_column('products_product', 'payment_type', self.gf('django.db.models.fields.PositiveSmallIntegerField')(default=1), keep_default=False)
+        # Adding model 'ProductRelatedMessage'
+        db.create_table('products_productrelatedmessage', (
+            ('message_ptr', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['django_messages.Message'], unique=True, primary_key=True)),
+            ('product', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='messages', null=True, to=orm['products.Product'])),
+        ))
+        db.send_create_signal('products', ['ProductRelatedMessage'])
 
 
     def backwards(self, orm):
         
-        # Deleting field 'Product.payment_type'
-        db.delete_column('products_product', 'payment_type')
+        # Deleting model 'ProductRelatedMessage'
+        db.delete_table('products_productrelatedmessage')
 
 
     models = {
@@ -39,6 +43,7 @@ class Migration(SchemaMigration):
             'is_professional': ('django.db.models.fields.NullBooleanField', [], {'default': 'None', 'null': 'True', 'blank': 'True'}),
             'is_subscribed': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'modified_at': ('django.db.models.fields.DateTimeField', [], {}),
+            'new_messages_alerted': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
             'paypal_email': ('django.db.models.fields.EmailField', [], {'max_length': '75', 'null': 'True', 'blank': 'True'}),
             'sites': ('django.db.models.fields.related.ManyToManyField', [], {'related_name': "'patrons'", 'symmetrical': 'False', 'to': "orm['sites.Site']"}),
             'slug': ('django.db.models.fields.SlugField', [], {'unique': 'True', 'max_length': '50', 'db_index': 'True'}),
@@ -79,6 +84,20 @@ class Migration(SchemaMigration):
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'model': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '100'})
+        },
+        'django_messages.message': {
+            'Meta': {'ordering': "['-sent_at']", 'object_name': 'Message'},
+            'body': ('django.db.models.fields.TextField', [], {}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'parent_msg': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'next_messages'", 'null': 'True', 'to': "orm['django_messages.Message']"}),
+            'read_at': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
+            'recipient': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'received_messages'", 'null': 'True', 'to': "orm['auth.User']"}),
+            'recipient_deleted_at': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
+            'replied_at': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
+            'sender': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'sent_messages'", 'to': "orm['auth.User']"}),
+            'sender_deleted_at': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
+            'sent_at': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
+            'subject': ('django.db.models.fields.CharField', [], {'max_length': '120'})
         },
         'products.alert': {
             'Meta': {'object_name': 'Alert'},
@@ -161,6 +180,11 @@ class Migration(SchemaMigration):
             'quantity': ('django.db.models.fields.IntegerField', [], {}),
             'sites': ('django.db.models.fields.related.ManyToManyField', [], {'related_name': "'products'", 'symmetrical': 'False', 'to': "orm['sites.Site']"}),
             'summary': ('django.db.models.fields.CharField', [], {'max_length': '255'})
+        },
+        'products.productrelatedmessage': {
+            'Meta': {'ordering': "['-sent_at']", 'object_name': 'ProductRelatedMessage', '_ormbases': ['django_messages.Message']},
+            'message_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['django_messages.Message']", 'unique': 'True', 'primary_key': 'True'}),
+            'product': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'messages'", 'null': 'True', 'to': "orm['products.Product']"})
         },
         'products.productreview': {
             'Meta': {'object_name': 'ProductReview'},

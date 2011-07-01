@@ -5,142 +5,143 @@
 
 {% block content %}
 <div id="content" class="xgrid">
-    <div class="content-top">
-        <ul id="menu" class="x12">
+       <div class="content-top">
+         <ul id="menu" class="x12">
             <li class="menu-tab first"><a href="{% url dashboard %}">{% trans "Tableau de bord" %}</a></li>
 			<li class="menu-tab"><a href="{% url owner_booking %}">{% trans "Propriétaire" %}</a></li>
 			<li class="menu-tab"><a href="{% url borrower_booking %}">{% trans "Locataire" %}</a></li>
 			<li class="menu-tab">{% trans "Mon compte" %}</li>
-        </ul>
-    </div>
-    <div id="sub-menu">
-        <ul class="x12">
-            <li class="sub-tab first">{% trans "Votre profil" %}</li>
-			<li class="sub-tab"><a href="{% url patron_edit_password %}">{% trans "Modification du mot de passe" %}</a></li>
-        </ul>
-    </div>
-    <div class="x8 p2">
-        <form class="form" action="" method="POST">
-    		{% csrf_token %}
-    		<table class="more-info">
-    		    {% if form.is_professional %}
-        		   				
-			<tr>
-        			<td colspan="2" {% if form.is_professional.errors %} class="error-field" {% endif %}>
-        				<label>{{ form.is_professional.label }} {% if form.is_professional.field.required %}*{% endif%} :</label>
-        				{{ form.is_professional }} oui
-        				{% if form.is_professional.errors %}
-        				    {% for error in form.is_professional.errors %}
-        								<br />
-        				        <span class="error">{{ error|escape }}</span>
-        				    {% endfor %}
-        				{% endif %}
-        			</td>
-    			</tr>        		
-			<tr class="company-name">
-        			<th><label>{{ form.company_name.label }} {% if form.company_name.field.required %}*{% endif %} :</label></th>
-        			<td {% if form.company_name.errors %} class="error-field" {% endif %}>
-        				{{ form.company_name }}
-        				{% if form.company_name.errors %}
-        				    {% for error in form.company_name.errors %}
-        								<br />
-        				        <span class="error">{{ error|escape }}</span>
-        				    {% endfor %}
-        				{% endif %}
-        			</td>
-        		</tr>
-        	    {% endif %}
-    			{% if form.email %}
-    			<tr>
-    				<th><label>{{ form.email.label }} {% if form.email.field.required %}*{% endif %} :</label></th>
-    				<td {% if form.email.errors %} class="error-field" {% endif %}>
-    					{{ form.email }}
-    					{% if form.email.errors %}
-    					    {% for error in form.email.errors %}
-    									<br />
-    					        <span class="error">{{ error|escape }}</span>
-    					    {% endfor %}
-    					{% endif %}
-    				</td>
-    			</tr>
-    			{% endif %}
-    			{% if form.username %}
-    			<tr>
-    				<th><label>{{ form.username.label }} {% if form.username.field.required %}*{% endif %} :</label></th>
-    				<td {% if form.username.errors %} class="error-field" {% endif %}>
-    					{{ form.username }}
-    					{% if form.username.errors %}
-    					    {% for error in form.username.errors %}
-    									<br />
-    					        <span class="error">{{ error|escape }}</span>
-    					    {% endfor %}
-    					{% endif %}
-    				</td>
-    			</tr>
-    			{% endif %}
-    			{% if form.civility %}
-    			<tr>
-    				<th><label>{{ form.civility.label }} {% if form.civility.field.required %}*{% endif %} :</label></th>
-    				<td {% if form.civility.errors %} class="error-field" {% endif %}>
-    					{{ form.civility }}
-    					{% if form.civility.errors %}
-    				 		{% for error in form.civility.errors %}
-    							<br />
-    					  	<span class="error">{{ error|escape }}</span>
-    						{% endfor %}
-    				{% endif %}
-    				</td>
-    			</tr>
-    			{% endif %}
-    			{% if form.first_name %}
-    			<tr>
-    				<th><label>{{ form.first_name.label }} {% if form.first_name.field.required %}*{% endif %} :</label></th>
-    				<td {% if form.first_name.errors %} class="error-field" {% endif %}>
-    					{{ form.first_name }}
-    					{% if form.first_name.errors %}
-    					    {% for error in form.first_name.errors %}
-    									<br />
-    					        <span class="error">{{ error|escape }}</span>
-    					    {% endfor %}
-    					{% endif %}
-    				</td>
-    			</tr>
-    			{% endif %}
-    			{% if form.last_name %}
-    			<tr>
-    				<th><label>{{ form.last_name.label }} {% if form.last_name.field.required %}*{% endif %} :</label></th>
-    				<td {% if form.last_name.errors %} class="error-field" {% endif %}>
-    					{{ form.last_name }}
-    					{% if form.last_name.errors %}
-    					    {% for error in form.last_name.errors %}
-    									<br />
-    					        <span class="error">{{ error|escape }}</span>
-    					    {% endfor %}
-    					{% endif %}
-    				</td>
-    			</tr>
-    			{% endif%}
-    			{% if form.paypal_email %}
-    			<tr>
-    				<th><label>{{ form.paypal_email.label }} {% if form.paypal_email.field.required %}*{% endif %} :</label></th>
-    				<td {% if form.paypal_email.errors %} class="error-field" {% endif %}>
-    					{{ form.paypal_email }}
-    					{% if form.paypal_email.errors %}
-    						{% for error in form.paypal_email.errors %}
-    							<br />
-    							<span class="error">{{ error|escape }}</span>
-    						{% endfor %}
-    					{% endif %}
-    				</td>
-    			</tr>
-    			{% endif %}
-    		</table>
-    		<p class="required-field">{% trans "* champ obligatoire" %}</p>
-    </div>
-    <div id="submit-wizard" class="x12">
-         <p>
-    		<input type="submit" class="btn big-green" value="Sauvegarder" />
-    	</p>
-    </div>
+			<li class="menu-tab"><a href="{% url messages_inbox %}">{% blocktrans %}Messages({{ messages_inbox_count }}){% endblocktrans %}</a></li>
+		 </ul>
+	    </div>
+	    <div id="sub-menu">
+	        <ul class="x12">
+	            <li class="sub-tab first">{% trans "Votre profil" %}</li>
+		    <li class="sub-tab"><a href="{% url patron_edit_password %}">{% trans "Modification du mot de passe" %}</a></li>
+	        </ul>
+	    </div>
+	    <div class="x8 p2">
+	        <form class="form" action="" method="POST">
+	    		{% csrf_token %}
+	    		<table class="more-info">
+	    		    {% if form.is_professional %}
+	        		<tr>
+	        			<td colspan="2" {% if form.is_professional.errors %} class="error-field" {% endif %}>
+	        				<label>{{ form.is_professional.label }} {% if form.is_professional.field.required %}*{% endif%} :</label>
+	        				{{ form.is_professional }} oui
+	        				{% if form.is_professional.errors %}
+	        				    {% for error in form.is_professional.errors %}
+	        								<br />
+	        				        <span class="error">{{ error|escape }}</span>
+	        				    {% endfor %}
+	        				{% endif %}
+	        			</td>
+	        		</tr>
+	        		<tr class="company-name">
+	        			<th><label>{{ form.company_name.label }} {% if form.company_name.field.required %}*{% endif %} :</label></th>
+	        			<td {% if form.company_name.errors %} class="error-field" {% endif %}>
+	        				{{ form.company_name }}
+	        				{% if form.company_name.errors %}
+	        				    {% for error in form.company_name.errors %}
+	        								<br />
+	        				        <span class="error">{{ error|escape }}</span>
+	        				    {% endfor %}
+	        				{% endif %}
+	        			</td>
+	        		</tr>
+	        		{% endif %}
+	    			{% if form.email %}
+	    			<tr>
+	    				<th><label>{{ form.email.label }} {% if form.email.field.required %}*{% endif %} :</label></th>
+	    				<td {% if form.email.errors %} class="error-field" {% endif %}>
+	    					{{ form.email }}
+	    					{% if form.email.errors %}
+	    					    {% for error in form.email.errors %}
+	    									<br />
+	    					        <span class="error">{{ error|escape }}</span>
+	    					    {% endfor %}
+	    					{% endif %}
+	    				</td>
+	    			</tr>
+	    			{% endif %}
+	    			{% if form.username %}
+	    			<tr>
+	    				<th><label>{{ form.username.label }} {% if form.username.field.required %}*{% endif %} :</label></th>
+	    				<td {% if form.username.errors %} class="error-field" {% endif %}>
+	    					{{ form.username }}
+	    					{% if form.username.errors %}
+	    					    {% for error in form.username.errors %}
+	    									<br />
+	    					        <span class="error">{{ error|escape }}</span>
+	    					    {% endfor %}
+	    					{% endif %}
+	    				</td>
+	    			</tr>
+	    			{% endif %}
+	    			{% if form.civility %}
+	    			<tr>
+	    				<th><label>{{ form.civility.label }} {% if form.civility.field.required %}*{% endif %} :</label></th>
+	    				<td {% if form.civility.errors %} class="error-field" {% endif %}>
+	    					{{ form.civility }}
+	    					{% if form.civility.errors %}
+	    				 		{% for error in form.civility.errors %}
+	    							<br />
+	    					  	<span class="error">{{ error|escape }}</span>
+	    						{% endfor %}
+	    				{% endif %}
+	    				</td>
+	    			</tr>
+	    			{% endif %}
+	    			{% if form.first_name %}
+	    			<tr>
+	    				<th><label>{{ form.first_name.label }} {% if form.first_name.field.required %}*{% endif %} :</label></th>
+	    				<td {% if form.first_name.errors %} class="error-field" {% endif %}>
+	    					{{ form.first_name }}
+	    					{% if form.first_name.errors %}
+	    					    {% for error in form.first_name.errors %}
+	    									<br />
+	    					        <span class="error">{{ error|escape }}</span>
+	    					    {% endfor %}
+	    					{% endif %}
+	    				</td>
+	    			</tr>
+	    			{% endif %}
+	    			{% if form.last_name %}
+	    			<tr>
+	    				<th><label>{{ form.last_name.label }} {% if form.last_name.field.required %}*{% endif %} :</label></th>
+	    				<td {% if form.last_name.errors %} class="error-field" {% endif %}>
+	    					{{ form.last_name }}
+	    					{% if form.last_name.errors %}
+	    					    {% for error in form.last_name.errors %}
+	    									<br />
+	    					        <span class="error">{{ error|escape }}</span>
+	    					    {% endfor %}
+	    					{% endif %}
+	    				</td>
+	    			</tr>
+	    			{% endif%}
+	    			{% if form.paypal_email %}
+	    			<tr>
+	    				<th><label>{{ form.paypal_email.label }} {% if form.paypal_email.field.required %}*{% endif %} :</label></th>
+	    				<td {% if form.paypal_email.errors %} class="error-field" {% endif %}>
+	    					{{ form.paypal_email }}
+	    					{% if form.paypal_email.errors %}
+	    						{% for error in form.paypal_email.errors %}
+	    							<br />
+	    							<span class="error">{{ error|escape }}</span>
+	    						{% endfor %}
+	    					{% endif %}
+	    				</td>
+	    			</tr>
+	    			{% endif %}
+	    		</table>
+	    		<p class="required-field">{% trans "* = champ obligatoire" %}</p>
+	    </div>
+	    <div id="submit-wizard" class="x12">
+	         <p>
+	    		<a href="{% url home %}">Annuler</a> ou
+	    		<input type="submit" class="btn big-green" value="Sauvegarder" />
+	    	</p>
+	    </div>
 </div>
 {% endblock %}
