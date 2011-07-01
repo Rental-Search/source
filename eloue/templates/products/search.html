@@ -20,6 +20,7 @@
 			<p>
 				<label>{% trans "Où ?" %}</label><br />
 				{{ form.l }}<br />
+				<span>{% trans "Exemple :" %} </span> <a href="{% url product_list %}?l={% trans "Paris, 75012" %}">{% trans "Paris, 75012" %}</a>
 			</p>
 		</div>
 		<div class="x2">
