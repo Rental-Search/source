@@ -17,7 +17,7 @@ from django.views.decorators.cache import never_cache
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic.list_detail import object_detail
 from django.views.generic.simple import direct_to_template, redirect_to
-
+from django.db.models import Q
 from django_lean.experiments.models import GoalRecord
 from django_lean.experiments.utils import WebUser
 
@@ -28,6 +28,8 @@ from eloue.rent.forms import BookingForm, BookingConfirmationForm, BookingStateF
 from eloue.rent.models import Booking
 from eloue.rent.wizard import BookingWizard
 from eloue.utils import currency
+from datetime import datetime, timedelta
+from eloue.rent.utils import get_product_occupied_date
 
 log = logbook.Logger('eloue.rent')
 
@@ -65,6 +67,15 @@ def pay_ipn(request):
             booking.state = Booking.STATE.CLOSED
         booking.save()
     return HttpResponse()
+
+
+def product_occupied_date(request, slug, product_id):
+    product = get_object_or_404(Product.on_site, pk=product_id)
+    bookings = Booking.objects.filter(product=product).filter(Q(state="pending")|Q(state="ongoing"))
+    dates = get_product_occupied_date(bookings)
+    formated_date = [str(d.year) + '-' + str(d.month) + '-' + str(d.day) for d in dates]
+    formated_date = list(set(formated_date))
+    return HttpResponse(simplejson.dumps(formated_date), mimetype='application/json')
 
 
 @require_GET

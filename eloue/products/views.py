@@ -59,7 +59,7 @@ def search(request):
 def product_create(request, *args, **kwargs):
     wizard = ProductWizard([ProductForm, EmailAuthenticationForm])
     return wizard(request, *args, **kwargs)
-
+    
 
 @login_required
 @ownership_required(model=Product, object_key='product_id', ownership=['owner'])
@@ -201,6 +201,7 @@ def product_list(request, urlbits, sqs=SearchQuerySet(), suggestions=None, page=
             'facets': sqs.facet_counts(), 'form': form, 'breadcrumbs': breadcrumbs, 'suggestions': suggestions,
             'urlbits': dict((facet['label'], facet['value']) for facet in breadcrumbs.values() if facet['facet'])
     })
+
 
 
 @never_cache

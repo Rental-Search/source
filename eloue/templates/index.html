@@ -53,7 +53,7 @@
     				 {% endwith %}
     				</a>
     				<h3>
-    				    <a href="{{ product.get_absolute_url }}">{{ product.summary|lower|capfirst }}</a>
+    				    <a href="{{ product.get_absolute_url }}">{{ product.summary|lower|capfirst|truncate:20 }}</a>
     				</h3>
     				{% with product.prices.day|first as price %}
                     <span class="price">{{ price }}/jour</span>
