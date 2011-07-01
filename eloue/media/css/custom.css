@@ -918,11 +918,17 @@ body { background: #ECF6FF url("../images/body-bg.png") repeat 0 0; }
 
 #owner-info 
 { 
-  height: 80px;
   -moz-border-radius:5px;
   -webkit-border-radius:5px;
   border-radius:5px; 
 }
+  #owner-info h3 {
+    background: transparent url("../images/content-h-bg.png") repeat-x 0 bottom;
+    padding-bottom: 15px;
+    text-indent: 0;
+    color: #364C59;
+  }
+  
   #owner-info img 
   {
     float: left; 
@@ -930,6 +936,8 @@ body { background: #ECF6FF url("../images/body-bg.png") repeat 0 0; }
     padding: 2px; 
     margin-right: 10px;
   }
+  
+  #owner-info p { height: 40px;}
 
 /* --------------------------------------------------------------
 

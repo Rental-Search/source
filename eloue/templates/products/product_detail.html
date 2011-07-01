@@ -98,6 +98,7 @@
             </div>
         </div>
         <div id="owner-info" class="box-welcome">
+            <h3>{% trans "Propriétaire" %}</h3>
             <img src="{{ MEDIA_URL }}images/default_avatar.png" alt="{% trans "loueur"%}{{ product.owner.username }}">
             <p class="pseudo">
                 <a href="{{ product.owner.get_absolute_url }}">{{ product.owner.username }}</a>
