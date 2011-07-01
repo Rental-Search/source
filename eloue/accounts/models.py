@@ -263,7 +263,6 @@ class Address(models.Model):
     
     def save(self, *args, **kwargs):
         self.position = self.geocode()
-        print ">>>>>>self.position>>>>>>", self.position
         super(Address, self).save(*args, **kwargs)
     
     def clean(self):
@@ -274,7 +273,6 @@ class Address(models.Model):
     
     def geocode(self):
         name, (lat, lon), radius = GoogleGeocoder().geocode("%s %s %s %s" % (self.address1, self.address2, self.zipcode, self.city))
-        print ">>>>>>>>>geocode>>>>>>>>>", (lat, lon)
         if lat and lon:
             return Point(lat, lon)
     
