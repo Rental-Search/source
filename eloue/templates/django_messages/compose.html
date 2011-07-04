@@ -27,6 +27,20 @@
 	    <form action="" method="post">
 	    {% csrf_token %} 
 	    <table class="more-info">
+	        {% if form.recipient %}
+	        <tr>
+				<th><label>{{ form.recipient.label }} * :</label></th>
+				<td {% if form.picture.errors %} class="error-field" {% endif %}>
+				{{ form.recipient }}
+				{% if form.recipient.errors %}
+				    {% for error in form.recipient.errors %}
+						<br />
+					    <span class="error">{{ error|escape }}</span>
+					{% endfor %}
+				{% endif %}
+				</td>
+			</tr>
+			{% endif %}
 	        <tr>
 				<th><label>{{ form.subject.label }} * :</label></th>
 				<td {% if form.picture.errors %} class="error-field" {% endif %}>
