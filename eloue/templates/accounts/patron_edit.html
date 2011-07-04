@@ -28,7 +28,7 @@
 	        		<tr>
 	        			<td colspan="2" {% if form.is_professional.errors %} class="error-field" {% endif %}>
 	        				<label>{{ form.is_professional.label }} {% if form.is_professional.field.required %}*{% endif%} :</label>
-	        				{{ form.is_professional }} oui
+	        				{{ form.is_professional }} {% trans "oui" %}
 	        				{% if form.is_professional.errors %}
 	        				    {% for error in form.is_professional.errors %}
 	        								<br />
@@ -140,7 +140,7 @@
 	    <div id="submit-wizard" class="x12">
 	         <p>
 	    		<a href="{% url home %}">Annuler</a> ou
-	    		<input type="submit" class="btn big-green" value="Sauvegarder" />
+	    		<input type="submit" class="btn big-green" value={% trans "Sauvegarder" %} />
 	    	</p>
 	    </div>
 </div>

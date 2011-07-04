@@ -7,33 +7,34 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-06-21 17:07+0200\n"
-"PO-Revision-Date: 2011-06-21 16:59+0100\n"
-"Last-Translator: aze <aze>\n"
+"POT-Creation-Date: 2011-07-04 15:18+0200\n"
+"PO-Revision-Date: 2011-07-04 15:18+0100\n"
+"Last-Translator: CHEN Xinlei <xinlei.chen@e-loue.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: settings.py:59
+#: settings.py:58
 msgid "Français"
 msgstr "French "
 
-#: settings.py:60
+#: settings.py:59
 msgid "English"
 msgstr "English"
 
-#: urls.py:84
+#: urls.py:87
 msgid "loueur/"
 msgstr "renter/"
 
-#: urls.py:85 products/templatetags/facets.py:27
+#: urls.py:88 products/templatetags/facets.py:27
 #: products/templatetags/facets.py:63 products/templatetags/facets.py:114
 msgid "location/"
 msgstr "rent/"
 
-#: urls.py:93
+#: urls.py:96
 msgid "recherche"
 msgstr "search"
 
@@ -94,12 +95,11 @@ msgid "Non"
 msgstr "No"
 
 #: accounts/forms.py:39
-#, fuzzy
 msgid "Oui"
-msgstr "yes"
+msgstr "Yes"
 
 #: accounts/forms.py:47 accounts/forms.py:92 accounts/forms.py:131
-#: accounts/forms.py:419
+#: accounts/forms.py:424
 msgid "Email"
 msgstr "Email"
 
@@ -128,23 +128,23 @@ msgstr "Please enter a valid email address and password"
 msgid "Ce compte est inactif parce qu'il n'a pas été activé."
 msgstr "This account is inactive as it has not been activated yet."
 
-#: accounts/forms.py:125 accounts/forms.py:285
+#: accounts/forms.py:125 accounts/forms.py:287
 msgid "Pseudo"
 msgstr "Username"
 
-#: accounts/forms.py:126 accounts/forms.py:286
+#: accounts/forms.py:126 accounts/forms.py:288
 msgid "Required. 30 characters or fewer. Letters, digits and @/./+/-/_ only."
 msgstr "Required. 30 characters or fewer. Letters, digits and @/./+/-/_ only."
 
-#: accounts/forms.py:127 accounts/forms.py:287
+#: accounts/forms.py:127 accounts/forms.py:289
 msgid "This value may contain only letters, numbers and @/./+/-/_ characters."
 msgstr "This value may contain only letters, numbers and @/./+/-/_ characters."
 
-#: accounts/forms.py:129 accounts/forms.py:294
+#: accounts/forms.py:129 accounts/forms.py:296
 msgid "Prénom"
 msgstr "First name"
 
-#: accounts/forms.py:130 accounts/forms.py:295
+#: accounts/forms.py:130 accounts/forms.py:297
 msgid "Nom"
 msgstr "Surname"
 
@@ -152,23 +152,23 @@ msgstr "Surname"
 msgid "Email PayPal"
 msgstr "Paypal Email"
 
-#: accounts/forms.py:136 accounts/forms.py:292
+#: accounts/forms.py:136 accounts/forms.py:294
 msgid "Êtes-vous un professionnel ?"
 msgstr "Are you a professional?"
 
-#: accounts/forms.py:138 accounts/forms.py:293
+#: accounts/forms.py:138 accounts/forms.py:295
 msgid "Nom de la société"
 msgstr "Company name"
 
-#: accounts/forms.py:183 accounts/forms.py:395
+#: accounts/forms.py:184 accounts/forms.py:400
 msgid "Vous devez entrer le nom de votre société"
 msgstr "You have to enter your company's name"
 
-#: accounts/forms.py:189 accounts/tests/views.py:137
+#: accounts/forms.py:190 accounts/tests/views.py:152
 msgid "This field is required."
 msgstr "This field is required."
 
-#: accounts/forms.py:192 accounts/tests/views.py:150
+#: accounts/forms.py:193 accounts/tests/views.py:165
 msgid ""
 "Pour garantir un service de qualité et la sécurité des utilisateurs de "
 "Croisé dans le métro, vous ne pouvez pas vous enregistrer avec une adresse "
@@ -178,361 +178,370 @@ msgstr ""
 "le métro users, you cannot use a disposable email address to register with "
 "us. Don't worry, you will not receive any spam."
 
-#: accounts/forms.py:195 accounts/tests/views.py:124
+#: accounts/forms.py:196 accounts/tests/views.py:139
 msgid "Un compte avec cet email existe déjà"
 msgstr "An account already exists for this email address"
 
-#: accounts/forms.py:242
+#: accounts/forms.py:244
 msgid "Your old password was entered incorrectly. Please enter it again."
 msgstr "Your old password was entered incorrectly. Please enter it again."
 
-#: accounts/forms.py:253
+#: accounts/forms.py:255
 msgid "E-mail"
 msgstr "E-mail"
 
-#: accounts/forms.py:265
+#: accounts/forms.py:267
 msgid "Vous devez entrer votre email Paypal"
 msgstr "You have to enter your Paypal email"
 
-#: accounts/forms.py:290
+#: accounts/forms.py:292
 msgid "Mot de passe"
 msgstr "Password"
 
-#: accounts/forms.py:291 templates/accounts/patron_password.html:52
+#: accounts/forms.py:293 templates/accounts/patron_password.html:52
 #: templates/dcns/accounts/patron_password.html:53
 msgid "A nouveau"
 msgstr "Again"
 
-#: accounts/forms.py:296
+#: accounts/forms.py:298
 msgid "Rue"
 msgstr "Street"
 
-#: accounts/forms.py:298
+#: accounts/forms.py:300
 msgid "Code postal"
 msgstr "Zipcode"
 
-#: accounts/forms.py:300
+#: accounts/forms.py:302
 msgid "Ville"
 msgstr "City"
 
-#: accounts/forms.py:302 accounts/forms.py:315
+#: accounts/forms.py:304 accounts/forms.py:317
 #: templates/accounts/partials/missing.html:127
 #: templates/dcns/accounts/partials/missing.html:97
 msgid "Téléphone"
 msgstr "Phone number"
 
-#: accounts/forms.py:307
+#: accounts/forms.py:309
 msgid "Addresse"
 msgstr "Address"
 
-#: accounts/forms.py:370 accounts/tests/wizard.py:157
+#: accounts/forms.py:375 accounts/tests/wizard.py:157
 msgid "Vos mots de passe ne correspondent pas"
 msgstr "Your passwords don't match"
 
-#: accounts/forms.py:375 accounts/forms.py:377 accounts/tests/wizard.py:141
+#: accounts/forms.py:380 accounts/forms.py:382 accounts/tests/wizard.py:141
 msgid "Ce nom d'utilisateur est déjà pris."
 msgstr "This username is already taken."
 
-#: accounts/forms.py:388
+#: accounts/forms.py:393
 msgid "Vous devez spécifiez une adresse"
 msgstr "You have to enter an address"
 
-#: accounts/forms.py:403
+#: accounts/forms.py:408
 msgid "Vous devez spécifiez un numéro de téléphone"
 msgstr "You have to enter a telephone number"
 
-#: accounts/forms.py:417
+#: accounts/forms.py:422
 msgid "Sujet"
 msgstr "Subject"
 
-#: accounts/forms.py:418
+#: accounts/forms.py:423 templates/django_messages/view.html:3
 msgid "Message"
 msgstr "Message"
 
-#: accounts/forms.py:422
+#: accounts/forms.py:427
 msgid "Je souhaite recevoir une copie de ce message."
 msgstr "Send me a copy of this message."
 
-#: accounts/models.py:28
+#: accounts/models.py:29
 msgid "Madame"
 msgstr "Mrs."
 
-#: accounts/models.py:29
+#: accounts/models.py:30
 msgid "Mademoiselle"
 msgstr "Ms."
 
-#: accounts/models.py:30
+#: accounts/models.py:31
 msgid "Monsieur"
 msgstr "Mr."
 
-#: accounts/models.py:34
+#: accounts/models.py:35
 msgid "France"
 msgstr "France"
 
-#: accounts/models.py:35
+#: accounts/models.py:36
 msgid "Belgique"
 msgstr "Belgium"
 
-#: accounts/models.py:36
+#: accounts/models.py:37
 msgid "Luxembourg"
 msgstr "Luxembourg"
 
-#: accounts/models.py:37
+#: accounts/models.py:38
 msgid "Réunion"
 msgstr "Réunion"
 
-#: accounts/models.py:38
+#: accounts/models.py:39
 msgid "Allemagne"
 msgstr "Germany"
 
-#: accounts/models.py:39
+#: accounts/models.py:40
 msgid "Andore"
 msgstr "Andorra"
 
-#: accounts/models.py:40
+#: accounts/models.py:41
 msgid "Autriche"
 msgstr "Austria"
 
-#: accounts/models.py:41
+#: accounts/models.py:42
 msgid "Canada"
 msgstr "Canada"
 
-#: accounts/models.py:42
+#: accounts/models.py:43
 msgid "Chypre"
 msgstr "Cyprus"
 
-#: accounts/models.py:43
+#: accounts/models.py:44
 msgid "Danemark"
 msgstr "Denmark"
 
-#: accounts/models.py:44
+#: accounts/models.py:45
 msgid "Espagne"
 msgstr "Spain"
 
-#: accounts/models.py:45
+#: accounts/models.py:46
 msgid "États-Unis"
 msgstr "United States"
 
-#: accounts/models.py:46
+#: accounts/models.py:47
 msgid "Finlande"
 msgstr "Finland"
 
-#: accounts/models.py:47
+#: accounts/models.py:48
 msgid "Grèce"
 msgstr "Greece"
 
-#: accounts/models.py:48
+#: accounts/models.py:49
 msgid "Guadeloupe"
 msgstr "Guadeloupe"
 
-#: accounts/models.py:49
+#: accounts/models.py:50
 msgid "Guernesey"
 msgstr "Guernsey"
 
-#: accounts/models.py:50
+#: accounts/models.py:51
 msgid "Guyane Française"
 msgstr "French Guiana"
 
-#: accounts/models.py:51
+#: accounts/models.py:52
 msgid "Hongrie"
 msgstr "Hungary"
 
-#: accounts/models.py:52
+#: accounts/models.py:53
 msgid "Irlande"
 msgstr "Ireland"
 
-#: accounts/models.py:53
+#: accounts/models.py:54
 msgid "Islande"
 msgstr "Iceland"
 
-#: accounts/models.py:54
+#: accounts/models.py:55
 msgid "Italie"
 msgstr "Italy"
 
-#: accounts/models.py:55
+#: accounts/models.py:56
 msgid "Japon"
 msgstr "Japan"
 
-#: accounts/models.py:56
+#: accounts/models.py:57
 msgid "Jersey"
 msgstr "Jersey"
 
-#: accounts/models.py:57
+#: accounts/models.py:58
 msgid "Lettonie"
 msgstr "Latvia"
 
-#: accounts/models.py:58
+#: accounts/models.py:59
 msgid "Liechtenstein"
 msgstr "Liechtenstein"
 
-#: accounts/models.py:59
+#: accounts/models.py:60
 msgid "Lituanie"
 msgstr "Lithuania"
 
-#: accounts/models.py:60
+#: accounts/models.py:61
 msgid "Malte"
 msgstr "Malta"
 
-#: accounts/models.py:61
+#: accounts/models.py:62
 msgid "Martinique"
 msgstr "Martinique"
 
-#: accounts/models.py:62
+#: accounts/models.py:63
 msgid "Maurice"
 msgstr "Mauritius"
 
-#: accounts/models.py:63
+#: accounts/models.py:64
 msgid "Mayotte"
 msgstr "Mayotte"
 
-#: accounts/models.py:64
+#: accounts/models.py:65
 msgid "Monaco"
 msgstr "Monaco"
 
-#: accounts/models.py:65
+#: accounts/models.py:66
 msgid "Maroc"
 msgstr "Morocco"
 
-#: accounts/models.py:66
+#: accounts/models.py:67
 msgid "Norvège"
 msgstr "Norway"
 
-#: accounts/models.py:67
+#: accounts/models.py:68
 msgid "Nouvelle-Calédonie"
 msgstr "New Caledonia"
 
-#: accounts/models.py:68
+#: accounts/models.py:69
 msgid "Pays-Bas"
 msgstr "Netherlands"
 
-#: accounts/models.py:69
+#: accounts/models.py:70
 msgid "Pologne"
 msgstr "Poland"
 
-#: accounts/models.py:70
+#: accounts/models.py:71
 msgid "Polynésie Française"
 msgstr "French Polynesia"
 
-#: accounts/models.py:71
+#: accounts/models.py:72
 msgid "Portugal"
 msgstr "Portugal"
 
-#: accounts/models.py:72
+#: accounts/models.py:73
 msgid "Roumanie"
 msgstr "Romania"
 
-#: accounts/models.py:73
+#: accounts/models.py:74
 msgid "Royaume-Uni"
 msgstr "United Kingdom"
 
-#: accounts/models.py:74
+#: accounts/models.py:75
 msgid "Russie, Fédération de"
 msgstr "Russian Federation"
 
-#: accounts/models.py:75
+#: accounts/models.py:76
 msgid "Saint-Pierre-et-Miquelon"
 msgstr "Saint Pierre and Miquelon"
 
-#: accounts/models.py:76
+#: accounts/models.py:77
 msgid "Saint-Siège (État de la cité du Vatican)"
 msgstr "Vatican City"
 
-#: accounts/models.py:77
+#: accounts/models.py:78
 msgid "Suède"
 msgstr "Sweden"
 
-#: accounts/models.py:78
+#: accounts/models.py:79
 msgid "Suisse"
 msgstr "Switzerland"
 
-#: accounts/models.py:79
+#: accounts/models.py:80
 msgid "Tchèque, République"
 msgstr "Czech Republic"
 
-#: accounts/models.py:80
+#: accounts/models.py:81
 msgid "Terres Australes Françaises"
 msgstr "French Southern and Antarctic Lands"
 
-#: accounts/models.py:81
+#: accounts/models.py:82
 msgid "Tunisie"
 msgstr "Tunisia"
 
-#: accounts/models.py:82
+#: accounts/models.py:83
 msgid "Turquie"
 msgstr "Turkey"
 
-#: accounts/models.py:86
+#: accounts/models.py:87
 msgid "Domicile"
 msgstr "Home"
 
-#: accounts/models.py:87
+#: accounts/models.py:88
 msgid "Travail"
 msgstr "Work"
 
-#: accounts/models.py:88
+#: accounts/models.py:89
 msgid "Mobile"
 msgstr "Cellphone"
 
-#: accounts/models.py:89
+#: accounts/models.py:90
 msgid "Fax"
 msgstr "Fax"
 
-#: accounts/models.py:90
+#: accounts/models.py:91
 msgid "Autre"
 msgstr "Other"
 
-#: accounts/models.py:100
+#: accounts/models.py:101
 msgid "Civilité"
 msgstr "Title"
 
-#: accounts/models.py:103
+#: accounts/models.py:104
 msgid "newsletter"
 msgstr "newsletter"
 
-#: accounts/models.py:103
+#: accounts/models.py:104
 msgid "Précise si l'utilisateur est abonné à la newsletter"
 msgstr "Specifies whether the user has subscribed to the newsletter or not"
 
-#: accounts/models.py:104
+#: accounts/models.py:105
+msgid "alerts if new messages come"
+msgstr "alerts if new messages come"
+
+#: accounts/models.py:105
+#, fuzzy
+msgid "Précise si l'utilisateur est informé par email s'il a nouveaux messages"
+msgstr "Specifies whether the user has subscribed to the newsletter or not"
+
+#: accounts/models.py:106
 msgid "professionnel"
 msgstr "professional"
 
-#: accounts/models.py:104
+#: accounts/models.py:106
 msgid "Précise si l'utilisateur est un professionnel"
 msgstr "Specifies whether the user is a professional"
 
-#: accounts/models.py:105
+#: accounts/models.py:107
 msgid "date de modification"
 msgstr "modification date"
 
-#: accounts/models.py:130 accounts/models.py:135
+#: accounts/models.py:140 accounts/models.py:145
 msgid "Un utilisateur utilisant cet email existe déjà"
 msgstr "A user with this email address already exists"
 
-#: accounts/models.py:132 accounts/models.py:137
+#: accounts/models.py:142 accounts/models.py:147
 msgid "Un utilisateur utilisant ce nom d'utilisateur existe déjà"
 msgstr "A user with this username already exists"
 
-#: accounts/models.py:187 templates/base.html:7
+#: accounts/models.py:197 templates/base.html:7
 #: templates/admin/base_site.html:4 templates/admin/base_site.html.py:7
 #: templates/dcns/base.html:7 templates/mobile/base.html:7
 #: templates/nc/base.html:8 templates/uk/base.html:8
 msgid "e-loue"
 msgstr "eRentmarket"
 
-#: accounts/models.py:223
+#: accounts/models.py:233
 msgid "Expiré"
 msgstr "Expired"
 
-#: accounts/models.py:241
+#: accounts/models.py:251
 msgid "addresses"
 msgstr "addresses"
 
-#: accounts/models.py:262
+#: accounts/models.py:272
 msgid "Coordonnées géographiques incorrectes"
 msgstr "Incorrect geographical coordinates"
 
-#: accounts/models.py:280
+#: accounts/models.py:290
 msgid "Géolocalisé"
 msgstr "Geolocated"
 
@@ -550,7 +559,7 @@ msgstr ""
 "Your paypal account has not been verified, please verify your account and "
 "modify your surname, firstname or Paypal email"
 
-#: accounts/views.py:107 accounts/views.py:148 rent/views.py:129
+#: accounts/views.py:107 accounts/views.py:148 rent/views.py:140
 msgid ""
 "Votre Paypal compte est invalide, veuillez modifier votre nom ou prénom ou "
 "email paypal"
@@ -571,7 +580,7 @@ msgstr "Your password has been successfully changed"
 msgid "Votre compte paypal est vérifié"
 msgstr "Your PayPal account"
 
-#: accounts/views.py:146 rent/views.py:127
+#: accounts/views.py:146 rent/views.py:138
 msgid ""
 "Votre paypal compte n'est pas vérifié, veuillez modifier votre nom ou prénom "
 "ou email paypal"
@@ -603,43 +612,43 @@ msgstr ""
 "Welcome! We have sent you an activation link by email. It is mandatory to "
 "activate your account to finish the registration process."
 
-#: products/forms.py:20 templates/dcns/products/product_list.html:106
+#: products/forms.py:30 templates/dcns/products/product_list.html:106
 #: templates/products/product_list.html:107
 msgid "Les plus proches"
 msgstr "Closest"
 
-#: products/forms.py:21
+#: products/forms.py:31
 msgid "Les plus récentes"
 msgstr "Newest"
 
-#: products/forms.py:22
+#: products/forms.py:32
 msgid "Les pris les plus bas"
 msgstr "Lowest prices"
 
-#: products/forms.py:23
+#: products/forms.py:33
 msgid "Les pris les plus haut"
 msgstr "Highest prices"
 
-#: products/forms.py:34
+#: products/forms.py:44
 msgid "Prix"
 msgstr "Price"
 
-#: products/forms.py:34
+#: products/forms.py:44
 msgid "par-prix"
 msgstr "by price"
 
-#: products/forms.py:35 products/views.py:112
+#: products/forms.py:45 products/views.py:178
 #: templates/dcns/products/product_detail.html:117
 #: templates/mobile/products/product_detail.html:57
-#: templates/products/product_detail.html:114
+#: templates/products/product_detail.html:122
 msgid "Catégorie"
 msgstr "Category "
 
-#: products/forms.py:35
+#: products/forms.py:45
 msgid "par-categorie"
 msgstr "by-category"
 
-#: products/forms.py:85 templates/index.html:25
+#: products/forms.py:95 templates/index.html:25
 #: templates/accounts/patron_detail.html:25 templates/dcns/index.html:25
 #: templates/dcns/accounts/patron_detail.html:25
 #: templates/dcns/products/alert_list.html:24
@@ -653,196 +662,211 @@ msgstr "by-category"
 msgid "Où ?"
 msgstr "Where?"
 
-#: products/forms.py:86
+#: products/forms.py:96
 #, fuzzy
 msgid "Restreindre les résultats à un rayon de :"
 msgstr "Limit results to a radius of"
 
-#: products/forms.py:127
+#: products/forms.py:138 products/forms.py:182
+#: templates/django_messages/inbox.html:32
+#: templates/django_messages/outbox.html:30
+#: templates/django_messages/trash.html:30
+msgid "Subject"
+msgstr "Subject"
+
+#: products/forms.py:139 products/forms.py:183
+msgid "Body"
+msgstr "Body"
+
+#: products/forms.py:181
+msgid "Recipient"
+msgstr "Recipient"
+
+#: products/forms.py:219
 msgid "Choisissez une catégorie"
 msgstr "Choose a category"
 
-#: products/forms.py:128
+#: products/forms.py:220
 msgid "Titre"
 msgstr "Title"
 
-#: products/forms.py:130 products/forms.py:178
+#: products/forms.py:222 products/forms.py:270
 msgid "Photo"
 msgstr "Picture"
 
-#: products/forms.py:131 templates/dcns/products/product_detail.html:104
+#: products/forms.py:223 templates/dcns/products/product_detail.html:104
 #: templates/mobile/products/product_detail.html:44
-#: templates/products/product_detail.html:105
+#: templates/products/product_detail.html:113
 msgid "Caution"
 msgstr "Security deposit"
 
-#: products/forms.py:132 templates/dcns/products/product_detail.html:113
+#: products/forms.py:224 templates/dcns/products/product_detail.html:113
 #: templates/mobile/products/product_detail.html:53
 msgid "Quantité"
 msgstr "Quantity"
 
-#: products/forms.py:133 products/forms.py:179 products/forms.py:233
+#: products/forms.py:225 products/forms.py:271 products/forms.py:325
 msgid "Description"
 msgstr "Description"
 
-#: products/forms.py:136 products/forms.py:181
+#: products/forms.py:228 products/forms.py:273
 msgid "l'heure"
 msgstr "time"
 
-#: products/forms.py:137 products/forms.py:182
+#: products/forms.py:229 products/forms.py:274
 msgid "la journée"
 msgstr "per day"
 
-#: products/forms.py:138 products/forms.py:183
+#: products/forms.py:230 products/forms.py:275
 msgid "le week-end"
 msgstr "weekend"
 
-#: products/forms.py:139 products/forms.py:184
+#: products/forms.py:231 products/forms.py:276
 msgid "la semaine"
 msgstr "week"
 
-#: products/forms.py:140 products/forms.py:185
+#: products/forms.py:232 products/forms.py:277
 msgid "les 15 jours"
 msgstr "pending"
 
-#: products/forms.py:141 products/forms.py:186
+#: products/forms.py:233 products/forms.py:278
 msgid "le mois"
 msgstr "month"
 
-#: products/forms.py:147
+#: products/forms.py:239
 msgid "Vous devriez au moins louer un object"
 msgstr "You have to rent at least one item"
 
-#: products/forms.py:160
+#: products/forms.py:252
 msgid "Vous devriez ajouter une photo."
 msgstr "You should add a photo."
 
-#: products/models.py:33
+#: products/models.py:40
 msgid "heure"
 msgstr "time"
 
-#: products/models.py:34
+#: products/models.py:41
 msgid "jour"
 msgstr "day"
 
-#: products/models.py:35
+#: products/models.py:42
 msgid "week-end"
 msgstr "weekend"
 
-#: products/models.py:36
+#: products/models.py:43
 msgid "semaine"
 msgstr "week"
 
-#: products/models.py:37
+#: products/models.py:44
 msgid "deux semaines"
 msgstr "two weeks"
 
-#: products/models.py:38
+#: products/models.py:45
 msgid "mois"
 msgstr "month"
 
-#: products/models.py:51
+#: products/models.py:58
 msgid "€"
 msgstr "€"
 
-#: products/models.py:52
+#: products/models.py:59
 msgid "$"
 msgstr "$"
 
-#: products/models.py:53
+#: products/models.py:60
 msgid "£"
 msgstr "£"
 
-#: products/models.py:54
+#: products/models.py:61
 msgid "¥"
 msgstr "¥"
 
-#: products/models.py:55
+#: products/models.py:62
 msgid "F"
 msgstr "F"
 
-#: products/models.py:59
+#: products/models.py:66
 msgid "brouillon"
 msgstr "draft"
 
-#: products/models.py:60
+#: products/models.py:67
 msgid "privé"
 msgstr "private"
 
-#: products/models.py:61
+#: products/models.py:68
 msgid "public"
 msgstr "public"
 
-#: products/models.py:62
+#: products/models.py:69
 msgid "supprimé"
 msgstr "deleted"
 
-#: products/models.py:66
+#: products/models.py:73
 msgid "Le locataire me paye directement et mon objet n'est pas assuré"
 msgstr "The tenant pays me directly and my item is not insured"
 
-#: products/models.py:67
+#: products/models.py:74
 msgid "Le locataire paye en ligne et mon objet est assuré"
 msgstr "The tenant pays online and my item is insured"
 
-#: products/models.py:85
+#: products/models.py:92
 msgid "archivé"
 msgstr "archived"
 
-#: products/models.py:86
+#: products/models.py:93
 msgid "autorisé"
 msgstr "authorized"
 
-#: products/models.py:91
+#: products/models.py:98
 msgid "Type de payments"
 msgstr "Type of payments"
 
-#: products/models.py:96
+#: products/models.py:103
 msgid "product"
 msgstr "product"
 
-#: products/models.py:170
+#: products/models.py:177
 msgid "category"
 msgstr "category"
 
-#: products/models.py:171
+#: products/models.py:178
 msgid "categories"
 msgstr "categories"
 
-#: products/models.py:187
+#: products/models.py:194
 #, python-format
 msgid "/location/par-categorie/%(category)s/"
 msgstr "/rent/by-category/%(category)s/"
 
-#: products/models.py:198
+#: products/models.py:205
 msgid "properties"
 msgstr "properties"
 
-#: products/models.py:252
+#: products/models.py:258
 msgid "Le prix ne peut pas être négatif"
 msgstr "The price cannot be a negative value"
 
-#: products/models.py:290
+#: products/models.py:296
 msgid "Score can't be higher than 1"
 msgstr "Score can't be higher than 1"
 
-#: products/models.py:292
+#: products/models.py:298
 msgid "Score can't be a negative value"
 msgstr "Score can't be a negative value"
 
-#: products/models.py:301
+#: products/models.py:307
 msgid "Vous ne pouvez pas commenter vos propres locations"
 msgstr "You cannot comment on your own rentals"
 
-#: products/models.py:303
+#: products/models.py:309
 msgid "Vous ne pouvez pas commenter un produit que vous n'avez pas loué"
 msgstr "You cannot comment on a product that you have not rented"
 
-#: products/models.py:313
+#: products/models.py:319
 msgid "Vous ne pouvez pas commenter votre profil"
 msgstr "You cannot comment on your own profile"
 
-#: products/models.py:315
+#: products/models.py:321
 msgid ""
 "Vous ne pouvez pas commenter le profil d'un loueur avec lequel n'avez pas "
 "effectué de réservations"
@@ -850,60 +874,79 @@ msgstr ""
 "You cannot comment on a borrower's profile with whom you haven't done any "
 "bookings"
 
-#: products/urls.py:12
+#: products/urls.py:11
 msgid "ajouter"
 msgstr "add"
 
-#: products/urls.py:14 products/urls.py:16
+#: products/urls.py:13 products/urls.py:15
 #, fuzzy
 msgid "alertes"
 msgstr "Malta"
 
-#: products/urls.py:15
+#: products/urls.py:14
 #, fuzzy
 msgid "alertes/ajouter"
 msgstr "add"
 
-#: products/urls.py:17
+#: products/urls.py:16
 #, fuzzy
 msgid "alertes/supprimer"
 msgstr "add"
 
-#: products/views.py:69
+#: products/urls.py:19
+#, fuzzy
+msgid "nouveau-message"
+msgstr "New password"
+
+#: products/views.py:77
 msgid "Votre produit a bien été édité !"
 msgstr "Your password has been successfully changed"
 
-#: products/views.py:79
+#: products/views.py:88 products/views.py:117
+msgid "Message successfully sent."
+msgstr "Message successfully sent."
+
+#: products/views.py:124
+#, python-format
+msgid "Re: %(subject)s"
+msgstr "Re: %(subject)s"
+
+#: products/views.py:145
 #, fuzzy
 msgid "Votre objet à bien été supprimée"
 msgstr "Your password has been successfully changed"
 
-#: products/views.py:103
+#: products/views.py:169
 msgid "par-"
 msgstr "by-"
 
-#: products/views.py:108
+#: products/views.py:174
 msgid "categorie"
 msgstr "category"
 
-#: products/views.py:115
+#: products/views.py:181 templates/products/product_detail.html:103
 msgid "loueur"
 msgstr "borrower"
 
-#: products/views.py:119
+#: products/views.py:185
 msgid "Loueur"
 msgstr "Borrower"
 
-#: products/views.py:124
+#: products/views.py:190
 msgid "page"
 msgstr "page"
 
-#: products/views.py:174
+#: products/views.py:241
 #, fuzzy
 msgid "Votre alerte à bien été supprimée"
 msgstr "Your password has been successfully changed"
 
-#: products/wizard.py:123
+#: products/wizard.py:145
+#, fuzzy
+msgid "Votre message a bien été envoyé au propriétaire"
+msgstr "Your message has been successfully sent"
+
+#: products/wizard.py:189
 #, fuzzy
 msgid "Votre alerte a bien été créée"
 msgstr "Your password has been successfully changed"
@@ -972,23 +1015,27 @@ msgstr "Enter a valid time."
 msgid "Cette transaction ne semble pas lier à une transaction interne"
 msgstr "This transaction doesn't seem to be linked to an internal transaction"
 
-#: rent/forms.py:158
+#: rent/forms.py:159
 msgid "Vous ne pouvez pas louer cet objet pour ces dates"
 msgstr "This item is not available to rent for the specified dates"
 
-#: rent/forms.py:162
+#: rent/forms.py:163
 msgid "Vous ne pouvez pas louer a ces dates"
 msgstr "You can't rent on these dates"
 
-#: rent/forms.py:164
+#: rent/forms.py:165
 msgid "Une location ne peut pas terminer avant d'avoir commencer"
 msgstr "A rental cannot end before having started"
 
-#: rent/forms.py:166
+#: rent/forms.py:167
 msgid "La durée d'une location est limitée à 85 jours."
 msgstr "The rental period is limited to 85 days."
 
-#: rent/forms.py:189
+#: rent/forms.py:169
+msgid "Ces dates sont déjà prises pour ce produit."
+msgstr "The following dates  have already been taken for this product."
+
+#: rent/forms.py:192
 msgid "Décrivez votre incident"
 msgstr "Declare your incident"
 
@@ -1046,163 +1093,163 @@ msgstr "Finalised"
 msgid "Dépassé"
 msgstr "Exceeded"
 
-#: rent/utils.py:61
+#: rent/utils.py:78
 msgid "milliard"
 msgstr "billion"
 
-#: rent/utils.py:67
+#: rent/utils.py:84
 msgid "million"
 msgstr "million"
 
-#: rent/utils.py:76 rent/utils.py:91
+#: rent/utils.py:93 rent/utils.py:108
 msgid "cent"
 msgstr "hundred"
 
-#: rent/utils.py:86
+#: rent/utils.py:103
 msgid "mille"
 msgstr "thousand"
 
-#: rent/utils.py:102
+#: rent/utils.py:119
 msgid "zéro"
 msgstr "zero"
 
-#: rent/utils.py:112
+#: rent/utils.py:129
 msgid "et"
 msgstr "and"
 
-#: rent/utils.py:120
+#: rent/utils.py:137
 msgid "moins"
 msgstr "minus"
 
-#: rent/utils.py:123
+#: rent/utils.py:140
 msgid "un"
 msgstr "one"
 
-#: rent/utils.py:123
+#: rent/utils.py:140
 msgid "deux"
 msgstr "two"
 
-#: rent/utils.py:123
+#: rent/utils.py:140
 msgid "trois"
 msgstr "three"
 
-#: rent/utils.py:123
+#: rent/utils.py:140
 msgid "quatre"
 msgstr "four"
 
-#: rent/utils.py:123
+#: rent/utils.py:140
 msgid "cinq"
 msgstr "five"
 
-#: rent/utils.py:123
+#: rent/utils.py:140
 msgid "six"
 msgstr "six"
 
-#: rent/utils.py:123
+#: rent/utils.py:140
 msgid "sept"
 msgstr "seven"
 
-#: rent/utils.py:123
+#: rent/utils.py:140
 msgid "huit"
 msgstr "eight"
 
-#: rent/utils.py:123
+#: rent/utils.py:140
 msgid "neuf"
 msgstr "nine"
 
-#: rent/utils.py:123 rent/utils.py:127 rent/tests/contract.py:46
+#: rent/utils.py:140 rent/utils.py:144 rent/tests/contract.py:46
 msgid "dix"
 msgstr "ten"
 
-#: rent/utils.py:124
+#: rent/utils.py:141
 msgid "onze"
 msgstr "eleven"
 
-#: rent/utils.py:124
+#: rent/utils.py:141
 msgid "douze"
 msgstr "twelve"
 
-#: rent/utils.py:124
+#: rent/utils.py:141
 msgid "treize"
 msgstr "thirteen"
 
-#: rent/utils.py:124
+#: rent/utils.py:141
 msgid "quatorze"
 msgstr "fourteen"
 
-#: rent/utils.py:124
+#: rent/utils.py:141
 msgid "quinze"
 msgstr "fifteen"
 
-#: rent/utils.py:124
+#: rent/utils.py:141
 msgid "seize"
 msgstr "fifteen"
 
-#: rent/utils.py:124
+#: rent/utils.py:141
 msgid "dix-sept"
 msgstr "seventeen"
 
-#: rent/utils.py:124
+#: rent/utils.py:141
 msgid "dix-huit"
 msgstr "eighteen"
 
-#: rent/utils.py:124
+#: rent/utils.py:141
 msgid "dix-neuf"
 msgstr "nineteen"
 
-#: rent/utils.py:127
+#: rent/utils.py:144
 msgid "vingt"
 msgstr "twenty"
 
-#: rent/utils.py:127
+#: rent/utils.py:144
 msgid "trente"
 msgstr "thirty"
 
-#: rent/utils.py:127
+#: rent/utils.py:144
 msgid "quarante"
 msgstr "forty"
 
-#: rent/utils.py:127
+#: rent/utils.py:144
 msgid "cinquante"
 msgstr "fifty"
 
-#: rent/utils.py:127
+#: rent/utils.py:144
 msgid "soixante"
 msgstr "sixty"
 
-#: rent/utils.py:127
+#: rent/utils.py:144
 msgid "soixante-dix"
 msgstr "seventy"
 
-#: rent/utils.py:127
+#: rent/utils.py:144
 msgid "quatre-vingt"
 msgstr "eighty"
 
-#: rent/utils.py:127
+#: rent/utils.py:144
 msgid "quatre-vingt-dix"
 msgstr "ninety"
 
-#: rent/views.py:153
+#: rent/views.py:164
 msgid "Cette réservation a bien été refusée"
 msgstr "This booking has been declined."
 
-#: rent/views.py:154
+#: rent/views.py:165
 msgid "Cette réservation n'a pu être refusée"
 msgstr "This booking could not be declined."
 
-#: rent/views.py:166
+#: rent/views.py:177
 msgid "Cette réservation a bien été annulée"
 msgstr "This booking has been canceled."
 
-#: rent/views.py:167
+#: rent/views.py:178
 msgid "Cette réservation n'a pu être annulée"
 msgstr "This booking could not be canceled."
 
-#: rent/views.py:179
+#: rent/views.py:190
 msgid "Cette réservation a bien été cloturée"
 msgstr "This booking has been finalised."
 
-#: rent/views.py:180
+#: rent/views.py:191
 msgid "Cette réservation n'a pu être cloturée"
 msgstr "This booking could not be finalised."
 
@@ -1275,17 +1322,22 @@ msgstr "Home"
 #: templates/dcns/products/product_delete.html:10
 #: templates/dcns/products/product_edit.html:10
 #: templates/dcns/rent/booking_detail.html:64
-#: templates/dcns/rent/booking_incident.html:37 templates/nc/base.html:74
+#: templates/dcns/rent/booking_incident.html:37
+#: templates/django_messages/compose.html:9
+#: templates/django_messages/inbox.html:11
+#: templates/django_messages/outbox.html:9
+#: templates/django_messages/trash.html:9
+#: templates/django_messages/view.html:9 templates/nc/base.html:74
 #: templates/products/product_delete.html:10
 #: templates/products/product_edit.html:10
 #: templates/rent/booking_detail.html:64
-#: templates/rent/booking_incident.html:10 templates/uk/base.html:52
+#: templates/rent/booking_incident.html:11 templates/uk/base.html:52
 msgid "Tableau de bord"
 msgstr "Control panel"
 
 #: templates/500.html:55 templates/500.html.py:89 templates/base.html:53
 #: templates/base.html.py:71 templates/20minutes/base.html:19
-#: templates/20minutes/base.html.py:37 templates/accounts/dashboard.html:26
+#: templates/20minutes/base.html.py:37 templates/accounts/dashboard.html:27
 #: templates/dcns/500.html:55 templates/dcns/500.html.py:89
 #: templates/dcns/base.html:53 templates/dcns/base.html.py:80
 #: templates/dcns/index.html:93 templates/dcns/accounts/dashboard.html:27
@@ -1298,7 +1350,7 @@ msgstr "/how-it-works/"
 
 #: templates/500.html:55 templates/500.html.py:89 templates/base.html:53
 #: templates/base.html.py:71 templates/20minutes/base.html:19
-#: templates/20minutes/base.html.py:37 templates/accounts/dashboard.html:26
+#: templates/20minutes/base.html.py:37 templates/accounts/dashboard.html:27
 #: templates/dcns/500.html:55 templates/dcns/500.html.py:89
 #: templates/dcns/base.html:53 templates/dcns/base.html.py:80
 #: templates/dcns/index.html:67 templates/dcns/accounts/dashboard.html:27
@@ -1386,11 +1438,16 @@ msgstr "Useful links"
 #: templates/dcns/products/product_delete.html:13
 #: templates/dcns/products/product_edit.html:13
 #: templates/dcns/rent/booking_detail.html:67
-#: templates/dcns/rent/booking_incident.html:40 templates/nc/base.html:87
+#: templates/dcns/rent/booking_incident.html:40
+#: templates/django_messages/compose.html:12
+#: templates/django_messages/inbox.html:14
+#: templates/django_messages/outbox.html:12
+#: templates/django_messages/trash.html:12
+#: templates/django_messages/view.html:12 templates/nc/base.html:87
 #: templates/products/product_delete.html:13
 #: templates/products/product_edit.html:13
 #: templates/rent/booking_detail.html:67
-#: templates/rent/booking_incident.html:13 templates/uk/base.html:65
+#: templates/rent/booking_incident.html:14 templates/uk/base.html:65
 msgid "Mon compte"
 msgstr "My account"
 
@@ -1420,7 +1477,7 @@ msgstr "Worry free insurance policy"
 #: templates/dcns/base.html:88 templates/mobile/base.html:39
 #: templates/nc/base.html:99 templates/uk/base.html:77
 msgid "/conditions-generales/"
-msgstr "/terms-and-conditions/"
+msgstr " /terms-and-conditions/"
 
 #: templates/500.html:97 templates/base.html:80
 #: templates/20minutes/base.html:46 templates/dcns/500.html:97
@@ -1539,12 +1596,17 @@ msgstr "Twitter"
 msgid "Facebook"
 msgstr "Facebook"
 
-#: templates/base.html:110 templates/20minutes/base.html:76
+#: templates/base.html:99
+#, fuzzy
+msgid "Nos partenaires"
+msgstr "Our partner"
+
+#: templates/base.html:111 templates/20minutes/base.html:76
 #: templates/nc/base.html:129 templates/uk/base.html:107
 msgid "sur"
 msgstr "to"
 
-#: templates/base.html:110 templates/20minutes/base.html:76
+#: templates/base.html:111 templates/20minutes/base.html:76
 #: templates/nc/base.html:129 templates/uk/base.html:107
 msgid "e-loue blog"
 msgstr "the eRentmarket blog"
@@ -1739,7 +1801,6 @@ msgstr ""
 "    \t\t\t    "
 
 #: templates/index.html:94
-#, fuzzy
 msgid ""
 "\n"
 "    \t\t\t    <p>Nos <strong>partenaires</strong> assurent les locations de "
@@ -1748,7 +1809,7 @@ msgid ""
 msgstr ""
 "\n"
 "\t\t\t\t\t\t <p>The <strong>guaranty and the rental agreement</strong> "
-"securize your items in case of damage.</p>\n"
+"securize your items.</p>\n"
 "\t\t\t\t\t\t"
 
 #: templates/index.html:110 templates/dcns/index.html:120
@@ -1785,7 +1846,7 @@ msgstr "Become fan<br>on Facebook"
 
 #: templates/index.html:157 templates/uk/index.html:147
 msgid "Suivez-nous<br>sur Twitter"
-msgstr "Find us<br>on Twitter"
+msgstr "Follow us<br>on Twitter"
 
 #: templates/accounts/activate.html:4 templates/dcns/accounts/activate.html:4
 msgid "Activation de votre compte"
@@ -1865,6 +1926,8 @@ msgstr ""
 #: templates/dcns/accounts/auth_login.html:9
 #: templates/dcns/rent/booking_register.html:4
 #: templates/dcns/rent/booking_register.html:24
+#: templates/django_messages/message_register.html:4
+#: templates/django_messages/message_register.html:19
 #: templates/products/product_register.html:4
 #: templates/products/product_register.html:19
 #: templates/rent/booking_register.html:4
@@ -1913,12 +1976,17 @@ msgstr "Your borrower's active rentals"
 #: templates/dcns/products/product_edit.html:11
 #: templates/dcns/rent/booking_detail.html:65
 #: templates/dcns/rent/booking_incident.html:38
+#: templates/django_messages/compose.html:10
+#: templates/django_messages/inbox.html:12
+#: templates/django_messages/outbox.html:10
+#: templates/django_messages/trash.html:10
+#: templates/django_messages/view.html:10
 #: templates/mobile/products/product_detail.html:61
 #: templates/products/product_delete.html:11
-#: templates/products/product_detail.html:118
+#: templates/products/product_detail.html:102
 #: templates/products/product_edit.html:11
 #: templates/rent/booking_detail.html:65
-#: templates/rent/booking_incident.html:11
+#: templates/rent/booking_incident.html:12
 msgid "Propriétaire"
 msgstr "Owner"
 
@@ -1945,315 +2013,42 @@ msgstr "Owner"
 #: templates/dcns/products/product_edit.html:12
 #: templates/dcns/rent/booking_detail.html:66
 #: templates/dcns/rent/booking_incident.html:39
+#: templates/django_messages/compose.html:11
+#: templates/django_messages/inbox.html:13
+#: templates/django_messages/outbox.html:11
+#: templates/django_messages/trash.html:11
+#: templates/django_messages/view.html:11
 #: templates/products/product_delete.html:12
 #: templates/products/product_edit.html:12
 #: templates/rent/booking_detail.html:66
-#: templates/rent/booking_incident.html:12
+#: templates/rent/booking_incident.html:13
 msgid "Locataire"
 msgstr "Borrower"
 
-#: templates/accounts/borrower_booking.html:18
-#: templates/accounts/borrower_booking.html:23
-#: templates/accounts/borrower_history.html:18
-#: templates/accounts/owner_booking.html:18
-#: templates/accounts/owner_booking.html:25
-#: templates/rent/booking_detail.html:75 templates/rent/booking_detail.html:77
-#: templates/rent/booking_detail.html:92 templates/rent/booking_detail.html:94
-msgid "Locations en cours"
-msgstr "Rental ongoing"
+#: templates/accounts/borrower_booking.html:14
+#: templates/accounts/borrower_history.html:14
+#: templates/accounts/dashboard.html:14
+#: templates/accounts/owner_booking.html:14
+#: templates/accounts/owner_history.html:14
+#: templates/accounts/owner_product.html:14
+#: templates/accounts/patron_edit.html:14
+#: templates/accounts/patron_paypal.html:15
+#: templates/django_messages/compose.html:13
+#: templates/django_messages/inbox.html:15
+#: templates/django_messages/outbox.html:13
+#: templates/django_messages/trash.html:13
+#: templates/django_messages/view.html:13
+#: templates/products/product_edit.html:14
+#: templates/rent/booking_detail.html:68
+#: templates/rent/booking_incident.html:15
+#, python-format
+msgid "Messages(%(messages_inbox_count)s)"
+msgstr "Messages(%(messages_inbox_count)s)"
 
 #: templates/accounts/borrower_booking.html:19
-#: templates/accounts/borrower_history.html:19
-#: templates/accounts/borrower_history.html:23
-#: templates/accounts/owner_booking.html:19
 #: templates/accounts/owner_history.html:19
-#: templates/accounts/owner_history.html:25
 #: templates/accounts/owner_product.html:19
-#: templates/dcns/accounts/borrower_booking.html:20
-#: templates/dcns/accounts/borrower_history.html:20
-#: templates/dcns/accounts/owner_booking.html:20
-#: templates/dcns/accounts/owner_history.html:20
-#: templates/dcns/accounts/owner_history.html:26
-#: templates/dcns/accounts/owner_product.html:20
-#: templates/dcns/products/product_delete.html:19
-#: templates/dcns/products/product_edit.html:19
-#: templates/dcns/rent/booking_detail.html:82
-#: templates/dcns/rent/booking_detail.html:84
-#: templates/dcns/rent/booking_detail.html:99
-#: templates/dcns/rent/booking_detail.html:101
-#: templates/dcns/rent/booking_incident.html:55
-#: templates/dcns/rent/booking_incident.html:57
-#: templates/dcns/rent/booking_incident.html:72
-#: templates/dcns/rent/booking_incident.html:74
-#: templates/products/product_delete.html:19
-#: templates/products/product_edit.html:19
-#: templates/rent/booking_detail.html:82 templates/rent/booking_detail.html:84
-#: templates/rent/booking_detail.html:99
-#: templates/rent/booking_detail.html:101
-#: templates/rent/booking_incident.html:28
-#: templates/rent/booking_incident.html:30
-#: templates/rent/booking_incident.html:45
-#: templates/rent/booking_incident.html:47
-msgid "Historique des locations"
-msgstr "Rental history"
-
-#: templates/accounts/borrower_booking.html:35
-#: templates/accounts/borrower_history.html:35
-#: templates/accounts/owner_booking.html:37
-#: templates/accounts/owner_history.html:37
-#: templates/accounts/owner_product.html:73
-#: templates/accounts/patron_detail.html:98
-#: templates/dcns/accounts/borrower_booking.html:36
-#: templates/dcns/accounts/borrower_history.html:36
-#: templates/dcns/accounts/owner_booking.html:38
-#: templates/dcns/accounts/owner_history.html:38
-#: templates/dcns/accounts/owner_product.html:74
-#: templates/dcns/accounts/patron_detail.html:98
-#: templates/dcns/products/product_list.html:163
-#: templates/products/alert_list.html:75
-#: templates/products/product_list.html:164
-msgid "Page précédente"
-msgstr "Previous page"
-
-#: templates/accounts/borrower_booking.html:41
-#: templates/accounts/borrower_history.html:41
-#: templates/accounts/owner_booking.html:43
-#: templates/accounts/owner_history.html:43
-#: templates/accounts/owner_product.html:79
-#: templates/accounts/patron_detail.html:108
-#: templates/dcns/accounts/borrower_booking.html:42
-#: templates/dcns/accounts/borrower_history.html:42
-#: templates/dcns/accounts/owner_booking.html:44
-#: templates/dcns/accounts/owner_history.html:44
-#: templates/dcns/accounts/owner_product.html:80
-#: templates/dcns/accounts/patron_detail.html:108
-#: templates/dcns/products/product_list.html:169
-#: templates/products/alert_list.html:81
-#: templates/products/product_list.html:170
-msgid "Page suivante"
-msgstr "Next page"
-
-#: templates/accounts/contact.html:4 templates/dcns/accounts/contact.html:4
-msgid "Contactez e-loue"
-msgstr "Contact eRentMarket"
-
-#: templates/accounts/contact.html:58 templates/accounts/patron_edit.html:138
-#: templates/accounts/partials/missing.html:417
-msgid "* champ obligatoire"
-msgstr "*  required field"
-
-#: templates/accounts/contact.html:62 templates/accounts/patron_paypal.html:45
-#: templates/dcns/accounts/contact.html:62
-#: templates/dcns/accounts/patron_paypal.html:43
-#: templates/dcns/accounts/partials/login.html:35
-#: templates/dcns/accounts/partials/missing.html:390
-#: templates/dcns/accounts/partials/missing.html:392
-#: templates/dcns/products/alert_create.html:66
-#: templates/dcns/products/product_delete.html:57
-#: templates/dcns/products/product_edit.html:176
-#: templates/dcns/rent/booking_confirm.html:87
-#: templates/dcns/rent/booking_incident.html:179
-#: templates/dcns/rent/partials/booking_status.html:40
-#: templates/nc/rent/booking_confirm.html:87
-#: templates/products/product_delete.html:57
-#: templates/products/product_edit.html:176
-#: templates/rent/booking_incident.html:152
-#: templates/rent/partials/booking_status.html:40
-msgid "Annuler"
-msgstr "Cancel"
-
-#: templates/accounts/contact.html:62 templates/accounts/patron_paypal.html:45
-#: templates/dcns/accounts/contact.html:62
-#: templates/dcns/accounts/patron_paypal.html:43
-#: templates/dcns/accounts/partials/login.html:35
-#: templates/dcns/accounts/partials/missing.html:390
-#: templates/dcns/accounts/partials/missing.html:392
-#: templates/dcns/products/alert_create.html:66
-#: templates/dcns/products/product_delete.html:57
-#: templates/dcns/products/product_edit.html:176
-#: templates/dcns/rent/booking_confirm.html:87
-#: templates/dcns/rent/booking_incident.html:179
-#: templates/nc/rent/booking_confirm.html:87
-#: templates/products/product_delete.html:57
-#: templates/products/product_edit.html:176
-#: templates/rent/booking_incident.html:152
-msgid "ou"
-msgstr "or"
-
-#: templates/accounts/contact.html:63 templates/dcns/accounts/contact.html:63
-#: templates/dcns/rent/booking_incident.html:180
-#: templates/rent/booking_incident.html:153
-msgid "Envoyer"
-msgstr "Send"
-
-#: templates/accounts/dashboard.html:4
-#: templates/dcns/accounts/dashboard.html:4
-msgid "Votre tableau de bord"
-msgstr "Your control panel"
-
-#: templates/accounts/dashboard.html:19
-#: templates/dcns/accounts/dashboard.html:20
-msgid "Modifier votre profil"
-msgstr "Edit your profile"
-
-#: templates/accounts/dashboard.html:23
-#: templates/dcns/accounts/dashboard.html:36
-msgid "Mettre un objet en location"
-msgstr "Rent your stuff"
-
-#: templates/accounts/dashboard.html:24
-#: templates/mobile/products/search.html:5
-msgid "Rechercher une location"
-msgstr "Search for a rental"
-
-#: templates/accounts/dashboard.html:25
-#: templates/dcns/accounts/dashboard.html:26
-msgid "Accéder à mes objets"
-msgstr "Go to my items"
-
-#: templates/accounts/dashboard.html:32
-#, fuzzy
-msgid "Que pouvez-vous faire ensuite ?"
-msgstr "Welcome to eRentmarket! What can you do next?"
-
-#: templates/accounts/dashboard.html:35
-#: templates/dcns/accounts/dashboard.html:37
-msgid "Editer votre profil"
-msgstr "Edit your profile"
-
-#: templates/accounts/dashboard.html:38
-#: templates/dcns/accounts/dashboard.html:41
-msgid "Locations en tant que <strong>propriétaire</strong>"
-msgstr "<strong>Owner's</strong> rental"
-
-#: templates/accounts/dashboard.html:43
-#, fuzzy
-msgid ""
-"\n"
-"                <span>Location<br />à valider</span>\n"
-"              "
-msgid_plural ""
-"\n"
-"\t\t\t    <span>Locations<br />à valider</span>\n"
-"              "
-msgstr[0] ""
-"\n"
-"                <span>Rent<br />to validate</span>\n"
-"              "
-msgstr[1] ""
-"\n"
-"                <span>Rent<br />to validate</span>\n"
-"              "
-
-#: templates/accounts/dashboard.html:53 templates/accounts/dashboard.html:86
-#, fuzzy
-msgid ""
-"\n"
-"                <span>Location<br />en cours</span>\n"
-"              "
-msgid_plural ""
-"\n"
-"\t\t\t    <span>Locations<br />en cours</span>\n"
-"              "
-msgstr[0] ""
-"\n"
-"                <span>Rentals<br />pending</span>\n"
-"              "
-msgstr[1] ""
-"\n"
-"                <span>Rentals<br />pending</span>\n"
-"              "
-
-#: templates/accounts/dashboard.html:63
-#: templates/dcns/accounts/dashboard.html:66
-#, fuzzy
-msgid ""
-"\n"
-"                <span>Objet<br />en location</span>\n"
-"              "
-msgid_plural ""
-"\n"
-" \t\t\t    <span>Objets<br />en location</span>\n"
-"              "
-msgstr[0] ""
-"\n"
-"                <span>Item<br />rented</span>\n"
-"              "
-msgstr[1] ""
-"\n"
-"                <span>Item<br />rented</span>\n"
-"              "
-
-#: templates/accounts/dashboard.html:71
-#: templates/dcns/accounts/dashboard.html:74
-msgid "Locations en tant que <strong>locataire</strong>"
-msgstr "<strong>Borrower's</strong> rental"
-
-#: templates/accounts/dashboard.html:76
-#, fuzzy
-msgid ""
-"\n"
-"                 <span>Location<br />en attente de validation</span>\n"
-"                "
-msgid_plural ""
-"\n"
-"\t\t\t     <span>Locations<br />en attente de validation</span>\n"
-"               "
-msgstr[0] ""
-"\n"
-"                 <span>Location<br />waiting for validation</span>\n"
-"                "
-msgstr[1] ""
-"\n"
-"                 <span>Location<br />waiting for validation</span>\n"
-"                "
-
-#: templates/accounts/owner_booking.html:4
-#, fuzzy
-msgid "Vos locations en cours en tant que propriétaire"
-msgstr "Your owner's active rentals"
-
-#: templates/accounts/owner_booking.html:20
-#: templates/accounts/owner_history.html:20
-#: templates/accounts/owner_product.html:20
-#: templates/dcns/accounts/owner_booking.html:21
-#: templates/dcns/accounts/owner_history.html:21
-#: templates/dcns/accounts/owner_product.html:21
-#: templates/dcns/products/product_delete.html:20
-#: templates/dcns/products/product_edit.html:20
-#: templates/dcns/rent/booking_detail.html:87
-#: templates/dcns/rent/booking_incident.html:60
-#: templates/products/product_delete.html:20
-#: templates/products/product_edit.html:20
-#: templates/rent/booking_detail.html:87
-#: templates/rent/booking_incident.html:33
-msgid "Mes objets"
-msgstr "My items"
-
-#: templates/accounts/owner_booking.html:21
-#: templates/accounts/owner_history.html:21
-#: templates/accounts/owner_product.html:21
-#: templates/dcns/accounts/owner_booking.html:22
-#: templates/dcns/accounts/owner_history.html:22
-#: templates/dcns/accounts/owner_product.html:22
-#: templates/dcns/products/product_delete.html:21
-#: templates/dcns/products/product_edit.html:21
-#: templates/dcns/rent/booking_detail.html:88
-#: templates/dcns/rent/booking_incident.html:61
-#: templates/products/product_delete.html:21
-#: templates/products/product_edit.html:21
-#: templates/rent/booking_detail.html:88
-#: templates/rent/booking_incident.html:34
-msgid "Ajouter un objet"
-msgstr "Add an item"
-
-#: templates/accounts/owner_history.html:4
-#: templates/dcns/accounts/owner_history.html:4
-msgid "Historique de vos locations en tant que propriétaire"
-msgstr "Your owner's rental history"
-
-#: templates/accounts/owner_history.html:18
-#: templates/accounts/owner_product.html:18
+#: templates/accounts/patron_paypal.html:20
 #: templates/dcns/accounts/borrower_booking.html:19
 #: templates/dcns/accounts/borrower_booking.html:24
 #: templates/dcns/accounts/borrower_history.html:19
@@ -2273,13 +2068,315 @@ msgstr "Your owner's rental history"
 #: templates/dcns/rent/booking_incident.html:65
 #: templates/dcns/rent/booking_incident.html:67
 #: templates/products/product_delete.html:18
-#: templates/products/product_edit.html:18
-#: templates/rent/booking_incident.html:21
+#: templates/products/product_edit.html:19
 #: templates/rent/booking_incident.html:23
-#: templates/rent/booking_incident.html:38
+#: templates/rent/booking_incident.html:25
 #: templates/rent/booking_incident.html:40
+#: templates/rent/booking_incident.html:42
 msgid "Locations actives"
 msgstr "Active rentals"
+
+#: templates/accounts/borrower_booking.html:20
+#: templates/accounts/borrower_history.html:20
+#: templates/accounts/borrower_history.html:24
+#: templates/accounts/owner_booking.html:20
+#: templates/accounts/owner_history.html:20
+#: templates/accounts/owner_history.html:26
+#: templates/accounts/owner_product.html:20
+#: templates/accounts/patron_paypal.html:21
+#: templates/dcns/accounts/borrower_booking.html:20
+#: templates/dcns/accounts/borrower_history.html:20
+#: templates/dcns/accounts/owner_booking.html:20
+#: templates/dcns/accounts/owner_history.html:20
+#: templates/dcns/accounts/owner_history.html:26
+#: templates/dcns/accounts/owner_product.html:20
+#: templates/dcns/products/product_delete.html:19
+#: templates/dcns/products/product_edit.html:19
+#: templates/dcns/rent/booking_detail.html:82
+#: templates/dcns/rent/booking_detail.html:84
+#: templates/dcns/rent/booking_detail.html:99
+#: templates/dcns/rent/booking_detail.html:101
+#: templates/dcns/rent/booking_incident.html:55
+#: templates/dcns/rent/booking_incident.html:57
+#: templates/dcns/rent/booking_incident.html:72
+#: templates/dcns/rent/booking_incident.html:74
+#: templates/products/product_delete.html:19
+#: templates/products/product_edit.html:20
+#: templates/rent/booking_detail.html:83 templates/rent/booking_detail.html:85
+#: templates/rent/booking_detail.html:100
+#: templates/rent/booking_detail.html:102
+#: templates/rent/booking_incident.html:30
+#: templates/rent/booking_incident.html:32
+#: templates/rent/booking_incident.html:47
+#: templates/rent/booking_incident.html:49
+msgid "Historique des locations"
+msgstr "Rental history"
+
+#: templates/accounts/borrower_booking.html:24
+#: templates/accounts/borrower_history.html:19
+#: templates/accounts/owner_booking.html:19
+#: templates/accounts/owner_booking.html:26
+#: templates/rent/booking_detail.html:76 templates/rent/booking_detail.html:78
+#: templates/rent/booking_detail.html:93 templates/rent/booking_detail.html:95
+msgid "Locations en cours"
+msgstr "Rental ongoing"
+
+#: templates/accounts/borrower_booking.html:36
+#: templates/accounts/borrower_history.html:36
+#: templates/accounts/owner_booking.html:38
+#: templates/accounts/owner_history.html:38
+#: templates/accounts/owner_product.html:74
+#: templates/accounts/patron_detail.html:98
+#: templates/dcns/accounts/borrower_booking.html:36
+#: templates/dcns/accounts/borrower_history.html:36
+#: templates/dcns/accounts/owner_booking.html:38
+#: templates/dcns/accounts/owner_history.html:38
+#: templates/dcns/accounts/owner_product.html:74
+#: templates/dcns/accounts/patron_detail.html:98
+#: templates/dcns/products/product_list.html:163
+#: templates/products/alert_list.html:75
+#: templates/products/product_list.html:164
+msgid "Page précédente"
+msgstr "Previous page"
+
+#: templates/accounts/borrower_booking.html:42
+#: templates/accounts/borrower_history.html:42
+#: templates/accounts/owner_booking.html:44
+#: templates/accounts/owner_history.html:44
+#: templates/accounts/owner_product.html:80
+#: templates/accounts/patron_detail.html:108
+#: templates/dcns/accounts/borrower_booking.html:42
+#: templates/dcns/accounts/borrower_history.html:42
+#: templates/dcns/accounts/owner_booking.html:44
+#: templates/dcns/accounts/owner_history.html:44
+#: templates/dcns/accounts/owner_product.html:80
+#: templates/dcns/accounts/patron_detail.html:108
+#: templates/dcns/products/product_list.html:169
+#: templates/products/alert_list.html:81
+#: templates/products/product_list.html:170
+msgid "Page suivante"
+msgstr "Next page"
+
+#: templates/accounts/contact.html:4 templates/dcns/accounts/contact.html:4
+msgid "Contactez e-loue"
+msgstr "Contact eRentMarket"
+
+#: templates/accounts/contact.html:58
+#: templates/accounts/partials/missing.html:417
+msgid "* champ obligatoire"
+msgstr "*  required field"
+
+#: templates/accounts/contact.html:62 templates/accounts/patron_paypal.html:60
+#: templates/dcns/accounts/contact.html:62
+#: templates/dcns/accounts/patron_paypal.html:43
+#: templates/dcns/accounts/partials/login.html:35
+#: templates/dcns/accounts/partials/missing.html:390
+#: templates/dcns/accounts/partials/missing.html:392
+#: templates/dcns/products/alert_create.html:66
+#: templates/dcns/products/product_delete.html:57
+#: templates/dcns/products/product_edit.html:176
+#: templates/dcns/rent/booking_confirm.html:87
+#: templates/dcns/rent/booking_incident.html:179
+#: templates/dcns/rent/partials/booking_status.html:40
+#: templates/nc/rent/booking_confirm.html:87
+#: templates/products/product_delete.html:57
+#: templates/products/product_edit.html:177
+#: templates/rent/booking_incident.html:154
+#: templates/rent/partials/booking_status.html:40
+msgid "Annuler"
+msgstr "Cancel"
+
+#: templates/accounts/contact.html:62 templates/accounts/patron_paypal.html:60
+#: templates/dcns/accounts/contact.html:62
+#: templates/dcns/accounts/patron_paypal.html:43
+#: templates/dcns/accounts/partials/login.html:35
+#: templates/dcns/accounts/partials/missing.html:390
+#: templates/dcns/accounts/partials/missing.html:392
+#: templates/dcns/products/alert_create.html:66
+#: templates/dcns/products/product_delete.html:57
+#: templates/dcns/products/product_edit.html:176
+#: templates/dcns/rent/booking_confirm.html:87
+#: templates/dcns/rent/booking_incident.html:179
+#: templates/nc/rent/booking_confirm.html:87
+#: templates/products/product_delete.html:57
+#: templates/products/product_edit.html:177
+#: templates/rent/booking_incident.html:154
+msgid "ou"
+msgstr "or"
+
+#: templates/accounts/contact.html:63 templates/dcns/accounts/contact.html:63
+#: templates/dcns/rent/booking_incident.html:180
+#: templates/rent/booking_incident.html:155
+msgid "Envoyer"
+msgstr "Send"
+
+#: templates/accounts/dashboard.html:4
+#: templates/dcns/accounts/dashboard.html:4
+#: templates/django_messages/compose.html:3
+#: templates/django_messages/inbox.html:3
+#: templates/django_messages/outbox.html:3
+#: templates/django_messages/trash.html:3
+msgid "Votre tableau de bord"
+msgstr "Your control panel"
+
+#: templates/accounts/dashboard.html:20
+#: templates/dcns/accounts/dashboard.html:20
+msgid "Modifier votre profil"
+msgstr "Edit your profile"
+
+#: templates/accounts/dashboard.html:24
+#: templates/dcns/accounts/dashboard.html:36
+msgid "Mettre un objet en location"
+msgstr "Rent your stuff"
+
+#: templates/accounts/dashboard.html:25
+#: templates/mobile/products/search.html:5
+msgid "Rechercher une location"
+msgstr "Search for a rental"
+
+#: templates/accounts/dashboard.html:26
+#: templates/dcns/accounts/dashboard.html:26
+msgid "Accéder à mes objets"
+msgstr "Go to my items"
+
+#: templates/accounts/dashboard.html:33
+#, fuzzy
+msgid "Que pouvez-vous faire ensuite ?"
+msgstr "Welcome to eRentmarket! What can you do next?"
+
+#: templates/accounts/dashboard.html:36
+#: templates/dcns/accounts/dashboard.html:37
+msgid "Editer votre profil"
+msgstr "Edit your profile"
+
+#: templates/accounts/dashboard.html:39
+#: templates/dcns/accounts/dashboard.html:41
+msgid "Locations en tant que <strong>propriétaire</strong>"
+msgstr "<strong>Owner's</strong> rental"
+
+#: templates/accounts/dashboard.html:44
+msgid ""
+"\n"
+"                <span>Location<br />à valider</span>\n"
+"              "
+msgid_plural ""
+"\n"
+"\t\t\t    <span>Locations<br />à valider</span>\n"
+"              "
+msgstr[0] ""
+"\n"
+"                <span>Rentals<br />to validate</span>\n"
+"              "
+msgstr[1] ""
+"\n"
+"                <span>Rentals<br />to validate</span>\n"
+"              "
+
+#: templates/accounts/dashboard.html:54 templates/accounts/dashboard.html:87
+msgid ""
+"\n"
+"                <span>Location<br />en cours</span>\n"
+"              "
+msgid_plural ""
+"\n"
+"\t\t\t    <span>Locations<br />en cours</span>\n"
+"              "
+msgstr[0] ""
+"\n"
+"                <span>Rentals<br />pending</span>\n"
+"              "
+msgstr[1] ""
+"\n"
+"\t\t\t    <span>Rentals<br />pending</span>\n"
+"              "
+
+#: templates/accounts/dashboard.html:64
+#: templates/dcns/accounts/dashboard.html:66
+msgid ""
+"\n"
+"                <span>Objet<br />en location</span>\n"
+"              "
+msgid_plural ""
+"\n"
+" \t\t\t    <span>Objets<br />en location</span>\n"
+"              "
+msgstr[0] ""
+"\n"
+"                <span>Item<br />rented</span>\n"
+"              "
+msgstr[1] ""
+"\n"
+" \t\t\t    <span>Item<br />rented</span>\n"
+"              "
+
+#: templates/accounts/dashboard.html:72
+#: templates/dcns/accounts/dashboard.html:74
+msgid "Locations en tant que <strong>locataire</strong>"
+msgstr "<strong>Borrower's</strong> rental"
+
+#: templates/accounts/dashboard.html:77
+msgid ""
+"\n"
+"                 <span>Location<br />en attente de validation</span>\n"
+"                "
+msgid_plural ""
+"\n"
+"\t\t\t     <span>Locations<br />en attente de validation</span>\n"
+"               "
+msgstr[0] ""
+"\n"
+"                <span>Rentals<br />waiting for validation</span>\n"
+"              "
+msgstr[1] ""
+"\n"
+"                <span>Rentals<br />waiting for validation</span>\n"
+"              "
+
+#: templates/accounts/owner_booking.html:4
+#, fuzzy
+msgid "Vos locations en cours en tant que propriétaire"
+msgstr "Your owner's active rentals"
+
+#: templates/accounts/owner_booking.html:21
+#: templates/accounts/owner_history.html:21
+#: templates/accounts/owner_product.html:21
+#: templates/accounts/patron_paypal.html:22
+#: templates/dcns/accounts/owner_booking.html:21
+#: templates/dcns/accounts/owner_history.html:21
+#: templates/dcns/accounts/owner_product.html:21
+#: templates/dcns/products/product_delete.html:20
+#: templates/dcns/products/product_edit.html:20
+#: templates/dcns/rent/booking_detail.html:87
+#: templates/dcns/rent/booking_incident.html:60
+#: templates/products/product_delete.html:20
+#: templates/products/product_edit.html:21
+#: templates/rent/booking_detail.html:88
+#: templates/rent/booking_incident.html:35
+msgid "Mes objets"
+msgstr "My items"
+
+#: templates/accounts/owner_booking.html:22
+#: templates/accounts/owner_history.html:22
+#: templates/accounts/owner_product.html:22
+#: templates/accounts/patron_paypal.html:23
+#: templates/dcns/accounts/owner_booking.html:22
+#: templates/dcns/accounts/owner_history.html:22
+#: templates/dcns/accounts/owner_product.html:22
+#: templates/dcns/products/product_delete.html:21
+#: templates/dcns/products/product_edit.html:21
+#: templates/dcns/rent/booking_detail.html:88
+#: templates/dcns/rent/booking_incident.html:61
+#: templates/products/product_delete.html:21
+#: templates/products/product_edit.html:22
+#: templates/rent/booking_detail.html:89
+#: templates/rent/booking_incident.html:36
+msgid "Ajouter un objet"
+msgstr "Add an item"
+
+#: templates/accounts/owner_history.html:4
+#: templates/dcns/accounts/owner_history.html:4
+msgid "Historique de vos locations en tant que propriétaire"
+msgstr "Your owner's rental history"
 
 #: templates/accounts/owner_product.html:4
 #: templates/dcns/accounts/owner_product.html:4
@@ -2287,19 +2384,19 @@ msgstr "Active rentals"
 msgid "Vos produits mis en locations"
 msgstr "Your listed items"
 
-#: templates/accounts/owner_product.html:26
+#: templates/accounts/owner_product.html:27
 #: templates/dcns/accounts/owner_product.html:27
 msgid "Objets en location"
 msgstr "Listed items"
 
-#: templates/accounts/owner_product.html:28
+#: templates/accounts/owner_product.html:29
 #: templates/accounts/patron_detail.html:55
 #: templates/dcns/accounts/owner_product.html:29
 #: templates/dcns/accounts/patron_detail.html:55
 msgid "Pas de location"
 msgstr "No rental"
 
-#: templates/accounts/owner_product.html:49
+#: templates/accounts/owner_product.html:50
 #: templates/dcns/accounts/owner_product.html:50
 #: templates/dcns/products/product_delete.html:42
 #: templates/dcns/products/product_list.html:140
@@ -2309,7 +2406,7 @@ msgstr "No rental"
 msgid "km"
 msgstr "km"
 
-#: templates/accounts/owner_product.html:55
+#: templates/accounts/owner_product.html:56
 #: templates/accounts/patron_detail.html:81
 #: templates/dcns/accounts/owner_product.html:56
 #: templates/dcns/accounts/patron_detail.html:81
@@ -2318,7 +2415,7 @@ msgstr "km"
 msgid "par"
 msgstr "by"
 
-#: templates/accounts/owner_product.html:59
+#: templates/accounts/owner_product.html:60
 #: templates/accounts/password_reset_confirm.html:54
 #: templates/dcns/accounts/owner_product.html:60
 #: templates/dcns/accounts/password_reset_confirm.html:54
@@ -2520,9 +2617,9 @@ msgid "Réserver &rarr;"
 msgstr "Book &rarr;"
 
 #: templates/accounts/patron_edit.html:4
-#: templates/accounts/patron_edit.html:18
+#: templates/accounts/patron_edit.html:19
 #: templates/accounts/patron_password.html:18
-#: templates/accounts/patron_paypal.html:18
+#: templates/accounts/patron_paypal.html:32
 #: templates/dcns/accounts/patron_edit.html:4
 #: templates/dcns/accounts/patron_edit.html:19
 #: templates/dcns/accounts/patron_password.html:19
@@ -2530,14 +2627,40 @@ msgstr "Book &rarr;"
 msgid "Votre profil"
 msgstr "Your profile"
 
-#: templates/accounts/patron_edit.html:19
+#: templates/accounts/patron_edit.html:20
 #: templates/accounts/patron_password.html:19
-#: templates/accounts/patron_paypal.html:19
+#: templates/accounts/patron_paypal.html:33
 #: templates/dcns/accounts/patron_edit.html:20
 #: templates/dcns/accounts/patron_password.html:20
 #: templates/dcns/accounts/patron_paypal.html:20
 msgid "Modification du mot de passe"
 msgstr "Change your password"
+
+#: templates/accounts/patron_edit.html:31
+msgid "oui"
+msgstr "yes"
+
+#: templates/accounts/patron_edit.html:138
+#: templates/accounts/patron_password.html:64
+#: templates/dcns/accounts/contact.html:58
+#: templates/dcns/accounts/patron_edit.html:112
+#: templates/dcns/accounts/patron_password.html:65
+#: templates/dcns/accounts/partials/missing.html:383
+#: templates/dcns/products/alert_create.html:49
+#: templates/dcns/products/product_create.html:220
+#: templates/dcns/products/product_edit.html:170
+#: templates/django_messages/compose.html:71
+#: templates/django_messages/message_create.html:52
+#: templates/products/product_create.html:186
+#: templates/products/product_edit.html:171
+msgid "* = champ obligatoire"
+msgstr "* = required field"
+
+#: templates/accounts/patron_edit.html:143
+#: templates/dcns/products/product_edit.html:177
+#: templates/products/product_edit.html:178
+msgid "Sauvegarder"
+msgstr " Save"
 
 #: templates/accounts/patron_password.html:4
 #: templates/dcns/accounts/patron_password.html:4
@@ -2554,40 +2677,27 @@ msgstr "Current password"
 msgid "Nouveau mot de passe"
 msgstr "New password"
 
-#: templates/accounts/patron_password.html:64
-#: templates/dcns/accounts/contact.html:58
-#: templates/dcns/accounts/patron_edit.html:112
-#: templates/dcns/accounts/patron_password.html:65
-#: templates/dcns/accounts/partials/missing.html:383
-#: templates/dcns/products/alert_create.html:49
-#: templates/dcns/products/product_create.html:220
-#: templates/dcns/products/product_edit.html:170
-#: templates/products/product_create.html:186
-#: templates/products/product_edit.html:170
-msgid "* = champ obligatoire"
-msgstr "* = required field"
-
 #: templates/accounts/patron_paypal.html:4
 #: templates/dcns/accounts/patron_paypal.html:4
 msgid "Votre compte PayPal"
 msgstr "Your PayPal account"
 
-#: templates/accounts/patron_paypal.html:23
+#: templates/accounts/patron_paypal.html:38
 #: templates/dcns/accounts/patron_paypal.html:24
 msgid "Vérification de votre compte PayPal"
 msgstr "Verifying your PayPal account"
 
-#: templates/accounts/patron_paypal.html:29
+#: templates/accounts/patron_paypal.html:44
 #: templates/dcns/accounts/patron_paypal.html:31
 msgid "Avez-vous un compte e-loue ?"
 msgstr "Do you already have an eRentmarket account?"
 
-#: templates/accounts/patron_paypal.html:41
+#: templates/accounts/patron_paypal.html:56
 #: templates/dcns/accounts/patron_paypal.html:49
 msgid "e-loue PayPal verified"
 msgstr "eRentmarket PayPal verified"
 
-#: templates/accounts/patron_paypal.html:46
+#: templates/accounts/patron_paypal.html:61
 #: templates/accounts/partials/login.html:35
 #: templates/accounts/partials/missing.html:426
 #: templates/dcns/accounts/patron_paypal.html:44
@@ -3616,7 +3726,6 @@ msgstr ""
 
 #: templates/accounts/partials/missing.html:410
 #: templates/dcns/accounts/partials/missing.html:376
-#, fuzzy
 msgid ""
 "\n"
 "    \t\t\t\tEn cliquant sur <strong>\"Continuer &rarr;\"</strong> en "
@@ -3625,8 +3734,8 @@ msgid ""
 "    \t\t\t "
 msgstr ""
 "\n"
-"\t\t\t\tBy clicking on <strong>\"Continue &rarr;\"</strong> bellow, you "
-"agree to the <a href=\"/conditions-generales/\" target=\"_blank\">terms and "
+"   \t\t\t\tBy clicking on <strong>\"Next &rarr;\"</strong> bellow, you agree "
+"to the <a href=\"/conditions-generales/\" target=\"_blank\">terms and "
 "conditions</a>.\n"
 "\t\t\t "
 
@@ -3687,7 +3796,7 @@ msgid ""
 msgstr ""
 "\n"
 "\t\t\t\t <p>The <strong> guaranty and the rental agreement</strong> securize "
-"your items in case of damage.</p>\n"
+"your items.</p>\n"
 "\t\t\t\t"
 
 #: templates/dcns/index.html:102 templates/dcns/accounts/alert_edit.html:13
@@ -3857,6 +3966,8 @@ msgstr "Your rental request"
 #: templates/dcns/products/alert_missing.html:13
 #: templates/dcns/products/product_create.html:13
 #: templates/dcns/products/product_missing.html:13
+#: templates/django_messages/message_missing.html:13
+#: templates/django_messages/message_register.html:13
 #: templates/products/alert_missing.html:13
 #: templates/products/product_create.html:13
 #: templates/products/product_missing.html:13
@@ -3868,6 +3979,9 @@ msgstr "1. Fill in the form"
 #: templates/dcns/products/alert_missing.html:14
 #: templates/dcns/products/product_create.html:14
 #: templates/dcns/products/product_missing.html:14
+#: templates/django_messages/message_create.html:13
+#: templates/django_messages/message_missing.html:14
+#: templates/django_messages/message_register.html:14
 #: templates/products/alert_missing.html:14
 #: templates/products/product_create.html:14
 #: templates/products/product_missing.html:14
@@ -3935,6 +4049,7 @@ msgstr ""
 #: templates/dcns/products/alert_missing.html:4
 #: templates/dcns/products/product_missing.html:4
 #: templates/dcns/rent/booking_missing.html:4
+#: templates/django_messages/message_missing.html:4
 #: templates/products/product_missing.html:4
 #: templates/rent/booking_missing.html:4
 msgid "Complétez votre profil"
@@ -3946,6 +4061,9 @@ msgstr "Complete your profile"
 #: templates/dcns/rent/booking_confirm.html:21
 #: templates/dcns/rent/booking_missing.html:21
 #: templates/dcns/rent/booking_register.html:21
+#: templates/django_messages/message_create.html:16
+#: templates/django_messages/message_missing.html:16
+#: templates/django_messages/message_register.html:16
 #: templates/nc/rent/booking_confirm.html:21
 #: templates/products/alert_missing.html:16
 #: templates/products/product_create.html:16
@@ -3960,6 +4078,7 @@ msgstr "Get help"
 #: templates/dcns/products/alert_missing.html:20
 #: templates/dcns/products/product_missing.html:20
 #: templates/dcns/rent/booking_missing.html:25
+#: templates/django_messages/message_missing.html:20
 #: templates/products/alert_missing.html:20
 #: templates/products/product_missing.html:20
 msgid "Choisissez une adresse pour l'objet :"
@@ -3968,6 +4087,7 @@ msgstr "Choose an address for the item :"
 #: templates/dcns/products/alert_missing.html:22
 #: templates/dcns/products/product_missing.html:22
 #: templates/dcns/rent/booking_missing.html:27
+#: templates/django_messages/message_missing.html:22
 #: templates/products/alert_missing.html:22
 #: templates/products/product_missing.html:22
 msgid "Complétez votre profil et choisissez une adresse pour la l'objet :"
@@ -3991,28 +4111,28 @@ msgstr "Your message has been successfully sent"
 #: templates/dcns/products/product_create.html:125
 #: templates/dcns/products/product_edit.html:117
 #: templates/products/product_create.html:125
-#: templates/products/product_edit.html:117
+#: templates/products/product_edit.html:118
 msgid "Prix de location"
 msgstr "Rental price"
 
 #: templates/dcns/products/product_create.html:130
 #: templates/dcns/products/product_edit.html:122
 #: templates/products/product_create.html:130
-#: templates/products/product_edit.html:122
+#: templates/products/product_edit.html:123
 msgid "Prix simplifiés"
 msgstr "Simplified pricing"
 
 #: templates/dcns/products/product_create.html:133
 #: templates/dcns/products/product_edit.html:125
 #: templates/products/product_create.html:133
-#: templates/products/product_edit.html:125
+#: templates/products/product_edit.html:126
 msgid "Prix par défaut :"
 msgstr "Price per day :"
 
 #: templates/dcns/products/product_create.html:134
 #: templates/dcns/products/product_edit.html:126
 #: templates/products/product_create.html:134
-#: templates/products/product_edit.html:126
+#: templates/products/product_edit.html:127
 #, python-format
 msgid ""
 "\n"
@@ -4031,7 +4151,7 @@ msgstr ""
 #: templates/dcns/products/product_create.html:174
 #: templates/dcns/products/product_edit.html:166
 #: templates/products/product_create.html:174
-#: templates/products/product_edit.html:166
+#: templates/products/product_edit.html:167
 msgid "Calculer"
 msgstr "Calculate"
 
@@ -4111,7 +4231,7 @@ msgstr ""
 
 #: templates/dcns/products/product_detail.html:109
 #: templates/mobile/products/product_detail.html:49
-#: templates/products/product_detail.html:110
+#: templates/products/product_detail.html:118
 msgid "Lieu"
 msgstr "Location"
 
@@ -4136,7 +4256,7 @@ msgstr ""
 #: templates/dcns/products/product_detail.html:133
 #: templates/dcns/rent/booking_confirm.html:101
 #: templates/nc/rent/booking_confirm.html:116
-#: templates/products/product_detail.html:124
+#: templates/products/product_detail.html:128
 msgid "Paiement en ligne"
 msgstr "Online payment"
 
@@ -4149,14 +4269,9 @@ msgid ""
 msgstr "The renter prefer the online payment. "
 
 #: templates/dcns/products/product_edit.html:175
-#: templates/products/product_edit.html:175
+#: templates/products/product_edit.html:176
 msgid "Supprimer cet objet"
 msgstr "Remove this item"
-
-#: templates/dcns/products/product_edit.html:177
-#: templates/products/product_edit.html:177
-msgid "Sauvegarder"
-msgstr "Save"
 
 #: templates/dcns/products/product_list.html:71
 #: templates/dcns/products/product_list.html:73
@@ -4304,8 +4419,8 @@ msgstr "Booked item"
 #: templates/dcns/rent/booking_incident.html:114
 #: templates/nc/rent/booking_confirm.html:57
 #: templates/rent/booking_confirm.html:57
-#: templates/rent/booking_detail.html:141
-#: templates/rent/booking_incident.html:87
+#: templates/rent/booking_detail.html:142
+#: templates/rent/booking_incident.html:89
 msgid "Dates et total"
 msgstr "Dates and total"
 
@@ -4314,8 +4429,8 @@ msgstr "Dates and total"
 #: templates/dcns/rent/booking_incident.html:119
 #: templates/nc/rent/booking_confirm.html:62
 #: templates/rent/booking_confirm.html:62
-#: templates/rent/booking_detail.html:146
-#: templates/rent/booking_incident.html:92
+#: templates/rent/booking_detail.html:147
+#: templates/rent/booking_incident.html:94
 msgid "Début :"
 msgstr "Start :"
 
@@ -4324,8 +4439,8 @@ msgstr "Start :"
 #: templates/dcns/rent/booking_incident.html:123
 #: templates/nc/rent/booking_confirm.html:66
 #: templates/rent/booking_confirm.html:66
-#: templates/rent/booking_detail.html:150
-#: templates/rent/booking_incident.html:96
+#: templates/rent/booking_detail.html:151
+#: templates/rent/booking_incident.html:98
 msgid "Fin :"
 msgstr "End :"
 
@@ -4334,8 +4449,8 @@ msgstr "End :"
 #: templates/dcns/rent/booking_incident.html:127
 #: templates/nc/rent/booking_confirm.html:70
 #: templates/rent/booking_confirm.html:70
-#: templates/rent/booking_detail.html:154
-#: templates/rent/booking_incident.html:100
+#: templates/rent/booking_detail.html:155
+#: templates/rent/booking_incident.html:102
 msgid "Prix par jour :"
 msgstr "Price per day :"
 
@@ -4344,8 +4459,8 @@ msgstr "Price per day :"
 #: templates/dcns/rent/booking_incident.html:131
 #: templates/nc/rent/booking_confirm.html:74
 #: templates/rent/booking_confirm.html:74
-#: templates/rent/booking_detail.html:158
-#: templates/rent/booking_incident.html:104
+#: templates/rent/booking_detail.html:159
+#: templates/rent/booking_incident.html:106
 msgid "Durée de la location :"
 msgstr "Rental period :"
 
@@ -4354,8 +4469,8 @@ msgstr "Rental period :"
 #: templates/dcns/rent/booking_incident.html:135
 #: templates/nc/rent/booking_confirm.html:78
 #: templates/rent/booking_confirm.html:78
-#: templates/rent/booking_detail.html:162
-#: templates/rent/booking_incident.html:108
+#: templates/rent/booking_detail.html:163
+#: templates/rent/booking_incident.html:110
 msgid "Total :"
 msgstr "Total :"
 
@@ -4414,29 +4529,29 @@ msgstr "Rental closed"
 
 #: templates/dcns/rent/booking_detail.html:109
 #: templates/dcns/rent/booking_incident.html:82
-#: templates/rent/booking_detail.html:109
-#: templates/rent/booking_incident.html:55
+#: templates/rent/booking_detail.html:110
+#: templates/rent/booking_incident.html:57
 msgid "Résumé"
 msgstr "Summary"
 
 #: templates/dcns/rent/booking_detail.html:131
 #: templates/dcns/rent/booking_incident.html:104
-#: templates/rent/booking_detail.html:131
-#: templates/rent/booking_incident.html:77
+#: templates/rent/booking_detail.html:132
+#: templates/rent/booking_incident.html:79
 msgid "Propriétaire :"
 msgstr "Owner :"
 
 #: templates/dcns/rent/booking_detail.html:136
 #: templates/dcns/rent/booking_incident.html:109
-#: templates/rent/booking_detail.html:136
-#: templates/rent/booking_incident.html:82
+#: templates/rent/booking_detail.html:137
+#: templates/rent/booking_incident.html:84
 msgid "Locataire :"
 msgstr "Borrower :"
 
 #: templates/dcns/rent/booking_detail.html:170
 #: templates/dcns/rent/booking_incident.html:187
-#: templates/rent/booking_detail.html:170
-#: templates/rent/booking_incident.html:160
+#: templates/rent/booking_detail.html:171
+#: templates/rent/booking_incident.html:162
 msgid "Statut de la location"
 msgstr "Rental status"
 
@@ -4453,27 +4568,27 @@ msgid "La réservation est annulé"
 msgstr "This booking has been canceled."
 
 #: templates/dcns/rent/booking_incident.html:142
-#: templates/rent/booking_incident.html:115
+#: templates/rent/booking_incident.html:117
 msgid "Détails de la transaction"
 msgstr "Transaction details"
 
 #: templates/dcns/rent/booking_incident.html:147
-#: templates/rent/booking_incident.html:120
+#: templates/rent/booking_incident.html:122
 msgid "Avant commission :"
 msgstr "Before commission :"
 
 #: templates/dcns/rent/booking_incident.html:151
-#: templates/rent/booking_incident.html:124
+#: templates/rent/booking_incident.html:126
 msgid "Commission :"
 msgstr "Commission :"
 
 #: templates/dcns/rent/booking_incident.html:155
-#: templates/rent/booking_incident.html:128
+#: templates/rent/booking_incident.html:130
 msgid "Montant net perçu :"
 msgstr "Net amount received"
 
 #: templates/dcns/rent/booking_incident.html:162
-#: templates/rent/booking_incident.html:135
+#: templates/rent/booking_incident.html:137
 msgid "Déclarez votre incident"
 msgstr "Declare your incident"
 
@@ -4590,6 +4705,137 @@ msgstr "Awaiting closing"
 #: templates/rent/partials/booking_status.html:71
 msgid "Clôturée"
 msgstr "Closed"
+
+#: templates/django_messages/compose.html:18
+#: templates/django_messages/inbox.html:20
+#: templates/django_messages/inbox.html:26
+#: templates/django_messages/outbox.html:18
+#: templates/django_messages/trash.html:18
+#: templates/django_messages/view.html:18
+msgid "Messages reçus"
+msgstr "Received messages"
+
+#: templates/django_messages/compose.html:19
+#: templates/django_messages/inbox.html:21
+#: templates/django_messages/outbox.html:19
+#: templates/django_messages/outbox.html:24
+#: templates/django_messages/trash.html:19
+#: templates/django_messages/view.html:19
+msgid "Messages envoyés"
+msgstr "Messages sent"
+
+#: templates/django_messages/compose.html:20
+#: templates/django_messages/inbox.html:22
+#: templates/django_messages/outbox.html:20
+#: templates/django_messages/trash.html:20
+#: templates/django_messages/view.html:20
+msgid "Messages supprimés"
+msgstr "Deleted messages"
+
+#: templates/django_messages/compose.html:24
+#, fuzzy
+msgid "Nouveau Message"
+msgstr "New password"
+
+#: templates/django_messages/inbox.html:32
+#: templates/django_messages/outbox.html:30
+#: templates/django_messages/trash.html:30
+msgid "Sender"
+msgstr "Sender"
+
+#: templates/django_messages/inbox.html:32
+#: templates/django_messages/outbox.html:30
+#: templates/django_messages/trash.html:30
+msgid "Reçu le"
+msgstr "Received on"
+
+#: templates/django_messages/inbox.html:32
+#: templates/django_messages/outbox.html:30
+#: templates/django_messages/trash.html:30
+#, fuzzy
+msgid "Action"
+msgstr "Activation"
+
+#: templates/django_messages/inbox.html:44
+#: templates/django_messages/outbox.html:42
+#: templates/django_messages/trash.html:42
+#: templates/django_messages/view.html:25
+msgid "DATETIME_FORMAT"
+msgstr "DATETIME_FORMAT"
+
+#: templates/django_messages/inbox.html:46
+#: templates/django_messages/outbox.html:44
+#: templates/django_messages/trash.html:44
+msgid "Lire"
+msgstr "Read"
+
+#: templates/django_messages/inbox.html:47
+#: templates/django_messages/view.html:34
+msgid "Delete"
+msgstr "Delete"
+
+#: templates/django_messages/inbox.html:54
+#: templates/django_messages/outbox.html:51
+#: templates/django_messages/trash.html:52
+#, fuzzy
+msgid "No messages."
+msgstr "Message"
+
+#: templates/django_messages/message_create.html:3
+msgid "Composer un message"
+msgstr "Write a message"
+
+#: templates/django_messages/message_create.html:8
+#, fuzzy
+msgid "Envoyer un message"
+msgstr "Send an chaser"
+
+#: templates/django_messages/message_create.html:11
+msgid "1. Composez le message"
+msgstr "1.  Write a message"
+
+#: templates/django_messages/message_create.html:19
+#, fuzzy
+msgid "Nouveau message"
+msgstr "New password"
+
+#: templates/django_messages/message_missing.html:10
+#: templates/django_messages/message_register.html:10
+msgid "Rédiger un message"
+msgstr "Write a message"
+
+#: templates/django_messages/new_message.html:2
+#, python-format
+msgid ""
+"\n"
+"\n"
+"Bonjour %(recipient)s,\n"
+"\n"
+"Vous avez reçu un message de %(sender)s qui contient le message suivant :\n"
+msgstr ""
+"\n"
+"\n"
+"Hello %(recipient)s,\n"
+"\n"
+"You have received a message from %(sender)s  :\n"
+
+#: templates/django_messages/new_message.html:16
+msgid "Inbox"
+msgstr "Inbox"
+
+#: templates/django_messages/new_message.html:17
+#: templates/django_messages/view.html:32
+msgid "Reply"
+msgstr "Reply"
+
+#: templates/django_messages/trash.html:24
+#, fuzzy
+msgid "Deleted Messages"
+msgstr "Message"
+
+#: templates/django_messages/trash.html:45
+msgid "undelete"
+msgstr "undelete"
 
 #: templates/faq/topic_detail.html:7
 #, python-format
@@ -4755,7 +5001,6 @@ msgstr ""
 "\t\t\t\t\t\t"
 
 #: templates/products/alert_list.html:118
-#, fuzzy
 msgid ""
 "\n"
 " \t\t\t\t <strong>Avertir le locataire</strong> que j'ai mis cet objet en "
@@ -4764,7 +5009,7 @@ msgid ""
 msgstr ""
 "\n"
 "\t\t\t  The <strong>guaranty and the rental agreement</strong> securize your "
-"items in case of damage.\n"
+"items.\n"
 "\t\t\t "
 
 #: templates/products/product_create.html:21
@@ -4775,7 +5020,11 @@ msgstr "1. Category "
 msgid "Louer &rarr;"
 msgstr "Next &rarr;"
 
-#: templates/products/product_detail.html:126
+#: templates/products/product_detail.html:107
+msgid "Contactez-moi"
+msgstr "Contact me"
+
+#: templates/products/product_detail.html:130
 msgid ""
 "Vous payez en ligne au moment de la réservation via PayPal.<br/> <strong>Le "
 "montant est débité lors du premier jour de location.</strong>"
@@ -4816,7 +5065,7 @@ msgid ""
 msgstr ""
 "\n"
 "\t\t\t\t <p>The <strong>guaranty and the rental agreement</strong> securize "
-"your items in case of damage.</p>\n"
+"your items.</p>\n"
 "\t\t\t\t"
 
 #: templates/rent/booking_confirm.html:15
@@ -4840,7 +5089,7 @@ msgid ""
 msgstr ""
 "\n"
 "                      The <strong>guaranty and the rental agreement</strong> "
-"securize your items in case of damage.\n"
+"securize your items.\n"
 " "
 
 #: templates/rent/booking_confirm.html:116
@@ -7141,9 +7390,6 @@ msgstr "/what-is-erentmarket/"
 #~ "\t\t\t  Thanks to <strong>PayPal</strong>, use the most secure payment "
 #~ "method in the world.\n"
 #~ "\t\t\t "
-
-#~ msgid "Notre partenaire"
-#~ msgstr "Our partner"
 
 #~ msgid ""
 #~ "\n"
