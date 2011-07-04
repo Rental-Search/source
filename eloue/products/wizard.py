@@ -137,9 +137,12 @@ class MessageWizard(GenericFormWizard):
         if missing_form:
             missing_form.instance = new_patron
             new_patron, new_address, new_phone = missing_form.save()
+        
         # Create message
         product = self.extra_context["product"]
         recipient = self.extra_context["recipient"]
+        if new_patron == product.owner:
+            return redirect_to(request, product.get_absolute_url())
         message_form = form_list[0]
         message_form.save(product=product, sender=new_patron, recipient=recipient)
         messages.success(request, _(u"Votre message a bien été envoyé au propriétaire"))
