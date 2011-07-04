@@ -52,8 +52,13 @@
 				{% if user.is_anonymous %}
 				 <li class="nav"><a href="{% trans "/comment-ca-marche/" %}" class="nav-link">{% trans "Comment ça marche ?" %}</a></li>
 				{% else %}
-				<li class="nav"><a href="{% url dashboard %}" class="nav-link">{% trans "Tableau de bord" %}</a></li>  
-				 <li class="nav welcome">{% blocktrans with request.user.first_name as first_name %} Bienvenue, {{ first_name }}!{% endblocktrans %}</li>
+				    {% if request.user.first_name %}
+				        <li class="nav"><a href="{% url dashboard %}" class="nav-link">{% trans "Tableau de bord" %}</a></li> 
+				        <li class="nav welcome">{% blocktrans with request.user.first_name as first_name %} Bienvenue, {{ first_name }}!{% endblocktrans %}</li>
+				    {% else %}
+				        <li class="nav"><a href="{% url dashboard %}" class="nav-link">{% trans "Tableau de bord" %}</a></li> 
+				        <li class="nav welcome">{% blocktrans with request.user.username as username %} Bienvenue, {{ username }}!{% endblocktrans %}</li>
+				    {% endif %}
 				{% endif %}
             </ul>
         </div>

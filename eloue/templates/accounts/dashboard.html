@@ -42,9 +42,9 @@
             {% with user.bookings.authorized|length as counter %}
 			  <a href="{% url owner_booking %}" class="highlight">{{ counter }}</a><br />
 			  {% blocktrans count counter as counter %}
-                <span>Location<br />à valider</span>
+                <span>Location<br />en attente de validation</span>
               {% plural %}
-			    <span>Locations<br />à valider</span>
+			    <span>Locations<br />en attente de validation</span>
               {% endblocktrans %}
 			 {% endwith %}
         </div>
