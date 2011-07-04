@@ -4,7 +4,7 @@ jQuery.fn.reverse = function() {
 
 $(document).ready(function() {
     // geocode
-if ($("input[name$='l']") && $("input[name$='l']").val() == '' && ($("input[name$='0-email']").length==0) ){
+if ( ($("input[name$='l']").length == 1) && ($("input[name$='l']").val() == '') ){
     var geocoder;
     var latitude;
     var longitude;
