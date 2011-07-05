@@ -40,7 +40,7 @@
                     <a href="{{message.get_absolute_url }}">{{ message.subject }}</a>
                     {% if message.replied %}</em>{% endif %}
                     {% if message.new %}</strong>{% endif %}</td>
-                <td><a href="{{ message.sender.get_absolute_url }}">{{ message.sender}}</a></td>
+                <td>{{ message.sender}}</td>
                 <td>{{ message.sent_at|date:_("DATETIME_FORMAT") }}</td>
                 <td>
                     <a href="{{message.get_absolute_url }}">{% trans "Lire" %}</a> -
