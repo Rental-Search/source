@@ -29,7 +29,7 @@ from eloue.products.forms import AlertSearchForm, AlertForm, FacetedSearchForm, 
 from eloue.products.models import Category, Product, Curiosity, UNIT, ProductRelatedMessage, Alert
 from eloue.products.wizard import ProductWizard, MessageWizard, AlertWizard, AlertAnswerWizard
 from django_messages.forms import ComposeForm
-from django_messages.utils import format_quote
+from eloue.products.utils import format_quote
 
 
 

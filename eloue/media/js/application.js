@@ -270,7 +270,24 @@ if ( ($("input[name$='l']").length == 1) && ($("input[name$='l']").val() == '') 
             hideNotification();
         });
     }
+    
+    // Put the cursor at the beginning of the textarea
 
+    /* to the BEGIN */
+
+    $('#id_body').each(function(){ //change event or something you want
+
+    /* simple js */
+    if (this.createTextRange) {
+     var r = this.createTextRange();
+     r.collapse(true);
+     r.select();
+    }
+
+     $(this).focus(); //set focus
+
+    });
+    
     //Partner slideshow
     $('.slide').cycle({
         fx: 'fade',
