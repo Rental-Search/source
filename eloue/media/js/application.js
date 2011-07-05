@@ -4,7 +4,7 @@ jQuery.fn.reverse = function() {
 
 $(document).ready(function() {
     // geocode
-if ( ($("input[name$='l']").length == 1) && ($("input[name$='l']").val() == '') ){
+if ( ($("input[name$='l']").length == 1) && ($("input[name$='l']").val() == '') && ($("input[name$='0-email']").length == 0) && ($("input[name$='1-email']").length == 0)){
     var geocoder;
     var latitude;
     var longitude;
@@ -113,7 +113,8 @@ if ( ($("input[name$='l']").length == 1) && ($("input[name$='l']").val() == '') 
 	newPhoneInput = $(".add_new_phone");
 	newPhoneInput.hide();
  	$("a#link_add_phone").click(function(){		
-		newPhoneInput.show();		
+		newPhoneInput.show();	
+		$("#id_1-phones").val('---------');	
  	});
     }
 
@@ -122,7 +123,8 @@ if ( ($("input[name$='l']").length == 1) && ($("input[name$='l']").val() == '') 
 	newAddrInput = $(".add_new_addr");
 	newAddrInput.hide();
 	$("a#link_add_addr").click(function(){		
-		newAddrInput.show();		
+		newAddrInput.show();
+		$("#id_1-addresses").val('---------');			
 	});
     }
 

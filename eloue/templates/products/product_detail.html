@@ -126,10 +126,18 @@
         </div>
         <div class="box-info">
               <h3>{% trans "Paiement en ligne" %}</h3>
-              <p>
-                {% trans "Vous payez en ligne au moment de la réservation via PayPal.<br/> <strong>Le montant est débité lors du premier jour de location.</strong>"%}
-              </p>
-         </div>
+              {% blocktrans %}
+			  <ol>
+					<li> Paiement sur payal</li>
+					<li> Le propriétaire est averti de votre demande</li>
+					<li> Nous vous informons par mail de sa réponse :</li>
+					<ul>
+						<li>-S’il accepte vous serez débité le premier jour de la location</li>
+						<li>-S’il refuse vous ne serez pas débité</li>
+					</ul>
+	      	 </ol>
+			 {% endblocktrans %}
+        </div>
     </div>
 </div>
 {% endblock %}

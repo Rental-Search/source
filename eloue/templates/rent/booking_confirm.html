@@ -113,20 +113,18 @@
                   {% trans "Le propriétaire souhaite le paiement hors ligne (chèque/espèce). Vous le payerez le premier jour de la location."%}
               </p>
               {% else %}
-              <h3>{% trans "Comment ça marche ?" %}</h3>
-              <p>
-                {% blocktrans %}
-                <ul style="list-style-type : none;">                
-					<li>1) Paiement sur payal</li>
-					<li>2) Le propriétaire est averti de votre demande</li>
-					<li>3) Nous vous informons par mail de sa réponse :</li>
-						<ul>
-							<li>-S’il accepte vous serez débité le premier jour de la location</li>
-							<li>-S’il refuse vous ne serez pas débité</li>
-						</ul>
-				</ul>
-                {% endblocktrans %}
-              </p>
+              <h3>{% trans "Paiement en ligne" %}</h3>
+              {% blocktrans %}
+			  <ol>
+					<li> Paiement sur payal </li>
+					<li> Le propriétaire est averti de votre demande </li>
+					<li> Nous vous informons par mail de sa réponse : </li>
+					<ul>
+						<li>-S’il accepte vous serez débité le premier jour de la location</li>
+						<li>-S’il refuse vous ne serez pas débité</li>
+					</ul>
+	      	 </ol>
+			 {% endblocktrans %}
               {% endif %}
          </div> 
 	</div>
