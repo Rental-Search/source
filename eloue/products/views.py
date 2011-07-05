@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import re
 from django.conf import settings
 from django.contrib import messages
 from django.core.urlresolvers import reverse
@@ -30,14 +31,12 @@ from eloue.products.forms import AlertSearchForm, AlertForm, FacetedSearchForm, 
 from eloue.products.models import Category, Product, Curiosity, UNIT, ProductRelatedMessage, Alert
 from eloue.products.wizard import ProductWizard, MessageWizard, AlertWizard, AlertAnswerWizard
 from django_messages.forms import ComposeForm
-from django_messages.utils import format_quote
-import re
-import redis
+from eloue.products.utils import format_quote
+from django.core.cache import cache
 
 
 PAGINATE_PRODUCTS_BY = getattr(settings, 'PAGINATE_PRODUCTS_BY', 10)
 DEFAULT_RADIUS = getattr(settings, 'DEFAULT_RADIUS', 50)
-redis = redis.Redis(host='localhost', port=6379, db=0)
 
 @mobify
 @cache_page(300)
@@ -247,9 +246,9 @@ def alert_delete(request, alert_id):
 
 def suggestion(request): 
     word = request.GET['q']
-    resp = redis.get(word)
-    if resp:
-        return HttpResponse(resp)
+    cache_value = cache.get(word)
+    if cache_value:
+        return HttpResponse(cache_value)
     results_categories = SearchQuerySet().filter(categories__startswith=word).models(Product)
     resp_list = []
     for result in results_categories:
@@ -280,7 +279,7 @@ def suggestion(request):
     resp = ""
     for el in resp_list:
         resp += "\n%s"%el
-    redis.set(word, resp)
+    cache.set(word, resp, 0)
     return HttpResponse(resp)
         
         
