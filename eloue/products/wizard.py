@@ -137,7 +137,6 @@ class MessageWizard(GenericFormWizard):
         if missing_form:
             missing_form.instance = new_patron
             new_patron, new_address, new_phone = missing_form.save()
-        
         # Create message
         product = self.extra_context["product"]
         recipient = self.extra_context["recipient"]
