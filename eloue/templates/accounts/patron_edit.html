@@ -134,6 +134,18 @@
 	    					{% endif %}
 	    				</td>
 	    			</tr>
+					<tr>
+						<td colspan="2" {% if form.new_messages_alerted.errors %} class="error-field" {% endif %}>
+							<label for="id_new_messages_alerted">{% trans "Souhaitez-vous recevoir des alertes des questions sur votre produits ?" %} :</label>
+							{{ form.new_messages_alerted }} {% trans "oui" %}
+							{% if form.new_messages_alerted.errors %}
+								{% for error in form.new_messages_alerted.errors %}
+									<br />
+									<span class="error">{{ error|escape }}</span>
+								{% endfor %}
+							{% endif %}
+						</td>
+					</tr>
 	    			{% endif %}
 	    		</table>
 	    		<p class="required-field">{% trans "* = champ obligatoire" %}</p>

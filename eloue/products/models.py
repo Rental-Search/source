@@ -430,7 +430,7 @@ class Alert(models.Model):
             return Patron.objects.distinct().filter(addresses__in=nearest_addresses)[:10]
         else:
             return None 
-        
+
     def send_alerts(self):
         if self.nearest_patrons:
             for patron in self.nearest_patrons:
