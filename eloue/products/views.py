@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import re
 from django.conf import settings
 from django.contrib import messages
 from django.core.urlresolvers import reverse
@@ -30,9 +31,9 @@ from eloue.products.forms import AlertSearchForm, AlertForm, FacetedSearchForm, 
 from eloue.products.models import Category, Product, Curiosity, UNIT, ProductRelatedMessage, Alert
 from eloue.products.wizard import ProductWizard, MessageWizard, AlertWizard, AlertAnswerWizard
 from django_messages.forms import ComposeForm
-from django_messages.utils import format_quote
-import re
+from eloue.products.utils import format_quote
 from django.core.cache import cache
+
 
 PAGINATE_PRODUCTS_BY = getattr(settings, 'PAGINATE_PRODUCTS_BY', 10)
 DEFAULT_RADIUS = getattr(settings, 'DEFAULT_RADIUS', 50)
