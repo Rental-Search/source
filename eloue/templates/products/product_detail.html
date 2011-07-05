@@ -124,17 +124,18 @@
     			</tr>
     		</table>
         </div>
-        <div class="box-info">
+        <div id="payment-info" class="box-info">
               <h3>{% trans "Paiement en ligne" %}</h3>
               {% blocktrans %}
 			  <ol>
 					<li> Paiement sur payal</li>
 					<li> Le propriétaire est averti de votre demande</li>
-					<li> Nous vous informons par mail de sa réponse :</li>
-					<ul>
-						<li>-S’il accepte vous serez débité le premier jour de la location</li>
-						<li>-S’il refuse vous ne serez pas débité</li>
-					</ul>
+					<li> Nous vous informons par mail de sa réponse :<br />
+					    <ul>
+    						<li>S’il accepte vous serez débité le premier jour de la location</li>
+    						<li>S’il refuse vous ne serez pas débité</li>
+    					</ul>
+    				</li>
 	      	 </ol>
 			 {% endblocktrans %}
         </div>

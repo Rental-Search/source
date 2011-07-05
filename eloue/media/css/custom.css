@@ -793,7 +793,10 @@ body { background: #ECF6FF url("../images/body-bg.png") repeat 0 0; }
     text-indent: 0;
     color: #364C59;
   }
-
+  
+  #payment-info ol { margin-left: 20px; }
+  #payment-info ol ul { margin-left: 20px; }
+    #payment-info ul li { list-style-type: disc; }
 /* --------------------------------------------------------------
 
           box-welcome
