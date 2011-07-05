@@ -114,7 +114,7 @@ if ( ($("input[name$='l']").length == 1) && ($("input[name$='l']").val() == '') 
 	newPhoneInput.hide();
  	$("a#link_add_phone").click(function(){		
 		newPhoneInput.show();	
-		$("#id_1-phones").val('---------');	
+		$("select[id$='-phones']").val('---------');	
  	});
     }
 
@@ -123,8 +123,8 @@ if ( ($("input[name$='l']").length == 1) && ($("input[name$='l']").val() == '') 
 	newAddrInput = $(".add_new_addr");
 	newAddrInput.hide();
 	$("a#link_add_addr").click(function(){		
-		newAddrInput.show();
-		$("#id_1-addresses").val('---------');			
+		newAddrInput.show();	
+		$("select[id$='-addresses']").val('---------');		
 	});
     }
 
