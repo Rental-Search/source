@@ -11,7 +11,7 @@ from django.utils.translation import ugettext as _
 
 from eloue.accounts.forms import EmailPasswordResetForm, PatronSetPasswordForm
 from eloue.accounts.views import activate, authenticate, authenticate_headless, dashboard, patron_edit, owner_booking, owner_history, \
-    borrower_booking, borrower_history, patron_edit_password, patron_paypal, owner_product, contact, alert_edit, patron_detail
+    borrower_booking, borrower_history, patron_edit_password, patron_paypal, owner_product, contact, alert_edit
 from eloue.api import api_v1
 from eloue.products.views import homepage, search, compose_product_related_message, reply_product_related_message
 from eloue.rent.views import booking_detail, booking_accept, booking_reject, booking_incident, booking_close, booking_cancel
@@ -85,7 +85,6 @@ urlpatterns = patterns('',
     url(r'^dashboard/messages/', include('django_messages.urls')),
     url(r'^media/(.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT}),
     url(r'^%s' % _("loueur/"), include('eloue.accounts.urls')),
-    url(r'^users/(?P<slug>[-\w]+)/$', patron_detail, name="patron_detail"),
     url(r'^%s' % _("location/"), include('eloue.products.urls')),
     url(r'^booking/', include('eloue.rent.urls')),
     url(r'^experiments/', include('django_lean.experiments.urls')),
