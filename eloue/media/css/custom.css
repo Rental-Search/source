@@ -915,7 +915,7 @@ body { background: #ECF6FF url("../images/body-bg.png") repeat 0 0; }
   color: #FF7200;
   font-weight: bold;
 }
-
+.product-properties { font-size: 16px; }
 .product-properties .p-value { font-weight: bold; }
 .product-properties .owner { color: #6EB924!important; }
 
