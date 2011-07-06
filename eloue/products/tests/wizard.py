@@ -96,7 +96,7 @@ class ProductWizardTest(TestCase):
     @patch.object(MultiPartFormWizard, 'security_hash')
     def test_second_step_message_wizard_as_anonymous(self, mock_method):
         mock_method.return_value = '6941fd7b20d720833717a1f92e8027af'
-        response = self.client.post(reverse('message_create', args=[1, 1]), {
+        response = self.client.post(reverse('message_create', args=[6, 4]), {
             '0-subject': 'Ask for price, test for wizard',
             '0-body': 'May I have a lower price? never send me a email',
             '1-email': 'alexandre.woog@e-loue.com',
@@ -106,7 +106,7 @@ class ProductWizardTest(TestCase):
             'wizard_step': 1
         })
         self.assertTrue(response.status_code, 301)
-        product = Product.objects.get(pk=1)
+        product = Product.objects.get(pk=6)
         message = ProductRelatedMessage.objects.get(pk=1)
         self.assertEqual(message.subject, 'Ask for price, test for wizard')
         self.assertEqual(product, message.product)

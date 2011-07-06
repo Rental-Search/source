@@ -10,7 +10,7 @@ from django.utils import translation
 from django.utils.translation import ugettext as _
 
 from eloue.accounts.forms import EmailPasswordResetForm, PatronSetPasswordForm
-from eloue.accounts.views import activate, authenticate, authenticate_headless, dashboard, patron_edit, owner_booking, owner_history, \
+from eloue.accounts.views import activate, authenticate, authenticate_headless, dashboard, patron_edit, owner_booking, owner_history,\
     borrower_booking, borrower_history, patron_edit_password, patron_paypal, owner_product, contact, alert_edit
 from eloue.api import api_v1
 from eloue.products.views import homepage, search, compose_product_related_message, reply_product_related_message
