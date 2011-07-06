@@ -110,9 +110,8 @@
     				        <span class="error">{{ error|escape }}</span>
     				    {% endfor %}
     				{% endif %}
-				<a id="link_add_phone" href="#"> Ajouter un nouveau numéro ?</a>
+				<a id="link_add_phone" href="http://"> {% trans "Ajouter un nouveau numéro ?" %}</a>
     			</td>
-			
     		</tr>		
     		{% endif %}
 
@@ -152,7 +151,11 @@
     				        <span class="error">{{ error|escape }}</span>
     				    {% endfor %}
     				{% endif %}
+<<<<<<< HEAD
 				<a id="link_add_addr" href="#"> Ajouter une nouvelle addresse ?</a>
+=======
+				<a id="link_add_addr" href="http://"> {% trans "Ajouter une nouvelle addresse ?" %}</a>
+>>>>>>> new_content
     			</td>
     		</tr>
     		{% endif %}
@@ -421,7 +424,7 @@
 	    <input type="hidden" name="{{ step_field }}" value="{{ step0 }}" />
     	{{ previous_fields|safe }}
     	{% if product %}
-    	<!-- <a href="{{ product.get_absolute_url }}">{% trans "Annuler" %}</a> {% trans "ou" %} -->
+    	
     	{% else %}
     	{% endif %}<input type="submit" class="btn big-green" value="{% trans "Continuer &rarr;" %}" />
     </p>
