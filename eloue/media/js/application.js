@@ -3,36 +3,6 @@ jQuery.fn.reverse = function() {
 };
 
 $(document).ready(function() {
-    // geocode
-if ( ($("input[name='l']").length == 1) && ($("input[name='l']").val() == '') ){
-    var geocoder;
-    var latitude;
-    var longitude;
-    var altitude;
-    var user_location;  
-    geocoder = new google.maps.Geocoder();
-           
-    if (navigator.geolocation){
-        navigator.geolocation.getCurrentPosition(function(position){
-		latitude = position.coords.latitude;
-		longitude = position.coords.longitude;
-		altitude = position.coords.altitude;
-		var address = latitude.toString()+","+longitude.toString();				
-    		geocoder.geocode( { 'address': address}, function(results, status) {
-      			if (status == google.maps.GeocoderStatus.OK) {
-				for(i = 0 ; i <= results[0].address_components.length-1 ; i++){						
-					if(results[0].address_components[i].types[0] == "locality"){
-						user_location = results[0].address_components[i].long_name;  
-						$("input[name$='l']").val(results[0].address_components[i].long_name);
-						break;
-					}
-				}
-        		} else {}
-     	        }); 	
-	});
-     } else {}
-}
- 	
     
     // Password field enabler/disabler
     var passwordInput,
