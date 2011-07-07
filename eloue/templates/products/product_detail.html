@@ -19,6 +19,7 @@
 		<p>
 			<label>{% trans "Où ?" %}</label><br />
 			{{ search_form.l }}<br />
+			<span>{% trans "Exemple :" %} </span> <a href="{% url product_list %}?l={% trans "Paris, 75012" %}">{% trans "Paris, 75012" %}</a>
 		</p>
 	</div>
 	<div class="x2">
@@ -58,6 +59,13 @@
 			{% endfor %}
         </div>
         <div class="product-desc">
+            <p class="product-properties">
+                {% trans "Lieu" %} : <span class="p-value">{{ product.address.city|capfirst }}, {{ product.address.zipcode }}</span>
+                {% if product.deposit_amount %}
+                &#149;
+                {% trans "Caution" %} : <span class="p-value">{{ product.deposit_amount|quantize|currency }}</span>
+                {% endif %}
+            </p>
             {{ product.description|linebreaksp }}
         </div>
     </div>
@@ -103,32 +111,23 @@
             <p class="pseudo">
                 <a href="{{ product.owner.get_absolute_url }}">{{ product.owner.username }}</a>
             </p>
-            <a href="{% url message_create product.pk product.owner.pk %}" class="btn long-blue">{% trans "Contactez-moi"%}</a>
+            <a href="{% url message_create product.pk product.owner.pk %}" class="btn long-blue">{% trans "Contactez-moi" %}</a>
         </div>
-        <div class="product-properties">
-            <table>
-    			{% if product.deposit_amount %}
-    			<tr>
-    				<td>{% trans "Caution" %} :</td>
-    				<td class="p-value">{{ product.deposit_amount|quantize|currency }}</td>
-    			</tr>
-    			{% endif %}
-    			<tr>
-    				<td>{% trans "Lieu" %} :</td>
-    				<td class="p-value">{{ product.address.city|capfirst }}, {{ product.address.zipcode }}</td>
-    			</tr>
-    			<tr>
-    				<td>{% trans "Catégorie" %} :</td>
-    				<td class="p-value"><a href="{{ product.category.get_absolute_url }}">{{ product.category }}</a></td>
-    			</tr>
-    		</table>
-        </div>
-        <div class="box-info">
+        <div id="payment-info" class="box-info">
               <h3>{% trans "Paiement en ligne" %}</h3>
-              <p>
-                {% trans "Vous payez en ligne au moment de la réservation via PayPal.<br/> <strong>Le montant est débité lors du premier jour de location.</strong>"%}
-              </p>
-         </div>
+              {% blocktrans %}
+			  <ol>
+					<li> Paiement sur payal</li>
+					<li> Le propriétaire est averti de votre demande</li>
+					<li> Nous vous informons par mail de sa réponse :<br />
+					    <ul>
+    						<li>S’il accepte vous serez débité le premier jour de la location</li>
+    						<li>S’il refuse vous ne serez pas débité</li>
+    					</ul>
+    				</li>
+	      	 </ol>
+			 {% endblocktrans %}
+        </div>
     </div>
 </div>
 {% endblock %}

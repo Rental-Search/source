@@ -150,7 +150,7 @@
                     </div>
                 </div>
                 <div class="pl-footer">
-    			 	Par <a href="{{ product.owner_url }}" {% if product|nofollow %}rel="nofollow"{% endif %} class="owner">{{ product.owner }}</a> | {{ product.city|capfirst }}{% if product.zipcode %}, {{ product.zipcode }}{% endif %}
+    			 	{% trans "Par" %} <a href="{{ product.owner_url }}" {% if product|nofollow %}rel="nofollow"{% endif %} class="owner">{{ product.owner }}</a> | {{ product.city|capfirst }}{% if product.zipcode %}, {{ product.zipcode }}{% endif %}
                 </div>
             </li>
             {% endfor %}

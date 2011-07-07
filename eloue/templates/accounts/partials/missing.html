@@ -7,7 +7,7 @@
     		<tr>
     			<th><label>{{ form.is_professional.label }} {% if form.is_professional.field.required %}*{% endif%} :</label></th>
 			<td {% if form.is_professional.errors %} class="error-field" {% endif %}>
-				{{ form.is_professional }}
+				{{ form.is_professional }} oui
     				{% if form.is_professional.errors %}
     				    {% for error in form.is_professional.errors %}
     								<br />
@@ -100,7 +100,7 @@
     		</tr>
     		{% endif%}
     		{% if form.phones %}
-    		<tr>
+    		<tr id="select_phone">
     			<th><label>{{ form.phones.label }} {% if form.phones.field.required %}*{% endif %} :</label></th>
     			<td {% if form.phones.errors %} class="error-field" {% endif %}>
     				{{ form.phones }}
@@ -110,11 +110,9 @@
     				        <span class="error">{{ error|escape }}</span>
     				    {% endfor %}
     				{% endif %}
-<!-- 				 added by xinlei-->
-				<a id="link_add_phone" href="http://"> Ajouter un nouveau numéro ?</a>
+				<a id="link_add_phone" href="http://"> {% trans "Ajouter un nouveau numéro ?" %}</a>
     			</td>
-			
-    		</tr>
+    		</tr>		
     		{% endif %}
 
 
@@ -143,7 +141,7 @@
 
 
     		{% if form.addresses %}
-    		<tr>
+    		<tr id="select_addr">
     			<th><label>{{ form.addresses.label }} {% if form.addresses.field.required %} * {% endif %}:</label></th>
     			<td {% if form.addresses.errors %} class="error-field" {% endif %}>
     				{{ form.addresses }}
@@ -153,7 +151,11 @@
     				        <span class="error">{{ error|escape }}</span>
     				    {% endfor %}
     				{% endif %}
-				<a id="link_add_addr" href="http://"> Ajouter une nouvelle addresse ?</a>
+<<<<<<< HEAD
+				<a id="link_add_addr" href="#"> Ajouter une nouvelle addresse ?</a>
+=======
+				<a id="link_add_addr" href="http://"> {% trans "Ajouter une nouvelle addresse ?" %}</a>
+>>>>>>> new_content
     			</td>
     		</tr>
     		{% endif %}
@@ -422,7 +424,7 @@
 	    <input type="hidden" name="{{ step_field }}" value="{{ step0 }}" />
     	{{ previous_fields|safe }}
     	{% if product %}
-    	<!-- <a href="{{ product.get_absolute_url }}">{% trans "Annuler" %}</a> {% trans "ou" %} -->
+    	
     	{% else %}
     	{% endif %}<input type="submit" class="btn big-green" value="{% trans "Continuer &rarr;" %}" />
     </p>

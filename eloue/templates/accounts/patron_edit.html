@@ -11,14 +11,13 @@
 			<li class="menu-tab"><a href="{% url owner_booking %}">{% trans "Propriétaire" %}</a></li>
 			<li class="menu-tab"><a href="{% url borrower_booking %}">{% trans "Locataire" %}</a></li>
 			<li class="menu-tab">{% trans "Mon compte" %}</li>
-
 			<li class="menu-tab"><a href="{% url messages_inbox %}">{% blocktrans %}Messages({{ messages_inbox_count }}){% endblocktrans %}</a></li>
 		 </ul>
 	    </div>
 	    <div id="sub-menu">
 	        <ul class="x12">
 	            <li class="sub-tab first">{% trans "Votre profil" %}</li>
-				<li class="sub-tab"><a href="{% url patron_edit_password %}">{% trans "Modification du mot de passe" %}</a></li>
+		    <li class="sub-tab"><a href="{% url patron_edit_password %}">{% trans "Modification du mot de passe" %}</a></li>
 	        </ul>
 	    </div>
 	    <div class="x8 p2">
@@ -29,7 +28,7 @@
 	        		<tr>
 	        			<td colspan="2" {% if form.is_professional.errors %} class="error-field" {% endif %}>
 	        				<label>{{ form.is_professional.label }} {% if form.is_professional.field.required %}*{% endif%} :</label>
-	        				{{ form.is_professional }} oui
+	        				{{ form.is_professional }} {% trans "oui" %}
 	        				{% if form.is_professional.errors %}
 	        				    {% for error in form.is_professional.errors %}
 	        								<br />
@@ -134,26 +133,14 @@
 	    					{% endif %}
 	    				</td>
 	    			</tr>
-					<tr>
-						<td colspan="2" {% if form.new_messages_alerted.errors %} class="error-field" {% endif %}>
-							<label for="id_new_messages_alerted">{% trans "Souhaitez-vous recevoir des alertes des questions sur votre produits ?" %} :</label>
-							{{ form.new_messages_alerted }} {% trans "oui" %}
-							{% if form.new_messages_alerted.errors %}
-								{% for error in form.new_messages_alerted.errors %}
-									<br />
-									<span class="error">{{ error|escape }}</span>
-								{% endfor %}
-							{% endif %}
-						</td>
-					</tr>
 	    			{% endif %}
 	    		</table>
-	    		<p class="required-field">{% trans "* = champ obligatoire" %}</p>
+	    		<p class="required-field">{% trans "* champ obligatoire" %}</p>
 	    </div>
 	    <div id="submit-wizard" class="x12">
 	         <p>
-	    		<a href="{% url home %}">Annuler</a> ou
-	    		<input type="submit" class="btn big-green" value="Sauvegarder" />
+	    		<a href="{% url home %}">{% trans "Annuler" %}</a> {% trans "ou" %}
+	    		<input type="submit" class="btn big-green" value={% trans "Sauvegarder" %} />
 	    	</p>
 	    </div>
 </div>

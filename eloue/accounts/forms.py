@@ -34,13 +34,6 @@ PAYPAL_ACCOUNT_CHOICES = (
     (1, _(u"J'ai déjà un compte PayPal et mon email est :")),
 )
 
-IS_PRO_CHOICES = (
-	(0, _(u"Non")),
-	(1, _(u"Oui")),
-)
-
-
-
 class EmailAuthenticationForm(forms.Form):
     """Displays the login form and handles the login action."""
     exists = forms.TypedChoiceField(required=True, coerce=int, choices=STATE_CHOICES, widget=forms.RadioSelect(renderer=ParagraphRadioFieldRenderer), initial=1)
@@ -291,7 +284,7 @@ def make_missing_data_form(instance, required_fields=[]):
         ),
         'password1': forms.CharField(label=_(u"Mot de passe"), max_length=128, required=True, widget=forms.PasswordInput(attrs={'class': 'inm'})),
         'password2': forms.CharField(label=_(u"A nouveau"), max_length=128, required=True, widget=forms.PasswordInput(attrs={'class': 'inm'})),
-        'is_professional': forms.ChoiceField(label=_(u"Êtes-vous un professionnel ?"), required=False, initial=False),
+        'is_professional': forms.BooleanField(label=_(u"Êtes-vous un professionnel ?"), required=False, initial=False),
         'company_name': forms.CharField(label=_(u"Nom de la société"), required=False, max_length=255, widget=forms.TextInput(attrs={'class': 'inm'})),
         'first_name': forms.CharField(label=_(u"Prénom"), max_length=30, required=True, widget=forms.TextInput(attrs={'class': 'inm'})),
         'last_name': forms.CharField(label=_(u"Nom"), max_length=30, required=True, widget=forms.TextInput(attrs={'class': 'inm'})),
