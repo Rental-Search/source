@@ -422,14 +422,14 @@ $.Autocompleter.defaults = {
 	formatItem: function(row) { return row[0]; },
 	formatMatch: null,
 	autoFill: false,
-	width: 0,
+	width: 348,
 	multiple: false,
 	multipleSeparator: ", ",
 	highlight: function(value, term) {
 		return value.replace(new RegExp("(?![^&;]+;)(?!<[^<>]*)(" + term.replace(/([\^\$\(\)\[\]\{\}\*\.\+\?\|\\])/gi, "\\$1") + ")(?![^<>]*>)(?![^&;]+;)", "gi"), "<strong>$1</strong>");
 	},
-    scroll: true,
-    scrollHeight: 180
+    scroll: false,
+    scrollHeight: 200
 };
 
 $.Autocompleter.Cache = function(options) {
