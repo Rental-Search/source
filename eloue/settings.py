@@ -335,7 +335,7 @@ COMPRESS_CSS = {
             'css/sep/screen.css',
             'css/sep/custom.css'
         ),
-        'output_filename': 'css/screen.r?.css',
+        'output_filename': 'css/sep/master.r?.css',
         'extra_context': {
             'media': 'screen',
         }
@@ -356,6 +356,15 @@ COMPRESS_JS = {
             'js/jquery.cycle.all.latest.js',
             'js/application.js'),
         'output_filename': 'js/application.r?.js',
+        'extra_context': {
+            'defer': True,
+        },
+    },
+    'sep': {
+        'source_filenames': (
+            'js/jquery.js',
+            'js/sep/application.js'),
+        'output_filename': 'js/sep/application.r?.js',
         'extra_context': {
             'defer': True,
         },
