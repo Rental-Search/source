@@ -58,7 +58,7 @@ $(document).ready(function() {
         }
     });
     
-// Company name field display/none
+    // Company name field display/none
     isProfessionalInput = $("input[name$='is_professional']");
     companyNameInput = $(".company-name");
     companyNameInput.hide();
@@ -315,7 +315,7 @@ $(document).ready(function() {
 	
     });
     
-    //slideshow for iphone page
+    //slideshow for iPhone page
     jQuery(document).ready(function() {
         jQuery('#slideshow').cycle({ 
             delay:  3000, 
@@ -323,7 +323,7 @@ $(document).ready(function() {
             pager: '#nav-slideshow'
         }); 
 
-        function selectMarker() { 
+        function selectMarker() {
             /*jQuery('.slideshow_marker').removeClass('active_marker');
             jQuery('#slideshow_marker_' + this.alt).addClass('active_marker');*/
         };
