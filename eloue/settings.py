@@ -359,15 +359,6 @@ COMPRESS_JS = {
         'extra_context': {
             'defer': True,
         },
-    },
-    'sep': {
-        'source_filenames': (
-            'js/jquery.js',
-            'js/sep/application.js'),
-        'output_filename': 'js/application.r?.js',
-        'extra_context': {
-            'defer': True,
-        },
     }
 }
 
