@@ -331,7 +331,7 @@ $(document).ready(function() {
     });
     
     //autocomplete
-    $("#id_q").focus().autocomplete("http://localhost:8000/suggestion/");
+    $("#id_q").focus().autocomplete("suggestion/");
     
 });
 
