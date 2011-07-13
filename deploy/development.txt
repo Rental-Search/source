@@ -13,7 +13,6 @@ mimeparse>=0.1.3
 mock>=0.7.0b3
 pylint>=0.21.2
 python-dateutil==1.5
-pyyaml>=3.09
 psycopg2>=2.2.2
 reportlab>=2.5
 south>=0.7
@@ -26,7 +25,6 @@ unittest2>=0.5.1
 -e git://github.com/robhudson/django-debug-toolbar.git#egg=debug_toolbar
 -e git://github.com/e-loue/django-announcements.git#egg=announcements
 -e git://github.com/e-loue/django-faq.git#egg=faq
--e git://github.com/e-loue/freshen.git#egg=freshen
 -e git://github.com/e-loue/django-compress.git#egg=compress
 -e git://github.com/e-loue/django-haystack.git#egg=haystack
 -e git://github.com/e-loue/django-storages.git#egg=storages

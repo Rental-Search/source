@@ -18,7 +18,7 @@
     <form class="inline" enctype="multipart/form-data" action="" method="POST">
     <div class="x6">
         <div class="content-header x6 first">
-            <h2>1. Catégorie</h2>
+            <h2>{% trans "1. Catégorie" %}</h2>
         </div>
         {% csrf_token %}
 			<table class="new">
@@ -62,13 +62,13 @@
             <tr>
 				<th><label>{{ form.picture.label }} * :</label></th>
 				<td {% if form.picture.errors %} class="error-field" {% endif %}>
-				{{ form.picture }}
-				{% if form.picture.errors %}
-				{% for error in form.picture.errors %}
+				  {{ form.picture }}
+				  {% if form.picture.errors %}
+						{% for error in form.picture.errors %}
 									<br />
-					        <span class="error">{{ error|escape }}</span>
+					         <span class="error">{{ error|escape }}</span>%}
 					    {% endfor %}
-					{% endif %}
+				  {% endif %}
 				</td>
 			</tr>
 			<tr>
@@ -183,12 +183,11 @@
         </div>
     </div>
     <div class="x12">
-        <p class="required-field">{% trans "* = champ obligatoire" %}</p>
+        <p class="required-field">{% trans "* champ obligatoire" %}</p>
     </div>
     <div id="submit-wizard" class="x12">
         <p>
-		    <a href="{% url home %}">Annuler</a> ou
-		    <input type="submit" class="btn big-green" value="Continuer &rarr;" />
+		    <input type="submit" class="btn big-green" value={% trans "Continuer &rarr;" %} />
 		</p>
 	</form>
 	</div>

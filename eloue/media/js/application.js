@@ -76,7 +76,7 @@ $(document).ready(function() {
             companyNameInput.hide();
         }
     });
-    
+
     // Phone field enabler/disabler
     phoneSelect = $("select[name$='phones']");
     phoneInput = $("input[name$='phones__phone']");
@@ -95,6 +95,30 @@ $(document).ready(function() {
     // Address field enabler/disabler
     addressSelect = $("select[name$='addresses']");
     addressInput = $(["input[name*='addresses__']", "textarea[name*='addresses__']", "select[name*='addresses__']"]);
+    // New number field display/none
+    if($("#select_phone").length==1){	
+	newPhoneInput = $(".add_new_phone");
+	newPhoneInput.hide();
+ 	$("a#link_add_phone").click(function(){		
+		newPhoneInput.show();	
+		$("select[id$='-phones']").val('---------');
+		phoneInput.removeAttr('disabled');		
+ 	});
+    }
+
+    // New adress field display/none
+    if($("#select_addr").length==1){    	
+	newAddrInput = $(".add_new_addr");
+	newAddrInput.hide();
+	$("a#link_add_addr").click(function(){		
+		newAddrInput.show();	
+		$("select[id$='-addresses']").val('---------');
+		addressInput.each(function(i, el) {
+            $(el).removeAttr('disabled');
+        });
+	});
+    }
+    
     if (addressSelect.val() && addressInput.attr('type') != 'hidden') {
         addressInput.each(function(i, el) {
             $(el).attr('disabled', 'disabled');
@@ -287,9 +311,11 @@ $(document).ready(function() {
           });
         }
       });
+      
+	
     });
     
-    //slideshow for iphone page
+    //slideshow for iPhone page
     jQuery(document).ready(function() {
         jQuery('#slideshow').cycle({ 
             delay:  3000, 
@@ -297,7 +323,7 @@ $(document).ready(function() {
             pager: '#nav-slideshow'
         }); 
 
-        function selectMarker() { 
+        function selectMarker() {
             /*jQuery('.slideshow_marker').removeClass('active_marker');
             jQuery('#slideshow_marker_' + this.alt).addClass('active_marker');*/
         };

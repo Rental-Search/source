@@ -6,7 +6,7 @@
 {% block content %}
 <div id="content" class="xgrid">
     <div class="content-top">
-        <h1>Contactez-nous</h1>
+        <h1>{% trans "Contactez-nous" %}</h1>
     </div>
 	<div id="contact" class="x8 p2">
 	    <form class="form" action="{% url contact %}" method="POST">
@@ -55,7 +55,7 @@
 				</td>
 			</tr>
 		</table>
-		<p class="required-field">{% trans "* = champ obligatoire" %}</p>
+		<p class="required-field">{% trans "* champ obligatoire" %}</p>
 	</div>
 	<div id="submit-wizard" class="x12">
 	    <p>
