@@ -21,7 +21,7 @@
     pk: 7
 -   fields: {domain: www.stockerentreparticuliers.com, name: stocker entre particuliers}
     model: sites.site
-    pk: 7
+    pk: 8
 -   fields: {is_readonly: false, name: all, url: /api/1.0/}
     model: oauth_provider.resource
     pk: 1
