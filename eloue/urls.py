@@ -13,7 +13,9 @@ from eloue.accounts.forms import EmailPasswordResetForm, PatronSetPasswordForm
 from eloue.accounts.views import activate, authenticate, authenticate_headless, dashboard, patron_edit, owner_booking, owner_history,\
     borrower_booking, borrower_history, patron_edit_password, patron_paypal, owner_product, contact, alert_edit
 from eloue.api import api_v1
-from eloue.products.views import homepage, search, compose_product_related_message, reply_product_related_message
+
+from eloue.products.views import homepage, search, compose_product_related_message, reply_product_related_message, suggestion
+
 from eloue.rent.views import booking_detail, booking_accept, booking_reject, booking_incident, booking_close, booking_cancel
 from eloue.sitemaps import CategorySitemap, FlatPageSitemap, PatronSitemap, ProductSitemap
 
@@ -60,6 +62,7 @@ urlpatterns = patterns('',
     url(r'^login_headless/$', authenticate_headless, name='auth_login_headless'),
     url(r'^logout/$', logout_then_login, name='auth_logout'),
     url(r'^dashboard/$', dashboard, name="dashboard"),
+    url(r'^suggestion/$', suggestion, name="suggestion"),
     url(r'^dashboard/account/profile/$', patron_edit, name="patron_edit"),
     url(r'^dashboard/account/password/$', patron_edit_password, name="patron_edit_password"),
     url(r'^dashboard/account/paypal/$', patron_paypal, name="patron_paypal"),

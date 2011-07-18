@@ -76,7 +76,6 @@ $(document).ready(function() {
         }
     });
 
-
     // Phone field enabler/disabler
     phoneSelect = $("select[name$='phones']");
     phoneInput = $("input[name$='phones__phone']");
@@ -329,7 +328,10 @@ $(document).ready(function() {
         };
 
     });
-
+    
+    //autocomplete
+    $("#id_q").focus().autocomplete("suggestion/");
+    
 });
 
 function hideNotification() {
