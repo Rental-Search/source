@@ -204,6 +204,26 @@ def product_list(request, urlbits, sqs=SearchQuerySet(), suggestions=None, page=
     })
 
 
+def category_root(request, slug, page=None):
+    """ Display the category page if we're not dealing with a child category """
+    try:
+        category = get_object_or_404(Category, slug=slug)
+    except IndexError:
+        Http404
+    
+    sqs = SearchQuerySet().filter(categories=category)
+    return object_list(
+        request, 
+        sqs, 
+        page=page, 
+        paginate_by=PAGINATE_PRODUCTS_BY, 
+        template_name="products/product_list_category.html",
+        template_object_name='product', 
+        extra_context={}
+    )
+    
+def category_children(request, slug):
+    pass
 
 @never_cache
 @secure_required

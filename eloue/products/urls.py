@@ -5,7 +5,7 @@ from django.utils.translation import ugettext as _
 from eloue.products.search_indexes import alert_search, product_search
 
 from eloue.products.views import product_create, product_list, product_edit, message_create, reply_product_related_message, compose_product_related_message, \
-    product_delete, alert_list, alert_create, alert_inform, alert_inform_success, alert_delete
+    product_delete, alert_list, alert_create, alert_inform, alert_inform_success, alert_delete, category_root, category_children
 from eloue.rent.views import booking_create, booking_price, product_occupied_date
 
 
@@ -22,5 +22,8 @@ urlpatterns = patterns('',
     url(r'^(?P<slug>[-\w]+)-(?P<product_id>\d+)/price/$', booking_price, name="booking_price"),
     url(r'^(?P<slug>[-\w]+)-(?P<product_id>\d+)/$', booking_create, name="booking_create"),
     url(r'^(?P<slug>[-\w]+)-(?P<product_id>\d+)/occupied_date/$', product_occupied_date, name="product_occupied_date"),
+    url(r'^(?P<slug>[-\w]+)/$', category_root, name='category_root'),
+    url(r'^(?P<slug_parent>[-\w]+)/(?P<slug>[-\w]+)/$', category_children, name='category_children'),
+    url(r'^([-\w]+/)+(?P<slug_parent>[-\w]+)/(?P<slug>[-\w]+)/$', category_children, name='category_children'),
     url(r'^([^/].+/)?$', product_list, {'sqs': product_search}, name="product_list"),
 )
