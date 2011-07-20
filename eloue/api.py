@@ -367,9 +367,7 @@ class ProductResource(UserSpecificResource):
         object_list = super(ProductResource, self).get_object_list(request)
         if "l" in request.GET:
             name, (lat, lon), radius = GoogleGeocoder().geocode(request.GET['l'])
-            print ">>>>>(lat, lon)>>>>>>>", (lat, lon)
             object_list = object_list.distance(Point((lat, lon)), field_name='address__position')
-        print ">>>>>>object_list>>>>>>"
         return object_list
     
     def obj_create(self, bundle, request=None, **kwargs):

@@ -329,9 +329,6 @@ $(document).ready(function() {
 
     });
     
-    //autocomplete
-    $("#id_q").focus().autocomplete("suggestion/");
-    
 });
 
 function hideNotification() {
