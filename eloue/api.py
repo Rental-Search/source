@@ -421,7 +421,27 @@ class ProductResource(UserSpecificResource):
         bundle.data["unit"], bundle.data["price"] = Booking.calculate_price(bundle.obj, date_start, date_end)
         return bundle
     
-
+class BookingResource(ModelResource):
+    """
+    Resource that returns the booking information 
+    """
+    # Foreign key here
+    owner = fields.ForeignKey(UserResource,'owner', full=True, null=True)
+    borrower = fields.ForeignKey(UserResource,'borrower', full=True, null=True)
+    #product = fields.ForeignKey(UserResource,'product', full=True, null=True)
+     
+    # Meta 
+    class Meta:
+            queryset = Booking.objects.all()
+            list_allowed_methods = ['get', 'post']
+            detail_allowed_methods = ['get', 'post', 'put', 'delete'] 
+            resource_name = 'booking'
+            # authorization = DjangoAuthorization()
+            filtering = {
+                'owner': ALL_WITH_RELATIONS,
+                'borrower': ALL_WITH_RELATIONS,
+                #'product': ALL_WITH_RELATIONS,
+            }
 api_v1 = Api(api_name='1.0')
 api_v1.register(CategoryResource())
 api_v1.register(ProductResource())
@@ -430,3 +450,4 @@ api_v1.register(PhoneNumberResource())
 api_v1.register(PictureResource())
 api_v1.register(PriceResource())
 api_v1.register(UserResource())
+api_v1.register(BookingResource())
