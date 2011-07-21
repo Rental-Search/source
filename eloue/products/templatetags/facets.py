@@ -18,6 +18,7 @@ register = Library()
 def facet_breadcrumb_link(breadcrumbs, facet):
     """
     {% facet_breadcrumb_link breadcrumbs facet %}
+    
     """
     output = []
     for f in breadcrumbs.values():

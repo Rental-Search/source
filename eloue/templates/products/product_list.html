@@ -62,8 +62,14 @@
             <li><a href="{% url home %}">{% trans "Accueil" %}</a></li>
             {% for crumb in breadcrumbs|facets %}
 				{% if form.cleaned_data.l or form.cleaned_data.q %}
-					<li><a href="{% facet_url breadcrumbs -"l" -"r" -"q" %}">{{ crumb.pretty_value|capfirst }}</a></li>
+				    {% for category in crumb.object.get_ancestors %}
+        			 <li><a href="{{ category.get_absolute_url }}">{{ category.name|capfirst }}</a></li>
+        			{% endfor %}
+					<li><a href="{{ crumb.url }}">{{ crumb.pretty_value|capfirst }}</a></li>
 				{% else %}
+				    {% for category in crumb.object.get_ancestors %}
+        			 <li><a href="{{ category.get_absolute_url }}">{{ category.name|capfirst }}</a></li>
+        			{% endfor %}
 					<li class="lastb">{{ crumb.pretty_value|capfirst }}</a></li>
 				{% endif %}
 			{% endfor %}
@@ -80,6 +86,7 @@
         </ul>
     </div>
     {% if product_list %}
+    {{ paginator.count }}
     {% if form.cleaned_data.q %}
     <div class="x12 content-header">
 	 {% blocktrans with form.cleaned_data.q as keywords count paginator.count as count %}
@@ -215,7 +222,7 @@
 	        </div>
 	    </div>
 	    {% endif %}
-	    {% if product_list %}
+	    <!--{% if product_list %}
 	    <div class="box-tools">
 	        <h3>{% trans "Catégories" %}</h3>
 	        <div class="box-tools-top">
@@ -241,6 +248,31 @@
 				 {% endif %}
 			  {% endif %}
 			{% endfor%}
+            </div>
+	    </div>
+	    {% endif %} -->
+	    {% if product_list %}
+	    <div class="box-tools">
+	        <h3>{% trans "Catégories" %}</h3>
+	        <div class="box-tools-top">
+                <a href="{% facet_url breadcrumbs -form.categories.field.pretty_name %}">
+                    {% trans "Voir tous les résultats" %}
+                </a>
+            </div>
+            <div class="box-tools-bottom">
+            {% if facets.fields.categories %}
+            <ul class="box-tools-tree">
+                {% for value, count in facets.fields.categories %}
+                {% if count > 0 %}
+                {% with value|category as category %}
+                    <li>
+						<a href="{% facet_url breadcrumbs category.get_ancertors_slug category.slug %}">{{ category.name }}</a> 
+					</li>
+                {% endwith%}
+                {% endif %}
+                {% endfor %}
+            </ul>
+            {% endif %}  
             </div>
 	    </div>
 	    {% endif %}
