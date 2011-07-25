@@ -206,7 +206,7 @@ def product_list(request, urlbits, sqs=SearchQuerySet(), suggestions=None, page=
             }
     form = FacetedSearchForm(dict((facet['name'], facet['value']) for facet in breadcrumbs.values()), searchqueryset=sqs)
     sqs, suggestions = form.search()
-    print sqs.facet_counts()
+    
     return object_list(request, sqs, page=page, paginate_by=PAGINATE_PRODUCTS_BY, template_name="products/product_list.html",
         template_object_name='product', extra_context={
             'facets': sqs.facet_counts(), 'form': form, 'breadcrumbs': breadcrumbs, 'suggestions': suggestions,

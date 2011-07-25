@@ -114,7 +114,11 @@ class Product(models.Model):
     
     @permalink
     def get_absolute_url(self):
-        path = '%s/%s/' % (self.category.get_ancertors_slug(), self.category.slug)
+        encestors_slug = self.category.get_ancertors_slug()
+        if encestors_slug:
+            path = '%s/%s/' % (self.category.get_ancertors_slug(), self.category.slug)
+        else:
+            path = '%s/' % self.category.slug
         return ('booking_create', [path, self.slug, self.pk])
     
     def more_like_this(self):
@@ -196,7 +200,10 @@ class Category(MPTTModel):
     
     def get_absolute_url(self):
         ancestors_slug = self.get_ancertors_slug()
-        return _(u"/location/%s/%s") % (ancestors_slug, self.slug)
+        if ancestors_slug:
+            return _(u"/location/%s/%s") % (ancestors_slug, self.slug)
+        else:
+            return _(u"/location/%s") % self.slug
      
         
 class Property(models.Model):
