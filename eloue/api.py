@@ -401,7 +401,7 @@ class ProductResource(UserSpecificResource):
     
     def dehydrate(self, bundle, request=None):
         """
-        Automatically add the location price if the request
+        Automatically add the rent price if the request
         contains date_start and date_end parameters
         """
         from datetime import datetime, timedelta
@@ -423,23 +423,81 @@ class BookingResource(ModelResource):
     """
     Resource that returns the booking information 
     """
-    # Foreign key here
-    owner = fields.ForeignKey(UserResource,'owner', full=True, null=True)
-    borrower = fields.ForeignKey(UserResource,'borrower', full=True, null=True)
-    #product = fields.ForeignKey(UserResource,'product', full=True, null=True)
+    # Foreign keys
+    owner = fields.ForeignKey(UserResource,'owner', full=False, null=True)
+    borrower = fields.ForeignKey(UserResource,'borrower', full=False, null=True)
+    product = fields.ForeignKey(ProductResource,'product', full=False, null=True)
      
     # Meta 
     class Meta:
-            queryset = Booking.objects.all()
-            list_allowed_methods = ['get', 'post']
-            detail_allowed_methods = ['get', 'post', 'put', 'delete'] 
-            resource_name = 'booking'
-            # authorization = DjangoAuthorization()
-            filtering = {
-                'owner': ALL_WITH_RELATIONS,
-                'borrower': ALL_WITH_RELATIONS,
-                #'product': ALL_WITH_RELATIONS,
-            }
+        queryset = Booking.objects.all()
+        list_allowed_methods = ['get', 'post']
+        detail_allowed_methods = ['get', 'post', 'put', 'delete'] 
+        resource_name = 'booking'
+        # authorization = DjangoAuthorization()
+        filtering = {
+            'owner': ALL_WITH_RELATIONS,
+            'borrower': ALL_WITH_RELATIONS,
+            'product': ALL_WITH_RELATIONS,
+            'ended_at': ALL_WITH_RELATIONS,
+            'started_at': ALL_WITH_RELATIONS,
+        }
+
+    def obj_create(self, bundle, request=None, **kwargs):
+        """ 
+        On receiving the POST request, create the bundle to use
+        """
+        started_at = parser.parse(unquote(request.GET["started_at"]))
+        ended_at = parser.parse(unquote(request.GET["ended_at"]))
+        
+        bundle.data["started_at"] = started_at
+        bundle.data["ended_at"] = ended_at
+        bundle.data["borrower"] = UserResource().get_resource_uri(request.user)
+        bundle = super(BookingResource, self).obj_create(bundle, request, **kwargs)
+        return bundle
+        
+    def obj_get_list(self, request=None, **kwargs):
+        """
+        Initiate the list of objects which will be sent to the user
+        """
+        from datetime import datetime, timedelta
+        from dateutil import parser
+        started_at = parser.parse(unquote(request.GET["started_at"]))
+        ended_at = parser.parse(unquote(request.GET["ended_at"]))
+        object_list = Booking.objects.all()[:1]
+        return object_list
+        
+    def dehydrate(self, bundle, request=None):
+        """
+        Modify the data before sending it to the client
+        """
+        from datetime import datetime, timedelta
+        from dateutil import parser
+        import unicodedata
+        
+        if "started_at" in request.GET and "ended_at" in request.GET:
+            started_at = parser.parse(unquote(request.GET["started_at"]))
+            ended_at = parser.parse(unquote(request.GET["ended_at"]))
+        else:
+            started_at = datetime.now() + timedelta(days=1)
+            ended_at = started_at + timedelta(days=1)
+        bundle.data = {}
+        substrings = request.GET["product"].split("/")
+        for item in substrings:
+            item = item.lower()
+            if item != "api" and item !="" and item != "1.0" and item != "product":
+                _id = int(item)
+                break
+        bundle.obj.product = Product.objects.get(id = _id)
+        temp, bundle.data["total_amount"] = Booking.calculate_price(bundle.obj.product, started_at, ended_at)
+        bundle.data["owner"] = unquote(request.GET["owner"])
+        bundle.data["borrower"] = unquote(request.GET["borrower"])
+        bundle.data["product"] = unquote(request.GET["product"])
+        bundle.data["started_at"] = parser.parse(unquote(request.GET["started_at"]))
+        bundle.data["ended_at"] = parser.parse(unquote(request.GET["ended_at"]))
+        #print "bundle :::", bundle
+        return bundle
+    
 api_v1 = Api(api_name='1.0')
 api_v1.register(CategoryResource())
 api_v1.register(ProductResource())
