@@ -244,7 +244,8 @@ COMPRESS_CSS = {
             'css/plugins/ui/jquery.ui.core.css',
             'css/plugins/ui/jquery.ui.datepicker.css',
             'css/plugins/ui/jquery.ui.tabs.css',
-            'css/plugins/ui/jquery.ui.theme.css'
+            'css/plugins/ui/jquery.ui.theme.css',
+            'css/chosen.css'
         ),
         'output_filename': 'css/twenty.r?.css',
         'extra_context': {
@@ -268,7 +269,8 @@ COMPRESS_CSS = {
             'css/plugins/ui/jquery.ui.core.css',
             'css/plugins/ui/jquery.ui.datepicker.css',
             'css/plugins/ui/jquery.ui.tabs.css',
-            'css/plugins/ui/jquery.ui.theme.css'
+            'css/plugins/ui/jquery.ui.theme.css',
+            'css/chosen.css'
         ),
         'output_filename': 'css/nc.r?.css',
         'extra_context': {
@@ -283,7 +285,8 @@ COMPRESS_CSS = {
             'css/plugins/ui/jquery.ui.core.css',
             'css/plugins/ui/jquery.ui.datepicker.css',
             'css/plugins/ui/jquery.ui.tabs.css',
-            'css/plugins/ui/jquery.ui.theme.css'
+            'css/plugins/ui/jquery.ui.theme.css',
+            'css/chosen.css'
         ),
         'output_filename': 'css/uk.r?.css',
         'extra_context': {
@@ -297,7 +300,8 @@ COMPRESS_CSS = {
             'css/plugins/ui/jquery.ui.core.css',
             'css/plugins/ui/jquery.ui.datepicker.css',
             'css/plugins/ui/jquery.ui.tabs.css',
-            'css/plugins/ui/jquery.ui.theme.css'
+            'css/plugins/ui/jquery.ui.theme.css',
+            'css/chosen.css'
         ),
         'output_filename': 'css/dcns.r?.css',
         'extra_context': {
