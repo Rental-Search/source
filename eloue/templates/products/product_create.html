@@ -25,7 +25,7 @@
 				<tr>
 				<td colspan="2" {% if form.category.errors %} class="error-field" {% endif %}>
 					{% full_tree_for_model products.Category as categories %}
-					<select id="id_0-category" class="selm" name="0-category">
+					<select id="id_0-category-chosen" class="selm" name="0-category">
 						{% if not form.category.data %}
 							<option selected="selected">{{ form.category.field.empty_label }}</option>
 						{% endif %}

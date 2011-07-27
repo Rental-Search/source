@@ -331,6 +331,9 @@ $(document).ready(function() {
 
     });
     
+    //chosen
+    $("#id_0-category-chosen").chosen();
+    
 });
 
 function hideNotification() {
