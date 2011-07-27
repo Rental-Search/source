@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import logbook
 import plistlib
-from urllib import unquote
+from urllib import unquote,quote
 from base64 import decodestring
 from decimal import Decimal as D
 
@@ -419,7 +419,7 @@ class ProductResource(UserSpecificResource):
         bundle.data["unit"], bundle.data["price"] = Booking.calculate_price(bundle.obj, date_start, date_end)
         return bundle
     
-class BookingResource(ModelResource):
+class BookingResource(OAuthResource):
     """
     Resource that returns the booking information 
     """
@@ -429,12 +429,12 @@ class BookingResource(ModelResource):
     product = fields.ForeignKey(ProductResource,'product', full=False, null=True)
      
     # Meta 
-    class Meta:
+    class Meta(MetaBase):
         queryset = Booking.objects.all()
+        #allowed_methods =['get']
         list_allowed_methods = ['get', 'post']
         detail_allowed_methods = ['get', 'post', 'put', 'delete'] 
         resource_name = 'booking'
-        # authorization = DjangoAuthorization()
         filtering = {
             'owner': ALL_WITH_RELATIONS,
             'borrower': ALL_WITH_RELATIONS,
@@ -443,17 +443,41 @@ class BookingResource(ModelResource):
             'started_at': ALL_WITH_RELATIONS,
         }
 
-    def obj_create(self, bundle, request=None, **kwargs):
-        """ 
-        On receiving the POST request, create the bundle to use
-        """
-        started_at = parser.parse(unquote(request.GET["started_at"]))
-        ended_at = parser.parse(unquote(request.GET["ended_at"]))
-        
-        bundle.data["started_at"] = started_at
-        bundle.data["ended_at"] = ended_at
-        bundle.data["borrower"] = UserResource().get_resource_uri(request.user)
-        bundle = super(BookingResource, self).obj_create(bundle, request, **kwargs)
+    def obj_create(self, bundle, **kwargs):
+        """Creates a new booking"""   
+        from datetime import datetime, timedelta
+        from dateutil import parser        
+        data = bundle.data
+        print "started_at"
+        print data["started_at"]
+        print "ended_at"
+        print data["ended_at"]
+        print "owner"
+        print type(data["owner"])
+        print quote(data["owner"])
+        print "borrower"
+        print data["borrower"]
+        print "product"
+        print data["product"]
+        try:
+            bundle.obj = Booking(started_at = data["started_at"],  
+                                            ended_at = data["ended_at"],  
+                                            ip = data["ip"],
+                                            total_amount = data["total_amount"],
+                                            #owner = UserResource.get_via_uri(quote(data["owner"])),
+                                            #borrower = UserResource.get_via_uri(quote(data["borrower"])),
+                                            #product = ProductResource.get_via_uri(quote(data["product"])),
+                                            owner = Patron.objects.get(id=1190),
+                                            borrower = Patron.objects.get(id=2286),
+                                            product = Product.objects.get(id=15048),
+                                            )
+            print bundle.obj.started_at
+            print bundle.obj.ended_at
+            print bundle.obj.owner
+            print bundle.obj.borrower
+            print bundle.obj.product
+        except IntegrityError:
+            raise ImmediateHttpResponse(response=HttpBadRequest())
         return bundle
         
     def obj_get_list(self, request=None, **kwargs):
@@ -462,9 +486,12 @@ class BookingResource(ModelResource):
         """
         from datetime import datetime, timedelta
         from dateutil import parser
-        started_at = parser.parse(unquote(request.GET["started_at"]))
-        ended_at = parser.parse(unquote(request.GET["ended_at"]))
-        object_list = Booking.objects.all()[:1]
+
+        if "started_at" in request.GET and "ended_at" in request.GET:
+            # TODO: more detection needed here
+            object_list = Booking.objects.all()[:1]
+        else:
+            object_list = Booking.objects.all()
         return object_list
         
     def dehydrate(self, bundle, request=None):
@@ -473,29 +500,28 @@ class BookingResource(ModelResource):
         """
         from datetime import datetime, timedelta
         from dateutil import parser
-        import unicodedata
         
         if "started_at" in request.GET and "ended_at" in request.GET:
+            # TODO: more detection needed here 
             started_at = parser.parse(unquote(request.GET["started_at"]))
             ended_at = parser.parse(unquote(request.GET["ended_at"]))
-        else:
-            started_at = datetime.now() + timedelta(days=1)
-            ended_at = started_at + timedelta(days=1)
-        bundle.data = {}
-        substrings = request.GET["product"].split("/")
-        for item in substrings:
-            item = item.lower()
-            if item != "api" and item !="" and item != "1.0" and item != "product":
-                _id = int(item)
-                break
-        bundle.obj.product = Product.objects.get(id = _id)
-        temp, bundle.data["total_amount"] = Booking.calculate_price(bundle.obj.product, started_at, ended_at)
-        bundle.data["owner"] = unquote(request.GET["owner"])
-        bundle.data["borrower"] = unquote(request.GET["borrower"])
-        bundle.data["product"] = unquote(request.GET["product"])
-        bundle.data["started_at"] = parser.parse(unquote(request.GET["started_at"]))
-        bundle.data["ended_at"] = parser.parse(unquote(request.GET["ended_at"]))
-        #print "bundle :::", bundle
+            bundle.data = {}
+            substrings = request.GET["product"].split("/")
+            for item in substrings:
+                item = item.lower()
+                if item != "api" and item !="" and item != "1.0" and item != "product":
+                    _id = int(item)
+                    break
+            bundle.obj.product = Product.objects.get(id = _id)
+            temp, bundle.data["total_amount"] = Booking.calculate_price(bundle.obj.product, started_at, ended_at)
+            bundle.data["owner"] = unquote(request.GET["owner"])
+            bundle.data["borrower"] = unquote(request.GET["borrower"])
+            bundle.data["product"] = unquote(request.GET["product"])
+            bundle.data["started_at"] = parser.parse(unquote(request.GET["started_at"]))
+            bundle.data["ended_at"] = parser.parse(unquote(request.GET["ended_at"]))
+        #else:
+         #   started_at = datetime.now() + timedelta(days=1)
+          #  ended_at = started_at + timedelta(days=1)
         return bundle
     
 api_v1 = Api(api_name='1.0')
