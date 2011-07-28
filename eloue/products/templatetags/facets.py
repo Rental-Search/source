@@ -49,7 +49,7 @@ class FacetUrlNode(Node):
         additions = dict([(key.resolve(context), value.resolve(context)) for key, value in self.additions])
         removals = [key.resolve(context) for key in self.removals]
         slugs = []
-        
+            
         
         for key, value in additions.iteritems():
             if key in params:

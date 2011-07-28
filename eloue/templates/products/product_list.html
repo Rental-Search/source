@@ -75,9 +75,9 @@
 			{% endfor %}
 			{% if form.cleaned_data.q %}
 				{% if form.cleaned_data.l %}
-					<li><a href="{% facet_url breadcrumbs -"l" -"r" %}">{% trans "location" %} "{{ form.cleaned_data.q }}"</a></li>
+					<li><a href="{% facet_url breadcrumbs -"l" -"r" %}">{% trans "location" %} {{ form.cleaned_data.q }}</a></li>
 				{% else %}
-					<li class="lastb">{% trans "location" %} "{{ form.cleaned_data.q }}"</li>
+					<li class="lastb">{% trans "location" %} {{ form.cleaned_data.q }}</li>
 				{% endif %}
 			{% endif %}
 			{% if form.cleaned_data.l %}
