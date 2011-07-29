@@ -81,7 +81,7 @@ class ProductWizardTest(TestCase):
             'hash_1': '6941fd7b20d720833717a1f92e8027af',
             'wizard_step': 2
         })
-        self.assertRedirects(response, reverse('booking_create', args=['bentley-brooklands', 7]))
+        self.assertRedirects(response, reverse('booking_create', args=['auto-et-moto/voiture/voiture-de-luxe/', 'bentley-brooklands', 7]))
         
     @patch.object(MultiPartFormWizard, 'security_hash')
     def test_first_step_message_wizard_as_anonymous(self, mock_method):

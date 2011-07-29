@@ -31,7 +31,7 @@ class BookingViewsTest(TestCase):
     def test_booking_price(self):
         started_at = self._next_weekday(0)
         ended_at = started_at + timedelta(days=3)
-        response = self.client.get(reverse('booking_price', args=['perceuse-visseuse-philips', '1']), {
+        response = self.client.get(reverse('booking_price', args=['rent/bebe/mobilier-bebe/lits/', 'perceuse-visseuse-philips', '1']), {
             '0-started_at_0': started_at.strftime("%d/%m/%Y"),
             '0-started_at_1': '08:00:00',
             '0-ended_at_0': ended_at.strftime("%d/%m/%Y"),
@@ -47,7 +47,7 @@ class BookingViewsTest(TestCase):
     def test_booking_price_error(self):
         started_at = self._next_weekday(0)
         ended_at = started_at - timedelta(days=3)
-        response = self.client.get(reverse('booking_price', args=['perceuse-visseuse-philips', '1']), {
+        response = self.client.get(reverse('booking_price', args=['rent/bebe/mobilier-bebe/lits/', 'perceuse-visseuse-philips', '1']), {
             '0-started_at_0': started_at.strftime("%d/%m/%Y"),
             '0-started_at_1': '08:00:00',
             '0-ended_at_0': ended_at.strftime("%d/%m/%Y"),
@@ -60,7 +60,7 @@ class BookingViewsTest(TestCase):
     def test_booking_price_not_ajax(self):
         started_at = self._next_weekday(0)
         ended_at = started_at + timedelta(days=3)
-        response = self.client.get(reverse('booking_price', args=['perceuse-visseuse-philips', '1']), {
+        response = self.client.get(reverse('booking_price', args=['rent/bebe/mobilier-bebe/lits/', 'perceuse-visseuse-philips', '1']), {
             '0-started_at_0': started_at.strftime("%d/%m/%Y"),
             '0-started_at_1': '08:00:00',
             '0-ended_at_0': ended_at.strftime("%d/%m/%Y"),
