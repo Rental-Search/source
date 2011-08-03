@@ -1,9 +1,12 @@
 # -*- coding: utf-8 -*-
 import logbook
 import plistlib
-from urllib import unquote,quote
+from urllib import unquote,quote,urlencode
 from base64 import decodestring
 from decimal import Decimal as D
+import simplejson as json
+
+from fsm import transition
 
 from tastypie import fields
 from tastypie.api import Api
@@ -11,7 +14,7 @@ from tastypie.constants import ALL_WITH_RELATIONS
 from tastypie.authentication import Authentication
 from tastypie.authorization import Authorization
 from tastypie.exceptions import NotFound, ImmediateHttpResponse
-from tastypie.http import HttpBadRequest, HttpCreated
+from tastypie.http import HttpBadRequest, HttpCreated, HttpAccepted
 from tastypie.resources import ModelResource
 from tastypie.serializers import Serializer
 from tastypie.utils import dict_strip_unicode_keys
@@ -24,21 +27,31 @@ from django.conf import settings
 from django.conf.urls.defaults import url
 from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
+from django.core.urlresolvers import reverse
 from django.contrib.gis.geos import Point
 from django.contrib.gis.measure import Distance
+from django.contrib.sites.models import Site
 from django.db import IntegrityError
+from django.http import HttpResponse
+from django.shortcuts import get_object_or_404
+
+from django_lean.experiments.models import GoalRecord
+from django_lean.experiments.utils import WebUser
 
 from eloue.geocoder import GoogleGeocoder
-from eloue.products.models import Product, Category, Picture, Price, upload_to#, StaticPage
+from eloue.products.models import Product, Category, Picture, Price, upload_to, PAYMENT_TYPE#, StaticPage
 from eloue.products.search_indexes import product_search
 from eloue.accounts.models import Address, PhoneNumber, Patron
 from eloue.rent.models import Booking
+from eloue.rent.views import preapproval_ipn, pay_ipn, booking_success, booking_failure
 
 __all__ = ['api_v1']
 
 log = logbook.Logger('eloue.api')
 
 DEFAULT_RADIUS = getattr(settings, 'DEFAULT_RADIUS', 50)
+
+USE_HTTPS = getattr(settings, 'USE_HTTPS', True)
 
 
 def is_valid_request(request, parameters=OAUTH_PARAMETERS_NAMES):
@@ -317,7 +330,7 @@ class ProductResource(UserSpecificResource):
     
     class Meta(MetaBase):
         queryset = Product.on_site.all()
-        allowed_methods = ['get', 'post']
+        allowed_methods = ['get', 'post','put']
         resource_name = 'product'
         include_absolute_url = True
         fields = ['id', 'quantity', 'summary', 'description', 'deposit_amount']
@@ -432,9 +445,11 @@ class BookingResource(OAuthResource):
     class Meta(MetaBase):
         queryset = Booking.objects.all()
         #allowed_methods =['get']
-        list_allowed_methods = ['get', 'post']
+        list_allowed_methods = ['get', 'post','put']
         detail_allowed_methods = ['get', 'post', 'put', 'delete'] 
         resource_name = 'booking'
+        excludes = ["pay_key"]
+        #always_return_data = True
         filtering = {
             'owner': ALL_WITH_RELATIONS,
             'borrower': ALL_WITH_RELATIONS,
@@ -442,43 +457,147 @@ class BookingResource(OAuthResource):
             'ended_at': ALL_WITH_RELATIONS,
             'started_at': ALL_WITH_RELATIONS,
         }
-
+    def obj_update(self, bundle, **kwargs):
+        #print "update"
+        pass
     def obj_create(self, bundle, **kwargs):
-        """Creates a new booking"""   
+        """Creates the object for booking"""   
         from datetime import datetime, timedelta
         from dateutil import parser        
         data = bundle.data
-        print "started_at"
-        print data["started_at"]
-        print "ended_at"
-        print data["ended_at"]
-        print "owner"
-        print type(data["owner"])
-        print quote(data["owner"])
-        print "borrower"
-        print data["borrower"]
-        print "product"
-        print data["product"]
         try:
-            bundle.obj = Booking(started_at = data["started_at"],  
-                                            ended_at = data["ended_at"],  
-                                            ip = data["ip"],
-                                            total_amount = data["total_amount"],
-                                            #owner = UserResource.get_via_uri(quote(data["owner"])),
-                                            #borrower = UserResource.get_via_uri(quote(data["borrower"])),
-                                            #product = ProductResource.get_via_uri(quote(data["product"])),
-                                            owner = Patron.objects.get(id=1190),
-                                            borrower = Patron.objects.get(id=2286),
-                                            product = Product.objects.get(id=15048),
-                                            )
-            print bundle.obj.started_at
-            print bundle.obj.ended_at
-            print bundle.obj.owner
-            print bundle.obj.borrower
-            print bundle.obj.product
+            bundle.obj=Booking(started_at = data["started_at"],  
+                                ended_at = data["ended_at"],  
+                                total_amount = D(data["total_amount"]),
+                                owner = Patron.objects.get(id=1190),
+                                borrower = Patron.objects.get(id=2286),
+                                product = Product.objects.get(id=15048),
+                              )
+            #print bundle.obj.product
+            bundle.obj.save()
         except IntegrityError:
             raise ImmediateHttpResponse(response=HttpBadRequest())
         return bundle
+    
+    def post_list(self, request, **kwargs):
+        """
+        Set the returned response for created booking
+        """
+        #print "enter post_list"
+        post_data = self.deserialize(request, request.raw_post_data, format=request.META.get('CONTENT_TYPE', 'application/json'))
+        bundle = self.build_bundle(data=dict_strip_unicode_keys(post_data))
+        self.is_valid(bundle, request)
+        updated_bundle = self.obj_create(bundle, request=request)
+        #updated_bundle.obj.init_payment_processor()
+        
+        domain = Site.objects.get_current().domain
+        protocol = "https" if USE_HTTPS else "http"
+        payment_type = updated_bundle.obj.product.payment_type
+        
+        if post_data["status"].lower() == 'authorizing':
+            #print "enter authorizing"
+            try:
+                booking = Booking.objects.get(uuid = updated_bundle.obj.uuid)
+                booking.init_payment_processor()
+                #print "1 %s" % booking.state
+                #print "1 %s" % booking.preapproval_key
+                booking.preapproval(
+                    cancel_url="%s://%s%s" % (protocol, domain, reverse("booking_failure", args=[booking.pk.hex])),
+                    return_url="%s://%s%s" % (protocol, domain, reverse("booking_success", args=[booking.pk.hex])),
+                    ip_address=request.META['REMOTE_ADDR']
+                    )
+                #print "2 %s" % booking.state
+                #print "2 %s" % booking.preapproval_key
+                #booking.save()
+                #booking.state = 'authorized'
+                #print "3 %s" % booking.state
+                #print "3 %s" % booking.preapproval_key
+                return HttpCreated(content_type='application/json', 
+                                    location = "/api/1.0/booking/" + str(booking.uuid) + "/", 
+                                    content = self.populate_response(booking) )
+            except IntegrityError:
+                raise ImmediateHttpResponse(response=HttpBadRequest())
+                
+        elif post_data["status"].lower() == 'pending' and post_data["uuid"]:
+            """
+            
+            """
+            #print "enter pending"
+            booking = get_object_or_404(Booking, pk=post_data["uuid"])
+            if booking.product.payment_type == PAYMENT_TYPE.NOPAY:
+                is_verified = booking.owner.is_verified
+                if not booking.owner.has_paypal():
+                    cont_dic = {"error":"The owner doesn't have paypal account"}
+                    content = json.dumps(cont_dic)
+                    return HttpResponse(content_type='application/json', content=content)                    
+                elif is_verified!="VERIFIED":
+                    if is_verified=="UNVERIFIED":
+                        cont_dic = {"error":"The owner's paypal account is unverified"}
+                        content = json.dumps(cont_dic)
+                        return HttpResponse(content_type='application/json', content=content)
+                    elif is_verified=="INVALID":
+                        cont_dic = {"error":"The owner's paypal account is invalid"}                            
+                        content = json.dumps(cont_dic)
+                        return HttpResponse(content_type='application/json', content=content)      
+            booking.state = post_data["status"]
+            #booking.send_acceptation_email()
+            GoalRecord.record('rent_object_accepted', WebUser(request))
+            booking.save()
+            return HttpResponse(content_type='application/json', content=self.populate_response(booking))
+        
+
+        elif post_data["status"].lower() == 'rejected' and post_data["uuid"]:
+            """
+            
+            """
+            #print "to rejected"
+            booking = get_object_or_404(Booking, pk=post_data["uuid"])
+            booking.state = post_data["status"]
+            #booking.send_rejection_email()
+            GoalRecord.record('rent_object_rejected', WebUser(request))
+            booking.save()
+            return HttpResponse(content_type='application/json', content=self.populate_response(booking))
+
+        elif post_data["status"].lower() == 'closed' and post_data["uuid"]:
+            """
+            
+            """ 
+            #print "to closed"
+            booking = get_object_or_404(Booking, pk=post_data["uuid"])
+            booking.state="ended"
+            booking.init_payment_processor()
+            #print "pay key %s" % booking.pay_key
+            booking.pay()
+            return HttpResponse(content_type='application/json', content=self.populate_response(booking))
+        else: 
+            # from authorizing to authorized
+            pass
+            
+                
+    def populate_response(self, booking):
+        cont_dic = {}
+        cont_dic["borrower"] = "/api/1.0/user/%s/" % booking.borrower.id
+        cont_dic["canceled_at"] = booking.canceled_at
+        cont_dic["contract_id"] = booking.contract_id
+        cont_dic["created_at"] = booking.created_at.__str__()
+        cont_dic["currency"] = booking.currency
+        cont_dic["deposit_amount"] = str(booking.deposit_amount)
+        cont_dic["ended_at"] = booking.ended_at.__str__()
+        cont_dic["insurance_amount"] = str(booking.insurance_amount)
+        cont_dic["ip"] = booking.ip
+        cont_dic["owner"] = "/api/1.0/user/%s/" % booking.owner.id
+        cont_dic["pin"] = booking.pin
+        cont_dic["preapproval_key"] = booking.preapproval_key
+        cont_dic["preapproval_url"] = settings.PAYPAL_COMMAND % urlencode({'cmd': '_ap-preapproval','preapprovalkey': booking.preapproval_key})
+        cont_dic["product"] = "/api/1.0/product/%s/" % booking.product.id
+        cont_dic["resource_uri"] = "/api/1.0/product/%s/" % booking.uuid
+        cont_dic["started_at"] = booking.started_at.__str__()
+        # >>>>>>>>>>>>>>> TODO change the state 
+        cont_dic["state"] = booking.state
+        cont_dic["total_amount"] = str(booking.total_amount)
+        cont_dic["uuid"] = str(booking.uuid)
+        content = json.dumps(cont_dic)
+        return content
         
     def obj_get_list(self, request=None, **kwargs):
         """
@@ -500,7 +619,7 @@ class BookingResource(OAuthResource):
         """
         from datetime import datetime, timedelta
         from dateutil import parser
-        
+        #print "enter dehydrate"
         if "started_at" in request.GET and "ended_at" in request.GET:
             # TODO: more detection needed here 
             started_at = parser.parse(unquote(request.GET["started_at"]))
@@ -522,8 +641,8 @@ class BookingResource(OAuthResource):
         #else:
          #   started_at = datetime.now() + timedelta(days=1)
           #  ended_at = started_at + timedelta(days=1)
-        return bundle
-    
+        return bundle        
+        
 api_v1 = Api(api_name='1.0')
 api_v1.register(CategoryResource())
 api_v1.register(ProductResource())
