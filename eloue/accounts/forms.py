@@ -114,7 +114,6 @@ class EmailPasswordResetForm(PasswordResetForm):
 
 
 class PatronEditForm(forms.ModelForm):
-    
     username = forms.RegexField(label=_(u"Pseudo"), max_length=30, regex=r'^[\w.@+-]+$',
     help_text=_("Required. 30 characters or fewer. Letters, digits and @/./+/-/_ only."),
     error_messages={'invalid': _("This value may contain only letters, numbers and @/./+/-/_ characters.")},
@@ -129,7 +128,7 @@ class PatronEditForm(forms.ModelForm):
     is_professional = forms.BooleanField(label=_(u"Êtes-vous un professionnel ?"), required=False, initial=False)
     
     company_name = forms.CharField(label=_(u"Nom de la société"), required=False, widget=forms.TextInput(attrs={'class': 'inm'}))
-    is_subscribed = forms.BooleanField(required=False, initial=False)
+    is_subscribed = forms.BooleanField(required=False, initial=False, label=_(u"Je suis inscrit à la newsletter"))
     new_messages_alerted = forms.BooleanField(required=False, initial=True)
     
     def __init__(self, *args, **kwargs):
@@ -300,14 +299,15 @@ def make_missing_data_form(instance, required_fields=[]):
     # Do we have an address ?
     if instance and instance.addresses.exists():
         fields['addresses'] = forms.ModelChoiceField(label=_(u"Addresse"), required=False,
-            queryset=instance.addresses.all(), widget=forms.Select(attrs={'class': 'selm'}))
+            queryset=instance.addresses.all(), initial=instance.addresses.all()[0], widget=forms.Select(attrs={'class': 'selm'}))
         for f in fields.keys():
             if "addresses" in f:
                 fields[f].required = False
     
     # Do we have a phone number ?
     if instance and instance.phones.exists():
-        fields['phones'] = forms.ModelChoiceField(label=_(u"Téléphone"), required=False, queryset=instance.phones.all(), widget=forms.Select(attrs={'class': 'selm'}))
+        fields['phones'] = forms.ModelChoiceField(label=_(u"Téléphone"), required=False, 
+            queryset=instance.phones.all(), initial=instance.phones.all()[0], widget=forms.Select(attrs={'class': 'selm'}))
         if fields.has_key('phones__phone'):
             fields['phones__phone'].required = False
     

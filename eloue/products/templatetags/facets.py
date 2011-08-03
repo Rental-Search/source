@@ -18,6 +18,7 @@ register = Library()
 def facet_breadcrumb_link(breadcrumbs, facet):
     """
     {% facet_breadcrumb_link breadcrumbs facet %}
+    
     """
     output = []
     for f in breadcrumbs.values():
@@ -47,6 +48,8 @@ class FacetUrlNode(Node):
         params = MultiValueDict((facet['label'], [facet['value']]) for facet in breadcrumbs.values() if (not facet['facet']) and not (facet['label'] == 'r' and facet['value'] == DEFAULT_RADIUS))
         additions = dict([(key.resolve(context), value.resolve(context)) for key, value in self.additions])
         removals = [key.resolve(context) for key in self.removals]
+        slugs = []
+            
         
         for key, value in additions.iteritems():
             if key in params:
@@ -59,8 +62,15 @@ class FacetUrlNode(Node):
                 del params[key]
             if key in urlbits:
                 del urlbits[key]
+                
+        for key, value in urlbits.iteritems():
+            if key == '':
+                slugs.append(''.join('%s/' % value))
+            else:
+                slugs.append(''.join('%s/%s/' % (key, value)))
+                
         
-        path = urljoin('/%s' % _("location/"), ''.join(['%s/%s/' % (key, value) for key, value in urlbits.iteritems()]))
+        path = urljoin('/%s' % _("location/"), ''.join(slugs))
         if any([value for key, value in params.iteritems()]):
             return '%s?%s' % (path, self.urlencode(params))
         else:
@@ -93,6 +103,7 @@ def do_facet_url(parser, token):
             except IndexError:
                 raise TemplateSyntaxError('Invalid argument length: %r' % token)
             additions.append((bit, next_bit))
+    
     return FacetUrlNode(breadcrumbs, additions, removals)
 
 

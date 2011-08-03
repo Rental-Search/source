@@ -67,7 +67,7 @@ class ProductViewsTest(TestCase):
         self.assertEqual(response.status_code, 200)
         response = self.client.get('/location/page/')
         self.assertEqual(response.status_code, 404)
-        response = self.client.get('/location/par-categorie/nsfw/')
+        response = self.client.get('/location/nsfw/')
         self.assertEqual(response.status_code, 404)
         response = self.client.get('/location/par-loueur/secret/')
         self.assertEqual(response.status_code, 404)

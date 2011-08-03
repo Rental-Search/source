@@ -114,7 +114,12 @@ class Product(models.Model):
     
     @permalink
     def get_absolute_url(self):
-        return ('booking_create', [self.slug, self.pk])
+        encestors_slug = self.category.get_ancertors_slug()
+        if encestors_slug:
+            path = '%s/%s/' % (self.category.get_ancertors_slug(), self.category.slug)
+        else:
+            path = '%s/' % self.category.slug
+        return ('booking_create', [path, self.slug, self.pk])
     
     def more_like_this(self):
         from eloue.products.search_indexes import product_search
@@ -190,10 +195,21 @@ class Category(MPTTModel):
             self.slug = slugify(self.name)
         super(Category, self).save(*args, **kwargs)
     
+    def get_ancertors_slug(self):
+        return ''.join('%s/' %  el.slug for el in self.get_ancestors()).replace(' ', '')[:-1]
+    
     def get_absolute_url(self):
-        return _(u"/location/par-categorie/%(category)s/") % {
-            'category': self.slug
-        }
+        ancestors_slug = self.get_ancertors_slug()
+        if ancestors_slug:
+            return _(u"/location/%(ancestors_slug)s/%(slug)s") % {
+                        'ancestors_slug': ancestors_slug,
+                        'slug': self.slug
+                    }
+        else:
+            return _(u"/location/%(slug)s") % {
+                        'slug': self.slug
+                    }
+            
      
         
 class Property(models.Model):

@@ -1275,6 +1275,8 @@ body { background: #ECF6FF url("../images/body-bg.png") repeat 0 0; }
 .new .desc-input { vertical-align: top; }
 .new .desc-input label { line-height: 50px; }
 
+#link_add_addr, #link_add_phone { font-size: 12px; }
+
 
 /* --------------------------------------------------------------
 
