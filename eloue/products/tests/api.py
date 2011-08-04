@@ -185,7 +185,43 @@ class ApiTest(TestCase):
             content_type='application/json',
             **self._get_headers(request))
         self.assertEquals(response.status_code, 400)
-    
+    def test_booking_list(self):
+        pass
+        
+    def test_booking_calculate_price(self):
+        pass
+        
+    def test_booking_creation(self):
+        post_data = {
+            'started_at': '2010-12-29 08:00:00',
+            'ended_at': '2011-01-05 08:00:00',
+            'product': '/api/1.0/product/12199/',
+            'borrower':'/api/1.0/user/2575/',
+            }
+        
+        request = self._get_request(method='POST')
+        response = self.client.post(reverse("api_dispatch_list", args=['1.0', 'user']),
+            data=simplejson.dumps(post_data),
+            content_type='application/json',
+            **self._get_headers(request))
+        self.assertEquals(response.status_code, 201)
+        self.assertTrue('Location' in response)
+        booking = Booking.objects.get(pk=int(response['Location'].split('/')[-2]))
+        self.assertEquals(booking.borrower.id, 2575)
+        self.assertEquals(booking.product.id, 12199)
+        self.assertEquals(booking.started_at, '2010-12-29 08:00:00')
+        self.assertEquals(booking.ended_at, '2011-01-05 08:00:00')
+        self.assertEquals(booking.total_amount, 175)
+        
+    def test_booking_autho_to_pending(self):
+        pass
+        
+    def test_booking_autho_to_rejected(self):
+        pass
+        
+    def test_booking_clossing_to_closed(self):
+        pass
+        
     def tearDown(self):
         for product in Product.objects.all():
             self.index.remove_object(product)
