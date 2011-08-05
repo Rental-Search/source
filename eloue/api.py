@@ -330,7 +330,7 @@ class ProductResource(UserSpecificResource):
     
     class Meta(MetaBase):
         queryset = Product.on_site.all()
-        allowed_methods = ['get', 'post','put']
+        allowed_methods = ['get', 'post']
         resource_name = 'product'
         include_absolute_url = True
         fields = ['id', 'quantity', 'summary', 'description', 'deposit_amount']
@@ -473,16 +473,22 @@ class BookingResource(OAuthResource):
             
             temp, total_amount = Booking.calculate_price(product, started_at, ended_at)
             #print total_amount
-            
-            bundle.obj=Booking(started_at = data["started_at"],  
-                                ended_at = data["ended_at"],  
-                                total_amount = total_amount,
-                                borrower = borrower,
-                                product = product,
-                                owner = product.owner,
-                              )
-            #print bundle.obj.total_amount
-            bundle.obj.save()
+            if data["status"] == "authorizing":
+                bundle.obj=Booking(started_at = data["started_at"],  
+                                    ended_at = data["ended_at"],  
+                                    total_amount = total_amount,
+                                    borrower = borrower,
+                                    product = product,
+                                    owner = product.owner,
+                                  )
+                bundle.obj.save()
+            elif data['status'] and data["uuid"]:
+                bundle.obj=Booking.objects.get(uuid=data["uuid"])
+                print bundle.obj.started_at
+                print bundle.obj.ended_at
+            else:
+                # need to do some checking here
+                pass
         except IntegrityError:
             raise ImmediateHttpResponse(response=HttpBadRequest())
         return bundle
@@ -497,7 +503,6 @@ class BookingResource(OAuthResource):
         #print "bundle %s" % bundle
         self.is_valid(bundle, request)
         updated_bundle = self.obj_create(bundle, request=request)
-        print "updated_bundle %s " % updated_bundle
         
         domain = Site.objects.get_current().domain
         protocol = "https" if USE_HTTPS else "http"
@@ -512,13 +517,14 @@ class BookingResource(OAuthResource):
                     return_url="%s://%s%s" % (protocol, domain, reverse("booking_success", args=[booking.pk.hex])),
                     ip_address=request.META['REMOTE_ADDR']
                     )
+                booking.state = "authorized"
                 return HttpCreated(content_type='application/json', 
                                     location = "/api/1.0/booking/" + str(booking.uuid) + "/", 
                                     content = self.populate_response(booking) )
             except IntegrityError:
                 raise ImmediateHttpResponse(response=HttpBadRequest())
                 
-        elif post_data["status"].lower() == 'pending' and post_data["uuid"]:
+        elif post_data["status"].lower() == 'pending' and updated_bundle.obj.uuid:
             booking = get_object_or_404(Booking, pk=updated_bundle.obj.uuid)
             if booking.product.payment_type == PAYMENT_TYPE.NOPAY:
                 is_verified = booking.owner.is_verified
@@ -541,20 +547,20 @@ class BookingResource(OAuthResource):
             booking.save()
             return HttpResponse(content_type='application/json', content=self.populate_response(booking))
             
-        elif post_data["status"].lower() == 'rejected' and post_data["uuid"]:
+        elif post_data["status"].lower() == 'rejected' and updated_bundle.obj.uuid:
             booking = get_object_or_404(Booking, pk=updated_bundle.obj.uuid)
             booking.state = post_data["status"]
             #booking.send_rejection_email()
             GoalRecord.record('rent_object_rejected', WebUser(request))
             booking.save()
-            return HttpAccepted(content_type='application/json', content=self.populate_response(booking))
+            return HttpResponse(content_type='application/json', content=self.populate_response(booking))
             
-        elif post_data["status"].lower() == 'closed' and post_data["uuid"]:
+        elif post_data["status"].lower() == 'closed' and updated_bundle.obj.uuid:
             booking = get_object_or_404(Booking, pk=updated_bundle.obj.uuid)
-            booking.state="ended"
-            booking.init_payment_processor()
-            booking.pay()
-            return HttpAccepted(content_type='application/json', content=self.populate_response(booking))
+            booking.state="closed"
+            #booking.init_payment_processor()
+            #booking.pay()
+            return HttpResponse(content_type='application/json', content=self.populate_response(booking))
         else: 
             pass
             
@@ -591,6 +597,7 @@ class BookingResource(OAuthResource):
         from dateutil import parser
 
         if "started_at" in request.GET and "ended_at" in request.GET:
+            #print "good place"
             object_list = Booking.objects.all()[:1]
         else:
             object_list = Booking.objects.all()
@@ -600,15 +607,18 @@ class BookingResource(OAuthResource):
         """
         Modify the data before sending it to the client
         """
+        print "enter dehydrate"
         from datetime import datetime, timedelta
         from dateutil import parser
         if "started_at" in request.GET and "ended_at" in request.GET:
+            #print unquote(request.GET["started_at"])
+            #print unquote(request.GET["ended_at"])
             started_at = parser.parse(unquote(request.GET["started_at"]))
             ended_at = parser.parse(unquote(request.GET["ended_at"]))
             bundle.data = {}
             bundle.obj.product = Product.objects.get(id = request.GET["product"].split("/")[-2])
             temp, bundle.data["total_amount"] = Booking.calculate_price(bundle.obj.product, started_at, ended_at)
-            bundle.data["owner"] = unquote(request.GET["owner"])
+            bundle.data["owner"] = "/api/1.0/user/%s/" % bundle.obj.product.owner.id
             bundle.data["borrower"] = unquote(request.GET["borrower"])
             bundle.data["product"] = unquote(request.GET["product"])
             bundle.data["started_at"] = parser.parse(unquote(request.GET["started_at"]))
