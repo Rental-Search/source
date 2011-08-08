@@ -211,7 +211,7 @@ class ApiTest(TestCase):
                                     {'oauth_consumer_key':OAUTH_CONSUME_KEY})
         self.assertEquals(response.status_code, 200)
         json = simplejson.loads(response.content)
-        self.assertEquals(json['objects'][0]['total_amount']), 275)
+        self.assertEquals(json['objects'][0]['total_amount'], 275)
                 
     def test_booking_creation(self):
         post_data = {

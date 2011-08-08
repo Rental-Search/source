@@ -32,8 +32,11 @@ from django.contrib.gis.geos import Point
 from django.contrib.gis.measure import Distance
 from django.contrib.sites.models import Site
 from django.db import IntegrityError
+from django.db.models import Q
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
+
+
 
 from django_lean.experiments.models import GoalRecord
 from django_lean.experiments.utils import WebUser
@@ -174,12 +177,20 @@ class UserSpecificResource(OAuthResource):
         filters = None
         
         if hasattr(request, 'GET'):
+            #print "1"
+            #print request.GET.copy()
             filters = request.GET.copy()
         
         if self.FILTER_GET_REQUESTS:
+            #print "2"
+            #print request.user
             filters["user"] = request.user
-        
+        #print "3"
+        #print filters
         applicable_filters = self.build_filters(filters=filters)
+        #applicable_filters = {"owner":request.user}
+        #print "4"
+        #print applicable_filters
         
         try:
             return self.get_object_list(request).filter(**applicable_filters)
@@ -419,7 +430,6 @@ class ProductResource(UserSpecificResource):
         """
         from datetime import datetime, timedelta
         from dateutil import parser
-        
         if "date_start" in request.GET and "date_end" in request.GET:
             date_start = parser.parse(unquote(request.GET["date_start"]))
             date_end = parser.parse(unquote(request.GET["date_end"]))
@@ -497,10 +507,15 @@ class BookingResource(OAuthResource):
         """
         Set the returned response for created booking
         """
-        
+        #print "post raw data >>>>>>>>>>>>>>>>>>>>>>>>>>>>> %s" % request.path
+        #print "request user %s" % request.user.email
+        #owner = Patron.objects.filter(email=request.user.email)
+        #print Booking.on_site.filter(owner=owner)
+        #print "borrower >>>"
+        #print Booking.on_site.filter(borrower=owner)
         post_data = self.deserialize(request, request.raw_post_data, format=request.META.get('CONTENT_TYPE', 'application/json'))
+        #print "post data >>>>>>>>>>>>>>>>>>>>>>>>>>>>> %s" % post_data
         bundle = self.build_bundle(data=dict_strip_unicode_keys(post_data))
-        #print "bundle %s" % bundle
         self.is_valid(bundle, request)
         updated_bundle = self.obj_create(bundle, request=request)
         
@@ -542,6 +557,7 @@ class BookingResource(OAuthResource):
                         content = json.dumps(cont_dic)
                         return HttpResponse(content_type='application/json', content=content)      
             booking.state = post_data["status"]
+            # TODO uncomment the following line 
             #booking.send_acceptation_email()
             GoalRecord.record('rent_object_accepted', WebUser(request))
             booking.save()
@@ -550,6 +566,7 @@ class BookingResource(OAuthResource):
         elif post_data["status"].lower() == 'rejected' and updated_bundle.obj.uuid:
             booking = get_object_or_404(Booking, pk=updated_bundle.obj.uuid)
             booking.state = post_data["status"]
+            # TODO uncomment the following line
             #booking.send_rejection_email()
             GoalRecord.record('rent_object_rejected', WebUser(request))
             booking.save()
@@ -558,6 +575,7 @@ class BookingResource(OAuthResource):
         elif post_data["status"].lower() == 'closed' and updated_bundle.obj.uuid:
             booking = get_object_or_404(Booking, pk=updated_bundle.obj.uuid)
             booking.state="closed"
+            # TODO uncomment the following lines
             #booking.init_payment_processor()
             #booking.pay()
             return HttpResponse(content_type='application/json', content=self.populate_response(booking))
@@ -599,15 +617,25 @@ class BookingResource(OAuthResource):
         if "started_at" in request.GET and "ended_at" in request.GET:
             #print "good place"
             object_list = Booking.objects.all()[:1]
+        elif "uuid" in request.GET:
+            try:
+                object_list = Booking.objects.filter(uuid=request.GET["uuid"])
+                if list(object_list)[0].owner != request.user and list(object_list)[0].borrower != request.user:
+                    object_list = Booking.objects.none()
+                    raise NotFound("The logined user is neither the owner nor the borrower of the booking with the uuid")
+                #print object_list.values()[0]
+            except ValueError:
+                raise NotFound("Invalid resource lookup data provided (mismatched type).")
+            
         else:
-            object_list = Booking.objects.all()
+            object_list = self.get_object_list(request).filter( Q(borrower=request.user) | Q(owner=request.user) )
         return object_list
-        
+ 
     def dehydrate(self, bundle, request=None):
         """
         Modify the data before sending it to the client
         """
-        print "enter dehydrate"
+        #print "enter dehydrate"
         from datetime import datetime, timedelta
         from dateutil import parser
         if "started_at" in request.GET and "ended_at" in request.GET:
