@@ -78,6 +78,7 @@ def product_edit(request, slug, product_id):
         messages.success(request, _(u"Votre produit a bien été édité !"))
     return direct_to_template(request, 'products/product_edit.html', extra_context={'product': product, 'form': form})
 
+
 @login_required
 def compose_product_related_message(request, recipient=None, form_class=MessageComposeForm,
     template_name='django_messages/compose.html', success_url=None, recipient_filter=None):
@@ -100,6 +101,7 @@ def compose_product_related_message(request, recipient=None, form_class=MessageC
     return render_to_response(template_name, {
         'form': form,
         }, context_instance=RequestContext(request))
+
 
 @login_required
 def reply_product_related_message(request, message_id, form_class=MessageEditForm,
@@ -174,11 +176,7 @@ def product_list(request, urlbits, sqs=SearchQuerySet(), suggestions=None, page=
                 raise Http404
             if bit.endswith(_('categorie')):
                 item = get_object_or_404(Category, slug=value)
-                breadcrumbs[bit] = {
-                    'name': 'categories', 'value': value, 'label': bit, 'object': item,
-                    'pretty_name': _(u"Catégorie"), 'pretty_value': item.name,
-                    'url': 'par-%s/%s' % (bit, value), 'facet': True
-                }
+                return redirect_to(request, item.get_absolute_url())
             elif bit.endswith(_('loueur')):
                 item = get_object_or_404(Patron.on_site, slug=value)
                 breadcrumbs[bit] = {
@@ -194,7 +192,14 @@ def product_list(request, urlbits, sqs=SearchQuerySet(), suggestions=None, page=
             except IndexError:
                 raise Http404
         else:
-            raise Http404
+            value = bit
+            item = get_object_or_404(Category, slug=value)
+            ancestors_slug = item.get_ancertors_slug()
+            breadcrumbs['categorie'] = {
+                'name': 'categories', 'value': value, 'label': ancestors_slug, 'object': item,
+                'pretty_name': _(u"Catégorie"), 'pretty_value': item.name,
+                'url': item.get_absolute_url(), 'facet': True
+            }
     form = FacetedSearchForm(dict((facet['name'], facet['value']) for facet in breadcrumbs.values()), searchqueryset=sqs)
     sqs, suggestions = form.search()
     return object_list(request, sqs, page=page, paginate_by=PAGINATE_PRODUCTS_BY, template_name="products/product_list.html",
@@ -202,8 +207,6 @@ def product_list(request, urlbits, sqs=SearchQuerySet(), suggestions=None, page=
             'facets': sqs.facet_counts(), 'form': form, 'breadcrumbs': breadcrumbs, 'suggestions': suggestions,
             'urlbits': dict((facet['label'], facet['value']) for facet in breadcrumbs.values() if facet['facet'])
     })
-
-
 
 @never_cache
 @secure_required

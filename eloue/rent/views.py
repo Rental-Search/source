@@ -95,6 +95,14 @@ def booking_price(request, slug, product_id):
 @mobify
 @never_cache
 @secure_required
+def booking_create_redirect(request, *args, **kwargs):
+    product = get_object_or_404(Product.on_site, pk=kwargs['product_id'])
+    return redirect_to(request, product.get_absolute_url())
+
+
+@mobify
+@never_cache
+@secure_required
 def booking_create(request, *args, **kwargs):
     product = get_object_or_404(Product.on_site, pk=kwargs['product_id'])
     if product.slug != kwargs['slug']:
