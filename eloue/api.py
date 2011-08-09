@@ -31,6 +31,7 @@ from django.core.urlresolvers import reverse
 from django.contrib.gis.geos import Point
 from django.contrib.gis.measure import Distance
 from django.contrib.sites.models import Site
+from django.contrib.auth.models import User
 from django.db import IntegrityError
 from django.db.models import Q
 from django.http import HttpResponse
@@ -243,7 +244,7 @@ class PhoneNumberResource(UserSpecificResource):
     
     def obj_create(self, bundle, request=None, **kwargs):
         bundle.data['patron'] = UserResource().get_resource_uri(request.user)
-        return super(AddressResource, self).obj_create(bundle, request, **kwargs)
+        return super(PhoneNumberResource, self).obj_create(bundle, request, **kwargs)
     
 
 class AddressResource(UserSpecificResource):
@@ -261,6 +262,9 @@ class AddressResource(UserSpecificResource):
         return bundle
     
     def obj_create(self, bundle, request=None, **kwargs):
+        print request.user
+        print ">>>>>>>>>>>>"
+        print UserResource().get_resource_uri(request.user)
         bundle.data['patron'] = UserResource().get_resource_uri(request.user)
         return super(AddressResource, self).obj_create(bundle, request, **kwargs)
     
