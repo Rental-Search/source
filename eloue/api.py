@@ -76,6 +76,7 @@ class OAuthentication(Authentication):
             # Just checking if you're allowed to be there
             oauth_request = get_oauth_request(request)
             try:
+                #print oauth_request.get_parameter('oauth_consumer_key')
                 consumer = store.get_consumer(request, oauth_request, oauth_request.get_parameter('oauth_consumer_key'))
                 return True
             except InvalidConsumerError:
@@ -85,11 +86,14 @@ class OAuthentication(Authentication):
 
 class OAuthAuthorization(Authorization):
     def is_authorized(self, request, object=None):
+        #print "enter"
         if is_valid_request(request, ['oauth_consumer_key']):  # Read-only part
             oauth_request = get_oauth_request(request)
             if issubclass(self.resource_meta.object_class, Product) and request.method == 'GET':
                 try:
                     consumer = store.get_consumer(request, oauth_request, oauth_request.get_parameter('oauth_consumer_key'))
+                    #print "2"
+                    #print consumer
                     return True
                 except InvalidConsumerError:
                     return False
@@ -152,7 +156,6 @@ class MetaBase():
     authentication = OAuthentication()
     authorization = OAuthAuthorization()
     serializer = JSONSerializer()
-
 
 class OAuthResource(ModelResource):
     def build_filters(self, filters=None):
@@ -262,9 +265,9 @@ class AddressResource(UserSpecificResource):
         return bundle
     
     def obj_create(self, bundle, request=None, **kwargs):
-        print request.user
-        print ">>>>>>>>>>>>"
-        print UserResource().get_resource_uri(request.user)
+        #print request.user
+        #print ">>>>>>>>>>>>"
+        #print UserResource().get_resource_uri(request.user)
         bundle.data['patron'] = UserResource().get_resource_uri(request.user)
         return super(AddressResource, self).obj_create(bundle, request, **kwargs)
     
@@ -469,8 +472,7 @@ class BookingResource(OAuthResource):
             'ended_at': ALL_WITH_RELATIONS,
             'started_at': ALL_WITH_RELATIONS,
         }
-    def obj_update(self, bundle, **kwargs):
-        pass
+    
     def obj_create(self, bundle,  request=None, **kwargs):
         """Creates the object for booking"""   
         from datetime import datetime, timedelta
@@ -498,8 +500,8 @@ class BookingResource(OAuthResource):
                 bundle.obj.save()
             elif data['status'] and data["uuid"]:
                 bundle.obj=Booking.objects.get(uuid=data["uuid"])
-                print bundle.obj.started_at
-                print bundle.obj.ended_at
+                #print bundle.obj.started_at
+                #print bundle.obj.ended_at
             else:
                 # need to do some checking here
                 pass
@@ -562,7 +564,7 @@ class BookingResource(OAuthResource):
                         return HttpResponse(content_type='application/json', content=content)      
             booking.state = post_data["status"]
             # TODO uncomment the following line 
-            #booking.send_acceptation_email()
+            booking.send_acceptation_email()
             GoalRecord.record('rent_object_accepted', WebUser(request))
             booking.save()
             return HttpResponse(content_type='application/json', content=self.populate_response(booking))
@@ -571,7 +573,7 @@ class BookingResource(OAuthResource):
             booking = get_object_or_404(Booking, pk=updated_bundle.obj.uuid)
             booking.state = post_data["status"]
             # TODO uncomment the following line
-            #booking.send_rejection_email()
+            booking.send_rejection_email()
             GoalRecord.record('rent_object_rejected', WebUser(request))
             booking.save()
             return HttpResponse(content_type='application/json', content=self.populate_response(booking))
@@ -580,8 +582,8 @@ class BookingResource(OAuthResource):
             booking = get_object_or_404(Booking, pk=updated_bundle.obj.uuid)
             booking.state="closed"
             # TODO uncomment the following lines
-            #booking.init_payment_processor()
-            #booking.pay()
+            booking.init_payment_processor()
+            booking.pay()
             return HttpResponse(content_type='application/json', content=self.populate_response(booking))
         else: 
             pass

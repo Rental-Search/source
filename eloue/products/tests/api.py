@@ -74,6 +74,7 @@ class ApiTest(TestCase):
         request = self._get_request(method='GET', use_token=False)
         response = self.client.get(reverse('oauth_request_token'), {'oauth_callback': 'oob'},
             **self._get_headers(request))
+        print response.status_code
         self.assertTrue(response.status_code, 200)
         request_token = dict(urlparse.parse_qsl(response.content))
         self.assertTrue('oauth_token' in request_token)
@@ -195,12 +196,19 @@ class ApiTest(TestCase):
         
     #>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
     def test_booking_list(self):
-        response = self.client.get(reverse("api_dispatch_list", args=['1.0', 'booking']),
-            {'oauth_consumer_key': OAUTH_CONSUMER_KEY})
+        # response = self.client.get(reverse("api_dispatch_list", args=['1.0', 'booking']),
+        #             {'oauth_consumer_key': OAUTH_CONSUMER_KEY})
+        response = self.client.get("/api/1.0/booking/")
         self.assertEquals(response.status_code, 200)
         json = simplejson.loads(response.content)
         self.assertEquals(json['meta']['total_count'], Booking.objects.count())
-                
+        # print "product list"
+        # response = self.client.get(reverse("api_dispatch_list", args=['1.0', 'product']),
+        #            {'oauth_consumer_key': OAUTH_CONSUMER_KEY})
+        #        self.assertEquals(response.status_code, 200)
+        #        json = simplejson.loads(response.content)
+        #        self.assertEquals(json['meta']['total_count'], Product.objects.count())
+
     def test_booking_calculate_price(self):
         url_dic = {'borrower': '/api/1.0/user/2575/',
                     'ended_at': '2011-01-03 08:00:00',
