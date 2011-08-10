@@ -109,6 +109,8 @@ class Patron(User):
     slug = models.SlugField(unique=True, db_index=True)
     paypal_email = models.EmailField(null=True, blank=True)
     sites = models.ManyToManyField(Site, related_name='patrons')
+
+    customers = models.ManyToManyField('self', through = 'PatronCustomer', symmetrical=False)
     
     on_site = CurrentSiteManager()
     objects = PatronManager()
@@ -260,22 +262,22 @@ class Address(models.Model):
         u'11, rue debelleyme  75003 Paris'
         """
         return smart_unicode("%s %s %s %s" % (self.address1, self.address2 if self.address2 else '', self.zipcode, self.city))
-    
+
     def save(self, *args, **kwargs):
         self.position = self.geocode()
         super(Address, self).save(*args, **kwargs)
-    
+
     def clean(self):
         from django.core.exceptions import ValidationError
         if self.position:
             if self.position.x > 90 or self.position.x < -90 or self.position.y < -180 or self.position.y > 180:
                 raise ValidationError(_(u"Coordonnées géographiques incorrectes"))
-    
+
     def geocode(self):
         name, (lat, lon), radius = GoogleGeocoder().geocode("%s %s %s %s" % (self.address1, self.address2, self.zipcode, self.city))
         if lat and lon:
             return Point(lat, lon)
-    
+
     def is_geocoded(self):
         """
         >>> address = Address(address1='11, rue debelleyme', zipcode='75003', city='Paris')
@@ -288,23 +290,28 @@ class Address(models.Model):
         return self.position != None
     is_geocoded.boolean = True
     is_geocoded.short_description = ugettext(u"Géolocalisé")
-    
+
 
 class PhoneNumber(models.Model):
     """A phone number"""
     patron = models.ForeignKey(Patron, related_name='phones')
     number = models.CharField(max_length=255)
     kind = models.PositiveSmallIntegerField(choices=PHONE_TYPES, default=PHONE_TYPES.OTHER)
-    
+
     def __unicode__(self):
         return smart_unicode(self.number)
 
-        
+
 class PatronAccepted(models.Model):
     """Patron accpeted to create an account for private plateform"""
     email = models.EmailField()
     sites = models.ManyToManyField(Site, related_name='patrons_accepted')
-    
+
+
+class PatronCustomer(models.Model):
+    renter = models.ForeignKey('Patron', related_name="renter_set")
+    customer = models.ForeignKey('Patron', related_name="customer_set")
+
 
 signals.post_save.connect(post_save_sites, sender=Patron)
 
