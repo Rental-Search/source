@@ -1,22 +1,22 @@
 {% extends "base.html" %}
- {% load i18n %}
+{% load i18n %}
 
 {% block title %}{% trans "Activation de votre compte" %}{% endblock %}
 
 {% block content %}
- <div id="content" class="register clearfix">
-	<div class="content-header x12">
+<div id="content-home" class="xgrid">
+    <div class="content-header x12">
 		<h1>{% trans "Activation" %}</h1>
 	</div>
-	<div class="x12">
-  	{% if is_actived %}
-   	<h2>{% trans "Merci d'avoir activé votre compte !" %}</h2>
-   	<p>{% trans "Vous pouvez vous y connecter dés à présent." %}</p>
-  	{% else %}
-   	<h2>{% trans "Votre compte n'a pu être activé" %}</h2>
-   	{% url feedback as feedback  %}
-   	<p>{% blocktrans %}Ceci peut-arriver si le lien que nous vous avons envoyé par email a été coupé, assurez-vous que celui-ci est complet.{% endblocktrans %}</p>
-  	{% endif %}
+    <div class="x12">
+  	    {% if is_actived %}
+       	<h2>{% trans "Merci d'avoir activé votre compte !" %}</h2>
+       	<p>{% trans "Vous pouvez vous y connecter dés à présent." %}</p>
+      	{% else %}
+       	<h2>{% trans "Votre compte n'a pu être activé" %}</h2>
+       	{% url feedback as feedback  %}
+       	<p>{% blocktrans %}Ceci peut-arriver si le lien que nous vous avons envoyé par email a été coupé, assurez-vous que celui-ci est complet.{% endblocktrans %}</p>
+      	{% endif %}
 	</div>
- </div>
+</div>
 {% endblock %}

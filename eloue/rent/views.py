@@ -17,17 +17,19 @@ from django.views.decorators.cache import never_cache
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic.list_detail import object_detail
 from django.views.generic.simple import direct_to_template, redirect_to
-
+from django.db.models import Q
 from django_lean.experiments.models import GoalRecord
 from django_lean.experiments.utils import WebUser
 
 from eloue.decorators import ownership_required, validate_ipn, secure_required, mobify
 from eloue.accounts.forms import EmailAuthenticationForm
-from eloue.products.models import Product
+from eloue.products.models import Product, PAYMENT_TYPE
 from eloue.rent.forms import BookingForm, BookingConfirmationForm, BookingStateForm, PreApprovalIPNForm, PayIPNForm, IncidentForm
 from eloue.rent.models import Booking
 from eloue.rent.wizard import BookingWizard
 from eloue.utils import currency
+from datetime import datetime, timedelta
+from eloue.rent.utils import get_product_occupied_date
 
 log = logbook.Logger('eloue.rent')
 
@@ -67,6 +69,15 @@ def pay_ipn(request):
     return HttpResponse()
 
 
+def product_occupied_date(request, slug, product_id):
+    product = get_object_or_404(Product.on_site, pk=product_id)
+    bookings = Booking.objects.filter(product=product).filter(Q(state="pending")|Q(state="ongoing"))
+    dates = get_product_occupied_date(bookings)
+    formated_date = [str(d.year) + '-' + str(d.month) + '-' + str(d.day) for d in dates]
+    formated_date = list(set(formated_date))
+    return HttpResponse(simplejson.dumps(formated_date), mimetype='application/json')
+
+
 @require_GET
 def booking_price(request, slug, product_id):
     if not request.is_ajax():
@@ -79,6 +90,14 @@ def booking_price(request, slug, product_id):
         return HttpResponse(simplejson.dumps({'duration': duration, 'total_price': total_price}), mimetype='application/json')
     else:
         return HttpResponse(simplejson.dumps({'errors': form.errors.values()}), mimetype='application/json')
+
+
+@mobify
+@never_cache
+@secure_required
+def booking_create_redirect(request, *args, **kwargs):
+    product = get_object_or_404(Product.on_site, pk=kwargs['product_id'])
+    return redirect_to(request, product.get_absolute_url())
 
 
 @mobify
@@ -118,8 +137,16 @@ def booking_detail(request, booking_id):
 @ownership_required(model=Booking, object_key='booking_id', ownership=['owner'])
 def booking_accept(request, booking_id):
     booking = get_object_or_404(Booking, pk=booking_id)
-    if not booking.owner.has_paypal():
-        return redirect_to(request, "%s?next=%s" % (reverse('patron_paypal'), booking.get_absolute_url()))
+    if booking.product.payment_type!=PAYMENT_TYPE.NOPAY:
+        is_verified = booking.owner.is_verified
+        if not booking.owner.has_paypal():
+            return redirect_to(request, "%s?next=%s" % (reverse('patron_paypal'), booking.get_absolute_url()))
+        elif is_verified!="VERIFIED":
+            if is_verified=="UNVERIFIED":
+                messages.error(request, _(u"Votre paypal compte n'est pas vérifié, veuillez modifier votre nom ou prénom ou email paypal"))
+            elif is_verified=="INVALID":
+                messages.error(request, _(u"Votre Paypal compte est invalide, veuillez modifier votre nom ou prénom ou email paypal"))
+            return redirect_to(request, "%s?next=%s" % (reverse('patron_edit'), booking.get_absolute_url()))
     form = BookingStateForm(request.POST or None,
         initial={'state': Booking.STATE.PENDING},
         instance=booking)
@@ -152,6 +179,7 @@ def booking_reject(request, booking_id):
 def booking_cancel(request, booking_id):
     booking = get_object_or_404(Booking, pk=booking_id)
     if request.POST:
+        booking.init_payment_processor()
         booking.cancel()
         booking.send_cancelation_email(source=request.user)
         messages.success(request, _(u"Cette réservation a bien été annulée"))
@@ -164,6 +192,7 @@ def booking_cancel(request, booking_id):
 def booking_close(request, booking_id):
     booking = get_object_or_404(Booking, pk=booking_id)
     if request.POST:
+        booking.init_payment_processor()
         booking.pay()
         booking.send_closed_email()
         messages.success(request, _(u"Cette réservation a bien été cloturée"))

@@ -3,6 +3,7 @@
 <html lang="fr">
  <head>
   <meta charset="utf-8">
+  <meta name="google-site-verification" content="tl7vO7wctrdRv306RmdpW-2PsdM0QIUzZ3RqJ8mH7ZE" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
   <title>{% filter striplinebreak %}{% block title %}{% endblock %} {% if is_paginated and page_obj.has_previous %}- {% trans "Page" %} {{ page_obj.number }}{% endif %} - {% trans "e-loue" %}{% endfilter %}</title>
   <meta name="description" content="{% filter striplinebreak %}{% block description %}Plateforme pour louer ou mettre en location tout type d'objet : materiel, reception, mariage, sono, utilitaires, ski{% endblock %}{% if is_paginated and page_obj.has_previous %} Page {{ page_obj.number }}{% endif %}{% endfilter %}">
@@ -28,99 +29,109 @@
  </head>
  <body>
 		{% if messages %}
-		    {% for message in messages %}
-				<div id="notification" class="notification {% if message.tags %} {{ message.tags }}"{% endif %}>
-					<span id="notification-text">{{ message }}</span>
-				</div>
-		    {% endfor %}
-		{% endif %}
-		<div id="wrapper" class="xgrid">
-			<div id="header" class="clearfix">
-				<div class="pub-header x12">
-					<div>
-						<p class="pub-size">
-							PUB<br />
-							728 x 90 pixels
-						</p>
-					</div>
-				</div>
-				<div class="logo x2">
-					<a href="{% url home %}">
-						<img src="{{ MEDIA_URL }}images/logo.png" alt="e-loue"/>
-					</a>
-				</div>
-				<div class="x10 omega">
-					<ul class="nav-bar">
-						<li class="nav"><a href="{% url product_create %}" class="btn medium-green"  >{% trans "Mettre en location" %}</a></li>
-						{% if not user.is_authenticated %}
-							<li class="nav"><a href="{% url auth_login %}" class="nav-link" >{% trans "S'inscrire ou se connecter" %}</a></li>
-						{% else %}
-							<li class="nav"><a href="{% url auth_logout %}" class="nav-link">{% trans "Se déconnecter" %}</a></li>
-						{% endif %}
-						{% if user.is_anonymous %}
-						 <li class="nav"><a href="/comment-ca-marche/" class="nav-link">{% trans "Comment ça marche ?" %}</a></li>
-						{% else %}
-						 <li class="nav"><a href="{% url dashboard %}" class="nav-link">{% trans "Tableau de bord" %}</a></li>
-						 <li class="nav welcome">{% blocktrans with request.user.first_name as first_name %} Bienvenue, {{ first_name }}!{% endblocktrans %}</li>    
-						{% endif %}
-					</ul>
-				</div>
-			</div>{# header #}
-  {% block content %}
-  {% endblock %}
-  	</div>
-		<div id="footer" class="xgrid">
-			<div class="x3">
-				<h4>{% trans "Liens utiles" %}</h4>
-				<ul>
-					<li><a href="{% url home %}">{% trans "Accueil" %}</a></li>
-					<li><a href="{% url dashboard %}">{% trans "Mon compte" %}</a></li>
-					<li><a href="{% url product_create %}">{% trans "Mettre en location" %}</a></li>
-					{% if user.is_authenticated %}
-						<li><a href="/comment-ca-marche/">{% trans "Comment ça marche ?" %}</a></li>
-					{% endif %}
-				</ul>
+             {% for message in messages %}
+             <div id="notification" class="notification {% if message.tags %} {{ message.tags }}"{% endif %}>
+        	     <span id="notification-text">{{ message }}</span>
+        	 </div>
+             {% endfor %}
+         {% endif %}
+        <div class="xgrid">
+            <div class="pub-header x12">
+					<script type='text/javascript'><!--//<![CDATA[
+                       var m3_u = 'http://regiepub2.skazy.nc/www/delivery/ajs.php';
+                       var m3_r = Math.floor(Math.random()*99999999999);
+                       if (!document.MAX_used) document.MAX_used = ',';
+                       document.write ("<scr"+"ipt type='text/javascript' src='"+m3_u);
+                       document.write ("?zoneid=80");
+                       document.write ('&amp;cb=' + m3_r);
+                       if (document.MAX_used != ',') document.write ("&amp;exclude=" + document.MAX_used);
+                       document.write (document.charset ? '&amp;charset='+document.charset : (document.characterSet ? '&amp;charset='+document.characterSet : ''));
+                       document.write ("&amp;loc=" + escape(window.location));
+                       if (document.referrer) document.write ("&amp;referer=" + escape(document.referrer));
+                       if (document.context) document.write ("&context=" + escape(document.context));
+                       if (document.mmm_fo) document.write ("&amp;mmm_fo=1");
+                       document.write ("'><\/scr"+"ipt>");
+                    //]]>--></script><noscript><a href='http://regiepub2.skazy.nc/www/delivery/ck.php?n=a7dddac9&amp;cb=INSERT_RANDOM_NUMBER_HERE' target='_blank'><img src='http://regiepub2.skazy.nc/www/delivery/avw.php?zoneid=80&amp;cb=INSERT_RANDOM_NUMBER_HERE&amp;n=a7dddac9' border='0' alt='' /></a></noscript>
 			</div>
-			<div class="x3">
-				<h4>{% trans "Info" %}</h4>
-				<ul>
-					<li><a href="/espace-professionnel/">{% trans "Espace professionnel" %}</a></li>
-					<li><a href="/conditions-generales/">{% trans "Conditions générales" %}</a></li>
-					<li><a href="/respect-vie-privee/">{% trans "Respect de la vie privée" %}</a></li>
-				</ul>
-			</div>
-			<div class="x3">
-				<h4>{% trans "Support" %}</h4>
-				<ul>
-					<li><a href="{% url faq-topic-list %}">{% trans "Aide" %}</a></li>
-					<li><a href="{% url contact %}">{% trans "Contactez-nous" %}</a></li>
-					<li><a href="/espace-presse/">{% trans "Espace presse" %}</a></li>
-					<li><a href="/qui-sommes-nous/">{% trans "Qui sommes nous ?" %}</a></li>
-				</ul>
-			</div>
-			<div class="x3">
-				<h4>{% trans "Communauté" %}</h4>
-				<ul>
-					<li><a href="http://blog.e-loue.com">{% trans "Blog" %}</a></li>
-					<li><a href="https://twitter.com/eloue">{% trans "Twitter" %}</a></li>
-					<li><a href="https://www.facebook.com/pages/e-louecom/104685226447">{% trans "Facebook" %}</a></li>
-				</ul>
-			</div>
-			{% if site_wide_announcements %}
-			{% with site_wide_announcements|first as announcement %}
-				<div class="x12 twitter-box">
-					{{ announcement.content|markdown }}
-					<div class="twitter-dialogue">
-					</div>
-				</div>
-				<div class="x12 twitter-info">
-				<p>
-					<span class="twitter-time">{{ announcement.creation_date|date:"l j F Y"|capfirst }}<span> {% trans "sur" %} <a href="http://blog.e-loue.com">{% trans "e-loue blog" %}</a>
-				</p>
-			</div>
-		{% endwith %}
-		{% endif %}
-	</div>
+        </div>
+		<div id="header" class="xgrid">
+            <div class="x2">
+                <a href="{% url home %}">
+    			    <img src="{{ MEDIA_URL }}images/logo.png" alt="e-loue"/>
+    			</a>
+            </div>
+            <div class="x10">
+                <ul class="nav-bar">
+    				<li class="nav"><a href="{% url product_create %}" class="btn medium-green"  >{% trans "Mettre en location" %}</a></li>
+    				{% if not user.is_authenticated %}
+    					<li class="nav"><a href="{% url auth_login %}" class="nav-link" >{% trans "S'inscrire ou se connecter" %}</a></li>
+    				{% else %}
+    					<li class="nav"><a href="{% url auth_logout %}" class="nav-link">{% trans "Se déconnecter" %}</a></li>
+    				{% endif %}
+    				{% if user.is_anonymous %}
+    				 <li class="nav"><a href="{% trans "/comment-ca-marche/" %}" class="nav-link">{% trans "Comment ça marche ?" %}</a></li>
+    				{% else %}
+    				<li class="nav"><a href="{% url dashboard %}" class="nav-link">{% trans "Tableau de bord" %}</a></li>  
+    				 <li class="nav welcome">{% blocktrans with request.user.first_name as first_name %} Bienvenue, {{ first_name }}!{% endblocktrans %}</li>
+    				{% endif %}
+                </ul>
+            </div>
+        </div>	
+        {% block content %}
+        {% endblock %}
+      	<div id="footer" class="xgrid">
+      	    <div class="x3">
+    			<h4>{% trans "Liens utiles" %}</h4>
+    			<ul>
+    				<li><a href="{% url home %}">{% trans "Accueil" %}</a></li>
+    				<li><a href="{% url dashboard %}">{% trans "Mon compte" %}</a></li>
+    				<li><a href="{% url product_create %}">{% trans "Mettre en location" %}</a></li>
+    				{% if user.is_authenticated %}
+    					<li><a href="{% trans "/comment-ca-marche/" %}">{% trans "Comment ça marche ?" %}</a></li>
+    				{% endif %}
+    			</ul>
+    		</div>
+    		<div class="x3">
+    			<h4>{% trans "Info" %}</h4>
+    			<ul>
+    				<li><a href="{% trans "/espace-professionnel/" %}">{% trans "Espace professionnel" %}</a></li>
+    				<li><a href="{% trans "/assurance-tranquillite/" %}">{% trans "Assurance tranquillité" %}</a></li>
+    				<li><a href="{% trans "/conditions-generales/" %}">{% trans "Conditions générales" %}</a></li>
+    				<li><a href="{% trans "/respect-vie-privee/" %}">{% trans "Respect de la vie privée" %}</a></li>
+    			</ul>
+    		</div>
+    		<div class="x3">
+    			<h4>{% trans "Support" %}</h4>
+    			<ul>
+    				<li><a href="{% url faq-topic-list %}">{% trans "Aide" %}</a></li>
+    				<li><a href="{% url contact %}">{% trans "Contactez-nous" %}</a></li>
+    				<li><a href="{% trans "/espace-presse/" %}">{% trans "Espace presse" %}</a></li>
+    				<li><a href="{% trans "/qui-sommes-nous/" %}">{% trans "Qui sommes nous ?" %}</a></li>
+    			</ul>
+    		</div>
+    		<div class="x3">
+    			<h4>{% trans "Communauté" %}</h4>
+    			<ul>
+    				<li><a href="http://blog.e-loue.com">{% trans "Blog" %}</a></li>
+    				<li><a href="https://twitter.com/eloue">{% trans "Twitter" %}</a></li>
+    				<li><a href="https://www.facebook.com/pages/e-louecom/104685226447">{% trans "Facebook" %}</a></li>
+    			</ul>
+    		</div>
+    		{% if site_wide_announcements %}
+    		{% with site_wide_announcements|first as announcement %}
+    			<div class="x12 twitter-box">
+    				{{ announcement.content|markdown }}
+    				<div class="twitter-dialogue">
+    				</div>
+    			</div>
+    			<div class="x12 twitter-info">
+    			<p>
+    				<span class="twitter-time">{{ announcement.creation_date|date:"l j F Y"|capfirst }}<span> {% trans "sur" %} <a href="http://blog.e-loue.com">{% trans "e-loue blog" %}</a>
+    			</p>
+    		</div>
+    	{% endwith %}
+    	{% endif %}
+      	</div>
   {% block tail %}
 		{% compressed_js 'application' %}
   {% endblock %}

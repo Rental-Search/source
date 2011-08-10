@@ -5,6 +5,8 @@ from datetime import datetime, timedelta
 
 from django.conf import settings
 from django.contrib.gis.db import models
+from django.contrib.gis.geos import Point
+from django.contrib.gis.measure import Distance
 from django.contrib.sites.managers import CurrentSiteManager
 from django.contrib.sites.models import Site
 from django.db.models import permalink
@@ -19,12 +21,20 @@ from mptt.models import MPTTModel
 from imagekit.models import ImageModel
 
 from eloue.accounts.models import Patron, Address
+from eloue.geocoder import GoogleGeocoder
 from eloue.products.fields import SimpleDateField
 from eloue.products.manager import ProductManager, PriceManager, QuestionManager, CurrentSiteProductManager, TreeManager
 from eloue.products.signals import post_save_answer, post_save_product, post_save_curiosity
 from eloue.products.utils import Enum
 from eloue.signals import post_save_sites
-from eloue.utils import currency
+
+from django_messages.models import Message 
+from eloue.accounts.models import Patron
+
+from django.db.models import signals
+from eloue import signals as eloue_signals
+
+from eloue.utils import currency, create_alternative_email
 
 UNIT = Enum([
     (0, 'HOUR', _(u'heure')),
@@ -59,9 +69,16 @@ STATUS = Enum([
     (3, 'REMOVED', _(u'supprimé'))
 ])
 
+PAYMENT_TYPE = Enum([
+    (0, 'NOPAY', _(u'Le locataire me paye directement et mon objet n\'est pas assuré')),
+    (1, 'PAYPAL', _(u'Le locataire paye en ligne et mon objet est assuré'))
+])
+
 INSURANCE_MAX_DEPOSIT = getattr(settings, 'INSURANCE_MAX_DEPOSIT', 750)
 DEFAULT_RADIUS = getattr(settings, 'DEFAULT_RADIUS', 50)
 DEFAULT_CURRENCY = get_format('CURRENCY') if not settings.CONVERT_XPF else "XPF"
+
+ALERT_RADIUS = getattr(settings, 'ALERT_RADIUS', 200)
 
 
 class Product(models.Model):
@@ -78,7 +95,7 @@ class Product(models.Model):
     owner = models.ForeignKey(Patron, related_name='products')
     created_at = models.DateTimeField(blank=True, editable=False)
     sites = models.ManyToManyField(Site, related_name='products')
-    
+    payment_type = models.PositiveSmallIntegerField(_(u"Type de payments"), default=PAYMENT_TYPE.PAYPAL, choices=PAYMENT_TYPE)
     on_site = CurrentSiteProductManager()
     objects = ProductManager()
     
@@ -97,7 +114,12 @@ class Product(models.Model):
     
     @permalink
     def get_absolute_url(self):
-        return ('booking_create', [self.slug, self.pk])
+        encestors_slug = self.category.get_ancertors_slug()
+        if encestors_slug:
+            path = '%s/%s/' % (self.category.get_ancertors_slug(), self.category.slug)
+        else:
+            path = '%s/' % self.category.slug
+        return ('booking_create', [path, self.slug, self.pk])
     
     def more_like_this(self):
         from eloue.products.search_indexes import product_search
@@ -173,12 +195,23 @@ class Category(MPTTModel):
             self.slug = slugify(self.name)
         super(Category, self).save(*args, **kwargs)
     
-    def get_absolute_url(self):
-        return _(u"/location/par-categorie/%(category)s/") % {
-            'category': self.slug
-        }
+    def get_ancertors_slug(self):
+        return ''.join('%s/' %  el.slug for el in self.get_ancestors()).replace(' ', '')[:-1]
     
-
+    def get_absolute_url(self):
+        ancestors_slug = self.get_ancertors_slug()
+        if ancestors_slug:
+            return _(u"/location/%(ancestors_slug)s/%(slug)s") % {
+                        'ancestors_slug': ancestors_slug,
+                        'slug': self.slug
+                    }
+        else:
+            return _(u"/location/%(slug)s") % {
+                        'slug': self.slug
+                    }
+            
+     
+        
 class Property(models.Model):
     """A property"""
     category = models.ForeignKey(Category, related_name='properties')
@@ -211,7 +244,6 @@ class PropertyValue(models.Model):
         u'Mercedes'
         """
         return smart_unicode(self.value)
-    
 
 class Price(models.Model):
     """A price"""
@@ -368,11 +400,81 @@ class Curiosity(models.Model):
     
     class Meta:
         verbose_name_plural = "curiosities"
+        
+class ProductRelatedMessage(Message):
+    product = models.ForeignKey(Product, related_name='messages', blank=True, null=True)
+    
+    
+if "notification" not in settings.INSTALLED_APPS:
+    from django_messages import utils
+    signals.post_save.connect(utils.new_message_email, sender=ProductRelatedMessage)
+    signals.pre_save.connect(eloue_signals.message_content_filter, sender=ProductRelatedMessage)
+    signals.pre_save.connect(eloue_signals.message_site_filter, sender=ProductRelatedMessage) 
+
+class Alert(models.Model):
+    patron = models.ForeignKey(Patron, related_name='alerts')
+    designation = models.CharField(max_length=255)
+    description = models.CharField(max_length=255)
+    created_at = models.DateTimeField(editable=False)
+    address = models.ForeignKey(Address, related_name='alerts')
+    sites = models.ManyToManyField(Site, related_name='alerts')
+    
+    on_site = CurrentSiteManager()
+    objects = models.Manager()
+    
+    def __unicode__(self):
+        return smart_unicode(self.designation)
+    
+    def geocode(self):
+        name, (lat, lon), radius = GoogleGeocoder().geocode(self.location)
+        if lat and lon:
+            return Point(lat, lon)
+    
+    def save(self, *args, **kwargs):
+        if not self.created_at:
+            self.created_at = datetime.now()
+        super(Alert, self).save(*args, **kwargs)
+    
+    @property
+    def position(self):
+        return self.address.position
+    
+    @property
+    def nearest_patrons(self):
+        if self.position:
+            nearest_addresses = Address.objects.distance(self.position).filter(position__distance_lt=(self.position, Distance(km=ALERT_RADIUS))).order_by('distance')
+            return Patron.objects.distinct().filter(addresses__in=nearest_addresses)[:10]
+        else:
+            return None 
+
+    def send_alerts(self):
+        if self.nearest_patrons:
+            for patron in self.nearest_patrons:
+                message = create_alternative_email('products/emails/alert', {
+                    'patron': patron,
+                    'alert': self
+                    }, settings.DEFAULT_FROM_EMAIL, [self.patron.email])
+                message.send()
+    
+    def send_alerts_answer(self, product):
+        message = create_alternative_email('products/emails/alert_answer', {
+            'product': product,
+            'alert': self
+        }, settings.DEFAULT_FROM_EMAIL, [self.patron.email])
+        message.send()
+            
+    @permalink
+    def get_absolute_url(self):
+        return ('alert_inform', [self.pk])
+    
+    class Meta:
+        get_latest_by = 'created_at'
     
 
 post_save.connect(post_save_answer, sender=Answer)
 post_save.connect(post_save_product, sender=Product)
 post_save.connect(post_save_curiosity, sender=Curiosity)
+post_save.connect(post_save_sites, sender=Alert)
 post_save.connect(post_save_sites, sender=Curiosity)
 post_save.connect(post_save_sites, sender=Product)
 post_save.connect(post_save_sites, sender=Category)

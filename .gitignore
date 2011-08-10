@@ -1,3 +1,4 @@
+*~
 *.pyc
 *.tmproj
 *.rdb
@@ -5,6 +6,9 @@ nosetests.xml
 .DS_Store
 .noseids
 .coverage
+.project
+.pydevproject
+.settings/
 env
 eloue.db
 eloue/local.py
@@ -17,3 +21,4 @@ eloue/media/pictures/*
 eloue/media/media/*
 eloue/templates/20minutes/header.html
 eloue/templates/20minutes/footer.html
+eloue/test_payment_steps.py

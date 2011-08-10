@@ -1,0 +1,142 @@
+{% extends "base.html" %}
+{% load i18n product booking cache %}
+
+{% block title %}{% trans "Location"%} {{ product.summary }}{% endblock %}
+
+{% block description %}{{ product.summary }} {{ product.description }}{% endblock %}
+
+{% block content %}
+<div id="search" class="xgrid">
+	<form class="form" action="{% url product_list %}">
+	<div class="x5">
+		<p>
+			<label for="id_q">{% trans "Que recherchez-vous ?" %}</label><br />
+			{{ search_form.q }}<br />
+			<span>{% trans "Exemple :" %} </span> <a href="{% url product_list %}?q={% trans "voiture" %}">{% trans "Voiture" %}</a>, <a href="{% url product_list %}?q={% trans "chèvre" %}">{% trans "Chèvre" %}</a>, <a href="{% url product_list %}?q={% trans "ski" %}">{% trans "Ski" %}</a>, <a href="{% url product_list %}?q={% trans "robe" %}">{% trans "Robe" %}</a>
+		</p>
+	</div>
+	<div class="x5">
+		<p>
+			<label>{% trans "Où ?" %}</label><br />
+			{{ search_form.l }}<br />
+		</p>
+	</div>
+	<div class="x2">
+		<p>
+			<input type="submit" value="{% trans "Rechercher" %}" class="btn big-orange"/>
+		</p>
+	</div>
+	</form>
+</div>
+<div id="content" class="xgrid">
+    <div class="breadcrumb">
+        <ul class="x12 breadcrumbs">
+            <li><a href="{% url home %}">{% trans "Accueil" %}</a></li>
+			{% for category in product.category.get_ancestors %}
+			 <li><a href="{{ category.get_absolute_url }}">{{ category.name|capfirst }}</a></li>
+			{% endfor %}
+			<li><a href="{{ product.category.get_absolute_url }}">{% trans "Location" %} {{ product.category|capfirst }}</a></li>
+			<li class="lastb">{{ product.summary|capitalize }}</li>
+        </ul>
+    </div>
+    <div class="x12 content-header">
+        <h1>{{ product.summary|capitalize }}</h1>
+    </div>
+    <div class="x8">
+        <div class="product-pic">
+            {% with product.pictures.all|first as picture %}
+    		  {% if picture %}
+    		   <img src="{{ picture.display.url }}" alt="{{ product.summary }}" />
+    		  {% endif %}
+    		 {% endwith %}
+        </div>
+        <div class="product-thumbs">
+            {% for picture in product.pictures.all %}
+			 {% if picture.thumbnail %}
+       		  <a href="#"><img src="{{ picture.thumbnail.url }}" /></a>
+             {% endif %}
+			{% endfor %}
+        </div>
+        <div class="product-desc">
+            {{ product.description|linebreaksp }}
+        </div>
+    </div>
+    <div class="x4">
+        <div class="box-tools">
+            <div class="box-tools-top">
+                <div class="product-price">
+                    {% with product.prices.day|first as price %}
+            		  <span class="price">{{ price }}</span>
+            		  <span class="unit">{% blocktrans with price.unit|unit as unit %} / par {{ unit }}{% endblocktrans %}</span>
+            		 {% endwith %}
+                </div>
+                <form id="booking_create" action="" method="post" class="form">
+                <div id="booking-dates" class="clearfix">
+                    <p class="started-date">
+                        <label class="labm">{% trans "Début" %} :</label><br />
+        				{{ form.started_at }}
+                    </p>
+                    <p class="ended-date">
+                        <label class="labm">{% trans "Fin" %} :</label><br />
+        				{{ form.ended_at }}
+                    </p>
+                </div>
+            </div>
+            <div id="booking-total" class="box-tools-bottom">
+                {% blocktrans with product.product.day|first as day_price %}
+        		  <p>Total : <span class="day">1 jour,</span> soit <span class="total-price">{{ day_price }}</span></p>
+        		 {% endblocktrans %}
+            </div>
+            <div class="box-tools-footer">
+                {% csrf_token %}
+        		<input type="hidden" name="{{ step_field }}" value="{{ step0 }}" />
+        	    {{ previous_fields|safe }}
+        		<p>
+        			<input type="submit" value="{% trans "Réserver &rarr;" %}" class="btn big-green" />
+        		</p>
+        		</form>
+            </div>
+        </div>
+        <div class="product-properties">
+            <table>
+    			{% if product.deposit_amount %}
+    			<tr>
+    				<td>{% trans "Caution" %} :</td>
+    				<td class="p-value">{{ product.deposit_amount|quantize|currency }}</td>
+    			</tr>
+    			{% endif %}
+    			<tr>
+    				<td>{% trans "Lieu" %} :</td>
+    				<td class="p-value">{{ product.address.city|capfirst }}, {{ product.address.zipcode }}</td>
+    			</tr>
+    			<tr>
+    				<td>{% trans "Quantité" %} :</td>
+    				<td class="p-value">{{ product.quantity }}</td>
+    			</tr>
+    			<tr>
+    				<td>{% trans "Catégorie" %} :</td>
+    				<td class="p-value"><a href="{{ product.category.get_absolute_url }}">{{ product.category }}</a></td>
+    			</tr>
+    			<tr>
+    				<td>{% trans "Propriétaire" %} :</td>
+    				<td class="p-value"><a href="{{ product.owner.get_absolute_url }}" class="owner">{{ product.owner.username }}</a></td>
+    			</tr>
+    		</table>
+        </div>
+        <div class="box-info">
+              {% if product.payment_type == 0 %}
+              <h3>{% trans "Paiement hors ligne" %}</h3>
+              <p>
+                  {% trans "Le propriétaire souhaite le paiement hors ligne (chèque/espèce). Vous le payerez le premier jour de la location."%}
+              </p>
+              {% else %}
+              <h3>{% trans "Paiement en ligne" %}</h3>
+              <p>
+                {% trans "Le propriétaire souhaite le paiement en ligne. Vous payez au moment de la réservation via PayPal. Le montant est débité lors du premier jour de location."%}
+              {% endif %}
+              </p>
+         </div>
+    </div>
+</div>
+    
+{% endblock %}

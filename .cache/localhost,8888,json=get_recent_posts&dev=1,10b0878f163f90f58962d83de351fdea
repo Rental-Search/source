@@ -1,0 +1,120 @@
+status: 200
+content-length: 3011
+content-location: http://localhost:8888/?json=get_recent_posts&dev=1
+x-powered-by: PHP/5.3.5
+server: Apache/2.0.64 (Unix) PHP/5.3.5 DAV/2
+date: Thu, 24 Mar 2011 10:48:44 GMT
+content-type: text/plain; charset: UTF-8
+x-pingback: http://localhost:8888/xmlrpc.php
+
+{
+  "status": "ok",
+  "count": 2,
+  "count_total": 2,
+  "pages": 1,
+  "posts": [
+    {
+      "id": 5,
+      "type": "post",
+      "slug": "test-wordpress",
+      "url": "http:\/\/localhost:8888\/?p=5",
+      "status": "publish",
+      "title": "test wordpress",
+      "title_plain": "test wordpress",
+      "content": "<p>wordpress is very good tool for edit static pages.<\/p>\n",
+      "excerpt": "wordpress is very good tool for edit static pages.",
+      "date": "2011-03-23 16:13:28",
+      "modified": "2011-03-24 07:55:13",
+      "categories": [
+        {
+          "id": 7,
+          "slug": "avion",
+          "title": "avion",
+          "description": "qssqd",
+          "parent": 6,
+          "post_count": 1
+        }
+      ],
+      "tags": [],
+      "author": {
+        "id": 1,
+        "slug": "admin",
+        "name": "admin",
+        "first_name": "",
+        "last_name": "",
+        "nickname": "admin",
+        "url": "",
+        "description": ""
+      },
+      "comments": [],
+      "attachments": [],
+      "comment_count": 0,
+      "comment_status": "open"
+    },
+    {
+      "id": 1,
+      "type": "post",
+      "slug": "hello-world",
+      "url": "http:\/\/localhost:8888\/?p=1",
+      "status": "publish",
+      "title": "Hello world!",
+      "title_plain": "Hello world!",
+      "content": "<p>Welcome to WordPress. This is your first post. Edit or delete it, then start blogging!<\/p>\n",
+      "excerpt": "Welcome to WordPress. This is your first post. Edit or delete it, then start blogging!",
+      "date": "2011-03-23 16:05:44",
+      "modified": "2011-03-24 07:38:11",
+      "categories": [
+        {
+          "id": 3,
+          "slug": "voiture",
+          "title": "voiture",
+          "description": "",
+          "parent": 0,
+          "post_count": 1
+        }
+      ],
+      "tags": [],
+      "author": {
+        "id": 1,
+        "slug": "admin",
+        "name": "admin",
+        "first_name": "",
+        "last_name": "",
+        "nickname": "admin",
+        "url": "",
+        "description": ""
+      },
+      "comments": [
+        {
+          "id": 1,
+          "name": "Mr WordPress",
+          "url": "http:\/\/wordpress.org\/",
+          "date": "2011-03-23 16:05:44",
+          "content": "<p>Hi, this is a comment.<br \/>To delete a comment, just log in and view the post&#039;s comments. There you will have the option to edit or delete them.<\/p>\n",
+          "parent": 0
+        },
+        {
+          "id": 2,
+          "name": "admin",
+          "url": "",
+          "date": "2011-03-23 16:14:56",
+          "content": "<p>hihihihhi, comments wordpress.<\/p>\n",
+          "parent": 1,
+          "author": {
+            "id": 1,
+            "slug": "admin",
+            "name": "admin",
+            "first_name": "",
+            "last_name": "",
+            "nickname": "admin",
+            "url": "",
+            "description": ""
+          }
+        }
+      ],
+      "attachments": [],
+      "comment_count": 2,
+      "comment_status": "open"
+    }
+  ]
+}

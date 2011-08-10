@@ -4,30 +4,30 @@
 {% block title %}{% trans "Confirmez votre réservation" %}{% endblock %}
 
 {% block content %}
-<div id="content" class="clearfix">
-	<div class="sbs x12">
-		<div class="sbs-header">
-			<h1>{% trans "Réservation" %}</h1>
-		</div>
-		<ol class="sbs-steps">
-			{% if not user.is_authenticated %}
-				<li class="off">{% trans "1.Identifiez-vous" %}</li>
-				<li class="on">{% trans "2.Confirmez votre réservation" %}</li>
-			{% else %}
-				<li class="off">{% trans "1.Information de contact" %}</li>
-				<li class="on">{% trans "2.Confirmez votre réservation" %}</li>
-			{% endif %}
-		</ol>
-		<a href="{% url faq-topic-list %}" class="btn big-blue">{% trans "Obtenir de l'aide" %}</a>
-	</div>
-	<div class="booking x8">
-		<div class="content-header x8 first">
-		 <h2>{% trans "Objet réservé" %}</h2>
-		</div>
-		<div class="booking-product x8 first">
-		 <form class="form" action="" method="POST">
-			{% csrf_token %}
-			<a class="pl-img" href="{{ object.get_absolute_url }}">
+<div id="content-home" class="xgrid">
+    <div id="wizard" class="x12">
+        <div class="wizard-header">
+            <h1>{% trans "Réservation" %}</h1>
+        </div>
+         <ol class="sbs-steps">
+ 			{% if not user.is_authenticated %}
+ 				<li>{% trans "1. Identifiez-vous" %}</li>
+ 				<li class="on">{% trans "2. Confirmez votre réservation" %}</li>
+ 			{% else %}
+ 				<li>{% trans "1. Information de contact" %}</li>
+ 				<li class="on">{% trans "2. Confirmez votre réservation" %}</li>
+ 			{% endif %}
+ 		</ol>
+        <a href="{% url faq-topic-list %}" class="btn big-blue">{% trans "Obtenir de l'aide" %}</a>
+    </div>
+    <div class="x8">
+        <div class="content-header x8 first">
+            <h2>{% trans "Objet réservé" %}</h2>
+        </div>
+        <div class="x8 first" style="margin-bottom: 20px;">
+            <form class="form" action="" method="POST">
+            {% csrf_token %}
+            <a class="pl-img" href="{{ object.get_absolute_url }}">
 				{% with product.pictures.all|first as picture %}
           {% if picture.thumbnail %}
            <img src="{{ picture.thumbnail.url }}" alt="product.summary" />
@@ -52,74 +52,76 @@
 			<div class="pl-footer">
 				Par <a href="{{ product.owner.get_absolute_url }}" class="owner">{{ product.owner.username }}</a> | {{ product.address.city|capfirst }}, {{ product.address.zipcode }}
 			</div>
-		</div>
-		<div class="content-header x8 first">
+        </div>
+        <div class="content-header x8 first">
 			<h2>{% trans "Dates et total" %}</h2>
 		</div>
-		<div class="booking-resume x8 first">
-			<table>
-				<tr>
-					<th>{% trans "Début :" %}</th>
-					<td>
-						{{ preview.started_at|date:"l j F Y"|capfirst }}
-					</td>
-				</tr>
-				<tr>
-					<th>{% trans "Fin :" %}</th>
-					<td>
-                        {{ preview.ended_at|date:"l j F Y"|capfirst }}
-					</td>
-				</tr>
-				<tr>
-					<th>{% trans "Prix par jour :" %}</th>
-					<td class="number">{{ product.prices.day|first }}</td>
-				</tr>
-				<tr>
-					<th>{% trans "Durée de la location :" %}</th>
-					<td class="number">{{ preview.started_at|timesince:preview.ended_at }}</td>
-				</tr>
-				<tr class="total">
-					<th>{% trans "Total :" %}</th>
-					<td class="number">{{ preview.total_amount }} €</td>
-				</tr>
-			</table>
+		<div class="x8 first">
+		    <table class="booking-resume">
+                <tr>
+                    <th>{% trans "Début :" %}</th>
+                    <td>{{ preview.started_at|date:"l j F Y"|capfirst }}</td>
+                </tr>
+                <tr>
+                    <th>{% trans "Fin :" %}</th>
+                    <td>{{ preview.ended_at|date:"l j F Y"|capfirst }}</td>
+                </tr>
+                <tr>
+                    <th>{% trans "Prix par jour :" %}</th>
+                    <td class="number">{{ product.prices.day|first }}</td>
+                </tr>
+                <tr>
+                    <th>{% trans "Durée de la location :" %}</th>
+                    <td class="number">{{ preview.started_at|timesince:preview.ended_at }}</td>
+                </tr>
+                <tr class="total">
+                    <th>{% trans "Total :" %}</th>
+                    <td class="number">{{ preview.total_amount|currency }}</td>
+                </tr>
+            </table>
 		</div>
-		<div class="content-header x8 first">
-		 <h2>{% trans "Paiement" %}</h2>
-		</div>
-		<div class="booking-paiement x8 first">
-		 {% blocktrans %}
-		  Sur la prochaine page veuillez fournir vos informations de paiement.<br />
-		  Vous ne serez <strong>débité</strong> que <strong>si le propriétaire accepte</strong> votre demande (dans les 32 heures).<br /> 
-		  Si le propriétaire refuse ou ne répond pas, vous ne serez pas prélevé.<br />
-		 {% endblocktrans %}
-		</div>
-		<div class="booking-submit x8 first">
-		    <input type="hidden" name="{{ step_field }}" value="{{ step0 }}" />
-	        {{ previous_fields|safe }}
-			<a href="{{ product.get_absolute_url }}">{% trans "Annuler" %}</a> {% trans "ou" %}
-		    <input type="submit" class="btn big-green" value="{% trans "Payez" %}" />
+		<div id="submit-wizard" class="x8 first">
+		    <p>
+		        <input type="hidden" name="{{ step_field }}" value="{{ step0 }}" />
+    	        {{ previous_fields|safe }}
+    			<a href="{{ product.get_absolute_url }}">{% trans "Annuler" %}</a> {% trans "ou" %}
+    		    <input type="submit" class="btn big-green" value="{% trans "Payez" %}" />
+    		</p>
 		</div>
 	  </form>
-	</div>{# col1 #}
-	<div class="sidebar-box x4">
-		<h3>{% trans "Louez en toute sécurité !" %}</h3>
-		<ul class="guarantee-list">
-			<li class="guarantee-list-pp">
-			 {% blocktrans %}
-			  Grâce à <strong>PayPal</strong>, bénéficiez du paiement le plus sécurisé au monde.
-			 {% endblocktrans %}
-			</li>
-			<li class="guarantee-list-tw">
-			 {% blocktrans %}
-			  Un <strong>contrat de location</strong> est proposé par e-loue.
-			 {% endblocktrans %}
-			</li>
-		</ul>
+    </div>
+    <div class="x4">
+          <div class="box-info">
+              <h3>{% trans "Louez en toute sécurité !" %}</h3>
+              <ul class="vertical-assurancy">
+                  <li class="va-pp">
+                      {% blocktrans %}
+                        Grâce à <strong>PayPal</strong>, bénéficiez du paiement le plus sécurisé au monde.
+                      {% endblocktrans %}
+                  </li>
+                  <li class="va-assurone">
+                      {% blocktrans %}
+          			  Un <strong>contrat de location</strong> est proposé par e-loue.
+          			 {% endblocktrans %}
+                  </li>
+              </ul>
+          </div>
+          <div class="box-info">
+              {% if product.payment_type == 0 %}
+              <h3>{% trans "Paiement hors ligne" %}</h3>
+              <p>
+                  {% trans "Le propriétaire souhaite le paiement hors ligne (chèque/espèce). Vous le payerez le premier jour de la location."%}
+              </p>
+              {% else %}
+              <h3>{% trans "Paiement en ligne" %}</h3>
+              <p>
+                {% blocktrans %}
+                Le paiement se fait en ligne. Vous payez au moment de la réservation via PayPal.<br/>
+                <strong>Le montant est débité lors du premier jour de location</strong>.
+                {% endblocktrans %}
+              </p>
+              {% endif %}
+         </div> 
 	</div>
-	<div class="partner-gurantees-list x4">
-		<p>{% trans "Notre partenaire" %}</p>
-		<img src="{{ MEDIA_URL }}images/paypal2.png" />
-	</div>
-</div>{# content #}
+</div>
 {% endblock %}

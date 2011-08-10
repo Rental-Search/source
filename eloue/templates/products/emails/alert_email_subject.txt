@@ -1,0 +1,1 @@
+Un utilisateur d'e-loue souhaite louer un(e) {{ alert.designation }} près de chez vous.

@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% load i18n mptt_tags product %}
+
+{% block title %}{% trans "Modification de" %} {{ product.summary }}{% endblock %}
+
+{% block content %}
+<div id="content" class="xgrid">
+    <div class="content-top">
+        <ul id="menu" class="x12">
+            <li class="menu-tab first"><a href="{% url dashboard %}">{% trans "Tableau de bord" %}</a></li>
+			<li class="menu-tab selected">{% trans "Propriétaire" %}</li>
+			<li class="menu-tab"><a href="{% url borrower_booking %}">{% trans "Locataire" %}</a></li>
+			<li class="menu-tab"><a href="{% url patron_edit %}">{% trans "Mon compte" %}</a></li>
+        </ul>
+    </div>
+    <div id="sub-menu">
+        <ul class="x12">
+            <li class="sub-tab first"><a href="{% url owner_booking %}">{% trans "Locations actives" %}</a></li>
+			<li class="sub-tab"><a href="{% url owner_history %}">{% trans "Historique des locations" %}</a></li>
+			<li class="sub-tab selected">{% trans "Mes objets" %}</li>
+			<li class="sub-tab"><a href="{% url product_create %}">{% trans "Ajouter un objet" %}</a></li>
+        </ul>
+    </div>
+    <div class="content-header x12">
+        <h2>Supprimer cet objet</h2>
+    </div>
+    <div class="x8" style="margin-bottom: 20px;">
+	   <a class="pl-img" href="{{ product.get_absolute_url }}">
+           {% with product.pictures.all|first as picture %}
+       		{% if picture.thumbnail %}
+					<img src="{{ picture.thumbnail.url }}" alt="product.summary" />
+	   			{% endif %}
+      	{% endwith %}
+	   </a>
+	   <div class="pl-header">
+	    <h2><a href="{{ product.get_absolute_url }}">{{ product.summary|capfirst|truncatewords:5 }}</a></h2>
+	   </div>
+	   <div class="pl-content">
+		   <div class="pl-desc">{{ product.description|truncatewords:12 }}</div>
+			    <div class="pl-distance">
+			    {% if product.geo_distance %}
+			    {{ product.geo_distance|floatformat }} {% trans "km" %}{{ product.geo_distance|pluralize }}
+			    {% endif %}
+			    </div>
+			    <div class="pl-price">
+	   			{% with product.prices.day|first as price %}
+					<span class="price">{{ price }}</span><br />
+					<span class="unit">{% trans "par" %} {{ price.unit|unit }}</span>
+	   			{% endwith %}
+	  		</div>
+	   </div>
+    </div>
+    <div id="submit-wizard" class="x12">
+    <form id="product-delete" class="inline" enctype="multipart/form-data" action="" method="POST">
+        {% csrf_token %}
+        <p>
+		   <!-- <a href="{% url product_edit product.slug product.pk %}">{% trans "Annuler" %}</a> {% trans "ou" %} -->
+    		<input type="submit" class="btn big-green" value="{% trans "Supprimer" %}" />
+		</p>
+	</form>
+	</div>
+</div>
+{% endblock %}

@@ -18,6 +18,7 @@ from eloue.accounts.models import Patron
 from eloue.products.models import Product
 from eloue.rent.models import Booking
 
+
 OAUTH_CONSUMER_KEY = '451cffaa88bd49e881068349b093598a'
 OAUTH_CONSUMER_SECRET = 'j5rdVtVhKu4VfykM'
 OAUTH_TOKEN_KEY = '87a9386519d24d2a8977388d4fd2e9b5'
@@ -85,7 +86,8 @@ class ApiTest(TestCase):
         self.assertEquals(response.status_code, 200)
         json = simplejson.loads(response.content)
         self.assertEquals(json['meta']['total_count'], 2)
-    
+        
+        
     def test_product_search_with_location(self):
         settings.DEBUG = True
         response = self.client.get(reverse("api_dispatch_list", args=['1.0', 'product']), {
@@ -130,7 +132,8 @@ class ApiTest(TestCase):
             **self._get_headers(request))
         self.assertEquals(response.status_code, 201)
         self.assertTrue('Location' in response)
-        product = Product.objects.get(pk=5)
+        num = Product.objects.count()
+        product = Product.objects.get(pk=num)
         self.assertTrue(response["Location"].endswith(product.get_absolute_url()))
         self.assertEquals(product.summary, 'Tondeuse')
         self.assertEquals(product.description, 'Merveilleuse tondeuse')

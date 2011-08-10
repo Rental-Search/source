@@ -1,5 +1,5 @@
 {% load i18n %}
-{% blocktrans with booking.owner.username as owner and booking.borrower.username as borrower and booking.product.category.name as category and booking.product.summary as summary and booking.started_at|date:"DATETIME_FORMAT" as starting_at and booking.started_at|timesince:booking.ended_at as duration and booking.get_absolute_url as booking_url and site.domain as domain %}
+{% blocktrans with booking.owner.username as owner and booking.borrower.username as borrower and booking.product.category.name as category and booking.product.summary as summary and booking.started_at|date:"DATETIME_FORMAT" as starting_at and booking.started_at|timesince:booking.ended_at as duration and booking.get_absolute_url as booking_url and site.domain as domain and site.name as site_name %}
  Bonjour {{ owner }},
 
  {{ borrower }} souhaite louer l’un de vos objets. Voici les détails de sa proposition : 
@@ -13,6 +13,6 @@
  
  {{ protocol }}://{{ domain }}{{ booking_url }}
 
-{% endblocktrans %}
+L'équipe {{ site_name }}
 
-{% trans "L'équipe e-loue" %}
+{% endblocktrans %}

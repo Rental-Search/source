@@ -1,5 +1,5 @@
 {% load i18n %}
-{% blocktrans with booking.borrower.username as username and booking.product.category.name as category and booking.product.summary as summary  and booking.started_at|date:"DATETIME_FORMAT" as starting_at and booking.started_at|timesince:booking.ended_at as duration %}
+{% blocktrans with booking.borrower.username as username and booking.product.category.name as category and booking.product.summary as summary  and booking.started_at|date:"DATETIME_FORMAT" as starting_at and booking.started_at|timesince:booking.ended_at as duration and  site.name as site_name %}
 Bonjour {{ username }},
 
 Vous avez manifesté votre souhait d'annuler la location suivante :
@@ -11,5 +11,5 @@ Durée de la location : {{ duration }}
 
 Conformément à votre demande, nous vous confirmons que cette location a bien été annulée et donc qu'aucun débit n'aura lieu.
  
-L'équipe e-loue
+L'équipe {{ site_name }}
 {% endblocktrans %}

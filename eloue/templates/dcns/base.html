@@ -1,0 +1,105 @@
+{% load compressed i18n markup seo %}
+<!doctype html>
+<html lang="fr">
+ <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>{% filter striplinebreak %}{% block title %}{% endblock %} {% if is_paginated and page_obj.has_previous %}- {% trans "Page" %} {{ page_obj.number }}{% endif %} - {% trans "e-loue" %}{% endfilter %}</title>
+  <meta name="description" content="{% filter striplinebreak %}{% block description %}Plateforme pour louer ou mettre en location tout type d'objet : materiel, reception, mariage, sono, utilitaires, ski{% endblock %}{% if is_paginated and page_obj.has_previous %} Page {{ page_obj.number }}{% endif %}{% endfilter %}">
+  <meta name="google-site-verification" content="JxKbPmnlcJagHiSTQcwcZaA2XWBbpU1ZVHmJ6529HT0" />
+  <link rel="shortcut icon" href="{{ MEDIA_URL }}favicon.ico">
+  {% block head %}
+    <!--[if lt IE 8]>{% compressed_css 'ie' %}<![endif]-->
+   {% compressed_css 'dcns' %}
+    <!--[if IE 6]>{% compressed_css 'ie6' %}<![endif]-->
+    <!--[if IE 7]>{% compressed_css 'ie7' %}<![endif]-->
+  {% endblock %}
+  <script type="text/javascript">
+
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-8258979-6']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+
+  </script>
+ </head>
+ <body>
+	{% if messages %}
+	    {% for message in messages %}
+	    <div id="notification" class="notification {% if message.tags %} {{ message.tags }}"{% endif %}>
+    	    <span id="notification-text">{{ message }}</span>
+    	</div>
+	    {% endfor %}
+	{% endif %}
+	<div id="top-header" class="xgrid">
+	</div>
+	<div id="header" class="xgrid">
+        <div class="x10">
+            <ul class="nav-bar">
+                <li class="nav" style="padding-left: 0px;">
+                    <a href="{% url home %}" class="nav-link">{% trans "Accueil" %}</a>
+                </li>
+    			{% if user.is_authenticated %}
+    			<li class="nav">
+    			    <a href="{% url dashboard %}" class="nav-link">{% trans "Tableau de bord" %}</a>
+    			</li>
+    			{%  endif %}
+    			<li class="nav">
+    			    <a href="{% trans "/comment-ca-marche/" %}" class="nav-link">{% trans "Comment ça marche ?" %}</a>
+    			</li>
+    			{% if user.is_anonymous %}
+    			<li class="nav">
+    				<a href="{% url auth_login %}" class="nav-link" >{% trans "S'inscrire ou se connecter" %}</a>
+    			</li>
+    			{% else %}
+    			<li class="nav">
+    				<a href="{% url auth_logout %}" class="nav-link">{% trans "Se déconnecter" %}</a>
+    			</li>
+    			{% endif %}
+			</ul>
+        </div>
+        <div class="x2">
+            <a href="{% url product_create %}" class="btn medium-green"  >{% trans "Mettre en location" %}</a>
+        </div>
+    </div><!-- header -->
+  {% block content %}
+  {% endblock %}
+  <div id="footer" class="xgrid">
+      <div class="x4">
+			<h4>{% trans "Liens utiles" %}</h4>
+			<ul>
+				<li><a href="{% url home %}">{% trans "Accueil" %}</a></li>
+				<li><a href="{% url dashboard %}">{% trans "Mon compte" %}</a></li>
+				<li><a href="{% url product_create %}">{% trans "Mettre en location" %}</a></li>
+				{% if user.is_authenticated %}
+					<li><a href="{% trans "/comment-ca-marche/" %}">{% trans "Comment ça marche ?" %}</a></li>
+				{% endif %}
+			</ul>
+		</div>
+		<div class="x4">
+			<h4>{% trans "Info" %}</h4>
+			<ul>
+				<li><a href="{% trans "/assurance-tranquillite/" %}">{% trans "Assurance tranquillité" %}</a></li>
+				<li><a href="{% trans "/conditions-generales/" %}">{% trans "Conditions générales" %}</a></li>
+				<li><a href="{% trans "/respect-vie-privee/" %}">{% trans "Respect de la vie privée" %}</a></li>
+			</ul>
+		</div>
+		<div class="x4">
+			<h4>{% trans "Support" %}</h4>
+			<ul>
+				<li><a href="{% url faq-topic-list %}">{% trans "Aide" %}</a></li>
+				<li><a href="{% url contact %}">{% trans "Contactez-nous" %}</a></li>
+				<li><a href="{% trans "/qui-sommes-nous/" %}">{% trans "Qui sommes nous ?" %}</a></li>
+			</ul>
+		</div>
+    </div>
+  {% block tail %}
+		{% compressed_js 'application' %}
+  {% endblock %}
+ </body>
+</html>

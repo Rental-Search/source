@@ -99,10 +99,28 @@
     pk: 11
 
 -   fields:
-      name : ''
-      amount: "450"
-      currency: "EUR"
-      product: 4
-      unit: 1
+        name : ''
+        amount: "450"
+        currency: "EUR"
+        product: 4
+        unit: 1
     model: products.price
     pk: 12
+    
+-   fields:
+        name : ''
+        amount: "160"
+        currency: "EUR"
+        product: 5
+        unit: 1
+    model: products.price
+    pk: 13
+
+-   fields:
+        name : ''
+        amount: "180"
+        currency: "EUR"
+        product: 6
+        unit: 1
+    model: products.price
+    pk: 14

@@ -6,13 +6,28 @@ from django.core import mail
 from django.core.urlresolvers import reverse
 from django.test import TestCase
 from django.utils.translation import ugettext as _
-
+from django.contrib.sites.models import Site
 from eloue.accounts.forms import PatronPasswordChangeForm, ContactForm
 from eloue.accounts.models import Patron
+from eloue.payments import paypal_payment
+from eloue.payments.paypal_payment import verify_paypal_account
 
+def dummy_verify_paypal_account(email, first_name, last_name):
+    if first_name=='Lin' and last_name=='LIU' and email=='unverified_paypal_account@e-loue.com':
+        return 'UNVERIFIED'
+    elif first_name=='Lin' and last_name=='LIU' and email=='invalid@e-loue.com':
+        return 'INVALID'
+    elif first_name=='Lin' and last_name=='LIU' and email=='test_verified_status@e-loue.com':
+        return 'VERIFIED'
 
 class PatronTest(TestCase):
-    fixtures = ['patron']
+    fixtures = ['category', 'patron', 'address', 'price', 'product', 'booking']
+    
+    def setUp(self):
+        paypal_payment.verify_paypal_account = dummy_verify_paypal_account
+    
+    def tearDown(self):
+        paypal_payment.verify_paypal_account = verify_paypal_account
         
     def test_patron_detail_view(self):
         response = self.client.get(reverse('patron_detail', args=['alexandre']))
@@ -35,14 +50,81 @@ class PatronTest(TestCase):
         self.assertEquals(response.status_code, 200)
         patron = Patron.objects.get(email='alexandre.woog@e-loue.com')
         self.assertEquals(patron.first_name, 'Alex')
-    
+        # unverified case
+        response = self.client.post(reverse('patron_edit'), {
+            'first_name': 'Lin',
+            'last_name': 'LIU',
+            'username': 'alexandre',
+            'email': 'alexandre.woog@e-loue.com',
+            'paypal_email': 'unverified_paypal_account@e-loue.com',
+            'is_professional': False,
+            'is_subscribed': False
+        })
+        self.assertEquals(response.status_code, 200)
+        form = response.context['form']
+        
+        self.assertTrue("papal email n'est pas vérifié" in form.errors['first_name'][0])
+        self.assertTrue("papal email n'est pas vérifié" in form.errors['last_name'][0])
+        self.assertTrue("papal email n'est pas vérifié" in form.errors['paypal_email'][0])
+        # invalid case
+        response = self.client.post(reverse('patron_edit'), {
+            'first_name': 'Lin',
+            'last_name': 'LIU',
+            'username': 'alexandre',
+            'email': 'alexandre.woog@e-loue.com',
+            'paypal_email': 'invalid@e-loue.com',
+            'is_professional': False,
+            'is_subscribed': False
+        })
+        
+        self.assertEquals(response.status_code, 200)
+        form = response.context['form']
+        self.assertTrue("papal email n'est pas valid" in form.errors['first_name'][0])
+        self.assertTrue("papal email n'est pas valid" in form.errors['last_name'][0])
+        self.assertTrue("papal email n'est pas valid" in form.errors['paypal_email'][0])
+        # verified case
+        response = self.client.post(reverse('patron_edit'), {
+            'first_name': 'Lin',
+            'last_name': 'LIU',
+            'username': 'alexandre',
+            'email': 'alexandre.woog@e-loue.com',
+            'paypal_email': 'test_verified_status@e-loue.com',
+            'is_professional': False,
+            'is_subscribed': False
+        })
+        self.assertEquals(response.status_code, 200)
+        form = response.context['form']
+        self.assertFalse(form.errors)
+        
+        self.assertEqual(response.context['user'].username, 'alexandre')
+        
+        
     def test_patron_edit_form(self):
         self.client.login(username='alexandre.woog@e-loue.com', password='alexandre')
         response = self.client.get(reverse('patron_edit'))
         self.assertEquals(response.status_code, 200)
         self.assertTrue('form' in response.context)
         self.assertTrue(isinstance(response.context['form'], forms.ModelForm))
-    
+        
+        
+    def test_patron_paypal(self):
+        self.client.login(username='lin.liu@e-loue.com', password='lin')
+        domain = Site.objects.get_current().domain        
+        response = self.client.post(reverse('patron_paypal'), {
+            'paypal_exists': 1,
+            'paypal_email': 'invalid@e-loue.com',
+            'next': '/dashboard/booking/349ce9ba628abfdfc9cb3a72608dab68/'})
+        url = "http://%s/dashboard/account/profile/?next=/dashboard/booking/349ce9ba628abfdfc9cb3a72608dab68/&paypal=true"%domain
+        self.assertRedirects(response, url, status_code=301)
+        
+        response = self.client.post(reverse('patron_paypal'), {
+            'paypal_exists': 1,
+            'paypal_email': 'test_verified_status@e-loue.com',
+            'next': '/dashboard/booking/349ce9ba628abfdfc9cb3a72608dab68/'})
+        url = "http://%s/dashboard/booking/349ce9ba628abfdfc9cb3a72608dab68/?paypal=true"%domain
+        self.assertRedirects(response, url, status_code=301)
+        
+        
     def test_patron_edit_email_already_exists(self):
         self.client.login(username='alexandre.woog@e-loue.com', password='alexandre')
         response = self.client.post(reverse('patron_edit'), {

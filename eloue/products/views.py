@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import re
 from django.conf import settings
 from django.contrib import messages
 from django.core.urlresolvers import reverse
@@ -13,18 +14,29 @@ from django.views.decorators.vary import vary_on_cookie
 from django.views.generic.simple import direct_to_template, redirect_to
 from django.views.generic.list_detail import object_list
 
-from haystack.query import SearchQuerySet
+from django.shortcuts import render_to_response
+from django.template import RequestContext
+from django.views.generic.list_detail import object_detail
 
+from django.http import Http404, HttpResponseRedirect
+
+from haystack.query import SearchQuerySet
+from django.http import HttpResponse
 from eloue.decorators import ownership_required, secure_required, mobify
 from eloue.accounts.forms import EmailAuthenticationForm
 from eloue.accounts.models import Patron
-from eloue.products.forms import FacetedSearchForm, ProductForm, ProductEditForm
-from eloue.products.models import Category, Product, Curiosity, UNIT
-from eloue.products.wizard import ProductWizard
+
+from eloue.products.forms import AlertSearchForm, AlertForm, FacetedSearchForm, ProductForm, ProductEditForm, MessageEditForm, MessageComposeForm
+
+from eloue.products.models import Category, Product, Curiosity, UNIT, ProductRelatedMessage, Alert
+from eloue.products.wizard import ProductWizard, MessageWizard, AlertWizard, AlertAnswerWizard
+from django_messages.forms import ComposeForm
+from eloue.products.utils import format_quote
+from django.core.cache import cache
+
 
 PAGINATE_PRODUCTS_BY = getattr(settings, 'PAGINATE_PRODUCTS_BY', 10)
 DEFAULT_RADIUS = getattr(settings, 'DEFAULT_RADIUS', 50)
-
 
 @mobify
 @cache_page(300)
@@ -32,7 +44,8 @@ DEFAULT_RADIUS = getattr(settings, 'DEFAULT_RADIUS', 50)
 def homepage(request):
     curiosities = Curiosity.on_site.all()
     form = FacetedSearchForm()
-    return direct_to_template(request, template='index.html', extra_context={'form': form, 'curiosities': curiosities})
+    alerts = Alert.on_site.all()[:3]
+    return direct_to_template(request, template='index.html', extra_context={'form': form, 'curiosities': curiosities, 'alerts':alerts})
 
 
 @mobify
@@ -47,7 +60,7 @@ def search(request):
 def product_create(request, *args, **kwargs):
     wizard = ProductWizard([ProductForm, EmailAuthenticationForm])
     return wizard(request, *args, **kwargs)
-
+    
 
 @login_required
 @ownership_required(model=Product, object_key='product_id', ownership=['owner'])
@@ -64,6 +77,78 @@ def product_edit(request, slug, product_id):
         product = form.save()
         messages.success(request, _(u"Votre produit a bien été édité !"))
     return direct_to_template(request, 'products/product_edit.html', extra_context={'product': product, 'form': form})
+
+
+@login_required
+def compose_product_related_message(request, recipient=None, form_class=MessageComposeForm,
+    template_name='django_messages/compose.html', success_url=None, recipient_filter=None):
+    if request.method == "POST":
+        sender = request.user
+        form = form_class(request.POST, recipient_filter=recipient_filter)
+        if form.is_valid():
+            form.save(sender=request.user)
+            messages.add_message(request, messages.SUCCESS, _(u"Message successfully sent."))
+            if success_url is None:
+                success_url = reverse('messages_inbox')
+            if request.GET.has_key('next'):
+                success_url = request.GET['next']
+            return HttpResponseRedirect(success_url)
+    else:
+        form = form_class()
+        if recipient is not None:
+            recipients = [u.username for u in User.objects.filter(username__in=[r.strip() for r in recipient.split('+')])]
+            form.fields['recipient'].initial = ','.join(recipients)
+    return render_to_response(template_name, {
+        'form': form,
+        }, context_instance=RequestContext(request))
+
+
+@login_required
+def reply_product_related_message(request, message_id, form_class=MessageEditForm,
+    template_name='django_messages/compose.html', success_url=None, recipient_filter=None,
+    quote=format_quote):
+    parent = get_object_or_404(ProductRelatedMessage, id=message_id)
+    product = parent.product
+    
+    if parent.sender != request.user and parent.recipient != request.user:
+        raise Http404
+    if request.method == "POST":
+        sender = request.user
+        form = form_class(request.POST)
+        if form.is_valid():
+            form.save(product=product, sender=request.user, recipient=parent.sender, parent_msg=parent)
+            messages.add_message(request, messages.SUCCESS, _(u"Message successfully sent."))
+            if success_url is None:
+                success_url = reverse('messages_inbox')
+            return HttpResponseRedirect(success_url)
+    else:
+        form = form_class({
+            'body': quote(parent.sender, parent.body),
+            'subject': _(u"Re: %(subject)s") % {'subject': parent.subject},
+            'recipient': parent.sender
+            })
+    return render_to_response(template_name, {
+        'form': form,
+    }, context_instance=RequestContext(request))
+
+
+@never_cache
+@secure_required
+def message_create(request, product_id, recipient_id):
+    message_wizard = MessageWizard([MessageEditForm, EmailAuthenticationForm])
+    return message_wizard(request, product_id, recipient_id)
+
+
+@login_required
+@ownership_required(model=Product, object_key='product_id', ownership=['owner'])
+def product_delete(request, slug, product_id):
+    product = get_object_or_404(Product.on_site, pk=product_id)
+    if request.method == "POST":
+        product.delete()
+        messages.success(request, _(u"Votre objet à bien été supprimée"))
+        return redirect_to(request, reverse('owner_product'))
+    else:
+        return direct_to_template(request, template='products/product_delete.html', extra_context={'product': product})
 
 
 @mobify
@@ -91,11 +176,7 @@ def product_list(request, urlbits, sqs=SearchQuerySet(), suggestions=None, page=
                 raise Http404
             if bit.endswith(_('categorie')):
                 item = get_object_or_404(Category, slug=value)
-                breadcrumbs[bit] = {
-                    'name': 'categories', 'value': value, 'label': bit, 'object': item,
-                    'pretty_name': _(u"Catégorie"), 'pretty_value': item.name,
-                    'url': 'par-%s/%s' % (bit, value), 'facet': True
-                }
+                return redirect_to(request, item.get_absolute_url())
             elif bit.endswith(_('loueur')):
                 item = get_object_or_404(Patron.on_site, slug=value)
                 breadcrumbs[bit] = {
@@ -111,7 +192,14 @@ def product_list(request, urlbits, sqs=SearchQuerySet(), suggestions=None, page=
             except IndexError:
                 raise Http404
         else:
-            raise Http404
+            value = bit
+            item = get_object_or_404(Category, slug=value)
+            ancestors_slug = item.get_ancertors_slug()
+            breadcrumbs['categorie'] = {
+                'name': 'categories', 'value': value, 'label': ancestors_slug, 'object': item,
+                'pretty_name': _(u"Catégorie"), 'pretty_value': item.name,
+                'url': item.get_absolute_url(), 'facet': True
+            }
     form = FacetedSearchForm(dict((facet['name'], facet['value']) for facet in breadcrumbs.values()), searchqueryset=sqs)
     sqs, suggestions = form.search()
     return object_list(request, sqs, page=page, paginate_by=PAGINATE_PRODUCTS_BY, template_name="products/product_list.html",
@@ -119,3 +207,82 @@ def product_list(request, urlbits, sqs=SearchQuerySet(), suggestions=None, page=
             'facets': sqs.facet_counts(), 'form': form, 'breadcrumbs': breadcrumbs, 'suggestions': suggestions,
             'urlbits': dict((facet['label'], facet['value']) for facet in breadcrumbs.values() if facet['facet'])
     })
+
+@never_cache
+@secure_required
+def alert_create(request, *args, **kwargs):
+    wizard = AlertWizard([AlertForm, EmailAuthenticationForm])
+    return wizard(request, *args, **kwargs)
+
+
+@cache_page(900)
+@vary_on_cookie
+def alert_list(request, sqs=SearchQuerySet(), page=None):
+    form = FacetedSearchForm()
+    search_alert_form = AlertSearchForm(request.GET, searchqueryset=sqs)
+    return object_list(request, search_alert_form.search(), page=page, paginate_by=PAGINATE_PRODUCTS_BY, template_name="products/alert_list.html",
+        template_object_name='alert', extra_context={'form': form, 'search_alert_form':search_alert_form})
+
+
+@never_cache
+@secure_required
+def alert_inform(request, *args, **kwargs):
+    wizard = AlertAnswerWizard([ProductForm, EmailAuthenticationForm])
+    return wizard(request, *args, **kwargs)
+
+
+@login_required
+def alert_inform_success(request, alert_id):
+    return object_detail(request, queryset=Alert.objects.all(), object_id=alert_id,
+        template_name='products/alert_unform_success.html', template_object_name='alert')
+
+
+@login_required
+def alert_delete(request, alert_id):
+    alert = get_object_or_404(Alert, pk=alert_id)
+    if request.method == "POST":
+        alert.delete()
+        messages.success(request, _(u"Votre alerte à bien été supprimée"))
+        return redirect_to(request, reverse('alert_edit'))
+    else:
+        return direct_to_template(request, template='products/alert_delete.html', extra_context={'alert': alert})
+
+def suggestion(request): 
+    word = request.GET['q']
+    cache_value = cache.get(word)
+    if cache_value:
+        return HttpResponse(cache_value)
+    results_categories = SearchQuerySet().filter(categories__startswith=word).models(Product)
+    resp_list = []
+    for result in results_categories:
+        if len(result.categories)>1:
+            for category in result.categories:
+                if category.startswith(word):
+                    if "-" in category:
+                        resp_list.append(category.split("-")[0].lower())
+                    else:
+                        resp_list.append(category.lower())      
+        else:
+            category = result.categories[0]
+            if category.startswith(word):
+                if "-" in category:
+                    resp_list.append(category.split("-")[0].lower())
+                else:
+                    resp_list.append(category.lower())
+    results_description = SearchQuerySet().autocomplete(description=word)
+    results_summary = SearchQuerySet().autocomplete(summary=word)
+    for result in results_summary:
+        for m in re.finditer(r"^%s(\w+)"%word, result.summary, re.I):
+            resp_list.append(m.group(0).lower())
+    for result in results_description:
+        for m in re.finditer(r"^%s(\w+)"%word, result.description, re.I):
+            resp_list.append(m.group(0).lower())
+    resp_list = list(set(resp_list))
+    resp_list = resp_list[-10:]
+    resp = ""
+    for el in resp_list:
+        resp += "\n%s"%el
+    cache.set(word, resp, 0)
+    return HttpResponse(resp)
+        
+        

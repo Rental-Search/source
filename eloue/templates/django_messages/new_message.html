@@ -1,0 +1,20 @@
+{% load i18n %}
+{% blocktrans with message.recipient.username as recipient and message.sender.username as sender%}
+
+Bonjour {{ recipient }},
+
+Vous avez reçu un message de {{ sender }} qui contient le message suivant :
+{% endblocktrans %}
+
+{{ message.body|safe }}
+
+
+
+Cliquez sur le lien suivant pour répondre à ce message :
+{% url reply_product_related_message message.id %}
+
+------
+L'equipe {{ site_url }}
+
+{% trans "Inbox" %}: {{ site_url }}{% url messages_inbox %}
+{% trans "Reply" %}: {{ site_url }}{% url reply_product_related_message message.id %}

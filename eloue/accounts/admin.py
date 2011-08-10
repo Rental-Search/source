@@ -9,7 +9,7 @@ from django.utils.encoding import smart_str
 from django.utils.translation import ugettext_lazy as _
 
 from eloue.admin import CurrentSiteAdmin
-from eloue.accounts.models import Patron, Address, PhoneNumber
+from eloue.accounts.models import Patron, Address, PhoneNumber, PatronAccepted
 from eloue.accounts.forms import PatronChangeForm
 
 
@@ -23,18 +23,18 @@ class PhoneNumberInline(admin.TabularInline):
 
 class PatronAdmin(UserAdmin, CurrentSiteAdmin):
     fieldsets = (
-        (None, {'fields': ('username', 'password')}),
+        (None, {'fields': ('username', 'password', 'sites')}),
         (_('Personal info'), {'fields': ('civility', 'first_name', 'last_name', 'email', 'slug', 'affiliate')}),
         (_('Company info'), {'fields': ('is_professional', 'company_name')}),
-        (_('Permissions'), {'fields': ('is_staff', 'is_active', 'is_superuser', 'is_subscribed', 'user_permissions')}),
+        (_('Permissions'), {'fields': ('is_staff', 'is_active', 'is_superuser', 'is_subscribed', 'new_messages_alerted', 'user_permissions')}),
         (_('Important dates'), {'fields': ('last_login', 'date_joined')}),
         (_('Paypal'), {'classes': ('collapse',), 'fields': ('paypal_email',)}),
         (_('Groups'), {'classes': ('collapse',), 'fields': ('groups',)}),
     )
     list_display = ('username', 'first_name', 'last_name', 'email', 'company_name',
-        'is_staff', 'is_active', 'is_expired', 'is_professional', 'is_subscribed', 'date_joined', 'modified_at')
+        'is_staff', 'is_active', 'is_expired', 'is_professional', 'is_subscribed', 'date_joined', 'modified_at', 'new_messages_alerted')
     date_hierarchy = 'date_joined'
-    list_filter = ('is_active', 'is_staff', 'is_superuser', 'is_professional', 'is_subscribed', 'affiliate')
+    list_filter = ('is_active', 'is_staff', 'is_superuser', 'is_professional', 'is_subscribed', 'affiliate', 'new_messages_alerted')
     save_on_top = True
     ordering = ['-date_joined']
     inlines = [AddressInline, PhoneNumberInline]
@@ -72,5 +72,7 @@ class AddressAdmin(admin.ModelAdmin):
         (_('Geolocation'), {'classes': ('collapse',), 'fields': ('position',)})
     )
 
+
 admin.site.register(Address, AddressAdmin)
 admin.site.register(Patron, PatronAdmin)
+admin.site.register(PatronAccepted)

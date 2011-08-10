@@ -1,13 +1,13 @@
 {% extends "base.html" %}
 {% load i18n %}
 
-{% block title %}{% trans "Complétez votre profil" %}{% endblock %}
+{% block title %}{% trans "Identifiction" %}{% endblock %}
 
 {% block content %}
-	<div id="content" class="clearfix">
-		<div class="content-header x12">
-			<h1>{% trans "Informations nécessaires pour la création de votre compte" %}</h1>
-		</div>
-		{% include "accounts/partials/missing.html" %}
-	</div>{# content #}
+<div id="content-home" class="xgrid">
+    <div class="content-header x12">
+		<h1>{% trans "Informations nécessaires pour la création de votre compte" %}</h1>
+	</div>
+	{% include "accounts/partials/missing.html" %}
+</div>
 {% endblock %}
