@@ -111,10 +111,10 @@ class Patron(User):
     sites = models.ManyToManyField(Site, related_name='patrons')
 
     customers = models.ManyToManyField('self', through = 'PatronCustomer', symmetrical=False)
-    
+
     on_site = CurrentSiteManager()
     objects = PatronManager()
-    
+
     def save(self, *args, **kwargs):
         if not self.slug:
             if self.is_professional:
@@ -123,7 +123,7 @@ class Patron(User):
                 self.slug = slugify(self.username)
         self.modified_at = datetime.datetime.now()
         super(Patron, self).save(*args, **kwargs)
-    
+
     def __eq__(self, other):
         """
         To resolve the user comparing problems in other projet lib.
@@ -131,11 +131,11 @@ class Patron(User):
         if isinstance(other, User):
             if other.pk == self.pk:
                 return True
-    
+
     @permalink
     def get_absolute_url(self):
         return ('patron_detail', [self.slug])
-    
+
     def clean(self):
         if self.pk:  # TODO : Might need some improvements and more tests
             if Patron.objects.exclude(pk=self.pk).filter(email=self.email).exists():
@@ -147,13 +147,13 @@ class Patron(User):
                 raise ValidationError(_(u"Un utilisateur utilisant cet email existe déjà"))
             if Patron.objects.exists(username=self.username):
                 raise ValidationError(_(u"Un utilisateur utilisant ce nom d'utilisateur existe déjà"))
-    
+
     def is_anonymous(self):
         return False
-    
+
     def is_authenticated(self):
         return True
-    
+
     def has_paypal(self):
         """Indicates if user has an "verified" paypal account
         >>> patron = Patron(paypal_email=None)
@@ -172,7 +172,7 @@ class Patron(User):
             return True
         except ValidationError:
             return False
-    
+
     def create_account(self, return_url=None):
         try:
             address = self.addresses.all()[0]
@@ -207,11 +207,11 @@ class Patron(User):
             self.paypal_email = None
             self.save()
             return None
-    
+
     @property
     def is_verified(self):
         return paypal_payment.verify_paypal_account(email=self.paypal_email, first_name=self.first_name, last_name=self.last_name)
-    
+
     def send_activation_email(self):
         context = {
             'patron': self, 'activation_key': self.activation_key,
@@ -219,7 +219,7 @@ class Patron(User):
         }
         message = create_alternative_email('accounts/activation', context, settings.DEFAULT_FROM_EMAIL, [self.email])
         message.send()
-    
+
     def is_expired(self):
         """
         >>> patron = Patron(date_joined=datetime.datetime.now())
@@ -233,7 +233,7 @@ class Patron(User):
         return (self.date_joined + expiration_date <= datetime.datetime.now())
     is_expired.boolean = True
     is_expired.short_description = ugettext(u"Expiré")
-    
+
 
 class Address(models.Model):
     """An address"""
@@ -244,14 +244,14 @@ class Address(models.Model):
     position = models.PointField(null=True, blank=True)
     city = models.CharField(max_length=255)
     country = models.CharField(max_length=2, choices=COUNTRY_CHOICES)
-    
+
     objects = models.GeoManager()
-    
+
     COUNTRIES = COUNTRY_CHOICES
-    
+
     class Meta:
         verbose_name_plural = _('addresses')
-    
+
     def __unicode__(self):
         """
         >>> address = Address(address1='11, rue debelleyme', zipcode='75003', city='Paris')
@@ -309,11 +309,13 @@ class PatronAccepted(models.Model):
 
 
 class PatronCustomer(models.Model):
+    """
+    Model for "customers" ManyToMany relationship.
+    Represents the customer of a professionnal renter.
+    """
     renter = models.ForeignKey('Patron', related_name="renter_set")
     customer = models.ForeignKey('Patron', related_name="customer_set")
 
 
 signals.post_save.connect(post_save_sites, sender=Patron)
-
-
 
