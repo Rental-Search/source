@@ -185,7 +185,60 @@ class ApiTest(TestCase):
             content_type='application/json',
             **self._get_headers(request))
         self.assertEquals(response.status_code, 400)
-    
+
+    def test_customer_creation(self):
+        login_success = self.client.login(username='alexandre.woog@e-loue.com', password='alexandre')
+        self.assertTrue(login_success)
+        post_data = {
+            'username': 'customer1',
+            'password': 'iwantyourcar',
+            'email': 'customer1@customerfarm.com'
+        }
+        headers = self._get_headers(self._get_request(method='POST'))
+        response = self.client.post(
+            reverse('api_dispatch_list', args=['1.0', 'customer']),
+            data=simplejson.dumps(post_data),
+            content_type='application/json',
+            **headers
+        )
+        customer = Patron.objects.get(username='customer1')
+        renter = Patron.objects.get(email='alexandre.woog@e-loue.com')
+        rcust = renter.customers.get(username='customer1')
+        self.assertEquals(customer, rcust)
+
+    def test_customer_list(self):
+        login_success = self.client.login(username='alexandre.woog@e-loue.com', password='alexandre')
+        self.assertTrue(login_success)
+        users_data = [
+            {
+                'username': 'customer1',
+                'password': 'iwantyourcar',
+                'email': 'customer1@customerfarm.com'
+            },
+            {
+                'username': 'customer2',
+                'password': 'iwantyourcartoo',
+                'email': 'customer2@customerfarm.com'
+            }
+        ]
+
+        headers = self._get_headers(self._get_request(method='POST'))
+        for data in users_data:
+            self.client.post(
+                reverse('api_dispatch_list', args=['1.0', 'customer']),
+                data=simplejson.dumps(data),
+                content_type='application/json',
+                **headers
+            )
+
+        headers = self._get_headers(self._get_request(method='GET'))
+        response = self.client.get(
+            reverse('api_dispatch_list', args=['1.0', 'customer']),
+            **headers
+        )
+        content = simplejson.loads(response.content)
+        self.assertTrue(content["meta"]["total_count"] == 2)
+
     def tearDown(self):
         for product in Product.objects.all():
             self.index.remove_object(product)

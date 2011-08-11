@@ -64,7 +64,7 @@ class OAuthentication(Authentication):
             except InvalidConsumerError:
                 return False
         return False
-    
+
 
 class OAuthAuthorization(Authorization):
     def is_authorized(self, request, object=None):
@@ -89,15 +89,15 @@ class OAuthAuthorization(Authorization):
                 token = store.get_access_token(request, oauth_request, consumer, oauth_request.get_parameter('oauth_token'))
             except InvalidTokenError:
                 return False
-        
+
             if not verify_oauth_request(request, oauth_request, consumer, token=token):
                 return False
-            
+
             if consumer and token:
                 request.user = token.user.patron
                 return True
         return False
-    
+
 
 class JSONSerializer(Serializer):
     formats = ['json', 'jsonp']
@@ -114,21 +114,21 @@ class PlistSerializer(Serializer):
         'jsonp': 'text/javascript',
         'plist': 'text/plist'
     }
-    
+
     def to_simple(self, data, options):
         if isinstance(data, dict):
             data = dict((key, self.to_simple(val, options)) for (key, val) in data.iteritems() if val)
         return super(PlistSerializer, self).to_simple(data, options)
-    
+
     def to_plist(self, data, options=None):
         options = options or {}
         data = self.to_simple(data, options)
-        
+
         return plistlib.writePlistToString(data)
-    
+
     def from_plist(self, content):
         return plistlib.readPlistFromString(content)
-    
+
 
 class MetaBase():
     """Define meta attributes that must be shared between all resources"""
@@ -144,7 +144,7 @@ class OAuthResource(ModelResource):
             if key.startswith("oauth_"):
                 del filters[key]
         return filters
-    
+
 
 class UserSpecificResource(OAuthResource):
     """
@@ -154,38 +154,39 @@ class UserSpecificResource(OAuthResource):
     """
     # TODO : Make it work the same way with obj_get than with get_list
     FILTER_GET_REQUESTS = True
-    
+    USER_FIELD_NAME = "user"
+
     def obj_get_list(self, request=None, **kwargs):
         # Get back the user object injected in get_list, and add it to the filters
         # If FILTER_GET_REQUESTS is true
         filters = None
-        
+
         if hasattr(request, 'GET'):
             filters = request.GET.copy()
-        
+
         if self.FILTER_GET_REQUESTS:
-            filters["user"] = request.user
-        
+            filters[USER_FIELD_NAME] = request.user
+
         applicable_filters = self.build_filters(filters=filters)
-        
+
         try:
             return self.get_object_list(request).filter(**applicable_filters)
+
         except ValueError:
             raise NotFound("Invalid resource lookup data provided (mismatched type).")
-    
+
     def build_filters(self, filters):
         orm_filters = {}
         filters = super(UserSpecificResource, self).build_filters(filters)
-        user = filters.pop("user") if "user" in filters else None
-        
+        user = filters.pop(USER_FIELD_NAME) if USER_FIELD_NAME in filters else None
+
         if not self.FILTER_GET_REQUESTS:
             return filters
-        
+
         if user:
             orm_filters['patron'] = user
-        
+
         return orm_filters
-    
 
 class UserResource(OAuthResource):
     class Meta(MetaBase):
@@ -197,53 +198,74 @@ class UserResource(OAuthResource):
             'username': ALL_WITH_RELATIONS,
             'email': ALL_WITH_RELATIONS
         }
-    
-    def obj_create(self, bundle, **kwargs):
+
+
+    def obj_create(self, bundle, request=None, **kwargs):
         """Creates a new inactive user"""
+
         data = bundle.data
         try:
             bundle.obj = Patron.objects.create_user(data["username"], data["email"], data["password"])
         except IntegrityError:
             raise ImmediateHttpResponse(response=HttpBadRequest())
         return bundle
-    
+
+class CustomerResource(UserResource):
+
+    class Meta(UserResource.Meta):
+        resource_name = "customer"
+
+    def obj_get_list(self, request=None, **kwargs):
+        user = request.user
+        return user.customers.all()
+
+    def obj_create(self, bundle, request=None, **kwargs):
+        """Creates a new inactive user"""
+
+        bundle = super(CustomerResource, self).obj_create(bundle, request, **kwargs)
+        user = request.user
+
+        if not user.is_anonymous():
+            user.customers.add(bundle.obj)
+
+        return bundle
 
 class PhoneNumberResource(UserSpecificResource):
     """Resource that sends back the phone numbers linked to the user"""
     patron = fields.ForeignKey(UserResource, 'patron', full=False, null=True)
-    
+
     class Meta(MetaBase):
         queryset = PhoneNumber.objects.all()
         resource_name = "phonenumber"
         allowed_methods = ['get', 'post']
-    
+
     def obj_create(self, bundle, request=None, **kwargs):
         bundle.data['patron'] = UserResource().get_resource_uri(request.user)
         return super(AddressResource, self).obj_create(bundle, request, **kwargs)
-    
+
 
 class AddressResource(UserSpecificResource):
     """Resource that sends back the addresses linked to the user"""
     patron = fields.ForeignKey(UserResource, 'patron', full=False, null=True)
-    
+
     class Meta(MetaBase):
         queryset = Address.objects.all()
         resource_name = "address"
         allowed_methods = ['get', 'post']
-    
+
     def dehydrate(self, bundle, request=None):
         if bundle.obj.position:
             bundle.data["position"] = {'lat': bundle.obj.position.x, 'lng': bundle.obj.position.y}
         return bundle
-    
+
     def obj_create(self, bundle, request=None, **kwargs):
         bundle.data['patron'] = UserResource().get_resource_uri(request.user)
         return super(AddressResource, self).obj_create(bundle, request, **kwargs)
-    
+
 
 class CategoryResource(ModelResource):
     parent = fields.ForeignKey('self', 'parent', full=False, null=True)
-    
+
     class Meta:
         queryset = Category.on_site.all()
         resource_name = 'category'
@@ -254,7 +276,7 @@ class CategoryResource(ModelResource):
             "parent": ALL_WITH_RELATIONS,
         }
         serializer = PlistSerializer()
-    
+
     def build_tree(self):
         def build_node(node):
             bits = []
@@ -268,34 +290,34 @@ class CategoryResource(ModelResource):
         for root in roots:
             nodes.extend(root.get_children())
         return [build_node(node) for node in nodes]
-    
+
     def get_tree(self, request, **kwargs):
         self.method_check(request, allowed=['get'])
         self.is_authenticated(request)
         self.throttle_check(request)
         self.log_throttled_access(request)
         return self.create_response(request, self.build_tree())
-    
+
     def base_urls(self):
         return super(CategoryResource, self).base_urls()
-    
+
     def override_urls(self):
         return [
             url(r"^(?P<resource_name>%s)/tree/$" % self._meta.resource_name, self.wrap_view('get_tree'), name="api_get_tree"),
         ]
-        
+
 class PictureResource(OAuthResource):
     class Meta:
         queryset = Picture.objects.all()
         resource_name = 'picture'
         allowed_methods = ['get']
         fields = ['id']
-    
+
     def dehydrate(self, bundle, request=None):
         bundle.data['thumbnail_url'] = bundle.obj.thumbnail.url
         bundle.data['display_url'] = bundle.obj.display.url
         return bundle
-    
+
 
 class PriceResource(OAuthResource):
     class Meta(MetaBase):
@@ -304,7 +326,7 @@ class PriceResource(OAuthResource):
         fields = []
         allowed_methods = ['get', 'post']
 
-        
+
 class ProductResource(UserSpecificResource):
     category = fields.ForeignKey(CategoryResource, 'category', full=True, null=True)
     address = fields.ForeignKey(AddressResource, 'address', full=True, null=True)
@@ -312,9 +334,9 @@ class ProductResource(UserSpecificResource):
     pictures = fields.ToManyField(PictureResource, 'pictures', full=True, null=True)
     prices = fields.ToManyField(PriceResource, 'prices', full=True, null=True)
     distance = fields.RelatedField(Distance, 'distance', null=True)
-    
+
     FILTER_GET_REQUESTS = False
-    
+
     class Meta(MetaBase):
         queryset = Product.on_site.all()
         allowed_methods = ['get', 'post']
@@ -326,35 +348,35 @@ class ProductResource(UserSpecificResource):
             'category': ALL_WITH_RELATIONS,
             'owner': ALL_WITH_RELATIONS,
         }
-    
+
     def build_filters(self, filters=None):
         if filters is None:
             filters = {}
-        
+
         orm_filters = super(ProductResource, self).build_filters(filters)
         if "q" in filters or "l" in filters:
             sqs = product_search
-            
+
             if "q" in filters:
                 sqs = sqs.auto_query(filters['q'])
-            
+
             if "l" in filters:
                 name, (lat, lon), radius = GoogleGeocoder().geocode(filters['l'])
                 radius = filters.get('r', radius if radius else DEFAULT_RADIUS)
                 if lat and lon:
                     sqs = sqs.spatial(lat=lat, long=lon, radius=radius, unit='km')
-            
+
             pk = []
             for p in sqs:
                 try:
                     pk.append(int(p.pk))
                 except ValueError:
                     pass
-            
+
             orm_filters.update({"pk__in": pk})
-        
+
         return orm_filters
-    
+
     def post_list(self, request, **kwargs):
         """Stop making it return standard location header"""
         deserialized = self.deserialize(request, request.raw_post_data, format=request.META.get('CONTENT_TYPE', 'application/json'))
@@ -362,14 +384,14 @@ class ProductResource(UserSpecificResource):
         self.is_valid(bundle, request)
         updated_bundle = self.obj_create(bundle, request=request)
         return HttpCreated(location=updated_bundle.obj.get_absolute_url())
-    
+
     def get_object_list(self, request):
         object_list = super(ProductResource, self).get_object_list(request)
         if "l" in request.GET:
             name, (lat, lon), radius = GoogleGeocoder().geocode(request.GET['l'])
             object_list = object_list.distance(Point((lat, lon)), field_name='address__position')
         return object_list
-    
+
     def obj_create(self, bundle, request=None, **kwargs):
         """
         On product creation, if the request contains a "picture" parameter
@@ -380,10 +402,10 @@ class ProductResource(UserSpecificResource):
         day_price_data = bundle.data.get("price", None)
         if picture_data:
             bundle.data.pop("picture")
-        
+
         bundle.data['owner'] = UserResource().get_resource_uri(request.user)
         bundle = super(ProductResource, self).obj_create(bundle, request, **kwargs)
-        
+
         # Create the picture object if there is a picture in the request
         if picture_data:
             picture = Picture(product=bundle.obj)
@@ -393,12 +415,12 @@ class ProductResource(UserSpecificResource):
             img_path = default_storage.save(img_path, img_file)
             picture.image.name = img_path
             picture.save()
-        
+
         # Add a day price to the object if there isnt any yet
         if day_price_data:
             Price(product=bundle.obj, unit=1, amount=D(day_price_data)).save()
         return bundle
-    
+
     def dehydrate(self, bundle, request=None):
         """
         Automatically add the location price if the request
@@ -406,19 +428,19 @@ class ProductResource(UserSpecificResource):
         """
         from datetime import datetime, timedelta
         from dateutil import parser
-        
+
         if "date_start" in request.GET and "date_end" in request.GET:
             date_start = parser.parse(unquote(request.GET["date_start"]))
             date_end = parser.parse(unquote(request.GET["date_end"]))
         else:
             date_start = datetime.now() + timedelta(days=1)
             date_end = date_start + timedelta(days=1)
-        
+
         if bundle.data["distance"]:
             bundle.data["distance"] = bundle.data["distance"].km
         bundle.data["unit"], bundle.data["price"] = Booking.calculate_price(bundle.obj, date_start, date_end)
         return bundle
-    
+
 
 api_v1 = Api(api_name='1.0')
 api_v1.register(CategoryResource())
@@ -428,3 +450,4 @@ api_v1.register(PhoneNumberResource())
 api_v1.register(PictureResource())
 api_v1.register(PriceResource())
 api_v1.register(UserResource())
+api_v1.register(CustomerResource())
