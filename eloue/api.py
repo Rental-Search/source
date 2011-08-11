@@ -34,7 +34,7 @@ from django.contrib.sites.models import Site
 from django.contrib.auth.models import User
 from django.db import IntegrityError
 from django.db.models import Q
-from django.http import HttpResponse
+from django.http import HttpResponse,HttpResponseBadRequest
 from django.shortcuts import get_object_or_404
 
 
@@ -478,17 +478,13 @@ class BookingResource(OAuthResource):
         from datetime import datetime, timedelta
         from dateutil import parser        
         data = bundle.data
-        #print "request POST %s" % request.POST
-        #print ">>>>>>>>>>>>>>>>>"
-        #print "budled data %s" % bundle.data
         try:
             product = Product.objects.get(id=int(data["product"].split("/")[-2]))
             borrower = Patron.objects.get(id=int(data["borrower"].split("/")[-2]))
             started_at = parser.parse(unquote(data["started_at"]))
             ended_at = parser.parse(unquote(data["ended_at"]))
-            
+
             temp, total_amount = Booking.calculate_price(product, started_at, ended_at)
-            #print total_amount
             if data["status"] == "authorizing":
                 bundle.obj=Booking(started_at = data["started_at"],  
                                     ended_at = data["ended_at"],  
@@ -500,8 +496,6 @@ class BookingResource(OAuthResource):
                 bundle.obj.save()
             elif data['status'] and data["uuid"]:
                 bundle.obj=Booking.objects.get(uuid=data["uuid"])
-                #print bundle.obj.started_at
-                #print bundle.obj.ended_at
             else:
                 # need to do some checking here
                 pass
@@ -513,14 +507,7 @@ class BookingResource(OAuthResource):
         """
         Set the returned response for created booking
         """
-        #print "post raw data >>>>>>>>>>>>>>>>>>>>>>>>>>>>> %s" % request.path
-        #print "request user %s" % request.user.email
-        #owner = Patron.objects.filter(email=request.user.email)
-        #print Booking.on_site.filter(owner=owner)
-        #print "borrower >>>"
-        #print Booking.on_site.filter(borrower=owner)
         post_data = self.deserialize(request, request.raw_post_data, format=request.META.get('CONTENT_TYPE', 'application/json'))
-        #print "post data >>>>>>>>>>>>>>>>>>>>>>>>>>>>> %s" % post_data
         bundle = self.build_bundle(data=dict_strip_unicode_keys(post_data))
         self.is_valid(bundle, request)
         updated_bundle = self.obj_create(bundle, request=request)
@@ -532,13 +519,13 @@ class BookingResource(OAuthResource):
         if post_data["status"].lower() == 'authorizing':
             try:
                 booking = get_object_or_404(Booking, pk=updated_bundle.obj.uuid)
+                booking.state = "authorizing"
                 booking.init_payment_processor()
                 booking.preapproval(
                     cancel_url="%s://%s%s" % (protocol, domain, reverse("booking_failure", args=[booking.pk.hex])),
                     return_url="%s://%s%s" % (protocol, domain, reverse("booking_success", args=[booking.pk.hex])),
                     ip_address=request.META['REMOTE_ADDR']
                     )
-                booking.state = "authorized"
                 return HttpCreated(content_type='application/json', 
                                     location = "/api/1.0/booking/" + str(booking.uuid) + "/", 
                                     content = self.populate_response(booking) )
@@ -561,7 +548,13 @@ class BookingResource(OAuthResource):
                     elif is_verified=="INVALID":
                         cont_dic = {"error":"The owner's paypal account is invalid"}                            
                         content = json.dumps(cont_dic)
-                        return HttpResponse(content_type='application/json', content=content)      
+                        return HttpResponse(content_type='application/json', content=content)
+            if booking.state != "authorized":
+                error_message = "can't switch from state "+ post_data["status"]+" to state pending"
+                cont_dic = {"error":error_message}                            
+                content = json.dumps(cont_dic)
+                return HttpResponseBadRequest(content_type='application/json', content=content)
+                  
             booking.state = post_data["status"]
             # TODO uncomment the following line 
             booking.send_acceptation_email()
@@ -571,6 +564,11 @@ class BookingResource(OAuthResource):
             
         elif post_data["status"].lower() == 'rejected' and updated_bundle.obj.uuid:
             booking = get_object_or_404(Booking, pk=updated_bundle.obj.uuid)
+            if booking.state != "authorized":
+                error_message = "can't switch from state "+ post_data["status"]+" to state rejected"
+                cont_dic = {"error":error_message}                            
+                content = json.dumps(cont_dic)
+                return HttpResponseBadRequest(content_type='application/json', content=content)
             booking.state = post_data["status"]
             # TODO uncomment the following line
             booking.send_rejection_email()
@@ -580,7 +578,12 @@ class BookingResource(OAuthResource):
             
         elif post_data["status"].lower() == 'closed' and updated_bundle.obj.uuid:
             booking = get_object_or_404(Booking, pk=updated_bundle.obj.uuid)
-            booking.state="closed"
+            if booking.state != "closing":
+                error_message = "can't switch from state "+ post_data["status"]+" to state closed"
+                cont_dic = {"error":error_message}                            
+                content = json.dumps(cont_dic)
+                return HttpResponseBadRequest(content_type='application/json', content=content)
+            booking.state=post_data["status"]
             # TODO uncomment the following lines
             booking.init_payment_processor()
             booking.pay()
