@@ -110,7 +110,7 @@ class Patron(User):
     paypal_email = models.EmailField(null=True, blank=True)
     sites = models.ManyToManyField(Site, related_name='patrons')
 
-    customers = models.ManyToManyField('self', through = 'PatronCustomer', symmetrical=False)
+    customers = models.ManyToManyField('self', symmetrical=False)
 
     on_site = CurrentSiteManager()
     objects = PatronManager()
@@ -308,14 +308,4 @@ class PatronAccepted(models.Model):
     sites = models.ManyToManyField(Site, related_name='patrons_accepted')
 
 
-class PatronCustomer(models.Model):
-    """
-    Model for "customers" ManyToMany relationship.
-    Represents the customer of a professionnal renter.
-    """
-    renter = models.ForeignKey('Patron', related_name="renter_set")
-    customer = models.ForeignKey('Patron', related_name="customer_set")
-
-
 signals.post_save.connect(post_save_sites, sender=Patron)
-

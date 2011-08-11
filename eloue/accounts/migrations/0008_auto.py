@@ -8,19 +8,19 @@ class Migration(SchemaMigration):
 
     def forwards(self, orm):
         
-        # Adding model 'PatronCustomer'
-        db.create_table('accounts_patroncustomer', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('renter', self.gf('django.db.models.fields.related.ForeignKey')(related_name='renter_set', to=orm['accounts.Patron'])),
-            ('customer', self.gf('django.db.models.fields.related.ForeignKey')(related_name='customer_set', to=orm['accounts.Patron'])),
+        # Adding M2M table for field customers on 'Patron'
+        db.create_table('accounts_patron_customers', (
+            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
+            ('from_patron', models.ForeignKey(orm['accounts.patron'], null=False)),
+            ('to_patron', models.ForeignKey(orm['accounts.patron'], null=False))
         ))
-        db.send_create_signal('accounts', ['PatronCustomer'])
+        db.create_unique('accounts_patron_customers', ['from_patron_id', 'to_patron_id'])
 
 
     def backwards(self, orm):
         
-        # Deleting model 'PatronCustomer'
-        db.delete_table('accounts_patroncustomer')
+        # Removing M2M table for field customers on 'Patron'
+        db.delete_table('accounts_patron_customers')
 
 
     models = {
@@ -41,20 +41,21 @@ class Migration(SchemaMigration):
             'affiliate': ('django.db.models.fields.CharField', [], {'max_length': '10', 'null': 'True', 'blank': 'True'}),
             'civility': ('django.db.models.fields.PositiveSmallIntegerField', [], {'null': 'True', 'blank': 'True'}),
             'company_name': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
-            'customers': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['accounts.Patron']", 'through': "orm['accounts.PatronCustomer']", 'symmetrical': 'False'}),
+            'customers': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['accounts.Patron']", 'symmetrical': 'False'}),
             'is_professional': ('django.db.models.fields.NullBooleanField', [], {'default': 'None', 'null': 'True', 'blank': 'True'}),
             'is_subscribed': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'modified_at': ('django.db.models.fields.DateTimeField', [], {}),
+            'new_messages_alerted': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
             'paypal_email': ('django.db.models.fields.EmailField', [], {'max_length': '75', 'null': 'True', 'blank': 'True'}),
             'sites': ('django.db.models.fields.related.ManyToManyField', [], {'related_name': "'patrons'", 'symmetrical': 'False', 'to': "orm['sites.Site']"}),
             'slug': ('django.db.models.fields.SlugField', [], {'unique': 'True', 'max_length': '50', 'db_index': 'True'}),
             'user_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['auth.User']", 'unique': 'True', 'primary_key': 'True'})
         },
-        'accounts.patroncustomer': {
-            'Meta': {'object_name': 'PatronCustomer'},
-            'customer': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'customer_set'", 'to': "orm['accounts.Patron']"}),
+        'accounts.patronaccepted': {
+            'Meta': {'object_name': 'PatronAccepted'},
+            'email': ('django.db.models.fields.EmailField', [], {'max_length': '75'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'renter': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'renter_set'", 'to': "orm['accounts.Patron']"})
+            'sites': ('django.db.models.fields.related.ManyToManyField', [], {'related_name': "'patrons_accepted'", 'symmetrical': 'False', 'to': "orm['sites.Site']"})
         },
         'accounts.phonenumber': {
             'Meta': {'object_name': 'PhoneNumber'},
