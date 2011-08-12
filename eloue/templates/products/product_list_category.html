@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% load cache facets i18n param category product paginator mptt_tags seo booking %}
+
+{% block content %}
+<div id="content" class="xgrid">
+{% if product_list %}
+<div id="results" class="x8">
+    <ul class="product-list">
+        {% for product in product_list %}
+        <li>
+            <a class="pl-img" href="{{ product.url|safe }}" {% if product|nofollow %}rel="nofollow"{% endif %}>
+                <img width="90" src="{{ product.thumbnail }}" alt="{{ product.summary }}">
+            </a>
+            <div class="pl-header">
+                <h2><a href="{{ product.url|safe }}" {% if product|nofollow %}rel="nofollow"{% endif %}>{{ product.summary|capitalize|truncate:50 }}</a></h2>
+            </div>
+            <div class="pl-content">
+                {% with product.highlighted.text|first|truncate:91|safe as highlight %}
+			 	 {% if highlight %}
+				  <div class="pl-desc">{{ highlight }}</div>
+				 {% else %}
+				  <div class="pl-desc">{{ product.description|truncate:91 }}</div>
+				 {% endif %}
+				{% endwith %}
+                <div class="pl-distance">
+                 {% if product.geo_distance %}
+				  {{ product.geo_distance|floatformat }} {% trans "km" %}{{ product.geo_distance|pluralize }}
+				 {% endif %}
+                </div>
+                <div class="pl-price">
+                    <span class="price">{{ product.price|quantize|currency }}</span><br />
+				    <span class="unit">{% trans "par jour" %}</span>
+                </div>
+                <div class="pl-btn">
+                    <a href="{{ product.url|safe }}" {% if product|nofollow %}rel="nofollow"{% endif %} class="btn small-blue">{% trans "Réserver" %} &rarr;</a>
+                </div>
+            </div>
+            <div class="pl-footer">
+			 	{% trans "Par" %} <a href="{{ product.owner_url }}" {% if product|nofollow %}rel="nofollow"{% endif %} class="owner">{{ product.owner }}</a> | {{ product.city|capfirst }}{% if product.zipcode %}, {{ product.zipcode }}{% endif %}
+            </div>
+        </li>
+        {% endfor %}
+    </ul>
+    {% pagination %}
+    {% if is_paginated %}
+    {% endif %}
+</div>
+{% else %}
+{% endif %}
+</div>
+{% endblock %}

@@ -134,6 +134,20 @@
 	    				</td>
 	    			</tr>
 	    			{% endif %}
+	    			{% if form.is_subscribed %}
+	    			<tr>
+	        			<td colspan="2" {% if form.is_subscribed.errors %} class="error-field" {% endif %}>
+	        				<label>{{ form.is_subscribed.label }} {% if form.is_subscribed.field.required %}*{% endif%} :</label>
+	        				{{ form.is_subscribed }} {% trans "oui" %}
+	        				{% if form.is_subscribed.errors %}
+	        				    {% for error in form.is_subscribed.errors %}
+	        								<br />
+	        				        <span class="error">{{ error|escape }}</span>
+	        				    {% endfor %}
+	        				{% endif %}
+	        			</td>
+	        		</tr>
+	    			{% endif %}
 	    		</table>
 	    		<p class="required-field">{% trans "* champ obligatoire" %}</p>
 	    </div>

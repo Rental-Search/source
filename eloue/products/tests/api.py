@@ -7,10 +7,12 @@ import urlparse
 from datetime import datetime, timedelta
 from decimal import Decimal as D
 from haystack import site
+from urllib import urlencode
 
 from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.db import transaction
+from django.db.models import Q
 from django.test import Client, TestCase
 from django.utils import simplejson
 
@@ -28,7 +30,7 @@ local_path = lambda path: os.path.join(os.path.dirname(__file__), path)
 
 
 class ApiTest(TestCase):
-    fixtures = ['category', 'patron', 'address', 'oauth', 'price', 'product']
+    fixtures = ['category', 'patron', 'address', 'oauth', 'price', 'product', 'booking']
     
     def setUp(self):
         self.index = site.get_index(Product)
@@ -153,11 +155,19 @@ class ApiTest(TestCase):
             data=simplejson.dumps(post_data),
             content_type='application/json',
             **self._get_headers(request))
+        print simplejson.dumps(post_data)
+        print self._get_headers(request)
+        print ">>>>>>>>>>>>>>>>>>>>>>>>"
+        print "request %s" % response.request
+        print "context %s" % response.context 
+        print "content %s" % response.content
+        
         self.assertEquals(response.status_code, 201)
         self.assertTrue('Location' in response)
         patron = Patron.objects.get(pk=int(response['Location'].split('/')[-2]))
         self.assertEquals(patron.username, 'chuck')
-        self.assertEquals(patron.email, 'chuck.berry@chess-records.com')
+        #self.assertEquals(patron.email, 'chuck.berry@chess-records.com')
+        self.assertEquals(patron.email, 'chuck.berry@chesdfqsdfsdfqsdfs-records.com')
         self.assertEquals(patron.is_active, True)
     
     @transaction.commit_on_success
@@ -185,7 +195,131 @@ class ApiTest(TestCase):
             content_type='application/json',
             **self._get_headers(request))
         self.assertEquals(response.status_code, 400)
-    
+        
+    def test_booking_list(self):
+        request = self._get_request(method='GET', use_token=True)
+        response = self.client.get(reverse("api_dispatch_list", args=['1.0', 'booking']), HTTP_AUTHORIZATION=request.to_header()['Authorization'])
+        self.assertEquals(response.status_code, 200)
+        json = simplejson.loads(response.content)
+        self.assertEquals(json['meta']['total_count'], Booking.objects.filter( Q(borrower=Patron.objects.get(pk=1)) | Q(owner=Patron.objects.get(pk=1)) ).count())
+
+    def test_booking_calculate_price(self):
+        booking_to_cal = {'borrower': '/api/1.0/user/1/',
+                          'ended_at': '2011-01-03 08:00:00',
+                          'product': '/api/1.0/product/6/',
+                          'started_at': '2010-12-23 08:00:00'}
+        request = self._get_request(method='GET', use_token=True)
+        response = self.client.get(reverse("api_dispatch_list", args=['1.0', 'booking']), booking_to_cal, HTTP_AUTHORIZATION=request.to_header()['Authorization'])
+        self.assertEquals(response.status_code, 200)
+        json = simplejson.loads(response.content)
+        self.assertEquals(json['objects'][0]['product'], "/api/1.0/product/6/")
+        self.assertEquals(json['objects'][0]['borrower'], "/api/1.0/user/1/")
+        self.assertEquals(json['objects'][0]['owner'], "/api/1.0/user/4/")
+        self.assertEquals(json['objects'][0]['started_at'], "2010-12-23T08:00:00")
+        self.assertEquals(json['objects'][0]['ended_at'], "2011-01-03T08:00:00")
+        self.assertEquals(json['objects'][0]['total_amount'], "1980.00")
+                
+    def test_booking_creation(self):
+        post_data = {'started_at': '2010-12-29 08:00:00',
+                     'ended_at': '2011-01-05 08:00:00',
+                     'product': '/api/1.0/product/6/',
+                     'borrower':'/api/1.0/user/1/',
+                     'status': 'authorizing'
+        } 
+        request = self._get_request(method='POST', use_token=True)
+        #print request.to_header()['Authorization']
+        print self._get_headers(request)
+        #print simplejson.dumps(post_data)
+        response = self.client.post(reverse("api_dispatch_list", args=['1.0', 'booking']), 
+                                    data=simplejson.dumps(post_data),
+                                    content_type='application/json',
+                                    #HTTP_AUTHORIZATION=request.to_header()['Authorization'])
+                                    **self._get_headers(request))
+        #print "request %s" % response.request
+        #print "context %s" % response.context
+        print "body >>>>>>>>>>" 
+        print response.content 
+        
+        self.assertEquals(response.status_code, 201)
+        self.assertTrue('Location' in response)
+        booking = Booking.objects.get(pk=int(response['Location'].split('/')[-2]))
+        self.assertEquals(booking.borrower.id, 1)
+        self.assertEquals(booking.product.id, 6)
+        self.assertEquals(booking.started_at, '2010-12-29 08:00:00')
+        self.assertEquals(booking.ended_at, '2011-01-05 08:00:00')
+        self.assertEquals(booking.total_amount, 1980)
+                # 
+                # post_data = {
+                #     'username': 'chuck',
+                #     'password': 'begood',
+                #     'email': 'chuck.berry@chess-records.com'
+                # }
+                # request = self._get_request(method='POST')
+                # response = self.client.post(reverse("api_dispatch_list", args=['1.0', 'user']),
+                #     data=simplejson.dumps(post_data),
+                #     content_type='application/json',
+                #     **self._get_headers(request))
+                # self.assertEquals(response.status_code, 201)
+                # self.assertTrue('Location' in response)
+                # patron = Patron.objects.get(pk=int(response['Location'].split('/')[-2]))
+                # self.assertEquals(patron.username, 'chuck')
+                # self.assertEquals(patron.email, 'chuck.berry@chess-records.com')
+                # self.assertEquals(patron.is_active, True)
+    def test_booking_auth_to_pending(self):
+        post_data = {
+               'uuid': 'a72608d9a7e349ce9ba628abfdfc9cb3',
+               'status': 'pending'
+                } 
+            
+        request = self._get_request(method='POST')
+        client = Client()
+        client.login(email="alexandre.woog@e-loue.com", password="alexandre")
+        print self._get_headers(request)
+        response = self.client.post(reverse("api_dispatch_list", args=['1.0', 'booking']), 
+                                    data=simplejson.dumps(post_data),
+                                    content_type='application/json',
+                                    HTTP_AUTHORIZATION=request.to_header()['Authorization'])
+                                    #**self._get_headers(request))
+        print "body >>>>>>>>>>>>>>>>>"
+        print type(response.content) 
+        print response.content
+        self.assertEquals(response.status_code, 200)
+        self.assertTrue('Location' in response)
+        booking = Booking.objects.get(pk=post_data['uuid'])
+        self.assertEquals(booking.state, "pending")
+                   
+    def test_booking_auth_to_rejected(self):
+        post_data = {
+               'uuid': 'a72608d9a7e349ce9ba628abfdfc9cb3',
+               'status': 'rejected'
+                } 
+            
+        request = self._get_request(method='POST')
+        response = self.client.post(reverse("api_dispatch_list", args=['1.0', 'booking']), 
+                                    data=simplejson.dumps(post_data),
+                                    content_type='application/json',
+                                    **self._get_headers(request))
+        self.assertEquals(response.status_code, 200)
+        #self.assertTrue('Location' in response)
+        booking = Booking.objects.get(pk=post_data['uuid'])
+        self.assertEquals(booking.state, "rejected")
+                   
+    def test_booking_closing_to_closed(self):
+        post_data = {
+               'uuid': 'a72608d9a7e349ce9ba628abfdfc9cb3',
+               'status': 'closed'
+                } 
+            
+        request = self._get_request(method='POST')
+        response = self.client.post(reverse("api_dispatch_list", args=['1.0', 'booking']), 
+                                    data=simplejson.dumps(post_data),
+                                    content_type='application/json',
+                                    **self._get_headers(request))
+        self.assertEquals(response.status_code, 200)
+        #self.assertTrue('Location' in response)
+        booking = Booking.objects.get(pk=post_data['uuid'])
+        self.assertEquals(booking.state, "closed")
+        
     def tearDown(self):
         for product in Product.objects.all():
             self.index.remove_object(product)

@@ -1,9 +1,12 @@
 # -*- coding: utf-8 -*-
 import logbook
 import plistlib
-from urllib import unquote
+from urllib import unquote,quote,urlencode
 from base64 import decodestring
 from decimal import Decimal as D
+import simplejson as json
+
+from fsm import transition
 
 from tastypie import fields
 from tastypie.api import Api
@@ -11,7 +14,7 @@ from tastypie.constants import ALL_WITH_RELATIONS
 from tastypie.authentication import Authentication
 from tastypie.authorization import Authorization
 from tastypie.exceptions import NotFound, ImmediateHttpResponse
-from tastypie.http import HttpBadRequest, HttpCreated
+from tastypie.http import HttpBadRequest, HttpCreated, HttpAccepted
 from tastypie.resources import ModelResource
 from tastypie.serializers import Serializer
 from tastypie.utils import dict_strip_unicode_keys
@@ -24,21 +27,35 @@ from django.conf import settings
 from django.conf.urls.defaults import url
 from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
+from django.core.urlresolvers import reverse
 from django.contrib.gis.geos import Point
 from django.contrib.gis.measure import Distance
+from django.contrib.sites.models import Site
+from django.contrib.auth.models import User
 from django.db import IntegrityError
+from django.db.models import Q
+from django.http import HttpResponse,HttpResponseBadRequest
+from django.shortcuts import get_object_or_404
+
+#from django_messages.models import Message 
+
+from django_lean.experiments.models import GoalRecord
+from django_lean.experiments.utils import WebUser
 
 from eloue.geocoder import GoogleGeocoder
-from eloue.products.models import Product, Category, Picture, Price, upload_to#, StaticPage
+from eloue.products.models import Product, Category, Picture, Price, upload_to, PAYMENT_TYPE, ProductRelatedMessage#, StaticPage
 from eloue.products.search_indexes import product_search
 from eloue.accounts.models import Address, PhoneNumber, Patron
 from eloue.rent.models import Booking
+from eloue.rent.views import preapproval_ipn, pay_ipn, booking_success, booking_failure
 
 __all__ = ['api_v1']
 
 log = logbook.Logger('eloue.api')
 
 DEFAULT_RADIUS = getattr(settings, 'DEFAULT_RADIUS', 50)
+
+USE_HTTPS = getattr(settings, 'USE_HTTPS', True)
 
 
 def is_valid_request(request, parameters=OAUTH_PARAMETERS_NAMES):
@@ -59,6 +76,7 @@ class OAuthentication(Authentication):
             # Just checking if you're allowed to be there
             oauth_request = get_oauth_request(request)
             try:
+                #print oauth_request.get_parameter('oauth_consumer_key')
                 consumer = store.get_consumer(request, oauth_request, oauth_request.get_parameter('oauth_consumer_key'))
                 return True
             except InvalidConsumerError:
@@ -82,6 +100,7 @@ class OAuthAuthorization(Authorization):
                     return True
                 except InvalidConsumerError:
                     return False
+                    
         if is_valid_request(request):  # Read/Write part
             oauth_request = get_oauth_request(request)
             consumer = store.get_consumer(request, oauth_request, oauth_request.get_parameter('oauth_consumer_key'))
@@ -136,7 +155,6 @@ class MetaBase():
     authorization = OAuthAuthorization()
     serializer = JSONSerializer()
 
-
 class OAuthResource(ModelResource):
     def build_filters(self, filters=None):
         filters = super(OAuthResource, self).build_filters(filters)
@@ -161,12 +179,20 @@ class UserSpecificResource(OAuthResource):
         filters = None
         
         if hasattr(request, 'GET'):
+            #print "1"
+            #print request.GET.copy()
             filters = request.GET.copy()
         
         if self.FILTER_GET_REQUESTS:
+            #print "2"
+            #print request.user
             filters["user"] = request.user
-        
+        #print "3"
+        #print filters
         applicable_filters = self.build_filters(filters=filters)
+        #applicable_filters = {"owner":request.user}
+        #print "4"
+        #print applicable_filters
         
         try:
             return self.get_object_list(request).filter(**applicable_filters)
@@ -219,7 +245,7 @@ class PhoneNumberResource(UserSpecificResource):
     
     def obj_create(self, bundle, request=None, **kwargs):
         bundle.data['patron'] = UserResource().get_resource_uri(request.user)
-        return super(AddressResource, self).obj_create(bundle, request, **kwargs)
+        return super(PhoneNumberResource, self).obj_create(bundle, request, **kwargs)
     
 
 class AddressResource(UserSpecificResource):
@@ -237,6 +263,9 @@ class AddressResource(UserSpecificResource):
         return bundle
     
     def obj_create(self, bundle, request=None, **kwargs):
+        #print request.user
+        #print ">>>>>>>>>>>>"
+        #print UserResource().get_resource_uri(request.user)
         bundle.data['patron'] = UserResource().get_resource_uri(request.user)
         return super(AddressResource, self).obj_create(bundle, request, **kwargs)
     
@@ -401,12 +430,11 @@ class ProductResource(UserSpecificResource):
     
     def dehydrate(self, bundle, request=None):
         """
-        Automatically add the location price if the request
+        Automatically add the rent price if the request
         contains date_start and date_end parameters
         """
         from datetime import datetime, timedelta
         from dateutil import parser
-        
         if "date_start" in request.GET and "date_end" in request.GET:
             date_start = parser.parse(unquote(request.GET["date_start"]))
             date_end = parser.parse(unquote(request.GET["date_end"]))
@@ -418,7 +446,295 @@ class ProductResource(UserSpecificResource):
             bundle.data["distance"] = bundle.data["distance"].km
         bundle.data["unit"], bundle.data["price"] = Booking.calculate_price(bundle.obj, date_start, date_end)
         return bundle
+    
+class BookingResource(OAuthResource):
+    """
+    Resource that returns the booking information 
+    """
+    # Foreign keys
+    owner = fields.ForeignKey(UserResource,'owner', full=False, null=True)
+    borrower = fields.ForeignKey(UserResource,'borrower', full=False, null=True)
+    product = fields.ForeignKey(ProductResource,'product', full=False, null=True)
+     
+    # Meta 
+    class Meta(MetaBase):
+        queryset = Booking.on_site.all()
+        list_allowed_methods = ['get', 'post','put']
+        detail_allowed_methods = ['get', 'post', 'put', 'delete'] 
+        resource_name = 'booking'
+        excludes = ["pay_key"]
+        filtering = {
+            'owner': ALL_WITH_RELATIONS,
+            'borrower': ALL_WITH_RELATIONS,
+            'product': ALL_WITH_RELATIONS,
+            'ended_at': ALL_WITH_RELATIONS,
+            'started_at': ALL_WITH_RELATIONS,
+        }
+    
+    def obj_create(self, bundle,  request=None, **kwargs):
+        """Creates the object for booking"""   
+        from datetime import datetime, timedelta
+        from dateutil import parser        
+        data = bundle.data
+        try:
+            product = Product.objects.get(id=int(data["product"].split("/")[-2]))
+            #borrower = Patron.objects.get(id=int(data["borrower"].split("/")[-2]))
+            borrower = request.user
+            started_at = parser.parse(unquote(data["started_at"]))
+            ended_at = parser.parse(unquote(data["ended_at"]))
+            #print request.user
+            temp, total_amount = Booking.calculate_price(product, started_at, ended_at)
+            if data["status"] == "authorizing":
+                bundle.obj=Booking(started_at = data["started_at"],  
+                                    ended_at = data["ended_at"],  
+                                    total_amount = total_amount,
+                                    borrower = borrower,
+                                    product = product,
+                                    owner = product.owner,
+                                  )
+                bundle.obj.save()
+            elif data['status'] and data["uuid"]:
+                bundle.obj=Booking.objects.get(uuid=data["uuid"])
+            else:
+                # need to do some checking here
+                pass
+        except IntegrityError:
+            raise ImmediateHttpResponse(response=HttpBadRequest())
+        return bundle
+    
+    def post_list(self, request, **kwargs):
+        """
+        Set the returned response for created booking
+        """
+        print request.user
+        #print request.META
+        print request.POST
+        post_data = self.deserialize(request, request.raw_post_data, format=request.META.get('CONTENT_TYPE', 'application/json'))
+        bundle = self.build_bundle(data=dict_strip_unicode_keys(post_data))
+        self.is_valid(bundle, request)
+        updated_bundle = self.obj_create(bundle, request=request)
         
+        domain = Site.objects.get_current().domain
+        protocol = "https" if USE_HTTPS else "http"
+        payment_type = updated_bundle.obj.product.payment_type
+        
+        if post_data["status"].lower() == 'authorizing':
+            try:
+                print request.user
+                booking = get_object_or_404(Booking, pk=updated_bundle.obj.uuid)
+                booking.state = "authorizing"
+                booking.init_payment_processor()
+                booking.preapproval(
+                    cancel_url="%s://%s%s" % (protocol, domain, reverse("booking_failure", args=[booking.pk.hex])),
+                    return_url="%s://%s%s" % (protocol, domain, reverse("booking_success", args=[booking.pk.hex])),
+                    ip_address=request.META['REMOTE_ADDR']
+                    )
+                return HttpCreated(content_type='application/json', 
+                                    location = "/api/1.0/booking/" + str(booking.uuid) + "/", 
+                                    content = self.populate_response(booking) )
+            except IntegrityError:
+                raise ImmediateHttpResponse(response=HttpBadRequest())
+                
+        elif post_data["status"].lower() == 'pending' and updated_bundle.obj.uuid:
+            booking = get_object_or_404(Booking, pk=updated_bundle.obj.uuid)
+            if booking.product.payment_type == PAYMENT_TYPE.NOPAY:
+                is_verified = booking.owner.is_verified
+                if not booking.owner.has_paypal():
+                    cont_dic = {"error":"The owner doesn't have paypal account"}
+                    content = json.dumps(cont_dic)
+                    return HttpResponse(content_type='application/json', content=content)                    
+                elif is_verified!="VERIFIED":
+                    if is_verified=="UNVERIFIED":
+                        cont_dic = {"error":"The owner's paypal account is unverified"}
+                        content = json.dumps(cont_dic)
+                        return HttpResponse(content_type='application/json', content=content)
+                    elif is_verified=="INVALID":
+                        cont_dic = {"error":"The owner's paypal account is invalid"}                            
+                        content = json.dumps(cont_dic)
+                        return HttpResponse(content_type='application/json', content=content)
+            if booking.state != "authorized":
+                error_message = "can't switch from state "+ post_data["status"]+" to state pending"
+                cont_dic = {"error":error_message}                            
+                content = json.dumps(cont_dic)
+                return HttpResponseBadRequest(content_type='application/json', content=content)
+            elif booking.owner != request.user:
+                error_message = "Can't change the state of booking to pending because the currently logged-in user is not the owner of this booking"
+                cont_dic = {"error":error_message}                            
+                content = json.dumps(cont_dic)
+                return HttpResponseBadRequest(content_type='application/json', content=content)
+                  
+            booking.state = post_data["status"]
+            # TODO uncomment the following line 
+            booking.send_acceptation_email()
+            GoalRecord.record('rent_object_accepted', WebUser(request))
+            booking.save()
+            return HttpResponse(content_type='application/json', content=self.populate_response(booking))
+            
+        elif post_data["status"].lower() == 'rejected' and updated_bundle.obj.uuid:
+            booking = get_object_or_404(Booking, pk=updated_bundle.obj.uuid)
+            if booking.state != "authorized":
+                error_message = "can't switch from state "+ post_data["status"]+" to state rejected"
+                cont_dic = {"error":error_message}                            
+                content = json.dumps(cont_dic)
+                return HttpResponseBadRequest(content_type='application/json', content=content)
+            elif booking.owner != request.user:
+                error_message = "Can't change the state of booking to rejected because the currently logged-in user is not the owner of this booking"
+                cont_dic = {"error":error_message}                            
+                content = json.dumps(cont_dic)
+                return HttpResponseBadRequest(content_type='application/json', content=content)
+            booking.state = post_data["status"]
+            # TODO uncomment the following line
+            booking.send_rejection_email()
+            GoalRecord.record('rent_object_rejected', WebUser(request))
+            booking.save()
+            return HttpResponse(content_type='application/json', content=self.populate_response(booking))
+            
+        elif post_data["status"].lower() == 'closed' and updated_bundle.obj.uuid:
+            booking = get_object_or_404(Booking, pk=updated_bundle.obj.uuid)
+            if booking.state != "closing":
+                error_message = "can't switch from state "+ post_data["status"]+" to state closed"
+                cont_dic = {"error":error_message}                            
+                content = json.dumps(cont_dic)
+                return HttpResponseBadRequest(content_type='application/json', content=content)
+            elif booking.owner != request.user:
+                error_message = "Can't change the state of booking to closed because the currently logged-in user is not the owner of this booking"
+                cont_dic = {"error":error_message}                            
+                content = json.dumps(cont_dic)
+                return HttpResponseBadRequest(content_type='application/json', content=content)
+            booking.state=post_data["status"]
+            # TODO uncomment the following lines
+            booking.init_payment_processor()
+            booking.pay()
+            return HttpResponse(content_type='application/json', content=self.populate_response(booking))
+        else: 
+            pass
+            
+                
+    def populate_response(self, booking):
+        cont_dic = {}
+        cont_dic["borrower"] = "/api/1.0/user/%s/" % booking.borrower.id
+        cont_dic["canceled_at"] = booking.canceled_at
+        cont_dic["contract_id"] = booking.contract_id
+        cont_dic["created_at"] = booking.created_at.__str__()
+        cont_dic["currency"] = booking.currency
+        cont_dic["deposit_amount"] = str(booking.deposit_amount)
+        cont_dic["ended_at"] = booking.ended_at.__str__()
+        cont_dic["insurance_amount"] = str(booking.insurance_amount)
+        cont_dic["ip"] = booking.ip
+        cont_dic["owner"] = "/api/1.0/user/%s/" % booking.owner.id
+        cont_dic["pin"] = booking.pin
+        cont_dic["preapproval_key"] = booking.preapproval_key
+        cont_dic["preapproval_url"] = settings.PAYPAL_COMMAND % urlencode({'cmd': '_ap-preapproval','preapprovalkey': booking.preapproval_key})
+        cont_dic["product"] = "/api/1.0/product/%s/" % booking.product.id
+        cont_dic["resource_uri"] = "/api/1.0/product/%s/" % booking.uuid
+        cont_dic["started_at"] = booking.started_at.__str__()
+        cont_dic["state"] = booking.state
+        cont_dic["total_amount"] = str(booking.total_amount)
+        cont_dic["uuid"] = str(booking.uuid)
+        content = json.dumps(cont_dic)
+        return content
+        
+    def obj_get_list(self, request=None, **kwargs):
+        """
+        Initiate the list of objects which will be sent to the user
+        """
+        from datetime import datetime, timedelta
+        from dateutil import parser
+        print request.user
+        if "started_at" in request.GET and "ended_at" in request.GET:
+            #print "good place"
+            object_list = Booking.objects.all()[:1]
+        elif "uuid" in request.GET:
+            try:
+                object_list = Booking.objects.filter(uuid=request.GET["uuid"])
+                if list(object_list)[0].owner != request.user and list(object_list)[0].borrower != request.user:
+                    object_list = Booking.objects.none()
+                    raise NotFound("The logined user is neither the owner nor the borrower of the booking with the uuid")
+                #print object_list.values()[0]
+            except ValueError:
+                raise NotFound("Invalid resource lookup data provided (mismatched type).")
+            
+        else:
+            object_list = self.get_object_list(request).filter( Q(borrower=request.user) | Q(owner=request.user) )
+        return object_list
+ 
+    def dehydrate(self, bundle, request=None):
+        """
+        Modify the data before sending it to the client
+        """
+        #print "enter dehydrate"
+        from datetime import datetime, timedelta
+        from dateutil import parser
+        if "started_at" in request.GET and "ended_at" in request.GET:
+            #print unquote(request.GET["started_at"])
+            #print unquote(request.GET["ended_at"])
+            started_at = parser.parse(unquote(request.GET["started_at"]))
+            ended_at = parser.parse(unquote(request.GET["ended_at"]))
+            bundle.data = {}
+            bundle.obj.product = Product.objects.get(id = request.GET["product"].split("/")[-2])
+            temp, bundle.data["total_amount"] = Booking.calculate_price(bundle.obj.product, started_at, ended_at)
+            bundle.data["owner"] = "/api/1.0/user/%s/" % bundle.obj.product.owner.id
+            bundle.data["borrower"] = unquote(request.GET["borrower"])
+            bundle.data["product"] = unquote(request.GET["product"])
+            bundle.data["started_at"] = parser.parse(unquote(request.GET["started_at"]))
+            bundle.data["ended_at"] = parser.parse(unquote(request.GET["ended_at"]))
+        #else:
+         #   started_at = datetime.now() + timedelta(days=1)
+          #  ended_at = started_at + timedelta(days=1)
+        return bundle 
+
+class ProductRelatedMessageResource(OAuthResource):
+    # Foreign keys
+    recipient = fields.ForeignKey(UserResource,'recipient', full=False, null=True)
+    sender = fields.ForeignKey(UserResource,'sender', full=False, null=True)
+    product = fields.ForeignKey(ProductResource,'product', full=False, null=True)
+    
+    class Meta(MetaBase):
+        queryset = ProductRelatedMessage.objects.all()
+        resource_name = "message"
+        fields = []
+        allowed_methods = ['get', 'post']
+        
+    def obj_get_list(self, request=None, **kwargs):
+        object_list = self.get_object_list(request).filter( Q(recipient=request.user) | Q(sender=request.user) )
+        #object_list = self.get_object_list(request).filter( Q(recipient=request.user))
+        return object_list
+        
+    def obj_create(self, bundle,  request=None, **kwargs):
+        #print "user >>>>>>>>>>>>>>>>>>"
+        #print request.user
+        data = bundle.data
+        try:
+            #recipinent = Patron.objects.get(id=int(data["recipinent"].split("/")[-2]))
+            #print ">>>>>>>>>>>>>>>>>>"
+            #print request.user
+            sender = Patron.objects.get(id=int(data["sender"].split("/")[-2]))
+            product = Product.objects.get(id=int(data["product"].split("/")[-2]))
+            recipient = Patron.objects.get(id=product.owner.id)
+            
+            bundle.obj=ProductRelatedMessage(recipient = recipient,  
+                                sender = request.user,  
+                                product = product,
+                                subject = data["subject"],
+                                body = data["body"],
+                      )
+            bundle.obj.save()
+        except IntegrityError:
+            raise ImmediateHttpResponse(response=HttpBadRequest())
+        return bundle
+        
+    def post_list(self, request, **kwargs):
+        #print "user post list >>>>>>>>>>>>>>>>>>"
+        #print request.user
+        post_data = self.deserialize(request, request.raw_post_data, format=request.META.get('CONTENT_TYPE', 'application/json'))
+        bundle = self.build_bundle(data=dict_strip_unicode_keys(post_data))
+        self.is_valid(bundle, request)
+        updated_bundle = self.obj_create(bundle, request=request)
+        #print updated_bundle.obj.id
+        #product_related_message = get_object_or_404(ProductRelatedMessage, pk=updated_bundle.obj.id)
+        #return HttpResponse()
+        return HttpCreated(location = updated_bundle.obj.get_absolute_url())
+
 api_v1 = Api(api_name='1.0')
 api_v1.register(CategoryResource())
 api_v1.register(ProductResource())
@@ -427,3 +743,6 @@ api_v1.register(PhoneNumberResource())
 api_v1.register(PictureResource())
 api_v1.register(PriceResource())
 api_v1.register(UserResource())
+api_v1.register(BookingResource())
+api_v1.register(ProductRelatedMessageResource())
+
