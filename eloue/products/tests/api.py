@@ -225,19 +225,20 @@ class ApiTest(TestCase):
                      'product': '/api/1.0/product/6/',
                      'borrower':'/api/1.0/user/1/',
                      'status': 'authorizing'
-                    } 
+        } 
         request = self._get_request(method='POST', use_token=True)
         #print request.to_header()['Authorization']
-        #print self._get_headers(request)
-        print simplejson.dumps(post_data)
+        print self._get_headers(request)
+        #print simplejson.dumps(post_data)
         response = self.client.post(reverse("api_dispatch_list", args=['1.0', 'booking']), 
                                     data=simplejson.dumps(post_data),
                                     content_type='application/json',
-                                    HTTP_AUTHORIZATION=request.to_header()['Authorization'])
-                                    #**self._get_headers(request))
+                                    #HTTP_AUTHORIZATION=request.to_header()['Authorization'])
+                                    **self._get_headers(request))
         #print "request %s" % response.request
         #print "context %s" % response.context
-        #print "body %s" % response.content 
+        print "body >>>>>>>>>>" 
+        print response.content 
         
         self.assertEquals(response.status_code, 201)
         self.assertTrue('Location' in response)
@@ -266,17 +267,22 @@ class ApiTest(TestCase):
                 # self.assertEquals(patron.is_active, True)
     def test_booking_auth_to_pending(self):
         post_data = {
-               'uuid': 'a72608d9-a7e3-49ce-9ba6-28abfdfc9cb3',
+               'uuid': 'a72608d9a7e349ce9ba628abfdfc9cb3',
                'status': 'pending'
                 } 
             
         request = self._get_request(method='POST')
         client = Client()
         client.login(email="alexandre.woog@e-loue.com", password="alexandre")
+        print self._get_headers(request)
         response = self.client.post(reverse("api_dispatch_list", args=['1.0', 'booking']), 
                                     data=simplejson.dumps(post_data),
                                     content_type='application/json',
-                                    **self._get_headers(request))
+                                    HTTP_AUTHORIZATION=request.to_header()['Authorization'])
+                                    #**self._get_headers(request))
+        print "body >>>>>>>>>>>>>>>>>"
+        print type(response.content) 
+        print response.content
         self.assertEquals(response.status_code, 200)
         self.assertTrue('Location' in response)
         booking = Booking.objects.get(pk=post_data['uuid'])
