@@ -67,21 +67,22 @@ class OAuthentication(Authentication):
 
 
 class OAuthAuthorization(Authorization):
+
     def is_authorized(self, request, object=None):
+
         if is_valid_request(request, ['oauth_consumer_key']):  # Read-only part
             oauth_request = get_oauth_request(request)
-            if issubclass(self.resource_meta.object_class, Product) and request.method == 'GET':
+
+            klass = self.resource_meta.object_class
+            # Allow GET access to products and POST access to Patron for unlogged users
+            if (issubclass(klass, Patron) and request.method == 'POST')\
+                or (issubclass(klass, Product) and request.method == 'GET'):
                 try:
                     consumer = store.get_consumer(request, oauth_request, oauth_request.get_parameter('oauth_consumer_key'))
                     return True
                 except InvalidConsumerError:
                     return False
-            if issubclass(self.resource_meta.object_class, Patron) and request.method == 'POST':
-                try:
-                    consumer = store.get_consumer(request, oauth_request, oauth_request.get_parameter('oauth_consumer_key'))
-                    return True
-                except InvalidConsumerError:
-                    return False
+
         if is_valid_request(request):  # Read/Write part
             oauth_request = get_oauth_request(request)
             consumer = store.get_consumer(request, oauth_request, oauth_request.get_parameter('oauth_consumer_key'))
@@ -96,6 +97,7 @@ class OAuthAuthorization(Authorization):
             if consumer and token:
                 request.user = token.user.patron
                 return True
+
         return False
 
 
@@ -165,7 +167,7 @@ class UserSpecificResource(OAuthResource):
             filters = request.GET.copy()
 
         if self.FILTER_GET_REQUESTS:
-            filters[USER_FIELD_NAME] = request.user
+            filters[self.USER_FIELD_NAME] = request.user
 
         applicable_filters = self.build_filters(filters=filters)
 
@@ -178,7 +180,7 @@ class UserSpecificResource(OAuthResource):
     def build_filters(self, filters):
         orm_filters = {}
         filters = super(UserSpecificResource, self).build_filters(filters)
-        user = filters.pop(USER_FIELD_NAME) if USER_FIELD_NAME in filters else None
+        user = filters.pop(self.USER_FIELD_NAME) if self.USER_FIELD_NAME in filters else None
 
         if not self.FILTER_GET_REQUESTS:
             return filters
@@ -192,7 +194,7 @@ class UserResource(OAuthResource):
     class Meta(MetaBase):
         queryset = Patron.objects.all()
         resource_name = "user"
-        allowed_methods = ['get', 'post']
+        allowed_methods = ['get', 'post', 'put']
         fields = ['username', 'id', 'email']
         filtering = {
             'username': ALL_WITH_RELATIONS,
@@ -209,6 +211,19 @@ class UserResource(OAuthResource):
         except IntegrityError:
             raise ImmediateHttpResponse(response=HttpBadRequest())
         return bundle
+
+    def obj_get_list(self, request=None, **kwargs):
+        raise ImmediateHttpResponse(response=HttpBadRequest())
+
+    def obj_update(self, bundle, request=None, pk='', **kwargs):
+        pk = int(pk)
+        patron = Patron.objects.get(id=pk)
+        if patron == request.user:
+            for field in ("email", "username"):
+                if field in bundle.data:
+                    setattr(patron, field, bundle.data[field])
+                    patron.save()
+
 
 class CustomerResource(UserResource):
 

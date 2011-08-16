@@ -29,12 +29,12 @@ local_path = lambda path: os.path.join(os.path.dirname(__file__), path)
 
 class ApiTest(TestCase):
     fixtures = ['category', 'patron', 'address', 'oauth', 'price', 'product']
-    
+
     def setUp(self):
         self.index = site.get_index(Product)
         for product in Product.objects.all():
             self.index.update_object(product)
-    
+
     def _get_request(self, method='GET', parameters=None, use_token=True):
         consumer = oauth.Consumer(OAUTH_CONSUMER_KEY, OAUTH_CONSUMER_SECRET)
         if use_token:
@@ -44,13 +44,20 @@ class ApiTest(TestCase):
         request = oauth.Request.from_consumer_and_token(consumer, token, http_method=method, parameters=parameters)
         request.sign_request(oauth.SignatureMethod_PLAINTEXT(), consumer, token)
         return request
-    
+
     def _get_headers(self, request):
         headers = request.to_header()
         headers['HTTP_AUTHORIZATION'] = headers['Authorization']
         del headers['Authorization']
         return headers
-    
+
+    def _resource_url(self, resource_name, resource_id):
+        url = reverse("api_dispatch_list", args=['1.0', resource_name])
+        if resource_id:
+            return "%s%s/" % (url, resource_id)
+        return url
+
+
     def test_login_headless(self):
         client = Client(enforce_csrf_checks=True)
         response = client.get(reverse("auth_login_headless"))
@@ -74,14 +81,14 @@ class ApiTest(TestCase):
         self.assertTrue('oauth_token' in request_token)
     
     def test_product_list(self):
-        response = self.client.get(reverse("api_dispatch_list", args=['1.0', 'product']),
+        response = self.client.get(self._resource_url('product'),
             {'oauth_consumer_key': OAUTH_CONSUMER_KEY})
         self.assertEquals(response.status_code, 200)
         json = simplejson.loads(response.content)
         self.assertEquals(json['meta']['total_count'], Product.objects.count())
     
     def test_product_search(self):
-        response = self.client.get(reverse("api_dispatch_list", args=['1.0', 'product']), {'q': 'perceuse',
+        response = self.client.get(self._resource_url('product'), {'q': 'perceuse',
             'oauth_consumer_key': OAUTH_CONSUMER_KEY})
         self.assertEquals(response.status_code, 200)
         json = simplejson.loads(response.content)
@@ -90,7 +97,7 @@ class ApiTest(TestCase):
         
     def test_product_search_with_location(self):
         settings.DEBUG = True
-        response = self.client.get(reverse("api_dispatch_list", args=['1.0', 'product']), {
+        response = self.client.get(self._resource_url('product'), {
             'q': 'perceuse', 'l': '48.8613232, 2.3631101', 'r': 1,
             'oauth_consumer_key': OAUTH_CONSUMER_KEY
         })
@@ -101,7 +108,7 @@ class ApiTest(TestCase):
     def test_product_with_dates(self):
         start_at = datetime.now() + timedelta(days=1)
         end_at = start_at + timedelta(days=1)
-        response = self.client.get(reverse("api_dispatch_list", args=['1.0', 'product']), {
+        response = self.client.get(self._resource_url('product'), {
             'date_start': start_at.isoformat(),
             'date_end': end_at.isoformat(),
             'oauth_consumer_key': OAUTH_CONSUMER_KEY
@@ -126,7 +133,7 @@ class ApiTest(TestCase):
             'address': '/api/1.0/address/1/'
         }
         request = self._get_request(method='POST')
-        response = self.client.post(reverse("api_dispatch_list", args=['1.0', 'product']),
+        response = self.client.post(self._resource_url('product'),
             data=simplejson.dumps(post_data),
             content_type='application/json',
             **self._get_headers(request))
@@ -149,7 +156,7 @@ class ApiTest(TestCase):
             'email': 'chuck.berry@chess-records.com'
         }
         request = self._get_request(method='POST')
-        response = self.client.post(reverse("api_dispatch_list", args=['1.0', 'user']),
+        response = self.client.post(self._resource_url('user'),
             data=simplejson.dumps(post_data),
             content_type='application/json',
             **self._get_headers(request))
@@ -168,7 +175,7 @@ class ApiTest(TestCase):
             'email': 'chuck.berry@chess-records.com'
         }
         request = self._get_request(method='POST')
-        response = self.client.post(reverse("api_dispatch_list", args=['1.0', 'user']),
+        response = self.client.post(self._resource_url('user'),
             data=simplejson.dumps(post_data),
             content_type='application/json',
             **self._get_headers(request))
@@ -180,7 +187,7 @@ class ApiTest(TestCase):
             'email': 'chuck.berry@chess-records.com'
         }
         request = self._get_request(method='POST')
-        response = self.client.post(reverse("api_dispatch_list", args=['1.0', 'user']),
+        response = self.client.post(self._resource_url('user'),
             data=simplejson.dumps(post_data),
             content_type='application/json',
             **self._get_headers(request))
@@ -196,7 +203,7 @@ class ApiTest(TestCase):
         }
         headers = self._get_headers(self._get_request(method='POST'))
         response = self.client.post(
-            reverse('api_dispatch_list', args=['1.0', 'customer']),
+            self._resource_url('customer'),
             data=simplejson.dumps(post_data),
             content_type='application/json',
             **headers
@@ -225,7 +232,7 @@ class ApiTest(TestCase):
         headers = self._get_headers(self._get_request(method='POST'))
         for data in users_data:
             self.client.post(
-                reverse('api_dispatch_list', args=['1.0', 'customer']),
+                self._resource_url('customer'),
                 data=simplejson.dumps(data),
                 content_type='application/json',
                 **headers
@@ -233,11 +240,26 @@ class ApiTest(TestCase):
 
         headers = self._get_headers(self._get_request(method='GET'))
         response = self.client.get(
-            reverse('api_dispatch_list', args=['1.0', 'customer']),
+            self._resource_url('customer'),
             **headers
         )
         content = simplejson.loads(response.content)
         self.assertTrue(content["meta"]["total_count"] == 2)
+
+    def test_user_modification(self):
+        login_success = self.client.login(username='alexandre.woog@e-loue.com', password='alexandre')
+        self.assertTrue(login_success)
+        headers = self._get_headers(self._get_request(method='PUT'))
+        myid = Patron.objects.get(email='alexandre.woog@e-loue.com').id
+        response = self.client.put(
+            self._resource_url('user', myid),
+            data=simplejson.dumps({'username':'trololol'}),
+            content_type='application/json',
+            **headers
+        )
+        self.assertEquals(response.status_code, 204)
+        patron = Patron.objects.get(email='alexandre.woog@e-loue.com')
+        self.assertEquals(patron.username, 'trololol')
 
     def tearDown(self):
         for product in Product.objects.all():
