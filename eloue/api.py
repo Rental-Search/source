@@ -65,6 +65,7 @@ def is_valid_request(request, parameters=OAUTH_PARAMETERS_NAMES):
     which is by the way the preferred method according to
     OAuth spec, but otherwise fall back to `GET` and `POST`.
     """
+    print "enter is valid request"
     is_in = lambda l: all((p in l) for p in parameters)
     auth_params = request.META.get("HTTP_AUTHORIZATION", [])
     return is_in(auth_params) or is_in(request.REQUEST)
@@ -72,14 +73,21 @@ def is_valid_request(request, parameters=OAUTH_PARAMETERS_NAMES):
 
 class OAuthentication(Authentication):
     def is_authenticated(self, request, **kwargs):
+        print "is authenticated"
         if is_valid_request(request, ['oauth_consumer_key']):
             # Just checking if you're allowed to be there
             oauth_request = get_oauth_request(request)
+            print "get oauth request"
             try:
                 #print oauth_request.get_parameter('oauth_consumer_key')
+                print request
+                print oauth_request
+                print oauth_request.get_parameter('oauth_consumer_key')
                 consumer = store.get_consumer(request, oauth_request, oauth_request.get_parameter('oauth_consumer_key'))
+                print "get consumer"
                 return True
             except InvalidConsumerError:
+                print "1 - invalid consumer error"
                 return False
         return False
     
@@ -87,32 +95,41 @@ class OAuthentication(Authentication):
 class OAuthAuthorization(Authorization):
     def is_authorized(self, request, object=None):
         if is_valid_request(request, ['oauth_consumer_key']):  # Read-only part
+            print "enter is valid request + oauth consumer key"
             oauth_request = get_oauth_request(request)
             if issubclass(self.resource_meta.object_class, Product) and request.method == 'GET':
                 try:
                     consumer = store.get_consumer(request, oauth_request, oauth_request.get_parameter('oauth_consumer_key'))
                     return True
                 except InvalidConsumerError:
+                    print "2 - invalid consumer error"
                     return False
             if issubclass(self.resource_meta.object_class, Patron) and request.method == 'POST':
                 try:
                     consumer = store.get_consumer(request, oauth_request, oauth_request.get_parameter('oauth_consumer_key'))
                     return True
                 except InvalidConsumerError:
+                    print "3 - invalid consumer error"
                     return False
                     
         if is_valid_request(request):  # Read/Write part
+            print "enter is valid request"
             oauth_request = get_oauth_request(request)
             consumer = store.get_consumer(request, oauth_request, oauth_request.get_parameter('oauth_consumer_key'))
+            print "is valid get consumer OK"
             try:
                 token = store.get_access_token(request, oauth_request, consumer, oauth_request.get_parameter('oauth_token'))
+                print "is valid get token ok"
             except InvalidTokenError:
+                print "4 - invalid token error"
                 return False
         
             if not verify_oauth_request(request, oauth_request, consumer, token=token):
+                print "5 - oauth request not verified"
                 return False
             
             if consumer and token:
+                print "check if consumer = token"
                 request.user = token.user.patron
                 return True
         return False
@@ -476,15 +493,14 @@ class BookingResource(OAuthResource):
         from datetime import datetime, timedelta
         from dateutil import parser        
         data = bundle.data
-        try:
-            product = Product.objects.get(id=int(data["product"].split("/")[-2]))
-            #borrower = Patron.objects.get(id=int(data["borrower"].split("/")[-2]))
-            borrower = request.user
-            started_at = parser.parse(unquote(data["started_at"]))
-            ended_at = parser.parse(unquote(data["ended_at"]))
-            #print request.user
-            temp, total_amount = Booking.calculate_price(product, started_at, ended_at)
+        try:            
             if data["status"] == "authorizing":
+                borrower = request.user
+                product = Product.objects.get(id=int(data["product"].split("/")[-2]))
+                started_at = parser.parse(unquote(data["started_at"]))
+                ended_at = parser.parse(unquote(data["ended_at"]))
+                temp, total_amount = Booking.calculate_price(product, started_at, ended_at)
+                
                 bundle.obj=Booking(started_at = data["started_at"],  
                                     ended_at = data["ended_at"],  
                                     total_amount = total_amount,
@@ -553,7 +569,7 @@ class BookingResource(OAuthResource):
                         content = json.dumps(cont_dic)
                         return HttpResponse(content_type='application/json', content=content)
             if booking.state != "authorized":
-                error_message = "can't switch from state "+ post_data["status"]+" to state pending"
+                error_message = "can't switch from state "+ str(booking.state) +" to state pending"
                 cont_dic = {"error":error_message}                            
                 content = json.dumps(cont_dic)
                 return HttpResponseBadRequest(content_type='application/json', content=content)
@@ -573,7 +589,7 @@ class BookingResource(OAuthResource):
         elif post_data["status"].lower() == 'rejected' and updated_bundle.obj.uuid:
             booking = get_object_or_404(Booking, pk=updated_bundle.obj.uuid)
             if booking.state != "authorized":
-                error_message = "can't switch from state "+ post_data["status"]+" to state rejected"
+                error_message = "can't switch from state "+ str(booking.state) +" to state rejected"
                 cont_dic = {"error":error_message}                            
                 content = json.dumps(cont_dic)
                 return HttpResponseBadRequest(content_type='application/json', content=content)
@@ -592,7 +608,7 @@ class BookingResource(OAuthResource):
         elif post_data["status"].lower() == 'closed' and updated_bundle.obj.uuid:
             booking = get_object_or_404(Booking, pk=updated_bundle.obj.uuid)
             if booking.state != "closing":
-                error_message = "can't switch from state "+ post_data["status"]+" to state closed"
+                error_message = "can't switch from state "+ str(booking.state) +" to state closed"
                 cont_dic = {"error":error_message}                            
                 content = json.dumps(cont_dic)
                 return HttpResponseBadRequest(content_type='application/json', content=content)
@@ -604,7 +620,8 @@ class BookingResource(OAuthResource):
             booking.state=post_data["status"]
             # TODO uncomment the following lines
             booking.init_payment_processor()
-            booking.pay()
+            #booking.pay()
+            booking.save()
             return HttpResponse(content_type='application/json', content=self.populate_response(booking))
         else: 
             pass
@@ -683,7 +700,7 @@ class BookingResource(OAuthResource):
           #  ended_at = started_at + timedelta(days=1)
         return bundle 
 
-class ProductRelatedMessageResource(OAuthResource):
+class MessageResource(OAuthResource):
     # Foreign keys
     recipient = fields.ForeignKey(UserResource,'recipient', full=False, null=True)
     sender = fields.ForeignKey(UserResource,'sender', full=False, null=True)
@@ -708,7 +725,7 @@ class ProductRelatedMessageResource(OAuthResource):
             #recipinent = Patron.objects.get(id=int(data["recipinent"].split("/")[-2]))
             #print ">>>>>>>>>>>>>>>>>>"
             #print request.user
-            sender = Patron.objects.get(id=int(data["sender"].split("/")[-2]))
+            #sender = Patron.objects.get(id=int(data["sender"].split("/")[-2]))
             product = Product.objects.get(id=int(data["product"].split("/")[-2]))
             recipient = Patron.objects.get(id=product.owner.id)
             
@@ -744,5 +761,5 @@ api_v1.register(PictureResource())
 api_v1.register(PriceResource())
 api_v1.register(UserResource())
 api_v1.register(BookingResource())
-api_v1.register(ProductRelatedMessageResource())
+api_v1.register(MessageResource())
 
