@@ -30,7 +30,7 @@ local_path = lambda path: os.path.join(os.path.dirname(__file__), path)
 
 
 class ApiTest(TestCase):
-    fixtures = ['category', 'patron', 'address', 'oauth', 'price', 'product', 'booking', 'phones']
+    fixtures = ['category', 'patron', 'address', 'oauth', 'price', 'product', 'booking_api', 'phones', 'message']
     
     def setUp(self):
         self.index = site.get_index(Product)
@@ -155,18 +155,10 @@ class ApiTest(TestCase):
             data=simplejson.dumps(post_data),
             content_type='application/json',
             **self._get_headers(request))
-        # print simplejson.dumps(post_data)
-        #        print self._get_headers(request)
-        #        print ">>>>>>>>>>>>>>>>>>>>>>>>"
-        #        print "request %s" % response.request
-        #        print "context %s" % response.context 
-        #        print "content %s" % response.content
-        
         self.assertEquals(response.status_code, 201)
         self.assertTrue('Location' in response)
         patron = Patron.objects.get(pk=int(response['Location'].split('/')[-2]))
         self.assertEquals(patron.username, 'chuck')
-        #self.assertEquals(patron.email, 'chuck.berry@chess-records.com')
         self.assertEquals(patron.email, 'chuck.berry@chess-records.com')
         self.assertEquals(patron.is_active, True)
     
@@ -231,27 +223,18 @@ class ApiTest(TestCase):
                      'status': 'authorizing'
         } 
         request = self._get_request(method='POST', use_token=True)
-        #print request.to_header()['Authorization']
-        print self._get_headers(request)
-        #print simplejson.dumps(post_data)
         response = self.client.post(reverse("api_dispatch_list", args=['1.0', 'booking']), 
                                     data=simplejson.dumps(post_data),
                                     content_type='application/json',
-                                    #HTTP_AUTHORIZATION=request.to_header()['Authorization'])
                                     **self._get_headers(request))
-        #print "request %s" % response.request
-        #print "context %s" % response.context
-        print "body >>>>>>>>>>" 
-        print response.content 
-        
         self.assertEquals(response.status_code, 201)
         self.assertTrue('Location' in response)
         booking = Booking.objects.get(pk=response['Location'].split('/')[-2].replace("-",""))
         self.assertEquals(booking.borrower.id, 1)
         self.assertEquals(booking.product.id, 6)
-        self.assertEquals(booking.started_at, '2010-12-29 08:00:00')
-        self.assertEquals(booking.ended_at, '2011-01-05 08:00:00')
-        self.assertEquals(booking.total_amount, 1980)
+        self.assertEquals(str(booking.started_at), '2010-12-29 08:00:00')
+        self.assertEquals(str(booking.ended_at), '2011-01-05 08:00:00')
+        self.assertEquals(booking.total_amount, D(1260.00))
                
     def test_booking_auth_to_pending(self):
         post_data = {
@@ -260,19 +243,11 @@ class ApiTest(TestCase):
                 } 
             
         request = self._get_request(method='POST')
-        client = Client()
-        client.login(email="alexandre.woog@e-loue.com", password="alexandre")
-        print self._get_headers(request)
         response = self.client.post(reverse("api_dispatch_list", args=['1.0', 'booking']), 
                                     data=simplejson.dumps(post_data),
                                     content_type='application/json',
-                                    HTTP_AUTHORIZATION=request.to_header()['Authorization'])
-                                    #**self._get_headers(request))
-        #print "body >>>>>>>>>>>>>>>>>"
-        #print type(response.content) 
-        print response.content
+                                    **self._get_headers(request))
         self.assertEquals(response.status_code, 200)
-        #self.assertTrue('Location' in response)
         booking = Booking.objects.get(pk=post_data['uuid'])
         self.assertEquals(booking.state, "pending")
                    
@@ -288,7 +263,6 @@ class ApiTest(TestCase):
                                     content_type='application/json',
                                     **self._get_headers(request))
         self.assertEquals(response.status_code, 200)
-        #self.assertTrue('Location' in response)
         booking = Booking.objects.get(pk=post_data['uuid'])
         self.assertEquals(booking.state, "rejected")
                    
@@ -304,42 +278,33 @@ class ApiTest(TestCase):
                                     content_type='application/json',
                                     **self._get_headers(request))
         self.assertEquals(response.status_code, 200)
-        #self.assertTrue('Location' in response)
         booking = Booking.objects.get(pk=post_data['uuid'])
         self.assertEquals(booking.state, "closed")
         
     def test_message_list(self):
         request = self._get_request(method='GET', use_token=True)
         response = self.client.get(reverse("api_dispatch_list", args=['1.0', 'message']), 
-                                            HTTP_AUTHORIZATION=request.to_header()['Authorization'])
+                                            **self._get_headers(request))
         self.assertEquals(response.status_code, 200)
         json = simplejson.loads(response.content)
-        self.assertEquals(json['meta']['total_count'], 
-                ProductRelatedMessage.objects.filter( Q(sender=Patron.objects.get(pk=1)) | Q(recipient=Patron.objects.get(pk=1)) ).count())
-    
+        self.assertEquals(json['meta']['total_count'],2)
+        
     def test_message_creation(self):
         post_data = {"body": "test body", 
-                     "product": "/api/1.0/product/5/", 
-                     "subject": "test subject"}
+                     "product": "/api/1.0/product/6/", 
+                     "subject": "test subject",
+                     "parent_msg": "/api/1.0/message/1/",
+                     "recipient": "/api/1.0/user/4/"}
         request = self._get_request(method='POST', use_token=True)
-        #print request.to_header()['Authorization']
-        print self._get_headers(request)
-        #print simplejson.dumps(post_data)
         response = self.client.post(reverse("api_dispatch_list", args=['1.0', 'message']), 
                                     data=simplejson.dumps(post_data),
                                     content_type='application/json',
-                                    #HTTP_AUTHORIZATION=request.to_header()['Authorization'])
                                     **self._get_headers(request))
-        #print "request %s" % response.request
-        #print "context %s" % response.context
-        print "body >>>>>>>>>>" 
-        print response.content 
-        
         self.assertEquals(response.status_code, 201)
         self.assertTrue('Location' in response)
         message = ProductRelatedMessage.objects.get(pk=int(response['Location'].split('/')[-2]))
         self.assertEquals(message.sender.id, 1)
-        self.assertEquals(message.product.id, 5)
+        self.assertEquals(message.product.id, 6)
         self.assertEquals(message.recipient.id, message.product.owner.id)
         self.assertEquals(message.body, 'test body')
         self.assertEquals(message.subject, 'test subject')

@@ -37,8 +37,6 @@ from django.db.models import Q
 from django.http import HttpResponse,HttpResponseBadRequest
 from django.shortcuts import get_object_or_404
 
-#from django_messages.models import Message 
-
 from django_lean.experiments.models import GoalRecord
 from django_lean.experiments.utils import WebUser
 
@@ -65,7 +63,6 @@ def is_valid_request(request, parameters=OAUTH_PARAMETERS_NAMES):
     which is by the way the preferred method according to
     OAuth spec, but otherwise fall back to `GET` and `POST`.
     """
-    print "enter is valid request"
     is_in = lambda l: all((p in l) for p in parameters)
     auth_params = request.META.get("HTTP_AUTHORIZATION", [])
     return is_in(auth_params) or is_in(request.REQUEST)
@@ -73,21 +70,13 @@ def is_valid_request(request, parameters=OAUTH_PARAMETERS_NAMES):
 
 class OAuthentication(Authentication):
     def is_authenticated(self, request, **kwargs):
-        print "is authenticated"
         if is_valid_request(request, ['oauth_consumer_key']):
             # Just checking if you're allowed to be there
             oauth_request = get_oauth_request(request)
-            print "get oauth request"
             try:
-                #print oauth_request.get_parameter('oauth_consumer_key')
-                print request
-                print oauth_request
-                print oauth_request.get_parameter('oauth_consumer_key')
                 consumer = store.get_consumer(request, oauth_request, oauth_request.get_parameter('oauth_consumer_key'))
-                print "get consumer"
                 return True
             except InvalidConsumerError:
-                print "1 - invalid consumer error"
                 return False
         return False
     
@@ -95,41 +84,32 @@ class OAuthentication(Authentication):
 class OAuthAuthorization(Authorization):
     def is_authorized(self, request, object=None):
         if is_valid_request(request, ['oauth_consumer_key']):  # Read-only part
-            print "enter is valid request + oauth consumer key"
             oauth_request = get_oauth_request(request)
             if issubclass(self.resource_meta.object_class, Product) and request.method == 'GET':
                 try:
                     consumer = store.get_consumer(request, oauth_request, oauth_request.get_parameter('oauth_consumer_key'))
                     return True
                 except InvalidConsumerError:
-                    print "2 - invalid consumer error"
                     return False
             if issubclass(self.resource_meta.object_class, Patron) and request.method == 'POST':
                 try:
                     consumer = store.get_consumer(request, oauth_request, oauth_request.get_parameter('oauth_consumer_key'))
                     return True
                 except InvalidConsumerError:
-                    print "3 - invalid consumer error"
                     return False
                     
         if is_valid_request(request):  # Read/Write part
-            print "enter is valid request"
             oauth_request = get_oauth_request(request)
             consumer = store.get_consumer(request, oauth_request, oauth_request.get_parameter('oauth_consumer_key'))
-            print "is valid get consumer OK"
             try:
                 token = store.get_access_token(request, oauth_request, consumer, oauth_request.get_parameter('oauth_token'))
-                print "is valid get token ok"
             except InvalidTokenError:
-                print "4 - invalid token error"
                 return False
         
             if not verify_oauth_request(request, oauth_request, consumer, token=token):
-                print "5 - oauth request not verified"
                 return False
             
             if consumer and token:
-                print "check if consumer = token"
                 request.user = token.user.patron
                 return True
         return False
@@ -196,20 +176,11 @@ class UserSpecificResource(OAuthResource):
         filters = None
         
         if hasattr(request, 'GET'):
-            #print "1"
-            #print request.GET.copy()
             filters = request.GET.copy()
         
         if self.FILTER_GET_REQUESTS:
-            #print "2"
-            #print request.user
             filters["user"] = request.user
-        #print "3"
-        #print filters
         applicable_filters = self.build_filters(filters=filters)
-        #applicable_filters = {"owner":request.user}
-        #print "4"
-        #print applicable_filters
         
         try:
             return self.get_object_list(request).filter(**applicable_filters)
@@ -280,9 +251,6 @@ class AddressResource(UserSpecificResource):
         return bundle
     
     def obj_create(self, bundle, request=None, **kwargs):
-        #print request.user
-        #print ">>>>>>>>>>>>"
-        #print UserResource().get_resource_uri(request.user)
         bundle.data['patron'] = UserResource().get_resource_uri(request.user)
         return super(AddressResource, self).obj_create(bundle, request, **kwargs)
     
@@ -512,7 +480,6 @@ class BookingResource(OAuthResource):
             elif data['status'] and data["uuid"]:
                 bundle.obj=Booking.objects.get(uuid=data["uuid"])
             else:
-                # need to do some checking here
                 pass
         except IntegrityError:
             raise ImmediateHttpResponse(response=HttpBadRequest())
@@ -522,9 +489,6 @@ class BookingResource(OAuthResource):
         """
         Set the returned response for created booking
         """
-        print request.user
-        #print request.META
-        print request.POST
         post_data = self.deserialize(request, request.raw_post_data, format=request.META.get('CONTENT_TYPE', 'application/json'))
         bundle = self.build_bundle(data=dict_strip_unicode_keys(post_data))
         self.is_valid(bundle, request)
@@ -536,7 +500,6 @@ class BookingResource(OAuthResource):
         
         if post_data["status"].lower() == 'authorizing':
             try:
-                print request.user
                 booking = get_object_or_404(Booking, pk=updated_bundle.obj.uuid)
                 booking.state = "authorizing"
                 booking.init_payment_processor()
@@ -580,7 +543,6 @@ class BookingResource(OAuthResource):
                 return HttpResponseBadRequest(content_type='application/json', content=content)
                   
             booking.state = post_data["status"]
-            # TODO uncomment the following line 
             booking.send_acceptation_email()
             GoalRecord.record('rent_object_accepted', WebUser(request))
             booking.save()
@@ -599,7 +561,6 @@ class BookingResource(OAuthResource):
                 content = json.dumps(cont_dic)
                 return HttpResponseBadRequest(content_type='application/json', content=content)
             booking.state = post_data["status"]
-            # TODO uncomment the following line
             booking.send_rejection_email()
             GoalRecord.record('rent_object_rejected', WebUser(request))
             booking.save()
@@ -618,9 +579,8 @@ class BookingResource(OAuthResource):
                 content = json.dumps(cont_dic)
                 return HttpResponseBadRequest(content_type='application/json', content=content)
             booking.state=post_data["status"]
-            # TODO uncomment the following lines
             booking.init_payment_processor()
-            #booking.pay()
+            booking.pay()
             booking.save()
             return HttpResponse(content_type='application/json', content=self.populate_response(booking))
         else: 
@@ -657,9 +617,7 @@ class BookingResource(OAuthResource):
         """
         from datetime import datetime, timedelta
         from dateutil import parser
-        print request.user
         if "started_at" in request.GET and "ended_at" in request.GET:
-            #print "good place"
             object_list = Booking.objects.all()[:1]
         elif "uuid" in request.GET:
             try:
@@ -667,7 +625,6 @@ class BookingResource(OAuthResource):
                 if list(object_list)[0].owner != request.user and list(object_list)[0].borrower != request.user:
                     object_list = Booking.objects.none()
                     raise NotFound("The logined user is neither the owner nor the borrower of the booking with the uuid")
-                #print object_list.values()[0]
             except ValueError:
                 raise NotFound("Invalid resource lookup data provided (mismatched type).")
             
@@ -679,12 +636,9 @@ class BookingResource(OAuthResource):
         """
         Modify the data before sending it to the client
         """
-        #print "enter dehydrate"
         from datetime import datetime, timedelta
         from dateutil import parser
         if "started_at" in request.GET and "ended_at" in request.GET:
-            #print unquote(request.GET["started_at"])
-            #print unquote(request.GET["ended_at"])
             started_at = parser.parse(unquote(request.GET["started_at"]))
             ended_at = parser.parse(unquote(request.GET["ended_at"]))
             bundle.data = {}
@@ -695,9 +649,6 @@ class BookingResource(OAuthResource):
             bundle.data["product"] = unquote(request.GET["product"])
             bundle.data["started_at"] = parser.parse(unquote(request.GET["started_at"]))
             bundle.data["ended_at"] = parser.parse(unquote(request.GET["ended_at"]))
-        #else:
-         #   started_at = datetime.now() + timedelta(days=1)
-          #  ended_at = started_at + timedelta(days=1)
         return bundle 
 
 class MessageResource(OAuthResource):
@@ -705,6 +656,7 @@ class MessageResource(OAuthResource):
     recipient = fields.ForeignKey(UserResource,'recipient', full=False, null=True)
     sender = fields.ForeignKey(UserResource,'sender', full=False, null=True)
     product = fields.ForeignKey(ProductResource,'product', full=False, null=True)
+    parent_msg = fields.ForeignKey('self','parent_msg', full=False, null=True)
     
     class Meta(MetaBase):
         queryset = ProductRelatedMessage.objects.all()
@@ -714,42 +666,36 @@ class MessageResource(OAuthResource):
         
     def obj_get_list(self, request=None, **kwargs):
         object_list = self.get_object_list(request).filter( Q(recipient=request.user) | Q(sender=request.user) )
-        #object_list = self.get_object_list(request).filter( Q(recipient=request.user))
         return object_list
         
     def obj_create(self, bundle,  request=None, **kwargs):
-        #print "user >>>>>>>>>>>>>>>>>>"
-        #print request.user
         data = bundle.data
         try:
-            #recipinent = Patron.objects.get(id=int(data["recipinent"].split("/")[-2]))
-            #print ">>>>>>>>>>>>>>>>>>"
-            #print request.user
-            #sender = Patron.objects.get(id=int(data["sender"].split("/")[-2]))
             product = Product.objects.get(id=int(data["product"].split("/")[-2]))
-            recipient = Patron.objects.get(id=product.owner.id)
-            
+            recipient = Patron.objects.get(id=int(data["recipient"].split("/")[-2]))
+            parent_msg = ProductRelatedMessage.objects.get(id=int(data["parent_msg"].split("/")[-2]))
             bundle.obj=ProductRelatedMessage(recipient = recipient,  
                                 sender = request.user,  
                                 product = product,
+                                parent_msg = parent_msg,
                                 subject = data["subject"],
                                 body = data["body"],
                       )
-            bundle.obj.save()
         except IntegrityError:
             raise ImmediateHttpResponse(response=HttpBadRequest())
         return bundle
         
     def post_list(self, request, **kwargs):
-        #print "user post list >>>>>>>>>>>>>>>>>>"
-        #print request.user
         post_data = self.deserialize(request, request.raw_post_data, format=request.META.get('CONTENT_TYPE', 'application/json'))
         bundle = self.build_bundle(data=dict_strip_unicode_keys(post_data))
         self.is_valid(bundle, request)
         updated_bundle = self.obj_create(bundle, request=request)
-        #print updated_bundle.obj.id
-        #product_related_message = get_object_or_404(ProductRelatedMessage, pk=updated_bundle.obj.id)
-        #return HttpResponse()
+        if updated_bundle.obj.sender is updated_bundle.obj.recipient:
+            error_message = "You can't send message to yourself"
+            cont_dic = {"error":error_message}                            
+            content = json.dumps(cont_dic)
+            return HttpResponseBadRequest(content_type='application/json', content=content)
+        updated_bundle.obj.save()
         return HttpCreated(location = updated_bundle.obj.get_absolute_url())
 
 api_v1 = Api(api_name='1.0')
