@@ -40,7 +40,7 @@
         </div>
         <div class="stat-number x2">
             {% with user.bookings.authorized|length as counter %}
-				<a href="{% url borrower_booking %}" class="highlight">{{ counter }}</a><br />
+				<a href="{% url owner_booking %}" class="highlight">{{ counter }}</a><br />
 				{% blocktrans count counter as counter %}
                  <span>Location<br />en attente de validation</span>
                 {% plural %}
