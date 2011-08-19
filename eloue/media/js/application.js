@@ -137,7 +137,7 @@ $(document).ready(function() {
         }
     });
     
-    /*var url = window.location.href;
+    var url = window.location.href;
     var array = url.split("-");
     var booking_id = array[array.length-1].split("/")[0];
     if (booking_id) {
@@ -145,7 +145,7 @@ $(document).ready(function() {
             function(data) {
                 disabledDays = data;
             }, 'json');
-    }*/
+    }
     
     /* utility functions */
     function occupiedDays(date) {

@@ -161,13 +161,11 @@ class PatronEditForm(forms.ModelForm):
                     last_name=last_name
                     )
             if is_verified == 'UNVERIFIED':
-                form_errors_append(self, 'paypal_email', "Votre paypal email ne correspond pas à votre nom et prénom, papal email n'est pas vérifié")
-                form_errors_append(self, 'first_name', "Votre prénom ne correspond pas à votre nom et paypal email, papal email n'est pas vérifié")
-                form_errors_append(self, 'last_name', "Votre nom ne correspond pas à votre prénom et paypal email, papal email n'est pas vérifié")
+                form_errors_append(self, 'paypal_email', _(u"Votre compte PayPal n'est pas vérifié."))
             elif is_verified == 'INVALID':
-                form_errors_append(self, 'paypal_email', "Votre paypal email ne correspond pas à votre nom et prénom, papal email n'est pas valide")
-                form_errors_append(self, 'first_name', "Votre prénom ne correspond pas à votre nom et paypal email, papal email n'est pas valide")
-                form_errors_append(self, 'last_name', "Votre nom ne correspond pas à votre prénom et paypal email, papal email n'est pas valide")
+                form_errors_append(self, 'paypal_email', _(u"Vérifier qu'il s'agit bien de votre email PayPal"))
+                form_errors_append(self, 'first_name', _(u"Vérifier que le prénom est identique à celui de votre compte PayPal"))
+                form_errors_append(self, 'last_name', _(u"Vérifier que le nom est identique à celui de votre compte PayPal"))
                 
     def clean_company_name(self):
         is_professional = self.cleaned_data.get('is_professional')
@@ -198,15 +196,13 @@ class PatronEditForm(forms.ModelForm):
                         email=paypal_email,
                         first_name=first_name,
                         last_name=last_name
-                        )
-            if is_verified == 'UNVERIFIED':
-                form_errors_append(self, 'paypal_email', "Votre paypal email ne correspond pas à votre nom et prénom, papal email n'est pas vérifié")
-                form_errors_append(self, 'first_name', "Votre prénom ne correspond pas à votre nom et paypal email, papal email n'est pas vérifié")
-                form_errors_append(self, 'last_name', "Votre nom ne correspond pas à votre prénom et paypal email, papal email n'est pas vérifié")
-            elif is_verified == 'INVALID':
-                form_errors_append(self, 'paypal_email', "Votre paypal email ne correspond pas à votre nom et prénom, papal email n'est pas valide")
-                form_errors_append(self, 'first_name', "Votre prénom ne correspond pas à votre nom et paypal email, papal email n'est pas valide")
-                form_errors_append(self, 'last_name', "Votre nom ne correspond pas à votre prénom et paypal email, papal email n'est pas valide")
+                       )
+        if is_verified == 'UNVERIFIED':
+            form_errors_append(self, 'paypal_email', _(u"Votre compte PayPal n'est pas vérifié."))
+        elif is_verified == 'INVALID':
+            form_errors_append(self, 'paypal_email', _(u"Vérifier qu'il s'agit bien de votre email PayPal"))
+            form_errors_append(self, 'first_name', _(u"Vérifier que le prénom est identique à celui de votre compte PayPal"))
+            form_errors_append(self, 'last_name', _(u"Vérifier que le nom est identique à celui de votre compte PayPal"))
         return self.cleaned_data
         
     class Meta:
