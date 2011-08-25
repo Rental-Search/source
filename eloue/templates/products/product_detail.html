@@ -5,6 +5,12 @@
 
 {% block description %}{{ product.summary }} {{ product.description }}{% endblock %}
 
+
+{% block  head %}
+ {{ block.super }}
+ <link rel="canonical" href="{{ product.get_absolute_url }}" />
+{% endblock %}
+
 {% block content %}
 <div id="search" class="xgrid">
 	<form class="form" action="{% url product_list %}">

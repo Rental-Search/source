@@ -197,12 +197,12 @@ class PatronEditForm(forms.ModelForm):
                         first_name=first_name,
                         last_name=last_name
                        )
-        if is_verified == 'UNVERIFIED':
-            form_errors_append(self, 'paypal_email', _(u"Votre compte PayPal n'est pas vérifié."))
-        elif is_verified == 'INVALID':
-            form_errors_append(self, 'paypal_email', _(u"Vérifier qu'il s'agit bien de votre email PayPal"))
-            form_errors_append(self, 'first_name', _(u"Vérifier que le prénom est identique à celui de votre compte PayPal"))
-            form_errors_append(self, 'last_name', _(u"Vérifier que le nom est identique à celui de votre compte PayPal"))
+            if is_verified == 'UNVERIFIED':
+                form_errors_append(self, 'paypal_email', _(u"Votre compte PayPal n'est pas vérifié."))
+            elif is_verified == 'INVALID':
+                form_errors_append(self, 'paypal_email', _(u"Vérifier qu'il s'agit bien de votre email PayPal"))
+                form_errors_append(self, 'first_name', _(u"Vérifier que le prénom est identique à celui de votre compte PayPal"))
+                form_errors_append(self, 'last_name', _(u"Vérifier que le nom est identique à celui de votre compte PayPal"))
         return self.cleaned_data
         
     class Meta:
