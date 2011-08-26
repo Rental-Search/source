@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import re
+from urllib import urlencode
 from django.conf import settings
 from django.contrib.sites.models import Site
 from django.contrib import messages
@@ -8,7 +9,7 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.vary import vary_on_headers
 from django.http import Http404
 from django.shortcuts import get_object_or_404
-from django.utils.datastructures import SortedDict
+from django.utils.datastructures import SortedDict, MultiValueDict
 from django.utils.translation import ugettext as _
 from django.views.decorators.cache import never_cache, cache_page
 from django.views.decorators.vary import vary_on_cookie
@@ -161,11 +162,16 @@ def product_list(request, urlbits, sqs=SearchQuerySet(), suggestions=None, page=
     if not form.is_valid():
         raise Http404
         
+    print urlbits
+        
     breadcrumbs = SortedDict()
     breadcrumbs['q'] = {'name': 'q', 'value': form.cleaned_data.get('q', None), 'label': 'q', 'facet': False}
     breadcrumbs['l'] = {'name': 'l', 'value': form.cleaned_data.get('l', None), 'label': 'l', 'facet': False}
     breadcrumbs['r'] = {'name': 'r', 'value': form.cleaned_data.get('r', None), 'label': 'r', 'facet': False}
     breadcrumbs['sort'] = {'name': 'sort', 'value': form.cleaned_data.get('sort', None), 'label': 'sort', 'facet': False}
+    
+    print breadcrumbs['l']
+    
     
     urlbits = urlbits or ''
     urlbits = filter(None, urlbits.split('/')[::-1])
@@ -178,7 +184,12 @@ def product_list(request, urlbits, sqs=SearchQuerySet(), suggestions=None, page=
                 raise Http404
             if bit.endswith(_('categorie')):
                 item = get_object_or_404(Category, slug=value)
-                return redirect_to(request, item.get_absolute_url())
+                params = MultiValueDict((facet['label'], [facet['value']]) for facet in breadcrumbs.values() if (not facet['facet']) and not (facet['label'] == 'r' and facet['value'] == DEFAULT_RADIUS)and not (facet['label'] == 'l' and facet['value'] == '') and not (facet['label'] == 'sort' and facet['value'] == '') and not (facet['label'] == 'q' and facet['value'] == ''))
+                path = item.get_absolute_url()
+                print params
+                if any([value for key, value in params.iteritems()]):
+                    path = '%s?%s' % (path, urlencode(params))
+                return redirect_to(request, path)
             elif bit.endswith(_('loueur')):
                 item = get_object_or_404(Patron.on_site, slug=value)
                 breadcrumbs[bit] = {
@@ -204,7 +215,6 @@ def product_list(request, urlbits, sqs=SearchQuerySet(), suggestions=None, page=
             }
     
     site_url="%s://%s" % ("https" if USE_HTTPS else "http", Site.objects.get_current().domain)
-    
     form = FacetedSearchForm(dict((facet['name'], facet['value']) for facet in breadcrumbs.values()), searchqueryset=sqs)
     sqs, suggestions = form.search()
     return object_list(request, sqs, page=page, paginate_by=PAGINATE_PRODUCTS_BY, template_name="products/product_list.html",
