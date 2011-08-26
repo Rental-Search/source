@@ -162,15 +162,11 @@ def product_list(request, urlbits, sqs=SearchQuerySet(), suggestions=None, page=
     if not form.is_valid():
         raise Http404
         
-    print urlbits
-        
     breadcrumbs = SortedDict()
     breadcrumbs['q'] = {'name': 'q', 'value': form.cleaned_data.get('q', None), 'label': 'q', 'facet': False}
     breadcrumbs['l'] = {'name': 'l', 'value': form.cleaned_data.get('l', None), 'label': 'l', 'facet': False}
     breadcrumbs['r'] = {'name': 'r', 'value': form.cleaned_data.get('r', None), 'label': 'r', 'facet': False}
     breadcrumbs['sort'] = {'name': 'sort', 'value': form.cleaned_data.get('sort', None), 'label': 'sort', 'facet': False}
-    
-    print breadcrumbs['l']
     
     
     urlbits = urlbits or ''
@@ -186,7 +182,6 @@ def product_list(request, urlbits, sqs=SearchQuerySet(), suggestions=None, page=
                 item = get_object_or_404(Category, slug=value)
                 params = MultiValueDict((facet['label'], [facet['value']]) for facet in breadcrumbs.values() if (not facet['facet']) and not (facet['label'] == 'r' and facet['value'] == DEFAULT_RADIUS)and not (facet['label'] == 'l' and facet['value'] == '') and not (facet['label'] == 'sort' and facet['value'] == '') and not (facet['label'] == 'q' and facet['value'] == ''))
                 path = item.get_absolute_url()
-                print params
                 if any([value for key, value in params.iteritems()]):
                     path = '%s?%s' % (path, urlencode(params))
                 return redirect_to(request, path)
