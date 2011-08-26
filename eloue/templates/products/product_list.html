@@ -21,9 +21,9 @@
 {% block  head %}
     {{ block.super }}
     {% if page == 1 %}
-    <link rel="canonical" href="{% facet_url breadcrumbs %}" />
+    <link rel="canonical" href="{{ site_url }}{% facet_url breadcrumbs %}" />
     {% else %}
-    <link rel="canonical" href="{% facet_url breadcrumbs "page" page %}" />
+    <link rel="canonical" href="{{ site_url }}{% facet_url breadcrumbs "page" page %}" />
     {% endif %}
 {% endblock %}
 
