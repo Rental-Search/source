@@ -2,16 +2,7 @@
  {% load cache facets i18n param category product paginator mptt_tags seo booking %}
 
 {% block title %}
- {% trans "Location" %}
- {% for crumb in breadcrumbs|facets %}
-   &rsaquo; {{ crumb.pretty_value|capfirst }}
- {% endfor %}
- {% if form.cleaned_data.l %}
-  &rsaquo; {{ form.cleaned_data.l|capfirst }}
- {% endif %}
- {% if form.cleaned_data.q %}
-   &rsaquo; "{{ form.cleaned_data.q }}"
- {% endif %}
+{% trans "Location" %}{% if not form.cleaned_data.q %}{% for crumb in breadcrumbs|facets %} {{ crumb.pretty_value|capfirst }}{% endfor %}{% endif %}{% if form.cleaned_data.q %} {{ form.cleaned_data.q }}{% endif %}{% if form.cleaned_data.l %} {{ form.cleaned_data.l|capfirst }}{% endif %}
 {% endblock %}
 
 {% block description %}
@@ -28,8 +19,12 @@
 {% endblock %}
 
 {% block  head %}
- {{ block.super }}
- <link rel="canonical" href="{% canonical_url urlbits %}" />
+    {{ block.super }}
+    {% if page == 1 %}
+    <link rel="canonical" href="{{ site_url }}{% facet_url breadcrumbs %}" />
+    {% else %}
+    <link rel="canonical" href="{{ site_url }}{% facet_url breadcrumbs "page" page %}" />
+    {% endif %}
 {% endblock %}
 
 {% block content %}
@@ -241,7 +236,9 @@
                     {% if breadcrumbs.categorie %}
                     {% if breadcrumbs.categorie.value != category.slug %}
                     <li>
-    					<a href="{% facet_url breadcrumbs -breadcrumbs.categorie.label category.get_ancertors_slug category.slug %}">{{ category.name }}</a> 
+    					<a href="{% facet_url breadcrumbs -breadcrumbs.categorie.label category.get_ancertors_slug category.slug %}">
+    					    {{ category.name }}
+    					</a> 
     				</li>
     				{% endif %}
 					{% else %}

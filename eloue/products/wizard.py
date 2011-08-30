@@ -141,7 +141,7 @@ class MessageWizard(GenericFormWizard):
         product = self.extra_context["product"]
         recipient = self.extra_context["recipient"]
         if new_patron == product.owner:
-            messages.error(request, _(u"Vous ne pouvez vous envoyer des messages à vous même."))
+            messages.error(request, _(u"Vous ne pouvez pas vous envoyer des messages."))
             return redirect_to(request, product.get_absolute_url())
         message_form = form_list[0]
         message_form.save(product=product, sender=new_patron, recipient=recipient)
