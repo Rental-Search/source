@@ -328,7 +328,7 @@ class AddressResource(UserSpecificResource):
         resource_name = "address"
         allowed_methods = ['get', 'post', 'put', 'delete']
 
-    def dehydrate(self, bundle, request=None):
+    def dehydrate(self, bundle):
         if bundle.obj.position:
             bundle.data["position"] = {'lat': bundle.obj.position.x, 'lng': bundle.obj.position.y}
         return bundle
@@ -404,7 +404,7 @@ class PictureResource(OAuthResource):
         allowed_methods = ['get']
         fields = ['id']
 
-    def dehydrate(self, bundle, request=None):
+    def dehydrate(self, bundle):
         bundle.data['thumbnail_url'] = bundle.obj.thumbnail.url
         bundle.data['display_url'] = bundle.obj.display.url
         return bundle
@@ -479,7 +479,7 @@ class ProductResource(UserSpecificResource):
 
     def get_object_list(self, request):
         object_list = super(ProductResource, self).get_object_list(request)
-        if "l" in request.GET:
+        if request and "l" in request.GET:
             name, (lat, lon), radius = GoogleGeocoder().geocode(request.GET['l'])
             object_list = object_list.distance(Point((lat, lon)), field_name='address__position')
         return object_list
@@ -538,7 +538,7 @@ class ProductResource(UserSpecificResource):
             print e
             print e.message
 
-    def dehydrate(self, bundle, request=None):
+    def dehydrate(self, bundle):
         """
         Automatically add the rent price if the request
         contains date_start and date_end parameters
@@ -546,7 +546,8 @@ class ProductResource(UserSpecificResource):
         from datetime import datetime, timedelta
         from dateutil import parser
 
-        if "date_start" in request.GET and "date_end" in request.GET:
+        request = bundle.request
+        if request and "date_start" in request.GET and "date_end" in request.GET:
             date_start = parser.parse(unquote(request.GET["date_start"]))
             date_end = parser.parse(unquote(request.GET["date_end"]))
         else:
@@ -558,22 +559,27 @@ class ProductResource(UserSpecificResource):
         bundle.data["unit"], bundle.data["price"] = Booking.calculate_price(bundle.obj, date_start, date_end)
         return bundle
 
+def require_keys(keys, data):
+    print data.keys()
+    if keys != data.keys():
+        raise ImmediateHttpResponse(response=HttpBadRequest("Your request didn't meet the specs"))
 
 class BookingResource(OAuthResource):
     """
-    Resource that returns the booking information 
+    Resource that returns the booking information
     """
     # Foreign keys
     owner = fields.ForeignKey(UserResource,'owner', full=False, null=True)
     borrower = fields.ForeignKey(UserResource,'borrower', full=False, null=True)
     product = fields.ForeignKey(ProductResource,'product', full=False, null=True)
-     
+
     # Meta 
     class Meta(MetaBase):
         queryset = Booking.on_site.all()
         list_allowed_methods = ['get', 'post','put']
-        detail_allowed_methods = ['get', 'post', 'put', 'delete'] 
+        detail_allowed_methods = ['get', 'post', 'put', 'delete']
         resource_name = 'booking'
+        always_return_data = True
         excludes = ["pay_key"]
         filtering = {
             'owner': ALL_WITH_RELATIONS,
@@ -582,201 +588,99 @@ class BookingResource(OAuthResource):
             'ended_at': ALL_WITH_RELATIONS,
             'started_at': ALL_WITH_RELATIONS,
         }
-    
-    def obj_create(self, bundle,  request=None, **kwargs):
-        """Creates the object for booking"""   
-        from datetime import datetime, timedelta
-        from dateutil import parser        
-        data = bundle.data
-        try:            
-            if data["status"] == "authorizing":
-                borrower = request.user
-                product = Product.objects.get(id=int(data["product"].split("/")[-2]))
-                started_at = parser.parse(unquote(data["started_at"]))
-                ended_at = parser.parse(unquote(data["ended_at"]))
-                temp, total_amount = Booking.calculate_price(product, started_at, ended_at)
-                
-                bundle.obj=Booking(started_at = data["started_at"],  
-                                    ended_at = data["ended_at"],  
-                                    total_amount = total_amount,
-                                    borrower = borrower,
-                                    product = product,
-                                    owner = product.owner,
-                                  )
-                bundle.obj.save()
-            elif data['status'] and data["uuid"]:
-                bundle.obj=Booking.objects.get(uuid=data["uuid"])
-            else:
-                pass
-        except IntegrityError:
-            raise ImmediateHttpResponse(response=HttpBadRequest())
-        return bundle
-    
-    def post_list(self, request, **kwargs):
-        """
-        Set the returned response for created booking
-        """
-        post_data = self.deserialize(request, request.raw_post_data, format=request.META.get('CONTENT_TYPE', 'application/json'))
-        bundle = self.build_bundle(data=dict_strip_unicode_keys(post_data))
-        self.is_valid(bundle, request)
-        updated_bundle = self.obj_create(bundle, request=request)
-        
+
+    def obj_create(self, bundle, request=None, **kwargs):
+        # TODO: Block the api user from using unwanted keys 
+        # to set various properties of the booking directly
+        # Block total_amount and state
+
+        from dateutil import parser
+
+        require_keys(["product", "started_at", "ended_at"], bundle.data)
+
+        product = Product.objects.get(pk=int(bundle.data["product"].split("/")[-2]))
+        started_at = parser.parse(unquote(bundle.data["started_at"]))
+        ended_at = parser.parse(unquote(bundle.data["ended_at"]))
+        _, total_amount = Booking.calculate_price(product, started_at, ended_at)
         domain = Site.objects.get_current().domain
         protocol = "https" if USE_HTTPS else "http"
-        payment_type = updated_bundle.obj.product.payment_type
-        
-        if post_data["status"].lower() == 'authorizing':
-            try:
-                booking = get_object_or_404(Booking, pk=updated_bundle.obj.uuid)
-                booking.state = "authorizing"
-                booking.init_payment_processor()
-                booking.preapproval(
-                    cancel_url="%s://%s%s" % (protocol, domain, reverse("booking_failure", args=[booking.pk.hex])),
-                    return_url="%s://%s%s" % (protocol, domain, reverse("booking_success", args=[booking.pk.hex])),
-                    ip_address=request.META['REMOTE_ADDR']
-                    )
-                return HttpCreated(content_type='application/json', 
-                                    location = "/api/1.0/booking/" + str(booking.uuid) + "/", 
-                                    content = self.populate_response(booking) )
-            except IntegrityError:
-                raise ImmediateHttpResponse(response=HttpBadRequest())
-                
-        elif post_data["status"].lower() == 'pending' and updated_bundle.obj.uuid:
-            booking = get_object_or_404(Booking, pk=updated_bundle.obj.uuid)
+        bundle = super(BookingResource, self).obj_create(bundle, request=request,
+            state="authorizing",
+            owner=product.owner,
+            borrower=request.user,
+            total_amount=total_amount,
+            **kwargs
+        )
+
+        try:
+            booking = bundle.obj
+            booking.init_payment_processor()
+            booking.preapproval(
+                cancel_url="%s://%s%s" % (protocol, domain, reverse("booking_failure", args=[booking.pk.hex])),
+                return_url="%s://%s%s" % (protocol, domain, reverse("booking_success", args=[booking.pk.hex])),
+                ip_address=request.META['REMOTE_ADDR']
+            )
+        except IntegrityError:
+            raise ImmediateHttpResponse(response=HttpBadRequest())
+
+        return bundle
+
+    def obj_update(self, bundle, request=None, pk='', **kwargs):
+
+        require_keys(["state"], bundle.data)
+
+        new_state = bundle.data["state"].lower()
+        booking = Booking.objects.get(pk=pk)
+
+        def error(error_str):
+            raise ImmediateHttpResponse(response = HttpResponseBadRequest(content_type='application/json', content=json.dumps({ "error":error_str })))
+
+        def assert_current_state_is(from_state):
+            if booking.state != from_state:
+                raise ImmediateHttpResponse(
+                    response=error("Need to be in state %s to switch to state %s" % (from_state, booking.state))
+                )
+
+        if booking.owner != request.user:
+            error("Can't modify booking : Wrong user")
+
+        if new_state == 'pending':
+
             if booking.product.payment_type == PAYMENT_TYPE.NOPAY:
                 is_verified = booking.owner.is_verified
                 if not booking.owner.has_paypal():
-                    cont_dic = {"error":"The owner doesn't have paypal account"}
-                    content = json.dumps(cont_dic)
-                    return HttpResponse(content_type='application/json', content=content)                    
-                elif is_verified!="VERIFIED":
-                    if is_verified=="UNVERIFIED":
-                        cont_dic = {"error":"The owner's paypal account is unverified"}
-                        content = json.dumps(cont_dic)
-                        return HttpResponse(content_type='application/json', content=content)
-                    elif is_verified=="INVALID":
-                        cont_dic = {"error":"The owner's paypal account is invalid"}                            
-                        content = json.dumps(cont_dic)
-                        return HttpResponse(content_type='application/json', content=content)
-            if booking.state != "authorized":
-                error_message = "can't switch from state "+ str(booking.state) +" to state pending"
-                cont_dic = {"error":error_message}                            
-                content = json.dumps(cont_dic)
-                return HttpResponseBadRequest(content_type='application/json', content=content)
-            elif booking.owner != request.user:
-                error_message = "Can't change the state of booking to pending because the currently logged-in user is not the owner of this booking"
-                cont_dic = {"error":error_message}                            
-                content = json.dumps(cont_dic)
-                return HttpResponseBadRequest(content_type='application/json', content=content)
-                  
-            booking.state = post_data["status"]
+                    return error("The owner doesn't have paypal account")
+                elif is_verified == "UNVERIFIED":
+                    return error("The owner's paypal account is unverified")
+                elif is_verified == "INVALID":
+                    return error("The owner's paypal account is invalid")
+
+            assert_current_state_is("authorized")
             booking.send_acceptation_email()
             GoalRecord.record('rent_object_accepted', WebUser(request))
-            booking.save()
-            return HttpResponse(content_type='application/json', content=self.populate_response(booking))
-            
-        elif post_data["status"].lower() == 'rejected' and updated_bundle.obj.uuid:
-            booking = get_object_or_404(Booking, pk=updated_bundle.obj.uuid)
-            if booking.state != "authorized":
-                error_message = "can't switch from state "+ str(booking.state) +" to state rejected"
-                cont_dic = {"error":error_message}                            
-                content = json.dumps(cont_dic)
-                return HttpResponseBadRequest(content_type='application/json', content=content)
-            elif booking.owner != request.user:
-                error_message = "Can't change the state of booking to rejected because the currently logged-in user is not the owner of this booking"
-                cont_dic = {"error":error_message}                            
-                content = json.dumps(cont_dic)
-                return HttpResponseBadRequest(content_type='application/json', content=content)
-            booking.state = post_data["status"]
+
+        elif new_state == 'rejected':
+            assert_current_state_is("authorized")
             booking.send_rejection_email()
             GoalRecord.record('rent_object_rejected', WebUser(request))
-            booking.save()
-            return HttpResponse(content_type='application/json', content=self.populate_response(booking))
-            
-        elif post_data["status"].lower() == 'closed' and updated_bundle.obj.uuid:
-            booking = get_object_or_404(Booking, pk=updated_bundle.obj.uuid)
-            if booking.state != "closing":
-                error_message = "can't switch from state "+ str(booking.state) +" to state closed"
-                cont_dic = {"error":error_message}                            
-                content = json.dumps(cont_dic)
-                return HttpResponseBadRequest(content_type='application/json', content=content)
-            elif booking.owner != request.user:
-                error_message = "Can't change the state of booking to closed because the currently logged-in user is not the owner of this booking"
-                cont_dic = {"error":error_message}                            
-                content = json.dumps(cont_dic)
-                return HttpResponseBadRequest(content_type='application/json', content=content)
-            booking.state=post_data["status"]
+
+        elif new_state == 'closed':
+            assert_current_state_is("closing")
             booking.init_payment_processor()
             booking.pay()
-            booking.save()
-            return HttpResponse(content_type='application/json', content=self.populate_response(booking))
-        else: 
-            pass
-            
-                
-    def populate_response(self, booking):
-        cont_dic = {}
-        cont_dic["borrower"] = "/api/1.0/user/%s/" % booking.borrower.id
-        cont_dic["canceled_at"] = booking.canceled_at
-        cont_dic["contract_id"] = booking.contract_id
-        cont_dic["created_at"] = booking.created_at.__str__()
-        cont_dic["currency"] = booking.currency
-        cont_dic["deposit_amount"] = str(booking.deposit_amount)
-        cont_dic["ended_at"] = booking.ended_at.__str__()
-        cont_dic["insurance_amount"] = str(booking.insurance_amount)
-        cont_dic["ip"] = booking.ip
-        cont_dic["owner"] = "/api/1.0/user/%s/" % booking.owner.id
-        cont_dic["pin"] = booking.pin
-        cont_dic["preapproval_key"] = booking.preapproval_key
-        cont_dic["preapproval_url"] = settings.PAYPAL_COMMAND % urlencode({'cmd': '_ap-preapproval','preapprovalkey': booking.preapproval_key})
-        cont_dic["product"] = "/api/1.0/product/%s/" % booking.product.id
-        cont_dic["resource_uri"] = "/api/1.0/product/%s/" % booking.uuid
-        cont_dic["started_at"] = booking.started_at.__str__()
-        cont_dic["state"] = booking.state
-        cont_dic["total_amount"] = str(booking.total_amount)
-        cont_dic["uuid"] = str(booking.uuid)
-        content = json.dumps(cont_dic)
-        return content
-        
-    def obj_get_list(self, request=None, **kwargs):
-        """
-        Initiate the list of objects which will be sent to the user
-        """
-        from datetime import datetime, timedelta
-        from dateutil import parser
-        if "started_at" in request.GET and "ended_at" in request.GET:
-            object_list = Booking.objects.all()[:1]
-        elif "uuid" in request.GET:
-            try:
-                object_list = Booking.objects.filter(uuid=request.GET["uuid"])
-                if list(object_list)[0].owner != request.user and list(object_list)[0].borrower != request.user:
-                    object_list = Booking.objects.none()
-                    raise NotFound("The logined user is neither the owner nor the borrower of the booking with the uuid")
-            except ValueError:
-                raise NotFound("Invalid resource lookup data provided (mismatched type).")
-            
-        else:
-            object_list = self.get_object_list(request).filter( Q(borrower=request.user) | Q(owner=request.user) )
-        return object_list
- 
-    def dehydrate(self, bundle, request=None):
+
+
+        return super(BookingResource, self).obj_update(bundle, request=request, pk=pk, **kwargs)
+
+    def apply_authorization_limits(self, request, object_list):
+        return object_list.filter( Q(borrower=request.user) | Q(owner=request.user) )
+
+    def dehydrate(self, bundle):
         """
         Modify the data before sending it to the client
         """
-        from datetime import datetime, timedelta
-        from dateutil import parser
-        if "started_at" in request.GET and "ended_at" in request.GET:
-            started_at = parser.parse(unquote(request.GET["started_at"]))
-            ended_at = parser.parse(unquote(request.GET["ended_at"]))
-            bundle.data = {}
-            bundle.obj.product = Product.objects.get(id = request.GET["product"].split("/")[-2])
-            temp, bundle.data["total_amount"] = Booking.calculate_price(bundle.obj.product, started_at, ended_at)
-            bundle.data["owner"] = "/api/1.0/user/%s/" % bundle.obj.product.owner.id
-            bundle.data["borrower"] = unquote(request.GET["borrower"])
-            bundle.data["product"] = unquote(request.GET["product"])
-            bundle.data["started_at"] = parser.parse(unquote(request.GET["started_at"]))
-            bundle.data["ended_at"] = parser.parse(unquote(request.GET["ended_at"]))
-        return bundle 
+        bundle.data["preapproval_url"] = settings.PAYPAL_COMMAND % urlencode({'cmd': '_ap-preapproval','preapprovalkey': bundle.data["preapproval_key"]})
+        return bundle
 
 class MessageResource(OAuthResource):
     # Foreign keys
@@ -784,25 +688,25 @@ class MessageResource(OAuthResource):
     sender = fields.ForeignKey(UserResource,'sender', full=False, null=True)
     product = fields.ForeignKey(ProductResource,'product', full=False, null=True)
     parent_msg = fields.ForeignKey('self','parent_msg', full=False, null=True)
-    
+
     class Meta(MetaBase):
         queryset = ProductRelatedMessage.objects.all()
         resource_name = "message"
         fields = []
         allowed_methods = ['get', 'post']
-        
+
     def obj_get_list(self, request=None, **kwargs):
         object_list = self.get_object_list(request).filter( Q(recipient=request.user) | Q(sender=request.user) )
         return object_list
-        
+
     def obj_create(self, bundle,  request=None, **kwargs):
         data = bundle.data
         try:
             product = Product.objects.get(id=int(data["product"].split("/")[-2]))
             recipient = Patron.objects.get(id=int(data["recipient"].split("/")[-2]))
             parent_msg = ProductRelatedMessage.objects.get(id=int(data["parent_msg"].split("/")[-2]))
-            bundle.obj=ProductRelatedMessage(recipient = recipient,  
-                                sender = request.user,  
+            bundle.obj=ProductRelatedMessage(recipient = recipient,
+                                sender = request.user,
                                 product = product,
                                 parent_msg = parent_msg,
                                 subject = data["subject"],
@@ -811,7 +715,7 @@ class MessageResource(OAuthResource):
         except IntegrityError:
             raise ImmediateHttpResponse(response=HttpBadRequest())
         return bundle
-        
+
     def post_list(self, request, **kwargs):
         post_data = self.deserialize(request, request.raw_post_data, format=request.META.get('CONTENT_TYPE', 'application/json'))
         bundle = self.build_bundle(data=dict_strip_unicode_keys(post_data))
@@ -819,7 +723,7 @@ class MessageResource(OAuthResource):
         updated_bundle = self.obj_create(bundle, request=request)
         if updated_bundle.obj.sender is updated_bundle.obj.recipient:
             error_message = "You can't send message to yourself"
-            cont_dic = {"error":error_message}                            
+            cont_dic = {"error":error_message}
             content = json.dumps(cont_dic)
             return HttpResponseBadRequest(content_type='application/json', content=content)
         updated_bundle.obj.save()
