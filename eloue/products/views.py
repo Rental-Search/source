@@ -182,6 +182,14 @@ def product_list(request, urlbits, sqs=SearchQuerySet(), suggestions=None, page=
                 item = get_object_or_404(Category, slug=value)
                 params = MultiValueDict((facet['label'], [facet['value']]) for facet in breadcrumbs.values() if (not facet['facet']) and not (facet['label'] == 'r' and facet['value'] == DEFAULT_RADIUS)and not (facet['label'] == 'l' and facet['value'] == '') and not (facet['label'] == 'sort' and facet['value'] == '') and not (facet['label'] == 'q' and facet['value'] == ''))
                 path = item.get_absolute_url()
+                for bit in urlbits:
+                    print bit
+                    if bit.startswith(_('page')):
+                        try:
+                            page = urlbits.pop(0)
+                            path = '%s/%s/%s' % (path, _(u'page'), page)
+                        except IndexError:
+                            raise Http404
                 if any([value for key, value in params.iteritems()]):
                     path = '%s?%s' % (path, urlencode(params))
                 return redirect_to(request, path)
