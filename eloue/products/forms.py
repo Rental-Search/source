@@ -235,7 +235,7 @@ class ProductForm(forms.ModelForm):
     def clean_quantity(self):
         quantity = self.cleaned_data['quantity']
         if quantity < 1:
-            raise forms.ValidationError(_(u"Vous devriez au moins louer un object"))
+            raise forms.ValidationError(_(u"Vous devez au moins louer un object"))
         return quantity
     
     def clean_deposit_amount(self):
@@ -248,7 +248,7 @@ class ProductForm(forms.ModelForm):
         picture = self.cleaned_data['picture']
         picture_id = self.cleaned_data['picture_id']
         if not (picture or picture_id):
-            raise forms.ValidationError(_(u"Vous devriez ajouter une photo."))
+            raise forms.ValidationError(_(u"Vous devez ajouter une photo."))
     
     def clean_payment_type(self):
         payment_type = self.cleaned_data.get('payment_type', None)
