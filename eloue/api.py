@@ -31,7 +31,7 @@ from django.db import IntegrityError
 from eloue.geocoder import GoogleGeocoder
 from eloue.products.models import Product, Category, Picture, Price, upload_to#, StaticPage
 from eloue.products.search_indexes import product_search
-from eloue.accounts.models import Address, PhoneNumber, Patron
+from eloue.accounts.models import Address, PhoneNumber, Patron, PHONE_TYPES
 from eloue.rent.models import Booking
 
 __all__ = ['api_v1']
@@ -55,14 +55,18 @@ def is_valid_request(request, parameters=OAUTH_PARAMETERS_NAMES):
 
 class OAuthentication(Authentication):
     def is_authenticated(self, request, **kwargs):
+        print "IN IS AUTHENTICATED"
         if is_valid_request(request, ['oauth_consumer_key']):
             # Just checking if you're allowed to be there
             oauth_request = get_oauth_request(request)
             try:
                 consumer = store.get_consumer(request, oauth_request, oauth_request.get_parameter('oauth_consumer_key'))
+                print "RETURN TRUE"
                 return True
             except InvalidConsumerError:
+                print "INVALIDCONSUMERERROR RETURN FALSE"
                 return False
+        print "RETURN FALSE"
         return False
 
 
@@ -71,6 +75,7 @@ class OAuthAuthorization(Authorization):
     def is_authorized(self, request, object=None):
 
         if is_valid_request(request, ['oauth_consumer_key']):  # Read-only part
+            print "REQUEST IS VALID 1"
             oauth_request = get_oauth_request(request)
 
             klass = self.resource_meta.object_class
@@ -79,8 +84,10 @@ class OAuthAuthorization(Authorization):
                 or (issubclass(klass, Product) and request.method == 'GET'):
                 try:
                     consumer = store.get_consumer(request, oauth_request, oauth_request.get_parameter('oauth_consumer_key'))
+                    print "RETURN TRUE"
                     return True
                 except InvalidConsumerError:
+                    print "RETURN FALSE"
                     return False
 
         if is_valid_request(request):  # Read/Write part
@@ -98,6 +105,7 @@ class OAuthAuthorization(Authorization):
                 request.user = token.user.patron
                 return True
 
+        print "REQUEST NOT VALID"
         return False
 
 
@@ -191,10 +199,11 @@ class UserSpecificResource(OAuthResource):
         return orm_filters
 
 class UserResource(OAuthResource):
+
     class Meta(MetaBase):
         queryset = Patron.objects.all()
         resource_name = "user"
-        allowed_methods = ['get', 'post', 'put']
+        allowed_methods = ['get', 'post', 'put', 'delete']
         fields = ['username', 'id', 'email']
         filtering = {
             'username': ALL_WITH_RELATIONS,
@@ -205,11 +214,19 @@ class UserResource(OAuthResource):
     def obj_create(self, bundle, request=None, **kwargs):
         """Creates a new inactive user"""
 
+        print "IN OBJ CREATE"
         data = bundle.data
         try:
+            print data
             bundle.obj = Patron.objects.create_user(data["username"], data["email"], data["password"])
         except IntegrityError:
+            print "INTEGRITY ERROR"
             raise ImmediateHttpResponse(response=HttpBadRequest())
+        except Exception, e:
+            print "OTHER EXCEPTION", e
+            print type(e)
+            raise ImmediateHttpResponse(response=HttpBadRequest())
+
         return bundle
 
     def obj_get_list(self, request=None, **kwargs):
@@ -223,6 +240,16 @@ class UserResource(OAuthResource):
                 if field in bundle.data:
                     setattr(patron, field, bundle.data[field])
                     patron.save()
+        else:
+            raise ImmediateHttpResponse(response=HttpBadRequest())
+
+    def obj_delete(self, request=None, pk='', **kwargs):
+        pk = int(pk)
+        patron = Patron.objects.get(id=pk)
+        if patron == request.user:
+            patron.delete()
+        else:
+            raise ImmediateHttpResponse(response=HttpBadRequest())
 
 
 class CustomerResource(UserResource):
@@ -252,11 +279,30 @@ class PhoneNumberResource(UserSpecificResource):
     class Meta(MetaBase):
         queryset = PhoneNumber.objects.all()
         resource_name = "phonenumber"
-        allowed_methods = ['get', 'post']
+        allowed_methods = ['get', 'post', 'put', 'delete']
 
     def obj_create(self, bundle, request=None, **kwargs):
         bundle.data['patron'] = UserResource().get_resource_uri(request.user)
-        return super(AddressResource, self).obj_create(bundle, request, **kwargs)
+        bundle.data['kind'] = getattr(PHONE_TYPES, bundle.data['kind'])
+        print bundle.data['patron']
+        return super(PhoneNumberResource, self).obj_create(bundle, request, **kwargs)
+
+    def obj_update(self, bundle, request=None, pk='', **kwargs):
+        print "IN OBJ UPDATE"
+        pk = int(pk)
+        number = PhoneNumber.objects.filter(id=pk)
+        if number[0].patron == request.user:
+                number.update(**bundle.data)
+        else:
+            raise ImmediateHttpResponse(response=HttpBadRequest())
+
+    def obj_delete(self, request=None, pk='', **kwargs):
+        pk = int(pk)
+        number = PhoneNumber.objects.get(id=pk)
+        if number.patron == request.user:
+            number.delete()
+        else:
+            raise ImmediateHttpResponse(response=HttpBadRequest())
 
 
 class AddressResource(UserSpecificResource):
@@ -266,7 +312,7 @@ class AddressResource(UserSpecificResource):
     class Meta(MetaBase):
         queryset = Address.objects.all()
         resource_name = "address"
-        allowed_methods = ['get', 'post']
+        allowed_methods = ['get', 'post', 'put', 'delete']
 
     def dehydrate(self, bundle, request=None):
         if bundle.obj.position:
@@ -276,6 +322,22 @@ class AddressResource(UserSpecificResource):
     def obj_create(self, bundle, request=None, **kwargs):
         bundle.data['patron'] = UserResource().get_resource_uri(request.user)
         return super(AddressResource, self).obj_create(bundle, request, **kwargs)
+
+    def obj_delete(self, request=None, pk='', **kwargs):
+        pk = int(pk)
+        address = Address.objects.get(id=pk)
+        if address.patron == request.user:
+            address.delete()
+        else:
+            raise ImmediateHttpResponse(response=HttpBadRequest())
+
+    def obj_update(self, bundle, request=None, pk='', **kwargs):
+        pk = int(pk)
+        address = Address.objects.filter(id=pk)
+        if address[0].patron == request.user:
+            address.update(**bundle.data)
+        else:
+            raise ImmediateHttpResponse(response=HttpBadRequest())
 
 
 class CategoryResource(ModelResource):
@@ -343,6 +405,7 @@ class PriceResource(OAuthResource):
 
 
 class ProductResource(UserSpecificResource):
+
     category = fields.ForeignKey(CategoryResource, 'category', full=True, null=True)
     address = fields.ForeignKey(AddressResource, 'address', full=True, null=True)
     owner = fields.ForeignKey(UserResource, 'owner', full=False, null=True)
@@ -354,7 +417,7 @@ class ProductResource(UserSpecificResource):
 
     class Meta(MetaBase):
         queryset = Product.on_site.all()
-        allowed_methods = ['get', 'post']
+        allowed_methods = ['get', 'post', 'put', 'delete']
         resource_name = 'product'
         include_absolute_url = True
         fields = ['id', 'quantity', 'summary', 'description', 'deposit_amount']
@@ -407,23 +470,12 @@ class ProductResource(UserSpecificResource):
             object_list = object_list.distance(Point((lat, lon)), field_name='address__position')
         return object_list
 
-    def obj_create(self, bundle, request=None, **kwargs):
-        """
-        On product creation, if the request contains a "picture" parameter
-        Creates a file with the content of the field
-        And creates a picture linked to the product
-        """
-        picture_data = bundle.data.get("picture", None)
-        day_price_data = bundle.data.get("price", None)
-        if picture_data:
-            bundle.data.pop("picture")
-
-        bundle.data['owner'] = UserResource().get_resource_uri(request.user)
-        bundle = super(ProductResource, self).obj_create(bundle, request, **kwargs)
+    def _obj_process_fields(self, product, picture_data, day_price_data):
 
         # Create the picture object if there is a picture in the request
         if picture_data:
-            picture = Picture(product=bundle.obj)
+            picture = Picture(product=product)
+
             # Write the image content to a file
             img_path = upload_to(picture, "")
             img_file = ContentFile(decodestring(picture_data))
@@ -433,8 +485,44 @@ class ProductResource(UserSpecificResource):
 
         # Add a day price to the object if there isnt any yet
         if day_price_data:
-            Price(product=bundle.obj, unit=1, amount=D(day_price_data)).save()
+            Price(product=product, unit=1, amount=D(day_price_data)).save()
+
+
+    def obj_create(self, bundle, request=None, **kwargs):
+        """
+        On product creation, if the request contains a "picture" parameter
+        Creates a file with the content of the field
+        And creates a picture linked to the product
+        """
+        picture_data = bundle.data.pop("picture", None)
+        day_price_data = bundle.data.pop("price", None)
+
+        if picture_data:
+            bundle.data.pop("picture")
+
+        bundle.data['owner'] = UserResource().get_resource_uri(request.user)
+        bundle = super(ProductResource, self).obj_create(bundle, request, **kwargs)
+
+        self._obj_process_fields(bundle.obj, picture_data, day_price_data)
+
         return bundle
+
+    def obj_update(self, bundle, request=None, pk='', **kwargs):
+        try:
+            p_id = pk.split("-")[-1]
+            product = Product.objects.filter(id=int(p_id))
+            if product[0].owner == request.user:
+                picture_data = bundle.data.pop("picture", None)
+                day_price_data = bundle.data.pop("price", None)
+                product.update(**bundle.data)
+
+                self._obj_process_fields(bundle.obj, picture_data, day_price_data)
+                return bundle
+            else:
+                raise ImmediateHttpResponse(response=HttpBadRequest())
+        except Exception, e:
+            print e
+            print e.message
 
     def dehydrate(self, bundle, request=None):
         """
