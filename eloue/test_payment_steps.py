@@ -59,7 +59,6 @@ def httplib(uuid):
     theurl = "http://192.168.0.28:8000/booking/ipn/fakepreapproval/?booking_pk=%s"%uuid
     req = urllib2.Request(url=theurl)
     f = urllib2.urlopen(req)
-    print f.read()
 
 
     

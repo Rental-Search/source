@@ -63,9 +63,7 @@ class PatronTest(TestCase):
         self.assertEquals(response.status_code, 200)
         form = response.context['form']
         
-        self.assertTrue("papal email n'est pas vérifié" in form.errors['first_name'][0])
-        self.assertTrue("papal email n'est pas vérifié" in form.errors['last_name'][0])
-        self.assertTrue("papal email n'est pas vérifié" in form.errors['paypal_email'][0])
+        self.assertTrue(_(u"Votre compte PayPal n'est pas vérifié.") in form.errors['paypal_email'][0])
         # invalid case
         response = self.client.post(reverse('patron_edit'), {
             'first_name': 'Lin',
@@ -79,9 +77,9 @@ class PatronTest(TestCase):
         
         self.assertEquals(response.status_code, 200)
         form = response.context['form']
-        self.assertTrue("papal email n'est pas valid" in form.errors['first_name'][0])
-        self.assertTrue("papal email n'est pas valid" in form.errors['last_name'][0])
-        self.assertTrue("papal email n'est pas valid" in form.errors['paypal_email'][0])
+        self.assertTrue(_(u"Vérifier que le prénom est identique à celui de votre compte PayPal") in form.errors['first_name'][0])
+        self.assertTrue(_(u"Vérifier que le nom est identique à celui de votre compte PayPal") in form.errors['last_name'][0])
+        self.assertTrue(_(u"Vérifier qu'il s'agit bien de votre email PayPal") in form.errors['paypal_email'][0])
         # verified case
         response = self.client.post(reverse('patron_edit'), {
             'first_name': 'Lin',

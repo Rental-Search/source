@@ -160,7 +160,7 @@ class BookingForm(forms.ModelForm):
         if started_at and ended_at:
             booking_dates = datespan(started_at, ended_at)
             if started_at <= datetime.datetime.now() or ended_at <= datetime.datetime.now():
-                raise ValidationError(_(u"Vous ne pouvez pas louer a ces dates"))
+                raise ValidationError(_(u"Vous ne pouvez pas louer à ces dates"))
             if started_at >= ended_at:
                 raise ValidationError(_(u"Une location ne peut pas terminer avant d'avoir commencer"))
             if (ended_at - started_at) > datetime.timedelta(days=BOOKING_DAYS):
