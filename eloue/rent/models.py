@@ -10,7 +10,7 @@ from fsm.fields import FSMField
 from fsm import transition
 from pyke import knowledge_engine
 from urlparse import urljoin
-from datetime import datetime, timedelta
+from datetime import timedelta
 
 from django.conf import settings
 from django.core.urlresolvers import reverse
