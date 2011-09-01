@@ -170,6 +170,7 @@ INSTALLED_APPS = (
     'rent',
     'django_messages',
     'products',
+    'api',
     'oauth_provider',
 )
 if DEBUG_TOOLBAR:

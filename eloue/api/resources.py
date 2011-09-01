@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+
+import re
 import logbook
 import plistlib
 from urllib import unquote,quote,urlencode
@@ -41,7 +43,7 @@ from django_lean.experiments.models import GoalRecord
 from django_lean.experiments.utils import WebUser
 
 from eloue.geocoder import GoogleGeocoder
-from eloue.products.models import Product, Category, Picture, Price, upload_to, PAYMENT_TYPE, ProductRelatedMessage#, StaticPage
+from eloue.products.models import Product, Category, Picture, Price, upload_to, PAYMENT_TYPE, ProductRelatedMessage, UNIT#, StaticPage
 from eloue.products.search_indexes import product_search
 from eloue.accounts.models import Address, PhoneNumber, Patron, PHONE_TYPES
 from eloue.rent.models import Booking
@@ -105,6 +107,9 @@ class OAuthAuthorization(Authorization):
                     print "RETURN FALSE"
                     return False
 
+            return self._is_valid(request)
+
+    def _is_valid(self, request):
         if is_valid_request(request):  # Read/Write part
             oauth_request = get_oauth_request(request)
             consumer = store.get_consumer(request, oauth_request, oauth_request.get_parameter('oauth_consumer_key'))
@@ -122,6 +127,7 @@ class OAuthAuthorization(Authorization):
 
         print "REQUEST NOT VALID"
         return False
+
 
 
 class JSONSerializer(Serializer):
@@ -414,8 +420,15 @@ class PriceResource(OAuthResource):
     class Meta(MetaBase):
         queryset = Price.objects.all()
         resource_name = "price"
-        fields = []
+        fields = ["amount", "currency", "unit"]
         allowed_methods = ['get', 'post']
+
+    def dehydrate(self, bundle):
+        bundle.data["unit"] = UNIT.reverted[bundle.data["unit"]]
+        return bundle
+
+    def hydrate(self, bundle):
+        bundle.obj.unit = UNIT.enum_dict[bundle.data["unit"]]
 
 
 class ProductResource(UserSpecificResource):
@@ -501,6 +514,13 @@ class ProductResource(UserSpecificResource):
         if day_price_data:
             Price(product=product, unit=1, amount=D(day_price_data)).save()
 
+    def add_prices(self, bundle, prices):
+        if prices:
+            bundle.obj.prices.all().delete()
+            for price_dict in prices:
+                price_dict["unit"] = UNIT.enum_dict[price_dict["unit"]]
+                price = Price(product=bundle.obj, **price_dict)
+                price.save()
 
     def obj_create(self, bundle, request=None, **kwargs):
         """
@@ -510,6 +530,7 @@ class ProductResource(UserSpecificResource):
         """
         picture_data = bundle.data.pop("picture", None)
         day_price_data = bundle.data.pop("price", None)
+        prices = bundle.data.pop("prices", None)
 
         if picture_data:
             bundle.data.pop("picture")
@@ -518,25 +539,25 @@ class ProductResource(UserSpecificResource):
         bundle = super(ProductResource, self).obj_create(bundle, request, **kwargs)
 
         self._obj_process_fields(bundle.obj, picture_data, day_price_data)
+        self.add_prices(bundle, prices)
 
         return bundle
 
     def obj_update(self, bundle, request=None, pk='', **kwargs):
-        try:
-            p_id = pk.split("-")[-1]
-            product = Product.objects.filter(id=int(p_id))
-            if product[0].owner == request.user:
-                picture_data = bundle.data.pop("picture", None)
-                day_price_data = bundle.data.pop("price", None)
-                product.update(**bundle.data)
 
-                self._obj_process_fields(bundle.obj, picture_data, day_price_data)
-                return bundle
-            else:
-                raise ImmediateHttpResponse(response=HttpBadRequest())
-        except Exception, e:
-            print e
-            print e.message
+        p_id = pk.split("-")[-1]
+        product = Product.objects.filter(id=int(p_id))
+        if product[0].owner == request.user:
+            picture_data = bundle.data.pop("picture", None)
+            day_price_data = bundle.data.pop("price", None)
+            prices = bundle.data.pop("prices", None)
+            bundle = super(ProductResource, self).obj_update(bundle, request=request, pk=p_id, **kwargs)
+
+            self.add_prices(bundle, prices)
+            self._obj_process_fields(bundle.obj, picture_data, day_price_data)
+            return bundle
+        else:
+            raise ImmediateHttpResponse(response=HttpBadRequest())
 
     def dehydrate(self, bundle):
         """
@@ -559,10 +580,13 @@ class ProductResource(UserSpecificResource):
         bundle.data["unit"], bundle.data["price"] = Booking.calculate_price(bundle.obj, date_start, date_end)
         return bundle
 
+
 def require_keys(keys, data):
     print data.keys()
     if keys != data.keys():
+        print "BAD SPECS BAD BOY"
         raise ImmediateHttpResponse(response=HttpBadRequest("Your request didn't meet the specs"))
+
 
 class BookingResource(OAuthResource):
     """
@@ -590,18 +614,15 @@ class BookingResource(OAuthResource):
         }
 
     def obj_create(self, bundle, request=None, **kwargs):
-        # TODO: Block the api user from using unwanted keys 
-        # to set various properties of the booking directly
-        # Block total_amount and state
 
         from dateutil import parser
 
         require_keys(["product", "started_at", "ended_at"], bundle.data)
 
-        product = Product.objects.get(pk=int(bundle.data["product"].split("/")[-2]))
+        product = Product.objects.get(pk=int(bundle.data["product"].split('/')[-2]))
         started_at = parser.parse(unquote(bundle.data["started_at"]))
         ended_at = parser.parse(unquote(bundle.data["ended_at"]))
-        _, total_amount = Booking.calculate_price(product, started_at, ended_at)
+        unit, total_amount = Booking.calculate_price(product, started_at, ended_at)
         domain = Site.objects.get_current().domain
         protocol = "https" if USE_HTTPS else "http"
         bundle = super(BookingResource, self).obj_create(bundle, request=request,
@@ -611,6 +632,9 @@ class BookingResource(OAuthResource):
             total_amount=total_amount,
             **kwargs
         )
+
+        # Pass unit information to dehydrate
+        bundle.data["price_unit"] = UNIT.reverted[unit]
 
         try:
             booking = bundle.obj
