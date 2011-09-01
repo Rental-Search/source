@@ -10,6 +10,7 @@ from fsm.fields import FSMField
 from fsm import transition
 from pyke import knowledge_engine
 from urlparse import urljoin
+from datetime import datetime, timedelta
 
 from django.conf import settings
 from django.core.urlresolvers import reverse
@@ -73,10 +74,10 @@ PACKAGES_UNIT = {
 PACKAGES = {
     UNIT.HOUR: lambda amount, delta: amount * (delta.seconds / 60),
     UNIT.WEEK_END: lambda amount, delta: amount,
-    UNIT.DAY: lambda amount, delta: amount * delta.days,
-    UNIT.WEEK: lambda amount, delta: amount * delta.days,
-    UNIT.TWO_WEEKS: lambda amount, delta: amount * delta.days,
-    UNIT.MONTH: lambda amount, delta: amount * delta.days
+    UNIT.DAY: lambda amount, delta: amount * delta.days + (amount/86400) * delta.seconds,
+    UNIT.WEEK: lambda amount, delta: amount * delta.days + (amount/86400) * delta.seconds,
+    UNIT.TWO_WEEKS: lambda amount, delta: amount * delta.days + (amount/86400) * delta.seconds,
+    UNIT.MONTH: lambda amount, delta: amount * delta.days + (amount/86400) * delta.seconds,
 }
 
 log = logbook.Logger('eloue.rent')
@@ -155,24 +156,30 @@ class Booking(models.Model):
     @staticmethod
     def calculate_price(product, started_at, ended_at):
         delta = ended_at - started_at
-        
+
+        engine_prices = dict([(pr.unit, pr) for pr in product.prices.all()]).values()
+
         engine = knowledge_engine.engine((__file__, '.rules'))
         engine.activate('pricing')
-        for price in product.prices.iterator():
+        for price in engine_prices:
             engine.assert_('prices', 'price', (price.unit, price.day_amount))
         vals, plans = engine.prove_1_goal('pricing.pricing($type, $started_at, $ended_at, $delta)', started_at=started_at, ended_at=ended_at, delta=delta)
         engine.reset()
-        
+
         amount, unit = D(0), PACKAGES_UNIT[vals['type']]
         package = PACKAGES[unit]
-        for price in product.prices.filter(unit=unit, started_at__isnull=True, ended_at__isnull=True):
-            amount += package(price.day_amount, delta)
-        
+
         for price in product.prices.filter(unit=unit, started_at__isnull=False, ended_at__isnull=False):
-            amount += package(price.day_amount, price.delta(started_at, ended_at))
-        
+            price_delta = price.delta(started_at, ended_at)
+            delta -= price_delta
+            amount += package(price.day_amount, price_delta)
+
+        for price in product.prices.filter(unit=unit, started_at__isnull=True, ended_at__isnull=True):
+            null_delta = timedelta(days=0)
+            amount += package(price.day_amount, null_delta if null_delta > delta else delta)
+
         return unit, amount.quantize(D(".00"))
-    
+
     def not_need_ipn(self):
         return self.payment_processor.NOT_NEED_IPN
         
