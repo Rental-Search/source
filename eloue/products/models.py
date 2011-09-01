@@ -258,9 +258,6 @@ class Price(models.Model):
     
     objects = PriceManager()
     
-    class Meta:
-        unique_together = ('product', 'unit', 'name')
-    
     @property
     def day_amount(self):
         return UNITS[self.unit](self.amount)
