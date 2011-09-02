@@ -28,9 +28,14 @@
 {% endblock %}
 
 {% block  head %}
- {{ block.super }}
- <link rel="canonical" href="{% canonical_url urlbits %}" />
+    {{ block.super }}
+    {% if page == 1 %}
+    <link rel="canonical" href="{{ site_url }}{% facet_url breadcrumbs %}" />
+    {% else %}
+    <link rel="canonical" href="{{ site_url }}{% facet_url breadcrumbs "page" page %}" />
+    {% endif %}
 {% endblock %}
+
 {% block content %}
 <div class="nav-header">
 	<ul class="nav">
