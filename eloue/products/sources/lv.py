@@ -72,7 +72,10 @@ class SourceClass(BaseSource):
         pool, docs = self.get_pool(), []
         for member in tar:
             part = tar.extractfile(member)
-            root = objectify.parse(part)
+            try:
+                root = objectify.parse(part)
+            except:
+                pass
             elements = root.xpath('//hebergement')
             docs.extend(pool.map(parse_doc, elements, len(elements) // SourceClass.processes))
         pool.close()
