@@ -515,10 +515,13 @@ class ProductResource(UserSpecificResource):
             Price(product=product, unit=1, amount=D(day_price_data)).save()
 
     def add_prices(self, bundle, prices):
+        from dateutil.parser import parse
         if prices:
             bundle.obj.prices.all().delete()
             for price_dict in prices:
                 price_dict["unit"] = UNIT.enum_dict[price_dict["unit"]]
+                price_dict["started_at"] = parse(price_dict["started_at"])
+                price_dict["ended_at"] = parse(price_dict["ended_at"])
                 price = Price(product=bundle.obj, **price_dict)
                 price.save()
 
@@ -544,7 +547,6 @@ class ProductResource(UserSpecificResource):
         return bundle
 
     def obj_update(self, bundle, request=None, pk='', **kwargs):
-
         p_id = pk.split("-")[-1]
         product = Product.objects.filter(id=int(p_id))
         if product[0].owner == request.user:
