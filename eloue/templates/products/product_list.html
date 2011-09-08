@@ -233,6 +233,7 @@
                 {% for value, count in facets.fields.categories %}
                 {% if count > 0 %}
                 {% with value|category as category %}
+                 {% if category != 'None' %}
                     {% if breadcrumbs.categorie %}
                     {% if breadcrumbs.categorie.value != category.slug %}
                     <li>
@@ -246,6 +247,7 @@
 						<a href="{% facet_url breadcrumbs category.get_ancertors_slug category.slug %}">{{ category.name }}</a> 
 					</li>
 					{% endif %}
+				{% endif %}
                 {% endwith%}
                 {% endif %}
                 {% endfor %}
