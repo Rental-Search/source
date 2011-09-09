@@ -627,8 +627,11 @@ class BookingResource(OAuthResource):
         unit, total_amount = Booking.calculate_price(product, started_at, ended_at)
         domain = Site.objects.get_current().domain
         protocol = "https" if USE_HTTPS else "http"
+
+        state = "authorized" if product.owner == request.user else "authorizing"
+
         bundle = super(BookingResource, self).obj_create(bundle, request=request,
-            state="authorizing",
+            state= state,
             owner=product.owner,
             borrower=request.user,
             total_amount=total_amount,
@@ -638,16 +641,17 @@ class BookingResource(OAuthResource):
         # Pass unit information to dehydrate
         bundle.data["price_unit"] = UNIT.reverted[unit]
 
-        try:
-            booking = bundle.obj
-            booking.init_payment_processor()
-            booking.preapproval(
-                cancel_url="%s://%s%s" % (protocol, domain, reverse("booking_failure", args=[booking.pk.hex])),
-                return_url="%s://%s%s" % (protocol, domain, reverse("booking_success", args=[booking.pk.hex])),
-                ip_address=request.META['REMOTE_ADDR']
-            )
-        except IntegrityError:
-            raise ImmediateHttpResponse(response=HttpBadRequest())
+        if state == "authorizing":
+            try:
+                booking = bundle.obj
+                booking.init_payment_processor()
+                booking.preapproval(
+                    cancel_url="%s://%s%s" % (protocol, domain, reverse("booking_failure", args=[booking.pk.hex])),
+                    return_url="%s://%s%s" % (protocol, domain, reverse("booking_success", args=[booking.pk.hex])),
+                    ip_address=request.META['REMOTE_ADDR']
+                )
+            except IntegrityError:
+                raise ImmediateHttpResponse(response=HttpBadRequest())
 
         return bundle
 
