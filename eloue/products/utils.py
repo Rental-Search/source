@@ -71,4 +71,8 @@ def format_quote(sender, body):
         'body': quote,
         }
             
-            
+def escape_percent_sign(unescaped_url):
+    """
+    Escapes standalone percent signs in raw url's, like localhost:8000/location/jardinage?q=ch%C3%A8vre&sort=price
+    """
+    return unescaped_url.replace('%', '%%')
