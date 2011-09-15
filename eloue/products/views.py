@@ -155,6 +155,7 @@ def product_delete(request, slug, product_id):
 
 
 @mobify
+@cache_page(900)
 @vary_on_cookie
 def product_list(request, urlbits, sqs=SearchQuerySet(), suggestions=None, page=None):
     form = FacetedSearchForm(request.GET)
