@@ -1,0 +1,248 @@
+[
+    {
+        "fields": {
+            "product": 1,
+            "ended_at": "2010-08-27 09:00:10",
+            "total_amount": "20",
+            "pin": 1234,
+            "insurance_amount": "1.294920",
+            "pay_key": "AP-1G646418FF723264N",
+            "created_at": "2010-08-15 09:00:10",
+            "deposit_amount": "10",
+            "state": "canceled",
+            "preapproval_key": "PA-2NS525738W954192E",
+            "borrower": 2,
+            "owner": 1,
+            "started_at": "2010-08-17 09:00:10",
+            "contract_id": 1
+        },
+        "model": "rent.booking",
+        "pk": "87ee8e9dec1d47c29ebb27e09bda8fc3"
+    },
+    {
+        "fields": {
+            "product": 1,
+            "ended_at": "2010-08-29 09:00:10",
+            "total_amount": "20",
+            "pin": 4321,
+            "insurance_amount": "1.294920",
+            "created_at": "2010-08-15 09:00:10",
+            "deposit_amount": "10",
+            "state": "canceled",
+            "borrower": 1,
+            "owner": 2,
+            "started_at": "2010-08-19 09:00:10",
+            "contract_id": 2
+        },
+        "model": "rent.booking",
+        "pk": "8fd2f3df67e2488496899aeb22601b15"
+    },
+    {
+        "fields": {
+            "product": 1,
+            "ended_at": "2010-08-29 09:00:10",
+            "total_amount": "20",
+            "pin": 3412,
+            "insurance_amount": "1.294920",
+            "created_at": "2010-08-15 09:00:10",
+            "deposit_amount": "10",
+            "state": "pending",
+            "preapproval_key": "PA-3GS72427VU067670D",
+            "borrower": 1,
+            "owner": 2,
+            "started_at": "2010-08-19 09:00:10",
+            "contract_id": 3
+        },
+        "model": "rent.booking",
+        "pk": "a72608d9a7e349ce9ba628abfdfc9cb3"
+    },
+    {
+        "fields": {
+            "product": 1,
+            "ended_at": "2010-08-29 09:00:10",
+            "total_amount": "20",
+            "pin": 2314,
+            "insurance_amount": "1.294920",
+            "created_at": "2010-08-15 09:00:10",
+            "deposit_amount": "10",
+            "state": "ended",
+            "borrower": 1,
+            "owner": 2,
+            "started_at": "2010-08-19 09:00:10",
+            "contract_id": 4
+        },
+        "model": "rent.booking",
+        "pk": "39b3d0063edb4ca8b661543386df7660"
+    },
+    {
+        "fields": {
+            "product": 1,
+            "ended_at": "2010-08-29 09:00:10",
+            "total_amount": "20",
+            "pin": 2134,
+            "insurance_amount": "1.294920",
+            "canceled_at": "2010-08-15 09:00:10",
+            "created_at": "2010-08-02 09:00:10",
+            "deposit_amount": "10",
+            "state": "canceled",
+            "borrower": 1,
+            "owner": 2,
+            "started_at": "2010-08-19 09:00:10",
+            "contract_id": 5
+        },
+        "model": "rent.booking",
+        "pk": "cf196d3c919c4c41b90233f7398ab27e"
+    },
+    {
+        "fields": {
+            "product": 1,
+            "ended_at": "2010-08-29 09:00:10",
+            "total_amount": "20",
+            "pin": 3421,
+            "insurance_amount": "1.294920",
+            "canceled_at": "2010-08-15 09:00:10",
+            "created_at": "2010-08-02 09:00:10",
+            "deposit_amount": "10",
+            "state": "canceled",
+            "borrower": 1,
+            "owner": 2,
+            "started_at": "2010-08-19 09:00:10",
+            "contract_id": 6
+        },
+        "model": "rent.booking",
+        "pk": "7ff8c84f45d540fb9b38b2dd0ca8a208"
+    },
+    {
+        "fields": {
+            "product": 1,
+            "ended_at": "2010-08-29 09:00:10",
+            "total_amount": "20",
+            "pin": 2135,
+            "insurance_amount": "1.294920",
+            "canceled_at": "2010-08-15 09:00:10",
+            "created_at": "2010-08-02 09:00:10",
+            "deposit_amount": "10",
+            "state": "canceled",
+            "borrower": 1,
+            "owner": 2,
+            "started_at": "2010-08-19 09:00:10",
+            "contract_id": 7
+        },
+        "model": "rent.booking",
+        "pk": "c41b90233f7398ab27ecf196d3c919c4"
+    },
+    {
+        "fields": {
+            "product": 1,
+            "ended_at": "2010-08-29 09:00:10",
+            "total_amount": "20",
+            "pin": 3427,
+            "insurance_amount": "1.294920",
+            "created_at": "2010-08-15 09:00:10",
+            "deposit_amount": "10",
+            "state": "pending",
+            "preapproval_key": "PA-2NS525738W954192F",
+            "borrower": 2,
+            "owner": 1,
+            "started_at": "2010-08-19 09:00:10",
+            "contract_id": 8
+        },
+        "model": "rent.booking",
+        "pk": "349ce9ba628abfdfc9cb3a72608d9a7e"
+    },
+    {
+        "fields": {
+            "product": 3,
+            "ended_at": "2010-08-29 09:00:10",
+            "total_amount": "20",
+            "pin": 3425,
+            "insurance_amount": "1.294920",
+            "created_at": "2010-08-15 09:00:10",
+            "deposit_amount": "10",
+            "state": "ongoing",
+            "preapproval_key": "PA-2NS525738W954192F",
+            "borrower": 2,
+            "owner": 1,
+            "started_at": "2010-08-19 09:00:10",
+            "contract_id": 12
+        },
+        "model": "rent.booking",
+        "pk": "349ce9ba628abfdfc9cb3a72608d9a7d"
+    },
+    {
+        "fields": {
+            "product": 1,
+            "ended_at": "2011-03-25 08:00:00",
+            "total_amount": "6.00",
+            "pin": 3427,
+            "insurance_amount": "0.35",
+            "created_at": "2011-03-22 19:58:14",
+            "deposit_amount": "30.00",
+            "state": "authorizing",
+            "preapproval_key": "PA-7BT08456PP218331A",
+            "borrower": 2,
+            "owner": 1,
+            "started_at": "2011-03-23 08:00:00",
+            "contract_id": 9
+        },
+        "model": "rent.booking",
+        "pk": "1661f5f6f9e14b43813b3c1913a7c26d"
+    },
+    {
+        "fields": {
+            "product": 5,
+            "ended_at": "2011-03-26 08:00:00",
+            "total_amount": "10.00",
+            "pin": 2463,
+            "insurance_amount": "1.294920",
+            "created_at": "2011-03-22 19:58:14",
+            "deposit_amount": "30.00",
+            "state": "pending",
+            "preapproval_key": "PA-7BT08456PP218336",
+            "borrower": 2,
+            "owner": 1,
+            "started_at": "2011-03-24 08:00:00",
+            "contract_id": 10
+        },
+        "model": "rent.booking",
+        "pk": "349ce9ba628abfdfc9cb3a72608dab6d"
+    },
+    {
+        "fields": {
+            "product": 5,
+            "ended_at": "2011-03-26 08:00:00",
+            "total_amount": "10.00",
+            "pin": 2466,
+            "insurance_amount": "1.294920",
+            "created_at": "2011-03-22 19:58:14",
+            "deposit_amount": "30.00",
+            "state": "ongoing",
+            "preapproval_key": "PA-7BT08456PP218336",
+            "borrower": 2,
+            "owner": 1,
+            "started_at": "2011-03-24 08:00:00",
+            "contract_id": 11
+        },
+        "model": "rent.booking",
+        "pk": "349ce9ba628abfdfc9cb3a72608dab66"
+    },
+    {
+        "fields": {
+            "product": 6,
+            "ended_at": "2011-03-26 08:00:00",
+            "total_amount": "10.00",
+            "pin": 2468,
+            "insurance_amount": "1.294920",
+            "created_at": "2011-03-22 19:58:14",
+            "deposit_amount": "30.00",
+            "state": "authorizing",
+            "preapproval_key": "PA-7BT08456PP218336",
+            "borrower": 2,
+            "owner": 4,
+            "started_at": "2011-03-24 08:00:00",
+            "contract_id": 13
+        },
+        "model": "rent.booking",
+        "pk": "349ce9ba628abfdfc9cb3a72608dab68"
+    }
+]
