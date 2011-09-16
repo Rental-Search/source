@@ -14,7 +14,7 @@ mock>=0.7.0b3
 pylint>=0.21.2
 python-dateutil==1.5
 pyyaml>=3.09
-psycopg2>=2.2.2
+psycopg2==2.4.1
 reportlab>=2.5
 south>=0.7
 sphinx>=1.0.2
