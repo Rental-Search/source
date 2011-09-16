@@ -1,0 +1,117 @@
+[
+    {
+        "fields": {
+            "category": 1,
+            "description": "Engrenage plantaire haute performance 2 vitesses : dur\u00e9e de vie sup\u00e9rieure, transmission optimale, fonctionnement r\u00e9gulier.",
+            "created_at": "2010-08-15 09:00:10",
+            "deposit_amount": "250",
+            "sites": [
+                1,
+                2,
+                3
+            ],
+            "summary": "Perceuse visseuse Philips",
+            "address": 1,
+            "owner": 1,
+            "quantity": 1
+        },
+        "model": "products.product",
+        "pk": 1
+    },
+    {
+        "fields": {
+            "category": 1,
+            "description": "Engrenage plantaire haute performance 2 vitesses : dur\u00e9e de vie sup\u00e9rieure fonctionnement r\u00e9gulier.",
+            "created_at": "2010-08-15 09:00:10",
+            "deposit_amount": "250",
+            "sites": [
+                1,
+                2,
+                3
+            ],
+            "summary": "Perceuse visseuse Black Decker",
+            "address": 1,
+            "owner": 1,
+            "quantity": 1
+        },
+        "model": "products.product",
+        "pk": 2
+    },
+    {
+        "fields": {
+            "category": 1,
+            "description": "Belle maison de bord de plage",
+            "created_at": "2010-08-15 09:00:10",
+            "deposit_amount": "1000",
+            "sites": [
+                1,
+                2,
+                3
+            ],
+            "summary": "Maison de vacances au bord de la plage",
+            "address": 1,
+            "owner": 1,
+            "quantity": 1
+        },
+        "model": "products.product",
+        "pk": 3
+    },
+    {
+        "fields": {
+            "category": 1,
+            "description": "Belle voiture de sport",
+            "created_at": "2010-08-15 09:00:10",
+            "deposit_amount": "700",
+            "sites": [
+                1,
+                2,
+                3
+            ],
+            "summary": "Belle voiture de sport BMW",
+            "address": 1,
+            "owner": 1,
+            "quantity": 1
+        },
+        "model": "products.product",
+        "pk": 4
+    },
+    {
+        "fields": {
+            "category": 1,
+            "description": "Voiture neuf",
+            "created_at": "2010-08-15 09:00:10",
+            "deposit_amount": "100",
+            "sites": [
+                1,
+                2,
+                3
+            ],
+            "summary": "Bonne voiture Benz",
+            "payment_type": 0,
+            "address": 1,
+            "owner": 1,
+            "quantity": 1
+        },
+        "model": "products.product",
+        "pk": 5
+    },
+    {
+        "fields": {
+            "category": 1,
+            "description": "Voiture neuf de Lin",
+            "created_at": "2010-08-15 10:00:10",
+            "deposit_amount": "100",
+            "sites": [
+                1,
+                2,
+                3
+            ],
+            "summary": "Bonne voiture Benz de Lin",
+            "address": 1,
+            "owner": 4,
+            "quantity": 1
+        },
+        "model": "products.product",
+        "pk": 6
+    }
+]

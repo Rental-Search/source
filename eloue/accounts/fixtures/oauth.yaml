@@ -1,9 +1,0 @@
--   fields: {description: e-loue iPhone application, key: 451cffaa88bd49e881068349b093598a,
-        name: iPhone Application, secret: j5rdVtVhKu4VfykM, status: 1, user: null}
-    model: oauth_provider.consumer
-    pk: 1
--   fields: {callback: null, callback_confirmed: false, consumer: 1, is_approved: false,
-        key: 87a9386519d24d2a8977388d4fd2e9b5, resource: 1, secret: jSdFZCdLgzTCRxcG,
-        timestamp: 1291285352, token_type: 2, user: 1, verifier: ''}
-    model: oauth_provider.token
-    pk: 1
