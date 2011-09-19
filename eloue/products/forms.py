@@ -224,13 +224,12 @@ class ProductForm(forms.ModelForm):
     description = forms.CharField(label=_(u"Description"), widget=forms.Textarea())
     payment_type = forms.ChoiceField(choices=PAYMENT_TYPE, required=False, widget=forms.Select(attrs={'class': 'selm'}))
     
-    hour_price = forms.DecimalField(label=_(u"l'heure"), required=False, widget=forms.TextInput(attrs={'class': 'ins'}), localize=True)
-    day_price = forms.DecimalField(label=_(u"la journée"), required=True, widget=forms.TextInput(attrs={'class': 'ins'}), localize=True)
-    week_end_price = forms.DecimalField(label=_(u"le week-end"), required=False, widget=forms.TextInput(attrs={'class': 'ins'}), localize=True)
-    week_price = forms.DecimalField(label=_(u"la semaine"), required=False, widget=forms.TextInput(attrs={'class': 'ins'}), localize=True)
-    two_weeks_price = forms.DecimalField(label=_(u"les 15 jours"), required=False, widget=forms.TextInput(attrs={'class': 'ins'}), localize=True)
-    month_price = forms.DecimalField(label=_(u"le mois"), required=False, widget=forms.TextInput(attrs={'class': 'ins'}), localize=True)
-    
+    hour_price = forms.DecimalField(label=_(u"l'heure"), required=False, min_value=D('0.01'), widget=forms.TextInput(attrs={'class': 'ins'}), localize=True)
+    day_price = forms.DecimalField(label=_(u"la journée"), required=True, min_value=D('0.01'), widget=forms.TextInput(attrs={'class': 'ins'}), localize=True)
+    week_end_price = forms.DecimalField(label=_(u"le week-end"), required=False, min_value=D('0.01'), widget=forms.TextInput(attrs={'class': 'ins'}), localize=True)
+    week_price = forms.DecimalField(label=_(u"la semaine"), required=False, min_value=D('0.01'), widget=forms.TextInput(attrs={'class': 'ins'}), localize=True)
+    two_weeks_price = forms.DecimalField(label=_(u"les 15 jours"), required=False, min_value=D('0.01'), widget=forms.TextInput(attrs={'class': 'ins'}), localize=True)
+    month_price = forms.DecimalField(label=_(u"le mois"), required=False, min_value=D('0.01'), widget=forms.TextInput(attrs={'class': 'ins'}), localize=True)
     
     def clean_quantity(self):
         quantity = self.cleaned_data['quantity']
@@ -268,13 +267,14 @@ class ProductEditForm(forms.ModelForm):
     quantity = forms.IntegerField(initial=1, widget=forms.TextInput(attrs={'class': 'inm price'}))
     picture = forms.ImageField(label=_(u"Photo"), required=False, widget=forms.FileInput(attrs={'class': 'inm'}))
     description = forms.CharField(label=_(u"Description"), widget=forms.Textarea())
+
+    hour_price = forms.DecimalField(label=_(u"l'heure"), required=False, min_value=D('0.01'), widget=forms.TextInput(attrs={'class': 'ins'}), localize=True)
+    day_price = forms.DecimalField(label=_(u"la journée"), required=True, min_value=D('0.01'), widget=forms.TextInput(attrs={'class': 'ins'}), localize=True)
+    week_end_price = forms.DecimalField(label=_(u"le week-end"), required=False, min_value=D('0.01'), widget=forms.TextInput(attrs={'class': 'ins'}), localize=True)
+    week_price = forms.DecimalField(label=_(u"la semaine"), required=False, min_value=D('0.01'), widget=forms.TextInput(attrs={'class': 'ins'}), localize=True)
+    two_weeks_price = forms.DecimalField(label=_(u"les 15 jours"), required=False, min_value=D('0.01'), widget=forms.TextInput(attrs={'class': 'ins'}), localize=True)
+    month_price = forms.DecimalField(label=_(u"le mois"), required=False, min_value=D('0.01'), widget=forms.TextInput(attrs={'class': 'ins'}), localize=True)
     
-    hour_price = forms.DecimalField(label=_(u"l'heure"), required=False, widget=forms.TextInput(attrs={'class': 'ins'}), localize=True)
-    day_price = forms.DecimalField(label=_(u"la journée"), required=True, widget=forms.TextInput(attrs={'class': 'ins'}), localize=True)
-    week_end_price = forms.DecimalField(label=_(u"le week-end"), required=False, widget=forms.TextInput(attrs={'class': 'ins'}), localize=True)
-    week_price = forms.DecimalField(label=_(u"la semaine"), required=False, widget=forms.TextInput(attrs={'class': 'ins'}), localize=True)
-    two_weeks_price = forms.DecimalField(label=_(u"les 15 jours"), required=False, widget=forms.TextInput(attrs={'class': 'ins'}), localize=True)
-    month_price = forms.DecimalField(label=_(u"le mois"), required=False, widget=forms.TextInput(attrs={'class': 'ins'}), localize=True)
     
     def __init__(self, *args, **kwargs):
         super(ProductEditForm, self).__init__(*args, **kwargs)

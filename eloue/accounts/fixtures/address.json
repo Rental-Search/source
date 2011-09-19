@@ -1,0 +1,28 @@
+[
+    {
+        "fields": {
+            "city": "Paris",
+            "position": "POINT(48.8613232 2.3631101)",
+            "patron": 1,
+            "country": "FR",
+            "address1": "11, rue debelleyme",
+            "address2": null,
+            "zipcode": "75003"
+        },
+        "model": "accounts.address",
+        "pk": 1
+    },
+    {
+        "fields": {
+            "city": "Paris",
+            "position": "POINT(48.8916787 2.3439435)",
+            "patron": 2,
+            "country": "FR",
+            "address1": "70, rue Mont-Cenis",
+            "address2": null,
+            "zipcode": "75018"
+        },
+        "model": "accounts.address",
+        "pk": 2
+    }
+]

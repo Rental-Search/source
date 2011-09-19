@@ -33,7 +33,7 @@ from eloue.products.forms import AlertSearchForm, AlertForm, FacetedSearchForm, 
 from eloue.products.models import Category, Product, Curiosity, UNIT, ProductRelatedMessage, Alert
 from eloue.products.wizard import ProductWizard, MessageWizard, AlertWizard, AlertAnswerWizard
 from django_messages.forms import ComposeForm
-from eloue.products.utils import format_quote
+from eloue.products.utils import format_quote, escape_percent_sign
 from django.core.cache import cache
 
 
@@ -180,7 +180,7 @@ def product_list(request, urlbits, sqs=SearchQuerySet(), suggestions=None, page=
                 raise Http404
             if bit.endswith(_('categorie')):
                 item = get_object_or_404(Category, slug=value)
-                params = MultiValueDict((facet['label'], [facet['value']]) for facet in breadcrumbs.values() if (not facet['facet']) and not (facet['label'] == 'r' and facet['value'] == DEFAULT_RADIUS)and not (facet['label'] == 'l' and facet['value'] == '') and not (facet['label'] == 'sort' and facet['value'] == '') and not (facet['label'] == 'q' and facet['value'] == ''))
+                params = MultiValueDict((facet['label'], [unicode(facet['value']).encode('utf-8')]) for facet in breadcrumbs.values() if (not facet['facet']) and not (facet['label'] == 'r' and facet['value'] == DEFAULT_RADIUS)and not (facet['label'] == 'l' and facet['value'] == '') and not (facet['label'] == 'sort' and facet['value'] == '') and not (facet['label'] == 'q' and facet['value'] == ''))
                 path = item.get_absolute_url()
                 for bit in urlbits:
                     if bit.startswith(_('page')):
@@ -191,7 +191,7 @@ def product_list(request, urlbits, sqs=SearchQuerySet(), suggestions=None, page=
                             raise Http404
                 if any([value for key, value in params.iteritems()]):
                     path = '%s?%s' % (path, urlencode(params))
-                return redirect_to(request, path)
+                return redirect_to(request, escape_percent_sign(path))
             elif bit.endswith(_('loueur')):
                 item = get_object_or_404(Patron.on_site, slug=value)
                 breadcrumbs[bit] = {

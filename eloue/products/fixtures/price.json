@@ -1,0 +1,157 @@
+[
+    {
+        "fields": {
+            "currency": "EUR",
+            "product": 1,
+            "amount": "1",
+            "unit": 0,
+            "name": ""
+        },
+        "model": "products.price",
+        "pk": 1
+    },
+    {
+        "fields": {
+            "currency": "EUR",
+            "product": 1,
+            "amount": "24",
+            "unit": 1,
+            "name": ""
+        },
+        "model": "products.price",
+        "pk": 2
+    },
+    {
+        "fields": {
+            "currency": "EUR",
+            "product": 1,
+            "amount": "36",
+            "unit": 2,
+            "name": ""
+        },
+        "model": "products.price",
+        "pk": 3
+    },
+    {
+        "fields": {
+            "product": 1,
+            "amount": "90",
+            "unit": 3,
+            "name": ""
+        },
+        "model": "products.price",
+        "pk": 4
+    },
+    {
+        "fields": {
+            "product": 1,
+            "amount": "135",
+            "unit": 4,
+            "name": ""
+        },
+        "model": "products.price",
+        "pk": 5
+    },
+    {
+        "fields": {
+            "product": 1,
+            "amount": "200",
+            "unit": 5,
+            "name": ""
+        },
+        "model": "products.price",
+        "pk": 6
+    },
+    {
+        "fields": {
+            "currency": "EUR",
+            "product": 2,
+            "amount": "7",
+            "unit": 1,
+            "name": ""
+        },
+        "model": "products.price",
+        "pk": 7
+    },
+    {
+        "fields": {
+            "currency": "EUR",
+            "product": 2,
+            "amount": "95",
+            "unit": 4,
+            "name": ""
+        },
+        "model": "products.price",
+        "pk": 8
+    },
+    {
+        "fields": {
+            "currency": "EUR",
+            "product": 2,
+            "amount": "0.6",
+            "unit": 0,
+            "name": ""
+        },
+        "model": "products.price",
+        "pk": 9
+    },
+    {
+        "fields": {
+            "currency": "EUR",
+            "product": 3,
+            "ended_at": 310,
+            "name": "Haute saison",
+            "started_at": 213,
+            "amount": "10",
+            "unit": 1
+        },
+        "model": "products.price",
+        "pk": 10
+    },
+    {
+        "fields": {
+            "currency": "EUR",
+            "product": 3,
+            "ended_at": 212,
+            "name": "Basse saison",
+            "started_at": 311,
+            "amount": "8",
+            "unit": 1
+        },
+        "model": "products.price",
+        "pk": 11
+    },
+    {
+        "fields": {
+            "currency": "EUR",
+            "product": 4,
+            "amount": "450",
+            "unit": 1,
+            "name": ""
+        },
+        "model": "products.price",
+        "pk": 12
+    },
+    {
+        "fields": {
+            "currency": "EUR",
+            "product": 5,
+            "amount": "160",
+            "unit": 1,
+            "name": ""
+        },
+        "model": "products.price",
+        "pk": 13
+    },
+    {
+        "fields": {
+            "currency": "EUR",
+            "product": 6,
+            "amount": "180",
+            "unit": 1,
+            "name": ""
+        },
+        "model": "products.price",
+        "pk": 14
+    }
+]

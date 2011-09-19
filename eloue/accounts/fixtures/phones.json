@@ -1,0 +1,20 @@
+[
+    {
+        "fields": {
+            "kind": 4,
+            "number": "0123456789",
+            "patron": 1
+        },
+        "model": "accounts.phonenumber",
+        "pk": 1
+    },
+    {
+        "fields": {
+            "kind": 4,
+            "number": "0198765432",
+            "patron": 2
+        },
+        "model": "accounts.phonenumber",
+        "pk": 2
+    }
+]

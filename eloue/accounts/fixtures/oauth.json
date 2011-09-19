@@ -1,0 +1,31 @@
+[
+    {
+        "fields": {
+            "status": 1,
+            "secret": "j5rdVtVhKu4VfykM",
+            "description": "e-loue iPhone application",
+            "key": "451cffaa88bd49e881068349b093598a",
+            "name": "iPhone Application",
+            "user": null
+        },
+        "model": "oauth_provider.consumer",
+        "pk": 1
+    },
+    {
+        "fields": {
+            "resource": 1,
+            "callback_confirmed": false,
+            "timestamp": 1291285352,
+            "secret": "jSdFZCdLgzTCRxcG",
+            "token_type": 2,
+            "callback": null,
+            "verifier": "",
+            "user": 1,
+            "key": "87a9386519d24d2a8977388d4fd2e9b5",
+            "consumer": 1,
+            "is_approved": false
+        },
+        "model": "oauth_provider.token",
+        "pk": 1
+    }
+]
