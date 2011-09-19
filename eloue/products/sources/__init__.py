@@ -35,7 +35,7 @@ class Product(dict):
             'price_exact': self['price'],
             'sites': settings.DEFAULT_SITES,
             'sites_exact': settings.DEFAULT_SITES,
-            'thumbnail': generate_camo_url(self['thumbnail']) if 'thumbnail' in self and self['thumbnail'] else None,
+            'thumbnail': generate_camo_url(self['thumbnail'].encode('utf-8')) if 'thumbnail' in self and self['thumbnail'] else None,
         })
 
     def _camo_url(self, url):
