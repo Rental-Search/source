@@ -19,7 +19,7 @@ XP_PDESC = "//div[@id='desc']//div[@class='texte']"
 XP_THUMBNAIL = "//div[@class='visuel']//img"
 
 BASE_URL = "http://www.kiloutou.fr"
-
+IMAGE_URL =  "http://filer.kiloutou.fr"
 class SourceClass(BaseSource):
 
     id = id_gen()
@@ -51,7 +51,9 @@ class SourceClass(BaseSource):
         try:
             cat, subcat = [s.replace("Location-","") for s in href.split("/")[2:4]]
             categories = CATEGORIES.get(cat, CATEGORIES.get(subcat, []))
-            price_string = html_tree.find(XP_PRICE).text
+            if html_tree.find(XP_PRICE) is not None:
+                price_string = html_tree.find(XP_PRICE).text
+            else: return
             c_id = self.id.next()
 
             yield Product({
@@ -65,7 +67,7 @@ class SourceClass(BaseSource):
                 'owner' : 'kiloutou',
                 'owner_url' : BASE_URL + "/",
                 'url' : BASE_URL + href,
-                'thumbnail' : html_tree.find(XP_THUMBNAIL).attrib["src"],
+                'thumbnail' : IMAGE_URL + html_tree.find(XP_THUMBNAIL).attrib["src"][6:],
                 'django_id' : 'kiloutou.%d' % c_id
             })
         except Exception, e:
