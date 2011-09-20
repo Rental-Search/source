@@ -15,7 +15,7 @@ class SourceClass(BaseSource):
     def request(self, xml):
         response, content = Http().request("http://www.elocationdevoitures.fr/service/ServiceRequest.do?%s" % urlencode({'xml': xml}))
         return objectify.fromstring(content)
-    
+
     def build_xml(self, params):
         xml = """<SearchRQ>
             <Credentials username="eloue_fr" password="eloue" remoteIp="46.51.172.206" />
@@ -38,7 +38,7 @@ class SourceClass(BaseSource):
             for city in root.xpath('//City'):
                 cities.append({'country': country, 'city': smart_str(city.pyval)})
         return cities
-    
+
     def get_locations(self):
         locations = []
         for city in self.get_cities():
@@ -51,7 +51,7 @@ class SourceClass(BaseSource):
                     'country': city['country'],
                 })
         return locations
-    
+
     def get_docs(self):
         docs = []
         pickup_date = datetime.now() + timedelta(days=7)
@@ -83,7 +83,7 @@ class SourceClass(BaseSource):
                     'django_id': 'jigsaw.%s' % match.Vehicle.get('id')
                 }))
         return docs
-    
+
     def get_prefix(self):
         return 'source.jigsaw'
-    
+
