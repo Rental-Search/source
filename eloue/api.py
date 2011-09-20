@@ -418,8 +418,7 @@ class ProductResource(UserSpecificResource):
             bundle.data["distance"] = bundle.data["distance"].km
         bundle.data["unit"], bundle.data["price"] = Booking.calculate_price(bundle.obj, date_start, date_end)
         return bundle
-    
-
+        
 api_v1 = Api(api_name='1.0')
 api_v1.register(CategoryResource())
 api_v1.register(ProductResource())

@@ -3,7 +3,6 @@ jQuery.fn.reverse = function() {
 };
 
 $(document).ready(function() {
-    
     // Password field enabler/disabler
     var passwordInput,
     paypalEmailInput,
