@@ -72,18 +72,14 @@ def is_valid_request(request, parameters=OAUTH_PARAMETERS_NAMES):
 
 class OAuthentication(Authentication):
     def is_authenticated(self, request, **kwargs):
-        print "IN IS AUTHENTICATED"
         if is_valid_request(request, ['oauth_consumer_key']):
             # Just checking if you're allowed to be there
             oauth_request = get_oauth_request(request)
             try:
                 consumer = store.get_consumer(request, oauth_request, oauth_request.get_parameter('oauth_consumer_key'))
-                print "RETURN TRUE"
                 return True
             except InvalidConsumerError:
-                print "INVALIDCONSUMERERROR RETURN FALSE"
                 return False
-        print "RETURN FALSE"
         return False
 
 
@@ -92,7 +88,6 @@ class OAuthAuthorization(Authorization):
     def is_authorized(self, request, object=None):
 
         if is_valid_request(request, ['oauth_consumer_key']):  # Read-only part
-            print "REQUEST IS VALID 1"
             oauth_request = get_oauth_request(request)
 
             klass = self.resource_meta.object_class
@@ -101,10 +96,8 @@ class OAuthAuthorization(Authorization):
                 or (issubclass(klass, Product) and request.method == 'GET'):
                 try:
                     consumer = store.get_consumer(request, oauth_request, oauth_request.get_parameter('oauth_consumer_key'))
-                    print "RETURN TRUE"
                     return True
                 except InvalidConsumerError:
-                    print "RETURN FALSE"
                     return False
 
             return self._is_valid(request)
@@ -125,7 +118,6 @@ class OAuthAuthorization(Authorization):
                 request.user = token.user.patron
                 return True
 
-        print "REQUEST NOT VALID"
         return False
 
 
@@ -224,7 +216,7 @@ class UserResource(OAuthResource):
         queryset = Patron.objects.all()
         resource_name = "user"
         allowed_methods = ['get', 'post', 'put', 'delete']
-        fields = ['username', 'id', 'email']
+        fields = ['username', 'id', 'email', 'first_name', 'last_name']
         filtering = {
             'username': ALL_WITH_RELATIONS,
             'email': ALL_WITH_RELATIONS
@@ -234,23 +226,15 @@ class UserResource(OAuthResource):
     def obj_create(self, bundle, request=None, **kwargs):
         """Creates a new inactive user"""
 
-        print "IN OBJ CREATE"
         data = bundle.data
         try:
-            print data
             bundle.obj = Patron.objects.create_user(data["username"], data["email"], data["password"])
         except IntegrityError:
-            print "INTEGRITY ERROR"
             raise ImmediateHttpResponse(response=HttpBadRequest())
         except Exception, e:
-            print "OTHER EXCEPTION", e
-            print type(e)
             raise ImmediateHttpResponse(response=HttpBadRequest())
 
         return bundle
-
-    def obj_get_list(self, request=None, **kwargs):
-        raise ImmediateHttpResponse(response=HttpBadRequest())
 
     def obj_update(self, bundle, request=None, pk='', **kwargs):
         pk = int(pk)
@@ -304,11 +288,9 @@ class PhoneNumberResource(UserSpecificResource):
     def obj_create(self, bundle, request=None, **kwargs):
         bundle.data['patron'] = UserResource().get_resource_uri(request.user)
         bundle.data['kind'] = getattr(PHONE_TYPES, bundle.data['kind'])
-        print bundle.data['patron']
         return super(PhoneNumberResource, self).obj_create(bundle, request, **kwargs)
 
     def obj_update(self, bundle, request=None, pk='', **kwargs):
-        print "IN OBJ UPDATE"
         pk = int(pk)
         number = PhoneNumber.objects.filter(id=pk)
         if number[0].patron == request.user:
@@ -584,9 +566,7 @@ class ProductResource(UserSpecificResource):
 
 
 def require_keys(keys, data):
-    print data.keys()
-    if keys != data.keys():
-        print "BAD SPECS BAD BOY"
+    if set(keys) != set(data.keys()):
         raise ImmediateHttpResponse(response=HttpBadRequest("Your request didn't meet the specs"))
 
 
@@ -619,15 +599,15 @@ class BookingResource(OAuthResource):
 
         from dateutil import parser
 
-        require_keys(["product", "started_at", "ended_at"], bundle.data)
+        is_offline_booking = bool(bundle.data.pop("is_offline_booking", False))
 
+        require_keys(["product", "started_at", "ended_at"], bundle.data)
         product = Product.objects.get(pk=int(bundle.data["product"].split('/')[-2]))
         started_at = parser.parse(unquote(bundle.data["started_at"]))
         ended_at = parser.parse(unquote(bundle.data["ended_at"]))
         unit, total_amount = Booking.calculate_price(product, started_at, ended_at)
         domain = Site.objects.get_current().domain
         protocol = "https" if USE_HTTPS else "http"
-
         state = "authorized" if product.owner == request.user else "authorizing"
 
         bundle = super(BookingResource, self).obj_create(bundle, request=request,
@@ -641,7 +621,7 @@ class BookingResource(OAuthResource):
         # Pass unit information to dehydrate
         bundle.data["price_unit"] = UNIT.reverted[unit]
 
-        if state == "authorizing":
+        if not is_offline_booking and state == "authorizing":
             try:
                 booking = bundle.obj
                 booking.init_payment_processor()
@@ -657,16 +637,28 @@ class BookingResource(OAuthResource):
 
     def obj_update(self, bundle, request=None, pk='', **kwargs):
 
+        is_offline_booking = bool(bundle.data.pop("is_offline_booking", False))
         require_keys(["state"], bundle.data)
 
         new_state = bundle.data["state"].lower()
         booking = Booking.objects.get(pk=pk)
 
         def error(error_str):
-            raise ImmediateHttpResponse(response = HttpResponseBadRequest(content_type='application/json', content=json.dumps({ "error":error_str })))
+            raise ImmediateHttpResponse(
+                response = HttpResponseBadRequest(
+                    content_type='application/json',
+                    content=json.dumps({ "error":error_str })
+                )
+            )
 
         def assert_current_state_is(from_state):
-            if booking.state != from_state:
+
+            if type(from_state) is list:
+                wrong_status = booking.state not in from_state
+            else:
+                wrong_status = booking.state != from_state
+
+            if wrong_status:
                 raise ImmediateHttpResponse(
                     response=error("Need to be in state %s to switch to state %s" % (from_state, booking.state))
                 )
@@ -676,7 +668,7 @@ class BookingResource(OAuthResource):
 
         if new_state == 'pending':
 
-            if booking.product.payment_type == PAYMENT_TYPE.NOPAY:
+            if booking.product.payment_type == PAYMENT_TYPE.PAYPAL:
                 is_verified = booking.owner.is_verified
                 if not booking.owner.has_paypal():
                     return error("The owner doesn't have paypal account")
@@ -695,9 +687,10 @@ class BookingResource(OAuthResource):
             GoalRecord.record('rent_object_rejected', WebUser(request))
 
         elif new_state == 'closed':
-            assert_current_state_is("closing")
-            booking.init_payment_processor()
-            booking.pay()
+            assert_current_state_is(["closing", "ongoing"])
+            if not is_offline_booking:
+                booking.init_payment_processor()
+                booking.pay()
 
 
         return super(BookingResource, self).obj_update(bundle, request=request, pk=pk, **kwargs)
