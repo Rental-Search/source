@@ -517,9 +517,6 @@ class ProductResource(UserSpecificResource):
         day_price_data = bundle.data.pop("price", None)
         prices = bundle.data.pop("prices", None)
 
-        if picture_data:
-            bundle.data.pop("picture")
-
         bundle.data['owner'] = UserResource().get_resource_uri(request.user)
         bundle = super(ProductResource, self).obj_create(bundle, request, **kwargs)
 
