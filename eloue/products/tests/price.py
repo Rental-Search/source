@@ -40,10 +40,6 @@ class StandardPriceTest(TestCase):
         product = Product.objects.get(pk=1)
         self.assertTrue(standard_price in product.prices.all())
     
-    def test_pricing_uniqueness(self):
-        Price.objects.create(unit=1, amount=10, product_id=1, currency='EUR')
-        self.assertRaises(IntegrityError, Price.objects.create, unit=1, amount=20, product_id=1)
-    
 
 class SeasonalPriceTest(TestCase):
     fixtures = ['category', 'patron', 'address', 'product', 'booking']
@@ -69,26 +65,4 @@ class SeasonalPriceTest(TestCase):
         )
         product = Product.objects.get(pk=1)
         self.assertTrue(seasonal_price in product.prices.all())
-    
-    def test_pricing_uniqueness(self):
-        from django.db import connection
-        self.assertEquals(connection.isolation_level, 0)
-        Price.objects.create(
-            name='Haute saison',
-            product_id=1,
-            amount=20,
-            unit=1,
-            currency='EUR',
-            started_at=datetime.date.today(),
-            ended_at=datetime.date.today() + datetime.timedelta(days=3)
-        )
-        self.assertRaises(IntegrityError, Price.objects.create,
-            name='Haute saison',
-            product_id=1,
-            amount=25,
-            unit=1,
-            currency='EUR',
-            started_at=datetime.date.today(),
-            ended_at=datetime.date.today() + datetime.timedelta(days=3)
-        )
     
