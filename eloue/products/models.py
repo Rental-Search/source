@@ -275,10 +275,10 @@ class Price(models.Model):
         increase = 0
         if self.ended_at < self.started_at:
             increase = 1
-        if ended_at >= self.ended_at.datetime(ended_at.year + increase):
+        if ended_at >= self.ended_at.datetime(ended_at.year + increase) + timedelta(days=1):
             ended_at = self.ended_at.datetime(ended_at.year + increase) + timedelta(days=1)
         if started_at <= self.started_at.datetime(started_at.year):
-            started_at = self.started_at.datetime(started_at.year) - timedelta(days=1)
+            started_at = self.started_at.datetime(started_at.year)
         delta = (ended_at - started_at)
         return delta if delta > timedelta(days=0) else timedelta(days=0)
     

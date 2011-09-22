@@ -72,12 +72,12 @@ PACKAGES_UNIT = {
 }
 
 PACKAGES = {
-    UNIT.HOUR: lambda amount, delta: amount * (delta.seconds / D('3600')),
-    UNIT.WEEK_END: lambda amount, delta: amount,
-    UNIT.DAY: lambda amount, delta: amount * max(delta.days + delta.seconds / D('86400'), 1),
-    UNIT.WEEK: lambda amount, delta: amount * (delta.days + delta.seconds / D('86400')),
-    UNIT.TWO_WEEKS: lambda amount, delta: amount * (delta.days + delta.seconds / D('86400')),
-    UNIT.MONTH: lambda amount, delta: amount * (delta.days + delta.seconds / D('86400')),
+    UNIT.HOUR: lambda amount, delta, round=True: amount * (delta.seconds / D('3600')),
+    UNIT.WEEK_END: lambda amount, delta, round=True: amount,
+    UNIT.DAY: lambda amount, delta, round=True: amount * (max(delta.days + delta.seconds / D('86400'), 1) if round else delta.days + delta.seconds / D('86400')),
+    UNIT.WEEK: lambda amount, delta, round=True: amount * (delta.days + delta.seconds / D('86400')),
+    UNIT.TWO_WEEKS: lambda amount, delta, round=True: amount * (delta.days + delta.seconds / D('86400')),
+    UNIT.MONTH: lambda amount, delta, round=True: amount * (delta.days + delta.seconds / D('86400')),
 }
 
 log = logbook.Logger('eloue.rent')
@@ -170,12 +170,12 @@ class Booking(models.Model):
         for price in product.prices.filter(unit=unit, started_at__isnull=False, ended_at__isnull=False):
             price_delta = price.delta(started_at, ended_at)
             delta -= price_delta
-            amount += package(price.day_amount, price_delta)
+            amount += package(price.day_amount, price_delta, False)
         
-        price = product.prices.get(unit=unit, started_at__isnull=True, ended_at__isnull=True)
-        # after handling the seasonal prices we should have one and only one normal price
-        null_delta = timedelta(days=0)
-        amount += package(price.day_amount, null_delta if null_delta > delta else delta)
+        if (delta.days > 0 or delta.seconds > 0):
+            price = product.prices.get(unit=unit, started_at__isnull=True, ended_at__isnull=True)
+            null_delta = timedelta(days=0)
+            amount += package(price.day_amount, null_delta if null_delta > delta else delta)
         
         return unit, amount.quantize(D(".00"))
 

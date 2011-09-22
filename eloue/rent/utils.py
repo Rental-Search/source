@@ -89,7 +89,6 @@ def timesince(d, now=None):
     s = []
     for i, (seconds, name) in enumerate(chunks):
         count = since // seconds
-        print count, since
         if count != 0:
             s.append(_('%(number)d %(type)s') % {'number': count, 'type': name(count)})
             since -= count * seconds

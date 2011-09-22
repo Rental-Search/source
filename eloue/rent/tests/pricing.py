@@ -20,7 +20,7 @@ class BookingPriceTest(TestCase):
         started_at = datetime.now()
         ended_at = started_at + timedelta(0, 240)
         unit, price = Booking.calculate_price(self.product, started_at, ended_at)
-        self.assertEquals(price, D('4'))
+        self.assertEquals(price, D('0.07'))
         self.assertEquals(unit, UNIT.HOUR)
     
     def test_calculate_week_end_price(self):
@@ -82,15 +82,15 @@ class BookingPriceTest(TestCase):
         started_at = datetime.now()
         ended_at = started_at + timedelta(days=45)
         unit, price = Booking.calculate_price(product, started_at, ended_at)
-        self.assertEquals(price, D('315'))
-        self.assertEquals(unit, UNIT.DAY)
+        self.assertEquals(price, D('305.36'))
+        self.assertEquals(unit, UNIT.TWO_WEEKS)
     
     def test_calculate_hourly_price(self):
         product = Product.objects.get(pk=2)
         started_at = datetime.now()
         ended_at = started_at + timedelta(seconds=360)
         unit, price = Booking.calculate_price(product, started_at, ended_at)
-        self.assertEquals(price, D('3.6'))
+        self.assertEquals(price, D('0.06'))
         self.assertEquals(unit, UNIT.HOUR)
     
     def test_calculate_two_week_price(self):
@@ -113,14 +113,18 @@ class BookingPriceTest(TestCase):
         product = Product.objects.get(pk=4)
         started_at = datetime.now()
         ended_at = started_at + timedelta(days=1, hours=4)
-        self.assertRaises(CanNotProve, Booking.calculate_price, product, started_at, ended_at)
+        unit, price = Booking.calculate_price(product, started_at, ended_at)
+        self.assertEqual(price, D('525'))
+        self.assertEqual(unit, UNIT.DAY)
     
     def test_calculate_strict_with_hours_price(self):
         product = Product.objects.get(pk=4)
         started_at = datetime.now()
         ended_at = started_at + timedelta(hours=4)
-        self.assertRaises(CanNotProve, Booking.calculate_price, product, started_at, ended_at)
-    
+        unit, price = Booking.calculate_price(product, started_at, ended_at)
+        self.assertEqual(price, D('450'))
+        self.assertEqual(unit, UNIT.DAY)
+        
 
 class BookingSeasonTest(TestCase):
     fixtures = ['category', 'patron', 'address', 'price', 'product']
@@ -138,7 +142,7 @@ class BookingSeasonTest(TestCase):
         started_at = datetime(2010, 9, 15, 9, 0)
         ended_at = started_at + timedelta(days=14)
         unit, price = Booking.calculate_price(product, started_at, ended_at)
-        self.assertEquals(price, D('135.25'))
+        self.assertEquals(price, D('127.25'))
         self.assertEquals(unit, UNIT.DAY)
     
     def test_calculate_over_year(self):
@@ -160,7 +164,7 @@ class BookingSeasonTest(TestCase):
     def test_calculate_on_end_terminal(self):
         product = Product.objects.get(pk=3)
         started_at = datetime(2010, 9, 20, 9, 0)
-        ended_at = started_at + timedelta(days=2)
+        ended_at = started_at + timedelta(days=3)
         unit, price = Booking.calculate_price(product, started_at, ended_at)
         self.assertEquals(price, D('29.25'))
         self.assertEquals(unit, UNIT.DAY)
