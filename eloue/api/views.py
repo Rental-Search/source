@@ -43,7 +43,6 @@ def update_product_prices(request):
 
             for product in products:
                 product.prices.all().delete()
-                print prices_dicts
                 for price_dict in prices_dicts:
                     Price(product=product, **price_dict).save()
 
@@ -51,5 +50,4 @@ def update_product_prices(request):
         else:
             return HttpBadRequest()
     except Exception, e:
-        print e
         traceback.print_exc()
