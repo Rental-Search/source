@@ -72,12 +72,12 @@ PACKAGES_UNIT = {
 }
 
 PACKAGES = {
-    UNIT.HOUR: lambda amount, delta: amount * (delta.seconds / 60),
+    UNIT.HOUR: lambda amount, delta: amount * (delta.seconds / D('3600')),
     UNIT.WEEK_END: lambda amount, delta: amount,
-    UNIT.DAY: lambda amount, delta: amount * delta.days + (amount/86400) * delta.seconds,
-    UNIT.WEEK: lambda amount, delta: amount * delta.days + (amount/86400) * delta.seconds,
-    UNIT.TWO_WEEKS: lambda amount, delta: amount * delta.days + (amount/86400) * delta.seconds,
-    UNIT.MONTH: lambda amount, delta: amount * delta.days + (amount/86400) * delta.seconds,
+    UNIT.DAY: lambda amount, delta: amount * max(delta.days + delta.seconds / D('86400'), 1),
+    UNIT.WEEK: lambda amount, delta: amount * (delta.days + delta.seconds / D('86400')),
+    UNIT.TWO_WEEKS: lambda amount, delta: amount * (delta.days + delta.seconds / D('86400')),
+    UNIT.MONTH: lambda amount, delta: amount * (delta.days + delta.seconds / D('86400')),
 }
 
 log = logbook.Logger('eloue.rent')
@@ -156,28 +156,27 @@ class Booking(models.Model):
     @staticmethod
     def calculate_price(product, started_at, ended_at):
         delta = ended_at - started_at
-
-        engine_prices = dict([(pr.unit, pr) for pr in product.prices.all()]).values()
-
+        
         engine = knowledge_engine.engine((__file__, '.rules'))
         engine.activate('pricing')
-        for price in engine_prices:
+        for price in product.prices.all():
             engine.assert_('prices', 'price', (price.unit, price.day_amount))
         vals, plans = engine.prove_1_goal('pricing.pricing($type, $started_at, $ended_at, $delta)', started_at=started_at, ended_at=ended_at, delta=delta)
         engine.reset()
 
         amount, unit = D(0), PACKAGES_UNIT[vals['type']]
         package = PACKAGES[unit]
-
+        
         for price in product.prices.filter(unit=unit, started_at__isnull=False, ended_at__isnull=False):
             price_delta = price.delta(started_at, ended_at)
             delta -= price_delta
             amount += package(price.day_amount, price_delta)
-
-        for price in product.prices.filter(unit=unit, started_at__isnull=True, ended_at__isnull=True):
-            null_delta = timedelta(days=0)
-            amount += package(price.day_amount, null_delta if null_delta > delta else delta)
-
+        
+        price = product.prices.get(unit=unit, started_at__isnull=True, ended_at__isnull=True)
+        # after handling the seasonal prices we should have one and only one normal price
+        null_delta = timedelta(days=0)
+        amount += package(price.day_amount, null_delta if null_delta > delta else delta)
+        
         return unit, amount.quantize(D(".00"))
 
     def not_need_ipn(self):

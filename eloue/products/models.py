@@ -9,7 +9,7 @@ from django.contrib.gis.geos import Point
 from django.contrib.gis.measure import Distance
 from django.contrib.sites.managers import CurrentSiteManager
 from django.contrib.sites.models import Site
-from django.db.models import permalink
+from django.db.models import permalink, Q
 from django.db.models.signals import post_save
 from django.template.defaultfilters import slugify
 from django.utils.encoding import smart_unicode
@@ -267,7 +267,7 @@ class Price(models.Model):
     
     def clean(self):
         from django.core.exceptions import ValidationError
-        if self.amount < 0:
+        if self.amount <= 0:
             raise ValidationError(_(u"Le prix ne peut pas être négatif"))
     
     def delta(self, started_at, ended_at):

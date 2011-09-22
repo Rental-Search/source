@@ -10,7 +10,6 @@ from django.http import HttpResponse, HttpResponseNotAllowed
 from django.shortcuts import get_object_or_404
 from django.utils import simplejson
 from django.utils.encoding import smart_str
-from django.utils.timesince import timesince
 from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.http import require_POST, require_GET
 from django.views.decorators.cache import never_cache
@@ -29,7 +28,7 @@ from eloue.rent.models import Booking
 from eloue.rent.wizard import BookingWizard
 from eloue.utils import currency
 from datetime import datetime, timedelta
-from eloue.rent.utils import get_product_occupied_date
+from eloue.rent.utils import get_product_occupied_date, timesince
 
 log = logbook.Logger('eloue.rent')
 

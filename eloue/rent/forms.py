@@ -57,7 +57,7 @@ class DateTimeWidget(forms.MultiWidget):
     def __init__(self, attrs=None, date_format=None, time_format=None, *args, **kwargs):
         widgets = (
             forms.DateInput(attrs={'class': 'ins dps'}, format=date_format),
-            forms.HiddenInput(attrs={'class': 'sells'}),
+            forms.Select(choices=TIME_CHOICE, attrs={'class': 'sells ins'}),
         )
         super(DateTimeWidget, self).__init__(widgets, *args, **kwargs)
     
@@ -77,7 +77,7 @@ class HiddenDateTimeWidget(DateTimeWidget):
 
 class DateTimeField(forms.MultiValueField):
     widget = DateTimeWidget
-    hidden_widget = HiddenDateTimeWidget
+    #hidden_widget = HiddenDateTimeWidget
     default_error_messages = {
         'invalid_date': _(u'Enter a valid date.'),
         'invalid_time': _(u'Enter a valid time.'),
@@ -157,7 +157,7 @@ class BookingForm(forms.ModelForm):
                 self.cleaned_data['total_amount'] = Booking.calculate_price(product, started_at, ended_at)[1]
             except CanNotProve:
                 raise ValidationError(_(u"Vous ne pouvez pas louer cet objet pour ces dates"))
-        if started_at and ended_at:
+            
             booking_dates = datespan(started_at, ended_at)
             if started_at <= datetime.datetime.now() or ended_at <= datetime.datetime.now():
                 raise ValidationError(_(u"Vous ne pouvez pas louer à ces dates"))
