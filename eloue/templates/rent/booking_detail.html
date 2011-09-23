@@ -145,11 +145,11 @@
             <table class="booking-resume">
                 <tr>
                     <th>{% trans "Début :" %}</th>
-                    <td>{{ booking.started_at|date:"l j F Y"|capfirst }}</td>
+                    <td>{{ booking.started_at|date:"l j F Y"|capfirst }} à {{ booking.started_at|date:"H:i" }}</td>
                 </tr>
                 <tr>
                     <th>{% trans "Fin :" %}</th>
-                    <td>{{ booking.ended_at|date:"l j F Y"|capfirst }}</td>
+                    <td>{{ booking.ended_at|date:"l j F Y"|capfirst }} à {{ booking.ended_at|date:"H:i" }}</td>
                 </tr>
                 <tr>
                     <th>{% trans "Prix par jour :" %}</th>
