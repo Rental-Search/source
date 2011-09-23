@@ -4,12 +4,58 @@ month_package
         prices.price(5, $amount)
         check $delta.days >= calendar.monthrange($started_at.year, $started_at.month)[1]
 
+two_weeks_package_for_gte_month
+    use pricing(two_weeks, $started_at, $ended_at, $delta)
+    when
+        prices.price(4, $amount)
+        check $delta.days >= calendar.monthrange($started_at.year, $started_at.month)[1]
+        notany
+            prices.price(5, $amount)
+
+week_package_for_gte_month
+    use pricing(week, $started_at, $ended_at, $delta)
+    when
+        prices.price(3, $amount)
+        check $delta.days >= calendar.monthrange($started_at.year, $started_at.month)[1]
+        notany
+            prices.price(4, $amount)
+            prices.price(5, $amount)
+
+day_package_for_gte_month
+    use pricing(day, $started_at, $ended_at, $delta)
+    when
+        prices.price(1, $amount)
+        check $delta.days >= calendar.monthrange($started_at.year, $started_at.month)[1]
+        notany
+            prices.price(3, $amount)
+            prices.price(4, $amount)
+            prices.price(5, $amount)
+
 two_weeks_package
     use pricing(two_weeks, $started_at, $ended_at, $delta)
     when
         prices.price(4, $amount)
         check $delta.days < calendar.monthrange($started_at.year, $started_at.month)[1]
         check $delta.days >= 14
+
+week_package_for_gte_two_weeks_lt_month
+    use pricing(week, $started_at, $ended_at, $delta)
+    when
+        prices.price(3, $amount)
+        check $delta.days < calendar.monthrange($started_at.year, $started_at.month)[1]
+        check $delta.days >= 14
+        notany
+            prices.price(4, $amount)
+
+day_package_for_gte_two_weeks_lt_month
+    use pricing(day, $started_at, $ended_at, $delta)
+    when
+        prices.price(1, $amount)
+        check $delta.days < calendar.monthrange($started_at.year, $started_at.month)[1]
+        check $delta.days >= 14
+        notany
+            prices.price(4, $amount)
+            prices.price(3, $amount)
 
 week_package
     use pricing(week, $started_at, $ended_at, $delta)
@@ -18,91 +64,48 @@ week_package
         check $delta.days < 14
         check $delta.days >= 7
 
+day_package_for_gte_week_lt_two_weeks
+    use pricing(day, $started_at, $ended_at, $delta)
+    when
+        prices.price(1, $amount)
+        check $delta.days < 14
+        check $delta.days >= 7
+        notany
+            prices.price(4, $amount)
+
 week_end_package
     use pricing(week_end, $started_at, $ended_at, $delta)
     when
         prices.price(2, $amount)
-        $week_end = (calendar.weekday($ended_at.year, $ended_at.month, $ended_at.day) == 0 and calendar.weekday($started_at.year, $started_at.month, $started_at.day) >= 4)
+        $week_end = ((calendar.weekday($ended_at.year, $ended_at.month, $ended_at.day) == 0 or 
+                        calendar.weekday($ended_at.year, $ended_at.month, $ended_at.day) == 6
+                    )  and calendar.weekday($started_at.year, $started_at.month, $started_at.day) >= 4)
+        check $delta.days >= 2
+        check $delta.days < 4
         check $week_end == True
 
 day_package
     use pricing(day, $started_at, $ended_at, $delta)
     when
         prices.price(1, $amount)
-        $week_end = (calendar.weekday($ended_at.year, $ended_at.month, $ended_at.day) == 0 and calendar.weekday($started_at.year, $started_at.month, $started_at.day) >= 4)
-        check $week_end != True
         check $delta.days < 7
         check $delta.days >= 1
-        check $delta.seconds == 0
 
 hour_package
-    use pricing(hour, $start_at, $ended_at, $delta)
+    use pricing(hour, $started_at, $ended_at, $delta)
     when
         prices.price(0, $amount)
         check $delta.days < 1
         check $delta.seconds > 0
 
-day_package_for_week
+day_package_for_lt_day
     use pricing(day, $started_at, $ended_at, $delta)
     when
         prices.price(1, $amount)
-        check $delta.days < 14
-        check $delta.days >= 1
-        check $delta.seconds == 0
+        check $delta.days < 1
+        check $delta.seconds > 0
         notany
-            prices.price(3, $amount)
-            prices.price(4, $amount)
-            prices.price(5, $amount)
-
-day_package_for_two_weeks
-    use pricing(day, $started_at, $ended_at, $delta)
-    when
-        prices.price(1, $amount)
-        check $delta.days < calendar.monthrange($started_at.year, $started_at.month)[1]
-        check $delta.days >= 1
-        check $delta.seconds == 0
-        notany
-            prices.price(3, $amount)
-            prices.price(4, $amount)
-            prices.price(5, $amount)
-
-day_package_for_month
-    use pricing(day, $started_at, $ended_at, $delta)
-    when
-        prices.price(1, $amount)
-        check $delta.days >= calendar.monthrange($started_at.year, $started_at.month)[1]
-        check $delta.days >= 1
-        check $delta.seconds == 0
-        notany
-            prices.price(3, $amount)
-            prices.price(4, $amount)
-            prices.price(5, $amount)
-
-week_package_for_two_weeks
-    use pricing(week, $started_at, $ended_at, $delta)
-    when
-        prices.price(3, $amount)
-        check $delta.days < calendar.monthrange($started_at.year, $started_at.month)[1]
-        notany
-            prices.price(4, $amount)
-            prices.price(5, $amount)
-
-week_package_for_month
-    use pricing(week, $started_at, $ended_at, $delta)
-    when
-        prices.price(3, $amount)
-        check $delta.days >= calendar.monthrange($started_at.year, $started_at.month)[1]
-        notany
-            prices.price(4, $amount)
-            prices.price(5, $amount)
-
-two_weeks_package_for_month
-    use pricing(two_weeks, $started_at, $ended_at, $delta)
-    when
-        prices.price(4, $amount)
-        check $delta.days >= calendar.monthrange($started_at.year, $started_at.month)[1]
-        notany
-            prices.price(5, $amount)
+            prices.price(0, $amount)
 
 bc_extras
     import calendar

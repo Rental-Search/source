@@ -2,8 +2,9 @@
 import datetime
 import time
 
+from django.utils.tzinfo import LocalTimezone
 from django.utils import formats
-from django.utils.translation import ugettext as _
+from django.utils.translation import ugettext as _, ungettext
 
 DATE_FORMAT = ['%d/%m/%Y', '%d-%m-%Y', '%d %m %Y', '%d %m %y', '%d/%m/%y', '%d-%m-%y']
 
@@ -48,6 +49,50 @@ def get_product_occupied_date(bookings):
         else:
             date.extend(datespan(booking.started_at, booking.ended_at))
     return date
+
+def timesince(d, now=None):
+    """
+    Takes two datetime objects and returns the time between d and now
+    as a nicely formatted string, e.g. "10 minutes".  If d occurs after now,
+    then "0 minutes" is returned.
+
+    Units used are years, months, weeks, days, hours, and minutes.
+    Microseconds are ignored.
+    """
+    chunks = (
+      (60 * 60 * 24 * 365, lambda n: ungettext('year', 'years', n)),
+      (60 * 60 * 24 * 30, lambda n: ungettext('month', 'months', n)),
+      (60 * 60 * 24 * 7, lambda n : ungettext('week', 'weeks', n)),
+      (60 * 60 * 24, lambda n : ungettext('day', 'days', n)),
+      (60 * 60, lambda n: ungettext('hour', 'hours', n)),
+      (60, lambda n: ungettext('minute', 'minutes', n)),
+      (1, lambda n: ungettext('second', 'seconds', n)),
+    )
+    # Convert datetime.date to datetime.datetime for comparison.
+    if not isinstance(d, datetime.datetime):
+        d = datetime.datetime(d.year, d.month, d.day)
+    if now and not isinstance(now, datetime.datetime):
+        now = datetime.datetime(now.year, now.month, now.day)
+
+    if not now:
+        if d.tzinfo:
+            now = datetime.datetime.now(LocalTimezone(d))
+        else:
+            now = datetime.datetime.now()
+
+    # ignore microsecond part of 'd' since we removed it from 'now'
+    delta = now - (d - datetime.timedelta(0, 0, d.microsecond))
+    since = delta.days * 24 * 60 * 60 + delta.seconds
+    if since <= 0:
+        # d is in the future compared to now, stop processing.
+        return u'0 ' + _('minutes')
+    s = []
+    for i, (seconds, name) in enumerate(chunks):
+        count = since // seconds
+        if count != 0:
+            s.append(_('%(number)d %(type)s') % {'number': count, 'type': name(count)})
+            since -= count * seconds
+    return ', '.join(s)
 
 def spellout(number, unit="", decimal=""):
     """Spell out numbers the dirty way."""
