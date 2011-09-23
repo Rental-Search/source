@@ -169,3 +169,12 @@ class BookingSeasonTest(TestCase):
         self.assertEquals(price, D('29.25'))
         self.assertEquals(unit, UNIT.DAY)
     
+    def test_calculate_just_at_the_end(self):
+        product = Product.objects.get(pk=3)
+        started_at = datetime(2010, 9, 22, 9, 0)
+        ended_at = started_at + timedelta(days=1)
+        unit, price = Booking.calculate_price(product, started_at, ended_at)
+        self.assertEqual(unit, UNIT.DAY)
+        self.assertEqual(price, D('9.25'))
+        
+        
