@@ -294,14 +294,18 @@ class ProductEditForm(forms.ModelForm):
     def save(self, *args, **kwargs):
         for unit in UNIT.keys():
             field = "%s_price" % unit.lower()
-            if field in self.cleaned_data and self.cleaned_data[field]:
-                instance, created = self.instance.prices.get_or_create(
-                    unit=UNIT[unit],
-                    defaults={'amount': self.cleaned_data[field]}
-                )
-                if not created:
-                    instance.amount = self.cleaned_data[field]
-                    instance.save()
+            if field in self.cleaned_data:
+                if self.cleaned_data[field]:
+                    instance, created = self.instance.prices.get_or_create(
+                        unit=UNIT[unit],
+                        defaults={'amount': self.cleaned_data[field]}
+                    )
+                    if not created:
+                        instance.amount = self.cleaned_data[field]
+                        instance.save()
+                else:
+                    #TODO: could have problems with seasonal prices
+                    self.instance.prices.filter(unit=UNIT[unit]).delete()
         if self.new_picture:
             self.instance.pictures.all().delete() 
             self.instance.pictures.add(Picture.objects.create(image=self.cleaned_data['picture']))
