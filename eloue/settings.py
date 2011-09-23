@@ -487,7 +487,7 @@ OAUTH_CALLBACK_VIEW = "eloue.accounts.views.oauth_callback"
 USE_ETAGS = False
 
 # Affiliation configuraton
-AFFILIATION_SOURCES = getattr(local, 'AFFILIATION_SOURCES', ['lv', 'skiplanet.equipment', 'jigsaw', 'kiloutou', 'loxam'])
+AFFILIATION_SOURCES = getattr(local, 'AFFILIATION_SOURCES', ['lv', 'skiplanet.equipment', 'jigsaw', 'kiloutou', 'loxam', 'chronobook'])
 AFFILIATION_BATCHSIZE = 1000
 LV_FTP = "ftp.bo.location-et-vacances.com"
 
