@@ -16,6 +16,7 @@ from eloue.geocoder import GoogleGeocoder
 from eloue.utils import generate_camo_url
 
 log = logbook.Logger('eloue.rent.sources')
+
 SOURCES = getattr(settings, 'AFFILIATION_SOURCES', ['skiplanet', 'lv'])
 BATCHSIZE = 20 # getattr(settings, 'AFFILIATION_BATCHSIZE', 10)
 
@@ -69,36 +70,34 @@ class BaseSource(object):
 class SourceManager(object):
     solr = Solr(settings.HAYSTACK_SOLR_URL, timeout=900)
 
-    def __init__(self):
+    def __init__(self, sources = None):
         self.sources = []
-        for source in SOURCES:
+        for source in sources if sources else SOURCES:
             mod = importlib.import_module('eloue.products.sources.%s' % source)
             self.sources.append(getattr(mod, 'SourceClass')())
 
-    def get_docs(self):
-        for source in self.sources:
-            for el in source.get_docs():
-                yield el
+    def get_docs(self, source):
+        for el in source.get_docs():
+            yield el
 
-    def index_docs(self):
+    def index_docs(self, source):
 
-        def next_docs():
-            docs = self.get_docs()
+        def next_docs(source):
+            docs = self.get_docs(source)
             while True:
                 l = list(islice(docs, BATCHSIZE))
                 if l: yield l
                 else: return
 
-        for batch in next_docs():
+        for batch in next_docs(source):
             log.info("appending batch")
             self.__class__.solr.add(batch)
             self.__class__.solr.commit()
 
 
-    def remove_docs(self):
-        for source in self.sources:
-            self.__class__.solr.delete(q="id:%s.*" % source.get_prefix())
-            self.__class__.solr.commit()
+    def remove_docs(self, source):
+        self.__class__.solr.delete(q="id:%s.*" % source.get_prefix())
+        self.__class__.solr.commit()
 
 
 if __name__ == '__main__':

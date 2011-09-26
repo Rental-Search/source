@@ -27,7 +27,7 @@ def html_tree(url):
         html_page = urlopen(urll, timeout=5)
         return etree.parse(html_page, etree.HTMLParser())
     except Exception, e:
-        log.exception("Exception: %s".format(e))
+        log.exception("Exception: {0}".format(e))
         return
 
 def tree_from_link(a):
