@@ -7,12 +7,23 @@ log = logbook.Logger('eloue.rent.sources')
 
 
 class Command(BaseCommand):
-    help = "Update sources for affiliation"
+    help = "Update sources for affiliation."
+    args = "[source_prefix source_prefix ...]"
 
     def handle(self, *args, **options):
         from eloue.products.sources import SourceManager
         log.info('Starting updating sources')
-        manager = SourceManager()
-        manager.remove_docs()
-        manager.index_docs()
-
+        try:
+            manager = SourceManager(args)
+        except ImportError as e:
+            log.exception("Source not found:\n{0}".format(e))
+        return
+        for source in manager.sources:
+            log.info('Working on %s' % source.get_prefix())
+            manager.remove_docs(source)
+            try:
+                manager.index_docs(source)
+            except Exception as e:
+                log.exception("Exception: {0}".format(e))
+                manager.remove_docs(source)
+                continue
