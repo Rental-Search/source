@@ -73,7 +73,7 @@ class SourceManager(object):
     def __init__(self, sources = None):
         self.sources = []
         for source in sources if sources else SOURCES:
-            mod = importlib.import_module('eloue.products.sources.{0}' % source)
+            mod = importlib.import_module('eloue.products.sources.%s' % source)
             self.sources.append(getattr(mod, 'SourceClass')())
 
     def get_docs(self, source):

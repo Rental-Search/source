@@ -13,11 +13,13 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         from eloue.products.sources import SourceManager
         log.info('Starting updating sources')
+        
         try:
             manager = SourceManager(args)
         except ImportError as e:
             log.exception("Source not found:\n{0}".format(e))
-        return
+            return
+        
         for source in manager.sources:
             log.info('Working on %s' % source.get_prefix())
             manager.remove_docs(source)
