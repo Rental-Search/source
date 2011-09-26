@@ -15,6 +15,7 @@ psycopg2==2.4.1
 reportlab>=2.5
 south>=0.7
 sphinx>=1.0.2
+feedparser>=5.0.1
 -e git://github.com/e-loue/boto.git#egg=boto
 -e git://github.com/e-loue/pyPdf.git#egg=pyPdf
 -e git://github.com/e-loue/python-oauth2.git#egg=oauth2
