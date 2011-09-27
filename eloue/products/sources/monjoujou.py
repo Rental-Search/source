@@ -13,6 +13,9 @@ BASE_URL='http://www.monjoujou.com/'
 log = logbook.Logger('eloue.rent.sources')
 
 class SourceClass(BaseSource):
+    
+    id = id_gen()
+    
     def get_prefix(self):
         return 'source.monjoujou'
     
@@ -21,11 +24,11 @@ class SourceClass(BaseSource):
         for entry in feed.entries:
             description_html = entry.description
             description_tree = etree.HTML(description_html)
-            id = id_gen()
+            id_c = self.id.next()
             thumbnail = description_tree[0][0][0].attrib['src']
             description = description_tree[0][1]
             yield Product({
-                'id': '%s.%s' % (SourceClass().get_prefix(), id),
+                'id': '%s.%s' % (SourceClass().get_prefix(), id_c),
                 'summary': '%s' % entry.title,
                 'description': ' '.join([text.strip() for text in description.itertext(tag='p')]),
                 'categories': ['eveil-et-jouets-bebe', 'jeux'],
