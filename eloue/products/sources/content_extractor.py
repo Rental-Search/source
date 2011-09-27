@@ -3,6 +3,7 @@ import logbook
 from lxml import etree
 from urllib2 import urlopen
 from decimal import Decimal as D
+import contextlib
 
 log = logbook.Logger('eloue.rent.sources')
 
@@ -24,8 +25,8 @@ get_base_url, set_base_url = __make_get_set_base_url()
 def html_tree(url):
     try:
         urll = get_base_url() + url
-        html_page = urlopen(urll, timeout=5)
-        return etree.parse(html_page, etree.HTMLParser())
+        with contextlib.closing(urlopen(urll, timeout=5)) as html_page:
+            return etree.parse(html_page, etree.HTMLParser())
     except Exception, e:
         log.exception("Exception: {0}".format(e))
         return

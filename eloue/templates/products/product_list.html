@@ -144,10 +144,17 @@
     				  {{ product.geo_distance|floatformat }} {% trans "km" %}{{ product.geo_distance|pluralize }}
     				 {% endif %}
                     </div>
+                    {% if product.price %}
                     <div class="pl-price">
                         <span class="price">{{ product.price|quantize|currency }}</span><br />
     				    <span class="unit">{% trans "par jour" %}</span>
                     </div>
+                    {% else %}
+                    <div class="pl-price">
+                        <span class="price">{% trans "Sur devis" %}</span><br />
+    				    <span class="unit"></span>
+                    </div>
+                    {% endif %}
                     <div class="pl-btn">
                         <a href="{{ product.url|safe }}" {% if product|nofollow %}rel="nofollow"{% endif %} class="btn small-blue">{% trans "Réserver" %} &rarr;</a>
                     </div>
