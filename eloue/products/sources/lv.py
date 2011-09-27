@@ -77,8 +77,9 @@ class SourceClass(BaseSource):
             except:
                 pass
             elements = root.xpath('//hebergement')
-            docs.extend(pool.map(parse_doc, elements, len(elements) // SourceClass.processes))
+            gen = pool.imap(parse_doc, elements, 100)
+            for prod in gen:
+                yield prod
         pool.close()
         pool.join()
-        return docs
     

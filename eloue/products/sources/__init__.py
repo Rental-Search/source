@@ -18,7 +18,7 @@ from eloue.utils import generate_camo_url
 log = logbook.Logger('eloue.rent.sources')
 
 SOURCES = getattr(settings, 'AFFILIATION_SOURCES', ['skiplanet', 'lv'])
-BATCHSIZE = 20 # getattr(settings, 'AFFILIATION_BATCHSIZE', 10)
+BATCHSIZE = 100 # getattr(settings, 'AFFILIATION_BATCHSIZE', 10)
 
 CAMO_URL = getattr(settings, 'CAMO_URL', 'https://media.e-loue.com/proxy/')
 CAMO_KEY = getattr(settings, 'CAMO_KEY')
