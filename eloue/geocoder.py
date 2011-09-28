@@ -29,7 +29,7 @@ class Geocoder(object):
         if not cache_hit and (lat == None or lon == None):
             name, (lat, lon), radius = self._geocode(location)
         
-        if not cache_hit and self.use_cache:
+        if not cache_hit and self.use_cache and not ((lat is None) or (lon is None)):
             cache.set('location:%s' % self.hash_key(location), (name, (lat, lon), radius), 0)
         return name, (lat, lon), radius
     
@@ -70,9 +70,9 @@ class GoogleGeocoder(Geocoder):
         except (KeyError, IndexError):
             return None, (None, None), None
         try:  # trying to return at least lat, lon
-            sw = Point(json['results'][0]['geometry']['bounds']['southwest']['lat'],
+            sw = Point(json['results'][0]['geometry']['viewport']['southwest']['lat'],
                 json['results'][0]['geometry']['viewport']['southwest']['lng'])
-            ne = Point(json['results'][0]['geometry']['bounds']['northeast']['lat'],
+            ne = Point(json['results'][0]['geometry']['viewport']['northeast']['lat'],
                 json['results'][0]['geometry']['viewport']['northeast']['lng'])
             radius = (distance.distance(sw, ne).km // 2) + 1
         except (KeyError, IndexError):

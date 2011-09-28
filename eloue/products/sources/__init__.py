@@ -18,7 +18,7 @@ from eloue.utils import generate_camo_url
 log = logbook.Logger('eloue.rent.sources')
 
 SOURCES = getattr(settings, 'AFFILIATION_SOURCES', ['skiplanet', 'lv'])
-BATCHSIZE = 100 # getattr(settings, 'AFFILIATION_BATCHSIZE', 10)
+BATCHSIZE = getattr(settings, 'AFFILIATION_BATCHSIZE', 100)
 
 CAMO_URL = getattr(settings, 'CAMO_URL', 'https://media.e-loue.com/proxy/')
 CAMO_KEY = getattr(settings, 'CAMO_KEY')
@@ -72,7 +72,7 @@ class SourceManager(object):
 
     def __init__(self, sources = None):
         self.sources = []
-        for source in sources if sources else SOURCES:
+        for source in (sources if sources else SOURCES):
             mod = importlib.import_module('eloue.products.sources.%s' % source)
             self.sources.append(getattr(mod, 'SourceClass')())
 

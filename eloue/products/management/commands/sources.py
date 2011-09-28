@@ -15,7 +15,7 @@ class Command(BaseCommand):
         log.info('Starting updating sources')
         
         try:
-            manager = SourceManager(args)
+            manager = SourceManager(sources=args)
         except ImportError as e:
             log.exception("Source not found:\n{0}".format(e))
             return
@@ -27,5 +27,8 @@ class Command(BaseCommand):
                 manager.index_docs(source)
             except Exception as e:
                 log.exception("Exception: {0}".format(e))
-                manager.remove_docs(source)
+                try:
+                    manager.remove_docs(source)
+                except Exception as e1:
+                    log.exception("Exception: {0}".format(e1))
                 continue
