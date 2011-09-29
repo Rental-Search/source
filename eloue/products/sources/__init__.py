@@ -70,9 +70,9 @@ class BaseSource(object):
 class SourceManager(object):
     solr = Solr(settings.HAYSTACK_SOLR_URL, timeout=900)
 
-    def __init__(self, sources = None):
+    def __init__(self, sources = ()):
         self.sources = []
-        for source in (sources if sources else SOURCES):
+        for source in (sources if len(sources) else SOURCES):
             mod = importlib.import_module('eloue.products.sources.%s' % source)
             self.sources.append(getattr(mod, 'SourceClass')())
 

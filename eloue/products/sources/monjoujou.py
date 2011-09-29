@@ -25,6 +25,8 @@ class SourceClass(BaseSource):
             description_html = entry.description
             description_tree = etree.HTML(description_html)
             id_c = self.id.next()
+            location = "France"
+            lat, lon = BaseSource.get_location(self, location)
             thumbnail = description_tree[0][0][0].attrib['src']
             description = description_tree[0][1]
             yield Product({
@@ -33,7 +35,7 @@ class SourceClass(BaseSource):
                 'description': ' '.join([text.strip() for text in description.itertext(tag='p')]),
                 'categories': ['eveil-et-jouets-bebe', 'jeux'],
                 'lat': 0, 'lng': 0,
-                'city': 'France',
+                'city': location,
                 'price': D('0.66'),
                 'owner': 'monjoujou',
                 'owner_url': BASE_URL,

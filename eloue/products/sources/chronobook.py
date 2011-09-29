@@ -34,6 +34,8 @@ class SourceClass(BaseSource):
             attrib = book.attrib
             html = html_tree(attrib['fiche'])
             thumbnail = html.xpath(XP_IMAGE)
+            location = "Paris, France"
+            lat, lon = BaseSource.get_coordinates(self, location)
             if not len(thumbnail):
                 continue
             else:
@@ -44,9 +46,9 @@ class SourceClass(BaseSource):
                 'summary': '%(author)s: %(title)s' % {'author': attrib['auteur'], 'title': book.text},
                 'description': description,
                 'categories': ['culture', 'livre'],
-                'lat': 0, 'lng': 0,
-                'city': "Paris",
-                'price': D('12.90'),
+                'lat': lat, 'lng': lon,
+                'city': location,
+                'price': D('0.20'),
                 'owner': 'chronobook',
                 'owner_url': BASE_URL,
                 'url': attrib['fiche'],
