@@ -142,16 +142,32 @@ class BookingForm(forms.ModelForm):
     started_at = DateTimeField(required=True, input_date_formats=DATE_FORMAT)
     ended_at = DateTimeField(required=True, input_date_formats=DATE_FORMAT)
     
+    def __init__(self, *args, **kwargs):
+        super(BookingForm, self).__init__(*args, **kwargs)
+        initial = kwargs['initial']
+        started_at = initial['started_at']
+        ended_at = initial['ended_at']
+        product = self.instance.product
+        self.fields['quantity'] = forms.IntegerField(widget=forms.Select(choices=enumerate(xrange(1, 1 + Booking.calculate_available_quantity(
+                                                        product, 
+                                                        datetime.datetime.strptime(' '.join(started_at), "%d/%m/%Y %H:%M:%S"), 
+                                                        datetime.datetime.strptime(' '.join(ended_at), "%d/%m/%Y %H:%M:%S")
+                                                    )), start=1)))
+        
     class Meta:
         model = Booking
-        fields = ('started_at', 'ended_at')
+        fields = ('started_at', 'ended_at', 'quantity')
     
     def clean(self):
         started_at = self.cleaned_data.get('started_at', None)
         ended_at = self.cleaned_data.get('ended_at', None)
+        quantity = self.cleaned_data.get('quantity')
+
         product = self.instance.product
         bookings = Booking.objects.filter(product=product).filter(Q(state="pending")|Q(state="ongoing"))
         booked_dates = get_product_occupied_date(bookings)
+        if (quantity > Booking.calculate_available_quantity(product, started_at, ended_at)): 
+            raise ValidationError(_(u'Pas assez de produit disponible'))
         if (started_at and ended_at):
             try:
                 self.cleaned_data['total_amount'] = Booking.calculate_price(product, started_at, ended_at)[1]
@@ -164,7 +180,7 @@ class BookingForm(forms.ModelForm):
             if started_at >= ended_at:
                 raise ValidationError(_(u"Une location ne peut pas terminer avant d'avoir commencer"))
             if (ended_at - started_at) > datetime.timedelta(days=BOOKING_DAYS):
-                raise ValidationError(_(u"La durée d'une location est limitée à 85 jours."))
+                raise ValidationError(_(u"La durée d'une location est limitée à %s jours."%BOOKING_DAYS))
             if set(booked_dates) & set(booking_dates):
                 raise ValidationError(_(u"Ces dates sont déjà prises pour ce produit."))
         return self.cleaned_data

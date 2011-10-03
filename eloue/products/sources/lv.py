@@ -8,7 +8,7 @@ except ImportError:
 
 from decimal import ROUND_CEILING, Decimal as D
 from ftplib import FTP
-from lxml import objectify
+from lxml import objectify, etree
 
 from django.conf import settings
 
@@ -72,10 +72,7 @@ class SourceClass(BaseSource):
         pool, docs = self.get_pool(), []
         for member in tar:
             part = tar.extractfile(member)
-            try:
-                root = objectify.parse(part)
-            except:
-                pass
+            root = objectify.parse(part, parser=etree.XMLParser(recover=True))
             elements = root.xpath('//hebergement')
             gen = pool.imap(parse_doc, elements, 100)
             for prod in gen:

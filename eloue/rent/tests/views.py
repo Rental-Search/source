@@ -35,7 +35,8 @@ class BookingViewsTest(TestCase):
             '0-started_at_0': started_at.strftime("%d/%m/%Y"),
             '0-started_at_1': '08:00:00',
             '0-ended_at_0': ended_at.strftime("%d/%m/%Y"),
-            '0-ended_at_1': '08:00:00'
+            '0-ended_at_1': '08:00:00',
+            '0-quantity': 2
         }, HTTP_X_REQUESTED_WITH='XMLHttpRequest')
         self.assertEquals(response.status_code, 200)
         json = simplejson.loads(response.content)
@@ -51,7 +52,8 @@ class BookingViewsTest(TestCase):
             '0-started_at_0': started_at.strftime("%d/%m/%Y"),
             '0-started_at_1': '08:00:00',
             '0-ended_at_0': ended_at.strftime("%d/%m/%Y"),
-            '0-ended_at_1': '08:00:00'
+            '0-ended_at_1': '08:00:00',
+            '0-quantity': 2
         }, HTTP_X_REQUESTED_WITH='XMLHttpRequest')
         self.assertEquals(response.status_code, 200)
         json = simplejson.loads(response.content)
@@ -64,7 +66,8 @@ class BookingViewsTest(TestCase):
             '0-started_at_0': started_at.strftime("%d/%m/%Y"),
             '0-started_at_1': '08:00:00',
             '0-ended_at_0': ended_at.strftime("%d/%m/%Y"),
-            '0-ended_at_1': '08:00:00'
+            '0-ended_at_1': '08:00:00',
+            '0-quantity': 2
         })
         self.assertEquals(response.status_code, 405)
 

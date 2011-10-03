@@ -89,6 +89,7 @@ class Product(models.Model):
     description = models.TextField()
     address = models.ForeignKey(Address, related_name='products')
     quantity = models.IntegerField()
+
     is_archived = models.BooleanField(_(u'archivé'), default=False, db_index=True)
     is_allowed = models.BooleanField(_(u'autorisé'), default=True, db_index=True)
     category = models.ForeignKey('Category', related_name='products')
