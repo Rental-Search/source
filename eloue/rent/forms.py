@@ -144,15 +144,16 @@ class BookingForm(forms.ModelForm):
     
     def __init__(self, *args, **kwargs):
         super(BookingForm, self).__init__(*args, **kwargs)
-        initial = kwargs['initial']
-        started_at = initial['started_at']
-        ended_at = initial['ended_at']
-        product = self.instance.product
-        self.fields['quantity'] = forms.IntegerField(widget=forms.Select(choices=enumerate(xrange(1, 1 + Booking.calculate_available_quantity(
-                                                        product, 
-                                                        datetime.datetime.strptime(' '.join(started_at), "%d/%m/%Y %H:%M:%S"), 
-                                                        datetime.datetime.strptime(' '.join(ended_at), "%d/%m/%Y %H:%M:%S")
-                                                    )), start=1)))
+        if 'initial' in kwargs:
+            initial = kwargs['initial']
+            started_at = initial['started_at']
+            ended_at = initial['ended_at']
+            product = self.instance.product
+            self.fields['quantity'] = forms.IntegerField(widget=forms.Select(choices=enumerate(xrange(1, 1 + Booking.calculate_available_quantity(
+                                                            product, 
+                                                            datetime.datetime.strptime(' '.join(started_at), "%d/%m/%Y %H:%M:%S"), 
+                                                            datetime.datetime.strptime(' '.join(ended_at), "%d/%m/%Y %H:%M:%S")
+                                                        )), start=1)))
         
     class Meta:
         model = Booking
