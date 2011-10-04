@@ -1,0 +1,41 @@
+#header {
+  background: #9D0B30 url(../images/header_bg.png) repeat-x 0 0;
+  height: 96px;
+  margin: 0 auto;
+  position: relative;
+}
+
+  #header h1 {
+    width: 189px;
+    height: 30px;
+    overflow: hidden;
+    color: white;
+    font-size: 32px;
+    position: absolute;
+    top: 40px;
+    left: 10px;
+  }
+
+#nav {
+  background: #9D0B30;
+  height: 47px;
+  margin: 0 auto 20px;
+  position: relative;
+  z-index: 100;
+  -moz-border-radius-bottomleft: 8px;
+  -webkit-border-bottom-left-radius: 8px;
+  -o-border-bottom-left-radius: 8px;
+  -ms-border-bottom-left-radius: 8px;
+  -khtml-border-bottom-left-radius: 8px;
+  border-bottom-left-radius: 8px;
+  -moz-border-radius-bottomright: 8px;
+  -webkit-border-bottom-right-radius: 8px;
+  -o-border-bottom-right-radius: 8px;
+  -ms-border-bottom-right-radius: 8px;
+  -khtml-border-bottom-right-radius: 8px;
+  border-bottom-right-radius: 8px;
+  -moz-box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.35);
+  -webkit-box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.35);
+  -o-box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.35);
+  box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.35);
+}
