@@ -22,7 +22,7 @@ AUTHENTICATION_BACKENDS = (
     'eloue.accounts.auth.PrivatePatronModelBackend',
 )
 
-#MIDDLEWARE_CLASSES += ('eloue.middleware.RequireLoginMiddleware',)
+MIDDLEWARE_CLASSES += ('eloue.middleware.RequireLoginMiddleware',)
 
 DEFAULT_SITES = [9]
 
