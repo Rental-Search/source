@@ -8,7 +8,8 @@
             "sites": [
                 1,
                 2,
-                3
+                3,
+                9
             ],
             "summary": "Perceuse visseuse Philips",
             "address": 1,
@@ -27,7 +28,8 @@
             "sites": [
                 1,
                 2,
-                3
+                3,
+                9
             ],
             "summary": "Perceuse visseuse Black Decker",
             "address": 1,
@@ -46,7 +48,8 @@
             "sites": [
                 1,
                 2,
-                3
+                3,
+                9
             ],
             "summary": "Maison de vacances au bord de la plage",
             "address": 1,
@@ -65,7 +68,8 @@
             "sites": [
                 1,
                 2,
-                3
+                3,
+                9
             ],
             "summary": "Belle voiture de sport BMW",
             "address": 1,
@@ -84,7 +88,8 @@
             "sites": [
                 1,
                 2,
-                3
+                3,
+                9
             ],
             "summary": "Bonne voiture Benz",
             "payment_type": 0,
@@ -104,7 +109,8 @@
             "sites": [
                 1,
                 2,
-                3
+                3,
+                9
             ],
             "summary": "Bonne voiture Benz de Lin",
             "address": 1,
