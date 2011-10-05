@@ -67,6 +67,10 @@
                     <td>{{ preview.ended_at|date:"l j F Y"|capfirst }} à {{ preview.ended_at|date:"H:i"}}</td>
                 </tr>
                 <tr>
+                  <th>{% trans "Quantité" %}</th>
+                  <td>{{ preview.quanity}}</th>
+                </tr>
+                <tr>
                     <th>{% trans "Prix par jour :" %}</th>
                     <td class="number">{{ product.prices.day|first }}</td>
                 </tr>

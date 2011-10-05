@@ -123,7 +123,6 @@ class Booking(models.Model):
     
     @incr_sequence('contract_id', 'rent_booking_contract_id_seq')
     def save(self, *args, **kwargs):
-  
         if not self.pk:
             self.created_at = datetime.datetime.now()
             self.pin = str(random.randint(1000, 9999))
@@ -163,6 +162,7 @@ class Booking(models.Model):
         from datetime import datetime
         import operator
         from operator import itemgetter, mul, add
+
         def max_rented_quantity(bookings):
             
             def _accumulate(iterable, func=operator.add, start=None):
@@ -179,8 +179,10 @@ class Booking(models.Model):
                 for element in it:
                     total = func(total, element)
                     yield 
-            
-            bookings_tuple = ((booking.started_at, booking.ended_at, quantity) for booking in bookings)
+            START = 1
+            END = -1
+
+            bookings_tuple = ((booking.started_at, booking.ended_at, booking.quantity) for booking in bookings)
             return max(_accumulate(sum(map(lambda x: mul(*itemgetter(1, 2)(x)), j)) for i, j in groupby(sorted(chain.from_iterable(\
                  ((start, START, value), (end, END, value)) for start, end, value in bookings_tuple\
                ), key=itemgetter(0)), key=itemgetter(0))))

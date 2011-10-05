@@ -160,13 +160,14 @@ class BookingForm(forms.ModelForm):
         fields = ('started_at', 'ended_at', 'quantity')
     
     def clean(self):
+        # Isn't these fields always present in cleaned data?
+        # Anyway: we should consider to move this, and the BookingStateForm's clean() method into the model.
         started_at = self.cleaned_data.get('started_at', None)
         ended_at = self.cleaned_data.get('ended_at', None)
         quantity = self.cleaned_data.get('quantity')
 
         product = self.instance.product
         bookings = Booking.objects.filter(product=product).filter(Q(state="pending")|Q(state="ongoing"))
-        booked_dates = get_product_occupied_date(bookings)
         if (quantity > Booking.calculate_available_quantity(product, started_at, ended_at)): 
             raise ValidationError(_(u'Pas assez de produit disponible'))
         if (started_at and ended_at):
@@ -175,15 +176,12 @@ class BookingForm(forms.ModelForm):
             except CanNotProve:
                 raise ValidationError(_(u"Vous ne pouvez pas louer cet objet pour ces dates"))
             
-            booking_dates = datespan(started_at, ended_at)
             if started_at <= datetime.datetime.now() or ended_at <= datetime.datetime.now():
                 raise ValidationError(_(u"Vous ne pouvez pas louer à ces dates"))
             if started_at >= ended_at:
                 raise ValidationError(_(u"Une location ne peut pas terminer avant d'avoir commencer"))
             if (ended_at - started_at) > datetime.timedelta(days=BOOKING_DAYS):
                 raise ValidationError(_(u"La durée d'une location est limitée à %s jours."%BOOKING_DAYS))
-            if set(booked_dates) & set(booking_dates):
-                raise ValidationError(_(u"Ces dates sont déjà prises pour ce produit."))
         return self.cleaned_data
     
 
@@ -198,6 +196,29 @@ class BookingStateForm(forms.ModelForm):
         model = Booking
         fields = ('state',)
     
+    def clean(self):
+        started_at = self.instance.started_at
+        ended_at = self.instance.ended_at
+        quantity = self.instance.quantity
+        product = self.instance.product
+        
+        bookings = Booking.objects.filter(product=product).filter(Q(state="pending")|Q(state="ongoing"))
+        if (quantity > Booking.calculate_available_quantity(product, started_at, ended_at)): 
+            raise ValidationError(_(u'Pas assez de produit disponible'))
+        if (started_at and ended_at):
+            try:
+                self.cleaned_data['total_amount'] = Booking.calculate_price(product, started_at, ended_at)[1]
+            except CanNotProve:
+                raise ValidationError(_(u"Vous ne pouvez pas louer cet objet pour ces dates"))
+            
+            if started_at <= datetime.datetime.now() or ended_at <= datetime.datetime.now():
+                raise ValidationError(_(u"Vous ne pouvez pas louer à ces dates"))
+            if started_at >= ended_at:
+                raise ValidationError(_(u"Une location ne peut pas terminer avant d'avoir commencer"))
+            if (ended_at - started_at) > datetime.timedelta(days=BOOKING_DAYS):
+                raise ValidationError(_(u"La durée d'une location est limitée à %s jours."%BOOKING_DAYS))
+        return self.cleaned_data
+
 
 class SinisterForm(forms.ModelForm):
     class Meta:
