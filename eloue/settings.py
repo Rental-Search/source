@@ -320,7 +320,7 @@ COMPRESS_CSS = {
             'css/chosen.css',
             'css/shiseido/screen.css'
         ),
-        'output_filename': 'css/master.r?.css',
+        'output_filename': 'css/shiseido.r?.css',
         'extra_context': {
             'media': 'screen',
         },
