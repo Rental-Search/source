@@ -65,6 +65,14 @@
     },
     {
         "fields": {
+            "domain": "shiseido.e-loue.com",
+            "name": "Shiseido"
+        },
+        "model": "sites.site",
+        "pk": 9
+    },
+    {
+        "fields": {
             "url": "/api/1.0/",
             "name": "all",
             "is_readonly": false

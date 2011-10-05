@@ -309,6 +309,22 @@ COMPRESS_CSS = {
             'media': 'screen',
         }
     },
+    'shiseido': {
+        'source_filenames': (
+            'css/screen.css',
+            'css/custom.css',
+            'css/plugins/ui/jquery.ui.core.css',
+            'css/plugins/ui/jquery.ui.datepicker.css',
+            'css/plugins/ui/jquery.ui.tabs.css',
+            'css/plugins/ui/jquery.ui.theme.css',
+            'css/chosen.css',
+            'css/shiseido/screen.css'
+        ),
+        'output_filename': 'css/master.r?.css',
+        'extra_context': {
+            'media': 'screen',
+        },
+    },
     'ie': {
         'source_filenames': (
             'css/ie/ie.css',

@@ -1,0 +1,115 @@
+{% load compressed i18n markup seo %}
+<!doctype html>
+<html lang="fr">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title>{% filter striplinebreak %}{% block title %}{% endblock %} {% if is_paginated and page_obj.has_previous %}- {% trans "Page" %} {{ page_obj.number }}{% endif %} - {% trans "e-loue" %}{% endfilter %}</title>
+        <meta name="description" content="{% filter striplinebreak %}{% block description %}Plateforme pour louer ou mettre en location tout type d'objet : materiel, reception, mariage, sono, utilitaires, ski{% endblock %}{% if is_paginated and page_obj.has_previous %} Page {{ page_obj.number }}{% endif %}{% endfilter %}">
+        <link rel="shortcut icon" href="{{ MEDIA_URL }}favicon.ico">
+        {% block head %}
+           <!--[if lt IE 8]>{% compressed_css 'ie' %}<![endif]-->
+           {% compressed_css 'shiseido' %}
+           <!--[if IE 6]>{% compressed_css 'ie6' %}<![endif]-->
+           <!--[if IE 7]>{% compressed_css 'ie7' %}<![endif]-->
+        {% endblock %}
+    </head>
+    <body>
+        {% if messages %}
+             {% for message in messages %}
+             <div id="notification" class="notification {% if message.tags %} {{ message.tags }}"{% endif %}>
+        	     <span id="notification-text">{{ message }}</span>
+        	 </div>
+             {% endfor %}
+         {% endif %}
+         <div id="header" class="xgrid">
+             <h1><a href="/">Shiseido CE</a></h1>
+             <div id="info">
+                 {% if user.is_authenticated %}
+                 {% if request.user.first_name %}
+				    <h4>{% blocktrans with request.user.first_name as first_name %} Bienvenue, {{ first_name }} !{% endblocktrans %}</h4>
+                {% else %}
+                    <h4>{% blocktrans with request.user.username as username %} Bienvenue, {{ username }} !{% endblocktrans %}</h4>
+				{% endif %}
+                 <p>
+                     <a href="{% url product_create %}">{% trans "Mettre en location" %}</a>
+                     <br>
+                     <a href="{% url dashboard %}">{% trans "Tableau de bord" %}</a>
+                     <br>
+                     <a href="{% url auth_logout %}">{% trans "Se déconnecter" %}</a>
+                 </p>
+                 <img src="./images/avatar.jpg" alt="avatar">
+                 {% else %}
+                    <a href="{% url auth_login %}">{% trans "S'inscrire ou se connecter" %}</a>
+                 {% endif %}
+             </div>
+        </div>
+        <div id="nav" class="xgrid">
+            <ul class="mega-container mega-grey">
+                <li class="mega">
+                    <a href="http://ec2-46-137-50-223.eu-west-1.compute.amazonaws.com/" class="mega-link">Présentation de la mandature</a>	
+                </li>
+                <li class="mega">				
+                    <a href="javascript:;" class="mega-tab">Réunion CE</a>
+                    <div class="mega-content mega-menu ">
+                        <ul>
+                            <li><a href="http://ec2-46-137-50-223.eu-west-1.compute.amazonaws.com/documents/">Documents</a></li>
+                            <li><a href="http://ec2-46-137-50-223.eu-west-1.compute.amazonaws.com/date-reunion-ce/2011/10/">Calendrier</a></li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="mega">
+                    <a href="javascript:;" class="mega-tab">Activités / Avantages</a>	
+                    <div class="mega-content mega-menu ">
+                        <ul>
+
+                            <li><a href="http://ec2-46-137-50-223.eu-west-1.compute.amazonaws.com/advantages/cheques/">Chèques</a></li>
+                            <li><a href="http://ec2-46-137-50-223.eu-west-1.compute.amazonaws.com/advantages/contre-marque/">Contre-marque</a></li>
+                            <li><a href="http://ec2-46-137-50-223.eu-west-1.compute.amazonaws.com/advantages/tickets-cinema/">Tickets Cinéma</a></li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="mega">
+                    <a href="http://ec2-46-137-50-223.eu-west-1.compute.amazonaws.com/boutique/" class="mega-link">Commandes produits</a>
+                </li>
+                <li class="mega">
+                    <a href="http://ec2-46-137-50-223.eu-west-1.compute.amazonaws.com/questions-suggestions/" class="mega-link">Questions/Suggestions</a>
+                </li>
+                <li class="mega">
+                    <a href="#" class="mega-link">Location</a>
+                </li>
+            </ul>
+        </div>
+         {% block content %}
+         {% endblock %}
+         <div id="footer" class="xgrid">
+       	    <div class="x3">
+     			<h4>{% trans "Liens utiles" %}</h4>
+     			<ul>
+     				<li><a href="{% url home %}">{% trans "Accueil" %}</a></li>
+     				<li><a href="{% url dashboard %}">{% trans "Mon compte" %}</a></li>
+     				<li><a href="{% url product_create %}">{% trans "Mettre en location" %}</a></li>
+                    <li><a href="{% trans "/comment-ca-marche/" %}">{% trans "Comment ça marche ?" %}</a></li>
+     			</ul>
+     		</div>
+     		<div class="x3">
+     			<h4>{% trans "Info" %}</h4>
+     			<ul>
+     				<li><a href="{% trans "/assurance-tranquillite/" %}">{% trans "Assurance tranquillité" %}</a></li>
+     				<li><a href="{% trans "/conditions-generales/" %}">{% trans "Conditions générales" %}</a></li>
+     				<li><a href="{% trans "/respect-vie-privee/" %}">{% trans "Respect de la vie privée" %}</a></li>
+     			</ul>
+     		</div>
+     		<div class="x3">
+     			<h4>{% trans "Support" %}</h4>
+     			<ul>
+     				<li><a href="{% url faq-topic-list %}">{% trans "Aide" %}</a></li>
+     				<li><a href="{% url contact %}">{% trans "Contactez-nous" %}</a></li>
+     			</ul>
+     		</div>
+       	</div>
+       	{% block tail %}
+        	{% compressed_js 'application' %}
+        {% endblock %}
+    </body>
+</html>
