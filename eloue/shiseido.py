@@ -4,7 +4,7 @@ from eloue.settings import *
 
 local_path = lambda path: os.path.join(os.path.dirname(__file__), path)
 
-SITE_ID = 7
+SITE_ID = 9
 
 USE_HTTPS = False
 

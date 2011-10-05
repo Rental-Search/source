@@ -24,18 +24,37 @@
          {% endif %}
          <div id="header" class="xgrid">
              <h1><a href="/">Shiseido CE</a></h1>
+             <div id="info">
+                 {% if user.is_authenticated %}
+                 {% if request.user.first_name %}
+				    <h4>{% blocktrans with request.user.first_name as first_name %} Bienvenue, {{ first_name }} !{% endblocktrans %}</h4>
+                {% else %}
+                    <h4>{% blocktrans with request.user.username as username %} Bienvenue, {{ username }} !{% endblocktrans %}</h4>
+				{% endif %}
+                 <p>
+                     <a href="{% url product_create %}">{% trans "Mettre en location" %}</a>
+                     <br>
+                     <a href="{% url dashboard %}">{% trans "Tableau de bord" %}</a>
+                     <br>
+                     <a href="{% url auth_logout %}">{% trans "Se déconnecter" %}</a>
+                 </p>
+                 <img src="./images/avatar.jpg" alt="avatar">
+                 {% else %}
+                    <a href="{% url auth_login %}">{% trans "S'inscrire ou se connecter" %}</a>
+                 {% endif %}
+             </div>
         </div>
         <div id="nav" class="xgrid">
             <ul class="mega-container mega-grey">
                 <li class="mega">
-                    <a href="/" class="mega-link">Présentation de la mandature</a>	
+                    <a href="http://ec2-46-137-50-223.eu-west-1.compute.amazonaws.com/" class="mega-link">Présentation de la mandature</a>	
                 </li>
                 <li class="mega">				
                     <a href="javascript:;" class="mega-tab">Réunion CE</a>
                     <div class="mega-content mega-menu ">
                         <ul>
-                            <li><a href="/documents/">Documents</a></li>
-                            <li><a href="/date-reunion-ce/2011/10">Calendrier</a></li>
+                            <li><a href="http://ec2-46-137-50-223.eu-west-1.compute.amazonaws.com/documents/">Documents</a></li>
+                            <li><a href="http://ec2-46-137-50-223.eu-west-1.compute.amazonaws.com/date-reunion-ce/2011/10/">Calendrier</a></li>
                         </ul>
                     </div>
                 </li>
@@ -44,48 +63,23 @@
                     <div class="mega-content mega-menu ">
                         <ul>
 
-                            <li><a href="/advantages/cheques/">Chèques</a></li>
-                            <li><a href="/advantages/contre-marque/">Contre-marque</a></li>
-                            <li><a href="/advantages/tickets-cinema/">Tickets Cinéma</a></li>
+                            <li><a href="http://ec2-46-137-50-223.eu-west-1.compute.amazonaws.com/advantages/cheques/">Chèques</a></li>
+                            <li><a href="http://ec2-46-137-50-223.eu-west-1.compute.amazonaws.com/advantages/contre-marque/">Contre-marque</a></li>
+                            <li><a href="http://ec2-46-137-50-223.eu-west-1.compute.amazonaws.com/advantages/tickets-cinema/">Tickets Cinéma</a></li>
                         </ul>
                     </div>
                 </li>
                 <li class="mega">
-                    <a href="/boutique/" class="mega-link">Commandes produits</a>
+                    <a href="http://ec2-46-137-50-223.eu-west-1.compute.amazonaws.com/boutique/" class="mega-link">Commandes produits</a>
                 </li>
                 <li class="mega">
-                    <a href="/questions-suggestions/" class="mega-link">Questions/Suggestions</a>
+                    <a href="http://ec2-46-137-50-223.eu-west-1.compute.amazonaws.com/questions-suggestions/" class="mega-link">Questions/Suggestions</a>
+                </li>
+                <li class="mega">
+                    <a href="#" class="mega-link">Location</a>
                 </li>
             </ul>
         </div>
-         <!--<div id="header" class="xgrid">
-             <div class="x2">
-                 <a href="{% url home %}">
-     			    <img src="{{ MEDIA_URL }}images/logo.png" alt="e-loue"/>
-     			</a>
-             </div>
-             <div class="x10">
-                 <ul class="nav-bar">
-     				<li class="nav"><a href="{% url product_create %}" class="btn medium-green"  >{% trans "Mettre en location" %}</a></li>
-     				{% if not user.is_authenticated %}
-     					<li class="nav"><a href="{% url auth_login %}" class="nav-link" >{% trans "S'inscrire ou se connecter" %}</a></li>
-     				{% else %}
-     					<li class="nav"><a href="{% url auth_logout %}" class="nav-link">{% trans "Se déconnecter" %}</a></li>
-     				{% endif %}
-     				{% if user.is_anonymous %}
-     				 <li class="nav"><a href="{% trans "/comment-ca-marche/" %}" class="nav-link">{% trans "Comment ça marche ?" %}</a></li>
-     				{% else %}
-     				    {% if request.user.first_name %}
-     				        <li class="nav"><a href="{% url dashboard %}" class="nav-link">{% trans "Tableau de bord" %}</a></li> 
-     				        <li class="nav welcome">{% blocktrans with request.user.first_name as first_name %} Bienvenue, {{ first_name }}!{% endblocktrans %}</li>
-     				    {% else %}
-     				        <li class="nav"><a href="{% url dashboard %}" class="nav-link">{% trans "Tableau de bord" %}</a></li> 
-     				        <li class="nav welcome">{% blocktrans with request.user.username as username %} Bienvenue, {{ username }}!{% endblocktrans %}</li>
-     				    {% endif %}
-     				{% endif %}
-                 </ul>
-             </div>
-         </div>-->
          {% block content %}
          {% endblock %}
          <div id="footer" class="xgrid">
@@ -95,15 +89,12 @@
      				<li><a href="{% url home %}">{% trans "Accueil" %}</a></li>
      				<li><a href="{% url dashboard %}">{% trans "Mon compte" %}</a></li>
      				<li><a href="{% url product_create %}">{% trans "Mettre en location" %}</a></li>
-     				{% if user.is_authenticated %}
-     					<li><a href="{% trans "/comment-ca-marche/" %}">{% trans "Comment ça marche ?" %}</a></li>
-     				{% endif %}
+                    <li><a href="{% trans "/comment-ca-marche/" %}">{% trans "Comment ça marche ?" %}</a></li>
      			</ul>
      		</div>
      		<div class="x3">
      			<h4>{% trans "Info" %}</h4>
      			<ul>
-     				<li><a href="{% trans "/espace-professionnel/" %}">{% trans "Espace professionnel" %}</a></li>
      				<li><a href="{% trans "/assurance-tranquillite/" %}">{% trans "Assurance tranquillité" %}</a></li>
      				<li><a href="{% trans "/conditions-generales/" %}">{% trans "Conditions générales" %}</a></li>
      				<li><a href="{% trans "/respect-vie-privee/" %}">{% trans "Respect de la vie privée" %}</a></li>
@@ -114,33 +105,8 @@
      			<ul>
      				<li><a href="{% url faq-topic-list %}">{% trans "Aide" %}</a></li>
      				<li><a href="{% url contact %}">{% trans "Contactez-nous" %}</a></li>
-     				<li><a href="{% trans "/espace-presse/" %}">{% trans "Espace presse" %}</a></li>
-     				<li><a href="{% trans "/qui-sommes-nous/" %}">{% trans "Qui sommes nous ?" %}</a></li>
      			</ul>
      		</div>
-     		<div class="x3">
-     			<h4>{% trans "Communauté" %}</h4>
-     			<ul>
-     				<li><a href="http://blog.e-loue.com">{% trans "Blog" %}</a></li>
-     				<li><a href="https://twitter.com/eloue">{% trans "Twitter" %}</a></li>
-     				<li><a href="https://www.facebook.com/pages/e-louecom/104685226447">{% trans "Facebook" %}</a></li>
-     				<li><a href="/partenaires/">{% trans "Nos partenaires" %}</a></li>
-     			</ul>
-     		</div>
-     		{% if site_wide_announcements %}
-     		{% with site_wide_announcements|first as announcement %}
-     			<div class="x12 twitter-box">
-     				{{ announcement.content|markdown }}
-     				<div class="twitter-dialogue">
-     				</div>
-     			</div>
-     			<div class="x12 twitter-info">
-     			<p>
-     				<span class="twitter-time">{{ announcement.creation_date|date:"l j F Y"|capfirst }}<span> {% trans "sur" %} <a href="http://blog.e-loue.com">{% trans "e-loue blog" %}</a>
-     			</p>
-     		</div>
-     	{% endwith %}
-     	{% endif %}
        	</div>
        	{% block tail %}
         	{% compressed_js 'application' %}
