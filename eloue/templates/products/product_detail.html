@@ -78,7 +78,7 @@
     <div class="x4">
         <div class="box-tools">
             <div class="box-tools-top">
-                <div class="product-price">
+                <div id="product_price" class="product-price">
                     {% with product.prices.day|first as price %}
             		  <span class="price">{{ price }}</span>
             		  <span class="unit">{% blocktrans with price.unit|unit as unit %} / par {{ unit }}{% endblocktrans %}</span>
@@ -93,6 +93,12 @@
                     <p class="ended-date">
                         <label class="labm">{% trans "Fin" %} :</label><br />
         				{{ form.ended_at }}
+                    </p>
+                    </div>
+                <div>
+                    <p class="quanity">
+                        <label class="labm">{% trans "Quantité" %} :</label>
+                        {{ form.quantity }}
                     </p>
                 </div>
             </div>

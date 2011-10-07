@@ -6,6 +6,7 @@ from django.core.urlresolvers import reverse
 from django.test import TestCase
 from django.utils import simplejson
 
+from django.utils.translation import ugettext as _
 
 class BookingViewsTest(TestCase):
     fixtures = ['category', 'patron', 'address', 'price', 'product', 'booking', 'sinister']
@@ -35,14 +36,16 @@ class BookingViewsTest(TestCase):
             '0-started_at_0': started_at.strftime("%d/%m/%Y"),
             '0-started_at_1': '08:00:00',
             '0-ended_at_0': ended_at.strftime("%d/%m/%Y"),
-            '0-ended_at_1': '08:00:00'
+            '0-ended_at_1': '08:00:00',
+            '0-quantity': 1
         }, HTTP_X_REQUESTED_WITH='XMLHttpRequest')
         self.assertEquals(response.status_code, 200)
         json = simplejson.loads(response.content)
+        print json
         self.assertTrue('duration' in json)
         self.assertTrue('total_price' in json)
         self.assertEquals(json['total_price'], '72.00')
-        self.assertEquals(json['duration'], '3 days')
+        self.assertEquals(json['duration'], '3 '+_("jours"))
     
     def test_booking_price_error(self):
         started_at = self._next_weekday(0)
@@ -51,7 +54,8 @@ class BookingViewsTest(TestCase):
             '0-started_at_0': started_at.strftime("%d/%m/%Y"),
             '0-started_at_1': '08:00:00',
             '0-ended_at_0': ended_at.strftime("%d/%m/%Y"),
-            '0-ended_at_1': '08:00:00'
+            '0-ended_at_1': '08:00:00',
+            '0-quantity': 2
         }, HTTP_X_REQUESTED_WITH='XMLHttpRequest')
         self.assertEquals(response.status_code, 200)
         json = simplejson.loads(response.content)
@@ -64,7 +68,8 @@ class BookingViewsTest(TestCase):
             '0-started_at_0': started_at.strftime("%d/%m/%Y"),
             '0-started_at_1': '08:00:00',
             '0-ended_at_0': ended_at.strftime("%d/%m/%Y"),
-            '0-ended_at_1': '08:00:00'
+            '0-ended_at_1': '08:00:00',
+            '0-quantity': 2
         })
         self.assertEquals(response.status_code, 405)
 

@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import datetime
 import time
+import dis
 
 from django.utils.tzinfo import LocalTimezone
 from django.utils import formats
@@ -60,13 +61,13 @@ def timesince(d, now=None):
     Microseconds are ignored.
     """
     chunks = (
-      (60 * 60 * 24 * 365, lambda n: ungettext('year', 'years', n)),
-      (60 * 60 * 24 * 30, lambda n: ungettext('month', 'months', n)),
-      (60 * 60 * 24 * 7, lambda n : ungettext('week', 'weeks', n)),
-      (60 * 60 * 24, lambda n : ungettext('day', 'days', n)),
-      (60 * 60, lambda n: ungettext('hour', 'hours', n)),
-      (60, lambda n: ungettext('minute', 'minutes', n)),
-      (1, lambda n: ungettext('second', 'seconds', n)),
+      (60 * 60 * 24 * 365, lambda n: ungettext(u'année', u'années', n)),
+      (60 * 60 * 24 * 30, lambda n: ungettext(u'mois', u'mois', n)),
+      (60 * 60 * 24 * 7, lambda n : ungettext(u'semaine', u'semaines', n)),
+      (60 * 60 * 24, lambda n : ungettext(u'jour', u'jours', n)),
+      (60 * 60, lambda n: ungettext(u'heure', u'heures', n)),
+      (60, lambda n: ungettext(u'minute', u'minutes', n)),
+      (1, lambda n: ungettext(u'seconde', u'secondes', n)),
     )
     # Convert datetime.date to datetime.datetime for comparison.
     if not isinstance(d, datetime.datetime):
@@ -85,12 +86,12 @@ def timesince(d, now=None):
     since = delta.days * 24 * 60 * 60 + delta.seconds
     if since <= 0:
         # d is in the future compared to now, stop processing.
-        return u'0 ' + _('minutes')
+        return u'0 ' + _(u'minute')
     s = []
     for i, (seconds, name) in enumerate(chunks):
         count = since // seconds
         if count != 0:
-            s.append(_('%(number)d %(type)s') % {'number': count, 'type': name(count)})
+            s.append('%(number)d %(type)s' % {'number': count, 'type': name(count)})
             since -= count * seconds
     return ', '.join(s)
 

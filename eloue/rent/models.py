@@ -20,6 +20,7 @@ from django.db.models import permalink
 from django.db.models.signals import post_save
 from django.utils.formats import get_format
 from django.utils.translation import ugettext_lazy as _
+from django.db.models import Q
 
 from eloue.accounts.models import Patron
 from eloue.products.models import CURRENCY, UNIT, Product
@@ -89,7 +90,8 @@ class Booking(models.Model):
     
     started_at = models.DateTimeField()
     ended_at = models.DateTimeField()
-    
+    quantity = models.IntegerField(null=False, default=1)
+
     state = FSMField(default='authorizing', choices=BOOKING_STATE)
     
     deposit_amount = models.DecimalField(max_digits=8, decimal_places=2)
@@ -101,6 +103,7 @@ class Booking(models.Model):
     borrower = models.ForeignKey(Patron, related_name='rentals')
     product = models.ForeignKey(Product, related_name='bookings')
     
+
     contract_id = IntegerAutoField(unique=True, db_index=True)
     pin = models.CharField(blank=True, max_length=4)
     ip = models.IPAddressField(blank=True, null=True)
@@ -120,7 +123,6 @@ class Booking(models.Model):
     
     @incr_sequence('contract_id', 'rent_booking_contract_id_seq')
     def save(self, *args, **kwargs):
-  
         if not self.pk:
             self.created_at = datetime.datetime.now()
             self.pin = str(random.randint(1000, 9999))
@@ -151,7 +153,47 @@ class Booking(models.Model):
         
     def init_payment_processor(self):
         self.payment_processor = PAY_PROCESSORS[self.product.payment_type](self)
-        
+    
+    @staticmethod
+    def calculate_available_quantity(product, started_at, ended_at):
+        """Returns maximal available quantity between dates started_at and ended_at.
+        """
+        from itertools import groupby, chain, izip
+        from datetime import datetime
+        import operator
+        from operator import itemgetter, mul, add
+
+        def max_rented_quantity(bookings):
+            
+            def _accumulate(iterable, func=operator.add, start=None):
+                """
+                Return running totals
+                Obsoleted starting from Python 3.2
+                """
+                # accumulate([1,2,3,4,5]) --> 1 3 6 10 15
+                # accumulate([1,2,3,4,5], operator.mul) --> 1 2 6 24 120
+                yield 0
+                it = iter(iterable)
+                total = next(it)
+                yield total
+                for element in it:
+                    total = func(total, element)
+                    yield total
+                yield
+            
+            START = 1
+            END = -1
+            
+            bookings_tuple = ((booking.started_at, booking.ended_at, booking.quantity) for booking in bookings)
+            grouped_dates = groupby(sorted(chain.from_iterable(
+              ((start, START, value), (end, END, value)) for start, end, value in bookings_tuple), 
+              key=itemgetter(0)), 
+              key=itemgetter(0)
+            )
+            return max(_accumulate(sum(map(lambda x: mul(*itemgetter(1, 2)(x)), j)) for i, j in grouped_dates))
+
+        bookings = Booking.objects.filter(product=product).filter(Q(state="pending")|Q(state="ongoing")).filter(Q(started_at__lte=started_at, ended_at__gt=started_at)|Q(started_at__lt=ended_at, ended_at__gte=started_at))
+        return product.quantity - max_rented_quantity(bookings)
         
     @staticmethod
     def calculate_price(product, started_at, ended_at):
