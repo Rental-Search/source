@@ -150,9 +150,10 @@ $(document).ready(function() {
     function occupiedDays(date) {
       var m = date.getMonth(), d = date.getDate(), y = date.getFullYear();
       for (i = 0; i < disabledDays.length; i++) {
-        if($.inArray(y +'-'+ (m+1) + '-' + d, disabledDays) != -1 || new Date() > date) {
-          return [false];
-        }
+        //if($.inArray(y +'-'+ (m+1) + '-' + d, disabledDays) != -1 || new Date() > date) {
+      }
+      if(new Date() > date) {
+        return [false];
       }
       return [true];
     }
@@ -161,7 +162,9 @@ $(document).ready(function() {
     bookingPrice = function(form) {
         var template,
         serializedForm;
-        template = '{{#errors}}{{ errors }}{{/errors}}{{^errors}}<p>Total :<span class="day">{{ duration }},</span> soit <span class="total-price">{{ total_price }}</span></p>{{/errors}}';
+        unitTemplate = '<span class="price">{{unit_value}}</span><span class="unit"> / par {{unit_name}}</span>';
+        priceTemplate = '{{#warnings}}{{ warnings }}{{/warnings}} {{#errors}}{{ errors }}{{/errors}}{{^errors}}<p>Total :<span class="day">{{ duration }},</span> soit <span class="total-price">{{ total_price }}</span></p>{{/errors}}';
+        listTemplate = '{{#select_list}}<option value="{{value}}" {{#selected}}selected="selected"{{/selected}}>{{value}}</option>{{/select_list}}';
         serializedForm = $.grep(form.serializeArray(),
         function(el) {
             return (el.name.indexOf('csrfmiddlewaretoken') != -1) || (el.name.indexOf('wizard_step') != -1);
@@ -173,7 +176,9 @@ $(document).ready(function() {
             dataType: 'json',
             data: $.param(serializedForm),
             success: function(data) {
-                $("#booking-total").html(Mustache.to_html(template, data));
+                $("#product_price").html(Mustache.to_html(unitTemplate, data));
+                $("#booking-total").html(Mustache.to_html(priceTemplate, data));
+                $("#id_0-quantity").html(Mustache.to_html(listTemplate, data));
             }
         });
     }

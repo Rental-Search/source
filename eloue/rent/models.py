@@ -90,7 +90,7 @@ class Booking(models.Model):
     
     started_at = models.DateTimeField()
     ended_at = models.DateTimeField()
-    quantity = models.IntegerField(default=1)
+    quantity = models.IntegerField(null=False, default=1)
 
     state = FSMField(default='authorizing', choices=BOOKING_STATE)
     
@@ -178,16 +178,21 @@ class Booking(models.Model):
                 yield total
                 for element in it:
                     total = func(total, element)
-                    yield 
+                    yield total
+                yield
+            
             START = 1
             END = -1
-
+            
             bookings_tuple = ((booking.started_at, booking.ended_at, booking.quantity) for booking in bookings)
-            return max(_accumulate(sum(map(lambda x: mul(*itemgetter(1, 2)(x)), j)) for i, j in groupby(sorted(chain.from_iterable(\
-                 ((start, START, value), (end, END, value)) for start, end, value in bookings_tuple\
-               ), key=itemgetter(0)), key=itemgetter(0))))
+            grouped_dates = groupby(sorted(chain.from_iterable(
+              ((start, START, value), (end, END, value)) for start, end, value in bookings_tuple), 
+              key=itemgetter(0)), 
+              key=itemgetter(0)
+            )
+            return max(_accumulate(sum(map(lambda x: mul(*itemgetter(1, 2)(x)), j)) for i, j in grouped_dates))
 
-        bookings = Booking.objects.filter(product=product).filter(Q(state="pending")|Q(state="ongoing")).filter(Q(started_at__lte=started_at, ended_at__gt=started_at)|Q(started_at__lt=ended_at, ended_at__gte=ended_at))
+        bookings = Booking.objects.filter(product=product).filter(Q(state="pending")|Q(state="ongoing")).filter(Q(started_at__lte=started_at, ended_at__gt=started_at)|Q(started_at__lt=ended_at, ended_at__gte=started_at))
         return product.quantity - max_rented_quantity(bookings)
         
     @staticmethod

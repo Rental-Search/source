@@ -141,40 +141,29 @@ class PayIPNForm(forms.Form):
 class BookingForm(forms.ModelForm):
     started_at = DateTimeField(required=True, input_date_formats=DATE_FORMAT)
     ended_at = DateTimeField(required=True, input_date_formats=DATE_FORMAT)
-    
+
     def __init__(self, *args, **kwargs):
         super(BookingForm, self).__init__(*args, **kwargs)
-        if 'initial' in kwargs:
-            initial = kwargs['initial']
-            started_at = initial['started_at']
-            ended_at = initial['ended_at']
-            product = self.instance.product
-            self.fields['quantity'] = forms.IntegerField(widget=forms.Select(choices=enumerate(xrange(1, 1 + Booking.calculate_available_quantity(
-                                                            product, 
-                                                            datetime.datetime.strptime(' '.join(started_at), "%d/%m/%Y %H:%M:%S"), 
-                                                            datetime.datetime.strptime(' '.join(ended_at), "%d/%m/%Y %H:%M:%S")
-                                                        )), start=1)))
-        
+        self.fields['quantity'] = forms.IntegerField(required=False, widget=forms.Select(choices=enumerate(xrange(1, 1 + self.instance.product.quantity), start=1)))
+    
     class Meta:
         model = Booking
         fields = ('started_at', 'ended_at', 'quantity')
     
     def clean(self):
-        # Isn't these fields always present in cleaned data?
-        # Anyway: we should consider to move this, and the BookingStateForm's clean() method into the model.
-        started_at = self.cleaned_data.get('started_at', None)
-        ended_at = self.cleaned_data.get('ended_at', None)
+        super(BookingForm, self).clean()
+        started_at = self.cleaned_data.get('started_at')
+        ended_at = self.cleaned_data.get('ended_at')
         quantity = self.cleaned_data.get('quantity')
 
         product = self.instance.product
         bookings = Booking.objects.filter(product=product).filter(Q(state="pending")|Q(state="ongoing"))
-        if (quantity > Booking.calculate_available_quantity(product, started_at, ended_at)): 
-            raise ValidationError(_(u'Pas assez de produit disponible'))
+
         if (started_at and ended_at):
-            try:
-                self.cleaned_data['total_amount'] = Booking.calculate_price(product, started_at, ended_at)[1]
-            except CanNotProve:
-                raise ValidationError(_(u"Vous ne pouvez pas louer cet objet pour ces dates"))
+            self.max_available = Booking.calculate_available_quantity(product, started_at, ended_at)
+
+            if not self.max_available:
+                    raise ValidationError(u"Il n'y a aucun produit disponible pendant la période choisie")
             
             if started_at <= datetime.datetime.now() or ended_at <= datetime.datetime.now():
                 raise ValidationError(_(u"Vous ne pouvez pas louer à ces dates"))
@@ -182,6 +171,12 @@ class BookingForm(forms.ModelForm):
                 raise ValidationError(_(u"Une location ne peut pas terminer avant d'avoir commencer"))
             if (ended_at - started_at) > datetime.timedelta(days=BOOKING_DAYS):
                 raise ValidationError(_(u"La durée d'une location est limitée à %s jours."%BOOKING_DAYS))
+            
+            unit = Booking.calculate_price(product, started_at, ended_at)
+            self.cleaned_data['price_unit'] = unit[0]
+            
+            self.cleaned_data['total_amount'] = unit[1] * (1 if quantity is None else (quantity if self.max_available >= quantity else self.max_available))
+        
         return self.cleaned_data
     
 
@@ -203,20 +198,12 @@ class BookingStateForm(forms.ModelForm):
         product = self.instance.product
         
         bookings = Booking.objects.filter(product=product).filter(Q(state="pending")|Q(state="ongoing"))
-        if (quantity > Booking.calculate_available_quantity(product, started_at, ended_at)): 
-            raise ValidationError(_(u'Pas assez de produit disponible'))
+        max_available = Booking.calculate_available_quantity(product, started_at, ended_at)
+        if (quantity > max_available):
+            raise ValidationError(u'Quantité disponible à cette période: %s' % max_available)
         if (started_at and ended_at):
-            try:
-                self.cleaned_data['total_amount'] = Booking.calculate_price(product, started_at, ended_at)[1]
-            except CanNotProve:
-                raise ValidationError(_(u"Vous ne pouvez pas louer cet objet pour ces dates"))
-            
             if started_at <= datetime.datetime.now() or ended_at <= datetime.datetime.now():
                 raise ValidationError(_(u"Vous ne pouvez pas louer à ces dates"))
-            if started_at >= ended_at:
-                raise ValidationError(_(u"Une location ne peut pas terminer avant d'avoir commencer"))
-            if (ended_at - started_at) > datetime.timedelta(days=BOOKING_DAYS):
-                raise ValidationError(_(u"La durée d'une location est limitée à %s jours."%BOOKING_DAYS))
         return self.cleaned_data
 
 

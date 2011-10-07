@@ -22,7 +22,7 @@ from django_lean.experiments.utils import WebUser
 
 from eloue.decorators import ownership_required, validate_ipn, secure_required, mobify
 from eloue.accounts.forms import EmailAuthenticationForm
-from eloue.products.models import Product, PAYMENT_TYPE
+from eloue.products.models import Product, PAYMENT_TYPE, UNIT
 from eloue.rent.forms import BookingForm, BookingConfirmationForm, BookingStateForm, PreApprovalIPNForm, PayIPNForm, IncidentForm
 from eloue.rent.models import Booking
 from eloue.rent.wizard import BookingWizard
@@ -79,17 +79,49 @@ def product_occupied_date(request, slug, product_id):
 
 @require_GET
 def booking_price(request, slug, product_id):
+
+    def generate_select_list(n, selected):
+        select_options = [{'value': x, 'selected': x==selected} for x in xrange(1, 1 + n)]
+        return select_options
+
     if not request.is_ajax():
         return HttpResponseNotAllowed(['GET', 'XHR'])
     product = get_object_or_404(Product.on_site, pk=product_id)
     form = BookingForm(request.GET, prefix="0", instance=Booking(product=product))
+        
     if form.is_valid():
         duration = timesince(form.cleaned_data['started_at'], form.cleaned_data['ended_at'])
         total_price = smart_str(currency(form.cleaned_data['total_amount']))
-        return HttpResponse(simplejson.dumps({'duration': duration, 'total_price': total_price}), mimetype='application/json')
+        price_unit = form.cleaned_data['price_unit']
+        quantity = form.cleaned_data['quantity']
+        max_available = form.max_available
+        if quantity is None and max_available > 0:
+            quantity = 1
+        response_dict = {
+          'duration': duration,
+          'total_price': total_price, 
+          'unit_name': UNIT[price_unit][1], 
+          'unit_value': smart_str(currency(product.prices.filter(unit=price_unit)[0].amount)), 
+          'max_available': max_available, 
+          'select_list': generate_select_list(max_available, selected=quantity) 
+        }
+        if quantity > max_available:
+            response_dict.setdefault('warnings', []).append('Quantité disponible à cette période: %s' % max_available)
+            response_dict['select_list'] = generate_select_list(max_available, selected=max_available)
+        else:
+            response_dict['select_list'] = generate_select_list(max_available, selected=quantity)
+        return HttpResponse(simplejson.dumps(response_dict), mimetype='application/json')
     else:
-        return HttpResponse(simplejson.dumps({'errors': form.errors.values()}), mimetype='application/json')
-
+        max_available = getattr(form, 'max_available', product.quantity)
+        price_unit = product.prices.filter(unit=1)[0]
+        response_dict = {
+          'errors': form.errors.values(), 
+          'unit_name': UNIT[1][1], 
+          'unit_value': smart_str(currency(price_unit.amount)), 
+          'max_available': max_available, 
+          'select_list': generate_select_list(max_available, selected=1)
+        }
+        return HttpResponse(simplejson.dumps(response_dict), mimetype='application/json')
 
 @mobify
 @never_cache
@@ -154,6 +186,8 @@ def booking_accept(request, booking_id):
         booking.send_acceptation_email()
         GoalRecord.record('rent_object_accepted', WebUser(request))
         booking.save()
+    else:
+        messages.error(request, form.non_field_errors())
     return redirect_to(request, "%s?paypal=true" % booking.get_absolute_url())
 
 

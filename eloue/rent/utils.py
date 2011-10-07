@@ -60,7 +60,6 @@ def timesince(d, now=None):
     Units used are years, months, weeks, days, hours, and minutes.
     Microseconds are ignored.
     """
-    print get_language()
     chunks = (
       (60 * 60 * 24 * 365, lambda n: ungettext(u'année', u'années', n)),
       (60 * 60 * 24 * 30, lambda n: ungettext(u'mois', u'mois', n)),

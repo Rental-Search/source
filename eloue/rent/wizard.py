@@ -94,6 +94,7 @@ class BookingWizard(GenericFormWizard):
             initial = {
                 'started_at': [started_at.strftime('%d/%m/%Y'), started_at.strftime("08:00:00")],
                 'ended_at': [ended_at.strftime('%d/%m/%Y'), ended_at.strftime("08:00:00")],
+                # is 'total_amount' really necessary?
                 'total_amount': Booking.calculate_price(product, started_at, ended_at)[1]
             }
             initial.update(self.initial.get(step, {}))
