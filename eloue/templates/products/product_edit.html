@@ -129,37 +129,37 @@
 			    {% endblocktrans %}
 			    <ul class="prices-form clearfix">
 			        <li>
-			            <p>
+			            <p class="{% if form.hour_price.errors %}error-field{% endif %}">
 			             {{ form.hour_price }}
-							<label class="labs "><span class="current-symbol">{% currency_symbol %}</span> {{ form.hour_price.label }}{% if form.hour_price.field.required %}*{% endif %}</label>
+							<span><label class="labs "><span class="current-symbol">{% currency_symbol %}</span> {{ form.hour_price.label }}{% if form.hour_price.field.required %}*{% endif %}</label><span>
 						</p>
 			        </li>
 			        <li>
-			            <p>
+			            <p class="{% if form.day_price.errors %}error-field{% endif %}">
 			                {{ form.day_price }}
 							<label class="labs"><span class="current-symbol">{% currency_symbol %}</span> {{ form.day_price.label }}{% if form.day_price.field.required %}*{% endif %}</label>
 			            </p>
 			        </li>
 			        <li>
-			            <p>
+			            <p class="{% if form.week_end_price.errors %}error-field{% endif %}">
 			                {{ form.week_end_price }}
-							<label class="labs"><span class="current-symbol">{% currency_symbol %}</span> {{ form.week_end_price.label }}{% if form.week_end_price.field.required %}*{% endif %}</label>
+						    <label class="labs"><span class="current-symbol">{% currency_symbol %}</span> {{ form.week_end_price.label }}{% if form.week_end_price.field.required %}*{% endif %}</label>
 			             </p>
 			        </li>
 			        <li>
-			            <p>
+			            <p class="{% if form.week_price.errors %}error-field{% endif %}">
 			                {{ form.week_price }}
 							<label class="labs"><span class="current-symbol">{% currency_symbol %}</span> {{ form.week_price.label }}{% if form.week_price.field.required %}*{% endif %}</label>
 			            </p>
 			        </li>
 			        <li>
-			            <p>
+			            <p class="{% if form.two_weeks_price.errors %}error-field{% endif %}">
 			                {{ form.two_weeks_price }}
 							<label class="labs"><span class="current-symbol">{% currency_symbol %}</span> {{ form.two_weeks_price.label }}{% if form.two_weeks_price.field.required %}*{% endif %}</label>
 			            </p>
 			        </li>
 			        <li>
-			            <p>
+			            <p class="{% if form.month_price.errors %}error-field{% endif%}">
 			                {{ form.month_price }}
 							<label class="labs"><span class="current-symbol">{% currency_symbol %}</span> {{ form.month_price.label }}{% if form.month_price.field.required %}*{% endif %}</label>
 			            </p>
@@ -167,9 +167,41 @@
 			        <li class="calculator"><a href="#">{% trans "Calculer" %}</a></li>
                     <li class="supp-list-prices"></li>
 			    </ul>
+			    {% if form.hour_price.errors %}
+    			    {% for error in form.hour_price.errors %}
+    			        <span class="error">{{ error|escape }}</span></br>
+    			    {% endfor %}
+    			{% endif %}
+			    {% if form.day_price.errors %}
+    			    {% for error in form.day_price.errors %}
+    			        <span class="error">{{ error|escape }}</span></br>
+    			    {% endfor %}
+    			{% endif %}
+			    {% if form.week_end_price.errors %}
+    			    {% for error in form.week_end_price.errors %}
+    			        <span class="error">{{ error|escape }}</span></br>
+    			    {% endfor %}
+    			{% endif %}
+			    {% if form.week_price.errors %}
+    			    {% for error in form.week_price.errors %}
+    			        <span class="error">{{ error|escape }}</span></br>
+    			    {% endfor %}
+    			{% endif %}
+			    {% if form.two_weeks_price.errors %}
+    			    {% for error in form.two_weeks_price.errors %}
+    			        <span class="error">{{ error|escape }}</span></br>
+    			    {% endfor %}
+    			{% endif %}
+			    {% if form.month_price.errors %}
+    			    {% for error in form.month_price.errors %}
+    			        <span class="error">{{ error|escape }}</span></br>
+    			    {% endfor %}
+    			{% endif %}
 			</div>
-			<p class="required-field">{% trans "* champs obligatoires" %}</p>
         </div>
+    </div>
+    <div class="x12">
+        <p class="required-field">{% trans "* champ obligatoire" %}</p>
     </div>
     <div id="submit-wizard" class="x12">
         <p>

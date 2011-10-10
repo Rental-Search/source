@@ -56,7 +56,7 @@ class BookingWizardTest(TestCase):
             '0-started_at_1': '08:00:00',
             '0-ended_at_0': '19/10/2010',
             '0-ended_at_1': '08:00:00',
-            '0-quantity': 2,
+            '0-quantity': 1,
             'wizard_step': 0
         })
         self.assertTrue(response.status_code, 200)
@@ -73,7 +73,7 @@ class BookingWizardTest(TestCase):
             '0-started_at_1': '08:00:00',
             '0-ended_at_0': '19/10/2010',
             '0-ended_at_1': '08:00:00',
-            '0-quantity': 2,
+            '0-quantity': 1,
             '1-email': 'alexandre.woog@e-loue.com',
             '1-exists': 1,
             '1-password': 'alexandre',
@@ -91,7 +91,7 @@ class BookingWizardTest(TestCase):
             '0-started_at_1': '08:00:00',
             '0-ended_at_0': '19/10/2010',
             '0-ended_at_1': '08:00:00',
-            '0-quantity': 2,
+            '0-quantity': 1,
             '1-email': 'alexandre.woog@e-loue.com',
             '1-exists': 1,
             '1-password': 'alexandre',
@@ -116,7 +116,7 @@ class BookingWizardTest(TestCase):
             '0-started_at_1': '08:00:00',
             '0-ended_at_0': '19/10/2010',
             '0-ended_at_1': '08:00:00',
-            '0-quantity': 2,
+            '0-quantity': 1,
             '1-email': 'timothee.peignier@e-loue.com',
             '1-exists': 1,
             '1-password': 'timothee',

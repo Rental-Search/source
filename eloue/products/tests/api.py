@@ -94,7 +94,7 @@ class ApiTest(TestCase):
             'oauth_consumer_key': OAUTH_CONSUMER_KEY})
         self.assertEquals(response.status_code, 200)
         json = simplejson.loads(response.content)
-        self.assertEquals(json['meta']['total_count'], 2)
+        self.assertEquals(json['meta']['total_count'], 3)
         
         
     def test_product_search_with_location(self):
@@ -105,7 +105,7 @@ class ApiTest(TestCase):
         })
         self.assertEquals(response.status_code, 200)
         json = simplejson.loads(response.content)
-        self.assertEquals(json['meta']['total_count'], 2)
+        self.assertEquals(json['meta']['total_count'], 3)
     
     def test_product_with_dates(self):
         start_at = datetime.now() + timedelta(days=1)

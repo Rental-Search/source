@@ -28,6 +28,7 @@ class BookingTest(TestCase):
         booking = Booking.objects.create(
             started_at=datetime.datetime.now(),
             ended_at=datetime.datetime.now() + datetime.timedelta(days=3),
+            quantity=1,
             total_amount=10,
             state=4,
             owner_id=1,
@@ -40,6 +41,7 @@ class BookingTest(TestCase):
         booking = Booking(
             started_at=datetime.datetime.now() + datetime.timedelta(days=3),
             ended_at=datetime.datetime.now(),
+            quantity=1,
             total_amount=10,
             state=4,
             owner_id=1,
@@ -52,6 +54,7 @@ class BookingTest(TestCase):
         booking = Booking(
             started_at=datetime.datetime.now(),
             ended_at=datetime.datetime.now() + datetime.timedelta(days=3),
+            quantity=1,
             total_amount=10,
             state=4,
             owner_id=1,
@@ -64,6 +67,7 @@ class BookingTest(TestCase):
         booking = Booking(
             started_at=datetime.datetime.now(),
             ended_at=datetime.datetime.now() + datetime.timedelta(days=3),
+            quantity=1,
             total_amount=-10,
             state=4,
             owner_id=1,
@@ -76,6 +80,7 @@ class BookingTest(TestCase):
         booking = Booking.objects.create(
             started_at=datetime.datetime.now(),
             ended_at=datetime.datetime.now() + datetime.timedelta(days=3),
+            quantity=1,
             total_amount=10,
             state=4,
             owner_id=1,
@@ -89,6 +94,7 @@ class BookingTest(TestCase):
         booking = Booking(
             started_at=datetime.datetime.now(),
             ended_at=datetime.datetime.now() + datetime.timedelta(days=90),
+            quantity=1,
             total_amount=10,
             state=4,
             owner_id=1,
@@ -101,6 +107,7 @@ class BookingTest(TestCase):
         booking = Booking.objects.create(
             started_at=datetime.datetime.now(),
             ended_at=datetime.datetime.now() + datetime.timedelta(days=80),
+            quantity=1,
             total_amount=10,
             state=4,
             owner_id=1,
@@ -113,6 +120,7 @@ class BookingTest(TestCase):
         booking = Booking.objects.create(
             started_at=datetime.datetime.now(),
             ended_at=datetime.datetime.now() + datetime.timedelta(days=80),
+            quantity=1,
             total_amount=10,
             state=4,
             owner_id=1,
@@ -126,6 +134,7 @@ class BookingTest(TestCase):
         booking = Booking.objects.create(
             started_at=datetime.datetime.now(),
             ended_at=datetime.datetime.now() + datetime.timedelta(days=3),
+            quantity=1,
             total_amount=10,
             state=Booking.STATE.AUTHORIZING,
             owner_id=1,
@@ -143,6 +152,7 @@ class BookingTest(TestCase):
         booking = Booking.objects.create(
             started_at=datetime.datetime.now(),
             ended_at=datetime.datetime.now() + datetime.timedelta(days=3),
+            quantity=1,
             total_amount=10,
             state=Booking.STATE.ENDED,
             owner_id=1,
@@ -162,6 +172,7 @@ class BookingTest(TestCase):
         booking = Booking.objects.create(
             started_at=datetime.datetime.now(),
             ended_at=datetime.datetime.now() + datetime.timedelta(days=3),
+            quantity=1,
             total_amount=10,
             state=Booking.STATE.AUTHORIZING,
             owner_id=1,
@@ -182,6 +193,7 @@ class BookingTest(TestCase):
         booking = Booking.objects.create(
             started_at=datetime.datetime.now(),
             ended_at=datetime.datetime.now() + datetime.timedelta(days=3),
+            quantity=1,
             total_amount=10,
             state=Booking.STATE.ENDED,
             owner_id=1,

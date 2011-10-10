@@ -144,7 +144,8 @@ class BookingForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(BookingForm, self).__init__(*args, **kwargs)
-        self.fields['quantity'] = forms.IntegerField(required=False, widget=forms.Select(choices=enumerate(xrange(1, 1 + self.instance.product.quantity), start=1)))
+        widget = forms.Select(choices=enumerate(xrange(1, 1 + self.instance.product.quantity), start=1)) if self.instance.product.quantity >  1 else forms.HiddenInput()
+        self.fields['quantity'] = forms.IntegerField(required=False, widget=widget, initial=1)
     
     class Meta:
         model = Booking
@@ -154,7 +155,7 @@ class BookingForm(forms.ModelForm):
         super(BookingForm, self).clean()
         started_at = self.cleaned_data.get('started_at')
         ended_at = self.cleaned_data.get('ended_at')
-        quantity = self.cleaned_data.get('quantity')
+        quantity = self.cleaned_data.get('quantity', 1)
 
         product = self.instance.product
         bookings = Booking.objects.filter(product=product).filter(Q(state="pending")|Q(state="ongoing"))
@@ -175,7 +176,7 @@ class BookingForm(forms.ModelForm):
             unit = Booking.calculate_price(product, started_at, ended_at)
             self.cleaned_data['price_unit'] = unit[0]
             
-            self.cleaned_data['total_amount'] = unit[1] * (1 if quantity is None else (quantity if self.max_available >= quantity else self.max_available))
+            self.cleaned_data['total_amount'] = unit[1] * (quantity if self.max_available >= quantity else self.max_available)
         
         return self.cleaned_data
     
