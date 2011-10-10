@@ -90,7 +90,7 @@ class Booking(models.Model):
     
     started_at = models.DateTimeField()
     ended_at = models.DateTimeField()
-    quantity = models.IntegerField(null=False, default=1)
+    quantity = models.IntegerField(default=1)
 
     state = FSMField(default='authorizing', choices=BOOKING_STATE)
     
@@ -167,11 +167,10 @@ class Booking(models.Model):
             
             def _accumulate(iterable, func=operator.add, start=None):
                 """
-                Return running totals
-                Obsoleted starting from Python 3.2
+                Modified version of Python 3.2's itertools.accumulate.
                 """
-                # accumulate([1,2,3,4,5]) --> 1 3 6 10 15
-                # accumulate([1,2,3,4,5], operator.mul) --> 1 2 6 24 120
+                # accumulate([1,2,3,4,5]) --> 0 1 3 6 10 15
+                # accumulate([1,2,3,4,5], operator.mul) --> 0 1 2 6 24 120
                 yield 0
                 it = iter(iterable)
                 total = next(it)
@@ -191,8 +190,7 @@ class Booking(models.Model):
               key=itemgetter(0)
             )
             return max(_accumulate(sum(map(lambda x: mul(*itemgetter(1, 2)(x)), j)) for i, j in grouped_dates))
-
-        bookings = Booking.objects.filter(product=product).filter(Q(state="pending")|Q(state="ongoing")).filter(Q(started_at__lte=started_at, ended_at__gt=started_at)|Q(started_at__lt=ended_at, ended_at__gte=started_at))
+        bookings = Booking.objects.filter(product=product).filter(Q(state="pending")|Q(state="ongoing")).filter(~Q(ended_at__lte=started_at) & ~Q(started_at__gte=ended_at))
         return product.quantity - max_rented_quantity(bookings)
         
     @staticmethod

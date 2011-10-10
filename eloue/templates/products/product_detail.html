@@ -95,12 +95,16 @@
         				{{ form.ended_at }}
                     </p>
                     </div>
+                {% if product.quantity > 1 %}
                 <div>
                     <p class="quanity">
                         <label class="labm">{% trans "Quantité" %} :</label>
+                {% endif %}
                         {{ form.quantity }}
+                {% if product.quantity > 1 %}
                     </p>
                 </div>
+                {% endif %}
             </div>
             <div id="booking-total" class="box-tools-bottom">
                 {% blocktrans with product.product.day|first as day_price %}
