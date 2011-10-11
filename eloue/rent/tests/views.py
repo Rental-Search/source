@@ -109,7 +109,7 @@ class BookingViewsTestWithMultipleQuantity(TestCase):
           started_at=self.now+timedelta(days=1, seconds=12*3600),
           ended_at=self.now+timedelta(days=3),
           quantity=1,
-          total_amount=D('7*1.5'),
+          total_amount=D(str(7*1.5)),
           state=Booking.STATE.ONGOING,
           owner_id=1,
           borrower_id=2,
