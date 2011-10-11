@@ -155,7 +155,7 @@ class BookingForm(forms.ModelForm):
         super(BookingForm, self).clean()
         started_at = self.cleaned_data.get('started_at')
         ended_at = self.cleaned_data.get('ended_at')
-        quantity = self.cleaned_data.get('quantity', 1)
+        quantity = self.cleaned_data.get('quantity')
 
         product = self.instance.product
         bookings = Booking.objects.filter(product=product).filter(Q(state="pending")|Q(state="ongoing"))
@@ -176,7 +176,7 @@ class BookingForm(forms.ModelForm):
             unit = Booking.calculate_price(product, started_at, ended_at)
             self.cleaned_data['price_unit'] = unit[0]
             
-            self.cleaned_data['total_amount'] = unit[1] * (quantity if self.max_available >= quantity else self.max_available)
+            self.cleaned_data['total_amount'] = unit[1] * (1 if quantity is None else (quantity if self.max_available >= quantity else self.max_available))
         
         return self.cleaned_data
     
