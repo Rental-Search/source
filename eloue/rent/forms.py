@@ -179,7 +179,32 @@ class BookingForm(forms.ModelForm):
             self.cleaned_data['total_amount'] = unit[1] * (quantity if self.max_available >= quantity else self.max_available)
         
         return self.cleaned_data
+
+
+class BookingOfferForm(forms.ModelForm):
+    started_at = DateTimeField(required=True, input_date_formats=DATE_FORMAT)
+    ended_at = DateTimeField(required=True, input_date_formats=DATE_FORMAT)
+    quantity = forms.IntegerField(widget=forms.Select(choices=enumerate(xrange(5))))
+    total_amount = forms.DecimalField()
+
+    class Meta:
+        model = Booking
+        fields = ('started_at', 'ended_at', 'quantity', 'total_amount')
     
+    def __init__(self, *args, **kwargs):
+        super(BookingOfferForm, self).__init__(*args, **kwargs)
+
+    def save(self, commit=True):
+        m = super(BookingOfferForm, self).save(commit=False)
+        
+        if commit:
+            m.save()
+        return m
+
+    def clean(self):
+        super(BookingOfferForm, self).clean()
+        # custom validation
+        return self.cleaned_data()
 
 class BookingConfirmationForm(forms.Form):
     pass
