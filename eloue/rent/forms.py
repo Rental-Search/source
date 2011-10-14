@@ -116,7 +116,7 @@ class PreApprovalIPNForm(forms.Form):
     max_total_amount_of_all_payments = forms.DecimalField(max_digits=8, decimal_places=2, required=True)
     sender_email = forms.CharField(required=True)
     status = forms.CharField(required=True)
-        
+    
     def clean_preapproval_key(self):
         preapproval_key = self.cleaned_data['preapproval_key']
         if not Booking.objects.filter(preapproval_key=preapproval_key).exists():
@@ -193,13 +193,6 @@ class BookingOfferForm(forms.ModelForm):
     
     def __init__(self, *args, **kwargs):
         super(BookingOfferForm, self).__init__(*args, **kwargs)
-
-    def save(self, commit=True):
-        m = super(BookingOfferForm, self).save(commit=False)
-        
-        if commit:
-            m.save()
-        return m
 
     def clean(self):
         super(BookingOfferForm, self).clean()

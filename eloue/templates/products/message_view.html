@@ -27,12 +27,12 @@
 		{% for message in message_list %}
 		{{dsg}}
 			{% if message.recipient == request.user %}de {{message.sender}}{% else %}Vous{% endif %}({{message.sent_at}}):
-			{{message.body}} {% if message.offer %} + offer {% endif %} </br></br>
+			{{message.body}} {% if message.offer %} + offer {{message.offer.state}} {% if message.offer.state == Booking.STATE.UNACCEPTED %} <a href="{% url offer_accept booking_id=message.offer.pk.hex %}">accept</a> {% endif %}  {% endif %} </br></br>
 		{% endfor %}
 	    <form action="" method="post">
 	    {% csrf_token %}
 	    {{ offerForm.as_p }}
-		{{ editForm.as_p }}</br>
+		{{ editForm.body }} {{ editForm.jointOffer}} </br>
 		<input type="submit" class="btn big-green" value="Envoyer &rarr;" />
 
 		</form>

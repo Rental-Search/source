@@ -120,7 +120,7 @@ def thread_details(request, thread_id):
     thread = get_object_or_404(MessageThread, id=thread_id)
     user = request.user
     peer = thread.sender if user == thread.recipient else thread.recipient
-    
+
     product = thread.last_message.product
     owner = product.owner
     borrower = user if peer == product.owner else peer
@@ -140,10 +140,14 @@ def thread_details(request, thread_id):
                   product=product, 
                   owner=owner, 
                   borrower=borrower, 
-                  state=Booking.STATE.AUTHORIZING,
-                  ip=None) # we can fill out IP if the user is the borrower, else only when peer accepts the offer
+                  state=Booking.STATE.UNACCEPTED,
+                  ip=request.META.get('REMOTE_ADDR', None) if user==borrower else None) # we can fill out IP if the user is the borrower, else only when peer accepts the offer
                 offerForm = BookingOfferForm(request.POST, instance=booking, prefix='1')
                 if offerForm.is_valid():
+                    messages_with_offer = message_list.filter(~Q(offer=None) & ~Q(offer__state=Booking.STATE.REJECTED))
+                    for message in messages_with_offer:
+                        message.offer.state = Booking.STATE.REJECTED
+                        message.offer.save()
                     editForm.save(product, user, peer, parent_msg=thread.last_message, offer=offerForm.save())
                     messages.add_message(request, messages.SUCCESS, _(u"Message successfully sent with booking offer."))
                     return HttpResponseRedirect(reverse('thread_details', kwargs={'thread_id': thread_id}))
@@ -152,7 +156,7 @@ def thread_details(request, thread_id):
                 messages.add_message(request, messages.SUCCESS, _(u"Message successfully sent."))
                 return HttpResponseRedirect(reverse('thread_details', kwargs={'thread_id': thread_id}))
 
-    return render_to_response('products/message_view.html', {'message_list': message_list, 'editForm': editForm, 'offerForm': offerForm}, context_instance=RequestContext(request))
+    return render_to_response('products/message_view.html', {'message_list': message_list, 'editForm': editForm, 'offerForm': offerForm, 'Booking': Booking}, context_instance=RequestContext(request))
 
 @login_required
 def reply_product_related_message(request, message_id, form_class=MessageEditForm,

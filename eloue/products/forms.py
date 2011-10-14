@@ -134,7 +134,7 @@ class ProductReviewForm(forms.ModelForm):
 
 class MessageEditForm(forms.Form):
     # used in the wizard, and in the reply
-    #subject = forms.CharField(label=_(u"Subject"), widget=forms.TextInput(attrs={'class': 'inm'}), required=False)
+    subject = forms.CharField(label=_(u"Subject"), widget=forms.TextInput(attrs={'class': 'inm'}), required=False)
     body = forms.CharField(label=_(u"Body"), widget=forms.Textarea(attrs={'class': 'inm'}))
     jointOffer = forms.BooleanField(initial=False, required=False)
 
@@ -143,6 +143,7 @@ class MessageEditForm(forms.Form):
     
     def save(self, product, sender, recipient, parent_msg=None, offer=None):
         body = self.cleaned_data['body']
+        subject = self.cleaned_data['subject']
         message_list = [] # WHY ... 
         if not hasattr(recipient, 'new_messages_alerted'):
             patron = Patron.objects.get(pk=recipient.pk)

@@ -15,7 +15,7 @@ from eloue.accounts.views import activate, authenticate, authenticate_headless, 
 
 from eloue.products.views import homepage, search, reply_product_related_message, threaded_inbox, thread_details
 
-from eloue.rent.views import booking_detail, booking_accept, booking_reject, booking_incident, booking_close, booking_cancel
+from eloue.rent.views import booking_detail, booking_accept, booking_reject, booking_incident, booking_close, booking_cancel, offer_reject, offer_accept
 from eloue.sitemaps import CategorySitemap, FlatPageSitemap, PatronSitemap, ProductSitemap
 
 log = logbook.Logger('eloue')
@@ -83,6 +83,8 @@ urlpatterns = patterns('',
     url(r'^dashboard/booking/(?P<booking_id>[0-9a-f]{32})/close/$', booking_close, name="booking_close"),
     url(r'^dashboard/messages/(?P<message_id>[\d]+)/reply/$', reply_product_related_message, name='reply_product_related_message'),
     url(r'^dashboard/messages/(?P<thread_id>[\d]+)$', thread_details, name='thread_details'),
+    url(r'^dashboard/messages/accept/(?P<booking_id>[0-9a-f]{32})', offer_accept, name='offer_accept'),
+    url(r'^dashboard/messages/reject/(?P<booking_id>[0-9a-f]{32})', offer_reject, name='offer_reject'),
     url(r'^dashboard/messages/inbox', threaded_inbox, name='threaded_inbox'),
     url(r'^dashboard/messages/', include('django_messages.urls')),
     url(r'^media/(.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT}),

@@ -37,7 +37,7 @@
                 <td>
                     {% if thread.last_message.new %}<strong>{% endif %}
                     {% if thread.last_message.replied %}<em>{% endif %}
-                    <a href="{% url thread_details thread_id=thread.id%}">{{ thread.last_message.subject }}</a>
+                    <a href="{% url thread_details thread_id=thread.id%}">{{ thread.subject }}</a>
                     {% if thread.last_message.replied %}</em>{% endif %}
                     {% if thread.last_message.new %}</strong>{% endif %}</td>
                 <td>{{ thread.sender }}</td>
