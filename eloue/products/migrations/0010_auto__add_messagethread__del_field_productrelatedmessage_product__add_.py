@@ -11,11 +11,23 @@ class Migration(SchemaMigration):
         # Adding model 'MessageThread'
         db.create_table('products_messagethread', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('sender', self.gf('django.db.models.fields.related.ForeignKey')(related_name='initiated_threads', to=orm['accounts.Patron'])),
+            ('recipient', self.gf('django.db.models.fields.related.ForeignKey')(related_name='participating_threads', to=orm['accounts.Patron'])),
+            ('product', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='messages', null=True, to=orm['products.Product'])),
+            ('last_message', self.gf('django.db.models.fields.related.OneToOneField')(blank=True, related_name='last_message_in_thread', unique=True, null=True, to=orm['products.ProductRelatedMessage'])),
+            ('last_offer', self.gf('django.db.models.fields.related.OneToOneField')(blank=True, related_name='last_offer_in_thread', unique=True, null=True, to=orm['products.ProductRelatedMessage'])),
+            ('subject', self.gf('django.db.models.fields.CharField')(max_length=120)),
         ))
         db.send_create_signal('products', ['MessageThread'])
 
+        # Deleting field 'ProductRelatedMessage.product'
+        db.delete_column('products_productrelatedmessage', 'product_id')
+
         # Adding field 'ProductRelatedMessage.thread'
-        db.add_column('products_productrelatedmessage', 'thread', self.gf('django.db.models.fields.related.ForeignKey')(related_name='messages', null=True, to=orm['products.MessageThread']), keep_default=False)
+        db.add_column('products_productrelatedmessage', 'thread', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='messages', null=True, to=orm['products.MessageThread']), keep_default=False)
+
+        # Adding field 'ProductRelatedMessage.offer'
+        db.add_column('products_productrelatedmessage', 'offer', self.gf('django.db.models.fields.related.OneToOneField')(blank=True, related_name='offer_in_message', unique=True, null=True, to=orm['rent.Booking']), keep_default=False)
 
 
     def backwards(self, orm):
@@ -23,8 +35,14 @@ class Migration(SchemaMigration):
         # Deleting model 'MessageThread'
         db.delete_table('products_messagethread')
 
+        # Adding field 'ProductRelatedMessage.product'
+        db.add_column('products_productrelatedmessage', 'product', self.gf('django.db.models.fields.related.ForeignKey')(related_name='messages', null=True, to=orm['products.Product'], blank=True), keep_default=False)
+
         # Deleting field 'ProductRelatedMessage.thread'
         db.delete_column('products_productrelatedmessage', 'thread_id')
+
+        # Deleting field 'ProductRelatedMessage.offer'
+        db.delete_column('products_productrelatedmessage', 'offer_id')
 
 
     models = {
@@ -143,7 +161,13 @@ class Migration(SchemaMigration):
         },
         'products.messagethread': {
             'Meta': {'object_name': 'MessageThread'},
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'})
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'last_message': ('django.db.models.fields.related.OneToOneField', [], {'blank': 'True', 'related_name': "'last_message_in_thread'", 'unique': 'True', 'null': 'True', 'to': "orm['products.ProductRelatedMessage']"}),
+            'last_offer': ('django.db.models.fields.related.OneToOneField', [], {'blank': 'True', 'related_name': "'last_offer_in_thread'", 'unique': 'True', 'null': 'True', 'to': "orm['products.ProductRelatedMessage']"}),
+            'product': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'messages'", 'null': 'True', 'to': "orm['products.Product']"}),
+            'recipient': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'participating_threads'", 'to': "orm['accounts.Patron']"}),
+            'sender': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'initiated_threads'", 'to': "orm['accounts.Patron']"}),
+            'subject': ('django.db.models.fields.CharField', [], {'max_length': '120'})
         },
         'products.patronreview': {
             'Meta': {'object_name': 'PatronReview'},
@@ -194,8 +218,8 @@ class Migration(SchemaMigration):
         'products.productrelatedmessage': {
             'Meta': {'ordering': "['-sent_at']", 'object_name': 'ProductRelatedMessage', '_ormbases': ['django_messages.Message']},
             'message_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['django_messages.Message']", 'unique': 'True', 'primary_key': 'True'}),
-            'product': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'messages'", 'null': 'True', 'to': "orm['products.Product']"}),
-            'thread': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'messages'", 'null': 'True', 'to': "orm['products.MessageThread']"})
+            'offer': ('django.db.models.fields.related.OneToOneField', [], {'blank': 'True', 'related_name': "'offer_in_message'", 'unique': 'True', 'null': 'True', 'to': "orm['rent.Booking']"}),
+            'thread': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'messages'", 'null': 'True', 'to': "orm['products.MessageThread']"})
         },
         'products.productreview': {
             'Meta': {'object_name': 'ProductReview'},
@@ -230,6 +254,29 @@ class Migration(SchemaMigration):
             'product': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'questions'", 'to': "orm['products.Product']"}),
             'status': ('django.db.models.fields.PositiveSmallIntegerField', [], {'default': '0', 'db_index': 'True'}),
             'text': ('django.db.models.fields.CharField', [], {'max_length': '255'})
+        },
+        'rent.booking': {
+            'Meta': {'object_name': 'Booking'},
+            'borrower': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'rentals'", 'to': "orm['accounts.Patron']"}),
+            'canceled_at': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
+            'contract_id': ('django.db.models.fields.IntegerField', [], {'db_index': 'True', 'unique': 'True', 'blank': 'True'}),
+            'created_at': ('django.db.models.fields.DateTimeField', [], {'blank': 'True'}),
+            'currency': ('django.db.models.fields.CharField', [], {'default': "'EUR'", 'max_length': '3'}),
+            'deposit_amount': ('django.db.models.fields.DecimalField', [], {'max_digits': '8', 'decimal_places': '2'}),
+            'ended_at': ('django.db.models.fields.DateTimeField', [], {}),
+            'insurance_amount': ('django.db.models.fields.DecimalField', [], {'max_digits': '8', 'decimal_places': '2', 'blank': 'True'}),
+            'ip': ('django.db.models.fields.IPAddressField', [], {'max_length': '15', 'null': 'True', 'blank': 'True'}),
+            'owner': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'bookings'", 'to': "orm['accounts.Patron']"}),
+            'pay_key': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
+            'pin': ('django.db.models.fields.CharField', [], {'max_length': '4', 'blank': 'True'}),
+            'preapproval_key': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
+            'product': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'bookings'", 'to': "orm['products.Product']"}),
+            'quantity': ('django.db.models.fields.IntegerField', [], {'default': '1'}),
+            'sites': ('django.db.models.fields.related.ManyToManyField', [], {'related_name': "'bookings'", 'symmetrical': 'False', 'to': "orm['sites.Site']"}),
+            'started_at': ('django.db.models.fields.DateTimeField', [], {}),
+            'state': ('django.db.models.fields.CharField', [], {'default': "'authorizing'", 'max_length': '50'}),
+            'total_amount': ('django.db.models.fields.DecimalField', [], {'max_digits': '8', 'decimal_places': '2'}),
+            'uuid': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '32', 'primary_key': 'True'})
         },
         'sites.site': {
             'Meta': {'ordering': "('domain',)", 'object_name': 'Site', 'db_table': "'django_site'"},

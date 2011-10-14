@@ -403,7 +403,7 @@ class MessageThread(models.Model):
     
     sender = models.ForeignKey(Patron, related_name='initiated_threads')
     recipient = models.ForeignKey(Patron, related_name='participating_threads')
-    product = models.ForeignKey(Product, related_name='messages', blank=True, null=True) # should not be null either
+    product = models.ForeignKey(Product, related_name='messages', blank=True, null=True) # we should remove NULL after migration of the data
     last_message = models.OneToOneField('ProductRelatedMessage', blank=True, null=True, related_name='last_message_in_thread')
     last_offer = models.OneToOneField('ProductRelatedMessage', blank=True, null=True, related_name='last_offer_in_thread')
     subject = models.CharField(_("Subject"), max_length=120)
@@ -412,7 +412,7 @@ class MessageThread(models.Model):
         return unicode(self.last_message)
 
 class ProductRelatedMessage(Message):
-    thread = models.ForeignKey(MessageThread, related_name='messages') # cannot be Null
+    thread = models.ForeignKey(MessageThread, related_name='messages', blank=True, null=True) # we should remove NULL after migration of the data
     offer = models.OneToOneField('rent.Booking', blank=True, null=True, related_name='offer_in_message')
 
 if "notification" not in settings.INSTALLED_APPS:
