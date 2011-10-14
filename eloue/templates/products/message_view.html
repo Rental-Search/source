@@ -27,7 +27,7 @@
 		{% for message in message_list %}
 		{{dsg}}
 			{% if message.recipient == request.user %}de {{message.sender}}{% else %}Vous{% endif %}({{message.sent_at}}):
-			{{message.body}}</br></br>
+			{{message.body}} {% if message.offer %} + offer {% endif %} </br></br>
 		{% endfor %}
 	    <form action="" method="post">
 	    {% csrf_token %}

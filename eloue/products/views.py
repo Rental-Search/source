@@ -35,6 +35,7 @@ from eloue.products.forms import AlertSearchForm, AlertForm, FacetedSearchForm, 
 from eloue.products.models import Category, Product, Curiosity, UNIT, ProductRelatedMessage, Alert, MessageThread
 from eloue.products.wizard import ProductWizard, MessageWizard, AlertWizard, AlertAnswerWizard
 from eloue.rent.forms import BookingOfferForm
+from eloue.rent.models import Booking
 from django_messages.forms import ComposeForm
 from eloue.products.utils import format_quote, escape_percent_sign
 from django.core.cache import cache
@@ -119,10 +120,10 @@ def thread_details(request, thread_id):
     thread = get_object_or_404(MessageThread, id=thread_id)
     user = request.user
     peer = thread.sender if user == thread.recipient else thread.recipient
-
-    #product = 
-    #owner 
-    #borrower 
+    
+    product = thread.last_message.product
+    owner = product.owner
+    borrower = user if peer == product.owner else peer
     if request.user != thread.sender and request.user != thread.recipient:
         return HttpResponseForbidden()
     
@@ -135,14 +136,21 @@ def thread_details(request, thread_id):
         editForm = MessageEditForm(request.POST, prefix='0')
         if editForm.is_valid():
             if editForm.cleaned_data['jointOffer']:
-                booking = Booking(product=product, owner=owner, borrower=borrower, currency=None)
-                offerForm = BookingOfferForm(reqest.POST, instance=booking, prefix='1')
+                booking = Booking(
+                  product=product, 
+                  owner=owner, 
+                  borrower=borrower, 
+                  state=Booking.STATE.AUTHORIZING,
+                  ip=None) # we can fill out IP if the user is the borrower, else only when peer accepts the offer
+                offerForm = BookingOfferForm(request.POST, instance=booking, prefix='1')
                 if offerForm.is_valid():
-                    editForm.save(offer=offerForm.save())
+                    editForm.save(product, user, peer, parent_msg=thread.last_message, offer=offerForm.save())
+                    messages.add_message(request, messages.SUCCESS, _(u"Message successfully sent with booking offer."))
+                    return HttpResponseRedirect(reverse('thread_details', kwargs={'thread_id': thread_id}))
             else:
                 editForm.save(product=thread.last_message.product, sender=user, recipient=peer, parent_msg=thread.last_message)
                 messages.add_message(request, messages.SUCCESS, _(u"Message successfully sent."))
-                return HttpResponseRedirect(reverse('thread_details', args=[str(thread_id)]))
+                return HttpResponseRedirect(reverse('thread_details', kwargs={'thread_id': thread_id}))
 
     return render_to_response('products/message_view.html', {'message_list': message_list, 'editForm': editForm, 'offerForm': offerForm}, context_instance=RequestContext(request))
 

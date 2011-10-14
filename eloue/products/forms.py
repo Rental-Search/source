@@ -137,11 +137,11 @@ class MessageEditForm(forms.Form):
     #subject = forms.CharField(label=_(u"Subject"), widget=forms.TextInput(attrs={'class': 'inm'}), required=False)
     body = forms.CharField(label=_(u"Body"), widget=forms.Textarea(attrs={'class': 'inm'}))
     jointOffer = forms.BooleanField(initial=False, required=False)
-    
+
     def __init__(self, *args, **kwargs):
         super(MessageEditForm, self).__init__(*args, **kwargs)
     
-    def save(self, product, sender, recipient, parent_msg=None):
+    def save(self, product, sender, recipient, parent_msg=None, offer=None):
         body = self.cleaned_data['body']
         message_list = [] # WHY ... 
         if not hasattr(recipient, 'new_messages_alerted'):
@@ -152,10 +152,11 @@ class MessageEditForm(forms.Form):
         else:
             signals.post_save.connect(utils.new_message_email, ProductRelatedMessage)
         msg = ProductRelatedMessage(
-                sender = sender,
-                recipient = recipient,
-                body = body,
-            )
+          sender=sender,
+          recipient=recipient,
+          body=body,
+          offer=offer
+        )
         if parent_msg is not None:
             msg.parent_msg = parent_msg
             msg.thread = parent_msg.thread

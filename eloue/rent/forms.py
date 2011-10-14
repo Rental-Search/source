@@ -204,7 +204,7 @@ class BookingOfferForm(forms.ModelForm):
     def clean(self):
         super(BookingOfferForm, self).clean()
         # custom validation
-        return self.cleaned_data()
+        return self.cleaned_data
 
 class BookingConfirmationForm(forms.Form):
     pass
