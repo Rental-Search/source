@@ -1,48 +1,39 @@
 # encoding: utf-8
 import datetime
 from south.db import db
-from south.v2 import SchemaMigration
+from south.v2 import DataMigration
 from django.db import models
 
-class Migration(SchemaMigration):
+class Migration(DataMigration):
 
     def forwards(self, orm):
+        groups = {}
+        for message in orm.ProductRelatedMessage.objects.all():
+            m = message
+            ml = set()
+            while m.parent_msg:
+                ml.add(m.pk)
+                m = m.parent_msg
+            ml.add(m.pk)
+            g = groups.setdefault(m.pk, set())
+            g |= ml
         
-        # Adding model 'MessageThread'
-        db.create_table('products_messagethread', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('sender', self.gf('django.db.models.fields.related.ForeignKey')(related_name='initiated_threads', to=orm['accounts.Patron'])),
-            ('recipient', self.gf('django.db.models.fields.related.ForeignKey')(related_name='participating_threads', to=orm['accounts.Patron'])),
-            ('product', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='messages', null=True, to=orm['products.Product'])),
-            ('last_message', self.gf('django.db.models.fields.related.OneToOneField')(blank=True, related_name='last_message_in_thread', unique=True, null=True, to=orm['products.ProductRelatedMessage'])),
-            ('last_offer', self.gf('django.db.models.fields.related.OneToOneField')(blank=True, related_name='last_offer_in_thread', unique=True, null=True, to=orm['products.ProductRelatedMessage'])),
-            ('subject', self.gf('django.db.models.fields.CharField')(max_length=120)),
-        ))
-        db.send_create_signal('products', ['MessageThread'])
-
-        # Deleting field 'ProductRelatedMessage.product'
-        db.delete_column('products_productrelatedmessage', 'product_id')
-
-        # Adding field 'ProductRelatedMessage.thread'
-        db.add_column('products_productrelatedmessage', 'thread', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='messages', null=True, to=orm['products.MessageThread']), keep_default=False)
-
-        # Adding field 'ProductRelatedMessage.offer'
-        db.add_column('products_productrelatedmessage', 'offer', self.gf('django.db.models.fields.related.OneToOneField')(blank=True, related_name='offer_in_message', unique=True, null=True, to=orm['rent.Booking']), keep_default=False)
+        for key, value in groups.iteritems():
+            messages = (orm.ProductRelatedMessage.objects.get(pk=pk) for pk in value)
+            sorted_messages = sorted(messages, key=lambda message: message.sent_at)
+            f = sorted_messages[0]
+            l = sorted_messages[-1]
+            thread = orm.MessageThread(product=f.product, recipient=orm['accounts.Patron'].objects.get(pk=f.recipient.pk), sender=orm['accounts.Patron'].objects.get(pk=f.sender.pk), subject=f.subject, last_message=l)
+            thread.save()
+            for m in sorted_messages:
+                m.thread = thread
+                m.save()
+            thread.save()
 
 
     def backwards(self, orm):
-        
-        # Deleting model 'MessageThread'
-        db.delete_table('products_messagethread')
-
-        # Adding field 'ProductRelatedMessage.product'
-        db.add_column('products_productrelatedmessage', 'product', self.gf('django.db.models.fields.related.ForeignKey')(related_name='messages', null=True, to=orm['products.Product'], blank=True), keep_default=False)
-
-        # Deleting field 'ProductRelatedMessage.thread'
-        db.delete_column('products_productrelatedmessage', 'thread_id')
-
-        # Deleting field 'ProductRelatedMessage.offer'
-        db.delete_column('products_productrelatedmessage', 'offer_id')
+        orm.MessageThread.objects.all().delete()
+        "Write your backwards methods here."
 
 
     models = {
@@ -219,6 +210,7 @@ class Migration(SchemaMigration):
             'Meta': {'ordering': "['-sent_at']", 'object_name': 'ProductRelatedMessage', '_ormbases': ['django_messages.Message']},
             'message_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['django_messages.Message']", 'unique': 'True', 'primary_key': 'True'}),
             'offer': ('django.db.models.fields.related.OneToOneField', [], {'blank': 'True', 'related_name': "'offer_in_message'", 'unique': 'True', 'null': 'True', 'to': "orm['rent.Booking']"}),
+            'product': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'messages_will_be_removed'", 'null': 'True', 'to': "orm['products.Product']"}),
             'thread': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'messages'", 'null': 'True', 'to': "orm['products.MessageThread']"})
         },
         'products.productreview': {
