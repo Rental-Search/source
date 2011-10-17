@@ -409,11 +409,18 @@ class MessageThread(models.Model):
     subject = models.CharField(_("Subject"), max_length=120)
 
     def __unicode__(self):
-        return unicode(self.last_message)
+        return unicode(self.subject)
+    
+    def new(self, user):
+        return any(self.messages.filter(recipient=user).new())
 
 class ProductRelatedMessage(Message):
+    
     thread = models.ForeignKey(MessageThread, related_name='messages', blank=True, null=True) # we should remove NULL after migration of the data
     offer = models.OneToOneField('rent.Booking', blank=True, null=True, related_name='offer_in_message')
+
+    def __unicode__(self):
+        return self.body
 
 if "notification" not in settings.INSTALLED_APPS:
     from django_messages import utils

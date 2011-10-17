@@ -121,7 +121,7 @@ def thread_details(request, thread_id):
     user = request.user
     peer = thread.sender if user == thread.recipient else thread.recipient
 
-    product = thread.last_message.product
+    product = thread.product
     owner = product.owner
     borrower = user if peer == product.owner else peer
     if request.user != thread.sender and request.user != thread.recipient:
@@ -152,7 +152,7 @@ def thread_details(request, thread_id):
                     messages.add_message(request, messages.SUCCESS, _(u"Message successfully sent with booking offer."))
                     return HttpResponseRedirect(reverse('thread_details', kwargs={'thread_id': thread_id}))
             else:
-                editForm.save(product=thread.last_message.product, sender=user, recipient=peer, parent_msg=thread.last_message)
+                editForm.save(product=product, sender=user, recipient=peer, parent_msg=thread.last_message)
                 messages.add_message(request, messages.SUCCESS, _(u"Message successfully sent."))
                 return HttpResponseRedirect(reverse('thread_details', kwargs={'thread_id': thread_id}))
 

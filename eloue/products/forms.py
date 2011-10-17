@@ -173,7 +173,7 @@ class MessageEditForm(forms.Form):
         msg.thread.save()
         message_list.append(msg) # ... IS THIS ...
         if product:
-            product.messages.add(msg) # To implement a layer to wrap the message lib
+            product.messages.add(msg.thread) # To implement a layer to wrap the message lib
         if notification:
             if parent_msg is not None:
                 notification.send([recipient], "messages_reply_received", {'message': msg,})
