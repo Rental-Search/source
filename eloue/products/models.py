@@ -411,11 +411,14 @@ class MessageThread(models.Model):
     def __unicode__(self):
         return unicode(self.subject)
     
-    def new(self, user):
-        return any(self.messages.filter(recipient=user).new())
+    def new_recipient(self):
+        return any(map(lambda message: not message.read_at, self.messages.filter(recipient=self.recipient)))
+    
+    def new_sender(self):
+        return any(map(lambda message: not message.read_at, self.messages.filter(recipient=self.sender)))
 
 class ProductRelatedMessage(Message):
-    
+
     thread = models.ForeignKey(MessageThread, related_name='messages', blank=True, null=True) # we should remove NULL after migration of the data
     offer = models.OneToOneField('rent.Booking', blank=True, null=True, related_name='offer_in_message')
 

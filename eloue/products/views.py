@@ -2,6 +2,7 @@
  # -*- coding: utf-8 -*-
 import re
 from urllib import urlencode
+import datetime
 from django.conf import settings
 from django.contrib.sites.models import Site
 from django.contrib import messages
@@ -112,7 +113,7 @@ def product_edit(request, slug, product_id):
 @login_required
 def threaded_inbox(request):
     thread_list = MessageThread.objects.filter(Q(sender=request.user)|Q(recipient=request.user)).order_by('-last_message__sent_at')
-    return render_to_response('products/inbox.html', {'thread_list': thread_list})
+    return render_to_response('products/inbox.html', {'thread_list': thread_list}, context_instance=RequestContext(request))
 
 @login_required
 def thread_details(request, thread_id):
@@ -122,8 +123,8 @@ def thread_details(request, thread_id):
     peer = thread.sender if user == thread.recipient else thread.recipient
 
     product = thread.product
-    owner = product.owner
-    borrower = user if peer == product.owner else peer
+    owner = product.owner if product else None
+    borrower = user if peer == owner else peer
     if request.user != thread.sender and request.user != thread.recipient:
         return HttpResponseForbidden()
     
@@ -155,7 +156,10 @@ def thread_details(request, thread_id):
                 editForm.save(product=product, sender=user, recipient=peer, parent_msg=thread.last_message)
                 messages.add_message(request, messages.SUCCESS, _(u"Message successfully sent."))
                 return HttpResponseRedirect(reverse('thread_details', kwargs={'thread_id': thread_id}))
-
+    elif request.method == "GET":
+        for message in message_list.filter(recipient=user, read_at=None):
+            message.read_at = datetime.datetime.now()
+            message.save()
     return render_to_response('products/message_view.html', {'message_list': message_list, 'editForm': editForm, 'offerForm': offerForm, 'Booking': Booking}, context_instance=RequestContext(request))
 
 @login_required
