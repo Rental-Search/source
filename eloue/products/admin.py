@@ -65,9 +65,9 @@ class CuriosityAdmin(CurrentSiteAdmin):
     list_display = ('product',)
     raw_id_fields = ("product",)
 
-class ProductRelatedMessageAdmin(admin.ModelAdmin):
-    list_display = ('product',)
-    raw_id_fields = ("product",)
+#class ProductRelatedMessageAdmin(admin.ModelAdmin):
+#    list_display = ('product',)
+#    raw_id_fields = ("product",)
 
 class AlertAdmin(admin.ModelAdmin):
     pass
@@ -79,6 +79,6 @@ admin.site.register(Property, PropertyAdmin)
 admin.site.register(Curiosity, CuriosityAdmin)
 admin.site.register(ProductReview, ProductReviewAdmin)
 admin.site.register(PatronReview, PatronReviewAdmin)
-admin.site.register(ProductRelatedMessage, ProductRelatedMessageAdmin)
+#admin.site.register(ProductRelatedMessage, ProductRelatedMessageAdmin)
 admin.site.register(Alert, AlertAdmin)
 

@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+ # -*- coding: utf-8 -*-
 import re
 from urllib import urlencode
 from django.conf import settings
@@ -15,6 +16,7 @@ from django.views.decorators.cache import never_cache, cache_page
 from django.views.decorators.vary import vary_on_cookie
 from django.views.generic.simple import direct_to_template, redirect_to
 from django.views.generic.list_detail import object_list
+from django.db.models import Q
 
 from django.shortcuts import render_to_response
 from django.template import RequestContext
@@ -28,14 +30,16 @@ from eloue.decorators import ownership_required, secure_required, mobify
 from eloue.accounts.forms import EmailAuthenticationForm
 from eloue.accounts.models import Patron
 
-from eloue.products.forms import AlertSearchForm, AlertForm, FacetedSearchForm, ProductForm, ProductEditForm, MessageEditForm, MessageComposeForm
+from eloue.products.forms import AlertSearchForm, AlertForm, FacetedSearchForm, ProductForm, ProductEditForm, MessageEditForm
 
-from eloue.products.models import Category, Product, Curiosity, UNIT, ProductRelatedMessage, Alert
+from eloue.products.models import Category, Product, Curiosity, UNIT, ProductRelatedMessage, Alert, MessageThread
 from eloue.products.wizard import ProductWizard, MessageWizard, AlertWizard, AlertAnswerWizard
+from eloue.rent.forms import BookingOfferForm
+from eloue.rent.models import Booking
 from django_messages.forms import ComposeForm
 from eloue.products.utils import format_quote, escape_percent_sign
 from django.core.cache import cache
-
+ 
 
 PAGINATE_PRODUCTS_BY = getattr(settings, 'PAGINATE_PRODUCTS_BY', 10)
 DEFAULT_RADIUS = getattr(settings, 'DEFAULT_RADIUS', 50)
@@ -82,29 +86,77 @@ def product_edit(request, slug, product_id):
     return direct_to_template(request, 'products/product_edit.html', extra_context={'product': product, 'form': form})
 
 
-@login_required
-def compose_product_related_message(request, recipient=None, form_class=MessageComposeForm,
-    template_name='django_messages/compose.html', success_url=None, recipient_filter=None):
-    if request.method == "POST":
-        sender = request.user
-        form = form_class(request.POST, recipient_filter=recipient_filter)
-        if form.is_valid():
-            form.save(sender=request.user)
-            messages.add_message(request, messages.SUCCESS, _(u"Message successfully sent."))
-            if success_url is None:
-                success_url = reverse('messages_inbox')
-            if request.GET.has_key('next'):
-                success_url = request.GET['next']
-            return HttpResponseRedirect(success_url)
-    else:
-        form = form_class()
-        if recipient is not None:
-            recipients = [u.username for u in User.objects.filter(username__in=[r.strip() for r in recipient.split('+')])]
-            form.fields['recipient'].initial = ','.join(recipients)
-    return render_to_response(template_name, {
-        'form': form,
-        }, context_instance=RequestContext(request))
+# @login_required
+# def compose_product_related_message(request, recipient=None, form_class=MessageComposeForm,
+#     template_name='django_messages/compose.html', success_url=None, recipient_filter=None):
+#     if request.method == "POST":
+#         sender = request.user
+#         form = form_class(request.POST, recipient_filter=recipient_filter)
+#         if form.is_valid():
+#             form.save(sender=request.user)
+#             messages.add_message(request, messages.SUCCESS, _(u"Message successfully sent."))
+#             if success_url is None:
+#                 success_url = reverse('messages_inbox')
+#             if request.GET.has_key('next'):
+#                 success_url = request.GET['next']
+#             return HttpResponseRedirect(success_url)
+#     else:
+#         form = form_class()
+#         if recipient is not None:
+#             recipients = [u.username for u in User.objects.filter(username__in=[r.strip() for r in recipient.split('+')])]
+#             form.fields['recipient'].initial = ','.join(recipients)
+#     return render_to_response(template_name, {
+#         'form': form,
+#         }, context_instance=RequestContext(request))
 
+@login_required
+def threaded_inbox(request):
+    thread_list = MessageThread.objects.filter(Q(sender=request.user)|Q(recipient=request.user)).order_by('-last_message__sent_at')
+    return render_to_response('products/inbox.html', {'thread_list': thread_list})
+
+@login_required
+def thread_details(request, thread_id):
+
+    thread = get_object_or_404(MessageThread, id=thread_id)
+    user = request.user
+    peer = thread.sender if user == thread.recipient else thread.recipient
+
+    product = thread.product
+    owner = product.owner
+    borrower = user if peer == product.owner else peer
+    if request.user != thread.sender and request.user != thread.recipient:
+        return HttpResponseForbidden()
+    
+    message_list = thread.messages.order_by('sent_at')
+    
+    editForm = MessageEditForm(prefix='0')
+    offerForm = BookingOfferForm(prefix='1')
+
+    if request.method == "POST":
+        editForm = MessageEditForm(request.POST, prefix='0')
+        if editForm.is_valid():
+            if editForm.cleaned_data['jointOffer']:
+                booking = Booking(
+                  product=product, 
+                  owner=owner, 
+                  borrower=borrower, 
+                  state=Booking.STATE.UNACCEPTED,
+                  ip=request.META.get('REMOTE_ADDR', None) if user==borrower else None) # we can fill out IP if the user is the borrower, else only when peer accepts the offer
+                offerForm = BookingOfferForm(request.POST, instance=booking, prefix='1')
+                if offerForm.is_valid():
+                    messages_with_offer = message_list.filter(~Q(offer=None) & ~Q(offer__state=Booking.STATE.REJECTED))
+                    for message in messages_with_offer:
+                        message.offer.state = Booking.STATE.REJECTED
+                        message.offer.save()
+                    editForm.save(product, user, peer, parent_msg=thread.last_message, offer=offerForm.save())
+                    messages.add_message(request, messages.SUCCESS, _(u"Message successfully sent with booking offer."))
+                    return HttpResponseRedirect(reverse('thread_details', kwargs={'thread_id': thread_id}))
+            else:
+                editForm.save(product=product, sender=user, recipient=peer, parent_msg=thread.last_message)
+                messages.add_message(request, messages.SUCCESS, _(u"Message successfully sent."))
+                return HttpResponseRedirect(reverse('thread_details', kwargs={'thread_id': thread_id}))
+
+    return render_to_response('products/message_view.html', {'message_list': message_list, 'editForm': editForm, 'offerForm': offerForm, 'Booking': Booking}, context_instance=RequestContext(request))
 
 @login_required
 def reply_product_related_message(request, message_id, form_class=MessageEditForm,

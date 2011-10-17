@@ -50,7 +50,9 @@ BOOKING_STATE = Enum([
     ('deposit', 'DEPOSIT', _(u'Caution versée')),
     ('closing', 'CLOSING', _(u"En attende de clôture")),
     ('closed', 'CLOSED', _(u'Clôturé')),
-    ('outdated', 'OUTDATED', _(u"Dépassé"))
+    ('outdated', 'OUTDATED', _(u"Dépassé")),
+    ('unaccepted', 'UNACCEPTED', _(u"Pas accepté")),
+    ('accepted_unauthorized', 'ACCEPTED_UNAUTHORIZED', _(u"Accepté et en cours d'autorisation"))
 ])
 
 DEFAULT_CURRENCY = get_format('CURRENCY') if not settings.CONVERT_XPF else "XPF"
