@@ -61,6 +61,7 @@
 	        #id_0-body { height: 60px; }
 	    </style>
 	    <form action="" method="post">
+	        {% csrf_token %}
 	        <p style="text-align: left;">
 	            {{ editForm.body }}<br />
         	    <input type="submit" class="btn small-green" style="font-size: 12px;" value="Répondre">
