@@ -19,27 +19,53 @@
 			<li class="sub-tab"><a href="{% url messages_outbox %}">{% trans "Messages envoyés" %}</a></li>
 			<li class="sub-tab"><a href="{% url messages_trash %}">{% trans "Messages supprimés" %}</a></li>
 		</ul>
-	</div
+	</div>
+	{% for message in message_list %}
+	{% if forloop.first %}
 	<div class="content-header x12">
-		<h1>Conversation entre vous et ....
-		<h1 class="message-subject">{{ message.subject }}</h1>
-		<p class="message-meta">De <strong>{{ thread.sender }}</strong>, <i>le {{ message.sent_at|date:_("DATETIME_FORMAT")}}</i></p>
-		{% for message in message_list %}
-		{{dsg}}
-			{% if message.recipient == request.user %}de {{message.sender}}{% else %}Vous{% endif %}({{message.sent_at}}):
-			{{message.body}} {% if message.offer %} + offer {{message.offer.state}} {% if message.offer.state == Booking.STATE.UNACCEPTED %} <a href="{% url offer_accept booking_id=message.offer.pk.hex %}">accept</a> {% endif %}  {% endif %} </br></br>
-		{% endfor %}
+	    <h1>Conversation avec {{ message.sender }}</h1>
+	</div>
+	<ul class="x8">
+	{% endif %}
+	{% if forloop.last %}
+	<li style="padding: 10px 0;">
+	    <img src="{{ MEDIA_URL }}images/bk_borrower_img.png" style="float: left; margin-right: 10px;">
+	    <div class="message-content">
+	        <div class="message-sender">
+	            <div style="float: right; font-size: 12px;">{{ message.sent_at|date:_("DATETIME_FORMAT")}}</div>
+	            <strong>{{ message.sender }}</strong>
+	        </div>
+	        <div class="message-body">
+	            {{ message.body }}
+	        </div>
+	    </div>
+	</li>
+	{% else %}
+	<li style="padding: 10px 0; border-bottom: 1px dashed #B9CAD4;">
+	    <img src="{{ MEDIA_URL }}images/bk_borrower_img.png" style="float: left; margin-right: 10px;">
+	    <div class="message-content">
+	        <div class="message-sender">
+	            <div style="float: right; font-size: 12px;">{{ message.sent_at|date:_("DATETIME_FORMAT")}}</div>
+	            <strong>{{ message.sender }}</strong>
+	        </div>
+	        <div class="message-body">
+	            {{ message.body }}
+	        </div>
+	    </div>
+	</li>
+	{% endif %}
+	{% endfor %}
+	</ul>
+	<div id="submit-wizard" class="x12">
+	    <style>
+	        #id_0-body { height: 60px; }
+	    </style>
 	    <form action="" method="post">
-	    {% csrf_token %}
-	    {{ offerForm.as_p }}
-		{{ editForm.body }} {{ editForm.jointOffer}} </br>
-		<input type="submit" class="btn big-green" value="Envoyer &rarr;" />
-
-		</form>
-	</div>
-	</div>
-	<div class="x12">   
-	<div id="message-action" class="x12">
-	</div>
+	        <p style="text-align: left;">
+	            {{ editForm.body }}<br />
+        	    <input type="submit" class="btn small-green" style="font-size: 12px;" value="Répondre">
+        	</p>
+	    </form>
+    </div>
 </div>
 {% endblock %}
