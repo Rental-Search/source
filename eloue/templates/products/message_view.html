@@ -30,26 +30,26 @@
 	{% if forloop.last %}
 	<li style="padding: 10px 0;">
 	    <img src="{{ MEDIA_URL }}images/bk_borrower_img.png" style="float: left; margin-right: 10px;">
-	    <div class="message-content">
-	        <div class="message-sender">
+	    <div class="message-content" style="display: table-cell; vertical-align: top;  width: 570px;">
+	        <div class="message-sender" style="margin-bottom: 5px;">
 	            <div style="float: right; font-size: 12px;">{{ message.sent_at|date:_("DATETIME_FORMAT")}}</div>
 	            <strong>{{ message.sender }}</strong>
 	        </div>
 	        <div class="message-body">
-	            {{ message.body }}
+	            {{ message.body|linebreaks }}
 	        </div>
 	    </div>
 	</li>
 	{% else %}
 	<li style="padding: 10px 0; border-bottom: 1px dashed #B9CAD4;">
 	    <img src="{{ MEDIA_URL }}images/bk_borrower_img.png" style="float: left; margin-right: 10px;">
-	    <div class="message-content">
-	        <div class="message-sender">
+	    <div class="message-content" style="display: table-cell; vertical-align: top; width: 570px;">
+	        <div class="message-sender" style="margin-bottom: 5px;">
 	            <div style="float: right; font-size: 12px;">{{ message.sent_at|date:_("DATETIME_FORMAT")}}</div>
 	            <strong>{{ message.sender }}</strong>
 	        </div>
 	        <div class="message-body">
-	            {{ message.body }}
+	            {{ message.body|linebreaks }}
 	        </div>
 	    </div>
 	</li>
