@@ -38,13 +38,12 @@
                 <td>
                     {% if thread.sender == request.user %}{% if thread.new_sender %}<strong>{% endif %}{% endif %}
                     {% if thread.recipient == request.user %}{% if thread.new_recipient %}<strong>{% endif %}{% endif %}
-
                     {% if thread.last_message.replied %}<em>{% endif %}
                     <a href="{% url thread_details thread_id=thread.id%}">{{ thread.subject }}</a>
                     {% if thread.last_message.replied %}</em>{% endif %}
                     {% if thread.sender == request.user %} {% if thread.new_sender %}</strong>{% endif %}{% endif %}
                     {% if thread.recipient == request.user %} {% if thread.new_recipient %}</strong>{% endif %}{% endif %}
-                <td>{{ thread.sender }}</td>
+                <td>{% if thread.sender == request.user %} {{ thread.recipient }} {% else %} {{ thread.sender }} {% endif %}</td>
                 <td>{{ thread.last_message.sent_at|date:_("DATETIME_FORMAT") }}</td>
                 <td>
                     <a href="{{message.get_absolute_url }}">{% trans "Lire" %}</a> -
