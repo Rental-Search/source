@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import datetime
 import logbook
+import uuid
 
 from django.core.exceptions import ValidationError
 from django.contrib.sites.managers import CurrentSiteManager
@@ -95,6 +96,8 @@ DEFAULT_CURRENCY = get_format('CURRENCY')
 
 log = logbook.Logger('eloue.accounts')
 
+def upload_to(instance, filename):
+    return 'pictures/%s.jpg' % uuid.uuid4().hex
 
 class Patron(User):
     """A member"""
@@ -110,6 +113,8 @@ class Patron(User):
     paypal_email = models.EmailField(null=True, blank=True)
     sites = models.ManyToManyField(Site, related_name='patrons')
 
+    avatar = models.ImageField(null=True, blank=True, upload_to=upload_to)
+    
     customers = models.ManyToManyField('self', symmetrical=False)
 
     on_site = CurrentSiteManager()

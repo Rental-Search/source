@@ -130,7 +130,8 @@ class PatronEditForm(forms.ModelForm):
     company_name = forms.CharField(label=_(u"Nom de la société"), required=False, widget=forms.TextInput(attrs={'class': 'inm'}))
     is_subscribed = forms.BooleanField(required=False, initial=False, label=_(u"Je suis inscrit à la newsletter"))
     new_messages_alerted = forms.BooleanField(required=False, initial=True)
-    
+    avatar = forms.ImageField(required=True)
+
     def __init__(self, *args, **kwargs):
         super(PatronEditForm, self).__init__(*args, **kwargs)
         self.fields['civility'].widget.attrs['class'] = "selm"
@@ -208,7 +209,7 @@ class PatronEditForm(forms.ModelForm):
     class Meta:
         model = Patron
         fields = ('civility', 'username', 'first_name', 'last_name',
-            'email', 'paypal_email', 'is_professional', 'company_name', 'is_subscribed', 'new_messages_alerted')
+            'email', 'paypal_email', 'is_professional', 'company_name', 'is_subscribed', 'new_messages_alerted', 'avatar')
 
             
 

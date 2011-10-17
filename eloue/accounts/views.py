@@ -88,7 +88,7 @@ def patron_edit(request, *args, **kwargs):
     paypal = request.GET.get('paypal', False)
     redirect_path = request.REQUEST.get('next', '')
     patron = request.user
-    form = PatronEditForm(request.POST or None, instance=patron)
+    form = PatronEditForm(request.POST or None, request.FILES or None, instance=patron)
     if form.is_valid():
         patron = form.save()
         if paypal: 
