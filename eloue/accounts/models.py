@@ -3,9 +3,12 @@ import datetime
 import logbook
 import uuid
 
+from imagekit.models import ImageModel
+
 from django.core.exceptions import ValidationError
 from django.contrib.sites.managers import CurrentSiteManager
 from django.contrib.sites.models import Site
+from django.contrib.auth.models import User
 from django.contrib.gis.db import models
 from django.conf import settings
 from django.contrib.auth.models import User
@@ -97,7 +100,28 @@ DEFAULT_CURRENCY = get_format('CURRENCY')
 log = logbook.Logger('eloue.accounts')
 
 def upload_to(instance, filename):
-    return 'pictures/%s.jpg' % uuid.uuid4().hex
+    return 'pictures/avatars/%s.jpg' % uuid.uuid4().hex
+
+class Avatar(ImageModel):
+
+    patron = models.OneToOneField(User, related_name='avatar')
+    image = models.ImageField(upload_to=upload_to)
+    created_at = models.DateTimeField(editable=False)
+
+    def save(self, *args, **kwargs):
+        if not self.created_at:
+            self.created_at = datetime.datetime.now()
+        super(Avatar, self).save(*args, **kwargs)
+    
+    def delete(self, *args, **kwargs):
+        self.image.delete()
+        super(Avatar, self).delete(*args, **kwargs)
+    
+    class IKOptions:
+        spec_module = 'eloue.accounts.specs'
+        image_field = 'image'
+        cache_dir = 'media'
+        cache_filename_format = "%(specname)s_%(filename)s.%(extension)s"
 
 class Patron(User):
     """A member"""
@@ -112,8 +136,6 @@ class Patron(User):
     slug = models.SlugField(unique=True, db_index=True)
     paypal_email = models.EmailField(null=True, blank=True)
     sites = models.ManyToManyField(Site, related_name='patrons')
-
-    avatar = models.ImageField(null=True, blank=True, upload_to=upload_to)
     
     customers = models.ManyToManyField('self', symmetrical=False)
 

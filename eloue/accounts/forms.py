@@ -17,7 +17,7 @@ from django.utils.translation import ugettext as _
 
 from eloue.accounts import EMAIL_BLACKLIST
 from eloue.accounts.fields import PhoneNumberField
-from eloue.accounts.models import Patron, PhoneNumber, COUNTRY_CHOICES, PatronAccepted
+from eloue.accounts.models import Patron, Avatar, PhoneNumber, COUNTRY_CHOICES, PatronAccepted
 from eloue.accounts.widgets import ParagraphRadioFieldRenderer
 from eloue.utils import form_errors_append
 from eloue.payments import paypal_payment
@@ -130,8 +130,24 @@ class PatronEditForm(forms.ModelForm):
     company_name = forms.CharField(label=_(u"Nom de la société"), required=False, widget=forms.TextInput(attrs={'class': 'inm'}))
     is_subscribed = forms.BooleanField(required=False, initial=False, label=_(u"Je suis inscrit à la newsletter"))
     new_messages_alerted = forms.BooleanField(required=False, initial=True)
-    avatar = forms.ImageField(required=True)
 
+    avatar = forms.ImageField(required=False)
+
+    def save(self, *args, **kwargs):
+        super(PatronEditForm, self).save(*args, **kwargs)
+        if self.avatar:
+            try:
+                self.instance.avatar
+            except Avatar.DoesNotExist:
+                pass
+            else:
+                self.instance.avatar.delete()
+            Avatar.objects.create(image=self.avatar, patron=self.instance)
+    
+    def clean_avatar(self):
+        self.avatar = self.cleaned_data['avatar']
+        return self.avatar
+    
     def __init__(self, *args, **kwargs):
         super(PatronEditForm, self).__init__(*args, **kwargs)
         self.fields['civility'].widget.attrs['class'] = "selm"
@@ -167,7 +183,7 @@ class PatronEditForm(forms.ModelForm):
                 form_errors_append(self, 'paypal_email', _(u"Vérifier qu'il s'agit bien de votre email PayPal"))
                 form_errors_append(self, 'first_name', _(u"Vérifier que le prénom est identique à celui de votre compte PayPal"))
                 form_errors_append(self, 'last_name', _(u"Vérifier que le nom est identique à celui de votre compte PayPal"))
-                
+
     def clean_company_name(self):
         is_professional = self.cleaned_data.get('is_professional')
         company_name = self.cleaned_data.get('company_name', None)
@@ -209,7 +225,7 @@ class PatronEditForm(forms.ModelForm):
     class Meta:
         model = Patron
         fields = ('civility', 'username', 'first_name', 'last_name',
-            'email', 'paypal_email', 'is_professional', 'company_name', 'is_subscribed', 'new_messages_alerted', 'avatar')
+            'email', 'paypal_email', 'is_professional', 'company_name', 'is_subscribed', 'new_messages_alerted')
 
             
 
@@ -288,6 +304,7 @@ def make_missing_data_form(instance, required_fields=[]):
         'addresses__zipcode': forms.CharField(required=True, max_length=9, widget=forms.TextInput(attrs={
             'class': 'inm zipcode', 'placeholder': _(u'Code postal')
         })),
+        'avatar': forms.ImageField(required=False),
         'addresses__city': forms.CharField(required=True, max_length=255, widget=forms.TextInput(attrs={'class': 'inm town', 'placeholder': _(u'Ville')})),
         'addresses__country': forms.ChoiceField(choices=COUNTRY_CHOICES, required=True, widget=forms.Select(attrs={'class': 'selm'})),
         'phones__phone': PhoneNumberField(label=_(u"Téléphone"), required=True, widget=forms.TextInput(attrs={'class': 'inm'}))
@@ -333,7 +350,7 @@ def make_missing_data_form(instance, required_fields=[]):
         for attr, value in self.cleaned_data.iteritems():
             if attr == "password1":
                 self.instance.set_password(value)
-            if "addresses" not in attr and "phones" not in attr:
+            if "addresses" not in attr and "phones" not in attr and "avatar" not in attr: # wtf is this checking?
                 setattr(self.instance, attr, value)
         if 'addresses' in self.cleaned_data and self.cleaned_data['addresses']:
             address = self.cleaned_data['addresses']
@@ -355,6 +372,8 @@ def make_missing_data_form(instance, required_fields=[]):
         else:
             phone = None
         self.instance.save()
+        if self.avatar:
+            Avatar.objects.create(image=self.avatar, patron=self.instance)
         return self.instance, address, phone
     
     def clean_password2(self):
@@ -398,6 +417,10 @@ def make_missing_data_form(instance, required_fields=[]):
             raise forms.ValidationError(_(u"Vous devez spécifiez un numéro de téléphone"))
         return phones
     
+    def clean_avatar(self):
+        self.avatar = self.cleaned_data['avatar']
+        return self.avatar
+    
     form_class = type('MissingInformationForm', (forms.BaseForm,), {'instance': instance, 'base_fields': fields})
     form_class.save = types.MethodType(save, None, form_class)
     form_class.clean_password2 = types.MethodType(clean_password2, None, form_class)
@@ -405,6 +428,7 @@ def make_missing_data_form(instance, required_fields=[]):
     form_class.clean_phones = types.MethodType(clean_phones, None, form_class)
     form_class.clean_addresses = types.MethodType(clean_addresses, None, form_class)
     form_class.clean_company_name = types.MethodType(clean_company_name, None, form_class)
+    form_class.clean_avatar = types.MethodType(clean_avatar, None, form_class)
     return fields != {}, form_class
     
     

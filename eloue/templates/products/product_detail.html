@@ -123,7 +123,11 @@
         </div>
         <div id="owner-info" class="box-welcome">
             <h3>{% trans "Propriétaire" %}</h3>
+            {% if product.owner.avatar %}
+            <img src="{{ product.owner.avatar.product_page.url }}" alt="{% trans "loueur"%}{{ product.owner.username }}">
+            {% else %}
             <img src="{{ MEDIA_URL }}images/default_avatar.png" alt="{% trans "loueur"%}{{ product.owner.username }}">
+            {% endif %}
             <p class="pseudo">
                 <a href="{{ product.owner.get_absolute_url }}">{{ product.owner.username }}</a>
             </p>

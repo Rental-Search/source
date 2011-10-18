@@ -140,6 +140,9 @@
 	    			{% endif %}
 	    			{% if form.avatar %}
 	    			<tr>
+						{% if patron.avatar %}
+				       		<a href="#"><img src="{{ patron.avatar.thumbnail.url }}" /></a>
+				        {% endif %}
 	    				<th><label>{{ form.avatar.label }} {% if form.avatar.field.required %}*{% endif %} :</label></th>
 	    				<td {% if form.avatar.errors %} class="error-field" {% endif %}>
 	    					{{ form.avatar }}

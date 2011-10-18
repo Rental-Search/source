@@ -1,6 +1,10 @@
 {% load i18n %}
 <div class="x9 p2">
-    <form class="form" action="" method="POST">
+    {% if form.is_multipart %}
+    <form enctype="multipart/form-data" method="post" action="">
+    {% else %}
+    <form method="post" action="">
+    {% endif %}
     	{% csrf_token %}
         <table class="more-info">
             {% if form.is_professional %}
@@ -71,6 +75,20 @@
     			</td>
     		</tr>
     		{% endif %}
+            {% if form.avatar %}
+            <tr>
+                <th><label>{{ form.avatar.label }} {% if form.avatar.field.required %}*{% endif %} :</label></th>
+                <td {% if form.avatar.errors %} class="error-field" {% endif %}>
+                    {{ form.avatar }}
+                    {% if form.avatar.errors %}
+                        {% for error in form.avatar.errors %}
+                                    <br />
+                            <span class="error">{{ error|escape }}</span>
+                        {% endfor %}
+                    {% endif %}
+                </td>
+            </tr>
+            {% endif %}
     		{% if form.first_name %}
     		<tr>
     			<th><label>{{ form.first_name.label }} {% if form.first_name.field.required %}*{% endif %} :</label></th>
