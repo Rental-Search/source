@@ -46,13 +46,15 @@ class SourceClass(BaseSource):
             if not len(thumb_tree):
                 thumb_tree = html_tree.xpath(XP_THUMBNAIL1)
             thumbnail = thumb_tree[0].attrib["src"] if len(thumb_tree) else ""
+            location = "France"
+            lat, lon = BaseSource.get_coordinates(self, location)
             yield Product({
                 'id' : "%s.%d" % (self.get_prefix(), c_id),
                 'summary':  html_tree.findall("//h1")[1].text.split(":")[-1].strip(),
                 'description': "\n".join([i.strip() for i in html_tree.xpath(XP_DESC)[0].itertext()]),
                 'categories': CATEGORIES.get(cat, CATEGORIES.get(subcat, [])),
                 'lat' : 0, 'lng' : 0,
-                'city' : 'Paris',
+                'city' : location,
                 'price': extract_price(html_tree.find(XP_PRICE).text),
                 'owner' : 'loxam',
                 'owner_url' : BASE_URL + "/",

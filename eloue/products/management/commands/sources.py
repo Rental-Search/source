@@ -18,17 +18,18 @@ class Command(BaseCommand):
             manager = SourceManager(sources=args)
         except ImportError as e:
             log.exception("Source not found:\n{0}".format(e))
-            return
-        
-        for source in manager.sources:
-            log.info('Working on %s' % source.get_prefix())
-            manager.remove_docs(source)
-            try:
-                manager.index_docs(source)
-            except Exception as e:
-                log.exception("Exception: {0}".format(e))
+        except Exception as e:
+            log.exception("Something bad happened:\n{0}".format(e))
+        else:
+            for source in manager.sources:
+                log.info('Working on %s' % source.get_prefix())
+                manager.remove_docs(source)
                 try:
-                    manager.remove_docs(source)
-                except Exception as e1:
-                    log.exception("Exception: {0}".format(e1))
-                continue
+                    manager.index_docs(source)
+                except Exception as e:
+                    log.exception("Exception: {0}".format(e))
+                    try:
+                        manager.remove_docs(source)
+                    except Exception as e1:
+                        log.exception("Exception: {0}".format(e1))
+                    continue
