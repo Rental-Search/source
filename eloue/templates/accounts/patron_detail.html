@@ -34,19 +34,27 @@
 	</form>
 </div>
 <div id="content-home" class="xgrid">
-    <div class="x12 content-header">
-        <h1>{{ patron.username }}</h1>
-    </div>
     <div class="x3">
         <div class="box-welcome">
-            <p class="pseudo">
+            {% if patron.avatar %}
+            <img src="{{ patron.avatar.product_page.url }}" alt="{% trans "loueur"%}{{ patron.username }}" style="float: left; margin-right: 10px; border: 1px solid #9EB0BA;">
+            {% else %}
+            <img src="{{ MEDIA_URL }}images/default_avatar.png" alt="{% trans "loueur"%}{{ patron.username }}" style="float: left; margin-right: 10px; border: 1px solid #9EB0BA;">
+            {% endif %}
+            <p style="text-align: left;">
+                {{ patron.username }}
+            </p>
+            <p style="font-size: 12px; text-align: left; margin-bottom: 0px; ">
                 {% with patron.addresses.all|first as address %}
-					{{ address.city|capfirst }}, {{ address.zipcode }}
+					{{ address.zipcode }} {{ address.city|capfirst }}
 				{% endwith %}
             </p>
         </div>
     </div>
     <div class="x9">
+        <div class="x9 content-header" style="margin-left: 0px;">
+            <h1>{% trans "Mes objets"%}</h1>
+        </div>
         {% if patron.products %}
 	     {% blocktrans with patron.products.count as count and patron.products.count|pluralize as pluralize %}
 	      <h2>{{ count }} location{{ pluralize }}</h2>
