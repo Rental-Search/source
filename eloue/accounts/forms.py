@@ -331,6 +331,9 @@ def make_missing_data_form(instance, required_fields=[]):
             del fields['password1']
             del fields['password2']
     
+    if instance and instance.username and "first_name" not in required_fields:
+        del fields['avatar']
+
     # Are we in presence of a pro ?
     if fields.has_key('is_professional'):
         if instance and getattr(instance, 'is_professional', None)!=None:
@@ -345,7 +348,8 @@ def make_missing_data_form(instance, required_fields=[]):
             continue
         if hasattr(instance, f) and getattr(instance, f):
             del fields[f]
-            
+    
+
     def save(self):
         for attr, value in self.cleaned_data.iteritems():
             if attr == "password1":
@@ -372,7 +376,7 @@ def make_missing_data_form(instance, required_fields=[]):
         else:
             phone = None
         self.instance.save()
-        if self.avatar:
+        if hasattr(self, 'avatar') and self.avatar:
             Avatar.objects.create(image=self.avatar, patron=self.instance)
         return self.instance, address, phone
     
@@ -418,7 +422,7 @@ def make_missing_data_form(instance, required_fields=[]):
         return phones
     
     def clean_avatar(self):
-        self.avatar = self.cleaned_data['avatar']
+        self.avatar = self.cleaned_data.get('avatar', None)
         return self.avatar
     
     form_class = type('MissingInformationForm', (forms.BaseForm,), {'instance': instance, 'base_fields': fields})

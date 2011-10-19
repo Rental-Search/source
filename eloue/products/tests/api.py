@@ -30,7 +30,7 @@ local_path = lambda path: os.path.join(os.path.dirname(__file__), path)
 
 
 class ApiTest(TestCase):
-    fixtures = ['category', 'patron', 'address', 'oauth', 'price', 'product', 'booking_api', 'phones', 'message']
+    fixtures = ['category', 'patron', 'address', 'oauth', 'price', 'product', 'booking_api', 'phones', 'messagethread', 'message']
 
     def setUp(self):
         self.index = site.get_index(Product)
@@ -275,7 +275,8 @@ class ApiTest(TestCase):
         post_data = {"body": "test body", 
                      "product": "/api/1.0/product/6/", 
                      "subject": "test subject",
-                     "parent_msg": "/api/1.0/message/1/",
+                     "parent_msg": "/api/1.0/message/2/",
+                     "thread": 1,
                      "recipient": "/api/1.0/user/4/"}
         request = self._get_request(method='POST', use_token=True)
         response = self.client.post(reverse("api_dispatch_list", args=['1.0', 'message']), 
@@ -286,8 +287,7 @@ class ApiTest(TestCase):
         self.assertTrue('Location' in response)
         message = ProductRelatedMessage.objects.get(pk=int(response['Location'].split('/')[-2]))
         self.assertEquals(message.sender.id, 1)
-        self.assertEquals(message.product.id, 6)
-        self.assertEquals(message.recipient.id, message.product.owner.id)
+        self.assertEquals(message.thread.id, 1)
         self.assertEquals(message.body, 'test body')
         self.assertEquals(message.subject, 'test subject')
                 

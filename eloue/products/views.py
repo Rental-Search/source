@@ -111,22 +111,69 @@ def product_edit(request, slug, product_id):
 #         }, context_instance=RequestContext(request))
 
 @login_required
-def threaded_inbox(request):
-    thread_list = MessageThread.objects.filter(Q(sender=request.user)|Q(recipient=request.user)).order_by('-last_message__sent_at')
-    return render_to_response('products/inbox.html', {'thread_list': thread_list}, context_instance=RequestContext(request))
+def inbox(request):
+    user = request.user
+    thread_list = MessageThread.objects.filter(
+      Q(sender=request.user, sender_archived=False)
+      |Q(recipient=request.user, recipient_archived=False)
+    ).order_by('-last_message__sent_at')
+
+    return render_to_response(
+      'products/inbox.html', 
+      {'thread_list': thread_list}, 
+      context_instance=RequestContext(request)
+    )
+
+@login_required
+def archived(request):
+    user = request.user
+    archives = MessageThread.objects.filter(
+      Q(sender=user, sender_archived=True)
+      |Q(recipient=user, recipient_archived=True)
+    ).order_by('-last_message__sent_at')
+
+    return render_to_response(
+      'products/archives.html', 
+      {'thread_list': archives}, 
+      context_instance=RequestContext(request)
+    )
+
+@login_required
+def archive_thread(request, thread_id):
+    thread = get_object_or_404(MessageThread, pk=thread_id)
+    if thread.sender != request.user and thread.recipient != request.user:
+        return HttpResponseForbidden()
+    if request.user == thread.sender:
+        thread.sender_archived = True
+    else:
+        thread.recipient_archived = True
+    thread.save()
+    return HttpResponseRedirect(reverse('inbox'))
+
+@login_required
+def unarchive_thread(request, thread_id):
+    thread = get_object_or_404(MessageThread, pk=thread_id)
+    if thread.sender != request.user and thread.recipient != request.user:
+        return HttpResponseForbidden()
+    if request.user == thread.sender:
+        thread.sender_archived = False
+    else:
+        thread.recipient_archived = False
+    thread.save()
+    return HttpResponseRedirect(reverse('archived'))
 
 @login_required
 def thread_details(request, thread_id):
 
     thread = get_object_or_404(MessageThread, id=thread_id)
+    if request.user != thread.sender and request.user != thread.recipient:
+        return HttpResponseForbidden()
+
     user = request.user
     peer = thread.sender if user == thread.recipient else thread.recipient
-
     product = thread.product
     owner = product.owner if product else None
     borrower = user if peer == owner else peer
-    if request.user != thread.sender and request.user != thread.recipient:
-        return HttpResponseForbidden()
     
     message_list = thread.messages.order_by('sent_at')
     
@@ -160,7 +207,7 @@ def thread_details(request, thread_id):
         for message in message_list.filter(recipient=user, read_at=None):
             message.read_at = datetime.datetime.now()
             message.save()
-    return render_to_response('products/message_view.html', {'message_list': message_list, 'editForm': editForm, 'offerForm': offerForm, 'Booking': Booking}, context_instance=RequestContext(request))
+    return render_to_response('products/message_view.html', {'thread': thread, 'message_list': message_list, 'editForm': editForm, 'offerForm': offerForm, 'Booking': Booking}, context_instance=RequestContext(request))
 
 @login_required
 def reply_product_related_message(request, message_id, form_class=MessageEditForm,
@@ -170,7 +217,7 @@ def reply_product_related_message(request, message_id, form_class=MessageEditFor
     product = parent.product
     
     if parent.sender != request.user and parent.recipient != request.user:
-        raise Http404
+        return HttpResponseForbidden()
     if request.method == "POST":
         sender = request.user
         form = form_class(request.POST)

@@ -13,7 +13,7 @@ from eloue.accounts.forms import EmailPasswordResetForm, PatronSetPasswordForm
 from eloue.accounts.views import activate, authenticate, authenticate_headless, dashboard, patron_edit, owner_booking, owner_history,\
     borrower_booking, borrower_history, patron_edit_password, patron_paypal, owner_product, contact, alert_edit
 
-from eloue.products.views import homepage, search, reply_product_related_message, threaded_inbox, thread_details
+from eloue.products.views import homepage, search, reply_product_related_message, inbox, archived, archive_thread, unarchive_thread, thread_details
 
 from eloue.rent.views import booking_detail, booking_accept, booking_reject, booking_incident, booking_close, booking_cancel, offer_reject, offer_accept
 from eloue.sitemaps import CategorySitemap, FlatPageSitemap, PatronSitemap, ProductSitemap
@@ -81,12 +81,15 @@ urlpatterns = patterns('',
     url(r'^dashboard/booking/(?P<booking_id>[0-9a-f]{32})/reject/$', booking_reject, name="booking_reject"),
     url(r'^dashboard/booking/(?P<booking_id>[0-9a-f]{32})/incident/$', booking_incident, name="booking_incident"),
     url(r'^dashboard/booking/(?P<booking_id>[0-9a-f]{32})/close/$', booking_close, name="booking_close"),
-    url(r'^dashboard/messages/(?P<message_id>[\d]+)/reply/$', reply_product_related_message, name='reply_product_related_message'),
+    #url(r'^dashboard/messages/(?P<message_id>[\d]+)/reply/$', reply_product_related_message, name='reply_product_related_message'),
     url(r'^dashboard/messages/(?P<thread_id>[\d]+)$', thread_details, name='thread_details'),
+    url(r'^dashboard/messages/(?P<thread_id>[\d]+)/archive/$', archive_thread, name='archive_thread'),
+    url(r'^dashboard/messages/(?P<thread_id>[\d]+)/unarchive/$', unarchive_thread, name='unarchive_thread'),
     url(r'^dashboard/messages/accept/(?P<booking_id>[0-9a-f]{32})', offer_accept, name='offer_accept'),
     url(r'^dashboard/messages/reject/(?P<booking_id>[0-9a-f]{32})', offer_reject, name='offer_reject'),
-    url(r'^dashboard/messages/inbox', threaded_inbox, name='threaded_inbox'),
-    url(r'^dashboard/messages/', include('django_messages.urls')),
+    url(r'^dashboard/messages/inbox', inbox, name='inbox'),
+    url(r'^dashboard/messages/archived', archived, name='archived'),
+    #url(r'^dashboard/messages/', include('django_messages.urls')),
     url(r'^media/(.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT}),
     url(r'^%s' % _("loueur/"), include('eloue.accounts.urls')),
     url(r'^%s' % _("location/"), include('eloue.products.urls')),

@@ -407,7 +407,9 @@ class MessageThread(models.Model):
     last_message = models.OneToOneField('ProductRelatedMessage', blank=True, null=True, related_name='last_message_in_thread')
     last_offer = models.OneToOneField('ProductRelatedMessage', blank=True, null=True, related_name='last_offer_in_thread')
     subject = models.CharField(_("Subject"), max_length=120)
-
+    sender_archived = models.BooleanField(_("Archived"), default=False)
+    recipient_archived = models.BooleanField(_("Archived"), default=False)
+    
     def __unicode__(self):
         return unicode(self.subject)
     
