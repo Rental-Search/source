@@ -9,6 +9,7 @@ from django.contrib.gis.geos import Point
 from django.contrib.gis.measure import Distance
 from django.contrib.sites.managers import CurrentSiteManager
 from django.contrib.sites.models import Site
+from django.contrib.auth.models import User
 from django.db.models import permalink, Q
 from django.db.models.signals import post_save
 from django.template.defaultfilters import slugify
@@ -30,7 +31,6 @@ from eloue.signals import post_save_sites
 
 from django_messages.models import Message 
 from eloue.accounts.models import Patron
-
 from django.db.models import signals
 from eloue import signals as eloue_signals
 
@@ -399,10 +399,34 @@ class Curiosity(models.Model):
     class Meta:
         verbose_name_plural = "curiosities"
         
+class MessageThread(models.Model):
+    
+    sender = models.ForeignKey(Patron, related_name='initiated_threads')
+    recipient = models.ForeignKey(Patron, related_name='participating_threads')
+    product = models.ForeignKey(Product, related_name='messages', blank=True, null=True) # we should remove NULL after migration of the data
+    last_message = models.OneToOneField('ProductRelatedMessage', blank=True, null=True, related_name='last_message_in_thread')
+    last_offer = models.OneToOneField('ProductRelatedMessage', blank=True, null=True, related_name='last_offer_in_thread')
+    subject = models.CharField(_("Subject"), max_length=120)
+    sender_archived = models.BooleanField(_("Archived"), default=False)
+    recipient_archived = models.BooleanField(_("Archived"), default=False)
+    
+    def __unicode__(self):
+        return unicode(self.subject)
+    
+    def new_recipient(self):
+        return any(map(lambda message: not message.read_at, self.messages.filter(recipient=self.recipient)))
+    
+    def new_sender(self):
+        return any(map(lambda message: not message.read_at, self.messages.filter(recipient=self.sender)))
+
 class ProductRelatedMessage(Message):
-    product = models.ForeignKey(Product, related_name='messages', blank=True, null=True)
-    
-    
+
+    thread = models.ForeignKey(MessageThread, related_name='messages', blank=True, null=True) # we should remove NULL after migration of the data
+    offer = models.OneToOneField('rent.Booking', blank=True, null=True, related_name='offer_in_message')
+
+    def __unicode__(self):
+        return self.body
+
 if "notification" not in settings.INSTALLED_APPS:
     from django_messages import utils
     signals.post_save.connect(utils.new_message_email, sender=ProductRelatedMessage)

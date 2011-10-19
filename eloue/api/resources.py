@@ -43,7 +43,7 @@ from django_lean.experiments.models import GoalRecord
 from django_lean.experiments.utils import WebUser
 
 from eloue.geocoder import GoogleGeocoder
-from eloue.products.models import Product, Category, Picture, Price, upload_to, PAYMENT_TYPE, ProductRelatedMessage, UNIT#, StaticPage
+from eloue.products.models import Product, Category, Picture, Price, upload_to, PAYMENT_TYPE, ProductRelatedMessage, MessageThread, UNIT#, StaticPage
 from eloue.products.search_indexes import product_search
 from eloue.accounts.models import Address, PhoneNumber, Patron, PHONE_TYPES
 from eloue.rent.models import Booking
@@ -706,7 +706,6 @@ class MessageResource(OAuthResource):
     # Foreign keys
     recipient = fields.ForeignKey(UserResource,'recipient', full=False, null=True)
     sender = fields.ForeignKey(UserResource,'sender', full=False, null=True)
-    product = fields.ForeignKey(ProductResource,'product', full=False, null=True)
     parent_msg = fields.ForeignKey('self','parent_msg', full=False, null=True)
 
     class Meta(MetaBase):
@@ -722,15 +721,15 @@ class MessageResource(OAuthResource):
     def obj_create(self, bundle,  request=None, **kwargs):
         data = bundle.data
         try:
-            product = Product.objects.get(id=int(data["product"].split("/")[-2]))
             recipient = Patron.objects.get(id=int(data["recipient"].split("/")[-2]))
             parent_msg = ProductRelatedMessage.objects.get(id=int(data["parent_msg"].split("/")[-2]))
+            thread = MessageThread.objects.get(id=int(data["thread"]))
             bundle.obj=ProductRelatedMessage(recipient = recipient,
                                 sender = request.user,
-                                product = product,
                                 parent_msg = parent_msg,
                                 subject = data["subject"],
                                 body = data["body"],
+                                thread = thread
                       )
         except IntegrityError:
             raise ImmediateHttpResponse(response=HttpBadRequest())

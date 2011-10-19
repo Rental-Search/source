@@ -88,7 +88,7 @@ def patron_edit(request, *args, **kwargs):
     paypal = request.GET.get('paypal', False)
     redirect_path = request.REQUEST.get('next', '')
     patron = request.user
-    form = PatronEditForm(request.POST or None, instance=patron)
+    form = PatronEditForm(request.POST or None, request.FILES or None, instance=patron)
     if form.is_valid():
         patron = form.save()
         if paypal: 
@@ -107,6 +107,7 @@ def patron_edit(request, *args, **kwargs):
                     messages.error(request, _(u"Votre Paypal compte est invalide, veuillez modifier votre nom ou prénom ou email paypal"))
         else:
             messages.success(request, _(u"Vos informations ont bien été modifiées")) 
+    patron = Patron.objects.get(pk=request.user.pk)
     return direct_to_template(request, 'accounts/patron_edit.html', extra_context={'form': form, 'patron': patron})
 
 

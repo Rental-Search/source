@@ -105,7 +105,7 @@ class GenericFormWizard(MultiPartFormWizard):
     required_fields = [
         'username', 'password1', 'password2', 'is_professional', 'company_name', 'first_name', 'last_name',
         'phones', 'phones__phone', 'addresses',
-        'addresses__address1', 'addresses__zipcode', 'addresses__city', 'addresses__country'
+        'addresses__address1', 'addresses__zipcode', 'addresses__city', 'addresses__country', 'avatar'
     ]
         
     def __call__(self, request, *args, **kwargs):

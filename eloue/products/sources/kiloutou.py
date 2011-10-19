@@ -78,13 +78,15 @@ class SourceClass(BaseSource):
 
     def get_product(self, html_tree, href=None):
         c_id = self.id.next()
+        location = "France"
+        lat, lon = BaseSource.get_coordinates(self, location)
         yield Product({
             'id' : "%s.%d" % (self.get_prefix(), c_id),
             'summary' : html_tree.xpath(XP_PNAME)[0].text.strip(),
             'description' : html_tree.xpath(XP_PDESC)[0].text.strip(),
             'categories' : [],
-            'lat' : 0, 'lng' : 0,
-            'city' : 'France',
+            'lat' : lat, 'lng' : lon,
+            'city' : location,
             'price' : None if html_tree.xpath(XP_PRICE)[0].text.strip() == "Sur devis" else D(html_tree.xpath(XP_PRICE)[0].text.strip()),
             'owner' : 'kiloutou',
             'owner_url' : BASE_URL + "/",

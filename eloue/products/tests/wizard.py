@@ -8,7 +8,7 @@ from mock import patch
 
 from eloue.products.models import Picture
 from eloue.wizard import MultiPartFormWizard
-from eloue.products.models import Product, ProductRelatedMessage
+from eloue.products.models import Product, ProductRelatedMessage, MessageThread
 from eloue.accounts.models import Address
 local_path = lambda path: os.path.join(os.path.dirname(__file__), path)
 
@@ -108,9 +108,9 @@ class ProductWizardTest(TestCase):
         })
         self.assertTrue(response.status_code, 301)
         product = Product.objects.get(pk=6)
-        message = ProductRelatedMessage.objects.get(pk=1)
-        self.assertEqual(message.subject, 'Ask for price, test for wizard')
-        self.assertEqual(product, message.product)
+        thread = MessageThread.objects.get(pk=1)
+        self.assertEqual(thread.subject, 'Ask for price, test for wizard')
+        self.assertEqual(product, thread.product)
 
 class AlertWizardTest(TestCase):
     fixtures = ['patron', 'address']
