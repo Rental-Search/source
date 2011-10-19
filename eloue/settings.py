@@ -113,6 +113,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django_messages.context_processors.inbox',
     'eloue.context_processors.site',
     'eloue.context_processors.debug',
+    'eloue.context_processors.unread_message_count_context'
 )
 
 

@@ -12,7 +12,7 @@
 			<li class="menu-tab"><a href="{% url owner_booking %}">{% trans "Propriétaire" %}</a></li>
 			<li class="menu-tab"><a href="{% url borrower_booking %}">{% trans "Locataire" %}</a></li>
 			<li class="menu-tab"><a href="{% url patron_edit %}">{% trans "Mon compte" %}</a></li>
-			<li class="menu-tab">{% blocktrans %}Messages(){% endblocktrans %}</li>
+			<li class="menu-tab">{% blocktrans %}Messages({{ unread_message_count }}){% endblocktrans %}</li>
 		</ul>
 	</div>
 	<div id="sub-menu">
@@ -32,7 +32,7 @@
             </thead>
             <tbody>
         {% for thread in thread_list %}
-
+            
             <tr>
                 <td>
                     {% if thread.sender == request.user %}{% if thread.new_sender %}<strong>{% endif %}{% endif %}

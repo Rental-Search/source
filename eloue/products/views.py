@@ -110,31 +110,30 @@ def product_edit(request, slug, product_id):
 #         'form': form,
 #         }, context_instance=RequestContext(request))
 
+def thread_list(user, is_archived):
+    return sorted(MessageThread.objects.filter(
+      Q(sender=user, sender_archived=is_archived)
+      |Q(recipient=user, recipient_archived=is_archived)
+    ).order_by('-last_message__sent_at'), key=lambda thread: not (thread.new_sender() if user==thread.sender else thread.new_recipient()))
+
+
 @login_required
 def inbox(request):
     user = request.user
-    thread_list = MessageThread.objects.filter(
-      Q(sender=request.user, sender_archived=False)
-      |Q(recipient=request.user, recipient_archived=False)
-    ).order_by('-last_message__sent_at')
-
+    threads = thread_list(user, False)
     return render_to_response(
       'products/inbox.html', 
-      {'thread_list': thread_list}, 
+      {'thread_list': threads}, 
       context_instance=RequestContext(request)
     )
 
 @login_required
 def archived(request):
     user = request.user
-    archives = MessageThread.objects.filter(
-      Q(sender=user, sender_archived=True)
-      |Q(recipient=user, recipient_archived=True)
-    ).order_by('-last_message__sent_at')
-
+    threads = thread_list(user, True)
     return render_to_response(
       'products/archives.html', 
-      {'thread_list': archives}, 
+      {'thread_list': threads}, 
       context_instance=RequestContext(request)
     )
 

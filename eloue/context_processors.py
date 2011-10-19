@@ -2,6 +2,7 @@
 from django.conf import settings
 from django.contrib.sites.models import Site
 
+from eloue.products.models import MessageThread
 
 def site(request):
     try:
@@ -12,3 +13,12 @@ def site(request):
 
 def debug(request):
     return {'debug': settings.DEBUG}
+
+
+def unread_message_count_context(request):
+    if request.user.is_authenticated():
+	    return {'unread_message_count': len(filter(lambda thread: thread.new_sender(), MessageThread.objects.filter(sender=request.user))) +
+	      len(filter(lambda thread: thread.new_recipient(), MessageThread.objects.filter(recipient=request.user)))
+	    }
+    else:
+        return {}
