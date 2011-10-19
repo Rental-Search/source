@@ -76,15 +76,6 @@
 	        <p style="text-align: left;">
 	            {{ editForm.body }}<br />
         	    <input type="submit" class="btn small-green" style="font-size: 12px;" value="Répondre">
-        		{% if request.user == thread.sender %}
-				    {% if thread.sender_archived %}<a href="{% url unarchive_thread thread_id=thread.id %}">unarchive</a>
-				    {% else %}<a href="{% url archive_thread thread_id=thread.id %}">archive</a>
-	    {% endif %}
-        		{% else %}
-				    {% if thread.recipient_archived %}<a href="{% url unarchive_thread thread_id=thread.id %}">unarchive</a>
-				    {% else %}<a href="{% url archive_thread thread_id=thread.id %}">archive</a>
-	    {% endif %}
-        		{% endif %}
         	</p>
 	    </form>
     </div>

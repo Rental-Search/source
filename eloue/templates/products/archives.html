@@ -46,7 +46,7 @@
                 <td>{{ thread.last_message.sent_at|date:_("DATETIME_FORMAT") }}</td>
                 <td>
                     <a href="{% url thread_details thread_id=thread.id%}">{% trans "Lire" %}</a> - 
-                    <a href="{% url archive_thread thread_id=thread.id%}"</a>{% trans "Archiver" %}
+                    <a href="{% url unarchive_thread thread_id=thread.id%}"</a>{% trans "Restituer" %}
                 </td>
             </tr>
         {% endfor %}
