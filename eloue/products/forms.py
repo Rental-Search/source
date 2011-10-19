@@ -161,6 +161,14 @@ class MessageEditForm(forms.Form):
         if parent_msg is not None:
             msg.parent_msg = parent_msg
             msg.thread = parent_msg.thread
+            if sender == msg.thread.sender:
+                if msg.thread.recipient_archived:
+                    msg.thread.recipient_archived = False
+                    msg.thread.save()
+            else:
+                if msg.thread.sender_archived:
+                    msg.thread.sender_archived = False
+                    msg.thread.save()
             parent_msg.replied_at = datetime.datetime.now()
             parent_msg.save()
         else:

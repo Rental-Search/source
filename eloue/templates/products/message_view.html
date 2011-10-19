@@ -10,14 +10,13 @@
 			<li class="menu-tab"><a href="{% url owner_booking %}">{% trans "Propriétaire" %}</a></li>
 			<li class="menu-tab"><a href="{% url borrower_booking %}">{% trans "Locataire" %}</a></li>
 			<li class="menu-tab"><a href="{% url patron_edit %}">{% trans "Mon compte" %}</a></li>
-			<li class="menu-tab"><a href="{% url messages_inbox %}">{% blocktrans %}Messages(){% endblocktrans %}</a></li>
+			<li class="menu-tab"><a href="{% url inbox %}">{% blocktrans %}Messages(TODO){% endblocktrans %}</a></li>
 		</ul>
 	</div>
 	<div id="sub-menu">
 		<ul class="x12">
-			<li class="sub-tab first selected"><a href="{% url messages_inbox %}">{% trans "Messages reçus"%}</a></li>
-			<li class="sub-tab"><a href="{% url messages_outbox %}">{% trans "Messages envoyés" %}</a></li>
-			<li class="sub-tab"><a href="{% url messages_trash %}">{% trans "Messages supprimés" %}</a></li>
+			<li class="sub-tab first selected"><a href="{% url inbox %}">{% trans "Messages reçus"%}</a></li>
+			<li class="sub-tab"><a href="{% url archived %}">{% trans "Messages archivés" %}</a></li>
 		</ul>
 	</div>
 	{% for message in message_list %}
@@ -77,6 +76,15 @@
 	        <p style="text-align: left;">
 	            {{ editForm.body }}<br />
         	    <input type="submit" class="btn small-green" style="font-size: 12px;" value="Répondre">
+        		{% if request.user == thread.sender %}
+				    {% if thread.sender_archived %}<a href="{% url unarchive_thread thread_id=thread.id %}">unarchive</a>
+				    {% else %}<a href="{% url archive_thread thread_id=thread.id %}">archive</a>
+	    {% endif %}
+        		{% else %}
+				    {% if thread.recipient_archived %}<a href="{% url unarchive_thread thread_id=thread.id %}">unarchive</a>
+				    {% else %}<a href="{% url archive_thread thread_id=thread.id %}">archive</a>
+	    {% endif %}
+        		{% endif %}
         	</p>
 	    </form>
     </div>

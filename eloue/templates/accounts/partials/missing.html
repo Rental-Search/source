@@ -77,6 +77,11 @@
     		{% endif %}
             {% if form.avatar %}
             <tr>
+                {% if product.owner.avatar %}
+                    <img src="{{ product.owner.avatar.product_page.url }}" alt="{% trans "loueur"%}{{ product.owner.username }}">
+                {% else %}
+                    <img src="{{ MEDIA_URL }}images/default_avatar.png" alt="{% trans "loueur"%}{{ product.owner.username }}">
+                {% endif %}
                 <th><label>{{ form.avatar.label }} {% if form.avatar.field.required %}*{% endif %} :</label></th>
                 <td {% if form.avatar.errors %} class="error-field" {% endif %}>
                     {{ form.avatar }}
