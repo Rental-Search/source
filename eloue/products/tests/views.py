@@ -3,7 +3,7 @@ import django.forms as forms
 from django.core.urlresolvers import reverse
 from django.test import TestCase
 from eloue.accounts.models import Patron
-from eloue.products.models import Product, ProductRelatedMessage
+from eloue.products.models import Product, ProductRelatedMessage, MessageThread
 from django_messages import utils
 from django_messages.utils import new_message_email
 from eloue.signals import message_content_filter, message_site_filter
@@ -96,39 +96,74 @@ class ProductViewsTest(TestCase):
         self.assertEqual(response.status_code, 404)
     
     def test_compose_product_related_message(self):
-        self.client.login(username='alexandre.woog@e-loue.com', password='alexandre')
-        recipient = Patron.objects.get(email='timothee.peignier@e-loue.com')
+        self.client.login(username='timothee.peignier@e-loue.com', password='timothee')
+        sender = Patron.objects.get(email='timothee.peignier@e-loue.com')
+        recipient = Patron.objects.get(email='alexandre.woog@e-loue.com')
         recipient.new_messages_alerted = False
         recipient.save()
-        response = self.client.post(reverse('compose_product_related_message'), {
-            'recipient': 'tim',
-            'subject': 'Ask for price',
-            'body': 'May I have a lower price? never send me a email'
+        response = self.client.post(reverse('message_create', kwargs={'product_id': recipient.products.all()[0].pk, 'recipient_id': recipient.pk}), {
+            '0-subject': 'Hi!',
+            '0-body': 'How are you?'
         })
-        self.assertTrue(response.status_code, 200)
-        self.assertEqual(self.called, False)
-    
-    
-    def test_reply_product_related_message(self):
-        self.client.login(username='alexandre.woog@e-loue.com', password='alexandre')
-        response = self.client.post(reverse('compose_product_related_message'), {
-            'recipient': 'lin',
-            'subject': 'Ask for price',
-            'body': 'May I have a lower price?, send me email'
-        })
-        self.assertEqual(self.called, True)
+        self.assertEqual(len(MessageThread.objects.all()), 1)
+        self.assertEqual(len(ProductRelatedMessage.objects.all()), 1)
+        thread = MessageThread.objects.all()[0]
+        message = ProductRelatedMessage.objects.all()[0]
+        self.assertEqual(thread.subject, 'Hi!')
+        self.assertEqual(thread.last_message, message)
+        self.assertEqual(message.parent_msg, None)
+        self.assertEqual(message.thread, thread)
         self.client.logout()
-        self.client.login(username='lin.liu@e-loue.com', password='lin')
-        parent_m = ProductRelatedMessage.objects.get(pk=1)
+
+        self.client.login(username='alexandre.woog@e-loue.com', password='alexandre')
+        sender, recipient = recipient, sender
+        recipient.new_message_alerted = False
+        recipient.save()
+        response = self.client.post(reverse('thread_details', kwargs={'thread_id': thread.pk}), {'0-body': "I'm fine. And you?"})
+        self.assertEqual(len(MessageThread.objects.all()), 1)
+        self.assertEqual(len(ProductRelatedMessage.objects.all()), 2)
+        thread = MessageThread.objects.all()[0]
+        self.assertEqual(thread.last_message.parent_msg.pk, message.pk)
+        self.assertEqual(thread.subject, 'Hi!')
+        self.assertEqual(thread.last_message.subject, '')
+        self.assertEqual(thread.last_message.parent_msg.subject, '')
+        self.client.logout()
+
+
+    # def test_compose_product_related_message(self):
+    #     self.client.login(username='alexandre.woog@e-loue.com', password='alexandre')
+    #     recipient = Patron.objects.get(email='timothee.peignier@e-loue.com')
+    #     recipient.new_messages_alerted = False
+    #     recipient.save()
+    #     response = self.client.post(reverse('compose_product_related_message'), {
+    #         'recipient': 'tim',
+    #         'subject': 'Ask for price',
+    #         'body': 'May I have a lower price? never send me a email'
+    #     })
+    #     self.assertTrue(response.status_code, 200)
+    #     self.assertEqual(self.called, False)
+    
+    
+    # def test_reply_product_related_message(self):
+    #     self.client.login(username='alexandre.woog@e-loue.com', password='alexandre')
+    #     response = self.client.post(reverse('compose_product_related_message'), {
+    #         'recipient': 'lin',
+    #         'subject': 'Ask for price',
+    #         'body': 'May I have a lower price?, send me email'
+    #     })
+    #     self.assertEqual(self.called, True)
+    #     self.client.logout()
+    #     self.client.login(username='lin.liu@e-loue.com', password='lin')
+    #     parent_m = ProductRelatedMessage.objects.get(pk=1)
         
-        response = self.client.post(reverse('reply_product_related_message', args=[parent_m.pk]), {
-                'subject': 'Reply Ask for price',
-                'body': 'May I have a lower price? never send me a email'
-        })
-        self.assertTrue(response.status_code, 200)
-        messages = ProductRelatedMessage.objects.all()
-        self.assertEqual(len(messages), 2)
-        self.assertEqual(messages[0].product, messages[1].product)
+    #     response = self.client.post(reverse('reply_product_related_message', args=[parent_m.pk]), {
+    #             'subject': 'Reply Ask for price',
+    #             'body': 'May I have a lower price? never send me a email'
+    #     })
+    #     self.assertTrue(response.status_code, 200)
+    #     messages = ProductRelatedMessage.objects.all()
+    #     self.assertEqual(len(messages), 2)
+    #     self.assertEqual(messages[0].product, messages[1].product)
 
     def test_product_delete(self):
         self.client.login(username='alexandre.woog@e-loue.com', password='alexandre')

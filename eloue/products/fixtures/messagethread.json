@@ -1,0 +1,14 @@
+[
+	{
+		"pk": 1, 
+		"model": "products.messagethread", 
+		"fields": {
+			"product": 6, 
+			"sender": 1, 
+			"last_message": 2, 
+			"last_offer": null, 
+			"recipient": 4, 
+			"subject": "Hi, time to sign the contract"
+		}
+	}
+]

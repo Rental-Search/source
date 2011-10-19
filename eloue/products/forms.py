@@ -12,7 +12,7 @@ from mptt.forms import TreeNodeChoiceField
 from eloue.accounts.models import Patron
 from eloue.geocoder import GoogleGeocoder
 from eloue.products.fields import FacetField
-from eloue.products.models import Alert, PatronReview, ProductReview, Product, Picture, Category, UNIT, PAYMENT_TYPE, ProductRelatedMessage
+from eloue.products.models import Alert, PatronReview, ProductReview, Product, Picture, Category, UNIT, PAYMENT_TYPE, ProductRelatedMessage, MessageThread
 from eloue.products.utils import Enum
 from django_messages.forms import ComposeForm
 import datetime
@@ -133,17 +133,18 @@ class ProductReviewForm(forms.ModelForm):
 
 
 class MessageEditForm(forms.Form):
-
-    subject = forms.CharField(label=_(u"Subject"), widget=forms.TextInput(attrs={'class': 'inm'}) )
+    # used in the wizard, and in the reply
+    subject = forms.CharField(label=_(u"Subject"), widget=forms.TextInput(attrs={'class': 'inm'}), required=False)
     body = forms.CharField(label=_(u"Body"), widget=forms.Textarea(attrs={'class': 'inm'}))
-    
+    jointOffer = forms.BooleanField(initial=False, required=False)
+
     def __init__(self, *args, **kwargs):
         super(MessageEditForm, self).__init__(*args, **kwargs)
-       
-    def save(self, product, sender, recipient, parent_msg=None):
-        subject = self.cleaned_data['subject']
+    
+    def save(self, product, sender, recipient, parent_msg=None, offer=None):
         body = self.cleaned_data['body']
-        message_list = []
+        subject = self.cleaned_data['subject']
+        message_list = [] # WHY ... 
         if not hasattr(recipient, 'new_messages_alerted'):
             patron = Patron.objects.get(pk=recipient.pk)
             recipient = patron # Hacking to make messages work
@@ -152,66 +153,82 @@ class MessageEditForm(forms.Form):
         else:
             signals.post_save.connect(utils.new_message_email, ProductRelatedMessage)
         msg = ProductRelatedMessage(
-                sender = sender,
-                recipient = recipient,
-                subject = subject,
-                body = body,
-            )
-        if product:
-            product.messages.add(msg) # To implement a layer to wrap the message lib
+          sender=sender,
+          recipient=recipient,
+          body=body,
+          offer=offer
+        )
         if parent_msg is not None:
             msg.parent_msg = parent_msg
+            msg.thread = parent_msg.thread
+            if sender == msg.thread.sender:
+                if msg.thread.recipient_archived:
+                    msg.thread.recipient_archived = False
+                    msg.thread.save()
+            else:
+                if msg.thread.sender_archived:
+                    msg.thread.sender_archived = False
+                    msg.thread.save()
             parent_msg.replied_at = datetime.datetime.now()
             parent_msg.save()
+        else:
+            thread = MessageThread(sender=sender, recipient=recipient, subject=subject)
+            thread.last_message = msg
+            thread.save()
+            msg.thread = thread
         msg.save()
-        message_list.append(msg)
+        msg.thread.last_message = msg
+        msg.thread.save()
+        message_list.append(msg) # ... IS THIS ...
+        if product:
+            product.messages.add(msg.thread) # To implement a layer to wrap the message lib
         if notification:
             if parent_msg is not None:
                 notification.send([recipient], "messages_reply_received", {'message': msg,})
             else:
                 notification.send([recipient], "messages_received", {'message': msg,})
-        return message_list
+        return message_list # ... RETURNED?
 
 
-class MessageComposeForm(ComposeForm):
-    """
-    A simple default form for private messages.
-    """
-    recipient = CommaSeparatedUserField(label=_(u"Recipient"), widget=forms.TextInput(attrs={'class': 'inm'}))
-    subject = forms.CharField(label=_(u"Subject"), widget=forms.TextInput(attrs={'class': 'inm'}) )
-    body = forms.CharField(label=_(u"Body"), widget=forms.Textarea(attrs={'class': 'inm'}))
+# class MessageComposeForm(ComposeForm):
+#     """
+#     A simple default form for private messages.
+#     """
+#     recipient = CommaSeparatedUserField(label=_(u"Recipient"), widget=forms.TextInput(attrs={'class': 'inm'}))
+#     subject = forms.CharField(label=_(u"Subject"), widget=forms.TextInput(attrs={'class': 'inm'}) )
+#     body = forms.CharField(label=_(u"Body"), widget=forms.Textarea(attrs={'class': 'inm'}))
     
-    def save(self, sender, parent_msg=None):
-        recipients = self.cleaned_data['recipient']
-        subject = self.cleaned_data['subject']
-        body = self.cleaned_data['body']
-        message_list = []
-        for r in recipients:
-            if not hasattr(r, 'new_messages_alerted'):
-                patron = Patron.objects.get(pk=r.pk)
-                r = patron # Hacking to make messages work
-            if not r.new_messages_alerted:
-                signals.post_save.disconnect(utils.new_message_email, ProductRelatedMessage)
-            else:
-                signals.post_save.connect(utils.new_message_email, ProductRelatedMessage)
-            msg = ProductRelatedMessage(
-                sender = sender,
-                recipient = r,
-                subject = subject,
-                body = body,
-            )
-            if parent_msg is not None:
-                msg.parent_msg = parent_msg
-                parent_msg.replied_at = datetime.datetime.now()
-                parent_msg.save()
-            msg.save()
-            message_list.append(msg)
-            if notification:
-                if parent_msg is not None:
-                    notification.send([r], "messages_reply_received", {'message': msg,})
-                else:
-                    notification.send([r], "messages_received", {'message': msg,})
-        return message_list
+#     def save(self, sender, parent_msg=None):
+#         recipients = self.cleaned_data['recipient']
+#         subject = self.cleaned_data['subject']
+#         body = self.cleaned_data['body']
+#         message_list = []
+#         for r in recipients:
+#             if not hasattr(r, 'new_messages_alerted'):
+#                 patron = Patron.objects.get(pk=r.pk)
+#                 r = patron # Hacking to make messages work
+#             if not r.new_messages_alerted:
+#                 signals.post_save.disconnect(utils.new_message_email, ProductRelatedMessage)
+#             else:
+#                 signals.post_save.connect(utils.new_message_email, ProductRelatedMessage)
+#             msg = ProductRelatedMessage(
+#                 sender = sender,
+#                 recipient = r,
+#                 subject = subject,
+#                 body = body,
+#             )
+#             if parent_msg is not None:
+#                 msg.parent_msg = parent_msg
+#                 parent_msg.replied_at = datetime.datetime.now()
+#                 parent_msg.save()
+#             msg.save()
+#             message_list.append(msg)
+#             if notification:
+#                 if parent_msg is not None:
+#                     notification.send([r], "messages_reply_received", {'message': msg,})
+#                 else:
+#                     notification.send([r], "messages_received", {'message': msg,})
+#         return message_list
 
 
 class ProductForm(forms.ModelForm):

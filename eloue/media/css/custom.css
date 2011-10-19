@@ -896,7 +896,7 @@ body { background: #ECF6FF url("../images/body-bg.png") repeat 0 0; }
   width: 118px;
   margin-bottom: 0;
 }
-  .started-date { margin-right: 22px; }
+.started-date { margin-right: 22px; }
 #booking-dates p input 
 { 
   background: white url("../images/icone-calendrier.png") no-repeat 91px 7px;
@@ -915,6 +915,10 @@ body { background: #ECF6FF url("../images/body-bg.png") repeat 0 0; }
   color: #FF7200;
   font-weight: bold;
 }
+
+.quantity { margin: 10px 0 0; }
+.quantity p { margin-bottom: 0px; }
+
 .product-properties { font-size: 16px; }
 .product-properties .p-value { font-weight: bold; }
 .product-properties .owner { color: #6EB924!important; }
@@ -1692,3 +1696,20 @@ input.price { color: #000; }
 {
   margin: 10px 0;
 }
+
+
+/* --------------------------------------------------------------
+
+        Avatar
+
+-------------------------------------------------------------- */
+.avatar-edit 
+{
+  float: left;
+  margin-right: 10px; 
+}
+
+
+
+
+

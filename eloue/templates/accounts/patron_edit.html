@@ -11,7 +11,7 @@
 			<li class="menu-tab"><a href="{% url owner_booking %}">{% trans "Propriétaire" %}</a></li>
 			<li class="menu-tab"><a href="{% url borrower_booking %}">{% trans "Locataire" %}</a></li>
 			<li class="menu-tab">{% trans "Mon compte" %}</li>
-			<li class="menu-tab"><a href="{% url messages_inbox %}">{% blocktrans %}Messages({{ messages_inbox_count }}){% endblocktrans %}</a></li>
+			<li class="menu-tab"><a href="{% url inbox %}">{% blocktrans %}Messages({{ unread_message_count }}){% endblocktrans %}</a></li>
 		 </ul>
 	    </div>
 	    <div id="sub-menu">
@@ -21,14 +21,18 @@
 	        </ul>
 	    </div>
 	    <div class="x8 p2">
-	        <form class="form" action="" method="POST">
+	    {% if form.is_multipart %}
+	    <form enctype="multipart/form-data" method="post" action="">
+		{% else %}
+	    <form method="post" action="">
+		{% endif %}
 	    		{% csrf_token %}
 	    		<table class="more-info">
 	    		    {% if form.is_professional %}
 	        		<tr>
+	        		    <th><label>{{ form.is_professional.label }} {% if form.is_professional.field.required %}*{% endif%} :</label></th>
 	        			<td colspan="2" {% if form.is_professional.errors %} class="error-field" {% endif %}>
-	        				<label>{{ form.is_professional.label }} {% if form.is_professional.field.required %}*{% endif%} :</label>
-	        				{{ form.is_professional }} {% trans "oui" %}
+	        				{{ form.is_professional }} {% trans "Je suis un professionnel." %}
 	        				{% if form.is_professional.errors %}
 	        				    {% for error in form.is_professional.errors %}
 	        								<br />
@@ -134,11 +138,30 @@
 	    				</td>
 	    			</tr>
 	    			{% endif %}
+	    			{% if form.avatar %}
+	    			<tr>
+	    				<th><label>{{ form.avatar.label }} {% if form.avatar.field.required %}*{% endif %} :</label></th>
+	    				<td {% if form.avatar.errors %} class="error-field" {% endif %}>
+	    				    {% if patron.avatar %}
+                            <img src="{{ patron.avatar.product_page.url }}" alt="{% trans "loueur"%}{{ patron.username }}" style="float: left; margin-right: 10px; border: 1px solid #9EB0BA;">
+                            {% else %}
+                            <img src="{{ MEDIA_URL }}images/default_avatar.png" alt="{% trans "loueur"%}{{ patron.username }}" style="float: left; margin-right: 10px; border: 1px solid #9EB0BA;">
+                            {% endif %}
+	    					{{ form.avatar }}
+	    					{% if form.avatar.errors %}
+	    						{% for error in form.avatar.errors %}
+	    							<br />
+	    							<span class="error">{{ error|escape }}</span>
+	    						{% endfor %}
+	    					{% endif %}
+	    				</td>
+	    			</tr>
+	    			{% endif %}
 	    			{% if form.is_subscribed %}
 	    			<tr>
+	    			    <th><label>{{ form.is_subscribed.label }} {% if form.is_subscribed.field.required %}*{% endif%} :</label></th>
 	        			<td colspan="2" {% if form.is_subscribed.errors %} class="error-field" {% endif %}>
-	        				<label>{{ form.is_subscribed.label }} {% if form.is_subscribed.field.required %}*{% endif%} :</label>
-	        				{{ form.is_subscribed }} {% trans "oui" %}
+	        				{{ form.is_subscribed }} {% trans "Je souhaite recevoir les newsletters." %}
 	        				{% if form.is_subscribed.errors %}
 	        				    {% for error in form.is_subscribed.errors %}
 	        								<br />

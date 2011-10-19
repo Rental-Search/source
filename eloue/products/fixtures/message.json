@@ -1,0 +1,70 @@
+[
+    {
+        "pk": 1, 
+        "model": "django_messages.message", 
+        "fields": {
+            "body": "what about tomorrow?", 
+            "recipient_deleted_at": null, 
+            "sender_deleted_at": null, 
+            "read_at": null, 
+            "parent_msg": null, 
+            "sent_at": "2011-08-17 10:47:47", 
+            "replied_at": null, 
+            "subject": "", 
+            "recipient": 4, 
+            "sender": 1
+        }
+    },
+    {
+        "pk": 1, 
+        "model": "products.productrelatedmessage", 
+        "fields": {
+            "thread": 1, 
+            "offer": null,
+            "body": "what about tomorrow?", 
+            "recipient_deleted_at": null, 
+            "sender_deleted_at": null, 
+            "read_at": null, 
+            "parent_msg": null, 
+            "sent_at": "2011-08-17 10:47:47", 
+            "replied_at": null, 
+            "subject": "", 
+            "recipient": 4, 
+            "sender": 1
+        }
+    },
+    {
+        "pk": 2, 
+        "model": "django_messages.message", 
+        "fields": {
+            "body": "so what?", 
+            "recipient_deleted_at": null, 
+            "sender_deleted_at": null, 
+            "read_at": null, 
+            "parent_msg": null, 
+            "sent_at": "2011-08-17 10:47:47", 
+            "replied_at": null, 
+            "subject": "",
+            "recipient": 1, 
+            "sender": 4
+        }
+    },
+    {
+        "pk": 2, 
+        "model": "products.productrelatedmessage", 
+        "fields": {
+            "thread": 1, 
+            "offer": null,
+            "body": "so what?", 
+            "recipient_deleted_at": null, 
+            "sender_deleted_at": null, 
+            "read_at": null, 
+            "parent_msg": null, 
+            "sent_at": "2011-08-17 10:47:47", 
+            "replied_at": null, 
+            "subject": "",
+            "recipient": 1, 
+            "sender": 4
+        }
+    }
+]
