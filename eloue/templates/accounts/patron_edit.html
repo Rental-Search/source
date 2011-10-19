@@ -21,7 +21,11 @@
 	        </ul>
 	    </div>
 	    <div class="x8 p2">
-	        <form class="form" action="" method="POST">
+	    {% if form.is_multipart %}
+	    <form enctype="multipart/form-data" method="post" action="">
+		{% else %}
+	    <form method="post" action="">
+		{% endif %}
 	    		{% csrf_token %}
 	    		<table class="more-info">
 	    		    {% if form.is_professional %}
@@ -127,6 +131,23 @@
 	    					{{ form.paypal_email }}
 	    					{% if form.paypal_email.errors %}
 	    						{% for error in form.paypal_email.errors %}
+	    							<br />
+	    							<span class="error">{{ error|escape }}</span>
+	    						{% endfor %}
+	    					{% endif %}
+	    				</td>
+	    			</tr>
+	    			{% endif %}
+	    			{% if form.avatar %}
+	    			<tr>
+						{% if patron.avatar %}
+				       		<a href="#"><img src="{{ patron.avatar.thumbnail.url }}" /></a>
+				        {% endif %}
+	    				<th><label>{{ form.avatar.label }} {% if form.avatar.field.required %}*{% endif %} :</label></th>
+	    				<td {% if form.avatar.errors %} class="error-field" {% endif %}>
+	    					{{ form.avatar }}
+	    					{% if form.avatar.errors %}
+	    						{% for error in form.avatar.errors %}
 	    							<br />
 	    							<span class="error">{{ error|escape }}</span>
 	    						{% endfor %}

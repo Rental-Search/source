@@ -15,7 +15,7 @@ from eloue.wizard import MultiPartFormWizard
 
 
 class AuthenticationWizard(MultiPartFormWizard):
-    required_fields = ['username', 'password1', 'password2', 'is_professional', 'company_name']
+    required_fields = ['username', 'password1', 'password2', 'is_professional', 'company_name', 'avatar']
     
     def done(self, request, form_list):
         missing_form = next((form for form in form_list if getattr(form.__class__, '__name__', None) == 'MissingInformationForm'), None)

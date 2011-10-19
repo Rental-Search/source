@@ -19,6 +19,8 @@ from django.views.generic.simple import direct_to_template, redirect_to
 from django.db.models import Q
 from django_lean.experiments.models import GoalRecord
 from django_lean.experiments.utils import WebUser
+from django.contrib.sites.models import Site
+
 
 from eloue.decorators import ownership_required, validate_ipn, secure_required, mobify
 from eloue.accounts.forms import EmailAuthenticationForm
@@ -31,6 +33,7 @@ from datetime import datetime, timedelta
 from eloue.rent.utils import get_product_occupied_date, timesince
 
 log = logbook.Logger('eloue.rent')
+USE_HTTPS = getattr(settings, 'USE_HTTPS', True)
 
 
 @require_POST
@@ -162,6 +165,41 @@ def booking_detail(request, booking_id):
     paypal = request.GET.get('paypal', False)
     return object_detail(request, queryset=Booking.on_site.all(), object_id=booking_id,
         template_name='rent/booking_detail.html', template_object_name='booking', extra_context={'paypal': paypal})
+
+
+
+def offer_accept(request, booking_id):
+    booking = get_object_or_404(Booking, pk=booking_id)
+    if request.user == booking.offer_in_message.recipient:
+        if booking.state == Booking.STATE.UNACCEPTED:
+            booking.state = Booking.STATE.ACCEPTED_UNAUTHORIZED
+            if request.user == booking.borrower:
+                domain = Site.objects.get_current().domain
+                protocol = "https" if USE_HTTPS else "http"
+                booking.preapproval(
+                    cancel_url="%s://%s%s" % (protocol, domain, reverse("booking_failure", args=[booking.pk.hex])),
+                    return_url="%s://%s%s" % (protocol, domain, reverse("booking_success", args=[booking.pk.hex])),
+                    ip_address=request.META['REMOTE_ADDR']
+                )
+            else:
+                #send mail to borrower with paypal link
+                pass
+        else:
+            #we should not be here
+            pass
+    else:
+        return HttpResponseForbidden()
+def offer_reject(request, booking_id):
+    booking = get_object_or_404(Booking, pk=booking_id)
+    if request.user == booking.offer_in_message.recipient:
+        if booking.state == Booking.STATE.UNACCEPTED:
+            booking.state = Booking.STATE.REJECTED
+        else:
+            #we should not be here
+            pass
+    else:
+        return HttpResponseForbidden()
+
 
 
 @login_required

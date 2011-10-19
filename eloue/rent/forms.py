@@ -116,7 +116,7 @@ class PreApprovalIPNForm(forms.Form):
     max_total_amount_of_all_payments = forms.DecimalField(max_digits=8, decimal_places=2, required=True)
     sender_email = forms.CharField(required=True)
     status = forms.CharField(required=True)
-        
+    
     def clean_preapproval_key(self):
         preapproval_key = self.cleaned_data['preapproval_key']
         if not Booking.objects.filter(preapproval_key=preapproval_key).exists():
@@ -179,7 +179,25 @@ class BookingForm(forms.ModelForm):
             self.cleaned_data['total_amount'] = unit[1] * (1 if quantity is None else (quantity if self.max_available >= quantity else self.max_available))
         
         return self.cleaned_data
+
+
+class BookingOfferForm(forms.ModelForm):
+    started_at = DateTimeField(required=True, input_date_formats=DATE_FORMAT)
+    ended_at = DateTimeField(required=True, input_date_formats=DATE_FORMAT)
+    quantity = forms.IntegerField(widget=forms.Select(choices=enumerate(xrange(5))))
+    total_amount = forms.DecimalField()
+
+    class Meta:
+        model = Booking
+        fields = ('started_at', 'ended_at', 'quantity', 'total_amount')
     
+    def __init__(self, *args, **kwargs):
+        super(BookingOfferForm, self).__init__(*args, **kwargs)
+
+    def clean(self):
+        super(BookingOfferForm, self).clean()
+        # custom validation
+        return self.cleaned_data
 
 class BookingConfirmationForm(forms.Form):
     pass

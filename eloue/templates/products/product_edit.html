@@ -52,8 +52,8 @@
 				<td>
 					{% for picture in product.pictures.all %}
 						{% if picture.thumbnail %}
-		       		<a href="#"><img src="{{ picture.thumbnail.url }}" /></a>
-		        {% endif %}
+				       		<a href="#"><img src="{{ picture.thumbnail.url }}" /></a>
+				        {% endif %}
 					{% endfor %}
 					{{ form.picture }}
 					{% if form.picture.errors %}
