@@ -32,7 +32,7 @@ class Migration(DataMigration):
 
 
     def backwards(self, orm):
-        for message in orm.ProductRelatedMessage:
+        for message in orm.ProductRelatedMessage.objects.all():
             if message.subject == "":
                 message.subject = message.thread.subject
             message.product = message.thread.product

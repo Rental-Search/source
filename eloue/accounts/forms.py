@@ -125,10 +125,10 @@ class PatronEditForm(forms.ModelForm):
     paypal_email = forms.EmailField(label=_(u"Email PayPal"), required=False, max_length=75, widget=forms.TextInput(attrs={
             'autocapitalize': 'off', 'autocorrect': 'off', 'class': 'inm'}))
 	    
-    is_professional = forms.BooleanField(label=_(u"Êtes-vous un professionnel ?"), required=False, initial=False)
+    is_professional = forms.BooleanField(label=_(u"Professionnel"), required=False, initial=False)
     
     company_name = forms.CharField(label=_(u"Nom de la société"), required=False, widget=forms.TextInput(attrs={'class': 'inm'}))
-    is_subscribed = forms.BooleanField(required=False, initial=False, label=_(u"Je suis inscrit à la newsletter"))
+    is_subscribed = forms.BooleanField(required=False, initial=False, label=_(u"Newsletter"))
     new_messages_alerted = forms.BooleanField(required=False, initial=True)
 
     avatar = forms.ImageField(required=False)
@@ -296,7 +296,7 @@ def make_missing_data_form(instance, required_fields=[]):
         ),
         'password1': forms.CharField(label=_(u"Mot de passe"), max_length=128, required=True, widget=forms.PasswordInput(attrs={'class': 'inm'})),
         'password2': forms.CharField(label=_(u"A nouveau"), max_length=128, required=True, widget=forms.PasswordInput(attrs={'class': 'inm'})),
-        'is_professional': forms.BooleanField(label=_(u"Êtes-vous un professionnel ?"), required=False, initial=False),
+        'is_professional': forms.BooleanField(label=_(u"Professionnel"), required=False, initial=False),
         'company_name': forms.CharField(label=_(u"Nom de la société"), required=False, max_length=255, widget=forms.TextInput(attrs={'class': 'inm'})),
         'first_name': forms.CharField(label=_(u"Prénom"), max_length=30, required=True, widget=forms.TextInput(attrs={'class': 'inm'})),
         'last_name': forms.CharField(label=_(u"Nom"), max_length=30, required=True, widget=forms.TextInput(attrs={'class': 'inm'})),

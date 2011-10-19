@@ -46,7 +46,7 @@ class SourceClass(BaseSource):
                 'categories': ['culture', 'livre'],
                 'lat': 0, 'lng': 0,
                 'city': "Paris",
-                'price': D('12.90'),
+                'price': D('0.45'),
                 'owner': 'chronobook',
                 'owner_url': BASE_URL,
                 'url': attrib['fiche'],

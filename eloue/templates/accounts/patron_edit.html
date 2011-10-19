@@ -30,9 +30,9 @@
 	    		<table class="more-info">
 	    		    {% if form.is_professional %}
 	        		<tr>
+	        		    <th><label>{{ form.is_professional.label }} {% if form.is_professional.field.required %}*{% endif%} :</label></th>
 	        			<td colspan="2" {% if form.is_professional.errors %} class="error-field" {% endif %}>
-	        				<label>{{ form.is_professional.label }} {% if form.is_professional.field.required %}*{% endif%} :</label>
-	        				{{ form.is_professional }} {% trans "oui" %}
+	        				{{ form.is_professional }} {% trans "Je suis un professionnel." %}
 	        				{% if form.is_professional.errors %}
 	        				    {% for error in form.is_professional.errors %}
 	        								<br />
@@ -140,11 +140,13 @@
 	    			{% endif %}
 	    			{% if form.avatar %}
 	    			<tr>
-						{% if patron.avatar %}
-				       		<a href="#"><img src="{{ patron.avatar.thumbnail.url }}" /></a>
-				        {% endif %}
 	    				<th><label>{{ form.avatar.label }} {% if form.avatar.field.required %}*{% endif %} :</label></th>
 	    				<td {% if form.avatar.errors %} class="error-field" {% endif %}>
+	    				    {% if patron.avatar %}
+                            <img src="{{ patron.avatar.product_page.url }}" alt="{% trans "loueur"%}{{ patron.username }}" style="float: left; margin-right: 10px; border: 1px solid #9EB0BA;">
+                            {% else %}
+                            <img src="{{ MEDIA_URL }}images/default_avatar.png" alt="{% trans "loueur"%}{{ patron.username }}" style="float: left; margin-right: 10px; border: 1px solid #9EB0BA;">
+                            {% endif %}
 	    					{{ form.avatar }}
 	    					{% if form.avatar.errors %}
 	    						{% for error in form.avatar.errors %}
@@ -157,9 +159,9 @@
 	    			{% endif %}
 	    			{% if form.is_subscribed %}
 	    			<tr>
+	    			    <th><label>{{ form.is_subscribed.label }} {% if form.is_subscribed.field.required %}*{% endif%} :</label></th>
 	        			<td colspan="2" {% if form.is_subscribed.errors %} class="error-field" {% endif %}>
-	        				<label>{{ form.is_subscribed.label }} {% if form.is_subscribed.field.required %}*{% endif%} :</label>
-	        				{{ form.is_subscribed }} {% trans "oui" %}
+	        				{{ form.is_subscribed }} {% trans "Je souhaite recevoir les newsletters." %}
 	        				{% if form.is_subscribed.errors %}
 	        				    {% for error in form.is_subscribed.errors %}
 	        								<br />
