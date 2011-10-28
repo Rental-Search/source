@@ -11,10 +11,9 @@ Vous avez reçu un message de {{ sender }} qui contient le message suivant :
 
 
 Cliquez sur le lien suivant pour répondre à ce message :
-{% url reply_product_related_message message.id %}
+{{ site_url }}{% url thread_details message.thread.pk %}
 
 ------
 L'equipe {{ site_url }}
 
-{% trans "Inbox" %}: {{ site_url }}{% url messages_inbox %}
-{% trans "Reply" %}: {{ site_url }}{% url reply_product_related_message message.id %}
+{% trans "Reply" %}: {{ site_url }}{% url thread_details message.thread.pk %}
