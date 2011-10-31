@@ -134,7 +134,7 @@ class PatronEditForm(forms.ModelForm):
     avatar = forms.ImageField(required=False)
 
     def save(self, *args, **kwargs):
-        super(PatronEditForm, self).save(*args, **kwargs)
+        inst = super(PatronEditForm, self).save(*args, **kwargs)
         if self.avatar:
             try:
                 self.instance.avatar
@@ -143,6 +143,7 @@ class PatronEditForm(forms.ModelForm):
             else:
                 self.instance.avatar.delete()
             Avatar.objects.create(image=self.avatar, patron=self.instance)
+        return inst
     
     def clean_avatar(self):
         self.avatar = self.cleaned_data['avatar']
