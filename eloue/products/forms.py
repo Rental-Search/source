@@ -148,10 +148,7 @@ class MessageEditForm(forms.Form):
         if not hasattr(recipient, 'new_messages_alerted'):
             patron = Patron.objects.get(pk=recipient.pk)
             recipient = patron # Hacking to make messages work
-        if not recipient.new_messages_alerted:
-            signals.post_save.disconnect(utils.new_message_email, ProductRelatedMessage)
-        else:
-            signals.post_save.connect(utils.new_message_email, ProductRelatedMessage)
+        signals.post_save.connect(utils.new_message_email, ProductRelatedMessage)
         msg = ProductRelatedMessage(
           sender=sender,
           recipient=recipient,
