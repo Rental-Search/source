@@ -11,7 +11,7 @@ from ftplib import FTP
 from lxml import objectify, etree
 
 from django.conf import settings
-
+import itertools
 from . import BaseSource, Product
 
 LV_FTP = getattr(settings, 'LV_FTP', "ftp.bo.location-et-vacances.com")
@@ -20,35 +20,42 @@ LV_FTP_PASSWORD = getattr(settings, 'LV_FTP_PASSWORD', 'u1Pur-qh')
 
 
 def parse_doc(element):
+
+    def get_tag(element, tag):
+        return next(element.iterchildren(tag))
+    
     descriptions = element.xpath('descriptions/lang[@iso="fr"]')
-    if descriptions:
-        description = "%s %s" % (descriptions[0].description_interieur.pyval, descriptions[0].description_exterieur.pyval)
+    if len(descriptions):
+        description = "%s %s" % (get_tag(descriptions[0], "description_interieur").text, get_tag(descriptions[0], "description_exterieur"))
     else:
-        description = element.nom_hergement.pyval
+        description = get_tag(element, "nom_hergement").text
     photos = element.xpath('photos/photo')
     if photos:
-        thumbnail = element.photos.photo.pyval
+        thumbnail = get_tag(get_tag(element, "photos"), "photo").text
     else:
         thumbnail = None
-    if element.type_hebergement.pyval == 'Appartement':
+    if get_tag(element, "type_hebergement").text == 'Appartement':
         categories = ['lieu', 'appartement']
-    elif element.type_hebergement.pyval == 'Maison':
+    elif get_tag(element, "type_hebergement").text == 'Maison':
         categories = ['lieu', 'maison-villa']
     else:
         categories = ['lieu']
-    lat, lon = BaseSource().get_coordinates("%s %s" % (element.localisation.ville, element.localisation.pays_libelle))
-    price = D(str(element.prix_mini.pyval)) / D('7')
+    ville = get_tag(get_tag(element, "localisation"),"ville").text
+    pays = get_tag(get_tag(element, "localisation"),"pays_libelle").text
+    zip_code = get_tag(get_tag(element, "localisation"),"code_postal").text
+    lat, lon = BaseSource().get_coordinates("%s %s" % (ville, pays))
+    price = D(get_tag(element, "prix_mini").text) / D('7')
     return Product({
         'id': '%s.%s' % (SourceClass().get_prefix(), element.get('id')),
-        'summary': element.nom_hergement.pyval,
+        'summary': get_tag(element, "nom_hergement").text,
         'description': description,
         'categories': categories,
         'lat': lat, 'lng': lon,
-        'city': element.localisation.ville.pyval, 'zipcode': element.localisation.code_postal.pyval,
+        'city': ville, 'zipcode': zip_code,
         'price': price.quantize(D(".00"), rounding=ROUND_CEILING),
         'owner': 'location-et-vacances',
         'owner_url': 'http://www.location-et-vacances.com/',
-        'url': "%s?cle=eloue" % element.descriptions.lang.url_fiche.pyval,
+        'url': "%s?cle=eloue" % get_tag(descriptions[0], "url_fiche").text,
         'thumbnail': thumbnail,
         'django_id': 'lv.%s' % element.get('id'),
     })
@@ -69,14 +76,12 @@ class SourceClass(BaseSource):
     
     def get_docs(self):
         tar = tarfile.open(fileobj=self.get_archive(), mode="r:gz")
-        pool, docs = self.get_pool(), []
         for member in tar:
             part = tar.extractfile(member)
             root = objectify.parse(part, parser=etree.XMLParser(recover=True))
             elements = root.xpath('//hebergement')
-            gen = pool.imap(parse_doc, elements, 100)
+            #gen = pool.imap(parse_doc, elements, 100)
+            gen = itertools.imap(parse_doc, elements)
             for prod in gen:
                 yield prod
-        pool.close()
-        pool.join()
     
