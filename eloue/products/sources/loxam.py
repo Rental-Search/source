@@ -47,7 +47,7 @@ class SourceClass(BaseSource):
                 thumb_tree = html_tree.xpath(XP_THUMBNAIL1)
             thumbnail = thumb_tree[0].attrib["src"] if len(thumb_tree) else ""
             location = "France"
-            lat, lon = BaseSource.get_coordinates(self, location)
+            lat, lon = self.get_coordinates(location)
             yield Product({
                 'id' : "%s.%d" % (self.get_prefix(), c_id),
                 'summary':  html_tree.findall("//h1")[1].text.split(":")[-1].strip(),

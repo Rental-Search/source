@@ -79,7 +79,7 @@ class SourceClass(BaseSource):
     def get_product(self, html_tree, href=None):
         c_id = self.id.next()
         location = "France"
-        lat, lon = BaseSource.get_coordinates(self, location)
+        lat, lon = self.get_coordinates(location)
         yield Product({
             'id' : "%s.%d" % (self.get_prefix(), c_id),
             'summary' : html_tree.xpath(XP_PNAME)[0].text.strip(),

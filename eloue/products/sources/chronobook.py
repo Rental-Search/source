@@ -35,7 +35,7 @@ class SourceClass(BaseSource):
             html = html_tree(attrib['fiche'])
             thumbnail = html.xpath(XP_IMAGE)
             location = "Paris, France"
-            lat, lon = BaseSource.get_coordinates(self, location)
+            lat, lon = self.get_coordinates(location)
             if not len(thumbnail):
                 continue
             else:

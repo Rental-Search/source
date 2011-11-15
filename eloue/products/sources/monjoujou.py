@@ -26,7 +26,7 @@ class SourceClass(BaseSource):
             description_tree = etree.HTML(description_html)
             id_c = self.id.next()
             location = "France"
-            lat, lon = BaseSource.get_location(self, location)
+            lat, lon = self.get_coordinates(location)
             thumbnail = description_tree[0][0][0].attrib['src']
             description = description_tree[0][1]
             yield Product({
