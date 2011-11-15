@@ -3,6 +3,7 @@ import datetime
 import inspect
 
 from django.core.management.base import BaseCommand
+from django.conf import settings
 from django.core import mail
 
 import logbook
@@ -12,10 +13,9 @@ class DjangoMailHandler(logbook.MailHandler):
 
     def deliver(self, msg, recipients):
         """Delivers the given message to a list of recpients."""
-        print inspect.getmembers(msg)
         mail.send_mail("importation error", msg.as_string(), self.from_addr, recipients)
 
-handler = DjangoMailHandler("someone@example.com", ['other@example.com'],
+handler = DjangoMailHandler(settings.SERVER_EMAIL, ['ops@e-loue.com'],
                               format_string=logbook.handlers.MAIL_FORMAT_STRING, level='INFO', bubble = True, record_delta=datetime.timedelta(seconds=0))
 
 log = logbook.Logger('eloue.rent.sources')
