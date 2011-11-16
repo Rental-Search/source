@@ -361,7 +361,7 @@ class CategoryResource(ModelResource):
             bits = []
             for child in node.get_children():
                 bits.append(build_node(child))
-            bundle = self.full_dehydrate(node)
+            bundle = self.full_dehydrate(self.build_bundle(node))
             bundle.data['children'] = bits
             return bundle.data
         roots = Category.tree.root_nodes()
