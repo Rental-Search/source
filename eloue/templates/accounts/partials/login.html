@@ -1,5 +1,6 @@
 {% load i18n %}
 <div class="x10 p2">
+    <button id="fbconnect">Facebook connect</button>
     {{ form.non_field_errors }}
 	<form class="inline" action="" method="POST">
 	{% csrf_token %}
@@ -30,9 +31,41 @@
 </div>
 <div id="submit-wizard" class="x12">
     <p>
+        <input type="hidden" name="facebook_access_token" value="" />
+        <input type="hidden" name="facebook_expires" value="" />
+        <input type="hidden" name="facebook_uid" value="" />
 	    <input type="hidden" name="{{ step_field }}" value="{{ step0 }}" />
     	{{ previous_fields|safe }}
     	<input type="submit" class="btn big-green" value="{% trans "Continuer &rarr;" %}" />
     </p>
 </form>
 </div>
+<div id="fb-root"></div>
+<script type="text/javascript">  (function() {
+    var ga = document.createElement('script');     ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:'   == document.location.protocol ? 'https://ssl'   : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+</script>
+<script>
+  window.fbAsyncInit = function() {
+    FB.init({
+      appId      : '197983240245844', // App ID
+      channelURL : '{{ MEDIA_URL }}channel.html', // Channel File
+      status     : true, // check login status
+      cookie     : true, // enable cookies to allow the server to access the session
+      oauth      : true, // enable OAuth 2.0
+      xfbml      : true  // parse XFBML
+    });
+
+    // Additional initialization code here
+  };
+
+  // Load the SDK Asynchronously
+  (function(d){
+     var js, id = 'facebook-jssdk'; if (d.getElementById(id)) {return;}
+     js = d.createElement('script'); js.id = id; js.async = true;
+     js.src = "//connect.facebook.net/fr_FR/all.js";
+     d.getElementsByTagName('head')[0].appendChild(js);
+   }(document));
+</script>
