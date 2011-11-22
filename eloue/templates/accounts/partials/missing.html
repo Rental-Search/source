@@ -77,6 +77,9 @@
     		{% endif %}
             {% if form.avatar %}
             <tr>
+                {% if fb_image %}
+                    <img src={{fb_image}}/>
+                {% endif %}
                 <th><label>{{ form.avatar.label }} {% if form.avatar.field.required %}*{% endif %} :</label></th>
                 <td {% if form.avatar.errors %} class="error-field" {% endif %}>
                     {{ form.avatar }}

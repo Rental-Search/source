@@ -5,6 +5,8 @@ import uuid
 
 from imagekit.models import ImageModel
 
+import facebook
+
 from django.core.exceptions import ValidationError
 from django.contrib.sites.managers import CurrentSiteManager
 from django.contrib.sites.models import Site
@@ -261,7 +263,23 @@ class Patron(User):
     is_expired.boolean = True
     is_expired.short_description = ugettext(u"Expiré")
 
+class FacebookSession(models.Model):
 
+    access_token = models.CharField(max_length=255, unique=True)
+    expires = models.DateTimeField(null=True)
+        
+    user = models.OneToOneField(Patron, null=True)
+    uid = models.BigIntegerField(unique=True, null=True)
+
+    class Meta:
+        unique_together = (('user', 'uid'), ('access_token', 'expires'))
+    
+    @property
+    def graph_api(self):
+        if not hasattr(self, '_graph_api') or self._graph_api.access_token != self.access_token:
+            self._graph_api = facebook.GraphAPI(self.access_token)
+        return self._graph_api
+    
 class Address(models.Model):
     """An address"""
     patron = models.ForeignKey(Patron, related_name='addresses')
@@ -327,7 +345,6 @@ class PhoneNumber(models.Model):
 
     def __unicode__(self):
         return smart_unicode(self.number)
-
 
 class PatronAccepted(models.Model):
     """Patron accpeted to create an account for private plateform"""

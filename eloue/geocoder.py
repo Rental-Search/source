@@ -80,3 +80,18 @@ class GoogleGeocoder(Geocoder):
         name = json['results'][0]['formatted_address']
         return name, (lat, lon), int(radius)
     
+    def getCityCountry(self, locationName):
+        # returns city and country
+
+        json = simplejson.load(urllib.urlopen(
+            'http://maps.googleapis.com/maps/api/geocode/json?' + urllib.urlencode({
+                'address': locationName.encode('utf-8'),
+                'oe': 'utf8',
+                'sensor': 'false',
+                'region': GOOGLE_REGION_CODE
+            })
+        ))
+        
+        return json['results'][0]['address_components'][0]['long_name'], json['results'][0]['address_components'][-1]['short_name']
+
+

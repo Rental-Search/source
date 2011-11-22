@@ -11,7 +11,7 @@ from django_lean.experiments.models import GoalRecord
 from django_lean.experiments.utils import WebUser
 
 from eloue.accounts.forms import EmailAuthenticationForm, make_missing_data_form
-from eloue.accounts.models import Patron
+from eloue.accounts.models import Patron, Avatar
 
 from eloue.products.forms import AlertForm, ProductForm, MessageEditForm
 
@@ -24,7 +24,7 @@ from django.shortcuts import get_object_or_404
 from django.contrib import messages
 from django.utils.translation import ugettext as _
 from django.views.generic.simple import direct_to_template, redirect_to
-
+from eloue.geocoder import GoogleGeocoder
 
 class ProductWizard(GenericFormWizard):
     def done(self, request, form_list):
@@ -32,9 +32,22 @@ class ProductWizard(GenericFormWizard):
         if request.user.is_anonymous():  # Create new Patron
             auth_form = next((form for form in form_list if isinstance(form, EmailAuthenticationForm)), None)
             new_patron = auth_form.get_user()
+            fb_session = auth_form.fb_session
             if not new_patron:
-                new_patron = Patron.objects.create_inactive(missing_form.cleaned_data['username'],
-                    auth_form.cleaned_data['email'], missing_form.cleaned_data['password1'])
+                if fb_session:
+                    new_patron = Patron.objects.create_user(
+                      missing_form.cleaned_data['username'], 
+                      auth_form.cleaned_data['email'], 
+                      missing_form.cleaned_data['password1']
+                    )
+                    fb_session.user = new_patron
+                    fb_session.save()
+                else:
+                    new_patron = Patron.objects.create_inactive(
+                      missing_form.cleaned_data['username'],
+                      auth_form.cleaned_data['email'], 
+                      missing_form.cleaned_data['password1']
+                    )
                 if hasattr(settings, 'AFFILIATE_TAG'):
                     # Assign affiliate tag, no need to save, since missing_form should do it for us
                     new_patron.affiliate = settings.AFFILIATE_TAG
@@ -48,7 +61,14 @@ class ProductWizard(GenericFormWizard):
         
         if missing_form:
             missing_form.instance = new_patron
-            new_patron, new_address, new_phone = missing_form.save()
+            new_patron, new_address, new_phone, avatar = missing_form.save()
+            if not avatar and fb_session:
+                if 'picture' in self.me:
+                    from urllib2 import urlopen
+                    from django.core.files.uploadedfile import SimpleUploadedFile
+
+                    fb_image_object = urlopen(self.me['picture']).read()
+                    Avatar(patron=new_patron, image=SimpleUploadedFile('picture',fb_image_object)).save()
         # Create product
         product_form = form_list[0]
         product_form.instance.owner = new_patron
@@ -71,17 +91,31 @@ class ProductWizard(GenericFormWizard):
         return redirect_to(request, product.get_absolute_url(), permanent=False)
     
     def get_form(self, step, data=None, files=None):
-        if issubclass(self.form_list[step], ProductForm):
+        next_form = self.form_list[step]
+        if issubclass(next_form, ProductForm):
             if files and '0-picture' in files:  # Hack to get image working
                 data['0-picture_id'] = Picture.objects.create(image=files['0-picture']).id
                 del files['0-picture']
-            return self.form_list[step](data, files, prefix=self.prefix_for_step(step),
+            return next_form(data, files, prefix=self.prefix_for_step(step),
                 initial=self.initial.get(step, None), instance=Product(quantity=1, deposit_amount=0))
-        if not issubclass(self.form_list[step], (ProductForm, EmailAuthenticationForm)):
+        elif next_form.__name__ == 'MissingInformationForm':
+            #if not issubclass(next_form, (ProductForm, EmailAuthenticationForm)):
             initial = {
                 'addresses__country': settings.LANGUAGE_CODE.split('-')[1].upper(),
+                'first_name': self.me.get('first_name', '') if self.me else '',
+                'last_name': self.me.get('last_name', '') if self.me else '',
+                'username': self.me.get('username', '') if self.me else '',
             }
-            return self.form_list[step](data, files, prefix=self.prefix_for_step(step),
+            if self.me and 'location' in self.me:
+                try:
+                    city, country = GoogleGeocoder().getCityCountry(self.me['location']['name'])
+                except (KeyError, IndexError):
+                    pass
+                else:
+                    initial['addresses__country'] = country
+                    initial['addresses__city'] = city
+            
+            return next_form(data, files, prefix=self.prefix_for_step(step),
                 initial=initial)
         return super(ProductWizard, self).get_form(step, data, files)
     
@@ -122,8 +156,21 @@ class MessageWizard(GenericFormWizard):
             auth_form = next((form for form in form_list if isinstance(form, EmailAuthenticationForm)), None)
             new_patron = auth_form.get_user()
             if not new_patron:
-                new_patron = Patron.objects.create_inactive(missing_form.cleaned_data['username'],
-                    auth_form.cleaned_data['email'], missing_form.cleaned_data['password1'])
+                fb_session = auth_form.fb_session
+                if fb_session:
+                    new_patron = Patron.objects.create_user(
+                      missing_form.cleaned_data['username'], 
+                      auth_form.cleaned_data['email'], 
+                      missing_form.cleaned_data['password1']
+                    )
+                    fb_session.user = new_patron
+                    fb_session.save()
+                else:
+                    new_patron = Patron.objects.create_inactive(
+                      missing_form.cleaned_data['username'],
+                      auth_form.cleaned_data['email'], 
+                      missing_form.cleaned_data['password1']
+                    )
                 if hasattr(settings, 'AFFILIATE_TAG'):
                     #Assign affiliate tag, no need to save, since missing_form should do it for us
                     new_patron.affiliate = settings.AFFILIATE_TAG
@@ -136,7 +183,7 @@ class MessageWizard(GenericFormWizard):
             new_patron = request.user
         if missing_form:
             missing_form.instance = new_patron
-            new_patron, new_address, new_phone = missing_form.save()
+            new_patron, new_address, new_phone, avatar = missing_form.save()
         # Create message
         product = self.extra_context["product"]
         recipient = self.extra_context["recipient"]
@@ -147,7 +194,18 @@ class MessageWizard(GenericFormWizard):
         message_form.save(product=product, sender=new_patron, recipient=recipient)
         messages.success(request, _(u"Votre message a bien été envoyé au propriétaire"))
         return redirect_to(request, product.get_absolute_url())
-
+    
+    def get_form(self, step, data=None, files=None):
+        next_form = self.form_list[step]
+        if next_form.__name__ == 'MissingInformationForm':
+            initial = {
+                'username': self.me.get('username', '') if self.me else '',
+            }
+            
+            return next_form(data, files, prefix=self.prefix_for_step(step),
+                initial=initial)
+        return super(MessageWizard, self).get_form(step, data, files)
+    
     def get_template(self, step):
         if issubclass(self.form_list[step], EmailAuthenticationForm):
             return 'django_messages/message_register.html'

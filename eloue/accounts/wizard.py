@@ -10,24 +10,46 @@ from django_lean.experiments.models import GoalRecord
 from django_lean.experiments.utils import WebUser
 
 from eloue.accounts.forms import EmailAuthenticationForm, make_missing_data_form
-from eloue.accounts.models import Patron
+from eloue.accounts.models import Patron, Avatar
 from eloue.wizard import MultiPartFormWizard
 
+def isMissingInformationForm(obj):
+    return getattr(obj.__class__, '__name__', None) == 'MissingInformationForm'
 
 class AuthenticationWizard(MultiPartFormWizard):
     required_fields = ['username', 'password1', 'password2', 'is_professional', 'company_name', 'avatar']
     
+    def __init__(self, *args, **kwargs):
+        super(AuthenticationWizard, self).__init__(*args, **kwargs)
+        self.me = None
+    
     def done(self, request, form_list):
-        missing_form = next((form for form in form_list if getattr(form.__class__, '__name__', None) == 'MissingInformationForm'), None)
-        
+        missing_form = next((form for form in form_list if isMissingInformationForm(form)), None)
         auth_form = next((form for form in form_list if isinstance(form, EmailAuthenticationForm)), None)
+
         new_patron = auth_form.get_user()
+        fb_session = auth_form.fb_session
+
         if not new_patron:
-            new_patron = Patron.objects.create_inactive(missing_form.cleaned_data['username'],
-                auth_form.cleaned_data['email'], missing_form.cleaned_data['password1'])
+            if fb_session:
+                new_patron = Patron.objects.create_user(
+                  missing_form.cleaned_data['username'], 
+                  auth_form.cleaned_data['email'], 
+                  missing_form.cleaned_data['password1']
+                )
+                fb_session.user = new_patron
+                fb_session.save()
+            else:
+                new_patron = Patron.objects.create_inactive(
+                  missing_form.cleaned_data['username'],
+                  auth_form.cleaned_data['email'], 
+                  missing_form.cleaned_data['password1']
+                )
+            
             if hasattr(settings, 'AFFILIATE_TAG'):
                 # Assign affiliate tag, no need to save, since missing_form should do it for us
                 new_patron.affiliate = settings.AFFILIATE_TAG
+            
         if not hasattr(new_patron, 'backend'):
             from django.contrib.auth import load_backend
             backend = load_backend(settings.AUTHENTICATION_BACKENDS[0])
@@ -36,7 +58,14 @@ class AuthenticationWizard(MultiPartFormWizard):
         
         if missing_form:  # Okay, there's nothing missing here
             missing_form.instance = new_patron
-            new_patron, new_address, new_phone = missing_form.save()
+            new_patron, new_address, new_phone, avatar = missing_form.save()
+            if not avatar and fb_session:
+                if 'picture' in self.me:
+                    from urllib2 import urlopen
+                    from django.core.files.uploadedfile import SimpleUploadedFile
+
+                    fb_image_object = urlopen(self.me['picture']).read()
+                    Avatar(patron=new_patron, image=SimpleUploadedFile('picture',fb_image_object)).save()
         
         if request.user.is_active:
             GoalRecord.record('authentication', WebUser(request))
@@ -45,6 +74,17 @@ class AuthenticationWizard(MultiPartFormWizard):
             GoalRecord.record('registration', WebUser(request))
             messages.info(request, _(u"Bienvenue ! Nous vous avons envoyé un lien de validation par email. Cette validation est impérative pour terminer votre enregistrement."))
         return redirect_to(request, self.redirect_path, permanent=False)
+
+    def get_form(self, step, data=None, files=None):
+        next_form = self.form_list[step]
+        if next_form.__name__ == 'MissingInformationForm':            
+            return next_form(
+              data=data, 
+              files=files, 
+              prefix=self.prefix_for_step(step), 
+              initial={'username': self.me.get('username', '')}
+            )
+        return super(AuthenticationWizard, self).get_form(step, data=data, files=files)
     
     def parse_params(self, request, *args, **kwargs):
         redirect_path = request.REQUEST.get('next', '')

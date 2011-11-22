@@ -31,9 +31,9 @@
 </div>
 <div id="submit-wizard" class="x12">
     <p>
-        <input type="hidden" name="facebook_access_token" value="" />
-        <input type="hidden" name="facebook_expires" value="" />
-        <input type="hidden" name="facebook_uid" value="" />
+        {{ form.facebook_access_token }}
+        {{ form.facebook_expires }}
+        {{ form.facebook_uid }}
 	    <input type="hidden" name="{{ step_field }}" value="{{ step0 }}" />
     	{{ previous_fields|safe }}
     	<input type="submit" class="btn big-green" value="{% trans "Continuer &rarr;" %}" />

@@ -13,9 +13,16 @@ from django.utils.hashcompat import md5_constructor
 from django.views.decorators.csrf import csrf_protect
 
 from eloue.accounts.forms import EmailAuthenticationForm, make_missing_data_form
-
+from eloue.accounts.models import Patron
 
 class MultiPartFormWizard(FormWizard):
+    
+    def __init__(self, *args, **kwargs):
+        super(MultiPartFormWizard, self).__init__(*args, **kwargs)
+        self.fb_session = None
+        self.new_patron = None
+        self.me = None
+    
     def get_form(self, step, data=None, files=None):
         return self.form_list[step](data, files, prefix=self.prefix_for_step(step), initial=self.initial.get(step, None))
     
@@ -67,7 +74,12 @@ class MultiPartFormWizard(FormWizard):
             form = self.get_form(i, request.POST, request.FILES)
             if request.POST.get("hash_%d" % i, '') != self.security_hash(request, form):
                 return self.render_hash_failure(request, i)
-            self.process_step(request, form, i)
+            
+                                                                                # Hotfix for #14498
+            if not form.is_valid():                                             # for more details: 
+                return self.render_revalidation_failure(request, i, form)       # https://code.djangoproject.com/ticket/14498
+            else:                                                               #
+                self.process_step(request, form, i)
         
         # Process the current step. If it's valid, go to the next step or call
         # done(), depending on whether any steps remain.
@@ -99,6 +111,21 @@ class MultiPartFormWizard(FormWizard):
                 self.step = current_step = next_step
         return self.render(form, request, current_step)
     
+    def process_step(self, request, form, step):
+        super(MultiPartFormWizard, self).process_step(request, form, step)
+        if isinstance(form, EmailAuthenticationForm):
+            self.fb_session = form.fb_session
+            self.new_patron = form.get_user()
+            self.me = form.me
+
+    def render(self, form, request, step, context=None):
+        if form.__class__.__name__ == 'MissingInformationForm':
+            if self.fb_session:
+                if context==None:
+                    context={}
+                default_picture = settings.MEDIA_URL + 'images/default_avatar.png'
+                context['fb_image'] = self.me.get('picture', default_picture)
+        return super(MultiPartFormWizard, self).render(form, request, step, context)
 
 class GenericFormWizard(MultiPartFormWizard):
     """A not so generic form wizard"""
@@ -107,9 +134,16 @@ class GenericFormWizard(MultiPartFormWizard):
         'phones', 'phones__phone', 'addresses',
         'addresses__address1', 'addresses__zipcode', 'addresses__city', 'addresses__country', 'avatar'
     ]
-        
+
     def __call__(self, request, *args, **kwargs):
         if request.user.is_authenticated():  # When user is authenticated
+            self.patron = request.user
+            if not self.fb_session:
+                try:
+                    self.fb_session = self.patron.facebooksession
+                    self.me = self.fb_session.graph_api.get_object('me', fields='picture,email,first_name,last_name,gender,username,location')
+                except Patron.DoesNotExist:
+                    pass
             if EmailAuthenticationForm in self.form_list:
                 self.form_list.remove(EmailAuthenticationForm)
             if not any(map(lambda el: getattr(el, '__name__', None) == 'MissingInformationForm', self.form_list)):
