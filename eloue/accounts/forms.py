@@ -111,7 +111,7 @@ class EmailAuthenticationForm(forms.Form):
                 raise forms.ValidationError('Empty email') # TODO: more meaningful error message
             password = self.cleaned_data.get('password')
             exists = self.cleaned_data.get('exists')
-                        
+            
             if exists:
                 self.user_cache = authenticate(username=email, password=password)
                 if self.user_cache is None:
@@ -277,18 +277,39 @@ class PatronEditForm(forms.ModelForm):
         fields = ('civility', 'username', 'first_name', 'last_name',
             'email', 'paypal_email', 'is_professional', 'company_name', 'is_subscribed', 'new_messages_alerted')
 
-            
 
+class PatronSetPasswordForm(forms.Form):
+    """
+    A form that lets a user change set his/her password without
+    entering the old password
+    """
+    new_password1 = forms.CharField(label=_("New password"), widget=forms.PasswordInput(attrs={'class': 'inm'}))
+    new_password2 = forms.CharField(label=_("New password confirmation"), widget=forms.PasswordInput(attrs={'class': 'inm'}))
 
+    def __init__(self, user, *args, **kwargs):
+        self.user = user
+        super(PatronSetPasswordForm, self).__init__(*args, **kwargs)
+
+    def clean_new_password2(self):
+        password1 = self.cleaned_data.get('new_password1')
+        password2 = self.cleaned_data.get('new_password2')
+        if password1 and password2:
+            if password1 != password2:
+                raise forms.ValidationError(_("The two password fields didn't match."))
+        return password2
+
+    def save(self, commit=True):
+        self.user.set_password(self.cleaned_data['new_password1'])
+        if commit:
+            self.user.save()
+        return self.user
             
-class PatronPasswordChangeForm(PasswordChangeForm):
+class PatronPasswordChangeForm(PatronSetPasswordForm):
     """
     A form that lets a user change his/her password by entering
     their old password.
     """
     old_password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'inm'}))
-    new_password1 = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'inm'}))
-    new_password2 = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'inm'}))
     
     def clean_old_password(self):
         """
@@ -298,7 +319,7 @@ class PatronPasswordChangeForm(PasswordChangeForm):
         if not self.user.check_password(old_password):
             raise forms.ValidationError(_("Your old password was entered incorrectly. Please enter it again."))
         return old_password
-    PasswordChangeForm.base_fields.keyOrder = ['old_password', 'new_password1', 'new_password2']
+PatronPasswordChangeForm.base_fields.keyOrder = ['old_password', 'new_password1', 'new_password2']
     
 
 class PatronChangeForm(forms.ModelForm):
@@ -429,7 +450,6 @@ def make_missing_data_form(instance, required_fields=[]):
         avatar = None
         if hasattr(self, 'avatar') and self.avatar:
             avatar = Avatar.objects.create(image=self.avatar, patron=self.instance)
-            print avatar.created_at
         return self.instance, address, phone, avatar
     
     def clean_password2(self):

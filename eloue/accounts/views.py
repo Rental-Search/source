@@ -20,7 +20,7 @@ from django.contrib.auth import login
 from oauth_provider.models import Token
 
 from eloue.decorators import secure_required, mobify
-from eloue.accounts.forms import EmailAuthenticationForm, PatronEditForm, PatronPaypalForm, PatronPasswordChangeForm, ContactForm
+from eloue.accounts.forms import EmailAuthenticationForm, PatronEditForm, PatronPaypalForm, PatronPasswordChangeForm, ContactForm, PatronSetPasswordForm
 from eloue.accounts.models import Patron
 from eloue.accounts.wizard import AuthenticationWizard
 
@@ -113,7 +113,11 @@ def patron_edit(request, *args, **kwargs):
 
 @login_required
 def patron_edit_password(request):
-    form = PatronPasswordChangeForm(request.user, request.POST or None)
+    
+    form = PatronPasswordChangeForm(request.user, request.POST or None) \
+      if request.user.has_usable_password() \
+      else PatronSetPasswordForm(request.user, request.POST or None) 
+    
     if form.is_valid():
         form.save()
         messages.success(request, _(u"Votre mot de passe à bien été modifié"))

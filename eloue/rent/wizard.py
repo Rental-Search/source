@@ -21,12 +21,12 @@ from eloue.products.forms import FacetedSearchForm
 from eloue.products.models import Product, PAYMENT_TYPE
 from eloue.rent.models import Booking
 from eloue.rent.forms import BookingForm, BookingConfirmationForm
-from eloue.wizard import GenericFormWizard
+from eloue.wizard import GenericFormWizard, NewGenericFormWizard
 
 USE_HTTPS = getattr(settings, 'USE_HTTPS', True)
 
 
-class BookingWizard(GenericFormWizard):
+class BookingWizard(NewGenericFormWizard):
     
     required_fields = [
         'username', 'password1', 'password2', 'is_professional', 'company_name', 'first_name', 'last_name',
@@ -35,52 +35,17 @@ class BookingWizard(GenericFormWizard):
     ]
 
     def done(self, request, form_list):
-        missing_form = next((form for form in form_list if getattr(form.__class__, '__name__', None) == 'MissingInformationForm'), None)
-        
-        if request.user.is_anonymous():  # Create new Patron
-            auth_form = next((form for form in form_list if isinstance(form, EmailAuthenticationForm)), None)
-            new_patron = auth_form.get_user()
-            if not new_patron:
-                fb_session = auth_form.fb_session
-                if fb_session:
-                    new_patron = Patron.objects.create_user(
-                      missing_form.cleaned_data['username'], 
-                      auth_form.cleaned_data['email'], 
-                      missing_form.cleaned_data['password1']
-                    )
-                    fb_session.user = new_patron
-                    fb_session.save()
-                else:
-                    new_patron = Patron.objects.create_inactive(
-                      missing_form.cleaned_data['username'],
-                      auth_form.cleaned_data['email'], 
-                      missing_form.cleaned_data['password1']
-                    )
-                if hasattr(settings, 'AFFILIATE_TAG'):
-                    # Assign affiliate tag, no need to save, since missing_form should do it for us
-                    new_patron.affiliate = settings.AFFILIATE_TAG
-            if not hasattr(new_patron, 'backend'):
-                from django.contrib.auth import load_backend
-                backend = load_backend(settings.AUTHENTICATION_BACKENDS[0])
-                new_patron.backend = "%s.%s" % (backend.__module__, backend.__class__.__name__)
-            login(request, new_patron)
-        else:
-            new_patron = request.user
-        
-        if missing_form:
-            missing_form.instance = new_patron
-            new_patron, new_address, new_phone, avatar = missing_form.save()
-        
+        super(BookingWizard, self).done(request, form_list)
         booking_form = form_list[0]
         
-        if new_patron == booking_form.instance.product.owner:
+        if self.new_patron == booking_form.instance.product.owner:
             messages.error(request, _(u"Vous ne pouvez pas louer vos propres objets"))
             return redirect_to(request, booking_form.instance.product.get_absolute_url())
         
         booking_form.instance.ip = request.META.get('REMOTE_ADDR', None)
         booking_form.instance.total_amount = Booking.calculate_price(booking_form.instance.product,
             booking_form.cleaned_data['started_at'], booking_form.cleaned_data['ended_at'])[1]
-        booking_form.instance.borrower = new_patron
+        booking_form.instance.borrower = self.new_patron
         payment_type = booking_form.instance.product.payment_type
         booking = booking_form.save()
         booking.init_payment_processor()
@@ -121,26 +86,6 @@ class BookingWizard(GenericFormWizard):
             initial.update(self.initial.get(step, {}))
             return next_form(data, files, prefix=self.prefix_for_step(step),
                 initial=initial, instance=booking)
-        elif next_form.__name__ == 'MissingInformationForm':
-        #if not issubclass(self.form_list[step], (BookingForm, EmailAuthenticationForm, BookingConfirmationForm)):
-            initial = {
-                'addresses__country': settings.LANGUAGE_CODE.split('-')[1].upper(),
-                'first_name': self.me.get('first_name', '') if self.me else '',
-                'last_name': self.me.get('last_name', '') if self.me else '',
-                'username': self.me.get('username', '') if self.me else '',
-            }
-            if self.me and 'location' in self.me:
-                try:
-                    city, country = GoogleGeocoder().getCityCountry(self.me['location']['name'])
-                except (KeyError, IndexError):
-                    pass
-                else:
-                    initial['addresses__country'] = country
-                    initial['addresses__city'] = city
-
-            return next_form(data, files, prefix=self.prefix_for_step(step),
-                initial=initial)
-            
         return super(BookingWizard, self).get_form(step, data, files)
     
     def process_step(self, request, form, step):
