@@ -4,17 +4,20 @@ try:
 except ImportError:
     import pickle
 
+from urllib2 import urlopen
+
 import django.forms as forms
 from django.conf import settings
 from django.contrib.formtools.wizard import FormWizard
 from django.contrib.auth import login, authenticate
+from django.core.files.uploadedfile import SimpleUploadedFile
 from django.http import Http404
 from django.utils.decorators import method_decorator
 from django.utils.hashcompat import md5_constructor
 from django.views.decorators.csrf import csrf_protect
 
 from eloue.accounts.forms import EmailAuthenticationForm, make_missing_data_form
-from eloue.accounts.models import Patron, Avatar
+from eloue.accounts.models import Patron, Avatar, FacebookSession
 from eloue.geocoder import GoogleGeocoder
 
 class MultiPartFormWizard(FormWizard):
@@ -66,7 +69,7 @@ class MultiPartFormWizard(FormWizard):
             self.extra_context.update(kwargs['extra_context'])
         current_step = self.determine_step(request, *args, **kwargs)
         self.parse_params(request, *args, **kwargs)
-        
+
         # Sanity check.
         if current_step >= self.num_steps():
             raise Http404('Step %s does not exist' % current_step)
@@ -153,9 +156,9 @@ class NewGenericFormWizard(MultiPartFormWizard):
                 try:
                     self.fb_session = self.patron.facebooksession
                     self.me = self.fb_session.graph_api.get_object('me', fields='picture,email,first_name,last_name,gender,username,location')
-                except Patron.DoesNotExist:
+                except FacebookSession.DoesNotExist:
                     pass
-            if EmailAuthenticationForm in self.form_list:
+            if EmailAuthenticationForm in self.form_list and len(self.form_list) > 1:
                 self.form_list.remove(EmailAuthenticationForm)
             if not any(map(lambda el: getattr(el, '__name__', None) == 'MissingInformationForm', self.form_list)):
                 missing_fields, missing_form = make_missing_data_form(request.user, self.required_fields)
@@ -187,7 +190,6 @@ class NewGenericFormWizard(MultiPartFormWizard):
                       auth_form.cleaned_data['email'], 
                       Patron.objects.make_random_password()
                     )
-
                     self.new_patron.set_unusable_password()
                     self.new_patron.save()
 
@@ -217,9 +219,7 @@ class NewGenericFormWizard(MultiPartFormWizard):
                 try:
                     self.new_patron.avatar
                 except Avatar.DoesNotExist:
-                    if 'picture' in self.me:
-                        from urllib2 import urlopen
-                        from django.core.files.uploadedfile import SimpleUploadedFile
+                    if 'picture' in self.me and 'static-ak' not in self.me['picture']:
 
                         fb_image_object = urlopen(self.me['picture']).read()
                         Avatar(patron=self.new_patron, image=SimpleUploadedFile('picture',fb_image_object)).save()

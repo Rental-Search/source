@@ -41,7 +41,6 @@ class AccountWizardTest(TestCase):
             'wizard_step': 0
         })
         self.assertRedirects(response, reverse('auth_login'), status_code=302)
-        
         scheme, netloc, path, query, fragment = urlsplit(response['Location'])
         redirect_response = response.client.get(path, QueryDict(query))
         self.assertTrue(redirect_response.context['user'].is_authenticated())

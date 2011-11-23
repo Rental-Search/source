@@ -134,7 +134,7 @@ class AlertWizard(GenericFormWizard):
 
         if missing_form:
             missing_form.instance = new_patron
-            new_patron, new_address, new_phone = missing_form.save()
+            new_patron, new_address, new_phone, avatar = missing_form.save()
         # Create and send alerts
         alert_form = form_list[0]
         alert_form.instance.patron = new_patron
@@ -177,7 +177,7 @@ class AlertAnswerWizard(GenericFormWizard):
 
         if missing_form:
             missing_form.instance = new_patron
-            new_patron, new_address, new_phone = missing_form.save()
+            new_patron, new_address, new_phone, avatar = missing_form.save()
 
         # Create product
         product_form = form_list[0]

@@ -97,6 +97,12 @@ class EmailAuthenticationForm(forms.Form):
                     self.user_cache = self.fb_session.user
                 else:
                     self.cleaned_data['email'] = self.me['email']
+                    try:
+                        self.user_cache = Patron.objects.get(email=self.me['email'])
+                    except Patron.DoesNotExist:
+                        pass
+                    else:
+                        self.fb_session.user = self.user_cache
                 self.fb_session.access_token = facebook_access_token
                 self.fb_session.expires = datetime.datetime.now() + datetime.timedelta(seconds=facebook_expires)
                 self.fb_session.save()
