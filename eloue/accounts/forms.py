@@ -91,26 +91,27 @@ class EmailAuthenticationForm(forms.Form):
                 'access_token': facebook_access_token, 
                 'expires': datetime.datetime.now() + datetime.timedelta(seconds=facebook_expires)
             })
+
+            self.cleaned_data['email'] = self.me['email']
             
             if not created:
-                if self.fb_session.user:
-                    self.user_cache = self.fb_session.user
-                else:
-                    self.cleaned_data['email'] = self.me['email']
-                    try:
-                        self.user_cache = Patron.objects.get(email=self.me['email'])
-                    except Patron.DoesNotExist:
-                        pass
-                    else:
-                        self.fb_session.user = self.user_cache
+                # if already existed because of registered user or started facebook registration process,
+                # we refresh login information
                 self.fb_session.access_token = facebook_access_token
                 self.fb_session.expires = datetime.datetime.now() + datetime.timedelta(seconds=facebook_expires)
                 self.fb_session.save()
-            else:
-                self.cleaned_data['email'] = self.me['email']
             
-        else:
+            if self.fb_session.user:
+                self.user_cache = self.fb_session.user
+            else:
+                try:
+                    self.user_cache = Patron.objects.get(email=self.me['email'])
+                    self.fb_session.user = self.user_cache
+                    self.fb_session.save()
+                except Patron.DoesNotExist:
+                    pass
 
+        else:
             email = self.cleaned_data.get('email')
             
             if email is None or email == u'':

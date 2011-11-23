@@ -35,7 +35,7 @@ class AuthenticationWizard(NewGenericFormWizard):
             self.redirect_path = settings.LOGIN_REDIRECT_URL
         else:
             self.redirect_path = redirect_path
-    
+        
     def get_template(self, step):
         if issubclass(self.form_list[step], EmailAuthenticationForm):
             return 'accounts/auth_login.html'
