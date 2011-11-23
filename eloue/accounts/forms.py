@@ -515,11 +515,3 @@ class ContactForm(forms.Form):
         'autocapitalize': 'off', 'autocorrect': 'off', 'class': 'inm'
     }))
     cc_myself = forms.BooleanField(label=_(u"Je souhaite recevoir une copie de ce message."), required=False)
-
-
-class PatronSetPasswordForm(SetPasswordForm):
-    def __init__(self, user, *args, **kwargs):
-        super(PatronSetPasswordForm, self).__init__(user, *args, **kwargs)
-        self.fields['new_password1'].widget.attrs['class'] = 'inm'
-        self.fields['new_password2'].widget.attrs['class'] = 'inm'
-    
