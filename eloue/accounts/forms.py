@@ -97,8 +97,8 @@ class EmailAuthenticationForm(forms.Form):
                     self.user_cache = self.fb_session.user
                 else:
                     self.cleaned_data['email'] = self.me['email']
-                self.fb_session.access_token=facebook_access_token
-                self.fb_session.expires=datetime.datetime.now() + datetime.timedelta(seconds=facebook_expires)
+                self.fb_session.access_token = facebook_access_token
+                self.fb_session.expires = datetime.datetime.now() + datetime.timedelta(seconds=facebook_expires)
                 self.fb_session.save()
             else:
                 self.cleaned_data['email'] = self.me['email']
@@ -515,11 +515,3 @@ class ContactForm(forms.Form):
         'autocapitalize': 'off', 'autocorrect': 'off', 'class': 'inm'
     }))
     cc_myself = forms.BooleanField(label=_(u"Je souhaite recevoir une copie de ce message."), required=False)
-
-
-class PatronSetPasswordForm(SetPasswordForm):
-    def __init__(self, user, *args, **kwargs):
-        super(PatronSetPasswordForm, self).__init__(user, *args, **kwargs)
-        self.fields['new_password1'].widget.attrs['class'] = 'inm'
-        self.fields['new_password2'].widget.attrs['class'] = 'inm'
-    
