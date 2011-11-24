@@ -18,6 +18,7 @@ from django.core.context_processors import csrf
 from django.http import HttpResponse
 from django.contrib.auth import login
 from oauth_provider.models import Token
+from django.shortcuts import redirect
 
 from eloue.decorators import secure_required, mobify
 from eloue.accounts.forms import EmailAuthenticationForm, PatronEditForm, PatronPaypalForm, PatronPasswordChangeForm, ContactForm, PatronSetPasswordForm
@@ -48,8 +49,11 @@ def activate(request, activation_key):
 @never_cache
 @secure_required
 def authenticate(request, *args, **kwargs):
-    wizard = AuthenticationWizard([EmailAuthenticationForm])
-    return wizard(request, *args, **kwargs)
+    if request.user.is_anonymous():
+        wizard = AuthenticationWizard([EmailAuthenticationForm])
+        return wizard(request, *args, **kwargs)
+    else:
+        return redirect(settings.LOGIN_REDIRECT_URL)
 
 
 @never_cache

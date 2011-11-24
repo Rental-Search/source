@@ -40,11 +40,14 @@ class AccountWizardTest(TestCase):
             '0-exists': 1,
             '0-password': 'alexandre',
             'wizard_step': 0
-        })
-        self.assertRedirects(response, reverse('auth_login'), status_code=302)
+            })
+        self.assertRedirects(response, reverse('auth_login'), target_status_code=302)
         scheme, netloc, path, query, fragment = urlsplit(response['Location'])
         redirect_response = response.client.get(path, QueryDict(query))
-        self.assertTrue(redirect_response.context['user'].is_authenticated())
+        self.assertRedirects(redirect_response, settings.LOGIN_REDIRECT_URL)
+        scheme, netloc, path, query, fragment = urlsplit(redirect_response['Location'])
+        third_response = response.client.get(path, QueryDict(query))
+        self.assertTrue(third_response.context['user'].is_authenticated())
     
     def test_first_step_with_inactive_account(self):
         response = self.client.post(reverse('auth_login'), {
@@ -163,13 +166,14 @@ class FacebookAccountWizardTest(TestCase):
     1, AAAC0EJC00lQBAOf7XANWgcw2UzKdLn5q13bUp07KRPy8MntAdsPzJsnFOiCu7ZCegQIX46eu7OAjXp3sFucTCRKYGH42OW9ywcissIAZDZD, 100003207275288
         fb username: balazs.kossovics@e-loue.com, fb pw: fedcba
         already associated with the e-loue user kosii
-    2, AAAC0EJC00lQBAOf7XANWgcw2UzKdLn5q13bUp07KRPy8MntAdsPzJsnFOiCu7ZCegQIX46eu7OAjXp3sFucTCRKYGH42OW9ywcissIAZDZD, 100000609837182
+    2, AAAC0EJC00lQBAGnc6FW8QlB5tz4ppuSXeR0FQ8kdCagwHwRraHDBI4HE7eigTprugjh0uGPu4h2FG2VEaRO8RxRcm8ObicNyZB21JGgZDZD, 100000609837182
         fb username: kosii.spam@gmail.com, fb pw: fedcba
         used for new user creation on e-loue
 
     3, AAAC0EJC00lQBAFeztcpDKBgyFDRm9kIiaSe7amtYzcw2MLiSdfEeh9ftpZAFzYUT0zwIqXCnBEYe95I1cnMX8dZCQ2Dw10qJlhJRgYxgZDZD, 100003190074813
         fb username: elouetest@gmail.com, pw: ElOuTeSt (same for gmail authentication + gmail secret answer: 'The probabilistic method'
-        user for new user creation on e-loue when the registration process was started once
+        user for new user creation on e-loue when the registration process was started once,
+        and we have a user with the same address, so they will be associated
     """
 
     fixtures = ['patron', 'facebooksession']
@@ -193,22 +197,6 @@ class FacebookAccountWizardTest(TestCase):
         scheme, netloc, path, query, fragment = urlsplit(response['Location'])
         redirect_response = response.client.get(path, QueryDict(query))
         self.assertTrue(redirect_response.context['user'].is_authenticated())
-    
-    def test_first_step_with_existing_account_with_exist0(self):
-        response = self.client.post(reverse('auth_login'), {
-            '0-email': '',
-            '0-exists': 0,
-            '0-password': '',
-            'wizard_step': 0,
-            '0-facebook_access_token': 'AAAC0EJC00lQBAOf7XANWgcw2UzKdLn5q13bUp07KRPy8MntAdsPzJsnFOiCu7ZCegQIX46eu7OAjXp3sFucTCRKYGH42OW9ywcissIAZDZD',
-            '0-facebook_expires': '0',
-            '0-facebook_uid': '100003207275288'
-        })
-        self.assertRedirects(response, settings.LOGIN_REDIRECT_URL, status_code=302)
-        
-        scheme, netloc, path, query, fragment = urlsplit(response['Location'])
-        redirect_response = response.client.get(path, QueryDict(query))
-        self.assertTrue(redirect_response.context['user'].is_authenticated())
 
     def test_first_step_with_redirect(self):
         args = urlencode({'next': reverse('auth_login')})
@@ -221,10 +209,13 @@ class FacebookAccountWizardTest(TestCase):
             '0-facebook_expires': '0',
             '0-facebook_uid': '100003207275288'
         })
-        self.assertRedirects(response, reverse('auth_login'), status_code=302)
+        self.assertRedirects(response, reverse('auth_login'), target_status_code=302)
         scheme, netloc, path, query, fragment = urlsplit(response['Location'])
         redirect_response = response.client.get(path, QueryDict(query))
-        self.assertTrue(redirect_response.context['user'].is_authenticated())
+        self.assertRedirects(redirect_response, settings.LOGIN_REDIRECT_URL)
+        scheme, netloc, path, query, fragment = urlsplit(redirect_response['Location'])
+        third_response = response.client.get(path, QueryDict(query))
+        self.assertTrue(third_response.context['user'].is_authenticated())
     
     def test_first_step_without_account(self):
         response = self.client.post(reverse('auth_login'), {
@@ -313,6 +304,7 @@ class FacebookAccountWizardTest(TestCase):
     def test_first_step_with_existing_facebooksession(self):
         access_token = 'AAAC0EJC00lQBAFeztcpDKBgyFDRm9kIiaSe7amtYzcw2MLiSdfEeh9ftpZAFzYUT0zwIqXCnBEYe95I1cnMX8dZCQ2Dw10qJlhJRgYxgZDZD'
         self.assertEqual(FacebookSession.objects.get(access_token=access_token).user, None)
+        Patron.objects.get(username='kosii1')
         response =  self.client.post(reverse('auth_login'), {
             '0-email': '',
             '0-exists': 0,

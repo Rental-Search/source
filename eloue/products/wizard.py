@@ -20,7 +20,7 @@ from eloue.products.models import Product, Picture, UNIT, Alert
 from eloue.wizard import GenericFormWizard, NewGenericFormWizard
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_protect
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, redirect
 from django.contrib import messages
 from django.utils.translation import ugettext as _
 from django.views.generic.simple import direct_to_template, redirect_to
@@ -77,17 +77,6 @@ class MessageWizard(NewGenericFormWizard):
         recipient = get_object_or_404(Patron, pk=recipient_id)
         self.extra_context.update({'product': product})
         self.extra_context.update({'recipient': recipient})
-        if request.user.is_authenticated():
-            return super(MessageWizard, self).__call__(request, *args, **kwargs)
-        if EmailAuthenticationForm not in self.form_list:
-            self.form_list.append(EmailAuthenticationForm)
-        if EmailAuthenticationForm in self.form_list:
-            if not next((form for form in self.form_list if getattr(form, '__name__', None) == 'MissingInformationForm'), None):
-                form = self.get_form(self.form_list.index(EmailAuthenticationForm), request.POST, request.FILES)
-                form.is_valid()
-                missing_fields, missing_form = make_missing_data_form(form.get_user(), self.required_fields)
-                if missing_fields:
-                    self.form_list.append(missing_form)
         return super(MessageWizard, self).__call__(request, *args, **kwargs)
         
     def done(self, request, form_list):
@@ -101,7 +90,7 @@ class MessageWizard(NewGenericFormWizard):
         message_form = form_list[0]
         message_form.save(product=product, sender=self.new_patron, recipient=recipient)
         messages.success(request, _(u"Votre message a bien été envoyé au propriétaire"))
-        return redirect_to(request, product.get_absolute_url())
+        return redirect(product.get_absolute_url())
     
     def get_template(self, step):
         if issubclass(self.form_list[step], EmailAuthenticationForm):

@@ -187,12 +187,8 @@ class NewGenericFormWizard(MultiPartFormWizard):
                 if self.fb_session:
                     self.new_patron = Patron.objects.create_user(
                       missing_form.cleaned_data['username'], 
-                      auth_form.cleaned_data['email'], 
-                      Patron.objects.make_random_password()
+                      auth_form.cleaned_data['email']
                     )
-                    self.new_patron.set_unusable_password()
-                    self.new_patron.save()
-
                     self.fb_session.user = self.new_patron
                     self.fb_session.save()
                 else:
@@ -220,7 +216,6 @@ class NewGenericFormWizard(MultiPartFormWizard):
                     self.new_patron.avatar
                 except Avatar.DoesNotExist:
                     if 'picture' in self.me and 'static-ak' not in self.me['picture']:
-
                         fb_image_object = urlopen(self.me['picture']).read()
                         Avatar(patron=self.new_patron, image=SimpleUploadedFile('picture',fb_image_object)).save()
         
