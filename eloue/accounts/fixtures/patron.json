@@ -150,10 +150,41 @@
             "modified_at": "2011-08-17 09:00:10",
             "groups": [],
             "user_permissions": [],
-            "paypal_email": "eloue_1878761216_per@tryphon.org",
             "slug": "kosii"
         },
         "model": "accounts.patron",
         "pk": 5
+    },
+
+    {
+        "fields": {
+            "username": "kosii1",
+            "first_name": "Balazs",
+            "last_name": "Kossovics",
+            "is_active": true,
+            "is_superuser": false,
+            "is_staff": false,
+            "last_login": "2011-08-18 15:35:00",
+            "groups": [],
+            "user_permissions": [],
+            "password": "!",
+            "email": "elouetest@gmail.com",
+            "date_joined": "2011-03-17 09:00:10"
+        },
+        "model": "auth.user",
+        "pk": 6
+    },
+    {
+        "fields": {
+            "activation_key": null,
+            "is_professional": false,
+            "civility": 2,
+            "modified_at": "2011-08-17 09:00:10",
+            "groups": [],
+            "user_permissions": [],
+            "slug": "kosii1"
+        },
+        "model": "accounts.patron",
+        "pk": 6
     }
 ]

@@ -83,7 +83,7 @@ class EmailAuthenticationForm(forms.Form):
                 raise forms.ValidationError(str(e))
             
             if self.me.get('id', None) != facebook_uid:
-                raise forms.ValidationError
+                raise forms.ValidationError(_(u'Wrong facebook uid.'))
             
             self.fb_session, created = FacebookSession.objects.get_or_create(
               uid=facebook_uid,

@@ -13,9 +13,6 @@ from eloue.accounts.forms import EmailAuthenticationForm, make_missing_data_form
 from eloue.accounts.models import Patron, Avatar
 from eloue.wizard import MultiPartFormWizard, NewGenericFormWizard
 
-def isMissingInformationForm(obj):
-    return getattr(obj.__class__, '__name__', None) == 'MissingInformationForm'
-
 class AuthenticationWizard(NewGenericFormWizard):
     required_fields = ['username', 'password1', 'password2', 'is_professional', 'company_name', 'avatar']
     
