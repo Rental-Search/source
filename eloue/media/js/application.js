@@ -347,7 +347,10 @@ $(document).ready(function() {
              $('input[name$="facebook_expires"]').val(response.authResponse.expiresIn);
              $('input[name$="facebook_uid"]').val(response.authResponse.userID);
            }
-           //$('form').submit();
+           $('form').submit();
+           $('input[type="submit"]').attr('disabled','disabled');
+           $('#fbconnect').remove();
+           $('.fbconnect-content span').html('Connexion en cours...');
          }, {scope: 'email,user_location,offline_access'});
     });
     

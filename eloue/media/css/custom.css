@@ -1384,7 +1384,8 @@ input.price { color: #000; }
 }
   
 .fbconnect-content {
-  margin-top: 80px;
+  background: transparent url("../images/waiting.gif") no-repeat 100px 5px;
+  margin-top: 95px;
   margin-left: 85px;
 }
   .fbconnect-content span {
