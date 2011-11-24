@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
 import types
 import re
+import datetime
 
 import django.forms as forms
 from django.conf import settings
-from django.contrib.auth import authenticate
+from django.contrib.auth import authenticate, login
 from django.contrib.sites.models import Site
 from django.contrib.auth.forms import PasswordResetForm, PasswordChangeForm, SetPasswordForm
 from django.contrib.auth.tokens import default_token_generator
@@ -14,15 +15,18 @@ from django.template.loader import render_to_string
 from django.utils.datastructures import SortedDict
 from django.utils.http import int_to_base36
 from django.utils.translation import ugettext as _
+from django.dispatch import dispatcher
+from django.utils.safestring import mark_safe
+
+import facebook
 
 from eloue.accounts import EMAIL_BLACKLIST
 from eloue.accounts.fields import PhoneNumberField
-from eloue.accounts.models import Patron, Avatar, PhoneNumber, COUNTRY_CHOICES, PatronAccepted
+from eloue.accounts.models import Patron, Avatar, PhoneNumber, COUNTRY_CHOICES, PatronAccepted, FacebookSession
 from eloue.accounts.widgets import ParagraphRadioFieldRenderer
 from eloue.utils import form_errors_append
 from eloue.payments import paypal_payment
-from django.dispatch import dispatcher
-from django.utils.safestring import mark_safe
+
 
 STATE_CHOICES = (
     (0, _(u"Je n'ai pas encore de compte")),
@@ -37,13 +41,21 @@ PAYPAL_ACCOUNT_CHOICES = (
 class EmailAuthenticationForm(forms.Form):
     """Displays the login form and handles the login action."""
     exists = forms.TypedChoiceField(required=True, coerce=int, choices=STATE_CHOICES, widget=forms.RadioSelect(renderer=ParagraphRadioFieldRenderer), initial=1)
-    email = forms.EmailField(label=_(u"Email"), max_length=75, required=True, widget=forms.TextInput(attrs={
+    email = forms.EmailField(label=_(u"Email"), max_length=75, required=False, widget=forms.TextInput(attrs={
         'autocapitalize': 'off', 'autocorrect': 'off', 'class': 'inm', 'tabindex': '1'
     }))
     password = forms.CharField(label=_(u"Password"), widget=forms.PasswordInput(attrs={'class': 'inm', 'tabindex': '2'}), required=False)
     
+    # for facebook connect
+    facebook_access_token = forms.CharField(required=False, widget=forms.HiddenInput())
+    facebook_expires = forms.IntegerField(required=False, widget=forms.HiddenInput())
+    facebook_uid = forms.CharField(required=False, widget=forms.HiddenInput())
+
+
     def __init__(self, *args, **kwargs):
         self.user_cache = None
+        self.fb_session = None
+        self.me = None
         super(EmailAuthenticationForm, self).__init__(*args, **kwargs)
     
     def clean_email(self):
@@ -52,24 +64,68 @@ class EmailAuthenticationForm(forms.Form):
         for rule in EMAIL_BLACKLIST:
             if re.search(rule, email):
                 raise forms.ValidationError(_(u"Pour garantir un service de qualité et la sécurité des utilisateurs de e-loue.com, vous ne pouvez pas vous enregistrer avec une adresse email jetable."))
-    
+        
         if not exists and Patron.objects.filter(email=email).exists():
             raise forms.ValidationError(_(u"Un compte existe déjà pour cet email"))
-                
+        
         return email
-    
+
     def clean(self):
-        email = self.cleaned_data.get('email')
-        password = self.cleaned_data.get('password')
-        exists = self.cleaned_data.get('exists')
-        
-        if exists:
-            self.user_cache = authenticate(username=email, password=password)
-            if self.user_cache is None:
-                raise forms.ValidationError(_(u"Veuillez saisir une adresse email et un mot de passe valide."))
-            elif not self.user_cache.is_active:
-                raise forms.ValidationError(_(u"Ce compte est inactif parce qu'il n'a pas été activé."))
-        
+
+        facebook_access_token = self.cleaned_data.get('facebook_access_token')
+        facebook_expires = self.cleaned_data.get('facebook_expires')
+        facebook_uid = self.cleaned_data.get('facebook_uid')
+
+        if any([facebook_access_token, facebook_expires, facebook_uid]):
+            try:
+                self.me = facebook.GraphAPI(facebook_access_token).get_object('me', fields='picture,email,first_name,last_name,gender,username,location')
+            except facebook.GraphAPIError as e:
+                raise forms.ValidationError(str(e))
+            
+            if self.me.get('id', None) != facebook_uid:
+                raise forms.ValidationError(_(u'Wrong facebook uid.'))
+            
+            self.fb_session, created = FacebookSession.objects.get_or_create(
+              uid=facebook_uid,
+              defaults={
+                'access_token': facebook_access_token, 
+                'expires': datetime.datetime.now() + datetime.timedelta(seconds=facebook_expires)
+            })
+
+            self.cleaned_data['email'] = self.me['email']
+            
+            if not created:
+                # if already existed because of registered user or started facebook registration process,
+                # we refresh login information
+                self.fb_session.access_token = facebook_access_token
+                self.fb_session.expires = datetime.datetime.now() + datetime.timedelta(seconds=facebook_expires)
+                self.fb_session.save()
+            
+            if self.fb_session.user:
+                self.user_cache = self.fb_session.user
+            else:
+                try:
+                    self.user_cache = Patron.objects.get(email=self.me['email'])
+                    self.fb_session.user = self.user_cache
+                    self.fb_session.save()
+                except Patron.DoesNotExist:
+                    pass
+
+        else:
+            email = self.cleaned_data.get('email')
+            
+            if email is None or email == u'':
+                raise forms.ValidationError('Empty email') # TODO: more meaningful error message
+            password = self.cleaned_data.get('password')
+            exists = self.cleaned_data.get('exists')
+            
+            if exists:
+                self.user_cache = authenticate(username=email, password=password)
+                if self.user_cache is None:
+                    raise forms.ValidationError(_(u"Veuillez saisir une adresse email et un mot de passe valide."))
+                elif not self.user_cache.is_active:
+                    raise forms.ValidationError(_(u"Ce compte est inactif parce qu'il n'a pas été activé."))
+            
         return self.cleaned_data
     
     def get_user_id(self):
@@ -228,18 +284,39 @@ class PatronEditForm(forms.ModelForm):
         fields = ('civility', 'username', 'first_name', 'last_name',
             'email', 'paypal_email', 'is_professional', 'company_name', 'is_subscribed', 'new_messages_alerted')
 
-            
 
+class PatronSetPasswordForm(forms.Form):
+    """
+    A form that lets a user change set his/her password without
+    entering the old password
+    """
+    new_password1 = forms.CharField(label=_("New password"), widget=forms.PasswordInput(attrs={'class': 'inm'}))
+    new_password2 = forms.CharField(label=_("New password confirmation"), widget=forms.PasswordInput(attrs={'class': 'inm'}))
 
+    def __init__(self, user, *args, **kwargs):
+        self.user = user
+        super(PatronSetPasswordForm, self).__init__(*args, **kwargs)
+
+    def clean_new_password2(self):
+        password1 = self.cleaned_data.get('new_password1')
+        password2 = self.cleaned_data.get('new_password2')
+        if password1 and password2:
+            if password1 != password2:
+                raise forms.ValidationError(_("The two password fields didn't match."))
+        return password2
+
+    def save(self, commit=True):
+        self.user.set_password(self.cleaned_data['new_password1'])
+        if commit:
+            self.user.save()
+        return self.user
             
-class PatronPasswordChangeForm(PasswordChangeForm):
+class PatronPasswordChangeForm(PatronSetPasswordForm):
     """
     A form that lets a user change his/her password by entering
     their old password.
     """
     old_password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'inm'}))
-    new_password1 = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'inm'}))
-    new_password2 = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'inm'}))
     
     def clean_old_password(self):
         """
@@ -249,7 +326,7 @@ class PatronPasswordChangeForm(PasswordChangeForm):
         if not self.user.check_password(old_password):
             raise forms.ValidationError(_("Your old password was entered incorrectly. Please enter it again."))
         return old_password
-    PasswordChangeForm.base_fields.keyOrder = ['old_password', 'new_password1', 'new_password2']
+PatronPasswordChangeForm.base_fields.keyOrder = ['old_password', 'new_password1', 'new_password2']
     
 
 class PatronChangeForm(forms.ModelForm):
@@ -377,9 +454,10 @@ def make_missing_data_form(instance, required_fields=[]):
         else:
             phone = None
         self.instance.save()
+        avatar = None
         if hasattr(self, 'avatar') and self.avatar:
-            Avatar.objects.create(image=self.avatar, patron=self.instance)
-        return self.instance, address, phone
+            avatar = Avatar.objects.create(image=self.avatar, patron=self.instance)
+        return self.instance, address, phone, avatar
     
     def clean_password2(self):
         password1 = self.cleaned_data['password1']
@@ -444,11 +522,3 @@ class ContactForm(forms.Form):
         'autocapitalize': 'off', 'autocorrect': 'off', 'class': 'inm'
     }))
     cc_myself = forms.BooleanField(label=_(u"Je souhaite recevoir une copie de ce message."), required=False)
-
-
-class PatronSetPasswordForm(SetPasswordForm):
-    def __init__(self, user, *args, **kwargs):
-        super(PatronSetPasswordForm, self).__init__(user, *args, **kwargs)
-        self.fields['new_password1'].widget.attrs['class'] = 'inm'
-        self.fields['new_password2'].widget.attrs['class'] = 'inm'
-    

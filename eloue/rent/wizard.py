@@ -15,51 +15,37 @@ from django_lean.experiments.models import GoalRecord
 from django_lean.experiments.utils import WebUser
 
 from eloue.accounts.forms import EmailAuthenticationForm
-from eloue.accounts.models import Patron
+from eloue.accounts.models import Patron, Avatar
+from eloue.geocoder import GoogleGeocoder
 from eloue.products.forms import FacetedSearchForm
 from eloue.products.models import Product, PAYMENT_TYPE
 from eloue.rent.models import Booking
 from eloue.rent.forms import BookingForm, BookingConfirmationForm
-from eloue.wizard import GenericFormWizard
+from eloue.wizard import GenericFormWizard, NewGenericFormWizard
 
 USE_HTTPS = getattr(settings, 'USE_HTTPS', True)
 
 
-class BookingWizard(GenericFormWizard):
+class BookingWizard(NewGenericFormWizard):
+    
+    required_fields = [
+        'username', 'password1', 'password2', 'is_professional', 'company_name', 'first_name', 'last_name',
+        'phones', 'phones__phone', 'addresses',
+        'addresses__address1', 'addresses__zipcode', 'addresses__city', 'addresses__country'
+    ]
+
     def done(self, request, form_list):
-        missing_form = next((form for form in form_list if getattr(form.__class__, '__name__', None) == 'MissingInformationForm'), None)
-        
-        if request.user.is_anonymous():  # Create new Patron
-            auth_form = next((form for form in form_list if isinstance(form, EmailAuthenticationForm)), None)
-            new_patron = auth_form.get_user()
-            if not new_patron:
-                new_patron = Patron.objects.create_inactive(missing_form.cleaned_data['username'],
-                    auth_form.cleaned_data['email'], missing_form.cleaned_data['password1'])
-                if hasattr(settings, 'AFFILIATE_TAG'):
-                    # Assign affiliate tag, no need to save, since missing_form should do it for us
-                    new_patron.affiliate = settings.AFFILIATE_TAG
-            if not hasattr(new_patron, 'backend'):
-                from django.contrib.auth import load_backend
-                backend = load_backend(settings.AUTHENTICATION_BACKENDS[0])
-                new_patron.backend = "%s.%s" % (backend.__module__, backend.__class__.__name__)
-            login(request, new_patron)
-        else:
-            new_patron = request.user
-        
-        if missing_form:
-            missing_form.instance = new_patron
-            new_patron, new_address, new_phone = missing_form.save()
-        
+        super(BookingWizard, self).done(request, form_list)
         booking_form = form_list[0]
         
-        if new_patron == booking_form.instance.product.owner:
+        if self.new_patron == booking_form.instance.product.owner:
             messages.error(request, _(u"Vous ne pouvez pas louer vos propres objets"))
             return redirect_to(request, booking_form.instance.product.get_absolute_url())
         
         booking_form.instance.ip = request.META.get('REMOTE_ADDR', None)
         booking_form.instance.total_amount = Booking.calculate_price(booking_form.instance.product,
             booking_form.cleaned_data['started_at'], booking_form.cleaned_data['ended_at'])[1]
-        booking_form.instance.borrower = new_patron
+        booking_form.instance.borrower = self.new_patron
         payment_type = booking_form.instance.product.payment_type
         booking = booking_form.save()
         booking.init_payment_processor()
@@ -71,7 +57,6 @@ class BookingWizard(GenericFormWizard):
             return_url="%s://%s%s" % (protocol, domain, reverse("booking_success", args=[booking.pk.hex])),
             ip_address=request.META['REMOTE_ADDR']
         )
-        
         
         if booking.state != Booking.STATE.REJECTED:
             GoalRecord.record('rent_object_pre_paypal', WebUser(request))
@@ -86,7 +71,8 @@ class BookingWizard(GenericFormWizard):
         })
     
     def get_form(self, step, data=None, files=None):
-        if issubclass(self.form_list[step], BookingForm):
+        next_form = self.form_list[step]
+        if issubclass(next_form, BookingForm):
             product = self.extra_context['product']
             booking = Booking(product=product, owner=product.owner)
             started_at = datetime.datetime.now() + datetime.timedelta(days=1)
@@ -98,15 +84,12 @@ class BookingWizard(GenericFormWizard):
                 'total_amount': Booking.calculate_price(product, started_at, ended_at)[1]
             }
             initial.update(self.initial.get(step, {}))
-            return self.form_list[step](data, files, prefix=self.prefix_for_step(step),
+            return next_form(data, files, prefix=self.prefix_for_step(step),
                 initial=initial, instance=booking)
-        if not issubclass(self.form_list[step], (BookingForm, EmailAuthenticationForm, BookingConfirmationForm)):
-            initial = {'addresses__country': settings.LANGUAGE_CODE.split('-')[1].upper()}
-            return self.form_list[step](data, files, prefix=self.prefix_for_step(step),
-                initial=initial)
         return super(BookingWizard, self).get_form(step, data, files)
     
     def process_step(self, request, form, step):
+        super(BookingWizard, self).process_step(request, form, step)
         form = self.get_form(0, request.POST, request.FILES)
         if form.is_valid():
             self.extra_context['preview'] = form.cleaned_data

@@ -338,6 +338,19 @@ $(document).ready(function() {
     //chosen
     $("#id_0-category-chosen").chosen();
     
+    
+    //fbconnect
+    $('#fbconnect').click(function () {
+        FB.login(function(response) {
+           if (response.authResponse) {
+             $('input[name$="facebook_access_token"]').val(response.authResponse.accessToken);
+             $('input[name$="facebook_expires"]').val(response.authResponse.expiresIn);
+             $('input[name$="facebook_uid"]').val(response.authResponse.userID);
+           }
+           //$('form').submit();
+         }, {scope: 'email,user_location,offline_access'});
+    });
+    
 });
 
 function hideNotification() {

@@ -1,0 +1,21 @@
+[
+	{
+		"pk": 1, 
+		"model": "accounts.facebooksession", 
+		"fields": {
+			"access_token": "AAAC0EJC00lQBAOf7XANWgcw2UzKdLn5q13bUp07KRPy8MntAdsPzJsnFOiCu7ZCegQIX46eu7OAjXp3sFucTCRKYGH42OW9ywcissIAZDZD", 
+			"expires": "2011-11-23 11:55:27", 
+			"user": 5, 
+			"uid": 100003207275288
+		}
+	},
+	{
+		"pk": 2,
+		"model": "accounts.facebooksession",
+		"fields": {
+			"access_token": "AAAC0EJC00lQBAFeztcpDKBgyFDRm9kIiaSe7amtYzcw2MLiSdfEeh9ftpZAFzYUT0zwIqXCnBEYe95I1cnMX8dZCQ2Dw10qJlhJRgYxgZDZD",
+			"expires": "2011-11-24 9:59:32",
+			"uid": 100003190074813
+		}
+	}
+]
