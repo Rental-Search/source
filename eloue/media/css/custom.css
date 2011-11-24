@@ -1358,7 +1358,6 @@ input.price { color: #000; }
 -------------------------------------------------------------- */
 .email input { width: 300px; margin-left: 5px; }
 .email label, .question { font-weight: bold; }
-.exist, .question, .password { margin-left: 170px; }
 .email 
 {  
   margin-bottom: 10px !important; 
@@ -1366,13 +1365,51 @@ input.price { color: #000; }
 .password 
 {
   margin-top: 10px;
-  margin-bottom: 20px !important; 
+  margin-bottom: 20px !important;
+  margin-left: 7px;
 }
   .password input { width: 170px; }
   .password a 
   { 
     color: #6EB924; 
     font-size: 0.85em; 
+  }
+.emailOauth-content {
+  margin-left: 63px;
+}
+
+.or {
+  background: transparent url("../images/or.png") no-repeat right top;
+  height: 325px;
+}
+  
+.fbconnect-content {
+  margin-top: 80px;
+  margin-left: 85px;
+}
+  .fbconnect-content span {
+    font-size: 11px;
+    color: #555;
+    padding-left: 138px;
+  }
+
+  #fbconnect 
+  {
+    background: transparent url("../images/facebook-connect-buttons.png") no-repeat 0 -80px;
+    height: 40px;
+    width: 242px;
+    text-indent: -9999px;
+    cursor: pointer;
+  }
+
+  #fbconnect:hover
+  {
+    background: transparent url("../images/facebook-connect-buttons.png") no-repeat 0 -40px;
+  }
+
+  #fbconnect:active
+  {
+    background: transparent url("../images/facebook-connect-buttons.png") no-repeat 0 0;
   }
   
 /* --------------------------------------------------------------
