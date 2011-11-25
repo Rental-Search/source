@@ -70,7 +70,9 @@ class ProductWizard(NewGenericFormWizard):
             
 class MessageWizard(NewGenericFormWizard):
     
-    required_fields = ['username', 'password1', 'password2']
+    def __init__(self, *args, **kwargs):
+        super(MessageWizard, self).__init__(*args, **kwargs)
+        self.required_fields = ['username', 'password1', 'password2']
     
     def __call__(self, request, product_id, recipient_id, *args, **kwargs):
         product = get_object_or_404(Product, pk=product_id)

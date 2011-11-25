@@ -140,14 +140,15 @@ def isMissingInformationForm(obj):
     return getattr(obj.__class__, '__name__', None) == 'MissingInformationForm'
 
 class NewGenericFormWizard(MultiPartFormWizard):
-    """collecting here the biggest common parts of MessageWizard, BookingWizard and ProductWizard"""
+    """collecting here the largest common part of MessageWizard, BookingWizard and ProductWizard"""
 
-    """A not so generic form wizard"""
-    required_fields = [
-        'username', 'password1', 'password2', 'is_professional', 'company_name', 'first_name', 'last_name',
-        'phones', 'phones__phone', 'addresses',
-        'addresses__address1', 'addresses__zipcode', 'addresses__city', 'addresses__country', 'avatar'
-    ]
+    def __init__(self, *args, **kwargs):
+        super(NewGenericFormWizard, self).__init__(*args, **kwargs)
+        self.required_fields = [
+          'username', 'password1', 'password2', 'is_professional', 'company_name', 'first_name', 'last_name',
+          'phones', 'phones__phone', 'addresses',
+          'addresses__address1', 'addresses__zipcode', 'addresses__city', 'addresses__country', 'avatar'
+        ]
 
     def __call__(self, request, *args, **kwargs):
         if request.user.is_authenticated():
@@ -245,11 +246,14 @@ class NewGenericFormWizard(MultiPartFormWizard):
 
 class GenericFormWizard(MultiPartFormWizard):
     """A not so generic form wizard"""
-    required_fields = [
-        'username', 'password1', 'password2', 'is_professional', 'company_name', 'first_name', 'last_name',
-        'phones', 'phones__phone', 'addresses',
-        'addresses__address1', 'addresses__zipcode', 'addresses__city', 'addresses__country', 'avatar'
-    ]
+
+    def __init__(self, *args, **kwargs):
+        super(GenericFormWizard, self).__init__(*args, **kwargs)
+        self.required_fields = [
+          'username', 'password1', 'password2', 'is_professional', 'company_name', 'first_name', 'last_name',
+          'phones', 'phones__phone', 'addresses',
+          'addresses__address1', 'addresses__zipcode', 'addresses__city', 'addresses__country', 'avatar'
+        ]
 
     def __call__(self, request, *args, **kwargs):
         if request.user.is_authenticated():  # When user is authenticated
