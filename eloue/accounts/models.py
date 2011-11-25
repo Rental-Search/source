@@ -275,13 +275,19 @@ class FacebookSession(models.Model):
         unique_together = (('user', 'uid'), ('access_token', 'expires'))
     
     def __unicode__(self):
-        me = self.graph_api.get_object('me')
-        return "%(name)s <%(email)s>" % me
-
+        return "%(name)s <%(email)s>" % self.me
+    
+    @property
+    def me(self):
+        if not hasattr(self, '_me') or not self._me:
+            self._me = self.graph_api.get_object("me")
+        return self._me
+    
     @property
     def graph_api(self):
         if not hasattr(self, '_graph_api') or self._graph_api.access_token != self.access_token:
             self._graph_api = facebook.GraphAPI(self.access_token)
+            self._me = None
         return self._graph_api
     
 class Address(models.Model):
