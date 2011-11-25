@@ -77,8 +77,7 @@ class ProductWizardTestWithFacebookAccount(TestCase):
         mock_method.return_value = '6941fd7b20d720833717a1f92e8027af'
         uid = 100000609837182
         access_token = 'AAAC0EJC00lQBAGnc6FW8QlB5tz4ppuSXeR0FQ8kdCagwHwRraHDBI4HE7eigTprugjh0uGPu4h2FG2VEaRO8RxRcm8ObicNyZB21JGgZDZD'
-        with self.assertRaises(FacebookSession.DoesNotExist):
-            FacebookSession.objects.get(uid=uid)
+        self.assertRaises(FacebookSession.DoesNotExist, FacebookSession.objects.get, uid=uid)
         response = self.client.post(reverse('product_create'), {
             '0-category': 484,
             '0-picture_id': 1,
@@ -105,10 +104,8 @@ class ProductWizardTestWithFacebookAccount(TestCase):
         mock_method.return_value = '6941fd7b20d720833717a1f92e8027af'
         uid = 100000609837182
         access_token = 'AAAC0EJC00lQBAGnc6FW8QlB5tz4ppuSXeR0FQ8kdCagwHwRraHDBI4HE7eigTprugjh0uGPu4h2FG2VEaRO8RxRcm8ObicNyZB21JGgZDZD'
-        with self.assertRaises(FacebookSession.DoesNotExist):
-            FacebookSession.objects.get(uid=100000609837182)
-        with self.assertRaises(Patron.DoesNotExist):
-            Patron.objects.get(username='kosii2')
+        self.assertRaises(FacebookSession.DoesNotExist, FacebookSession.objects.get, uid=100000609837182)
+        self.assertRaises(Patron.DoesNotExist, Patron.objects.get, username='kosii2')
         response = self.client.post(reverse('product_create'), {
             '0-category': 484,
             '0-picture_id': 1,
