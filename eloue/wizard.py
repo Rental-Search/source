@@ -5,7 +5,7 @@ except ImportError:
     import pickle
 
 from urllib2 import urlopen
-
+import facebook
 import django.forms as forms
 from django.conf import settings
 from django.contrib.formtools.wizard import FormWizard
@@ -156,7 +156,10 @@ class NewGenericFormWizard(MultiPartFormWizard):
             if not self.fb_session:
                 try:
                     self.fb_session = self.patron.facebooksession
-                    self.me = self.fb_session.graph_api.get_object('me', fields='picture,email,first_name,last_name,gender,username,location')
+                    try:
+                        self.me = self.fb_session.graph_api.get_object('me', fields='picture,email,first_name,last_name,gender,username,location')
+                    except facebook.GraphAPIError:
+                        self.me = {}
                 except FacebookSession.DoesNotExist:
                     pass
             if EmailAuthenticationForm in self.form_list and len(self.form_list) > 1:
