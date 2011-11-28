@@ -346,6 +346,7 @@ $(document).ready(function() {
              $('input[name$="facebook_access_token"]').val(response.authResponse.accessToken);
              $('input[name$="facebook_expires"]').val(response.authResponse.expiresIn);
              $('input[name$="facebook_uid"]').val(response.authResponse.userID);
+             $('input[name$="email"]').removeAttr('value');
            }
            $('form').submit();
            $('input[type="submit"]').attr('disabled','disabled');
