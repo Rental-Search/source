@@ -158,7 +158,7 @@ class NewGenericFormWizard(MultiPartFormWizard):
                     self.fb_session = self.patron.facebooksession
                     try:
                         self.me = self.fb_session.graph_api.get_object('me', fields='picture,email,first_name,last_name,gender,username,location')
-                    except facebook.GraphAPIError:
+                    except facebook.GraphAPIError as e:
                         self.me = {}
                 except FacebookSession.DoesNotExist:
                     pass

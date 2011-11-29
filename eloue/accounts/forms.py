@@ -234,12 +234,13 @@ class PatronEditForm(forms.ModelForm):
                     first_name=first_name,
                     last_name=last_name
                     )
-            if is_verified == 'UNVERIFIED':
-                form_errors_append(self, 'paypal_email', _(u"Votre compte PayPal n'est pas vérifié."))
-            elif is_verified == 'INVALID':
+            if is_verified == 'INVALID':
                 form_errors_append(self, 'paypal_email', _(u"Vérifier qu'il s'agit bien de votre email PayPal"))
                 form_errors_append(self, 'first_name', _(u"Vérifier que le prénom est identique à celui de votre compte PayPal"))
                 form_errors_append(self, 'last_name', _(u"Vérifier que le nom est identique à celui de votre compte PayPal"))
+            if not paypal_payment.confirm_paypal_account(email=paypal_email):
+                form_errors_append(self, 'paypal_email', _(u"Vérifiez que vous avez bien répondu à l'email d'activation de Paypal"))
+
 
     def clean_company_name(self):
         is_professional = self.cleaned_data.get('is_professional')
@@ -271,12 +272,12 @@ class PatronEditForm(forms.ModelForm):
                         first_name=first_name,
                         last_name=last_name
                        )
-            if is_verified == 'UNVERIFIED':
-                form_errors_append(self, 'paypal_email', _(u"Votre compte PayPal n'est pas vérifié."))
-            elif is_verified == 'INVALID':
+            if is_verified == 'INVALID':
                 form_errors_append(self, 'paypal_email', _(u"Vérifier qu'il s'agit bien de votre email PayPal"))
                 form_errors_append(self, 'first_name', _(u"Vérifier que le prénom est identique à celui de votre compte PayPal"))
                 form_errors_append(self, 'last_name', _(u"Vérifier que le nom est identique à celui de votre compte PayPal"))
+            if not paypal_payment.confirm_paypal_account(email=paypal_email):
+                form_errors_append(self, 'paypal_email', _(u"Vérifiez que vous avez bien répondu à l'email d'activation de Paypal"))
         return self.cleaned_data
         
     class Meta:
@@ -341,12 +342,9 @@ class PatronPaypalForm(forms.ModelForm):
     
     def clean(self):
         paypal_email = self.cleaned_data.get('paypal_email', None)
-        paypal_exists = self.cleaned_data['paypal_exists']
-        self.paypal_exists = False
-        if paypal_exists:
-            self.paypal_exists = True
+        self.paypal_exists = self.cleaned_data['paypal_exists']
         if not paypal_email:
-            if paypal_exists:
+            if self.paypal_exists:
                 raise forms.ValidationError(_(u"Vous devez entrer votre email Paypal"))
             else:
                 self.cleaned_data['paypal_email'] = self.instance.email

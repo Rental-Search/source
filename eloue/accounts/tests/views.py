@@ -63,7 +63,6 @@ class PatronTest(TestCase):
         self.assertEquals(response.status_code, 200)
         form = response.context['form']
         
-        self.assertTrue(_(u"Votre compte PayPal n'est pas vérifié.") in form.errors['paypal_email'][0])
         # invalid case
         response = self.client.post(reverse('patron_edit'), {
             'first_name': 'Lin',
