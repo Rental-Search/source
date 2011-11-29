@@ -7,7 +7,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse, HttpResponseNotAllowed
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, redirect
 from django.utils import simplejson
 from django.utils.encoding import smart_str
 from django.utils.translation import ugettext_lazy as _
@@ -207,15 +207,15 @@ def offer_reject(request, booking_id):
 def booking_accept(request, booking_id):
     booking = get_object_or_404(Booking, pk=booking_id)
     if booking.product.payment_type!=PAYMENT_TYPE.NOPAY:
-        is_verified = booking.owner.is_verified
+        is_valid = booking.owner.is_valid
         if not booking.owner.has_paypal():
             return redirect_to(request, "%s?next=%s" % (reverse('patron_paypal'), booking.get_absolute_url()))
-        elif is_verified!="VERIFIED":
-            if is_verified=="UNVERIFIED":
-                messages.error(request, _(u"Votre paypal compte n'est pas vérifié, veuillez modifier votre nom ou prénom ou email paypal"))
-            elif is_verified=="INVALID":
-                messages.error(request, _(u"Votre Paypal compte est invalide, veuillez modifier votre nom ou prénom ou email paypal"))
+        elif not is_valid:
+            messages.error(request, _(u"Votre Paypal compte est invalide, veuillez modifier votre nom ou prénom ou email paypal"))
             return redirect_to(request, "%s?next=%s" % (reverse('patron_edit'), booking.get_absolute_url()))
+        elif not booking.owner.is_confirmed:
+            messages.error(request, _(u"Vérifiez que vous avez bien répondu à l'email d'activation de Paypal"))
+            return redirect(booking.get_absolute_url())
     form = BookingStateForm(request.POST or None,
         initial={'state': Booking.STATE.PENDING},
         instance=booking)
