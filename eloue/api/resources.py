@@ -666,13 +666,14 @@ class BookingResource(OAuthResource):
         if new_state == 'pending':
 
             if booking.product.payment_type == PAYMENT_TYPE.PAYPAL:
-                is_verified = booking.owner.is_verified
+                is_valid = booking.owner.is_valid
+                is_confirmed = booking.owner.is_confirmed
                 if not booking.owner.has_paypal():
                     return error("The owner doesn't have paypal account")
-                elif is_verified == "UNVERIFIED":
-                    return error("The owner's paypal account is unverified")
-                elif is_verified == "INVALID":
+                elif not is_verified:
                     return error("The owner's paypal account is invalid")
+                elif not is_confirmed:
+                    return error("The owner's paypal email is not confirmed")
 
             assert_current_state_is("authorized")
             booking.send_acceptation_email()

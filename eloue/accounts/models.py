@@ -240,7 +240,16 @@ class Patron(User):
     @property
     def is_verified(self):
         return paypal_payment.verify_paypal_account(email=self.paypal_email, first_name=self.first_name, last_name=self.last_name)
+    
+    @property
+    def is_valid(self):
+        paypal_status = paypal_payment.verify_paypal_account(email=self.paypal_email, first_name=self.first_name, last_name=self.last_name)
+        return paypal_status == "VERIFIED" or paypal_status == "UNVERIFIED"
 
+    @property
+    def is_confirmed(self):
+        return paypal_payment.confirm_paypal_account(self.paypal_email)
+    
     def send_activation_email(self):
         context = {
             'patron': self, 'activation_key': self.activation_key,
