@@ -179,8 +179,10 @@ def confirm_paypal_account(email):
           }
         )
     except PaypalError as e:
-        # 569042 The email account is not confirmed by PayPal, or 'restricted' (probably means it's not existing)
-        if e.code == '569042' or e.code == '520009':
+        # 569042 The email account is not confirmed by PayPal, 
+        # or 'restricted' (probably means it's not existing)
+        # or empty
+        if e.code == '569042' or e.code == '520009' or e.code == '580022':
             return False
         # there is an other problem, we can't handle it, the best we can do is re-raise
         raise
