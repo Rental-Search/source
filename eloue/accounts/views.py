@@ -103,7 +103,8 @@ def patron_edit(request, *args, **kwargs):
       not patron_dict.get('first_name', None) and \
       not patron_dict.get('last_name', None):
         patron_dict['paypal_email'] = patron.email
-
+    else:
+        patron_dict = None
     form = PatronEditForm(request.POST or patron_dict, request.FILES or None, instance=patron)
     if form.is_valid():
         patron = form.save()
