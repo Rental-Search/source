@@ -189,15 +189,22 @@ class PatronEditForm(forms.ModelForm):
 
     avatar = forms.ImageField(required=False)
 
+    def __init__(self, *args, **kwargs):
+        super(PatronEditForm, self).__init__(*args, **kwargs)
+        self.fields['civility'].widget.attrs['class'] = "selm"
+
+    class Meta:
+        model = Patron
+        fields = ('civility', 'username', 'first_name', 'last_name',
+            'email', 'paypal_email', 'is_professional', 'company_name', 'is_subscribed', 'new_messages_alerted')
+
     def save(self, *args, **kwargs):
         inst = super(PatronEditForm, self).save(*args, **kwargs)
         if self.avatar:
             try:
-                self.instance.avatar
+                self.instance.avatar.delete()
             except Avatar.DoesNotExist:
                 pass
-            else:
-                self.instance.avatar.delete()
             Avatar.objects.create(image=self.avatar, patron=self.instance)
         return inst
     
@@ -205,43 +212,6 @@ class PatronEditForm(forms.ModelForm):
         self.avatar = self.cleaned_data['avatar']
         return self.avatar
     
-    def __init__(self, *args, **kwargs):
-        super(PatronEditForm, self).__init__(*args, **kwargs)
-        self.fields['civility'].widget.attrs['class'] = "selm"
-        raw_paypal_email = None
-        first_name = None
-        last_name = None
-        for name, field in self.fields.items():
-            prefixed_name = self.add_prefix(name)
-            data_value = field.widget.value_from_datadict(self.data, self.files, prefixed_name)
-            if name == "paypal_email" and data_value:
-                raw_paypal_email = data_value
-            if name == "first_name" and data_value:
-                first_name = data_value
-            if name == "last_name" and data_value:
-                last_name = data_value
-        
-        if not raw_paypal_email and not first_name and not last_name:
-            raw_paypal_email = self.instance.paypal_email
-        if not first_name:
-            first_name = self.instance.first_name
-        if not last_name:
-            last_name = self.instance.last_name
-        
-        if raw_paypal_email:
-            is_verified = paypal_payment.verify_paypal_account(
-                    email=raw_paypal_email,
-                    first_name=first_name,
-                    last_name=last_name
-                    )
-            if is_verified == 'INVALID':
-                form_errors_append(self, 'paypal_email', _(u"Vérifier qu'il s'agit bien de votre email PayPal"))
-                form_errors_append(self, 'first_name', _(u"Vérifier que le prénom est identique à celui de votre compte PayPal"))
-                form_errors_append(self, 'last_name', _(u"Vérifier que le nom est identique à celui de votre compte PayPal"))
-            if not paypal_payment.confirm_paypal_account(email=raw_paypal_email):
-                form_errors_append(self, 'paypal_email', _(u"Vérifiez que vous avez bien répondu à l'email d'activation de Paypal"))
-
-
     def clean_company_name(self):
         is_professional = self.cleaned_data.get('is_professional')
         company_name = self.cleaned_data.get('company_name', None)
@@ -261,7 +231,7 @@ class PatronEditForm(forms.ModelForm):
             raise forms.ValidationError(_(u"Un compte avec cet email existe déjà"))
         except Patron.DoesNotExist:
             return email
-   
+    
     def clean(self):
         paypal_email = self.cleaned_data.get('paypal_email', None)
         first_name = self.cleaned_data.get('first_name', None)
@@ -279,12 +249,6 @@ class PatronEditForm(forms.ModelForm):
             if not paypal_payment.confirm_paypal_account(email=paypal_email):
                 form_errors_append(self, 'paypal_email', _(u"Vérifiez que vous avez bien répondu à l'email d'activation de Paypal"))
         return self.cleaned_data
-        
-    class Meta:
-        model = Patron
-        fields = ('civility', 'username', 'first_name', 'last_name',
-            'email', 'paypal_email', 'is_professional', 'company_name', 'is_subscribed', 'new_messages_alerted')
-
 
 class PatronSetPasswordForm(forms.Form):
     """

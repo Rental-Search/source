@@ -9,6 +9,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.sites.models import Site
 from django.core.mail import EmailMessage, BadHeaderError
 from django.core.urlresolvers import reverse
+from django.forms.models import model_to_dict
 from django.shortcuts import get_object_or_404
 from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.cache import never_cache, cache_page
@@ -96,7 +97,14 @@ def patron_edit(request, *args, **kwargs):
     paypal = request.GET.get('paypal', False)
     redirect_path = request.REQUEST.get('next', '')
     patron = request.user
-    form = PatronEditForm(request.POST or None, request.FILES or None, instance=patron)
+
+    patron_dict = model_to_dict(patron)
+    if not patron_dict.get('paypal_email', None) and \
+      not patron_dict.get('first_name', None) and \
+      not patron_dict.get('last_name', None):
+        patron_dict['paypal_email'] = patron.email
+
+    form = PatronEditForm(request.POST or patron_dict, request.FILES or None, instance=patron)
     if form.is_valid():
         patron = form.save()
         if paypal:
