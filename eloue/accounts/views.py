@@ -75,6 +75,13 @@ def oauth_callback(request, *args, **kwargs):
     token = Token.objects.get(key=kwargs['oauth_token'])
     return HttpResponse(token.verifier)
 
+@never_cache
+@login_required
+def associate_facebook(request):
+    form = FacebookForm(request.POST or None)
+    if form.is_valid():
+        pass
+
 
 @cache_page(900)
 def patron_detail(request, slug, patron_id=None, page=None):

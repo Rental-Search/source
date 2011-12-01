@@ -38,6 +38,30 @@ PAYPAL_ACCOUNT_CHOICES = (
     (1, _(u"J'ai déjà un compte PayPal et mon email est :")),
 )
 
+class FacebookForm(forms.ModelForm):
+    
+    class Meta:
+        model = FacebookSession
+    
+    def clean(self):
+        facebook_token = self.cleaned_data.get('access_token', None)
+        try:
+            me = facebook.GraphAPI(facebook_token).get_objects('me')
+        except facebook.GraphAPIError as e:
+            raise ValidationError()
+        
+        try:
+            fb = FacebookSession.objects.get(uid=me['id'])
+        except FacebookSession.MultipleObjectsReturned:
+            raise
+        except FacebookSession.DoesNotExist:
+            
+        else:
+
+
+    def save(self):
+        pass
+
 class EmailAuthenticationForm(forms.Form):
     """Displays the login form and handles the login action."""
     exists = forms.TypedChoiceField(required=True, coerce=int, choices=STATE_CHOICES, widget=forms.RadioSelect(renderer=ParagraphRadioFieldRenderer), initial=1)
