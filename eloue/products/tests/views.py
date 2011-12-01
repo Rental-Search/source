@@ -125,8 +125,8 @@ class ProductViewsTest(TestCase):
         thread = MessageThread.objects.all()[0]
         self.assertEqual(thread.last_message.parent_msg.pk, message.pk)
         self.assertEqual(thread.subject, 'Hi!')
-        self.assertEqual(thread.last_message.subject, '')
-        self.assertEqual(thread.last_message.parent_msg.subject, '')
+        self.assertEqual(thread.last_message.subject, 'Hi!')
+        self.assertEqual(thread.last_message.parent_msg.subject, 'Hi!')
         self.client.logout()
 
 
