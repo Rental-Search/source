@@ -50,6 +50,6 @@ feedparser>=5.0.1
 -e git://github.com/e-loue/django-oauth-plus.git#egg=django-oauth-plus
 -e git://github.com/e-loue/django-messages.git#egg=django-messages
 -e git://github.com/e-loue/freshen.git#egg=freshen
--e git://github.com/facebook/python-sdk.git#egg=facebook-sdk
+-e git://github.com/e-loue/python-sdk.git#egg=facebook-sdk
 PIL
 
