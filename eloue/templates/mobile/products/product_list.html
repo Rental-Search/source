@@ -74,7 +74,11 @@
 					{% endif %}
 					<div class="pl-desc">
 						<p class="title"><strong>{{ product.summary|capitalize|truncate:25 }}</strong></p>
+						{% if product.price %}
 						<p class="price">{{ product.price|quantize }}{% currency_symbol %}{% trans "/J" %}</p>
+						{% else %}
+						<p class="price">Sur devis</p>
+						{% endif %}
 						<p class="from">
 							{{ product.city|capfirst }}{% if product.zipcode %}, {{ product.zipcode }}{% endif %}
 							 {% if product.geo_distance %}
