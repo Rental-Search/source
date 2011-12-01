@@ -232,12 +232,12 @@ class NewGenericFormWizard(MultiPartFormWizard):
             }
             if self.me and 'location' in self.me:
                 try:
-                    city, country = GoogleGeocoder().getCityCountry(self.me['location']['name'])
+                    if self.me['location']['name']:
+                        city, country = GoogleGeocoder().getCityCountry(self.me['location']['name'])
+                        initial['addresses__country'] = country
+                        initial['addresses__city'] = city
                 except (KeyError, IndexError):
                     pass
-                else:
-                    initial['addresses__country'] = country
-                    initial['addresses__city'] = city
             
             return next_form(data, files, prefix=self.prefix_for_step(step),
                 initial=initial)
