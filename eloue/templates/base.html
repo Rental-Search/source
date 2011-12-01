@@ -19,7 +19,8 @@
     _gaq.push(['_setAccount', 'UA-8258979-1']);
     _gaq.push(['_setDomainName', 'www.e-loue.com']);
     _gaq.push(['_trackPageview']);
-    {% spaceless %}{% if user.is_authenticated %}
+    {% spaceless %}
+        {% if user.is_authenticated %}
      _gaq.push(['_setVar', 'authenticated']);
     {% else %}
      _gaq.push(['_setVar', 'anonymous']);
@@ -123,6 +124,12 @@
     {% block tail %}
     	{% compressed_js 'application' %}
     {% endblock %}
+    <script type="text/javascript">  (function() {
+        var ga = document.createElement('script');     ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:'   == document.location.protocol ? 'https://ssl'   : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+    </script>
     <script type="text/javascript">
         window.$zopim||(function(d,s){var z=$zopim=function(c){z._.push(c)},$=
         z.s=d.createElement(s),e=d.getElementsByTagName(s)[0];z.set=function(o
