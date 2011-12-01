@@ -158,6 +158,7 @@ class MessageEditForm(forms.Form):
         if parent_msg is not None:
             msg.parent_msg = parent_msg
             msg.thread = parent_msg.thread
+            msg.subject = parent_msg.thread.subject
             if sender == msg.thread.sender:
                 if msg.thread.recipient_archived:
                     msg.thread.recipient_archived = False
@@ -173,6 +174,7 @@ class MessageEditForm(forms.Form):
             thread.last_message = msg
             thread.save()
             msg.thread = thread
+            msg.subject = thread.subject
         msg.save()
         msg.thread.last_message = msg
         msg.thread.save()
