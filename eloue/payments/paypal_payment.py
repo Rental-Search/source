@@ -161,8 +161,8 @@ def confirm_paypal_account(email):
         # try a test payment
         app.payments.pay(
           returnUrl='http://e-loue.com', 
-          actionType='PAY', 
           cancelUrl='http://e-loue.com', 
+          actionType='PAY', 
           currencyCode='EUR', 
           receiverList={
             'receiver': [
@@ -178,13 +178,12 @@ def confirm_paypal_account(email):
             ]
           }
         )
+        return True
     except PaypalError as e:
         # 569042 The email account is not confirmed by PayPal, 
         # or 'restricted' (probably means it's not existing)
         # or empty
-        if e.code == '569042' or e.code == '520009' or e.code == '580022':
-            return False
-        # there is an other problem, we can't handle it, the best we can do is re-raise
-        raise
-    else:
-        return True
+        #if e.code == '569042' or e.code == '520009' or e.code == '580022':
+        #   return False
+        #else: raise
+        return False
