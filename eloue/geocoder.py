@@ -56,18 +56,18 @@ class Geocoder(object):
 class GoogleGeocoder(Geocoder):
     # http://code.google.com/apis/maps/documentation/geocoding/index.html
     def _geocode(self, location):
-        json = simplejson.load(urllib.urlopen(
-            'http://maps.googleapis.com/maps/api/geocode/json?' + urllib.urlencode({
-                'address': location,
-                'oe': 'utf8',
-                'sensor': 'false',
-                'region': GOOGLE_REGION_CODE
-            })
-        ))
         try:
+            json = simplejson.load(urllib.urlopen(
+                'http://maps.googleapis.com/maps/api/geocode/json?' + urllib.urlencode({
+                    'address': location,
+                    'oe': 'utf8',
+                    'sensor': 'false',
+                    'region': GOOGLE_REGION_CODE
+                })
+            ))
             lon = json['results'][0]['geometry']['location']['lng']
             lat = json['results'][0]['geometry']['location']['lat']
-        except (KeyError, IndexError):
+        except (KeyError, IndexError, IOError):
             return None, (None, None), None
         try:  # trying to return at least lat, lon
             sw = Point(json['results'][0]['geometry']['viewport']['southwest']['lat'],
