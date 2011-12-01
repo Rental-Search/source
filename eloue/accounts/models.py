@@ -15,6 +15,7 @@ from django.contrib.gis.db import models
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.contrib.gis.geos import Point
+from django.core.cache import cache
 from django.db.models import permalink
 from django.db.models import signals
 from django.utils.encoding import smart_unicode
@@ -283,20 +284,24 @@ class FacebookSession(models.Model):
     class Meta:
         unique_together = (('user', 'uid'), ('access_token', 'expires'))
     
-    def __unicode__(self):
-        return "%(name)s <%(email)s>" % self.me
-    
     @property
     def me(self):
-        if not hasattr(self, '_me') or not self._me:
-            self._me = self.graph_api.get_object("me")
-        return self._me
+        me_dict = cache.get('facebook:me_%d' % self.uid, {})
+        if me_dict:
+            return me_dict
+        try:
+            # we have to stock it in a local variable, and return the value from that
+            # local variable, otherwise this stuff is broken with the dummy cache engine
+            me_dict = self.graph_api.get_object("me")
+            cache.set('facebook:me_%d' % self.uid, me_dict, 0)
+        except facebook.GraphAPIError as e:
+            return {}
+        return me_dict
     
     @property
     def graph_api(self):
         if not hasattr(self, '_graph_api') or self._graph_api.access_token != self.access_token:
             self._graph_api = facebook.GraphAPI(self.access_token)
-            self._me = None
         return self._graph_api
     
 class Address(models.Model):
