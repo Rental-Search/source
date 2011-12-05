@@ -92,7 +92,10 @@ class EmailAuthenticationForm(forms.Form):
                 'expires': datetime.datetime.now() + datetime.timedelta(seconds=facebook_expires)
             })
 
-            self.cleaned_data['email'] = self.me['email']
+            if self.me.get('email', None):
+                self.cleaned_data['email'] = self.me['email']
+            else:
+                raise ValidationError(_("Les serveurs de Facebook sont inaccessibles. Veuillez reessayer dans quelques secondes."))
             
             if not created:
                 # if already existed because of registered user or started facebook registration process,

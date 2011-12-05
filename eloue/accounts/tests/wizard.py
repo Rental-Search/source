@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
-from mock import patch
+from mock import patch, Mock
 from urllib import urlencode
 from urlparse import urlsplit
+
+from facebook import GraphAPIError, GraphAPI
 
 from django.conf import settings
 from django.core.urlresolvers import reverse
@@ -182,7 +184,49 @@ class FacebookAccountWizardTest(TestCase):
         response = self.client.get(reverse('auth_login'))
         self.assertEquals(response.status_code, 200)
     
-    def test_first_step_with_existing_account(self):
+
+    me1 = {
+        u'email': u'balazs.kossovics@e-loue.com',
+        u'first_name': u'Jacques-Yves',
+        u'gender': u'male',
+        u'id': u'100003207275288',
+        u'last_name': u'Cousteau',
+        u'link': u'http://www.facebook.com/profile.php?id=100003207275288',
+        u'locale': u'en_GB',
+        u'name': u'Jacques-Yves Cousteau',
+        u'timezone': 1,
+        u'updated_time': u'2011-11-23T09:25:40+0000'
+    }
+
+    me2 = {u'email': u'kosii.spam@gmail.com',
+        u'first_{name': u'Bal\xe1zs',
+        u'gender': u'male',
+        u'id': u'100000609837182',
+        u'last_name': u'Kossovics',
+        u'link': u'http://www.facebook.com/kosii.spam',
+        u'locale': u'en_US',
+        u'name': u'Bal\xe1zs Kossovics',
+        u'timezone': 1,
+        u'updated_time': u'2011-11-23T16:42:03+0000',
+        u'username': u'kosii.spam',
+        u'verified': True
+    }
+
+    me3 = {u'email': u'elouetest@gmail.com',
+        u'first_name': u'Noga',
+        u'gender': u'male',
+        u'id': u'100003190074813',
+        u'last_name': u'Alon',
+        u'link': u'http://www.facebook.com/profile.php?id=100003190074813',
+        u'locale': u'en_US',
+        u'name': u'Noga Alon',
+        u'timezone': 1,
+        u'updated_time': u'2011-11-25T16:14:45+0000'
+    }
+
+    @patch.object(GraphAPI, 'get_object')
+    def test_first_step_with_existing_account(self, mock_object):
+        mock_object.return_value = FacebookAccountWizardTest.me1
         response = self.client.post(reverse('auth_login'), {
             '0-email': '',
             '0-exists': 1,
@@ -193,12 +237,15 @@ class FacebookAccountWizardTest(TestCase):
             '0-facebook_uid': '100003207275288'
         })
         self.assertRedirects(response, settings.LOGIN_REDIRECT_URL, status_code=302)
-        
         scheme, netloc, path, query, fragment = urlsplit(response['Location'])
         redirect_response = response.client.get(path, QueryDict(query))
         self.assertTrue(redirect_response.context['user'].is_authenticated())
+        self.assertTrue(mock_object.called)
+    
 
-    def test_first_step_with_redirect(self):
+    @patch.object(GraphAPI, 'get_object')
+    def test_first_step_with_redirect(self, mock_object):
+        mock_object.return_value = FacebookAccountWizardTest.me1
         args = urlencode({'next': reverse('auth_login')})
         response = self.client.post("%s?%s" % (reverse('auth_login'), args), {
             '0-email': '',
@@ -216,8 +263,11 @@ class FacebookAccountWizardTest(TestCase):
         scheme, netloc, path, query, fragment = urlsplit(redirect_response['Location'])
         third_response = response.client.get(path, QueryDict(query))
         self.assertTrue(third_response.context['user'].is_authenticated())
-    
-    def test_first_step_without_account(self):
+        self.assertTrue(mock_object.called)
+
+    @patch.object(GraphAPI, 'get_object')
+    def test_first_step_without_account(self, mock_object):
+        mock_object.return_value = FacebookAccountWizardTest.me2
         response = self.client.post(reverse('auth_login'), {
             '0-email': '',
             '0-exists': 0,
@@ -229,9 +279,12 @@ class FacebookAccountWizardTest(TestCase):
         })
         self.assertTrue(response.status_code, 200)
         self.assertContains(response, "1-username")
+        self.assertTrue(mock_object.called)
 
+    @patch.object(GraphAPI, 'get_object')
     @patch.object(MultiPartFormWizard, 'security_hash')
-    def test_second_step_without_account(self, mock_return):
+    def test_second_step_without_account(self, mock_return, mock_object):
+        mock_object.return_value = FacebookAccountWizardTest.me2
         mock_return.return_value = 'b5d8e7ffcc52f852c688983ecb30ead6'
         access_token = 'AAAC0EJC00lQBAGnc6FW8QlB5tz4ppuSXeR0FQ8kdCagwHwRraHDBI4HE7\
           eigTprugjh0uGPu4h2FG2VEaRO8RxRcm8ObicNyZB21JGgZDZD'
@@ -253,8 +306,10 @@ class FacebookAccountWizardTest(TestCase):
         self.assertEqual(p, FacebookSession.objects.get(access_token=access_token).user)
         self.assertFalse(p.has_usable_password())
     
+    @patch.object(GraphAPI, 'get_object')
     @patch.object(MultiPartFormWizard, 'security_hash')
-    def test_second_step_without_account_already_existing_username(self, mock_return):
+    def test_second_step_without_account_already_existing_username(self, mock_return, mock_object):
+        mock_object.return_value = FacebookAccountWizardTest.me2
         mock_return.return_value = 'b5d8e7ffcc52f852c688983ecb30ead6'
         access_token = 'AAAC0EJC00lQBAGnc6FW8QlB5tz4ppuSXeR0FQ8kdCagwHwRraHDBI4HE7\
           eigTprugjh0uGPu4h2FG2VEaRO8RxRcm8ObicNyZB21JGgZDZD'
@@ -271,8 +326,11 @@ class FacebookAccountWizardTest(TestCase):
                 })
         self.assertFormError(response, 'form', 'username', _(u"Ce nom d'utilisateur est déjà pris."))
         self.assertEqual(FacebookSession.objects.get(access_token=access_token).user, None)
-    
-    def test_first_step_with_wrong_access_token(self):
+        self.assertTrue(mock_object.called)
+
+    @patch.object(GraphAPI, 'get_object')
+    def test_first_step_with_wrong_access_token(self, mock_object):
+        mock_object.side_effect = GraphAPIError('OAuthException', 'Invalid OAuth access token.')
         response = self.client.post(reverse('auth_login'), {
             '0-email': '',
             '0-exists': 0,
@@ -284,8 +342,12 @@ class FacebookAccountWizardTest(TestCase):
         })
         self.assertTrue(response.status_code, 200)
         self.assertFormError(response, 'form', None, _(u"Invalid OAuth access token."))
+        self.assertTrue(mock_object.called)
+
     
-    def test_first_step_with_wrong_uid(self):
+    @patch.object(GraphAPI, 'get_object')
+    def test_first_step_with_wrong_uid(self, mock_object):
+        mock_object.return_value = {}
         response = self.client.post(reverse('auth_login'), {
             '0-email': '',
             '0-exists': 0,
@@ -298,9 +360,11 @@ class FacebookAccountWizardTest(TestCase):
         })
         self.assertTrue(response.status_code, 200)
         self.assertFormError(response, 'form', None, _(u'Wrong facebook uid.'))
-
+        self.assertTrue(mock_object.called)
     
-    def test_first_step_with_existing_facebooksession(self):
+    @patch.object(GraphAPI, 'get_object')
+    def test_first_step_with_existing_facebooksession(self, mock_object):
+        mock_object.return_value = FacebookAccountWizardTest.me3
         access_token = 'AAAC0EJC00lQBAFeztcpDKBgyFDRm9kIiaSe7amtYzcw2MLiSdfEeh9ftpZAFzYUT0zwIqXCnBEYe95I1cnMX8dZCQ2Dw10qJlhJRgYxgZDZD'
         self.assertEqual(FacebookSession.objects.get(access_token=access_token).user, None)
         Patron.objects.get(username='kosii1')
@@ -315,7 +379,7 @@ class FacebookAccountWizardTest(TestCase):
         })
         self.assertRedirects(response, settings.LOGIN_REDIRECT_URL)
         self.assertEqual(FacebookSession.objects.get(access_token=access_token).user, Patron.objects.get(username='kosii1'))
-
+        self.assertTrue(mock_object.called)
     
 
 
