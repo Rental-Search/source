@@ -217,8 +217,11 @@ class NewGenericFormWizard(MultiPartFormWizard):
                     self.new_patron.avatar
                 except Avatar.DoesNotExist:
                     if 'picture' in self.me and 'static-ak' not in self.me['picture']:
-                        fb_image_object = urlopen(self.me['picture']).read()
-                        Avatar(patron=self.new_patron, image=SimpleUploadedFile('picture',fb_image_object)).save()
+                        try:
+                            fb_image_object = urlopen(self.me['picture']).read()
+                            Avatar(patron=self.new_patron, image=SimpleUploadedFile('picture',fb_image_object)).save()
+                        except IOError:
+                            pass
         
     def get_form(self, step, data=None, files=None):
         next_form = self.form_list[step]
