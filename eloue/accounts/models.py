@@ -289,13 +289,10 @@ class FacebookSession(models.Model):
         me_dict = cache.get('facebook:me_%d' % self.uid, {})
         if me_dict:
             return me_dict
-        try:
-            # we have to stock it in a local variable, and return the value from that
-            # local variable, otherwise this stuff is broken with the dummy cache engine
-            me_dict = self.graph_api.get_object("me")
-            cache.set('facebook:me_%d' % self.uid, me_dict, 0)
-        except facebook.GraphAPIError as e:
-            return {}
+        # we have to stock it in a local variable, and return the value from that
+        # local variable, otherwise this stuff is broken with the dummy cache engine
+        me_dict = self.graph_api.get_object("me")
+        cache.set('facebook:me_%d' % self.uid, me_dict, 0)
         return me_dict
     
     @property
