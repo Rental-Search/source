@@ -94,7 +94,7 @@ def associate_facebook(request):
     else:
         return direct_to_template(
             request, 'accounts/associated_facebook.html', 
-            {'me': request.user.facebooksession.me}
+            {'me': request.user.facebooksession.uid}
         )
 
 @cache_page(900)
