@@ -9,20 +9,20 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.sites.models import Site
 from django.core.mail import EmailMessage, BadHeaderError
 from django.core.urlresolvers import reverse
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, render_to_response
 from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.cache import never_cache, cache_page
 from django.views.generic.simple import direct_to_template, redirect_to
 from django.views.generic.list_detail import object_list
 from django.core.context_processors import csrf
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseForbidden
 from django.contrib.auth import login
 from oauth_provider.models import Token
 from django.shortcuts import redirect
 
 from eloue.decorators import secure_required, mobify
-from eloue.accounts.forms import EmailAuthenticationForm, PatronEditForm, PatronPaypalForm, PatronPasswordChangeForm, ContactForm, PatronSetPasswordForm
-from eloue.accounts.models import Patron
+from eloue.accounts.forms import EmailAuthenticationForm, PatronEditForm, PatronPaypalForm, PatronPasswordChangeForm, ContactForm, PatronSetPasswordForm, FacebookForm
+from eloue.accounts.models import Patron, FacebookSession
 from eloue.accounts.wizard import AuthenticationWizard
 
 from eloue.products.forms import FacetedSearchForm
@@ -78,10 +78,19 @@ def oauth_callback(request, *args, **kwargs):
 @never_cache
 @login_required
 def associate_facebook(request):
-    form = FacebookForm(request.POST or None)
-    if form.is_valid():
-        pass
-
+    try:
+        request.user.facebooksession
+    except FacebookSession.DoesNotExist:
+        form = FacebookForm(request.POST or None)
+        form.user = request.user
+        if form.is_valid():
+            return redirect('associate_facebook')
+        return direct_to_template(request, 'accounts/associate_facebook.html', {'form': form})
+    else:
+        return direct_to_template(
+            request, 'accounts/associated_facebook.html', 
+            {'me': request.user.facebooksession.me}
+        )
 
 @cache_page(900)
 def patron_detail(request, slug, patron_id=None, page=None):

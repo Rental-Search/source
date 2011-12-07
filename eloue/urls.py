@@ -11,7 +11,7 @@ from django.utils.translation import ugettext as _
 
 from eloue.accounts.forms import EmailPasswordResetForm, PatronSetPasswordForm
 from eloue.accounts.views import activate, authenticate, authenticate_headless, dashboard, patron_edit, owner_booking, owner_history,\
-    borrower_booking, borrower_history, patron_edit_password, patron_paypal, owner_product, contact, alert_edit
+    borrower_booking, borrower_history, patron_edit_password, patron_paypal, owner_product, contact, alert_edit, associate_facebook
 
 from eloue.products.views import homepage, search, reply_product_related_message, inbox, archived, archive_thread, unarchive_thread, thread_details
 
@@ -63,6 +63,7 @@ urlpatterns = patterns('',
     url(r'^dashboard/$', dashboard, name="dashboard"),
     url(r'^dashboard/account/profile/$', patron_edit, name="patron_edit"),
     url(r'^dashboard/account/password/$', patron_edit_password, name="patron_edit_password"),
+    url(r'^dashboard/account/facebook/$', associate_facebook, name='associate_facebook'),
     url(r'^dashboard/account/paypal/$', patron_paypal, name="patron_paypal"),
     url(r'^dashboard/owner/booking/$', owner_booking, name="owner_booking"),
     url(r'^dashboard/owner/booking/page/(?P<page>\d+)/$', owner_booking, name="owner_booking"),
