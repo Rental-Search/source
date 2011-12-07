@@ -15,6 +15,7 @@ from django.contrib.gis.db import models
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.contrib.gis.geos import Point
+from django.core.cache import cache
 from django.db.models import permalink
 from django.db.models import signals
 from django.utils.encoding import smart_unicode
@@ -240,7 +241,16 @@ class Patron(User):
     @property
     def is_verified(self):
         return paypal_payment.verify_paypal_account(email=self.paypal_email, first_name=self.first_name, last_name=self.last_name)
+    
+    @property
+    def is_valid(self):
+        paypal_status = paypal_payment.verify_paypal_account(email=self.paypal_email, first_name=self.first_name, last_name=self.last_name)
+        return paypal_status == "VERIFIED" or paypal_status == "UNVERIFIED"
 
+    @property
+    def is_confirmed(self):
+        return paypal_payment.confirm_paypal_account(self.paypal_email)
+    
     def send_activation_email(self):
         context = {
             'patron': self, 'activation_key': self.activation_key,
@@ -274,10 +284,17 @@ class FacebookSession(models.Model):
     class Meta:
         unique_together = (('user', 'uid'), ('access_token', 'expires'))
     
-    def __unicode__(self):
-        me = self.graph_api.get_object('me')
-        return "%(name)s <%(email)s>" % me
-
+    @property
+    def me(self):
+        me_dict = cache.get('facebook:me_%d' % self.uid, {})
+        if me_dict:
+            return me_dict
+        # we have to stock it in a local variable, and return the value from that
+        # local variable, otherwise this stuff is broken with the dummy cache engine
+        me_dict = self.graph_api.get_object("me", fields='picture,email,first_name,last_name,gender,username,location')
+        cache.set('facebook:me_%d' % self.uid, me_dict, 0)
+        return me_dict
+    
     @property
     def graph_api(self):
         if not hasattr(self, '_graph_api') or self._graph_api.access_token != self.access_token:

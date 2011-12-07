@@ -302,7 +302,7 @@ $(document).ready(function() {
           inputs.slice(0, index).reverse().each(function(i, previous) {
             previous = $(previous);
             if(!previous.val()) {
-              previous.val(prev / hash[index - (i+1)]);
+              previous.val((prev / hash[index - (i+1)]).toFixed(2));
             }
             prev = parseFloat(previous.val().replace(',', '.'));
           });
@@ -310,7 +310,7 @@ $(document).ready(function() {
           inputs.slice(index + 1).each(function(i, next) {
             next = $(next);
             if(!next.val()) {
-              next.val(prev * hash[i + index]);
+              next.val((prev * hash[i + index]).toFixed(2));
             }
             prev = parseFloat(next.val().replace(',', '.'));
           });
@@ -346,6 +346,7 @@ $(document).ready(function() {
              $('input[name$="facebook_access_token"]').val(response.authResponse.accessToken);
              $('input[name$="facebook_expires"]').val(response.authResponse.expiresIn);
              $('input[name$="facebook_uid"]').val(response.authResponse.userID);
+             $('input[name$="email"]').removeAttr('value');
            }
            $('form').submit();
            $('input[type="submit"]').attr('disabled','disabled');

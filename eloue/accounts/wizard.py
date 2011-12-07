@@ -14,7 +14,10 @@ from eloue.accounts.models import Patron, Avatar
 from eloue.wizard import MultiPartFormWizard, NewGenericFormWizard
 
 class AuthenticationWizard(NewGenericFormWizard):
-    required_fields = ['username', 'password1', 'password2', 'is_professional', 'company_name', 'avatar']
+
+    def __init__(self, *args, **kwargs):
+        super(AuthenticationWizard, self).__init__(*args, **kwargs)
+        self.required_fields = ['username', 'password1', 'password2', 'is_professional', 'company_name', 'avatar']
     
     def done(self, request, form_list):
         super(AuthenticationWizard, self).done(request, form_list)

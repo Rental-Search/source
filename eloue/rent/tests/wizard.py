@@ -6,6 +6,8 @@ from mock import patch
 from django.core.urlresolvers import reverse
 from django.test import TestCase
 
+from facebook import GraphAPIError, GraphAPI
+
 from eloue.products.models import Product
 from eloue.rent.models import Booking
 from eloue.wizard import MultiPartFormWizard
@@ -24,6 +26,45 @@ class MockDateTime(datetime.datetime):
 class BookingWizardTestWithFacebook(TestCase):
     fixtures = ['category', 'patron', 'address', 'price', 'product', 'facebooksession']
     
+    me1 = {
+        u'email': u'balazs.kossovics@e-loue.com',
+        u'first_name': u'Jacques-Yves',
+        u'gender': u'male',
+        u'id': u'100003207275288',
+        u'last_name': u'Cousteau',
+        u'link': u'http://www.facebook.com/profile.php?id=100003207275288',
+        u'locale': u'en_GB',
+        u'name': u'Jacques-Yves Cousteau',
+        u'timezone': 1,
+        u'updated_time': u'2011-11-23T09:25:40+0000'
+    }
+
+    me2 = {u'email': u'kosii.spam@gmail.com',
+        u'first_{name': u'Bal\xe1zs',
+        u'gender': u'male',
+        u'id': u'100000609837182',
+        u'last_name': u'Kossovics',
+        u'link': u'http://www.facebook.com/kosii.spam',
+        u'locale': u'en_US',
+        u'name': u'Bal\xe1zs Kossovics',
+        u'timezone': 1,
+        u'updated_time': u'2011-11-23T16:42:03+0000',
+        u'username': u'kosii.spam',
+        u'verified': True
+    }
+
+    me3 = {u'email': u'elouetest@gmail.com',
+        u'first_name': u'Noga',
+        u'gender': u'male',
+        u'id': u'100003190074813',
+        u'last_name': u'Alon',
+        u'link': u'http://www.facebook.com/profile.php?id=100003190074813',
+        u'locale': u'en_US',
+        u'name': u'Noga Alon',
+        u'timezone': 1,
+        u'updated_time': u'2011-11-25T16:14:45+0000'
+    }
+
     def setUp(self):
         self.product = Product.objects.get(pk=1)
         self.old_datetime = datetime.datetime
@@ -33,9 +74,13 @@ class BookingWizardTestWithFacebook(TestCase):
     def tearDown(self):
         datetime.datetime = self.old_datetime
 
+
+    @patch.object(GraphAPI, 'get_object')
     @patch.object(MultiPartFormWizard, 'security_hash')
-    def test_second_step_as_anonymous(self, mock_method):
+    def test_second_step_as_anonymous(self, mock_method, mock_object):
         mock_method.return_value = '6941fd7b20d720833717a1f92e8027af'
+        mock_object.return_value = BookingWizardTestWithFacebook.me1
+
         access_token = 'AAAC0EJC00lQBAOf7XANWgcw2UzKdLn5q13bUp07KRPy8MntAdsPzJsnFOiCu7ZCegQIX46eu7OAjXp3sFucTCRKYGH42OW9ywcissIAZDZD'
         uid = 100003207275288
         response = self.client.post(reverse('booking_create', args=['location/bebe/mobilier-bebe/lits/', self.product.slug, self.product.id]), {
@@ -55,10 +100,14 @@ class BookingWizardTestWithFacebook(TestCase):
         })
         self.assertTrue(response.status_code, 200)
         self.assertTemplateUsed(response, 'rent/booking_missing.html')
+        self.assertTrue(mock_object.called)
     
+    @patch.object(GraphAPI, 'get_object')
     @patch.object(MultiPartFormWizard, 'security_hash')
-    def test_third_step_as_anonymous(self, mock_method):
+    def test_third_step_as_anonymous(self, mock_method, mock_object):
         mock_method.return_value = '6941fd7b20d720833717a1f92e8027af'
+        mock_object.return_value = BookingWizardTestWithFacebook.me1
+        
         access_token = 'AAAC0EJC00lQBAOf7XANWgcw2UzKdLn5q13bUp07KRPy8MntAdsPzJsnFOiCu7ZCegQIX46eu7OAjXp3sFucTCRKYGH42OW9ywcissIAZDZD'
         uid = 100003207275288
         response = self.client.post(reverse('booking_create', args=['location/bebe/mobilier-bebe/lits/', self.product.slug, self.product.id]), {
@@ -84,11 +133,15 @@ class BookingWizardTestWithFacebook(TestCase):
         })
         self.assertTrue(response.status_code, 200)
         self.assertTemplateUsed(response, 'rent/booking_confirm.html')
+        self.assertTrue(mock_object.called)
     
+    @patch.object(GraphAPI, 'get_object')
     @patch.object(Booking, 'preapproval')
     @patch.object(MultiPartFormWizard, 'security_hash')
-    def test_fourth_step_as_anonymous(self, mock_hash, mock_preapproval):
+    def test_fourth_step_as_anonymous(self, mock_hash, mock_preapproval, mock_object):
         mock_hash.return_value = '6941fd7b20d720833717a1f92e8027af'
+        mock_object.return_value = BookingWizardTestWithFacebook.me1
+        
         access_token = ('AAAC0EJC00lQBAOf7XANWgcw2UzKdLn5q13bUp07KRPy8MntAdsPz'
             'JsnFOiCu7ZCegQIX46eu7OAjXp3sFucTCRKYGH42OW9ywcissIAZDZD')
         uid = 100003207275288
@@ -115,12 +168,16 @@ class BookingWizardTestWithFacebook(TestCase):
             'wizard_step': 3
         })
         self.assertTrue(mock_preapproval.called)
+        self.assertTrue(mock_object.called)
 
 #---------------------------------
 
+    @patch.object(GraphAPI, 'get_object')
     @patch.object(MultiPartFormWizard, 'security_hash')
-    def test_second_step_as_new(self, mock_method):
+    def test_second_step_as_new(self, mock_method, mock_object):
         mock_method.return_value = '6941fd7b20d720833717a1f92e8027af'
+        mock_object.return_value = BookingWizardTestWithFacebook.me2
+        
         access_token = 'AAAC0EJC00lQBAGnc6FW8QlB5tz4ppuSXeR0FQ8kdCagwHwRraHDBI4HE7eigTprugjh0uGPu4h2FG2VEaRO8RxRcm8ObicNyZB21JGgZDZD'
         uid = 100000609837182
         response = self.client.post(reverse('booking_create', args=['location/bebe/mobilier-bebe/lits/', self.product.slug, self.product.id]), {
@@ -140,10 +197,14 @@ class BookingWizardTestWithFacebook(TestCase):
         })
         self.assertTrue(response.status_code, 200)
         self.assertTemplateUsed(response, 'rent/booking_missing.html')
+        self.assertTrue(mock_object.called)
     
+    @patch.object(GraphAPI, 'get_object')
     @patch.object(MultiPartFormWizard, 'security_hash')
-    def test_third_step_as_new(self, mock_method):
+    def test_third_step_as_new(self, mock_method, mock_object):
         mock_method.return_value = '6941fd7b20d720833717a1f92e8027af'
+        mock_object.return_value = BookingWizardTestWithFacebook.me2
+        
         access_token = 'AAAC0EJC00lQBAGnc6FW8QlB5tz4ppuSXeR0FQ8kdCagwHwRraHDBI4HE7eigTprugjh0uGPu4h2FG2VEaRO8RxRcm8ObicNyZB21JGgZDZD'
         uid = 100000609837182
         response = self.client.post(reverse('booking_create', args=['location/bebe/mobilier-bebe/lits/', self.product.slug, self.product.id]), {
@@ -172,11 +233,15 @@ class BookingWizardTestWithFacebook(TestCase):
         })
         self.assertTrue(response.status_code, 200)
         self.assertTemplateUsed(response, 'rent/booking_confirm.html')
+        self.assertTrue(mock_object.called)
     
+    @patch.object(GraphAPI, 'get_object')
     @patch.object(Booking, 'preapproval')
     @patch.object(MultiPartFormWizard, 'security_hash')
-    def test_fourth_step_as_new(self, mock_hash, mock_preapproval):
+    def test_fourth_step_as_new(self, mock_hash, mock_preapproval, mock_object):
         mock_hash.return_value = '6941fd7b20d720833717a1f92e8027af'
+        mock_object.return_value = BookingWizardTestWithFacebook.me2
+        
         access_token = 'AAAC0EJC00lQBAGnc6FW8QlB5tz4ppuSXeR0FQ8kdCagwHwRraHDBI4HE7eigTprugjh0uGPu4h2FG2VEaRO8RxRcm8ObicNyZB21JGgZDZD'
         uid = 100000609837182
         response = self.client.post(reverse('booking_create', args=['location/bebe/mobilier-bebe/lits/', self.product.slug, self.product.id]), {
@@ -205,12 +270,16 @@ class BookingWizardTestWithFacebook(TestCase):
             'wizard_step': 3
         })
         self.assertTrue(mock_preapproval.called)
+        self.assertTrue(mock_object.called)
 
 #---------------------------------
 
+    @patch.object(GraphAPI, 'get_object')
     @patch.object(MultiPartFormWizard, 'security_hash')
-    def test_second_step_associate(self, mock_method):
+    def test_second_step_associate(self, mock_method, mock_object):
         mock_method.return_value = '6941fd7b20d720833717a1f92e8027af'
+        mock_object.return_value = BookingWizardTestWithFacebook.me3
+        
         access_token = 'AAAC0EJC00lQBAFeztcpDKBgyFDRm9kIiaSe7amtYzcw2MLiSdfEeh9ftpZAFzYUT0zwIqXCnBEYe95I1cnMX8dZCQ2Dw10qJlhJRgYxgZDZD'
         uid = 100003190074813
         self.assertEqual(FacebookSession.objects.get(uid=uid).user, None)
@@ -231,10 +300,14 @@ class BookingWizardTestWithFacebook(TestCase):
         })
         self.assertTrue(response.status_code, 200)
         self.assertTemplateUsed(response, 'rent/booking_missing.html')
+        self.assertTrue(mock_object.called)
     
+    @patch.object(GraphAPI, 'get_object')
     @patch.object(MultiPartFormWizard, 'security_hash')
-    def test_third_step_associate(self, mock_method):
+    def test_third_step_associate(self, mock_method, mock_object):
         mock_method.return_value = '6941fd7b20d720833717a1f92e8027af'
+        mock_object.return_value = BookingWizardTestWithFacebook.me3
+        
         access_token = 'AAAC0EJC00lQBAFeztcpDKBgyFDRm9kIiaSe7amtYzcw2MLiSdfEeh9ftpZAFzYUT0zwIqXCnBEYe95I1cnMX8dZCQ2Dw10qJlhJRgYxgZDZD'
         uid = 100003190074813
         self.assertEqual(FacebookSession.objects.get(uid=uid).user, None)
@@ -261,11 +334,15 @@ class BookingWizardTestWithFacebook(TestCase):
         })
         self.assertTrue(response.status_code, 200)
         self.assertTemplateUsed(response, 'rent/booking_confirm.html')
+        self.assertTrue(mock_object.called)
     
+    @patch.object(GraphAPI, 'get_object')
     @patch.object(Booking, 'preapproval')
     @patch.object(MultiPartFormWizard, 'security_hash')
-    def test_fourth_step_associate(self, mock_hash, mock_preapproval):
+    def test_fourth_step_associate(self, mock_hash, mock_preapproval, mock_object):
         mock_hash.return_value = '6941fd7b20d720833717a1f92e8027af'
+        mock_object.return_value = BookingWizardTestWithFacebook.me3
+        
         access_token = 'AAAC0EJC00lQBAFeztcpDKBgyFDRm9kIiaSe7amtYzcw2MLiSdfEeh9ftpZAFzYUT0zwIqXCnBEYe95I1cnMX8dZCQ2Dw10qJlhJRgYxgZDZD'
         uid = 100003190074813
         self.assertEqual(FacebookSession.objects.get(uid=uid).user, None)
@@ -293,6 +370,7 @@ class BookingWizardTestWithFacebook(TestCase):
         })
         self.assertTrue(mock_preapproval.called)
         self.assertEqual(FacebookSession.objects.get(uid=uid).user, Patron.objects.get(username='kosii1'))
+        self.assertTrue(mock_object.called)
 
 class BookingWizardTest(TestCase):
     fixtures = ['category', 'patron', 'address', 'price', 'product']

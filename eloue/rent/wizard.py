@@ -28,11 +28,13 @@ USE_HTTPS = getattr(settings, 'USE_HTTPS', True)
 
 class BookingWizard(NewGenericFormWizard):
     
-    required_fields = [
-        'username', 'password1', 'password2', 'is_professional', 'company_name', 'first_name', 'last_name',
-        'phones', 'phones__phone', 'addresses',
-        'addresses__address1', 'addresses__zipcode', 'addresses__city', 'addresses__country'
-    ]
+    def __init__(self, *args, **kwargs):
+        super(BookingWizard, self).__init__(*args, **kwargs)
+        self.required_fields = [
+          'username', 'password1', 'password2', 'is_professional', 'company_name', 'first_name', 'last_name',
+          'phones', 'phones__phone', 'addresses',
+          'addresses__address1', 'addresses__zipcode', 'addresses__city', 'addresses__country'
+        ]
 
     def done(self, request, form_list):
         super(BookingWizard, self).done(request, form_list)

@@ -9,6 +9,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.sites.models import Site
 from django.core.mail import EmailMessage, BadHeaderError
 from django.core.urlresolvers import reverse
+from django.forms.models import model_to_dict
 from django.shortcuts import get_object_or_404, render_to_response
 from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.cache import never_cache, cache_page
@@ -53,7 +54,11 @@ def authenticate(request, *args, **kwargs):
         wizard = AuthenticationWizard([EmailAuthenticationForm])
         return wizard(request, *args, **kwargs)
     else:
-        return redirect(settings.LOGIN_REDIRECT_URL)
+        redirect_path = request.GET.get('next', '')
+        if redirect_path:
+            return redirect(redirect_path)
+        else:
+            return redirect(settings.LOGIN_REDIRECT_URL)
 
 
 @never_cache
@@ -108,24 +113,29 @@ def patron_edit(request, *args, **kwargs):
     paypal = request.GET.get('paypal', False)
     redirect_path = request.REQUEST.get('next', '')
     patron = request.user
-    form = PatronEditForm(request.POST or None, request.FILES or None, instance=patron)
+
+    patron_dict = model_to_dict(patron)
+    
+    form = PatronEditForm(request.POST or patron_dict, request.FILES or None, instance=patron)
     if form.is_valid():
         patron = form.save()
-        if paypal: 
-            if patron.is_verified == "VERIFIED":
+        if paypal:
+            is_valid = patron.is_valid
+            is_confirmed = patron.is_confirmed
+            if patron.is_valid and patron.is_confirmed:
                 protocol = 'https' if USE_HTTPS else 'http'
                 domain = Site.objects.get_current().domain
                 if not redirect_path or '//' in redirect_path or ' ' in redirect_path:
                     redirect_path = reverse('dashboard')
                 return_url = "%s://%s%s?paypal=true" % (protocol, domain, redirect_path)
-                messages.success(request, _(u"Vos informations ont bien été modifiées et votre compte paypal est vérifié"))    
+                messages.success(request, _(u"Vos informations ont bien été modifiées et votre compte paypal est valide"))    
                 return redirect_to(request, return_url)
             else:
-                if patron.is_verified == "UNVERIFIED":
-                    messages.error(request, _(u"Votre paypal compte n'est pas vérifié, veuillez vérifier votre compte et modifier votre nom ou prénom ou email paypal"))
-                elif patron.is_verified == "INVALID":
+                if not is_valid:
                     messages.error(request, _(u"Votre Paypal compte est invalide, veuillez modifier votre nom ou prénom ou email paypal"))
-        else:
+                if not is_confirmed:
+                    messages.error(request,  _(u"Vérifiez que vous avez bien répondu à l'email d'activation de Paypal"))
+        elif request.POST:
             messages.success(request, _(u"Vos informations ont bien été modifiées")) 
     patron = Patron.objects.get(pk=request.user.pk)
     return direct_to_template(request, 'accounts/patron_edit.html', extra_context={'form': form, 'patron': patron})
@@ -163,14 +173,16 @@ def patron_paypal(request):
         profile_edit_url = "%s://%s%s?next=%s&paypal=true"% (protocol, domain, reverse('patron_edit'), redirect_path)
         
         if form.paypal_exists:
-            if patron.is_verified == "VERIFIED":
-                messages.success(request, _(u"Votre compte paypal est vérifié"))
+            is_valid = patron.is_valid
+            is_confirmed = patron.is_confirmed
+            if is_valid and is_confirmed:
+                messages.success(request, _(u"Votre compte paypal est valide"))
                 return redirect_to(request, return_url)
             else:
-                if patron.is_verified == "UNVERIFIED":
-                    messages.error(request, _(u"Votre paypal compte n'est pas vérifié, veuillez modifier votre nom ou prénom ou email paypal"))
-                elif patron.is_verified == "INVALID":
+                if not is_valid:
                     messages.error(request, _(u"Votre Paypal compte est invalide, veuillez modifier votre nom ou prénom ou email paypal"))
+                if not is_confirmed:
+                    messages.error(request,  _(u"Vérifiez que vous avez bien répondu à l'email d'activation de Paypal"))    
                 return redirect_to(request, profile_edit_url)
         else: 
             paypal_redirect = patron.create_account(return_url=return_url)

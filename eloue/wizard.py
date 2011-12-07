@@ -5,7 +5,7 @@ except ImportError:
     import pickle
 
 from urllib2 import urlopen
-
+import facebook
 import django.forms as forms
 from django.conf import settings
 from django.contrib.formtools.wizard import FormWizard
@@ -26,7 +26,7 @@ class MultiPartFormWizard(FormWizard):
         super(MultiPartFormWizard, self).__init__(*args, **kwargs)
         self.fb_session = None
         self.new_patron = None
-        self.me = None
+        self.me = {}
     
     def get_form(self, step, data=None, files=None):
         return self.form_list[step](data, files, prefix=self.prefix_for_step(step), initial=self.initial.get(step, None))
@@ -140,14 +140,15 @@ def isMissingInformationForm(obj):
     return getattr(obj.__class__, '__name__', None) == 'MissingInformationForm'
 
 class NewGenericFormWizard(MultiPartFormWizard):
-    """collecting here the biggest common parts of MessageWizard, BookingWizard and ProductWizard"""
+    """collecting here the largest common part of MessageWizard, BookingWizard and ProductWizard"""
 
-    """A not so generic form wizard"""
-    required_fields = [
-        'username', 'password1', 'password2', 'is_professional', 'company_name', 'first_name', 'last_name',
-        'phones', 'phones__phone', 'addresses',
-        'addresses__address1', 'addresses__zipcode', 'addresses__city', 'addresses__country', 'avatar'
-    ]
+    def __init__(self, *args, **kwargs):
+        super(NewGenericFormWizard, self).__init__(*args, **kwargs)
+        self.required_fields = [
+          'username', 'password1', 'password2', 'is_professional', 'company_name', 'first_name', 'last_name',
+          'phones', 'phones__phone', 'addresses',
+          'addresses__address1', 'addresses__zipcode', 'addresses__city', 'addresses__country', 'avatar'
+        ]
 
     def __call__(self, request, *args, **kwargs):
         if request.user.is_authenticated():
@@ -155,8 +156,8 @@ class NewGenericFormWizard(MultiPartFormWizard):
             if not self.fb_session:
                 try:
                     self.fb_session = self.patron.facebooksession
-                    self.me = self.fb_session.graph_api.get_object('me', fields='picture,email,first_name,last_name,gender,username,location')
-                except FacebookSession.DoesNotExist:
+                    self.me = self.fb_session.me
+                except (FacebookSession.DoesNotExist, facebook.GraphAPIError):
                     pass
             if EmailAuthenticationForm in self.form_list and len(self.form_list) > 1:
                 self.form_list.remove(EmailAuthenticationForm)
@@ -216,13 +217,15 @@ class NewGenericFormWizard(MultiPartFormWizard):
                     self.new_patron.avatar
                 except Avatar.DoesNotExist:
                     if 'picture' in self.me and 'static-ak' not in self.me['picture']:
-                        fb_image_object = urlopen(self.me['picture']).read()
-                        Avatar(patron=self.new_patron, image=SimpleUploadedFile('picture',fb_image_object)).save()
+                        try:
+                            fb_image_object = urlopen(self.me['picture']).read()
+                            Avatar(patron=self.new_patron, image=SimpleUploadedFile('picture',fb_image_object)).save()
+                        except IOError:
+                            pass
         
     def get_form(self, step, data=None, files=None):
         next_form = self.form_list[step]
         if next_form.__name__ == 'MissingInformationForm':
-            #if not issubclass(next_form, (ProductForm, EmailAuthenticationForm)):
             initial = {
                 'addresses__country': settings.LANGUAGE_CODE.split('-')[1].upper(),
                 'first_name': self.me.get('first_name', '') if self.me else '',
@@ -231,12 +234,12 @@ class NewGenericFormWizard(MultiPartFormWizard):
             }
             if self.me and 'location' in self.me:
                 try:
-                    city, country = GoogleGeocoder().getCityCountry(self.me['location']['name'])
+                    if self.me['location']['name']:
+                        city, country = GoogleGeocoder().getCityCountry(self.me['location']['name'])
+                        initial['addresses__country'] = country
+                        initial['addresses__city'] = city
                 except (KeyError, IndexError):
                     pass
-                else:
-                    initial['addresses__country'] = country
-                    initial['addresses__city'] = city
             
             return next_form(data, files, prefix=self.prefix_for_step(step),
                 initial=initial)
@@ -245,11 +248,14 @@ class NewGenericFormWizard(MultiPartFormWizard):
 
 class GenericFormWizard(MultiPartFormWizard):
     """A not so generic form wizard"""
-    required_fields = [
-        'username', 'password1', 'password2', 'is_professional', 'company_name', 'first_name', 'last_name',
-        'phones', 'phones__phone', 'addresses',
-        'addresses__address1', 'addresses__zipcode', 'addresses__city', 'addresses__country', 'avatar'
-    ]
+
+    def __init__(self, *args, **kwargs):
+        super(GenericFormWizard, self).__init__(*args, **kwargs)
+        self.required_fields = [
+          'username', 'password1', 'password2', 'is_professional', 'company_name', 'first_name', 'last_name',
+          'phones', 'phones__phone', 'addresses',
+          'addresses__address1', 'addresses__zipcode', 'addresses__city', 'addresses__country', 'avatar'
+        ]
 
     def __call__(self, request, *args, **kwargs):
         if request.user.is_authenticated():  # When user is authenticated

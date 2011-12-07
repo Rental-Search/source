@@ -24,6 +24,7 @@ accounts = AdaptiveAccounts(
     sandbox=settings.USE_PAYPAL_SANDBOX
 )
 
+
 def verify_paypal_account(email, first_name, last_name):
     try:
         response = accounts.get_verified_status(
@@ -73,7 +74,8 @@ class AdaptivePapalPayments(AbstractPayment):
             maxTotalAmountOfAllPayments=str(total_amount.quantize(D(".00"), ROUND_CEILING)),
             cancelUrl=cancel_url,
             returnUrl=return_url,
-            ipnNotificationUrl=urljoin("%s://%s" % (protocol, domain), reverse('preapproval_ipn')),
+            ipnNotificationUrl='http://www.postbin.org/1fi02go' if settings.USE_PAYPAL_SANDBOX \
+                else urljoin("%s://%s" % (protocol, domain), reverse('preapproval_ipn')),
             client_details={
                 'ipAddress': ip_address,
                 'partnerName': 'e-loue',
@@ -104,7 +106,8 @@ class AdaptivePapalPayments(AbstractPayment):
             returnUrl=return_url,
             currencyCode=self.booking._currency,
             preapprovalKey=self.booking.preapproval_key,
-            ipnNotificationUrl=urljoin("%s://%s" % (protocol, domain), reverse('pay_ipn')),
+            ipnNotificationUrl='http://www.postbin.org/1fi02go' if settings.USE_PAYPAL_SANDBOX \
+                else urljoin("%s://%s" % (protocol, domain), reverse('preapproval_ipn')),
             receiverList={'receiver': [
                 {'primary':True, 'amount':str(total_amount.quantize(D(".00"), ROUND_CEILING)), 'email':settings.PAYPAL_API_EMAIL},
                 {'primary':False, 'amount':str(net_price.quantize(D(".00"), ROUND_FLOOR)), 'email':self.booking.owner.paypal_email}
@@ -144,24 +147,43 @@ class AdaptivePapalPayments(AbstractPayment):
             cancelUrl=cancel_url,
             returnUrl=return_url,
             currencyCode=self.booking._currency,
-            ipnNotificationUrl=urljoin(
-                "%s://%s" % (protocol, domain), reverse('pay_ipn')
-            ),
+            ipnNotificationUrl='http://www.postbin.org/1fi02go' if settings.USE_PAYPAL_SANDBOX \
+                else urljoin("%s://%s" % (protocol, domain), reverse('preapproval_ipn')),
             receiverList={'receiver': [
                 {'amount':str(amount.quantize(D('.00'), ROUND_FLOOR)), 'email':self.booking.owner.paypal_email},
             ]}
         )
+
+app = AdaptivePapalPayments(None)
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-        
-        
+def confirm_paypal_account(email):
+    try:
+        # try a test payment
+        app.payments.pay(
+          returnUrl='http://e-loue.com', 
+          cancelUrl='http://e-loue.com', 
+          actionType='PAY', 
+          currencyCode='EUR', 
+          receiverList={
+            'receiver': [
+              {
+                'email': email, 
+                'amount': '0.01', 
+                'primary': False
+              }, {
+                'email': settings.PAYPAL_API_EMAIL,
+                'amount': '0.01', 
+                'primary': True
+              }
+            ]
+          }
+        )
+        return True
+    except PaypalError as e:
+        # 569042 The email account is not confirmed by PayPal, 
+        # or 'restricted' (probably means it's not existing)
+        # or empty
+        #if e.code == '569042' or e.code == '520009' or e.code == '580022':
+        #   return False
+        #else: raise
+        return False
