@@ -26,7 +26,7 @@ class MultiPartFormWizard(FormWizard):
         super(MultiPartFormWizard, self).__init__(*args, **kwargs)
         self.fb_session = None
         self.new_patron = None
-        self.me = None
+        self.me = {}
     
     def get_form(self, step, data=None, files=None):
         return self.form_list[step](data, files, prefix=self.prefix_for_step(step), initial=self.initial.get(step, None))
@@ -157,7 +157,7 @@ class NewGenericFormWizard(MultiPartFormWizard):
                 try:
                     self.fb_session = self.patron.facebooksession
                     self.me = self.fb_session.me
-                except FacebookSession.DoesNotExist:
+                except (FacebookSession.DoesNotExist, facebook.GraphAPIError):
                     pass
             if EmailAuthenticationForm in self.form_list and len(self.form_list) > 1:
                 self.form_list.remove(EmailAuthenticationForm)
@@ -217,13 +217,15 @@ class NewGenericFormWizard(MultiPartFormWizard):
                     self.new_patron.avatar
                 except Avatar.DoesNotExist:
                     if 'picture' in self.me and 'static-ak' not in self.me['picture']:
-                        fb_image_object = urlopen(self.me['picture']).read()
-                        Avatar(patron=self.new_patron, image=SimpleUploadedFile('picture',fb_image_object)).save()
+                        try:
+                            fb_image_object = urlopen(self.me['picture']).read()
+                            Avatar(patron=self.new_patron, image=SimpleUploadedFile('picture',fb_image_object)).save()
+                        except IOError:
+                            pass
         
     def get_form(self, step, data=None, files=None):
         next_form = self.form_list[step]
         if next_form.__name__ == 'MissingInformationForm':
-            #if not issubclass(next_form, (ProductForm, EmailAuthenticationForm)):
             initial = {
                 'addresses__country': settings.LANGUAGE_CODE.split('-')[1].upper(),
                 'first_name': self.me.get('first_name', '') if self.me else '',
