@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% load i18n product paginator %}
+
+{% block title %}{% trans "Votre profil" %}{% endblock %}
+
+{% block content %}
+<div id="content" class="xgrid">
+       <div class="content-top">
+         <ul id="menu" class="x12">
+            <li class="menu-tab first"><a href="{% url dashboard %}">{% trans "Tableau de bord" %}</a></li>
+			<li class="menu-tab"><a href="{% url owner_booking %}">{% trans "Propriétaire" %}</a></li>
+			<li class="menu-tab"><a href="{% url borrower_booking %}">{% trans "Locataire" %}</a></li>
+			<li class="menu-tab">{% trans "Mon compte" %}</li>
+			<li class="menu-tab"><a href="{% url inbox %}">{% blocktrans %}Messages({{ unread_message_count }}){% endblocktrans %}</a></li>
+		 </ul>
+	    </div>
+	    <div id="sub-menu">
+	        <ul class="x12">
+	            <li class="sub-tab first"><a href="{% url patron_edit %}">{% trans "Votre profil" %}</a></li>
+			    <li class="sub-tab"><a href="{% url patron_edit_password %}">{% trans "Modification du mot de passe" %}</a></li>
+			    <li class="sub-tab">{% trans "Facebook connect" %}</li>
+	        </ul>
+	    </div>
+	    <div class="x8 p2">
+		    </div>
+				<div class="x5">
+				    <div class="fbconnect-content">
+				        <div id="fbconnect">Connectez-vous avec Facebook</div>
+				        	<span>Plus simple et rapide.</span>
+				    	</div>
+					</div>
+		   		<div id="submit-wizard" class="x12">
+		        <p>
+		         	<form action="" method="post">
+		         	{% csrf_token %}
+		         	{{form.as_p}}
+		    		<input type="submit" style="visibility:hidden" class="btn big-green" value={% trans "Sauvegarder" %} />
+		    		</form>
+		    	</p>
+		    </div>
+		</div>
+<script>
+  window.fbAsyncInit = function() {
+    FB.init({
+      appId      : '255056637886187', // App ID
+      channelURL : '{{ MEDIA_URL }}channel.html', // Channel File
+      status     : true, // check login status
+      cookie     : true, // enable cookies to allow the server to access the session
+      oauth      : true, // enable OAux§th 2.0
+      xfbml      : true  // parse XFBML
+    });
+    // Additional initialization code here
+  };
+
+  // Load the SDK Asynchronously
+  (function(d){
+     var js, id = 'facebook-jssdk'; if (d.getElementById(id)) {return;}
+     js = d.createElement('script'); js.id = id; js.async = true;
+     js.src = "http://connect.facebook.net/fr_FR/all.js";
+     d.getElementsByTagName('head')[0].appendChild(js);
+   }(document));
+</script>
+{% endblock %}
