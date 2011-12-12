@@ -1,34 +1,42 @@
 # -*- coding: utf-8 -*-
 import smtplib
 import socket
+import time
+import urllib
+import simplejson
+import itertools
+
 from logbook import Logger
+
+import gdata.contacts.client
+import gdata.gauth
 
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.sites.models import Site
-from django.core.mail import EmailMessage, BadHeaderError
+from django.core.mail import EmailMessage, BadHeaderError, get_connection
 from django.core.urlresolvers import reverse
 from django.forms.models import model_to_dict
+from django.forms.formsets import formset_factory
 from django.shortcuts import get_object_or_404
 from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.cache import never_cache, cache_page
 from django.views.generic.simple import direct_to_template, redirect_to
 from django.views.generic.list_detail import object_list
 from django.core.context_processors import csrf
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseForbidden
 from django.contrib.auth import login
 from oauth_provider.models import Token
 from django.shortcuts import redirect
 
 from eloue.decorators import secure_required, mobify
-from eloue.accounts.forms import EmailAuthenticationForm, PatronEditForm, PatronPaypalForm, PatronPasswordChangeForm, ContactForm, PatronSetPasswordForm
+from eloue.accounts.forms import EmailAuthenticationForm, GmailContactForm, PatronEditForm, PatronPaypalForm, PatronPasswordChangeForm, ContactForm, PatronSetPasswordForm
 from eloue.accounts.models import Patron
 from eloue.accounts.wizard import AuthenticationWizard
 
 from eloue.products.forms import FacetedSearchForm
 from eloue.rent.models import Booking
-import time
 
 
 PAGINATE_PRODUCTS_BY = getattr(settings, 'PAGINATE_PRODUCTS_BY', 10)
@@ -79,6 +87,9 @@ def oauth_authorize(request, *args, **kwargs):
 def oauth_callback(request, *args, **kwargs):
     token = Token.objects.get(key=kwargs['oauth_token'])
     return HttpResponse(token.verifier)
+
+def google_oauth_callback(request):
+    return direct_to_template(request, 'accounts/google_callback.html')
 
 
 @cache_page(900)
@@ -242,8 +253,50 @@ def contact(request):
             messages.error(request, _(u"Erreur lors de l'envoi du message"))
     return direct_to_template(request, 'accounts/contact.html', extra_context={'form': ContactForm()})
 
-    
-    
-    
-    
-    
+
+@login_required
+def gmail_invite(request):
+
+    if request.POST:
+        formset = formset_factory(GmailContactForm, extra=0)(request.POST)
+        if formset.is_valid():
+            mails = map(lambda email: email['email'], filter(lambda email: email['checked'], formset.cleaned_data))
+            EmailMessage('sdf', 'reerg', 'from', [], mails, connection=get_connection()).send()
+            return redirect('invitation_sent')
+
+        return direct_to_template(request, 'accounts/gmail_invite.html', {'formset': formset})
+    elif request.GET:
+        access_token = request.GET.get('0-facebook_access_token', None)
+        if access_token:
+            # import atom.data
+            # import gdata.data
+            # import gdata.contacts.data
+            
+            token_info = simplejson.load(urllib.urlopen('https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=%s'%access_token))
+            if 'audience' not in token_info or token_info['audience'] != settings.GOOGLE_CLIENT_ID:
+                return HttpResponseForbidden()
+            client = gdata.contacts.client.ContactsClient(source='e-loue')
+            token = gdata.gauth.OAuth2Token(
+                client_id=settings.GOOGLE_CLIENT_ID,
+                client_secret=settings.GOOGLE_CLIENT_SECRET,
+                scope=('https://www.googleapis.com/auth/userinfo.email+'
+                    'https://www.googleapis.com/auth/userinfo.profile+'
+                    'https://www.google.com/m8/feeds'
+                ),
+                user_agent='', access_token=access_token
+            )
+            client = token.authorize(client)
+            query = gdata.contacts.client.ContactsQuery()
+            query.max_results = 10000
+            initial_data = []
+            for e in client.GetContacts(q=query).entry:
+                email = next(itertools.imap(lambda email: email.address, itertools.ifilter(lambda email: email.primary and email.primary=='true', e.email)), None)
+                if email:
+                    initial_data.append({'checked': True, 'name': e.name.full_name.text if e.name else '', 'email': email})
+            formset = formset_factory(GmailContactForm, extra=0)(initial=initial_data)
+            return direct_to_template(request, 'accounts/gmail_invite.html', {'formset': formset})
+    return direct_to_template(request, 'accounts/gmail_invite.html')
+
+@login_required
+def facebook_invite(request):
+    return direct_to_template(request, 'accounts/facebook_invite.html')

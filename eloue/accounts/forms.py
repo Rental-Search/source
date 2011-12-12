@@ -487,3 +487,9 @@ class ContactForm(forms.Form):
         'autocapitalize': 'off', 'autocorrect': 'off', 'class': 'inm'
     }))
     cc_myself = forms.BooleanField(label=_(u"Je souhaite recevoir une copie de ce message."), required=False)
+
+
+class GmailContactForm(forms.Form):
+    checked = forms.BooleanField(required=False)
+    name = forms.CharField(max_length=200, required=False, widget=forms.HiddenInput())
+    email = forms.EmailField(widget=forms.HiddenInput())

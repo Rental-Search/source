@@ -11,7 +11,10 @@ from django.utils.translation import ugettext as _
 
 from eloue.accounts.forms import EmailPasswordResetForm, PatronSetPasswordForm
 from eloue.accounts.views import activate, authenticate, authenticate_headless, dashboard, patron_edit, owner_booking, owner_history,\
-    borrower_booking, borrower_history, patron_edit_password, patron_paypal, owner_product, contact, alert_edit
+    borrower_booking, borrower_history, patron_edit_password, patron_paypal, owner_product, contact, alert_edit, gmail_invite,\
+    google_oauth_callback, facebook_invite
+
+from django.views.generic.simple import direct_to_template
 
 from eloue.products.views import homepage, search, reply_product_related_message, inbox, archived, archive_thread, unarchive_thread, thread_details
 
@@ -61,8 +64,15 @@ urlpatterns = patterns('',
     url(r'^login_headless/$', authenticate_headless, name='auth_login_headless'),
     url(r'^logout/$', logout_then_login, name='auth_logout'),
     url(r'^dashboard/$', dashboard, name="dashboard"),
+    url(r'^oauth2callback$', google_oauth_callback),
     url(r'^dashboard/account/profile/$', patron_edit, name="patron_edit"),
     url(r'^dashboard/account/password/$', patron_edit_password, name="patron_edit_password"),
+    url(r'^dashboard/invite/gmail/$', gmail_invite, name="gmail_invite"),
+    url(
+        r'^dashboard/invite/sent/$', direct_to_template, 
+        {'template': 'accounts/invitation_sent.html'}, name='invitation_sent'
+    ),
+    url(r'^dashboard/invite/facebook/$', facebook_invite, name="facebook_invite"),
     url(r'^dashboard/account/paypal/$', patron_paypal, name="patron_paypal"),
     url(r'^dashboard/owner/booking/$', owner_booking, name="owner_booking"),
     url(r'^dashboard/owner/booking/page/(?P<page>\d+)/$', owner_booking, name="owner_booking"),
@@ -81,7 +91,6 @@ urlpatterns = patterns('',
     url(r'^dashboard/booking/(?P<booking_id>[0-9a-f]{32})/reject/$', booking_reject, name="booking_reject"),
     url(r'^dashboard/booking/(?P<booking_id>[0-9a-f]{32})/incident/$', booking_incident, name="booking_incident"),
     url(r'^dashboard/booking/(?P<booking_id>[0-9a-f]{32})/close/$', booking_close, name="booking_close"),
-    #url(r'^dashboard/messages/(?P<message_id>[\d]+)/reply/$', reply_product_related_message, name='reply_product_related_message'),
     url(r'^dashboard/messages/(?P<thread_id>[\d]+)$', thread_details, name='thread_details'),
     url(r'^dashboard/messages/(?P<thread_id>[\d]+)/archive/$', archive_thread, name='archive_thread'),
     url(r'^dashboard/messages/(?P<thread_id>[\d]+)/unarchive/$', unarchive_thread, name='unarchive_thread'),

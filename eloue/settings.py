@@ -460,6 +460,10 @@ AWS_HEADERS = {
     'Cache-Control': 'max-age=31556926,public',
 }
 
+
+GOOGLE_CLIENT_ID = getattr(local, 'GOOGLE_CLIENT_ID', '382908503214.apps.googleusercontent.com')
+GOOGLE_CLIENT_SECRET = getattr(local, 'GOOGLE_CLIENT_SECRET', 'bHf4VtyrFzphNMCzg7lkQXGy')
+
 # Paypal configuration
 USE_PAYPAL_SANDBOX = getattr(local, 'USE_PAYPAL_SANDBOX', DEBUG)
 VALIDATE_IPN = getattr(local, 'VALIDATE_IPN', True)
