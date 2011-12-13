@@ -9,7 +9,7 @@ from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.vary import vary_on_headers
-from django.http import Http404
+from django.http import Http404, HttpResponseForbidden
 from django.shortcuts import get_object_or_404
 from django.utils.datastructures import SortedDict, MultiValueDict
 from django.utils.translation import ugettext as _
