@@ -15,10 +15,9 @@ from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.sites.models import Site
-from django.core.mail import EmailMessage, BadHeaderError, get_connection
+from django.core.mail import EmailMessage, BadHeaderError, send_mass_mail
 from django.core.urlresolvers import reverse
 from django.forms.models import model_to_dict
-from django.forms.formsets import formset_factory
 from django.shortcuts import get_object_or_404
 from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.cache import never_cache, cache_page
@@ -31,7 +30,7 @@ from oauth_provider.models import Token
 from django.shortcuts import redirect
 
 from eloue.decorators import secure_required, mobify
-from eloue.accounts.forms import EmailAuthenticationForm, GmailContactForm, PatronEditForm, PatronPaypalForm, PatronPasswordChangeForm, ContactForm, PatronSetPasswordForm
+from eloue.accounts.forms import EmailAuthenticationForm, GmailContactFormset, PatronEditForm, PatronPaypalForm, PatronPasswordChangeForm, ContactForm, PatronSetPasswordForm
 from eloue.accounts.models import Patron
 from eloue.accounts.wizard import AuthenticationWizard
 
@@ -256,23 +255,24 @@ def contact(request):
 
 @login_required
 def gmail_invite(request):
-
     if request.POST:
-        formset = formset_factory(GmailContactForm, extra=0)(request.POST)
+        formset = GmailContactFormset(request.POST)
         if formset.is_valid():
-            mails = map(lambda email: email['email'], filter(lambda email: email['checked'], formset.cleaned_data))
-            EmailMessage('sdf', 'reerg', 'from', [], mails, connection=get_connection()).send()
+            emails = map(lambda email: email['email'], filter(lambda email: email['checked'], formset.cleaned_data))
+            datatuple = [('SUBJECT', 'MESSAGE', 'OUR_EMAIL', (email, )) for email in emails]
+            send_mass_mail(datatuple)
             return redirect('invitation_sent')
 
         return direct_to_template(request, 'accounts/gmail_invite.html', {'formset': formset})
     elif request.GET:
         access_token = request.GET.get('0-facebook_access_token', None)
         if access_token:
-            # import atom.data
-            # import gdata.data
-            # import gdata.contacts.data
-            
-            token_info = simplejson.load(urllib.urlopen('https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=%s'%access_token))
+            token_info = simplejson.load(
+                urllib.urlopen(
+                    'https://www.googleapis.com/oauth2/v1/'
+                    'tokeninfo?access_token=%s'%access_token
+                )
+            )
             if 'audience' not in token_info or token_info['audience'] != settings.GOOGLE_CLIENT_ID:
                 return HttpResponseForbidden()
             client = gdata.contacts.client.ContactsClient(source='e-loue')
@@ -282,8 +282,7 @@ def gmail_invite(request):
                 scope=('https://www.googleapis.com/auth/userinfo.email+'
                     'https://www.googleapis.com/auth/userinfo.profile+'
                     'https://www.google.com/m8/feeds'
-                ),
-                user_agent='', access_token=access_token
+                ), user_agent='', access_token=access_token
             )
             client = token.authorize(client)
             query = gdata.contacts.client.ContactsQuery()
@@ -292,8 +291,8 @@ def gmail_invite(request):
             for e in client.GetContacts(q=query).entry:
                 email = next(itertools.imap(lambda email: email.address, itertools.ifilter(lambda email: email.primary and email.primary=='true', e.email)), None)
                 if email:
-                    initial_data.append({'checked': True, 'name': e.name.full_name.text if e.name else '', 'email': email})
-            formset = formset_factory(GmailContactForm, extra=0)(initial=initial_data)
+                    initial_data.append({'checked': False, 'name': e.name.full_name.text if e.name else '', 'email': email})
+            formset = GmailContactFormset(initial=initial_data)
             return direct_to_template(request, 'accounts/gmail_invite.html', {'formset': formset})
     return direct_to_template(request, 'accounts/gmail_invite.html')
 
