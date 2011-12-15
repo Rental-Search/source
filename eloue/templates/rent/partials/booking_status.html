@@ -24,6 +24,14 @@
        </form>
       </p>
       {% endif %}
+      {% if booking.borrower == user %}
+       <form class="bk-refuse" action="{% url booking_cancel booking.pk.hex %}" method="post">
+        {% csrf_token %}
+        <input type="hidden" name="state" value="{{ booking.STATE.CANCELED }}"/>
+        <button class="bk-cancel btn bk-orange">{% trans "Annuler" %}</button>
+       </form>
+      </p>
+      {%endif %}
      {% endif %}
      {% if booking.state == booking.STATE.REJECTED %}
      <p>
@@ -33,13 +41,11 @@
      {% if booking.state == booking.STATE.PENDING %}
      <p>
       <img src="{{ MEDIA_URL }}images/dcns/status_booking.png" alt="{% trans "Réservée" %}" class="booking">
-      {% if booking.owner == user %}
       <form class="bk-cancel" action="{% url booking_cancel booking.pk.hex %}" method="post">
        {% csrf_token %}
        <input type="hidden" name="state" value="{{ booking.STATE.CANCELED }}"/>
        <button class="bk-cancel btn bk-orange">{% trans "Annuler" %}</button>
       </form>
-      {% endif %}
      </p>
      {% endif %}
      {% if booking.state == booking.STATE.ONGOING %}

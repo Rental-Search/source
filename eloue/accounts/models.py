@@ -2,10 +2,11 @@
 import datetime
 import logbook
 import uuid
+import urllib2
+import simplejson
+import facebook
 
 from imagekit.models import ImageModel
-
-import facebook
 
 from django.core.exceptions import ValidationError
 from django.contrib.sites.managers import CurrentSiteManager
@@ -273,33 +274,181 @@ class Patron(User):
     is_expired.boolean = True
     is_expired.short_description = ugettext(u"Expiré")
 
+class OAuthServices(object):
+    class OAuthServiceError(Exception):
+        pass
+    
+    def __init__(self,session):
+        self.session = session
+        self.error_text = None
+    
+    @property
+    def me(self):
+        """It's a dictionary, and it MUST contain 'email'.
+        In order to properly prefill the MissingInformationForm's 
+        fields, it SHOULD contain 'first_name', 'last_name', 'username', 
+        'picture' (which is a url pointing to the user's avatar)
+        (The keywords MUST and SHOULD are interpreted as described in RFC 2119.)
+        """
+        raise NotImplementedError
+    
+    def verify(self):
+        raise NotImplementedError
+
+class FacebookOAuthServices(OAuthServices):
+    fields = 'picture,email,first_name,last_name,gender,username,location'
+    def __init__(self, *args, **kwargs):
+        super(FacebookOAuthServices, self).__init__(*args, **kwargs)
+        self.graph_api = facebook.GraphAPI(self.session.access_token)
+
+    @property
+    def me(self):
+        me_dict = cache.get('oauth:facebook:me_%s' % self.session.uid, {})
+        if me_dict:
+            return me_dict
+        try:
+            me_dict = self.graph_api.get_object("me", fields=self.__class__.fields)
+            if 'picture' in me_dict and 'static_ak' not in me_dict['picture']:
+                del me_dict['picture']
+            cache.set('facebook:me_%s' % self.session.uid, me_dict, 0)
+            return me_dict
+        except facebook.GraphAPIError as e:
+            raise self.__class__.OAuthServiceError(unicode(e))
+
+    def is_valid(self):
+        try:
+            me = self.graph_api.get_object("me", fields=self.__class__.fields)
+        except facebook.GraphAPIError as e:
+            self.error_text = unicode(e)
+            return False
+        
+        if not self.session.uid or self.session.uid != me.get('id', None):
+            self.error_text = ugettext(u'Wrong user id.')
+            return False
+        
+        if 'email' not in me:
+            self.error_text = ugettext(u'We were not able to retrieve your email address.')
+            return False
+        
+        self.error_text = None
+        cache.set('oauth:facebook:me_%s' % self.session.uid, me, 0)
+        return True
+
+
+class GoogleOAuthServices(OAuthServices):
+    @property
+    def me(self):
+        me_dict = cache.get('oauth:google:me_%s' % self.session.uid, {})
+        if me_dict:
+            return me_dict
+        try:
+            me_dict = simplejson.load(
+                urllib2.urlopen(
+                    'https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=%s'
+                    %self.session.access_token,
+                    timeout=5
+                )
+            )
+            me_dict['first_name'] = me_dict.pop('given_name', '')
+            me_dict['last_name'] = me_dict.pop('family_name', '')
+            cache.set('oauth:google:me_%s' % self.session.uid, me_dict, 0)
+            return me_dict
+        except urllib2.HTTPError as e:
+            if e.code == 401:
+                raise self.__class__.OAuthServiceError('Wrong access token.')
+            else:
+                raise self.__class__.OAuthServiceError(str(e))
+        except IOError:
+            raise self.__class__.OAuthServiceError(
+                ugettext(
+                    u'Google est momentanément indisponible. '
+                    u'Veuillez reéssayer plus tard.')
+            )
+    
+    def is_valid(self):
+        try:
+            tokeninfo = simplejson.load(
+                urllib2.urlopen(
+                    'https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=%s'
+                    %self.session.access_token,
+                    timeout=5
+                )
+            )
+            if tokeninfo.get('audience', None) != settings.GOOGLE_CLIENT_ID:
+                self.error_text = ugettext(u'Possible confused deputy attack detected. Your IP is logged.')
+                return False
+        except urllib2.HTTPError as e:
+            if e.code == 400:
+                self.error_text = 'Wrong access token.'
+            else:
+                self.error_text = str(e)
+            return False
+        except IOError:
+            self.error_text = ugettext(
+                u'Google est momentanément indisponible. '
+                u'Veuillez reéssayer plus tard.')
+            return False
+        
+        self.session.uid = tokeninfo['user_id']
+        
+        try:
+            me = simplejson.load(
+                urllib2.urlopen(
+                    'https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=%s'
+                    %self.session.access_token,
+                    timeout=5
+                )
+            )
+        except IOError as e:
+            self.error_text = ugettext(
+                u'Google est momentanément indisponible. '
+                u'Veuillez reéssayer plus tard.')
+            return False
+        
+        if 'email' not in me:
+            self.error_text = ugettext(u'We were not able to retrieve your email address.')
+            return False
+        
+        self.error_test = None
+        cache.set('google:me_%s' % self.session.uid, me, 0)
+        return True
+
+
 class FacebookSession(models.Model):
+    PROVIDER_CHOICES = (
+        (1, 'Facebook'),
+        (2, 'Google'),
+    )
+    PROVIDER_SERVICES =  {
+        1: FacebookOAuthServices, 
+        2: GoogleOAuthServices
+    }
 
     access_token = models.CharField(max_length=255, unique=True)
     expires = models.DateTimeField(null=True)
         
     user = models.OneToOneField(Patron, null=True)
-    uid = models.BigIntegerField(unique=True, null=True)
+    uid = models.CharField(max_length=255, unique=True, null=True)
+
+    provider = models.PositiveSmallIntegerField(choices=PROVIDER_CHOICES)
 
     class Meta:
         unique_together = (('user', 'uid'), ('access_token', 'expires'))
     
-    @property
-    def me(self):
-        me_dict = cache.get('facebook:me_%d' % self.uid, {})
-        if me_dict:
-            return me_dict
-        # we have to stock it in a local variable, and return the value from that
-        # local variable, otherwise this stuff is broken with the dummy cache engine
-        me_dict = self.graph_api.get_object("me", fields='picture,email,first_name,last_name,gender,username,location')
-        cache.set('facebook:me_%d' % self.uid, me_dict, 0)
-        return me_dict
+    def __init__(self, *args, **kwargs):
+        super(FacebookSession, self).__init__(*args, **kwargs)
+        self.service = self.__class__.PROVIDER_SERVICES[self.provider](self) if self.provider in self.__class__.PROVIDER_SERVICES else None
     
     @property
-    def graph_api(self):
-        if not hasattr(self, '_graph_api') or self._graph_api.access_token != self.access_token:
-            self._graph_api = facebook.GraphAPI(self.access_token)
-        return self._graph_api
+    def me(self):
+        if not self.service:
+            return None
+        return self.service.me
+    
+    def is_valid(self):
+        if not self.service:
+            return False
+        return self.service.is_valid()
     
 class Address(models.Model):
     """An address"""
