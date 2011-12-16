@@ -2,10 +2,11 @@
 import datetime
 import logbook
 import uuid
+import urllib2
+import simplejson
+import facebook
 
 from imagekit.models import ImageModel
-
-import facebook
 
 from django.core.exceptions import ValidationError
 from django.contrib.sites.managers import CurrentSiteManager
@@ -279,20 +280,22 @@ class FacebookSession(models.Model):
     expires = models.DateTimeField(null=True)
         
     user = models.OneToOneField(Patron, null=True)
-    uid = models.BigIntegerField(unique=True, null=True)
+    uid = models.CharField(max_length=255, unique=True, null=True)
+
+    provider = models.PositiveSmallIntegerField(default=1)
 
     class Meta:
         unique_together = (('user', 'uid'), ('access_token', 'expires'))
-    
+
     @property
     def me(self):
-        me_dict = cache.get('facebook:me_%d' % self.uid, {})
+        me_dict = cache.get('facebook:me_%s' % self.uid, {})
         if me_dict:
             return me_dict
         # we have to stock it in a local variable, and return the value from that
         # local variable, otherwise this stuff is broken with the dummy cache engine
         me_dict = self.graph_api.get_object("me", fields='picture,email,first_name,last_name,gender,username,location')
-        cache.set('facebook:me_%d' % self.uid, me_dict, 0)
+        cache.set('facebook:me_%s' % self.uid, me_dict, 0)
         return me_dict
     
     @property
