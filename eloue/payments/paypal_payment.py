@@ -107,7 +107,7 @@ class AdaptivePapalPayments(AbstractPayment):
             currencyCode=self.booking._currency,
             preapprovalKey=self.booking.preapproval_key,
             ipnNotificationUrl='http://www.postbin.org/1fi02go' if settings.USE_PAYPAL_SANDBOX \
-                else urljoin("%s://%s" % (protocol, domain), reverse('preapproval_ipn')),
+                else urljoin("%s://%s" % (protocol, domain), reverse('pay_ipn')),
             receiverList={'receiver': [
                 {'primary':True, 'amount':str(total_amount.quantize(D(".00"), ROUND_CEILING)), 'email':settings.PAYPAL_API_EMAIL},
                 {'primary':False, 'amount':str(net_price.quantize(D(".00"), ROUND_FLOOR)), 'email':self.booking.owner.paypal_email}
@@ -148,7 +148,7 @@ class AdaptivePapalPayments(AbstractPayment):
             returnUrl=return_url,
             currencyCode=self.booking._currency,
             ipnNotificationUrl='http://www.postbin.org/1fi02go' if settings.USE_PAYPAL_SANDBOX \
-                else urljoin("%s://%s" % (protocol, domain), reverse('preapproval_ipn')),
+                else urljoin("%s://%s" % (protocol, domain), reverse('pay_ipn')),
             receiverList={'receiver': [
                 {'amount':str(amount.quantize(D('.00'), ROUND_FLOOR)), 'email':self.booking.owner.paypal_email},
             ]}
