@@ -182,7 +182,7 @@ def patron_paypal(request):
                 if not is_valid:
                     messages.error(request, _(u"Votre Paypal compte est invalide, veuillez modifier votre nom ou prénom ou email paypal"))
                 if not is_confirmed:
-                    messages.error(request,  _(u"Vérifiez que vous avez bien répondu à l'email d'activation de Paypal"))    
+                    messages.error(request,  _(u"Vérifiez que vous avez bien répondu à l'email d'activation de Paypal"))
                 return redirect_to(request, profile_edit_url)
         else: 
             paypal_redirect = patron.create_account(return_url=return_url)

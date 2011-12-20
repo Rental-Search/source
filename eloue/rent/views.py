@@ -246,7 +246,7 @@ def booking_reject(request, booking_id):
 
 
 @login_required
-@ownership_required(model=Booking, object_key='booking_id', ownership=['owner'])
+@ownership_required(model=Booking, object_key='booking_id', ownership=['owner', 'borrower'])
 def booking_cancel(request, booking_id):
     booking = get_object_or_404(Booking, pk=booking_id)
     if request.POST:
