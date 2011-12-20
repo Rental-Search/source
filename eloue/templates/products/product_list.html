@@ -2,20 +2,28 @@
  {% load cache facets i18n param category product paginator mptt_tags seo booking %}
 
 {% block title %}
-{% trans "Location" %}{% if not form.cleaned_data.q %}{% for crumb in breadcrumbs|facets %} {{ crumb.pretty_value|capfirst }}{% endfor %}{% endif %}{% if form.cleaned_data.q %} {{ form.cleaned_data.q }}{% endif %}{% if form.cleaned_data.l %} {{ form.cleaned_data.l|capfirst }}{% endif %}
+    {% if breadcrumbs.categorie.object.description %}
+        {{ breadcrumbs.categorie.object.description.title }}
+    {% else %}
+        {% trans "Location" %}{% if not form.cleaned_data.q %}{% for crumb in breadcrumbs|facets %} {{ crumb.pretty_value|capfirst }}{% endfor %}{% endif %}{% if form.cleaned_data.q %} {{ form.cleaned_data.q }}{% endif %}{% if form.cleaned_data.l %} {{ form.cleaned_data.l|capfirst }}{% endif %}
+    {% endif %}
 {% endblock %}
 
 {% block description %}
- {% trans "Location " %}
- {% for crumb in breadcrumbs|facets %}
-   &rsaquo; {{ crumb.pretty_value|capfirst }}
- {% endfor %}
- {% if form.cleaned_data.l %}
-  &rsaquo; {{ form.cleaned_data.l|capfirst }}
- {% endif %}
- {% if form.cleaned_data.q %}
-    &rsaquo; "{{ form.cleaned_data.q }}"
- {% endif %}
+    {% if breadcrumbs.categorie.object.description %}
+        {{ breadcrumbs.categorie.object.description.description }}
+    {% else %}
+         {% trans "Location " %}
+         {% for crumb in breadcrumbs|facets %}
+           &rsaquo; {{ crumb.pretty_value|capfirst }}
+         {% endfor %}
+         {% if form.cleaned_data.l %}
+          &rsaquo; {{ form.cleaned_data.l|capfirst }}
+         {% endif %}
+         {% if form.cleaned_data.q %}
+            &rsaquo; "{{ form.cleaned_data.q }}"
+         {% endif %}
+    {% endif %}
 {% endblock %}
 
 {% block  head %}
@@ -97,6 +105,9 @@
 			{% endif %}
         </ul>
     </div>
+    {% if breadcrumbs.categorie.object.description %}
+        {{ breadcrumbs.categorie.object.description.header }}
+    {% endif %}
     {% if product_list %}
     {% if form.cleaned_data.q %}
     <div class="x12 content-header">
@@ -219,6 +230,9 @@
 	</div>
 	{% endif%}
 	{% endif %}
+    {% if breadcrumbs.categorie.object.description %}
+        {{ breadcrumbs.categorie.object.description.footer }}
+    {% endif %}
 	<div id="facets" class="x4">
 	    {% if form.cleaned_data.l %}
 	    <div class="box-tools">

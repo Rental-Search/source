@@ -211,8 +211,19 @@ class Category(MPTTModel):
                         'slug': self.slug
                     }
             
-     
-        
+
+class CategoryDescription(models.Model):
+
+    category = models.OneToOneField(Category, related_name='description')
+
+    title = models.CharField(max_length=150)
+    description = models.TextField()
+    header = models.TextField()
+    footer = models.TextField()
+    
+    def __unicode__(self):
+        return "%s - %s"%(self.category.name, self.title)
+    
 class Property(models.Model):
     """A property"""
     category = models.ForeignKey(Category, related_name='properties')
