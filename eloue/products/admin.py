@@ -7,7 +7,7 @@ from mptt.forms import TreeNodeChoiceField
 from eloue.admin import CurrentSiteAdmin
 from eloue.products.forms import ProductAdminForm
 
-from eloue.products.models import Alert, Product, Picture, Category, Property, PropertyValue, Price, ProductReview, PatronReview, Curiosity, ProductRelatedMessage
+from eloue.products.models import Alert, Product, Picture, Category, Property, PropertyValue, Price, ProductReview, PatronReview, Curiosity, ProductRelatedMessage, CategoryDescription
 
 
 class PictureInline(admin.TabularInline):
@@ -81,4 +81,4 @@ admin.site.register(ProductReview, ProductReviewAdmin)
 admin.site.register(PatronReview, PatronReviewAdmin)
 #admin.site.register(ProductRelatedMessage, ProductRelatedMessageAdmin)
 admin.site.register(Alert, AlertAdmin)
-
+admin.site.register(CategoryDescription)

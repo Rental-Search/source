@@ -202,17 +202,28 @@ class Category(MPTTModel):
     def get_absolute_url(self):
         ancestors_slug = self.get_ancertors_slug()
         if ancestors_slug:
-            return _(u"/location/%(ancestors_slug)s/%(slug)s") % {
+            return _(u"/location/%(ancestors_slug)s/%(slug)s/") % {
                         'ancestors_slug': ancestors_slug,
                         'slug': self.slug
                     }
         else:
-            return _(u"/location/%(slug)s") % {
+            return _(u"/location/%(slug)s/") % {
                         'slug': self.slug
                     }
             
-     
-        
+
+class CategoryDescription(models.Model):
+
+    category = models.OneToOneField(Category, related_name='description')
+
+    title = models.CharField(max_length=150)
+    description = models.TextField()
+    header = models.TextField()
+    footer = models.TextField()
+    
+    def __unicode__(self):
+        return "%s - %s"%(self.category.name, self.title)
+    
 class Property(models.Model):
     """A property"""
     category = models.ForeignKey(Category, related_name='properties')

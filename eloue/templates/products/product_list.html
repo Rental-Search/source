@@ -2,29 +2,54 @@
  {% load cache facets i18n param category product paginator mptt_tags seo booking %}
 
 {% block title %}
-{% trans "Location" %}{% if not form.cleaned_data.q %}{% for crumb in breadcrumbs|facets %} {{ crumb.pretty_value|capfirst }}{% endfor %}{% endif %}{% if form.cleaned_data.q %} {{ form.cleaned_data.q }}{% endif %}{% if form.cleaned_data.l %} {{ form.cleaned_data.l|capfirst }}{% endif %}
+    {% if breadcrumbs.categorie.object.description %}
+        {{ breadcrumbs.categorie.object.description.title }}
+    {% else %}
+        {% trans "Location" %}{% if not form.cleaned_data.q %}{% for crumb in breadcrumbs|facets %} {{ crumb.pretty_value|capfirst }}{% endfor %}{% endif %}{% if form.cleaned_data.q %} {{ form.cleaned_data.q }}{% endif %}{% if form.cleaned_data.l %} {{ form.cleaned_data.l|capfirst }}{% endif %}
+    {% endif %}
 {% endblock %}
 
 {% block description %}
- {% trans "Location " %}
- {% for crumb in breadcrumbs|facets %}
-   &rsaquo; {{ crumb.pretty_value|capfirst }}
- {% endfor %}
- {% if form.cleaned_data.l %}
-  &rsaquo; {{ form.cleaned_data.l|capfirst }}
- {% endif %}
- {% if form.cleaned_data.q %}
-    &rsaquo; "{{ form.cleaned_data.q }}"
- {% endif %}
+    {% if breadcrumbs.categorie.object.description %}
+        {{ breadcrumbs.categorie.object.description.description }}
+    {% else %}
+         {% trans "Location " %}
+         {% for crumb in breadcrumbs|facets %}
+           &rsaquo; {{ crumb.pretty_value|capfirst }}
+         {% endfor %}
+         {% if form.cleaned_data.l %}
+          &rsaquo; {{ form.cleaned_data.l|capfirst }}
+         {% endif %}
+         {% if form.cleaned_data.q %}
+            &rsaquo; "{{ form.cleaned_data.q }}"
+         {% endif %}
+    {% endif %}
 {% endblock %}
 
 {% block  head %}
     {{ block.super }}
-    {% if page == 1 %}
-    <link rel="canonical" href="{{ site_url }}{% facet_url breadcrumbs %}" />
+    {% if breadcrumbs.categorie %}
+        <link rel="canonical" href="{{ request.get_host }}{{ breadcrumbs.categorie.url }}"/>
     {% else %}
-    <link rel="canonical" href="{{ site_url }}{% facet_url breadcrumbs "page" page %}" />
+        <link rel="canonical" href="{{ request.get_host }}/location/"/>
     {% endif %}
+
+    {% if page_obj.has_next %}
+        {% if breadcrumbs.categorie %}
+            <link rel="next" href="{{ request.get_host }}{{ breadcrumbs.categorie.url }}page/{{page_obj.next_page_number}}/"/>
+        {% else %}
+            <link rel="next" href="{{ request.get_host }}/location/page/{{page_obj.next_page_number}}/"/>
+        {% endif %}
+    {% endif %}
+
+    {% if page_obj.has_previous %}
+        {% if breadcrumbs.categorie %}
+            <link rel="prev" href="{{ request.get_host }}{{ breadcrumbs.categorie.url }}page/{{page_obj.previous_page_number}}/"/>
+        {% else %}
+            <link rel="prev" href="{{ request.get_host }}/location/page/{{page_obj.previous_page_number}}/"/>
+        {% endif %}
+    {% endif %}
+
 {% endblock %}
 
 {% block content %}
@@ -80,6 +105,9 @@
 			{% endif %}
         </ul>
     </div>
+    {% if breadcrumbs.categorie.object.description %}
+        {{ breadcrumbs.categorie.object.description.header }}
+    {% endif %}
     {% if product_list %}
     {% if form.cleaned_data.q %}
     <div class="x12 content-header">
@@ -202,6 +230,9 @@
 	</div>
 	{% endif%}
 	{% endif %}
+    {% if breadcrumbs.categorie.object.description %}
+        {{ breadcrumbs.categorie.object.description.footer }}
+    {% endif %}
 	<div id="facets" class="x4">
 	    {% if form.cleaned_data.l %}
 	    <div class="box-tools">
