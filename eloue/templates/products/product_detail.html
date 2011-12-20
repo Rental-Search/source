@@ -8,10 +8,28 @@
 
 {% block  head %}
  {{ block.super }}
+     <meta property="og:title" content="{{product.summary}}"/>
+    <meta property="og:type" content="website"/>
+    <meta property="og:url" content="{{request.build_absolute_uri}}"/>
+    <meta property="og:image" content="http://ia.media-imdb.com/rock.jpg"/>
+    <meta property="og:site_name" content="e-loue"/>
+    <meta property="fb:app_id" content="{{FACEBOOK_APP_ID}}"/>
+    <meta property="og:description" content="{{ product.summary }}/>
+
  <link rel="canonical" href="{{ product.get_absolute_url }}" />
 {% endblock %}
 
 {% block content %}
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_GB/all.js#xfbml=1&appId={{FACEBOOK_APP_ID}}";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+<fb:like href="
+{{request.build_absolute_uri}}" send="false" layout="box_count" width="450" show_faces="false" font="tahoma"></fb:like>
 <div id="search" class="xgrid">
 	<form class="form" action="{% url product_list %}">
 	<div class="x5">

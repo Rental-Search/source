@@ -14,6 +14,8 @@ def site(request):
 def debug(request):
     return {'debug': settings.DEBUG}
 
+def facebook_context(request):
+    return {'FACEBOOK_APP_ID': settings.FACEBOOK_APP_ID}
 
 def unread_message_count_context(request):
     if request.user.is_authenticated():
