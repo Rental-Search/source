@@ -105,9 +105,7 @@
 			{% endif %}
         </ul>
     </div>
-    {% if breadcrumbs.categorie.object.description %}
-        {{ breadcrumbs.categorie.object.description.header }}
-    {% endif %}
+    
     {% if product_list %}
     {% if form.cleaned_data.q %}
     <div class="x12 content-header">
@@ -124,6 +122,11 @@
 	</div>
 	{% endif%}
 	<div id="results" class="x8">
+	    <div class="top-content">
+    	    {% if breadcrumbs.categorie.object.description %}
+                {{ breadcrumbs.categorie.object.description.header }}
+            {% endif %}
+        </div>
 	     <ul class="filters">
             <li class="label-sort">
                <span>{% trans "Trier par :" %}</span>
@@ -230,9 +233,6 @@
 	</div>
 	{% endif%}
 	{% endif %}
-    {% if breadcrumbs.categorie.object.description %}
-        {{ breadcrumbs.categorie.object.description.footer }}
-    {% endif %}
 	<div id="facets" class="x4">
 	    {% if form.cleaned_data.l %}
 	    <div class="box-tools">
@@ -295,5 +295,10 @@
 	    </div>
 	    {% endif %}
 	</div>
+	<div class="bottom-content x12">
+        {% if breadcrumbs.categorie.object.description %}
+            {{ breadcrumbs.categorie.object.description.footer }}
+        {% endif %}
+    </div>
 </div>
 {% endblock %}

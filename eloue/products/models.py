@@ -213,7 +213,6 @@ class Category(MPTTModel):
             
 
 class CategoryDescription(models.Model):
-
     category = models.OneToOneField(Category, related_name='description')
 
     title = models.CharField(max_length=150)

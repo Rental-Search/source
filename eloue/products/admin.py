@@ -41,12 +41,16 @@ class ProductAdmin(CurrentSiteAdmin):
             kwargs['level_indicator'] = u"--"
             kwargs['queryset'] = Category.tree.all()
         return super(ProductAdmin, self).formfield_for_dbfield(db_field, **kwargs)
-    
+        
+
+class CategoryDescriptionInline(admin.StackedInline):
+    model = CategoryDescription
 
 class CategoryAdmin(MPTTModelAdmin):
     list_display = ('name', 'parent')
     search_fields = ['name', 'parent__name']
     prepopulated_fields = {"slug": ("name",)}
+    inlines = [CategoryDescriptionInline]
 
 
 class PropertyAdmin(admin.ModelAdmin):
@@ -81,4 +85,3 @@ admin.site.register(ProductReview, ProductReviewAdmin)
 admin.site.register(PatronReview, PatronReviewAdmin)
 #admin.site.register(ProductRelatedMessage, ProductRelatedMessageAdmin)
 admin.site.register(Alert, AlertAdmin)
-admin.site.register(CategoryDescription)
