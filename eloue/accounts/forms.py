@@ -328,7 +328,16 @@ class PhoneNumberForm(forms.ModelForm):
     class Meta:
         model = PhoneNumber
         exclude = ('patron')
-    
+
+from django.forms.models import inlineformset_factory
+from django.forms.models import BaseInlineFormSet
+
+class PhoneNumberBaseFormSet(BaseInlineFormSet):
+    def clean(self):
+        if not len(filter(lambda phonenumber:not phonenumber.get('DELETE', True), self.cleaned_data)):
+            raise forms.ValidationError(_(u"Vous ne pouvez pas supprimer tout vos numéros."))
+        return self.cleaned_data
+PhoneNumberFormset = inlineformset_factory(Patron, PhoneNumber, formset=PhoneNumberBaseFormSet, exclude=['kind'], extra=1, can_delete=True)
 
 def make_missing_data_form(instance, required_fields=[]):
     fields = SortedDict({
