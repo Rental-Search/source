@@ -142,7 +142,8 @@ class BookingWizardTestWithFacebook(TestCase):
         mock_hash.return_value = '6941fd7b20d720833717a1f92e8027af'
         mock_object.return_value = BookingWizardTestWithFacebook.me1
         
-        access_token = 'AAAC0EJC00lQBAOf7XANWgcw2UzKdLn5q13bUp07KRPy8MntAdsPzJsnFOiCu7ZCegQIX46eu7OAjXp3sFucTCRKYGH42OW9ywcissIAZDZD'
+        access_token = ('AAAC0EJC00lQBAOf7XANWgcw2UzKdLn5q13bUp07KRPy8MntAdsPz'
+            'JsnFOiCu7ZCegQIX46eu7OAjXp3sFucTCRKYGH42OW9ywcissIAZDZD')
         uid = 100003207275288
         response = self.client.post(reverse('booking_create', args=['location/bebe/mobilier-bebe/lits/', self.product.slug, self.product.id]), {
             '0-started_at_0': '18/10/2010',

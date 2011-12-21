@@ -38,6 +38,62 @@ PAYPAL_ACCOUNT_CHOICES = (
     (1, _(u"J'ai déjà un compte PayPal et mon email est :")),
 )
 
+class FacebookForm(forms.Form):
+    
+    facebook_access_token = forms.CharField(
+        required=False, widget=forms.HiddenInput())
+    facebook_expires = forms.IntegerField(
+        required=False, widget=forms.HiddenInput())
+    facebook_uid = forms.CharField(
+        required=False, widget=forms.HiddenInput())
+    
+    def clean(self):
+        access_token = self.cleaned_data.get('facebook_access_token', None)
+        uid = self.cleaned_data.get('facebook_uid', None)
+        expires = self.cleaned_data.get('facebook_expires', None)
+
+        try:
+            me = facebook.GraphAPI(access_token).get_object(
+                'me', 
+                fields=('picture,email,first_name,'
+                    'last_name,gender,username,location')
+            )
+        except facebook.GraphAPIError as e:
+            raise forms.ValidationError(e)
+        
+        if 'id' not in me:
+            raise forms.ValidationError(_(
+                "Les serveurs de Facebook sont inaccessibles."
+                " Veuillez reessayer dans quelques secondes."
+            ))
+        
+        if uid != me['id']:
+            raise forms.ValidationError(_(u'Wrong facebook uid.'))
+        
+        try:
+            fb, created = FacebookSession.objects.get_or_create(
+                uid=me['id'], 
+                defaults={
+                    'access_token': access_token, 
+                    'expires': (datetime.datetime.now() + 
+                        datetime.timedelta(seconds=expires)),
+                    'user': self.user
+                }
+            )
+        except FacebookSession.MultipleObjectsReturned:
+            raise forms.ValidationError('4')
+        
+        if not created:
+            if fb.user:
+                raise forms.ValidationError(
+                    _(u'Un compte e-loue est déjà associé à votre Facebook')
+                )
+            else:
+                fb.user = self.user
+                fb.save()
+        
+        return self.cleaned_data
+
 class EmailAuthenticationForm(forms.Form):
     """Displays the login form and handles the login action."""
     exists = forms.TypedChoiceField(required=True, coerce=int, choices=STATE_CHOICES, widget=forms.RadioSelect(renderer=ParagraphRadioFieldRenderer), initial=1)

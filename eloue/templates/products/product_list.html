@@ -29,24 +29,24 @@
 {% block  head %}
     {{ block.super }}
     {% if breadcrumbs.categorie %}
-        <link rel="canonical" href="{{ request.get_host }}{{ breadcrumbs.categorie.url }}"/>
+        <link rel="canonical" href="https://{{ request.get_host }}{{ breadcrumbs.categorie.url }}"/>
     {% else %}
-        <link rel="canonical" href="{{ request.get_host }}/location/"/>
+        <link rel="canonical" href="https://{{ request.get_host }}/location/"/>
     {% endif %}
 
     {% if page_obj.has_next %}
         {% if breadcrumbs.categorie %}
-            <link rel="next" href="{{ request.get_host }}{{ breadcrumbs.categorie.url }}page/{{page_obj.next_page_number}}/"/>
+            <link rel="next" href="https://{{ request.get_host }}{{ breadcrumbs.categorie.url }}page/{{page_obj.next_page_number}}/"/>
         {% else %}
-            <link rel="next" href="{{ request.get_host }}/location/page/{{page_obj.next_page_number}}/"/>
+            <link rel="next" href="https://{{ request.get_host }}/location/page/{{page_obj.next_page_number}}/"/>
         {% endif %}
     {% endif %}
 
     {% if page_obj.has_previous %}
         {% if breadcrumbs.categorie %}
-            <link rel="prev" href="{{ request.get_host }}{{ breadcrumbs.categorie.url }}page/{{page_obj.previous_page_number}}/"/>
+            <link rel="prev" href="https://{{ request.get_host }}{{ breadcrumbs.categorie.url }}page/{{page_obj.previous_page_number}}/"/>
         {% else %}
-            <link rel="prev" href="{{ request.get_host }}/location/page/{{page_obj.previous_page_number}}/"/>
+            <link rel="prev" href="https://{{ request.get_host }}/location/page/{{page_obj.previous_page_number}}/"/>
         {% endif %}
     {% endif %}
 

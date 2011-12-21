@@ -8,10 +8,51 @@
 
 {% block  head %}
  {{ block.super }}
- <link rel="canonical" href="{{ request.get_host }}{{ product.get_absolute_url }}" />
+    <meta property="og:title" content="{{product.summary}}"/>
+    <meta property="og:type" content="website"/>
+    <meta property="og:url" content="https://{{ request.get_host }}{{ product.get_absolute_url }}"/>
+
+    {% with product.pictures.all|first as picture %}
+      {% if picture %}
+        <meta property="og:image" content="{{picture.thumbnail.url }}"/>
+      {% endif %}
+     {% endwith %}
+    <meta property="og:site_name" content="e-loue"/>
+    <meta property="fb:app_id" content="{{FACEBOOK_APP_ID}}"/>
+    <meta property="og:description" content="{{ product.description }}"/>
+
+
+    <meta itemprop="name" content="{{ product.summary }}">
+    <meta itemprop="description" content="{{ product.description }}">
+    {% with product.pictures.all|first as picture %}
+    {% if picture %}
+    <meta itemprop="image" content="{{picture.thumbnail.url}}">
+    {% endif %}
+    {% endwith %}
+
+    <link rel="canonical" href="https://{{ request.get_host }}{{ product.get_absolute_url }}" />
 {% endblock %}
 
 {% block content %}
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_GB/all.js#xfbml=1&appId={{FACEBOOK_APP_ID}}";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+<script type="text/javascript">
+  (function() {
+    var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+    po.src = 'https://apis.google.com/js/plusone.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+  })();
+</script>
+
 <div id="search" class="xgrid">
 	<form class="form" action="{% url product_list %}">
 	<div class="x5">
@@ -51,7 +92,15 @@
     </div>
     <div class="x8">
         <div class="product-pic">
-            {% with product.pictures.all|first as picture %}
+
+<fb:like href="https://{{ request.get_host }}{{ product.get_absolute_url }}" send="false" layout="button_count" width="450" show_faces="false" font="tahoma"></fb:like>
+<p>
+<a href="https://twitter.com/share" class="twitter-share-button" data-url="https://{{ request.get_host }}{{ product.get_absolute_url }}" data-hashtags="eloue">Tweet</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+<p>
+<g:plusone size="medium" href="https://{{ request.get_host }}{{ product.get_absolute_url }}"></g:plusone>
+
+   {% with product.pictures.all|first as picture %}
     		  {% if picture %}
     		   <img src="{{ picture.display.url }}" alt="{{ product.summary }}" />
     		  {% endif %}
