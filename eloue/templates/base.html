@@ -1,9 +1,7 @@
 {% load compressed i18n markup seo %}
 <!doctype html>
-<html lang="fr">
+<html lang="fr" {% block html_properties %} {% endblock %}>
  <head>
-  <html xmlns:fb="http://ogp.me/ns/fb#">
-  <html itemscope itemtype="http://schema.org/Product">
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
   <title>{% filter striplinebreak %}{% block title %}{% endblock %} {% if is_paginated and page_obj.has_previous %}- {% trans "Page" %} {{ page_obj.number }}{% endif %} - {% trans "e-loue" %}{% endfilter %}</title>

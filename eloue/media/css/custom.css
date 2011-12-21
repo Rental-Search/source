@@ -717,6 +717,23 @@ body { background: #ECF6FF url("../images/body-bg.png") repeat 0 0; }
   margin: 20px 20px 20px 20px;
 }
 
+.social_button {
+  float: right; 
+  margin-bottom: 0px; 
+  margin-top: 5px;
+}
+  .social_button li {
+    float: right;
+  }
+  
+  .social_button .tweet {
+    margin-right: -15px;
+  }
+  
+  .social_button .gplus {
+    margin-right: -15px;
+  }
+
 /* --------------------------------------------------------------
 
          Pages

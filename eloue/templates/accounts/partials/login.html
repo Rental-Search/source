@@ -1,4 +1,5 @@
 {% load i18n %}
+<div id="fb-root"></div>
 <div class="x6 or">
     <div class="fbconnect-content">
         <div id="fbconnect">Connectez-vous avec Facebook</div>
@@ -47,21 +48,14 @@
     </form>
     </div>
 </div>
-<div id="fb-root"></div>
-<script type="text/javascript">  (function() {
-    var ga = document.createElement('script');     ga.type = 'text/javascript'; ga.async = true;
-    ga.src = ('https:'   == document.location.protocol ? 'https://ssl'   : 'http://www') + '.google-analytics.com/ga.js';
-    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-    })();
-</script>
+
 <script>
   window.fbAsyncInit = function() {
     FB.init({
       appId      : '{{FACEBOOK_APP_ID}}', // App ID
-      channelURL : '{{ MEDIA_URL }}channel.html', // Channel File
+      channelUrl : '{{ MEDIA_URL }}channel.html', // Channel File
       status     : true, // check login status
       cookie     : true, // enable cookies to allow the server to access the session
-      oauth      : true, // enable OAuth 2.0
       xfbml      : true  // parse XFBML
     });
 
