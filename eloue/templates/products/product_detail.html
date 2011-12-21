@@ -68,12 +68,12 @@
         </ul>
     </div>
     <div class="x12 content-header">
-        <h1>{{ product.summary|capitalize }}</h1><fb:like href="
-{{request.build_absolute_uri}}" send="false" layout="box_count" width="450" show_faces="false" font="tahoma"></fb:like>
-
+        <h1>{{ product.summary|capitalize }}</h1>
     </div>
     <div class="x8">
-        <div class="product-pic">
+        <div class="product-pic"><fb:like href="
+{{request.build_absolute_uri}}" send="false" layout="box_count" width="450" show_faces="false" font="tahoma"></fb:like>
+
             {% with product.pictures.all|first as picture %}
     		  {% if picture %}
     		   <img src="{{ picture.display.url }}" alt="{{ product.summary }}" />
