@@ -113,7 +113,8 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django_messages.context_processors.inbox',
     'eloue.context_processors.site',
     'eloue.context_processors.debug',
-    'eloue.context_processors.unread_message_count_context'
+    'eloue.context_processors.unread_message_count_context',
+    'eloue.context_processors.facebook_context'
 )
 
 
@@ -459,6 +460,8 @@ AWS_AUTO_CREATE_BUCKET = getattr(local, 'AWS_AUTO_CREATE_BUCKET', False)
 AWS_HEADERS = {
     'Cache-Control': 'max-age=31556926,public',
 }
+
+FACEBOOK_APP_ID = getattr(local, 'FACEBOOK_APP_ID', '197983240245844')
 
 # Paypal configuration
 USE_PAYPAL_SANDBOX = getattr(local, 'USE_PAYPAL_SANDBOX', DEBUG)
