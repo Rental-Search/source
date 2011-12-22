@@ -291,9 +291,9 @@ class ProductEditForm(forms.ModelForm):
     two_weeks_price = forms.DecimalField(label=_(u"les 15 jours"), required=False, max_digits=10, decimal_places=2, min_value=D('0.01'), widget=forms.TextInput(attrs={'class': 'ins'}), localize=True)
     month_price = forms.DecimalField(label=_(u"le mois"), required=False, max_digits=10, decimal_places=2, min_value=D('0.01'), widget=forms.TextInput(attrs={'class': 'ins'}), localize=True)
     
-    
     def __init__(self, *args, **kwargs):
         super(ProductEditForm, self).__init__(*args, **kwargs)
+        self.fields['address'].queryset = self.instance.owner.addresses.all()
         self.fields['category'].widget.attrs['class'] = "selm"
     
     def clean_deposit_amount(self):
@@ -329,7 +329,7 @@ class ProductEditForm(forms.ModelForm):
     
     class Meta:
         model = Product
-        fields = ('category', 'summary', 'deposit_amount', 'quantity', 'description')
+        fields = ('category', 'summary', 'deposit_amount', 'quantity', 'description', 'address')
 
   
 

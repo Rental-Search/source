@@ -16,8 +16,10 @@
 	    </div>
 	    <div id="sub-menu">
 	        <ul class="x12">
-	            <li class="sub-tab first">{% trans "Votre profil" %}</li>
+	            <li class="sub-tab first"><a href="{% url patron_edit %}">{% trans "Votre profil" %}</a></li>
 		    <li class="sub-tab"><a href="{% url patron_edit_password %}">{% trans "Modification du mot de passe" %}</a></li>
+		    <li class="sub-tab">{% trans "Modification des numéros de téléphone" %}</li>
+		    <li class="sub-tab"><a href="{% url patron_edit_addresses%}">{% trans "Modification des adresses" %}<a/></li>
 	        </ul>
 	    </div>
 	    <div class="x8 p2">
@@ -28,13 +30,10 @@
 		{% endif %}
 	    		{% csrf_token %}
 	    		<table class="more-info">
-	    			
+				    {{formset.as_table}}
 	    		</table>
-	    		<p class="required-field">{% trans "* champ obligatoire" %}</p>
-	    </div>
-	    {{formset}}
-	    {{formset.errors}}
 	    {{formset.non_form_errors}}
+	    </div>
 	    <div id="submit-wizard" class="x12">
 	         <p>
 	    		<a href="{% url home %}">{% trans "Annuler" %}</a> {% trans "ou" %}

@@ -152,6 +152,19 @@ def patron_edit_phonenumber(request):
     return render_to_response('accounts/phonenumber_edit.html', dictionary={'formset': formset}, context_instance=RequestContext(request))
 
 @login_required
+def patron_edit_addresses(request):
+    from eloue.accounts.forms import AddressFormSet
+    if request.POST:
+        formset = AddressFormSet(request.POST, instance=request.user)
+        if formset.is_valid():
+            formset.save()
+            messages.success(request, _(u"Vos addresses ont bien été modifiées"))
+            return redirect('eloue.accounts.views.patron_edit_addresses')
+    else:
+        formset = AddressFormSet(instance=request.user)
+    return render_to_response('accounts/addresses_edit.html', dictionary={'formset': formset}, context_instance=RequestContext(request))
+
+@login_required
 def patron_paypal(request):
     form = PatronPaypalForm(request.POST or None,
         initial={'paypal_email': request.user.email}, instance=request.user)
