@@ -2,33 +2,33 @@
  {% load cache facets i18n param category product paginator mptt_tags seo booking %}
 
 {% block title %}
-    {% if breadcrumbs.categorie.object.description %}
-        {{ breadcrumbs.categorie.object.description.title }}
-    {% else %}
-        {% trans "Location" %}{% if not form.cleaned_data.q %}{% for crumb in breadcrumbs|facets %} {{ crumb.pretty_value|capfirst }}{% endfor %}{% endif %}{% if form.cleaned_data.q %} {{ form.cleaned_data.q }}{% endif %}{% if form.cleaned_data.l %} {{ form.cleaned_data.l|capfirst }}{% endif %}
-    {% endif %}
+{% if breadcrumbs.categorie.object.description %}
+{{ breadcrumbs.categorie.object.description.title }}
+{% else %}
+{% trans "Location" %}{% if not form.cleaned_data.q %}{% for crumb in breadcrumbs|facets %} {{ crumb.pretty_value|capfirst }}{% endfor %}{% endif %}{% if form.cleaned_data.q %} {{ form.cleaned_data.q }}{% endif %}{% if form.cleaned_data.l %} {{ form.cleaned_data.l|capfirst }}{% endif %}
+{% endif %}
 {% endblock %}
 
 {% block description %}
-    {% if breadcrumbs.categorie.object.description %}
-        {{ breadcrumbs.categorie.object.description.description }}
-    {% else %}
-         {% trans "Location " %}
-         {% for crumb in breadcrumbs|facets %}
-           &rsaquo; {{ crumb.pretty_value|capfirst }}
-         {% endfor %}
-         {% if form.cleaned_data.l %}
-          &rsaquo; {{ form.cleaned_data.l|capfirst }}
-         {% endif %}
-         {% if form.cleaned_data.q %}
-            &rsaquo; "{{ form.cleaned_data.q }}"
-         {% endif %}
-    {% endif %}
+{% if breadcrumbs.categorie.object.description %}
+{{ breadcrumbs.categorie.object.description.description }}
+{% else %}
+{% trans "Location " %}
+{% for crumb in breadcrumbs|facets %}
+&rsaquo; {{ crumb.pretty_value|capfirst }}
+{% endfor %}
+{% if form.cleaned_data.l %}
+&rsaquo; {{ form.cleaned_data.l|capfirst }}
+{% endif %}
+{% if form.cleaned_data.q %}
+&rsaquo; &quot;{{ form.cleaned_data.q }}&quot;
+{% endif %}
+{% endif %}
 {% endblock %}
 
 {% block  head %}
     {{ block.super }}
-    
+
     {% if breadcrumbs.categorie %}
         <link rel="canonical" href="{% if request.is_secure %}https{%else%}http{%endif%}://{{ request.get_host }}{{ breadcrumbs.categorie.url }}{{canonical_parameters}}"/>
     {% else %}
