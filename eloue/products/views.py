@@ -321,7 +321,7 @@ def product_list(request, urlbits, sqs=SearchQuerySet(), suggestions=None, page=
     site_url="%s://%s" % ("https" if USE_HTTPS else "http", Site.objects.get_current().domain)
     form = FacetedSearchForm(dict((facet['name'], facet['value']) for facet in breadcrumbs.values()), searchqueryset=sqs)
     sqs, suggestions = form.search()
-    canonical_parameters = SortedDict(((key, value['value']) for (key, value) in breadcrumbs.iteritems() if value['value']))
+    canonical_parameters = SortedDict(((key, unicode(value['value']).encode('utf-8')) for (key, value) in breadcrumbs.iteritems() if value['value']))
     canonical_parameters.pop('categorie', None)
     canonical_parameters.pop('r', None)
     canonical_parameters.pop('sort', None)
