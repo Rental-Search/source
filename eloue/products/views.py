@@ -321,10 +321,18 @@ def product_list(request, urlbits, sqs=SearchQuerySet(), suggestions=None, page=
     site_url="%s://%s" % ("https" if USE_HTTPS else "http", Site.objects.get_current().domain)
     form = FacetedSearchForm(dict((facet['name'], facet['value']) for facet in breadcrumbs.values()), searchqueryset=sqs)
     sqs, suggestions = form.search()
+    canonical_parameters = SortedDict(((key, value['value']) for (key, value) in breadcrumbs.iteritems() if value['value']))
+    canonical_parameters.pop('categorie', None)
+    canonical_parameters.pop('r', None)
+    canonical_parameters.pop('sort', None)
+    import urllib
+    canonical_parameters = urllib.urlencode(canonical_parameters)
+    if canonical_parameters:
+        canonical_parameters = '?' + canonical_parameters
     return object_list(request, sqs, page=page, paginate_by=PAGINATE_PRODUCTS_BY, template_name="products/product_list.html",
         template_object_name='product', extra_context={
             'facets': sqs.facet_counts(), 'form': form, 'breadcrumbs': breadcrumbs, 'suggestions': suggestions,
-            'site_url': site_url
+            'site_url': site_url, 'canonical_parameters': canonical_parameters
     })
 
 @never_cache
