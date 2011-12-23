@@ -112,7 +112,7 @@
     </div>
     <div class="x12 content-header">
         <h1 style="float: left;">{{ product.summary|capitalize|truncate:57 }}</h1>
-        
+        {% if 0%}
         <ul class="social_button">
             <li class="fb">
                 <fb:like href="https://{{ request.get_host }}{{ product.get_absolute_url }}" send="false" layout="button_count" width="69" show_faces="false" font="tahoma"></fb:like>
@@ -125,6 +125,7 @@
                 <g:plusone size="medium" href="https://{{ request.get_host }}{{ product.get_absolute_url }}"></g:plusone>
             </li>
         </ul>
+        {% endif %}
     </div>
     <div class="x8">
         <div class="product-pic">
