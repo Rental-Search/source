@@ -11,11 +11,11 @@
 {% block description %}{{ product.summary }} {{ product.description }}{% endblock %}
 
 
-{% block  head %}
+{% block head %}
  {{ block.super }}
     <meta property="og:title" content="{{product.summary}}"/>
     <meta property="og:type" content="website"/>
-    <meta property="og:url" content="https://{{ request.get_host }}{{ product.get_absolute_url }}"/>
+    <meta property="og:url" content="{% if request.is_secure %}https{%else%}http{%endif%}://{{ request.get_host }}{{ product.get_absolute_url }}"/>
 
     {% with product.pictures.all|first as picture %}
       {% if picture %}
@@ -34,7 +34,7 @@
         <meta itemprop="image" content="{{picture.thumbnail.url}}">
         {% endif %}
     {% endwith %}
-    <link rel="canonical" href="https://{{ request.get_host }}{{ product.get_absolute_url }}" />
+    <link rel="canonical" href="{% if request.is_secure %}https{%else%}http{%endif%}://{{ request.get_host }}{{ product.get_absolute_url }}" />
 {% endblock %}
 
 {% block tail %}
@@ -115,14 +115,14 @@
         {% if 0%}
         <ul class="social_button">
             <li class="fb">
-                <fb:like href="https://{{ request.get_host }}{{ product.get_absolute_url }}" send="false" layout="button_count" width="69" show_faces="false" font="tahoma"></fb:like>
+                <fb:like href="{% if request.is_secure %}https{%else%}http{%endif%}://{{ request.get_host }}{{ product.get_absolute_url }}" send="false" layout="button_count" width="69" show_faces="false" font="tahoma"></fb:like>
             </li>
             <li class="tweet">
-                <a href="https://twitter.com/share" class="twitter-share-button" data-url="https://{{ request.get_host }}{{ product.get_absolute_url }}" data-hashtags="eloue">Tweet</a>
+                <a href="https://twitter.com/share" class="twitter-share-button" data-url="{% if request.is_secure %}https{%else%}http{%endif%}://{{ request.get_host }}{{ product.get_absolute_url }}" data-hashtags="eloue">Tweet</a>
                 
             </li>
             <li class="gplus">
-                <g:plusone size="medium" href="https://{{ request.get_host }}{{ product.get_absolute_url }}"></g:plusone>
+                <g:plusone size="medium" href="{% if request.is_secure %}https{%else%}http{%endif%}://{{ request.get_host }}{{ product.get_absolute_url }}"></g:plusone>
             </li>
         </ul>
         {% endif %}
