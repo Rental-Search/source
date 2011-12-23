@@ -112,7 +112,8 @@
 					{% endif %}
 				</td>
 			</tr>
-			<tr>
+			
+			<tr id="select_addr">
 				<th class="desc-input"><label>{{ form.address.label }} {% if form.address.field.required %}*{% endif %} :</label></th>
 				<td {% if form.address.errors %} class="error-field" {% endif %}>
 					{{ form.address }}
@@ -122,8 +123,64 @@
 					        <span class="error">{{ error|escape }}</span>
 					    {% endfor %}
 					{% endif %}
+				    <br /><a id="link_add_addr" href="#"> {% trans "Ajouter une nouvelle addresse ?" %}</a>
 				</td>
 			</tr>
+
+
+    		<tr class = "add_new_addr">
+    			<th rowspan="3" class="new-address">
+    				<label>
+    					{% if form.addresses %}
+    						{% trans "Nouvelle adresse :" %}
+    					{% else %}
+    						{% trans "Adresse" %} * :
+    					{% endif %}
+    				</label>
+    			</th>
+    			<td  class="street-field {% if form.addresses__address1.errors %}error-field{% endif %}">
+    				{{ form.addresses__address1 }}
+    				{% if form.addresses__address1.errors %}
+    				    {% for error in form.addresses__address1.errors %}
+    								<br />
+    				        <span class="error">{{ error|escape }}</span>
+    				    {% endfor %}
+    				{% endif %}
+    			</td>
+    		</tr>
+    		<tr class = "add_new_addr">
+    			<td>
+    				<span {% if form.addresses__zipcode.errors %} class="error-field" {% endif %}>
+    					{{ form.addresses__zipcode }}
+    				</span>
+    				<span {% if form.addresses__city.errors %} class="error-field" {% endif %}>
+    					{{ form.addresses__city }}
+    				</span>
+    				{% if form.addresses__zipcode.errors%}
+    				    {% for error in form.addresses__zipcode.errors %}
+    								<br />
+    				        <span class="error">{{ error|escape }}</span>
+    				    {% endfor %}
+    				{% endif %}
+    				{% if form.addresses__city.errors %}
+    				    {% for error in form.addresses__city.errors %}									
+    				        <span class="error">{{ error|escape }}</span>
+    				    {% endfor %}
+    				{% endif %}
+    			</td>
+    		</tr>
+    		<tr class = "add_new_addr">
+    			<td  class="country-field {% if form.addresses__country.errors %}error-field {% endif %}" >
+    				{{ form.addresses__country }}
+    				{% if form.addresses__country.errors %}
+    				    {% for error in form.addresses__country.errors %}
+    								<br />
+    				        <span class="error">{{ error|escape }}</span>
+    				    {% endfor %}
+    				{% endif %}
+    			</td>
+    		</tr>
+
         </table>
     </div>
     <div class="content-header x12">

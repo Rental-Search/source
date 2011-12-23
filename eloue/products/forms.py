@@ -9,7 +9,7 @@ from django.utils.translation import ugettext as _
 
 from haystack.forms import SearchForm
 from mptt.forms import TreeNodeChoiceField
-from eloue.accounts.models import Patron
+from eloue.accounts.models import Patron, COUNTRY_CHOICES
 from eloue.geocoder import GoogleGeocoder
 from eloue.products.fields import FacetField
 from eloue.products.models import Alert, PatronReview, ProductReview, Product, Picture, Category, UNIT, PAYMENT_TYPE, ProductRelatedMessage, MessageThread
@@ -291,6 +291,14 @@ class ProductEditForm(forms.ModelForm):
     two_weeks_price = forms.DecimalField(label=_(u"les 15 jours"), required=False, max_digits=10, decimal_places=2, min_value=D('0.01'), widget=forms.TextInput(attrs={'class': 'ins'}), localize=True)
     month_price = forms.DecimalField(label=_(u"le mois"), required=False, max_digits=10, decimal_places=2, min_value=D('0.01'), widget=forms.TextInput(attrs={'class': 'ins'}), localize=True)
     
+
+    addresses__address1 = forms.CharField(max_length=255, widget=forms.Textarea(attrs={'class': 'inm street', 'placeholder': _(u'Rue')}))
+    addresses__zipcode = forms.CharField(required=True, max_length=9, widget=forms.TextInput(attrs={
+            'class': 'inm zipcode', 'placeholder': _(u'Code postal')
+        }))
+    addresses__city = forms.CharField(required=True, max_length=255, widget=forms.TextInput(attrs={'class': 'inm town', 'placeholder': _(u'Ville')}))
+    addresses__country = forms.ChoiceField(choices=COUNTRY_CHOICES, required=True, widget=forms.Select(attrs={'class': 'selm'}))
+
     def __init__(self, *args, **kwargs):
         super(ProductEditForm, self).__init__(*args, **kwargs)
         self.fields['address'].queryset = self.instance.owner.addresses.all()
