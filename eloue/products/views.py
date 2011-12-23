@@ -19,7 +19,7 @@ from django.views.generic.simple import direct_to_template, redirect_to
 from django.views.generic.list_detail import object_list
 from django.db.models import Q
 
-from django.shortcuts import render_to_response
+from django.shortcuts import render_to_response, redirect
 from django.template import RequestContext
 from django.views.generic.list_detail import object_detail
 
@@ -84,7 +84,17 @@ def product_edit(request, slug, product_id):
     if form.is_valid():
         product = form.save()
         messages.success(request, _(u"Votre produit a bien été édité !"))
-    return direct_to_template(request, 'products/product_edit.html', extra_context={'product': product, 'form': form})
+        return redirect(
+            'eloue.products.views.product_edit', 
+            slug=slug, product_id=product_id
+        )
+    return render_to_response(
+        'products/product_edit.html', dictionary={
+            'product': product, 
+            'form': form
+        }, 
+        context_instance=RequestContext(request)
+    )
 
 
 # @login_required

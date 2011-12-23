@@ -9,7 +9,7 @@ from django.utils.translation import ugettext as _
 
 from haystack.forms import SearchForm
 from mptt.forms import TreeNodeChoiceField
-from eloue.accounts.models import Patron, COUNTRY_CHOICES
+from eloue.accounts.models import Patron, COUNTRY_CHOICES, Address
 from eloue.geocoder import GoogleGeocoder
 from eloue.products.fields import FacetField
 from eloue.products.models import Alert, PatronReview, ProductReview, Product, Picture, Category, UNIT, PAYMENT_TYPE, ProductRelatedMessage, MessageThread
@@ -292,18 +292,34 @@ class ProductEditForm(forms.ModelForm):
     month_price = forms.DecimalField(label=_(u"le mois"), required=False, max_digits=10, decimal_places=2, min_value=D('0.01'), widget=forms.TextInput(attrs={'class': 'ins'}), localize=True)
     
 
-    addresses__address1 = forms.CharField(max_length=255, widget=forms.Textarea(attrs={'class': 'inm street', 'placeholder': _(u'Rue')}))
-    addresses__zipcode = forms.CharField(required=True, max_length=9, widget=forms.TextInput(attrs={
+    addresses__address1 = forms.CharField(max_length=255, required=False, widget=forms.Textarea(attrs={'class': 'inm street', 'placeholder': _(u'Rue')}))
+    addresses__zipcode = forms.CharField(required=False, max_length=9, widget=forms.TextInput(attrs={
             'class': 'inm zipcode', 'placeholder': _(u'Code postal')
         }))
-    addresses__city = forms.CharField(required=True, max_length=255, widget=forms.TextInput(attrs={'class': 'inm town', 'placeholder': _(u'Ville')}))
-    addresses__country = forms.ChoiceField(choices=COUNTRY_CHOICES, required=True, widget=forms.Select(attrs={'class': 'selm'}))
+    addresses__city = forms.CharField(required=False, max_length=255, widget=forms.TextInput(attrs={'class': 'inm town', 'placeholder': _(u'Ville')}))
+    addresses__country = forms.ChoiceField(choices=COUNTRY_CHOICES, initial=settings.LANGUAGE_CODE.split('-')[1].upper(), required=False, widget=forms.Select(attrs={'class': 'selm'}))
 
     def __init__(self, *args, **kwargs):
         super(ProductEditForm, self).__init__(*args, **kwargs)
         self.fields['address'].queryset = self.instance.owner.addresses.all()
+        self.fields['address'].required = False
         self.fields['category'].widget.attrs['class'] = "selm"
     
+    def clean(self):
+        address = self.cleaned_data['address']
+        address1 = self.cleaned_data['addresses__address1']
+        zipcode = self.cleaned_data['addresses__zipcode']
+        city = self.cleaned_data['addresses__city']
+        country = self.cleaned_data['addresses__country']
+        
+        if not address and not (address1 and zipcode and city and country):
+            self.cleaned_data['address'] = self.instance.address
+            raise forms.ValidationError(_(u"Vous devez spécifiez une adresse"))
+        if not any(self.errors) and not address:
+            self.cleaned_data['address'] = Address(address1=address1, zipcode=zipcode, city=city, country=country, patron=self.instance.owner)
+            self.cleaned_data['address'].save()
+        return self.cleaned_data
+
     def clean_deposit_amount(self):
         deposit_amount = self.cleaned_data.get('deposit_amount', None)
         if deposit_amount in EMPTY_VALUES:
