@@ -38,7 +38,11 @@
                      <br>
                      <a href="{% url auth_logout %}">{% trans "Se déconnecter" %}</a>
                  </p>
-                 <img src="./images/avatar.jpg" alt="avatar">
+                 {% if  user.avatar %}
+                    <img src="{{ user.avatar.product_page.url }}" alt="{% trans "loueur"%}{{ user.username }}">
+                 {% else %}
+                    <img src="{{ MEDIA_URL }}images/avatar.jpg" alt="avatar">
+                 {% endif %}
                  {% else %}
                     <a href="{% url auth_login %}">{% trans "S'inscrire ou se connecter" %}</a>
                  {% endif %}
@@ -47,14 +51,14 @@
         <div id="nav" class="xgrid">
             <ul class="mega-container mega-grey">
                 <li class="mega">
-                    <a href="http://ec2-46-137-50-223.eu-west-1.compute.amazonaws.com/" class="mega-link">Présentation de la mandature</a>	
+                    <a href="http://46.51.177.231/" class="mega-link">Présentation de la mandature</a>	
                 </li>
                 <li class="mega">				
                     <a href="javascript:;" class="mega-tab">Réunion CE</a>
                     <div class="mega-content mega-menu ">
                         <ul>
-                            <li><a href="http://ec2-46-137-50-223.eu-west-1.compute.amazonaws.com/documents/">Documents</a></li>
-                            <li><a href="http://ec2-46-137-50-223.eu-west-1.compute.amazonaws.com/date-reunion-ce/2011/10/">Calendrier</a></li>
+                            <li><a href="http://46.51.177.231/documents/">Documents</a></li>
+                            <li><a href="http://46.51.177.231/date-reunion-ce/2011/10/">Calendrier</a></li>
                         </ul>
                     </div>
                 </li>
@@ -63,17 +67,17 @@
                     <div class="mega-content mega-menu ">
                         <ul>
 
-                            <li><a href="http://ec2-46-137-50-223.eu-west-1.compute.amazonaws.com/advantages/cheques/">Chèques</a></li>
-                            <li><a href="http://ec2-46-137-50-223.eu-west-1.compute.amazonaws.com/advantages/contre-marque/">Contre-marque</a></li>
-                            <li><a href="http://ec2-46-137-50-223.eu-west-1.compute.amazonaws.com/advantages/tickets-cinema/">Tickets Cinéma</a></li>
+                            <li><a href="http://46.51.177.231/advantages/cheques/">Chèques</a></li>
+                            <li><a href="http://46.51.177.231/advantages/contre-marque/">Contre-marque</a></li>
+                            <li><a href="http://46.51.177.231/advantages/tickets-cinema/">Tickets Cinéma</a></li>
                         </ul>
                     </div>
                 </li>
                 <li class="mega">
-                    <a href="http://ec2-46-137-50-223.eu-west-1.compute.amazonaws.com/boutique/" class="mega-link">Commandes produits</a>
+                    <a href="http://46.51.177.231/boutique/" class="mega-link">Commandes produits</a>
                 </li>
                 <li class="mega">
-                    <a href="http://ec2-46-137-50-223.eu-west-1.compute.amazonaws.com/questions-suggestions/" class="mega-link">Questions/Suggestions</a>
+                    <a href="http://46.51.177.231/questions-suggestions/" class="mega-link">Questions/Suggestions</a>
                 </li>
                 <li class="mega">
                     <a href="#" class="mega-link">Location</a>
