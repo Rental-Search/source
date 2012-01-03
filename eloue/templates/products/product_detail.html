@@ -13,7 +13,7 @@
 
 {% block head %}
  {{ block.super }}
-    <meta property="og:title" content="A louer : {{product.summary}}"/>
+    <meta property="og:title" content="A louer sur e-loue : {{product.summary}}"/>
     <meta property="og:type" content="product"/>
     <meta property="og:url" content="{% if request.is_secure %}https{%else%}http{%endif%}://{{ request.get_host }}{{ product.get_absolute_url }}"/>
 
@@ -27,7 +27,7 @@
     <meta property="og:description" content="{{ product.description }}"/>
 
 
-    <meta itemprop="name" content="{{ product.summary }}">
+    <meta itemprop="name" content="A louer sur e-loue : {{ product.summary }}">
     <meta itemprop="description" content="{{ product.description }}">
     {% with product.pictures.all|first as picture %}
         {% if picture %}
@@ -117,7 +117,7 @@
                 <fb:like href="{% if request.is_secure %}https{%else%}http{%endif%}://{{ request.get_host }}{{ product.get_absolute_url }}" send="true" layout="button_count" show_faces="false" font="tahoma"></fb:like>
             </li>
             <li class="tweet">
-                <a href="https://twitter.com/share" class="twitter-share-button" data-count="none" data-url="{% if request.is_secure %}https{%else%}http{%endif%}://{{ request.get_host }}{{ product.get_absolute_url }}" data-hashtags="eloue">Tweet</a>
+                <a href="https://twitter.com/share" class="twitter-share-button" data-count="none" data-url="{% if request.is_secure %}https{%else%}http{%endif%}://{{ request.get_host }}{{ product.get_absolute_url }}" data-hashtags="eloue" data-text="A louer sur e-loue : ">Tweet</a>
                 
             </li>
             <li class="gplus">
