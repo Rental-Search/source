@@ -14,7 +14,7 @@
 {% block head %}
  {{ block.super }}
     <meta property="og:title" content="{{product.summary}}"/>
-    <meta property="og:type" content="website"/>
+    <meta property="og:type" content="product"/>
     <meta property="og:url" content="{% if request.is_secure %}https{%else%}http{%endif%}://{{ request.get_host }}{{ product.get_absolute_url }}"/>
 
     {% with product.pictures.all|first as picture %}
@@ -110,8 +110,8 @@
 			<li class="lastb">{{ product.summary|capitalize }}</li>
         </ul>
     </div>
-    <div class="x12 content-header">
-        <h1 style="float: left;">{{ product.summary|capitalize|truncate:57 }}</h1>
+    <div class="x12 content-header product-header">
+        <h1>{{ product.summary|capitalize|truncate:57 }}</h1>
         <ul class="social_button">
             <li class="fb">
                 <fb:like href="{% if request.is_secure %}https{%else%}http{%endif%}://{{ request.get_host }}{{ product.get_absolute_url }}" send="true" layout="button_count" show_faces="false" font="tahoma"></fb:like>

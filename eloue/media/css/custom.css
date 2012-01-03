@@ -897,6 +897,12 @@ body { background: #ECF6FF url("../images/body-bg.png") repeat 0 0; }
       product details
 
 -------------------------------------------------------------- */
+.product-header {
+  height: 44px;
+}
+  .product-header h1 {
+    float: left;
+  }
 .product-desc 
 {
   float: left;
