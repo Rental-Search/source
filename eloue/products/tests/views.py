@@ -47,7 +47,8 @@ class ProductViewsTest(TestCase):
             'day_price': 100,
             'deposit_amount': 250,
             'quantity': 1,
-            'description': "Engrenage plantaire haute performance 2 vitesses."
+            'description': "Engrenage plantaire haute performance 2 vitesses.",
+            'address': 1
         })
         product = Product.objects.get(pk=1)
         self.assertTrue(response.status_code, 200)
@@ -63,7 +64,8 @@ class ProductViewsTest(TestCase):
             'day_price': 0,
             'deposit_amount': 250,
             'quantity': 1,
-            'description': "Engrenage plantaire haute performance 2 vitesses."        
+            'description': "Engrenage plantaire haute performance 2 vitesses.",
+            'address': 1        
         })
         product = Product.objects.get(pk=1)
         self.assertTrue(response.status_code, 200)

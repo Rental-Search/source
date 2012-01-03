@@ -303,6 +303,7 @@ class ProductEditForm(forms.ModelForm):
         super(ProductEditForm, self).__init__(*args, **kwargs)
         self.fields['address'].queryset = self.instance.owner.addresses.all()
         self.fields['address'].required = False
+        self.fields['address'].widget.attrs['class'] = "selm"
         self.fields['category'].widget.attrs['class'] = "selm"
     
     def clean(self):

@@ -112,32 +112,27 @@
 					{% endif %}
 				</td>
 			</tr>
-			
-			<tr id="select_addr">
-				<th class="desc-input"><label>{{ form.address.label }} {% if form.address.field.required %}*{% endif %} :</label></th>
-				<td {% if form.address.errors %} class="error-field" {% endif %}>
-					{{ form.address }}
+        </table>
+        {{form.non_field_errors}}
+    </div>
+    <div class="content-header x12">
+        <h2>3. {% trans "Adresse" %}</h2>
+    </div><!-- content-header -->
+    <div class="x12">
+        <table id="address" class="more-info">
+            <tr id="select_addr">
+                <td {% if form.address.errors %} class="error-field" {% endif %}>
+                    {{ form.address }}
 					{% if form.address.errors %}
 					    {% for error in form.address.errors %}
 									<br />
 					        <span class="error">{{ error|escape }}</span>
 					    {% endfor %}
 					{% endif %}
-				    <br /><a id="link_add_addr" href="#"> {% trans "Ajouter une nouvelle addresse ?" %}</a>
+				    <br /><a id="link_add_addr" href="#address"> {% trans "Ajouter une nouvelle addresse ?" %}</a>
 				</td>
 			</tr>
-
-
-    		<tr class = "add_new_addr">
-    			<th rowspan="3" class="new-address">
-    				<label>
-    					{% if form.addresses %}
-    						{% trans "Nouvelle adresse :" %}
-    					{% else %}
-    						{% trans "Adresse" %} * :
-    					{% endif %}
-    				</label>
-    			</th>
+    		<tr class="add_new_addr">
     			<td  class="street-field {% if form.addresses__address1.errors %}error-field{% endif %}">
     				{{ form.addresses__address1 }}
     				{% if form.addresses__address1.errors %}
@@ -180,12 +175,10 @@
     				{% endif %}
     			</td>
     		</tr>
-
         </table>
-        {{form.non_field_errors}}
     </div>
     <div class="content-header x12">
-        <h2>3. {% trans "Prix de location" %}</h2>
+        <h2>4. {% trans "Prix de location" %}</h2>
     </div>
     <div class="x12">
         <div class="tabsPrices">
@@ -276,7 +269,7 @@
     <div id="submit-wizard" class="x12">
         <p>
             <a href="{% url product_delete product.slug product.pk %}" style="padding-right: 500px; color: #900;">{% trans "Supprimer cet objet" %}</a>
-		   <!-- <a href="{% url owner_product %}">{% trans "Annuler" %}</a> {% trans "ou" %} -->
+		   <a href="{% url owner_product %}">{% trans "Annuler" %}</a> {% trans "ou" %}
     		<input type="submit" class="btn big-green" value="{% trans "Sauvegarder" %}" />
 		</p>
 	</form>
