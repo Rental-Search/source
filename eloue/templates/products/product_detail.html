@@ -112,20 +112,18 @@
     </div>
     <div class="x12 content-header">
         <h1 style="float: left;">{{ product.summary|capitalize|truncate:57 }}</h1>
-        {% if 0%}
         <ul class="social_button">
             <li class="fb">
-                <fb:like href="{% if request.is_secure %}https{%else%}http{%endif%}://{{ request.get_host }}{{ product.get_absolute_url }}" send="false" layout="button_count" width="69" show_faces="false" font="tahoma"></fb:like>
+                <fb:like href="{% if request.is_secure %}https{%else%}http{%endif%}://{{ request.get_host }}{{ product.get_absolute_url }}" send="true" layout="button_count" show_faces="false" font="tahoma"></fb:like>
             </li>
             <li class="tweet">
-                <a href="https://twitter.com/share" class="twitter-share-button" data-url="{% if request.is_secure %}https{%else%}http{%endif%}://{{ request.get_host }}{{ product.get_absolute_url }}" data-hashtags="eloue">Tweet</a>
+                <a href="https://twitter.com/share" class="twitter-share-button" data-count="none" data-url="{% if request.is_secure %}https{%else%}http{%endif%}://{{ request.get_host }}{{ product.get_absolute_url }}" data-hashtags="eloue">Tweet</a>
                 
             </li>
             <li class="gplus">
-                <g:plusone size="medium" href="{% if request.is_secure %}https{%else%}http{%endif%}://{{ request.get_host }}{{ product.get_absolute_url }}"></g:plusone>
+                <g:plusone size="medium" annotation="none" href="{% if request.is_secure %}https{%else%}http{%endif%}://{{ request.get_host }}{{ product.get_absolute_url }}"></g:plusone>
             </li>
         </ul>
-        {% endif %}
     </div>
     <div class="x8">
         <div class="product-pic">
