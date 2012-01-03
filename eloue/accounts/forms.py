@@ -380,7 +380,7 @@ class PatronPaypalForm(forms.ModelForm):
     
 
 class PhoneNumberForm(forms.ModelForm):
-    number = PhoneNumberField(widget=forms.TextInput(attrs={'class': 'inm'}), required=False)
+    number = PhoneNumberField(label=_(u"Téléphone"), widget=forms.TextInput(attrs={'class': 'inm'}), required=False)
 
     def clean_number(self):
         if not self.cleaned_data['number']:
