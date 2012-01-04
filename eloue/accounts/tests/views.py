@@ -8,7 +8,7 @@ from django.test import TestCase
 from django.utils.translation import ugettext as _
 from django.contrib.sites.models import Site
 from eloue.accounts.forms import PatronPasswordChangeForm, ContactForm
-from eloue.accounts.models import Patron
+from eloue.accounts.models import Patron, Address
 from eloue.payments import paypal_payment
 from eloue.payments.paypal_payment import verify_paypal_account
 
@@ -249,4 +249,176 @@ class PatronTest(TestCase):
         response = self.client.get(reverse('owner_booking'))
         self.assertEqual(response.status_code, 200)
         self.assertTrue('booking_list' in response.context)
+
+class AddressManagement(TestCase):
+    fixtures = ['category', 'patron', 'address', 'price', 'product']
+
+    def test_modify_address(self):
+        self.client.login(username='alexandre.woog@e-loue.com', password='alexandre')
+        response = self.client.post(reverse('patron_edit_addresses'), {
+            'addresses-0-zipcode': '99999',
+            'addresses-0-address1': 'FOO',
+            'addresses-0-id': '1',
+            'addresses-0-city': 'BAR',
+            'addresses-0-country': 'FR',
+            'addresses-1-zipcode': '75003',
+            'addresses-1-address1': '11, rue debelleyme',
+            'addresses-1-id': '3',
+            'addresses-1-city': 'Paris',
+            'addresses-1-country': 'FR',
+            'addresses-2-zipcode': '',
+            'addresses-2-address1': '',
+            'addresses-2-city': '',
+            'addresses-2-country': '',
+            'addresses-INITIAL_FORMS': '2',
+            'addresses-MAX_NUM_FORMS': '',
+            'addresses-TOTAL_FORMS': '3',
+        })
+        self.assertRedirects(response, reverse('patron_edit_addresses'))
+        address = Address.objects.get(pk=1)
+        self.assertEqual(address.city, "BAR")
+        self.assertEqual(address.address1, "FOO")
+        self.assertEqual(address.country, 'FR')
+        self.assertEqual(address.zipcode, u'99999')
+
+    def test_new_address_with_error(self):
+        self.client.login(username='alexandre.woog@e-loue.com', password='alexandre')
+        response = self.client.post(reverse('patron_edit_addresses'), {
+            'addresses-0-zipcode': '75003',
+            'addresses-0-address1': '11, rue debelleyme',
+            'addresses-0-id': '1',
+            'addresses-0-city': 'Paris',
+            'addresses-0-country': 'FR',
+            'addresses-1-zipcode': '75003',
+            'addresses-1-address1': '11, rue debelleyme',
+            'addresses-1-id': '3',
+            'addresses-1-city': 'Paris',
+            'addresses-1-country': 'FR',
+            'addresses-2-zipcode': '324',
+            'addresses-2-address1': '',
+            'addresses-2-city': '',
+            'addresses-2-country': '',
+            'addresses-INITIAL_FORMS': '2',
+            'addresses-MAX_NUM_FORMS': '',
+            'addresses-TOTAL_FORMS': '3',
+        })
+        self.assertTemplateUsed(response, 'accounts/addresses_edit.html')
+        self.assertContains(response, _('This field is required.'))
     
+    def test_remove_used_address(self):
+        self.client.login(username='alexandre.woog@e-loue.com', password='alexandre')
+        response = self.client.post(reverse('patron_edit_addresses'), {
+            'addresses-0-zipcode': '75003',
+            'addresses-0-address1': '11, rue debelleyme',
+            'addresses-0-id': '1',
+            'addresses-0-city': 'Paris',
+            'addresses-0-country': 'FR',
+            'addresses-0-DELETE': 'on',
+            'addresses-1-zipcode': '75003',
+            'addresses-1-address1': '11, rue debelleyme',
+            'addresses-1-id': '3',
+            'addresses-1-city': 'Paris',
+            'addresses-1-country': 'FR',
+            'addresses-2-zipcode': '',
+            'addresses-2-address1': '',
+            'addresses-2-city': '',
+            'addresses-2-country': '',
+            'addresses-INITIAL_FORMS': '2',
+            'addresses-MAX_NUM_FORMS': '',
+            'addresses-TOTAL_FORMS': '3',
+        })
+        self.assertTemplateUsed(response, 'accounts/addresses_edit.html')
+        self.assertContains(response, 'Vous ne pouvez pas supprimer une adresse associé à un produit. Veuillez le changer sur le page produit.')
+
+    def test_remove_unused_address(self):
+        self.client.login(username='alexandre.woog@e-loue.com', password='alexandre')
+        response = self.client.post(reverse('patron_edit_addresses'), {
+            'addresses-0-zipcode': '75003',
+            'addresses-0-address1': '11, rue debelleyme',
+            'addresses-0-id': '1',
+            'addresses-0-city': 'Paris',
+            'addresses-0-country': 'FR',
+            'addresses-1-DELETE': 'on',
+            'addresses-1-zipcode': '75003',
+            'addresses-1-address1': '11, rue debelleyme',
+            'addresses-1-id': '3',
+            'addresses-1-city': 'Paris',
+            'addresses-1-country': 'FR',
+            'addresses-2-zipcode': '',
+            'addresses-2-address1': '',
+            'addresses-2-city': '',
+            'addresses-2-country': '',
+            'addresses-INITIAL_FORMS': '2',
+            'addresses-MAX_NUM_FORMS': '',
+            'addresses-TOTAL_FORMS': '3',
+        })
+        self.assertRedirects(response, reverse('patron_edit_addresses'))
+    
+    def test_add_new_address(self):
+        self.client.login(username='alexandre.woog@e-loue.com', password='alexandre')
+        response = self.client.post(reverse('patron_edit_addresses'), {
+            'addresses-0-zipcode': '75003',
+            'addresses-0-address1': '11, rue debelleyme',
+            'addresses-0-id': '1',
+            'addresses-0-city': 'Paris',
+            'addresses-0-country': 'FR',
+            'addresses-1-zipcode': '75003',
+            'addresses-1-address1': '11, rue debelleyme',
+            'addresses-1-id': '3',
+            'addresses-1-city': 'Paris',
+            'addresses-1-country': 'FR',
+            'addresses-2-zipcode': '75019',
+            'addresses-2-address1': '10, passage Montenegro',
+            'addresses-2-city': 'Paris',
+            'addresses-2-country': 'FR',
+            'addresses-INITIAL_FORMS': '2',
+            'addresses-MAX_NUM_FORMS': '',
+            'addresses-TOTAL_FORMS': '3',
+        })
+        self.assertRedirects(response, reverse('patron_edit_addresses'))
+
+
+class PhonenumberManagement(TestCase):
+    fixtures = ['category', 'patron', 'address', 'price', 'product', 'phones']
+
+    def test_new_phone_number(self):
+        self.client.login(username='alexandre.woog@e-loue.com', password='alexandre')
+        response = self.client.post(reverse('patron_edit_phonenumber'), {
+            'phones-0-number': '0123456789',
+            'phones-1-number': '24234', 
+            'phones-TOTAL_FORMS': '2', 
+            'phones-0-id': '1',
+            'phones-1-id': '', 
+            'phones-MAX_NUM_FORMS': '',
+            'phones-INITIAL_FORMS': '1'
+        })
+        self.assertRedirects(response, reverse('patron_edit_phonenumber'))
+
+    def test_delete_last_phone_number(self):
+        self.client.login(username='alexandre.woog@e-loue.com', password='alexandre')
+        response = self.client.post(reverse('patron_edit_phonenumber'), {
+            'phones-0-number': '0123456789',
+            'phones-1-number': '', 
+            'phones-0-DELETE': 'on',
+            'phones-TOTAL_FORMS': '2', 
+            'phones-0-id': '1',
+            'phones-1-id': '', 
+            'phones-MAX_NUM_FORMS': '',
+            'phones-INITIAL_FORMS': '1'
+        })
+        self.assertTemplateUsed(response, 'accounts/phonenumber_edit.html')
+        self.assertContains(response, 'Vous ne pouvez pas supprimer tout vos numéros.')
+
+    def test_add_wrong_number(self):
+        self.client.login(username='alexandre.woog@e-loue.com', password='alexandre')
+        response = self.client.post(reverse('patron_edit_phonenumber'), {
+            'phones-0-number': '0123456789',
+            'phones-1-number': 'gergreg', 
+            'phones-TOTAL_FORMS': '2', 
+            'phones-0-id': '1',
+            'phones-1-id': '', 
+            'phones-MAX_NUM_FORMS': '',
+            'phones-INITIAL_FORMS': '1'
+        })
+        self.assertTemplateUsed(response, 'accounts/phonenumber_edit.html')
+        self.assertContains(response, _(u'Vous devez spécifiez un numéro de téléphone'))
