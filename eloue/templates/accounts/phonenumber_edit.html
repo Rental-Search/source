@@ -26,6 +26,7 @@
         <form method="post" action="" method="post">
             {% csrf_token %}
             {{ formset.management_form }}
+            {{ formset.non_form_errors }}
             <table class="more-info">
                 <thead>
                     <tr>

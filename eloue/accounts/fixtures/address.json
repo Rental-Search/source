@@ -24,5 +24,18 @@
         },
         "model": "accounts.address",
         "pk": 2
+    },
+    {
+        "fields": {
+            "city": "Paris",
+            "position": "POINT(48.8613232 2.3631101)",
+            "patron": 1,
+            "country": "FR",
+            "address1": "11, rue debelleyme",
+            "address2": null,
+            "zipcode": "75003"
+        },
+        "model": "accounts.address",
+        "pk": 3
     }
 ]
