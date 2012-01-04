@@ -421,4 +421,4 @@ class PhonenumberManagement(TestCase):
             'phones-INITIAL_FORMS': '1'
         })
         self.assertTemplateUsed(response, 'accounts/phonenumber_edit.html')
-        self.assertContains(response, 'Vous devez spécifiez un numéro de téléphone')
+        self.assertContains(response, _(u'Vous devez spécifiez un numéro de téléphone'))
