@@ -1415,11 +1415,13 @@ input.price { color: #000; }
   margin-top: 95px;
   margin-left: 85px;
 }
-  .fbconnect-content span {
+  .fbconnect-content .fb-slogan {
     font-size: 11px;
     color: #555;
     padding-left: 138px;
   }
+  
+  .fbconnect-content .fb-pile { padding-top: 20px; }
 
   #fbconnect 
   {
