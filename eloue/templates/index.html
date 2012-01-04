@@ -5,6 +5,7 @@
 
 {% block head %}
  {{ block.super }}
+ <link rel="canonical" href="{% if request.is_secure %}https{%else%}http{%endif%}://{{ request.get_host }}">
 {% endblock %}
 
 {% block content %}
