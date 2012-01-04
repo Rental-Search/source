@@ -352,7 +352,7 @@ $(document).ready(function() {
            $('form').submit();
            $('input[type="submit"]').attr('disabled','disabled');
            $('#fbconnect').remove();
-           $('.fbconnect-content span').html('Connexion en cours...');
+           $('.fbconnect-content .fb-slogan').html('Connexion en cours...');
          }, {scope: 'email,user_location'});
     });
     
