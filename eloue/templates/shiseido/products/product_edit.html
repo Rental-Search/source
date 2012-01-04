@@ -1,7 +1,7 @@
 {% extends "base.html" %}
-{% load i18n mptt_tags product%}
+{% load i18n mptt_tags product %}
 
-{% block title %}{% trans "Vos produits mis en locations" %}{% endblock %}
+{% block title %}{% trans "Modification de" %} {{ product.summary }}{% endblock %}
 
 {% block content %}
 <div id="content" class="xgrid">
@@ -11,7 +11,6 @@
 			<li class="menu-tab selected">{% trans "Propriétaire" %}</li>
 			<li class="menu-tab"><a href="{% url borrower_booking %}">{% trans "Locataire" %}</a></li>
 			<li class="menu-tab"><a href="{% url patron_edit %}">{% trans "Mon compte" %}</a></li>
-			<li class="menu-tab"><a href="{% url inbox %}">{% blocktrans %}Messages({{ unread_message_count }}){% endblocktrans %}</a></li>
         </ul>
     </div>
     <div id="sub-menu">
@@ -52,8 +51,8 @@
 				<td>
 					{% for picture in product.pictures.all %}
 						{% if picture.thumbnail %}
-				       		<a href="#"><img src="{{ picture.thumbnail.url }}" /></a>
-				        {% endif %}
+		       		<a href="#"><img src="{{ picture.thumbnail.url }}" /></a>
+		        {% endif %}
 					{% endfor %}
 					{{ form.picture }}
 					{% if form.picture.errors %}
@@ -101,7 +100,7 @@
 				</td>
 			</tr>
 			<tr>
-				<th class="desc-input"><label>{{ form.description.label }} {% if form.description.field.required %}*{% endif %} :</label></th>
+				<th class="desc-input" ><label>{{ form.description.label }} {% if form.description.field.required %}*{% endif %} :</label></th>
 				<td {% if form.description.errors %} class="error-field" {% endif %}>
 					{{ form.description }}
 					{% if form.description.errors %}
@@ -113,72 +112,9 @@
 				</td>
 			</tr>
         </table>
-        {{form.non_field_errors}}
     </div>
     <div class="content-header x12">
-        <h2>3. {% trans "Adresse" %}</h2>
-    </div><!-- content-header -->
-    <div class="x12">
-        <table id="address" class="more-info">
-            <tr id="select_addr">
-                <td {% if form.address.errors %} class="error-field" {% endif %}>
-                    {{ form.address }}
-					{% if form.address.errors %}
-					    {% for error in form.address.errors %}
-									<br />
-					        <span class="error">{{ error|escape }}</span>
-					    {% endfor %}
-					{% endif %}
-				    <br /><a id="link_add_addr" href="#address"> {% trans "Ajouter une nouvelle addresse ?" %}</a>
-				</td>
-			</tr>
-    		<tr class="add_new_addr">
-    			<td  class="street-field {% if form.addresses__address1.errors %}error-field{% endif %}">
-    				{{ form.addresses__address1 }}
-    				{% if form.addresses__address1.errors %}
-    				    {% for error in form.addresses__address1.errors %}
-    								<br />
-    				        <span class="error">{{ error|escape }}</span>
-    				    {% endfor %}
-    				{% endif %}
-    			</td>
-    		</tr>
-    		<tr class = "add_new_addr">
-    			<td>
-    				<span {% if form.addresses__zipcode.errors %} class="error-field" {% endif %}>
-    					{{ form.addresses__zipcode }}
-    				</span>
-    				<span {% if form.addresses__city.errors %} class="error-field" {% endif %}>
-    					{{ form.addresses__city }}
-    				</span>
-    				{% if form.addresses__zipcode.errors%}
-    				    {% for error in form.addresses__zipcode.errors %}
-    								<br />
-    				        <span class="error">{{ error|escape }}</span>
-    				    {% endfor %}
-    				{% endif %}
-    				{% if form.addresses__city.errors %}
-    				    {% for error in form.addresses__city.errors %}									
-    				        <span class="error">{{ error|escape }}</span>
-    				    {% endfor %}
-    				{% endif %}
-    			</td>
-    		</tr>
-    		<tr class = "add_new_addr">
-    			<td  class="country-field {% if form.addresses__country.errors %}error-field {% endif %}" >
-    				{{ form.addresses__country }}
-    				{% if form.addresses__country.errors %}
-    				    {% for error in form.addresses__country.errors %}
-    								<br />
-    				        <span class="error">{{ error|escape }}</span>
-    				    {% endfor %}
-    				{% endif %}
-    			</td>
-    		</tr>
-        </table>
-    </div>
-    <div class="content-header x12">
-        <h2>4. {% trans "Prix de location" %}</h2>
+        <h2>3. {% trans "Prix de location" %}</h2>
     </div>
     <div class="x12">
         <div class="tabsPrices">
@@ -192,37 +128,37 @@
 			    {% endblocktrans %}
 			    <ul class="prices-form clearfix">
 			        <li>
-			            <p class="{% if form.hour_price.errors %}error-field{% endif %}">
+			            <p>
 			             {{ form.hour_price }}
-							<span><label class="labs "><span class="current-symbol">{% currency_symbol %}</span> {{ form.hour_price.label }}{% if form.hour_price.field.required %}*{% endif %}</label><span>
+							<label class="labs "><span class="current-symbol">{% currency_symbol %}</span> {{ form.hour_price.label }}{% if form.hour_price.field.required %}*{% endif %}</label>
 						</p>
 			        </li>
 			        <li>
-			            <p class="{% if form.day_price.errors %}error-field{% endif %}">
+			            <p>
 			                {{ form.day_price }}
 							<label class="labs"><span class="current-symbol">{% currency_symbol %}</span> {{ form.day_price.label }}{% if form.day_price.field.required %}*{% endif %}</label>
 			            </p>
 			        </li>
 			        <li>
-			            <p class="{% if form.week_end_price.errors %}error-field{% endif %}">
+			            <p>
 			                {{ form.week_end_price }}
-						    <label class="labs"><span class="current-symbol">{% currency_symbol %}</span> {{ form.week_end_price.label }}{% if form.week_end_price.field.required %}*{% endif %}</label>
+							<label class="labs"><span class="current-symbol">{% currency_symbol %}</span> {{ form.week_end_price.label }}{% if form.week_end_price.field.required %}*{% endif %}</label>
 			             </p>
 			        </li>
 			        <li>
-			            <p class="{% if form.week_price.errors %}error-field{% endif %}">
+			            <p>
 			                {{ form.week_price }}
 							<label class="labs"><span class="current-symbol">{% currency_symbol %}</span> {{ form.week_price.label }}{% if form.week_price.field.required %}*{% endif %}</label>
 			            </p>
 			        </li>
 			        <li>
-			            <p class="{% if form.two_weeks_price.errors %}error-field{% endif %}">
+			            <p>
 			                {{ form.two_weeks_price }}
 							<label class="labs"><span class="current-symbol">{% currency_symbol %}</span> {{ form.two_weeks_price.label }}{% if form.two_weeks_price.field.required %}*{% endif %}</label>
 			            </p>
 			        </li>
 			        <li>
-			            <p class="{% if form.month_price.errors %}error-field{% endif%}">
+			            <p>
 			                {{ form.month_price }}
 							<label class="labs"><span class="current-symbol">{% currency_symbol %}</span> {{ form.month_price.label }}{% if form.month_price.field.required %}*{% endif %}</label>
 			            </p>
@@ -230,46 +166,14 @@
 			        <li class="calculator"><a href="#">{% trans "Calculer" %}</a></li>
                     <li class="supp-list-prices"></li>
 			    </ul>
-			    {% if form.hour_price.errors %}
-    			    {% for error in form.hour_price.errors %}
-    			        <span class="error">{{ error|escape }}</span></br>
-    			    {% endfor %}
-    			{% endif %}
-			    {% if form.day_price.errors %}
-    			    {% for error in form.day_price.errors %}
-    			        <span class="error">{{ error|escape }}</span></br>
-    			    {% endfor %}
-    			{% endif %}
-			    {% if form.week_end_price.errors %}
-    			    {% for error in form.week_end_price.errors %}
-    			        <span class="error">{{ error|escape }}</span></br>
-    			    {% endfor %}
-    			{% endif %}
-			    {% if form.week_price.errors %}
-    			    {% for error in form.week_price.errors %}
-    			        <span class="error">{{ error|escape }}</span></br>
-    			    {% endfor %}
-    			{% endif %}
-			    {% if form.two_weeks_price.errors %}
-    			    {% for error in form.two_weeks_price.errors %}
-    			        <span class="error">{{ error|escape }}</span></br>
-    			    {% endfor %}
-    			{% endif %}
-			    {% if form.month_price.errors %}
-    			    {% for error in form.month_price.errors %}
-    			        <span class="error">{{ error|escape }}</span></br>
-    			    {% endfor %}
-    			{% endif %}
 			</div>
+			<p class="required-field">{% trans "* = champ obligatoire" %}</p>
         </div>
-    </div>
-    <div class="x12">
-        <p class="required-field">{% trans "* champ obligatoire" %}</p>
     </div>
     <div id="submit-wizard" class="x12">
         <p>
             <a href="{% url product_delete product.slug product.pk %}" style="padding-right: 500px; color: #900;">{% trans "Supprimer cet objet" %}</a>
-		   <a href="{% url owner_product %}">{% trans "Annuler" %}</a> {% trans "ou" %}
+		    <a href="{% url owner_product %}">{% trans "Annuler" %}</a> {% trans "ou" %} 
     		<input type="submit" class="btn big-green" value="{% trans "Sauvegarder" %}" />
 		</p>
 	</form>

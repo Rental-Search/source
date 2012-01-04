@@ -722,17 +722,11 @@ body { background: #ECF6FF url("../images/body-bg.png") repeat 0 0; }
   margin-bottom: 0px; 
   margin-top: 5px;
 }
-  .social_button li {
-    float: right;
-  }
+  .social_button li { float: left; }
   
-  .social_button .tweet {
-    margin-right: -15px;
-  }
+  .social_button .tweet { margin-left: 7px; }
   
-  .social_button .gplus {
-    margin-right: -15px;
-  }
+  .social_button .gplus { margin-left: 7px; }
 
 /* --------------------------------------------------------------
 
@@ -903,6 +897,12 @@ body { background: #ECF6FF url("../images/body-bg.png") repeat 0 0; }
       product details
 
 -------------------------------------------------------------- */
+.product-header {
+  height: 44px;
+}
+  .product-header h1 {
+    float: left;
+  }
 .product-desc 
 {
   float: left;
@@ -1415,11 +1415,13 @@ input.price { color: #000; }
   margin-top: 95px;
   margin-left: 85px;
 }
-  .fbconnect-content span {
+  .fbconnect-content .fb-slogan {
     font-size: 11px;
     color: #555;
     padding-left: 138px;
   }
+  
+  .fbconnect-content .fb-pile { padding-top: 20px; }
 
   #fbconnect 
   {

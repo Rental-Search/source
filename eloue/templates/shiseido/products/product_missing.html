@@ -1,11 +1,7 @@
 {% extends "base.html" %}
 {% load i18n %}
 
-{% block title %}{% trans "Identification" %}{% endblock %}
-
-{% block html_properties %}
-    xmlns:fb="http://ogp.me/ns/fb#"
-{% endblock %}
+{% block title %}{% trans "Complétez votre profil" %}{% endblock %}
 
 {% block content %}
 <div id="content-home" class="xgrid">
@@ -20,8 +16,12 @@
         <a href="{% url faq-topic-list %}" class="btn big-blue">{% trans "Obtenir de l'aide" %}</a>
     </div>
     <div class="content-header x12">
-		<h2>{% trans "Identification" %}</h2>
+		{% if form.addresses %}
+			<h2>{% trans "Choisissez une adresse pour l'objet :" %}</h2>
+		{% else %}
+			<h2>{% trans "Complétez votre profil et choisissez une adresse pour la l'objet :" %}</h2>
+		{% endif %}
 	</div>
-	{% include "accounts/partials/login.html" %}
-</div>
+	{% include "accounts/partials/missing.html" %}
+</div>    
 {% endblock %}

@@ -11,6 +11,7 @@ from django.core.mail import EmailMessage, BadHeaderError
 from django.core.urlresolvers import reverse
 from django.forms.models import model_to_dict
 from django.shortcuts import get_object_or_404, render_to_response
+from django.template import RequestContext
 from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.cache import never_cache, cache_page
 from django.views.generic.simple import direct_to_template, redirect_to
@@ -153,6 +154,31 @@ def patron_edit_password(request):
         messages.success(request, _(u"Votre mot de passe à bien été modifié"))
     return direct_to_template(request, 'accounts/patron_password.html', extra_context={'form': form, 'patron': request.user})
 
+@login_required
+def patron_edit_phonenumber(request):
+    from eloue.accounts.forms import PhoneNumberFormset
+    if request.POST:
+        formset  = PhoneNumberFormset(request.POST, instance=request.user)
+        if formset.is_valid():
+            formset.save()
+            messages.success(request, _(u"Vos numéros de téléphones ont bien été modifiés"))
+            return redirect('eloue.accounts.views.patron_edit_phonenumber')
+    else:
+        formset = PhoneNumberFormset(instance=request.user)
+    return render_to_response('accounts/phonenumber_edit.html', dictionary={'formset': formset}, context_instance=RequestContext(request))
+
+@login_required
+def patron_edit_addresses(request):
+    from eloue.accounts.forms import AddressFormSet
+    if request.POST:
+        formset = AddressFormSet(request.POST, instance=request.user)
+        if formset.is_valid():
+            formset.save()
+            messages.success(request, _(u"Vos addresses ont bien été modifiées"))
+            return redirect('eloue.accounts.views.patron_edit_addresses')
+    else:
+        formset = AddressFormSet(instance=request.user)
+    return render_to_response('accounts/addresses_edit.html', dictionary={'formset': formset}, context_instance=RequestContext(request))
 
 @login_required
 def patron_paypal(request):

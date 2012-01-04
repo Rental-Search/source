@@ -126,16 +126,6 @@ class MultiPartFormWizard(FormWizard):
             self.required_fields.remove('password1')
             self.required_fields.remove('password2')
 
-    def render(self, form, request, step, context=None):
-        if form.__class__.__name__ == 'MissingInformationForm':
-            if self.fb_session:
-                if context==None:
-                    context={}
-                default_picture = settings.MEDIA_URL + 'images/default_avatar.png'
-                context['fb_image'] = self.me.get('picture', default_picture)
-        return super(MultiPartFormWizard, self).render(form, request, step, context)
-
-
 def isMissingInformationForm(obj):
     return getattr(obj.__class__, '__name__', None) == 'MissingInformationForm'
 
@@ -245,6 +235,15 @@ class NewGenericFormWizard(MultiPartFormWizard):
                 initial=initial)
         else:
             return super(NewGenericFormWizard, self).get_form(step, data, files)
+
+    def render(self, form, request, step, context=None):
+        if form.__class__.__name__ == 'MissingInformationForm':
+            if self.fb_session:
+                if context==None:
+                    context={}
+                default_picture = settings.MEDIA_URL + 'images/default_avatar.png'
+                context['fb_image'] = self.me.get('picture', default_picture)
+        return super(NewGenericFormWizard, self).render(form, request, step, context)
 
 class GenericFormWizard(MultiPartFormWizard):
     """A not so generic form wizard"""

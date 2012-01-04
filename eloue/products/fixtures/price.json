@@ -112,6 +112,17 @@
         "fields": {
             "currency": "EUR",
             "product": 3,
+            "name": "Haute saison",
+            "amount": "11",
+            "unit": 1
+        },
+        "model": "products.price",
+        "pk": 10
+    },
+    {
+        "fields": {
+            "currency": "EUR",
+            "product": 3,
             "ended_at": 212,
             "name": "Basse saison",
             "started_at": 311,

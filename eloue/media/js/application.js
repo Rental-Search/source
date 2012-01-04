@@ -112,6 +112,7 @@ $(document).ready(function() {
 	$("a#link_add_addr").click(function(){		
 		newAddrInput.show();	
 		$("select[id$='-addresses']").val('---------');
+        $("select[id='id_address']").val('---------');
 		addressInput.each(function(i, el) {
             $(el).removeAttr('disabled');
         });
@@ -351,7 +352,7 @@ $(document).ready(function() {
            $('form').submit();
            $('input[type="submit"]').attr('disabled','disabled');
            $('#fbconnect').remove();
-           $('.fbconnect-content span').html('Connexion en cours...');
+           $('.fbconnect-content .fb-slogan').html('Connexion en cours...');
          }, {scope: 'email,user_location'});
     });
     

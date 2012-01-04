@@ -10,6 +10,7 @@ from django.contrib.sites.models import Site
 from django.contrib.auth.forms import PasswordResetForm, PasswordChangeForm, SetPasswordForm
 from django.contrib.auth.tokens import default_token_generator
 from django.forms.fields import EMPTY_VALUES
+from django.forms.models import inlineformset_factory, BaseInlineFormSet
 from django.template.defaultfilters import slugify
 from django.template.loader import render_to_string
 from django.utils.datastructures import SortedDict
@@ -22,7 +23,7 @@ import facebook
 
 from eloue.accounts import EMAIL_BLACKLIST
 from eloue.accounts.fields import PhoneNumberField
-from eloue.accounts.models import Patron, Avatar, PhoneNumber, COUNTRY_CHOICES, PatronAccepted, FacebookSession
+from eloue.accounts.models import Patron, Avatar, PhoneNumber, COUNTRY_CHOICES, PatronAccepted, FacebookSession, Address
 from eloue.accounts.widgets import ParagraphRadioFieldRenderer
 from eloue.utils import form_errors_append
 from eloue.payments import paypal_payment
@@ -379,12 +380,63 @@ class PatronPaypalForm(forms.ModelForm):
     
 
 class PhoneNumberForm(forms.ModelForm):
-    number = PhoneNumberField()
-       
+    number = PhoneNumberField(label=_(u"Téléphone"), widget=forms.TextInput(attrs={'class': 'inm'}), required=False)
+
+    def clean_number(self):
+        if not self.cleaned_data['number']:
+            raise forms.ValidationError(_(u"Vous devez spécifiez un numéro de téléphone"))
+        return self.cleaned_data['number']
+    
     class Meta:
         model = PhoneNumber
         exclude = ('patron')
-    
+
+class PhoneNumberBaseFormSet(BaseInlineFormSet):
+    def clean(self):
+        super(PhoneNumberBaseFormSet, self).clean()
+        if not len(filter(lambda form:(not form.cleaned_data.get('DELETE', True) if hasattr(form, 'cleaned_data') else False), self.forms)):
+            raise forms.ValidationError(_(u"Vous ne pouvez pas supprimer tout vos numéros."))
+        if any(self.errors):
+            return
+        return self.cleaned_data
+
+PhoneNumberFormset = inlineformset_factory(Patron, PhoneNumber, form=PhoneNumberForm, formset=PhoneNumberBaseFormSet, exclude=['kind'], extra=1, can_delete=True)
+
+class AddressForm(forms.ModelForm):
+
+    def clean(self):
+        if self.instance.products.all() and self.cleaned_data['DELETE']:
+            raise forms.ValidationError(_(u'Vous ne pouvez pas supprimer une adresse associé à un produit. Veuillez le changer sur le page produit.'))
+        return self.cleaned_data
+
+    class Meta:
+        model = Address
+        exclude = ('address2', 'position', 'objects', 'patron')
+        widgets = {
+            'address1': forms.Textarea(
+                attrs={'class': 'inm street', 'placeholder': _(u'Rue')}
+            ),
+            'zipcode': forms.TextInput(
+                attrs={'class': 'inm zipcode', 'placeholder': _(u'Code postal')}
+            ),
+            'city': forms.TextInput(
+                attrs={'class': 'inm town', 'placeholder': _(u'Ville')}
+            ),
+            'country': forms.Select(
+                attrs={'class': 'selm'}
+            ),
+        }
+
+class AddressBaseFormSet(BaseInlineFormSet):
+
+    def clean(self):
+        super(AddressBaseFormSet, self).clean()
+        if any(self.errors):
+            raise forms.ValidationError('')
+        for form in self.forms:
+            pass
+        
+AddressFormSet = inlineformset_factory(Patron, Address, form=AddressForm, formset=AddressBaseFormSet, extra=1, can_delete=True)
 
 def make_missing_data_form(instance, required_fields=[]):
     fields = SortedDict({
@@ -403,9 +455,9 @@ def make_missing_data_form(instance, required_fields=[]):
         'addresses__zipcode': forms.CharField(required=True, max_length=9, widget=forms.TextInput(attrs={
             'class': 'inm zipcode', 'placeholder': _(u'Code postal')
         })),
-        'avatar': forms.ImageField(required=False),
         'addresses__city': forms.CharField(required=True, max_length=255, widget=forms.TextInput(attrs={'class': 'inm town', 'placeholder': _(u'Ville')})),
         'addresses__country': forms.ChoiceField(choices=COUNTRY_CHOICES, required=True, widget=forms.Select(attrs={'class': 'selm'})),
+        'avatar': forms.ImageField(required=False),
         'phones__phone': PhoneNumberField(label=_(u"Téléphone"), required=True, widget=forms.TextInput(attrs={'class': 'inm'}))
     })
 

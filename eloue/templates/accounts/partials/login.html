@@ -1,9 +1,13 @@
 {% load i18n %}
+
 <div id="fb-root"></div>
 <div class="x6 or">
     <div class="fbconnect-content">
         <div id="fbconnect">Connectez-vous avec Facebook</div>
-        <span>Plus simple et rapide.</span>
+        <span class="fb-slogan">Plus simple et rapide.</span>
+        <div class="fb-pile">
+            <fb:facepile app_id="{{FACEBOOK_APP_ID}}" width="240" max_rows="1"></fb:facepile>
+        </div>
     </div>
 </div>
 <div class="x6">
