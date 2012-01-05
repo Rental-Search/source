@@ -104,3 +104,5 @@ urlpatterns = patterns('',
     url(r'^$', homepage, name="home"),
     url(r'^%s/$' % _('recherche'), search, name="search")
 )
+
+handler404 = 'eloue.views.custom404'
