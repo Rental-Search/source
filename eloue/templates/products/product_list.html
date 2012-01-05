@@ -28,11 +28,10 @@
 
 {% block  head %}
     {{ block.super }}
-
     {% if breadcrumbs.categorie %}
-        <link rel="canonical" href="{% if request.is_secure %}https{%else%}http{%endif%}://{{ request.get_host }}{{ breadcrumbs.categorie.url }}{{canonical_parameters}}"/>
+        <link rel="canonical" href="{% if request.is_secure %}https{%else%}http{%endif%}://{{ request.get_host }}{{ breadcrumbs.categorie.url }}{% if page > 1 %}page/{{page}}/{% endif %}{{canonical_parameters}}"/>
     {% else %}
-        <link rel="canonical" href="{% if request.is_secure %}https{%else%}http{%endif%}://{{ request.get_host }}/location/{{canonical_parameters}}"/>
+        <link rel="canonical" href="{% if request.is_secure %}https{%else%}http{%endif%}://{{ request.get_host }}/location/{% if page > 1%}page/{{page}}/{% endif %}{{canonical_parameters}}"/>
     {% endif %}
 
     {% if page_obj.has_next %}
@@ -44,10 +43,18 @@
     {% endif %}
 
     {% if page_obj.has_previous %}
-        {% if breadcrumbs.categorie %}
-            <link rel="prev" href="{% if request.is_secure %}https{%else%}http{%endif%}://{{ request.get_host }}{{ breadcrumbs.categorie.url }}page/{{page_obj.previous_page_number}}/{{canonical_parameters}}"/>
+        {% if page == 2%}
+            {% if breadcrumbs.categorie %}
+                <link rel="prev" href="{% if request.is_secure %}https{%else%}http{%endif%}://{{ request.get_host }}{{ breadcrumbs.categorie.url }}{{canonical_parameters}}"/>
+            {% else %}
+                <link rel="prev" href="{% if request.is_secure %}https{%else%}http{%endif%}://{{ request.get_host }}/location/{{canonical_parameters}}"/>
+            {% endif %}
         {% else %}
-            <link rel="prev" href="{% if request.is_secure %}https{%else%}http{%endif%}://{{ request.get_host }}/location/page/{{page_obj.previous_page_number}}/{{canonical_parameters}}"/>
+            {% if breadcrumbs.categorie %}
+                <link rel="prev" href="{% if request.is_secure %}https{%else%}http{%endif%}://{{ request.get_host }}{{ breadcrumbs.categorie.url }}page/{{page_obj.previous_page_number}}/{{canonical_parameters}}"/>
+            {% else %}
+                <link rel="prev" href="{% if request.is_secure %}https{%else%}http{%endif%}://{{ request.get_host }}/location/page/{{page_obj.previous_page_number}}/{{canonical_parameters}}"/>
+            {% endif %}
         {% endif %}
     {% endif %}
 
