@@ -16,7 +16,11 @@
     <meta property="og:title" content="A louer sur e-loue : {{product.summary}}"/>
     <meta property="og:type" content="product"/>
     <meta property="og:url" content="{% if request.is_secure %}https{%else%}http{%endif%}://{{ request.get_host }}{{ product.get_absolute_url }}"/>
-
+    {% with product.address as address %}
+        <meta property="og:locality" content="{{address.city}}"/>
+        <meta property="og:postal-code" content="{{address.zipcode}}"/>
+        <meta property="og:country-name" content="{{address.get_country_display}}"/>
+    {% endwith %}
     {% with product.pictures.all|first as picture %}
       {% if picture %}
         <meta property="og:image" content="{{picture.thumbnail.url }}"/>
