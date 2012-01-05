@@ -17,11 +17,6 @@
     <meta property="og:type" content="product"/>
     <meta property="og:url" content="{% if request.is_secure %}https{%else%}http{%endif%}://{{ request.get_host }}{{ product.get_absolute_url }}"/>
     {% with product.address as address %}
-        {% if address.is_geocoded %}
-            <meta property="og:latitude" content="{{address.position.0}}"/>
-            <meta property="og:longitude" content="{{address.position.1}}"/>
-        {% endif %}
-        <meta property="og:street-address" content="{{address.address1}}"/>
         <meta property="og:locality" content="{{address.city}}"/>
         <meta property="og:postal-code" content="{{address.zipcode}}"/>
         <meta property="og:country-name" content="{{address.get_country_display}}"/>
