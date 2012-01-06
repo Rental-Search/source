@@ -25,7 +25,7 @@ from eloue.accounts.models import Patron, Address
 from eloue.geocoder import GoogleGeocoder
 from eloue.products.fields import SimpleDateField
 from eloue.products.manager import ProductManager, PriceManager, QuestionManager, CurrentSiteProductManager, TreeManager
-from eloue.products.signals import post_save_answer, post_save_product, post_save_curiosity
+from eloue.products.signals import post_save_answer, post_save_product, post_save_curiosity, pre_save_product
 from eloue.products.utils import Enum
 from eloue.signals import post_save_sites
 
@@ -100,6 +100,8 @@ class Product(models.Model):
     on_site = CurrentSiteProductManager()
     objects = ProductManager()
     
+    modified_at = models.DateTimeField(blank=True, null=True)
+
     class Meta:
         verbose_name = _('product')
     
@@ -510,3 +512,4 @@ post_save.connect(post_save_sites, sender=Alert)
 post_save.connect(post_save_sites, sender=Curiosity)
 post_save.connect(post_save_sites, sender=Product)
 post_save.connect(post_save_sites, sender=Category)
+signals.pre_save.connect(pre_save_product, sender=Product)
