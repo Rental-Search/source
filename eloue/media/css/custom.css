@@ -1014,6 +1014,8 @@ body { background: #ECF6FF url("../images/body-bg.png") repeat 0 0; }
 
 #flatpage li ul { margin-left: 20px; }
 
+#flatpage a { text-decoration: underline; }
+
 /* --------------------------------------------------------------
 
   Menu
