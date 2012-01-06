@@ -125,7 +125,7 @@
 	<div id="results" class="x8">
 	    <div class="top-content">
     	    {% if breadcrumbs.categorie.object.description %}
-                {{ breadcrumbs.categorie.object.description.header }}
+                {{ breadcrumbs.categorie.object.description.header|safe }}
             {% endif %}
         </div>
 	     <ul class="filters">
@@ -298,7 +298,7 @@
 	</div>
 	<div class="bottom-content x12">
         {% if breadcrumbs.categorie.object.description %}
-            {{ breadcrumbs.categorie.object.description.footer }}
+            {{ breadcrumbs.categorie.object.description.footer|safe }}
         {% endif %}
     </div>
 </div>
