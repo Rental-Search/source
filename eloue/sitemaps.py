@@ -20,17 +20,23 @@ class SecureSitemap(Sitemap):
 
 class PatronSitemap(SecureSitemap):
     changefreq = "weekly"
+    limit=1000
     
     def items(self):
         return Patron.on_site.all()
     
+    def lastmod(self, patron):
+        return patron.modified_at
 
 class ProductSitemap(SecureSitemap):
     changefreq = "weekly"
-    
+    limit = 1000
+
     def items(self):
         return Product.on_site.active()
     
+    def lastmod(self, product):
+        return product.modified_at
 
 class FlatPageSitemap(SecureSitemap):
     changefreq = "monthly"
