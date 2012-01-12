@@ -267,6 +267,8 @@ def booking_close(request, booking_id):
         booking.pay()
         booking.send_closed_email()
         messages.success(request, _(u"Cette réservation a bien été cloturée"))
+        messages.info(request, _(u"Cette réservation a bien été cloturée et le virement effectué. Si vous voulez vous pouvez ajouter une commentaire et une note sur le déroulement de la location."))
+        return redirect(reverse('eloue.accounts.views.comments')+'#'+booking.pk.hex)
     messages.error(request, _(u"Cette réservation n'a pu être cloturée"))
     return redirect_to(request, booking.get_absolute_url())
 

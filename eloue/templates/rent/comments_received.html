@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}{% trans "Votre tableau de bord" %}{% endblock %}
+{% load inbox %}
+
+{% block content %}
+
+<div id="content" class="xgrid">
+       <div class="content-top">
+         <ul id="menu" class="x12">
+            <li class="menu-tab first"><a href="{% url dashboard %}">{% trans "Tableau de bord" %}</a></li>
+            <li class="menu-tab"><a href="{% url owner_booking %}">{% trans "Propriétaire" %}</a></li>
+            <li class="menu-tab"><a href="{% url borrower_booking %}">{% trans "Locataire" %}</a></li>
+            <li class="menu-tab">{% trans "Mon compte" %}</li>
+            <li class="menu-tab"><a href="{% url inbox %}">{% blocktrans %}Messages({{ unread_message_count }}){% endblocktrans %}</a></li>
+        </ul>
+        </div>
+        <div id="sub-menu">
+            <ul class="x12">
+                <li class="sub-tab first"><a href="{% url patron_edit %}">{% trans "Votre profil" %}</a></li>
+                <li class="sub-tab"><a href="{% url patron_edit_password %}">{% trans "Modification du mot de passe" %}</a></li>
+                <li class="sub-tab"><a href="{% url patron_edit_phonenumber %}">{% trans "Modification des numéros de téléphone" %}</a></li>
+                <li class="sub-tab"><a href="{% url patron_edit_addresses %}">{% trans "Modification des adresses" %}</a></li>
+                <li class="sub-tab">{% trans "Commentaires" %}</li>
+            </ul>
+        </div>
+        <div id="sub-menu">
+            <ul class="x12">
+                <li class="sub-tab first"><a href="{% url comments %}">{% trans "Commentaires ecrits par moi" %}</a></li>
+                <li class="sub-tab">{% trans "Commentaires ecrits sur moi" %}</li>
+            </ul>
+        </div>
+	<div class="content-header x12">
+		<h1>{% trans "Comments des proprietaires" %}</h1>
+        {% for comment in owners_comments %}
+            {% include "rent/partials/comment.html" %}
+        {% endfor %}
+	</div>
+    <div class="content-header x12">
+        <h1>{% trans "Comments des locataires" %}</h1>
+        {% for comment in borrowers_comments %}
+            {% include "rent/partials/comment.html" %}
+        {% endfor %}
+    </div>
+</div>
+{% endblock%}

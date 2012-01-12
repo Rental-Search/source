@@ -151,6 +151,17 @@
             </p>
             {{ product.description|linebreaksp }}
         </div>
+        <div class="product-comments">
+            <p>
+            <h1>Commentaires</h1>
+            <lu>
+            {% for comment in comments %}
+                <li>{{comment}}</li>
+            {%empty%}
+                Pas de commentaire! Soyez le premier a louer et commenter!
+            {% endfor %}
+            </lu>
+        </div>
     </div>
     <div class="x4">
         <div class="box-tools">
@@ -211,19 +222,19 @@
             <a href="{% url message_create product.pk product.owner.pk %}" class="btn long-blue">{% trans "Contactez-moi" %}</a>
         </div>
         <div id="payment-info" class="box-info">
-              <h3>{% trans "Paiement en ligne" %}</h3>
-              {% blocktrans %}
-			  <ol>
-					<li> Paiement sur payal</li>
-					<li> Le propriétaire est averti de votre demande</li>
-					<li> Nous vous informons par mail de sa réponse :<br />
-					    <ul>
-    						<li>S’il accepte vous serez débité le premier jour de la location</li>
-    						<li>S’il refuse vous ne serez pas débité</li>
-    					</ul>
-    				</li>
-	      	 </ol>
-			 {% endblocktrans %}
+            <h3>{% trans "Paiement en ligne" %}</h3>
+            {% blocktrans %}
+			<ol>
+				<li> Paiement sur payal</li>
+				<li> Le propriétaire est averti de votre demande</li>
+				<li> Nous vous informons par mail de sa réponse :<br />
+				    <ul>
+						<li>S’il accepte vous serez débité le premier jour de la location</li>
+						<li>S’il refuse vous ne serez pas débité</li>
+					</ul>
+				</li>
+	      	</ol>
+			{% endblocktrans %}
         </div>
     </div>
 </div>

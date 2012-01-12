@@ -586,8 +586,7 @@ def make_missing_data_form(instance, required_fields=[]):
     form_class.clean_company_name = types.MethodType(clean_company_name, None, form_class)
     form_class.clean_avatar = types.MethodType(clean_avatar, None, form_class)
     return fields != {}, form_class
-    
-    
+
 class ContactForm(forms.Form):
     subject = forms.CharField(label=_(u"Sujet"), max_length=100, required=True, widget=forms.TextInput(attrs={'class': 'inm'}))
     message = forms.CharField(label=_(u"Message"), required=True, widget=forms.Textarea(attrs={'class': 'inm'}))

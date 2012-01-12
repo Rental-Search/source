@@ -12,7 +12,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from pyke.knowledge_engine import CanNotProve
 
-from eloue.rent.models import Booking, Sinister
+from eloue.rent.models import Booking, Sinister, OwnerComment, BorrowerComment
 from eloue.rent.utils import get_product_occupied_date, datespan, DATE_FORMAT
 from django.db.models import Q
 
@@ -234,3 +234,14 @@ class SinisterForm(forms.ModelForm):
 
 class IncidentForm(forms.Form):
     message = forms.CharField(required=True, widget=forms.Textarea(attrs={'placeholder': _(u"Décrivez votre incident")}))
+
+
+class OwnerCommentForm(forms.ModelForm):
+    class Meta:
+        model = OwnerComment
+        fields = ('note', 'comment', )
+
+class BorrowerCommentForm(forms.ModelForm):
+    class Meta:
+        model = BorrowerComment
+        fields = ('note', 'comment', )
