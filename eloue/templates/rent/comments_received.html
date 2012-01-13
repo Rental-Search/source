@@ -18,29 +18,40 @@
         <div id="sub-menu">
             <ul class="x12">
                 <li class="sub-tab first"><a href="{% url patron_edit %}">{% trans "Votre profil" %}</a></li>
-                <li class="sub-tab"><a href="{% url patron_edit_password %}">{% trans "Modification du mot de passe" %}</a></li>
-                <li class="sub-tab"><a href="{% url patron_edit_phonenumber %}">{% trans "Modification des numéros de téléphone" %}</a></li>
-                <li class="sub-tab"><a href="{% url patron_edit_addresses %}">{% trans "Modification des adresses" %}</a></li>
                 <li class="sub-tab">{% trans "Commentaires" %}</li>
+                <li class="sub-tab"><a href="{% url patron_edit_password %}">{% trans "Modification du mot de passe" %}</a></li>
+                <li class="sub-tab"><a href="{% url patron_edit_phonenumber %}">{% trans "Numéros de téléphone" %}</a></li>
+                <li class="sub-tab"><a href="{% url patron_edit_addresses %}">{% trans "Adresses" %}</a></li>
             </ul>
         </div>
-        <div id="sub-menu">
-            <ul class="x12">
-                <li class="sub-tab first"><a href="{% url comments %}">{% trans "Commentaires ecrits par moi" %}</a></li>
-                <li class="sub-tab">{% trans "Commentaires ecrits sur moi" %}</li>
+        <div class="tabsPrices x12 ui-tabs ui-widget ui-widget-content ui-corner-all">
+            <ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
+                <li class="ui-state-default ui-corner-top">
+                    <a href="{% url comments %}">{% trans "Commentaires ecrits par moi" %}</a>
+                </li>
+                <li class="ui-state-default ui-corner-top ui-tabs-selected ui-state-active">
+                    <a href="{% url comments_received %}">{% trans "Commentaires ecrits sur moi" %}</a>
+                </li>
             </ul>
+            <div id="téabs-1" class="ui-tabs-panel ui-widget-content ui-corner-bottom">
+                <div class="content-header x11">
+                	<h2>{% trans "Commentaires des proprietaires" %}</h2>
+                </div>
+                <div class="x11">
+                    {% for comment in owners_comments %}
+                        {% include "rent/partials/comment.html" %}
+                    {% endfor %}
+                </div>
+                <div class="content-header x11">
+                    <h2>{% trans "Commentaires des locataires" %}</h2>
+                </div>
+                <div class="x11">
+                    {% for comment in borrowers_comments %}
+                        {% include "rent/partials/comment.html" %}
+                    {% endfor %}
+                </div>
+            </div><!-- tab1 -->
         </div>
-	<div class="content-header x12">
-		<h1>{% trans "Comments des proprietaires" %}</h1>
-        {% for comment in owners_comments %}
-            {% include "rent/partials/comment.html" %}
-        {% endfor %}
-	</div>
-    <div class="content-header x12">
-        <h1>{% trans "Comments des locataires" %}</h1>
-        {% for comment in borrowers_comments %}
-            {% include "rent/partials/comment.html" %}
-        {% endfor %}
-    </div>
+	
 </div>
 {% endblock%}

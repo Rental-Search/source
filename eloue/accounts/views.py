@@ -103,13 +103,12 @@ def associate_facebook(request):
 def comments_received(request):
     patron = request.user
     borrowers_comments = BorrowerComment.objects.filter(booking__owner=patron)
-    owner_comments = OwnerComment.objects.filter(booking__borrower=patron)
-
+    owners_comments = OwnerComment.objects.filter(booking__borrower=patron)
     return render_to_response(
         'rent/comments_received.html',
         RequestContext(request, {
             'borrowers_comments': borrowers_comments,
-            'owner_comments': owner_comments,
+            'owners_comments': owners_comments,
         })
     )
 

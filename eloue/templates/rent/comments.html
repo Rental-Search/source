@@ -18,63 +18,68 @@
         <div id="sub-menu">
             <ul class="x12">
                 <li class="sub-tab first"><a href="{% url patron_edit %}">{% trans "Votre profil" %}</a></li>
-                <li class="sub-tab"><a href="{% url patron_edit_password %}">{% trans "Modification du mot de passe" %}</a></li>
-                <li class="sub-tab"><a href="{% url patron_edit_phonenumber %}">{% trans "Modification des numéros de téléphone" %}</a></li>
-                <li class="sub-tab"><a href="{% url patron_edit_addresses %}">{% trans "Modification des adresses" %}</a></li>
                 <li class="sub-tab">{% trans "Commentaires" %}</li>
+                <li class="sub-tab"><a href="{% url patron_edit_password %}">{% trans "Modification du mot de passe" %}</a></li>
+                <li class="sub-tab"><a href="{% url patron_edit_phonenumber %}">{% trans "Numéros de téléphone" %}</a></li>
+                <li class="sub-tab"><a href="{% url patron_edit_addresses %}">{% trans "Adresses" %}</a></li>
             </ul>
         </div>
-        <div id="sub-menu">
-            <ul class="x12">
-                <li class="sub-tab first">{% trans "Commentaires ecrits par moi" %}</li>
-                <li class="sub-tab"><a href="{% url comments_received %}">{% trans "Commentaires ecrits sur moi" %}</a></li>
-            </ul>
-        </div>
-	<div class="content-header x12">
-		<h1>{% trans "Comments à écrire" %}</h1>
-	</div>
-	<div class="x12">
-        
-         {% if messages %}
-             {% for message in messages %}
-                 {% if message.tags == "info" %}
-                        {{ message }}
+    <div class="tabsPrices x12 ui-tabs ui-widget ui-widget-content ui-corner-all">
+        <ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
+            <li class="ui-state-default ui-corner-top ui-tabs-selected ui-state-active">
+                <a href="{% url comments %}">{% trans "Commentaires ecrits par moi" %}</a>
+            </li>
+            <li class="ui-state-default ui-corner-top">
+                <a href="{% url comments_received %}">{% trans "Commentaires ecrits sur moi" %}</a>
+            </li>
+        </ul>
+        <div id="tabs-1" class="ui-tabs-panel ui-widget-content ui-corner-bottom">
+            <div class="content-header x11">
+        		<h2>{% trans "Comments à écrire" %}</h2>
+        	</div>	
+        	<div class="x11">
+                 {% if messages %}
+                     {% for message in messages %}
+                         {% if message.tags == "info" %}
+                                {{ message }}
+                         {% endif %}
+                     {% endfor %}
                  {% endif %}
-             {% endfor %}
-         {% endif %}
-        {% for form in forms %}
-        <div id="{{form.instance.booking.pk.hex}}">
-        <form method="post" action="">
-        {% csrf_token %}
-        <table>
-            <a href="{{form.instance.booking.get_absolute_url}}">booking</a>
-            <input type="submit" name="{{form.instance.booking.pk}}"value="enregistrer comment" />
-            {{form.note}} {{form.note.errors}}
-            {{form.comment}} {{form.comment.errors}}
-            {{form.booking.errors}}
-            {{form.form.non_field_errors}}
-        </table>
-        </form>
-        </div>
-        {% endfor%}
+                {% for form in forms %}
+                <div id="{{form.instance.booking.pk.hex}}">
+                <form method="post" action="">
+                {% csrf_token %}
+                <table>
+                    <a href="{{form.instance.booking.get_absolute_url}}">booking</a>
+                    <input type="submit" name="{{form.instance.booking.pk}}"value="enregistrer comment" />
+                    {{form.note}} {{form.note.errors}}
+                    {{form.comment}} {{form.comment.errors}}
+                    {{form.booking.errors}}
+                    {{form.form.non_field_errors}}
+                </table>
+                </form>
+                </div>
+                {% endfor%}
 
-	</div>
-    <div class="content-header x12">
-        <h1>{% trans "Comments écrits" %}</h1>
-    </div>
-    <div class="x12">
-        {% for booking in commented_bookings %}
-            <a href="{{booking.get_absolute_url}}">commented booking</a>
-            <ul>
-            {% if booking.owner == request.user %}
-                <li>note: {{booking.ownercomment.note}}</li>
-                <li>comment: {{booking.ownercomment.comment}}</li>
-            {% else %}
-                <li>note: {{booking.borrowercomment.note}}</li>
-                <li>comment:    {{booking.borrowercomment.comment}}</li>
-            {% endif %}
-            </ul>
-        {% endfor %}
+        	</div>
+            <div class="content-header x11">
+                <h2>{% trans "Comments écrits" %}</h2>
+            </div>
+            <div class="x11">
+                {% for booking in commented_bookings %}
+                    <a href="{{booking.get_absolute_url}}">commented booking</a>
+                    <ul>
+                    {% if booking.owner == request.user %}
+                        <li>note: {{booking.ownercomment.note}}</li>
+                        <li>comment: {{booking.ownercomment.comment}}</li>
+                    {% else %}
+                        <li>note: {{booking.borrowercomment.note}}</li>
+                        <li>comment:    {{booking.borrowercomment.comment}}</li>
+                    {% endif %}
+                    </ul>
+                {% endfor %}
+            </div>
+        </div><!-- tab1 -->
     </div>
 </div>
 {% endblock%}

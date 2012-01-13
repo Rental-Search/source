@@ -152,15 +152,50 @@
             {{ product.description|linebreaksp }}
         </div>
         <div class="product-comments">
-            <p>
-            <h1>Commentaires</h1>
-            <lu>
+            {% if comments %}
+            <div class="x8 content-header" style="margin-left: 0px;">
+                <h2>{{ comments.count }} {% trans "Commentaire" %}{{ num_messages|pluralize }}</h2>
+            </div>
+            <div class="x8 comments-resume">
+                Note globale : 
+                <span class="stars-big empty">
+                    <span class="stars-big" style="width: 47px;"></span>
+                </span>
+            </div>
+            {% else %}
+            <div class="x8 content-header" style="margin-left: 0px;">
+                <h2>{% trans "Commentaire" %}</h2>
+            </div>
+            {% endif %}
+            <ul class="x8 comments" style="margin-left: 0px;">
             {% for comment in comments %}
-                <li>{{comment}}</li>
-            {%empty%}
-                Pas de commentaire! Soyez le premier a louer et commenter!
+                <li class="comment">
+                    <a href="#" class="comment-img">
+                        {% if comment.writer.avatar %}
+                        <img src="{{ comment.writer.avatar.product_page.url }}" alt="{% trans "Autheur"%}{{ comment.writer.username }}">
+                        {% else %}
+                        <img src="{{ MEDIA_URL }}images/default_avatar.png" alt="{% trans "Autheur"%}{{ comment.writer.username }}">
+                        {% endif %}
+                    </a>
+                    <div class="comment-content">
+                        <div class="comment-title">
+                            <p class="comment-writter">
+                                <a href="{{ product.owner.get_absolute_url }}">{{ comment.writer.username }}</a>
+                                <span class="stars empty">
+                                    <span class="stars filled_{{ comment.note }}"></span>
+                                </span>
+                            </p>
+                            <p class="clear"></p>
+                            <p class="comment-meta">{{ comment.created_at|date:"d F Y" }}</p>
+                        </div>
+                        <div class="comment-comment">
+                            {{ comment.comment }}
+                        </div>
+                    </div>
+                </li>
+            {% empty %}
+                <li>{% trans "Pas de commentaire ! Soyez le premier à louer et commenter !" %}</li>
             {% endfor %}
-            </lu>
         </div>
     </div>
     <div class="x4">

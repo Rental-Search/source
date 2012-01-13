@@ -17,9 +17,10 @@
         <div id="sub-menu">
             <ul class="x12">
                 <li class="sub-tab first"><a href="{% url patron_edit %}">{% trans "Votre profil" %}</a></li>
+                <li class="sub-tab"><a href="{% url comments %}">{% trans "Commentaires" %}</a></li>
                 <li class="sub-tab"><a href="{% url patron_edit_password %}">{% trans "Modification du mot de passe" %}</a></li>
-                <li class="sub-tab"><a href="{% url patron_edit_phonenumber %}">{% trans "Modification des numéros de téléphone" %}</a></li>
-                <li class="sub-tab">{% trans "Modification des adresses" %}</li>
+                <li class="sub-tab"><a href="{% url patron_edit_phonenumber %}">{% trans "Numéros de téléphone" %}</a></li>
+                <li class="sub-tab">{% trans "Adresses" %}</li>
             </ul>
         </div>
         <div class="x8 p2">
