@@ -467,7 +467,7 @@ def make_missing_data_form(instance, required_fields=[]):
     # Do we have an address ?
     if instance and instance.addresses.exists():
         fields['addresses'] = forms.ModelChoiceField(label=_(u"Addresse"), required=False,
-            queryset=instance.addresses.all(), initial=instance.addresses.all()[0], widget=forms.Select(attrs={'class': 'selm'}))
+            queryset=instance.addresses.all(), initial=instance.default_address if instance.default_address else instance.addresses.all()[0], widget=forms.Select(attrs={'class': 'selm'}))
         for f in fields.keys():
             if "addresses" in f:
                 fields[f].required = False
