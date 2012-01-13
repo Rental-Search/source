@@ -80,3 +80,14 @@ class PatronManager(UserManager, GeoManager):
     
     def last_joined(self):
         return self.filter(~Q(avatar=None)).order_by('-date_joined')
+    
+    def last_joined_near(self, l):
+        return self.filter(
+            ~Q(avatar=None),
+            ~Q(default_address=None),
+        ).distance(
+            l, field_name='default_address__position'
+        ).extra(
+            select={'joined': 'date(date_joined)'}
+        ).order_by('-joined', 'distance')
+    
