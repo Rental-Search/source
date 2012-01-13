@@ -252,11 +252,14 @@ class PatronEditForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(PatronEditForm, self).__init__(*args, **kwargs)
         self.fields['civility'].widget.attrs['class'] = "selm"
+        self.fields['default_address'].widget.attrs['class'] = "selm"
+        self.fields['default_address'].queryset = self.instance.addresses.all()
 
     class Meta:
         model = Patron
         fields = ('civility', 'username', 'first_name', 'last_name',
-            'email', 'paypal_email', 'is_professional', 'company_name', 'is_subscribed', 'new_messages_alerted')
+            'email', 'paypal_email', 'is_professional', 'company_name', 
+            'is_subscribed', 'new_messages_alerted', 'default_address')
 
     def save(self, *args, **kwargs):
         inst = super(PatronEditForm, self).save(*args, **kwargs)

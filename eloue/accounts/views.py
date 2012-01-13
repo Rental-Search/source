@@ -14,6 +14,7 @@ from django.shortcuts import get_object_or_404, render_to_response
 from django.template import RequestContext
 from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.cache import never_cache, cache_page
+from django.views.decorators.http import require_POST
 from django.views.generic.simple import direct_to_template, redirect_to
 from django.views.generic.list_detail import object_list
 from django.core.context_processors import csrf
@@ -97,6 +98,22 @@ def associate_facebook(request):
             request, 'accounts/associated_facebook.html', 
             {'me': request.user.facebooksession.uid}
         )
+
+@require_POST
+def user_geolocation(request):
+    import json
+    from pprint import pprint
+    location = json.loads(request.POST['address'])
+    best_address = location[0]
+    pprint(best_address)
+    coordinates = {}
+    coordinates['lat'], coordinates['lon'] = best_address['geometry']['location']['Pa'], best_address['geometry']['location']['Qa']
+    city = next(iter(map(lambda component: component['long_name'], filter(lambda component: 'locality' in component['types'], best_address['address_components']))), None)
+    print coordinates, city
+    request.session['location'] = {}
+    request.session['location']['coordinates'] = coordinates
+    request.session['location']['city'] = city
+    return HttpResponse("OK")
 
 @cache_page(900)
 def patron_detail(request, slug, patron_id=None, page=None):
