@@ -6,6 +6,7 @@ import datetime
 
 from django.contrib.auth.models import UserManager
 from django.contrib.gis.db.models import GeoManager
+from django.db.models import Q
 
 SHA1_RE = re.compile('^[a-f0-9]{40}$')
 
@@ -77,3 +78,5 @@ class PatronManager(UserManager, GeoManager):
             if patron.is_expired():
                 patron.delete()
     
+    def last_joined(self):
+        return self.filter(~Q(avatar=None)).order_by('-date_joined')
