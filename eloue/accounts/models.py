@@ -127,6 +127,11 @@ class Avatar(ImageModel):
         cache_dir = 'media'
         cache_filename_format = "%(specname)s_%(filename)s.%(extension)s"
 
+class Language(models.Model):
+
+    name = models.CharField(max_length=50)
+    user = models.ManyToManyField(Patron)
+
 class Patron(User):
     """A member"""
     civility = models.PositiveSmallIntegerField(_(u"Civilité"), null=True, blank=True, choices=CIVILITY_CHOICES)
@@ -143,8 +148,14 @@ class Patron(User):
     
     customers = models.ManyToManyField('self', symmetrical=False)
 
+    about = mdels.TextField()
+    work = models.CharField(max_length=75)
+    school = models.CharField(max_length=75)
+    hobby = models.CharField(max_length=75)
+
     on_site = CurrentSiteManager()
     objects = PatronManager()
+
 
     def save(self, *args, **kwargs):
         if not self.slug:
