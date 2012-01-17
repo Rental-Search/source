@@ -104,7 +104,6 @@ def comments_received(request):
     patron = request.user
     borrowers_comments = BorrowerComment.objects.filter(booking__owner=patron)
     owners_comments = OwnerComment.objects.filter(booking__borrower=patron)
-
     return render_to_response(
         'rent/comments_received.html',
         RequestContext(request, {

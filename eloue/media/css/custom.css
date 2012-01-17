@@ -499,6 +499,7 @@ body { background: #ECF6FF url("../images/body-bg.png") repeat 0 0; }
   .pp { margin-left: 60px; }
   .assurone { margin-left: 30px; }
   .mma { margin-left: 10px; margin-top: 15px; }
+  .europ_assistance { margin-left: 40px; }
 
 /* --------------------------------------------------------------
 
@@ -894,7 +895,7 @@ body { background: #ECF6FF url("../images/body-bg.png") repeat 0 0; }
 
 /* --------------------------------------------------------------
 
-      product details
+      Product details
 
 -------------------------------------------------------------- */
 .product-header {
@@ -907,6 +908,7 @@ body { background: #ECF6FF url("../images/body-bg.png") repeat 0 0; }
 {
   float: left;
   width: 620px;
+  margin-bottom: 20px;
 }
   .product-desc p { margin-bottom: 0.8em; }
   
@@ -972,6 +974,107 @@ body { background: #ECF6FF url("../images/body-bg.png") repeat 0 0; }
   }
   
   #owner-info p { height: 40px;}
+  
+/* --------------------------------------------------------------
+
+      comment list
+      
+-------------------------------------------------------------- */
+.comments-resume {
+  margin-left: 0px; 
+  padding-bottom: 20px;
+  border-bottom: 1px solid #B9CAD4;
+  font-size: 22px;
+  font-family: 'Ubuntu', Arial Helvetica, sans-serif;
+  color: #546b78;
+}
+.comment {
+  padding: 10px 0;
+  border-bottom: 1px solid #B9CAD4;
+  float: left;
+}
+  .comment-img {
+    float: left;
+  }
+  
+  .comment-img img {
+    padding: 3px;
+    border: 1px solid #B9CAD4;
+  }
+  
+  .comment-content {
+    display: table-cell; 
+    vertical-align: top;  
+    padding-left: 10px;
+  }
+    .comment-content textarea {
+      height: 50px;
+      width: 400px;
+    }
+  
+  .comment-writter {
+    float: left;
+    margin-bottom: 5px;
+  }
+  
+    .comment-writter a {
+      float: left;
+      color: #6eb924 !important;
+      font-weight: bold;
+      font-size: 16px;
+      line-height: 16px;
+      padding-right: 5px;
+    }
+  .comment-meta {
+    font-size: 12px;
+    color: #546b78;
+    margin-bottom: 2px;
+  }
+
+.ui-widget .booking-list {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.comment-edit textarea {
+  height: 50px;
+  width: 400px;
+}
+
+/* --------------------------------------------------------------
+
+      Start rating
+
+-------------------------------------------------------------- */
+
+.stars {
+  background: url("../images/stars.png") repeat-x top left;
+  height: 14px;
+  display: block;
+}
+  .stars.empty {
+    background-position: 0 -14px;
+    width: 80px;
+    float: left;
+  }
+    .stars.filled_0 { width: 0px; }
+    .stars.filled_1 { width: 16px; }
+    .stars.filled_2 { width: 32px; }
+    .stars.filled_3 { width: 48px; }
+    .stars.filled_4 { width: 64px }
+    .stars.filled_5 { width: 80px; }
+    
+.stars-big {
+  background: url("../images/stars_big.png") repeat-x top left;
+  height: 18px;
+  display: block;
+}
+  .stars-big.empty {
+    background-position: 0 -18px;
+    width: 100px;
+    float: right;
+    margin-top: 10px;
+    margin-right: 370px;
+}
 
 /* --------------------------------------------------------------
 
@@ -1012,6 +1115,8 @@ body { background: #ECF6FF url("../images/body-bg.png") repeat 0 0; }
 #flatpage li { list-style-image: url("../images/list-style-info.png"); }
 
 #flatpage li ul { margin-left: 20px; }
+
+#flatpage a { text-decoration: underline; }
 
 /* --------------------------------------------------------------
 

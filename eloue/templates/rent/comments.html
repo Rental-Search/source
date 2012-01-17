@@ -18,63 +18,108 @@
         <div id="sub-menu">
             <ul class="x12">
                 <li class="sub-tab first"><a href="{% url patron_edit %}">{% trans "Votre profil" %}</a></li>
-                <li class="sub-tab"><a href="{% url patron_edit_password %}">{% trans "Modification du mot de passe" %}</a></li>
-                <li class="sub-tab"><a href="{% url patron_edit_phonenumber %}">{% trans "Modification des numéros de téléphone" %}</a></li>
-                <li class="sub-tab"><a href="{% url patron_edit_addresses %}">{% trans "Modification des adresses" %}</a></li>
                 <li class="sub-tab">{% trans "Commentaires" %}</li>
+                <li class="sub-tab"><a href="{% url patron_edit_password %}">{% trans "Modification du mot de passe" %}</a></li>
+                <li class="sub-tab"><a href="{% url patron_edit_phonenumber %}">{% trans "Numéros de téléphone" %}</a></li>
+                <li class="sub-tab"><a href="{% url patron_edit_addresses %}">{% trans "Adresses" %}</a></li>
             </ul>
         </div>
-        <div id="sub-menu">
-            <ul class="x12">
-                <li class="sub-tab first">{% trans "Commentaires ecrits par moi" %}</li>
-                <li class="sub-tab"><a href="{% url comments_received %}">{% trans "Commentaires ecrits sur moi" %}</a></li>
+    <div class="tabsPrices x12 ui-tabs ui-widget ui-widget-content ui-corner-all">
+        <ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
+            <li class="ui-state-default ui-corner-top ui-tabs-selected ui-state-active">
+                <a href="{% url comments %}">{% trans "Commentaires ecrits par moi" %}</a>
+            </li>
+            <li class="ui-state-default ui-corner-top">
+                <a href="{% url comments_received %}">{% trans "Commentaires ecrits sur moi" %}</a>
+            </li>
+        </ul>
+        <div id="tabs-1" class="ui-tabs-panel ui-widget-content ui-corner-bottom">
+            <div class="x11 content-header">
+                <h2>Commentaire à écrire</h2>
+            </div><!-- content-header -->
+            <ul class="x11 booking-list">
+                {% for form in forms %}
+                <li class"x11 first">
+                    <div class="bk" style="width: 760px; margin-bottom: 10px; padding-bottom: 10px;">
+                        <div class="bk-dates">
+                            <p>
+                                13/01/2012<br><span>↓</span><br>
+                                14/01/2012
+                            </p>
+                        </div>
+                        <div class="bk-desc">
+                            <a class="bk-product-img" href="/location/auto-et-moto/moto/side-car/fsdf-dsf-dsf-ds-15149/">
+                                <img width="70" src="http://localhost:8000/media/media/pictures/thumbnail_6cb59325da0049e19dbcc4ef3d291246.jpg">
+                            </a>
+                            <h5>Fsdf dsf dsf ds</h5>
+                            <div class="bk-borrower">
+                                <img src="http://localhost:8000/media/images/bk_borrower_img.png">
+                                <h5><a href="/loueur/benoit/" style="color: #546B78;">Benoit Wojciechowski</a></h5>
+                            </div>
+                            <div class="bk-price">
+                                <p style="color: #FF7200; font-size: 23px;">34,00</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="comment-edit" style="float: left; width: 760px;">
+                        <form method="post" action="">
+                            <div style="float: left; width: 200px;">
+                                <label>Notation :</label><br />
+                                {{ form.note }}
+                            </div>
+                            <div style="float: left; width: 415px;">
+                                <label>Commentaires :</label><br />
+                                {{ form.comment }}
+                            </div>
+                        </form>
+                    </div><!-- comment-edit -->
+                    <div style="float: left; width: 760px; padding: 10px 0; text-align: right; border-bottom: 1px solid #B9CAD4;">
+                        <input type="submit" class="btn big-green" value="Enregistrer">
+                    </div>
+                </li>
+                {% endfor %}
             </ul>
-        </div>
-	<div class="content-header x12">
-		<h1>{% trans "Comments à écrire" %}</h1>
-	</div>
-	<div class="x12">
-        
-         {% if messages %}
-             {% for message in messages %}
-                 {% if message.tags == "info" %}
-                        {{ message }}
-                 {% endif %}
-             {% endfor %}
-         {% endif %}
-        {% for form in forms %}
-        <div id="{{form.instance.booking.pk.hex}}">
-        <form method="post" action="">
-        {% csrf_token %}
-        <table>
-            <a href="{{form.instance.booking.get_absolute_url}}">booking</a>
-            <input type="submit" name="{{form.instance.booking.pk}}"value="enregistrer comment" />
-            {{form.note}} {{form.note.errors}}
-            {{form.comment}} {{form.comment.errors}}
-            {{form.booking.errors}}
-            {{form.form.non_field_errors}}
-        </table>
-        </form>
-        </div>
-        {% endfor%}
-
-	</div>
-    <div class="content-header x12">
-        <h1>{% trans "Comments écrits" %}</h1>
-    </div>
-    <div class="x12">
-        {% for booking in commented_bookings %}
-            <a href="{{booking.get_absolute_url}}">commented booking</a>
-            <ul>
-            {% if booking.owner == request.user %}
-                <li>note: {{booking.ownercomment.note}}</li>
-                <li>comment: {{booking.ownercomment.comment}}</li>
-            {% else %}
-                <li>note: {{booking.borrowercomment.note}}</li>
-                <li>comment:    {{booking.borrowercomment.comment}}</li>
-            {% endif %}
+            <div class="x11 content-header">
+                <h2>Commentaire écrit</h2>
+            </div>
+            <ul class="x11 comments">
+                {% for booking in commented_bookings %}
+                <li class="comment">
+                    {% if booking.owner == request.user %}
+                    <div class="comment-content">
+                        <div class="comment-title">
+                              <p class="comment-meta">{% trans "Le" %} {{ booking.borrowercomment.created_at|date:"d F Y" }} écrit à {{ booking.owner.username }} écrit à {{ booking.owner.username }} pour la location <a href="{{ booking.get_absolute_url }}">{{ booking.product.name }}</a> :</p>
+                              <p class="comment-writter">
+                                  <span class="stars empty">
+                                      <span class="stars filled_{{ booking.borrowercomment.note }}"></span>
+                                  </span>
+                              </p>
+                              <p class="clear"></p>
+                          </div>
+                          <div class="comment-comment">
+                              {{ booking.ownercomment.comment }}
+                          </div>
+                    </div><!-- commment-content -->
+                    {% else %}
+                    <div class="comment-content">
+                          <div class="comment-title">
+                              <p class="comment-meta">{% trans "Le" %} {{ booking.borrowercomment.created_at|date:"d F Y" }} écrit à {{ booking.owner.username }} (<a href="{{ booking.get_absolute_url }}">location {{ booking.product.summary }}</a>) :</p>
+                              <p class="comment-writter">
+                                  <span class="stars empty">
+                                      <span class="stars filled_{{ booking.borrowercomment.note }}"></span>
+                                  </span>
+                              </p>
+                              <p class="clear"></p>
+                          </div>
+                          <div class="comment-comment">
+                              {{ booking.borrowercomment.comment }}
+                          </div>
+                      </div>
+                    {% endif %}
+                </li> 
+                {% endfor %}
             </ul>
-        {% endfor %}
+        </div><!-- tab1 -->
     </div>
 </div>
 {% endblock%}
