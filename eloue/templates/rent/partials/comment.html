@@ -1,3 +1,4 @@
+{% load i18n %}
 <div class="comment-content">
     <div class="comment-title">
         <p class="comment-meta">{% trans "Le" %} {{ comment.created_at|date:"d F Y" }} (<a href="{{ comment.booking.get_absolute_url }}">location {{ comment.booking.product.summary }}</a>) :</p>
