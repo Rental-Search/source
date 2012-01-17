@@ -1007,6 +1007,10 @@ body { background: #ECF6FF url("../images/body-bg.png") repeat 0 0; }
     vertical-align: top;  
     padding-left: 10px;
   }
+    .comment-content textarea {
+      height: 50px;
+      width: 400px;
+    }
   
   .comment-writter {
     float: left;
@@ -1015,7 +1019,7 @@ body { background: #ECF6FF url("../images/body-bg.png") repeat 0 0; }
   
     .comment-writter a {
       float: left;
-      color: #6eb924;
+      color: #6eb924 !important;
       font-weight: bold;
       font-size: 16px;
       line-height: 16px;
@@ -1026,6 +1030,15 @@ body { background: #ECF6FF url("../images/body-bg.png") repeat 0 0; }
     color: #546b78;
     margin-bottom: 2px;
   }
+
+.ui-widget .booking-list {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.comment-edit textarea {
+  height: 50px;
+  width: 400px;
+}
 
 /* --------------------------------------------------------------
 

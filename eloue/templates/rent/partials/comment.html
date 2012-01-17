@@ -1,1 +1,14 @@
-comment de {{comment.writer}} a {{comment.created_at}}: {{comment.comment}} ({{comment.note}}/3)
+<div class="comment-content">
+    <div class="comment-title">
+        <p class="comment-meta">{% trans "Le" %} {{ comment.created_at|date:"d F Y" }} (<a href="{{ comment.booking.get_absolute_url }}">location {{ comment.booking.product.summary }}</a>) :</p>
+        <p class="comment-writter">
+            <span class="stars empty">
+                <span class="stars filled_{{ comment.note }}"></span>
+            </span>
+        </p>
+        <p class="clear"></p>
+    </div>
+    <div class="comment-comment">
+        {{ comment.comment }}
+    </div>
+</div>
