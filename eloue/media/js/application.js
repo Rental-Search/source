@@ -335,11 +335,44 @@ $(document).ready(function() {
         };
 
     });
-    
+    var availableTags = [
+            "ActionScript",
+            "AppleScript",
+            "Asp",
+            "BASIC",
+            "C",
+            "C++",
+            "Clojure",
+            "COBOL",
+            "ColdFusion",
+            "Erlang",
+            "Fortran",
+            "Groovy",
+            "Haskell",
+            "Java",
+            "JavaScript",
+            "Lisp",
+            "Perl",
+            "PHP",
+            "Python",
+            "Ruby",
+            "Scala",
+            "Scheme"
+        ];
     //chosen
     $("#id_0-category-chosen").chosen();
-    
-    
+    $("#id_languages").chosen();
+    $("#id_work").autocomplete(
+        {
+            'source': availableTags
+            //function(a){
+             //   console.log(a);
+              //  resp = $.getJSON({url: 'accounts_work_autocomplete'});
+               // return $.parseJSON(resp.response);
+            //}
+        }
+    );
+
     //fbconnect
     $('#fbconnect').click(function () {
         FB.login(function(response) {

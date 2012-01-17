@@ -9,6 +9,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.sites.models import Site
 from django.core.mail import EmailMessage, BadHeaderError
 from django.core.urlresolvers import reverse
+from django.views.decorators.http import require_GET
 from django.forms.models import model_to_dict
 from django.shortcuts import get_object_or_404, render_to_response
 from django.template import RequestContext
@@ -284,8 +285,12 @@ def contact(request):
             messages.error(request, _(u"Erreur lors de l'envoi du message"))
     return direct_to_template(request, 'accounts/contact.html', extra_context={'form': ContactForm()})
 
-    
-    
-    
-    
-    
+@require_GET
+def accounts_work_autocomplete(request):
+    term = request.GET.get('term', '')
+    from django.db.models import Count
+    print Patron.objects.filter(work__contains=term).values('work').annotate(Count('work'))
+    work_list = [work['work']for work in Patron.objects.filter(work__contains=term).values('work').annotate(Count('work'))]
+    print work_list
+    import simplejson
+    return HttpResponse(simplejson.dumps(work_list), mimetype="application/json")

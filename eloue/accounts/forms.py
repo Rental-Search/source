@@ -256,8 +256,10 @@ class PatronEditForm(forms.ModelForm):
     class Meta:
         model = Patron
         fields = ('civility', 'username', 'first_name', 'last_name',
-            'email', 'paypal_email', 'is_professional', 'company_name', 'is_subscribed', 'new_messages_alerted')
-
+            'email', 'paypal_email', 'is_professional', 'company_name', 'about',
+            'work', 'school', 'hobby', 'languages', 'is_subscribed', 
+            'new_messages_alerted')
+        
     def save(self, *args, **kwargs):
         inst = super(PatronEditForm, self).save(*args, **kwargs)
         if self.avatar:
