@@ -129,7 +129,7 @@ def comments(request):
                 Form = BorrowerCommentForm
                 Model = BorrowerComment
             
-            if unicode(booking.pk) in request.POST:
+            if unicode(booking.pk.hex) in request.POST:
                 form = Form(request.POST, instance=Model(booking=booking), prefix=booking.pk)
                 if form.is_valid():
                     form.save()

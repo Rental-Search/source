@@ -14,6 +14,7 @@ from datetime import timedelta
 
 from django.conf import settings
 from django.core.urlresolvers import reverse
+from django.core.validators import MaxValueValidator
 from django.contrib.sites.models import Site
 from django.db import models
 from django.db.models import permalink
@@ -414,7 +415,10 @@ class Booking(models.Model):
 class Comment(models.Model):
     booking = models.OneToOneField(Booking)
     comment = models.TextField()
-    note = models.PositiveSmallIntegerField(choices=((0, 0), (1, 1), (2, 2)))
+    note = models.PositiveSmallIntegerField(
+        choices=enumerate(xrange(6)),
+        validators=[MaxValueValidator(5)]
+    )
     created_at = models.DateTimeField(editable=False, auto_now_add=True)
 
     @property
