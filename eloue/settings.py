@@ -369,12 +369,14 @@ COMPRESS_CSS = {
 COMPRESS_JS = {
     'application': {
         'source_filenames': (
-            'js/jquery.js',
-            'js/ui/jquery.ui.core.js',
-            'js/ui/jquery.ui.widget.js',
-            'js/ui/jquery.ui.datepicker.js',
-            'js/ui/jquery.ui.datepicker-fr.js',
-            'js/ui/jquery.ui.tabs.js',
+#            'js/jquery.js',
+#            'js/ui/jquery.ui.core.js',
+#            'js/ui/jquery.ui.widget.js',
+#            'js/ui/jquery.ui.datepicker.js',
+#            'js/ui/jquery.ui.datepicker-fr.js',
+#            'js/ui/jquery.ui.tabs.js',
+            'js/jquery-1.7.1.min.js',
+            'js/ui/jquery-ui-1.8.17.custom.min.js',
             'js/modernizr.js',
             'js/mustache.js',
             'js/jquery.cycle.all.latest.js',
