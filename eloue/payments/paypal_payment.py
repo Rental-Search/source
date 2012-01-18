@@ -113,6 +113,8 @@ class AdaptivePapalPayments(AbstractPayment):
                 {'primary':False, 'amount':str(net_price.quantize(D(".00"), ROUND_FLOOR)), 'email':self.booking.owner.paypal_email}
             ]}
         )
+        if 'ERROR' in response.get('paymentExecStatus', None):
+            PaypalError('paymentExecStatus' ,response.get('paymentExecStatus', None), response)
         return response['payKey']
 
      

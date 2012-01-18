@@ -345,7 +345,13 @@ class Address(models.Model):
                 raise ValidationError(_(u"Coordonnées géographiques incorrectes"))
 
     def geocode(self):
-        name, (lat, lon), radius = GoogleGeocoder().geocode("%s %s %s %s" % (self.address1, self.address2, self.zipcode, self.city))
+        location = ', '.join(
+            filter(
+                lambda t: t is not None, 
+                [self.address1, self.address2, self.zipcode, self.city, self.country]
+            )
+        )
+        name, (lat, lon), radius = GoogleGeocoder().geocode(location)
         if lat and lon:
             return Point(lat, lon)
 
