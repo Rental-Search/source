@@ -17,6 +17,7 @@ class Migration(DataMigration):
     def backwards(self, orm):
         for patron in orm.Patron.objects.all():
             patron.default_address = None
+            patron.save()
         "Write your backwards methods here."
 
 
