@@ -198,19 +198,6 @@ class NewGenericFormWizard(MultiPartFormWizard):
             login(request, self.new_patron)
         else:
             self.new_patron = request.user
-        
-        if not request.session.get('location', None):
-            if self.new_patron.default_address and self.new_patron.default_address.is_geocoded():
-                location = {}
-                location['coordinates'] = dict(
-                    zip(
-                        ('lat', 'lon'), 
-                        self.new_patron.default_address.position.coords
-                    )
-                )
-                location['city'] = self.new_patron.default_address.city
-                request.session['location'] = location
-                
 
         if missing_form:
             missing_form.instance = self.new_patron
@@ -225,7 +212,24 @@ class NewGenericFormWizard(MultiPartFormWizard):
                             Avatar(patron=self.new_patron, image=SimpleUploadedFile('picture',fb_image_object)).save()
                         except IOError:
                             pass
-        
+        address = None
+        if not request.session.get('location', None):
+            if self.new_patron.default_address and self.new_patron.default_address.is_geocoded():
+                address = self.new_patron.default_address
+            elif len(self.new_patron.addresses.all()):
+                if self.new_patron.addresses.all()[0].is_geocoded():
+                    address = self.new_patron.addresses.all()[0]
+            if address:
+                location = {}
+                location['coordinates'] = dict(
+                    zip(
+                        ('lat', 'lon'), 
+                        address.position.coords
+                    )
+                )
+                location['city'] = address.city
+                request.session['location'] = location
+            
     def get_form(self, step, data=None, files=None):
         next_form = self.form_list[step]
         if next_form.__name__ == 'MissingInformationForm':
