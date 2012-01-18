@@ -240,7 +240,10 @@ class PatronEditForm(forms.ModelForm):
         'autocapitalize': 'off', 'autocorrect': 'off', 'class': 'inm'}))
     paypal_email = forms.EmailField(label=_(u"Email PayPal"), required=False, max_length=75, widget=forms.TextInput(attrs={
             'autocapitalize': 'off', 'autocorrect': 'off', 'class': 'inm'}))
-	    
+	
+    work = forms.CharField(label=_(u"Travail"), required=False, widget=forms.TextInput(attrs={'class': 'inm'}))
+    school = forms.CharField(label=_(u"Etudes"), required=False, widget=forms.TextInput(attrs={'class': 'inm'}))
+    
     is_professional = forms.BooleanField(label=_(u"Professionnel"), required=False, initial=False)
     
     company_name = forms.CharField(label=_(u"Nom de la société"), required=False, widget=forms.TextInput(attrs={'class': 'inm'}))

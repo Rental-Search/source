@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import smtplib
 import socket
+import simplejson
 from logbook import Logger
 
 from django.conf import settings
@@ -9,6 +10,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.sites.models import Site
 from django.core.mail import EmailMessage, BadHeaderError
 from django.core.urlresolvers import reverse
+from django.db.models import Count
 from django.views.decorators.http import require_GET
 from django.forms.models import model_to_dict
 from django.shortcuts import get_object_or_404, render_to_response
@@ -288,9 +290,12 @@ def contact(request):
 @require_GET
 def accounts_work_autocomplete(request):
     term = request.GET.get('term', '')
-    from django.db.models import Count
-    print Patron.objects.filter(work__contains=term).values('work').annotate(Count('work'))
-    work_list = [work['work']for work in Patron.objects.filter(work__contains=term).values('work').annotate(Count('work'))]
-    print work_list
-    import simplejson
+    work_list = [work['work'] for work in Patron.objects.filter(work__contains=term).values('work').annotate(Count('work'))]
     return HttpResponse(simplejson.dumps(work_list), mimetype="application/json")
+
+@require_GET
+def accounts_studies_autocomplete(request):
+    term = request.GET.get('term', '')
+    school_list = [school['school'] for school in Patron.objects.filter(school__contains=term).values('school').annotate(Count('school'))]
+    return HttpResponse(simplejson.dumps(school_list), mimetype="application/json")
+

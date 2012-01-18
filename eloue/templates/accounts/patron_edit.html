@@ -2,6 +2,15 @@
 {% load i18n product paginator %}
 
 {% block title %}{% trans "Votre profil" %}{% endblock %}
+{% block head %}
+	{{block.super}}
+	<link rel="stylesheet" href="http://jqueryui.com/themes/base/jquery.ui.all.css">
+	<script src="http://jqueryui.com/jquery-1.7.1.js"></script>
+	<script src="http://jqueryui.com/ui/jquery.ui.core.js"></script>
+	<script src="http://jqueryui.com/ui/jquery.ui.widget.js"></script>
+	<script src="http://jqueryui.com/ui/jquery.ui.position.js"></script>
+	<script src="http://jqueryui.com/ui/jquery.ui.autocomplete.js"></script>
+{% endblock %}
 
 {% block content %}
 <div id="content" class="xgrid">
@@ -192,6 +201,7 @@
 	    			    <th><label>{{ form.work.label }} {% if form.work.field.required %}*{% endif%} :</label></th>
 	        			<td colspan="2" {% if form.work.errors %} class="error-field" {% endif %}>
 	        				{{ form.work }}
+	        			</div>
 	        				{% if form.work.errors %}
 	        				    {% for error in form.work.errors %}
 	        								<br />
@@ -253,4 +263,13 @@
 	    	</p>
 	    </div>
 </div>
+	        			
+<script type="text/javascript">
+
+    $("#id_work").autocomplete(
+        {
+            'source': 'accounts_work_autocomplete'
+        }
+    );
+	        			</script>
 {% endblock %}
