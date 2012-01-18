@@ -102,7 +102,8 @@ def associate_facebook(request):
 
 @require_POST
 def user_geolocation(request):
-    print type(request.session)
+    if request.session.get('location', None):
+        return HttpResponse('already_geolocated')
     location = simplejson.loads(request.POST['address'])
     best_address = location[0]
     address_components = best_address['address_components']

@@ -199,6 +199,19 @@ class NewGenericFormWizard(MultiPartFormWizard):
         else:
             self.new_patron = request.user
         
+        if not request.session.get('location', None):
+            if self.new_patron.default_address and self.new_patron.default_address.is_geocoded():
+                location = {}
+                location['coordinates'] = dict(
+                    zip(
+                        ('lat', 'lon'), 
+                        self.new_patron.default_address.position.coords
+                    )
+                )
+                location['city'] = self.new_patron.default_address.city
+                request.session['location'] = location
+                
+
         if missing_form:
             missing_form.instance = self.new_patron
             self.new_patron, self.new_address, self.new_phone, avatar = missing_form.save()
