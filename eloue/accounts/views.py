@@ -2,6 +2,7 @@
 import smtplib
 import socket
 from logbook import Logger
+import simplejson
 
 from django.conf import settings
 from django.contrib import messages
@@ -101,15 +102,16 @@ def associate_facebook(request):
 
 @require_POST
 def user_geolocation(request):
-    import json
-    from pprint import pprint
-    location = json.loads(request.POST['address'])
+    print type(request.session)
+    location = simplejson.loads(request.POST['address'])
     best_address = location[0]
-    pprint(best_address)
+    address_components = best_address['address_components']
+    address_coordinates = best_address['geometry']['location']
     coordinates = {}
-    coordinates['lat'], coordinates['lon'] = best_address['geometry']['location']['Pa'], best_address['geometry']['location']['Qa']
-    city = next(iter(map(lambda component: component['long_name'], filter(lambda component: 'locality' in component['types'], best_address['address_components']))), None)
-    print coordinates, city
+    coordinates['lat'] = address_coordinates['Pa']
+    coordinates['lon'] = address_coordinates['Qa']
+    localities = filter(lambda component: 'locality' in component['types'], address_components)
+    city = next(iter(map(lambda component: component['long_name'], localities)), None)
     request.session['location'] = {}
     request.session['location']['coordinates'] = coordinates
     request.session['location']['city'] = city

@@ -9,6 +9,7 @@
 {% endblock %}
 
 {% block content %}
+{% csrf_token %}
 	<div id="search" class="xgrid">
         <div class="x12">
 		  <h1>{% trans "Avec e-loue, tout se loue !" %}</h1>
@@ -212,7 +213,7 @@
                 xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
             }
         });
-          $.post('user_geolocation/', {'address': JSON.stringify(result)}, function(response) {console.log(response); } )
+          $.post('user_geolocation/', {'address': JSON.stringify(result)})
         }
       );
     }

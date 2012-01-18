@@ -519,6 +519,7 @@ def make_missing_data_form(instance, required_fields=[]):
                 city=self.cleaned_data['addresses__city'],
                 country=self.cleaned_data['addresses__country']
             )
+            self.instance.default_address = address
         else:
             address = None
         if 'phones' in self.cleaned_data and self.cleaned_data['phones']:

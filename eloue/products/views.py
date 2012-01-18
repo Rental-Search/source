@@ -53,7 +53,11 @@ def homepage(request):
     curiosities = Curiosity.on_site.all()
     form = FacetedSearchForm()
     alerts = Alert.on_site.all()[:3]
-    return direct_to_template(request, template='index.html', extra_context={'form': form, 'curiosities': curiosities, 'alerts':alerts})
+    return render_to_response(
+        template_name='index.html', 
+        dictionary={'form': form, 'curiosities': curiosities, 'alerts':alerts}, 
+        context_instance=RequestContext(request)
+    )
 
 
 @mobify
