@@ -228,10 +228,11 @@ COMPRESS_CSS = {
         'source_filenames': (
             'css/screen.css',
             'css/custom.css',
-            'css/plugins/ui/jquery.ui.core.css',
-            'css/plugins/ui/jquery.ui.datepicker.css',
-            'css/plugins/ui/jquery.ui.tabs.css',
-            'css/plugins/ui/jquery.ui.theme.css',
+            #'css/plugins/ui/jquery.ui.core.css',
+            #'css/plugins/ui/jquery.ui.datepicker.css',
+            #'css/plugins/ui/jquery.ui.tabs.css',
+            #'css/plugins/ui/jquery.ui.theme.css',
+            'css/jquery-ui-1.8.17.custom.css',
             'css/chosen.css'
         ),
         'output_filename': 'css/master.r?.css',
