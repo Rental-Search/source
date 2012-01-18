@@ -113,7 +113,7 @@ def user_geolocation(request):
     coordinates['lon'] = address_coordinates['Qa']
     localities = filter(lambda component: 'locality' in component['types'], address_components)
     city = next(iter(map(lambda component: component['long_name'], localities)), None)
-    request.session['location'] = {}
+    request.session['location'] = {'source': 'browser'}
     request.session['location']['coordinates'] = coordinates
     request.session['location']['city'] = city
     return HttpResponse("OK")

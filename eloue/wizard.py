@@ -220,7 +220,7 @@ class NewGenericFormWizard(MultiPartFormWizard):
                 if self.new_patron.addresses.all()[0].is_geocoded():
                     address = self.new_patron.addresses.all()[0]
             if address:
-                location = {}
+                location = {'source': 'address'}
                 location['coordinates'] = dict(
                     zip(
                         ('lat', 'lon'), 
