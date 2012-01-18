@@ -410,6 +410,8 @@ class AddressForm(forms.ModelForm):
     def clean(self):
         if self.instance.products.all() and self.cleaned_data['DELETE']:
             raise forms.ValidationError(_(u'Vous ne pouvez pas supprimer une adresse associé à un produit. Veuillez le changer sur le page produit.'))
+        if self.cleaned_data['DELETE'] and self.instance.patron.default_address == self.instance:
+            raise forms.ValidationError(_(u'Vous ne pouvez pas supprimer votre adresse par default.'))
         return self.cleaned_data
 
     class Meta:
@@ -438,7 +440,7 @@ class AddressBaseFormSet(BaseInlineFormSet):
             raise forms.ValidationError('')
         for form in self.forms:
             pass
-        
+    
 AddressFormSet = inlineformset_factory(Patron, Address, form=AddressForm, formset=AddressBaseFormSet, extra=1, can_delete=True)
 
 def make_missing_data_form(instance, required_fields=[]):
