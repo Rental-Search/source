@@ -132,7 +132,7 @@ class Language(models.Model):
     lang = models.CharField(max_length=30)
 
     def __unicode__(self):
-        return self.lang
+        return ugettext(self.lang)
     
 class Patron(User):
     """A member"""
