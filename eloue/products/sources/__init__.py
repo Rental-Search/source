@@ -90,7 +90,6 @@ class SourceManager(object):
                 else: return
 
         for batch in next_docs(source):
-            log.info("appending batch")
             self.__class__.solr.add(batch)
             self.__class__.solr.commit()
 
