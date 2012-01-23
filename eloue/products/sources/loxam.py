@@ -53,7 +53,7 @@ class SourceClass(BaseSource):
                 'summary':  html_tree.findall("//h1")[1].text.split(":")[-1].strip(),
                 'description': "\n".join([i.strip() for i in html_tree.xpath(XP_DESC)[0].itertext()]),
                 'categories': CATEGORIES.get(cat, CATEGORIES.get(subcat, [])),
-                'lat' : 0, 'lng' : 0,
+                'lat' : lat, 'lng' : lon,
                 'city' : location,
                 'price': extract_price(html_tree.find(XP_PRICE).text),
                 'owner' : 'loxam',
