@@ -163,7 +163,7 @@
 
     		{% if form.addresses %}
     		<tr id="select_addr">
-    			<th><label>{{ form.addresses.label }} {% if form.addresses.field.required %} * {% endif %}:</label></th>
+    			<th><label>{% trans "Adresse" %} {% if form.addresses.field.required %} * {% endif %}:</label></th>
     			<td {% if form.addresses.errors %} class="error-field" {% endif %}>
     				{{ form.addresses }}
     				{% if form.addresses.errors %}
@@ -172,7 +172,7 @@
     				        <span class="error">{{ error|escape }}</span>
     				    {% endfor %}
     				{% endif %}
-				    <br /><a id="link_add_addr" href="#"> {% trans "Ajouter une nouvelle addresse ?" %}</a>
+				    <br /><a id="link_add_addr" href="#"> {% trans "Ajouter une nouvelle adresse ?" %}</a>
     			</td>
     		</tr>
     		{% endif %}
