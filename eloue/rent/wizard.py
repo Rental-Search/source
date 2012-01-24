@@ -21,7 +21,7 @@ from eloue.products.forms import FacetedSearchForm
 from eloue.products.models import Product, PAYMENT_TYPE
 from eloue.rent.models import Booking
 from eloue.rent.forms import BookingForm, BookingConfirmationForm
-from eloue.wizard import GenericFormWizard, NewGenericFormWizard
+from eloue.wizard import NewGenericFormWizard
 
 USE_HTTPS = getattr(settings, 'USE_HTTPS', True)
 
