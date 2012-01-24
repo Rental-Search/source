@@ -1,20 +1,55 @@
 from . import BaseSource, Product
-from content_extractor import *
+import contextlib
+import urllib2
+from content_extractor import id_gen
+from lxml import etree
 import re
 import logbook
+import gzip
+import io
 
 log = logbook.Logger('eloue.rent.sources')
 
 CATEGORIES = {}
 
-XP_CATEGORIES = "//div/a[@class='location_menu_item']"
-XP_SUBCAT = "//table//tr/td[2]//a[@class='location_rub_liste']"
-XP_PRODUCT = "//table[3]//td[contains(@class, 'tableau_location_ligne') and position()=2]//a[1]"
-XP_PRICE = "//table//tr[1]/td[@class='location_detail_prix']"
-XP_DESC = "//td[@height=160]/div"
-XP_THUMBNAIL = "//td[@id='maincontent_0']//table[2]//tr[3]/td/img"
-XP_THUMBNAIL1 = "//div[@id='maincontent']//div[@class='box0_middle']/div[@class='box0_top']/div[@class='box0_bottom']/table/tbody/tr//table[2]/tbody/tr[4]/td/div/img"
+XP_CATEGORIES = './/div[@class="main-menu-td"]/div[@class="menu-dyn"]/table/tr/td[2]/ul/li/em[@class="loc-item"]/a'
+XP_PAGES = ".//*[@id='toolbar']/table/tr/td/a"
+
+XP_PRODUCT = ".//*[@id='content']/table/tr/td/div/strong/a[1]"
+
+XP_SUMMARY = ".//*[@id='caddy']/h1"
+XP_PRICE = ".//*[@id='bloc-tarifs-part']/table/tr[2]/td[1]/table/tr[1]/td[2]"
+XP_DESC = ".//*[@id='bonasavoir']/tr[2]/td/div"
+XP_DESC2 = ".//form[@id='caddy']//div[@class='descr']/div/p"
+XP_THUMBNAIL = ".//*[@id='caddy']/img"
+
 BASE_URL = "http://www.loxam.fr"
+
+
+def html_tree(url):
+    try:
+        urll = BASE_URL + url
+        with contextlib.closing(urlopen(urll, timeout=5)) as html_page:
+            return etree.parse(html_page, etree.HTMLParser(recover=True, encoding='utf-8'))
+    except Exception, e:
+        log.exception("Exception: {0}".format(e))
+        return
+
+def tree_from_link(a):
+    return html_tree(a.get("href"))
+
+def follow_all(extractor, a_list, pages=False):
+    for a in a_list:
+        href = a.get("href")
+        tree = html_tree(href)
+        if not tree: return
+        for p in extractor(tree, href=href, pages=pages):
+            yield p
+
+def extract_price(string, sep=","):
+    from decimal import Decimal as D
+    re_num = re.compile("[0-9]*\,?[0-9]+")
+    return D(re_num.findall(string)[0].replace(",", "."))
 
 class SourceClass(BaseSource):
 
@@ -22,43 +57,67 @@ class SourceClass(BaseSource):
 
     def __init__(self, *args, **kwargs):
         BaseSource.__init__(self, *args, **kwargs)
+    
+    def _html_loader(self, url):
+        request = urllib2.Request(
+            url, headers={
+                'Accept-Encoding': 'gzip, identity', 
+            }
+        )
+        while True:
+            try:
+                with contextlib.closing(urllib2.urlopen(url, timeout=5)) as response:
+                    if response.info().get('Content-Encoding') is 'gzip':
+                        response = gzip.GzipFile(fileobj=BytesIO(response))
+                    return etree.parse(response, etree.HTMLParser(recover=True, encoding='utf-8'))
+            except urllib2.URLError:
+                continue
+            else:
+                break
+        
+    def get_categories(self, url):
+        html_tree = self._html_loader(url)
+        for atag in html_tree.xpath(XP_CATEGORIES):
+            href = atag.get('href')
+            for product in self.get_products(BASE_URL+href, pages=True):
+                yield product
 
-    def get_categories(self, html_tree):
-        for p in follow_all(self.get_subcat, html_tree.xpath(XP_CATEGORIES)):
-            yield p
+    def get_products(self, url, pages=False):
+        html_tree = self._html_loader(url)
+        for atag in html_tree.xpath(XP_PRODUCT):
+            href = atag.get('href')
+            product = self.get_product(BASE_URL+href)
+            yield product
+        if pages:
+            for atag in html_tree.xpath(XP_PAGES):
+                href = atag.get('href')
+                for product in self.get_products(url+href):
+                    yield product
 
-    def get_subcat(self, html_tree, href=None):
-        for p in follow_all(self.get_products, html_tree.xpath(XP_SUBCAT)):
-            yield p
-
-    def get_products(self, html_tree, href=None):
-        for p in follow_all(self.get_product, html_tree.xpath(XP_PRODUCT)):
-            yield p
-
-    def get_product(self, html_tree, href=None):
-        cat, subcat = href.split("/")[2:4]
+    def get_product(self, url):
+        html_tree = self._html_loader(url)
+        cat, subcat = url.split("/")[2:4]
         subcat=subcat.replace("location-","")
-        if not (href.startswith("/location") and href.endswith(".html")): 
-            return
+        #if not (href.startswith("/location") and href.endswith(".html")): 
+        #    return
         try:
             c_id = self.id.next()
             thumb_tree = html_tree.xpath(XP_THUMBNAIL)
-            if not len(thumb_tree):
-                thumb_tree = html_tree.xpath(XP_THUMBNAIL1)
             thumbnail = thumb_tree[0].attrib["src"] if len(thumb_tree) else ""
+            description = ''.join([i.strip() for i in html_tree.find(XP_DESC).itertext()]) if html_tree.find(XP_DESC) is not None else ''.join(html_tree.find(XP_DESC2).itertext()) if html_tree.find(XP_DESC2) is not None else ''
             location = "France"
             lat, lon = self.get_coordinates(location)
-            yield Product({
+            return Product({
                 'id' : "%s.%d" % (self.get_prefix(), c_id),
-                'summary':  html_tree.findall("//h1")[1].text.split(":")[-1].strip(),
-                'description': "\n".join([i.strip() for i in html_tree.xpath(XP_DESC)[0].itertext()]),
+                'summary': html_tree.find(XP_SUMMARY).text,
+                'description': description,
                 'categories': CATEGORIES.get(cat, CATEGORIES.get(subcat, [])),
                 'lat' : lat, 'lng' : lon,
                 'city' : location,
                 'price': extract_price(html_tree.find(XP_PRICE).text),
                 'owner' : 'loxam',
                 'owner_url' : BASE_URL + "/",
-                'url' : BASE_URL + href,
+                'url' : url,
                 'thumbnail' : BASE_URL + thumbnail,
                 'django_id' : u'loxam.%d' % c_id
             })
@@ -69,7 +128,6 @@ class SourceClass(BaseSource):
         return 'source.loxam'
 
     def get_docs(self):
-        set_base_url(BASE_URL)
-        for product in self.get_categories(html_tree("/location/")):
+        for product in self.get_categories(BASE_URL+"/"):
             yield product
 
