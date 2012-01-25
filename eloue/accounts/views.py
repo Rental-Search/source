@@ -105,12 +105,11 @@ def user_geolocation(request):
     if request.session.get('location', None):
         return HttpResponse('already_geolocated')
     location = simplejson.loads(request.POST['address'])
-    best_address = location[0]
-    address_components = best_address['address_components']
-    address_coordinates = best_address['geometry']['location']
+    address_components = location['address_components']
+    address_coordinates = location['geometry']['location']
     coordinates = {}
     coordinates['lat'] = address_coordinates['Pa']
-    coordinates['lon'] = address_coordinates['Qa']
+    coordinates['lon'] = address_coordinates['Oa']
     localities = filter(lambda component: 'locality' in component['types'], address_components)
     city = next(iter(map(lambda component: component['long_name'], localities)), None)
     request.session['location'] = {'source': 'browser'}

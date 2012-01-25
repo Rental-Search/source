@@ -166,6 +166,7 @@
 	</div>{# content #}
   <script type="text/javascript"
         src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
+  <script src="//maps.googleapis.com/maps/api/js?sensor=false&amp;libraries=places" type="text/javascript"></script>
   <script type="text/javascript">
 
 
@@ -212,8 +213,10 @@
             if (!safeMethod(settings.type) && sameOrigin(settings.url)) {
                 xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
             }
-        });
-          $.post('user_geolocation/', {'address': JSON.stringify(result)})
+          });
+          console.log(JSON.stringify(result[0]));
+          $.post('user_geolocation/', {address: JSON.stringify(result[0])}, 
+            function(response){ console.log(response); }, 'json');
         }
       );
     }
@@ -221,6 +224,11 @@
       alert(error.message);
     }
     navigator.geolocation.getCurrentPosition(success, handleError);
-
+    autocomplete = new google.maps.places.Autocomplete(document.getElementById("id_l"), {types: ['geocode']});
+    google.maps.event.addListener(autocomplete, 'place_changed', function() {
+      console.log(autocomplete.getPlace());
+      $.post('user_geolocation/', {address: JSON.stringify(autocomplete.getPlace())}, 
+        function(response){ console.log(response); }, 'json');
+    });
   </script>
 {% endblock %}
