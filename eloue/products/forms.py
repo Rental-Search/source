@@ -189,47 +189,6 @@ class MessageEditForm(forms.Form):
         return message_list # ... RETURNED?
 
 
-# class MessageComposeForm(ComposeForm):
-#     """
-#     A simple default form for private messages.
-#     """
-#     recipient = CommaSeparatedUserField(label=_(u"Recipient"), widget=forms.TextInput(attrs={'class': 'inm'}))
-#     subject = forms.CharField(label=_(u"Subject"), widget=forms.TextInput(attrs={'class': 'inm'}) )
-#     body = forms.CharField(label=_(u"Body"), widget=forms.Textarea(attrs={'class': 'inm'}))
-    
-#     def save(self, sender, parent_msg=None):
-#         recipients = self.cleaned_data['recipient']
-#         subject = self.cleaned_data['subject']
-#         body = self.cleaned_data['body']
-#         message_list = []
-#         for r in recipients:
-#             if not hasattr(r, 'new_messages_alerted'):
-#                 patron = Patron.objects.get(pk=r.pk)
-#                 r = patron # Hacking to make messages work
-#             if not r.new_messages_alerted:
-#                 signals.post_save.disconnect(utils.new_message_email, ProductRelatedMessage)
-#             else:
-#                 signals.post_save.connect(utils.new_message_email, ProductRelatedMessage)
-#             msg = ProductRelatedMessage(
-#                 sender = sender,
-#                 recipient = r,
-#                 subject = subject,
-#                 body = body,
-#             )
-#             if parent_msg is not None:
-#                 msg.parent_msg = parent_msg
-#                 parent_msg.replied_at = datetime.datetime.now()
-#                 parent_msg.save()
-#             msg.save()
-#             message_list.append(msg)
-#             if notification:
-#                 if parent_msg is not None:
-#                     notification.send([r], "messages_reply_received", {'message': msg,})
-#                 else:
-#                     notification.send([r], "messages_received", {'message': msg,})
-#         return message_list
-
-
 class ProductForm(forms.ModelForm):
     category = TreeNodeChoiceField(queryset=Category.tree.all(), empty_label=_(u"Choisissez une catégorie"), level_indicator=u'--', widget=forms.Select(attrs={'class': 'selm'}))
     summary = forms.CharField(label=_(u"Titre"), max_length=100, widget=forms.TextInput(attrs={'class': 'inm'}))

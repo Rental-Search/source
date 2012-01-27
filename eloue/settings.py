@@ -162,7 +162,7 @@ INSTALLED_APPS = (
     'imagekit',
     'django_lean.experiments',
     'rollout',
-    'compress',
+    'pipeline',
     'faq',
     'announcements',
     'haystack',
@@ -207,23 +207,23 @@ CACHE_MIDDLEWARE_ANONYMOUS_ONLY = True
 CACHE_MIDDLEWARE_SECONDS = getattr(local, 'CACHE_MIDDLEWARE_SECONDS', 60 * 15)
 CACHE_MIDDLEWARE_KEY_PREFIX = getattr(local, 'CACHE_MIDDLEWARE_KEY_PREFIX', None)
 
-# Compress configuration
-COMPRESS = getattr(local, 'COMPRESS', True)
-COMPRESS_AUTO = getattr(local, 'COMPRESS_AUTO', False)
-COMPRESS_VERSION_REMOVE_OLD = False
-COMPRESS_VERSION = True
-COMPRESS_CSS_URL_REPLACE = {
-    r"\.\.\/": "",
-    r"url\([\'|\"]([^(|\'|\"|\)]*)[\'|\"|\)]+": lambda m: "url(\"%s%s\")" % (MEDIA_URL, m.group(1)) if not m.group(1).startswith("http") else "url(\"%s\")" % m.group(1),
-    r"src=[\'|\"]([^(\'|\")]*)[\'|\"]": lambda m: "src=\"%s%s\"" % (MEDIA_URL, m.group(1)),
-}
-COMPRESS_JS_FILTERS = getattr(local, 'COMPRESS_JS_FILTERS', ('compress.filters.yui.YUICompressorFilter',))
-COMPRESS_CSS_FILTERS = getattr(local, 'COMPRESS_CSS_FILTERS', (
-    'compress.filters.css_url_replace.CSSURLReplace',
-    'compress.filters.yui.YUICompressorFilter'
-))
-COMPRESS_YUI_BINARY = getattr(local, 'COMPRESS_YUI_BINARY', '/usr/bin/yui-compressor')
-COMPRESS_CSS = {
+
+STATIC_ROOT = getattr(local, 'STATIC_ROOT', None)
+STATIC_URL = getattr(local, 'STATIC_URL', None)
+
+
+#pipeline configuration
+PIPELINE = True
+PIPELINE_CSS_COMPRESSOR = 'pipeline.compressors.yui.YUICompressor'
+PIPELINE_JS_COMPRESSOR = 'pipeline.compressors.yui.YUICompressor'
+PIPELINE_COMPILERS = (
+  'pipeline.compilers.less.LessCompiler',
+)
+PIPELINE_LESS_BINARY = '/usr/local/lib/node_modules/npm/node_modules/less/bin/lessc'
+PIPELINE_YUI_BINARY = getattr(local, 'COMPRESS_YUI_BINARY', '/usr/bin/yui-compressor')
+PIPELINE_ROOT = getattr(local, 'PIPELINE_ROOT', MEDIA_ROOT)
+PIPELINE_URL = getattr(local, 'PIPELINE_URL', MEDIA_URL)
+PIPELINE_CSS = {
     'master': {
         'source_filenames': (
             'css/screen.css',
@@ -366,7 +366,7 @@ COMPRESS_CSS = {
     }
 }
 
-COMPRESS_JS = {
+PIPELINE_JS = {
     'application': {
         'source_filenames': (
             'js/jquery.js',
@@ -396,6 +396,9 @@ COMPRESS_JS = {
         },
     }
 }
+
+
+
 
 # South configuration
 SOUTH_TESTS_MIGRATE = getattr(local, 'SOUTH_TESTS_MIGRATE', True)

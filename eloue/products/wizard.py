@@ -17,7 +17,7 @@ from eloue.products.forms import AlertForm, ProductForm, MessageEditForm
 
 from eloue.products.models import Product, Picture, UNIT, Alert
 
-from eloue.wizard import GenericFormWizard, NewGenericFormWizard
+from eloue.wizard import NewGenericFormWizard
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_protect
 from django.shortcuts import get_object_or_404, redirect
@@ -102,34 +102,13 @@ class MessageWizard(NewGenericFormWizard):
         else:
             return 'django_messages/message_missing.html'
     
-class AlertWizard(GenericFormWizard):
+class AlertWizard(NewGenericFormWizard):
     def done(self, request, form_list):
-        missing_form = next((form for form in form_list if getattr(form.__class__, '__name__', None) == 'MissingInformationForm'), None)
-
-        if request.user.is_anonymous():  # Create new Patron
-            auth_form = next((form for form in form_list if isinstance(form, EmailAuthenticationForm)), None)
-            new_patron = auth_form.get_user()
-            if not new_patron:
-                new_patron = Patron.objects.create_inactive(missing_form.cleaned_data['username'],
-                    auth_form.cleaned_data['email'], missing_form.cleaned_data['password1'])
-                if hasattr(settings, 'AFFILIATE_TAG'):
-                    # Assign affiliate tag, no need to save, since missing_form should do it for us
-                    new_patron.affiliate = settings.AFFILIATE_TAG
-            if not hasattr(new_patron, 'backend'):
-                from django.contrib.auth import load_backend
-                backend = load_backend(settings.AUTHENTICATION_BACKENDS[0])
-                new_patron.backend = "%s.%s" % (backend.__module__, backend.__class__.__name__)
-            login(request, new_patron)
-        else:
-            new_patron = request.user
-
-        if missing_form:
-            missing_form.instance = new_patron
-            new_patron, new_address, new_phone, avatar = missing_form.save()
+        super(AlertWizard, self).done(request, form_list)
         # Create and send alerts
         alert_form = form_list[0]
-        alert_form.instance.patron = new_patron
-        alert_form.instance.address = new_address
+        alert_form.instance.patron = self.new_patron
+        alert_form.instance.address = self.new_address
         alert = alert_form.save()
 
         if not settings.AUTHENTICATION_BACKENDS[0] == 'eloue.accounts.auth.PrivatePatronModelBackend':
@@ -146,34 +125,13 @@ class AlertWizard(GenericFormWizard):
         else:
             return 'products/alert_missing.html'
     
-class AlertAnswerWizard(GenericFormWizard):
+class AlertAnswerWizard(NewGenericFormWizard):
     def done(self, request, form_list):
-        missing_form = next((form for form in form_list if getattr(form.__class__, '__name__', None) == 'MissingInformationForm'), None)
-        if request.user.is_anonymous():  # Create new Patron
-            auth_form = next((form for form in form_list if isinstance(form, EmailAuthenticationForm)), None)
-            new_patron = auth_form.get_user()
-            if not new_patron:
-                new_patron = Patron.objects.create_inactive(missing_form.cleaned_data['username'],
-                    auth_form.cleaned_data['email'], missing_form.cleaned_data['password1'])
-                if hasattr(settings, 'AFFILIATE_TAG'):
-                    # Assign affiliate tag, no need to save, since missing_form should do it for us
-                    new_patron.affiliate = settings.AFFILIATE_TAG
-            if not hasattr(new_patron, 'backend'):
-                from django.contrib.auth import load_backend
-                backend = load_backend(settings.AUTHENTICATION_BACKENDS[0])
-                new_patron.backend = "%s.%s" % (backend.__module__, backend.__class__.__name__)
-            login(request, new_patron)
-        else:
-            new_patron = request.user
-
-        if missing_form:
-            missing_form.instance = new_patron
-            new_patron, new_address, new_phone, avatar = missing_form.save()
-
+        super(AlertAnswerWizard, self).done(request, form_list)
         # Create product
         product_form = form_list[0]
-        product_form.instance.owner = new_patron
-        product_form.instance.address = new_address
+        product_form.instance.owner = self.new_patron
+        product_form.instance.address = self.new_address
         product = product_form.save()
 
         for unit in UNIT.keys():
@@ -201,13 +159,7 @@ class AlertAnswerWizard(GenericFormWizard):
                 del files['0-picture']
             return self.form_list[step](data, files, prefix=self.prefix_for_step(step),
                 initial=self.initial.get(step, None), instance=Product(quantity=1, deposit_amount=0))
-        if not issubclass(self.form_list[step], (ProductForm, EmailAuthenticationForm)):
-            initial = {
-                'addresses__country': settings.LANGUAGE_CODE.split('-')[1].upper(),
-            }
-            return self.form_list[step](data, files, prefix=self.prefix_for_step(step),
-                initial=initial)
-        return super(ProductWizard, self).get_form(step, data, files)
+        return super(AlertAnswerWizard, self).get_form(step, data, files)
 
     def parse_params(self, request, *args, **kwargs):
         alert = get_object_or_404(Alert, pk=kwargs["alert_id"])
