@@ -21,6 +21,9 @@ south>=0.7
 sphinx>=1.0.2
 unittest2>=0.5.1
 feedparser>=5.0.1
+manifesto
+django-staticfiles
+-e git://github.com/e-loue/django-pipeline.git#egg=django-pipeline
 -e git://github.com/e-loue/boto.git#egg=boto
 -e git://github.com/e-loue/pyPdf.git#egg=pyPdf
 -e git://github.com/e-loue/python-oauth2.git#egg=oauth2
