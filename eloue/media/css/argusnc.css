@@ -1,0 +1,44 @@
+#header-argusnc {
+  margin-left: 0px;
+}
+
+#header {
+  width: 960px;
+}
+
+#footer {
+  margin-bottom: 20px;
+  -moz-border-radius: 5px 5px 5px 5px; 
+  -webkit-border-radius: 5px 5px 5px 5px; 
+  border-radius: 5px 5px 5px 5px;
+}
+
+#pied {
+  background-color: #000;
+  text-align: right;
+  color: white;
+  height: 15px;
+  position: relative;
+  padding-top: 5px;
+  padding-bottom: 20px;
+  margin: 0;
+  width: 980px;
+}
+  #pied .menu_foot {
+      padding: 0px;
+      margin: 0px 0px 10px 0px;
+  }
+  #pied .menu_foot .item30 {
+    border: 0px;
+  }
+  #pied .menu_foot li {
+      border-left: 1px solid white;
+      padding: 0px 10px;
+      float: left;
+      list-style-type: none;
+  }
+  #pied .menu_foot li a {
+    color: #fff;
+    font-family: Arial, Helvetica, sans-serif;
+    font-family: 12px;
+  }
