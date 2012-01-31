@@ -141,6 +141,10 @@ class Product(models.Model):
             and self.deposit_amount <= INSURANCE_MAX_DEPOSIT \
             and self.category.need_insurance
     
+    @property
+    def daily_price(self):
+        return self.prices.get(unit=UNIT.DAY)
+
 
 def upload_to(instance, filename):
     return 'pictures/%s.jpg' % uuid.uuid4().hex
