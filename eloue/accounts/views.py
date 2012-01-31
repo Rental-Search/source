@@ -287,15 +287,22 @@ def contact(request):
             messages.error(request, _(u"Erreur lors de l'envoi du message"))
     return direct_to_template(request, 'accounts/contact.html', extra_context={'form': ContactForm()})
 
+@login_required
 @require_GET
 def accounts_work_autocomplete(request):
     term = request.GET.get('term', '')
-    work_list = [work['work'] for work in Patron.objects.filter(work__contains=term).values('work').annotate(Count('work'))]
+    works = Patron.objects.filter(
+        work__icontains=term).values('work').annotate(Count('work'))
+    work_list = [{'label': work['work'], 'value': work['work']} for work in works]
     return HttpResponse(simplejson.dumps(work_list), mimetype="application/json")
 
+
+@login_required
 @require_GET
 def accounts_studies_autocomplete(request):
     term = request.GET.get('term', '')
-    school_list = [school['school'] for school in Patron.objects.filter(school__contains=term).values('school').annotate(Count('school'))]
+    schools = Patron.objects.filter(
+        school__icontains=term).values('school').annotate(Count('school'))
+    school_list = [{'label': school['school'], 'value': school['school']} for school in schools]
     return HttpResponse(simplejson.dumps(school_list), mimetype="application/json")
 

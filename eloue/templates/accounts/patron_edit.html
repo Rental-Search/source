@@ -4,12 +4,10 @@
 {% block title %}{% trans "Votre profil" %}{% endblock %}
 {% block head %}
 	{{block.super}}
-	<link rel="stylesheet" href="http://jqueryui.com/themes/base/jquery.ui.all.css">
-	<script src="http://jqueryui.com/jquery-1.7.1.js"></script>
-	<script src="http://jqueryui.com/ui/jquery.ui.core.js"></script>
-	<script src="http://jqueryui.com/ui/jquery.ui.widget.js"></script>
-	<script src="http://jqueryui.com/ui/jquery.ui.position.js"></script>
-	<script src="http://jqueryui.com/ui/jquery.ui.autocomplete.js"></script>
+
+	<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js"></script>
 {% endblock %}
 
 {% block content %}
@@ -265,11 +263,17 @@
 </div>
 	        			
 <script type="text/javascript">
-
     $("#id_work").autocomplete(
         {
-            'source': 'accounts_work_autocomplete'
+            'source': function(request, response) {
+	            $.getJSON('accounts_work_autocomplete'+'?term='+request.term, response);}
         }
     );
-	        			</script>
+    $("#id_school").autocomplete(
+        {
+            'source': function(request, response) {
+	            $.getJSON('accounts_studies_autocomplete'+'?term='+request.term, response);}
+        }
+    );
+</script>
 {% endblock %}
