@@ -17,6 +17,16 @@ class ProductManager(GeoManager):
     def archived(self):
         return self.filter(is_archived=True, is_allowed=True)
     
+    def last_added(self):
+        return self.order_by('-created_at')
+    
+    def last_added_near(self, l):
+        return self.distance(
+            l, field_name='address__position'
+        ).extra(
+            select={'created_date': 'date(created_at)'}
+        ).order_by('-created_date', 'distance')
+
 
 class CurrentSiteProductManager(ProductManager):
     def __init__(self, field_name=None):
