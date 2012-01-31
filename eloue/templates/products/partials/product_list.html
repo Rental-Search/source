@@ -1,4 +1,4 @@
-{% load i18n %}
+{% load i18n product %}
 <ul class="product-list">
     {% for product in product_list %}
         <li>
@@ -9,7 +9,7 @@
             </a><!-- pl-img -->
             <div class="pl-content">
                 <h3>
-                    <a href="#">{{ product.summary|capfirst|slice:":40"}}{% if product.summary|length > 40 %}...{% endif %}</a>
+                    <a href="#">{{ product.summary|capfirst|truncate:40 }}</a>
                 </h3>
                 {% if product.owner.default_address %}
                     {% with product.owner.default_address as address %}
