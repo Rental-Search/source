@@ -28,6 +28,7 @@ from django.template.defaultfilters import slugify
 from eloue.accounts.manager import PatronManager
 from eloue.geocoder import GoogleGeocoder
 from eloue.products.utils import Enum
+from eloue.products.models import ProductRelatedMessages
 from eloue.signals import post_save_sites
 from eloue.utils import create_alternative_email
 from eloue.payments.paypal_payment import accounts, PaypalError
@@ -266,6 +267,16 @@ class Patron(User):
     def is_confirmed(self):
         return paypal_payment.confirm_paypal_account(self.paypal_email)
     
+    @property
+    def response_rate(self):
+        ProductRelatedMessages.objects.find()
+        return 90.0
+    
+    @property
+    def response_time(self):
+        from datetime import timedelta
+        return timedelta(seconds=50)
+
     def send_activation_email(self):
         context = {
             'patron': self, 'activation_key': self.activation_key,
