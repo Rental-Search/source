@@ -17,10 +17,10 @@ from django.conf import settings
 from django.contrib.auth.models import User
 from django.contrib.gis.geos import Point
 from django.core.cache import cache
-from django.db.models import permalink
-from django.db.models import signals
+from django.db.models import permalink, Q, signals
 from django.utils.encoding import smart_unicode
 from django.utils.formats import get_format
+from django.utils.timesince import timesince
 from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import ugettext
 from django.template.defaultfilters import slugify
@@ -28,7 +28,6 @@ from django.template.defaultfilters import slugify
 from eloue.accounts.manager import PatronManager
 from eloue.geocoder import GoogleGeocoder
 from eloue.products.utils import Enum
-from eloue.products.models import ProductRelatedMessages
 from eloue.signals import post_save_sites
 from eloue.utils import create_alternative_email
 from eloue.payments.paypal_payment import accounts, PaypalError
@@ -269,13 +268,25 @@ class Patron(User):
     
     @property
     def response_rate(self):
-        ProductRelatedMessages.objects.find()
-        return 90.0
+        from eloue.products.models import MessageThread
+        threads = MessageThread.objects.filter(recipient=self)
+        if not threads:
+            return None
+        threads_num = threads.count()
+        responded_num = 0
+        for thread in threads:
+            if thread.messages.count() > 1:
+                responded_num += 1
+        return responded_num/float(threads_num)
     
     @property
     def response_time(self):
-        from datetime import timedelta
-        return timedelta(seconds=50)
+        from eloue.products.models import ProductRelatedMessage
+        messages = ProductRelatedMessage.objects.filter(~Q(parent_msg=None), parent_msg__recipient=self, sender=self)
+        if not messages:
+            return None
+        rt = sum([message.sent_at - message.parent_msg.sent_at for message in messages], datetime.timedelta(seconds=0))/len(messages)
+        return timesince(datetime.datetime.now() - rt)
 
     def send_activation_email(self):
         context = {
