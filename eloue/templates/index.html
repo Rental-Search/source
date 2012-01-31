@@ -39,7 +39,9 @@
                 <li><a href="#categories">Catégories</a><li>
             </ul>
             <div id="near">
+              {% with near as product_list %}
                 {% include "products/partials/product_list.html" %}
+              {% endwith %}
             </div>{# near #}
             <div id="moreRent"></div>{# moreRent #}
             <div id="hotloc"></div>{# hotloc #}
@@ -75,4 +77,70 @@
         <img src="{{ MEDIA_URL }}images/e-loue_dans_la_press.png" width="778" height="49" />
     </div>{# press #}
 </div>{# container-top #}
+
+  <script src="//maps.googleapis.com/maps/api/js?sensor=false&amp;libraries=places" type="text/javascript"></script>
+  <script type="text/javascript">
+
+
+    function success(position) {
+      geocoder = new google.maps.Geocoder();
+      latlon = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+      geocoder.geocode(
+        {'latLng':latlon}, 
+        function(result) {
+          console.log(result); 
+          console.log(result[0]);
+          $(document).ajaxSend(function(event, xhr, settings) {
+            function getCookie(name) {
+                var cookieValue = null;
+                if (document.cookie && document.cookie != '') {
+                    var cookies = document.cookie.split(';');
+                    for (var i = 0; i < cookies.length; i++) {
+                        var cookie = jQuery.trim(cookies[i]);
+                        // Does this cookie string begin with the name we want?
+                        if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                            break;
+                        }
+                    }
+                }
+                return cookieValue;
+            }
+            function sameOrigin(url) {
+                // url could be relative or scheme relative or absolute
+                var host = document.location.host; // host + port
+                var protocol = document.location.protocol;
+                var sr_origin = '//' + host;
+                var origin = protocol + sr_origin;
+                // Allow absolute or scheme relative URLs to same origin
+                return (url == origin || url.slice(0, origin.length + 1) == origin + '/') ||
+                    (url == sr_origin || url.slice(0, sr_origin.length + 1) == sr_origin + '/') ||
+                    // or any other URL that isn't scheme relative or absolute i.e relative.
+                    !(/^(\/\/|http:|https:).*/.test(url));
+            }
+            function safeMethod(method) {
+                return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+            }
+
+            if (!safeMethod(settings.type) && sameOrigin(settings.url)) {
+                xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+            }
+          });
+          console.log(JSON.stringify(result[0]));
+          $.post('user_geolocation/', {address: JSON.stringify(result[0])}, 
+            function(response){ console.log(response); }, 'json');
+        }
+      );
+    }
+    function handleError(error) {
+      alert(error.message);
+    }
+    navigator.geolocation.getCurrentPosition(success, handleError);
+    autocomplete = new google.maps.places.Autocomplete(document.getElementById("id_l"), {types: ['geocode']});
+    google.maps.event.addListener(autocomplete, 'place_changed', function() {
+      console.log(autocomplete.getPlace());
+      $.post('user_geolocation/', {address: JSON.stringify(autocomplete.getPlace())}, 
+        function(response){ console.log(response); }, 'json');
+    });
+  </script>
 {% endblock %}

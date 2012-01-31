@@ -252,11 +252,14 @@ class PatronEditForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(PatronEditForm, self).__init__(*args, **kwargs)
         self.fields['civility'].widget.attrs['class'] = "selm"
+        self.fields['default_address'].widget.attrs['class'] = "selm"
+        self.fields['default_address'].queryset = self.instance.addresses.all()
 
     class Meta:
         model = Patron
         fields = ('civility', 'username', 'first_name', 'last_name',
-            'email', 'paypal_email', 'is_professional', 'company_name', 'is_subscribed', 'new_messages_alerted')
+            'email', 'paypal_email', 'is_professional', 'company_name', 
+            'is_subscribed', 'new_messages_alerted', 'default_address')
 
     def save(self, *args, **kwargs):
         inst = super(PatronEditForm, self).save(*args, **kwargs)
@@ -407,6 +410,8 @@ class AddressForm(forms.ModelForm):
     def clean(self):
         if self.instance.products.all() and self.cleaned_data['DELETE']:
             raise forms.ValidationError(_(u'Vous ne pouvez pas supprimer une adresse associé à un produit. Veuillez le changer sur le page produit.'))
+        if self.cleaned_data['DELETE'] and self.instance.patron.default_address == self.instance:
+            raise forms.ValidationError(_(u'Vous ne pouvez pas supprimer votre adresse par default.'))
         return self.cleaned_data
 
     class Meta:
@@ -435,7 +440,7 @@ class AddressBaseFormSet(BaseInlineFormSet):
             raise forms.ValidationError('')
         for form in self.forms:
             pass
-        
+    
 AddressFormSet = inlineformset_factory(Patron, Address, form=AddressForm, formset=AddressBaseFormSet, extra=1, can_delete=True)
 
 def make_missing_data_form(instance, required_fields=[]):
@@ -464,7 +469,7 @@ def make_missing_data_form(instance, required_fields=[]):
     # Do we have an address ?
     if instance and instance.addresses.exists():
         fields['addresses'] = forms.ModelChoiceField(label=_(u"Addresse"), required=False,
-            queryset=instance.addresses.all(), initial=instance.addresses.all()[0], widget=forms.Select(attrs={'class': 'selm'}))
+            queryset=instance.addresses.all(), initial=instance.default_address if instance.default_address else instance.addresses.all()[0], widget=forms.Select(attrs={'class': 'selm'}))
         for f in fields.keys():
             if "addresses" in f:
                 fields[f].required = False
@@ -516,6 +521,7 @@ def make_missing_data_form(instance, required_fields=[]):
                 city=self.cleaned_data['addresses__city'],
                 country=self.cleaned_data['addresses__country']
             )
+            self.instance.default_address = address
         else:
             address = None
         if 'phones' in self.cleaned_data and self.cleaned_data['phones']:

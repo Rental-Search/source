@@ -140,6 +140,22 @@
 	    				</td>
 	    			</tr>
 	    			{% endif %}
+
+
+	    			{% if form.default_address %}
+	    			<tr>
+	    				<th><label>{{ form.default_address.label }} {% if form.default_address.field.required %}*{% endif %} :</label></th>
+	    				<td {% if form.default_address.errors %} class="error-field" {% endif %}>
+	    					{{ form.default_address }}
+	    					{% if form.default_address.errors %}
+	    						{% for error in form.default_address.errors %}
+	    							<br />
+	    							<span class="error">{{ error|escape }}</span>
+	    						{% endfor %}
+	    					{% endif %}
+	    				</td>
+	    			</tr>
+	    			{% endif %}
 	    			{% if form.avatar %}
 	    			<tr>
 	    				<th><label>{{ form.avatar.label }} {% if form.avatar.field.required %}*{% endif %} :</label></th>

@@ -35,6 +35,7 @@ sitemaps = {
 translation.activate(settings.LANGUAGE_CODE)  # Force language for test and dev
 
 urlpatterns = patterns('',
+    url(r'^user_geolocation/$', 'eloue.accounts.views.user_geolocation', name='user_geolocation'),
     url(r"^announcements/", include("announcements.urls")),
     url(r'^sitemap.xml$', index, {'sitemaps': sitemaps}, name="sitemap"),
     url(r'^sitemap-(?P<section>.+).xml$', sitemap, {'sitemaps': sitemaps}),

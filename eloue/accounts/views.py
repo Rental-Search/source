@@ -2,6 +2,7 @@
 import smtplib
 import socket
 from logbook import Logger
+import simplejson
 
 from django.conf import settings
 from django.contrib import messages
@@ -13,7 +14,9 @@ from django.forms.models import model_to_dict
 from django.shortcuts import get_object_or_404, render_to_response
 from django.template import RequestContext
 from django.utils.translation import ugettext_lazy as _
+from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.cache import never_cache, cache_page
+from django.views.decorators.http import require_POST
 from django.views.generic.simple import direct_to_template, redirect_to
 from django.views.generic.list_detail import object_list
 from django.core.context_processors import csrf
@@ -97,6 +100,24 @@ def associate_facebook(request):
             request, 'accounts/associated_facebook.html', 
             {'me': request.user.facebooksession.uid}
         )
+
+@csrf_exempt
+@require_POST
+def user_geolocation(request):
+    if request.session.get('location', None):
+        return HttpResponse('already_geolocated')
+    location = simplejson.loads(request.POST['address'])
+    address_components = location['address_components']
+    address_coordinates = location['geometry']['location']
+    coordinates = {}
+    coordinates['lat'] = address_coordinates['Pa']
+    coordinates['lon'] = address_coordinates['Oa']
+    localities = filter(lambda component: 'locality' in component['types'], address_components)
+    city = next(iter(map(lambda component: component['long_name'], localities)), None)
+    request.session['location'] = {'source': 'browser'}
+    request.session['location']['coordinates'] = coordinates
+    request.session['location']['city'] = city
+    return HttpResponse("OK")
 
 @cache_page(900)
 def patron_detail(request, slug, patron_id=None, page=None):
