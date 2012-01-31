@@ -9,11 +9,11 @@
             </a><!-- pl-img -->
             <div class="pl-content">
                 <h3>
-                    <a href="#">{{ product.summary }}</a>
+                    <a href="#">{{ product.summary|capfirst|slice:":40"}}{% if product.summary|length > 40 %}...{% endif %}</a>
                 </h3>
                 {% if product.owner.default_address %}
                     {% with product.owner.default_address as address %}
-                        <address>{{address.zipcode}}, {{address.city}}</address>
+                        <address>{{address.zipcode}}, {{address.city|capfirst}}</address>
                     {% endwith %}
                 {% else %}
                     {% with product.owner.addresses|first as address %}

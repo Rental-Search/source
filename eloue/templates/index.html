@@ -39,7 +39,7 @@
                 <li><a href="#categories">Catégories</a><li>
             </ul>
             <div id="near">
-              {% with near as product_list %}
+              {% with last_added as product_list %}
                 {% include "products/partials/product_list.html" %}
               {% endwith %}
             </div>{# near #}
@@ -70,7 +70,9 @@
     </ul>{# args #}
     <div class="new-profils">
         <div class="np-title">{% trans "Derniers<br/>inscrits" %}</div><!-- np-title -->
-        {% include "accounts/partials/avatar_list.html" %}
+        {% with last_joined as patron_list %}
+          {% include "accounts/partials/avatar_list.html" %}
+        {% endwith %}
     </div>{# new_profils #}
     <div class="press">
         <div class="press-title">Ils parlent de nous !</div>

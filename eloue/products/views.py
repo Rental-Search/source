@@ -6,6 +6,7 @@ import datetime
 from django.conf import settings
 from django.contrib.sites.models import Site
 from django.contrib import messages
+from django.contrib.gis.geos import Point
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.vary import vary_on_headers
@@ -53,11 +54,21 @@ def homepage(request):
     curiosities = Curiosity.on_site.all()
     form = FacetedSearchForm()
     alerts = Alert.on_site.all()[:3]
+    if 'location' in request.session:
+        location = request.session['location']
+        coordinates = location['coordinates']
+        l = Point(coordinates['lat'], coordinates['lon'])
+        last_joined = Patron.objects.last_joined_near(l)
+        last_added = Product.objects.last_added_near(l)
+    else:
+        last_joined = Patron.objects.last_joined()
+        last_added = Product.objects.last_added()
     return render_to_response(
         template_name='index.html', 
         dictionary={
-            'form': form, 'curiosities': curiosities, 
-            'alerts':alerts,'near': Product.objects.last_added()[:10]
+            'form': form, 'curiosities': curiosities,
+            'alerts':alerts,'last_added': last_added[:10],
+            'last_joined': last_joined[:11],
         }, 
         context_instance=RequestContext(request)
     )
