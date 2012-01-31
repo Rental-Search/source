@@ -219,11 +219,20 @@ PIPELINE_JS_COMPRESSOR = 'pipeline.compressors.yui.YUICompressor'
 PIPELINE_COMPILERS = (
   'pipeline.compilers.less.LessCompiler',
 )
-PIPELINE_LESS_BINARY = '/usr/local/lib/node_modules/npm/node_modules/less/bin/lessc'
+PIPELINE_LESS_BINARY = '/Users/benoit/node_modules/less/bin/lessc'
 PIPELINE_YUI_BINARY = getattr(local, 'COMPRESS_YUI_BINARY', '/usr/bin/yui-compressor')
 PIPELINE_ROOT = getattr(local, 'PIPELINE_ROOT', MEDIA_ROOT)
 PIPELINE_URL = getattr(local, 'PIPELINE_URL', MEDIA_URL)
 PIPELINE_CSS = {
+    'master2': {
+        'source_filenames': (
+            'less/styles.less',
+        ),
+        'output_filename': 'css/master2.r?.css',
+        'extra_context': {
+            'media': 'screen',
+        },
+    },
     'master': {
         'source_filenames': (
             'css/screen.css',
@@ -367,6 +376,17 @@ PIPELINE_CSS = {
 }
 
 PIPELINE_JS = {
+    'application2': {
+        'source_filenames': (
+            'js/jquery-1.7.1.min.js',
+            'js/jquery-ui-1.8.17.custom.min.js',
+            'js/application2.js'
+            ),
+        'output_filename': 'js/application2.r?.js',
+        'extra_context': {
+            'defer': True,
+        },
+    },
     'application': {
         'source_filenames': (
             'js/jquery.js',

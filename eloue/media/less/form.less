@@ -1,0 +1,173 @@
+/* Forms.less
+ * Base styles for various input types, form layouts, and states
+ * ------------------------------------------------------------- */
+ 
+// FORM STYLES
+// -----------
+
+form {
+  margin-bottom: @baseline;
+}
+
+// Parent element that clears floats and wraps labels and fields together
+form .clearfix {
+  margin-bottom: @baseline;
+  .clearfix()
+}
+
+// Set font for forms
+label,
+input,
+select,
+textarea {
+  font-family: 'Ubuntu', sans-serif;
+  font-size: @basefont;
+  font-weight: normal;
+  line-height: 20px;
+}
+
+// Float labels left
+label {
+  padding-top: 6px;
+  font-size: @basefont;
+  line-height: @baseline;
+  float: left;
+  width: 130px;
+  text-align: right;
+  color: #546b78
+}
+
+// Shift over the inside div to align all label's relevant content
+form .input {
+  margin-left: 150px;
+}
+
+// Checkboxs and radio buttons
+input[type=checkbox],
+input[type=radio] {
+  cursor: pointer;
+}
+
+// Inputs, Textareas, Selects
+input,
+textarea,
+select
+{
+  display: inline-block;
+  width: 210px;
+  height: @baseline;
+  padding: 4px;
+  font-size: @basefont;
+  line-height: @baseline;
+  color: #546b78;
+  border: 1px solid #a4bcca;
+  .rounded(3px);
+  @shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+  .box-shadow(@shadow);
+}
+
+// remove padding from select
+select {
+  padding: initial;
+}
+
+// mini reset for non-html5 file types
+input[type=checkbox],
+input[type=radio] {
+  width: auto;
+  height: auto;
+  padding: 0;
+  margin: 3px 0;
+  *margin-top: 0; /* IE6-7 */
+  line-height: normal;
+  border: none;
+}
+
+input[type=file] {
+  background-color: #fff;
+  padding: initial;
+  border: initial;
+  line-height: initial;
+  .box-shadow(none);
+}
+
+input[type=button],
+input[type=reset],
+input[type=submit] {
+  width: auto;
+  height: auto;
+}
+
+select,
+input[type=file] {
+  height: @baseline * 1.5; // In IE7, the height of the select element cannot be changed by height, only font-size
+  *height: auto; // Reset for IE7
+  line-height: @baseline * 1.5;
+  *margin-top: 4px; /* For IE7, add top margin to align select with labels */
+}
+
+// Make multiple select elements height not fixed
+select[multiple] {
+  height: inherit;
+  background-color: #fff; // Fixes Chromium bug of unreadable items
+}
+
+textarea {
+  height: auto;
+}
+
+// Placeholder text gets special styles; can't be bundled together though for some reason
+:-moz-placeholder {
+  color: #b9cad4;
+}
+::-webkit-input-placeholder {
+  color: #b9cad4;
+}
+
+
+// Stacked forms
+.form-stacked {
+  fieldset {
+    padding-top: @baseline / 2;
+  }
+  legend {
+    padding-left: 0;
+  }
+  label {
+    display: block;
+    float: none;
+    width: auto;
+    font-weight: bold;
+    text-align: left;
+    line-height: 20px;
+    padding-top: 0;
+  }
+  .clearfix {
+    margin-bottom: @baseline / 2;
+    div.input {
+      margin-left: 0;
+    }
+  }
+  .inputs-list {
+    margin-bottom: 0;
+    li {
+      padding-top: 0;
+      label {
+        font-weight: normal;
+        padding-top: 0;
+      }
+    }
+  }
+  div.clearfix.error {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 10px;
+    margin-top: 0;
+    margin-left: -10px;
+  }
+  .actions {
+    margin-left: -20px;
+    padding-left: 20px;
+  }
+}
+
