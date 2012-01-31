@@ -55,7 +55,10 @@ def homepage(request):
     alerts = Alert.on_site.all()[:3]
     return render_to_response(
         template_name='index.html', 
-        dictionary={'form': form, 'curiosities': curiosities, 'alerts':alerts}, 
+        dictionary={
+            'form': form, 'curiosities': curiosities, 
+            'alerts':alerts,'near': Product.objects.last_added()[:10]
+        }, 
         context_instance=RequestContext(request)
     )
 
@@ -63,9 +66,11 @@ def homepage(request):
 @mobify
 @cache_page(300)
 def search(request):
-    Produc
     form = FacetedSearchForm()
-    return direct_to_template(request, template='products/search.html', extra_context={'form': form, 'near': })
+    return direct_to_template(
+        request, template='products/search.html', 
+        extra_context={'form': form, }
+    )
 
 
 @never_cache
