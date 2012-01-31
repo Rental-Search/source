@@ -79,11 +79,13 @@ class PatronManager(UserManager, GeoManager):
                 patron.delete()
     
     def last_joined(self):
-        return self.filter(~Q(avatar=None)).order_by('-date_joined')
+        return self.filter(
+            #~Q(avatar=None)
+        ).order_by('-date_joined')
     
     def last_joined_near(self, l):
         return self.filter(
-            ~Q(avatar=None),
+            #~Q(avatar=None),
             ~Q(default_address=None),
         ).distance(
             l, field_name='default_address__position'
