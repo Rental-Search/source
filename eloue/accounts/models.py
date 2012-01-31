@@ -17,7 +17,7 @@ from django.conf import settings
 from django.contrib.auth.models import User
 from django.contrib.gis.geos import Point
 from django.core.cache import cache
-from django.db.models import permalink, Q, signals
+from django.db.models import permalink, Q, signals, Count
 from django.utils.encoding import smart_unicode
 from django.utils.formats import get_format
 from django.utils.timesince import timesince
@@ -269,15 +269,13 @@ class Patron(User):
     @property
     def response_rate(self):
         from eloue.products.models import MessageThread
-        threads = MessageThread.objects.filter(recipient=self)
+        threads = MessageThread.objects.filter(recipient=self).annotate(num_messages=Count('messages'))
         if not threads:
             return None
         threads_num = threads.count()
-        responded_num = 0
-        for thread in threads:
-            if thread.messages.count() > 1:
-                responded_num += 1
-        return responded_num/float(threads_num)
+        answered = threads.filter(num_messages__gt=1)
+        answered_num = answered.count()
+        return answered_num/float(threads_num)
     
     @property
     def response_time(self):
