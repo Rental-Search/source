@@ -290,7 +290,14 @@ def product_list(request, urlbits, sqs=SearchQuerySet(), suggestions=None, page=
                 raise Http404
             if bit.endswith(_('categorie')):
                 item = get_object_or_404(Category, slug=value)
-                params = MultiValueDict((facet['label'], [unicode(facet['value']).encode('utf-8')]) for facet in breadcrumbs.values() if (not facet['facet']) and not (facet['label'] == 'r' and facet['value'] == DEFAULT_RADIUS)and not (facet['label'] == 'l' and facet['value'] == '') and not (facet['label'] == 'sort' and facet['value'] == '') and not (facet['label'] == 'q' and facet['value'] == ''))
+                is_facet_not_empty = not (facet['facet'] or \
+                     facet['label'] == 'r' and facet['value'] == DEFAULT_RADIUS or \
+                     facet['label'] == 'l' and facet['value'] == '' or \
+                     facet['label'] == 'sort' and facet['value'] == '' or \
+                     facet['label'] == 'q' and facet['value'] == '')
+                params = MultiValueDict(
+                    (facet['label'], [unicode(facet['value']).encode('utf-8')]) for facet in breadcrumbs.values() if is_facet_not_empty
+                )
                 path = item.get_absolute_url()
                 for bit in urlbits:
                     if bit.startswith(_('page')):
