@@ -57,7 +57,7 @@ def homepage(request):
     if 'location' in request.session:
         location = request.session['location']
         coordinates = location['coordinates']
-        l = Point(coordinates['lat'], coordinates['lon'])
+        l = Point(coordinates['lon'], coordinates['lat'])
         last_joined = Patron.objects.last_joined_near(l)
         last_added = Product.objects.last_added_near(l)
     else:
@@ -67,7 +67,7 @@ def homepage(request):
         template_name='index.html', 
         dictionary={
             'form': form, 'curiosities': curiosities,
-            'alerts':alerts,'last_added': last_added[:10],
+            'alerts':alerts,'last_added': last_added[:20],
             'last_joined': last_joined[:11],
         }, 
         context_instance=RequestContext(request)

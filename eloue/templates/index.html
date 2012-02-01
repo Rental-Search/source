@@ -9,6 +9,7 @@
 {% endblock %}
 
 {% block content %}
+{% csrf_token %}
 <div class="container-top">
     <div class="search-home">
         <h1 class="rent-anythings">{% trans "Rejoignez la communauté des e-loueurs !" %} <br> 
@@ -129,21 +130,52 @@
             }
           });
           console.log(JSON.stringify(result[0]));
-          $.post('user_geolocation/', {address: JSON.stringify(result[0])}, 
-            function(response){ console.log(response); }, 'json');
+          $.ajax({
+            type: 'POST',
+            url: 'user_geolocation/',
+            data: {
+              address: JSON.stringify(result[0]),
+              source: 2
+            },
+            success: function(response) {
+              console.log('SZAR');
+              console.log(response);
+              if (response == 'OK') {
+                console.log('pisi');
+                window.location.reload(); 
+              } else {
+                console.log('kkaka');
+              }
+            },
+            error: function(error, textStatus, errorThrown){
+              console.log(error);
+              console.log(textStatus);
+              console.log(errorThrown);
+            }
+          });
         }
       );
     }
     function handleError(error) {
-      alert(error.message);
+      console.log(error.message);
     }
 
     navigator.geolocation.getCurrentPosition(success, handleError);
     autocomplete = new google.maps.places.Autocomplete(document.getElementById("id_l"), {types: ['geocode']});
     google.maps.event.addListener(autocomplete, 'place_changed', function() {
       console.log(autocomplete.getPlace());
-      $.post('user_geolocation/', {address: JSON.stringify(autocomplete.getPlace())}, 
-        function(response){ console.log(response); }, 'json');
+      $.post(
+        'user_geolocation/', 
+        {
+          address: JSON.stringify(autocomplete.getPlace()),
+          source: 1
+        }, 
+        function(response){
+          if (response == "OK"){
+            window.location.reload();
+          }
+        }
+      );
     });
   </script>
 {% endblock %}

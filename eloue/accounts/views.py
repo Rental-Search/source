@@ -101,12 +101,24 @@ def associate_facebook(request):
             {'me': request.user.facebooksession.uid}
         )
 
-@csrf_exempt
+from eloue.products.utils import Enum
+
+GEOLOCATION_SOURCE = Enum([
+    (1, 'MANUAL', _('Location set manually')),
+    (2, 'BROWSER', _('Location set by browser geocoding')),
+    (3, 'ADDRESS', _('Location set by user address')),
+])
+
 @require_POST
 def user_geolocation(request):
-    if request.session.get('location', None):
-        return HttpResponse('already_geolocated')
+    stored_location = request.session.get('location')
     location = simplejson.loads(request.POST['address'])
+    if stored_location:
+        current_source = stored_location.get('source', max(GEOLOCATION_SOURCE.values())+1)
+        if current_source < int(request.POST['source']) or \
+            current_source == int(request.POST['source']) and current_source == GEOLOCATION_SOURCE.BROWSER:
+            return HttpResponse('already_geolocated')
+
     address_components = location['address_components']
     address_coordinates = location['geometry']['location']
     coordinates = {}
@@ -114,7 +126,7 @@ def user_geolocation(request):
     coordinates['lon'] = address_coordinates['Oa']
     localities = filter(lambda component: 'locality' in component['types'], address_components)
     city = next(iter(map(lambda component: component['long_name'], localities)), None)
-    request.session['location'] = {'source': 'browser'}
+    request.session['location'] = {'source': int(request.POST['source'])}
     request.session['location']['coordinates'] = coordinates
     request.session['location']['city'] = city
     return HttpResponse("OK")

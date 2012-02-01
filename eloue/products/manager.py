@@ -4,7 +4,7 @@ import types
 from django.conf import settings
 from django.contrib.gis.db.models import GeoManager
 from django.db import models
-from django.db.models import Manager
+from django.db.models import Manager, Q
 from django.db.models.fields import FieldDoesNotExist
 
 from mptt.managers import TreeManager as OriginalTreeManager
@@ -18,14 +18,16 @@ class ProductManager(GeoManager):
         return self.filter(is_archived=True, is_allowed=True)
     
     def last_added(self):
-        return self.order_by('-created_at')
+        return self.order_by('-modified_at')
     
     def last_added_near(self, l):
-        return self.distance(
+        return self.filter(
+            ~Q(address__position=None)
+        ).distance(
             l, field_name='address__position'
         ).extra(
-            select={'created_date': 'date(created_at)'}
-        ).order_by('-created_date', 'distance')
+            select={'modified_date': 'date(modified_at)'}
+        ).order_by('-modified_date', 'distance')
 
 
 class CurrentSiteProductManager(ProductManager):
