@@ -276,7 +276,7 @@ $(document).ready(function() {
     });
 
     //add in product_create
-    $(".tabsPrices").tabs();
+    $("#tabsPricesProduct").tabs();
 
     // DatePicker for season price
     $('#new-start-date').datepicker({

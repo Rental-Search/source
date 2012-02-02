@@ -19,7 +19,7 @@ from eloue.accounts.models import Patron, Avatar
 from eloue.geocoder import GoogleGeocoder
 from eloue.products.forms import FacetedSearchForm
 from eloue.products.models import Product, PAYMENT_TYPE
-from eloue.rent.models import Booking
+from eloue.rent.models import Booking, BorrowerComment
 from eloue.rent.forms import BookingForm, BookingConfirmationForm
 from eloue.wizard import NewGenericFormWizard
 
@@ -100,6 +100,7 @@ class BookingWizard(NewGenericFormWizard):
         product = get_object_or_404(Product.on_site.active(), pk=kwargs['product_id'])
         self.extra_context['product'] = product
         self.extra_context['search_form'] = FacetedSearchForm()
+        self.extra_context['comments'] = BorrowerComment.objects.filter(booking__product=product)
     
     def get_template(self, step):
         if issubclass(self.form_list[step], EmailAuthenticationForm):

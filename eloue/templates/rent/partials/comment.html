@@ -1,14 +1,19 @@
+{% load i18n %}
 <a href="{{ comment.writer.get_absolute_url }}" class="comment-img">
-    <img src="images/avatars/product_page_a1fc68d292034f45b9ce559bb88d9bec.jpeg" width="60" height="60" alt=""/>
+    {% if comment.writer.avatar %}
+        <img src="{{comment.writer.avatar.thumbnail.url}}" width="60" height="60" alt=""/>
+    {% else %}
+        <img src="{{ MEDIA_URL }}images/default_avatar.png" width="60" height="60" alt="">
+    {% endif %}
 </a>
 <div class="comment-content">
     <div>
         <p class="comment-writter">
-            <a href="/loueur/benoit/">qto870</a> Jeudi 12 janvier 2012
-            <span class="stars empty"><span class="stars filled_1"></span></span>
+            <a href="/loueur/benoit/">qto870</a> {{ comment.created_at|date:"l d F Y" }}
+            <span class="stars empty"><span class="stars filled_{{ comment.note }}"></span></span>
         </p>
         <p class="comment-text">
-            Great place - great city! To put it in a nutshell it was a very nice trip and the apartment is perfect for everybody who wants a nice place in edinburgh for a few days. Thank you, Samira!
+            {{ comment.comment }}
         </p><!-- comment-content -->
         <span class="comment-dial"></span>
     </div>

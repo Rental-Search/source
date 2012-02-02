@@ -119,6 +119,7 @@
         <div class="product-desc">
             {{ product.description|linebreaksp }}
         </div>{# product-desc #}
+
         <div class="product-comment">
             <h2>{% trans "Commentaires" %} <small>({{comment_list.count}} {% trans "avis" %})</small></h2>
             <ul>
@@ -129,6 +130,7 @@
             {% endfor %}
             </ul>
         </div>{# product-comment #}
+
     </div>{# content-main #}
     <div class="content-aside">
         <ul class="social-button">
@@ -196,5 +198,4 @@
         </div>{#  owner #}
     </div>{# content-aside #}
 </div>{# container-main #}
-
 {% endblock %}

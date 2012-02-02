@@ -5,7 +5,7 @@ from decimal import Decimal as D
 from django.core.exceptions import ValidationError
 from django.test import TestCase
 
-from eloue.rent.models import Booking
+from eloue.rent.models import Booking, BorrowerComment, OwnerComment
 from eloue.rent import models
 from eloue.payments.paypal_payment import AdaptivePapalPayments
 from mock import patch
@@ -210,10 +210,25 @@ class BookingTest(TestCase):
         
     def tearDown(self):
         datetime.datetime = self.old_datetime
+        
+        
+        
+class CommentTest(TestCase):
+    fixtures = ['category', 'patron', 'address', 'price', 'product', 'booking']
+    def setUp(self):
+        self.booking = Booking.objects.get(pk="1fac3d9f309c437b99f912bd08b09526")
 
-        
-        
-        
-        
-        
+    def test_comment_ok(self):
+        borrower_comment = BorrowerComment(booking=self.booking, note=1, comment='bien')
+        borrower_comment.save()
+        self.assertEquals(borrower_comment.writer, self.booking.borrower)
+        self.assertRaises(OwnerComment.DoesNotExist, lambda: borrower_comment.response)
+
+        owner_comment = OwnerComment(booking=self.booking, note=2, comment='asd')
+        owner_comment.save()
+        self.assertEquals(owner_comment.writer, self.booking.owner)
+        self.assertEquals(owner_comment.response, borrower_comment)
+        self.assertEquals(borrower_comment.response, owner_comment)
+
+        self.assertRaises(NotImplementedError, owner_comment.get_absolute_url)
     

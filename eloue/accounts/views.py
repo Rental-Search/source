@@ -11,9 +11,9 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.sites.models import Site
 from django.core.mail import EmailMessage, BadHeaderError
 from django.core.urlresolvers import reverse
-from django.db.models import Count
+from django.db.models import Count, Q
 from django.views.decorators.http import require_GET
-from django.forms.models import model_to_dict
+from django.forms.models import model_to_dict, inlineformset_factory
 from django.shortcuts import get_object_or_404, render_to_response
 from django.template import RequestContext
 from django.utils.translation import ugettext_lazy as _
@@ -27,14 +27,15 @@ from django.http import HttpResponse, HttpResponseForbidden
 from django.contrib.auth import login
 from oauth_provider.models import Token
 from django.shortcuts import redirect
-
+ 
 from eloue.decorators import secure_required, mobify
 from eloue.accounts.forms import EmailAuthenticationForm, PatronEditForm, PatronPaypalForm, PatronPasswordChangeForm, ContactForm, PatronSetPasswordForm, FacebookForm
 from eloue.accounts.models import Patron, FacebookSession
 from eloue.accounts.wizard import AuthenticationWizard
 
 from eloue.products.forms import FacetedSearchForm
-from eloue.rent.models import Booking
+from eloue.rent.models import Booking, BorrowerComment, OwnerComment
+from eloue.rent.forms import OwnerCommentForm, BorrowerCommentForm
 import time
 
 
@@ -66,7 +67,6 @@ def authenticate(request, *args, **kwargs):
             return redirect(redirect_path)
         else:
             return redirect(settings.LOGIN_REDIRECT_URL)
-
 
 @never_cache
 def authenticate_headless(request):
@@ -103,6 +103,7 @@ def associate_facebook(request):
             request, 'accounts/associated_facebook.html', 
             {'me': request.user.facebooksession.uid}
         )
+
 
 from eloue.products.utils import Enum
 
@@ -147,6 +148,67 @@ def user_geolocation(request):
     }
     return HttpResponse("OK")
 
+
+@login_required
+def comments_received(request):
+    patron = request.user
+    borrowers_comments = BorrowerComment.objects.filter(booking__owner=patron)
+    owners_comments = OwnerComment.objects.filter(booking__borrower=patron)
+    return render_to_response(
+        'rent/comments_received.html',
+        RequestContext(request, {
+            'borrowers_comments': borrowers_comments,
+            'owners_comments': owners_comments,
+        })
+    )
+
+@login_required
+def comments(request):
+    patron = request.user
+    closed_bookings = Booking.objects.filter(Q(owner=patron) | Q(borrower=patron), Q(state=Booking.STATE.CLOSED)|Q(state=Booking.STATE.CLOSING))
+    commented_bookings = closed_bookings.filter(~Q(ownercomment=None, owner=patron) & ~Q(borrower=patron, borrowercomment=None))
+    uncommented_bookings = closed_bookings.filter(Q(ownercomment=None, owner=patron) | Q(borrower=patron, borrowercomment=None))
+    forms = []
+
+    if request.method == "POST":
+        for booking in uncommented_bookings:
+            if booking.owner == patron:
+                Form = OwnerCommentForm
+                Model = OwnerComment
+            else:
+                Form = BorrowerCommentForm
+                Model = BorrowerComment
+            
+            if unicode(booking.pk.hex) in request.POST:
+                form = Form(request.POST, instance=Model(booking=booking), prefix=booking.pk)
+                if form.is_valid():
+                    form.save()
+                    return redirect('eloue.accounts.views.comments')
+            else:
+                form = Form(instance=Model(booking=booking), prefix=booking.pk)
+            forms.append(form)
+    else:
+        for booking in uncommented_bookings:
+            if booking.owner == patron:
+                Form = OwnerCommentForm
+                Model = OwnerComment
+            else:
+                Form = BorrowerCommentForm
+                Model = BorrowerComment
+            form = Form(instance=Model(booking=booking), prefix=booking.pk)
+            forms.append(form)
+    
+    return render_to_response(
+        'rent/comments.html', 
+        RequestContext(
+            request, 
+            {
+                'commented_bookings': commented_bookings,
+                'forms': forms,
+            }
+        )
+    )
+    
 @cache_page(900)
 def patron_detail(request, slug, patron_id=None, page=None):
     if patron_id:  # This is here to be compatible with the old app

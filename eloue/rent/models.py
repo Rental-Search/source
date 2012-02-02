@@ -14,6 +14,7 @@ from datetime import timedelta
 
 from django.conf import settings
 from django.core.urlresolvers import reverse
+from django.core.validators import MaxValueValidator
 from django.contrib.sites.models import Site
 from django.db import models
 from django.db.models import permalink
@@ -84,7 +85,6 @@ PACKAGES = {
 }
 
 log = logbook.Logger('eloue.rent')
-
 
 class Booking(models.Model):
     """A reservation"""
@@ -411,8 +411,51 @@ class Booking(models.Model):
             return "EUR"
         else:
             return self.currency
-    
 
+class Comment(models.Model):
+    booking = models.OneToOneField(Booking)
+    comment = models.TextField()
+    note = models.PositiveSmallIntegerField(
+        choices=enumerate(xrange(6)),
+        validators=[MaxValueValidator(5)]
+    )
+    created_at = models.DateTimeField(editable=False, auto_now_add=True)
+
+    @property
+    def response(self):
+        raise NotImplementedError
+    
+    @property
+    def writer(self):
+        raise NotImplementedError
+
+    #@permalink
+    def get_absolute_url(self):
+        raise NotImplementedError
+        #return ('booking_detail', [self.pk.hex])
+
+    def __unicode__(self):
+        return self.comment
+
+    class Meta:
+        abstract = True
+        
+class OwnerComment(Comment):
+    @property
+    def response(self):
+        return self.booking.borrowercomment
+    @property
+    def writer(self):
+        return self.booking.owner
+    
+class BorrowerComment(Comment):
+    @property
+    def response(self):
+        return self.booking.ownercomment
+    @property
+    def writer(self):
+        return self.booking.borrower
+    
 class Sinister(models.Model):
     uuid = UUIDField(primary_key=True)
     sinister_id = IntegerAutoField(unique=True, db_index=True)
