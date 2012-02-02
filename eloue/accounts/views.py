@@ -118,17 +118,27 @@ def user_geolocation(request):
         if current_source < int(request.POST['source']) or \
             current_source == int(request.POST['source']) and current_source == GEOLOCATION_SOURCE.BROWSER:
             return HttpResponse('already_geolocated')
-
     address_components = location['address_components']
     address_coordinates = location['geometry']['location']
-    coordinates = {}
-    coordinates['lat'] = address_coordinates['Pa']
-    coordinates['lon'] = address_coordinates['Oa']
+    if 'viewport' in location['geometry']:
+        viewport = location['geometry']['viewport']
+        latitudes = viewport['Y']
+        longitudes = viewport['$']
+        from geopy import distance, Point
+        sw = Point(latitudes['b'], longitudes['b'])
+        ne = Point(latitudes['d'], longitudes['d'])
+        radius = (distance.distance(sw, ne).km // 2) + 1
+    else:
+        radius = settings.DEFAULT_RADIUS
+    coordinates = (address_coordinates['Oa'], address_coordinates['Pa'])
     localities = filter(lambda component: 'locality' in component['types'], address_components)
     city = next(iter(map(lambda component: component['long_name'], localities)), None)
-    request.session['location'] = {'source': int(request.POST['source'])}
-    request.session['location']['coordinates'] = coordinates
-    request.session['location']['city'] = city
+    request.session['location'] = {
+        'source': int(request.POST['source']), 
+        'coordinates': coordinates, 
+        'city': city,
+        'radius': radius,
+    }
     return HttpResponse("OK")
 
 @cache_page(900)
