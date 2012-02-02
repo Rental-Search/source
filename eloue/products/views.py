@@ -55,9 +55,7 @@ def homepage(request):
     form = FacetedSearchForm()
     alerts = Alert.on_site.all()[:3]
     if 'location' in request.session:
-        location = request.session['location']
-        coordinates = location['coordinates']
-        l = Point(coordinates['lon'], coordinates['lat'])
+        l = Point(request.session['location']['coordinates'])
         last_joined = Patron.objects.last_joined_near(l)
         last_added = Product.objects.last_added_near(l)
     else:
@@ -268,14 +266,19 @@ def product_delete(request, slug, product_id):
 @cache_page(900)
 @vary_on_cookie
 def product_list(request, urlbits, sqs=SearchQuerySet(), suggestions=None, page=None):
-    form = FacetedSearchForm(request.GET)
+    form = FacetedSearchForm(
+        request.GET, 
+        coords=request.session.get('location',{}).get('coordinates'),
+        radius=request.session.get('location', {}).get('radius')
+    )
+
     if not form.is_valid():
         raise Http404
         
     breadcrumbs = SortedDict()
     breadcrumbs['q'] = {'name': 'q', 'value': form.cleaned_data.get('q', None), 'label': 'q', 'facet': False}
-    breadcrumbs['l'] = {'name': 'l', 'value': form.cleaned_data.get('l', None), 'label': 'l', 'facet': False}
-    breadcrumbs['r'] = {'name': 'r', 'value': form.cleaned_data.get('r', None), 'label': 'r', 'facet': False}
+    #breadcrumbs['l'] = {'name': 'l', 'value': form.cleaned_data.get('l', None), 'label': 'l', 'facet': False}
+    #breadcrumbs['r'] = {'name': 'r', 'value': form.cleaned_data.get('r', None), 'label': 'r', 'facet': False}
     breadcrumbs['sort'] = {'name': 'sort', 'value': form.cleaned_data.get('sort', None), 'label': 'sort', 'facet': False}
     
     
@@ -290,13 +293,16 @@ def product_list(request, urlbits, sqs=SearchQuerySet(), suggestions=None, page=
                 raise Http404
             if bit.endswith(_('categorie')):
                 item = get_object_or_404(Category, slug=value)
-                is_facet_not_empty = not (facet['facet'] or \
-                     facet['label'] == 'r' and facet['value'] == DEFAULT_RADIUS or \
-                     facet['label'] == 'l' and facet['value'] == '' or \
-                     facet['label'] == 'sort' and facet['value'] == '' or \
-                     facet['label'] == 'q' and facet['value'] == '')
+                is_facet_not_empty = lambda facet: (not (facet['facet'] or
+                    (facet['label']), facet['value']) in [
+                        #('r', DEFAULT_RADIUS), 
+                        #('l', ''), 
+                        ('sort', ''), 
+                        ('q', '')
+                    ]
+                )
                 params = MultiValueDict(
-                    (facet['label'], [unicode(facet['value']).encode('utf-8')]) for facet in breadcrumbs.values() if is_facet_not_empty
+                    (facet['label'], [unicode(facet['value']).encode('utf-8')]) for facet in breadcrumbs.values() if is_facet_not_empty(facet)
                 )
                 path = item.get_absolute_url()
                 for bit in urlbits:

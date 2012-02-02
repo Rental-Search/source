@@ -38,21 +38,17 @@ DEFAULT_RADIUS = getattr(settings, 'DEFAULT_RADIUS', 50)
 
 class FacetedSearchForm(SearchForm):
     q = forms.CharField(required=False, max_length=100, widget=forms.TextInput(attrs={'class': 'x9 inb', 'tabindex': '1'}))
-    l = forms.CharField(required=False, max_length=100, widget=forms.TextInput(attrs={'class': 'x9 inb', 'tabindex': '2'}))
-    r = forms.IntegerField(required=False, widget=forms.TextInput(attrs={'class': 'ins'}))
+    #l = forms.CharField(required=False, max_length=100, widget=forms.TextInput(attrs={'class': 'x9 inb', 'tabindex': '2'}))
+    #r = forms.IntegerField(required=False, widget=forms.TextInput(attrs={'class': 'ins'}))
     sort = forms.ChoiceField(required=False, choices=SORT, widget=forms.HiddenInput())
     price = FacetField(label=_(u"Prix"), pretty_name=_("par-prix"), required=False)
     categories = FacetField(label=_(u"Catégorie"), pretty_name=_("par-categorie"), required=False, widget=forms.HiddenInput())
     
-    def clean_r(self):
-        location = self.cleaned_data.get('l', None)
-        radius = self.cleaned_data.get('r', None)
-        if location not in EMPTY_VALUES and radius in EMPTY_VALUES:
-            name, coordinates, radius = GoogleGeocoder().geocode(location)
-        if radius in EMPTY_VALUES:
-            radius = DEFAULT_RADIUS
-        return radius
-    
+    def __init__(self, *args, **kwargs):
+        self.coords = kwargs.pop('coords', None)
+        self.radius = kwargs.pop('radius', DEFAULT_RADIUS)
+        super(FacetedSearchForm, self).__init__(*args, **kwargs)
+
     def search(self):
         if self.is_valid():
             sqs = self.searchqueryset
@@ -71,9 +67,9 @@ class FacetedSearchForm(SearchForm):
                     suggestions = None
             
             location, radius = self.cleaned_data.get('l', None), self.cleaned_data.get('r', DEFAULT_RADIUS)
-            if location:
-                name, (lat, lon), _ = GoogleGeocoder().geocode(location)
-                sqs = sqs.spatial(lat=lat, long=lon, radius=radius, unit='km')
+            if self.coords:
+                lat, lon = self.coords
+                sqs = sqs.spatial(lat=lat, long=lon, radius=self.radius, unit='km')
             
             if self.load_all:
                 sqs = sqs.load_all()
