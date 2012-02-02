@@ -56,7 +56,7 @@ class ISO8601DateTimeField(forms.Field):
 class DateTimeWidget(forms.MultiWidget):
     def __init__(self, attrs=None, date_format=None, time_format=None, *args, **kwargs):
         widgets = (
-            forms.DateInput(attrs={'class': 'ins dps'}, format=date_format),
+            forms.DateInput(attrs={'class': 'ins dps date-input'}, format=date_format),
             forms.Select(choices=TIME_CHOICE, attrs={'class': 'sells'}),
         )
         super(DateTimeWidget, self).__init__(widgets, *args, **kwargs)
