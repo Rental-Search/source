@@ -8,117 +8,113 @@
 {% endblock %}
 
 {% block content %}
-<div id="search" class="xgrid">
-    <div class="x12">
-	  <h1>{% trans "Avec e-loue, tout se loue !" %}</h1>
-	</div>
-	<form class="form" action="{% url product_list %}">
-	<div class="x5">
-		<p>
-			<label for="id_q">{% trans "Que voulez-vous louer ?" %}</label><br />
-			{{ form.q }}<br />
-			<span>{% trans "Exemple :" %} </span> <a href="{% url product_list %}?q={% trans "voiture" %}">{% trans "Voiture" %}</a>, <a href="{% url product_list %}?q={% trans "chèvre" %}">{% trans "Chèvre" %}</a>, <a href="{% url product_list %}?q={% trans "ski" %}">{% trans "Ski" %}</a>, <a href="{% url product_list %}?q={% trans "robe" %}">{% trans "Robe" %}</a>
-		</p>
-	</div>
-	<div class="x5">
-		<p>
-			<label>{% trans "Où ?" %}</label><br />
-			{{ form.l }}<br />
-		</p>
-	</div>
-	<div class="x2">
-		<p>
-			<input type="submit" value="{% trans "Rechercher" %}" class="btn big-orange"/>
-		</p>
-	</div>
-	</form>
-</div>
-<div id="content-home" class="xgrid">
-    <div class="x3">
-        <div class="box-welcome" style="height: 93px;">
-            {% if patron.avatar %}
-            <img src="{{ patron.avatar.product_page.url }}" alt="{% trans "loueur"%}{{ patron.username }}" style="float: left; margin-right: 10px; border: 1px solid #9EB0BA;">
-            {% else %}
-            <img src="{{ MEDIA_URL }}images/default_avatar.png" alt="{% trans "loueur"%}{{ patron.username }}" style="float: left; margin-right: 10px; border: 1px solid #9EB0BA;">
-            {% endif %}
-            <p style="text-align: left;">
-                {{ patron.username }}
-            </p>
-            <p style="font-size: 12px; text-align: left; margin-bottom: 0px; ">
-                {% with patron.addresses.all|first as address %}
-					{{ address.zipcode }} {{ address.city|capfirst }}
-				{% endwith %}
-            </p>
-        </div>
-    </div>
-    <div class="x9">
-        <div class="x9 content-header" style="margin-left: 0px;">
-            <h1>{% trans "Mes objets"%}</h1>
-        </div>
+<div id="profil" class="container-main">
+    <div class="content-aside-profil">
+        <div class="profil-block">
+            <div class="avatar-picture">
+                {% if patron.avatar %}
+                <img src="{{ patron.avatar.product_page.url }}" alt="{% trans "loueur"%}{{ patron.username }}" width="180" height="180">
+                {% else %}
+                <img src="{{ MEDIA_URL }}images/default_avatar.png" alt="{% trans "loueur"%}{{ patron.username }}" width="180" height="180">
+                {% endif %}
+                <h1>{{ patron.username }}</h1>
+                <address>{{ patron.default_address.city }} - {{ patron.default_address.zipcode }}</address>
+            </div>{# avatar-picture #}
+            <div class="profil-intro-content">
+                <p class="profil-description">“Donec nec justo eget felis facilisis fermentum. Aliquam porttitor mauris sit amet orci. Aenean dignissi pellentesque”</p>
+                <button class="btn-contactme">{% trans "Contactez-moi" %}</button>
+            </div>{# profil-description #}
+        </div>{# profil-block #}
+        <div class="profil-block">
+            <ul class="profil-verification">
+                <li class="fb-verification">Compte Facebook vérifié</li>
+                <li class="pp-account-verification">Compte PayPal vérifié</li>
+                <li class="pp-email-verification">Email PayPal vérifié</li>
+            </ul>
+        </div>{# profil-block #}
+        <div class="profil-block">
+            <h3>Plus d'info</h3>
+            <h4>Travail</h4>
+            <p>Directrice Resources Humaines, Société Générale</p>
+            <h4>Etudes</h4>
+            <p>Ecole de commerce</p>
+            <h4>Languages Parlées</h4>
+            <p>Français, Anglais</p>
+        </div>{# profil-block #}
+        <div class="profil-block last">
+            <table class="answer-stats">
+                <tr>
+                    <td class="answer-rate">Taux de réponse</td><td>100%</td>
+                </tr>
+                <tr>
+                    <td class="answer-time">Temps de réponse moyen</td><td>1 j</td>
+                </tr>
+            </table>
+        </div>{# profil-block #}
+    </div>{# content-aside-profil #}
+    <div class="content-main-profil">
+        <h2>{% trans "Commentaires" %} <small>(6 {% trans "avis" %})</small></h2>
+        <ul class="comments">
+            <li>
+                <a href="#" class="comment-img">
+                    <img src="images/avatars/product_page_a1fc68d292034f45b9ce559bb88d9bec.jpeg" width="60" height="60" alt=""/>
+                </a>
+                <div class="comment-content">
+                    <div>
+                        <p class="comment-writter">
+                            <a href="/loueur/benoit/">qto870</a> Jeudi 12 janvier 2012
+                            <span class="stars empty"><span class="stars filled_1"></span></span>
+                        </p>
+                        <p class="comment-text">
+                            Great place - great city! To put it in a nutshell it was a very nice trip and the apartment is perfect for everybody who wants a nice place in edinburgh for a few days. Thank you, Samira!
+                        </p><!-- comment-content -->
+                        <span class="comment-dial"></span>
+                    </div>
+                </div><!-- comment-content -->
+            </li>
+            <li>
+                <a href="#" class="comment-img">
+                    <img src="images/avatars/product_page_a1fc68d292034f45b9ce559bb88d9bec.jpeg" width="60" height="60" alt=""/>
+                </a>
+                <div class="comment-content">
+                    <div>
+                        <p class="comment-writter">
+                            <a href="/loueur/benoit/">qto870</a> Jeudi 12 janvier 2012
+                            <span class="stars empty"><span class="stars filled_3"></span></span>
+                        </p>
+                        <p class="comment-text">
+                            Great place - great city! To put it in a nutshell it was a very nice trip and the apartment is perfect for everybody who wants a nice place in edinburgh for a few days. Thank you, Samira!
+                        </p><!-- comment-content -->
+                        <span class="comment-dial"></span>
+                    </div>
+                </div><!-- comment-content -->
+            </li>
+        </ul>
+        <p class="more-comment"><a href="#">Voir tous les commentaires</a></p>
         {% if patron.products %}
-	     {% blocktrans with patron.products.count as count and patron.products.count|pluralize as pluralize %}
+        {% blocktrans with patron.products.count as count and patron.products.count|pluralize as pluralize %}
 	      <h2>{{ count }} location{{ pluralize }}</h2>
 	     {% endblocktrans %}
-		{% else %}
-			<h2>{% trans "Pas de location" %}</h2>
-		{% endif %}
-		<ul class="product-list">
-		{% for product in product_list %}
-		  {% cache 900 product:patron:row product.id site %}
-		    <li>
-                <a class="pl-img" href="{{ product.get_absolute_url }}">
-                {% with product.pictures.all|first as picture %}
+        <ul class="product-vignettes">
+            {% for product in product_list %}
+            {% cache 900 product:patron:row product.id site %}
+            <li>
+                <a href="{{ product.get_absolute_url }}">
+                    {% with product.pictures.all|first as picture %}
                     {% if picture.thumbnail %}
-        			<img src="{{ picture.thumbnail.url }}" alt="product.summary" />
+                        <img src="{{ picture.thumbnail.url }}" width="200" height="170" />
                     {% endif %}
-                {% endwith %}
+                    {% endwith %}
+                    <h3>{{ product.summary|truncate:22 }}</h3>
+                    {% with product.prices.day|first as price %}
+                        <p class="pv-price">{{ price }} <span>/{{ price.unit|unit }}</span></p>
+                    {% endwith %}
                 </a>
-                <div class="pl-header">
-                    <h2><a href="{{ product.get_absolute_url }}">{{ product.summary }}</a></h2>
-                </div>
-                <div class="pl-content">
-                    <div class="pl-desc">
-                        {{ product.description }}
-                    </div>
-                    <div class="pl-distance">
-                        
-                    </div>
-                    <div class="pl-price">
-                        {% with product.prices.day|first as price %}
-            				<span class="price">{{ price }}</span><br />
-            				<span class="unit">{% trans "par" %} {{ price.unit|unit }}</span>
-                        {% endwith %}
-                    </div>
-                    <div class="pl-btn">
-                         <a href="{{ product.get_absolute_url }}" class="btn small-blue">{% trans "Réserver &rarr;" %}</a>
-                    </div>
-                </div>
             </li>
             {% endcache %}
-    	{% endfor %}
-		</ul>
-		{% pagination %}
-        {% if is_paginated %}
-    	<div class="pages">
-            <ul class="pages-list">
-                {% if page_obj.has_previous %}
-        		    <li class="previous">
-        		        <a href="{% url patron_detail patron.slug page_obj.previous_page_number %}">&#171; {% trans "Page précédente" %}</a>
-        		    </li>
-        	    {% endif %}
-    	        {% for page in page_range %}
-    		        <li class="page-{{ page }} {% if page_obj.number == page %}select{% endif %}">
-    		            <a href="{% url patron_detail patron.slug page %}">{{ page }}</a>
-    		        </li>
-    		    {% endfor %}
-    	        {% if page_obj.has_next %}
-        		    <li class="next">
-        		        <a href="{% url patron_detail patron.slug page_obj.next_page_number %}">{% trans "Page suivante" %} &#187;</a>
-        		    </li>
-        	    {% endif %}
-            </ul>
-        </div>
+            {% endfor %}
+        </ul>{# product-vignettes #}
         {% endif %}
-    </div>
-</div>
+    </div>{# content-main-profil #}
+</div>{# profil #}
 {% endblock %}

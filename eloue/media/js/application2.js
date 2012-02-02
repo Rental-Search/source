@@ -52,4 +52,33 @@ $(document).ready(function() {
     $('#booking_create').change(function(event) {
         bookingPrice($(this));
     });
+    
+    //Display datepicker on product detail page
+    $('input[name$=started_at_0]').datepicker({
+        dateFormat: 'dd/mm/yy',
+        minDate: 1,
+        maxDate: '+360d',
+        onSelect: function(dateText, inst) {
+            
+            var date1 = $(this).datepicker('getDate');
+            
+            var date = new Date( Date.parse( date1 ) ); 
+            date.setDate( date.getDate() + 1 );
+            
+            var newDate = date.toDateString(); 
+            newDate = new Date( Date.parse( newDate ) );
+            
+            var ended_at = $('input[name$=ended_at_0]');
+
+            ended_at.datepicker("option", "minDate", newDate);
+            
+            ended_at.datepicker('setDate', newDate );
+            
+            bookingPrice($('#booking_create'));
+        }
+    });
+    
+    $('input[name$=ended_at_0]').datepicker({
+        dateFormat: 'dd/mm/yy',
+    });
 });
