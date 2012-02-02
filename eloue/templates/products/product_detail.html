@@ -147,6 +147,7 @@
         <div class="booking-block">
             <h2>{% trans "Réservez en ligne" %}</h2>
             <form id="booking_create" action="" method="POST">
+                {% csrf_token %}
                 <div class="top-block">
                 {% with product.prices.day|first as price %}
                     {{ price }} <span>{% blocktrans with price.unit|unit as unit %} / par {{ unit }}{% endblocktrans %}</span>
