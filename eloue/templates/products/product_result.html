@@ -1,0 +1,234 @@
+{% extends "base.html" %}
+ {% load cache facets i18n param category product paginator mptt_tags seo booking %}
+
+{% block title %}
+{% if breadcrumbs.categorie.object.description %}
+{{ breadcrumbs.categorie.object.description.title }}
+{% else %}
+{% trans "Location" %}{% if not form.cleaned_data.q %}{% for crumb in breadcrumbs|facets %} {{ crumb.pretty_value|capfirst }}{% endfor %}{% endif %}{% if form.cleaned_data.q %} {{ form.cleaned_data.q }}{% endif %}{% if form.cleaned_data.l %} {{ form.cleaned_data.l|capfirst }}{% endif %}
+{% endif %}
+{% endblock %}
+
+{% block description %}
+{% if breadcrumbs.categorie.object.description %}
+{{ breadcrumbs.categorie.object.description.description }}
+{% else %}
+{% trans "Location " %}
+{% for crumb in breadcrumbs|facets %}
+&rsaquo; {{ crumb.pretty_value|capfirst }}
+{% endfor %}
+{% if form.cleaned_data.l %}
+&rsaquo; {{ form.cleaned_data.l|capfirst }}
+{% endif %}
+{% if form.cleaned_data.q %}
+&rsaquo; &quot;{{ form.cleaned_data.q }}&quot;
+{% endif %}
+{% endif %}
+{% endblock %}
+
+{% block  head %}
+    {{ block.super }}
+    {% if breadcrumbs.categorie %}
+        <link rel="canonical" href="{% if request.is_secure %}https{%else%}http{%endif%}://{{ request.get_host }}{{ breadcrumbs.categorie.url }}{% if page > 1 %}page/{{page}}/{% endif %}{{canonical_parameters}}"/>
+    {% else %}
+        <link rel="canonical" href="{% if request.is_secure %}https{%else%}http{%endif%}://{{ request.get_host }}/location/{% if page > 1%}page/{{page}}/{% endif %}{{canonical_parameters}}"/>
+    {% endif %}
+
+    {% if page_obj.has_next %}
+        {% if breadcrumbs.categorie %}
+            <link rel="next" href="{% if request.is_secure %}https{%else%}http{%endif%}://{{ request.get_host }}{{ breadcrumbs.categorie.url }}page/{{page_obj.next_page_number}}/{{canonical_parameters}}"/>
+        {% else %}
+            <link rel="next" href="{% if request.is_secure %}https{%else%}http{%endif%}://{{ request.get_host }}/location/page/{{page_obj.next_page_number}}/{{canonical_parameters}}"/>
+        {% endif %}
+    {% endif %}
+
+    {% if page_obj.has_previous %}
+        {% if page == 2%}
+            {% if breadcrumbs.categorie %}
+                <link rel="prev" href="{% if request.is_secure %}https{%else%}http{%endif%}://{{ request.get_host }}{{ breadcrumbs.categorie.url }}{{canonical_parameters}}"/>
+            {% else %}
+                <link rel="prev" href="{% if request.is_secure %}https{%else%}http{%endif%}://{{ request.get_host }}/location/{{canonical_parameters}}"/>
+            {% endif %}
+        {% else %}
+            {% if breadcrumbs.categorie %}
+                <link rel="prev" href="{% if request.is_secure %}https{%else%}http{%endif%}://{{ request.get_host }}{{ breadcrumbs.categorie.url }}page/{{page_obj.previous_page_number}}/{{canonical_parameters}}"/>
+            {% else %}
+                <link rel="prev" href="{% if request.is_secure %}https{%else%}http{%endif%}://{{ request.get_host }}/location/page/{{page_obj.previous_page_number}}/{{canonical_parameters}}"/>
+            {% endif %}
+        {% endif %}
+    {% endif %}
+
+{% endblock %}
+
+{% block content %}
+<div id="result-page" class="container-main">
+    <ul class="breadcrumb">
+        <li><a href="{% url home %}">{% trans "Accueil" %}</a></li>
+        {% for crumb in breadcrumbs|facets %}
+			{% if form.cleaned_data.l or form.cleaned_data.q %}
+			    {% for category in crumb.object.get_ancestors %}
+    			 <li><a href="{{ category.get_absolute_url }}">{{ category.name|capfirst }}</a></li>
+    			{% endfor %}
+				<li><a href="{{ crumb.url }}">{{ crumb.pretty_value|capfirst }}</a></li>
+			{% else %}
+			    {% for category in crumb.object.get_ancestors %}
+    			 <li><a href="{{ category.get_absolute_url }}">{{ category.name|capfirst }}</a></li>
+    			{% endfor %}
+				<li class="lastb">{{ crumb.pretty_value|capfirst }}</a></li>
+			{% endif %}
+		{% endfor %}
+		{% if form.cleaned_data.q %}
+			{% if form.cleaned_data.l %}
+				<li><a href="{% facet_url breadcrumbs -"l" -"r" %}">{% trans "location" %} {{ form.cleaned_data.q }}</a></li>
+			{% else %}
+				<li class="lastb">{% trans "location" %} {{ form.cleaned_data.q }}</li>
+			{% endif %}
+		{% endif %}
+		{% if form.cleaned_data.l %}
+			<li class="lastb">{{ form.cleaned_data.l|capfirst }}</li>
+		{% endif %}
+    </ul>{# breadcrumb #}
+    <div class="content-main">
+    {% if product_list %}
+        {% if form.cleaned_data.q %}
+        {% blocktrans with form.cleaned_data.q as keywords count paginator.count as count %}
+            <h1>Résultat pour <strong>"{{ keywords }}"</strong></h1>
+            {% plural %}
+            <h1>Résultats pour <strong>"{{ keywords }}"</strong></h1>
+        {% endblocktrans%}
+        {% endif %}
+        <ul class="product-filter">
+            <li class="filter-title">Trier par</li>
+            <li {% if form.sort.data == "-created_at" %} class="filter-selected" {% endif %}>
+                {% if form.sort.data == "-created_at" %}
+                    {% trans "Les plus récents" %}
+                {% else %}
+                    <a href="{% facet_url breadcrumbs "sort" "-created_at" %}">{% trans "Les plus récents" %}</a>
+                {% endif %}
+            </li>
+            {% if form.cleaned_data.l %}
+            <li {% if form.sort.data == "geo_distance" %} class="filter-selected" {% endif %}>
+                {% if form.sort.data == "geo_distance" %}
+                {% trans "Les plus proches" %}
+                {% else %}
+                <a href="{% facet_url breadcrumbs "sort" "geo_distance" %}">{% trans "Les plus proches" %}</a>
+                {% endif %}
+            </li>
+            {% endif %}
+            <li {% if form.sort.data == "price" %} class="filter-selected" {% endif %}>
+                {% if form.sort.data == "price" %}
+                    {% trans "Les prix les plus bas" %}
+                {% else %}
+                    <a href="{% facet_url breadcrumbs "sort" "price" %}">{% trans "Les prix les plus bas" %}</a>
+                {% endif %}
+            </li>
+            <li {% if form.sort.data == "-price" %} class"filter-selected" {% endif %}>
+                {% if form.sort.data == "-price" %}
+                    {% trans "Les prix les plus haut" %}
+                {% else %}
+                    <a href="{% facet_url breadcrumbs "sort" "-price" %}">{% trans "Les prix les plus haut" %}</a>
+                {% endif %}
+            </li>
+        </ul>{# product_filter #}
+        <ul class="product-list">
+            {% for product in product_list %}
+            <li>
+                <a href="{{ product.url|safe }}" {% if product|nofollow %}rel="nofollow"{% endif %} class="pl-img">
+                    {% if product.thumbnail %}
+                    <img src="{{ product.thumbnail }}" alt="{{ product.summary }}" width="60" height="60" />
+                    {% endif %}
+                </a><!-- pl-img -->
+                <div class="pl-content">
+                    <h3>
+                        <a href="#"><a href="{{ product.url|safe }}" {% if product|nofollow %}rel="nofollow"{% endif %}>{{ product.summary|capitalize|truncate:50 }}</a></a>
+                    </h3>
+                    <address>{{ product.city|capfirst }}{% if product.zipcode %}, {{ product.zipcode }}{% endif %}</address>
+                    {% if product.price %}
+                        <p class="pl-price">{{ product.price|quantize|currency }} <span>/jour</span></p>
+                    {% endif %}
+                </div><!-- pl-content -->
+                <div class="pl-avatar">
+                    <a href="{{product.owner.get_absolute_url}}">
+                        {% if product.owner.avatar %}
+                            <img src="{{product.owner.avatar.thumbnail.url}}" width="60" height="60" />
+                        {% else %}
+                            <img src="{{ MEDIA_URL }}images/default_avatar.png" width="60" height="60" />
+                        {% endif %}
+                    </a>
+                    <span class="dial-avatar"></span>
+                </div>
+            </li>
+            {% endfor %}
+        </ul>{# product_list #}
+        {% pagination %}
+        {% if is_paginated %}
+        <div class="pagination">
+            {% if page_obj.has_previous %}
+                <a href="{% facet_url breadcrumbs "page" page_obj.previous_page_number %}" class="prev">&#171; {% trans "Page précédente" %}</a>
+            {% endif %}
+            {% for page in page_range %}
+            <a href="{% facet_url breadcrumbs "page" page %}" {% if page_obj.number == page %}class="page-selected"{% endif %}>{{ page }}</a>
+            {% endfor %}
+            {% if page_obj.has_next %}
+                <a href="{% facet_url breadcrumbs "page" page_obj.next_page_number %}" class="next">{% trans "Page suivante" %} &#187;</a>
+            {% endif %}
+        </div><!-- pagination -->
+        {% endif %}
+    {% else %}
+    <h1>{% trans "Pas de résultat pour cette recherche" %}</h1>
+    {% endif %}
+    </div>{# content-main #}
+    <div class="content-aside">
+        <div class="searh-block">
+            <form action="" method="get">
+                <input type="text" name="q" value="Robe" class="search-box-q"/>
+                <input type="submit" value="Rechercher" class="btn-search"/>
+            </form>
+        </div><!-- search-block -->
+        <div id="where" class="info-block">
+            <h2>Lieu</h2>
+            <p class="town-input"><input type="text" name="l" value="Paris"/></p>
+            <div id="map-canvas" class="map"></div>
+            <p class="radius-input">Dans un rayon de <input type="text" name="r" value="5"/> Km</p>
+        </div><!-- where -->
+        {% if product_list %}
+        <div id ="facet-categories" class="info-block">
+            <h2>{% trans "Catégories" %}</h2>
+            {% if breadcrumbs.categorie %}
+            <p>
+                <a href="{% facet_url breadcrumbs -breadcrumbs.categorie.label %}">
+                    {% trans "Voir tous les résultats" %}
+                </a>
+            </p>
+            {% endif %}
+            {% if facets.fields.categories %}
+            <ul>
+                {% for value, count in facets.fields.categories %}
+                {% if count > 0 %}
+                {% with value|category as category %}
+                 {% if category != 'None' %}
+                    {% if breadcrumbs.categorie %}
+                    {% if breadcrumbs.categorie.value != category.slug %}
+                    <li>
+    					<a href="{% facet_url breadcrumbs -breadcrumbs.categorie.label category.get_ancertors_slug category.slug %}">
+    					    {{ category.name }}
+    					</a> 
+    				</li>
+    				{% endif %}
+					{% else %}
+					<li>
+						<a href="{% facet_url breadcrumbs category.get_ancertors_slug category.slug %}">{{ category.name }}</a> 
+					</li>
+					{% endif %}
+				{% endif %}
+                {% endwith%}
+                {% endif %}
+                {% endfor %}
+            </ul>
+            {% endif %}
+        </div>{# facet-categories #}
+        {% endif %}
+    </div>{# content-aside #}
+</div>{# container-main #}
+</div>
+{% endblock %}

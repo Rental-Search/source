@@ -1,9 +1,15 @@
 {% load i18n product %}
 <ul class="avatars-list">
     {% for patron in patron_list %}
-        <li>
-            <a href="{{ patron.get_absolute_url }}"><img src="{{ patron.avatar.thumbnail.url }}" width="60" height="60" /><a>
-            <p>{{ patron.username|truncate:6 }}<p>
+    <li>
+        <a href="#">
+            {% if patron.avatar %}
+                <img src="{{ patron.avatar.thumbnail.url }}" width="60" height="60" />
+            {% else %}
+                <img src="{{ MEDIA_URL }}images/default_avatar.png" width="60" height="60" />
+            {% endif %}
+        </a>
+        <p>{{ patron.username|truncate:6 }}</p>
     </li>
     {% endfor %}
 </ul>{# avatars-list #}
