@@ -14,4 +14,42 @@ $(document).ready(function() {
     $('.btn-cancel-edit-town').click(function () {
         $('.search-home').removeClass('editing');
     });
+    
+    /*Display product detail tabs */
+    $( ".product-tabs" ).tabs();
+    
+    
+    /* Booking price */
+    // Price calculations
+    bookingPrice = function(form) {
+        var template,
+        serializedForm;
+        unitTemplate = '<span class="price">{{unit_value}}</span><span class="unit"> / par {{unit_name}}</span>';
+        priceTemplate = '{{#warnings}}{{ warnings }}{{/warnings}} {{#errors}}{{ errors }}{{/errors}}{{^errors}}Total :<span class="day">{{ duration }},</span> soit <span class="pricing">{{ total_price }}</span>{{/errors}}';
+        listTemplate = '{{#select_list}}<option value="{{value}}" {{#selected}}selected="selected"{{/selected}}>{{value}}</option>{{/select_list}}';
+        serializedForm = $.grep(form.serializeArray(),
+        function(el) {
+            return (el.name.indexOf('csrfmiddlewaretoken') != -1) || (el.name.indexOf('wizard_step') != -1);
+        },
+        true);
+        $.ajax({
+            type: 'GET',
+            url: 'price/',
+            dataType: 'json',
+            data: $.param(serializedForm),
+            success: function(data) {
+                $("#product_price").html(Mustache.to_html(unitTemplate, data));
+                $("#booking-total").html(Mustache.to_html(priceTemplate, data));
+                $("#id_0-quantity").html(Mustache.to_html(listTemplate, data));
+            }
+        });
+    }
+    bookingCreate = $('#booking_create');
+    if (bookingCreate.length > 0) {
+        bookingPrice(bookingCreate);
+    }
+    
+    $('#booking_create').change(function(event) {
+        bookingPrice($(this));
+    });
 });

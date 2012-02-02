@@ -74,157 +74,162 @@
 {% endblock %}
 
 {% block content %}
-
 <div id="fb-root"></div>
 
-<div id="search" class="xgrid">
-	<form class="form" action="{% url product_list %}">
-	<div class="x5">
-		<p>
-			<label for="id_q">{% trans "Que voulez-vous louer ?" %}</label><br />
-			{{ search_form.q }}<br />
-			<span>{% trans "Exemple :" %} </span> <a href="{% url product_list %}?q={% trans "voiture" %}">{% trans "Voiture" %}</a>, <a href="{% url product_list %}?q={% trans "chèvre" %}">{% trans "Chèvre" %}</a>, <a href="{% url product_list %}?q={% trans "ski" %}">{% trans "Ski" %}</a>, <a href="{% url product_list %}?q={% trans "robe" %}">{% trans "Robe" %}</a>
-		</p>
-	</div>
-	<div class="x5">
-		<p>
-			<label>{% trans "Où ?" %}</label><br />
-			{{ search_form.l }}<br />
-			<span>{% trans "Exemple :" %} </span> <a href="{% url product_list %}?l={% trans "Paris, 75012" %}">{% trans "Paris, 75012" %}</a>
-		</p>
-	</div>
-	<div class="x2">
-		<p>
-			<input type="submit" value="{% trans "Rechercher" %}" class="btn big-orange"/>
-		</p>
-	</div>
-	</form>
-</div>
-<div id="content" class="xgrid">
-    <div class="breadcrumb">
-        <ul class="x12 breadcrumbs">
-            <li><a href="{% url home %}">{% trans "Accueil" %}</a></li>
-			{% for category in product.category.get_ancestors %}
-			 <li><a href="{{ category.get_absolute_url }}">{{ category.name|capfirst }}</a></li>
-			{% endfor %}
-			<li><a href="{{ product.category.get_absolute_url }}">{% trans "Location" %} {{ product.category|capfirst }}</a></li>
-			<li class="lastb">{{ product.summary|capitalize }}</li>
-        </ul>
-    </div>
-    <div class="x12 content-header product-header">
-        <h1>{{ product.summary|capitalize|truncate:57 }}</h1>
-        <ul class="social_button">
+<div class="container-main">
+    <ul class="breadcrumb">
+        <li><a href="{% url home %}">{% trans "Accueil" %}</a></li>
+		{% for category in product.category.get_ancestors %}
+		 <li><a href="{{ category.get_absolute_url }}">{{ category.name|capfirst }}</a></li>
+		{% endfor %}
+		<li><a href="{{ product.category.get_absolute_url }}">{% trans "Location" %} {{ product.category|capfirst }}</a></li>
+		<li class="lastb">{{ product.summary|capitalize }}</li>
+    </ul>{# breadcrumb #}
+    <div class="content-main">
+        <h1>{{ product.summary|capitalize}}</h1>
+        <ul class="product-properties">
+            <li class="product-address">
+                {{ product.address.city|capfirst }}, {{ product.address.zipcode }}
+            {% if product.deposit_amount %}
+                    <span class="divider">&#149;</span>
+            </li>
+            <li class="product-deposit">
+                {% trans "Caution" %} : <span>{{ product.deposit_amount|quantize|currency }}</span>
+            </li>
+            {% else %}
+            </li>
+            {% endif %}
+        </ul>{# product-properties #}
+        <div class="product-tabs">
+            <ul>
+                <li><a href="#gallery">Photo</a></li>
+                <li><a href="#prices">Grille des tarifs</a></li>
+                <li><a href="#calendar">Calendrier</a></li>
+            </ul>
+            <div id="gallery">
+                {% with product.pictures.all|first as picture %}
+                {% if picture %}
+                    <img src="{{ picture.display.url }}" alt="{{ product.summary }}">
+                {% endif %}
+                {% endwith %}
+            </div> {# gallery #}
+            <div id="prices" style="height: 200px;">Grille des tarifs</div>{# prices #}
+            <div id="calendar" style="height: 200px;">Calendrier</div>{# calendar #}
+        </div>{# product-tabs #}
+        <div class="product-desc">
+            {{ product.description|linebreaksp }}
+        </div>{# product-desc #}
+        <div class="product-comment">
+            <h2>{% trans "Commentaires" %} <small>(2 {% trans "avis" %})</small></h2>
+            <ul class="comments">
+                <li>
+                    <a href="#" class="comment-img">
+                        <img src="images/avatars/product_page_a1fc68d292034f45b9ce559bb88d9bec.jpeg" width="60" height="60" alt=""/>
+                    </a>
+                    <div class="comment-content">
+                        <div>
+                            <p class="comment-writter">
+                                <a href="/loueur/benoit/">qto870</a> Jeudi 12 janvier 2012
+                                <span class="stars empty"><span class="stars filled_1"></span></span>
+                            </p>
+                            <p class="comment-text">
+                                Great place - great city! To put it in a nutshell it was a very nice trip and the apartment is perfect for everybody who wants a nice place in edinburgh for a few days. Thank you, Samira!
+                            </p><!-- comment-content -->
+                            <span class="comment-dial"></span>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <a href="#" class="comment-img">
+                        <img src="images/avatars/product_page_a1fc68d292034f45b9ce559bb88d9bec.jpeg" width="60" height="60" alt=""/>
+                    </a>
+                    <div class="comment-content">
+                        <div>
+                            <p class="comment-writter">
+                                <a href="/loueur/benoit/">qto870</a> Jeudi 12 janvier 2012
+                                <span class="stars empty"><span class="stars filled_3"></span></span>
+                            </p>
+                            <p class="comment-text">
+                                Great place - great city! To put it in a nutshell it was a very nice trip and the apartment is perfect for everybody who wants a nice place in edinburgh for a few days. Thank you, Samira!
+                            </p><!-- comment-content -->
+                            <span class="comment-dial"></span>
+                        </div>
+                    </div>
+                </li>
+            </ul>{# comments #}
+        </div>{# product-comment #}
+    </div>{# content-main #}
+    <div class="content-aside">
+        <ul class="social-button">
             <li class="fb">
                 <fb:like href="{% if request.is_secure %}https{%else%}http{%endif%}://{{ request.get_host }}{{ product.get_absolute_url }}" send="true" layout="button_count" show_faces="false" font="tahoma"></fb:like>
             </li>
             <li class="tweet">
-                <a href="https://twitter.com/share" class="twitter-share-button" data-count="none" data-url="{% if request.is_secure %}https{%else%}http{%endif%}://{{ request.get_host }}{{ product.get_absolute_url }}" data-hashtags="eloue" data-text="A louer sur e-loue : ">Tweet</a>
-                
+                <a href="https://twitter.com/share" class="twitter-share-button" data-count="none" data-url="{% if request.is_secure %}https{%else%}http{%endif%}://{{ request.get_host }}{{ product.get_absolute_url }}" data-hashtags="eloue" data-text="A louer sur e-loue : "></a>
             </li>
             <li class="gplus">
                 <g:plusone size="medium" annotation="none" href="{% if request.is_secure %}https{%else%}http{%endif%}://{{ request.get_host }}{{ product.get_absolute_url }}"></g:plusone>
             </li>
-        </ul>
-    </div>
-    <div class="x8">
-        <div class="product-pic">
-            {% with product.pictures.all|first as picture %}
-    		  {% if picture %}
-    		   <img src="{{ picture.display.url }}" alt="{{ product.summary }}" />
-    		  {% endif %}
-    		 {% endwith %}
-        </div>
-        <div class="product-thumbs">
-            {% for picture in product.pictures.all %}
-			 {% if picture.thumbnail %}
-       		  <a href="#"><img src="{{ picture.thumbnail.url }}" /></a>
-             {% endif %}
-			{% endfor %}
-        </div>
-        <div class="product-desc">
-            <p class="product-properties">
-                {% trans "Lieu" %} : <span class="p-value">{{ product.address.city|capfirst }}, {{ product.address.zipcode }}</span>
-                {% if product.deposit_amount %}
-                &#149;
-                {% trans "Caution" %} : <span class="p-value">{{ product.deposit_amount|quantize|currency }}</span>
+        </ul>{# social-button #}
+        <div class="booking-block">
+            <h2>{% trans "Réservez en ligne" %}</h2>
+            <form id="booking_create" action="" method="POST">
+                <div class="top-block">
+                {% with product.prices.day|first as price %}
+                    {{ price }} <span>{% blocktrans with price.unit|unit as unit %} / par {{ unit }}{% endblocktrans %}</span>
+                {% endwith %}
+                </div>{# top block #}
+                <div class="main-block">
+                    <div class="booking-dates form-stacked">
+                        <p class="start-date">
+                            <label>{% trans "Début" %} :</label>
+                            {{ form.started_at }}
+                        </p>
+                        <p class="end-date">
+                            <label>{% trans "Fin" %} :</label>
+                            {{ form.ended_at }}
+                        </p>
+                    </div>
+                    <p class="available">Ces dates sont disponibles</p>
+                </div>{# main-block #}
+                 <div class="bottom-block">
+                     {% blocktrans with product.product.day|first as day_price %}
+                        <p id="booking-total" class="total-price">
+                            Total : <span class="day">1 jour,</span> soit <span class="pricing">{{ day_price }}</span>
+                        </p>
+                        <p><input type="submit" class="btn-booking" value="Réservez"/></p>
+                    {% endblocktrans %}
+                    </form>
+                </div><!-- bottom-block -->
+        </div>{# booking-block #}
+        <div id="owner" class="info-block">
+            <h2>{% trans "Propriétaire" %}</h2>
+            <a href="{{ product.owner.get_absolute_url }}" class="onwer-avatar">
+                {% if product.owner.avatar %}
+                <img src="{{ product.owner.avatar.product_page.url }}" alt="{% trans "loueur"%}{{ product.owner.username }}" width="100" height="100">
+                {% else %}
+                <img src="{{ MEDIA_URL }}images/default_avatar.png" alt="{% trans "loueur"%}{{ product.owner.username }}" width="100" height="100">
                 {% endif %}
-            </p>
-            {{ product.description|linebreaksp }}
-        </div>
-    </div>
-    <div class="x4">
-        <div class="box-tools">
-            <div class="box-tools-top">
-                <div id="product_price" class="product-price">
-                    {% with product.prices.day|first as price %}
-            		  <span class="price">{{ price }}</span>
-            		  <span class="unit">{% blocktrans with price.unit|unit as unit %} / par {{ unit }}{% endblocktrans %}</span>
-            		 {% endwith %}
-                </div>
-                <form id="booking_create" action="" method="post" class="form">
-                <div id="booking-dates" class="clearfix">
-                    <p class="started-date">
-                        <label class="labm">{% trans "Début" %} :</label><br />
-        				{{ form.started_at }}
-                    </p>
-                    <p class="ended-date">
-                        <label class="labm">{% trans "Fin" %} :</label><br />
-        				{{ form.ended_at }}
-                    </p>
-                </div>
-                {% if product.quantity > 1 %}
-                <div class="quantity">
-                    <p>
-                        <label class="labm">{% trans "Quantité" %} :</label>
-                {% endif %}
-                        {{ form.quantity }}
-                {% if product.quantity > 1 %}
-                    </p>
-                </div>
-                {% endif %}
-            </div>
-            <div id="booking-total" class="box-tools-bottom">
-                {% blocktrans with product.product.day|first as day_price %}
-        		  <p>Total : <span class="day">1 jour,</span> soit <span class="total-price">{{ day_price }}</span></p>
-        		 {% endblocktrans %}
-            </div>
-            <div class="box-tools-footer">
-                {% csrf_token %}
-        		<input type="hidden" name="{{ step_field }}" value="{{ step0 }}" />
-        	    {{ previous_fields|safe }}
-        		<p>
-        			<input type="submit" value="{% trans "Louer &rarr;" %}" class="btn big-green" />
-        		</p>
-        		</form>
-            </div>
-        </div>
-        <div id="owner-info" class="box-welcome">
-            <h3>{% trans "Propriétaire" %}</h3>
-            {% if product.owner.avatar %}
-            <img src="{{ product.owner.avatar.product_page.url }}" alt="{% trans "loueur"%}{{ product.owner.username }}">
-            {% else %}
-            <img src="{{ MEDIA_URL }}images/default_avatar.png" alt="{% trans "loueur"%}{{ product.owner.username }}">
-            {% endif %}
-            <p class="pseudo">
-                <a href="{{ product.owner.get_absolute_url }}">{{ product.owner.username }}</a>
-            </p>
-            <a href="{% url message_create product.pk product.owner.pk %}" class="btn long-blue">{% trans "Contactez-moi" %}</a>
-        </div>
-        <div id="payment-info" class="box-info">
-              <h3>{% trans "Paiement en ligne" %}</h3>
-              {% blocktrans %}
-			  <ol>
-					<li> Paiement sur payal</li>
-					<li> Le propriétaire est averti de votre demande</li>
-					<li> Nous vous informons par mail de sa réponse :<br />
-					    <ul>
-    						<li>S’il accepte vous serez débité le premier jour de la location</li>
-    						<li>S’il refuse vous ne serez pas débité</li>
-    					</ul>
-    				</li>
-	      	 </ol>
-			 {% endblocktrans %}
-        </div>
-    </div>
-</div>
+            </a>
+            <p class="owner-username">{{ product.owner.username }}</p>
+            <address>{{ product.owner.default_address.city }} - {{ product.owner.default_address.zipcode }}</address>
+            <button class="btn-contactme">Contactez-moi</button>
+            <table class="answer-stats">
+                <tr>
+                    <td class="answer-rate">Taux de réponse</td><td>100%</td>
+                </tr>
+                <tr>
+                    <td class="answer-time">Temps de réponse moyen</td><td>1 jours</td>
+                </tr>
+            </table>
+        </div>{#  owner #}
+    </div>{# content-aside #}
+</div>{# container-main #}
+
+
+
+
+
+
+
 {% endblock %}

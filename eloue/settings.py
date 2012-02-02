@@ -213,7 +213,7 @@ STATIC_URL = getattr(local, 'STATIC_URL', None)
 
 
 #pipeline configuration
-PIPELINE = True
+#PIPELINE_AUTO = True
 PIPELINE_CSS_COMPRESSOR = 'pipeline.compressors.yui.YUICompressor'
 PIPELINE_JS_COMPRESSOR = 'pipeline.compressors.yui.YUICompressor'
 PIPELINE_COMPILERS = (
@@ -380,6 +380,8 @@ PIPELINE_JS = {
         'source_filenames': (
             'js/jquery-1.7.1.min.js',
             'js/jquery-ui-1.8.17.custom.min.js',
+            'js/modernizr.js',
+            'js/mustache.js',
             'js/application2.js'
             ),
         'output_filename': 'js/application2.r?.js',

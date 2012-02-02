@@ -845,6 +845,9 @@ a:hover {
   padding: 7px 7px 7px 30px;
   margin-bottom: 10px;
 }
+#owner h2 {
+  margin-bottom: 0;
+}
 #owner .onwer-avatar {
   display: block;
   float: left;
