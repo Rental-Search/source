@@ -61,6 +61,7 @@
 {% endblock %}
 
 {% block content %}
+
 <div id="result-page" class="container-main">
     <ul class="breadcrumb">
         <li><a href="{% url home %}">{% trans "Accueil" %}</a></li>
@@ -180,16 +181,16 @@
     </div>{# content-main #}
     <div class="content-aside">
         <div class="searh-block">
-            <form action="" method="get">
-                <input type="text" name="q" value="Robe" class="search-box-q"/>
+            <form action="{% url product_list %}" method="get">
+                {{form.q}}
                 <input type="submit" value="Rechercher" class="btn-search"/>
             </form>
         </div><!-- search-block -->
         <div id="where" class="info-block">
             <h2>Lieu</h2>
-            <p class="town-input"><input type="text" name="l" value="Paris"/></p>
+            <p class="town-input"><input id="id_l" type="text" name="l" value="{% firstof request.session.location.city request.session.location.country '' %}"/></p>
             <div id="map-canvas" class="map"></div>
-            <p class="radius-input">Dans un rayon de <input type="text" name="r" value="5"/> Km</p>
+            <p class="radius-input">Dans un rayon de <input type="text" name="r" value="{{request.session.location.radius}}"/> Km</p>
         </div><!-- where -->
         {% if product_list %}
         <div id ="facet-categories" class="info-block">
@@ -231,4 +232,128 @@
     </div>{# content-aside #}
 </div>{# container-main #}
 </div>
+
+{% endblock %}
+
+{% block tail %}
+{{block.super}}
+
+  <script src="//maps.googleapis.com/maps/api/js?sensor=false&amp;libraries=places" type="text/javascript"></script>
+  <script type="text/javascript">
+
+    function success(position) {
+      geocoder = new google.maps.Geocoder();
+      latlon = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+      geocoder.geocode(
+        {'latLng':latlon}, 
+        function(result) {
+          console.log(result); 
+          console.log(result[0]);
+          $(document).ajaxSend(function(event, xhr, settings) {
+            function getCookie(name) {
+                var cookieValue = null;
+                if (document.cookie && document.cookie != '') {
+                    var cookies = document.cookie.split(';');
+                    for (var i = 0; i < cookies.length; i++) {
+                        var cookie = jQuery.trim(cookies[i]);
+                        // Does this cookie string begin with the name we want?
+                        if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                            break;
+                        }
+                    }
+                }
+                return cookieValue;
+            }
+            function sameOrigin(url) {
+                // url could be relative or scheme relative or absolute
+                var host = document.location.host; // host + port
+                var protocol = document.location.protocol;
+                var sr_origin = '//' + host;
+                var origin = protocol + sr_origin;
+                // Allow absolute or scheme relative URLs to same origin
+                return (url == origin || url.slice(0, origin.length + 1) == origin + '/') ||
+                    (url == sr_origin || url.slice(0, sr_origin.length + 1) == sr_origin + '/') ||
+                    // or any other URL that isn't scheme relative or absolute i.e relative.
+                    !(/^(\/\/|http:|https:).*/.test(url));
+            }
+            function safeMethod(method) {
+                return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+            }
+
+            if (!safeMethod(settings.type) && sameOrigin(settings.url)) {
+                xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+            }
+          });
+          console.log(JSON.stringify(result[0]));
+          $.ajax({
+            type: 'POST',
+            url: 'http://{{request.get_host}}/user_geolocation/',
+            data: {
+              address: JSON.stringify(result[0]),
+              source: 2
+            },
+            success: function(response) {
+              console.log('SZAR');
+              console.log(response);
+              if (response == 'OK') {
+                console.log('pisi');
+                window.location.reload(); 
+              } else {
+                console.log('kkaka');
+              }
+            },
+            error: function(error, textStatus, errorThrown){
+              console.log(error);
+              console.log(textStatus);
+              console.log(errorThrown);
+            }
+          });
+        }
+      );
+    }
+    function handleError(error) {
+      console.log(error.message);
+    }
+
+    navigator.geolocation.getCurrentPosition(success, handleError);
+    autocomplete = new google.maps.places.Autocomplete(document.getElementById("id_l"), {types: ['geocode']});
+    google.maps.event.addListener(autocomplete, 'place_changed', function() {
+      console.log(autocomplete.getPlace());
+      $.post(
+        'http://{{request.get_host}}/user_geolocation/',
+        {
+          address: JSON.stringify(autocomplete.getPlace()),
+          source: 1
+        }, 
+        function(response){
+            console.log('hulye');console.log(response);
+          if (response == "OK"){
+            window.location.reload();
+          }
+        }
+      );
+    });
+
+
+    function initialize() {
+        var myLatlng = new google.maps.LatLng('{{request.session.location.coordinates.0}}'.replace(',','.'), '{{request.session.location.coordinates.1}}'.replace(',','.'));
+        var myOptions = {
+            zoom: 13,
+            disableDefaultUI: true,
+            center: myLatlng,
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+        }
+        var map = new google.maps.Map(document.getElementById("map-canvas"), myOptions);
+
+        var marker = new google.maps.Marker({
+            position: myLatlng, 
+            map: map,
+            title:"Hello World!"
+        });   
+    }
+
+        initialize();    
+    
+  </script>
 {% endblock %}

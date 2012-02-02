@@ -547,5 +547,3 @@ XPF_EXCHANGE_RATE = '0.00838'
 
 # Message 
 REPLACE_STRING = getattr(local, "REPLACE_STRING", "XXXXXX")
-
-

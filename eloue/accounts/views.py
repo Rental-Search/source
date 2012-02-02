@@ -109,6 +109,7 @@ GEOLOCATION_SOURCE = Enum([
     (3, 'ADDRESS', _('Location set by user address')),
 ])
 
+@csrf_exempt
 @require_POST
 def user_geolocation(request):
     stored_location = request.session.get('location')
@@ -129,7 +130,7 @@ def user_geolocation(request):
         ne = Point(latitudes['d'], longitudes['d'])
         radius = (distance.distance(sw, ne).km // 2) + 1
     else:
-        radius = settings.DEFAULT_RADIUS
+        radius = 10
     coordinates = (address_coordinates['Oa'], address_coordinates['Pa'])
     localities = filter(lambda component: 'locality' in component['types'], address_components)
     city = next(iter(map(lambda component: component['long_name'], localities)), None)
