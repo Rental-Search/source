@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import smtplib
 import socket
+import simplejson
 from logbook import Logger
 import simplejson
 
@@ -10,6 +11,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.sites.models import Site
 from django.core.mail import EmailMessage, BadHeaderError
 from django.core.urlresolvers import reverse
+from django.db.models import Count
+from django.views.decorators.http import require_GET
 from django.forms.models import model_to_dict
 from django.shortcuts import get_object_or_404, render_to_response
 from django.template import RequestContext
@@ -330,8 +333,22 @@ def contact(request):
             messages.error(request, _(u"Erreur lors de l'envoi du message"))
     return direct_to_template(request, 'accounts/contact.html', extra_context={'form': ContactForm()})
 
-    
-    
-    
-    
-    
+@login_required
+@require_GET
+def accounts_work_autocomplete(request):
+    term = request.GET.get('term', '')
+    works = Patron.objects.filter(
+        work__icontains=term).values('work').annotate(Count('work'))
+    work_list = [{'label': work['work'], 'value': work['work']} for work in works]
+    return HttpResponse(simplejson.dumps(work_list), mimetype="application/json")
+
+
+@login_required
+@require_GET
+def accounts_studies_autocomplete(request):
+    term = request.GET.get('term', '')
+    schools = Patron.objects.filter(
+        school__icontains=term).values('school').annotate(Count('school'))
+    school_list = [{'label': school['school'], 'value': school['school']} for school in schools]
+    return HttpResponse(simplejson.dumps(school_list), mimetype="application/json")
+

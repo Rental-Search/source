@@ -2,6 +2,13 @@
 {% load i18n product paginator %}
 
 {% block title %}{% trans "Votre profil" %}{% endblock %}
+{% block head %}
+	{{block.super}}
+
+	<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js"></script>
+{% endblock %}
 
 {% block content %}
 <div id="content" class="xgrid">
@@ -189,6 +196,77 @@
 	        			</td>
 	        		</tr>
 	    			{% endif %}
+	    			{% if form.about %}
+	    			<tr>
+	    			    <th><label>{{ form.about.label }} {% if form.about.field.required %}*{% endif%} :</label></th>
+	        			<td colspan="2" {% if form.about.errors %} class="error-field" {% endif %}>
+	        				{{ form.about }}
+	        				{% if form.about.errors %}
+	        				    {% for error in form.about.errors %}
+	        								<br />
+	        				        <span class="error">{{ error|escape }}</span>
+	        				    {% endfor %}
+	        				{% endif %}
+	        			</td>
+	        		</tr>
+	    			{% endif %}
+	    			{% if form.work %}
+	    			<tr>
+	    			    <th><label>{{ form.work.label }} {% if form.work.field.required %}*{% endif%} :</label></th>
+	        			<td colspan="2" {% if form.work.errors %} class="error-field" {% endif %}>
+	        				{{ form.work }}
+	        			</div>
+	        				{% if form.work.errors %}
+	        				    {% for error in form.work.errors %}
+	        								<br />
+	        				        <span class="error">{{ error|escape }}</span>
+	        				    {% endfor %}
+	        				{% endif %}
+	        			</td>
+	        		</tr>
+	    			{% endif %}
+	    			{% if form.school %}
+	    			<tr>
+	    			    <th><label>{{ form.school.label }} {% if form.school.field.required %}*{% endif%} :</label></th>
+	        			<td colspan="2" {% if form.school.errors %} class="error-field" {% endif %}>
+	        				{{ form.school }}
+	        				{% if form.school.errors %}
+	        				    {% for error in form.school.errors %}
+	        								<br />
+	        				        <span class="error">{{ error|escape }}</span>
+	        				    {% endfor %}
+	        				{% endif %}
+	        			</td>
+	        		</tr>
+	    			{% endif %}
+	    			{% if form.school %}
+	    			<tr>
+	    			    <th><label>{{ form.hobby.label }} {% if form.hobby.field.required %}*{% endif%} :</label></th>
+	        			<td colspan="2" {% if form.hobby.errors %} class="error-field" {% endif %}>
+	        				{{ form.hobby }}
+	        				{% if form.hobby.errors %}
+	        				    {% for error in form.hobby.errors %}
+	        								<br />
+	        				        <span class="error">{{ error|escape }}</span>
+	        				    {% endfor %}
+	        				{% endif %}
+	        			</td>
+	        		</tr>
+	    			{% endif %}
+	    			{% if form.languages %}
+	    			<tr>
+	    			    <th><label>{{ form.languages.label }} {% if form.languages.field.required %}*{% endif%} :</label></th>
+	        			<td colspan="2" {% if form.languages.errors %} class="error-field" {% endif %}>
+	        				{{ form.languages }}
+	        				{% if form.languages.errors %}
+	        				    {% for error in form.languages.errors %}
+	        								<br />
+	        				        <span class="error">{{ error|escape }}</span>
+	        				    {% endfor %}
+	        				{% endif %}
+	        			</td>
+	        		</tr>
+	    			{% endif %}
 	    		</table>
 	    		<p class="required-field">{% trans "* champ obligatoire" %}</p>
 	    </div>
@@ -199,4 +277,19 @@
 	    	</p>
 	    </div>
 </div>
+	        			
+<script type="text/javascript">
+    $("#id_work").autocomplete(
+        {
+            'source': function(request, response) {
+	            $.getJSON('accounts_work_autocomplete'+'?term='+request.term, response);}
+        }
+    );
+    $("#id_school").autocomplete(
+        {
+            'source': function(request, response) {
+	            $.getJSON('accounts_studies_autocomplete'+'?term='+request.term, response);}
+        }
+    );
+</script>
 {% endblock %}

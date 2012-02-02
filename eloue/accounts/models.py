@@ -17,10 +17,10 @@ from django.conf import settings
 from django.contrib.auth.models import User
 from django.contrib.gis.geos import Point
 from django.core.cache import cache
-from django.db.models import permalink
-from django.db.models import signals
+from django.db.models import permalink, Q, signals, Count
 from django.utils.encoding import smart_unicode
 from django.utils.formats import get_format
+from django.utils.timesince import timesince
 from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import ugettext
 from django.template.defaultfilters import slugify
@@ -127,6 +127,13 @@ class Avatar(ImageModel):
         cache_dir = 'media'
         cache_filename_format = "%(specname)s_%(filename)s.%(extension)s"
 
+class Language(models.Model):
+
+    lang = models.CharField(max_length=30)
+
+    def __unicode__(self):
+        return ugettext(self.lang)
+    
 class Patron(User):
     """A member"""
     civility = models.PositiveSmallIntegerField(_(u"Civilité"), null=True, blank=True, choices=CIVILITY_CHOICES)
@@ -145,8 +152,15 @@ class Patron(User):
 
     customers = models.ManyToManyField('self', symmetrical=False)
 
+    about = models.TextField(blank=True)
+    work = models.CharField(max_length=75, blank=True)
+    school = models.CharField(max_length=75, blank=True)
+    hobby = models.CharField(max_length=75, blank=True)
+    languages = models.ManyToManyField(Language, blank=True)
+
     on_site = CurrentSiteManager()
     objects = PatronManager()
+
 
     def save(self, *args, **kwargs):
         if not self.slug:
@@ -254,6 +268,26 @@ class Patron(User):
     def is_confirmed(self):
         return paypal_payment.confirm_paypal_account(self.paypal_email)
     
+    @property
+    def response_rate(self):
+        from eloue.products.models import MessageThread
+        threads = MessageThread.objects.filter(recipient=self).annotate(num_messages=Count('messages'))
+        if not threads:
+            return None
+        threads_num = threads.count()
+        answered = threads.filter(num_messages__gt=1)
+        answered_num = answered.count()
+        return answered_num/float(threads_num)
+    
+    @property
+    def response_time(self):
+        from eloue.products.models import ProductRelatedMessage
+        messages = ProductRelatedMessage.objects.filter(~Q(parent_msg=None), parent_msg__recipient=self, sender=self)
+        if not messages:
+            return None
+        rt = sum([message.sent_at - message.parent_msg.sent_at for message in messages], datetime.timedelta(seconds=0))/len(messages)
+        return timesince(datetime.datetime.now() - rt)
+
     def send_activation_email(self):
         context = {
             'patron': self, 'activation_key': self.activation_key,
