@@ -149,7 +149,12 @@ class Product(models.Model):
     def average_note(self):
         from eloue.rent.models import BorrowerComment
         return BorrowerComment.objects.filter(booking__product=self).aggregate(Avg('note'))['note__avg']
-
+    
+    @property
+    def borrowercomments(self):
+        from eloue.rent.models import BorrowerComment
+        return BorrowerComment.objects.filter(booking__product=self)
+    
 def upload_to(instance, filename):
     return 'pictures/%s.jpg' % uuid.uuid4().hex
 

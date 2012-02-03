@@ -121,9 +121,9 @@
         </div>{# product-desc #}
 
         <div class="product-comment">
-            <h2>{% trans "Commentaires" %} <small>({{comment_list.count}} {% trans "avis" %})</small></h2>
+            <h2>{% trans "Commentaires" %} <small>({{product.borrowercomments.count}} {% trans "avis" %})</small></h2>
             <ul>
-            {% for comment in product.comment_list %}
+            {% for comment in product.borrowercomments %}
                 <li>{% include "rent/partials/comment.html" %}</li>
             {% empty %}
                 <li>Soyez-le premier a louer et commenter!</li>
