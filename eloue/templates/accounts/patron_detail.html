@@ -18,11 +18,19 @@
                 <img src="{{ MEDIA_URL }}images/default_avatar.png" alt="{% trans "loueur"%}{{ patron.username }}" width="180" height="180">
                 {% endif %}
                 <h1>{{ patron.username }}</h1>
-                <address>{{ patron.default_address.city }} - {{ patron.default_address.zipcode }}</address>
+                {% if patron.default_address %}
+                    <address>{{ patron.default_address.city }} - {{ patron.default_address.zipcode }}</address>
+                {% else %}
+                    {% if patron.addresses.all|first %}
+                        {% with patron.addresses.all|first as address %}
+                             <address>{{ address.city }} - {{ address.zipcode }}</address>
+                        {% endwith %}
+                    {% endif %}
+                {% endif %}
             </div>{# avatar-picture #}
             <div class="profil-intro-content">
                 {% if patron.about %}
-                <p class="profil-description">{{ patron.about }}</p>
+                    <p class="profil-description">{{ patron.about }}</p>
                 {% endif %}
                 <button class="btn-contactme">{% trans "Contactez-moi" %}</button>
             </div>{# profil-description #}

@@ -277,7 +277,7 @@ class Patron(User):
         threads_num = threads.count()
         answered = threads.filter(num_messages__gt=1)
         answered_num = answered.count()
-        return answered_num/float(threads_num)
+        return answered_num/float(threads_num)*100.0
     
     @property
     def response_time(self):
