@@ -149,7 +149,7 @@
                     {% endif %}
                 </div><!-- pl-content -->
                 <div class="pl-avatar">
-                    <a href="{{product.owner.get_absolute_url}}">
+                    <a href="{{product.owner_url}}">
                         {% if product.owner.avatar %}
                             <img src="{{product.owner.avatar.thumbnail.url}}" width="60" height="60" />
                         {% else %}
