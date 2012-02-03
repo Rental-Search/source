@@ -37,9 +37,15 @@
         </div>{# profil-block #}
         <div class="profil-block">
             <ul class="profil-verification">
-                <li class="fb-verification">Compte Facebook vérifié</li>
-                <li class="pp-account-verification">Compte PayPal vérifié</li>
-                <li class="pp-email-verification">Email PayPal vérifié</li>
+                {% if patron.facebooksession %}
+                    <li class="fb-verification">Compte Facebook vérifié</li>
+                {% endif %}
+                {% if patron.is_verified == 'VERIFIED' %}
+                    <li class="pp-account-verification">Compte PayPal vérifié</li>
+                {% endif %}
+                {% if patron.is_confirmed %}
+                    <li class="pp-email-verification">Email PayPal vérifié</li>
+                {% endif %}
             </ul>
         </div>{# profil-block #}
         <div class="profil-block">
