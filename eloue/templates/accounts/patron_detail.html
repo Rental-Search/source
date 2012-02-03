@@ -21,7 +21,9 @@
                 <address>{{ patron.default_address.city }} - {{ patron.default_address.zipcode }}</address>
             </div>{# avatar-picture #}
             <div class="profil-intro-content">
-                <p class="profil-description">“Donec nec justo eget felis facilisis fermentum. Aliquam porttitor mauris sit amet orci. Aenean dignissi pellentesque”</p>
+                {% if patron.about %}
+                <p class="profil-description">{{ patron.about }}</p>
+                {% endif %}
                 <button class="btn-contactme">{% trans "Contactez-moi" %}</button>
             </div>{# profil-description #}
         </div>{# profil-block #}
@@ -34,22 +36,21 @@
         </div>{# profil-block #}
         <div class="profil-block">
             <h3>Plus d'info</h3>
-            <h4>Travail</h4>
-            <p>Directrice Resources Humaines, Société Générale</p>
-            <h4>Etudes</h4>
-            <p>Ecole de commerce</p>
-            <h4>Languages Parlées</h4>
-            <p>Français, Anglais</p>
+            {% if patron.work %}
+                <h4>{% trans "Travail" %}</h4>
+                <p>{{ patron.work }}</p>
+            {% endif %}
+            {% if patron.school %}
+                <h4>{% trans "Etudes" %}</h4>
+                <p>{{patron.school}}</p>
+            {% endif %}
+            {% if patron.languages.count %}
+                <h4>{% trans "Languages Parlées" %}</h4>
+                <p>{{ patron.languages.all|join:", "}}</p>
+            {% endif %}
         </div>{# profil-block #}
         <div class="profil-block last">
-            <table class="answer-stats">
-                <tr>
-                    <td class="answer-rate">Taux de réponse</td><td>100%</td>
-                </tr>
-                <tr>
-                    <td class="answer-time">Temps de réponse moyen</td><td>1 j</td>
-                </tr>
-            </table>
+            {% include "accounts/partials/response_stats.html" %}
         </div>{# profil-block #}
     </div>{# content-aside-profil #}
     <div class="content-main-profil">
