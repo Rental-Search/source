@@ -735,11 +735,11 @@ a:hover {
   color: #364c59;
   text-shadow: 0 1px rgba(255, 255, 255, 0.5);
   padding: 10px;
-  margin-bottom: 10px;
+  margin-bottom: 15px;
 }
 .booking-block .top-block {
   border-bottom: 1px dashed #92DB49;
-  padding-bottom: 10px;
+  padding-bottom: 15px;
   margin: 0 10px 10px;
   font-family: Arial, sans-serif;
   font-size: 24px;
@@ -792,6 +792,22 @@ a:hover {
   font-weight: normal;
   margin-top: 10px;
   width: 60px;
+}
+.booking-block .quantity-input {
+  border-top: 1px dashed #92DB49;
+  border-bottom: 1px dashed #92DB49;
+  float: left;
+  width: 278px;
+  margin-top: 10px;
+  padding: 10px 0;
+}
+.booking-block .quantity-input select {
+  margin-top: 0px;
+}
+.booking-block .quantity-input label {
+  float: left;
+  margin-right: 5px;
+  margin-top: 3px;
 }
 .booking-block .bottom-block {
   margin: 0 10px;
