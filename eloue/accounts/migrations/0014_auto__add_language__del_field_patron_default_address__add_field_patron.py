@@ -15,9 +15,6 @@ class Migration(SchemaMigration):
         ))
         db.send_create_signal('accounts', ['Language'])
 
-        # Deleting field 'Patron.default_address'
-        db.delete_column('accounts_patron', 'default_address_id')
-
         # Adding field 'Patron.about'
         db.add_column('accounts_patron', 'about', self.gf('django.db.models.fields.TextField')(default='', blank=True), keep_default=False)
 
@@ -43,10 +40,7 @@ class Migration(SchemaMigration):
         
         # Deleting model 'Language'
         db.delete_table('accounts_language')
-
-        # Adding field 'Patron.default_address'
-        db.add_column('accounts_patron', 'default_address', self.gf('django.db.models.fields.related.ForeignKey')(related_name='+', null=True, to=orm['accounts.Address'], blank=True), keep_default=False)
-
+        
         # Deleting field 'Patron.about'
         db.delete_column('accounts_patron', 'about')
 
