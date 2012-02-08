@@ -6,7 +6,10 @@ import urllib2
 import simplejson
 import facebook
 
-from imagekit.models import ImageModel
+
+from imagekit.models import ImageSpec
+from imagekit.processors import resize, Adjust, Transpose
+
 
 from django.core.exceptions import ValidationError
 from django.contrib.sites.managers import CurrentSiteManager
@@ -106,12 +109,34 @@ log = logbook.Logger('eloue.accounts')
 def upload_to(instance, filename):
     return 'pictures/avatars/%s.jpg' % uuid.uuid4().hex
 
-class Avatar(ImageModel):
+class Avatar(models.Model):
 
     patron = models.OneToOneField(User, related_name='avatar')
     image = models.ImageField(upload_to=upload_to)
     created_at = models.DateTimeField(editable=False)
 
+    thumbnail = ImageSpec(
+        processors=[
+            resize.Crop(width=40, height=40), 
+            Adjust(contrast=1.2, sharpness=1.1),
+            Transpose(Transpose.AUTO),
+        ], image_field='image', pre_cache=True
+    )
+    product_page = ImageSpec(
+        processors=[
+            resize.Crop(width=74, height=74), 
+            Adjust(contrast=1.2, sharpness=1.1),
+            Transpose(Transpose.AUTO),
+        ], image_field='image', pre_cache=True
+    )
+    display = ImageSpec(
+        processors=[
+            resize.Fit(width=450), 
+            Adjust(contrast=1.2, sharpness=1.1),
+            Transpose(Transpose.AUTO),
+        ], image_field='image', pre_cache=True
+    )
+    
     def save(self, *args, **kwargs):
         if not self.created_at:
             self.created_at = datetime.datetime.now()
@@ -120,12 +145,6 @@ class Avatar(ImageModel):
     def delete(self, *args, **kwargs):
         self.image.delete()
         super(Avatar, self).delete(*args, **kwargs)
-    
-    class IKOptions:
-        spec_module = 'eloue.accounts.specs'
-        image_field = 'image'
-        cache_dir = 'media'
-        cache_filename_format = "%(specname)s_%(filename)s.%(extension)s"
 
 class Patron(User):
     """A member"""

@@ -3,6 +3,9 @@ import uuid
 
 from datetime import datetime, timedelta
 
+from imagekit.models import ImageSpec
+from imagekit.processors import resize, Adjust, Transpose
+
 from django.conf import settings
 from django.contrib.gis.db import models
 from django.contrib.gis.geos import Point
@@ -19,7 +22,6 @@ from django.utils.html import strip_tags
 from django.utils.translation import ugettext as _
 
 from mptt.models import MPTTModel
-from imagekit.models import ImageModel
 
 from eloue.accounts.models import Patron, Address
 from eloue.geocoder import GoogleGeocoder
@@ -146,12 +148,34 @@ def upload_to(instance, filename):
     return 'pictures/%s.jpg' % uuid.uuid4().hex
 
 
-class Picture(ImageModel):
+class Picture(models.Model):
     """A picture"""
     product = models.ForeignKey(Product, related_name='pictures', blank=True, null=True)
     image = models.ImageField(null=True, blank=True, upload_to=upload_to)
     created_at = models.DateTimeField(blank=True, editable=False)
-    
+
+    thumbnail = ImageSpec(
+        processors=[
+            resize.Crop(width=90, height=90), 
+            Adjust(contrast=1.2, sharpness=1.1),
+            Transpose(Transpose.AUTO),
+        ], image_field='image', pre_cache=True
+    )
+    home = ImageSpec(
+        processors=[
+            resize.Crop(width=120, height=140), 
+            Adjust(contrast=1.2, sharpness=1.1),
+            Transpose(Transpose.AUTO),
+        ], image_field='image', pre_cache=True
+    )
+    display = ImageSpec(
+        processors=[
+            resize.Fit(width=450), 
+            Adjust(contrast=1.2, sharpness=1.1),
+            Transpose(Transpose.AUTO),
+        ], image_field='image', pre_cache=True
+    )
+
     def save(self, *args, **kwargs):
         if not self.created_at:
             self.created_at = datetime.now()
@@ -160,12 +184,6 @@ class Picture(ImageModel):
     def delete(self, *args, **kwargs):
         self.image.delete()
         super(Picture, self).delete(*args, **kwargs)
-    
-    class IKOptions:
-        spec_module = 'eloue.products.specs'
-        image_field = 'image'
-        cache_dir = 'media'
-        cache_filename_format = "%(specname)s_%(filename)s.%(extension)s"
     
 
 class Category(MPTTModel):
