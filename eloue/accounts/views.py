@@ -117,13 +117,13 @@ GEOLOCATION_SOURCE = Enum([
 def user_geolocation(request):
     stored_location = request.session.get('location')
     location = simplejson.loads(request.POST['address'])
+    coordinates = simplejson.loads(request.POST['coordinates'])
     if stored_location:
         current_source = stored_location.get('source', max(GEOLOCATION_SOURCE.values())+1)
         if current_source < int(request.POST['source']) or \
             current_source == int(request.POST['source']) and current_source == GEOLOCATION_SOURCE.BROWSER:
             return HttpResponse('already_geolocated')
     address_components = location['address_components']
-    address_coordinates = location['geometry']['location']
     if 'viewport' in location['geometry']:
         viewport = location['geometry']['viewport']
         latitudes = viewport['Y']
@@ -133,8 +133,8 @@ def user_geolocation(request):
         ne = Point(latitudes['d'], longitudes['d'])
         radius = (distance.distance(sw, ne).km // 2) + 1
     else:
-        radius = 3
-    coordinates = (address_coordinates['Oa'], address_coordinates['Pa'])
+        radius = 5
+    coordinates = (coordinates['lat'], coordinates['lon'])
     localities = filter(lambda component: 'locality' in component['types'], address_components)
     city = next(iter(map(lambda component: component['long_name'], localities)), None)
     countries = filter(lambda component: 'country' in component['types'], address_components)

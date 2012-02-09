@@ -241,100 +241,97 @@
   <script src="//maps.googleapis.com/maps/api/js?sensor=false&amp;libraries=places" type="text/javascript"></script>
   <script type="text/javascript">
 
+    function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie != '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = jQuery.trim(cookies[i]);
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+    function sameOrigin(url) {
+        // url could be relative or scheme relative or absolute
+        var host = document.location.host; // host + port
+        var protocol = document.location.protocol;
+        var sr_origin = '//' + host;
+        var origin = protocol + sr_origin;
+        // Allow absolute or scheme relative URLs to same origin
+        return (url == origin || url.slice(0, origin.length + 1) == origin + '/') ||
+            (url == sr_origin || url.slice(0, sr_origin.length + 1) == sr_origin + '/') ||
+            // or any other URL that isn't scheme relative or absolute i.e relative.
+            !(/^(\/\/|http:|https:).*/.test(url));
+    }
+    function safeMethod(method) {
+        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+    }
+
     function success(position) {
       geocoder = new google.maps.Geocoder();
       latlon = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
       geocoder.geocode(
         {'latLng':latlon}, 
         function(result) {
-          console.log(result); 
-          console.log(result[0]);
           $(document).ajaxSend(function(event, xhr, settings) {
-            function getCookie(name) {
-                var cookieValue = null;
-                if (document.cookie && document.cookie != '') {
-                    var cookies = document.cookie.split(';');
-                    for (var i = 0; i < cookies.length; i++) {
-                        var cookie = jQuery.trim(cookies[i]);
-                        // Does this cookie string begin with the name we want?
-                        if (cookie.substring(0, name.length + 1) == (name + '=')) {
-                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                            break;
-                        }
-                    }
-                }
-                return cookieValue;
-            }
-            function sameOrigin(url) {
-                // url could be relative or scheme relative or absolute
-                var host = document.location.host; // host + port
-                var protocol = document.location.protocol;
-                var sr_origin = '//' + host;
-                var origin = protocol + sr_origin;
-                // Allow absolute or scheme relative URLs to same origin
-                return (url == origin || url.slice(0, origin.length + 1) == origin + '/') ||
-                    (url == sr_origin || url.slice(0, sr_origin.length + 1) == sr_origin + '/') ||
-                    // or any other URL that isn't scheme relative or absolute i.e relative.
-                    !(/^(\/\/|http:|https:).*/.test(url));
-            }
-            function safeMethod(method) {
-                return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
-            }
-
             if (!safeMethod(settings.type) && sameOrigin(settings.url)) {
                 xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
             }
           });
-          console.log(JSON.stringify(result[0]));
           $.ajax({
             type: 'POST',
             url: 'http://{{request.get_host}}/user_geolocation/',
             data: {
               address: JSON.stringify(result[0]),
+              coordinates: JSON.stringify({
+                lat: latlon.lat(),
+                lon: latlon.lng()
+              }),
               source: 2
             },
             success: function(response) {
-              console.log('SZAR');
-              console.log(response);
               if (response == 'OK') {
-                console.log('pisi');
                 window.location.reload(); 
-              } else {
-                console.log('kkaka');
               }
-            },
-            error: function(error, textStatus, errorThrown){
-              console.log(error);
-              console.log(textStatus);
-              console.log(errorThrown);
             }
           });
         }
       );
     }
-    function handleError(error) {
-      console.log(error.message);
-    }
 
-    navigator.geolocation.getCurrentPosition(success, handleError);
+    navigator.geolocation.getCurrentPosition(success);
     autocomplete = new google.maps.places.Autocomplete(document.getElementById("id_l"), {types: ['geocode']});
     google.maps.event.addListener(autocomplete, 'place_changed', function() {
-      console.log(autocomplete.getPlace());
+      
+      console.log(autocomplete.getPlace().geometry.location);
+
+      $(document).ajaxSend(function(event, xhr, settings) {
+        if (!safeMethod(settings.type) && sameOrigin(settings.url)) {
+            xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+        }
+      });
+      place = autocomplete.getPlace();
       $.post(
-        'http://{{request.get_host}}/user_geolocation/',
-        {
+          'http://{{request.get_host}}/user_geolocation/', {
           address: JSON.stringify(autocomplete.getPlace()),
+          coordinates: JSON.stringify({
+            lat: place.geometry.location.lat(),
+            lon: place.geometry.location.lng()
+          }),
           source: 1
         }, 
         function(response){
-            console.log('hulye');console.log(response);
           if (response == "OK"){
-            $("#form_search_results").submit();
+            window.location.reload();
           }
         }
       );
     });
-
 
     function initialize() {
         var myLatlng = new google.maps.LatLng('{{request.session.location.coordinates.0}}'.replace(',','.'), '{{request.session.location.coordinates.1}}'.replace(',','.'));
