@@ -273,7 +273,7 @@ class Patron(User):
         from eloue.products.models import MessageThread
         threads = MessageThread.objects.filter(recipient=self).annotate(num_messages=Count('messages'))
         if not threads:
-            return 1.0
+            return 100.0
         threads_num = threads.count()
         answered = threads.filter(num_messages__gt=1)
         answered_num = answered.count()
