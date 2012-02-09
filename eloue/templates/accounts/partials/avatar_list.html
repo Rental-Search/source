@@ -2,7 +2,7 @@
 <ul class="avatars-list">
     {% for patron in patron_list %}
     <li>
-        <a href="#">
+        <a href="{{patron.get_absolute_url}}">
             {% if patron.avatar %}
                 <img src="{{ patron.avatar.thumbnail.url }}" width="60" height="60" />
             {% else %}
