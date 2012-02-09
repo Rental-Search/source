@@ -16,7 +16,7 @@
                         <address>{{address.zipcode}}, {{address.city|capfirst}}</address>
                     {% endwith %}
                 {% else %}
-                    {% with product.owner.addresses|first as address %}
+                    {% with product.owner.addresses.all|first as address %}
                         <address>{{address.zipcode}}, {{address.city}}</address>
                     {% endwith %}
                 {% endif %}
