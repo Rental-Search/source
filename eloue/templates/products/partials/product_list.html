@@ -9,7 +9,7 @@
             </a><!-- pl-img -->
             <div class="pl-content">
                 <h3>
-                    <a href="{{ product.get_absolute_url }}">{{ product.summary|capfirst|truncate:40 }}</a>
+                    <a href="{{ product.get_absolute_url }}">{{ product.summary|capfirst|truncate:28 }}</a>
                 </h3>
                 {% if product.owner.default_address %}
                     {% with product.owner.default_address as address %}
