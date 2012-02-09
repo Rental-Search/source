@@ -113,7 +113,11 @@
                 {% endif %}
                 {% endwith %}
             </div> {# gallery #}
-            <div id="prices" style="height: 200px;">Grille des tarifs</div>{# prices #}
+            <div id="prices" style="height: 200px;">
+            {% for price in product.prices.all %}
+                {{price}} euros / {{price.get_unit_display}}<p>
+            {% endfor %}
+            </div>{# prices #}
             <div id="calendar" style="height: 200px;">Calendrier</div>{# calendar #}
         </div>{# product-tabs #}
         <div class="product-desc">

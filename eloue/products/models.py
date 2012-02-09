@@ -308,6 +308,8 @@ class Price(models.Model):
         delta = (ended_at - started_at)
         return delta if delta > timedelta(days=0) else timedelta(days=0)
     
+    class Meta:
+        ordering = ['unit']
 
 class Review(models.Model):
     """A review"""
