@@ -271,7 +271,7 @@ class Patron(User):
         from eloue.products.models import MessageThread
         threads = MessageThread.objects.filter(recipient=self).annotate(num_messages=Count('messages'))
         if not threads:
-            return None
+            return 1.0
         threads_num = threads.count()
         answered = threads.filter(num_messages__gt=1)
         answered_num = answered.count()
@@ -282,7 +282,7 @@ class Patron(User):
         from eloue.products.models import ProductRelatedMessage
         messages = ProductRelatedMessage.objects.filter(~Q(parent_msg=None), parent_msg__recipient=self, sender=self)
         if not messages:
-            return None
+            return timesince(datetime.datetime.now() - datetime.timedelta(days=1))
         rt = sum([message.sent_at - message.parent_msg.sent_at for message in messages], datetime.timedelta(seconds=0))/len(messages)
         return timesince(datetime.datetime.now() - rt)
 
