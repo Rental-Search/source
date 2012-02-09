@@ -36,7 +36,7 @@ from eloue.accounts.models import Patron
 from django.db.models import signals
 from eloue import signals as eloue_signals
 
-from eloue.utils import currency, create_alternative_email
+from eloue.utils import currency, create_alternative_email, cache_to
 
 UNIT = Enum([
     (0, 'HOUR', _(u'heure')),
@@ -147,7 +147,6 @@ class Product(models.Model):
 def upload_to(instance, filename):
     return 'pictures/%s.jpg' % uuid.uuid4().hex
 
-
 class Picture(models.Model):
     """A picture"""
     product = models.ForeignKey(Product, related_name='pictures', blank=True, null=True)
@@ -159,21 +158,21 @@ class Picture(models.Model):
             resize.Crop(width=90, height=90), 
             Adjust(contrast=1.2, sharpness=1.1),
             Transpose(Transpose.AUTO),
-        ], image_field='image', pre_cache=True
+        ], image_field='image', pre_cache=True, cache_to=cache_to
     )
     home = ImageSpec(
         processors=[
             resize.Crop(width=120, height=140), 
             Adjust(contrast=1.2, sharpness=1.1),
             Transpose(Transpose.AUTO),
-        ], image_field='image', pre_cache=True
+        ], image_field='image', pre_cache=True, cache_to=cache_to
     )
     display = ImageSpec(
         processors=[
             resize.Fit(width=450), 
             Adjust(contrast=1.2, sharpness=1.1),
             Transpose(Transpose.AUTO),
-        ], image_field='image', pre_cache=True
+        ], image_field='image', pre_cache=True, cache_to=cache_to
     )
 
     def save(self, *args, **kwargs):

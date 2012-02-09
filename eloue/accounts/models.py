@@ -6,7 +6,6 @@ import urllib2
 import simplejson
 import facebook
 
-
 from imagekit.models import ImageSpec
 from imagekit.processors import resize, Adjust, Transpose
 
@@ -32,7 +31,7 @@ from eloue.accounts.manager import PatronManager
 from eloue.geocoder import GoogleGeocoder
 from eloue.products.utils import Enum
 from eloue.signals import post_save_sites
-from eloue.utils import create_alternative_email
+from eloue.utils import create_alternative_email, cache_to
 from eloue.payments.paypal_payment import accounts, PaypalError
 from eloue.payments import paypal_payment
 
@@ -120,21 +119,21 @@ class Avatar(models.Model):
             resize.Crop(width=40, height=40), 
             Adjust(contrast=1.2, sharpness=1.1),
             Transpose(Transpose.AUTO),
-        ], image_field='image', pre_cache=True
+        ], image_field='image', pre_cache=True, cache_to=cache_to
     )
     product_page = ImageSpec(
         processors=[
             resize.Crop(width=74, height=74), 
             Adjust(contrast=1.2, sharpness=1.1),
             Transpose(Transpose.AUTO),
-        ], image_field='image', pre_cache=True
+        ], image_field='image', pre_cache=True, cache_to=cache_to
     )
     display = ImageSpec(
         processors=[
             resize.Fit(width=450), 
             Adjust(contrast=1.2, sharpness=1.1),
             Transpose(Transpose.AUTO),
-        ], image_field='image', pre_cache=True
+        ], image_field='image', pre_cache=True, cache_to=cache_to
     )
     
     def save(self, *args, **kwargs):
