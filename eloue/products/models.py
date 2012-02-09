@@ -155,21 +155,21 @@ class Picture(models.Model):
 
     thumbnail = ImageSpec(
         processors=[
-            resize.Crop(width=90, height=90), 
+            resize.Crop(width=60, height=60), 
             Adjust(contrast=1.2, sharpness=1.1),
             Transpose(Transpose.AUTO),
         ], image_field='image', pre_cache=True, cache_to=cache_to
     )
-    home = ImageSpec(
+    profile = ImageSpec(
         processors=[
-            resize.Crop(width=120, height=140), 
+            resize.Crop(width=200, height=170), 
             Adjust(contrast=1.2, sharpness=1.1),
             Transpose(Transpose.AUTO),
         ], image_field='image', pre_cache=True, cache_to=cache_to
     )
     display = ImageSpec(
         processors=[
-            resize.Fit(width=450), 
+            resize.Fit(width=578, height=500), 
             Adjust(contrast=1.2, sharpness=1.1),
             Transpose(Transpose.AUTO),
         ], image_field='image', pre_cache=True, cache_to=cache_to

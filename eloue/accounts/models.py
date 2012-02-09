@@ -116,21 +116,21 @@ class Avatar(models.Model):
 
     thumbnail = ImageSpec(
         processors=[
-            resize.Crop(width=40, height=40), 
+            resize.Crop(width=60, height=60), 
             Adjust(contrast=1.2, sharpness=1.1),
             Transpose(Transpose.AUTO),
         ], image_field='image', pre_cache=True, cache_to=cache_to
     )
-    product_page = ImageSpec(
+    profil = ImageSpec(
         processors=[
-            resize.Crop(width=74, height=74), 
+            resize.Fit(width=100), 
             Adjust(contrast=1.2, sharpness=1.1),
             Transpose(Transpose.AUTO),
         ], image_field='image', pre_cache=True, cache_to=cache_to
     )
     display = ImageSpec(
         processors=[
-            resize.Fit(width=450), 
+            resize.Fit(width=180), 
             Adjust(contrast=1.2, sharpness=1.1),
             Transpose(Transpose.AUTO),
         ], image_field='image', pre_cache=True, cache_to=cache_to
