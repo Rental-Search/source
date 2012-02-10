@@ -155,6 +155,16 @@ class Product(models.Model):
         from eloue.rent.models import BorrowerComment
         return BorrowerComment.objects.filter(booking__product=self)
     
+    def daily_available(self, started_at, ended_at):
+        started_at_date = max(datetime.now().date(), started_at.date())
+        ended_at_date = ended_at.date()
+        from django.db.models import Q
+        bookings = self.bookings.filter(
+            Q(state="pending")|Q(state="ongoing")
+        ).filter(
+            ~Q(ended_at__lte=started_at) & ~Q(started_at__gte=ended_at)
+        )
+
 def upload_to(instance, filename):
     return 'pictures/%s.jpg' % uuid.uuid4().hex
 

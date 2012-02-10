@@ -126,6 +126,11 @@ def booking_price(request, slug, product_id):
         }
         return HttpResponse(simplejson.dumps(response_dict), mimetype='application/json')
 
+@require_GET
+def get_availability(request, product_id, year, month):
+    product = get_object_or_404(Product.on_site, pk=product_id)
+    
+
 @mobify
 @never_cache
 @secure_required
