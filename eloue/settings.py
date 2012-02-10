@@ -227,6 +227,7 @@ PIPELINE_CSS = {
     'master2': {
         'source_filenames': (
             'less/styles.less',
+            'css/chosen.css'
         ),
         'output_filename': 'css/master2.r?.css',
         'extra_context': {
@@ -383,7 +384,8 @@ PIPELINE_JS = {
             'js/jquery-ui-1.8.17.custom.min.js',
             'js/modernizr.js',
             'js/mustache.js',
-            'js/application2.js'
+            'js/application2.js',
+            'js/chosen.jquery.min.js',
             ),
         'output_filename': 'js/application2.r?.js',
         'extra_context': {

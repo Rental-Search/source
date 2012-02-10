@@ -337,8 +337,7 @@ $(document).ready(function() {
     });
     //chosen
     $("#id_0-category-chosen").chosen();
-    $("#id_languages").chosen();
-
+    
     //fbconnect
     $('#fbconnect').click(function () {
         FB.login(function(response) {
