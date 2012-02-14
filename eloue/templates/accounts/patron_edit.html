@@ -281,20 +281,6 @@
 	        			
 <script type="text/javascript">
 	function init() {
-	    $("#id_work").autocomplete(
-	        {
-	            'source': function(request, response) {
-		            $.getJSON('accounts_work_autocomplete'+'?term='+request.term, response);}
-	        }
-	    );
-	    $("#id_school").autocomplete(
-	        {
-	            'source': function(request, response) {
-		            $.getJSON('accounts_studies_autocomplete'+'?term='+request.term, response);}
-	        }
-	    );
-
-	    $("#id_languages").chosen();
 	}
 	window.onload=init;
 </script>
