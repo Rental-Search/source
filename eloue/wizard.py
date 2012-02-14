@@ -80,11 +80,11 @@ class MultiPartFormWizard(FormWizard):
             if request.POST.get("hash_%d" % i, '') != self.security_hash(request, form):
                 return self.render_hash_failure(request, i)
             
-                                                                                # Hotfix for issue #14498
-            if not form.is_valid():                                             # for more details: 
-                return self.render_revalidation_failure(request, i, form)       # https://code.djangoproject.com/ticket/14498
-            else:                                                               #
-                self.process_step(request, form, i)
+            
+            if not form.is_valid():                                             # Hotfix for issue #14498
+                return self.render_revalidation_failure(request, i, form)       # for more details: 
+            else:                                                               # https://code.djangoproject.com/ticket/14498
+                self.process_step(request, form, i)                             #
         
         # Process the current step. If it's valid, go to the next step or call
         # done(), depending on whether any steps remain.
@@ -245,41 +245,3 @@ class NewGenericFormWizard(MultiPartFormWizard):
                 context['fb_image'] = self.me.get('picture', default_picture)
         return super(NewGenericFormWizard, self).render(form, request, step, context)
 
-class GenericFormWizard(MultiPartFormWizard):
-    """A not so generic form wizard"""
-
-    def __init__(self, *args, **kwargs):
-        super(GenericFormWizard, self).__init__(*args, **kwargs)
-        self.required_fields = [
-          'username', 'password1', 'password2', 'is_professional', 'company_name', 'first_name', 'last_name',
-          'phones', 'phones__phone', 'addresses',
-          'addresses__address1', 'addresses__zipcode', 'addresses__city', 'addresses__country', 'avatar'
-        ]
-
-    def __call__(self, request, *args, **kwargs):
-        if request.user.is_authenticated():  # When user is authenticated
-            self.patron = request.user
-            if not self.fb_session:
-                try:
-                    self.fb_session = self.patron.facebooksession
-                    self.me = self.fb_session.graph_api.get_object('me', fields='picture,email,first_name,last_name,gender,username,location')
-                except Patron.DoesNotExist:
-                    pass
-            if EmailAuthenticationForm in self.form_list:
-                self.form_list.remove(EmailAuthenticationForm)
-            if not any(map(lambda el: getattr(el, '__name__', None) == 'MissingInformationForm', self.form_list)):
-                missing_fields, missing_form = make_missing_data_form(request.user, self.required_fields)
-                if missing_fields:  # FIXME : Optimistic insert
-                    self.form_list.insert(1, missing_form)
-        else:  # When user is anonymous
-            if EmailAuthenticationForm not in self.form_list:
-                self.form_list.append(EmailAuthenticationForm)
-            if EmailAuthenticationForm in self.form_list:
-                if not next((form for form in self.form_list if getattr(form, '__name__', None) == 'MissingInformationForm'), None):
-                    form = self.get_form(self.form_list.index(EmailAuthenticationForm), request.POST, request.FILES)
-                    form.is_valid()  # Here to fill form user_cache
-                    missing_fields, missing_form = make_missing_data_form(form.get_user(), self.required_fields)
-                    if missing_fields:  # FIXME : Optimistic insert
-                        self.form_list.insert(2, missing_form)
-        return super(GenericFormWizard, self).__call__(request, *args, **kwargs)
-    
