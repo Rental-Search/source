@@ -439,7 +439,8 @@ class Comment(models.Model):
 
     class Meta:
         abstract = True
-        
+        ordering = ['-created_at']
+    
 class OwnerComment(Comment):
     @property
     def response(self):

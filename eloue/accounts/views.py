@@ -218,8 +218,15 @@ def patron_detail(request, slug, patron_id=None, page=None):
         return redirect_to(request, patron.get_absolute_url(), permanent=True)
     form = FacetedSearchForm()
     patron = get_object_or_404(Patron.on_site, slug=slug)
-    return object_list(request, patron.products.all(), page=page, paginate_by=PAGINATE_PRODUCTS_BY,
-        template_name='accounts/patron_detail.html', template_object_name='product', extra_context={'form': form, 'patron': patron})
+    return object_list(
+        request, patron.products.all(), page=page, 
+        paginate_by=PAGINATE_PRODUCTS_BY, 
+        template_name='accounts/patron_detail.html', 
+        template_object_name='product', extra_context={
+            'form': form, 'patron': patron, 
+            'borrowercomments': BorrowerComment.objects.filter(booking__owner=patron)[:4]
+        }
+    )
 
 
 @login_required

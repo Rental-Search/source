@@ -68,44 +68,13 @@
         </div>{# profil-block #}
     </div>{# content-aside-profil #}
     <div class="content-main-profil">
-        <h2>{% trans "Commentaires" %} <small>(6 {% trans "avis" %})</small></h2>
+        <h2>{% trans "Commentaires" %} <small>({{ borrowercomments.count }} {% trans "avis" %})</small></h2>
         <ul class="comments">
-            <li>
-                <a href="#" class="comment-img">
-                    <img src="images/avatars/product_page_a1fc68d292034f45b9ce559bb88d9bec.jpeg" width="60" height="60" alt=""/>
-                </a>
-                <div class="comment-content">
-                    <div>
-                        <p class="comment-writter">
-                            <a href="/loueur/benoit/">qto870</a> Jeudi 12 janvier 2012
-                            <span class="stars empty"><span class="stars filled_1"></span></span>
-                        </p>
-                        <p class="comment-text">
-                            Great place - great city! To put it in a nutshell it was a very nice trip and the apartment is perfect for everybody who wants a nice place in edinburgh for a few days. Thank you, Samira!
-                        </p><!-- comment-content -->
-                        <span class="comment-dial"></span>
-                    </div>
-                </div><!-- comment-content -->
-            </li>
-            <li>
-                <a href="#" class="comment-img">
-                    <img src="images/avatars/product_page_a1fc68d292034f45b9ce559bb88d9bec.jpeg" width="60" height="60" alt=""/>
-                </a>
-                <div class="comment-content">
-                    <div>
-                        <p class="comment-writter">
-                            <a href="/loueur/benoit/">qto870</a> Jeudi 12 janvier 2012
-                            <span class="stars empty"><span class="stars filled_3"></span></span>
-                        </p>
-                        <p class="comment-text">
-                            Great place - great city! To put it in a nutshell it was a very nice trip and the apartment is perfect for everybody who wants a nice place in edinburgh for a few days. Thank you, Samira!
-                        </p><!-- comment-content -->
-                        <span class="comment-dial"></span>
-                    </div>
-                </div><!-- comment-content -->
-            </li>
+            {% for comment in borrowercomments %}
+                <li>{% include 'rent/partials/comment.html' %}</li>
+            {% endfor %}
         </ul>
-        <p class="more-comment"><a href="#">Voir tous les commentaires</a></p>
+        <p class="more-comment"><a href="{% url comments %}">Voir tous les commentaires</a></p>
         {% if patron.products %}
         {% blocktrans with patron.products.count as count and patron.products.count|pluralize as pluralize %}
 	      <h2>{{ count }} location{{ pluralize }}</h2>
