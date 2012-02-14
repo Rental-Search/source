@@ -118,12 +118,12 @@ def user_geolocation(request):
     stored_location = request.session.get('location')
     location = simplejson.loads(request.POST['address'])
     coordinates = simplejson.loads(request.POST['coordinates'])
+    address_components = location['address_components']
     if stored_location:
         current_source = stored_location.get('source', max(GEOLOCATION_SOURCE.values())+1)
         if current_source < int(request.POST['source']) or \
             current_source == int(request.POST['source']) and current_source == GEOLOCATION_SOURCE.BROWSER:
             return HttpResponse('already_geolocated')
-    address_components = location['address_components']
     if 'viewport' in location['geometry']:
         viewport = location['geometry']['viewport']
         latitudes = viewport['Y']
@@ -135,16 +135,18 @@ def user_geolocation(request):
     else:
         radius = 5
     coordinates = (coordinates['lat'], coordinates['lon'])
-    localities = filter(lambda component: 'locality' in component['types'], address_components)
+    localities = filter(lambda component: 'locality' in component['types'] or 'administrative_area_level_1' in component['types'], address_components)
     city = next(iter(map(lambda component: component['long_name'], localities)), None)
     countries = filter(lambda component: 'country' in component['types'], address_components)
     country = next(iter(map(lambda component: component['long_name'], countries)), None)
+    fallback = next(iter(map(lambda component: component['long_name'], address_components)), None)
     request.session['location'] = {
         'source': int(request.POST['source']), 
         'coordinates': coordinates, 
         'city': city,
         'radius': radius,
-        'country': country
+        'country': country,
+        'fallback': fallback
     }
     return HttpResponse("OK")
 

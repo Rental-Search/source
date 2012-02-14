@@ -188,7 +188,7 @@
         </div><!-- search-block -->
         <div id="where" class="info-block">
             <h2>Lieu</h2>
-            <p class="town-input"><input id="id_l" type="text" name="l" value="{% firstof request.session.location.city request.session.location.country '' %}"/></p>
+            <p class="town-input"><input id="id_l" type="text" name="l" value="{% firstof request.session.location.city request.session.location.country request.session.location.fallback '' %}"/></p>
             <div id="map-canvas" class="map"></div>
             <p class="radius-input">Dans un rayon de <input type="text" name="r" value="{{request.session.location.radius}}"/> Km</p>
         </div><!-- where -->
