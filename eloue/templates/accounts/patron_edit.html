@@ -280,17 +280,8 @@
 </div>
 	        			
 <script type="text/javascript">
-    $("#id_work").autocomplete(
-        {
-            'source': function(request, response) {
-	            $.getJSON('accounts_work_autocomplete'+'?term='+request.term, response);}
-        }
-    );
-    $("#id_school").autocomplete(
-        {
-            'source': function(request, response) {
-	            $.getJSON('accounts_studies_autocomplete'+'?term='+request.term, response);}
-        }
-    );
+	function init() {
+	}
+	window.onload=init;
 </script>
 {% endblock %}
