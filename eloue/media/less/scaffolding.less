@@ -38,7 +38,7 @@ body {
 }
 
 .top-bar {
-  #gradient > .vertical(#e2e9ef, #eff4f8);
+  #gradient > .vertical(#eff4f8, #e2e9ef);
   border-bottom: 1px solid #abc9d5;
   .box-shadow(0 1px 3px rgba(0,0,0,0.15));
   
@@ -123,6 +123,51 @@ body {
 
     .add-product-link {
       color: @green;
+    }
+    
+    .profil-link {
+      img { 
+        margin-right: 3px;
+        vertical-align: -20%;
+      }
+    }
+  }
+  
+  .nav-bar {
+    padding-top: 13px;
+    
+    .clearfix();
+    
+    > li {
+      float: left;
+      
+      #font > .sans-serif('Ubuntu', bold, 16px);
+      color: @blueDark;
+      text-shadow: 0 1px rgba(255,255,255,0.5);
+    }
+    
+    a {
+      display: block;
+      margin: 0 15px;
+      padding: 10px 15px;
+      
+      #font > .sans-serif('Ubuntu', bold, 16px);
+      color: @blueDark;
+      text-shadow: 0 1px rgba(255,255,255,0.5);
+      
+      &:hover {
+        text-decoration: none;
+        
+        background-color: #dce3e8;
+        .rounded(20px);
+      }
+    }
+    
+    .selected-nav-bar-link {
+      #gradient > .vertical(#dce3e8, #ced7de );
+      @shadow: 0 1px 0 rgba(255,255,255,0.7), inset 0 1px 3px rgba(0,0,0,0.2);
+      .box-shadow(@shadow);
+      .rounded(20px);
     }
   }
 }
@@ -836,6 +881,13 @@ a {
 
 #profil {
   background: #fff url("../images/background_span3.png") repeat-y top left;
+  
+  .top-bar {
+    @shadow:inset 0 1px 0 rgba(255,255,255,0.7),  0 1px 3px rgba(0,0,0,0.15);
+    .box-shadow(@shadow);
+    
+    margin-bottom: 20px;
+  }
 }
 
 .content-aside-profil {
@@ -890,8 +942,9 @@ a {
     margin-bottom: 15px;
   }
   
-  button {
-    width: 200px;
+  a {
+    width: 175px;
+    text-align: center;
   }
 }
 
@@ -900,5 +953,48 @@ a {
     #font > .sans-serif('Ubuntu', normal, 16px);
     color: @blueDark;
     margin-bottom: 15px;
+  }
+}
+
+.nav-sub-bar {
+  margin-left: 30px;
+  
+  > li {
+    margin: 10px 0;
+    #font > .sans-serif('Ubuntu', bold, @basefont);
+    color: @blueDark;
+    
+    margin-right: 1px;
+  }
+  a {
+    display: block;
+    padding: 10px;
+    
+    @border: 1px solid #e3f6fd;
+    border-left: @border;
+    border-top: @border;
+    border-bottom: @border;
+    
+    #font > .sans-serif('Ubuntu', bold, @basefont);
+    color: @blueDark;
+    
+    &:hover {
+      .border-radius(0, 0, 20px, 20px);
+      background-color: #daedf5;
+      
+      text-decoration: none;
+    }
+  }
+  
+  .selected-nav-bar-link, .selected-nav-bar-link:hover {
+    .border-radius(0, 0, 20px, 20px);
+    
+    @border: 1px solid #ABC9D5;
+    border-left: @border;
+    border-top: @border;
+    border-bottom: @border;
+    background-color: #fff;
+    
+    margin-right: -1px;
   }
 }
