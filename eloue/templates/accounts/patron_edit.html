@@ -19,71 +19,38 @@
 {% endblock %}
 
 {% block content-main-profil %}
-<form class="form-horizontal">
+{% if form.is_multipart %}
+<form enctype="multipart/form-data" class="form-horizontal" method="post" action="">
+{% else %}
+<form class="form-horizontal" method="post" action="">
+{% endif %}
+{% csrf_token %}
     <fieldset>
-      <legend>Informations générales</legend>
-      <div class="control-group">
-          <label class="control-label">Statut</label>
-          <div class="controls">
-              <label class="radio">
-                  <input type="radio" name="optionsRadios" id="optionsRadios1" value="option1" checked="">
-                      Je suis un particulier.
-              </label>
-              <label class="radio">
-                  <input type="radio" name="optionsRadios" id="optionsRadios2" value="option2">
-                      Je suis un professionnel.
-              </label>
-          </div>
-      </div>
-      <div class="control-group">
-        <label class="control-label" for="input01">Email</label>
-        <div class="controls">
-          <input type="text" class="input-xlarge" id="input01">
-        </div>
-      </div>
-      <div class="control-group">
-        <label class="control-label" for="select01">Civilité</label>
-        <div class="controls">
-          <select id="select01">
-            <option>Mr.</option>
-            <option>Mme</option>
-            <option>Mlle</option>
-          </select>
-        </div>
-      </div>
-      <div class="control-group">
-          <label class="control-label" for="input01">Nom</label>
-          <div class="controls">
-            <input type="text" class="input-xlarge" id="input01">
-          </div>
-      </div>
-      <div class="control-group">
-          <label class="control-label" for="input01">Prénom</label>
-          <div class="controls">
-              <input type="text" class="input-xlarge" id="input01">
-          </div>
-      </div>
-      <div class="control-group">
-         <label class="control-label" for="fileInput">Photo de profil</label>
-         <div class="controls">
-             <input class="input-file" id="fileInput" type="file">
+       <legend>Informations générales</legend>
+       {% for formfield in form %}
+       <div class="control-group {% if form.company_name.errors %} error {% endif %}">
+             <label class="control-label" for="{{ formfield.id_for_label }}">{{ formfield.label }} {% if formfield.field.required %}*{% endif %}</label>
+             <div class="controls">
+                 {% if formfield.name == "avatar" %}
+                    {% if patron.avatar %}
+                    <img src="{{ patron.avatar.product_page.url }}" alt="{% trans "loueur"%}{{ patron.username }}" style="float: left; margin-right: 10px; border: 1px solid #9EB0BA;">
+                    {% else %}
+                    <img src="{{ MEDIA_URL }}images/default_avatar.png" alt="{% trans "loueur"%}{{ patron.username }}" style="float: left; margin-right: 10px; border: 1px solid #9EB0BA;">
+                    {% endif %}
+                 {% endif %}
+                 {{ formfield }}
+                 {% if formfield.errors %}
+                 <span class="help-inline">
+                     {% for error in formfield.errors %}
+                           {{ error|escape }} 
+                     {% endfor %}
+                 </span>
+                 {% endif %}
+           </div>
          </div>
-     </div>
-     <div class="control-group">
-         <label class="control-label">Newsletter</label>
-         <div class="controls">
-             <label class="radio">
-                 <input type="radio" name="optionsRadios" id="optionsRadios1" value="option1" checked="">
-                        Je souhaite recevoir la newsletter.
-                </label>
-                <label class="radio">
-                    <input type="radio" name="optionsRadios" id="optionsRadios2" value="option2">
-                        Je ne souhaite plus recevoir la newsletter.
-                </label>
-            </div>
-        </div>
-        <legend>Plus d'informations</legend>
-        <div class="control-group">
+       {% endfor %}
+       <legend>Plus d'informations</legend>
+       <div class="control-group">
             <label class="control-label" for="input01">Travail</label>
             <div class="controls">
                 <input type="text" class="input-xlarge" id="input01">

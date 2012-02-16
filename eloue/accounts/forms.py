@@ -230,24 +230,25 @@ class EmailPasswordResetForm(PasswordResetForm):
 
 
 class PatronEditForm(forms.ModelForm):
+    is_professional = forms.BooleanField(label=_(u"Professionnel"), required=False, initial=False)
+    company_name = forms.CharField(label=_(u"Nom de la société"), required=False, widget=forms.TextInput(attrs={'class': 'inm'}))
+    
+    email = forms.EmailField(label=_(u"Email"), max_length=75, widget=forms.TextInput(attrs={
+        'autocapitalize': 'off', 'autocorrect': 'off', 'class': 'inm'}))
     username = forms.RegexField(label=_(u"Pseudo"), max_length=30, regex=r'^[\w.@+-]+$',
     help_text=_("Required. 30 characters or fewer. Letters, digits and @/./+/-/_ only."),
     error_messages={'invalid': _("This value may contain only letters, numbers and @/./+/-/_ characters.")},
     widget=forms.TextInput(attrs={'class': 'inm'}))
+    
     first_name = forms.CharField(label=_(u"Prénom"), required=True, widget=forms.TextInput(attrs={'class': 'inm'}))
     last_name = forms.CharField(label=_(u"Nom"), required=True, widget=forms.TextInput(attrs={'class': 'inm'}))
-    email = forms.EmailField(label=_(u"Email"), max_length=75, widget=forms.TextInput(attrs={
-        'autocapitalize': 'off', 'autocorrect': 'off', 'class': 'inm'}))
+    avatar = forms.ImageField(required=False)
+    
     paypal_email = forms.EmailField(label=_(u"Email PayPal"), required=False, max_length=75, widget=forms.TextInput(attrs={
             'autocapitalize': 'off', 'autocorrect': 'off', 'class': 'inm'}))
-	    
-    is_professional = forms.BooleanField(label=_(u"Professionnel"), required=False, initial=False)
     
-    company_name = forms.CharField(label=_(u"Nom de la société"), required=False, widget=forms.TextInput(attrs={'class': 'inm'}))
     is_subscribed = forms.BooleanField(required=False, initial=False, label=_(u"Newsletter"))
     new_messages_alerted = forms.BooleanField(required=False, initial=True)
-
-    avatar = forms.ImageField(required=False)
 
     def __init__(self, *args, **kwargs):
         super(PatronEditForm, self).__init__(*args, **kwargs)
@@ -257,9 +258,8 @@ class PatronEditForm(forms.ModelForm):
 
     class Meta:
         model = Patron
-        fields = ('civility', 'username', 'first_name', 'last_name',
-            'email', 'paypal_email', 'is_professional', 'company_name', 
-            'is_subscribed', 'new_messages_alerted', 'default_address')
+        fields = ('is_professional', 'company_name', 'username', 'email', 'civility',  'first_name', 'last_name', 'avatar', 'default_address',
+             'paypal_email', 'is_subscribed', 'new_messages_alerted' )
 
     def save(self, *args, **kwargs):
         inst = super(PatronEditForm, self).save(*args, **kwargs)
