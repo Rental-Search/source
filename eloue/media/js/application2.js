@@ -37,10 +37,10 @@ function SuccessBuilder(priority, geocodeSuccess) {
             {'latLng':latlon}, 
             function(result) {
                 report_location_back(priority, result[0], latlon, function(response) {
-                    if (response == "OK") {
+                    if (response["status"] == "OK") {
                         geocodeSuccess();
                     }
-                })
+                });
             }
         );
     };
@@ -48,7 +48,8 @@ function SuccessBuilder(priority, geocodeSuccess) {
 
 function report_location_back(source, address, coords, success) {
   success = (typeof success == "undefined")?function(response) {
-      if (response == 'OK') {
+
+      if (response["status"] == 'OK') {
         window.location.reload();
       }
     }:success;

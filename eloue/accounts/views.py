@@ -33,6 +33,7 @@ from eloue.accounts.forms import EmailAuthenticationForm, PatronEditForm, Patron
 from eloue.accounts.models import Patron, FacebookSession
 from eloue.accounts.wizard import AuthenticationWizard
 
+from eloue import geocoder
 from eloue.products.forms import FacetedSearchForm
 from eloue.rent.models import Booking, BorrowerComment, OwnerComment
 from eloue.rent.forms import OwnerCommentForm, BorrowerCommentForm
@@ -123,9 +124,11 @@ def user_geolocation(request):
         current_source = stored_location.get('source', max(GEOLOCATION_SOURCE.values())+1)
         if current_source < int(request.POST['source']) or \
             current_source == int(request.POST['source']) and current_source == GEOLOCATION_SOURCE.BROWSER:
-            return HttpResponse('already_geolocated')
-    from eloue import geocoder
-
+            return HttpResponse(simplejson.dumps(
+                {'status': 'already_geolocated'}),
+                mimetype="application/json"
+            )
+    
     localities = filter(lambda component: 'locality' in component['types'], address_components)
     city = next(iter(map(lambda component: component['long_name'], localities)), None)
     regions = filter(lambda component: 'administrative_area_level_1' in component['types'], address_components)
@@ -159,7 +162,10 @@ def user_geolocation(request):
         'country': country,
         'fallback': fallback
     }
-    return HttpResponse("OK")
+    return HttpResponse(simplejson.dumps(
+        {'status': "OK", 'radius': radius}), 
+        mimetype="application/json"
+    )
 
 
 @login_required

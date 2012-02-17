@@ -94,10 +94,10 @@
                 {'latLng':latlon}, 
                 function(result) {
                     report_location_back(priority, result[0], latlon, function(response) {
-                        if (response == "OK") {
+                        if (response["status"] == "OK") {
                             geocodeSuccess();
                         }
-                    })
+                    });
                 }
             );
         };
