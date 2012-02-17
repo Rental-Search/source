@@ -1,5 +1,5 @@
-{% extends "base.html" %}
-{% load i18n product paginator %}
+{% extends "accounts/dashboard.html" %}
+{% load i18n navbar %}
 
 {% block title %}{% trans "Votre profil" %}{% endblock %}
 {% block head %}
@@ -10,278 +10,79 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js"></script>
 {% endblock %}
 
-{% block content %}
-<div id="content" class="xgrid">
-       <div class="content-top">
-         <ul id="menu" class="x12">
-            <li class="menu-tab first"><a href="{% url dashboard %}">{% trans "Tableau de bord" %}</a></li>
-			<li class="menu-tab"><a href="{% url owner_booking %}">{% trans "Propriétaire" %}</a></li>
-			<li class="menu-tab"><a href="{% url borrower_booking %}">{% trans "Locataire" %}</a></li>
-			<li class="menu-tab">{% trans "Mon compte" %}</li>
-			<li class="menu-tab"><a href="{% url inbox %}">{% blocktrans %}Messages({{ unread_message_count }}){% endblocktrans %}</a></li>
-		 </ul>
-	    </div>
-	    <div id="sub-menu">
-	        <ul class="x12">
-	            <li class="sub-tab first">{% trans "Votre profil" %}</li>
-	            <li class="sub-tab"><a href="{% url comments %}">{% trans "Commentaires" %}</a></li>
-		        <li class="sub-tab"><a href="{% url patron_edit_password %}">{% trans "Modification du mot de passe" %}</a></li>
-		        <li class="sub-tab"><a href="{% url patron_edit_phonenumber %}">{% trans "Téléphone" %}</a></li>
-		        <li class="sub-tab"><a href="{% url patron_edit_addresses%}">{% trans "Adresses" %}</a></li>
-	        </ul>
-	    </div>
-	    <div class="x8 p2">
-	    {% if form.is_multipart %}
-	    <form enctype="multipart/form-data" method="post" action="">
-		{% else %}
-	    <form method="post" action="">
-		{% endif %}
-	    		{% csrf_token %}
-	    		<table class="more-info">
-	    		    {% if form.is_professional %}
-	        		<tr>
-	        		    <th><label>{{ form.is_professional.label }} {% if form.is_professional.field.required %}*{% endif%} :</label></th>
-	        			<td colspan="2" {% if form.is_professional.errors %} class="error-field" {% endif %}>
-	        				{{ form.is_professional }} {% trans "Je suis un professionnel." %}
-	        				{% if form.is_professional.errors %}
-	        				    {% for error in form.is_professional.errors %}
-	        								<br />
-	        				        <span class="error">{{ error|escape }}</span>
-	        				    {% endfor %}
-	        				{% endif %}
-	        			</td>
-	        		</tr>
-	        		<tr class="company-name">
-	        			<th><label>{{ form.company_name.label }} {% if form.company_name.field.required %}*{% endif %} :</label></th>
-	        			<td {% if form.company_name.errors %} class="error-field" {% endif %}>
-	        				{{ form.company_name }}
-	        				{% if form.company_name.errors %}
-	        				    {% for error in form.company_name.errors %}
-	        								<br />
-	        				        <span class="error">{{ error|escape }}</span>
-	        				    {% endfor %}
-	        				{% endif %}
-	        			</td>
-	        		</tr>
-	        		{% endif %}
-	    			{% if form.email %}
-	    			<tr>
-	    				<th><label>{{ form.email.label }} {% if form.email.field.required %}*{% endif %} :</label></th>
-	    				<td {% if form.email.errors %} class="error-field" {% endif %}>
-	    					{{ form.email }}
-	    					{% if form.email.errors %}
-	    					    {% for error in form.email.errors %}
-	    									<br />
-	    					        <span class="error">{{ error|escape }}</span>
-	    					    {% endfor %}
-	    					{% endif %}
-	    				</td>
-	    			</tr>
-	    			{% endif %}
-	    			{% if form.username %}
-	    			<tr>
-	    				<th><label>{{ form.username.label }} {% if form.username.field.required %}*{% endif %} :</label></th>
-	    				<td {% if form.username.errors %} class="error-field" {% endif %}>
-	    					{{ form.username }}
-	    					{% if form.username.errors %}
-	    					    {% for error in form.username.errors %}
-	    									<br />
-	    					        <span class="error">{{ error|escape }}</span>
-	    					    {% endfor %}
-	    					{% endif %}
-	    				</td>
-	    			</tr>
-	    			{% endif %}
-	    			{% if form.civility %}
-	    			<tr>
-	    				<th><label>{{ form.civility.label }} {% if form.civility.field.required %}*{% endif %} :</label></th>
-	    				<td {% if form.civility.errors %} class="error-field" {% endif %}>
-	    					{{ form.civility }}
-	    					{% if form.civility.errors %}
-	    				 		{% for error in form.civility.errors %}
-	    							<br />
-	    					  	<span class="error">{{ error|escape }}</span>
-	    						{% endfor %}
-	    				{% endif %}
-	    				</td>
-	    			</tr>
-	    			{% endif %}
-	    			{% if form.first_name %}
-	    			<tr>
-	    				<th><label>{{ form.first_name.label }} {% if form.first_name.field.required %}*{% endif %} :</label></th>
-	    				<td {% if form.first_name.errors %} class="error-field" {% endif %}>
-	    					{{ form.first_name }}
-	    					{% if form.first_name.errors %}
-	    					    {% for error in form.first_name.errors %}
-	    									<br />
-	    					        <span class="error">{{ error|escape }}</span>
-	    					    {% endfor %}
-	    					{% endif %}
-	    				</td>
-	    			</tr>
-	    			{% endif %}
-	    			{% if form.last_name %}
-	    			<tr>
-	    				<th><label>{{ form.last_name.label }} {% if form.last_name.field.required %}*{% endif %} :</label></th>
-	    				<td {% if form.last_name.errors %} class="error-field" {% endif %}>
-	    					{{ form.last_name }}
-	    					{% if form.last_name.errors %}
-	    					    {% for error in form.last_name.errors %}
-	    									<br />
-	    					        <span class="error">{{ error|escape }}</span>
-	    					    {% endfor %}
-	    					{% endif %}
-	    				</td>
-	    			</tr>
-	    			{% endif%}
-	    			{% if form.paypal_email %}
-	    			<tr>
-	    				<th><label>{{ form.paypal_email.label }} {% if form.paypal_email.field.required %}*{% endif %} :</label></th>
-	    				<td {% if form.paypal_email.errors %} class="error-field" {% endif %}>
-	    					{{ form.paypal_email }}
-	    					{% if form.paypal_email.errors %}
-	    						{% for error in form.paypal_email.errors %}
-	    							<br />
-	    							<span class="error">{{ error|escape }}</span>
-	    						{% endfor %}
-	    					{% endif %}
-	    				</td>
-	    			</tr>
-	    			{% endif %}
-
-
-	    			{% if form.default_address %}
-	    			<tr>
-	    				<th><label>{{ form.default_address.label }} {% if form.default_address.field.required %}*{% endif %} :</label></th>
-	    				<td {% if form.default_address.errors %} class="error-field" {% endif %}>
-	    					{{ form.default_address }}
-	    					{% if form.default_address.errors %}
-	    						{% for error in form.default_address.errors %}
-	    							<br />
-	    							<span class="error">{{ error|escape }}</span>
-	    						{% endfor %}
-	    					{% endif %}
-	    				</td>
-	    			</tr>
-	    			{% endif %}
-	    			{% if form.avatar %}
-	    			<tr>
-	    				<th><label>{{ form.avatar.label }} {% if form.avatar.field.required %}*{% endif %} :</label></th>
-	    				<td {% if form.avatar.errors %} class="error-field" {% endif %}>
-	    				    {% if patron.avatar %}
-                            <img src="{{ patron.avatar.product_page.url }}" alt="{% trans "loueur"%}{{ patron.username }}" style="float: left; margin-right: 10px; border: 1px solid #9EB0BA;">
-                            {% else %}
-                            <img src="{{ MEDIA_URL }}images/default_avatar.png" alt="{% trans "loueur"%}{{ patron.username }}" style="float: left; margin-right: 10px; border: 1px solid #9EB0BA;">
-                            {% endif %}
-	    					{{ form.avatar }}
-	    					{% if form.avatar.errors %}
-	    						{% for error in form.avatar.errors %}
-	    							<br />
-	    							<span class="error">{{ error|escape }}</span>
-	    						{% endfor %}
-	    					{% endif %}
-	    				</td>
-	    			</tr>
-	    			{% endif %}
-	    			{% if form.is_subscribed %}
-	    			<tr>
-	    			    <th><label>{{ form.is_subscribed.label }} {% if form.is_subscribed.field.required %}*{% endif%} :</label></th>
-	        			<td colspan="2" {% if form.is_subscribed.errors %} class="error-field" {% endif %}>
-	        				{{ form.is_subscribed }} {% trans "Je souhaite recevoir les newsletters." %}
-	        				{% if form.is_subscribed.errors %}
-	        				    {% for error in form.is_subscribed.errors %}
-	        								<br />
-	        				        <span class="error">{{ error|escape }}</span>
-	        				    {% endfor %}
-	        				{% endif %}
-	        			</td>
-	        		</tr>
-	    			{% endif %}
-	    			{% if form.about %}
-	    			<tr>
-	    			    <th><label>{{ form.about.label }} {% if form.about.field.required %}*{% endif%} :</label></th>
-	        			<td colspan="2" {% if form.about.errors %} class="error-field" {% endif %}>
-	        				{{ form.about }}
-	        				{% if form.about.errors %}
-	        				    {% for error in form.about.errors %}
-	        								<br />
-	        				        <span class="error">{{ error|escape }}</span>
-	        				    {% endfor %}
-	        				{% endif %}
-	        			</td>
-	        		</tr>
-	    			{% endif %}
-	    			{% if form.work %}
-	    			<tr>
-	    			    <th><label>{{ form.work.label }} {% if form.work.field.required %}*{% endif%} :</label></th>
-	        			<td colspan="2" {% if form.work.errors %} class="error-field" {% endif %}>
-	        				{{ form.work }}
-	        			</div>
-	        				{% if form.work.errors %}
-	        				    {% for error in form.work.errors %}
-	        								<br />
-	        				        <span class="error">{{ error|escape }}</span>
-	        				    {% endfor %}
-	        				{% endif %}
-	        			</td>
-	        		</tr>
-	    			{% endif %}
-	    			{% if form.school %}
-	    			<tr>
-	    			    <th><label>{{ form.school.label }} {% if form.school.field.required %}*{% endif%} :</label></th>
-	        			<td colspan="2" {% if form.school.errors %} class="error-field" {% endif %}>
-	        				{{ form.school }}
-	        				{% if form.school.errors %}
-	        				    {% for error in form.school.errors %}
-	        								<br />
-	        				        <span class="error">{{ error|escape }}</span>
-	        				    {% endfor %}
-	        				{% endif %}
-	        			</td>
-	        		</tr>
-	    			{% endif %}
-	    			{% if form.school %}
-	    			<tr>
-	    			    <th><label>{{ form.hobby.label }} {% if form.hobby.field.required %}*{% endif%} :</label></th>
-	        			<td colspan="2" {% if form.hobby.errors %} class="error-field" {% endif %}>
-	        				{{ form.hobby }}
-	        				{% if form.hobby.errors %}
-	        				    {% for error in form.hobby.errors %}
-	        								<br />
-	        				        <span class="error">{{ error|escape }}</span>
-	        				    {% endfor %}
-	        				{% endif %}
-	        			</td>
-	        		</tr>
-	    			{% endif %}
-	    			{% if form.languages %}
-	    			<tr>
-	    			    <th><label>{{ form.languages.label }} {% if form.languages.field.required %}*{% endif%} :</label></th>
-	        			<td colspan="2" {% if form.languages.errors %} class="error-field" {% endif %}>
-	        				{{ form.languages }}
-	        				{% if form.languages.errors %}
-	        				    {% for error in form.languages.errors %}
-	        								<br />
-	        				        <span class="error">{{ error|escape }}</span>
-	        				    {% endfor %}
-	        				{% endif %}
-	        			</td>
-	        		</tr>
-	    			{% endif %}
-	    		</table>
-	    		<p class="required-field">{% trans "* champ obligatoire" %}</p>
-	    </div>
-	    <div id="submit-wizard" class="x12">
-	         <p>
-	    		<a href="{% url home %}">{% trans "Annuler" %}</a> {% trans "ou" %}
-	    		<input type="submit" class="btn big-green" value={% trans "Sauvegarder" %} />
-	    	</p>
-	    </div>
-</div>
-	        			
-<script type="text/javascript">
-	function init() {
-	}
-	window.onload=init;
-</script>
+{% block content-aside-profil %}
+{% url patron_edit as patron_edit %}
+{% url patron_edit_addresses as patron_edit_addresses %}
+{% url patron_edit_phonenumber as patron_edit_phonenumber %}
+{% url patron_edit_password as patron_edit_password %}
+<ul class="nav-sub-bar">
+    <li><a href="{{ patron_edit }}"  class="{% active request "^/dashboard/account/$" %}">{% trans "Mon Profil" %}</a></li>
+    <li><a href="{{ patron_edit_addresses }}" class="{% active request patron_edit_addresses %}">{% trans "Adresses" %}</a></li>
+    <li><a href="{{ patron_edit_phonenumber }}" class="{% active request patron_edit_phonenumber %}">{% trans "Téléphone" %}</a></li>
+    <li><a href="{{ patron_edit_password }}" class="{% active request patron_edit_password %}">{% trans "Mot de passe" %}</a></li>
+</ul>
 {% endblock %}
+
+{% block content-main-profil %}
+{% if form.is_multipart %}
+<form enctype="multipart/form-data" class="form-horizontal" method="post" action="">
+{% else %}
+<form class="form-horizontal" method="post" action="">
+{% endif %}
+{% csrf_token %}
+    <fieldset>
+       <legend>Informations générales</legend>
+       {% for formfield in form %}
+       <div class="control-group {% if form.company_name.errors %} error {% endif %}">
+             <label class="control-label" for="{{ formfield.id_for_label }}">{{ formfield.label }} {% if formfield.field.required %}*{% endif %}</label>
+             <div class="controls">
+                 {% if formfield.name == "avatar" %}
+                    {% if patron.avatar %}
+                    <img src="{{ patron.avatar.product_page.url }}" alt="{% trans "loueur"%}{{ patron.username }}" style="float: left; margin-right: 10px; border: 1px solid #9EB0BA;">
+                    {% else %}
+                    <img src="{{ MEDIA_URL }}images/default_avatar.png" alt="{% trans "loueur"%}{{ patron.username }}" style="float: left; margin-right: 10px; border: 1px solid #9EB0BA;">
+                    {% endif %}
+                 {% endif %}
+                 {{ formfield }}
+                 {% if formfield.errors %}
+                 <span class="help-inline">
+                     {% for error in formfield.errors %}
+                           {{ error|escape }} 
+                     {% endfor %}
+                 </span>
+                 {% endif %}
+           </div>
+         </div>
+       {% endfor %}
+       <legend>Plus d'informations</legend>
+       <div class="control-group">
+            <label class="control-label" for="input01">Travail</label>
+            <div class="controls">
+                <input type="text" class="input-xlarge" id="input01">
+                <p class="help-block">Exemple : Directrice Resources Humaines, ma socitée</p>
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label" for="input01">Etude</label>
+            <div class="controls">
+                <input type="text" class="input-xlarge" id="input01">
+                <p class="help-block">Exemple : Université Panthéon Sorbonne (Paris I)</p>
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label" for="input01">Langue</label>
+            <div class="controls">
+                <input type="text" class="input-xlarge" id="input01">
+                <p class="help-block">Exemple : Français, Anglais</p>
+            </div>
+        </div>
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary">Enregistrer</button>
+        <button type="reset" class="btn btn-cancel">Annuler</a>
+      </div>
+    </fieldset>
+  </form>
+
+{% endblock %}
+
+

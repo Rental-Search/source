@@ -289,7 +289,7 @@ def patron_edit_password(request):
     if form.is_valid():
         form.save()
         messages.success(request, _(u"Votre mot de passe à bien été modifié"))
-    return direct_to_template(request, 'accounts/patron_password.html', extra_context={'form': form, 'patron': request.user})
+    return direct_to_template(request, 'accounts/patron_edit_password.html', extra_context={'form': form, 'patron': request.user})
 
 @login_required
 def patron_edit_phonenumber(request):
@@ -302,7 +302,7 @@ def patron_edit_phonenumber(request):
             return redirect('eloue.accounts.views.patron_edit_phonenumber')
     else:
         formset = PhoneNumberFormset(instance=request.user)
-    return render_to_response('accounts/phonenumber_edit.html', dictionary={'formset': formset}, context_instance=RequestContext(request))
+    return render_to_response('accounts/patron_edit_phonenumber.html', dictionary={'formset': formset}, context_instance=RequestContext(request))
 
 @login_required
 def patron_edit_addresses(request):
@@ -315,7 +315,7 @@ def patron_edit_addresses(request):
             return redirect('eloue.accounts.views.patron_edit_addresses')
     else:
         formset = AddressFormSet(instance=request.user)
-    return render_to_response('accounts/addresses_edit.html', dictionary={'formset': formset}, context_instance=RequestContext(request))
+    return render_to_response('accounts/patron_edit_addresses.html', dictionary={'formset': formset}, context_instance=RequestContext(request))
 
 @login_required
 def patron_paypal(request):

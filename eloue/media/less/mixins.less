@@ -2,6 +2,7 @@
 // GRID SYSTEM
 // -----------------
 
+
 // Clearfix for clearing floats like a boss h5bp.com/q
 .clearfix() {
   zoom: 1;
@@ -44,9 +45,29 @@
 }
 
 
+// WEBKIT-STYLE FOCUS
+// ------------------
+
+.tab-focus() {
+  // Default
+  outline: thin dotted;
+  // Webkit
+  outline: 5px auto -webkit-focus-ring-color;
+  outline-offset: -2px;
+}
+
+
+// IE7 INLINE_BLOCK
+// ----------------
+.ie7-inline-block() {
+  *display: inline; /* IE7 inline-block hack */
+  *zoom: 1;
+}
+
+
 //
 // PLACEHOLDER
-//
+//-------------
 
 .placeholder(@color: @green, @fontSize: 18px) {
   input:-moz-placeholder {

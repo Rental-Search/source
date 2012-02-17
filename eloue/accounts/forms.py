@@ -229,42 +229,77 @@ class EmailPasswordResetForm(PasswordResetForm):
             message.send()
 
 
+class CommentedCheckboxInput(forms.CheckboxInput):
+
+    def __init__(self, info_text, attrs=None, check_test=bool):
+        super(CommentedCheckboxInput, self).__init__(attrs, check_test)
+        from django.utils.html import escape
+        self.info_text = escape(_(info_text))
+
+    def render(self, name, value, attrs=None):
+        from django.utils.safestring import mark_safe
+        print 'hello'
+        return mark_safe('<label class="checkbox">' + super(CommentedCheckboxInput, self).render(name, value, attrs) + '\t' + self.info_text + '</label>')
+
+
 class PatronEditForm(forms.ModelForm):
+    is_professional = forms.BooleanField(label=_(u"Professionnel"), required=False, initial=False, widget=CommentedCheckboxInput(info_text='Je suis professionnel'))
+    company_name = forms.CharField(label=_(u"Nom de la société"), required=False, widget=forms.TextInput(attrs={'class': 'inm'}))
+    
+    email = forms.EmailField(label=_(u"Email"), max_length=75, widget=forms.TextInput(attrs={
+        'autocapitalize': 'off', 'autocorrect': 'off', 'class': 'inm'}))
     username = forms.RegexField(label=_(u"Pseudo"), max_length=30, regex=r'^[\w.@+-]+$',
     help_text=_("Required. 30 characters or fewer. Letters, digits and @/./+/-/_ only."),
     error_messages={'invalid': _("This value may contain only letters, numbers and @/./+/-/_ characters.")},
     widget=forms.TextInput(attrs={'class': 'inm'}))
+    
     first_name = forms.CharField(label=_(u"Prénom"), required=True, widget=forms.TextInput(attrs={'class': 'inm'}))
     last_name = forms.CharField(label=_(u"Nom"), required=True, widget=forms.TextInput(attrs={'class': 'inm'}))
-    email = forms.EmailField(label=_(u"Email"), max_length=75, widget=forms.TextInput(attrs={
-        'autocapitalize': 'off', 'autocorrect': 'off', 'class': 'inm'}))
+    avatar = forms.ImageField(required=False)
+    
     paypal_email = forms.EmailField(label=_(u"Email PayPal"), required=False, max_length=75, widget=forms.TextInput(attrs={
             'autocapitalize': 'off', 'autocorrect': 'off', 'class': 'inm'}))
 	
     work = forms.CharField(label=_(u"Travail"), required=False, widget=forms.TextInput(attrs={'class': 'inm'}))
     school = forms.CharField(label=_(u"Etudes"), required=False, widget=forms.TextInput(attrs={'class': 'inm'}))
+
+    #is_professional = forms.BooleanField(label=_(u"Professionnel"), required=False, initial=False)
     
-    is_professional = forms.BooleanField(label=_(u"Professionnel"), required=False, initial=False)
-    
-    company_name = forms.CharField(label=_(u"Nom de la société"), required=False, widget=forms.TextInput(attrs={'class': 'inm'}))
     is_subscribed = forms.BooleanField(required=False, initial=False, label=_(u"Newsletter"))
     new_messages_alerted = forms.BooleanField(required=False, initial=True)
-
-    avatar = forms.ImageField(required=False)
 
     def __init__(self, *args, **kwargs):
         super(PatronEditForm, self).__init__(*args, **kwargs)
         self.fields['civility'].widget.attrs['class'] = "selm"
         self.fields['default_address'].widget.attrs['class'] = "selm"
         self.fields['default_address'].queryset = self.instance.addresses.all()
+        print self.fields['is_professional'].widget
 
     class Meta:
         model = Patron
-        fields = ('civility', 'username', 'first_name', 'last_name',
-            'email', 'paypal_email', 'is_professional', 'company_name', 'about',
-            'work', 'school', 'hobby', 'languages', 'is_subscribed', 'default_address',
-            'new_messages_alerted')
-    
+        fields = [
+             'is_professional',
+             'company_name',
+             'username',
+             'email',
+             'civility',
+             'first_name',
+             'last_name',
+             'avatar',
+             'default_address',
+             'paypal_email',
+             'is_subscribed',
+             'new_messages_alerted',
+             'about',
+             'school',
+             'hobby',
+             'work',
+             'languages',
+        ]
+        widgets = {
+            'is_professional': CommentedCheckboxInput('Je suis professionel'),
+        }
+
     def save(self, *args, **kwargs):
         inst = super(PatronEditForm, self).save(*args, **kwargs)
         if self.avatar:

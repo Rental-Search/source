@@ -1,0 +1,25 @@
+{% extends "accounts/patron_edit.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Modification de mes adresses" %}{% endblock %}
+
+{% block content-main-profil %}
+<form class="form-horizontal" method="post" action="" method="POST">
+    {% csrf_token %}
+    {{ formset.management_form }}
+    <legend>{% trans "Vos adresses" %}</legend>
+    {% for form in formset.forms %}
+        {% if forloop.last %}
+        <legend>{% trans "Ajouter une nouvelle adresse" %}</legend>
+        {% endif %}
+        {{form.id}}
+        <div class="control-group">
+            <label class="control-label" for="input01">Travail</label>
+            <div class="controls">
+                <input type="text" id="input01">
+            </div>
+        </div>
+        
+    {% endfor %}
+</form>
+{% endblock %}
