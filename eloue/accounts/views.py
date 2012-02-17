@@ -124,6 +124,19 @@ def user_geolocation(request):
         if current_source < int(request.POST['source']) or \
             current_source == int(request.POST['source']) and current_source == GEOLOCATION_SOURCE.BROWSER:
             return HttpResponse('already_geolocated')
+    from eloue import geocoder
+
+    localities = filter(lambda component: 'locality' in component['types'], address_components)
+    city = next(iter(map(lambda component: component['long_name'], localities)), None)
+    regions = filter(lambda component: 'administrative_area_level_1' in component['types'], address_components)
+    region = next(iter(map(lambda component: component['long_name'], regions)), None)
+    countries = filter(lambda component: 'country' in component['types'], address_components)
+    country = next(iter(map(lambda component: component['long_name'], countries)), None)
+    fallback = next(iter(map(lambda component: component['long_name'], address_components)), None) if not (city or region or country) else None
+    region_coords, region_radius = geocoder.GoogleGeocoder().geocode(region+', '+country)[1:3] if region and country else (None, None)
+
+
+    coordinates = (coordinates['lat'], coordinates['lon'])
     if 'viewport' in location['geometry']:
         viewport = location['geometry']['viewport']
         latitudes = viewport['Y']
@@ -134,17 +147,15 @@ def user_geolocation(request):
         radius = (distance.distance(sw, ne).km // 2) + 1
     else:
         radius = 5
-    coordinates = (coordinates['lat'], coordinates['lon'])
-    localities = filter(lambda component: 'locality' in component['types'] or 'administrative_area_level_1' in component['types'], address_components)
-    city = next(iter(map(lambda component: component['long_name'], localities)), None)
-    countries = filter(lambda component: 'country' in component['types'], address_components)
-    country = next(iter(map(lambda component: component['long_name'], countries)), None)
-    fallback = next(iter(map(lambda component: component['long_name'], address_components)), None)
+    
     request.session['location'] = {
         'source': int(request.POST['source']), 
         'coordinates': coordinates, 
         'city': city,
+        'region': region,
         'radius': radius,
+        'region_radius': region_radius,
+        'region_coords': region_coords,
         'country': country,
         'fallback': fallback
     }

@@ -36,6 +36,7 @@ from eloue.products.forms import AlertSearchForm, AlertForm, FacetedSearchForm, 
 
 from eloue.products.models import Category, Product, Curiosity, UNIT, ProductRelatedMessage, Alert, MessageThread
 from eloue.products.wizard import ProductWizard, MessageWizard, AlertWizard, AlertAnswerWizard
+from eloue.products.search_indexes import product_search
 from eloue.rent.forms import BookingOfferForm
 from eloue.rent.models import Booking
 from django_messages.forms import ComposeForm
@@ -55,12 +56,19 @@ def homepage(request):
     form = FacetedSearchForm()
     alerts = Alert.on_site.all()[:3]
     if 'location' in request.session:
-        l = Point(request.session['location']['coordinates'])
+        coords = request.session['location']['coordinates']
+        region_coords = request.session['location']['region_coords'] or coords
+        region_radius = request.session['location']['region_radius'] or request.session['location']['radius']
+        l = Point(coords)
         last_joined = Patron.objects.last_joined_near(l)
-        last_added = Product.objects.last_added_near(l)
+        last_added = product_search.spatial(
+            lat=region_coords[0], long=region_coords[1], radius=region_radius
+        ).spatial(
+            lat=coords[0], long=coords[1], radius=region_radius*2
+        ).order_by('-created_at_date', 'geo_distance')
     else:
         last_joined = Patron.objects.last_joined()
-        last_added = Product.objects.last_added()
+        last_added = product_search.order_by('-created_at')
     return render_to_response(
         template_name='index.html', 
         dictionary={

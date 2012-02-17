@@ -131,36 +131,9 @@
                 {% endif %}
             </li>
         </ul>{# product_filter #}
-        <ul class="product-list">
-            {% for product in product_list %}
-            <li>
-                <a href="{{ product.url|safe }}" {% if product|nofollow %}rel="nofollow"{% endif %} class="pl-img">
-                    {% if product.thumbnail %}
-                    <img src="{{ product.thumbnail }}" alt="{{ product.summary }}" width="60" height="60" />
-                    {% endif %}
-                </a><!-- pl-img -->
-                <div class="pl-content">
-                    <h3>
-                        <a href="#"><a href="{{ product.url|safe }}" {% if product|nofollow %}rel="nofollow"{% endif %}>{{ product.summary|capitalize|truncate:50 }}</a></a>
-                    </h3>
-                    <address>{{ product.city|capfirst }}{% if product.zipcode %}, {{ product.zipcode }}{% endif %}</address>
-                    {% if product.price %}
-                        <p class="pl-price">{{ product.price|quantize|currency }} <span>/jour</span></p>
-                    {% endif %}
-                </div><!-- pl-content -->
-                <div class="pl-avatar">
-                    <a href="{{product.owner_url}}">
-                        {% if product.owner.avatar %}
-                            <img src="{{product.owner.avatar.thumbnail.url}}" width="60" height="60" />
-                        {% else %}
-                            <img src="{{ MEDIA_URL }}images/default_avatar.png" width="60" height="60" />
-                        {% endif %}
-                    </a>
-                    <span class="dial-avatar"></span>
-                </div>
-            </li>
-            {% endfor %}
-        </ul>{# product_list #}
+        {% with 50 as truncation %}
+            {% include 'products/partials/result_list.html' %}
+        {% endwith %}
         {% pagination %}
         {% if is_paginated %}
         <div class="pagination">
@@ -188,7 +161,7 @@
         </div><!-- search-block -->
         <div id="where" class="info-block">
             <h2>Lieu</h2>
-            <p class="town-input"><input id="id_l" type="text" name="l" value="{% firstof request.session.location.city request.session.location.country request.session.location.fallback '' %}"/></p>
+            <p class="town-input"><input id="id_l" type="text" name="l" value="{% firstof request.session.location.city request.session.location.region request.session.location.country request.session.location.fallback "" %}"/></p>
             <div id="map-canvas" class="map"></div>
             <p class="radius-input">Dans un rayon de <input type="text" name="r" value="{{request.session.location.radius}}"/> Km</p>
         </div><!-- where -->
