@@ -148,6 +148,8 @@
 
     <field name="summary" type="edge_ngram" indexed="true" stored="true" multiValued="false" />
 
+    <field name="created_at_date" type="date" indexed="true" stored="true" multiValued="false" />
+
     <field name="patron_url" type="text" indexed="true" stored="true" multiValued="false" />
 
     <field name="owner_exact" type="string" indexed="true" stored="true" multiValued="false" />
@@ -163,3 +165,5 @@
   <!-- SolrQueryParser configuration: defaultOperator="AND|OR" -->
   <solrQueryParser defaultOperator="AND" />
 </schema>
+
+

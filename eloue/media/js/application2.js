@@ -1,3 +1,78 @@
+function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie != '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = jQuery.trim(cookies[i]);
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+function sameOrigin(url) {
+    // url could be relative or scheme relative or absolute
+    var host = document.location.host; // host + port
+    var protocol = document.location.protocol;
+    var sr_origin = '//' + host;
+    var origin = protocol + sr_origin;
+    // Allow absolute or scheme relative URLs to same origin
+    return (url == origin || url.slice(0, origin.length + 1) == origin + '/') ||
+        (url == sr_origin || url.slice(0, sr_origin.length + 1) == sr_origin + '/') ||
+        // or any other URL that isn't scheme relative or absolute i.e relative.
+        !(/^(\/\/|http:|https:).*/.test(url));
+}
+function safeMethod(method) {
+    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+}
+
+function SuccessBuilder(priority, geocodeSuccess) {
+    return function(position) {
+        geocoder = new google.maps.Geocoder();
+        latlon = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+        geocoder.geocode(
+            {'latLng':latlon}, 
+            function(result) {
+                report_location_back(priority, result[0], latlon, function(response) {
+                    if (response["status"] == "OK") {
+                        geocodeSuccess();
+                    }
+                });
+            }
+        );
+    };
+}
+
+function report_location_back(source, address, coords, success) {
+  success = (typeof success == "undefined")?function(response) {
+
+      if (response["status"] == 'OK') {
+        window.location.reload();
+      }
+    }:success;
+  $(document).ajaxSend(function(event, xhr, settings) {
+    if (!safeMethod(settings.type) && sameOrigin(settings.url)) {
+        xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+    }
+  });
+  $.ajax({
+    type: 'POST',
+    url: document.location.origin+'/user_geolocation/',
+    data: {
+      address: JSON.stringify(address),
+      coordinates: JSON.stringify({
+        lat: coords.lat(),
+        lon: coords.lng()
+      }),
+      source: source
+    },
+    success: success
+  });
+}
+
 $(document).ready(function() {
     /*Display home tabs */
     $( ".products-home-tabs" ).tabs();
@@ -6,10 +81,10 @@ $(document).ready(function() {
     $('.btn-other-town').click(function () {
         $('.search-home').addClass('editing');
     });
-    
+
     /* Display the city input */
     $('.btn-edit-town').click(function () {
-        $('.search-home').removeClass('editing');
+        navigator.geolocation.getCurrentPosition(SuccessBuilder(1, function(){window.location.reload();}));
     });
     $('.btn-cancel-edit-town').click(function () {
         $('.search-home').removeClass('editing');
@@ -18,6 +93,22 @@ $(document).ready(function() {
     /*Display product detail tabs */
     $( ".product-tabs" ).tabs();
     
+
+    $("#id_work").autocomplete(
+        {
+            'source': function(request, response) {
+                $.getJSON('accounts_work_autocomplete'+'?term='+request.term, response);}
+        }
+    );
+    $("#id_school").autocomplete(
+        {
+            'source': function(request, response) {
+                $.getJSON('accounts_studies_autocomplete'+'?term='+request.term, response);}
+        }
+    );
+    
+    $("#id_languages").chosen();
+
     
     /* Booking price */
     // Price calculations

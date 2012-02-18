@@ -18,79 +18,63 @@
                 <img src="{{ MEDIA_URL }}images/default_avatar.png" alt="{% trans "loueur"%}{{ patron.username }}" width="180" height="180">
                 {% endif %}
                 <h1>{{ patron.username }}</h1>
-                <address>{{ patron.default_address.city }} - {{ patron.default_address.zipcode }}</address>
+                {% if patron.default_address %}
+                    <address>{{ patron.default_address.city }} - {{ patron.default_address.zipcode }}</address>
+                {% else %}
+                    {% if patron.addresses.all|first %}
+                        {% with patron.addresses.all|first as address %}
+                             <address>{{ address.city }} - {{ address.zipcode }}</address>
+                        {% endwith %}
+                    {% endif %}
+                {% endif %}
             </div>{# avatar-picture #}
             <div class="profil-intro-content">
-                <p class="profil-description">“Donec nec justo eget felis facilisis fermentum. Aliquam porttitor mauris sit amet orci. Aenean dignissi pellentesque”</p>
-                <a class="btn-contactme">{% trans "Contactez-moi" %}</a>
+                {% if patron.about %}
+                    <p class="profil-description">{{ patron.about }}</p>
+                {% endif %}
+                <a class="btn-contactme">{% trans "Contactez-moi" %}</button>
             </div>{# profil-description #}
         </div>{# profil-block #}
         <div class="profil-block">
             <ul class="profil-verification">
-                <li class="fb-verification">Compte Facebook vérifié</li>
-                <li class="pp-account-verification">Compte PayPal vérifié</li>
-                <li class="pp-email-verification">Email PayPal vérifié</li>
+                {% if patron.facebooksession %}
+                    <li class="fb-verification">Compte Facebook vérifié</li>
+                {% endif %}
+                {% if patron.is_verified == 'VERIFIED' %}
+                    <li class="pp-account-verification">Compte PayPal vérifié</li>
+                {% endif %}
+                {% if patron.is_confirmed %}
+                    <li class="pp-email-verification">Email PayPal vérifié</li>
+                {% endif %}
             </ul>
         </div>{# profil-block #}
         <div class="profil-block">
             <h3>Plus d'info</h3>
-            <h4>Travail</h4>
-            <p>Directrice Resources Humaines, Société Générale</p>
-            <h4>Etudes</h4>
-            <p>Ecole de commerce</p>
-            <h4>Languages Parlées</h4>
-            <p>Français, Anglais</p>
+            {% if patron.work %}
+                <h4>{% trans "Travail" %}</h4>
+                <p>{{ patron.work }}</p>
+            {% endif %}
+            {% if patron.school %}
+                <h4>{% trans "Etudes" %}</h4>
+                <p>{{patron.school}}</p>
+            {% endif %}
+            {% if patron.languages.count %}
+                <h4>{% trans "Languages Parlées" %}</h4>
+                <p>{{ patron.languages.all|join:", "}}</p>
+            {% endif %}
         </div>{# profil-block #}
         <div class="profil-block last">
-            <table class="answer-stats">
-                <tr>
-                    <td class="answer-rate">Taux de réponse</td><td>100%</td>
-                </tr>
-                <tr>
-                    <td class="answer-time">Temps de réponse moyen</td><td>1 j</td>
-                </tr>
-            </table>
+            {% include "accounts/partials/response_stats.html" %}
         </div>{# profil-block #}
     </div>{# content-aside-profil #}
     <div class="content-main-profil">
-        <h2>{% trans "Commentaires" %} <small>(6 {% trans "avis" %})</small></h2>
+        <h2>{% trans "Commentaires" %} <small>({{ borrowercomments.count }} {% trans "avis" %})</small></h2>
         <ul class="comments">
-            <li>
-                <a href="#" class="comment-img">
-                    <img src="images/avatars/product_page_a1fc68d292034f45b9ce559bb88d9bec.jpeg" width="60" height="60" alt=""/>
-                </a>
-                <div class="comment-content">
-                    <div>
-                        <p class="comment-writter">
-                            <a href="/loueur/benoit/">qto870</a> Jeudi 12 janvier 2012
-                            <span class="stars empty"><span class="stars filled_1"></span></span>
-                        </p>
-                        <p class="comment-text">
-                            Great place - great city! To put it in a nutshell it was a very nice trip and the apartment is perfect for everybody who wants a nice place in edinburgh for a few days. Thank you, Samira!
-                        </p><!-- comment-content -->
-                        <span class="comment-dial"></span>
-                    </div>
-                </div><!-- comment-content -->
-            </li>
-            <li>
-                <a href="#" class="comment-img">
-                    <img src="images/avatars/product_page_a1fc68d292034f45b9ce559bb88d9bec.jpeg" width="60" height="60" alt=""/>
-                </a>
-                <div class="comment-content">
-                    <div>
-                        <p class="comment-writter">
-                            <a href="/loueur/benoit/">qto870</a> Jeudi 12 janvier 2012
-                            <span class="stars empty"><span class="stars filled_3"></span></span>
-                        </p>
-                        <p class="comment-text">
-                            Great place - great city! To put it in a nutshell it was a very nice trip and the apartment is perfect for everybody who wants a nice place in edinburgh for a few days. Thank you, Samira!
-                        </p><!-- comment-content -->
-                        <span class="comment-dial"></span>
-                    </div>
-                </div><!-- comment-content -->
-            </li>
+            {% for comment in borrowercomments %}
+                <li>{% include 'rent/partials/comment.html' %}</li>
+            {% endfor %}
         </ul>
-        <p class="more-comment"><a href="#">Voir tous les commentaires</a></p>
+        <p class="more-comment"><a href="{% url comments %}">Voir tous les commentaires</a></p>
         {% if patron.products %}
         {% blocktrans with patron.products.count as count and patron.products.count|pluralize as pluralize %}
 	      <h2>{{ count }} location{{ pluralize }}</h2>

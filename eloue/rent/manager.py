@@ -20,7 +20,7 @@ class BookingManager(Manager):
         def filter(self):
             return self.get_query_set().filter(state=BOOKING_STATE[state])
         return filter
-    
+
 
 class CurrentSiteBookingManager(CurrentSiteManager, BookingManager):
     pass

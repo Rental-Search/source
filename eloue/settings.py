@@ -219,7 +219,7 @@ PIPELINE_JS_COMPRESSOR = 'pipeline.compressors.yui.YUICompressor'
 PIPELINE_COMPILERS = (
   'pipeline.compilers.less.LessCompiler',
 )
-PIPELINE_LESS_BINARY = '/Users/benoit/node_modules/less/bin/lessc'
+PIPELINE_LESS_BINARY = getattr(local, 'PIPELINE_LESS_BINARY', '/Users/benoit/node_modules/less/bin/lessc')
 PIPELINE_YUI_BINARY = getattr(local, 'COMPRESS_YUI_BINARY', '/usr/bin/yui-compressor')
 PIPELINE_ROOT = getattr(local, 'PIPELINE_ROOT', MEDIA_ROOT)
 PIPELINE_URL = getattr(local, 'PIPELINE_URL', MEDIA_URL)
@@ -227,6 +227,7 @@ PIPELINE_CSS = {
     'master2': {
         'source_filenames': (
             'less/styles.less',
+            'css/chosen.css'
         ),
         'output_filename': 'css/master2.r?.css',
         'extra_context': {
@@ -237,10 +238,11 @@ PIPELINE_CSS = {
         'source_filenames': (
             'css/screen.css',
             'css/custom.css',
-            'css/plugins/ui/jquery.ui.core.css',
-            'css/plugins/ui/jquery.ui.datepicker.css',
-            'css/plugins/ui/jquery.ui.tabs.css',
-            'css/plugins/ui/jquery.ui.theme.css',
+            #'css/plugins/ui/jquery.ui.core.css',
+            #'css/plugins/ui/jquery.ui.datepicker.css',
+            #'css/plugins/ui/jquery.ui.tabs.css',
+            #'css/plugins/ui/jquery.ui.theme.css',
+            'css/jquery-ui-1.8.17.custom.css',
             'css/chosen.css'
         ),
         'output_filename': 'css/master.r?.css',
@@ -382,7 +384,8 @@ PIPELINE_JS = {
             'js/jquery-ui-1.8.17.custom.min.js',
             'js/modernizr.js',
             'js/mustache.js',
-            'js/application2.js'
+            'js/application2.js',
+            'js/chosen.jquery.min.js',
             ),
         'output_filename': 'js/application2.r?.js',
         'extra_context': {
@@ -391,12 +394,14 @@ PIPELINE_JS = {
     },
     'application': {
         'source_filenames': (
-            'js/jquery.js',
-            'js/ui/jquery.ui.core.js',
-            'js/ui/jquery.ui.widget.js',
-            'js/ui/jquery.ui.datepicker.js',
-            'js/ui/jquery.ui.datepicker-fr.js',
-            'js/ui/jquery.ui.tabs.js',
+#            'js/jquery.js',
+#            'js/ui/jquery.ui.core.js',
+#            'js/ui/jquery.ui.widget.js',
+#            'js/ui/jquery.ui.datepicker.js',
+#            'js/ui/jquery.ui.datepicker-fr.js',
+#            'js/ui/jquery.ui.tabs.js',
+            'js/jquery-1.7.1.min.js',
+            'js/ui/jquery-ui-1.8.17.custom.min.js',
             'js/modernizr.js',
             'js/mustache.js',
             'js/jquery.cycle.all.latest.js',
@@ -549,5 +554,3 @@ XPF_EXCHANGE_RATE = '0.00838'
 
 # Message 
 REPLACE_STRING = getattr(local, "REPLACE_STRING", "XXXXXX")
-
-

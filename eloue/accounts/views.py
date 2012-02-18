@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import smtplib
 import socket
+import simplejson
 from logbook import Logger
 import simplejson
 
@@ -10,7 +11,9 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.sites.models import Site
 from django.core.mail import EmailMessage, BadHeaderError
 from django.core.urlresolvers import reverse
-from django.forms.models import model_to_dict
+from django.db.models import Count, Q
+from django.views.decorators.http import require_GET
+from django.forms.models import model_to_dict, inlineformset_factory
 from django.shortcuts import get_object_or_404, render_to_response
 from django.template import RequestContext
 from django.utils.translation import ugettext_lazy as _
@@ -24,14 +27,16 @@ from django.http import HttpResponse, HttpResponseForbidden
 from django.contrib.auth import login
 from oauth_provider.models import Token
 from django.shortcuts import redirect
-
+ 
 from eloue.decorators import secure_required, mobify
 from eloue.accounts.forms import EmailAuthenticationForm, PatronEditForm, PatronPaypalForm, PatronPasswordChangeForm, ContactForm, PatronSetPasswordForm, FacebookForm
 from eloue.accounts.models import Patron, FacebookSession
 from eloue.accounts.wizard import AuthenticationWizard
 
+from eloue import geocoder
 from eloue.products.forms import FacetedSearchForm
-from eloue.rent.models import Booking
+from eloue.rent.models import Booking, BorrowerComment, OwnerComment
+from eloue.rent.forms import OwnerCommentForm, BorrowerCommentForm
 import time
 
 
@@ -63,7 +68,6 @@ def authenticate(request, *args, **kwargs):
             return redirect(redirect_path)
         else:
             return redirect(settings.LOGIN_REDIRECT_URL)
-
 
 @never_cache
 def authenticate_headless(request):
@@ -101,6 +105,7 @@ def associate_facebook(request):
             {'me': request.user.facebooksession.uid}
         )
 
+
 from eloue.products.utils import Enum
 
 GEOLOCATION_SOURCE = Enum([
@@ -113,24 +118,116 @@ GEOLOCATION_SOURCE = Enum([
 def user_geolocation(request):
     stored_location = request.session.get('location')
     location = simplejson.loads(request.POST['address'])
+    coordinates = simplejson.loads(request.POST['coordinates'])
+    address_components = location['address_components']
     if stored_location:
         current_source = stored_location.get('source', max(GEOLOCATION_SOURCE.values())+1)
         if current_source < int(request.POST['source']) or \
             current_source == int(request.POST['source']) and current_source == GEOLOCATION_SOURCE.BROWSER:
-            return HttpResponse('already_geolocated')
-
-    address_components = location['address_components']
-    address_coordinates = location['geometry']['location']
-    coordinates = {}
-    coordinates['lat'] = address_coordinates['Pa']
-    coordinates['lon'] = address_coordinates['Oa']
+            return HttpResponse(simplejson.dumps(
+                {'status': 'already_geolocated'}),
+                mimetype="application/json"
+            )
+    
     localities = filter(lambda component: 'locality' in component['types'], address_components)
     city = next(iter(map(lambda component: component['long_name'], localities)), None)
-    request.session['location'] = {'source': int(request.POST['source'])}
-    request.session['location']['coordinates'] = coordinates
-    request.session['location']['city'] = city
-    return HttpResponse("OK")
+    regions = filter(lambda component: 'administrative_area_level_1' in component['types'], address_components)
+    region = next(iter(map(lambda component: component['long_name'], regions)), None)
+    countries = filter(lambda component: 'country' in component['types'], address_components)
+    country = next(iter(map(lambda component: component['long_name'], countries)), None)
+    fallback = next(iter(map(lambda component: component['long_name'], address_components)), None) if not (city or region or country) else None
+    region_coords, region_radius = geocoder.GoogleGeocoder().geocode(region+', '+country)[1:3] if region and country else (None, None)
 
+
+    coordinates = (coordinates['lat'], coordinates['lon'])
+    if 'viewport' in location['geometry']:
+        viewport = location['geometry']['viewport']
+        latitudes = viewport['Y']
+        longitudes = viewport['$']
+        from geopy import distance, Point
+        sw = Point(latitudes['b'], longitudes['b'])
+        ne = Point(latitudes['d'], longitudes['d'])
+        radius = (distance.distance(sw, ne).km // 2) + 1
+    else:
+        radius = 5
+    
+    request.session['location'] = {
+        'source': int(request.POST['source']), 
+        'coordinates': coordinates, 
+        'city': city,
+        'region': region,
+        'radius': radius,
+        'region_radius': region_radius,
+        'region_coords': region_coords,
+        'country': country,
+        'fallback': fallback
+    }
+    return HttpResponse(simplejson.dumps(
+        {'status': "OK", 'radius': radius}), 
+        mimetype="application/json"
+    )
+
+
+@login_required
+def comments_received(request):
+    patron = request.user
+    borrowers_comments = BorrowerComment.objects.filter(booking__owner=patron)
+    owners_comments = OwnerComment.objects.filter(booking__borrower=patron)
+    return render_to_response(
+        'rent/comments_received.html',
+        RequestContext(request, {
+            'borrowers_comments': borrowers_comments,
+            'owners_comments': owners_comments,
+        })
+    )
+
+@login_required
+def comments(request):
+    patron = request.user
+    closed_bookings = Booking.objects.filter(Q(owner=patron) | Q(borrower=patron), Q(state=Booking.STATE.CLOSED)|Q(state=Booking.STATE.CLOSING))
+    commented_bookings = closed_bookings.filter(~Q(ownercomment=None, owner=patron) & ~Q(borrower=patron, borrowercomment=None))
+    uncommented_bookings = closed_bookings.filter(Q(ownercomment=None, owner=patron) | Q(borrower=patron, borrowercomment=None))
+    forms = []
+
+    if request.method == "POST":
+        for booking in uncommented_bookings:
+            if booking.owner == patron:
+                Form = OwnerCommentForm
+                Model = OwnerComment
+            else:
+                Form = BorrowerCommentForm
+                Model = BorrowerComment
+            
+            if unicode(booking.pk.hex) in request.POST:
+                form = Form(request.POST, instance=Model(booking=booking), prefix=booking.pk)
+                if form.is_valid():
+                    form.save()
+                    return redirect('eloue.accounts.views.comments')
+            else:
+                form = Form(instance=Model(booking=booking), prefix=booking.pk)
+            forms.append(form)
+    else:
+        for booking in uncommented_bookings:
+            if booking.owner == patron:
+                Form = OwnerCommentForm
+                Model = OwnerComment
+            else:
+                Form = BorrowerCommentForm
+                Model = BorrowerComment
+            form = Form(instance=Model(booking=booking), prefix=booking.pk)
+            forms.append(form)
+    
+    return render_to_response(
+        'rent/comments.html', 
+        RequestContext(
+            request, 
+            {
+                'commented_bookings': commented_bookings,
+                'forms': forms,
+            }
+        )
+    )
+    
 @cache_page(900)
 def patron_detail(request, slug, patron_id=None, page=None):
     if patron_id:  # This is here to be compatible with the old app
@@ -138,8 +235,15 @@ def patron_detail(request, slug, patron_id=None, page=None):
         return redirect_to(request, patron.get_absolute_url(), permanent=True)
     form = FacetedSearchForm()
     patron = get_object_or_404(Patron.on_site, slug=slug)
-    return object_list(request, patron.products.all(), page=page, paginate_by=PAGINATE_PRODUCTS_BY,
-        template_name='accounts/patron_detail.html', template_object_name='product', extra_context={'form': form, 'patron': patron})
+    return object_list(
+        request, patron.products.all(), page=page, 
+        paginate_by=PAGINATE_PRODUCTS_BY, 
+        template_name='accounts/patron_detail.html', 
+        template_object_name='product', extra_context={
+            'form': form, 'patron': patron, 
+            'borrowercomments': BorrowerComment.objects.filter(booking__owner=patron)[:4]
+        }
+    )
 
 
 @login_required
@@ -317,8 +421,22 @@ def contact(request):
             messages.error(request, _(u"Erreur lors de l'envoi du message"))
     return direct_to_template(request, 'accounts/contact.html', extra_context={'form': ContactForm()})
 
-    
-    
-    
-    
-    
+@login_required
+@require_GET
+def accounts_work_autocomplete(request):
+    term = request.GET.get('term', '')
+    works = Patron.objects.filter(
+        work__icontains=term).values('work').annotate(Count('work'))
+    work_list = [{'label': work['work'], 'value': work['work']} for work in works]
+    return HttpResponse(simplejson.dumps(work_list), mimetype="application/json")
+
+
+@login_required
+@require_GET
+def accounts_studies_autocomplete(request):
+    term = request.GET.get('term', '')
+    schools = Patron.objects.filter(
+        school__icontains=term).values('school').annotate(Count('school'))
+    school_list = [{'label': school['school'], 'value': school['school']} for school in schools]
+    return HttpResponse(simplejson.dumps(school_list), mimetype="application/json")
+

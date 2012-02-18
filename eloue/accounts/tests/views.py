@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+
+
 import django.forms as forms
 
 from django.conf import settings
@@ -19,6 +21,41 @@ def dummy_verify_paypal_account(email, first_name, last_name):
         return 'INVALID'
     elif first_name=='Lin' and last_name=='LIU' and email=='test_verified_status@e-loue.com':
         return 'VERIFIED'
+
+class PatronInfoAjaxTest(TestCase):
+    fixtures = ['category', 'patron', 'address', 'price', 'product', 'booking']
+
+    def test_work_autocomplete(self):
+        import json
+        self.assertTrue(self.client.login(username='alexandre.woog@e-loue.com', password='alexandre'))
+        response = self.client.get(reverse('accounts_work_autocomplete'), {
+            'term': 'e-'
+        })
+        self.assertEqual(response.status_code, 200)
+        response = json.loads(response.content)
+        self.assertEqual(len(response), 2)
+        response = self.client.get(reverse('accounts_work_autocomplete'), {
+            'term': 'google'
+        })
+        self.assertEqual(response.status_code, 200)
+        response = json.loads(response.content)
+        self.assertEqual(len(response), 0)
+    
+    def test_school_autocomplete(self):
+        import json
+        self.assertTrue(self.client.login(username='alexandre.woog@e-loue.com', password='alexandre'))
+        response = self.client.get(reverse('accounts_studies_autocomplete'), {
+            'term': 'e'
+        })
+        self.assertEqual(response.status_code, 200)
+        response = json.loads(response.content)
+        self.assertEqual(len(response), 5)
+        response = self.client.get(reverse('accounts_studies_autocomplete'), {
+            'term': 'el'
+        })
+        self.assertEqual(response.status_code, 200)
+        response = json.loads(response.content)
+        self.assertEqual(len(response), 2)
 
 class PatronTest(TestCase):
     fixtures = ['category', 'patron', 'address', 'price', 'product', 'booking']

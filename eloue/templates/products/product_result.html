@@ -61,6 +61,7 @@
 {% endblock %}
 
 {% block content %}
+
 <div id="result-page" class="container-main">
     <ul class="breadcrumb">
         <li><a href="{% url home %}">{% trans "Accueil" %}</a></li>
@@ -130,36 +131,9 @@
                 {% endif %}
             </li>
         </ul>{# product_filter #}
-        <ul class="product-list">
-            {% for product in product_list %}
-            <li>
-                <a href="{{ product.url|safe }}" {% if product|nofollow %}rel="nofollow"{% endif %} class="pl-img">
-                    {% if product.thumbnail %}
-                    <img src="{{ product.thumbnail }}" alt="{{ product.summary }}" width="60" height="60" />
-                    {% endif %}
-                </a><!-- pl-img -->
-                <div class="pl-content">
-                    <h3>
-                        <a href="#"><a href="{{ product.url|safe }}" {% if product|nofollow %}rel="nofollow"{% endif %}>{{ product.summary|capitalize|truncate:50 }}</a></a>
-                    </h3>
-                    <address>{{ product.city|capfirst }}{% if product.zipcode %}, {{ product.zipcode }}{% endif %}</address>
-                    {% if product.price %}
-                        <p class="pl-price">{{ product.price|quantize|currency }} <span>/jour</span></p>
-                    {% endif %}
-                </div><!-- pl-content -->
-                <div class="pl-avatar">
-                    <a href="{{product.owner.get_absolute_url}}">
-                        {% if product.owner.avatar %}
-                            <img src="{{product.owner.avatar.thumbnail.url}}" width="60" height="60" />
-                        {% else %}
-                            <img src="{{ MEDIA_URL }}images/default_avatar.png" width="60" height="60" />
-                        {% endif %}
-                    </a>
-                    <span class="dial-avatar"></span>
-                </div>
-            </li>
-            {% endfor %}
-        </ul>{# product_list #}
+        {% with 50 as truncation %}
+            {% include 'products/partials/result_list.html' %}
+        {% endwith %}
         {% pagination %}
         {% if is_paginated %}
         <div class="pagination">
@@ -179,18 +153,18 @@
     {% endif %}
     </div>{# content-main #}
     <div class="content-aside">
-        <div class="searh-block">
-            <form action="" method="get">
-                <input type="text" name="q" value="Robe" class="search-box-q"/>
-                <input type="submit" value="Rechercher" class="btn-search"/>
-            </form>
-        </div><!-- search-block -->
-        <div id="where" class="info-block">
-            <h2>Lieu</h2>
-            <p class="town-input"><input type="text" name="l" value="Paris"/></p>
-            <div id="map-canvas" class="map"></div>
-            <p class="radius-input">Dans un rayon de <input type="text" name="r" value="5"/> Km</p>
-        </div><!-- where -->
+        <form action="{% url product_list %}" method="get" id="form_search_results">
+            <div class="search-block">
+                    {{form.q}}
+                    <input type="submit" value="Rechercher" class="btn-search"/>
+            </div><!-- search-block -->
+            <div id="where" class="info-block">
+                <h2>Lieu</h2>
+                <p class="town-input"><input id="id_l" type="text" name="l" value="{% firstof request.session.location.city request.session.location.region request.session.location.country request.session.location.fallback "" %}"/></p>
+                <div id="map-canvas" class="map"></div>
+                <p class="radius-input">Dans un rayon de <input id="id_r" type="text" name="r" value="{{request.session.location.radius}}"/> Km</p>
+            </div><!-- where -->
+        </form>
         {% if product_list %}
         <div id ="facet-categories" class="info-block">
             <h2>{% trans "Catégories" %}</h2>
@@ -231,4 +205,80 @@
     </div>{# content-aside #}
 </div>{# container-main #}
 </div>
+
+{% endblock %}
+
+{% block tail %}
+{{block.super}}
+
+  <script src="//maps.googleapis.com/maps/api/js?sensor=false&amp;libraries=places" type="text/javascript"></script>
+  <script type="text/javascript">
+ 
+    function SuccessBuilder(priority, geocodeSuccess) {
+        return function(position) {
+            geocoder = new google.maps.Geocoder();
+            latlon = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+            geocoder.geocode(
+                {'latLng':latlon}, 
+                function(result) {
+                    report_location_back(priority, result[0], latlon, function(response) {
+                        if (response["status"] == "OK") {
+                           geocodeSuccess();
+                        }
+                    });
+                }
+            );
+        };
+    }
+
+    navigator.geolocation.getCurrentPosition(
+        SuccessBuilder(
+            2, function() {
+                $("#form_search_results").submit();
+            }
+        )
+    );
+
+
+    autocomplete = new google.maps.places.Autocomplete(document.getElementById("id_l"), {types: ['geocode']});
+    google.maps.event.addListener(autocomplete, 'place_changed', function() {
+      place = autocomplete.getPlace();
+      report_location_back(1, place, place.geometry.location, function(response){
+        if (response["status"] == "OK") {
+          $("#id_l").remove();
+          $("#id_r").val(40);
+          $("#id_r").attr("value", 40);
+          //$("#form_search_results").submit();
+        }
+      });
+    });
+
+
+    function initialize() {
+        var myLatlng = new google.maps.LatLng('{{request.session.location.coordinates.0}}'.replace(',','.'), '{{request.session.location.coordinates.1}}'.replace(',','.'));
+        var myOptions = {
+            zoom: 12,
+            disableDefaultUI: true,
+            center: myLatlng,
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+        }
+        var map = new google.maps.Map(document.getElementById("map-canvas"), myOptions);
+
+        var marker = new google.maps.Marker({
+            position: myLatlng, 
+            map: map,
+            title:"Hello World!"
+        });
+        var circle = new google.maps.Circle({
+          map: map,
+          radius: Number('{{request.session.location.radius}}'.replace(',', '.'))*1000,    // 10 miles in metres
+          fillColor: '#AA0000',
+          editable: true
+        });
+        circle.bindTo('center', marker, 'position');
+    }
+
+    initialize();    
+    
+  </script>
 {% endblock %}

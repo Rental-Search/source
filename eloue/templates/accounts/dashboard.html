@@ -32,7 +32,9 @@
                 <address>{{ user.default_address.city }} - {{ user.default_address.zipcode}}</address>
             </div><!-- avatar-picture -->
             <div class="profil-intro-content">
-                <p class="profil-description">“Donec nec justo eget felis facilisis fermentum. Aliquam porttitor mauris sit amet orci. Aenean dignissi pellentesque”</p>
+                {% if patron.about %}
+                    <p class="profil-description">{{ patron.about }}</p>
+                {% endif %}
                 <a href="{% url patron_edit %}" class="btn-contactme">Editer mon profil</a>
             </div><!-- profil-description -->
         </div><!-- profil-block -->

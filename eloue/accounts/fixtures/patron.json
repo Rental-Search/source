@@ -25,7 +25,9 @@
             "is_professional": false,
             "civility": 2,
             "modified_at": "2010-08-17 09:00:10",
-            "slug": "alexandre"
+            "slug": "alexandre",
+            "work": "e-loue",
+            "school": "hec"
         },
         "model": "accounts.patron",
         "pk": 1
@@ -57,7 +59,9 @@
             "groups": [],
             "user_permissions": [],
             "paypal_email": "eloue_1283761258_per@tryphon.org",
-            "slug": "tim"
+            "slug": "tim",
+            "work": "20 minutes",
+            "school": "sorbonne"
         },
         "model": "accounts.patron",
         "pk": 2
@@ -87,7 +91,9 @@
             "user_permissions": [],
             "civility": 2,
             "modified_at": "2010-08-17 09:00:10",
-            "slug": "benjamin"
+            "slug": "benjamin",
+            "work": "facebook",
+            "school": "ecole normale superieure"
         },
         "model": "accounts.patron",
         "pk": 3
@@ -119,7 +125,9 @@
             "groups": [],
             "user_permissions": [],
             "paypal_email": "eloue_1878761216_per@tryphon.org",
-            "slug": "lin"
+            "slug": "lin",
+            "work": "eloue",
+            "school": "telecom bretagne"
         },
         "model": "accounts.patron",
         "pk": 4
@@ -150,7 +158,9 @@
             "modified_at": "2011-08-17 09:00:10",
             "groups": [],
             "user_permissions": [],
-            "slug": "kosii"
+            "slug": "kosii",
+            "work": "E-loue",
+            "school": "ELTE"
         },
         "model": "accounts.patron",
         "pk": 5

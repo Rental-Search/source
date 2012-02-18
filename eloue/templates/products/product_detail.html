@@ -113,51 +113,28 @@
                 {% endif %}
                 {% endwith %}
             </div> {# gallery #}
-            <div id="prices" style="height: 200px;">Grille des tarifs</div>{# prices #}
+            <div id="prices" style="height: 200px;">
+            {% for price in product.prices.all %}
+                {{price}} euros / {{price.get_unit_display}}<p>
+            {% endfor %}
+            </div>{# prices #}
             <div id="calendar" style="height: 200px;">Calendrier</div>{# calendar #}
         </div>{# product-tabs #}
         <div class="product-desc">
             {{ product.description|linebreaksp }}
         </div>{# product-desc #}
+
         <div class="product-comment">
-            <h2>{% trans "Commentaires" %} <small>(2 {% trans "avis" %})</small></h2>
-            <ul class="comments">
-                <li>
-                    <a href="#" class="comment-img">
-                        <img src="images/avatars/product_page_a1fc68d292034f45b9ce559bb88d9bec.jpeg" width="60" height="60" alt=""/>
-                    </a>
-                    <div class="comment-content">
-                        <div>
-                            <p class="comment-writter">
-                                <a href="/loueur/benoit/">qto870</a> Jeudi 12 janvier 2012
-                                <span class="stars empty"><span class="stars filled_1"></span></span>
-                            </p>
-                            <p class="comment-text">
-                                Great place - great city! To put it in a nutshell it was a very nice trip and the apartment is perfect for everybody who wants a nice place in edinburgh for a few days. Thank you, Samira!
-                            </p><!-- comment-content -->
-                            <span class="comment-dial"></span>
-                        </div>
-                    </div>
-                </li>
-                <li>
-                    <a href="#" class="comment-img">
-                        <img src="images/avatars/product_page_a1fc68d292034f45b9ce559bb88d9bec.jpeg" width="60" height="60" alt=""/>
-                    </a>
-                    <div class="comment-content">
-                        <div>
-                            <p class="comment-writter">
-                                <a href="/loueur/benoit/">qto870</a> Jeudi 12 janvier 2012
-                                <span class="stars empty"><span class="stars filled_3"></span></span>
-                            </p>
-                            <p class="comment-text">
-                                Great place - great city! To put it in a nutshell it was a very nice trip and the apartment is perfect for everybody who wants a nice place in edinburgh for a few days. Thank you, Samira!
-                            </p><!-- comment-content -->
-                            <span class="comment-dial"></span>
-                        </div>
-                    </div>
-                </li>
-            </ul>{# comments #}
+            <h2>{% trans "Commentaires" %} <small>({{product.borrowercomments.count}} {% trans "avis" %})</small></h2>
+            <ul>
+            {% for comment in product.borrowercomments %}
+                <li>{% include "rent/partials/comment.html" %}</li>
+            {% empty %}
+                <li>Soyez-le premier a louer et commenter!</li>
+            {% endfor %}
+            </ul>
         </div>{# product-comment #}
+
     </div>{# content-main #}
     <div class="content-aside">
         <ul class="social-button">
@@ -174,6 +151,7 @@
         <div class="booking-block">
             <h2>{% trans "Réservez en ligne" %}</h2>
             <form id="booking_create" action="" method="POST">
+                {% csrf_token %}
                 <div class="top-block">
                 {% with product.prices.day|first as price %}
                     {{ price }} <span>{% blocktrans with price.unit|unit as unit %} / par {{ unit }}{% endblocktrans %}</span>
@@ -221,15 +199,10 @@
             </a>
             <p class="owner-username">{{ product.owner.username }}</p>
             <address>{{ product.owner.default_address.city }} - {{ product.owner.default_address.zipcode }}</address>
-            <button class="btn-contactme">Contactez-moi</button>
-            <table class="answer-stats">
-                <tr>
-                    <td class="answer-rate">Taux de réponse</td><td>100%</td>
-                </tr>
-                <tr>
-                    <td class="answer-time">Temps de réponse moyen</td><td>1 jours</td>
-                </tr>
-            </table>
+            <a href="{% url message_create product.pk product.owner.pk %}"><button class="btn-contactme">Contactez-moi</button></a>
+            {% with product.owner as patron %}
+                {% include "accounts/partials/response_stats.html" %}
+            {% endwith %}
         </div>{#  owner #}
     </div>{# content-aside #}
 </div>{# container-main #}

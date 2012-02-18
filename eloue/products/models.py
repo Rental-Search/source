@@ -10,7 +10,7 @@ from django.contrib.gis.measure import Distance
 from django.contrib.sites.managers import CurrentSiteManager
 from django.contrib.sites.models import Site
 from django.contrib.auth.models import User
-from django.db.models import permalink, Q
+from django.db.models import permalink, Q, Avg
 from django.db.models.signals import post_save
 from django.template.defaultfilters import slugify
 from django.utils.encoding import smart_unicode
@@ -145,7 +145,16 @@ class Product(models.Model):
     def daily_price(self):
         return self.prices.get(unit=UNIT.DAY)
 
-
+    @property
+    def average_note(self):
+        from eloue.rent.models import BorrowerComment
+        return BorrowerComment.objects.filter(booking__product=self).aggregate(Avg('note'))['note__avg']
+    
+    @property
+    def borrowercomments(self):
+        from eloue.rent.models import BorrowerComment
+        return BorrowerComment.objects.filter(booking__product=self)
+    
 def upload_to(instance, filename):
     return 'pictures/%s.jpg' % uuid.uuid4().hex
 
@@ -299,6 +308,8 @@ class Price(models.Model):
         delta = (ended_at - started_at)
         return delta if delta > timedelta(days=0) else timedelta(days=0)
     
+    class Meta:
+        ordering = ['unit']
 
 class Review(models.Model):
     """A review"""

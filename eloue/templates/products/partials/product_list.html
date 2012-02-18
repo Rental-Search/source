@@ -9,14 +9,14 @@
             </a><!-- pl-img -->
             <div class="pl-content">
                 <h3>
-                    <a href="{{ product.get_absolute_url }}">{{ product.summary|capfirst|truncate:40 }}</a>
+                    <a href="{{ product.get_absolute_url }}">{{ product.summary|capfirst|truncate:28 }}</a>
                 </h3>
                 {% if product.owner.default_address %}
                     {% with product.owner.default_address as address %}
                         <address>{{address.zipcode}}, {{address.city|capfirst}}</address>
                     {% endwith %}
                 {% else %}
-                    {% with product.owner.addresses|first as address %}
+                    {% with product.owner.addresses.all|first as address %}
                         <address>{{address.zipcode}}, {{address.city}}</address>
                     {% endwith %}
                 {% endif %}

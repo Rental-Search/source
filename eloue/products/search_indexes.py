@@ -4,7 +4,7 @@ import datetime
 from django.conf import settings
 
 from haystack.sites import site
-from haystack.indexes import CharField, DateTimeField, FloatField, MultiValueField, EdgeNgramField
+from haystack.indexes import CharField, DateTimeField, DateField, FloatField, MultiValueField, EdgeNgramField
 from haystack.exceptions import AlreadyRegistered
 from haystack.query import SearchQuerySet
 
@@ -19,6 +19,7 @@ __all__ = ['ProductIndex', 'product_search', 'AlertIndex', 'alert_search']
 class ProductIndex(QueuedSearchIndex):
     categories = MultiValueField(faceted=True)
     created_at = DateTimeField(model_attr='created_at')
+    created_at_date = DateField()
     description = EdgeNgramField(model_attr='description')
     lat = FloatField(model_attr='address__position__x', null=True)
     lng = FloatField(model_attr='address__position__y', null=True)
@@ -47,6 +48,9 @@ class ProductIndex(QueuedSearchIndex):
             picture = obj.pictures.all()[0]
             return picture.thumbnail.url
     
+    def prepare_created_at_date(self, obj):
+        return obj.created_at.date()
+
     def prepare_price(self, obj):
         # It doesn't play well with season
         now = datetime.datetime.now()

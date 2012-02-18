@@ -36,6 +36,7 @@ from eloue.products.forms import AlertSearchForm, AlertForm, FacetedSearchForm, 
 
 from eloue.products.models import Category, Product, Curiosity, UNIT, ProductRelatedMessage, Alert, MessageThread
 from eloue.products.wizard import ProductWizard, MessageWizard, AlertWizard, AlertAnswerWizard
+from eloue.products.search_indexes import product_search
 from eloue.rent.forms import BookingOfferForm
 from eloue.rent.models import Booking
 from django_messages.forms import ComposeForm
@@ -55,14 +56,19 @@ def homepage(request):
     form = FacetedSearchForm()
     alerts = Alert.on_site.all()[:3]
     if 'location' in request.session:
-        location = request.session['location']
-        coordinates = location['coordinates']
-        l = Point(coordinates['lon'], coordinates['lat'])
+        coords = request.session['location']['coordinates']
+        region_coords = request.session['location']['region_coords'] or coords
+        region_radius = request.session['location']['region_radius'] or request.session['location']['radius']
+        l = Point(coords)
         last_joined = Patron.objects.last_joined_near(l)
-        last_added = Product.objects.last_added_near(l)
+        last_added = product_search.spatial(
+            lat=region_coords[0], long=region_coords[1], radius=region_radius
+        ).spatial(
+            lat=coords[0], long=coords[1], radius=region_radius*2
+        ).order_by('-created_at_date', 'geo_distance')
     else:
         last_joined = Patron.objects.last_joined()
-        last_added = Product.objects.last_added()
+        last_added = product_search.order_by('-created_at')
     return render_to_response(
         template_name='index.html', 
         dictionary={
@@ -268,16 +274,23 @@ def product_delete(request, slug, product_id):
 @cache_page(900)
 @vary_on_cookie
 def product_list(request, urlbits, sqs=SearchQuerySet(), suggestions=None, page=None):
-    form = FacetedSearchForm(request.GET)
+    form = FacetedSearchForm(
+        request.GET, 
+        coords=request.GET.get('r') or request.session.get('location',{}).get('coordinates'),
+        radius=request.session.get('location', {}).get('radius')
+    )
+
     if not form.is_valid():
         raise Http404
-        
+    
     breadcrumbs = SortedDict()
     breadcrumbs['q'] = {'name': 'q', 'value': form.cleaned_data.get('q', None), 'label': 'q', 'facet': False}
-    breadcrumbs['l'] = {'name': 'l', 'value': form.cleaned_data.get('l', None), 'label': 'l', 'facet': False}
-    breadcrumbs['r'] = {'name': 'r', 'value': form.cleaned_data.get('r', None), 'label': 'r', 'facet': False}
+    #breadcrumbs['l'] = {'name': 'l', 'value': form.cleaned_data.get('l', None), 'label': 'l', 'facet': False}
+    #breadcrumbs['r'] = {'name': 'r', 'value': form.cleaned_data.get('r', None), 'label': 'r', 'facet': False}
     breadcrumbs['sort'] = {'name': 'sort', 'value': form.cleaned_data.get('sort', None), 'label': 'sort', 'facet': False}
     
+    if form.cleaned_data.get('r'):
+        request.session.get('location', {})['radius'] = form.cleaned_data.get('r')
     
     urlbits = urlbits or ''
     urlbits = filter(None, urlbits.split('/')[::-1])
@@ -290,7 +303,17 @@ def product_list(request, urlbits, sqs=SearchQuerySet(), suggestions=None, page=
                 raise Http404
             if bit.endswith(_('categorie')):
                 item = get_object_or_404(Category, slug=value)
-                params = MultiValueDict((facet['label'], [unicode(facet['value']).encode('utf-8')]) for facet in breadcrumbs.values() if (not facet['facet']) and not (facet['label'] == 'r' and facet['value'] == DEFAULT_RADIUS)and not (facet['label'] == 'l' and facet['value'] == '') and not (facet['label'] == 'sort' and facet['value'] == '') and not (facet['label'] == 'q' and facet['value'] == ''))
+                is_facet_not_empty = lambda facet: (not (facet['facet'] or
+                    (facet['label']), facet['value']) in [
+                        #('r', DEFAULT_RADIUS), 
+                        #('l', ''), 
+                        ('sort', ''), 
+                        ('q', '')
+                    ]
+                )
+                params = MultiValueDict(
+                    (facet['label'], [unicode(facet['value']).encode('utf-8')]) for facet in breadcrumbs.values() if is_facet_not_empty(facet)
+                )
                 path = item.get_absolute_url()
                 for bit in urlbits:
                     if bit.startswith(_('page')):
@@ -327,7 +350,11 @@ def product_list(request, urlbits, sqs=SearchQuerySet(), suggestions=None, page=
             }
     
     site_url="%s://%s" % ("https" if USE_HTTPS else "http", Site.objects.get_current().domain)
-    form = FacetedSearchForm(dict((facet['name'], facet['value']) for facet in breadcrumbs.values()), searchqueryset=sqs)
+    form = FacetedSearchForm(
+        dict((facet['name'], facet['value']) for facet in breadcrumbs.values()), 
+        coords=request.session.get('location',{}).get('coordinates'),
+        radius=request.session.get('location', {}).get('radius'),
+        searchqueryset=sqs)
     sqs, suggestions = form.search()
     canonical_parameters = SortedDict(((key, unicode(value['value']).encode('utf-8')) for (key, value) in breadcrumbs.iteritems() if value['value']))
     canonical_parameters.pop('categorie', None)
