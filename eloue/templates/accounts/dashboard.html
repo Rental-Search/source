@@ -8,14 +8,14 @@
     {% url dashboard as dashboard %}
     {% url inbox as inbox %}
     {% url borrower_booking as borrower_booking %}
-    {% url owner_booking as owner_booking %}
+    {% url owner_product as owner_product %}
     {% url patron_edit as patron_edit %}
     <div class="top-bar">
         <ul class="nav-bar">
             <li><a href="{{ dashboard }}" class="{% active request dashboard %}">{% trans "Tableau de bord" %}</a></li>
-            <li><a href="{{ inbox }}" class="{% active request inbox %}">{% trans "Messages" %}</a></li>
-            <li><a href="{{ borrower_booking }}" class="{% active request borrower_booking %}">{% trans "Mes réservations" %}</a></li>
-            <li><a href="{{ owner_booking }}" class="{% active request owner_booking %}">{% trans "Mes annonces" %}</a></li>
+            <li><a href="{{ inbox }}" class="{% active request "^/dashboard/messages/" %}">{% trans "Messages" %}</a></li>
+            <li><a href="{{ borrower_booking }}" class="{% active request  "^/dashboard/borrower/" %}">{% trans "Mes réservations" %}</a></li>
+            <li><a href="{{ owner_product }}" class="{% active request "^/dashboard/owner/" %}">{% trans "Mes annonces" %}</a></li>
             <li><a href="{{ patron_edit }}" class="{% active request patron_edit %}">{% trans "Paramètres de compte" %}</a></li>
         </ul>
     </div>{# top-bar #}

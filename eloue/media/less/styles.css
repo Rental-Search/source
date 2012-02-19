@@ -1137,17 +1137,21 @@ a:hover {
 }
 .avatar-picture h1 {
   font-family: Arial, cursive;
-  font-size: 30px;
+  font-size: 26px;
   font-weight: normal;
   color: #364c59;
   font-style: italic;
   margin-bottom: 10px;
+  margin-left: 10px;
+  margin-right: 10px;
 }
 .avatar-picture address {
   font-family: 'Ubuntu', sans-serif;
   font-size: 14px;
   font-weight: bold;
   color: #364c59;
+  margin-left: 10px;
+  margin-right: 10px;
 }
 .profil-intro-content p {
   font-family: 'Ubuntu', sans-serif;
