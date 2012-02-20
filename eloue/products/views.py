@@ -125,16 +125,20 @@ def product_edit(request, slug, product_id):
 
 
 def thread_list(user, is_archived):
-    return sorted(MessageThread.objects.filter(
-      Q(sender=user, sender_archived=is_archived)
-      |Q(recipient=user, recipient_archived=is_archived)
-    ).order_by('-last_message__sent_at'), key=lambda thread: not (thread.new_sender() if user==thread.sender else thread.new_recipient()))
+    return sorted(
+        MessageThread.objects.filter(
+            Q(sender=user, sender_archived=is_archived)
+            |Q(recipient=user, recipient_archived=is_archived)
+        ).order_by('-last_message__sent_at'), 
+        key=lambda thread: not (thread.new_sender() if user==thread.sender else thread.new_recipient())
+    )
 
 
 @login_required
 def inbox(request):
     user = request.user
     threads = thread_list(user, False)
+    print threads
     return render_to_response(
       'products/inbox.html', 
       {'thread_list': threads}, 

@@ -19,7 +19,14 @@ def facebook_context(request):
 
 def unread_message_count_context(request):
     if request.user.is_authenticated():
-	    return {'unread_message_count': len(filter(lambda thread: thread.new_sender(), MessageThread.objects.filter(sender=request.user))) +
+        # return {
+        #     'unread_message_count': ProductRelatedMessage.objects.filter(
+        #         recipient=request.user, 
+        #         read_at=None
+        #     )
+        # }
+	    return {
+            'unread_message_count': len(filter(lambda thread: thread.new_sender(), MessageThread.objects.filter(sender=request.user))) +
 	      len(filter(lambda thread: thread.new_recipient(), MessageThread.objects.filter(recipient=request.user)))
 	    }
     else:

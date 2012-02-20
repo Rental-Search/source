@@ -16,4 +16,9 @@
 {% endblock %}
 
 {% block content-main-profil %}
+	<ul>
+	{% for thread in thread_list %}
+		<li>{{ thread }}</li>
+	{% endfor %}
+	</ul>
 {% endblock %}
