@@ -261,6 +261,12 @@ def message_create(request, product_id, recipient_id):
     message_wizard = MessageWizard([MessageEditForm, EmailAuthenticationForm])
     return message_wizard(request, product_id, recipient_id)
 
+@never_cache
+@secure_required
+def patron_message_create(request, recipient_username):
+    message_wizard = MessageWizard([MessageEditForm, EmailAuthenticationForm])
+    recipient = Patron.objects.get(slug=recipient_username)
+    return message_wizard(request, None, recipient.pk)
 
 @login_required
 @ownership_required(model=Product, object_key='product_id', ownership=['owner'])
