@@ -238,7 +238,6 @@ class CommentedCheckboxInput(forms.CheckboxInput):
 
     def render(self, name, value, attrs=None):
         from django.utils.safestring import mark_safe
-        print 'hello'
         return mark_safe('<label class="checkbox">' + super(CommentedCheckboxInput, self).render(name, value, attrs) + '\t' + self.info_text + '</label>')
 
 
@@ -273,7 +272,6 @@ class PatronEditForm(forms.ModelForm):
         self.fields['civility'].widget.attrs['class'] = "selm"
         self.fields['default_address'].widget.attrs['class'] = "selm"
         self.fields['default_address'].queryset = self.instance.addresses.all()
-        print self.fields['is_professional'].widget
 
     class Meta:
         model = Patron
