@@ -2179,24 +2179,166 @@ input::-webkit-input-placeholder {
 .form-horizontal .form-actions button {
   margin-right: 10px;
 }
-/*
- * Tables.less
- * Tables for, you guessed it, tabular data
- * ---------------------------------------- */
-.answer-stats {
+table {
+  max-width: 100%;
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+.table {
+  width: 100%;
+  margin-bottom: 18px;
+}
+.table th, .table td {
+  padding: 8px;
+  line-height: 18px;
+  text-align: left;
+  vertical-align: top;
+  border-top: 1px solid #ddd;
+}
+.table th {
+  font-weight: bold;
+}
+.table thead th {
+  vertical-align: bottom;
+}
+.table thead:first-child tr th, .table thead:first-child tr td {
+  border-top: 0;
+}
+.table tbody + tbody {
+  border-top: 2px solid #ddd;
+}
+.table-condensed th, .table-condensed td {
+  padding: 4px 5px;
+}
+.table-bordered {
+  border: 1px solid #ddd;
+  border-collapse: separate;
+  *border-collapse: collapsed;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+  -moz-background-clip: padding;
+  -webkit-background-clip: padding-box;
+  background-clip: padding-box;
+}
+.table-bordered th + th,
+.table-bordered td + td,
+.table-bordered th + td,
+.table-bordered td + th {
+  border-left: 1px solid #ddd;
+}
+.table-bordered thead:first-child tr:first-child th, .table-bordered tbody:first-child tr:first-child th, .table-bordered tbody:first-child tr:first-child td {
+  border-top: 0;
+}
+.table-bordered thead:first-child tr:first-child th:first-child, .table-bordered tbody:first-child tr:first-child td:first-child {
+  -webkit-border-top-right-radius: 4px 0 0 0;
+  -webkit-border-bottom-right-radius: 0;
+  -webkit-border-bottom-left-radius: 0;
+  -webkit-border-top-left-radius: 0;
+  -moz-border-radius-topright: 4px 0 0 0;
+  -moz-border-radius-bottomright: 0;
+  -moz-border-radius-bottomleft: 0;
+  -moz-border-radius-topleft: 0;
+  border-top-right-radius: 4px 0 0 0;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+  border-top-left-radius: 0;
+  -moz-background-clip: padding;
+  -webkit-background-clip: padding-box;
+  background-clip: padding-box;
+}
+.table-bordered thead:first-child tr:first-child th:last-child, .table-bordered tbody:first-child tr:first-child td:last-child {
+  -webkit-border-top-right-radius: 0 4px 0 0;
+  -webkit-border-bottom-right-radius: 0;
+  -webkit-border-bottom-left-radius: 0;
+  -webkit-border-top-left-radius: 0;
+  -moz-border-radius-topright: 0 4px 0 0;
+  -moz-border-radius-bottomright: 0;
+  -moz-border-radius-bottomleft: 0;
+  -moz-border-radius-topleft: 0;
+  border-top-right-radius: 0 4px 0 0;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+  border-top-left-radius: 0;
+  -moz-background-clip: padding;
+  -webkit-background-clip: padding-box;
+  background-clip: padding-box;
+}
+.table-bordered thead:last-child tr:last-child th:first-child, .table-bordered tbody:last-child tr:last-child td:first-child {
+  -webkit-border-top-right-radius: 0 0 0 4px;
+  -webkit-border-bottom-right-radius: 0;
+  -webkit-border-bottom-left-radius: 0;
+  -webkit-border-top-left-radius: 0;
+  -moz-border-radius-topright: 0 0 0 4px;
+  -moz-border-radius-bottomright: 0;
+  -moz-border-radius-bottomleft: 0;
+  -moz-border-radius-topleft: 0;
+  border-top-right-radius: 0 0 0 4px;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+  border-top-left-radius: 0;
+  -moz-background-clip: padding;
+  -webkit-background-clip: padding-box;
+  background-clip: padding-box;
+}
+.table-bordered thead:last-child tr:last-child th:last-child, .table-bordered tbody:last-child tr:last-child td:last-child {
+  -webkit-border-top-right-radius: 0 0 4px 0;
+  -webkit-border-bottom-right-radius: 0;
+  -webkit-border-bottom-left-radius: 0;
+  -webkit-border-top-left-radius: 0;
+  -moz-border-radius-topright: 0 0 4px 0;
+  -moz-border-radius-bottomright: 0;
+  -moz-border-radius-bottomleft: 0;
+  -moz-border-radius-topleft: 0;
+  border-top-right-radius: 0 0 4px 0;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+  border-top-left-radius: 0;
+  -moz-background-clip: padding;
+  -webkit-background-clip: padding-box;
+  background-clip: padding-box;
+}
+.table-striped tbody tr:nth-child(odd) td, .table-striped tbody tr:nth-child(odd) th {
+  background-color: #f9f9f9;
+}
+.table tbody tr:hover td, .table tbody tr:hover th {
+  background-color: #f5f5f5;
+}
+.booking-list li {
+  margin-bottom: 20px;
+}
+.booking-list .b-action {
+  background-color: #e3f6fd;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+  -moz-background-clip: padding;
+  -webkit-background-clip: padding-box;
+  background-clip: padding-box;
+  padding: 10px;
+}
+.booking-resume {
+  background-color: #f5f7f9;
   font-family: 'Ubuntu', sans-serif;
   font-size: 14px;
   font-weight: normal;
   color: #364c59;
+  margin-bottom: 5px;
 }
-.answer-stats td {
-  padding: 5px 5px 5px 25px;
+.booking-resume th {
+  width: 80px;
+  font-weight: normal;
 }
-.answer-stats .answer-rate {
-  background: transparent url("../images/answer_rate_icon.png") no-repeat 0 5px;
+.booking-resume th.b-state {
+  font-weight: bold;
 }
-.answer-stats .answer-time {
-  background: transparent url("../images/answer_time_icon.png") no-repeat 0 5px;
+.booking-resume .b-title {
+  font-size: 18px;
+}
+.booking-resume .b-more {
+  float: right;
+  font-size: 12px;
+  padding-top: 3px;
 }
 /* Patterns.less
  * Repeatable UI elements outside the base styles provided from the scaffolding
@@ -3053,6 +3195,136 @@ input::-webkit-input-placeholder {
 }
 .pagination a.page-selected {
   color: #ff7200;
+}
+.label {
+  padding: 2px 4px 3px;
+  font-size: 11.9px;
+  font-weight: bold;
+  color: #ffffff;
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+  background-color: #999999;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  -moz-background-clip: padding;
+  -webkit-background-clip: padding-box;
+  background-clip: padding-box;
+}
+.label:hover {
+  color: #ffffff;
+  text-decoration: none;
+}
+.label-important {
+  background-color: #b94a48;
+}
+.label-important:hover {
+  background-color: #953b39;
+}
+.label-warning {
+  background-color: #ff7200;
+}
+.label-warning:hover {
+  background-color: #cc5b00;
+}
+.label-success {
+  background-color: #468847;
+}
+.label-success:hover {
+  background-color: #356635;
+}
+.label-info {
+  background-color: #3a87ad;
+}
+.label-info:hover {
+  background-color: #2d6987;
+}
+.messages li {
+  margin-bottom: 20px;
+}
+.m-img {
+  display: block;
+  float: left;
+  height: 60px;
+  width: 60px;
+  position: relative;
+  margin-right: 15px;
+}
+.m-img:after {
+  -webkit-box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.35);
+  -moz-box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.35);
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.35);
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  -moz-background-clip: padding;
+  -webkit-background-clip: padding-box;
+  background-clip: padding-box;
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  z-index: 2;
+  content: "";
+}
+.m-img img {
+  display: block;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  -moz-background-clip: padding;
+  -webkit-background-clip: padding-box;
+  background-clip: padding-box;
+}
+.m-content {
+  border-left: 2px solid #b2ced9;
+  display: table-cell;
+  vertical-align: top;
+  padding: 0 10px;
+  width: 600px;
+  position: relative;
+}
+.m-content div {
+  position: relative;
+}
+.m-content .message-dial {
+  background: transparent url("../images/dial-message.png") no-repeat 0 0;
+  display: block;
+  height: 23px;
+  width: 11px;
+  position: absolute;
+  top: 17px;
+  left: -21px;
+}
+.m-content .m-sender {
+  font-family: Arial, sans-serif;
+  font-size: 12px;
+  font-weight: normal;
+  color: #546b78;
+  margin-bottom: 10px;
+}
+.m-content .m-sender a {
+  font-family: Arial, sans-serif;
+  font-size: 24px;
+  font-weight: normal;
+  font-style: italic;
+  margin-right: 5px;
+}
+.m-content .m-sender .m-action {
+  float: right;
+  margin-top: 4px;
+}
+.m-content .m-sender .m-action a {
+  font-family: 'Ubuntu', sans-serif;
+  font-size: 14px;
+  font-weight: normal;
+  font-style: normal;
+}
+.m-content .m-subject {
+  font-family: 'Ubuntu', sans-serif;
+  font-size: 16px;
+  font-weight: normal;
+  padding-bottom: 10px;
 }
 /*
  * jQuery UI CSS Framework 1.8.17

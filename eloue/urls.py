@@ -13,7 +13,7 @@ from eloue.accounts.forms import EmailPasswordResetForm, PatronSetPasswordForm
 from eloue.accounts.views import activate, authenticate, authenticate_headless, dashboard, patron_edit, owner_booking, owner_history,\
     borrower_booking, borrower_history, patron_edit_password, patron_paypal, owner_product, contact, alert_edit, associate_facebook
 
-from eloue.products.views import homepage, search, reply_product_related_message, inbox, archived, archive_thread, unarchive_thread, thread_details
+from eloue.products.views import homepage, search, reply_product_related_message, inbox, archived, archive_thread, unarchive_thread, thread_details, product_edit
 
 from eloue.rent.views import booking_detail, booking_accept, booking_reject, booking_incident, booking_close, booking_cancel, offer_reject, offer_accept
 from eloue.sitemaps import CategorySitemap, FlatPageSitemap, PatronSitemap, ProductSitemap
@@ -76,6 +76,7 @@ urlpatterns = patterns('',
     url(r'^dashboard/owner/history/$', owner_history, name="owner_history"),
     url(r'^dashboard/owner/history/page/(?P<page>\d+)/$', owner_history, name="owner_history"),
     url(r'^dashboard/owner/product/$', owner_product, name="owner_product"),
+    url(r'^dashboard/owner/product/(?P<slug>[-\w]+)-(?P<product_id>\d+)/$', product_edit, name="owner_product_edit"),
     url(r'^dashboard/alertes/$', alert_edit, name="alert_edit"),
     url(r'^dashboard/owner/product/page/(?P<page>\d+)/$', owner_product, name="owner_product"),
     url(r'^dashboard/borrower/booking/$', borrower_booking, name="borrower_booking"),
