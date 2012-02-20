@@ -1,5 +1,5 @@
 {% extends "accounts/dashboard.html" %}
-{% load i18n navbar %}
+{% load i18n navbar product %}
 
 {% block title %}{% trans "Mes annonces" %}{% endblock %}
 {% block head %}
@@ -18,4 +18,31 @@
 {% endblock %}
 
 {% block content-main-profil %}
+	<ul class="product-list">
+	{% for product in product_list %}
+	<li>
+		<a href="{{ product.get_absolute_url }}" class="pl-img">
+			{% with product.pictures.all|first as picture %}
+           	{% if picture.thumbnail %}
+            <img src="{{ picture.thumbnail.url }}" alt="product.summary" width="60" height="60" />
+            {% endif %}
+            {% endwith %}
+        </a><!-- pl-img -->
+        <div class="pl-content">
+        	<h3>
+        	<a href="{{ product.get_absolute_url }}">{{product.summary|capitalize|truncate:200 }}</a>
+        	</h3>
+        	<address>
+        		{{ product.address.city|capfirst }}
+        		{% if product.address.zipcode %}, {{ product.address.zipcode }} {% endif %}
+        	</address>
+        	{% with product.prices.day|first as price %}
+        	<p class="pl-price">
+        		{{ price }} <span>/{{price.unit|unit}}</span>
+        	</p>
+        	{% endwith %}
+       	</div><!-- pl-content -->
+	</li>
+	{% endfor %}
+	</ul>
 {% endblock %}

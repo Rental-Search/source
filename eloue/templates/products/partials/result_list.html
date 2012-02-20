@@ -9,7 +9,7 @@
         </a><!-- pl-img -->
         <div class="pl-content">
             <h3>
-                <a href="#"><a href="{{ product.url|safe }}" {% if product|nofollow %}rel="nofollow"{% endif %}>{{ product.summary|capitalize|truncate:truncation }}</a></a>
+               <a href="{{ product.url|safe }}" {% if product|nofollow %}rel="nofollow"{% endif %}>{{ product.summary|capitalize|truncate:truncation }}</a>
             </h3>
             <address>{{ product.city|capfirst }}{% if product.zipcode %}, {{ product.zipcode }}{% endif %}</address>
             {% if product.price %}
