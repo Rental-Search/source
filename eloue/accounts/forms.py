@@ -254,18 +254,19 @@ class PatronEditForm(forms.ModelForm):
     
     first_name = forms.CharField(label=_(u"Prénom"), required=True, widget=forms.TextInput(attrs={'class': 'inm'}))
     last_name = forms.CharField(label=_(u"Nom"), required=True, widget=forms.TextInput(attrs={'class': 'inm'}))
-    avatar = forms.ImageField(required=False)
+    avatar = forms.ImageField(required=False, label=_(u"Photo de profil"))
     
     paypal_email = forms.EmailField(label=_(u"Email PayPal"), required=False, max_length=75, widget=forms.TextInput(attrs={
             'autocapitalize': 'off', 'autocorrect': 'off', 'class': 'inm'}))
-	
-    work = forms.CharField(label=_(u"Travail"), required=False, widget=forms.TextInput(attrs={'class': 'inm'}))
-    school = forms.CharField(label=_(u"Etudes"), required=False, widget=forms.TextInput(attrs={'class': 'inm'}))
 
-    #is_professional = forms.BooleanField(label=_(u"Professionnel"), required=False, initial=False)
+    about = forms.CharField(label=_(u"A propos de vous"), required=False, widget=forms.Textarea(attrs={'class': 'inm'}))
+    work = forms.CharField(label=_(u"Travail"), required=False, widget=forms.TextInput(attrs={'class': 'inm'}), help_text=_(u"Exemple : Directrice Resources Humaines, ma socitée"))
+    school = forms.CharField(label=_(u"Etudes"), required=False, widget=forms.TextInput(attrs={'class': 'inm'}), help_text=_(u"Exemple : Université Panthéon Sorbonne (Paris I)"))
+    hobby = forms.CharField(label=_(u"Hobbies"), required=False, widget=forms.TextInput(attrs={'class': 'inm'}))
     
-    is_subscribed = forms.BooleanField(required=False, initial=False, label=_(u"Newsletter"))
-    new_messages_alerted = forms.BooleanField(required=False, initial=True)
+
+    is_subscribed = forms.BooleanField(required=False, initial=False, label=_(u"Newsletter"), widget=CommentedCheckboxInput(info_text="J'accepte de recevoir de recevoir la Newsletter e-loue"))
+    new_messages_alerted = forms.BooleanField(label=_(u"Notifications"), required=False, initial=True, widget=CommentedCheckboxInput(info_text="J'accepte de recevoir les messages des autres membres"))
 
     def __init__(self, *args, **kwargs):
         super(PatronEditForm, self).__init__(*args, **kwargs)
@@ -289,9 +290,9 @@ class PatronEditForm(forms.ModelForm):
              'is_subscribed',
              'new_messages_alerted',
              'about',
+             'work',
              'school',
              'hobby',
-             'work',
              'languages',
         ]
         widgets = {
@@ -381,7 +382,7 @@ class PatronPasswordChangeForm(PatronSetPasswordForm):
     A form that lets a user change his/her password by entering
     their old password.
     """
-    old_password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'inm'}))
+    old_password = forms.CharField(label=_(u"Ancien mot de passe"), widget=forms.PasswordInput(attrs={'class': 'inm'}))
     
     def clean_old_password(self):
         """
@@ -443,6 +444,9 @@ class PhoneNumberBaseFormSet(BaseInlineFormSet):
 PhoneNumberFormset = inlineformset_factory(Patron, PhoneNumber, form=PhoneNumberForm, formset=PhoneNumberBaseFormSet, exclude=['kind'], extra=1, can_delete=True)
 
 class AddressForm(forms.ModelForm):
+    address1 = forms.CharField(label=_(u"Adresse"), widget=forms.Textarea(attrs={'class': 'inm street', 'placeholder': _(u'Rue')}))
+    zipcode = forms.CharField(label=_(u"Code Postal"), widget=forms.TextInput(attrs={'class': 'inm zipcode', 'placeholder': _(u'Code postal')}))
+    city = forms.CharField(label=_(u"Ville"), widget=forms.TextInput(attrs={'class': 'inm town', 'placeholder': _(u'Ville')}))
 
     def clean(self):
         if self.instance.products.all() and self.cleaned_data['DELETE']:
@@ -453,7 +457,7 @@ class AddressForm(forms.ModelForm):
 
     class Meta:
         model = Address
-        exclude = ('address2', 'position', 'objects', 'patron')
+        exclude = ('address2', 'position', 'objects', 'patron',)
         widgets = {
             'address1': forms.Textarea(
                 attrs={'class': 'inm street', 'placeholder': _(u'Rue')}
@@ -468,6 +472,12 @@ class AddressForm(forms.ModelForm):
                 attrs={'class': 'selm'}
             ),
         }
+        fields = [
+            'address1',
+            'zipcode',
+            'city',
+            'country',
+        ]
 
 class AddressBaseFormSet(BaseInlineFormSet):
 
