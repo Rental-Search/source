@@ -8,5 +8,30 @@
 
 
 {% block content-main-profil %}
-
+{% if thread_list %}
+<ul class="messages">
+	{% for thread in thread_list %}
+	<li>
+		<a href="{% url thread_details thread_id=thread.id%}" class="m-img">
+			{% if thread.sender.avatar %}
+				<img src="{{thread.sender.avatar.thumbnail.url}}" width="60" height="60" alt=""/>
+			{% else %}
+				<img src="{{ MEDIA_URL }}images/default_avatar.png" width="60" height="60" alt="">
+			{% endif %}
+		</a>
+		<div class="m-content">
+			<div>
+				<p class="m-sender">
+					<a href="{% url thread_details thread_id=thread.id%}">{{thread.sender.username }}</a> {{ thread.last_message.sent_at|date:_("DATETIME_FORMAT") }}
+					<span class="m-action"><a href="{% url thread_details thread_id=thread.id %}">{% trans "Lire" %}</a></span> -
+					<span class="m-action"><a href="{% url unarchive_thread thread_id=thread.id %}">{% trans "Rétablir" %}</a></span>
+				</p>
+				<p class="m-subject">{{ thread.subject }}</p>
+				<span class="message-dial"></span>
+			</div>
+		</div>
+	</li>
+	{% endfor %}
+</ul>{# message_list #}
+{% endif %}
 {% endblock %}
