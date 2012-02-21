@@ -7,19 +7,22 @@
 {% endblock %}
 
 {% block content-aside-profil %}
-{% url owner_product as owner_product %}
-{% url owner_booking as owner_booking %}
-{% url owner_history as owner_history %}
+<div class="previous-sub-bar">
+  &larr;  <a href="{% url owner_product %}">{% trans "Retour à mes annonce" %}</a>
+</div>
 <ul class="nav-sub-bar">
-    <li><a href="{{ owner_product }}"  class="{% active request owner_product %}">{% trans "Gérer mes annonces" %}</a></li>
-    <li><a href="{{ owner_booking }}" class="{% active request owner_booking %}">{% trans "Demande de réservation" %}</a></li>
-    <li><a href="{{ owner_history }}" class="{% active request owner_history %}">{% trans "Historiques" %}</a></li>
+    <li><a href="#"  class="selected-nav-bar-link">{% trans "Description et photos" %}</a></li>
+    <li><a href="#">{% trans "Adresse" %}</a></li>
+    <li><a href="#">{% trans "Prix et disponibilité" %}</a></li>
+    <li><a href="#">{% trans "Demande de réservation"%}</a></li>
+    <li><a href="#">{% trans "Réservation" %}</a></li>
+    <li><a href="#">{% trans "Historique" %}</a></li>
 </ul>
 {% endblock %}
 
 {% block content-main-profil %}
 {% if form.is_multipart %}
-<h2>{% trans "Modifier l'annonce" %}</h2>
+<h2>{% trans "Description et photos" %}</h2>
 <form enctype="multipart/form-data" class="form-horizontal" method="post" action="">
 {% else %}
 <form class="form-horizontal" method="post" action="">

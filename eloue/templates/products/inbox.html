@@ -33,12 +33,50 @@
 					<a href="{% url thread_details thread_id=thread.id%}">{{thread.sender.username }}</a> {{ thread.last_message.sent_at|date:_("DATETIME_FORMAT") }}
 					<span class="m-action"><a href="{% url thread_details thread_id=thread.id%}">{% trans "Lire" %}</a></span>
 				</p>
-				<p class="m-subject">{{ thread.subject }}</p>
+				<div class="m-subject">{{ thread.subject }}</div>
 				<span class="message-dial"></span>
 			</div>
 		</div>
 	</li>
 	{% endfor %}
+	<li>
+		<a href="#" class="m-img">
+			<img src="{{ MEDIA_URL }}images/default_avatar.png" width="60" height="60" alt="">
+		</a>
+		<div class="m-content">
+			<div>
+				<p class="m-sender">
+					<a href="#">Princess</a> 24 novembre 2011, 18:02
+					<span class="m-action"><a href="#">{% trans "Lire" %}</a></span>
+				</p>
+				<div class="m-text">
+					<table class="table table-bordered booking-resume">
+						<tbody>
+						<tr>
+							<th class="b-state">Demande</th>
+							<td><a href="#" class="b-title">Robe de  soirée</a> <a href="#" class="b-more">Voir le détail</a></td>
+						</tr>
+						<tr>
+							<th>Début</th>
+							<td>Lundi 15 novembre 2012</td>
+						</tr> 
+							<th>Fin</th>
+							<td>Mercredi 18 novembre 2012</td>
+						</tr>
+						<tr>
+							<th>Montant</th>
+							<td>134 &euro;</td>
+						</tr>
+						<tr class="b-action">
+							<td colspan="2"><a href="#">Accepter</a> - <a href="#">Refuser</a> - <a href="#">Envoyer un message au locataire</a></td>
+						</tr>
+						</tbody>
+					</table>
+				</div>
+				<span class="message-dial"></span>
+			</div>
+		</div>
+	</li>
 </ul>{# message_list #}
 {% endif %}
 {% endblock %}
