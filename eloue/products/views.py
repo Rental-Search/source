@@ -73,7 +73,7 @@ def homepage(request):
         template_name='index.html', 
         dictionary={
             'form': form, 'curiosities': curiosities,
-            'alerts':alerts,'last_added': last_added[:20],
+            'alerts':alerts,'last_added': last_added[:10],
             'last_joined': last_joined[:11],
         }, 
         context_instance=RequestContext(request)

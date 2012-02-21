@@ -48,11 +48,15 @@
             </div>{# near #}
             <div id="moreRent"></div>{# moreRent #}
             <div id="hotloc">
-            {% for curiosity in curiosities %}
-                {% with curiosity.product as product %}
-                    {% include "products/partials/product.html" %}
-                {% endwith %}
-            {% endfor %}
+                <ul class="product-list">
+                {% for curiosity in curiosities %}
+                    {% with curiosity.product as product %}
+                        <li>
+                        {% include "products/partials/product.html" %}
+                        </li>
+                    {% endwith %}
+                {% endfor %}
+                </ul>
             </div>{# hotloc #}
             <div id="categories"></div>{# categories #}
         </div>{# products-home-tabs #}
