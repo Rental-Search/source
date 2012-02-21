@@ -234,10 +234,10 @@ class ProductForm(forms.ModelForm):
 
 
 class ProductEditForm(forms.ModelForm):
-    category = TreeNodeChoiceField(queryset=Category.tree.all(), empty_label="Choisissez une catégorie", level_indicator=u'--')
-    summary = forms.CharField(max_length=100, widget=forms.TextInput(attrs={'class': 'inm'}))
-    deposit_amount = forms.DecimalField(initial=0, required=False, max_digits=8, decimal_places=2, widget=forms.TextInput(attrs={'class': 'inm price'}), localize=True)
-    quantity = forms.IntegerField(initial=1, widget=forms.TextInput(attrs={'class': 'inm price'}))
+    category = TreeNodeChoiceField(label=_(u"Catégorie"), queryset=Category.tree.all(), empty_label="Choisissez une catégorie", level_indicator=u'--')
+    summary = forms.CharField( label=_(u"Titre"), max_length=100, widget=forms.TextInput(attrs={'class': 'inm'}))
+    deposit_amount = forms.DecimalField(label=_(u"Caution"), initial=0, required=False, max_digits=8, decimal_places=2, widget=forms.TextInput(attrs={'class': 'inm price'}), localize=True)
+    quantity = forms.IntegerField(label=_(u"Quantité"), initial=1, widget=forms.TextInput(attrs={'class': 'inm price'}))
     picture = forms.ImageField(label=_(u"Photo"), required=False, widget=forms.FileInput(attrs={'class': 'inm'}))
     description = forms.CharField(label=_(u"Description"), widget=forms.Textarea())
 
@@ -249,12 +249,12 @@ class ProductEditForm(forms.ModelForm):
     month_price = forms.DecimalField(label=_(u"le mois"), required=False, max_digits=10, decimal_places=2, min_value=D('0.01'), widget=forms.TextInput(attrs={'class': 'ins'}), localize=True)
     
 
-    addresses__address1 = forms.CharField(max_length=255, required=False, widget=forms.Textarea(attrs={'class': 'inm street', 'placeholder': _(u'Rue')}))
-    addresses__zipcode = forms.CharField(required=False, max_length=9, widget=forms.TextInput(attrs={
+    addresses__address1 = forms.CharField(label=_(u"Adresse"), max_length=255, required=False, widget=forms.Textarea(attrs={'class': 'inm street', 'placeholder': _(u'Rue')}))
+    addresses__zipcode = forms.CharField(label=_(u"Code postal"), required=False, max_length=9, widget=forms.TextInput(attrs={
             'class': 'inm zipcode', 'placeholder': _(u'Code postal')
         }))
-    addresses__city = forms.CharField(required=False, max_length=255, widget=forms.TextInput(attrs={'class': 'inm town', 'placeholder': _(u'Ville')}))
-    addresses__country = forms.ChoiceField(choices=COUNTRY_CHOICES, initial=settings.LANGUAGE_CODE.split('-')[1].upper(), required=False, widget=forms.Select(attrs={'class': 'selm'}))
+    addresses__city = forms.CharField(label=_(u"Ville"), required=False, max_length=255, widget=forms.TextInput(attrs={'class': 'inm town', 'placeholder': _(u'Ville')}))
+    addresses__country = forms.ChoiceField(label=_(u"Pays"), choices=COUNTRY_CHOICES, initial=settings.LANGUAGE_CODE.split('-')[1].upper(), required=False, widget=forms.Select(attrs={'class': 'selm'}))
 
     def __init__(self, *args, **kwargs):
         super(ProductEditForm, self).__init__(*args, **kwargs)

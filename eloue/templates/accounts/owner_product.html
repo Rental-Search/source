@@ -1,5 +1,5 @@
 {% extends "accounts/dashboard.html" %}
-{% load i18n navbar product %}
+{% load i18n navbar product paginator %}
 
 {% block title %}{% trans "Mes annonces" %}{% endblock %}
 {% block head %}
@@ -18,6 +18,7 @@
 {% endblock %}
 
 {% block content-main-profil %}
+	<h2>{% trans "Gérer mes annonces" %}</h2>
 	<ul class="product-list">
 	{% for product in product_list %}
 	<li>
@@ -42,7 +43,35 @@
         	</p>
         	{% endwith %}
        	</div><!-- pl-content -->
+       	<ul class="pl-bookings" style="float: left; padding: 10px; margin-left: 40px;">
+       		<li style="height: auto; margin-bottom: 5px;">
+       			<span class="label label-success">3 demandes de réservation</span>
+       		</li>
+ 			<li style="height: auto; margin-bottom: 5px; border-bottom: 0px;">
+ 				<span class="label label-warning">3 réservations à venir</span>
+ 			</li>
+       		<li style="height: auto;">
+       			<span class="label">2 réservation en cours</span>
+       		</li>
+       	</ul>
+       	<div style="float: right; padding-top: 23px;">
+       		<a href="{% url owner_product_edit product.slug product.pk %}" class="btn btn-contactme">{% trans "Modifier l'annonce" %}</a>
+       	</div>
 	</li>
 	{% endfor %}
 	</ul>
+	{% pagination %}
+        {% if is_paginated %}
+        <div class="pagination">
+            {% if page_obj.has_previous %}
+                <a href="{% url owner_product page_obj.previous_page_number %}" class="prev">&#171; {% trans "Page précédente" %}</a>
+            {% endif %}
+            {% for page in page_range %}
+            <a href="{% url owner_product page %}" {% if page_obj.number == page %}class="page-selected"{% endif %}>{{ page }}</a>
+            {% endfor %}
+            {% if page_obj.has_next %}
+                <a href="{% url owner_product page_obj.next_page_number %}" class="next">{% trans "Page suivante" %} &#187;</a>
+            {% endif %}
+        </div><!-- pagination -->
+        {% endif %}
 {% endblock %}
