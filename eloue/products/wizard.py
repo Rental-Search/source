@@ -75,7 +75,7 @@ class MessageWizard(NewGenericFormWizard):
         self.required_fields = ['username', 'password1', 'password2']
     
     def __call__(self, request, product_id, recipient_id, *args, **kwargs):
-        product = get_object_or_404(Product, pk=product_id)
+        product = get_object_or_404(Product, pk=product_id) if product_id is not None else None
         recipient = get_object_or_404(Patron, pk=recipient_id)
         self.extra_context.update({'product': product})
         self.extra_context.update({'recipient': recipient})
@@ -86,13 +86,16 @@ class MessageWizard(NewGenericFormWizard):
         # Create message
         product = self.extra_context["product"]
         recipient = self.extra_context["recipient"]
-        if self.new_patron == product.owner:
+        if self.new_patron == recipient:
             messages.error(request, _(u"Vous ne pouvez pas vous envoyer des messages."))
-            return redirect_to(request, product.get_absolute_url())
-        message_form = form_list[0]
-        message_form.save(product=product, sender=self.new_patron, recipient=recipient)
-        messages.success(request, _(u"Votre message a bien été envoyé au propriétaire"))
-        return redirect(product.get_absolute_url())
+        else:
+            message_form = form_list[0]
+            message_form.save(product=product, sender=self.new_patron, recipient=recipient)
+            messages.success(request, _(u"Votre message a bien été envoyé au propriétaire"))
+        try:
+            return redirect(product.get_absolute_url())
+        except AttributeError:
+            return redirect(request.user.get_absolute_url())
     
     def get_template(self, step):
         if issubclass(self.form_list[step], EmailAuthenticationForm):

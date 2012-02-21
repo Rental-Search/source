@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import uuid
 
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, time
 
 from django.conf import settings
 from django.contrib.gis.db import models
@@ -155,6 +155,74 @@ class Product(models.Model):
         from eloue.rent.models import BorrowerComment
         return BorrowerComment.objects.filter(booking__product=self)
     
+    def monthly_availability(self):
+        import calendar
+        from django.db.models import Q
+        import operator
+        import datetime
+        import itertools
+        month = 1
+        year = 2012
+
+        _, days_num = calendar.monthrange(year, month)
+
+        started_at = datetime.datetime.combine(datetime.date(year, month, 1), datetime.time())
+        ended_at = datetime.datetime.combine(datetime.date(year, month, 1), datetime.time()) + datetime.timedelta(days=days_num)
+        def _accumulate(iterable, func=operator.add, start=None):
+            """
+            Modified version of Python 3.2's itertools.accumulate.
+            """
+            # accumulate([1,2,3,4,5]) --> 0 1 3 6 10 15
+            # accumulate([1,2,3,4,5], operator.mul) --> 0 1 2 6 24 120
+            # yield 0
+            it = iter(iterable)
+            total = next(it)
+            yield total
+            for element in it:
+                total = func(total, element)
+                yield total
+            yield
+        
+        bookings = self.bookings.filter(
+            Q(state="pending")|Q(state="ongoing")
+        ).filter(
+            ~Q(ended_at__lte=started_at) & ~Q(started_at__gte=ended_at)
+        )
+
+        _one_day = datetime.timedelta(days=1)
+        day_first = datetime.datetime.combine(datetime.date(year, month, 1), datetime.time())
+
+        START = 1
+        END = -1
+        
+        bookings_tuple = [(booking.started_at, booking.ended_at, booking.quantity) for booking in bookings]
+
+        for day in xrange(days_num):
+            midnight = day_first + datetime.timedelta(days=day)
+            bookings_tuple += ((midnight, midnight + _one_day, 0), )
+        
+        grouped_dates = itertools.groupby(
+            sorted(
+                itertools.chain.from_iterable(
+                    ((start, START, value), (end, END, value)) for start, end, value in bookings_tuple), 
+                key=operator.itemgetter(0)
+            ), key=operator.itemgetter(0)
+        )
+        
+        changements = [
+            (key, sum(event[1]*event[2] for event in group))
+            for key, group
+            in grouped_dates]
+        availables = zip(
+            map(operator.itemgetter(0), changements), 
+            _accumulate(map(operator.itemgetter(1), changements))
+        )
+        return [
+            max(group, key=lambda x: x[1])
+            for (key, group) 
+            in itertools.groupby(availables, key=lambda x:x[0].date())
+            if key.year == year and key.month == month and key >= datetime.date.today()]
+
 def upload_to(instance, filename):
     return 'pictures/%s.jpg' % uuid.uuid4().hex
 
