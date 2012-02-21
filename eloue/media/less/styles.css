@@ -1018,12 +1018,13 @@ a:hover {
 #result-page .info-block {
   background-color: #fff;
 }
-.searh-block input[type=text] {
-  height: 20px;
-  width: 184px;
+.search-block .search-box-q {
+  height: 22px;
+  width: 179px;
 }
-.searh-block input[type=submit] {
-  vertical-align: -3%;
+.search-block input[type=submit] {
+  vertical-align: -2%;
+  margin-left: 7px;
 }
 .town-input {
   margin: 10px;
