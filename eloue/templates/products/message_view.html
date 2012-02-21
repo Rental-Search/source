@@ -61,6 +61,7 @@
 					<a href="{{user.get_absolute_url}}">{{ user.username }}</a>
 					<p class="m-content">
 						<form method="post" action="">
+						{% csrf_token %}
 						{{ editForm.body }}
 						<div class="form-actions">
         					<button type="submit" class="btn btn-primary">Envoyer</button>
