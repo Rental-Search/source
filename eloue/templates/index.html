@@ -47,7 +47,17 @@
             {% endwith %}
             </div>{# near #}
             <div id="moreRent"></div>{# moreRent #}
-            <div id="hotloc"></div>{# hotloc #}
+            <div id="hotloc">
+                <ul class="product-list">
+                {% for curiosity in curiosities %}
+                    {% with curiosity.product as product %}
+                        <li>
+                        {% include "products/partials/product.html" %}
+                        </li>
+                    {% endwith %}
+                {% endfor %}
+                </ul>
+            </div>{# hotloc #}
             <div id="categories"></div>{# categories #}
         </div>{# products-home-tabs #}
     </div>{# product-home #}
@@ -82,8 +92,6 @@
         <img src="{{ MEDIA_URL }}images/e-loue_dans_la_press.png" width="778" height="49" />
     </div>{# press #}
 </div>{# container-top #}
-
-  <script src="//maps.googleapis.com/maps/api/js?sensor=false&amp;libraries=places" type="text/javascript"></script>
   <script type="text/javascript">
 
     function SuccessBuilder(priority, geocodeSuccess) {
@@ -93,23 +101,12 @@
             geocoder.geocode(
                 {'latLng':latlon}, 
                 function(result) {
-                    report_location_back(priority, result[0], latlon, function(response) {
-                        if (response["status"] == "OK") {
-                            geocodeSuccess();
-                        }
-                    });
+                    report_location_back(priority, result[0], latlon, geocodeSuccess);
                 }
             );
         };
     }
-    
     navigator.geolocation.getCurrentPosition(SuccessBuilder(2, function(){window.location.reload();}));
 
-
-    autocomplete = new google.maps.places.Autocomplete(document.getElementById("id_l"), {types: ['geocode']});
-    google.maps.event.addListener(autocomplete, 'place_changed', function() {
-      place = autocomplete.getPlace();
-      report_location_back(1, place, place.geometry.location);
-    });
   </script>
 {% endblock %}

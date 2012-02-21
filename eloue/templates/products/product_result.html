@@ -100,11 +100,11 @@
         {% endif %}
         <ul class="product-filter">
             <li class="filter-title">Trier par</li>
-            <li {% if form.sort.data == "-created_at" %} class="filter-selected" {% endif %}>
-                {% if form.sort.data == "-created_at" %}
+            <li {% if form.sort.data == "-created_at" or not form.sort.data %} class="filter-selected" {% endif %}>
+                {% if form.sort.data == "-created_at" or not form.sort.data %}
                     {% trans "Les plus récents" %}
                 {% else %}
-                    <a href="{% facet_url breadcrumbs "sort" "-created_at" %}">{% trans "Les plus récents" %}</a>
+                    <a href="{% facet_url breadcrumbs "sort" "" %}">{% trans "Les plus récents" %}</a>
                 {% endif %}
             </li>
             {% if form.cleaned_data.l %}
@@ -153,18 +153,18 @@
     {% endif %}
     </div>{# content-main #}
     <div class="content-aside">
-        <form action="{% url product_list %}" method="get" id="form_search_results">
-            <div class="search-block">
-                    {{form.q}}
-                    <input type="submit" value="Rechercher" class="btn-search"/>
-            </div><!-- search-block -->
-            <div id="where" class="info-block">
-                <h2>Lieu</h2>
-                <p class="town-input"><input id="id_l" class="noEnterSubmit" type="text" name="l" value="{% firstof request.session.location.city request.session.location.region request.session.location.country request.session.location.fallback "" %}"/></p>
-                <div id="map-canvas" class="map"></div>
-                <p class="radius-input">Dans un rayon de <input id="id_r" class="noEnterSubmit" type="text" name="r" value="{{request.session.location.radius|stringformat:"s" }}"/> Km</p>
-            </div><!-- where -->
-        </form>
+        <div class="search-block">
+            <form action="{% url product_list %}" method="get" id="form_search_results">
+                {{form.q}}
+                <input type="submit" value="Rechercher" class="btn-search"/>
+            </form>
+        </div><!-- search-block -->
+        <div id="where" class="info-block">
+            <h2>Lieu</h2>
+            <p class="town-input"><input id="id_l" type="text" name="l" value="{% firstof request.session.location.city request.session.location.region request.session.location.country request.session.location.fallback "" %}"/></p>
+            <div id="map-canvas" class="map"></div>
+            <p class="radius-input">Dans un rayon de <input id="id_r" type="text" name="r" value="{{request.session.location.radius|stringformat:"s" }}"/> Km <input type="button" name="a" value="m. à j." id="rayon_update"></p>
+        </div><!-- where -->
         {% if product_list %}
         <div id ="facet-categories" class="info-block">
             <h2>{% trans "Catégories" %}</h2>
@@ -211,7 +211,7 @@
 {% block tail %}
 {{block.super}}
 
-  <script src="//maps.googleapis.com/maps/api/js?sensor=false&amp;libraries=places" type="text/javascript"></script>
+
   <script type="text/javascript">
     function SuccessBuilder(priority, geocodeSuccess) {
         return function(position) {
@@ -220,11 +220,7 @@
             geocoder.geocode(
                 {'latLng':latlon}, 
                 function(result) {
-                    report_location_back(priority, result[0], latlon, function(response) {
-                        if (response["status"] == "OK") {
-                           geocodeSuccess();
-                        }
-                    });
+                    report_location_back(priority, result[0], latlon, geocodeSuccess);
                 }
             );
         };
@@ -237,19 +233,6 @@
             }
         )
     );
-
-
-    autocomplete = new google.maps.places.Autocomplete(document.getElementById("id_l"), {types: ['geocode']});
-    google.maps.event.addListener(autocomplete, 'place_changed', function() {
-      place = autocomplete.getPlace();
-      report_location_back(1, place, place.geometry.location, function(response){
-        if (response["status"] == "OK") {
-          $("#id_l").remove();
-          $("#form_search_results").submit();
-        }
-      });
-    });
-
 
     function initialize() {
         var myLatlng = new google.maps.LatLng('{{request.session.location.coordinates.0|stringformat:"s" }}', '{{request.session.location.coordinates.1|stringformat:"s" }}');
@@ -269,8 +252,8 @@
         var circle = new google.maps.Circle({
           map: map,
           radius: Number('{{request.session.location.radius}}'.replace(',', '.'))*1000,    // 10 miles in metres
-          fillColor: '#AA0000',
-          editable: true
+          fillColor: '#FFFFFF',
+          editable: false
         });
         circle.bindTo('center', marker, 'position');
     }

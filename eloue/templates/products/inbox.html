@@ -31,7 +31,8 @@
 			<div>
 				<p class="m-sender">
 					<a href="{% url thread_details thread_id=thread.id%}">{{thread.sender.username }}</a> {{ thread.last_message.sent_at|date:_("DATETIME_FORMAT") }}
-					<span class="m-action"><a href="{% url thread_details thread_id=thread.id%}">{% trans "Lire" %}</a></span>
+					<span class="m-action"><a href="{% url thread_details thread_id=thread.id %}">{% trans "Lire" %}</a></span> -
+					<span class="m-action"><a href="{% url archive_thread thread_id=thread.id %}">{% trans "Archiver" %}</a></span>
 				</p>
 				<div class="m-subject">{{ thread.subject }}</div>
 				<span class="message-dial"></span>

@@ -13,6 +13,7 @@ function getCookie(name) {
     }
     return cookieValue;
 }
+
 function sameOrigin(url) {
     // url could be relative or scheme relative or absolute
     var host = document.location.host; // host + port
@@ -25,6 +26,7 @@ function sameOrigin(url) {
         // or any other URL that isn't scheme relative or absolute i.e relative.
         !(/^(\/\/|http:|https:).*/.test(url));
 }
+
 function safeMethod(method) {
     return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
 }
@@ -34,25 +36,15 @@ function SuccessBuilder(priority, geocodeSuccess) {
         geocoder = new google.maps.Geocoder();
         latlon = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
         geocoder.geocode(
-            {'latLng':latlon}, 
+            {'latLng':latlon},
             function(result) {
-                report_location_back(priority, result[0], latlon, function(response) {
-                    if (response["status"] == "OK") {
-                        geocodeSuccess();
-                    }
-                });
+                report_location_back(priority, result[0], latlon, geocodeSuccess);
             }
         );
     };
 }
 
 function report_location_back(source, address, coords, success) {
-  success = (typeof success == "undefined")?function(response) {
-
-      if (response["status"] == 'OK') {
-        window.location.reload();
-      }
-    }:success;
   $(document).ajaxSend(function(event, xhr, settings) {
     if (!safeMethod(settings.type) && sameOrigin(settings.url)) {
         xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
@@ -69,11 +61,46 @@ function report_location_back(source, address, coords, success) {
       }),
       source: source
     },
-    success: success
+    success: function(response) {
+        if (response["status"] == "OK") {
+            success();
+        }
+    }
   });
 }
 
+geolocation_stuff = function() {
+    autocomplete = new google.maps.places.Autocomplete(document.getElementById("id_l"), {types: ['geocode']});
+    google.maps.event.addListener(autocomplete, 'place_changed', function() {
+      place = autocomplete.getPlace();
+      report_location_back(1, place, place.geometry.location, function() {window.location.reload();});
+    });
+
+    $("#rayon_update").click(function() {
+        $(document).ajaxSend(function(event, xhr, settings) {
+            if (!safeMethod(settings.type) && sameOrigin(settings.url)) {
+                xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+            }
+        });
+        $.ajax({
+            type: 'POST',
+            url: document.location.origin+'/user_geolocation/',
+            data: {
+                source: 1,
+                radius: $("#id_r").val().replace(RegExp(',', 'g'), '.')
+            },
+            success: function(response) {
+                console.log(response);
+                if (response["status"] == "OK") {
+                    $("#form_search_results").submit();
+                }
+            }
+        });
+    });
+}
+
 $(document).ready(function() {
+    geolocation_stuff();
     /*Display home tabs */
     $( ".products-home-tabs" ).tabs();
     
@@ -92,7 +119,6 @@ $(document).ready(function() {
     
     /*Display product detail tabs */
     $( ".product-tabs" ).tabs();
-    
 
     $("#id_work").autocomplete(
         {
@@ -108,12 +134,6 @@ $(document).ready(function() {
     );
     
     $("#id_languages").chosen();
-    
-    $('.noEnterSubmit').keypress(function(e){
-        if ( e.which == 13 ) return false;
-        //or...
-        if ( e.which == 13 ) e.preventDefault();
-    });
     
     /* Booking price */
     // Price calculations
