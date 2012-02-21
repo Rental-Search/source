@@ -286,7 +286,7 @@ def product_delete(request, slug, product_id):
 def product_list(request, urlbits, sqs=SearchQuerySet(), suggestions=None, page=None):
     form = FacetedSearchForm(
         request.GET, 
-        coords=request.GET.get('r') or request.session.get('location',{}).get('coordinates'),
+        coords=request.session.get('location',{}).get('coordinates'),
         radius=request.session.get('location', {}).get('radius')
     )
 
@@ -298,10 +298,7 @@ def product_list(request, urlbits, sqs=SearchQuerySet(), suggestions=None, page=
     #breadcrumbs['l'] = {'name': 'l', 'value': form.cleaned_data.get('l', None), 'label': 'l', 'facet': False}
     #breadcrumbs['r'] = {'name': 'r', 'value': form.cleaned_data.get('r', None), 'label': 'r', 'facet': False}
     breadcrumbs['sort'] = {'name': 'sort', 'value': form.cleaned_data.get('sort', None), 'label': 'sort', 'facet': False}
-    
-    if form.cleaned_data.get('r'):
-        request.session.get('location', {})['radius'] = form.cleaned_data.get('r')
-    
+        
     urlbits = urlbits or ''
     urlbits = filter(None, urlbits.split('/')[::-1])
     while urlbits:

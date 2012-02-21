@@ -116,10 +116,8 @@ GEOLOCATION_SOURCE = Enum([
 
 @require_POST
 def user_geolocation(request):
-    stored_location = request.session.get('location')
-    location = simplejson.loads(request.POST['address'])
-    coordinates = simplejson.loads(request.POST['coordinates'])
-    address_components = location['address_components']
+    stored_location = request.session.setdefault('location', {})
+
     if stored_location:
         current_source = stored_location.get('source', max(GEOLOCATION_SOURCE.values())+1)
         if current_source < int(request.POST['source']) or \
@@ -129,39 +127,60 @@ def user_geolocation(request):
                 mimetype="application/json"
             )
     
-    localities = filter(lambda component: 'locality' in component['types'], address_components)
-    city = next(iter(map(lambda component: component['long_name'], localities)), None)
-    regions = filter(lambda component: 'administrative_area_level_1' in component['types'], address_components)
-    region = next(iter(map(lambda component: component['long_name'], regions)), None)
-    countries = filter(lambda component: 'country' in component['types'], address_components)
-    country = next(iter(map(lambda component: component['long_name'], countries)), None)
-    fallback = next(iter(map(lambda component: component['long_name'], address_components)), None) if not (city or region or country) else None
-    region_coords, region_radius = geocoder.GoogleGeocoder().geocode(region+', '+country)[1:3] if region and country else (None, None)
-
-
-    coordinates = (coordinates['lat'], coordinates['lon'])
-    if 'viewport' in location['geometry']:
-        viewport = location['geometry']['viewport']
-        latitudes = viewport['Y']
-        longitudes = viewport['$']
-        from geopy import distance, Point
-        sw = Point(latitudes['b'], longitudes['b'])
-        ne = Point(latitudes['d'], longitudes['d'])
-        radius = (distance.distance(sw, ne).km // 2) + 1
-    else:
-        radius = 5
+    radius = None
     
-    request.session['location'] = {
-        'source': int(request.POST['source']), 
-        'coordinates': coordinates, 
-        'city': city,
-        'region': region,
-        'radius': radius,
-        'region_radius': region_radius,
-        'region_coords': region_coords,
-        'country': country,
-        'fallback': fallback
-    }
+    stored_location.update({
+        'source': int(request.POST['source'])
+    })
+
+    if 'address' in request.POST:
+        location = simplejson.loads(request.POST['address'])
+        address_components = location['address_components']
+        
+        localities = filter(lambda component: 'locality' in component['types'], address_components)
+        city = next(iter(map(lambda component: component['long_name'], localities)), None)
+        regions = filter(lambda component: 'administrative_area_level_1' in component['types'], address_components)
+        region = next(iter(map(lambda component: component['long_name'], regions)), None)
+        countries = filter(lambda component: 'country' in component['types'], address_components)
+        country = next(iter(map(lambda component: component['long_name'], countries)), None)
+        fallback = next(iter(map(lambda component: component['long_name'], address_components)), None) if not (city or region or country) else None
+        region_coords, region_radius = geocoder.GoogleGeocoder().geocode(region+', '+country)[1:3] if region and country else (None, None)
+
+        stored_location.update({
+            'city': city,
+            'region': region,
+            'region_radius': region_radius,
+            'region_coords': region_coords,
+            'country': country,
+            'fallback': fallback
+        })
+        if 'radius' not in request.POST:
+            if 'viewport' in location['geometry']:
+                viewport = location['geometry']['viewport']
+                latitudes = viewport['Y']
+                longitudes = viewport['$']
+                from geopy import distance, Point
+                sw = Point(latitudes['b'], longitudes['b'])
+                ne = Point(latitudes['d'], longitudes['d'])
+                radius = (distance.distance(sw, ne).km // 2) + 1
+            else:
+                radius = 5
+
+    if 'coordinates' in request.POST:
+        coordinates = simplejson.loads(request.POST['coordinates'])
+        coordinates = (coordinates['lat'], coordinates['lon'])
+        stored_location.update({
+            'coordinates': coordinates
+        })
+    
+    if 'radius' in request.POST:
+        radius = int(float(request.POST['radius']))
+
+    stored_location.update({
+        'radius': radius
+    })
+
+    request.session.save()
     return HttpResponse(simplejson.dumps(
         {'status': "OK", 'radius': radius}), 
         mimetype="application/json"
