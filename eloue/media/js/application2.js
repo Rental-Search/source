@@ -108,7 +108,12 @@ $(document).ready(function() {
     );
     
     $("#id_languages").chosen();
-
+    
+    $('.noEnterSubmit').keypress(function(e){
+        if ( e.which == 13 ) return false;
+        //or...
+        if ( e.which == 13 ) e.preventDefault();
+    });
     
     /* Booking price */
     // Price calculations

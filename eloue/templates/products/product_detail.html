@@ -118,7 +118,7 @@
                 {{price}} euros / {{price.get_unit_display}}<p>
             {% endfor %}
             </div>{# prices #}
-            <div id="calendar" style="height: 200px;">Calendrier</div>{# calendar #}
+            <div id="calendar" style="height: 200px;">{{ product.monthly_availability }}</div>{# calendar #}
         </div>{# product-tabs #}
         <div class="product-desc">
             {{ product.description|linebreaksp }}

@@ -126,13 +126,18 @@ def booking_price(request, slug, product_id):
         }
         return HttpResponse(simplejson.dumps(response_dict), mimetype='application/json')
 
+@require_GET
+def get_availability(request, product_id, year, month):
+    product = get_object_or_404(Product.on_site, pk=product_id)
+    availability = product.daily_available(year, month)
+    return HttpResponse(simplejson.dumps(availability), mimetype='application/json')
+    
 @mobify
 @never_cache
 @secure_required
 def booking_create_redirect(request, *args, **kwargs):
     product = get_object_or_404(Product.on_site, pk=kwargs['product_id'])
     return redirect_to(request, product.get_absolute_url())
-
 
 @mobify
 @never_cache

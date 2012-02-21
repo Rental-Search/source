@@ -192,9 +192,16 @@ class Booking(models.Model):
               key=itemgetter(0)
             )
             return max(_accumulate(sum(map(lambda x: mul(*itemgetter(1, 2)(x)), j)) for i, j in grouped_dates))
-        bookings = Booking.objects.filter(product=product).filter(Q(state="pending")|Q(state="ongoing")).filter(~Q(ended_at__lte=started_at) & ~Q(started_at__gte=ended_at))
-        return product.quantity - max_rented_quantity(bookings)
         
+        bookings = Booking.objects.filter(
+            product=product
+        ).filter(
+            Q(state="pending")|Q(state="ongoing")
+        ).filter(
+            ~Q(ended_at__lte=started_at) & ~Q(started_at__gte=ended_at)
+        )
+        return product.quantity - max_rented_quantity(bookings)
+
     @staticmethod
     def calculate_price(product, started_at, ended_at):
         delta = ended_at - started_at

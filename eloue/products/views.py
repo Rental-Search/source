@@ -125,16 +125,20 @@ def product_edit(request, slug, product_id):
 
 
 def thread_list(user, is_archived):
-    return sorted(MessageThread.objects.filter(
-      Q(sender=user, sender_archived=is_archived)
-      |Q(recipient=user, recipient_archived=is_archived)
-    ).order_by('-last_message__sent_at'), key=lambda thread: not (thread.new_sender() if user==thread.sender else thread.new_recipient()))
+    return sorted(
+        MessageThread.objects.filter(
+            Q(sender=user, sender_archived=is_archived)
+            |Q(recipient=user, recipient_archived=is_archived)
+        ).order_by('-last_message__sent_at'), 
+        key=lambda thread: not (thread.new_sender() if user==thread.sender else thread.new_recipient())
+    )
 
 
 @login_required
 def inbox(request):
     user = request.user
     threads = thread_list(user, False)
+    print threads
     return render_to_response(
       'products/inbox.html', 
       {'thread_list': threads}, 
@@ -257,6 +261,12 @@ def message_create(request, product_id, recipient_id):
     message_wizard = MessageWizard([MessageEditForm, EmailAuthenticationForm])
     return message_wizard(request, product_id, recipient_id)
 
+@never_cache
+@secure_required
+def patron_message_create(request, recipient_username):
+    message_wizard = MessageWizard([MessageEditForm, EmailAuthenticationForm])
+    recipient = Patron.objects.get(slug=recipient_username)
+    return message_wizard(request, None, recipient.pk)
 
 @login_required
 @ownership_required(model=Product, object_key='product_id', ownership=['owner'])

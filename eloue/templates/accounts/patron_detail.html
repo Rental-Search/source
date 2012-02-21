@@ -32,7 +32,7 @@
                 {% if patron.about %}
                     <p class="profil-description">{{ patron.about }}</p>
                 {% endif %}
-                <a class="btn-contactme">{% trans "Contactez-moi" %}</button>
+                <a class="btn-contactme" href={% url patron_message_create recipient_username=patron.slug %}>{% trans "Contactez-moi" %}</button>
             </div>{# profil-description #}
         </div>{# profil-block #}
         <div class="profil-block">
