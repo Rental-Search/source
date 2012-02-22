@@ -29,32 +29,34 @@
 <form class="form-horizontal" method="post" action="">
 {% endif %}
 {% csrf_token %}
-<fieldset>
-<legend>{{ form.legend }}</legend>
-{% for formfield in form %}
-  <div class="control-group {% if formfield.errors %} error {% endif %}">
-    <label class="control-label" for="{{ formfield.id_for_label }}">{{ formfield.label }} {% if formfield.field.required %}*{% endif %}</label>
-    <div class="controls">
-      {% if formfield.name == "picture" %}
-        {% for picture in product.pictures.all %}
-            {% if picture.thumbnail %}
-                  <a href="#"><img src="{{ picture.thumbnail.url }}" /></a>
-                {% endif %}
+{% for form in forms %}
+  <fieldset>
+    <legend>{{ form.legend }}</legend>
+    {% for formfield in form %}
+    <div class="control-group {% if formfield.errors %} error {% endif %}">
+      <label class="control-label" for="{{ formfield.id_for_label }}">{{ formfield.label }} {% if formfield.field.required %}*{% endif %}</label>
+      <div class="controls">
+        {% if formfield.name == "picture" %}
+          {% for picture in product.pictures.all %}
+              {% if picture.thumbnail %}
+                    <a href="#"><img src="{{ picture.thumbnail.url }}" /></a>
+                  {% endif %}
+            {% endfor %}
+        {% endif %}
+        {{ formfield }}
+        <p class="help-block">{{ formfield.help_text }}</p>
+        {% if formfield.errors %}
+          <span class="help-inline">
+          {% for error in formfield.errors %}
+            {{ error|escape }} 
           {% endfor %}
-      {% endif %}
-      {{ formfield }}
-      <p class="help-block">{{ formfield.help_text }}</p>
-      {% if formfield.errors %}
-        <span class="help-inline">
-        {% for error in formfield.errors %}
-          {{ error|escape }} 
-        {% endfor %}
-        </span>
-      {% endif %}
+          </span>
+        {% endif %}
+      </div>
     </div>
-  </div>
-  {% endfor %}
+    {% endfor %}
   </fieldset>
+  {% endfor %}
   <div class="form-actions">
     <button type="submit" class="btn btn-primary">Enregistrer</button>
     <button type="reset" class="btn btn-cancel">Annuler</a>
