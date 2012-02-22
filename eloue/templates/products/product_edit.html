@@ -7,46 +7,57 @@
 {% endblock %}
 
 {% block content-aside-profil %}
+{% url owner_product_edit product.slug product.pk as product_edit %}
+{% url owner_product_address_edit product.slug product.pk as product_address_edit %}
+{% url owner_product_price_edit product.slug product.pk as product_price_edit %}
+
+
 <div class="previous-sub-bar">
   &larr;  <a href="{% url owner_product %}">{% trans "Retour à mes annonce" %}</a>
 </div>
 <ul class="nav-sub-bar">
-    <li><a href="#"  class="selected-nav-bar-link">{% trans "Description et photos" %}</a></li>
-    <li><a href="#">{% trans "Adresse" %}</a></li>
-    <li><a href="#">{% trans "Prix et disponibilité" %}</a></li>
-    <li><a href="#">{% trans "Demande de réservation"%}</a></li>
-    <li><a href="#">{% trans "Réservation" %}</a></li>
-    <li><a href="#">{% trans "Historique" %}</a></li>
+    <li><a href="{{ product_edit }}"  class="{% active request product_edit "$" %}">{% trans "Description et photos" %}</a></li>
+    <li><a href="{{ product_address_edit }}"  class="{% active request product_address_edit %}">{% trans "Adresse" %}</a></li>
+    <li><a href="{{ product_price_edit }}"  class="{% active request product_price_edit %}">{% trans "Prix et disponibilité" %}</a></li>
 </ul>
 {% endblock %}
-
 {% block content-main-profil %}
+<h2>{% trans "Modification de "%} {{ product.summary }}</h2>
 {% if form.is_multipart %}
-<h2>{% trans "Description et photos" %}</h2>
 <form enctype="multipart/form-data" class="form-horizontal" method="post" action="">
 {% else %}
 <form class="form-horizontal" method="post" action="">
 {% endif %}
 {% csrf_token %}
+<fieldset>
+<legend>{{ form.legend }}</legend>
 {% for formfield in form %}
   <div class="control-group {% if formfield.errors %} error {% endif %}">
-             <label class="control-label" for="{{ formfield.id_for_label }}">{{ formfield.label }} {% if formfield.field.required %}*{% endif %}</label>
-             <div class="controls">
-                 {{ formfield }}
-                 <p class="help-block">{{ formfield.help_text }}</p>
-                 {% if formfield.errors %}
-                 <span class="help-inline">
-                     {% for error in formfield.errors %}
-                           {{ error|escape }} 
-                     {% endfor %}
-                 </span>
-                 {% endif %}
-           </div>
-         </div>
-       {% endfor %}
-      <div class="form-actions">
-        <button type="submit" class="btn btn-primary">Enregistrer</button>
-        <button type="reset" class="btn btn-cancel">Annuler</a>
-      </div>
+    <label class="control-label" for="{{ formfield.id_for_label }}">{{ formfield.label }} {% if formfield.field.required %}*{% endif %}</label>
+    <div class="controls">
+      {% if formfield.name == "picture" %}
+        {% for picture in product.pictures.all %}
+            {% if picture.thumbnail %}
+                  <a href="#"><img src="{{ picture.thumbnail.url }}" /></a>
+                {% endif %}
+          {% endfor %}
+      {% endif %}
+      {{ formfield }}
+      <p class="help-block">{{ formfield.help_text }}</p>
+      {% if formfield.errors %}
+        <span class="help-inline">
+        {% for error in formfield.errors %}
+          {{ error|escape }} 
+        {% endfor %}
+        </span>
+      {% endif %}
+    </div>
+  </div>
+  {% endfor %}
+  </fieldset>
+  <div class="form-actions">
+    <button type="submit" class="btn btn-primary">Enregistrer</button>
+    <button type="reset" class="btn btn-cancel">Annuler</a>
+  </div>
 </form>
 {% endblock %}

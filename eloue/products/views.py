@@ -32,7 +32,7 @@ from eloue.decorators import ownership_required, secure_required, mobify
 from eloue.accounts.forms import EmailAuthenticationForm
 from eloue.accounts.models import Patron
 
-from eloue.products.forms import AlertSearchForm, AlertForm, FacetedSearchForm, ProductForm, ProductEditForm, MessageEditForm
+from eloue.products.forms import AlertSearchForm, AlertForm, FacetedSearchForm, ProductForm, ProductEditForm, ProductAddressEditForm, ProductPriceEditForm, MessageEditForm
 
 from eloue.products.models import Category, Product, Curiosity, UNIT, ProductRelatedMessage, Alert, MessageThread
 from eloue.products.wizard import ProductWizard, MessageWizard, AlertWizard, AlertAnswerWizard
@@ -105,14 +105,60 @@ def product_edit(request, slug, product_id):
         'category': product.category.id,
         'deposit_amount': product.deposit_amount
     }
-    for price in product.prices.all():
-        initial['%s_price' % UNIT.reverted[price.unit].lower()] = price.amount
+
     form = ProductEditForm(data=request.POST or None, files=request.FILES or None, instance=product, initial=initial)
     if form.is_valid():
         product = form.save()
-        messages.success(request, _(u"Votre produit a bien été édité !"))
+        messages.success(request, _(u"Les modifications ont bien été prises en compte"))
         return redirect(
             'eloue.products.views.product_edit', 
+            slug=slug, product_id=product_id
+        )
+    return render_to_response(
+        'products/product_edit.html', dictionary={
+            'product': product, 
+            'form': form
+        }, 
+        context_instance=RequestContext(request)
+    )
+
+
+@login_required
+@ownership_required(model=Product, object_key='product_id', ownership=['owner'])
+def product_address_edit(request, slug, product_id):
+    product = get_object_or_404(Product.on_site, pk=product_id)
+
+    form = ProductAddressEditForm(data=request.POST or None, instance=product)
+    if form.is_valid():
+        product = form.save()
+        messages.success(request, _(u"L'adress a bien été modifié"))
+        return redirect(
+            'eloue.products.views.product_address_edit', 
+            slug=slug, product_id=product_id
+        )
+    return render_to_response(
+        'products/product_edit.html', dictionary={
+            'product': product, 
+            'form': form
+        }, 
+        context_instance=RequestContext(request)
+    )
+
+@login_required
+@ownership_required(model=Product, object_key='product_id', ownership=['owner'])
+def product_price_edit(request, slug, product_id):
+    product = get_object_or_404(Product.on_site, pk=product_id)
+    initial = {}
+
+    for price in product.prices.all():
+        initial['%s_price' % UNIT.reverted[price.unit].lower()] = price.amount
+
+    form = ProductPriceEditForm(data=request.POST or None, instance=product, initial=initial)
+    if form.is_valid():
+        product = form.save()
+        messages.success(request, _(u"Les prix ont bien été modifiés"))
+        return redirect(
+            'eloue.products.views.product_price_edit', 
             slug=slug, product_id=product_id
         )
     return render_to_response(
