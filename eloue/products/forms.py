@@ -233,36 +233,70 @@ class ProductForm(forms.ModelForm):
         fields = ('category', 'summary', 'picture_id', 'picture', 'deposit_amount', 'quantity', 'description', 'payment_type')
 
 
+class PictureFileInput(forms.FileInput):
+    def render(self, name, value, attrs=None):
+        return super(PictureFileInput, self).render(name, None, attrs=attrs)
+
+
 class ProductEditForm(forms.ModelForm):
     category = TreeNodeChoiceField(label=_(u"Catégorie"), queryset=Category.tree.all(), empty_label="Choisissez une catégorie", level_indicator=u'--')
     summary = forms.CharField( label=_(u"Titre"), max_length=100, widget=forms.TextInput(attrs={'class': 'inm'}))
     deposit_amount = forms.DecimalField(label=_(u"Caution"), initial=0, required=False, max_digits=8, decimal_places=2, widget=forms.TextInput(attrs={'class': 'inm price'}), localize=True)
     quantity = forms.IntegerField(label=_(u"Quantité"), initial=1, widget=forms.TextInput(attrs={'class': 'inm price'}))
-    picture = forms.ImageField(label=_(u"Photo"), required=False, widget=forms.FileInput(attrs={'class': 'inm'}))
+    picture = forms.ImageField(label=_(u"Photo"), required=False, widget=PictureFileInput(attrs={'class': 'inm'}))
     description = forms.CharField(label=_(u"Description"), widget=forms.Textarea())
-
-    hour_price = forms.DecimalField(label=_(u"l'heure"), required=False, max_digits=10, decimal_places=2, min_value=D('0.01'), widget=forms.TextInput(attrs={'class': 'ins'}), localize=True)
-    day_price = forms.DecimalField(label=_(u"la journée"), required=True, max_digits=10, decimal_places=2, min_value=D('0.01'), widget=forms.TextInput(attrs={'class': 'ins'}), localize=True)
-    week_end_price = forms.DecimalField(label=_(u"le week-end"), required=False, max_digits=10, decimal_places=2, min_value=D('0.01'), widget=forms.TextInput(attrs={'class': 'ins'}), localize=True)
-    week_price = forms.DecimalField(label=_(u"la semaine"), required=False, max_digits=10, decimal_places=2, min_value=D('0.01'), widget=forms.TextInput(attrs={'class': 'ins'}), localize=True)
-    two_weeks_price = forms.DecimalField(label=_(u"les 15 jours"), required=False, max_digits=10, decimal_places=2, min_value=D('0.01'), widget=forms.TextInput(attrs={'class': 'ins'}), localize=True)
-    month_price = forms.DecimalField(label=_(u"le mois"), required=False, max_digits=10, decimal_places=2, min_value=D('0.01'), widget=forms.TextInput(attrs={'class': 'ins'}), localize=True)
-    
-
-    addresses__address1 = forms.CharField(label=_(u"Adresse"), max_length=255, required=False, widget=forms.Textarea(attrs={'class': 'inm street', 'placeholder': _(u'Rue')}))
-    addresses__zipcode = forms.CharField(label=_(u"Code postal"), required=False, max_length=9, widget=forms.TextInput(attrs={
-            'class': 'inm zipcode', 'placeholder': _(u'Code postal')
-        }))
-    addresses__city = forms.CharField(label=_(u"Ville"), required=False, max_length=255, widget=forms.TextInput(attrs={'class': 'inm town', 'placeholder': _(u'Ville')}))
-    addresses__country = forms.ChoiceField(label=_(u"Pays"), choices=COUNTRY_CHOICES, initial=settings.LANGUAGE_CODE.split('-')[1].upper(), required=False, widget=forms.Select(attrs={'class': 'selm'}))
 
     def __init__(self, *args, **kwargs):
         super(ProductEditForm, self).__init__(*args, **kwargs)
-        self.fields['address'].queryset = self.instance.owner.addresses.all()
-        self.fields['address'].required = False
-        self.fields['address'].widget.attrs['class'] = "selm"
-        self.fields['category'].widget.attrs['class'] = "selm"
+        self.legend = _(u"Description et photo")
+
+    def clean_deposit_amount(self):
+        deposit_amount = self.cleaned_data.get('deposit_amount', None)
+        if deposit_amount in EMPTY_VALUES:
+            deposit_amount = D('0')
+        return deposit_amount
     
+    def clean_picture(self):
+        picture = self.cleaned_data.get('picture', None)
+        self.new_picture = picture
+        return picture
+    
+    def save(self, *args, **kwargs):
+        if self.new_picture:
+            self.instance.pictures.all().delete() 
+            self.instance.pictures.add(Picture.objects.create(image=self.cleaned_data['picture']))
+        return super(ProductEditForm, self).save(*args, **kwargs)
+    
+    class Meta:
+        model = Product
+        fields = ('category', 'summary', 'deposit_amount', 'quantity', 'description', 'picture')
+
+
+class AddressSelect(forms.Select):
+
+    def render(self, name, value, attrs=None, choices=()):
+        from django.utils.safestring import mark_safe
+        return mark_safe(super(AddressSelect, self).render(name, value, attrs, choices) 
+                            + '<p style="margin-top: 10px;"><a href="">Ajouter une autre adresse</a></p>')
+        
+
+class ProductAddressEditForm(forms.ModelForm):
+    addresses__address1 = forms.CharField(label=_(u"Rue"), max_length=255, required=False, widget=forms.TextInput(attrs={'class': 'inm street'}))
+    addresses__zipcode = forms.CharField(label=_(u"Code postal"), required=False, max_length=9, widget=forms.TextInput(attrs={
+            'class': 'inm zipcode'
+        }))
+    addresses__city = forms.CharField(label=_(u"Ville"), required=False, max_length=255, widget=forms.TextInput(attrs={'class': 'inm town'}))
+    addresses__country = forms.ChoiceField(label=_(u"Pays"), choices=COUNTRY_CHOICES, initial=settings.LANGUAGE_CODE.split('-')[1].upper(), required=False, widget=forms.Select(attrs={'class': 'selm'}))
+    
+    #address = forms.ChoiceField(label=_(u"Adresse"), required=False)
+
+    def __init__(self, *args, **kwargs):
+        super(ProductAddressEditForm, self).__init__(*args, **kwargs)
+        self.legend = _(u"Adresse")
+        self.fields['address'].queryset = self.instance.owner.addresses.all()
+        self.fields['address'].label = _(u"Adresse")
+        self.fields['address'].required = False
+
     def clean(self):
         address = self.cleaned_data['address']
         address1 = self.cleaned_data['addresses__address1']
@@ -278,17 +312,25 @@ class ProductEditForm(forms.ModelForm):
             self.cleaned_data['address'].save()
         return self.cleaned_data
 
-    def clean_deposit_amount(self):
-        deposit_amount = self.cleaned_data.get('deposit_amount', None)
-        if deposit_amount in EMPTY_VALUES:
-            deposit_amount = D('0')
-        return deposit_amount
+    class Meta:
+        model = Product
+        fields = ('address', 'addresses__address1', 'addresses__zipcode', 'addresses__city', 'addresses__country')
+        widgets = {
+            'address': AddressSelect
+        }
+
+class ProductPriceEditForm(forms.ModelForm):
+    hour_price = forms.DecimalField(label=_(u"L'heure"), required=False, max_digits=10, decimal_places=2, min_value=D('0.01'), widget=forms.TextInput(attrs={'class': 'ins'}), localize=True)
+    day_price = forms.DecimalField(label=_(u"La journée"), required=True, max_digits=10, decimal_places=2, min_value=D('0.01'), widget=forms.TextInput(attrs={'class': 'ins'}), localize=True)
+    week_end_price = forms.DecimalField(label=_(u"Le week-end"), required=False, max_digits=10, decimal_places=2, min_value=D('0.01'), widget=forms.TextInput(attrs={'class': 'ins'}), localize=True)
+    week_price = forms.DecimalField(label=_(u"La semaine"), required=False, max_digits=10, decimal_places=2, min_value=D('0.01'), widget=forms.TextInput(attrs={'class': 'ins'}), localize=True)
+    two_weeks_price = forms.DecimalField(label=_(u"Les 15 jours"), required=False, max_digits=10, decimal_places=2, min_value=D('0.01'), widget=forms.TextInput(attrs={'class': 'ins'}), localize=True)
+    month_price = forms.DecimalField(label=_(u"Le mois"), required=False, max_digits=10, decimal_places=2, min_value=D('0.01'), widget=forms.TextInput(attrs={'class': 'ins'}), localize=True)
     
-    def clean_picture(self):
-        picture = self.cleaned_data.get('picture', None)
-        self.new_picture = picture
-        return picture
-    
+    def __init__(self, *args, **kwargs):
+        super(ProductPriceEditForm, self).__init__(*args, **kwargs)
+        self.legend = _(u"Prix et disponibilité")
+
     def save(self, *args, **kwargs):
         for unit in UNIT.keys():
             field = "%s_price" % unit.lower()
@@ -304,16 +346,11 @@ class ProductEditForm(forms.ModelForm):
                 else:
                     #TODO: could have problems with seasonal prices
                     self.instance.prices.filter(unit=UNIT[unit]).delete()
-        if self.new_picture:
-            self.instance.pictures.all().delete() 
-            self.instance.pictures.add(Picture.objects.create(image=self.cleaned_data['picture']))
-        return super(ProductEditForm, self).save(*args, **kwargs)
     
     class Meta:
         model = Product
-        fields = ('category', 'summary', 'deposit_amount', 'quantity', 'description', 'address')
+        fields = ('hour_price', 'day_price', 'week_end_price', 'week_price', 'two_weeks_price', 'month_price')        
 
-  
 
 class ProductAdminForm(forms.ModelForm):
     category = TreeNodeChoiceField(queryset=Category.tree.all(), empty_label="Choisissez une catégorie", level_indicator=u'--')
