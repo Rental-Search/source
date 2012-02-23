@@ -296,7 +296,7 @@ class ProductAddressEditForm(forms.ModelForm):
         fields = ('address',)
 
 class ProductAddressForm(forms.ModelForm):
-    address1 = forms.CharField(label=_(u"Adresse"))
+    address1 = forms.CharField(label=_(u"Rue"))
     zipcode = forms.CharField(label=_(u"Code Postal"))
     city = forms.CharField(label=_(u"Ville"))
     country = forms.ChoiceField(label=_(u"Pays"), choices=COUNTRY_CHOICES, initial=settings.LANGUAGE_CODE.split('-')[1].upper(), required=True)
