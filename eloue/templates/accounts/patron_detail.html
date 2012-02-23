@@ -35,6 +35,7 @@
                 <a class="btn-contactme" href={% url patron_message_create recipient_username=patron.slug %}>{% trans "Contactez-moi" %}</a>
             </div>{# profil-description #}
         </div>{# profil-block #}
+        {% if patron.facebooksession or patron.is_verified == 'VERIFIED' or patron.is_confirmed %}
         <div class="profil-block">
             <ul class="profil-verification">
                 {% if patron.facebooksession %}
@@ -48,6 +49,8 @@
                 {% endif %}
             </ul>
         </div>{# profil-block #}
+        {% endif %}
+        {% if patron.work or patron.school or patron.languages.count %}
         <div class="profil-block">
             <h3>Plus d'info</h3>
             {% if patron.work %}
@@ -63,11 +66,13 @@
                 <p>{{ patron.languages.all|join:", "}}</p>
             {% endif %}
         </div>{# profil-block #}
+        {% endif %}
         <div class="profil-block last">
             {% include "accounts/partials/response_stats.html" %}
         </div>{# profil-block #}
     </div>{# content-aside-profil #}
     <div class="content-main-profil">
+        {% if borrowercomments %}
         <h2>{% trans "Commentaires" %} <small>({{ borrowercomments.count }} {% trans "avis" %})</small></h2>
         <ul class="comments">
             {% for comment in borrowercomments %}
@@ -75,6 +80,7 @@
             {% endfor %}
         </ul>
         <p class="more-comment"><a href="{% url comments %}">Voir tous les commentaires</a></p>
+        {% endif %}
         {% if patron.products %}
         {% blocktrans with patron.products.count as count and patron.products.count|pluralize as pluralize %}
 	      <h2>{{ count }} location{{ pluralize }}</h2>

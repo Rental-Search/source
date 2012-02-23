@@ -3223,6 +3223,21 @@ table {
 .pagination a.page-selected {
   color: #ff7200;
 }
+.answer-stats {
+  font-family: 'Ubuntu', sans-serif;
+  font-size: 13px;
+  font-weight: normal;
+  color: #364c59;
+}
+.answer-stats th, .answer-stats td {
+  padding-bottom: 5px;
+}
+.answer-stats td {
+  font-weight: bold;
+}
+.answer-stats th {
+  text-align: left;
+}
 .label {
   padding: 2px 4px 3px;
   font-size: 11.9px;

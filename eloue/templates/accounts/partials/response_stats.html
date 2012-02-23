@@ -1,14 +1,16 @@
 {% load i18n %}
 <table class="answer-stats">
     <tr>
-        <td class="answer-rate">Taux de réponse</td><td>
+        <th class="answer-rate">{% trans "Taux de réponse" %}</th>
+        <td>
         {% if patron.response_rate != None %}
         	{{patron.response_rate|floatformat:"0"}}%
         {% else %}
 	        {% trans "Personne ne le pas encore contacté, soyez le premier!" %}
-        {% endif %}</td>
+        {% endif %}
+</td>
     </tr>
     <tr>
-        <td class="answer-time">Temps de réponse moyen</td><td>{{patron.response_time|default_if_none:"Ce membre n'a jamais repondu"}}</td>
+        <th class="answer-time">{% trans "Temps de réponse moyen" %}</th><td>{{patron.response_time|default_if_none:"Ce membre n'a jamais repondu"}}</td>
     </tr>
 </table>
