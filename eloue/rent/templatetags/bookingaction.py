@@ -35,7 +35,7 @@ class TemplateWidgetAction(ActionWidget):
 
 class LinkWidget(TemplateWidgetAction):
 	template = Template(
-		r'{% load i18n %}'
+		ur'{% load i18n %}'
 		'<a href="{{ url }}">{% trans text %}</a>'
 	)
 
@@ -53,7 +53,7 @@ class LinkWidget(TemplateWidgetAction):
 
 class PostForm(TemplateWidgetAction):
 	template = Template(
-		r'{% load i18n %}'
+		ur'{% load i18n %}'
 		'<form action="{{url}}" method="post">'
 		'{% csrf_token %}'
 		'<input type="hidden" name="state" value={{ state }}/>'
@@ -101,7 +101,7 @@ SendMessageToOwner = LinkWidget(
 			'product_id': booking.product.pk,
 			'recipient_id': booking.owner.pk
 		}),
-	text='Envoyer message au proprietaire'
+	text=u'Envoyer un message au propriétaire'
 )
 
 
@@ -112,7 +112,7 @@ SendMessageToBorrower = LinkWidget(
 			'product_id': booking.product.pk,
 			'recipient_id': booking.owner.pk
 		}),
-	text='Envoyer message au locataire'
+	text=u'Envoyer un message au locataire'
 )
 
 borrower = {
@@ -151,8 +151,8 @@ owner = {
 def bookingaction(request, booking):
 	actions = borrower if booking.borrower == request.user else owner
 	possible_actions = actions[booking.state]
-	return '<td colspan={len}>{actions}</td>'.format(
+	return u'<td colspan={len}>{actions}</td>'.format(
 		len=len(possible_actions),
-		actions=' - '.join([action.render(request, booking) for action in possible_actions])
+		actions=u' - '.join([action.render(request, booking) for action in possible_actions])
 	)
 	return PaypalAuthorize.render(request, booking)+Accept.render(request, booking)

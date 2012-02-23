@@ -4,7 +4,7 @@ from django.conf.urls.defaults import *
 from eloue.accounts.views import dashboard, patron_edit, patron_edit_password, patron_paypal, patron_edit_phonenumber,\
 									patron_edit_addresses, accounts_work_autocomplete, accounts_studies_autocomplete, comments,\
 									comments_received, owner_booking, owner_history, alert_edit, owner_product
-from eloue.products.views import product_edit, thread_details, archive_thread, unarchive_thread, inbox, archived
+from eloue.products.views import product_edit, product_address_edit, product_price_edit, thread_details, archive_thread, unarchive_thread, inbox, archived
 from eloue.rent.views import booking_detail, booking_accept, booking_cancel, booking_reject, booking_incident, booking_close
 
 urlpatterns = patterns('',
@@ -25,6 +25,8 @@ urlpatterns = patterns('',
     url(r'^owner/product/$', owner_product, name="owner_product"),
     url(r'^owner/product/page/(?P<page>\d+)/$', owner_product, name="owner_product"),
     url(r'^owner/product/(?P<slug>[-\w]+)-(?P<product_id>\d+)/$', product_edit, name="owner_product_edit"),
+    url(r'^owner/product/(?P<slug>[-\w]+)-(?P<product_id>\d+)/address/$', product_address_edit, name="owner_product_address_edit"),
+    url(r'^owner/product/(?P<slug>[-\w]+)-(?P<product_id>\d+)/price/$', product_price_edit, name="owner_product_price_edit"),
     url(r'^alertes/$', alert_edit, name="alert_edit"),
     url(r'^borrower/booking/pending/$', 'eloue.accounts.views.borrower_booking_pending', name="borrower_booking_pending"),
     url(r'^borrower/booking/ongoing/$', 'eloue.accounts.views.borrower_booking_ongoing', name="borrower_booking_ongoing"),

@@ -258,11 +258,6 @@ class PatronEditForm(forms.ModelForm):
     
     paypal_email = forms.EmailField(label=_(u"Email PayPal"), required=False, max_length=75, widget=forms.TextInput(attrs={
             'autocapitalize': 'off', 'autocorrect': 'off', 'class': 'inm'}))
-
-    about = forms.CharField(label=_(u"A propos de vous"), required=False, widget=forms.Textarea(attrs={'class': 'inm'}))
-    work = forms.CharField(label=_(u"Travail"), required=False, widget=forms.TextInput(attrs={'class': 'inm'}), help_text=_(u"Exemple : Directrice Resources Humaines, ma socitée"))
-    school = forms.CharField(label=_(u"Etudes"), required=False, widget=forms.TextInput(attrs={'class': 'inm'}), help_text=_(u"Exemple : Université Panthéon Sorbonne (Paris I)"))
-    hobby = forms.CharField(label=_(u"Hobbies"), required=False, widget=forms.TextInput(attrs={'class': 'inm'}))
     
 
     is_subscribed = forms.BooleanField(required=False, initial=False, label=_(u"Newsletter"), widget=CommentedCheckboxInput(info_text="J'accepte de recevoir de recevoir la Newsletter e-loue"))
@@ -270,6 +265,7 @@ class PatronEditForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(PatronEditForm, self).__init__(*args, **kwargs)
+        self.legend = _(u"Informations nécessaires")
         self.fields['civility'].widget.attrs['class'] = "selm"
         self.fields['default_address'].widget.attrs['class'] = "selm"
         self.fields['default_address'].queryset = self.instance.addresses.all()
@@ -289,11 +285,6 @@ class PatronEditForm(forms.ModelForm):
              'paypal_email',
              'is_subscribed',
              'new_messages_alerted',
-             'about',
-             'work',
-             'school',
-             'hobby',
-             'languages',
         ]
         widgets = {
             'is_professional': CommentedCheckboxInput('Je suis professionel'),
@@ -350,6 +341,26 @@ class PatronEditForm(forms.ModelForm):
             if not paypal_payment.confirm_paypal_account(email=paypal_email):
                 form_errors_append(self, 'paypal_email', _(u"Vérifiez que vous avez bien répondu à l'email d'activation de Paypal"))
         return self.cleaned_data
+
+class MoreInformationForm(forms.ModelForm):
+    about = forms.CharField(label=_(u"A propos de vous"), required=False, widget=forms.Textarea(attrs={'class': 'inm'}))
+    work = forms.CharField(label=_(u"Travail"), required=False, widget=forms.TextInput(attrs={'class': 'inm'}), help_text=_(u"Exemple : Directrice Resources Humaines, ma socitée"))
+    school = forms.CharField(label=_(u"Etudes"), required=False, widget=forms.TextInput(attrs={'class': 'inm'}), help_text=_(u"Exemple : Université Panthéon Sorbonne (Paris I)"))
+    hobby = forms.CharField(label=_(u"Hobbies"), required=False, widget=forms.TextInput(attrs={'class': 'inm'}))
+
+    def __init__(self, *args, **kwargs):
+        super(MoreInformationForm, self).__init__(*args, **kwargs)
+        self.legend = _(u"Informations complémentaires")
+
+    class Meta:
+        model = Patron
+        fields = [
+            'about',
+            'work',
+            'school',
+            'hobby'
+        ]
+
 
 class PatronSetPasswordForm(forms.Form):
     """

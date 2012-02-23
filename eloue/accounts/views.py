@@ -29,7 +29,7 @@ from oauth_provider.models import Token
 from django.shortcuts import redirect
  
 from eloue.decorators import secure_required, mobify
-from eloue.accounts.forms import EmailAuthenticationForm, PatronEditForm, PatronPaypalForm, PatronPasswordChangeForm, ContactForm, PatronSetPasswordForm, FacebookForm
+from eloue.accounts.forms import EmailAuthenticationForm, PatronEditForm, MoreInformationForm, PatronPaypalForm, PatronPasswordChangeForm, ContactForm, PatronSetPasswordForm, FacebookForm
 from eloue.accounts.models import Patron, FacebookSession
 from eloue.accounts.wizard import AuthenticationWizard
 
@@ -273,9 +273,14 @@ def patron_edit(request, *args, **kwargs):
 
     patron_dict = model_to_dict(patron)
     
-    form = PatronEditForm(request.POST or patron_dict, request.FILES or None, instance=patron)
-    if form.is_valid():
-        patron = form.save()
+    patron_edit_form = PatronEditForm(request.POST or None, request.FILES or None, instance=patron, initial=patron_dict, prefix='patronEdit')
+    more_info_edit_form = MoreInformationForm(request.POST or None, instance=patron, initial=patron_dict, prefix='moreInfoEdit')
+
+    forms = [patron_edit_form, more_info_edit_form]
+
+    if patron_edit_form.is_valid() and more_info_edit_form.is_valid():
+        for form in forms:
+            patron = form.save()
         if paypal:
             is_valid = patron.is_valid
             is_confirmed = patron.is_confirmed
@@ -294,8 +299,9 @@ def patron_edit(request, *args, **kwargs):
                     messages.error(request,  _(u"Vérifiez que vous avez bien répondu à l'email d'activation de Paypal"))
         elif request.POST:
             messages.success(request, _(u"Vos informations ont bien été modifiées")) 
+
     patron = Patron.objects.get(pk=request.user.pk)
-    return direct_to_template(request, 'accounts/patron_edit.html', extra_context={'form': form, 'patron': patron})
+    return direct_to_template(request, 'accounts/patron_edit.html', extra_context={'forms': forms, 'patron': patron})
 
 
 @login_required

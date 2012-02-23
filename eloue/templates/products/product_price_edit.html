@@ -1,4 +1,4 @@
-{% extends "accounts/dashboard.html" %}
+{% extends "products/product_edit.html" %}
 {% load i18n navbar product %}
 
 {% block title %}{% trans "Mes annonces" %}{% endblock %}
@@ -6,27 +6,12 @@
   {{block.super}}
 {% endblock %}
 
-{% block content-aside-profil %}
-{% url owner_product_edit product.slug product.pk as product_edit %}
-{% url owner_product_address_edit product.slug product.pk as product_address_edit %}
-{% url owner_product_price_edit product.slug product.pk as product_price_edit %}
-
-
-<div class="previous-sub-bar">
-  &larr;  <a href="{% url owner_product %}">{% trans "Retour à mes annonce" %}</a>
-</div>
-<ul class="nav-sub-bar">
-    <li><a href="{{ product_edit }}"  class="{% active request product_edit "$" %}">{% trans "Description et photos" %}</a></li>
-    <li><a href="{{ product_address_edit }}"  class="{% active request product_address_edit %}">{% trans "Adresse" %}</a></li>
-    <li><a href="{{ product_price_edit }}"  class="{% active request product_price_edit %}">{% trans "Prix" %}</a></li>
-</ul>
-{% endblock %}
 {% block content-main-profil %}
 <h2>{% trans "Modification de "%} {{ product.summary }} <small><a href="{{ product.get_absolute_url }}">({% trans "Voir l'annonce" %}) </a></small></h2>
 {% if form.is_multipart %}
 <form enctype="multipart/form-data" class="form-horizontal" method="post" action="">
 {% else %}
-<form class="form-horizontal" method="post" action="">
+<form class="form-horizontal price-form" method="post" action="">
 {% endif %}
 {% csrf_token %}
 {% for form in forms %}

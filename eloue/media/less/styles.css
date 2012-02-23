@@ -2194,6 +2194,16 @@ input::-webkit-input-placeholder {
 .form-horizontal .form-actions button {
   margin-right: 10px;
 }
+.price {
+  width: 50px;
+  text-align: right;
+}
+.unit {
+  font-family: Arial, sans-serif;
+  font-size: 16px;
+  font-weight: normal;
+  color: #364c59;
+}
 table {
   max-width: 100%;
   border-collapse: collapse;
@@ -3212,6 +3222,21 @@ table {
 }
 .pagination a.page-selected {
   color: #ff7200;
+}
+.answer-stats {
+  font-family: 'Ubuntu', sans-serif;
+  font-size: 13px;
+  font-weight: normal;
+  color: #364c59;
+}
+.answer-stats th, .answer-stats td {
+  padding-bottom: 5px;
+}
+.answer-stats td {
+  font-weight: bold;
+}
+.answer-stats th {
+  text-align: left;
 }
 .label {
   padding: 2px 4px 3px;
