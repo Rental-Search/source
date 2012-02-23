@@ -104,6 +104,28 @@
             {% endcache %}
             {% endfor %}
         </ul>{# product-vignettes #}
+        {% pagination %}
+        {% if is_paginated %}
+        <div class="pagination">
+            {% if page_obj.has_previous %}
+                {% if page_obj.previous_page_number == 1 %}
+                    <a href=" {{ patron.get_absolute_url }}" class="prev">&#171; {% trans "Page précédente" %}</a>
+                {% else %}
+                    <a href="{% url patron_detail patron.slug page_obj.previous_page_number %}" class="prev">&#171; {% trans "Page précédente" %}</a>
+                {% endif %}   
+            {% endif %}
+            {% for page in page_range %}
+                {% if page == 1 %}
+                    <a href="{{ patron.get_absolute_url }}" {% if page_obj.number == page %}class="page-selected"{% endif %}>{{ page }}</a>
+                {% else %}
+                    <a href="{% url patron_detail patron.slug page %}" {% if page_obj.number == page %}class="page-selected"{% endif %}>{{ page }}</a>
+                {% endif %}
+            {% endfor %}
+            {% if page_obj.has_next %}
+                <a href="{% url patron_detail patron.slug page_obj.next_page_number %}" class="next">{% trans "Page suivante" %} &#187;</a>
+            {% endif %}
+        </div><!-- pagination -->
+        {% endif %}
         {% endif %}
     </div>{# content-main-profil #}
 </div>{# profil #}
