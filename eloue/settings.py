@@ -389,7 +389,7 @@ PIPELINE_JS = {
             ),
         'output_filename': 'js/application2.r?.js',
         'extra_context': {
-            'defer': True,
+            'defer': False,
         },
     },
     'application': {
@@ -410,7 +410,7 @@ PIPELINE_JS = {
             'js/application.js'),
         'output_filename': 'js/application.r?.js',
         'extra_context': {
-            'defer': True,
+            'defer': False,
         },
     },
     'sep': {
@@ -419,7 +419,7 @@ PIPELINE_JS = {
             'js/sep/application.js'),
         'output_filename': 'js/sep/application.r?.js',
         'extra_context': {
-            'defer': True,
+            'defer': False,
         },
     }
 }
