@@ -155,15 +155,15 @@ def user_geolocation(request):
             'fallback': fallback
         })
         if 'radius' not in request.POST:
-            if 'viewport' in location['geometry']:
+            try:
                 viewport = location['geometry']['viewport']
-                latitudes = viewport['Y']
+                latitudes = viewport.get('Y') or viewport['ba']
                 longitudes = viewport['$']
                 from geopy import distance, Point
                 sw = Point(latitudes['b'], longitudes['b'])
                 ne = Point(latitudes['d'], longitudes['d'])
                 radius = (distance.distance(sw, ne).km // 2) + 1
-            else:
+            except KeyError:
                 radius = 5
 
     if 'coordinates' in request.POST:
