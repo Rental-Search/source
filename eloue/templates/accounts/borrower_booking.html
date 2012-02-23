@@ -1,7 +1,7 @@
 {% extends "accounts/dashboard.html" %}
 {% load i18n navbar %}
 
-{% block title %}{% trans "Mes réservations - Réservation à venir" %}{% endblock %}
+{% block title %}{% trans "Mes réservations" %} - {% trans content %}{% endblock %}
 {% block head %}
 	{{block.super}}
 {% endblock %}
@@ -20,6 +20,6 @@
 {% endblock %}
 
 {% block content-main-profil %}
-<h2>{% trans "Réservation à venir" %}</h2>
+<h2>{% trans content %}</h2>
 	{% include 'accounts/partials/booking_list.html' %}
 {% endblock %}
