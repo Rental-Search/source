@@ -320,7 +320,7 @@ class ProductPriceEditForm(forms.ModelForm):
     
     def __init__(self, *args, **kwargs):
         super(ProductPriceEditForm, self).__init__(*args, **kwargs)
-        self.legend = _(u"Prix et disponibilité")
+        self.legend = _(u"Prix")
 
     def save(self, *args, **kwargs):
         for unit in UNIT.keys():
