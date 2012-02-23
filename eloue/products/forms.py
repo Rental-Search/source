@@ -190,6 +190,11 @@ class MessageEditForm(forms.Form):
         return message_list # ... RETURNED?
 
 
+class PriceTextInput(forms.TextInput):
+    def render(self, name, value, attrs=None):
+        from django.utils.safestring import mark_safe
+        return mark_safe(super(PriceTextInput, self).render(name, value, attrs) + ' <span class="unit"> &euro;</span>')
+
 class ProductForm(forms.ModelForm):
     category = TreeNodeChoiceField(queryset=Category.tree.all(), empty_label=_(u"Choisissez une catégorie"), level_indicator=u'--', widget=forms.Select(attrs={'class': 'selm'}))
     summary = forms.CharField(label=_(u"Titre"), max_length=100, widget=forms.TextInput(attrs={'class': 'inm'}))
@@ -236,17 +241,12 @@ class ProductForm(forms.ModelForm):
         fields = ('category', 'summary', 'picture_id', 'picture', 'deposit_amount', 'quantity', 'description', 'payment_type')
 
 
-class PictureFileInput(forms.FileInput):
-    def render(self, name, value, attrs=None):
-        return super(PictureFileInput, self).render(name, None, attrs=attrs)
-
-
 class ProductEditForm(forms.ModelForm):
     category = TreeNodeChoiceField(label=_(u"Catégorie"), queryset=Category.tree.all(), empty_label="Choisissez une catégorie", level_indicator=u'--')
     summary = forms.CharField( label=_(u"Titre"), max_length=100, widget=forms.TextInput(attrs={'class': 'inm'}))
-    deposit_amount = forms.DecimalField(label=_(u"Caution"), initial=0, required=False, max_digits=8, decimal_places=2, widget=forms.TextInput(attrs={'class': 'inm price'}), localize=True)
+    deposit_amount = forms.DecimalField(label=_(u"Caution"), initial=0, required=False, max_digits=8, decimal_places=2, widget=PriceTextInput(attrs={'class': 'inm price'}), localize=True)
     quantity = forms.IntegerField(label=_(u"Quantité"), initial=1, widget=forms.TextInput(attrs={'class': 'inm price'}))
-    picture = forms.ImageField(label=_(u"Photo"), required=False, widget=PictureFileInput(attrs={'class': 'inm'}))
+    picture = forms.ImageField(label=_(u"Photo"), required=False, widget=forms.FileInput(attrs={'class': 'inm'}))
     description = forms.CharField(label=_(u"Description"), widget=forms.Textarea())
 
     def __init__(self, *args, **kwargs):
@@ -273,21 +273,13 @@ class ProductEditForm(forms.ModelForm):
     class Meta:
         model = Product
         fields = ('category', 'summary', 'deposit_amount', 'quantity', 'description', 'picture')
-
-
-class AddressSelect(forms.Select):
-
-    def render(self, name, value, attrs=None, choices=()):
-        from django.utils.safestring import mark_safe
-        return mark_safe(super(AddressSelect, self).render(name, value, attrs, choices) 
-                            + '<p style="margin-top: 10px;"><a href="">Ajouter une autre adresse</a></p>')
         
 
 class ProductAddressEditForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(ProductAddressEditForm, self).__init__(*args, **kwargs)
-        self.legend = _(u"Adresse existance")
+        self.legend = _(u"Adresses existantes")
         self.fields['address'].queryset = self.instance.owner.addresses.all()
         self.fields['address'].label = _(u"Adresse")
         #self.fields['address'].required = False
@@ -316,14 +308,15 @@ class ProductAddressForm(forms.ModelForm):
     class Meta:
         model = Address
         fields = ('address1', 'zipcode', 'city', 'country')
+
         
 class ProductPriceEditForm(forms.ModelForm):
-    hour_price = forms.DecimalField(label=_(u"L'heure"), required=False, max_digits=10, decimal_places=2, min_value=D('0.01'), widget=forms.TextInput(attrs={'class': 'ins'}), localize=True)
-    day_price = forms.DecimalField(label=_(u"La journée"), required=True, max_digits=10, decimal_places=2, min_value=D('0.01'), widget=forms.TextInput(attrs={'class': 'ins'}), localize=True)
-    week_end_price = forms.DecimalField(label=_(u"Le week-end"), required=False, max_digits=10, decimal_places=2, min_value=D('0.01'), widget=forms.TextInput(attrs={'class': 'ins'}), localize=True)
-    week_price = forms.DecimalField(label=_(u"La semaine"), required=False, max_digits=10, decimal_places=2, min_value=D('0.01'), widget=forms.TextInput(attrs={'class': 'ins'}), localize=True)
-    two_weeks_price = forms.DecimalField(label=_(u"Les 15 jours"), required=False, max_digits=10, decimal_places=2, min_value=D('0.01'), widget=forms.TextInput(attrs={'class': 'ins'}), localize=True)
-    month_price = forms.DecimalField(label=_(u"Le mois"), required=False, max_digits=10, decimal_places=2, min_value=D('0.01'), widget=forms.TextInput(attrs={'class': 'ins'}), localize=True)
+    hour_price = forms.DecimalField(label=_(u"L'heure"), required=False, max_digits=10, decimal_places=2, min_value=D('0.01'), widget=PriceTextInput(attrs={'class': 'price'}), localize=True)
+    day_price = forms.DecimalField(label=_(u"La journée"), required=True, max_digits=10, decimal_places=2, min_value=D('0.01'), widget=PriceTextInput(attrs={'class': 'price'}), localize=True)
+    week_end_price = forms.DecimalField(label=_(u"Le week-end"), required=False, max_digits=10, decimal_places=2, min_value=D('0.01'), widget=PriceTextInput(attrs={'class': 'price'}), localize=True)
+    week_price = forms.DecimalField(label=_(u"La semaine"), required=False, max_digits=10, decimal_places=2, min_value=D('0.01'), widget=PriceTextInput(attrs={'class': 'price'}), localize=True)
+    two_weeks_price = forms.DecimalField(label=_(u"Les 15 jours"), required=False, max_digits=10, decimal_places=2, min_value=D('0.01'), widget=PriceTextInput(attrs={'class': 'price'}), localize=True)
+    month_price = forms.DecimalField(label=_(u"Le mois"), required=False, max_digits=10, decimal_places=2, min_value=D('0.01'), widget=PriceTextInput(attrs={'class': 'price'}), localize=True)
     
     def __init__(self, *args, **kwargs):
         super(ProductPriceEditForm, self).__init__(*args, **kwargs)

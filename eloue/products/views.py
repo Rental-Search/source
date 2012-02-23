@@ -109,6 +109,8 @@ def product_edit(request, slug, product_id):
     }
 
     form = ProductEditForm(data=request.POST or None, files=request.FILES or None, instance=product, initial=initial)
+
+    forms = [form]
     if form.is_valid():
         product = form.save()
         messages.success(request, _(u"Les modifications ont bien été prises en compte"))
@@ -119,7 +121,7 @@ def product_edit(request, slug, product_id):
     return render_to_response(
         'products/product_edit.html', dictionary={
             'product': product, 
-            'form': form
+            'forms': forms
         }, 
         context_instance=RequestContext(request)
     )
@@ -173,6 +175,8 @@ def product_price_edit(request, slug, product_id):
         initial['%s_price' % UNIT.reverted[price.unit].lower()] = price.amount
 
     form = ProductPriceEditForm(data=request.POST or None, instance=product, initial=initial)
+    forms = [form]
+
     if form.is_valid():
         product = form.save()
         messages.success(request, _(u"Les prix ont bien été modifiés"))
@@ -181,9 +185,9 @@ def product_price_edit(request, slug, product_id):
             slug=slug, product_id=product_id
         )
     return render_to_response(
-        'products/product_edit.html', dictionary={
+        'products/product_price_edit.html', dictionary={
             'product': product, 
-            'form': form
+            'forms': forms
         }, 
         context_instance=RequestContext(request)
     )

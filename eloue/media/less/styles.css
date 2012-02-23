@@ -2258,6 +2258,16 @@ input::-webkit-input-placeholder {
 .form-horizontal .form-actions button {
   margin-right: 10px;
 }
+.price {
+  width: 50px;
+  text-align: right;
+}
+.unit {
+  font-family: Arial, sans-serif;
+  font-size: 16px;
+  font-weight: normal;
+  color: #364c59;
+}
 table {
   max-width: 100%;
   border-collapse: collapse;
