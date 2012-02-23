@@ -80,7 +80,7 @@ class PostForm(TemplateWidgetAction):
 
 
 Accept = PostForm('Accepter', 'eloue.rent.views.booking_accept', BOOKING_STATE.PENDING)
-Refuse = PostForm('Refuser', 'eloue.rent.views.booking_refuse', BOOKING_STATE.REJECTED)
+Refuse = PostForm('Refuser', 'eloue.rent.views.booking_reject', BOOKING_STATE.REJECTED)
 Cancel = PostForm('Annuler', 'eloue.rent.views.booking_cancel', BOOKING_STATE.CANCELED)
 Close = PostForm(u'Clôturer', 'eloue.rent.views.booking_close', BOOKING_STATE.CLOSING)
 Incident = PostForm('Signaler une incident', 'eloue.rent.views.booking_incident', BOOKING_STATE.INCIDENT)
@@ -116,35 +116,35 @@ SendMessageToBorrower = LinkWidget(
 )
 
 borrower = {
-    'AUTHORIZING': (Cancel, PaypalAuthorize, SendMessageToOwner),
+    'authorizing': (Cancel, PaypalAuthorize, SendMessageToOwner),
     'authorized': (Cancel, SendMessageToOwner, ),
-    'REJECTED': (SendMessageToOwner, ),
-    'CANCELED': (), 
-   	'PENDING': (Cancel, ),
-    'ONGOING': (Incident, ), 
-    'ENDED': (Incident, ),
-    'INCIDENT': (), 
-    'REFUNDED': (),
-    'DEPOSIT': (),
-    'CLOSING': (),
-    'CLOSED': (), 
-    'OUTDATED': (),
+    'rejected': (SendMessageToOwner, ),
+    'canceled': (), 
+   	'pending': (Cancel, ),
+    'ongoing': (Incident, ), 
+    'ended': (Incident, ),
+    'incident': (), 
+    'refunded': (),
+    'deposit': (),
+    'closing': (Incident, SendMessageToOwner, ),
+    'closed': (Incident, SendMessageToOwner, ),
+    'outdated': (),
 }
 
 owner = {
-    'AUTHORIZING': (), 
+    'authorizing': (), 
     'authorized': (Accept, Refuse, SendMessageToBorrower),
-    'REJECTED': (),
-    'CANCELED': (), 
-   	'PENDING': (Cancel, ),
-    'ONGOING': (Incident, ), 
-    'ENDED': (Close, Incident, ),
-    'INCIDENT': (), 
-    'REFUNDED': (),
-    'DEPOSIT': (),
-    'CLOSING': (),
-    'CLOSED': (), 
-    'OUTDATED': (),
+    'rejected': (),
+    'canceled': (), 
+   	'pending': (Cancel, ),
+    'ongoing': (Incident, ), 
+    'ended': (Close, Incident, ),
+    'incident': (), 
+    'refunded': (),
+    'deposit': (),
+    'closing': (Incident, SendMessageToBorrower, ),
+    'closed': (Incident, SendMessageToBorrower, ), 
+    'outdated': (),
 }
 
 @register.simple_tag
