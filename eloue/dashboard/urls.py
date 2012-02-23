@@ -3,8 +3,7 @@ from django.conf.urls.defaults import *
 
 from eloue.accounts.views import dashboard, patron_edit, patron_edit_password, patron_paypal, patron_edit_phonenumber,\
 									patron_edit_addresses, accounts_work_autocomplete, accounts_studies_autocomplete, comments,\
-									comments_received, owner_booking, owner_history, alert_edit, owner_product, borrower_booking,\
-									borrower_history
+									comments_received, owner_booking, owner_history, alert_edit, owner_product
 from eloue.products.views import product_edit, thread_details, archive_thread, unarchive_thread, inbox, archived
 from eloue.rent.views import booking_detail, booking_accept, booking_cancel, booking_reject, booking_incident, booking_close
 

@@ -1,3 +1,4 @@
+{% load bookingaction %}
 <ul class="booking-list">
 	{% for booking in object_list %}
 		<li>
@@ -5,21 +6,22 @@
 			<tbody>
 				<tr>
 					<th class="b-state">{{ booking.get_state_display }}</th>
-					<td><a href="{{booking.product.get_absolute_url}}" class="b-title">{{booking.product.summary}}</a> <a href="#" class="b-more">Voir le détail</a></td>
+					<td><a href="{{booking.product.get_absolute_url}}" class="b-title">{{booking.product.summary}}</a> <a href="{{booking.get_absolute_url}}" class="b-more">Voir le détail</a></td>
 				</tr>
 				<tr>
 					<th>Début</th>
-					<td>{{booking.started_at|time:"Y:M:d"}}Lundi 15 novembre 2012</td>
+					<td>{{booking.started_at|date:"l d F Y H:i"}}</td>
 				</tr> 
 					<th>Fin</th>
-					<td>Mercredi 18 novembre 2012</td>
+					<td>{{booking.ended_at|date:"l d F Y H:i"}}</td>
 				</tr>
 				<tr>
 					<th>Montant</th>
-					<td>27 &euro;</td>
+					<td>{{booking.total_amount}} &euro;</td>
 				</tr>
 				<tr class="b-action">
-					<td colspan="2"><a href="#">Annuler</a> - <a href="#">Envoyer un message au propriétaire</a></td>
+					{#<td colspan="2"><a href="#">Annuler</a> - <a href="#">Envoyer un message au propriétaire</a></td>#}
+					<td>{% bookingaction request booking %}</td>
 				</tr>
 			</tbody>
 			</table>
