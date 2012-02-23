@@ -30,29 +30,34 @@
 <form class="form-horizontal" method="post" action="">
 {% endif %}
 {% csrf_token %}
-       {% for formfield in form %}
-       <div class="control-group {% if formfield.errors %} error {% endif %}">
-             <label class="control-label" for="{{ formfield.id_for_label }}">{{ formfield.label }} {% if formfield.field.required %}*{% endif %}</label>
-             <div class="controls">
-                 {% if formfield.name == "avatar" %}
-                    {% if patron.avatar %}
-                    <img src="{{ patron.avatar.product_page.url }}" alt="{% trans "loueur"%}{{ patron.username }}" style="float: left; margin-right: 10px; border: 1px solid #9EB0BA;">
-                    {% else %}
-                    <img src="{{ MEDIA_URL }}images/default_avatar.png" alt="{% trans "loueur"%}{{ patron.username }}" style="float: left; margin-right: 10px; border: 1px solid #9EB0BA;">
-                    {% endif %}
-                 {% endif %}
-                 {{ formfield }}
-                 <p class="help-block">{{ formfield.help_text }}</p>
-                 {% if formfield.errors %}
-                 <span class="help-inline">
-                     {% for error in formfield.errors %}
-                           {{ error|escape }} 
-                     {% endfor %}
-                 </span>
-                 {% endif %}
-           </div>
-         </div>
-       {% endfor %}
+{% for form in forms %}
+<fieldset>
+  <legend>{{ form.legend }}</legend>
+  {% for formfield in form %}
+    <div class="control-group {% if formfield.errors %} error {% endif %}">
+      <label class="control-label" for="{{ formfield.id_for_label }}">{{ formfield.label }} {% if formfield.field.required %}*{% endif %}</label>
+      <div class="controls">
+        {% if formfield.name == "avatar" %}
+          {% if patron.avatar %}
+          <img src="{{ patron.avatar.product_page.url }}" alt="{% trans "loueur"%}{{ patron.username }}" style="float: left; margin-right: 10px; border: 1px solid #9EB0BA;">
+          {% else %}
+          <img src="{{ MEDIA_URL }}images/default_avatar.png" alt="{% trans "loueur"%}{{ patron.username }}" style="float: left; margin-right: 10px; border: 1px solid #9EB0BA;">
+          {% endif %}
+        {% endif %}
+        {{ formfield }}
+        <p class="help-block">{{ formfield.help_text }}</p>
+        {% if formfield.errors %}
+          <span class="help-inline">
+          {% for error in formfield.errors %}
+            {{ error|escape }} 
+          {% endfor %}
+          </span>
+        {% endif %}
+      </div>
+    </div>
+  {% endfor %}
+</fieldsset>
+{% endfor %}
       <div class="form-actions">
         <button type="submit" class="btn btn-primary">Enregistrer</button>
         <button type="reset" class="btn btn-cancel">Annuler</a>

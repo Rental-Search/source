@@ -22,7 +22,7 @@
 </ul>
 {% endblock %}
 {% block content-main-profil %}
-<h2>{% trans "Modification de "%} {{ product.summary }}</h2>
+<h2>{% trans "Modification de "%} {{ product.summary }} <small><a href="{{ product.get_absolute_url }}">({% trans "Voir l'annonce" %}) </a></small></h2>
 {% if form.is_multipart %}
 <form enctype="multipart/form-data" class="form-horizontal" method="post" action="">
 {% else %}
