@@ -62,7 +62,6 @@
       window.country;
 
       var input = document.getElementById('id_newAddress-address1');
-
       var autocomplete = new google.maps.places.Autocomplete(input);
 
       //autocomplete.bindTo('bounds', map);
@@ -87,10 +86,12 @@
             country = component.short_name
           }
         });
+
         $("#id_newAddress-address1").val(street.join(" "));
         $("#id_newAddress-city").val(locality);
         $("#id_newAddress-zipcode").val(postal_code);
         $("#id_newAddress-country").val(country);
+
       });
     }
 
