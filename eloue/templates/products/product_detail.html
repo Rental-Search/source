@@ -197,7 +197,7 @@
                 <img src="{{ MEDIA_URL }}images/default_avatar.png" alt="{% trans "loueur"%}{{ product.owner.username }}" width="100" height="100">
                 {% endif %}
             </a>
-            <p class="owner-username">{{ product.owner.username }}</p>
+            <p class="owner-username"><a href="{{ product.owner.get_absolute_url }}">{{ product.owner.username }}</a></p>
             <address>{{ product.owner.default_address.city }} - {{ product.owner.default_address.zipcode }}</address>
             <a href="{% url message_create product.pk product.owner.pk %}"><button class="btn-contactme">Contactez-moi</button></a>
             {% with product.owner as patron %}

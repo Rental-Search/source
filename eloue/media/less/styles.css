@@ -763,7 +763,7 @@ a:hover {
   margin-right: 5px;
 }
 .social-button .fb {
-  vertical-align: 22%;
+  vertical-align: 25%;
 }
 .booking-block {
   background-color: #e4f8d1;
@@ -973,12 +973,14 @@ a:hover {
   background-clip: padding-box;
 }
 #owner .owner-username {
+  margin: 10px 0;
+}
+#owner .owner-username a {
   font-family: Arial, sans-serif;
   font-size: 24px;
   font-weight: normal;
   color: #6eb924;
   font-style: italic;
-  margin: 10px 0;
 }
 #owner address {
   font-family: Arial, sans-serif;
@@ -1150,7 +1152,7 @@ a:hover {
   margin-bottom: 15px;
 }
 .profil-intro-content a {
-  width: 175px;
+  width: 178px;
   text-align: center;
 }
 .profil-verification li {
