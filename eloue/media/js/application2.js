@@ -100,42 +100,86 @@ geolocation_stuff = function() {
 }
 
 $(document).ready(function() {
+    var isProfessionalInput, 
+        companyNameInput,
+        productHomeTab,
+        btnOtherTown,
+        btnEditTown,
+        btnCancelEditTown,
+        productTab,
+        workInput,
+        schoolInput,
+        languagesInput,
+        bookingCreate,
+        startDate,
+        endDate
+
+
+    // Company name field display/none
+    isProfessionalInput = $("input[name*='is_professional']");
+    companyNameInput = $("input[name*='company_name']");
+    companyNameInput.parent().parent().hide();
+
+    var exists = $("input[name*='is_professional']:checked").val();
+
+    if (exists == 'on') {
+        companyNameInput.parent().parent().show();
+    }
+    $(":checkbox").click(function() {
+        if (isProfessionalInput.is(':checked')) {
+            companyNameInput.parent().parent().show();
+        } else {
+            companyNameInput.parent().parent().hide();
+        }
+    });
+
+
     geolocation_stuff();
-    /*Display home tabs */
-    $( ".products-home-tabs" ).tabs();
+
+    //Display home tabs
+    productHomeTab = $( ".products-home-tabs" );
+    productHomeTab.tabs();
     
-    /* Display city input to change the localisation */
-    $('.btn-other-town').click(function () {
+    //Display city input to change the localisation
+    btnOtherTown = $('.btn-other-town');
+    btnOtherTown.click(function () {
         $('.search-home').addClass('editing');
     });
 
-    /* Display the city input */
-    $('.btn-edit-town').click(function () {
+    //Display the city input
+    btnEditTown = $('.btn-edit-town');
+    btnEditTown.click(function () {
         navigator.geolocation.getCurrentPosition(SuccessBuilder(1, function(){window.location.reload();}));
     });
-    $('.btn-cancel-edit-town').click(function () {
+
+    btnCancelEditTown = $('.btn-cancel-edit-town');
+    btnCancelEditTown.click(function () {
         $('.search-home').removeClass('editing');
     });
     
-    /*Display product detail tabs */
-    $( ".product-tabs" ).tabs();
+    //Display product detail tabs
+    btnCancelEditTown = $( ".product-tabs" );
+    btnCancelEditTown.tabs();
 
-    $("#id_work").autocomplete(
+    workInput = $("#id_work");
+    workInput.autocomplete(
         {
             'source': function(request, response) {
                 $.getJSON('accounts_work_autocomplete'+'?term='+request.term, response);}
         }
     );
-    $("#id_school").autocomplete(
+    schoolInput = $("#id_school");
+    schoolInput.autocomplete(
         {
             'source': function(request, response) {
                 $.getJSON('accounts_studies_autocomplete'+'?term='+request.term, response);}
         }
     );
     
-    $("#id_languages").chosen();
+    languagesInput = $("#id_languages");
+    languagesInput.chosen();
     
-    /* Booking price */
+    // Booking price
     // Price calculations
     bookingPrice = function(form) {
         var template,
@@ -165,12 +209,13 @@ $(document).ready(function() {
         bookingPrice(bookingCreate);
     }
     
-    $('#booking_create').change(function(event) {
+    bookingCreate.change(function(event) {
         bookingPrice($(this));
     });
     
     //Display datepicker on product detail page
-    $('input[name$=started_at_0]').datepicker({
+    startDate = $('input[name$=started_at_0]');
+    startDate.datepicker({
         dateFormat: 'dd/mm/yy',
         minDate: 1,
         maxDate: '+360d',
@@ -194,7 +239,8 @@ $(document).ready(function() {
         }
     });
     
-    $('input[name$=ended_at_0]').datepicker({
+    endDate = $('input[name$=ended_at_0]');
+    endDate.datepicker({
         dateFormat: 'dd/mm/yy',
     });
 });
