@@ -1,15 +1,15 @@
 {% extends "accounts/owner_product.html" %}
 {% load i18n navbar %}
 
-{% block title %}{% trans "Mes annonces - Demande de réservation" %}{% endblock %}
+{% block title %}{% trans "Mes annonces" %} - {%trans content %}{% endblock %}
 {% block head %}
 	{{block.super}}
 {% endblock %}
 
 
 {% block content-main-profil %}
-<h2>{% trans "Demandes de réservation" %}</h2>
-<ul class="messages">
+<h2>{% trans content %}</h2>
+	{% include 'accounts/partials/booking_list.html' %}<ul class="messages">
 	<li>
 		<a href="#" class="m-img">
 			<img src="{{ MEDIA_URL }}images/default_avatar.png" width="60" height="60" alt="">

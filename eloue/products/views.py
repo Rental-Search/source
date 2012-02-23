@@ -57,7 +57,7 @@ def homepage(request):
     curiosities = Curiosity.on_site.all()
     form = FacetedSearchForm()
     alerts = Alert.on_site.all()[:3]
-    if 'location' in request.session and 'coordinates' in request.session['location']:
+    try:
         coords = request.session['location']['coordinates']
         region_coords = request.session['location'].get('region_coords') or coords
         region_radius = request.session['location'].get('region_radius') or request.session['location']['radius']
@@ -68,7 +68,7 @@ def homepage(request):
         ).spatial(
             lat=coords[0], long=coords[1], radius=region_radius*2
         ).order_by('-created_at_date', 'geo_distance')
-    else:
+    except KeyError:
         last_joined = Patron.objects.last_joined()
         last_added = product_search.order_by('-created_at')
     return render_to_response(
