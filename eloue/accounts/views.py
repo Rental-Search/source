@@ -155,15 +155,15 @@ def user_geolocation(request):
             'fallback': fallback
         })
         if 'radius' not in request.POST:
-            if 'viewport' in location['geometry']:
+            try:
                 viewport = location['geometry']['viewport']
-                latitudes = viewport['Y']
+                latitudes = viewport.get('Y') or viewport['ba']
                 longitudes = viewport['$']
                 from geopy import distance, Point
                 sw = Point(latitudes['b'], longitudes['b'])
                 ne = Point(latitudes['d'], longitudes['d'])
                 radius = (distance.distance(sw, ne).km // 2) + 1
-            else:
+            except KeyError:
                 radius = 5
 
     if 'coordinates' in request.POST:
@@ -427,7 +427,33 @@ def alert_edit(request, page=None):
     return object_list(request, queryset, page=page, paginate_by=10, template_name='accounts/alert_edit.html',
         template_object_name='alert')
 
+#-------
+@login_required
+def borrower_booking_ongoing(request, page=None):
+    queryset = request.user.rentals.filter(state=Booking.STATE.ONGOING)
+    return object_list(request, queryset, page=page, paginate_by=10, template_name='accounts/borrower_booking.html')
 
+@login_required
+def borrower_booking_pending(request, page=None):
+    queryset = request.user.rentals.filter(state=Booking.STATE.PENDING)
+    return object_list(request, queryset, page=page, paginate_by=10, template_name='accounts/borrower_booking.html')
+
+@login_required
+def borrower_booking_authorized(request, page=None):
+    queryset = request.user.rentals.filter(state=Booking.STATE.AUTHORIZED)
+    return object_list(request, queryset, page=page, paginate_by=10, template_name='accounts/borrower_booking.html')
+
+@login_required
+def borrower_booking_history(request, page=None):
+    queryset = request.user.rentals.exclude(
+        state__in=[
+            Booking.STATE.ONGOING, 
+            Booking.STATE.PENDING, 
+            Booking.STATE.AUTHORIZED
+        ]
+    )
+    return object_list(request, queryset, page=page, paginate_by=10, template_name='accounts/borrower_booking.html')
+#-----------
 @mobify
 def contact(request):
     form = ContactForm(request.POST or None)

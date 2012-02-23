@@ -7,90 +7,19 @@
 {% endblock %}
 
 {% block content-aside-profil %}
-{% url borrower_booking as borrower_booking %}
-{% url borrower_history as borrower_history %}
+{% url borrower_booking_authorized as borrower_booking_authorized %}
+{% url borrower_booking_pending as borrower_booking_pending %}
+{% url borrower_booking_history as borrower_booking_history %}
+{% url borrower_booking_ongoing as borrower_booking_ongoing %}
 <ul class="nav-sub-bar">
-	<li><a href="#" class="">{% trans "Demande de réservation" %}</a></li>
-    <li><a href="{{ borrower_booking }}"  class="{% active request borrower_booking %}">{% trans "Réservation à venir" %}</a></li>
-    <li><a href="#" class="">{% trans "Réservation en cours" %}</a></li>
-    <li><a href="{{ borrower_history }}" class="{% active request borrower_history %}">{% trans "Historiques" %}</a></li>
+	<li><a href="{{ borrower_booking_authorized }}" class="{% active request borrower_booking_authorized %}">{% trans "Demande de réservation" %}</a></li>
+    <li><a href="{{ borrower_booking_pending }}"  class="{% active request borrower_booking_pending %}">{% trans "Réservation à venir" %}</a></li>
+    <li><a href="{{ borrower_booking_ongoing }}" class="{% active request borrower_booking_ongoing %}">{% trans "Réservation en cours" %}</a></li>
+    <li><a href="{{ borrower_booking_history }}" class="{% active request borrower_booking_history %}">{% trans "Historiques" %}</a></li>
 </ul>
 {% endblock %}
 
 {% block content-main-profil %}
 <h2>{% trans "Réservation à venir" %}</h2>
-<ul class="booking-list">
-	<li>
-		<table class="table table-bordered booking-resume">
-		<tbody>
-			<tr>
-				<th class="b-state">A venir</th>
-				<td><a href="#" class="b-title">Robe de  soirée</a> <a href="#" class="b-more">Voir le détail</a></td>
-			</tr>
-			<tr>
-				<th>Début</th>
-				<td>Lundi 15 novembre 2012</td>
-			</tr> 
-				<th>Fin</th>
-				<td>Mercredi 18 novembre 2012</td>
-			</tr>
-			<tr>
-				<th>Montant</th>
-				<td>27 &euro;</td>
-			</tr>
-			<tr class="b-action">
-				<td colspan="2"><a href="#">Annuler</a> - <a href="#">Envoyer un message au propriétaire</a></td>
-			</tr>
-		</tbody>
-		</table>
-	</li>
-	<li>
-		<table class="table table-bordered booking-resume">
-		<tbody>
-			<tr>
-				<th class="b-state">En cours</th>
-				<td><a href="#" class="b-title">Robe de  soirée</a> <a href="#" class="b-more">Voir le détail</a></td>
-			</tr>
-			<tr>
-				<th>Début</th>
-				<td>Lundi 15 novembre 2012</td>
-			</tr> 
-				<th>Fin</th>
-				<td>Mercredi 18 novembre 2012</td>
-			</tr>
-			<tr>
-				<th>Montant</th>
-				<td>34 &euro;</td>
-			</tr>
-			<tr class="b-action">
-				<td colspan="2"><a href="#">Déclarer un incident</a> - <a href="#">Envoyer un message au propriétaire</a></td>
-			</tr>
-		</tbody>
-		</table>
-	</li>
-	<li>
-		<table class="table table-bordered booking-resume">
-		<tbody>
-			<tr>
-				<th class="b-state">Demande</th>
-				<td><a href="#" class="b-title">Robe de  soirée</a> <a href="#" class="b-more">Voir le détail</a></td>
-			</tr>
-			<tr>
-				<th>Début</th>
-				<td>Lundi 15 novembre 2012</td>
-			</tr> 
-				<th>Fin</th>
-				<td>Mercredi 18 novembre 2012</td>
-			</tr>
-			<tr>
-				<th>Montant</th>
-				<td>134 &euro;</td>
-			</tr>
-			<tr class="b-action">
-				<td colspan="2"><a href="#">Commenter</a> - <a href="#">Envoyer un message au propriétaire</a></td>
-			</tr>
-		</tbody>
-		</table>
-	</li>
-</ul>
+	{% include 'accounts/partials/booking_list.html' %}
 {% endblock %}
