@@ -8,13 +8,17 @@
 
 {% block content-aside-profil %}
 {% url owner_product as owner_product %}
-{% url owner_booking as owner_booking %}
-{% url owner_history as owner_history %}
+{% url owner_booking_authorized as owner_booking_authorized %}
+{% url owner_booking_history as owner_booking_history %}
+{% url owner_booking_pending as owner_booking_pending %}
+{% url owner_booking_ongoing as owner_booking_ongoing %}
+
 <ul class="nav-sub-bar">
     <li><a href="{{ owner_product }}"  class="{% active request owner_product %}">{% trans "Gérer mes annonces" %}</a></li>
-    <li><a href="{{ owner_booking }}" class="{% active request owner_booking %}">{% trans "Demande de réservation" %}</a></li>
-    <li><a href="#">{% trans "Réservation" %}</a>
-    <li><a href="{{ owner_history }}" class="{% active request owner_history %}">{% trans "Historiques" %}</a></li>
+    <li><a href="{{ owner_booking_authorized }}" class="{% active request owner_booking_authorized %}">{% trans "Demande de réservation" %}</a></li>
+    <li><a href="{{ owner_booking_pending }}" class="{% active request owner_booking_pending %}">{% trans "Réservations à venir" %}</a></li>
+    <li><a href="{{ owner_booking_ongoing }}" class="{% active request owner_booking_ongoing %}">{% trans "Réservations en cours" %}</a></li>
+    <li><a href="{{ owner_booking_history }}" class="{% active request owner_booking_history %}">{% trans "Historiques" %}</a></li>
 </ul>
 {% endblock %}
 
