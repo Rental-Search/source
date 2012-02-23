@@ -92,21 +92,14 @@
         <img src="{{ MEDIA_URL }}images/e-loue_dans_la_press.png" width="778" height="49" />
     </div>{# press #}
 </div>{# container-top #}
-  <script type="text/javascript">
-
-    function SuccessBuilder(priority, geocodeSuccess) {
-        return function(position) {
-            geocoder = new google.maps.Geocoder();
-            latlon = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-            geocoder.geocode(
-                {'latLng':latlon}, 
-                function(result) {
-                    report_location_back(priority, result[0], latlon, geocodeSuccess);
-                }
-            );
-        };
-    }
-    navigator.geolocation.getCurrentPosition(SuccessBuilder(2, function(){window.location.reload();}));
-
-  </script>
 {% endblock %}
+
+{% block tail %}
+    {{ block.super }}
+    <script type="text/javascript">
+        $(document).ready(function() {
+            navigator.geolocation.getCurrentPosition(SuccessBuilder(2, function(){window.location.reload();}));
+        });
+    </script>
+{% endblock %}
+

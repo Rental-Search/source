@@ -13,6 +13,7 @@ env
 eloue.db
 eloue/local.py
 eloue/media/js/*.r*.js
+eloue/media/js/sep/*.r*.js
 eloue/media/css/*.r*.css
 docs/_build/doctrees/
 eloue/rent/rules
