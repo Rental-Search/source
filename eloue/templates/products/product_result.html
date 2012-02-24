@@ -211,7 +211,7 @@
 {% block tail %}
     {{block.super}}
     <script src="//maps.googleapis.com/maps/api/js?sensor=false&amp;libraries=places" type="text/javascript"></script>
-      <script type="text/javascript" charset="utf-8">
+    <script type="text/javascript" charset="utf-8">
         navigator.geolocation.getCurrentPosition(
             SuccessBuilder(
                 2, function() {
@@ -247,5 +247,5 @@
         $(document).ready(function () {
             initialize();
         });
-      </script>
+    </script>
 {% endblock %}
