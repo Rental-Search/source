@@ -392,7 +392,7 @@ def owner_booking_authorized(request, page=None):
     queryset = request.user.bookings.filter(state=Booking.STATE.AUTHORIZED)
     return object_list(
         request, queryset, page=page, paginate_by=10, 
-        extra_context={'content': u'Demandes de réservation'},
+        extra_context={'title_page': u'Demandes de réservation'},
         template_name='accounts/owner_booking.html'
     )
 
@@ -401,7 +401,7 @@ def owner_booking_pending(request, page=None):
     queryset = request.user.bookings.filter(state=Booking.STATE.PENDING)
     return object_list(
         request, queryset, page=page, paginate_by=10, 
-        extra_context={'content': u'Réservation à venir'},
+        extra_context={'title_page': u'Réservations à venir'},
         template_name='accounts/owner_booking.html'
     )
 
@@ -410,7 +410,7 @@ def owner_booking_ongoing(request, page=None):
     queryset = request.user.bookings.filter(state=Booking.STATE.ONGOING)
     return object_list(
         request, queryset, page=page, paginate_by=10, 
-        extra_context={'content': u'Réservation en cours'},
+        extra_context={'title_page': u'Réservations en cours'},
         template_name='accounts/owner_booking.html'
     )
 
@@ -426,7 +426,7 @@ def owner_booking_history(request, page=None):
     )
     return object_list(
         request, queryset, page=page, paginate_by=10, 
-        extra_context={'content': u'Historique de réservations'},
+        extra_context={'title_page': u'Réservations terminées'},
         template_name='accounts/owner_booking.html')
 
 @login_required
@@ -453,7 +453,7 @@ def borrower_booking_ongoing(request, page=None):
     queryset = request.user.rentals.filter(state=Booking.STATE.ONGOING)
     return object_list(
         request, queryset, page=page, paginate_by=10,
-        extra_context={'content': u'Réservation en cours'},
+        extra_context={'title_page': u'Réservation en cours'},
         template_name='accounts/borrower_booking.html')
 
 @login_required
@@ -461,7 +461,7 @@ def borrower_booking_pending(request, page=None):
     queryset = request.user.rentals.filter(state=Booking.STATE.PENDING)
     return object_list(
         request, queryset, page=page, paginate_by=10, 
-        extra_context={'content': u'Réservation à venir'},
+        extra_context={'title_page': u'Réservation à venir'},
         template_name='accounts/borrower_booking.html')
 
 @login_required
@@ -469,7 +469,7 @@ def borrower_booking_authorized(request, page=None):
     queryset = request.user.rentals.filter(state=Booking.STATE.AUTHORIZED)
     return object_list(
         request, queryset, page=page, paginate_by=10, 
-        extra_context={'content': u'Demandes de réservation'},
+        extra_context={'title_page': u'Demandes de réservation'},
         template_name='accounts/borrower_booking.html')
 
 @login_required
@@ -484,7 +484,7 @@ def borrower_booking_history(request, page=None):
     )
     return object_list(
         request, queryset, page=page, paginate_by=10,
-        extra_context={'content': u'Historique de réservations'},
+        extra_context={'title_page': u'Réservations terminées'},
         template_name='accounts/borrower_booking.html')
 
 @mobify

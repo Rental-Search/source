@@ -1,7 +1,7 @@
 {% extends "accounts/dashboard.html" %}
 {% load i18n navbar %}
 
-{% block title %}{% trans "Mes réservations" %} - {% trans content %}{% endblock %}
+{% block title %}{% trans "Mes réservations" %} - {% trans title_page %}{% endblock %}
 {% block head %}
 	{{block.super}}
 {% endblock %}
@@ -12,14 +12,14 @@
 {% url borrower_booking_history as borrower_booking_history %}
 {% url borrower_booking_ongoing as borrower_booking_ongoing %}
 <ul class="nav-sub-bar">
-	<li><a href="{{ borrower_booking_authorized }}" class="{% active request borrower_booking_authorized %}">{% trans "Demande de réservation" %}</a></li>
-    <li><a href="{{ borrower_booking_pending }}"  class="{% active request borrower_booking_pending %}">{% trans "Réservation à venir" %}</a></li>
-    <li><a href="{{ borrower_booking_ongoing }}" class="{% active request borrower_booking_ongoing %}">{% trans "Réservation en cours" %}</a></li>
-    <li><a href="{{ borrower_booking_history }}" class="{% active request borrower_booking_history %}">{% trans "Historiques" %}</a></li>
+	<li><a href="{{ borrower_booking_authorized }}" class="{% active request borrower_booking_authorized %}">{% trans "Demandes de réservation" %}</a></li>
+    <li><a href="{{ borrower_booking_pending }}"  class="{% active request borrower_booking_pending %}">{% trans "Réservations à venir" %}</a></li>
+    <li><a href="{{ borrower_booking_ongoing }}" class="{% active request borrower_booking_ongoing %}">{% trans "Réservations en cours" %}</a></li>
+    <li><a href="{{ borrower_booking_history }}" class="{% active request borrower_booking_history %}">{% trans "Réservations terminées" %}</a></li>
 </ul>
 {% endblock %}
 
 {% block content-main-profil %}
-<h2>{% trans content %}</h2>
+<h2>{% trans title_page %}</h2>
 	{% include 'accounts/partials/booking_list.html' %}
 {% endblock %}
