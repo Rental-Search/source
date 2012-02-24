@@ -56,18 +56,23 @@
   <script type="text/javascript">
     function initialize() {
 
-      window.street = new Array()
+      window.street = new Array();
       window.locality;
       window.postal_code;
       window.country;
 
+
       var input = document.getElementById('id_newAddress-address1');
-      var autocomplete = new google.maps.places.Autocomplete(input);
+
+      options = { types: ['geocode']}
+      var autocomplete = new google.maps.places.Autocomplete(input, options);
 
       //autocomplete.bindTo('bounds', map);
 
       google.maps.event.addListener(autocomplete, 'place_changed', function() {
         var place = autocomplete.getPlace();
+
+        window.street = new Array();
 
         place.address_components.forEach(function(component) {
           if (component.types[0] == 'street_number' || component.types[0] == 'route') {
@@ -91,7 +96,6 @@
         $("#id_newAddress-city").val(locality);
         $("#id_newAddress-zipcode").val(postal_code);
         $("#id_newAddress-country").val(country);
-
       });
     }
 
