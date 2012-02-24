@@ -1,6 +1,30 @@
 {% extends "accounts/borrower_booking.html" %}
+{% load i18n %}
+
+
+{% block owner_product %}
+    {% if request.user == booking.owner %}selected-nav-bar-link{% endif %}
+{% endblock %}
+{% block borrower_booking %}
+    {% if request.user == booking.borrower %}selected-nav-bar-link{% endif %}
+{% endblock %}
 
 {% block content-aside-profil %}
+    {% if request.user == booking.borrower %}
+        {% if booking.state == "authorized"%}{% url borrower_booking_authorized as return_url %}{% endif %}
+        {% if booking.state == "pending"%}{% url borrower_booking_pending as return_url %}{% endif %}
+        {% if booking.state == "ongoing"%}{% url borrower_booking_ongoing as return_url %}{% endif %}
+        {% if booking.state == "ended" or booking.state == "closed" %}
+            {% url borrower_booking_history as return_url %}
+        {% endif %}
+    {% endif %}
+    {% if return_url %}
+        <div class="previous-sub-bar">
+          &larr;  <a href="{{ return_url }}">{% trans "Retour aux réservations" %}</a>
+        </div>
+    {% endif %}
 {% endblock %}
+
 {% block content-main-profil %}
+
 {% endblock %}
