@@ -3,32 +3,28 @@
 <ul class="booking-list">
 	{% for booking in object_list %}
 		<li>
-			<div class="m-content">
-				<div class="m-text">
-					<table class="table table-bordered booking-resume">
-						<tbody>
-						<tr>
-							<th class="b-state">{{ booking.get_state_display }}</th>
-							<td><a href="{{booking.product.get_absolute_url}}" class="b-title">{{booking.product.summary}}</a> <a href="{{booking.get_absolute_url}}" class="b-more">Voir le détail</a></td>
-						</tr>
-						<tr>
-							<th>{% trans "Début" %}</th>
-							<td class="align-center">{{booking.started_at|date:"l d F Y H:i"|capfirst}}</td>
-						</tr> 
-							<th>{% trans "Fin" %}</th>
-							<td class="align-center">{{booking.ended_at|date:"l d F Y H:i"|capfirst}}</td>
-						</tr>
-						<tr>
-							<th>{% trans "Montant" %}</th>
-							<td class="align-center"><b>{{booking.total_amount}} &euro;</b></td>
-						</tr>
-						<tr class="b-action">
-							<td colspan="2">{% bookingaction request booking %}</td>
-						</tr>
-						</tbody>
-					</table>
-				</div>
-			</div>
+			<table class="table table-bordered booking-resume">
+				<tbody>
+				<tr>
+					<th class="b-state">{{ booking.get_state_display }}</th>
+					<td><a href="{{booking.product.get_absolute_url}}" class="b-title">{{booking.product.summary|capfirst}}</a> <a href="{{booking.get_absolute_url}}" class="b-more">(Voir le détail)</a></td>
+				</tr>
+				<tr>
+					<th>{% trans "Début" %}</th>
+					<td class="align-center">{{booking.started_at|date:"l d F Y H:i"|capfirst}}</td>
+				</tr> 
+					<th>{% trans "Fin" %}</th>
+					<td class="align-center">{{booking.ended_at|date:"l d F Y H:i"|capfirst}}</td>
+				</tr>
+				<tr>
+					<th>{% trans "Montant" %}</th>
+					<td class="align-center"><b>{{booking.total_amount}} &euro;</b></td>
+				</tr>
+				<tr class="b-action">
+					<td colspan="2">{% bookingaction request booking %}</td>
+				</tr>
+				</tbody>
+			</table>
 		</li>
 	{% endfor %}
 </ul>
