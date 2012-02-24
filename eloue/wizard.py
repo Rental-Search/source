@@ -4,6 +4,8 @@ try:
 except ImportError:
     import pickle
 
+import itertools
+
 from urllib2 import urlopen
 import facebook
 import django.forms as forms
@@ -213,23 +215,31 @@ class NewGenericFormWizard(MultiPartFormWizard):
                         except IOError:
                             pass
         address = None
-        if not request.session.get('location'):
+        from eloue.accounts.views import GEOLOCATION_SOURCE
+        if not request.session.get('location') or request.session['location'].get('source') > GEOLOCATION_SOURCE.ADDRESS:
             if self.new_patron.default_address and self.new_patron.default_address.is_geocoded():
                 address = self.new_patron.default_address
-            elif len(self.new_patron.addresses.all()):
-                if self.new_patron.addresses.all()[0].is_geocoded():
-                    address = self.new_patron.addresses.all()[0]
-            if address:
-                location = {'source': 3}
-                location['coordinates'] = dict(
-                    zip(
-                        ('lat', 'lon'), 
-                        address.position.coords
-                    )
+            else:
+                address = next(
+                    itertools.ifilter(
+                            lambda address: address.is_geocoded(), 
+                            self.new_patron.addresses.all()
+                    ), 
+                    None
                 )
-                location['city'] = address.city
-                request.session['location'] = location
-            
+            if address:
+                request.session['location'] = {
+                    'city': address.city,
+                    'coordinates': address.position.coords,
+                    'country': address.get_country_display(),
+                    'fallback': None,
+                    'radius': 5,
+                    'region': None,
+                    'region_coords': None,
+                    'region_radius': None,
+                    'source': GEOLOCATION_SOURCE.ADDRESS,
+                }
+
     def get_form(self, step, data=None, files=None):
         next_form = self.form_list[step]
         if next_form.__name__ == 'MissingInformationForm':
