@@ -282,7 +282,7 @@ class Patron(User):
     @property
     def response_time(self):
         from eloue.products.models import ProductRelatedMessage
-        messages = ProductRelatedMessage.objects.select_related.filter(~Q(parent_msg=None), parent_msg__recipient=self, sender=self)
+        messages = ProductRelatedMessage.objects.select_related().filter(~Q(parent_msg=None), parent_msg__recipient=self, sender=self)
         if not messages:
             return timesince(datetime.datetime.now() - datetime.timedelta(days=1))
         rt = sum([message.sent_at - message.parent_msg.sent_at for message in messages], datetime.timedelta(seconds=0))/len(messages)
