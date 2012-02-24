@@ -112,6 +112,7 @@ GEOLOCATION_SOURCE = Enum([
     (1, 'MANUAL', _('Location set manually')),
     (2, 'BROWSER', _('Location set by browser geocoding')),
     (3, 'ADDRESS', _('Location set by user address')),
+    (4, 'DEFAULT', _('Default location'))
 ])
 
 @require_POST
