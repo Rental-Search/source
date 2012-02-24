@@ -430,7 +430,8 @@ def owner_booking_history(request, page=None):
             Booking.STATE.ONGOING, 
             Booking.STATE.PENDING, 
             Booking.STATE.AUTHORIZED,
-            Booking.STATE.AUTHORIZING
+            Booking.STATE.AUTHORIZING,
+            Booking.STATE.OUTDATED
         ]
     )
     return object_list(
@@ -488,7 +489,8 @@ def borrower_booking_history(request, page=None):
             Booking.STATE.ONGOING, 
             Booking.STATE.PENDING, 
             Booking.STATE.AUTHORIZED,
-            Booking.STATE.AUTHORIZING
+            Booking.STATE.AUTHORIZING,
+            Booking.STATE.OUTDATED
         ]
     )
     return object_list(
