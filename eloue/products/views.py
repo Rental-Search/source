@@ -58,15 +58,16 @@ def homepage(request):
     form = FacetedSearchForm()
     alerts = Alert.on_site.all()[:3]
     try:
-        coords = request.session['location']['coordinates']
-        region_coords = request.session['location'].get('region_coords') or coords
-        region_radius = request.session['location'].get('region_radius') or request.session['location']['radius']
+        location = request.session.setdefault('location', settings.DEFAULT_LOCATION)
+        coords = location['coordinates']
+        region_coords = location.get('region_coords') or coords
+        region_radius = location.get('region_radius') or location['radius']
         l = Point(coords)
         last_joined = Patron.objects.last_joined_near(l)
         last_added = product_search.spatial(
-            lat=region_coords[0], long=region_coords[1], radius=region_radius
+            lat=region_coords[0], long=region_coords[1], radius=min(region_radius, 1541)
         ).spatial(
-            lat=coords[0], long=coords[1], radius=region_radius*2
+            lat=coords[0], long=coords[1], radius=min(region_radius*2, 1541)
         ).order_by('-created_at_date', 'geo_distance')
     except KeyError:
         last_joined = Patron.objects.last_joined()
@@ -111,6 +112,8 @@ def product_edit(request, slug, product_id):
     form = ProductEditForm(data=request.POST or None, files=request.FILES or None, instance=product, initial=initial)
 
     forms = [form]
+    is_multipart = any([form.is_multipart() for form in forms])
+
     if form.is_valid():
         product = form.save()
         messages.success(request, _(u"Les modifications ont bien été prises en compte"))
@@ -118,10 +121,12 @@ def product_edit(request, slug, product_id):
             'eloue.products.views.product_edit', 
             slug=slug, product_id=product_id
         )
+
     return render_to_response(
         'products/product_edit.html', dictionary={
             'product': product, 
-            'forms': forms
+            'forms': forms,
+            'is_multipart': is_multipart
         }, 
         context_instance=RequestContext(request)
     )
@@ -352,10 +357,11 @@ def product_delete(request, slug, product_id):
 @cache_page(900)
 @vary_on_cookie
 def product_list(request, urlbits, sqs=SearchQuerySet(), suggestions=None, page=None):
+    location = request.session.setdefault('location', settings.DEFAULT_LOCATION)
     form = FacetedSearchForm(
         request.GET, 
-        coords=request.session.get('location',{}).get('coordinates'),
-        radius=request.session.get('location', {}).get('radius')
+        coords=location.get('coordinates'),
+        radius=location.get('radius')
     )
 
     if not form.is_valid():

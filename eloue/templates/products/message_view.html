@@ -18,16 +18,14 @@
 {% block content-main-profil %}
 
 <ul class="messages">
-{% for message in message_list %}
-{% if forloop.first %}
 	{% if request.user == message.recipient %}
 		<h2>Conversation avec {{ message.sender }}</h2>
 	{% else %}
 		<h2>Conversation avec {{ message.recipient }}</h2>
 	{% endif %}
-<ul class="messages">
+{% for message in message_list %}
 	<li>
-		<a href="{{message.sender.get_absolute_url}}" class="m-img">
+		<a href="{{message.sender.patron.get_absolute_url}}" class="m-img">
 			{% if message.sender.avatar %}
 				<img src="{{message.sender.avatar.thumbnail.url}}" width="60" height="60" />
 			{% else %}
@@ -37,72 +35,19 @@
 		<div class="m-content">
 			<div>
 				<p class="m-sender">
-					<a href="{{message.sender.get_absolute_url}}">{{message.sender.username}}</a> {{message.sent_at|date:_("DATETIME_FORMAT")}}
+					<a href="{{message.sender.patron.get_absolute_url}}">{{message.sender.username}}</a> {{message.sent_at|date:_("DATETIME_FORMAT")}}
 				</p>
-				<div class="m-text">
+				<p class="m-content">
 					{{ message.body|linebreaks }}
-				</div>
-				<span class="message-dial"></span>
-			</div>
-		</div>
-	</li>
-{% if forloop.last %}
-	<li>
-		<a href="#" class="m-img">
-			<img src="{{ MEDIA_URL }}images/default_avatar.png" width="60" height="60" alt="">
-		</a>
-		<div class="m-content">
-			<div>
-				<p class="m-sender">
-					<a href="#">Princess</a> 24 novembre 2011, 18:02
 				</p>
-				<div class="m-text">
-					<table class="table table-bordered booking-resume">
-						<tbody>
-						<tr>
-							<th class="b-state">Demande</th>
-							<td><a href="#" class="b-title">Robe de  soirée</a> <a href="#" class="b-more">Voir le détail</a></td>
-						</tr>
-						<tr>
-							<th>Début</th>
-							<td>Lundi 15 novembre 2012</td>
-						</tr> 
-							<th>Fin</th>
-							<td>Mercredi 18 novembre 2012</td>
-						</tr>
-						<tr>
-							<th>Montant</th>
-							<td>134 &euro;</td>
-						</tr>
-						<tr class="b-action">
-							<td colspan="2"><a href="#">Accepter</a> - <a href="#">Refuser</a> - <a href="#">Envoyer un message au locataire</a></td>
-						</tr>
-						</tbody>
-					</table>
-				</div>
 				<span class="message-dial"></span>
 			</div>
 		</div>
 	</li>
+
+{% endfor %}
 	<li>
-		<a href="#" class="m-img">
-			<img src="{{ MEDIA_URL }}images/default_avatar.png" width="60" height="60" alt="">
-		</a>
-		<div class="m-content">
-			<div>
-				<p class="m-sender">
-					<a href="#">Princess</a> 24 novembre 2011, 19:02
-				</p>
-				<div class="m-text">
-					<p>La demande de réservation <a href="#">Robe d'un soir</a> est acceptée</p>
-					<p>Ca marche, à bientôt !</p>
-				</div>
-				<span class="message-dial"></span>
-			</div>
-		</div>
-	</li>
-	<li>
-		<a href="{{message.sender.get_absolute_url}}" class="m-img">
+		<a href="{{message.sender.patron.get_absolute_url}}" class="m-img">
 			{% if user.avatar %}
 				<img src="{{ user.avatar.thumbnail.url }}" width="60" height="60">
 			{% else %}
@@ -127,29 +72,5 @@
 			</div>
 		</div>
 	</li>
-{% endif %}
-{% else %}
-	<li>
-		<a href="{{message.sender.get_absolute_url}}" class="m-img">
-			{% if message.sender.avatar %}
-				<img src="{{message.sender.avatar.thumbnail.url}}" width="60" height="60" />
-			{% else %}
-				<img src="{{ MEDIA_URL }}images/default_avatar.png" width="60" height="60" alt="">
-			{% endif %}
-		</a>
-		<div class="m-content">
-			<div>
-				<p class="m-sender">
-					<a href="{{message.sender.get_absolute_url}}">{{message.sender.username}}</a> {{message.sent_at|date:_("DATETIME_FORMAT")}}
-				</p>
-				<p class="m-content">
-					{{ message.body|linebreaks }}
-				</p>
-				<span class="message-dial"></span>
-			</div>
-		</div>
-	</li>
-{% endif%}
-{% endfor %}
 </ul>
 {% endblock %}

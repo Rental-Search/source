@@ -110,7 +110,7 @@
 
     <field name="text" type="text" indexed="true" stored="true" multiValued="false" />
 
-    <field name="sites" type="text" indexed="true" stored="true" multiValued="true" />
+    <field name="zipcode" type="string" indexed="false" stored="true" multiValued="false" />
 
     <field name="owner" type="text" indexed="true" stored="true" multiValued="false" />
 
@@ -118,19 +118,21 @@
 
     <field name="city" type="string" indexed="false" stored="true" multiValued="false" />
 
-    <field name="sites_exact" type="string" indexed="true" stored="true" multiValued="true" />
+    <field name="title" type="text" indexed="true" stored="true" multiValued="false" />
 
-    <field name="zipcode" type="string" indexed="false" stored="true" multiValued="false" />
+    <field name="sites" type="text" indexed="true" stored="true" multiValued="true" />
 
     <field name="owner_url" type="string" indexed="false" stored="true" multiValued="false" />
 
     <field name="thumbnail" type="string" indexed="false" stored="true" multiValued="false" />
 
-    <field name="description" type="text" indexed="true" stored="true" multiValued="false" />
+    <field name="description" type="edge_ngram" indexed="true" stored="true" multiValued="false" />
 
     <field name="price" type="sfloat" indexed="true" stored="true" multiValued="false" />
 
     <field name="categories_exact" type="string" indexed="true" stored="true" multiValued="true" />
+
+    <field name="owner_avatar" type="text" indexed="true" stored="true" multiValued="false" />
 
     <field name="lat" type="tdouble" indexed="true" stored="true" multiValued="false" />
 
@@ -142,9 +144,9 @@
 
     <field name="url" type="string" indexed="false" stored="true" multiValued="false" />
 
-    <field name="created_at" type="date" indexed="true" stored="true" multiValued="false" />
+    <field name="owner_exact" type="string" indexed="true" stored="true" multiValued="false" />
 
-    <field name="title" type="text" indexed="true" stored="true" multiValued="false" />
+    <field name="sites_exact" type="string" indexed="true" stored="true" multiValued="true" />
 
     <field name="summary" type="edge_ngram" indexed="true" stored="true" multiValued="false" />
 
@@ -152,7 +154,7 @@
 
     <field name="patron_url" type="text" indexed="true" stored="true" multiValued="false" />
 
-    <field name="owner_exact" type="string" indexed="true" stored="true" multiValued="false" />
+    <field name="created_at" type="date" indexed="true" stored="true" multiValued="false" />
 
   </fields>
 

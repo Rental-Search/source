@@ -2,6 +2,7 @@
 import datetime
 
 from django.conf import settings
+from django.core.exceptions import ObjectDoesNotExist
 
 from haystack.sites import site
 from haystack.indexes import CharField, DateTimeField, DateField, FloatField, MultiValueField, EdgeNgramField
@@ -27,6 +28,7 @@ class ProductIndex(QueuedSearchIndex):
     zipcode = CharField(model_attr='address__zipcode', indexed=False)
     owner = CharField(model_attr='owner__username', faceted=True)
     owner_url = CharField(model_attr='owner__get_absolute_url', indexed=False)
+    owner_avatar = CharField()
     price = FloatField(faceted=True)
     sites = MultiValueField(faceted=True)
     summary = EdgeNgramField(model_attr='summary')
@@ -47,7 +49,14 @@ class ProductIndex(QueuedSearchIndex):
         if obj.pictures.all():
             picture = obj.pictures.all()[0]
             return picture.thumbnail.url
-    
+
+    def prepare_owner_avatar(self, obj):
+        try:
+            if obj.owner.avatar:
+                return obj.owner.avatar.thumbnail.url
+        except ObjectDoesNotExist:
+            return None
+
     def prepare_created_at_date(self, obj):
         return obj.created_at.date()
 

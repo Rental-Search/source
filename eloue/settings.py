@@ -554,3 +554,15 @@ XPF_EXCHANGE_RATE = '0.00838'
 
 # Message 
 REPLACE_STRING = getattr(local, "REPLACE_STRING", "XXXXXX")
+
+DEFAULT_LOCATION = getattr(local, "DEFAULT_LOCATION", {
+    'city': None,
+    'coordinates': (46.227637999999999, 2.2137490000000071),
+    'country': u'France',
+    'fallback': None,
+    'radius': 1007.0,
+    'region': None,
+    'region_coords': None,
+    'region_radius': None,
+    'source': 4
+})

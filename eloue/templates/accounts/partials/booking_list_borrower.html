@@ -4,28 +4,28 @@
 	{% for booking in object_list %}
 		<li>
 			<table class="table table-bordered booking-resume">
-			<tbody>
+				<tbody>
 				<tr>
 					<th class="b-state">{{ booking.get_state_display }}</th>
 					<td><a href="{{booking.product.get_absolute_url}}" class="b-title">{{booking.product.summary|capfirst}}</a> <a href="{{booking.get_absolute_url}}" class="b-more">(Voir le détail)</a></td>
 				</tr>
 				<tr>
-					<th>Début</th>
+					<th>{% trans "Début" %}</th>
 					<td class="align-center">{{booking.started_at|date:"l d F Y H:i"|capfirst}}</td>
 				</tr> 
-					<th>Fin</th>
+					<th>{% trans "Fin" %}</th>
 					<td class="align-center">{{booking.ended_at|date:"l d F Y H:i"|capfirst}}</td>
 				</tr>
 				<tr>
-					<th>Montant</th>
+					<th>{% trans "Montant" %}</th>
 					<td class="align-center"><b>{{booking.total_amount}} &euro;</b></td>
 				</tr>
 				<tr class="b-action">
 					<td colspan="2">{% bookingaction request booking %}</td>
 				</tr>
-			</tbody>
+				</tbody>
 			</table>
-		</li>	
+		</li>
 	{% endfor %}
 </ul>
 {% else %}
