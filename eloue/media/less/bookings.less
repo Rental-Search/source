@@ -1,0 +1,91 @@
+// BOOKING LIST
+// ------------
+//
+
+.booking-list {
+  > li {
+    margin-bottom: 20px;
+  }
+}
+
+
+// BUTTON BOOKING STATE
+// -------------
+//
+
+.btn-booking-action {
+  cursor: pointer;
+  cursor: hand;
+  background-color: transparent;
+  color: @green;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+
+
+// BOOKING RESUME
+// ---------------
+// table template for booking pending
+
+.booking-resume {
+
+  background-color: #f5f7f9;
+
+  #font > .sans-serif('Ubuntu', normal, @basefont);
+  color: @blueDark;
+
+  margin-bottom: 5px;
+  
+  th {
+    width: 80px;
+
+    font-weight: normal;
+
+    &.b-state { font-weight: bold; }
+  }
+
+  .b-title {
+    font-size: 18px;
+  }
+
+  .b-more { 
+    float: right;
+    font-size: 12px;
+    padding-top: 3px;
+  }
+
+  .b-state {
+    text-align: center;
+  }
+
+  .b-action {
+    background-color: #e3f6fd;
+
+    td { text-align: right; }
+
+    &:hover td {
+      background-color: #e3f6fd;
+    }
+  }
+
+  .action-list {
+    float: right;
+
+    margin: 5px 0;
+
+    .clearfix();
+
+    li {
+      float: left;
+
+      padding: 0 10px;
+      maring-bottom: 0px;
+
+      form { margin-bottom: 0px; }
+      a { line-height: 16px; }
+    }
+  }
+}

@@ -36,7 +36,7 @@ class TemplateWidgetAction(ActionWidget):
 class LinkWidget(TemplateWidgetAction):
 	template = Template(
 		ur'{% load i18n %}'
-		'<a href="{{ url }}">{% trans text %}</a>'
+		'<li><a href="{{ url }}">{% trans text %}</a></li>'
 	)
 
 	def __init__(self, url_builder, text):
@@ -54,11 +54,11 @@ class LinkWidget(TemplateWidgetAction):
 class PostForm(TemplateWidgetAction):
 	template = Template(
 		ur'{% load i18n %}'
-		'<form action="{{url}}" method="post">'
+		'<li><form action="{{url}}" method="post">'
 		'{% csrf_token %}'
 		'<input type="hidden" name="state" value={{ state }}/>'
-		'<button>{% trans text %}</button>'
-		'</form>'
+		'<button class="btn-booking-action {{ state }}">{% trans text %}</button>'
+		'</form></li>'
 	)
 
 	def __init__(self, text, view_name, state):
@@ -151,8 +151,7 @@ owner = {
 def bookingaction(request, booking):
 	actions = borrower if booking.borrower == request.user else owner
 	possible_actions = actions[booking.state]
-	return u'<td colspan={len}>{actions}</td>'.format(
-		len=len(possible_actions),
-		actions=u' - '.join([action.render(request, booking) for action in possible_actions])
+
+	return u'<ul class="action-list">{actions}</ul>'.format(
+		actions=u''.join([action.render(request, booking) for action in possible_actions])
 	)
-	return PaypalAuthorize.render(request, booking)+Accept.render(request, booking)

@@ -1,5 +1,6 @@
-{% load bookingaction %}
-<ul class="messages">
+{% load bookingaction i18n %}
+{% if object_list %}
+<ul class="booking-list">
 	{% for booking in object_list %}
 		<li>
 			{% if request.user == booking.borrower %}
@@ -36,18 +37,18 @@
 								<td><a href="{{booking.product.get_absolute_url}}" class="b-title">{{booking.product.summary}}</a> <a href="{{booking.get_absolute_url}}" class="b-more">Voir le détail</a></td>
 							</tr>
 							<tr>
-								<th>Début</th>
-								<td>{{booking.started_at|date:"l d F Y, H:i"}}</td>
+								<th>{% trans "Début" %}</th>
+								<td class="align-center">{{booking.started_at|date:"l d F Y H:i"|capfirst}}</td>
 							</tr> 
-								<th>Fin</th>
-								<td>{{booking.ended_at|date:"l d F Y H:i"}}</td>
+								<th>{% trans "Fin" %}</th>
+								<td class="align-center">{{booking.ended_at|date:"l d F Y H:i"|capfirst}}</td>
 							</tr>
 							<tr>
-								<th>Montant</th>
-								<td>{{booking.total_amount}} &euro;</td>
+								<th>{% trans "Montant" %}</th>
+								<td class="align-center"><b>{{booking.total_amount}} &euro;</b></td>
 							</tr>
 							<tr class="b-action">
-								{% bookingaction request booking %}
+								<td colspan="2">{% bookingaction request booking %}</td>
 							</tr>
 							</tbody>
 						</table>
@@ -58,3 +59,6 @@
 		</li>
 	{% endfor %}
 </ul>
+{% else %}
+<p style="text-align: center; margin-top: 60px;">{% trans "Pas de réservation" %}</p>
+{% endif %}
