@@ -18,8 +18,8 @@
         </div><!-- pl-content -->
         <div class="pl-avatar">
             <a href="{{product.owner_url}}">
-                {% if product.owner.avatar %}
-                    <img src="{{product.owner.avatar.thumbnail.url}}" width="60" height="60" />
+                {% if product.owner_avatar %}
+                    <img src="{{product.owner_avatar}}" width="60" height="60" />
                 {% else %}
                     <img src="{{ MEDIA_URL }}images/default_avatar.png" width="60" height="60" />
                 {% endif %}
