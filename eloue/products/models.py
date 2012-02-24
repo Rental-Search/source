@@ -509,10 +509,14 @@ class MessageThread(models.Model):
         return unicode(self.subject)
     
     def new_recipient(self):
-        return any(map(lambda message: not message.read_at, self.messages.filter(recipient=self.recipient)))
+        """Returns True if self.recipient has unread message in the thread
+        """
+        return self.last_message.recipient == self.recipient and not self.last_message.read_at
     
     def new_sender(self):
-        return any(map(lambda message: not message.read_at, self.messages.filter(recipient=self.sender)))
+        """Return True if self.sender has unread message in the thread
+        """
+        return self.last_message.recipient == self.sender and not self.last_message.read_at
 
 class ProductRelatedMessage(Message):
 
