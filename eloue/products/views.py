@@ -111,6 +111,8 @@ def product_edit(request, slug, product_id):
     form = ProductEditForm(data=request.POST or None, files=request.FILES or None, instance=product, initial=initial)
 
     forms = [form]
+    is_multipart = any([form.is_multipart() for form in forms])
+
     if form.is_valid():
         product = form.save()
         messages.success(request, _(u"Les modifications ont bien été prises en compte"))
@@ -118,10 +120,12 @@ def product_edit(request, slug, product_id):
             'eloue.products.views.product_edit', 
             slug=slug, product_id=product_id
         )
+
     return render_to_response(
         'products/product_edit.html', dictionary={
             'product': product, 
-            'forms': forms
+            'forms': forms,
+            'is_multipart': is_multipart
         }, 
         context_instance=RequestContext(request)
     )
