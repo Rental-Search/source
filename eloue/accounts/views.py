@@ -277,6 +277,7 @@ def patron_edit(request, *args, **kwargs):
     more_info_edit_form = MoreInformationForm(request.POST or None, instance=patron, initial=patron_dict, prefix='moreInfoEdit')
 
     forms = [patron_edit_form, more_info_edit_form]
+    is_multipart = any([form.is_multipart() for form in forms])
 
     if patron_edit_form.is_valid() and more_info_edit_form.is_valid():
         for form in forms:
@@ -300,8 +301,16 @@ def patron_edit(request, *args, **kwargs):
         elif request.POST:
             messages.success(request, _(u"Vos informations ont bien été modifiées")) 
 
-    patron = Patron.objects.get(pk=request.user.pk)
-    return direct_to_template(request, 'accounts/patron_edit.html', extra_context={'forms': forms, 'patron': patron})
+        return redirect(reverse('patron_edit'))
+    
+    return direct_to_template(
+        request, 'accounts/patron_edit.html', 
+        extra_context={
+            'forms': forms, 
+            'patron': request.user,
+            'is_multipart': is_multipart
+        }
+    )
 
 
 @login_required

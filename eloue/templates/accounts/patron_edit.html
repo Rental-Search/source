@@ -24,7 +24,7 @@
 {% endblock %}
 
 {% block content-main-profil %}
-{% if form.is_multipart %}
+{% if is_multipart %}
 <form enctype="multipart/form-data" class="form-horizontal" method="post" action="">
 {% else %}
 <form class="form-horizontal" method="post" action="">
@@ -39,9 +39,9 @@
       <div class="controls">
         {% if formfield.name == "avatar" %}
           {% if patron.avatar %}
-          <img src="{{ patron.avatar.product_page.url }}" alt="{% trans "loueur"%}{{ patron.username }}" style="float: left; margin-right: 10px; border: 1px solid #9EB0BA;">
+            <img src="{{ patron.avatar.product_page.url }}" alt="{% trans "loueur"%}{{ patron.username }}" style="float: left; margin-right: 10px; border: 1px solid #9EB0BA;">
           {% else %}
-          <img src="{{ MEDIA_URL }}images/default_avatar.png" alt="{% trans "loueur"%}{{ patron.username }}" style="float: left; margin-right: 10px; border: 1px solid #9EB0BA;">
+            <img src="{{ MEDIA_URL }}images/default_avatar.png" alt="{% trans "loueur"%}{{ patron.username }}" style="float: left; margin-right: 10px; border: 1px solid #9EB0BA;">
           {% endif %}
         {% endif %}
         {{ formfield }}
