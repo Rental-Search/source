@@ -213,7 +213,6 @@ STATIC_URL = getattr(local, 'STATIC_URL', None)
 
 
 #pipeline configuration
-#PIPELINE_AUTO = True
 PIPELINE_CSS_COMPRESSOR = 'pipeline.compressors.yui.YUICompressor'
 PIPELINE_JS_COMPRESSOR = 'pipeline.compressors.yui.YUICompressor'
 PIPELINE_COMPILERS = (
