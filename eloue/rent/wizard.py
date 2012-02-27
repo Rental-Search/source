@@ -36,6 +36,14 @@ class BookingWizard(NewGenericFormWizard):
           'addresses__address1', 'addresses__zipcode', 'addresses__city', 'addresses__country'
         ]
 
+    def __call__(self, request, *args, **kwargs):
+        product = get_object_or_404(Product.on_site, pk=kwargs['product_id'])
+        from eloue.products.search_indexes import product_search
+        self.extra_context={
+            'product_list': product_search.more_like_this(product)[:4]
+        }
+        return super(BookingWizard, self).__call__(request, *args, **kwargs)
+
     def done(self, request, form_list):
         super(BookingWizard, self).done(request, form_list)
         booking_form = form_list[0]
