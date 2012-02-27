@@ -14,7 +14,7 @@
         {% if booking.state == "authorized"%}{% url borrower_booking_authorized as return_url %}{% endif %}
         {% if booking.state == "pending"%}{% url borrower_booking_pending as return_url %}{% endif %}
         {% if booking.state == "ongoing"%}{% url borrower_booking_ongoing as return_url %}{% endif %}
-        {% if booking.state == "ended" or booking.state == "closed" %}
+        {% if booking.state != "authorized" and booking.state != "pending" and booking.state != "ongoing" %}
             {% url borrower_booking_history as return_url %}
         {% endif %}
     {% endif %}
