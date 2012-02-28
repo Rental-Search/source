@@ -20,15 +20,6 @@
 <ul class="messages">
 	{% for thread in thread_list %}
 	<li>
-		{% if request.user == thread.sender %}
-			{% if thread.new_sender %}
-				NEW
-			{%endif%}
-		{% else %}
-			{% if thread.new_recipient %}
-				NEW
-			{% endif %}
-		{% endif %}
 		<a href="{% url thread_details thread_id=thread.id%}" class="m-img">
 			{% if request.user == thread.sender %}
 				{% if thread.recipient.avatar %}
@@ -44,7 +35,19 @@
 				{% endif %}
 			{% endif %}
 		</a>
-		<div class="m-content">
+		{% if request.user == thread.sender %}
+			{% if thread.new_sender %}
+				<div class="m-content m-unread">
+			{% else %}
+				<div class="m-content">
+			{%endif%}
+		{% else %}
+			{% if thread.new_recipient %}
+				<div class="m-content m-unread">
+			{% else %}
+				<div class="m-content">
+			{% endif %}
+		{% endif %}
 			<div>
 				<p class="m-sender">
 					<a href="{% url thread_details thread_id=thread.id%}">

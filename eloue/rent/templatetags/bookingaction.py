@@ -17,6 +17,9 @@ class ActionWidget(object):
 	def render(self, request, booking):
 		raise NotImplementedError
 
+	def condition(self, request, booking):
+		return True
+
 class TemplateWidgetAction(ActionWidget):
 	def render(self, request, context_dict):
 		try:
@@ -104,6 +107,30 @@ SendMessageToOwner = LinkWidget(
 	text=u'Envoyer un message au propriétaire'
 )
 
+class CommentLinkWidget(LinkWidget):
+	def condition(self, request, booking):
+		from django.core.exceptions import ObjectDoesNotExist
+		if request.user == booking.owner:
+			try:
+				booking.ownercomment
+			except ObjectDoesNotExist:
+				return True
+		else:
+			try:
+				booking.borrowercomment
+			except ObjectDoesNotExist:
+				return True
+		return False
+
+LeaveComment = CommentLinkWidget(
+	url_builder=lambda request, booking: reverse(
+		'eloue.accounts.views.comment_booking',
+		kwargs={
+			'booking_id':booking.pk.hex
+		}
+	),
+	text=u'Commenter la location',
+)
 
 SendMessageToBorrower = LinkWidget(
 	url_builder=lambda request, booking: reverse(
@@ -126,8 +153,8 @@ borrower = {
     'incident': (), 
     'refunded': (),
     'deposit': (),
-    'closing': (Incident, SendMessageToOwner, ),
-    'closed': (Incident, SendMessageToOwner, ),
+    'closing': (Incident, SendMessageToOwner, LeaveComment, ),
+    'closed': (Incident, SendMessageToOwner, LeaveComment, ),
     'outdated': (),
 }
 
@@ -142,8 +169,8 @@ owner = {
     'incident': (), 
     'refunded': (),
     'deposit': (),
-    'closing': (Incident, SendMessageToBorrower, ),
-    'closed': (Incident, SendMessageToBorrower, ), 
+    'closing': (Incident, SendMessageToBorrower, LeaveComment, ),
+    'closed': (Incident, SendMessageToBorrower, LeaveComment, ), 
     'outdated': (),
 }
 
@@ -153,5 +180,9 @@ def bookingaction(request, booking):
 	possible_actions = actions[booking.state]
 
 	return u'<ul class="action-list">{actions}</ul>'.format(
-		actions=u''.join([action.render(request, booking) for action in possible_actions])
+		actions=u''.join(
+			[action.render(request, booking) 
+				for action in possible_actions 
+				if action.condition(request, booking)]
+		)
 	)

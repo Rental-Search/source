@@ -247,7 +247,45 @@ def comments(request):
             }
         )
     )
-    
+
+@login_required
+#@ownership_required()
+def comment_booking(request, booking_id):
+    booking = Booking.objects.get(pk=booking_id)
+    if booking.state not in (Booking.STATE.CLOSING, Booking.STATE.CLOSED):
+        return redirect('eloue.accounts.views.comments')
+
+    if booking.owner == request.user:
+        try:
+            booking.ownercomment
+        except OwnerComment.DoesNotExist:
+            Form = OwnerCommentForm
+            Model = OwnerComment
+        else:
+            return redirect('eloue.accounts.views.comments')
+    else:
+        try:
+            booking.borrowercomment
+        except BorrowerComment.DoesNotExist:
+            Form = BorrowerCommentForm
+            Model = BorrowerComment
+        else:
+            return redirect('eloue.accounts.views.comments')
+    if request.POST:
+        form = Form(request.POST, instance=Model(booking=booking))
+        if form.is_valid():
+            form.save()
+            return redirect('eloue.accounts.views.comments')
+    else:
+        form = Form(instance=Model(booking=booking))
+    return render_to_response(
+        template_name='rent/comment.html',
+        context_instance=RequestContext(
+            request, {'form': form}
+        )
+    )
+
+
 @cache_page(900)
 def patron_detail(request, slug, patron_id=None, page=None):
     if patron_id:  # This is here to be compatible with the old app
