@@ -1,29 +1,94 @@
-{% extends "base.html" %}
-{% load i18n %}
-{% block title %}{% trans "Votre tableau de bord" %}{% endblock %}
-{% load inbox %}
+{% extends "accounts/dashboard.html" %}
+{% load i18n navbar %}
 
-{% block content %}
+{% block title %}{% trans "Votre profil" %}{% endblock %}
+{% block head %}
+  {{block.super}}
+
+  <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js"></script>
+{% endblock %}
+
+{% block content-aside-profil %}
+{% url patron_edit as patron_edit %}
+{% url comments as comments %}
+{% url patron_edit_addresses as patron_edit_addresses %}
+{% url patron_edit_phonenumber as patron_edit_phonenumber %}
+{% url patron_edit_password as patron_edit_password %}
+<ul class="nav-sub-bar">
+    <li><a href="{{ patron_edit }}"  class="{% active request "^/dashboard/account/$" %}">{% trans "Mon Profil" %}</a></li>
+    <li><a href="{{ comments }}" class="{% active request comments %}">{% trans "Commentaires" %}</a></li>
+    <li><a href="{{ patron_edit_addresses }}" class="{% active request patron_edit_addresses %}">{% trans "Adresses" %}</a></li>
+    <li><a href="{{ patron_edit_phonenumber }}" class="{% active request patron_edit_phonenumber %}">{% trans "Téléphone" %}</a></li>
+    <li><a href="{{ patron_edit_password }}" class="{% active request patron_edit_password %}">{% trans "Mot de passe" %}</a></li>
+</ul>
+{% endblock %}
+
+{% block content-main-profil %}
+{% trans "Vos commentaires" %}
+<div class="product-comment">
+  <ul>
+  {% for booking in commented_bookings %}
+    {% if request.user == booking.owner %}
+      {% with booking.ownercomment as comment %}
+        <li>{% include 'rent/partials/comment.html' %}</li>
+      {% endwith %}
+    {% else %}
+      {% with booking.borrowercomment as comment %}
+        <li>{% include 'rent/partials/comment.html' %}</li>
+      {% endwith %}
+    {% endif %}
+  {% endfor %}
+  </ul>
+</div>
+
+{% trans "Commentaires a ecrire" %}
+
+{% if is_multipart %}
+<form enctype="multipart/form-data" class="form-horizontal" method="post" action="">
+{% else %}
+<form class="form-horizontal" method="post" action="">
+{% endif %}
+{% csrf_token %}
+{% for form in forms %}
+<fieldset>
+  <legend>{{ form.legend }}</legend>
+  {% for formfield in form %}
+    <div class="control-group {% if formfield.errors %} error {% endif %}">
+      <label class="control-label" for="{{ formfield.id_for_label }}">{{ formfield.label }} {% if formfield.field.required %}*{% endif %}</label>
+      <div class="controls">
+        {% if formfield.name == "avatar" %}
+          {% if patron.avatar %}
+            <img src="{{ patron.avatar.product_page.url }}" alt="{% trans "loueur"%}{{ patron.username }}" style="float: left; margin-right: 10px; border: 1px solid #9EB0BA;">
+          {% else %}
+            <img src="{{ MEDIA_URL }}images/default_avatar.png" alt="{% trans "loueur"%}{{ patron.username }}" style="float: left; margin-right: 10px; border: 1px solid #9EB0BA;">
+          {% endif %}
+        {% endif %}
+        {{ formfield }}
+        <p class="help-block">{{ formfield.help_text }}</p>
+        {% if formfield.errors %}
+          <span class="help-inline">
+          {% for error in formfield.errors %}
+            {{ error|escape }} 
+          {% endfor %}
+          </span>
+        {% endif %}
+      </div>
+    </div>
+  {% endfor %}
+</fieldsset>
+{% endfor %}
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary">Enregistrer</button>
+        <button type="reset" class="btn btn-cancel">Annuler</a>
+      </div>
+  </form>
+
+{% endblock %}
+
 
 <div id="content" class="xgrid">
-       <div class="content-top">
-         <ul id="menu" class="x12">
-            <li class="menu-tab first"><a href="{% url dashboard %}">{% trans "Tableau de bord" %}</a></li>
-            <li class="menu-tab"><a href="#">{% trans "Propriétaire" %}</a></li>
-            <li class="menu-tab"><a href="#">{% trans "Locataire" %}</a></li>
-            <li class="menu-tab">{% trans "Mon compte" %}</li>
-            <li class="menu-tab"><a href="{% url inbox %}">{% blocktrans %}Messages({{ unread_message_count }}){% endblocktrans %}</a></li>
-        </ul>
-        </div>
-        <div id="sub-menu">
-            <ul class="x12">
-                <li class="sub-tab first"><a href="{% url patron_edit %}">{% trans "Votre profil" %}</a></li>
-                <li class="sub-tab">{% trans "Commentaires" %}</li>
-                <li class="sub-tab"><a href="{% url patron_edit_password %}">{% trans "Modification du mot de passe" %}</a></li>
-                <li class="sub-tab"><a href="{% url patron_edit_phonenumber %}">{% trans "Numéros de téléphone" %}</a></li>
-                <li class="sub-tab"><a href="{% url patron_edit_addresses %}">{% trans "Adresses" %}</a></li>
-            </ul>
-        </div>
     <div class="tabsPrices x12 ui-tabs ui-widget ui-widget-content ui-corner-all">
         <ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
             <li class="ui-state-default ui-corner-top ui-tabs-selected ui-state-active">
@@ -123,4 +188,3 @@
         </div><!-- tab1 -->
     </div>
 </div>
-{% endblock%}

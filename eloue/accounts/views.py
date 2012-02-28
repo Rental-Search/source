@@ -205,9 +205,18 @@ def comments_received(request):
 @login_required
 def comments(request):
     patron = request.user
-    closed_bookings = Booking.objects.filter(Q(owner=patron) | Q(borrower=patron), Q(state=Booking.STATE.CLOSED)|Q(state=Booking.STATE.CLOSING))
-    commented_bookings = closed_bookings.filter(~Q(ownercomment=None, owner=patron) & ~Q(borrower=patron, borrowercomment=None))
-    uncommented_bookings = closed_bookings.filter(Q(ownercomment=None, owner=patron) | Q(borrower=patron, borrowercomment=None))
+    closed_bookings = Booking.objects.filter(
+        Q(owner=patron) | Q(borrower=patron), 
+        Q(state=Booking.STATE.CLOSED)|Q(state=Booking.STATE.CLOSING)
+    )
+    commented_bookings = closed_bookings.filter(
+        ~Q(ownercomment=None, owner=patron) & 
+        ~Q(borrower=patron, borrowercomment=None)
+    )
+    uncommented_bookings = closed_bookings.filter(
+        Q(ownercomment=None, owner=patron) | 
+        Q(borrower=patron, borrowercomment=None)
+    )
     forms = []
 
     if request.method == "POST":
@@ -238,6 +247,7 @@ def comments(request):
             form = Form(instance=Model(booking=booking), prefix=booking.pk)
             forms.append(form)
     
+    print commented_bookings[0].pk
     return render_to_response(
         'rent/comments.html', 
         RequestContext(
