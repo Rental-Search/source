@@ -8,10 +8,14 @@
 {% endblock %}
 
 {% block content %}
-<div id="content-home" class="xgrid">
-    <div class="content-header x12">
+<div class="container-main">
+	<ul class="breadcrumb">
+		<li><a href="{% url home %}">{% trans "Accueil" %}</a></li>
+		<li>{% trans "Se connecter ou s'inscrire" %}</li>
+	</ul>
+	<div class="content-main-large">
 		<h1>{% trans "Identification" %}</h1>
+		{% include "accounts/partials/login.html" %}
 	</div>
-	{% include "accounts/partials/login.html" %}
 </div>
 {% endblock %}
