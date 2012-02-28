@@ -1,0 +1,45 @@
+{% extends "accounts/borrower_booking.html" %}
+{% load i18n bookingaction %}
+
+{{form.instance.booking}}
+{% block owner_product %}
+    {% if request.user == form.instance.booking.owner %}selected-nav-bar-link{% endif %}
+{% endblock %}
+{% block borrower_booking %}
+    {% if request.user == form.instance.booking.borrower %}selected-nav-bar-link{% endif %}
+{% endblock %}
+
+{% block content-aside-profil %}
+    {% if request.user == booking.borrower %}
+        {% if booking.state == "authorized"%}{% url borrower_booking_authorized as return_url %}{% endif %}
+        {% if booking.state == "pending"%}{% url borrower_booking_pending as return_url %}{% endif %}
+        {% if booking.state == "ongoing"%}{% url borrower_booking_ongoing as return_url %}{% endif %}
+        {% if booking.state != "authorized" and booking.state != "pending" and booking.state != "ongoing" %}
+            {% url borrower_booking_history as return_url %}
+        {% endif %}
+    {% endif %}
+        <div class="previous-sub-bar">
+          &larr;  <a href="{{ form.instance.booking.get_absolute_url }}">{% trans "Retour aux details de la reservation" %}</a>
+        </div>
+{% endblock %}
+
+{% block content-main-profil %}
+
+        <div class="m-content">
+            <div>
+                <p class="m-sender">
+                    <a href="{{user.get_absolute_url}}">{{ user.username }}</a>
+                    <p class="m-content">
+                        <form method="post" action="">
+                            {%csrf_token%}
+                            {{form}}
+                            <div class="form-actions">
+                                <button type="submit" class="btn btn-primary">Envoyer</button>
+                            </div>
+                        </form>
+                    </p>
+                </p>
+                <span class="message-dial"></span>
+            </div>
+        </div>
+{% endblock %}

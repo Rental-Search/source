@@ -182,8 +182,10 @@ $(document).ready(function() {
     // Booking price
     // Price calculations
     bookingPrice = function(form) {
+        console.log('kaka');
         var template,
         serializedForm;
+        availabilityTemplate = '{{^errors}}<p class="available">Ces dates sont disponibles</p>{{/errors}}{{#errors}}<p class="unavailable">Ces dates ne sont pas disponibles</p>{{/errors}}'
         unitTemplate = '<span class="price">{{unit_value}}</span><span class="unit"> / par {{unit_name}}</span>';
         priceTemplate = '{{#warnings}}{{ warnings }}{{/warnings}} {{#errors}}{{ errors }}{{/errors}}{{^errors}}Total :<span class="day">{{ duration }},</span> soit <span class="pricing">{{ total_price }}</span>{{/errors}}';
         listTemplate = '{{#select_list}}<option value="{{value}}" {{#selected}}selected="selected"{{/selected}}>{{value}}</option>{{/select_list}}';
@@ -198,12 +200,14 @@ $(document).ready(function() {
             dataType: 'json',
             data: $.param(serializedForm),
             success: function(data) {
+                $("#available").html(Mustache.to_html(availabilityTemplate, data));
                 $("#product_price").html(Mustache.to_html(unitTemplate, data));
                 $("#booking-total").html(Mustache.to_html(priceTemplate, data));
                 $("#id_0-quantity").html(Mustache.to_html(listTemplate, data));
             }
         });
     }
+    
     bookingCreate = $('#booking_create');
     if (bookingCreate.length > 0) {
         bookingPrice(bookingCreate);
