@@ -73,6 +73,14 @@
     },
     {
         "fields": {
+            "domain": "argusnc.e-loue.com",
+            "name": "ArgusNC"
+        },
+        "model": "sites.site",
+        "pk": 10
+    },
+    {
+        "fields": {
             "url": "/api/1.0/",
             "name": "all",
             "is_readonly": false

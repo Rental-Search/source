@@ -1,5 +1,12 @@
 /* --------------------------------------------------------------
 
+   errors
+
+-------------------------------------------------------------- */
+.errorlist li { color: red; }
+
+/* --------------------------------------------------------------
+
    radius
 
 -------------------------------------------------------------- */
@@ -499,6 +506,7 @@ body { background: #ECF6FF url("../images/body-bg.png") repeat 0 0; }
   .pp { margin-left: 60px; }
   .assurone { margin-left: 30px; }
   .mma { margin-left: 10px; margin-top: 15px; }
+  .europ_assistance { margin-left: 40px; }
 
 /* --------------------------------------------------------------
 
@@ -1012,6 +1020,8 @@ body { background: #ECF6FF url("../images/body-bg.png") repeat 0 0; }
 #flatpage li { list-style-image: url("../images/list-style-info.png"); }
 
 #flatpage li ul { margin-left: 20px; }
+
+#flatpage a { text-decoration: underline; }
 
 /* --------------------------------------------------------------
 

@@ -223,33 +223,29 @@ COMPRESS_CSS_FILTERS = getattr(local, 'COMPRESS_CSS_FILTERS', (
     'compress.filters.yui.YUICompressorFilter'
 ))
 COMPRESS_YUI_BINARY = getattr(local, 'COMPRESS_YUI_BINARY', '/usr/bin/yui-compressor')
+
+
+CSS_LIST = (
+    'css/screen.css',
+    'css/custom.css',
+    'css/plugins/ui/jquery.ui.core.css',
+    'css/plugins/ui/jquery.ui.datepicker.css',
+    'css/plugins/ui/jquery.ui.tabs.css',
+    'css/plugins/ui/jquery.ui.theme.css',
+    'css/chosen.css'
+)
+
+
 COMPRESS_CSS = {
     'master': {
-        'source_filenames': (
-            'css/screen.css',
-            'css/custom.css',
-            'css/plugins/ui/jquery.ui.core.css',
-            'css/plugins/ui/jquery.ui.datepicker.css',
-            'css/plugins/ui/jquery.ui.tabs.css',
-            'css/plugins/ui/jquery.ui.theme.css',
-            'css/chosen.css'
-        ),
+        'source_filenames': CSS_LIST,
         'output_filename': 'css/master.r?.css',
         'extra_context': {
             'media': 'screen',
         },
     },
     'twenty': {
-        'source_filenames': (
-            'css/screen.css',
-            'css/custom.css',
-            'css/20m.css',
-            'css/plugins/ui/jquery.ui.core.css',
-            'css/plugins/ui/jquery.ui.datepicker.css',
-            'css/plugins/ui/jquery.ui.tabs.css',
-            'css/plugins/ui/jquery.ui.theme.css',
-            'css/chosen.css'
-        ),
+        'source_filenames': CSS_LIST + ('css/20m.css',),
         'output_filename': 'css/twenty.r?.css',
         'extra_context': {
             'media': 'screen',
@@ -265,32 +261,14 @@ COMPRESS_CSS = {
         },
     },
     'nc': {
-        'source_filenames': (
-            'css/screen.css',
-            'css/custom.css',
-            'css/nc.css',
-            'css/plugins/ui/jquery.ui.core.css',
-            'css/plugins/ui/jquery.ui.datepicker.css',
-            'css/plugins/ui/jquery.ui.tabs.css',
-            'css/plugins/ui/jquery.ui.theme.css',
-            'css/chosen.css'
-        ),
+        'source_filenames': CSS_LIST + ('css/nc.css',),
         'output_filename': 'css/nc.r?.css',
         'extra_context': {
             'media': 'screen',
         }
     },
     'uk': {
-        'source_filenames': (
-            'css/screen.css',
-            'css/custom.css',
-            'css/uk.css',
-            'css/plugins/ui/jquery.ui.core.css',
-            'css/plugins/ui/jquery.ui.datepicker.css',
-            'css/plugins/ui/jquery.ui.tabs.css',
-            'css/plugins/ui/jquery.ui.theme.css',
-            'css/chosen.css'
-        ),
+        'source_filenames': CSS_LIST + ('css/uk.css',),
         'output_filename': 'css/uk.r?.css',
         'extra_context': {
             'media': 'screen',
@@ -312,17 +290,15 @@ COMPRESS_CSS = {
         }
     },
     'shiseido': {
-        'source_filenames': (
-            'css/screen.css',
-            'css/custom.css',
-            'css/plugins/ui/jquery.ui.core.css',
-            'css/plugins/ui/jquery.ui.datepicker.css',
-            'css/plugins/ui/jquery.ui.tabs.css',
-            'css/plugins/ui/jquery.ui.theme.css',
-            'css/chosen.css',
-            'css/shiseido/screen.css'
-        ),
+        'source_filenames': CSS_LIST + ('css/shiseido/screen.css',),
         'output_filename': 'css/shiseido.r?.css',
+        'extra_context': {
+            'media': 'screen',
+        },
+    },
+    'argusnc': {
+        'source_filenames': CSS_LIST + ('css/argusnc.css',),
+        'output_filename': 'css/argusnc.r?.css',
         'extra_context': {
             'media': 'screen',
         },
@@ -507,7 +483,7 @@ OAUTH_CALLBACK_VIEW = "eloue.accounts.views.oauth_callback"
 USE_ETAGS = False
 
 # Affiliation configuraton
-AFFILIATION_SOURCES = getattr(local, 'AFFILIATION_SOURCES', ['lv', 'skiplanet.equipment', 'jigsaw', 'loxam', 'chronobook'])
+AFFILIATION_SOURCES = getattr(local, 'AFFILIATION_SOURCES', ['lv', 'skiplanet.equipment', 'jigsaw', 'loxam', 'chronobook', 'monjoujou'])
 AFFILIATION_BATCHSIZE = 1000
 LV_FTP = "ftp.bo.location-et-vacances.com"
 
