@@ -13,7 +13,14 @@
         {% url patron_edit as patron_edit %}
         <ul class="nav-bar">
             <li><a href="{{ dashboard }}" class="{% active request dashboard %}">{% trans "Tableau de bord" %}</a></li>
-            <li><a href="{{ inbox }}" class="{% active request "^/dashboard/messages/" %}">{% trans "Messages" %} ({{unread_message_count}})</a></li>
+            <li>
+                <a href="{{ inbox }}" class="{% active request "^/dashboard/messages/" %}">
+                    {% trans "Messages" %} 
+                    {% if unread_message_count > 0 %}
+                        ({{unread_message_count}})
+                    {% endif %}
+                </a>
+            </li>
             <li><a href="{{ borrower_booking }}" class="{% block borrower_booking %}{% endblock %}{% active request  "^/dashboard/borrower/" %}">{% trans "Mes réservations" %}</a></li>
             <li><a href="{{ owner_product }}" class="{% block owner_product %}{% endblock %}{% active request "^/dashboard/owner/" %}">{% trans "Mes annonces" %}</a></li>
             <li><a href="{{ patron_edit }}" class="{% active request patron_edit %}">{% trans "Paramètres de compte" %}</a></li>
