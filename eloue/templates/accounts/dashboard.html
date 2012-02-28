@@ -50,6 +50,7 @@
     <div class="content-main-profil">
         {% block content-main-profil %}
             {% if thread_list %}
+                Vos nouveaux messages:
                 {% include 'products/partials/message_list.html' %}
             {% else %}
                 Vous n'avez pas de nouveau message.

@@ -247,7 +247,6 @@ def comments(request):
             form = Form(instance=Model(booking=booking), prefix=booking.pk)
             forms.append(form)
     
-    print commented_bookings[0].pk
     return render_to_response(
         'rent/comments.html', 
         RequestContext(
