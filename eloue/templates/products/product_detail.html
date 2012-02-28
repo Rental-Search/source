@@ -126,7 +126,12 @@
         </div>{# product-desc #}
 
         <div class="product-comment">
-            <h2>{% trans "Commentaires" %} <small>({{product.borrowercomments.count}} {% trans "avis" %})</small></h2>
+            {% blocktrans count product.borrowercomments.count as count %}
+                <h2>{{ count }} commentaires</h2>
+                {% plural %}
+                <h2>{{ count }} commentaire</h2>
+            {% endblocktrans%}
+            </h2>
             <ul>
             {% for comment in product.borrowercomments %}
                 <li>{% include "rent/partials/comment.html" %}</li>

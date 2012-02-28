@@ -1,4 +1,4 @@
-{% extends "accounts/borrower_booking.html" %}
+{% extends "accounts/dashboard.html" %}
 {% load i18n bookingaction %}
 
 
@@ -18,6 +18,14 @@
             {% url borrower_booking_history as return_url %}
         {% endif %}
     {% endif %}
+    {% if request.user == booking.owner %}
+        {% if booking.state == "authorized"%}{% url owner_booking_authorized as return_url %}{% endif %}
+        {% if booking.state == "pending"%}{% url owner_booking_pending as return_url %}{% endif %}
+        {% if booking.state == "ongoing"%}{% url owner_booking_ongoing as return_url %}{% endif %}
+        {% if booking.state == "ended" or booking.state == "closed" %}
+            {% url owner_booking_history as return_url %}
+        {% endif %}
+    {% endif %}
     {% if return_url %}
         <div class="previous-sub-bar">
           &larr;  <a href="{{ return_url }}">{% trans "Retour aux réservations" %}</a>
@@ -26,27 +34,58 @@
 {% endblock %}
 
 {% block content-main-profil %}
+<h2>{% trans "La réservation" %}</h2>
 <table class="table table-bordered booking-resume">
-                <tbody>
-                <tr>
-                    <th class="b-state">{{ booking.get_state_display }}</th>
-                    <td><a href="{{booking.product.get_absolute_url}}" class="b-title">{{booking.product.summary|capfirst}}</a> <a href="{{booking.get_absolute_url}}" class="b-more">(Voir le détail)</a></td>
-                </tr>
-                <tr>
-                    <th>{% trans "Début" %}</th>
-                    <td class="align-center">{{booking.started_at|date:"l d F Y H:i"|capfirst}}</td>
-                </tr> 
-                    <th>{% trans "Fin" %}</th>
-                    <td class="align-center">{{booking.ended_at|date:"l d F Y H:i"|capfirst}}</td>
-                </tr>
-                <tr>
-                    <th>{% trans "Montant" %}</th>
-                    <td class="align-center"><b>{{booking.total_amount}} &euro;</b></td>
-                </tr>
-                <tr class="b-action">
-                    <td colspan="2">{% bookingaction request booking %}</td>
-                </tr>
-                </tbody>
-            </table>
+    <tbody>
+        <tr>
+            <th class="b-state">{{ booking.get_state_display }}</th>
+            <td><a href="{{booking.product.get_absolute_url}}" class="b-title">{{booking.product.summary|capfirst}}</a></td>
+        </tr>
+        <tr>
+            <th>{% trans "Début" %}</th>
+            <td class="align-center">{{booking.started_at|date:"l d F Y H:i"|capfirst}}</td>
+        </tr> 
+        <th>{% trans "Fin" %}</th>
+            <td class="align-center">{{booking.ended_at|date:"l d F Y H:i"|capfirst}}</td>
+        </tr>
+        <tr>
+            <th>{% trans "Montant" %}</th>
+            <td class="align-center"><b>{{booking.total_amount}} &euro;</b></td>
+    </tbody>
+</table>
 
+{% if request.user == booking.borrower %}
+    <h2>{% trans "Le propriétaire" %}</h2>
+    <table class="table table-bordered booking-resume">
+    <tr>
+        <td class="b-profil-avatar" style="width: 60px;" rowspan="3">
+            {% if booking.owner.avatar %}
+                <img src="{{ booking.owner.avatar.thumbnail.url }}" width="60" height="60" alt="">
+            {% else %}
+                <img src="{{ MEDIA_URL }}images/default_avatar.png" width="60" height="60" alt="">
+            {% endif %}
+        </td>
+        <td style="text-align: center;">
+            {% if booking.state == booking.STATE.AUTHORIZED or booking.state == booking.STATE.REJECTED %}
+                {{ booking.owner.username|capfirst }}
+            {% else %}
+                {{ booking.owner.first_name|capfirst }} {{ booking.last_name|capfirst }}
+            {% endif %}
+        </td>
+    </tr>
+    <tr>
+        <td style="text-align: center;">
+            {% if booking.state == booking.STATE.AUTHORIZED or booking.state == booking.STATE.REJECTED %}
+                {{ booking.owner.default_address.city }} - {{ booking.owner.default_address.zipcode }}
+            {% else %}
+                {{ booking.owner.default_address.address1 }}<br />
+                {{ booking.owner.default_address.city }} - {{ booking.owner.default_address.zipcode }}
+            {% endif %}
+        </td>
+    </tr>
+    </table>
+{% endif %}
+{% if request.user == booking.owner %}
+    <h2>{%  trans "Informations sur le locataire" %}</h2>
+{% endif %}
 {% endblock %}
