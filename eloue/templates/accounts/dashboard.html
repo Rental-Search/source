@@ -49,7 +49,20 @@
     </div>{# content-aside-profil #}
     <div class="content-main-profil">
         {% block content-main-profil %}
-        
+            {% if thread_list %}
+                {% include 'products/partials/message_list.html' %}
+            {% else %}
+                Vous n'avez pas de nouveau message.
+            {% endif %}
+            <a href="{% url inbox %}">Lire tous vos messages.</a>
+            {% if booking_demands %}
+                {% with booking_demands as object_list %}
+                    {% include 'accounts/partials/booking_list_owner.html' %}
+                {% endwith %}
+            {% else %}
+                Vous n'avez pas de nouveau demande de location.
+            {% endif %}
+            <a href="{% url owner_product %}">Aller dans Vos annonces.</a>
         {% endblock %}
     </div>{# content-main-profil #}
 </div>{# profil #}

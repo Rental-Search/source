@@ -35,6 +35,7 @@ from eloue.accounts.wizard import AuthenticationWizard
 
 from eloue import geocoder
 from eloue.products.forms import FacetedSearchForm
+from eloue.products.models import ProductRelatedMessage, MessageThread
 from eloue.rent.models import Booking, BorrowerComment, OwnerComment
 from eloue.rent.forms import OwnerCommentForm, BorrowerCommentForm
 import time
@@ -432,7 +433,19 @@ def patron_paypal(request):
 
 @login_required
 def dashboard(request):
-    return direct_to_template(request, 'accounts/dashboard.html')
+    new_thread_ids = ProductRelatedMessage.objects.filter(
+        recipient=request.user, read_at=None
+    ).order_by().values('thread').distinct()
+    new_threads = MessageThread.objects.filter(pk__in=[thread['thread'] for thread in new_thread_ids]).order_by('-last_message__sent_at')
+    booking_demands = Booking.objects.filter(owner=request.user, state=Booking.STATE.AUTHORIZED).order_by('-created_at')
+    return render_to_response(
+        template_name='accounts/dashboard.html', 
+        dictionary={'thread_list': new_threads, 'booking_demands': booking_demands}, 
+        context_instance=RequestContext(request)
+    )
+    return direct_to_template(
+        request, 'accounts/dashboard.html', {}
+    )
 
 
 @login_required
