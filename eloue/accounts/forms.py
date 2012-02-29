@@ -503,6 +503,8 @@ AddressFormSet = inlineformset_factory(Patron, Address, form=AddressForm, formse
 
 def make_missing_data_form(instance, required_fields=[]):
     fields = SortedDict({
+        'is_professional': forms.BooleanField(label=_(u"Professionnel"), required=False, initial=False, widget=CommentedCheckboxInput(info_text='Je suis professionnel')),
+        'company_name': forms.CharField(label=_(u"Nom de la société"), required=False, max_length=255, widget=forms.TextInput(attrs={'class': 'inm'})),
         'username': forms.RegexField(label=_(u"Pseudo"), max_length=30, regex=r'^[\w.@+-]+$',
             help_text=_("Required. 30 characters or fewer. Letters, digits and @/./+/-/_ only."),
             error_messages={'invalid': _("This value may contain only letters, numbers and @/./+/-/_ characters.")},
@@ -510,8 +512,6 @@ def make_missing_data_form(instance, required_fields=[]):
         ),
         'password1': forms.CharField(label=_(u"Mot de passe"), max_length=128, required=True, widget=forms.PasswordInput(attrs={'class': 'inm'})),
         'password2': forms.CharField(label=_(u"A nouveau"), max_length=128, required=True, widget=forms.PasswordInput(attrs={'class': 'inm'})),
-        'is_professional': forms.BooleanField(label=_(u"Professionnel"), required=False, initial=False),
-        'company_name': forms.CharField(label=_(u"Nom de la société"), required=False, max_length=255, widget=forms.TextInput(attrs={'class': 'inm'})),
         'first_name': forms.CharField(label=_(u"Prénom"), max_length=30, required=True, widget=forms.TextInput(attrs={'class': 'inm'})),
         'last_name': forms.CharField(label=_(u"Nom"), max_length=30, required=True, widget=forms.TextInput(attrs={'class': 'inm'})),
         'addresses__address1': forms.CharField(max_length=255, widget=forms.Textarea(attrs={'class': 'inm street', 'placeholder': _(u'Rue')})),
@@ -523,6 +523,12 @@ def make_missing_data_form(instance, required_fields=[]):
         'avatar': forms.ImageField(required=False),
         'phones__phone': PhoneNumberField(label=_(u"Téléphone"), required=True, widget=forms.TextInput(attrs={'class': 'inm'}))
     })
+
+    # Are we in presence of a pro ?
+    if fields.has_key('is_professional'):
+        if instance and getattr(instance, 'is_professional', None)!=None:
+            del fields['is_professional']
+            del fields['company_name']
 
     # Do we have an address ?
     if instance and instance.addresses.exists():
@@ -547,12 +553,6 @@ def make_missing_data_form(instance, required_fields=[]):
     
     if instance and instance.username and "first_name" not in required_fields:
         del fields['avatar']
-
-    # Are we in presence of a pro ?
-    if fields.has_key('is_professional'):
-        if instance and getattr(instance, 'is_professional', None)!=None:
-            del fields['is_professional']
-            del fields['company_name']
             
     for f in fields.keys():
         if required_fields and f not in required_fields:

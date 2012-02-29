@@ -99,11 +99,11 @@ class MessageWizard(NewGenericFormWizard):
     
     def get_template(self, step):
         if issubclass(self.form_list[step], EmailAuthenticationForm):
-            return 'django_messages/message_register.html'
+            return 'accounts/auth_login.html'
         elif issubclass(self.form_list[step], MessageEditForm):
             return 'django_messages/message_create.html'
         else:
-            return 'django_messages/message_missing.html'
+            return 'accounts/auth_missing.html'
     
 class AlertWizard(NewGenericFormWizard):
     def done(self, request, form_list):
