@@ -4,6 +4,7 @@ from django.contrib.sites.models import Site
 from django.db.models import Count
 
 from eloue.products.models import ProductRelatedMessage, MessageThread
+from eloue.rent.models import Booking
 
 def site(request):
     try:
@@ -23,11 +24,18 @@ def facebook_context(request):
 def unread_message_count_context(request):
     if request.user.is_authenticated():
         return {
-            'unread_message_count': len(
-                ProductRelatedMessage.objects.filter(
-                    recipient=request.user, read_at=None
-                ).values('thread').annotate(Count('thread')).order_by())
+            'unread_message_count': ProductRelatedMessage.objects.filter(
+                recipient=request.user, read_at=None
+            ).values('thread').annotate(Count('thread')).order_by().count()
         }
     else:
         return {}
 
+def new_booking_demand_count_context(request):
+    if request.user.is_authenticated():
+        return {
+            'new_booking_demand_count': Booking.objects.filter(
+                owner=request.user, state=Booking.STATE.AUTHORIZED).count()
+        }
+    else:
+        return {}

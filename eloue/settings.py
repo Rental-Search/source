@@ -114,6 +114,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'eloue.context_processors.site',
     'eloue.context_processors.debug',
     'eloue.context_processors.unread_message_count_context',
+    'eloue.context_processors.new_booking_demand_count_context',
     'eloue.context_processors.facebook_context'
 )
 

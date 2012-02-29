@@ -22,7 +22,14 @@
                 </a>
             </li>
             <li><a href="{{ borrower_booking }}" class="{% block borrower_booking %}{% endblock %}{% active request  "^/dashboard/borrower/" %}">{% trans "Mes réservations" %}</a></li>
-            <li><a href="{{ owner_product }}" class="{% block owner_product %}{% endblock %}{% active request "^/dashboard/owner/" %}">{% trans "Mes annonces" %}</a></li>
+            <li>
+                <a href="{{ owner_product }}" class="{% block owner_product %}{% endblock %}{% active request "^/dashboard/owner/" %}">
+                    {% trans "Mes annonces" %}
+                    {% if new_booking_demand_count > 0%}
+                        ({{new_booking_demand_count}})
+                    {% endif %}
+                </a>
+            </li>
             <li><a href="{{ patron_edit }}" class="{% active request patron_edit %}">{% trans "Paramètres de compte" %}</a></li>
         </ul>
     </div>{# top-bar #}
