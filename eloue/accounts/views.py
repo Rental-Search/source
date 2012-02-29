@@ -264,7 +264,7 @@ def comment_booking(request, booking_id):
     booking = Booking.objects.get(pk=booking_id)
     if booking.state not in (Booking.STATE.CLOSING, Booking.STATE.CLOSED):
         return redirect('eloue.accounts.views.comments')
-
+    
     if booking.owner == request.user:
         try:
             booking.ownercomment
@@ -295,6 +295,14 @@ def comment_booking(request, booking_id):
         )
     )
 
+@login_required
+@ownership_required(model=Booking, object_key='booking_id', ownership=['owner', 'borrower'])
+def view_comment(request, booking_id):
+    booking = Booking.objects.get(pk=booking_id)
+    return render_to_response(
+        template_name='rent/comment_view.html',
+        context_instance=RequestContext(request, {'booking': booking})
+    )
 
 @cache_page(900)
 def patron_detail(request, slug, patron_id=None, page=None):

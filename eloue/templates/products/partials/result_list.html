@@ -11,10 +11,12 @@
             <h3>
                <a href="{{ product.url|safe }}" {% if product|nofollow %}rel="nofollow"{% endif %}>{{ product.summary|capitalize|truncate:truncation }}</a>
             </h3>
-            <address>{{ product.city|capfirst }}{% if product.zipcode %}, {{ product.zipcode }}{% endif %}</address>
-            {% if product.price %}
-                <p class="pl-price">{{ product.price|quantize|currency }} <span>/jour</span></p>
-            {% endif %}
+            {% with product.city|capfirst|add:", "|add:product.zipcode|truncate:truncation as address %}
+                <address>{{address}}</address>
+                {% if product.price %}
+                    <p class="pl-price">{{ product.price|quantize|currency }} <span>/jour</span></p>
+                {% endif %}
+            {% endwith %}
         </div><!-- pl-content -->
         <div class="pl-avatar">
             <a href="{{product.owner_url}}">
