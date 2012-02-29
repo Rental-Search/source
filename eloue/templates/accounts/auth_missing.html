@@ -4,10 +4,14 @@
 {% block title %}{% trans "Identifiction" %}{% endblock %}
 
 {% block content %}
-<div id="content-home" class="xgrid">
-    <div class="content-header x12">
+<div class="container-main">
+	<ul class="breadcrumb">
+		<li><a href="{% url home %}">{% trans "Accueil" %}</a></li>
+		<li>{% trans "Identification" %}</li>
+	</ul>
+	<div class="one-content">
 		<h1>{% trans "Informations nécessaires pour la création de votre compte" %}</h1>
+		{% include "accounts/partials/missing.html" %}
 	</div>
-	{% include "accounts/partials/missing.html" %}
 </div>
 {% endblock %}
