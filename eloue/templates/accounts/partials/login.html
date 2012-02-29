@@ -2,17 +2,19 @@
 
 <div id="fb-root"></div>
 <div class="fbconnect-content">
+  <div class="fb-elements">
     <div id="fbconnect">Connectez-vous avec Facebook</div>
     <span class="fb-slogan">Plus simple et rapide.</span>
     <div class="fb-pile">
         <fb:facepile app_id="{{FACEBOOK_APP_ID}}" width="240" max_rows="1"></fb:facepile>
     </div>
+  </div>
 </div>{# fbconnect-content #}
 <div class="email-login-content">
   {{ form.non_field_errors }}
   <form action="" method="POST" class="form-inline">
   {% csrf_token %}
-  <div class="control-group">
+  <div class="control-group email-group">
     <label class="email-label">{% trans "Votre adresse email est : " %}</label> 
     {{ form.email }}
     {% if form.email.errors %}
@@ -23,7 +25,7 @@
     </span>
     {% endif %}
   </div>
-  <div class="control-group">
+  <div class="control-group exists_group">
     <p class="account-ask">{% trans "Avez-vous un compte ?" %}</p>
     {{ form.exists }}
     {% if form.exists.errors %}
@@ -34,7 +36,7 @@
     </span>
     {% endif %}
   </div>
-  <div class="control-group">
+  <div class="control-group password-group">
     {{ form.password }}
     <span class="help-inline"><a href="{% url password_reset %}" >{% trans "Mot de passe oublié" %}</a></span>
     {% if form.password.errors %}
@@ -44,6 +46,9 @@
       {% endfor %}
     </span>
     {% endif %}
+  </div>
+  <div class="form-actions">
+      <button type="submit" class="btn btn-primary">{% trans "Continuer"%}</button>
   </div>
   </form>
 </div>{# email-login-content #}

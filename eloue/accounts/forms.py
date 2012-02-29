@@ -99,9 +99,9 @@ class EmailAuthenticationForm(forms.Form):
     """Displays the login form and handles the login action."""
     exists = forms.TypedChoiceField(required=True, coerce=int, choices=STATE_CHOICES, widget=forms.RadioSelect(renderer=ParagraphRadioFieldRenderer), initial=1)
     email = forms.EmailField(label=_(u"Email"), max_length=75, required=False, widget=forms.TextInput(attrs={
-        'autocapitalize': 'off', 'autocorrect': 'off', 'class': 'inm', 'tabindex': '1'
+        'autocapitalize': 'off', 'autocorrect': 'off', 'class': 'inm', 'tabindex': '1', 'placeholder': _(u"Email")
     }))
-    password = forms.CharField(label=_(u"Password"), widget=forms.PasswordInput(attrs={'class': 'inm', 'tabindex': '2'}), required=False)
+    password = forms.CharField(label=_(u"Password"), widget=forms.PasswordInput(attrs={'placeholder': _(u"Mot de passe"), 'tabindex': '2'}), required=False)
     
     # for facebook connect
     facebook_access_token = forms.CharField(required=False, widget=forms.HiddenInput())
