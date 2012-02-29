@@ -28,7 +28,7 @@ from django.contrib.auth import login
 from oauth_provider.models import Token
 from django.shortcuts import redirect
  
-from eloue.decorators import secure_required, mobify
+from eloue.decorators import secure_required, mobify, ownership_required
 from eloue.accounts.forms import EmailAuthenticationForm, PatronEditForm, MoreInformationForm, PatronPaypalForm, PatronPasswordChangeForm, ContactForm, PatronSetPasswordForm, FacebookForm
 from eloue.accounts.models import Patron, FacebookSession
 from eloue.accounts.wizard import AuthenticationWizard
@@ -259,7 +259,7 @@ def comments(request):
     )
 
 @login_required
-#@ownership_required()
+@ownership_required(model=Booking, object_key='booking_id', ownership=['owner', 'borrower'])
 def comment_booking(request, booking_id):
     booking = Booking.objects.get(pk=booking_id)
     if booking.state not in (Booking.STATE.CLOSING, Booking.STATE.CLOSED):

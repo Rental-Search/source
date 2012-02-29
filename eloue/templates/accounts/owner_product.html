@@ -15,7 +15,7 @@
 
 <ul class="nav-sub-bar">
     <li><a href="{{ owner_product }}"  class="{% active request owner_product %}">{% trans "Gérer mes annonces" %}</a></li>
-    <li><a href="{{ owner_booking_authorized }}" class="{% active request owner_booking_authorized %}">{% trans "Demande de réservation" %}</a></li>
+    <li><a href="{{ owner_booking_authorized }}" class="{% active request owner_booking_authorized %}">{% trans "Demande de réservation" %}{% if new_booking_demand_count > 0 %} ({{new_booking_demand_count}}){% endif %}</a></li>
     <li><a href="{{ owner_booking_pending }}" class="{% active request owner_booking_pending %}">{% trans "Réservations à venir" %}</a></li>
     <li><a href="{{ owner_booking_ongoing }}" class="{% active request owner_booking_ongoing %}">{% trans "Réservations en cours" %}</a></li>
     <li><a href="{{ owner_booking_history }}" class="{% active request owner_booking_history %}">{% trans "Réservations terminées" %}</a></li>
