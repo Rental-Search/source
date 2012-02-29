@@ -39,7 +39,7 @@
 							<tbody>
 							<tr>
 								<th class="b-state">{{ booking.get_state_display }}</th>
-								<td><a href="{{booking.product.get_absolute_url}}" class="b-title">{{booking.product.summary}}</a> <a href="{{booking.get_absolute_url}}" class="b-more">(Voir le détail)</a></td>
+								<td><a href="{{booking.product.get_absolute_url}}" class="b-title">{{booking.product.summary}}</a> <a href="{{booking.get_absolute_url}}" class="b-more"> ({% trans "voir le détail" %})</a></td>
 							</tr>
 							<tr>
 								<th>{% trans "Début" %}</th>
