@@ -114,7 +114,7 @@ class AdaptivePapalPayments(AbstractPayment):
             ]}
         )
         if 'ERROR' in response.get('paymentExecStatus', None):
-            PaypalError('paymentExecStatus' ,response.get('paymentExecStatus', None), response)
+            raise PaypalError('paymentExecStatus' ,response.get('paymentExecStatus', None), response)
         return response['payKey']
 
      
