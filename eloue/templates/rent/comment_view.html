@@ -24,8 +24,19 @@
 {% endblock %}
 
 {% block content-main-profil %}
+
+{% with booking.ownercomment as ownercomment %}
+{% if ownercomment %}
 Commentraire de propriataire:
-    {{ booking.ownercomment }}<br>
+    {{ ownercomment }}<br>
+{% endif %}
+{% endwith %}
+
+{% with booking.borrowercomment as borrowercomment %}
+{% if borrowercomment %}
 Commentaire de loueur:
-    {{ booking.borrowercomment }}<br>
+    {{ borrowercomment }}<br>
+{% endif %}
+{% endwith %}
 {% endblock %}
+
