@@ -137,7 +137,6 @@ class MessageEditForm(forms.Form):
     # used in the wizard, and in the reply
     subject = forms.CharField(label=_(u"Subject"), widget=forms.TextInput(attrs={'class': 'inm'}), required=False)
     body = forms.CharField(label=_(u"Body"), widget=forms.Textarea(attrs={'class': 'inm'}))
-    jointOffer = forms.BooleanField(initial=False, required=False)
 
     def __init__(self, *args, **kwargs):
         super(MessageEditForm, self).__init__(*args, **kwargs)

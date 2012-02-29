@@ -48,6 +48,10 @@
     {% endif %}
   </div>
   <div class="form-actions">
+      {% if step_field %}
+        <input type="hidden" name="{{ step_field }}" value="{{ step0 }}" />
+        {{ previous_fields|safe }}
+      {% endif %}
       <button type="submit" class="btn btn-primary">{% trans "Continuer"%}</button>
   </div>
   </form>
