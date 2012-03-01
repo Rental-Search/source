@@ -50,6 +50,8 @@ BOOKING_DAYS = getattr(settings, 'BOOKING_DAYS', 85)
 
 class ISO8601DateTimeField(forms.Field):
     def to_python(self, value):
+        if value in validators.EMPTY_VALUES:
+            return None
         return parser.parse(value)
     
 
