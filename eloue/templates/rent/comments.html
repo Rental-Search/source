@@ -1,126 +1,79 @@
-{% extends "base.html" %}
-{% load i18n %}
-{% block title %}{% trans "Votre tableau de bord" %}{% endblock %}
-{% load inbox %}
+{% extends "accounts/dashboard.html" %}
+{% load i18n navbar %}
 
-{% block content %}
+{% block title %}{% trans "Votre profil" %}{% endblock %}
+{% block head %}
+  {{block.super}}
 
-<div id="content" class="xgrid">
-       <div class="content-top">
-         <ul id="menu" class="x12">
-            <li class="menu-tab first"><a href="{% url dashboard %}">{% trans "Tableau de bord" %}</a></li>
-            <li class="menu-tab"><a href="#">{% trans "Propriétaire" %}</a></li>
-            <li class="menu-tab"><a href="#">{% trans "Locataire" %}</a></li>
-            <li class="menu-tab">{% trans "Mon compte" %}</li>
-            <li class="menu-tab"><a href="{% url inbox %}">{% blocktrans %}Messages({{ unread_message_count }}){% endblocktrans %}</a></li>
-        </ul>
+  <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js"></script>
+{% endblock %}
+
+{% block content-aside-profil %}
+{% url patron_edit as patron_edit %}
+{% url comments as comments %}
+{% url patron_edit_addresses as patron_edit_addresses %}
+{% url patron_edit_phonenumber as patron_edit_phonenumber %}
+{% url patron_edit_password as patron_edit_password %}
+<ul class="nav-sub-bar">
+    <li><a href="{{ patron_edit }}"  class="{% active request "^/dashboard/account/$" %}">{% trans "Mon Profil" %}</a></li>
+    <li><a href="{{ comments }}" class="{% active request comments %}">{% trans "Commentaires" %}</a></li>
+    <li><a href="{{ patron_edit_addresses }}" class="{% active request patron_edit_addresses %}">{% trans "Adresses" %}</a></li>
+    <li><a href="{{ patron_edit_phonenumber }}" class="{% active request patron_edit_phonenumber %}">{% trans "Téléphone" %}</a></li>
+    <li><a href="{{ patron_edit_password }}" class="{% active request patron_edit_password %}">{% trans "Mot de passe" %}</a></li>
+</ul>
+{% endblock %}
+
+{% block content-main-profil %}
+  {% trans "Vos commentaires" %}
+  <div class="product-comment">
+    <ul>
+    {% for booking in commented_bookings %}
+      {% if request.user == booking.owner %}
+        {% with booking.ownercomment as comment %}
+          <li>{% include 'rent/partials/comment.html' %}</li>
+        {% endwith %}
+      {% else %}
+        {% with booking.borrowercomment as comment %}
+          <li>{% include 'rent/partials/comment.html' %}</li>
+        {% endwith %}
+      {% endif %}
+    {% endfor %}
+    </ul>
+  </div>
+
+  {% trans "Commentaires a ecrire" %}
+
+  {% for form in forms %}
+    <form method="post" action="">
+      <legend>
+        <a href="{{ form.instance.booking.get_absolute_url }}">booking</a>
+      </legend>
+        {% csrf_token %}
+
+      {% for formfield in form %}
+        <div class="control-group {% if formfield.errors %} error {% endif %}">
+          <label class="control-label" for="{{ formfield.id_for_label }}">{{ formfield.label }} {% if formfield.field.required %}*{% endif %}</label>
+          <div class="controls">
+            {{ formfield }}
+            <p class="help-block">{{ formfield.help_text }}</p>
+            {% if formfield.errors %}
+              <span class="help-inline">
+              {% for error in formfield.errors %}
+                {{ error|escape }} 
+              {% endfor %}
+              </span>
+            {% endif %}
+          </div>
         </div>
-        <div id="sub-menu">
-            <ul class="x12">
-                <li class="sub-tab first"><a href="{% url patron_edit %}">{% trans "Votre profil" %}</a></li>
-                <li class="sub-tab">{% trans "Commentaires" %}</li>
-                <li class="sub-tab"><a href="{% url patron_edit_password %}">{% trans "Modification du mot de passe" %}</a></li>
-                <li class="sub-tab"><a href="{% url patron_edit_phonenumber %}">{% trans "Numéros de téléphone" %}</a></li>
-                <li class="sub-tab"><a href="{% url patron_edit_addresses %}">{% trans "Adresses" %}</a></li>
-            </ul>
-        </div>
-    <div class="tabsPrices x12 ui-tabs ui-widget ui-widget-content ui-corner-all">
-        <ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
-            <li class="ui-state-default ui-corner-top ui-tabs-selected ui-state-active">
-                <a href="{% url comments %}">{% trans "Commentaires ecrits par moi" %}</a>
-            </li>
-            <li class="ui-state-default ui-corner-top">
-                <a href="{% url comments_received %}">{% trans "Commentaires ecrits sur moi" %}</a>
-            </li>
-        </ul>
-        <div id="tabs-1" class="ui-tabs-panel ui-widget-content ui-corner-bottom">
-            <div class="x11 content-header">
-                <h2>Commentaire à écrire</h2>
-            </div><!-- content-header -->
-            <ul class="x11 booking-list">
-                {% for form in forms %}
-                <li class"x11 first">
-                    <div class="bk" style="width: 760px; margin-bottom: 10px; padding-bottom: 10px;">
-                        <div class="bk-dates">
-                            <p>
-                                13/01/2012<br><span>↓</span><br>
-                                14/01/2012
-                            </p>
-                        </div>
-                        <div class="bk-desc">
-                            <a class="bk-product-img" href="/location/auto-et-moto/moto/side-car/fsdf-dsf-dsf-ds-15149/">
-                                <img width="70" src="http://localhost:8000/media/media/pictures/thumbnail_6cb59325da0049e19dbcc4ef3d291246.jpg">
-                            </a>
-                            <h5>Fsdf dsf dsf ds</h5>
-                            <div class="bk-borrower">
-                                <img src="http://localhost:8000/media/images/bk_borrower_img.png">
-                                <h5><a href="/loueur/benoit/" style="color: #546B78;">Benoit Wojciechowski</a></h5>
-                            </div>
-                            <div class="bk-price">
-                                <p style="color: #FF7200; font-size: 23px;">34,00</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="comment-edit" style="float: left; width: 760px;">
-                        <form method="post" action="">
-                            {% csrf_token %}
-                            <div style="float: left; width: 200px;">
-                                <label>Notation :</label><br />
-                                {{ form.note }}
-                            </div>
-                            <div style="float: left; width: 415px;">
-                                <label>Commentaires :</label><br />
-                                {{ form.comment }}
-                            </div>
-                            <div style="float: left; width: 760px; padding: 10px 0; text-align: right; border-bottom: 1px solid #B9CAD4;">
-                                <input type="submit" name="{{form.instance.booking.pk.hex}}" class="btn big-green" value="Enregistrer">
-                            </div>
-                        </form>
-                    </div><!-- comment-edit -->
-                </li>
-                {% endfor %}
-            </ul>
-            <div class="x11 content-header">
-                <h2>Commentaire écrit</h2>
-            </div>
-            <ul class="x11 comments">
-                {% for booking in commented_bookings %}
-                <li class="comment">
-                    {% if booking.owner == request.user %}
-                    <div class="comment-content">
-                        <div class="comment-title">
-                              <p class="comment-meta">{% trans "Le" %} {{ booking.borrowercomment.created_at|date:"d F Y" }} écrit à {{ booking.owner.username }} écrit à {{ booking.owner.username }} pour la location <a href="{{ booking.get_absolute_url }}">{{ booking.product.name }}</a> :</p>
-                              <p class="comment-writter">
-                                  <span class="stars empty">
-                                      <span class="stars filled_{{ booking.borrowercomment.note }}"></span>
-                                  </span>
-                              </p>
-                              <p class="clear"></p>
-                          </div>
-                          <div class="comment-comment">
-                              {{ booking.ownercomment.comment }}
-                          </div>
-                    </div><!-- commment-content -->
-                    {% else %}
-                    <div class="comment-content">
-                          <div class="comment-title">
-                              <p class="comment-meta">{% trans "Le" %} {{ booking.borrowercomment.created_at|date:"d F Y" }} écrit à {{ booking.owner.username }} (<a href="{{ booking.get_absolute_url }}">location {{ booking.product.summary }}</a>) :</p>
-                              <p class="comment-writter">
-                                  <span class="stars empty">
-                                      <span class="stars filled_{{ booking.borrowercomment.note }}"></span>
-                                  </span>
-                              </p>
-                              <p class="clear"></p>
-                          </div>
-                          <div class="comment-comment">
-                              {{ booking.borrowercomment.comment }}
-                          </div>
-                      </div>
-                    {% endif %}
-                </li> 
-                {% endfor %}
-            </ul>
-        </div><!-- tab1 -->
-    </div>
-</div>
-{% endblock%}
+      {% endfor %}
+
+      <div class="form-actions">
+        <input type="submit" name="{{form.instance.booking.pk.hex}}" class="btn big-green" value="Enregistrer">
+      </div>
+    </form>
+  {% endfor %}
+
+{% endblock %}
+

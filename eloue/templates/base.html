@@ -54,9 +54,11 @@
                             <img src="{{ MEDIA_URL }}images/default_avatar.png"  width="20" height="20">
                             {% endif %}
                             {% trans "Tableau de bord" %}  
-                            {% if unread_message_count > 0 %}
-                                ({{unread_message_count}})
-                            {% endif %}
+                            {% with unread_message_count|add:new_booking_demand_count as notification_count %}
+                                {% if notification_count > 0 %}
+                                    ({{notification_count}})
+                                {% endif %}
+                            {% endwith %}
                         </a>
                     {% endif %}
                     {% if not user.is_authenticated %}

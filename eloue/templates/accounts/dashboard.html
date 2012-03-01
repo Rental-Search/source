@@ -22,7 +22,14 @@
                 </a>
             </li>
             <li><a href="{{ borrower_booking }}" class="{% block borrower_booking %}{% endblock %}{% active request  "^/dashboard/borrower/" %}">{% trans "Mes réservations" %}</a></li>
-            <li><a href="{{ owner_product }}" class="{% block owner_product %}{% endblock %}{% active request "^/dashboard/owner/" %}">{% trans "Mes annonces" %}</a></li>
+            <li>
+                <a href="{{ owner_product }}" class="{% block owner_product %}{% endblock %}{% active request "^/dashboard/owner/" %}">
+                    {% trans "Mes annonces" %}
+                    {% if new_booking_demand_count > 0%}
+                        ({{new_booking_demand_count}})
+                    {% endif %}
+                </a>
+            </li>
             <li><a href="{{ patron_edit }}" class="{% active request patron_edit %}">{% trans "Paramètres de compte" %}</a></li>
         </ul>
     </div>{# top-bar #}
@@ -49,7 +56,21 @@
     </div>{# content-aside-profil #}
     <div class="content-main-profil">
         {% block content-main-profil %}
-        
+            {% if thread_list %}
+                Vos nouveaux messages:
+                {% include 'products/partials/message_list.html' %}
+            {% else %}
+                Vous n'avez pas de nouveau message.
+            {% endif %}
+            <a href="{% url inbox %}">Lire tous vos messages.</a>
+            {% if booking_demands %}
+                {% with booking_demands as object_list %}
+                    {% include 'accounts/partials/booking_list_owner.html' %}
+                {% endwith %}
+            {% else %}
+                Vous n'avez pas de nouveau demande de location.
+            {% endif %}
+            <a href="{% url owner_product %}">Aller dans Vos annonces.</a>
         {% endblock %}
     </div>{# content-main-profil #}
 </div>{# profil #}

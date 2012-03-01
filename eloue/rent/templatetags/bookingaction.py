@@ -59,7 +59,7 @@ class PostForm(TemplateWidgetAction):
 		ur'{% load i18n %}'
 		'<li><form action="{{url}}" method="post">'
 		'{% csrf_token %}'
-		'<input type="hidden" name="state" value={{ state }}/>'
+		'<input type="hidden" name="state" value="{{ state }}"/>'
 		'<button class="btn-booking-action {{ state }}">{% trans text %}</button>'
 		'</form></li>'
 	)
