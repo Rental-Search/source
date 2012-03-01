@@ -3,6 +3,7 @@ import re
 from decimal import Decimal as D
 
 import django.forms as forms
+from form_utils.forms import BetterModelForm
 from django.conf import settings
 from django.core.validators import EMPTY_VALUES
 from django.utils.translation import ugettext as _
@@ -13,6 +14,7 @@ from eloue.accounts.models import Patron, COUNTRY_CHOICES, Address
 from eloue.geocoder import GoogleGeocoder
 from eloue.products.fields import FacetField
 from eloue.products.models import Alert, PatronReview, ProductReview, Product, Picture, Category, UNIT, PAYMENT_TYPE, ProductRelatedMessage, MessageThread
+from eloue.products.widgets import PriceTextInput
 from eloue.products.utils import Enum
 from django_messages.forms import ComposeForm
 import datetime
@@ -127,12 +129,6 @@ class ProductReviewForm(forms.ModelForm):
         exclude = ('created_at', 'ip', 'reviewer', 'patron')
 
 
-class ProductReviewForm(forms.ModelForm):
-    class Meta:
-        model = ProductReview
-        exclude = ('created_at', 'ip', 'reviewer', 'product')
-
-
 class MessageEditForm(forms.Form):
     # used in the wizard, and in the reply
     subject = forms.CharField(label=_(u"Subject"), widget=forms.TextInput(attrs={'class': 'inm'}), required=False)
@@ -189,13 +185,9 @@ class MessageEditForm(forms.Form):
         return message_list # ... RETURNED?
 
 
-class PriceTextInput(forms.TextInput):
-    def render(self, name, value, attrs=None):
-        from django.utils.safestring import mark_safe
-        return mark_safe(super(PriceTextInput, self).render(name, value, attrs) + ' <span class="unit"> &euro;</span>')
-
-class ProductForm(forms.ModelForm):
+class ProductForm(BetterModelForm):
     category = TreeNodeChoiceField(label=_(u"Catégorie"), queryset=Category.tree.all(), empty_label=_(u"Choisissez une catégorie"), level_indicator=u'--', widget=forms.Select(attrs={'class': 'selm'}))
+
     summary = forms.CharField(label=_(u"Titre"), max_length=100, widget=forms.TextInput(attrs={'class': 'inm'}))
     picture_id = forms.IntegerField(required=False, widget=forms.HiddenInput())
     picture = forms.ImageField(label=_(u"Photo"), required=False, widget=forms.FileInput(attrs={'class': 'inm'}))
@@ -238,6 +230,14 @@ class ProductForm(forms.ModelForm):
     class Meta:
         model = Product
         fields = ('category', 'summary', 'picture_id', 'picture', 'deposit_amount', 'quantity', 'description')
+        fieldsets = [('category_choice', {'fields': ['category'], 
+                                            'legend': 'Choisissez une catégorie'}),
+                        ('description', {'fields': ['summary', 'picture', 'description', 'quantity'], 
+                                            'legend': 'Description'}),
+                        ('price', {'fields': ['day_price', 'deposit_amount'], 
+                                    'legend': 'Prix'}),
+                        ('price_detail', {'fields': ['hour_price', 'week_end_price', 'week_price', 'two_weeks_price', 'month_price'], 
+                                            'legend': 'Grille des tarifs'})]
 
 
 class ProductEditForm(forms.ModelForm):
@@ -294,6 +294,7 @@ class ProductAddressEditForm(forms.ModelForm):
         model = Product
         fields = ('address',)
 
+
 class ProductAddressForm(forms.ModelForm):
     address1 = forms.CharField(label=_(u"Rue"))
     zipcode = forms.CharField(label=_(u"Code Postal"))
@@ -348,6 +349,7 @@ class ProductAdminForm(forms.ModelForm):
     class Meta:
         model = Product
 
+
 class AlertForm(forms.ModelForm):
     designation = forms.CharField(max_length=100, widget=forms.TextInput(attrs={'class': 'inm'}))
     description = forms.CharField(label=_(u"Description"), widget=forms.Textarea())
@@ -355,6 +357,3 @@ class AlertForm(forms.ModelForm):
     class Meta:
         model = Alert
         fields = ('description', 'designation')
-
-
-

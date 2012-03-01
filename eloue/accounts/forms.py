@@ -4,6 +4,7 @@ import re
 import datetime
 
 import django.forms as forms
+from form_utils.forms import BetterForm
 from django.conf import settings
 from django.contrib.auth import authenticate, login
 from django.contrib.sites.models import Site
@@ -524,6 +525,7 @@ def make_missing_data_form(instance, required_fields=[]):
         'phones__phone': PhoneNumberField(label=_(u"Téléphone"), required=True, widget=forms.TextInput(attrs={'class': 'inm'}))
     })
 
+
     # Are we in presence of a pro ?
     if fields.has_key('is_professional'):
         if instance and getattr(instance, 'is_professional', None)!=None:
@@ -640,8 +642,16 @@ def make_missing_data_form(instance, required_fields=[]):
     def clean_avatar(self):
         self.avatar = self.cleaned_data.get('avatar', None)
         return self.avatar
-    
-    form_class = type('MissingInformationForm', (forms.BaseForm,), {'instance': instance, 'base_fields': fields})
+    class Meta:
+        fieldsets = [('member', {'fields': ['is_professional', 'company_name', 'username', 'password1', 'password2', 'first_name', 'last_name', ], 
+                                    'legend': 'Vous'}),
+                        ('addresses', {'fields': ['addresses', 'addresses__address1', 'addresses__zipcode', 'addresses__city', 'addresses__country'], 
+                                        'legend': 'Adresse existante'}),
+                        ('phone', {'fields': ['phones', 'phones__phone'], 
+                                        'legend': 'Numéro de téléphone'})]
+
+    fields.update({'instance': instance, 'Meta': Meta})
+    form_class = type('MissingInformationForm', (BetterForm,), fields)
     form_class.save = types.MethodType(save, None, form_class)
     form_class.clean_password2 = types.MethodType(clean_password2, None, form_class)
     form_class.clean_username = types.MethodType(clean_username, None, form_class)
