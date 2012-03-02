@@ -223,6 +223,71 @@ class Product(models.Model):
             in itertools.groupby(availables, key=lambda x:x[0].date())
             if key.year == year and key.month == month and key >= datetime.date.today()]
 
+
+class CarProduct(Product):
+
+    brand = models.CharField()
+    model = models.CharField()
+
+    # charactersitiques du vehicule
+    seat_number = models.IntegerField()
+    door_number = models.IntegerField()
+    fuel = models.IntegerField(choices=[(1, 'essence'), (2, 'diesel')])
+    transmission = models.Integerfield(choices=[(1, 'manuel'), (2, 'automatique')])
+    mileage = models.Integerfield(choices=[(1, '- 10000 km'), (2, '10001 - 50000 km')])
+    comsumption = models.DecimalField()
+
+    # options & accessoires
+    air_conditioning = models.BooleanField()
+    power_steering = models.BooleanField()
+    cruise_control = models.BooleanField()
+    gps = models.BooleanField()
+    baby_seat = models.BooleanField()
+    roof_box = models.BooleanField()
+    bike_rack = models.BooleanField()
+    snow_tires = models.BooleanField()
+    snow_chains = models.BooleanField()
+    ski_rack = modeles.BooleanField()
+    cd_player = models.BooleanField()
+    audio_input = models.BooleanField()
+
+    # informations de l'assurance
+    tax_horsepower = models.DecimalField()
+    licence_plate = models.CharField()
+    first_registration_date = models.DateField()
+
+class LocationProduct(Product):
+    
+    capacity = models.Integerfield()
+    private_life = models.Integerfield(
+        choices=[(1, 'Chambre privée'), (2, 'Chambre privée'), (3, 'Maison / Appartement en entier')])
+    chamber_number = models.Integerfield()
+    rules = models.CharField("Regle d'utilisation")
+
+    # services inclus
+    air_conditioning = models.BooleanField()
+    breakfast = models.BooleanField()
+    balcony = models.BooleanField()
+    lockable_chamber = models.BooleanField()
+    tower = models.BooleanField()
+    lift = models.BooleanField()
+    family_friendly = models.BooleanField()
+    gym = models.BooleanField()
+    accessible = models.BooleanField()
+    heating = models.BooleanField()
+    jacuzzi = models.BooleanField()
+    chimney = models.BooleanField()
+    internet_access = models.BooleanField()
+    kitchen = models.BooleanField()
+    parking = models.BooleanField()
+    smoking_accepted = models.BooleanField()
+    ideal_for_events = models.BooleanField()
+    tv = models.BooleanField()
+    washing_machine = models.BooleanField()
+    tumble_dryer = models.BooleanField()
+    computer_with_internet = models.BooleanField()
+
+
 def upload_to(instance, filename):
     return 'pictures/%s.jpg' % uuid.uuid4().hex
 
