@@ -3,39 +3,49 @@
 {% block title %}{% trans "Composer un message"%}{% endblock %}
 
 {% block content %}
-<div class="container-main">
+<style>
+legend {
+	border-bottom: 1px solid #CCC;
+}
+</style>
+<div id="result-page" class="container-main">
 	<ul class="breadcrumb" >
 		<li><a href="#">Nom du produit</a></li>
 		<li>{% trans "Nouveau message" %}</li>
 	</ul>
-	<div class="one-content">
+	<div class="content-main">
 		<h1>{% trans "Nouveau message" %}</h1>
 		<form class="form-horizontal" method="post" action="">
 			{% csrf_token %}
-			{% for formfield in form %}
-			<div class="control-group {% if formfield.errors %} error {% endif %}">
-				<label class="control-label" for="{{ formfield.id_for_label }}">{{ formfield.label }} {% if formfield.field.required %}*{% endif %}</label>
-				<div class="controls">
-            	{{ formfield }}
-            	<p class="help-block">{{ formfield.help_text }}</p>
-            	{% if formfield.errors %}
-            	<span class="help-inline">
-                {% for error in formfield.errors %}
-                    {{ error|escape }}
-                {% endfor %}
-            	</span>
-            {% endif %}
-			</div>
-			{% endfor %}
-		</form>
-		<div class="form-actions">
-	        <input type="hidden" name="{{ step_field }}" value="{{ step0 }}" />
-	        {{ previous_fields|safe }}
-	        {% if product %}
-	        {% else %}
-	        {% endif %}
-	        <button type="submit" class="btn btn-primary">{% trans "Continuer" %}</button>
-    	</div>
+			<fieldset>
+				<legend>Message</legend>
+				{% for formfield in form %}
+				<div class="control-group {% if formfield.errors %} error {% endif %}">
+					<label class="control-label" for="{{ formfield.id_for_label }}">{{ formfield.label }} {% if formfield.field.required %}*{% endif %}</label>
+					<div class="controls">
+	            	{{ formfield }}
+	            	<p class="help-block">{{ formfield.help_text }}</p>
+	            	{% if formfield.errors %}
+	            	<span class="help-inline">
+	                {% for error in formfield.errors %}
+	                    {{ error|escape }}
+	                {% endfor %}
+	            	</span>
+	            {% endif %}
+				</div>
+				{% endfor %}
+			</fieldset>
+			<div class="form-actions">
+		        <input type="hidden" name="{{ step_field }}" value="{{ step0 }}" />
+		        {{ previous_fields|safe }}
+		        {% if product %}
+		        {% else %}
+		        {% endif %}
+		        <button type="submit" class="btn btn-primary">{% trans "Continuer" %}</button>
+	    	</div>
+	    </form>
+	</div>
+	<div class="content-aside">
 	</div>
 </div>
 {% endblock %}
