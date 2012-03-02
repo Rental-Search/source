@@ -12,7 +12,7 @@ from mptt.forms import TreeNodeChoiceField
 from eloue.accounts.models import Patron, COUNTRY_CHOICES, Address
 from eloue.geocoder import GoogleGeocoder
 from eloue.products.fields import FacetField
-from eloue.products.models import Alert, PatronReview, ProductReview, Product, Picture, Category, UNIT, PAYMENT_TYPE, ProductRelatedMessage, MessageThread
+from eloue.products.models import Alert, PatronReview, ProductReview, Product, CarProduct, LocationProduct, Picture, Category, UNIT, PAYMENT_TYPE, ProductRelatedMessage, MessageThread
 from eloue.products.utils import Enum
 from django_messages.forms import ComposeForm
 import datetime
@@ -239,6 +239,26 @@ class ProductForm(forms.ModelForm):
         model = Product
         fields = ('category', 'summary', 'picture_id', 'picture', 'deposit_amount', 'quantity', 'description', 'payment_type')
 
+
+class CarForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(CarForm, self).__init__(*args, **kwargs)
+        self.fields['category'].queryset = Category.objects.get(slug='auto-et-moto').get_descendants(include_self=True)
+
+    class Meta:
+        model = CarProduct
+        exclude = ('payment_type', 'sites', 'currency', 'address', 
+            'is_archived', 'is_allowed', 'modified_at', 'owner')
+
+class LocationForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(LocationForm, self).__init__(*args, **kwargs)
+        self.fields['category'].queryset = Category.objects.get(slug='hebergement').get_descendants(include_self=True)
+
+    class Meta:
+        model = LocationProduct
+        exclude = ('payment_type', 'sites', 'currency', 'address', 
+            'is_archived', 'is_allowed', 'modified_at', 'owner')
 
 class ProductEditForm(forms.ModelForm):
     category = TreeNodeChoiceField(label=_(u"Catégorie"), queryset=Category.tree.all(), empty_label="Choisissez une catégorie", level_indicator=u'--')
