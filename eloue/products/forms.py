@@ -131,8 +131,8 @@ class ProductReviewForm(forms.ModelForm):
 
 class MessageEditForm(forms.Form):
     # used in the wizard, and in the reply
-    subject = forms.CharField(label=_(u"Subject"), widget=forms.TextInput(attrs={'class': 'inm'}), required=False)
-    body = forms.CharField(label=_(u"Body"), widget=forms.Textarea(attrs={'class': 'inm'}))
+    subject = forms.CharField(label=_(u"Sujet"), widget=forms.TextInput(attrs={'class': 'inm'}), required=False)
+    body = forms.CharField(label=_(u"Contenu"), widget=forms.Textarea(attrs={'class': 'inm'}))
 
     def __init__(self, *args, **kwargs):
         super(MessageEditForm, self).__init__(*args, **kwargs)
@@ -191,13 +191,13 @@ class ProductForm(BetterModelForm):
     summary = forms.CharField(label=_(u"Titre"), max_length=100, widget=forms.TextInput(attrs={'class': 'inm'}))
     picture_id = forms.IntegerField(required=False, widget=forms.HiddenInput())
     picture = forms.ImageField(label=_(u"Photo"), required=False, widget=forms.FileInput(attrs={'class': 'inm'}))
-    deposit_amount = forms.DecimalField(label=_(u"Caution"), initial=0, required=False, max_digits=8, decimal_places=2, widget=PriceTextInput(attrs={'class': 'price'}), localize=True)
-    quantity = forms.IntegerField(label=_(u"Quantité"), initial=1, widget=forms.TextInput(attrs={'class': 'inm price'}))
+    deposit_amount = forms.DecimalField(label=_(u"Caution"), initial=0, required=False, max_digits=8, decimal_places=2, widget=PriceTextInput(attrs={'class': 'price'}), localize=True, help_text=_(u"Montant utilisé en cas de dédomagement"))
+    quantity = forms.IntegerField(label=_(u"Quantité"), initial=1, widget=forms.TextInput(attrs={'class': 'inm price'}), help_text=_(u"Le locataire peut réserver plusieurs exemplaires si vous les possédez"))
     description = forms.CharField(label=_(u"Description"), widget=forms.Textarea())
     #payment_type = forms.ChoiceField(choices=PAYMENT_TYPE, required=False, widget=forms.Select(attrs={'class': 'selm'}))
     
     hour_price = forms.DecimalField(label=_(u"L'heure"), required=False, max_digits=10, decimal_places=2, min_value=D('0.01'), widget=PriceTextInput(attrs={'class': 'price'}), localize=True)
-    day_price = forms.DecimalField(label=_(u"La journée"), required=True, max_digits=10, decimal_places=2, min_value=D('0.01'), widget=PriceTextInput(attrs={'class': 'price'}), localize=True)
+    day_price = forms.DecimalField(label=_(u"La journée"), required=True, max_digits=10, decimal_places=2, min_value=D('0.01'), widget=PriceTextInput(attrs={'class': 'price'}), localize=True, help_text=_(u"Prix de location à la journée"))
     week_end_price = forms.DecimalField(label=_(u"Le week-end"), required=False, max_digits=10, decimal_places=2, min_value=D('0.01'), widget=PriceTextInput(attrs={'class': 'price'}), localize=True)
     week_price = forms.DecimalField(label=_(u"La semaine"), required=False, max_digits=10, decimal_places=2, min_value=D('0.01'), widget=PriceTextInput(attrs={'class': 'price'}), localize=True)
     two_weeks_price = forms.DecimalField(label=_(u"Les 15 jours"), required=False, max_digits=10, decimal_places=2, min_value=D('0.01'), widget=PriceTextInput(attrs={'class': 'price'}), localize=True)
@@ -230,14 +230,14 @@ class ProductForm(BetterModelForm):
     class Meta:
         model = Product
         fields = ('category', 'summary', 'picture_id', 'picture', 'deposit_amount', 'quantity', 'description')
-        fieldsets = [('category_choice', {'fields': ['category'], 
-                                            'legend': 'Choisissez une catégorie'}),
-                        ('description', {'fields': ['summary', 'picture', 'description', 'quantity'], 
-                                            'legend': 'Description'}),
+        fieldsets = [('informations', {'fields': ['summary', 'picture', 'description', 'quantity'], 
+                                            'legend': 'Informations'}),
                         ('price', {'fields': ['day_price', 'deposit_amount'], 
-                                    'legend': 'Prix'}),
+                                    'legend': 'Prix de la location'}),
                         ('price_detail', {'fields': ['hour_price', 'week_end_price', 'week_price', 'two_weeks_price', 'month_price'], 
-                                            'legend': 'Grille des tarifs'})]
+                                            'legend': 'Grille des tarifs',
+                                            'description': 'La grille tarifaire permet d\'appliquer un tarif dégressif en fonction de la période. Ces prix ne sont pas obligatoires pour publier l\'annonce, il est possible de les ajouter plus tard.',
+                                            'classes': ['prices-grid', 'hidden-fieldset']})]
 
 
 class ProductEditForm(forms.ModelForm):

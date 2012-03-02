@@ -1,29 +1,87 @@
 {% extends "base.html" %}
-{% load i18n %}
+{% load i18n mptt_tags%}
 
 {% block title %}{% trans "Mettre en location" %}{% endblock %}
 
 {% block content %}
-<div class="container-main">
+<style>
+.control-group {
+	margin-left: 50px;
+}
+legend {
+	border-bottom: 1px solid #CCC;
+}
+.hidden-fieldset {
+	display: none;
+}
+
+.fieldset-description { 
+ 	font-size: 13px;
+ 	color: #364C59;
+ 	font-family: 'Arial', sans-serif;
+ 	font-weight: normal;
+}
+</style>
+<div id="result-page" class="container-main">
 	<ul class="breadcrumb" >
 		<li><a href="{% url home %}">Accueil</a></li>
 		<li>{% trans "Ajouter une annonce" %}</li>
 	</ul>
-	<div class="one-content">
+	<div class="content-main">
 		<h1>Ajouter une annonce</h1>
 		<form enctype="multipart/form-data" class="form-horizontal" method="post" action="">
 			{% csrf_token %}
-			{% for fieldset in form.fieldsets %}
 			<fieldset>
+				<legend>{% trans "Choisissez un catégorie" %}</legend>
+				<div class="control-group">
+					<label class="control-label" for="id_0-category-chosen">{% trans "Catégorie" %} *</label>
+					<div class="controls {% if form.category.errors %} error {% endif %}">
+						{% full_tree_for_model products.Category as categories %}
+						<select id="id_0-category-chosen" name="0-category">
+							{% if not form.category.data %}
+								<option selected="selected">{{ form.category.field.empty_label }}</option>
+							{% endif %}
+						    {% for node,structure in categories|tree_info:"ancestors" %}
+										{% if not node.is_root_node and not node.is_leaf_node %}
+											<optgroup label="==== {{ node }} ====">
+										{% endif %}
+									{% if node.is_leaf_node %}
+									<option value="{{ node.pk }}" {% if form.category.data == node.id %}selected="selected"{% endif %}>
+										{{ node }}
+									</option>
+								{% endif %}
+								{{ structure.closed_levels }}
+								{% if structure.closed_levels|length_is:"1" %}
+								</optgroup>
+								{% endif %}
+							{% endfor %}
+						</select>
+						{% if form.category.errors %}
+			            <span class="help-inline">
+			                {% for error in form.category.errors %}
+			                    {{ error|escape }}
+			                {% endfor %}
+			            </span>
+			            {% endif %}
+					</div>	
+				</div>
+			</fieldset>
+			{% for fieldset in form.fieldsets %}
+			<fieldset class="{{ fieldset.classes }}">
 				{% if fieldset.legend %}
     				<legend>{{ fieldset.legend }}</legend>
+  				{% endif %}
+  				{% if fieldset.description %}
+  					<div class="control-group">
+  						<p class="fieldset-description">{{ fieldset.description }}</p>
+  					</div>
   				{% endif %}
   				{% for formfield in fieldset %}
   				<div class="control-group {% if formfield.errors %} error {% endif %}">
 			        <label class="control-label" for="{{ formfield.id_for_label }}">{{ formfield.label }} {% if formfield.field.required %}*{% endif %}</label>
 			        <div class="controls">
 			            {{ formfield }}
-			            <p class="help-block">{{ formfield.help_text }}</p>
+			            <p class="help-block">{{ formfield.help_text}}</p>
 			            {% if formfield.errors %}
 			            <span class="help-inline">
 			                {% for error in formfield.errors %}
@@ -34,6 +92,11 @@
 			        </div>
 		    	</div>
   				{% endfor %}
+  				{% if fieldset.name == "price" %}
+  				<div class="control-group">
+  					<a href="#" class="more-price">+ {% trans "Ajoutez des prix en fonction de la période" %}</a>
+  				</div>
+  				{% endif %}
 			</fieldset>	
 			{% endfor %}
 		    <div class="form-actions">
@@ -41,5 +104,25 @@
 		    </div>
 		</form>
 	</div>
+	<div class="content-aside">
+	</div>
 </div>
+{% endblock %}
+
+
+
+{% block tail %}
+	{{ block.super }}
+	<script src="//maps.googleapis.com/maps/api/js?sensor=false&amp;libraries=places" type="text/javascript"></script>
+	<script type="text/javascript">
+		$(document).ready(function () {
+    		$("#id_0-category-chosen").chosen();
+
+    		$(".more-price").click(function (event) { 
+     			event.preventDefault();
+     			$(".prices-grid").show();
+     			$(this).hide();
+			});
+		})
+	</script>
 {% endblock %}

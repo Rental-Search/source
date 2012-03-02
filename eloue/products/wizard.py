@@ -72,7 +72,7 @@ class MessageWizard(NewGenericFormWizard):
     
     def __init__(self, *args, **kwargs):
         super(MessageWizard, self).__init__(*args, **kwargs)
-        self.required_fields = ['username', 'password1', 'password2']
+        self.required_fields = ['username', 'password1', 'password2', 'avatar']
     
     def __call__(self, request, product_id, recipient_id, *args, **kwargs):
         product = get_object_or_404(Product, pk=product_id) if product_id is not None else None

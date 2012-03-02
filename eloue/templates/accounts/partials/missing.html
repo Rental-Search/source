@@ -1,5 +1,30 @@
 {% load i18n %}
 
+<style>
+.control-group {
+    margin-left: 50px;
+}
+
+.terms-group {
+    margin-left: 0px;
+}
+
+.hidden-fieldset {
+    display: none;
+}
+
+legend {
+    border-bottom: 1px solid #CCC;
+}
+
+.fieldset-description { 
+    font-size: 13px;
+    color: #364C59;
+    font-family: 'Arial', sans-serif;
+    font-weight: normal;
+}
+
+</style>
 
 {% if is_multipart %}
 <form enctype="multipart/form-data" class="form-horizontal" method="post" action="">
@@ -8,7 +33,8 @@
 {% endif %}
 {% csrf_token %}
     {% for fieldset in form.fieldsets %}
-    <fieldset>
+    {% if fieldset.boundfields|length > 0 %}
+    <fieldset class="{{ fieldset.classes }}">
         {% if fieldset.legend %}
         <legend>{{ fieldset.legend }}</legend>
         {% endif %}
@@ -28,11 +54,22 @@
             </div>
         </div>
         {% endfor %}
-    </fieldset> 
+        {% if fieldset.name == "addresses" %}
+        <div class="control-group">
+            <a href="#" class="add-new-address">+ {% trans "Ajoutez une nouvelle adresse" %}</a>
+        </div>
+        {% endif %}
+        {% if fieldset.name == "phones" %}
+        <div class="control-group">
+            <a href="#" class="add-new-number">+ {% trans "Ajoutez un nouveau numéro de téléphone" %}</a>
+        </div>
+        {% endif %}
+    </fieldset>
+    {% endif %}
     {% endfor %}
     <fieldset>
         <legend>Conditions générales</legend>
-        <div class="control-group">
+        <div class="control-group terms-group">
             {% include "accounts/partials/terms.html" %}
             <p>
             {% blocktrans %}
