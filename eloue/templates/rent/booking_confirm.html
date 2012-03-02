@@ -4,134 +4,42 @@
 {% block title %}{% trans "Confirmez votre réservation" %}{% endblock %}
 
 {% block content %}
-<div id="content-home" class="xgrid">
-    <div id="wizard" class="x12">
-        <div class="wizard-header">
-            <h1>{% trans "Réservation" %}</h1>
-        </div>
-         <ol class="sbs-steps">
- 			{% if not user.is_authenticated %}
- 				<li>{% trans "1. Identifiez-vous" %}</li>
- 				<li class="on">{% trans "2. Confirmetion de location" %}</li>
- 			{% else %}
- 				<li>{% trans "1. Informations" %}</li>
- 				<li class="on">{% trans "2. Confirmation de location" %}</li>
- 			{% endif %}
- 		</ol>
-        <a href="{% url faq-topic-list %}" class="btn big-blue">{% trans "Obtenir de l'aide" %}</a>
-    </div>
-    <div class="x8">
-        <div class="content-header x8 first">
-            <h2>{% trans "Objet réservé" %}</h2>
-        </div>
-        <div class="x8 first" style="margin-bottom: 20px;">
-            <form class="form" action="" method="POST">
-            {% csrf_token %}
-            <a class="pl-img" href="{{ object.get_absolute_url }}">
-				{% with product.pictures.all|first as picture %}
-          {% if picture.thumbnail %}
-           <img src="{{ picture.thumbnail.url }}" alt="product.summary" />
-          {% endif %}
-         {% endwith %}
-			</a>
-			<div class="pl-header">
-				<h2><a href="{{ product.get_absolute_url }}">{{ product.summary|capfirst|truncate:50 }}</a></h2>
-			</div>
-			<div class="pl-content">
-				<div class="pl-desc">{{ product.description|truncate:100 }}</div>
-				<div class="pl-distance">
-					
-				</div>
-				<div class="pl-price">
-				    {% with product.prices.day|first as price %}
-					 <span class="price">{{ price }}</span><br />
-					 <span class="unit">par {{ price.unit|unit }}</span>
-					{% endwith %}
-				</div>
-			</div>
-			<div class="pl-footer">
-				Par <a href="{{ product.owner.get_absolute_url }}" class="owner">{{ product.owner.username }}</a> | {{ product.address.city|capfirst }}, {{ product.address.zipcode }}
-			</div>
-        </div>
-        <div class="content-header x8 first">
-			<h2>{% trans "Dates et total" %}</h2>
-		</div>
-		<div class="x8 first">
-		    <table class="booking-resume">
-                <tr>
-                    <th>{% trans "Début :" %}</th>
-                    <td>{{ preview.started_at|date:"l j F Y"|capfirst }} à {{ preview.started_at|date:"H:i"}}</td>
-                </tr>
-                <tr>
-                    <th>{% trans "Fin :" %}</th>
-                    <td>{{ preview.ended_at|date:"l j F Y"|capfirst }} à {{ preview.ended_at|date:"H:i"}}</td>
-                </tr>
-                <tr>
-                  <th>{% trans "Quantité :" %}</th>
-                  <td>{{ preview.quantity}}</th>
-                </tr>
-                <tr>
-                    <th>{% trans "Prix par jour :" %}</th>
-                    <td class="number">{{ product.prices.day|first }}</td>
-                </tr>
-                <tr>
-                    <th>{% trans "Durée de la location :" %}</th>
-                    <td class="number">{{ preview.started_at|timesince:preview.ended_at }}</td>
-                </tr>
-                <tr class="total">
-                    <th>{% trans "Total :" %}</th>
-                    <td class="number">{{ preview.total_amount|currency }}</td>
-                </tr>
-            </table>
-		</div>
-		<div id="submit-wizard" class="x8 first">
-		    <p>
-		        <input type="hidden" name="{{ step_field }}" value="{{ step0 }}" />
-    	        {{ previous_fields|safe }}
-    	        {% trans "Vous allez être redirigé(e) sur Paypal mais ne serez pas débité(e)" %}
-    		    <input type="submit" class="btn big-green" value="{% trans "Continuer" %}" />
-    		</p>
-		</div>
-	  </form>
-    </div>
-    <div class="x4">
-          <div class="box-info">
-              <h3>{% trans "Louez en toute sécurité !" %}</h3>
-              <ul class="vertical-assurancy">
-                  <li class="va-pp">
-                      {% blocktrans %}
-                        Grâce à <strong>PayPal</strong>, bénéficiez du paiement le plus sécurisé au monde.
-                      {% endblocktrans %}
-                  </li>
-                  <li class="va-assurone">
-                      {% blocktrans %}
-                        Notre <strong>partenaire assureur</strong> garantit l'objets en cas de casse.
-                      {% endblocktrans %}
-                  </li>
-              </ul>
-          </div>
-          <div id="payment-info" class="box-info">
-              {% if product.payment_type == 0 %}
-              <h3>{% trans "Paiement hors ligne" %}</h3>
-                <p>
-                    {% trans "Le propriétaire souhaite le paiement hors ligne (chèque/espèce). Vous le payerez le premier jour de la location."%}
-                </p>
-              {% else %}
-              <h3>{% trans "Paiement en ligne" %}</h3>
-              {% blocktrans %}
-  			  <ol>
-  					<li> Paiement sur payal</li>
-  					<li> Le propriétaire est averti de votre demande</li>
-  					<li> Nous vous informons par mail de sa réponse :<br />
-  					    <ul>
-      						<li>S’il accepte vous serez débité le premier jour de la location</li>
-      						<li>S’il refuse vous ne serez pas débité</li>
-      					</ul>
-      				</li>
-  	      	 </ol>
-  			 {% endblocktrans %}
-  			 {% endif %}
-          </div> 
-	</div>
-</div>
+<div id="result-page" class="container-main">
+  <ul class="breadcrumb">
+    <li><a href="{% url home %}">{% trans "Accueil" %}</a></li>
+    <li>{% trans "Réservation" %}
+  </ul>
+  <div class="content-main">
+    <h2>{% trans "La réservation" %}</h2>
+    <form class="form" action="" method="POST">
+    {% csrf_token %}
+      <table class="table table-bordered booking-resume">
+      <tbody>
+          <tr>
+              <th class="b-state">{% trans "Demande" %}</th>
+              <td><a href="{{product.get_absolute_url}}" class="b-title">{{product.summary|capfirst}}</a></td>
+          </tr>
+          <tr>
+              <th>{% trans "Début" %}</th>
+              <td class="align-center">{{preview.started_at|date:"l d F Y H:i"|capfirst}}</td>
+          </tr> 
+          <th>{% trans "Fin" %}</th>
+              <td class="align-center">{{preview.ended_at|date:"l d F Y H:i"|capfirst}}</td>
+          </tr>
+          <tr>
+              <th>{% trans "Montant" %}</th>
+              <td class="align-center"><b>{{preview.total_amount}} &euro;</b></td>
+      </tbody>
+      </table>
+      <div class="form-actions">
+          <input type="hidden" name="{{ step_field }}" value="{{ step0 }}" />
+          {{ previous_fields|safe }}
+          <button type="submit" class="btn btn-primary">{% trans "Paiment" %}</button>
+      </div>
+    </form>
+  </div>
+  <div class="content-aside">
+
+  </div>
+</div>{# container_main #}
 {% endblock %}

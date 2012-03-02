@@ -62,11 +62,11 @@ class ProductWizard(NewGenericFormWizard):
     
     def get_template(self, step):
         if issubclass(self.form_list[step], EmailAuthenticationForm):
-            return 'products/product_register.html'
+            return 'accounts/auth_login.html'
         elif issubclass(self.form_list[step], ProductForm):
             return 'products/product_create.html'
         else:
-            return 'products/product_missing.html'
+            return 'accounts/auth_missing.html'
             
 class MessageWizard(NewGenericFormWizard):
     

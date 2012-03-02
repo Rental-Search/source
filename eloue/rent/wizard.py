@@ -112,11 +112,11 @@ class BookingWizard(NewGenericFormWizard):
     
     def get_template(self, step):
         if issubclass(self.form_list[step], EmailAuthenticationForm):
-            return 'rent/booking_register.html'
+            return 'accounts/auth_login.html'
         elif issubclass(self.form_list[step], BookingForm):
             return 'products/product_detail.html'
         elif issubclass(self.form_list[step], BookingConfirmationForm):
             return 'rent/booking_confirm.html'
         else:
-            return 'rent/booking_missing.html'
+            return 'accounts/auth_missing.html'
     

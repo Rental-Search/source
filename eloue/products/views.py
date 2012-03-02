@@ -163,7 +163,7 @@ def product_address_edit(request, slug, product_id):
         )
 
     return render_to_response(
-        'products/product_address_edit.html', dictionary={
+        'products/product_edit.html', dictionary={
             'product': product, 
             'forms': forms
         }, 
@@ -190,7 +190,7 @@ def product_price_edit(request, slug, product_id):
             slug=slug, product_id=product_id
         )
     return render_to_response(
-        'products/product_price_edit.html', dictionary={
+        'products/product_edit.html', dictionary={
             'product': product, 
             'forms': forms
         }, 
