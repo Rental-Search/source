@@ -241,6 +241,8 @@ class ProductForm(forms.ModelForm):
 
 
 class CarForm(forms.ModelForm):
+    category = TreeNodeChoiceField(queryset=None, empty_label=_(u"Choisissez une catégorie"), level_indicator=u'--', widget=forms.Select(attrs={'class': 'selm'}))
+    
     def __init__(self, *args, **kwargs):
         super(CarForm, self).__init__(*args, **kwargs)
         self.fields['category'].queryset = Category.objects.get(slug='auto-et-moto').get_descendants(include_self=True)
@@ -251,6 +253,8 @@ class CarForm(forms.ModelForm):
             'is_archived', 'is_allowed', 'modified_at', 'owner')
 
 class LocationForm(forms.ModelForm):
+    category = TreeNodeChoiceField(queryset=None, empty_label=_(u"Choisissez une catégorie"), level_indicator=u'--', widget=forms.Select(attrs={'class': 'selm'}))
+    
     def __init__(self, *args, **kwargs):
         super(LocationForm, self).__init__(*args, **kwargs)
         self.fields['category'].queryset = Category.objects.get(slug='hebergement').get_descendants(include_self=True)

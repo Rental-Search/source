@@ -98,7 +98,20 @@ def search(request):
 def product_create(request, *args, **kwargs):
     wizard = ProductWizard([ProductForm, EmailAuthenticationForm])
     return wizard(request, *args, **kwargs)
-    
+
+@never_cache
+@secure_required
+def carproduct_create(request, *args, **kwargs):
+    from eloue.products.forms import CarForm
+    wizard = ProductWizard([CarForm, EmailAuthenticationForm])
+    return wizard(request, *args, **kwargs)
+
+@never_cache
+@secure_required
+def locationproduct_create(request, *args, **kwargs):
+    from eloue.products.forms import LocationForm
+    wizard = ProductWizard([LocationForm, EmailAuthenticationForm])
+    return wizard(request, *args, **kwargs)
 
 @login_required
 @ownership_required(model=Product, object_key='product_id', ownership=['owner'])
