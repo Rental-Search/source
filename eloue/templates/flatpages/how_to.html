@@ -4,10 +4,12 @@
 {% block title %}{{ flatpage.title }}{% endblock %}
 
 {% block content %}
-<div class="container-main">
-    <div class="one-content">
-    	<h1>{{ flatpage.title }}</h1>
-    	{{ flatpage.content|markdown }}
-    </div>
+<div id="how-to" class="container-main">
+	<ul class="breadcrumb">
+		<li><a href="{% url home %}">{% trans "Accueil" %}</a></li>
+		<li>{% trans "Comment ça marche ?" %}</li>
+	</ul>
+	<h1>{{ flatpage.title }}</h1>
+	{{ flatpage.content|markdown }}
 </div>
 {% endblock %}
