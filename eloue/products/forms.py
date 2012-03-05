@@ -13,7 +13,7 @@ from mptt.forms import TreeNodeChoiceField
 from eloue.accounts.models import Patron, COUNTRY_CHOICES, Address
 from eloue.geocoder import GoogleGeocoder
 from eloue.products.fields import FacetField
-from eloue.products.models import Alert, PatronReview, ProductReview, Product, CarProduct, LocationProduct, Picture, Category, UNIT, PAYMENT_TYPE, ProductRelatedMessage, MessageThread
+from eloue.products.models import Alert, PatronReview, ProductReview, Product, CarProduct, RealEstateProduct, Picture, Category, UNIT, PAYMENT_TYPE, ProductRelatedMessage, MessageThread
 from eloue.products.widgets import PriceTextInput
 from eloue.products.utils import Enum
 from django_messages.forms import ComposeForm
@@ -260,7 +260,7 @@ class ProductForm(BetterModelForm):
 
 class CarForm(ProductForm):
 
-    category = forms.Select(choices=generate_choices(Category.tree.get(slug='auto-et-moto')))
+    category = forms.ChoiceField(choices=generate_choices(Category.tree.get(slug='auto-et-moto')))
 
     class Meta:
         model = CarProduct
@@ -283,11 +283,11 @@ class CarForm(ProductForm):
                             })
                     ]
 
-class LocationForm(ProductForm):
+class RealEstateForm(ProductForm):
     category = forms.ChoiceField(choices=generate_choices(Category.tree.get(slug='hebergement')))
 
     class Meta:
-        model = LocationProduct
+        model = RealEstateProduct
         fieldsets = [
                         ('category', {'fields': ['category'], 'legend': _(u'Choisissez un catégorie')}),
                         ('informations', {'fields': ['summary', 'picture', 'description', 'quantity'], 

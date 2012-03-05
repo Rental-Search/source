@@ -13,41 +13,6 @@
 		<h1>Ajouter une annonce</h1>
 		<form enctype="multipart/form-data" class="form-horizontal" method="post" action="">
 			{% csrf_token %}
-			<fieldset>
-				<legend>{% trans "Choisissez un catégorie" %}</legend>
-				<div class="control-group">
-					<label class="control-label" for="id_0-category-chosen">{% trans "Catégorie" %} *</label>
-					<div class="controls {% if form.category.errors %} error {% endif %}">
-						{% full_tree_for_model products.Category as categories %}
-						<select id="id_0-category-chosen" name="0-category">
-							{% if not form.category.data %}
-								<option selected="selected">{{ form.category.field.empty_label }}</option>
-							{% endif %}
-						    {% for node,structure in categories|tree_info:"ancestors" %}
-										{% if not node.is_root_node and not node.is_leaf_node %}
-											<optgroup label="==== {{ node }} ====">
-										{% endif %}
-									{% if node.is_leaf_node %}
-									<option value="{{ node.pk }}" {% if form.category.data == node.id %}selected="selected"{% endif %}>
-										{{ node }}
-									</option>
-								{% endif %}
-								{{ structure.closed_levels }}
-								{% if structure.closed_levels|length_is:"1" %}
-								</optgroup>
-								{% endif %}
-							{% endfor %}
-						</select>
-						{% if form.category.errors %}
-			            <span class="help-inline">
-			                {% for error in form.category.errors %}
-			                    {{ error|escape }}
-			                {% endfor %}
-			            </span>
-			            {% endif %}
-					</div>	
-				</div>
-			</fieldset>
 			{% for fieldset in form.fieldsets %}
 			<fieldset class="{{ fieldset.classes }}">
 				{% if fieldset.legend %}

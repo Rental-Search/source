@@ -11,7 +11,7 @@ from haystack.query import SearchQuerySet
 
 from queued_search.indexes import QueuedSearchIndex
 
-from eloue.products.models import Alert, Product, CarProduct, LocationProduct
+from eloue.products.models import Alert, Product, CarProduct, RealEstateProduct
 from eloue.rent.models import Booking
 
 __all__ = ['ProductIndex', 'product_search', 'AlertIndex', 'alert_search']
@@ -104,7 +104,7 @@ class CarIndex(ProductIndex):
     def get_queryset(self):
         return CarProduct.on_site.active()
 
-class LocationIndex(ProductIndex):
+class RealEstateIndex(ProductIndex):
     
     capacity = IntegerField(model_attr='capacity')
     private_life = IntegerField(model_attr='private_life')
@@ -159,7 +159,7 @@ class AlertIndex(QueuedSearchIndex):
 try:
     site.register(Product, ProductIndex)
     site.register(CarProduct, CarIndex)
-    site.register(LocationProduct, LocationIndex)
+    site.register(RealEstateProduct, RealEstateIndex)
     site.register(Alert, AlertIndex)
 except AlreadyRegistered:
     pass
@@ -167,6 +167,6 @@ except AlreadyRegistered:
 
 product_search = SearchQuerySet().models(Product).facet('sites').facet('categories').facet('owner').facet('price').narrow('sites:%s' % settings.SITE_ID)
 car_search = SearchQuerySet().models(CarProduct).facet('sites').facet('categories').facet('owner').facet('price').narrow('sites:%s' % settings.SITE_ID)
-location_search = SearchQuerySet().models(LocationProduct).facet('sites').facet('categories').facet('owner').facet('price').narrow('sites:%s' % settings.SITE_ID)
+location_search = SearchQuerySet().models(RealEstateProduct).facet('sites').facet('categories').facet('owner').facet('price').narrow('sites:%s' % settings.SITE_ID)
 alert_search = SearchQuerySet().models(Alert)
 

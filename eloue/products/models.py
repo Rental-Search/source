@@ -256,7 +256,7 @@ class CarProduct(Product):
     licence_plate = models.CharField(_(u"numéro d'immatriculation"), max_length=10)
     first_registration_date = models.DateField(_(u'première mise en circulation'))
 
-class LocationProduct(Product):
+class RealEstateProduct(Product):
     
     capacity = models.IntegerField(_(u'capacité'))
     private_life = models.IntegerField(_(u'vie privée'),

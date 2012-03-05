@@ -8,8 +8,8 @@ class Migration(SchemaMigration):
 
     def forwards(self, orm):
         
-        # Adding model 'LocationProduct'
-        db.create_table('products_locationproduct', (
+        # Adding model 'RealEstateProduct'
+        db.create_table('products_realestateproduct', (
             ('product_ptr', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['products.Product'], unique=True, primary_key=True)),
             ('capacity', self.gf('django.db.models.fields.IntegerField')()),
             ('private_life', self.gf('django.db.models.fields.IntegerField')()),
@@ -37,7 +37,7 @@ class Migration(SchemaMigration):
             ('tumble_dryer', self.gf('django.db.models.fields.BooleanField')(default=False)),
             ('computer_with_internet', self.gf('django.db.models.fields.BooleanField')(default=False)),
         ))
-        db.send_create_signal('products', ['LocationProduct'])
+        db.send_create_signal('products', ['RealEstateProduct'])
 
         # Adding model 'CarProduct'
         db.create_table('products_carproduct', (
@@ -71,8 +71,8 @@ class Migration(SchemaMigration):
 
     def backwards(self, orm):
         
-        # Deleting model 'LocationProduct'
-        db.delete_table('products_locationproduct')
+        # Deleting model 'RealEstateProduct'
+        db.delete_table('products_realestateproduct')
 
         # Deleting model 'CarProduct'
         db.delete_table('products_carproduct')
@@ -239,35 +239,6 @@ class Migration(SchemaMigration):
             'product': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'curiosities'", 'to': "orm['products.Product']"}),
             'sites': ('django.db.models.fields.related.ManyToManyField', [], {'related_name': "'curiosities'", 'symmetrical': 'False', 'to': "orm['sites.Site']"})
         },
-        'products.locationproduct': {
-            'Meta': {'object_name': 'LocationProduct', '_ormbases': ['products.Product']},
-            'accessible': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'air_conditioning': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'balcony': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'breakfast': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'capacity': ('django.db.models.fields.IntegerField', [], {}),
-            'chamber_number': ('django.db.models.fields.IntegerField', [], {}),
-            'chimney': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'computer_with_internet': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'family_friendly': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'gym': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'heating': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'ideal_for_events': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'internet_access': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'jacuzzi': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'kitchen': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'lift': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'lockable_chamber': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'parking': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'private_life': ('django.db.models.fields.IntegerField', [], {}),
-            'product_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['products.Product']", 'unique': 'True', 'primary_key': 'True'}),
-            'rules': ('django.db.models.fields.CharField', [], {'max_length': '60'}),
-            'smoking_accepted': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'towel': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'tumble_dryer': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'tv': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'washing_machine': ('django.db.models.fields.BooleanField', [], {'default': 'False'})
-        },
         'products.messagethread': {
             'Meta': {'object_name': 'MessageThread'},
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
@@ -366,6 +337,35 @@ class Migration(SchemaMigration):
             'product': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'questions'", 'to': "orm['products.Product']"}),
             'status': ('django.db.models.fields.PositiveSmallIntegerField', [], {'default': '0', 'db_index': 'True'}),
             'text': ('django.db.models.fields.CharField', [], {'max_length': '255'})
+        },
+        'products.realestateproduct': {
+            'Meta': {'object_name': 'RealEstateProduct', '_ormbases': ['products.Product']},
+            'accessible': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            'air_conditioning': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            'balcony': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            'breakfast': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            'capacity': ('django.db.models.fields.IntegerField', [], {}),
+            'chamber_number': ('django.db.models.fields.IntegerField', [], {}),
+            'chimney': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            'computer_with_internet': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            'family_friendly': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            'gym': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            'heating': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            'ideal_for_events': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            'internet_access': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            'jacuzzi': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            'kitchen': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            'lift': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            'lockable_chamber': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            'parking': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            'private_life': ('django.db.models.fields.IntegerField', [], {}),
+            'product_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['products.Product']", 'unique': 'True', 'primary_key': 'True'}),
+            'rules': ('django.db.models.fields.CharField', [], {'max_length': '60'}),
+            'smoking_accepted': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            'towel': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            'tumble_dryer': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            'tv': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            'washing_machine': ('django.db.models.fields.BooleanField', [], {'default': 'False'})
         },
         'rent.booking': {
             'Meta': {'object_name': 'Booking'},
