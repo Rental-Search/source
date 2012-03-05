@@ -1,220 +1,110 @@
 {% extends "base.html" %}
-{% load i18n mptt_tags product %}
+{% load i18n mptt_tags%}
 
 {% block title %}{% trans "Mettre en location" %}{% endblock %}
 
 {% block content %}
-<div id="content-home" class="xgrid">
-    <div id="wizard" class="x12">
-        <div class="wizard-header">
-            <h1>{% trans "Mettre en location" %}</h1>
-        </div>
-        <ol>
-            <li class="first on">{% trans "1. Remplissez la fiche" %}</li>
-            <li>{% trans "2. Identifiez-vous" %}</li>
-        </ol>
-        <a href="{% url faq-topic-list %}" class="btn big-blue">{% trans "Obtenir de l'aide" %}</a>
-    </div>
-    <form class="inline" enctype="multipart/form-data" action="" method="POST">
-    <div class="x6">
-        <div class="content-header x6 first">
-            <h2>{% trans "1. Catégorie" %}</h2>
-        </div>
-        {% csrf_token %}
-			<table class="new">
-				<tr>
-				<td colspan="2" {% if form.category.errors %} class="error-field" {% endif %}>
-					{% full_tree_for_model products.Category as categories %}
-					<select id="id_0-category-chosen" class="selm" name="0-category">
-						{% if not form.category.data %}
-							<option selected="selected">{{ form.category.field.empty_label }}</option>
-						{% endif %}
-					    {% for node,structure in categories|tree_info:"ancestors" %}
-									{% if not node.is_root_node and not node.is_leaf_node %}
-										<optgroup label="==== {{ node }} ====">
-									{% endif %}
-								{% if node.is_leaf_node %}
-								<option value="{{ node.pk }}" {% if form.category.data == node.id %}selected="selected"{% endif %}>
-									{{ node }}
-								</option>
+<div id="wizard-page" class="container-main">
+	<ul class="breadcrumb" >
+		<li><a href="{% url home %}">Accueil</a></li>
+		<li>{% trans "Ajouter une annonce" %}</li>
+	</ul>
+	<div class="content-main">
+		<h1>Ajouter une annonce</h1>
+		<form enctype="multipart/form-data" class="form-horizontal" method="post" action="">
+			{% csrf_token %}
+			<fieldset>
+				<legend>{% trans "Choisissez un catégorie" %}</legend>
+				<div class="control-group">
+					<label class="control-label" for="id_0-category-chosen">{% trans "Catégorie" %} *</label>
+					<div class="controls {% if form.category.errors %} error {% endif %}">
+						{% full_tree_for_model products.Category as categories %}
+						<select id="id_0-category-chosen" name="0-category">
+							{% if not form.category.data %}
+								<option selected="selected">{{ form.category.field.empty_label }}</option>
 							{% endif %}
-							{{ structure.closed_levels }}
-							{% if structure.closed_levels|length_is:"1" %}
-							</optgroup>
-							{% endif %}
-						{% endfor %}
-					</select>
-					{% if form.category.errors %}
-				 		{% for error in form.category.errors %}
-							<br />
-					  	<span class="error">{{ error|escape }}</span>
-						{% endfor %}
-				{% endif %}
-				</td>
-			</tr>
-		</table>
-    </div>
-    <div class="x6">
-        <div class="content-header x6 first">
-            <h2>2. Information</h2>
-        </div>
-        <table class="new">
-            <tr>
-				<th><label>{{ form.picture.label }} * :</label></th>
-				<td {% if form.picture.errors %} class="error-field" {% endif %}>
-				  {{ form.picture }}
-				  {% if form.picture.errors %}
-						{% for error in form.picture.errors %}
-									<br />
-					         <span class="error">{{ error|escape }}</span>
-					    {% endfor %}
-				  {% endif %}
-				</td>
-			</tr>
-			<tr>
-				<th><label>{{ form.summary.label }} {% if form.summary.field.required %}*{% endif %} :</label></th>
-				<td {% if form.summary.errors %} class="error-field" {% endif %}>
-					{{ form.summary }}
-					{% if form.summary.errors %}
-					    {% for error in form.summary.errors %}
-									<br />
-					        <span class="error">{{ error|escape }}</span>
-					    {% endfor %}
-					{% endif %}
-				</td>
-			</tr>
-			<tr>
-				<th><label>{{ form.deposit_amount.label }} {% if form.deposit_amount.field.required %}*{% endif %} :</label></th>
-				<td {% if form.deposit_amount.errors %} class="error-field" {% endif %}>
-					{{  form.deposit_amount }} <span class="unit">{% currency_symbol %}</span>
-					{% if form.deposit_amount.errors %}
-					    {% for error in form.deposit_amount.errors %}
-									<br />
-					        <span class="error">{{ error|escape }}</span>
-					    {% endfor %}
-					{% endif %}
-				</td>
-			</tr>
-			<tr>
-				<th><label>{{ form.quantity.label }} {% if form.quantity.field.required %}*{% endif %} :</label></th>
-				<td {% if form.quantity.errors %} class="error-field" {% endif %}>
-					{{  form.quantity }}
-					{% if form.quantity.errors %}
-					    {% for error in form.quantity.errors %}
-									<br />
-					        <span class="error">{{ error|escape }}</span>
-					    {% endfor %}
-					{% endif %}
-				</td>
-			</tr>
-			<tr>
-				<th class="desc-input"><label>{{ form.description.label }} {% if form.description.field.required %}*{% endif %} :</label></th>
-				<td {% if form.description.errors %} class="error-field" {% endif %}>
-					{{ form.description }}
-					{% if form.description.errors %}
-					    {% for error in form.description.errors %}
-									<br />
-					        <span class="error">{{ error|escape }}</span>
-					    {% endfor %}
-					{% endif %}
-				</td>
-			</tr>
-        </table>
-    </div>
-    <div class="content-header x12">
-        <h2>3. {% trans "Prix de location" %}</h2>
-    </div>
-    <div class="x12">
-        <div id="tabsPricesProduct" class="tabsPrices">
-            <ul>
-				<li><a href="#tabs-1">{% trans "Prix simplifiés"%}</a></li>
-			</ul>
-			<div id="tabs-1">
-			    <h5>{% trans "Prix par défaut :" %}</h5>
-			    {% blocktrans %}
-			    <p>Vous pouvez ne remplir qu’une seule case et cliquer sur l’icône <img src="{{MEDIA_URL}}/images/mini_calculator.png" alt="Calculer les prix de location automatiquement" /> pour calculer les autres valeurs automatiquement.</p>
-			    {% endblocktrans %}
-			    <ul class="prices-form clearfix">
-			        <li>
-			            <p class="{% if form.hour_price.errors %}error-field{% endif %}">
-			             {{ form.hour_price }}
-							<span><label class="labs "><span class="current-symbol">{% currency_symbol %}</span> {{ form.hour_price.label }}{% if form.hour_price.field.required %}*{% endif %}</label><span>
-						</p>
-			        </li>
-			        <li>
-			            <p class="{% if form.day_price.errors %}error-field{% endif %}">
-			                {{ form.day_price }}
-							<label class="labs"><span class="current-symbol">{% currency_symbol %}</span> {{ form.day_price.label }}{% if form.day_price.field.required %}*{% endif %}</label>
-			            </p>
-			        </li>
-			        <li>
-			            <p class="{% if form.week_end_price.errors %}error-field{% endif %}">
-			                {{ form.week_end_price }}
-						    <label class="labs"><span class="current-symbol">{% currency_symbol %}</span> {{ form.week_end_price.label }}{% if form.week_end_price.field.required %}*{% endif %}</label>
-			             </p>
-			        </li>
-			        <li>
-			            <p class="{% if form.week_price.errors %}error-field{% endif %}">
-			                {{ form.week_price }}
-							<label class="labs"><span class="current-symbol">{% currency_symbol %}</span> {{ form.week_price.label }}{% if form.week_price.field.required %}*{% endif %}</label>
-			            </p>
-			        </li>
-			        <li>
-			            <p class="{% if form.two_weeks_price.errors %}error-field{% endif %}">
-			                {{ form.two_weeks_price }}
-							<label class="labs"><span class="current-symbol">{% currency_symbol %}</span> {{ form.two_weeks_price.label }}{% if form.two_weeks_price.field.required %}*{% endif %}</label>
-			            </p>
-			        </li>
-			        <li>
-			            <p class="{% if form.month_price.errors %}error-field{% endif%}">
-			                {{ form.month_price }}
-							<label class="labs"><span class="current-symbol">{% currency_symbol %}</span> {{ form.month_price.label }}{% if form.month_price.field.required %}*{% endif %}</label>
-			            </p>
-			        </li>
-			        <li class="calculator"><a href="#">{% trans "Calculer" %}</a></li>
-                    <li class="supp-list-prices"></li>
-			    </ul>
-			    {% if form.hour_price.errors %}
-    			    {% for error in form.hour_price.errors %}
-    			        <span class="error">{{ error|escape }}</span></br>
-    			    {% endfor %}
-    			{% endif %}
-			    {% if form.day_price.errors %}
-    			    {% for error in form.day_price.errors %}
-    			        <span class="error">{{ error|escape }}</span></br>
-    			    {% endfor %}
-    			{% endif %}
-			    {% if form.week_end_price.errors %}
-    			    {% for error in form.week_end_price.errors %}
-    			        <span class="error">{{ error|escape }}</span></br>
-    			    {% endfor %}
-    			{% endif %}
-			    {% if form.week_price.errors %}
-    			    {% for error in form.week_price.errors %}
-    			        <span class="error">{{ error|escape }}</span></br>
-    			    {% endfor %}
-    			{% endif %}
-			    {% if form.two_weeks_price.errors %}
-    			    {% for error in form.two_weeks_price.errors %}
-    			        <span class="error">{{ error|escape }}</span></br>
-    			    {% endfor %}
-    			{% endif %}
-			    {% if form.month_price.errors %}
-    			    {% for error in form.month_price.errors %}
-    			        <span class="error">{{ error|escape }}</span></br>
-    			    {% endfor %}
-    			{% endif %}
-			</div>
-        </div>
-    </div>
-    <div class="x12">
-        <p class="required-field">{% trans "* champ obligatoire" %}</p>
-    </div>
-    <div id="submit-wizard" class="x12">
-        <p>
-		    <input type="submit" class="btn big-green" value={% trans "Continuer &rarr;" %} />
-		</p>
-	</form>
+						    {% for node,structure in categories|tree_info:"ancestors" %}
+										{% if not node.is_root_node and not node.is_leaf_node %}
+											<optgroup label="==== {{ node }} ====">
+										{% endif %}
+									{% if node.is_leaf_node %}
+									<option value="{{ node.pk }}" {% if form.category.data == node.id %}selected="selected"{% endif %}>
+										{{ node }}
+									</option>
+								{% endif %}
+								{{ structure.closed_levels }}
+								{% if structure.closed_levels|length_is:"1" %}
+								</optgroup>
+								{% endif %}
+							{% endfor %}
+						</select>
+						{% if form.category.errors %}
+			            <span class="help-inline">
+			                {% for error in form.category.errors %}
+			                    {{ error|escape }}
+			                {% endfor %}
+			            </span>
+			            {% endif %}
+					</div>	
+				</div>
+			</fieldset>
+			{% for fieldset in form.fieldsets %}
+			<fieldset class="{{ fieldset.classes }}">
+				{% if fieldset.legend %}
+    				<legend>{{ fieldset.legend }}</legend>
+  				{% endif %}
+  				{% if fieldset.description %}
+  					<div class="control-group">
+  						<p class="fieldset-description">{{ fieldset.description }}</p>
+  					</div>
+  				{% endif %}
+  				{% for formfield in fieldset %}
+  				<div class="control-group {% if formfield.errors %} error {% endif %}">
+			        <label class="control-label" for="{{ formfield.id_for_label }}">{{ formfield.label }} {% if formfield.field.required %}*{% endif %}</label>
+			        <div class="controls">
+			            {{ formfield }}
+			            <p class="help-block">{{ formfield.help_text}}</p>
+			            {% if formfield.errors %}
+			            <span class="help-inline">
+			                {% for error in formfield.errors %}
+			                    {{ error|escape }}
+			                {% endfor %}
+			            </span>
+			            {% endif %}
+			        </div>
+		    	</div>
+  				{% endfor %}
+  				{% if fieldset.name == "price" %}
+  				<div class="control-group">
+  					<a href="#" class="more-price">+ {% trans "Ajoutez des prix en fonction de la période" %}</a>
+  				</div>
+  				{% endif %}
+			</fieldset>	
+			{% endfor %}
+		    <div class="form-actions">
+		    	<button type="submit" class="btn btn-primary">{% trans "Continuer" %}</button>
+		    </div>
+		</form>
+	</div>
+	<div class="content-aside">
 	</div>
 </div>
+{% endblock %}
+
+
+
+{% block tail %}
+	{{ block.super }}
+	<script src="//maps.googleapis.com/maps/api/js?sensor=false&amp;libraries=places" type="text/javascript"></script>
+	<script type="text/javascript">
+		$(document).ready(function () {
+    		$("#id_0-category-chosen").chosen();
+
+    		$(".more-price").click(function (event) { 
+     			event.preventDefault();
+     			$(".prices-grid").show();
+     			$(this).hide();
+			});
+		})
+	</script>
 {% endblock %}

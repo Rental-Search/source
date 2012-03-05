@@ -4,14 +4,50 @@
 {% block title %}{% trans "Identifiction" %}{% endblock %}
 
 {% block content %}
-<div class="container-main">
+<div id="wizard-page" class="container-main">
 	<ul class="breadcrumb">
 		<li><a href="{% url home %}">{% trans "Accueil" %}</a></li>
 		<li>{% trans "Identification" %}</li>
 	</ul>
-	<div class="one-content">
-		<h1>{% trans "Informations nécessaires pour la création de votre compte" %}</h1>
+	<div class="content-main">
+		<h1>{% trans "Informations complémentaires" %}</h1>
 		{% include "accounts/partials/missing.html" %}
 	</div>
+	<div class="content-aside">
+	</div>
 </div>
+{% endblock %}
+
+{% block tail %}
+    {{ block.super }}
+    
+    <script src="//maps.googleapis.com/maps/api/js?sensor=false&amp;libraries=places" type="text/javascript"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+        	var addNewAddress = $(".add-new-address");
+        	var addNewPhone = $(".add-new-number");
+
+        	if (addNewAddress.length == 0 ){
+        		$(".new-address").show();
+        	}
+
+        	if (addNewPhone.length == 0 ){
+        		$(".new-number").show();
+        	}
+
+            addNewAddress.click(function (event) { 
+                event.preventDefault();
+                $(".new-address").show();
+                $(this).hide();
+            });
+
+            addNewPhone.click(function (event) { 
+                event.preventDefault();
+                $(".new-number").show();
+                $(this).hide();
+            });
+        })
+    </script>
+
 {% endblock %}

@@ -7,33 +7,52 @@
 <form class="form-horizontal" method="post" action="">
 {% endif %}
 {% csrf_token %}
-    {% for formfield in form %}
-    <div class="control-group {% if formfield.errors %} error {% endif %}">
-        <label class="control-label" for="{{ formfield.id_for_label }}">{{ formfield.label }} {% if formfield.field.required %}*{% endif %}</label>
-        <div class="controls">
-            {{ formfield }}
-            <p class="help-block">{{ formfield.help_text }}</p>
-            {% if formfield.errors %}
-            <span class="help-inline">
-                {% for error in formfield.errors %}
-                    {{ error|escape }}
-                {% endfor %}
-            </span>
-            {% endif %}
+    {% for fieldset in form.fieldsets %}
+    {% if fieldset.boundfields|length > 0 %}
+    <fieldset class="{{ fieldset.classes }}">
+        {% if fieldset.legend %}
+        <legend>{{ fieldset.legend }}</legend>
+        {% endif %}
+        {% for formfield in fieldset %}
+        <div class="control-group {% if formfield.errors %} error {% endif %}">
+            <label class="control-label" for="{{ formfield.id_for_label }}">{{ formfield.label }} {% if formfield.field.required %}*{% endif %}</label>
+            <div class="controls">
+                {{ formfield }}
+                <p class="help-block">{{ formfield.help_text }}</p>
+                {% if formfield.errors %}
+                    <span class="help-inline">
+                    {% for error in formfield.errors %}
+                        {{ error|escape }}
+                    {% endfor %}
+                    </span>
+                {% endif %}
+            </div>
         </div>
-    </div>
+        {% endfor %}
+        {% if fieldset.name == "addresses" %}
+        <div class="control-group">
+            <a href="#" class="add-new-address">+ {% trans "Ajoutez une nouvelle adresse" %}</a>
+        </div>
+        {% endif %}
+        {% if fieldset.name == "phones" %}
+        <div class="control-group">
+            <a href="#" class="add-new-number">+ {% trans "Ajoutez un nouveau numéro de téléphone" %}</a>
+        </div>
+        {% endif %}
+    </fieldset>
+    {% endif %}
     {% endfor %}
-    <div class="control-group">
-        <label class="control-label">{% trans "Conditions générales" %}</label>
-        <div class="controls">
+    <fieldset>
+        <legend>Conditions générales</legend>
+        <div class="control-group terms-group">
             {% include "accounts/partials/terms.html" %}
             <p>
-                {% blocktrans %}
-                    En cliquant sur <strong>"Continuer"</strong> en dessous, vous acceptez <a href="/conditions-generales/" target="_blank">les conditions générales</a>.
-                {% endblocktrans %}
+            {% blocktrans %}
+                En cliquant sur <strong>"Continuer"</strong> en dessous, vous acceptez <a href="/conditions-generales/" target="_blank">les conditions générales</a>.
+            {% endblocktrans %}
             </p>
         </div>
-    </div>
+    </fieldset>
     <div class="form-actions">
         <input type="hidden" name="{{ step_field }}" value="{{ step0 }}" />
         {{ previous_fields|safe }}

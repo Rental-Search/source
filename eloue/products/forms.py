@@ -3,6 +3,7 @@ import re
 from decimal import Decimal as D
 
 import django.forms as forms
+from form_utils.forms import BetterModelForm
 from django.conf import settings
 from django.core.validators import EMPTY_VALUES
 from django.utils.translation import ugettext as _
@@ -13,6 +14,7 @@ from eloue.accounts.models import Patron, COUNTRY_CHOICES, Address
 from eloue.geocoder import GoogleGeocoder
 from eloue.products.fields import FacetField
 from eloue.products.models import Alert, PatronReview, ProductReview, Product, CarProduct, LocationProduct, Picture, Category, UNIT, PAYMENT_TYPE, ProductRelatedMessage, MessageThread
+from eloue.products.widgets import PriceTextInput
 from eloue.products.utils import Enum
 from django_messages.forms import ComposeForm
 import datetime
@@ -127,16 +129,10 @@ class ProductReviewForm(forms.ModelForm):
         exclude = ('created_at', 'ip', 'reviewer', 'patron')
 
 
-class ProductReviewForm(forms.ModelForm):
-    class Meta:
-        model = ProductReview
-        exclude = ('created_at', 'ip', 'reviewer', 'product')
-
-
 class MessageEditForm(forms.Form):
     # used in the wizard, and in the reply
-    subject = forms.CharField(label=_(u"Subject"), widget=forms.TextInput(attrs={'class': 'inm'}), required=False)
-    body = forms.CharField(label=_(u"Body"), widget=forms.Textarea(attrs={'class': 'inm'}))
+    subject = forms.CharField(label=_(u"Sujet"), widget=forms.TextInput(attrs={'class': 'inm'}), required=False)
+    body = forms.CharField(label=_(u"Contenu"), widget=forms.Textarea(attrs={'class': 'inm'}))
 
     def __init__(self, *args, **kwargs):
         super(MessageEditForm, self).__init__(*args, **kwargs)
@@ -189,27 +185,23 @@ class MessageEditForm(forms.Form):
         return message_list # ... RETURNED?
 
 
-class PriceTextInput(forms.TextInput):
-    def render(self, name, value, attrs=None):
-        from django.utils.safestring import mark_safe
-        return mark_safe(super(PriceTextInput, self).render(name, value, attrs) + ' <span class="unit"> &euro;</span>')
+class ProductForm(BetterModelForm):
+    category = TreeNodeChoiceField(label=_(u"Catégorie"), queryset=Category.tree.all(), empty_label=_(u"Choisissez une catégorie"), level_indicator=u'--', widget=forms.Select(attrs={'class': 'selm'}))
 
-class ProductForm(forms.ModelForm):
-    category = TreeNodeChoiceField(queryset=Category.tree.all(), empty_label=_(u"Choisissez une catégorie"), level_indicator=u'--', widget=forms.Select(attrs={'class': 'selm'}))
     summary = forms.CharField(label=_(u"Titre"), max_length=100, widget=forms.TextInput(attrs={'class': 'inm'}))
     picture_id = forms.IntegerField(required=False, widget=forms.HiddenInput())
     picture = forms.ImageField(label=_(u"Photo"), required=False, widget=forms.FileInput(attrs={'class': 'inm'}))
-    deposit_amount = forms.DecimalField(label=_(u"Caution"), initial=0, required=False, max_digits=8, decimal_places=2, widget=forms.TextInput(attrs={'class': 'inm price'}), localize=True)
-    quantity = forms.IntegerField(label=_(u"Quantité"), initial=1, widget=forms.TextInput(attrs={'class': 'inm price'}))
+    deposit_amount = forms.DecimalField(label=_(u"Caution"), initial=0, required=False, max_digits=8, decimal_places=2, widget=PriceTextInput(attrs={'class': 'price'}), localize=True, help_text=_(u"Montant utilisé en cas de dédomagement"))
+    quantity = forms.IntegerField(label=_(u"Quantité"), initial=1, widget=forms.TextInput(attrs={'class': 'inm price'}), help_text=_(u"Le locataire peut réserver plusieurs exemplaires si vous les possédez"))
     description = forms.CharField(label=_(u"Description"), widget=forms.Textarea())
-    payment_type = forms.ChoiceField(choices=PAYMENT_TYPE, required=False, widget=forms.Select(attrs={'class': 'selm'}))
+    #payment_type = forms.ChoiceField(choices=PAYMENT_TYPE, required=False, widget=forms.Select(attrs={'class': 'selm'}))
     
-    hour_price = forms.DecimalField(label=_(u"l'heure"), required=False, max_digits=10, decimal_places=2, min_value=D('0.01'), widget=forms.TextInput(attrs={'class': 'ins'}), localize=True)
-    day_price = forms.DecimalField(label=_(u"la journée"), required=True, max_digits=10, decimal_places=2, min_value=D('0.01'), widget=forms.TextInput(attrs={'class': 'ins'}), localize=True)
-    week_end_price = forms.DecimalField(label=_(u"le week-end"), required=False, max_digits=10, decimal_places=2, min_value=D('0.01'), widget=forms.TextInput(attrs={'class': 'ins'}), localize=True)
-    week_price = forms.DecimalField(label=_(u"la semaine"), required=False, max_digits=10, decimal_places=2, min_value=D('0.01'), widget=forms.TextInput(attrs={'class': 'ins'}), localize=True)
-    two_weeks_price = forms.DecimalField(label=_(u"les 15 jours"), required=False, max_digits=10, decimal_places=2, min_value=D('0.01'), widget=forms.TextInput(attrs={'class': 'ins'}), localize=True)
-    month_price = forms.DecimalField(label=_(u"le mois"), required=False, max_digits=10, decimal_places=2, min_value=D('0.01'), widget=forms.TextInput(attrs={'class': 'ins'}), localize=True)
+    hour_price = forms.DecimalField(label=_(u"L'heure"), required=False, max_digits=10, decimal_places=2, min_value=D('0.01'), widget=PriceTextInput(attrs={'class': 'price'}), localize=True)
+    day_price = forms.DecimalField(label=_(u"La journée"), required=True, max_digits=10, decimal_places=2, min_value=D('0.01'), widget=PriceTextInput(attrs={'class': 'price'}), localize=True, help_text=_(u"Prix de location à la journée"))
+    week_end_price = forms.DecimalField(label=_(u"Le week-end"), required=False, max_digits=10, decimal_places=2, min_value=D('0.01'), widget=PriceTextInput(attrs={'class': 'price'}), localize=True)
+    week_price = forms.DecimalField(label=_(u"La semaine"), required=False, max_digits=10, decimal_places=2, min_value=D('0.01'), widget=PriceTextInput(attrs={'class': 'price'}), localize=True)
+    two_weeks_price = forms.DecimalField(label=_(u"Les 15 jours"), required=False, max_digits=10, decimal_places=2, min_value=D('0.01'), widget=PriceTextInput(attrs={'class': 'price'}), localize=True)
+    month_price = forms.DecimalField(label=_(u"Le mois"), required=False, max_digits=10, decimal_places=2, min_value=D('0.01'), widget=PriceTextInput(attrs={'class': 'price'}), localize=True)
     
     def clean_quantity(self):
         quantity = self.cleaned_data['quantity']
@@ -237,7 +229,15 @@ class ProductForm(forms.ModelForm):
     
     class Meta:
         model = Product
-        fields = ('category', 'summary', 'picture_id', 'picture', 'deposit_amount', 'quantity', 'description', 'payment_type')
+        fields = ('category', 'summary', 'picture_id', 'picture', 'deposit_amount', 'quantity', 'description')
+        fieldsets = [('informations', {'fields': ['summary', 'picture', 'description', 'quantity'], 
+                                            'legend': 'Informations'}),
+                        ('price', {'fields': ['day_price', 'deposit_amount'], 
+                                    'legend': 'Prix de la location'}),
+                        ('price_detail', {'fields': ['hour_price', 'week_end_price', 'week_price', 'two_weeks_price', 'month_price'], 
+                                            'legend': 'Grille des tarifs',
+                                            'description': 'La grille tarifaire permet d\'appliquer un tarif dégressif en fonction de la période. Ces prix ne sont pas obligatoires pour publier l\'annonce, il est possible de les ajouter plus tard.',
+                                            'classes': ['prices-grid', 'hidden-fieldset']})]
 
 
 class CarForm(forms.ModelForm):
@@ -318,6 +318,7 @@ class ProductAddressEditForm(forms.ModelForm):
         model = Product
         fields = ('address',)
 
+
 class ProductAddressForm(forms.ModelForm):
     address1 = forms.CharField(label=_(u"Rue"))
     zipcode = forms.CharField(label=_(u"Code Postal"))
@@ -372,6 +373,7 @@ class ProductAdminForm(forms.ModelForm):
     class Meta:
         model = Product
 
+
 class AlertForm(forms.ModelForm):
     designation = forms.CharField(max_length=100, widget=forms.TextInput(attrs={'class': 'inm'}))
     description = forms.CharField(label=_(u"Description"), widget=forms.Textarea())
@@ -379,6 +381,3 @@ class AlertForm(forms.ModelForm):
     class Meta:
         model = Alert
         fields = ('description', 'designation')
-
-
-

@@ -4,6 +4,7 @@ import re
 import datetime
 
 import django.forms as forms
+from form_utils.forms import BetterForm
 from django.conf import settings
 from django.contrib.auth import authenticate, login
 from django.contrib.sites.models import Site
@@ -511,18 +512,19 @@ def make_missing_data_form(instance, required_fields=[]):
             widget=forms.TextInput(attrs={'class': 'inm'})
         ),
         'password1': forms.CharField(label=_(u"Mot de passe"), max_length=128, required=True, widget=forms.PasswordInput(attrs={'class': 'inm'})),
-        'password2': forms.CharField(label=_(u"A nouveau"), max_length=128, required=True, widget=forms.PasswordInput(attrs={'class': 'inm'})),
+        'password2': forms.CharField(label=_(u"Mot de passe à nouveau"), max_length=128, required=True, widget=forms.PasswordInput(attrs={'class': 'inm'})),
         'first_name': forms.CharField(label=_(u"Prénom"), max_length=30, required=True, widget=forms.TextInput(attrs={'class': 'inm'})),
         'last_name': forms.CharField(label=_(u"Nom"), max_length=30, required=True, widget=forms.TextInput(attrs={'class': 'inm'})),
-        'addresses__address1': forms.CharField(max_length=255, widget=forms.Textarea(attrs={'class': 'inm street', 'placeholder': _(u'Rue')})),
-        'addresses__zipcode': forms.CharField(required=True, max_length=9, widget=forms.TextInput(attrs={
+        'addresses__address1': forms.CharField(label=_(u"Rue"), max_length=255, widget=forms.Textarea(attrs={'class': 'inm street', 'placeholder': _(u'Rue')})),
+        'addresses__zipcode': forms.CharField(label=_(u"Code postal"), required=True, max_length=9, widget=forms.TextInput(attrs={
             'class': 'inm zipcode', 'placeholder': _(u'Code postal')
         })),
-        'addresses__city': forms.CharField(required=True, max_length=255, widget=forms.TextInput(attrs={'class': 'inm town', 'placeholder': _(u'Ville')})),
-        'addresses__country': forms.ChoiceField(choices=COUNTRY_CHOICES, required=True, widget=forms.Select(attrs={'class': 'selm'})),
-        'avatar': forms.ImageField(required=False),
+        'addresses__city': forms.CharField(label=_(u"Ville"), required=True, max_length=255, widget=forms.TextInput(attrs={'class': 'inm town', 'placeholder': _(u'Ville')})),
+        'addresses__country': forms.ChoiceField(label=_(u"Pays"), choices=COUNTRY_CHOICES, required=True, widget=forms.Select(attrs={'class': 'selm'})),
+        'avatar': forms.ImageField(required=False, label=_(u"Photo de profil")),
         'phones__phone': PhoneNumberField(label=_(u"Téléphone"), required=True, widget=forms.TextInput(attrs={'class': 'inm'}))
     })
+
 
     # Are we in presence of a pro ?
     if fields.has_key('is_professional'):
@@ -533,7 +535,7 @@ def make_missing_data_form(instance, required_fields=[]):
     # Do we have an address ?
     if instance and instance.addresses.exists():
         fields['addresses'] = forms.ModelChoiceField(label=_(u"Addresse"), required=False,
-            queryset=instance.addresses.all(), initial=instance.default_address if instance.default_address else instance.addresses.all()[0], widget=forms.Select(attrs={'class': 'selm'}))
+            queryset=instance.addresses.all(), initial=instance.default_address if instance.default_address else instance.addresses.all()[0], widget=forms.Select(attrs={'class': 'selm'}), help_text=_(u"Selectionnez une adresse enregistrée précédemment"))
         for f in fields.keys():
             if "addresses" in f:
                 fields[f].required = False
@@ -541,7 +543,7 @@ def make_missing_data_form(instance, required_fields=[]):
     # Do we have a phone number ?
     if instance and instance.phones.exists():
         fields['phones'] = forms.ModelChoiceField(label=_(u"Téléphone"), required=False, 
-            queryset=instance.phones.all(), initial=instance.phones.all()[0], widget=forms.Select(attrs={'class': 'selm'}))
+            queryset=instance.phones.all(), initial=instance.phones.all()[0], widget=forms.Select(attrs={'class': 'selm'}), help_text=_(u"Selectionnez un numéro de téléphone enregistré précédemment"))
         if fields.has_key('phones__phone'):
             fields['phones__phone'].required = False
     
@@ -640,8 +642,22 @@ def make_missing_data_form(instance, required_fields=[]):
     def clean_avatar(self):
         self.avatar = self.cleaned_data.get('avatar', None)
         return self.avatar
-    
-    form_class = type('MissingInformationForm', (forms.BaseForm,), {'instance': instance, 'base_fields': fields})
+    class Meta:
+        fieldsets = [('member', {'fields': ['is_professional', 'company_name', 'username', 'password1', 'password2', 'first_name', 'last_name', 'avatar'], 
+                                    'legend': 'Vous'}),
+                        ('addresses', {'fields': ['addresses'], 
+                                        'legend': 'Adresse existante'}),
+                        ('new_address', {'fields': ['addresses__address1', 'addresses__zipcode', 'addresses__city', 'addresses__country'],
+                                            'legend': 'Nouvelle adresse',
+                                            'classes': ['new-address', 'hidden-fieldset']}),
+                        ('phones', {'fields': ['phones'], 
+                                        'legend': 'Numéro de téléphone'}),
+                        ('new_phone', {'fields': ['phones__phone'], 
+                                        'legend': 'Nouveau numéro',
+                                        'classes': ['new-number', 'hidden-fieldset']})]
+
+    fields.update({'instance': instance, 'Meta': Meta})
+    form_class = type('MissingInformationForm', (BetterForm,), fields)
     form_class.save = types.MethodType(save, None, form_class)
     form_class.clean_password2 = types.MethodType(clean_password2, None, form_class)
     form_class.clean_username = types.MethodType(clean_username, None, form_class)

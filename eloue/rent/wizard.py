@@ -31,7 +31,7 @@ class BookingWizard(NewGenericFormWizard):
     def __init__(self, *args, **kwargs):
         super(BookingWizard, self).__init__(*args, **kwargs)
         self.required_fields = [
-          'username', 'password1', 'password2', 'is_professional', 'company_name', 'first_name', 'last_name',
+          'username', 'password1', 'password2', 'is_professional', 'company_name', 'first_name', 'last_name', 'avatar',
           'phones', 'phones__phone', 'addresses',
           'addresses__address1', 'addresses__zipcode', 'addresses__city', 'addresses__country'
         ]
@@ -112,11 +112,11 @@ class BookingWizard(NewGenericFormWizard):
     
     def get_template(self, step):
         if issubclass(self.form_list[step], EmailAuthenticationForm):
-            return 'rent/booking_register.html'
+            return 'accounts/auth_login.html'
         elif issubclass(self.form_list[step], BookingForm):
             return 'products/product_detail.html'
         elif issubclass(self.form_list[step], BookingConfirmationForm):
             return 'rent/booking_confirm.html'
         else:
-            return 'rent/booking_missing.html'
+            return 'accounts/auth_missing.html'
     

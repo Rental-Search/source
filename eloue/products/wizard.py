@@ -62,17 +62,17 @@ class ProductWizard(NewGenericFormWizard):
     
     def get_template(self, step):
         if issubclass(self.form_list[step], EmailAuthenticationForm):
-            return 'products/product_register.html'
+            return 'accounts/auth_login.html'
         elif issubclass(self.form_list[step], ProductForm):
             return 'products/product_create.html'
         else:
-            return 'products/product_missing.html'
+            return 'accounts/auth_missing.html'
             
 class MessageWizard(NewGenericFormWizard):
     
     def __init__(self, *args, **kwargs):
         super(MessageWizard, self).__init__(*args, **kwargs)
-        self.required_fields = ['username', 'password1', 'password2']
+        self.required_fields = ['username', 'password1', 'password2', 'avatar']
     
     def __call__(self, request, product_id, recipient_id, *args, **kwargs):
         product = get_object_or_404(Product, pk=product_id) if product_id is not None else None
