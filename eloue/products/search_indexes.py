@@ -80,7 +80,7 @@ class CarIndex(ProductIndex):
     fuel = IntegerField(model_attr='fuel')
     transmission = IntegerField(model_attr='transmission')
     mileage = IntegerField(model_attr='mileage')
-    consumption = DecimalField(model_attr='comsumption')
+    consumption = DecimalField(model_attr='consumption')
 
     # options & accessoires
     air_conditioning = BooleanField(model_attr='air_conditioning')

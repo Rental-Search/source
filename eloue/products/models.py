@@ -92,7 +92,7 @@ class Product(models.Model):
 
     is_archived = models.BooleanField(_(u'archivé'), default=False, db_index=True)
     is_allowed = models.BooleanField(_(u'autorisé'), default=True, db_index=True)
-    category = models.ForeignKey('Category', related_name='products')
+    category = models.ForeignKey('Category', verbose_name=_(u"Catégorie"), related_name='products')
     owner = models.ForeignKey(Patron, related_name='products')
     created_at = models.DateTimeField(blank=True, editable=False)
     sites = models.ManyToManyField(Site, related_name='products')
@@ -235,7 +235,7 @@ class CarProduct(Product):
     fuel = models.IntegerField(_(u'énergie'), choices=[(1, 'essence'), (2, 'diesel')])
     transmission = models.IntegerField(_(u'boite de vitesse'), choices=[(1, 'manuel'), (2, 'automatique')])
     mileage = models.IntegerField(_(u'kilométrage'), choices=[(1, '- 10000 km'), (2, '10001 - 50000 km')])
-    comsumption = models.DecimalField(_(u'consommation'), decimal_places=2, max_digits=5)
+    consumption = models.DecimalField(_(u'consommation'), decimal_places=2, max_digits=5)
 
     # options & accessoires
     air_conditioning = models.BooleanField(_(u'climatisation'))
