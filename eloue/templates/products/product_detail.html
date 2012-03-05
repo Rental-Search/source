@@ -212,12 +212,14 @@
                 {% include "accounts/partials/response_stats.html" %}
             {% endwith %}
         </div>{#  owner #}
+        {% if product_list %}
         <div id="related-product" class="info-block">
             <h2>Objets similaires</h2>
-            {% with 16 as truncation %}
+            {% with 15 as truncation %}
             {% include 'products/partials/result_list.html' %}
             {% endwith %}
         </div>
+        {% endif %}
     </div>{# content-aside #}
 </div>{# container-main #}
 {% endblock %}

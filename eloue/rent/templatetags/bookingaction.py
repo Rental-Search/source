@@ -122,6 +122,15 @@ class CommentLinkWidget(LinkWidget):
 				return True
 		return False
 
+class ViewLinkWidget(LinkWidget):
+	def condition(self, request, booking):
+		from django.core.exceptions import ObjectDoesNotExist
+		try:
+			request.user == booking.owner and booking.ownercomment or booking.borrowercomment
+		except ObjectDoesNotExist:
+			return False
+		return True
+
 LeaveComment = CommentLinkWidget(
 	url_builder=lambda request, booking: reverse(
 		'eloue.accounts.views.comment_booking',
@@ -130,6 +139,16 @@ LeaveComment = CommentLinkWidget(
 		}
 	),
 	text=u'Commenter la location',
+)
+
+ViewComment = ViewLinkWidget(
+	url_builder=lambda request, booking: reverse(
+		'eloue.accounts.views.view_comment',
+		kwargs={
+			'booking_id': booking.pk.hex,
+		}
+	),
+	text=u'Regarder le commentaire',
 )
 
 SendMessageToBorrower = LinkWidget(
@@ -153,8 +172,8 @@ borrower = {
     'incident': (), 
     'refunded': (),
     'deposit': (),
-    'closing': (Incident, SendMessageToOwner, LeaveComment, ),
-    'closed': (Incident, SendMessageToOwner, LeaveComment, ),
+    'closing': (Incident, SendMessageToOwner, LeaveComment, ViewComment),
+    'closed': (Incident, SendMessageToOwner, LeaveComment, ViewComment),
     'outdated': (),
 }
 
@@ -169,8 +188,8 @@ owner = {
     'incident': (), 
     'refunded': (),
     'deposit': (),
-    'closing': (Incident, SendMessageToBorrower, LeaveComment, ),
-    'closed': (Incident, SendMessageToBorrower, LeaveComment, ), 
+    'closing': (Incident, SendMessageToBorrower, LeaveComment, ViewComment),
+    'closed': (Incident, SendMessageToBorrower, LeaveComment, ViewComment), 
     'outdated': (),
 }
 

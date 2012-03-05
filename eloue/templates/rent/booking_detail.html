@@ -87,5 +87,33 @@
 {% endif %}
 {% if request.user == booking.owner %}
     <h2>{%  trans "Informations sur le locataire" %}</h2>
+    <table class="table table-bordered booking-resume">
+    <tr>
+        <td class="b-profil-avatar" style="width: 60px;" rowspan="3">
+            {% if booking.borrower.avatar %}
+                <img src="{{ booking.borrower.avatar.thumbnail.url }}" width="60" height="60" alt="">
+            {% else %}
+                <img src="{{ MEDIA_URL }}images/default_avatar.png" width="60" height="60" alt="">
+            {% endif %}
+        </td>
+        <td style="text-align: center;">
+            {% if booking.state == booking.STATE.AUTHORIZED or booking.state == booking.STATE.REJECTED %}
+                {{ booking.borrower.username|capfirst }}
+            {% else %}
+                {{ booking.borrower.first_name|capfirst }} {{ booking.borrower.last_name|capfirst }}
+            {% endif %}
+        </td>
+    </tr>
+    <tr>
+        <td style="text-align: center;">
+            {% if booking.state == booking.STATE.AUTHORIZED or booking.state == booking.STATE.REJECTED %}
+                {{ booking.borrower.default_address.city }} - {{ booking.borrower.default_address.zipcode }}
+            {% else %}
+                {{ booking.borrower.default_address.address1 }}<br />
+                {{ booking.borrower.default_address.city }} - {{ booking.borrower.default_address.zipcode }}
+            {% endif %}
+        </td>
+    </tr>
+    </table>
 {% endif %}
 {% endblock %}
