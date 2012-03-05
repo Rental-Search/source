@@ -3,13 +3,8 @@
 {% block title %}{% trans "Composer un message"%}{% endblock %}
 
 {% block content %}
-<style>
-legend {
-	border-bottom: 1px solid #CCC;
-}
-</style>
 
-<div id="result-page" class="container-main">
+<div id="wizard-page" class="container-main">
 	<ul class="breadcrumb" >
 		<li><a href="#">Nom du produit</a></li>
 		<li>{% trans "Nouveau message" %}</li>
@@ -24,15 +19,16 @@ legend {
 				<div class="control-group {% if formfield.errors %} error {% endif %}">
 					<label class="control-label" for="{{ formfield.id_for_label }}">{{ formfield.label }} {% if formfield.field.required %}*{% endif %}</label>
 					<div class="controls">
-	            	{{ formfield }}
-	            	<p class="help-block">{{ formfield.help_text }}</p>
-	            	{% if formfield.errors %}
-	            	<span class="help-inline">
-	                {% for error in formfield.errors %}
-	                    {{ error|escape }}
-	                {% endfor %}
-	            	</span>
-	            {% endif %}
+		            	{{ formfield }}
+		            	<p class="help-block">{{ formfield.help_text }}</p>
+		            	{% if formfield.errors %}
+		            	<span class="help-inline">
+			                {% for error in formfield.errors %}
+			                    {{ error|escape }}
+			                {% endfor %}
+		            	</span>
+		            	{% endif %}
+	            	</div>
 				</div>
 				{% endfor %}
 			</fieldset>

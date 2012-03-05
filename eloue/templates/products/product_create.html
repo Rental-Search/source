@@ -4,25 +4,7 @@
 {% block title %}{% trans "Mettre en location" %}{% endblock %}
 
 {% block content %}
-<style>
-.control-group {
-	margin-left: 50px;
-}
-legend {
-	border-bottom: 1px solid #CCC;
-}
-.hidden-fieldset {
-	display: none;
-}
-
-.fieldset-description { 
- 	font-size: 13px;
- 	color: #364C59;
- 	font-family: 'Arial', sans-serif;
- 	font-weight: normal;
-}
-</style>
-<div id="result-page" class="container-main">
+<div id="wizard-page" class="container-main">
 	<ul class="breadcrumb" >
 		<li><a href="{% url home %}">Accueil</a></li>
 		<li>{% trans "Ajouter une annonce" %}</li>

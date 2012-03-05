@@ -4,7 +4,7 @@
 {% block title %}{% trans "Identifiction" %}{% endblock %}
 
 {% block content %}
-<div id="result-page" class="container-main">
+<div id="wizard-page" class="container-main">
 	<ul class="breadcrumb">
 		<li><a href="{% url home %}">{% trans "Accueil" %}</a></li>
 		<li>{% trans "Identification" %}</li>
@@ -42,7 +42,7 @@
                 $(this).hide();
             });
 
-            addNewAddress.click(function (event) { 
+            addNewPhone.click(function (event) { 
                 event.preventDefault();
                 $(".new-number").show();
                 $(this).hide();
