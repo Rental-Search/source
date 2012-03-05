@@ -4,10 +4,10 @@
 {% block title %}{{ flatpage.title }}{% endblock %}
 
 {% block content %}
-<div id="content" class="xgrid">
-    <div class="content-top">
-        <h1>{{ flatpage.title }}</h1>
+<div class="container-main">
+    <div class="one-content">
+    	<h1>{{ flatpage.title }}</h1>
+    	{{ flatpage.content|markdown }}
     </div>
-    {{ flatpage.content|markdown }}
 </div>
 {% endblock %}
