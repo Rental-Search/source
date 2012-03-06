@@ -26,54 +26,53 @@
 {% endblock %}
 
 {% block content-main-profil %}
-  {% trans "Vos commentaires" %}
-  <div class="product-comment">
-    <ul>
-    {% for booking in commented_bookings %}
-      {% if request.user == booking.owner %}
-        {% with booking.ownercomment as comment %}
-          <li>{% include 'rent/partials/comment.html' %}</li>
-        {% endwith %}
-      {% else %}
-        {% with booking.borrowercomment as comment %}
-          <li>{% include 'rent/partials/comment.html' %}</li>
-        {% endwith %}
-      {% endif %}
-    {% endfor %}
-    </ul>
-  </div>
-
-  {% trans "Commentaires a ecrire" %}
-
-  {% for form in forms %}
-    <form method="post" action="">
-      <legend>
-        <a href="{{ form.instance.booking.get_absolute_url }}">booking</a>
-      </legend>
-        {% csrf_token %}
-
-      {% for formfield in form %}
-        <div class="control-group {% if formfield.errors %} error {% endif %}">
-          <label class="control-label" for="{{ formfield.id_for_label }}">{{ formfield.label }} {% if formfield.field.required %}*{% endif %}</label>
-          <div class="controls">
-            {{ formfield }}
-            <p class="help-block">{{ formfield.help_text }}</p>
-            {% if formfield.errors %}
-              <span class="help-inline">
-              {% for error in formfield.errors %}
-                {{ error|escape }} 
-              {% endfor %}
-              </span>
-            {% endif %}
-          </div>
-        </div>
-      {% endfor %}
-
-      <div class="form-actions">
-        <input type="submit" name="{{form.instance.booking.pk.hex}}" class="btn big-green" value="Enregistrer">
-      </div>
-    </form>
+{% if  commented_bookings %}
+  <h2>{% trans "Vos commentaires" %}</h2>
+  <ul>
+  {% for booking in commented_bookings %}
+    {% if request.user == booking.owner %}
+      {% with booking.ownercomment as comment %}
+        <li>{% include 'rent/partials/comment.html' %}</li>
+      {% endwith %}
+    {% else %}
+      {% with booking.borrowercomment as comment %}
+        <li>{% include 'rent/partials/comment.html' %}</li>
+      {% endwith %}
+    {% endif %}
   {% endfor %}
+  </ul>
+{% endif %}
 
+{% if forms %}
+<h2>{% trans "Commentaires à ecrire" %}</h2>
+{% for form in forms %}
+<form method="post" action="">
+  <legend><a href="{{ form.instance.booking.get_absolute_url }}">booking</a></legend>
+  {% csrf_token %}
+  {% for formfield in form %}
+    <div class="control-group {% if formfield.errors %} error {% endif %}">
+      <label class="control-label" for="{{ formfield.id_for_label }}">{{ formfield.label }} {% if formfield.field.required %}*{% endif %}</label>
+      <div class="controls">
+        {{ formfield }}
+        <p class="help-block">{{ formfield.help_text }}</p>
+        {% if formfield.errors %}
+          <span class="help-inline">
+          {% for error in formfield.errors %}
+            {{ error|escape }} 
+          {% endfor %}
+          </span>
+        {% endif %}
+      </div>
+    </div>
+  {% endfor %}
+    <div class="form-actions">
+      <input type="submit" name="{{form.instance.booking.pk.hex}}" class="btn big-green" value="Enregistrer">
+    </div>
+</form>
+{% endfor %}
+{% endif %}
+{% if not commented_bookings and not forms %}
+  <p style="text-align: center;">Pas de commentaires</p>
+{% endif %}
 {% endblock %}
 

@@ -46,31 +46,51 @@
                 <address>{{ user.default_address.city }} - {{ user.default_address.zipcode}}</address>
             </div><!-- avatar-picture -->
             <div class="profil-intro-content">
-                {% if patron.about %}
-                    <p class="profil-description">{{ patron.about }}</p>
+                {% if user.about %}
+                    <p class="profil-description">{{ user.about }}</p>
                 {% endif %}
                 <a href="{% url patron_edit %}" class="btn-contactme">Editer mon profil</a>
             </div><!-- profil-description -->
         </div><!-- profil-block -->
+        {% if user.work or user.school or user.languages.count %}
+        <div class="profil-block">
+            <h3>Plus d'info</h3>
+            {% if user.work %}
+                <h4>{% trans "Travail" %}</h4>
+                <p>{{ user.work }}</p>
+            {% endif %}
+            {% if user.school %}
+                <h4>{% trans "Etudes" %}</h4>
+                <p>{{user.school}}</p>
+            {% endif %}
+            {% if user.languages.count %}
+                <h4>{% trans "Languages Parlées" %}</h4>
+                <p>{{ user.languages.all|join:", "}}</p>
+            {% endif %}
+        </div>{# profil-block #}
+        {% endif %}
+        <div class="profil-block last">
+            {% with user as patron %}
+                {% include "accounts/partials/response_stats.html" %}
+            {% endwith %}
+        </div>{# profil-block #}
         {% endblock %}
     </div>{# content-aside-profil #}
     <div class="content-main-profil">
         {% block content-main-profil %}
+            <h2>{% trans "Vos nouveaux messages" %}</h2>
             {% if thread_list %}
-                Vos nouveaux messages:
-                {% include 'products/partials/message_list.html' %}
+            {% include 'products/partials/message_list.html' %}
             {% else %}
-                Vous n'avez pas de nouveau message.
+            <p>Vous n'avez pas de nouveau message.</p>
             {% endif %}
-            <a href="{% url inbox %}">Lire tous vos messages.</a>
+            <p style="text-align: right;"><a href="{% url inbox %}">Lire tous vos messages.</a></p>
             {% if booking_demands %}
-                {% with booking_demands as object_list %}
-                    {% include 'accounts/partials/booking_list_owner.html' %}
-                {% endwith %}
-            {% else %}
-                Vous n'avez pas de nouveau demande de location.
+            <h2>{% trans "Demandes de location" %}</h2>
+            {% with booking_demands as object_list %}
+                {% include 'accounts/partials/booking_list_owner.html' %}
+            {% endwith %}
             {% endif %}
-            <a href="{% url owner_product %}">Aller dans Vos annonces.</a>
         {% endblock %}
     </div>{# content-main-profil #}
 </div>{# profil #}
