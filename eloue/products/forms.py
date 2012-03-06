@@ -204,10 +204,10 @@ def generate_choices(nodes, empty_value=_(u"Choisissez une catégorie")):
         )
 
 class ProductForm(BetterModelForm):
-    category = forms.ChoiceField(choices=generate_choices(Category.tree.root_nodes()))
+    category = forms.TypedChoiceField(coerce=lambda pk: Category.tree.get(pk=pk), choices=generate_choices(Category.tree.root_nodes()))
 
     summary = forms.CharField(label=_(u"Titre"), max_length=100, widget=forms.TextInput(attrs={'class': 'inm'}))
-    picture_id = forms.IntegerField(required=False, widget=forms.HiddenInput())
+    picture_id = forms.IntegerField(required=True, widget=forms.HiddenInput())
     picture = forms.ImageField(label=_(u"Photo"), required=False, widget=forms.FileInput(attrs={'class': 'inm'}))
     deposit_amount = forms.DecimalField(label=_(u"Caution"), initial=0, required=False, max_digits=8, decimal_places=2, widget=PriceTextInput(attrs={'class': 'price'}), localize=True, help_text=_(u"Montant utilisé en cas de dédomagement"))
     quantity = forms.IntegerField(label=_(u"Quantité"), initial=1, widget=forms.TextInput(attrs={'class': 'inm price'}), help_text=_(u"Le locataire peut réserver plusieurs exemplaires si vous les possédez"))
@@ -233,8 +233,8 @@ class ProductForm(BetterModelForm):
         return deposit_amount
     
     def clean_picture(self):
-        picture = self.cleaned_data['picture']
-        picture_id = self.cleaned_data['picture_id']
+        picture = self.cleaned_data.get('picture')
+        picture_id = self.cleaned_data.get('picture_id')
         if not (picture or picture_id):
             raise forms.ValidationError(_(u"Vous devez ajouter une photo."))
     
@@ -246,10 +246,9 @@ class ProductForm(BetterModelForm):
     
     class Meta:
         model = Product
-        fields = ('category', 'summary', 'picture_id', 'picture', 'deposit_amount', 'quantity', 'description')
         fieldsets = [
                         ('category', {'fields': ['category'], 'legend': _(u'Choisissez un catégorie')}),
-                        ('informations', {'fields': ['summary', 'picture', 'description', 'quantity'], 
+                        ('informations', {'fields': ['summary', 'picture_id', 'picture', 'description', 'quantity'], 
                                             'legend': 'Informations'}),
                         ('price', {'fields': ['day_price', 'deposit_amount'], 
                                     'legend': 'Prix de la location'}),
@@ -259,14 +258,13 @@ class ProductForm(BetterModelForm):
                                             'classes': ['prices-grid', 'hidden-fieldset']})]
 
 class CarForm(ProductForm):
-
-    category = forms.ChoiceField(choices=generate_choices(Category.tree.get(slug='auto-et-moto')))
+    category = forms.TypedChoiceField(coerce=lambda pk: Category.tree.get(pk=pk), choices=generate_choices(Category.tree.get(slug='auto-et-moto')))
 
     class Meta:
         model = CarProduct
         fieldsets = [
                         ('category', {'fields': ['category'], 'legend': _(u'Choisissez un catégorie')}),
-                        ('informations', {'fields': ['summary', 'picture', 'description', 'quantity'], 
+                        ('informations', {'fields': ['summary', 'picture_id', 'picture', 'description', 'quantity'], 
                                             'legend': 'Informations'}),
                         ('price', {'fields': ['day_price', 'deposit_amount'], 
                                     'legend': 'Prix de la location'}),
@@ -284,13 +282,13 @@ class CarForm(ProductForm):
                     ]
 
 class RealEstateForm(ProductForm):
-    category = forms.ChoiceField(choices=generate_choices(Category.tree.get(slug='hebergement')))
+    category = forms.TypedChoiceField(coerce=lambda pk: Category.tree.get(pk=pk), choices=generate_choices(Category.tree.get(slug='hebergement')))
 
     class Meta:
         model = RealEstateProduct
         fieldsets = [
                         ('category', {'fields': ['category'], 'legend': _(u'Choisissez un catégorie')}),
-                        ('informations', {'fields': ['summary', 'picture', 'description', 'quantity'], 
+                        ('informations', {'fields': ['summary', 'picture_id', 'picture', 'description', 'quantity'], 
                                             'legend': 'Informations'}),
                         ('price', {'fields': ['day_price', 'deposit_amount'], 
                                     'legend': 'Prix de la location'}),

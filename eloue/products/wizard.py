@@ -56,8 +56,9 @@ class ProductWizard(NewGenericFormWizard):
             if files and '0-picture' in files:  # Hack to get image working
                 data['0-picture_id'] = Picture.objects.create(image=files['0-picture']).id
                 del files['0-picture']
-            return next_form(data, files, prefix=self.prefix_for_step(step),
-                initial=self.initial.get(step, None), instance=Product(quantity=1, deposit_amount=0))
+            return next_form(
+                data, files, prefix=self.prefix_for_step(step),
+                initial=self.initial.get(step, None), instance=next_form._meta.model(quantity=1, deposit_amount=0))
         return super(ProductWizard, self).get_form(step, data, files)
     
     def get_template(self, step):

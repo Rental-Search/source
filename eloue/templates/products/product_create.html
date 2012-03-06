@@ -11,7 +11,12 @@
 	</ul>
 	<div class="content-main">
 		<h1>Ajouter une annonce</h1>
+
+		{% if form.is_multipart %}
 		<form enctype="multipart/form-data" class="form-horizontal" method="post" action="">
+		{% else %}
+		<form class="form-horizontal" method="post" action="">
+		{% endif %}
 			{% csrf_token %}
 			{% for fieldset in form.fieldsets %}
 			<fieldset class="{{ fieldset.classes }}">
@@ -24,20 +29,24 @@
   					</div>
   				{% endif %}
   				{% for formfield in fieldset %}
-  				<div class="control-group {% if formfield.errors %} error {% endif %}">
-			        <label class="control-label" for="{{ formfield.id_for_label }}">{{ formfield.label }} {% if formfield.field.required %}*{% endif %}</label>
-			        <div class="controls">
-			            {{ formfield }}
-			            <p class="help-block">{{ formfield.help_text}}</p>
-			            {% if formfield.errors %}
-			            <span class="help-inline">
-			                {% for error in formfield.errors %}
-			                    {{ error|escape }}
-			                {% endfor %}
-			            </span>
-			            {% endif %}
-			        </div>
-		    	</div>
+  					{% if formfield.is_hidden %}
+  						{{formfield}}
+  					{% else %}
+		  				<div class="control-group {% if formfield.errors %} error {% endif %}">
+					        <label class="control-label" for="{{ formfield.id_for_label }}">{{ formfield.label }} {% if formfield.field.required %}*{% endif %}</label>
+					        <div class="controls">
+					            {{ formfield }}
+					            <p class="help-block">{{ formfield.help_text}}</p>
+					            {% if formfield.errors %}
+					            <span class="help-inline">
+					                {% for error in formfield.errors %}
+					                    {{ error|escape }}
+					                {% endfor %}
+					            </span>
+					            {% endif %}
+					        </div>
+				    	</div>
+			    	{% endif %}
   				{% endfor %}
   				{% if fieldset.name == "price" %}
   				<div class="control-group">
