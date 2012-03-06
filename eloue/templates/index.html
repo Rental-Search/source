@@ -101,6 +101,7 @@
         $(document).ready(function() {
             navigator.geolocation.getCurrentPosition(SuccessBuilder(2, function(){window.location.reload();}));
         });
+        geolocation_stuff();
     </script>
 {% endblock %}
 

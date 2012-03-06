@@ -212,6 +212,7 @@
     {{block.super}}
     <script src="//maps.googleapis.com/maps/api/js?sensor=false&amp;libraries=places" type="text/javascript"></script>
     <script type="text/javascript" charset="utf-8">
+        geolocation_stuff();
         navigator.geolocation.getCurrentPosition(
             SuccessBuilder(
                 2, function() {
@@ -226,6 +227,7 @@
                 zoom: 12,
                 disableDefaultUI: true,
                 center: myLatlng,
+                zoomControl: true,
                 mapTypeId: google.maps.MapTypeId.ROADMAP
             }
             var map = new google.maps.Map(document.getElementById("map-canvas"), myOptions);

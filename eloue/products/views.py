@@ -273,7 +273,7 @@ def thread_details(request, thread_id):
     if request.method == "POST":
         editForm = MessageEditForm(request.POST, prefix='0')
         if editForm.is_valid():
-            if editForm.cleaned_data['jointOffer']:
+            if editForm.cleaned_data.get('jointOffer'):
                 booking = Booking(
                   product=product, 
                   owner=owner, 
