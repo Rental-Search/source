@@ -50,13 +50,13 @@
        	</div><!-- pl-content -->
        	<ul class="pl-bookings" style="float: left; padding: 10px; margin-left: 40px;">
        		<li style="height: auto; margin-bottom: 5px;">
-       			<span class="label label-success">3 demandes de réservation</span>
+       			<span class="label label-success">{{product.demand_count}} demandes de réservation</span>
        		</li>
  			<li style="height: auto; margin-bottom: 5px; border-bottom: 0px;">
- 				<span class="label label-warning">3 réservations à venir</span>
+ 				<span class="label label-warning">{{product.pending_count}} réservations à venir</span>
  			</li>
        		<li style="height: auto;">
-       			<span class="label">2 réservation en cours</span>
+       			<span class="label">{{product.ongoing_count}} réservation en cours</span>
        		</li>
        	</ul>
        	<div style="float: right; padding-top: 23px;">

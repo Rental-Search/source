@@ -656,8 +656,9 @@ def make_missing_data_form(instance, required_fields=[]):
                                         'legend': 'Nouveau numéro',
                                         'classes': ['new-number', 'hidden-fieldset']})]
 
-    fields.update({'instance': instance, 'Meta': Meta})
-    form_class = type('MissingInformationForm', (BetterForm,), fields)
+    class_dict = fields.copy()
+    class_dict.update({'instance': instance, 'Meta': Meta})
+    form_class = type('MissingInformationForm', (BetterForm,), class_dict)
     form_class.save = types.MethodType(save, None, form_class)
     form_class.clean_password2 = types.MethodType(clean_password2, None, form_class)
     form_class.clean_username = types.MethodType(clean_username, None, form_class)

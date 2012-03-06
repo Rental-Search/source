@@ -37,7 +37,7 @@ class BookingWizard(NewGenericFormWizard):
         ]
 
     def __call__(self, request, *args, **kwargs):
-        product = get_object_or_404(Product.on_site, pk=kwargs['product_id'])
+        product = get_object_or_404(Product.on_site.select_related(), pk=kwargs['product_id'])
         from eloue.products.search_indexes import product_search
         self.extra_context={
             'product_list': product_search.more_like_this(product)[:4]
@@ -105,7 +105,7 @@ class BookingWizard(NewGenericFormWizard):
             self.extra_context['preview'] = form.cleaned_data
     
     def parse_params(self, request, *args, **kwargs):
-        product = get_object_or_404(Product.on_site.active(), pk=kwargs['product_id'])
+        product = get_object_or_404(Product.on_site.active().select_related(), pk=kwargs['product_id'])
         self.extra_context['product'] = product
         self.extra_context['search_form'] = FacetedSearchForm()
         self.extra_context['comments'] = BorrowerComment.objects.filter(booking__product=product)
