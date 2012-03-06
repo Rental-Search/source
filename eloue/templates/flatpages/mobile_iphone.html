@@ -4,12 +4,14 @@
 {% block title %}{{ flatpage.title }}{% endblock %}
 
 {% block content %}
-<div id="content" class="xgrid">
-    <div class="content-top">
-        <h1>{{ flatpage.title }}</h1>
-    </div>
-    <div id="iphone-col1" class="x7">
-        <ul id="iphone-features" class="iphone-desc">
+<div id="mobile-iphone" class="container-main">
+	<ul class="breadcrumb">
+		<li><a href="{% url home %}">{% trans "Accueil" %}</a></li>
+		<li>{% trans "e-loue sur iPhone" %}</li>
+	</ul>
+	<h1>{% trans "e-loue sur iPhone" %}</h1>
+	<div class="content-main">
+		<ul id="iphone-features" class="iphone-desc">
 	        <li class="increase">
 	            <strong>Augmenter</strong><br />
 	            ses revenus
@@ -23,66 +25,7 @@
 	            ses biens
 	        </li>
 	    </ul>
-	    <a href="http://itunes.apple.com/fr/app/e-loue-mobile-app/id427538545" class="iphone-dl-link">
-	        Télécharger l'application mobile e-loue
-	    </a>
-	    <div class="iphone-desc">
-	        <div class="content-header">
-	            <h2>La première application pour TOUT louer !</h2>
-	        </div>
-	        <p>
-                Vous avez chez vous des objets peu utilisés? Vous cherchez à rentabiliser des achats ? Vous
-                vous apprêtez à jeter du vieux matériel ? <br>Grâce à l’application e-loue, vous allez pouvoir
-                leur donner une seconde vie tout en accédant à une source de revenu supplémentaire. En 3 clics
-                seulement, vous les proposez en location à toute la communauté de loueurs de e­loue.com. 
-            </p>
-	    </div>
-	    <div class="iphone-desc">
-    	    <div class="content-header">
-    	        <h2>Tout type d'objet</h2>
-    	    </div>
-    	    <p>
-    	        Vous pouvez proposer tout type d’objet : outil de bricolage, véhicule, vêtement, ustensile de
-    	        cuisine, console de jeux vidéo, matériel High-­‐Tech, immobilier de vacance ... Bien sûr, chaque
-    	        location que vous effectuez sur e-loue est encadrée par un contrat de location, et votre objet peut 
-    	        être assuré contre toute éventuelle détérioration. A l’issue de la location, vous recevez votre 
-    	        paiement en toute sécurité. En louant vos objets, vous menez une action écologique en limitant la 
-    	        surconsommation et ses conséquences (émission de CO2 due à la 
-    	        surproduction, pollution à grande échelle, réduction de votre quantité de déchets ...). 
-            </p>
-    	</div>
-	</div>
-	<div id="iphone-col2" class="x5">
-	    <div class="iphone-slides">
-	        <div id="slideshow">
-	            <img src="{{ MEDIA_URL }}images/iphone/add_rental.png" width="251" height="376" />
-	            <img src="{{ MEDIA_URL }}images/iphone/product_form.png" width="251" height="376" />
-	            <img src="{{ MEDIA_URL }}images/iphone/booking_success.png" width="251" height="376" />
-	            <img src="{{ MEDIA_URL }}images/iphone/search.png" width="251" height="376" />
-	        </div>
-	    </div>
-	    <div class="iphone-refection"></div>
-	    <div id="nav-slideshow"></div>
-	    <div class="box-tools">
-	        <h3>Mode d'emploi</h3>
-	        <p>
-	            L’application est très simple d’utilisation : 
-	        </p>
-	        <ul>
-	            <li>
-	                Vous prenez en photo l’objet que vous souhaitez proposer en location.
-	            </li>
-	            <li>
-	                Vous remplissez un court formulaire (titre, montant de la location, éventuelle caution ...).
-	            </li>
-	            <li class="last">
-	                Vous créez votre compte si ce n'est pas déjà fait et vous publiez.
-	            </li>
-	        </ul>
-	        <p>
-	            Si un loueur est intéressé par votre annonce vous serez contacté(e)<br /> par e-mail !
-	        </p>  
-	    </div>
-	</div>
-</div>
+		
+	</div>{# content-main #}
+</div>{# container-main #}
 {% endblock %}
