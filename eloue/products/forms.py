@@ -275,9 +275,20 @@ class CarForm(ProductForm):
                         ('car_description', {'fields': ['brand', 'model'],
                                     'legend': _(u'Description du véhicule')
                             }),
+                        ('insurance', {
+                            'fields': ['tax_horsepower', 'licence_plate', 'first_registration_date'],
+                            'legend': _(u'Information de l’assurance')
+                            }),
                         ('car_characteristics', {
                             'fields': ['seat_number', 'door_number', 'fuel', 'transmission', 'mileage', 'consumption'],
                             'legend': _(u'Caractéristique du véhicule'),
+                            }),
+                        ('options', {
+                            'fields': ['air_conditioning', 'power_steering', 
+                                'cruise_control', 'gps', 'baby_seat', 'roof_box', 
+                                'bike_rack', 'snow_tires', 'snow_chains', 
+                                'ski_rack', 'cd_player', 'audio_input'],
+                            'legend': _(u'Options & accessoires'),
                             })
                     ]
 
