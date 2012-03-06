@@ -51,6 +51,10 @@
         <tr>
             <th>{% trans "Montant" %}</th>
             <td class="align-center"><b>{{booking.total_amount}} &euro;</b></td>
+        </tr>
+        <tr class="b-action">
+            <td colspan="2">{% bookingaction request booking %}</td>
+        </tr>
     </tbody>
 </table>
 

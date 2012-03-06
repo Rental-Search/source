@@ -48,17 +48,6 @@
         	</p>
         	{% endwith %}
        	</div><!-- pl-content -->
-       	<ul class="pl-bookings" style="float: left; padding: 10px; margin-left: 40px;">
-       		<li style="height: auto; margin-bottom: 5px;">
-       			<span class="label label-success">{{product.demand_count}} demandes de réservation</span>
-       		</li>
- 			<li style="height: auto; margin-bottom: 5px; border-bottom: 0px;">
- 				<span class="label label-warning">{{product.pending_count}} réservations à venir</span>
- 			</li>
-       		<li style="height: auto;">
-       			<span class="label">{{product.ongoing_count}} réservation en cours</span>
-       		</li>
-       	</ul>
        	<div style="float: right; padding-top: 23px;">
        		<a href="{% url owner_product_edit product.slug product.pk %}" class="btn btn-contactme">{% trans "Modifier l'annonce" %}</a>
        	</div>
