@@ -10,6 +10,8 @@
 
 	margin-bottom: 20px;
 
+  #font > .sans-serif('Ubuntu', normal, @basefont);
+
 	h1 {
 		background: transparent url("../images/content-h-bg.png") repeat-x 0 bottom;
 		font-weight: bold;
@@ -56,26 +58,33 @@
       .ht-desc
       {
         color: #9EB0BA;
-      }
-        .ht-desc span
+        font-size: 13px;
+
+        span
         {
           color: #364C59;
           font-size: 23px;
           line-height: 32px;
         }
+      }
+        
 		}
 	}
 }
 
 .ht-fonction {
 	.makeColumn(12);
+
 	background-color: #f5f7f9;
-    width: 860px;
+  width: 860px;
 	margin-left: 60px;
 	.rounded(15px);
 	border-radius: 15px;
 	padding: 10px 0;
 	margin-bottom: 20px;
+
+  #font > .sans-serif('Ubuntu', normal, @basefont);
+  color: @blueDark;
 
 	h1
         {
@@ -120,7 +129,7 @@
             {
               font-size: 18px;
               font-weight: bold;
-              line-height: 26px;
+              line-height: 28px;
             }
           
         } 
