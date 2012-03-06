@@ -32,8 +32,8 @@ def notify(func):
             releases()
         if 'git_branch' not in env:
             env.git_branch = "master"
-        deployed = run("cd %(current_release)s; git rev-parse HEAD" % env)[:7]
-        deploying = run("cd %(current_release)s; git fetch deploy; git rev-parse deploy/%(git_branch)s" % env)[:7]
+        #deployed = run("cd %(current_release)s; git rev-parse HEAD" % env)[:7]
+        #deploying = run("cd %(current_release)s; git fetch deploy; git rev-parse deploy/%(git_branch)s" % env)[:7]
         return_value = func(*args, **kwargs)
         c = Campfire(env.campfire_domain, env.campfire_token, ssl=True)
         room = c.find_room_by_name(env.campfire_room)
@@ -79,6 +79,7 @@ def staging():
     env.campfire_token = "b96565fb9b8f49f0e18a6a194d7ac97812e154d6"
     env.campfire_domain = "e-loue"
     env.github_url = "https://github.com/e-loue/eloue"
+    env.git_branch = "staging"
 
 def monkeysandbox():
     """Defines sandbox environment"""
@@ -171,7 +172,7 @@ def update_env():
         releases()
     with cd(env.current_release):
         run("virtualenv -q --no-site-packages --unzip-setuptools env")
-        run("env/bin/pip -q install -E env -r %(env_file)s" % {'env_file': env.env_file})
+        run("env/bin/pip -q install -r %(env_file)s" % {'env_file': env.env_file})
     permissions()
 
 def migrate():
