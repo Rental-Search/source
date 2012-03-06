@@ -223,6 +223,21 @@ class Product(models.Model):
             in itertools.groupby(availables, key=lambda x:x[0].date())
             if key.year == year and key.month == month and key >= datetime.date.today()]
 
+    @property
+    def demand_count(self):
+        from eloue.rent.models import Booking
+        return self.bookings.filter(state=Booking.STATE.AUTHORIZED).count()
+
+    @property
+    def pending_count(self):
+        from eloue.rent.models import Booking
+        return self.bookings.filter(state=Booking.STATE.PENDING).count()
+
+    @property
+    def ongoing_count(self):
+        from eloue.rent.models import Booking
+        return self.bookings.filter(state=Booking.STATE.ONGOING).count()
+    
 def upload_to(instance, filename):
     return 'pictures/%s.jpg' % uuid.uuid4().hex
 
