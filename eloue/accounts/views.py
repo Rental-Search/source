@@ -118,12 +118,15 @@ GEOLOCATION_SOURCE = Enum([
 
 @require_POST
 def user_geolocation(request):
+
     stored_location = request.session.setdefault('location', {})
 
+    source = int(request.POST['source'])
     if stored_location:
         current_source = stored_location.get('source', max(GEOLOCATION_SOURCE.values())+1)
-        if current_source < int(request.POST['source']) or \
-            current_source == int(request.POST['source']) and current_source == GEOLOCATION_SOURCE.BROWSER:
+        print current_source, source
+        print current_source < source, not simplejson.loads(request.POST.get('forced'))
+        if (current_source <= source) and not simplejson.loads(request.POST.get('forced')):
             return HttpResponse(simplejson.dumps(
                 {'status': 'already_geolocated'}),
                 mimetype="application/json"
@@ -146,7 +149,7 @@ def user_geolocation(request):
         countries = filter(lambda component: 'country' in component['types'], address_components)
         country = next(iter(map(lambda component: component['long_name'], countries)), None)
         fallback = next(iter(map(lambda component: component['long_name'], address_components)), None) if not (city or region or country) else None
-        region_coords, region_radius = geocoder.GoogleGeocoder().geocode(region+', '+country)[1:3] if region and country else (None, None)
+        region_coords, region_radius = geocoder.GoogleGeocoder().geocode(', '.join([region, country]))[1:3] if region and country else (None, None)
 
         stored_location.update({
             'city': city,
@@ -157,16 +160,23 @@ def user_geolocation(request):
             'fallback': fallback
         })
         if 'radius' not in request.POST:
-            try:
-                viewport = location['geometry']['viewport']
-                latitudes = viewport.get('Y') or viewport['ba']
-                longitudes = viewport['$']
-                from geopy import distance, Point
-                sw = Point(latitudes['b'], longitudes['b'])
-                ne = Point(latitudes['d'], longitudes['d'])
-                radius = (distance.distance(sw, ne).km // 2) + 1
-            except KeyError:
-                radius = 5
+            if source == GEOLOCATION_SOURCE.MANUAL:
+                try:
+                    viewport = location['geometry']['viewport']
+                    latitudes = viewport.get('Y') or viewport['ba']
+                    longitudes = viewport['$']
+                    from geopy import distance, Point
+                    sw = Point(latitudes['b'], longitudes['b'])
+                    ne = Point(latitudes['d'], longitudes['d'])
+                    radius = (distance.distance(sw, ne).km // 2) + 1
+                except KeyError as e:
+                    print 'szar', e
+                    city_coords, city_radius = geocoder.GoogleGeocoder().geocode(', '.join([city, region, country]))[1:3] if region and country else (None, None)
+                    radius = city_radius or region_radius
+            else:
+                print 'fos' 
+                city_coords, city_radius = geocoder.GoogleGeocoder().geocode(', '.join([city, region, country]))[1:3] if region and country else (None, None)
+                radius = city_radius or region_radius
 
     if 'coordinates' in request.POST:
         coordinates = simplejson.loads(request.POST['coordinates'])

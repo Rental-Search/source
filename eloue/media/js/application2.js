@@ -31,21 +31,25 @@ function safeMethod(method) {
     return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
 }
 
-function SuccessBuilder(priority, geocodeSuccess) {
+function SuccessBuilder(priority, forced, geocodeSuccess) {
     return function(position) {
-        $.cookie('geocoding', 'success', { expires: 7 });
+        $.cookie('geocoding', 'success', { expires: 1, path: '/' });
         geocoder = new google.maps.Geocoder();
         latlon = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
         geocoder.geocode(
             {'latLng':latlon},
             function(result) {
-                report_location_back(priority, result[0], latlon, geocodeSuccess);
+                report_location_back(priority, forced, result[0], latlon, geocodeSuccess);
             }
         );
     };
 }
 
-function report_location_back(source, address, coords, success) {
+function geocoder_error_handler(error) {
+    $.cookie('geocoding', 'failed', { expires: 1, path: '/' });
+}
+
+function report_location_back(source, forced, address, coords, success) {
   $(document).ajaxSend(function(event, xhr, settings) {
     if (!safeMethod(settings.type) && sameOrigin(settings.url)) {
         xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
@@ -60,10 +64,12 @@ function report_location_back(source, address, coords, success) {
         lat: coords.lat(),
         lon: coords.lng()
       }),
-      source: source
+      source: source,
+      forced: forced
     },
     success: function(response) {
         if (response["status"] == "OK") {
+            $.cookie('geocoding', 'success', { expires: 1, path: '/' });
             success();
         }
     }
@@ -71,10 +77,20 @@ function report_location_back(source, address, coords, success) {
 }
 
 geolocation_stuff = function() {
-    autocomplete = new google.maps.places.Autocomplete(document.getElementById("id_l"), {types: ['geocode']});
+    autocomplete = new google.maps.places.Autocomplete(
+        document.getElementById("id_l"), 
+        {
+            types: ['geocode'], 
+            bounds: new google.maps.LatLngBounds(
+                new google.maps.LatLng(42.13316390, -5.982051999999999), 
+                new google.maps.LatLng(50.03800220, 10.409550)
+            )
+        }
+    );
+    
     google.maps.event.addListener(autocomplete, 'place_changed', function() {
       place = autocomplete.getPlace();
-      report_location_back(1, place, place.geometry.location, function() {window.location.reload();});
+      report_location_back(1, true, place, place.geometry.location, function() {window.location.reload();});
     });
 
     $("#rayon_update").click(function() {
@@ -88,7 +104,8 @@ geolocation_stuff = function() {
             url: '/user_geolocation/',
             data: {
                 source: 1,
-                radius: $("#id_r").val().replace(RegExp(',', 'g'), '.')
+                radius: $("#id_r").val().replace(RegExp(',', 'g'), '.'),
+                forced: true
             },
             success: function(response) {
                 console.log(response);
@@ -148,7 +165,10 @@ $(document).ready(function() {
     //Display the city input
     btnEditTown = $('.btn-edit-town');
     btnEditTown.click(function () {
-        navigator.geolocation.getCurrentPosition(SuccessBuilder(1, function(){window.location.reload();}));
+        navigator.geolocation.getCurrentPosition(
+            SuccessBuilder(2, true, function(){window.location.reload();}), 
+            geocoder_error_handler
+        );
     });
 
     btnCancelEditTown = $('.btn-cancel-edit-town');
