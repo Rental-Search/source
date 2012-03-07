@@ -52,7 +52,7 @@ function report_location_back(source, address, coords, success) {
   });
   $.ajax({
     type: 'POST',
-    url: document.location.origin+'/user_geolocation/',
+    url: '/user_geolocation/',
     data: {
       address: JSON.stringify(address),
       coordinates: JSON.stringify({
@@ -84,7 +84,7 @@ geolocation_stuff = function() {
         });
         $.ajax({
             type: 'POST',
-            url: document.location.origin+'/user_geolocation/',
+            url: '/user_geolocation/',
             data: {
                 source: 1,
                 radius: $("#id_r").val().replace(RegExp(',', 'g'), '.')
