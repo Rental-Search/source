@@ -6,7 +6,9 @@ import urllib2
 import simplejson
 import facebook
 
-from imagekit.models import ImageModel
+from imagekit.models import ImageSpec
+from imagekit.processors import resize, Adjust, Transpose
+
 
 from django.core.exceptions import ValidationError
 from django.contrib.sites.managers import CurrentSiteManager
@@ -29,7 +31,7 @@ from eloue.accounts.manager import PatronManager
 from eloue.geocoder import GoogleGeocoder
 from eloue.products.utils import Enum
 from eloue.signals import post_save_sites
-from eloue.utils import create_alternative_email
+from eloue.utils import create_alternative_email, cache_to
 from eloue.payments.paypal_payment import accounts, PaypalError
 from eloue.payments import paypal_payment
 
@@ -106,12 +108,34 @@ log = logbook.Logger('eloue.accounts')
 def upload_to(instance, filename):
     return 'pictures/avatars/%s.jpg' % uuid.uuid4().hex
 
-class Avatar(ImageModel):
+class Avatar(models.Model):
 
     patron = models.OneToOneField(User, related_name='avatar')
     image = models.ImageField(upload_to=upload_to)
     created_at = models.DateTimeField(editable=False)
 
+    thumbnail = ImageSpec(
+        processors=[
+            resize.Crop(width=60, height=60), 
+            Adjust(contrast=1.2, sharpness=1.1),
+            Transpose(Transpose.AUTO),
+        ], image_field='image', pre_cache=True, cache_to=cache_to
+    )
+    profil = ImageSpec(
+        processors=[
+            resize.Fit(width=100), 
+            Adjust(contrast=1.2, sharpness=1.1),
+            Transpose(Transpose.AUTO),
+        ], image_field='image', pre_cache=True, cache_to=cache_to
+    )
+    display = ImageSpec(
+        processors=[
+            resize.Fit(width=180), 
+            Adjust(contrast=1.2, sharpness=1.1),
+            Transpose(Transpose.AUTO),
+        ], image_field='image', pre_cache=True, cache_to=cache_to
+    )
+    
     def save(self, *args, **kwargs):
         if not self.created_at:
             self.created_at = datetime.datetime.now()
@@ -120,12 +144,6 @@ class Avatar(ImageModel):
     def delete(self, *args, **kwargs):
         self.image.delete()
         super(Avatar, self).delete(*args, **kwargs)
-    
-    class IKOptions:
-        spec_module = 'eloue.accounts.specs'
-        image_field = 'image'
-        cache_dir = 'media'
-        cache_filename_format = "%(specname)s_%(filename)s.%(extension)s"
 
 class Language(models.Model):
 

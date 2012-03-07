@@ -134,8 +134,6 @@ $(document).ready(function() {
     });
 
 
-    geolocation_stuff();
-
     //Display home tabs
     productHomeTab = $( ".products-home-tabs" );
     productHomeTab.tabs();
@@ -161,28 +159,26 @@ $(document).ready(function() {
     btnCancelEditTown = $( ".product-tabs" );
     btnCancelEditTown.tabs();
 
-    workInput = $("#id_work");
+    workInput = $("#id_moreInfoEdit-work");
     workInput.autocomplete(
         {
             'source': function(request, response) {
                 $.getJSON('accounts_work_autocomplete'+'?term='+request.term, response);}
         }
     );
-    schoolInput = $("#id_school");
+    schoolInput = $("#id_moreInfoEdit-school");
     schoolInput.autocomplete(
         {
             'source': function(request, response) {
                 $.getJSON('accounts_studies_autocomplete'+'?term='+request.term, response);}
         }
     );
-    
     languagesInput = $("#id_languages");
     languagesInput.chosen();
     
     // Booking price
     // Price calculations
     bookingPrice = function(form) {
-        console.log('kaka');
         var template,
         serializedForm;
         availabilityTemplate = '{{^errors}}<p class="available">Ces dates sont disponibles</p>{{/errors}}{{#errors}}<p class="unavailable">Ces dates ne sont pas disponibles</p>{{/errors}}'

@@ -13,7 +13,7 @@
         <div class="profil-block">
             <div class="avatar-picture">
                 {% if patron.avatar %}
-                <img src="{{ patron.avatar.product_page.url }}" alt="{% trans "loueur"%}{{ patron.username }}" width="180" height="180">
+                <img src="{{ patron.avatar.display.url }}" alt="{% trans "loueur"%}{{ patron.username }}" width="180" height="180">
                 {% else %}
                 <img src="{{ MEDIA_URL }}images/default_avatar.png" alt="{% trans "loueur"%}{{ patron.username }}" width="180" height="180">
                 {% endif %}
