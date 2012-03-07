@@ -136,6 +136,13 @@ class Avatar(models.Model):
         ], image_field='image', pre_cache=True, cache_to=cache_to
     )
     
+    product_page = ImageSpec(
+        processors=[
+            resize.Fit(width=74, height=74), 
+            Adjust(contrast=1.2, sharpness=1.1),
+            Transpose(Transpose.AUTO),
+        ], image_field='image', pre_cache=True, cache_to=cache_to
+    )
     def save(self, *args, **kwargs):
         if not self.created_at:
             self.created_at = datetime.datetime.now()

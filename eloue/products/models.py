@@ -248,6 +248,13 @@ class Picture(models.Model):
             Transpose(Transpose.AUTO),
         ], image_field='image', pre_cache=True, cache_to=cache_to
     )
+    home = ImageSpec(
+        processors=[
+            resize.Crop(width=120, height=140), 
+            Adjust(contrast=1.2, sharpness=1.1),
+            Transpose(Transpose.AUTO),
+        ], image_field='image', pre_cache=True, cache_to=cache_to
+    )
     display = ImageSpec(
         processors=[
             resize.Fit(width=578, height=500), 
