@@ -100,8 +100,14 @@
     {{ block.super }}
     <script src="//maps.googleapis.com/maps/api/js?sensor=false&amp;libraries=places" type="text/javascript"></script>
     <script type="text/javascript">
+        function error_handler(error) {
+            $.cookie('geocoding', 'failed', { expires: 7 });
+        }
         $(document).ready(function() {
-            navigator.geolocation.getCurrentPosition(SuccessBuilder(2, function(){window.location.reload();}));
+            if (!$.cookie('geocoding')) 
+                navigator.geolocation.getCurrentPosition(
+                    SuccessBuilder(2, function(){window.location.reload();}), error_handler
+                );
         });
         geolocation_stuff();
     </script>
