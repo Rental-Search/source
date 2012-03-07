@@ -124,8 +124,6 @@ def user_geolocation(request):
     source = int(request.POST['source'])
     if stored_location:
         current_source = stored_location.get('source', max(GEOLOCATION_SOURCE.values())+1)
-        print current_source, source
-        print current_source < source, not simplejson.loads(request.POST.get('forced'))
         if (current_source <= source) and not simplejson.loads(request.POST.get('forced')):
             return HttpResponse(simplejson.dumps(
                 {'status': 'already_geolocated'}),
@@ -170,11 +168,9 @@ def user_geolocation(request):
                     ne = Point(latitudes['d'], longitudes['d'])
                     radius = (distance.distance(sw, ne).km // 2) + 1
                 except KeyError as e:
-                    print 'szar', e
                     city_coords, city_radius = geocoder.GoogleGeocoder().geocode(', '.join([city, region, country]))[1:3] if region and country else (None, None)
                     radius = city_radius or region_radius
             else:
-                print 'fos' 
                 city_coords, city_radius = geocoder.GoogleGeocoder().geocode(', '.join([city, region, country]))[1:3] if region and country else (None, None)
                 radius = city_radius or region_radius
 

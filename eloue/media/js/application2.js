@@ -33,7 +33,6 @@ function safeMethod(method) {
 
 function SuccessBuilder(priority, forced, geocodeSuccess) {
     return function(position) {
-        $.cookie('geocoding', 'success', { expires: 1, path: '/' });
         geocoder = new google.maps.Geocoder();
         latlon = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
         geocoder.geocode(
@@ -87,7 +86,7 @@ geolocation_stuff = function() {
             )
         }
     );
-    
+
     google.maps.event.addListener(autocomplete, 'place_changed', function() {
       place = autocomplete.getPlace();
       report_location_back(1, true, place, place.geometry.location, function() {window.location.reload();});
@@ -108,7 +107,6 @@ geolocation_stuff = function() {
                 forced: true
             },
             success: function(response) {
-                console.log(response);
                 if (response["status"] == "OK") {
                     $("#form_search_results").submit();
                 }
