@@ -35,8 +35,8 @@ class CenteredResize(processors.Resize):
     
 
 class ResizeThumb(CenteredResize):
-    width = 40
-    height = 40
+    width = 60
+    height = 60
     crop = True
 
 class ResizeProductPage(processors.Resize):
@@ -44,11 +44,14 @@ class ResizeProductPage(processors.Resize):
     height = 74
 
 class ResizeDisplay(processors.Resize):
-    width = 450
+    width = 180
+
+class ResizeProfile(processors.Resize):
+    width = 100
+
 
 class Rotate(processors.Transpose):
     method = 'auto'
-
 
 class Enhance(processors.Adjustment):
     contrast = 1.2
@@ -60,7 +63,6 @@ class Thumbnail(ImageSpec):
     access_as = 'thumbnail'
     processors = [Rotate, ResizeThumb, Enhance]
 
-
 class Home(ImageSpec):
     pre_cache = True
     access_as = 'product_page'
@@ -71,3 +73,9 @@ class Display(ImageSpec):
     access_as = 'display'
     processors = [Rotate, ResizeDisplay, Enhance]
 
+
+
+class Profile(ImageSpec):
+    pre_cache = True
+    access_as = 'profil'
+    processors = [Rotate, ResizeProfile, Enhance]

@@ -35,19 +35,23 @@ class CenteredResize(processors.Resize):
     
 
 class ResizeThumb(CenteredResize):
-    width = 90
-    height = 90
+    width = 60
+    height = 60
     crop = True
 
 
 class ResizeDisplay(processors.Resize):
-    width = 450
-
+    width = 578
+    heigth = 500
 
 class ResizeHome(processors.Resize):
     width = 120
     height = 140
 
+class ResizeProfile(processors.Resize):
+    width = 200
+    height = 170
+    crop = True
 
 class Rotate(processors.Transpose):
     method = 'auto'
@@ -74,3 +78,8 @@ class Home(ImageSpec):
     pre_cache = True
     access_as = 'home'
     processors = [Rotate, ResizeHome, Enhance]
+
+class Profile(ImageSpec):
+    pre_cache = True
+    access_as = 'profile'
+    processors = [Rotate, ResizeProfile, Enhance]
