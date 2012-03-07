@@ -17,7 +17,6 @@ reportlab>=2.5
 south>=0.7
 sphinx>=1.0.2
 feedparser>=5.0.1
-django-form-utils
 manifesto
 django-form-utils==0.2.0
 django-staticfiles==1.1.2
