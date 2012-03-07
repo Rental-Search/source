@@ -49,7 +49,7 @@
                     {% else %}
                         <a href="{% url dashboard %}" class="profil-link">
                             {% if user.avatar %}
-                            <img src="{{ user.avatar.product_page.url }}" width="20" height="20">
+                            <img src="{{ user.avatar.thumbnail.url }}" width="20" height="20">
                             {% else %}
                             <img src="{{ MEDIA_URL }}images/default_avatar.png"  width="20" height="20">
                             {% endif %}

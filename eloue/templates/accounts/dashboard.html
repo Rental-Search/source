@@ -38,7 +38,7 @@
         <div class="profil-block">
             <div class="avatar-picture" style="margin-top: 0px;">
                 {% if user.avatar %}
-                <img src="{{ user.avatar.product_page.url }}" width="180" height="180">
+                <img src="{{ user.avatar.display.url }}" width="180" height="180">
                 {% else %}
                 <img src="{{ MEDIA_URL }}images/default_avatar.png" width="180" height="180">
                 {% endif %}
