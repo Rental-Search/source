@@ -1,5 +1,5 @@
 -f http://effbot.org/downloads/Imaging-1.1.7.tar.gz
-django-imagekit==0.4.0
+django-imagekit==1.1
 django-nose>=0.1.2
 geopy>=0.94
 Imaging==1.1.7
@@ -18,7 +18,8 @@ south>=0.7
 sphinx>=1.0.2
 feedparser>=5.0.1
 manifesto
-django-staticfiles
+django-form-utils==0.2.0
+django-staticfiles==1.1.2
 -e git://github.com/e-loue/django-pipeline.git#egg=django-pipeline
 -e git://github.com/e-loue/boto.git#egg=boto
 -e git://github.com/e-loue/pyPdf.git#egg=pyPdf
