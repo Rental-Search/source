@@ -32,8 +32,8 @@ def notify(func):
             releases()
         if 'git_branch' not in env:
             env.git_branch = "master"
-        #deployed = run("cd %(current_release)s; git rev-parse HEAD" % env)[:7]
-        #deploying = run("cd %(current_release)s; git fetch deploy; git rev-parse deploy/%(git_branch)s" % env)[:7]
+        deployed = run("cd %(current_release)s; git rev-parse HEAD" % env)[:7]
+        deploying = run("cd %(current_release)s; git fetch deploy; git rev-parse deploy/%(git_branch)s" % env)[:7]
         return_value = func(*args, **kwargs)
         c = Campfire(env.campfire_domain, env.campfire_token, ssl=True)
         room = c.find_room_by_name(env.campfire_room)
@@ -247,7 +247,7 @@ def cold():
     compress()
     start()
 
-@notify
+
 def deploy():
     """Deploys your project. This calls both `update' and `restart'"""
     update()
@@ -255,7 +255,7 @@ def deploy():
     compress()
     restart()
 
-@notify
+
 def soft():
     """Deploys your project without updating the environnement"""
     if not env.has_key('current_release'):
