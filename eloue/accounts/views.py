@@ -454,7 +454,7 @@ def dashboard(request):
         recipient=request.user, read_at=None
     ).order_by().values('thread').distinct()
     new_threads = MessageThread.objects.filter(pk__in=[thread['thread'] for thread in new_thread_ids]).order_by('-last_message__sent_at')
-    booking_demands = Booking.objects.filter(owner=request.user, state=Booking.STATE.AUTHORIZED).order_by('-created_at')
+    booking_demands = Booking.on_site.filter(owner=request.user, state=Booking.STATE.AUTHORIZED).order_by('-created_at')
     return render_to_response(
         template_name='accounts/dashboard.html', 
         dictionary={'thread_list': new_threads, 'booking_demands': booking_demands}, 
