@@ -16,16 +16,16 @@ class Migration(SchemaMigration):
         db.send_create_signal('accounts', ['Language'])
 
         # Adding field 'Patron.about'
-        db.add_column('accounts_patron', 'about', self.gf('django.db.models.fields.TextField')(default='', blank=True), keep_default=False)
+        db.add_column('accounts_patron', 'about', self.gf('django.db.models.fields.TextField')(null=True, blank=True), keep_default=False)
 
         # Adding field 'Patron.work'
-        db.add_column('accounts_patron', 'work', self.gf('django.db.models.fields.CharField')(default='', max_length=75, blank=True), keep_default=False)
+        db.add_column('accounts_patron', 'work', self.gf('django.db.models.fields.CharField')(max_length=75, null=True, blank=True), keep_default=False)
 
         # Adding field 'Patron.school'
-        db.add_column('accounts_patron', 'school', self.gf('django.db.models.fields.CharField')(default='', max_length=75, blank=True), keep_default=False)
+        db.add_column('accounts_patron', 'school', self.gf('django.db.models.fields.CharField')(max_length=75, null=True, blank=True), keep_default=False)
 
         # Adding field 'Patron.hobby'
-        db.add_column('accounts_patron', 'hobby', self.gf('django.db.models.fields.CharField')(default='', max_length=75, blank=True), keep_default=False)
+        db.add_column('accounts_patron', 'hobby', self.gf('django.db.models.fields.CharField')(max_length=75, null=True, blank=True), keep_default=False)
 
         # Adding M2M table for field languages on 'Patron'
         db.create_table('accounts_patron_languages', (
@@ -40,7 +40,7 @@ class Migration(SchemaMigration):
         
         # Deleting model 'Language'
         db.delete_table('accounts_language')
-        
+
         # Deleting field 'Patron.about'
         db.delete_column('accounts_patron', 'about')
 
@@ -92,24 +92,25 @@ class Migration(SchemaMigration):
         },
         'accounts.patron': {
             'Meta': {'object_name': 'Patron', '_ormbases': ['auth.User']},
-            'about': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
+            'about': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
             'activation_key': ('django.db.models.fields.CharField', [], {'max_length': '40', 'null': 'True', 'blank': 'True'}),
             'affiliate': ('django.db.models.fields.CharField', [], {'max_length': '10', 'null': 'True', 'blank': 'True'}),
             'civility': ('django.db.models.fields.PositiveSmallIntegerField', [], {'null': 'True', 'blank': 'True'}),
             'company_name': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
             'customers': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['accounts.Patron']", 'symmetrical': 'False'}),
-            'hobby': ('django.db.models.fields.CharField', [], {'max_length': '75', 'blank': 'True'}),
+            'default_address': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'+'", 'null': 'True', 'to': "orm['accounts.Address']"}),
+            'hobby': ('django.db.models.fields.CharField', [], {'max_length': '75', 'null': 'True', 'blank': 'True'}),
             'is_professional': ('django.db.models.fields.NullBooleanField', [], {'default': 'None', 'null': 'True', 'blank': 'True'}),
             'is_subscribed': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'languages': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['accounts.Language']", 'symmetrical': 'False'}),
+            'languages': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'to': "orm['accounts.Language']", 'null': 'True', 'blank': 'True'}),
             'modified_at': ('django.db.models.fields.DateTimeField', [], {}),
             'new_messages_alerted': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
             'paypal_email': ('django.db.models.fields.EmailField', [], {'max_length': '75', 'null': 'True', 'blank': 'True'}),
-            'school': ('django.db.models.fields.CharField', [], {'max_length': '75', 'blank': 'True'}),
+            'school': ('django.db.models.fields.CharField', [], {'max_length': '75', 'null': 'True', 'blank': 'True'}),
             'sites': ('django.db.models.fields.related.ManyToManyField', [], {'related_name': "'patrons'", 'symmetrical': 'False', 'to': "orm['sites.Site']"}),
             'slug': ('django.db.models.fields.SlugField', [], {'unique': 'True', 'max_length': '50', 'db_index': 'True'}),
             'user_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['auth.User']", 'unique': 'True', 'primary_key': 'True'}),
-            'work': ('django.db.models.fields.CharField', [], {'max_length': '75', 'blank': 'True'})
+            'work': ('django.db.models.fields.CharField', [], {'max_length': '75', 'null': 'True', 'blank': 'True'})
         },
         'accounts.patronaccepted': {
             'Meta': {'object_name': 'PatronAccepted'},

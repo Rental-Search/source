@@ -96,17 +96,6 @@ PaypalAuthorize = LinkWidget(
 	text='Authorizer payment'
 )
 
-
-SendMessageToOwner = LinkWidget(
-	url_builder=lambda request, booking: reverse(
-		'eloue.products.views.message_create', 
-		kwargs={
-			'product_id': booking.product.pk,
-			'recipient_id': booking.owner.pk
-		}),
-	text=u'Envoyer un message au propriétaire'
-)
-
 class CommentLinkWidget(LinkWidget):
 	def condition(self, request, booking):
 		from django.core.exceptions import ObjectDoesNotExist
@@ -156,9 +145,19 @@ SendMessageToBorrower = LinkWidget(
 		'eloue.products.views.message_create', 
 		kwargs={
 			'product_id': booking.product.pk,
-			'recipient_id': booking.owner.pk
+			'recipient_id': booking.borrower.pk
 		}),
 	text=u'Envoyer un message au locataire'
+)
+
+SendMessageToOwner = LinkWidget(
+	url_builder=lambda request, booking: reverse(
+		'eloue.products.views.message_create', 
+		kwargs={
+			'product_id': booking.product.pk,
+			'recipient_id': booking.owner.pk
+		}),
+	text=u'Envoyer un message au propriétaire'
 )
 
 borrower = {
