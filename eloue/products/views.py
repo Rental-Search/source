@@ -67,7 +67,7 @@ def homepage(request):
         last_added = product_search.spatial(
             lat=region_coords[0], long=region_coords[1], radius=min(region_radius, 1541)
         ).spatial(
-            lat=coords[0], long=coords[1], radius=min(region_radius*2, 1541)
+            lat=coords[0], long=coords[1], radius=min(region_radius*2 if region_radius else float('inf'), 1541)
         ).order_by('-created_at_date', 'geo_distance')
     except KeyError:
         last_joined = Patron.objects.last_joined()
