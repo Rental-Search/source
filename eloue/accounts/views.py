@@ -118,7 +118,6 @@ GEOLOCATION_SOURCE = Enum([
 
 @require_POST
 def user_geolocation(request):
-
     stored_location = request.session.setdefault('location', {})
 
     source = int(request.POST['source'])
@@ -168,10 +167,10 @@ def user_geolocation(request):
                     ne = Point(latitudes['d'], longitudes['d'])
                     radius = (distance.distance(sw, ne).km // 2) + 1
                 except KeyError as e:
-                    city_coords, city_radius = geocoder.GoogleGeocoder().geocode(', '.join([city, region, country]))[1:3] if region and country else (None, None)
+                    city_coords, city_radius = geocoder.GoogleGeocoder().geocode(', '.join(filter(None, [city, region, country])))[1:3] if city and country else (None, None)
                     radius = city_radius or region_radius
             else:
-                city_coords, city_radius = geocoder.GoogleGeocoder().geocode(', '.join([city, region, country]))[1:3] if region and country else (None, None)
+                city_coords, city_radius = geocoder.GoogleGeocoder().geocode(', '.join(filter(None, [city, region, country])))[1:3] if region and country else (None, None)
                 radius = city_radius or region_radius
 
     if 'coordinates' in request.POST:
