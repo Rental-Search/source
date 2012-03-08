@@ -191,7 +191,7 @@ def update_env():
         releases()
     with cd(env.current_release):
         run("virtualenv -q --no-site-packages --unzip-setuptools env")
-        run("env/bin/pip -q install -E env -r %(env_file)s" % {'env_file': env.env_file})
+        run("env/bin/pip -q install -r %(env_file)s" % {'env_file': env.env_file})
     permissions()
 
 def migrate():
