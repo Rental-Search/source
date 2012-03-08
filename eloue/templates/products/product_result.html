@@ -61,7 +61,7 @@
 {% endblock %}
 
 {% block content %}
-
+{% csrf_token %}
 <div id="result-page" class="container-main">
     <ul class="breadcrumb">
         <li><a href="{% url home %}">{% trans "Accueil" %}</a></li>
@@ -213,18 +213,20 @@
     <script src="//maps.googleapis.com/maps/api/js?sensor=false&amp;libraries=places" type="text/javascript"></script>
     <script type="text/javascript" charset="utf-8">
         geolocation_stuff();
-        navigator.geolocation.getCurrentPosition(
-            SuccessBuilder(
-                2, function() {
-                    $("#form_search_results").submit();
-                }
-            )
-        );
+
+        $(document).ready(function() {
+            if (!$.cookie('geocoding')) 
+                navigator.geolocation.getCurrentPosition(
+                    SuccessBuilder(2, false, function() {$("#form_search_results").submit();}),
+                    geocoder_error_handler
+                );
+        });
+
 
         function initialize() {
             var myLatlng = new google.maps.LatLng('{{request.session.location.coordinates.0|stringformat:"s" }}', '{{request.session.location.coordinates.1|stringformat:"s" }}');
             var myOptions = {
-                zoom: 12,
+                zoom: 10,
                 disableDefaultUI: true,
                 center: myLatlng,
                 zoomControl: true,
