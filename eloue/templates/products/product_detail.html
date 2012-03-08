@@ -126,12 +126,15 @@
         </div>{# product-desc #}
 
         <div class="product-comment">
-            {% blocktrans count product.borrowercomments.count as count %}
-                <h2>{{ count }} commentaires</h2>
-                {% plural %}
-                <h2>{{ count }} commentaire</h2>
-            {% endblocktrans%}
-            </h2>
+            {% if product.borrowercomments.count > 0 %}
+                {% blocktrans count product.borrowercomments.count as count %}
+                    <h2>{{ count }} commentaires</h2>
+                    {% plural %}
+                    <h2>{{ count }} commentaire</h2>
+                {% endblocktrans%}
+            {% else %}
+            <h2>{% trans "Pas de commentaire" %}</h2>
+            {% endif %}
             <ul>
             {% for comment in product.borrowercomments %}
                 <li>{% include "rent/partials/comment.html" %}</li>
@@ -140,7 +143,6 @@
             {% endfor %}
             </ul>
         </div>{# product-comment #}
-
     </div>{# content-main #}
     <div class="content-aside">
         <ul class="social-button">

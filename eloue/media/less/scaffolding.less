@@ -310,7 +310,7 @@ a {
       font-size: 18px;
       margin-right: 10px;
     }
-    .placeholder();
+    .placeholder(@green, 22px) 
   }
   
   .city-input {
@@ -321,7 +321,7 @@ a {
     color: @blue;
     
     input {
-      width: 300px;
+      width: 250px;
       margin-right: 5px;
     }
   }
@@ -331,6 +331,8 @@ a {
     
     .city-input { display: block; }
   }
+
+  .bt-big-orange { vertical-align: 8%; }
 }
 
 // PRODUCT HOME
@@ -444,10 +446,10 @@ a {
   }
 }
 
+.fb-iframe { margin-top: 20px; }
+
 // NEW PROFIL HOME
 // ---------------
-
-
 .new-profils {
   display: inline;
   float: left;
@@ -567,6 +569,10 @@ a {
 
 .product-desc {
   margin-bottom: 30px;
+
+  p {
+    line-height: 18px;
+  }
 }
 
 .product-comment {
@@ -1127,13 +1133,19 @@ a {
 //-----------
 
 #flatpages {
-color: @blueDark;
+  color: @blueDark;
+
+  h1 { margin-bottom: 20px; }
 
   ul { 
     margin-bottom: 20px;
   }
   li { margin-bottom: 10px; }
 
-  p { margin-bottom: 20px; }
+  p { 
+    margin-bottom: 20px;
+    line-height: 18px;
+    text-align: justify;
+  }
 }
 
