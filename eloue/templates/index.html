@@ -103,7 +103,11 @@
     <script src="//maps.googleapis.com/maps/api/js?sensor=false&amp;libraries=places" type="text/javascript"></script>
     <script type="text/javascript">
         $(document).ready(function() {
-            navigator.geolocation.getCurrentPosition(SuccessBuilder(2, function(){window.location.reload();}));
+            if (!$.cookie('geocoding')) 
+                navigator.geolocation.getCurrentPosition(
+                    SuccessBuilder(2, false, function(){window.location.reload();}), 
+                    geocoder_error_handler
+                );
         });
         geolocation_stuff();
     </script>
