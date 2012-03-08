@@ -64,8 +64,8 @@ def production():
 def beta():
     """Defines beta environment"""
     env.name = "beta"
-    env.user = "benooitw"
-    env.host = ['goat.e-loue.com',]
+    env.user = "benoitw"
+    env.hosts = ['goat.e-loue.com',]
     env.base_dir = "/var/www"
     env.app_name = "eloue"
     env.domain_name = "beta.e-loue.com"

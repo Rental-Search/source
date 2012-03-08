@@ -219,7 +219,7 @@ PIPELINE_JS_COMPRESSOR = 'pipeline.compressors.yui.YUICompressor'
 PIPELINE_COMPILERS = (
   'pipeline.compilers.less.LessCompiler',
 )
-PIPELINE_LESS_BINARY = getattr(local, 'PIPELINE_LESS_BINARY', '/Users/benoit/node_modules/less/bin/lessc')
+PIPELINE_LESS_BINARY = getattr(local, 'PIPELINE_LESS_BINARY', '/home/benoitw/node_modules/less/bin/lessc')
 PIPELINE_YUI_BINARY = getattr(local, 'COMPRESS_YUI_BINARY', '/usr/bin/yui-compressor')
 PIPELINE_ROOT = getattr(local, 'PIPELINE_ROOT', MEDIA_ROOT)
 PIPELINE_URL = getattr(local, 'PIPELINE_URL', MEDIA_URL)
