@@ -262,4 +262,21 @@ $(document).ready(function() {
     endDate.datepicker({
         dateFormat: 'dd/mm/yy',
     });
+
+    //fbconnect
+    $('#fbconnect').click(function () {
+        FB.login(function(response) {
+           if (response.authResponse) {
+             $('input[name$="facebook_access_token"]').val(response.authResponse.accessToken);
+             $('input[name$="facebook_expires"]').val(response.authResponse.expiresIn);
+             $('input[name$="facebook_uid"]').val(response.authResponse.userID);
+             $('input[name$="email"]').removeAttr('value');
+             $('input[name$="password"]').removeAttr('value');
+           }
+           $('form').submit();
+           $('input[type="submit"]').attr('disabled','disabled');
+           $('#fbconnect').remove();
+           $('.fbconnect-content .fb-slogan').html('Connexion en cours...');
+         }, {scope: 'email,user_location'});
+    });
 });

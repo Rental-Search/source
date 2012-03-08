@@ -134,7 +134,10 @@ class EmailAuthenticationForm(forms.Form):
         facebook_expires = self.cleaned_data.get('facebook_expires')
         facebook_uid = self.cleaned_data.get('facebook_uid')
 
-        if any([facebook_access_token, facebook_expires, facebook_uid]):
+        email = self.cleaned_data.get('email')
+        password = self.cleaned_data.get('password')
+
+        if any([facebook_access_token, facebook_expires, facebook_uid]) and not any([email, password]):
             try:
                 self.me = facebook.GraphAPI(facebook_access_token).get_object('me', fields='picture,email,first_name,last_name,gender,username,location')
             except facebook.GraphAPIError as e:
@@ -173,11 +176,9 @@ class EmailAuthenticationForm(forms.Form):
                     pass
 
         else:
-            email = self.cleaned_data.get('email')
             
             if email is None or email == u'':
                 raise forms.ValidationError('Empty email') # TODO: more meaningful error message
-            password = self.cleaned_data.get('password')
             exists = self.cleaned_data.get('exists')
             
             if exists:
