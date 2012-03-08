@@ -73,6 +73,14 @@
     },
     {
         "fields": {
+            "domain": "beta.e-loue.com",
+            "name": "e-loue beta"
+        },
+        "model": "sites.site",
+        "pk": 10
+    },
+    {
+        "fields": {
             "url": "/api/1.0/",
             "name": "all",
             "is_readonly": false
