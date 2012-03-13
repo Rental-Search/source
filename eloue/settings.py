@@ -175,6 +175,7 @@ INSTALLED_APPS = (
     'products',
     'api',
     'oauth_provider',
+    'payments',
 )
 if DEBUG_TOOLBAR:
     INSTALLED_APPS += ('debug_toolbar',)

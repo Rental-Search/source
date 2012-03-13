@@ -152,10 +152,35 @@ class PayboxManager(object):
 # else:
 # 	print pm.unsubscribe('dfgsd')
 
-class PayboxPayment(abstract_payment.AbstractPayment):
+class PayboxDirectPayment(abstract_payment.AbstractPayment):
 
     def __init__(self, booking):
     	self.booking = booking
+        self.paybox_manager = PayboxManager()
+
+    def preapproval(self, cancel_url, return_url, ip_address):
+    	self.paybox_manager.authorize(
+    		self, member_id, card_number, expiration_date, cvv, amount)
+        
+    def pay(self, cancel_url, return_url):
+    	self.paybox_manager.debit(self, member_id, card_number, expiration_date, cvv, amount, numappel, numtrans)
+        pass
+        
+    def execute_payment(self, *args, **kwargs):
+        pass
+        
+    def cancel_preapproval(self, *args, **kwargs):
+        pass
+        
+    def refund(self, *args, **kwargs):
+        pass
+        
+    def give_caution(self, amount, cancel_url, return_url):
+        pass
+
+class PayboxDirectPlusPayment(abstract_payment.AbstractPayment):
+
+    def __init__(self):
         self.paybox_manager = PayboxManager()
 
     def preapproval(self, cancel_url, return_url, ip_address):

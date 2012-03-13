@@ -31,13 +31,12 @@ from eloue.rent.fields import UUIDField, IntegerAutoField
 from eloue.rent.manager import BookingManager, CurrentSiteBookingManager
 from eloue.payments.paypal_payment import AdaptivePapalPayments, PaypalError
 from eloue.payments.non_payment import NonPayments
-from eloue.payments.paybox_payment import PayboxPayment
 from eloue.payments.fsm_transition import smart_transition
 from eloue.signals import post_save_sites
 from eloue.utils import create_alternative_email, convert_from_xpf
 
 
-PAY_PROCESSORS = (NonPayments, AdaptivePapalPayments, PayboxPayment)
+PAY_PROCESSORS = (NonPayments, AdaptivePapalPayments)
 
 BOOKING_STATE = Enum([
     ('authorizing', 'AUTHORIZING', _(u"En cours d'autorisation")),
