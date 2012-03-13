@@ -31,12 +31,13 @@ from eloue.rent.fields import UUIDField, IntegerAutoField
 from eloue.rent.manager import BookingManager, CurrentSiteBookingManager
 from eloue.payments.paypal_payment import AdaptivePapalPayments, PaypalError
 from eloue.payments.non_payment import NonPayments
+from eloue.payments.paybox_payment import PayboxPayment
 from eloue.payments.fsm_transition import smart_transition
 from eloue.signals import post_save_sites
 from eloue.utils import create_alternative_email, convert_from_xpf
 
 
-PAY_PROCESSORS = (NonPayments, AdaptivePapalPayments)
+PAY_PROCESSORS = (NonPayments, AdaptivePapalPayments, PayboxPayment)
 
 BOOKING_STATE = Enum([
     ('authorizing', 'AUTHORIZING', _(u"En cours d'autorisation")),
@@ -86,6 +87,7 @@ PACKAGES = {
 
 log = logbook.Logger('eloue.rent')
 
+
 class Booking(models.Model):
     """A reservation"""
     uuid = UUIDField(primary_key=True)
@@ -121,6 +123,13 @@ class Booking(models.Model):
     on_site = CurrentSiteBookingManager()
     objects = BookingManager()
     
+    from django.contrib.contenttypes.models import ContentType
+    from django.contrib.contenttypes import generic
+
+    content_type = models.ForeignKey(ContentType)
+    object_id = models.PositiveIntegerField()
+    payment_information = generic.GenericForeignKey('content_type', 'object_id')
+
     STATE = BOOKING_STATE
     
     @incr_sequence('contract_id', 'rent_booking_contract_id_seq')

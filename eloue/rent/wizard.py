@@ -14,7 +14,7 @@ from django.views.generic.simple import direct_to_template, redirect_to
 from django_lean.experiments.models import GoalRecord
 from django_lean.experiments.utils import WebUser
 
-from eloue.accounts.forms import EmailAuthenticationForm
+from eloue.accounts.forms import EmailAuthenticationForm, CreditCardForm
 from eloue.accounts.models import Patron, Avatar
 from eloue.geocoder import GoogleGeocoder
 from eloue.products.forms import FacetedSearchForm
@@ -117,6 +117,8 @@ class BookingWizard(NewGenericFormWizard):
             return 'products/product_detail.html'
         elif issubclass(self.form_list[step], BookingConfirmationForm):
             return 'rent/booking_confirm.html'
+        elif issubclass(self.form_list[step], CreditCardForm):
+            return 'accounts/credit_card.html'
         else:
             return 'accounts/auth_missing.html'
     

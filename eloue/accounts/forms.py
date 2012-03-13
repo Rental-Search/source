@@ -503,6 +503,29 @@ class AddressBaseFormSet(BaseInlineFormSet):
     
 AddressFormSet = inlineformset_factory(Patron, Address, form=AddressForm, formset=AddressBaseFormSet, extra=1, can_delete=True)
 
+from eloue.accounts.models import CreditCard
+
+class CreditCardForm(forms.ModelForm):
+    
+    save_card = forms.BooleanField(initial=False)
+
+    class Meta:
+        model = CreditCard
+
+    def clean(self):
+        save_card = self.cleaned_data['save_card']
+        if save_card:
+            # subscribe
+            # auth
+            pass
+        else:
+            # auth
+            pass
+
+    # def save(self, *args, **kwargs):
+    #     pass
+
+
 def make_missing_data_form(instance, required_fields=[]):
     fields = SortedDict({
         'is_professional': forms.BooleanField(label=_(u"Professionnel"), required=False, initial=False, widget=CommentedCheckboxInput(info_text='Je suis professionnel')),

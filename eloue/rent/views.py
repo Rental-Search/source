@@ -146,7 +146,8 @@ def booking_create(request, *args, **kwargs):
     product = get_object_or_404(Product.on_site, pk=kwargs['product_id'])
     if product.slug != kwargs['slug']:
         return redirect_to(request, product.get_absolute_url())
-    wizard = BookingWizard([BookingForm, EmailAuthenticationForm, BookingConfirmationForm])
+    from eloue.accounts.forms import CreditCardForm
+    wizard = BookingWizard([BookingForm, EmailAuthenticationForm, BookingConfirmationForm, CreditCardForm])
     return wizard(request, *args, **kwargs)
 
 

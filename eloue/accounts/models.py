@@ -335,6 +335,13 @@ class Patron(User):
     is_expired.boolean = True
     is_expired.short_description = ugettext(u"Expiré")
 
+class CreditCard(models.Model):
+
+    partial_card_number = models.CharField(max_length=20)
+    cvv = models.CharField(max_length=4)
+    expires = models.DateField()
+    holder = models.OneToOneField(Patron, editable=False)
+
 class FacebookSession(models.Model):
 
     access_token = models.CharField(max_length=255, unique=True)

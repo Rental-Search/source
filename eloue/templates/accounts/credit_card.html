@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Identifiction" %}{% endblock %}
+
+{% block content %}
+<div id="wizard-page" class="container-main">
+	<ul class="breadcrumb">
+		<li><a href="{% url home %}">{% trans "Accueil" %}</a></li>
+		<li>{% trans "Identification" %}</li>
+	</ul>
+	<div class="content-main">
+		<h1>{% trans "Payment informations" %}</h1>
+        {{form}}
+	</div>
+	<div class="content-aside">
+	</div>
+</div>
+{% endblock %}
