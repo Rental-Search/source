@@ -94,7 +94,7 @@ class Product(models.Model):
 
     is_archived = models.BooleanField(_(u'archivé'), default=False, db_index=True)
     is_allowed = models.BooleanField(_(u'autorisé'), default=True, db_index=True)
-    category = models.ForeignKey('Category', related_name='products')
+    category = models.ForeignKey('Category', verbose_name=_(u"Catégorie"), related_name='products')
     owner = models.ForeignKey(Patron, related_name='products')
     created_at = models.DateTimeField(blank=True, editable=False)
     sites = models.ManyToManyField(Site, related_name='products')
@@ -224,6 +224,71 @@ class Product(models.Model):
             for (key, group) 
             in itertools.groupby(availables, key=lambda x:x[0].date())
             if key.year == year and key.month == month and key >= datetime.date.today()]
+
+
+class CarProduct(Product):
+
+    brand = models.CharField(_(u'marque'), max_length=30)
+    model = models.CharField(_(u'modèle'), max_length=30)
+
+    # charactersitiques du vehicule
+    seat_number = models.IntegerField(_(u'nombre de place'), null=True, blank=True)
+    door_number = models.IntegerField(_(u'nombre de porte'), null=True, blank=True)
+    fuel = models.IntegerField(_(u'énergie'), choices=[(1, 'essence'), (2, 'diesel')], null=True, blank=True)
+    transmission = models.IntegerField(_(u'boite de vitesse'), choices=[(1, 'manuel'), (2, 'automatique')], null=True, blank=True)
+    mileage = models.IntegerField(_(u'kilométrage'), choices=[(1, '- 10000 km'), (2, '10001 - 50000 km')], null=True, blank=True)
+    consumption = models.DecimalField(_(u'consommation'), decimal_places=2, max_digits=5, null=True, blank=True)
+
+    # options & accessoires
+    air_conditioning = models.NullBooleanField(_(u'climatisation'))
+    power_steering = models.NullBooleanField(_(u'direction assistée'))
+    cruise_control = models.NullBooleanField(_(u'régulateur de vitesse'))
+    gps = models.NullBooleanField(_(u'GPS'))
+    baby_seat = models.NullBooleanField(_(u'siège bébé'))
+    roof_box = models.NullBooleanField(_(u'coffre de toit'))
+    bike_rack = models.NullBooleanField(_(u'porte-vélo'))
+    snow_tires = models.NullBooleanField(_(u'pneus neige'))
+    snow_chains = models.NullBooleanField(_(u'chaines'))
+    ski_rack = models.NullBooleanField(_(u'porte-skis'))
+    cd_player = models.NullBooleanField(_(u'lecteur CD'))
+    audio_input = models.NullBooleanField(_(u'entrée audio/iPod'))
+
+    # informations de l'assurance
+    tax_horsepower = models.DecimalField(_(u'CV fiscal'), decimal_places=2, max_digits=6)
+    licence_plate = models.CharField(_(u"numéro d'immatriculation"), max_length=10)
+    first_registration_date = models.DateField(_(u'première mise en circulation'))
+
+class RealEstateProduct(Product):
+    
+    capacity = models.IntegerField(_(u'capacité'), null=True, blank=True)
+    private_life = models.IntegerField(_(u'vie privée'),
+        choices=[(1, 'Chambre privée'), (2, 'Chambre privée'), (3, 'Maison / Appartement en entier')], null=True, blank=True)
+    chamber_number = models.IntegerField(_(u'nombre de chambre'), null=True, blank=True)
+    rules = models.CharField(_(u"règle d'utilisation"), max_length=60, null=True, blank=True)
+
+    # services inclus
+    air_conditioning = models.NullBooleanField(_(u'air conditionné'))
+    breakfast = models.NullBooleanField(_(u'petit déjeuner'))
+    balcony = models.NullBooleanField(_(u'balcon/terasse'))
+    lockable_chamber = models.NullBooleanField(_(u'chambre avec serrure'))
+    towel = models.NullBooleanField(_(u'serviettes'))
+    lift = models.NullBooleanField(_(u'ascenseur dans l\'immeuble'))
+    family_friendly = models.NullBooleanField(_(u'adapté aux familles/enfants'))
+    gym = models.NullBooleanField(_(u'salle de sport'))
+    accessible = models.NullBooleanField(_(u'accessible aux personnes handicapées'))
+    heating = models.NullBooleanField(_(u'chauffage'))
+    jacuzzi = models.NullBooleanField(_(u'jacuzzi'))
+    chimney = models.NullBooleanField(_(u'cheminée intérieure'))
+    internet_access = models.NullBooleanField(_(u'accès internet'))
+    kitchen = models.NullBooleanField(_(u'cuisine'))
+    parking = models.NullBooleanField(_(u'parking'))
+    smoking_accepted = models.NullBooleanField(_(u'fumeurs acceptées'))
+    ideal_for_events = models.NullBooleanField(_(u'idéal pour des évènements'))
+    tv = models.NullBooleanField(_(u'TV'))
+    washing_machine = models.NullBooleanField(_(u'machine à laver'))
+    tumble_dryer = models.NullBooleanField(_(u'sèche linge'))
+    computer_with_internet = models.NullBooleanField(_(u'ordinateur avec Internet'))
+
 
 def upload_to(instance, filename):
     return 'pictures/%s.jpg' % uuid.uuid4().hex
@@ -616,4 +681,6 @@ post_save.connect(post_save_sites, sender=Alert)
 post_save.connect(post_save_sites, sender=Curiosity)
 post_save.connect(post_save_sites, sender=Product)
 post_save.connect(post_save_sites, sender=Category)
+post_save.connect(post_save_sites, sender=CarProduct)
+post_save.connect(post_save_sites, sender=RealEstateProduct)
 signals.pre_save.connect(pre_save_product, sender=Product)
