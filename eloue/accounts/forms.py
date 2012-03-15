@@ -670,9 +670,9 @@ def make_missing_data_form(instance, required_fields=[]):
     return fields != {}, form_class
 
 class ContactForm(forms.Form):
-    subject = forms.CharField(label=_(u"Sujet"), max_length=100, required=True, widget=forms.TextInput(attrs={'class': 'inm'}))
-    message = forms.CharField(label=_(u"Message"), required=True, widget=forms.Textarea(attrs={'class': 'inm'}))
     sender = forms.EmailField(label=_(u"Email"), max_length=75, required=True, widget=forms.TextInput(attrs={
         'autocapitalize': 'off', 'autocorrect': 'off', 'class': 'inm'
     }))
-    cc_myself = forms.BooleanField(label=_(u"Je souhaite recevoir une copie de ce message."), required=False)
+    subject = forms.CharField(label=_(u"Sujet"), max_length=100, required=True, widget=forms.TextInput(attrs={'class': 'inm'}))
+    message = forms.CharField(label=_(u"Message"), required=True, widget=forms.Textarea(attrs={'class': 'inm'}))
+    cc_myself = forms.BooleanField(label=_(u"Etre en copie"), required=False)
