@@ -1,4 +1,4 @@
-{% extends "accounts/dashboard.html" %}
+{% extends "accounts/patron_edit.html" %}
 {% load i18n navbar %}
 
 {% block title %}{% trans "Votre profil" %}{% endblock %}
@@ -8,21 +8,6 @@
   <script type="text/javascript" src="https://www.google.com/jsapi"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js"></script>
-{% endblock %}
-
-{% block content-aside-profil %}
-{% url patron_edit as patron_edit %}
-{% url comments as comments %}
-{% url patron_edit_addresses as patron_edit_addresses %}
-{% url patron_edit_phonenumber as patron_edit_phonenumber %}
-{% url patron_edit_password as patron_edit_password %}
-<ul class="nav-sub-bar">
-    <li><a href="{{ patron_edit }}"  class="{% active request "^/dashboard/account/$" %}">{% trans "Mon Profil" %}</a></li>
-    <li><a href="{{ comments }}" class="{% active request comments %}">{% trans "Commentaires" %}</a></li>
-    <li><a href="{{ patron_edit_addresses }}" class="{% active request patron_edit_addresses %}">{% trans "Adresses" %}</a></li>
-    <li><a href="{{ patron_edit_phonenumber }}" class="{% active request patron_edit_phonenumber %}">{% trans "Téléphone" %}</a></li>
-    <li><a href="{{ patron_edit_password }}" class="{% active request patron_edit_password %}">{% trans "Mot de passe" %}</a></li>
-</ul>
 {% endblock %}
 
 {% block content-main-profil %}
