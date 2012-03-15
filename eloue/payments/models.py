@@ -5,7 +5,12 @@ from eloue.rent.models import Booking
 from eloue.payments import *
 
 class PaymentInformation(models.Model, abstract_payment.AbstractPayment):
-    booking = generic.GenericRelation(Booking)
+    _booking = generic.GenericRelation(Booking)
+
+    @property
+    def booking(self):
+    	return next(iter(self._booking.all()), None)
+
     class Meta:
         abstract = True
 

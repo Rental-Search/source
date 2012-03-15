@@ -87,6 +87,9 @@ PACKAGES = {
 log = logbook.Logger('eloue.rent')
 
 
+    
+from django.contrib.contenttypes.models import ContentType
+from django.contrib.contenttypes import generic
 class Booking(models.Model):
     """A reservation"""
     uuid = UUIDField(primary_key=True)
@@ -121,13 +124,10 @@ class Booking(models.Model):
     
     on_site = CurrentSiteBookingManager()
     objects = BookingManager()
-    
-    from django.contrib.contenttypes.models import ContentType
-    from django.contrib.contenttypes import generic
 
-    content_type = models.ForeignKey(ContentType)
-    object_id = models.PositiveIntegerField()
-    payment_information = generic.GenericForeignKey('content_type', 'object_id')
+    content_type = models.ForeignKey(ContentType, null=True, blank=True)
+    object_id = models.PositiveIntegerField(null=True, blank=True)
+    payment = generic.GenericForeignKey('content_type', 'object_id')
 
     STATE = BOOKING_STATE
     
