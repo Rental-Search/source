@@ -401,6 +401,25 @@ def patron_edit_phonenumber(request):
     return render_to_response('accounts/patron_edit_phonenumber.html', dictionary={'formset': formset}, context_instance=RequestContext(request))
 
 @login_required
+def patron_edit_credit_card(request):
+    from eloue.accounts.forms import CreditCardForm
+    from eloue.accounts.models import CreditCard
+    try:
+        instance = request.user.creditcard
+    except CreditCard.DoesNotExist:
+        instance = None
+    if request.method == 'POST':
+        form = CreditCardForm(request.POST, initial={'holder': request.user}, instance=instance)
+        if form.is_valid():
+            form.save()
+            return redirect(patron_edit_credit_card)
+    else:
+        form = CreditCardForm(initial={'holder': request.user}, instance=instance)
+    return render_to_response(
+        template_name='accounts/patron_edit_credit_card.html', 
+        dictionary={'form': form}, context_instance=RequestContext(request))
+
+@login_required
 def patron_edit_addresses(request):
     from eloue.accounts.forms import AddressFormSet
     if request.POST:

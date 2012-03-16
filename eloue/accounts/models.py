@@ -337,10 +337,10 @@ class Patron(User):
 
 class CreditCard(models.Model):
 
-    partial_card_number = models.CharField(max_length=20)
-    cvv = models.CharField(max_length=4)
+    card_number = models.CharField(max_length=20)
     expires = models.DateField()
     holder = models.OneToOneField(Patron, editable=False)
+    masked_number = models.CharField(max_length=20, blank=False)
 
 class FacebookSession(models.Model):
 

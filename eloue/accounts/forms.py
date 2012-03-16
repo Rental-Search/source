@@ -504,28 +504,56 @@ class AddressBaseFormSet(BaseInlineFormSet):
 AddressFormSet = inlineformset_factory(Patron, Address, form=AddressForm, formset=AddressBaseFormSet, extra=1, can_delete=True)
 
 from eloue.accounts.models import CreditCard
-
 class CreditCardForm(forms.ModelForm):
+    cvv = forms.CharField(max_length=4, widget=forms.TextInput(attrs={'placeholder': 'E-loue ne stocke pas le cryptogram visuel, vous devriez resaisir apres chaque payment pour des raison de securite'}))
     
-    save_card = forms.BooleanField(initial=False)
+    def __init__(self, *args, **kwargs):
+        super(CreditCardForm, self).__init__(*args, **kwargs)
+        self.fields['card_number'] = forms.CharField(
+            max_length=20, required=False, widget=forms.TextInput(
+                attrs={'placeholder': '1XXXXXXXXXXXXX45'}
+            )
+        )
 
     class Meta:
+        # see note: https://docs.djangoproject.com/en/dev/topics/forms/modelforms/#using-a-subset-of-fields-on-the-form
+        # we excluded, then added 
         model = CreditCard
+        exclude = ('card_number', 'holder')
+        widgets = {
+        }
+
+    def clean_expires(self):
+        return self.cleaned_data['expires']
+
+    def clean_card_number(self):
+        #validate with luhn checksum
+        return self.cleaned_data['card_number']
 
     def clean(self):
-        save_card = self.cleaned_data['save_card']
-        if save_card:
-            # subscribe
-            # auth
-            pass
-        else:
-            # auth
-            pass
-
+        from eloue.payments.paybox_payment import PayboxManager, PayboxException
+        pm = PayboxManager()
+        try:
+            self.cleaned_data['card_number'] = pm.modify(
+                self.instance.holder.pk, 
+                self.cleaned_data['card_number'], 
+                self.cleaned_data['expires'].strftime('%m%y'), self.cleaned_data['cvv']) if self.instance else pm.subscribe(
+                    self.data['holder'], 
+                    self.cleaned_data['card_number'], 
+                    self.cleaned_data['expires'].strftime('%m%y'), self.cleaned_data['cvv']
+                )
+        except PayboxException as e:
+            raise forms.ValidationError('wrong card informations')
+        return self.cleaned_data
     # def save(self, *args, **kwargs):
     #     pass
-
-
+    def save(self, *args, **kwargs):
+        commit = kwargs.pop('commit', True)
+        instance = super(CreditCardForm, self).save(*args, commit=False, **kwargs)
+        instance.card_number = self.cleaned_data['card_number']
+        if commit:
+            instance.save()
+        return instance
 def make_missing_data_form(instance, required_fields=[]):
     fields = SortedDict({
         'is_professional': forms.BooleanField(label=_(u"Professionnel"), required=False, initial=False, widget=CommentedCheckboxInput(info_text='Je suis professionnel')),

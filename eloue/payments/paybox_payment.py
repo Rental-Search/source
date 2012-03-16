@@ -82,19 +82,41 @@ class PayboxManager(object):
 		)
 		return response['PORTEUR'][0]
 
+	def authorize_subscribed(self, member_id, card_number, expiration_date, cvv, amount):
+		if cvv:
+			response = self._request(
+				TYPE=51, MONTANT=amount, REFABONNE=member_id, PORTEUR=card_number,
+				DATEVAL=expiration_date, CVV=cvv, 
+				REFERENCE='6666'
+			)
+		else:
+			response = self._request(
+				TYPE=51, MONTANT=amount, REFABONNE=member_id, PORTEUR=card_number,
+				DATEVAL=expiration_date,
+				REFERENCE='6666'
+			)
+		return response['NUMAPPEL'][0], response['NUMTRANS'][0]
+
 	def authorize(self, member_id, card_number, expiration_date, cvv, amount):
-		response = self._request(
-			TYPE=51, MONTANT=amount, REFABONNE=member_id, PORTEUR=card_number,
-			DATEVAL=expiration_date, CVV=cvv, 
-			REFERENCE='6666'
-		)
+		if cvv:
+			response = self._request(
+				TYPE=1, MONTANT=amount, REFABONNE=member_id, PORTEUR=card_number,
+				DATEVAL=expiration_date, CVV=cvv, 
+				REFERENCE='6666'
+			)
+		else:
+			response = self._request(
+				TYPE=1, MONTANT=amount, REFABONNE=member_id, PORTEUR=card_number,
+				DATEVAL=expiration_date,
+				REFERENCE='6666'
+			)
 		return response['NUMAPPEL'][0], response['NUMTRANS'][0]
 
 
 	def debit(self, member_id, card_number, expiration_date, cvv, amount, numappel, numtrans):
 		response = self._request(
 			TYPE=52, MONTANT=amount, REFABONNE=member_id, PORTEUR=card_number,
-			DATEVAL=expiration_date, CVV=cvv,
+			DATEVAL=expiration_date,
 			REFERENCE=random.randint(10**(LENGTH-1),10**LENGTH-1),
 			NUMAPPEL=numappel, NUMTRANS=numtrans
 		)
@@ -142,9 +164,11 @@ class PayboxManager(object):
 # 	print 'modify user', pm.modify('dfgsd', '1111222233334444', '0115', '123')
 # 	numquestion, numtrans = pm.authorize('dfgsd', p, '0115', '123', 100)
 # 	print 'authorize payment'
-# 	#numquestion, numtrans = pm.debit('dfgsd', p, '0115', '123', 100, numquestion, numtrans)
+# 	numquestion, numtrans = pm.debit('dfgsd', p, '0115', '123', 100, numquestion, numtrans)
+# 	numquestion, numtrans = pm.authorize('dfgsd', p, '0115', None, 50)
+# 	numquestion, numtrans = pm.debit('dfgsd', p, '0115', '123', 50, numquestion, numtrans)
 # 	#print 'make payment'
-# 	print 'cancel payment', pm.cancel('dfgsd', p, '0115', '123', numquestion, numtrans)
+# 	#print 'cancel payment', pm.cancel('dfgsd', p, '0115', '123', numquestion, numtrans)
 # 	print 'credit', pm.credit('dfgsd', p, '0115', '123', 50)
 
 # except PayboxException:
