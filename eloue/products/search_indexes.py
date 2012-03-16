@@ -5,13 +5,13 @@ from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
 
 from haystack.sites import site
-from haystack.indexes import CharField, DateTimeField, DateField, FloatField, MultiValueField, EdgeNgramField
+from haystack.indexes import CharField, DateTimeField, DateField, FloatField, MultiValueField, EdgeNgramField, IntegerField, DecimalField, BooleanField
 from haystack.exceptions import AlreadyRegistered
 from haystack.query import SearchQuerySet
 
 from queued_search.indexes import QueuedSearchIndex
 
-from eloue.products.models import Alert, Product
+from eloue.products.models import Alert, Product, CarProduct, RealEstateProduct
 from eloue.rent.models import Booking
 
 __all__ = ['ProductIndex', 'product_search', 'AlertIndex', 'alert_search']
@@ -69,6 +69,73 @@ class ProductIndex(QueuedSearchIndex):
     def get_queryset(self):
         return Product.on_site.active()
         
+class CarIndex(ProductIndex):
+
+    brand = CharField(model_attr='brand')
+    model = CharField(model_attr='model')
+
+    # charactersitiques du vehicule
+    seat_number = IntegerField(model_attr='seat_number')
+    door_number = IntegerField(model_attr='door_number')
+    fuel = IntegerField(model_attr='fuel')
+    transmission = IntegerField(model_attr='transmission')
+    mileage = IntegerField(model_attr='mileage')
+    consumption = DecimalField(model_attr='consumption')
+
+    # options & accessoires
+    air_conditioning = BooleanField(model_attr='air_conditioning')
+    power_steering = BooleanField(model_attr='power_steering')
+    cruise_control = BooleanField(model_attr='cruise_control')
+    gps = BooleanField(model_attr='gps')
+    baby_seat = BooleanField(model_attr='baby_seat')
+    roof_box = BooleanField(model_attr='roof_box')
+    bike_rack = BooleanField(model_attr='bike_rack')
+    snow_tires = BooleanField(model_attr='snow_tires')
+    snow_chains = BooleanField(model_attr='snow_chains')
+    ski_rack = BooleanField(model_attr='ski_rack')
+    cd_player = BooleanField(model_attr='cd_player')
+    audio_input = BooleanField(model_attr='audio_input')
+
+    # informations de l'assurance
+    tax_horsepower = DecimalField(model_attr='tax_horsepower')
+    licence_plate = CharField(model_attr='licence_plate')
+    first_registration_date = DateField(model_attr='first_registration_date')
+
+    def get_queryset(self):
+        return CarProduct.on_site.active()
+
+class RealEstateIndex(ProductIndex):
+    
+    capacity = IntegerField(model_attr='capacity')
+    private_life = IntegerField(model_attr='private_life')
+    chamber_number = IntegerField(model_attr='chamber_number')
+    rules = CharField(model_attr='rules')
+
+    # services inclus
+    air_conditioning = BooleanField(model_attr='air_conditioning')
+    breakfast = BooleanField(model_attr='breakfast')
+    balcony = BooleanField(model_attr='balcony')
+    lockable_chamber = BooleanField(model_attr='lockable_chamber')
+    towel = BooleanField(model_attr='towel')
+    lift = BooleanField(model_attr='lift')
+    family_friendly = BooleanField(model_attr='family_friendly')
+    gym = BooleanField(model_attr='gym')
+    accessible = BooleanField(model_attr='accessible')
+    heating = BooleanField(model_attr='heating')
+    jacuzzi = BooleanField(model_attr='jacuzzi')
+    chimney = BooleanField(model_attr='chimney')
+    internet_access = BooleanField(model_attr='internet_access')
+    kitchen = BooleanField(model_attr='kitchen')
+    parking = BooleanField(model_attr='parking')
+    smoking_accepted = BooleanField(model_attr='smoking_accepted')
+    ideal_for_events = BooleanField(model_attr='ideal_for_events')
+    tv = BooleanField(model_attr='tv')
+    washing_machine = BooleanField(model_attr='washing_machine')
+    tumble_dryer = BooleanField(model_attr='tumble_dryer')
+    computer_with_internet = BooleanField(model_attr='computer_with_internet')
+
+    def get_queryset(self):
+        return LocationProduct.on_site.active()
 
 class AlertIndex(QueuedSearchIndex):
     designation = CharField(model_attr='designation')
@@ -91,11 +158,15 @@ class AlertIndex(QueuedSearchIndex):
 
 try:
     site.register(Product, ProductIndex)
+    site.register(CarProduct, CarIndex)
+    site.register(RealEstateProduct, RealEstateIndex)
     site.register(Alert, AlertIndex)
 except AlreadyRegistered:
     pass
 
 
 product_search = SearchQuerySet().models(Product).facet('sites').facet('categories').facet('owner').facet('price').narrow('sites:%s' % settings.SITE_ID)
+car_search = SearchQuerySet().models(CarProduct).facet('sites').facet('categories').facet('owner').facet('price').narrow('sites:%s' % settings.SITE_ID)
+location_search = SearchQuerySet().models(RealEstateProduct).facet('sites').facet('categories').facet('owner').facet('price').narrow('sites:%s' % settings.SITE_ID)
 alert_search = SearchQuerySet().models(Alert)
 

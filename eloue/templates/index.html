@@ -34,10 +34,9 @@
     <div class="products-home">
         <div class="products-home-tabs">
             <ul>
-                <li><a href="#near">Près d'ici</a></li>
-                <li><a href="#moreRent">Les plus loué</a></li>
-                <li><a href="#hotloc">Hot loc</a></li>
-                <li><a href="#categories">Catégories</a><li>
+                <li><a href="#near">{% trans "Près d'ici" %}</a></li>
+                <li><a href="#hotloc">{% trans "Locations du moment" %}</a></li>
+                <li><a href="#categories">{% trans "Catégories" %}</a><li>
             </ul>
             <div id="near">
             {% with last_added as product_list %}
@@ -46,7 +45,6 @@
                 {% endwith %}
             {% endwith %}
             </div>{# near #}
-            <div id="moreRent"></div>{# moreRent #}
             <div id="hotloc">
                 <ul class="product-list">
                 {% for curiosity in curiosities %}
@@ -68,7 +66,7 @@
             </a>
         </li>
         <li class="arg-iphoneApp">
-            <a href="#">
+            <a href="/mobile/iphone/">
                 <img src="{{ MEDIA_URL }}images/e-loue_sur_iPhone.png" width="204" height="126" />
                 <h4>{% trans "L'appli pour tout louer !" %}</h4>
             </a>

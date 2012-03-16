@@ -95,10 +95,31 @@ def search(request):
 
 @never_cache
 @secure_required
+def publish_new_ad(request, *args, **kwargs):
+    return direct_to_template(request, template='products/publish_new_ad.html')
+    
+
+
+
+@never_cache
+@secure_required
 def product_create(request, *args, **kwargs):
     wizard = ProductWizard([ProductForm, EmailAuthenticationForm])
     return wizard(request, *args, **kwargs)
-    
+
+@never_cache
+@secure_required
+def car_product_create(request, *args, **kwargs):
+    from eloue.products.forms import CarProductForm
+    wizard = ProductWizard([CarProductForm, EmailAuthenticationForm])
+    return wizard(request, *args, **kwargs)
+
+@never_cache
+@secure_required
+def real_estate_product_create(request, *args, **kwargs):
+    from eloue.products.forms import RealEstateForm
+    wizard = ProductWizard([RealEstateForm, EmailAuthenticationForm])
+    return wizard(request, *args, **kwargs)
 
 @login_required
 @ownership_required(model=Product, object_key='product_id', ownership=['owner'])

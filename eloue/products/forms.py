@@ -13,8 +13,8 @@ from mptt.forms import TreeNodeChoiceField
 from eloue.accounts.models import Patron, COUNTRY_CHOICES, Address
 from eloue.geocoder import GoogleGeocoder
 from eloue.products.fields import FacetField
-from eloue.products.models import Alert, PatronReview, ProductReview, Product, Picture, Category, UNIT, PAYMENT_TYPE, ProductRelatedMessage, MessageThread
-from eloue.products.widgets import PriceTextInput
+from eloue.products.models import Alert, PatronReview, ProductReview, Product, CarProduct, RealEstateProduct, Picture, Category, UNIT, PAYMENT_TYPE, ProductRelatedMessage, MessageThread
+from eloue.products.widgets import PriceTextInput, CommentedSelectInput
 from eloue.products.utils import Enum
 from django_messages.forms import ComposeForm
 import datetime
@@ -185,16 +185,33 @@ class MessageEditForm(forms.Form):
         return message_list # ... RETURNED?
 
 
+def generate_choices(nodes, empty_value=_(u"Choisissez une catégorie")):
+    def _children(nodes):
+        import collections
+        if not isinstance(nodes, collections.Iterable):
+            nodes = (nodes, )
+        for node in nodes:
+            for child in node.get_children():
+                yield child
+
+    if empty_value is not None:
+        yield ('', empty_value)
+
+    for child in _children(nodes):
+        yield (
+            child.name,
+            [(descendant.pk, descendant.name) for descendant in child.get_descendants()]
+        )
+
 class ProductForm(BetterModelForm):
-    category = TreeNodeChoiceField(label=_(u"Catégorie"), queryset=Category.tree.all(), empty_label=_(u"Choisissez une catégorie"), level_indicator=u'--', widget=forms.Select(attrs={'class': 'selm'}))
+    category = forms.TypedChoiceField(label=_(u"Catégorie"), coerce=lambda pk: Category.tree.get(pk=pk), choices=generate_choices(Category.tree.root_nodes()))
 
     summary = forms.CharField(label=_(u"Titre"), max_length=100, widget=forms.TextInput(attrs={'class': 'inm'}))
-    picture_id = forms.IntegerField(required=False, widget=forms.HiddenInput())
+    picture_id = forms.IntegerField(required=True, widget=forms.HiddenInput())
     picture = forms.ImageField(label=_(u"Photo"), required=False, widget=forms.FileInput(attrs={'class': 'inm'}))
-    deposit_amount = forms.DecimalField(label=_(u"Caution"), initial=0, required=False, max_digits=8, decimal_places=2, widget=PriceTextInput(attrs={'class': 'price'}), localize=True, help_text=_(u"Montant utilisé en cas de dédomagement"))
+    deposit_amount = forms.DecimalField(label=_(u"Dépôt de garantie"), initial=0, required=False, max_digits=8, decimal_places=2, widget=PriceTextInput(attrs={'class': 'price'}), localize=True, help_text=_(u"Montant utilisé en cas de dédomagement"))
     quantity = forms.IntegerField(label=_(u"Quantité"), initial=1, widget=forms.TextInput(attrs={'class': 'inm price'}), help_text=_(u"Le locataire peut réserver plusieurs exemplaires si vous les possédez"))
     description = forms.CharField(label=_(u"Description"), widget=forms.Textarea())
-    #payment_type = forms.ChoiceField(choices=PAYMENT_TYPE, required=False, widget=forms.Select(attrs={'class': 'selm'}))
     
     hour_price = forms.DecimalField(label=_(u"L'heure"), required=False, max_digits=10, decimal_places=2, min_value=D('0.01'), widget=PriceTextInput(attrs={'class': 'price'}), localize=True)
     day_price = forms.DecimalField(label=_(u"La journée"), required=True, max_digits=10, decimal_places=2, min_value=D('0.01'), widget=PriceTextInput(attrs={'class': 'price'}), localize=True, help_text=_(u"Prix de location à la journée"))
@@ -216,8 +233,8 @@ class ProductForm(BetterModelForm):
         return deposit_amount
     
     def clean_picture(self):
-        picture = self.cleaned_data['picture']
-        picture_id = self.cleaned_data['picture_id']
+        picture = self.cleaned_data.get('picture')
+        picture_id = self.cleaned_data.get('picture_id')
         if not (picture or picture_id):
             raise forms.ValidationError(_(u"Vous devez ajouter une photo."))
     
@@ -229,15 +246,86 @@ class ProductForm(BetterModelForm):
     
     class Meta:
         model = Product
-        fields = ('category', 'summary', 'picture_id', 'picture', 'deposit_amount', 'quantity', 'description')
-        fieldsets = [('informations', {'fields': ['summary', 'picture', 'description', 'quantity'], 
-                                            'legend': 'Informations'}),
+        fieldsets = [
+                        ('category', {'fields': ['category'], 'legend': _(u'Choisissez un catégorie')}),
+                        ('informations', {'fields': ['summary', 'picture_id', 'picture', 'description', 'quantity'], 
+                                            'legend': _(u'Informations')}),
                         ('price', {'fields': ['day_price', 'deposit_amount'], 
-                                    'legend': 'Prix de la location'}),
+                                    'legend': _(u'Prix de la location')}),
                         ('price_detail', {'fields': ['hour_price', 'week_end_price', 'week_price', 'two_weeks_price', 'month_price'], 
-                                            'legend': 'Grille des tarifs',
+                                            'legend': _(u'Grille des tarifs'),
                                             'description': 'La grille tarifaire permet d\'appliquer un tarif dégressif en fonction de la période. Ces prix ne sont pas obligatoires pour publier l\'annonce, il est possible de les ajouter plus tard.',
                                             'classes': ['prices-grid', 'hidden-fieldset']})]
+
+
+class CarProductForm(ProductForm):
+    category = forms.TypedChoiceField(label=_(u"Catégorie"), coerce=lambda pk: Category.tree.get(pk=pk), choices=generate_choices(Category.tree.get(slug='auto-et-moto')))
+    quantity = forms.IntegerField(widget=forms.HiddenInput(), initial=1)
+    summary = forms.CharField(widget=forms.HiddenInput(), required=False)
+
+
+    def clean_summary(self):
+        summary = self.cleaned_data.get('summary', None)
+        summary = '%s %s' % (self.cleaned_data['brand'], self.cleaned_data['model'])
+        return summary
+
+
+
+
+    class Meta:
+        model = CarProduct
+        fieldsets = [('category', {'fields': ['category'], 'legend': _(u'Choisissez un catégorie')}),
+                        ('informations', {'fields': ['brand', 'model', 'picture_id', 'picture', 'description'], 
+                                            'legend': _(u'Description du véhicule')}),
+                        ('car_characteristics', {
+                            'fields': ['seat_number', 'door_number', 'fuel', 'transmission', 'mileage', 'consumption'],
+                            'legend': _(u'Caractéristique du véhicule'),
+                            }),
+                        ('options', {
+                            'fields': ['air_conditioning', 'power_steering', 
+                                'cruise_control', 'gps', 'baby_seat', 'roof_box', 
+                                'bike_rack', 'snow_tires', 'snow_chains', 
+                                'ski_rack', 'cd_player', 'audio_input'],
+                            'legend': _(u'Options & accessoires'),
+                            }),
+                        ('price', {'fields': ['day_price', 'deposit_amount'], 
+                                    'legend': _(u'Prix de la location')}),
+                        ('price_detail', {'fields': ['hour_price', 'week_end_price', 'week_price', 'two_weeks_price', 'month_price'], 
+                                            'legend': _(u'Grille des tarifs'),
+                                            'description': _(u'La grille tarifaire permet d\'appliquer un tarif dégressif en fonction de la période. Ces prix ne sont pas obligatoires pour publier l\'annonce, il est possible de les ajouter plus tard.'),
+                                            'classes': ['prices-grid', 'hidden-fieldset']})]
+        widgets = {
+            'seat_number': CommentedSelectInput(info_text=_(u'place(s)')),
+            'door_number': CommentedSelectInput(info_text=_(u'porte(s)')),
+            'consumption': CommentedSelectInput(info_text=_(u'litre/100km')),
+        }
+
+
+class RealEstateForm(ProductForm):
+    category = forms.TypedChoiceField(label=_(u'Catégorie'), coerce=lambda pk: Category.tree.get(pk=pk), choices=generate_choices(Category.tree.get(slug='hebergement')))
+    quantity = forms.IntegerField(widget=forms.HiddenInput(), initial=1)
+
+    class Meta:
+        model = RealEstateProduct
+        fieldsets = [('category', {'fields': ['category'], 'legend': _(u'Choisissez un catégorie')}),
+                    ('informations', {'fields': ['summary', 'picture_id', 'picture', 'description'], 
+                                        'legend': _(u'Informations')}),
+                    ('real_estate_description', {'fields' : ['capacity', 'private_life', 'chamber_number', 'rules'],
+                                                    'legend' : _(u'Description du lieu')}),
+                    ('service_included', {'fields': ['air_conditioning', 'breakfast', 'balcony', 'lockable_chamber', 'towel', 'lift', 'family_friendly', 
+                                                        'gym', 'accessible', 'heating', 'jacuzzi', 'chimney', 'internet_access', 'kitchen', 'parking', 'smoking_accepted', 'ideal_for_events',
+                                                        'tv', 'washing_machine', 'tumble_dryer', 'computer_with_internet'],
+                                            'legend': _(u'Service inclus')}),
+                    ('price', {'fields': ['day_price', 'deposit_amount'], 
+                                'legend': _(u'Prix de la location')}),
+                    ('price_detail', {'fields': ['hour_price', 'week_end_price', 'week_price', 'two_weeks_price', 'month_price'], 
+                                        'legend': _(u'Grille des tarifs'),
+                                        'description': 'La grille tarifaire permet d\'appliquer un tarif dégressif en fonction de la période. Ces prix ne sont pas obligatoires pour publier l\'annonce, il est possible de les ajouter plus tard.',
+                                        'classes': ['prices-grid', 'hidden-fieldset']})]
+        widgets = {
+            'capacity': CommentedSelectInput(info_text=_(u'persone(s)')),
+            'chamber_number': CommentedSelectInput(info_text=_(u'chambre(s)'))
+        }
 
 
 class ProductEditForm(forms.ModelForm):
