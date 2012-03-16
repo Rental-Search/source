@@ -11,12 +11,12 @@
 	</ul>
 	<div class="content-main">
 		<h1>Ajouter une annonce</h1>
-
 		{% if form.is_multipart %}
 		<form enctype="multipart/form-data" class="form-horizontal" method="post" action="">
 		{% else %}
 		<form class="form-horizontal" method="post" action="">
 		{% endif %}
+			{{ form.errors }}
 			{% csrf_token %}
 			{% for fieldset in form.fieldsets %}
 			<fieldset class="{{ fieldset.classes }}">
@@ -28,35 +28,58 @@
   						<p class="fieldset-description">{{ fieldset.description }}</p>
   					</div>
   				{% endif %}
+  				{% if fieldset.name == "service_included" or fieldset.name == "options" %}
   				{% for formfield in fieldset %}
-  					{% if formfield.is_hidden %}
-  						{{formfield}}
-  					{% else %}
-		  				<div class="control-group {% if formfield.errors %} error {% endif %}">
-					        <label class="control-label" for="{{ formfield.id_for_label }}">{{ formfield.label }} {% if formfield.field.required %}*{% endif %}</label>
-					        <div class="controls">
-					            {{ formfield }}
-					            <p class="help-block">{{ formfield.help_text}}</p>
-					            {% if formfield.errors %}
-					            <span class="help-inline">
-					                {% for error in formfield.errors %}
-					                    {{ error|escape }}
-					                {% endfor %}
-					            </span>
-					            {% endif %}
-					        </div>
-				    	</div>
-			    	{% endif %}
-  				{% endfor %}
-  				{% if fieldset.name == "price" %}
-  				<div class="control-group">
-  					<a href="#" class="more-price">+ {% trans "Ajoutez des prix en fonction de la période" %}</a>
+  				<div class="control-group {% if formfield.errors %} error {% endif %}">
+  					<div class="controls">
+              			<label class="checkbox">
+                		{{formfield}}
+                		{{formfield.label}}
+              			</label>
+              			{% if formfield.errors %}
+							<span class="help-inline">
+							{% for error in formfield.errors %}
+								{{ error|escape }}
+							{% endfor %}
+						    </span>
+						{% endif %}
+            		</div>
   				</div>
+  				{% endfor %}
+  				{% else %}
+	  				{% for formfield in fieldset %}
+	  					{% if formfield.is_hidden %}
+	  						{{formfield}}
+	  					{% else %}
+			  				<div class="control-group {% if formfield.errors %} error {% endif %}">
+						        <label class="control-label" for="{{ formfield.id_for_label }}">{{ formfield.label }} {% if formfield.field.required %}*{% endif %}</label>
+						        <div class="controls">
+						            {{ formfield }}
+						            <p class="help-block">{{ formfield.help_text}}</p>
+						            {% if formfield.errors %}
+						            <span class="help-inline">
+						                {% for error in formfield.errors %}
+						                    {{ error|escape }}
+						                {% endfor %}
+						            </span>
+						            {% endif %}
+						        </div>
+					    	</div>
+				    	{% endif %}
+	  				{% endfor %}
+	  				{% if fieldset.name == "price" %}
+	  				<div class="control-group">
+	  					<a href="#" class="more-price">+ {% trans "Ajoutez des prix en fonction de la période" %}</a>
+	  				</div>
+	  				{% endif %}
   				{% endif %}
 			</fieldset>	
 			{% endfor %}
 		    <div class="form-actions">
 		    	<button type="submit" class="btn btn-primary">{% trans "Continuer" %}</button>
+		    	{% for hidden in form.hidden_fields %}
+    				{{ hidden }}
+    			{% endfor %}
 		    </div>
 		</form>
 	</div>

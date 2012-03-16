@@ -68,6 +68,7 @@ class ProductWizard(NewGenericFormWizard):
             return 'products/product_create.html'
         else:
             return 'accounts/auth_missing.html'
+
             
 class MessageWizard(NewGenericFormWizard):
     
@@ -105,6 +106,7 @@ class MessageWizard(NewGenericFormWizard):
             return 'django_messages/message_create.html'
         else:
             return 'accounts/auth_missing.html'
+
     
 class AlertWizard(NewGenericFormWizard):
     def done(self, request, form_list):
@@ -128,6 +130,7 @@ class AlertWizard(NewGenericFormWizard):
             return 'products/alert_create.html'
         else:
             return 'products/alert_missing.html'
+
     
 class AlertAnswerWizard(NewGenericFormWizard):
     def done(self, request, form_list):

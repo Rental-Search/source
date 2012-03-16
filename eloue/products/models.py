@@ -76,6 +76,94 @@ PAYMENT_TYPE = Enum([
     (1, 'PAYPAL', _(u'Le locataire paye en ligne et mon objet est assuré'))
 ])
 
+SEAT_NUMBER = Enum([
+    (2, '2', _(u'2')),
+    (3, '3', _(u'3')),
+    (4, '4', _(u'4')),
+    (5, '5', _(u'5')),
+    (6, '6', _(u'6')),
+    (7, '7', _(u'7')),
+    (8, '8', _(u'8')),
+    (9, '9', _(u'9')),
+    (10, '10', _(u'10')),
+])
+
+DOOR_NUMBER = Enum([
+    (2, '2', _(u'2')),
+    (3, '3', _(u'3')),
+    (4, '4', _(u'4')),
+    (5, '5', _(u'5')),
+    (6, '6', _(u'6')),
+])
+
+CONSUMPTION = Enum([
+    (2, '2', _(u'2')),
+    (3, '3', _(u'3')),
+    (4, '4', _(u'4')),
+    (5, '5', _(u'5')),
+    (6, '6', _(u'6')), 
+    (7, '7', _(u'7')),
+    (8, '8', _(u'8')),
+    (9, '9', _(u'9')),
+    (10, '10', _(u'10')),
+    (11, '11', _(u'11')),
+    (12, '12', _(u'12')),
+    (13, '13', _(u'13')),
+    (14, '14', _(u'14')),
+    (15, '15', _(u'15')),
+    (16, '16', _(u'16')),
+    (17, '17', _(u'17')),
+    (18, '18', _(u'18')),
+    (19, '19', _(u'19')),
+])
+
+FUEL = Enum ([
+    (1, '1', _(u'Essence')),
+    (2, '2', _(u'Diesel')),
+    (3, '3', _(u'GPL')),
+    (4, '4', _(u'Electrique')),
+])
+
+TRANSMISSION = Enum ([
+    (1, '1', _(u'Manuel')),
+    (2, '2', _(u'Automatique')),
+])
+
+MILEAGE = Enum ([
+    (1, '1', _(u'- de 10000 km')),
+    (2, '2', _(u'Entre 10001 et 50000 km')),
+    (3, '3', _(u'Plus de 50000 km')),
+])
+
+CAPICITY = Enum ([
+    (1, '1', _(u'1')),
+    (2, '2', _(u'2')),
+    (3, '3', _(u'3')),
+    (4, '4', _(u'4')),
+    (5, '5', _(u'5')),
+    (6, '6', _(u'6')), 
+    (7, '7', _(u'7')),
+    (8, '8', _(u'8')),
+    (9, '9', _(u'9')),
+    (10, '10', _(u'10')),
+    (11, '11', _(u'11')),
+    (12, '12', _(u'12')),
+    (13, '13', _(u'13')),
+    (14, '14', _(u'14')),
+    (15, '15', _(u'15')),
+    (16, '16', _(u'16')),
+    (17, '17', _(u'17')),
+    (18, '18', _(u'18')),
+    (19, '19', _(u'19+')),
+])
+
+PRIVATE_LIFE = Enum([
+    (1, '1', _(u'Appartement')),
+    (2, '2', _(u'Maison')),
+    (3, '3', _(u'Chambre privée')),
+])
+
+
 INSURANCE_MAX_DEPOSIT = getattr(settings, 'INSURANCE_MAX_DEPOSIT', 750)
 DEFAULT_RADIUS = getattr(settings, 'DEFAULT_RADIUS', 50)
 DEFAULT_CURRENCY = get_format('CURRENCY') if not settings.CONVERT_XPF else "XPF"
@@ -90,7 +178,7 @@ class Product(models.Model):
     currency = models.CharField(max_length=3, choices=CURRENCY, default=DEFAULT_CURRENCY)
     description = models.TextField()
     address = models.ForeignKey(Address, related_name='products')
-    quantity = models.IntegerField()
+    quantity = models.IntegerField(default=1)
 
     is_archived = models.BooleanField(_(u'archivé'), default=False, db_index=True)
     is_allowed = models.BooleanField(_(u'autorisé'), default=True, db_index=True)
@@ -232,66 +320,68 @@ class CarProduct(Product):
     model = models.CharField(_(u'modèle'), max_length=30)
 
     # charactersitiques du vehicule
-    seat_number = models.IntegerField(_(u'nombre de place'), null=True, blank=True)
-    door_number = models.IntegerField(_(u'nombre de porte'), null=True, blank=True)
-    fuel = models.IntegerField(_(u'énergie'), choices=[(1, 'essence'), (2, 'diesel')], null=True, blank=True)
-    transmission = models.IntegerField(_(u'boite de vitesse'), choices=[(1, 'manuel'), (2, 'automatique')], null=True, blank=True)
-    mileage = models.IntegerField(_(u'kilométrage'), choices=[(1, '- 10000 km'), (2, '10001 - 50000 km')], null=True, blank=True)
-    consumption = models.DecimalField(_(u'consommation'), decimal_places=2, max_digits=5, null=True, blank=True)
+    seat_number = models.IntegerField(_(u'nombre de place'), null=True, blank=True, choices=SEAT_NUMBER, default=4)
+    door_number = models.IntegerField(_(u'nombre de porte'), null=True, blank=True, choices=DOOR_NUMBER, default=5)
+    fuel = models.IntegerField(_(u'énergie'), choices=FUEL, null=True, blank=True, default=1)
+    transmission = models.IntegerField(_(u'boite de vitesse'), choices=TRANSMISSION, null=True, blank=True, default=1)
+    mileage = models.IntegerField(_(u'kilométrage'), choices=MILEAGE, null=True, blank=True, default=2)
+    consumption = models.DecimalField(_(u'consommation'), decimal_places=2, max_digits=5, null=True, blank=True, choices=CONSUMPTION, default=4)
 
     # options & accessoires
-    air_conditioning = models.NullBooleanField(_(u'climatisation'))
-    power_steering = models.NullBooleanField(_(u'direction assistée'))
-    cruise_control = models.NullBooleanField(_(u'régulateur de vitesse'))
-    gps = models.NullBooleanField(_(u'GPS'))
-    baby_seat = models.NullBooleanField(_(u'siège bébé'))
-    roof_box = models.NullBooleanField(_(u'coffre de toit'))
-    bike_rack = models.NullBooleanField(_(u'porte-vélo'))
-    snow_tires = models.NullBooleanField(_(u'pneus neige'))
-    snow_chains = models.NullBooleanField(_(u'chaines'))
-    ski_rack = models.NullBooleanField(_(u'porte-skis'))
-    cd_player = models.NullBooleanField(_(u'lecteur CD'))
-    audio_input = models.NullBooleanField(_(u'entrée audio/iPod'))
+    air_conditioning = models.BooleanField(_(u'climatisation'))
+    power_steering = models.BooleanField(_(u'direction assistée'))
+    cruise_control = models.BooleanField(_(u'régulateur de vitesse'))
+    gps = models.BooleanField(_(u'GPS'))
+    baby_seat = models.BooleanField(_(u'siège bébé'))
+    roof_box = models.BooleanField(_(u'coffre de toit'))
+    bike_rack = models.BooleanField(_(u'porte-vélo'))
+    snow_tires = models.BooleanField(_(u'pneus neige'))
+    snow_chains = models.BooleanField(_(u'chaines'))
+    ski_rack = models.BooleanField(_(u'porte-skis'))
+    cd_player = models.BooleanField(_(u'lecteur CD'))
+    audio_input = models.BooleanField(_(u'entrée audio/iPod'))
 
     # informations de l'assurance
     tax_horsepower = models.DecimalField(_(u'CV fiscal'), decimal_places=2, max_digits=6)
     licence_plate = models.CharField(_(u"numéro d'immatriculation"), max_length=10)
     first_registration_date = models.DateField(_(u'première mise en circulation'))
 
+
 class RealEstateProduct(Product):
     
-    capacity = models.IntegerField(_(u'capacité'), null=True, blank=True)
+    capacity = models.IntegerField(_(u'capacité'), null=True, blank=True, choices=CAPICITY, default=1, help_text=_(u'Nombre de personne que peux accueillir votre locgement'))
     private_life = models.IntegerField(_(u'vie privée'),
-        choices=[(1, 'Chambre privée'), (2, 'Chambre privée'), (3, 'Maison / Appartement en entier')], null=True, blank=True)
-    chamber_number = models.IntegerField(_(u'nombre de chambre'), null=True, blank=True)
-    rules = models.CharField(_(u"règle d'utilisation"), max_length=60, null=True, blank=True)
+        choices=PRIVATE_LIFE, null=True, blank=True, default=1)
+    chamber_number = models.IntegerField(_(u'nombre de chambre'), null=True, blank=True, choices=CAPICITY, default=1)
+    rules = models.TextField(_(u"règle d'utilisation"), max_length=60, null=True, blank=True)
 
-    # services inclus
-    air_conditioning = models.NullBooleanField(_(u'air conditionné'))
-    breakfast = models.NullBooleanField(_(u'petit déjeuner'))
-    balcony = models.NullBooleanField(_(u'balcon/terasse'))
-    lockable_chamber = models.NullBooleanField(_(u'chambre avec serrure'))
-    towel = models.NullBooleanField(_(u'serviettes'))
-    lift = models.NullBooleanField(_(u'ascenseur dans l\'immeuble'))
-    family_friendly = models.NullBooleanField(_(u'adapté aux familles/enfants'))
-    gym = models.NullBooleanField(_(u'salle de sport'))
-    accessible = models.NullBooleanField(_(u'accessible aux personnes handicapées'))
-    heating = models.NullBooleanField(_(u'chauffage'))
-    jacuzzi = models.NullBooleanField(_(u'jacuzzi'))
-    chimney = models.NullBooleanField(_(u'cheminée intérieure'))
-    internet_access = models.NullBooleanField(_(u'accès internet'))
-    kitchen = models.NullBooleanField(_(u'cuisine'))
-    parking = models.NullBooleanField(_(u'parking'))
-    smoking_accepted = models.NullBooleanField(_(u'fumeurs acceptées'))
-    ideal_for_events = models.NullBooleanField(_(u'idéal pour des évènements'))
-    tv = models.NullBooleanField(_(u'TV'))
-    washing_machine = models.NullBooleanField(_(u'machine à laver'))
-    tumble_dryer = models.NullBooleanField(_(u'sèche linge'))
-    computer_with_internet = models.NullBooleanField(_(u'ordinateur avec Internet'))
+    # service_included
+    air_conditioning = models.BooleanField(_(u'air conditionné'))
+    breakfast = models.BooleanField(_(u'petit déjeuner'))
+    balcony = models.BooleanField(_(u'balcon/terasse'))
+    lockable_chamber = models.BooleanField(_(u'chambre avec serrure'))
+    towel = models.BooleanField(_(u'serviettes'))
+    lift = models.BooleanField(_(u'ascenseur dans l\'immeuble'))
+    family_friendly = models.BooleanField(_(u'adapté aux familles/enfants'))
+    gym = models.BooleanField(_(u'salle de sport'))
+    accessible = models.BooleanField(_(u'accessible aux personnes handicapées'))
+    heating = models.BooleanField(_(u'chauffage'))
+    jacuzzi = models.BooleanField(_(u'jacuzzi'))
+    chimney = models.BooleanField(_(u'cheminée intérieure'))
+    internet_access = models.BooleanField(_(u'accès internet'))
+    kitchen = models.BooleanField(_(u'cuisine'))
+    parking = models.BooleanField(_(u'parking'))
+    smoking_accepted = models.BooleanField(_(u'fumeurs acceptées'))
+    ideal_for_events = models.BooleanField(_(u'idéal pour des évènements'))
+    tv = models.BooleanField(_(u'TV'))
+    washing_machine = models.BooleanField(_(u'machine à laver'))
+    tumble_dryer = models.BooleanField(_(u'sèche linge'))
+    computer_with_internet = models.BooleanField(_(u'ordinateur avec Internet'))
 
 
 def upload_to(instance, filename):
     return 'pictures/%s.jpg' % uuid.uuid4().hex
+
 
 class Picture(models.Model):
     """A picture"""
@@ -388,6 +478,7 @@ class CategoryDescription(models.Model):
     def __unicode__(self):
         return "%s - %s"%(self.category.name, self.title)
     
+
 class Property(models.Model):
     """A property"""
     category = models.ForeignKey(Category, related_name='properties')
@@ -420,6 +511,7 @@ class PropertyValue(models.Model):
         u'Mercedes'
         """
         return smart_unicode(self.value)
+
 
 class Price(models.Model):
     """A price"""
@@ -460,6 +552,7 @@ class Price(models.Model):
     
     class Meta:
         ordering = ['unit']
+
 
 class Review(models.Model):
     """A review"""
@@ -576,8 +669,8 @@ class Curiosity(models.Model):
     class Meta:
         verbose_name_plural = "curiosities"
         
+
 class MessageThread(models.Model):
-    
     sender = models.ForeignKey(Patron, related_name='initiated_threads')
     recipient = models.ForeignKey(Patron, related_name='participating_threads')
     product = models.ForeignKey(Product, related_name='messages', blank=True, null=True) # we should remove NULL after migration of the data
@@ -600,6 +693,7 @@ class MessageThread(models.Model):
         """
         return self.last_message.recipient == self.sender and not self.last_message.read_at
 
+
 class ProductRelatedMessage(Message):
 
     thread = models.ForeignKey(MessageThread, related_name='messages', blank=True, null=True) # we should remove NULL after migration of the data
@@ -613,6 +707,7 @@ if "notification" not in settings.INSTALLED_APPS:
     signals.post_save.connect(utils.new_message_email, sender=ProductRelatedMessage)
     signals.pre_save.connect(eloue_signals.message_content_filter, sender=ProductRelatedMessage)
     signals.pre_save.connect(eloue_signals.message_site_filter, sender=ProductRelatedMessage) 
+
 
 class Alert(models.Model):
     patron = models.ForeignKey(Patron, related_name='alerts')

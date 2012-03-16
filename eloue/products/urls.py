@@ -10,9 +10,10 @@ from eloue.rent.views import booking_create, booking_price, product_occupied_dat
 
 
 urlpatterns = patterns('',
-    url(r'^%s/$' % _("ajouter"), product_create, name="product_create"),
-    url(r'^%s/car/$' % _("ajouter"), 'eloue.products.views.carproduct_create', name="carproduct_create"),
-    url(r'^%s/location/$' % _("ajouter"), 'eloue.products.views.locationproduct_create', name="locationproduct_create"),
+    url(r'^%s/$' % _("ajouter"), 'eloue.products.views.publish_new_ad', name="publish_new_ad"),
+    url(r'^%s/%s/$' % (_("ajouter"), _("objet")), product_create, name="product_create"),
+    url(r'^%s/%s/$' % (_("ajouter"), _("voiture")), 'eloue.products.views.car_product_create', name="car_product_create"),
+    url(r'^%s/%s/$' % (_("ajouter"), _("lieu")), 'eloue.products.views.real_estate_product_create', name="real_estate_product_create"),
     url(r'^(?P<slug>[-\w]+)-(?P<product_id>\d+)/delete/$', product_delete, name="product_delete"),
 	url(r'^%s/$' % _("alertes"), alert_list, {'sqs': alert_search}, name="alert_list"),
 	url(r'^%s/$' % _("alertes/ajouter"), alert_create, name="alert_create"),

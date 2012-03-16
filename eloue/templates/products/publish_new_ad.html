@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Mettre en location" %}{% endblock %}
+
+
+{% block content %}
+<div class="container-main">
+<ul class="breadcrumb">
+	<li><a href="{% url home %}">{% trans "Accueil" %}</a></li>
+	<li>{% trans "Ajouter une annonce" %}</li>
+</ul>
+<div id="publish-new-ad">
+<h1 style="text-align: center;">{% trans "A quelle catégorie appartient votre annonce ?" %}</h1>
+<p class="publish-intro" style="text-align: center;">
+	e-loue vous fait gagner de l'argent en louant.<br> Vos biens deviennent source de revenue. 
+</p>
+<div class="car-product-create">
+	<a href="{% url car_product_create %}" class="btn">Ajouter une voiture</a>
+</div>{# car-product-create #}
+<div class="real-estate-product-create">
+	<a href="{% url real_estate_product_create %}" class="btn">Ajouter un lieu</a>
+</div>{# real-estate-product-create #}
+<div class="product-create">
+	<a href="{% url product_create %}" class="btn">Ajouter un autre objet</a>
+</div>{# product-create #}
+
+
+<div class="ht-fonction x12">
+	<h1>Pourquoi passer par e-loue ?</h1>
+	<ul class="ht-f-col"><li><div class="ht-icon lock"></div><div class="ht-f-desc"><span>Payez en toute sécurité</span><br>
+        Grâce à PayPal, bénéficiez du paiement le plus sécurisé au monde.
+    </div></li><li><div class="ht-icon car"></div><div class="ht-f-desc"><span>Louez tout</span><br>
+        De la voiture à la robe de soirée en passant par une perceuse, vous pouvez tout louer.
+    </div></li><li><div class="ht-icon laptop"></div><div class="ht-f-desc"><span>Réservez en ligne</span><br>
+        Le paiement s'effectue en ligne et nous vous garantissons ainsi le paiement.
+    </div></li></ul><ul class="ht-f-col"><li><div class="ht-icon money"></div><div class="ht-f-desc"><span>Gagnez de l’argent</span><br>
+        Rentabilisez un bien que vous utilisez rarement.
+    </div></li><li><div class="ht-icon assurancy"></div><div class="ht-f-desc"><span>Soyez assuré</span><br>
+        Notre partenaire assureur garantit vos objets en cas de casse.
+    </div></li><li><div class="ht-icon people"></div><div class="ht-f-desc"><span>Touchez un large public</span><br>
+        Votre annonce sera visible sur les moteurs de recherche.
+    </div></li></ul>
+	</div>
+</div>
+</div>{# container-main #}
+{% endblock %}
