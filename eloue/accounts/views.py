@@ -407,14 +407,14 @@ def patron_edit_credit_card(request):
     try:
         instance = request.user.creditcard
     except CreditCard.DoesNotExist:
-        instance = None
+        instance = CreditCard(holder=request.user)
     if request.method == 'POST':
-        form = CreditCardForm(request.POST, initial={'holder': request.user}, instance=instance)
+        form = CreditCardForm(data=request.POST, instance=instance)
         if form.is_valid():
             form.save()
             return redirect(patron_edit_credit_card)
     else:
-        form = CreditCardForm(initial={'holder': request.user}, instance=instance)
+        form = CreditCardForm(data=None, instance=instance)
     return render_to_response(
         template_name='accounts/patron_edit_credit_card.html', 
         dictionary={'form': form}, context_instance=RequestContext(request))

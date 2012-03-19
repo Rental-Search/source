@@ -10,6 +10,7 @@ from django.contrib.auth import authenticate, login
 from django.contrib.sites.models import Site
 from django.contrib.auth.forms import PasswordResetForm, PasswordChangeForm, SetPasswordForm
 from django.contrib.auth.tokens import default_token_generator
+from django.core import validators
 from django.forms.fields import EMPTY_VALUES
 from django.forms.models import inlineformset_factory, BaseInlineFormSet
 from django.template.defaultfilters import slugify
@@ -24,7 +25,7 @@ import facebook
 
 from eloue.accounts import EMAIL_BLACKLIST
 from eloue.accounts.fields import PhoneNumberField
-from eloue.accounts.models import Patron, Avatar, PhoneNumber, COUNTRY_CHOICES, PatronAccepted, FacebookSession, Address
+from eloue.accounts.models import Patron, Avatar, PhoneNumber, CreditCard, COUNTRY_CHOICES, PatronAccepted, FacebookSession, Address
 from eloue.accounts.widgets import ParagraphRadioFieldRenderer
 from eloue.utils import form_errors_append
 from eloue.payments import paypal_payment
@@ -503,15 +504,75 @@ class AddressBaseFormSet(BaseInlineFormSet):
     
 AddressFormSet = inlineformset_factory(Patron, Address, form=AddressForm, formset=AddressBaseFormSet, extra=1, can_delete=True)
 
-from eloue.accounts.models import CreditCard
+MONTH_CHOICES = (
+    ('01', '01'),
+    ('02', '02'),
+    ('03', '03'),
+    ('04', '04'),
+    ('05', '05'),
+    ('06', '06'),
+    ('07', '07'),
+    ('08', '08'),
+    ('09', '09'),
+    ('10', '10'),
+    ('11', '11'),
+    ('12', '12')
+)
+
+YEAR_CHOICES = [(lambda x: (x, x))(str(datetime.date.today().year+y)[2:]) for y in xrange(11)]
+
+class ExpirationWidget(forms.MultiWidget):
+    def decompress(self, value):
+        if value:
+            return (value[:2], value[2:])
+        return (None, None)
+    def __init__(self):
+        widgets = (
+            forms.Select(choices=MONTH_CHOICES),
+            forms.Select(choices=YEAR_CHOICES),
+            )
+        super(ExpirationWidget, self).__init__(widgets)
+
+class HiddenExpirationWidget(ExpirationWidget):
+    def __init__(self):
+        widgets = (
+            forms.Select(choices=MONTH_CHOICES),
+            forms.Select(choices=YEAR_CHOICES),
+            )
+        super(ExpirationWidget, self).__init__(widgets)
+
+class ExpirationField(forms.MultiValueField):
+    widget = ExpirationWidget
+    hidden_widget = HiddenExpirationWidget
+    default_error_messages = {
+        'invalid_month': _(u''),
+        'invalid_year': _(u'')
+    }
+    def __init__(self, *args, **kwargs):
+        fields = (
+            forms.ChoiceField(choices=MONTH_CHOICES),
+            forms.ChoiceField(choices=YEAR_CHOICES),
+        )
+        super(ExpirationField, self).__init__(fields, *args, **kwargs)
+
+    def compress(self, data_list):
+        if data_list:
+            if data_list[0] in validators.EMPTY_VALUES:
+                raise ValidationError('')
+            if data_list[1] in validators.EMPTY_VALUES:
+                raise ValidationError('')
+            return ''.join(data_list)
+        return None
+
 class CreditCardForm(forms.ModelForm):
     cvv = forms.CharField(max_length=4, widget=forms.TextInput(attrs={'placeholder': 'E-loue ne stocke pas le cryptogram visuel, vous devriez resaisir apres chaque payment pour des raison de securite'}))
-    
+    expires = ExpirationField()
+
     def __init__(self, *args, **kwargs):
         super(CreditCardForm, self).__init__(*args, **kwargs)
         self.fields['card_number'] = forms.CharField(
-            max_length=20, required=False, widget=forms.TextInput(
-                attrs={'placeholder': '1XXXXXXXXXXXXX45'}
+            max_length=24, required=True, widget=forms.TextInput(
+                attrs={'placeholder': self.instance.masked_number or 'E-loue ne stocke pas le numero de votre carte'}
             )
         )
 
@@ -519,41 +580,62 @@ class CreditCardForm(forms.ModelForm):
         # see note: https://docs.djangoproject.com/en/dev/topics/forms/modelforms/#using-a-subset-of-fields-on-the-form
         # we excluded, then added 
         model = CreditCard
-        exclude = ('card_number', 'holder')
-        widgets = {
-        }
+        exclude = ('card_number', 'holder', 'masked_number')
 
     def clean_expires(self):
         return self.cleaned_data['expires']
 
     def clean_card_number(self):
-        #validate with luhn checksum
-        return self.cleaned_data['card_number']
+        def _luhn_valid(card_number):
+            return sum(
+                int(j) if not i%2 else sum(int(k) for k in str(2*int(j))) 
+                for i, j 
+                in enumerate(reversed(card_number))
+            )%10 == 0
+        card_number = self.cleaned_data['card_number'].replace(' ','').replace('-', '')
+        try:
+            if not _luhn_valid(card_number):
+                raise forms.ValidationError('Veuillez verifier le numero de votre carte bancaire')
+        except ValueError as e:
+            raise forms.ValidationError('Votre numero doive etre compose uniquement des chiffres!')
+        return card_number
 
     def clean(self):
+        if self.errors:
+            return self.cleaned_data
         from eloue.payments.paybox_payment import PayboxManager, PayboxException
         pm = PayboxManager()
         try:
+            import re
+            def mask_card_number(card_number):
+                return re.sub(
+                    '(.)(.*)(...)', 
+                    lambda matchobject: \
+                        matchobject.group(1)+'X'*len(matchobject.group(2))+matchobject.group(3), 
+                    card_number
+                )
+            self.cleaned_data['masked_number'] = mask_card_number(self.cleaned_data['card_number'])
             self.cleaned_data['card_number'] = pm.modify(
                 self.instance.holder.pk, 
-                self.cleaned_data['card_number'], 
-                self.cleaned_data['expires'].strftime('%m%y'), self.cleaned_data['cvv']) if self.instance else pm.subscribe(
-                    self.data['holder'], 
+                self.cleaned_data['card_number'],
+                self.cleaned_data['expires'], self.cleaned_data['cvv']) if self.instance.card_number else pm.subscribe(
+                    self.instance.holder.pk, 
                     self.cleaned_data['card_number'], 
-                    self.cleaned_data['expires'].strftime('%m%y'), self.cleaned_data['cvv']
+                    self.cleaned_data['expires'], self.cleaned_data['cvv']
                 )
         except PayboxException as e:
             raise forms.ValidationError('wrong card informations')
         return self.cleaned_data
-    # def save(self, *args, **kwargs):
-    #     pass
+
     def save(self, *args, **kwargs):
         commit = kwargs.pop('commit', True)
         instance = super(CreditCardForm, self).save(*args, commit=False, **kwargs)
         instance.card_number = self.cleaned_data['card_number']
+        instance.masked_number = self.cleaned_data['masked_number']
         if commit:
             instance.save()
         return instance
+
 def make_missing_data_form(instance, required_fields=[]):
     fields = SortedDict({
         'is_professional': forms.BooleanField(label=_(u"Professionnel"), required=False, initial=False, widget=CommentedCheckboxInput(info_text='Je suis professionnel')),
