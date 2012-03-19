@@ -126,18 +126,21 @@ def booking_price(request, slug, product_id):
         }
         return HttpResponse(simplejson.dumps(response_dict), mimetype='application/json')
 
+
 @require_GET
 def get_availability(request, product_id, year, month):
     product = get_object_or_404(Product.on_site, pk=product_id)
     availability = product.daily_available(year, month)
     return HttpResponse(simplejson.dumps(availability), mimetype='application/json')
-    
+
+
 @mobify
 @never_cache
 @secure_required
 def booking_create_redirect(request, *args, **kwargs):
     product = get_object_or_404(Product.on_site, pk=kwargs['product_id'])
     return redirect_to(request, product.get_absolute_url())
+
 
 @mobify
 @never_cache
@@ -172,7 +175,6 @@ def booking_detail(request, booking_id):
         template_name='rent/booking_detail.html', template_object_name='booking', extra_context={'paypal': paypal})
 
 
-
 def offer_accept(request, booking_id):
     booking = get_object_or_404(Booking, pk=booking_id)
     if request.user == booking.offer_in_message.recipient:
@@ -204,7 +206,6 @@ def offer_reject(request, booking_id):
             pass
     else:
         return HttpResponseForbidden()
-
 
 
 @login_required
@@ -288,4 +289,3 @@ def booking_incident(request, booking_id):
         booking.state = Booking.STATE.INCIDENT
         booking.save()
     return direct_to_template(request, 'rent/booking_incident.html', extra_context={'booking': booking, 'form': form})
-

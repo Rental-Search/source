@@ -132,9 +132,6 @@ def product_edit(request, slug, product_id):
 
     form = ProductEditForm(data=request.POST or None, files=request.FILES or None, instance=product, initial=initial)
 
-    forms = [form]
-    is_multipart = any([form.is_multipart() for form in forms])
-
     if form.is_valid():
         product = form.save()
         messages.success(request, _(u"Les modifications ont bien été prises en compte"))
@@ -146,8 +143,7 @@ def product_edit(request, slug, product_id):
     return render_to_response(
         'products/product_edit.html', dictionary={
             'product': product, 
-            'forms': forms,
-            'is_multipart': is_multipart
+            'form': form,
         }, 
         context_instance=RequestContext(request)
     )
@@ -159,20 +155,11 @@ def product_address_edit(request, slug, product_id):
 
     product = get_object_or_404(Product.on_site, pk=product_id)
 
-    product_address_edit_form = ProductAddressEditForm(data=request.POST or None, instance=product, prefix='productAddress')
-    product_address_form = ProductAddressForm(data=request.POST or None, prefix='newAddress', instance=Address(patron=request.user))
-
-    forms = [product_address_edit_form, product_address_form]
-
-    if product_address_edit_form.is_valid() and not product_address_form.is_valid():
-        product = product_address_edit_form.save()
-        messages.success(request, _(u"L'adress a bien été modifié"))
-        return redirect(
-            'eloue.products.views.product_address_edit', 
-            slug=slug, product_id=product_id
-        )
-    if product_address_form.is_valid():
-        address = product_address_form.save(commit=False)
+    form = ProductAddressEditForm(data=request.POST or None, instance=product)
+    
+    
+    if form.is_valid():
+        address = form.save(commit=False)
         #address.patron = request.user
         address.save()
         product.address = address
@@ -186,7 +173,7 @@ def product_address_edit(request, slug, product_id):
     return render_to_response(
         'products/product_edit.html', dictionary={
             'product': product, 
-            'forms': forms
+            'form': form
         }, 
         context_instance=RequestContext(request)
     )
