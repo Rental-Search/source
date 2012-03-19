@@ -32,7 +32,7 @@ from eloue.decorators import ownership_required, secure_required, mobify
 from eloue.accounts.forms import EmailAuthenticationForm
 from eloue.accounts.models import Patron
 
-from eloue.products.forms import AlertSearchForm, AlertForm, FacetedSearchForm, ProductForm, ProductEditForm, ProductAddressEditForm, ProductAddressForm, ProductPriceEditForm, MessageEditForm
+from eloue.products.forms import AlertSearchForm, AlertForm, FacetedSearchForm, ProductForm, ProductEditForm, ProductAddressEditForm, ProductPriceEditForm, MessageEditForm
 
 from eloue.products.models import Category, Product, Curiosity, UNIT, ProductRelatedMessage, Alert, MessageThread
 from eloue.accounts.models import Address
@@ -157,13 +157,8 @@ def product_address_edit(request, slug, product_id):
 
     form = ProductAddressEditForm(data=request.POST or None, instance=product)
     
-    
     if form.is_valid():
-        address = form.save(commit=False)
-        #address.patron = request.user
-        address.save()
-        product.address = address
-        product.save()
+        product = form.save()
         messages.success(request, _(u"L'adress a bien été modifié"))
         return redirect(
             'eloue.products.views.product_address_edit', 
@@ -188,7 +183,6 @@ def product_price_edit(request, slug, product_id):
         initial['%s_price' % UNIT.reverted[price.unit].lower()] = price.amount
 
     form = ProductPriceEditForm(data=request.POST or None, instance=product, initial=initial)
-    forms = [form]
 
     if form.is_valid():
         product = form.save()
@@ -200,7 +194,7 @@ def product_price_edit(request, slug, product_id):
     return render_to_response(
         'products/product_edit.html', dictionary={
             'product': product, 
-            'forms': forms
+            'form': form
         }, 
         context_instance=RequestContext(request)
     )

@@ -265,7 +265,7 @@ class CarProductForm(ProductForm):
 
     class Meta:
         model = CarProduct
-        fieldsets = [('category', {'fields': ['category'], 'legend': _(u'Choisissez un catégorie')}),
+        fieldsets = [('category', {'fields': ['category'], 'legend': _(u'Type de véhicule')}),
                         ('informations', {
                             'fields': ['summary', 'brand', 'model', 'picture_id', 'picture', 'description'], 
                             'legend': _(u'Description du véhicule')
@@ -339,10 +339,6 @@ class ProductEditForm(BetterModelForm):
     picture = forms.ImageField(label=_(u"Photo"), required=False, widget=forms.FileInput(attrs={'class': 'inm'}))
     description = forms.CharField(label=_(u"Description"), widget=forms.Textarea())
 
-    def __init__(self, *args, **kwargs):
-        super(ProductEditForm, self).__init__(*args, **kwargs)
-        self.legend = _(u"Description et photo")
-
     def clean_deposit_amount(self):
         deposit_amount = self.cleaned_data.get('deposit_amount', None)
         if deposit_amount in EMPTY_VALUES:
@@ -373,7 +369,6 @@ class ProductEditForm(BetterModelForm):
 class ProductAddressEditForm(BetterModelForm):
     addresses__address1 = forms.CharField(label=_(u"Rue"), max_length=255, required=False)
     addresses__zipcode = forms.CharField(label=_(u"Code postal"), required=False, max_length=9)
-        }))
     addresses__city = forms.CharField(label=_(u"Ville"), required=False, max_length=255)
     addresses__country = forms.ChoiceField(label=(u"Pays"), choices=COUNTRY_CHOICES, initial=settings.LANGUAGE_CODE.split('-')[1].upper(), required=False)
     
@@ -385,33 +380,37 @@ class ProductAddressEditForm(BetterModelForm):
         #self.fields['address'].required = False
 
     def clean(self):
-        address = self.cleaned_data.get('address', None)
-        
-        if not address:
+        address = self.cleaned_data['address']
+        address1 = self.cleaned_data['addresses__address1']
+        zipcode = self.cleaned_data['addresses__zipcode']
+        city = self.cleaned_data['addresses__city']
+        country = self.cleaned_data['addresses__country']
+
+        if not address and not (address1 and zipcode and city and country):
+            self.cleaned_data['address'] = self.instance.address
             raise forms.ValidationError(_(u"Vous devez spécifiez une adresse"))
+        if not any(self.errors) and not address:
+            self.cleaned_data['address'] = Address(address1=address1, zipcode=zipcode, city=city, country=country, patron=self.instance.owner)
+            self.cleaned_data['address'].save()
         return self.cleaned_data
 
     class Meta:
         model = Product
-        fields = ('address', 'address1', 'zipcode', 'city', 'country')
+        fields = ('address', 'addresses__address1', 'addresses__zipcode', 'addresses__city', 'addresses__country')
         fieldsets = [('address', {'fields': ['address'], 
                                         'legend': 'Adresse existante'}),
-                        ('new_address', {'fields': ['address1', 'zipcode', 'city', 'country'],
+                        ('new_address', {'fields': ['addresses__address1', 'addresses__zipcode', 'addresses__city', 'addresses__country'],
                                             'legend': 'Nouvelle adresse',
                                             'classes': ['new-address', 'hidden-fieldset']})]
 
       
-class ProductPriceEditForm(forms.ModelForm):
+class ProductPriceEditForm(BetterModelForm):
     hour_price = forms.DecimalField(label=_(u"L'heure"), required=False, max_digits=10, decimal_places=2, min_value=D('0.01'), widget=PriceTextInput(attrs={'class': 'price'}), localize=True)
     day_price = forms.DecimalField(label=_(u"La journée"), required=True, max_digits=10, decimal_places=2, min_value=D('0.01'), widget=PriceTextInput(attrs={'class': 'price'}), localize=True)
     week_end_price = forms.DecimalField(label=_(u"Le week-end"), required=False, max_digits=10, decimal_places=2, min_value=D('0.01'), widget=PriceTextInput(attrs={'class': 'price'}), localize=True)
     week_price = forms.DecimalField(label=_(u"La semaine"), required=False, max_digits=10, decimal_places=2, min_value=D('0.01'), widget=PriceTextInput(attrs={'class': 'price'}), localize=True)
     two_weeks_price = forms.DecimalField(label=_(u"Les 15 jours"), required=False, max_digits=10, decimal_places=2, min_value=D('0.01'), widget=PriceTextInput(attrs={'class': 'price'}), localize=True)
     month_price = forms.DecimalField(label=_(u"Le mois"), required=False, max_digits=10, decimal_places=2, min_value=D('0.01'), widget=PriceTextInput(attrs={'class': 'price'}), localize=True)
-    
-    def __init__(self, *args, **kwargs):
-        super(ProductPriceEditForm, self).__init__(*args, **kwargs)
-        self.legend = _(u"Prix")
 
     def save(self, *args, **kwargs):
         for unit in UNIT.keys():
@@ -431,7 +430,13 @@ class ProductPriceEditForm(forms.ModelForm):
     
     class Meta:
         model = Product
-        fields = ('hour_price', 'day_price', 'week_end_price', 'week_price', 'two_weeks_price', 'month_price')        
+        fields = ('hour_price', 'day_price', 'week_end_price', 'week_price', 'two_weeks_price', 'month_price')
+        fieldsets = [('price', {'fields': ['day_price', 'deposit_amount'], 
+                                'legend': _(u'Prix de la location')}),
+                        ('price_detail', {'fields': ['hour_price', 'week_end_price', 'week_price', 'two_weeks_price', 'month_price'], 
+                                        'legend': _(u'Grille des tarifs'),
+                                        'description': 'La grille tarifaire permet d\'appliquer un tarif dégressif en fonction de la période. Ces prix ne sont pas obligatoires pour publier l\'annonce, il est possible de les ajouter plus tard.',
+                                        'classes': ['prices-grid', 'hidden-fieldset']})]      
 
 
 class ProductAdminForm(forms.ModelForm):
