@@ -8,17 +8,45 @@ class Migration(SchemaMigration):
 
     def forwards(self, orm):
         
-        # Adding model 'NonPaymentInformation'
-        db.create_table('payments_nonpaymentinformation', (
+        # Adding model 'CreditCard'
+        db.create_table('accounts_creditcard', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('card_number', self.gf('django.db.models.fields.CharField')(max_length=20)),
+            ('expires', self.gf('django.db.models.fields.CharField')(max_length=4)),
+            ('holder', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['accounts.Patron'], unique=True)),
+            ('masked_number', self.gf('django.db.models.fields.CharField')(max_length=20)),
         ))
-        db.send_create_signal('payments', ['NonPaymentInformation'])
+        db.send_create_signal('accounts', ['CreditCard'])
+
+        # Changing field 'Patron.work'
+        db.alter_column('accounts_patron', 'work', self.gf('django.db.models.fields.CharField')(max_length=75, null=True))
+
+        # Changing field 'Patron.school'
+        db.alter_column('accounts_patron', 'school', self.gf('django.db.models.fields.CharField')(max_length=75, null=True))
+
+        # Changing field 'Patron.about'
+        db.alter_column('accounts_patron', 'about', self.gf('django.db.models.fields.TextField')(null=True))
+
+        # Changing field 'Patron.hobby'
+        db.alter_column('accounts_patron', 'hobby', self.gf('django.db.models.fields.CharField')(max_length=75, null=True))
 
 
     def backwards(self, orm):
         
-        # Deleting model 'NonPaymentInformation'
-        db.delete_table('payments_nonpaymentinformation')
+        # Deleting model 'CreditCard'
+        db.delete_table('accounts_creditcard')
+
+        # Changing field 'Patron.work'
+        db.alter_column('accounts_patron', 'work', self.gf('django.db.models.fields.CharField')(default='', max_length=75))
+
+        # Changing field 'Patron.school'
+        db.alter_column('accounts_patron', 'school', self.gf('django.db.models.fields.CharField')(default='', max_length=75))
+
+        # Changing field 'Patron.about'
+        db.alter_column('accounts_patron', 'about', self.gf('django.db.models.fields.TextField')(default=''))
+
+        # Changing field 'Patron.hobby'
+        db.alter_column('accounts_patron', 'hobby', self.gf('django.db.models.fields.CharField')(default='', max_length=75))
 
 
     models = {
@@ -32,6 +60,30 @@ class Migration(SchemaMigration):
             'patron': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'addresses'", 'to': "orm['accounts.Patron']"}),
             'position': ('django.contrib.gis.db.models.fields.PointField', [], {'null': 'True', 'blank': 'True'}),
             'zipcode': ('django.db.models.fields.CharField', [], {'max_length': '9'})
+        },
+        'accounts.avatar': {
+            'Meta': {'object_name': 'Avatar'},
+            'created_at': ('django.db.models.fields.DateTimeField', [], {}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'image': ('django.db.models.fields.files.ImageField', [], {'max_length': '100'}),
+            'patron': ('django.db.models.fields.related.OneToOneField', [], {'related_name': "'avatar'", 'unique': 'True', 'to': "orm['auth.User']"})
+        },
+        'accounts.creditcard': {
+            'Meta': {'object_name': 'CreditCard'},
+            'card_number': ('django.db.models.fields.CharField', [], {'max_length': '20'}),
+            'expires': ('django.db.models.fields.CharField', [], {'max_length': '4'}),
+            'holder': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['accounts.Patron']", 'unique': 'True'}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'masked_number': ('django.db.models.fields.CharField', [], {'max_length': '20'})
+        },
+        'accounts.facebooksession': {
+            'Meta': {'unique_together': "(('user', 'uid'), ('access_token', 'expires'))", 'object_name': 'FacebookSession'},
+            'access_token': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '255'}),
+            'expires': ('django.db.models.fields.DateTimeField', [], {'null': 'True'}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'provider': ('django.db.models.fields.PositiveSmallIntegerField', [], {'default': '1'}),
+            'uid': ('django.db.models.fields.CharField', [], {'max_length': '255', 'unique': 'True', 'null': 'True'}),
+            'user': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['accounts.Patron']", 'unique': 'True', 'null': 'True'})
         },
         'accounts.language': {
             'Meta': {'object_name': 'Language'},
@@ -59,6 +111,19 @@ class Migration(SchemaMigration):
             'slug': ('django.db.models.fields.SlugField', [], {'unique': 'True', 'max_length': '50', 'db_index': 'True'}),
             'user_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['auth.User']", 'unique': 'True', 'primary_key': 'True'}),
             'work': ('django.db.models.fields.CharField', [], {'max_length': '75', 'null': 'True', 'blank': 'True'})
+        },
+        'accounts.patronaccepted': {
+            'Meta': {'object_name': 'PatronAccepted'},
+            'email': ('django.db.models.fields.EmailField', [], {'max_length': '75'}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'sites': ('django.db.models.fields.related.ManyToManyField', [], {'related_name': "'patrons_accepted'", 'symmetrical': 'False', 'to': "orm['sites.Site']"})
+        },
+        'accounts.phonenumber': {
+            'Meta': {'object_name': 'PhoneNumber'},
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'kind': ('django.db.models.fields.PositiveSmallIntegerField', [], {'default': '4'}),
+            'number': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
+            'patron': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'phones'", 'to': "orm['accounts.Patron']"})
         },
         'auth.group': {
             'Meta': {'object_name': 'Group'},
@@ -96,81 +161,6 @@ class Migration(SchemaMigration):
             'model': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '100'})
         },
-        'payments.nonpaymentinformation': {
-            'Meta': {'object_name': 'NonPaymentInformation'},
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'})
-        },
-        'payments.payboxdirectpaymentinformation': {
-            'Meta': {'object_name': 'PayboxDirectPaymentInformation'},
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'numauth': ('django.db.models.fields.CharField', [], {'max_length': '20'})
-        },
-        'payments.payboxdirectpluspaymentinformation': {
-            'Meta': {'object_name': 'PayboxDirectPlusPaymentInformation'},
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'})
-        },
-        'payments.paypalpaymentinformation': {
-            'Meta': {'object_name': 'PaypalPaymentInformation'},
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'pay_key': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
-            'preapproval_key': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'})
-        },
-        'products.category': {
-            'Meta': {'ordering': "['name']", 'object_name': 'Category'},
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'level': ('django.db.models.fields.PositiveIntegerField', [], {'db_index': 'True'}),
-            'lft': ('django.db.models.fields.PositiveIntegerField', [], {'db_index': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
-            'need_insurance': ('django.db.models.fields.BooleanField', [], {'default': 'True', 'db_index': 'True'}),
-            'parent': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'childrens'", 'null': 'True', 'to': "orm['products.Category']"}),
-            'rght': ('django.db.models.fields.PositiveIntegerField', [], {'db_index': 'True'}),
-            'sites': ('django.db.models.fields.related.ManyToManyField', [], {'related_name': "'categories'", 'symmetrical': 'False', 'to': "orm['sites.Site']"}),
-            'slug': ('django.db.models.fields.SlugField', [], {'unique': 'True', 'max_length': '50', 'db_index': 'True'}),
-            'tree_id': ('django.db.models.fields.PositiveIntegerField', [], {'db_index': 'True'})
-        },
-        'products.product': {
-            'Meta': {'object_name': 'Product'},
-            'address': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'products'", 'to': "orm['accounts.Address']"}),
-            'category': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'products'", 'to': "orm['products.Category']"}),
-            'created_at': ('django.db.models.fields.DateTimeField', [], {'blank': 'True'}),
-            'currency': ('django.db.models.fields.CharField', [], {'default': "'EUR'", 'max_length': '3'}),
-            'deposit_amount': ('django.db.models.fields.DecimalField', [], {'max_digits': '10', 'decimal_places': '2'}),
-            'description': ('django.db.models.fields.TextField', [], {}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'is_allowed': ('django.db.models.fields.BooleanField', [], {'default': 'True', 'db_index': 'True'}),
-            'is_archived': ('django.db.models.fields.BooleanField', [], {'default': 'False', 'db_index': 'True'}),
-            'modified_at': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
-            'owner': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'products'", 'to': "orm['accounts.Patron']"}),
-            'payment_type': ('django.db.models.fields.PositiveSmallIntegerField', [], {'default': '1'}),
-            'quantity': ('django.db.models.fields.IntegerField', [], {}),
-            'sites': ('django.db.models.fields.related.ManyToManyField', [], {'related_name': "'products'", 'symmetrical': 'False', 'to': "orm['sites.Site']"}),
-            'summary': ('django.db.models.fields.CharField', [], {'max_length': '255'})
-        },
-        'rent.booking': {
-            'Meta': {'object_name': 'Booking'},
-            'borrower': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'rentals'", 'to': "orm['accounts.Patron']"}),
-            'canceled_at': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
-            'content_type': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['contenttypes.ContentType']"}),
-            'contract_id': ('django.db.models.fields.IntegerField', [], {'db_index': 'True', 'unique': 'True', 'blank': 'True'}),
-            'created_at': ('django.db.models.fields.DateTimeField', [], {'blank': 'True'}),
-            'currency': ('django.db.models.fields.CharField', [], {'default': "'EUR'", 'max_length': '3'}),
-            'deposit_amount': ('django.db.models.fields.DecimalField', [], {'max_digits': '8', 'decimal_places': '2'}),
-            'ended_at': ('django.db.models.fields.DateTimeField', [], {}),
-            'insurance_amount': ('django.db.models.fields.DecimalField', [], {'max_digits': '8', 'decimal_places': '2', 'blank': 'True'}),
-            'ip': ('django.db.models.fields.IPAddressField', [], {'max_length': '15', 'null': 'True', 'blank': 'True'}),
-            'object_id': ('django.db.models.fields.PositiveIntegerField', [], {}),
-            'owner': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'bookings'", 'to': "orm['accounts.Patron']"}),
-            'pay_key': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
-            'pin': ('django.db.models.fields.CharField', [], {'max_length': '4', 'blank': 'True'}),
-            'preapproval_key': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
-            'product': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'bookings'", 'to': "orm['products.Product']"}),
-            'quantity': ('django.db.models.fields.IntegerField', [], {'default': '1'}),
-            'sites': ('django.db.models.fields.related.ManyToManyField', [], {'related_name': "'bookings'", 'symmetrical': 'False', 'to': "orm['sites.Site']"}),
-            'started_at': ('django.db.models.fields.DateTimeField', [], {}),
-            'state': ('django.db.models.fields.CharField', [], {'default': "'authorizing'", 'max_length': '50'}),
-            'total_amount': ('django.db.models.fields.DecimalField', [], {'max_digits': '8', 'decimal_places': '2'}),
-            'uuid': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '32', 'primary_key': 'True'})
-        },
         'sites.site': {
             'Meta': {'ordering': "('domain',)", 'object_name': 'Site', 'db_table': "'django_site'"},
             'domain': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
@@ -179,4 +169,4 @@ class Migration(SchemaMigration):
         }
     }
 
-    complete_apps = ['payments']
+    complete_apps = ['accounts']

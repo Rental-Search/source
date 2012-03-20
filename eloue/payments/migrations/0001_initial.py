@@ -8,6 +8,12 @@ class Migration(SchemaMigration):
 
     def forwards(self, orm):
         
+        # Adding model 'NonPaymentInformation'
+        db.create_table('payments_nonpaymentinformation', (
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+        ))
+        db.send_create_signal('payments', ['NonPaymentInformation'])
+
         # Adding model 'PaypalPaymentInformation'
         db.create_table('payments_paypalpaymentinformation', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
@@ -19,6 +25,8 @@ class Migration(SchemaMigration):
         # Adding model 'PayboxDirectPaymentInformation'
         db.create_table('payments_payboxdirectpaymentinformation', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('numappel', self.gf('django.db.models.fields.CharField')(max_length=20)),
+            ('numtrans', self.gf('django.db.models.fields.CharField')(max_length=20)),
             ('numauth', self.gf('django.db.models.fields.CharField')(max_length=20)),
         ))
         db.send_create_signal('payments', ['PayboxDirectPaymentInformation'])
@@ -26,12 +34,17 @@ class Migration(SchemaMigration):
         # Adding model 'PayboxDirectPlusPaymentInformation'
         db.create_table('payments_payboxdirectpluspaymentinformation', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('numappel', self.gf('django.db.models.fields.CharField')(max_length=20)),
+            ('numtrans', self.gf('django.db.models.fields.CharField')(max_length=20)),
         ))
         db.send_create_signal('payments', ['PayboxDirectPlusPaymentInformation'])
 
 
     def backwards(self, orm):
         
+        # Deleting model 'NonPaymentInformation'
+        db.delete_table('payments_nonpaymentinformation')
+
         # Deleting model 'PaypalPaymentInformation'
         db.delete_table('payments_paypalpaymentinformation')
 
@@ -117,14 +130,22 @@ class Migration(SchemaMigration):
             'model': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '100'})
         },
+        'payments.nonpaymentinformation': {
+            'Meta': {'object_name': 'NonPaymentInformation'},
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'})
+        },
         'payments.payboxdirectpaymentinformation': {
             'Meta': {'object_name': 'PayboxDirectPaymentInformation'},
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'numauth': ('django.db.models.fields.CharField', [], {'max_length': '20'})
+            'numappel': ('django.db.models.fields.CharField', [], {'max_length': '20'}),
+            'numauth': ('django.db.models.fields.CharField', [], {'max_length': '20'}),
+            'numtrans': ('django.db.models.fields.CharField', [], {'max_length': '20'})
         },
         'payments.payboxdirectpluspaymentinformation': {
             'Meta': {'object_name': 'PayboxDirectPlusPaymentInformation'},
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'})
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'numappel': ('django.db.models.fields.CharField', [], {'max_length': '20'}),
+            'numtrans': ('django.db.models.fields.CharField', [], {'max_length': '20'})
         },
         'payments.paypalpaymentinformation': {
             'Meta': {'object_name': 'PaypalPaymentInformation'},
@@ -167,7 +188,7 @@ class Migration(SchemaMigration):
             'Meta': {'object_name': 'Booking'},
             'borrower': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'rentals'", 'to': "orm['accounts.Patron']"}),
             'canceled_at': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
-            'content_type': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['contenttypes.ContentType']"}),
+            'content_type': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['contenttypes.ContentType']", 'null': 'True', 'blank': 'True'}),
             'contract_id': ('django.db.models.fields.IntegerField', [], {'db_index': 'True', 'unique': 'True', 'blank': 'True'}),
             'created_at': ('django.db.models.fields.DateTimeField', [], {'blank': 'True'}),
             'currency': ('django.db.models.fields.CharField', [], {'default': "'EUR'", 'max_length': '3'}),
@@ -175,7 +196,7 @@ class Migration(SchemaMigration):
             'ended_at': ('django.db.models.fields.DateTimeField', [], {}),
             'insurance_amount': ('django.db.models.fields.DecimalField', [], {'max_digits': '8', 'decimal_places': '2', 'blank': 'True'}),
             'ip': ('django.db.models.fields.IPAddressField', [], {'max_length': '15', 'null': 'True', 'blank': 'True'}),
-            'object_id': ('django.db.models.fields.PositiveIntegerField', [], {}),
+            'object_id': ('django.db.models.fields.PositiveIntegerField', [], {'null': 'True', 'blank': 'True'}),
             'owner': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'bookings'", 'to': "orm['accounts.Patron']"}),
             'pay_key': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
             'pin': ('django.db.models.fields.CharField', [], {'max_length': '4', 'blank': 'True'}),

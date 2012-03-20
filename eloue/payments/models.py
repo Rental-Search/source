@@ -27,8 +27,8 @@ class PayboxPaymentInformation(PaymentInformation):
 	class Meta:
 		abstract = True
 
-class PayboxDirectPaymentInformation(PaymentInformation, paybox_payment.PayboxDirectPayment):
+class PayboxDirectPaymentInformation(PayboxPaymentInformation, paybox_payment.PayboxDirectPayment):
     numauth = models.CharField(max_length=20)
 
-class PayboxDirectPlusPaymentInformation(PaymentInformation, paybox_payment.PayboxDirectPlusPayment):
+class PayboxDirectPlusPaymentInformation(PayboxPaymentInformation, paybox_payment.PayboxDirectPlusPayment):
 	pass
