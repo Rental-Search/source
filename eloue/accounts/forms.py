@@ -564,6 +564,16 @@ class ExpirationField(forms.MultiValueField):
             return ''.join(data_list)
         return None
 
+
+def mask_card_number(card_number):
+    return re.sub(
+        '(.)(.*)(...)', 
+        lambda matchobject: (
+            matchobject.group(1)+'X'*len(matchobject.group(2))+matchobject.group(3)
+        ), 
+        card_number
+    )
+
 class CreditCardForm(forms.ModelForm):
     cvv = forms.CharField(max_length=4, widget=forms.TextInput(attrs={'placeholder': 'E-loue ne stocke pas le cryptogram visuel, vous devriez resaisir apres chaque payment pour des raison de securite'}))
     expires = ExpirationField()
@@ -571,14 +581,14 @@ class CreditCardForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(CreditCardForm, self).__init__(*args, **kwargs)
         self.fields['card_number'] = forms.CharField(
-            max_length=24, required=True, widget=forms.TextInput(
+            min_length=16, max_length=24, required=True, widget=forms.TextInput(
                 attrs={'placeholder': self.instance.masked_number or 'E-loue ne stocke pas le numero de votre carte'}
             )
         )
 
     class Meta:
         # see note: https://docs.djangoproject.com/en/dev/topics/forms/modelforms/#using-a-subset-of-fields-on-the-form
-        # we excluded, then added 
+        # we excluded, then added, to avoid save automatically the card_number
         model = CreditCard
         exclude = ('card_number', 'holder', 'masked_number')
 
@@ -603,22 +613,17 @@ class CreditCardForm(forms.ModelForm):
     def clean(self):
         if self.errors:
             return self.cleaned_data
-        from eloue.payments.paybox_payment import PayboxManager, PayboxException
-        pm = PayboxManager()
         try:
-            import re
-            def mask_card_number(card_number):
-                return re.sub(
-                    '(.)(.*)(...)', 
-                    lambda matchobject: \
-                        matchobject.group(1)+'X'*len(matchobject.group(2))+matchobject.group(3), 
-                    card_number
-                )
+            from eloue.payments.paybox_payment import PayboxManager, PayboxException
+            pm = PayboxManager()
             self.cleaned_data['masked_number'] = mask_card_number(self.cleaned_data['card_number'])
-            self.cleaned_data['card_number'] = pm.modify(
-                self.instance.holder.pk, 
-                self.cleaned_data['card_number'],
-                self.cleaned_data['expires'], self.cleaned_data['cvv']) if self.instance.card_number else pm.subscribe(
+            if self.instance.card_number:
+                self.cleaned_data['card_number'] = pm.modify(
+                    self.instance.holder.pk, 
+                    self.cleaned_data['card_number'],
+                    self.cleaned_data['expires'], self.cleaned_data['cvv']) 
+            else:
+                self.cleaned_data['card_number'] = pm.subscribe(
                     self.instance.holder.pk, 
                     self.cleaned_data['card_number'], 
                     self.cleaned_data['expires'], self.cleaned_data['cvv']
@@ -635,6 +640,41 @@ class CreditCardForm(forms.ModelForm):
         if commit:
             instance.save()
         return instance
+
+class BookingCreditCardForm(CreditCardForm):
+    save = forms.BooleanField(label=_(u'Stocker les cordonnees bancaires'), required=False, initial=False)
+
+    def clean(self):
+        if self.errors:
+            return self.cleaned_data
+
+        try:
+            from eloue.payments.paybox_payment import PayboxManager, PayboxException
+            pm = PayboxManager()
+            self.cleaned_data['masked_number'] = mask_card_number(self.cleaned_data['card_number'])
+            pm.authorize(self.cleaned_data['card_number'], 
+                self.cleaned_data['expires'], self.cleaned_data['cvv'], 0
+            )
+        except PayboxException as e:
+            raise forms.ValidationError(e)
+        return self.cleaned_data
+
+class CvvForm(forms.ModelForm):
+    cvv = forms.CharField(label=_(u'Veuillez resaisir votre cryptogram visuel'), max_length=4, widget=forms.TextInput(attrs={'placeholder': 'E-loue ne stocke pas le cryptogram visuel, vous devriez resaisir apres chaque payment pour des raison de securite'}))
+    
+    def __init__(self, *args, **kwargs):
+        if 'instance' not in kwargs:
+            raise ValueError("you should specify 'instance' for this form")
+
+    class Meta:
+        exclude = ('expires', 'masked_number', 'card_number', 'holder')
+        model = CreditCard
+
+    def clean(self):
+        if self.errors:
+            return self.cleaned_data
+        from eloue.payments.paybox_payment import PayboxManager, PayboxException
+        pm = PayboxManager()
 
 def make_missing_data_form(instance, required_fields=[]):
     fields = SortedDict({

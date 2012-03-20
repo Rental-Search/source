@@ -22,6 +22,7 @@ from django_lean.experiments.utils import WebUser
 from django.contrib.sites.models import Site
 
 
+from eloue.accounts.models import CreditCard
 from eloue.decorators import ownership_required, validate_ipn, secure_required, mobify
 from eloue.accounts.forms import EmailAuthenticationForm
 from eloue.products.models import Product, PAYMENT_TYPE, UNIT
@@ -146,8 +147,16 @@ def booking_create(request, *args, **kwargs):
     product = get_object_or_404(Product.on_site, pk=kwargs['product_id'])
     if product.slug != kwargs['slug']:
         return redirect_to(request, product.get_absolute_url())
-    from eloue.accounts.forms import CreditCardForm
-    wizard = BookingWizard([BookingForm, EmailAuthenticationForm, BookingConfirmationForm, CreditCardForm])
+    from eloue.accounts.forms import BookingCreditCardForm, CvvForm
+    try:
+        request.user.creditcard
+        wizard = BookingWizard(
+            [BookingForm, EmailAuthenticationForm, BookingConfirmationForm, CvvForm]
+        )
+    except CreditCard.DoesNotExist:
+        wizard = BookingWizard(
+            [BookingForm, EmailAuthenticationForm, BookingConfirmationForm, BookingCreditCardForm]
+        )
     return wizard(request, *args, **kwargs)
 
 

@@ -54,7 +54,7 @@ class PayboxException(Exception):
 		return unicode(self)
 
 	def __unicode__(self):
-		return "PayboxError with code {code} and message \"{message}\"".format(self.__dict__)
+		return "PayboxError with code {code} and message \"{message}\"".format(**self.__dict__)
 
 
 class PayboxManager(object):
@@ -83,33 +83,19 @@ class PayboxManager(object):
 		return response['PORTEUR'][0]
 
 	def authorize_subscribed(self, member_id, card_number, expiration_date, cvv, amount):
-		if cvv:
-			response = self._request(
-				TYPE=51, MONTANT=amount, REFABONNE=member_id, PORTEUR=card_number,
-				DATEVAL=expiration_date, CVV=cvv, 
-				REFERENCE='6666'
-			)
-		else:
-			response = self._request(
-				TYPE=51, MONTANT=amount, REFABONNE=member_id, PORTEUR=card_number,
-				DATEVAL=expiration_date,
-				REFERENCE='6666'
-			)
+		response = self._request(
+			TYPE=51, MONTANT=amount, REFABONNE=member_id, PORTEUR=card_number,
+			DATEVAL=expiration_date, CVV=cvv, 
+			REFERENCE='6666'
+		)
 		return response['NUMAPPEL'][0], response['NUMTRANS'][0]
 
-	def authorize(self, member_id, card_number, expiration_date, cvv, amount):
-		if cvv:
-			response = self._request(
-				TYPE=1, MONTANT=amount, REFABONNE=member_id, PORTEUR=card_number,
-				DATEVAL=expiration_date, CVV=cvv, 
-				REFERENCE='6666'
-			)
-		else:
-			response = self._request(
-				TYPE=1, MONTANT=amount, REFABONNE=member_id, PORTEUR=card_number,
-				DATEVAL=expiration_date,
-				REFERENCE='6666'
-			)
+	def authorize(self, card_number, expiration_date, cvv, amount):
+		response = self._request(
+			TYPE=1, MONTANT=amount, PORTEUR=card_number,
+			DATEVAL=expiration_date, CVV=cvv, 
+			REFERENCE='6666'
+		)
 		return response['NUMAPPEL'][0], response['NUMTRANS'][0]
 
 
@@ -178,14 +164,21 @@ class PayboxManager(object):
 
 class PayboxDirectPayment(abstract_payment.AbstractPayment):
 
-    def __init__(self, booking):
-    	self.booking = booking
+    def __init__(self):
         self.paybox_manager = PayboxManager()
 
-    def preapproval(self, cancel_url, return_url, ip_address):
-    	self.paybox_manager.authorize(
-    		self, member_id, card_number, expiration_date, cvv, amount)
-        
+    def preapproval(self, credit_card, cvv, amount):
+    	booking = self.booking
+    	try:
+	    	self.numappel, self.numtrans = self.paybox_manager.authorize(
+	    		credit_card.card_number, credit_card.expires, cvv, amount)
+        except PayboxException:
+        	booking.state = booking.STATE.REJECTED
+        else:
+        	booking.state = booking.STATE.AUTHORIZED
+        finally:
+	        booking.save()
+
     def pay(self, cancel_url, return_url):
     	self.paybox_manager.debit(self, member_id, card_number, expiration_date, cvv, amount, numappel, numtrans)
         pass
@@ -201,15 +194,17 @@ class PayboxDirectPayment(abstract_payment.AbstractPayment):
         
     def give_caution(self, amount, cancel_url, return_url):
         pass
+
 
 class PayboxDirectPlusPayment(abstract_payment.AbstractPayment):
 
     def __init__(self):
         self.paybox_manager = PayboxManager()
 
-    def preapproval(self, cancel_url, return_url, ip_address):
-    	self.paybox_manager.authorize(
-    		self, member_id, card_number, expiration_date, cvv, amount)
+    def preapproval(self, holder, card_number, expires, cvv, amount):
+    	self.numappel, self.numtrans = self.paybox_manager.authorize_subscribed(
+    		holder, card_number, expires, cvv, amount
+    	)
         
     def pay(self, cancel_url, return_url):
     	self.paybox_manager.debit(self, member_id, card_number, expiration_date, cvv, amount, numappel, numtrans)
@@ -226,3 +221,4 @@ class PayboxDirectPlusPayment(abstract_payment.AbstractPayment):
         
     def give_caution(self, amount, cancel_url, return_url):
         pass
+

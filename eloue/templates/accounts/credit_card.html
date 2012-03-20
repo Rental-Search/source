@@ -11,7 +11,16 @@
 	</ul>
 	<div class="content-main">
 		<h1>{% trans "Payment informations" %}</h1>
-        {{form}}
+		<form class="form-horizontal" method="post" action="">
+			{% csrf_token %}
+	        {{form}}
+	      <div class="form-actions">
+	        <button type="submit" class="btn btn-primary">Enregistrer</button>
+	        <button type="reset" class="btn btn-cancel">Annuler</a>
+	      </div>
+	      <input type="hidden" name="{{ step_field }}" value="{{ step0 }}" />
+	      {{ previous_fields|safe }}
+	    </form>
 	</div>
 	<div class="content-aside">
 	</div>
