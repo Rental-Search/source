@@ -32,7 +32,7 @@ from eloue.decorators import ownership_required, secure_required, mobify
 from eloue.accounts.forms import EmailAuthenticationForm
 from eloue.accounts.models import Patron
 
-from eloue.products.forms import AlertSearchForm, AlertForm, FacetedSearchForm, ProductForm, ProductEditForm, ProductAddressEditForm, ProductPriceEditForm, MessageEditForm
+from eloue.products.forms import AlertSearchForm, AlertForm, FacetedSearchForm, ProductForm, CarProductEditForm, ProductEditForm, ProductAddressEditForm, ProductPriceEditForm, MessageEditForm
 
 from eloue.products.models import Category, Product, Curiosity, UNIT, ProductRelatedMessage, Alert, MessageThread
 from eloue.accounts.models import Address
@@ -121,6 +121,7 @@ def real_estate_product_create(request, *args, **kwargs):
     wizard = ProductWizard([RealEstateForm, EmailAuthenticationForm])
     return wizard(request, *args, **kwargs)
 
+
 @login_required
 @ownership_required(model=Product, object_key='product_id', ownership=['owner'])
 def product_edit(request, slug, product_id):
@@ -130,7 +131,20 @@ def product_edit(request, slug, product_id):
         'deposit_amount': product.deposit_amount
     }
 
-    form = ProductEditForm(data=request.POST or None, files=request.FILES or None, instance=product, initial=initial)
+    form = False
+
+    try:
+        form = CarProductEditForm(data=request.POST or None, files=request.FILES or None, instance=product.carproduct, initial=initial)
+    except:
+        pass
+
+    try:
+        form = RealEstateProductEditForm(data=request.POST or None, files=request.FILES or None, instance=product.realestateproduct, initial=initial)
+    except:
+        pass
+
+    if not form:
+        form = ProductEditForm(data=request.POST or None, files=request.FILES or None, instance=product, initial=initial)
 
     if form.is_valid():
         product = form.save()

@@ -331,39 +331,58 @@ class RealEstateForm(ProductForm):
         }
 
 
-class ProductEditForm(BetterModelForm):
-    category = TreeNodeChoiceField(label=_(u"Catégorie"), queryset=Category.tree.all(), empty_label="Choisissez une catégorie", level_indicator=u'--')
-    summary = forms.CharField( label=_(u"Titre"), max_length=100, widget=forms.TextInput(attrs={'class': 'inm'}))
-    deposit_amount = forms.DecimalField(label=_(u"Caution"), initial=0, required=False, max_digits=8, decimal_places=2, widget=PriceTextInput(attrs={'class': 'inm price'}), localize=True)
-    quantity = forms.IntegerField(label=_(u"Quantité"), initial=1, widget=forms.TextInput(attrs={'class': 'inm price'}))
-    picture = forms.ImageField(label=_(u"Photo"), required=False, widget=forms.FileInput(attrs={'class': 'inm'}))
-    description = forms.CharField(label=_(u"Description"), widget=forms.Textarea())
-
-    def clean_deposit_amount(self):
-        deposit_amount = self.cleaned_data.get('deposit_amount', None)
-        if deposit_amount in EMPTY_VALUES:
-            deposit_amount = D('0')
-        return deposit_amount
+class ProductEditForm(ProductForm):
     
-    def clean_picture(self):
-        picture = self.cleaned_data.get('picture', None)
-        self.new_picture = picture
-        return picture
-    
-    def save(self, *args, **kwargs):
-        if self.new_picture:
-            self.instance.pictures.all().delete() 
-            self.instance.pictures.add(Picture.objects.create(image=self.cleaned_data['picture']))
-        return super(ProductEditForm, self).save(*args, **kwargs)
-    
-    class Meta:
-        model = Product
+    class Meta(ProductForm.Meta):
         fields = ('category', 'summary', 'deposit_amount', 'quantity', 'description', 'picture')
         fieldsets = [
                         ('category', {'fields': ['category'], 'legend': _(u'Catégorie')}),
                         ('informations', {'fields': ['summary', 'picture_id', 'picture', 'description', 'quantity'], 
                                             'legend': _(u'Informations')}),
                     ]
+
+
+class CarProductEditForm(CarProductForm):
+
+    class Meta(CarProductForm.Meta):
+        fieldsets = [('category', {'fields': ['category'], 'legend': _(u'Type de véhicule')}),
+                        ('informations', {
+                            'fields': ['summary', 'brand', 'model', 'picture_id', 'picture', 'description'], 
+                            'legend': _(u'Description du véhicule')
+                            }),
+                        ('car_characteristics', {
+                            'fields': ['seat_number', 'door_number', 'fuel', 'transmission', 'mileage', 'consumption'],
+                            'legend': _(u'Caractéristique du véhicule'),
+                            }),
+                        ('assurancies_informations', {
+                            'fields': ['tax_horsepower', 'licence_plate', 'first_registration_date'],
+                            'legend': _(u'Informations pour l\'assurance'),
+                            'description': _(u'Ces informations servent à assurer le véhicule pendant la location <a href=\"#\">(En savoir plus)</a>.'),
+                            }),
+                        ('options', {
+                            'fields': ['air_conditioning', 'power_steering', 
+                                'cruise_control', 'gps', 'baby_seat', 'roof_box', 
+                                'bike_rack', 'snow_tires', 'snow_chains', 
+                                'ski_rack', 'cd_player', 'audio_input'],
+                            'legend': _(u'Options & accessoires'),
+                            })
+                        ]
+
+
+class RealEstateEditForm(RealEstateForm):
+
+    class Meta(RealEstateForm.Meta):
+        fieldsets = [('category', {'fields': ['category'], 'legend': _(u'Choisissez un catégorie')}),
+                        ('informations', {'fields': ['summary', 'picture_id', 'picture', 'description'], 
+                                        'legend': _(u'Informations')}),
+                        ('real_estate_description', {'fields' : ['capacity', 'private_life', 'chamber_number', 'rules'],
+                                                    'legend' : _(u'Description du lieu')}),
+                        ('service_included', {'fields': ['air_conditioning', 'breakfast', 'balcony', 'lockable_chamber', 'towel', 'lift', 'family_friendly', 
+                                                        'gym', 'accessible', 'heating', 'jacuzzi', 'chimney', 'internet_access', 'kitchen', 'parking', 'smoking_accepted', 'ideal_for_events',
+                                                        'tv', 'washing_machine', 'tumble_dryer', 'computer_with_internet'],
+                                            'legend': _(u'Service inclus')})
+                    ]
+
      
 
 class ProductAddressEditForm(BetterModelForm):

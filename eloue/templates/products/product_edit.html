@@ -78,10 +78,15 @@
                 </div>
               {% endif %}
             {% endfor %}
-            {% if fieldset.name == "price" %}
+            {% if fieldset.name == "address" %}
             <div class="control-group">
-              <a href="#" class="more-price">+ {% trans "Ajoutez des prix en fonction de la période" %}</a>
+              <a href="#" class="add-new-address">+ {% trans "Ajoutez une nouvelle adresse" %}</a>
             </div>
+            {% endif %}
+            {% if fieldset.name == "price" %}
+              <div class="control-group">
+                <a href="#" class="more-price">+ {% trans "Ajoutez des prix en fonction de la période" %}</a>
+              </div>
             {% endif %}
           {% endif %}
       </fieldset> 
@@ -92,3 +97,29 @@
   </div>
 </form>
 {% endblock %}
+
+{% block tail %}
+  {{ block.super }}
+  <script type="text/javascript">
+    $(document).ready(function (){
+      $(".more-price").click(function (event) {
+        event.preventDefault();
+        $(".prices-grid").show();
+        $(this).hide();
+      });
+
+      var addNewAddress = $(".add-new-address");
+
+      if (addNewAddress.length == 0 ){
+        $(".new-address").show();
+      }
+
+      addNewAddress.click(function (event) { 
+          event.preventDefault();
+          $(".new-address").show();
+          $(this).hide();
+      });
+    });
+  </script>
+{% endblock %}
+
