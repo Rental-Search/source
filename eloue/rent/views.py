@@ -37,41 +37,6 @@ log = logbook.Logger('eloue.rent')
 USE_HTTPS = getattr(settings, 'USE_HTTPS', True)
 
 
-@require_POST
-@csrf_exempt
-@validate_ipn
-def preapproval_ipn(request):
-    form = PreApprovalIPNForm(request.POST)
-    if form.is_valid():
-        booking = Booking.objects.get(preapproval_key=form.cleaned_data['preapproval_key'])
-        if form.cleaned_data['approved'] and form.cleaned_data['status'] == 'ACTIVE':
-            # Changing state
-            booking.state = Booking.STATE.AUTHORIZED
-            booking.borrower.paypal_email = form.cleaned_data['sender_email']
-            booking.borrower.save()
-            # Sending email
-            booking.send_ask_email()
-        else:
-            booking.state = Booking.STATE.REJECTED
-        booking.save()
-    return HttpResponse()
-
-
-@require_POST
-@csrf_exempt
-@validate_ipn
-def pay_ipn(request):
-    form = PayIPNForm(request.POST)
-    if form.is_valid():
-        booking = Booking.objects.get(pay_key=form.cleaned_data['pay_key'])
-        if form.cleaned_data['action_type'] == 'PAY_PRIMARY' and form.cleaned_data['status'] == 'INCOMPLETE':
-            booking.state = Booking.STATE.ONGOING
-        else:  # FIXME : naïve
-            booking.state = Booking.STATE.CLOSED
-        booking.save()
-    return HttpResponse()
-
-
 def product_occupied_date(request, slug, product_id):
     product = get_object_or_404(Product.on_site, pk=product_id)
     bookings = Booking.objects.filter(product=product).filter(Q(state="pending")|Q(state="ongoing"))
@@ -92,7 +57,7 @@ def booking_price(request, slug, product_id):
         return HttpResponseNotAllowed(['GET', 'XHR'])
     product = get_object_or_404(Product.on_site, pk=product_id)
     form = BookingForm(request.GET, prefix="0", instance=Booking(product=product))
-        
+    
     if form.is_valid():
         duration = timesince(form.cleaned_data['started_at'], form.cleaned_data['ended_at'])
         total_price = smart_str(currency(form.cleaned_data['total_amount']))
