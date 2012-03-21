@@ -83,19 +83,19 @@ class BookingWizard(NewGenericFormWizard):
         payment.preapproval(credit_card, creditcard_form.cleaned_data['cvv'])
         payment.save()
 
-
         payment_type = booking_form.instance.product.payment_type
-        
-        
+        booking = Booking.objects.get(pk=booking.pk)
+
         if booking.state != Booking.STATE.REJECTED:
             GoalRecord.record('rent_object_pre_paypal', WebUser(request))
             if payment_type == PAYMENT_TYPE.NOPAY:
                 from django.views.generic.list_detail import object_detail
                 return object_detail(request, queryset=Booking.on_site.all(), object_id=booking.pk.hex, #test
                      template_name='rent/booking_success.html', template_object_name='booking')
-            return redirect(booking.get_absolute_url())
+            return redirect('booking_success', booking.pk.hex)
             return redirect_to(request, settings.PAYPAL_COMMAND % urllib.urlencode({'cmd': '_ap-preapproval',
                 'preapprovalkey': booking.preapproval_key}))
+        return redirect('booking_failure', booking.pk.hex)
         return direct_to_template(request, template="rent/booking_preapproval.html", extra_context={
             'booking': booking,
         })
