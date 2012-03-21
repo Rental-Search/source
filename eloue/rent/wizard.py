@@ -16,7 +16,7 @@ from django_lean.experiments.models import GoalRecord
 from django_lean.experiments.utils import WebUser
 
 from eloue.accounts.forms import EmailAuthenticationForm, BookingCreditCardForm, CvvForm
-from eloue.accounts.models import Patron, Avatar
+from eloue.accounts.models import Patron, Avatar, CreditCard
 from eloue.geocoder import GoogleGeocoder
 from eloue.products.forms import FacetedSearchForm
 from eloue.products.models import Product, PAYMENT_TYPE
@@ -65,32 +65,27 @@ class BookingWizard(NewGenericFormWizard):
             booking_form.cleaned_data['started_at'], booking_form.cleaned_data['ended_at'])[1]
         booking.borrower = self.new_patron
 
-        if creditcard_form.cleaned_data.get('save') or isinstance(creditcard_form, CvvForm):
+        if creditcard_form.cleaned_data.get('save'):
             credit_card = creditcard_form.save(commit=bool(creditcard_form.cleaned_data.get('save')))
-            payment = PayboxDirectPlusPaymentInformation(booking=booking)
-            #payment.subscribe(creditcard_form.instance)
         else:
             credit_card = creditcard_form.save(commit=False)
-            payment = PayboxDirectPaymentInformation(booking=booking)
         
+        try:
+            request.user.creditcard
+            payment = PayboxDirectPlusPaymentInformation(booking=booking)
+        except CreditCard.DoesNotExist:
+            payment = PayboxDirectPaymentInformation(booking=booking)
+
         payment.save()
         booking.payment = payment
         booking.save()
 
-        payment.preapproval(credit_card, creditcard_form.cleaned_data['cvv'], str(D(booking.total_amount*100).quantize(0)))
+        payment.preapproval(credit_card, creditcard_form.cleaned_data['cvv'])
         payment.save()
 
 
         payment_type = booking_form.instance.product.payment_type
-        #booking.init_payment_processor()
-        #domain = Site.objects.get_current().domain
-        #protocol = "https" if USE_HTTPS else "http"
         
-        # booking.preapproval(
-        #     cancel_url="%s://%s%s" % (protocol, domain, reverse("booking_failure", args=[booking.pk.hex])),
-        #     return_url="%s://%s%s" % (protocol, domain, reverse("booking_success", args=[booking.pk.hex])),
-        #     ip_address=request.META['REMOTE_ADDR']
-        # )
         
         if booking.state != Booking.STATE.REJECTED:
             GoalRecord.record('rent_object_pre_paypal', WebUser(request))
