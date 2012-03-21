@@ -149,6 +149,7 @@ def booking_detail(request, booking_id):
 
 
 def offer_accept(request, booking_id):
+    return HttpResponseForbidden()
     booking = get_object_or_404(Booking, pk=booking_id)
     if request.user == booking.offer_in_message.recipient:
         if booking.state == Booking.STATE.UNACCEPTED:
@@ -170,6 +171,7 @@ def offer_accept(request, booking_id):
     else:
         return HttpResponseForbidden()
 def offer_reject(request, booking_id):
+    return HttpResponseForbidden()
     booking = get_object_or_404(Booking, pk=booking_id)
     if request.user == booking.offer_in_message.recipient:
         if booking.state == Booking.STATE.UNACCEPTED:
@@ -183,31 +185,13 @@ def offer_reject(request, booking_id):
 
 
 @login_required
+@require_POST
 @ownership_required(model=Booking, object_key='booking_id', ownership=['owner'])
 def booking_accept(request, booking_id):
     booking = get_object_or_404(Booking, pk=booking_id)
-    if booking.product.payment_type!=PAYMENT_TYPE.NOPAY:
-        is_valid = booking.owner.is_valid
-        if not booking.owner.has_paypal():
-            return redirect_to(request, "%s?next=%s" % (reverse('patron_paypal'), booking.get_absolute_url()))
-        elif not is_valid:
-            messages.error(request, _(u"Votre Paypal compte est invalide, veuillez modifier votre nom ou prénom ou email paypal"))
-            return redirect_to(request, "%s?next=%s" % (reverse('patron_edit'), booking.get_absolute_url()))
-        elif not booking.owner.is_confirmed:
-            messages.error(request, _(u"Vérifiez que vous avez bien répondu à l'email d'activation de Paypal"))
-            return redirect(booking.get_absolute_url())
-    form = BookingStateForm(request.POST or None,
-        initial={'state': Booking.STATE.PENDING},
-        instance=booking)
-    if form.is_valid():
-        booking = form.save()
-        booking.send_acceptation_email()
-        GoalRecord.record('rent_object_accepted', WebUser(request))
-        booking.save()
-    else:
-        messages.error(request, form.non_field_errors())
-    return redirect_to(request, "%s?paypal=true" % booking.get_absolute_url())
-
+    booking.accept()
+    GoalRecord.record('rent_object_accepted', WebUser(request))
+    return redirect(booking)
 
 @login_required
 @ownership_required(model=Booking, object_key='booking_id', ownership=['owner'])

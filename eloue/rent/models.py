@@ -382,8 +382,18 @@ class Booking(models.Model):
         """
         return self.insurance_fee * INSURANCE_TAXES
     
-    @transition(source='pending', target='ongoing')
-    def hold(self, cancel_url=None, return_url=None):
+    @transition(source='authorized', target='pending', save=True)
+    def accept(self):
+        self.payment.pay()
+        self.payment.save()
+        self.send_acceptation_email()
+
+    @transition(source='pending', target='ongoing', save=True)
+    def activate(self):
+        pass
+
+    @transition(source='pending', target='ongoing', save=True)
+    def hold(self):
         """Take money from borrower and keep it safe for later.
         
         Keywords arguments :
@@ -394,8 +404,7 @@ class Booking(models.Model):
         Then you should redirect user to :
         https://www.paypal.com/webscr?cmd=_ap-payment&paykey={{ pay_key }}
         """
-        self.pay_key = self.payment_processor.pay(cancel_url, return_url)
-        self.save()
+        self.payment.pay()
 
     @transition(source='ended', target='closing', save=True)
     @smart_transition(source='closing', target='closed', conditions=[not_need_ipn], save=True)
