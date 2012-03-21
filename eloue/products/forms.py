@@ -455,7 +455,7 @@ class ProductPriceEditForm(BetterModelForm):
                         ('price_detail', {'fields': ['hour_price', 'week_end_price', 'week_price', 'two_weeks_price', 'month_price'], 
                                         'legend': _(u'Grille des tarifs'),
                                         'description': 'La grille tarifaire permet d\'appliquer un tarif dégressif en fonction de la période. Ces prix ne sont pas obligatoires pour publier l\'annonce, il est possible de les ajouter plus tard.',
-                                        'classes': ['prices-grid', 'hidden-fieldset']})]      
+                                        'classes': ['prices-grid']})]      
 
 
 class ProductAdminForm(forms.ModelForm):
