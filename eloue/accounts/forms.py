@@ -24,7 +24,7 @@ from django.utils.safestring import mark_safe
 import facebook
 
 from eloue.accounts import EMAIL_BLACKLIST
-from eloue.accounts.fields import PhoneNumberField
+from eloue.accounts.fields import PhoneNumberField, ExpirationField, RIBField
 from eloue.accounts.models import Patron, Avatar, PhoneNumber, CreditCard, COUNTRY_CHOICES, PatronAccepted, FacebookSession, Address
 from eloue.accounts.widgets import ParagraphRadioFieldRenderer
 from eloue.utils import form_errors_append
@@ -504,70 +504,6 @@ class AddressBaseFormSet(BaseInlineFormSet):
     
 AddressFormSet = inlineformset_factory(Patron, Address, form=AddressForm, formset=AddressBaseFormSet, extra=1, can_delete=True)
 
-MONTH_CHOICES = (
-    ('01', '01'),
-    ('02', '02'),
-    ('03', '03'),
-    ('04', '04'),
-    ('05', '05'),
-    ('06', '06'),
-    ('07', '07'),
-    ('08', '08'),
-    ('09', '09'),
-    ('10', '10'),
-    ('11', '11'),
-    ('12', '12')
-)
-
-YEAR_CHOICES = [(lambda x: (x, x))(str(datetime.date.today().year+y)[2:]) for y in xrange(11)]
-
-import itertools
-import string
-
-mapping = dict(zip(string.ascii_uppercase, itertools.cycle('123456789')))
-
-def rib_check(rib, generate_checksum=False):
-    rib = rib.replace(' ', '')
-    return not (89*int(rib[:5]) + 15*int(rib[5:10]) + 3*int(rib[10:21]) + int(rib[21:23]))%97
-
-class RIBWidget(forms.MultiWidget):
-    def decompress(self, value):
-        if value:
-            return [value[:5], value[5:10], value[10:21], value[21:23]]
-        return [None, None, None, None]
-    
-    def __init__(self, attrs=None):
-        widgets = [
-            forms.TextInput(attrs={'maxlength': 5, 'placeholder': _(u'code banque')}),
-            forms.TextInput(attrs={'maxlength': 5, 'placeholder': _(u'code guichet')}),
-            forms.TextInput(attrs={'maxlength': 11, 'placeholder': _(u'numéro de compte')}), 
-            forms.TextInput(attrs={'maxlength': 2, 'placeholder':_(u'clé RIB')}),
-        ]
-        super(RIBWidget, self).__init__(widgets)
-
-class RIBField(forms.MultiValueField):
-    widget = RIBWidget
-    def __init__(self, *args, **kwargs):
-        fields = (
-            forms.CharField(min_length=5, max_length=5),
-            forms.CharField(min_length=5, max_length=5),
-            forms.CharField(min_length=11, max_length=11),
-            forms.CharField(min_length=2, max_length=2),
-        )
-        super(RIBField, self).__init__(fields, *args, **kwargs)
-
-    def clean(self, value):
-        out = super(RIBField, self).clean(value)
-        if not rib_check(out):
-            raise forms.ValidationError("Votre RIB n'est pas valide. Veuillez verifier.")
-        return out
-
-    def compress(self, data_list):
-        if data_list:
-            return ''.join(data_list)
-        return None
-
-
 class RIBForm(forms.ModelForm):
     
     rib = RIBField(label='RIB')
@@ -575,50 +511,6 @@ class RIBForm(forms.ModelForm):
     class Meta:
         model = Patron
         fields = ('rib', )
-
-
-class ExpirationWidget(forms.MultiWidget):
-    def decompress(self, value):
-        if value:
-            return (value[:2], value[2:])
-        return (None, None)
-    def __init__(self):
-        widgets = (
-            forms.Select(choices=MONTH_CHOICES),
-            forms.Select(choices=YEAR_CHOICES),
-            )
-        super(ExpirationWidget, self).__init__(widgets)
-
-class HiddenExpirationWidget(ExpirationWidget):
-    def __init__(self):
-        widgets = (
-            forms.Select(choices=MONTH_CHOICES),
-            forms.Select(choices=YEAR_CHOICES),
-            )
-        super(ExpirationWidget, self).__init__(widgets)
-
-class ExpirationField(forms.MultiValueField):
-    widget = ExpirationWidget
-    hidden_widget = HiddenExpirationWidget
-    default_error_messages = {
-        'invalid_month': _(u''),
-        'invalid_year': _(u'')
-    }
-    def __init__(self, *args, **kwargs):
-        fields = (
-            forms.ChoiceField(choices=MONTH_CHOICES),
-            forms.ChoiceField(choices=YEAR_CHOICES),
-        )
-        super(ExpirationField, self).__init__(fields, *args, **kwargs)
-
-    def compress(self, data_list):
-        if data_list:
-            if data_list[0] in validators.EMPTY_VALUES:
-                raise ValidationError('')
-            if data_list[1] in validators.EMPTY_VALUES:
-                raise ValidationError('')
-            return ''.join(data_list)
-        return None
 
 
 def mask_card_number(card_number):

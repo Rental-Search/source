@@ -109,21 +109,41 @@ class PayboxManager(object):
     def debit(self, amount, numappel, numtrans):
         response = self._request(
             TYPE=2, MONTANT=amount,
-            REFERENCE=random.randint(10**(LENGTH-1),10**LENGTH-1),
+            REFERENCE='6666',
             NUMAPPEL=numappel, NUMTRANS=numtrans
         )
         return response['NUMAPPEL'][0], response['NUMTRANS'][0]
-    def cancel(self, member_id, card_number, expiration_date, cvv, numappel, numtrans):
+
+    def cancel_subscribed(self, member_id, card_number, expiration_date, cvv, numappel, numtrans):
         response = self._request(
             TYPE=55, MONTANT=100, REFABONNE=member_id, PORTEUR=card_number, DATEVAL=expiration_date, CVV=cvv,
             REFERENCE='6666',
             NUMAPPEL=numappel, NUMTRANS=numtrans
         )
+
+    def cancel(self, numappel, numtrans, amount):
+        print 'cancel'
+        response = self._request(
+            TYPE=5, MONTANT=amount, REFERENCE='6666', NUMAPPEL=str(numappel).rjust(10, '0'), NUMTRANS=str(numtrans).rjust(10, '0')
+        )
+
     def credit(self, member_id, card_number, expiration_date, cvv, amount):
         response = self._request(
             TYPE=54, MONTANT=amount, REFABONNE=member_id, PORTEUR=card_number,
             DATEVAL=expiration_date, CVV=cvv,
             REFERENCE=random.randint(10**(LENGTH-1),10**LENGTH-1)
+        )
+
+    def verification(self, numappel, numtrans):
+        print 'verify'
+        response = self._request(
+            TYPE=11, NUMAPPEL=numappel, NUMTRANS=numtrans, MONTANT=50,
+        )
+
+    def consultation(self, numappel, numtrans, amount):
+        response = self._request(
+            TYPE=17, NUMAPPEL=numappel, NUMTRANS=numtrans, MONTANT=50,
+            REFERENCE='6666'
         )
 
     def _request(self, **kwargs):
@@ -140,7 +160,6 @@ class PayboxManager(object):
         with contextlib.closing(httplib.HTTPSConnection(PAYBOX_DIRECTPLUS_ENDPOINT.netloc, timeout=5)) as conn:
             conn.request("POST", PAYBOX_DIRECTPLUS_ENDPOINT.path, params, headers)
             response = conn.getresponse()
-            print response.status, response.reason
             #print filter(lambda ch: ord(ch) < 128, response.read())
             response = parse_qs(response.read())
             print response
