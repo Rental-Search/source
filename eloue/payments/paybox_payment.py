@@ -43,7 +43,7 @@ TYPE = {
 
 PAYBOX_DIRECTPLUS_ENDPOINT = urlparse("https://preprod-ppps.paybox.com/PPPS.php")
 
-class PayboxException(Exception):
+class PayboxException(abstract_payment.PaymentException):
     
     def __init__(self, code, message):
         self.code = code

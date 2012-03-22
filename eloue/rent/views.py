@@ -113,15 +113,14 @@ def booking_create(request, *args, **kwargs):
     if product.slug != kwargs['slug']:
         return redirect_to(request, product.get_absolute_url())
     from eloue.accounts.forms import BookingCreditCardForm, CvvForm
-    try:
-        request.user.creditcard
-        wizard = BookingWizard(
-            [BookingForm, EmailAuthenticationForm, BookingConfirmationForm, CvvForm]
-        )
-    except CreditCard.DoesNotExist:
-        wizard = BookingWizard(
-            [BookingForm, EmailAuthenticationForm, BookingConfirmationForm, BookingCreditCardForm]
-        )
+    form_list = [BookingForm, EmailAuthenticationForm, BookingConfirmationForm]
+    if product.payment_type != PAYMENT_TYPE.NOPAY:
+        try:
+            request.user.creditcard
+            form_list.append(CvvForm)
+        except CreditCard.DoesNotExist:
+            form_list.append(BookingCreditCardForm)
+    wizard = BookingWizard(form_list)
     return wizard(request, *args, **kwargs)
 
 

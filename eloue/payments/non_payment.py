@@ -6,11 +6,6 @@ from eloue.payments.abstract_payment import AbstractPayment
 class NonPayments(AbstractPayment):
     
     NOT_NEED_IPN = True
-    
-    def __init__(self, booking):
-        self.booking = booking
-        super(NonPayments, self).__init__()
-        
         
     def preapproval(self, cancel_url=None, return_url=None, ip_address=None):
         self.booking.send_ask_email()

@@ -1,7 +1,7 @@
 {% extends "accounts/patron_edit.html" %}
 {% load i18n %}
 
-{% block title %}{% trans "Modification de mes adresses" %}{% endblock %}
+{% block title %}{% trans "Modification de mes cordonnées bancaires" %}{% endblock %}
 
 {% block content-main-profil %}
 {% if form.is_multipart %}
@@ -11,7 +11,7 @@
 {% endif %}
 {% csrf_token %}
     <fieldset>
-      <legend>{% trans "Modification de vos coordonnées bancaires" %}</legend>
+      <legend>{% trans "Modification de mes coordonnées bancaires" %}</legend>
        {% for formfield in form %}
        <div class="control-group {% if formfield.errors %} error {% endif %}">
              <label class="control-label" for="{{ formfield.id_for_label }}">

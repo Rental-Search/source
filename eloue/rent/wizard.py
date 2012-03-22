@@ -48,57 +48,56 @@ class BookingWizard(NewGenericFormWizard):
     def done(self, request, form_list):
         super(BookingWizard, self).done(request, form_list)
         booking_form = form_list[0]
-        creditcard_form = form_list[3]
+        import itertools
+        creditcard_form = next(
+            itertools.ifilter(
+                lambda form: isinstance(form, (BookingCreditCardForm, CvvForm)), 
+                form_list
+            ),
+            None
+        )
 
         if self.new_patron == booking_form.instance.product.owner:
             messages.error(request, _(u"Vous ne pouvez pas louer vos propres objets"))
             return redirect_to(request, booking_form.instance.product.get_absolute_url())
         
-
-        from eloue.payments.models import PayboxDirectPaymentInformation, PayboxDirectPlusPaymentInformation
+        from eloue.payments.models import PayboxDirectPaymentInformation, PayboxDirectPlusPaymentInformation, NonPaymentInformation
         from eloue.payments.paybox_payment import PayboxManager, PayboxException
-
-
         booking = booking_form.save(commit=False)
         booking.ip = request.META.get('REMOTE_ADDR', None)
         booking.total_amount = Booking.calculate_price(booking.product,
             booking_form.cleaned_data['started_at'], booking_form.cleaned_data['ended_at'])[1]
         booking.borrower = self.new_patron
-
-        if creditcard_form.cleaned_data.get('save'):
-            credit_card = creditcard_form.save(commit=bool(creditcard_form.cleaned_data.get('save')))
+        if creditcard_form:
+            if creditcard_form.cleaned_data.get('save'):
+                credit_card = creditcard_form.save(commit=bool(creditcard_form.cleaned_data.get('save')))
+            else:
+                credit_card = creditcard_form.save(commit=False)
+            try:
+                request.user.creditcard
+                payment = PayboxDirectPlusPaymentInformation(booking=booking)
+            except CreditCard.DoesNotExist:
+                payment = PayboxDirectPaymentInformation(booking=booking)
+            preapproval_parameters = (credit_card, creditcard_form.cleaned_data['cvv'])
         else:
-            credit_card = creditcard_form.save(commit=False)
-        
-        try:
-            request.user.creditcard
-            payment = PayboxDirectPlusPaymentInformation(booking=booking)
-        except CreditCard.DoesNotExist:
-            payment = PayboxDirectPaymentInformation(booking=booking)
+            preapproval_parameters = ()
+            payment = NonPaymentInformation()
 
         payment.save()
         booking.payment = payment
         booking.save()
 
-        payment.preapproval(credit_card, creditcard_form.cleaned_data['cvv'])
-        payment.save()
+        try:
+            booking.preapproval(*preapproval_parameters)
+        except PaymentException as e:
+            booking.state = Booking.STATE.REJECTED
+            booking.save()
 
-        payment_type = booking_form.instance.product.payment_type
-        booking = Booking.objects.get(pk=booking.pk)
-
-        if booking.state != Booking.STATE.REJECTED:
+        if booking.state == Booking.STATE.AUTHORIZED:
             GoalRecord.record('rent_object_pre_paypal', WebUser(request))
-            if payment_type == PAYMENT_TYPE.NOPAY:
-                from django.views.generic.list_detail import object_detail
-                return object_detail(request, queryset=Booking.on_site.all(), object_id=booking.pk.hex, #test
-                     template_name='rent/booking_success.html', template_object_name='booking')
             return redirect('booking_success', booking.pk.hex)
-            return redirect_to(request, settings.PAYPAL_COMMAND % urllib.urlencode({'cmd': '_ap-preapproval',
-                'preapprovalkey': booking.preapproval_key}))
         return redirect('booking_failure', booking.pk.hex)
-        return direct_to_template(request, template="rent/booking_preapproval.html", extra_context={
-            'booking': booking,
-        })
+
     
     def get_form(self, step, data=None, files=None):
         next_form = self.form_list[step]
