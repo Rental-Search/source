@@ -426,7 +426,7 @@ def patron_edit_rib(request):
         form = RIBForm(data=request.POST, instance=request.user)
         if form.is_valid():
             form.save()
-            return redirect(patron_edit_rib)
+            return redirect(request.GET.get('next') or patron_edit_rib)
     else:
         form = RIBForm(data=None, instance=request.user)
     return render_to_response(
