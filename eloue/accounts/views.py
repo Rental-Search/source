@@ -421,9 +421,17 @@ def patron_edit_credit_card(request):
 
 @login_required
 def patron_edit_rib(request):
+    from eloue.accounts.forms import RIBForm
+    if request.method == 'POST':
+        form = RIBForm(data=request.POST, instance=request.user)
+        if form.is_valid():
+            form.save()
+            return redirect(patron_edit_rib)
+    else:
+        form = RIBForm(data=None, instance=request.user)
     return render_to_response(
         template_name='accounts/patron_edit_rib.html',
-        dictionary={}, context_instance=RequestContext(request)
+        dictionary={'form': form}, context_instance=RequestContext(request)
     )
 
 @login_required

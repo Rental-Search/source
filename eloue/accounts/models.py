@@ -186,6 +186,7 @@ class Patron(User):
     on_site = CurrentSiteManager()
     objects = PatronManager()
 
+    rib = models.CharField(max_length=23, blank=True)
 
     def save(self, *args, **kwargs):
         if not self.slug:

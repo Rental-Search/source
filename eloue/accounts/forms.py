@@ -533,30 +533,31 @@ def rib_check(rib, generate_checksum=False):
 class RIBWidget(forms.MultiWidget):
     def decompress(self, value):
         if value:
-            return (value[:5], value[5:10], value[10:21], value[21:23])
-        return (None, None, None, None)
+            return [value[:5], value[5:10], value[10:21], value[21:23]]
+        return [None, None, None, None]
     
-    def __init__(self):
-        widgets = (
-            forms.TextInput, 
-            forms.TextInput,
-            forms.TextInput, 
-            forms.TextInput,
-        )
-        super(RIBWidget, slef).__init__(widgets)
+    def __init__(self, attrs=None):
+        widgets = [
+            forms.TextInput(attrs={'maxlength': 5, 'placeholder': _(u'code banque')}),
+            forms.TextInput(attrs={'maxlength': 5, 'placeholder': _(u'code guichet')}),
+            forms.TextInput(attrs={'maxlength': 11, 'placeholder': _(u'numéro de compte')}), 
+            forms.TextInput(attrs={'maxlength': 2, 'placeholder':_(u'clé RIB')}),
+        ]
+        super(RIBWidget, self).__init__(widgets)
 
 class RIBField(forms.MultiValueField):
+    widget = RIBWidget
     def __init__(self, *args, **kwargs):
         fields = (
-            forms.CharField(label=_(u'code banque'), min_length=5, max_length=5),
-            forms.CharField(label=_(u'code guichet'), min_length=5, max_length=5),
-            forms.CharField(label=_(u'numéro de compte'), min_length=11, max_length=11),
-            forms.CharField(label=_(u'clé RIB'), min_length=2, max_length=2),
+            forms.CharField(min_length=5, max_length=5),
+            forms.CharField(min_length=5, max_length=5),
+            forms.CharField(min_length=11, max_length=11),
+            forms.CharField(min_length=2, max_length=2),
         )
         super(RIBField, self).__init__(fields, *args, **kwargs)
 
-    def clean(self):
-        out = super(RIBField, self).clean()
+    def clean(self, value):
+        out = super(RIBField, self).clean(value)
         if not rib_check(out):
             raise forms.ValidationError("Votre RIB n'est pas valide. Veuillez verifier.")
         return out
@@ -566,11 +567,15 @@ class RIBField(forms.MultiValueField):
             return ''.join(data_list)
         return None
 
+
 class RIBForm(forms.ModelForm):
+    
+    rib = RIBField(label='RIB')
+
     class Meta:
         model = Patron
         fields = ('rib', )
-        
+
 
 class ExpirationWidget(forms.MultiWidget):
     def decompress(self, value):
