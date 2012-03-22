@@ -87,9 +87,9 @@ PACKAGES = {
 log = logbook.Logger('eloue.rent')
 
 
-    
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
+
 class Booking(models.Model):
     """A reservation"""
     uuid = UUIDField(primary_key=True)
@@ -239,25 +239,12 @@ class Booking(models.Model):
     def not_need_ipn(self):
         return self.payment_processor.NOT_NEED_IPN
         
-    @smart_transition(source='authorizing', target='authorized', conditions=[not_need_ipn], save=True)
-    def preapproval(self, cancel_url=None, return_url=None, ip_address=None):
-        """Preapprove payments for borrower from Paypal.
+    @smart_transition(source='authorizing', target='authorized', save=True)
+    def preapproval(self, *args):
+        self.payment.preapproval(*args)
+        self.payment.save()
+        self.send_ask_email()
         
-        Keywords arguments :
-        cancel_url -- The URL to which the sender’s browser is redirected after the sender cancels the preapproval at paypal.com.
-        return_url -- The URL to which the sender’s browser is redirected after the sender approves the preapproval on paypal.com.
-        ip_address -- The ip address of sender.
-        
-        The you should redirect user to :
-        https://www.paypal.com/webscr?cmd=_ap-preapproval&preapprovalkey={{ preapproval_key }}
-        """
-        try:
-            self.preapproval_key = self.payment_processor.preapproval(cancel_url, return_url, ip_address)
-        except PaypalError, e: 
-            self.state = BOOKING_STATE.REJECTED
-            log.error(e)
-        self.save()
-    
     def send_recovery_email(self):
         context = {
             'booking': self,

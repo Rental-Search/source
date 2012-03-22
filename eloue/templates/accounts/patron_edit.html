@@ -17,6 +17,7 @@
 {% url patron_edit_phonenumber as patron_edit_phonenumber %}
 {% url patron_edit_password as patron_edit_password %}
 {% url patron_edit_credit_card as patron_edit_credit_card %}
+{% url patron_edit_rib as patron_edit_rib %}
 <ul class="nav-sub-bar">
     <li><a href="{{ patron_edit }}"  class="{% active request "^/dashboard/account/$" %}">{% trans "Mon Profil" %}</a></li>
     <li><a href="{{ comments }}" class="{% active request comments %}">{% trans "Commentaires" %}</a></li>
@@ -24,6 +25,7 @@
     <li><a href="{{ patron_edit_phonenumber }}" class="{% active request patron_edit_phonenumber %}">{% trans "Téléphone" %}</a></li>
     <li><a href="{{ patron_edit_password }}" class="{% active request patron_edit_password %}">{% trans "Mot de passe" %}</a></li>
     <li><a href="{{ patron_edit_credit_card }}" class="{% active request patron_edit_credit_card %}">{% trans "Carte bancaire" %}</a></li>
+    <li><a href="{{ patron_edit_rib }}" class="{% active request patron_edit_rib%}">{% trans "RIB "%}</a></li>
 </ul>
 {% endblock %}
 

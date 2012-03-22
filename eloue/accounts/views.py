@@ -420,6 +420,13 @@ def patron_edit_credit_card(request):
         dictionary={'form': form}, context_instance=RequestContext(request))
 
 @login_required
+def patron_edit_rib(request):
+    return render_to_response(
+        template_name='accounts/patron_edit_rib.html',
+        dictionary={}, context_instance=RequestContext(request)
+    )
+
+@login_required
 def patron_edit_addresses(request):
     from eloue.accounts.forms import AddressFormSet
     if request.POST:

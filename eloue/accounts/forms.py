@@ -521,6 +521,57 @@ MONTH_CHOICES = (
 
 YEAR_CHOICES = [(lambda x: (x, x))(str(datetime.date.today().year+y)[2:]) for y in xrange(11)]
 
+import itertools
+import string
+
+mapping = dict(zip(string.ascii_uppercase, itertools.cycle('123456789')))
+
+def rib_check(rib, generate_checksum=False):
+    rib = rib.replace(' ', '')
+    return not (89*int(rib[:5]) + 15*int(rib[5:10]) + 3*int(rib[10:21]) + int(rib[21:23]))%97
+
+class RIBWidget(forms.MultiWidget):
+    def decompress(self, value):
+        if value:
+            return (value[:5], value[5:10], value[10:21], value[21:23])
+        return (None, None, None, None)
+    
+    def __init__(self):
+        widgets = (
+            forms.TextInput, 
+            forms.TextInput,
+            forms.TextInput, 
+            forms.TextInput,
+        )
+        super(RIBWidget, slef).__init__(widgets)
+
+class RIBField(forms.MultiValueField):
+    def __init__(self, *args, **kwargs):
+        fields = (
+            forms.CharField(label=_(u'code banque'), min_length=5, max_length=5),
+            forms.CharField(label=_(u'code guichet'), min_length=5, max_length=5),
+            forms.CharField(label=_(u'numéro de compte'), min_length=11, max_length=11),
+            forms.CharField(label=_(u'clé RIB'), min_length=2, max_length=2),
+        )
+        super(RIBField, self).__init__(fields, *args, **kwargs)
+
+    def clean(self):
+        out = super(RIBField, self).clean()
+        if not rib_check(out):
+            raise forms.ValidationError("Votre RIB n'est pas valide. Veuillez verifier.")
+        return out
+
+    def compress(self, data_list):
+        if data_list:
+            return ''.join(data_list)
+        return None
+
+class RIBForm(forms.ModelForm):
+    class Meta:
+        model = Patron
+        fields = ('rib', )
+        
+
 class ExpirationWidget(forms.MultiWidget):
     def decompress(self, value):
         if value:
