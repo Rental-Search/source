@@ -121,10 +121,44 @@
             </div>{# prices #}
             <div id="calendar" style="height: 200px;">{{ product.monthly_availability }}</div>{# calendar #}
         </div>{# product-tabs #}
-        <div class="product-desc">
-            {{ product.description|linebreaksp }}
-        </div>{# product-desc #}
+        <div class="product-info">
+            <div class="product-desc">
+                <ul>
 
+                </ul>
+                {{ product.description|linebreaksp }}
+            </div>{# product-desc #}
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <td>{% trans "Nombre de siège" %}</td>
+                    <td style="text-align: right">4</td>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>{% trans "Nombre de porte" %}</td>
+                    <td style="text-align: right">5</td>
+                </tr>
+                <tr>
+                    <td>{% trans "Energie" %}</td>
+                    <td style="text-align: right">Diesel</td>
+                </tr>
+                <tr>
+                    <td>{% trans "Transmission" %}</td>
+                    <td style="text-align: right">Manuel</td>
+                </tr>
+                <tr>
+                    <td>{% trans "Kilométrage" %}</td>
+                    <td style="text-align: right">112435 km</td>
+                </tr>
+                <tr>
+                    <td>{% trans "Consommation" %}</td>
+                    <td style="text-align: right">4 litres/100km</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
         <div class="product-comment">
             {% if product.borrowercomments.count > 0 %}
                 {% blocktrans count product.borrowercomments.count as count %}

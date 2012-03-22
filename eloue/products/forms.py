@@ -263,6 +263,7 @@ class CarProductForm(ProductForm):
     category = forms.TypedChoiceField(label=_(u"Catégorie"), coerce=lambda pk: Category.tree.get(pk=pk), choices=generate_choices(Category.tree.get(slug='auto-et-moto')))
     quantity = forms.IntegerField(widget=forms.HiddenInput(), initial=1)
 
+
     class Meta:
         model = CarProduct
         fieldsets = [('category', {'fields': ['category'], 'legend': _(u'Type de véhicule')}),
@@ -301,6 +302,7 @@ class CarProductForm(ProductForm):
             'seat_number': CommentedSelectInput(info_text=_(u'place(s)')),
             'door_number': CommentedSelectInput(info_text=_(u'porte(s)')),
             'consumption': CommentedSelectInput(info_text=_(u'litre/100km')),
+            'tax_horsepower': CommentedSelectInput(info_text=_(u'CV'))
         }
 
 

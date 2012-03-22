@@ -135,7 +135,7 @@ MILEAGE = Enum ([
     (3, '3', _(u'Plus de 50000 km')),
 ])
 
-CAPICITY = Enum ([
+CAPACITY = Enum ([
     (1, '1', _(u'1')),
     (2, '2', _(u'2')),
     (3, '3', _(u'3')),
@@ -156,6 +156,8 @@ CAPICITY = Enum ([
     (18, '18', _(u'18')),
     (19, '19', _(u'19+')),
 ])
+
+TAX_HORSEPOWER = CAPACITY
 
 PRIVATE_LIFE = Enum([
     (1, '1', _(u'Appartement')),
@@ -342,17 +344,17 @@ class CarProduct(Product):
     audio_input = models.BooleanField(_(u'entrée audio/iPod'))
 
     # informations de l'assurance
-    tax_horsepower = models.DecimalField(_(u'CV fiscal'), decimal_places=2, max_digits=6)
+    tax_horsepower = models.DecimalField(_(u'CV fiscal'), decimal_places=2, max_digits=6, choices=TAX_HORSEPOWER)
     licence_plate = models.CharField(_(u"numéro d'immatriculation"), max_length=10)
     first_registration_date = models.DateField(_(u'première mise en circulation'))
 
 
 class RealEstateProduct(Product):
     
-    capacity = models.IntegerField(_(u'capacité'), null=True, blank=True, choices=CAPICITY, default=1, help_text=_(u'Nombre de personne que peux accueillir votre locgement'))
+    capacity = models.IntegerField(_(u'capacité'), null=True, blank=True, choices=CAPACITY, default=1, help_text=_(u'Nombre de personne que peux accueillir votre locgement'))
     private_life = models.IntegerField(_(u'vie privée'),
         choices=PRIVATE_LIFE, null=True, blank=True, default=1)
-    chamber_number = models.IntegerField(_(u'nombre de chambre'), null=True, blank=True, choices=CAPICITY, default=1)
+    chamber_number = models.IntegerField(_(u'nombre de chambre'), null=True, blank=True, choices=CAPACITY, default=1)
     rules = models.TextField(_(u"règle d'utilisation"), max_length=60, null=True, blank=True)
 
     # service_included
