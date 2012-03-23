@@ -106,7 +106,13 @@ class BookingWizard(NewGenericFormWizard):
     
     def parse_params(self, request, *args, **kwargs):
         product = get_object_or_404(Product.on_site.active().select_related(), pk=kwargs['product_id'])
-        self.extra_context['product'] = product
+        try:
+            self.extra_context['product'] = product.realestateproduct
+        except Product.DoesNotExist:
+            try:
+                self.extra_context['product'] = product.carproduct
+            except Product.DoesNotExist:
+                self.extra_context['product'] = product
         self.extra_context['search_form'] = FacetedSearchForm()
         self.extra_context['comments'] = BorrowerComment.objects.filter(booking__product=product)
     
