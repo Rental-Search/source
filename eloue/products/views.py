@@ -32,7 +32,7 @@ from eloue.decorators import ownership_required, secure_required, mobify
 from eloue.accounts.forms import EmailAuthenticationForm
 from eloue.accounts.models import Patron
 
-from eloue.products.forms import AlertSearchForm, AlertForm, FacetedSearchForm, ProductForm, CarProductEditForm, ProductEditForm, ProductAddressEditForm, ProductPriceEditForm, MessageEditForm
+from eloue.products.forms import AlertSearchForm, AlertForm, FacetedSearchForm, RealEstateEditForm, ProductForm, CarProductEditForm, ProductEditForm, ProductAddressEditForm, ProductPriceEditForm, MessageEditForm
 
 from eloue.products.models import Category, Product, Curiosity, UNIT, ProductRelatedMessage, Alert, MessageThread
 from eloue.accounts.models import Address
@@ -131,20 +131,13 @@ def product_edit(request, slug, product_id):
         'deposit_amount': product.deposit_amount
     }
 
-    form = False
-
     try:
         form = CarProductEditForm(data=request.POST or None, files=request.FILES or None, instance=product.carproduct, initial=initial)
-    except:
-        pass
-
-    try:
-        form = RealEstateProductEditForm(data=request.POST or None, files=request.FILES or None, instance=product.realestateproduct, initial=initial)
-    except:
-        pass
-
-    if not form:
-        form = ProductEditForm(data=request.POST or None, files=request.FILES or None, instance=product, initial=initial)
+    except Product.DoesNotExist:
+        try:
+            form = RealEstateEditForm(data=request.POST or None, files=request.FILES or None, instance=product.realestateproduct, initial=initial)
+        except Product.DoesNotExist:
+            form = ProductEditForm(data=request.POST or None, files=request.FILES or None, instance=product, initial=initial)
 
     if form.is_valid():
         product = form.save()

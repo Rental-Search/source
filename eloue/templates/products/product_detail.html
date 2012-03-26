@@ -145,41 +145,60 @@
             <div class="product-desc">
                 <h3 style="margin-bottom: 10px;">{% trans "Options & accessoires" %}</h3>
                 <p style="margin-bottom: 20px;">
-                    climatisation - direction assistée - régulateur de vitesse - GPS - siège bébé - coffre de toit - porte-vélo - pneus neige - chaines - porte-skis - lecteur CD - entrée audio/iPod
+                    {% for option in product.options %}
+                        {% if forloop.first %} {{option}} {% else %} - {{option}} {% endif %}
+                    {% endfor %}
                 </p>
                 <h3 style="margin-bottom: 10px;">{% trans "Description" %}</h3>
                 {{ product.description|linebreaksp }}
             </div>{# product-desc #}
-            <table class="table table-striped">
-                <thead>
-                <tr>
-                    <td>{% trans "Nombre de siège" %}</td>
-                    <td style="text-align: right">4</td>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                    <td>{% trans "Nombre de porte" %}</td>
-                    <td style="text-align: right">5</td>
-                </tr>
-                <tr>
-                    <td>{% trans "Energie" %}</td>
-                    <td style="text-align: right">Diesel</td>
-                </tr>
-                <tr>
-                    <td>{% trans "Transmission" %}</td>
-                    <td style="text-align: right">Manuel</td>
-                </tr>
-                <tr>
-                    <td>{% trans "Kilométrage" %}</td>
-                    <td style="text-align: right">112435 km</td>
-                </tr>
-                <tr>
-                    <td>{% trans "Consommation" %}</td>
-                    <td style="text-align: right">4 litres/100km</td>
-                </tr>
-                </tbody>
-            </table>
+            {% if product.carproduct %}
+                <table class="table table-striped">
+                    <tbody>
+                    <tr>
+                        <td>{% trans "Nombre de siège" %}</td>
+                        <td style="text-align: right">{{product.seat_number}}</td>
+                    </tr>
+                    <tr>
+                        <td>{% trans "Nombre de porte" %}</td>
+                        <td style="text-align: right">{{ product.door_number }}</td>
+                    </tr>
+                    <tr>
+                        <td>{% trans "Energie" %}</td>
+                        <td style="text-align: right">{{ product.get_fuel_display }}</td>
+                    </tr>
+                    <tr>
+                        <td>{% trans "Transmission" %}</td>
+                        <td style="text-align: right">{{ product.get_transmission_display }}</td>
+                    </tr>
+                    <tr>
+                        <td>{% trans "Kilométrage" %}</td>
+                        <td style="text-align: right">{{ product.get_mileage_display }}</td>
+                    </tr>
+                    <tr>
+                        <td>{% trans "Consommation" %}</td>
+                        <td style="text-align: right">{{ product.consumption }} litres/100km</td>
+                    </tr>
+                    </tbody>
+                </table>
+            {% endif %}
+            {% if product.realestateproduct %}
+                <table class="table table-striped">
+                    <tbody>
+                    <tr>
+                        <td>{% trans "Capacité" %}</td>
+                        <td style="text-align: right">{{product.capacity}}</td>
+                    </tr>
+                    <tr>
+                        <td>{% trans "Vie privée" %}</td>
+                        <td style="text-align: right">{{ product.get_private_life_display }}</td>
+                    </tr>
+                    <tr>
+                        <td>{% trans "Nombre de chambres" %}</td>
+                        <td style="text-align: right">{{ product.chamber_number }}</td>
+                    </tr>
+                </table>
+            {% endif %}
         </div>
         <div class="product-comment">
             {% if product.borrowercomments.count > 0 %}

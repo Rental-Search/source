@@ -322,7 +322,7 @@ class CarProduct(Product):
     model = models.CharField(_(u'modèle'), max_length=30)
 
     # charactersitiques du vehicule
-    seat_number = models.IntegerField(_(u'nombre de place'), null=True, blank=True, choices=SEAT_NUMBER, default=4)
+    seat_number = models.IntegerField(_(u'nombre de siège'), null=True, blank=True, choices=SEAT_NUMBER, default=4)
     door_number = models.IntegerField(_(u'nombre de porte'), null=True, blank=True, choices=DOOR_NUMBER, default=5)
     fuel = models.IntegerField(_(u'énergie'), choices=FUEL, null=True, blank=True, default=1)
     transmission = models.IntegerField(_(u'boite de vitesse'), choices=TRANSMISSION, null=True, blank=True, default=1)
@@ -347,6 +347,19 @@ class CarProduct(Product):
     tax_horsepower = models.DecimalField(_(u'CV fiscal'), decimal_places=2, max_digits=6, choices=TAX_HORSEPOWER)
     licence_plate = models.CharField(_(u"numéro d'immatriculation"), max_length=10)
     first_registration_date = models.DateField(_(u'première mise en circulation'))
+
+    @property
+    def options(self):
+        option_names = [
+            field.name 
+            for field in self.__class__._meta.fields 
+            if isinstance(field, models.BooleanField) and field.model == self.__class__
+        ]
+        return [
+            self._meta.get_field(field_name).verbose_name 
+            for field_name in option_names 
+            if getattr(self, field_name)
+        ]
 
 
 class RealEstateProduct(Product):
@@ -379,6 +392,19 @@ class RealEstateProduct(Product):
     washing_machine = models.BooleanField(_(u'machine à laver'))
     tumble_dryer = models.BooleanField(_(u'sèche linge'))
     computer_with_internet = models.BooleanField(_(u'ordinateur avec Internet'))
+
+    @property
+    def options(self):
+        option_names = [
+            field.name 
+            for field in self.__class__._meta.fields 
+            if isinstance(field, models.BooleanField) and field.model == self.__class__
+        ]
+        return [
+            self._meta.get_field(field_name).verbose_name 
+            for field_name in option_names 
+            if getattr(self, field_name)
+        ]
 
 
 def upload_to(instance, filename):
