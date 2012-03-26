@@ -143,12 +143,14 @@
         </div>{# product-tabs #}
         <div class="product-info">
             <div class="product-desc">
+                {% if product.options %}
                 <h3 style="margin-bottom: 10px;">{% trans "Options & accessoires" %}</h3>
                 <p style="margin-bottom: 20px;">
                     {% for option in product.options %}
                         {% if forloop.first %} {{option}} {% else %} - {{option}} {% endif %}
                     {% endfor %}
                 </p>
+                {% endif %}
                 <h3 style="margin-bottom: 10px;">{% trans "Description" %}</h3>
                 {{ product.description|linebreaksp }}
             </div>{# product-desc #}
