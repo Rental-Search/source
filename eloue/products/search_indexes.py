@@ -14,7 +14,7 @@ from queued_search.indexes import QueuedSearchIndex
 from eloue.products.models import Alert, Product, CarProduct, RealEstateProduct
 from eloue.rent.models import Booking
 
-__all__ = ['ProductIndex', 'product_search', 'AlertIndex', 'alert_search']
+__all__ = ['ProductIndex', 'product_search', 'AlertIndex', 'alert_search', 'car_search', 'realestate_search']
 
 
 class ProductIndex(QueuedSearchIndex):
@@ -66,7 +66,7 @@ class ProductIndex(QueuedSearchIndex):
         unit, amount = Booking.calculate_price(obj, now, now + datetime.timedelta(days=1))
         return amount
     
-    def get_queryset(self):
+    def index_queryset(self):
         return Product.on_site.active()
         
 class CarIndex(ProductIndex):
@@ -101,7 +101,7 @@ class CarIndex(ProductIndex):
     licence_plate = CharField(model_attr='licence_plate')
     first_registration_date = DateField(model_attr='first_registration_date')
 
-    def get_queryset(self):
+    def index_queryset(self):
         return CarProduct.on_site.active()
 
 class RealEstateIndex(ProductIndex):
@@ -134,8 +134,8 @@ class RealEstateIndex(ProductIndex):
     tumble_dryer = BooleanField(model_attr='tumble_dryer')
     computer_with_internet = BooleanField(model_attr='computer_with_internet')
 
-    def get_queryset(self):
-        return LocationProduct.on_site.active()
+    def index_queryset(self):
+        return RealEstateProduct.on_site.active()
 
 class AlertIndex(QueuedSearchIndex):
     designation = CharField(model_attr='designation')
@@ -152,7 +152,7 @@ class AlertIndex(QueuedSearchIndex):
     def prepare_sites(self, obj):
         return [site.id for site in obj.sites.all()]
     
-    def get_queryset(self):
+    def index_queryset(self):
         return Alert.on_site.all()
     
 
@@ -167,6 +167,6 @@ except AlreadyRegistered:
 
 product_search = SearchQuerySet().models(Product).facet('sites').facet('categories').facet('owner').facet('price').narrow('sites:%s' % settings.SITE_ID)
 car_search = SearchQuerySet().models(CarProduct).facet('sites').facet('categories').facet('owner').facet('price').narrow('sites:%s' % settings.SITE_ID)
-location_search = SearchQuerySet().models(RealEstateProduct).facet('sites').facet('categories').facet('owner').facet('price').narrow('sites:%s' % settings.SITE_ID)
+realestate_search = SearchQuerySet().models(RealEstateProduct).facet('sites').facet('categories').facet('owner').facet('price').narrow('sites:%s' % settings.SITE_ID)
 alert_search = SearchQuerySet().models(Alert)
 

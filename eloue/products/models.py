@@ -348,6 +348,9 @@ class CarProduct(Product):
     licence_plate = models.CharField(_(u"numéro d'immatriculation"), max_length=10)
     first_registration_date = models.DateField(_(u'première mise en circulation'))
 
+    objects = ProductManager()
+    on_site = CurrentSiteProductManager()
+
     @property
     def options(self):
         option_names = [
@@ -393,6 +396,9 @@ class RealEstateProduct(Product):
     tumble_dryer = models.BooleanField(_(u'sèche linge'))
     computer_with_internet = models.BooleanField(_(u'ordinateur avec Internet'))
 
+    objects = ProductManager()
+    on_site = CurrentSiteProductManager()
+    
     @property
     def options(self):
         option_names = [
