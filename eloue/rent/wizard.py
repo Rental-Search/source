@@ -86,10 +86,8 @@ class BookingWizard(MultiPartFormWizard):
         booking.borrower = self.new_patron
         if creditcard_form:
             if creditcard_form.cleaned_data.get('save'):
-                creditcard = creditcard_form.save(commit=False)
-                creditcard.holder = self.new_patron
-                if bool(creditcard_form.cleaned_data.get('save')):
-                    creditcard.save()
+                creditcard_form.instance.holder = self.new_patron
+                creditcard = creditcard_form.save(commit=bool(creditcard_form.cleaned_data.get('save')))
             else:
                 creditcard = creditcard_form.save(commit=False)
             try:

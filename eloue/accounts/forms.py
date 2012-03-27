@@ -590,7 +590,7 @@ class CreditCardForm(forms.ModelForm):
                         self.cleaned_data['expires'], self.cleaned_data['cvv']
                     )
             except PayboxException:
-                raise Exception
+                raise
         instance = super(CreditCardForm, self).save(*args, commit=False, **kwargs)
         instance.card_number = self.cleaned_data['card_number']
         instance.masked_number = self.cleaned_data['masked_number']
