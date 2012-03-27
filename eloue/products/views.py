@@ -126,18 +126,14 @@ def real_estate_product_create(request, *args, **kwargs):
 @ownership_required(model=Product, object_key='product_id', ownership=['owner'])
 def product_edit(request, slug, product_id):
     product = get_object_or_404(Product.on_site, pk=product_id)
-    initial = {
-        'category': product.category.id,
-        'deposit_amount': product.deposit_amount
-    }
-
+    
     try:
-        form = CarProductEditForm(data=request.POST or None, files=request.FILES or None, instance=product.carproduct, initial=initial)
+        form = CarProductEditForm(data=request.POST or None, files=request.FILES or None, instance=product.carproduct)
     except Product.DoesNotExist:
         try:
-            form = RealEstateEditForm(data=request.POST or None, files=request.FILES or None, instance=product.realestateproduct, initial=initial)
+            form = RealEstateEditForm(data=request.POST or None, files=request.FILES or None, instance=product.realestateproduct)
         except Product.DoesNotExist:
-            form = ProductEditForm(data=request.POST or None, files=request.FILES or None, instance=product, initial=initial)
+            form = ProductEditForm(data=request.POST or None, files=request.FILES or None, instance=product)
 
     if form.is_valid():
         product = form.save()
