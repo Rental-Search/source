@@ -114,16 +114,36 @@
                 {% endif %}
                 {% endwith %}
             </div> {# gallery #}
-            <div id="prices" style="height: 200px;">
-            {% for price in product.prices.all %}
-                {{price}} euros / {{price.get_unit_display}}<p>
-            {% endfor %}
+            <div id="prices">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>{% trans "La journée" %}</th>
+                        <th>{% trans "L'heure" %}</th>
+                        <th>{% trans "Le week end" %}</th>
+                        <th>{% trans "La semaine" %}</th>
+                        <th>{% trans "Les 15 jours" %}</th>
+                        <th>{% trans "Le mois" %}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td style="text-align: center;">43 &euro;</td>
+                        <td style="text-align: center;">54 &euro;</td>
+                        <td style="text-align: center;">12 &euro;</td>
+                        <td style="text-align: center;">76 &euro;</td>
+                        <td style="text-align: center;">98 &euro;</td>
+                        <td style="text-align: center;">23 &euro;</td>
+                    </tr>
+                </tbody>
+            </table>
+            
             </div>{# prices #}
-            <div id="calendar" style="height: 200px;">{{ product.monthly_availability }}</div>{# calendar #}
+            <div id="calendar">{{ product.monthly_availability }}</div>{# calendar #}
         </div>{# product-tabs #}
         <div class="product-info">
             <div class="product-desc">
-                {% if options %}
+                {% if product.options %}
                 <h3 style="margin-bottom: 10px;">{% trans "Options & accessoires" %}</h3>
                 <p style="margin-bottom: 20px;">
                     {{product.options|join:" - "}}
