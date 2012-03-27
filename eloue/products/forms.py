@@ -248,56 +248,59 @@ class ProductForm(BetterModelForm):
     class Meta:
         model = Product
         fieldsets = [
-                        ('category', {'fields': ['category'], 'legend': _(u'Choisissez un catégorie')}),
-                        ('informations', {'fields': ['summary', 'picture_id', 'picture', 'description', 'quantity'], 
-                                            'legend': _(u'Informations')}),
-                        ('price', {'fields': ['day_price', 'deposit_amount'], 
-                                    'legend': _(u'Prix de la location')}),
-                        ('price_detail', {'fields': ['hour_price', 'week_end_price', 'week_price', 'two_weeks_price', 'month_price'], 
-                                            'legend': _(u'Grille des tarifs'),
-                                            'description': 'La grille tarifaire permet d\'appliquer un tarif dégressif en fonction de la période. Ces prix ne sont pas obligatoires pour publier l\'annonce, il est possible de les ajouter plus tard.',
-                                            'classes': ['prices-grid', 'hidden-fieldset']})]
+            ('category', {'fields': ['category'], 'legend': _(u'Choisissez un catégorie')}),
+            ('informations', {
+                'fields': ['summary', 'picture_id', 'picture', 'description', 'quantity'], 
+                'legend': _(u'Informations')}),
+            ('price', {'fields': ['day_price', 'deposit_amount'], 
+                        'legend': _(u'Prix de la location')}),
+            ('price_detail', {
+                'fields': ['hour_price', 'week_end_price', 'week_price', 'two_weeks_price', 'month_price'], 
+                'legend': _(u'Grille des tarifs'),
+                'description': 'La grille tarifaire permet d\'appliquer un tarif dégressif en fonction de la période. Ces prix ne sont pas obligatoires pour publier l\'annonce, il est possible de les ajouter plus tard.',
+                'classes': ['prices-grid', 'hidden-fieldset']})
+        ]
 
 
 class CarProductForm(ProductForm):
     category = forms.TypedChoiceField(label=_(u"Catégorie"), coerce=lambda pk: Category.tree.get(pk=pk), choices=generate_choices(Category.tree.get(slug='auto-et-moto')))
     quantity = forms.IntegerField(widget=forms.HiddenInput(), initial=1)
 
-
     class Meta:
         model = CarProduct
-        fieldsets = [('category', {'fields': ['category'], 'legend': _(u'Type de véhicule')}),
-                        ('informations', {
-                            'fields': ['summary', 'brand', 'model', 'picture_id', 'picture', 'description'], 
-                            'legend': _(u'Description du véhicule')
-                            }),
-                        ('car_characteristics', {
-                            'fields': ['seat_number', 'door_number', 'fuel', 'transmission', 'mileage', 'consumption'],
-                            'legend': _(u'Caractéristique du véhicule'),
-                            }),
-                        ('assurancies_informations', {
-                            'fields': ['tax_horsepower', 'licence_plate', 'first_registration_date'],
-                            'legend': _(u'Informations pour l\'assurance'),
-                            'description': _(u'Ces informations servent à assurer le véhicule pendant la location <a href=\"#\">(En savoir plus)</a>.'),
-                            }),
-                        ('options', {
-                            'fields': ['air_conditioning', 'power_steering', 
-                                'cruise_control', 'gps', 'baby_seat', 'roof_box', 
-                                'bike_rack', 'snow_tires', 'snow_chains', 
-                                'ski_rack', 'cd_player', 'audio_input'],
-                            'legend': _(u'Options & accessoires'),
-                            }),
-                        ('price', {
-                            'fields': ['day_price', 'deposit_amount'], 
-                            'legend': _(u'Prix de la location')
-                            }),
-                        ('price_detail', {
-                            'fields': ['hour_price', 'week_end_price', 'week_price', 'two_weeks_price', 'month_price'], 
-                            'legend': _(u'Grille des tarifs'),
-                            'description': _(u'La grille tarifaire permet d\'appliquer un tarif dégressif en fonction de la période. Ces prix ne sont pas obligatoires pour publier l\'annonce, il est possible de les ajouter plus tard.'),
-                            'classes': ['prices-grid', 'hidden-fieldset']
-                            })
-                        ]
+        fieldsets = [
+            ('category', {'fields': ['category'], 'legend': _(u'Type de véhicule')}),
+            ('informations', {
+                'fields': ['summary', 'brand', 'model', 'picture_id', 'picture', 'description'], 
+                'legend': _(u'Description du véhicule')
+                }),
+            ('car_characteristics', {
+                'fields': ['seat_number', 'door_number', 'fuel', 'transmission', 'mileage', 'consumption'],
+                'legend': _(u'Caractéristique du véhicule'),
+                }),
+            ('assurancies_informations', {
+                'fields': ['tax_horsepower', 'licence_plate', 'first_registration_date'],
+                'legend': _(u'Informations pour l\'assurance'),
+                'description': _(u'Ces informations servent à assurer le véhicule pendant la location <a href=\"#\">(En savoir plus)</a>.'),
+                }),
+            ('options', {
+                'fields': ['air_conditioning', 'power_steering', 
+                    'cruise_control', 'gps', 'baby_seat', 'roof_box', 
+                    'bike_rack', 'snow_tires', 'snow_chains', 
+                    'ski_rack', 'cd_player', 'audio_input'],
+                'legend': _(u'Options & accessoires'),
+                }),
+            ('price', {
+                'fields': ['day_price', 'deposit_amount'], 
+                'legend': _(u'Prix de la location')
+                }),
+            ('price_detail', {
+                'fields': ['hour_price', 'week_end_price', 'week_price', 'two_weeks_price', 'month_price'], 
+                'legend': _(u'Grille des tarifs'),
+                'description': _(u'La grille tarifaire permet d\'appliquer un tarif dégressif en fonction de la période. Ces prix ne sont pas obligatoires pour publier l\'annonce, il est possible de les ajouter plus tard.'),
+                'classes': ['prices-grid', 'hidden-fieldset']
+                })
+            ]
         widgets = {
             'seat_number': CommentedSelectInput(info_text=_(u'place(s)')),
             'door_number': CommentedSelectInput(info_text=_(u'porte(s)')),
@@ -312,21 +315,31 @@ class RealEstateForm(ProductForm):
 
     class Meta:
         model = RealEstateProduct
-        fieldsets = [('category', {'fields': ['category'], 'legend': _(u'Choisissez un catégorie')}),
-                    ('informations', {'fields': ['summary', 'picture_id', 'picture', 'description'], 
-                                        'legend': _(u'Informations')}),
-                    ('real_estate_description', {'fields' : ['capacity', 'private_life', 'chamber_number', 'rules'],
-                                                    'legend' : _(u'Description du lieu')}),
-                    ('service_included', {'fields': ['air_conditioning', 'breakfast', 'balcony', 'lockable_chamber', 'towel', 'lift', 'family_friendly', 
-                                                        'gym', 'accessible', 'heating', 'jacuzzi', 'chimney', 'internet_access', 'kitchen', 'parking', 'smoking_accepted', 'ideal_for_events',
-                                                        'tv', 'washing_machine', 'tumble_dryer', 'computer_with_internet'],
-                                            'legend': _(u'Service inclus')}),
-                    ('price', {'fields': ['day_price', 'deposit_amount'], 
-                                'legend': _(u'Prix de la location')}),
-                    ('price_detail', {'fields': ['hour_price', 'week_end_price', 'week_price', 'two_weeks_price', 'month_price'], 
-                                        'legend': _(u'Grille des tarifs'),
-                                        'description': 'La grille tarifaire permet d\'appliquer un tarif dégressif en fonction de la période. Ces prix ne sont pas obligatoires pour publier l\'annonce, il est possible de les ajouter plus tard.',
-                                        'classes': ['prices-grid', 'hidden-fieldset']})]
+        fieldsets = [
+            ('category', {'fields': ['category'], 'legend': _(u'Choisissez un catégorie')}),
+            ('informations', {
+                'fields': ['summary', 'picture_id', 'picture', 'description'], 
+                'legend': _(u'Informations')}),
+            ('real_estate_description', {
+                'fields' : ['capacity', 'private_life', 'chamber_number', 'rules'],
+                'legend' : _(u'Description du lieu')}),
+            ('service_included', {
+                'fields': [
+                    'air_conditioning', 'breakfast', 'balcony', 'lockable_chamber', 
+                    'towel', 'lift', 'family_friendly', 'gym', 'accessible', 
+                    'heating', 'jacuzzi', 'chimney', 'internet_access', 
+                    'kitchen', 'parking', 'smoking_accepted', 'ideal_for_events',
+                    'tv', 'washing_machine', 'tumble_dryer', 'computer_with_internet'
+                ],
+                'legend': _(u'Service inclus')}),
+            ('price', {
+                'fields': ['day_price', 'deposit_amount'], 
+                'legend': _(u'Prix de la location')}),
+            ('price_detail', {
+                'fields': ['hour_price', 'week_end_price', 'week_price', 'two_weeks_price', 'month_price'], 
+                'legend': _(u'Grille des tarifs'),
+                'description': 'La grille tarifaire permet d\'appliquer un tarif dégressif en fonction de la période. Ces prix ne sont pas obligatoires pour publier l\'annonce, il est possible de les ajouter plus tard.',
+                'classes': ['prices-grid', 'hidden-fieldset']})]
         widgets = {
             'capacity': CommentedSelectInput(info_text=_(u'persone(s)')),
             'chamber_number': CommentedSelectInput(info_text=_(u'chambre(s)'))
@@ -464,11 +477,15 @@ class ProductAddressEditForm(BetterModelForm):
     class Meta:
         model = Product
         fields = ('address', 'addresses__address1', 'addresses__zipcode', 'addresses__city', 'addresses__country')
-        fieldsets = [('address', {'fields': ['address'], 
-                                        'legend': 'Adresse existante'}),
-                        ('new_address', {'fields': ['addresses__address1', 'addresses__zipcode', 'addresses__city', 'addresses__country'],
-                                            'legend': 'Nouvelle adresse',
-                                            'classes': ['new-address', 'hidden-fieldset']})]
+        fieldsets = [
+            ('address', {
+                'fields': ['address'], 
+                'legend': 'Adresse existante'}),
+            ('new_address', {
+                'fields': ['addresses__address1', 'addresses__zipcode', 'addresses__city', 'addresses__country'],
+                'legend': 'Nouvelle adresse',
+                'classes': ['new-address', 'hidden-fieldset']})
+        ]
 
       
 class ProductPriceEditForm(BetterModelForm):
@@ -498,12 +515,16 @@ class ProductPriceEditForm(BetterModelForm):
     class Meta:
         model = Product
         fields = ('hour_price', 'day_price', 'week_end_price', 'week_price', 'two_weeks_price', 'month_price')
-        fieldsets = [('price', {'fields': ['day_price', 'deposit_amount'], 
-                                'legend': _(u'Prix de la location')}),
-                        ('price_detail', {'fields': ['hour_price', 'week_end_price', 'week_price', 'two_weeks_price', 'month_price'], 
-                                        'legend': _(u'Grille des tarifs'),
-                                        'description': 'La grille tarifaire permet d\'appliquer un tarif dégressif en fonction de la période. Ces prix ne sont pas obligatoires pour publier l\'annonce, il est possible de les ajouter plus tard.',
-                                        'classes': ['prices-grid']})]      
+        fieldsets = [
+            ('price', {
+                'fields': ['day_price', 'deposit_amount'], 
+                'legend': _(u'Prix de la location')}),
+            ('price_detail', {
+                'fields': ['hour_price', 'week_end_price', 'week_price', 'two_weeks_price', 'month_price'], 
+                'legend': _(u'Grille des tarifs'),
+                'description': 'La grille tarifaire permet d\'appliquer un tarif dégressif en fonction de la période. Ces prix ne sont pas obligatoires pour publier l\'annonce, il est possible de les ajouter plus tard.',
+                'classes': ['prices-grid']})
+        ]      
 
 
 class ProductAdminForm(forms.ModelForm):
