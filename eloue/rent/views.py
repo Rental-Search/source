@@ -113,16 +113,8 @@ def booking_create_redirect(request, *args, **kwargs):
 def booking_create(request, *args, **kwargs):
     product = get_object_or_404(Product.on_site, pk=kwargs['product_id'])
     if product.slug != kwargs['slug']:
-        return redirect_to(request, product.get_absolute_url())
-    from eloue.accounts.forms import BookingCreditCardForm, CvvForm
-    form_list = [BookingForm, EmailAuthenticationForm, BookingConfirmationForm]
-    if product.payment_type != PAYMENT_TYPE.NOPAY:
-        try:
-            request.user.creditcard
-            form_list.append(CvvForm)
-        except CreditCard.DoesNotExist:
-            form_list.append(BookingCreditCardForm)
-    wizard = BookingWizard(form_list)
+        return redirect(product)
+    wizard = BookingWizard([BookingForm, EmailAuthenticationForm, BookingConfirmationForm])
     return wizard(request, *args, **kwargs)
 
 
@@ -171,6 +163,7 @@ def offer_accept(request, booking_id):
             pass
     else:
         return HttpResponseForbidden()
+
 def offer_reject(request, booking_id):
     return HttpResponseForbidden()
     booking = get_object_or_404(Booking, pk=booking_id)

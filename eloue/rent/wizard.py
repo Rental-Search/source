@@ -43,6 +43,22 @@ class BookingWizard(MultiPartFormWizard):
         self.extra_context={
             'product_list': product_search.more_like_this(product)[:4]
         }
+        if product.payment_type != PAYMENT_TYPE.NOPAY:
+            if request.user.is_authenticated():
+                try:
+                    request.user.creditcard
+                    self.form_list.append(CvvForm)
+                except (CreditCard.DoesNotExist):
+                    self.form_list.append(BookingCreditCardForm)
+            elif EmailAuthenticationForm in self.form_list:
+                 form = self.get_form(self.form_list.index(EmailAuthenticationForm), request.POST, request.FILES)
+                 if form.is_valid():
+                    user = form.get_user()
+                    try:
+                        user.creditcard
+                        self.form_list.append(CvvForm)
+                    except (CreditCard.DoesNotExist, AttributeError):
+                        self.form_list.append(BookingCreditCardForm)
         return super(BookingWizard, self).__call__(request, *args, **kwargs)
 
     def done(self, request, form_list):
@@ -70,15 +86,18 @@ class BookingWizard(MultiPartFormWizard):
         booking.borrower = self.new_patron
         if creditcard_form:
             if creditcard_form.cleaned_data.get('save'):
-                credit_card = creditcard_form.save(commit=bool(creditcard_form.cleaned_data.get('save')))
+                creditcard = creditcard_form.save(commit=False)
+                creditcard.holder = self.new_patron
+                if bool(creditcard_form.cleaned_data.get('save')):
+                    creditcard.save()
             else:
-                credit_card = creditcard_form.save(commit=False)
+                creditcard = creditcard_form.save(commit=False)
             try:
                 request.user.creditcard
                 payment = PayboxDirectPlusPaymentInformation(booking=booking)
             except CreditCard.DoesNotExist:
                 payment = PayboxDirectPaymentInformation(booking=booking)
-            preapproval_parameters = (credit_card, creditcard_form.cleaned_data['cvv'])
+            preapproval_parameters = (creditcard, creditcard_form.cleaned_data['cvv'])
         else:
             preapproval_parameters = ()
             payment = NonPaymentInformation()
@@ -117,11 +136,14 @@ class BookingWizard(MultiPartFormWizard):
                 initial=initial, instance=booking)
         elif issubclass(next_form, (BookingCreditCardForm, CvvForm)):
             from eloue.accounts.models import CreditCard
-            user = self.extra_context['user']
+
             try:
-                instance = user.creditcard
-            except CreditCard.DoesNotExist:
-                instance = CreditCard(holder=user)
+                instance = self.new_patron.creditcard
+            except (CreditCard.DoesNotExist, AttributeError):
+                if self.new_patron:
+                    instance = CreditCard(holder=self.new_patron)
+                else:
+                    instance = CreditCard()
             return next_form(
                 data, files, prefix=self.prefix_for_step(step), 
                 instance=instance
@@ -137,7 +159,6 @@ class BookingWizard(MultiPartFormWizard):
     def parse_params(self, request, *args, **kwargs):
         product = get_object_or_404(Product.on_site.active().select_related(), pk=kwargs['product_id'])
         self.extra_context['product'] = product
-        self.extra_context['user'] = request.user
         self.extra_context['search_form'] = FacetedSearchForm()
         self.extra_context['comments'] = BorrowerComment.objects.filter(booking__product=product)
     
