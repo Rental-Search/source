@@ -3,6 +3,7 @@ import re
 import datetime
 
 from django import forms
+from django.core import validators
 from django.utils.encoding import smart_unicode
 from django.utils.translation import ugettext as _
 
@@ -150,6 +151,8 @@ class RIBField(forms.MultiValueField):
 
     def clean(self, value):
         out = super(RIBField, self).clean(value)
+        if out:
+            out = out.upper()
         if not rib_check(out):
             raise forms.ValidationError(self.error_messages['invalid_rib'])
         return out
