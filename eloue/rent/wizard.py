@@ -3,17 +3,17 @@ import datetime
 import urllib
 from decimal import Decimal as D
 
+from django_lean.experiments.models import GoalRecord
+from django_lean.experiments.utils import WebUser
+
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import login
 from django.contrib.sites.models import Site
 from django.core.urlresolvers import reverse
-from django.utils.translation import ugettext_lazy as _
 from django.shortcuts import get_object_or_404, redirect
+from django.utils.translation import ugettext_lazy as _
 from django.views.generic.simple import direct_to_template, redirect_to
-
-from django_lean.experiments.models import GoalRecord
-from django_lean.experiments.utils import WebUser
 
 from eloue.accounts.forms import EmailAuthenticationForm, BookingCreditCardForm, CvvForm
 from eloue.accounts.models import Patron, Avatar, CreditCard
@@ -22,12 +22,12 @@ from eloue.products.forms import FacetedSearchForm
 from eloue.products.models import Product, PAYMENT_TYPE
 from eloue.rent.models import Booking, BorrowerComment
 from eloue.rent.forms import BookingForm, BookingConfirmationForm
-from eloue.wizard import NewGenericFormWizard
+from eloue.wizard import MultiPartFormWizard
 
 USE_HTTPS = getattr(settings, 'USE_HTTPS', True)
 
 
-class BookingWizard(NewGenericFormWizard):
+class BookingWizard(MultiPartFormWizard):
     
     def __init__(self, *args, **kwargs):
         super(BookingWizard, self).__init__(*args, **kwargs)

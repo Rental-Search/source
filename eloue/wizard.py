@@ -22,73 +22,22 @@ from eloue.accounts.forms import EmailAuthenticationForm, make_missing_data_form
 from eloue.accounts.models import Patron, Avatar, FacebookSession
 from eloue.geocoder import GoogleGeocoder
 
+def isMissingInformationForm(obj):
+    return getattr(obj.__class__, '__name__', None) == 'MissingInformationForm'
+
 class MultiPartFormWizard(FormWizard):
 
     def __init__(self, *args, **kwargs):
         super(MultiPartFormWizard, self).__init__(*args, **kwargs)
-        self.fb_session = None
-        self.new_patron = None
-        self.me = {}
-    
-    def get_form(self, step, data=None, files=None):
-        return self.form_list[step](data, files, prefix=self.prefix_for_step(step), initial=self.initial.get(step, None))
-    
-    def security_hash(self, request, form):
-        data = []
-        for bf in form:
-            # Get the value from the form data. If the form allows empty or hasn't
-            # changed then don't call clean() to avoid trigger validation errors
-            if isinstance(bf.field, forms.FileField):
-                continue
-            if form.empty_permitted and not form.has_changed():
-                value = bf.data or ''
-            else:
-                value = bf.field.clean(bf.data) or ''
-            if isinstance(value, basestring):
-                value = value.strip()
-            data.append((bf.name, value))
-        data.append(settings.SECRET_KEY)
-        
-        pickled = pickle.dumps(data, pickle.HIGHEST_PROTOCOL)
-        return md5_constructor(pickled).hexdigest()
-    
-    def render(self, form, request, step, context=None):
-        old_data, old_files = request.POST, request.FILES
-        prev_fields = []
-        if old_data:
-            hidden = forms.HiddenInput()
-            # Collect all data from previous steps and render it as HTML hidden fields.
-            for i in range(step):
-                old_form = self.get_form(i, old_data, old_files)
-                hash_name = 'hash_%s' % i
-                prev_fields.extend([bf.as_hidden() for bf in old_form])
-                prev_fields.append(hidden.render(hash_name, old_data.get(hash_name, self.security_hash(request, old_form))))
-        return self.render_template(request, form, ''.join(prev_fields), step, context)
-    
-    def process_step(self, request, form, step):
-        super(MultiPartFormWizard, self).process_step(request, form, step)
-        if isinstance(form, EmailAuthenticationForm):
-            self.fb_session = form.fb_session
-            self.new_patron = form.get_user()
-            self.me = form.me
-        if self.fb_session and 'password1' in self.required_fields:
-            self.required_fields.remove('password1')
-            self.required_fields.remove('password2')
-
-def isMissingInformationForm(obj):
-    return getattr(obj.__class__, '__name__', None) == 'MissingInformationForm'
-
-class NewGenericFormWizard(MultiPartFormWizard):
-    """collecting here the largest common part of MessageWizard, BookingWizard and ProductWizard"""
-
-    def __init__(self, *args, **kwargs):
-        super(NewGenericFormWizard, self).__init__(*args, **kwargs)
         self.required_fields = [
           'username', 'password1', 'password2', 'is_professional', 'company_name', 'first_name', 'last_name',
           'phones', 'phones__phone', 'addresses',
           'addresses__address1', 'addresses__zipcode', 'addresses__city', 'addresses__country', 'avatar'
         ]
-
+        self.fb_session = None
+        self.new_patron = None
+        self.me = {}
+    
     def __call__(self, request, *args, **kwargs):
         if request.user.is_authenticated():
             self.patron = request.user
@@ -117,7 +66,7 @@ class NewGenericFormWizard(MultiPartFormWizard):
                     missing_fields, missing_form = make_missing_data_form(form.get_user(), self.required_fields)
                     if missing_fields:
                         self.form_list.insert(2, missing_form)
-        return super(NewGenericFormWizard, self).__call__(request, *args, **kwargs)
+        return super(MultiPartFormWizard, self).__call__(request, *args, **kwargs)
 
     def done(self, request, form_list):
         missing_form = next((form for form in form_list if getattr(form.__class__, '__name__', None) == 'MissingInformationForm'), None)
@@ -208,14 +157,53 @@ class NewGenericFormWizard(MultiPartFormWizard):
             return next_form(data, files, prefix=self.prefix_for_step(step),
                 initial=initial)
         else:
-            return super(NewGenericFormWizard, self).get_form(step, data, files)
-
-    def render(self, form, request, step, context=None):
+            return self.form_list[step](data, files, prefix=self.prefix_for_step(step), initial=self.initial.get(step, None))
+    
+    def security_hash(self, request, form):
+        data = []
+        for bf in form:
+            # Get the value from the form data. If the form allows empty or hasn't
+            # changed then don't call clean() to avoid trigger validation errors
+            if isinstance(bf.field, forms.FileField):
+                continue
+            if form.empty_permitted and not form.has_changed():
+                value = bf.data or ''
+            else:
+                value = bf.field.clean(bf.data) or ''
+            if isinstance(value, basestring):
+                value = value.strip()
+            data.append((bf.name, value))
+        data.append(settings.SECRET_KEY)
+        
+        pickled = pickle.dumps(data, pickle.HIGHEST_PROTOCOL)
+        return md5_constructor(pickled).hexdigest()
+    
+    def render(self, form, request, step, context={}):
         if form.__class__.__name__ == 'MissingInformationForm':
+            # maybe we should move this section into process_step, or another function
+            # this does not seem the best place to handle
             if self.fb_session:
-                if context==None:
-                    context={}
                 default_picture = settings.MEDIA_URL + 'images/default_avatar.png'
                 context['fb_image'] = self.me.get('picture', default_picture)
-        return super(NewGenericFormWizard, self).render(form, request, step, context)
+        old_data, old_files = request.POST, request.FILES
+        prev_fields = []
+        if old_data:
+            hidden = forms.HiddenInput()
+            # Collect all data from previous steps and render it as HTML hidden fields.
+            for i in range(step):
+                old_form = self.get_form(i, old_data, old_files)
+                hash_name = 'hash_%s' % i
+                prev_fields.extend([bf.as_hidden() for bf in old_form])
+                prev_fields.append(hidden.render(hash_name, old_data.get(hash_name, self.security_hash(request, old_form))))
+        return self.render_template(request, form, ''.join(prev_fields), step, context)
+
+    def process_step(self, request, form, step):
+        super(MultiPartFormWizard, self).process_step(request, form, step)
+        if isinstance(form, EmailAuthenticationForm):
+            self.fb_session = form.fb_session
+            self.new_patron = form.get_user()
+            self.me = form.me
+        if self.fb_session and 'password1' in self.required_fields:
+            self.required_fields.remove('password1')
+            self.required_fields.remove('password2')
 

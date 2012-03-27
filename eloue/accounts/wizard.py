@@ -11,9 +11,9 @@ from django_lean.experiments.utils import WebUser
 
 from eloue.accounts.forms import EmailAuthenticationForm, make_missing_data_form
 from eloue.accounts.models import Patron, Avatar
-from eloue.wizard import MultiPartFormWizard, NewGenericFormWizard
+from eloue.wizard import MultiPartFormWizard
 
-class AuthenticationWizard(NewGenericFormWizard):
+class AuthenticationWizard(MultiPartFormWizard):
 
     def __init__(self, *args, **kwargs):
         super(AuthenticationWizard, self).__init__(*args, **kwargs)
