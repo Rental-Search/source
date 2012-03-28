@@ -350,6 +350,13 @@ def patron_message_create(request, recipient_username):
 @ownership_required(model=Product, object_key='product_id', ownership=['owner'])
 def product_delete(request, slug, product_id):
     product = get_object_or_404(Product.on_site, pk=product_id)
+    try:
+        product = product.carproduct
+    except Product.DoesNotExist:
+        try:
+            product = product.realestateproduct
+        except Product.DoesNotExist:
+            pass
     if request.method == "POST":
         product.delete()
         messages.success(request, _(u"Votre objet à bien été supprimée"))
