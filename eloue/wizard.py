@@ -199,6 +199,7 @@ class MultiPartFormWizard(FormWizard):
 
     def process_step(self, request, form, step):
         super(MultiPartFormWizard, self).process_step(request, form, step)
+        self.user = request.user
         if isinstance(form, EmailAuthenticationForm):
             self.fb_session = form.fb_session
             self.new_patron = form.get_user()

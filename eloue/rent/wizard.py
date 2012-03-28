@@ -135,12 +135,12 @@ class BookingWizard(MultiPartFormWizard):
                 initial=initial, instance=booking)
         elif issubclass(next_form, (BookingCreditCardForm, CvvForm)):
             from eloue.accounts.models import CreditCard
-
+            user = self.user if self.user.is_authenticated() else self.new_patron
             try:
-                instance = self.new_patron.creditcard
+                instance = user.creditcard
             except (CreditCard.DoesNotExist, AttributeError):
-                if self.new_patron:
-                    instance = CreditCard(holder=self.new_patron)
+                if user:
+                    instance = CreditCard(holder=user)
                 else:
                     instance = CreditCard()
             return next_form(
