@@ -8,13 +8,11 @@ from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
 
 class Migration(DataMigration):
-
-
     def forwards(self, orm):
         "Write your forwards methods here."
         gfk = generic.GenericForeignKey()
-        gfk.contribute_to_class(orm.Booking, "payment")
-        for booking in orm.Booking.objects.all():
+        gfk.contribute_to_class(orm['rent.booking'], "payment")
+        for booking in orm['rent.booking'].objects.all():
             payment = orm['payments.PaypalPaymentInformation'](
                 preapproval_key=booking.preapproval_key, 
                 pay_key=booking.pay_key)
@@ -26,9 +24,9 @@ class Migration(DataMigration):
         "Write your backwards methods here."
         gfk = generic.GenericForeignKey()
         gfk.contribute_to_class(orm.Booking, "payment")
-        for booking in orm.Booking.objects.all():
-            booking.preapproval_key = booking.payment.preapproval_key
-            booking.pay_key = booking.payment.pay_key
+        for booking in orm['rent.Booking'].objects.filter(content_type=ContentType.objects.get(model='paypalpaymentinformation')):
+            booking.preapproval_key = booking.preapproval_key
+            booking.pay_key = booking.pay_key
             booking.payment = None
             booking.save()
         orm['payments.PaypalPaymentInformation'].objects.all().delete()
@@ -66,6 +64,7 @@ class Migration(DataMigration):
             'modified_at': ('django.db.models.fields.DateTimeField', [], {}),
             'new_messages_alerted': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
             'paypal_email': ('django.db.models.fields.EmailField', [], {'max_length': '75', 'null': 'True', 'blank': 'True'}),
+            'rib': ('django.db.models.fields.CharField', [], {'max_length': '23', 'blank': 'True'}),
             'school': ('django.db.models.fields.CharField', [], {'max_length': '75', 'null': 'True', 'blank': 'True'}),
             'sites': ('django.db.models.fields.related.ManyToManyField', [], {'related_name': "'patrons'", 'symmetrical': 'False', 'to': "orm['sites.Site']"}),
             'slug': ('django.db.models.fields.SlugField', [], {'unique': 'True', 'max_length': '50', 'db_index': 'True'}),
@@ -115,11 +114,15 @@ class Migration(DataMigration):
         'payments.payboxdirectpaymentinformation': {
             'Meta': {'object_name': 'PayboxDirectPaymentInformation'},
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'numauth': ('django.db.models.fields.CharField', [], {'max_length': '20'})
+            'numappel': ('django.db.models.fields.CharField', [], {'max_length': '20'}),
+            'numauth': ('django.db.models.fields.CharField', [], {'max_length': '20'}),
+            'numtrans': ('django.db.models.fields.CharField', [], {'max_length': '20'})
         },
         'payments.payboxdirectpluspaymentinformation': {
             'Meta': {'object_name': 'PayboxDirectPlusPaymentInformation'},
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'})
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'numappel': ('django.db.models.fields.CharField', [], {'max_length': '20'}),
+            'numtrans': ('django.db.models.fields.CharField', [], {'max_length': '20'})
         },
         'payments.paypalpaymentinformation': {
             'Meta': {'object_name': 'PaypalPaymentInformation'},
@@ -154,7 +157,7 @@ class Migration(DataMigration):
             'modified_at': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
             'owner': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'products'", 'to': "orm['accounts.Patron']"}),
             'payment_type': ('django.db.models.fields.PositiveSmallIntegerField', [], {'default': '1'}),
-            'quantity': ('django.db.models.fields.IntegerField', [], {}),
+            'quantity': ('django.db.models.fields.IntegerField', [], {'default': '1'}),
             'sites': ('django.db.models.fields.related.ManyToManyField', [], {'related_name': "'products'", 'symmetrical': 'False', 'to': "orm['sites.Site']"}),
             'summary': ('django.db.models.fields.CharField', [], {'max_length': '255'})
         },
@@ -217,4 +220,4 @@ class Migration(DataMigration):
         }
     }
 
-    complete_apps = ['payments', 'rent']
+    complete_apps = ['rent', 'payments']
