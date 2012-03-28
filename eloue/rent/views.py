@@ -126,12 +126,14 @@ def booking_price(request, slug, product_id):
         }
         return HttpResponse(simplejson.dumps(response_dict), mimetype='application/json')
 
+
 @require_GET
 def get_availability(request, product_id, year, month):
     product = get_object_or_404(Product.on_site, pk=product_id)
     availability = product.daily_available(year, month)
     return HttpResponse(simplejson.dumps(availability), mimetype='application/json')
-    
+
+
 @mobify
 @never_cache
 @secure_required
@@ -139,13 +141,14 @@ def booking_create_redirect(request, *args, **kwargs):
     product = get_object_or_404(Product.on_site, pk=kwargs['product_id'])
     return redirect_to(request, product.get_absolute_url())
 
+
 @mobify
 @never_cache
 @secure_required
 def booking_create(request, *args, **kwargs):
     product = get_object_or_404(Product.on_site, pk=kwargs['product_id'])
     if product.slug != kwargs['slug']:
-        return redirect_to(request, product.get_absolute_url())
+        return redirect(product)
     wizard = BookingWizard([BookingForm, EmailAuthenticationForm, BookingConfirmationForm])
     return wizard(request, *args, **kwargs)
 
@@ -172,9 +175,8 @@ def booking_detail(request, booking_id):
         template_name='rent/booking_detail.html', template_object_name='booking', extra_context={'paypal': paypal})
 
 
-
 def offer_accept(request, booking_id):
-    booking = get_object_or_404(Booking, pk=booking_id)
+    booking = get_object_or_404(Booking.on_site, pk=booking_id)
     if request.user == booking.offer_in_message.recipient:
         if booking.state == Booking.STATE.UNACCEPTED:
             booking.state = Booking.STATE.ACCEPTED_UNAUTHORIZED
@@ -195,7 +197,7 @@ def offer_accept(request, booking_id):
     else:
         return HttpResponseForbidden()
 def offer_reject(request, booking_id):
-    booking = get_object_or_404(Booking, pk=booking_id)
+    booking = get_object_or_404(Booking.on_site, pk=booking_id)
     if request.user == booking.offer_in_message.recipient:
         if booking.state == Booking.STATE.UNACCEPTED:
             booking.state = Booking.STATE.REJECTED
@@ -206,11 +208,10 @@ def offer_reject(request, booking_id):
         return HttpResponseForbidden()
 
 
-
 @login_required
 @ownership_required(model=Booking, object_key='booking_id', ownership=['owner'])
 def booking_accept(request, booking_id):
-    booking = get_object_or_404(Booking, pk=booking_id)
+    booking = get_object_or_404(Booking.on_site, pk=booking_id)
     if booking.product.payment_type!=PAYMENT_TYPE.NOPAY:
         is_valid = booking.owner.is_valid
         if not booking.owner.has_paypal():
@@ -237,7 +238,7 @@ def booking_accept(request, booking_id):
 @login_required
 @ownership_required(model=Booking, object_key='booking_id', ownership=['owner'])
 def booking_reject(request, booking_id):
-    booking = get_object_or_404(Booking, pk=booking_id)
+    booking = get_object_or_404(Booking.on_site, pk=booking_id)
     form = BookingStateForm(request.POST or None,
         initial={'state': Booking.STATE.REJECTED},
         instance=booking)
@@ -253,7 +254,7 @@ def booking_reject(request, booking_id):
 @login_required
 @ownership_required(model=Booking, object_key='booking_id', ownership=['owner', 'borrower'])
 def booking_cancel(request, booking_id):
-    booking = get_object_or_404(Booking, pk=booking_id)
+    booking = get_object_or_404(Booking.on_site, pk=booking_id)
     if request.POST:
         booking.init_payment_processor()
         booking.cancel()
@@ -266,7 +267,7 @@ def booking_cancel(request, booking_id):
 @login_required
 @ownership_required(model=Booking, object_key='booking_id', ownership=['owner'])
 def booking_close(request, booking_id):
-    booking = get_object_or_404(Booking, pk=booking_id)
+    booking = get_object_or_404(Booking.on_site, pk=booking_id)
     if request.POST:
         booking.init_payment_processor()
         booking.pay()
@@ -281,11 +282,10 @@ def booking_close(request, booking_id):
 @login_required
 @ownership_required(model=Booking, object_key='booking_id', ownership=['owner', 'borrower'])
 def booking_incident(request, booking_id):
-    booking = get_object_or_404(Booking, pk=booking_id)
+    booking = get_object_or_404(Booking.on_site, pk=booking_id)
     form = IncidentForm(request.POST or None)
     if form.is_valid():
         send_mail(u"Déclaration d'incident", form.cleaned_data['message'], settings.DEFAULT_FROM_EMAIL, ['contact@e-loue.com'])
         booking.state = Booking.STATE.INCIDENT
         booking.save()
     return direct_to_template(request, 'rent/booking_incident.html', extra_context={'booking': booking, 'form': form})
-

@@ -114,17 +114,92 @@
                 {% endif %}
                 {% endwith %}
             </div> {# gallery #}
-            <div id="prices" style="height: 200px;">
-            {% for price in product.prices.all %}
-                {{price}} euros / {{price.get_unit_display}}<p>
-            {% endfor %}
+            <div id="prices">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>{% trans "La journée" %}</th>
+                        <th>{% trans "L'heure" %}</th>
+                        <th>{% trans "Le week end" %}</th>
+                        <th>{% trans "La semaine" %}</th>
+                        <th>{% trans "Les 15 jours" %}</th>
+                        <th>{% trans "Le mois" %}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td style="text-align: center;">43 &euro;</td>
+                        <td style="text-align: center;">54 &euro;</td>
+                        <td style="text-align: center;">12 &euro;</td>
+                        <td style="text-align: center;">76 &euro;</td>
+                        <td style="text-align: center;">98 &euro;</td>
+                        <td style="text-align: center;">23 &euro;</td>
+                    </tr>
+                </tbody>
+            </table>
+            
             </div>{# prices #}
-            <div id="calendar" style="height: 200px;">{{ product.monthly_availability }}</div>{# calendar #}
+            <div id="calendar">{{ product.monthly_availability }}</div>{# calendar #}
         </div>{# product-tabs #}
-        <div class="product-desc">
-            {{ product.description|linebreaksp }}
-        </div>{# product-desc #}
-
+        <div class="product-info">
+            <div class="product-desc">
+                {% if product.options %}
+                <h3 style="margin-bottom: 10px;">{% trans "Options & accessoires" %}</h3>
+                <p style="margin-bottom: 20px;">
+                    {{product.options|join:" - "}}
+                </p>
+                {% endif %}
+                <h3 style="margin-bottom: 10px;">{% trans "Description" %}</h3>
+                {{ product.description|linebreaksp }}
+            </div>{# product-desc #}
+            {% if product.carproduct %}
+                <table class="table table-striped">
+                    <tbody>
+                    <tr>
+                        <td>{% trans "Nombre de siège" %}</td>
+                        <td style="text-align: right">{{product.seat_number}}</td>
+                    </tr>
+                    <tr>
+                        <td>{% trans "Nombre de porte" %}</td>
+                        <td style="text-align: right">{{ product.door_number }}</td>
+                    </tr>
+                    <tr>
+                        <td>{% trans "Energie" %}</td>
+                        <td style="text-align: right">{{ product.get_fuel_display }}</td>
+                    </tr>
+                    <tr>
+                        <td>{% trans "Transmission" %}</td>
+                        <td style="text-align: right">{{ product.get_transmission_display }}</td>
+                    </tr>
+                    <tr>
+                        <td>{% trans "Kilométrage" %}</td>
+                        <td style="text-align: right">{{ product.get_mileage_display }}</td>
+                    </tr>
+                    <tr>
+                        <td>{% trans "Consommation" %}</td>
+                        <td style="text-align: right">{{ product.consumption }} litres/100km</td>
+                    </tr>
+                    </tbody>
+                </table>
+            {% endif %}
+            {% if product.realestateproduct %}
+                <table class="table table-striped">
+                    <tbody>
+                    <tr>
+                        <td>{% trans "Capacité" %}</td>
+                        <td style="text-align: right">{{product.capacity}}</td>
+                    </tr>
+                    <tr>
+                        <td>{% trans "Vie privée" %}</td>
+                        <td style="text-align: right">{{ product.get_private_life_display }}</td>
+                    </tr>
+                    <tr>
+                        <td>{% trans "Nombre de chambres" %}</td>
+                        <td style="text-align: right">{{ product.chamber_number }}</td>
+                    </tr>
+                </table>
+            {% endif %}
+        </div>
         <div class="product-comment">
             {% if product.borrowercomments.count > 0 %}
                 {% blocktrans count product.borrowercomments.count as count %}

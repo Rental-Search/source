@@ -23,43 +23,94 @@
 {% endblock %}
 {% block content-main-profil %}
 <h2>{% trans "Modification de "%} {{ product.summary }} <small><a href="{{ product.get_absolute_url }}">({% trans "Voir l'annonce" %}) </a></small></h2>
-{% if is_multipart %}
+{% if form.is_multipart %}
 <form enctype="multipart/form-data" class="form-horizontal" method="post" action="">
 {% else %}
 <form class="form-horizontal" method="post" action="">
 {% endif %}
 {% csrf_token %}
-{% for form in forms %}
-  <fieldset>
-    <legend>{{ form.legend }}</legend>
-    {% for formfield in form %}
-    <div class="control-group {% if formfield.errors %} error {% endif %}">
-      <label class="control-label" for="{{ formfield.id_for_label }}">{{ formfield.label }} {% if formfield.field.required %}*{% endif %}</label>
-      <div class="controls">
-        {% if formfield.name == "picture" %}
-          {% for picture in product.pictures.all %}
-              {% if picture.thumbnail %}
-                    <a href="#"><img src="{{ picture.thumbnail.url }}" /></a>
-                  {% endif %}
-            {% endfor %}
-        {% endif %}
-        {{ formfield }}
-        <p class="help-block">{{ formfield.help_text }}</p>
-        {% if formfield.errors %}
-          <span class="help-inline">
-          {% for error in formfield.errors %}
-            {{ error|escape }} 
+{% for fieldset in form.fieldsets %}
+      <fieldset class="{{ fieldset.classes }}">
+        {% if fieldset.legend %}
+            <legend>{{ fieldset.legend }}</legend>
+          {% endif %}
+          {% if fieldset.description %}
+            <div class="control-group">
+              <p class="fieldset-description">{{ fieldset.description }}</p>
+            </div>
+          {% endif %}
+          {% if fieldset.name == "service_included" or fieldset.name == "options" %}
+          {% for formfield in fieldset %}
+          <div class="control-group {% if formfield.errors %} error {% endif %}">
+            <div class="controls">
+                    <label class="checkbox">
+                    {{formfield}}
+                    {{formfield.label}}
+                    </label>
+                    {% if formfield.errors %}
+              <span class="help-inline">
+              {% for error in formfield.errors %}
+                {{ error|escape }}
+              {% endfor %}
+                </span>
+            {% endif %}
+                </div>
+          </div>
           {% endfor %}
-          </span>
-        {% endif %}
-      </div>
-    </div>
-    {% endfor %}
-  </fieldset>
-  {% endfor %}
+          {% else %}
+            {% for formfield in fieldset %}
+              {% if formfield.is_hidden %}
+                {{formfield}}
+              {% else %}
+                <div class="control-group {% if formfield.errors %} error {% endif %}">
+                    <label class="control-label" for="{{ formfield.id_for_label }}">{{ formfield.label }} {% if formfield.field.required %}*{% endif %}</label>
+                    <div class="controls">
+                        {% if formfield.name == "picture" %}{% with form.instance.pictures.all|first as picture %}<img src="{{picture.thumbnail.url}}"/>{% endwith %}{%endif%}
+                        {{ formfield }}
+                        <p class="help-block">{{ formfield.help_text}}</p>
+                        {% if formfield.errors %}
+                        <span class="help-inline">
+                            {% for error in formfield.errors %}
+                                {{ error|escape }}
+                            {% endfor %}
+                        </span>
+                        {% endif %}
+                    </div>
+                </div>
+              {% endif %}
+            {% endfor %}
+            {% if fieldset.name == "address" %}
+            <div class="control-group">
+              <a href="#" class="add-new-address">+ {% trans "Ajoutez une nouvelle adresse" %}</a>
+            </div>
+            {% endif %}
+          {% endif %}
+      </fieldset> 
+      {% endfor %}
   <div class="form-actions">
     <button type="submit" class="btn btn-primary">Enregistrer</button>
     <button type="reset" class="btn btn-cancel">Annuler</a>
   </div>
 </form>
 {% endblock %}
+
+{% block tail %}
+  {{ block.super }}
+  <script type="text/javascript">
+    $(document).ready(function (){
+
+      var addNewAddress = $(".add-new-address");
+
+      if (addNewAddress.length == 0 ){
+        $(".new-address").show();
+      }
+
+      addNewAddress.click(function (event) { 
+          event.preventDefault();
+          $(".new-address").show();
+          $(this).hide();
+      });
+    });
+  </script>
+{% endblock %}
+

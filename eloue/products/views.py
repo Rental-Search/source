@@ -32,7 +32,7 @@ from eloue.decorators import ownership_required, secure_required, mobify
 from eloue.accounts.forms import EmailAuthenticationForm
 from eloue.accounts.models import Patron
 
-from eloue.products.forms import AlertSearchForm, AlertForm, FacetedSearchForm, ProductForm, ProductEditForm, ProductAddressEditForm, ProductAddressForm, ProductPriceEditForm, MessageEditForm
+from eloue.products.forms import AlertSearchForm, AlertForm, FacetedSearchForm, RealEstateEditForm, ProductForm, CarProductEditForm, ProductEditForm, ProductAddressEditForm, ProductPriceEditForm, MessageEditForm
 
 from eloue.products.models import Category, Product, Curiosity, UNIT, ProductRelatedMessage, Alert, MessageThread
 from eloue.accounts.models import Address
@@ -95,24 +95,45 @@ def search(request):
 
 @never_cache
 @secure_required
+def publish_new_ad(request, *args, **kwargs):
+    return direct_to_template(request, template='products/publish_new_ad.html')
+    
+
+
+
+@never_cache
+@secure_required
 def product_create(request, *args, **kwargs):
     wizard = ProductWizard([ProductForm, EmailAuthenticationForm])
     return wizard(request, *args, **kwargs)
-    
+
+@never_cache
+@secure_required
+def car_product_create(request, *args, **kwargs):
+    from eloue.products.forms import CarProductForm
+    wizard = ProductWizard([CarProductForm, EmailAuthenticationForm])
+    return wizard(request, *args, **kwargs)
+
+@never_cache
+@secure_required
+def real_estate_product_create(request, *args, **kwargs):
+    from eloue.products.forms import RealEstateForm
+    wizard = ProductWizard([RealEstateForm, EmailAuthenticationForm])
+    return wizard(request, *args, **kwargs)
+
 
 @login_required
 @ownership_required(model=Product, object_key='product_id', ownership=['owner'])
 def product_edit(request, slug, product_id):
     product = get_object_or_404(Product.on_site, pk=product_id)
-    initial = {
-        'category': product.category.id,
-        'deposit_amount': product.deposit_amount
-    }
-
-    form = ProductEditForm(data=request.POST or None, files=request.FILES or None, instance=product, initial=initial)
-
-    forms = [form]
-    is_multipart = any([form.is_multipart() for form in forms])
+    
+    try:
+        form = CarProductEditForm(data=request.POST or None, files=request.FILES or None, instance=product.carproduct)
+    except Product.DoesNotExist:
+        try:
+            form = RealEstateEditForm(data=request.POST or None, files=request.FILES or None, instance=product.realestateproduct)
+        except Product.DoesNotExist:
+            form = ProductEditForm(data=request.POST or None, files=request.FILES or None, instance=product)
 
     if form.is_valid():
         product = form.save()
@@ -125,8 +146,7 @@ def product_edit(request, slug, product_id):
     return render_to_response(
         'products/product_edit.html', dictionary={
             'product': product, 
-            'forms': forms,
-            'is_multipart': is_multipart
+            'form': form,
         }, 
         context_instance=RequestContext(request)
     )
@@ -138,24 +158,10 @@ def product_address_edit(request, slug, product_id):
 
     product = get_object_or_404(Product.on_site, pk=product_id)
 
-    product_address_edit_form = ProductAddressEditForm(data=request.POST or None, instance=product, prefix='productAddress')
-    product_address_form = ProductAddressForm(data=request.POST or None, prefix='newAddress', instance=Address(patron=request.user))
-
-    forms = [product_address_edit_form, product_address_form]
-
-    if product_address_edit_form.is_valid() and not product_address_form.is_valid():
-        product = product_address_edit_form.save()
-        messages.success(request, _(u"L'adress a bien été modifié"))
-        return redirect(
-            'eloue.products.views.product_address_edit', 
-            slug=slug, product_id=product_id
-        )
-    if product_address_form.is_valid():
-        address = product_address_form.save(commit=False)
-        #address.patron = request.user
-        address.save()
-        product.address = address
-        product.save()
+    form = ProductAddressEditForm(data=request.POST or None, instance=product)
+    
+    if form.is_valid():
+        product = form.save()
         messages.success(request, _(u"L'adress a bien été modifié"))
         return redirect(
             'eloue.products.views.product_address_edit', 
@@ -165,7 +171,7 @@ def product_address_edit(request, slug, product_id):
     return render_to_response(
         'products/product_edit.html', dictionary={
             'product': product, 
-            'forms': forms
+            'form': form
         }, 
         context_instance=RequestContext(request)
     )
@@ -180,7 +186,6 @@ def product_price_edit(request, slug, product_id):
         initial['%s_price' % UNIT.reverted[price.unit].lower()] = price.amount
 
     form = ProductPriceEditForm(data=request.POST or None, instance=product, initial=initial)
-    forms = [form]
 
     if form.is_valid():
         product = form.save()
@@ -192,7 +197,7 @@ def product_price_edit(request, slug, product_id):
     return render_to_response(
         'products/product_edit.html', dictionary={
             'product': product, 
-            'forms': forms
+            'form': form
         }, 
         context_instance=RequestContext(request)
     )

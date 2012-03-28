@@ -25,7 +25,7 @@ import facebook
 from eloue.accounts import EMAIL_BLACKLIST
 from eloue.accounts.fields import PhoneNumberField
 from eloue.accounts.models import Patron, Avatar, PhoneNumber, COUNTRY_CHOICES, PatronAccepted, FacebookSession, Address
-from eloue.accounts.widgets import ParagraphRadioFieldRenderer
+from eloue.accounts.widgets import ParagraphRadioFieldRenderer, CommentedCheckboxInput
 from eloue.utils import form_errors_append
 from eloue.payments import paypal_payment
 
@@ -229,18 +229,6 @@ class EmailPasswordResetForm(PasswordResetForm):
             message = EmailMultiAlternatives(subject, text_content, settings.DEFAULT_FROM_EMAIL, [user.email])
             message.attach_alternative(html_content, "text/html")
             message.send()
-
-
-class CommentedCheckboxInput(forms.CheckboxInput):
-
-    def __init__(self, info_text, attrs=None, check_test=bool):
-        super(CommentedCheckboxInput, self).__init__(attrs, check_test)
-        from django.utils.html import escape
-        self.info_text = escape(_(info_text))
-
-    def render(self, name, value, attrs=None):
-        from django.utils.safestring import mark_safe
-        return mark_safe('<label class="checkbox">' + super(CommentedCheckboxInput, self).render(name, value, attrs) + '\t' + self.info_text + '</label>')
 
 
 class PatronEditForm(forms.ModelForm):

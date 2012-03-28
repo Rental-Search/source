@@ -56,8 +56,9 @@ class ProductWizard(NewGenericFormWizard):
             if files and '0-picture' in files:  # Hack to get image working
                 data['0-picture_id'] = Picture.objects.create(image=files['0-picture']).id
                 del files['0-picture']
-            return next_form(data, files, prefix=self.prefix_for_step(step),
-                initial=self.initial.get(step, None), instance=Product(quantity=1, deposit_amount=0))
+            return next_form(
+                data, files, prefix=self.prefix_for_step(step),
+                initial=self.initial.get(step, None), instance=next_form._meta.model(quantity=1, deposit_amount=0))
         return super(ProductWizard, self).get_form(step, data, files)
     
     def get_template(self, step):
@@ -67,6 +68,7 @@ class ProductWizard(NewGenericFormWizard):
             return 'products/product_create.html'
         else:
             return 'accounts/auth_missing.html'
+
             
 class MessageWizard(NewGenericFormWizard):
     
@@ -104,6 +106,7 @@ class MessageWizard(NewGenericFormWizard):
             return 'django_messages/message_create.html'
         else:
             return 'accounts/auth_missing.html'
+
     
 class AlertWizard(NewGenericFormWizard):
     def done(self, request, form_list):
@@ -127,6 +130,7 @@ class AlertWizard(NewGenericFormWizard):
             return 'products/alert_create.html'
         else:
             return 'products/alert_missing.html'
+
     
 class AlertAnswerWizard(NewGenericFormWizard):
     def done(self, request, form_list):
