@@ -102,7 +102,8 @@ mapping = dict(zip(string.ascii_uppercase, itertools.cycle('123456789')))
 
 def rib_check(rib, generate_checksum=False):
     rib = rib.replace(' ', '')
-    return not (89*int(rib[:5]) + 15*int(rib[5:10]) + 3*int(rib[10:21]) + int(rib[21:23]))%97
+    rib = ''.join((mapping.get(ch, ch) for ch in rib))
+    return  (89*int(rib[:5]) + 15*int(rib[5:10]) + 3*int(rib[10:21]) + int(rib[21:23]))%97 == 0
 
 class RIBWidget(forms.MultiWidget):
     def decompress(self, value):
