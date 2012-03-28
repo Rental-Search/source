@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import datetime
 import urllib
+import itertools
 from decimal import Decimal as D
 
 from django_lean.experiments.models import GoalRecord
@@ -15,6 +16,8 @@ from django.shortcuts import get_object_or_404, redirect
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic.simple import direct_to_template, redirect_to
 
+from eloue.payments.models import PayboxDirectPaymentInformation, PayboxDirectPlusPaymentInformation, NonPaymentInformation
+from eloue.payments.paybox_payment import PayboxManager, PayboxException
 from eloue.accounts.forms import EmailAuthenticationForm, BookingCreditCardForm, CvvForm
 from eloue.accounts.models import Patron, Avatar, CreditCard
 from eloue.geocoder import GoogleGeocoder
@@ -64,7 +67,7 @@ class BookingWizard(MultiPartFormWizard):
     def done(self, request, form_list):
         super(BookingWizard, self).done(request, form_list)
         booking_form = form_list[0]
-        import itertools
+        
         creditcard_form = next(
             itertools.ifilter(
                 lambda form: isinstance(form, (BookingCreditCardForm, CvvForm)), 
@@ -77,8 +80,6 @@ class BookingWizard(MultiPartFormWizard):
             messages.error(request, _(u"Vous ne pouvez pas louer vos propres objets"))
             return redirect_to(request, booking_form.instance.product.get_absolute_url())
         
-        from eloue.payments.models import PayboxDirectPaymentInformation, PayboxDirectPlusPaymentInformation, NonPaymentInformation
-        from eloue.payments.paybox_payment import PayboxManager, PayboxException
         booking = booking_form.save(commit=False)
         booking.ip = request.META.get('REMOTE_ADDR', None)
         booking.total_amount = Booking.calculate_price(booking.product,
