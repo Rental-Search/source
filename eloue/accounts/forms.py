@@ -569,7 +569,7 @@ class CreditCardForm(forms.ModelForm):
                 self.cleaned_data['expires'], self.cleaned_data['cvv'], 0
             )
         except PayboxException as e:
-            raise forms.ValidationError(e)
+            raise forms.ValidationError(_(u'La validation de votre carte a échoué.'))
         return self.cleaned_data
 
     def save(self, *args, **kwargs):
@@ -597,9 +597,6 @@ class CreditCardForm(forms.ModelForm):
         if commit:
             instance.save()
         return instance
-
-class AccountCreditCard(CreditCardForm):
-    pass
 
 class BookingCreditCardForm(CreditCardForm):
     save = forms.BooleanField(label=_(u'Stocker les cordonnees bancaires'), required=False, initial=False)
