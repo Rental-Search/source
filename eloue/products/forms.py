@@ -233,13 +233,14 @@ class ProductForm(BetterModelForm):
         if deposit_amount in EMPTY_VALUES:
             deposit_amount = D('0')
         return deposit_amount
-    
+
     def clean_picture(self):
         picture = self.cleaned_data.get('picture')
         picture_id = self.cleaned_data.get('picture_id')
         if not (picture or picture_id):
             raise forms.ValidationError(_(u"Vous devez ajouter une photo."))
-    
+        return picture
+
     def clean_payment_type(self):
         payment_type = self.cleaned_data.get('payment_type', None)
         if payment_type in EMPTY_VALUES:
