@@ -30,7 +30,7 @@ from django.template.defaultfilters import slugify
 from eloue.accounts.manager import PatronManager
 from eloue.geocoder import GoogleGeocoder
 from eloue.products.utils import Enum
-from eloue.signals import post_save_sites
+from eloue.signals import post_save_sites, pre_delete_creditcard
 from eloue.utils import create_alternative_email, cache_to
 from eloue.payments.paypal_payment import accounts, PaypalError
 from eloue.payments import paypal_payment
@@ -186,6 +186,7 @@ class Patron(User):
     on_site = CurrentSiteManager()
     objects = PatronManager()
 
+    rib = models.CharField(max_length=23, blank=True)
 
     def save(self, *args, **kwargs):
         if not self.slug:
@@ -335,6 +336,13 @@ class Patron(User):
     is_expired.boolean = True
     is_expired.short_description = ugettext(u"Expiré")
 
+class CreditCard(models.Model):
+
+    card_number = models.CharField(max_length=20)
+    expires = models.CharField(max_length=4)
+    holder = models.OneToOneField(Patron, editable=False)
+    masked_number = models.CharField(max_length=20, blank=False)
+
 class FacebookSession(models.Model):
 
     access_token = models.CharField(max_length=255, unique=True)
@@ -444,3 +452,4 @@ class PatronAccepted(models.Model):
 
 
 signals.post_save.connect(post_save_sites, sender=Patron)
+signals.pre_delete.connect(pre_delete_creditcard, sender=CreditCard)

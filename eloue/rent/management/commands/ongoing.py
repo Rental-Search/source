@@ -2,7 +2,7 @@
 import logbook
 
 from datetime import datetime, timedelta
-from paypalx import PaypalError
+from eloue.payments.paybox_payment import PayboxException
 from django.conf import settings
 from django.contrib.sites.models import Site
 from django.core.urlresolvers import reverse
@@ -36,19 +36,12 @@ class Command(BaseCommand):
         domain = Site.objects.get_current().domain
         protocol = "https" if USE_HTTPS else "http"
         dtime = datetime.now() + timedelta(hours=1)
-        for booking in Booking.objects.pending().filter(started_at__contains=' %02d' % dtime.hour, started_at__day=dtime.day, started_at__month=dtime.month, started_at__year=dtime.year):
-            booking.init_payment_processor()
+        for booking in Booking.objects.pending().filter(
+            started_at__contains=' %02d' % dtime.hour, 
+            started_at__day=dtime.day, 
+            started_at__month=dtime.month, 
+            started_at__year=dtime.year):
             with handler:
-                try:
-                    booking.hold(
-                        cancel_url="%s://%s%s" % (protocol, domain, reverse("booking_failure", args=[booking.pk.hex])),
-                        return_url="%s://%s%s" % (protocol, domain, reverse("booking_success", args=[booking.pk.hex])),
-                    )
-                except PaypalError as e:
-                    log.exception("For booking {pk}, exception occured: {e}".format(e=e, pk=booking.pk))
-                    continue
-            if booking.not_need_ipn():
-                booking.state = Booking.STATE.ONGOING
-                booking.save()
+                booking.activate()
         log.info('Finished hourly ongoing mover process')
     

@@ -401,6 +401,40 @@ def patron_edit_phonenumber(request):
     return render_to_response('accounts/patron_edit_phonenumber.html', dictionary={'formset': formset}, context_instance=RequestContext(request))
 
 @login_required
+def patron_edit_credit_card(request):
+    from eloue.accounts.forms import CreditCardForm
+    from eloue.accounts.models import CreditCard
+    try:
+        instance = request.user.creditcard
+    except CreditCard.DoesNotExist:
+        instance = CreditCard(holder=request.user)
+    if request.method == 'POST':
+        form = CreditCardForm(data=request.POST, instance=instance)
+        if form.is_valid():
+            form.save()
+            return redirect(patron_edit_credit_card)
+    else:
+        form = CreditCardForm(data=None, instance=instance)
+    return render_to_response(
+        template_name='accounts/patron_edit_credit_card.html', 
+        dictionary={'form': form}, context_instance=RequestContext(request))
+
+@login_required
+def patron_edit_rib(request):
+    from eloue.accounts.forms import RIBForm
+    if request.method == 'POST':
+        form = RIBForm(data=request.POST, instance=request.user)
+        if form.is_valid():
+            form.save()
+            return redirect(request.GET.get('next') or patron_edit_rib)
+    else:
+        form = RIBForm(data=None, instance=request.user)
+    return render_to_response(
+        template_name='accounts/patron_edit_rib.html',
+        dictionary={'form': form}, context_instance=RequestContext(request)
+    )
+
+@login_required
 def patron_edit_addresses(request):
     from eloue.accounts.forms import AddressFormSet
     if request.POST:
@@ -459,7 +493,7 @@ def dashboard(request):
         recipient=request.user, read_at=None
     ).order_by().values('thread').distinct()
     new_threads = MessageThread.objects.filter(pk__in=[thread['thread'] for thread in new_thread_ids]).order_by('-last_message__sent_at')
-    booking_demands = Booking.objects.filter(owner=request.user, state=Booking.STATE.AUTHORIZED).order_by('-created_at')
+    booking_demands = Booking.on_site.filter(owner=request.user, state=Booking.STATE.AUTHORIZED).order_by('-created_at')
     return render_to_response(
         template_name='accounts/dashboard.html', 
         dictionary={'thread_list': new_threads, 'booking_demands': booking_demands}, 

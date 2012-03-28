@@ -10,6 +10,7 @@ from django.contrib.auth import authenticate, login
 from django.contrib.sites.models import Site
 from django.contrib.auth.forms import PasswordResetForm, PasswordChangeForm, SetPasswordForm
 from django.contrib.auth.tokens import default_token_generator
+from django.core import validators
 from django.forms.fields import EMPTY_VALUES
 from django.forms.models import inlineformset_factory, BaseInlineFormSet
 from django.template.defaultfilters import slugify
@@ -23,8 +24,8 @@ from django.utils.safestring import mark_safe
 import facebook
 
 from eloue.accounts import EMAIL_BLACKLIST
-from eloue.accounts.fields import PhoneNumberField
-from eloue.accounts.models import Patron, Avatar, PhoneNumber, COUNTRY_CHOICES, PatronAccepted, FacebookSession, Address
+from eloue.accounts.fields import PhoneNumberField, ExpirationField, RIBField
+from eloue.accounts.models import Patron, Avatar, PhoneNumber, CreditCard, COUNTRY_CHOICES, PatronAccepted, FacebookSession, Address
 from eloue.accounts.widgets import ParagraphRadioFieldRenderer, CommentedCheckboxInput
 from eloue.utils import form_errors_append
 from eloue.payments import paypal_payment
@@ -490,6 +491,134 @@ class AddressBaseFormSet(BaseInlineFormSet):
             pass
     
 AddressFormSet = inlineformset_factory(Patron, Address, form=AddressForm, formset=AddressBaseFormSet, extra=1, can_delete=True)
+
+class RIBForm(forms.ModelForm):
+    
+    rib = RIBField(label='RIB')
+
+    class Meta:
+        model = Patron
+        fields = ('rib', )
+
+
+def mask_card_number(card_number):
+    return re.sub(
+        '(.)(.*)(...)', 
+        lambda matchobject: (
+            matchobject.group(1)+'X'*len(matchobject.group(2))+matchobject.group(3)
+        ), 
+        card_number
+    )
+
+class CreditCardForm(forms.ModelForm):
+    cvv = forms.CharField(max_length=4, widget=forms.TextInput(attrs={'placeholder': 'E-loue ne stocke pas le cryptogram visuel, vous devriez resaisir apres chaque payment pour des raison de securite'}))
+    expires = ExpirationField()
+
+    def __init__(self, *args, **kwargs):
+        super(CreditCardForm, self).__init__(*args, **kwargs)
+        self.fields['card_number'] = forms.CharField(
+            min_length=16, max_length=24, required=True, widget=forms.TextInput(
+                attrs={'placeholder': self.instance.masked_number or 'E-loue ne stocke pas le numero de votre carte'}
+            )
+        )
+
+    class Meta:
+        # see note: https://docs.djangoproject.com/en/dev/topics/forms/modelforms/#using-a-subset-of-fields-on-the-form
+        # we excluded, then added, to avoid save automatically the card_number
+        model = CreditCard
+        exclude = ('card_number', 'holder', 'masked_number')
+
+    def clean_expires(self):
+        return self.cleaned_data['expires']
+
+    def clean_card_number(self):
+        def _luhn_valid(card_number):
+            return sum(
+                int(j) if not i%2 else sum(int(k) for k in str(2*int(j))) 
+                for i, j 
+                in enumerate(reversed(card_number))
+            )%10 == 0
+        card_number = self.cleaned_data['card_number'].replace(' ','').replace('-', '')
+        try:
+            if not _luhn_valid(card_number):
+                raise forms.ValidationError('Veuillez verifier le numero de votre carte bancaire')
+        except ValueError as e:
+            raise forms.ValidationError('Votre numero doive etre compose uniquement des chiffres!')
+        return card_number
+
+    def clean(self):
+        if self.errors:
+            return self.cleaned_data
+        try:
+            from eloue.payments.paybox_payment import PayboxManager, PayboxException
+            pm = PayboxManager()
+            self.cleaned_data['masked_number'] = mask_card_number(self.cleaned_data['card_number'])
+            pm.authorize(self.cleaned_data['card_number'], 
+                self.cleaned_data['expires'], self.cleaned_data['cvv'], 0
+            )
+        except PayboxException as e:
+            raise forms.ValidationError(_(u'La validation de votre carte a échoué.'))
+        return self.cleaned_data
+
+    def save(self, *args, **kwargs):
+        commit = kwargs.pop('commit', True)
+        from eloue.payments.paybox_payment import PayboxManager, PayboxException
+        pm = PayboxManager()
+        if commit:
+            try:
+                if self.instance.card_number:
+                    self.cleaned_data['card_number'] = pm.modify(
+                        self.instance.holder.pk, 
+                        self.cleaned_data['card_number'],
+                        self.cleaned_data['expires'], self.cleaned_data['cvv']) 
+                else:
+                    self.cleaned_data['card_number'] = pm.subscribe(
+                        self.instance.holder.pk, 
+                        self.cleaned_data['card_number'], 
+                        self.cleaned_data['expires'], self.cleaned_data['cvv']
+                    )
+            except PayboxException:
+                raise
+        instance = super(CreditCardForm, self).save(*args, commit=False, **kwargs)
+        instance.card_number = self.cleaned_data['card_number']
+        instance.masked_number = self.cleaned_data['masked_number']
+        if commit:
+            instance.save()
+        return instance
+
+class BookingCreditCardForm(CreditCardForm):
+    save = forms.BooleanField(label=_(u'Stocker les cordonnees bancaires'), required=False, initial=False)
+
+class CvvForm(forms.ModelForm):
+    cvv = forms.CharField(label=_(u'Veuillez resaisir votre cryptogram visuel'), max_length=4, widget=forms.TextInput(attrs={'placeholder': 'E-loue ne stocke pas le cryptogram visuel, vous devriez resaisir apres chaque payment pour des raison de securite'}))
+    
+    def __init__(self, *args, **kwargs):
+        if 'instance' not in kwargs:
+            raise ValueError("you should specify 'instance' for this form")
+        super(CvvForm, self).__init__(*args, **kwargs)
+
+    class Meta:
+        exclude = ('expires', 'masked_number', 'card_number', 'holder')
+        model = CreditCard
+
+    def clean(self):
+        if self.errors:
+            return self.cleaned_data
+        try:
+            from eloue.payments.paybox_payment import PayboxManager, PayboxException
+            pm = PayboxManager()
+            pm.authorize_subscribed(
+                self.instance.holder.pk, self.instance.card_number, 
+                self.instance.expires, self.cleaned_data['cvv'], 0
+            )
+        except PayboxException as e:
+            raise forms.ValidationError(e)
+        return self.cleaned_data
+    
+    def save(self, *args, **kwargs):
+        if kwargs.get('commit'):
+            raise NotImplementedError('you have nothing to commit here!!')
+        return super(CvvForm, self).save(*args, **kwargs)
 
 def make_missing_data_form(instance, required_fields=[]):
     fields = SortedDict({

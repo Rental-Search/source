@@ -86,6 +86,10 @@ PACKAGES = {
 
 log = logbook.Logger('eloue.rent')
 
+
+from django.contrib.contenttypes.models import ContentType
+from django.contrib.contenttypes import generic
+
 class Booking(models.Model):
     """A reservation"""
     uuid = UUIDField(primary_key=True)
@@ -120,7 +124,11 @@ class Booking(models.Model):
     
     on_site = CurrentSiteBookingManager()
     objects = BookingManager()
-    
+
+    content_type = models.ForeignKey(ContentType, null=True, blank=True)
+    object_id = models.PositiveIntegerField(null=True, blank=True)
+    payment = generic.GenericForeignKey('content_type', 'object_id')
+
     STATE = BOOKING_STATE
     
     @incr_sequence('contract_id', 'rent_booking_contract_id_seq')
@@ -231,25 +239,12 @@ class Booking(models.Model):
     def not_need_ipn(self):
         return self.payment_processor.NOT_NEED_IPN
         
-    @smart_transition(source='authorizing', target='authorized', conditions=[not_need_ipn], save=True)
-    def preapproval(self, cancel_url=None, return_url=None, ip_address=None):
-        """Preapprove payments for borrower from Paypal.
+    @smart_transition(source='authorizing', target='authorized', save=True)
+    def preapproval(self, *args):
+        self.payment.preapproval(*args)
+        self.payment.save()
+        self.send_ask_email()
         
-        Keywords arguments :
-        cancel_url -- The URL to which the sender’s browser is redirected after the sender cancels the preapproval at paypal.com.
-        return_url -- The URL to which the sender’s browser is redirected after the sender approves the preapproval on paypal.com.
-        ip_address -- The ip address of sender.
-        
-        The you should redirect user to :
-        https://www.paypal.com/webscr?cmd=_ap-preapproval&preapprovalkey={{ preapproval_key }}
-        """
-        try:
-            self.preapproval_key = self.payment_processor.preapproval(cancel_url, return_url, ip_address)
-        except PaypalError, e: 
-            self.state = BOOKING_STATE.REJECTED
-            log.error(e)
-        self.save()
-    
     def send_recovery_email(self):
         context = {
             'booking': self,
@@ -374,8 +369,18 @@ class Booking(models.Model):
         """
         return self.insurance_fee * INSURANCE_TAXES
     
-    @transition(source='pending', target='ongoing')
-    def hold(self, cancel_url=None, return_url=None):
+    @transition(source='authorized', target='pending', save=True)
+    def accept(self):
+        self.payment.pay()
+        self.payment.save()
+        self.send_acceptation_email()
+
+    @transition(source='pending', target='ongoing', save=True)
+    def activate(self):
+        pass
+
+    @transition(source='pending', target='ongoing', save=True)
+    def hold(self):
         """Take money from borrower and keep it safe for later.
         
         Keywords arguments :
@@ -386,8 +391,7 @@ class Booking(models.Model):
         Then you should redirect user to :
         https://www.paypal.com/webscr?cmd=_ap-payment&paykey={{ pay_key }}
         """
-        self.pay_key = self.payment_processor.pay(cancel_url, return_url)
-        self.save()
+        self.payment.pay()
 
     @transition(source='ended', target='closing', save=True)
     @smart_transition(source='closing', target='closed', conditions=[not_need_ipn], save=True)

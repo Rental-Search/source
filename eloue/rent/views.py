@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 import logbook
+import urllib
+import datetime
 
 from django.conf import settings
 from django.contrib import messages
@@ -22,6 +24,7 @@ from django_lean.experiments.utils import WebUser
 from django.contrib.sites.models import Site
 
 
+from eloue.accounts.models import CreditCard
 from eloue.decorators import ownership_required, validate_ipn, secure_required, mobify
 from eloue.accounts.forms import EmailAuthenticationForm
 from eloue.products.models import Product, PAYMENT_TYPE, UNIT
@@ -34,41 +37,6 @@ from eloue.rent.utils import get_product_occupied_date, timesince
 
 log = logbook.Logger('eloue.rent')
 USE_HTTPS = getattr(settings, 'USE_HTTPS', True)
-
-
-@require_POST
-@csrf_exempt
-@validate_ipn
-def preapproval_ipn(request):
-    form = PreApprovalIPNForm(request.POST)
-    if form.is_valid():
-        booking = Booking.objects.get(preapproval_key=form.cleaned_data['preapproval_key'])
-        if form.cleaned_data['approved'] and form.cleaned_data['status'] == 'ACTIVE':
-            # Changing state
-            booking.state = Booking.STATE.AUTHORIZED
-            booking.borrower.paypal_email = form.cleaned_data['sender_email']
-            booking.borrower.save()
-            # Sending email
-            booking.send_ask_email()
-        else:
-            booking.state = Booking.STATE.REJECTED
-        booking.save()
-    return HttpResponse()
-
-
-@require_POST
-@csrf_exempt
-@validate_ipn
-def pay_ipn(request):
-    form = PayIPNForm(request.POST)
-    if form.is_valid():
-        booking = Booking.objects.get(pay_key=form.cleaned_data['pay_key'])
-        if form.cleaned_data['action_type'] == 'PAY_PRIMARY' and form.cleaned_data['status'] == 'INCOMPLETE':
-            booking.state = Booking.STATE.ONGOING
-        else:  # FIXME : naïve
-            booking.state = Booking.STATE.CLOSED
-        booking.save()
-    return HttpResponse()
 
 
 def product_occupied_date(request, slug, product_id):
@@ -91,7 +59,7 @@ def booking_price(request, slug, product_id):
         return HttpResponseNotAllowed(['GET', 'XHR'])
     product = get_object_or_404(Product.on_site, pk=product_id)
     form = BookingForm(request.GET, prefix="0", instance=Booking(product=product))
-        
+    
     if form.is_valid():
         duration = timesince(form.cleaned_data['started_at'], form.cleaned_data['ended_at'])
         total_price = smart_str(currency(form.cleaned_data['total_amount']))
@@ -196,6 +164,7 @@ def offer_accept(request, booking_id):
             pass
     else:
         return HttpResponseForbidden()
+
 def offer_reject(request, booking_id):
     booking = get_object_or_404(Booking.on_site, pk=booking_id)
     if request.user == booking.offer_in_message.recipient:
@@ -209,31 +178,21 @@ def offer_reject(request, booking_id):
 
 
 @login_required
+@require_POST
 @ownership_required(model=Booking, object_key='booking_id', ownership=['owner'])
 def booking_accept(request, booking_id):
-    booking = get_object_or_404(Booking.on_site, pk=booking_id)
-    if booking.product.payment_type!=PAYMENT_TYPE.NOPAY:
-        is_valid = booking.owner.is_valid
-        if not booking.owner.has_paypal():
-            return redirect_to(request, "%s?next=%s" % (reverse('patron_paypal'), booking.get_absolute_url()))
-        elif not is_valid:
-            messages.error(request, _(u"Votre Paypal compte est invalide, veuillez modifier votre nom ou prénom ou email paypal"))
-            return redirect_to(request, "%s?next=%s" % (reverse('patron_edit'), booking.get_absolute_url()))
-        elif not booking.owner.is_confirmed:
-            messages.error(request, _(u"Vérifiez que vous avez bien répondu à l'email d'activation de Paypal"))
-            return redirect(booking.get_absolute_url())
-    form = BookingStateForm(request.POST or None,
-        initial={'state': Booking.STATE.PENDING},
-        instance=booking)
-    if form.is_valid():
-        booking = form.save()
-        booking.send_acceptation_email()
-        GoalRecord.record('rent_object_accepted', WebUser(request))
+    booking = get_object_or_404(Booking, pk=booking_id)
+    if booking.started_at > datetime.datetime.now():
+        booking.state = booking.STATE.OUTDATED
         booking.save()
     else:
-        messages.error(request, form.non_field_errors())
-    return redirect_to(request, "%s?paypal=true" % booking.get_absolute_url())
-
+        if not request.user.rib:
+            response = redirect('patron_edit_rib')
+            response['Location'] += '?' + urllib.urlencode({'next': booking.get_absolute_url()})
+            return response
+        booking.accept()
+        GoalRecord.record('rent_object_accepted', WebUser(request))
+    return redirect(booking)
 
 @login_required
 @ownership_required(model=Booking, object_key='booking_id', ownership=['owner'])

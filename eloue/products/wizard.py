@@ -1,31 +1,25 @@
 # -*- coding: utf-8 -*-
+from django_lean.experiments.models import GoalRecord
+from django_lean.experiments.utils import WebUser
+
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import login
 from django.core.urlresolvers import reverse
-from django.views.generic.simple import redirect_to, direct_to_template
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, redirect
 from django.utils.translation import ugettext as _
-
-from django_lean.experiments.models import GoalRecord
-from django_lean.experiments.utils import WebUser
-
-from eloue.accounts.forms import EmailAuthenticationForm, make_missing_data_form
-from eloue.accounts.models import Patron, Avatar
-
-from eloue.products.forms import AlertForm, ProductForm, MessageEditForm
-
-from eloue.products.models import Product, Picture, UNIT, Alert
-
-from eloue.wizard import NewGenericFormWizard
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_protect
-from django.shortcuts import get_object_or_404, redirect
-from django.contrib import messages
-from django.utils.translation import ugettext as _
 from django.views.generic.simple import direct_to_template, redirect_to
 
-class ProductWizard(NewGenericFormWizard):
+from eloue.wizard import MultiPartFormWizard
+from eloue.accounts.forms import EmailAuthenticationForm, make_missing_data_form
+from eloue.accounts.models import Patron, Avatar
+from eloue.products.forms import AlertForm, ProductForm, MessageEditForm
+from eloue.products.models import Product, Picture, UNIT, Alert
+
+
+class ProductWizard(MultiPartFormWizard):
 
     def done(self, request, form_list):
         super(ProductWizard, self).done(request, form_list)
@@ -70,7 +64,7 @@ class ProductWizard(NewGenericFormWizard):
             return 'accounts/auth_missing.html'
 
             
-class MessageWizard(NewGenericFormWizard):
+class MessageWizard(MultiPartFormWizard):
     
     def __init__(self, *args, **kwargs):
         super(MessageWizard, self).__init__(*args, **kwargs)
@@ -108,7 +102,7 @@ class MessageWizard(NewGenericFormWizard):
             return 'accounts/auth_missing.html'
 
     
-class AlertWizard(NewGenericFormWizard):
+class AlertWizard(MultiPartFormWizard):
     def done(self, request, form_list):
         super(AlertWizard, self).done(request, form_list)
         # Create and send alerts
@@ -132,7 +126,7 @@ class AlertWizard(NewGenericFormWizard):
             return 'products/alert_missing.html'
 
     
-class AlertAnswerWizard(NewGenericFormWizard):
+class AlertAnswerWizard(MultiPartFormWizard):
     def done(self, request, form_list):
         super(AlertAnswerWizard, self).done(request, form_list)
         # Create product

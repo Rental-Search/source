@@ -1,32 +1,36 @@
 # -*- coding: utf-8 -*-
 import datetime
 import urllib
+import itertools
+from decimal import Decimal as D
+
+from django_lean.experiments.models import GoalRecord
+from django_lean.experiments.utils import WebUser
 
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import login
 from django.contrib.sites.models import Site
 from django.core.urlresolvers import reverse
+from django.shortcuts import get_object_or_404, redirect
 from django.utils.translation import ugettext_lazy as _
-from django.shortcuts import get_object_or_404
 from django.views.generic.simple import direct_to_template, redirect_to
 
-from django_lean.experiments.models import GoalRecord
-from django_lean.experiments.utils import WebUser
-
-from eloue.accounts.forms import EmailAuthenticationForm
-from eloue.accounts.models import Patron, Avatar
+from eloue.payments.models import PayboxDirectPaymentInformation, PayboxDirectPlusPaymentInformation, NonPaymentInformation
+from eloue.payments.paybox_payment import PayboxManager, PayboxException
+from eloue.accounts.forms import EmailAuthenticationForm, BookingCreditCardForm, CvvForm
+from eloue.accounts.models import Patron, Avatar, CreditCard
 from eloue.geocoder import GoogleGeocoder
 from eloue.products.forms import FacetedSearchForm
 from eloue.products.models import Product, PAYMENT_TYPE
 from eloue.rent.models import Booking, BorrowerComment
 from eloue.rent.forms import BookingForm, BookingConfirmationForm
-from eloue.wizard import NewGenericFormWizard
+from eloue.wizard import MultiPartFormWizard
 
 USE_HTTPS = getattr(settings, 'USE_HTTPS', True)
 
 
-class BookingWizard(NewGenericFormWizard):
+class BookingWizard(MultiPartFormWizard):
     
     def __init__(self, *args, **kwargs):
         super(BookingWizard, self).__init__(*args, **kwargs)
@@ -42,43 +46,76 @@ class BookingWizard(NewGenericFormWizard):
         self.extra_context={
             'product_list': product_search.more_like_this(product)[:4]
         }
+        if product.payment_type != PAYMENT_TYPE.NOPAY:
+            if request.user.is_authenticated():
+                try:
+                    request.user.creditcard
+                    self.form_list.append(CvvForm)
+                except (CreditCard.DoesNotExist):
+                    self.form_list.append(BookingCreditCardForm)
+            elif EmailAuthenticationForm in self.form_list:
+                 form = self.get_form(self.form_list.index(EmailAuthenticationForm), request.POST, request.FILES)
+                 if form.is_valid():
+                    user = form.get_user()
+                    try:
+                        user.creditcard
+                        self.form_list.append(CvvForm)
+                    except (CreditCard.DoesNotExist, AttributeError):
+                        self.form_list.append(BookingCreditCardForm)
         return super(BookingWizard, self).__call__(request, *args, **kwargs)
 
     def done(self, request, form_list):
         super(BookingWizard, self).done(request, form_list)
         booking_form = form_list[0]
         
+        creditcard_form = next(
+            itertools.ifilter(
+                lambda form: isinstance(form, (BookingCreditCardForm, CvvForm)), 
+                form_list
+            ),
+            None
+        )
+
         if self.new_patron == booking_form.instance.product.owner:
             messages.error(request, _(u"Vous ne pouvez pas louer vos propres objets"))
             return redirect_to(request, booking_form.instance.product.get_absolute_url())
         
-        booking_form.instance.ip = request.META.get('REMOTE_ADDR', None)
-        booking_form.instance.total_amount = Booking.calculate_price(booking_form.instance.product,
+        booking = booking_form.save(commit=False)
+        booking.ip = request.META.get('REMOTE_ADDR', None)
+        booking.total_amount = Booking.calculate_price(booking.product,
             booking_form.cleaned_data['started_at'], booking_form.cleaned_data['ended_at'])[1]
-        booking_form.instance.borrower = self.new_patron
-        payment_type = booking_form.instance.product.payment_type
-        booking = booking_form.save()
-        booking.init_payment_processor()
-        domain = Site.objects.get_current().domain
-        protocol = "https" if USE_HTTPS else "http"
-        
-        booking.preapproval(
-            cancel_url="%s://%s%s" % (protocol, domain, reverse("booking_failure", args=[booking.pk.hex])),
-            return_url="%s://%s%s" % (protocol, domain, reverse("booking_success", args=[booking.pk.hex])),
-            ip_address=request.META['REMOTE_ADDR']
-        )
-        
-        if booking.state != Booking.STATE.REJECTED:
+        booking.borrower = self.new_patron
+        if creditcard_form:
+            if creditcard_form.cleaned_data.get('save'):
+                creditcard_form.instance.holder = self.new_patron
+                creditcard = creditcard_form.save(commit=bool(creditcard_form.cleaned_data.get('save')))
+            else:
+                creditcard = creditcard_form.save(commit=False)
+            try:
+                request.user.creditcard
+                payment = PayboxDirectPlusPaymentInformation(booking=booking)
+            except CreditCard.DoesNotExist:
+                payment = PayboxDirectPaymentInformation(booking=booking)
+            preapproval_parameters = (creditcard, creditcard_form.cleaned_data['cvv'])
+        else:
+            preapproval_parameters = ()
+            payment = NonPaymentInformation()
+
+        payment.save()
+        booking.payment = payment
+        booking.save()
+
+        try:
+            booking.preapproval(*preapproval_parameters)
+        except PaymentException as e:
+            booking.state = Booking.STATE.REJECTED
+            booking.save()
+
+        if booking.state == Booking.STATE.AUTHORIZED:
             GoalRecord.record('rent_object_pre_paypal', WebUser(request))
-            if payment_type == PAYMENT_TYPE.NOPAY:
-                from django.views.generic.list_detail import object_detail
-                return object_detail(request, queryset=Booking.on_site.all(), object_id=booking.pk.hex, #test
-                     template_name='rent/booking_success.html', template_object_name='booking')
-            return redirect_to(request, settings.PAYPAL_COMMAND % urllib.urlencode({'cmd': '_ap-preapproval',
-                'preapprovalkey': booking.preapproval_key}))
-        return direct_to_template(request, template="rent/booking_preapproval.html", extra_context={
-            'booking': booking,
-        })
+            return redirect('booking_success', booking.pk.hex)
+        return redirect('booking_failure', booking.pk.hex)
+
     
     def get_form(self, step, data=None, files=None):
         next_form = self.form_list[step]
@@ -96,6 +133,20 @@ class BookingWizard(NewGenericFormWizard):
             initial.update(self.initial.get(step, {}))
             return next_form(data, files, prefix=self.prefix_for_step(step),
                 initial=initial, instance=booking)
+        elif issubclass(next_form, (BookingCreditCardForm, CvvForm)):
+            from eloue.accounts.models import CreditCard
+            user = self.user if self.user.is_authenticated() else self.new_patron
+            try:
+                instance = user.creditcard
+            except (CreditCard.DoesNotExist, AttributeError):
+                if user:
+                    instance = CreditCard(holder=user)
+                else:
+                    instance = CreditCard()
+            return next_form(
+                data, files, prefix=self.prefix_for_step(step), 
+                instance=instance
+            )
         return super(BookingWizard, self).get_form(step, data, files)
     
     def process_step(self, request, form, step):
@@ -123,6 +174,8 @@ class BookingWizard(NewGenericFormWizard):
             return 'products/product_detail.html'
         elif issubclass(self.form_list[step], BookingConfirmationForm):
             return 'rent/booking_confirm.html'
+        elif issubclass(self.form_list[step], (BookingCreditCardForm, CvvForm)):
+            return 'accounts/credit_card.html'
         else:
             return 'accounts/auth_missing.html'
     

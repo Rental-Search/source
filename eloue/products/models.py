@@ -73,7 +73,8 @@ STATUS = Enum([
 
 PAYMENT_TYPE = Enum([
     (0, 'NOPAY', _(u'Le locataire me paye directement et mon objet n\'est pas assuré')),
-    (1, 'PAYPAL', _(u'Le locataire paye en ligne et mon objet est assuré'))
+    (1, 'PAYPAL', _(u'Le locataire paye en ligne et mon objet est assuré')),
+    (2, 'PAYBOX', _(u'Le locataire paye en ligne par son carte bancaire et mon objet est assuré')),
 ])
 
 SEAT_NUMBER = Enum([

@@ -43,7 +43,7 @@ class AdaptivePapalPayments(AbstractPayment):
 
     NOT_NEED_IPN = False
     
-    def __init__(self, booking):
+    def __init__(self, *args, **kwargs):
         
         self.payments = AdaptivePayments(
             settings.PAYPAL_API_USERNAME,
@@ -53,7 +53,6 @@ class AdaptivePapalPayments(AbstractPayment):
             settings.PAYPAL_API_EMAIL,
             sandbox=settings.USE_PAYPAL_SANDBOX
         )
-        self.booking = booking
         super(AdaptivePapalPayments, self).__init__()
         
     
