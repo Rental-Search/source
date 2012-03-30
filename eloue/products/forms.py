@@ -185,19 +185,17 @@ class MessageEditForm(forms.Form):
         return message_list # ... RETURNED?
 
 
-def generate_choices(nodes, empty_value=_(u"Choisissez une catégorie")):
-    def _children(nodes):
-        import collections
-        if not isinstance(nodes, collections.Iterable):
-            nodes = (nodes, )
-        for node in nodes:
-            for child in node.get_children():
-                yield child
+def generate_choices(slugs, empty_value=_(u"Choisissez une catégorie")):
 
     if empty_value is not None:
         yield ('', empty_value)
 
-    for child in _children(nodes):
+    def _children(slugs):
+        for slug in slugs:
+            node = Category.objects.get(slug=slug)
+            for child in node.get_children():
+                yield child
+    for child in _children(slugs):
         yield (
             child.name,
             [(descendant.pk, descendant.name) for descendant in child.get_descendants()]
@@ -205,8 +203,6 @@ def generate_choices(nodes, empty_value=_(u"Choisissez une catégorie")):
 
 
 class ProductForm(BetterModelForm):
-    category = forms.TypedChoiceField(label=_(u"Catégorie"), coerce=lambda pk: Category.tree.get(pk=pk), choices=generate_choices(Category.tree.root_nodes()))
-
     summary = forms.CharField(label=_(u"Titre"), max_length=100, widget=forms.TextInput(attrs={'class': 'inm'}))
     picture_id = forms.IntegerField(required=True, widget=forms.HiddenInput())
     picture = forms.ImageField(label=_(u"Photo"), required=False, widget=forms.FileInput(attrs={'class': 'inm'}))
@@ -221,7 +217,14 @@ class ProductForm(BetterModelForm):
     week_price = forms.DecimalField(label=_(u"La semaine"), required=False, max_digits=10, decimal_places=2, min_value=D('0.01'), widget=PriceTextInput(attrs={'class': 'price'}), localize=True)
     two_weeks_price = forms.DecimalField(label=_(u"Les 15 jours"), required=False, max_digits=10, decimal_places=2, min_value=D('0.01'), widget=PriceTextInput(attrs={'class': 'price'}), localize=True)
     month_price = forms.DecimalField(label=_(u"Le mois"), required=False, max_digits=10, decimal_places=2, min_value=D('0.01'), widget=PriceTextInput(attrs={'class': 'price'}), localize=True)
-    
+
+    def __init__(self, *args, **kwargs):
+        super(ProductEditForm, self).__init__(*args, **kwargs)
+        self.fields['category'] = forms.TypedChoiceField(
+            label=_(u"Catégorie"), coerce=lambda pk: Category.tree.get(pk=pk), 
+            choices=generate_choices((cat.slug for cat in Category.tree.root_nodes()))
+        )
+
     def clean_quantity(self):
         quantity = self.cleaned_data['quantity']
         if quantity < 1:
@@ -265,8 +268,14 @@ class ProductForm(BetterModelForm):
 
 
 class CarProductForm(ProductForm):
-    category = forms.TypedChoiceField(label=_(u"Catégorie"), coerce=lambda pk: Category.tree.get(pk=pk), choices=generate_choices(Category.tree.get(slug='auto-et-moto')))
     quantity = forms.IntegerField(widget=forms.HiddenInput(), initial=1)
+    
+    def __init__(self, *args, **kwargs):
+        super(CarProductForm, self).__init__(*args, **kwargs)
+        self.fields['category'] = forms.TypedChoiceField(
+            label=_(u"Catégorie"), coerce=lambda pk: Category.tree.get(pk=pk), 
+            choices=generate_choices(('auto-et-moto', ))
+        )
 
     class Meta:
         model = CarProduct
@@ -312,8 +321,14 @@ class CarProductForm(ProductForm):
 
 
 class RealEstateForm(ProductForm):
-    category = forms.TypedChoiceField(label=_(u'Catégorie'), coerce=lambda pk: Category.tree.get(pk=pk), choices=generate_choices(Category.tree.get(slug='hebergement')))
     quantity = forms.IntegerField(widget=forms.HiddenInput(), initial=1)
+    
+    def __init__(self, *args, **kwargs):
+        super(RealEstateForm, self).__init__(*args, **kwargs)
+        self.fields['category'] = forms.TypedChoiceField(
+            label=_(u"Catégorie"), coerce=lambda pk: Category.tree.get(pk=pk), 
+            choices=generate_choices(('hebergement', ))
+        )
 
     class Meta:
         model = RealEstateProduct
@@ -351,6 +366,14 @@ class RealEstateForm(ProductForm):
 class ProductEditForm(BetterModelForm):
     picture = forms.ImageField(label=_(u"Photo"), required=False, widget=forms.FileInput(attrs={'class': 'inm'}))
 
+    def __init__(self, *args, **kwargs):
+        super(ProductEditForm, self).__init__(*args, **kwargs)
+        self.fields['category'] = forms.TypedChoiceField(
+            label=_(u"Catégorie"), coerce=lambda pk: Category.tree.get(pk=pk), 
+            choices=generate_choices(
+                (cat.slug for cat in Category.tree.root_nodes()), None
+            )
+        )
     class Meta:
         model = Product
         fieldsets = [
@@ -391,6 +414,13 @@ class ProductEditForm(BetterModelForm):
 
 class CarProductEditForm(ProductEditForm):
 
+    def __init__(self, *args, **kwargs):
+        super(CarProductEditForm, self).__init__(*args, **kwargs)
+        self.fields['category'] = forms.TypedChoiceField(
+            label=_(u"Catégorie"), coerce=lambda pk: Category.tree.get(pk=pk), 
+            choices=generate_choices(('auto-et-moto', ), None)
+        )
+
     class Meta:
         model = CarProduct
         fieldsets = [
@@ -425,6 +455,12 @@ class CarProductEditForm(ProductEditForm):
 
 class RealEstateEditForm(ProductEditForm):
 
+    def __init__(self, *args, **kwargs):
+        super(RealEstateEditForm, self).__init__(*args, **kwargs)
+        self.fields['category'] = forms.TypedChoiceField(
+            label=_(u"Catégorie"), coerce=lambda pk: Category.tree.get(pk=pk), 
+            choices=generate_choices(('hebergement', ), None)
+        )
     class Meta:
         models = RealEstateProduct
         fieldsets = [

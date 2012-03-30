@@ -122,7 +122,7 @@ class EmailAuthenticationForm(forms.Form):
         exists = self.cleaned_data.get('exists')
         for rule in EMAIL_BLACKLIST:
             if re.search(rule, email):
-                raise forms.ValidationError(_(u"Pour garantir un service de qualité et la sécurité des utilisateurs de e-loue.com, vous ne pouvez pas vous enregistrer avec une adresse email jetable."))
+                raise forms.ValidationError(_(u"Pour garantir un service de qualité et la sécurité des utilisateurs d'e-loue.com, vous ne pouvez pas vous enregistrer avec une adresse email jetable."))
         
         if not exists and Patron.objects.filter(email=email).exists():
             raise forms.ValidationError(_(u"Un compte existe déjà pour cet email"))
@@ -308,7 +308,7 @@ class PatronEditForm(forms.ModelForm):
             raise forms.ValidationError(_(u"This field is required."))
         for rule in EMAIL_BLACKLIST:
             if re.search(rule, email):
-                raise forms.ValidationError(_(u"Pour garantir un service de qualité et la sécurité des utilisateurs de Croisé dans le métro, vous ne pouvez pas vous enregistrer avec une adresse email jetable. Ne craignez rien, vous ne recevrez aucun courrier indésirable."))
+                raise forms.ValidationError(_(u"Pour garantir un service de qualité et la sécurité des utilisateurs d'e-loue.com dans le métro, vous ne pouvez pas vous enregistrer avec une adresse email jetable. Ne craignez rien, vous ne recevrez aucun courrier indésirable."))
         try:
             Patron.objects.exclude(pk=self.instance.pk).get(email=email)
             raise forms.ValidationError(_(u"Un compte avec cet email existe déjà"))

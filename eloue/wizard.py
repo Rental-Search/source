@@ -176,7 +176,7 @@ class MultiPartFormWizard(FormWizard):
                     'source': GEOLOCATION_SOURCE.ADDRESS,
                 }
 
-    def get_form(self, step, data, files):
+    def get_form(self, step, data=None, files=None):
         next_form = self.form_list[step]
         if next_form.__name__ == 'MissingInformationForm':
             initial = {

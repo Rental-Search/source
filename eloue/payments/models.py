@@ -1,15 +1,16 @@
-from django.contrib.contenttypes import generic
+from django.contrib.contenttypes.models import ContentType
 from django.db import models
 
 from eloue.rent.models import Booking
 from eloue.payments import *
 
 class PaymentInformation(models.Model, abstract_payment.AbstractPayment):
-    _booking = generic.GenericRelation(Booking)
-
     @property
     def booking(self):
-    	return next(iter(self._booking.all()), None)
+        tipe = ContentType.objects.get_for_model(self)
+        return Booking.objects.get(
+            content_type__pk=tipe.id,
+            object_id=self.id)
 
     class Meta:
         abstract = True
