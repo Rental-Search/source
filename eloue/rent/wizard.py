@@ -18,6 +18,7 @@ from django.views.generic.simple import direct_to_template, redirect_to
 
 from eloue.payments.models import PayboxDirectPaymentInformation, PayboxDirectPlusPaymentInformation, NonPaymentInformation
 from eloue.payments.paybox_payment import PayboxManager, PayboxException
+from eloue.payments.abstract_payment import PaymentException
 from eloue.accounts.forms import EmailAuthenticationForm, BookingCreditCardForm, CvvForm
 from eloue.accounts.models import Patron, Avatar, CreditCard
 from eloue.geocoder import GoogleGeocoder

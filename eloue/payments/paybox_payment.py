@@ -20,7 +20,7 @@ permanent_data = {
     'ACTIVITE': '024',
 }
 
-TYPE = {
+TYPES = {
     'AUTHORIZE': 1,
     'DEBIT': 2,
     'AUTHORIZE_DEBIT': 3,
@@ -53,7 +53,7 @@ class PayboxException(abstract_payment.PaymentException):
         return unicode(self)
 
     def __unicode__(self):
-        return "PayboxError with code {code} and message \"{message}\"".format(**self.__dict__)
+        return u"PayboxError with code {code} and message \"{message}\"".format(**self.__dict__)
 
 
 class PayboxManager(object):
@@ -63,18 +63,21 @@ class PayboxManager(object):
 
     def subscribe(self, member_id, card_number, expiration_date, cvv):
         """Subscribe new user to Paybox Direct Plus services"""
+        TYPE = TYPES['SUBSCRIBER_SUBSCRIBE']
         response = self._request(
-            TYPE=56, MONTANT=0, REFABONNE=member_id, PORTEUR=card_number, 
+            TYPE=TYPE, MONTANT=0, REFABONNE=member_id, PORTEUR=card_number, 
             DATEVAL=expiration_date, CVV=cvv
         )
         return response['PORTEUR'][0]
 
     def unsubscribe(self, member_id):
+        TYPE = TYPES['SUBSCRIBER_DELETE']
         response = self._request(
-            TYPE=58, REFABONNE=member_id
+            TYPE=TYPE, REFABONNE=member_id
         )
 
     def modify(self, member_id, card_number, expiration_date, cvv):
+        TYPE = TYPES['SUBSCRIBER_MODIFY']
         response = self._request(
             TYPE=57, MONTANT=0, REFABONNE=member_id, PORTEUR=card_number, 
             DATEVAL=expiration_date, CVV=cvv
@@ -82,6 +85,7 @@ class PayboxManager(object):
         return response['PORTEUR'][0]
 
     def authorize_subscribed(self, member_id, card_number, expiration_date, cvv, amount):
+        TYPE = TYPES['SUBSCRIBER_AUTHORIZE']
         response = self._request(
             TYPE=51, MONTANT=amount, REFABONNE=member_id, PORTEUR=card_number,
             DATEVAL=expiration_date, CVV=cvv, 
@@ -90,6 +94,7 @@ class PayboxManager(object):
         return response['NUMAPPEL'][0], response['NUMTRANS'][0]
 
     def authorize(self, card_number, expiration_date, cvv, amount):
+        TYPE = TYPES['AUTHORIZE']
         response = self._request(
             TYPE=1, MONTANT=amount, PORTEUR=card_number,
             DATEVAL=expiration_date, CVV=cvv, 
@@ -99,6 +104,7 @@ class PayboxManager(object):
 
 
     def debit_subscribed(self, member_id, amount, numappel, numtrans):
+        TYPE = TYPES['SUBSCRIBER_DEBIT']
         response = self._request(
             TYPE=52, MONTANT=amount, REFABONNE=member_id,
             REFERENCE=random.randint(10**(LENGTH-1),10**LENGTH-1),
@@ -107,6 +113,7 @@ class PayboxManager(object):
         return response['NUMAPPEL'][0], response['NUMTRANS'][0]
 
     def debit(self, amount, numappel, numtrans):
+        TYPE = TYPES['DEBIT']
         response = self._request(
             TYPE=2, MONTANT=amount,
             REFERENCE='6666',
@@ -115,6 +122,7 @@ class PayboxManager(object):
         return response['NUMAPPEL'][0], response['NUMTRANS'][0]
 
     def cancel_subscribed(self, member_id, card_number, expiration_date, cvv, numappel, numtrans):
+        TYPE = TYPES['SUBSCRIBER_CANCEL']
         response = self._request(
             TYPE=55, MONTANT=100, REFABONNE=member_id, PORTEUR=card_number, DATEVAL=expiration_date, CVV=cvv,
             REFERENCE='6666',
@@ -122,12 +130,13 @@ class PayboxManager(object):
         )
 
     def cancel(self, numappel, numtrans, amount):
-        print 'cancel'
+        TYPE = TYPES['CANCEL']
         response = self._request(
             TYPE=5, MONTANT=amount, REFERENCE='6666', NUMAPPEL=str(numappel).rjust(10, '0'), NUMTRANS=str(numtrans).rjust(10, '0')
         )
 
     def credit(self, member_id, card_number, expiration_date, cvv, amount):
+        TYPE = TYPES['SUBSCRIBER_CREDIT']
         response = self._request(
             TYPE=54, MONTANT=amount, REFABONNE=member_id, PORTEUR=card_number,
             DATEVAL=expiration_date, CVV=cvv,
@@ -135,12 +144,13 @@ class PayboxManager(object):
         )
 
     def verification(self, numappel, numtrans):
-        print 'verify'
+        TYPE = TYPES['']
         response = self._request(
             TYPE=11, NUMAPPEL=numappel, NUMTRANS=numtrans, MONTANT=50,
         )
 
     def consultation(self, numappel, numtrans, amount):
+        TYPE = TYPES['CONSULT']
         response = self._request(
             TYPE=17, NUMAPPEL=numappel, NUMTRANS=numtrans, MONTANT=50,
             REFERENCE='6666'
@@ -160,33 +170,12 @@ class PayboxManager(object):
         with contextlib.closing(httplib.HTTPSConnection(PAYBOX_DIRECTPLUS_ENDPOINT.netloc, timeout=5)) as conn:
             conn.request("POST", PAYBOX_DIRECTPLUS_ENDPOINT.path, params, headers)
             response = conn.getresponse()
-            #print filter(lambda ch: ord(ch) < 128, response.read())
             response = parse_qs(response.read())
             print response
             response_code = response['CODEREPONSE'][0]
             if int(response_code):
-                raise PayboxException(response_code, response['COMMENTAIRE'][0])
+                raise PayboxException(response_code, response['COMMENTAIRE'][0].decode('ascii'))
             return response
-
-# pm = PayboxManager()
-# try:
-#   p = pm.subscribe('dfgsd', '1111222233334444', '0114', '123')
-#   print 'new user subscribed with partial number', p
-# # print 'modify user', pm.modify('dfgsd', '1111222233334444', '0115', '123')
-#   numquestion, numtrans = pm.authorize_subscribed('dfgsd', p, '0115', '123', 100)
-#   #print 'authorize payment'
-#   numquestion, numtrans = pm.debit_subscribed('dfgsd', 100, numquestion, numtrans)
-
-#   # numquestion, numtrans = pm.authorize('1111222233334444', '0115', '123', 50)
-#   # numquestion, numtrans = pm.debit(50, numquestion, numtrans)
-#   #print 'make payment'
-#   #print 'cancel payment', pm.cancel('dfgsd', p, '0115', '123', numquestion, numtrans)
-#   #print 'credit', pm.credit('dfgsd', p, '0115', '123', 50)
-
-# except PayboxException:
-#   print pm.unsubscribe('dfgsd')
-# else:
-#   print pm.unsubscribe('dfgsd')
 
 class PayboxDirectPayment(abstract_payment.AbstractPayment):
 
@@ -196,15 +185,9 @@ class PayboxDirectPayment(abstract_payment.AbstractPayment):
     def preapproval(self, credit_card, cvv):
         booking = self.booking
         amount = str(D(booking.total_amount*100).quantize(0))
-        try:
-            self.numappel, self.numtrans = self.paybox_manager.authorize(
-                credit_card.card_number, credit_card.expires, cvv, amount)
-        except PayboxException:
-            booking.state = booking.STATE.REJECTED
-        else:
-            booking.state = booking.STATE.AUTHORIZED
-        finally:
-            booking.save()
+        self.numappel, self.numtrans = self.paybox_manager.authorize(
+            credit_card.card_number, credit_card.expires, cvv, amount
+        )
 
     def pay(self):
         booking = self.booking
@@ -260,3 +243,23 @@ class PayboxDirectPlusPayment(abstract_payment.AbstractPayment):
     def give_caution(self, amount, cancel_url, return_url):
         pass
 
+
+# pm = PayboxManager()
+# try:
+#   p = pm.subscribe('dfgsd', '1111222233334444', '0114', '123')
+#   print 'new user subscribed with partial number', p
+# # print 'modify user', pm.modify('dfgsd', '1111222233334444', '0115', '123')
+#   numquestion, numtrans = pm.authorize_subscribed('dfgsd', p, '0115', '123', 100)
+#   #print 'authorize payment'
+#   numquestion, numtrans = pm.debit_subscribed('dfgsd', 100, numquestion, numtrans)
+
+#   # numquestion, numtrans = pm.authorize('1111222233334444', '0115', '123', 50)
+#   # numquestion, numtrans = pm.debit(50, numquestion, numtrans)
+#   #print 'make payment'
+#   #print 'cancel payment', pm.cancel('dfgsd', p, '0115', '123', numquestion, numtrans)
+#   #print 'credit', pm.credit('dfgsd', p, '0115', '123', 50)
+
+# except PayboxException:
+#   print pm.unsubscribe('dfgsd')
+# else:
+#   print pm.unsubscribe('dfgsd')

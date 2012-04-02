@@ -219,7 +219,7 @@ class ProductForm(BetterModelForm):
     month_price = forms.DecimalField(label=_(u"Le mois"), required=False, max_digits=10, decimal_places=2, min_value=D('0.01'), widget=PriceTextInput(attrs={'class': 'price'}), localize=True)
 
     def __init__(self, *args, **kwargs):
-        super(ProductEditForm, self).__init__(*args, **kwargs)
+        super(ProductForm, self).__init__(*args, **kwargs)
         self.fields['category'] = forms.TypedChoiceField(
             label=_(u"Catégorie"), coerce=lambda pk: Category.tree.get(pk=pk), 
             choices=generate_choices((cat.slug for cat in Category.tree.root_nodes()))

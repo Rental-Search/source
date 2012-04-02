@@ -8,14 +8,14 @@ from django.contrib.sites.models import Site
 class Migration(DataMigration):
 
     def forwards(self, orm):
-        site = Site.objects.get(name='e-loue beta')
+        site, _ = Site.objects.get_or_create(name='e-loue beta', domain='beta.e-loue.com', pk=11)
         for patron in orm.Patron.objects.all():
             patron.sites.add(site.pk)
         "Write your forwards methods here."
 
 
     def backwards(self, orm):
-        site = Site.objects.get(name='e-loue beta')
+        site, _ = Site.objects.get_or_create(name='e-loue beta', domain='beta.e-loue.com', pk=11)
         for patron in orm.Patron.objects.all():
             patron.sites.remove(site.pk)
         "Write your backwards methods here."

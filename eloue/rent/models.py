@@ -24,7 +24,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.db.models import Q
 
 from eloue.accounts.models import Patron
-from eloue.products.models import CURRENCY, UNIT, Product
+from eloue.products.models import CURRENCY, UNIT, Product, PAYMENT_TYPE
 from eloue.products.utils import Enum
 from eloue.rent.decorators import incr_sequence
 from eloue.rent.fields import UUIDField, IntegerAutoField
@@ -160,9 +160,6 @@ class Booking(models.Model):
         def is_state(self):
             return self.state == getattr(BOOKING_STATE, state)
         return is_state
-        
-    def init_payment_processor(self):
-        self.payment_processor = PAY_PROCESSORS[self.product.payment_type](self)
     
     @staticmethod
     def calculate_available_quantity(product, started_at, ended_at):
@@ -236,15 +233,6 @@ class Booking(models.Model):
         
         return unit, amount.quantize(D(".00"))
 
-    def not_need_ipn(self):
-        return self.payment_processor.NOT_NEED_IPN
-        
-    @smart_transition(source='authorizing', target='authorized', save=True)
-    def preapproval(self, *args):
-        self.payment.preapproval(*args)
-        self.payment.save()
-        self.send_ask_email()
-        
     def send_recovery_email(self):
         context = {
             'booking': self,
@@ -369,6 +357,15 @@ class Booking(models.Model):
         """
         return self.insurance_fee * INSURANCE_TAXES
     
+    def not_need_ipn(self):
+        return self.product.payment_type == PAYMENT_TYPE.NOPAY
+        
+    @smart_transition(source='authorizing', target='authorized', save=True)
+    def preapproval(self, *args, **kwargs):
+        self.payment.preapproval(*args, **kwargs)
+        self.payment.save()
+        self.send_ask_email()
+        
     @transition(source='authorized', target='pending', save=True)
     def accept(self):
         self.payment.pay()
@@ -397,24 +394,24 @@ class Booking(models.Model):
     @smart_transition(source='closing', target='closed', conditions=[not_need_ipn], save=True)
     def pay(self):
         """Return deposit_amount to borrower and pay the owner"""
-        self.payment_processor.execute_payment()
+        self.payment.execute_payment()
     
     @transition(source=['authorized', 'pending'], target='canceled', save=True)
     def cancel(self):
         """Cancel preapproval for the borrower"""
-        self.payment_processor.cancel_preapproval()
+        self.payment.cancel_preapproval()
     
     @transition(source='incident', target='deposit', save=True)
     def litigation(self, amount=None, cancel_url='', return_url=''):
         """Giving caution to owner"""
         # FIXME : Deposit amount isn't considered in preapproval amount
        
-        self.payment_processor.give_caution(amount, cancel_url, return_url)
+        self.payment.give_caution(amount, cancel_url, return_url)
     
     @transition(source='incident', target='refunded', save=True)
     def refund(self):
         """Refund borrower or owner if something as gone wrong"""
-        self.payment_processor.refund()
+        self.payment.refund()
     
     @property
     def _currency(self):

@@ -1,1 +1,574 @@
-[{"pk": 432, "model": "products.category", "fields": {"rght": 86, "name": "B\u00e9b\u00e9", "parent": null, "need_insurance": true, "level": 0, "sites": [1], "lft": 1, "tree_id": 432, "slug": "bebe"}}, {"pk": 7, "model": "products.category", "fields": {"rght": 9, "name": "Toilette b\u00e9b\u00e9", "parent": 432, "need_insurance": true, "level": 1, "sites": [1], "lft": 2, "tree_id": 432, "slug": "toilette-bebe"}}, {"pk": 8, "model": "products.category", "fields": {"rght": 4, "name": "Meubles \u00e0 langer", "parent": 7, "need_insurance": true, "level": 2, "sites": [1], "lft": 3, "tree_id": 432, "slug": "meubles-a-langer"}}, {"pk": 9, "model": "products.category", "fields": {"rght": 6, "name": "Hygi\u00e8ne et propret\u00e9", "parent": 7, "need_insurance": true, "level": 2, "sites": [1], "lft": 5, "tree_id": 432, "slug": "hygiene-et-proprete"}}, {"pk": 435, "model": "products.category", "fields": {"rght": 8, "name": "Les baignoires et \u00e9quipements", "parent": 7, "need_insurance": true, "level": 2, "sites": [1], "lft": 7, "tree_id": 432, "slug": "les-baignoires-et-equipements"}}, {"pk": 10, "model": "products.category", "fields": {"rght": 29, "name": "Eveil et jouets b\u00e9b\u00e9", "parent": 432, "need_insurance": true, "level": 1, "sites": [1], "lft": 10, "tree_id": 432, "slug": "eveil-et-jouets-bebe"}}, {"pk": 11, "model": "products.category", "fields": {"rght": 12, "name": "Arches", "parent": 10, "need_insurance": true, "level": 2, "sites": [1], "lft": 11, "tree_id": 432, "slug": "arches"}}, {"pk": 12, "model": "products.category", "fields": {"rght": 14, "name": "Jouets", "parent": 10, "need_insurance": true, "level": 2, "sites": [1], "lft": 13, "tree_id": 432, "slug": "jouets"}}, {"pk": 13, "model": "products.category", "fields": {"rght": 16, "name": "Jouets d'ext\u00e9rieur", "parent": 10, "need_insurance": true, "level": 2, "sites": [1], "lft": 15, "tree_id": 432, "slug": "jouets-dexterieur"}}, {"pk": 14, "model": "products.category", "fields": {"rght": 18, "name": "Livres d'\u00e9veil", "parent": 10, "need_insurance": true, "level": 2, "sites": [1], "lft": 17, "tree_id": 432, "slug": "livres-deveil"}}, {"pk": 15, "model": "products.category", "fields": {"rght": 20, "name": "Mobiles", "parent": 10, "need_insurance": true, "level": 2, "sites": [1], "lft": 19, "tree_id": 432, "slug": "mobiles"}}, {"pk": 16, "model": "products.category", "fields": {"rght": 22, "name": "Tapis de jeux et d'\u00e9veil", "parent": 10, "need_insurance": true, "level": 2, "sites": [1], "lft": 21, "tree_id": 432, "slug": "tapis-de-jeux-et-deveil"}}, {"pk": 17, "model": "products.category", "fields": {"rght": 24, "name": "Trotteurs", "parent": 10, "need_insurance": true, "level": 2, "sites": [1], "lft": 23, "tree_id": 432, "slug": "trotteurs"}}, {"pk": 436, "model": "products.category", "fields": {"rght": 26, "name": "Plage et piscine et bain", "parent": 10, "need_insurance": true, "level": 2, "sites": [1], "lft": 25, "tree_id": 432, "slug": "plage-et-piscine-et-bain"}}, {"pk": 437, "model": "products.category", "fields": {"rght": 28, "name": "Transat et balancelles", "parent": 10, "need_insurance": true, "level": 2, "sites": [1], "lft": 27, "tree_id": 432, "slug": "transat-et-balancelles"}}, {"pk": 18, "model": "products.category", "fields": {"rght": 47, "name": "Alimentation b\u00e9b\u00e9", "parent": 432, "need_insurance": true, "level": 1, "sites": [1], "lft": 30, "tree_id": 432, "slug": "alimentation-bebe"}}, {"pk": 19, "model": "products.category", "fields": {"rght": 32, "name": "Biberon", "parent": 18, "need_insurance": true, "level": 2, "sites": [1], "lft": 31, "tree_id": 432, "slug": "biberon"}}, {"pk": 20, "model": "products.category", "fields": {"rght": 34, "name": "Chaise haute", "parent": 18, "need_insurance": true, "level": 2, "sites": [1], "lft": 33, "tree_id": 432, "slug": "chaise-haute"}}, {"pk": 21, "model": "products.category", "fields": {"rght": 36, "name": "Coussin d'allaitement", "parent": 18, "need_insurance": true, "level": 2, "sites": [1], "lft": 35, "tree_id": 432, "slug": "coussin-dallaitement"}}, {"pk": 22, "model": "products.category", "fields": {"rght": 38, "name": "Cuiseur", "parent": 18, "need_insurance": true, "level": 2, "sites": [1], "lft": 37, "tree_id": 432, "slug": "cuiseur"}}, {"pk": 23, "model": "products.category", "fields": {"rght": 40, "name": "St\u00e9rilisateur de biberon", "parent": 18, "need_insurance": true, "level": 2, "sites": [1], "lft": 39, "tree_id": 432, "slug": "sterilisateur-de-biberon"}}, {"pk": 24, "model": "products.category", "fields": {"rght": 42, "name": "Tire-lait", "parent": 18, "need_insurance": true, "level": 2, "sites": [1], "lft": 41, "tree_id": 432, "slug": "tire-lait"}}, {"pk": 438, "model": "products.category", "fields": {"rght": 44, "name": "Chauffe biberon", "parent": 18, "need_insurance": true, "level": 2, "sites": [1], "lft": 43, "tree_id": 432, "slug": "chauffe-biberon"}}, {"pk": 439, "model": "products.category", "fields": {"rght": 46, "name": "Si\u00e8ge de table et r\u00e9hausseur", "parent": 18, "need_insurance": true, "level": 2, "sites": [1], "lft": 45, "tree_id": 432, "slug": "siege-de-table-et-rehausseur"}}, {"pk": 25, "model": "products.category", "fields": {"rght": 65, "name": "D\u00e9placements b\u00e9b\u00e9", "parent": 432, "need_insurance": true, "level": 1, "sites": [1], "lft": 48, "tree_id": 432, "slug": "deplacements-bebe"}}, {"pk": 26, "model": "products.category", "fields": {"rght": 50, "name": "Poussette", "parent": 25, "need_insurance": true, "level": 2, "sites": [1], "lft": 49, "tree_id": 432, "slug": "poussette"}}, {"pk": 27, "model": "products.category", "fields": {"rght": 52, "name": "Porte-b\u00e9b\u00e9s", "parent": 25, "need_insurance": true, "level": 2, "sites": [1], "lft": 51, "tree_id": 432, "slug": "porte-bebes"}}, {"pk": 28, "model": "products.category", "fields": {"rght": 54, "name": "Sacs a langer", "parent": 25, "need_insurance": true, "level": 2, "sites": [1], "lft": 53, "tree_id": 432, "slug": "sacs-a-langer"}}, {"pk": 29, "model": "products.category", "fields": {"rght": 56, "name": "Baby-coques", "parent": 25, "need_insurance": true, "level": 2, "sites": [1], "lft": 55, "tree_id": 432, "slug": "baby-coques"}}, {"pk": 30, "model": "products.category", "fields": {"rght": 58, "name": "Si\u00e8ge auto", "parent": 25, "need_insurance": true, "level": 2, "sites": [1], "lft": 57, "tree_id": 432, "slug": "siege-auto"}}, {"pk": 31, "model": "products.category", "fields": {"rght": 60, "name": "Tente de plage b\u00e9b\u00e9", "parent": 25, "need_insurance": true, "level": 2, "sites": [1], "lft": 59, "tree_id": 432, "slug": "tente-de-plage-bebe"}}, {"pk": 440, "model": "products.category", "fields": {"rght": 62, "name": "Lits pliants", "parent": 25, "need_insurance": true, "level": 2, "sites": [1], "lft": 61, "tree_id": 432, "slug": "lits-pliants"}}, {"pk": 441, "model": "products.category", "fields": {"rght": 64, "name": "Landau/nacelle", "parent": 25, "need_insurance": true, "level": 2, "sites": [1], "lft": 63, "tree_id": 432, "slug": "landaunacelle"}}, {"pk": 32, "model": "products.category", "fields": {"rght": 73, "name": "S\u00e9curit\u00e9", "parent": 432, "need_insurance": true, "level": 1, "sites": [1], "lft": 66, "tree_id": 432, "slug": "securite"}}, {"pk": 33, "model": "products.category", "fields": {"rght": 68, "name": "Babyphone", "parent": 32, "need_insurance": true, "level": 2, "sites": [1], "lft": 67, "tree_id": 432, "slug": "babyphone"}}, {"pk": 34, "model": "products.category", "fields": {"rght": 70, "name": "Parc", "parent": 32, "need_insurance": true, "level": 2, "sites": [1], "lft": 69, "tree_id": 432, "slug": "parc"}}, {"pk": 442, "model": "products.category", "fields": {"rght": 72, "name": "Barrieres", "parent": 32, "need_insurance": true, "level": 2, "sites": [1], "lft": 71, "tree_id": 432, "slug": "barrieres"}}, {"pk": 433, "model": "products.category", "fields": {"rght": 85, "name": "Mobilier B\u00e9b\u00e9", "parent": 432, "need_insurance": true, "level": 1, "sites": [1], "lft": 74, "tree_id": 432, "slug": "mobilier-bebe"}}, {"pk": 1, "model": "products.category", "fields": {"rght": 76, "name": "Lits", "parent": 433, "need_insurance": true, "level": 2, "sites": [1], "lft": 75, "tree_id": 432, "slug": "lits"}}, {"pk": 4, "model": "products.category", "fields": {"rght": 78, "name": "Berceaux", "parent": 433, "need_insurance": true, "level": 2, "sites": [1], "lft": 77, "tree_id": 432, "slug": "berceaux"}}, {"pk": 5, "model": "products.category", "fields": {"rght": 80, "name": "Commodes et plans \u00e0 langer", "parent": 433, "need_insurance": true, "level": 2, "sites": [1], "lft": 79, "tree_id": 432, "slug": "commodes-et-plans-a-langer"}}, {"pk": 6, "model": "products.category", "fields": {"rght": 82, "name": "Divers mobilier b\u00e9b\u00e9", "parent": 433, "need_insurance": true, "level": 2, "sites": [1], "lft": 81, "tree_id": 432, "slug": "divers-mobilier-bebe"}}, {"pk": 434, "model": "products.category", "fields": {"rght": 84, "name": "\u00c9tag\u00e8res murales", "parent": 433, "need_insurance": true, "level": 2, "sites": [1], "lft": 83, "tree_id": 432, "slug": "etageres-murales"}}, {"pk": 390, "model": "products.category", "fields": {"rght": 92, "name": "Jardinage", "parent": null, "need_insurance": true, "level": 0, "sites": [1], "lft": 1, "tree_id": 390, "slug": "jardinage"}}, {"pk": 35, "model": "products.category", "fields": {"rght": 248, "name": "Bricolage", "parent": null, "need_insurance": true, "level": 0, "sites": [1], "lft": 1, "tree_id": 35, "slug": "bricolage"}}, {"pk": 3, "model": "products.category", "fields": {"rght": 712, "name": "Auto et moto", "parent": null, "need_insurance": true, "level": 0, "sites": [1], "lft": 1, "tree_id": 3, "slug": "auto-et-moto"}}, {"pk": 475, "model": "products.category", "fields": {"rght": 671, "name": "Scooter", "parent": 3, "need_insurance": true, "level": 1, "sites": [1], "lft": 664, "tree_id": 3, "slug": "scooter"}}, {"pk": 476, "model": "products.category", "fields": {"rght": 666, "name": "125 Cc", "parent": 475, "need_insurance": true, "level": 2, "sites": [1], "lft": 665, "tree_id": 3, "slug": "125-cc"}}, {"pk": 477, "model": "products.category", "fields": {"rght": 668, "name": "Maxi scooter", "parent": 475, "need_insurance": true, "level": 2, "sites": [1], "lft": 667, "tree_id": 3, "slug": "maxi-scooter"}}, {"pk": 665, "model": "products.category", "fields": {"rght": 670, "name": "50 Cc", "parent": 475, "need_insurance": true, "level": 2, "sites": [1], "lft": 669, "tree_id": 3, "slug": "50-cc"}}, {"pk": 487, "model": "products.category", "fields": {"rght": 689, "name": "Moto", "parent": 3, "need_insurance": true, "level": 1, "sites": [1], "lft": 672, "tree_id": 3, "slug": "moto"}}, {"pk": 488, "model": "products.category", "fields": {"rght": 674, "name": "Enduro et cross", "parent": 487, "need_insurance": true, "level": 2, "sites": [1], "lft": 673, "tree_id": 3, "slug": "enduro-et-cross"}}, {"pk": 489, "model": "products.category", "fields": {"rght": 676, "name": "Roadster", "parent": 487, "need_insurance": true, "level": 2, "sites": [1], "lft": 675, "tree_id": 3, "slug": "roadster"}}, {"pk": 490, "model": "products.category", "fields": {"rght": 678, "name": "Routi\u00e8re", "parent": 487, "need_insurance": true, "level": 2, "sites": [1], "lft": 677, "tree_id": 3, "slug": "routiere"}}, {"pk": 491, "model": "products.category", "fields": {"rght": 680, "name": "Side-car", "parent": 487, "need_insurance": true, "level": 2, "sites": [1], "lft": 679, "tree_id": 3, "slug": "side-car"}}, {"pk": 492, "model": "products.category", "fields": {"rght": 682, "name": "Sportive", "parent": 487, "need_insurance": true, "level": 2, "sites": [1], "lft": 681, "tree_id": 3, "slug": "sportive"}}, {"pk": 493, "model": "products.category", "fields": {"rght": 684, "name": "Trial", "parent": 487, "need_insurance": true, "level": 2, "sites": [1], "lft": 683, "tree_id": 3, "slug": "trial"}}, {"pk": 494, "model": "products.category", "fields": {"rght": 686, "name": "Quad", "parent": 487, "need_insurance": true, "level": 2, "sites": [1], "lft": 685, "tree_id": 3, "slug": "quad"}}, {"pk": 670, "model": "products.category", "fields": {"rght": 688, "name": "Supermotard", "parent": 487, "need_insurance": true, "level": 2, "sites": [1], "lft": 687, "tree_id": 3, "slug": "supermotard"}}, {"pk": 666, "model": "products.category", "fields": {"rght": 697, "name": "Accessoires auto", "parent": 3, "need_insurance": true, "level": 1, "sites": [1], "lft": 690, "tree_id": 3, "slug": "accessoires-auto"}}, {"pk": 478, "model": "products.category", "fields": {"rght": 692, "name": "Gallerie", "parent": 666, "need_insurance": true, "level": 2, "sites": [1], "lft": 691, "tree_id": 3, "slug": "gallerie"}}, {"pk": 481, "model": "products.category", "fields": {"rght": 694, "name": "Attelage", "parent": 666, "need_insurance": true, "level": 2, "sites": [1], "lft": 693, "tree_id": 3, "slug": "attelage"}}, {"pk": 482, "model": "products.category", "fields": {"rght": 696, "name": "Siege enfant", "parent": 666, "need_insurance": true, "level": 2, "sites": [1], "lft": 695, "tree_id": 3, "slug": "siege-enfant"}}, {"pk": 667, "model": "products.category", "fields": {"rght": 711, "name": "Voiture", "parent": 3, "need_insurance": true, "level": 1, "sites": [1], "lft": 698, "tree_id": 3, "slug": "voiture"}}, {"pk": 483, "model": "products.category", "fields": {"rght": 700, "name": "Voiture de tourisme", "parent": 667, "need_insurance": true, "level": 2, "sites": [1], "lft": 699, "tree_id": 3, "slug": "voiture-de-tourisme"}}, {"pk": 484, "model": "products.category", "fields": {"rght": 702, "name": "Voiture de luxe", "parent": 667, "need_insurance": true, "level": 2, "sites": [1], "lft": 701, "tree_id": 3, "slug": "voiture-de-luxe"}}, {"pk": 485, "model": "products.category", "fields": {"rght": 704, "name": "Voiture avec chauffeur", "parent": 667, "need_insurance": true, "level": 2, "sites": [1], "lft": 703, "tree_id": 3, "slug": "voiture-avec-chauffeur"}}, {"pk": 486, "model": "products.category", "fields": {"rght": 706, "name": "Voiture \u00e9lectrique", "parent": 667, "need_insurance": true, "level": 2, "sites": [1], "lft": 705, "tree_id": 3, "slug": "voiture-electrique"}}, {"pk": 668, "model": "products.category", "fields": {"rght": 708, "name": "Voiture ancienne", "parent": 667, "need_insurance": true, "level": 2, "sites": [1], "lft": 707, "tree_id": 3, "slug": "voiture-ancienne"}}, {"pk": 669, "model": "products.category", "fields": {"rght": 710, "name": "Voiture sans permis", "parent": 667, "need_insurance": true, "level": 2, "sites": [1], "lft": 709, "tree_id": 3, "slug": "voiture-sans-permis"}}]
+[
+    {
+        "pk": 3,
+        "model": "products.category",
+        "fields": {
+            "rght": 712,
+            "name": "Auto et moto",
+            "parent": null,
+            "need_insurance": true,
+            "level": 0,
+            "sites": [
+                11,
+                7,
+                2,
+                3,
+                1,
+                4
+            ],
+            "lft": 1,
+            "tree_id": 3,
+            "slug": "auto-et-moto"
+        }
+    },
+    {
+        "pk": 475,
+        "model": "products.category",
+        "fields": {
+            "rght": 671,
+            "name": "Scooter",
+            "parent": 3,
+            "need_insurance": true,
+            "level": 1,
+            "sites": [
+                11,
+                7,
+                2,
+                3,
+                1,
+                4
+            ],
+            "lft": 664,
+            "tree_id": 3,
+            "slug": "scooter"
+        }
+    },
+    {
+        "pk": 476,
+        "model": "products.category",
+        "fields": {
+            "rght": 666,
+            "name": "125 Cc",
+            "parent": 475,
+            "need_insurance": true,
+            "level": 2,
+            "sites": [
+                11,
+                7,
+                2,
+                3,
+                1,
+                4
+            ],
+            "lft": 665,
+            "tree_id": 3,
+            "slug": "125-cc"
+        }
+    },
+    {
+        "pk": 477,
+        "model": "products.category",
+        "fields": {
+            "rght": 668,
+            "name": "Maxi scooter",
+            "parent": 475,
+            "need_insurance": true,
+            "level": 2,
+            "sites": [
+                11,
+                7,
+                2,
+                3,
+                1,
+                4
+            ],
+            "lft": 667,
+            "tree_id": 3,
+            "slug": "maxi-scooter"
+        }
+    },
+    {
+        "pk": 665,
+        "model": "products.category",
+        "fields": {
+            "rght": 670,
+            "name": "50 Cc",
+            "parent": 475,
+            "need_insurance": true,
+            "level": 2,
+            "sites": [
+                11,
+                7,
+                2,
+                3,
+                1,
+                4
+            ],
+            "lft": 669,
+            "tree_id": 3,
+            "slug": "50-cc"
+        }
+    },
+    {
+        "pk": 379,
+        "model": "products.category",
+        "fields": {
+            "rght": 32,
+            "name": "H\u00e9bergement",
+            "parent": null,
+            "need_insurance": true,
+            "level": 0,
+            "sites": [
+                11,
+                7,
+                2,
+                3,
+                1,
+                4
+            ],
+            "lft": 1,
+            "tree_id": 379,
+            "slug": "hebergement"
+        }
+    },
+    {
+        "pk": 384,
+        "model": "products.category",
+        "fields": {
+            "rght": 9,
+            "name": "Maison/villa",
+            "parent": 379,
+            "need_insurance": true,
+            "level": 1,
+            "sites": [
+                11,
+                7,
+                2,
+                3,
+                1,
+                4
+            ],
+            "lft": 2,
+            "tree_id": 379,
+            "slug": "maison-villa"
+        }
+    },
+    {
+        "pk": 385,
+        "model": "products.category",
+        "fields": {
+            "rght": 4,
+            "name": "4/5 chambres",
+            "parent": 384,
+            "need_insurance": true,
+            "level": 2,
+            "sites": [
+                11,
+                7,
+                2,
+                3,
+                1,
+                4
+            ],
+            "lft": 3,
+            "tree_id": 379,
+            "slug": "45-chambres"
+        }
+    },
+    {
+        "pk": 386,
+        "model": "products.category",
+        "fields": {
+            "rght": 6,
+            "name": "+5 chambres",
+            "parent": 384,
+            "need_insurance": true,
+            "level": 2,
+            "sites": [
+                11,
+                7,
+                2,
+                3,
+                1,
+                4
+            ],
+            "lft": 5,
+            "tree_id": 379,
+            "slug": "5-chambres"
+        }
+    },
+    {
+        "pk": 638,
+        "model": "products.category",
+        "fields": {
+            "rght": 8,
+            "name": "1/3 chambres",
+            "parent": 384,
+            "need_insurance": true,
+            "level": 2,
+            "sites": [
+                11,
+                7,
+                2,
+                3,
+                1,
+                4
+            ],
+            "lft": 7,
+            "tree_id": 379,
+            "slug": "13-chambres"
+        }
+    },
+    {
+        "pk": 1,
+        "model": "products.category",
+        "fields": {
+            "rght": 76,
+            "name": "Lits",
+            "parent": 433,
+            "need_insurance": true,
+            "level": 2,
+            "sites": [
+                11,
+                7,
+                2,
+                3,
+                1,
+                4
+            ],
+            "lft": 75,
+            "tree_id": 432,
+            "slug": "lits"
+        }
+    },
+    {
+        "pk": 433,
+        "model": "products.category",
+        "fields": {
+            "rght": 85,
+            "name": "Mobilier B\u00e9b\u00e9",
+            "parent": 432,
+            "need_insurance": true,
+            "level": 1,
+            "sites": [
+                11,
+                7,
+                2,
+                3,
+                1,
+                4
+            ],
+            "lft": 74,
+            "tree_id": 432,
+            "slug": "mobilier-bebe"
+        }
+    },
+    {
+        "pk": 432,
+        "model": "products.category",
+        "fields": {
+            "rght": 86,
+            "name": "B\u00e9b\u00e9",
+            "parent": null,
+            "need_insurance": true,
+            "level": 0,
+            "sites": [
+                11,
+                7,
+                2,
+                3,
+                1,
+                4
+            ],
+            "lft": 1,
+            "tree_id": 432,
+            "slug": "bebe"
+        }
+    },
+    {
+        "pk": 35,
+        "model": "products.category",
+        "fields": {
+            "rght": 248,
+            "name": "Bricolage",
+            "parent": null,
+            "need_insurance": true,
+            "level": 0,
+            "sites": [
+                11,
+                7,
+                2,
+                3,
+                1,
+                4
+            ],
+            "lft": 1,
+            "tree_id": 35,
+            "slug": "bricolage"
+        }
+    },
+    {
+        "pk": 51,
+        "model": "products.category",
+        "fields": {
+            "rght": 65,
+            "name": "Mesure et d\u00e9tection",
+            "parent": 35,
+            "need_insurance": true,
+            "level": 1,
+            "sites": [
+                11,
+                7,
+                2,
+                3,
+                1,
+                4
+            ],
+            "lft": 42,
+            "tree_id": 35,
+            "slug": "mesure-et-detection"
+        }
+    },
+    {
+        "pk": 52,
+        "model": "products.category",
+        "fields": {
+            "rght": 44,
+            "name": "D\u00e9tecteur de m\u00e9taux",
+            "parent": 51,
+            "need_insurance": true,
+            "level": 2,
+            "sites": [
+                11,
+                7,
+                2,
+                3,
+                1,
+                4
+            ],
+            "lft": 43,
+            "tree_id": 35,
+            "slug": "detecteur-de-metaux"
+        }
+    },
+    {
+        "pk": 53,
+        "model": "products.category",
+        "fields": {
+            "rght": 46,
+            "name": "D\u00e9tecteur d'humidit\u00e9",
+            "parent": 51,
+            "need_insurance": true,
+            "level": 2,
+            "sites": [
+                11,
+                7,
+                2,
+                3,
+                1,
+                4
+            ],
+            "lft": 45,
+            "tree_id": 35,
+            "slug": "detecteur-dhumidite"
+        }
+    },
+    {
+        "pk": 54,
+        "model": "products.category",
+        "fields": {
+            "rght": 48,
+            "name": "Hygrom\u00e8tre",
+            "parent": 51,
+            "need_insurance": true,
+            "level": 2,
+            "sites": [
+                11,
+                7,
+                2,
+                3,
+                1,
+                4
+            ],
+            "lft": 47,
+            "tree_id": 35,
+            "slug": "hygrometre"
+        }
+    },
+    {
+        "pk": 55,
+        "model": "products.category",
+        "fields": {
+            "rght": 50,
+            "name": "Sonom\u00e8tre",
+            "parent": 51,
+            "need_insurance": true,
+            "level": 2,
+            "sites": [
+                11,
+                7,
+                2,
+                3,
+                1,
+                4
+            ],
+            "lft": 49,
+            "tree_id": 35,
+            "slug": "sonometre"
+        }
+    },
+    {
+        "pk": 56,
+        "model": "products.category",
+        "fields": {
+            "rght": 52,
+            "name": "Soudure et plomberie",
+            "parent": 51,
+            "need_insurance": true,
+            "level": 2,
+            "sites": [
+                11,
+                7,
+                2,
+                3,
+                1,
+                4
+            ],
+            "lft": 51,
+            "tree_id": 35,
+            "slug": "soudure-et-plomberie"
+        }
+    },
+    {
+        "pk": 57,
+        "model": "products.category",
+        "fields": {
+            "rght": 54,
+            "name": "Niveau \u00e0 bulle",
+            "parent": 51,
+            "need_insurance": true,
+            "level": 2,
+            "sites": [
+                11,
+                7,
+                2,
+                3,
+                1,
+                4
+            ],
+            "lft": 53,
+            "tree_id": 35,
+            "slug": "niveau-a-bulle"
+        }
+    },
+    {
+        "pk": 58,
+        "model": "products.category",
+        "fields": {
+            "rght": 56,
+            "name": "Niveau laser",
+            "parent": 51,
+            "need_insurance": true,
+            "level": 2,
+            "sites": [
+                11,
+                7,
+                2,
+                3,
+                1,
+                4
+            ],
+            "lft": 55,
+            "tree_id": 35,
+            "slug": "niveau-laser"
+        }
+    },
+    {
+        "pk": 447,
+        "model": "products.category",
+        "fields": {
+            "rght": 58,
+            "name": "Compressiom\u00e8tre",
+            "parent": 51,
+            "need_insurance": true,
+            "level": 2,
+            "sites": [
+                11,
+                7,
+                2,
+                3,
+                1,
+                4
+            ],
+            "lft": 57,
+            "tree_id": 35,
+            "slug": "compressiometre"
+        }
+    },
+    {
+        "pk": 448,
+        "model": "products.category",
+        "fields": {
+            "rght": 60,
+            "name": "Multifaisceaux",
+            "parent": 51,
+            "need_insurance": true,
+            "level": 2,
+            "sites": [
+                11,
+                7,
+                2,
+                3,
+                1,
+                4
+            ],
+            "lft": 59,
+            "tree_id": 35,
+            "slug": "multifaisceaux"
+        }
+    },
+    {
+        "pk": 537,
+        "model": "products.category",
+        "fields": {
+            "rght": 62,
+            "name": "Theodolite",
+            "parent": 51,
+            "need_insurance": true,
+            "level": 2,
+            "sites": [
+                11,
+                7,
+                2,
+                3,
+                1,
+                4
+            ],
+            "lft": 61,
+            "tree_id": 35,
+            "slug": "theodolite"
+        }
+    },
+    {
+        "pk": 686,
+        "model": "products.category",
+        "fields": {
+            "rght": 64,
+            "name": "Laser de mesure",
+            "parent": 51,
+            "need_insurance": true,
+            "level": 2,
+            "sites": [
+                11,
+                7,
+                2,
+                3,
+                1,
+                4
+            ],
+            "lft": 63,
+            "tree_id": 35,
+            "slug": "laser-de-mesure"
+        }
+    }
+]
