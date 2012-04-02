@@ -64,7 +64,6 @@ class PayboxManager(object):
         data.update(kwargs)
         data['DATEQ'] = datetime.datetime.now().strftime("%d%m%Y%H%M%S")
         data['NUMQUESTION'] = uuid.uuid4().fields[0]/2
-        print data
         params = urllib.urlencode(data)
         headers = {
             "Content-type": "application/x-www-form-urlencoded",
@@ -74,7 +73,6 @@ class PayboxManager(object):
             conn.request("POST", self.PAYBOX_ENDPOINT.path, params, headers)
             response = conn.getresponse()
             response = parse_qs(response.read())
-            print response
             response_code = response['CODEREPONSE'][0]
             if int(response_code):
                 raise PayboxException(response_code, response['COMMENTAIRE'][0].decode('ascii'))
@@ -119,7 +117,6 @@ class PayboxManager(object):
             DATEVAL=expiration_date, CVV=cvv, REFERENCE=reference
         )
         return response['NUMAPPEL'][0], response['NUMTRANS'][0]
-
 
     def debit_subscribed(self, member_id, amount, numappel, numtrans, reference):
         TYPE = TYPES['SUBSCRIBER_DEBIT']
