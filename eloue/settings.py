@@ -568,3 +568,12 @@ DEFAULT_LOCATION = getattr(local, "DEFAULT_LOCATION", {
     'region_radius': None,
     'source': 4
 })
+
+PAYBOX_VERSION = getattr(local, 'PAYBOX_VERSION', '00104')
+PAYBOX_SITE = getattr(local, 'PAYBOX_SITE', 1999888)
+PAYBOX_RANG = getattr(local, 'PAYBOX_RANG', 99)
+PAYBOX_CLE = getattr(local, 'PAYBOX_CLE', '1999888I')
+PAYBOX_DEVISE = getattr(local, 'PAYBOX_DEVISE', 978)
+PAYBOX_ACTIVITE = getattr(local, 'PAYBOX_ACTIVITE', '024')
+PAYBOX_ENDPOINT = getattr(local, 'PAYBOX_ENDPOINT', "https://preprod-ppps.paybox.com/PPPS.php")
+

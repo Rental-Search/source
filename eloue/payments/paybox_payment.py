@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import httplib, urllib
 import contextlib
+import uuid
 from decimal import Decimal as D
 
 import abstract_payment
@@ -8,17 +9,8 @@ import datetime
 import random
 LENGTH=5
 from urlparse import urlparse, parse_qs
+from django.conf import settings
 
-permanent_data = {
-    'VERSION': '00104',
-    'DATEQ': datetime.datetime.now().strftime("%d%m%Y%H%M%S"),
-    'NUMQUESTION': random.randint(10**(LENGTH-1),10**LENGTH-1), # <- NOT FOR PRODUCTION
-    'SITE': 1999888,
-    'RANG': 99,
-    'CLE': '1999888I',
-    'DEVISE': 978,
-    'ACTIVITE': '024',
-}
 
 TYPES = {
     'AUTHORIZE': 1,
@@ -41,8 +33,6 @@ TYPES = {
     'SUBSCRIBER_FORCAGE': 61,
 }
 
-PAYBOX_DIRECTPLUS_ENDPOINT = urlparse("https://preprod-ppps.paybox.com/PPPS.php")
-
 class PayboxException(abstract_payment.PaymentException):
     
     def __init__(self, code, message):
@@ -59,7 +49,36 @@ class PayboxException(abstract_payment.PaymentException):
 class PayboxManager(object):
     
     def __init__(self, ):
-        pass
+        self.PAYBOX_ENDPOINT = urlparse(settings.PAYBOX_ENDPOINT)
+        self.permanent_data = {
+            'VERSION': settings.PAYBOX_VERSION,
+            'SITE': settings.PAYBOX_SITE,
+            'RANG': settings.PAYBOX_RANG,
+            'CLE': settings.PAYBOX_CLE,
+            'DEVISE': settings.PAYBOX_DEVISE,
+            'ACTIVITE': settings.PAYBOX_ACTIVITE,
+        }
+
+    def _request(self, **kwargs):
+        data = self.permanent_data.copy()
+        data.update(kwargs)
+        data['DATEQ'] = datetime.datetime.now().strftime("%d%m%Y%H%M%S")
+        data['NUMQUESTION'] = uuid.uuid4().fields[0]/2
+        print data
+        params = urllib.urlencode(data)
+        headers = {
+            "Content-type": "application/x-www-form-urlencoded",
+            "Accept": "text/plain"
+        }
+        with contextlib.closing(httplib.HTTPSConnection(self.PAYBOX_ENDPOINT.netloc, timeout=5)) as conn:
+            conn.request("POST", self.PAYBOX_ENDPOINT.path, params, headers)
+            response = conn.getresponse()
+            response = parse_qs(response.read())
+            print response
+            response_code = response['CODEREPONSE'][0]
+            if int(response_code):
+                raise PayboxException(response_code, response['COMMENTAIRE'][0].decode('ascii'))
+            return response
 
     def subscribe(self, member_id, card_number, expiration_date, cvv):
         """Subscribe new user to Paybox Direct Plus services"""
@@ -79,103 +98,84 @@ class PayboxManager(object):
     def modify(self, member_id, card_number, expiration_date, cvv):
         TYPE = TYPES['SUBSCRIBER_MODIFY']
         response = self._request(
-            TYPE=57, MONTANT=0, REFABONNE=member_id, PORTEUR=card_number, 
+            TYPE=TYPE, MONTANT=0, REFABONNE=member_id, PORTEUR=card_number, 
             DATEVAL=expiration_date, CVV=cvv
         )
         return response['PORTEUR'][0]
 
-    def authorize_subscribed(self, member_id, card_number, expiration_date, cvv, amount):
+    def authorize_subscribed(self, member_id, card_number, expiration_date, cvv, amount, reference):
         TYPE = TYPES['SUBSCRIBER_AUTHORIZE']
         response = self._request(
-            TYPE=51, MONTANT=amount, REFABONNE=member_id, PORTEUR=card_number,
+            TYPE=TYPE, MONTANT=amount, REFABONNE=member_id, PORTEUR=card_number,
             DATEVAL=expiration_date, CVV=cvv, 
-            REFERENCE='6666'
+            REFERENCE=reference
         )
         return response['NUMAPPEL'][0], response['NUMTRANS'][0]
 
-    def authorize(self, card_number, expiration_date, cvv, amount):
+    def authorize(self, card_number, expiration_date, cvv, amount, reference):
         TYPE = TYPES['AUTHORIZE']
         response = self._request(
-            TYPE=1, MONTANT=amount, PORTEUR=card_number,
-            DATEVAL=expiration_date, CVV=cvv, 
-            REFERENCE='6666'
+            TYPE=TYPE, MONTANT=amount, PORTEUR=card_number, 
+            DATEVAL=expiration_date, CVV=cvv, REFERENCE=reference
         )
         return response['NUMAPPEL'][0], response['NUMTRANS'][0]
 
 
-    def debit_subscribed(self, member_id, amount, numappel, numtrans):
+    def debit_subscribed(self, member_id, amount, numappel, numtrans, reference):
         TYPE = TYPES['SUBSCRIBER_DEBIT']
         response = self._request(
-            TYPE=52, MONTANT=amount, REFABONNE=member_id,
-            REFERENCE=random.randint(10**(LENGTH-1),10**LENGTH-1),
-            NUMAPPEL=numappel, NUMTRANS=numtrans
+            TYPE=TYPE, MONTANT=amount, REFABONNE=member_id,
+            REFERENCE=reference, NUMAPPEL=numappel, NUMTRANS=numtrans
         )
         return response['NUMAPPEL'][0], response['NUMTRANS'][0]
 
-    def debit(self, amount, numappel, numtrans):
+    def debit(self, amount, numappel, numtrans, reference):
         TYPE = TYPES['DEBIT']
         response = self._request(
-            TYPE=2, MONTANT=amount,
-            REFERENCE='6666',
-            NUMAPPEL=numappel, NUMTRANS=numtrans
+            TYPE=TYPE, MONTANT=amount, REFERENCE=reference, NUMAPPEL=numappel, 
+            NUMTRANS=numtrans
         )
         return response['NUMAPPEL'][0], response['NUMTRANS'][0]
 
     def cancel_subscribed(self, member_id, card_number, expiration_date, cvv, numappel, numtrans):
         TYPE = TYPES['SUBSCRIBER_CANCEL']
+        raise NotImplementedError('we have to assign a proper reference number')
         response = self._request(
-            TYPE=55, MONTANT=100, REFABONNE=member_id, PORTEUR=card_number, DATEVAL=expiration_date, CVV=cvv,
+            TYPE=TYPE, MONTANT=100, REFABONNE=member_id, PORTEUR=card_number, DATEVAL=expiration_date, CVV=cvv,
             REFERENCE='6666',
             NUMAPPEL=numappel, NUMTRANS=numtrans
         )
 
     def cancel(self, numappel, numtrans, amount):
         TYPE = TYPES['CANCEL']
+        raise NotImplementedError('we have to assign a proper reference number')
         response = self._request(
-            TYPE=5, MONTANT=amount, REFERENCE='6666', NUMAPPEL=str(numappel).rjust(10, '0'), NUMTRANS=str(numtrans).rjust(10, '0')
+            TYPE=TYPE, MONTANT=amount, REFERENCE='6666', NUMAPPEL=numappel, NUMTRANS=numtrans
         )
 
     def credit(self, member_id, card_number, expiration_date, cvv, amount):
         TYPE = TYPES['SUBSCRIBER_CREDIT']
+        raise NotImplementedError('we have to assign a proper reference number')
         response = self._request(
-            TYPE=54, MONTANT=amount, REFABONNE=member_id, PORTEUR=card_number,
+            TYPE=TYPE, MONTANT=amount, REFABONNE=member_id, PORTEUR=card_number,
             DATEVAL=expiration_date, CVV=cvv,
             REFERENCE=random.randint(10**(LENGTH-1),10**LENGTH-1)
         )
 
     def verification(self, numappel, numtrans):
+        raise NotImplementedError('TODO')
         TYPE = TYPES['']
         response = self._request(
-            TYPE=11, NUMAPPEL=numappel, NUMTRANS=numtrans, MONTANT=50,
+            TYPE=TYPE, NUMAPPEL=numappel, NUMTRANS=numtrans, MONTANT=50,
         )
 
     def consultation(self, numappel, numtrans, amount):
+        raise NotImplementedError('we have to assign a proper reference number')
         TYPE = TYPES['CONSULT']
         response = self._request(
-            TYPE=17, NUMAPPEL=numappel, NUMTRANS=numtrans, MONTANT=50,
+            TYPE=TYPE, NUMAPPEL=numappel, NUMTRANS=numtrans, MONTANT=amount,
             REFERENCE='6666'
         )
-
-    def _request(self, **kwargs):
-        permanent_data['NUMQUESTION'] += 1
-        data = permanent_data.copy()
-        data.update(kwargs)
-        print data
-        data['DATEQ'] = datetime.datetime.now().strftime("%d%m%Y%H%M%S")
-        params = urllib.urlencode(data)
-        headers = {
-            "Content-type": "application/x-www-form-urlencoded",
-            "Accept": "text/plain"
-        }
-        with contextlib.closing(httplib.HTTPSConnection(PAYBOX_DIRECTPLUS_ENDPOINT.netloc, timeout=5)) as conn:
-            conn.request("POST", PAYBOX_DIRECTPLUS_ENDPOINT.path, params, headers)
-            response = conn.getresponse()
-            response = parse_qs(response.read())
-            print response
-            response_code = response['CODEREPONSE'][0]
-            if int(response_code):
-                raise PayboxException(response_code, response['COMMENTAIRE'][0].decode('ascii'))
-            return response
 
 class PayboxDirectPayment(abstract_payment.AbstractPayment):
 
@@ -186,13 +186,17 @@ class PayboxDirectPayment(abstract_payment.AbstractPayment):
         booking = self.booking
         amount = str(D(booking.total_amount*100).quantize(0))
         self.numappel, self.numtrans = self.paybox_manager.authorize(
-            credit_card.card_number, credit_card.expires, cvv, amount
+            card_number=credit_card.card_number, expiration_date=credit_card.expires, 
+            cvv=cvv, amount=amount, reference=booking.pk.hex
         )
 
     def pay(self):
         booking = self.booking
         amount = str(D(booking.total_amount*100).quantize(0))
-        self.paybox_manager.debit(amount, self.numappel, self.numtrans)
+        self.paybox_manager.debit(
+            amount=amount, numappel=self.numappel, numtrans=self.numtrans, 
+            reference=booking.pk.hex
+        )
         
     def execute_payment(self, *args, **kwargs):
         pass
@@ -215,21 +219,19 @@ class PayboxDirectPlusPayment(abstract_payment.AbstractPayment):
     def preapproval(self, credit_card, cvv):
         booking = self.booking
         amount = str(D(booking.total_amount*100).quantize(0))
-        try:
-            self.numappel, self.numtrans = self.paybox_manager.authorize_subscribed(
-                credit_card.holder.pk, credit_card.card_number, credit_card.expires, cvv, amount
-            )
-        except PayboxException:
-            booking.state = booking.STATE.REJECTED
-        else:
-            booking.state = booking.STATE.AUTHORIZED
-        finally:
-            booking.save()
+        self.numappel, self.numtrans = self.paybox_manager.authorize_subscribed(
+            member_id=credit_card.holder.pk, card_number=credit_card.card_number, 
+            expiration_date=credit_card.expires, cvv=cvv, amount=amount, 
+            reference=booking.pk.hex
+        )
         
     def pay(self):
         booking = self.booking
         amount = str(D(booking.total_amount*100).quantize(0))
-        self.paybox_manager.debit_subscribed(booking.borrower.pk, amount, self.numappel, self.numtrans)
+        self.paybox_manager.debit_subscribed(
+            member_id=booking.borrower.pk, amount=amount, numappel=self.numappel, 
+            numtrans=self.numtrans, reference=booking.pk.hex
+        )
         
     def execute_payment(self, *args, **kwargs):
         pass
