@@ -212,16 +212,6 @@
     {{block.super}}
     <script src="//maps.googleapis.com/maps/api/js?sensor=false&amp;libraries=places" type="text/javascript"></script>
     <script type="text/javascript" charset="utf-8">
-        geolocation_stuff();
-
-        $(document).ready(function() {
-            if (!$.cookie('geocoding')) 
-                navigator.geolocation.getCurrentPosition(
-                    SuccessBuilder(2, false, function() {$("#form_search_results").submit();}),
-                    geocoder_error_handler
-                );
-        });
-
 
         function initialize() {
             var myLatlng = new google.maps.LatLng('{{request.session.location.coordinates.0|stringformat:"s" }}', '{{request.session.location.coordinates.1|stringformat:"s" }}');
@@ -249,6 +239,15 @@
         }
 
         $(document).ready(function () {
+            geolocation_stuff();
+
+            if (!$.cookie('geocoding')) {
+                navigator.geolocation.getCurrentPosition(
+                    SuccessBuilder(2, false, function() {$("#form_search_results").submit();}),
+                    geocoder_error_handler
+                );
+            }
+
             initialize();
         });
     </script>
