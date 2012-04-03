@@ -166,13 +166,6 @@
             <p class="radius-input">Dans un rayon de <input id="id_r" type="text" name="r" value="{{request.session.location.radius|stringformat:"s" }}"/> Km <input type="button" name="a" value="m. à j." id="rayon_update"></p>
         </div><!-- where -->
         {% if product_list %}
-
-            {% if facets.fields.sites %}
-                {% for site in facets.fields.sites %}
-<dd><a href="{{ request.get_full_path }}&amp;selected_facets=site_exact:{{ site.0|urlencode }}">{{ site.0 }}</a> ({{ site.1 }})</dd>
-                    {% facet_url breadcrumbs "sites" site.0 %}
-                {% endfor %}
-            {% endif %}
         <div id ="facet-categories" class="info-block">
             <h2>{% trans "Catégories" %}</h2>
             {% if breadcrumbs.categorie %}
@@ -219,16 +212,6 @@
     {{block.super}}
     <script src="//maps.googleapis.com/maps/api/js?sensor=false&amp;libraries=places" type="text/javascript"></script>
     <script type="text/javascript" charset="utf-8">
-        geolocation_stuff();
-
-        $(document).ready(function() {
-            if (!$.cookie('geocoding')) 
-                navigator.geolocation.getCurrentPosition(
-                    SuccessBuilder(2, false, function() {$("#form_search_results").submit();}),
-                    geocoder_error_handler
-                );
-        });
-
 
         function initialize() {
             var myLatlng = new google.maps.LatLng('{{request.session.location.coordinates.0|stringformat:"s" }}', '{{request.session.location.coordinates.1|stringformat:"s" }}');
@@ -256,6 +239,15 @@
         }
 
         $(document).ready(function () {
+            geolocation_stuff();
+
+            if (!$.cookie('geocoding')) {
+                navigator.geolocation.getCurrentPosition(
+                    SuccessBuilder(2, false, function() {$("#form_search_results").submit();}),
+                    geocoder_error_handler
+                );
+            }
+
             initialize();
         });
     </script>
