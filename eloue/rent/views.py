@@ -182,13 +182,14 @@ def offer_reject(request, booking_id):
 @ownership_required(model=Booking, object_key='booking_id', ownership=['owner'])
 def booking_accept(request, booking_id):
     booking = get_object_or_404(Booking, pk=booking_id)
-    if booking.started_at > datetime.datetime.now():
+    if booking.started_at < datetime.now():
         booking.state = booking.STATE.OUTDATED
         booking.save()
     else:
         if not request.user.rib:
             response = redirect('patron_edit_rib')
             response['Location'] += '?' + urllib.urlencode({'next': booking.get_absolute_url()})
+            message.success(request, _(u"Avant l'acceptation de la demande, veuillez saisir votre RIB."))
             return response
         booking.accept()
         GoalRecord.record('rent_object_accepted', WebUser(request))
