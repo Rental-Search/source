@@ -73,6 +73,7 @@
         </div>{# container #}
     </div>{# topbar #}
     {% block content %}{% endblock %}
+    {% block footer %}
     <div class="container">
         <footer>
             <div class="f-col first">
@@ -129,6 +130,7 @@
             {% endif %}
         </footer>
     </div>{# container #}
+    {% endblock %}
     {% block tail %}
     	{% compressed_js 'application' %}
     {% endblock %}

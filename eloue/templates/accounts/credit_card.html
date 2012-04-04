@@ -7,7 +7,7 @@
 <div id="wizard-page" class="container-main">
 	<ul class="breadcrumb">
 		<li><a href="{% url home %}">{% trans "Accueil" %}</a></li>
-		<li>{% trans "Identification" %}</li>
+		<li>{% trans "Réservation" %}</li>
 	</ul>
 	<div class="content-main">
 		<h1>{% trans "Payment informations" %}</h1>
@@ -23,7 +23,8 @@
 	      Powered by Paybox™
 	    </form>
 	</div>
-	<div class="content-aside">
-	</div>
 </div>
+{% endblock %}
+
+{% block footer %}
 {% endblock %}

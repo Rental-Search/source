@@ -4,7 +4,7 @@
 {% block title %}{% trans "Confirmez votre réservation" %}{% endblock %}
 
 {% block content %}
-<div id="result-page" class="container-main">
+<div id="wizard-page" class="container-main">
   <ul class="breadcrumb">
     <li><a href="{% url home %}">{% trans "Accueil" %}</a></li>
     <li>{% trans "Réservation" %}
@@ -38,8 +38,8 @@
       </div>
     </form>
   </div>
-  <div class="content-aside">
-
-  </div>
 </div>{# container_main #}
+{% endblock %}
+
+{% block footer %}
 {% endblock %}
