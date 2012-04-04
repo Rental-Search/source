@@ -348,7 +348,7 @@ class BookingWizardTestWithFacebookAsNew(BookingWizardTestWithFacebook):
         mock_object.return_value = self.me
 
         returns = [PayboxException('016', ''), ('0001234', '0002345'),]
-        def returns_sideeffect(*args):
+        def returns_sideeffect(*args, **kwargs):
             result = returns.pop()
             if isinstance(result, PayboxException):
                 raise result

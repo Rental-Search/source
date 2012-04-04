@@ -177,11 +177,9 @@ class EmailAuthenticationForm(forms.Form):
                     pass
 
         else:
-            
             if email is None or email == u'':
                 raise forms.ValidationError('Empty email') # TODO: more meaningful error message
             exists = self.cleaned_data.get('exists')
-            
             if exists:
                 self.user_cache = authenticate(username=email, password=password)
                 if self.user_cache is None:
@@ -528,9 +526,6 @@ class CreditCardForm(forms.ModelForm):
         model = CreditCard
         exclude = ('card_number', 'holder', 'masked_number')
 
-    def clean_expires(self):
-        return self.cleaned_data['expires']
-
     def clean_card_number(self):
         def _luhn_valid(card_number):
             return sum(
@@ -590,7 +585,7 @@ class BookingCreditCardForm(CreditCardForm):
     save = forms.BooleanField(label=_(u'Stocker les cordonnees bancaires'), required=False, initial=False)
 
 class CvvForm(forms.ModelForm):
-    cvv = forms.CharField(label=_(u'Veuillez resaisir votre cryptogram visuel'), max_length=4, widget=forms.TextInput(attrs={'placeholder': 'E-loue ne stocke pas le cryptogram visuel, vous devriez resaisir apres chaque payment pour des raison de securite'}))
+    cvv = forms.CharField(label=_(u'Veuillez resaisir votre cryptogram visuel'), min_length=3, max_length=4, widget=forms.TextInput(attrs={'placeholder': 'E-loue ne stocke pas le cryptogram visuel, vous devriez resaisir apres chaque payment pour des raison de securite'}))
     
     def __init__(self, *args, **kwargs):
         if 'instance' not in kwargs:
