@@ -16,7 +16,7 @@
 		{% else %}
 		<form class="form-horizontal" method="post" action="">
 		{% endif %}
-			{{ form.errors }}
+			{{ form.non_field_errors }}
 			{% csrf_token %}
 			{% for fieldset in form.fieldsets %}
 			<fieldset class="{{ fieldset.classes }}">

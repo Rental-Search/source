@@ -269,7 +269,8 @@ class ProductForm(BetterModelForm):
 
 class CarProductForm(ProductForm):
     quantity = forms.IntegerField(widget=forms.HiddenInput(), initial=1)
-    
+    summary = forms.CharField(required=False, widget=forms.HiddenInput(), max_length=255)
+
     def __init__(self, *args, **kwargs):
         super(CarProductForm, self).__init__(*args, **kwargs)
         self.fields['category'] = forms.TypedChoiceField(
@@ -277,12 +278,16 @@ class CarProductForm(ProductForm):
             choices=generate_choices(('auto-et-moto', ))
         )
 
+    def clean(self):
+        self.cleaned_data['summary'] = '{brand} - {model}'.format(**self.cleaned_data)
+        return self.cleaned_data
+
     class Meta:
         model = CarProduct
         fieldsets = [
             ('category', {'fields': ['category'], 'legend': _(u'Type de véhicule')}),
             ('informations', {
-                'fields': ['summary', 'brand', 'model', 'picture_id', 'picture', 'description'], 
+                'fields': ['brand', 'summary', 'model', 'picture_id', 'picture', 'description'], 
                 'legend': _(u'Description du véhicule')
                 }),
             ('car_characteristics', {
@@ -413,6 +418,7 @@ class ProductEditForm(BetterModelForm):
         return payment_type
 
 class CarProductEditForm(ProductEditForm):
+    summary = forms.CharField(required=False, widget=forms.HiddenInput(), max_length=255)
 
     def __init__(self, *args, **kwargs):
         super(CarProductEditForm, self).__init__(*args, **kwargs)
@@ -420,6 +426,10 @@ class CarProductEditForm(ProductEditForm):
             label=_(u"Catégorie"), coerce=lambda pk: Category.tree.get(pk=pk), 
             choices=generate_choices(('auto-et-moto', ), None)
         )
+
+    def clean(self):
+        self.cleaned_data['summary'] = '{brand} - {model}'.format(**self.cleaned_data)
+        return self.cleaned_data
 
     class Meta:
         model = CarProduct
