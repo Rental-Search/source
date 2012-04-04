@@ -220,49 +220,17 @@ PIPELINE_JS_COMPRESSOR = 'pipeline.compressors.yui.YUICompressor'
 PIPELINE_COMPILERS = (
   'pipeline.compilers.less.LessCompiler',
 )
-PIPELINE_LESS_BINARY = getattr(local, 'PIPELINE_LESS_BINARY', '/home/benoitw/node_modules/less/bin/lessc')
+PIPELINE_LESS_BINARY = getattr(local, 'PIPELINE_LESS_BINARY', '/Users/benoit/node_modules/less/bin/lessc')
 PIPELINE_YUI_BINARY = getattr(local, 'COMPRESS_YUI_BINARY', '/usr/bin/yui-compressor')
 PIPELINE_ROOT = getattr(local, 'PIPELINE_ROOT', MEDIA_ROOT)
 PIPELINE_URL = getattr(local, 'PIPELINE_URL', MEDIA_URL)
 PIPELINE_CSS = {
-    'master2': {
+    'master': {
         'source_filenames': (
             'less/styles.less',
             'css/chosen.css'
         ),
-        'output_filename': 'css/master2.r?.css',
-        'extra_context': {
-            'media': 'screen',
-        },
-    },
-    'master': {
-        'source_filenames': (
-            'css/screen.css',
-            'css/custom.css',
-            #'css/plugins/ui/jquery.ui.core.css',
-            #'css/plugins/ui/jquery.ui.datepicker.css',
-            #'css/plugins/ui/jquery.ui.tabs.css',
-            #'css/plugins/ui/jquery.ui.theme.css',
-            'css/jquery-ui-1.8.17.custom.css',
-            'css/chosen.css'
-        ),
         'output_filename': 'css/master.r?.css',
-        'extra_context': {
-            'media': 'screen',
-        },
-    },
-    'twenty': {
-        'source_filenames': (
-            'css/screen.css',
-            'css/custom.css',
-            'css/20m.css',
-            'css/plugins/ui/jquery.ui.core.css',
-            'css/plugins/ui/jquery.ui.datepicker.css',
-            'css/plugins/ui/jquery.ui.tabs.css',
-            'css/plugins/ui/jquery.ui.theme.css',
-            'css/chosen.css'
-        ),
-        'output_filename': 'css/twenty.r?.css',
         'extra_context': {
             'media': 'screen',
         },
@@ -276,69 +244,6 @@ PIPELINE_CSS = {
             'media': 'screen',
         },
     },
-    'nc': {
-        'source_filenames': (
-            'css/screen.css',
-            'css/custom.css',
-            'css/nc.css',
-            'css/plugins/ui/jquery.ui.core.css',
-            'css/plugins/ui/jquery.ui.datepicker.css',
-            'css/plugins/ui/jquery.ui.tabs.css',
-            'css/plugins/ui/jquery.ui.theme.css',
-            'css/chosen.css'
-        ),
-        'output_filename': 'css/nc.r?.css',
-        'extra_context': {
-            'media': 'screen',
-        }
-    },
-    'uk': {
-        'source_filenames': (
-            'css/screen.css',
-            'css/custom.css',
-            'css/uk.css',
-            'css/plugins/ui/jquery.ui.core.css',
-            'css/plugins/ui/jquery.ui.datepicker.css',
-            'css/plugins/ui/jquery.ui.tabs.css',
-            'css/plugins/ui/jquery.ui.theme.css',
-            'css/chosen.css'
-        ),
-        'output_filename': 'css/uk.r?.css',
-        'extra_context': {
-            'media': 'screen',
-        }
-    },
-    'dcns': {
-        'source_filenames': (
-            'css/dcns/screen.css',
-            'css/dcns/custom.css',
-            'css/plugins/ui/jquery.ui.core.css',
-            'css/plugins/ui/jquery.ui.datepicker.css',
-            'css/plugins/ui/jquery.ui.tabs.css',
-            'css/plugins/ui/jquery.ui.theme.css',
-            'css/chosen.css'
-        ),
-        'output_filename': 'css/dcns.r?.css',
-        'extra_context': {
-            'media': 'screen',
-        }
-    },
-    'shiseido': {
-        'source_filenames': (
-            'css/screen.css',
-            'css/custom.css',
-            'css/plugins/ui/jquery.ui.core.css',
-            'css/plugins/ui/jquery.ui.datepicker.css',
-            'css/plugins/ui/jquery.ui.tabs.css',
-            'css/plugins/ui/jquery.ui.theme.css',
-            'css/chosen.css',
-            'css/shiseido/screen.css'
-        ),
-        'output_filename': 'css/shiseido.r?.css',
-        'extra_context': {
-            'media': 'screen',
-        },
-    },
     'ie': {
         'source_filenames': (
             'css/ie/ie.css',
@@ -348,82 +253,24 @@ PIPELINE_CSS = {
             'media': 'screen',
         }
     },
-    'ie6': {
-        'source_filenames': (
-            'css/ie/ie6.css',
-        ),
-        'output_filename': 'css/ie6.r?.css',
-        'extra_context': {
-            'media': 'screen',
-        }
-    },
-    'ie7': {
-        'source_filenames': (
-            'css/ie/ie7.css',
-        ),
-        'output_filename': 'css/ie7.r?.css',
-        'extra_context': {
-            'media': 'screen',
-        }
-    },
-    'sep': {
-        'source_filenames': (
-            'css/sep/screen.css',
-            'css/sep/custom.css'
-        ),
-        'output_filename': 'css/sep/master.r?.css',
-        'extra_context': {
-            'media': 'screen',
-        }
-    }
 }
 
 PIPELINE_JS = {
-    'application2': {
+    'application': {
         'source_filenames': (
             'js/jquery-1.7.1.min.js',
             'js/jquery-ui-1.8.17.custom.min.js',
             'js/modernizr.js',
             'js/mustache.js',
-            'js/jquery.cycle.all.latest.js',
-            'js/application2.js',
             'js/chosen.jquery.min.js',
+            'js/jquery.cookie.js',
+            'js/application2.js',
             ),
         'output_filename': 'js/application2.r?.js',
         'extra_context': {
             'defer': False,
         },
     },
-    'application': {
-        'source_filenames': (
-#            'js/jquery.js',
-#            'js/ui/jquery.ui.core.js',
-#            'js/ui/jquery.ui.widget.js',
-#            'js/ui/jquery.ui.datepicker.js',
-#            'js/ui/jquery.ui.datepicker-fr.js',
-#            'js/ui/jquery.ui.tabs.js',
-            'js/jquery-1.7.1.min.js',
-            'js/ui/jquery-ui-1.8.17.custom.min.js',
-            'js/modernizr.js',
-            'js/mustache.js',
-            'js/jquery.cycle.all.latest.js',
-            'js/jquery.autocomplete.js',
-            'js/chosen.jquery.min.js',
-            'js/application.js'),
-        'output_filename': 'js/application.r?.js',
-        'extra_context': {
-            'defer': False,
-        },
-    },
-    'sep': {
-        'source_filenames': (
-            'js/jquery.js',
-            'js/sep/application.js'),
-        'output_filename': 'js/sep/application.r?.js',
-        'extra_context': {
-            'defer': False,
-        },
-    }
 }
 
 
