@@ -7,10 +7,9 @@ from decimal import Decimal as D
 import abstract_payment
 import datetime
 import random
-LENGTH=5
-from urlparse import urlparse, parse_qs
-from django.conf import settings
 
+import urlparse
+from django.conf import settings
 
 TYPES = {
     'AUTHORIZE': 1,
@@ -49,7 +48,7 @@ class PayboxException(abstract_payment.PaymentException):
 class PayboxManager(object):
     
     def __init__(self, ):
-        self.PAYBOX_ENDPOINT = urlparse(settings.PAYBOX_ENDPOINT)
+        self.PAYBOX_ENDPOINT = urlparse.urlparse(settings.PAYBOX_ENDPOINT)
         self.permanent_data = {
             'VERSION': settings.PAYBOX_VERSION,
             'SITE': settings.PAYBOX_SITE,
@@ -69,13 +68,13 @@ class PayboxManager(object):
             "Content-type": "application/x-www-form-urlencoded",
             "Accept": "text/plain"
         }
-        with contextlib.closing(httplib.HTTPSConnection(self.PAYBOX_ENDPOINT.netloc, timeout=5)) as conn:
+        with contextlib.closing(httplib.HTTPSConnection(self.PAYBOX_ENDPOINT.netloc, timeout=10)) as conn:
             conn.request("POST", self.PAYBOX_ENDPOINT.path, params, headers)
             response = conn.getresponse()
-            response = parse_qs(response.read())
+            response = urlparse.parse_qs(response.read())
             response_code = response['CODEREPONSE'][0]
             if int(response_code):
-                raise PayboxException(response_code, response['COMMENTAIRE'][0].decode('ascii'))
+                raise PayboxException(response_code, response['COMMENTAIRE'][0].decode('latin1').encode('utf-8'))
             return response
 
     def subscribe(self, member_id, card_number, expiration_date, cvv):
@@ -156,7 +155,7 @@ class PayboxManager(object):
         response = self._request(
             TYPE=TYPE, MONTANT=amount, REFABONNE=member_id, PORTEUR=card_number,
             DATEVAL=expiration_date, CVV=cvv,
-            REFERENCE=random.randint(10**(LENGTH-1),10**LENGTH-1)
+            REFERENCE='6666'
         )
 
     def verification(self, numappel, numtrans):
