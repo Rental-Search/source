@@ -1,15 +1,12 @@
 # -*- coding: utf-8 -*-
-import httplib, urllib
-import contextlib
-import uuid
+import httplib, urllib, urlparse, ssl
+import datetime, random, contextlib, uuid
 from decimal import Decimal as D
 
-import abstract_payment
-import datetime
-import random
-
-import urlparse
+from backports.ssl_match_hostname import match_hostname
 from django.conf import settings
+
+import abstract_payment
 
 TYPES = {
     'AUTHORIZE': 1,
@@ -45,6 +42,13 @@ class PayboxException(abstract_payment.PaymentException):
         return u"PayboxError with code {code} and message \"{message}\"".format(**self.__dict__)
 
 
+class HTTPSConnection(httplib.HTTPConnection):
+    default_port = httplib.HTTPS_PORT
+    def connect(self):
+        httplib.HTTPConnection.connect(self)
+        self.sock = ssl.wrap_socket(self.sock, cert_reqs=ssl.CERT_REQUIRED, ca_certs='eloue/payments/cacerts.txt')
+        match_hostname(self.sock.getpeercert(), self.host)
+
 class PayboxManager(object):
     
     def __init__(self, ):
@@ -68,7 +72,7 @@ class PayboxManager(object):
             "Content-type": "application/x-www-form-urlencoded",
             "Accept": "text/plain"
         }
-        with contextlib.closing(httplib.HTTPSConnection(self.PAYBOX_ENDPOINT.netloc, timeout=10)) as conn:
+        with contextlib.closing(HTTPSConnection(self.PAYBOX_ENDPOINT.netloc, timeout=10)) as conn:
             conn.request("POST", self.PAYBOX_ENDPOINT.path, params, headers)
             response = conn.getresponse()
             response = urlparse.parse_qs(response.read())
