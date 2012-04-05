@@ -36,7 +36,7 @@
         </a><!-- pl-img -->
         <div class="pl-content">
         	<h3>
-        	<a href="{{ product.get_absolute_url }}">{{product.summary|capitalize|truncate:200 }}</a>
+        	<a href="{% url owner_product_edit product.slug product.pk %}">{{product.summary|capitalize|truncate:200 }}</a>
         	</h3>
         	<address>
         		{{ product.address.city|capfirst }}
