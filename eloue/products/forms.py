@@ -279,7 +279,8 @@ class CarProductForm(ProductForm):
         )
 
     def clean(self):
-        self.cleaned_data['summary'] = '{brand} - {model}'.format(**self.cleaned_data)
+        self.cleaned_data['summary'] = '{brand} - {model}'.format(
+            brand=self.cleaned_data.get('brand',''), model=self.cleaned_data.get('model', ''))
         return self.cleaned_data
 
     class Meta:
