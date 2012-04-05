@@ -123,6 +123,9 @@
           </tr>
         </table>
         <h2>{% trans "Paiement" %}</h2>
+            {{form}}
+            {{ previous_fields|safe }}
+            Powered by Paybox™
         
       <div class="form-actions">
           <input type="hidden" name="{{ step_field }}" value="{{ step0 }}" />

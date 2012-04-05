@@ -117,7 +117,7 @@ def booking_create(request, *args, **kwargs):
     product = get_object_or_404(Product.on_site, pk=kwargs['product_id'])
     if product.slug != kwargs['slug']:
         return redirect(product, permanent=True)
-    wizard = BookingWizard([BookingForm, EmailAuthenticationForm, BookingConfirmationForm])
+    wizard = BookingWizard([BookingForm, EmailAuthenticationForm,])
     return wizard(request, *args, **kwargs)
 
 

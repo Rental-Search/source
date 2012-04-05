@@ -134,47 +134,15 @@ class BookingWizardTestWithFacebookAsAnonymous(BookingWizardTestWithFacebook):
             '2-addresses__zipcode': '75003',
             '2-addresses__city': 'Paris',
             '2-addresses__country': 'FR',
+            '3-cvv': '123',
+            '3-expires_0': '12',
+            '3-expires_1': '20',
+            '3-card_number': '1111222233334444',
+            '3-save': True,
             'hash_0': '6941fd7b20d720833717a1f92e8027af',
             'hash_1': '6941fd7b20d720833717a1f92e8027af',
             'hash_2': '6941fd7b20d720833717a1f92e8027af',
             'wizard_step': 3
-        })
-        self.assertTrue(mock_object.called)
-        self.assertTemplateUsed(response, 'accounts/credit_card.html')
-
-    @patch.object(GraphAPI, 'get_object')
-    @patch.object(MultiPartFormWizard, 'security_hash')
-    def test_fifth_step_as_anonymous(self, mock_hash, mock_object):
-        mock_hash.return_value = '6941fd7b20d720833717a1f92e8027af'
-        mock_object.return_value = self.me
-        
-        response = self.client.post(reverse('booking_create', args=['location/bebe/mobilier-bebe/lits/', self.product.slug, self.product.id]), {
-            '0-started_at_0': '18/10/2010',
-            '0-started_at_1': '08:00:00',
-            '0-ended_at_0': '19/10/2010',
-            '0-ended_at_1': '08:00:00',
-            '0-quantity': 1,
-            '1-email': '',
-            '1-exists': 1,
-            '1-password': '',
-            '1-facebook_access_token': self.access_token,
-            '1-facebook_expires': 0,
-            '1-facebook_uid': self.uid,
-            '2-phones__phone': '0123456789',
-            '2-addresses__address1': '11, rue debelleyme',
-            '2-addresses__zipcode': '75003',
-            '2-addresses__city': 'Paris',
-            '2-addresses__country': 'FR',
-            '4-cvv': '123',
-            '4-expires_0': '12',
-            '4-expires_1': '20',
-            '4-card_number': '1111222233334444',
-            '4-save': True,
-            'hash_0': '6941fd7b20d720833717a1f92e8027af',
-            'hash_1': '6941fd7b20d720833717a1f92e8027af',
-            'hash_2': '6941fd7b20d720833717a1f92e8027af',
-            'hash_3': '6941fd7b20d720833717a1f92e8027af',
-            'wizard_step': 4
         })
         self.assertRedirects(response, reverse('booking_success', kwargs={'booking_id': Booking.objects.get().pk.hex}))
         self.assertEquals(CreditCard.objects.count(), 1)
@@ -267,41 +235,6 @@ class BookingWizardTestWithFacebookAsNew(BookingWizardTestWithFacebook):
     
     @patch.object(GraphAPI, 'get_object')
     @patch.object(MultiPartFormWizard, 'security_hash')
-    def test_fourth_step_as_new(self, mock_hash, mock_object):
-        mock_hash.return_value = '6941fd7b20d720833717a1f92e8027af'
-        mock_object.return_value = self.me
-        
-        response = self.client.post(reverse('booking_create', args=['location/bebe/mobilier-bebe/lits/', self.product.slug, self.product.id]), {
-            '0-started_at_0': '18/10/2010',
-            '0-started_at_1': '08:00:00',
-            '0-ended_at_0': '19/10/2010',
-            '0-ended_at_1': '08:00:00',
-            '0-quantity': 1,
-            '1-email': '',
-            '1-exists': 1,
-            '1-password': '',
-            '1-facebook_access_token': self.access_token,
-            '1-facebook_expires': 0,
-            '1-facebook_uid': self.uid,
-            '2-username': 'kosii2',
-            '2-first_name': 'first',
-            '2-last_name': 'last',
-            '2-phones__phone': '0123456789',
-            '2-addresses__address1': '11, rue debelleyme',
-            '2-addresses__zipcode': '75003',
-            '2-addresses__city': 'Paris',
-            '2-addresses__country': 'FR',
-            'hash_0': '6941fd7b20d720833717a1f92e8027af',
-            'hash_1': '6941fd7b20d720833717a1f92e8027af',
-            'hash_2': '6941fd7b20d720833717a1f92e8027af',
-            'wizard_step': 3
-        })
-        self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'accounts/credit_card.html')
-        self.assertTrue(mock_object.called)
-    
-    @patch.object(GraphAPI, 'get_object')
-    @patch.object(MultiPartFormWizard, 'security_hash')
     def test_fifth_step_as_new(self, mock_hash, mock_object):
         mock_hash.return_value = '6941fd7b20d720833717a1f92e8027af'
         mock_object.return_value = self.me
@@ -326,16 +259,15 @@ class BookingWizardTestWithFacebookAsNew(BookingWizardTestWithFacebook):
             '2-addresses__zipcode': '75003',
             '2-addresses__city': 'Paris',
             '2-addresses__country': 'FR',
-            '4-cvv': '123',
-            '4-expires_0': '12',
-            '4-expires_1': '20',
-            '4-card_number': '1111222233334444',
-            '4-save': False,
+            '3-cvv': '123',
+            '3-expires_0': '12',
+            '3-expires_1': '20',
+            '3-card_number': '1111222233334444',
+            '3-save': False,
             'hash_0': '6941fd7b20d720833717a1f92e8027af',
             'hash_1': '6941fd7b20d720833717a1f92e8027af',
             'hash_2': '6941fd7b20d720833717a1f92e8027af',
-            'hash_3': '6941fd7b20d720833717a1f92e8027af',
-            'wizard_step': 4
+            'wizard_step': 3
         })
         self.assertTrue(mock_object.called)
         self.assertRedirects(response, reverse('booking_success', kwargs={'booking_id': Booking.objects.get().pk.hex}))
@@ -375,16 +307,15 @@ class BookingWizardTestWithFacebookAsNew(BookingWizardTestWithFacebook):
             '2-addresses__zipcode': '75003',
             '2-addresses__city': 'Paris',
             '2-addresses__country': 'FR',
-            '4-cvv': '123',
-            '4-expires_0': '12',
-            '4-expires_1': '20',
-            '4-card_number': '1111222233334444',
-            '4-save': False,
+            '3-cvv': '123',
+            '3-expires_0': '12',
+            '3-expires_1': '20',
+            '3-card_number': '1111222233334444',
+            '3-save': False,
             'hash_0': '6941fd7b20d720833717a1f92e8027af',
             'hash_1': '6941fd7b20d720833717a1f92e8027af',
             'hash_2': '6941fd7b20d720833717a1f92e8027af',
-            'hash_3': '6941fd7b20d720833717a1f92e8027af',
-            'wizard_step': 4
+            'wizard_step': 3
         })
         self.assertTrue(mock_object.called)
         self.assertRedirects(response, reverse('booking_failure', kwargs={'booking_id': Booking.objects.get().pk.hex}))
@@ -470,39 +401,6 @@ class BookingWizardTestWithFacebookAssociate(BookingWizardTestWithFacebook):
     
     @patch.object(GraphAPI, 'get_object')
     @patch.object(MultiPartFormWizard, 'security_hash')
-    def test_fourth_step_associate(self, mock_hash, mock_object):
-        mock_hash.return_value = '6941fd7b20d720833717a1f92e8027af'
-        mock_object.return_value = self.me
-        
-        self.assertEqual(FacebookSession.objects.get(uid=self.uid).user, None)
-        response = self.client.post(reverse('booking_create', args=['location/bebe/mobilier-bebe/lits/', self.product.slug, self.product.id]), {
-            '0-started_at_0': '18/10/2010',
-            '0-started_at_1': '08:00:00',
-            '0-ended_at_0': '19/10/2010',
-            '0-ended_at_1': '08:00:00',
-            '0-quantity': 1,
-            '1-email': '',
-            '1-exists': 1,
-            '1-password': '',
-            '1-facebook_access_token': self.access_token,
-            '1-facebook_expires': 0,
-            '1-facebook_uid': self.uid,
-            '2-phones__phone': '0123456789',
-            '2-addresses__address1': '11, rue debelleyme',
-            '2-addresses__zipcode': '75003',
-            '2-addresses__city': 'Paris',
-            '2-addresses__country': 'FR',
-            'hash_0': '6941fd7b20d720833717a1f92e8027af',
-            'hash_1': '6941fd7b20d720833717a1f92e8027af',
-            'hash_2': '6941fd7b20d720833717a1f92e8027af',
-            'wizard_step': 3
-        })
-        self.assertTemplateUsed(response, 'accounts/credit_card.html')
-        self.assertEqual(FacebookSession.objects.get(uid=self.uid).user, Patron.objects.get(username='kosii1'))
-        self.assertTrue(mock_object.called)
-    
-    @patch.object(GraphAPI, 'get_object')
-    @patch.object(MultiPartFormWizard, 'security_hash')
     def test_fifth_step_associate(self, mock_hash, mock_object):
         mock_hash.return_value = '6941fd7b20d720833717a1f92e8027af'
         mock_object.return_value = self.me
@@ -525,16 +423,15 @@ class BookingWizardTestWithFacebookAssociate(BookingWizardTestWithFacebook):
             '2-addresses__zipcode': '75003',
             '2-addresses__city': 'Paris',
             '2-addresses__country': 'FR',
-            '4-cvv': '123',
-            '4-expires_0': '12',
-            '4-expires_1': '20',
-            '4-card_number': '1111222233334444',
-            '4-save': False,
+            '3-cvv': '123',
+            '3-expires_0': '12',
+            '3-expires_1': '20',
+            '3-card_number': '1111222233334444',
+            '3-save': False,
             'hash_0': '6941fd7b20d720833717a1f92e8027af',
             'hash_1': '6941fd7b20d720833717a1f92e8027af',
             'hash_2': '6941fd7b20d720833717a1f92e8027af',
-            'hash_3': '6941fd7b20d720833717a1f92e8027af',
-            'wizard_step': 4
+            'wizard_step': 3
         })
         self.assertRedirects(response, reverse('booking_success', kwargs={'booking_id': Booking.objects.get().pk.hex}))
         self.assertEqual(FacebookSession.objects.get(uid=self.uid).user, Patron.objects.get(username='kosii1'))
@@ -626,30 +523,6 @@ class BookingWizardTest(TestCase):
         self.assertTemplateUsed(response, 'rent/booking_confirm.html')
     
     @patch.object(MultiPartFormWizard, 'security_hash')
-    def test_fourth_step_as_anonymous(self, mock_hash):
-        mock_hash.return_value = '6941fd7b20d720833717a1f92e8027af'
-        response = self.client.post(reverse('booking_create', args=['location/bebe/mobilier-bebe/lits/', self.product.slug, self.product.id]), {
-            '0-started_at_0': '18/10/2010',
-            '0-started_at_1': '08:00:00',
-            '0-ended_at_0': '19/10/2010',
-            '0-ended_at_1': '08:00:00',
-            '0-quantity': 1,
-            '1-email': 'timothee.peignier@e-loue.com',
-            '1-exists': 1,
-            '1-password': 'timothee',
-            '2-phones__phone': '0123456789',
-            '2-addresses__address1': '11, rue debelleyme',
-            '2-addresses__zipcode': '75003',
-            '2-addresses__city': 'Paris',
-            '2-addresses__country': 'FR',
-            'hash_0': '6941fd7b20d720833717a1f92e8027af',
-            'hash_1': '6941fd7b20d720833717a1f92e8027af',
-            'hash_2': '6941fd7b20d720833717a1f92e8027af',
-            'wizard_step': 3
-        })
-        self.assertTemplateUsed(response, 'accounts/credit_card.html')
-    
-    @patch.object(MultiPartFormWizard, 'security_hash')
     def test_fifth_step_as_anonymous(self, mock_hash):
         mock_hash.return_value = '6941fd7b20d720833717a1f92e8027af'
         response = self.client.post(reverse('booking_create', args=['location/bebe/mobilier-bebe/lits/', self.product.slug, self.product.id]), {
@@ -666,16 +539,15 @@ class BookingWizardTest(TestCase):
             '2-addresses__zipcode': '75003',
             '2-addresses__city': 'Paris',
             '2-addresses__country': 'FR',
-            '4-cvv': '123',
-            '4-expires_0': '12',
-            '4-expires_1': '20',
-            '4-card_number': '1111222233334444',
-            '4-save': False,
+            '3-cvv': '123',
+            '3-expires_0': '12',
+            '3-expires_1': '20',
+            '3-card_number': '1111222233334444',
+            '3-save': False,
             'hash_0': '6941fd7b20d720833717a1f92e8027af',
             'hash_1': '6941fd7b20d720833717a1f92e8027af',
             'hash_2': '6941fd7b20d720833717a1f92e8027af',
-            'hash_3': '6941fd7b20d720833717a1f92e8027af',
-            'wizard_step': 4
+            'wizard_step': 3
         })
         booking = Booking.objects.get()
         self.assertRedirects(response, reverse('booking_success', kwargs={'booking_id': booking.pk.hex}))

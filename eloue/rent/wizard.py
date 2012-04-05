@@ -173,10 +173,8 @@ class BookingWizard(MultiPartFormWizard):
             return 'accounts/auth_login.html'
         elif issubclass(self.form_list[step], BookingForm):
             return 'products/product_detail.html'
-        elif issubclass(self.form_list[step], BookingConfirmationForm):
-            return 'rent/booking_confirm.html'
         elif issubclass(self.form_list[step], (BookingCreditCardForm, CvvForm)):
-            return 'accounts/credit_card.html'
+            return 'rent/booking_confirm.html'
         else:
             return 'accounts/auth_missing.html'
     
