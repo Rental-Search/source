@@ -222,7 +222,7 @@ class ProductForm(BetterModelForm):
         super(ProductForm, self).__init__(*args, **kwargs)
         self.fields['category'] = forms.TypedChoiceField(
             label=_(u"Catégorie"), coerce=lambda pk: Category.tree.get(pk=pk), 
-            choices=generate_choices((cat.slug for cat in Category.tree.root_nodes()))
+            choices=generate_choices((cat.slug for cat in Category.tree.root_nodes() if cat.slug not in ['auto-et-moto', 'hebergement', 'motors']))
         )
 
     def clean_quantity(self):
@@ -275,7 +275,7 @@ class CarProductForm(ProductForm):
         super(CarProductForm, self).__init__(*args, **kwargs)
         self.fields['category'] = forms.TypedChoiceField(
             label=_(u"Catégorie"), coerce=lambda pk: Category.tree.get(pk=pk), 
-            choices=generate_choices(('auto-et-moto', ))
+            choices=generate_choices(('auto-et-moto', 'motors'))
         )
 
     def clean(self):
@@ -376,7 +376,7 @@ class ProductEditForm(BetterModelForm):
         self.fields['category'] = forms.TypedChoiceField(
             label=_(u"Catégorie"), coerce=lambda pk: Category.tree.get(pk=pk), 
             choices=generate_choices(
-                (cat.slug for cat in Category.tree.root_nodes()), None
+                (cat.slug for cat in Category.tree.root_nodes() if cat.slug not in ['auto-et-moto', 'hebergement', 'motors']), None
             )
         )
     class Meta:
@@ -424,7 +424,7 @@ class CarProductEditForm(ProductEditForm):
         super(CarProductEditForm, self).__init__(*args, **kwargs)
         self.fields['category'] = forms.TypedChoiceField(
             label=_(u"Catégorie"), coerce=lambda pk: Category.tree.get(pk=pk), 
-            choices=generate_choices(('auto-et-moto', ), None)
+            choices=generate_choices(('auto-et-moto', 'motors'), None)
         )
 
     def clean(self):
