@@ -10,27 +10,120 @@
     <li>{% trans "Réservation" %}
   </ul>
   <div class="content-main">
-    <h2>{% trans "La réservation" %}</h2>
+    <h2>{% trans "Récapitulatif de votre réservation" %}</h2>
     <form class="form" action="" method="POST">
     {% csrf_token %}
       <table class="table table-bordered booking-resume">
       <tbody>
           <tr>
-              <th class="b-state">{% trans "Demande" %}</th>
-              <td><a href="{{product.get_absolute_url}}" class="b-title">{{product.summary|capfirst}}</a></td>
+              <th style="vertical-align: middle; text-align">
+                {% if product.carproduct %}
+                  {% trans "Véhicule" %}
+                {% else %}
+                  {% if product.realestate.product %}
+                    {% trans "Logement" %}
+                  {% else %}
+                    {% trans "Produit" %}
+                  {% endif %}
+                {% endif %}
+              </th>
+              <td>
+                {% with product.pictures.all|first as picture %}
+                {% if picture %}
+                    <img src="{{ picture.thumbnail.url }}" alt="{{ product.summary }}" style="float: left; margin-right: 10px;">
+                {% endif %}
+                {% endwith %}
+                <h3>{{ product.summary|capfirst }}<h3> 
+                <span style="font-size: 13px">{{ product.address.city|capfirst }} - {{ product.address.zipcode }}</span>
+              </td>
           </tr>
           <tr>
-              <th>{% trans "Début" %}</th>
-              <td class="align-center">{{preview.started_at|date:"l d F Y H:i"|capfirst}}</td>
+            <th>Kilomètre inclus</th>
+            <td>100 Km</td>
+          </tr>
+          <tr>
+            <th>Prix du Km supplémentaire</th>
+            <td>0,10 &euro;</tD
+          </tr>
+          <tr>
+            <th>{% trans "Propriétaire" %}</th>
+            <td>{{ product.owner.username }}</td>
+          </tr>
+          <tr>
+            <td colspan="2" style="font-size: 12px;">L'intégralité des informations sur le propriétaire vous seront communiquées après l'acceptation définitive de la réservation par celui-ci.</td>
+          </td>
+          <tr>
+              <th>{% trans "Réservation" %}</th>
+              <td><b>Du</b> {{preview.started_at|date:"l d F Y H:i"}} <b>au</b> {{preview.ended_at|date:"l d F Y H:i"}}</td>
           </tr> 
-          <th>{% trans "Fin" %}</th>
-              <td class="align-center">{{preview.ended_at|date:"l d F Y H:i"|capfirst}}</td>
-          </tr>
           <tr>
-              <th>{% trans "Montant" %}</th>
-              <td class="align-center"><b>{{preview.total_amount}} &euro;</b></td>
+              <th>{% trans "Montant de la réservation" %}</th>
+              <td class="align-center">{{preview.total_amount}} &euro; <span style="font-size: 12px">(dont 16 &euro; pour les kilomètres inclus)</span></td>
+          </tr>
       </tbody>
       </table>
+        <h2>{% trans "Informations sur le conducteur" %}</h2>
+        <table class="table table-bordered booking-resume">
+          <tr>
+            <th>{% trans "Nom et Prénom" %}</th>
+            <td>{{ preview.borrower.first_name }} {{ preview.borrower.last_name }}</td>
+          </tr>
+          <tr>
+            <th>{% trans "Téléphone" %}</th>
+            <td>
+              {% with preview.borrower.phones.all|first as phone %}
+                {{ phone }}
+              {% endwith %}
+            </td>
+          </tr>
+          <tr>
+            <th>{% trans "Adresse" %}</th>
+            <td>
+              {{ preview.borrower.default_address.address1 }}<br />
+              {{ preview.borrower.default_address.zipcode }} {{ preview.borrower.default_address.city|capfirst }}
+            </td>
+          </tr>
+          <tr>
+            <th>{% trans "Date et lieu de naissance" %}</th>
+            <td>Le 25/05/1985 à Neuilly-sur-Seine</td>
+          </tr>
+          <tr>
+            <th>{% trans "Permis de conduire" %}</th>
+            <td>{% trans "N°" %} 030392300405 {% trans "délivré le" %} 22/07/203</td>
+          </tr>
+        </table>
+        <h2>{% trans "Assurance" %}</h2>
+        <table class="table table-bordered booking-resume">
+          <tr>
+            <th>
+              {% trans "Conditions" %}
+            </tf>
+            <td>
+              <ul>
+                <li>
+                  Le conducteur doit être titulaire d'un permis de conduire obtenu depuis plus de 2 ans valable en France
+                </li>
+                <li>
+                  Le conducteur doit payer la location sur le site avec une carte bancaire à son nom qu'il présentera au propriétaire au début de la location, ainsi que son permis de conduire.
+                </li>
+                <li>
+                  Il est possible d'avoir plusieurs conducteurs. Dans ce cas, chaque conducteur devra être mentionné sur le contrat de location et répondre aux conditions d'age et de permis de conduire.
+                </li>
+              </ul>
+            </td>
+          </tr>
+          <tr>
+            <th>
+              {% trans "Dépôt de garantie" %}
+            </th>
+            <td>
+              2000 &euro;<br>
+              (Uniquement débité en cas de dommage constaté et avec votre accord)
+            </td>
+          </tr>
+        </table>
+        <h2>{% trans "Paiement" %}</h2>
+        
       <div class="form-actions">
           <input type="hidden" name="{{ step_field }}" value="{{ step0 }}" />
           {{ previous_fields|safe }}
