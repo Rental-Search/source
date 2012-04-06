@@ -266,10 +266,11 @@ class ProductForm(BetterModelForm):
                 'classes': ['prices-grid', 'hidden-fieldset']})
         ]
 
-
+from eloue.products.fields import FRLicensePlateField
 class CarProductForm(ProductForm):
     quantity = forms.IntegerField(widget=forms.HiddenInput(), initial=1)
     summary = forms.CharField(required=False, widget=forms.HiddenInput(), max_length=255)
+    licence_plate = FRLicensePlateField(required=True)
 
     def __init__(self, *args, **kwargs):
         super(CarProductForm, self).__init__(*args, **kwargs)
@@ -371,7 +372,8 @@ class RealEstateForm(ProductForm):
 
 class ProductEditForm(BetterModelForm):
     picture = forms.ImageField(label=_(u"Photo"), required=False, widget=forms.FileInput(attrs={'class': 'inm'}))
-
+    licence_plate = FRLicensePlateField(required=True)
+    
     def __init__(self, *args, **kwargs):
         super(ProductEditForm, self).__init__(*args, **kwargs)
         self.fields['category'] = forms.TypedChoiceField(

@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
+import re
 import datetime
 from django.db import models
 from django.core import exceptions
 import django.forms as forms
-
+from django.utils.translation import ugettext as _
 
 class SimpleDate(int):
     def __new__(cls, value):
@@ -121,4 +122,30 @@ class FacetField(forms.CharField):
     def __init__(self, pretty_name=None, *args, **kwargs):
         self.pretty_name = pretty_name
         super(FacetField, self).__init__(*args, **kwargs)
-    
+
+
+old_plate_re = re.compile(r'^(\d{1,4})\W*([a-zA-Z]{1,3})\W*(\d{2}|2A|2B)$')
+new_plate_re = re.compile(r'^([a-zA-Z]{2})\W*(\d{3})\W*([a-zA-Z]{2})$')
+
+class FRLicensePlateField(forms.Field):
+    default_error_messages = {
+        'invalid': _(u'Enter a valid vehicle license plate number'),
+    }
+
+    def clean(self, value):
+        value = super(FRLicensePlateField, self).clean(value)
+        value = value.strip().upper()
+        
+        matches = new_plate_re.match(value)
+        if matches:
+            if 'SS' in matches.groups() or 'W' == matches.groups(1):
+                raise forms.ValidationError(self.error_messages['invalid'])
+            return "{0}-{1}-{2}".format(*matches.groups())
+        else:
+            matches = old_plate_re.match(value)
+            if matches:
+                return "{0} {1} {2}".format(*matches.groups())
+            else:
+                raise forms.ValidationError(self.error_messages['invalid'])
+
+
