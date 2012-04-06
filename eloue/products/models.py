@@ -123,6 +123,7 @@ FUEL = Enum ([
     (2, '2', _(u'Diesel')),
     (3, '3', _(u'GPL')),
     (4, '4', _(u'Electrique')),
+    (5, '5', _(u'Hybride')),
 ])
 
 TRANSMISSION = Enum ([
@@ -328,7 +329,7 @@ class CarProduct(Product):
     fuel = models.IntegerField(_(u'énergie'), choices=FUEL, null=True, blank=True, default=1)
     transmission = models.IntegerField(_(u'boite de vitesse'), choices=TRANSMISSION, null=True, blank=True, default=1)
     mileage = models.IntegerField(_(u'kilométrage'), choices=MILEAGE, null=True, blank=True, default=2)
-    consumption = models.DecimalField(_(u'consommation'), decimal_places=2, max_digits=5, null=True, blank=True, choices=CONSUMPTION, default=4)
+    consumption = models.PositiveIntegerField(_(u'consommation'), null=True, blank=True, choices=CONSUMPTION, default=4)
 
     # options & accessoires
     air_conditioning = models.BooleanField(_(u'climatisation'))
@@ -345,7 +346,7 @@ class CarProduct(Product):
     audio_input = models.BooleanField(_(u'entrée audio/iPod'))
 
     # informations de l'assurance
-    tax_horsepower = models.DecimalField(_(u'CV fiscal'), decimal_places=2, max_digits=6, choices=TAX_HORSEPOWER)
+    tax_horsepower = models.PositiveIntegerField(_(u'CV fiscal'), choices=TAX_HORSEPOWER)
     licence_plate = models.CharField(_(u"numéro d'immatriculation"), max_length=10)
     first_registration_date = models.DateField(_(u'première mise en circulation'))
 
