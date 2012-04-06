@@ -99,6 +99,9 @@
   <script type="text/javascript">
     $(document).ready(function (){
       $("#id_category").chosen();
+      $('#id_first_registration_date').datepicker({
+          dateFormat: 'dd/mm/yy',changeYear: true
+      });
 
       var addNewAddress = $(".add-new-address");
 
