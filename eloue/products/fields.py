@@ -5,6 +5,7 @@ from django.db import models
 from django.core import exceptions
 import django.forms as forms
 from django.utils.translation import ugettext as _
+from django.core import validators
 
 class SimpleDate(int):
     def __new__(cls, value):
@@ -134,6 +135,8 @@ class FRLicensePlateField(forms.Field):
 
     def clean(self, value):
         value = super(FRLicensePlateField, self).clean(value)
+        if value in validators.EMPTY_VALUES:
+            return ''
         value = value.strip().upper()
         
         matches = new_plate_re.match(value)
