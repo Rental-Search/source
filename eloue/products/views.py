@@ -2,6 +2,7 @@
  # -*- coding: utf-8 -*-
 import re
 from urllib import urlencode
+import urllib
 import datetime
 from django.conf import settings
 from django.contrib.sites.models import Site
@@ -381,8 +382,6 @@ def product_list(request, urlbits, sqs=SearchQuerySet(), suggestions=None, page=
     
     breadcrumbs = SortedDict()
     breadcrumbs['q'] = {'name': 'q', 'value': form.cleaned_data.get('q', None), 'label': 'q', 'facet': False}
-    #breadcrumbs['l'] = {'name': 'l', 'value': form.cleaned_data.get('l', None), 'label': 'l', 'facet': False}
-    #breadcrumbs['r'] = {'name': 'r', 'value': form.cleaned_data.get('r', None), 'label': 'r', 'facet': False}
     breadcrumbs['sort'] = {'name': 'sort', 'value': form.cleaned_data.get('sort', None), 'label': 'sort', 'facet': False}
         
     urlbits = urlbits or ''
@@ -396,13 +395,9 @@ def product_list(request, urlbits, sqs=SearchQuerySet(), suggestions=None, page=
                 raise Http404
             if bit.endswith(_('categorie')):
                 item = get_object_or_404(Category, slug=value)
-                is_facet_not_empty = lambda facet: (not (facet['facet'] or
-                    (facet['label']), facet['value']) in [
-                        #('r', DEFAULT_RADIUS), 
-                        #('l', ''), 
-                        ('sort', ''), 
-                        ('q', '')
-                    ]
+                is_facet_not_empty = lambda facet: not (
+                    facet['facet'] or
+                    (facet['label'], facet['value']) in [ ('sort', ''), ('q', '')]
                 )
                 params = MultiValueDict(
                     (facet['label'], [unicode(facet['value']).encode('utf-8')]) for facet in breadcrumbs.values() if is_facet_not_empty(facet)
@@ -418,13 +413,6 @@ def product_list(request, urlbits, sqs=SearchQuerySet(), suggestions=None, page=
                 if any([value for key, value in params.iteritems()]):
                     path = '%s?%s' % (path, urlencode(params))
                 return redirect_to(request, escape_percent_sign(path))
-            elif bit.endswith(_('loueur')):
-                item = get_object_or_404(Patron.on_site, slug=value)
-                breadcrumbs[bit] = {
-                    'name': 'owner', 'value': value, 'label': bit, 'object': item,
-                    'pretty_name': _(u"Loueur"), 'pretty_value': item.username,
-                    'url': 'par-%s/%s' % (bit, value), 'facet': True
-                }
             else:
                 raise Http404
         elif bit.startswith(_('page')):
@@ -449,11 +437,11 @@ def product_list(request, urlbits, sqs=SearchQuerySet(), suggestions=None, page=
         radius=request.session.get('location', {}).get('radius'),
         searchqueryset=sqs)
     sqs, suggestions = form.search()
+    # we use canonical_parameters to generate the canonical url in the header
     canonical_parameters = SortedDict(((key, unicode(value['value']).encode('utf-8')) for (key, value) in breadcrumbs.iteritems() if value['value']))
     canonical_parameters.pop('categorie', None)
     canonical_parameters.pop('r', None)
     canonical_parameters.pop('sort', None)
-    import urllib
     canonical_parameters = urllib.urlencode(canonical_parameters)
     if canonical_parameters:
         canonical_parameters = '?' + canonical_parameters
