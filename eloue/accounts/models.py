@@ -183,6 +183,12 @@ class Patron(User):
     hobby = models.CharField(max_length=75, blank=True, null=True)
     languages = models.ManyToManyField(Language, blank=True, null=True)
 
+    drivers_license_date = models.DateTimeField(blank=True, null=True)
+    drivers_license_number = models.CharField(blank=True, max_length=32)
+
+    date_of_birth = models.DateTimeField(blank=True, null=True)
+    place_of_birth = models.CharField(blank=True, max_length=255)
+
     on_site = CurrentSiteManager()
     objects = PatronManager()
 
@@ -342,6 +348,7 @@ class CreditCard(models.Model):
     expires = models.CharField(max_length=4)
     holder = models.OneToOneField(Patron, editable=False)
     masked_number = models.CharField(max_length=20, blank=False)
+    keep = models.BooleanField()
 
 class FacebookSession(models.Model):
 

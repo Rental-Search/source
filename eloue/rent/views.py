@@ -189,7 +189,7 @@ def booking_accept(request, booking_id):
         if not request.user.rib:
             response = redirect('patron_edit_rib')
             response['Location'] += '?' + urllib.urlencode({'next': booking.get_absolute_url()})
-            message.success(request, _(u"Avant l'acceptation de la demande, veuillez saisir votre RIB."))
+            messages.success(request, _(u"Avant l'acceptation de la demande, veuillez saisir votre RIB."))
             return response
         booking.accept()
         GoalRecord.record('rent_object_accepted', WebUser(request))

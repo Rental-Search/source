@@ -150,6 +150,16 @@ $(document).ready(function() {
     });
 
 
+    // add datepicker to drivers license date
+    drivers_license_date = $("#id_1-drivers_license_date");
+    if (drivers_license_date) {
+        drivers_license_date.datepicker({dateFormat: 'dd/mm/yy',changeYear: true});
+    };
+    drivers_dob = $("#id_1-date_of_birth");
+    if (drivers_dob) {
+        drivers_dob.datepicker({dateFormat: 'dd/mm/yy', changeYear: true});
+    };
+
     //Display home tabs
     productHomeTab = $( ".products-home-tabs" );
     productHomeTab.tabs();

@@ -636,7 +636,11 @@ def make_missing_data_form(instance, required_fields=[]):
         'addresses__city': forms.CharField(label=_(u"Ville"), required=True, max_length=255, widget=forms.TextInput(attrs={'class': 'inm town', 'placeholder': _(u'Ville')})),
         'addresses__country': forms.ChoiceField(label=_(u"Pays"), choices=COUNTRY_CHOICES, required=True, widget=forms.Select(attrs={'class': 'selm'})),
         'avatar': forms.ImageField(required=False, label=_(u"Photo de profil")),
-        'phones__phone': PhoneNumberField(label=_(u"Téléphone"), required=True, widget=forms.TextInput(attrs={'class': 'inm'}))
+        'phones__phone': PhoneNumberField(label=_(u"Téléphone"), required=True, widget=forms.TextInput(attrs={'class': 'inm'})),
+        'drivers_license_date': forms.DateTimeField(),
+        'drivers_license_number': forms.CharField(max_length=32),
+        'date_of_birth': forms.DateTimeField(),
+        'place_of_birth': forms.CharField(max_length=255),
     })
 
 
@@ -757,18 +761,27 @@ def make_missing_data_form(instance, required_fields=[]):
         self.avatar = self.cleaned_data.get('avatar', None)
         return self.avatar
     class Meta:
-        fieldsets = [('member', {'fields': ['is_professional', 'company_name', 'username', 'password1', 'password2', 'first_name', 'last_name', 'avatar'], 
-                                    'legend': 'Vous'}),
-                        ('addresses', {'fields': ['addresses'], 
-                                        'legend': 'Adresse existante'}),
-                        ('new_address', {'fields': ['addresses__address1', 'addresses__zipcode', 'addresses__city', 'addresses__country'],
-                                            'legend': 'Nouvelle adresse',
-                                            'classes': ['new-address', 'hidden-fieldset']}),
-                        ('phones', {'fields': ['phones'], 
-                                        'legend': 'Numéro de téléphone'}),
-                        ('new_phone', {'fields': ['phones__phone'], 
-                                        'legend': 'Nouveau numéro',
-                                        'classes': ['new-number', 'hidden-fieldset']})]
+        fieldsets = [
+            ('member', {
+                'fields': ['is_professional', 'company_name', 'username', 'password1', 'password2', 'first_name', 'last_name', 'avatar'], 
+                'legend': 'Vous'}),
+            ('driver_info', {
+                'fields': ['drivers_license_date', 'drivers_license_number', 'date_of_birth', 'place_of_birth'],
+                'legend': _(u'Informations sur le conducteur')}),
+            ('addresses', {
+                'fields': ['addresses'], 
+                'legend': 'Adresse existante'}),
+            ('new_address', {
+                'fields': ['addresses__address1', 'addresses__zipcode', 'addresses__city', 'addresses__country'],
+                'legend': 'Nouvelle adresse',
+                'classes': ['new-address', 'hidden-fieldset']}),
+            ('phones', {
+                'fields': ['phones'], 
+                'legend': 'Numéro de téléphone'}),
+            ('new_phone', {
+                'fields': ['phones__phone'], 
+                'legend': 'Nouveau numéro',
+                'classes': ['new-number', 'hidden-fieldset']}),]
 
     class_dict = fields.copy()
     class_dict.update({'instance': instance, 'Meta': Meta})

@@ -43,6 +43,12 @@ class BookingWizard(MultiPartFormWizard):
 
     def __call__(self, request, *args, **kwargs):
         product = get_object_or_404(Product.on_site.select_related(), pk=kwargs['product_id'])
+        try:
+            product.carproduct
+            self.required_fields += ['drivers_license_date', 'drivers_license_number', 'date_of_birth', 'place_of_birth']
+        except Product.DoesNotExist:
+            pass
+        
         from eloue.products.search_indexes import product_search
         self.extra_context={
             'product_list': product_search.more_like_this(product)[:4]
