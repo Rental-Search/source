@@ -37,9 +37,25 @@
                 <li><a href="#near">{% trans "Près d'ici" %}</a></li>
                 <li><a href="#hotloc">{% trans "Locations du moment" %}</a></li>
                 <li><a href="#categories">{% trans "Catégories" %}</a><li>
+                <li><a href="#near_car">{% trans "Voitures près d'ici" %}</a></li>
+                <li><a href="#near_realestate">{% trans "Appartements près d'ici" %}</a></li>
             </ul>
             <div id="near">
             {% with last_added as product_list %}
+                {% with 28 as truncation %}
+                    {% include 'products/partials/result_list.html' %}
+                {% endwith %}
+            {% endwith %}
+            </div>{# near #}
+            <div id="near_car">
+            {% with last_added_car as product_list %}
+                {% with 28 as truncation %}
+                    {% include 'products/partials/result_list.html' %}
+                {% endwith %}
+            {% endwith %}
+            </div>{# near #}
+            <div id="near_realestate">
+            {% with last_added_realestate as product_list %}
                 {% with 28 as truncation %}
                     {% include 'products/partials/result_list.html' %}
                 {% endwith %}
