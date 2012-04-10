@@ -117,22 +117,16 @@
             <table class="table">
                 <thead>
                     <tr>
-                        <th>{% trans "La journée" %}</th>
-                        <th>{% trans "L'heure" %}</th>
-                        <th>{% trans "Le week end" %}</th>
-                        <th>{% trans "La semaine" %}</th>
-                        <th>{% trans "Les 15 jours" %}</th>
-                        <th>{% trans "Le mois" %}</th>
+                        {% for price in product.prices.all %}
+                            <th style="text-align: center;">{% trans price.get_unit_display|capfirst %}</th>
+                        {% endfor %}
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td style="text-align: center;">43 &euro;</td>
-                        <td style="text-align: center;">54 &euro;</td>
-                        <td style="text-align: center;">12 &euro;</td>
-                        <td style="text-align: center;">76 &euro;</td>
-                        <td style="text-align: center;">98 &euro;</td>
-                        <td style="text-align: center;">23 &euro;</td>
+                        {% for price in product.prices.all %}
+                            <td style="text-align: center;">{{price.amount}} &euro;</td>
+                        {% endfor %}
                     </tr>
                 </tbody>
             </table>
