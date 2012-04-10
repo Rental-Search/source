@@ -509,14 +509,15 @@ def mask_card_number(card_number):
     )
 
 class CreditCardForm(forms.ModelForm):
-    cvv = forms.CharField(max_length=4, widget=forms.TextInput(attrs={'placeholder': 'E-loue ne stocke pas le cryptogram visuel, vous devriez resaisir apres chaque payment pour des raison de securite'}))
-    expires = ExpirationField()
+    cvv = forms.CharField(max_length=4, label=_(u'Cryptogramme de sécurité'))
+    expires = ExpirationField(label=_(u'Date d\'expiration'))
 
     def __init__(self, *args, **kwargs):
         super(CreditCardForm, self).__init__(*args, **kwargs)
         self.fields['card_number'] = forms.CharField(
+            label=_(u'Numéro de carte de crédit'),
             min_length=16, max_length=24, required=True, widget=forms.TextInput(
-                attrs={'placeholder': self.instance.masked_number or 'E-loue ne stocke pas le numero de votre carte'}
+                attrs={'placeholder': self.instance.masked_number or ''}
             )
         )
 
