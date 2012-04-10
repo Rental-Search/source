@@ -7,10 +7,10 @@
 <div id="wizard-page" class="container-main">
 	<ul class="breadcrumb" >
 		<li><a href="{% url home %}">{% trans "Accueil" %}</a></li>
-		<li>{% trans "Ajouter une annonce" %}</li>
+		<li>{{ form.title }}</li>
 	</ul>
 	<div class="content-main">
-		<h1>Ajouter une annonce</h1>
+		<h1>{{ form.title }}</h1>
 		{% if form.is_multipart %}
 		<form enctype="multipart/form-data" class="form-horizontal" method="post" action="">
 		{% else %}

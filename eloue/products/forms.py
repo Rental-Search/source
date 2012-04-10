@@ -220,6 +220,7 @@ class ProductForm(BetterModelForm):
 
     def __init__(self, *args, **kwargs):
         super(ProductForm, self).__init__(*args, **kwargs)
+        self.title = _(u'Ajouter une annonce')
         self.fields['category'] = forms.TypedChoiceField(
             label=_(u"Catégorie"), coerce=lambda pk: Category.tree.get(pk=pk), 
             choices=generate_choices((cat.slug for cat in Category.tree.root_nodes() if cat.slug not in ['auto-et-moto', 'hebergement', 'motors']))
@@ -274,6 +275,7 @@ class CarProductForm(ProductForm):
 
     def __init__(self, *args, **kwargs):
         super(CarProductForm, self).__init__(*args, **kwargs)
+        self.title = _(u'Ajouter une voiture')
         self.fields['category'] = forms.TypedChoiceField(
             label=_(u"Catégorie"), coerce=lambda pk: Category.tree.get(pk=pk), 
             choices=generate_choices(('auto-et-moto', 'motors'))
@@ -332,6 +334,7 @@ class RealEstateForm(ProductForm):
     
     def __init__(self, *args, **kwargs):
         super(RealEstateForm, self).__init__(*args, **kwargs)
+        self.title = _(u'Ajouter un lieu')
         self.fields['category'] = forms.TypedChoiceField(
             label=_(u"Catégorie"), coerce=lambda pk: Category.tree.get(pk=pk), 
             choices=generate_choices(('hebergement', ))
