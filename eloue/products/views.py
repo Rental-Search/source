@@ -65,7 +65,7 @@ def homepage(request):
         region_radius = location.get('region_radius') or location['radius']
         l = Point(coords)
         last_joined = Patron.objects.last_joined_near(l)
-        last_added = product_search.spatial(
+        last_added = product_search.narrow('special:False').spatial(
             lat=region_coords[0], long=region_coords[1], radius=min(region_radius, 1541)
         ).spatial(
             lat=coords[0], long=coords[1], radius=min(region_radius*2 if region_radius else float('inf'), 1541)
@@ -82,7 +82,7 @@ def homepage(request):
         ).order_by('-created_at_date', 'geo_distance')
     except KeyError:
         last_joined = Patron.objects.last_joined()
-        last_added = product_search.order_by('-created_at')
+        last_added = product_search.narrow('special:False').order_by('-created_at')
         last_added_car = car_search.order_by('-created_at')
         last_added_realestate = realestate_search.order_by('-created_at')
     return render_to_response(
