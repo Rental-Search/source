@@ -76,7 +76,7 @@
           <tr>
             <th>{% trans "Téléphone" %}</th>
             <td>
-              {%firstof request.user.phones.all|first preview.phones__phone%}
+              {%firstof preview.phones__phone request.user.phones.all|first %}
             </td>
           </tr>
           <tr>
