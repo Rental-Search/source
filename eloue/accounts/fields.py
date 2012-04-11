@@ -152,3 +152,27 @@ class RIBField(forms.MultiValueField):
 
     def compress(self, data_list):
         return ''.join(data_list)
+
+
+class DateSelectWidget(forms.MultiWidget):
+    def decompress(self, value):
+        if value:
+            return (value.day, value.month, value.year)
+        return (None, None, None)
+
+class DateSelectField(forms.MultiValueField):
+
+    def __init__(self, min_year=1900, max_year=2012, *args, **kwargs):
+        fields = (
+            forms.ChoiceField(choices=((x, str(x).rjust(2, '0')) for x in xrange(1, 32))),
+            forms.ChoiceField(choices=((x, str(x).rjust(2, '0')) for x in xrange(1, 13))),
+            forms.ChoiceField(choices=((x, x) for x in xrange(min_year, max_year))),
+        )
+        self.widget = DateSelectWidget(widgets=[field.widget for field in fields])
+        self.hidden_widget = DateSelectWidget(widgets=[field.hidden_widget for field in fields])
+        self.hidden_widget.is_hidden = True
+        return super(DateSelectField, self).__init__(fields, *args, **kwargs)
+
+    def compress(self, data_list):
+        return datetime.date(year=data_list[2], month=data_list[1], day=data_list[0])
+
