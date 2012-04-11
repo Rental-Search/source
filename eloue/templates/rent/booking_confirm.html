@@ -1,13 +1,14 @@
 {% extends "base.html" %}
 {% load i18n product %}
 
-{% block title %}{% trans "Confirmez votre réservation" %}{% endblock %}
+{% block title %}{% trans "Payez votre réservation" %}{% endblock %}
 
 {% block content %}
 <div id="wizard-page" class="container-main">
   <ul class="breadcrumb">
     <li><a href="{% url home %}">{% trans "Accueil" %}</a></li>
-    <li>{% trans "Réservation" %}
+    <li><a href="{{ request.HTTP_REFERER }}">{{ wizard_title }}</a></li>
+    <li>{% trans "Paiement de la réservation" %}</li>
   </ul>
   <div class="content-main">
     <h2>{% trans "Récapitulatif de votre réservation" %}</h2>

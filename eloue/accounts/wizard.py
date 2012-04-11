@@ -18,7 +18,8 @@ class AuthenticationWizard(MultiPartFormWizard):
     def __init__(self, *args, **kwargs):
         super(AuthenticationWizard, self).__init__(*args, **kwargs)
         self.required_fields = ['username', 'password1', 'password2', 'is_professional', 'company_name', 'avatar']
-    
+        self.title = _(u'S\'incrire ou se connecter')
+
     def done(self, request, form_list):
         super(AuthenticationWizard, self).done(request, form_list)
         if request.user.is_active:

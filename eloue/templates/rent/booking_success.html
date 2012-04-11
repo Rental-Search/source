@@ -4,10 +4,19 @@
 {% block title %}{% trans "Réservation enregistrée avec succès" %}{% endblock %}
 
 {% block content %}
-<div id="result-page" class="container-main">
-    <div class="one-content">
-        <h1>{% trans "Réservation terminée avec succès"%}</h1>
-        <p>{% trans "Le propriétaire a été informé de votre réservation." %}</p>
-    </div>
+<div id="wizard-page" class="container-main">
+	<ul class="breadcrumb">
+    	<li><a href="{% url home %}">{% trans "Accueil" %}</a></li>
+    	<li><a href="{{ request.HTTP_REFERER }}">{{ wizard_title }}</a></li>
+    	<li>{% trans "Réservation terminée avec succès" %}</li>
+  	</ul>
+  	<div class="content-main">
+  		<h2>{% trans "Réservation terminée avec succès" %}</h2>
+  		<p>
+  			{% blocktrans %}
+  			Nous avons bien pris en comtpe votre réservation. Le propriétaire a été informé, il va vous répondre le plus rapidement possible (24h maximum)
+  			{% endblocktrans %}
+  		</p>
+  	</div>
 </div>
 {% endblock %}

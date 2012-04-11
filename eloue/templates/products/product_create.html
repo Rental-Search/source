@@ -7,7 +7,7 @@
 <div id="wizard-page" class="container-main">
 	<ul class="breadcrumb" >
 		<li><a href="{% url home %}">{% trans "Accueil" %}</a></li>
-		<li><a href="{% url publish_new_ad %}">{% trans "Ajouter une annonce" %}</a></li>
+		<li><a href="{% url publish_new_ad %}">{{ wizard_title }}</a></li>
 		<li>{{ form.title }}</li>
 	</ul>
 	<div class="content-main">

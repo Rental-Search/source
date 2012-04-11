@@ -40,6 +40,7 @@ class BookingWizard(MultiPartFormWizard):
           'phones', 'phones__phone', 'addresses',
           'addresses__address1', 'addresses__zipcode', 'addresses__city', 'addresses__country'
         ]
+        self.title = _(u'Réservation')
 
     def __call__(self, request, *args, **kwargs):
         product = get_object_or_404(Product.on_site.select_related(), pk=kwargs['product_id'])

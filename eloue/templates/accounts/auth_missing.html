@@ -7,7 +7,8 @@
 <div id="wizard-page" class="container-main">
 	<ul class="breadcrumb">
 		<li><a href="{% url home %}">{% trans "Accueil" %}</a></li>
-		<li>{% trans "Identification" %}</li>
+        <li><a href="{{ request.HTTP_REFERER }}">{{ wizard_title }}</a></li>
+		<li>{% trans "Informations complémentaires" %}</li>
 	</ul>
 	<div class="content-main">
 		<h1>{% trans "Informations complémentaires" %}</h1>

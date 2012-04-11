@@ -37,6 +37,7 @@ class MultiPartFormWizard(FormWizard):
         self.fb_session = None
         self.new_patron = None
         self.me = {}
+        self.title = None
     
     @method_decorator(csrf_protect)
     def __call__(self, request, *args, **kwargs):
@@ -235,6 +236,7 @@ class MultiPartFormWizard(FormWizard):
                 hash_name = 'hash_%s' % i
                 prev_fields.extend([bf.as_hidden() for bf in old_form])
                 prev_fields.append(hidden.render(hash_name, old_data.get(hash_name, self.security_hash(request, old_form))))
+        context = {'wizard_title': self.title}
         return self.render_template(request, form, ''.join(prev_fields), step, context)
 
     def process_step(self, request, form, step):

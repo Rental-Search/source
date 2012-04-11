@@ -21,8 +21,13 @@ from eloue.products.models import Product, Picture, UNIT, Alert
 
 class ProductWizard(MultiPartFormWizard):
 
+    def __init__(self, *args, **kwargs):
+        super(ProductWizard, self).__init__(*args, **kwargs)
+        self.title = _(u'Ajouter une annonce')
+
     def done(self, request, form_list):
         super(ProductWizard, self).done(request, form_list)
+
         # Create product
         product_form = form_list[0]
         product_form.instance.owner = self.new_patron
@@ -69,6 +74,7 @@ class MessageWizard(MultiPartFormWizard):
     def __init__(self, *args, **kwargs):
         super(MessageWizard, self).__init__(*args, **kwargs)
         self.required_fields = ['username', 'password1', 'password2', 'avatar']
+        self.title = _(u'Envoyer un message')
     
     def __call__(self, request, product_id, recipient_id, *args, **kwargs):
         product = get_object_or_404(Product, pk=product_id) if product_id is not None else None
