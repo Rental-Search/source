@@ -52,16 +52,19 @@ YEAR_CHOICES = [(lambda x: (x, x))(str(datetime.date.today().year+y)[2:]) for y 
 
 
 class ExpirationWidget(forms.MultiWidget):
-    def decompress(self, value):
-        return (value[:2], value[2:])
-
     def __init__(self):
         widgets = (
             forms.Select(choices=MONTH_CHOICES),
             forms.Select(choices=YEAR_CHOICES),
             )
         super(ExpirationWidget, self).__init__(widgets)
+    
+    def format_output(self, rendered_widgets):
+        return _(u'<label>Month</label>{0}<label>Year</label>{1}'.format(*rendered_widgets))
+        pass
 
+    def decompress(self, value):
+        return (value[:2], value[2:])
 
 class HiddenExpirationWidget(ExpirationWidget):
     def __init__(self):
