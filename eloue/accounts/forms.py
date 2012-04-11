@@ -637,10 +637,10 @@ def make_missing_data_form(instance, required_fields=[]):
         'addresses__country': forms.ChoiceField(label=_(u"Pays"), choices=COUNTRY_CHOICES, required=True, widget=forms.Select(attrs={'class': 'selm'})),
         'avatar': forms.ImageField(required=False, label=_(u"Photo de profil")),
         'phones__phone': PhoneNumberField(label=_(u"Téléphone"), required=True, widget=forms.TextInput(attrs={'class': 'inm'})),
-        'drivers_license_date': forms.DateTimeField(),
-        'drivers_license_number': forms.CharField(max_length=32),
-        'date_of_birth': forms.DateTimeField(),
-        'place_of_birth': forms.CharField(max_length=255),
+        'drivers_license_number': forms.CharField(label=_(u'Numéro de permis'), max_length=32),
+        'drivers_license_date': forms.DateTimeField(label=_(u'Date de délivraisance')),
+        'date_of_birth': forms.DateTimeField(label=_(u'Date de naissance')),
+        'place_of_birth': forms.CharField(label=_(u'Lieu de naissance'), max_length=255),
     })
 
 
@@ -763,11 +763,11 @@ def make_missing_data_form(instance, required_fields=[]):
     class Meta:
         fieldsets = [
             ('member', {
-                'fields': ['is_professional', 'company_name', 'username', 'password1', 'password2', 'first_name', 'last_name', 'avatar'], 
+                'fields': ['is_professional', 'company_name', 'username', 'password1', 'password2', 'first_name', 'last_name', 'avatar', 'date_of_birth', 'place_of_birth'], 
                 'legend': 'Vous'}),
             ('driver_info', {
-                'fields': ['drivers_license_date', 'drivers_license_number', 'date_of_birth', 'place_of_birth'],
-                'legend': _(u'Informations sur le conducteur')}),
+                'fields': ['drivers_license_number', 'drivers_license_date'],
+                'legend': _(u'Permis de conduire')}),
             ('addresses', {
                 'fields': ['addresses'], 
                 'legend': 'Adresse existante'}),
