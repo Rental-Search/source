@@ -158,9 +158,7 @@ class BookingWizard(MultiPartFormWizard):
     
     def process_step(self, request, form, step):
         super(BookingWizard, self).process_step(request, form, step)
-        form = self.get_form(0, request.POST, request.FILES)
-        if form.is_valid():
-            self.extra_context['preview'] = form.cleaned_data
+        self.extra_context.setdefault('preview', {}).update(form.cleaned_data)
     
     def parse_params(self, request, *args, **kwargs):
         product = get_object_or_404(Product.on_site.active().select_related(), pk=kwargs['product_id'])
