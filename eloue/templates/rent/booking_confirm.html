@@ -11,7 +11,7 @@
   </ul>
   <div class="content-main">
     <h2>{% trans "Récapitulatif de votre réservation" %}</h2>
-    <form class="form" action="" method="POST">
+    <form class="form-horizontal" action="" method="POST">
     {% csrf_token %}
       <table class="table table-bordered booking-resume">
       <tbody>
@@ -43,7 +43,7 @@
           </tr>
           <tr>
             <th>Prix du Km supplémentaire</th>
-            <td>0,10 &euro;</tD
+            <td>0,10 &euro;</td>
           </tr>
           <tr>
             <th>{% trans "Propriétaire" %}</th>
@@ -135,10 +135,71 @@
           </tr>
         </table>
         <h2>{% trans "Paiement" %}</h2>
-            {{form}}
-            {{ previous_fields|safe }}
-            Powered by Paybox™
-        
+        <fieldset id="credit-card-form">
+        <div class="control-group {% if form.card_number.errors %} error {% endif %}">
+          <label class="control-label" for="{{ form.card_number.id_for_label }}">
+            {{ form.card_number.label }}
+          </label>
+          <div class="controls">
+            {{ form.card_number }}
+            <p class="help-block">{{ form.card_number.help_text}}</p>
+            {% if form.card_number.errors %}
+            <span class="help-inline">
+            {% for error in form.card_number.errors %}
+              {{ error|escape }}
+            {% endfor %}
+            </span>
+            {% endif %}
+          </div>{# controls #}
+        </div>{# control-group #}
+        <div class="control-group {% if form.cvv.errors %} error {% endif %}">
+          <label class="control-label" for="{{ form.cvv.id_for_label }}">
+            {{ form.cvv.label }}
+          </label>
+          <div class="controls">
+            {{ form.cvv }}
+            <p class="help-block">{{ form.cvv.help_text}}</p>
+            {% if form.cvv.errors %}
+            <span class="help-inline">
+            {% for error in form.cvv.errors %}
+              {{ error|escape }}
+            {% endfor %}
+            </span>
+            {% endif %}
+          </div>{# controls #}
+        </div>{# control-group #}
+        <div class="control-group {% if form.expires.errors %} error {% endif %}">
+          <label class="control-label" for="{{ form.expires.id_for_label }}">
+            {{ form.expires.label }}
+          </label>
+          <div class="controls">
+            {{ form.expires }}
+            <p class="help-block">{{ form.expires.help_text}}</p>
+            {% if form.expires.errors %}
+            <span class="help-inline">
+            {% for error in form.expires.errors %}
+              {{ error|escape }}
+            {% endfor %}
+            </span>
+            {% endif %}
+          </div>{# controls #}
+        </div>{# control-group #}
+        <div class="control-group {% if form.save.errors %} error {% endif %}">
+          <label class="checkbox" for="{{ form.save.id_for_label }}">
+            {{ form.save }} {% trans "Conserver mes coordonnées bancaire" %}
+          </label>
+          <div class="controls">
+            <p class="help-block">{{ form.save.help_text}}</p>
+            {% if form.save.errors %}
+            <span class="help-inline">
+            {% for error in form.save.errors %}
+              {{ error|escape }}
+            {% endfor %}
+            </span>
+            {% endif %}
+          </div>{# controls #}
+        </div>{# control-group #}
+      </fieldset>{# credit-card-form #}
       <div class="form-actions">
           <input type="hidden" name="{{ step_field }}" value="{{ step0 }}" />
           {{ previous_fields|safe }}

@@ -540,7 +540,7 @@ select:focus:required:invalid {
 }
 
 
-// Price theme
+// PRICE THEME
 //--------------
 
 .price {
@@ -549,12 +549,12 @@ select:focus:required:invalid {
 }
 
 .unit {
-  #font > .sans-serif(Arial, normal, 16px);
+  #font > .sans-serif(Arial, normal, 13px);
   color: @blueDark;
 }
 
 
-//Terms
+//TERMS
 //------
 
 .terms {
@@ -566,6 +566,37 @@ select:focus:required:invalid {
   padding: 8px 0 8px 8px;
   font-size: 12px;
   margin-bottom: 20px;
+}
+
+
+//CREDIT CARD
+//-----------
+
+#credit-card-form {
+
+  .control-label {
+    width: 180px
+  }
+  .controls {
+    margin-left: 200px;
+  }
+
+  .checkbox {
+    width: 220px;
+    margin-left: 200px;
+  }
+}
+
+#id_3-expires_0 {
+  margin-right: 10px;
+}
+
+#id_3-expires_0, #id_3-expires_1 {
+  width: 50px;
+}
+
+#id_3-cvv {
+  width: 30px;
 }
 
 

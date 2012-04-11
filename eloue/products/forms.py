@@ -218,7 +218,7 @@ class ProductForm(BetterModelForm):
 
     def __init__(self, *args, **kwargs):
         super(ProductForm, self).__init__(*args, **kwargs)
-        self.title = _(u'Ajouter une annonce')
+        self.title = _(u'Ajouter un objet')
         self.fields['category'] = forms.TypedChoiceField(
             label=_(u"Catégorie"), coerce=lambda pk: Category.tree.get(pk=pk), 
             choices=generate_choices((cat.slug for cat in Category.tree.root_nodes() if cat.slug not in ['auto-et-moto', 'hebergement', 'motors']))

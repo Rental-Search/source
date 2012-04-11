@@ -509,14 +509,15 @@ def mask_card_number(card_number):
     )
 
 class CreditCardForm(forms.ModelForm):
-    cvv = forms.CharField(max_length=4, widget=forms.TextInput(attrs={'placeholder': 'E-loue ne stocke pas le cryptogram visuel, vous devriez resaisir apres chaque payment pour des raison de securite'}))
-    expires = ExpirationField()
+    cvv = forms.CharField(max_length=4, label=_(u'Cryptogramme de sécurité'))
+    expires = ExpirationField(label=_(u'Date d\'expiration'))
 
     def __init__(self, *args, **kwargs):
         super(CreditCardForm, self).__init__(*args, **kwargs)
         self.fields['card_number'] = forms.CharField(
+            label=_(u'Numéro de carte de crédit'),
             min_length=16, max_length=24, required=True, widget=forms.TextInput(
-                attrs={'placeholder': self.instance.masked_number or 'E-loue ne stocke pas le numero de votre carte'}
+                attrs={'placeholder': self.instance.masked_number or ''}
             )
         )
 
@@ -636,10 +637,10 @@ def make_missing_data_form(instance, required_fields=[]):
         'addresses__country': forms.ChoiceField(label=_(u"Pays"), choices=COUNTRY_CHOICES, required=True, widget=forms.Select(attrs={'class': 'selm'})),
         'avatar': forms.ImageField(required=False, label=_(u"Photo de profil")),
         'phones__phone': PhoneNumberField(label=_(u"Téléphone"), required=True, widget=forms.TextInput(attrs={'class': 'inm'})),
-        'drivers_license_date': forms.DateTimeField(),
-        'drivers_license_number': forms.CharField(max_length=32),
-        'date_of_birth': forms.DateTimeField(),
-        'place_of_birth': forms.CharField(max_length=255),
+        'drivers_license_number': forms.CharField(label=_(u'Numéro de permis'), max_length=32),
+        'drivers_license_date': forms.DateTimeField(label=_(u'Date de délivraisance')),
+        'date_of_birth': forms.DateTimeField(label=_(u'Date de naissance')),
+        'place_of_birth': forms.CharField(label=_(u'Lieu de naissance'), max_length=255),
     })
 
 
@@ -762,11 +763,11 @@ def make_missing_data_form(instance, required_fields=[]):
     class Meta:
         fieldsets = [
             ('member', {
-                'fields': ['is_professional', 'company_name', 'username', 'password1', 'password2', 'first_name', 'last_name', 'avatar'], 
+                'fields': ['is_professional', 'company_name', 'username', 'password1', 'password2', 'first_name', 'last_name', 'avatar', 'date_of_birth', 'place_of_birth'], 
                 'legend': 'Vous'}),
             ('driver_info', {
-                'fields': ['drivers_license_date', 'drivers_license_number', 'date_of_birth', 'place_of_birth'],
-                'legend': _(u'Informations sur le conducteur')}),
+                'fields': ['drivers_license_number', 'drivers_license_date'],
+                'legend': _(u'Permis de conduire')}),
             ('addresses', {
                 'fields': ['addresses'], 
                 'legend': 'Adresse existante'}),

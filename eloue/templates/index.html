@@ -34,11 +34,10 @@
     <div class="products-home">
         <div class="products-home-tabs">
             <ul>
-                <li><a href="#near">{% trans "Près d'ici" %}</a></li>
+                <li><a href="#near_car">{% trans "Voitures" %}</a></li>
+                <li><a href="#near_realestate">{% trans "Lieu" %}</a></li>
+                <li><a href="#near">{% trans "Autres catégories" %}</a></li>
                 <li><a href="#hotloc">{% trans "Locations du moment" %}</a></li>
-                <li><a href="#categories">{% trans "Catégories" %}</a><li>
-                <li><a href="#near_car">{% trans "Voitures près d'ici" %}</a></li>
-                <li><a href="#near_realestate">{% trans "Appartements près d'ici" %}</a></li>
             </ul>
             <div id="near">
             {% with last_added as product_list %}
@@ -72,7 +71,6 @@
                 {% endfor %}
                 </ul>
             </div>{# hotloc #}
-            <div id="categories"></div>{# categories #}
         </div>{# products-home-tabs #}
     </div>{# product-home #}
     <ul class="args">
