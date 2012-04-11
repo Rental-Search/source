@@ -35,6 +35,7 @@ class ProductIndex(QueuedSearchIndex):
     text = CharField(document=True, use_template=True)
     url = CharField(model_attr='get_absolute_url', indexed=False)
     thumbnail = CharField(indexed=False)
+    special = BooleanField()
     
     def prepare_sites(self, obj):
         return [site.id for site in obj.sites.all()]
@@ -66,6 +67,21 @@ class ProductIndex(QueuedSearchIndex):
         unit, amount = Booking.calculate_price(obj, now, now + datetime.timedelta(days=1))
         return amount
     
+    def prepare_special(self, obj):
+        try:
+            obj.carproduct
+            return True
+        except ObjectDoesNotExist:
+            pass
+
+        try:
+            obj.realestateproduct
+            return True
+        except ObjectDoesNotExist:
+            pass
+
+        return False
+
     def index_queryset(self):
         return Product.on_site.active()
         

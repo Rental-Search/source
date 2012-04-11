@@ -20,7 +20,7 @@ from django.utils.http import int_to_base36
 from django.utils.translation import ugettext as _
 from django.dispatch import dispatcher
 from django.utils.safestring import mark_safe
-
+from django.forms.formsets import ORDERING_FIELD_NAME, DELETION_FIELD_NAME
 import facebook
 
 from eloue.accounts import EMAIL_BLACKLIST
@@ -430,9 +430,25 @@ class PhoneNumberForm(forms.ModelForm):
     
     class Meta:
         model = PhoneNumber
-        exclude = ('patron')
+        fields = ('number', )
 
-class PhoneNumberBaseFormSet(BaseInlineFormSet):
+class MixinHiddenDeleteFormset(object):
+    # mixin to hide delete and order fields for the extra fields for the formset
+    def add_fields(self, form, index):
+        if index < self.initial_form_count():
+            return super(MixinHiddenDeleteFormset, self).add_fields(form, index)
+        if self.can_order:
+            # Only pre-fill the ordering field for initial forms.
+            if index is not None and index < self.initial_form_count():
+                form.fields[ORDERING_FIELD_NAME] = forms.IntegerField(label=_(u'Order'), initial=index+1, required=False, widget=forms.HiddenInput())
+            else:
+                form.fields[ORDERING_FIELD_NAME] = forms.IntegerField(label=_(u'Order'), required=False, widget=forms.HiddenInput())
+        if self.can_delete:
+            form.fields[DELETION_FIELD_NAME] = forms.BooleanField(label=_(u'Delete'), required=False, widget=forms.HiddenInput())
+        
+
+
+class PhoneNumberBaseFormSet(MixinHiddenDeleteFormset, BaseInlineFormSet):
     def clean(self):
         super(PhoneNumberBaseFormSet, self).clean()
         if not len(filter(lambda form:(not form.cleaned_data.get('DELETE', True) if hasattr(form, 'cleaned_data') else False), self.forms)):
@@ -457,7 +473,6 @@ class AddressForm(forms.ModelForm):
 
     class Meta:
         model = Address
-        exclude = ('address2', 'position', 'objects', 'patron',)
         widgets = {
             'address1': forms.Textarea(
                 attrs={'class': 'inm street', 'placeholder': _(u'Rue')}
@@ -479,8 +494,7 @@ class AddressForm(forms.ModelForm):
             'country',
         ]
 
-class AddressBaseFormSet(BaseInlineFormSet):
-
+class AddressBaseFormSet(MixinHiddenDeleteFormset, BaseInlineFormSet):
     def clean(self):
         super(AddressBaseFormSet, self).clean()
         if any(self.errors):
@@ -488,6 +502,7 @@ class AddressBaseFormSet(BaseInlineFormSet):
         for form in self.forms:
             pass
     
+
 AddressFormSet = inlineformset_factory(Patron, Address, form=AddressForm, formset=AddressBaseFormSet, extra=1, can_delete=True)
 
 class RIBForm(forms.ModelForm):

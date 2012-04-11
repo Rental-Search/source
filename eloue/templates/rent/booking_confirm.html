@@ -65,100 +65,46 @@
       </table>
       {% if product.carproduct %}
         <h2>{% trans "Informations sur le conducteur" %}</h2>
+      {% else %}
+          <h2>{% trans "Informations sur le locataire" %}</h2>
+      {% endif %}
         <table class="table table-bordered booking-resume">
           <tr>
             <th>{% trans "Nom et Prénom" %}</th>
-            <td>{{ preview.borrower.first_name }} {{ preview.borrower.last_name }}</td>
+            <td>{% firstof request.user.first_name preview.first_name %} {% firstof request.user.last_name preview.last_name %}</td>
           </tr>
           <tr>
             <th>{% trans "Téléphone" %}</th>
             <td>
-              {% with preview.borrower.phones.all|first as phone %}
-                {{ phone }}
-              {% endwith %}
+              {%firstof request.user.phones.all|first preview.phones__phone%}
             </td>
           </tr>
           <tr>
             <th>{% trans "Adresse" %}</th>
             <td>
-              {{ preview.borrower.default_address.address1 }}<br />
-              {{ preview.borrower.default_address.zipcode }} {{ preview.borrower.default_address.city|capfirst }}
+              {% if preview.addresses %}
+                {{ preview.addresses }}
+              {% else %}
+                {{preview.addresses__address1}} {{preview.addresses__zipcode}} {{preview.addresses__city}} {{preview.addresses__country}}
+              {% endif %}
             </td>
           </tr>
+          {% if product.carproduct %}
           <tr>
             <th>{% trans "Date et lieu de naissance" %}</th>
-            <td>Le 25/05/1985 à Neuilly-sur-Seine</td>
+            <td>Le {% firstof request.user.date_of_birth|date:"d/m/Y" preview.date_of_birth|date:"d/m/Y" %} à {% firstof request.user.place_of_birth preview.place_of_birth %}</td>
           </tr>
           <tr>
             <th>{% trans "Permis de conduire" %}</th>
-            <td>{% trans "N°" %} 030392300405 {% trans "délivré le" %} 22/07/203</td>
+            <td>{% trans "N°" %} {%firstof request.user.drivers_license_number preview.drivers_license_number %} {% trans "délivré le" %} {% firstof request.user.drivers_license_date|date:"d/m/Y" preview.drivers_license_date|date:"d/m/Y" %}</td>
           </tr>
+          {% else %}
+            {% if product.realestateproduct %}
+            {% else %}
+            {% endif %}
+          {% endif %}
         </table>
-      {% else %}
-        {% if product.realestateproduct %}
-          <h2>{% trans "Informations sur le conducteur" %}</h2>
-          <table class="table table-bordered booking-resume">
-            <tr>
-              <th>{% trans "Nom et Prénom" %}</th>
-              <td>{{ preview.borrower.first_name }} {{ preview.borrower.last_name }}</td>
-            </tr>
-            <tr>
-              <th>{% trans "Téléphone" %}</th>
-              <td>
-                {% with preview.borrower.phones.all|first as phone %}
-                  {{ phone }}
-                {% endwith %}
-              </td>
-            </tr>
-            <tr>
-              <th>{% trans "Adresse" %}</th>
-              <td>
-                {{ preview.borrower.default_address.address1 }}<br />
-                {{ preview.borrower.default_address.zipcode }} {{ preview.borrower.default_address.city|capfirst }}
-              </td>
-            </tr>
-            <tr>
-              <th>{% trans "Date et lieu de naissance" %}</th>
-              <td>Le 25/05/1985 à Neuilly-sur-Seine</td>
-            </tr>
-            <tr>
-              <th>{% trans "Permis de conduire" %}</th>
-              <td>{% trans "N°" %} 030392300405 {% trans "délivré le" %} 22/07/203</td>
-            </tr>
-          </table>
-        {% else %}
-          <h2>{% trans "Informations sur le locataire" %}</h2>
-          <table class="table table-bordered booking-resume">
-            <tr>
-              <th>{% trans "Nom et Prénom" %}</th>
-              <td>{{ preview.borrower.first_name }} {{ preview.borrower.last_name }}</td>
-            </tr>
-            <tr>
-              <th>{% trans "Téléphone" %}</th>
-              <td>
-                {% with preview.borrower.phones.all|first as phone %}
-                  {{ phone }}
-                {% endwith %}
-              </td>
-            </tr>
-            <tr>
-              <th>{% trans "Adresse" %}</th>
-              <td>
-                {{ preview.borrower.default_address.address1 }}<br />
-                {{ preview.borrower.default_address.zipcode }} {{ preview.borrower.default_address.city|capfirst }}
-              </td>
-            </tr>
-            <tr>
-              <th>{% trans "Date et lieu de naissance" %}</th>
-              <td>Le 25/05/1985 à Neuilly-sur-Seine</td>
-            </tr>
-            <tr>
-              <th>{% trans "Permis de conduire" %}</th>
-              <td>{% trans "N°" %} 030392300405 {% trans "délivré le" %} 22/07/203</td>
-            </tr>
-          </table>
-        {% endif %}
-      {% endif %}
+
         <h2>{% trans "Assurance" %}</h2>
         <table class="table table-bordered booking-resume">
           <tr>
