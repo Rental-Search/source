@@ -10,6 +10,7 @@ from django.utils.translation import ugettext as _
 
 from haystack.forms import SearchForm
 from mptt.forms import TreeNodeChoiceField
+from eloue.accounts.fields import DateSelectField
 from eloue.accounts.models import Patron, COUNTRY_CHOICES, Address
 from eloue.geocoder import GoogleGeocoder
 from eloue.products.fields import FacetField
@@ -270,6 +271,7 @@ class CarProductForm(ProductForm):
     quantity = forms.IntegerField(widget=forms.HiddenInput(), initial=1)
     summary = forms.CharField(required=False, widget=forms.HiddenInput(), max_length=255)
     licence_plate = FRLicensePlateField(required=True)
+    first_registration_date = DateSelectField()
 
     def __init__(self, *args, **kwargs):
         super(CarProductForm, self).__init__(*args, **kwargs)
@@ -420,9 +422,9 @@ class ProductEditForm(BetterModelForm):
         if payment_type in EMPTY_VALUES:
             payment_type = 1
         return payment_type
-
 class CarProductEditForm(ProductEditForm):
     summary = forms.CharField(required=False, widget=forms.HiddenInput(), max_length=255)
+    first_registration_date = DateSelectField()
 
     def __init__(self, *args, **kwargs):
         super(CarProductEditForm, self).__init__(*args, **kwargs)
