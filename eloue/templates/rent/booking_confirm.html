@@ -39,14 +39,6 @@
               </td>
           </tr>
           <tr>
-            <th>Kilomètre inclus</th>
-            <td>100 Km</td>
-          </tr>
-          <tr>
-            <th>Prix du Km supplémentaire</th>
-            <td>0,10 &euro;</td>
-          </tr>
-          <tr>
             <th>{% trans "Propriétaire" %}</th>
             <td>{{ product.owner.username }}</td>
           </tr>
@@ -59,7 +51,7 @@
           </tr> 
           <tr>
               <th>{% trans "Montant de la réservation" %}</th>
-              <td class="align-center">{{preview.total_amount}} &euro; <span style="font-size: 12px">(dont 16 &euro; pour les kilomètres inclus)</span></td>
+              <td class="align-center">{{preview.total_amount}} &euro;</td>
           </tr>
       </tbody>
       </table>
