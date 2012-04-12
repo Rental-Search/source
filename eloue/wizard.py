@@ -245,6 +245,7 @@ class MultiPartFormWizard(FormWizard):
         if isinstance(form, EmailAuthenticationForm):
             self.fb_session = form.fb_session
             self.new_patron = form.get_user()
+            self.extra_context['new_patron'] = self.new_patron
             self.me = form.me
         if self.fb_session and 'password1' in self.required_fields:
             self.required_fields.remove('password1')

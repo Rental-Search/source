@@ -24,7 +24,7 @@ from django.forms.formsets import ORDERING_FIELD_NAME, DELETION_FIELD_NAME
 import facebook
 
 from eloue.accounts import EMAIL_BLACKLIST
-from eloue.accounts.fields import PhoneNumberField, ExpirationField, RIBField
+from eloue.accounts.fields import PhoneNumberField, ExpirationField, RIBField, DateSelectField
 from eloue.accounts.models import Patron, Avatar, PhoneNumber, CreditCard, COUNTRY_CHOICES, PatronAccepted, FacebookSession, Address
 from eloue.accounts.widgets import ParagraphRadioFieldRenderer, CommentedCheckboxInput
 from eloue.utils import form_errors_append
@@ -653,8 +653,8 @@ def make_missing_data_form(instance, required_fields=[]):
         'avatar': forms.ImageField(required=False, label=_(u"Photo de profil")),
         'phones__phone': PhoneNumberField(label=_(u"Téléphone"), required=True, widget=forms.TextInput(attrs={'class': 'inm'})),
         'drivers_license_number': forms.CharField(label=_(u'Numéro de permis'), max_length=32),
-        'drivers_license_date': forms.DateTimeField(label=_(u'Date de délivraisance')),
-        'date_of_birth': forms.DateTimeField(label=_(u'Date de naissance')),
+        'drivers_license_date': DateSelectField(label=_(u'Date de délivraisance')),
+        'date_of_birth': DateSelectField(label=_(u'Date de naissance')),
         'place_of_birth': forms.CharField(label=_(u'Lieu de naissance'), max_length=255),
     })
 

@@ -28,8 +28,8 @@
         	var addNewAddress = $(".add-new-address");
         	var addNewPhone = $(".add-new-number");
 
-            var addresses = $("#id_1-addresses")[0];
-            var phones = $("#id_1-phones")[0];
+            var addresses = $("#id_1-addresses, #id_2-addresses")[0];
+            var phones = $("#id_1-phones, #id_2-phones")[0];
 
         	if (!addresses||addresses.length == 1 ){
         		$(".new-address").show();
