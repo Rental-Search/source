@@ -49,7 +49,7 @@ MONTH_CHOICES = (
     ('12', '12')
 )
 
-YEAR_CHOICES = [(lambda x: (str(x)[2:], x))(datetime.date.today().year+y) for y in xrange(11)] + [('', _('an'))]
+YEAR_CHOICES = [('', _('an'))] + [(lambda x: (str(x)[2:], x))(datetime.date.today().year+y) for y in xrange(11)] 
 
 
 class ExpirationWidget(forms.MultiWidget):
