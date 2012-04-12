@@ -34,6 +34,7 @@ class PhoneNumberField(forms.Field):
 
 
 MONTH_CHOICES = (
+    ('', _('mois')),
     ('01', '01'),
     ('02', '02'),
     ('03', '03'),
@@ -48,7 +49,7 @@ MONTH_CHOICES = (
     ('12', '12')
 )
 
-YEAR_CHOICES = [(lambda x: (x, x))(str(datetime.date.today().year+y)[2:]) for y in xrange(11)]
+YEAR_CHOICES = [(lambda x: (str(x)[2:], x))(datetime.date.today().year+y) for y in xrange(11)] + [('', _('an'))]
 
 
 class ExpirationWidget(forms.MultiWidget):
@@ -59,10 +60,6 @@ class ExpirationWidget(forms.MultiWidget):
             )
         super(ExpirationWidget, self).__init__(widgets)
     
-    def format_output(self, rendered_widgets):
-        return _(u'<label>Month</label>{0}<label>Year</label>{1}'.format(*rendered_widgets))
-        pass
-
     def decompress(self, value):
         return (value[:2], value[2:])
 
