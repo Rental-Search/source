@@ -161,9 +161,9 @@ class DateSelectField(forms.MultiValueField):
 
     def __init__(self, min_year=1900, max_year=2012, *args, **kwargs):
         fields = (
-            forms.ChoiceField(choices=((x, str(x).rjust(2, '0')) for x in xrange(1, 32))),
-            forms.ChoiceField(choices=((x, str(x).rjust(2, '0')) for x in xrange(1, 13))),
-            forms.ChoiceField(choices=((x, x) for x in xrange(min_year, max_year))),
+            forms.TypedChoiceField(coerce=int, choices=((x, str(x).rjust(2, '0')) for x in xrange(1, 32))),
+            forms.TypedChoiceField(coerce=int, choices=((x, str(x).rjust(2, '0')) for x in xrange(1, 13))),
+            forms.TypedChoiceField(coerce=int, choices=((x, x) for x in xrange(min_year, max_year))),
         )
         self.widget = DateSelectWidget(widgets=[field.widget for field in fields])
         self.hidden_widget = DateSelectWidget(widgets=[field.hidden_widget for field in fields])
