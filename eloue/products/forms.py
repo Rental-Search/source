@@ -13,7 +13,7 @@ from mptt.forms import TreeNodeChoiceField
 from eloue.accounts.fields import DateSelectField
 from eloue.accounts.models import Patron, COUNTRY_CHOICES, Address
 from eloue.geocoder import GoogleGeocoder
-from eloue.products.fields import FacetField
+from eloue.products.fields import FacetField, FRLicensePlateField
 from eloue.products.models import Alert, PatronReview, ProductReview, Product, CarProduct, RealEstateProduct, Picture, Category, UNIT, PAYMENT_TYPE, ProductRelatedMessage, MessageThread
 from eloue.products.widgets import PriceTextInput, CommentedSelectInput
 from eloue.products.utils import Enum
@@ -185,7 +185,6 @@ class MessageEditForm(forms.Form):
 
 
 def generate_choices(slugs, empty_value=_(u"Choisissez une catégorie")):
-
     if empty_value is not None:
         yield ('', empty_value)
 
@@ -195,10 +194,14 @@ def generate_choices(slugs, empty_value=_(u"Choisissez une catégorie")):
             for child in node.get_children():
                 yield child
     for child in _children(slugs):
-        yield (
-            child.name,
-            [(descendant.pk, descendant.name) for descendant in child.get_descendants()]
-        )
+        descendants = child.get_descendants()
+        if descendants:
+            yield (
+                child.name,
+                [(descendant.pk, descendant.name) for descendant in descendants]
+            )
+        else:
+            yield (child.pk, child.name)
 
 
 class ProductForm(BetterModelForm):
@@ -222,7 +225,7 @@ class ProductForm(BetterModelForm):
         self.title = _(u'Ajouter un objet')
         self.fields['category'] = forms.TypedChoiceField(
             label=_(u"Catégorie"), coerce=lambda pk: Category.tree.get(pk=pk), 
-            choices=generate_choices((cat.slug for cat in Category.tree.root_nodes() if cat.slug not in ['auto-et-moto', 'hebergement', 'motors']))
+            choices=generate_choices((cat.slug for cat in Category.tree.root_nodes() if cat.slug not in ['auto-et-moto', 'hebergement', 'motors', 'automobile']))
         )
 
     def clean_quantity(self):
@@ -266,7 +269,7 @@ class ProductForm(BetterModelForm):
                 'classes': ['prices-grid', 'hidden-fieldset']})
         ]
 
-from eloue.products.fields import FRLicensePlateField
+
 class CarProductForm(ProductForm):
     quantity = forms.IntegerField(widget=forms.HiddenInput(), initial=1)
     summary = forms.CharField(required=False, widget=forms.HiddenInput(), max_length=255)
@@ -278,7 +281,7 @@ class CarProductForm(ProductForm):
         self.title = _(u'Ajouter une voiture')
         self.fields['category'] = forms.TypedChoiceField(
             label=_(u"Catégorie"), coerce=lambda pk: Category.tree.get(pk=pk), 
-            choices=generate_choices(('auto-et-moto', 'motors'))
+            choices=generate_choices(('automobile',))
         )
 
     def clean(self):
@@ -382,7 +385,7 @@ class ProductEditForm(BetterModelForm):
         self.fields['category'] = forms.TypedChoiceField(
             label=_(u"Catégorie"), coerce=lambda pk: Category.tree.get(pk=pk), 
             choices=generate_choices(
-                (cat.slug for cat in Category.tree.root_nodes() if cat.slug not in ['auto-et-moto', 'hebergement', 'motors']), None
+                (cat.slug for cat in Category.tree.root_nodes() if cat.slug not in ['auto-et-moto', 'hebergement', 'motors', 'automobile']), None
             )
         )
     class Meta:
@@ -430,7 +433,7 @@ class CarProductEditForm(ProductEditForm):
         super(CarProductEditForm, self).__init__(*args, **kwargs)
         self.fields['category'] = forms.TypedChoiceField(
             label=_(u"Catégorie"), coerce=lambda pk: Category.tree.get(pk=pk), 
-            choices=generate_choices(('auto-et-moto', 'motors'), None)
+            choices=generate_choices(('automobile',), None)
         )
 
     def clean(self):
