@@ -88,6 +88,7 @@
       </fieldset> 
       {% endfor %}
   <div class="form-actions">
+      <a href="{% url product_delete product_id=product.id slug=product.slug %}">Supprimer</a>
     <button type="submit" class="btn btn-primary">Enregistrer</button>
     <button type="reset" class="btn btn-cancel">Annuler</a>
   </div>
