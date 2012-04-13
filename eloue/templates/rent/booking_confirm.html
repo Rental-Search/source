@@ -177,15 +177,29 @@
             {% endif %}
           </div>{# controls #}
         </div>{# control-group #}
-        <div class="control-group {% if form.save.errors %} error {% endif %}">
-          <label class="checkbox" for="{{ form.save.id_for_label }}">
-            {{ form.save }} {% trans "Conserver mes coordonnées bancaire" %}
+        <div class="control-group {% if form.keep.errors %} error {% endif %}">
+          <label class="checkbox" for="{{ form.keep.id_for_label }}">
+            {{ form.keep }} {% trans "Conserver mes coordonnées bancaire" %}
           </label>
           <div class="controls">
-            <p class="help-block">{{ form.save.help_text}}</p>
-            {% if form.save.errors %}
+            <p class="help-block">{{ form.keep.help_text}}</p>
+            {% if form.keep.errors %}
             <span class="help-inline">
-            {% for error in form.save.errors %}
+            {% for error in form.keep.errors %}
+              {{ error|escape }}
+            {% endfor %}
+            </span>
+            {% endif %}
+          </div>{# controls #}
+        <div class="control-group {% if form.holder_name.errors %} error {% endif %}">
+          <label class="checkbox" for="{{ form.holder_name.id_for_label }}">
+            {{ form.holder_name }} {% trans "Titulaire de la carte" %}
+          </label>
+          <div class="controls">
+            <p class="help-block">{{ form.holder_name.help_text}}</p>
+            {% if form.holder_name.errors %}
+            <span class="help-inline">
+            {% for error in form.holder_name.errors %}
               {{ error|escape }}
             {% endfor %}
             </span>
