@@ -4,7 +4,7 @@ import re
 import datetime
 
 import django.forms as forms
-from form_utils.forms import BetterForm
+from form_utils.forms import BetterForm, BetterModelForm
 from django.conf import settings
 from django.contrib.auth import authenticate, login
 from django.contrib.sites.models import Site
@@ -229,16 +229,15 @@ class EmailPasswordResetForm(PasswordResetForm):
             message.attach_alternative(html_content, "text/html")
             message.send()
 
-
-class PatronEditForm(forms.ModelForm):
+class PatronEditForm(BetterModelForm):
     is_professional = forms.BooleanField(label=_(u"Professionnel"), required=False, initial=False, widget=CommentedCheckboxInput(info_text='Je suis professionnel'))
     company_name = forms.CharField(label=_(u"Nom de la société"), required=False, widget=forms.TextInput(attrs={'class': 'inm'}))
     
     email = forms.EmailField(label=_(u"Email"), max_length=75, widget=forms.TextInput(attrs={
         'autocapitalize': 'off', 'autocorrect': 'off', 'class': 'inm'}))
     username = forms.RegexField(label=_(u"Pseudo"), max_length=30, regex=r'^[\w.@+-]+$',
-    help_text=_("Required. 30 characters or fewer. Letters, digits and @/./+/-/_ only."),
-    error_messages={'invalid': _("This value may contain only letters, numbers and @/./+/-/_ characters.")},
+    help_text=_(u"Required. 30 characters or fewer. Letters, digits and @/./+/-/_ only."),
+    error_messages={'invalid': _(u"This value may contain only letters, numbers and @/./+/-/_ characters.")},
     widget=forms.TextInput(attrs={'class': 'inm'}))
     
     first_name = forms.CharField(label=_(u"Prénom"), required=True, widget=forms.TextInput(attrs={'class': 'inm'}))
@@ -252,32 +251,45 @@ class PatronEditForm(forms.ModelForm):
     is_subscribed = forms.BooleanField(required=False, initial=False, label=_(u"Newsletter"), widget=CommentedCheckboxInput(info_text="J'accepte de recevoir de recevoir la Newsletter e-loue"))
     new_messages_alerted = forms.BooleanField(label=_(u"Notifications"), required=False, initial=True, widget=CommentedCheckboxInput(info_text="J'accepte de recevoir les messages des autres membres"))
 
+    date_of_birth = DateSelectField(label=_(u"Lieu de naissance"))
+    drivers_license_date = DateSelectField(label=_(u"Date d'obtention du permis"))
+
+    about = forms.CharField(label=_(u"A propos de vous"), required=False, widget=forms.Textarea(attrs={'class': 'inm'}))
+    work = forms.CharField(label=_(u"Travail"), required=False, widget=forms.TextInput(attrs={'class': 'inm'}), help_text=_(u"Exemple : Directrice Resources Humaines, ma socitée"))
+    school = forms.CharField(label=_(u"Etudes"), required=False, widget=forms.TextInput(attrs={'class': 'inm'}), help_text=_(u"Exemple : Université Panthéon Sorbonne (Paris I)"))
+    hobby = forms.CharField(label=_(u"Hobbies"), required=False, widget=forms.TextInput(attrs={'class': 'inm'}))
+
+    class Meta:
+        model = Patron
+        fieldsets = [
+            ('basic_info', {
+                'fields': [
+                    'is_professional', 'company_name', 'username', 'avatar', 
+                    'date_of_birth', 'place_of_birth', 'email',
+                    'civility', 'first_name', 'last_name','default_address',
+                    'paypal_email', 'is_subscribed', 'new_messages_alerted',
+                ],
+                'legend': _(u'Informations nécessaires')
+            }),
+            ('extra_info', {
+                'fields': ['about', 'work', 'school', 'hobby'],
+                'legend': _(u"Informations complémentaires")
+            }),
+            ('driver_info', {
+                'fields': ['drivers_license_date', 'drivers_license_number'],
+                'legend': _(u"Informations sur le conducteur")
+            })
+        ]
+        widgets = {
+            'is_professional': CommentedCheckboxInput('Je suis professionel'),
+        }
+
     def __init__(self, *args, **kwargs):
         super(PatronEditForm, self).__init__(*args, **kwargs)
         self.legend = _(u"Informations nécessaires")
         self.fields['civility'].widget.attrs['class'] = "selm"
         self.fields['default_address'].widget.attrs['class'] = "selm"
         self.fields['default_address'].queryset = self.instance.addresses.all()
-
-    class Meta:
-        model = Patron
-        fields = [
-             'is_professional',
-             'company_name',
-             'username',
-             'email',
-             'civility',
-             'first_name',
-             'last_name',
-             'avatar',
-             'default_address',
-             'paypal_email',
-             'is_subscribed',
-             'new_messages_alerted',
-        ]
-        widgets = {
-            'is_professional': CommentedCheckboxInput('Je suis professionel'),
-        }
 
     def save(self, *args, **kwargs):
         inst = super(PatronEditForm, self).save(*args, **kwargs)
@@ -330,25 +342,6 @@ class PatronEditForm(forms.ModelForm):
             if not paypal_payment.confirm_paypal_account(email=paypal_email):
                 form_errors_append(self, 'paypal_email', _(u"Vérifiez que vous avez bien répondu à l'email d'activation de Paypal"))
         return self.cleaned_data
-
-class MoreInformationForm(forms.ModelForm):
-    about = forms.CharField(label=_(u"A propos de vous"), required=False, widget=forms.Textarea(attrs={'class': 'inm'}))
-    work = forms.CharField(label=_(u"Travail"), required=False, widget=forms.TextInput(attrs={'class': 'inm'}), help_text=_(u"Exemple : Directrice Resources Humaines, ma socitée"))
-    school = forms.CharField(label=_(u"Etudes"), required=False, widget=forms.TextInput(attrs={'class': 'inm'}), help_text=_(u"Exemple : Université Panthéon Sorbonne (Paris I)"))
-    hobby = forms.CharField(label=_(u"Hobbies"), required=False, widget=forms.TextInput(attrs={'class': 'inm'}))
-
-    def __init__(self, *args, **kwargs):
-        super(MoreInformationForm, self).__init__(*args, **kwargs)
-        self.legend = _(u"Informations complémentaires")
-
-    class Meta:
-        model = Patron
-        fields = [
-            'about',
-            'work',
-            'school',
-            'hobby'
-        ]
 
 
 class PatronSetPasswordForm(forms.Form):

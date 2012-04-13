@@ -29,7 +29,7 @@ from oauth_provider.models import Token
 from django.shortcuts import redirect
  
 from eloue.decorators import secure_required, mobify, ownership_required
-from eloue.accounts.forms import EmailAuthenticationForm, PatronEditForm, MoreInformationForm, PatronPaypalForm, PatronPasswordChangeForm, ContactForm, PatronSetPasswordForm, FacebookForm
+from eloue.accounts.forms import EmailAuthenticationForm, PatronEditForm, PatronPasswordChangeForm, ContactForm, PatronSetPasswordForm, FacebookForm
 from eloue.accounts.models import Patron, FacebookSession
 from eloue.accounts.wizard import AuthenticationWizard
 
@@ -329,48 +329,16 @@ def patron_detail(request, slug, patron_id=None, page=None):
 
 @login_required
 def patron_edit(request, *args, **kwargs):
-    paypal = request.GET.get('paypal', False)
-    redirect_path = request.REQUEST.get('next', '')
-    patron = request.user
-
-    patron_dict = model_to_dict(patron)
-    
-    patron_edit_form = PatronEditForm(request.POST or None, request.FILES or None, instance=patron, initial=patron_dict, prefix='patronEdit')
-    more_info_edit_form = MoreInformationForm(request.POST or None, instance=patron, initial=patron_dict, prefix='moreInfoEdit')
-
-    forms = [patron_edit_form, more_info_edit_form]
-    is_multipart = any([form.is_multipart() for form in forms])
-
-    if patron_edit_form.is_valid() and more_info_edit_form.is_valid():
-        for form in forms:
-            patron = form.save()
-        if paypal:
-            is_valid = patron.is_valid
-            is_confirmed = patron.is_confirmed
-            if patron.is_valid and patron.is_confirmed:
-                protocol = 'https' if USE_HTTPS else 'http'
-                domain = Site.objects.get_current().domain
-                if not redirect_path or '//' in redirect_path or ' ' in redirect_path:
-                    redirect_path = reverse('dashboard')
-                return_url = "%s://%s%s?paypal=true" % (protocol, domain, redirect_path)
-                messages.success(request, _(u"Vos informations ont bien été modifiées et votre compte paypal est valide"))    
-                return redirect_to(request, return_url)
-            else:
-                if not is_valid:
-                    messages.error(request, _(u"Votre Paypal compte est invalide, veuillez modifier votre nom ou prénom ou email paypal"))
-                if not is_confirmed:
-                    messages.error(request,  _(u"Vérifiez que vous avez bien répondu à l'email d'activation de Paypal"))
-        elif request.POST:
-            messages.success(request, _(u"Vos informations ont bien été modifiées")) 
-
+    form = PatronEditForm(request.POST or None, request.FILES or None, instance=request.user)
+    if form.is_valid():
+        form.save()
+        messages.success(request, _(u"Vos informations ont bien été modifiées")) 
         return redirect(reverse('patron_edit'))
     
     return direct_to_template(
         request, 'accounts/patron_edit.html', 
         extra_context={
-            'forms': forms, 
-            'patron': request.user,
-            'is_multipart': is_multipart
+            'form': form
         }
     )
 
