@@ -415,45 +415,6 @@ def patron_edit_addresses(request):
         formset = AddressFormSet(instance=request.user)
     return render_to_response('accounts/patron_edit_addresses.html', dictionary={'formset': formset}, context_instance=RequestContext(request))
 
-@login_required
-def patron_paypal(request):
-    form = PatronPaypalForm(request.POST or None,
-        initial={'paypal_email': request.user.email}, instance=request.user)
-    redirect_path = request.REQUEST.get('next', '')
-    booking_id = redirect_path.split("/")[-2]
-    from eloue.rent.models import Booking
-    booking = Booking.objects.get(uuid=booking_id)
-    if not redirect_path or '//' in redirect_path or ' ' in redirect_path:
-        redirect_path = reverse('dashboard')
-    if form.is_valid():
-        
-        patron = form.save()
-        protocol = 'https' if USE_HTTPS else 'http'
-        domain = Site.objects.get_current().domain
-        return_url = "%s://%s%s?paypal=true" % (protocol, domain, redirect_path)
-        profile_edit_url = "%s://%s%s?next=%s&paypal=true"% (protocol, domain, reverse('patron_edit'), redirect_path)
-        
-        if form.paypal_exists:
-            is_valid = patron.is_valid
-            is_confirmed = patron.is_confirmed
-            if is_valid and is_confirmed:
-                messages.success(request, _(u"Votre compte paypal est valide"))
-                return redirect_to(request, return_url)
-            else:
-                if not is_valid:
-                    messages.error(request, _(u"Votre Paypal compte est invalide, veuillez modifier votre nom ou prénom ou email paypal"))
-                if not is_confirmed:
-                    messages.error(request,  _(u"Vérifiez que vous avez bien répondu à l'email d'activation de Paypal"))
-                return redirect_to(request, profile_edit_url)
-        else: 
-            paypal_redirect = patron.create_account(return_url=return_url)
-            if paypal_redirect:
-                return redirect_to(request, paypal_redirect)
-        patron.paypal_email = None
-        patron.save()
-        messages.error(request, _(u"Nous n'avons pas pu créer votre compte paypal"))
-    return direct_to_template(request, 'accounts/patron_paypal.html', extra_context={'form': form, 'next': redirect_path})
-
 
 @login_required
 def dashboard(request):

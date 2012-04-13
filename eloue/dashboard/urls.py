@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.conf.urls.defaults import *
 
-from eloue.accounts.views import dashboard, patron_edit, patron_edit_password, patron_paypal, patron_edit_phonenumber,\
+from eloue.accounts.views import dashboard, patron_edit, patron_edit_password, patron_edit_phonenumber,\
 									patron_edit_addresses, accounts_work_autocomplete, accounts_studies_autocomplete, comments,\
 									comments_received, owner_booking_pending, owner_booking_ongoing, owner_booking_history, owner_booking_authorized, owner_history, alert_edit, owner_product
 from eloue.products.views import product_edit, product_address_edit, product_price_edit, thread_details, archive_thread, unarchive_thread, inbox, archived
@@ -11,7 +11,6 @@ urlpatterns = patterns('',
 	url(r'^profil/$', dashboard, name="dashboard"),
     url(r'^account/$', patron_edit, name="patron_edit"),
     url(r'^account/password/$', patron_edit_password, name="patron_edit_password"),
-    url(r'^account/paypal/$', patron_paypal, name="patron_paypal"),
     url(r'^account/phonenumbers/$', patron_edit_phonenumber, name="patron_edit_phonenumber"),
     url(r'^account/addresses/$', patron_edit_addresses, name="patron_edit_addresses"),
     url(r'^account/credit_card/$', 'eloue.accounts.views.patron_edit_credit_card', name="patron_edit_credit_card"),
