@@ -242,12 +242,13 @@ class MultiPartFormWizard(FormWizard):
     def process_step(self, request, form, step):
         super(MultiPartFormWizard, self).process_step(request, form, step)
         self.user = request.user
+        if not request.user.is_anonymous():
+            self.new_patron = request.user
         if isinstance(form, EmailAuthenticationForm):
             self.fb_session = form.fb_session
             self.new_patron = form.get_user()
-            self.extra_context['new_patron'] = self.new_patron
             self.me = form.me
         if self.fb_session and 'password1' in self.required_fields:
             self.required_fields.remove('password1')
             self.required_fields.remove('password2')
-
+        self.extra_context['new_patron'] = self.new_patron
