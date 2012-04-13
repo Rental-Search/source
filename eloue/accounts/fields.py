@@ -3,6 +3,7 @@ import re
 import datetime
 import itertools
 import string
+import calendar
 
 from django import forms
 from django.utils.encoding import smart_unicode
@@ -156,14 +157,19 @@ class DateSelectWidget(forms.MultiWidget):
         if value:
             return (value.day, value.month, value.year)
         return (None, None, None)
+    def __call__(self):
+        return self
 
 class DateSelectField(forms.MultiValueField):
+    DAYS = [('', 'Jour')] + [(x, x) for x in xrange(1, 32)]
+    MONTHS = [('', 'Mois')] + [(x, _(calendar.month_name[x])) for x in xrange(1, 13)]
 
     def __init__(self, min_year=1900, max_year=2012, *args, **kwargs):
+        self.YEARS = [('', 'Année')] + [(x, x) for x in xrange(max_year, min_year, -1)]
         fields = (
-            forms.TypedChoiceField(coerce=int, choices=((x, str(x).rjust(2, '0')) for x in xrange(1, 32))),
-            forms.TypedChoiceField(coerce=int, choices=((x, str(x).rjust(2, '0')) for x in xrange(1, 13))),
-            forms.TypedChoiceField(coerce=int, choices=((x, x) for x in xrange(min_year, max_year))),
+            forms.TypedChoiceField(coerce=int, choices=self.DAYS),
+            forms.TypedChoiceField(coerce=int, choices=self.MONTHS),
+            forms.TypedChoiceField(coerce=int, choices=self.YEARS),
         )
         self.widget = DateSelectWidget(widgets=[field.widget for field in fields])
         self.hidden_widget = DateSelectWidget(widgets=[field.hidden_widget for field in fields])
