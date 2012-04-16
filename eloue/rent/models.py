@@ -58,11 +58,6 @@ BOOKING_STATE = Enum([
 
 DEFAULT_CURRENCY = get_format('CURRENCY') if not settings.CONVERT_XPF else "XPF"
 
-COMMISSION = D(str(getattr(settings, 'COMMISSION', 0.15)))
-INSURANCE_FEE = D(str(getattr(settings, 'INSURANCE_FEE', 0.0594)))
-INSURANCE_COMMISSION = D(str(getattr(settings, 'INSURANCE_COMMISSION', 0)))
-INSURANCE_TAXES = D(str(getattr(settings, 'INSURANCE_TAXES', 0.09)))
-
 
 USE_HTTPS = getattr(settings, 'USE_HTTPS', True)
 
@@ -252,10 +247,8 @@ class Booking(models.Model):
         message.send()
     
     def send_acceptation_email(self):
-        from eloue.rent.contract import ContractGenerator
         context = {'booking': self}
-        contract_generator = ContractGenerator()
-        contract = contract_generator(self)
+        contract = self.product.subtype.contract_generator(self)
         content = contract.getvalue()
         message = create_alternative_email('rent/emails/owner_acceptation', context, settings.DEFAULT_FROM_EMAIL, [self.owner.email])
         message.attach('contrat.pdf', content, 'application/pdf')
@@ -305,7 +298,7 @@ class Booking(models.Model):
         >>> booking.commission
         Decimal('1.50')
         """
-        return self.total_amount * COMMISSION
+        return self.total_amount * self.product.subtype.commission
         
     @property
     def total_commission(self):
@@ -335,7 +328,7 @@ class Booking(models.Model):
         >>> booking.insurance_commission
         Decimal('0')
         """
-        return self.total_amount * INSURANCE_COMMISSION
+        return self.total_amount * self.product.subtype.insurance_commission
     
     @property
     def insurance_fee(self):
@@ -345,7 +338,7 @@ class Booking(models.Model):
         >>> booking.insurance_fee
         Decimal('0.540')
         """
-        return self.total_amount * INSURANCE_FEE
+        return self.total_amount * self.product.subtype.insurance_fee
     
     @property
     def insurance_taxes(self):
@@ -355,7 +348,7 @@ class Booking(models.Model):
         >>> booking.insurance_taxes
         Decimal('0.04860')
         """
-        return self.insurance_fee * INSURANCE_TAXES
+        return self.insurance_fee * self.product.subtype.insurance_taxes
     
     def not_need_ipn(self):
         return self.product.payment_type == PAYMENT_TYPE.NOPAY

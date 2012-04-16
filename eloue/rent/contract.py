@@ -19,7 +19,14 @@ from eloue.rent.utils import spellout
 local_path = lambda path: os.path.join(os.path.dirname(__file__), path)
 
 
-class ContractGenerator(object):
+class ContractGeneratorNormal(object):
+    templates = {
+        'fr-fr': local_path("contract/fr_template.pdf"),
+        'en-uk': local_path("contract/uk_template.pdf"),
+    }
+    templates = {
+        'fr-fr': local_path("contract/fr_template_normal.pdf")
+    }
     def __call__(self, booking):
         """Merge template and carbon to produce final contract"""
         template = self.load_template(booking)
@@ -36,11 +43,8 @@ class ContractGenerator(object):
     
     def load_template(self, booking):
         """Load template pdf"""
-        if settings.LANGUAGE_CODE == 'fr-fr':
-            return PdfFileReader(open(local_path("contract/fr_template.pdf")))
-        elif settings.LANGUAGE_CODE == 'en-uk':
-            return PdfFileReader(open(local_path("contract/uk_template.pdf")))
-    
+        return PdfFileReader(open(self.templates[settings.LANGUAGE_CODE]))
+
     def generate_carbon(self, booking):
         "Create and draw the carbon"
         carbon_file = StringIO()
@@ -51,46 +55,137 @@ class ContractGenerator(object):
     
     def draw(self, canvas, booking):
         """Draw stuff in the carbon"""
-        from django.utils.timesince import timesince
         canvas.setFont("Helvetica", 10)
-        # Owner coordinates
-        if booking.owner.is_professional:
-            canvas.drawString(71, 633, booking.owner.company_name)
-        else:
-            canvas.drawString(71, 633, booking.owner.get_full_name())
-        address = booking.owner.addresses.all()[0]
-        canvas.drawString(71, 573, address.address1)
-        canvas.drawString(71, 563, "%s %s - %s" % (address.zipcode, address.city, address.country))
-        phone = booking.owner.phones.all()[0]
-        canvas.drawString(71, 543, phone.number)
-        
-        # Borrower coordinates
-        if booking.borrower.is_professional:
-            canvas.drawString(71, 333, booking.borrower.company_name)
-        else:
-            canvas.drawString(71, 333, booking.borrower.get_full_name())
-        address = booking.borrower.addresses.all()[0]
-        canvas.drawString(71, 273, address.address1)
-        canvas.drawString(71, 263, "%s %s - %s" % (address.zipcode, address.city, address.country))
-        phone = booking.borrower.phones.all()[0]
-        canvas.drawString(71, 243, phone.number)
-        
-        # Change page
-        canvas.showPage()
+        canvas.drawString(99, 614, "{first_name} {last_name}".format(
+                first_name=booking.borrower.first_name, 
+                last_name=booking.borrower.last_name.upper()
+            )
+        )
+        canvas.drawString(83, 603, "{phone}".format(phone=booking.borrower.phones.all()[0]))
+        canvas.drawString(75, 594, "{address1}".format(address1=booking.borrower.default_address or booking.borrower.addresses.all()[0]))
+        canvas.drawString(135, 575, "{date_of_birth}, {place_of_birth}".format(
+                date_of_birth=booking.borrower.date_of_birth.strftime("%d/%m/%Y"),
+                place_of_birth=booking.borrower.place_of_birth
+            )
+        )
+        canvas.drawString(115, 540, "{masked_number}".format(
+            masked_number=booking.borrower.creditcard.masked_number
+        ))
+        canvas.drawString(115, 530, "{expires}".format(
+            expires=booking.borrower.creditcard.expires
+        ))
+        canvas.drawString(170, 438, "{started_at}".format(started_at=booking.started_at.strftime("%d/%m/%Y à %H:%M")))
+        canvas.drawString(176, 426, "{ended_at}".format(ended_at=booking.ended_at.strftime("%d/%m/%Y à %H:%M")))
+        canvas.drawString(180, 415, "{total_amount}".format(total_amount=booking.total_amount))
+
+        canvas.drawString(430, 660, "{first_name} {last_name}".format(
+            first_name=booking.owner.first_name,
+            last_name=booking.owner.last_name.upper()
+        ))
+        canvas.drawString(430, 644, "{phone}".format(phone=booking.owner.phones.all()[0]))
+        canvas.drawString(430, 570, "{summary}".format(summary=booking.product.summary))
+        return canvas
+
+
+class ContractGeneratorCar(ContractGeneratorNormal):
+    templates = {
+        'fr-fr': local_path("contract/fr_template_car.pdf"),
+        'en-uk': local_path("contract/uk_template.pdf"),
+    }
+    def draw(self, canvas, booking):
         canvas.setFont("Helvetica", 10)
+        canvas.drawString(0, 0, "0,0 -----")
+        canvas.drawString(10, 10, "10,10 -----")
+        canvas.drawString(0, 100, "0,100 -----")
+        canvas.drawString(100, 0, "100,0 -----")
+        canvas.drawString(200, 0, "200,0 -----")
+        canvas.drawString(300, 0, "300,0 -----")
+        canvas.drawString(400, 0, "400,0 -----")
+        canvas.drawString(500, 0, "500,0 -----")
+        canvas.drawString(0, 100, "0,100 -----")
+        canvas.drawString(0, 200, "0,200 -----")
+        canvas.drawString(0, 300, "0,300 -----")
+        canvas.drawString(0, 400, "0,400 -----")
+        canvas.drawString(0, 500, "0,500 -----")
+        canvas.drawString(0, 600, "0,600 -----")
+        canvas.drawString(0, 700, "0,700 -----")
+        canvas.drawString(0, 800, "0,800 -----")
+        canvas.drawString(0, 900, "0,900 -----")
+        canvas.drawString(85, 764, "{first_name} {last_name}".format(
+                first_name=booking.borrower.first_name, 
+                last_name=booking.borrower.last_name.upper()
+            )
+        )
+        canvas.drawString(72, 752, "{phone}".format(phone=booking.borrower.phones.all()[0]))
+        canvas.drawString(70, 741, "{address1}".format(address1=booking.borrower.default_address or booking.borrower.addresses.all()[0]))
+        canvas.drawString(120, 720, "{date_of_birth}, {place_of_birth}".format(
+                date_of_birth=booking.borrower.date_of_birth.strftime("%d/%m/%Y"),
+                place_of_birth=booking.borrower.place_of_birth
+            )
+        )
+        canvas.drawString(115, 710, "{drivers_license_number}".format(
+                drivers_license_number=booking.borrower.drivers_license_number
+            )
+        )
+        canvas.drawString(130, 700, "{drivers_license_date}".format(
+            drivers_license_date=booking.borrower.drivers_license_date.strftime("%d/%m/%Y")
+        ))
+        canvas.drawString(115, 640, "{masked_number}".format(
+            masked_number=booking.borrower.creditcard.masked_number
+        ))
+        canvas.drawString(115, 630, "{expires}".format(
+            expires=booking.borrower.creditcard.expires
+        ))
+        canvas.drawString(170, 535, "{started_at}".format(started_at=booking.started_at.strftime("%d/%m/%Y à %H:%M")))
+        canvas.drawString(175, 522, "{ended_at}".format(ended_at=booking.ended_at.strftime("%d/%m/%Y à %H:%M")))
+        canvas.drawString(168, 490, "{total_amount}".format(total_amount=booking.total_amount))
+
+        canvas.drawString(430, 760, "{first_name} {last_name}".format(
+            first_name=booking.owner.first_name,
+            last_name=booking.owner.last_name.upper()
+        ))
+        canvas.drawString(430, 744, "{phone}".format(phone=booking.owner.phones.all()[0]))
+        canvas.drawString(430, 710, "{summary}".format(summary=booking.product.summary))
+        canvas.drawString(430, 693, "{licence_plate}".format(licence_plate=booking.product.carproduct.licence_plate))
+        canvas.drawString(430, 680, "{first_registration_date}".format(first_registration_date=booking.product.carproduct.first_registration_date))
+        return canvas
         
-        # Product related
-        canvas.drawString(71, 582, booking.product.summary)
-        canvas.drawString(225, 345, "%s." % timesince(booking.started_at, booking.ended_at))
-        canvas.drawString(245, 313, format(booking.started_at, _(u"d F Y \à H\hi.")))
-        canvas.drawString(198, 282, format(booking.ended_at, _(u"d F Y \à H\hi.")))
-        canvas.drawString(166, 220, "%s %s." % (booking.total_amount, booking.currency))
-                
-        # Change page
-        canvas.showPage()
+
+class ContractGeneratorRealEstate(ContractGeneratorNormal):
+    templates = {
+        'fr-fr': local_path("contract/fr_template_realestate.pdf"),
+        'en-uk': local_path("contract/uk_template.pdf"),
+    }
+    def draw(self, canvas, booking):
+        """Draw stuff in the carbon"""
         canvas.setFont("Helvetica", 10)
-        
-        spelled_number = spellout(booking.deposit_amount, unit=_('currency_unit'), decimal=_('currency_decimal'))
-        canvas.drawString(71, 640, "%s %s / %s" % (booking.deposit_amount, booking.currency, force_unicode(spelled_number)))
+        canvas.drawString(99, 614, "{first_name} {last_name}".format(
+                first_name=booking.borrower.first_name, 
+                last_name=booking.borrower.last_name.upper()
+            )
+        )
+        canvas.drawString(83, 603, "{phone}".format(phone=booking.borrower.phones.all()[0]))
+        canvas.drawString(75, 594, "{address1}".format(address1=booking.borrower.default_address or booking.borrower.addresses.all()[0]))
+        canvas.drawString(135, 575, "{date_of_birth}, {place_of_birth}".format(
+                date_of_birth=booking.borrower.date_of_birth.strftime("%d/%m/%Y"),
+                place_of_birth=booking.borrower.place_of_birth
+            )
+        )
+        canvas.drawString(115, 540, "{masked_number}".format(
+            masked_number=booking.borrower.creditcard.masked_number
+        ))
+        canvas.drawString(115, 530, "{expires}".format(
+            expires=booking.borrower.creditcard.expires
+        ))
+        canvas.drawString(170, 438, "{started_at}".format(started_at=booking.started_at.strftime("%d/%m/%Y à %H:%M")))
+        canvas.drawString(176, 426, "{ended_at}".format(ended_at=booking.ended_at.strftime("%d/%m/%Y à %H:%M")))
+        canvas.drawString(180, 415, "{total_amount}".format(total_amount=booking.total_amount))
+
+        canvas.drawString(430, 660, "{first_name} {last_name}".format(
+            first_name=booking.owner.first_name,
+            last_name=booking.owner.last_name.upper()
+        ))
+        canvas.drawString(430, 644, "{phone}".format(phone=booking.owner.phones.all()[0]))
+        canvas.drawString(430, 570, "{summary}".format(summary=booking.product.summary))
         return canvas
     

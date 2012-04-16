@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import local
 import logging
+import decimal
 
 DEBUG = getattr(local, 'DEBUG', False)
 DEBUG_TOOLBAR = getattr(local, 'DEBUG_TOOLBAR', False)
@@ -363,16 +364,24 @@ else:
 
 # Business configuration
 BOOKING_DAYS = 85  # Max booking days
-COMMISSION = 0.15  # Our commission percentage
+COMMISSION = 0.2  # Our commission percentage
 POLICY_NUMBER = None  # Our insurance policy number
 PARTNER_NUMBER = None  # Our insurance partner number
-INSURANCE_FEE = 0.054  # Use to calculate transfer price
-INSURANCE_TAXES = 0.09  # Use to calculate taxes on insurance
 INSURANCE_FTP_HOST = None  # Our insurance ftp server host
 INSURANCE_FTP_USER = None  # Our insurance ftp server username
 INSURANCE_FTP_PASSWORD = None  # Our insurance ftp server password
 INSURANCE_FTP_CWD = None  # Our insurance ftp server directory
 INSURANCE_EMAIL = None  # Our insurance email
+
+INSURANCE_FEE_NORMAL = decimal.Decimal('0.0647')
+INSURANCE_FEE_CAR = decimal.Decimal('0.1')
+INSURANCE_FEE_REALESTATE = decimal.Decimal('0.035')
+
+INSURANCE_TAXES_NORMAL = decimal.Decimal('0.09')
+INSURANCE_TAXES_CAR = decimal.Decimal('0')
+INSURANCE_TAXES_REALESTATE = decimal.Decimal('0')
+
+INSURANCE_COMMISSION_REALESTATE = INSURANCE_COMMISSION_CAR = INSURANCE_COMMISSION_NORMAL = decimal.Decimal('0')
 
 # Search configuration
 DEFAULT_RADIUS = 215

@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import uuid
+from decimal import Decimal as D
 
 from datetime import datetime, timedelta, time
 
@@ -30,7 +31,7 @@ from eloue.products.manager import ProductManager, PriceManager, QuestionManager
 from eloue.products.signals import post_save_answer, post_save_product, post_save_curiosity, pre_save_product
 from eloue.products.utils import Enum
 from eloue.signals import post_save_sites
-
+from eloue.rent.contract import ContractGeneratorNormal, ContractGeneratorCar, ContractGeneratorRealEstate
 from django_messages.models import Message 
 from eloue.accounts.models import Patron
 from django.db.models import signals
@@ -317,6 +318,37 @@ class Product(models.Model):
             in itertools.groupby(availables, key=lambda x:x[0].date())
             if key.year == year and key.month == month and key >= datetime.date.today()]
 
+    @property
+    def subtype(self):
+        try:
+            return self.carproduct
+        except self.DoesNotExist:
+            pass
+        try:
+            return self.realestateproduct
+        except self.DoesNotExist:
+            pass
+        return self
+
+    @property
+    def commission(self):
+        return settings.COMMISSION
+
+    @property
+    def insurance_fee(self):
+        return settings.INSURANCE_FEE_NORMAL
+
+    @property
+    def insurance_taxes(self):
+        return settings.INSURANCE_TAXES_NORMAL
+
+    @property
+    def insurance_commission(self):
+        return settings.INSURANCE_COMMISSION_NORMAL
+
+    @property
+    def contract_generator(self):
+        return ContractGeneratorNormal()
 
 class CarProduct(Product):
 
@@ -366,6 +398,29 @@ class CarProduct(Product):
             if getattr(self, field_name)
         ]
 
+    @property
+    def subtype(self):
+        return self
+
+    @property
+    def commission(self):
+        return settings.COMMISSION
+
+    @property
+    def insurance_fee(self):
+        return settings.INSURANCE_FEE_CAR
+
+    @property
+    def insurance_taxes(self):
+        return settings.INSURANCE_TAXES_CAR
+
+    @property
+    def insurance_commission(self):
+        return settings.INSURANCE_COMMISSION_CAR
+
+    @property
+    def contract_generator(self):
+        return ContractGeneratorCar()
 
 class RealEstateProduct(Product):
     
@@ -414,6 +469,29 @@ class RealEstateProduct(Product):
             if getattr(self, field_name)
         ]
 
+    @property
+    def subtype(self):
+        return self
+
+    @property
+    def commission(self):
+        return settings.COMMISSION
+
+    @property
+    def insurance_fee(self):
+        return settings.INSURANCE_FEE_REALESTATE
+
+    @property
+    def insurance_taxes(self):
+        return settings.INSURANCE_TAXES_REALESTATE
+
+    @property
+    def insurance_commission(self):
+        return settings.INSURANCE_COMMISSION_REALESTATE
+
+    @property
+    def contract_generator(self):
+        return ContractGeneratorRealEstate()
 
 def upload_to(instance, filename):
     return 'pictures/%s.jpg' % uuid.uuid4().hex
