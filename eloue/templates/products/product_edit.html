@@ -2,6 +2,7 @@
 {% load i18n navbar product %}
 
 {% block title %}{% trans "Mes annonces" %}{% endblock %}
+
 {% block head %}
   {{block.super}}
 {% endblock %}
@@ -19,6 +20,9 @@
     <li><a href="{{ product_edit }}"  class="{% active request product_edit "$" %}">{% trans "Description et photos" %}</a></li>
     <li><a href="{{ product_address_edit }}"  class="{% active request product_address_edit %}">{% trans "Adresse" %}</a></li>
     <li><a href="{{ product_price_edit }}"  class="{% active request product_price_edit %}">{% trans "Prix" %}</a></li>
+    <li>
+      <a href="{% url product_delete product_id=product.id slug=product.slug %}" style="color: #ccc;">Suppression</a>
+    </li>
 </ul>
 {% endblock %}
 {% block content-main-profil %}
@@ -88,7 +92,6 @@
       </fieldset> 
       {% endfor %}
   <div class="form-actions">
-      <a href="{% url product_delete product_id=product.id slug=product.slug %}">Supprimer</a>
     <button type="submit" class="btn btn-primary">Enregistrer</button>
     <button type="reset" class="btn btn-cancel">Annuler</a>
   </div>

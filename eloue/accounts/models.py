@@ -183,7 +183,7 @@ class Patron(User):
     hobby = models.CharField(max_length=75, blank=True, null=True)
     languages = models.ManyToManyField(Language, blank=True, null=True)
 
-    drivers_license_date = models.DateTimeField(_(u"Date d'obtention du permis"), blank=True, null=True)
+    drivers_license_date = models.DateTimeField(_(u"Date d'obtention"), blank=True, null=True)
     drivers_license_number = models.CharField(_(u"Numéro du permis"), blank=True, max_length=32)
 
     date_of_birth = models.DateTimeField(_(u"Date de naissance"), blank=True, null=True)

@@ -32,7 +32,7 @@
         </p>
     </div><!-- search-home -->
     <div class="products-home">
-        <div class="products-home-tabs">
+        <div class="products-home-tabs" style="display: none;">
             <ul>
                 <li><a href="#near_car">{% trans "Voitures" %}</a></li>
                 <li><a href="#near_realestate">{% trans "Lieu" %}</a></li>
@@ -115,6 +115,7 @@
     <script src="//maps.googleapis.com/maps/api/js?sensor=false&amp;libraries=places" type="text/javascript"></script>
     <script type="text/javascript">
         $(document).ready(function() {
+            $(".products-home-tabs").show();
             if (!$.cookie('geocoding')) 
                 navigator.geolocation.getCurrentPosition(
                     SuccessBuilder(2, false, function(){window.location.reload();}), 

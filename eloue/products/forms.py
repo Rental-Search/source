@@ -205,11 +205,11 @@ def generate_choices(slugs, empty_value=_(u"Choisissez une catégorie")):
 
 
 class ProductForm(BetterModelForm):
-    summary = forms.CharField(label=_(u"Titre"), max_length=100, widget=forms.TextInput(attrs={'class': 'inm'}))
+    summary = forms.CharField(label=_("Titre"), max_length=100)
     picture_id = forms.IntegerField(required=True, widget=forms.HiddenInput())
-    picture = forms.ImageField(label=_(u"Photo"), required=False, widget=forms.FileInput(attrs={'class': 'inm'}))
+    picture = forms.ImageField(label=_(u"Photo"), required=False)
     deposit_amount = forms.DecimalField(label=_(u"Dépôt de garantie"), initial=0, required=False, max_digits=8, decimal_places=2, widget=PriceTextInput(attrs={'class': 'price'}), localize=True, help_text=_(u"Montant utilisé en cas de dédomagement"))
-    quantity = forms.IntegerField(label=_(u"Quantité"), initial=1, widget=forms.TextInput(attrs={'class': 'inm price'}), help_text=_(u"Le locataire peut réserver plusieurs exemplaires si vous les possédez"))
+    quantity = forms.IntegerField(label=_(u"Quantité"), initial=1, widget=forms.TextInput(attrs={'class': 'price'}), help_text=_(u"Le locataire peut réserver plusieurs exemplaires si vous les possédez"))
     description = forms.CharField(label=_(u"Description"), widget=forms.Textarea())
     #payment_type = forms.ChoiceField(choices=PAYMENT_TYPE, required=False, widget=forms.Select(attrs={'class': 'selm'}))
     
@@ -379,7 +379,10 @@ class RealEstateForm(ProductForm):
 class ProductEditForm(BetterModelForm):
     picture = forms.ImageField(label=_(u"Photo"), required=False, widget=forms.FileInput(attrs={'class': 'inm'}))
     licence_plate = FRLicensePlateField(required=True)
-    
+    deposit_amount = forms.DecimalField(label=_(u"Dépôt de garantie"), initial=0, required=False, max_digits=8, decimal_places=2, widget=PriceTextInput(attrs={'class': 'price'}), localize=True, help_text=_(u"Montant utilisé en cas de dédomagement"))
+    quantity = forms.IntegerField(label=_(u"Quantité"), initial=1, widget=forms.TextInput(attrs={'class': 'price'}), help_text=_(u"Le locataire peut réserver plusieurs exemplaires si vous les possédez"))
+
+
     def __init__(self, *args, **kwargs):
         super(ProductEditForm, self).__init__(*args, **kwargs)
         self.fields['category'] = forms.TypedChoiceField(
