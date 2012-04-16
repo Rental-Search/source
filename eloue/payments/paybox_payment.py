@@ -180,6 +180,7 @@ class PayboxManager(object):
 class PayboxDirectPayment(abstract_payment.AbstractPayment):
 
     def __init__(self):
+        raise NotImplementedError()
         self.paybox_manager = PayboxManager()
 
     def preapproval(self, credit_card, cvv):

@@ -29,8 +29,10 @@ from oauth_provider.models import Token
 from django.shortcuts import redirect
  
 from eloue.decorators import secure_required, mobify, ownership_required
-from eloue.accounts.forms import EmailAuthenticationForm, PatronEditForm, PatronPasswordChangeForm, ContactForm, PatronSetPasswordForm, FacebookForm
-from eloue.accounts.models import Patron, FacebookSession
+from eloue.accounts.forms import (EmailAuthenticationForm, PatronEditForm, 
+    PatronPasswordChangeForm, ContactForm, 
+    PatronSetPasswordForm, FacebookForm, CreditCardForm)
+from eloue.accounts.models import Patron, FacebookSession, CreditCard
 from eloue.accounts.wizard import AuthenticationWizard
 
 from eloue import geocoder
@@ -370,12 +372,10 @@ def patron_edit_phonenumber(request):
 
 @login_required
 def patron_edit_credit_card(request):
-    from eloue.accounts.forms import CreditCardForm
-    from eloue.accounts.models import CreditCard
     try:
         instance = request.user.creditcard
     except CreditCard.DoesNotExist:
-        instance = CreditCard(holder=request.user)
+        instance = CreditCard(holder=request.user, keep=True)
     if request.method == 'POST':
         form = CreditCardForm(data=request.POST, instance=instance)
         if form.is_valid():

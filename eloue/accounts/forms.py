@@ -29,7 +29,7 @@ from eloue.accounts.models import Patron, Avatar, PhoneNumber, CreditCard, COUNT
 from eloue.accounts.widgets import ParagraphRadioFieldRenderer, CommentedCheckboxInput
 from eloue.utils import form_errors_append
 from eloue.payments import paypal_payment
-
+from eloue.payments.paybox_payment import PayboxManager, PayboxException
 
 STATE_CHOICES = (
     (0, _(u"Je n'ai pas encore de compte")),
@@ -533,7 +533,7 @@ class CreditCardForm(forms.ModelForm):
         # see note: https://docs.djangoproject.com/en/dev/topics/forms/modelforms/#using-a-subset-of-fields-on-the-form
         # we excluded, then added, to avoid save automatically the card_number
         model = CreditCard
-        exclude = ('card_number', 'holder', 'masked_number')
+        exclude = ('card_number', 'holder', 'masked_number', 'keep')
 
     def clean_card_number(self):
         def _luhn_valid(card_number):
@@ -566,23 +566,21 @@ class CreditCardForm(forms.ModelForm):
 
     def save(self, *args, **kwargs):
         commit = kwargs.pop('commit', True)
-        from eloue.payments.paybox_payment import PayboxManager, PayboxException
         pm = PayboxManager()
-        if commit:
-            try:
-                if self.instance.card_number:
-                    self.cleaned_data['card_number'] = pm.modify(
-                        self.instance.holder.pk, 
-                        self.cleaned_data['card_number'],
-                        self.cleaned_data['expires'], self.cleaned_data['cvv']) 
-                else:
-                    self.cleaned_data['card_number'] = pm.subscribe(
-                        self.instance.holder.pk, 
-                        self.cleaned_data['card_number'], 
-                        self.cleaned_data['expires'], self.cleaned_data['cvv']
-                    )
-            except PayboxException:
-                raise
+        try:
+            if self.instance.pk:
+                self.cleaned_data['card_number'] = pm.modify(
+                    self.instance.holder.pk, 
+                    self.cleaned_data['card_number'],
+                    self.cleaned_data['expires'], self.cleaned_data['cvv']) 
+            else:
+                self.cleaned_data['card_number'] = pm.subscribe(
+                    self.instance.holder.pk, 
+                    self.cleaned_data['card_number'], 
+                    self.cleaned_data['expires'], self.cleaned_data['cvv']
+                )
+        except PayboxException:
+            raise
         instance = super(CreditCardForm, self).save(*args, commit=False, **kwargs)
         instance.card_number = self.cleaned_data['card_number']
         instance.masked_number = self.cleaned_data['masked_number']
@@ -591,7 +589,12 @@ class CreditCardForm(forms.ModelForm):
         return instance
 
 class BookingCreditCardForm(CreditCardForm):
-    pass
+    class Meta:
+        # see note: https://docs.djangoproject.com/en/dev/topics/forms/modelforms/#using-a-subset-of-fields-on-the-form
+        # we excluded, then added, to avoid save automatically the card_number
+        model = CreditCard
+        exclude = ('card_number', 'holder', 'masked_number')
+
 
 class CvvForm(forms.ModelForm):
     cvv = forms.CharField(label=_(u'Veuillez resaisir votre cryptogram visuel'), min_length=3, max_length=4, widget=forms.TextInput(attrs={'placeholder': 'E-loue ne stocke pas le cryptogram visuel, vous devriez resaisir apres chaque payment pour des raison de securite'}))
@@ -602,7 +605,7 @@ class CvvForm(forms.ModelForm):
         super(CvvForm, self).__init__(*args, **kwargs)
 
     class Meta:
-        exclude = ('expires', 'masked_number', 'card_number', 'holder')
+        exclude = ('expires', 'masked_number', 'card_number', 'holder', 'keep')
         model = CreditCard
 
     def clean(self):

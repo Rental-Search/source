@@ -14,15 +14,7 @@
       <legend>{% trans "Modification de mes coordonnées bancaires" %}</legend>
        <form class="" method="post" action="">
       {% csrf_token %}
-      <label>{{ form.card_number.label }}</label>
-      {{ form.card_number }} {{ form.card_number.errors }}
-      <label>{{ form.expires.label }}</label>
-      {{ form.expires }} {{ form.expires.errors }}
-      <label>{{ form.cvv.label }}</label>
-      {{ form.cvv }} {{ form.cvv.errors }}
-      <label>{{ form.holder_name.label }}</label>
-      {{ form.holder_name }} {{ form.holder_name.errors }} 
-       {{form.non_field_errors}}
+      {{form.as_p}}
       <div class="form-actions">
         <button type="submit" class="btn btn-primary">Enregistrer</button>
         <button type="reset" class="btn btn-cancel">Annuler</a>

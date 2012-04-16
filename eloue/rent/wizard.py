@@ -93,18 +93,13 @@ class BookingWizard(MultiPartFormWizard):
         booking.total_amount = Booking.calculate_price(booking.product,
             booking_form.cleaned_data['started_at'], booking_form.cleaned_data['ended_at'])[1]
         booking.borrower = self.new_patron
+
         if creditcard_form:
-            if creditcard_form.cleaned_data.get('save'):
+            if creditcard_form.instance.pk is None:
                 creditcard_form.instance.holder = self.new_patron
-                creditcard = creditcard_form.save(commit=bool(creditcard_form.cleaned_data.get('save')))
-            else:
-                creditcard = creditcard_form.save(commit=False)
-            try:
-                request.user.creditcard
-                payment = PayboxDirectPlusPaymentInformation(booking=booking)
-            except CreditCard.DoesNotExist:
-                payment = PayboxDirectPaymentInformation(booking=booking)
+            creditcard = creditcard_form.save()
             preapproval_parameters = (creditcard, creditcard_form.cleaned_data['cvv'])
+            payment = PayboxDirectPlusPaymentInformation(booking=booking)
         else:
             preapproval_parameters = ()
             payment = NonPaymentInformation()
