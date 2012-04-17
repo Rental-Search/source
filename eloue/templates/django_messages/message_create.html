@@ -6,7 +6,12 @@
 
 <div id="wizard-page" class="container-main">
 	<ul class="breadcrumb" >
-		<li><a href="#">Nom du produit</a></li>
+		{% if product %}
+		<li><a href="{{ product.get_absolute_url }}">{{ product.summary }}</a></li>
+		{% endif %}
+		{% if recipient %}
+		<li><a href="{{ recipient.get_absolute_url }}">{{ recipient.username }}</a></li>
+		{% endif %}
 		<li>{% trans "Nouveau message" %}</li>
 	</ul>
 	<div class="content-main">

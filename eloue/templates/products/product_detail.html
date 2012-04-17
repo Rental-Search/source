@@ -118,7 +118,7 @@
                 <thead>
                     <tr>
                         {% for price in product.prices.all %}
-                            <th style="text-align: center;">{% trans price.get_unit_display|capfirst %}</th>
+                            <th style="text-align: center;">Par<br>{% trans price.get_unit_display %}</th>
                         {% endfor %}
                     </tr>
                 </thead>

@@ -273,8 +273,8 @@ class ProductForm(BetterModelForm):
 class CarProductForm(ProductForm):
     quantity = forms.IntegerField(widget=forms.HiddenInput(), initial=1)
     summary = forms.CharField(required=False, widget=forms.HiddenInput(), max_length=255)
-    licence_plate = FRLicensePlateField(required=True)
-    first_registration_date = DateSelectField()
+    licence_plate = FRLicensePlateField(label=_(u'N° d\'immatriculation'), required=True)
+    first_registration_date = DateSelectField(label=_(u'1er mise en circulation'))
 
     def __init__(self, *args, **kwargs):
         super(CarProductForm, self).__init__(*args, **kwargs)
