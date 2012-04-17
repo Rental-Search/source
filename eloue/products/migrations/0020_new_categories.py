@@ -41,7 +41,7 @@ class Migration(DataMigration):
             self.creator(orm, name, automobile)
 
         location_saisonnieres = orm.Category(parent=None, name=u'Location saisonnière')
-        location_saisonnieres.slug = slugify(u'Locations saisonnières')
+        location_saisonnieres.slug = slugify(u'Location saisonnière')
         location_saisonnieres.save()
         location_saisonnieres.sites.add(*settings.DEFAULT_SITES)
         names = [
