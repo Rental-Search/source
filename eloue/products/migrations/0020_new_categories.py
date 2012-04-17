@@ -25,8 +25,9 @@ class Migration(DataMigration):
     def forwards(self, orm):
         "Write your forwards methods here."
         site = Site.objects.get(domain='beta.e-loue.com')
-        for category in site.categories.all():
-            category.sites.remove(site)
+        site.categories.clear()
+        for category in orm.Category.objects.filter(sites=Site.objects.get(domain='www.e-loue.com')):
+            category.sites.add(*settings.DEFAULT_SITES)
 
         automobile = orm.Category(parent=None, name='Automobile')
         automobile.slug = slugify('Automobile')
@@ -54,9 +55,6 @@ class Migration(DataMigration):
             self.creator(orm, name, location_saisonnieres)
 
     def backwards(self, orm):
-        site = Site.objects.get(domain='beta.e-loue.com')
-        for category in site.categories.all():
-            category.sites.add(site)
         orm.Category.objects.get(name=u'Automobile', parent=None).delete()
         orm.Category.objects.get(name=u'Location saisonnière', parent=None).delete()
         "Write your backwards methods here."
