@@ -45,9 +45,7 @@
       {% if fieldset.description %}
         <p class="description">{{ fieldset.description }}</p>
       {% endif %}
-      <ul>
-      {% for field in fieldset %}
-
+    {% for field in fieldset %}
     <div class="control-group {% if field.errors %} error {% endif %}">
       <label class="control-label" for="{{ field.id_for_label }}">{{ field.label }} {% if field.field.required %}*{% endif %}</label>
       <div class="controls">
@@ -69,10 +67,8 @@
         {% endif %}
       </div>
     </div>
-
-      {% endfor %}
-      </ul>
-      </fieldset>
+    {% endfor %}
+    </fieldset>
     {% endfor %}
       <div class="form-actions">
         <button type="submit" class="btn btn-primary">Enregistrer</button>

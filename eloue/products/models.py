@@ -178,12 +178,12 @@ ALERT_RADIUS = getattr(settings, 'ALERT_RADIUS', 200)
 
 class Product(models.Model):
     """A product"""
-    summary = models.CharField(max_length=255)
-    deposit_amount = models.DecimalField(max_digits=10, decimal_places=2)
+    summary = models.CharField(_(u'Titre'), max_length=255)
+    deposit_amount = models.DecimalField(_(u'Dépôt de garantie'), max_digits=10, decimal_places=2)
     currency = models.CharField(max_length=3, choices=CURRENCY, default=DEFAULT_CURRENCY)
     description = models.TextField()
     address = models.ForeignKey(Address, related_name='products')
-    quantity = models.IntegerField(default=1)
+    quantity = models.IntegerField(_(u'Quantité'), default=1)
 
     is_archived = models.BooleanField(_(u'archivé'), default=False, db_index=True)
     is_allowed = models.BooleanField(_(u'autorisé'), default=True, db_index=True)

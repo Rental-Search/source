@@ -251,8 +251,8 @@ class PatronEditForm(BetterModelForm):
     is_subscribed = forms.BooleanField(required=False, initial=False, label=_(u"Newsletter"), widget=CommentedCheckboxInput(info_text="J'accepte de recevoir de recevoir la Newsletter e-loue"))
     new_messages_alerted = forms.BooleanField(label=_(u"Notifications"), required=False, initial=True, widget=CommentedCheckboxInput(info_text="J'accepte de recevoir les messages des autres membres"))
 
-    date_of_birth = DateSelectField(label=_(u"Lieu de naissance"))
-    drivers_license_date = DateSelectField(label=_(u"Date d'obtention du permis"))
+    date_of_birth = DateSelectField(required=False, label=_(u"Lieu de naissance"))
+    drivers_license_date = DateSelectField(required=False, label=_(u"Date d'obtention"))
 
     about = forms.CharField(label=_(u"A propos de vous"), required=False, widget=forms.Textarea(attrs={'class': 'inm'}))
     work = forms.CharField(label=_(u"Travail"), required=False, widget=forms.TextInput(attrs={'class': 'inm'}), help_text=_(u"Exemple : Directrice Resources Humaines, ma socitée"))
@@ -265,8 +265,8 @@ class PatronEditForm(BetterModelForm):
             ('basic_info', {
                 'fields': [
                     'is_professional', 'company_name', 'username', 'avatar', 
-                    'date_of_birth', 'place_of_birth', 'email',
-                    'civility', 'first_name', 'last_name','default_address',
+                    'email', 'civility', 'first_name', 'last_name',
+                    'default_address', 'date_of_birth', 'place_of_birth',
                     'paypal_email', 'is_subscribed', 'new_messages_alerted',
                 ],
                 'legend': _(u'Informations nécessaires')
@@ -277,7 +277,7 @@ class PatronEditForm(BetterModelForm):
             }),
             ('driver_info', {
                 'fields': ['drivers_license_date', 'drivers_license_number'],
-                'legend': _(u"Informations sur le conducteur")
+                'legend': _(u"Informations sur le permis")
             })
         ]
         widgets = {
@@ -289,6 +289,7 @@ class PatronEditForm(BetterModelForm):
         self.legend = _(u"Informations nécessaires")
         self.fields['civility'].widget.attrs['class'] = "selm"
         self.fields['default_address'].widget.attrs['class'] = "selm"
+        self.fields['default_address'].label = _(u'Adresse par defaut')
         self.fields['default_address'].queryset = self.instance.addresses.all()
 
     def save(self, *args, **kwargs):
@@ -517,7 +518,7 @@ def mask_card_number(card_number):
     )
 
 class CreditCardForm(forms.ModelForm):
-    cvv = forms.CharField(max_length=4, label=_(u'Cryptogramme de sécurité'))
+    cvv = forms.CharField(max_length=4, label=_(u'Cryptogramme de sécurité'), widget=forms.TextInput(attrs={'placeholder':' XXX'}))
     expires = ExpirationField(label=_(u'Date d\'expiration'))
 
     def __init__(self, *args, **kwargs):

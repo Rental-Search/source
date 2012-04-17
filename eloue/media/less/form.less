@@ -529,13 +529,14 @@ select:focus:required:invalid {
   .controls {
     margin-left: 160px;
   }
-  // Move over buttons in .form-actions to align with .controls
-  .form-actions {
-    padding-left: 160px;
+}
+
+// Move over buttons in .form-actions to align with .controls
+.form-actions {
+  padding-left: 160px;
     
-    button {
-      margin-right: 10px;
-    }
+  button {
+    margin-right: 10px;
   }
 }
 
@@ -587,16 +588,66 @@ select:focus:required:invalid {
   }
 }
 
-#id_3-expires_0 {
+#id_3-expires_0, #id_expires_0 {
   margin-right: 10px;
 }
 
-#id_3-expires_0, #id_3-expires_1 {
+#id_3-expires_0, #id_3-expires_1, #id_expires_0, #id_expires_1 {
   width: 70px;
 }
 
 #id_3-cvv {
   width: 30px;
+}
+
+// RIB FORM
+//---------
+.rib-form {
+  input { margin-top: 20px; }
+
+  #id_rib_0, #id_rib_1 {
+    width: 37px;
+    margin-right: 10px;
+  }
+
+  #id_rib_2 {
+    width: 80px;
+    margin-right: 10px;
+  }
+
+  #id_rib_3 { width: 16px; }
+
+  .bank-code { margin-right: 14px; }
+
+  .office-code { margin-right: 13px; }
+
+  .number-account { margin-right: 20px; }
+
+  p { margin-top: 5px; }
+}
+
+
+
+// DATE OF BIRTH
+//---------------
+
+select[id^="id_date_of_birth_"], select[id^="id_drivers_license_date_"] {
+  width: 70px;
+  margin-left: 5px;
+}
+
+//EDIT PASSWORD
+//______________
+
+.edit-password {
+
+  .control-label {
+    width: 240px !important;
+  }
+
+  .controls {
+    margin-left: 250px;
+  }
 }
 
 

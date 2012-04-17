@@ -100,10 +100,10 @@ def rib_check(rib):
 class RIBWidget(forms.MultiWidget):
     def __init__(self, attrs=None):
         widgets = [
-            forms.TextInput(attrs={'maxlength': 5, 'placeholder': _(u'code banque')}),
-            forms.TextInput(attrs={'maxlength': 5, 'placeholder': _(u'code guichet')}),
-            forms.TextInput(attrs={'maxlength': 11, 'placeholder': _(u'numéro de compte')}), 
-            forms.TextInput(attrs={'maxlength': 2, 'placeholder':_(u'clé RIB')}),
+            forms.TextInput(attrs={'maxlength': 5 }),
+            forms.TextInput(attrs={'maxlength': 5 }),
+            forms.TextInput(attrs={'maxlength': 11 }), 
+            forms.TextInput(attrs={'maxlength': 2 }),
         ]
         super(RIBWidget, self).__init__(widgets)
 
