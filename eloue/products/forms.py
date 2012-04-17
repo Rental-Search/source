@@ -190,18 +190,18 @@ def generate_choices(slugs, empty_value=_(u"Choisissez une catégorie")):
 
     def _children(slugs):
         for slug in slugs:
-            node = Category.objects.get(slug=slug)
+            node = Category.on_site.get(slug=slug)
             for child in node.get_children():
                 yield child
     for child in _children(slugs):
         descendants = child.get_descendants()
         if descendants:
             yield (
-                child.name,
-                [(descendant.pk, descendant.name) for descendant in descendants]
+                _(child.name),
+                [(descendant.pk, _(descendant.name)) for descendant in descendants]
             )
         else:
-            yield (child.pk, child.name)
+            yield (child.pk, _(child.name))
 
 
 class ProductForm(BetterModelForm):
@@ -225,7 +225,7 @@ class ProductForm(BetterModelForm):
         self.title = _(u'Ajouter un objet')
         self.fields['category'] = forms.TypedChoiceField(
             label=_(u"Catégorie"), coerce=lambda pk: Category.tree.get(pk=pk), 
-            choices=generate_choices((cat.slug for cat in Category.tree.root_nodes() if cat.slug not in ['auto-et-moto', 'hebergement', 'motors', 'automobile']))
+            choices=generate_choices((cat.slug for cat in Category.on_site.filter(parent=None) if cat.slug not in ['auto-et-moto', 'hebergement', 'motors', 'automobile', 'location-saisonniere']))
         )
 
     def clean_quantity(self):
@@ -340,7 +340,7 @@ class RealEstateForm(ProductForm):
         self.title = _(u'Ajouter un lieu')
         self.fields['category'] = forms.TypedChoiceField(
             label=_(u"Catégorie"), coerce=lambda pk: Category.tree.get(pk=pk), 
-            choices=generate_choices(('hebergement', ))
+            choices=generate_choices(('location-saisonniere', ))
         )
 
     class Meta:
@@ -385,7 +385,7 @@ class ProductEditForm(BetterModelForm):
         self.fields['category'] = forms.TypedChoiceField(
             label=_(u"Catégorie"), coerce=lambda pk: Category.tree.get(pk=pk), 
             choices=generate_choices(
-                (cat.slug for cat in Category.tree.root_nodes() if cat.slug not in ['auto-et-moto', 'hebergement', 'motors', 'automobile']), None
+                (cat.slug for cat in Category.on_site.filter(parent=None) if cat.slug not in ['auto-et-moto', 'hebergement', 'motors', 'automobile', 'location-saisonniere']), None
             )
         )
     class Meta:
@@ -478,7 +478,7 @@ class RealEstateEditForm(ProductEditForm):
         super(RealEstateEditForm, self).__init__(*args, **kwargs)
         self.fields['category'] = forms.TypedChoiceField(
             label=_(u"Catégorie"), coerce=lambda pk: Category.tree.get(pk=pk), 
-            choices=generate_choices(('hebergement', ), None)
+            choices=generate_choices(('location-saisonniere', ), None)
         )
     class Meta:
         models = RealEstateProduct
