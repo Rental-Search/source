@@ -153,18 +153,18 @@
     {% endif %}
     </div>{# content-main #}
     <div class="content-aside">
-        <div class="search-block">
-            <form action="{% url product_list %}" method="get" id="form_search_results">
+        <form action="{% url product_list %}" method="get" id="form_search_results">
+            <div class="search-block">
                 {{form.q}}
                 <input type="submit" value="Rechercher" class="btn-search"/>
-            </form>
-        </div><!-- search-block -->
-        <div id="where" class="info-block">
-            <h2>Lieu</h2>
-            <p class="town-input"><input id="id_l" type="text" name="l" value="{% firstof request.session.location.city request.session.location.region request.session.location.country request.session.location.fallback "" %}"/></p>
-            <div id="map-canvas" class="map"></div>
-            <p class="radius-input">Dans un rayon de <input id="id_r" type="text" name="r" value="{{request.session.location.radius|stringformat:"s" }}"/> Km <input type="button" name="a" value="m. à j." id="rayon_update"></p>
-        </div><!-- where -->
+            </div><!-- search-block -->
+            <div id="where" class="info-block">
+                <h2>Lieu</h2>
+                <p class="town-input">{{form.l}}</p>
+                <div id="map-canvas" class="map"></div>
+                <p class="radius-input">Dans un rayon de <input id="id_r" type="text" name="r" value="{{request.session.location.radius|stringformat:"s" }}"/> Km <input type="button" name="a" value="m. à j." id="rayon_update"></p>
+            </div><!-- where -->
+        </form>
         {% if product_list %}
         <div id ="facet-categories" class="info-block">
             <h2>{% trans "Catégories" %}</h2>
@@ -212,41 +212,53 @@
     {{block.super}}
     <script src="//maps.googleapis.com/maps/api/js?sensor=false&amp;libraries=places" type="text/javascript"></script>
     <script type="text/javascript" charset="utf-8">
-
         function initialize() {
-            var myLatlng = new google.maps.LatLng('{{request.session.location.coordinates.0|stringformat:"s" }}', '{{request.session.location.coordinates.1|stringformat:"s" }}');
             var myOptions = {
-                zoom: 10,
+                zoom: 16,
                 disableDefaultUI: true,
-                center: myLatlng,
                 zoomControl: true,
                 mapTypeId: google.maps.MapTypeId.ROADMAP
-            }
+            };
             var map = new google.maps.Map(document.getElementById("map-canvas"), myOptions);
-
-            var marker = new google.maps.Marker({
-                position: myLatlng, 
-                map: map,
-                title:"Hello World!"
-            });
-            var circle = new google.maps.Circle({
-              map: map,
-              radius: Number('{{request.session.location.radius}}'.replace(',', '.'))*1000,    // 10 miles in metres
-              fillColor: '#FFFFFF',
-              editable: false
-            });
-            circle.bindTo('center', marker, 'position');
+            geocoder = new google.maps.Geocoder();
+            geocoder.geocode(
+                {address: document.getElementById("id_l").value}, 
+                function(result, status){
+                    if (status == google.maps.GeocoderStatus.OK) {
+                        map.setCenter(result[0].geometry.location);
+                        var marker = new google.maps.Marker({
+                            position: result[0].geometry.location, 
+                            map: map,
+                            title:"Vous êtes ici!"
+                        });
+                        var circle = new google.maps.Circle({
+                          map: map,
+                          radius: Number($("#id_r").val().replace(',', '.'))*1000,
+                          fillColor: '#FFFFFF',
+                          editable: false
+                        });
+                        circle.bindTo('center', marker, 'position');
+                    }
+                }
+            )
         }
 
-        $(document).ready(function () {
-            geolocation_stuff();
 
-            if (!$.cookie('geocoding')) {
-                navigator.geolocation.getCurrentPosition(
-                    SuccessBuilder(2, false, function() {$("#form_search_results").submit();}),
-                    geocoder_error_handler
-                );
-            }
+        $(document).ready(function () {
+            autocomplete = new google.maps.places.Autocomplete(
+                document.getElementById("id_l"), 
+                {
+                    types: ['geocode'], 
+                    bounds: new google.maps.LatLngBounds(
+                        new google.maps.LatLng(42.13316390, -5.982051999999999), 
+                        new google.maps.LatLng(50.03800220, 10.409550)
+                    )
+                }
+            );
+
+            google.maps.event.addListener(autocomplete, 'place_changed', function() {
+                $("#form_search_results").submit();
+            });
 
             initialize();
         });
