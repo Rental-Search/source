@@ -64,7 +64,9 @@
           {% else %}
             {% for formfield in fieldset %}
               {% if formfield.is_hidden %}
+              <div class="control-group" style="margin-bottom: 0px;">
                 {{formfield}}
+              </div>
               {% else %}
                 <div class="control-group {% if formfield.errors %} error {% endif %}">
                     <label class="control-label" for="{{ formfield.id_for_label }}">{{ formfield.label }} {% if formfield.field.required %}*{% endif %}</label>

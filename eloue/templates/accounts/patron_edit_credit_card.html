@@ -12,20 +12,6 @@
 {% csrf_token %}
 <fieldset id="credit-card-form">
   <legend>Modifier votre carte bancaire</legend>
-  <div class="control-group {% if form.card_number.errors %} error {% endif %}">
-    <label class="control-label" for="{{ form.card_number.id_for_label }}">{{ form.card_number.label }}</label>
-    <div class="controls">
-      {{ form.card_number }}
-      <p class="help-block">{{ form.card_number.help_text}}</p>
-      {% if form.card_number.errors %}
-      <span class="help-inline">
-      {% for error in form.card_number.errors %}
-        {{ error|escape }}
-      {% endfor %}
-      </span>
-      {% endif %}
-    </div>{# controls #}
-  </div>{# control-group #}
   <div class="control-group {% if form.holder_name.errors %} error {% endif %}">
     <label class="control-label" for="{{ form.holder_name.id_for_label }}">{{ form.holder_name.label }}</label>
     <div class="controls">
@@ -34,6 +20,20 @@
       {% if form.holder_name.errors %}
       <span class="help-inline">
       {% for error in form.holder_name.errors %}
+        {{ error|escape }}
+      {% endfor %}
+      </span>
+      {% endif %}
+    </div>{# controls #}
+  </div>{# control-group #}
+  <div class="control-group {% if form.card_number.errors %} error {% endif %}">
+    <label class="control-label" for="{{ form.card_number.id_for_label }}">{{ form.card_number.label }}</label>
+    <div class="controls">
+      {{ form.card_number }}
+      <p class="help-block">{{ form.card_number.help_text}}</p>
+      {% if form.card_number.errors %}
+      <span class="help-inline">
+      {% for error in form.card_number.errors %}
         {{ error|escape }}
       {% endfor %}
       </span>
