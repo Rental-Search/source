@@ -418,7 +418,7 @@ DEFAULT_LOCATION = getattr(local, "DEFAULT_LOCATION", {
     'coordinates': (46.227637999999999, 2.2137490000000071),
     'country': u'France',
     'fallback': None,
-    'radius': 1007.0,
+    'radius': 550.0,
     'region': None,
     'region_coords': None,
     'region_radius': None,

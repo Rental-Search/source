@@ -162,7 +162,7 @@
                 <h2>Lieu</h2>
                 <p class="town-input">{{form.l}}</p>
                 <div id="map-canvas" class="map"></div>
-                <p class="radius-input">Dans un rayon de <input id="id_r" type="text" name="r" value="{{request.session.location.radius|stringformat:"s" }}"/> Km <input type="button" name="a" value="m. à j." id="rayon_update"></p>
+                <p class="radius-input">Dans un rayon de {{form.r}} Km</p>
             </div><!-- where -->
         </form>
         {% if product_list %}
@@ -213,8 +213,32 @@
     <script src="//maps.googleapis.com/maps/api/js?sensor=false&amp;libraries=places" type="text/javascript"></script>
     <script type="text/javascript" charset="utf-8">
         function initialize() {
+            function zoom(radius) {
+                if (radius <= 0.5)
+                    return 14;
+                if (radius <= 1)
+                    return 13;
+                if (radius <= 3)
+                    return 12;
+                if (radius <= 6)
+                    return 11;
+                if (radius <= 15)
+                    return 10;
+                if (radius <= 25)
+                    return 9;
+                if (radius <= 100)
+                    return 7;
+                if (radius <= 200)
+                    return 6;
+                if (radius <= 300)
+                    return 5;
+                if (radius <= 700)
+                    return 4;
+                return 3;
+            }
+            radius = Number($("#id_r").val().replace(',', '.'));
             var myOptions = {
-                zoom: 16,
+                zoom: zoom(radius),
                 disableDefaultUI: true,
                 zoomControl: true,
                 mapTypeId: google.maps.MapTypeId.ROADMAP
@@ -233,7 +257,7 @@
                         });
                         var circle = new google.maps.Circle({
                           map: map,
-                          radius: Number($("#id_r").val().replace(',', '.'))*1000,
+                          radius: radius*1000,
                           fillColor: '#FFFFFF',
                           editable: false
                         });

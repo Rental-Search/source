@@ -56,7 +56,8 @@ USE_HTTPS = getattr(settings, 'USE_HTTPS', True)
 def homepage(request):
     curiosities = Curiosity.on_site.all()
     location = request.session.setdefault('location', settings.DEFAULT_LOCATION)
-    form = FacetedSearchForm({'l': '{city}, {country}'.format(**location)}, auto_id='id_for_%s')
+    address = location.get('formatted_address') or ('{city}, {country}'.format(**location) if location.get('city') else '{country}'.format(**location))
+    form = FacetedSearchForm({'l': address}, auto_id='id_for_%s')
     alerts = Alert.on_site.all()[:3]
     try:
         coords = location['coordinates']
@@ -378,12 +379,7 @@ def product_delete(request, slug, product_id):
 def product_list(request, urlbits, sqs=SearchQuerySet(), suggestions=None, page=None):
     location = request.session.setdefault('location', settings.DEFAULT_LOCATION)
     form = FacetedSearchForm(request.GET)
-
     if not form.is_valid():
-        print 'szaar'
-        print form.errors
-        print form.non_field_errors()
-        print form.data
         raise Http404
     
     breadcrumbs = SortedDict()

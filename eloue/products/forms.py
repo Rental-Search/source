@@ -45,19 +45,26 @@ DEFAULT_RADIUS = getattr(settings, 'DEFAULT_RADIUS', 50)
 class FacetedSearchForm(SearchForm):
     q = forms.CharField(required=False, max_length=100, widget=forms.TextInput(attrs={'class': 'x9 inb search-box-q', 'tabindex': '1', 'placeholder': 'Que voulez-vous louer?'}))
     l = forms.CharField(required=False, max_length=100, widget=forms.TextInput(attrs={'class': 'x9 inb', 'tabindex': '2', 'placeholder': 'Où voulez-vous louer?'}))
-    r = forms.IntegerField(required=False, widget=forms.TextInput(attrs={'class': 'ins'}))
+    r = forms.DecimalField(required=False, widget=forms.TextInput(attrs={'class': 'ins'}))
     sort = forms.ChoiceField(required=False, choices=SORT, widget=forms.HiddenInput())
     price = FacetField(label=_(u"Prix"), pretty_name=_("par-prix"), required=False)
     categories = FacetField(label=_(u"Catégorie"), pretty_name=_("par-categorie"), required=False, widget=forms.HiddenInput())
     
     def clean_r(self):
-            location = self.cleaned_data.get('l', None)
-            radius = self.cleaned_data.get('r', None)
-            if location not in EMPTY_VALUES and radius in EMPTY_VALUES:
-                name, coordinates, radius = GoogleGeocoder().geocode(location)
-            if radius in EMPTY_VALUES:
-                radius = DEFAULT_RADIUS
-            return radius
+        location = self.cleaned_data.get('l', None)
+        radius = self.cleaned_data.get('r', None)
+        if location not in EMPTY_VALUES and radius in EMPTY_VALUES:
+            name, coordinates, radius = GoogleGeocoder().geocode(location)
+        if radius in EMPTY_VALUES:
+            radius = DEFAULT_RADIUS
+        return radius
+
+    def clean_l(self):
+        import re
+        location = self.cleaned_data.get('l', None)
+        if location:
+            location = re.sub('^[0-9]* +(.*)', r'\1', location)
+        return location
 
     def search(self):
         if self.is_valid():
