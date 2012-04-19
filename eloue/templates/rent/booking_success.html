@@ -7,16 +7,19 @@
 <div id="wizard-page" class="container-main">
 	<ul class="breadcrumb">
     	<li><a href="{% url home %}">{% trans "Accueil" %}</a></li>
-    	<li><a href="{{ request.HTTP_REFERER }}">{{ wizard_title }}</a></li>
+    	<li><a href="{{ booking.product.get_absolute_url }}">{% trans "Réservation" %}</a></li>
     	<li>{% trans "Réservation terminée avec succès" %}</li>
   	</ul>
   	<div class="content-main">
   		<h2>{% trans "Réservation terminée avec succès" %}</h2>
-  		<p>
+  		<p style="margin-bottom: 20px;">
   			{% blocktrans %}
   			Nous avons bien pris en comtpe votre réservation. Le propriétaire a été informé, il va vous répondre le plus rapidement possible (24h maximum)
   			{% endblocktrans %}
   		</p>
   	</div>
 </div>
+{% endblock %}
+
+{% block footer %}
 {% endblock %}
