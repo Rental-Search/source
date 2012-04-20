@@ -269,7 +269,7 @@ class ProductForm(BetterModelForm):
     class Meta:
         model = Product
         fieldsets = [
-            ('category', {'fields': ['category'], 'legend': _(u'Choisissez un catégorie')}),
+            ('category', {'fields': ['category'], 'legend': _(u'Choisissez une catégorie')}),
             ('informations', {
                 'fields': ['summary', 'picture_id', 'picture', 'description', 'quantity'], 
                 'legend': _(u'Informations')}),
@@ -359,7 +359,7 @@ class RealEstateForm(ProductForm):
     class Meta:
         model = RealEstateProduct
         fieldsets = [
-            ('category', {'fields': ['category'], 'legend': _(u'Choisissez un catégorie')}),
+            ('category', {'fields': ['category'], 'legend': _(u'Choisissez une catégorie')}),
             ('informations', {
                 'fields': ['summary', 'picture_id', 'picture', 'description'], 
                 'legend': _(u'Informations')}),
