@@ -258,6 +258,7 @@ class PatronEditForm(BetterModelForm):
     work = forms.CharField(label=_(u"Travail"), required=False, widget=forms.TextInput(attrs={'class': 'inm'}), help_text=_(u"Exemple : Directrice Resources Humaines, ma socitée"))
     school = forms.CharField(label=_(u"Etudes"), required=False, widget=forms.TextInput(attrs={'class': 'inm'}), help_text=_(u"Exemple : Université Panthéon Sorbonne (Paris I)"))
     hobby = forms.CharField(label=_(u"Hobbies"), required=False, widget=forms.TextInput(attrs={'class': 'inm'}))
+    languages = forms.CharField(label=_(u"Langues parlés"), required=False, widget=forms.TextInput())
 
     class Meta:
         model = Patron
@@ -272,7 +273,7 @@ class PatronEditForm(BetterModelForm):
                 'legend': _(u'Informations nécessaires')
             }),
             ('extra_info', {
-                'fields': ['about', 'work', 'school', 'hobby'],
+                'fields': ['about', 'work', 'school', 'hobby', 'languages'],
                 'legend': _(u"Informations complémentaires")
             }),
             ('driver_info', {
