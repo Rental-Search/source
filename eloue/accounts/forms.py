@@ -258,6 +258,7 @@ class PatronEditForm(BetterModelForm):
     work = forms.CharField(label=_(u"Travail"), required=False, widget=forms.TextInput(attrs={'class': 'inm'}), help_text=_(u"Exemple : Directrice Resources Humaines, ma socitée"))
     school = forms.CharField(label=_(u"Etudes"), required=False, widget=forms.TextInput(attrs={'class': 'inm'}), help_text=_(u"Exemple : Université Panthéon Sorbonne (Paris I)"))
     hobby = forms.CharField(label=_(u"Hobbies"), required=False, widget=forms.TextInput(attrs={'class': 'inm'}))
+    languages = forms.CharField(label=_(u"Langues parlés"), required=False, widget=forms.TextInput())
 
     class Meta:
         model = Patron
@@ -272,7 +273,7 @@ class PatronEditForm(BetterModelForm):
                 'legend': _(u'Informations nécessaires')
             }),
             ('extra_info', {
-                'fields': ['about', 'work', 'school', 'hobby'],
+                'fields': ['about', 'work', 'school', 'hobby', 'languages'],
                 'legend': _(u"Informations complémentaires")
             }),
             ('driver_info', {
@@ -520,6 +521,8 @@ def mask_card_number(card_number):
 class CreditCardForm(forms.ModelForm):
     cvv = forms.CharField(max_length=4, label=_(u'Cryptogramme de sécurité'), widget=forms.TextInput(attrs={'placeholder':' XXX'}))
     expires = ExpirationField(label=_(u'Date d\'expiration'))
+    holder_name = forms.CharField(label=_(u'Prénom et nom de la carte'))
+
 
     def __init__(self, *args, **kwargs):
         super(CreditCardForm, self).__init__(*args, **kwargs)
@@ -534,7 +537,7 @@ class CreditCardForm(forms.ModelForm):
         # see note: https://docs.djangoproject.com/en/dev/topics/forms/modelforms/#using-a-subset-of-fields-on-the-form
         # we excluded, then added, to avoid save automatically the card_number
         model = CreditCard
-        exclude = ('card_number', 'holder', 'masked_number', 'keep')
+        exclude = ('card_number', 'masked_number', 'keep')
 
     def clean_card_number(self):
         def _luhn_valid(card_number):

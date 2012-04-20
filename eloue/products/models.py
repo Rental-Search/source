@@ -379,8 +379,8 @@ class CarProduct(Product):
 
     # informations de l'assurance
     tax_horsepower = models.PositiveIntegerField(_(u'CV fiscal'), choices=TAX_HORSEPOWER)
-    licence_plate = models.CharField(_(u"numéro d'immatriculation"), max_length=10)
-    first_registration_date = models.DateField(_(u'première mise en circulation'))
+    licence_plate = models.CharField(_(u"N° d'immatriculation"), max_length=10)
+    first_registration_date = models.DateField(_(u'1er mise en circulation'))
 
     objects = ProductManager()
     on_site = CurrentSiteProductManager()
