@@ -43,15 +43,28 @@ DEFAULT_RADIUS = getattr(settings, 'DEFAULT_RADIUS', 50)
 
 
 class FacetedSearchForm(SearchForm):
-    q = forms.CharField(required=False, max_length=100, widget=forms.TextInput(attrs={'class': 'x9 inb search-box-q', 'tabindex': '1'}))
+    q = forms.CharField(required=False, max_length=100, widget=forms.TextInput(attrs={'class': 'x9 inb search-box-q', 'tabindex': '1', 'placeholder': 'Que voulez-vous louer?'}))
+    l = forms.CharField(required=False, max_length=100, widget=forms.TextInput(attrs={'class': 'x9 inb', 'tabindex': '2', 'placeholder': 'Où voulez-vous louer?'}))
+    r = forms.DecimalField(required=False, widget=forms.TextInput(attrs={'class': 'ins'}))
     sort = forms.ChoiceField(required=False, choices=SORT, widget=forms.HiddenInput())
     price = FacetField(label=_(u"Prix"), pretty_name=_("par-prix"), required=False)
     categories = FacetField(label=_(u"Catégorie"), pretty_name=_("par-categorie"), required=False, widget=forms.HiddenInput())
     
-    def __init__(self, *args, **kwargs):
-        self.coords = kwargs.pop('coords', None)
-        self.radius = kwargs.pop('radius', DEFAULT_RADIUS)
-        super(FacetedSearchForm, self).__init__(*args, **kwargs)
+    def clean_r(self):
+        location = self.cleaned_data.get('l', None)
+        radius = self.cleaned_data.get('r', None)
+        if location not in EMPTY_VALUES and radius in EMPTY_VALUES:
+            name, coordinates, radius = GoogleGeocoder().geocode(location)
+        if radius in EMPTY_VALUES:
+            radius = DEFAULT_RADIUS
+        return radius
+
+    def clean_l(self):
+        import re
+        location = self.cleaned_data.get('l', None)
+        if location:
+            location = re.sub('^[0-9]* +(.*)', r'\1', location)
+        return location
 
     def search(self):
         if self.is_valid():
@@ -71,9 +84,9 @@ class FacetedSearchForm(SearchForm):
                     suggestions = None
             
             location, radius = self.cleaned_data.get('l', None), self.cleaned_data.get('r', DEFAULT_RADIUS)
-            if self.coords:
-                lat, lon = self.coords
-                sqs = sqs.spatial(lat=lat, long=lon, radius=self.radius, unit='km')
+            if location:
+                name, (lat, lon), _ = GoogleGeocoder().geocode(location)
+                sqs = sqs.spatial(lat=lat, long=lon, radius=radius, unit='km')
             
             if self.load_all:
                 sqs = sqs.load_all()

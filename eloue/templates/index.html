@@ -17,19 +17,20 @@
         </h1>
         <form action="{% url product_list %}" method="get">
             <p class="what">
-                <input type="text" placeholder="Que voulez-vous louer ?" name="q" />
+                {{form.q}}
                 <input type="submit" value="Rechercher" class="btn bt-big-orange" />
+                {{form.l.as_hidden}}
             </p>
         </form>
-        <p class="city">
-            <span class="city-to">à </span>
-            <span class="city-name">{% firstof request.session.location.city request.session.location.region request.session.location.country request.session.location.fallback "Boulogne-sur-Mer" %}</span>
-            <button class="btn-other-town"><span>Changer de ville</span></button>
-        </p>
-        <p class="city-input">
-            <input id="id_l" type="text" name="city" />
-            <button class="btn-edit-town">me geolocaliser</button> ou <button class="btn-cancel-edit-town">annuler</button>
-        </p>
+            <p class="city">
+                <span class="city-to">à </span>
+                <span class="city-name">{% firstof request.session.location.city request.session.location.region request.session.location.country request.session.location.fallback "Boulogne-sur-Mer" %}</span>
+                <button class="btn-other-town"><span>Changer de ville</span></button>
+            </p>
+            <p class="city-input">
+                <input id="id_l" type="text" name="city" />
+                <button class="btn-edit-town">me geolocaliser</button> ou <button class="btn-cancel-edit-town">annuler</button>
+            </p>
     </div><!-- search-home -->
     <div class="products-home">
         <div class="products-home-tabs" style="display: none;">
@@ -114,8 +115,8 @@
     {{ block.super }}
     <script src="//maps.googleapis.com/maps/api/js?sensor=false&amp;libraries=places" type="text/javascript"></script>
     <script type="text/javascript">
+        $(".products-home-tabs").show();
         $(document).ready(function() {
-            $(".products-home-tabs").show();
             if (!$.cookie('geocoding')) 
                 navigator.geolocation.getCurrentPosition(
                     SuccessBuilder(2, false, function(){window.location.reload();}), 

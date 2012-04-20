@@ -55,10 +55,11 @@ USE_HTTPS = getattr(settings, 'USE_HTTPS', True)
 @vary_on_headers('Referer')
 def homepage(request):
     curiosities = Curiosity.on_site.all()
-    form = FacetedSearchForm()
+    location = request.session.setdefault('location', settings.DEFAULT_LOCATION)
+    address = location.get('formatted_address') or ('{city}, {country}'.format(**location) if location.get('city') else '{country}'.format(**location))
+    form = FacetedSearchForm({'l': address}, auto_id='id_for_%s')
     alerts = Alert.on_site.all()[:3]
     try:
-        location = request.session.setdefault('location', settings.DEFAULT_LOCATION)
         coords = location['coordinates']
         region_coords = location.get('region_coords') or coords
         region_radius = location.get('region_radius') or location['radius']
@@ -377,19 +378,16 @@ def product_delete(request, slug, product_id):
 @vary_on_cookie
 def product_list(request, urlbits, sqs=SearchQuerySet(), suggestions=None, page=None):
     location = request.session.setdefault('location', settings.DEFAULT_LOCATION)
-    form = FacetedSearchForm(
-        request.GET, 
-        coords=location.get('coordinates'),
-        radius=location.get('radius')
-    )
-
+    form = FacetedSearchForm(request.GET)
     if not form.is_valid():
         raise Http404
     
     breadcrumbs = SortedDict()
     breadcrumbs['q'] = {'name': 'q', 'value': form.cleaned_data.get('q', None), 'label': 'q', 'facet': False}
     breadcrumbs['sort'] = {'name': 'sort', 'value': form.cleaned_data.get('sort', None), 'label': 'sort', 'facet': False}
-        
+    breadcrumbs['l'] = {'name': 'l', 'value': form.cleaned_data.get('l', None), 'label': 'l', 'facet': False}
+    breadcrumbs['r'] = {'name': 'r', 'value': form.cleaned_data.get('r', None), 'label': 'r', 'facet': False}
+
     urlbits = urlbits or ''
     urlbits = filter(None, urlbits.split('/')[::-1])
     while urlbits:
@@ -438,9 +436,7 @@ def product_list(request, urlbits, sqs=SearchQuerySet(), suggestions=None, page=
     
     site_url="%s://%s" % ("https" if USE_HTTPS else "http", Site.objects.get_current().domain)
     form = FacetedSearchForm(
-        dict((facet['name'], facet['value']) for facet in breadcrumbs.values()), 
-        coords=request.session.get('location',{}).get('coordinates'),
-        radius=request.session.get('location', {}).get('radius'),
+        dict((facet['name'], facet['value']) for facet in breadcrumbs.values()),
         searchqueryset=sqs)
     sqs, suggestions = form.search()
     # we use canonical_parameters to generate the canonical url in the header

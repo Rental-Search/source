@@ -141,6 +141,7 @@ def user_geolocation(request):
         location = simplejson.loads(request.POST['address'])
         address_components = location['address_components']
         
+        formatted_address = location.get('formatted_address')
         localities = filter(lambda component: 'locality' in component['types'], address_components)
         city = next(iter(map(lambda component: component['long_name'], localities)), None)
         regions = filter(lambda component: 'administrative_area_level_1' in component['types'], address_components)
@@ -156,7 +157,8 @@ def user_geolocation(request):
             'region_radius': region_radius,
             'region_coords': region_coords,
             'country': country,
-            'fallback': fallback
+            'fallback': fallback,
+            'formatted_address': formatted_address,
         })
         if 'radius' not in request.POST:
             if source == GEOLOCATION_SOURCE.MANUAL:
