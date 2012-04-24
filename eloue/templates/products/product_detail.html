@@ -71,6 +71,12 @@
     </script>
     
     <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+
+    <script>
+        $(document).ready(function () {
+            $(".calendar-display").datepicker();
+        });
+    </script>
 {% endblock %}
 
 {% block content %}
@@ -102,9 +108,8 @@
         </ul>{# product-properties #}
         <div class="product-tabs">
             <ul>
-                <li><a href="#gallery">Photo</a></li>
-                <li><a href="#prices">Grille des tarifs</a></li>
-                <li><a href="#calendar">Calendrier</a></li>
+                <li><a href="#gallery">{% trans "Photo" %}</a></li>
+                <li><a href="#prices_calendar">{% trans "Tarifs et disponibilitées" %}</a></li>
             </ul>
             <div id="gallery">
                 {% with product.pictures.all|first as picture %}
@@ -113,26 +118,28 @@
                 {% endif %}
                 {% endwith %}
             </div> {# gallery #}
-            <div id="prices">
-            <table class="table">
-                <thead>
-                    <tr>
+            <div id="prices_calendar" style="background-color: #fff !important;">
+                <div class="prices">
+                    <table class="table table-striped" style="width: 220px; font-family: Ubuntu, sans-serif; font-size: 13px;">
+                        <thead>
+                            <tr>
+                                <th style="text-align: left;">{% trans "Période" %}</th>
+                                <th style="text-align: center;">{% trans "Prix" %}</th>
+                            </tr>
+                        </thead>
                         {% for price in product.prices.all %}
-                            <th style="text-align: center;">Par<br>{% trans price.get_unit_display %}</th>
+                        <tr>
+                            <td style="text-align: left;">{% trans price.get_unit_display|capfirst %}
+                            </td>
+                            <td style="vertical-align: middle; text-align: center;">{{ price.amount }}</td>
+                        </tr>
                         {% endfor %}
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        {% for price in product.prices.all %}
-                            <td style="text-align: center;">{{price.amount}} &euro;</td>
-                        {% endfor %}
-                    </tr>
-                </tbody>
-            </table>
-            
-            </div>{# prices #}
-            <div id="calendar">{{ product.monthly_availability }}</div>{# calendar #}
+                    </table>
+                </div>{# prices #}
+                <div class="calendar">
+                    <div class="calendar-display"></div>
+                </div>{# calendar #}
+            </div>
         </div>{# product-tabs #}
         <div class="product-info">
             <div class="product-desc">
@@ -293,3 +300,5 @@
     </div>{# content-aside #}
 </div>{# container-main #}
 {% endblock %}
+
+
