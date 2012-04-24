@@ -280,17 +280,49 @@
 //---------------------
 
 #prices_calendar {
+  #font > .sans-serif("Ubuntu", normal, 13px);
   .clearfix();
 }
 
 .prices {
   float: left;
-  width: 220px;
+  width: 218px;
 
-  margin-right: 20px;
+  margin-left: 20px;
+
+  background-color: #fff;
+  border: 1px solid #DDD;
+  .rounded(3px) !important;
+
+  .table {
+    margin-bottom: 0px;
+    width: 218px; 
+    color: #364C59;
+  }
+
+  .price-head { text-align: right; }
+
+  .price-display {
+    vertical-align: middle;
+    text-align: right;
+  }
 }
 
 .calendar {
   float: left;
   width: 338px;
+
+  .calendar-legend {
+    margin-top: 10px;
+
+    .unavailable-date {
+      background-color: red; 
+      display: block; 
+      height: 20px; 
+      width: 33px; 
+      float: left; 
+      margin-right: 5px; 
+      margin-top: -4px;
+    }
+  }
 }
