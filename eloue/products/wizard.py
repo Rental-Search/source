@@ -42,8 +42,9 @@ class ProductWizard(MultiPartFormWizard):
                     amount=product_form.cleaned_data[field]
                 )
         
-        if product_form.cleaned_data.get('picture_id', None):
-            product.pictures.add(Picture.objects.get(pk=product_form.cleaned_data['picture_id']))
+        picture_id = product_form.cleaned_data.get('picture_id')
+        if picture_id:
+            product.pictures.add(Picture.objects.get(pk=picture_id))
         
         GoalRecord.record('new_object', WebUser(request))
         
