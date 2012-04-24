@@ -109,7 +109,7 @@
         <div class="product-tabs">
             <ul>
                 <li><a href="#gallery">{% trans "Photo" %}</a></li>
-                <li><a href="#prices_calendar">{% trans "Tarifs et disponibilitées" %}</a></li>
+                <li><a href="#prices_calendar">{% trans "Disponibilitées et tarifs" %}</a></li>
             </ul>
             <div id="gallery">
                 {% with product.pictures.all|first as picture %}
@@ -121,10 +121,16 @@
             <div id="prices_calendar">
                 <div class="calendar">
                     <div class="calendar-display"></div>
-                    <p class="calendar-legend">
-                        <span class="unavailable-date"></span>
-                        Non disponible
-                    </p>
+                    <ul class="calendar-legend">
+                        <li>
+                            <span class="available-date"></span>
+                            {% trans "Date disponible" %}
+                        </li>
+                        <li>
+                            <span class="unavailable-date"></span>
+                            {% trans "Date non disponible" %}
+                        </li>
+                    </ul>
                 </div>{# calendar #}
                 <div class="prices">
                     <table class="table table-striped">

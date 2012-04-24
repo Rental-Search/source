@@ -83,17 +83,25 @@
     border: 1px solid #DDD !important;
   }
 
-  .ui-state-default { 
+  .ui-state-default,{
+      -webkit-box-shadow: inset 0 0 0 #ffffff;
+      -moz-box-shadow: inset 0 0 0 #ffffff;
+      box-shadow: inset 0 0 0 #ffffff;
       text-align: center;
       padding: 4px 0;
 
-      background: #fff;
+      background: @green;
 
-      color: #364C59;
+      color: #fff;
+  }
+
+  .ui-state-active {
+    background: @green !important;
   }
 
   .ui-datepicker-title {
     font-size: 14px;
+    font-weight: bold;
   }
 
 }
