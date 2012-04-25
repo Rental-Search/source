@@ -83,7 +83,7 @@
     border: 1px solid #DDD !important;
   }
 
-  .ui-state-default,{
+  .ui-state-default {
       -webkit-box-shadow: inset 0 0 0 #ffffff;
       -moz-box-shadow: inset 0 0 0 #ffffff;
       box-shadow: inset 0 0 0 #ffffff;
@@ -97,6 +97,16 @@
       border: 1px solid @green;
   }
 
+  .ui-datepicker-unselectable.ui-state-disabled {
+    background-color: #EA0C31 !important;
+    border: 1px solid #EA0C31;
+  }
+
+  .ui-datepicker-other-month.ui-datepicker-unselectable {
+    background-color: #fff !important;
+    border: 1px solid #fff;
+  }
+
   .ui-state-active {
     background: @green !important;
   }
@@ -104,11 +114,6 @@
   .ui-datepicker-title {
     font-size: 14px;
     font-weight: bold;
-  }
-
-  .ui-state-disabled {
-    background-color: #EA0C31 !important;
-    border: 1px solid #EA0C31;
   }
 
 }
