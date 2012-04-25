@@ -261,6 +261,7 @@ PIPELINE_JS = {
         'source_filenames': (
             'js/jquery-1.7.1.min.js',
             'js/jquery-ui-1.8.17.custom.min.js',
+            'js/jquery.ui.datepicker-fr.js',
             'js/modernizr.js',
             'js/mustache.js',
             'js/chosen.jquery.min.js',

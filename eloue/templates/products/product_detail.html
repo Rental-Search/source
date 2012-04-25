@@ -109,7 +109,7 @@
         <div class="product-tabs">
             <ul>
                 <li><a href="#gallery">{% trans "Photo" %}</a></li>
-                <li><a href="#prices_calendar">{% trans "Tarifs et disponibilitées" %}</a></li>
+                <li><a href="#prices_calendar">{% trans "Disponibilitées et tarifs" %}</a></li>
             </ul>
             <div id="gallery">
                 {% with product.pictures.all|first as picture %}
@@ -118,26 +118,36 @@
                 {% endif %}
                 {% endwith %}
             </div> {# gallery #}
-            <div id="prices_calendar" style="background-color: #fff !important;">
+            <div id="prices_calendar">
                 <div class="prices">
-                    <table class="table table-striped" style="width: 220px; font-family: Ubuntu, sans-serif; font-size: 13px;">
+                    <table class="table table-striped">
                         <thead>
                             <tr>
-                                <th style="text-align: left;">{% trans "Période" %}</th>
-                                <th style="text-align: center;">{% trans "Prix" %}</th>
+                                <th>{% trans "Période" %}</th>
+                                <th class="price-head">{% trans "Prix" %}</th>
                             </tr>
                         </thead>
                         {% for price in product.prices.all %}
                         <tr>
-                            <td style="text-align: left;">{% trans price.get_unit_display|capfirst %}
+                            <td>{% trans price.get_unit_display|capfirst %}
                             </td>
-                            <td style="vertical-align: middle; text-align: center;">{{ price.amount }}</td>
+                            <td class="price-display">{{ price.amount }}</td>
                         </tr>
                         {% endfor %}
                     </table>
                 </div>{# prices #}
                 <div class="calendar">
                     <div class="calendar-display"></div>
+                    <ul class="calendar-legend">
+                        <li>
+                            <span class="available-date"></span>
+                            {% trans "Date disponible" %}
+                        </li>
+                        <li>
+                            <span class="unavailable-date"></span>
+                            {% trans "Date non disponible" %}
+                        </li>
+                    </ul>
                 </div>{# calendar #}
             </div>
         </div>{# product-tabs #}

@@ -7,11 +7,6 @@
  *
  * http://docs.jquery.com/UI/Datepicker#theming
  */
-.ui-datepicker {
-  background-color: #F3F8FA;
-  border: 1px solid #B2CED9
-  width: 17em; padding: .2em .2em 0; display: none; 
-}
 .ui-datepicker .ui-datepicker-header { position:relative; padding:.2em 0; }
 .ui-datepicker .ui-datepicker-prev, .ui-datepicker .ui-datepicker-next { position:absolute; top: 2px; width: 1.8em; height: 1.8em; }
 .ui-datepicker .ui-datepicker-prev-hover, .ui-datepicker .ui-datepicker-next-hover { top: 1px; }
@@ -69,4 +64,46 @@
     left: -4px; /*must have*/
     width: 200px; /*must have*/
     height: 200px; /*must have*/
+}
+
+
+.hasDatepicker {
+  
+  color: #364C59;
+  
+  .ui-datepicker {
+    -webkit-border-top-left-radius: 3px !important;
+    border-top-left-radius: 3px !important;
+    -moz-border-radius-topleft: 3px !important;
+
+    background: #fff !important;
+
+    padding: 10px !important;
+
+    border: 1px solid #DDD !important;
+  }
+
+  .ui-state-default,{
+      -webkit-box-shadow: inset 0 0 0 #ffffff;
+      -moz-box-shadow: inset 0 0 0 #ffffff;
+      box-shadow: inset 0 0 0 #ffffff;
+      text-align: center;
+      padding: 4px 0;
+
+      background: #6EB924;
+
+      color: #fff;
+
+      border: 1px solid @green;
+  }
+
+  .ui-state-active {
+    background: @green !important;
+  }
+
+  .ui-datepicker-title {
+    font-size: 14px;
+    font-weight: bold;
+  }
+
 }
