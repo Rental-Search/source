@@ -73,8 +73,40 @@
     <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
 
     <script>
+        enabled = {};
+        date = new Date();
+        $.ajax({
+            type: 'GET',
+            url: 'occupied_date/',
+            dataType: 'json',
+            data: {year:date.getFullYear(), month:date.getMonth()+1},
+            success: function(response) {
+                enabled = {};
+                for (i in response) enabled[response[i]] = true;
+                $(".calendar-display").datepicker("refresh");
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                console.log('wefwfwefwe');
+                console.log(jqXHR, textStatus, errorThrown);
+            }
+        });
+
         $(document).ready(function () {
-            $(".calendar-display").datepicker();
+            $(".calendar-display").datepicker(
+                {
+                    beforeShowDay: function(date){
+                        if (date < new Date()) {
+                            return [false];
+                        }
+                        c = date.getFullYear()+'-'+('0'+(date.getMonth()+1)).slice(-2)+'-'+('0'+date.getDate()).slice(-2);
+                        if (enabled[c]) return [true];
+                        return [false];
+                    },
+                    onChangeMonthYear: function(year, month, inst) {
+                        console.log(year, month, inst);
+                    }
+                }
+            );
         });
     </script>
 {% endblock %}
@@ -312,3 +344,4 @@
 {% endblock %}
 
 
+\
