@@ -94,23 +94,11 @@
     <div class="content-main">
         <h1 style="font-size: 20px;">{{ product.summary|capitalize}}</h1>
         <div class="product-resume">
-            <div style="float: left; margin-right: 10px; text-align: center;">
-            {% with product.pictures.all|first as picture %}
-                {% if picture %}
-                    <img src="{{ picture.profile.url }}" alt="{{ product.summary }}" width="100">
-                {% endif %}
-            {% endwith %}
-            <br>
-            <a href="#" style="font-size: 11px; display:inline-block;"><i class="icon-zoom-in"></i>{% trans "Plus de photos"%}</a>
-            </div>
             <div style="float: left;">
                 <address class="product-address ">
                     <i class="icon-map-marker"></i>
                     {{ product.address.city|capfirst }}, {{ product.address.zipcode }}
                 </address>
-                <p class="product-deposit">
-                    <i class="icon-lock"></i><span> {{ product.deposit_amount|quantize|currency }}</span>
-                </p>
                 {% if product.carproduct %}
                 <ul class="product-properties">
                     <li>
@@ -165,8 +153,8 @@
         </div>{# product-resume #}
         <div class="product-tabs">
             <ul>
-                <li><a href="#prices_calendar">{% trans "Disponibilitées et tarifs" %}</a></li>
                 <li><a href="#gallery">{% trans "Photo" %}</a></li>
+                <li><a href="#prices_calendar">{% trans "Disponibilitées et tarifs" %}</a></li>
             </ul>
             <div id="gallery">
                 {% with product.pictures.all|first as picture %}
