@@ -74,24 +74,26 @@
 
     <script>
         enabled = {};
-        date = new Date();
-        $.ajax({
-            type: 'GET',
-            url: 'occupied_date/',
-            dataType: 'json',
-            data: {year:date.getFullYear(), month:date.getMonth()+1},
-            success: function(response) {
-                enabled = {};
-                for (i in response) enabled[response[i]] = true;
-                $(".calendar-display").datepicker("refresh");
-            },
-            error: function(jqXHR, textStatus, errorThrown) {
-                console.log('wefwfwefwe');
-                console.log(jqXHR, textStatus, errorThrown);
-            }
-        });
-
+        function availability(year, month) {
+            $.ajax({
+                type: 'GET',
+                url: 'occupied_date/',
+                dataType: 'json',
+                data: {year:year, month:month},
+                success: function(response) {
+                    enabled = {};
+                    for (i in response) enabled[response[i]] = true;
+                    console.log(enabled);
+                    $(".calendar-display").datepicker("refresh");
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.log(jqXHR, textStatus, errorThrown);
+                }
+            });
+        }
         $(document).ready(function () {
+            date = new Date();
+            availability(date.getFullYear(), date.getMonth()+1);
             $(".calendar-display").datepicker(
                 {
                     beforeShowDay: function(date){
@@ -104,6 +106,7 @@
                     },
                     onChangeMonthYear: function(year, month, inst) {
                         console.log(year, month, inst);
+                        availability(year, month);
                     }
                 }
             );
