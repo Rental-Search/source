@@ -248,7 +248,10 @@ class Product(models.Model):
     @property
     def average_note(self):
         from eloue.rent.models import BorrowerComment
-        return BorrowerComment.objects.filter(booking__product=self).aggregate(Avg('note'))['note__avg']
+        avg = BorrowerComment.objects.filter(booking__product=self).aggregate(Avg('note'))['note__avg']
+        if avg is None:
+            return 0
+        return avg
     
     @property
     def borrowercomments(self):
