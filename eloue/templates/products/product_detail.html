@@ -119,19 +119,6 @@
                 {% endwith %}
             </div> {# gallery #}
             <div id="prices_calendar">
-                <div class="calendar">
-                    <div class="calendar-display"></div>
-                    <ul class="calendar-legend">
-                        <li>
-                            <span class="available-date"></span>
-                            {% trans "Date disponible" %}
-                        </li>
-                        <li>
-                            <span class="unavailable-date"></span>
-                            {% trans "Date non disponible" %}
-                        </li>
-                    </ul>
-                </div>{# calendar #}
                 <div class="prices">
                     <table class="table table-striped">
                         <thead>
@@ -149,6 +136,19 @@
                         {% endfor %}
                     </table>
                 </div>{# prices #}
+                <div class="calendar">
+                    <div class="calendar-display"></div>
+                    <ul class="calendar-legend">
+                        <li>
+                            <span class="available-date"></span>
+                            {% trans "Date disponible" %}
+                        </li>
+                        <li>
+                            <span class="unavailable-date"></span>
+                            {% trans "Date non disponible" %}
+                        </li>
+                    </ul>
+                </div>{# calendar #}
             </div>
         </div>{# product-tabs #}
         <div class="product-info">
