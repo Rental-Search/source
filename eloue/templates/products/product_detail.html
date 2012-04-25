@@ -83,11 +83,7 @@
                 success: function(response) {
                     enabled = {};
                     for (i in response) enabled[response[i]] = true;
-                    console.log(enabled);
                     $(".calendar-display").datepicker("refresh");
-                },
-                error: function(jqXHR, textStatus, errorThrown) {
-                    console.log(jqXHR, textStatus, errorThrown);
                 }
             });
         }
@@ -105,7 +101,6 @@
                         return [false];
                     },
                     onChangeMonthYear: function(year, month, inst) {
-                        console.log(year, month, inst);
                         availability(year, month);
                     }
                 }
