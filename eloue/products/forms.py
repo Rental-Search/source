@@ -441,6 +441,7 @@ class ProductEditForm(BetterModelForm):
         if payment_type in EMPTY_VALUES:
             payment_type = 1
         return payment_type
+
 class CarProductEditForm(ProductEditForm):
     summary = forms.CharField(required=False, widget=forms.HiddenInput(), max_length=255)
     first_registration_date = DateSelectField()
@@ -491,7 +492,6 @@ class CarProductEditForm(ProductEditForm):
         }
 
 class RealEstateEditForm(ProductEditForm):
-
     def __init__(self, *args, **kwargs):
         super(RealEstateEditForm, self).__init__(*args, **kwargs)
         self.fields['category'] = forms.TypedChoiceField(
@@ -499,11 +499,11 @@ class RealEstateEditForm(ProductEditForm):
             choices=generate_choices(('location-saisonniere', ), None)
         )
     class Meta:
-        models = RealEstateProduct
+        model = RealEstateProduct
         fieldsets = [
             ('category', {'fields': ['category'], 'legend': _(u'Choisissez un catégorie')}),
             ('informations', {
-                'fields': ['summary', 'picture_id', 'picture', 'description'], 
+                'fields': ['summary', 'picture', 'description'], 
                 'legend': _(u'Informations')}),
             ('real_estate_description', {
                 'fields' : ['capacity', 'private_life', 'chamber_number', 'rules'],
