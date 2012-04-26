@@ -122,9 +122,9 @@
 		<li class="lastb">{{ product.summary|capitalize }}</li>
     </ul>{# breadcrumb #}
     <div class="content-main">
-        <h1 style="font-size: 20px;">{{ product.summary|capitalize}}</h1>
+        <h1>{{ product.summary|capitalize}}</h1>
         <div class="product-resume">
-            <div style="float: left;">
+            <div class="product-resume-left">
                 <address class="product-address ">
                     <i class="icon-map-marker"></i>
                     {{ product.address.city|capfirst }}, {{ product.address.zipcode }}
@@ -170,9 +170,9 @@
                 </ul>
                 {% endif %}
             </div>
-            <div style="float: right;">
+            <div class="product-resume-right">
                 <span class="stars empty"><span class="stars filled_{{ product.average_note }}"></span></span>
-                <a href="#" style="display: block; float: right; margin-top: 5px; font-size: 11px;">
+                <a href="#id_product_comment">
                 {% blocktrans count product.borrowercomments.count as count %}
                     ({{ count }} avis)
                     {% plural %}
@@ -240,7 +240,7 @@
             <h2>{% trans "Description" %}</h2>
             {{ product.description|linebreaksp }}
         </div>
-        <div class="product-comment">
+        <div id="id-product-comment" class="product-comment">
             {% if product.borrowercomments.count > 0 %}
                 {% blocktrans count product.borrowercomments.count as count %}
                     <h2>{{ count }} commentaires</h2>

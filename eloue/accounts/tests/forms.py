@@ -62,7 +62,7 @@ class CreditCardFormTest(TestCase):
             CreditCardForm(
                 {
                     'cvv': '123', 'expires_0': '12', 'expires_1': '22',
-                    'card_number': '1111222233334445'
+                    'card_number': '1111222233334445',  'holder_name': 'xxx'
                 }
             ).is_valid()
         )
@@ -72,7 +72,7 @@ class CreditCardFormTest(TestCase):
     def testCardWithLetters(self, mock_authorize):
         form = CreditCardForm({
                 'cvv': '123', 'expires_0': '12', 'expires_1': '22',
-                'card_number': '111122222aaaa4444'
+                'card_number': '111122222aaaa4444',  'holder_name': 'xxx'
             })
         self.assertFalse(form.is_valid())
         self.assertFalse(form.non_field_errors())
@@ -81,12 +81,24 @@ class CreditCardFormTest(TestCase):
         self.assertTrue('card_number' in form.errors)
 
     @mock.patch.object(PayboxManager, 'authorize')
+    def testCardWithoutHolderName(self, mock_authorize):
+        form = CreditCardForm({
+                'cvv': '123', 'expires_0': '12', 'expires_1': '22',
+                'card_number': '1111222233334444', 'holder_name': ''
+            })
+        self.assertFalse(form.is_valid())
+        self.assertFalse(form.non_field_errors())
+        self.assertTrue(form.errors)
+        self.assertEqual(len(form.errors), 1)
+        self.assertTrue('holder_name' in form.errors)
+
+    @mock.patch.object(PayboxManager, 'authorize')
     def testExpiredFail(self, mock_authorize):
         mock_authorize.side_effect = PayboxException(11, '')
         form = CreditCardForm(
             {
                 'cvv': '123', 'expires_0': '02', 'expires_1': '12',
-                'card_number': '1111222233334444'
+                'card_number': '1111222233334444',  'holder_name': 'xxx'
             }
         )
         self.assertFalse(form.is_valid())
@@ -102,7 +114,7 @@ class CreditCardFormTest(TestCase):
         form = CreditCardForm(
             {
                 'cvv': '123', 'expires_0': '02', 'expires_1': '22',
-                'card_number': '1111222233334444'
+                'card_number': '1111222233334444',  'holder_name': 'xxx'
             }
         )
         self.assertTrue(form.is_valid())
@@ -117,7 +129,7 @@ class CreditCardFormTest(TestCase):
         mock_authorize.return_value = ('0001234', '000012345')
         form = CreditCardForm({
                 'cvv': '123', 'expires_0': '12', 'expires_1': '22',
-                'card_number': '1111222233334444'
+                'card_number': '1111222233334444',  'holder_name': 'xxx'
             })
         self.assertTrue(form.is_valid())
         self.assertFalse(form.non_field_errors())
@@ -138,7 +150,7 @@ class CreditCardFormTest(TestCase):
         mock_subscribe.return_value = 'SLDLrcsLMPC'
         form = CreditCardForm({
                 'cvv': '123', 'expires_0': '12', 'expires_1': '22',
-                'card_number': '1111222233334444'
+                'card_number': '1111222233334444',  'holder_name': 'xxx'
             }, instance=CreditCardForm._meta.model(holder=Patron.objects.get(pk=1)))
         self.assertTrue(form.is_valid())
         self.assertFalse(form.non_field_errors())
@@ -159,7 +171,7 @@ class CreditCardFormTest(TestCase):
                 'card_number': '1111222233334444'
             }, instance=CreditCardForm._meta.model(
                 holder=Patron.objects.get(pk=1), card_number='SLDLrcsLMPC', 
-                expires='1222', masked_number='1XXXXXXXXXXXX444'
+                expires='1222', masked_number='1XXXXXXXXXXXX444', holder_name='xxx'
             )
         )
         self.assertTrue(form.is_valid())
@@ -179,7 +191,7 @@ class CreditCardFormTest(TestCase):
         mock_subscribe.side_effect = PayboxException(16, 'Abonne deja existant')
         form = CreditCardForm({
                 'cvv': '123', 'expires_0': '12', 'expires_1': '22',
-                'card_number': '1111222233334444'
+                'card_number': '1111222233334444',  'holder_name': 'xxx'
             }, instance=CreditCardForm._meta.model(holder=Patron.objects.get(pk=1)))
         self.assertTrue(form.is_valid())
         self.assertFalse(form.non_field_errors())

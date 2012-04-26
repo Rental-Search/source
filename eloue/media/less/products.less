@@ -198,6 +198,7 @@
   > li {
     float: left;
     margin-right: 10px;
+    color: @blueDark;
   }
   
   .divider {
@@ -222,6 +223,21 @@
     color: @green;
 
     margin-bottom: 10px;
+  }
+
+  .product-resume-left {
+    float: left;
+  }
+
+  .product-resume-right {
+    float: right;
+
+    a {
+      display: block; 
+      float: right; 
+      margin-top: 5px; 
+      font-size: 11px;
+    }
   }
 }
 
@@ -299,12 +315,11 @@
   .clearfix();
 
   margin-bottom: 20px;
-
   #font > .sans-serif('Ubuntu', normal, 13px);
 
-  .table {
-    float: left;
-    width: 250px;
+  p {
+    color: #555;
+    line-height: 18px;
   }
 }
 
@@ -322,6 +337,11 @@
 
 .product-comment {
   margin-bottom: 20px;
+
+  li {
+    #font > .sans-serif('Ubuntu', normal, 13px);
+    color: #555;
+  }
 }
 
 .social-button {
@@ -651,8 +671,14 @@
 
 .product-options {
   li {
+    #font > .sans-serif("Ubuntu", normal, @basefont);
     display: inline-block;
     margin-right: 10px;
+    margin-bottom: 20px;
+
+    width: 150px;
+
+    color: #555;
   } 
 }
 

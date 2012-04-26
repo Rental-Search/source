@@ -177,6 +177,22 @@
             {% endif %}
           </div>{# controls #}
         </div>{# control-group #}
+        <div class="control-group {% if form.holder_name.errors %} error {% endif %}">
+          <label class="control-label" for="{{ form.holder_name.id_for_label }}">
+            {{ form.holder_name.label }}
+          </label>
+          <div class="controls">
+            {{ form.holder_name }}
+            <p class="help-block">{{ form.holder_name.help_text}}</p>
+            {% if form.holder_name.errors %}
+            <span class="help-inline">
+            {% for error in form.holder_name.errors %}
+              {{ error|escape }}
+            {% endfor %}
+            </span>
+            {% endif %}
+          </div>{# controls #}
+        </div>{# control-group #}
         <div class="control-group {% if form.keep.errors %} error {% endif %}">
           <label class="checkbox" for="{{ form.keep.id_for_label }}">
             {{ form.keep }} {% trans "Conserver mes coordonnées bancaire" %}
@@ -191,21 +207,7 @@
             </span>
             {% endif %}
           </div>{# controls #}
-        <div class="control-group {% if form.holder_name.errors %} error {% endif %}">
-          <label class="checkbox" for="{{ form.holder_name.id_for_label }}">
-            {{ form.holder_name }} {% trans "Titulaire de la carte" %}
-          </label>
-          <div class="controls">
-            <p class="help-block">{{ form.holder_name.help_text}}</p>
-            {% if form.holder_name.errors %}
-            <span class="help-inline">
-            {% for error in form.holder_name.errors %}
-              {{ error|escape }}
-            {% endfor %}
-            </span>
-            {% endif %}
-          </div>{# controls #}
-        </div>{# control-group #}
+        </div>
       </fieldset>{# credit-card-form #}
       <div class="form-actions">
           <input type="hidden" name="{{ step_field }}" value="{{ step0 }}" />
@@ -216,6 +218,8 @@
   </div>
 </div>{# container_main #}
 {% endblock %}
+
+
 
 {% block footer %}
 {% endblock %}
