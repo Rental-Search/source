@@ -174,8 +174,20 @@ class AlertIndex(QueuedSearchIndex):
 
 try:
     site.register(Product, ProductIndex)
+except AlreadyRegistered:
+    pass
+
+try:
     site.register(CarProduct, CarIndex)
+except AlreadyRegistered:
+    pass
+
+try:
     site.register(RealEstateProduct, RealEstateIndex)
+except AlreadyRegistered:
+    pass
+
+try:
     site.register(Alert, AlertIndex)
 except AlreadyRegistered:
     pass

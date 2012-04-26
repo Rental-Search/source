@@ -177,5 +177,7 @@ class DateSelectField(forms.MultiValueField):
         return super(DateSelectField, self).__init__(fields, *args, **kwargs)
 
     def compress(self, data_list):
+        if not data_list:
+            return None
         return datetime.date(year=data_list[2], month=data_list[1], day=data_list[0])
 
