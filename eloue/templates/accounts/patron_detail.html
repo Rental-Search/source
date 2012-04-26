@@ -95,8 +95,8 @@
             <li>
                 <a href="{{ product.get_absolute_url }}">
                     {% with product.pictures.all|first as picture %}
-                    {% if picture.thumbnail %}
-                        <img src="{{ picture.thumbnail.url }}" width="200" height="170" />
+                    {% if picture.profile %}
+                        <img src="{{ picture.profile.url }}" width="200" height="170" />
                     {% endif %}
                     {% endwith %}
                     <h3>{{ product.summary|truncate:22 }}</h3>
