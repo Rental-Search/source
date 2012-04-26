@@ -292,38 +292,38 @@ class Booking(models.Model):
     @property
     def commission(self):
         """Return our commission
-        
-        >>> booking = Booking(total_amount=10)
+        >>> from eloue.products.models import Product
+        >>> booking = Booking(total_amount=10, product=Product())
         >>> booking.commission
-        Decimal('1.50')
+        Decimal('2.0')
         """
         return self.total_amount * self.product.subtype.commission
         
     @property
     def total_commission(self):
         """ Return all the commission
-        
-        >>> booking = Booking(total_amount=10)
+        >>> from eloue.products.models import Product
+        >>> booking = Booking(total_amount=10, product=Product())
         >>> booking.total_commission
-        Decimal('2.040')
+        Decimal('2.6470')
         """
         return self.commission + self.insurance_fee
     
     @property
     def net_price(self):
         """Return net price for owner
-        
-        >>> booking = Booking(total_amount=10)
+        >>> from eloue.products.models import Product
+        >>> booking = Booking(total_amount=10, product=Product())
         >>> booking.net_price
-        Decimal('8.50')
+        Decimal('8.0')
         """
         return self.total_amount - self.commission
     
     @property
     def insurance_commission(self):
         """Return our commission on insurance
-        
-        >>> booking = Booking(total_amount=10)
+        >>> from eloue.products.models import Product
+        >>> booking = Booking(total_amount=10, product=Product())
         >>> booking.insurance_commission
         Decimal('0')
         """
@@ -332,20 +332,20 @@ class Booking(models.Model):
     @property
     def insurance_fee(self):
         """Return insurance commission
-        
-        >>> booking = Booking(total_amount=10)
+        >>> from eloue.products.models import Product
+        >>> booking = Booking(total_amount=10, product=Product())
         >>> booking.insurance_fee
-        Decimal('0.540')
+        Decimal('0.6470')
         """
         return self.total_amount * self.product.subtype.insurance_fee
     
     @property
     def insurance_taxes(self):
         """Return insurance taxes
-        
-        >>> booking = Booking(total_amount=10)
+        >>> from eloue.products.models import Product
+        >>> booking = Booking(total_amount=10, product=Product())
         >>> booking.insurance_taxes
-        Decimal('0.04860')
+        Decimal('0.058230')
         """
         return self.insurance_fee * self.product.subtype.insurance_taxes
     

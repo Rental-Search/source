@@ -5,6 +5,7 @@ from decimal import Decimal as D
 from django.core.exceptions import ValidationError
 from django.test import TestCase
 
+from eloue.accounts.models import Patron
 from eloue.rent.models import Booking, BorrowerComment, OwnerComment
 from eloue.rent import models
 from eloue.payments.paypal_payment import AdaptivePapalPayments
@@ -114,7 +115,7 @@ class BookingTest(TestCase):
             borrower_id=2,
             product_id=4
         )
-        self.assertEquals(booking.insurance_amount, D('0.58860'))
+        self.assertEquals(booking.insurance_amount, D('0.705230'))
     
     def test_no_insurance(self):
         booking = Booking.objects.create(
@@ -173,12 +174,12 @@ class BookingTest(TestCase):
         self.assertEquals(booking.state, Booking.STATE.CLOSED) #state changed
     
     from eloue.payments.paybox_payment import PayboxManager
-    @patch.object(PayboxManager, 'authorize')
+    @patch.object(PayboxManager, 'authorize_subscribed')
     def test_paybox_payment_preapproval(self, mock_authorize):
-        from eloue.payments.models import PayboxDirectPaymentInformation
+        from eloue.payments.models import PayboxDirectPlusPaymentInformation
         from eloue.accounts.models import CreditCard
         mock_authorize.return_value = '00012345', '000012345'
-        payment = PayboxDirectPaymentInformation.objects.create()
+        payment = PayboxDirectPlusPaymentInformation.objects.create()
         booking = Booking.objects.create(
             started_at=datetime.datetime.now(),
             ended_at=datetime.datetime.now() + datetime.timedelta(days=3),
@@ -193,7 +194,12 @@ class BookingTest(TestCase):
         self.assertEquals(booking.state, Booking.STATE.AUTHORIZING) 
         #booking.init_payment_processor() 
         #self.assertTrue(isinstance(booking.payment_processor, models.PAY_PROCESSORS[1]))
-        booking.preapproval(credit_card=CreditCard(expires='0113', card_number='1111222233334444'), cvv='123')
+        booking.preapproval(
+            credit_card=CreditCard(
+                expires='0119', card_number='1111222233334444', 
+                holder=Patron.objects.get(pk=2)
+            ), cvv='123'
+        )
         self.assertTrue(mock_authorize.called)
         self.assertEquals(booking.state, Booking.STATE.AUTHORIZED)
         

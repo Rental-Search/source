@@ -35,9 +35,6 @@ class PayboxException(abstract_payment.PaymentException):
         self.code = code
         self.message = message
 
-    def __str__(self):
-        return unicode(self)
-
     def __unicode__(self):
         return u"PayboxError with code {code} and message \"{message}\"".format(**self.__dict__)
 

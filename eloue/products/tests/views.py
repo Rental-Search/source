@@ -49,7 +49,7 @@ class ProductViewsTest(TestCase):
             'deposit_amount': 250
         })
         product = Product.objects.get(pk=1)
-        self.assertTrue(response.status_code, 200)
+        self.assertTrue(response.status_code, 302)
         self.assertEqual(product.description, "Engrenage plantaire haute performance 2 vitesses.")
         self.assertEqual(product.prices.day().count(), 1)
         self.assertEqual(product.prices.day()[0].amount, 24)
