@@ -1,5 +1,7 @@
 // Griditude
 // Modify the grid styles in mixins.less
+// -------------------------------------
+
 @gridColumns:       12;
 @gridColumnWidth:   60px;
 @gridGutterWidth:   20px;
@@ -7,12 +9,14 @@
 @siteWidth:         (@gridColumns * @gridColumnWidth) + (@gridGutterWidth * (@gridColumns - 1));
 
 
-//Base size
+// Base size
+// -------------------------------
 @baseline:          18px;
 @basefont:          13px;
 
 
-//Color
+// Color
+// -------------------------------
 @green:             #6eb924;
 @blueLight:         #f3f8fa;
 @blue:              #546b78;
@@ -28,6 +32,7 @@
 
 
 // Form states and alerts
+// -------------------------------
 @warningText:             #c09853;
 @warningBackground:       #fcf8e3;
 @warningBorder:           darken(spin(@warningBackground, -10), 3%);
@@ -43,3 +48,10 @@
 @infoText:                #3a87ad;
 @infoBackground:          #d9edf7;
 @infoBorder:              darken(spin(@infoBackground, -10), 7%);
+
+
+// Sprite icons path
+// -------------------------
+@iconSpritePath:          "images/glyphicons-halflings.png";
+@iconWhiteSpritePath:     "images/glyphicons-halflings-white.png";
+
