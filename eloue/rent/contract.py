@@ -56,13 +56,11 @@ class ContractGeneratorNormal(object):
     def draw(self, canvas, booking):
         """Draw stuff in the carbon"""
         canvas.setFont("Helvetica", 10)
-        canvas.drawString(99, 614, "{first_name} {last_name}".format(
+        canvas.drawString(99, 614, u"{first_name} {last_name}".format(
                 first_name=booking.borrower.first_name, 
                 last_name=booking.borrower.last_name.upper()
             )
         )
-        canvas.drawString(83, 603, "{phone}".format(phone=booking.borrower.phones.all()[0]))
-        canvas.drawString(75, 594, "{address1}".format(address1=booking.borrower.default_address or booking.borrower.addresses.all()[0]))
         canvas.drawString(135, 575, "{date_of_birth}, {place_of_birth}".format(
                 date_of_birth=booking.borrower.date_of_birth.strftime("%d/%m/%Y"),
                 place_of_birth=booking.borrower.place_of_birth
@@ -74,9 +72,11 @@ class ContractGeneratorNormal(object):
         canvas.drawString(115, 530, "{expires}".format(
             expires=booking.borrower.creditcard.expires
         ))
+        canvas.drawString(83, 603, u"{phone}".format(phone=booking.borrower.phones.all()[0]))
+        canvas.drawString(75, 594, u"{address1}".format(address1=booking.borrower.default_address or booking.borrower.addresses.all()[0]))
         canvas.drawString(170, 438, "{started_at}".format(started_at=booking.started_at.strftime("%d/%m/%Y à %H:%M")))
         canvas.drawString(176, 426, "{ended_at}".format(ended_at=booking.ended_at.strftime("%d/%m/%Y à %H:%M")))
-        canvas.drawString(180, 415, "{total_amount}".format(total_amount=booking.total_amount))
+        canvas.drawString(180, 415, "{total_amount} {currency}.".format(total_amount=booking.total_amount, currency=booking.currency))
 
         canvas.drawString(430, 660, "{first_name} {last_name}".format(
             first_name=booking.owner.first_name,

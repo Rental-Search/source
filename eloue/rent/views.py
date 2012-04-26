@@ -32,7 +32,7 @@ from eloue.rent.forms import BookingForm, BookingConfirmationForm, BookingStateF
 from eloue.rent.models import Booking
 from eloue.rent.wizard import BookingWizard
 from eloue.utils import currency
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date
 from eloue.rent.utils import get_product_occupied_date, timesince
 
 log = logbook.Logger('eloue.rent')
@@ -41,11 +41,8 @@ USE_HTTPS = getattr(settings, 'USE_HTTPS', True)
 
 def product_occupied_date(request, slug, product_id):
     product = get_object_or_404(Product.on_site, pk=product_id)
-    bookings = Booking.objects.filter(product=product).filter(Q(state="pending")|Q(state="ongoing"))
-    dates = get_product_occupied_date(bookings)
-    formated_date = [str(d.year) + '-' + str(d.month) + '-' + str(d.day) for d in dates]
-    formated_date = list(set(formated_date))
-    return HttpResponse(simplejson.dumps(formated_date), mimetype='application/json')
+    dthandler = lambda obj: obj.isoformat() if isinstance(obj, (datetime, date)) else None
+    return HttpResponse(simplejson.dumps(product.monthly_availability(**request.GET),default=dthandler), mimetype='application/json')
 
 
 @require_GET

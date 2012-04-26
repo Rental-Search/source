@@ -25,7 +25,7 @@ import facebook
 
 from eloue.accounts import EMAIL_BLACKLIST
 from eloue.accounts.fields import PhoneNumberField, ExpirationField, RIBField, DateSelectField
-from eloue.accounts.models import Patron, Avatar, PhoneNumber, CreditCard, COUNTRY_CHOICES, PatronAccepted, FacebookSession, Address
+from eloue.accounts.models import Patron, Avatar, PhoneNumber, CreditCard, COUNTRY_CHOICES, PatronAccepted, FacebookSession, Address, Language
 from eloue.accounts.widgets import ParagraphRadioFieldRenderer, CommentedCheckboxInput
 from eloue.utils import form_errors_append
 from eloue.payments import paypal_payment
@@ -258,7 +258,7 @@ class PatronEditForm(BetterModelForm):
     work = forms.CharField(label=_(u"Travail"), required=False, widget=forms.TextInput(attrs={'class': 'inm'}), help_text=_(u"Exemple : Directrice Resources Humaines, ma socitée"))
     school = forms.CharField(label=_(u"Etudes"), required=False, widget=forms.TextInput(attrs={'class': 'inm'}), help_text=_(u"Exemple : Université Panthéon Sorbonne (Paris I)"))
     hobby = forms.CharField(label=_(u"Hobbies"), required=False, widget=forms.TextInput(attrs={'class': 'inm'}))
-    languages = forms.CharField(label=_(u"Langues parlés"), required=False, widget=forms.TextInput())
+    languages = forms.ModelMultipleChoiceField(queryset=Language.objects, label=_(u"Langues parlés"), required=False)
 
     class Meta:
         model = Patron

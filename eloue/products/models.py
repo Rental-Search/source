@@ -2,7 +2,12 @@
 import uuid
 from decimal import Decimal as D
 
-from datetime import datetime, timedelta, time
+from datetime import datetime, timedelta, time, date
+
+import calendar
+from django.db.models import Q
+import operator
+import itertools
 
 from imagekit.models import ImageSpec
 from imagekit.processors import resize, Adjust, Transpose
@@ -243,26 +248,24 @@ class Product(models.Model):
     @property
     def average_note(self):
         from eloue.rent.models import BorrowerComment
-        return BorrowerComment.objects.filter(booking__product=self).aggregate(Avg('note'))['note__avg']
+        avg = BorrowerComment.objects.filter(booking__product=self).aggregate(Avg('note'))['note__avg']
+        if avg is None:
+            return 0
+        return avg
     
     @property
     def borrowercomments(self):
         from eloue.rent.models import BorrowerComment
         return BorrowerComment.objects.filter(booking__product=self)
     
-    def monthly_availability(self):
-        import calendar
-        from django.db.models import Q
-        import operator
-        import datetime
-        import itertools
-        month = 1
-        year = 2012
+    def monthly_availability(self, year, month):
 
+        year = int(year[0])
+        month = int(month[0])
         _, days_num = calendar.monthrange(year, month)
 
-        started_at = datetime.datetime.combine(datetime.date(year, month, 1), datetime.time())
-        ended_at = datetime.datetime.combine(datetime.date(year, month, 1), datetime.time()) + datetime.timedelta(days=days_num)
+        started_at = datetime(year, month, 1, 0, 0)
+        ended_at = started_at + timedelta(days=days_num)
         def _accumulate(iterable, func=operator.add, start=None):
             """
             Modified version of Python 3.2's itertools.accumulate.
@@ -278,14 +281,15 @@ class Product(models.Model):
                 yield total
             yield
         
+        # the bookings 
         bookings = self.bookings.filter(
             Q(state="pending")|Q(state="ongoing")
         ).filter(
             ~Q(ended_at__lte=started_at) & ~Q(started_at__gte=ended_at)
         )
 
-        _one_day = datetime.timedelta(days=1)
-        day_first = datetime.datetime.combine(datetime.date(year, month, 1), datetime.time())
+        _one_day = timedelta(days=1)
+        day_first = datetime(year, month, 1)
 
         START = 1
         END = -1
@@ -293,30 +297,45 @@ class Product(models.Model):
         bookings_tuple = [(booking.started_at, booking.ended_at, booking.quantity) for booking in bookings]
 
         for day in xrange(days_num):
-            midnight = day_first + datetime.timedelta(days=day)
-            bookings_tuple += ((midnight, midnight + _one_day, 0), )
-        
+            bookings_tuple += ((
+                datetime(year, month, 1 + day), 
+                datetime(year, month, 1 + day) + _one_day, 
+                0
+            ),)
         grouped_dates = itertools.groupby(
             sorted(
                 itertools.chain.from_iterable(
-                    ((start, START, value), (end, END, value)) for start, end, value in bookings_tuple), 
-                key=operator.itemgetter(0)
-            ), key=operator.itemgetter(0)
+                    ((start, START, value), (end, END, value)) 
+                    for start, end, value 
+                    in bookings_tuple)
+            ),
+            key=operator.itemgetter(0)
         )
-        
+        import pprint
         changements = [
             (key, sum(event[1]*event[2] for event in group))
             for key, group
-            in grouped_dates]
-        availables = zip(
-            map(operator.itemgetter(0), changements), 
+            in grouped_dates
+        ]
+
+        borrowed = zip(
+            map(operator.itemgetter(0), changements),
             _accumulate(map(operator.itemgetter(1), changements))
         )
+        availables = [(key, self.quantity - value) for key, value in borrowed]
+        #pprint.pprint(availables)
+        #print 'availables', availables, [(key, list(value)) for (key, value) in itertools.groupby(availables, key=lambda x:x[0].date())]
+        
         return [
-            max(group, key=lambda x: x[1])
-            for (key, group) 
-            in itertools.groupby(availables, key=lambda x:x[0].date())
-            if key.year == year and key.month == month and key >= datetime.date.today()]
+            d.date() for (d, available) in (
+                min(group, key=lambda x: x[1])
+                for (key, group) 
+                in itertools.groupby(availables, key=lambda x:x[0].date())
+                if key.year == year and key.month == month and key >= date.today()
+            )
+            if available
+        ]
+
 
     @property
     def subtype(self):
@@ -508,28 +527,28 @@ class Picture(models.Model):
             resize.Crop(width=60, height=60), 
             Adjust(contrast=1.2, sharpness=1.1),
             Transpose(Transpose.AUTO),
-        ], image_field='image', pre_cache=True, cache_to=cache_to
+        ], image_field='image', pre_cache=False, cache_to=cache_to
     )
     profile = ImageSpec(
         processors=[
             resize.Crop(width=200, height=170), 
             Adjust(contrast=1.2, sharpness=1.1),
             Transpose(Transpose.AUTO),
-        ], image_field='image', pre_cache=True, cache_to=cache_to
+        ], image_field='image', pre_cache=False, cache_to=cache_to
     )
     home = ImageSpec(
         processors=[
             resize.Crop(width=120, height=140), 
             Adjust(contrast=1.2, sharpness=1.1),
             Transpose(Transpose.AUTO),
-        ], image_field='image', pre_cache=True, cache_to=cache_to
+        ], image_field='image', pre_cache=False, cache_to=cache_to
     )
     display = ImageSpec(
         processors=[
             resize.Fit(width=578, height=500), 
             Adjust(contrast=1.2, sharpness=1.1),
             Transpose(Transpose.AUTO),
-        ], image_field='image', pre_cache=True, cache_to=cache_to
+        ], image_field='image', pre_cache=False, cache_to=cache_to
     )
 
     def save(self, *args, **kwargs):

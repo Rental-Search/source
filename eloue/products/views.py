@@ -141,7 +141,6 @@ def real_estate_product_create(request, *args, **kwargs):
 @ownership_required(model=Product, object_key='product_id', ownership=['owner'])
 def product_edit(request, slug, product_id):
     product = get_object_or_404(Product.on_site, pk=product_id)
-    
     try:
         form = CarProductEditForm(data=request.POST or None, files=request.FILES or None, instance=product.carproduct)
     except Product.DoesNotExist:
@@ -364,7 +363,7 @@ def patron_message_create(request, recipient_username):
 @login_required
 @ownership_required(model=Product, object_key='product_id', ownership=['owner'])
 def product_delete(request, slug, product_id):
-    product = get_object_or_404(Product.on_site, pk=product_id).get_subtype
+    product = get_object_or_404(Product.on_site, pk=product_id).subtype
     if request.method == "POST":
         product.delete()
         messages.success(request, _(u"Votre objet à bien été supprimée"))
