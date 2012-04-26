@@ -382,6 +382,11 @@ class CarProduct(Product):
     mileage = models.IntegerField(_(u'kilométrage'), choices=MILEAGE, null=True, blank=True, default=2)
     consumption = models.PositiveIntegerField(_(u'consommation'), null=True, blank=True, choices=CONSUMPTION, default=4)
 
+    # info about km included
+    km_included = models.PositiveIntegerField(_(u'kilomètres inclus'), null=True, blank=True)
+    costs_per_km = models.DecimalField(_(u'prix par extra kilomètres'), null=True, 
+        blank=True, max_digits=8, decimal_places=3)
+
     # options & accessoires
     air_conditioning = models.BooleanField(_(u'climatisation'))
     power_steering = models.BooleanField(_(u'direction assistée'))

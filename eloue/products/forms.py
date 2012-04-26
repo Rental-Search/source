@@ -311,7 +311,7 @@ class CarProductForm(ProductForm):
                 'legend': _(u'Description du véhicule')
                 }),
             ('car_characteristics', {
-                'fields': ['seat_number', 'door_number', 'fuel', 'transmission', 'mileage', 'consumption'],
+                'fields': ['seat_number', 'door_number', 'fuel', 'transmission', 'mileage', 'consumption', 'km_included', 'costs_per_km'],
                 'legend': _(u'Caractéristique du véhicule'),
                 }),
             ('assurancies_informations', {
@@ -463,7 +463,7 @@ class CarProductEditForm(ProductEditForm):
         fieldsets = [
             ('category', {'fields': ['category'], 'legend': _(u'Type de véhicule')}),
             ('informations', {
-                'fields': ['summary', 'brand', 'model', 'picture', 'description', 'deposit_amount'], 
+                'fields': ['summary', 'brand', 'model', 'picture', 'description', 'deposit_amount', 'km_included', 'costs_per_km'], 
                 'legend': _(u'Description du véhicule')
                 }),
             ('car_characteristics', {
