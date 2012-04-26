@@ -122,20 +122,65 @@
 		<li class="lastb">{{ product.summary|capitalize }}</li>
     </ul>{# breadcrumb #}
     <div class="content-main">
-        <h1>{{ product.summary|capitalize}}</h1>
-        <ul class="product-properties">
-            <li class="product-address">
-                {{ product.address.city|capfirst }}, {{ product.address.zipcode }}
-            {% if product.deposit_amount %}
-                    <span class="divider">&#149;</span>
-            </li>
-            <li class="product-deposit">
-                {% trans "Caution" %} : <span>{{ product.deposit_amount|quantize|currency }}</span>
-            </li>
-            {% else %}
-            </li>
-            {% endif %}
-        </ul>{# product-properties #}
+        <h1 style="font-size: 20px;">{{ product.summary|capitalize}}</h1>
+        <div class="product-resume">
+            <div style="float: left;">
+                <address class="product-address ">
+                    <i class="icon-map-marker"></i>
+                    {{ product.address.city|capfirst }}, {{ product.address.zipcode }}
+                </address>
+                {% if product.carproduct %}
+                <ul class="product-properties">
+                    <li>
+                        <i class="icon-user"></i>
+                        {{ product.seat_number }} {% trans "places" %}
+                    </li>
+                    <li>
+                        <i class="icon-th-large"></i>
+                        {{ product.door_number }} {% trans "portes" %}
+                    </li>
+                    <li>
+                        <i class="icon-fire"></i>
+                        {{ product.get_fuel_display }}
+                    </li>
+                    <li>
+                        <i class="icon-move"></i>
+                        {{ product.get_transmission_display }}
+                    </li>
+                    <li>
+                        <i class="icon-road"></i>
+                        {{  product.consumption }} {% trans "L/100km" %}
+                    </li>
+                </ul>{# product-properties #}
+                {% endif %}
+                {% if product.realestateproduct %}
+                <ul class="product-properties">
+                    <li>
+                        <i class="icon-user"></i>
+                        {{product.capacity}} {% trans "personnes" %}
+                    </li>
+                    <li>
+                        <i class="icon-home"></i>
+                        {{ product.get_private_life_display }}
+                    </li>
+                    <li>
+                        <i class="icon-tags"></i>
+                        {{ product.chamber_number }} {% trans "chambres" %}
+                    </li>
+                </ul>
+                {% endif %}
+            </div>
+            <div style="float: right;">
+                <span class="stars empty"><span class="stars filled_{{ product.average_note }}"></span></span>
+                <a href="#" style="display: block; float: right; margin-top: 5px; font-size: 11px;">
+                {% blocktrans count product.borrowercomments.count as count %}
+                    ({{ count }} avis)
+                    {% plural %}
+                    ({{ count }} avis)
+                {% endblocktrans%}
+                </a>
+            </div>
+        </div>{# product-resume #}
         <div class="product-tabs">
             <ul>
                 <li><a href="#gallery">{% trans "Photo" %}</a></li>
@@ -181,64 +226,19 @@
                 </div>{# calendar #}
             </div>
         </div>{# product-tabs #}
+        {% if product.options %}
         <div class="product-info">
-            <div class="product-desc">
-                {% if product.options %}
-                <h3 style="margin-bottom: 10px;">{% trans "Options & accessoires" %}</h3>
-                <p style="margin-bottom: 20px;">
-                    {{product.options|join:" - "}}
-                </p>
-                {% endif %}
-                <h3 style="margin-bottom: 10px;">{% trans "Description" %}</h3>
-                {{ product.description|linebreaksp }}
-            </div>{# product-desc #}
-            {% if product.carproduct %}
-                <table class="table table-striped">
-                    <tbody>
-                    <tr>
-                        <td>{% trans "Nombre de siège" %}</td>
-                        <td style="text-align: right">{{product.seat_number}}</td>
-                    </tr>
-                    <tr>
-                        <td>{% trans "Nombre de porte" %}</td>
-                        <td style="text-align: right">{{ product.door_number }}</td>
-                    </tr>
-                    <tr>
-                        <td>{% trans "Energie" %}</td>
-                        <td style="text-align: right">{{ product.get_fuel_display }}</td>
-                    </tr>
-                    <tr>
-                        <td>{% trans "Transmission" %}</td>
-                        <td style="text-align: right">{{ product.get_transmission_display }}</td>
-                    </tr>
-                    <tr>
-                        <td>{% trans "Kilométrage" %}</td>
-                        <td style="text-align: right">{{ product.get_mileage_display }}</td>
-                    </tr>
-                    <tr>
-                        <td>{% trans "Consommation" %}</td>
-                        <td style="text-align: right">{{ product.consumption }} litres/100km</td>
-                    </tr>
-                    </tbody>
-                </table>
-            {% endif %}
-            {% if product.realestateproduct %}
-                <table class="table table-striped">
-                    <tbody>
-                    <tr>
-                        <td>{% trans "Capacité" %}</td>
-                        <td style="text-align: right">{{product.capacity}}</td>
-                    </tr>
-                    <tr>
-                        <td>{% trans "Vie privée" %}</td>
-                        <td style="text-align: right">{{ product.get_private_life_display }}</td>
-                    </tr>
-                    <tr>
-                        <td>{% trans "Nombre de chambres" %}</td>
-                        <td style="text-align: right">{{ product.chamber_number }}</td>
-                    </tr>
-                </table>
-            {% endif %}
+            <h2>{% trans "Options & accessoires" %}</h2>
+            <ul class="product-options">
+                {% for option in product.options %}
+                <li><i class="icon-ok"></i> {{option}}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+        <div class="product-info">
+            <h2>{% trans "Description" %}</h2>
+            {{ product.description|linebreaksp }}
         </div>
         <div class="product-comment">
             {% if product.borrowercomments.count > 0 %}
