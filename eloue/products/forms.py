@@ -311,7 +311,7 @@ class CarProductForm(ProductForm):
                 'legend': _(u'Description du véhicule')
                 }),
             ('car_characteristics', {
-                'fields': ['seat_number', 'door_number', 'fuel', 'transmission', 'mileage', 'consumption'],
+                'fields': ['seat_number', 'door_number', 'fuel', 'transmission', 'mileage', 'consumption', 'km_included', 'costs_per_km'],
                 'legend': _(u'Caractéristique du véhicule'),
                 }),
             ('assurancies_informations', {
@@ -391,7 +391,6 @@ class RealEstateForm(ProductForm):
 
 class ProductEditForm(BetterModelForm):
     picture = forms.ImageField(label=_(u"Photo"), required=False, widget=forms.FileInput(attrs={'class': 'inm'}))
-    licence_plate = FRLicensePlateField(required=True)
     deposit_amount = forms.DecimalField(label=_(u"Dépôt de garantie"), initial=0, required=False, max_digits=8, decimal_places=2, widget=PriceTextInput(attrs={'class': 'price'}), localize=True, help_text=_(u"Montant utilisé en cas de dédomagement"))
     quantity = forms.IntegerField(label=_(u"Quantité"), initial=1, widget=forms.TextInput(attrs={'class': 'price'}), help_text=_(u"Le locataire peut réserver plusieurs exemplaires si vous les possédez"))
 
@@ -464,7 +463,7 @@ class CarProductEditForm(ProductEditForm):
         fieldsets = [
             ('category', {'fields': ['category'], 'legend': _(u'Type de véhicule')}),
             ('informations', {
-                'fields': ['summary', 'brand', 'model', 'picture', 'description', 'deposit_amount'], 
+                'fields': ['summary', 'brand', 'model', 'picture', 'description', 'deposit_amount', 'km_included', 'costs_per_km'], 
                 'legend': _(u'Description du véhicule')
                 }),
             ('car_characteristics', {

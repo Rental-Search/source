@@ -609,7 +609,8 @@ class CvvForm(forms.ModelForm):
         super(CvvForm, self).__init__(*args, **kwargs)
 
     class Meta:
-        exclude = ('expires', 'masked_number', 'card_number', 'holder', 'keep')
+        exclude = ('expires', 'masked_number', 'card_number', 'holder', 
+            'keep', 'holder_name')
         model = CreditCard
 
     def clean(self):

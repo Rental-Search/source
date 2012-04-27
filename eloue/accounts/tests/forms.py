@@ -129,14 +129,14 @@ class CreditCardFormTest(TestCase):
         mock_authorize.return_value = ('0001234', '000012345')
         form = CreditCardForm({
                 'cvv': '123', 'expires_0': '12', 'expires_1': '22',
-                'card_number': '1111222233334444',  'holder_name': 'xxx'
-            })
+                'card_number': '1111222233334444',  'holder_name': 'xxx',
+            }, instance=CreditCardForm._meta.model(holder=Patron.objects.get(pk=1)))
         self.assertTrue(form.is_valid())
         self.assertFalse(form.non_field_errors())
         self.assertFalse(form.errors)
         self.assertTrue(isinstance(form.save(commit=False), CreditCardForm._meta.model))
         self.assertTrue(mock_authorize.called)
-        self.assertFalse(mock_subscribe.called)
+        self.assertTrue(mock_subscribe.called)
         self.assertFalse(mock_modify.called)
 
     def testCardNumberMask(self):
@@ -168,9 +168,9 @@ class CreditCardFormTest(TestCase):
         mock_modify.return_value = 'SLDLrcsLMPC'
         form = CreditCardForm({
                 'cvv': '123', 'expires_0': '12', 'expires_1': '22',
-                'card_number': '1111222233334444'
+                'card_number': '1111222233334444', 'holder_name': 'xxx'
             }, instance=CreditCardForm._meta.model(
-                holder=Patron.objects.get(pk=1), card_number='SLDLrcsLMPC', 
+                holder=Patron.objects.get(pk=1), card_number='SLDLrcsLMPC', pk=1,
                 expires='1222', masked_number='1XXXXXXXXXXXX444', holder_name='xxx'
             )
         )

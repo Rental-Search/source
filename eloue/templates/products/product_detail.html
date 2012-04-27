@@ -94,7 +94,7 @@
                 {
                     beforeShowDay: function(date){
                         if (date < new Date()) {
-                            return [false];
+                            return [false, 'outdated'];
                         }
                         c = date.getFullYear()+'-'+('0'+(date.getMonth()+1)).slice(-2)+'-'+('0'+date.getDate()).slice(-2);
                         if (enabled[c]) return [true];

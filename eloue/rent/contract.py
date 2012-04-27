@@ -61,19 +61,19 @@ class ContractGeneratorNormal(object):
                 last_name=booking.borrower.last_name.upper()
             )
         )
-        canvas.drawString(135, 575, "{date_of_birth}, {place_of_birth}".format(
-                date_of_birth=booking.borrower.date_of_birth.strftime("%d/%m/%Y"),
-                place_of_birth=booking.borrower.place_of_birth
-            )
-        )
-        canvas.drawString(115, 540, "{masked_number}".format(
-            masked_number=booking.borrower.creditcard.masked_number
-        ))
-        canvas.drawString(115, 530, "{expires}".format(
-            expires=booking.borrower.creditcard.expires
-        ))
         canvas.drawString(83, 603, u"{phone}".format(phone=booking.borrower.phones.all()[0]))
         canvas.drawString(75, 594, u"{address1}".format(address1=booking.borrower.default_address or booking.borrower.addresses.all()[0]))
+        # canvas.drawString(135, 575, "{date_of_birth}, {place_of_birth}".format(
+        #         date_of_birth=booking.borrower.date_of_birth.strftime("%d/%m/%Y"),
+        #         place_of_birth=booking.borrower.place_of_birth
+        #     )
+        # )
+        # canvas.drawString(115, 540, "{masked_number}".format(
+        #     masked_number=booking.borrower.creditcard.masked_number
+        # ))
+        # canvas.drawString(115, 530, "{expires}".format(
+        #     expires=booking.borrower.creditcard.expires
+        # ))
         canvas.drawString(170, 438, "{started_at}".format(started_at=booking.started_at.strftime("%d/%m/%Y à %H:%M")))
         canvas.drawString(176, 426, "{ended_at}".format(ended_at=booking.ended_at.strftime("%d/%m/%Y à %H:%M")))
         canvas.drawString(180, 415, "{total_amount} {currency}.".format(total_amount=booking.total_amount, currency=booking.currency))

@@ -45,12 +45,12 @@ from eloue import signals as eloue_signals
 from eloue.utils import currency, create_alternative_email, cache_to
 
 UNIT = Enum([
-    (0, 'HOUR', _(u'heure')),
-    (1, 'DAY', _(u'jour')),
-    (2, 'WEEK_END', _(u'week-end')),
-    (3, 'WEEK', _(u'semaine')),
-    (4, 'TWO_WEEKS', _(u'deux semaines')),
-    (5, 'MONTH', _(u'mois'))
+    (0, 'HOUR', _(u'heure'), _(u'1 heure')),
+    (1, 'DAY', _(u'jour'), _(u'1 jour')),
+    (2, 'WEEK_END', _(u'week-end'), _(u'1 week-end')),
+    (3, 'WEEK', _(u'semaine'), _(u'1 semaine')),
+    (4, 'TWO_WEEKS', _(u'deux semaines'), _(u'2 semaines')),
+    (5, 'MONTH', _(u'mois'), _(u'1 mois')),
 ])
 
 UNITS = {
@@ -382,6 +382,11 @@ class CarProduct(Product):
     mileage = models.IntegerField(_(u'kilométrage'), choices=MILEAGE, null=True, blank=True, default=2)
     consumption = models.PositiveIntegerField(_(u'consommation'), null=True, blank=True, choices=CONSUMPTION, default=4)
 
+    # info about km included
+    km_included = models.PositiveIntegerField(_(u'kilomètres inclus'), null=True, blank=True)
+    costs_per_km = models.DecimalField(_(u'prix par extra kilomètres'), null=True, 
+        blank=True, max_digits=8, decimal_places=3)
+
     # options & accessoires
     air_conditioning = models.BooleanField(_(u'climatisation'))
     power_steering = models.BooleanField(_(u'direction assistée'))
@@ -690,6 +695,9 @@ class Price(models.Model):
         delta = (ended_at - started_at)
         return delta if delta > timedelta(days=0) else timedelta(days=0)
     
+    def get_prefixed_unit_display(self):
+        return UNIT.prefixed[self.unit]
+
     class Meta:
         ordering = ['unit']
 

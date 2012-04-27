@@ -111,11 +111,17 @@ class BookingWizardTestWithFacebookAsAnonymous(BookingWizardTestWithFacebook):
         self.assertTemplateUsed(response, 'rent/booking_confirm.html')
         self.assertTrue(mock_object.called)
     
+    @patch.object(PayboxManager, 'unsubscribe')
+    @patch.object(PayboxManager, 'authorize_subscribed')
+    @patch.object(PayboxManager, 'subscribe')
     @patch.object(GraphAPI, 'get_object')
     @patch.object(MultiPartFormWizard, 'security_hash')
-    def test_fourth_step_as_anonymous(self, mock_hash, mock_object):
+    def test_fourth_step_as_anonymous(self, mock_hash, mock_object, mock_subscribe, mock_authorize,mock_unsubscribe):
         mock_hash.return_value = '6941fd7b20d720833717a1f92e8027af'
         mock_object.return_value = self.me
+        mock_authorize.return_value = ('0001234', '0002345')
+        mock_subscribe.return_value = 'SLDLrcsLMPC'
+        mock_unsubscribe.return_value = None
         
         response = self.client.post(reverse('booking_create', args=['location/bebe/mobilier-bebe/lits/', self.product.slug, self.product.id]), {
             '0-started_at_0': '18/10/2010',
@@ -138,12 +144,15 @@ class BookingWizardTestWithFacebookAsAnonymous(BookingWizardTestWithFacebook):
             '3-expires_0': '12',
             '3-expires_1': '20',
             '3-card_number': '1111222233334444',
-            '3-save': True,
+            '3-keep': True,
+            '3-holder_name': 'xxx',
             'hash_0': '6941fd7b20d720833717a1f92e8027af',
             'hash_1': '6941fd7b20d720833717a1f92e8027af',
             'hash_2': '6941fd7b20d720833717a1f92e8027af',
             'wizard_step': 3
         })
+        self.assertTrue(mock_authorize.called)
+        self.assertTrue(mock_subscribe.called)
         self.assertRedirects(response, reverse('booking_success', kwargs={'booking_id': Booking.objects.get().pk.hex}))
         self.assertEquals(CreditCard.objects.count(), 1)
         cc = CreditCard.objects.get()
@@ -233,11 +242,15 @@ class BookingWizardTestWithFacebookAsNew(BookingWizardTestWithFacebook):
         self.assertTemplateUsed(response, 'rent/booking_confirm.html')
         self.assertTrue(mock_object.called)
     
+    @patch.object(PayboxManager, 'authorize_subscribed')
+    @patch.object(PayboxManager, 'subscribe')
     @patch.object(GraphAPI, 'get_object')
     @patch.object(MultiPartFormWizard, 'security_hash')
-    def test_fifth_step_as_new(self, mock_hash, mock_object):
+    def test_fifth_step_as_new(self, mock_hash, mock_object, mock_subscribe, mock_authorize):
         mock_hash.return_value = '6941fd7b20d720833717a1f92e8027af'
         mock_object.return_value = self.me
+        mock_authorize.return_value = ('0001234', '0002345')
+        mock_subscribe.return_value = 'SLLLqssDLLS'
         
         response = self.client.post(reverse('booking_create', args=['location/bebe/mobilier-bebe/lits/', self.product.slug, self.product.id]), {
             '0-started_at_0': '18/10/2010',
@@ -263,29 +276,29 @@ class BookingWizardTestWithFacebookAsNew(BookingWizardTestWithFacebook):
             '3-expires_0': '12',
             '3-expires_1': '20',
             '3-card_number': '1111222233334444',
-            '3-save': False,
+            '3-holder_name': 'xxx',
+            '3-keep': False,
             'hash_0': '6941fd7b20d720833717a1f92e8027af',
             'hash_1': '6941fd7b20d720833717a1f92e8027af',
             'hash_2': '6941fd7b20d720833717a1f92e8027af',
             'wizard_step': 3
         })
+        self.assertTrue(mock_authorize.called)
+        self.assertTrue(mock_subscribe.called)
         self.assertTrue(mock_object.called)
         self.assertRedirects(response, reverse('booking_success', kwargs={'booking_id': Booking.objects.get().pk.hex}))
 
+    @patch.object(PayboxManager, 'authorize_subscribed')
     @patch.object(PayboxManager, 'authorize')
+    @patch.object(PayboxManager, 'subscribe')
     @patch.object(GraphAPI, 'get_object')
     @patch.object(MultiPartFormWizard, 'security_hash')
-    def test_fifth_step_as_new_fail(self, mock_hash, mock_object, mock_paybox_manager):
+    def test_fifth_step_as_new_fail(self, mock_hash, mock_object, mock_subscribe, mock_authorize, mock_authorize_subscribed):
         mock_hash.return_value = '6941fd7b20d720833717a1f92e8027af'
         mock_object.return_value = self.me
-
-        returns = [PayboxException('016', ''), ('0001234', '0002345'),]
-        def returns_sideeffect(*args, **kwargs):
-            result = returns.pop()
-            if isinstance(result, PayboxException):
-                raise result
-            return result
-        mock_paybox_manager.side_effect = returns_sideeffect
+        mock_subscribe.return_value = 'SLLLqssDLLS'
+        mock_authorize.return_value = ('0001234', '0002345')
+        mock_authorize_subscribed.side_effect = PayboxException('016', '')
 
         response = self.client.post(reverse('booking_create', args=['location/bebe/mobilier-bebe/lits/', self.product.slug, self.product.id]), {
             '0-started_at_0': '18/10/2010',
@@ -311,12 +324,16 @@ class BookingWizardTestWithFacebookAsNew(BookingWizardTestWithFacebook):
             '3-expires_0': '12',
             '3-expires_1': '20',
             '3-card_number': '1111222233334444',
-            '3-save': False,
+            '3-holder_name': 'xxx',
+            '3-keep': False,
             'hash_0': '6941fd7b20d720833717a1f92e8027af',
             'hash_1': '6941fd7b20d720833717a1f92e8027af',
             'hash_2': '6941fd7b20d720833717a1f92e8027af',
             'wizard_step': 3
         })
+        self.assertTrue(mock_subscribe.called)
+        self.assertTrue(mock_authorize.called)
+        self.assertTrue(mock_authorize_subscribed.called)
         self.assertTrue(mock_object.called)
         self.assertRedirects(response, reverse('booking_failure', kwargs={'booking_id': Booking.objects.get().pk.hex}))
 
@@ -399,11 +416,15 @@ class BookingWizardTestWithFacebookAssociate(BookingWizardTestWithFacebook):
         self.assertTemplateUsed(response, 'rent/booking_confirm.html')
         self.assertTrue(mock_object.called)
     
+    @patch.object(PayboxManager, 'authorize_subscribed')
+    @patch.object(PayboxManager, 'subscribe')
     @patch.object(GraphAPI, 'get_object')
     @patch.object(MultiPartFormWizard, 'security_hash')
-    def test_fifth_step_associate(self, mock_hash, mock_object):
+    def test_fifth_step_associate(self, mock_hash, mock_object, mock_subscribe, mock_authorize):
         mock_hash.return_value = '6941fd7b20d720833717a1f92e8027af'
         mock_object.return_value = self.me
+        mock_authorize.return_value = ('0001234', '0002345')
+        mock_subscribe.return_value = 'SLLLqssDLLS'
         
         self.assertEqual(FacebookSession.objects.get(uid=self.uid).user, None)
         response = self.client.post(reverse('booking_create', args=['location/bebe/mobilier-bebe/lits/', self.product.slug, self.product.id]), {
@@ -427,12 +448,15 @@ class BookingWizardTestWithFacebookAssociate(BookingWizardTestWithFacebook):
             '3-expires_0': '12',
             '3-expires_1': '20',
             '3-card_number': '1111222233334444',
-            '3-save': False,
+            '3-holder_name': 'xxx',
+            '3-keep': False,
             'hash_0': '6941fd7b20d720833717a1f92e8027af',
             'hash_1': '6941fd7b20d720833717a1f92e8027af',
             'hash_2': '6941fd7b20d720833717a1f92e8027af',
             'wizard_step': 3
         })
+        self.assertTrue(mock_authorize.called)
+        self.assertTrue(mock_subscribe.called)
         self.assertRedirects(response, reverse('booking_success', kwargs={'booking_id': Booking.objects.get().pk.hex}))
         self.assertEqual(FacebookSession.objects.get(uid=self.uid).user, Patron.objects.get(username='kosii1'))
         self.assertTrue(mock_object.called)
@@ -522,8 +546,13 @@ class BookingWizardTest(TestCase):
         self.assertTrue(response.status_code, 200)
         self.assertTemplateUsed(response, 'rent/booking_confirm.html')
     
+
+    @patch.object(PayboxManager, 'authorize_subscribed')
+    @patch.object(PayboxManager, 'subscribe')
     @patch.object(MultiPartFormWizard, 'security_hash')
-    def test_fifth_step_as_anonymous(self, mock_hash):
+    def test_fifth_step_as_anonymous(self, mock_hash, mock_subscribe, mock_authorize):
+        mock_authorize.return_value = ('0001234', '0002345')
+        mock_subscribe.return_value = 'SLLLqssDLLS'
         mock_hash.return_value = '6941fd7b20d720833717a1f92e8027af'
         response = self.client.post(reverse('booking_create', args=['location/bebe/mobilier-bebe/lits/', self.product.slug, self.product.id]), {
             '0-started_at_0': '18/10/2010',
@@ -543,12 +572,15 @@ class BookingWizardTest(TestCase):
             '3-expires_0': '12',
             '3-expires_1': '20',
             '3-card_number': '1111222233334444',
-            '3-save': False,
+            '3-keep': False,
+            '3-holder_name': 'xxx',
             'hash_0': '6941fd7b20d720833717a1f92e8027af',
             'hash_1': '6941fd7b20d720833717a1f92e8027af',
             'hash_2': '6941fd7b20d720833717a1f92e8027af',
             'wizard_step': 3
         })
+        self.assertTrue(mock_authorize.called)
+        self.assertTrue(mock_subscribe.called)
         booking = Booking.objects.get()
         self.assertRedirects(response, reverse('booking_success', kwargs={'booking_id': booking.pk.hex}))
 
