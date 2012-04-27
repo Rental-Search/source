@@ -348,7 +348,7 @@ class CreditCard(models.Model):
     holder = models.OneToOneField(Patron, editable=False)
     masked_number = models.CharField(max_length=20, blank=False)
     keep = models.BooleanField()
-    holder_name = models.CharField(max_length=60)
+    holder_name = models.CharField(max_length=60, help_text=_(u'Conserver mes coordonnées bancaire'))
 
 
 class FacebookSession(models.Model):
