@@ -45,11 +45,12 @@
  }
 }
 
-.product-list .more-product {
+.more-product {
   text-align: center; 
   height: auto; 
   padding: 10px; 
-  border-bottom: 1px solid #B2CED9 !important;
+  border-top: 1px solid #B2CED9;
+  border-bottom: 1px solid #B2CED9;
 
   .more-product-link {
     background-color: #F7F8FA;
@@ -663,7 +664,7 @@
     border: 1px solid #DDD !important;
   }
 
-  .ui-state-default,{
+  .ui-state-default {
       -webkit-box-shadow: none !important;
       -moz-box-shadow: none !important;
       box-shadow: none !important;
@@ -675,6 +676,18 @@
       color: #fff;
 
       border: 1px solid @green !important;
+  }
+
+  .outdated .ui-state-default {
+    background: #FFF !important;
+    color: #DDD;
+    border: none !important;
+  }
+
+  .unvailable .ui-state-default {
+    background: #EA0C31 !important;
+    color: #FFF;
+    border:   1px solid #EA0C31;
   }
 
   .ui-state-active {
@@ -704,6 +717,7 @@
     color: #555;
   } 
 }
+
 
 //PRODUCT RESUME
 //--------------
