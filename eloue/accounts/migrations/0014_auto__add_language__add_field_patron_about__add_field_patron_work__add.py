@@ -19,13 +19,13 @@ class Migration(SchemaMigration):
         db.add_column('accounts_patron', 'about', self.gf('django.db.models.fields.TextField')(default='', blank=True), keep_default=False)
 
         # Adding field 'Patron.work'
-        db.add_column('accounts_patron', 'work', self.gf('django.db.models.fields.CharField')(default='', max_length=75, blank=True), keep_default=False)
+        db.add_column('accounts_patron', 'work', self.gf('django.db.models.fields.CharField')(default='', max_length=75, null=True, blank=True), keep_default=False)
 
         # Adding field 'Patron.school'
-        db.add_column('accounts_patron', 'school', self.gf('django.db.models.fields.CharField')(default='', max_length=75, blank=True), keep_default=False)
+        db.add_column('accounts_patron', 'school', self.gf('django.db.models.fields.CharField')(default='', max_length=75, null=True, blank=True), keep_default=False)
 
         # Adding field 'Patron.hobby'
-        db.add_column('accounts_patron', 'hobby', self.gf('django.db.models.fields.CharField')(default='', max_length=75, blank=True), keep_default=False)
+        db.add_column('accounts_patron', 'hobby', self.gf('django.db.models.fields.CharField')(default='', max_length=75, null=True, blank=True), keep_default=False)
 
         # Adding M2M table for field languages on 'Patron'
         db.create_table('accounts_patron_languages', (
