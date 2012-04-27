@@ -128,7 +128,8 @@ $(document).ready(function() {
         languagesInput,
         bookingCreate,
         startDate,
-        endDate
+        endDate,
+        moreItem
 
 
     // Company name field display/none
@@ -271,6 +272,12 @@ $(document).ready(function() {
     endDate = $('input[name$=ended_at_0]');
     endDate.datepicker({
         dateFormat: 'dd/mm/yy',
+    });
+
+    moreItem = $('.more-product-link');
+    moreItem.click(function(e) {
+        e.preventDefault();
+        $(this).addClass('loading');
     });
 
     //fbconnect
