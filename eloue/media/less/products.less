@@ -45,6 +45,29 @@
  }
 }
 
+.product-list .more-product {
+  text-align: center; 
+  height: auto; 
+  padding: 10px; 
+  border-bottom: 1px solid #B2CED9 !important;
+
+  .more-product-link {
+    background-color: #F7F8FA;
+    display: block;
+
+    border: 1px solid #B2CED9;
+    padding: 8px;
+    .rounded(3px);
+
+    #font > .sans-serif('Myriad Pro', normal, 13px);
+  }
+
+  .more-product-link.loading {
+    background: #F7F8FA url("../images/waiting.gif") no-repeat center 9px;
+    text-indent: -9999px;
+  }
+}
+
 .pl-avatar {
  float: right;
  display: block;
