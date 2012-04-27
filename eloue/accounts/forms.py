@@ -521,7 +521,7 @@ def mask_card_number(card_number):
 class CreditCardForm(forms.ModelForm):
     cvv = forms.CharField(max_length=4, label=_(u'Cryptogramme de sécurité'), widget=forms.TextInput(attrs={'placeholder':' XXX'}))
     expires = ExpirationField(label=_(u'Date d\'expiration'))
-    holder_name = forms.CharField(label=_(u'Prénom et nom de la carte'))
+    holder_name = forms.CharField(label=_(u'Titulaire de la carte'))
 
 
     def __init__(self, *args, **kwargs):
