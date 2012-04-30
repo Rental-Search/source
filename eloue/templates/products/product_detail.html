@@ -254,7 +254,7 @@
             {% for comment in product.borrowercomments %}
                 <li>{% include "rent/partials/comment.html" %}</li>
             {% empty %}
-                <li>Soyez-le premier a louer et commenter!</li>
+                <li>{% trans "Soyez-le premier à réserver et commenter !" %}</li>
             {% endfor %}
             </ul>
         </div>{# product-comment #}
