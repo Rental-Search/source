@@ -377,7 +377,10 @@ def product_delete(request, slug, product_id):
 @vary_on_cookie
 def product_list(request, urlbits, sqs=SearchQuerySet(), suggestions=None, page=None):
     location = request.session.setdefault('location', settings.DEFAULT_LOCATION)
-    form = FacetedSearchForm(request.GET)
+    query_data = request.GET.copy()
+    if not query_data.get('l'):
+        query_data['l'] = u'France'
+    form = FacetedSearchForm(query_data)
     if not form.is_valid():
         raise Http404
     
