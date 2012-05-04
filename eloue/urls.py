@@ -12,9 +12,11 @@ from django.utils.translation import ugettext as _
 from eloue.accounts.forms import EmailPasswordResetForm, PatronSetPasswordForm
 from eloue.accounts.views import activate, authenticate, authenticate_headless, contact, associate_facebook
 
-from eloue.products.views import homepage, search, reply_product_related_message
-
+from eloue.products.views import homepage, search, reply_product_related_message, homepage_object_list
+from eloue.products.search_indexes import product_only_search, car_search, realestate_search
 from eloue.sitemaps import CategorySitemap, FlatPageSitemap, PatronSitemap, ProductSitemap
+
+from functools import partial
 
 log = logbook.Logger('eloue')
 
@@ -70,6 +72,9 @@ urlpatterns = patterns('',
     url(r'^api/', include('eloue.api.urls')),
     url(r'^oauth/', include('oauth_provider.urls')),
     url(r'^$', homepage, name="home"),
+    url(r'^lists/object/(?P<offset>[0-9]*)$', partial(homepage_object_list, search_index=product_only_search), name=''),
+    url(r'^lists/car/(?P<offset>[0-9]*)$', partial(homepage_object_list, search_index=car_search), name=''),
+    url(r'^lists/realestate/(?P<offset>[0-9]*)$', partial(homepage_object_list, search_index=realestate_search), name=''),
     url(r'^%s/$' % _('recherche'), search, name="search")
 )
 

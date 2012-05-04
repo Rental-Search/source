@@ -264,12 +264,6 @@ $(document).ready(function() {
         dateFormat: 'dd/mm/yy',
     });
 
-    moreItem = $('.more-product-link');
-    moreItem.click(function(e) {
-        e.preventDefault();
-        $(this).addClass('loading');
-    });
-
     //fbconnect
     $('#fbconnect').click(function () {
         FB.login(function(response) {

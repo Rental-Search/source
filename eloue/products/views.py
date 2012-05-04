@@ -61,40 +61,60 @@ def homepage(request):
     alerts = Alert.on_site.all()[:3]
     try:
         coords = location['coordinates']
-        region_coords = location.get('region_coords') or coords
-        region_radius = location.get('region_radius') or location['radius']
+        # region_coords = location.get('region_coords') or coords
+        # region_radius = location.get('region_radius') or location['radius']
         l = Point(coords)
         last_joined = Patron.objects.last_joined_near(l)
-        last_added = product_search.narrow('special:False').spatial(
-            lat=region_coords[0], long=region_coords[1], radius=min(region_radius, 1541)
-        ).spatial(
-            lat=coords[0], long=coords[1], radius=min(region_radius*2 if region_radius else float('inf'), 1541)
-        ).order_by('-created_at_date', 'geo_distance')
-        last_added_car = car_search.spatial(
-            lat=region_coords[0], long=region_coords[1], radius=min(region_radius, 1541)
-        ).spatial(
-            lat=coords[0], long=coords[1], radius=min(region_radius*2 if region_radius else float('inf'), 1541)
-        ).order_by('-created_at_date', 'geo_distance')
-        last_added_realestate = realestate_search.spatial(
-            lat=region_coords[0], long=region_coords[1], radius=min(region_radius, 1541)
-        ).spatial(
-            lat=coords[0], long=coords[1], radius=min(region_radius*2 if region_radius else float('inf'), 1541)
-        ).order_by('-created_at_date', 'geo_distance')
+        # last_added = product_search.spatial(
+        #     lat=region_coords[0], long=region_coords[1], radius=min(region_radius, 1541)
+        # ).spatial(
+        #     lat=coords[0], long=coords[1], radius=min(region_radius*2 if region_radius else float('inf'), 1541)
+        # ).order_by('-created_at_date', 'geo_distance')
+        # last_added_car = car_search.spatial(
+        #     lat=region_coords[0], long=region_coords[1], radius=min(region_radius, 1541)
+        # ).spatial(
+        #     lat=coords[0], long=coords[1], radius=min(region_radius*2 if region_radius else float('inf'), 1541)
+        # ).order_by('-created_at_date', 'geo_distance')
+        # last_added_realestate = realestate_search.spatial(
+        #     lat=region_coords[0], long=region_coords[1], radius=min(region_radius, 1541)
+        # ).spatial(
+        #     lat=coords[0], long=coords[1], radius=min(region_radius*2 if region_radius else float('inf'), 1541)
+        # ).order_by('-created_at_date', 'geo_distance')
     except KeyError:
         last_joined = Patron.objects.last_joined()
-        last_added = product_search.narrow('special:False').order_by('-created_at')
-        last_added_car = car_search.order_by('-created_at')
-        last_added_realestate = realestate_search.order_by('-created_at')
+        # last_added = product_search.narrow('special:False').order_by('-created_at')
+        # last_added_car = car_search.order_by('-created_at')
+        # last_added_realestate = realestate_search.order_by('-created_at')
     return render_to_response(
         template_name='index.html', 
         dictionary={
             'form': form, 'curiosities': curiosities,
-            'alerts':alerts, 'last_added': last_added[:10],
-            'last_added_car': last_added_car[:10],
-            'last_added_realestate': last_added_realestate[:10],
+            'alerts':alerts,
             'last_joined': last_joined[:11],
         }, 
         context_instance=RequestContext(request)
+    )
+
+
+def homepage_object_list(request, search_index, offset=0):
+    offset = int(offset) if offset else 0
+    location = request.session.setdefault('location', settings.DEFAULT_LOCATION)
+    coords = location['coordinates']
+    region_coords = location.get('region_coords') or coords
+    region_radius = location.get('region_radius') or location['radius']
+    l = Point(coords)
+    last_added = search_index.spatial(
+            lat=region_coords[0], long=region_coords[1], radius=min(region_radius, 1541)
+        ).spatial(
+            lat=coords[0], long=coords[1], radius=min(region_radius*2 if region_radius else float('inf'), 1541)
+        ).order_by('-created_at_date', 'geo_distance')
+    return render_to_response(
+        template_name='products/partials/result_list.html',
+        dictionary={
+            'product_list': last_added[offset*10:(offset+1)*10],
+            'truncation': 28
+        },
+        mimetype='text/plain; charset=utf-8'
     )
 
 

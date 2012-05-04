@@ -41,34 +41,22 @@
                 <li><a href="#hotloc">{% trans "Locations du moment" %}</a></li>
             </ul>
             <div id="near">
-            {% with last_added as product_list %}
-                {% with 28 as truncation %}
-                    {% include 'products/partials/result_list.html' %}
-                {% endwith %}
-            {% endwith %}
-            <p class="more-product">
-                <a href="#" class="more-product-link">{% trans "Chargez plus d'annonces..." %}</a>
-            </p>
+                <ul class="product-list"></ul>
+                <p class="more-product">
+                    <a href="#" class="more-product-link">{% trans "Chargez plus d'annonces..." %}</a>
+                </p>
             </div>{# near #}
             <div id="near_car">
-            {% with last_added_car as product_list %}
-                {% with 28 as truncation %}
-                    {% include 'products/partials/result_list.html' %}
-                {% endwith %}
-            {% endwith %}
-            <p class="more-product">
-                <a href="#" class="more-product-link">{% trans "Chargez plus d'annonces..." %}</a>
-            </p>
+                <ul class="product-list"></ul>
+                <p class="more-product">
+                    <a href="#" class="more-product-link">{% trans "Chargez plus d'annonces..." %}</a>
+                </p>
             </div>{# near #}
             <div id="near_realestate">
-            {% with last_added_realestate as product_list %}
-                {% with 28 as truncation %}
-                    {% include 'products/partials/result_list.html' %}
-                {% endwith %}
-            {% endwith %}
-            <p class="more-product">
-                <a href="#" class="more-product-link">{% trans "Chargez plus d'annonces..." %}</a>
-            </p>
+                <ul class="product-list"></ul>
+                <p class="more-product">
+                    <a href="#" class="more-product-link">{% trans "Chargez plus d'annonces..." %}</a>
+                </p>
             </div>{# near #}
             <div id="hotloc">
                 <ul class="product-list">
@@ -133,6 +121,37 @@
                 );
         });
         geolocation_stuff();
+
+        (function( $ ) {
+          $.fn.loadMore = function(url) {
+            if (typeof(url) === 'undefined') {
+              this.data('offset', this.data('offset') + 1);
+              $.ajax({
+                url: this.data('url')+this.data('offset'),
+                success: function(result) {
+                    $('ul', this).append($('li', result));
+                    $('.more-product-link', this).removeClass('loading');
+                },
+                cache: false,
+                dataType: 'html',
+                context: this
+              });
+            } else {
+              $('ul', this).load(url+' li');
+              $('.more-product-link', this).click(function(e) {
+                e.preventDefault();
+                $(this).addClass('loading');
+                $(this.parentNode.parentNode).loadMore();
+              })
+              this.data('url', url);
+              this.data('offset', 0);
+            }
+          };
+        })( jQuery );
+
+        $('#near').loadMore('lists/object/');
+        $('#near_car').loadMore('lists/car/');
+        $('#near_realestate').loadMore('lists/realestate/');
     </script>
 {% endblock %}
 
