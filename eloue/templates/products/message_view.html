@@ -33,18 +33,17 @@
 			{% endif %}
 		</a>
 		<div class="m-content">
-			<div>
+			<div class="m-body">
 				<p class="m-sender">
 					<a href="{{message.sender.patron.get_absolute_url}}">{{message.sender.username}}</a> {{message.sent_at|date:_("DATETIME_FORMAT")}}
 				</p>
-				<p class="m-content">
+				<div class="m-message">
 					{{ message.body|linebreaks }}
-				</p>
+				</div>
 				<span class="message-dial"></span>
 			</div>
 		</div>
 	</li>
-
 {% endfor %}
 	<li>
 		<a href="{{message.sender.patron.get_absolute_url}}" class="m-img">
@@ -55,19 +54,19 @@
 			{% endif %}
 		</a>
 		<div class="m-content">
-			<div>
+			<div class="m-body">
 				<p class="m-sender">
 					<a href="{{user.get_absolute_url}}">{{ user.username }}</a>
-					<p class="m-content">
-						<form method="post" action="">
+				</p>
+				<div class="m-message">
+					<form method="post" action="">
 						{% csrf_token %}
 						{{ editForm.body }}
 						<div class="form-actions">
         					<button type="submit" class="btn btn-primary">Envoyer</button>
       					</div>
-						</form>
-					</p>
-				</p>
+					</form>
+				</div>
 				<span class="message-dial"></span>
 			</div>
 		</div>

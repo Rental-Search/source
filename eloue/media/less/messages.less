@@ -43,7 +43,12 @@
   
 	position: relative;
 
-	div { position: relative; }
+	.m-body { position: relative; }
+
+  .m-message p {
+    line-height: 18px;
+  }
+
 
 	.message-dial {
 		background: transparent url("../images/dial-message.png") no-repeat 0 0;
@@ -78,14 +83,21 @@
       		}
     	}
 	}
+  
 	.m-subject {
-		#font > .sans-serif('Ubuntu', normal, 16px);
-		padding-bottom: 10px;
+		#font > .sans-serif('Ubuntu', normal, 14px);
+		padding-bottom: 5px;
+    color: @blueDark;
 	}
 
   .m-text {
     p {
       margin-bottom: 10px;
     }
+  }
+
+  #id_0-body {
+    width: 440px;
+    height: 70px;
   }
 }
