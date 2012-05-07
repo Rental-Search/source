@@ -1,7 +1,7 @@
 {% load cache i18n product seo booking %}
 <ul class="product-list">
     {% for product in product_list %}
-    <li>
+    <li id="marker-{{forloop.counter }}">
         <a href="{{ product.url|safe }}" {% if product|nofollow %}rel="nofollow"{% endif %} class="pl-img">
             {% if product.thumbnail %}
             <img src="{{ product.thumbnail }}" alt="{{ product.summary }}" width="60" height="60" />
@@ -9,7 +9,7 @@
         </a><!-- pl-img -->
         <div class="pl-content">
             <h3>
-               <a href="{{ product.url|safe }}" {% if product|nofollow %}rel="nofollow"{% endif %}>{{ product.summary|capitalize|truncate:truncation }}</a>
+               <a href="{{ product.url|safe }}" {% if product|nofollow %}rel="nofollow"{% endif %}>{{ product.summary|capitalize|truncate:truncation }}</a> 
             </h3>
             {% with product.city|capfirst|add:", "|add:product.zipcode|truncate:truncation as address %}
                 <address>{{address}}</address>
@@ -18,6 +18,7 @@
                 {% endif %}
             {% endwith %}
         </div><!-- pl-content -->
+        <img src="http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld={{ forloop.counter }}|FF0000|000000" alt="marker_{{ forloop.counter }}" height="25" style="margin-top: 3px; margin-left: 10px;">
         <div class="pl-avatar">
             <a href="{{product.owner_url}}">
                 {% if product.owner_avatar %}

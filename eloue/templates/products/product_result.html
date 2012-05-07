@@ -1,5 +1,5 @@
 {% extends "base.html" %}
- {% load cache facets i18n param category product paginator mptt_tags seo booking %}
+ {% load cache facets i18n l10n param category product paginator mptt_tags seo booking %}
 
 {% block title %}
 {% if breadcrumbs.categorie.object.description %}
@@ -212,6 +212,90 @@
     {{block.super}}
     <script src="//maps.googleapis.com/maps/api/js?sensor=false&amp;libraries=places" type="text/javascript"></script>
     <script type="text/javascript" charset="utf-8">
+        var highestZIndex = 0;
+        var markers = new Array();
+        var map;
+
+        var products = [
+            {% for product in product_list %}
+                ['{{ product.summary }}', {{ product.lat|unlocalize }}, {{ product.lng|unlocalize }}, {{ forloop.counter }}]{% if not forloop.last %},{% endif %}
+            {% endfor %}
+        ];
+
+        function setMarkers(map, locations) {
+
+            for (var i = 0; i < locations.length; i++) {
+                var product = locations[i];
+                
+                var image = 'http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=' + product[3] + '|FF0000|000000';
+
+                var image_hover = 'http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=' + product[3] + '|CC0123|000000';
+
+                var myLatLng = new google.maps.LatLng(product[1], product[2]);
+                
+                var marker = new google.maps.Marker({
+                        position: myLatLng,
+                        map: map,
+                        title: product[0],
+                        zIndex: product[3],
+                        icon: image
+                    });
+
+                marker.set("myZIndex", marker.getZIndex());
+
+                google.maps.event.addListener(marker, "mouseover", function() {
+                    getHighestZIndex();
+
+                    var image_hover = 'http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=' + this.zIndex + '|CC0123|000000';
+
+                    this.setOptions({
+                        icon:image_hover,
+                        zIndex:highestZIndex+1
+                    });
+                });
+
+                google.maps.event.addListener(marker, "mouseout", function() {
+                    
+                    var image = 'http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=' + this.get("myZIndex") + '|FF0000|000000';
+                    
+                    this.setOptions({
+                        icon:image,
+                        zIndex:this.get("myZIndex")
+                    });
+                });
+
+                //console.log(marker);
+                //console.log($('li#marker-' + marker.get("myZIndex")));
+
+                $('li#marker-' + marker.get("myZIndex")).mouseover(function (){
+                    google.maps.event.trigger(marker, 'mouseover');
+                });
+
+                $('li#marker-' + marker.get("myZIndex")).mouseout(function (){
+                    google.maps.event.trigger(marker, 'mouseout');
+                });
+
+                markers.push(marker);
+            }
+        }
+
+        function getHighestZIndex() {
+
+        // if we haven't previously got the highest zIndex
+        // save it as no need to do it multiple times
+            if (highestZIndex==0) {
+                if (markers.length>0) {
+                    for (var i=0; i<markers.length; i++) {
+                        tempZIndex = markers[i].getZIndex();
+                        if (tempZIndex>highestZIndex) {
+                            highestZIndex = tempZIndex;
+                        }
+                    }
+                }
+            }
+            return highestZIndex;
+        }
+
         function initialize() {
             function zoom(radius) {
                 if (radius <= 0.5)
@@ -243,7 +327,7 @@
                 zoomControl: true,
                 mapTypeId: google.maps.MapTypeId.ROADMAP
             };
-            var map = new google.maps.Map(document.getElementById("map-canvas"), myOptions);
+            map = new google.maps.Map(document.getElementById("map-canvas"), myOptions);
             geocoder = new google.maps.Geocoder();
             geocoder.geocode(
                 {address: document.getElementById("id_l").value}, 
@@ -265,6 +349,17 @@
                     }
                 }
             )
+
+            setMarkers(map, products);
+
+
+            if (markers.length>0) {
+                for (var i=0; i<markers.length; i++) {
+                    ZIndex = markers[i].getZIndex();
+
+                    
+                }
+            }
         }
 
 
@@ -285,6 +380,7 @@
             });
 
             initialize();
+
         });
     </script>
 {% endblock %}
