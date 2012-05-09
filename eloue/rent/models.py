@@ -367,21 +367,7 @@ class Booking(models.Model):
     @transition(source='pending', target='ongoing', save=True)
     def activate(self):
         pass
-
-    @transition(source='pending', target='ongoing', save=True)
-    def hold(self):
-        """Take money from borrower and keep it safe for later.
-        
-        Keywords arguments :
-        cancel_url -- The URL to which the sender’s browser is redirected after the sender cancels the preapproval at paypal.com.
-        return_url -- The URL to which the sender’s browser is redirected after the sender approves the preapproval on paypal.com.
-        ip_address -- The ip address of sender.
-        
-        Then you should redirect user to :
-        https://www.paypal.com/webscr?cmd=_ap-payment&paykey={{ pay_key }}
-        """
-        self.payment.pay()
-
+    
     @transition(source='ended', target='closing', save=True)
     @smart_transition(source='closing', target='closed', conditions=[not_need_ipn], save=True)
     def pay(self):
