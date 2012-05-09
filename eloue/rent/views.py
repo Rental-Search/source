@@ -42,7 +42,12 @@ USE_HTTPS = getattr(settings, 'USE_HTTPS', True)
 def product_occupied_date(request, slug, product_id):
     product = get_object_or_404(Product.on_site, pk=product_id)
     dthandler = lambda obj: obj.isoformat() if isinstance(obj, (datetime, date)) else None
-    return HttpResponse(simplejson.dumps(product.monthly_availability(**request.GET),default=dthandler), mimetype='application/json')
+    return HttpResponse(
+        simplejson.dumps(
+            product.monthly_availability(**request.GET),
+            default=dthandler), 
+        mimetype='application/json'
+    )
 
 
 @require_GET
