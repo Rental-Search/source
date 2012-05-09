@@ -228,9 +228,20 @@
             for (var i = 0; i < locations.length; i++) {
                 var product = locations[i];
                 
-                var image = 'http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=' + product[3] + '|FF0000|000000';
+                /*var image = 'http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=' + product[3] + '|FF0000|000000';
 
-                var image_hover = 'http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=' + product[3] + '|CC0123|000000';
+                var image_hover = 'http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=' + product[3] + '|CC0123|000000';*/
+
+                var image = new google.maps.MarkerImage('http://localhost:8000/media/images/markers.png',
+                    new google.maps.Size(20, 33),
+                    new google.maps.Point(44, 34*i),
+                    new google.maps.Point(10, 33));
+
+                var image_hover = new google.maps.MarkerImage('http://localhost:8000/media/images/markers.png',
+                    new google.maps.Size(20, 33),
+                    new google.maps.Point(0, 34*i),
+                    new google.maps.Point(10, 33));
+
 
                 var myLatLng = new google.maps.LatLng(product[1], product[2]);
                 
@@ -246,17 +257,17 @@
 
                 google.maps.event.addListener(marker, "mouseover", function() {
 
-                    var image_hover = 'http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=' + this.zIndex + '|CC0123|000000';
+                    //var image_hover = 'http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=' + this.zIndex + '|CC0123|000000';
 
                     this.setOptions({
                         icon:image_hover,
-                        zIndex:100
+                        zIndex:200
                     });
                 });
 
                 google.maps.event.addListener(marker, "mouseout", function() {
                     
-                    var image = 'http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=' + this.get("myZIndex") + '|FF0000|000000';
+                    //var image = 'http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=' + this.get("myZIndex") + '|FF0000|000000';
                     
                     this.setOptions({
                         icon:image,
@@ -340,15 +351,6 @@
             )
 
             setMarkers(map, products);
-
-
-            if (markers.length>0) {
-                for (var i=0; i<markers.length; i++) {
-                    ZIndex = markers[i].getZIndex();
-
-                    
-                }
-            }
         }
 
 
