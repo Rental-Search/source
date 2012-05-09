@@ -132,7 +132,9 @@
             </li>
         </ul>{# product_filter #}
         {% with 50 as truncation %}
-            {% include 'products/partials/result_list.html' %}
+            {% with 'True' as marker %}
+                {% include 'products/partials/result_list.html' %}
+            {% endwith %}
         {% endwith %}
         {% pagination %}
         {% if is_paginated %}
@@ -211,9 +213,8 @@
 {% block tail %}
     {{block.super}}
     <script src="//maps.googleapis.com/maps/api/js?sensor=false&amp;libraries=places" type="text/javascript"></script>
+
     <script type="text/javascript" charset="utf-8">
-        var highestZIndex = 0;
-        var markers = new Array();
         var map;
 
         var products = [
@@ -244,13 +245,12 @@
                 marker.set("myZIndex", marker.getZIndex());
 
                 google.maps.event.addListener(marker, "mouseover", function() {
-                    getHighestZIndex();
 
                     var image_hover = 'http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=' + this.zIndex + '|CC0123|000000';
 
                     this.setOptions({
                         icon:image_hover,
-                        zIndex:highestZIndex+1
+                        zIndex:100
                     });
                 });
 
@@ -264,37 +264,26 @@
                     });
                 });
 
-                //console.log(marker);
-                //console.log($('li#marker-' + marker.get("myZIndex")));
+                $('li#marker-' + marker.get("myZIndex")).mouseover(triggerMouseOverGenerator(marker));
 
-                $('li#marker-' + marker.get("myZIndex")).mouseover(function (){
-                    google.maps.event.trigger(marker, 'mouseover');
-                });
-
-                $('li#marker-' + marker.get("myZIndex")).mouseout(function (){
-                    google.maps.event.trigger(marker, 'mouseout');
-                });
-
-                markers.push(marker);
+                $('li#marker-' + marker.get("myZIndex")).mouseout(triggerMouseOutGenerator(marker));
             }
         }
 
-        function getHighestZIndex() {
-
-        // if we haven't previously got the highest zIndex
-        // save it as no need to do it multiple times
-            if (highestZIndex==0) {
-                if (markers.length>0) {
-                    for (var i=0; i<markers.length; i++) {
-                        tempZIndex = markers[i].getZIndex();
-                        if (tempZIndex>highestZIndex) {
-                            highestZIndex = tempZIndex;
-                        }
-                    }
-                }
+        function triggerMouseOverGenerator(marker) {
+            return function() {
+                google.maps.event.trigger(marker, 'mouseover');
+                $(this).css("background-color","#F7F8FA");
             }
-            return highestZIndex;
         }
+
+        function triggerMouseOutGenerator(marker) {
+            return function() {
+                google.maps.event.trigger(marker, 'mouseout');
+                $(this).css("background-color","#FFF");
+            }
+        }
+
 
         function initialize() {
             function zoom(radius) {
@@ -380,7 +369,6 @@
             });
 
             initialize();
-
         });
     </script>
 {% endblock %}

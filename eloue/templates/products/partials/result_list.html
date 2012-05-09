@@ -2,6 +2,9 @@
 <ul class="product-list">
     {% for product in product_list %}
     <li id="marker-{{forloop.counter }}">
+        {% if marker == 'True' %}
+            <div style="float: left; top:5px; left: 5px; font-size: 13px; padding-top: 10px; padding-left: 5px; color: #364C59; font-family: 'Ubuntu';" >{{ forloop.counter }}</div>
+        {% endif %}
         <a href="{{ product.url|safe }}" {% if product|nofollow %}rel="nofollow"{% endif %} class="pl-img">
             {% if product.thumbnail %}
             <img src="{{ product.thumbnail }}" alt="{{ product.summary }}" width="60" height="60" />
@@ -18,7 +21,6 @@
                 {% endif %}
             {% endwith %}
         </div><!-- pl-content -->
-        <img src="http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld={{ forloop.counter }}|FF0000|000000" alt="marker_{{ forloop.counter }}" height="25" style="margin-top: 3px; margin-left: 10px;">
         <div class="pl-avatar">
             <a href="{{product.owner_url}}">
                 {% if product.owner_avatar %}
