@@ -256,6 +256,18 @@ class Booking(models.Model):
         message.attach('contrat.pdf', content, 'application/pdf')
         message.send()
     
+    def send_borrower_receipt(self):
+        context = {'booking': self}
+        #XXX: finish the body of the mails
+        message = create_alternative_email('rent/emails/borrower_receipt', context, settings.DEFAULT_FROM_EMAIL, [self.borrower.email])
+        message.send()
+
+    def send_owner_receipt(self):
+        context = {'booking': self}
+        #XXX: finish the body of the mails
+        message = create_alternative_email('rent/emails/owner_receipt', context, settings.DEFAULT_FROM_EMAIL, [self.owner.email])
+        message.send()
+
     def send_rejection_email(self):
         context = {'booking': self}
         message = create_alternative_email('rent/emails/borrower_rejection', context, settings.DEFAULT_FROM_EMAIL, [self.borrower.email])
@@ -363,6 +375,7 @@ class Booking(models.Model):
         self.payment.pay()
         self.payment.save()
         self.send_acceptation_email()
+        self.send_borrower_receipt()
 
     @transition(source='pending', target='ongoing', save=True)
     def activate(self):
@@ -373,6 +386,7 @@ class Booking(models.Model):
     def pay(self):
         """Return deposit_amount to borrower and pay the owner"""
         self.payment.execute_payment()
+        self.send_owner_receipt()
     
     @transition(source=['authorized', 'pending'], target='canceled', save=True)
     def cancel(self):

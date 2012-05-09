@@ -1,0 +1,1 @@
+Vous étiez credité de {{booking.net_price}} euros!
