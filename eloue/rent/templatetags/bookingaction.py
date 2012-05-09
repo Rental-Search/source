@@ -122,7 +122,7 @@ class ViewLinkWidget(LinkWidget):
 
 LeaveComment = CommentLinkWidget(
 	url_builder=lambda request, booking: reverse(
-		'eloue.accounts.views.comment_booking',
+		viewname='eloue.accounts.views.comment_booking',
 		kwargs={
 			'booking_id':booking.pk.hex
 		}
@@ -132,7 +132,7 @@ LeaveComment = CommentLinkWidget(
 
 ViewComment = ViewLinkWidget(
 	url_builder=lambda request, booking: reverse(
-		'eloue.accounts.views.view_comment',
+		viewname='eloue.accounts.views.view_comment',
 		kwargs={
 			'booking_id': booking.pk.hex,
 		}
@@ -142,7 +142,7 @@ ViewComment = ViewLinkWidget(
 
 SendMessageToBorrower = LinkWidget(
 	url_builder=lambda request, booking: reverse(
-		'eloue.products.views.message_create', 
+		viewname='eloue.products.views.message_create', 
 		kwargs={
 			'product_id': booking.product.pk,
 			'recipient_id': booking.borrower.pk
@@ -152,7 +152,7 @@ SendMessageToBorrower = LinkWidget(
 
 SendMessageToOwner = LinkWidget(
 	url_builder=lambda request, booking: reverse(
-		'eloue.products.views.message_create', 
+		viewname='eloue.products.views.message_create', 
 		kwargs={
 			'product_id': booking.product.pk,
 			'recipient_id': booking.owner.pk
