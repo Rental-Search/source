@@ -25,6 +25,7 @@
         {% if booking.state == "ended" or booking.state == "closed" %}
             {% url owner_booking_history as return_url %}
         {% endif %}
+        {% if booking.state == "rejected" %}{% url owner_booking_history as return_url %}{% endif %}
     {% endif %}
     {% if return_url %}
         <div class="previous-sub-bar">
