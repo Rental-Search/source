@@ -255,25 +255,9 @@
 
                 marker.set("myZIndex", marker.getZIndex());
 
-                google.maps.event.addListener(marker, "mouseover", function() {
+                google.maps.event.addListener(marker, "mouseover", mouseoverListenerGenerator(image_hover));
 
-                    //var image_hover = 'http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=' + this.zIndex + '|CC0123|000000';
-
-                    this.setOptions({
-                        icon:image_hover,
-                        zIndex:200
-                    });
-                });
-
-                google.maps.event.addListener(marker, "mouseout", function() {
-                    
-                    //var image = 'http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=' + this.get("myZIndex") + '|FF0000|000000';
-                    
-                    this.setOptions({
-                        icon:image,
-                        zIndex:this.get("myZIndex")
-                    });
-                });
+                google.maps.event.addListener(marker, "mouseout",  mouseoutListenerGenerator(image));
 
                 $('li#marker-' + marker.get("myZIndex")).mouseover(triggerMouseOverGenerator(marker));
 
@@ -281,13 +265,28 @@
             }
         }
 
+        function mouseoverListenerGenerator(image_hover) {
+            return function() {
+                this.setOptions({
+                    icon:image_hover,
+                    zIndex:200
+                });
+            }
+        }
+        function mouseoutListenerGenerator(image) {
+            return function() {
+                this.setOptions({
+                    icon:image,
+                    zIndex:this.get("myZIndex")
+                });
+            }
+        }
         function triggerMouseOverGenerator(marker) {
             return function() {
                 google.maps.event.trigger(marker, 'mouseover');
                 $(this).css("background-color","#F7F8FA");
             }
         }
-
         function triggerMouseOutGenerator(marker) {
             return function() {
                 google.maps.event.trigger(marker, 'mouseout');
