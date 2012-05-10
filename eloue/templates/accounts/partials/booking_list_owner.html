@@ -21,7 +21,7 @@
 				</a>
 			{% endif %}
 			<div class="m-content">
-				<div>
+				<div class="m-body">
 					<p class="m-sender">
 						<a href="{{booking.borrower.get_absolute_url}}">{{booking.borrower.first_name }} {{ booking.borrower.last_name }}</a>
 						{% if booking.state == booking.STATE.AUTHORIZED %}
