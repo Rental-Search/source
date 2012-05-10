@@ -414,8 +414,8 @@ class Booking(models.Model):
 
 class Comment(models.Model):
     booking = models.OneToOneField(Booking)
-    comment = models.TextField()
-    note = models.PositiveSmallIntegerField(
+    comment = models.TextField(_(u'Commentaire'))
+    note = models.PositiveSmallIntegerField(_(u'Note'),
         choices=enumerate(xrange(6)),
         validators=[MaxValueValidator(5)]
     )
