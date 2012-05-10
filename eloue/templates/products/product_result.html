@@ -227,17 +227,13 @@
 
             for (var i = 0; i < locations.length; i++) {
                 var product = locations[i];
-                
-                /*var image = 'http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=' + product[3] + '|FF0000|000000';
 
-                var image_hover = 'http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=' + product[3] + '|CC0123|000000';*/
-
-                var image = new google.maps.MarkerImage('http://localhost:8000/media/images/markers.png',
+                var image = new google.maps.MarkerImage('{{ MEDIA_URL }}images/markers.png',
                     new google.maps.Size(20, 33),
                     new google.maps.Point(44, 34*i),
                     new google.maps.Point(10, 33));
 
-                var image_hover = new google.maps.MarkerImage('http://localhost:8000/media/images/markers.png',
+                var image_hover = new google.maps.MarkerImage('{{ MEDIA_URL }}images/markers.png',
                     new google.maps.Size(20, 33),
                     new google.maps.Point(0, 34*i),
                     new google.maps.Point(10, 33));
