@@ -251,9 +251,9 @@
 
                 marker.set("myZIndex", marker.getZIndex());
 
-                google.maps.event.addListener(marker, "mouseover", mouseoverListenerGenerator(image_hover));
+                google.maps.event.addListener(marker, "mouseover", mouseoverListenerGenerator(image_hover, marker));
 
-                google.maps.event.addListener(marker, "mouseout",  mouseoutListenerGenerator(image));
+                google.maps.event.addListener(marker, "mouseout",  mouseoutListenerGenerator(image, marker));
 
                 $('li#marker-' + marker.get("myZIndex")).mouseover(triggerMouseOverGenerator(marker));
 
@@ -261,32 +261,32 @@
             }
         }
 
-        function mouseoverListenerGenerator(image_hover) {
+        function mouseoverListenerGenerator(image_hover, marker) {
             return function() {
                 this.setOptions({
                     icon:image_hover,
                     zIndex:200
                 });
+                $('li#marker-' + marker.get("myZIndex")).css("background-color","#F7F8FA");
             }
         }
-        function mouseoutListenerGenerator(image) {
+        function mouseoutListenerGenerator(image, marker) {
             return function() {
                 this.setOptions({
                     icon:image,
                     zIndex:this.get("myZIndex")
                 });
+                $('li#marker-' + marker.get("myZIndex")).css("background-color","#FFF");
             }
         }
         function triggerMouseOverGenerator(marker) {
             return function() {
                 google.maps.event.trigger(marker, 'mouseover');
-                $(this).css("background-color","#F7F8FA");
             }
         }
         function triggerMouseOutGenerator(marker) {
             return function() {
                 google.maps.event.trigger(marker, 'mouseout');
-                $(this).css("background-color","#FFF");
             }
         }
 
