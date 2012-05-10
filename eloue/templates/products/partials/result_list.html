@@ -1,7 +1,10 @@
 {% load cache i18n product seo booking %}
 <ul class="product-list">
     {% for product in product_list %}
-    <li>
+    <li id="marker-{{forloop.counter }}">
+        {% if marker == 'True' %}
+            <div style="float: left; top:5px; left: 5px; font-size: 13px; padding-top: 10px; padding-left: 5px; color: #364C59; font-family: 'Ubuntu';" >{{ forloop.counter }}</div>
+        {% endif %}
         <a href="{{ product.url|safe }}" {% if product|nofollow %}rel="nofollow"{% endif %} class="pl-img">
             {% if product.thumbnail %}
             <img src="{{ product.thumbnail }}" alt="{{ product.summary }}" width="60" height="60" />
@@ -9,7 +12,7 @@
         </a><!-- pl-img -->
         <div class="pl-content">
             <h3>
-               <a href="{{ product.url|safe }}" {% if product|nofollow %}rel="nofollow"{% endif %}>{{ product.summary|capitalize|truncate:truncation }}</a>
+               <a href="{{ product.url|safe }}" {% if product|nofollow %}rel="nofollow"{% endif %}>{{ product.summary|capitalize|truncate:truncation }}</a> 
             </h3>
             {% with product.city|capfirst|add:", "|add:product.zipcode|truncate:truncation as address %}
                 <address>{{address}}</address>
