@@ -74,7 +74,7 @@
 
     <script>
         enabled = {};
-        function availability(year, month) {
+        function availability(year, month, inst) {
             $.ajax({
                 type: 'GET',
                 url: 'occupied_date/',
@@ -83,7 +83,11 @@
                 success: function(response) {
                     enabled = {};
                     for (i in response) enabled[response[i]] = true;
-                    $(".calendar-display").datepicker("refresh");
+                    if (typeof(inst) == 'undefined'){
+                        $('.hasDatepicker').datepicker("refresh");
+                    } else {
+                        inst.input.datepicker("refresh");
+                    }
                 }
             });
         }
@@ -101,14 +105,21 @@
             if (enabled[c]) return [true];
             return [false, 'unavailable'];
         }
+        
         onChangeMonthYear = function(year, month, inst) {
-            availability(inst.drawYear, inst.drawMonth + 1);
-            inst.input.datepicker("refresh");
+            availability(inst.drawYear, inst.drawMonth + 1, inst);
+        }
+
+        beforeShow = function(input, inst) {
+            setTimeout(
+                //XXX: outside a timeout it doesn't work, dunno why
+                function(){
+                    availability(inst.selectedYear, inst.selectedMonth + 1, inst);
+            }, 0);
         }
 
         $(document).ready(function () {
             date = new Date();
-            availability(date.getFullYear(), date.getMonth()+1);
             $(".calendar-display").datepicker(
                 {
                     minDate: 0,
@@ -122,7 +133,10 @@
             startDate = $('input[name$=started_at_0]');
             startDate.datepicker({
                 dateFormat: 'dd/mm/yy',
+                defaultDate: '+1d',
+                minDate: 0, 
                 maxDate: '+360d',
+                beforeShow: beforeShow,
                 beforeShowDay: beforeShowDay,
                 onChangeMonthYear: onChangeMonthYear,
                 onSelect: function(dateText, inst) {
@@ -142,9 +156,11 @@
             endDate.datepicker({
                 dateFormat: 'dd/mm/yy',
                 beforeShowDay: beforeShowDay,
-                onChangeMonthYear: onChangeMonthYear
+                onChangeMonthYear: onChangeMonthYear,
+                beforeShow: beforeShow
             });
 
+            availability(date.getFullYear(), date.getMonth()+1);
         });
 
         
