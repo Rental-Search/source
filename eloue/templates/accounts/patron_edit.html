@@ -38,7 +38,7 @@
 {% csrf_token %}    
 {% if form.non_field_errors %}{{ form.non_field_errors }}{% endif %}
     {% for fieldset in form.fieldsets %}
-      <fieldset class="{{ fieldset.classes }}">
+      <fieldset class="{{ fieldset.classes }}" {% if fieldset.name == 'extra_info' %}id="extraInfo"{% endif %}>
       {% if fieldset.legend %}
         <legend>{{ fieldset.legend }}</legend>
       {% endif %}

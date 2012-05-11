@@ -36,11 +36,12 @@
     <div class="content-aside-profil">
         {% block content-aside-profil %}
         <div class="profil-block">
-            <div class="avatar-picture" style="margin-top: 0px;">
+            <div class="avatar-picture" style="margin-top: 0px; position: relative;">
                 {% if user.avatar %}
                 <img src="{{ user.avatar.display.url }}" width="180" height="180">
                 {% else %}
                 <img src="{{ MEDIA_URL }}images/default_avatar.png" width="180" height="180">
+                <a href="{% url patron_edit %}#id_username" class="add-avatar-link">Ajouter une photo<br>de profil</a>
                 {% endif %}
                 <h1>{{ user.first_name }} {{ user.last_name }}</h1>
                 <address>{{ user.default_address.city }} - {{ user.default_address.zipcode}}</address>
@@ -49,7 +50,7 @@
                 {% if user.about %}
                     <p class="profil-description">{{ user.about }}</p>
                 {% endif %}
-                <a href="{% url patron_edit %}" class="btn-contactme">Editer mon profil</a>
+                <a href="{% url patron_edit %}#extraInfopp" class="btn-contactme">Editer mon profil</a>
             </div><!-- profil-description -->
         </div><!-- profil-block -->
         {% if user.work or user.school or user.languages.count %}
