@@ -365,7 +365,7 @@
                 {% endif %}
             </a>
             <p class="owner-username">
-                <a href="{{ product.owner.get_absolute_url }}">{{ product.owner.username }}</a>
+                <a href="{{ product.owner.get_absolute_url }}">{{ product.owner.username|truncate:16 }}</a>
             </p>
             <address>
                 {{ product.owner.default_address.city }} - {{ product.owner.default_address.zipcode }}
@@ -387,6 +387,3 @@
     </div>{# content-aside #}
 </div>{# container-main #}
 {% endblock %}
-
-
-\

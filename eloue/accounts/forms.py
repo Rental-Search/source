@@ -274,7 +274,7 @@ class PatronEditForm(BetterModelForm):
             }),
             ('extra_info', {
                 'fields': ['about', 'work', 'school', 'hobby', 'languages'],
-                'legend': _(u"Informations complémentaires")
+                'legend': _(u"Informations de profil")
             }),
             ('driver_info', {
                 'fields': ['drivers_license_date', 'drivers_license_number'],
