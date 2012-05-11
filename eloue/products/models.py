@@ -327,13 +327,13 @@ class Product(models.Model):
         #print 'availables', availables, [(key, list(value)) for (key, value) in itertools.groupby(availables, key=lambda x:x[0].date())]
         
         return [
-            d.date() for (d, available) in (
+            (d.date(), available) 
+            for (d, available) in (
                 min(group, key=lambda x: x[1])
                 for (key, group) 
                 in itertools.groupby(availables, key=lambda x:x[0].date())
                 if key.year == year and key.month == month and key >= date.today()
             )
-            if available
         ]
 
 

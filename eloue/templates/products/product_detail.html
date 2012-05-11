@@ -82,7 +82,9 @@
                 data: {year:year, month:month},
                 success: function(response) {
                     enabled = {};
-                    for (i in response) enabled[response[i]] = true;
+                    for (i in response) {
+                        enabled[response[i][0]] = response[i][1];
+                    }
                     if (typeof(inst) == 'undefined'){
                         $('.hasDatepicker').datepicker("refresh");
                     } else {
@@ -102,8 +104,8 @@
                 return [false, 'outdated'];
             }
             c = date.getFullYear()+'-'+('0'+(date.getMonth()+1)).slice(-2)+'-'+('0'+date.getDate()).slice(-2);
-            if (enabled[c]) return [true];
-            return [false, 'unavailable'];
+            if (c in enabled && !enabled[c]) return [false, 'unavailable'];
+            return [true];
         }
         
         onChangeMonthYear = function(year, month, inst) {
