@@ -50,7 +50,7 @@
                 {% if user.about %}
                     <p class="profil-description">{{ user.about }}</p>
                 {% endif %}
-                <a href="{% url patron_edit %}#extraInfopp" class="btn-contactme">Editer mon profil</a>
+                <a href="{% url patron_edit %}#extraInfo" class="btn-contactme">Editer mon profil</a>
             </div><!-- profil-description -->
         </div><!-- profil-block -->
         {% if user.work or user.school or user.languages.count %}
@@ -80,6 +80,7 @@
     <div class="content-main-profil">
         {% include "partials/alerts_message.html" %}
         {% block content-main-profil %}
+        <div class="dashboard-last-message">
             <h2>{% trans "Vos nouveaux messages" %}</h2>
             {% if thread_list %}
             {% include 'products/partials/message_list.html' %}
@@ -87,6 +88,7 @@
             <p>Vous n'avez pas de nouveau message.</p>
             {% endif %}
             <p style="text-align: right;"><a href="{% url inbox %}">Lire tous vos messages.</a></p>
+        </div>
             {% if booking_demands %}
             <h2>{% trans "Demandes de location" %}</h2>
             {% with booking_demands as object_list %}
