@@ -437,7 +437,7 @@ def dashboard(request):
 
 @login_required
 def owner_booking_authorized(request, page=None):
-    queryset = request.user.bookings.filter(state=Booking.STATE.AUTHORIZED)
+    queryset = request.user.bookings.authorized()
     return object_list(
         request, queryset, page=page, paginate_by=10, 
         extra_context={'title_page': u'Demandes de réservation'},
@@ -446,7 +446,7 @@ def owner_booking_authorized(request, page=None):
 
 @login_required
 def owner_booking_pending(request, page=None):
-    queryset = request.user.bookings.filter(state=Booking.STATE.PENDING)
+    queryset = request.user.bookings.pending()
     return object_list(
         request, queryset, page=page, paginate_by=10, 
         extra_context={'title_page': u'Réservations à venir'},
@@ -455,7 +455,7 @@ def owner_booking_pending(request, page=None):
 
 @login_required
 def owner_booking_ongoing(request, page=None):
-    queryset = request.user.bookings.filter(state=Booking.STATE.ONGOING)
+    queryset = request.user.bookings.ongoing()
     return object_list(
         request, queryset, page=page, paginate_by=10, 
         extra_context={'title_page': u'Réservations en cours'},
@@ -464,25 +464,17 @@ def owner_booking_ongoing(request, page=None):
 
 @login_required
 def owner_booking_history(request, page=None):
-    queryset = request.user.bookings.exclude(
-        state__in=[
-            Booking.STATE.ONGOING, 
-            Booking.STATE.PENDING, 
-            Booking.STATE.AUTHORIZED,
-            Booking.STATE.AUTHORIZING,
-            Booking.STATE.OUTDATED
-        ]
-    )
+    queryset = request.user.bookings.history()
     return object_list(
         request, queryset, page=page, paginate_by=10, 
         extra_context={'title_page': u'Réservations terminées'},
         template_name='accounts/owner_booking.html')
 
-@login_required
-def owner_history(request, page=None):
-    queryset = request.user.bookings.filter(state__in=[Booking.STATE.CLOSED, Booking.STATE.REJECTED])
-    return object_list(request, queryset, page=page, paginate_by=10, template_name='accounts/owner_history.html',
-        template_object_name='booking')
+# @login_required
+# def owner_history(request, page=None):
+#     queryset = request.user.bookings.filter(state__in=[Booking.STATE.CLOSED, Booking.STATE.REJECTED])
+#     return object_list(request, queryset, page=page, paginate_by=10, template_name='accounts/owner_history.html',
+#         template_object_name='booking')
 
 
 @login_required
@@ -499,7 +491,7 @@ def alert_edit(request, page=None):
 
 @login_required
 def borrower_booking_ongoing(request, page=None):
-    queryset = request.user.rentals.filter(state=Booking.STATE.ONGOING)
+    queryset = request.user.rentals.ongoing()
     return object_list(
         request, queryset, page=page, paginate_by=10,
         extra_context={'title_page': u'Réservations en cours'},
@@ -507,7 +499,7 @@ def borrower_booking_ongoing(request, page=None):
 
 @login_required
 def borrower_booking_pending(request, page=None):
-    queryset = request.user.rentals.filter(state=Booking.STATE.PENDING)
+    queryset = request.user.rentals.pending()
     return object_list(
         request, queryset, page=page, paginate_by=10, 
         extra_context={'title_page': u'Réservations à venir'},
@@ -515,7 +507,7 @@ def borrower_booking_pending(request, page=None):
 
 @login_required
 def borrower_booking_authorized(request, page=None):
-    queryset = request.user.rentals.filter(state=Booking.STATE.AUTHORIZED)
+    queryset = request.user.rentals.authorized()
     return object_list(
         request, queryset, page=page, paginate_by=10, 
         extra_context={'title_page': u'Demandes de réservation'},

@@ -3,7 +3,7 @@ from django.conf.urls.defaults import *
 
 from eloue.accounts.views import dashboard, patron_edit, patron_edit_password, patron_edit_phonenumber,\
 									patron_edit_addresses, accounts_work_autocomplete, accounts_studies_autocomplete, comments,\
-									comments_received, owner_booking_pending, owner_booking_ongoing, owner_booking_history, owner_booking_authorized, owner_history, alert_edit, owner_product
+									comments_received, owner_booking_pending, owner_booking_ongoing, owner_booking_history, owner_booking_authorized, alert_edit, owner_product
 from eloue.products.views import product_edit, product_address_edit, product_price_edit, thread_details, archive_thread, unarchive_thread, inbox, archived
 from eloue.rent.views import booking_detail, booking_accept, booking_cancel, booking_reject, booking_incident, booking_close
 
@@ -30,8 +30,8 @@ urlpatterns = patterns('',
     url(r'^owner/booking/history/$', owner_booking_history, name="owner_booking_history"),
     url(r'^owner/booking/history/(?P<page>\d+)/$', owner_booking_history, name="owner_booking_history"),
 
-    url(r'^owner/history/$', owner_history, name="owner_history"),
-    url(r'^owner/history/page/(?P<page>\d+)/$', owner_history, name="owner_history"),
+    # url(r'^owner/history/$', owner_history, name="owner_history"),
+    # url(r'^owner/history/page/(?P<page>\d+)/$', owner_history, name="owner_history"),
     url(r'^owner/product/$', owner_product, name="owner_product"),
     url(r'^owner/product/page/(?P<page>\d+)/$', owner_product, name="owner_product"),
     url(r'^owner/product/(?P<slug>[-\w]+)-(?P<product_id>\d+)/$', product_edit, name="owner_product_edit"),
