@@ -15,7 +15,7 @@ from eloue.accounts.models import Patron, COUNTRY_CHOICES, Address
 from eloue.geocoder import GoogleGeocoder
 from eloue.products.fields import FacetField, FRLicensePlateField
 from eloue.products.models import Alert, PatronReview, ProductReview, Product, CarProduct, RealEstateProduct, Picture, Category, UNIT, PAYMENT_TYPE, ProductRelatedMessage, MessageThread
-from eloue.products.widgets import PriceTextInput, CommentedSelectInput
+from eloue.products.widgets import PriceTextInput, CommentedSelectInput, CommentedTextInput
 from eloue.products.utils import Enum
 from django_messages.forms import ComposeForm
 import datetime
@@ -289,6 +289,7 @@ class CarProductForm(ProductForm):
     licence_plate = FRLicensePlateField(label=_(u'N° d\'immatriculation'), required=True)
     first_registration_date = DateSelectField(label=_(u'1er mise en circulation'))
 
+
     def __init__(self, *args, **kwargs):
         super(CarProductForm, self).__init__(*args, **kwargs)
         self.title = _(u'Ajouter une voiture')
@@ -311,7 +312,7 @@ class CarProductForm(ProductForm):
                 'legend': _(u'Description du véhicule')
                 }),
             ('car_characteristics', {
-                'fields': ['seat_number', 'door_number', 'fuel', 'transmission', 'mileage', 'consumption', 'km_included', 'costs_per_km'],
+                'fields': ['seat_number', 'door_number', 'fuel', 'transmission', 'mileage', 'consumption'],
                 'legend': _(u'Caractéristique du véhicule'),
                 }),
             ('assurancies_informations', {
@@ -327,7 +328,7 @@ class CarProductForm(ProductForm):
                 'legend': _(u'Options & accessoires'),
                 }),
             ('price', {
-                'fields': ['day_price', 'deposit_amount'], 
+                'fields': ['day_price', 'deposit_amount', 'km_included', 'costs_per_km'], 
                 'legend': _(u'Prix de la location')
                 }),
             ('price_detail', {
@@ -341,7 +342,9 @@ class CarProductForm(ProductForm):
             'seat_number': CommentedSelectInput(info_text=_(u'place(s)')),
             'door_number': CommentedSelectInput(info_text=_(u'porte(s)')),
             'consumption': CommentedSelectInput(info_text=_(u'litre/100km')),
-            'tax_horsepower': CommentedSelectInput(info_text=_(u'CV'))
+            'tax_horsepower': CommentedSelectInput(info_text=_(u'CV')),
+            'km_included': CommentedTextInput(info_text=_(u'Km')),
+            'costs_per_km': CommentedTextInput(info_text=_(u'€/Km'))
         }
 
 
@@ -487,7 +490,9 @@ class CarProductEditForm(ProductEditForm):
             'seat_number': CommentedSelectInput(info_text=_(u'place(s)')),
             'door_number': CommentedSelectInput(info_text=_(u'porte(s)')),
             'consumption': CommentedSelectInput(info_text=_(u'litre/100km')),
-            'tax_horsepower': CommentedSelectInput(info_text=_(u'CV'))
+            'tax_horsepower': CommentedSelectInput(info_text=_(u'CV')),
+            'km_included': CommentedTextInput(info_text=_(u'Km')),
+            'costs_per_km': CommentedTextInput(info_text=_(u'€/Km'))
         }
 
 class RealEstateEditForm(ProductEditForm):

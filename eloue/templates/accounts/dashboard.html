@@ -81,7 +81,7 @@
         {% include "partials/alerts_message.html" %}
         {% block content-main-profil %}
         <div class="dashboard-last-message">
-            <h2>{% trans "Vos nouveaux messages" %}</h2>
+            <h2 style="margin-bottom: 20px;">{% trans "Vos nouveaux messages" %}</h2>
             {% if thread_list %}
             {% include 'products/partials/message_list.html' %}
             {% else %}
@@ -90,7 +90,7 @@
             <p style="text-align: right;"><a href="{% url inbox %}">Lire tous vos messages.</a></p>
         </div>
             {% if booking_demands %}
-            <h2>{% trans "Demandes de location" %}</h2>
+            <h2 style="margin-bottom: 20px;">{% trans "Demandes de location" %}</h2>
             {% with booking_demands as object_list %}
                 {% include 'accounts/partials/booking_list_owner.html' %}
             {% endwith %}

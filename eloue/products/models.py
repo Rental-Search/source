@@ -383,9 +383,8 @@ class CarProduct(Product):
     consumption = models.PositiveIntegerField(_(u'consommation'), null=True, blank=True, choices=CONSUMPTION, default=4)
 
     # info about km included
-    km_included = models.PositiveIntegerField(_(u'kilomètres inclus'), null=True, blank=True)
-    costs_per_km = models.DecimalField(_(u'prix par extra kilomètres'), null=True, 
-        blank=True, max_digits=8, decimal_places=3)
+    km_included = models.PositiveIntegerField(_(u'kilomètres inclus/jour'), null=True, blank=True, help_text=_(u'Nombre de kilomètres maximum que le locataire peut effectuer en une journée.'))
+    costs_per_km = models.DecimalField(_(u'Prix par kilomètres supplémentaires'), null=True, blank=True, max_digits=8, decimal_places=3, help_text=_(u'Prix du kilomètre supplémentaires si le locataire dépasse le nombre de kilomètre inclus par jour.'))
 
     # options & accessoires
     air_conditioning = models.BooleanField(_(u'climatisation'))
