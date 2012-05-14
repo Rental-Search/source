@@ -84,7 +84,7 @@
         {% if patron.products %}
         {% if patron.products.count > 0 %}
             {% blocktrans with patron.products.count as count and patron.products.count|pluralize as pluralize %}
-	           <h2>{{ count }} location{{ pluralize }}</h2>
+	           <h2>{{ count }} annonce{{ pluralize }}</h2>
 	       {% endblocktrans %}
         {% else %}
             <h2>{% trans "Pas d'annonce" %}</h2>
