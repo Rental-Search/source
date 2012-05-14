@@ -411,7 +411,7 @@ def patron_edit_addresses(request):
         formset = AddressFormSet(request.POST, instance=request.user)
         if formset.is_valid():
             formset.save()
-            messages.success(request, _(u"Vos addresses ont bien été modifiées"))
+            messages.success(request, _(u"Vos adresses ont bien été modifiées"))
             return redirect('eloue.accounts.views.patron_edit_addresses')
     else:
         formset = AddressFormSet(instance=request.user)

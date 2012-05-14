@@ -78,6 +78,7 @@
         {% endblock %}
     </div>{# content-aside-profil #}
     <div class="content-main-profil">
+        {% include "partials/alerts_message.html" %}
         {% block content-main-profil %}
             <h2>{% trans "Vos nouveaux messages" %}</h2>
             {% if thread_list %}

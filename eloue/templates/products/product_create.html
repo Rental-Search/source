@@ -17,7 +17,9 @@
 		{% else %}
 		<form class="form-horizontal" method="post" action="">
 		{% endif %}
-			{{ form.non_field_errors }}
+			{% with form.non_field_errors as form_errors %}
+    			{% include "partials/alerts_message.html" %}
+  			{% endwith %}
 			{% csrf_token %}
 			{% for fieldset in form.fieldsets %}
 			<fieldset class="{{ fieldset.classes }}">

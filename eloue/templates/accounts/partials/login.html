@@ -11,7 +11,9 @@
   </div>
 </div>{# fbconnect-content #}
 <div class="email-login-content">
-  {{ form.non_field_errors }}
+  {% with form.non_field_errors as form_errors %}
+    {% include "partials/alerts_message.html" %}
+  {% endwith %}
   <form action="" method="POST" class="form-inline">
   {% csrf_token %}
   <div class="control-group email-group">

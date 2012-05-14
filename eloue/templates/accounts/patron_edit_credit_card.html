@@ -4,6 +4,9 @@
 {% block title %}{% trans "Modification de mes cordonnées bancaires" %}{% endblock %}
 
 {% block content-main-profil %}
+
+{% include "partials/alerts_message.html" %}
+
 {% if form.is_multipart %}
 <form enctype="multipart/form-data" class="form-horizontal" method="post" action="">
 {% else %}

@@ -549,9 +549,9 @@ class CreditCardForm(forms.ModelForm):
         card_number = self.cleaned_data['card_number'].replace(' ','').replace('-', '')
         try:
             if not _luhn_valid(card_number):
-                raise forms.ValidationError('Veuillez verifier le numero de votre carte bancaire')
+                raise forms.ValidationError(u'Veuillez verifier le numero de votre carte bancaire')
         except ValueError as e:
-            raise forms.ValidationError('Votre numero doive etre compose uniquement des chiffres!')
+            raise forms.ValidationError(u'Votre numero doit etre composé uniquement de chiffres')
         return card_number
 
     def clean(self):
