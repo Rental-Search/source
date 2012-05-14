@@ -470,11 +470,11 @@ def owner_booking_history(request, page=None):
         extra_context={'title_page': u'Réservations terminées'},
         template_name='accounts/owner_booking.html')
 
-@login_required
-def owner_history(request, page=None):
-    queryset = request.user.bookings.filter(state__in=[Booking.STATE.CLOSED, Booking.STATE.REJECTED])
-    return object_list(request, queryset, page=page, paginate_by=10, template_name='accounts/owner_history.html',
-        template_object_name='booking')
+# @login_required
+# def owner_history(request, page=None):
+#     queryset = request.user.bookings.filter(state__in=[Booking.STATE.CLOSED, Booking.STATE.REJECTED])
+#     return object_list(request, queryset, page=page, paginate_by=10, template_name='accounts/owner_history.html',
+#         template_object_name='booking')
 
 
 @login_required
