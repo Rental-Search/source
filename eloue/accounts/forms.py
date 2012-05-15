@@ -668,7 +668,7 @@ def make_missing_data_form(instance, required_fields=[]):
 
     # Do we have an address ?
     if instance and instance.addresses.exists():
-        fields['addresses'] = forms.ModelChoiceField(label=_(u"Addresse"), required=False,
+        fields['addresses'] = forms.ModelChoiceField(label=_(u"Adresse"), required=False,
             queryset=instance.addresses.all(), initial=instance.default_address if instance.default_address else instance.addresses.all()[0], widget=forms.Select(attrs={'class': 'selm'}), help_text=_(u"Selectionnez une adresse enregistrée précédemment"))
         for f in fields.keys():
             if "addresses" in f:
@@ -784,16 +784,13 @@ def make_missing_data_form(instance, required_fields=[]):
             ('driver_info', {
                 'fields': ['drivers_license_number', 'drivers_license_date'],
                 'legend': _(u'Permis de conduire')}),
-            ('addresses', {
-                'fields': ['addresses'], 
-                'legend': 'Adresse existante'}),
+            ('contacts', {
+                'fields': ['addresses', 'addresses__address1', 'addresses__zipcode', 'addresses__city', 'addresses__country', 'phones', 'phones__phone'], 
+                'legend': 'Information de contact'}),
             ('new_address', {
                 'fields': ['addresses__address1', 'addresses__zipcode', 'addresses__city', 'addresses__country'],
                 'legend': 'Nouvelle adresse',
                 'classes': ['new-address', 'hidden-fieldset']}),
-            ('phones', {
-                'fields': ['phones'], 
-                'legend': 'Numéro de téléphone'}),
             ('new_phone', {
                 'fields': ['phones__phone'], 
                 'legend': 'Nouveau numéro',

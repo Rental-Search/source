@@ -266,6 +266,7 @@ PIPELINE_JS = {
             'js/mustache.js',
             'js/chosen.jquery.min.js',
             'js/bootstrap-alert.js',
+            'js/bootstrap-modal.js',
             'js/jquery.cookie.js',
             'js/application2.js',
             ),

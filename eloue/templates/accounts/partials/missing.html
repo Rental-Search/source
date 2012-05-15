@@ -14,10 +14,25 @@
         <legend>{{ fieldset.legend }}</legend>
         {% endif %}
         {% for formfield in fieldset %}
-        <div class="control-group {% if formfield.errors %} error {% endif %}">
+        {% if formfield.name == "addresses__address1"%}<div id="newAddress">{% endif %}
+        {% if formfield.name == "phones__phone"%}<div id="newNumber">{% endif %}
+        <div class="control-group {% if formfield.errors %} error {% endif %} {% if formfield.name == 'addresses'%}addresses{% endif %}{% if formfield.name == 'phones'%}phones{% endif %}"%}>
             <label class="control-label" for="{{ formfield.id_for_label }}">{{ formfield.label }} {% if formfield.field.required %}*{% endif %}</label>
             <div class="controls">
-                {% if formfield.name == 'avatar' %}<img src="{{ fb_image }}"/>{% endif %}{{ formfield }}
+                {% if formfield.name == 'avatar' %}<img src="{{ fb_image }}"/>{% endif %}
+                {{ formfield }}
+                {% if formfield.name == "addresses__address1"%}
+                <span class="help-inline"><a href="#" id="cancelNewAddress" style="font-family: 'ubuntu'; color: red;">- {% trans "Annuler"%}</a></span>
+                {% endif %}
+                {% if formfield.name == "phones__phone"%}
+                <span class="help-inline"><a href="#" id="cancelNewPhone" style="font-family: 'ubuntu'; color: red;">- {% trans "Annuler"%}</a></span>
+                {% endif %}
+                {% if formfield.name == "addresses"%}
+                <span class="help-inline"><a href="#" id="addNewAddress" style="font-family: 'ubuntu';">+ {% trans "Ajoutez une adresse"%}</a></span>
+                {% endif %}
+                {% if formfield.name == "phones"%}
+                <span class="help-inline"><a href="#" id="addNewPhone" style="font-family: 'ubuntu';">+ {% trans "Ajoutez un numéro"%}</a></span>
+                {% endif %}
                 <p class="help-block">{{ formfield.help_text }}</p>
                 {% if formfield.errors %}
                     <span class="help-inline">
@@ -28,17 +43,8 @@
                 {% endif %}
             </div>
         </div>
+        {% if formfield.name == "addresses__country" or formfield.name == "phones__phone"%}</div>{% endif %}
         {% endfor %}
-        {% if fieldset.name == "addresses" %}
-        <div class="control-group">
-            <a href="#" class="add-new-address">+ {% trans "Ajoutez une nouvelle adresse" %}</a>
-        </div>
-        {% endif %}
-        {% if fieldset.name == "phones" %}
-        <div class="control-group">
-            <a href="#" class="add-new-number">+ {% trans "Ajoutez un nouveau numéro de téléphone" %}</a>
-        </div>
-        {% endif %}
     </fieldset>
     {% endif %}
     {% endfor %}
@@ -61,4 +67,3 @@
         {% endif %}
         <button type="submit" class="btn btn-primary">{% trans "Continuer" %}</button>
     </div>
-</form>
