@@ -223,6 +223,22 @@
  }
 
 
+#conditions {
+  p {
+    line-height: 16px;
+    margin-bottom: 5px;
+  }
+
+  p.last { margin-bottom: 20px; }
+
+  h4 {
+    #font > .sans-serif('Ubuntu', bold, 14px);
+    color: @blueDark;
+    margin-bottom: 10px;
+  }
+}
+
+
  // PRODUCT PROPERTIES
 //--------------------
 .product-properties {
@@ -613,6 +629,7 @@
       color: @blueDark;
       #font > .sans-serif("Ubuntu", normal, 11px);
       margin-left: 3px;
+      line-height: 14px;
     }
   }
 
@@ -733,7 +750,6 @@
     #font > .sans-serif("Ubuntu", normal, @basefont);
     display: inline-block;
     margin-right: 10px;
-    margin-bottom: 20px;
 
     width: 150px;
 

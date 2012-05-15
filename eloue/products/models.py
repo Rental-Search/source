@@ -168,8 +168,8 @@ CAPACITY = Enum ([
 TAX_HORSEPOWER = CAPACITY
 
 PRIVATE_LIFE = Enum([
-    (1, '1', _(u'Appartement')),
-    (2, '2', _(u'Maison')),
+    (1, '1', _(u'Appartement/Maison entier')),
+    (2, '2', _(u'Chambre partagé')),
     (3, '3', _(u'Chambre privée')),
 ])
 
