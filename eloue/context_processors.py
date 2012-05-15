@@ -31,11 +31,3 @@ def unread_message_count_context(request):
     else:
         return {}
 
-def new_booking_demand_count_context(request):
-    if request.user.is_authenticated():
-        return {
-            'new_booking_demand_count': Booking.objects.filter(
-                owner=request.user, state=Booking.STATE.AUTHORIZED).count()
-        }
-    else:
-        return {}
