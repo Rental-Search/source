@@ -203,7 +203,7 @@ $(document).ready(function() {
         serializedForm;
         availabilityTemplate = '{{^errors}}<p class="available">Ces dates sont disponibles</p>{{/errors}}{{#errors}}<p class="unavailable">Ces dates ne sont pas disponibles</p>{{/errors}}'
         unitTemplate = '<span class="price">{{unit_value}}</span><span class="unit"> / par {{unit_name}}</span>';
-        priceTemplate = '{{#warnings}}{{ warnings }}{{/warnings}} {{#errors}}{{ errors }}{{/errors}}{{^errors}}Total :<span class="day">{{ duration }},</span> soit <span class="pricing">{{ total_price }}</span>{{/errors}}';
+        priceTemplate = '{{#warnings}}{{ warnings }}{{/warnings}} {{#errors}}{{ errors }}{{/errors}}{{^errors}}Total : <span class="day">{{ duration }},</span> soit <span class="pricing">{{ total_price }}</span>{{/errors}}';
         listTemplate = '{{#select_list}}<option value="{{value}}" {{#selected}}selected="selected"{{/selected}}>{{value}}</option>{{/select_list}}';
         serializedForm = $.grep(form.serializeArray(),
         function(el) {

@@ -246,6 +246,7 @@
             <ul>
                 <li><a href="#gallery">{% trans "Photo" %}</a></li>
                 <li><a href="#prices_calendar">{% trans "Disponibilitées et tarifs" %}</a></li>
+                <li><a href="#conditions">{% trans "Conditions"%}</a></li>
             </ul>
             <div id="gallery">
                 {% with product.pictures.all|first as picture %}
@@ -256,21 +257,27 @@
             </div> {# gallery #}
             <div id="prices_calendar">
                 <div class="prices">
-                    <table class="table table-striped">
-                        <thead>
+                    <div class="table-bg">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>{% trans "Période" %}</th>
+                                    <th class="price-head">{% trans "Prix" %}</th>
+                                </tr>
+                            </thead>
+                            {% for price in product.prices.all %}
                             <tr>
-                                <th>{% trans "Période" %}</th>
-                                <th class="price-head">{% trans "Prix" %}</th>
+                                <td>{% trans price.get_prefixed_unit_display|capfirst %}
+                                </td>
+                                <td class="price-display">{{ price.amount }}</td>
                             </tr>
-                        </thead>
-                        {% for price in product.prices.all %}
-                        <tr>
-                            <td>{% trans price.get_prefixed_unit_display|capfirst %}
-                            </td>
-                            <td class="price-display">{{ price.amount }}</td>
-                        </tr>
-                        {% endfor %}
-                    </table>
+                            {% endfor %}
+                        </table>
+                    </div>
+                    <ul class="service-included">
+                        <li>215 km inclus par jour puis 0,14 c/km supplémentaire</li>
+                        <li>Assurance inclus <a href="#">( Voir le détail )</a></li>
+                    </ul>
                 </div>{# prices #}
                 <div class="calendar">
                     <div class="calendar-display"></div>
@@ -285,6 +292,9 @@
                         </li>
                     </ul>
                 </div>{# calendar #}
+            </div>
+            <div id="conditions">
+
             </div>
         </div>{# product-tabs #}
         {% if product.options %}
