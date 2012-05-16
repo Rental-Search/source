@@ -183,17 +183,19 @@ def offer_reject(request, booking_id):
 @require_POST
 @ownership_required(model=Booking, object_key='booking_id', ownership=['owner'])
 def booking_accept(request, booking_id):
-    booking = get_object_or_404(Booking, pk=booking_id)
+    booking = get_object_or_404(Booking, pk=booking_id, state=Booking.STATE.AUTHORIZED)
     if booking.started_at < datetime.now():
         booking.state = booking.STATE.OUTDATED
         booking.save()
+        messages.error(request, _(u"Votre demande est dépassée"))
     else:
         if not request.user.rib:
             response = redirect('patron_edit_rib')
-            response['Location'] += '?' + urllib.urlencode({'next': booking.get_absolute_url()})
+            response['Location'] += '?' + urllib.urlencode({'accept': booking.pk.hex})
             messages.success(request, _(u"Avant l'acceptation de la demande, veuillez saisir votre RIB."))
             return response
         booking.accept()
+        messages.success(request, _(u"La demande de location a été acceptée"))
         GoalRecord.record('rent_object_accepted', WebUser(request))
     return redirect(booking)
 

@@ -142,11 +142,10 @@ class RIBField(forms.MultiValueField):
         super(RIBField, self).__init__(fields, *args, **kwargs)
 
     def clean(self, value):
-        out = super(RIBField, self).clean(value)
-        out = out.upper()
-        if not rib_check(out):
+        value = super(RIBField, self).clean(value).upper()
+        if not rib_check(value):
             raise forms.ValidationError(self.error_messages['invalid_rib'])
-        return out
+        return value
 
     def compress(self, data_list):
         return ''.join(data_list)

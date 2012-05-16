@@ -13,7 +13,8 @@
 {% csrf_token %}
 <fieldset class="rib-form">
   <legend>{% trans "Modification de mon rib" %}</legend>
-  {% for formfield in form %}
+  {{form.non_field_errors}}
+  {% for formfield in form %} {{formfield.errors}}
     {{ formfield }}
   {% endfor %}  
   <p>
@@ -22,7 +23,6 @@
     <span class="number-account">{% trans "N° de compte" %}</span>
     <span class="key-rib">{% trans "Clé" %}</span>
   </p>  
-  {{form.non_field_errors}}
   <div class="form-actions">
       <button type="submit" class="btn btn-primary">Enregistrer</button>
       <button type="reset" class="btn btn-cancel">Annuler</button>

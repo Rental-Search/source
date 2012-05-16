@@ -1,9 +1,13 @@
 # -*- coding: utf-8 -*-
 import smtplib
 import socket
-import simplejson
+import datetime
 from logbook import Logger
 import simplejson
+
+
+from django_lean.experiments.models import GoalRecord
+from django_lean.experiments.utils import WebUser
 
 from django.conf import settings
 from django.contrib import messages
@@ -396,7 +400,20 @@ def patron_edit_rib(request):
         form = RIBForm(data=request.POST, instance=request.user)
         if form.is_valid():
             form.save()
-            return redirect(request.GET.get('next') or patron_edit_rib)
+            pk = request.GET.get('accept')
+            if pk:
+                booking = get_object_or_404(Booking, pk=pk, state=Booking.STATE.AUTHORIZED, owner=request.user)
+                if booking.started_at < datetime.datetime.now():
+                    booking.state = booking.STATE.OUTDATED
+                    booking.save()
+                    messages.error(request, _(u"Votre demande est dépassée"))
+                else:
+                    booking.accept()
+                    messages.success(request, _(u"La demande de location a été acceptée"))
+                    GoalRecord.record('rent_object_accepted', WebUser(request))
+                return redirect(booking)
+            else:
+                return redirect(patron_edit_rib)
     else:
         form = RIBForm(data=None, instance=request.user)
     return render_to_response(
