@@ -393,7 +393,13 @@
                 </div><!-- bottom-block -->
         </div>{# booking-block #}
         <div id="owner" class="info-block">
-            <h2>{% trans "Propriétaire" %}</h2>
+            <h2>
+                {% if product.owner.is_professional %}
+                    {% trans "Professionnel"%}
+                {% else %}
+                    {% trans "Propriétaire" %}
+                {% endif %}
+            </h2>
             <a href="{{ product.owner.get_absolute_url }}" class="onwer-avatar">
                 {% if product.owner.avatar %}
                 <img src="{{ product.owner.avatar.profil.url }}" alt="{% trans "loueur"%}{{ product.owner.username }}" width="100" height="100">
