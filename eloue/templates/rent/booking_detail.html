@@ -62,7 +62,7 @@
 </table>
 
 {% if request.user == booking.borrower %}
-    <h2>{% trans "Le propriétaire" %}</h2>
+    <h2>{% trans "Information sur le propriétaire" %}</h2>
     <table class="table table-bordered booking-resume">
     <tr>
         <td class="b-profil-avatar" style="width: 60px;" rowspan="3">
@@ -80,16 +80,26 @@
             {% endif %}
         </td>
     </tr>
+    {% if booking.state == booking.STATE.AUTHORIZED or booking.state == booking.STATE.REJECTED %}
     <tr>
         <td style="text-align: center;">
-            {% if booking.state == booking.STATE.AUTHORIZED or booking.state == booking.STATE.REJECTED %}
-                {{ booking.owner.default_address.city }} - {{ booking.owner.default_address.zipcode }}
-            {% else %}
-                {{ booking.owner.default_address.address1 }}<br />
-                {{ booking.owner.default_address.city }} - {{ booking.owner.default_address.zipcode }}
-            {% endif %}
+            {{ booking.owner.default_address.city }} - {{ booking.owner.default_address.zipcode }}
         </td>
     </tr>
+    {% else %}
+    <tr>
+        <td style="text-align: center;">
+            {{ booking.owner.default_address.city }} - {{ booking.owner.default_address.zipcode }}
+        </td>
+    </tr>
+    <tr>
+        <td style="text-align: center;">
+            {% with booking.owner.phones.all|first as phone %}
+            {{ phone }}
+            {% endwith %}
+        </td>
+    </tr>
+    {% endif %}
     </table>
 {% endif %}
 {% if request.user == booking.owner %}
@@ -111,16 +121,54 @@
             {% endif %}
         </td>
     </tr>
+    {% if booking.state == booking.STATE.AUTHORIZED or booking.state == booking.STATE.REJECTED %}
     <tr>
         <td style="text-align: center;">
-            {% if booking.state == booking.STATE.AUTHORIZED or booking.state == booking.STATE.REJECTED %}
-                {{ booking.borrower.default_address.city }} - {{ booking.borrower.default_address.zipcode }}
-            {% else %}
-                {{ booking.borrower.default_address.address1 }}<br />
-                {{ booking.borrower.default_address.city }} - {{ booking.borrower.default_address.zipcode }}
-            {% endif %}
+            {{ booking.borrower.default_address.city }} - {{ booking.borrower.default_address.zipcode }}
         </td>
     </tr>
+    {% else %}
+    <tr>
+        <td style="text-align: center;">
+            {{ booking.borrower.default_address.city }} - {{ booking.borrower.default_address.zipcode }}
+        </td>
+    </tr>
+    <tr>
+        <td style="text-align: center;">
+            {% with booking.borrower.phones.all|first as phone %}
+            {{ phone }}
+            {% endwith %}
+        </td>
+    </tr>
+    {% endif %}
     </table>
+{% endif %}
+{% if booking.borrowercomment %}
+<div style="margin-bottom: 30px;">
+    <h2 style="margin-bottom: 20px;">
+        {% if request.user == booking.borrower %}
+            {% trans "Votre commentaire"%}
+        {% else %}
+            {% trans "Commentaire du locataire"%}
+        {% endif %}
+    </h2>
+    {% with booking.borrowercomment as comment %}
+        {% include "rent/partials/comment.html" %}
+    {% endwith %}
+{% endif %}
+</div>
+{% if booking.ownercomment %}
+<div style="margin-bottom: 30px;">
+    <h2 style="margin-bottom: 20px;">
+        {% if request.user == booking.owner %}
+            {% trans "Votre commentaire"%}
+        {% else %}
+            {% trans "Commentaire du propriétaire"%}
+        {% endif %}
+    </h2>
+    {% with booking.ownercomment as comment %}
+        {% include "rent/partials/comment.html" %}
+    {% endwith %}
+</div>
 {% endif %}
 {% endblock %}
