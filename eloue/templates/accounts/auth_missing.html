@@ -25,9 +25,44 @@
     <script type="text/javascript">
         $(document).ready(function () {
 
-        	var addNewAddress = $(".add-new-address");
-        	var addNewPhone = $(".add-new-number");
+        	var addNewAddress = $("a#addNewAddress");
+        	var addNewPhone = $("a#addNewPhone");
 
+            var cancelNewAddress = $("a#cancelNewAddress");
+            var cancelNewPhone  = $("a#cancelNewPhone");
+
+            var addresses = $("#id_1-addresses, #id_2-addresses")[0];
+            var phones = $("#id_1-phones, #id_2-phones")[0];
+
+            addNewAddress.click(function (e) {
+                e.preventDefault();
+                $("div#newAddress").show();
+                $("div.addresses").hide('slow');
+                addresses.selectedIndex=0;
+            });
+
+            cancelNewAddress.click(function (e) {
+                e.preventDefault();
+                $("div.addresses").show();
+                $("div#newAddress").hide('slow');
+                addresses.selectedIndex=1;
+            });
+
+            addNewPhone.click(function (e) {
+                e.preventDefault();
+                $("div#newNumber").show();
+                $("div.phones").hide('slow');
+                phones.selectedIndex=0;
+            });
+
+            cancelNewPhone.click(function (e) {
+                e.preventDefault();
+                $("div.phones").show();
+                $("div#newNumber").hide('slow');
+                phones.selectedIndex=1;
+            });
+
+            /*
             var addresses = $("#id_1-addresses, #id_2-addresses")[0];
             var phones = $("#id_1-phones, #id_2-phones")[0];
 
@@ -52,7 +87,7 @@
                 $(this).hide();
                 phones.hide();
                 phones.selectedIndex=0;
-            });
+            });*/
         })
     </script>
 
