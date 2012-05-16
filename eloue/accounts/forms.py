@@ -787,14 +787,7 @@ def make_missing_data_form(instance, required_fields=[]):
             ('contacts', {
                 'fields': ['addresses', 'addresses__address1', 'addresses__zipcode', 'addresses__city', 'addresses__country', 'phones', 'phones__phone'], 
                 'legend': 'Information de contact'}),
-            ('new_address', {
-                'fields': ['addresses__address1', 'addresses__zipcode', 'addresses__city', 'addresses__country'],
-                'legend': 'Nouvelle adresse',
-                'classes': ['new-address', 'hidden-fieldset']}),
-            ('new_phone', {
-                'fields': ['phones__phone'], 
-                'legend': 'Nouveau numéro',
-                'classes': ['new-number', 'hidden-fieldset']}),]
+        ]
 
     class_dict = fields.copy()
     class_dict.update({'instance': instance, 'Meta': Meta})
