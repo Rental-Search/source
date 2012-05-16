@@ -1,35 +1,39 @@
 {% load i18n %}
 
-{% if product.carproduct %}
-     <h4>Asssurance du véhicule</h4>
-     <p class="last">Assurance accident et vol inclus dans le prix du montant de la réservation. La franchise de cette assurance est de 2000&euro;.</p>
-     <h4 style>Condition de location</h4>
-     <p>Le conducteur doit avoir au moins 21 ans.</p>
-     <p>Le conducteur doit être titulaire d'un permis de conduire obtenu depuis plus de 2 ans valable en France.</p>
-     <p>Le conducteur doit payer la location sur le site avec une carte bancaire à son nom qu'il présentera au propriétaire au début de la location, ainsi que son permis de conduire.</p>
-     <p>Il est possible d'avoir plusieurs conducteurs. Dans ce cas, chaque conducteur devra être mentionné sur le contrat de location et répondre aux conditions d'age et de permis de conduire.</p>
-     <p>Le véhicule ne doit circuler qu'en France métropolitaine.</p>
-     <p>L'usage est exclusivement privé.</p>
-     <p>Le transport de passagers à titre onéreux est exclus.</p>
- {% endif %}
- {% if product.realestateproduct %}
-     <h4>Assurance du logement</h4>
-     <p>Annulation de séjour</p>
-     <p>Intéruption de séjour</p>
-     <p>Responsabilité civile villégiature</p>
-     <p class="last">Non-conformité du bien loué</p>
-     <h4>Conditions de location</h4>
-     <p>Le locataire doit être un particulier.</p>
-     <p>La durée de la location ne peut pas excéder 90 jours.</p>
- {% endif %}
- {% if not product.carproduct and not product.realestateproduct %}
-     <h4>{% trans "Assurance de l'objet"%}</h4>
-     <p>Casse accidentelle (vol exclus) pour un montant maximum de 750&euro;.</p>
-     <p>Pour les réparations n'éxcédant pas 750&euro; : franchise de 15% du montant des réparations.<p>
-     <p class="last">Pour les réparations supérieur à 750&euro; : franchise de 112,5&euro; plus le montant des réparations excédant 750&euro;.</p>
-     <h4>{% trans "Condition de location" %}</h4>
-     <p>Le locataire doit être un particulier.</p>
-     <p>Le locataire doit payer sur le site avec une carte bancaire à son nom qu'il présentera au propriétaire au début de la location.</p>
-     <p>La location doit se faire en France métropolitaine.</p>
-     <p>La durée de la location ne peut pas excéder 90 jours.</p>
- {% endif %}
+{% if not product.owner.is_professional %}
+     {% if product.carproduct %}
+          <h4>Asssurance du véhicule</h4>
+          <p class="last">Assurance accident et vol inclus dans le prix du montant de la réservation. La franchise de cette assurance est de 2000&euro;.</p>
+          <h4 style>Condition de location</h4>
+          <p>Le conducteur doit avoir au moins 21 ans.</p>
+          <p>Le conducteur doit être titulaire d'un permis de conduire obtenu depuis plus de 2 ans valable en France.</p>
+          <p>Le conducteur doit payer la location sur le site avec une carte bancaire à son nom qu'il présentera au propriétaire au début de la location, ainsi que son permis de conduire.</p>
+          <p>Il est possible d'avoir plusieurs conducteurs. Dans ce cas, chaque conducteur devra être mentionné sur le contrat de location et répondre aux conditions d'age et de permis de conduire.</p>
+          <p>Le véhicule ne doit circuler qu'en France métropolitaine.</p>
+          <p>L'usage est exclusivement privé.</p>
+          <p>Le transport de passagers à titre onéreux est exclus.</p>
+      {% endif %}
+      {% if product.realestateproduct %}
+          <h4>Assurance du logement</h4>
+          <p>Annulation de séjour</p>
+          <p>Intéruption de séjour</p>
+          <p>Responsabilité civile villégiature</p>
+          <p class="last">Non-conformité du bien loué</p>
+          <h4>Conditions de location</h4>
+          <p>Le locataire doit être un particulier.</p>
+          <p>La durée de la location ne peut pas excéder 90 jours.</p>
+      {% endif %}
+      {% if not product.carproduct and not product.realestateproduct %}
+          <h4>{% trans "Assurance de l'objet"%}</h4>
+          <p>Casse accidentelle (vol exclus) pour un montant maximum de 750&euro;.</p>
+          <p>Pour les réparations n'éxcédant pas 750&euro; : franchise de 15% du montant des réparations.<p>
+          <p class="last">Pour les réparations supérieur à 750&euro; : franchise de 112,5&euro; plus le montant des réparations excédant 750&euro;.</p>
+          <h4>{% trans "Condition de location" %}</h4>
+          <p>Le locataire doit être un particulier.</p>
+          <p>Le locataire doit payer sur le site avec une carte bancaire à son nom qu'il présentera au propriétaire au début de la location.</p>
+          <p>La location doit se faire en France métropolitaine.</p>
+          <p>La durée de la location ne peut pas excéder 90 jours.</p>
+      {% endif %}
+{% else %}
+     <p>Il n'y a pas d'asurance pour les professionnels</p>
+{% endif %}
