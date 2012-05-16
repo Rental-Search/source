@@ -22,10 +22,10 @@
                 {% if formfield.name == 'avatar' %}<img src="{{ fb_image }}"/>{% endif %}
                 {{ formfield }}
                 {% if formfield.name == "addresses__address1"%}
-                <span class="help-inline"><a href="#" id="cancelNewAddress" style="font-family: 'ubuntu'; color: red;">- {% trans "Annuler"%}</a></span>
+                <span class="help-inline"><a href="#" id="cancelNewAddress" style="font-family: 'ubuntu'; color: red;">- {% trans "Annuler la nouvelle adresse"%}</a></span>
                 {% endif %}
                 {% if formfield.name == "phones__phone"%}
-                <span class="help-inline"><a href="#" id="cancelNewPhone" style="font-family: 'ubuntu'; color: red;">- {% trans "Annuler"%}</a></span>
+                <span class="help-inline"><a href="#" id="cancelNewPhone" style="font-family: 'ubuntu'; color: red;">- {% trans "Annuler le nouveau numéro"%}</a></span>
                 {% endif %}
                 {% if formfield.name == "addresses"%}
                 <span class="help-inline"><a href="#" id="addNewAddress" style="font-family: 'ubuntu';">+ {% trans "Ajoutez une adresse"%}</a></span>
