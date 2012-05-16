@@ -454,6 +454,7 @@ class CarProductEditForm(ProductEditForm):
 
     def __init__(self, *args, **kwargs):
         super(CarProductEditForm, self).__init__(*args, **kwargs)
+        del self.fields['quantity']
         self.fields['category'] = forms.TypedChoiceField(
             label=_(u"Catégorie"), coerce=lambda pk: Category.tree.get(pk=pk), 
             choices=generate_choices(('automobile',), None)
@@ -504,6 +505,8 @@ class RealEstateEditForm(ProductEditForm):
             label=_(u"Catégorie"), coerce=lambda pk: Category.tree.get(pk=pk), 
             choices=generate_choices(('location-saisonniere', ), None)
         )
+        del self.fields['quantity']
+    
     class Meta:
         model = RealEstateProduct
         fieldsets = [

@@ -46,8 +46,8 @@ class ProductWizard(MultiPartFormWizard):
         if picture_id:
             product.pictures.add(Picture.objects.get(pk=picture_id))
         
+        messages.success(request, _(u"Votre objet a bien été ajouté"))
         GoalRecord.record('new_object', WebUser(request))
-        
         return redirect_to(request, product.get_absolute_url(), permanent=False)
     
     def get_form(self, step, data=None, files=None):
