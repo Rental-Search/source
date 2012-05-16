@@ -355,7 +355,7 @@ class RealEstateForm(ProductForm):
     
     def __init__(self, *args, **kwargs):
         super(RealEstateForm, self).__init__(*args, **kwargs)
-        self.title = _(u'Ajouter un lieu')
+        self.title = _(u'Ajouter un logement')
         self.fields['category'] = forms.TypedChoiceField(
             label=_(u"Catégorie"), coerce=lambda pk: Category.tree.get(pk=pk), 
             choices=generate_choices(('location-saisonniere', ))
