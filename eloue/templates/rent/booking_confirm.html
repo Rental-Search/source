@@ -43,7 +43,7 @@
             <td>{{ product.owner.username }}</td>
           </tr>
           <tr>
-            <td colspan="2" style="font-size: 12px;">L'intégralité des informations sur le propriétaire vous seront communiquées après l'acceptation définitive de la réservation par celui-ci.</td>
+            <td colspan="2" style="font-size: 12px;">L'intégralité des informations sur le propriétaire vous seront communiquées après l'acceptation définitive de la réservation par le propriétaire.</td>
           </td>
           <tr>
               <th>{% trans "Réservation" %}</th>
@@ -97,24 +97,11 @@
           {% endif %}
         </table>
 
-        <h2>{% trans "Assurance" %}</h2>
+        <h2>{% trans "Condition et assurance" %}</h2>
         <table class="table table-bordered booking-resume">
           <tr>
-            <th>
-              {% trans "Conditions" %}
-            </tf>
-            <td>
-              <ul>
-                <li>
-                  Le conducteur doit être titulaire d'un permis de conduire obtenu depuis plus de 2 ans valable en France
-                </li>
-                <li>
-                  Le conducteur doit payer la location sur le site avec une carte bancaire à son nom qu'il présentera au propriétaire au début de la location, ainsi que son permis de conduire.
-                </li>
-                <li>
-                  Il est possible d'avoir plusieurs conducteurs. Dans ce cas, chaque conducteur devra être mentionné sur le contrat de location et répondre aux conditions d'age et de permis de conduire.
-                </li>
-              </ul>
+            <td colspan="2" id="conditions">
+              {% include "rent/partials/condition_assurance.html" %}
             </td>
           </tr>
           <tr>

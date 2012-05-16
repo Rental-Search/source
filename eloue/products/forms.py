@@ -221,7 +221,7 @@ class ProductForm(BetterModelForm):
     summary = forms.CharField(label=_("Titre"), max_length=100)
     picture_id = forms.IntegerField(required=True, widget=forms.HiddenInput())
     picture = forms.ImageField(label=_(u"Photo"), required=False)
-    deposit_amount = forms.DecimalField(label=_(u"Dépôt de garantie"), initial=0, required=False, max_digits=8, decimal_places=2, widget=PriceTextInput(attrs={'class': 'price'}), localize=True, help_text=_(u"Montant utilisé en cas de dédomagement"))
+    deposit_amount = forms.DecimalField(label=_(u"Dépôt de garantie"), initial=0, required=False, max_digits=8, decimal_places=2, widget=PriceTextInput(attrs={'class': 'price'}), localize=True, help_text=_(u"Nous conseillons de mettre le montant actuel de votre bien. Ce montant sert à rembourser les dommages en cas d'incident."))
     quantity = forms.IntegerField(label=_(u"Quantité"), initial=1, widget=forms.TextInput(attrs={'class': 'price'}), help_text=_(u"Le locataire peut réserver plusieurs exemplaires si vous les possédez"))
     description = forms.CharField(label=_(u"Description"), widget=forms.Textarea())
     #payment_type = forms.ChoiceField(choices=PAYMENT_TYPE, required=False, widget=forms.Select(attrs={'class': 'selm'}))
@@ -286,6 +286,7 @@ class ProductForm(BetterModelForm):
 class CarProductForm(ProductForm):
     quantity = forms.IntegerField(widget=forms.HiddenInput(), initial=1)
     summary = forms.CharField(required=False, widget=forms.HiddenInput(), max_length=255)
+    deposit_amount = forms.DecimalField(label=_(u"Dépôt de garantie"), required=False, max_digits=8, decimal_places=2, widget=PriceTextInput(attrs={'class': 'price'}), localize=True, help_text=_(u"Nous conseillons un dépôt de garantie de 2000€. Ceci correspond au montant de la franchise de l'assurance voiture."))
     licence_plate = FRLicensePlateField(label=_(u'N° d\'immatriculation'), required=True)
     first_registration_date = DateSelectField(label=_(u'1er mise en circulation'))
 
@@ -350,10 +351,11 @@ class CarProductForm(ProductForm):
 
 class RealEstateForm(ProductForm):
     quantity = forms.IntegerField(widget=forms.HiddenInput(), initial=1)
+    deposit_amount = forms.DecimalField(label=_(u"Dépôt de garantie"), required=False, max_digits=8, decimal_places=2, widget=PriceTextInput(attrs={'class': 'price'}), localize=True, help_text=_(u"Nous conseillons un dépôt de garantie de 75€. Ceci correspond au montant de la franchise de l'assurance."))
     
     def __init__(self, *args, **kwargs):
         super(RealEstateForm, self).__init__(*args, **kwargs)
-        self.title = _(u'Ajouter un lieu')
+        self.title = _(u'Ajouter un logement')
         self.fields['category'] = forms.TypedChoiceField(
             label=_(u"Catégorie"), coerce=lambda pk: Category.tree.get(pk=pk), 
             choices=generate_choices(('location-saisonniere', ))

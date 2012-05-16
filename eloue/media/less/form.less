@@ -588,15 +588,15 @@ select:focus:required:invalid {
   }
 }
 
-#id_2-expires_0, #id_expires_0 {
+#id_2-expires_0, #id_expires_0, #id_3-expires_0 {
   margin-right: 10px;
 }
 
-#id_2-expires_0, #id_2-expires_1, #id_expires_0, #id_expires_1 {
+#id_2-expires_0, #id_2-expires_1, #id_expires_0, #id_expires_1, #id_3-expires_1, #id_3-expires_0 {
   width: 70px;
 }
 
-#id_3-cvv {
+#id_3-cvv, #id_2-cvv {
   width: 30px;
 }
 
@@ -649,6 +649,23 @@ select[id^="id_date_of_birth_"], select[id^="id_drivers_license_date_"], select[
   .controls {
     margin-left: 250px;
   }
+}
+
+
+// MORE PRODUCT
+//_____________
+
+.more-price {
+  #font > .sans-serif('Ubuntu', normal, @basefont);
+}
+// ADDRESS
+//_________
+
+#newAddress, #newNumber {
+  display: none;
+
+  margin-top: 18px;
+  -webkit-margin-top-collapse: separate;
 }
 
 
