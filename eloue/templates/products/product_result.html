@@ -90,6 +90,11 @@
 		{% endif %}
     </ul>{# breadcrumb #}
     <div class="content-main">
+    {% if breadcrumbs.categorie.object.description %}
+    <div class="category-description">
+        {{ breadcrumbs.categorie.object.description.header|safe }}
+    </div>
+    {% endif %}
     {% if product_list %}
         {% if form.cleaned_data.q %}
         {% blocktrans with form.cleaned_data.q as keywords count paginator.count as count %}
@@ -149,6 +154,11 @@
                 <a href="{% facet_url breadcrumbs "page" page_obj.next_page_number %}" class="next">{% trans "Page suivante" %} &#187;</a>
             {% endif %}
         </div><!-- pagination -->
+        {% endif %}
+        {% if breadcrumbs.categorie.object.description %}
+        <div class="category-description">
+            {{ breadcrumbs.categorie.object.description.footer|safe }}
+        </div>
         {% endif %}
     {% else %}
     <h1>{% trans "Pas de résultat pour cette recherche" %}</h1>
