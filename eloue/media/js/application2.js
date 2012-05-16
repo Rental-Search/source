@@ -137,6 +137,28 @@ $(document).ready(function() {
     companyNameInput = $("input[name*='company_name']");
     companyNameInput.parent().parent().hide();
 
+
+    var exists = $("input[name$='exists']:checked").val();
+    passwordInput = $("input[name$='password']");
+    if (passwordInput.attr('type') != 'hidden') {
+        if (parseInt(exists, 10)) {
+            passwordInput.removeAttr('disabled');
+        } else {
+            passwordInput.attr('disabled', 'disabled');
+        }
+    }
+    $("input[name$='exists']").change(function(event) {
+        var radio = $(event.target);
+        if (passwordInput.attr('type') != 'hidden') {
+            if (parseInt(radio.val(), 10)) {
+                passwordInput.removeAttr('disabled');
+            } else {
+                passwordInput.attr('disabled', 'disabled');
+            }
+        }
+    });
+
+
     var exists = $("input[name*='is_professional']:checked").val();
 
     if (exists == 'on') {
