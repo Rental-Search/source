@@ -91,15 +91,16 @@ class MessageWizard(MultiPartFormWizard):
         recipient = self.extra_context["recipient"]
         if self.new_patron == recipient:
             messages.error(request, _(u"Vous ne pouvez pas vous envoyer des messages."))
+            try:
+                return redirect(product.get_absolute_url())
+            except AttributeError:
+                return redirect(request.user.get_absolute_url())
         else:
             message_form = form_list[0]
-            message_form.save(product=product, sender=self.new_patron, recipient=recipient)
+            message = message_form.save(product=product, sender=self.new_patron, recipient=recipient)
             messages.success(request, _(u"Votre message a bien été envoyé au propriétaire"))
-        try:
-            return redirect(product.get_absolute_url())
-        except AttributeError:
-            return redirect(request.user.get_absolute_url())
-    
+            return redirect('thread_details', thread_id=message[0].productrelatedmessage.thread.id)
+
     def get_template(self, step):
         if issubclass(self.form_list[step], EmailAuthenticationForm):
             return 'accounts/auth_login.html'
