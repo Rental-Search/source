@@ -78,7 +78,7 @@ class ContractGeneratorNormal(object):
         canvas.drawString(176, 426, "{ended_at}".format(ended_at=booking.ended_at.strftime("%d/%m/%Y à %H:%M")))
         canvas.drawString(180, 415, "{total_amount} {currency}.".format(total_amount=booking.total_amount, currency=booking.currency))
 
-        canvas.drawString(430, 660, "{first_name} {last_name}".format(
+        canvas.drawString(430, 660, u"{first_name} {last_name}".format(
             first_name=booking.owner.first_name,
             last_name=booking.owner.last_name.upper()
         ))
