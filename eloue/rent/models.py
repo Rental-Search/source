@@ -24,6 +24,8 @@ from django.db.models.signals import post_save
 from django.utils.formats import get_format
 from django.utils.translation import ugettext_lazy as _
 from django.db.models import Q
+from django.core.urlresolvers import reverse
+from django.contrib.sites.models import Site
 
 from eloue.accounts.models import Patron
 from eloue.products.models import CURRENCY, UNIT, Product, PAYMENT_TYPE
@@ -364,7 +366,7 @@ class Booking(models.Model):
     def not_need_ipn(self):
         return self.product.payment_type == PAYMENT_TYPE.NOPAY
         
-    @smart_transition(source='authorizing', target='authorized', save=True)
+    @smart_transition(source='authorizing', target='authorized', conditions=[not_need_ipn], save=True)
     def preapproval(self, *args, **kwargs):
         self.payment.preapproval(*args, **kwargs)
         self.payment.save()
@@ -372,7 +374,12 @@ class Booking(models.Model):
         
     @transition(source='authorized', target='pending', save=True)
     def accept(self):
-        self.payment.pay()
+        domain = Site.objects.get_current().domain
+        protocol = "https"
+        cancel_url="%s://%s%s" % (protocol, domain, reverse("booking_failure", args=[self.pk.hex]))
+        return_url="%s://%s%s" % (protocol, domain, reverse("booking_success", args=[self.pk.hex]))
+
+        self.payment.pay(cancel_url, return_url)
         self.payment.save()
         self.send_acceptation_email()
         self.send_borrower_receipt()
