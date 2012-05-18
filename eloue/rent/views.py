@@ -18,6 +18,7 @@ from django.views.decorators.cache import never_cache
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic.list_detail import object_detail
 from django.views.generic.simple import direct_to_template, redirect_to
+from django.template.loader import render_to_string
 from django.db.models import Q
 from django_lean.experiments.models import GoalRecord
 from django_lean.experiments.utils import WebUser
@@ -213,6 +214,14 @@ def offer_reject(request, booking_id):
     else:
         return HttpResponseForbidden()
 
+@login_required
+@ownership_required(model=Booking, object_key='booking_id', ownership=['owner', 'borrower'])
+def booking_contract(request, booking_id):
+    booking = get_object_or_404(Booking, pk=booking_id, state=Booking.STATE.PENDING)
+    content = booking.product.subtype.contract_generator(booking).getvalue()
+    response = HttpResponse(content, content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment; filename=contrat.pdf'
+    return response
 
 @login_required
 @require_POST
@@ -251,7 +260,7 @@ def booking_reject(request, booking_id):
 
 
 @login_required
-@ownership_required(model=Booking, object_key='booking_id', ownership=['owner', 'borrower'])
+@ownership_required(model=Booking, object_key='booking_id', ownership=['borrower'])
 def booking_cancel(request, booking_id):
     booking = get_object_or_404(Booking.on_site, pk=booking_id)
     if request.POST:
@@ -279,7 +288,9 @@ def booking_incident(request, booking_id):
     booking = get_object_or_404(Booking.on_site, pk=booking_id)
     form = IncidentForm(request.POST or None)
     if form.is_valid():
-        send_mail(u"Déclaration d'incident", form.cleaned_data['message'], settings.DEFAULT_FROM_EMAIL, ['contact@e-loue.com'])
+        text = render_to_string("rent/emails/incident.txt", {'user': request.user.username, 'booking_id': booking_id, 'problem': form.cleaned_data['message']})
+        send_mail(u"Déclaration d'incident", text, request.user.email, ['contact@e-loue.com'])
         booking.state = Booking.STATE.INCIDENT
         booking.save()
+        return redirect('booking_detail', booking_id=booking_id)
     return direct_to_template(request, 'rent/booking_incident.html', extra_context={'booking': booking, 'form': form})

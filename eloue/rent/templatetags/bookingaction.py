@@ -86,14 +86,22 @@ Accept = PostForm('Accepter', 'eloue.rent.views.booking_accept', BOOKING_STATE.P
 Refuse = PostForm('Refuser', 'eloue.rent.views.booking_reject', BOOKING_STATE.REJECTED)
 Cancel = PostForm('Annuler', 'eloue.rent.views.booking_cancel', BOOKING_STATE.CANCELED)
 Close = PostForm(u'Clôturer', 'eloue.rent.views.booking_close', BOOKING_STATE.CLOSING)
-Incident = PostForm('Signaler une incident', 'eloue.rent.views.booking_incident', BOOKING_STATE.INCIDENT)
 
-PaypalAuthorize = LinkWidget(
-	url_builder=lambda request, booking: settings.PAYPAL_COMMAND%urllib.urlencode({
-					'cmd': '_ap-preapproval',
-		        	'preapprovalkey': booking.preapproval_key
-                }), 
-	text='Authorizer payment'
+
+Incident = LinkWidget(
+	url_builder=lambda request, booking: reverse(
+		'eloue.rent.views.booking_incident', 
+		kwargs={'booking_id': booking.pk.hex}
+	),
+	text=u'Signaler une incident'
+)
+
+Contract = LinkWidget(
+	url_builder=lambda request, booking: reverse(
+		'eloue.rent.views.booking_contract', 
+		kwargs={'booking_id': booking.pk.hex}
+	),
+	text=u'Télécharger le contract de nouveau'
 )
 
 class CommentLinkWidget(LinkWidget):
@@ -151,11 +159,11 @@ SendMessageToOwner = LinkWidget(
 )
 
 borrower = {
-    'authorizing': (Cancel, PaypalAuthorize, SendMessageToOwner),
+    'authorizing': (Cancel, SendMessageToOwner),
     'authorized': (Cancel, SendMessageToOwner, ),
     'rejected': (SendMessageToOwner, ),
     'canceled': (), 
-   	'pending': (Cancel, ),
+   	'pending': (Cancel, Contract, ),
     'ongoing': (Incident, ), 
     'ended': (Incident, LeaveComment),
     'incident': (), 
@@ -171,7 +179,7 @@ owner = {
     'authorized': (Accept, Refuse, SendMessageToBorrower),
     'rejected': (),
     'canceled': (), 
-   	'pending': (Cancel, ),
+   	'pending': (Contract, ),
     'ongoing': (Incident, ), 
     'ended': (Close, Incident, LeaveComment),
     'incident': (), 
