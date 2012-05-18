@@ -1,5 +1,5 @@
 #publish-new-ad {
-	h1 { margin-bottom: 20px; }
+	h1 { margin-bottom: 0px !important; }
 
 	.publish-intro {
 		margin-bottom: 40px;
@@ -10,17 +10,34 @@
 		line-height: 22px;
 	}
 
-	.car-product-create, .real-estate-product-create, .product-create {
+	.product-type {
+		background: @blueLight;
+  		border: 1px solid #b2ced9;
+  		.rounded(3px);
+  		@shadow: inset 0 1px 0 rgba(255,255,255,1);
+  		.box-shadow(@shadow);
+		
 		.makeColumn(4);
-
-		height: 300px;
 
 		text-align: center;
 
-		margin-bottom: 40px;
+		margin-bottom: 20px;
 
 		border: 1px solid #B2CED9;
 		padding: 10px 0;
 		.rounded(3px);
+
+		ul {
+			margin: 10px 10px 30px;
+
+			li {
+				margin: 10px 0;
+				#font > .sans-serif('Ubuntu', normal, @basefont);
+				color: @blueDark;
+				height: 40px;
+				vertical-align: middle;
+				line-height: 18px;
+			}
+		}
 	} 
 }

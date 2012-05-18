@@ -16,7 +16,7 @@
                 Grâce à la location, vous allez gagnez de l'argent<br>tout en rendant service au e-loueurs et à la planète !
             {% endblocktrans %}
         </h1>
-        <div class="advantage ht-fonction" style="margin-left: 20px; width: 942px;">
+        <div class="advantage ht-fonction" style="margin-left: 20px; width: 942px; background-color: #FFF;">
             <ul class="ht-f-col" style="width: 400px;">
                 <li>
                     <div class="ht-icon lock"></div>
@@ -58,29 +58,29 @@
                 </li>
             </ul>
         </div>{# advantage #}
-        <div class="car-product-create">
-        	<a href="{% url car_product_create %}" class="btn">Ajouter une voiture</a>
-            <ul>
-                <li>{% trans "Assurance comprise avec MMA : Casse, Vol, responsabilité civile, dépannage 24h/24h"%} <a href=\"#\">({% trans "en savoir plus"%})</a></li>
+        <div class="product-type">
+            <ul class="">
+                <li>{% trans "Assurance comprise avec MMA : Casse, Vol, responsabilité civile, dépannage 24h/24h"%} <br><a href=\"#\">({% trans "en savoir plus"%})</a></li>
                 <li>{% trans "Rejoignez la communauté des 40 000 e-loueurs"%}</li>
                 <li>{% trans "Les e-loueurs de voiture gagnent en moyennent 300&euro; par mois."%}</li>
             </ul>
+            <a href="{% url car_product_create %}" class="btn">Ajouter une voiture</a>
         </div>{# car-product-create #}
-        <div class="real-estate-product-create">
-        	<a href="{% url real_estate_product_create %}" class="btn">Ajouter un logement</a>
+        <div class="product-type">
             <ul>
-                <li>{% trans "Assurance comprise avec Europe Assistance"%}<a href=\"#\">({% trans "en savoir plus"%})</a></li>
+                <li>{% trans "Assurance comprise avec Europe Assistance"%}<br><a href=\"#\">({% trans "en savoir plus"%})</a></li>
                 <li>{% trans "Rejoignez la communauté des 40 000 e-loueurs"%}</li>
                 <li>{% trans "Les e-loueurs d'appartement gagnent en moyennent 350&euro; par mois."%}</li>
             </ul>
+            <a href="{% url real_estate_product_create %}" class="btn">Ajouter un logement</a>
         </div>{# real-estate-product-create #}
-        <div class="product-create">
-        	<a href="{% url product_create %}" class="btn">Ajouter un autre objet</a>
+        <div class="product-type">
             <ul>
-                <li>{% trans "Assurance casse comprise avec Generali"%}<a href=\"#\">({% trans "en savoir plus"%})</a></li>
+                <li>{% trans "Assurance casse comprise avec Generali"%}<br><a href=\"#\">({% trans "en savoir plus"%})</a></li>
                 <li>{% trans "Rejoignez la communauté des 40 000 e-loueurs"%}</li>
                 <li>{% trans "Les e-loueurs d'appartement gagnent en moyennent 200&euro; par mois."%}</li>
             </ul>
+            <a href="{% url product_create %}" class="btn">Ajouter un autre objet</a>
         </div>{# product-create #}
     </div>
 </div>{# container-main #}
