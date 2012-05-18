@@ -30,9 +30,7 @@
     {% with request.user.bookings.ongoing.count as count %}
         <li><a href="{{ owner_booking_ongoing }}" class="{% active request owner_booking_ongoing %}">{% trans "Réservations en cours" %} {% if count > 0%}({{count}}){% endif %}</a></li>
     {% endwith %}
-    {% with request.user.bookings.history.count as count %}
-        <li><a href="{{ owner_booking_history }}" class="{% active request owner_booking_history %}">{% trans "Réservations terminées" %} {% if count > 0%}({{count}}){% endif %}</a></li>
-    {% endwith %}
+    <li><a href="{{ owner_booking_history }}" class="{% active request owner_booking_history %}">{% trans "Réservations terminées" %}</a></li>
 </ul>
 {% endblock %}
 
