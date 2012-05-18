@@ -786,7 +786,7 @@ def make_missing_data_form(instance, required_fields=[]):
                 'legend': _(u'Permis de conduire')}),
             ('contacts', {
                 'fields': ['addresses', 'addresses__address1', 'addresses__zipcode', 'addresses__city', 'addresses__country', 'phones', 'phones__phone'], 
-                'legend': 'Information de contact'}),
+                'legend': 'Vos coordonnées'}),
         ]
 
     class_dict = fields.copy()
