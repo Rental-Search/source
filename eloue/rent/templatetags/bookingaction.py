@@ -87,13 +87,6 @@ Refuse = PostForm('Refuser', 'eloue.rent.views.booking_reject', BOOKING_STATE.RE
 Cancel = PostForm('Annuler', 'eloue.rent.views.booking_cancel', BOOKING_STATE.CANCELED)
 Close = PostForm(u'Clôturer', 'eloue.rent.views.booking_close', BOOKING_STATE.CLOSING)
 
-PaypalAuthorize = LinkWidget(
-	url_builder=lambda request, booking: settings.PAYPAL_COMMAND%urllib.urlencode({
-					'cmd': '_ap-preapproval',
-		        	'preapprovalkey': booking.preapproval_key
-                }), 
-	text='Authorizer payment'
-)
 
 Incident = LinkWidget(
 	url_builder=lambda request, booking: reverse(
@@ -166,7 +159,7 @@ SendMessageToOwner = LinkWidget(
 )
 
 borrower = {
-    'authorizing': (Cancel, PaypalAuthorize, SendMessageToOwner),
+    'authorizing': (Cancel, SendMessageToOwner),
     'authorized': (Cancel, SendMessageToOwner, ),
     'rejected': (SendMessageToOwner, ),
     'canceled': (), 
