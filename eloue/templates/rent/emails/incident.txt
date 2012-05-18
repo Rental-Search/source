@@ -1,0 +1,3 @@
+L'utilisateur {{user}} a constaté l'incident suivant lors de la location avec l'id {{booking_id}}:
+
+{{problem}}

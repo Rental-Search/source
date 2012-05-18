@@ -18,6 +18,7 @@ from django.views.decorators.cache import never_cache
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic.list_detail import object_detail
 from django.views.generic.simple import direct_to_template, redirect_to
+from django.template.loader import render_to_string
 from django.db.models import Q
 from django_lean.experiments.models import GoalRecord
 from django_lean.experiments.utils import WebUser
@@ -279,7 +280,9 @@ def booking_incident(request, booking_id):
     booking = get_object_or_404(Booking.on_site, pk=booking_id)
     form = IncidentForm(request.POST or None)
     if form.is_valid():
-        send_mail(u"Déclaration d'incident", form.cleaned_data['message'], settings.DEFAULT_FROM_EMAIL, ['contact@e-loue.com'])
+        text = render_to_string("rent/emails/incident.txt", {'user': request.user.username, 'booking_id': booking_id, 'problem': form.cleaned_data['message']})
+        send_mail(u"Déclaration d'incident", text, request.user.email, ['contact@e-loue.com'])
         booking.state = Booking.STATE.INCIDENT
         booking.save()
+        return redirect('booking_detail', booking_id=booking_id)
     return direct_to_template(request, 'rent/booking_incident.html', extra_context={'booking': booking, 'form': form})
