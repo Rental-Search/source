@@ -220,12 +220,10 @@ def booking_reject(request, booking_id):
 def booking_cancel(request, booking_id):
     booking = get_object_or_404(Booking.on_site, pk=booking_id)
     if request.POST:
-        booking.init_payment_processor()
         booking.cancel()
         booking.send_cancelation_email(source=request.user)
         messages.success(request, _(u"Cette réservation a bien été annulée"))
-    messages.error(request, _(u"Cette réservation n'a pu être annulée"))
-    return redirect_to(request, booking.get_absolute_url())
+    return redirect(booking)
 
 
 @login_required
@@ -233,14 +231,12 @@ def booking_cancel(request, booking_id):
 def booking_close(request, booking_id):
     booking = get_object_or_404(Booking.on_site, pk=booking_id)
     if request.POST:
-        booking.init_payment_processor()
         booking.pay()
         booking.send_closed_email()
         messages.success(request, _(u"Cette réservation a bien été cloturée"))
         messages.info(request, _(u"Cette réservation a bien été cloturée et le virement effectué. Si vous voulez vous pouvez ajouter une commentaire et une note sur le déroulement de la location."))
         return redirect(reverse('eloue.accounts.views.comments')+'#'+booking.pk.hex)
-    messages.error(request, _(u"Cette réservation n'a pu être cloturée"))
-    return redirect_to(request, booking.get_absolute_url())
+    return redirect(booking)
 
 
 @login_required

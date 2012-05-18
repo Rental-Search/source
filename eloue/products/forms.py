@@ -218,16 +218,16 @@ def generate_choices(slugs, empty_value=_(u"Choisissez une catégorie")):
 
 
 class ProductForm(BetterModelForm):
-    summary = forms.CharField(label=_("Titre"), max_length=100)
+    summary = forms.CharField(label=_("Titre de l'annnonce"), max_length=100)
     picture_id = forms.IntegerField(required=True, widget=forms.HiddenInput())
     picture = forms.ImageField(label=_(u"Photo"), required=False)
-    deposit_amount = forms.DecimalField(label=_(u"Dépôt de garantie"), initial=0, required=False, max_digits=8, decimal_places=2, widget=PriceTextInput(attrs={'class': 'price'}), localize=True, help_text=_(u"Nous conseillons de mettre le montant actuel de votre bien. Ce montant sert à rembourser les dommages en cas d'incident."))
+    deposit_amount = forms.DecimalField(label=_(u"Dépôt de garantie"), initial=0, required=False, max_digits=8, decimal_places=2, widget=PriceTextInput(attrs={'class': 'price'}), localize=True, help_text=_(u"Nous conseillons de mettre la valeur actuelle de votre bien. Ce montant vous sera versé si votre objet est cassé ou irréparable."))
     quantity = forms.IntegerField(label=_(u"Quantité"), initial=1, widget=forms.TextInput(attrs={'class': 'price'}), help_text=_(u"Le locataire peut réserver plusieurs exemplaires si vous les possédez"))
-    description = forms.CharField(label=_(u"Description"), widget=forms.Textarea())
+    description = forms.CharField(label=_(u"Description"), widget=forms.Textarea(), help_text=_(u'Décrivez plus précisement votre objet, son état, comment et quand vous l\'utilisez.'))
     #payment_type = forms.ChoiceField(choices=PAYMENT_TYPE, required=False, widget=forms.Select(attrs={'class': 'selm'}))
     
     hour_price = forms.DecimalField(label=_(u"L'heure"), required=False, max_digits=10, decimal_places=2, min_value=D('0.01'), widget=PriceTextInput(attrs={'class': 'price'}), localize=True)
-    day_price = forms.DecimalField(label=_(u"La journée"), required=True, max_digits=10, decimal_places=2, min_value=D('0.01'), widget=PriceTextInput(attrs={'class': 'price'}), localize=True, help_text=_(u"Prix de location à la journée"))
+    day_price = forms.DecimalField(label=_(u"Tarif journée"), required=True, max_digits=10, decimal_places=2, min_value=D('0.01'), widget=PriceTextInput(attrs={'class': 'price'}), localize=True, help_text=_(u"Prix de location à la journée"))
     week_end_price = forms.DecimalField(label=_(u"Le week-end"), required=False, max_digits=10, decimal_places=2, min_value=D('0.01'), widget=PriceTextInput(attrs={'class': 'price'}), localize=True)
     week_price = forms.DecimalField(label=_(u"La semaine"), required=False, max_digits=10, decimal_places=2, min_value=D('0.01'), widget=PriceTextInput(attrs={'class': 'price'}), localize=True)
     two_weeks_price = forms.DecimalField(label=_(u"Les 15 jours"), required=False, max_digits=10, decimal_places=2, min_value=D('0.01'), widget=PriceTextInput(attrs={'class': 'price'}), localize=True)
@@ -236,6 +236,7 @@ class ProductForm(BetterModelForm):
     def __init__(self, *args, **kwargs):
         super(ProductForm, self).__init__(*args, **kwargs)
         self.title = _(u'Ajouter un objet')
+        self.header = _(u'Donnez envie aux e-loueurs potentiels de louer votre objets.')
         self.fields['category'] = forms.TypedChoiceField(
             label=_(u"Catégorie"), coerce=lambda pk: Category.tree.get(pk=pk), 
             choices=generate_choices((cat.slug for cat in Category.on_site.filter(parent=None) if cat.slug not in ['auto-et-moto', 'hebergement', 'motors', 'automobile', 'location-saisonniere']))
@@ -270,7 +271,7 @@ class ProductForm(BetterModelForm):
         model = Product
         fieldsets = [
             ('category', {'fields': ['category'], 'legend': _(u'Choisissez une catégorie')}),
-            ('informations', {
+            ('informations de l\'objet', {
                 'fields': ['summary', 'picture_id', 'picture', 'description', 'quantity'], 
                 'legend': _(u'Informations')}),
             ('price', {'fields': ['day_price', 'deposit_amount'], 
@@ -286,7 +287,8 @@ class ProductForm(BetterModelForm):
 class CarProductForm(ProductForm):
     quantity = forms.IntegerField(widget=forms.HiddenInput(), initial=1)
     summary = forms.CharField(required=False, widget=forms.HiddenInput(), max_length=255)
-    deposit_amount = forms.DecimalField(label=_(u"Dépôt de garantie"), required=False, max_digits=8, decimal_places=2, widget=PriceTextInput(attrs={'class': 'price'}), localize=True, help_text=_(u"Nous conseillons un dépôt de garantie de 2000€. Ceci correspond au montant de la franchise de l'assurance voiture."))
+    description = forms.CharField(label=_(u"Description"), widget=forms.Textarea(), help_text=_(u'Décrivez plus précissément votre véhicule, son état, ses particularités.'))
+    deposit_amount = forms.DecimalField(label=_(u"Dépôt de garantie"), required=False, max_digits=8, decimal_places=2, widget=PriceTextInput(attrs={'class': 'price'}), localize=True, help_text=_(u"Nous conseillons un dépôt de garantie de 2000€, qui correspond au montant de la franchise de l'assurance voiture. en cas de vol."))
     licence_plate = FRLicensePlateField(label=_(u'N° d\'immatriculation'), required=True)
     first_registration_date = DateSelectField(label=_(u'1er mise en circulation'))
 
@@ -294,6 +296,7 @@ class CarProductForm(ProductForm):
     def __init__(self, *args, **kwargs):
         super(CarProductForm, self).__init__(*args, **kwargs)
         self.title = _(u'Ajouter une voiture')
+        self.header = _(u'Votre voiture peut être très utile. Donnez envie aux e-loueurs potentiels de louer votre véhicule.')
         self.fields['category'] = forms.TypedChoiceField(
             label=_(u"Catégorie"), coerce=lambda pk: Category.tree.get(pk=pk), 
             choices=generate_choices(('automobile',))
@@ -351,11 +354,14 @@ class CarProductForm(ProductForm):
 
 class RealEstateForm(ProductForm):
     quantity = forms.IntegerField(widget=forms.HiddenInput(), initial=1)
+    description = forms.CharField(label=_(u"Description"), widget=forms.Textarea(), help_text=_(u'Décrivez les spécifités de votre logement et insistez sur ce qui le rend exceptionnel.'))
     deposit_amount = forms.DecimalField(label=_(u"Dépôt de garantie"), required=False, max_digits=8, decimal_places=2, widget=PriceTextInput(attrs={'class': 'price'}), localize=True, help_text=_(u"Nous conseillons un dépôt de garantie de 75€. Ceci correspond au montant de la franchise de l'assurance."))
-    
+    day_price = forms.DecimalField(label=_(u"Prix par nuit"), required=True, max_digits=10, decimal_places=2, min_value=D('0.01'), widget=PriceTextInput(attrs={'class': 'price'}), localize=True, help_text=_(u"Prix de location à la journée"))
+
     def __init__(self, *args, **kwargs):
         super(RealEstateForm, self).__init__(*args, **kwargs)
         self.title = _(u'Ajouter un logement')
+        self.header = _(u'Votre logement est unique. Donnez envie aux e-loueurs potentiels de venir y séjourner.')
         self.fields['category'] = forms.TypedChoiceField(
             label=_(u"Catégorie"), coerce=lambda pk: Category.tree.get(pk=pk), 
             choices=generate_choices(('location-saisonniere', ))
@@ -365,7 +371,7 @@ class RealEstateForm(ProductForm):
         model = RealEstateProduct
         fieldsets = [
             ('category', {'fields': ['category'], 'legend': _(u'Choisissez une catégorie')}),
-            ('informations', {
+            ('informations du logement', {
                 'fields': ['summary', 'picture_id', 'picture', 'description'], 
                 'legend': _(u'Informations')}),
             ('real_estate_description', {
