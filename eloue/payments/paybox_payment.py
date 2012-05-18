@@ -224,7 +224,7 @@ class PayboxDirectPlusPayment(abstract_payment.AbstractPayment):
             reference=booking.pk.hex
         )
         
-    def pay(self):
+    def pay(self, cancel_url, return_url):
         booking = self.booking
         amount = str(D(booking.total_amount*100).quantize(0))
         self.paybox_manager.debit_subscribed(
