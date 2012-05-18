@@ -22,16 +22,14 @@
         {% if booking.state == "authorized"%}{% url owner_booking_authorized as return_url %}{% endif %}
         {% if booking.state == "pending"%}{% url owner_booking_pending as return_url %}{% endif %}
         {% if booking.state == "ongoing"%}{% url owner_booking_ongoing as return_url %}{% endif %}
-        {% if booking.state == "ended" or booking.state == "closed" %}
+        {% if booking.state == "ended" or booking.state == "closing" or booking.state == "closed" %}
             {% url owner_booking_history as return_url %}
         {% endif %}
         {% if booking.state == "rejected" %}{% url owner_booking_history as return_url %}{% endif %}
     {% endif %}
-    {% if return_url %}
-        <div class="previous-sub-bar">
-          &larr;  <a href="{{ return_url }}">{% trans "Retour aux réservations" %}</a>
-        </div>
-    {% endif %}
+    <div class="previous-sub-bar">
+        &larr;  <a href="{{ return_url }}">{% trans "Retour aux réservations" %}</a>
+    </div>
 {% endblock %}
 
 {% block content-main-profil %}
@@ -144,19 +142,19 @@
     </table>
 {% endif %}
 {% if booking.borrowercomment %}
-<div style="margin-bottom: 30px;">
-    <h2 style="margin-bottom: 20px;">
-        {% if request.user == booking.borrower %}
-            {% trans "Votre commentaire"%}
-        {% else %}
-            {% trans "Commentaire du locataire"%}
-        {% endif %}
-    </h2>
-    {% with booking.borrowercomment as comment %}
-        {% include "rent/partials/comment.html" %}
-    {% endwith %}
+    <div style="margin-bottom: 30px;">
+        <h2 style="margin-bottom: 20px;">
+            {% if request.user == booking.borrower %}
+                {% trans "Votre commentaire"%}
+            {% else %}
+                {% trans "Commentaire du locataire"%}
+            {% endif %}
+        </h2>
+        {% with booking.borrowercomment as comment %}
+            {% include "rent/partials/comment.html" %}
+        {% endwith %}
+    </div>
 {% endif %}
-</div>
 {% if booking.ownercomment %}
 <div style="margin-bottom: 30px;">
     <h2 style="margin-bottom: 20px;">

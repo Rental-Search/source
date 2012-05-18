@@ -7,23 +7,19 @@
 <div id="wizard-page" class="container-main">
 	<ul class="breadcrumb">
     <li><a href="{% url home %}">{% trans "Accueil" %}</a></li>
-    <li><a href="{{ request.HTTP_REFERER }}">{{ wizard_title }}</a></li>
+    <li><a href="{{ request.HTTP_REFERER }}">{% trans "Réservation"%}</a></li>
     <li>{% trans "Echec de la réservation" %}</li>
   </ul>
-  <div class="contant-main">
-  	<h2>{% trans "Réservation échouée" %}</h2>
-	<p>
-	{% blocktrans %}
-		Votre réservation a échoué. Vous pouvez nous contacter si le problème persiste.
-	{% endblocktrans %}
-	</p>
+  <div class="content-main">
+  	<h2>{% trans "Echec de la réservation" %}</h2>
+  	<p style="margin-bottom: 20px;">
+  	{% blocktrans %}
+  		Votre réservation a échoué. Vous pouvez nous contacter si le problème persiste.
+  	{% endblocktrans %}
+  	</p>
   </div>
 </div>
+{% endblock %}
 
-
-<div id="content-home" class="xgrid">
-    <div class="x12">
-        <h1>{% trans "La réservation est annulé"%}</h1>
-    </div>
-</div>
+{% block footer %}
 {% endblock %}
