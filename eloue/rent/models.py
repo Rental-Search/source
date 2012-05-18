@@ -364,7 +364,7 @@ class Booking(models.Model):
         return self.insurance_fee * self.product.subtype.insurance_taxes
     
     def not_need_ipn(self):
-        return self.product.payment_type == PAYMENT_TYPE.NOPAY
+        return self.payment.NOT_NEED_IPN
         
     @smart_transition(source='authorizing', target='authorized', conditions=[not_need_ipn], save=True)
     def preapproval(self, *args, **kwargs):

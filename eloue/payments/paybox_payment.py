@@ -210,6 +210,7 @@ class PayboxDirectPayment(abstract_payment.AbstractPayment):
 
 
 class PayboxDirectPlusPayment(abstract_payment.AbstractPayment):
+    NOT_NEED_IPN = True
 
     def __init__(self):
         self.paybox_manager = PayboxManager()
