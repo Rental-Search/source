@@ -188,7 +188,7 @@ class PayboxDirectPayment(abstract_payment.AbstractPayment):
             cvv=cvv, amount=amount, reference=booking.pk.hex
         )
 
-    def pay(self):
+    def pay(self, *args, **kwargs):
         booking = self.booking
         amount = str(D(booking.total_amount*100).quantize(0))
         self.paybox_manager.debit(

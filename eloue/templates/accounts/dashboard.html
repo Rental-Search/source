@@ -21,11 +21,20 @@
                     {% endif %}
                 </a>
             </li>
-            <li><a href="{{ borrower_booking }}" class="{% block borrower_booking %}{% endblock %}{% active request  "^/dashboard/borrower/" %}">{% trans "Mes réservations" %}</a></li>
+            <li>
+                <a href="{{ borrower_booking }}" class="{% block borrower_booking %}{% endblock %}{% active request  "^/dashboard/borrower/" %}">
+                    {% trans "Mes réservations" %}
+                    {% with request.user.rentals.authorized.count|add:request.user.rentals.pending.count|add:request.user.rentals.ongoing.count as count %}
+                        {% if count > 0%}
+                            ({{count}})
+                        {% endif %}
+                    {% endwith %}
+                </a>
+            </li>
             <li>
                 <a href="{{ owner_product }}" class="{% block owner_product %}{% endblock %}{% active request "^/dashboard/owner/" %}">
                     {% trans "Mes annonces" %}
-                    {% with request.user.bookings.authorized.count|add:request.user.bookings.pending.count as count %}
+                    {% with request.user.bookings.authorized.count|add:request.user.bookings.pending.count|add:request.user.bookings.ongoing.count as count %}
                         {% if count > 0%}
                             ({{count}})
                         {% endif %}
