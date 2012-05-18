@@ -11,6 +11,11 @@
     <li>{% trans "Paiement de la réservation" %}</li>
   </ul>
   <div class="content-main">
+    <p class="form-header">
+      {% blocktrans %}
+      Lorsque vous cliquez sur "paiement" en bas de cette page, vous ne serez pas débité.(Il s'agit simplement d'une pré-réservation. Vous serez débité que si le propriétaire accepte la demande de location sous 48h)
+      {% endblocktrans %}
+    </p>
     <h2>{% trans "Récapitulatif de votre réservation" %}</h2>
     <form class="form-horizontal" action="" method="POST">
     {% csrf_token %}
@@ -43,10 +48,14 @@
             <td>{{ product.owner.username }}</td>
           </tr>
           <tr>
-            <td colspan="2" style="font-size: 12px;">L'intégralité des informations sur le propriétaire vous seront communiquées après l'acceptation définitive de la réservation par le propriétaire.</td>
+            <td colspan="2" style="font-size: 12px;">
+              {% blocktrans %}
+                L'intégralité des infractions et coordonnées du propriétaire, vous seras communiqué par email s'il accepte la location.
+              {% endblocktrans }
+            </td>
           </td>
           <tr>
-              <th>{% trans "Réservation" %}</th>
+              <th>{% trans "Période de réservation" %}</th>
               <td><b>Du</b> {{preview.started_at|date:"l d F Y H:i"}} <b>au</b> {{preview.ended_at|date:"l d F Y H:i"}}</td>
           </tr> 
           <tr>
@@ -58,7 +67,7 @@
       {% if product.carproduct %}
         <h2>{% trans "Informations sur le conducteur" %}</h2>
       {% else %}
-          <h2>{% trans "Informations sur le locataire" %}</h2>
+          <h2>{% trans "Vos informations" %}</h2>
       {% endif %}
         <table class="table table-bordered booking-resume">
           <tr>

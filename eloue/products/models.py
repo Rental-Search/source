@@ -168,7 +168,7 @@ CAPACITY = Enum ([
 TAX_HORSEPOWER = CAPACITY
 
 PRIVATE_LIFE = Enum([
-    (1, '1', _(u'Appartement/Maison entier')),
+    (1, '1', _(u'Appartement/Maison')),
     (2, '2', _(u'Chambre partagé')),
     (3, '3', _(u'Chambre privée')),
 ])
@@ -375,7 +375,7 @@ class CarProduct(Product):
     model = models.CharField(_(u'modèle'), max_length=30)
 
     # charactersitiques du vehicule
-    seat_number = models.IntegerField(_(u'nombre de siège'), null=True, blank=True, choices=SEAT_NUMBER, default=4)
+    seat_number = models.IntegerField(_(u'nombre de place'), null=True, blank=True, choices=SEAT_NUMBER, default=4)
     door_number = models.IntegerField(_(u'nombre de porte'), null=True, blank=True, choices=DOOR_NUMBER, default=5)
     fuel = models.IntegerField(_(u'énergie'), choices=FUEL, null=True, blank=True, default=1)
     transmission = models.IntegerField(_(u'boite de vitesse'), choices=TRANSMISSION, null=True, blank=True, default=1)
@@ -383,8 +383,8 @@ class CarProduct(Product):
     consumption = models.PositiveIntegerField(_(u'consommation'), null=True, blank=True, choices=CONSUMPTION, default=4)
 
     # info about km included
-    km_included = models.PositiveIntegerField(_(u'kilomètres inclus/jour'), null=True, blank=True, help_text=_(u'Nombre de kilomètres maximum que le locataire peut effectuer en une journée.'))
-    costs_per_km = models.DecimalField(_(u'Prix par kilomètres supplémentaires'), null=True, blank=True, max_digits=8, decimal_places=3, help_text=_(u'Prix du kilomètre supplémentaires si le locataire dépasse le nombre de kilomètre inclus par jour.'))
+    km_included = models.PositiveIntegerField(_(u'kilomètres inclus/jour'), null=True, blank=True, help_text=_(u'Nombre de kilomètres maximum que le locataire peut effectuer par jour.'))
+    costs_per_km = models.DecimalField(_(u'Prix par kilomètres supplémentaires'), null=True, blank=True, max_digits=8, decimal_places=3, help_text=_(u'Prix du kilomètre supplémentaire. Si le locataire dépasse le nombre de kilomètre inclus par jour.'))
 
     # options & accessoires
     air_conditioning = models.BooleanField(_(u'climatisation'))
@@ -448,10 +448,10 @@ class CarProduct(Product):
 class RealEstateProduct(Product):
     
     capacity = models.IntegerField(_(u'capacité'), null=True, blank=True, choices=CAPACITY, default=1, help_text=_(u'Nombre de personne que peux accueillir votre locgement'))
-    private_life = models.IntegerField(_(u'vie privée'),
+    private_life = models.IntegerField(_(u'Type de logement'),
         choices=PRIVATE_LIFE, null=True, blank=True, default=1)
     chamber_number = models.IntegerField(_(u'nombre de chambre'), null=True, blank=True, choices=CAPACITY, default=1)
-    rules = models.TextField(_(u"règle d'utilisation"), max_length=60, null=True, blank=True)
+    rules = models.TextField(_(u"Règles d'utilisation"), max_length=60, null=True, blank=True)
 
     # service_included
     air_conditioning = models.BooleanField(_(u'air conditionné'))

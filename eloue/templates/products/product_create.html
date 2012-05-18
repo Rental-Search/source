@@ -12,6 +12,9 @@
 	</ul>
 	<div class="content-main">
 		<h1>{{ form.title }}</h1>
+		<p class="form-header">
+			{{ form.header }}
+		</p>
 		{% if form.is_multipart %}
 		<form enctype="multipart/form-data" class="form-horizontal" method="post" action="">
 		{% else %}
@@ -72,7 +75,7 @@
 	  				{% endfor %}
 	  				{% if fieldset.name == "price" %}
 	  				<div class="control-group">
-	  					<a href="#" class="more-price">+ {% trans "Ajoutez des prix en fonction de la période" %}</a>
+	  					<a href="#" class="more-price">+ {% trans "Ajoutez des prix en fonction de la durée de location" %}</a>
 	  				</div>
 	  				{% endif %}
   				{% endif %}
