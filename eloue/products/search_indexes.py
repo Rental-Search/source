@@ -14,7 +14,7 @@ from queued_search.indexes import QueuedSearchIndex
 from eloue.products.models import Alert, Product, CarProduct, RealEstateProduct
 from eloue.rent.models import Booking
 
-__all__ = ['ProductIndex', 'product_search', 'AlertIndex', 'alert_search', 'car_search', 'realestate_search']
+__all__ = ['ProductIndex', 'product_search', 'product_only_search', 'AlertIndex', 'alert_search', 'car_search', 'realestate_search']
 
 
 class ProductIndex(QueuedSearchIndex):
