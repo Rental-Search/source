@@ -130,16 +130,6 @@ LeaveComment = CommentLinkWidget(
 	text=u'Commenter la location',
 )
 
-ViewComment = ViewLinkWidget(
-	url_builder=lambda request, booking: reverse(
-		viewname='eloue.accounts.views.view_comment',
-		kwargs={
-			'booking_id': booking.pk.hex,
-		}
-	),
-	text=u'Regarder le commentaire',
-)
-
 SendMessageToBorrower = LinkWidget(
 	url_builder=lambda request, booking: reverse(
 		viewname='eloue.products.views.message_create', 
@@ -167,12 +157,12 @@ borrower = {
     'canceled': (), 
    	'pending': (Cancel, ),
     'ongoing': (Incident, ), 
-    'ended': (Incident, LeaveComment, ViewComment, ),
+    'ended': (Incident, LeaveComment),
     'incident': (), 
     'refunded': (),
     'deposit': (),
-    'closing': (Incident, SendMessageToOwner, LeaveComment, ViewComment),
-    'closed': (Incident, SendMessageToOwner, LeaveComment, ViewComment),
+    'closing': (Incident, SendMessageToOwner, LeaveComment),
+    'closed': (Incident, SendMessageToOwner, LeaveComment),
     'outdated': (),
 }
 
@@ -183,12 +173,12 @@ owner = {
     'canceled': (), 
    	'pending': (Cancel, ),
     'ongoing': (Incident, ), 
-    'ended': (Close, Incident, LeaveComment, ViewComment, ),
+    'ended': (Close, Incident, LeaveComment),
     'incident': (), 
     'refunded': (),
     'deposit': (),
-    'closing': (Incident, SendMessageToBorrower, LeaveComment, ViewComment),
-    'closed': (Incident, SendMessageToBorrower, LeaveComment, ViewComment), 
+    'closing': (Incident, SendMessageToBorrower, LeaveComment),
+    'closed': (Incident, SendMessageToBorrower, LeaveComment), 
     'outdated': (),
 }
 
