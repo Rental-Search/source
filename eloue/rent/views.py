@@ -214,6 +214,14 @@ def offer_reject(request, booking_id):
     else:
         return HttpResponseForbidden()
 
+@login_required
+@ownership_required(model=Booking, object_key='booking_id', ownership=['owner', 'borrower'])
+def booking_contract(request, booking_id):
+    booking = get_object_or_404(Booking, pk=booking_id, state=Booking.STATE.PENDING)
+    content = booking.product.subtype.contract_generator(booking).getvalue()
+    response = HttpResponse(content, content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment; filename=contrat.pdf'
+    return response
 
 @login_required
 @require_POST

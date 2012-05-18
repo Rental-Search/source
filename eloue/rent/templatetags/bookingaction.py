@@ -103,6 +103,14 @@ Incident = LinkWidget(
 	text=u'Signaler une incident'
 )
 
+Contract = LinkWidget(
+	url_builder=lambda request, booking: reverse(
+		'eloue.rent.views.booking_contract', 
+		kwargs={'booking_id': booking.pk.hex}
+	),
+	text=u'Télécharger le contract de nouveau'
+)
+
 class CommentLinkWidget(LinkWidget):
 	def condition(self, request, booking):
 		from django.core.exceptions import ObjectDoesNotExist
@@ -162,7 +170,7 @@ borrower = {
     'authorized': (Cancel, SendMessageToOwner, ),
     'rejected': (SendMessageToOwner, ),
     'canceled': (), 
-   	'pending': (Cancel, ),
+   	'pending': (Cancel, Contract, ),
     'ongoing': (Incident, ), 
     'ended': (Incident, LeaveComment),
     'incident': (), 
@@ -178,7 +186,7 @@ owner = {
     'authorized': (Accept, Refuse, SendMessageToBorrower),
     'rejected': (),
     'canceled': (), 
-   	'pending': (Cancel, ),
+   	'pending': (Cancel, Contract, ),
     'ongoing': (Incident, ), 
     'ended': (Close, Incident, LeaveComment),
     'incident': (), 
