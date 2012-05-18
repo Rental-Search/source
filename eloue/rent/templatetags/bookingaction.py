@@ -84,7 +84,7 @@ class PostForm(TemplateWidgetAction):
 
 Accept = PostForm('Accepter', 'eloue.rent.views.booking_accept', BOOKING_STATE.PENDING)
 Refuse = PostForm('Refuser', 'eloue.rent.views.booking_reject', BOOKING_STATE.REJECTED)
-Cancel = PostForm('Annuler', 'eloue.rent.views.booking_cancel', BOOKING_STATE.CANCELED)
+Cancel = PostForm('Annuler la location', 'eloue.rent.views.booking_cancel', BOOKING_STATE.CANCELED)
 Close = PostForm(u'Clôturer', 'eloue.rent.views.booking_close', BOOKING_STATE.CLOSING)
 
 
@@ -101,7 +101,7 @@ Contract = LinkWidget(
 		'eloue.rent.views.booking_contract', 
 		kwargs={'booking_id': booking.pk.hex}
 	),
-	text=u'Télécharger le contract de nouveau'
+	text=u'Télécharger le contract de location'
 )
 
 class CommentLinkWidget(LinkWidget):

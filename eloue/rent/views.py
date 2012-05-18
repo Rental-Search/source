@@ -277,7 +277,7 @@ def booking_close(request, booking_id):
     if request.POST:
         booking.pay()
         booking.send_closed_email()
-        messages.success(request, _(u"Cette réservation a bien été cloturée et le virement effectué. Si vous voulez vous pouvez ajouter une commentaire et une note sur le déroulement de la location."))
+        messages.success(request, _(u"Cette réservation a bien été cloturée et le virement effectué. Si vous voulez vous pouvez ajouter un commentaire et une note sur le déroulement de la location."))
         return redirect(reverse('eloue.accounts.views.comments')+'#'+booking.pk.hex)
     return redirect(booking)
 
@@ -292,5 +292,6 @@ def booking_incident(request, booking_id):
         send_mail(u"Déclaration d'incident", text, request.user.email, ['contact@e-loue.com'])
         booking.state = Booking.STATE.INCIDENT
         booking.save()
+        messages.success(request, _(u'Nous avons bien pris en compte la déclaration de l\'incident. Nous vous contacterons rapidement.'))
         return redirect('booking_detail', booking_id=booking_id)
     return direct_to_template(request, 'rent/booking_incident.html', extra_context={'booking': booking, 'form': form})
