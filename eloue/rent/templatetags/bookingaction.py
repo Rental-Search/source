@@ -179,7 +179,7 @@ owner = {
     'authorized': (Accept, Refuse, SendMessageToBorrower),
     'rejected': (),
     'canceled': (), 
-   	'pending': (Cancel, Contract, ),
+   	'pending': (Contract, ),
     'ongoing': (Incident, ), 
     'ended': (Close, Incident, LeaveComment),
     'incident': (), 
