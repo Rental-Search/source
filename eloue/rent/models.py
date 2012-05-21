@@ -387,6 +387,10 @@ class Booking(models.Model):
     @transition(source='pending', target='ongoing', save=True)
     def activate(self):
         pass
+
+    @transition(source='ongoing', target='ended', save=True)
+    def end(self):
+        self.send_ended_email()
     
     @transition(source='ended', target='closing', save=True)
     @smart_transition(source='closing', target='closed', conditions=[not_need_ipn], save=True)
