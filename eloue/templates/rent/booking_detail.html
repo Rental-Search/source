@@ -51,6 +51,14 @@
             <th>{% trans "Montant" %}</th>
             <td class="align-center"><b>{{booking.total_amount}} &euro;</b></td>
         </tr>
+        {% if request.user == booking.owner %}
+        {% if booking.state == booking.STATE.PENDING or booking.state == booking.STATE.ENDED or booking.state == booking.STATE.CLOSED %}    
+        <tr>
+            <th>{% trans "Commission"%}</th>
+            <td class="align-center"><b>{{booking.commission|floatformat:2}} &euro;</b></td>
+        </tr>
+        {% endif %}
+        {% endif %}
         {% if not booking.state == "rejected" %}
         <tr class="b-action">
             <td colspan="2">{% bookingaction request booking %}</td>
@@ -63,14 +71,15 @@
     <h2>{% trans "Information sur le propriétaire" %}</h2>
     <table class="table table-bordered booking-resume">
     <tr>
-        <td class="b-profil-avatar" style="width: 60px;" rowspan="3">
+        <td class="b-profil-avatar" style="width: 100px; border-right: 1px solid #DDD;" rowspan="3">
             {% if booking.owner.avatar %}
-                <img src="{{ booking.owner.avatar.thumbnail.url }}" width="60" height="60" alt="">
+                <img src="{{ booking.owner.avatar.profil.url }}" width="100" height="100" alt="">
             {% else %}
-                <img src="{{ MEDIA_URL }}images/default_avatar.png" width="60" height="60" alt="">
+                <img src="{{ MEDIA_URL }}images/default_avatar.png" width="100" height="100" alt="">
             {% endif %}
+            <span style="margin-top: 0; margin-left: 10px;" class="stars empty"><span class="stars filled_{{ booking.product.average_note }}"></span></span>
         </td>
-        <td style="text-align: center;">
+        <td style="text-align: center; border-left: none;">
             <a href="{{ booking.owner.get_absolute_url }}">
             {% if booking.state == booking.STATE.AUTHORIZED or booking.state == booking.STATE.REJECTED %}
                 {{ booking.owner.username|capfirst }}
@@ -106,14 +115,15 @@
     <h2>{%  trans "Informations sur le locataire" %}</h2>
     <table class="table table-bordered booking-resume">
     <tr>
-        <td class="b-profil-avatar" style="width: 60px;" rowspan="3">
+        <td class="b-profil-avatar" style="width: 100px; border-right: 1px solid #DDD;" rowspan="3">
             {% if booking.borrower.avatar %}
-                <img src="{{ booking.borrower.avatar.thumbnail.url }}" width="60" height="60" alt="">
+                <img src="{{ booking.borrower.avatar.profil.url }}" width="100" height="100" alt="">
             {% else %}
-                <img src="{{ MEDIA_URL }}images/default_avatar.png" width="60" height="60" alt="">
+                <img src="{{ MEDIA_URL }}images/default_avatar.png" width="100" height="100" alt="">
             {% endif %}
+            <span style="margin-top: 0; margin-left: 10px;" class="stars empty"><span class="stars filled_{{ booking.product.average_note }}"></span></span>
         </td>
-        <td style="text-align: center;">
+        <td style="text-align: center; border-left: none;">
             <a href="{{ booking.borrower.get_absolute_url }}">
             {% if booking.state == booking.STATE.AUTHORIZED or booking.state == booking.STATE.REJECTED %}
                 {{ booking.borrower.username|capfirst }}

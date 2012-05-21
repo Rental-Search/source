@@ -276,7 +276,10 @@
                     </div>
                     {% if product.carproduct %}
                     <ul class="service-included">
-                        <li>215 km inclus par jour puis 0,14 c/km supplémentaire</li>
+                        <li>
+                            {% if product.km_included %}{{ product.km_included }} km inclus par jour {% endif %} 
+                            {% if product.costs_per_km %}{% if product.km_included %}puis {% endif %}{{ product.costs_per_km|floatformat:2 }} &euro;/km supplémentaire{% endif %}
+                        </li>
                         <li>Assurance vol et accident incluse</li>
                     </ul>
                     {% endif %}
