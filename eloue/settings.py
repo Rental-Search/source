@@ -266,6 +266,7 @@ PIPELINE_JS = {
             'js/chosen.jquery.min.js',
             'js/bootstrap-alert.js',
             'js/jquery.cookie.js',
+            'js/jquery.cycle.all.latest.js',
             'js/application2.js',
             ),
         'output_filename': 'js/application2.r?.js',
