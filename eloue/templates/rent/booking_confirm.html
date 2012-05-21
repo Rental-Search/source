@@ -109,15 +109,17 @@
               {% include "rent/partials/condition_assurance.html" %}
             </td>
           </tr>
+          {% if product.deposit_amount != 0 %}
           <tr>
             <th>
               {% trans "Dépôt de garantie" %}
             </th>
             <td>
-              2000 &euro;<br>
+              {{ product.deposit_amount }}<br>
               (Uniquement débité en cas de dommage constaté et avec votre accord)
             </td>
           </tr>
+          {% endif %}
         </table>
         <h2>{% trans "Paiement" %}</h2>
         <fieldset id="credit-card-form">
