@@ -1,5 +1,5 @@
 {% load i18n %}
-{% if is_multipart %}
+{% if form.is_multipart %}
 <form enctype="multipart/form-data" class="form-horizontal" method="post" action="">
 {% else %}
 <form class="form-horizontal" method="post" action="">

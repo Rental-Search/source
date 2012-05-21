@@ -246,7 +246,7 @@ def booking_accept(request, booking_id):
 @login_required
 @ownership_required(model=Booking, object_key='booking_id', ownership=['owner'])
 def booking_reject(request, booking_id):
-    booking = get_object_or_404(Booking.on_site, pk=booking_id)
+    booking = get_object_or_404(Booking.on_site, pk=booking_id, state=Booking.STATE.AUTHORIZED)
     if request.method == "POST":
         form = BookingStateForm(request.POST or None,
             initial={'state': Booking.STATE.REJECTED},
@@ -284,7 +284,7 @@ def booking_close(request, booking_id):
     if request.POST:
         booking.pay()
         booking.send_closed_email()
-        messages.success(request, _(u"Cette réservation a bien été cloturée et le virement effectué. Si vous voulez vous pouvez ajouter un commentaire et une note sur le déroulement de la location."))
+        messages.success(request, _(u"Cette réservation a bien été cloturée. Si vous voulez vous pouvez ajouter un commentaire et une note sur le déroulement de la location."))
         return redirect(reverse('eloue.accounts.views.comments')+'#'+booking.pk.hex)
     return redirect(booking)
 
