@@ -260,13 +260,11 @@ class Booking(models.Model):
     
     def send_borrower_receipt(self):
         context = {'booking': self}
-        #XXX: finish the body of the mails
         message = create_alternative_email('rent/emails/borrower_receipt', context, settings.DEFAULT_FROM_EMAIL, [self.borrower.email])
         message.send()
 
     def send_owner_receipt(self):
         context = {'booking': self}
-        #XXX: finish the body of the mails
         message = create_alternative_email('rent/emails/owner_receipt', context, settings.DEFAULT_FROM_EMAIL, [self.owner.email])
         message.send()
 
