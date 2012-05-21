@@ -71,11 +71,13 @@
             {% endif %}
         </td>
         <td style="text-align: center;">
+            <a href="{{ booking.owner.get_absolute_url }}">
             {% if booking.state == booking.STATE.AUTHORIZED or booking.state == booking.STATE.REJECTED %}
                 {{ booking.owner.username|capfirst }}
             {% else %}
                 {{ booking.owner.first_name|capfirst }} {{ booking.last_name|capfirst }}
             {% endif %}
+            </a>
         </td>
     </tr>
     {% if booking.state == booking.STATE.AUTHORIZED or booking.state == booking.STATE.REJECTED %}
@@ -112,11 +114,13 @@
             {% endif %}
         </td>
         <td style="text-align: center;">
+            <a href="{{ booking.borrower.get_absolute_url }}">
             {% if booking.state == booking.STATE.AUTHORIZED or booking.state == booking.STATE.REJECTED %}
                 {{ booking.borrower.username|capfirst }}
             {% else %}
                 {{ booking.borrower.first_name|capfirst }} {{ booking.borrower.last_name|capfirst }}
             {% endif %}
+            </a>
         </td>
     </tr>
     {% if booking.state == booking.STATE.AUTHORIZED or booking.state == booking.STATE.REJECTED %}
