@@ -12,9 +12,11 @@
   {% block head %}
   {% compressed_css 'master' %}
   <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
+
   {% endblock %}
   <!--[if lt IE 9]>
       <script src="{{ MEDIA_URL }}js/html5.js"></script>
+      {% compressed_css 'ie' %}
   <![endif]-->
 <!-- <script type="text/javascript">
     var _gaq = _gaq || [];
