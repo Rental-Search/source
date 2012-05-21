@@ -247,16 +247,23 @@ def booking_accept(request, booking_id):
 @ownership_required(model=Booking, object_key='booking_id', ownership=['owner'])
 def booking_reject(request, booking_id):
     booking = get_object_or_404(Booking.on_site, pk=booking_id)
-    form = BookingStateForm(request.POST or None,
-        initial={'state': Booking.STATE.REJECTED},
-        instance=booking)
-    if form.is_valid():
-        booking = form.save()
-        booking.send_rejection_email()
-        GoalRecord.record('rent_object_rejected', WebUser(request))
-        messages.success(request, _(u"Cette réservation a bien été refusée"))
-    messages.error(request, _(u"Cette réservation n'a pu être refusée"))
-    return redirect_to(request, booking.get_absolute_url())
+    if request.method == "POST":
+        form = BookingStateForm(request.POST or None,
+            initial={'state': Booking.STATE.REJECTED},
+            instance=booking
+        )
+        if form.is_valid():
+            booking = form.save()
+            booking.send_rejection_email()
+            GoalRecord.record('rent_object_rejected', WebUser(request))
+            messages.success(request, _(u"Cette réservation a bien été refusée"))
+        else:
+            messages.error(request, _(u"Cette réservation n'a pu être refusée"))
+    else:
+        form = BookingStateForm(
+            initial={'state': Booking.STATE.REJECTED},
+            instance=booking)
+    return redirect(booking)
 
 
 @login_required
