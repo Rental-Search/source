@@ -246,7 +246,7 @@ def booking_accept(request, booking_id):
 @login_required
 @ownership_required(model=Booking, object_key='booking_id', ownership=['owner'])
 def booking_reject(request, booking_id):
-    booking = get_object_or_404(Booking.on_site, pk=booking_id)
+    booking = get_object_or_404(Booking.on_site, pk=booking_id, state=Booking.STATE.AUTHORIZED)
     if request.method == "POST":
         form = BookingStateForm(request.POST or None,
             initial={'state': Booking.STATE.REJECTED},
