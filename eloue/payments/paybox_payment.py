@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-import httplib, urllib, urlparse, ssl
+import httplib, urllib, urlparse, ssl, os
 import datetime, random, contextlib, uuid
 from decimal import Decimal as D
 
@@ -43,8 +43,9 @@ class HTTPSConnection(httplib.HTTPConnection):
     default_port = httplib.HTTPS_PORT
     def connect(self):
         httplib.HTTPConnection.connect(self)
-        self.sock = ssl.wrap_socket(self.sock, cert_reqs=ssl.CERT_REQUIRED, ca_certs='eloue/payments/cacerts.txt')
+        self.sock = ssl.wrap_socket(self.sock, cert_reqs=ssl.CERT_REQUIRED, ca_certs=os.path.normpath(os.path.join(os.path.dirname(__file__), 'cacerts.txt')))
         match_hostname(self.sock.getpeercert(), self.host)
+
 
 class PayboxManager(object):
     
