@@ -264,6 +264,11 @@ $(document).ready(function() {
             return false;
         }
     });
+
+    //loading for accept action and refuse action booking
+    $('button.btn-booking-action.pending, button.btn-booking-action.rejected').click(function () {
+        $('tr.b-action').addClass('loading');
+    });
     
     //fbconnect
     $('#fbconnect').click(function () {
