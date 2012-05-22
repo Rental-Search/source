@@ -254,6 +254,16 @@ $(document).ready(function() {
     bookingCreate.change(function(event) {
         bookingPrice($(this));
     });
+
+    //Confirm cancel booking
+    $(".b-action button.btn-booking-action.canceled").click(function () {
+        answer = confirm('Etes-vous sur de vouloir annuler cette réservation ?');
+        if (answer == true) {
+            return true;
+        } else {
+            return false;
+        }
+    });
     
     //fbconnect
     $('#fbconnect').click(function () {
