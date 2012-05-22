@@ -60,7 +60,7 @@ LANGUAGES = (
     ('en-gb', ugettext('English')),
 )
 
-SITE_ID = 11
+SITE_ID = 1
 DEFAULT_SITES = getattr(local, "DEFAULT_SITES", [1, 2, 3, 11])
 
 # If you set this to False, Django will make some optimizations so as not
@@ -266,6 +266,7 @@ PIPELINE_JS = {
             'js/chosen.jquery.min.js',
             'js/bootstrap-alert.js',
             'js/jquery.cookie.js',
+            'js/jquery.cycle.all.latest.js',
             'js/application2.js',
             ),
         'output_filename': 'js/application2.r?.js',

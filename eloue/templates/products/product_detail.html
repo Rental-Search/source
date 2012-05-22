@@ -276,7 +276,10 @@
                     </div>
                     {% if product.carproduct %}
                     <ul class="service-included">
-                        <li>215 km inclus par jour puis 0,14 c/km supplémentaire</li>
+                        <li>
+                            {% if product.km_included %}{{ product.km_included }} km inclus par jour {% endif %} 
+                            {% if product.costs_per_km %}{% if product.km_included %}puis {% endif %}{{ product.costs_per_km|floatformat:2 }} &euro;/km supplémentaire{% endif %}
+                        </li>
                         <li>Assurance vol et accident incluse</li>
                     </ul>
                     {% endif %}
@@ -389,6 +392,9 @@
                         </p>
                         <p><input type="submit" class="btn-booking" value="Réservez"/></p>
                     {% endblocktrans %}
+                        <p class="booking-info">
+                            {% trans "Il s'agit simplement d'une pré-réservation. Vous ne serez débité que si le propriétaire accepte la demande de location sous 24h."%}
+                        </p>
                     </form>
                 </div><!-- bottom-block -->
         </div>{# booking-block #}
