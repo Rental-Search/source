@@ -141,24 +141,6 @@
               </div>{# controls #}
             </div>{# control-group #}
           {% endif %}
-          {% if form.cvv %}
-            <div class="control-group {% if form.cvv.errors %} error {% endif %}">
-              <label class="control-label" for="{{ form.cvv.id_for_label }}">
-                {{ form.cvv.label }}
-              </label>
-              <div class="controls">
-                {{ form.cvv }}
-                <p class="help-block">{{ form.cvv.help_text}}</p>
-                {% if form.cvv.errors %}
-                <span class="help-inline">
-                {% for error in form.cvv.errors %}
-                  {{ error|escape }}
-                {% endfor %}
-                </span>
-                {% endif %}
-              </div>{# controls #}
-            </div>{# control-group #}
-          {% endif %}
           {% if form.expires %}
             <div class="control-group {% if form.expires.errors %} error {% endif %}">
               <label class="control-label" for="{{ form.expires.id_for_label }}">
@@ -188,6 +170,24 @@
                 {% if form.holder_name.errors %}
                 <span class="help-inline">
                 {% for error in form.holder_name.errors %}
+                  {{ error|escape }}
+                {% endfor %}
+                </span>
+                {% endif %}
+              </div>{# controls #}
+            </div>{# control-group #}
+          {% endif %}
+          {% if form.cvv %}
+            <div class="control-group {% if form.cvv.errors %} error {% endif %}">
+              <label class="control-label" for="{{ form.cvv.id_for_label }}">
+                {{ form.cvv.label }}
+              </label>
+              <div class="controls">
+                {{ form.cvv }}
+                <p class="help-block">{{ form.cvv.help_text}}</p>
+                {% if form.cvv.errors %}
+                <span class="help-inline">
+                {% for error in form.cvv.errors %}
                   {{ error|escape }}
                 {% endfor %}
                 </span>
