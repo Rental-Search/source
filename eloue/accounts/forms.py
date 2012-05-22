@@ -601,7 +601,7 @@ class BookingCreditCardForm(CreditCardForm):
 
 
 class CvvForm(forms.ModelForm):
-    cvv = forms.CharField(label=_(u'Veuillez resaisir votre cryptogram visuel'), min_length=3, max_length=4, widget=forms.TextInput(attrs={'placeholder': 'E-loue ne stocke pas le cryptogram visuel, vous devriez resaisir apres chaque payment pour des raison de securite'}))
+    cvv = forms.CharField(label=_(u'Veuillez resaisir votre cryptogram visuel'), min_length=3, max_length=4, widget=forms.TextInput())
     
     def __init__(self, *args, **kwargs):
         if 'instance' not in kwargs:

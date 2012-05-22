@@ -139,7 +139,7 @@ $(document).ready(function() {
 
 
     var exists = $("input[name$='exists']:checked").val();
-    passwordInput = $("input[name$='password']");
+    passwordInput = $("input[name$='-password']");
     if (passwordInput.attr('type') != 'hidden') {
         if (parseInt(exists, 10)) {
             passwordInput.removeAttr('disabled');
