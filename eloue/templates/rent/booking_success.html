@@ -8,15 +8,44 @@
 	<ul class="breadcrumb">
     	<li><a href="{% url home %}">{% trans "Accueil" %}</a></li>
     	<li><a href="{{ booking.product.get_absolute_url }}">{% trans "Réservation" %}</a></li>
-    	<li>{% trans "Réservation terminée avec succès" %}</li>
+    	<li>{% trans "Réservation effectuée avec succès" %}</li>
   	</ul>
   	<div class="content-main">
-  		<h2>{% trans "Réservation terminée avec succès" %}</h2>
-  		<p style="margin-bottom: 20px;">
+  		<h2>{% trans "Réservation effectuée avec succès !" %}</h2>
+  		<p style="margin-bottom: 40px;">
   			{% blocktrans %}
-  			Nous avons bien pris en comtpe votre réservation. Le propriétaire a été informé, il va vous répondre le plus rapidement possible (24h maximum)
+  			Nous avons bien pris en comtpe votre réservation. Le propriétaire a été informé, il va vous répondre le plus rapidement possible (24h maximum).
   			{% endblocktrans %}
   		</p>
+      <h2>{% trans "Résumé de la réservation" %}</h2>
+      <table class="table table-bordered booking-resume">
+          <tbody>
+              <tr>
+                  <th class="b-state">{{ booking.get_state_display }}</th>
+                  <td><a href="{{booking.product.get_absolute_url}}" class="b-title">{{booking.product.summary|capfirst}}</a></td>
+              </tr>
+              <tr>
+                <th>{% trans "Propriétaire"%}</th>
+                <td style="text-align: center;">
+                  <a href="{{booking.owner.get_absolute_url }}">{{ booking.owner.username }}</a>
+                </td>
+              </tr>
+              <tr>
+                  <th>{% trans "Début" %}</th>
+                  <td class="align-center">{{booking.started_at|date:"l d F Y H:i"|capfirst}}</td>
+              </tr> 
+              <th>{% trans "Fin" %}</th>
+                  <td class="align-center">{{booking.ended_at|date:"l d F Y H:i"|capfirst}}</td>
+              </tr>
+              <tr>
+                  <th>{% trans "Montant" %}</th>
+                  <td class="align-center"><b>{{booking.total_amount}} &euro;</b></td>
+              </tr>
+          </tbody>
+      </table>
+      <p style="text-align: center; margin-bottom: 20px;">
+        <iframe src="//www.facebook.com/plugins/likebox.php?href=https%3A%2F%2Fwww.facebook.com%2Flocation.eloue&amp;width=224&amp;height=62&amp;colorscheme=light&amp;show_faces=false&amp;border_color=%23F3F8FA&amp;stream=false&amp;header=false&amp;appId=255056637886187" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:224px; height:62px;" allowTransparency="true"></iframe>
+      </p>
   	</div>
 </div>
 {% endblock %}
