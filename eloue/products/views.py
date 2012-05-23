@@ -94,6 +94,7 @@ def homepage_object_list(request, search_index, offset=0):
             'product_list': last_added[offset*10:(offset+1)*10],
             'truncation': 28
         },
+        context_instance=RequestContext(request),
         mimetype='text/plain; charset=utf-8'
     )
 
