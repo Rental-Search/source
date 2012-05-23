@@ -30,14 +30,12 @@ TYPES = {
 }
 
 class PayboxException(abstract_payment.PaymentException):
-    
-    def __init__(self, code, message):
-        self.code = code
-        self.message = message
 
     def __unicode__(self):
-        return u"PayboxError with code {code} and message \"{message}\"".format(**self.__dict__)
+        return u"PayboxError with code {0} and message \"{1}\"".format(*self.args)
 
+    def __str__(self):
+        return unicode(self).encode('utf-8')
 
 class HTTPSConnection(httplib.HTTPConnection):
     default_port = httplib.HTTPS_PORT
@@ -76,7 +74,7 @@ class PayboxManager(object):
             response = urlparse.parse_qs(response.read())
             response_code = response['CODEREPONSE'][0]
             if int(response_code):
-                raise PayboxException(response_code, response['COMMENTAIRE'][0].decode('latin1').encode('utf-8'))
+                raise PayboxException(response_code, response['COMMENTAIRE'][0].decode('latin1'))
             return response
 
     def subscribe(self, member_id, card_number, expiration_date, cvv):
