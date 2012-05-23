@@ -177,6 +177,13 @@
               </div>{# controls #}
             </div>{# control-group #}
           {% endif %}
+          {% if not form.holder_name %}
+          <div class="control-group">
+            <div class="control creditcard-already-save">
+              Vos coordonnées bancaire sont déjà enregistrées. Il suffit de retaper les chifres au dos de votre carte banvcaire pour valider la réservation.
+            </div>
+          </div>
+          {% endif %}
           {% if form.cvv %}
             <div class="control-group {% if form.cvv.errors %} error {% endif %}">
               <label class="control-label" for="{{ form.cvv.id_for_label }}">

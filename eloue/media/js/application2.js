@@ -139,7 +139,7 @@ $(document).ready(function() {
 
 
     var exists = $("input[name$='exists']:checked").val();
-    passwordInput = $("input[name$='password']");
+    passwordInput = $("input[name$='-password']");
     if (passwordInput.attr('type') != 'hidden') {
         if (parseInt(exists, 10)) {
             passwordInput.removeAttr('disabled');
@@ -263,6 +263,11 @@ $(document).ready(function() {
         } else {
             return false;
         }
+    });
+
+    //loading for accept action and refuse action booking
+    $('button.btn-booking-action.pending, button.btn-booking-action.rejected').click(function () {
+        $('tr.b-action').addClass('loading');
     });
     
     //fbconnect

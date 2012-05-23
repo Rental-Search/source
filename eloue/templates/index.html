@@ -73,8 +73,8 @@
     </div>{# product-home #}
     <ul class="args">
         <li class="arg-how">
-            <a href="#">
-                <h4>{% trans "Témoignage" %}</h4>
+            <a href="/temoignages/">
+                <h4>{% trans "Témoignages" %}</h4>
             </a>
         </li>
         <li class="arg-iphoneApp">
@@ -85,14 +85,16 @@
         </li>
         <li class="arg-garanties">
             <a href="/assurance-tranquillite/">
-                <img src="{{ MEDIA_URL }}images/garanties_e-loue.png" width="204" height="50" />
-                <h4>{% trans "Location garantie" %}</h4>
+                <img src="{{ MEDIA_URL }}images/garanties.png" width="204" height="88" alt="{% trans "Les garanties e-loue"%}" />
+                <h4>{% trans "La garantie" %}</h4>
+                <img class="small_logo" src="{{ MEDIA_URL }}images/small_logo.png" width="71" height="24" alt="{% trans "Location garantie"%}"/>
             </a>
         </li><!-- arg-garanties -->
         <li class="arg-fb">
             <div class="fb-iframe">
                 <iframe src="//www.facebook.com/plugins/likebox.php?href=https%3A%2F%2Fwww.facebook.com%2Flocation.eloue&amp;width=224&amp;height=62&amp;colorscheme=light&amp;show_faces=false&amp;border_color=%23F3F8FA&amp;stream=false&amp;header=false&amp;appId=255056637886187" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:224px; height:62px;" allowTransparency="true"></iframe>
             </div>
+            <h4>{% trans "Communauté"%}</h4>
         </li>
     </ul>{# args #}
     <div class="new-profils">

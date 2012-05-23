@@ -416,8 +416,8 @@ XPF_EXCHANGE_RATE = '0.00838'
 REPLACE_STRING = getattr(local, "REPLACE_STRING", "XXXXXX")
 
 DEFAULT_LOCATION = getattr(local, "DEFAULT_LOCATION", {
-    'city': None,
-    'coordinates': (46.227637999999999, 2.2137490000000071),
+    'city': u'Paris',
+    'coordinates': (48.856614, 2.3522219),
     'country': u'France',
     'fallback': None,
     'radius': 550.0,
