@@ -23,7 +23,7 @@ class ProductWizard(MultiPartFormWizard):
 
     def __init__(self, *args, **kwargs):
         super(ProductWizard, self).__init__(*args, **kwargs)
-        self.title = _(u'Ajouter une annonce')
+        self.title = _(u'Déposer une annonce')
 
     def done(self, request, form_list):
         super(ProductWizard, self).done(request, form_list)

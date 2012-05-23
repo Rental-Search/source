@@ -35,21 +35,6 @@
                 <a class="btn-contactme" href={% url patron_message_create recipient_username=patron.slug %}>{% trans "Contactez-moi" %}</a>
             </div>{# profil-description #}
         </div>{# profil-block #}
-        {% if patron.facebooksession or patron.is_verified == 'VERIFIED' or patron.is_confirmed %}
-        <div class="profil-block">
-            <ul class="profil-verification">
-                {% if patron.facebooksession %}
-                    <li class="fb-verification">Compte Facebook vérifié</li>
-                {% endif %}
-                {% if patron.is_verified == 'VERIFIED' %}
-                    <li class="pp-account-verification">Compte PayPal vérifié</li>
-                {% endif %}
-                {% if patron.is_confirmed %}
-                    <li class="pp-email-verification">Email PayPal vérifié</li>
-                {% endif %}
-            </ul>
-        </div>{# profil-block #}
-        {% endif %}
         {% if patron.work or patron.school or patron.languages.count %}
         <div class="profil-block">
             <h3>Plus d'info</h3>

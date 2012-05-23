@@ -8,7 +8,7 @@
 <div class="container-main">
     <ul class="breadcrumb">
     	<li><a href="{% url home %}">{% trans "Accueil" %}</a></li>
-    	<li>{% trans "Ajouter une annonce" %}</li>
+    	<li>{% trans "Déposer une annonce" %}</li>
     </ul>
     <div id="publish-new-ad">
         <h1 class="publish-intro">
@@ -32,7 +32,7 @@
                     <div class="ht-f-desc">
                         <span>{% trans "Tarif"%}</span><br>
                         {% trans "Pas de frais d'inscription"%}<br>
-                        {% trans "Mise en location GRATUIT"%}<br>
+                        {% trans "Mise en location GRATUITE"%}<br>
                         {% trans "Frais de 20% sur la location (seulement si vous louez)"%}<br>
                     </div>
                 </li>
@@ -44,7 +44,7 @@
                         <span>{% trans "Fléxibilité"%}</span><br>
                         {% trans "Possibilité de refuser une location"%}<br>
                         {% trans "Gestion de votre calendrier de disponibilités"%}<br>
-                        {% trans "Communiquez avec les locataire par messagerie"%}<br>
+                        {% trans "Communiquez avec les locataires par messagerie"%}<br>
                     </div>
                 </li>
                 <li>
@@ -52,33 +52,33 @@
                     <div class="ht-f-desc">
                         <span>Forte visibilité</span><br>
                         {% trans "Annonce visible sur les moteurs de recherche."%}<br>
-                        {% trans "Parution dans la presse"%}<br>
-                        {% trans "Votre annonce sera visible sur les réseaux sociaux"%}<br>
+                        {% trans "Parutions dans la presse"%}<br>
+                        {% trans "Annonce sera visible sur les réseaux sociaux"%}<br>
                     </div>
                 </li>
             </ul>
         </div>{# advantage #}
         <div class="product-type">
             <ul>
-                <li style="height: 54px;">{% trans "Assurance comprise avec MMA : Casse, Vol, responsabilité civile, dépannage 24h/24h"%} <br><a href=\"#\">({% trans "en savoir plus"%})</a></li>
-                <li>{% trans "Rejoignez la communauté des 40 000 e-loueurs"%}</li>
-                <li>{% trans "Les e-loueurs de voiture gagnent en moyennent 300&euro; par mois."%}</li>
+                <li style="height: 54px;">{% trans "Assurance comprise avec MMA : Casse, Vol, responsabilité civile, dépannage 24h/24h"%} <br><a href="/assurance-tranquillite/">({% trans "en savoir plus"%})</a></li>
+                <li>{% trans "Rejoignez la communauté de plus de 40 000 e-loueurs"%}</li>
+                <li>{% trans "Les e-loueurs de voitures gagnent en moyennent 300&euro; par mois."%}</li>
             </ul>
             <a href="{% url car_product_create %}" class="btn">Ajouter une voiture</a>
         </div>{# car-product-create #}
         <div class="product-type">
             <ul>
-                <li style="height: 54px;">{% trans "Assurance comprise avec Europe Assistance"%}<br><a href=\"#\">({% trans "en savoir plus"%})</a></li>
-                <li>{% trans "Rejoignez la communauté des 40 000 e-loueurs"%}</li>
-                <li>{% trans "Les e-loueurs d'appartement gagnent en moyennent 350&euro; par mois."%}</li>
+                <li style="height: 54px;">{% trans "Assurance comprise avec Europe Assistance"%}<br><a href="/assurance-tranquillite/">({% trans "en savoir plus"%})</a></li>
+                <li>{% trans "Rejoignez une communauté de plus de 40 000 e-loueurs"%}</li>
+                <li>{% trans "Les e-loueurs d'appartements gagnent en moyennent 350&euro; par mois."%}</li>
             </ul>
             <a href="{% url real_estate_product_create %}" class="btn">Ajouter un logement</a>
         </div>{# real-estate-product-create #}
         <div class="product-type">
             <ul>
-                <li style="height: 54px;">{% trans "Assurance casse comprise avec Generali"%}<br><a href=\"#\">({% trans "en savoir plus"%})</a></li>
-                <li>{% trans "Rejoignez la communauté des 40 000 e-loueurs"%}</li>
-                <li>{% trans "Les e-loueurs d'appartement gagnent en moyennent 200&euro; par mois."%}</li>
+                <li style="height: 54px;">{% trans "Assurance casse comprise avec AssurOne"%}<br><a href="/assurance-tranquillite/">({% trans "en savoir plus"%})</a></li>
+                <li>{% trans "Rejoignez une communauté de plus de 40 000 e-loueurs"%}</li>
+                <li>{% trans "Les e-loueurs d'objets gagnent en moyennent 200&euro; par mois."%}</li>
             </ul>
             <a href="{% url product_create %}" class="btn">Ajouter un autre objet</a>
         </div>{# product-create #}
