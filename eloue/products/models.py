@@ -233,7 +233,7 @@ class Product(models.Model):
     
     @property
     def slug(self):
-        return slugify(self.summary)
+        return slugify(self.summary) or 'none'
     
     @property
     def has_insurance(self):
