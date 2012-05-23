@@ -400,6 +400,7 @@ def patron_edit_rib(request):
         form = RIBForm(data=request.POST, instance=request.user)
         if form.is_valid():
             form.save()
+            messages.success(request, _(u"Votre RIB a bien été ajouté"))
             pk = request.GET.get('accept')
             if pk:
                 booking = get_object_or_404(Booking, pk=pk, state=Booking.STATE.AUTHORIZED, owner=request.user)
