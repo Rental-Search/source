@@ -562,7 +562,7 @@ class CreditCardForm(forms.ModelForm):
             pm = PayboxManager()
             self.cleaned_data['masked_number'] = mask_card_number(self.cleaned_data['card_number'])
             pm.authorize(self.cleaned_data['card_number'], 
-                self.cleaned_data['expires'], self.cleaned_data['cvv'], 0, 'verification'
+                self.cleaned_data['expires'], self.cleaned_data['cvv'], 1, 'verification'
             )
         except PayboxException as e:
             raise forms.ValidationError(_(u'La validation de votre carte a échoué.'))
@@ -621,7 +621,7 @@ class CvvForm(forms.ModelForm):
             pm = PayboxManager()
             pm.authorize_subscribed(
                 self.instance.holder.pk, self.instance.card_number, 
-                self.instance.expires, self.cleaned_data['cvv'], 0, 'verification'
+                self.instance.expires, self.cleaned_data['cvv'], 1, 'verification'
             )
         except PayboxException as e:
             raise forms.ValidationError(_(u'La validation de votre carte a échoué.'))
