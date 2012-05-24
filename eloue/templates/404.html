@@ -4,41 +4,15 @@
 {% block title %}{% trans "La page demandée est introuvable" %}{% endblock %}
 
 {% block content %}
-	<div id="search" class="xgrid">
-        <div class="x12">
-		  <h1>{% trans "Avec e-loue, tout se loue !" %}</h1>
-		</div>
-		<form class="form" action="{% url product_list %}">
-		<div class="x5">
-			<p>
-				<label for="id_q">{% trans "Que voulez-vous louer ?" %}</label><br />
-				{{ form.q }}<br />
-				<span>{% trans "Exemple :" %} </span> <a href="{% url product_list %}?q={% trans "voiture" %}">{% trans "Voiture" %}</a>, <a href="{% url product_list %}?q={% trans "chèvre" %}">{% trans "Chèvre" %}</a>, <a href="{% url product_list %}?q={% trans "ski" %}">{% trans "Ski" %}</a>, <a href="{% url product_list %}?q={% trans "robe" %}">{% trans "Robe" %}</a>
-			</p>
-		</div>
-		<div class="x5">
-			<p>
-				<label>{% trans "Où ?" %}</label><br />
-				{{ form.l }}<br />
-				<span>{% trans "Exemple :" %} </span> <a href="{% url product_list %}?l={% trans "Paris, 75012" %}">{% trans "Paris, 75012" %}</a>
-			</p>
-		</div>
-		<div class="x2">
-			<p>
-				<input type="submit" value="{% trans "Rechercher" %}" class="btn big-orange"/>
-			</p>
-		</div>
-		</form>
-	</div>{# top-content #}
-<div id="content" class="xgrid">
-     <div class="content-top">
-         <h1>{% trans "La page est introuvable" %}</h1>
-     </div>
-     <div class="x12">
-        {% url contact as contact_url %}
-        {% blocktrans %}
-         Si l'erreur persiste, merci de nous <a href="{{ contact_url }}">contacter</a>.
-        {% endblocktrans %}
-     </div>
+<div class="container-main">
+	<div class="one-content">
+		<h1>{% trans "La page est introuvable" %}</h1>
+		<p>
+			{% url contact as contact_url %}
+        	{% blocktrans %}
+         		Si l'erreur persiste, merci de nous <a href="{{ contact_url }}">contacter</a>.
+        	{% endblocktrans %}
+		</p>
+	</div>
  </div>
 {% endblock content %}
