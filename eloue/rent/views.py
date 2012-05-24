@@ -80,7 +80,7 @@ def product_occupied_date(request, slug, product_id):
     dthandler = lambda obj: obj.isoformat() if isinstance(obj, (datetime, date)) else None
     return HttpResponse(
         simplejson.dumps(
-            product.monthly_availability(**request.GET),
+            product.monthly_availability(request.GET['year'], request.GET['month']),
             default=dthandler), 
         mimetype='application/json'
     )
