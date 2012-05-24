@@ -15,6 +15,7 @@
 {% csrf_token %}
 <fieldset id="credit-card-form">
   <legend>Modifier votre carte bancaire</legend>
+  {{form.non_field_errors}}
   <div class="control-group {% if form.card_number.errors %} error {% endif %}">
     <label class="control-label" for="{{ form.card_number.id_for_label }}">{{ form.card_number.label }}</label>
     <div class="controls">
