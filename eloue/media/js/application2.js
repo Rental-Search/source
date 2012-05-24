@@ -293,4 +293,53 @@ $(document).ready(function() {
            $('.fbconnect-content .fb-slogan').html('Connexion en cours...');
          }, {scope: 'email,user_location'});
     });
+
+    (function( $ ) {
+              $.fn.loadMore = function(url) {
+                if (typeof(url) === 'undefined') {
+                  this.data('offset', this.data('offset') + 1);
+                  $.ajax({
+                    url: this.data('url')+this.data('offset'),
+                    success: function(result) {
+                        $('ul', this).append($('li', result));
+                        $('.more-product-link', this).removeClass('loading');
+                    },
+                    cache: false,
+                    dataType: 'html',
+                    context: this
+                  });
+                } else {
+                  $('ul', this).load(url+' li');
+                  $('.more-product-link', this).click(function(e) {
+                    e.preventDefault();
+                    $(this).addClass('loading');
+                    $(this.parentNode.parentNode).loadMore();
+                  })
+                  this.data('url', url);
+                  this.data('offset', 0);
+                }
+              };
+            })( jQuery );
+
+            location_changed = function() {
+                
+                $('#near').loadMore('lists/object/');
+                $('#near_car').loadMore('lists/car/');
+                $('#near_realestate').loadMore('lists/realestate/');
+                $.ajax(
+                    {
+                        url:'/get_user_location/', 
+                        cache: false,
+                        success: function(response) {
+                            $('.city-name').html(response);
+                            $('#id_for_l').val(response);
+                            $('.search-home').removeClass('editing');
+                        }
+                    }
+                )
+            }
+
+
+            $(".products-home-tabs").show();
+            location_changed();
 });
