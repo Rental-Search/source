@@ -5,7 +5,8 @@ from decimal import Decimal as D
 from django.core.exceptions import ValidationError
 from django.test import TestCase
 
-from eloue.rent.models import Booking
+from eloue.accounts.models import Patron
+from eloue.rent.models import Booking, BorrowerComment, OwnerComment
 from eloue.rent import models
 from eloue.payments.paypal_payment import AdaptivePapalPayments
 from mock import patch
@@ -114,7 +115,7 @@ class BookingTest(TestCase):
             borrower_id=2,
             product_id=4
         )
-        self.assertEquals(booking.insurance_amount, D('0.58860'))
+        self.assertEquals(booking.insurance_amount, D('0.705230'))
     
     def test_no_insurance(self):
         booking = Booking.objects.create(
@@ -131,6 +132,8 @@ class BookingTest(TestCase):
         self.assertEquals(booking.product.payment_type, 1)
     
     def test_non_payment_preapproval(self):
+        from eloue.payments.models import NonPaymentInformation
+        payment = NonPaymentInformation.objects.create()
         booking = Booking.objects.create(
             started_at=datetime.datetime.now(),
             ended_at=datetime.datetime.now() + datetime.timedelta(days=3),
@@ -139,16 +142,19 @@ class BookingTest(TestCase):
             state=Booking.STATE.AUTHORIZING,
             owner_id=1,
             borrower_id=2,
-            product_id=5
+            product_id=5,
+            payment=payment
         )
         self.assertEquals(booking.product.payment_type, 0) #non payment 
         self.assertEquals(booking.state, Booking.STATE.AUTHORIZING) 
-        booking.init_payment_processor() 
-        self.assertTrue(isinstance(booking.payment_processor, models.PAY_PROCESSORS[0]))
+        #booking.init_payment_processor() 
+        #self.assertTrue(isinstance(booking.payment_processor, models.PAY_PROCESSORS[0]))
         booking.preapproval()
         self.assertEquals(booking.state, Booking.STATE.AUTHORIZED) #state changed
     
     def test_non_payment_pay(self):
+        from eloue.payments.models import NonPaymentInformation
+        payment = NonPaymentInformation.objects.create()
         booking = Booking.objects.create(
             started_at=datetime.datetime.now(),
             ended_at=datetime.datetime.now() + datetime.timedelta(days=3),
@@ -157,18 +163,23 @@ class BookingTest(TestCase):
             state=Booking.STATE.ENDED,
             owner_id=1,
             borrower_id=2,
-            product_id=5
+            product_id=5,
+            payment=payment
         )
         self.assertEquals(booking.product.payment_type, 0) #non payment 
         self.assertEquals(booking.state, Booking.STATE.ENDED) 
-        booking.init_payment_processor()
-        self.assertTrue(isinstance(booking.payment_processor, models.PAY_PROCESSORS[0]))
+        #booking.init_payment_processor()
+        #self.assertTrue(isinstance(booking.payment_processor, models.PAY_PROCESSORS[0]))
         booking.pay()
         self.assertEquals(booking.state, Booking.STATE.CLOSED) #state changed
     
-    @patch.object(AdaptivePapalPayments, 'preapproval')
-    def test_paypal_payment_preapproval(self, mock_preapproval):
-        mock_preapproval.return_value = 'PA-7BT08456PP218331A'
+    from eloue.payments.paybox_payment import PayboxManager
+    @patch.object(PayboxManager, 'authorize_subscribed')
+    def test_paybox_payment_preapproval(self, mock_authorize):
+        from eloue.payments.models import PayboxDirectPlusPaymentInformation
+        from eloue.accounts.models import CreditCard
+        mock_authorize.return_value = '00012345', '000012345'
+        payment = PayboxDirectPlusPaymentInformation.objects.create()
         booking = Booking.objects.create(
             started_at=datetime.datetime.now(),
             ended_at=datetime.datetime.now() + datetime.timedelta(days=3),
@@ -177,43 +188,42 @@ class BookingTest(TestCase):
             state=Booking.STATE.AUTHORIZING,
             owner_id=1,
             borrower_id=2,
-            product_id=3
+            product_id=3,
+            payment=payment
         )
-        self.assertEquals(booking.product.payment_type, 1) #paypal payment 
         self.assertEquals(booking.state, Booking.STATE.AUTHORIZING) 
-        booking.init_payment_processor() 
-        self.assertTrue(isinstance(booking.payment_processor, models.PAY_PROCESSORS[1]))
-        booking.preapproval()
-        self.assertTrue(mock_preapproval.called)
-        self.assertEquals(booking.state, Booking.STATE.AUTHORIZING) # make sure that state didn't changed
-    
-    @patch.object(AdaptivePapalPayments, 'execute_payment')
-    def test_paypal_payment_pay(self, mock_execute_payment):
-        mock_execute_payment.return_value = None
-        booking = Booking.objects.create(
-            started_at=datetime.datetime.now(),
-            ended_at=datetime.datetime.now() + datetime.timedelta(days=3),
-            quantity=1,
-            total_amount=10,
-            state=Booking.STATE.ENDED,
-            owner_id=1,
-            borrower_id=2,
-            product_id=3
+        #booking.init_payment_processor() 
+        #self.assertTrue(isinstance(booking.payment_processor, models.PAY_PROCESSORS[1]))
+        booking.preapproval(
+            credit_card=CreditCard(
+                expires='0119', card_number='1111222233334444', 
+                holder=Patron.objects.get(pk=2)
+            ), cvv='123'
         )
-        self.assertEquals(booking.product.payment_type, 1) #paypal payment  
-        self.assertEquals(booking.state, Booking.STATE.ENDED) 
-        booking.init_payment_processor()
-        self.assertTrue(isinstance(booking.payment_processor, models.PAY_PROCESSORS[1]))
-        booking.pay()
-        self.assertTrue(mock_execute_payment.called)
-        self.assertEquals(booking.state, Booking.STATE.CLOSING) #make sure that state change once
+        self.assertTrue(mock_authorize.called)
+        self.assertEquals(booking.state, Booking.STATE.AUTHORIZED)
         
     def tearDown(self):
         datetime.datetime = self.old_datetime
+        
+        
+        
+class CommentTest(TestCase):
+    fixtures = ['category', 'patron', 'address', 'price', 'product', 'booking']
+    def setUp(self):
+        self.booking = Booking.objects.get(pk="1fac3d9f309c437b99f912bd08b09526")
 
-        
-        
-        
-        
-        
+    def test_comment_ok(self):
+        borrower_comment = BorrowerComment(booking=self.booking, note=1, comment='bien')
+        borrower_comment.save()
+        self.assertEquals(borrower_comment.writer, self.booking.borrower)
+        self.assertRaises(OwnerComment.DoesNotExist, lambda: borrower_comment.response)
+
+        owner_comment = OwnerComment(booking=self.booking, note=2, comment='asd')
+        owner_comment.save()
+        self.assertEquals(owner_comment.writer, self.booking.owner)
+        self.assertEquals(owner_comment.response, borrower_comment)
+        self.assertEquals(borrower_comment.response, owner_comment)
+
+        self.assertRaises(NotImplementedError, owner_comment.get_absolute_url)
     

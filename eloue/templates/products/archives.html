@@ -1,60 +1,14 @@
-{% extends "base.html" %}
-{% load i18n %}
-{% block title %}{% trans "Votre tableau de bord" %}{% endblock %}
-{% load inbox %}
+{% extends "products/inbox.html" %}
+{% load i18n navbar %}
 
-{% block content %}
+{% block title %}{% trans "Mes messages supprimés" %}{% endblock %}
+{% block head %}
+    {{block.super}}
+{% endblock %}
 
-<div id="content" class="xgrid">
-    <div class="content-top">
-        <ul id="menu" class="x12">
-			<li class="menu-tab first"><a href="{% url dashboard %}">{% trans "Tableau de bord" %}</a></li>
-			<li class="menu-tab"><a href="{% url owner_booking %}">{% trans "Propriétaire" %}</a></li>
-			<li class="menu-tab"><a href="{% url borrower_booking %}">{% trans "Locataire" %}</a></li>
-			<li class="menu-tab"><a href="{% url patron_edit %}">{% trans "Mon compte" %}</a></li>
-			<li class="menu-tab">{% blocktrans %}Messages({{ unread_message_count }}){% endblocktrans %}</li>
-		</ul>
-	</div>
-	<div id="sub-menu">
-		<ul class="x12">
-			<li class="sub-tab"><a href="{% url inbox %}">{% trans "Messages reçus"%}</a></li>
-			<li class="sub-tab first selected">{% trans "Messages archivés" %}</li>
-		</ul>
-	</div>
-	<div class="content-header x12">
-		<h1>{% trans "Messages archivés" %}</h1>
-	</div>
-	<div class="x12">
-	    {% if thread_list %} 
-        <table class="messages">
-            <thead>
-                <tr><th>{% trans "Subject" %}</th><th>{% trans "Sender" %}</th><th>{% trans "Reçu le" %}</th><th>{% trans "Action" %}</th></tr>
-            </thead>
-            <tbody>
-        {% for thread in thread_list %}
 
-            <tr>
-                <td>
-                    {% if thread.sender == request.user %}{% if thread.new_sender %}<strong>{% endif %}{% endif %}
-                    {% if thread.recipient == request.user %}{% if thread.new_recipient %}<strong>{% endif %}{% endif %}
-                    {% if thread.last_message.replied %}<em>{% endif %}
-                    <a href="{% url thread_details thread_id=thread.id%}">{{ thread.subject }}</a>
-                    {% if thread.last_message.replied %}</em>{% endif %}
-                    {% if thread.sender == request.user %} {% if thread.new_sender %}</strong>{% endif %}{% endif %}
-                    {% if thread.recipient == request.user %} {% if thread.new_recipient %}</strong>{% endif %}{% endif %}
-                <td>{% if thread.sender == request.user %} {{ thread.recipient }} {% else %} {{ thread.sender }} {% endif %}</td>
-                <td>{{ thread.last_message.sent_at|date:_("DATETIME_FORMAT") }}</td>
-                <td>
-                    <a href="{% url thread_details thread_id=thread.id%}">{% trans "Lire" %}</a> - 
-                    <a href="{% url unarchive_thread thread_id=thread.id%}"</a>{% trans "Restituer" %}
-                </td>
-            </tr>
-        {% endfor %}
-            </tbody>
-        </table>
-        {% else %}
-        <p>{% trans "No messages." %}</p>
-        {% endif %}
-	</div>
-</div>
-{% endblock%}
+{% block content-main-profil %}
+{% if thread_list %}
+	{% include 'products/partials/message_list.html' %}
+{% endif %}
+{% endblock %}

@@ -1,0 +1,34 @@
+/* Typography.less
+ * Headings, body text, lists, code, and more for a versatile and durable typography system
+ * ---------------------------------------------------------------------------------------- */
+ 
+ p {
+   #font > .sans-serif(Arial, normal, @basefont);
+   color: @blueDark;
+ }
+ 
+h1 {
+  #font > .sans-serif('Ubuntu', normal, 20px);
+  color: @blueDark;
+  line-height: 38px;
+  
+  padding-bottom: 5px;
+}
+
+h2 {
+  #font > .sans-serif('Ubuntu', normal, 17px);
+  color: @blueDark;
+  
+  margin-bottom: 10px;
+  
+  small {
+    font-size: 12px;
+  }
+}
+
+h3 {
+   #font > .sans-serif('Myriad Pro', normal, 16px);
+   margin-bottom: 5px;
+
+   color: @blueDark;
+ }

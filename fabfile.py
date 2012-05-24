@@ -61,6 +61,26 @@ def production():
     env.campfire_domain = "e-loue"
     env.github_url = "https://github.com/e-loue/eloue"
 
+def beta():
+    """Defines beta environment"""
+    env.name = "beta"
+    env.user = "benoitw"
+    env.hosts = ['goat.e-loue.com',]
+    env.base_dir = "/var/www"
+    env.app_name = "eloue"
+    env.domain_name = "beta.e-loue.com"
+    env.domain_path = "%(base_dir)s/%(domain_name)s" % {'base_dir': env.base_dir, 'domain_name': env.domain_name}
+    env.current_path = "%(domain_path)s/current" % {'domain_path': env.domain_path}
+    env.releases_path = "%(domain_path)s/releases" % {'domain_path': env.domain_path}
+    env.shared_path = "%(domain_path)s/shared" % {'domain_path': env.domain_path}
+    env.git_clone = "git@github.com:e-loue/eloue.git"
+    env.env_file = "deploy/production.txt"
+    env.campfire_room = "Chit chat"
+    env.campfire_token = "b96565fb9b8f49f0e18a6a194d7ac97812e154d6"
+    env.campfire_domain = "e-loue"
+    env.github_url = "https://github.com/e-loue/eloue"
+    env.git_branch = "beta"
+
 def staging():
     """Defines staging environment"""
     env.name = "staging"
@@ -79,6 +99,7 @@ def staging():
     env.campfire_token = "b96565fb9b8f49f0e18a6a194d7ac97812e154d6"
     env.campfire_domain = "e-loue"
     env.github_url = "https://github.com/e-loue/eloue"
+    env.git_branch = "staging"
 
 def monkeysandbox():
     """Defines sandbox environment"""
@@ -246,7 +267,7 @@ def cold():
     compress()
     start()
 
-@notify
+
 def deploy():
     """Deploys your project. This calls both `update' and `restart'"""
     update()
@@ -254,7 +275,7 @@ def deploy():
     compress()
     restart()
 
-@notify
+
 def soft():
     """Deploys your project without updating the environnement"""
     if not env.has_key('current_release'):

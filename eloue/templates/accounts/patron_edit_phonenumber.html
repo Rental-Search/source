@@ -1,0 +1,46 @@
+{% extends "accounts/patron_edit.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Modification de mes numéros de téléphone" %}{% endblock %}
+
+
+{% block content-main-profil %}
+
+<form class="form-horizontal" method="post" action="" method="POST">
+    {% csrf_token %}
+    {{ formset.management_form }}
+    <legend>{% trans "Vos numéros de téléphone" %}</legend>
+    {% for form in formset.forms %}
+        {% if forloop.last %}
+        {{formset.non_form_errors}}
+        <legend>{% trans "Ajouter un nouveau numéro" %}</legend>
+        {% endif %}
+        {{form.id}}
+        {% for formfield in form %}
+            {% if not formfield.is_hidden %}
+            <div class="control-group {% if form.company_name.errors %} error {% endif %}">
+                 <label class="control-label" for="{{ formfield.id_for_label }}">{{ formfield.label }} {% if formfield.field.required %}*{% endif %}</label>
+                 <div class="controls">
+                     {{ formfield }}
+                     <p class="help-block">{{ formfield.help_text }}</p>
+                     {% if formfield.errors %}
+                     <span class="help-inline">
+                         {% for error in formfield.errors %}
+                               {{ error|escape }} 
+                         {% endfor %}
+                     </span>
+                     {% endif %}
+               </div>
+            </div>
+            {% else %}
+                {{formfield}}
+            {% endif %}
+        {% endfor %}
+        {{form.non_field_errors}}
+    {% endfor %}
+    <div class="form-actions">
+        <button type="submit" class="btn btn-primary">Enregistrer</button>
+        <button type="reset" class="btn btn-cancel">Annuler</button>
+      </div>
+</form>
+{% endblock %}

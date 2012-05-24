@@ -1,96 +1,112 @@
 {% extends "base.html" %}
-{% load i18n %}
+{% load i18n navbar %}
 
 {% block title %}{% trans "Votre tableau de bord" %}{% endblock %}
 
 {% block content %}
-<div id="content" class="xgrid">
-    <div class="content-top">
-        <ul id="menu" class="x12">
-            <li class="menu-tab first selected">{% trans "Tableau de bord" %}</li>
-			<li class="menu-tab"><a href="{% url owner_booking %}">{% trans "Propriétaire" %}</a></li>
-			<li class="menu-tab"><a href="{% url borrower_booking %}">{% trans "Locataire" %}</a></li>
-			<li class="menu-tab"><a href="{% url patron_edit %}">{% trans "Mon compte" %}</a></li>
-			<li class="menu-tab"><a href="{% url inbox %}">{% blocktrans %}Messages({{ unread_message_count }}){% endblocktrans %}</a></li>
+<div id="profil" class="container-main">
+    <div class="top-bar">
+        {% url dashboard as dashboard %}
+        {% url inbox as inbox %}
+        {% url borrower_booking_pending as borrower_booking %}
+        {% url owner_product as owner_product %}
+        {% url patron_edit as patron_edit %}
+        <ul class="nav-bar">
+            <li><a href="{{ dashboard }}" class="{% active request dashboard %}">{% trans "Tableau de bord" %}</a></li>
+            <li>
+                <a href="{{ inbox }}" class="{% active request "^/dashboard/messages/" %}">
+                    {% trans "Messages" %} 
+                    {% if unread_message_count > 0 %}
+                        ({{unread_message_count}})
+                    {% endif %}
+                </a>
+            </li>
+            <li>
+                <a href="{{ borrower_booking }}" class="{% block borrower_booking %}{% endblock %}{% active request  "^/dashboard/borrower/" %}">
+                    {% trans "Mes réservations" %}
+                    {% with request.user.rentals.authorized.count|add:request.user.rentals.pending.count|add:request.user.rentals.ongoing.count as count %}
+                        {% if count > 0%}
+                            ({{count}})
+                        {% endif %}
+                    {% endwith %}
+                </a>
+            </li>
+            <li>
+                <a href="{{ owner_product }}" class="{% block owner_product %}{% endblock %}{% active request "^/dashboard/owner/" %}">
+                    {% trans "Mes annonces" %}
+                    {% with request.user.bookings.authorized.count|add:request.user.bookings.pending.count|add:request.user.bookings.ongoing.count as count %}
+                        {% if count > 0%}
+                            ({{count}})
+                        {% endif %}
+                    {% endwith %}
+                </a>
+            </li>
+            <li><a href="{{ patron_edit }}" class="{% active request patron_edit %}">{% trans "Paramètres de compte" %}</a></li>
         </ul>
-    </div>
-    <div class="x3" style="margin-top: 20px;">
-        <div class="box-welcome" style="text-align: center;">
-            <p>{{ user.username }}</p>
-            <a href="{% url patron_edit %}" class="btn long-blue">{% trans "Modifier votre profil" %}</a>
+    </div>{# top-bar #}
+    <div class="content-aside-profil">
+        {% block content-aside-profil %}
+        <div class="profil-block">
+            <div class="avatar-picture" style="margin-top: 0px; position: relative;">
+                {% if user.avatar %}
+                <img src="{{ user.avatar.display.url }}" width="180" height="180">
+                {% else %}
+                <img src="{{ MEDIA_URL }}images/default_avatar.png" width="180" height="180">
+                <a href="{% url patron_edit %}#id_username" class="add-avatar-link">Ajouter une photo<br>de profil</a>
+                {% endif %}
+                <h1>{{ user.first_name }} {{ user.last_name }}</h1>
+                <address>{{ user.default_address.city }} - {{ user.default_address.zipcode}}</address>
+            </div><!-- avatar-picture -->
+            <div class="profil-intro-content">
+                {% if user.about %}
+                    <p class="profil-description">{{ user.about }}</p>
+                {% endif %}
+                <a href="{% url patron_edit %}#extraInfo" class="btn-contactme">Editer mon profil</a>
+            </div><!-- profil-description -->
+        </div><!-- profil-block -->
+        {% if user.work or user.school or user.languages.count %}
+        <div class="profil-block">
+            <h3>Plus d'info</h3>
+            {% if user.work %}
+                <h4>{% trans "Travail" %}</h4>
+                <p>{{ user.work }}</p>
+            {% endif %}
+            {% if user.school %}
+                <h4>{% trans "Etudes" %}</h4>
+                <p>{{user.school}}</p>
+            {% endif %}
+            {% if user.languages.count %}
+                <h4>{% trans "Languages Parlées" %}</h4>
+                <p>{{ user.languages.all|join:", "}}</p>
+            {% endif %}
+        </div>{# profil-block #}
+        {% endif %}
+        <div class="profil-block last">
+            {% with user as patron %}
+                {% include "accounts/partials/response_stats.html" %}
+            {% endwith %}
+        </div>{# profil-block #}
+        {% endblock %}
+    </div>{# content-aside-profil #}
+    <div class="content-main-profil">
+        {% include "partials/alerts_message.html" %}
+        {% block content-main-profil %}
+        <div class="dashboard-last-message">
+            <h2 style="margin-bottom: 20px;">{% trans "Vos nouveaux messages" %}</h2>
+            {% if thread_list %}
+            {% include 'products/partials/message_list.html' %}
+            {% else %}
+            <p>Vous n'avez pas de nouveau message.</p>
+            {% endif %}
+            <p style="text-align: right;"><a href="{% url inbox %}">Lire tous vos messages.</a></p>
         </div>
-        <div class="box-links">
-            <ul>
-                <li><a href="{% url product_create %}">{% trans "Mettre un objet en location" %}</a></li>
-                <li><a href="{% url product_list %}">{% trans "Rechercher une location" %}</a></li>
-                <li><a href="{% url owner_product %}">{% trans "Accéder à mes objets" %}</a></li>
-                <li><a href="{% trans "/comment-ca-marche/" %}">{% trans "Comment ça marche ?"%}</a></li>
-            </ul>
-        </div>
-    </div>
-    <div class="x9" style="margin-top: 20px;">
-        <!--<div class="content-header x9 first">
-            <h2>{% trans "Que pouvez-vous faire ensuite ?" %}</h2>
-        </div>
-        <ul class="x8">
-			<li><a href="{% url patron_edit %}">{% trans "Editer votre profil" %}</a></li>
-        </ul>-->
-        <div class="content-header x9 first">
-            <h2>{% trans "Locations en tant que <strong>propriétaire</strong>" %}</h2>
-        </div>
-        <div class="stat-number x2">
-            {% with user.bookings.authorized|length as counter %}
-				<a href="{% url owner_booking %}" class="highlight">{{ counter }}</a><br />
-				{% blocktrans count counter as counter %}
-                 <span>Location<br />en attente de validation</span>
-                {% plural %}
-			     <span>Locations<br />en attente de validation</span>
-               {% endblocktrans %}
-			 {% endwith %}
-        </div>
-        <div class="stat-number x2">
-            {% with user.bookings.pending|length as counter %}
-			  <a href="{% url owner_booking %}">{{ counter }}</a><br />
-			  {% blocktrans count counter as counter %}
-                <span>Location<br />en cours</span>
-              {% plural %}
-			    <span>Locations<br />en cours</span>
-              {% endblocktrans %}
-			 {% endwith %}
-        </div>
-        <div class="stat-number x2">
-            {% with user.products.all|length as counter %}
-			  <a href="{% url owner_product %}">{{ counter }}</a><br />
-			  {% blocktrans count counter as counter %}
-                <span>Objet<br />en location</span>
-              {% plural %}
- 			    <span>Objets<br />en location</span>
-              {% endblocktrans %}
-			 {% endwith %}
-        </div>
-        <div class="content-header x9 first">
-            <h2>{% trans "Locations en tant que <strong>locataire</strong>" %}</h2>
-        </div>
-        <div class="stat-number x2">
-            {% with user.rentals.authorized|length as counter %}
-				<a href="{% url borrower_booking %}" class="highlight">{{ counter }}</a><br />
-				{% blocktrans count counter as counter %}
-                 <span>Location<br />en attente de validation</span>
-                {% plural %}
-			     <span>Locations<br />en attente de validation</span>
-               {% endblocktrans %}
-			 {% endwith %}
-        </div>
-        <div class="stat-number x2">
-            {% with user.rentals.pending|length as counter %}
-			  <a href="{% url borrower_booking %}">{{ counter }}</a><br />
-			  {% blocktrans count counter as counter %}
-                <span>Location<br />en cours</span>
-              {% plural %}
-			    <span>Locations<br />en cours</span>
-              {% endblocktrans %}
-			 {% endwith %}
-        </div>
-    </div>
-</div>
+            {% if booking_demands %}
+            <h2 style="margin-bottom: 20px;">{% trans "Demandes de location" %}</h2>
+            {% with booking_demands as object_list %}
+                {% include 'accounts/partials/booking_list_owner.html' %}
+            {% endwith %}
+            {% endif %}
+        {% endblock %}
+    </div>{# content-main-profil #}
+</div>{# profil #}
 {% endblock %}

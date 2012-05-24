@@ -1,0 +1,87 @@
+// ALERT STYLES
+// ------------
+
+// Base alert styles
+.alert {
+  padding: 8px 35px 8px 14px;
+  margin-bottom: @baseline;
+  text-shadow: 0 1px 0 rgba(255,255,255,.5);
+  background-color: @warningBackground;
+  border: 1px solid @warningBorder;
+  .border-radius(4px, 4px, 4px, 4px);
+  color: @warningText;
+
+  #font > .sans-serif('Ubuntu', normal, @basefont);
+}
+.alert-heading {
+  color: inherit;
+}
+
+.close {
+float: right;
+font-size: 20px;
+font-weight: bold;
+line-height: 18px;
+color: black;
+text-shadow: 0 1px 0 white;
+opacity: 0.2;
+filter: alpha(opacity=20);
+}
+
+.close:hover {
+color: black;
+text-decoration: none;
+cursor: pointer;
+opacity: 0.4;
+filter: alpha(opacity=40);
+}
+
+button.close {
+padding: 0;
+cursor: pointer;
+background: transparent;
+border: 0;
+-webkit-appearance: none;
+}
+
+// Adjust close link position
+.alert .close {
+  position: relative;
+  top: -2px;
+  right: -21px;
+  line-height: 18px;
+}
+
+// Alternate styles
+// ----------------
+
+.alert-success {
+  background-color: @successBackground;
+  border-color: @successBorder;  
+  color: @successText;
+}
+.alert-danger,
+.alert-error {
+  background-color: @errorBackground;
+  border-color: @errorBorder;
+  color: @errorText;
+}
+.alert-info {
+  background-color: @infoBackground;
+  border-color: @infoBorder;
+  color: @infoText;
+}
+
+// Block alerts
+// ------------------------
+.alert-block {
+  padding-top: 14px;
+  padding-bottom: 14px;
+}
+.alert-block > p,
+.alert-block > ul {
+  margin-bottom: 0;
+}
+.alert-block p + p {
+  margin-top: 5px;
+}

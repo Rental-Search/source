@@ -1,12 +1,15 @@
 # -*- coding: utf-8 -*-
 from django.conf import settings
 import re
-
+from eloue.payments.paybox_payment import PayboxManager
 
 REPLACE_STRING = settings.REPLACE_STRING
 
 def post_save_sites(sender, instance, created, **kwargs):
     instance.sites.add(*settings.DEFAULT_SITES)
+
+def pre_delete_creditcard(sender, instance, *args, **kwargs):
+    PayboxManager().unsubscribe(instance.holder.pk)
 
 def _string_filter(raw_string):
     

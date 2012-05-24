@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 import logbook
+import urllib
+import datetime
 
 from django.conf import settings
 from django.contrib import messages
@@ -16,12 +18,14 @@ from django.views.decorators.cache import never_cache
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic.list_detail import object_detail
 from django.views.generic.simple import direct_to_template, redirect_to
+from django.template.loader import render_to_string
 from django.db.models import Q
 from django_lean.experiments.models import GoalRecord
 from django_lean.experiments.utils import WebUser
 from django.contrib.sites.models import Site
 
 
+from eloue.accounts.models import CreditCard
 from eloue.decorators import ownership_required, validate_ipn, secure_required, mobify
 from eloue.accounts.forms import EmailAuthenticationForm
 from eloue.products.models import Product, PAYMENT_TYPE, UNIT
@@ -29,7 +33,7 @@ from eloue.rent.forms import BookingForm, BookingConfirmationForm, BookingStateF
 from eloue.rent.models import Booking
 from eloue.rent.wizard import BookingWizard
 from eloue.utils import currency
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date
 from eloue.rent.utils import get_product_occupied_date, timesince
 
 log = logbook.Logger('eloue.rent')
@@ -73,11 +77,13 @@ def pay_ipn(request):
 
 def product_occupied_date(request, slug, product_id):
     product = get_object_or_404(Product.on_site, pk=product_id)
-    bookings = Booking.objects.filter(product=product).filter(Q(state="pending")|Q(state="ongoing"))
-    dates = get_product_occupied_date(bookings)
-    formated_date = [str(d.year) + '-' + str(d.month) + '-' + str(d.day) for d in dates]
-    formated_date = list(set(formated_date))
-    return HttpResponse(simplejson.dumps(formated_date), mimetype='application/json')
+    dthandler = lambda obj: obj.isoformat() if isinstance(obj, (datetime, date)) else None
+    return HttpResponse(
+        simplejson.dumps(
+            product.monthly_availability(**request.GET),
+            default=dthandler), 
+        mimetype='application/json'
+    )
 
 
 @require_GET
@@ -91,7 +97,7 @@ def booking_price(request, slug, product_id):
         return HttpResponseNotAllowed(['GET', 'XHR'])
     product = get_object_or_404(Product.on_site, pk=product_id)
     form = BookingForm(request.GET, prefix="0", instance=Booking(product=product))
-        
+    
     if form.is_valid():
         duration = timesince(form.cleaned_data['started_at'], form.cleaned_data['ended_at'])
         total_price = smart_str(currency(form.cleaned_data['total_amount']))
@@ -126,6 +132,14 @@ def booking_price(request, slug, product_id):
         }
         return HttpResponse(simplejson.dumps(response_dict), mimetype='application/json')
 
+
+@require_GET
+def get_availability(request, product_id, year, month):
+    product = get_object_or_404(Product.on_site, pk=product_id)
+    availability = product.daily_available(year, month)
+    return HttpResponse(simplejson.dumps(availability), mimetype='application/json')
+
+
 @mobify
 @never_cache
 @secure_required
@@ -140,8 +154,8 @@ def booking_create_redirect(request, *args, **kwargs):
 def booking_create(request, *args, **kwargs):
     product = get_object_or_404(Product.on_site, pk=kwargs['product_id'])
     if product.slug != kwargs['slug']:
-        return redirect_to(request, product.get_absolute_url())
-    wizard = BookingWizard([BookingForm, EmailAuthenticationForm, BookingConfirmationForm])
+        return redirect(product, permanent=True)
+    wizard = BookingWizard([BookingForm, EmailAuthenticationForm,])
     return wizard(request, *args, **kwargs)
 
 
@@ -167,9 +181,8 @@ def booking_detail(request, booking_id):
         template_name='rent/booking_detail.html', template_object_name='booking', extra_context={'paypal': paypal})
 
 
-
 def offer_accept(request, booking_id):
-    booking = get_object_or_404(Booking, pk=booking_id)
+    booking = get_object_or_404(Booking.on_site, pk=booking_id)
     if request.user == booking.offer_in_message.recipient:
         if booking.state == Booking.STATE.UNACCEPTED:
             booking.state = Booking.STATE.ACCEPTED_UNAUTHORIZED
@@ -189,8 +202,9 @@ def offer_accept(request, booking_id):
             pass
     else:
         return HttpResponseForbidden()
+
 def offer_reject(request, booking_id):
-    booking = get_object_or_404(Booking, pk=booking_id)
+    booking = get_object_or_404(Booking.on_site, pk=booking_id)
     if request.user == booking.offer_in_message.recipient:
         if booking.state == Booking.STATE.UNACCEPTED:
             booking.state = Booking.STATE.REJECTED
@@ -200,85 +214,91 @@ def offer_reject(request, booking_id):
     else:
         return HttpResponseForbidden()
 
-
+@login_required
+@ownership_required(model=Booking, object_key='booking_id', ownership=['owner', 'borrower'])
+def booking_contract(request, booking_id):
+    booking = get_object_or_404(Booking, pk=booking_id, state=Booking.STATE.PENDING)
+    content = booking.product.subtype.contract_generator(booking).getvalue()
+    response = HttpResponse(content, content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment; filename=contrat.pdf'
+    return response
 
 @login_required
+@require_POST
 @ownership_required(model=Booking, object_key='booking_id', ownership=['owner'])
 def booking_accept(request, booking_id):
-    booking = get_object_or_404(Booking, pk=booking_id)
-    if booking.product.payment_type!=PAYMENT_TYPE.NOPAY:
-        is_valid = booking.owner.is_valid
-        if not booking.owner.has_paypal():
-            return redirect_to(request, "%s?next=%s" % (reverse('patron_paypal'), booking.get_absolute_url()))
-        elif not is_valid:
-            messages.error(request, _(u"Votre Paypal compte est invalide, veuillez modifier votre nom ou prénom ou email paypal"))
-            return redirect_to(request, "%s?next=%s" % (reverse('patron_edit'), booking.get_absolute_url()))
-        elif not booking.owner.is_confirmed:
-            messages.error(request, _(u"Vérifiez que vous avez bien répondu à l'email d'activation de Paypal"))
-            return redirect(booking.get_absolute_url())
-    form = BookingStateForm(request.POST or None,
-        initial={'state': Booking.STATE.PENDING},
-        instance=booking)
-    if form.is_valid():
-        booking = form.save()
-        booking.send_acceptation_email()
-        GoalRecord.record('rent_object_accepted', WebUser(request))
+    booking = get_object_or_404(Booking, pk=booking_id, state=Booking.STATE.AUTHORIZED)
+    if booking.started_at < datetime.now():
+        booking.state = booking.STATE.OUTDATED
         booking.save()
+        messages.error(request, _(u"Votre demande est dépassée"))
     else:
-        messages.error(request, form.non_field_errors())
-    return redirect_to(request, "%s?paypal=true" % booking.get_absolute_url())
-
+        if not request.user.rib:
+            response = redirect('patron_edit_rib')
+            response['Location'] += '?' + urllib.urlencode({'accept': booking.pk.hex})
+            messages.success(request, _(u"Avant l'acceptation de la demande, veuillez saisir votre RIB."))
+            return response
+        booking.accept()
+        messages.success(request, _(u"La demande de location a été acceptée"))
+        GoalRecord.record('rent_object_accepted', WebUser(request))
+    return redirect(booking)
 
 @login_required
 @ownership_required(model=Booking, object_key='booking_id', ownership=['owner'])
 def booking_reject(request, booking_id):
-    booking = get_object_or_404(Booking, pk=booking_id)
-    form = BookingStateForm(request.POST or None,
-        initial={'state': Booking.STATE.REJECTED},
-        instance=booking)
-    if form.is_valid():
-        booking = form.save()
-        booking.send_rejection_email()
-        GoalRecord.record('rent_object_rejected', WebUser(request))
-        messages.success(request, _(u"Cette réservation a bien été refusée"))
-    messages.error(request, _(u"Cette réservation n'a pu être refusée"))
-    return redirect_to(request, booking.get_absolute_url())
+    booking = get_object_or_404(Booking.on_site, pk=booking_id, state=Booking.STATE.AUTHORIZED)
+    if request.method == "POST":
+        form = BookingStateForm(request.POST or None,
+            initial={'state': Booking.STATE.REJECTED},
+            instance=booking
+        )
+        if form.is_valid():
+            booking = form.save()
+            booking.send_rejection_email()
+            GoalRecord.record('rent_object_rejected', WebUser(request))
+            messages.success(request, _(u"Cette réservation a bien été refusée"))
+        else:
+            messages.error(request, _(u"Cette réservation n'a pu être refusée"))
+    else:
+        form = BookingStateForm(
+            initial={'state': Booking.STATE.REJECTED},
+            instance=booking)
+    return redirect(booking)
 
 
 @login_required
-@ownership_required(model=Booking, object_key='booking_id', ownership=['owner', 'borrower'])
+@ownership_required(model=Booking, object_key='booking_id', ownership=['borrower'])
 def booking_cancel(request, booking_id):
-    booking = get_object_or_404(Booking, pk=booking_id)
+    booking = get_object_or_404(Booking.on_site, pk=booking_id)
     if request.POST:
-        booking.init_payment_processor()
         booking.cancel()
         booking.send_cancelation_email(source=request.user)
         messages.success(request, _(u"Cette réservation a bien été annulée"))
-    messages.error(request, _(u"Cette réservation n'a pu être annulée"))
-    return redirect_to(request, booking.get_absolute_url())
+    return redirect(booking)
 
 
 @login_required
 @ownership_required(model=Booking, object_key='booking_id', ownership=['owner'])
 def booking_close(request, booking_id):
-    booking = get_object_or_404(Booking, pk=booking_id)
+    booking = get_object_or_404(Booking.on_site, pk=booking_id)
     if request.POST:
-        booking.init_payment_processor()
         booking.pay()
         booking.send_closed_email()
-        messages.success(request, _(u"Cette réservation a bien été cloturée"))
-    messages.error(request, _(u"Cette réservation n'a pu être cloturée"))
-    return redirect_to(request, booking.get_absolute_url())
+        messages.success(request, _(u"Cette réservation a bien été cloturée. Si vous voulez vous pouvez ajouter un commentaire et une note sur le déroulement de la location."))
+        return redirect(reverse('eloue.accounts.views.comments')+'#'+booking.pk.hex)
+    return redirect(booking)
 
 
 @login_required
 @ownership_required(model=Booking, object_key='booking_id', ownership=['owner', 'borrower'])
 def booking_incident(request, booking_id):
-    booking = get_object_or_404(Booking, pk=booking_id)
+    booking = get_object_or_404(Booking.on_site, pk=booking_id)
     form = IncidentForm(request.POST or None)
     if form.is_valid():
-        send_mail(u"Déclaration d'incident", form.cleaned_data['message'], settings.DEFAULT_FROM_EMAIL, ['contact@e-loue.com'])
+        text = render_to_string("rent/emails/incident.txt", {'user': request.user.username, 'booking_id': booking_id, 'problem': form.cleaned_data['message']})
+        send_mail(u"Déclaration d'incident", text, request.user.email, ['contact@e-loue.com'])
         booking.state = Booking.STATE.INCIDENT
         booking.save()
+        messages.success(request, _(u'Nous avons bien pris en compte la déclaration de l\'incident. Nous vous contacterons rapidement.'))
+        return redirect('booking_detail', booking_id=booking_id)
     return direct_to_template(request, 'rent/booking_incident.html', extra_context={'booking': booking, 'form': form})
-

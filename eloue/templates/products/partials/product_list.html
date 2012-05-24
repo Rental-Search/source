@@ -1,0 +1,8 @@
+{% load i18n %}
+<ul class="product-list">
+    {% for product in product_list %}
+        <li>
+            {% include 'products/partials/product.html' %}
+        </li><!-- aproduct -->
+    {% endfor %}
+</ul>{# product-list #}

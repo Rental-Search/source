@@ -25,8 +25,9 @@ class Enum(object):
     """
     def __init__(self, enum_list):
         self.enum_list = [(item[0], item[2]) for item in enum_list]
+        self.enum_list_prefixed = [(item[0], item[3] if len(item) > 3 else item[2]) for item in enum_list]
         self.enum_dict = dict([(item[1], item[0]) for item in enum_list])
-    
+
     def __contains__(self, v):
         return (v in self.enum_list)
     
@@ -51,6 +52,10 @@ class Enum(object):
     def values(self):
         return self.enum_dict.values()
     
+    @property
+    def prefixed(self):
+        return dict(self.enum_list_prefixed)
+
     @property
     def reverted(self):
         return dict(zip(self.enum_dict.itervalues(), self.enum_dict.iterkeys()))

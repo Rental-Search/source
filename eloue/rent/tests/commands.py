@@ -27,7 +27,7 @@ class PaymentsTest(TestCase):
         self.old_datetime = datetime.datetime
         datetime.datetime = MockDateTime
     
-    @patch.object(Booking, 'hold')
+    @patch.object(Booking, 'activate')
     def test_ongoing_command(self, mock_method):
         import eloue.rent.management.commands.ongoing as ongoing
         reload(ongoing)  # It's loaded before we patch

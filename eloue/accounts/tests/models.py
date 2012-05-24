@@ -1,14 +1,33 @@
 # -*- coding: utf-8 -*-
 import datetime
 import unittest2
+import mock
 
 from django.core import mail
 from django.core.exceptions import ValidationError
 from django.contrib.gis.geos import Point
 from django.test import TestCase
 from django.contrib.auth.models import User
-from eloue.accounts.models import Patron, Address
+from eloue.accounts.models import Patron, Address, CreditCard
+from eloue.payments.paybox_payment import PayboxManager
 
+class CreditCardTest(TestCase):
+    fixtures = ['patron']
+
+    def setUp(self):
+        pass
+    
+    def tearDown(self):
+        pass
+
+    @mock.patch.object(PayboxManager, 'unsubscribe')
+    def test_delete(self, unsubscribe_mock):
+        unsubscribe_mock.return_value = None
+        cc = CreditCard(card_number='123123', expires='0319', holder=Patron.objects.get(pk=1))
+        cc.save()
+        cc.delete()
+        self.assertTrue(unsubscribe_mock.called)
+        unsubscribe_mock.called_with(1)
 
 class AccountManagerTest(TestCase):
     def test_inactive_account_creation(self):

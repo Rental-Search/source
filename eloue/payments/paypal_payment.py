@@ -43,7 +43,7 @@ class AdaptivePapalPayments(AbstractPayment):
 
     NOT_NEED_IPN = False
     
-    def __init__(self, booking):
+    def __init__(self, *args, **kwargs):
         
         self.payments = AdaptivePayments(
             settings.PAYPAL_API_USERNAME,
@@ -53,7 +53,6 @@ class AdaptivePapalPayments(AbstractPayment):
             settings.PAYPAL_API_EMAIL,
             sandbox=settings.USE_PAYPAL_SANDBOX
         )
-        self.booking = booking
         super(AdaptivePapalPayments, self).__init__()
         
     
@@ -83,13 +82,14 @@ class AdaptivePapalPayments(AbstractPayment):
                 'customerId': str(self.booking.borrower.pk)
             }
         )
-        return response['preapprovalKey']
+        self.preapproval_key = response['preapprovalKey']
 
         
     def pay(self, cancel_url, return_url):
-        
+        # debit borrower
         domain = Site.objects.get_current().domain
         protocol = "https"
+
         total_amount = None
         net_price = None
         if settings.CONVERT_XPF:
@@ -105,7 +105,7 @@ class AdaptivePapalPayments(AbstractPayment):
             cancelUrl=cancel_url,
             returnUrl=return_url,
             currencyCode=self.booking._currency,
-            preapprovalKey=self.booking.preapproval_key,
+            preapprovalKey=self.preapproval_key,
             ipnNotificationUrl='http://www.postbin.org/1fi02go' if settings.USE_PAYPAL_SANDBOX \
                 else urljoin("%s://%s" % (protocol, domain), reverse('pay_ipn')),
             receiverList={'receiver': [
@@ -115,7 +115,7 @@ class AdaptivePapalPayments(AbstractPayment):
         )
         if 'ERROR' in response.get('paymentExecStatus', None):
             raise PaypalError('paymentExecStatus' ,response.get('paymentExecStatus', None), response)
-        return response['payKey']
+        self.pay_key = response['payKey']
 
      
     def refund(self):
@@ -125,8 +125,9 @@ class AdaptivePapalPayments(AbstractPayment):
         )
     
     def execute_payment(self):
+        # pay owner
         response = self.payments.execute_payment(
-            payKey=self.booking.pay_key
+            payKey=self.booking.payment.pay_key
         )
     
     def cancel_preapproval(self):

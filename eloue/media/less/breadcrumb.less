@@ -1,0 +1,43 @@
+// BREADCRUMB
+//--------------
+
+.breadcrumb {
+  background-color: @blueLight;
+  @shadow: inset 0 1px 0 rgba(255,255,255,0.8);
+  .box-shadow(@shadow);
+  border-bottom: 1px solid #b2ced9;
+  .border-radius(3px, 0px, 0px, 3px);
+  
+  display: inline;
+  .makeColumn(12);
+  margin-left: 0px;
+  .size(27px, 980px);
+  overflow: hidden;
+  
+  margin-bottom: 20px;
+  
+  > li {
+    background: transparent url("../images/b-sign.png") no-repeat right top;
+    
+    display: inline;
+    
+    
+    #font > .sans-serif(Arial, bold, 12px);
+    color: @blueDark;
+    overflow: hidden;
+    line-height: 24px;
+    vertical-align: -24%;
+    padding: 8px 20px 8px 15px;
+    
+    &:last-child {
+      background: none;
+    }
+  }
+  
+  a {
+    #font > .sans-serif(Arial, bold, 12px);
+    color: #9eb0ba;
+    
+    &:hover { color: @blueDark; }
+  }
+}

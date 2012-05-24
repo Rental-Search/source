@@ -6,7 +6,9 @@ import urllib2
 import simplejson
 import facebook
 
-from imagekit.models import ImageModel
+from imagekit.models import ImageSpec
+from imagekit.processors import resize, Adjust, Transpose
+
 
 from django.core.exceptions import ValidationError
 from django.contrib.sites.managers import CurrentSiteManager
@@ -17,10 +19,10 @@ from django.conf import settings
 from django.contrib.auth.models import User
 from django.contrib.gis.geos import Point
 from django.core.cache import cache
-from django.db.models import permalink
-from django.db.models import signals
+from django.db.models import permalink, Q, signals, Count
 from django.utils.encoding import smart_unicode
 from django.utils.formats import get_format
+from django.utils.timesince import timesince
 from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import ugettext
 from django.template.defaultfilters import slugify
@@ -28,8 +30,8 @@ from django.template.defaultfilters import slugify
 from eloue.accounts.manager import PatronManager
 from eloue.geocoder import GoogleGeocoder
 from eloue.products.utils import Enum
-from eloue.signals import post_save_sites
-from eloue.utils import create_alternative_email
+from eloue.signals import post_save_sites, pre_delete_creditcard
+from eloue.utils import create_alternative_email, cache_to
 from eloue.payments.paypal_payment import accounts, PaypalError
 from eloue.payments import paypal_payment
 
@@ -106,12 +108,41 @@ log = logbook.Logger('eloue.accounts')
 def upload_to(instance, filename):
     return 'pictures/avatars/%s.jpg' % uuid.uuid4().hex
 
-class Avatar(ImageModel):
+class Avatar(models.Model):
 
     patron = models.OneToOneField(User, related_name='avatar')
     image = models.ImageField(upload_to=upload_to)
     created_at = models.DateTimeField(editable=False)
 
+    thumbnail = ImageSpec(
+        processors=[
+            resize.Crop(width=60, height=60), 
+            Adjust(contrast=1.2, sharpness=1.1),
+            Transpose(Transpose.AUTO),
+        ], image_field='image', pre_cache=True, cache_to=cache_to
+    )
+    profil = ImageSpec(
+        processors=[
+            resize.Fit(width=100), 
+            Adjust(contrast=1.2, sharpness=1.1),
+            Transpose(Transpose.AUTO),
+        ], image_field='image', pre_cache=True, cache_to=cache_to
+    )
+    display = ImageSpec(
+        processors=[
+            resize.Fit(width=180), 
+            Adjust(contrast=1.2, sharpness=1.1),
+            Transpose(Transpose.AUTO),
+        ], image_field='image', pre_cache=True, cache_to=cache_to
+    )
+    
+    product_page = ImageSpec(
+        processors=[
+            resize.Fit(width=74, height=74), 
+            Adjust(contrast=1.2, sharpness=1.1),
+            Transpose(Transpose.AUTO),
+        ], image_field='image', pre_cache=True, cache_to=cache_to
+    )
     def save(self, *args, **kwargs):
         if not self.created_at:
             self.created_at = datetime.datetime.now()
@@ -120,13 +151,14 @@ class Avatar(ImageModel):
     def delete(self, *args, **kwargs):
         self.image.delete()
         super(Avatar, self).delete(*args, **kwargs)
-    
-    class IKOptions:
-        spec_module = 'eloue.accounts.specs'
-        image_field = 'image'
-        cache_dir = 'media'
-        cache_filename_format = "%(specname)s_%(filename)s.%(extension)s"
 
+class Language(models.Model):
+
+    lang = models.CharField(max_length=30)
+
+    def __unicode__(self):
+        return ugettext(self.lang)
+    
 class Patron(User):
     """A member"""
     civility = models.PositiveSmallIntegerField(_(u"Civilité"), null=True, blank=True, choices=CIVILITY_CHOICES)
@@ -141,10 +173,26 @@ class Patron(User):
     paypal_email = models.EmailField(null=True, blank=True)
     sites = models.ManyToManyField(Site, related_name='patrons')
     
+    default_address = models.ForeignKey('Address', null=True, blank=True, related_name="+")
+
     customers = models.ManyToManyField('self', symmetrical=False)
+
+    about = models.TextField(blank=True, null=True)
+    work = models.CharField(max_length=75, blank=True, null=True)
+    school = models.CharField(max_length=75, blank=True, null=True)
+    hobby = models.CharField(max_length=75, blank=True, null=True)
+    languages = models.ManyToManyField(Language, blank=True, null=True)
+
+    drivers_license_date = models.DateTimeField(_(u"Date d'obtention"), blank=True, null=True)
+    drivers_license_number = models.CharField(_(u"Numéro du permis"), blank=True, max_length=32)
+
+    date_of_birth = models.DateTimeField(_(u"Date de naissance"), blank=True, null=True)
+    place_of_birth = models.CharField(_(u"Lieu de naissance"), blank=True, max_length=255)
 
     on_site = CurrentSiteManager()
     objects = PatronManager()
+
+    rib = models.CharField(max_length=23, blank=True)
 
     def save(self, *args, **kwargs):
         if not self.slug:
@@ -252,6 +300,26 @@ class Patron(User):
     def is_confirmed(self):
         return paypal_payment.confirm_paypal_account(self.paypal_email)
     
+    @property
+    def response_rate(self):
+        from eloue.products.models import MessageThread
+        threads = MessageThread.objects.filter(recipient=self).annotate(num_messages=Count('messages'))
+        if not threads:
+            return 100.0
+        threads_num = threads.count()
+        answered = threads.filter(num_messages__gt=1)
+        answered_num = answered.count()
+        return answered_num/float(threads_num)*100.0
+    
+    @property
+    def response_time(self):
+        from eloue.products.models import ProductRelatedMessage
+        messages = ProductRelatedMessage.objects.select_related().filter(~Q(parent_msg=None), parent_msg__recipient=self, sender=self)
+        if not messages:
+            return timesince(datetime.datetime.now() - datetime.timedelta(days=1))
+        rt = sum([message.sent_at - message.parent_msg.sent_at for message in messages], datetime.timedelta(seconds=0))/len(messages)
+        return timesince(datetime.datetime.now() - rt)
+
     def send_activation_email(self):
         context = {
             'patron': self, 'activation_key': self.activation_key,
@@ -273,6 +341,15 @@ class Patron(User):
         return (self.date_joined + expiration_date <= datetime.datetime.now())
     is_expired.boolean = True
     is_expired.short_description = ugettext(u"Expiré")
+
+class CreditCard(models.Model):
+    card_number = models.CharField(max_length=20)
+    expires = models.CharField(max_length=4)
+    holder = models.OneToOneField(Patron, editable=False)
+    masked_number = models.CharField(max_length=20, blank=False)
+    keep = models.BooleanField()
+    holder_name = models.CharField(max_length=60, help_text=_(u'Conserver mes coordonnées bancaire'))
+
 
 class FacebookSession(models.Model):
 
@@ -383,3 +460,4 @@ class PatronAccepted(models.Model):
 
 
 signals.post_save.connect(post_save_sites, sender=Patron)
+signals.pre_delete.connect(pre_delete_creditcard, sender=CreditCard)

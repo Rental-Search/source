@@ -1,83 +1,75 @@
-{% extends "base.html" %}
-{% load i18n %}
-{% block title %}{% trans "Message" %} : {{ message.subject }}{% endblock %}
+{% extends "products/inbox.html" %}
+{% load i18n navbar %}
 
-{% block content %}
-<div id="content" class="xgrid">
-    <div class="content-top">
-        <ul id="menu" class="x12">
-			<li class="menu-tab first"><a href="{% url dashboard %}">{% trans "Tableau de bord" %}</a></li>
-			<li class="menu-tab"><a href="{% url owner_booking %}">{% trans "Propriétaire" %}</a></li>
-			<li class="menu-tab"><a href="{% url borrower_booking %}">{% trans "Locataire" %}</a></li>
-			<li class="menu-tab"><a href="{% url patron_edit %}">{% trans "Mon compte" %}</a></li>
-			<li class="menu-tab"><a href="{% url inbox %}">{% blocktrans %}Messages({{ unread_message_count }}){% endblocktrans %}</a></li>
-		</ul>
-	</div>
-	<div id="sub-menu">
-		<ul class="x12">
-			<li class="sub-tab first selected"><a href="{% url inbox %}">{% trans "Messages reçus"%}</a></li>
-			<li class="sub-tab"><a href="{% url archived %}">{% trans "Messages archivés" %}</a></li>
-		</ul>
-	</div>
-	{% for message in message_list %}
-	{% if forloop.first %}
-	<div class="content-header x12">
-		{% if request.user == message.recipient %}
-	    <h1>Conversation avec {{ message.sender }}</h1>
-	    {% else %}
-	    <h1>Conversation avec {{ message.recipient }}</h1>
-	    {% endif %}
-	</div>
-	<ul class="x8">
-	{% endif %}
-	{% if forloop.last %}
-	<li style="padding: 10px 0;">
-		{% if message.sender.avatar %}
-	    <img src="{{message.sender.avatar.thumbnail.url}}" style="float: left; margin-right: 10px;">
-	    {% else %}
-	    <img src="{{ MEDIA_URL }}images/bk_borrower_img.png" style="float: left; margin-right: 10px;">
-	    {% endif %}
-	    <div class="message-content" style="display: table-cell; vertical-align: top;  width: 570px;">
-	        <div class="message-sender" style="margin-bottom: 5px;">
-	            <div style="float: right; font-size: 12px;">{{ message.sent_at|date:_("DATETIME_FORMAT")}}</div>
-	            <strong>{{ message.sender }}</strong>
-	        </div>
-	        <div class="message-body">
-	            {{ message.body|linebreaks }}
-	        </div>
-	    </div>
-	</li>
+{% block title %}{% trans "Mes messages" %}{% endblock %}
+{% block head %}
+    {{block.super}}
+{% endblock %}
+
+{% block content-aside-profil %}
+{% url inbox as inbox %}
+{% url archived as archived %}
+<ul class="nav-sub-bar">
+    <li><a href="{{ inbox }}"  class="{% if request.user == thread.sender and not thread.sender_archived or request.user == thread.recipient and not thread.recipient_archived %}{% active request '' %}{% endif %}">{% trans "Massages reçus" %}</a></li>
+    <li><a href="{{ archived }}" class="{% if request.user == thread.sender and  thread.sender_archived or request.user == thread.recipient and thread.recipient_archived %}{% active request '' %}{% endif %}">{% trans "Messages supprimés" %}</a></li>
+</ul>
+{% endblock %}
+
+{% block content-main-profil %}
+
+<ul class="messages">
+	{% if request.user == message.recipient %}
+		<h2>Conversation avec {{ message.sender }}</h2>
 	{% else %}
-	<li style="padding: 10px 0; border-bottom: 1px dashed #B9CAD4;">
-		{% if message.sender.avatar %}
-	    <img src="{{message.sender.avatar.thumbnail.url}}" style="float: left; margin-right: 10px;">
-	    {% else %}
-	    <img src="{{ MEDIA_URL }}images/bk_borrower_img.png" style="float: left; margin-right: 10px;">
-	    {% endif %}
-	    <div class="message-content" style="display: table-cell; vertical-align: top; width: 570px;">
-	        <div class="message-sender" style="margin-bottom: 5px;">
-	            <div style="float: right; font-size: 12px;">{{ message.sent_at|date:_("DATETIME_FORMAT")}}</div>
-	            <strong>{{ message.sender }}</strong>
-	        </div>
-	        <div class="message-body">
-	            {{ message.body|linebreaks }}
-	        </div>
-	    </div>
-	</li>
+		<h2>Conversation avec {{ message.recipient }}</h2>
 	{% endif %}
-	{% endfor %}
-	</ul>
-	<div id="submit-wizard" class="x12">
-	    <style>
-	        #id_0-body { height: 60px; }
-	    </style>
-	    <form action="" method="post">
-	        {% csrf_token %}
-	        <p style="text-align: left;">
-	            {{ editForm.body }}<br />
-        	    <input type="submit" class="btn small-green" style="font-size: 12px;" value="Répondre">
-        	</p>
-	    </form>
-    </div>
-</div>
+{% for message in message_list %}
+	<li>
+		<a href="{{message.sender.patron.get_absolute_url}}" class="m-img">
+			{% if message.sender.avatar %}
+				<img src="{{message.sender.avatar.thumbnail.url}}" width="60" height="60" />
+			{% else %}
+				<img src="{{ MEDIA_URL }}images/default_avatar.png" width="60" height="60" alt="">
+			{% endif %}
+		</a>
+		<div class="m-content">
+			<div class="m-body">
+				<p class="m-sender">
+					<a href="{{message.sender.patron.get_absolute_url}}">{{message.sender.username}}</a> {{message.sent_at|date:_("DATETIME_FORMAT")}}
+				</p>
+				<div class="m-message">
+					{{ message.body|linebreaks }}
+				</div>
+				<span class="message-dial"></span>
+			</div>
+		</div>
+	</li>
+{% endfor %}
+	<li>
+		<a href="{{message.sender.patron.get_absolute_url}}" class="m-img">
+			{% if user.avatar %}
+				<img src="{{ user.avatar.thumbnail.url }}" width="60" height="60">
+			{% else %}
+                <img src="{{ MEDIA_URL }}images/default_avatar.png" width="60" height="60">
+			{% endif %}
+		</a>
+		<div class="m-content">
+			<div class="m-body">
+				<p class="m-sender">
+					<a href="{{user.get_absolute_url}}">{{ user.username }}</a>
+				</p>
+				<div class="m-message">
+					<form method="post" action="">
+						{% csrf_token %}
+						{{ editForm.body }}
+						<div class="form-actions">
+        					<button type="submit" class="btn btn-primary">Envoyer</button>
+      					</div>
+					</form>
+				</div>
+				<span class="message-dial"></span>
+			</div>
+		</div>
+	</li>
+</ul>
 {% endblock %}

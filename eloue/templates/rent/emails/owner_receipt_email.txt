@@ -1,0 +1,18 @@
+{% load i18n %}{% blocktrans with booking.owner.get_full_name as owner_name and booking.borrower.get_full_name as borrower_name and booking.product.summary as summary and booking.product.category.name as category and booking.product.summary as summary and booking.borrower.phones.all|first as borrower_phone and booking.started_at|date:"DATETIME_FORMAT" as starting_at and booking.started_at|timesince:booking.ended_at as duration and booking.borrower.email as borrower_email and site.name as site_name and booking.net_price as net_price and booking.total_amount as total_amount and booking.commission as commission %}
+
+Bonjour {{ owner_name }},
+
+Vous avez été crédité de {{net_price}} euros pour la réservation suivante :
+
+Type : {{ category }}
+Objet : {{ summary }}
+Début de la location : {{ starting_at }}
+Durée de la location : {{ duration }}
+
+Ce montant correspond au montant total de la réservation ({{total_amount }}) moins la commission e-loue de 20% ({{commission }})
+
+A bientôt,
+
+L'équipe {{ site_name }}
+
+{% endblocktrans %}

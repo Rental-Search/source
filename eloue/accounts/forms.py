@@ -4,11 +4,13 @@ import re
 import datetime
 
 import django.forms as forms
+from form_utils.forms import BetterForm, BetterModelForm
 from django.conf import settings
 from django.contrib.auth import authenticate, login
 from django.contrib.sites.models import Site
 from django.contrib.auth.forms import PasswordResetForm, PasswordChangeForm, SetPasswordForm
 from django.contrib.auth.tokens import default_token_generator
+from django.core import validators
 from django.forms.fields import EMPTY_VALUES
 from django.forms.models import inlineformset_factory, BaseInlineFormSet
 from django.template.defaultfilters import slugify
@@ -18,16 +20,16 @@ from django.utils.http import int_to_base36
 from django.utils.translation import ugettext as _
 from django.dispatch import dispatcher
 from django.utils.safestring import mark_safe
-
+from django.forms.formsets import ORDERING_FIELD_NAME, DELETION_FIELD_NAME
 import facebook
 
 from eloue.accounts import EMAIL_BLACKLIST
-from eloue.accounts.fields import PhoneNumberField
-from eloue.accounts.models import Patron, Avatar, PhoneNumber, COUNTRY_CHOICES, PatronAccepted, FacebookSession, Address
-from eloue.accounts.widgets import ParagraphRadioFieldRenderer
+from eloue.accounts.fields import PhoneNumberField, ExpirationField, RIBField, DateSelectField
+from eloue.accounts.models import Patron, Avatar, PhoneNumber, CreditCard, COUNTRY_CHOICES, PatronAccepted, FacebookSession, Address, Language
+from eloue.accounts.widgets import ParagraphRadioFieldRenderer, CommentedCheckboxInput
 from eloue.utils import form_errors_append
 from eloue.payments import paypal_payment
-
+from eloue.payments.paybox_payment import PayboxManager, PayboxException
 
 STATE_CHOICES = (
     (0, _(u"Je n'ai pas encore de compte")),
@@ -99,9 +101,9 @@ class EmailAuthenticationForm(forms.Form):
     """Displays the login form and handles the login action."""
     exists = forms.TypedChoiceField(required=True, coerce=int, choices=STATE_CHOICES, widget=forms.RadioSelect(renderer=ParagraphRadioFieldRenderer), initial=1)
     email = forms.EmailField(label=_(u"Email"), max_length=75, required=False, widget=forms.TextInput(attrs={
-        'autocapitalize': 'off', 'autocorrect': 'off', 'class': 'inm', 'tabindex': '1'
+        'autocapitalize': 'off', 'autocorrect': 'off', 'class': 'inm', 'tabindex': '1', 'placeholder': _(u"Email")
     }))
-    password = forms.CharField(label=_(u"Password"), widget=forms.PasswordInput(attrs={'class': 'inm', 'tabindex': '2'}), required=False)
+    password = forms.CharField(label=_(u"Password"), widget=forms.PasswordInput(attrs={'placeholder': _(u"Mot de passe"), 'tabindex': '2'}), required=False)
     
     # for facebook connect
     facebook_access_token = forms.CharField(required=False, widget=forms.HiddenInput())
@@ -120,7 +122,7 @@ class EmailAuthenticationForm(forms.Form):
         exists = self.cleaned_data.get('exists')
         for rule in EMAIL_BLACKLIST:
             if re.search(rule, email):
-                raise forms.ValidationError(_(u"Pour garantir un service de qualité et la sécurité des utilisateurs de e-loue.com, vous ne pouvez pas vous enregistrer avec une adresse email jetable."))
+                raise forms.ValidationError(_(u"Pour garantir un service de qualité et la sécurité des utilisateurs d'e-loue.com, vous ne pouvez pas vous enregistrer avec une adresse email jetable."))
         
         if not exists and Patron.objects.filter(email=email).exists():
             raise forms.ValidationError(_(u"Un compte existe déjà pour cet email"))
@@ -133,7 +135,10 @@ class EmailAuthenticationForm(forms.Form):
         facebook_expires = self.cleaned_data.get('facebook_expires')
         facebook_uid = self.cleaned_data.get('facebook_uid')
 
-        if any([facebook_access_token, facebook_expires, facebook_uid]):
+        email = self.cleaned_data.get('email')
+        password = self.cleaned_data.get('password')
+
+        if any([facebook_access_token, facebook_expires, facebook_uid]) and not any([email, password]):
             try:
                 self.me = facebook.GraphAPI(facebook_access_token).get_object('me', fields='picture,email,first_name,last_name,gender,username,location')
             except facebook.GraphAPIError as e:
@@ -172,13 +177,9 @@ class EmailAuthenticationForm(forms.Form):
                     pass
 
         else:
-            email = self.cleaned_data.get('email')
-            
             if email is None or email == u'':
                 raise forms.ValidationError('Empty email') # TODO: more meaningful error message
-            password = self.cleaned_data.get('password')
             exists = self.cleaned_data.get('exists')
-            
             if exists:
                 self.user_cache = authenticate(username=email, password=password)
                 if self.user_cache is None:
@@ -228,35 +229,69 @@ class EmailPasswordResetForm(PasswordResetForm):
             message.attach_alternative(html_content, "text/html")
             message.send()
 
-
-class PatronEditForm(forms.ModelForm):
-    username = forms.RegexField(label=_(u"Pseudo"), max_length=30, regex=r'^[\w.@+-]+$',
-    help_text=_("Required. 30 characters or fewer. Letters, digits and @/./+/-/_ only."),
-    error_messages={'invalid': _("This value may contain only letters, numbers and @/./+/-/_ characters.")},
-    widget=forms.TextInput(attrs={'class': 'inm'}))
-    first_name = forms.CharField(label=_(u"Prénom"), required=True, widget=forms.TextInput(attrs={'class': 'inm'}))
-    last_name = forms.CharField(label=_(u"Nom"), required=True, widget=forms.TextInput(attrs={'class': 'inm'}))
+class PatronEditForm(BetterModelForm):
+    is_professional = forms.BooleanField(label=_(u"Professionnel"), required=False, initial=False, widget=CommentedCheckboxInput(info_text='Je suis professionnel'))
+    company_name = forms.CharField(label=_(u"Nom de la société"), required=False, widget=forms.TextInput(attrs={'class': 'inm'}))
+    
     email = forms.EmailField(label=_(u"Email"), max_length=75, widget=forms.TextInput(attrs={
         'autocapitalize': 'off', 'autocorrect': 'off', 'class': 'inm'}))
+    username = forms.RegexField(label=_(u"Pseudo"), max_length=30, regex=r'^[\w.@+-]+$',
+    help_text=_(u"Required. 30 characters or fewer. Letters, digits and @/./+/-/_ only."),
+    error_messages={'invalid': _(u"This value may contain only letters, numbers and @/./+/-/_ characters.")},
+    widget=forms.TextInput(attrs={'class': 'inm'}))
+    
+    first_name = forms.CharField(label=_(u"Prénom"), required=True, widget=forms.TextInput(attrs={'class': 'inm'}))
+    last_name = forms.CharField(label=_(u"Nom"), required=True, widget=forms.TextInput(attrs={'class': 'inm'}))
+    avatar = forms.ImageField(required=False, label=_(u"Photo de profil"))
+    
     paypal_email = forms.EmailField(label=_(u"Email PayPal"), required=False, max_length=75, widget=forms.TextInput(attrs={
             'autocapitalize': 'off', 'autocorrect': 'off', 'class': 'inm'}))
-	    
-    is_professional = forms.BooleanField(label=_(u"Professionnel"), required=False, initial=False)
     
-    company_name = forms.CharField(label=_(u"Nom de la société"), required=False, widget=forms.TextInput(attrs={'class': 'inm'}))
-    is_subscribed = forms.BooleanField(required=False, initial=False, label=_(u"Newsletter"))
-    new_messages_alerted = forms.BooleanField(required=False, initial=True)
 
-    avatar = forms.ImageField(required=False)
+    is_subscribed = forms.BooleanField(required=False, initial=False, label=_(u"Newsletter"), widget=CommentedCheckboxInput(info_text="J'accepte de recevoir de recevoir la Newsletter e-loue"))
+    new_messages_alerted = forms.BooleanField(label=_(u"Notifications"), required=False, initial=True, widget=CommentedCheckboxInput(info_text="J'accepte de recevoir les messages des autres membres"))
 
-    def __init__(self, *args, **kwargs):
-        super(PatronEditForm, self).__init__(*args, **kwargs)
-        self.fields['civility'].widget.attrs['class'] = "selm"
+    date_of_birth = DateSelectField(required=False, label=_(u"Lieu de naissance"))
+    drivers_license_date = DateSelectField(required=False, label=_(u"Date d'obtention"))
+
+    about = forms.CharField(label=_(u"A propos de vous"), required=False, widget=forms.Textarea(attrs={'class': 'inm'}))
+    work = forms.CharField(label=_(u"Travail"), required=False, widget=forms.TextInput(attrs={'class': 'inm'}), help_text=_(u"Exemple : Directrice Resources Humaines, ma socitée"))
+    school = forms.CharField(label=_(u"Etudes"), required=False, widget=forms.TextInput(attrs={'class': 'inm'}), help_text=_(u"Exemple : Université Panthéon Sorbonne (Paris I)"))
+    hobby = forms.CharField(label=_(u"Hobbies"), required=False, widget=forms.TextInput(attrs={'class': 'inm'}))
+    languages = forms.ModelMultipleChoiceField(queryset=Language.objects, label=_(u"Langues parlés"), required=False)
 
     class Meta:
         model = Patron
-        fields = ('civility', 'username', 'first_name', 'last_name',
-            'email', 'paypal_email', 'is_professional', 'company_name', 'is_subscribed', 'new_messages_alerted')
+        fieldsets = [
+            ('basic_info', {
+                'fields': [
+                    'is_professional', 'company_name', 'username', 'avatar', 
+                    'email', 'civility', 'first_name', 'last_name',
+                    'default_address', 'date_of_birth', 'place_of_birth',
+                    'paypal_email', 'is_subscribed', 'new_messages_alerted',
+                ],
+                'legend': _(u'Informations nécessaires')
+            }),
+            ('extra_info', {
+                'fields': ['about', 'work', 'school', 'hobby', 'languages'],
+                'legend': _(u"Informations de profil")
+            }),
+            ('driver_info', {
+                'fields': ['drivers_license_date', 'drivers_license_number'],
+                'legend': _(u"Informations sur le permis")
+            })
+        ]
+        widgets = {
+            'is_professional': CommentedCheckboxInput('Je suis professionel'),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super(PatronEditForm, self).__init__(*args, **kwargs)
+        self.legend = _(u"Informations nécessaires")
+        self.fields['civility'].widget.attrs['class'] = "selm"
+        self.fields['default_address'].widget.attrs['class'] = "selm"
+        self.fields['default_address'].label = _(u'Adresse par defaut')
+        self.fields['default_address'].queryset = self.instance.addresses.all()
 
     def save(self, *args, **kwargs):
         inst = super(PatronEditForm, self).save(*args, **kwargs)
@@ -285,7 +320,7 @@ class PatronEditForm(forms.ModelForm):
             raise forms.ValidationError(_(u"This field is required."))
         for rule in EMAIL_BLACKLIST:
             if re.search(rule, email):
-                raise forms.ValidationError(_(u"Pour garantir un service de qualité et la sécurité des utilisateurs de Croisé dans le métro, vous ne pouvez pas vous enregistrer avec une adresse email jetable. Ne craignez rien, vous ne recevrez aucun courrier indésirable."))
+                raise forms.ValidationError(_(u"Pour garantir un service de qualité et la sécurité des utilisateurs d'e-loue.com dans le métro, vous ne pouvez pas vous enregistrer avec une adresse email jetable. Ne craignez rien, vous ne recevrez aucun courrier indésirable."))
         try:
             Patron.objects.exclude(pk=self.instance.pk).get(email=email)
             raise forms.ValidationError(_(u"Un compte avec cet email existe déjà"))
@@ -309,6 +344,7 @@ class PatronEditForm(forms.ModelForm):
             if not paypal_payment.confirm_paypal_account(email=paypal_email):
                 form_errors_append(self, 'paypal_email', _(u"Vérifiez que vous avez bien répondu à l'email d'activation de Paypal"))
         return self.cleaned_data
+
 
 class PatronSetPasswordForm(forms.Form):
     """
@@ -341,7 +377,7 @@ class PatronPasswordChangeForm(PatronSetPasswordForm):
     A form that lets a user change his/her password by entering
     their old password.
     """
-    old_password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'inm'}))
+    old_password = forms.CharField(label=_(u"Ancien mot de passe"), widget=forms.PasswordInput(attrs={'class': 'inm'}))
     
     def clean_old_password(self):
         """
@@ -389,9 +425,25 @@ class PhoneNumberForm(forms.ModelForm):
     
     class Meta:
         model = PhoneNumber
-        exclude = ('patron')
+        fields = ('number', )
 
-class PhoneNumberBaseFormSet(BaseInlineFormSet):
+class MixinHiddenDeleteFormset(object):
+    # mixin to hide delete and order fields for the extra fields for the formset
+    def add_fields(self, form, index):
+        if index < self.initial_form_count():
+            return super(MixinHiddenDeleteFormset, self).add_fields(form, index)
+        if self.can_order:
+            # Only pre-fill the ordering field for initial forms.
+            if index is not None and index < self.initial_form_count():
+                form.fields[ORDERING_FIELD_NAME] = forms.IntegerField(label=_(u'Order'), initial=index+1, required=False, widget=forms.HiddenInput())
+            else:
+                form.fields[ORDERING_FIELD_NAME] = forms.IntegerField(label=_(u'Order'), required=False, widget=forms.HiddenInput())
+        if self.can_delete:
+            form.fields[DELETION_FIELD_NAME] = forms.BooleanField(label=_(u'Delete'), required=False, widget=forms.HiddenInput())
+        
+
+
+class PhoneNumberBaseFormSet(MixinHiddenDeleteFormset, BaseInlineFormSet):
     def clean(self):
         super(PhoneNumberBaseFormSet, self).clean()
         if not len(filter(lambda form:(not form.cleaned_data.get('DELETE', True) if hasattr(form, 'cleaned_data') else False), self.forms)):
@@ -403,15 +455,19 @@ class PhoneNumberBaseFormSet(BaseInlineFormSet):
 PhoneNumberFormset = inlineformset_factory(Patron, PhoneNumber, form=PhoneNumberForm, formset=PhoneNumberBaseFormSet, exclude=['kind'], extra=1, can_delete=True)
 
 class AddressForm(forms.ModelForm):
+    address1 = forms.CharField(label=_(u"Adresse"), widget=forms.Textarea(attrs={'class': 'inm street', 'placeholder': _(u'Rue')}))
+    zipcode = forms.CharField(label=_(u"Code Postal"), widget=forms.TextInput(attrs={'class': 'inm zipcode', 'placeholder': _(u'Code postal')}))
+    city = forms.CharField(label=_(u"Ville"), widget=forms.TextInput(attrs={'class': 'inm town', 'placeholder': _(u'Ville')}))
 
     def clean(self):
         if self.instance.products.all() and self.cleaned_data['DELETE']:
             raise forms.ValidationError(_(u'Vous ne pouvez pas supprimer une adresse associé à un produit. Veuillez le changer sur le page produit.'))
+        if self.cleaned_data['DELETE'] and self.instance.patron.default_address == self.instance:
+            raise forms.ValidationError(_(u'Vous ne pouvez pas supprimer votre adresse par default.'))
         return self.cleaned_data
 
     class Meta:
         model = Address
-        exclude = ('address2', 'position', 'objects', 'patron')
         widgets = {
             'address1': forms.Textarea(
                 attrs={'class': 'inm street', 'placeholder': _(u'Rue')}
@@ -426,45 +482,194 @@ class AddressForm(forms.ModelForm):
                 attrs={'class': 'selm'}
             ),
         }
+        fields = [
+            'address1',
+            'zipcode',
+            'city',
+            'country',
+        ]
 
-class AddressBaseFormSet(BaseInlineFormSet):
-
+class AddressBaseFormSet(MixinHiddenDeleteFormset, BaseInlineFormSet):
     def clean(self):
         super(AddressBaseFormSet, self).clean()
         if any(self.errors):
             raise forms.ValidationError('')
         for form in self.forms:
             pass
-        
+    
+
 AddressFormSet = inlineformset_factory(Patron, Address, form=AddressForm, formset=AddressBaseFormSet, extra=1, can_delete=True)
+
+class RIBForm(forms.ModelForm):
+    
+    rib = RIBField(label='RIB')
+
+    class Meta:
+        model = Patron
+        fields = ('rib', )
+
+
+def mask_card_number(card_number):
+    return re.sub(
+        '(.)(.*)(...)', 
+        lambda matchobject: (
+            matchobject.group(1)+'X'*len(matchobject.group(2))+matchobject.group(3)
+        ), 
+        card_number
+    )
+
+class CreditCardForm(forms.ModelForm):
+    cvv = forms.CharField(max_length=4, label=_(u'Cryptogramme de sécurité'))
+    expires = ExpirationField(label=_(u'Date d\'expiration'))
+    holder_name = forms.CharField(label=_(u'Titulaire de la carte'))
+
+
+    def __init__(self, *args, **kwargs):
+        super(CreditCardForm, self).__init__(*args, **kwargs)
+        self.fields['card_number'] = forms.CharField(
+            label=_(u'Numéro de carte de crédit'),
+            min_length=16, max_length=24, required=True, widget=forms.TextInput(
+                attrs={'placeholder': self.instance.masked_number or ''}
+            )
+        )
+
+    class Meta:
+        # see note: https://docs.djangoproject.com/en/dev/topics/forms/modelforms/#using-a-subset-of-fields-on-the-form
+        # we excluded, then added, to avoid save automatically the card_number
+        model = CreditCard
+        exclude = ('card_number', 'masked_number', 'keep')
+
+    def clean_card_number(self):
+        def _luhn_valid(card_number):
+            return sum(
+                int(j) if not i%2 else sum(int(k) for k in str(2*int(j))) 
+                for i, j 
+                in enumerate(reversed(card_number))
+            )%10 == 0
+        card_number = self.cleaned_data['card_number'].replace(' ','').replace('-', '')
+        try:
+            if not _luhn_valid(card_number):
+                raise forms.ValidationError(u'Veuillez verifier le numero de votre carte bancaire')
+        except ValueError as e:
+            raise forms.ValidationError(u'Votre numero doit etre composé uniquement de chiffres')
+        return card_number
+
+    def clean(self):
+        if self.errors:
+            return self.cleaned_data
+        try:
+            from eloue.payments.paybox_payment import PayboxManager, PayboxException
+            pm = PayboxManager()
+            self.cleaned_data['masked_number'] = mask_card_number(self.cleaned_data['card_number'])
+            pm.authorize(self.cleaned_data['card_number'], 
+                self.cleaned_data['expires'], self.cleaned_data['cvv'], 0, 'verification'
+            )
+        except PayboxException as e:
+            raise forms.ValidationError(_(u'La validation de votre carte a échoué.'))
+        return self.cleaned_data
+
+    def save(self, *args, **kwargs):
+        commit = kwargs.pop('commit', True)
+        pm = PayboxManager()
+        try:
+            if self.instance.pk:
+                self.cleaned_data['card_number'] = pm.modify(
+                    self.instance.holder.pk, 
+                    self.cleaned_data['card_number'],
+                    self.cleaned_data['expires'], self.cleaned_data['cvv']) 
+            else:
+                self.cleaned_data['card_number'] = pm.subscribe(
+                    self.instance.holder.pk, 
+                    self.cleaned_data['card_number'], 
+                    self.cleaned_data['expires'], self.cleaned_data['cvv']
+                )
+        except PayboxException:
+            raise
+        instance = super(CreditCardForm, self).save(*args, commit=False, **kwargs)
+        instance.card_number = self.cleaned_data['card_number']
+        instance.masked_number = self.cleaned_data['masked_number']
+        if commit:
+            instance.save()
+        return instance
+
+class BookingCreditCardForm(CreditCardForm):
+    class Meta:
+        # see note: https://docs.djangoproject.com/en/dev/topics/forms/modelforms/#using-a-subset-of-fields-on-the-form
+        # we excluded, then added, to avoid save automatically the card_number
+        model = CreditCard
+        exclude = ('card_number', 'holder', 'masked_number')
+
+
+class CvvForm(forms.ModelForm):
+    cvv = forms.CharField(label=_(u'Veuillez resaisir votre cryptogram visuel'), min_length=3, max_length=4, widget=forms.TextInput())
+    
+    def __init__(self, *args, **kwargs):
+        if 'instance' not in kwargs:
+            raise ValueError("you should specify 'instance' for this form")
+        super(CvvForm, self).__init__(*args, **kwargs)
+
+    class Meta:
+        exclude = ('expires', 'masked_number', 'card_number', 'holder', 
+            'keep', 'holder_name')
+        model = CreditCard
+
+    def clean(self):
+        if self.errors:
+            return self.cleaned_data
+        try:
+            from eloue.payments.paybox_payment import PayboxManager, PayboxException
+            pm = PayboxManager()
+            pm.authorize_subscribed(
+                self.instance.holder.pk, self.instance.card_number, 
+                self.instance.expires, self.cleaned_data['cvv'], 0, 'verification'
+            )
+        except PayboxException as e:
+            raise forms.ValidationError(_(u'La validation de votre carte a échoué.'))
+        return self.cleaned_data
+    
+    def save(self, *args, **kwargs):
+        if kwargs.get('commit'):
+            raise NotImplementedError('you have nothing to commit here!!')
+        return super(CvvForm, self).save(*args, **kwargs)
 
 def make_missing_data_form(instance, required_fields=[]):
     fields = SortedDict({
+        'is_professional': forms.BooleanField(label=_(u"Professionnel"), required=False, initial=False, widget=CommentedCheckboxInput(info_text='Je suis professionnel')),
+        'company_name': forms.CharField(label=_(u"Nom de la société"), required=False, max_length=255, widget=forms.TextInput(attrs={'class': 'inm'})),
         'username': forms.RegexField(label=_(u"Pseudo"), max_length=30, regex=r'^[\w.@+-]+$',
             help_text=_("Required. 30 characters or fewer. Letters, digits and @/./+/-/_ only."),
             error_messages={'invalid': _("This value may contain only letters, numbers and @/./+/-/_ characters.")},
             widget=forms.TextInput(attrs={'class': 'inm'})
         ),
         'password1': forms.CharField(label=_(u"Mot de passe"), max_length=128, required=True, widget=forms.PasswordInput(attrs={'class': 'inm'})),
-        'password2': forms.CharField(label=_(u"A nouveau"), max_length=128, required=True, widget=forms.PasswordInput(attrs={'class': 'inm'})),
-        'is_professional': forms.BooleanField(label=_(u"Professionnel"), required=False, initial=False),
-        'company_name': forms.CharField(label=_(u"Nom de la société"), required=False, max_length=255, widget=forms.TextInput(attrs={'class': 'inm'})),
+        'password2': forms.CharField(label=_(u"Mot de passe à nouveau"), max_length=128, required=True, widget=forms.PasswordInput(attrs={'class': 'inm'})),
         'first_name': forms.CharField(label=_(u"Prénom"), max_length=30, required=True, widget=forms.TextInput(attrs={'class': 'inm'})),
         'last_name': forms.CharField(label=_(u"Nom"), max_length=30, required=True, widget=forms.TextInput(attrs={'class': 'inm'})),
-        'addresses__address1': forms.CharField(max_length=255, widget=forms.Textarea(attrs={'class': 'inm street', 'placeholder': _(u'Rue')})),
-        'addresses__zipcode': forms.CharField(required=True, max_length=9, widget=forms.TextInput(attrs={
-            'class': 'inm zipcode', 'placeholder': _(u'Code postal')
+        'addresses__address1': forms.CharField(label=_(u"Rue"), max_length=255, widget=forms.Textarea(attrs={'class': 'inm street'})),
+        'addresses__zipcode': forms.CharField(label=_(u"Code postal"), required=True, max_length=9, widget=forms.TextInput(attrs={
+            'class': 'inm zipcode'
         })),
-        'addresses__city': forms.CharField(required=True, max_length=255, widget=forms.TextInput(attrs={'class': 'inm town', 'placeholder': _(u'Ville')})),
-        'addresses__country': forms.ChoiceField(choices=COUNTRY_CHOICES, required=True, widget=forms.Select(attrs={'class': 'selm'})),
-        'avatar': forms.ImageField(required=False),
-        'phones__phone': PhoneNumberField(label=_(u"Téléphone"), required=True, widget=forms.TextInput(attrs={'class': 'inm'}))
+        'addresses__city': forms.CharField(label=_(u"Ville"), required=True, max_length=255, widget=forms.TextInput(attrs={'class': 'inm town'})),
+        'addresses__country': forms.ChoiceField(label=_(u"Pays"), choices=COUNTRY_CHOICES, required=True, widget=forms.Select(attrs={'class': 'selm'})),
+        'avatar': forms.ImageField(required=False, label=_(u"Photo de profil")),
+        'phones__phone': PhoneNumberField(label=_(u"Téléphone"), required=True, widget=forms.TextInput(attrs={'class': 'inm'})),
+        'drivers_license_number': forms.CharField(label=_(u'Numéro de permis'), max_length=32),
+        'drivers_license_date': DateSelectField(label=_(u'Date de délivraisance')),
+        'date_of_birth': DateSelectField(label=_(u'Date de naissance')),
+        'place_of_birth': forms.CharField(label=_(u'Lieu de naissance'), max_length=255),
     })
+
+
+    # Are we in presence of a pro ?
+    if fields.has_key('is_professional'):
+        if instance and getattr(instance, 'is_professional', None)!=None:
+            del fields['is_professional']
+            del fields['company_name']
 
     # Do we have an address ?
     if instance and instance.addresses.exists():
-        fields['addresses'] = forms.ModelChoiceField(label=_(u"Addresse"), required=False,
-            queryset=instance.addresses.all(), initial=instance.addresses.all()[0], widget=forms.Select(attrs={'class': 'selm'}))
+        fields['addresses'] = forms.ModelChoiceField(label=_(u"Adresse"), required=False,
+            queryset=instance.addresses.all(), initial=instance.default_address if instance.default_address else instance.addresses.all()[0], widget=forms.Select(attrs={'class': 'selm'}), help_text=_(u"Selectionnez une adresse enregistrée précédemment"))
         for f in fields.keys():
             if "addresses" in f:
                 fields[f].required = False
@@ -472,7 +677,7 @@ def make_missing_data_form(instance, required_fields=[]):
     # Do we have a phone number ?
     if instance and instance.phones.exists():
         fields['phones'] = forms.ModelChoiceField(label=_(u"Téléphone"), required=False, 
-            queryset=instance.phones.all(), initial=instance.phones.all()[0], widget=forms.Select(attrs={'class': 'selm'}))
+            queryset=instance.phones.all(), initial=instance.phones.all()[0], widget=forms.Select(attrs={'class': 'selm'}), help_text=_(u"Selectionnez un numéro de téléphone enregistré précédemment"))
         if fields.has_key('phones__phone'):
             fields['phones__phone'].required = False
     
@@ -484,12 +689,6 @@ def make_missing_data_form(instance, required_fields=[]):
     
     if instance and instance.username and "first_name" not in required_fields:
         del fields['avatar']
-
-    # Are we in presence of a pro ?
-    if fields.has_key('is_professional'):
-        if instance and getattr(instance, 'is_professional', None)!=None:
-            del fields['is_professional']
-            del fields['company_name']
             
     for f in fields.keys():
         if required_fields and f not in required_fields:
@@ -516,6 +715,7 @@ def make_missing_data_form(instance, required_fields=[]):
                 city=self.cleaned_data['addresses__city'],
                 country=self.cleaned_data['addresses__country']
             )
+            self.instance.default_address = address
         else:
             address = None
         if 'phones' in self.cleaned_data and self.cleaned_data['phones']:
@@ -576,8 +776,22 @@ def make_missing_data_form(instance, required_fields=[]):
     def clean_avatar(self):
         self.avatar = self.cleaned_data.get('avatar', None)
         return self.avatar
-    
-    form_class = type('MissingInformationForm', (forms.BaseForm,), {'instance': instance, 'base_fields': fields})
+    class Meta:
+        fieldsets = [
+            ('member', {
+                'fields': ['is_professional', 'company_name', 'username', 'password1', 'password2', 'first_name', 'last_name', 'avatar', 'date_of_birth', 'place_of_birth'], 
+                'legend': 'Vous'}),
+            ('driver_info', {
+                'fields': ['drivers_license_number', 'drivers_license_date'],
+                'legend': _(u'Permis de conduire')}),
+            ('contacts', {
+                'fields': ['addresses', 'addresses__address1', 'addresses__zipcode', 'addresses__city', 'addresses__country', 'phones', 'phones__phone'], 
+                'legend': 'Vos coordonnées'}),
+        ]
+
+    class_dict = fields.copy()
+    class_dict.update({'instance': instance, 'Meta': Meta})
+    form_class = type('MissingInformationForm', (BetterForm,), class_dict)
     form_class.save = types.MethodType(save, None, form_class)
     form_class.clean_password2 = types.MethodType(clean_password2, None, form_class)
     form_class.clean_username = types.MethodType(clean_username, None, form_class)
@@ -586,12 +800,11 @@ def make_missing_data_form(instance, required_fields=[]):
     form_class.clean_company_name = types.MethodType(clean_company_name, None, form_class)
     form_class.clean_avatar = types.MethodType(clean_avatar, None, form_class)
     return fields != {}, form_class
-    
-    
+
 class ContactForm(forms.Form):
-    subject = forms.CharField(label=_(u"Sujet"), max_length=100, required=True, widget=forms.TextInput(attrs={'class': 'inm'}))
-    message = forms.CharField(label=_(u"Message"), required=True, widget=forms.Textarea(attrs={'class': 'inm'}))
     sender = forms.EmailField(label=_(u"Email"), max_length=75, required=True, widget=forms.TextInput(attrs={
         'autocapitalize': 'off', 'autocorrect': 'off', 'class': 'inm'
     }))
-    cc_myself = forms.BooleanField(label=_(u"Je souhaite recevoir une copie de ce message."), required=False)
+    subject = forms.CharField(label=_(u"Sujet"), max_length=100, required=True, widget=forms.TextInput(attrs={'class': 'inm'}))
+    message = forms.CharField(label=_(u"Message"), required=True, widget=forms.Textarea(attrs={'class': 'inm'}))
+    cc_myself = forms.BooleanField(label=_(u"Etre en copie"), required=False)

@@ -89,7 +89,7 @@ class AccountWizardTest(TestCase):
             'wizard_step': 0
         })
         self.assertTrue(response.status_code, 200)
-        self.assertFormError(response, 'form', 'email', _(u"Pour garantir un service de qualité et la sécurité des utilisateurs de e-loue.com, vous ne pouvez pas vous enregistrer avec une adresse email jetable."))
+        self.assertFormError(response, 'form', 'email', _(u"Pour garantir un service de qualité et la sécurité des utilisateurs d'e-loue.com, vous ne pouvez pas vous enregistrer avec une adresse email jetable."))
     
     def test_first_step_with_already_existing_account(self):
         response = self.client.post(reverse('auth_login'), {

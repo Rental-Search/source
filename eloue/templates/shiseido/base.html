@@ -39,7 +39,7 @@
                      <a href="{% url auth_logout %}">{% trans "Se déconnecter" %}</a>
                  </p>
                  {% if  user.avatar %}
-                    <img src="{{ user.avatar.product_page.url }}" alt="{% trans "loueur"%}{{ user.username }}">
+                    <img src="{{ user.avatar.display.url }}" alt="{% trans "loueur"%}{{ user.username }}">
                  {% else %}
                     <img src="{{ MEDIA_URL }}images/avatar.jpg" alt="avatar">
                  {% endif %}

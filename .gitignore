@@ -13,6 +13,7 @@ env
 eloue.db
 eloue/local.py
 eloue/media/js/*.r*.js
+eloue/media/js/sep/*.r*.js
 eloue/media/css/*.r*.css
 docs/_build/doctrees/
 eloue/rent/rules
@@ -22,3 +23,4 @@ eloue/media/media/*
 eloue/templates/20minutes/header.html
 eloue/templates/20minutes/footer.html
 eloue/test_payment_steps.py
+eloue/media/less/styles.css

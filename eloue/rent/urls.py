@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.conf.urls.defaults import *
 
-from eloue.rent.views import preapproval_ipn, pay_ipn, booking_success, booking_failure
+from eloue.rent.views import booking_success, booking_failure, preapproval_ipn, pay_ipn
 
 urlpatterns = patterns('',
     url(r'^ipn/preapproval/$', preapproval_ipn, name="preapproval_ipn"),

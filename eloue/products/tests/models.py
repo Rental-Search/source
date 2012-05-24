@@ -1,12 +1,15 @@
 # -*- coding: utf-8 -*-
 import os
+from decimal import Decimal as D
+import datetime
 
 from django.core.files import File
 from django.core.exceptions import ValidationError
 from django.db import transaction
 from django.test import TestCase
 
-from eloue.products.models import Picture, Product, ProductReview, PatronReview
+from eloue.products.models import (Picture, Product, ProductReview, PatronReview, 
+    CarProduct, RealEstateProduct)
 
 local_path = lambda path: os.path.join(os.path.dirname(__file__), path)
 
@@ -26,7 +29,41 @@ class ProductTest(TestCase):
             owner_id=1
         )
         product.save()
-    
+
+    @transaction.commit_on_success
+    def test_carproduct_creation(self):
+        carproduct = CarProduct(
+            summary="Opel Corsa",
+            brand="Opel",
+            model="Corsa",
+            deposit_amount=250,
+            description=u"Opel Corsa en bonne etat. Asd asd.",
+            address_id=1,
+            quantity=1,
+            category_id=35,
+            owner_id=1,
+            tax_horsepower=D('1.00'),
+            licence_plate='05 asd 50',
+            first_registration_date=datetime.date(2010, 9, 5)
+        )
+        carproduct.save()
+        self.assertEqual(CarProduct.objects.count(), 1)
+        self.assertTrue(carproduct.product_ptr)
+
+    @transaction.commit_on_success
+    def test_realestateproduct_creation(self):
+        realestateproduct = RealEstateProduct(
+            summary="appart a paris",
+            deposit_amount=250,
+            description=u"Paris, paris.",
+            address_id=1,
+            quantity=1,
+            category_id=35,
+            owner_id=1,
+        )
+        realestateproduct.save()
+        self.assertEqual(RealEstateProduct.objects.count(), 1)
+        self.assertTrue(realestateproduct.product_ptr)
 
 class PictureTest(TestCase):
     def test_ensure_delete(self):

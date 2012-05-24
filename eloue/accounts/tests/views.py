@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+
+
 import django.forms as forms
 
 from django.conf import settings
@@ -19,6 +21,41 @@ def dummy_verify_paypal_account(email, first_name, last_name):
         return 'INVALID'
     elif first_name=='Lin' and last_name=='LIU' and email=='test_verified_status@e-loue.com':
         return 'VERIFIED'
+
+class PatronInfoAjaxTest(TestCase):
+    fixtures = ['category', 'patron', 'address', 'price', 'product', 'booking']
+
+    def test_work_autocomplete(self):
+        import json
+        self.assertTrue(self.client.login(username='alexandre.woog@e-loue.com', password='alexandre'))
+        response = self.client.get(reverse('accounts_work_autocomplete'), {
+            'term': 'e-'
+        })
+        self.assertEqual(response.status_code, 200)
+        response = json.loads(response.content)
+        self.assertEqual(len(response), 2)
+        response = self.client.get(reverse('accounts_work_autocomplete'), {
+            'term': 'google'
+        })
+        self.assertEqual(response.status_code, 200)
+        response = json.loads(response.content)
+        self.assertEqual(len(response), 0)
+    
+    def test_school_autocomplete(self):
+        import json
+        self.assertTrue(self.client.login(username='alexandre.woog@e-loue.com', password='alexandre'))
+        response = self.client.get(reverse('accounts_studies_autocomplete'), {
+            'term': 'e'
+        })
+        self.assertEqual(response.status_code, 200)
+        response = json.loads(response.content)
+        self.assertEqual(len(response), 5)
+        response = self.client.get(reverse('accounts_studies_autocomplete'), {
+            'term': 'el'
+        })
+        self.assertEqual(response.status_code, 200)
+        response = json.loads(response.content)
+        self.assertEqual(len(response), 2)
 
 class PatronTest(TestCase):
     fixtures = ['category', 'patron', 'address', 'price', 'product', 'booking']
@@ -47,10 +84,12 @@ class PatronTest(TestCase):
             'is_professional': False,
             'is_subscribed': False
         })
-        self.assertEquals(response.status_code, 200)
+        self.assertEquals(response.status_code, 302)
+        self.assertRedirects(response, reverse('patron_edit'))
         patron = Patron.objects.get(email='alexandre.woog@e-loue.com')
         self.assertEquals(patron.first_name, 'Alex')
-        # unverified case
+
+        # unconfirmed case
         response = self.client.post(reverse('patron_edit'), {
             'first_name': 'Lin',
             'last_name': 'LIU',
@@ -62,6 +101,7 @@ class PatronTest(TestCase):
         })
         self.assertEquals(response.status_code, 200)
         form = response.context['form']
+        self.assertTrue(_(u"Vérifiez que vous avez bien répondu à l'email d'activation de Paypal") in form.errors['paypal_email'][0])
         
         # invalid case
         response = self.client.post(reverse('patron_edit'), {
@@ -79,6 +119,7 @@ class PatronTest(TestCase):
         self.assertTrue(_(u"Vérifier que le prénom est identique à celui de votre compte PayPal") in form.errors['first_name'][0])
         self.assertTrue(_(u"Vérifier que le nom est identique à celui de votre compte PayPal") in form.errors['last_name'][0])
         self.assertTrue(_(u"Vérifier qu'il s'agit bien de votre email PayPal") in form.errors['paypal_email'][0])
+        
         # verified case
         response = self.client.post(reverse('patron_edit'), {
             'first_name': 'Lin',
@@ -89,11 +130,8 @@ class PatronTest(TestCase):
             'is_professional': False,
             'is_subscribed': False
         })
-        self.assertEquals(response.status_code, 200)
-        form = response.context['form']
-        self.assertFalse(form.errors)
-        
-        self.assertEqual(response.context['user'].username, 'alexandre')
+        self.assertEquals(response.status_code, 302)
+        self.assertRedirects(response, reverse('patron_edit'))
         
         
     def test_patron_edit_form(self):
@@ -102,24 +140,6 @@ class PatronTest(TestCase):
         self.assertEquals(response.status_code, 200)
         self.assertTrue('form' in response.context)
         self.assertTrue(isinstance(response.context['form'], forms.ModelForm))
-        
-        
-    def test_patron_paypal(self):
-        self.client.login(username='lin.liu@e-loue.com', password='lin')
-        domain = Site.objects.get_current().domain        
-        response = self.client.post(reverse('patron_paypal'), {
-            'paypal_exists': 1,
-            'paypal_email': 'invalid@e-loue.com',
-            'next': '/dashboard/booking/349ce9ba628abfdfc9cb3a72608dab68/'})
-        url = "http://%s/dashboard/account/profile/?next=/dashboard/booking/349ce9ba628abfdfc9cb3a72608dab68/&paypal=true"%domain
-        self.assertRedirects(response, url, status_code=301)
-        
-        response = self.client.post(reverse('patron_paypal'), {
-            'paypal_exists': 1,
-            'paypal_email': 'test_verified_status@e-loue.com',
-            'next': '/dashboard/booking/349ce9ba628abfdfc9cb3a72608dab68/'})
-        url = "http://%s/dashboard/booking/349ce9ba628abfdfc9cb3a72608dab68/?paypal=true"%domain
-        self.assertRedirects(response, url, status_code=301)
         
         
     def test_patron_edit_email_already_exists(self):
@@ -133,7 +153,8 @@ class PatronTest(TestCase):
             'is_subscribed': False
         })
         self.assertEquals(response.status_code, 200)
-        self.assertFormError(response, 'form', 'email', _(u"Un compte avec cet email existe déjà"))
+        form = response.context['form']
+        self.assertTrue(_(u"Un compte avec cet email existe déjà") in form.errors['email'][0])
     
     def test_patron_edit_email_empty(self):
         self.client.login(username='alexandre.woog@e-loue.com', password='alexandre')
@@ -146,7 +167,8 @@ class PatronTest(TestCase):
             'is_subscribed': False
         })
         self.assertEquals(response.status_code, 200)
-        self.assertFormError(response, 'form', 'email', _(u"This field is required."))
+        form = response.context['form']
+        self.assertTrue(_(u"This field is required.") in form.errors['email'][0])
     
     def test_patron_edit_junk_email(self):
         self.client.login(username='alexandre.woog@e-loue.com', password='alexandre')
@@ -159,7 +181,8 @@ class PatronTest(TestCase):
             'is_subscribed': False
         })
         self.assertEquals(response.status_code, 200)
-        self.assertFormError(response, 'form', 'email', _(u"Pour garantir un service de qualité et la sécurité des utilisateurs de Croisé dans le métro, vous ne pouvez pas vous enregistrer avec une adresse email jetable. Ne craignez rien, vous ne recevrez aucun courrier indésirable."))
+        form = response.context['form']
+        self.assertTrue( _(u"Pour garantir un service de qualité et la sécurité des utilisateurs d'e-loue.com dans le métro, vous ne pouvez pas vous enregistrer avec une adresse email jetable. Ne craignez rien, vous ne recevrez aucun courrier indésirable.") in form.errors['email'][0])
     
     def test_patron_password_form(self):
         self.client.login(username='alexandre.woog@e-loue.com', password='alexandre')
@@ -222,15 +245,15 @@ class PatronTest(TestCase):
     
     def test_borrower_history(self):
         self.client.login(username='alexandre.woog@e-loue.com', password='alexandre')
-        response = self.client.get(reverse('borrower_history'))
+        response = self.client.get(reverse('borrower_booking_history'))
         self.assertEqual(response.status_code, 200)
-        self.assertTrue('booking_list' in response.context)
+        self.assertTrue('object_list' in response.context)
     
     def test_borrower_booking(self):
         self.client.login(username='alexandre.woog@e-loue.com', password='alexandre')
-        response = self.client.get(reverse('borrower_booking'))
+        response = self.client.get(reverse('borrower_booking_pending'))
         self.assertEqual(response.status_code, 200)
-        self.assertTrue('booking_list' in response.context)
+        self.assertTrue('object_list' in response.context)
     
     def test_owner_product(self):
         self.client.login(username='alexandre.woog@e-loue.com', password='alexandre')
@@ -240,15 +263,15 @@ class PatronTest(TestCase):
     
     def test_owner_history(self):
         self.client.login(username='alexandre.woog@e-loue.com', password='alexandre')
-        response = self.client.get(reverse('owner_history'))
+        response = self.client.get(reverse('owner_booking_history'))
         self.assertEqual(response.status_code, 200)
-        self.assertTrue('booking_list' in response.context)
+        self.assertTrue('object_list' in response.context)
     
     def test_owner_booking(self):
         self.client.login(username='alexandre.woog@e-loue.com', password='alexandre')
-        response = self.client.get(reverse('owner_booking'))
+        response = self.client.get(reverse('owner_booking_pending'))
         self.assertEqual(response.status_code, 200)
-        self.assertTrue('booking_list' in response.context)
+        self.assertTrue('object_list' in response.context)
 
 class AddressManagement(TestCase):
     fixtures = ['category', 'patron', 'address', 'price', 'product']
@@ -302,7 +325,7 @@ class AddressManagement(TestCase):
             'addresses-MAX_NUM_FORMS': '',
             'addresses-TOTAL_FORMS': '3',
         })
-        self.assertTemplateUsed(response, 'accounts/addresses_edit.html')
+        self.assertTemplateUsed(response, 'accounts/patron_edit_addresses.html')
         self.assertContains(response, _('This field is required.'))
     
     def test_remove_used_address(self):
@@ -327,7 +350,7 @@ class AddressManagement(TestCase):
             'addresses-MAX_NUM_FORMS': '',
             'addresses-TOTAL_FORMS': '3',
         })
-        self.assertTemplateUsed(response, 'accounts/addresses_edit.html')
+        self.assertTemplateUsed(response, 'accounts/patron_edit_addresses.html')
         self.assertContains(response, 'Vous ne pouvez pas supprimer une adresse associé à un produit. Veuillez le changer sur le page produit.')
 
     def test_remove_unused_address(self):
@@ -406,7 +429,7 @@ class PhonenumberManagement(TestCase):
             'phones-MAX_NUM_FORMS': '',
             'phones-INITIAL_FORMS': '1'
         })
-        self.assertTemplateUsed(response, 'accounts/phonenumber_edit.html')
+        self.assertTemplateUsed(response, 'accounts/patron_edit_phonenumber.html')
         self.assertContains(response, 'Vous ne pouvez pas supprimer tout vos numéros.')
 
     def test_add_wrong_number(self):
@@ -420,5 +443,5 @@ class PhonenumberManagement(TestCase):
             'phones-MAX_NUM_FORMS': '',
             'phones-INITIAL_FORMS': '1'
         })
-        self.assertTemplateUsed(response, 'accounts/phonenumber_edit.html')
+        self.assertTemplateUsed(response, 'accounts/patron_edit_phonenumber.html')
         self.assertContains(response, _(u'Vous devez spécifiez un numéro de téléphone'))

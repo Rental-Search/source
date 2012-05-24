@@ -1,21 +1,62 @@
-{% extends "base.html" %}
-{% load i18n mptt_tags product %}
+{% extends "accounts/dashboard.html" %}
+{% load i18n navbar product %}
 
-{% block title %}{% trans "Modification de" %} {{ product.summary }}{% endblock %}
+{% block title %}{% trans "Suppression de" %} {{ product.summary }}{% endblock %}
 
-{% block content %}
+{% block content-aside-profil %}
+<div class="previous-sub-bar">
+  &larr;  <a href="{% url owner_product_edit product.slug product.pk %}">{% trans "Retour à l'annonce" %}</a>
+</div>
+{% endblock %}
+
+{% block content-main-profil %}
+<h2>{% trans "Etes-vous sûr de vouloir l'annonce annonce ?"%}</h2>
+<ul class="product-list">
+	<li>
+		<a href="{{ product.get_absolute_url }}" class="pl-img">
+			{% with product.pictures.all|first as picture %}
+	           	{% if picture.thumbnail %}
+	           	<img src="{{ picture.thumbnail.url }}" alt="product.summary" width="60" height="60" />
+	        	{% endif %}
+			{% endwith %}
+		</a><!-- pl-img -->
+		<div class="pl-content">
+			<h3>
+				<a href="{% url owner_product_edit product.slug product.pk %}">{{product.summary|capitalize|truncate:200 }}</a>
+			</h3>
+			<address>
+				{{ product.address.city|capfirst }}
+				{% if product.address.zipcode %}, {{ product.address.zipcode }} {% endif %}
+			</address>
+			{% with product.prices.day|first as price %}
+		        <p class="pl-price">{{ price }} <span>/{{price.unit|unit}}</span></p>
+		    {% endwith %}
+	    </div><!-- pl-content -->
+	</li>
+</ul>
+
+<form enctype="multipart/form-data" action="" method="POST">
+	{% csrf_token %}
+	<div class="form-actions">
+      	<button type="submit" class="btn btn-primary">Supprimer</button>
+    	<a href="{% url owner_product_edit product.slug product.pk %}" type="reset" class="btn btn-cancel">Annuler</a>
+  	</div>
+</form>
+{% endblock %}
+
+
 <div id="content" class="xgrid">
     <div class="content-top">
         <ul id="menu" class="x12">
             <li class="menu-tab first"><a href="{% url dashboard %}">{% trans "Tableau de bord" %}</a></li>
 			<li class="menu-tab selected">{% trans "Propriétaire" %}</li>
-			<li class="menu-tab"><a href="{% url borrower_booking %}">{% trans "Locataire" %}</a></li>
+			<li class="menu-tab"><a href="{#% url borrower_booking %#}">{% trans "Locataire" %}</a></li>
 			<li class="menu-tab"><a href="{% url patron_edit %}">{% trans "Mon compte" %}</a></li>
         </ul>
     </div>
     <div id="sub-menu">
         <ul class="x12">
-            <li class="sub-tab first"><a href="{% url owner_booking %}">{% trans "Locations actives" %}</a></li>
+            <li class="sub-tab first"><a href="{#% url owner_booking %#}">{% trans "Locations actives" %}</a></li>
 			<li class="sub-tab"><a href="{% url owner_history %}">{% trans "Historique des locations" %}</a></li>
 			<li class="sub-tab selected">{% trans "Mes objets" %}</li>
 			<li class="sub-tab"><a href="{% url product_create %}">{% trans "Ajouter un objet" %}</a></li>
@@ -54,10 +95,9 @@
     <form id="product-delete" class="inline" enctype="multipart/form-data" action="" method="POST">
         {% csrf_token %}
         <p>
-		   <!-- <a href="{% url product_edit product.slug product.pk %}">{% trans "Annuler" %}</a> {% trans "ou" %} -->
+		   <!-- <a href="{# url product_edit product.slug product.pk #}">{% trans "Annuler" %}</a> {% trans "ou" %} -->
     		<input type="submit" class="btn big-green" value="{% trans "Supprimer" %}" />
 		</p>
 	</form>
 	</div>
 </div>
-{% endblock %}

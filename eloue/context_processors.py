@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 from django.conf import settings
 from django.contrib.sites.models import Site
+from django.db.models import Count
 
-from eloue.products.models import MessageThread
+from eloue.products.models import ProductRelatedMessage, MessageThread
+from eloue.rent.models import Booking
 
 def site(request):
     try:
@@ -14,13 +16,18 @@ def site(request):
 def debug(request):
     return {'debug': settings.DEBUG}
 
+
 def facebook_context(request):
     return {'FACEBOOK_APP_ID': settings.FACEBOOK_APP_ID}
 
+
 def unread_message_count_context(request):
     if request.user.is_authenticated():
-	    return {'unread_message_count': len(filter(lambda thread: thread.new_sender(), MessageThread.objects.filter(sender=request.user))) +
-	      len(filter(lambda thread: thread.new_recipient(), MessageThread.objects.filter(recipient=request.user)))
-	    }
+        return {
+            'unread_message_count': ProductRelatedMessage.objects.filter(
+                recipient=request.user, read_at=None
+            ).values('thread').annotate(Count('thread')).order_by().count()
+        }
     else:
         return {}
+
