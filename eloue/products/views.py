@@ -51,7 +51,8 @@ DEFAULT_RADIUS = getattr(settings, 'DEFAULT_RADIUS', 50)
 USE_HTTPS = getattr(settings, 'USE_HTTPS', True)
 
 @mobify
-@never_cache
+@cache_page(300)
+@vary_on_cookie('Referer')
 def homepage(request):
     curiosities = Curiosity.on_site.all()
     location = request.session.setdefault('location', settings.DEFAULT_LOCATION)

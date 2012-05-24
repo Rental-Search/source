@@ -201,6 +201,12 @@ def user_geolocation(request):
         mimetype="application/json"
     )
 
+@require_GET
+def get_user_location(request):
+    location = request.session.setdefault('location', settings.DEFAULT_LOCATION)
+    location_text = location['formatted_address'] or location['city'] or location['region'] or location['country'] or location['fallback']
+    print location_text
+    return HttpResponse(location_text)
 
 @login_required
 def comments_received(request):
