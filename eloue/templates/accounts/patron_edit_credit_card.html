@@ -13,6 +13,9 @@
 <form class="form-horizontal" method="post" action="">
 {% endif %}
 {% csrf_token %}
+<p class="form-header">
+      {% trans "En enregistrant vos coordonnées bancaires, vous n'aurez plus besoin de les réécrire lors de vos prochaines demandes de locations."%}
+</p>
 <fieldset id="credit-card-form">
   <legend>Modifier votre carte bancaire</legend>
   {{form.non_field_errors}}

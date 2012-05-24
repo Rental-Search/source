@@ -11,7 +11,7 @@
 {% url archived as archived %}
 <ul class="nav-sub-bar">
     <li><a href="{{ inbox }}"  class="{% if request.user == thread.sender and not thread.sender_archived or request.user == thread.recipient and not thread.recipient_archived %}{% active request '' %}{% endif %}">{% trans "Massages reçus" %}</a></li>
-    <li><a href="{{ archived }}" class="{% if request.user == thread.sender and  thread.sender_archived or request.user == thread.recipient and thread.recipient_archived %}{% active request '' %}{% endif %}">{% trans "Messages supprimés" %}</a></li>
+    <li><a href="{{ archived }}" class="{% if request.user == thread.sender and  thread.sender_archived or request.user == thread.recipient and thread.recipient_archived %}{% active request '' %}{% endif %}">{% trans "Messages archivés" %}</a></li>
 </ul>
 {% endblock %}
 

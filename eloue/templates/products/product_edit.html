@@ -21,7 +21,7 @@
     <li><a href="{{ product_address_edit }}"  class="{% active request product_address_edit %}">{% trans "Adresse" %}</a></li>
     <li><a href="{{ product_price_edit }}"  class="{% active request product_price_edit %}">{% trans "Prix" %}</a></li>
     <li>
-      <a href="{% url product_delete product_id=product.id slug=product.slug %}" style="color: #ccc;">Suppression</a>
+      <a href="{% url product_delete product_id=product.id slug=product.slug %}" style="color: #ccc;">Supprimer</a>
     </li>
 </ul>
 {% endblock %}

@@ -519,7 +519,7 @@ def mask_card_number(card_number):
     )
 
 class CreditCardForm(forms.ModelForm):
-    cvv = forms.CharField(max_length=4, label=_(u'Cryptogramme de sécurité'))
+    cvv = forms.CharField(max_length=4, label=_(u'Cryptogramme de sécurité'), help_text=_(u'Les 3 derniers chiffres au dos de la carte.'))
     expires = ExpirationField(label=_(u'Date d\'expiration'))
     holder_name = forms.CharField(label=_(u'Titulaire de la carte'))
 
