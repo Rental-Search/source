@@ -24,7 +24,7 @@
         </form>
             <p class="city">
                 <span class="city-to">à </span>
-                <span class="city-name">{% firstof request.session.location.city request.session.location.region request.session.location.country request.session.location.fallback "Boulogne-sur-Mer" %}</span>
+                <span class="city-name" id="city-name"></span>
                 <button class="btn-other-town"><span>Changer de ville</span></button>
             </p>
             <p class="city-input">
@@ -114,16 +114,6 @@
     {{ block.super }}
     <script src="//maps.googleapis.com/maps/api/js?sensor=false&amp;libraries=places" type="text/javascript"></script>
     <script type="text/javascript">
-        $(".products-home-tabs").show();
-        $(document).ready(function() {
-            if (!$.cookie('geocoding')) 
-                navigator.geolocation.getCurrentPosition(
-                    SuccessBuilder(2, false, function(){window.location.reload();}), 
-                    geocoder_error_handler
-                );
-        });
-        geolocation_stuff();
-
         (function( $ ) {
           $.fn.loadMore = function(url) {
             if (typeof(url) === 'undefined') {
@@ -151,9 +141,38 @@
           };
         })( jQuery );
 
-        $('#near').loadMore('lists/object/');
-        $('#near_car').loadMore('lists/car/');
-        $('#near_realestate').loadMore('lists/realestate/');
+        location_changed = function() {
+            $('#near').loadMore('lists/object/');
+            $('#near_car').loadMore('lists/car/');
+            $('#near_realestate').loadMore('lists/realestate/');
+            $.ajax(
+                {
+                    url:'/get_user_location/', 
+                    cache: false,
+                    success: function(response) {
+                        $('.city-name').html(response);
+                        $('#id_for_l').val(response);
+                        $('.search-home').removeClass('editing');
+                    }
+                }
+            )
+        }
+
+
+        $(".products-home-tabs").show();
+        location_changed();
+
+
+        $(document).ready(function() {
+            if (!$.cookie('geocoding')) 
+                navigator.geolocation.getCurrentPosition(
+                    SuccessBuilder(2, false, location_changed), 
+                    geocoder_error_handler
+                );
+        });
+        geolocation_stuff(location_changed);
+
+
     </script>
 {% endblock %}
 

@@ -1,3 +1,8 @@
+
+$.ajaxSetup ({
+    // Disable caching of AJAX responses
+    cache: false
+});
 function getCookie(name) {
     var cookieValue = null;
     if (document.cookie && document.cookie != '') {
@@ -66,6 +71,7 @@ function report_location_back(source, forced, address, coords, success) {
       source: source,
       forced: forced
     },
+    cache: false,
     success: function(response) {
         if (response["status"] == "OK") {
             $.cookie('geocoding', 'success', { expires: 1, path: '/' });
@@ -75,7 +81,7 @@ function report_location_back(source, forced, address, coords, success) {
   });
 }
 
-geolocation_stuff = function() {
+geolocation_stuff = function(success) {
     autocomplete = new google.maps.places.Autocomplete(
         document.getElementById("id_l"), 
         {
@@ -89,7 +95,7 @@ geolocation_stuff = function() {
 
     google.maps.event.addListener(autocomplete, 'place_changed', function() {
       place = autocomplete.getPlace();
-      report_location_back(1, true, place, place.geometry.location, function() {window.location.reload();});
+      report_location_back(1, true, place, place.geometry.location, function() {success();});
     });
 
     $("#rayon_update").click(function() {
@@ -106,6 +112,7 @@ geolocation_stuff = function() {
                 radius: $("#id_r").val().replace(RegExp(',', 'g'), '.'),
                 forced: true
             },
+            cache: false,
             success: function(response) {
                 if (response["status"] == "OK") {
                     $("#form_search_results").submit();
