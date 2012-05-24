@@ -125,7 +125,7 @@ class RealEstateIndex(ProductIndex):
     capacity = IntegerField(model_attr='capacity')
     private_life = IntegerField(model_attr='private_life')
     chamber_number = IntegerField(model_attr='chamber_number')
-    rules = CharField(model_attr='rules')
+    rules = CharField(model_attr='rules', null=True)
 
     # services inclus
     air_conditioning = BooleanField(model_attr='air_conditioning')
