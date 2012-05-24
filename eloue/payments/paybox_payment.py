@@ -81,7 +81,7 @@ class PayboxManager(object):
         """Subscribe new user to Paybox Direct Plus services"""
         TYPE = TYPES['SUBSCRIBER_SUBSCRIBE']
         response = self._request(
-            TYPE=TYPE, MONTANT=0, REFABONNE=member_id, PORTEUR=card_number, 
+            TYPE=TYPE, MONTANT=1, REFABONNE=member_id, PORTEUR=card_number, 
             DATEVAL=expiration_date, CVV=cvv
         )
         return response['PORTEUR'][0]
@@ -95,7 +95,7 @@ class PayboxManager(object):
     def modify(self, member_id, card_number, expiration_date, cvv):
         TYPE = TYPES['SUBSCRIBER_MODIFY']
         response = self._request(
-            TYPE=TYPE, MONTANT=0, REFABONNE=member_id, PORTEUR=card_number, 
+            TYPE=TYPE, MONTANT=1, REFABONNE=member_id, PORTEUR=card_number, 
             DATEVAL=expiration_date, CVV=cvv
         )
         return response['PORTEUR'][0]
