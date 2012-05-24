@@ -204,7 +204,7 @@ def user_geolocation(request):
 @require_GET
 def get_user_location(request):
     location = request.session.setdefault('location', settings.DEFAULT_LOCATION)
-    location_text = location['formatted_address'] or location['city'] or location['region'] or location['country'] or location['fallback']
+    location_text = location.get('formatted_address') or location['city'] or location['region'] or location['country'] or location['fallback']
     return HttpResponse(location_text)
 
 @login_required
