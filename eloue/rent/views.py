@@ -78,13 +78,15 @@ def pay_ipn(request):
 def product_occupied_date(request, slug, product_id):
     product = get_object_or_404(Product.on_site, pk=product_id)
     dthandler = lambda obj: obj.isoformat() if isinstance(obj, (datetime, date)) else None
-    return HttpResponse(
-        simplejson.dumps(
-            product.monthly_availability(request.GET['year'], request.GET['month']),
-            default=dthandler), 
-        mimetype='application/json'
-    )
-
+    if 'year' in request.GET and 'month' in request.GET:
+        return HttpResponse(
+            simplejson.dumps(
+                product.monthly_availability(request.GET['year'], request.GET['month']),
+                default=dthandler), 
+            mimetype='application/json'
+        )
+    else:
+        return HttpResponse('{}', mimetype='application/json')
 
 @require_GET
 def booking_price(request, slug, product_id):
