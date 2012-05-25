@@ -99,12 +99,14 @@
             <h4>{% trans "Communauté"%}</h4>
         </li>
     </ul>{# args #}
+    {% cache 500 last_joined request.session.location.coordinates %}
     <div class="new-profils">
         <div class="np-title">{% trans "Derniers<br/>inscrits" %}</div><!-- np-title -->
         {% with last_joined as patron_list %}
           {% include "accounts/partials/avatar_list.html" %}
         {% endwith %}
     </div>{# new_profils #}
+    {% endcache %}
     <div class="press">
         <div class="press-title">Ils parlent de nous !</div>
         <img src="{{ MEDIA_URL }}images/e-loue_dans_la_press.png" width="619" height="39" />
