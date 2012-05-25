@@ -99,7 +99,7 @@
             <h4>{% trans "Communauté"%}</h4>
         </li>
     </ul>{# args #}
-    {% cache 500 last_joined request.session.location.coordinates %}
+    {% cache 500 last_joined request.session.location.city %}
     <div class="new-profils">
         <div class="np-title">{% trans "Derniers<br/>inscrits" %}</div><!-- np-title -->
         {% with last_joined as patron_list %}

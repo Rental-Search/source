@@ -45,6 +45,7 @@ from django_messages.forms import ComposeForm
 from eloue.products.utils import format_quote, escape_percent_sign
 from django.core.cache import cache
  
+from eloue.accounts.search_indexes import patron_search
 
 PAGINATE_PRODUCTS_BY = getattr(settings, 'PAGINATE_PRODUCTS_BY', 10)
 DEFAULT_RADIUS = getattr(settings, 'DEFAULT_RADIUS', 50)
@@ -61,10 +62,11 @@ def homepage(request):
     alerts = Alert.on_site.all()[:3]
     try:
         coords = location['coordinates']
-        l = Point(coords)
-        last_joined = Patron.objects.last_joined_near(l)
+        last_joined = patron_search.spatial(
+            lat=coords[0], long=coords[1], radius=1541
+        ).order_by('-date_joined_date', 'geo_distance')
     except KeyError:
-        last_joined = Patron.objects.last_joined()
+        last_joined = patron_search.order_by('-date_joined_date')
     return render_to_response(
         template_name='index.html', 
         dictionary={
@@ -82,7 +84,6 @@ def homepage_object_list(request, search_index, offset=0):
     coords = location['coordinates']
     region_coords = location.get('region_coords') or coords
     region_radius = location.get('region_radius') or location['radius']
-    l = Point(coords)
     last_added = search_index.spatial(
             lat=region_coords[0], long=region_coords[1], radius=min(region_radius, 1541)
         ).spatial(

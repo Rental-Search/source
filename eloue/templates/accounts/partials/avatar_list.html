@@ -4,7 +4,7 @@
     <li>
         <a href="{{patron.get_absolute_url}}">
             {% if patron.avatar %}
-                <img src="{{ patron.avatar.thumbnail.url }}" width="60" height="60" />
+                <img src="{{ patron.avatar }}" width="60" height="60" />
             {% else %}
                 <img src="{{ MEDIA_URL }}images/default_avatar.png" width="60" height="60" />
             {% endif %}
