@@ -2,7 +2,7 @@
 <ul class="avatars-list">
     {% for patron in patron_list %}
     <li>
-        <a href="{{patron.get_absolute_url}}">
+        <a href="{{patron.url}}">
             <img src="{{ patron.avatar }}" width="60" height="60" />
         </a>
         <p>{{ patron.username|truncate:6 }}</p>

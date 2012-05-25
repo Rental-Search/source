@@ -20,6 +20,7 @@ class PatronIndex(QueuedSearchIndex):
     lng = FloatField(null=True)
     sites = MultiValueField(faceted=True)
     date_joined_date = DateField()
+    url = CharField()
     text = CharField(document=True)
 
     def prepare_sites(self, obj):
@@ -28,6 +29,9 @@ class PatronIndex(QueuedSearchIndex):
     def prepare_date_joined_date(self, obj):
         return obj.date_joined.date()
 
+    def prepare_url(self, obj):
+        return obj.get_absolute_url()
+        
     def prepare_avatar(self, obj):
         try:
             return obj.avatar.thumbnail.url
