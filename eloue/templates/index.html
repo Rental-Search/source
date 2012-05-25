@@ -59,6 +59,7 @@
                 </p>
             </div>{# near #}
             <div id="hotloc">
+                {% cache 500 curiosities %}
                 <ul class="product-list">
                 {% for curiosity in curiosities %}
                     {% with curiosity.product as product %}
@@ -68,6 +69,7 @@
                     {% endwith %}
                 {% endfor %}
                 </ul>
+                {% endcache %}
             </div>{# hotloc #}
         </div>{# products-home-tabs #}
     </div>{# product-home #}
@@ -145,7 +147,7 @@
             })( jQuery );
 
             location_changed = function() {
-                
+
                 $('#near').loadMore('lists/object/');
                 $('#near_car').loadMore('lists/car/');
                 $('#near_realestate').loadMore('lists/realestate/');
@@ -165,8 +167,6 @@
 
             $(".products-home-tabs").show();
             location_changed();
-
-
 
 
             if (!$.cookie('geocoding')) 
