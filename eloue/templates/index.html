@@ -166,6 +166,8 @@
                 )
             }
 
+             geolocation_stuff(location_changed);
+
 
             $(".products-home-tabs").show();
             location_changed();
@@ -176,7 +178,7 @@
                     SuccessBuilder(2, false, location_changed), 
                     geocoder_error_handler
                 );
-            geolocation_stuff(location_changed);
+           
         });
 
 
