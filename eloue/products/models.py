@@ -339,15 +339,17 @@ class Product(models.Model):
 
     @property
     def subtype(self):
-        try:
-            return self.carproduct
-        except self.DoesNotExist:
-            pass
-        try:
-            return self.realestateproduct
-        except self.DoesNotExist:
-            pass
-        return self
+        if hasattr(self, '_subtype'):
+            return self._subtype
+        else:
+            try:
+                self._subtype = self.carproduct
+            except self.DoesNotExist:
+                try:
+                    self._subtype = self.realestateproduct
+                except self.DoesNotExist:
+                    self._subtype = self
+        return self._subtype
 
     @property
     def commission(self):
