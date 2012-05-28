@@ -117,7 +117,20 @@
 {% block tail %}
     {{ block.super }}
     <script src="//maps.googleapis.com/maps/api/js?sensor=false&amp;libraries=places" type="text/javascript"></script>
-    <script type="text/javascript" defer="defer">
+    <script type="text/javascript">
+
+        function SuccessBuilder(priority, forced, geocodeSuccess) {
+    return function(position) {
+        geocoder = new google.maps.Geocoder();
+        latlon = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+        geocoder.geocode(
+            {'latLng':latlon},
+            function(result) {
+                report_location_back(priority, forced, result[0], latlon, geocodeSuccess);
+            }
+        );
+    };
+}
 
         $(document).ready(function() {
 
