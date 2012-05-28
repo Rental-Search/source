@@ -83,7 +83,7 @@
                 <ul>
         			<li><a href="{% url home %}">{% trans "Accueil" %}</a></li>
         			<li><a href="{% url dashboard %}">{% trans "Mon compte" %}</a></li>
-        			<li><a href="{% url product_create %}">{% trans "Mettre en location" %}</a></li>
+        			<li><a href="{% url publish_new_ad %}">{% trans "Déposer une annonce" %}</a></li>
         			{% if user.is_authenticated %}
         				<li><a href="{% trans "/comment-ca-marche/" %}">{% trans "Comment ça marche ?" %}</a></li>
         			{% endif %}
