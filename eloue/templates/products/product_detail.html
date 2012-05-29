@@ -420,7 +420,7 @@
                 {{ product.owner.default_address.city }} - {{ product.owner.default_address.zipcode }}
             </address>
             <a href="{% url message_create product.pk product.owner.pk %}" class="btn-contactme">Contactez-moi</a>
-            <span style="margin-top: 0; margin-bottom: 10px; margin-left: 20px;" class="stars empty"><span class="stars filled_{{ product.average_note }}"></span></span>
+            <span style="margin-top: 0; margin-bottom: 10px; margin-left: 20px;" class="stars empty"><span class="stars filled_{{ product.owner.average_note }}"></span></span>
             {% with product.owner as patron %}
                 {% include "accounts/partials/response_stats.html" %}
             {% endwith %}
