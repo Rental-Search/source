@@ -19,7 +19,7 @@ from django.conf import settings
 from django.contrib.auth.models import User
 from django.contrib.gis.geos import Point
 from django.core.cache import cache
-from django.db.models import permalink, Q, signals, Count
+from django.db.models import permalink, Q, signals, Count, Sum
 from django.utils.encoding import smart_unicode
 from django.utils.formats import get_format
 from django.utils.timesince import timesince
@@ -319,6 +319,31 @@ class Patron(User):
             return timesince(datetime.datetime.now() - datetime.timedelta(days=1))
         rt = sum([message.sent_at - message.parent_msg.sent_at for message in messages], datetime.timedelta(seconds=0))/len(messages)
         return timesince(datetime.datetime.now() - rt)
+
+    @property
+    def average_note(self):
+        from eloue.rent.models import BorrowerComment, OwnerComment
+        borrower_comments = BorrowerComment.objects.filter(booking__owner=self)
+        owner_comments = OwnerComment.objects.filter(booking__borrower=self)
+
+        if borrower_comments:
+            borrower_sum = borrower_comments.aggregate(Sum('note'))['note__sum']
+            borrower_count = borrower_comments.aggregate(Count('note'))['note__count']
+        else:
+            borrower_sum = 0
+            borrower_count = 0
+        if owner_comments:
+            owner_sum = owner_comments.aggregate(Sum('note'))['note__sum']
+            owner_count = owner_comments.aggregate(Count('note'))['note__count']
+        else:
+            owner_sum = 0
+            owner_count = 0
+
+        try:
+            avg = (borrower_sum + owner_sum) / (borrower_count + owner_count)
+        except:
+            avg = 0
+        return avg
 
     def send_activation_email(self):
         context = {

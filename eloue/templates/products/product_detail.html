@@ -438,7 +438,7 @@
                     {% endwith %}
                 </address>
                 <a href="{% url message_create product.pk patron.pk %}" class="btn-contactme">Contactez-moi</a>
-                <span style="margin-top: 0; margin-bottom: 10px; margin-left: 20px;" class="stars empty"><span class="stars filled_{{ product.average_note }}"></span></span>
+                <span style="margin-top: 0; margin-bottom: 10px; margin-left: 20px;" class="stars empty"><span class="stars filled_{{ patron.average_note }}"></span></span>
                 {% include "accounts/partials/response_stats.html" %}
             </div>{#  owner #}
             {% endwith %}
