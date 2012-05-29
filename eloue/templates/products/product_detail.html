@@ -10,32 +10,32 @@
 
 {% block description %}{{ product.summary }} {{ product.description }}{% endblock %}
 
+{% with product.get_absolute_url as absolute_url %}
+{% with product.pictures.all|first as picture %}
 
 {% block head %}
  {{ block.super }}
-    <meta property="og:title" content="A louer sur e-loue : {{product.summary}}"/>
-    <meta property="og:type" content="product"/>
-    <meta property="og:url" content="{% if request.is_secure %}https{%else%}http{%endif%}://{{ request.get_host }}{{ product.get_absolute_url }}"/>
-    {% with product.address as address %}
-        <meta property="og:locality" content="{{address.city}}"/>
-        <meta property="og:postal-code" content="{{address.zipcode}}"/>
-        <meta property="og:country-name" content="{{address.get_country_display}}"/>
-    {% endwith %}
-    {% with product.pictures.all|first as picture %}
-      {% if picture %}
-        <meta property="og:image" content="{{picture.thumbnail.url }}"/>
-      {% endif %}
-     {% endwith %}
-    <meta property="og:site_name" content="e-loue"/>
-    <meta property="fb:app_id" content="{{FACEBOOK_APP_ID}}"/>
-    <meta property="og:description" content="{{ product.description }}"/>
+    {% cache 300 product_meta product.pk product.modified_at %}
+        <meta property="og:title" content="A louer sur e-loue : {{product.summary}}"/>
+        <meta property="og:type" content="product"/>
+        <meta property="og:url" content="{% if request.is_secure %}https{%else%}http{%endif%}://{{ request.get_host }}{{ absolute_url }}"/>
+        {% with product.address as address %}
+            <meta property="og:locality" content="{{address.city}}"/>
+            <meta property="og:postal-code" content="{{address.zipcode}}"/>
+            <meta property="og:country-name" content="{{address.get_country_display}}"/>
+        {% endwith %}
+          {% if picture %}
+            <meta property="og:image" content="{{picture.thumbnail.url }}"/>
+          {% endif %}
+        <meta property="og:site_name" content="e-loue"/>
+        <meta property="fb:app_id" content="{{FACEBOOK_APP_ID}}"/>
+        <meta property="og:description" content="{{ product.description }}"/>
 
-    {% with product.pictures.all|first as picture %}
         {% if picture %}
-        <meta itemprop="image" content="{{picture.thumbnail.url}}">
+            <meta itemprop="image" content="{{picture.thumbnail.url}}">
         {% endif %}
-    {% endwith %}
-    <link rel="canonical" href="{% if request.is_secure %}https{%else%}http{%endif%}://{{ request.get_host }}{{ product.get_absolute_url }}" />
+        <link rel="canonical" href="{% if request.is_secure %}https{%else%}http{%endif%}://{{ request.get_host }}{{ absolute_url }}" />
+    {% endcache %}
 {% endblock %}
 
 {% block tail %}
@@ -173,6 +173,8 @@
 <div id="fb-root"></div>
 
 <div class="container-main">
+
+{% cache 300 product_breadcrumb product.pk product.modified_at %}
     <ul class="breadcrumb">
         <li><a href="{% url home %}">{% trans "Accueil" %}</a></li>
 		{% for category in product.category.get_ancestors %}
@@ -181,16 +183,21 @@
 		<li><a href="{{ product.category.get_absolute_url }}">{% trans "Location" %} {{ product.category|capfirst }}</a></li>
 		<li class="lastb">{{ product.summary|capitalize }}</li>
     </ul>{# breadcrumb #}
+{% endcache %}
     <div class="content-main">
         {% include "partials/alerts_message.html" %}
+
+{% cache 300 product_details product.pk product.modified_at %}
         <h1>{{ product.summary|capitalize}}</h1>
         <div class="product-resume">
             <div class="product-resume-left">
                 <address class="product-address ">
                     <i class="icon-map-marker"></i>
-                    {{ product.address.city|capfirst }}, {{ product.address.zipcode }}
+                    {% with product.address as product_address %}
+                    {{ product_address.city|capfirst }}, {{ product_address.zipcode }}
+                    {% endwith %}
                 </address>
-                {% if product.carproduct %}
+                {% if product.name == 'carproduct' %}
                 <ul class="product-properties">
                     <li>
                         <i class="icon-user"></i>
@@ -214,7 +221,7 @@
                     </li>
                 </ul>{# product-properties #}
                 {% endif %}
-                {% if product.realestateproduct %}
+                {% if product.name == 'realestateproduct' %}
                 <ul class="product-properties">
                     <li>
                         <i class="icon-user"></i>
@@ -231,6 +238,8 @@
                 </ul>
                 {% endif %}
             </div>
+{% endcache %}
+{% cache 300 product_borrowercomments product.borrowercomments.count %}
             <div class="product-resume-right">
                 <span class="stars empty"><span class="stars filled_{{ product.average_note }}"></span></span>
                 <a href="#id_product_comment">
@@ -241,6 +250,7 @@
                 {% endblocktrans%}
                 </a>
             </div>
+{% endcache %}
         </div>{# product-resume #}
         <div class="product-tabs">
             <ul>
@@ -249,11 +259,12 @@
                 <li><a href="#conditions">{% trans "Conditions et assurance"%}</a></li>
             </ul>
             <div id="gallery">
-                {% with product.pictures.all|first as picture %}
+
+            {% with product.pictures.all|first as picture %}
                 {% if picture %}
                     <img src="{{ picture.display.url }}" alt="{{ product.summary }}">
                 {% endif %}
-                {% endwith %}
+            {% endwith %}
             </div> {# gallery #}
             <div id="prices_calendar">
                 <div class="prices">
@@ -274,7 +285,8 @@
                             {% endfor %}
                         </table>
                     </div>
-                    {% if product.carproduct %}
+{% cache 300 product_details_end product.pk product.modified_at %}
+                    {% if product.type == 'carproduct' %}
                     <ul class="service-included">
                         <li>
                             {% if product.km_included %}{{ product.km_included }} km inclus par jour {% endif %} 
@@ -322,35 +334,38 @@
             {{ product.rules|linebreaksp }}
         </div>        
         {% endif %}
+{% endcache %}
         <div id="id-product-comment" class="product-comment">
-            {% if product.borrowercomments.count > 0 %}
-                {% blocktrans count product.borrowercomments.count as count %}
-                    <h2>{{ count }} commentaires</h2>
-                    {% plural %}
-                    <h2>{{ count }} commentaire</h2>
-                {% endblocktrans%}
-            {% else %}
-            <h2>{% trans "Pas de commentaire" %}</h2>
-            {% endif %}
-            <ul>
-            {% for comment in product.borrowercomments %}
-                <li>{% include "rent/partials/comment.html" %}</li>
-            {% empty %}
-                <li>{% trans "Soyez-le premier à réserver et commenter !" %}</li>
-            {% endfor %}
-            </ul>
+            {% with product.borrowercomments as borrowercomments %}
+                {% if borrowercomments.count > 0 %}
+                    {% blocktrans count borrowercomments.count as count %}
+                        <h2>{{ count }} commentaires</h2>
+                        {% plural %}
+                        <h2>{{ count }} commentaire</h2>
+                    {% endblocktrans%}
+                {% else %}
+                <h2>{% trans "Pas de commentaire" %}</h2>
+                {% endif %}
+                <ul>
+                {% for comment in borrowercomments %}
+                    <li>{% include "rent/partials/comment.html" %}</li>
+                {% empty %}
+                    <li>{% trans "Soyez-le premier à réserver et commenter !" %}</li>
+                {% endfor %}
+                </ul>
+            {% endwith %}
         </div>{# product-comment #}
     </div>{# content-main #}
     <div class="content-aside">
         <ul class="social-button">
             <li class="fb">
-                <fb:like href="{% if request.is_secure %}https{%else%}http{%endif%}://{{ request.get_host }}{{ product.get_absolute_url }}" send="true" layout="button_count" show_faces="false" font="tahoma"></fb:like>
+                <fb:like href="{% if request.is_secure %}https{%else%}http{%endif%}://{{ request.get_host }}{{ absolute_url }}" send="true" layout="button_count" show_faces="false" font="tahoma"></fb:like>
             </li>
             <li class="tweet">
-                <a href="https://twitter.com/share" class="twitter-share-button" data-count="none" data-url="{% if request.is_secure %}https{%else%}http{%endif%}://{{ request.get_host }}{{ product.get_absolute_url }}" data-hashtags="eloue" data-text="A louer sur e-loue : "></a>
+                <a href="https://twitter.com/share" class="twitter-share-button" data-count="none" data-url="{% if request.is_secure %}https{%else%}http{%endif%}://{{ request.get_host }}{{ absolute_url }}" data-hashtags="eloue" data-text="A louer sur e-loue : "></a>
             </li>
             <li class="gplus">
-                <g:plusone size="medium" annotation="none" href="{% if request.is_secure %}https{%else%}http{%endif%}://{{ request.get_host }}{{ product.get_absolute_url }}"></g:plusone>
+                <g:plusone size="medium" annotation="none" href="{% if request.is_secure %}https{%else%}http{%endif%}://{{ request.get_host }}{{ absolute_url }}"></g:plusone>
             </li>
         </ul>{# social-button #}
         <div class="booking-block">
@@ -398,33 +413,35 @@
                     </form>
                 </div><!-- bottom-block -->
         </div>{# booking-block #}
-        <div id="owner" class="info-block">
-            <h2>
-                {% if product.owner.is_professional %}
-                    {% trans "Professionnel"%}
-                {% else %}
-                    {% trans "Particulier" %}
-                {% endif %}
-            </h2>
-            <a href="{{ product.owner.get_absolute_url }}" class="onwer-avatar">
-                {% if product.owner.avatar %}
-                <img src="{{ product.owner.avatar.profil.url }}" alt="{% trans "loueur"%}{{ product.owner.username }}" width="100" height="100">
-                {% else %}
-                <img src="{{ MEDIA_URL }}images/default_avatar.png" alt="{% trans "loueur"%}{{ product.owner.username }}" width="100" height="100">
-                {% endif %}
-            </a>
-            <p class="owner-username">
-                <a href="{{ product.owner.get_absolute_url }}">{{ product.owner.username|truncate:16 }}</a>
-            </p>
-            <address>
-                {{ product.owner.default_address.city }} - {{ product.owner.default_address.zipcode }}
-            </address>
-            <a href="{% url message_create product.pk product.owner.pk %}" class="btn-contactme">Contactez-moi</a>
-            <span style="margin-top: 0; margin-bottom: 10px; margin-left: 20px;" class="stars empty"><span class="stars filled_{{ product.average_note }}"></span></span>
             {% with product.owner as patron %}
+            <div id="owner" class="info-block">
+                <h2>
+                    {% if patron.is_professional %}
+                        {% trans "Professionnel"%}
+                    {% else %}
+                        {% trans "Particulier" %}
+                    {% endif %}
+                </h2>
+                <a href="{{ patron.get_absolute_url }}" class="onwer-avatar">
+                    {% if patron.avatar %}
+                    <img src="{{ patron.avatar.profil.url }}" alt="{% trans "loueur"%}{{ patron.username }}" width="100" height="100">
+                    {% else %}
+                    <img src="{{ MEDIA_URL }}images/default_avatar.png" alt="{% trans "loueur"%}{{ patron.username }}" width="100" height="100">
+                    {% endif %}
+                </a>
+                <p class="owner-username">
+                    <a href="{{ patron.get_absolute_url }}">{{ patron.username|truncate:16 }}</a>
+                </p>
+                <address>
+                    {% with patron.default_address as default_address %}
+                        {{ default_address.city }} - {{ default_address.zipcode }}
+                    {% endwith %}
+                </address>
+                <a href="{% url message_create product.pk patron.pk %}" class="btn-contactme">Contactez-moi</a>
+                <span style="margin-top: 0; margin-bottom: 10px; margin-left: 20px;" class="stars empty"><span class="stars filled_{{ product.average_note }}"></span></span>
                 {% include "accounts/partials/response_stats.html" %}
+            </div>{#  owner #}
             {% endwith %}
-        </div>{#  owner #}
         {% if product_list %}
         <div id="related-product" class="info-block">
             <h2>Objets similaires</h2>
@@ -436,3 +453,6 @@
     </div>{# content-aside #}
 </div>{# container-main #}
 {% endblock %}
+
+{% endwith %} {# url#}
+{% endwith %} {# picture #}
