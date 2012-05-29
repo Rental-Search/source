@@ -200,7 +200,7 @@ class Product(models.Model):
     on_site = CurrentSiteProductManager()
     objects = ProductManager()
     
-    modified_at = models.DateTimeField(blank=True, null=True)
+    modified_at = models.DateTimeField(blank=True, null=True, auto_now=True)
 
     class Meta:
         verbose_name = _('product')
