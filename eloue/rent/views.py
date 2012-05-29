@@ -14,7 +14,7 @@ from django.utils import simplejson
 from django.utils.encoding import smart_str
 from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.http import require_POST, require_GET
-from django.views.decorators.cache import never_cache
+from django.views.decorators.cache import never_cache, cache_page
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic.list_detail import object_detail
 from django.views.generic.simple import direct_to_template, redirect_to
@@ -154,11 +154,11 @@ def booking_create_redirect(request, *args, **kwargs):
 @never_cache
 @secure_required
 def booking_create(request, *args, **kwargs):
-    product = get_object_or_404(Product.on_site, pk=kwargs['product_id'])
+    product = get_object_or_404(Product.on_site.active(), pk=kwargs['product_id']).subtype
     if product.slug != kwargs['slug']:
         return redirect(product, permanent=True)
     wizard = BookingWizard([BookingForm, EmailAuthenticationForm,])
-    return wizard(request, *args, **kwargs)
+    return wizard(request, product, product.subtype, *args, **kwargs)
 
 
 @login_required
