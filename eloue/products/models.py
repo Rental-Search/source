@@ -200,7 +200,7 @@ class Product(models.Model):
     on_site = CurrentSiteProductManager()
     objects = ProductManager()
     
-    modified_at = models.DateTimeField(blank=True, null=True)
+    modified_at = models.DateTimeField(blank=True, null=True, auto_now=True)
 
     class Meta:
         verbose_name = _('product')
@@ -336,18 +336,26 @@ class Product(models.Model):
             )
         ]
 
-
+    @property
+    def name(self):
+        if self.subtype == self:
+            return 'product'
+        else:
+            return self.subtype.name
+    
     @property
     def subtype(self):
-        try:
-            return self.carproduct
-        except self.DoesNotExist:
-            pass
-        try:
-            return self.realestateproduct
-        except self.DoesNotExist:
-            pass
-        return self
+        if hasattr(self, '_subtype'):
+            return self._subtype
+        else:
+            try:
+                self._subtype = self.carproduct
+            except self.DoesNotExist:
+                try:
+                    self._subtype = self.realestateproduct
+                except self.DoesNotExist:
+                    self._subtype = self
+        return self._subtype
 
     @property
     def commission(self):
@@ -426,6 +434,10 @@ class CarProduct(Product):
         return self
 
     @property
+    def name(self):
+        return 'carproduct'
+
+    @property
     def commission(self):
         return settings.COMMISSION
 
@@ -495,7 +507,11 @@ class RealEstateProduct(Product):
     @property
     def subtype(self):
         return self
-
+    
+    @property
+    def name(self):
+        return 'realestateproduct'
+        
     @property
     def commission(self):
         return settings.COMMISSION

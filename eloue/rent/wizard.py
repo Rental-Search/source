@@ -42,13 +42,9 @@ class BookingWizard(MultiPartFormWizard):
         ]
         self.title = _(u'Réservation')
 
-    def __call__(self, request, *args, **kwargs):
-        product = get_object_or_404(Product.on_site.select_related(), pk=kwargs['product_id'])
-        try:
-            product.carproduct
+    def __call__(self, request, product, *args, **kwargs):
+        if product.name == 'carproduct':
             self.required_fields += ['drivers_license_date', 'drivers_license_number', 'date_of_birth', 'place_of_birth']
-        except Product.DoesNotExist:
-            pass
         
         from eloue.products.search_indexes import product_search
         self.extra_context={
@@ -70,7 +66,7 @@ class BookingWizard(MultiPartFormWizard):
                         self.form_list.append(CvvForm)
                     except (CreditCard.DoesNotExist, AttributeError):
                         self.form_list.append(BookingCreditCardForm)
-        return super(BookingWizard, self).__call__(request, *args, **kwargs)
+        return super(BookingWizard, self).__call__(request, product, *args, **kwargs)
 
     def done(self, request, form_list):
         super(BookingWizard, self).done(request, form_list)
@@ -156,15 +152,8 @@ class BookingWizard(MultiPartFormWizard):
         super(BookingWizard, self).process_step(request, form, step)
         self.extra_context.setdefault('preview', {}).update(form.cleaned_data)
     
-    def parse_params(self, request, *args, **kwargs):
-        product = get_object_or_404(Product.on_site.active().select_related(), pk=kwargs['product_id'])
-        try:
-            self.extra_context['product'] = product.realestateproduct
-        except Product.DoesNotExist:
-            try:
-                self.extra_context['product'] = product.carproduct
-            except Product.DoesNotExist:
-                self.extra_context['product'] = product
+    def parse_params(self, request, product, *args, **kwargs):
+        self.extra_context['product'] = product
         self.extra_context['search_form'] = FacetedSearchForm()
         self.extra_context['comments'] = BorrowerComment.objects.filter(booking__product=product)
     

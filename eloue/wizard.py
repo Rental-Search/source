@@ -107,7 +107,6 @@ class MultiPartFormWizard(FormWizard):
                 self.step = current_step = next_step
 
         return self.render(form, request, current_step)
-        return super(MultiPartFormWizard, self).__call__(request, *args, **kwargs)
 
     def done(self, request, form_list):
         missing_form = next((form for form in form_list if getattr(form.__class__, '__name__', None) == 'MissingInformationForm'), None)

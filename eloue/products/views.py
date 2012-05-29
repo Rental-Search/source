@@ -57,7 +57,7 @@ USE_HTTPS = getattr(settings, 'USE_HTTPS', True)
 def homepage(request):
     curiosities = Curiosity.on_site.all()
     location = request.session.setdefault('location', settings.DEFAULT_LOCATION)
-    address = location.get('formatted_address') or ('{city}, {country}'.format(**location) if location.get('city') else '{country}'.format(**location))
+    address = location.get('formatted_address') or (u'{city}, {country}'.format(**location) if location.get('city') else u'{country}'.format(**location))
     form = FacetedSearchForm({'l': address}, auto_id='id_for_%s')
     alerts = Alert.on_site.all()[:3]
     try:
