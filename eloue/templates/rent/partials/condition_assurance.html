@@ -1,7 +1,7 @@
 {% load i18n %}
 
 {% if not product.owner.is_professional %}
-     {% if product.carproduct %}
+     {% if product.name == 'carproduct' %}
           <h4>Asssurance du véhicule</h4>
           <p class="last">Assurance accident et vol inclus dans le prix du montant de la réservation. La franchise de cette assurance est de 2000&euro;.</p>
           <h4 style>Condition de location</h4>
@@ -13,7 +13,7 @@
           <p>L'usage est exclusivement privé.</p>
           <p>Le transport de passagers à titre onéreux est exclus.</p>
       {% endif %}
-      {% if product.realestateproduct %}
+      {% if product.name == 'realestateproduct' %}
           <h4>Assurance du logement</h4>
           <p>Annulation de séjour</p>
           <p>Intéruption de séjour</p>
@@ -23,7 +23,7 @@
           <p>Le locataire doit être un particulier.</p>
           <p>La durée de la location ne peut pas excéder 90 jours.</p>
       {% endif %}
-      {% if not product.carproduct and not product.realestateproduct %}
+      {% if product.name == 'product' %}
           <h4>{% trans "Assurance de l'objet"%}</h4>
           <p>Casse accidentelle (vol exclus) pour un montant maximum de 750&euro;.</p>
           <p>Pour les réparations n'éxcédant pas 750&euro; : franchise de 15% du montant des réparations.<p>
