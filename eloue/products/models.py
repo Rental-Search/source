@@ -336,7 +336,13 @@ class Product(models.Model):
             )
         ]
 
-
+    @property
+    def name(self):
+        if self.subtype == self:
+            return 'product'
+        else:
+            return self.subtype.name
+    
     @property
     def subtype(self):
         if hasattr(self, '_subtype'):
@@ -428,6 +434,10 @@ class CarProduct(Product):
         return self
 
     @property
+    def name(self):
+        return 'carproduct'
+
+    @property
     def commission(self):
         return settings.COMMISSION
 
@@ -497,7 +507,11 @@ class RealEstateProduct(Product):
     @property
     def subtype(self):
         return self
-
+    
+    @property
+    def name(self):
+        return 'realestateproduct'
+        
     @property
     def commission(self):
         return settings.COMMISSION
