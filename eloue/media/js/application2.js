@@ -142,7 +142,7 @@ $(document).ready(function() {
     // Company name field display/none
     isProfessionalInput = $("input[name*='is_professional']");
     companyNameInput = $("input[name*='company_name']");
-    companyNameInput.parent().parent().hide();
+    companyNameInput.parent().parent(".control-group").hide();
 
 
     var exists = $("input[name$='exists']:checked").val();
@@ -169,13 +169,13 @@ $(document).ready(function() {
     var exists = $("input[name*='is_professional']:checked").val();
 
     if (exists == 'on') {
-        companyNameInput.parent().parent().show();
+        companyNameInput.parent().parent(".control-group").show();
     }
     $(":checkbox").click(function() {
         if (isProfessionalInput.is(':checked')) {
-            companyNameInput.parent().parent().show();
+            companyNameInput.parent().parent(".control-group").show();
         } else {
-            companyNameInput.parent().parent().hide();
+            companyNameInput.parent().parent(".control-group").hide();
         }
     });
 
