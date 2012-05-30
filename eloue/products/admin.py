@@ -7,7 +7,7 @@ from mptt.forms import TreeNodeChoiceField
 from eloue.admin import CurrentSiteAdmin
 from eloue.products.forms import ProductAdminForm
 
-from eloue.products.models import Alert, Product, Picture, Category, Property, PropertyValue, Price, ProductReview, PatronReview, Curiosity, ProductRelatedMessage, CategoryDescription
+from eloue.products.models import Alert, Product, CarProduct, RealEstateProduct, Picture, Category, Property, PropertyValue, Price, ProductReview, PatronReview, Curiosity, ProductRelatedMessage, CategoryDescription
 
 
 class PictureInline(admin.TabularInline):
@@ -21,6 +21,14 @@ class PropertyValueInline(admin.TabularInline):
 class PriceInline(admin.TabularInline):
     model = Price
 
+def convert_to_carproduct(modeladmin, request, queryset):
+    import datetime
+    carproduct = None
+    for product in queryset:
+        CarProduct(parent_ptr=product, first_registration_date=datetime.date.today())
+    queryset.update(status='p')
+convert_to_carproduct.short_description = "Convert selected products to CarProduct"
+
 
 class ProductAdmin(CurrentSiteAdmin):
     date_hierarchy = 'created_at'
@@ -33,7 +41,7 @@ class ProductAdmin(CurrentSiteAdmin):
     ordering = ['-created_at']
     list_per_page = 20
     form = ProductAdminForm
-    
+    actions = [convert_to_carproduct]
     def formfield_for_dbfield(self, db_field, **kwargs):
         if db_field.name == 'category':
             kwargs['form_class'] = TreeNodeChoiceField
@@ -85,3 +93,5 @@ admin.site.register(ProductReview, ProductReviewAdmin)
 admin.site.register(PatronReview, PatronReviewAdmin)
 #admin.site.register(ProductRelatedMessage, ProductRelatedMessageAdmin)
 admin.site.register(Alert, AlertAdmin)
+admin.site.register(CarProduct)
+admin.site.register(RealEstateProduct)
