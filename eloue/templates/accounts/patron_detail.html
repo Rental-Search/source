@@ -41,7 +41,8 @@
             </div>{# profil-description #}
         </div>{# profil-block #}
         {% with patron.languages as languages %}
-            {% if patron.work or patron.school or languages %}
+            {% with languages.count as languages_count %}
+            {% if patron.work or patron.school or languages_count %}
             <div class="profil-block">
                 <h3>Plus d'info</h3>
                 {% if patron.work %}
@@ -52,12 +53,13 @@
                     <h4>{% trans "Etudes" %}</h4>
                     <p>{{patron.school}}</p>
                 {% endif %}
-                    {% if languages %}
+                    {% if languages_count %}
                         <h4>{% trans "Languages Parlées" %}</h4>
                         <p>{{ languages.all|join:", "}}</p>
                     {% endif %}
             </div>{# profil-block #}
             {% endif %}
+        {% endwith %}
         {% endwith %}
         <div class="profil-block last">
             {% include "accounts/partials/response_stats.html" %}
