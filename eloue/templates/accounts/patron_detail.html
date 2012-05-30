@@ -76,8 +76,8 @@
             <p class="more-comment"><a href="{% url comments %}">Voir tous les commentaires</a></p>
             {% endif %}
         {% if product_list %}
-            {% if product_list > 0 %}
-                {% blocktrans with product_list.count as count and product_list.count|pluralize as pluralize %}
+            {% if product_list_count > 0 %}
+                {% blocktrans with product_list_count as count and product_list_count|pluralize as pluralize %}
     	           <h2>{{ count }} annonce{{ pluralize }}</h2>
     	       {% endblocktrans %}
             {% else %}
@@ -87,11 +87,6 @@
                 {% for product in product_list %}
                 <li>
                     <a href="{{ product.url }}">
-                        <!-- {% with product.pictures.all|first as picture %}
-                        {% if picture.profile %}
-                            <img src="{{ picture.profile.url }}" width="200" height="170" />
-                        {% endif %}
-                        {% endwith %} -->
                         <img src="{{product.profile}}" width="200" height="170" />
                         <h3>{{ product.summary|truncate:22 }}</h3>
                         <p class="pv-price">{{ product.price|unlocalize }} <span>/{{ 1|unit }}</span></p>
