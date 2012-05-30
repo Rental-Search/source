@@ -108,6 +108,8 @@
 
     <field name="accessible" type="boolean" indexed="true" stored="true" multiValued="false" />
 
+    <field name="username" type="text" indexed="true" stored="true" multiValued="false" />
+
     <field name="tumble_dryer" type="boolean" indexed="true" stored="true" multiValued="false" />
 
     <field name="patron" type="text" indexed="true" stored="true" multiValued="false" />
@@ -144,7 +146,7 @@
 
     <field name="consumption" type="text" indexed="true" stored="true" multiValued="false" />
 
-    <field name="sites_exact" type="string" indexed="true" stored="true" multiValued="true" />
+    <field name="title" type="text" indexed="true" stored="true" multiValued="false" />
 
     <field name="tv" type="boolean" indexed="true" stored="true" multiValued="false" />
 
@@ -172,7 +174,7 @@
 
     <field name="gps" type="boolean" indexed="true" stored="true" multiValued="false" />
 
-    <field name="username" type="text" indexed="true" stored="true" multiValued="false" />
+    <field name="profile" type="string" indexed="false" stored="true" multiValued="false" />
 
     <field name="heating" type="boolean" indexed="true" stored="true" multiValued="false" />
 
@@ -180,7 +182,7 @@
 
     <field name="mileage" type="slong" indexed="true" stored="true" multiValued="false" />
 
-    <field name="description" type="text" indexed="true" stored="true" multiValued="false" />
+    <field name="description" type="edge_ngram" indexed="true" stored="true" multiValued="false" />
 
     <field name="cd_player" type="boolean" indexed="true" stored="true" multiValued="false" />
 
@@ -226,9 +228,9 @@
 
     <field name="url" type="text" indexed="true" stored="true" multiValued="false" />
 
-    <field name="created_at" type="date" indexed="true" stored="true" multiValued="false" />
+    <field name="owner_exact" type="string" indexed="true" stored="true" multiValued="false" />
 
-    <field name="title" type="text" indexed="true" stored="true" multiValued="false" />
+    <field name="sites_exact" type="string" indexed="true" stored="true" multiValued="true" />
 
     <field name="snow_chains" type="boolean" indexed="true" stored="true" multiValued="false" />
 
@@ -254,7 +256,7 @@
 
     <field name="internet_access" type="boolean" indexed="true" stored="true" multiValued="false" />
 
-    <field name="owner_exact" type="string" indexed="true" stored="true" multiValued="false" />
+    <field name="created_at" type="date" indexed="true" stored="true" multiValued="false" />
 
     <field name="ski_rack" type="boolean" indexed="true" stored="true" multiValued="false" />
 
