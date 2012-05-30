@@ -1,6 +1,6 @@
 {% load i18n cache %}
 
-{% cache 43200 response_stats %}
+{% cache 43200 response_stats patron.pk %}
 <table class="answer-stats">
     <tr>
         <th class="answer-rate">{% trans "Taux de réponse" %}</th>
