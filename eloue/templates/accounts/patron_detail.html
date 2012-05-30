@@ -86,7 +86,7 @@
             <ul class="product-vignettes">
                 {% for product in product_list %}
                 <li>
-                    <a href="{{ product.get_absolute_url }}">
+                    <a href="{{ product.url }}">
                         <!-- {% with product.pictures.all|first as picture %}
                         {% if picture.profile %}
                             <img src="{{ picture.profile.url }}" width="200" height="170" />
