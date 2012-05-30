@@ -425,6 +425,9 @@
                     {% else %}
                         {% trans "Particulier" %}
                     {% endif %}
+                    <small>
+                        <a href="{{ patron.get_absolute_url }}" >({% trans "Voir toutes ses annonces "%})</a>
+                    </small>
                 </h2>
                 <a href="{{ patron.get_absolute_url }}" class="onwer-avatar">
                     {% if patron.avatar %}
