@@ -35,6 +35,7 @@ class ProductIndex(QueuedSearchIndex):
     text = CharField(document=True, use_template=True)
     url = CharField(model_attr='get_absolute_url', indexed=False)
     thumbnail = CharField(indexed=False)
+    profile = CharField(indexed=False)
     special = BooleanField()
     
     def prepare_sites(self, obj):
@@ -51,6 +52,11 @@ class ProductIndex(QueuedSearchIndex):
             picture = obj.pictures.all()[0]
             return picture.thumbnail.url
 
+    def prepare_profile(self, obj):
+        if obj.pictures.all():
+            picture = obj.pictures.all()[0]
+            return picture.profile.url
+    
     def prepare_owner_avatar(self, obj):
         try:
             if obj.owner.avatar:

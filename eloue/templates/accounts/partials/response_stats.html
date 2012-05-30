@@ -1,4 +1,6 @@
-{% load i18n %}
+{% load i18n cache %}
+
+{% cache 43200 response_stats %}
 <table class="answer-stats">
     <tr>
         <th class="answer-rate">{% trans "Taux de réponse" %}</th>
@@ -11,3 +13,4 @@
         <td>{{patron.response_time}}</td>
     </tr>
 </table>
+{% endcache %}

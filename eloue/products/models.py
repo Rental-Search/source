@@ -243,7 +243,10 @@ class Product(models.Model):
     
     @property
     def daily_price(self):
-        return self.prices.get(unit=UNIT.DAY)
+        if not hasattr(self, '_daily_price'):
+            import itertools
+            self._daily_price = next(itertools.ifilter(lambda price: price.unit == 1, self.prices.all()), None)
+        return self._daily_price
 
     @property
     def average_note(self):

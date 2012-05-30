@@ -154,7 +154,7 @@ def booking_create_redirect(request, *args, **kwargs):
 @never_cache
 @secure_required
 def booking_create(request, *args, **kwargs):
-    product = get_object_or_404(Product.on_site.active(), pk=kwargs['product_id']).subtype
+    product = get_object_or_404(Product.on_site.active().select_related('address', 'category', 'owner'), pk=kwargs['product_id']).subtype
     if product.slug != kwargs['slug']:
         return redirect(product, permanent=True)
     wizard = BookingWizard([BookingForm, EmailAuthenticationForm,])
