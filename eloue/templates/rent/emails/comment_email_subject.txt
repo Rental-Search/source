@@ -1,0 +1,1 @@
+{% load i18n %}{% trans "Nouveau commentaire sur e-loue"%}

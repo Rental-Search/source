@@ -25,7 +25,6 @@ from django.utils.formats import get_format
 from django.utils.translation import ugettext_lazy as _
 from django.db.models import Q
 from django.core.urlresolvers import reverse
-from django.contrib.sites.models import Site
 
 from eloue.accounts.models import Patron
 from eloue.products.models import CURRENCY, UNIT, Product, PAYMENT_TYPE
@@ -457,6 +456,11 @@ class OwnerComment(Comment):
     @property
     def writer(self):
         return self.booking.owner
+
+    def send_notification_comment_email(self):
+        context = {'comment': self, 'author': self.booking.owner, 'patron': self.booking.borrower}
+        message = create_alternative_email('rent/emails/comment', context, settings.DEFAULT_FROM_EMAIL, [self.booking.borrower.email])
+        message.send()
     
 class BorrowerComment(Comment):
     @property
@@ -465,6 +469,11 @@ class BorrowerComment(Comment):
     @property
     def writer(self):
         return self.booking.borrower
+
+    def send_notification_comment_email(self):
+        context = {'comment': self, 'author': self.booking.borrower, 'patron': self.booking.owner}
+        message = create_alternative_email('rent/emails/comment', context, settings.DEFAULT_FROM_EMAIL, [self.booking.owner.email])
+        message.send()
     
 class Sinister(models.Model):
     uuid = UUIDField(primary_key=True)

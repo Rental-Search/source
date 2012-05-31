@@ -1,0 +1,32 @@
+{% load i18n %}
+{% blocktrans with author.first_name as author_first_name and author.last_name as author_last_name and patron.first_name as first_name and patron.last_name as last_name and comment.note as note and comment.comment as comment_content and site.domain as domain and comment.booking.get_absolute_url as booking_url %}
+
+<p>Bonjour {{ first_name }} {{ last_name }},</p>
+
+<p>{{ author_first_name }} {{ author_last_name }} vous a laissé un commentaire :</p>
+<ul>
+ <li><strong>Evaluation :</strong> {{ note }}</li>
+ <li><strong>Commentaire :</strong> {{ comment_content }}</li>
+</ul>
+
+<p>Vous pouvez voir le commentaire sur votre tableau de bord en cliquant ci dessous :</p>
+<p><a href="{{protocol }}://{{ domain}}{{ booking_url }}"></a>
+{% endblocktrans %}
+
+
+{% if not comment.booking.ownercomment and comment.booking.owner == patron %}
+<p>{% trans "Vous pouvez aussi commenter la location en cliquant sur le lien ci dessous" %} :</p>
+<p><a href="{{ protocol }}://{{ site.domain }}{% url comments %}">{{ protocol }}://{{ site.domain }}{% url comments %}</a></p>
+{% endif %}
+
+{% if not (comment.booking.borrowercomment and comment.booking.borrower == patron %}
+<p>{% trans "Vous pouvez aussi commenter la location en cliquant sur le lien ci dessous" %} :</p>
+<p><a href="{{ protocol }}://{{ site.domain }}{% url comments %}">{{ protocol }}://{{ site.domain }}{% url comments %}</a></p>
+{% endif %}
+
+{% blocktrans with site.name as site_name %}
+
+<p>A bientôt,</p>
+
+<p>L'équipe {{ site_name }}</p>
+{% endblocktrans %}
