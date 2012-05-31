@@ -4,8 +4,7 @@ from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext_lazy as _
 
 from eloue.admin import CurrentSiteAdmin
-from eloue.rent.models import Booking
-
+from eloue.rent.models import Booking, OwnerComment, BorrowerComment
 
 class BookingAdmin(CurrentSiteAdmin):
     date_hierarchy = 'created_at'
@@ -67,6 +66,15 @@ class BookingAdmin(CurrentSiteAdmin):
         if obj.owner.phones.exists():
             return obj.owner.phones.all()[0]
     owner_phone.short_description = _('Owner phone')
-    
+
+class CommentAdmin(admin.ModelAdmin):
+    fieldsets = (
+        (None, {
+            'fields': ('comment', 'note')
+        }),
+    )
 
 admin.site.register(Booking, BookingAdmin)
+admin.site.register(OwnerComment, CommentAdmin)
+admin.site.register(BorrowerComment, CommentAdmin)
+
