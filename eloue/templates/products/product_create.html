@@ -5,7 +5,6 @@
 
 {% block content %}
 <div id="wizard-page" class="container-main">
-{% cache 1800 add_product request.path %}
 	<ul class="breadcrumb" >
 		<li><a href="{% url home %}">{% trans "Accueil" %}</a></li>
 		<li><a href="{% url publish_new_ad %}">{{ wizard_title }}</a></li>
@@ -90,7 +89,6 @@
 		    </div>
 		</form>
 	</div>
-{% endcache %}
 </div>
 {% endblock %}
 
