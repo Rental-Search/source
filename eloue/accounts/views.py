@@ -226,7 +226,7 @@ def comments(request):
     patron = request.user
     closed_bookings = Booking.objects.filter(
         Q(owner=patron) | Q(borrower=patron), 
-        Q(state=Booking.STATE.CLOSED)|Q(state=Booking.STATE.CLOSING)
+        Q(state=Booking.STATE.CLOSED)|Q(state=Booking.STATE.CLOSING)|Q(state=Booking.STATE.ENDED)
     )
     commented_bookings = closed_bookings.filter(
         ~Q(ownercomment=None, owner=patron) & 
@@ -250,7 +250,7 @@ def comments(request):
             if unicode(booking.pk.hex) in request.POST:
                 form = Form(request.POST, instance=Model(booking=booking), prefix=booking.pk)
                 if form.is_valid():
-                    form.save()
+                    form.save().send_notification_comment_email()
                     return redirect('eloue.accounts.views.comments')
             else:
                 form = Form(instance=Model(booking=booking), prefix=booking.pk)
@@ -281,7 +281,7 @@ def comments(request):
 @ownership_required(model=Booking, object_key='booking_id', ownership=['owner', 'borrower'])
 def comment_booking(request, booking_id):
     booking = Booking.objects.get(pk=booking_id)
-    if booking.state not in (Booking.STATE.CLOSING, Booking.STATE.CLOSED):
+    if booking.state not in (Booking.STATE.CLOSING, Booking.STATE.CLOSED, Booking.STATE.ENDED):
         return redirect('eloue.accounts.views.comments')
     
     if booking.owner == request.user:
@@ -303,7 +303,7 @@ def comment_booking(request, booking_id):
     if request.POST:
         form = Form(request.POST, instance=Model(booking=booking))
         if form.is_valid():
-            form.save()
+            form.save().send_notification_comment_email()
             return redirect('eloue.accounts.views.comments')
     else:
         form = Form(instance=Model(booking=booking))

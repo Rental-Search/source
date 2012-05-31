@@ -19,7 +19,7 @@
 <p><a href="{{ protocol }}://{{ site.domain }}{% url comments %}">{{ protocol }}://{{ site.domain }}{% url comments %}</a></p>
 {% endif %}
 
-{% if not (comment.booking.borrowercomment and comment.booking.borrower == patron %}
+{% if not comment.booking.borrowercomment and comment.booking.borrower == patron %}
 <p>{% trans "Vous pouvez aussi commenter la location en cliquant sur le lien ci dessous" %} :</p>
 <p><a href="{{ protocol }}://{{ site.domain }}{% url comments %}">{{ protocol }}://{{ site.domain }}{% url comments %}</a></p>
 {% endif %}
