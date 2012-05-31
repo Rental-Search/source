@@ -329,7 +329,7 @@ def patron_detail(request, slug, patron_id=None, page=None):
         patron = get_object_or_404(Patron.on_site, pk=patron_id)
         return redirect_to(request, patron.get_absolute_url(), permanent=True)
     patron = get_object_or_404(Patron.on_site.select_related('avatar', 'default_address', 'languages'), slug=slug)
-    patron_products = product_search.narrow('owner:{0}'.format(patron.username))
+    patron_products = product_search.narrow(u'owner:{0}'.format(patron.username))
     return object_list(
         request, patron_products, page=page, 
         paginate_by=9, template_name='accounts/patron_detail.html', 
