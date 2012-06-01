@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import csv
 import smtplib
+import logbook
 
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
@@ -12,6 +13,7 @@ from eloue.admin import CurrentSiteAdmin
 from eloue.accounts.models import Patron, Address, PhoneNumber, PatronAccepted
 from eloue.accounts.forms import PatronChangeForm
 
+log = logbook.Logger('eloue')
 
 class AddressInline(admin.TabularInline):
     model = Address
@@ -73,6 +75,9 @@ class AddressAdmin(admin.ModelAdmin):
     )
 
 
-admin.site.register(Address, AddressAdmin)
-admin.site.register(Patron, PatronAdmin)
-admin.site.register(PatronAccepted)
+try:
+    admin.site.register(Address, AddressAdmin)
+    admin.site.register(Patron, PatronAdmin)
+    admin.site.register(PatronAccepted)
+except admin.sites.AlreadyRegistered, e:
+    log.warn('Site is already registered : %s' % e)
