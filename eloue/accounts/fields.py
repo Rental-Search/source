@@ -178,5 +178,7 @@ class DateSelectField(forms.MultiValueField):
     def compress(self, data_list):
         if not data_list:
             return None
+        if len(data_list) != len(filter(None, data_list)):
+            raise forms.ValidationError('')
         return datetime.date(year=data_list[2], month=data_list[1], day=data_list[0])
 
