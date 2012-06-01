@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
-from django.contrib import admin
+import decimal
+
+from django.contrib import admin, messages
+from django.shortcuts import redirect
 
 from mptt.admin import MPTTModelAdmin
 from mptt.forms import TreeNodeChoiceField
@@ -7,7 +10,7 @@ from mptt.forms import TreeNodeChoiceField
 from eloue.admin import CurrentSiteAdmin
 from eloue.products.forms import ProductAdminForm
 
-from eloue.products.models import Alert, Product, Picture, Category, Property, PropertyValue, Price, ProductReview, PatronReview, Curiosity, ProductRelatedMessage, CategoryDescription
+from eloue.products.models import Alert, Product, CarProduct, RealEstateProduct, Picture, Category, Property, PropertyValue, Price, ProductReview, PatronReview, Curiosity, ProductRelatedMessage, CategoryDescription
 
 
 class PictureInline(admin.TabularInline):
@@ -21,6 +24,37 @@ class PropertyValueInline(admin.TabularInline):
 class PriceInline(admin.TabularInline):
     model = Price
 
+def convert_to_carproduct(modeladmin, request, queryset):
+    import datetime
+    if len(queryset) != 1:
+        messages.error(request, 'bulk action is not allowed')
+        return
+    product = queryset[0]
+    if product.name != 'product':
+        messages.error(request, 'this action can only be called for normal products')
+        return
+    carproduct = CarProduct(
+        product_ptr=product,deposit_amount=decimal.Decimal(2000), 
+        tax_horsepower=5, first_registration_date=datetime.date(2011, 1, 1)
+    )
+    carproduct.save_base(raw=True)
+    return redirect('admin:products_carproduct_change', carproduct.pk)
+convert_to_carproduct.short_description = "Convert selected products to CarProduct"
+
+
+def convert_to_realestateproduct(modeladmin, request, queryset):
+    realestateproduct = None
+    if len(queryset) != 1:
+        messages.error(request, 'bulk action is not allowed')
+        return
+    product = queryset[0]
+    if product.name != 'product':
+        messages.error(request, 'this action can only be called for normal products')
+        return
+    realestateproduct = RealEstateProduct(product_ptr=product)
+    realestateproduct.save_base(raw=True)
+    return redirect('admin:products_realestateproduct_change', realestateproduct.pk)
+convert_to_realestateproduct.short_description = "Convert selected products to RealEstateProduct"
 
 class ProductAdmin(CurrentSiteAdmin):
     date_hierarchy = 'created_at'
@@ -33,7 +67,7 @@ class ProductAdmin(CurrentSiteAdmin):
     ordering = ['-created_at']
     list_per_page = 20
     form = ProductAdminForm
-    
+    actions = [convert_to_carproduct, convert_to_realestateproduct]  
     def formfield_for_dbfield(self, db_field, **kwargs):
         if db_field.name == 'category':
             kwargs['form_class'] = TreeNodeChoiceField
@@ -41,7 +75,28 @@ class ProductAdmin(CurrentSiteAdmin):
             kwargs['level_indicator'] = u"--"
             kwargs['queryset'] = Category.tree.all()
         return super(ProductAdmin, self).formfield_for_dbfield(db_field, **kwargs)
-        
+    
+    def queryset(self, request):
+        qs = super(ProductAdmin, self).queryset(request)
+        return qs.filter(carproduct=None, realestateproduct=None)
+
+class RealEstateProductAdmin(CurrentSiteAdmin):
+    def formfield_for_dbfield(self, db_field, **kwargs):
+        if db_field.name == 'category':
+            kwargs['form_class'] = TreeNodeChoiceField
+            kwargs['empty_label'] = u"Choisissez une catégorie"
+            kwargs['level_indicator'] = u"--"
+            kwargs['queryset'] = Category.tree.get(name=u'Location saisonnière').get_descendants()
+        return super(RealEstateProductAdmin, self).formfield_for_dbfield(db_field, **kwargs)
+
+class CarProductAdmin(CurrentSiteAdmin):
+    def formfield_for_dbfield(self, db_field, **kwargs):
+        if db_field.name == 'category':
+            kwargs['form_class'] = TreeNodeChoiceField
+            kwargs['empty_label'] = u"Choisissez une catégorie"
+            kwargs['level_indicator'] = u"--"
+            kwargs['queryset'] = Category.tree.get(name=u'Automobile').get_descendants()
+        return super(CarProductAdmin, self).formfield_for_dbfield(db_field, **kwargs)
 
 class CategoryDescriptionInline(admin.StackedInline):
     model = CategoryDescription
@@ -78,6 +133,8 @@ class AlertAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Product, ProductAdmin)
+admin.site.register(CarProduct, CarProductAdmin)
+admin.site.register(RealEstateProduct, RealEstateProductAdmin)
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Property, PropertyAdmin)
 admin.site.register(Curiosity, CuriosityAdmin)
