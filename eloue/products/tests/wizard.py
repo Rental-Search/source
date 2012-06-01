@@ -342,7 +342,7 @@ class MessageWizardTestWithFacebook(TestCase):
             'wizard_step': 1,
             'hash_0': '6941fd7b20d720833717a1f92e8027af',
         })
-        self.assertRedirects(response, self.product.get_absolute_url())
+        self.assertRedirects(response, reverse('thread_details', kwargs={'thread_id': 1}))
     
     @patch.object(GraphAPI, 'get_object')
     @patch.object(MultiPartFormWizard, 'security_hash')
@@ -412,7 +412,7 @@ class MessageWizardTestWithFacebook(TestCase):
             'hash_1': '6941fd7b20d720833717a1f92e8027af',
             'hash_3': '6941fd7b20d720833717a1f92e8027af',
         })
-        self.assertRedirects(response, self.product.get_absolute_url())
+        self.assertRedirects(response, reverse('thread_details', kwargs={'thread_id': 1}))
         self.assertEqual(FacebookSession.objects.get(uid=100000609837182).user, Patron.objects.get(username='kosii2'))
 
     @patch.object(GraphAPI, 'get_object')
@@ -436,7 +436,7 @@ class MessageWizardTestWithFacebook(TestCase):
             'hash_0': '6941fd7b20d720833717a1f92e8027af',
             'hash_1': '6941fd7b20d720833717a1f92e8027af'
         })
-        self.assertRedirects(response, self.product.get_absolute_url())
+        self.assertRedirects(response, reverse('thread_details', kwargs={'thread_id': 1}))
 
         
 class ProductWizardTest(TestCase):
