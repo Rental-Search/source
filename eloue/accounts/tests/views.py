@@ -218,7 +218,8 @@ class PatronTest(TestCase):
             'sender': "moi@mondomaine.com",
             'cc_myself': True
         })
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 302)
+        self.assertRedirects(response, reverse('contact'))
         self.assertEqual(len(mail.outbox), 1)
         self.assertEqual(mail.outbox[0].subject, "J'ai un sujet pour vous")
         self.assertEqual(mail.outbox[0].body, "J'ai un message pour vous.")
@@ -234,7 +235,8 @@ class PatronTest(TestCase):
             'sender': "moi@mondomaine.com",
             'cc_myself': False
         })
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 302)
+        self.assertRedirects(response, reverse('contact'))
         self.assertEqual(len(mail.outbox), 1)
         self.assertEqual(mail.outbox[0].subject, "J'ai un sujet pour vous")
         self.assertEqual(mail.outbox[0].body, "J'ai un message pour vous.")
