@@ -112,7 +112,7 @@ class Avatar(models.Model):
 
     patron = models.OneToOneField(User, related_name='avatar')
     image = models.ImageField(upload_to=upload_to)
-    created_at = models.DateTimeField(editable=False)
+    created_at = models.DateTimeField(editable=False, auto_now_add=True)
 
     thumbnail = ImageSpec(
         processors=[
@@ -143,11 +143,6 @@ class Avatar(models.Model):
             Transpose(Transpose.AUTO),
         ], image_field='image', pre_cache=True, cache_to=cache_to
     )
-    def save(self, *args, **kwargs):
-        if not self.created_at:
-            self.created_at = datetime.datetime.now()
-        super(Avatar, self).save(*args, **kwargs)
-    
     def delete(self, *args, **kwargs):
         self.image.delete()
         super(Avatar, self).delete(*args, **kwargs)
@@ -167,7 +162,7 @@ class Patron(User):
     is_subscribed = models.BooleanField(_(u'newsletter'), default=False, help_text=_(u"Précise si l'utilisateur est abonné à la newsletter"))
     new_messages_alerted = models.BooleanField(_(u'alerts if new messages come'), default=True, help_text=_(u"Précise si l'utilisateur est informé par email s'il a nouveaux messages"))
     is_professional = models.NullBooleanField(_('professionnel'), blank=True, default=None, help_text=_(u"Précise si l'utilisateur est un professionnel"))
-    modified_at = models.DateTimeField(_('date de modification'), editable=False)
+    modified_at = models.DateTimeField(_('date de modification'), editable=False, auto_now=True)
     affiliate = models.CharField(null=True, blank=True, max_length=10)
     slug = models.SlugField(unique=True, db_index=True)
     paypal_email = models.EmailField(null=True, blank=True)
@@ -200,7 +195,6 @@ class Patron(User):
                 self.slug = slugify(self.company_name)
             else:
                 self.slug = slugify(self.username)
-        self.modified_at = datetime.datetime.now()
         super(Patron, self).save(*args, **kwargs)
 
     def __eq__(self, other):
