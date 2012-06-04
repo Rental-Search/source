@@ -67,7 +67,14 @@ class BookingAdmin(CurrentSiteAdmin):
             return obj.owner.phones.all()[0]
     owner_phone.short_description = _('Owner phone')
 
-class CommentAdmin(admin.ModelAdmin):
+class OwnerCommentAdmin(admin.ModelAdmin):
+    fieldsets = (
+        (None, {
+            'fields': ('comment', 'note')
+        }),
+    )
+
+class BorrowerCommentAdmin(admin.ModelAdmin):
     fieldsets = (
         (None, {
             'fields': ('comment', 'note')
@@ -75,6 +82,6 @@ class CommentAdmin(admin.ModelAdmin):
     )
 
 admin.site.register(Booking, BookingAdmin)
-admin.site.register(OwnerComment, CommentAdmin)
-admin.site.register(BorrowerComment, CommentAdmin)
+admin.site.register(OwnerComment, OwnerCommentAdmin)
+admin.site.register(BorrowerComment, BorrowerCommentAdmin)
 
