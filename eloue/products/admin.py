@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import decimal
+import logbook
 
 from django.contrib import admin, messages
 from django.shortcuts import redirect
@@ -11,6 +12,9 @@ from eloue.admin import CurrentSiteAdmin
 from eloue.products.forms import ProductAdminForm
 
 from eloue.products.models import Alert, Product, CarProduct, RealEstateProduct, Picture, Category, Property, PropertyValue, Price, ProductReview, PatronReview, Curiosity, ProductRelatedMessage, CategoryDescription
+
+
+log = logbook.Logger('eloue')
 
 
 class PictureInline(admin.TabularInline):
@@ -124,21 +128,19 @@ class CuriosityAdmin(CurrentSiteAdmin):
     list_display = ('product',)
     raw_id_fields = ("product",)
 
-#class ProductRelatedMessageAdmin(admin.ModelAdmin):
-#    list_display = ('product',)
-#    raw_id_fields = ("product",)
-
 class AlertAdmin(admin.ModelAdmin):
     pass
 
 
-admin.site.register(Product, ProductAdmin)
-admin.site.register(CarProduct, CarProductAdmin)
-admin.site.register(RealEstateProduct, RealEstateProductAdmin)
-admin.site.register(Category, CategoryAdmin)
-admin.site.register(Property, PropertyAdmin)
-admin.site.register(Curiosity, CuriosityAdmin)
-admin.site.register(ProductReview, ProductReviewAdmin)
-admin.site.register(PatronReview, PatronReviewAdmin)
-#admin.site.register(ProductRelatedMessage, ProductRelatedMessageAdmin)
-admin.site.register(Alert, AlertAdmin)
+try:
+    admin.site.register(Product, ProductAdmin)
+    admin.site.register(CarProduct, CarProductAdmin)
+    admin.site.register(RealEstateProduct, RealEstateProductAdmin)
+    admin.site.register(Category, CategoryAdmin)
+    admin.site.register(Property, PropertyAdmin)
+    admin.site.register(Curiosity, CuriosityAdmin)
+    admin.site.register(ProductReview, ProductReviewAdmin)
+    admin.site.register(PatronReview, PatronReviewAdmin)
+    admin.site.register(Alert, AlertAdmin)
+except admin.sites.AlreadyRegistered, e:
+    log.warn('Site is already registered : %s' % e)
