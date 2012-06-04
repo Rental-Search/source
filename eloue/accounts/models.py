@@ -321,14 +321,14 @@ class Patron(User):
         owner_comments = OwnerComment.objects.filter(booking__borrower=self)
 
         if borrower_comments:
-            borrower_sum = borrower_comments.aggregate(Sum('note'))['note__sum']
-            borrower_count = borrower_comments.aggregate(Count('note'))['note__count']
+            queryset = borrower_comments.aggregate(Sum('note'), Count('note'))
+            borrower_sum, borrower_count = queryset['note__sum'], queryset['note__count']
         else:
             borrower_sum = 0
             borrower_count = 0
         if owner_comments:
-            owner_sum = owner_comments.aggregate(Sum('note'))['note__sum']
-            owner_count = owner_comments.aggregate(Count('note'))['note__count']
+            queryset = owner_comments.aggregate(Sum('note'), Count('note'))
+            owner_sum, owner_count = queryset['note__sum'], queryset['note__count']
         else:
             owner_sum = 0
             owner_count = 0
