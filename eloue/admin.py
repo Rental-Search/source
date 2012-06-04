@@ -1,10 +1,13 @@
 # -*- coding: utf-8 -*-
+import logbook
+
 from django.conf import settings
 from django.contrib import admin
 from django.contrib.flatpages.models import FlatPage
 from django.contrib.flatpages.admin import FlatPageAdmin
 
 
+log = logbook.Logger('eloue')
 
 class CurrentSiteAdmin(admin.ModelAdmin):
     def queryset(self, request):
@@ -30,5 +33,8 @@ class CustomFlatPageAdmin(FlatPageAdmin):
             return super(FlatPageAdmin, self).queryset(request).filter(**{'sites__id__exact': settings.SITE_ID})
     
 
-admin.site.unregister(FlatPage)
-admin.site.register(FlatPage, CustomFlatPageAdmin)
+try:
+    admin.site.unregister(FlatPage)
+    admin.site.register(FlatPage, CustomFlatPageAdmin)
+except admin.sites.AlreadyRegistered, e:
+    log.warn('Site is already registered : %s' % e)

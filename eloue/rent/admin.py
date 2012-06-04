@@ -1,10 +1,14 @@
 # -*- coding: utf-8 -*-
+import logbook
+
 from django.contrib import admin
 from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext_lazy as _
 
 from eloue.admin import CurrentSiteAdmin
 from eloue.rent.models import Booking, OwnerComment, BorrowerComment
+
+log = logbook.Logger('eloue')
 
 class BookingAdmin(CurrentSiteAdmin):
     date_hierarchy = 'created_at'
@@ -81,7 +85,10 @@ class BorrowerCommentAdmin(admin.ModelAdmin):
         }),
     )
 
-admin.site.register(Booking, BookingAdmin)
-admin.site.register(OwnerComment, OwnerCommentAdmin)
-admin.site.register(BorrowerComment, BorrowerCommentAdmin)
 
+try:
+    admin.site.register(Booking, BookingAdmin)
+    admin.site.register(OwnerComment, OwnerCommentAdmin)
+    admin.site.register(BorrowerComment, BorrowerCommentAdmin)
+except admin.sites.AlreadyRegistered, e:
+    log.warn('Site is already registered : %s' % e)
