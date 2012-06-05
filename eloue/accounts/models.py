@@ -168,7 +168,7 @@ class Patron(User):
     paypal_email = models.EmailField(null=True, blank=True)
     sites = models.ManyToManyField(Site, related_name='patrons')
     
-    avatar = models.ImageField(upload_to=upload_to, null=True)
+    avatar = models.ImageField(upload_to=upload_to, null=True, blank=True)
 
     default_address = models.ForeignKey('Address', null=True, blank=True, related_name="+")
 
