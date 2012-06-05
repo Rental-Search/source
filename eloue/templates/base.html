@@ -1,4 +1,4 @@
-{% load compressed i18n markup seo %}
+{% load compressed i18n markup seo cache %}
 <!doctype html>
 <html lang="fr" {% block html_properties %} {% endblock %}>
  <head>
@@ -118,6 +118,7 @@
         		</ul>
             </div><!-- f-col -->
             <div class="f-bottom first">
+            {% cache 432000 announcements %}
             {% if site_wide_announcements %}
             {% with site_wide_announcements|first as announcement %}
             <div class="twitter-box">
@@ -130,6 +131,7 @@
             </div>
             {% endwith %}
             {% endif %}
+            {% endcache %}
         </footer>
     </div>{# container #}
     {% endblock %}
