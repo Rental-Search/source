@@ -49,12 +49,12 @@
                     {% else %}
                         <a href="{% url dashboard %}" class="profil-link">
                             {% if user.avatar %}
-                            <img src="{{ user.avatar.thumbnail.url }}" width="20" height="20">
+                            <img src="{{ user.thumbnail.url }}" width="20" height="20">
                             {% else %}
                             <img src="{{ MEDIA_URL }}images/default_avatar.png"  width="20" height="20">
                             {% endif %}
                             {% trans "Tableau de bord" %}  
-                            {% with unread_message_count|add:request.user.bookings.authorized.count as notification_count %}
+                            {% with unread_message_count|add:user.bookings.authorized.count as notification_count %}
                                 {% if notification_count > 0 %}
                                     ({{notification_count}})
                                 {% endif %}

@@ -431,7 +431,7 @@
                 </h2>
                 <a href="{{ patron.get_absolute_url }}" class="onwer-avatar">
                     {% if patron.avatar %}
-                    <img src="{{ patron.avatar.profil.url }}" alt="{% trans "loueur"%}{{ patron.username }}" width="100" height="100">
+                    <img src="{{ patron.profil.url }}" alt="{% trans "loueur"%}{{ patron.username }}" width="100" height="100">
                     {% else %}
                     <img src="{{ MEDIA_URL }}images/default_avatar.png" alt="{% trans "loueur"%}{{ patron.username }}" width="100" height="100">
                     {% endif %}

@@ -110,7 +110,7 @@ def upload_to(instance, filename):
 
 class Avatar(models.Model):
 
-    patron = models.OneToOneField(User, related_name='avatar')
+    patron = models.OneToOneField(User, related_name='avatar_old')
     image = models.ImageField(upload_to=upload_to)
     created_at = models.DateTimeField(editable=False, auto_now_add=True)
 
@@ -168,6 +168,8 @@ class Patron(User):
     paypal_email = models.EmailField(null=True, blank=True)
     sites = models.ManyToManyField(Site, related_name='patrons')
     
+    avatar = models.ImageField(upload_to=upload_to, null=True)
+
     default_address = models.ForeignKey('Address', null=True, blank=True, related_name="+")
 
     customers = models.ManyToManyField('self', symmetrical=False)
@@ -189,6 +191,36 @@ class Patron(User):
 
     rib = models.CharField(max_length=23, blank=True)
 
+    thumbnail = ImageSpec(
+        processors=[
+            resize.Crop(width=60, height=60), 
+            Adjust(contrast=1.2, sharpness=1.1),
+            Transpose(Transpose.AUTO),
+        ], image_field='avatar', pre_cache=True, cache_to=cache_to
+    )
+    profil = ImageSpec(
+        processors=[
+            resize.Fit(width=100), 
+            Adjust(contrast=1.2, sharpness=1.1),
+            Transpose(Transpose.AUTO),
+        ], image_field='avatar', pre_cache=True, cache_to=cache_to
+    )
+    display = ImageSpec(
+        processors=[
+            resize.Fit(width=180), 
+            Adjust(contrast=1.2, sharpness=1.1),
+            Transpose(Transpose.AUTO),
+        ], image_field='avatar', pre_cache=True, cache_to=cache_to
+    )
+    
+    product_page = ImageSpec(
+        processors=[
+            resize.Fit(width=74, height=74), 
+            Adjust(contrast=1.2, sharpness=1.1),
+            Transpose(Transpose.AUTO),
+        ], image_field='avatar', pre_cache=True, cache_to=cache_to
+    )
+    
     def save(self, *args, **kwargs):
         if not self.slug:
             if self.is_professional:

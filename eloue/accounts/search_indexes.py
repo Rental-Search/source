@@ -1,5 +1,6 @@
 #-*- coding: utf-8 -*-
 import datetime
+from urlparse import urljoin
 
 from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
@@ -33,10 +34,9 @@ class PatronIndex(QueuedSearchIndex):
         return obj.get_absolute_url()
         
     def prepare_avatar(self, obj):
-        try:
-            return obj.avatar.thumbnail.url
-        except ObjectDoesNotExist as e:
-            return settings.MEDIA_URL + "images/default_avatar.png"
+        if obj.avatar:
+            return obj.thumbnail.url
+        return urljoin(settings.MEDIA_URL, "images/default_avatar.png")
 
     def prepare_lat(self, obj):
         return obj.default_address.position[0] if obj.default_address and obj.default_address.position else None

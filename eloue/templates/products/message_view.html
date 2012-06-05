@@ -27,7 +27,7 @@
 	<li>
 		<a href="{{message.sender.patron.get_absolute_url}}" class="m-img">
 			{% if message.sender.avatar %}
-				<img src="{{message.sender.avatar.thumbnail.url}}" width="60" height="60" />
+				<img src="{{message.sender.thumbnail.url}}" width="60" height="60" />
 			{% else %}
 				<img src="{{ MEDIA_URL }}images/default_avatar.png" width="60" height="60" alt="">
 			{% endif %}
@@ -48,7 +48,7 @@
 	<li>
 		<a href="{{message.sender.patron.get_absolute_url}}" class="m-img">
 			{% if user.avatar %}
-				<img src="{{ user.avatar.thumbnail.url }}" width="60" height="60">
+				<img src="{{ user.thumbnail.url }}" width="60" height="60">
 			{% else %}
                 <img src="{{ MEDIA_URL }}images/default_avatar.png" width="60" height="60">
 			{% endif %}

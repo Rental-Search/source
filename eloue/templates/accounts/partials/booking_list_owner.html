@@ -6,7 +6,7 @@
 			{% if request.user == booking.borrower %}
 				<a href="{{booking.owner.get_absolute_url}}" class="m-img">
 					{% if booking.owner.avatar %}
-						<img src="{{booking.owner.avatar.thumbnail.url}}" width="60" height="60" alt="">
+						<img src="{{booking.owner.thumbnail.url}}" width="60" height="60" alt="">
 					{% else %}
 						<img src="{{ MEDIA_URL }}images/default_avatar.png" width="60" height="60" alt="">
 					{% endif %}
@@ -14,7 +14,7 @@
 			{% else %}
 				<a href="{{booking.borrower.get_absolute_url}}" class="m-img">
 					{% if booking.borrower.avatar %}
-						<img src="{{booking.borrower.avatar.thumbnail.url}}" width="60" height="60" alt="">
+						<img src="{{booking.borrower.thumbnail.url}}" width="60" height="60" alt="">
 					{% else %}
 						<img src="{{ MEDIA_URL }}images/default_avatar.png" width="60" height="60" alt="">
 					{% endif %}

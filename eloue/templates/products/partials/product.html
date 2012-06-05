@@ -22,7 +22,7 @@
 <div class="pl-avatar">
     <a href="{{product.owner.get_absolute_url}}">
         {% if product.owner.avatar %}
-            <img src="{{product.owner.avatar.thumbnail.url}}" width="60" height="60" />
+            <img src="{{product.owner.thumbnail.url}}" width="60" height="60" />
         {% else %}
             <img src="{{ MEDIA_URL }}images/default_avatar.png" width="60" height="60" />
         {% endif %}

@@ -8,18 +8,16 @@
 {% endblock %}
 
 {% block content %}
-{% cache 900 product_details_content patron.pk page_obj %}
+{% cache 900 patron_details_content patron.pk page_obj %}
 <div id="profil" class="container-main">
     <div class="content-aside-profil">
         <div class="profil-block">
             <div class="avatar-picture">
-                {% with patron.avatar as avatar %}
-                {% if avatar %}
-                <img src="{{ avatar.display.url }}" alt="{% trans "loueur"%}{{ patron.username }}" width="180" height="180">
+                {% if patron.avatar %}
+                <img src="{{ patron.display.url }}" alt="{% trans "loueur"%}{{ patron.username }}" width="180" height="180">
                 {% else %}
                 <img src="{{ MEDIA_URL }}images/default_avatar.png" alt="{% trans "loueur"%}{{ patron.username }}" width="180" height="180">
                 {% endif %}
-                {% endwith %}
                 <h1>{{ patron.username }}</h1>
                 {% with patron.default_address as default_address %}
                     {% if default_address %}
@@ -40,6 +38,7 @@
                 <a class="btn-contactme" href={% url patron_message_create recipient_username=patron.slug %}>{% trans "Contactez-moi" %}</a>
             </div>{# profil-description #}
         </div>{# profil-block #}
+        {% cache 900 patron_details_info patron.pk %}
         {% with patron.languages as languages %}
             {% with languages.count as languages_count %}
             {% if patron.work or patron.school or languages_count %}
@@ -59,8 +58,9 @@
                     {% endif %}
             </div>{# profil-block #}
             {% endif %}
+            {% endwith %}
         {% endwith %}
-        {% endwith %}
+        {% endcache %}
         <div class="profil-block last">
             {% include "accounts/partials/response_stats.html" %}
         </div>{# profil-block #}
