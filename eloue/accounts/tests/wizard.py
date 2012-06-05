@@ -301,7 +301,7 @@ class FacebookAccountWizardTest(TestCase):
                 })
         self.assertRedirects(response, settings.LOGIN_REDIRECT_URL)
         p = Patron.objects.get(username='kosii2')
-        self.assertRaises(Avatar.DoesNotExist, getattr, p, 'avatar')
+        self.assertFalse(p.avatar)
         self.assertEqual(p.email, 'kosii.spam@gmail.com')
         self.assertEqual(p, FacebookSession.objects.get(access_token=access_token).user)
         self.assertFalse(p.has_usable_password())
