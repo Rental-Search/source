@@ -1,5 +1,6 @@
 #-*- coding: utf-8 -*-
 import datetime
+from urlparse import urljoin
 
 from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
@@ -58,11 +59,9 @@ class ProductIndex(QueuedSearchIndex):
             return picture.profile.url
     
     def prepare_owner_avatar(self, obj):
-        try:
-            if obj.owner.avatar:
-                return obj.owner.avatar.thumbnail.url
-        except ObjectDoesNotExist:
-            return None
+        if obj.owner.avatar:
+            return obj.owner.thumbnail.url
+        return urljoin(settings.MEDIA_URL, "images/default_avatar.png")
 
     def prepare_created_at_date(self, obj):
         return obj.created_at.date()

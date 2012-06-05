@@ -292,20 +292,6 @@ class PatronEditForm(BetterModelForm):
         self.fields['default_address'].widget.attrs['class'] = "selm"
         self.fields['default_address'].label = _(u'Adresse par defaut')
         self.fields['default_address'].queryset = self.instance.addresses.all()
-
-    def save(self, *args, **kwargs):
-        inst = super(PatronEditForm, self).save(*args, **kwargs)
-        if self.avatar:
-            try:
-                self.instance.avatar.delete()
-            except Avatar.DoesNotExist:
-                pass
-            Avatar.objects.create(image=self.avatar, patron=self.instance)
-        return inst
-    
-    def clean_avatar(self):
-        self.avatar = self.cleaned_data['avatar']
-        return self.avatar
     
     def clean_company_name(self):
         is_professional = self.cleaned_data.get('is_professional')
@@ -704,7 +690,7 @@ def make_missing_data_form(instance, required_fields=[]):
         for attr, value in self.cleaned_data.iteritems():
             if attr == "password1":
                 self.instance.set_password(value)
-            if "addresses" not in attr and "phones" not in attr and "avatar" not in attr: # wtf is this checking?
+            if "addresses" not in attr and "phones" not in attr: # wtf is this checking?
                 setattr(self.instance, attr, value)
         if 'addresses' in self.cleaned_data and self.cleaned_data['addresses']:
             address = self.cleaned_data['addresses']
@@ -727,10 +713,7 @@ def make_missing_data_form(instance, required_fields=[]):
         else:
             phone = None
         self.instance.save()
-        avatar = None
-        if hasattr(self, 'avatar') and self.avatar:
-            avatar = Avatar.objects.create(image=self.avatar, patron=self.instance)
-        return self.instance, address, phone, avatar
+        return self.instance, address, phone
     
     def clean_password2(self):
         password1 = self.cleaned_data['password1']
@@ -773,9 +756,6 @@ def make_missing_data_form(instance, required_fields=[]):
             raise forms.ValidationError(_(u"Vous devez spécifiez un numéro de téléphone"))
         return phones
     
-    def clean_avatar(self):
-        self.avatar = self.cleaned_data.get('avatar', None)
-        return self.avatar
     class Meta:
         fieldsets = [
             ('member', {
@@ -798,7 +778,6 @@ def make_missing_data_form(instance, required_fields=[]):
     form_class.clean_phones = types.MethodType(clean_phones, None, form_class)
     form_class.clean_addresses = types.MethodType(clean_addresses, None, form_class)
     form_class.clean_company_name = types.MethodType(clean_company_name, None, form_class)
-    form_class.clean_avatar = types.MethodType(clean_avatar, None, form_class)
     return fields != {}, form_class
 
 class ContactForm(forms.Form):

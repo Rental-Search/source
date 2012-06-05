@@ -139,17 +139,15 @@ class MultiPartFormWizard(FormWizard):
 
         if missing_form:
             missing_form.instance = self.new_patron
-            self.new_patron, self.new_address, self.new_phone, avatar = missing_form.save()
-            if not avatar and self.fb_session:
-                try:
-                    self.new_patron.avatar
-                except Avatar.DoesNotExist:
-                    if 'picture' in self.me and 'static-ak' not in self.me['picture']:
-                        try:
-                            fb_image_object = urlopen(self.me['picture']).read()
-                            Avatar(patron=self.new_patron, image=SimpleUploadedFile('picture',fb_image_object)).save()
-                        except IOError:
-                            pass
+            self.new_patron, self.new_address, self.new_phone = missing_form.save()
+            if not self.new_patron.avatar and self.fb_session:
+                if 'picture' in self.me and 'static-ak' not in self.me['picture']:
+                    try:
+                        fb_image_object = urlopen(self.me['picture']).read()
+                        self.new_patron.avatar = SimpleUploadedFile('picture',fb_image_object)
+                        self.new_patron.save()
+                    except IOError:
+                        pass
         address = None
         from eloue.accounts.views import GEOLOCATION_SOURCE
         if not request.session.get('location') or request.session['location'].get('source') > GEOLOCATION_SOURCE.ADDRESS:

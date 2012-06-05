@@ -5,13 +5,13 @@
 		<a href="{% url thread_details thread_id=thread.id%}" class="m-img">
 			{% if request.user == thread.sender %}
 				{% if thread.recipient.avatar %}
-					<img src="{{ thread.recipient.avatar.thumbnail.url }}" widht="60" height="60" alt=""/>
+					<img src="{{ thread.recipient.thumbnail.url }}" widht="60" height="60" alt=""/>
 				{% else %}
 					<img src="{{ MEDIA_URL }}images/default_avatar.png" width="60" height="60" alt="">
 				{% endif %}
 			{% else %}
 				{% if thread.sender.avatar %}
-					<img src="{{thread.sender.avatar.thumbnail.url}}" width="60" height="60" alt=""/>
+					<img src="{{thread.sender.thumbnail.url}}" width="60" height="60" alt=""/>
 				{% else %}
 					<img src="{{ MEDIA_URL }}images/default_avatar.png" width="60" height="60" alt="">
 				{% endif %}

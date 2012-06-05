@@ -4,7 +4,7 @@ from django.contrib import messages
 from django.contrib.auth import login
 from django.contrib.sites.models import Site
 from django.utils.translation import ugettext as _
-from django.views.generic.simple import redirect_to
+from django.shortcuts import redirect
 
 from django_lean.experiments.models import GoalRecord
 from django_lean.experiments.utils import WebUser
@@ -28,7 +28,7 @@ class AuthenticationWizard(MultiPartFormWizard):
         else:
             GoalRecord.record('registration', WebUser(request))
             messages.info(request, _(u"Bienvenue ! Nous vous avons envoyé un lien de validation par email. Cette validation est impérative pour terminer votre enregistrement."))
-        return redirect_to(request, self.redirect_path, permanent=False)
+        return redirect(self.redirect_path, permanent=False)
     
     def parse_params(self, request, *args, **kwargs):
         redirect_path = request.REQUEST.get('next', '')

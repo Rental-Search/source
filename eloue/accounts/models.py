@@ -110,9 +110,9 @@ def upload_to(instance, filename):
 
 class Avatar(models.Model):
 
-    patron = models.OneToOneField(User, related_name='avatar')
+    patron = models.OneToOneField(User, related_name='avatar_old')
     image = models.ImageField(upload_to=upload_to)
-    created_at = models.DateTimeField(editable=False)
+    created_at = models.DateTimeField(editable=False, auto_now_add=True)
 
     thumbnail = ImageSpec(
         processors=[
@@ -143,11 +143,6 @@ class Avatar(models.Model):
             Transpose(Transpose.AUTO),
         ], image_field='image', pre_cache=True, cache_to=cache_to
     )
-    def save(self, *args, **kwargs):
-        if not self.created_at:
-            self.created_at = datetime.datetime.now()
-        super(Avatar, self).save(*args, **kwargs)
-    
     def delete(self, *args, **kwargs):
         self.image.delete()
         super(Avatar, self).delete(*args, **kwargs)
@@ -167,12 +162,14 @@ class Patron(User):
     is_subscribed = models.BooleanField(_(u'newsletter'), default=False, help_text=_(u"Précise si l'utilisateur est abonné à la newsletter"))
     new_messages_alerted = models.BooleanField(_(u'alerts if new messages come'), default=True, help_text=_(u"Précise si l'utilisateur est informé par email s'il a nouveaux messages"))
     is_professional = models.NullBooleanField(_('professionnel'), blank=True, default=None, help_text=_(u"Précise si l'utilisateur est un professionnel"))
-    modified_at = models.DateTimeField(_('date de modification'), editable=False)
+    modified_at = models.DateTimeField(_('date de modification'), editable=False, auto_now=True)
     affiliate = models.CharField(null=True, blank=True, max_length=10)
     slug = models.SlugField(unique=True, db_index=True)
     paypal_email = models.EmailField(null=True, blank=True)
     sites = models.ManyToManyField(Site, related_name='patrons')
     
+    avatar = models.ImageField(upload_to=upload_to, null=True)
+
     default_address = models.ForeignKey('Address', null=True, blank=True, related_name="+")
 
     customers = models.ManyToManyField('self', symmetrical=False)
@@ -194,13 +191,42 @@ class Patron(User):
 
     rib = models.CharField(max_length=23, blank=True)
 
+    thumbnail = ImageSpec(
+        processors=[
+            resize.Crop(width=60, height=60), 
+            Adjust(contrast=1.2, sharpness=1.1),
+            Transpose(Transpose.AUTO),
+        ], image_field='avatar', pre_cache=True, cache_to=cache_to
+    )
+    profil = ImageSpec(
+        processors=[
+            resize.Fit(width=100), 
+            Adjust(contrast=1.2, sharpness=1.1),
+            Transpose(Transpose.AUTO),
+        ], image_field='avatar', pre_cache=True, cache_to=cache_to
+    )
+    display = ImageSpec(
+        processors=[
+            resize.Fit(width=180), 
+            Adjust(contrast=1.2, sharpness=1.1),
+            Transpose(Transpose.AUTO),
+        ], image_field='avatar', pre_cache=True, cache_to=cache_to
+    )
+    
+    product_page = ImageSpec(
+        processors=[
+            resize.Fit(width=74, height=74), 
+            Adjust(contrast=1.2, sharpness=1.1),
+            Transpose(Transpose.AUTO),
+        ], image_field='avatar', pre_cache=True, cache_to=cache_to
+    )
+    
     def save(self, *args, **kwargs):
         if not self.slug:
             if self.is_professional:
                 self.slug = slugify(self.company_name)
             else:
                 self.slug = slugify(self.username)
-        self.modified_at = datetime.datetime.now()
         super(Patron, self).save(*args, **kwargs)
 
     def __eq__(self, other):
@@ -327,14 +353,14 @@ class Patron(User):
         owner_comments = OwnerComment.objects.filter(booking__borrower=self)
 
         if borrower_comments:
-            borrower_sum = borrower_comments.aggregate(Sum('note'))['note__sum']
-            borrower_count = borrower_comments.aggregate(Count('note'))['note__count']
+            queryset = borrower_comments.aggregate(Sum('note'), Count('note'))
+            borrower_sum, borrower_count = queryset['note__sum'], queryset['note__count']
         else:
             borrower_sum = 0
             borrower_count = 0
         if owner_comments:
-            owner_sum = owner_comments.aggregate(Sum('note'))['note__sum']
-            owner_count = owner_comments.aggregate(Count('note'))['note__count']
+            queryset = owner_comments.aggregate(Sum('note'), Count('note'))
+            owner_sum, owner_count = queryset['note__sum'], queryset['note__count']
         else:
             owner_sum = 0
             owner_count = 0
