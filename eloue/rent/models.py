@@ -29,6 +29,7 @@ from django.core.urlresolvers import reverse
 from eloue.accounts.models import Patron
 from eloue.products.models import CURRENCY, UNIT, Product, PAYMENT_TYPE
 from eloue.products.utils import Enum
+from eloue.products.signals import post_save_to_update_product
 from eloue.rent.decorators import incr_sequence
 from eloue.rent.fields import UUIDField, IntegerAutoField
 from eloue.rent.manager import BookingManager, CurrentSiteBookingManager
@@ -442,6 +443,10 @@ class Comment(models.Model):
         raise NotImplementedError
         #return ('booking_detail', [self.pk.hex])
 
+    @property
+    def product(self):
+        return self.booking.product
+
     def __unicode__(self):
         return self.comment
 
@@ -493,3 +498,6 @@ class Sinister(models.Model):
     
 
 post_save.connect(post_save_sites, sender=Booking)
+post_save.connect(post_save_to_update_product, sender=BorrowerComment)
+post_save.connect(post_save_to_update_product, sender=OwnerComment)
+

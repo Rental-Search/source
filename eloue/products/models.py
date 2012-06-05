@@ -33,7 +33,8 @@ from eloue.accounts.models import Patron, Address
 from eloue.geocoder import GoogleGeocoder
 from eloue.products.fields import SimpleDateField
 from eloue.products.manager import ProductManager, PriceManager, QuestionManager, CurrentSiteProductManager, TreeManager
-from eloue.products.signals import post_save_answer, post_save_product, post_save_curiosity
+from eloue.products.signals import (post_save_answer, post_save_product, 
+    post_save_curiosity, post_save_to_update_product,)
 from eloue.products.utils import Enum
 from eloue.signals import post_save_sites
 from eloue.rent.contract import ContractGeneratorNormal, ContractGeneratorCar, ContractGeneratorRealEstate
@@ -948,3 +949,6 @@ post_save.connect(post_save_sites, sender=Product)
 post_save.connect(post_save_sites, sender=Category)
 post_save.connect(post_save_sites, sender=CarProduct)
 post_save.connect(post_save_sites, sender=RealEstateProduct)
+
+post_save.connect(post_save_to_update_product, sender=Price)
+post_save.connect(post_save_to_update_product, sender=Picture)
