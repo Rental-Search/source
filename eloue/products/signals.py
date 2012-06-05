@@ -16,7 +16,3 @@ def post_save_product(sender, instance, created, **kwargs):
 
 def post_save_curiosity(sender, instance, created, **kwargs):
     cache.delete(cache_key('curiosities', Site.objects.get_current()))
-
-def pre_save_product(sender, instance, raw, using=None, **kwargs):
-	# keyword argumenet using is only present for 1.3+ compatibility
-	instance.modified_at = datetime.datetime.now()

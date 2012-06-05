@@ -33,7 +33,7 @@ from eloue.accounts.models import Patron, Address
 from eloue.geocoder import GoogleGeocoder
 from eloue.products.fields import SimpleDateField
 from eloue.products.manager import ProductManager, PriceManager, QuestionManager, CurrentSiteProductManager, TreeManager
-from eloue.products.signals import post_save_answer, post_save_product, post_save_curiosity, pre_save_product
+from eloue.products.signals import post_save_answer, post_save_product, post_save_curiosity
 from eloue.products.utils import Enum
 from eloue.signals import post_save_sites
 from eloue.rent.contract import ContractGeneratorNormal, ContractGeneratorCar, ContractGeneratorRealEstate
@@ -353,9 +353,13 @@ class Product(models.Model):
         else:
             try:
                 self._subtype = self.carproduct
+                if not self._subtype:
+                    raise self.DoesNotExist()
             except self.DoesNotExist:
                 try:
                     self._subtype = self.realestateproduct
+                    if not self._subtype:
+                        raise self.DoesNotExist()
                 except self.DoesNotExist:
                     self._subtype = self
         return self._subtype
@@ -944,4 +948,3 @@ post_save.connect(post_save_sites, sender=Product)
 post_save.connect(post_save_sites, sender=Category)
 post_save.connect(post_save_sites, sender=CarProduct)
 post_save.connect(post_save_sites, sender=RealEstateProduct)
-signals.pre_save.connect(pre_save_product, sender=Product)
