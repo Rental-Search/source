@@ -412,7 +412,7 @@ class CarProduct(Product):
     audio_input = models.BooleanField(_(u'entrée audio/iPod'))
 
     # informations de l'assurance
-    tax_horsepower = models.PositiveIntegerField(_(u'CV fiscal'), choices=TAX_HORSEPOWER)
+    tax_horsepower = models.PositiveIntegerField(_(u'CV fiscaux'), choices=TAX_HORSEPOWER)
     licence_plate = models.CharField(_(u"N° d'immatriculation"), max_length=10)
     first_registration_date = models.DateField(_(u'1er mise en circulation'))
 
