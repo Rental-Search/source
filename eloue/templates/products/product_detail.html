@@ -154,15 +154,16 @@
                     ended_at.datepicker('setDate', newDate );
                     bookingPrice($('#booking_create'));
                 }
-            });
+            }).datepicker('setDate', '+1d');
             
             endDate = $('input[name$=ended_at_0]');
             endDate.datepicker({
+                defaultDate: '+2d',
                 dateFormat: 'dd/mm/yy',
                 beforeShowDay: beforeShowDay,
                 onChangeMonthYear: onChangeMonthYear,
                 beforeShow: beforeShow
-            });
+            }).datepicker('setDate', '+2d');
 
             availability(date.getFullYear(), date.getMonth()+1);
         });
