@@ -1,0 +1,52 @@
+# -*- coding: utf-8 -*-
+import datetime
+import qsstats
+
+from django.template import RequestContext
+from django.shortcuts import render_to_response
+from django.contrib.admin.views.decorators import staff_member_required
+
+from django.db.models import Avg, Sum, Q, Count
+
+from eloue.accounts.models import Patron
+from eloue.products.models import Product, CarProduct, RealEstateProduct
+from eloue.rent.models import Booking
+
+
+
+def stats(request):
+	booking_transaction_list = [Booking.STATE.PENDING, Booking.STATE.ONGOING, Booking.STATE.ENDED, Booking.STATE.INCIDENT, Booking.STATE.CLOSING, Booking.STATE.CLOSED]
+
+	qss_list = {
+		'patrons': (Patron.objects.all(), 'date_joined'),
+		'patrons_particular': (Patron.objects.filter(is_professional=False), 'date_joined'),
+		'patrons_professionnal': (Patron.objects.filter(is_professional=True), 'date_joined'),
+		'products': (Product.objects.all(), 'created_at'),
+		'car_product': (CarProduct.objects.all(), 'created_at'),
+		'real_estate_product': (RealEstateProduct.objects.all(), 'created_at'),
+		'other_item_product': (Product.objects.filter(carproduct=None).filter(realestateproduct=None), 'created_at'),
+		'authorized_booking': (Booking.objects.all(), 'created_at', Count('uuid')),
+		'booking': (Booking.objects.filter(state__in=booking_transaction_list), 'created_at', Count('uuid')),
+		'car_booking': (Booking.objects.filter(state__in=booking_transaction_list).filter(~Q(product__carproduct=None)), 'created_at', Count('uuid')),
+		'real_estate_booking': (Booking.objects.filter(state__in=booking_transaction_list).filter(~Q(product__realestateproduct=None)), 'created_at', Count('uuid')),
+		'other_item_booking': (Booking.objects.filter(state__in=booking_transaction_list).filter(Q(product__realestateproduct=None, product__carproduct=None)), 'created_at', Count('uuid')),
+		'average_total_amount_authorized_booking': (Booking.objects.all(), 'created_at', Avg('total_amount')),
+		'average_total_amount_booking': (Booking.objects.filter(state__in=booking_transaction_list), 'created_at', Avg('total_amount')),
+		'sum_total_amount_authorized_booking': (Booking.objects.all(), 'created_at', Sum('total_amount')),
+		'sum_total_amount_booking': (Booking.objects.filter(state__in=booking_transaction_list), 'created_at', Sum('total_amount')),
+		'need_assurancy_authorized_booking': (Booking.objects.filter(Q(product__category__need_insurance=True)), 'created_at', Count('uuid')),
+		'need_assurancy_booking': (Booking.objects.filter(state__in=booking_transaction_list).filter(Q(product__category__need_insurance=True)), 'created_at', Count('uuid')),
+		'incident_declaration': (Booking.objects.filter(state__in=[Booking.STATE.INCIDENT]), 'created_at', Count('uuid'))
+	}
+
+	qss = qsstats.QuerySetStats(*qss_list['other_item_product'])
+
+	time_series = qss.time_series(datetime.date(2012, 2, 1), datetime.date(2012, 2, 29), interval='days')
+
+	return render_to_response(
+		"reporting/admin/stats.html",
+		{},
+		RequestContext(request, {'time_series': time_series}),
+    )
+
+stats = staff_member_required(stats)
