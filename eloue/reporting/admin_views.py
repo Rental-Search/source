@@ -17,7 +17,7 @@ from eloue.rent.models import Booking
 def stats(request):
 	booking_transaction_list = [Booking.STATE.PENDING, Booking.STATE.ONGOING, Booking.STATE.ENDED, Booking.STATE.INCIDENT, Booking.STATE.CLOSING, Booking.STATE.CLOSED]
 
-	qss_list = {
+	qss_parameters_list = {
 		'patrons': (Patron.objects.all(), 'date_joined'),
 		'patrons_particular': (Patron.objects.filter(is_professional=False), 'date_joined'),
 		'patrons_professionnal': (Patron.objects.filter(is_professional=True), 'date_joined'),
@@ -39,14 +39,16 @@ def stats(request):
 		'incident_declaration': (Booking.objects.filter(state__in=[Booking.STATE.INCIDENT]), 'created_at', Count('uuid'))
 	}
 
-	qss = qsstats.QuerySetStats(*qss_list['other_item_product'])
+	stats = {}
 
-	time_series = qss.time_series(datetime.date(2012, 2, 1), datetime.date(2012, 2, 29), interval='days')
+	for key, value in qss_parameters_list.items():
+		stats[key] = qsstats.QuerySetStats(*value).time_series(datetime.date(2012, 2, 1), datetime.date(2012, 2, 29), interval='days')
+
 
 	return render_to_response(
-		"reporting/admin/stats.html",
+        "reporting/admin/stats.html",
 		{},
-		RequestContext(request, {'time_series': time_series}),
+		RequestContext(request, {'stats': stats}),
     )
 
 stats = staff_member_required(stats)

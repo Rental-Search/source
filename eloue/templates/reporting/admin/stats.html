@@ -15,8 +15,15 @@
 {% block content %}
 fsfdsfds
 <ul>
-	{% for time in time_series %}
+{% for key, value in stats.items %}
+<li>
+<p>{{ key }}</p>
+<ul>
+	{% for time in value %}
 	<li>{{ time.0 }} : {{ time.1 }}</li>
 	{% endfor %}
+</ul>
+</li>
+{% endfor %}
 </ul>
 {% endblock %}
