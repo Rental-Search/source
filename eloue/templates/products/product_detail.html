@@ -13,7 +13,7 @@
 
 {% block head %}
  {{ block.super }}
-    {% cache 300 product_meta product.pk product.modified_at %}
+    {% cache 43200 product:meta product.pk %}
     {% with product.pictures.all|first as picture %}
     {% with product.get_absolute_url as absolute_url %}
         <meta property="og:title" content="A louer sur e-loue : {{product.summary}}"/>
@@ -154,15 +154,16 @@
                     ended_at.datepicker('setDate', newDate );
                     bookingPrice($('#booking_create'));
                 }
-            });
+            }).datepicker('setDate', '+1d');
             
             endDate = $('input[name$=ended_at_0]');
             endDate.datepicker({
+                defaultDate: '+2d',
                 dateFormat: 'dd/mm/yy',
                 beforeShowDay: beforeShowDay,
                 onChangeMonthYear: onChangeMonthYear,
                 beforeShow: beforeShow
-            });
+            }).datepicker('setDate', '+2d');
 
             availability(date.getFullYear(), date.getMonth()+1);
         });
@@ -176,7 +177,7 @@
 
 <div class="container-main">
 
-{% cache 300 product_breadcrumb product.pk product.modified_at %}
+{% cache 43200 product:breadcrumb product.pk %}
     <ul class="breadcrumb">
         <li><a href="{% url home %}">{% trans "Accueil" %}</a></li>
 		{% for category in product.category.get_ancestors %}
@@ -189,7 +190,7 @@
     <div class="content-main">
         {% include "partials/alerts_message.html" %}
 
-{% cache 300 product_details product.pk product.modified_at %}
+{% cache 43200 product:details product.pk %}
         <h1>{{ product.summary|capitalize}}</h1>
         <div class="product-resume">
             <div class="product-resume-left">
@@ -240,8 +241,6 @@
                 </ul>
                 {% endif %}
             </div>
-{% endcache %}
-{% cache 300 product_borrowercomments product.borrowercomments.count %}
             <div class="product-resume-right">
                 <span class="stars empty"><span class="stars filled_{{ product.average_note }}"></span></span>
                 <a href="#id_product_comment">
@@ -252,7 +251,6 @@
                 {% endblocktrans%}
                 </a>
             </div>
-{% endcache %}
         </div>{# product-resume #}
         <div class="product-tabs">
             <ul>
@@ -287,7 +285,6 @@
                             {% endfor %}
                         </table>
                     </div>
-{% cache 300 product_details_end product.pk product.modified_at %}
                     {% if product.type == 'carproduct' %}
                     <ul class="service-included">
                         <li>
@@ -336,7 +333,6 @@
             {{ product.rules|linebreaksp }}
         </div>        
         {% endif %}
-{% endcache %}
         <div id="id-product-comment" class="product-comment">
             {% with product.borrowercomments as borrowercomments %}
                 {% if borrowercomments.count > 0 %}
@@ -457,6 +453,7 @@
             {% endwith %}
         </div>
         {% endif %}
+{% endcache %}
     </div>{# content-aside #}
 </div>{# container-main #}
 {% endblock %}
