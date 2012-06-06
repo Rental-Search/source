@@ -4,6 +4,7 @@ from django.contrib.sites.models import Site
 import datetime
 from eloue.utils import cache_key
 from django.db.models import signals
+from django.core import exceptions
 
 def post_save_answer(sender, instance, created, **kwargs):
     instance.question.save()
@@ -18,8 +19,14 @@ def post_save_product(sender, instance, created, **kwargs):
 
 
 def post_save_to_update_product(sender, instance, created, **kwargs):
-	product = instance.product
-	signals.post_save.send(sender=product.__class__, instance=product, raw=False, created=False)
+	try:
+		product = instance.product
+		signals.post_save.send(
+			sender=product.__class__, instance=product, 
+			raw=False, created=False
+		)
+	except exceptions.ObjectDoesNotExist:
+		pass
 
 def post_save_to_batch_update_product(sender, instance, created, **kwargs):
 	for product in instance.products.all():
