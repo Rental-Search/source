@@ -50,22 +50,23 @@ class BookingWizard(MultiPartFormWizard):
         self.extra_context={
             'product_list': product_search.more_like_this(product)[:4]
         }
-        if product.payment_type != PAYMENT_TYPE.NOPAY:
-            if request.user.is_authenticated():
-                try:
-                    request.user.creditcard
-                    self.form_list.append(CvvForm)
-                except (CreditCard.DoesNotExist):
-                    self.form_list.append(BookingCreditCardForm)
-            elif EmailAuthenticationForm in self.form_list:
-                 form = self.get_form(self.form_list.index(EmailAuthenticationForm), request.POST, request.FILES)
-                 if form.is_valid():
-                    user = form.get_user()
+        if request.method == "POST":
+            if product.payment_type != PAYMENT_TYPE.NOPAY:
+                if request.user.is_authenticated():
                     try:
-                        user.creditcard
+                        request.user.creditcard
                         self.form_list.append(CvvForm)
-                    except (CreditCard.DoesNotExist, AttributeError):
+                    except (CreditCard.DoesNotExist):
                         self.form_list.append(BookingCreditCardForm)
+                elif EmailAuthenticationForm in self.form_list:
+                     form = self.get_form(self.form_list.index(EmailAuthenticationForm), request.POST, request.FILES)
+                     if form.is_valid():
+                        user = form.get_user()
+                        try:
+                            user.creditcard
+                            self.form_list.append(CvvForm)
+                        except (CreditCard.DoesNotExist, AttributeError):
+                            self.form_list.append(BookingCreditCardForm)
         return super(BookingWizard, self).__call__(request, product, *args, **kwargs)
 
     def done(self, request, form_list):

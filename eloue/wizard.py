@@ -41,33 +41,34 @@ class MultiPartFormWizard(FormWizard):
     
     @method_decorator(csrf_protect)
     def __call__(self, request, *args, **kwargs):
-        if request.user.is_authenticated():
-            self.patron = request.user
-            if not self.fb_session:
-                try:
-                    self.fb_session = self.patron.facebooksession
-                    self.me = self.fb_session.me
-                except (FacebookSession.DoesNotExist, facebook.GraphAPIError):
-                    pass
-            if EmailAuthenticationForm in self.form_list and len(self.form_list) > 1:
-                self.form_list.remove(EmailAuthenticationForm)
-            if not any(map(lambda el: getattr(el, '__name__', None) == 'MissingInformationForm', self.form_list)):
-                missing_fields, missing_form = make_missing_data_form(request.user, self.required_fields)
-                if missing_fields:
-                    self.form_list.insert(1, missing_form)
-        else:
-            if EmailAuthenticationForm not in self.form_list:
-                self.form_list.append(EmailAuthenticationForm)
-            if EmailAuthenticationForm in self.form_list:
-                if not next((form for form in self.form_list if getattr(form, '__name__', None) == 'MissingInformationForm'), None):
-                    form = self.get_form(self.form_list.index(EmailAuthenticationForm), request.POST, request.FILES)
-                    form.is_valid()  # Here to fill form user_cache
-                    if form.fb_session and 'password1' in self.required_fields:
-                        self.required_fields.remove('password1')
-                        self.required_fields.remove('password2')
-                    missing_fields, missing_form = make_missing_data_form(form.get_user(), self.required_fields)
+        if request.method == "POST":
+            if request.user.is_authenticated():
+                self.patron = request.user
+                if not self.fb_session:
+                    try:
+                        self.fb_session = self.patron.facebooksession
+                        self.me = self.fb_session.me
+                    except (FacebookSession.DoesNotExist, facebook.GraphAPIError):
+                        pass
+                if EmailAuthenticationForm in self.form_list and len(self.form_list) > 1:
+                    self.form_list.remove(EmailAuthenticationForm)
+                if not any(map(lambda el: getattr(el, '__name__', None) == 'MissingInformationForm', self.form_list)):
+                    missing_fields, missing_form = make_missing_data_form(request.user, self.required_fields)
                     if missing_fields:
-                        self.form_list.insert(2, missing_form)
+                        self.form_list.insert(1, missing_form)
+            else:
+                if EmailAuthenticationForm not in self.form_list:
+                    self.form_list.append(EmailAuthenticationForm)
+                if EmailAuthenticationForm in self.form_list:
+                    if not next((form for form in self.form_list if getattr(form, '__name__', None) == 'MissingInformationForm'), None):
+                        form = self.get_form(self.form_list.index(EmailAuthenticationForm), request.POST, request.FILES)
+                        form.is_valid()  # Here to fill form user_cache
+                        if form.fb_session and 'password1' in self.required_fields:
+                            self.required_fields.remove('password1')
+                            self.required_fields.remove('password2')
+                        missing_fields, missing_form = make_missing_data_form(form.get_user(), self.required_fields)
+                        if missing_fields:
+                            self.form_list.insert(2, missing_form)
 
         if 'extra_context' in kwargs:
             self.extra_context.update(kwargs['extra_context'])
