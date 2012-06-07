@@ -366,7 +366,36 @@
             );
 
             google.maps.event.addListener(autocomplete, 'place_changed', function() {
-                $("#form_search_results").submit();
+                // code found at 
+                // http://stackoverflow.com/questions/3525670/radius-of-viewable-region-in-google-maps-v3 
+                console.log(autocomplete.getPlace().geometry);
+                bounds = autocomplete.getPlace().geometry.viewport;
+                if (bounds) {
+                    center = bounds.getCenter();
+                    ne = bounds.getNorthEast();
+
+                    // r = radius of the earth in statute miles
+                    var r = 6378.7;  
+
+                    // Convert lat or lng from decimal degrees into radians (divide by 57.2958)
+                    var lat1 = center.lat() / 57.29577951; 
+                    var lon1 = center.lng() / 57.29577951;
+                    var lat2 = ne.lat() / 57.29577951;
+                    var lon2 = ne.lng() / 57.29577951;
+
+                    // distance = circle radius from center to Northeast corner of bounds
+                    var dis = r * Math.acos(Math.sin(lat1) * Math.sin(lat2) + 
+                      Math.cos(lat1) * Math.cos(lat2) * Math.cos(lon2 - lon1));
+                } else {
+                    var dis = 1;
+                }
+                    id_r = $('#id_r');
+                    id_l = $('#id_l');
+                    id_r.attr({READONLY: true});
+                    id_l.attr({READONLY: true});
+                    id_r.val(Math.ceil(dis));
+
+                    $("#form_search_results").submit();
             });
 
             initialize();
