@@ -354,6 +354,12 @@
 
 
         $(document).ready(function () {
+            $('#id_l').click(function (){
+                $('#form_search_results').keypress(function(e){
+                    if ( e.which == 13 ) e.preventDefault();
+                });
+            });
+
             autocomplete = new google.maps.places.Autocomplete(
                 document.getElementById("id_l"), 
                 {
