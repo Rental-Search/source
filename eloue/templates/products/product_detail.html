@@ -259,7 +259,6 @@
                 <li><a href="#conditions">{% trans "Conditions et assurance"%}</a></li>
             </ul>
             <div id="gallery">
-
             {% with product.pictures.all|first as picture %}
                 {% if picture %}
                     <img src="{{ picture.display.url }}" alt="{{ product.summary }}">
@@ -285,6 +284,12 @@
                             {% endfor %}
                         </table>
                     </div>
+                    {% if product.deposit_amount %}
+                    <ul>
+                        <li style="margin-bottom: 10px;">{% trans "Dépôt de garantie" %} : {{ product.deposit_amount }} &euro;</li>
+                        <li>{% trans "Uniquement débité en cas de dommage constaté et avec votre accord."%}</li>
+                    </ul>
+                    {% endif %}
                     {% if product.type == 'carproduct' %}
                     <ul class="service-included">
                         <li>

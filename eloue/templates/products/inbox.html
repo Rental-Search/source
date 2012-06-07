@@ -10,7 +10,7 @@
 {% url inbox as inbox %}
 {% url archived as archived %}
 <ul class="nav-sub-bar">
-    <li><a href="{{ inbox }}"  class="{% active request inbox %}">{% trans "Messages reçus" %}</a></li>
+    <li><a href="{{ inbox }}"  class="{% active request inbox %}">{% trans "Messages" %}</a></li>
     <li><a href="{{ archived }}" class="{% active request archived %}">{% trans "Messages archivés" %}</a></li>
 </ul>
 {% endblock %}

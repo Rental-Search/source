@@ -49,4 +49,5 @@ backports.ssl_match_hostname
 -e git://github.com/e-loue/queued_search.git#egg=queued_search
 -e git://github.com/e-loue/django-messages.git#egg=django-messages
 -e git://github.com/e-loue/python-sdk.git#egg=facebook-sdk
+-e git://github.com/e-loue/django-qsstats-magic.git#egg=qsstats
 PIL

@@ -18,7 +18,7 @@
                 {% else %}
                 <img src="{{ MEDIA_URL }}images/default_avatar.png" alt="{% trans "loueur"%}{{ patron.username }}" width="180" height="180">
                 {% endif %}
-                <h1>{{ patron.username }}</h1>
+                <h1>{{ patron.username|truncate:13 }}</h1>
                 {% with patron.default_address as default_address %}
                     {% if default_address %}
                         <address>{{ default_address.city }} - {{ default_address.zipcode }}</address>

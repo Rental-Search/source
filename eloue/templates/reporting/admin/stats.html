@@ -1,0 +1,42 @@
+{% extends "admin/base_site.html" %}
+
+{% load i18n %}
+
+{% block title %}Stats{% endblock %}
+
+{% block breadcrumbs %}
+    <div class="breadcrumbs">
+        <a href="/">{% trans 'Home' %}</a> 
+        &rsaquo; stats
+    </div>
+{% endblock %}
+
+
+{% block content %}
+<div style="overflow-x: auto;">
+	<table>
+	{% for key, value in stats.items %}
+		{% if forloop.first %}
+		<thead>
+			<tr>
+				<th></th>
+				{% for item in value %}
+				<th>{{ item.0|date:"M y" }}</th>
+				{% endfor %}
+			</tr>
+		</thead>
+		<tbody>
+		{% endif %}
+		<tr>
+			<th>{{ key }}</th>
+			{% for item in value %}
+			<td style="text-align: center;">{{ item.1|floatformat:2 }}</td>
+			{% endfor %}
+		</tr>
+		{% if forloop.last %}
+		</tbody>
+		{% endif %}
+	{% endfor %}
+	</table>
+</table>
+{% endblock %}
