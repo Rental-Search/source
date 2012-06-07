@@ -339,18 +339,12 @@
                 function(result, status){
                     if (status == google.maps.GeocoderStatus.OK) {
                         map.setCenter(result[0].geometry.location);
-                        var marker = new google.maps.Marker({
-                            position: result[0].geometry.location, 
-                            map: map,
-                            title:"Vous êtes ici!"
-                        });
                         var circle = new google.maps.Circle({
                           map: map,
                           radius: radius*1000,
                           fillColor: '#FFFFFF',
                           editable: false
                         });
-                        circle.bindTo('center', marker, 'position');
                     }
                 }
             )
