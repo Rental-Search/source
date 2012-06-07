@@ -15,6 +15,8 @@ from eloue.rent.models import Booking
 
 
 def stats(request):
+	data = {}
+
 	booking_transaction_list = [Booking.STATE.PENDING, Booking.STATE.ONGOING, Booking.STATE.ENDED, Booking.STATE.INCIDENT, Booking.STATE.CLOSING, Booking.STATE.CLOSED]
 
 	qss_parameters_list = {
@@ -36,19 +38,17 @@ def stats(request):
 		'sum_total_amount_booking': (Booking.objects.filter(state__in=booking_transaction_list), 'created_at', Sum('total_amount')),
 		'need_assurancy_authorized_booking': (Booking.objects.filter(Q(product__category__need_insurance=True)), 'created_at', Count('uuid')),
 		'need_assurancy_booking': (Booking.objects.filter(state__in=booking_transaction_list).filter(Q(product__category__need_insurance=True)), 'created_at', Count('uuid')),
-		'incident_declaration': (Booking.objects.filter(state__in=[Booking.STATE.INCIDENT]), 'created_at', Count('uuid'))
+		'incident_declaration': (Booking.objects.filter(state__in=[Booking.STATE.INCIDENT]), 'created_at', Count('uuid')),
 	}
 
-	stats = {}
-
 	for key, value in qss_parameters_list.items():
-		stats[key] = qsstats.QuerySetStats(*value).time_series(datetime.date(2012, 2, 1), datetime.date(2012, 2, 29), interval='days')
+		data[key] = qsstats.QuerySetStats(*value).time_series(datetime.date(2010, 1, 1), datetime.date(2012, 2, 28), interval='months')
 
 
 	return render_to_response(
         "reporting/admin/stats.html",
 		{},
-		RequestContext(request, {'stats': stats}),
+		RequestContext(request, {'stats': data}),
     )
 
 stats = staff_member_required(stats)

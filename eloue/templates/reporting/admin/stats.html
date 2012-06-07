@@ -13,17 +13,30 @@
 
 
 {% block content %}
-fsfdsfds
-<ul>
-{% for key, value in stats.items %}
-<li>
-<p>{{ key }}</p>
-<ul>
-	{% for time in value %}
-	<li>{{ time.0 }} : {{ time.1 }}</li>
+<div style="overflow-x: auto;">
+	<table>
+	{% for key, value in stats.items %}
+		{% if forloop.first %}
+		<thead>
+			<tr>
+				<th></th>
+				{% for item in value %}
+				<th>{{ item.0|date:"M y" }}</th>
+				{% endfor %}
+			</tr>
+		</thead>
+		<tbody>
+		{% endif %}
+		<tr>
+			<th>{{ key }}</th>
+			{% for item in value %}
+			<td>{{ item.1|floatformat:2 }}</td>
+			{% endfor %}
+		</tr>
+		{% if forloop.last %}
+		</tbody>
+		{% endif %}
 	{% endfor %}
-</ul>
-</li>
-{% endfor %}
-</ul>
+	</table>
+</table>
 {% endblock %}
