@@ -34,7 +34,7 @@ backports.ssl_match_hostname
 -e git://github.com/e-loue/django-announcements.git#egg=announcements
 -e git://github.com/e-loue/django-faq.git#egg=faq
 -e git://github.com/e-loue/django-compress.git#egg=compress
--e git://github.com/kossovics/django-haystack.git@1.2.X#egg=haystack
+#-e git://github.com/kossovics/django-haystack.git@1.2.X#egg=haystack
 -e git://github.com/e-loue/django-storages.git#egg=storages
 -e git://github.com/e-loue/django-tastypie.git#egg=tastypie
 -e git://github.com/e-loue/django-fsm.git#egg=fsm
@@ -57,5 +57,6 @@ backports.ssl_match_hostname
 -e git://github.com/e-loue/django-messages.git#egg=django-messages
 -e git://github.com/e-loue/freshen.git#egg=freshen
 -e git://github.com/e-loue/python-sdk.git#egg=facebook-sdk
+-e git://github.com/e-loue/django-qsstats-magic.git#egg=qsstats
 PIL
 
