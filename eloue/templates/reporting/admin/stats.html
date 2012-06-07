@@ -30,7 +30,7 @@
 		<tr>
 			<th>{{ key }}</th>
 			{% for item in value %}
-			<td>{{ item.1|floatformat:2 }}</td>
+			<td style="text-align: center;">{{ item.1|floatformat:2 }}</td>
 			{% endfor %}
 		</tr>
 		{% if forloop.last %}

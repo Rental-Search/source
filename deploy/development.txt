@@ -57,6 +57,6 @@ backports.ssl_match_hostname
 -e git://github.com/e-loue/django-messages.git#egg=django-messages
 -e git://github.com/e-loue/freshen.git#egg=freshen
 -e git://github.com/e-loue/python-sdk.git#egg=facebook-sdk
--e git://github.com/kmike/django-qsstats-magic.git#egg=qsstats
+-e git://github.com/e-loue/django-qsstats-magic.git#egg=qsstats
 PIL
 
