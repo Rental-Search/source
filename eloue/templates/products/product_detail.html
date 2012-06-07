@@ -436,9 +436,15 @@
                     <a href="{{ patron.get_absolute_url }}">{{ patron.username|truncate:16 }}</a>
                 </p>
                 <address>
-                    {% with patron.default_address as default_address %}
-                        {{ default_address.city }} - {{ default_address.zipcode }}
-                    {% endwith %}
+                    {% if patron.default_address %}
+                        {% with patron.default_address as default_address %}
+                            {{ default_address.city }} - {{ default_address.zipcode }}
+                        {% endwith %}
+                    {% else %}
+                        {% with patron.addresses.all|first as default_address %}
+                            {{ default_address.city }} - {{ default_address.zipcode }}
+                        {% endwith %}
+                    {% endif %}
                 </address>
                 <a href="{% url message_create product.pk patron.pk %}" class="btn-contactme">Contactez-moi</a>
                 <span style="margin-top: 0; margin-bottom: 10px; margin-left: 20px;" class="stars empty"><span class="stars filled_{{ patron.average_note }}"></span></span>
