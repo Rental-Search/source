@@ -15,7 +15,9 @@ def post_save_product(sender, instance, created, **kwargs):
     
     cache.delete(cache_key('product:meta', instance.pk))
     cache.delete(cache_key('product:breadcrumb', instance.pk))
-    cache.delete(cache_key('product:details', instance.pk))
+    cache.delete(cache_key('product:details:before_csrf', instance.pk))
+    cache.delete(cache_key('product:details:after_csrf', instance.pk))
+    cache.delete(cache_key('product:details:after_dates', instance.pk))
 
 
 def post_save_to_update_product(sender, instance, created, **kwargs):

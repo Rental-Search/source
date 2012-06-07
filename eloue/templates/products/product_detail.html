@@ -190,7 +190,7 @@
     <div class="content-main">
         {% include "partials/alerts_message.html" %}
 
-{% cache 43200 product:details product.pk %}
+{% cache 43200 product:details:before_csrf product.pk %}
         <h1>{{ product.summary|capitalize}}</h1>
         <div class="product-resume">
             <div class="product-resume-left">
@@ -371,11 +371,14 @@
         <div class="booking-block">
             <h2>{% trans "Réservez en ligne" %}</h2>
             <form id="booking_create" action="" method="POST">
+{% endcache %}
                 {% csrf_token %}
+{% cache 43200 product:details:after_csrf product.pk %}
                 <div class="top-block">
                 {% with product.daily_price as price %}
                     {{ price }} <span>{% blocktrans with price.unit|unit as unit %} / par {{ unit }}{% endblocktrans %}</span>
                 {% endwith %}
+{% endcache %}
                 </div>{# top block #}
                 <div class="main-block">
                     <div class="booking-dates form-stacked">
@@ -400,6 +403,7 @@
                         <p class="available">Ces dates sont disponibles</p>
                     </div>
                 </div>{# main-block #}
+{% cache 43200 product:details:after_dates product.pk %}
                  <div class="bottom-block">
                      {% blocktrans with product.product.day|first as day_price %}
                         <p id="booking-total" class="total-price">
