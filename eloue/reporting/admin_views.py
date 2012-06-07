@@ -42,7 +42,7 @@ def stats(request):
 	}
 
 	for key, value in qss_parameters_list.items():
-		data[key] = qsstats.QuerySetStats(*value).time_series(datetime.date(2010, 1, 1), datetime.date(2012, 2, 28), interval='months')
+		data[key] = qsstats.QuerySetStats(*value).time_series(datetime.date(2012, 1, 1), datetime.date(2012, 5, 31), interval='months')
 
 
 	return render_to_response(
