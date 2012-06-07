@@ -12,13 +12,13 @@ log = logbook.Logger('eloue')
 class CurrentSiteAdmin(admin.ModelAdmin):
     def queryset(self, request):
         if request.user.is_superuser:
+            return super(CurrentSiteAdmin, self).queryset(request)
+        else:
             queryset = self.model.objects.get_query_set().filter(**{'sites__id__exact': settings.SITE_ID})
             ordering = self.ordering or ()  # otherwise we might try to *None, which is bad ;)
             if ordering:
                 queryset = queryset.order_by(*ordering)
             return queryset
-        else:
-            return super(CurrentSiteAdmin, self).queryset(request)
     
 
 class CustomFlatPageAdmin(FlatPageAdmin):
