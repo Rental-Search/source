@@ -3,13 +3,30 @@ import datetime
 from south.db import db
 from south.v2 import DataMigration
 from django.db import models
+from eloue.rent.models import Booking
+
+def booking_exists(payment):
+    try:
+        payment.booking
+    except Booking.DoesNotExist:
+        return False
+    return True
 
 class Migration(DataMigration):
 
     def forwards(self, orm):
+        from django.contrib.contenttypes.models import ContentType
+
         for payment in orm['payments.payboxdirectpluspaymentinformation'].objects.all():
-            payment.creditcard = payment.borrower.creditcard
-            payment.save()
+            tipe = ContentType.objects.get_for_model(payment)
+            try:
+                booking = Booking.objects.get(
+                    content_type__pk=tipe.id,
+                    object_id=payment.id)
+                payment.creditcard_id = booking.borrower.creditcard.pk
+                payment.save()
+            except Booking.DoesNotExist:
+                continue
 
         "Write your forwards methods here."
 
