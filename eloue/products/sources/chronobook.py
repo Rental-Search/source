@@ -30,12 +30,12 @@ class SourceClass(BaseSource):
             books = etree.parse(xml_source, parser=etree.XMLParser(recover=True))
         except Exception, e:
             log.exception("Exception: %s".format(e))
+        location = "Paris, France"
+        lat, lon = self.get_coordinates(location)
         for book in books.getroot():
             attrib = book.attrib
             html = html_tree(attrib['fiche'])
             thumbnail = html.xpath(XP_IMAGE)
-            location = "Paris, France"
-            lat, lon = self.get_coordinates(location)
             if not len(thumbnail):
                 continue
             else:

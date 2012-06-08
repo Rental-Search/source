@@ -21,12 +21,12 @@ class SourceClass(BaseSource):
     
     def get_docs(self):
         feed = feedparser.parse(BASE_URL + 'jouets.xml', agent='Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.8.1.6) Gecko/20070802 SeaMonkey/1.1.4')
+        location = "France"
+        lat, lon = self.get_coordinates(location)
         for entry in feed.entries:
             description_html = entry.description
             description_tree = etree.HTML(description_html)
             id_c = self.id.next()
-            location = "France"
-            lat, lon = self.get_coordinates(location)
             thumbnail = description_tree[0][0][0].attrib['src']
             description = description_tree[0][1]
             yield Product({
