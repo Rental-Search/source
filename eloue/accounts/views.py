@@ -387,7 +387,10 @@ def patron_edit_credit_card(request):
     try:
         instance = request.user.creditcard
     except CreditCard.DoesNotExist:
-        instance = CreditCard(holder=request.user, keep=True)
+        instance = CreditCard(
+            holder=request.user, keep=True, 
+            subscriber_reference=str(request.user.pk)
+        )
     if request.method == 'POST':
         form = CreditCardForm(data=request.POST, instance=instance)
         if form.is_valid():

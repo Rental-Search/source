@@ -218,7 +218,7 @@ class PayboxDirectPlusPayment(abstract_payment.AbstractPayment):
         booking = self.booking
         amount = str(D(booking.total_amount*100).quantize(0))
         self.numappel, self.numtrans = self.paybox_manager.authorize_subscribed(
-            member_id=credit_card.holder.pk, card_number=credit_card.card_number, 
+            member_id=credit_card.subscriber_reference, card_number=credit_card.card_number, 
             expiration_date=credit_card.expires, cvv=cvv, amount=amount, 
             reference=booking.pk.hex
         )
@@ -227,8 +227,9 @@ class PayboxDirectPlusPayment(abstract_payment.AbstractPayment):
         booking = self.booking
         amount = str(D(booking.total_amount*100).quantize(0))
         self.paybox_manager.debit_subscribed(
-            member_id=booking.borrower.pk, amount=amount, numappel=self.numappel, 
-            numtrans=self.numtrans, reference=booking.pk.hex
+            member_id=self.creditcard.subscriber_reference, amount=amount, 
+            numappel=self.numappel, numtrans=self.numtrans, 
+            reference=booking.pk.hex
         )
         
     def execute_payment(self, *args, **kwargs):

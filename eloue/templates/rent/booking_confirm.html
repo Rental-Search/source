@@ -122,6 +122,9 @@
           {% endif %}
         </table>
         <h2>{% trans "Paiement" %}</h2>
+        {% with form.non_field_errors as form_errors %}
+          {% include "partials/alerts_message.html" %}
+        {% endwith %}
         <fieldset id="credit-card-form">
           {% if form.card_number %}
             <div class="control-group {% if form.card_number.errors %} error {% endif %}">
@@ -180,7 +183,11 @@
           {% if not form.holder_name %}
           <div class="control-group">
             <div class="control creditcard-already-save">
-              Vos coordonnées bancaire sont déjà enregistrées. Il suffit de retaper les chifres au dos de votre carte bancaire pour valider la réservation.
+              Vos coordonnées bancaire sont déjà enregistrées. 
+              Les details de la carte utilisee pour le paiement:<br>
+              {{form.instance.masked_number}}<br>
+              {{form.instance.holder_name}}<br>
+              {{form.instance.expires}}<br>
             </div>
           </div>
           {% endif %}

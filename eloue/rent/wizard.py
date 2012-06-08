@@ -19,7 +19,7 @@ from django.views.generic.simple import direct_to_template, redirect_to
 from eloue.payments.models import PayboxDirectPaymentInformation, PayboxDirectPlusPaymentInformation, NonPaymentInformation
 from eloue.payments.paybox_payment import PayboxManager, PayboxException
 from eloue.payments.abstract_payment import PaymentException
-from eloue.accounts.forms import EmailAuthenticationForm, BookingCreditCardForm, CvvForm
+from eloue.accounts.forms import EmailAuthenticationForm, BookingCreditCardForm, CreditCardBaseForm
 from eloue.accounts.models import Patron, Avatar, CreditCard
 from eloue.geocoder import GoogleGeocoder
 from eloue.products.forms import FacetedSearchForm
@@ -55,8 +55,8 @@ class BookingWizard(MultiPartFormWizard):
                 if request.user.is_authenticated():
                     try:
                         request.user.creditcard
-                        self.form_list.append(CvvForm)
-                    except (CreditCard.DoesNotExist):
+                        self.form_list.append(CreditCardBaseForm)
+                    except CreditCard.DoesNotExist:
                         self.form_list.append(BookingCreditCardForm)
                 elif EmailAuthenticationForm in self.form_list:
                      form = self.get_form(self.form_list.index(EmailAuthenticationForm), request.POST, request.FILES)
@@ -64,7 +64,7 @@ class BookingWizard(MultiPartFormWizard):
                         user = form.get_user()
                         try:
                             user.creditcard
-                            self.form_list.append(CvvForm)
+                            self.form_list.append(CreditCardBaseForm)
                         except (CreditCard.DoesNotExist, AttributeError):
                             self.form_list.append(BookingCreditCardForm)
         return super(BookingWizard, self).__call__(request, product, *args, **kwargs)
@@ -75,12 +75,12 @@ class BookingWizard(MultiPartFormWizard):
         
         creditcard_form = next(
             itertools.ifilter(
-                lambda form: isinstance(form, (BookingCreditCardForm, CvvForm)), 
+                lambda form: isinstance(form, (BookingCreditCardForm, CreditCardBaseForm)), 
                 form_list
             ),
             None
         )
-
+        from django.forms.models import model_to_dict
         if self.new_patron == booking_form.instance.product.owner:
             messages.error(request, _(u"Vous ne pouvez pas louer vos propres objets"))
             return redirect_to(request, booking_form.instance.product.get_absolute_url())
@@ -92,11 +92,19 @@ class BookingWizard(MultiPartFormWizard):
         booking.borrower = self.new_patron
 
         if creditcard_form:
+            cleaned_data = creditcard_form.cleaned_data
             if creditcard_form.instance.pk is None:
-                creditcard_form.instance.holder = self.new_patron
-            creditcard = creditcard_form.save()
-            preapproval_parameters = (creditcard, creditcard_form.cleaned_data['cvv'])
-            payment = PayboxDirectPlusPaymentInformation(booking=booking)
+                if cleaned_data.get('keep'):
+                    creditcard_form.instance.holder = self.new_patron
+                    creditcard_form.instance.subscriber_reference = str(self.new_patron.pk)
+                else:
+                    import uuid
+                    creditcard_form.instance.subscriber_reference = uuid.uuid4().hex
+                creditcard = creditcard_form.save()
+            else:
+                creditcard = creditcard_form.instance
+            preapproval_parameters = (creditcard, cleaned_data.get('cvv', ''))
+            payment = PayboxDirectPlusPaymentInformation(booking=booking, creditcard=creditcard)
         else:
             preapproval_parameters = ()
             payment = NonPaymentInformation()
@@ -127,23 +135,17 @@ class BookingWizard(MultiPartFormWizard):
             initial = {
                 'started_at': [started_at.strftime('%d/%m/%Y'), started_at.strftime("08:00:00")],
                 'ended_at': [ended_at.strftime('%d/%m/%Y'), ended_at.strftime("08:00:00")],
-                # is 'total_amount' really necessary?
-                # 'total_amount': Booking.calculate_price(product, started_at, ended_at)[1]
-                # it is not
             }
             initial.update(self.initial.get(step, {}))
             return next_form(data, files, prefix=self.prefix_for_step(step),
                 initial=initial, instance=booking)
-        elif issubclass(next_form, (BookingCreditCardForm, CvvForm)):
-            from eloue.accounts.models import CreditCard
+        elif issubclass(next_form, (BookingCreditCardForm, CreditCardBaseForm)):
             user = self.user if self.user.is_authenticated() else self.new_patron
             try:
                 instance = user.creditcard
             except (CreditCard.DoesNotExist, AttributeError):
-                if user:
-                    instance = CreditCard(holder=user)
-                else:
-                    instance = CreditCard()
+                instance = CreditCard()
+            from django.forms.models import model_to_dict
             return next_form(
                 data, files, prefix=self.prefix_for_step(step), 
                 instance=instance
@@ -164,7 +166,7 @@ class BookingWizard(MultiPartFormWizard):
             return 'accounts/auth_login.html'
         elif issubclass(self.form_list[step], BookingForm):
             return 'products/product_detail.html'
-        elif issubclass(self.form_list[step], (BookingCreditCardForm, CvvForm)):
+        elif issubclass(self.form_list[step], (BookingCreditCardForm, CreditCardBaseForm)):
             return 'rent/booking_confirm.html'
         else:
             return 'accounts/auth_missing.html'

@@ -3,6 +3,7 @@ from django.db import models
 
 from eloue.rent.models import Booking
 from eloue.payments import *
+from eloue.accounts.models import CreditCard
 
 class PaymentInformation(models.Model, abstract_payment.AbstractPayment):
     @property
@@ -32,4 +33,4 @@ class PayboxDirectPaymentInformation(PayboxPaymentInformation, paybox_payment.Pa
     numauth = models.CharField(max_length=20)
 
 class PayboxDirectPlusPaymentInformation(PayboxPaymentInformation, paybox_payment.PayboxDirectPlusPayment):
-	pass
+    creditcard = models.ForeignKey(CreditCard, null=True)

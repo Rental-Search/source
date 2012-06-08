@@ -393,13 +393,15 @@ class Patron(User):
     is_expired.boolean = True
     is_expired.short_description = ugettext(u"Expiré")
 
+
 class CreditCard(models.Model):
     card_number = models.CharField(max_length=20)
     expires = models.CharField(max_length=4)
-    holder = models.OneToOneField(Patron, editable=False)
+    holder = models.OneToOneField(Patron, editable=False, null=True)
     masked_number = models.CharField(max_length=20, blank=False)
     keep = models.BooleanField()
     holder_name = models.CharField(max_length=60, help_text=_(u'Conserver mes coordonnées bancaire'))
+    subscriber_reference = models.CharField(max_length=250, blank=True)
 
 
 class FacebookSession(models.Model):
