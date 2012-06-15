@@ -61,7 +61,7 @@ LANGUAGES = (
 )
 
 SITE_ID = 1
-DEFAULT_SITES = getattr(local, "DEFAULT_SITES", [1, 3])
+DEFAULT_SITES = getattr(local, "DEFAULT_SITES", [1, 3, 4])
 
 # If you set this to False, Django will make some optimizations so as not
 # to load the internationalization machinery.

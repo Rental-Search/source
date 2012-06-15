@@ -18,9 +18,20 @@ GOOGLE_REGION_CODE = 'nc'
 
 CONVERT_XPF = True
 
-DEFAULT_SITES = [4]
-
 TEMPLATE_DIRS = (
     local_path('templates/nc/'),
     local_path('templates/'),
 )
+
+
+DEFAULT_LOCATION = {
+    'city': u'Noumea',
+    'coordinates': (-22.29349, 166.463989),
+    'country': u'Nouvelle-Caledonie',
+    'fallback': None,
+    'radius': 260.0,
+    'region': None,
+    'region_coords': None,
+    'region_radius': None,
+    'source': 4
+}
