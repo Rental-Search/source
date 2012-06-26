@@ -35,3 +35,5 @@ DEFAULT_LOCATION = {
     'region_radius': None,
     'source': 4
 }
+
+INSURANCE_AVAILABLE = False

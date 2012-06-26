@@ -256,7 +256,9 @@
             <ul>
                 <li><a href="#gallery">{% trans "Photo" %}</a></li>
                 <li><a href="#prices_calendar">{% trans "Disponibilitées et tarifs" %}</a></li>
-                <li><a href="#conditions">{% trans "Conditions et assurance"%}</a></li>
+                {% if insurance_available %}
+                    <li><a href="#conditions">{% trans "Conditions et assurance"%}</a></li>
+                {% endif %}
             </ul>
             <div id="gallery">
             {% with product.pictures.all|first as picture %}
@@ -275,11 +277,11 @@
                                     <th class="price-head">{% trans "Prix" %}</th>
                                 </tr>
                             </thead>
-                            {% for price in product.prices.all %}
+                            {% for price in prices %}
                             <tr>
                                 <td>{% trans price.get_prefixed_unit_display|capfirst %}
                                 </td>
-                                <td class="price-display">{{ price.amount }}&euro;</td>
+                                <td class="price-display">{{ price }}</td>
                             </tr>
                             {% endfor %}
                         </table>
@@ -314,9 +316,11 @@
                     </ul>
                 </div>{# calendar #}
             </div>
+            {% if insurance_available %}
             <div id="conditions">
                 {% include "rent/partials/condition_assurance.html" %}
             </div>
+            {% endif %}
         </div>{# product-tabs #}
         {% if product.options %}
         <div class="product-info">

@@ -101,7 +101,7 @@
             {% endif %}
           {% endif %}
         </table>
-
+        {% if insurance_available %}
         <h2>{% trans "Condition et assurance" %}</h2>
         <table class="table table-bordered booking-resume">
           <tr>
@@ -121,6 +121,7 @@
           </tr>
           {% endif %}
         </table>
+        {% endif %}
         <h2>{% trans "Paiement" %}</h2>
         <fieldset id="credit-card-form">
           {% if form.card_number %}

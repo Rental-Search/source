@@ -37,7 +37,7 @@ from eloue.products.signals import (post_save_answer, post_save_product,
     post_save_curiosity, post_save_to_update_product,)
 from eloue.products.utils import Enum
 from eloue.signals import post_save_sites
-from eloue.rent.contract import ContractGeneratorNormal, ContractGeneratorCar, ContractGeneratorRealEstate
+from eloue.rent.contract import ContractGenerator, ContractGeneratorNormal, ContractGeneratorCar, ContractGeneratorRealEstate
 from django_messages.models import Message 
 from eloue.accounts.models import Patron
 from django.db.models import signals
@@ -383,7 +383,10 @@ class Product(models.Model):
 
     @property
     def contract_generator(self):
-        return ContractGeneratorNormal()
+        if self.category.need_insurance and settings.INSURANCE_AVAILABLE:
+            return ContractGeneratorNormal()
+        else:
+            return ContractGenerator()
 
 class CarProduct(Product):
 
@@ -463,7 +466,10 @@ class CarProduct(Product):
 
     @property
     def contract_generator(self):
-        return ContractGeneratorCar()
+        if self.category.need_insurance and settings.INSURANCE_AVAILABLE:
+            return ContractGeneratorCar()
+        else:
+            return ContractGenerator()
 
 class RealEstateProduct(Product):
     
@@ -538,7 +544,10 @@ class RealEstateProduct(Product):
 
     @property
     def contract_generator(self):
-        return ContractGeneratorRealEstate()
+        if self.category.need_insurance and settings.INSURANCE_AVAILABLE:
+            return ContractGeneratorRealEstate()
+        else:
+            return ContractGenerator()
 
 def upload_to(instance, filename):
     return 'pictures/%s.jpg' % uuid.uuid4().hex
