@@ -251,7 +251,6 @@ class Booking(models.Model):
         context = {'booking': self}
         if not self.owner.is_professional:
             contract = self.product.subtype.contract_generator(self)
-            print contract
             content = contract.getvalue()
         message = create_alternative_email('rent/emails/owner_acceptation', context, settings.DEFAULT_FROM_EMAIL, [self.owner.email])
         if not self.owner.is_professional: 
