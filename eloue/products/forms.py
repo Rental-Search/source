@@ -467,6 +467,8 @@ class CarProductEditForm(ProductEditForm):
         )
 
     def clean(self):
+        if self.errors:
+            return self.cleaned_data
         self.cleaned_data['summary'] = '{brand} - {model}'.format(**self.cleaned_data)
         return self.cleaned_data
 
