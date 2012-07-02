@@ -3,157 +3,198 @@
 
 {% block title %}{% trans "Location entre particuliers ou professionnels de tout type d'objet" %}{% endblock %}
 
+{% block head %}
+ {{ block.super }}
+ <link rel="canonical" href="{% if request.is_secure %}https{%else%}http{%endif%}://www.e-loue.com/">
+{% endblock %}
 
 {% block content %}
-	<div id="search" class="xgrid">
-        <div class="x12">
-		  <h1>{% trans "Avec e-loue, tout se loue !" %}</h1>
-		</div>
-		<form class="form" action="{% url product_list %}">
-		<div class="x5">
-			<p>
-				<label for="id_q">{% trans "Que voulez-vous louer ?" %}</label><br />
-				{{ form.q }}<br />
-				<span>{% trans "Exemple :" %} </span> <a href="{% url product_list %}?q={% trans "voiture" %}">{% trans "Voiture" %}</a>, <a href="{% url product_list %}?q={% trans "chèvre" %}">{% trans "Chèvre" %}</a>, <a href="{% url product_list %}?q={% trans "ski" %}">{% trans "Ski" %}</a>, <a href="{% url product_list %}?q={% trans "robe" %}">{% trans "Robe" %}</a>
-			</p>
-		</div>
-		<div class="x5">
-			<p>
-				<label>{% trans "Où ?" %}</label><br />
-				{{ form.l }}<br />
-			</p>
-		</div>
-		<div class="x2">
-			<p>
-				<input type="submit" value="{% trans "Rechercher" %}" class="btn big-orange"/>
-			</p>
-		</div>
-		</form>
-	</div>{# top-content #}
-	<div id="content-home" class="xgrid">
-	    <div class="x8">
-    		<div class="content-header x8 first">
-    		 <h2>{% trans "Les curiosités d'e-loue" %}</h2>
-    		</div>
-    		 {% cache 900 curiosities site %}
-    	     {% for curiosity in curiosities|slice:":4" %}
-    		  {% with curiosity.product as product %}
-    		 	 {% if forloop.first %}
-    			 	<div class="x2 first curiosity">
-    			 {% else %}
-    			 	<div class="x2 curiosity">
-    			 {% endif %}
-    			 	<a href="{{ product.get_absolute_url }}" class="curiosity-img">
-    	  	   {% with product.pictures.all|first as picture %}
-    				  <img src="{{ picture.home.url }}" alt="{{ product.summary }}"/>
-    				 {% endwith %}
-    				</a>
-    				<h3>
-    				    <a href="{{ product.get_absolute_url }}">{{ product.summary|lower|capfirst }}</a>
-    				</h3>
-    				{% with product.prices.day|first as price %}
-                    <span class="price">{{ price }}/{% trans "jour" %}</span>
-                    {% endwith %}   
-    			</div>
-    		 {% endwith %}
-    		{% endfor %}	 
-    	{% endcache %}
-    	 </div>
-    	 <div class="pub-content x4">
-         	<div>
-         	    <script type='text/javascript'><!--//<![CDATA[
-                   var m3_u = 'http://regiepub2.skazy.nc/www/delivery/ajs.php';
-                   var m3_r = Math.floor(Math.random()*99999999999);
-                   if (!document.MAX_used) document.MAX_used = ',';
-                   document.write ("<scr"+"ipt type='text/javascript' src='"+m3_u);
-                   document.write ("?zoneid=81");
-                   document.write ('&amp;cb=' + m3_r);
-                   if (document.MAX_used != ',') document.write ("&amp;exclude=" + document.MAX_used);
-                   document.write (document.charset ? '&amp;charset='+document.charset : (document.characterSet ? '&amp;charset='+document.characterSet : ''));
-                   document.write ("&amp;loc=" + escape(window.location));
-                   if (document.referrer) document.write ("&amp;referer=" + escape(document.referrer));
-                   if (document.context) document.write ("&context=" + escape(document.context));
-                   if (document.mmm_fo) document.write ("&amp;mmm_fo=1");
-                   document.write ("'><\/scr"+"ipt>");
-                //]]>--></script><noscript><a href='http://regiepub2.skazy.nc/www/delivery/ck.php?n=a0dfb8ae&amp;cb=INSERT_RANDOM_NUMBER_HERE' target='_blank'><img src='http://regiepub2.skazy.nc/www/delivery/avw.php?zoneid=81&amp;cb=INSERT_RANDOM_NUMBER_HERE&amp;n=a0dfb8ae' border='0' alt='' /></a></noscript>
-         	</div>
-        </div>
-     	<div class="x12 horizontal-assurancy">
-    	    <div class="guarantees">
-    	        <div class="content-header">
-        			<h2>{% trans "Avec les garanties e-loue, louez en toute sécurité !" %}</h2>
-        		</div>
-    			<div class="g-payment">
-    			    {% blocktrans %}
-    			     <p>Grâce à <strong>PayPal</strong>, bénéficiez du paiement le plus sécurisé au monde.</p>
-    			    {% endblocktrans %}
-    			</div>
-    			<div class="g-assurancy">
-    			    {% blocktrans %}
-                    	 <p>Un <strong>contrat de location</strong> est proposé par e-loue</p>
-                    	{% endblocktrans %}
-    			</div>
-    		</div>
-    		<div class="assurancy-partner">
-                <div class="assurancy-slide">
-                    <a href="{% trans "/comment-ca-marche/" %}" class="slide">
-                        <img src="{{ MEDIA_URL }}images/pp-verification-seal.gif" alt="PayPal" width="100" height="100" class="pp"/>
-                        <img src="{{ MEDIA_URL }}images/dcns/assurone.png" alt="Assurone" width="157" height="90" class="assurone"/>
-                    </a>
-                </div>
+{% csrf_token %}
+<div class="container-top">
+    <div class="search-home">
+        <h1 class="rent-anythings">{% trans "Rejoignez la communauté des e-loueurs !" %} <br> 
+            <small>{% trans "Au lieu d'acheter, louez pour augmenter votre pouvoir d'usage." %}</small>
+        </h1>
+        <form action="{% url product_list %}" method="get">
+            <p class="what">
+                {{form.q}}
+                <input type="submit" value="Rechercher" class="btn bt-big-orange" />
+                {{form.l.as_hidden}}
+            </p>
+        </form>
+            <p class="city">
+                <span class="city-to">à </span>
+                <span class="city-name" id="city-name"></span>
+                <button class="btn-other-town"><span>Changer de ville</span></button>
+            </p>
+            <p class="city-input">
+                <input id="id_l" type="text" name="city" />
+                <button class="btn-edit-town">me geolocaliser</button> ou <button class="btn-cancel-edit-town">annuler</button>
+            </p>
+    </div><!-- search-home -->
+    <div class="products-home">
+        <div class="products-home-tabs" style="display: none;">
+            <ul>
+                <li><a href="#near">{% trans "Objets" %}</a></li>
+                <li><a href="#near_car">{% trans "Voitures" %}</a></li>
+                <li><a href="#near_realestate">{% trans "Logements" %}</a></li>
+                <li><a href="#hotloc">{% trans "Locations du moment" %}</a></li>
+            </ul>
+            <div id="near">
+                <ul class="product-list"></ul>
+                <p class="more-product">
+                    <a href="#" class="more-product-link">{% trans "Chargez plus d'annonces..." %}</a>
+                </p>
+            </div>{# near #}
+            <div id="near_car">
+                <ul class="product-list"></ul>
+                <p class="more-product">
+                    <a href="#" class="more-product-link">{% trans "Chargez plus d'annonces..." %}</a>
+                </p>
+            </div>{# near #}
+            <div id="near_realestate">
+                <ul class="product-list"></ul>
+                <p class="more-product">
+                    <a href="#" class="more-product-link">{% trans "Chargez plus d'annonces..." %}</a>
+                </p>
+            </div>{# near #}
+            <div id="hotloc">
+                {% cache 43200 curiosities %}
+                <ul class="product-list">
+                {% for curiosity in curiosities %}
+                    {% with curiosity.product as product %}
+                        <li>
+                        {% include "products/partials/product.html" %}
+                        </li>
+                    {% endwith %}
+                {% endfor %}
+                </ul>
+                {% endcache %}
+            </div>{# hotloc #}
+        </div>{# products-home-tabs #}
+    </div>{# product-home #}
+    <ul class="args">
+        <li class="arg-how">
+            <a href="/temoignages/">
+                <h4>{% trans "Témoignages" %}</h4>
+            </a>
+        </li>
+        <li class="arg-iphoneApp">
+            <a href="/mobile/iphone/">
+                <img src="{{ MEDIA_URL }}images/e-loue_sur_iPhone.png" width="204" height="126" />
+                <h4>{% trans "L'appli pour tout louer !" %}</h4>
+            </a>
+        </li>
+        <li class="arg-garanties">
+            <a href="/assurance-tranquillite/">
+                <p style="padding: 22px 0; font-size: 18px; line-height: 22px; margin-bottom: 1px;">{% trans "Réservation et paiement <br>en ligne" %}</p>
+                <h4>{% trans "La garantie" %}</h4>
+                <img class="small_logo" src="{{ MEDIA_URL }}images/small_logo.png" width="71" height="24" alt="{% trans "Location garantie"%}"/>
+            </a>
+        </li><!-- arg-garanties -->
+        <li class="arg-fb">
+            <div class="fb-iframe">
+                <iframe src="//www.facebook.com/plugins/likebox.php?href=https%3A%2F%2Fwww.facebook.com%2Flocation.eloue&amp;width=224&amp;height=62&amp;colorscheme=light&amp;show_faces=false&amp;border_color=%23F3F8FA&amp;stream=false&amp;header=false&amp;appId=255056637886187" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:224px; height:62px;" allowTransparency="true"></iframe>
             </div>
-        </div>
-        <div class="content-header x12">
-    	 <h2>{% trans "Catégories" %}</h2>
-    	</div>
-    	{% cache 900 categories site %}
-    	 {% full_tree_for_model products.Category as categories %}
-    	 {% for column in categories|partition:4 %}
-    	  <div class="x3 categories">
-    	   {% for category in column %}
-    	    {% if category.is_root_node %}
-    	     {% drilldown_tree_for_node category as drilldown cumulative count products.Product.category in product_count %}
-    	     {% for node,structure in drilldown|tree_info %}
-    	      {% if node.is_root_node and node.slug != 'divers' %}
-    	      <h3><a href="{{ node.get_absolute_url }}">{{ node.name }}</a></h3>
-    	      <ul>
-    	      {% else %}
-    	       {% if node.product_count %}
-    	        <li><a href="{{ node.get_absolute_url }}">{{ node.name }}</a></li>
-    	       {% endif %}
-    	      {% if structure.closed_levels|length >= 2 %}</ul>{% endif %}
-    	     {% endif %}
-    	    {% endfor %}
-    	   {% endif %}
-    	  {% endfor %}
-    	 </div>
-        {% endfor %}
-       {% endcache %}
-       <div class="content-community">
-           <div class="x8">
-               <div class="content-header x8 first">
-                   <h2>Ils parlent de nous !</h2>
-               </div>
-	      </div>
-  	      <div class="x4">
-  	          <div class="box-tools clearfix">
-  	              <h3>Rejoignez notre communauté</h3>
-  	              <ul class="community-portlet-content">
-  	                  <li class="fb">
-  	                      <a href="https://www.facebook.com/pages/e-louecom/104685226447">
-  	                          <span class="fb-icon"></span>
-                  			  Devenez fan<br>sur Facebook
-                  		  </a>
-                      </li>
-                      <li class="tw">
-                          <a href="https://twitter.com/eloue">
-                              <span class="tw-icon"></span>
-                  			  Suivez-nous<br>sur Twitter
-                  		  </a>
-                  	  </li>
-                  </ul>
-  	          </div>
-  	      </div>
-       </div>
-	</div>{# content #}
+            <a href="https://www.facebook.com/location.eloue">
+                <h4>{% trans "Communauté"%}</h4>
+            </a>
+        </li>
+    </ul>{# args #}
+    {% cache 500 last_joined request.session.location.city %}
+    <div class="new-profils">
+        <div class="np-title">{% trans "Derniers<br/>inscrits" %}</div><!-- np-title -->
+        {% with last_joined as patron_list %}
+          {% include "accounts/partials/avatar_list.html" %}
+        {% endwith %}
+    </div>{# new_profils #}
+    {% endcache %}
+    <div class="horizontal-pub">
+        <script type='text/javascript'><!--//<![CDATA[
+                       var m3_u = 'http://regiepub2.skazy.nc/www/delivery/ajs.php';
+                       var m3_r = Math.floor(Math.random()*99999999999);
+                       if (!document.MAX_used) document.MAX_used = ',';
+                       document.write ("<scr"+"ipt type='text/javascript' src='"+m3_u);
+                       document.write ("?zoneid=80");
+                       document.write ('&amp;cb=' + m3_r);
+                       if (document.MAX_used != ',') document.write ("&amp;exclude=" + document.MAX_used);
+                       document.write (document.charset ? '&amp;charset='+document.charset : (document.characterSet ? '&amp;charset='+document.characterSet : ''));
+                       document.write ("&amp;loc=" + escape(window.location));
+                       if (document.referrer) document.write ("&amp;referer=" + escape(document.referrer));
+                       if (document.context) document.write ("&context=" + escape(document.context));
+                       if (document.mmm_fo) document.write ("&amp;mmm_fo=1");
+                       document.write ("'><\/scr"+"ipt>");
+                    //]]>--></script><noscript><a href='http://regiepub2.skazy.nc/www/delivery/ck.php?n=a7dddac9&amp;cb=INSERT_RANDOM_NUMBER_HERE' target='_blank'><img src='http://regiepub2.skazy.nc/www/delivery/avw.php?zoneid=80&amp;cb=INSERT_RANDOM_NUMBER_HERE&amp;n=a7dddac9' border='0' alt='' /></a></noscript>
+    </div>
+</div>{# container-top #}
 {% endblock %}
+
+{% block tail %}
+    {{ block.super }}
+    <script src="//maps.googleapis.com/maps/api/js?sensor=false&amp;libraries=places" type="text/javascript"></script>
+    <script type="text/javascript" >
+
+        $(document).ready(function() {
+
+            (function( $ ) {
+              $.fn.loadMore = function(url) {
+                if (typeof(url) === 'undefined') {
+                  this.data('offset', this.data('offset') + 1);
+                  $.ajax({
+                    url: this.data('url')+this.data('offset'),
+                    success: function(result) {
+                        $('ul', this).append($('li', result));
+                        $('.more-product-link', this).removeClass('loading');
+                    },
+                    cache: false,
+                    dataType: 'html',
+                    context: this
+                  });
+                } else {
+                  $('ul', this).load(url+' li');
+                  $('.more-product-link', this).click(function(e) {
+                    e.preventDefault();
+                    $(this).addClass('loading');
+                    $(this.parentNode.parentNode).loadMore();
+                  })
+                  this.data('url', url);
+                  this.data('offset', 0);
+                }
+              };
+            })( jQuery );
+
+            location_changed = function() {
+
+                $('#near').loadMore('lists/object/');
+                $('#near_car').loadMore('lists/car/');
+                $('#near_realestate').loadMore('lists/realestate/');
+                $.ajax(
+                    {
+                        url:'/get_user_location/', 
+                        cache: false,
+                        success: function(response) {
+                            $('.city-name').html(response);
+                            $('#id_for_l').val(response);
+                            $('.search-home').removeClass('editing');
+                        }
+                    }
+                )
+            }
+
+             geolocation_stuff(location_changed);
+
+
+            $(".products-home-tabs").show();
+            location_changed();
+
+
+            if (!$.cookie('geocoding')) 
+                navigator.geolocation.getCurrentPosition(
+                    SuccessBuilder(2, false, location_changed), 
+                    geocoder_error_handler
+                );
+           
+        });
+    </script>
+{% endblock %}
+

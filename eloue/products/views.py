@@ -381,7 +381,7 @@ def product_list(request, urlbits, sqs=SearchQuerySet(), suggestions=None, page=
     location = request.session.setdefault('location', settings.DEFAULT_LOCATION)
     query_data = request.GET.copy()
     if not query_data.get('l'):
-        query_data['l'] = u'France'
+        query_data['l'] = location['country']
     form = FacetedSearchForm(query_data)
     if not form.is_valid():
         raise Http404
@@ -533,5 +533,3 @@ def suggestion(request):
         resp += "\n%s"%el
     cache.set(word, resp, 0)
     return HttpResponse(resp)
-        
-        
