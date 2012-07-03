@@ -26,6 +26,11 @@
 </ul>
 {% endblock %}
 {% block content-main-profil %}
+
+{% with form.non_field_errors as form_errors %}
+  {% include "partials/non_field_errors.html" %}
+{% endwith %}
+
 <h2>{% trans "Modification de "%} {{ product.summary }} <small><a href="{{ product.get_absolute_url }}">({% trans "Voir l'annonce" %}) </a></small></h2>
 {% if form.is_multipart %}
 <form enctype="multipart/form-data" class="form-horizontal" method="post" action="">
@@ -34,9 +39,6 @@
 {% endif %}
 {% csrf_token %}
 
-{% with form.non_field_errors as form_errors %}
-{% include "partials/alerts_message.html" %}
-{% endwith %}
 {% for fieldset in form.fieldsets %}
       <fieldset class="{{ fieldset.classes }}">
         {% if fieldset.legend %}
