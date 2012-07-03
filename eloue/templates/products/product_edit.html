@@ -53,18 +53,18 @@
           {% for formfield in fieldset %}
           <div class="control-group {% if formfield.errors %} error {% endif %}">
             <div class="controls">
-                    <label class="checkbox">
-                    {{formfield}}
-                    {{formfield.label}}
-                    </label>
-                    {% if formfield.errors %}
-              <span class="help-inline">
-              {% for error in formfield.errors %}
-                {{ error|escape }}
-              {% endfor %}
+              <label class="checkbox">
+                {{formfield}}
+                {{formfield.label}}
+              </label>
+              {% if formfield.errors %}
+                <span class="help-inline">
+                {% for error in formfield.errors %}
+                  {{ error|escape }}
+                {% endfor %}
                 </span>
-            {% endif %}
-                </div>
+              {% endif %}
+            </div>
           </div>
           {% endfor %}
           {% else %}
