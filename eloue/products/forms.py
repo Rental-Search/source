@@ -549,10 +549,10 @@ class ProductAddressEditForm(BetterModelForm):
         super(ProductAddressEditForm, self).__init__(*args, **kwargs)
         self.fields['address'].queryset = self.instance.owner.addresses.all()
         self.fields['address'].label = _(u"Adresse")
-        #self.fields['address'].required = False
+        self.fields['address'].required = False
 
     def clean(self):
-        address = self.cleaned_data['address']
+        address = self.cleaned_data.get('address')
         address1 = self.cleaned_data['addresses__address1']
         zipcode = self.cleaned_data['addresses__zipcode']
         city = self.cleaned_data['addresses__city']

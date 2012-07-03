@@ -112,12 +112,16 @@
 
       var addNewAddress = $(".add-new-address");
 
-      if (addNewAddress.length == 0 ){
-        $(".new-address").show();
+      if (
+          addNewAddress.length == 0 || Boolean($('#id_addresses__address1').val()) || 
+          Boolean($('#id_addresses__zipcode').val()) || Boolean($('#id_addresses__city').val())
+        ){
+          $(".new-address").show();
       }
 
       addNewAddress.click(function (event) { 
           event.preventDefault();
+          $("#id_address").val('');
           $(".new-address").show();
           $(this).hide();
       });
