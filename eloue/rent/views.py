@@ -208,7 +208,10 @@ def booking_accept(request, booking_id):
         if not request.user.rib:
             response = redirect('patron_edit_rib')
             response['Location'] += '?' + urllib.urlencode({'accept': booking.pk.hex})
-            messages.success(request, _(u"Avant l'acceptation de la demande, veuillez saisir votre RIB."))
+            messages.success(
+                request, 
+                _(u"Avant l'acceptation de la demande, "
+                    u"veuillez saisir votre RIB."))
             return response
         booking.accept()
         messages.success(request, _(u"La demande de location a été acceptée"))
