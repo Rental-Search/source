@@ -113,10 +113,9 @@
       $("#id_category").chosen();
 
       var addNewAddress = $(".add-new-address");
-
       if (
-          addNewAddress.length == 0 || Boolean($('#id_addresses__address1').val()) || 
-          Boolean($('#id_addresses__zipcode').val()) || Boolean($('#id_addresses__city').val())
+          addNewAddress.length == 0 || (!Boolean($("#id_address").val()) && !( Boolean($('#id_addresses__address1').val()) && 
+          Boolean($('#id_addresses__zipcode').val()) && Boolean($('#id_addresses__city').val())))
         ){
           $(".new-address").show();
       }
