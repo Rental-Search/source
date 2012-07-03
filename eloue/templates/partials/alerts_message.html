@@ -3,14 +3,14 @@
 	<div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">
 		<button class="close" data-dismiss="alert">×</button>
 		{{ message }}
-	 </div>
- {% endfor %}
- {% endif %}
- {% if form_errors %}
+	</div>
+{% endfor %}
+{% endif %}
+{% if form_errors %}
  	{% for error in form_errors %}
  	<div class="alert alert-error">
 		<button class="close" data-dismiss="alert">×</button>
 		{{ error }}
-	 </div>
+	</div>
  	{% endfor %}
- {% endif %}
+{% endif %}
