@@ -33,6 +33,10 @@
 <form class="form-horizontal" method="post" action="">
 {% endif %}
 {% csrf_token %}
+
+{% with form.non_field_errors as form_errors %}
+{% include "partials/alerts_message.html" %}
+{% endwith %}
 {% for fieldset in form.fieldsets %}
       <fieldset class="{{ fieldset.classes }}">
         {% if fieldset.legend %}
