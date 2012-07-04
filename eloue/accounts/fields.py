@@ -88,7 +88,7 @@ class ExpirationField(forms.MultiValueField):
         return ''.join(data_list)
 
 
-mapping = dict(zip(string.ascii_uppercase, itertools.cycle('123456789')))
+mapping = dict(zip(string.ascii_uppercase, 2*'123456789' + '23456789'))
 
 
 def rib_check(rib):

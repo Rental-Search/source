@@ -26,6 +26,11 @@
 </ul>
 {% endblock %}
 {% block content-main-profil %}
+
+{% with form.non_field_errors as form_errors %}
+  {% include "partials/non_field_errors.html" %}
+{% endwith %}
+
 <h2>{% trans "Modification de "%} {{ product.summary }} <small><a href="{{ product.get_absolute_url }}">({% trans "Voir l'annonce" %}) </a></small></h2>
 {% if form.is_multipart %}
 <form enctype="multipart/form-data" class="form-horizontal" method="post" action="">
@@ -33,6 +38,7 @@
 <form class="form-horizontal" method="post" action="">
 {% endif %}
 {% csrf_token %}
+
 {% for fieldset in form.fieldsets %}
       <fieldset class="{{ fieldset.classes }}">
         {% if fieldset.legend %}
@@ -47,18 +53,18 @@
           {% for formfield in fieldset %}
           <div class="control-group {% if formfield.errors %} error {% endif %}">
             <div class="controls">
-                    <label class="checkbox">
-                    {{formfield}}
-                    {{formfield.label}}
-                    </label>
-                    {% if formfield.errors %}
-              <span class="help-inline">
-              {% for error in formfield.errors %}
-                {{ error|escape }}
-              {% endfor %}
+              <label class="checkbox">
+                {{formfield}}
+                {{formfield.label}}
+              </label>
+              {% if formfield.errors %}
+                <span class="help-inline">
+                {% for error in formfield.errors %}
+                  {{ error|escape }}
+                {% endfor %}
                 </span>
-            {% endif %}
-                </div>
+              {% endif %}
+            </div>
           </div>
           {% endfor %}
           {% else %}
@@ -107,13 +113,16 @@
       $("#id_category").chosen();
 
       var addNewAddress = $(".add-new-address");
-
-      if (addNewAddress.length == 0 ){
-        $(".new-address").show();
+      if (
+          addNewAddress.length == 0 || (!Boolean($("#id_address").val()) && !( Boolean($('#id_addresses__address1').val()) && 
+          Boolean($('#id_addresses__zipcode').val()) && Boolean($('#id_addresses__city').val())))
+        ){
+          $(".new-address").show();
       }
 
       addNewAddress.click(function (event) { 
           event.preventDefault();
+          $("#id_address").val('');
           $(".new-address").show();
           $(this).hide();
       });

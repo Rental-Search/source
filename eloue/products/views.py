@@ -171,19 +171,21 @@ def product_edit(request, slug, product_id):
 @login_required
 @ownership_required(model=Product, object_key='product_id', ownership=['owner'])
 def product_address_edit(request, slug, product_id):
-
     product = get_object_or_404(Product.on_site, pk=product_id)
 
-    form = ProductAddressEditForm(data=request.POST or None, instance=product)
+    if request.method == "POST":
+        form = ProductAddressEditForm(data=request.POST, instance=product)
+        if form.is_valid():
+            product = form.save()
+            messages.success(request, _(u"L'adress a bien été modifié"))
+            return redirect(
+                'eloue.products.views.product_address_edit', 
+                slug=slug, product_id=product_id
+            )
+    else:
+        form = ProductAddressEditForm(instance=product)
     
-    if form.is_valid():
-        product = form.save()
-        messages.success(request, _(u"L'adress a bien été modifié"))
-        return redirect(
-            'eloue.products.views.product_address_edit', 
-            slug=slug, product_id=product_id
-        )
-
+    
     return render_to_response(
         'products/product_edit.html', dictionary={
             'product': product, 
