@@ -18,7 +18,7 @@ class ProductManager(GeoManager):
     def archived(self):
         return self.filter(is_archived=True, is_allowed=True)
 
-class CurrentSiteProductManager(ProductManager, CurrentSiteManager):
+class CurrentSiteProductManager(CurrentSiteManager, ProductManager):
     pass
 
 class PriceManager(Manager):
