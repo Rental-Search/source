@@ -89,6 +89,14 @@
     },
     {
         "fields": {
+            "domain": "www.gites.nc",
+            "name": "GitesNC",
+        },
+        "model": "sites.site",
+        "pk": 12
+    },
+    {
+        "fields": {
             "url": "/api/1.0/",
             "name": "all",
             "is_readonly": false
