@@ -1,4 +1,4 @@
-{% load bookingaction i18n %}
+{% load bookingaction i18n product %}
 {% if object_list %}
 <ul class="booking-list">
 	{% for booking in object_list %}
@@ -18,7 +18,7 @@
 				</tr>
 				<tr>
 					<th>{% trans "Montant" %}</th>
-					<td class="align-center"><b>{{booking.total_amount}} &euro;</b></td>
+					<td class="align-center"><b>{{booking.total_amount|currency}}</b></td>
 				</tr>
 				<tr class="b-action">
 					<td colspan="2">{% bookingaction request booking %}</td>
