@@ -216,7 +216,12 @@ class PayboxDirectPlusPayment(abstract_payment.AbstractPayment):
 
     def preapproval(self, credit_card, cvv):
         booking = self.booking
-        amount = str(D(booking.total_amount*100).quantize(0))
+        from eloue.utils import convert_from_xpf
+        from django.conf import settings
+        amount = D(booking.total_amount*100).quantize(0)
+        if settings.CONVERT_XPF:
+            amount = convert_from_xpf(D(booking.total_amount*100).quantize(0))
+        amount = str(amount)
         self.numappel, self.numtrans = self.paybox_manager.authorize_subscribed(
             member_id=credit_card.holder.pk, card_number=credit_card.card_number, 
             expiration_date=credit_card.expires, cvv=cvv, amount=amount, 
@@ -225,7 +230,12 @@ class PayboxDirectPlusPayment(abstract_payment.AbstractPayment):
         
     def pay(self, cancel_url, return_url):
         booking = self.booking
-        amount = str(D(booking.total_amount*100).quantize(0))
+        from eloue.utils import convert_from_xpf
+        from django.conf import settings
+        amount = D(booking.total_amount*100).quantize(0)
+        if settings.CONVERT_XPF:
+            amount = convert_from_xpf(D(booking.total_amount*100).quantize(0))
+        amount = str(amount)
         self.paybox_manager.debit_subscribed(
             member_id=booking.borrower.pk, amount=amount, numappel=self.numappel, 
             numtrans=self.numtrans, reference=booking.pk.hex
