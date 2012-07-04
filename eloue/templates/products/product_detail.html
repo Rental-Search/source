@@ -382,7 +382,7 @@
             <form id="booking_create" action="" method="POST">
 {% endcache %}
                 {% csrf_token %}
-{% cache 43200 product:details:after_csrf product.pk %}
+{% cache 43200 product:details:after_csrf product.pk site.pk %}
                 <div class="top-block">
                 {% with product.daily_price as price %}
                     {{ price }} <span>{% blocktrans with price.unit|unit as unit %} / par {{ unit }}{% endblocktrans %}</span>
