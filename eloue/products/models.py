@@ -705,10 +705,10 @@ class Price(models.Model):
     
     @property
     def day_amount(self):
-        return UNITS[self.unit](self.amount)
+        return UNITS[self.unit](self.local_currency_amount)
     
     def __unicode__(self):
-        return smart_unicode(currency(self.amount))
+        return smart_unicode(currency(self.local_currency_amount))
     
     def clean(self):
         from django.core.exceptions import ValidationError
@@ -727,6 +727,17 @@ class Price(models.Model):
         delta = (ended_at - started_at)
         return delta if delta > timedelta(days=0) else timedelta(days=0)
     
+    @property
+    def local_currency_amount(self):
+        # XXX: ugly and not very well tested hack
+        from eloue.utils import convert_from_xpf, convert_to_xpf
+        if self.currency == DEFAULT_CURRENCY:
+            return self.amount
+        if self.currency == 'XPF':
+            return convert_from_xpf(self.amount)
+        else:
+            return convert_to_xpf(self.amount)
+
     def get_prefixed_unit_display(self):
         return UNIT.prefixed[self.unit]
 
