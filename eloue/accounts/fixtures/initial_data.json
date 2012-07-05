@@ -90,7 +90,7 @@
     {
         "fields": {
             "domain": "www.gites.nc",
-            "name": "GitesNC",
+            "name": "GitesNC"
         },
         "model": "sites.site",
         "pk": 12
