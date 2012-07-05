@@ -190,7 +190,7 @@
     <div class="content-main">
         {% include "partials/alerts_message.html" %}
 
-{% cache 43200 product:details:before_csrf product.pk %}
+{% cache 43200 product:details:before_csrf product.pk site.pk %}
         <h1>{{ product.summary|capitalize}}</h1>
         <div class="product-resume">
             <div class="product-resume-left">
