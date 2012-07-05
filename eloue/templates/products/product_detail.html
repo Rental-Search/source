@@ -288,7 +288,7 @@
                     </div>
                     {% if product.deposit_amount %}
                     <ul>
-                        <li style="margin-bottom: 10px;">{% trans "Dépôt de garantie" %} : {{ product.deposit_amount }} &euro;</li>
+                        <li style="margin-bottom: 10px;">{% trans "Dépôt de garantie" %} : {{ product.local_currency_deposit_amount|currency }}</li>
                         <li>{% trans "Uniquement débité en cas de dommage constaté et avec votre accord."%}</li>
                     </ul>
                     {% endif %}
