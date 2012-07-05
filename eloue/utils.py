@@ -95,7 +95,9 @@ def convert_from_xpf(value):
     amount = value * D(settings.XPF_EXCHANGE_RATE)
     return amount.quantize(D("0.00"), rounding=ROUND_UP)
 
-
+def convert_to_xpf(value):
+    amount = value / D(settings.XPF_EXCHANGE_RATE)
+    return amount.quantize(D("0.00"), rounding=ROUND_UP)
 
 def cache_to(instance, path, specname, extension):
     filepath, basename = os.path.split(path)
