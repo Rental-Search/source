@@ -1,5 +1,8 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
 import django.forms as forms
 from django.utils.safestring import mark_safe
+from django.utils.encoding import smart_unicode
 
 class PriceTextInput(forms.TextInput):
     def render(self, name, value, attrs=None):
@@ -13,7 +16,7 @@ class PriceTextInput(forms.TextInput):
         try:
             new_locale = locale.normalize(translation.to_locale("%s.utf8" % translation.get_language()))
             locale.setlocale(locale.LC_ALL, new_locale)
-            return mark_safe(super(PriceTextInput, self).render(name, value, attrs) + ' <span class="unit">'+locale.localeconv()['currency_symbol']+'</span>')
+            return mark_safe(super(PriceTextInput, self).render(name, value, attrs) + u' <span class="unit">'+smart_unicode(locale.localeconv()['currency_symbol'])+u'</span>')
         except (TypeError, locale.Error):
             return mark_safe(super(PriceTextInput, self).render(name, value, attrs) + ' <span class="unit"></span>')
         finally:
