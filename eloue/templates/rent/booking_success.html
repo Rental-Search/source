@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load i18n %}
+{% load i18n product %}
 
 {% block title %}{% trans "Réservation enregistrée avec succès" %}{% endblock %}
 
@@ -39,7 +39,7 @@
               </tr>
               <tr>
                   <th>{% trans "Montant" %}</th>
-                  <td class="align-center"><b>{{booking.total_amount}} &euro;</b></td>
+                  <td class="align-center"><b>{{booking.total_amount|currency}}</b></td>
               </tr>
           </tbody>
       </table>

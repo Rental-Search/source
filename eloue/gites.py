@@ -3,25 +3,25 @@ import os
 from eloue.settings import *
 local_path = lambda path: os.path.join(os.path.dirname(__file__), path)
 
-SITE_ID = 4
+SITE_ID = 12
 
-SESSION_COOKIE_DOMAIN = 'e-loue.nc'
+SESSION_COOKIE_DOMAIN = 'e-loue.gites'
 
 
 USE_HTTPS = False
 
-CACHE_MIDDLEWARE_KEY_PREFIX = 'nc'
+CACHE_MIDDLEWARE_KEY_PREFIX = 'gites'
 
-AFFILIATE_TAG = 'nc'
+AFFILIATE_TAG = 'gites'
 
-GOOGLE_REGION_CODE = 'nc'
+GOOGLE_REGION_CODE = 'gites'
 
 CONVERT_XPF = True
 
-DEFAULT_SITES = [4]
+DEFAULT_SITES = [12]
 
 TEMPLATE_DIRS = (
-    local_path('templates/nc/'),
+    local_path('templates/gites/'),
     local_path('templates/'),
 )
 

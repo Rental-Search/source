@@ -158,8 +158,10 @@ class BookingWizard(MultiPartFormWizard):
     
     def parse_params(self, request, product, *args, **kwargs):
         self.extra_context['product'] = product
+        self.extra_context['prices'] = product.prices.filter(unit=1)
         self.extra_context['search_form'] = FacetedSearchForm()
         self.extra_context['comments'] = BorrowerComment.objects.filter(booking__product=product)
+        self.extra_context['insurance_available'] = settings.INSURANCE_AVAILABLE
     
     def get_template(self, step):
         if issubclass(self.form_list[step], EmailAuthenticationForm):

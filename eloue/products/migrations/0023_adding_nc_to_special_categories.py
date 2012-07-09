@@ -3,26 +3,30 @@ import datetime
 from south.db import db
 from south.v2 import DataMigration
 from django.db import models
-from django.contrib import sites, admin
-from eloue.accounts.models import Patron
-
-class FakeAdmin(object):
-    def has_perm(self, perm): return True
 
 class Migration(DataMigration):
 
     def forwards(self, orm):
         "Write your forwards methods here."
-        to_delete, perms_needed = admin.util.get_deleted_objects(
-            sites.models.Site.objects.filter(domain='beta.e-loue.com'),
-            None, FakeAdmin(), admin.site
-        )
-        assert len(to_delete)==1, 'Warning, other object than Site(\'beta.e-loue.com\' would get deleted. Exit.'
-        sites.models.Site.objects.get(domain='beta.e-loue.com').delete()
+        nc = orm['sites.site'].objects.get(domain='www.e-loue.nc')
+        automobile = orm['products.category'].objects.get(slug='automobile')
+        nc.categories.add(automobile)
+        nc.categories.add(*automobile.childrens.all())
+
+        location_saisonniere = orm['products.category'].objects.get(slug='location-saisonniere')
+        nc.categories.add(location_saisonniere)
+        nc.categories.add(*location_saisonniere.childrens.all())
 
     def backwards(self, orm):
         "Write your backwards methods here."
+        nc = orm['sites.site'].objects.get(domain='www.e-loue.nc')
+        automobile = orm['products.category'].objects.get(slug='automobile')
+        nc.categories.remove(automobile)
+        nc.categories.remove(*automobile.childrens.all())
 
+        location_saisonniere = orm['products.category'].objects.get(slug='location-saisonniere')
+        nc.categories.remove(location_saisonniere)
+        nc.categories.remove(*location_saisonniere.childrens.all())
 
     models = {
         'accounts.address': {
@@ -354,4 +358,4 @@ class Migration(DataMigration):
         }
     }
 
-    complete_apps = ['products', 'sites']
+    complete_apps = ['products']

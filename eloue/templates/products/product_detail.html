@@ -190,7 +190,7 @@
     <div class="content-main">
         {% include "partials/alerts_message.html" %}
 
-{% cache 43200 product:details:before_csrf product.pk %}
+{% cache 43200 product:details:before_csrf product.pk site.pk %}
         <h1>{{ product.summary|capitalize}}</h1>
         <div class="product-resume">
             <div class="product-resume-left">
@@ -256,7 +256,9 @@
             <ul>
                 <li><a href="#gallery">{% trans "Photo" %}</a></li>
                 <li><a href="#prices_calendar">{% trans "Disponibilitées et tarifs" %}</a></li>
-                <li><a href="#conditions">{% trans "Conditions et assurance"%}</a></li>
+                {% if insurance_available %}
+                    <li><a href="#conditions">{% trans "Conditions et assurance"%}</a></li>
+                {% endif %}
             </ul>
             <div id="gallery">
             {% with product.pictures.all|first as picture %}
@@ -275,18 +277,18 @@
                                     <th class="price-head">{% trans "Prix" %}</th>
                                 </tr>
                             </thead>
-                            {% for price in product.prices.all %}
+                            {% for price in prices %}
                             <tr>
                                 <td>{% trans price.get_prefixed_unit_display|capfirst %}
                                 </td>
-                                <td class="price-display">{{ price.amount }}&euro;</td>
+                                <td class="price-display">{{ price }}</td>
                             </tr>
                             {% endfor %}
                         </table>
                     </div>
                     {% if product.deposit_amount %}
                     <ul>
-                        <li style="margin-bottom: 10px;">{% trans "Dépôt de garantie" %} : {{ product.deposit_amount }} &euro;</li>
+                        <li style="margin-bottom: 10px;">{% trans "Dépôt de garantie" %} : {{ product.local_currency_deposit_amount|currency }}</li>
                         <li>{% trans "Uniquement débité en cas de dommage constaté et avec votre accord."%}</li>
                     </ul>
                     {% endif %}
@@ -314,9 +316,11 @@
                     </ul>
                 </div>{# calendar #}
             </div>
+            {% if insurance_available %}
             <div id="conditions">
                 {% include "rent/partials/condition_assurance.html" %}
             </div>
+            {% endif %}
         </div>{# product-tabs #}
         {% if product.options %}
         <div class="product-info">
@@ -378,7 +382,7 @@
             <form id="booking_create" action="" method="POST">
 {% endcache %}
                 {% csrf_token %}
-{% cache 43200 product:details:after_csrf product.pk %}
+{% cache 43200 product:details:after_csrf product.pk site.pk %}
                 <div class="top-block">
                 {% with product.daily_price as price %}
                     {{ price }} <span>{% blocktrans with price.unit|unit as unit %} / par {{ unit }}{% endblocktrans %}</span>

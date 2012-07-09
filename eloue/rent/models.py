@@ -249,13 +249,16 @@ class Booking(models.Model):
     
     def send_acceptation_email(self):
         context = {'booking': self}
-        contract = self.product.subtype.contract_generator(self)
-        content = contract.getvalue()
+        if not self.owner.is_professional:
+            contract = self.product.subtype.contract_generator(self)
+            content = contract.getvalue()
         message = create_alternative_email('rent/emails/owner_acceptation', context, settings.DEFAULT_FROM_EMAIL, [self.owner.email])
-        message.attach('contrat.pdf', content, 'application/pdf')
+        if not self.owner.is_professional: 
+            message.attach('contrat.pdf', content, 'application/pdf')
         message.send()
         message = create_alternative_email('rent/emails/borrower_acceptation', context, settings.DEFAULT_FROM_EMAIL, [self.borrower.email])
-        message.attach('contrat.pdf', content, 'application/pdf')
+        if not self.owner.is_professional:    
+            message.attach('contrat.pdf', content, 'application/pdf')
         message.send()
     
     def send_borrower_receipt(self):

@@ -37,7 +37,7 @@ from eloue.products.signals import (post_save_answer, post_save_product,
     post_save_curiosity, post_save_to_update_product,)
 from eloue.products.utils import Enum
 from eloue.signals import post_save_sites
-from eloue.rent.contract import ContractGeneratorNormal, ContractGeneratorCar, ContractGeneratorRealEstate
+from eloue.rent.contract import ContractGenerator, ContractGeneratorNormal, ContractGeneratorCar, ContractGeneratorRealEstate
 from django_messages.models import Message 
 from eloue.accounts.models import Patron
 from django.db.models import signals
@@ -250,6 +250,17 @@ class Product(models.Model):
         return self._daily_price
 
     @property
+    def local_currency_deposit_amount(self):
+        # XXX: ugly and not very well tested hack
+        from eloue.utils import convert_from_xpf, convert_to_xpf
+        if self.daily_price.currency == DEFAULT_CURRENCY:
+            return self.deposit_amount
+        if self.daily_price.currency == 'XPF':
+            return convert_from_xpf(self.deposit_amount.amount)
+        else:
+            return convert_to_xpf(self.deposit_amount)
+
+    @property
     def average_note(self):
         from eloue.rent.models import BorrowerComment
         avg = BorrowerComment.objects.filter(booking__product=self).aggregate(Avg('note'))['note__avg']
@@ -383,7 +394,10 @@ class Product(models.Model):
 
     @property
     def contract_generator(self):
-        return ContractGeneratorNormal()
+        if self.category.need_insurance and settings.INSURANCE_AVAILABLE:
+            return ContractGeneratorNormal()
+        else:
+            return ContractGenerator()
 
 class CarProduct(Product):
 
@@ -463,7 +477,10 @@ class CarProduct(Product):
 
     @property
     def contract_generator(self):
-        return ContractGeneratorCar()
+        if self.category.need_insurance and settings.INSURANCE_AVAILABLE:
+            return ContractGeneratorCar()
+        else:
+            return ContractGenerator()
 
 class RealEstateProduct(Product):
     
@@ -538,7 +555,10 @@ class RealEstateProduct(Product):
 
     @property
     def contract_generator(self):
-        return ContractGeneratorRealEstate()
+        if self.category.need_insurance and settings.INSURANCE_AVAILABLE:
+            return ContractGeneratorRealEstate()
+        else:
+            return ContractGenerator()
 
 def upload_to(instance, filename):
     return 'pictures/%s.jpg' % uuid.uuid4().hex
@@ -696,10 +716,10 @@ class Price(models.Model):
     
     @property
     def day_amount(self):
-        return UNITS[self.unit](self.amount)
+        return UNITS[self.unit](self.local_currency_amount)
     
     def __unicode__(self):
-        return smart_unicode(currency(self.amount))
+        return smart_unicode(currency(self.local_currency_amount))
     
     def clean(self):
         from django.core.exceptions import ValidationError
@@ -718,6 +738,17 @@ class Price(models.Model):
         delta = (ended_at - started_at)
         return delta if delta > timedelta(days=0) else timedelta(days=0)
     
+    @property
+    def local_currency_amount(self):
+        # XXX: ugly and not very well tested hack
+        from eloue.utils import convert_from_xpf, convert_to_xpf
+        if self.currency == DEFAULT_CURRENCY:
+            return self.amount
+        if self.currency == 'XPF':
+            return convert_from_xpf(self.amount)
+        else:
+            return convert_to_xpf(self.amount)
+
     def get_prefixed_unit_display(self):
         return UNIT.prefixed[self.unit]
 

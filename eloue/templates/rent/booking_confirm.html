@@ -60,7 +60,7 @@
           </tr> 
           <tr>
               <th>{% trans "Montant de la réservation" %}</th>
-              <td class="align-center">{{preview.total_amount}} &euro;</td>
+              <td class="align-center">{{preview.total_amount|currency}}</td>
           </tr>
       </tbody>
       </table>
@@ -101,7 +101,7 @@
             {% endif %}
           {% endif %}
         </table>
-
+        {% if insurance_available %}
         <h2>{% trans "Condition et assurance" %}</h2>
         <table class="table table-bordered booking-resume">
           <tr>
@@ -109,18 +109,19 @@
               {% include "rent/partials/condition_assurance.html" %}
             </td>
           </tr>
-          {% if product.deposit_amount != 0 %}
+          {% if product.deposit_amount %}
           <tr>
             <th>
               {% trans "Dépôt de garantie" %}
             </th>
             <td>
-              {{ product.deposit_amount }}<br>
+              {{ product.local_currency_deposit_amount|currency }}<br>
               (Uniquement débité en cas de dommage constaté et avec votre accord)
             </td>
           </tr>
           {% endif %}
         </table>
+        {% endif %}
         <h2>{% trans "Paiement" %}</h2>
         {% with form.non_field_errors as form_errors %}
           {% include "partials/alerts_message.html" %}

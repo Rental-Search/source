@@ -171,19 +171,21 @@ def product_edit(request, slug, product_id):
 @login_required
 @ownership_required(model=Product, object_key='product_id', ownership=['owner'])
 def product_address_edit(request, slug, product_id):
-
     product = get_object_or_404(Product.on_site, pk=product_id)
 
-    form = ProductAddressEditForm(data=request.POST or None, instance=product)
+    if request.method == "POST":
+        form = ProductAddressEditForm(data=request.POST, instance=product)
+        if form.is_valid():
+            product = form.save()
+            messages.success(request, _(u"L'adress a bien été modifié"))
+            return redirect(
+                'eloue.products.views.product_address_edit', 
+                slug=slug, product_id=product_id
+            )
+    else:
+        form = ProductAddressEditForm(instance=product)
     
-    if form.is_valid():
-        product = form.save()
-        messages.success(request, _(u"L'adress a bien été modifié"))
-        return redirect(
-            'eloue.products.views.product_address_edit', 
-            slug=slug, product_id=product_id
-        )
-
+    
     return render_to_response(
         'products/product_edit.html', dictionary={
             'product': product, 
@@ -381,7 +383,7 @@ def product_list(request, urlbits, sqs=SearchQuerySet(), suggestions=None, page=
     location = request.session.setdefault('location', settings.DEFAULT_LOCATION)
     query_data = request.GET.copy()
     if not query_data.get('l'):
-        query_data['l'] = u'France'
+        query_data['l'] = location['country']
     form = FacetedSearchForm(query_data)
     if not form.is_valid():
         raise Http404
@@ -533,5 +535,3 @@ def suggestion(request):
         resp += "\n%s"%el
     cache.set(word, resp, 0)
     return HttpResponse(resp)
-        
-        
