@@ -20,13 +20,13 @@
  </head>
  
  <body>
-    <div class="container" style="padding: 0px; width: 980px;">
-      <img src="{{ MEDIA_URL }}images/argusnc/argus_header.jpg" alt="Retour en accueil" title="Retour en accueil" border="0" width="980">
-    </div>{# container #}
-    <div class="top-bar" style="background: none; height: 23px; box-shadow: none; border-bottom: none;">
+    <div class="top-bar" style="background: none; box-shadow: none; border-bottom: none;">
         <div class="container">
+            <div class="logo">
+                <a href="{% url home %}"><img src="{{ MEDIA_URL }}images/bml/logo_bml.gif" alt="e-loue" width="214" height="50"/></a>
+            </div><!-- logo -->
             <div class="top-content">
-                <nav style="margin-top: 5px;">
+                <nav>
                     {% if user.is_anonymous %}
                         <a href="{% trans "/comment-ca-marche/" %}" class="nav-link">{% trans "Comment ça marche ?" %}</a>
                     {% else %}
@@ -94,35 +94,38 @@
             <div class="f-bottom first">
         </footer>
     </div>{# container #}
-    <div class="container" style="background-color: #000; padding: 10px 0; width: 980px;">
+    <div class="container" style="background-color: #925940; padding: 10px;">
       <style>
         .menu_foot {
-          padding: 0px;
-          margin: 0px 0px 10px 0px;
+          margin: 0px 0px 0px 0px;
         }
-        .menu_foot .item30 {
+        .menu_foot .item11 {
           border: 0px;
         }
         .menu_foot li {
-          border-left: 1px solid white;
-          padding: 0px 10px;
           float: left;
-          list-style-type: none;
+          display: block;
+          list-style: none;
+          border-left: 1px solid white;
+          padding: 0px 8px 0px 08px;
         }
         .menu_foot li a {
           color: #fff;
-          font-family: Arial, Helvetica, sans-serif;
           font-size: 12px;
+          font-family: Arial, Helvetica, sans-serif;
         }
       </style>
       <ul class="menu_foot">
-        <li class="item30"><a href="http://www.argus.nc/plan-du-site"><span>Plan du site</span></a></li>
-        <li class="item28"><a href="http://www.argus.nc/mentions-legales"><span>Mentions légales</span></a></li>
-        <li class="item27"><a href="http://www.argus.nc/contactez-nous?view=multicontact&amp;dest=1"><span>Contactez nous</span></a></li>
-        <li class="item36"><a href="http://www.argus.nc/liens"><span>Liens</span></a></li><li class="item31"><a href="/newsletters"><span>Newsletters</span></a></li>
-        <li class="item34"><a href="http://www.argus.nc/les-points-de-vente"><span>Les points de vente</span></a></li>
+        <li class="item11"><a href="http://www.bienmeloger.nc"><span>Accueil</span></a></li>
+        <li class="item12"><a href="http://www.bienmeloger.nc/contact?view=multicontact"><span>Contact</span></a></li>
+        <li class="item32"><a href="http://www.bienmeloger.nc/mentions-legales"><span>Mentions Légales</span></a></li>
+        <li class="item33"><a href="http://www.bienmeloger.nc/plan-du-site"><span>Plan du site</span></a></li>
+        <li class="item38"><a href="http://www.bienmeloger.nc/liens"><span>Liens</span></a></li>
+        <li class="item36"><a href="http://www.bienmeloger.nc/newsletters"><span>Newsletters</span></a></li>
+        <li class="item24"><a href="http://www.bienmeloger.nc/annuaire-des-professionnels"><span>Annuaire des professionnels</span></a></li>
+        <li class="item72"><a href="http://www.bienmeloger.nc/agences-immobilieres-nouvelle-caledonie"><span>Agences immobilières</span></a></li>
       </ul>
-    </div>
+    </div>{# container #}
     {% endblock %}
     {% block tail %}
       {% compressed_js 'application' %}
