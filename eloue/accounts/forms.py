@@ -599,38 +599,6 @@ class BookingCreditCardForm(CreditCardForm):
         exclude = ('card_number', 'holder', 'masked_number')
 
 
-# class CvvForm(forms.ModelForm):
-#     cvv = forms.CharField(label=_(u'Veuillez resaisir votre cryptogram visuel'), min_length=3, max_length=4, widget=forms.TextInput())
-    
-#     def __init__(self, *args, **kwargs):
-#         if 'instance' not in kwargs:
-#             raise ValueError("you should specify 'instance' for this form")
-#         super(CvvForm, self).__init__(*args, **kwargs)
-
-#     class Meta:
-#         exclude = ('expires', 'masked_number', 'card_number', 'holder', 
-#             'keep', 'holder_name')
-#         model = CreditCard
-
-#     def clean(self):
-#         if self.errors:
-#             return self.cleaned_data
-#         try:
-#             from eloue.payments.paybox_payment import PayboxManager, PayboxException
-#             pm = PayboxManager()
-#             pm.authorize_subscribed(
-#                 self.instance.holder.pk, self.instance.card_number, 
-#                 self.instance.expires, self.cleaned_data['cvv'], 1, 'verification'
-#             )
-#         except PayboxException as e:
-#             raise forms.ValidationError(_(u'La validation de votre carte a échoué.'))
-#         return self.cleaned_data
-    
-#     def save(self, *args, **kwargs):
-#         if kwargs.get('commit'):
-#             raise NotImplementedError('you have nothing to commit here!!')
-#         return super(CvvForm, self).save(*args, **kwargs)
-
 def make_missing_data_form(instance, required_fields=[]):
     fields = SortedDict({
         'is_professional': forms.BooleanField(label=_(u"Professionnel"), required=False, initial=False, widget=CommentedCheckboxInput(info_text='Je suis professionnel')),
