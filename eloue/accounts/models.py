@@ -403,6 +403,8 @@ class CreditCard(models.Model):
     holder_name = models.CharField(max_length=60, help_text=_(u'Conserver mes coordonnées bancaire'))
     subscriber_reference = models.CharField(max_length=250, blank=True)
 
+    def __unicode__(self):
+        return self.masked_number
 
 class FacebookSession(models.Model):
 
