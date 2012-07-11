@@ -403,6 +403,22 @@ def patron_edit_credit_card(request):
         dictionary={'form': form}, context_instance=RequestContext(request))
 
 @login_required
+@require_POST
+def patron_delete_credit_card(request):
+    try:
+        instance = request.user.creditcard
+        if not instance.keep:
+            messages.error(request, _(u"Vous n'avez pas de carte enregistrée"))
+            return redirect(patron_edit_credit_card)
+    except CreditCard.DoesNotExist:
+        return redirect(patron_edit_credit_card)
+    messages.success(request, _(u"On a bien supprimé les détails de votre carte bancaire."))
+    instance.payboxdirectpluspaymentinformation_set.update(creditcard=None)
+    instance.delete()
+    return redirect(patron_edit_credit_card)
+
+
+@login_required
 def patron_edit_rib(request):
     from eloue.accounts.forms import RIBForm
     if request.method == 'POST':
