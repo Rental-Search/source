@@ -1,0 +1,11 @@
+[
+	{
+        "pk": 1,
+        "model": "payments.payboxdirectpluspaymentinformation",
+        "fields": {
+            "numtrans": "0001629807",
+            "numappel": "0003261053",
+            "creditcard": 1
+        }
+    }
+]
