@@ -86,7 +86,7 @@ def product_occupied_date(request, slug, product_id):
             mimetype='application/json'
         )
     else:
-        return HttpResponse('{}', mimetype='application/json')
+        return HttpResponse('[]', mimetype='application/json')
 
 @require_GET
 def booking_price(request, slug, product_id):

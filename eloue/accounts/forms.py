@@ -504,6 +504,18 @@ def mask_card_number(card_number):
         card_number
     )
 
+class CreditCardBaseForm(forms.ModelForm):
+    class Meta:
+        model = CreditCard
+        exclude = ('expires', 'masked_number', 'card_number', 'holder', 
+            'keep', 'holder_name', 'cvv', 'subscriber_reference')
+
+    def save(self, *args, **kwargs):
+        instance = super(CreditCardBaseForm, self).save(*args, **kwargs)
+        if not instance.subscriber_reference:
+            import pdb; pdb.set_trace()
+        return instance
+    
 class CreditCardForm(forms.ModelForm):
     cvv = forms.CharField(max_length=4, label=_(u'Cryptogramme de sécurité'), help_text=_(u'Les 3 derniers chiffres au dos de la carte.'))
     expires = ExpirationField(label=_(u'Date d\'expiration'))
@@ -523,7 +535,9 @@ class CreditCardForm(forms.ModelForm):
         # see note: https://docs.djangoproject.com/en/dev/topics/forms/modelforms/#using-a-subset-of-fields-on-the-form
         # we excluded, then added, to avoid save automatically the card_number
         model = CreditCard
-        exclude = ('card_number', 'masked_number', 'keep')
+        exclude = (
+            'card_number', 'masked_number', 'keep', 'subscriber_reference'
+        )
 
     def clean_card_number(self):
         def _luhn_valid(card_number):
@@ -565,7 +579,7 @@ class CreditCardForm(forms.ModelForm):
                     self.cleaned_data['expires'], self.cleaned_data['cvv']) 
             else:
                 self.cleaned_data['card_number'] = pm.subscribe(
-                    self.instance.holder.pk, 
+                    self.instance.subscriber_reference,
                     self.cleaned_data['card_number'], 
                     self.cleaned_data['expires'], self.cleaned_data['cvv']
                 )
@@ -579,44 +593,11 @@ class CreditCardForm(forms.ModelForm):
         return instance
 
 class BookingCreditCardForm(CreditCardForm):
-    class Meta:
+    class Meta(CreditCardForm.Meta):
         # see note: https://docs.djangoproject.com/en/dev/topics/forms/modelforms/#using-a-subset-of-fields-on-the-form
         # we excluded, then added, to avoid save automatically the card_number
-        model = CreditCard
         exclude = ('card_number', 'holder', 'masked_number')
 
-
-class CvvForm(forms.ModelForm):
-    cvv = forms.CharField(label=_(u'Veuillez resaisir votre cryptogram visuel'), min_length=3, max_length=4, widget=forms.TextInput())
-    
-    def __init__(self, *args, **kwargs):
-        if 'instance' not in kwargs:
-            raise ValueError("you should specify 'instance' for this form")
-        super(CvvForm, self).__init__(*args, **kwargs)
-
-    class Meta:
-        exclude = ('expires', 'masked_number', 'card_number', 'holder', 
-            'keep', 'holder_name')
-        model = CreditCard
-
-    def clean(self):
-        if self.errors:
-            return self.cleaned_data
-        try:
-            from eloue.payments.paybox_payment import PayboxManager, PayboxException
-            pm = PayboxManager()
-            pm.authorize_subscribed(
-                self.instance.holder.pk, self.instance.card_number, 
-                self.instance.expires, self.cleaned_data['cvv'], 1, 'verification'
-            )
-        except PayboxException as e:
-            raise forms.ValidationError(_(u'La validation de votre carte a échoué.'))
-        return self.cleaned_data
-    
-    def save(self, *args, **kwargs):
-        if kwargs.get('commit'):
-            raise NotImplementedError('you have nothing to commit here!!')
-        return super(CvvForm, self).save(*args, **kwargs)
 
 def make_missing_data_form(instance, required_fields=[]):
     fields = SortedDict({

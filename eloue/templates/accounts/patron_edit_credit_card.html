@@ -5,8 +5,6 @@
 
 {% block content-main-profil %}
 
-{% include "partials/alerts_message.html" %}
-
 {% if form.is_multipart %}
 <form enctype="multipart/form-data" class="form-horizontal" method="post" action="">
 {% else %}
@@ -18,7 +16,9 @@
 </p>
 <fieldset id="credit-card-form">
   <legend>Modifier votre carte bancaire</legend>
-  {{form.non_field_errors}}
+  {% with form.non_field_errors as form_errors %}
+    {% include "partials/non_field_errors.html" %}
+  {% endwith %}
   <div class="control-group {% if form.card_number.errors %} error {% endif %}">
     <label class="control-label" for="{{ form.card_number.id_for_label }}">{{ form.card_number.label }}</label>
     <div class="controls">
@@ -83,4 +83,8 @@
   </div>
 </fieldset>
 </form>
+  <form class="form-horizontal" method="post" action="delete/">
+    {% csrf_token %}
+    <button type="submit" class="btn">Supprimer</button>
+  </form>
 {% endblock %}

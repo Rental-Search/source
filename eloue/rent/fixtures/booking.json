@@ -15,7 +15,12 @@
             "owner": 1,
             "started_at": "2010-08-17 09:00:10",
             "contract_id": 1,
-            "quantity": 1
+            "quantity": 1,
+            "content_type": [
+                "payments",
+                "payboxdirectpluspaymentinformation"
+            ],
+            "object_id": 1
         },
         "model": "rent.booking",
         "pk": "87ee8e9dec1d47c29ebb27e09bda8fc3"

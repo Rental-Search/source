@@ -33,14 +33,10 @@ class Command(BaseCommand):
         """Find ongoing rent, hold money and the ipn callback do the rest by moving them in ONGOING state"""
         from eloue.rent.models import Booking
         log.info('Starting hourly ongoing mover process')
-        domain = Site.objects.get_current().domain
-        protocol = "https" if USE_HTTPS else "http"
-        dtime = datetime.now() + timedelta(hours=1)
-        for booking in Booking.objects.pending().filter(
-            started_at__contains=' %02d' % dtime.hour, 
-            started_at__day=dtime.day, 
-            started_at__month=dtime.month, 
-            started_at__year=dtime.year):
+        # unittests failed with dtime = datetime.now + timedelta(hours=1)
+        # it's an ugly workaround
+        dtime = datetime(*(datetime.now() + timedelta(hours=1)).timetuple()[:-3])
+        for booking in Booking.objects.pending().filter(started_at__lte=dtime):
             with handler:
                 booking.activate()
         log.info('Finished hourly ongoing mover process')
