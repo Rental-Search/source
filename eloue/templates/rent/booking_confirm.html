@@ -184,11 +184,11 @@
           {% if not form.holder_name %}
           <div class="control-group">
             <div class="control creditcard-already-save">
-              Vos coordonnées bancaire sont déjà enregistrées. 
-              Les details de la carte utilisee pour le paiement:<br>
+              Vos coordonnées bancaire sont déjà enregistrées.<br>
+              Les détails de la carte utilisée pour le paiement:<br>
               {{form.instance.masked_number}}<br>
-              {{form.instance.holder_name}}<br>
-              {{form.instance.expires}}<br>
+              Nom du teneur: {{form.instance.holder_name}}<br>
+              Date d'expiration: {{form.instance.expires|slice:":2"}}/{{form.instance.expires|slice:"2:"}}<br>
             </div>
           </div>
           {% endif %}
