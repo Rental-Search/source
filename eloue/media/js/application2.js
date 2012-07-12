@@ -272,6 +272,11 @@ $(document).ready(function() {
         }
     });
 
+    //Confirm delete credit card
+    $(".delete-credit-card").click(function() {
+        return confirm('Êtes-vous sûr de vouloir supprimer cette carte de crédit ?');
+    });
+
     //loading for accept action and refuse action booking
     $('button.btn-booking-action.pending, button.btn-booking-action.rejected').click(function () {
         $('tr.b-action').addClass('loading');

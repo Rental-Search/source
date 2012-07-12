@@ -403,7 +403,6 @@ def patron_edit_credit_card(request):
         dictionary={'form': form}, context_instance=RequestContext(request))
 
 @login_required
-@require_POST
 def patron_delete_credit_card(request):
     try:
         instance = request.user.creditcard
