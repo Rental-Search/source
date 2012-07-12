@@ -510,12 +510,6 @@ class CreditCardBaseForm(forms.ModelForm):
         exclude = ('expires', 'masked_number', 'card_number', 'holder', 
             'keep', 'holder_name', 'cvv', 'subscriber_reference')
 
-    def save(self, *args, **kwargs):
-        instance = super(CreditCardBaseForm, self).save(*args, **kwargs)
-        if not instance.subscriber_reference:
-            import pdb; pdb.set_trace()
-        return instance
-    
 class CreditCardForm(forms.ModelForm):
     cvv = forms.CharField(max_length=4, label=_(u'Cryptogramme de sécurité'), help_text=_(u'Les 3 derniers chiffres au dos de la carte.'))
     expires = ExpirationField(label=_(u'Date d\'expiration'))
