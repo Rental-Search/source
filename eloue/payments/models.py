@@ -6,6 +6,9 @@ from eloue.payments import *
 from eloue.accounts.models import CreditCard
 
 class PaymentInformation(models.Model, abstract_payment.AbstractPayment):
+    # I did not used a generic reverse relation here, because of a bug in django 1.2
+    # we must replace this with:
+    # booking = generic.ReverseRelation(Booking)
     @property
     def booking(self):
         tipe = ContentType.objects.get_for_model(self)
