@@ -275,8 +275,8 @@ class Product(models.Model):
     
     def monthly_availability(self, year, month):
 
-        year = int(year[0])
-        month = int(month[0])
+        year = int(year)
+        month = int(month)
         _, days_num = calendar.monthrange(year, month)
 
         started_at = datetime(year, month, 1, 0, 0)

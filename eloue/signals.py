@@ -9,7 +9,7 @@ def post_save_sites(sender, instance, created, **kwargs):
     instance.sites.add(*settings.DEFAULT_SITES)
 
 def pre_delete_creditcard(sender, instance, *args, **kwargs):
-    PayboxManager().unsubscribe(instance.holder.pk)
+    PayboxManager().unsubscribe(instance.subscriber_reference)
 
 def _string_filter(raw_string):
     

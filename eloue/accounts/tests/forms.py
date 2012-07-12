@@ -4,7 +4,7 @@ import mock
 from django.test import TestCase
 
 from eloue.accounts.forms import (RIBForm, CreditCardForm, mask_card_number, 
-    CvvForm, EmailAuthenticationForm)
+    EmailAuthenticationForm)
 from eloue.accounts.models import Patron
 from eloue.payments.paybox_payment import PayboxManager, PayboxException
 
@@ -200,69 +200,3 @@ class CreditCardFormTest(TestCase):
         self.assertTrue(mock_authorize.called)
         self.assertTrue(mock_subscribe.called)
         self.assertFalse(mock_modify.called)
-
-class CvvFormTest(TestCase):
-    fixtures = ['patron']
-
-    def testWithoutInstance(self):
-        self.assertRaises(ValueError, CvvForm, {})
-
-    @mock.patch.object(PayboxManager, 'authorize_subscribed')
-    def testEmptyFail(self, mock_authorize):
-        form = CvvForm({'cvv': ''}, instance=CreditCardForm._meta.model(
-                holder=Patron.objects.get(pk=1), card_number='SLDLrcsLMPC',
-                expires='1222', masked_number='1XXXXXXXXXXXX444'
-            ))
-        self.assertFalse(form.is_valid())
-        self.assertTrue('cvv' in form.errors)
-        self.assertFalse(form.non_field_errors())
-        self.assertFalse(mock_authorize.called)
-
-    @mock.patch.object(PayboxManager, 'authorize_subscribed')
-    def testTooShortFail(self, mock_authorize):
-        form = CvvForm({'cvv': '11'}, instance=CreditCardForm._meta.model(
-                holder=Patron.objects.get(pk=1), card_number='SLDLrcsLMPC',
-                expires='1222', masked_number='1XXXXXXXXXXXX444'
-            ))
-        self.assertFalse(form.is_valid())
-        self.assertTrue('cvv' in form.errors)
-        self.assertFalse(form.non_field_errors())
-        self.assertFalse(mock_authorize.called)
-
-    @mock.patch.object(PayboxManager, 'authorize_subscribed')
-    def testTooLongFail(self, mock_authorize):
-        form = CvvForm({'cvv': '11111'}, instance=CreditCardForm._meta.model(
-                holder=Patron.objects.get(pk=1), card_number='SLDLrcsLMPC',
-                expires='1222', masked_number='1XXXXXXXXXXXX444'
-            ))
-        self.assertFalse(form.is_valid())
-        self.assertTrue('cvv' in form.errors)
-        self.assertFalse(form.non_field_errors())
-        self.assertFalse(mock_authorize.called)
-
-    @mock.patch.object(PayboxManager, 'authorize_subscribed')
-    def testValidationError(self, mock_authorize):
-        mock_authorize.side_effect = PayboxException(19, 'Wrong card data')
-        form = CvvForm({'cvv': '1111'}, instance=CreditCardForm._meta.model(
-                holder=Patron.objects.get(pk=1), card_number='SLDLrcsLMPC',
-                expires='1222', masked_number='1XXXXXXXXXXXX444'
-            ))
-        self.assertFalse(form.is_valid())
-        self.assertFalse('cvv' in form.errors)
-        self.assertTrue(form.non_field_errors())
-        self.assertTrue(mock_authorize.called)
-
-    @mock.patch.object(PayboxManager, 'authorize_subscribed')
-    def testValid(self, mock_authorize):
-        mock_authorize.return_value = ('0001234', '0001234')
-        form = CvvForm({'cvv': '1111'}, instance=CreditCardForm._meta.model(
-                holder=Patron.objects.get(pk=1), card_number='SLDLrcsLMPC',
-                expires='1222', masked_number='1XXXXXXXXXXXX444'
-            ))
-        self.assertTrue(form.is_valid())
-        self.assertFalse('cvv' in form.errors)
-        self.assertFalse(form.non_field_errors())
-        self.assertTrue(mock_authorize.called)
-        self.assertRaises(NotImplementedError, form.save, commit=True)
-        self.assertTrue(isinstance(form.save(commit=False), CreditCardForm._meta.model))
-
