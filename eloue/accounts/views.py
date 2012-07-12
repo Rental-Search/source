@@ -416,7 +416,7 @@ def patron_delete_credit_card(request):
     from django.contrib import contenttypes
     from eloue.payments.models import PayboxDirectPlusPaymentInformation
     if Booking.objects.filter(
-        state__in=['authorizing', 'closing', 'authorized', 'pending', 'ongoing', 'ended', 'ending'],
+        state__in=['authorizing', 'authorized', 'pending', 'ongoing', 'ended', 'ending', 'closing', 'incident'],
         content_type=contenttypes.models.ContentType.objects.get_for_model(PayboxDirectPlusPaymentInformation),
         object_id__in=PayboxDirectPlusPaymentInformation.objects.filter(
             creditcard=instance
