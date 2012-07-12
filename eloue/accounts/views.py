@@ -412,6 +412,19 @@ def patron_delete_credit_card(request):
             return redirect(patron_edit_credit_card)
     except CreditCard.DoesNotExist:
         return redirect(patron_edit_credit_card)
+    
+    from django.contrib import contenttypes
+    from eloue.payments.models import PayboxDirectPlusPaymentInformation
+    if Booking.objects.filter(
+        state__in=['authorizing', 'closing', 'authorized', 'pending', 'ongoing', 'ended', 'ending'],
+        content_type=contenttypes.models.ContentType.objects.get_for_model(PayboxDirectPlusPaymentInformation),
+        object_id__in=PayboxDirectPlusPaymentInformation.objects.filter(
+            creditcard=instance
+        ).values('id')
+    ):
+        messages.error(request, _(u"Vous avez des locations en cours, vous ne pouvez pas supprimer votre carte."))
+        return redirect(patron_edit_credit_card)
+
     messages.success(request, _(u"On a bien supprimé les détails de votre carte bancaire."))
     instance.payboxdirectpluspaymentinformation_set.update(creditcard=None)
     instance.delete()
