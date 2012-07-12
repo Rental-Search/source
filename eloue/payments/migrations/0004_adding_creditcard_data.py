@@ -25,7 +25,7 @@ class Migration(DataMigration):
                     object_id=payment.id)
                 payment.creditcard_id = booking.borrower.creditcard.pk
                 payment.save()
-            except Booking.DoesNotExist:
+            except (Booking.DoesNotExist, CreditCard.DoesNotExist):
                 continue
 
         "Write your forwards methods here."
