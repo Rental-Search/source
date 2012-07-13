@@ -126,6 +126,23 @@
         {% with form.non_field_errors as form_errors %}
           {% include "partials/alerts_message.html" %}
         {% endwith %}
+        {% if form.instance.pk %}
+        <p style="margin-bottom: 5px; line-height: 18px;">{% trans "Vos coordonnées bancaire sont déjà enregistrées. Elles vont être utilisées pour cette réservation."%}</p>
+        <table class="table table-bordered booking-resume">
+          <tr>
+            <th>{% trans "Numéro de carte de crédit"%}</th>
+            <td>{{form.instance.masked_number}}</td>
+          </tr>
+          <tr>
+            <th>{% trans "Nom du détenteur"%}</th>
+            <td>{{form.instance.holder_name}}</td>
+          </tr>
+          <tr>
+            <th>{% trans "Date d'expiration" %}</th>
+            <td>{{form.instance.expires|slice:":2"}}/{{form.instance.expires|slice:"2:"}}</td>
+          </tr>
+        </table>
+        {% endif %}
         <fieldset id="credit-card-form">
           {% if form.card_number %}
             <div class="control-group {% if form.card_number.errors %} error {% endif %}">
@@ -217,23 +234,6 @@
             </div>
           {% endif %}
         </fieldset>{# credit-card-form #}
-        {% if not form.holder_name %}
-        <p style="margin-bottom: 5px; line-height: 18px;">{% trans "Vos coordonnées bancaire sont déjà enregistrées. Elles vont être utilisées pour cette réservation."%}</p>
-        <table class="table table-bordered booking-resume">
-          <tr>
-            <th>{% trans "Numéro de carte de crédit"%}</th>
-            <td>{{form.instance.masked_number}}</td>
-          </tr>
-          <tr>
-            <th>{% trans "Nom du détenteur"%}</th>
-            <td>{{form.instance.holder_name}}</td>
-          </tr>
-          <tr>
-            <th>{% trans "Date d'expiration" %}</th>
-            <td>{{form.instance.expires|slice:":2"}}/{{form.instance.expires|slice:"2:"}}</td>
-          </tr>
-        </table>
-        {% endif %}
         <div class="form-actions">
           <input type="hidden" name="{{ step_field }}" value="{{ step0 }}" />
           {{ previous_fields|safe }}
