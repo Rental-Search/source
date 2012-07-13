@@ -16,6 +16,10 @@ class Migration(DataMigration):
                 except orm['accounts.patron'].DoesNotExist:
                     continue
 
+        for cc in orm['accounts.creditcard'].objects.filter(holder__isnull=False):
+            cc.keep = True
+            cc.save()
+
     def backwards(self, orm):
         "Write your backwards methods here."
 
