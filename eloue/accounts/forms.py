@@ -592,6 +592,65 @@ class BookingCreditCardForm(CreditCardForm):
         # we excluded, then added, to avoid save automatically the card_number
         exclude = ('card_number', 'holder', 'masked_number')
 
+class ExistingBookingCreditCardForm(CreditCardForm):
+    cvv = forms.CharField(max_length=4, required=False, label=_(u'Cryptogramme de sécurité'), help_text=_(u'Les 3 derniers chiffres au dos de la carte.'))
+    expires = ExpirationField(label=_(u'Date d\'expiration'), required=False)
+
+    def __init__(self, *args, **kwargs):
+        super(CreditCardForm, self).__init__(*args, **kwargs)
+        self.fields['card_number'] = forms.CharField(
+            label=_(u'Numéro de carte de crédit'),
+            min_length=16, max_length=24, required=False, widget=forms.TextInput(
+                attrs={'placeholder': self.instance.masked_number or ''}
+            )
+        )
+        self.fields['holder_name'] = forms.CharField(
+            label=_(u'Titulaire de la carte'), required=False,
+            widget=forms.TextInput(attrs={'placeholder': self.instance.holder_name or ''})
+        )
+
+    def clean(self):
+        if self.errors:
+            return self.cleaned_data
+        cvv = self.cleaned_data.get('cvv')
+        holder_name = self.cleaned_data.get('holder_name')
+        card_number = self.cleaned_data.get('card_number')
+        if any((cvv, holder_name, card_number)):
+            if not all((cvv, holder_name, card_number)):
+                raise forms.ValidationError('You have to fill out all the fields')
+            else:
+                try:
+                    from eloue.payments.paybox_payment import PayboxManager, PayboxException
+                    pm = PayboxManager()
+                    self.cleaned_data['masked_number'] = mask_card_number(self.cleaned_data['card_number'])
+                    pm.authorize(self.cleaned_data['card_number'], 
+                        self.cleaned_data['expires'], self.cleaned_data['cvv'], 1, 'verification'
+                    )
+                except PayboxException as e:
+                    raise forms.ValidationError(_(u'La validation de votre carte a échoué.'))
+        return self.cleaned_data
+
+    def save(self, *args, **kwargs):
+        commit = kwargs.pop('commit', True)
+        cvv = self.cleaned_data.get('cvv')
+        holder_name = self.cleaned_data.get('holder_name')
+        card_number = self.cleaned_data.get('card_number')
+        if any((cvv, holder_name, card_number)):
+            pm = PayboxManager()
+            try:
+                self.cleaned_data['card_number'] = pm.modify(
+                    self.instance.holder.pk, 
+                    self.cleaned_data['card_number'],
+                    self.cleaned_data['expires'], self.cleaned_data['cvv']) 
+            except PayboxException:
+                raise
+            instance = super(CreditCardForm, self).save(*args, commit=False, **kwargs)
+            instance.card_number = self.cleaned_data['card_number']
+            instance.masked_number = self.cleaned_data['masked_number']
+            if commit:
+                instance.save()
+            return instance
+        return self.instance
 
 def make_missing_data_form(instance, required_fields=[]):
     fields = SortedDict({

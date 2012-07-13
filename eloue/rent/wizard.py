@@ -19,7 +19,7 @@ from django.views.generic.simple import direct_to_template, redirect_to
 from eloue.payments.models import PayboxDirectPaymentInformation, PayboxDirectPlusPaymentInformation, NonPaymentInformation
 from eloue.payments.paybox_payment import PayboxManager, PayboxException
 from eloue.payments.abstract_payment import PaymentException
-from eloue.accounts.forms import EmailAuthenticationForm, BookingCreditCardForm, CreditCardBaseForm
+from eloue.accounts.forms import EmailAuthenticationForm, BookingCreditCardForm, ExistingBookingCreditCardForm
 from eloue.accounts.models import Patron, Avatar, CreditCard
 from eloue.geocoder import GoogleGeocoder
 from eloue.products.forms import FacetedSearchForm
@@ -55,7 +55,7 @@ class BookingWizard(MultiPartFormWizard):
                 if request.user.is_authenticated():
                     try:
                         request.user.creditcard
-                        self.form_list.append(CreditCardBaseForm)
+                        self.form_list.append(ExistingBookingCreditCardForm)
                     except CreditCard.DoesNotExist:
                         self.form_list.append(BookingCreditCardForm)
                 elif EmailAuthenticationForm in self.form_list:
@@ -64,7 +64,7 @@ class BookingWizard(MultiPartFormWizard):
                         user = form.get_user()
                         try:
                             user.creditcard
-                            self.form_list.append(CreditCardBaseForm)
+                            self.form_list.append(ExistingBookingCreditCardForm)
                         except (CreditCard.DoesNotExist, AttributeError):
                             self.form_list.append(BookingCreditCardForm)
         return super(BookingWizard, self).__call__(request, product, *args, **kwargs)
@@ -75,7 +75,7 @@ class BookingWizard(MultiPartFormWizard):
         
         creditcard_form = next(
             itertools.ifilter(
-                lambda form: isinstance(form, (BookingCreditCardForm, CreditCardBaseForm)), 
+                lambda form: isinstance(form, (BookingCreditCardForm, ExistingBookingCreditCardForm)), 
                 form_list
             ),
             None
@@ -100,9 +100,7 @@ class BookingWizard(MultiPartFormWizard):
                 else:
                     import uuid
                     creditcard_form.instance.subscriber_reference = uuid.uuid4().hex
-                creditcard = creditcard_form.save()
-            else:
-                creditcard = creditcard_form.instance
+            creditcard = creditcard_form.save()
             preapproval_parameters = (creditcard, cleaned_data.get('cvv', ''))
             payment = PayboxDirectPlusPaymentInformation(booking=booking, creditcard=creditcard)
         else:
@@ -139,7 +137,7 @@ class BookingWizard(MultiPartFormWizard):
             initial.update(self.initial.get(step, {}))
             return next_form(data, files, prefix=self.prefix_for_step(step),
                 initial=initial, instance=booking)
-        elif issubclass(next_form, (BookingCreditCardForm, CreditCardBaseForm)):
+        elif issubclass(next_form, (BookingCreditCardForm, ExistingBookingCreditCardForm)):
             user = self.user if self.user.is_authenticated() else self.new_patron
             try:
                 instance = user.creditcard
@@ -148,7 +146,7 @@ class BookingWizard(MultiPartFormWizard):
             from django.forms.models import model_to_dict
             return next_form(
                 data, files, prefix=self.prefix_for_step(step), 
-                instance=instance
+                instance=instance, initial={'holder_name': ''}
             )
         return super(BookingWizard, self).get_form(step, data, files)
     
@@ -168,7 +166,7 @@ class BookingWizard(MultiPartFormWizard):
             return 'accounts/auth_login.html'
         elif issubclass(self.form_list[step], BookingForm):
             return 'products/product_detail.html'
-        elif issubclass(self.form_list[step], (BookingCreditCardForm, CreditCardBaseForm)):
+        elif issubclass(self.form_list[step], (BookingCreditCardForm, ExistingBookingCreditCardForm)):
             return 'rent/booking_confirm.html'
         else:
             return 'accounts/auth_missing.html'
