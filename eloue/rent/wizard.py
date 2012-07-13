@@ -140,13 +140,16 @@ class BookingWizard(MultiPartFormWizard):
         elif issubclass(next_form, (BookingCreditCardForm, ExistingBookingCreditCardForm)):
             user = self.user if self.user.is_authenticated() else self.new_patron
             try:
-                instance = user.creditcard
+                # in the ModelForm._post_clean hook the instance is updated with the values of cleaned_data,
+                # and _post_clean is called always, even when the form is invalid
+                # so we have to pass a copy, because we don't want to get request.user.creditcard modified
+                from copy import copy
+                instance = copy(user.creditcard)
             except (CreditCard.DoesNotExist, AttributeError):
                 instance = CreditCard()
-            from django.forms.models import model_to_dict
             return next_form(
                 data, files, prefix=self.prefix_for_step(step), 
-                instance=instance, initial={'holder_name': ''}
+                instance=instance, initial={'holder_name': '', 'expires': ''}
             )
         return super(BookingWizard, self).get_form(step, data, files)
     
