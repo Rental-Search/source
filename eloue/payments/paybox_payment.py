@@ -73,8 +73,6 @@ class PayboxManager(object):
             response = conn.getresponse()
             response = urlparse.parse_qs(response.read())
             response_code = response['CODEREPONSE'][0]
-            print data
-            print response
             if int(response_code):
                 raise PayboxException(response_code, response['COMMENTAIRE'][0].decode('latin1'))
             return response
