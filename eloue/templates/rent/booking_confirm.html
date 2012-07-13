@@ -236,9 +236,11 @@
               </div>{# controls #}
             </div>
           {% endif %}
+          {% if form.instance.pk %}
           <div class="control-group" style="text-align: right; font-family: Ubuntu, sans-serif; font-size: 13px;">
             <a id="cancel-credit-card-form" href="#" style="color: #ea0c31;">{% trans "Annuler les modifications"%}</a>
           </div>
+          {% endif %}
         </fieldset>{# credit-card-form #}
         <div class="form-actions">
           <input type="hidden" name="{{ step_field }}" value="{{ step0 }}" />
