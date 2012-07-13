@@ -595,13 +595,10 @@ class ExistingBookingCreditCardForm(CreditCardForm):
         super(CreditCardForm, self).__init__(*args, **kwargs)
         self.fields['card_number'] = forms.CharField(
             label=_(u'Numéro de carte de crédit'),
-            min_length=16, max_length=24, required=False, widget=forms.TextInput(
-                attrs={'placeholder': self.instance.masked_number or ''}
-            )
+            min_length=16, max_length=24, required=False
         )
         self.fields['holder_name'] = forms.CharField(
-            label=_(u'Titulaire de la carte'), required=False,
-            widget=forms.TextInput(attrs={'placeholder': self.instance.holder_name or ''})
+            label=_(u'Titulaire de la carte'), required=False
         )
 
     def clean(self):
@@ -610,8 +607,9 @@ class ExistingBookingCreditCardForm(CreditCardForm):
         cvv = self.cleaned_data.get('cvv')
         holder_name = self.cleaned_data.get('holder_name')
         card_number = self.cleaned_data.get('card_number')
-        if any((cvv, holder_name, card_number)):
-            if not all((cvv, holder_name, card_number)):
+        expires = self.cleaned_data.get('expires')
+        if any((cvv, holder_name, card_number, expires)):
+            if not all((cvv, holder_name, card_number, expires)):
                 raise forms.ValidationError('You have to fill out all the fields')
             else:
                 try:
@@ -630,7 +628,8 @@ class ExistingBookingCreditCardForm(CreditCardForm):
         cvv = self.cleaned_data.get('cvv')
         holder_name = self.cleaned_data.get('holder_name')
         card_number = self.cleaned_data.get('card_number')
-        if any((cvv, holder_name, card_number)):
+        expires = self.cleaned_data.get('expires')
+        if any((cvv, holder_name, card_number, expires)):
             pm = PayboxManager()
             try:
                 self.cleaned_data['card_number'] = pm.modify(
