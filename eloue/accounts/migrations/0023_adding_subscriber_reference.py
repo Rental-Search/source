@@ -13,7 +13,7 @@ class Migration(DataMigration):
                 try:
                     cc.subscriber_reference = str(cc.holder.pk)
                     cc.save()
-                except orm['accounts.creditcard'].DoesNotExist:
+                except orm['accounts.patron'].DoesNotExist:
                     continue
 
     def backwards(self, orm):
