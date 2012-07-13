@@ -414,7 +414,12 @@ def patron_delete_credit_card(request):
         messages.error(request, _(u"Vous n'avez pas de carte enregistrée"))
         return redirect(patron_edit_credit_card)
     
-    instance.holder = None
+    if instance.payboxdirectpluspaymentinformation_set.all():
+        instance.holder = None
+        instance.save()
+    else:
+        instance.delete()
+
     messages.success(request, _(u"On a bien supprimé les détails de votre carte bancaire."))
     return redirect(patron_edit_credit_card)
 

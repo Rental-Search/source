@@ -98,7 +98,10 @@ class BookingWizard(MultiPartFormWizard):
                 if cleaned_data.get('keep'):
                     creditcard_form.instance.holder = self.new_patron
                 creditcard_form.instance.subscriber_reference = uuid.uuid4().hex
-            creditcard = creditcard_form.save()
+            if any(cleaned_data.values()):
+                creditcard = creditcard_form.save()
+            else:
+                creditcard = request.user.creditcard
             preapproval_parameters = (creditcard, cleaned_data.get('cvv', ''))
             payment = PayboxDirectPlusPaymentInformation(booking=booking, creditcard=creditcard)
         else:
