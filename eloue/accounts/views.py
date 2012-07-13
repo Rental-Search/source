@@ -384,12 +384,13 @@ def patron_edit_phonenumber(request):
 
 @login_required
 def patron_edit_credit_card(request):
+    import uuid
     try:
         instance = request.user.creditcard
     except CreditCard.DoesNotExist:
         instance = CreditCard(
             holder=request.user, keep=True, 
-            subscriber_reference=str(request.user.pk)
+            subscriber_reference=uuid.uuid4().hex
         )
     if request.method == 'POST':
         form = CreditCardForm(data=request.POST, instance=instance)
