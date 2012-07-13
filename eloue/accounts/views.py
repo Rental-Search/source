@@ -410,6 +410,7 @@ def patron_delete_credit_card(request):
             messages.error(request, _(u"Vous n'avez pas de carte enregistrée"))
             return redirect(patron_edit_credit_card)
     except CreditCard.DoesNotExist:
+        messages.error(request, _(u"Vous n'avez pas de carte enregistrée"))
         return redirect(patron_edit_credit_card)
     
     from django.contrib import contenttypes
