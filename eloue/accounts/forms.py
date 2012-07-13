@@ -595,13 +595,10 @@ class ExistingBookingCreditCardForm(CreditCardForm):
         super(CreditCardForm, self).__init__(*args, **kwargs)
         self.fields['card_number'] = forms.CharField(
             label=_(u'Numéro de carte de crédit'),
-            min_length=16, max_length=24, required=False, widget=forms.TextInput(
-                attrs={'placeholder': self.instance.masked_number or ''}
-            )
+            min_length=16, max_length=24, required=False
         )
         self.fields['holder_name'] = forms.CharField(
-            label=_(u'Titulaire de la carte'), required=False,
-            widget=forms.TextInput(attrs={'placeholder': self.instance.holder_name or ''})
+            label=_(u'Titulaire de la carte'), required=False
         )
 
     def clean(self):
