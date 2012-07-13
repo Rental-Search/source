@@ -141,9 +141,12 @@
             <th>{% trans "Date d'expiration" %}</th>
             <td>{{form.instance.expires|slice:":2"}}/{{form.instance.expires|slice:"2:"}}</td>
           </tr>
+          <tr>
+            <td colspan="2" style="text-align: right;"><a id="display-credit-card-form" href="#">{% trans "Modifier mes coordonnées bancaire"%}</a></td>
+          </tr>
         </table>
         {% endif %}
-        <fieldset id="credit-card-form">
+        <fieldset id="credit-card-form" {% if form.instance.pk %}style="display: none"{% endif %}>
           {% if form.card_number %}
             <div class="control-group {% if form.card_number.errors %} error {% endif %}">
               <label class="control-label" for="{{ form.card_number.id_for_label }}">
@@ -233,6 +236,9 @@
               </div>{# controls #}
             </div>
           {% endif %}
+          <div class="control-group" style="text-align: right; font-family: Ubuntu, sans-serif; font-size: 13px;">
+            <a id="cancel-credit-card-form" href="#" style="color: #ea0c31;">{% trans "Annuler les modifications"%}</a>
+          </div>
         </fieldset>{# credit-card-form #}
         <div class="form-actions">
           <input type="hidden" name="{{ step_field }}" value="{{ step0 }}" />

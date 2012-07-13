@@ -277,6 +277,21 @@ $(document).ready(function() {
         return confirm('Êtes-vous sûr de vouloir supprimer cette carte de crédit ?');
     });
 
+    //New credit card on confirm booking
+    $("#display-credit-card-form").click(function(e) { 
+        e.preventDefault(); 
+        $("#credit-card-form").show();
+    });
+
+    //Cancel credit card on confirm booking
+    $("#cancel-credit-card-form").click(function(e) {
+        e.preventDefault();
+        $("input[name$=-card_number]").val("");
+        $("input[name$=-holder_name]").val("");
+        $("input[name$=-cvv]").val("");
+        $("#credit-card-form").hide();
+    })
+
     //loading for accept action and refuse action booking
     $('button.btn-booking-action.pending, button.btn-booking-action.rejected').click(function () {
         $('tr.b-action').addClass('loading');
