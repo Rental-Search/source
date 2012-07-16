@@ -267,7 +267,7 @@ class PatronEditForm(BetterModelForm):
                 'fields': [
                     'is_professional', 'company_name', 'username', 'avatar', 
                     'email', 'civility', 'first_name', 'last_name',
-                    'default_address', 'date_of_birth', 'place_of_birth',
+                    'default_address', 'default_number', 'date_of_birth', 'place_of_birth',
                     'paypal_email', 'is_subscribed', 'new_messages_alerted',
                 ],
                 'legend': _(u'Informations nécessaires')
@@ -292,6 +292,9 @@ class PatronEditForm(BetterModelForm):
         self.fields['default_address'].widget.attrs['class'] = "selm"
         self.fields['default_address'].label = _(u'Adresse par defaut')
         self.fields['default_address'].queryset = self.instance.addresses.all()
+        self.fields['default_number'].widget.attrs['class'] = "selm"
+        self.fields['default_number'].label = _(u'Téléphone par defaut')
+        self.fields['default_number'].queryset = self.instance.phones.all()
     
     def clean_company_name(self):
         is_professional = self.cleaned_data.get('is_professional')

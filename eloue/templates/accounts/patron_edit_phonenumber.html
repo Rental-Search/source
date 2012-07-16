@@ -13,6 +13,7 @@
     {% for form in formset.forms %}
         {% if forloop.last %}
         {{formset.non_form_errors}}
+        <div id="newPhone"></div>
         <legend>{% trans "Ajouter un nouveau numéro" %}</legend>
         {% endif %}
         {{form.id}}

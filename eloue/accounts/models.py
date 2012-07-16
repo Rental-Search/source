@@ -171,6 +171,7 @@ class Patron(User):
     avatar = models.ImageField(upload_to=upload_to, null=True, blank=True)
 
     default_address = models.ForeignKey('Address', null=True, blank=True, related_name="+")
+    default_number = models.ForeignKey('PhoneNumber', null=True, blank=True, related_name="+")
 
     customers = models.ManyToManyField('self', symmetrical=False)
 
