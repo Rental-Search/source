@@ -10,6 +10,7 @@
     <legend>{% trans "Vos adresses" %}</legend>
     {% for form in formset.forms %}
         {% if forloop.last %}
+        <div id="newAddress"></div>
         <legend>{% trans "Ajouter une nouvelle adresse" %}</legend>
         {% endif %}
         {{form.id}}

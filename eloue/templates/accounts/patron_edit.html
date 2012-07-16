@@ -59,6 +59,7 @@
         {% endif %}
         {{ field }}
         <p class="help-block">{{ field.help_text }}</p>
+        {% if field.name == "default_address" %}<p class="help-block"><a href="{% url patron_edit_addresses %}#newAddress">{% trans "Ajouter une nouvelle adresse"%}</a></p>{% endif %}
         {% if field.errors %}
           <span class="help-inline">
           {% for error in field.errors %}
