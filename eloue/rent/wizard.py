@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import datetime
 import urllib
+import uuid
 import itertools
 from decimal import Decimal as D
 
@@ -96,11 +97,11 @@ class BookingWizard(MultiPartFormWizard):
             if creditcard_form.instance.pk is None:
                 if cleaned_data.get('keep'):
                     creditcard_form.instance.holder = self.new_patron
-                    creditcard_form.instance.subscriber_reference = str(self.new_patron.pk)
-                else:
-                    import uuid
-                    creditcard_form.instance.subscriber_reference = uuid.uuid4().hex
-            creditcard = creditcard_form.save()
+                creditcard_form.instance.subscriber_reference = uuid.uuid4().hex
+            if any(cleaned_data.values()):
+                creditcard = creditcard_form.save()
+            else:
+                creditcard = request.user.creditcard
             preapproval_parameters = (creditcard, cleaned_data.get('cvv', ''))
             payment = PayboxDirectPlusPaymentInformation(booking=booking, creditcard=creditcard)
         else:
