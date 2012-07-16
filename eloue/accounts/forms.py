@@ -563,7 +563,7 @@ class CreditCardForm(forms.ModelForm):
         try:
             if self.instance.pk:
                 self.cleaned_data['card_number'] = pm.modify(
-                    self.instance.holder.pk, 
+                    self.instance.subscriber_reference, 
                     self.cleaned_data['card_number'],
                     self.cleaned_data['expires'], self.cleaned_data['cvv']) 
             else:
@@ -633,7 +633,7 @@ class ExistingBookingCreditCardForm(CreditCardForm):
             pm = PayboxManager()
             try:
                 self.cleaned_data['card_number'] = pm.modify(
-                    self.instance.holder.pk, 
+                    self.instance.subscriber_reference, 
                     self.cleaned_data['card_number'],
                     self.cleaned_data['expires'], self.cleaned_data['cvv']) 
             except PayboxException:
