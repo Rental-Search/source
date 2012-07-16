@@ -30,6 +30,7 @@ from django.template.defaultfilters import slugify
 from eloue.accounts.manager import PatronManager
 from eloue.geocoder import GoogleGeocoder
 from eloue.products.utils import Enum
+from eloue.products.signals import post_save_to_batch_update_product
 from eloue.signals import post_save_sites, pre_delete_creditcard
 from eloue.utils import create_alternative_email, cache_to
 from eloue.payments.paypal_payment import accounts, PaypalError
@@ -516,3 +517,4 @@ class PatronAccepted(models.Model):
 
 signals.post_save.connect(post_save_sites, sender=Patron)
 signals.pre_delete.connect(pre_delete_creditcard, sender=CreditCard)
+signals.post_save.connect(post_save_to_batch_update_product, sender=Address)
