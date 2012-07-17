@@ -375,10 +375,19 @@ class Patron(User):
 
     def send_activation_email(self):
         context = {
-            'patron': self, 'activation_key': self.activation_key,
+            'patron': self, 
+            'activation_key': self.activation_key,
             'expiration_days': settings.ACCOUNT_ACTIVATION_DAYS
         }
         message = create_alternative_email('accounts/activation', context, settings.DEFAULT_FROM_EMAIL, [self.email])
+        message.send()
+
+    def send_professionnel_activation_email(self, clear_password):
+        context = {
+            'patron': self,
+            'clear_password': clear_password
+        }
+        message = create_alternative_email('accounts/professionnel_activation', context, settings.DEFAULT_FROM_EMAIL, [self.email])
         message.send()
 
     def is_expired(self):

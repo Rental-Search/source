@@ -1,0 +1,18 @@
+{% load i18n %}
+{% blocktrans with patron.first_name as first_name and patron.last_name as last_name and site.domain as domain and site.name as site_name %}
+ Bonjour {{ first_name }} {{ last_name }},
+ Nous vous remercions de vous être enregistré(e) sur {{ protocol }}://{{ domain }}
+{% endblocktrans %}
+
+{% blocktrans with clear_password as clear_password and site.domain as domain and site.name as site_name %}
+Votre mot de passe temporaire est : {{ clear_password }}
+
+Vous pouvez vous connecter sur e-loue en cliquant sur cette adresse : {{ protocol }}://{{ domain }}/login/
+
+{% endblocktrans %}
+
+{% trans "L'équipe" %} {{ site.name }}.
+
+
+
+

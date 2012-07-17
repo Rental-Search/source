@@ -8,7 +8,8 @@ from form_utils.forms import BetterForm, BetterModelForm
 from django.conf import settings
 from django.contrib.auth import authenticate, login
 from django.contrib.sites.models import Site
-from django.contrib.auth.forms import PasswordResetForm, PasswordChangeForm, SetPasswordForm
+from django.contrib.auth.models import UserManager
+from django.contrib.auth.forms import PasswordResetForm, PasswordChangeForm, SetPasswordForm, UserCreationForm
 from django.contrib.auth.tokens import default_token_generator
 from django.core import validators
 from django.forms.fields import EMPTY_VALUES
@@ -380,6 +381,48 @@ PatronPasswordChangeForm.base_fields.keyOrder = ['old_password', 'new_password1'
     
 
 class PatronChangeForm(forms.ModelForm):
+    class Meta:
+        model = Patron
+
+
+class PatronCreationForm(UserCreationForm):
+    password1 = forms.CharField(label=_("Password"), widget=forms.PasswordInput, required=False)
+    password2 = forms.CharField(label=_("Password confirmation"), widget=forms.PasswordInput,
+        help_text = _("Enter the same password as above, for verification."), required=False)
+    email = forms.EmailField(label=_(u"Email"), max_length=75, required=True)
+    first_name = forms.CharField(label=_(u"Prénom"), required=True)
+    last_name = forms.CharField(label=_(u"Nom"), required=True)
+
+    def __init__(self, *args, **kwargs):
+        super(PatronCreationForm, self).__init__(*args, **kwargs)
+        self.fields['slug'].required = False
+
+    def clean_company_name(self):
+        is_professional = self.cleaned_data.get('is_professional')
+        company_name = self.cleaned_data.get('company_name', None)
+        if is_professional and not company_name:
+            raise forms.ValidationError(_(u"Vous devez entrer le nom de l'entreprise"))
+        return company_name
+
+    def clean_slug(self):
+        slug = self.cleaned_data.get("username", "")
+        return slugify(slug)
+
+    def clean(self):
+        if self.cleaned_data.get("is_professional"):
+            random_password = UserManager().make_random_password()
+            self.cleaned_data["password1"] = random_password
+            self.cleaned_data["password2"] = random_password
+        else:
+            msg = _(u"Ce champ est obligatoire.")
+            if not self.cleaned_data.get("password1", None):
+                self._errors["password1"] = self.error_class([msg])
+                del self.cleaned_data["password1"]
+            if not self.cleaned_data.get("password2", None):
+                self._errors["password2"] = self.error_class([msg])
+                del self.cleaned_data["password2"]
+        return self.cleaned_data
+
     class Meta:
         model = Patron
     
