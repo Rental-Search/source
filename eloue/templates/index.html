@@ -33,32 +33,32 @@
             </p>
     </div><!-- search-home -->
     <div class="products-home">
-        <div class="products-home-tabs" style="display: none;">
-            <ul>
-                <li><a href="#near">{% trans "Objets" %}</a></li>
-                <li><a href="#near_car">{% trans "Voitures" %}</a></li>
-                <li><a href="#near_realestate">{% trans "Logements" %}</a></li>
-                <li><a href="#hotloc">{% trans "Locations du moment" %}</a></li>
+        <div class="products-home-tabs ui-tabs ui-widget ui-widget-content ui-corner-all">
+            <ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
+                <li class="ui-state-default ui-corner-top ui-tabs-selected ui-state-active"><a href="#near">{% trans "Objets" %}</a></li>
+                <li class="ui-state-default ui-corner-top"><a href="#near_car">{% trans "Voitures" %}</a></li>
+                <li class="ui-state-default ui-corner-top"><a href="#near_realestate">{% trans "Logements" %}</a></li>
+                <li class="ui-state-default ui-corner-top"><a href="#hotloc">{% trans "Locations du moment" %}</a></li>
             </ul>
-            <div id="near">
+            <div id="near" class="ui-tabs-panel ui-widget-content ui-corner-bottom">
                 <ul class="product-list"></ul>
                 <p class="more-product">
                     <a href="#" class="more-product-link">{% trans "Chargez plus d'annonces..." %}</a>
                 </p>
             </div>{# near #}
-            <div id="near_car">
+            <div id="near_car" class="ui-tabs-panel ui-widget-content ui-corner-bottom ui-tabs-hide">
                 <ul class="product-list"></ul>
                 <p class="more-product">
                     <a href="#" class="more-product-link">{% trans "Chargez plus d'annonces..." %}</a>
                 </p>
             </div>{# near #}
-            <div id="near_realestate">
+            <div id="near_realestate" class="ui-tabs-panel ui-widget-content ui-corner-bottom ui-tabs-hide">
                 <ul class="product-list"></ul>
                 <p class="more-product">
                     <a href="#" class="more-product-link">{% trans "Chargez plus d'annonces..." %}</a>
                 </p>
             </div>{# near #}
-            <div id="hotloc">
+            <div id="hotloc" class="ui-tabs-panel ui-widget-content ui-corner-bottom ui-tabs-hide">
                 {% cache 43200 curiosities %}
                 <ul class="product-list">
                 {% for curiosity in curiosities %}
