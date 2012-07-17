@@ -70,6 +70,9 @@ def homepage(request):
     return render_to_response(
         template_name='index.html', 
         dictionary={
+            'product_list': product_search.order_by('-created_at')[:10],
+            'car_list': car_search.order_by('-created_at')[:10],
+            'realestate_list': realestate_search.order_by('-created_at')[:10],
             'form': form, 'curiosities': curiosities,
             'alerts':alerts,
             'last_joined': last_joined[:11],

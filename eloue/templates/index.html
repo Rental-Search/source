@@ -41,34 +41,47 @@
                 <li class="ui-state-default ui-corner-top"><a href="#hotloc">{% trans "Locations du moment" %}</a></li>
             </ul>
             <div id="near" class="ui-tabs-panel ui-widget-content ui-corner-bottom">
-                <ul class="product-list"></ul>
+                {# <ul class="product-list"></ul> #}
+                {% with 28 as truncation %}
+                    {% include 'products/partials/result_list.html' %}
+                {% endwith %}
                 <p class="more-product">
                     <a href="#" class="more-product-link">{% trans "Chargez plus d'annonces..." %}</a>
                 </p>
             </div>{# near #}
             <div id="near_car" class="ui-tabs-panel ui-widget-content ui-corner-bottom ui-tabs-hide">
-                <ul class="product-list"></ul>
+                {# <ul class="product-list"></ul> #}
+                {% with car_list as product_list %} 
+                    {% with 28 as truncation %}
+                        {% include 'products/partials/result_list.html' %}
+                    {% endwith %}
+                {% endwith %}
                 <p class="more-product">
                     <a href="#" class="more-product-link">{% trans "Chargez plus d'annonces..." %}</a>
                 </p>
             </div>{# near #}
             <div id="near_realestate" class="ui-tabs-panel ui-widget-content ui-corner-bottom ui-tabs-hide">
-                <ul class="product-list"></ul>
+                {# <ul class="product-list"></ul> #}
+                {% with realestate_list as product_list %} 
+                    {% with 28 as truncation %}
+                        {% include 'products/partials/result_list.html' %}
+                    {% endwith %}
+                {% endwith %}
                 <p class="more-product">
                     <a href="#" class="more-product-link">{% trans "Chargez plus d'annonces..." %}</a>
                 </p>
             </div>{# near #}
             <div id="hotloc" class="ui-tabs-panel ui-widget-content ui-corner-bottom ui-tabs-hide">
                 {% cache 43200 curiosities %}
-                <ul class="product-list">
-                {% for curiosity in curiosities %}
-                    {% with curiosity.product as product %}
-                        <li>
-                        {% include "products/partials/product.html" %}
-                        </li>
-                    {% endwith %}
-                {% endfor %}
-                </ul>
+                    <ul class="product-list">
+                    {% for curiosity in curiosities %}
+                        {% with curiosity.product as product %}
+                            <li>
+                                {% include "products/partials/product.html" %}
+                            </li>
+                        {% endwith %}
+                    {% endfor %}
+                    </ul>
                 {% endcache %}
             </div>{# hotloc #}
         </div>{# products-home-tabs #}
