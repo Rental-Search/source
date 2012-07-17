@@ -80,7 +80,7 @@ urlpatterns = patterns('',
     url(r'^%s/$' % _('recherche'), search, name="search"),
     url(r'^propw/(?P<uidb36>[0-9A-Za-z]+)-(?P<token>.+)/$', password_reset_confirm, {
         'set_password_form': PatronSetPasswordForm,
-        'template_name': 'accounts/password_reset_confirm.html',
+        'template_name': 'accounts/professional_password_reset_confirm.html',
     }, name="propw"),
 )
 
