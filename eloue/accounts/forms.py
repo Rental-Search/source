@@ -204,7 +204,7 @@ class EmailPasswordResetForm(PasswordResetForm):
         'autocapitalize': 'off', 'autocorrect': 'off', 'class': 'inb'
     }))
     
-    def save(self, domain_override=None, use_https=False, token_generator=default_token_generator, **kwargs):
+    def save(self, domain_override=None, use_https=False, token_generator=default_token_generator, email_template_name='registration/password_reset_email', **kwargs):
         """Generates a one-use only link for resetting password and sends to the user"""
         from django.core.mail import EmailMultiAlternatives
         for user in self.users_cache:
@@ -223,9 +223,12 @@ class EmailPasswordResetForm(PasswordResetForm):
                 'token': token_generator.make_token(user),
                 'protocol': use_https and 'https' or 'http',
             }
-            subject = render_to_string('accounts/password_reset_email_subject.txt', {'patron': user, 'site': Site.objects.get_current()})
-            text_content = render_to_string('accounts/password_reset_email.txt', context)
-            html_content = render_to_string('accounts/password_reset_email.html', context)
+            subject = render_to_string(
+                email_template_name + '_subject.txt', 
+                {'patron': user, 'site': Site.objects.get_current()}
+            )
+            text_content = render_to_string(email_template_name + '.txt', context)
+            html_content = render_to_string(email_template_name + '.html', context)
             message = EmailMultiAlternatives(subject, text_content, settings.DEFAULT_FROM_EMAIL, [user.email])
             message.attach_alternative(html_content, "text/html")
             message.send()
@@ -410,17 +413,18 @@ class PatronCreationForm(UserCreationForm):
 
     def clean(self):
         if self.cleaned_data.get("is_professional"):
-            random_password = UserManager().make_random_password()
-            self.cleaned_data["password1"] = random_password
-            self.cleaned_data["password2"] = random_password
+            self.cleaned_data['password1'] = None
+            self.cleaned_data['password2'] = None
         else:
             msg = _(u"Ce champ est obligatoire.")
-            if not self.cleaned_data.get("password1", None):
+            if not self.cleaned_data.get("password1"):
                 self._errors["password1"] = self.error_class([msg])
-                del self.cleaned_data["password1"]
-            if not self.cleaned_data.get("password2", None):
+                if 'password1' in self.cleaned_data:
+                    del self.cleaned_data["password1"]
+            if not self.cleaned_data.get("password2"):
                 self._errors["password2"] = self.error_class([msg])
-                del self.cleaned_data["password2"]
+                if 'password2' in self.cleaned_data:
+                    del self.cleaned_data["password2"]
         return self.cleaned_data
 
     class Meta:

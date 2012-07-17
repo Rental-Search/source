@@ -54,10 +54,10 @@ class PatronAdmin(UserAdmin, CurrentSiteAdmin):
     search_fields = ('username', 'first_name', 'last_name', 'email', 'phones__number', 'addresses__city', 'company_name')
 
     def save_model(self, request, obj, form, change):
+        obj.save()
         if not change:
             if obj.is_professional:
-                obj.send_professionnel_activation_email(form.cleaned_data["password1"])
-        obj.save()
+                obj.send_professionnel_activation_email()
     
     def export_as_csv(self, request, queryset):
         response = HttpResponse(mimetype='text/csv')

@@ -11,6 +11,8 @@ Vous pouvez vous connecter sur e-loue en cliquant sur cette adresse : {{ protoco
 
 {% endblocktrans %}
 
+{{ protocol }}://{{ domain }}{% url propw uidb36=uid token=token %}
+
 {% trans "L'équipe" %} {{ site.name }}.
 
 

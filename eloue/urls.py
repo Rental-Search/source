@@ -44,7 +44,7 @@ urlpatterns = patterns('',
         'is_admin_site': False,
         'password_reset_form': EmailPasswordResetForm,
         'template_name': 'accounts/password_reset_form.html',
-        'email_template_name': 'accounts/password_reset_email.html'
+        'email_template_name': 'accounts/password_reset_email'
         }, name="password_reset"),
     url(r'^reset/done/$', password_reset_done, {
         'template_name': 'accounts/password_reset_done.html'
@@ -77,7 +77,11 @@ urlpatterns = patterns('',
     url(r'^lists/object/(?P<offset>[0-9]*)$', partial(homepage_object_list, search_index=product_only_search), name=''),
     url(r'^lists/car/(?P<offset>[0-9]*)$', partial(homepage_object_list, search_index=car_search), name=''),
     url(r'^lists/realestate/(?P<offset>[0-9]*)$', partial(homepage_object_list, search_index=realestate_search), name=''),
-    url(r'^%s/$' % _('recherche'), search, name="search")
+    url(r'^%s/$' % _('recherche'), search, name="search"),
+    url(r'^propw/(?P<uidb36>[0-9A-Za-z]+)-(?P<token>.+)/$', password_reset_confirm, {
+        'set_password_form': PatronSetPasswordForm,
+        'template_name': 'accounts/password_reset_confirm.html',
+    }, name="propw"),
 )
 
 handler404 = 'eloue.views.custom404'
