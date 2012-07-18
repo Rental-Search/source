@@ -9,7 +9,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse, HttpResponseNotAllowed
-from django.shortcuts import get_object_or_404, redirect
+from django.shortcuts import get_object_or_404, redirect, render_to_response
 from django.utils import simplejson
 from django.utils.encoding import smart_str
 from django.utils.translation import ugettext_lazy as _
@@ -23,7 +23,7 @@ from django.db.models import Q
 from django_lean.experiments.models import GoalRecord
 from django_lean.experiments.utils import WebUser
 from django.contrib.sites.models import Site
-
+from django.template import RequestContext
 
 from eloue.accounts.models import CreditCard
 from eloue.decorators import ownership_required, validate_ipn, secure_required, mobify
@@ -268,12 +268,27 @@ def booking_close(request, booking_id):
 @ownership_required(model=Booking, object_key='booking_id', ownership=['owner', 'borrower'])
 def booking_incident(request, booking_id):
     booking = get_object_or_404(Booking.on_site, pk=booking_id)
-    form = IncidentForm(request.POST or None)
-    if form.is_valid():
-        text = render_to_string("rent/emails/incident.txt", {'user': request.user.username, 'booking_id': booking_id, 'problem': form.cleaned_data['message']})
-        send_mail(u"Déclaration d'incident", text, request.user.email, ['contact@e-loue.com'])
-        booking.state = Booking.STATE.INCIDENT
-        booking.save()
-        messages.success(request, _(u'Nous avons bien pris en compte la déclaration de l\'incident. Nous vous contacterons rapidement.'))
-        return redirect('booking_detail', booking_id=booking_id)
-    return direct_to_template(request, 'rent/booking_incident.html', extra_context={'booking': booking, 'form': form})
+    from eloue.rent.forms import SinisterForm
+    from eloue.rent.models import Sinister
+    if request.method == "POST":
+        form = SinisterForm(
+            request.POST, 
+            instance=Sinister(
+                booking=booking, patron=request.user, product=booking.product
+            )
+        )
+        if form.is_valid():
+            form.save()
+            text = render_to_string("rent/emails/incident.txt", {'user': request.user.username, 'booking_id': booking_id, 'problem': form.cleaned_data['description']})
+            send_mail(u"Déclaration d'incident", text, request.user.email, ['contact@e-loue.com'])
+            booking.state = Booking.STATE.INCIDENT
+            booking.save()
+            messages.success(request, _(u'Nous avons bien pris en compte la déclaration de l\'incident. Nous vous contacterons rapidement.'))
+            return redirect('booking_detail', booking_id=booking_id)
+    else:
+        form = SinisterForm()
+    return render_to_response(
+        template_name='rent/booking_incident.html', 
+        dictionary={'booking': booking, 'form': form}, 
+        context_instance=RequestContext(request)
+    )
