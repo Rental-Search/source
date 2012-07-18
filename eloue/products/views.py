@@ -38,7 +38,7 @@ from eloue.products.models import Category, Product, Curiosity, UNIT, ProductRel
 from eloue.accounts.models import Address
 
 from eloue.products.wizard import ProductWizard, MessageWizard, AlertWizard, AlertAnswerWizard
-from eloue.products.search_indexes import product_search, car_search, realestate_search
+from eloue.products.search_indexes import product_search, car_search, realestate_search, product_only_search
 from eloue.rent.forms import BookingOfferForm
 from eloue.rent.models import Booking
 from django_messages.forms import ComposeForm
@@ -50,6 +50,17 @@ from eloue.accounts.search_indexes import patron_search
 PAGINATE_PRODUCTS_BY = getattr(settings, 'PAGINATE_PRODUCTS_BY', 10)
 DEFAULT_RADIUS = getattr(settings, 'DEFAULT_RADIUS', 50)
 USE_HTTPS = getattr(settings, 'USE_HTTPS', True)
+
+def last_added(search_index, location, offset=0):
+    coords = location['coordinates']
+    region_coords = location.get('region_coords') or coords
+    region_radius = location.get('region_radius') or location['radius']
+    last_added = search_index.spatial(
+            lat=region_coords[0], long=region_coords[1], radius=min(region_radius, 1541)
+        ).spatial(
+            lat=coords[0], long=coords[1], radius=min(region_radius*2 if region_radius else float('inf'), 1541)
+        ).order_by('-created_at_date', 'geo_distance')
+    return last_added[offset*10:(offset+1)*10]
 
 @mobify
 @cache_page(300)
@@ -70,9 +81,9 @@ def homepage(request):
     return render_to_response(
         template_name='index.html', 
         dictionary={
-            'product_list': product_search.order_by('-created_at')[:10],
-            'car_list': car_search.order_by('-created_at')[:10],
-            'realestate_list': realestate_search.order_by('-created_at')[:10],
+            'product_list': last_added(product_only_search, location),
+            'car_list': last_added(car_search, location),
+            'realestate_list': last_added(realestate_search, location),
             'form': form, 'curiosities': curiosities,
             'alerts':alerts,
             'last_joined': last_joined[:11],
@@ -80,22 +91,13 @@ def homepage(request):
         context_instance=RequestContext(request)
     )
 
-
 def homepage_object_list(request, search_index, offset=0):
     offset = int(offset) if offset else 0
     location = request.session.setdefault('location', settings.DEFAULT_LOCATION)
-    coords = location['coordinates']
-    region_coords = location.get('region_coords') or coords
-    region_radius = location.get('region_radius') or location['radius']
-    last_added = search_index.spatial(
-            lat=region_coords[0], long=region_coords[1], radius=min(region_radius, 1541)
-        ).spatial(
-            lat=coords[0], long=coords[1], radius=min(region_radius*2 if region_radius else float('inf'), 1541)
-        ).order_by('-created_at_date', 'geo_distance')
     return render_to_response(
         template_name='products/partials/result_list.html',
         dictionary={
-            'product_list': last_added[offset*10:(offset+1)*10],
+            'product_list': last_added(search_index, location, offset),
             'truncation': 28
         },
         context_instance=RequestContext(request),
