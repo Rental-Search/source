@@ -57,7 +57,7 @@ class PatronAdmin(UserAdmin, CurrentSiteAdmin):
         obj.save()
         if not change:
             if obj.is_professional:
-                obj.send_professionnel_activation_email()
+                obj.send_professional_activation_email()
     
     def export_as_csv(self, request, queryset):
         response = HttpResponse(mimetype='text/csv')

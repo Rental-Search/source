@@ -382,12 +382,12 @@ class Patron(User):
         message = create_alternative_email('accounts/activation', context, settings.DEFAULT_FROM_EMAIL, [self.email])
         message.send()
 
-    def send_professionnel_activation_email(self, *args):
+    def send_professional_activation_email(self, *args):
         from eloue.accounts.forms import EmailPasswordResetForm
         form = EmailPasswordResetForm({'email': self.email})
         if form.is_valid():
             form.save(
-                email_template_name='accounts/professionnel_activation_email', 
+                email_template_name='accounts/professional_activation_email', 
                 use_https=True
             )
 
