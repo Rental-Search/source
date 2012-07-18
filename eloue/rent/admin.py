@@ -77,6 +77,7 @@ class CommentAdmin(admin.ModelAdmin):
             'fields': ('comment', 'note')
         }),
     )
+    list_display = ('comment', 'note')
 
 try:
     admin.site.register(Booking, BookingAdmin)
