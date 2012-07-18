@@ -24,7 +24,11 @@
         </form>
             <p class="city">
                 <span class="city-to">à </span>
-                <span class="city-name" id="city-name"></span>
+                <span class="city-name" id="city-name">
+                    {% with request.session.location as location %}
+                        {% firstof location.formatted_address location.city location.region location.country location.fallback %}
+                    {% endwith %}
+                </span>
                 <button class="btn-other-town"><span>Changer de ville</span></button>
             </p>
             <p class="city-input">
@@ -137,12 +141,13 @@
         $(document).ready(function() {
 
             (function( $ ) {
-              $.fn.loadMore = function(url) {
+              $.fn.loadMore = function(url, flag) {
                 if (typeof(url) === 'undefined') {
                   this.data('offset', this.data('offset') + 1);
                   $.ajax({
                     url: this.data('url')+this.data('offset'),
                     success: function(result) {
+                        console.log($('ul', this));
                         $('ul', this).append($('li', result));
                         $('.more-product-link', this).removeClass('loading');
                     },
@@ -151,23 +156,26 @@
                     context: this
                   });
                 } else {
-                  $('ul', this).load(url+' li');
-                  $('.more-product-link', this).click(function(e) {
-                    e.preventDefault();
-                    $(this).addClass('loading');
-                    $(this.parentNode.parentNode).loadMore();
-                  })
-                  this.data('url', url);
-                  this.data('offset', 0);
+                    if (typeof(flag) == 'undefined') {
+                      $('ul', this).load(url+' li');
+                      this.data('offset', 0);
+                    } else {
+                      this.data('offset', 1);
+                    }
+                    $('.more-product-link', this).click(function(e) {
+                      e.preventDefault();
+                      $(this).addClass('loading');
+                      $(this.parentNode.parentNode).loadMore();
+                    });
+                    this.data('url', url);
                 }
               };
             })( jQuery );
 
-            location_changed = function() {
-
-                $('#near').loadMore('lists/object/');
-                $('#near_car').loadMore('lists/car/');
-                $('#near_realestate').loadMore('lists/realestate/');
+            location_changed = function(flag) {
+                $('#near').loadMore('lists/object/', flag);
+                $('#near_car').loadMore('lists/car/', flag);
+                $('#near_realestate').loadMore('lists/realestate/', flag);
                 $.ajax(
                     {
                         url:'/get_user_location/', 
@@ -185,7 +193,7 @@
 
 
             $(".products-home-tabs").show();
-            location_changed();
+            location_changed(1);
 
 
             if (!$.cookie('geocoding')) 
