@@ -295,7 +295,7 @@
                     icon:image,
                     zIndex:this.get("myZIndex")
                 });
-                $('li#marker-' + marker.get("myZIndex")).css("background-color","#FFF");
+                $('li#marker-' + marker.get("myZIndex")).removeAttr("style");
             }
         }
         function triggerMouseOverGenerator(marker) {
