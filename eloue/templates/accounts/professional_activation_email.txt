@@ -1,5 +1,5 @@
 {% load i18n %}
-{% blocktrans with patron.first_name as first_name and patron.last_name as last_name and site.domain as domain and site.name as site_name %}
+{% blocktrans with patron.first_name as first_name and patron.last_name as last_name %}
 
 Bonjour {{ first_name }} {{ last_name }},
 
