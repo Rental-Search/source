@@ -330,9 +330,14 @@ def patron_detail(request, slug, patron_id=None, page=None):
         return redirect_to(request, patron.get_absolute_url(), permanent=True)
     patron = get_object_or_404(Patron.on_site.select_related('default_address', 'languages'), slug=slug)
     patron_products = product_search.filter(owner_exact=patron.username)
+    if patron.is_professional:
+        template_name = 'accounts/company_detail.html'
+    else:
+        template_name = 'accounts/patron_detail.html'
+
     return object_list(
         request, patron_products, page=page, 
-        paginate_by=9, template_name='accounts/patron_detail.html', 
+        paginate_by=9, template_name=template_name, 
         template_object_name='product', 
         extra_context={
             'patron': patron, 'product_list_count': patron_products.count(), 

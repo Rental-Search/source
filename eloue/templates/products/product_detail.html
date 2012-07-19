@@ -413,7 +413,40 @@
                 <li>01 45 57 90 34</li>
             </ul>
         </div>{#  owner #}
-        {% endif %}
+        {% else %}
+        <div id="owner" class="info-block">
+                <h2>
+                    {% trans "Particulier" %}
+                    <small>
+                        <a href="{{ patron.get_absolute_url }}" >({% trans " Voir toutes ses annonces "%})</a>
+                    </small>
+                </h2>
+                <a href="{{ patron.get_absolute_url }}" class="onwer-avatar">
+                    {% if patron.avatar %}
+                    <img src="{{ patron.profil.url }}" alt="{% trans "loueur"%}{{ patron.username }}" width="100" height="100">
+                    {% else %}
+                    <img src="{{ MEDIA_URL }}images/default_avatar.png" alt="{% trans "loueur"%}{{ patron.username }}" width="100" height="100">
+                    {% endif %}
+                </a>
+                <p class="owner-username">
+                    <a href="{{ patron.get_absolute_url }}">{{ patron.username|truncate:16 }}</a>
+                </p>
+                <address>
+                    {% if patron.default_address %}
+                        {% with patron.default_address as default_address %}
+                            {{ default_address.city }} - {{ default_address.zipcode }}
+                        {% endwith %}
+                    {% else %}
+                        {% with patron.addresses.all|first as default_address %}
+                            {{ default_address.city }} - {{ default_address.zipcode }}
+                        {% endwith %}
+                    {% endif %}
+                </address>
+                <a href="{% url message_create product.pk patron.pk %}" class="btn-contactme">Contactez-moi</a>
+                <span style="margin-top: 0; margin-bottom: 10px; margin-left: 20px;" class="stars empty"><span class="stars filled_{{ patron.average_note }}"></span></span>
+                {% include "accounts/partials/response_stats.html" %}
+            </div>{#  owner #}
+            {% endif %}
         {% endwith %}
         <div class="booking-block">
             <h2>{% trans "Réservez en ligne" %}</h2>
@@ -464,42 +497,6 @@
                     </form>
                 </div><!-- bottom-block -->
         </div>{# booking-block #}
-            {% with product.owner as patron %}
-            {% if not patron.is_professional %}
-            <div id="owner" class="info-block">
-                <h2>
-                    {% trans "Particulier" %}
-                    <small>
-                        <a href="{{ patron.get_absolute_url }}" >({% trans " Voir toutes ses annonces "%})</a>
-                    </small>
-                </h2>
-                <a href="{{ patron.get_absolute_url }}" class="onwer-avatar">
-                    {% if patron.avatar %}
-                    <img src="{{ patron.profil.url }}" alt="{% trans "loueur"%}{{ patron.username }}" width="100" height="100">
-                    {% else %}
-                    <img src="{{ MEDIA_URL }}images/default_avatar.png" alt="{% trans "loueur"%}{{ patron.username }}" width="100" height="100">
-                    {% endif %}
-                </a>
-                <p class="owner-username">
-                    <a href="{{ patron.get_absolute_url }}">{{ patron.username|truncate:16 }}</a>
-                </p>
-                <address>
-                    {% if patron.default_address %}
-                        {% with patron.default_address as default_address %}
-                            {{ default_address.city }} - {{ default_address.zipcode }}
-                        {% endwith %}
-                    {% else %}
-                        {% with patron.addresses.all|first as default_address %}
-                            {{ default_address.city }} - {{ default_address.zipcode }}
-                        {% endwith %}
-                    {% endif %}
-                </address>
-                <a href="{% url message_create product.pk patron.pk %}" class="btn-contactme">Contactez-moi</a>
-                <span style="margin-top: 0; margin-bottom: 10px; margin-left: 20px;" class="stars empty"><span class="stars filled_{{ patron.average_note }}"></span></span>
-                {% include "accounts/partials/response_stats.html" %}
-            </div>{#  owner #}
-            {% endif %}
-            {% endwith %}
         {% if product_list %}
         <div id="related-product" class="info-block">
             <h2>Objets similaires</h2>
