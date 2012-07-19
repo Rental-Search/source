@@ -6,7 +6,7 @@ from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext_lazy as _
 
 from eloue.admin import CurrentSiteAdmin
-from eloue.rent.models import Booking, OwnerComment, BorrowerComment
+from eloue.rent.models import Booking, OwnerComment, BorrowerComment, Sinister
 
 log = logbook.Logger('eloue')
 
@@ -79,9 +79,13 @@ class CommentAdmin(admin.ModelAdmin):
     )
     list_display = ('comment', 'note')
 
+class SinisterAdmin(admin.ModelAdmin):
+    list_display = ('uuid', 'booking', 'patron', 'product',)
+
 try:
     admin.site.register(Booking, BookingAdmin)
     admin.site.register(OwnerComment, CommentAdmin)
     admin.site.register(BorrowerComment, CommentAdmin)
+    admin.site.register(Sinister, SinisterAdmin)
 except admin.sites.AlreadyRegistered, e:
     log.warn('Site is already registered : %s' % e)
