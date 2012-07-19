@@ -1,0 +1,100 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:fb="https://www.facebook.com/2008/fbml">
+  <head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+    <script src="https://raw.github.com/janl/mustache.js/master/mustache.js"></script>
+    <script src="//connect.facebook.net/en_US/all.js"></script>
+    <title>Request Tester C</title>
+  </head>
+
+  <body>
+    <div id="fb-root"></div>
+    <p>
+      <input type="button"
+        onclick="sendRequestToRecipients(); return false;"
+        value="Send Request to Users Directly"
+      />
+      <input type="text" value="User ID" name="user_ids" />
+      </p>
+    <p>
+    <input type="button"
+      onclick="sendRequestViaMultiFriendSelector(); return false;"
+      value="Send Request to Many Users with MFS"
+    />
+    </p>
+    <ul id="friends">
+    </ul>
+    <script>
+      window.fbAsyncInit = function() {
+        console.log("before init...")
+        FB.init({
+          appId      : '{{ FACEBOOK_APP_ID }}', // App ID
+          channelUrl : '{{ MEDIA_URL }}channel.html', // Channel File
+          status : true,
+          cookie : true,
+          oauth: true
+        });
+        console.log("init....");
+        FB.getLoginStatus(function(response){
+          console.log(response.status);
+          if (response.status === 'connected') {
+            console.log("fetching friends....");
+            FB.api(
+              'me/friends/?fields=picture,name', 
+              function (response) {
+                console.log(response.data);
+                template = '<ul id="friends">{% templatetag openvariable %}#data{%templatetag closevariable %}<li id="{%templatetag openvariable%}id{% templatetag closevariable %}"><img src="{%templatetag openvariable%}picture{% templatetag closevariable %}"/> {%templatetag openvariable%}name{% templatetag closevariable %}</li>{%templatetag openvariable%}/data{%templatetag closevariable %}</ul>';
+
+                // console.log(Mustache.render(template, {data: response.data}));
+                $('#friends').html(Mustache.render(template, {data: response.data}));
+                $('li', '#friends').click(
+                  function a(i) {
+                    FB.ui({
+                      to: i.currentTarget.id,
+                      method: 'send',
+                      name: '!!!',
+                      link: 'https://www.e-loue.com/',
+                    });
+                  }
+                );
+                // for (friend_index in response.data) {
+                //   friend = response.data[friend_index];
+                //   img_src = friend.picture;
+                //   name = friend.name;
+                //   $('#friends').append('<li id>'+'<img src="'+img_src+'"/>' +name+'</li>');
+                // }
+                console.log(response);
+              }
+            );
+          } else {
+            $('#friends').html('<a id="fbfb">fb connect</a>');
+            $('#fbfb').click(function (event) {
+              FB.login(function (response){
+                console.log(response);
+                window.location.reload();
+              }, {scope: 'email,user_location'});
+            })
+          }
+        });
+      }
+
+      function sendRequestToRecipients() {
+        var user_ids = document.getElementsByName("user_ids")[0].value;
+        FB.ui({method: 'apprequests',
+          message: 'My Great Request',
+          to: user_ids, 
+        }, requestCallback);
+      }
+
+      function sendRequestViaMultiFriendSelector() {
+        FB.ui({method: 'apprequests',
+          message: 'My Great Request'
+        }, requestCallback);
+      }
+      
+      function requestCallback(response) {
+        // Handle callback here
+      }
+    </script>
+  </body>
+</html>

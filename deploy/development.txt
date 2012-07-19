@@ -21,6 +21,7 @@ south==0.7.3
 sphinx>=1.0.2
 unittest2>=0.5.1
 feedparser>=5.0.1
+gdata
 manifesto
 django-form-utils==0.2.0
 django-staticfiles==1.1.2

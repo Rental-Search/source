@@ -13,6 +13,7 @@ from django.contrib.auth.forms import PasswordResetForm, PasswordChangeForm, Set
 from django.contrib.auth.tokens import default_token_generator
 from django.core import validators
 from django.forms.fields import EMPTY_VALUES
+from django.forms.formsets import formset_factory, BaseFormSet
 from django.forms.models import inlineformset_factory, BaseInlineFormSet
 from django.template.defaultfilters import slugify
 from django.template.loader import render_to_string
@@ -865,3 +866,19 @@ class ContactForm(forms.Form):
     subject = forms.CharField(label=_(u"Sujet"), max_length=100, required=True, widget=forms.TextInput(attrs={'class': 'inm'}))
     message = forms.CharField(label=_(u"Message"), required=True, widget=forms.Textarea(attrs={'class': 'inm'}))
     cc_myself = forms.BooleanField(label=_(u"Etre en copie"), required=False)
+
+class GmailContactForm(forms.Form):
+    checked = forms.BooleanField(required=False)
+    name = forms.CharField(max_length=200, required=False, widget=forms.HiddenInput())
+    email = forms.EmailField(widget=forms.HiddenInput())
+
+class BaseGmailContactFormset(BaseFormSet):
+    def clean(self):
+        if any(self.errors):
+            return self.cleaned_data
+        checked_contacts = filter(lambda form: form.cleaned_data.get('checked', None), self.forms)
+        if len(checked_contacts) > 20:
+            raise forms.ValidationError(_('Vous pouvez choisir 20 contacts maximum'))
+        return self.cleaned_data
+
+GmailContactFormset = formset_factory(GmailContactForm, formset=BaseGmailContactFormset, extra=0)
