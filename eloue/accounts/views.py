@@ -34,7 +34,7 @@ from django.shortcuts import redirect
  
 from eloue.decorators import secure_required, mobify, ownership_required
 from eloue.accounts.forms import (EmailAuthenticationForm, PatronEditForm, 
-    PatronPasswordChangeForm, ContactForm, 
+    PatronPasswordChangeForm, ContactForm, CompanyEditForm,
     PatronSetPasswordForm, FacebookForm, CreditCardForm)
 from eloue.accounts.models import Patron, FacebookSession, CreditCard
 from eloue.accounts.wizard import AuthenticationWizard
@@ -348,7 +348,11 @@ def patron_detail(request, slug, patron_id=None, page=None):
 
 @login_required
 def patron_edit(request, *args, **kwargs):
-    form = PatronEditForm(request.POST or None, request.FILES or None, instance=request.user)
+    if request.user.is_professional:
+        form = CompanyEditForm(request.POST or None, request.FILES or None, instance=request.user)
+    else:
+        form = PatronEditForm(request.POST or None, request.FILES or None, instance=request.user)
+
     if form.is_valid():
         form.save()
         messages.success(request, _(u"Vos informations ont bien été modifiées")) 

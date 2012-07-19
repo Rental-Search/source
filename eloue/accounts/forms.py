@@ -338,6 +338,43 @@ class PatronEditForm(BetterModelForm):
                 form_errors_append(self, 'paypal_email', _(u"Vérifiez que vous avez bien répondu à l'email d'activation de Paypal"))
         return self.cleaned_data
 
+class CompanyEditForm(PatronEditForm):
+    avatar = forms.ImageField(required=False, label=_(u"Logo de l\'entreprise"))
+
+    about = forms.CharField(label=_(u"A propos de l'entreprise"), required=False, widget=forms.Textarea(attrs={'class': 'inm'}))
+
+    class Meta:
+        model = Patron
+        fieldsets = [
+            ('basic_info', {
+                'fields': [
+                    'is_professional', 'company_name', 'username', 'avatar', 
+                    'email', 'civility', 'first_name', 'last_name',
+                    'default_address', 'default_number', 'date_of_birth', 'place_of_birth',
+                    'paypal_email', 'is_subscribed', 'new_messages_alerted',
+                ],
+                'legend': _(u'Informations nécessaires')
+            }),
+            ('extra_info', {
+                'fields': ['about', 'languages'],
+                'legend': _(u"Informations sur l'entreprise")
+            }),
+            ('driver_info', {
+                'fields': ['drivers_license_date', 'drivers_license_number'],
+                'legend': _(u"Informations sur le permis")
+            })
+        ]
+        widgets = {
+            'is_professional': CommentedCheckboxInput('Je suis professionel'),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super(PatronEditForm, self).__init__(*args, **kwargs)
+        self.fields['default_address'].label = _(u'Adresse de l\'entreprise')
+        self.fields['default_address'].queryset = self.instance.addresses.all()
+        self.fields['default_number'].label = _(u'Téléphone de l\'entreprise')
+        self.fields['default_number'].queryset = self.instance.phones.all()
+
 
 class PatronSetPasswordForm(forms.Form):
     """

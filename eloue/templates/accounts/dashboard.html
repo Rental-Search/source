@@ -65,25 +65,19 @@
             </div><!-- profil-description -->
         </div><!-- profil-block -->
         {% if user.work or user.school or user.languages.count %}
-        <div class="profil-block">
-            <h3>Plus d'info</h3>
-            {% if user.work %}
-                <h4>{% trans "Travail" %}</h4>
-                <p>{{ user.work }}</p>
+        {% with user as patron %}
+            {% if patron.is_professional %}
+                {% include "accounts/partials/company_more_info.html" %}
+            {% else %}
+                {% include "accounts/partials/more_info.html" %}
             {% endif %}
-            {% if user.school %}
-                <h4>{% trans "Etudes" %}</h4>
-                <p>{{user.school}}</p>
-            {% endif %}
-            {% if user.languages.count %}
-                <h4>{% trans "Languages Parlées" %}</h4>
-                <p>{{ user.languages.all|join:", "}}</p>
-            {% endif %}
-        </div>{# profil-block #}
+        {% endwith %}
         {% endif %}
         <div class="profil-block last">
             {% with user as patron %}
-                {% include "accounts/partials/response_stats.html" %}
+                {% if not patron.is_professional %}
+                    {% include "accounts/partials/response_stats.html" %}
+                {% endif %}
             {% endwith %}
         </div>{# profil-block #}
         {% endblock %}

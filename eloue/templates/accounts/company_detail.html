@@ -41,58 +41,7 @@
                 <a class="btn-contactme" href={% url patron_message_create recipient_username=patron.slug %}>{% trans "Contactez-moi" %}</a>
             </div>{# profil-description #}
         </div>{# profil-block #}
-        {% cache 900 patron_details_info patron.pk %}
-        {% with patron.languages as languages %}
-            {% with languages.count as languages_count %}
-            {% if patron.work or patron.school or languages_count %}
-            <div class="profil-block" style="border-bottom: none;">
-                <h3>{% trans "Plus d'info" %}</h3>
-                {% if languages_count %}
-                    <h4>{% trans "Téléphone" %}</h4>
-                    <p>01 45 67 89 09 87</p>
-                    <h4>{% trans "Site Internet"%}</h4>
-                    <p><a href="#">www.e-loue.com</a></p>
-                    <h4>{% trans "Languages Parlées" %}</h4>
-                    <p style="margin-bottom: 30px;">{{ languages.all|join:", "}}</p>
-                {% endif %}
-                <h3>{% trans "Horaires d'ouverture" %}</h3>
-                <table class="timetable">
-                    <tbody>
-                        <tr>
-                            <td width="40%">Lundi</td>
-                            <td width="60%" align="center">8h30 - 18h00</td>
-                        </tr>
-                        <tr>
-                            <td width="40%">Mardi</td>
-                            <td width="60%" align="center">8h30 - 18h00</td>
-                        </tr>
-                        <tr>
-                            <td width="40%">Mercredi</td>
-                            <td width="60%" align="center">8h30 - 18h00</td>
-                        </tr>
-                        <tr>
-                            <td width="40%">Jeudi</td>
-                            <td width="60%" align="center">8h30 - 18h00</td>
-                        </tr>
-                        <tr>
-                            <td width="40%">Vendredi</td>
-                            <td width="60%" align="center">8h30 - 18h00</td>
-                        </tr>
-                        <tr>
-                            <td width="40%">Samedi</td>
-                            <td width="60%" align="center">8h30 - 17h00</td>
-                        </tr>
-                        <tr>
-                            <td width="40%">Dimanche</td>
-                            <td width="60%" align="center">Fermé</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>{# profil-block #}
-            {% endif %}
-            {% endwith %}
-        {% endwith %}
-        {% endcache %}
+        {% include "accounts/partials/company_more_info.html" %}
     </div>{# content-aside-profil #}
     <div class="content-main-profil">
             {% if borrowercomments %}
