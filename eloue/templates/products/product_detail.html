@@ -252,22 +252,28 @@
                 </a>
             </div>
         </div>{# product-resume #}
-        <div class="product-tabs">
-            <ul>
-                <li><a href="#gallery">{% trans "Photo" %}</a></li>
-                <li><a href="#prices_calendar">{% trans "Disponibilitées et tarifs" %}</a></li>
+        <div class="product-tabs ui-tabs ui-widget ui-widget-content ui-corner-all">
+            <ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
+                <li class="ui-state-default ui-corner-top ui-tabs-selected ui-state-active">
+                    <a href="#gallery">{% trans "Photo" %}</a>
+                </li>
+                <li class="ui-state-default ui-corner-top">
+                    <a href="#prices_calendar">{% trans "Disponibilitées et tarifs" %}</a>
+                </li>
                 {% if insurance_available %}
-                    <li><a href="#conditions">{% trans "Conditions et assurance"%}</a></li>
+                <li class="ui-state-default ui-corner-top">
+                    <a href="#conditions">{% trans "Conditions et assurance"%}</a>
+                </li>
                 {% endif %}
             </ul>
-            <div id="gallery">
+            <div id="gallery" class="ui-tabs-panel ui-widget-content ui-corner-bottom">
             {% with product.pictures.all|first as picture %}
                 {% if picture %}
                     <img src="{{ picture.display.url }}" alt="{{ product.summary }}">
                 {% endif %}
             {% endwith %}
             </div> {# gallery #}
-            <div id="prices_calendar">
+            <div id="prices_calendar" class="ui-tabs-panel ui-widget-content ui-corner-bottom ui-tabs-hide">
                 <div class="prices">
                     <div class="table-bg">
                         <table class="table table-striped">
@@ -317,7 +323,7 @@
                 </div>{# calendar #}
             </div>
             {% if insurance_available %}
-            <div id="conditions">
+            <div id="conditions" class="ui-tabs-panel ui-widget-content ui-corner-bottom ui-tabs-hide">
                 {% include "rent/partials/condition_assurance.html" %}
             </div>
             {% endif %}
