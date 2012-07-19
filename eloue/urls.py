@@ -16,6 +16,7 @@ from eloue.accounts.views import activate, authenticate, authenticate_headless, 
 from eloue.products.views import homepage, search, reply_product_related_message, homepage_object_list
 from eloue.products.search_indexes import product_only_search, car_search, realestate_search
 from eloue.sitemaps import CategorySitemap, FlatPageSitemap, PatronSitemap, ProductSitemap
+from django.views.generic.simple import direct_to_template
 
 from functools import partial
 
@@ -36,6 +37,7 @@ sitemaps = {
 translation.activate(settings.LANGUAGE_CODE)  # Force language for test and dev
 
 urlpatterns = patterns('',
+    url(r'^invitation_sent/$', direct_to_template, {'template': 'accounts/invitation_sent.html'}, 'invitation_sent'),
     url(r'^user_geolocation/$', 'eloue.accounts.views.user_geolocation', name='user_geolocation'),
     url(r'^get_user_location/$', 'eloue.accounts.views.get_user_location', name='get_user_location'),
     url(r"^announcements/", include("announcements.urls")),
