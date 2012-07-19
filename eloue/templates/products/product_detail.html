@@ -381,11 +381,7 @@
         {% if patron.is_professional %}
         <div id="owner" class="info-block">
             <h2>
-                {% if patron.is_professional %}
-                    {% trans "Professionnel"%}
-                {% else %}
-                    {% trans "Particulier" %}
-                {% endif %}
+                {% trans "Professionnel"%}
                 <small>
                     <a href="{{ patron.get_absolute_url }}" >({% trans " Voir toutes ses annonces "%})</a>
                 </small>
@@ -398,7 +394,7 @@
                 {% endif %}
             </a>
             <p class="owner-username">
-                <a href="{{ patron.get_absolute_url }}">{{ patron.username|truncate:16 }}</a>
+                <a href="{{ patron.get_absolute_url }}">{{ patron.company_name|truncate:16 }}</a>
             </p>
             <address>
                 {% if patron.default_address %}
@@ -412,8 +408,10 @@
                 {% endif %}
             </address>
             <a href="{% url message_create product.pk patron.pk %}" class="btn-contactme">Contactez-moi</a>
-            <span style="margin-top: 0; margin-bottom: 10px; margin-left: 20px;" class="stars empty"><span class="stars filled_{{ patron.average_note }}"></span></span>
-            {% include "accounts/partials/response_stats.html" %}
+            <ul class="pro-contact">
+                <li><a href="#">www.e-loue.com</a></li>
+                <li>01 45 57 90 34</li>
+            </ul>
         </div>{#  owner #}
         {% endif %}
         {% endwith %}
@@ -470,11 +468,7 @@
             {% if not patron.is_professional %}
             <div id="owner" class="info-block">
                 <h2>
-                    {% if patron.is_professional %}
-                        {% trans "Professionnel"%}
-                    {% else %}
-                        {% trans "Particulier" %}
-                    {% endif %}
+                    {% trans "Particulier" %}
                     <small>
                         <a href="{{ patron.get_absolute_url }}" >({% trans " Voir toutes ses annonces "%})</a>
                     </small>
