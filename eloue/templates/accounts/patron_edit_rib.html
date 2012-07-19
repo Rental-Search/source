@@ -1,0 +1,35 @@
+{% extends "accounts/patron_edit.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Modification de mon RIB" %}{% endblock %}
+
+{% block content-main-profil %}
+
+{% if form.is_multipart %}
+<form enctype="multipart/form-data" class="form-inline" method="post" action="">
+{% else %}
+<form class="form-inline" method="post" action="">
+{% endif %}
+{% csrf_token %}
+<p class="form-header">
+      {% trans "Il est obligatoire d’enregistrer son RIB afin d'être payé à la fin d'une location."%}
+</p>
+<fieldset class="rib-form">
+  <legend>{% trans "Modification de mon rib" %}</legend>
+  {{form.non_field_errors}}
+  {% for formfield in form %} {{formfield.errors}}
+    {{ formfield }}
+  {% endfor %}  
+  <p>
+    <span class="bank-code">{% trans "Banque" %}</span>
+    <span class="office-code">{% trans "Guichet" %}</span>
+    <span class="number-account">{% trans "N° de compte" %}</span>
+    <span class="key-rib">{% trans "Clé" %}</span>
+  </p>  
+  <div class="form-actions">
+      <button type="submit" class="btn btn-primary">Enregistrer</button>
+      <button type="reset" class="btn btn-cancel">Annuler</button>
+  </div>
+  </fieldset>
+  </form>
+{% endblock %}

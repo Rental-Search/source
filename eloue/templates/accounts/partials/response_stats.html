@@ -1,0 +1,16 @@
+{% load i18n cache %}
+
+{% cache 43200 response_stats patron.pk %}
+<table class="answer-stats">
+    <tr>
+        <th class="answer-rate">{% trans "Taux de réponse" %}</th>
+        <td>
+        	{{patron.response_rate|floatformat:"0"}}%
+        </td>
+    </tr>
+    <tr>
+        <th class="answer-time">{% trans "Temps de réponse moyen" %}</th>
+        <td>{{patron.response_time}}</td>
+    </tr>
+</table>
+{% endcache %}

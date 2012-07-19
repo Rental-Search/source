@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import local
 import logging
+import decimal
 
 DEBUG = getattr(local, 'DEBUG', False)
 DEBUG_TOOLBAR = getattr(local, 'DEBUG_TOOLBAR', False)
@@ -60,7 +61,7 @@ LANGUAGES = (
 )
 
 SITE_ID = 1
-DEFAULT_SITES = getattr(local, "DEFAULT_SITES", [1, 2, 3])
+DEFAULT_SITES = getattr(local, "DEFAULT_SITES", [1, 3, 4])
 
 # If you set this to False, Django will make some optimizations so as not
 # to load the internationalization machinery.
@@ -110,10 +111,10 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.request',
     'django.contrib.messages.context_processors.messages',
     'announcements.context_processors.site_wide_announcements',
-    'django_messages.context_processors.inbox',
     'eloue.context_processors.site',
     'eloue.context_processors.debug',
-    'eloue.context_processors.unread_message_count_context'
+    'eloue.context_processors.unread_message_count_context',
+    'eloue.context_processors.facebook_context'
 )
 
 
@@ -139,7 +140,7 @@ if DEBUG_TOOLBAR:
 ROOT_URLCONF = 'eloue.urls'
 LOGIN_URL = '/login/'
 LOGOUT_URL = '/logout/'
-LOGIN_REDIRECT_URL = '/dashboard/'
+LOGIN_REDIRECT_URL = '/dashboard/profil/'
 
 TEMPLATE_DIRS = getattr(local, 'TEMPLATE_DIRS')
 
@@ -161,7 +162,7 @@ INSTALLED_APPS = (
     'imagekit',
     'django_lean.experiments',
     'rollout',
-    'compress',
+    'pipeline',
     'faq',
     'announcements',
     'haystack',
@@ -173,6 +174,7 @@ INSTALLED_APPS = (
     'products',
     'api',
     'oauth_provider',
+    'payments',
 )
 if DEBUG_TOOLBAR:
     INSTALLED_APPS += ('debug_toolbar',)
@@ -206,50 +208,27 @@ CACHE_MIDDLEWARE_ANONYMOUS_ONLY = True
 CACHE_MIDDLEWARE_SECONDS = getattr(local, 'CACHE_MIDDLEWARE_SECONDS', 60 * 15)
 CACHE_MIDDLEWARE_KEY_PREFIX = getattr(local, 'CACHE_MIDDLEWARE_KEY_PREFIX', None)
 
-# Compress configuration
-COMPRESS = getattr(local, 'COMPRESS', True)
-COMPRESS_AUTO = getattr(local, 'COMPRESS_AUTO', False)
-COMPRESS_VERSION_REMOVE_OLD = False
-COMPRESS_VERSION = True
-COMPRESS_CSS_URL_REPLACE = {
-    r"\.\.\/": "",
-    r"url\([\'|\"]([^(|\'|\"|\)]*)[\'|\"|\)]+": lambda m: "url(\"%s%s\")" % (MEDIA_URL, m.group(1)) if not m.group(1).startswith("http") else "url(\"%s\")" % m.group(1),
-    r"src=[\'|\"]([^(\'|\")]*)[\'|\"]": lambda m: "src=\"%s%s\"" % (MEDIA_URL, m.group(1)),
-}
-COMPRESS_JS_FILTERS = getattr(local, 'COMPRESS_JS_FILTERS', ('compress.filters.yui.YUICompressorFilter',))
-COMPRESS_CSS_FILTERS = getattr(local, 'COMPRESS_CSS_FILTERS', (
-    'compress.filters.css_url_replace.CSSURLReplace',
-    'compress.filters.yui.YUICompressorFilter'
-))
-COMPRESS_YUI_BINARY = getattr(local, 'COMPRESS_YUI_BINARY', '/usr/bin/yui-compressor')
-COMPRESS_CSS = {
+STATIC_ROOT = getattr(local, 'STATIC_ROOT', None)
+STATIC_URL = getattr(local, 'STATIC_URL', None)
+
+
+#pipeline configuration
+PIPELINE_CSS_COMPRESSOR = 'pipeline.compressors.yui.YUICompressor'
+PIPELINE_JS_COMPRESSOR = ''
+PIPELINE_COMPILERS = (
+  'pipeline.compilers.less.LessCompiler',
+)
+PIPELINE_LESS_BINARY = getattr(local, 'PIPELINE_LESS_BINARY', '/home/benoitw/node_modules/less/bin/lessc')
+PIPELINE_YUI_BINARY = getattr(local, 'COMPRESS_YUI_BINARY', '/usr/bin/yui-compressor')
+PIPELINE_ROOT = getattr(local, 'PIPELINE_ROOT', MEDIA_ROOT)
+PIPELINE_URL = getattr(local, 'PIPELINE_URL', MEDIA_URL)
+PIPELINE_CSS = {
     'master': {
         'source_filenames': (
-            'css/screen.css',
-            'css/custom.css',
-            'css/plugins/ui/jquery.ui.core.css',
-            'css/plugins/ui/jquery.ui.datepicker.css',
-            'css/plugins/ui/jquery.ui.tabs.css',
-            'css/plugins/ui/jquery.ui.theme.css',
+            'less/styles.less',
             'css/chosen.css'
         ),
         'output_filename': 'css/master.r?.css',
-        'extra_context': {
-            'media': 'screen',
-        },
-    },
-    'twenty': {
-        'source_filenames': (
-            'css/screen.css',
-            'css/custom.css',
-            'css/20m.css',
-            'css/plugins/ui/jquery.ui.core.css',
-            'css/plugins/ui/jquery.ui.datepicker.css',
-            'css/plugins/ui/jquery.ui.tabs.css',
-            'css/plugins/ui/jquery.ui.theme.css',
-            'css/chosen.css'
-        ),
-        'output_filename': 'css/twenty.r?.css',
         'extra_context': {
             'media': 'screen',
         },
@@ -263,69 +242,6 @@ COMPRESS_CSS = {
             'media': 'screen',
         },
     },
-    'nc': {
-        'source_filenames': (
-            'css/screen.css',
-            'css/custom.css',
-            'css/nc.css',
-            'css/plugins/ui/jquery.ui.core.css',
-            'css/plugins/ui/jquery.ui.datepicker.css',
-            'css/plugins/ui/jquery.ui.tabs.css',
-            'css/plugins/ui/jquery.ui.theme.css',
-            'css/chosen.css'
-        ),
-        'output_filename': 'css/nc.r?.css',
-        'extra_context': {
-            'media': 'screen',
-        }
-    },
-    'uk': {
-        'source_filenames': (
-            'css/screen.css',
-            'css/custom.css',
-            'css/uk.css',
-            'css/plugins/ui/jquery.ui.core.css',
-            'css/plugins/ui/jquery.ui.datepicker.css',
-            'css/plugins/ui/jquery.ui.tabs.css',
-            'css/plugins/ui/jquery.ui.theme.css',
-            'css/chosen.css'
-        ),
-        'output_filename': 'css/uk.r?.css',
-        'extra_context': {
-            'media': 'screen',
-        }
-    },
-    'dcns': {
-        'source_filenames': (
-            'css/dcns/screen.css',
-            'css/dcns/custom.css',
-            'css/plugins/ui/jquery.ui.core.css',
-            'css/plugins/ui/jquery.ui.datepicker.css',
-            'css/plugins/ui/jquery.ui.tabs.css',
-            'css/plugins/ui/jquery.ui.theme.css',
-            'css/chosen.css'
-        ),
-        'output_filename': 'css/dcns.r?.css',
-        'extra_context': {
-            'media': 'screen',
-        }
-    },
-    'shiseido': {
-        'source_filenames': (
-            'css/screen.css',
-            'css/custom.css',
-            'css/plugins/ui/jquery.ui.core.css',
-            'css/plugins/ui/jquery.ui.datepicker.css',
-            'css/plugins/ui/jquery.ui.tabs.css',
-            'css/plugins/ui/jquery.ui.theme.css',
-            'css/chosen.css',
-            'css/shiseido/screen.css'
-        ),
-        'output_filename': 'css/shiseido.r?.css',
-        'extra_context': {
-            'media': 'screen',
-        },
-    },
     'ie': {
         'source_filenames': (
             'css/ie/ie.css',
@@ -335,66 +251,31 @@ COMPRESS_CSS = {
             'media': 'screen',
         }
     },
-    'ie6': {
-        'source_filenames': (
-            'css/ie/ie6.css',
-        ),
-        'output_filename': 'css/ie6.r?.css',
-        'extra_context': {
-            'media': 'screen',
-        }
-    },
-    'ie7': {
-        'source_filenames': (
-            'css/ie/ie7.css',
-        ),
-        'output_filename': 'css/ie7.r?.css',
-        'extra_context': {
-            'media': 'screen',
-        }
-    },
-    'sep': {
-        'source_filenames': (
-            'css/sep/screen.css',
-            'css/sep/custom.css'
-        ),
-        'output_filename': 'css/sep/master.r?.css',
-        'extra_context': {
-            'media': 'screen',
-        }
-    }
 }
 
-COMPRESS_JS = {
+PIPELINE_JS = {
     'application': {
         'source_filenames': (
-            'js/jquery.js',
-            'js/ui/jquery.ui.core.js',
-            'js/ui/jquery.ui.widget.js',
-            'js/ui/jquery.ui.datepicker.js',
-            'js/ui/jquery.ui.datepicker-fr.js',
-            'js/ui/jquery.ui.tabs.js',
+            'js/jquery-1.7.1.min.js',
+            'js/jquery-ui-1.8.17.custom.min.js',
+            'js/jquery.ui.datepicker-fr.js',
             'js/modernizr.js',
             'js/mustache.js',
-            'js/jquery.cycle.all.latest.js',
-            'js/jquery.autocomplete.js',
             'js/chosen.jquery.min.js',
-            'js/application.js'),
-        'output_filename': 'js/application.r?.js',
+            'js/bootstrap-alert.js',
+            'js/jquery.cookie.js',
+            'js/jquery.cycle.all.latest.js',
+            'js/application2.js',
+            ),
+        'output_filename': 'js/application2.r?.js',
         'extra_context': {
-            'defer': True,
+            'defer': False,
         },
     },
-    'sep': {
-        'source_filenames': (
-            'js/jquery.js',
-            'js/sep/application.js'),
-        'output_filename': 'js/sep/application.r?.js',
-        'extra_context': {
-            'defer': True,
-        },
-    }
 }
+
+
+
 
 # South configuration
 SOUTH_TESTS_MIGRATE = getattr(local, 'SOUTH_TESTS_MIGRATE', True)
@@ -460,9 +341,10 @@ AWS_HEADERS = {
     'Cache-Control': 'max-age=31556926,public',
 }
 
-
 GOOGLE_CLIENT_ID = getattr(local, 'GOOGLE_CLIENT_ID', '382908503214.apps.googleusercontent.com')
 GOOGLE_CLIENT_SECRET = getattr(local, 'GOOGLE_CLIENT_SECRET', 'bHf4VtyrFzphNMCzg7lkQXGy')
+
+FACEBOOK_APP_ID = getattr(local, 'FACEBOOK_APP_ID', '197983240245844')
 
 # Paypal configuration
 USE_PAYPAL_SANDBOX = getattr(local, 'USE_PAYPAL_SANDBOX', DEBUG)
@@ -485,16 +367,26 @@ else:
 
 # Business configuration
 BOOKING_DAYS = 85  # Max booking days
-COMMISSION = 0.15  # Our commission percentage
+COMMISSION = decimal.Decimal('0.2')  # Our commission percentage
 POLICY_NUMBER = None  # Our insurance policy number
 PARTNER_NUMBER = None  # Our insurance partner number
-INSURANCE_FEE = 0.054  # Use to calculate transfer price
-INSURANCE_TAXES = 0.09  # Use to calculate taxes on insurance
 INSURANCE_FTP_HOST = None  # Our insurance ftp server host
 INSURANCE_FTP_USER = None  # Our insurance ftp server username
 INSURANCE_FTP_PASSWORD = None  # Our insurance ftp server password
 INSURANCE_FTP_CWD = None  # Our insurance ftp server directory
 INSURANCE_EMAIL = None  # Our insurance email
+
+INSURANCE_FEE_NORMAL = decimal.Decimal('0.0647')
+INSURANCE_FEE_CAR = decimal.Decimal('0.1')
+INSURANCE_FEE_REALESTATE = decimal.Decimal('0.035')
+
+INSURANCE_TAXES_NORMAL = decimal.Decimal('0.09')
+INSURANCE_TAXES_CAR = decimal.Decimal('0')
+INSURANCE_TAXES_REALESTATE = decimal.Decimal('0')
+
+INSURANCE_COMMISSION_REALESTATE = INSURANCE_COMMISSION_CAR = INSURANCE_COMMISSION_NORMAL = decimal.Decimal('0')
+
+INSURANCE_AVAILABLE = True
 
 # Search configuration
 DEFAULT_RADIUS = 215
@@ -508,7 +400,7 @@ OAUTH_CALLBACK_VIEW = "eloue.accounts.views.oauth_callback"
 USE_ETAGS = False
 
 # Affiliation configuraton
-AFFILIATION_SOURCES = getattr(local, 'AFFILIATION_SOURCES', ['lv', 'skiplanet.equipment', 'jigsaw', 'kiloutou', 'loxam', 'chronobook'])
+AFFILIATION_SOURCES = getattr(local, 'AFFILIATION_SOURCES', ['lv', 'skiplanet.equipment', 'jigsaw', 'loxam', 'chronobook', 'monjoujou'])
 AFFILIATION_BATCHSIZE = 1000
 LV_FTP = "ftp.bo.location-et-vacances.com"
 
@@ -526,4 +418,31 @@ XPF_EXCHANGE_RATE = '0.00838'
 # Message 
 REPLACE_STRING = getattr(local, "REPLACE_STRING", "XXXXXX")
 
+DEFAULT_LOCATION = getattr(local, "DEFAULT_LOCATION", {
+    'city': u'Paris',
+    'coordinates': (48.856614, 2.3522219),
+    'country': u'France',
+    'fallback': None,
+    'radius': 550.0,
+    'region': None,
+    'region_coords': None,
+    'region_radius': None,
+    'source': 4
+})
 
+if DEBUG:
+    PAYBOX_VERSION = getattr(local, 'PAYBOX_VERSION', '00104')
+    PAYBOX_SITE = getattr(local, 'PAYBOX_SITE', 1999888)
+    PAYBOX_RANG = getattr(local, 'PAYBOX_RANG', 99)
+    PAYBOX_CLE = getattr(local, 'PAYBOX_CLE', '1999888I')
+    PAYBOX_DEVISE = getattr(local, 'PAYBOX_DEVISE', 978)
+    PAYBOX_ACTIVITE = getattr(local, 'PAYBOX_ACTIVITE', '027')
+    PAYBOX_ENDPOINT = getattr(local, 'PAYBOX_ENDPOINT', "https://preprod-ppps.paybox.com/PPPS.php")
+else:
+    PAYBOX_SITE = getattr(local, 'PAYBOX_SITE', '3818292')
+    PAYBOX_RANG = getattr(local, 'PAYBOX_RANG', '01')
+    PAYBOX_DEVISE = getattr(local, 'PAYBOX_DEVISE', 978)
+    PAYBOX_ACTIVITE = getattr(local, 'PAYBOX_ACTIVITE', '027')
+    PAYBOX_ENDPOINT = getattr(local, 'PAYBOX_ENDPOINT', "https://ppps.paybox.com/PPPS.php")
+    PAYBOX_VERSION = getattr(local, 'PAYBOX_VERSION', '00104')
+    PAYBOX_CLE = getattr(local, 'PAYBOX_CLE', 'IJEDEDBC')

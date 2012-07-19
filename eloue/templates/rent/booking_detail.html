@@ -1,181 +1,186 @@
-{% extends "base.html" %}
-{% load i18n product booking %}
+{% extends "accounts/dashboard.html" %}
+{% load i18n bookingaction %}
 
-{% block gaq %}
- {% if paypal %}
-  {% with booking.product as product %}
-   _gaq.push(['_addTrans',
-    '{{ booking.uuid.hex }}',
-    'e-loue',
-    '{{ booking.total_amount }}',
-    '0',
-    '0',
-    '{{ product.address.city }}',
-    '{{ product.address.zipcode }}',
-    '{{ product.address.country }}'
-   ]);
 
-   _gaq.push(['_addItem',
-    '{{ booking.uuid.hex }}',
-    '{{ product.id }}',
-    '{{ product.summary }}',
-    '{{ product.category.name }}',
-    '{{ product.prices.day|first }}',
-    '1'
-   ]);
-  {% endwith %}
-  _gaq.push(['_trackTrans']);
- {% endif %}
+{% block owner_product %}
+    {% if request.user == booking.owner %}selected-nav-bar-link{% endif %}
+{% endblock %}
+{% block borrower_booking %}
+    {% if request.user == booking.borrower %}selected-nav-bar-link{% endif %}
 {% endblock %}
 
-{% block title %}
-{% if booking.state == booking.STATE.AUTHORIZING %}
-	{% if booking.borrower == user %}
-		{% trans "Location en cours de validation" %}
-	{% endif %}
-{% endif %}
-{% if booking.state == booking.STATE.AUTHORIZED %}
- 	{% trans "Location réservée" %}
-{% endif %}
-{% if booking.state == booking.STATE.REJECTED %}
-	{% trans "Location rejetée" %}
-{% endif %}
-{% if booking.state == booking.STATE.PENDING %}
- 	{% trans "Location à venir" %}
-{% endif %}
-{% if booking.state == booking.STATE.ONGOING %}
- 	{% trans "Location en cours" %}
-{% endif %}
-{% if booking.state == booking.STATE.ENDED %}
- {% trans "Location terminée" %}
-{% endif %}
-{% if booking.state == booking.STATE.CLOSING %}
-	{% trans "Location en cours de clôture" %}
-{% endif %}
-{% if booking.state == booking.STATE.CLOSED %}
- {% trans "Location clôturer" %}
-{% endif %}
+{% block content-aside-profil %}
+    {% if request.user == booking.borrower %}
+        {% if booking.state == "authorized"%}{% url borrower_booking_authorized as return_url %}{% endif %}
+        {% if booking.state == "pending"%}{% url borrower_booking_pending as return_url %}{% endif %}
+        {% if booking.state == "ongoing"%}{% url borrower_booking_ongoing as return_url %}{% endif %}
+        {% if booking.state != "authorized" and booking.state != "pending" and booking.state != "ongoing" %}
+            {% url borrower_booking_history as return_url %}
+        {% endif %}
+    {% endif %}
+    {% if request.user == booking.owner %}
+        {% if booking.state == "authorized"%}{% url owner_booking_authorized as return_url %}{% endif %}
+        {% if booking.state == "pending"%}{% url owner_booking_pending as return_url %}{% endif %}
+        {% if booking.state == "ongoing"%}{% url owner_booking_ongoing as return_url %}{% endif %}
+        {% if booking.state == "ended" or booking.state == "closing" or booking.state == "closed" %}
+            {% url owner_booking_history as return_url %}
+        {% endif %}
+        {% if booking.state == "rejected" %}{% url owner_booking_history as return_url %}{% endif %}
+    {% endif %}
+    <div class="previous-sub-bar">
+        &larr;  <a href="{{ return_url }}">{% trans "Retour aux réservations" %}</a>
+    </div>
 {% endblock %}
 
-{% block content %}
-<div id="content" class="xgrid">
-    <div class="content-top">
-        <ul id="menu" class="x12">
-            <li class="menu-tab first"><a href="{% url dashboard %}">{% trans "Tableau de bord" %}</a></li>
-			<li class="menu-tab">{% if booking.owner == user %}{% trans "Propriétaire" %}{% else %}<a href="{% url owner_booking %}">{% trans "Propriétaire" %}</a>{% endif %}</li>
-			<li class="menu-tab">{% if booking.borrower == user %}{% trans "Locataire" %}{% else %}<a href="{% url borrower_booking %}">{% trans "Locataire" %}</a>{% endif %} </li>
-			<li class="menu-tab"><a href="{% url patron_edit %}">{% trans "Mon compte" %}</a></li>
-			<li class="menu-tab"><a href="{% url inbox %}">{% blocktrans %}Messages({{ unread_message_count }}){% endblocktrans %}</a></li>
-        </ul>
+{% block content-main-profil %}
+<h2>{% trans "La réservation" %}</h2>
+<table class="table table-bordered booking-resume">
+    <tbody>
+        <tr>
+            <th class="b-state">{{ booking.get_state_display }}</th>
+            <td><a href="{{booking.product.get_absolute_url}}" class="b-title">{{booking.product.summary|capfirst}}</a></td>
+        </tr>
+        <tr>
+            <th>{% trans "Début" %}</th>
+            <td class="align-center">{{booking.started_at|date:"l d F Y H:i"|capfirst}}</td>
+        </tr> 
+        <th>{% trans "Fin" %}</th>
+            <td class="align-center">{{booking.ended_at|date:"l d F Y H:i"|capfirst}}</td>
+        </tr>
+        <tr>
+            <th>{% trans "Montant" %}</th>
+            <td class="align-center"><b>{{booking.total_amount}} &euro;</b></td>
+        </tr>
+        {% if request.user == booking.owner %}
+        {% if booking.state == booking.STATE.PENDING or booking.state == booking.STATE.ENDED or booking.state == booking.STATE.CLOSED %}    
+        <tr>
+            <th>{% trans "Commission"%}</th>
+            <td class="align-center"><b>{{booking.commission|floatformat:2}} &euro;</b></td>
+        </tr>
+        {% endif %}
+        {% endif %}
+        {% if not booking.state == "rejected" %}
+        <tr class="b-action">
+            <td colspan="2">{% bookingaction request booking %}</td>
+        </tr>
+        {% endif %}
+    </tbody>
+</table>
+
+{% if request.user == booking.borrower %}
+    <h2>{% trans "Information sur le propriétaire" %}</h2>
+    <table class="table table-bordered booking-resume">
+    <tr>
+        <td class="b-profil-avatar" style="width: 100px; border-right: 1px solid #DDD;" rowspan="3">
+            {% if booking.owner.avatar %}
+                <img src="{{ booking.owner.avatar.profil.url }}" width="100" height="100" alt="">
+            {% else %}
+                <img src="{{ MEDIA_URL }}images/default_avatar.png" width="100" height="100" alt="">
+            {% endif %}
+            <span style="margin-top: 0; margin-left: 10px;" class="stars empty"><span class="stars filled_{{ booking.owner.average_note }}"></span></span>
+        </td>
+        <td style="text-align: center; border-left: none;">
+            <a href="{{ booking.owner.get_absolute_url }}">
+            {% if booking.state == booking.STATE.AUTHORIZED or booking.state == booking.STATE.REJECTED %}
+                {{ booking.owner.username|capfirst }}
+            {% else %}
+                {{ booking.owner.first_name|capfirst }} {{ booking.last_name|capfirst }}
+            {% endif %}
+            </a>
+        </td>
+    </tr>
+    {% if booking.state == booking.STATE.AUTHORIZED or booking.state == booking.STATE.REJECTED %}
+    <tr>
+        <td style="text-align: center;">
+            {{ booking.owner.default_address.city }} - {{ booking.owner.default_address.zipcode }}
+        </td>
+    </tr>
+    {% else %}
+    <tr>
+        <td style="text-align: center;">
+            {{ booking.owner.default_address.city }} - {{ booking.owner.default_address.zipcode }}
+        </td>
+    </tr>
+    <tr>
+        <td style="text-align: center;">
+            {% with booking.owner.phones.all|first as phone %}
+            {{ phone }}
+            {% endwith %}
+        </td>
+    </tr>
+    {% endif %}
+    </table>
+{% endif %}
+{% if request.user == booking.owner %}
+    <h2>{%  trans "Informations sur le locataire" %}</h2>
+    <table class="table table-bordered booking-resume">
+    <tr>
+        <td class="b-profil-avatar" style="width: 100px; border-right: 1px solid #DDD;" rowspan="3">
+            {% if booking.borrower.avatar %}
+                <img src="{{ booking.borrower.avatar.profil.url }}" width="100" height="100" alt="">
+            {% else %}
+                <img src="{{ MEDIA_URL }}images/default_avatar.png" width="100" height="100" alt="">
+            {% endif %}
+            <span style="margin-top: 0; margin-left: 10px;" class="stars empty"><span class="stars filled_{{ booking.borrower.average_note }}"></span></span>
+        </td>
+        <td style="text-align: center; border-left: none;">
+            <a href="{{ booking.borrower.get_absolute_url }}">
+            {% if booking.state == booking.STATE.AUTHORIZED or booking.state == booking.STATE.REJECTED %}
+                {{ booking.borrower.username|capfirst }}
+            {% else %}
+                {{ booking.borrower.first_name|capfirst }} {{ booking.borrower.last_name|capfirst }}
+            {% endif %}
+            </a>
+        </td>
+    </tr>
+    {% if booking.state == booking.STATE.AUTHORIZED or booking.state == booking.STATE.REJECTED %}
+    <tr>
+        <td style="text-align: center;">
+            {{ booking.borrower.default_address.city }} - {{ booking.borrower.default_address.zipcode }}
+        </td>
+    </tr>
+    {% else %}
+    <tr>
+        <td style="text-align: center;">
+            {{ booking.borrower.default_address.city }} - {{ booking.borrower.default_address.zipcode }}
+        </td>
+    </tr>
+    <tr>
+        <td style="text-align: center;">
+            {% with booking.borrower.phones.all|first as phone %}
+            {{ phone }}
+            {% endwith %}
+        </td>
+    </tr>
+    {% endif %}
+    </table>
+{% endif %}
+{% if booking.borrowercomment %}
+    <div style="margin-bottom: 30px;">
+        <h2 style="margin-bottom: 20px;">
+            {% if request.user == booking.borrower %}
+                {% trans "Votre commentaire"%}
+            {% else %}
+                {% trans "Commentaire du locataire"%}
+            {% endif %}
+        </h2>
+        {% with booking.borrowercomment as comment %}
+            {% include "rent/partials/comment.html" %}
+        {% endwith %}
     </div>
-    <div id="sub-menu">
-        <ul class="x12">
-            {% if booking.owner == user %}
-            <li class="sub-tab first selected">
-                {% if not booking.state == booking.STATE.CLOSED and not booking.state == booking.STATE.REJECTED %}
-                {% trans "Locations en cours" %}
-                {% else %}
-                <a href="{% url owner_booking %}">{% trans "Locations en cours" %}</a>
-                {% endif %}
-            </li>
-			<li class="sub-tab">
-			    {% if booking.state == booking.STATE.CLOSED or booking.state == booking.STATE.REJECTED %}
-			    {% trans "Historique des locations" %}
-			    {% else %}
-			    <a href="{% url owner_history %}">{% trans "Historique des locations" %}</a>
-			    {% endif %}
-			</li>
-			<li class="sub-tab"><a href="{% url owner_product %}">{% trans "Mes objets" %}</a></li>
-			<li class="sub-tab"><a href="{% url product_create %}">{% trans "Ajouter un objet" %}</a></li>
-		    {% else %}
-		    <li class="sub-tab first">
-		        {% if not booking.state == booking.STATE.CLOSED and not booking.state == booking.STATE.REJECTED %}
-		        {% trans "Locations en cours" %}
-		        {% else %}
-		        <a href="{% url borrower_booking %}">{% trans "Locations en cours" %}</a>
-		        {% endif %}
-		    </li>
-			<li class="sub-tab">
-			    {% if booking.state == booking.STATE.CLOSED or booking.state == booking.STATE.REJECTED %}
-			    {% trans "Historique des locations" %}
-			    {% else %}
-			    <a href="{% url borrower_history %}">{% trans "Historique des locations" %}</a>
-			    {% endif %}
-			</li>
-		    {% endif %}
-        </ul>
-    </div>
-    <div class="x8">
-        <div class="content-header x8 first">
-            <h2>{% trans "Résumé" %}</h2>
-        </div>
-        <div class="x8 first" style="margin-bottom: 20px;">
-            <a class="pl-img" href="{{ booking.product.get_absolute_url }}">
-				{% with booking.product.pictures.all|first as picture %}
-          {% if picture.thumbnail %}
-           <img src="{{ picture.thumbnail.url }}" alt="booking.product.summary" />
-          {% endif %}
-         {% endwith %}
-			</a>
-			<div class="pl-header">
-				<h2><a href="{{ booking.product.get_absolute_url }}">{{ booking.product.summary|capfirst|truncate:50 }}</a></h2>
-			</div>
-			<div class="pl-content">
-				<div class="pl-desc">{{ booking.product.description|truncate:100 }}</div>
-				<div class="pl-distance">
-				</div>
-				<div class="pl-price">
-				</div>
-			</div>
-			{% if request.user == booking.borrower %}
-				<div class="pl-footer">
-					{% trans "Propriétaire :" %}	 <a href="{{ booking.product.owner.get_absolute_url }}" class="owner">{{ booking.product.owner.username }}</a> | {{ booking.product.address.city|capfirst }}, {{ booking.product.address.zipcode }}
-				</div>
-			{% endif %}
-			{% if request.user == booking.owner %}
-				<div class="pl-footer">
-					{% trans "Locataire :" %} <a href="{{ booking.borrower.get_absolute_url }}" class="owner">{{ booking.borrower.get_full_name }}</a>
-				</div>
-			{% endif%}
-        </div>
-        <div class="content-header x8 first">
-            <h2>{% trans "Dates et total" %}</h2>
-        </div>
-        <div class="x8 first">
-            <table class="booking-resume">
-                <tr>
-                    <th>{% trans "Début :" %}</th>
-                    <td>{{ booking.started_at|date:"l j F Y"|capfirst }} à {{ booking.started_at|date:"H:i" }}</td>
-                </tr>
-                <tr>
-                    <th>{% trans "Fin :" %}</th>
-                    <td>{{ booking.ended_at|date:"l j F Y"|capfirst }} à {{ booking.ended_at|date:"H:i" }}</td>
-                </tr>
-                  <th>{% trans "Quantité :" %}</th>
-                  <td>{{ booking.quantity }}</th>
-                </tr>
-                <tr>
-                    <th>{% trans "Prix par jour :" %}</th>
-                    <td class="number">{{ booking.product.prices.day|first }}</td>
-                </tr>
-                <tr>
-                    <th>{% trans "Durée de la location :" %}</th>
-                    <td class="number">{{ booking.started_at|timesince:booking.ended_at }}</td>
-                </tr>
-                <tr class="total">
-                    <th>{% trans "Total :" %}</th>
-                    <td class="number">{{ booking.total_amount|quantize|currency }}</td>
-                </tr>
-            </table>
-        </div>
-    </div>
-    <div class="x3">
-        <div class="box-tools" style="background-color: #FFF;">
-            <h3>{% trans "Statut de la location" %}</h3>
-            <div class="box-tools-bottom clearfix">
-                {% include "rent/partials/booking_status.html" %}
-            </div>
-        </div>
-    </div>
+{% endif %}
+{% if booking.ownercomment %}
+<div style="margin-bottom: 30px;">
+    <h2 style="margin-bottom: 20px;">
+        {% if request.user == booking.owner %}
+            {% trans "Votre commentaire"%}
+        {% else %}
+            {% trans "Commentaire du propriétaire"%}
+        {% endif %}
+    </h2>
+    {% with booking.ownercomment as comment %}
+        {% include "rent/partials/comment.html" %}
+    {% endwith %}
 </div>
+{% endif %}
 {% endblock %}

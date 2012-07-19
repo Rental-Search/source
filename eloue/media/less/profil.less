@@ -1,0 +1,55 @@
+// PROFIL BLOCK
+//-------------
+
+.profil-block {
+  @shadow: 0px 1px 0 rgba(255, 255, 255, 0.5);
+  .box-shadow(@shadow);
+  border-bottom: 1px solid #B2CED9;
+  
+  padding: 0 20px 10px 20px;
+  margin-bottom: 20px;
+
+  .add-avatar-link {
+    position: absolute; 
+    top: 80px; 
+    left: 42px; 
+    
+    text-align: center; 
+    color: #364C59;
+
+    #font > .sans-serif('Ubuntu', normal, 14px);
+    text-decoration: underline; 
+
+    line-height: 18px;
+  }
+  
+  h3 {
+    #font > .sans-serif('Ubuntu', normal, 18px);
+    font-style: italic;
+    color: @blueDark;
+    
+    margin-bottom: 20px;
+  }
+  
+  h4 {
+    #font > .sans-serif('Ubuntu', bold, 14px);
+    color: @blueDark;
+    
+    margin-bottom: 5px;
+  }
+  
+  p {
+     #font > .sans-serif('Ubuntu', normal, @basefont);
+      color: @blueDark;
+
+      margin-bottom: 10px;
+  }
+  
+  table { width: 200px; }
+  
+  &.last {
+    border-bottom: 0;
+    @shadow: 0 0 0 rgba(255, 255, 255, 0.5);
+    .box-shadow(@shadow);
+  }
+}

@@ -1,0 +1,71 @@
+{% load bookingaction i18n product %}
+{% if object_list %}
+<ul class="booking-list">
+	{% for booking in object_list %}
+		<li>
+			{% if request.user == booking.borrower %}
+				<a href="{{booking.owner.get_absolute_url}}" class="m-img">
+					{% if booking.owner.avatar %}
+						<img src="{{booking.owner.thumbnail.url}}" width="60" height="60" alt="">
+					{% else %}
+						<img src="{{ MEDIA_URL }}images/default_avatar.png" width="60" height="60" alt="">
+					{% endif %}
+				</a>
+			{% else %}
+				<a href="{{booking.borrower.get_absolute_url}}" class="m-img">
+					{% if booking.borrower.avatar %}
+						<img src="{{booking.borrower.thumbnail.url}}" width="60" height="60" alt="">
+					{% else %}
+						<img src="{{ MEDIA_URL }}images/default_avatar.png" width="60" height="60" alt="">
+					{% endif %}
+				</a>
+			{% endif %}
+			<div class="m-content">
+				<div class="m-body">
+					<p class="m-sender">
+						<a href="{{booking.borrower.get_absolute_url}}">{{booking.borrower.first_name }} {{ booking.borrower.last_name }}</a>
+						{% if booking.state == booking.STATE.AUTHORIZED %}
+							veut vous réserver :
+						{% else %}
+							{% if booking.state == booking.STATE.REJECTED %}
+							voulait vous réserver :
+							{% else %}
+							a réservé :
+							{% endif %}
+						{% endif %}
+					</p>
+					<div class="m-text">
+						<table class="table table-bordered booking-resume">
+							<tbody>
+							<tr>
+								<th class="b-state">{{ booking.get_state_display }}</th>
+								<td><a href="{{booking.get_absolute_url}}" class="b-title">{{booking.product.summary}}</a> <a href="{{booking.get_absolute_url}}" class="b-more"> ({% trans "voir le détail" %})</a></td>
+							</tr>
+							<tr>
+								<th>{% trans "Début" %}</th>
+								<td class="align-center">{{booking.started_at|date:"l d F Y H:i"|capfirst}}</td>
+							</tr> 
+								<th>{% trans "Fin" %}</th>
+								<td class="align-center">{{booking.ended_at|date:"l d F Y H:i"|capfirst}}</td>
+							</tr>
+							<tr>
+								<th>{% trans "Montant" %}</th>
+								<td class="align-center"><b>{{booking.total_amount|currency}}</b></td>
+							</tr>
+							{% if not booking.state == "rejected" %}
+							<tr class="b-action">
+								<td colspan="2">{% bookingaction request booking %}</td>
+							</tr>
+							{% endif %}
+							</tbody>
+						</table>
+					</div>
+					<span class="message-dial"></span>
+				</div>
+			</div>
+		</li>
+	{% endfor %}
+</ul>
+{% else %}
+<p style="text-align: center; margin-top: 60px;">{% trans "Pas de réservation" %}</p>
+{% endif %}

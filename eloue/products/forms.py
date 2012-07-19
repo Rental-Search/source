@@ -3,22 +3,28 @@ import re
 from decimal import Decimal as D
 
 import django.forms as forms
+from form_utils.forms import BetterModelForm
 from django.conf import settings
 from django.core.validators import EMPTY_VALUES
 from django.utils.translation import ugettext as _
 
 from haystack.forms import SearchForm
 from mptt.forms import TreeNodeChoiceField
-from eloue.accounts.models import Patron
+from eloue.accounts.fields import DateSelectField
+from eloue.accounts.models import Patron, COUNTRY_CHOICES, Address
 from eloue.geocoder import GoogleGeocoder
-from eloue.products.fields import FacetField
-from eloue.products.models import Alert, PatronReview, ProductReview, Product, Picture, Category, UNIT, PAYMENT_TYPE, ProductRelatedMessage, MessageThread
+from eloue.products.fields import FacetField, FRLicensePlateField
+from eloue.products.models import Alert, PatronReview, ProductReview, Product, CarProduct, RealEstateProduct, Picture, Category, UNIT, PAYMENT_TYPE, ProductRelatedMessage, MessageThread
+from eloue.products.widgets import PriceTextInput, CommentedSelectInput, CommentedTextInput
 from eloue.products.utils import Enum
 from django_messages.forms import ComposeForm
 import datetime
 from django.db.models import signals
 from django_messages import utils
 from django_messages.fields import CommaSeparatedUserField
+
+
+from eloue.accounts.models import Address
 
 if "notification" in settings.INSTALLED_APPS:
     from notification import models as notification
@@ -37,9 +43,9 @@ DEFAULT_RADIUS = getattr(settings, 'DEFAULT_RADIUS', 50)
 
 
 class FacetedSearchForm(SearchForm):
-    q = forms.CharField(required=False, max_length=100, widget=forms.TextInput(attrs={'class': 'x9 inb', 'tabindex': '1'}))
-    l = forms.CharField(required=False, max_length=100, widget=forms.TextInput(attrs={'class': 'x9 inb', 'tabindex': '2'}))
-    r = forms.IntegerField(required=False, widget=forms.TextInput(attrs={'class': 'ins'}))
+    q = forms.CharField(required=False, max_length=100, widget=forms.TextInput(attrs={'class': 'x9 inb search-box-q', 'tabindex': '1', 'placeholder': 'Que voulez-vous louer ?'}))
+    l = forms.CharField(required=False, max_length=100, widget=forms.TextInput(attrs={'class': 'x9 inb', 'tabindex': '2', 'placeholder': 'Où voulez-vous louer?'}))
+    r = forms.DecimalField(required=False, widget=forms.TextInput(attrs={'class': 'ins'}))
     sort = forms.ChoiceField(required=False, choices=SORT, widget=forms.HiddenInput())
     price = FacetField(label=_(u"Prix"), pretty_name=_("par-prix"), required=False)
     categories = FacetField(label=_(u"Catégorie"), pretty_name=_("par-categorie"), required=False, widget=forms.HiddenInput())
@@ -52,7 +58,14 @@ class FacetedSearchForm(SearchForm):
         if radius in EMPTY_VALUES:
             radius = DEFAULT_RADIUS
         return radius
-    
+
+    def clean_l(self):
+        import re
+        location = self.cleaned_data.get('l', None)
+        if location:
+            location = re.sub('^[0-9]* +(.*)', r'\1', location)
+        return location
+
     def search(self):
         if self.is_valid():
             sqs = self.searchqueryset
@@ -84,10 +97,12 @@ class FacetedSearchForm(SearchForm):
             
             if self.cleaned_data['sort']:
                 sqs = sqs.order_by(self.cleaned_data['sort'])
+            else:
+                sqs = sqs.order_by(SORT.RECENT)
             return sqs, suggestions
         else:
             return self.searchqueryset, None
-    
+
 
 class AlertSearchForm(SearchForm):
     q = forms.CharField(required=False, max_length=100, widget=forms.TextInput(attrs={'class': 'inb'}))
@@ -118,7 +133,7 @@ class AlertSearchForm(SearchForm):
             return sqs
         else:
             return self.searchqueryset
-    
+
 
 class ProductReviewForm(forms.ModelForm):
     class Meta:
@@ -126,17 +141,10 @@ class ProductReviewForm(forms.ModelForm):
         exclude = ('created_at', 'ip', 'reviewer', 'patron')
 
 
-class ProductReviewForm(forms.ModelForm):
-    class Meta:
-        model = ProductReview
-        exclude = ('created_at', 'ip', 'reviewer', 'product')
-
-
 class MessageEditForm(forms.Form):
     # used in the wizard, and in the reply
-    subject = forms.CharField(label=_(u"Subject"), widget=forms.TextInput(attrs={'class': 'inm'}), required=False)
-    body = forms.CharField(label=_(u"Body"), widget=forms.Textarea(attrs={'class': 'inm'}))
-    jointOffer = forms.BooleanField(initial=False, required=False)
+    subject = forms.CharField(label=_(u"Sujet"), widget=forms.TextInput(attrs={'class': 'inm'}), required=False)
+    body = forms.CharField(label=_(u"Contenu"), widget=forms.Textarea(attrs={'class': 'inm'}))
 
     def __init__(self, *args, **kwargs):
         super(MessageEditForm, self).__init__(*args, **kwargs)
@@ -189,63 +197,237 @@ class MessageEditForm(forms.Form):
         return message_list # ... RETURNED?
 
 
-# class MessageComposeForm(ComposeForm):
-#     """
-#     A simple default form for private messages.
-#     """
-#     recipient = CommaSeparatedUserField(label=_(u"Recipient"), widget=forms.TextInput(attrs={'class': 'inm'}))
-#     subject = forms.CharField(label=_(u"Subject"), widget=forms.TextInput(attrs={'class': 'inm'}) )
-#     body = forms.CharField(label=_(u"Body"), widget=forms.Textarea(attrs={'class': 'inm'}))
+def generate_choices(slugs, empty_value=_(u"Choisissez une catégorie")):
+    if empty_value is not None:
+        yield ('', empty_value)
+
+    def _children(slugs):
+        for slug in slugs:
+            node = Category.on_site.get(slug=slug)
+            for child in node.get_children():
+                yield child
+    for child in _children(slugs):
+        descendants = child.get_descendants()
+        if descendants:
+            yield (
+                _(child.name),
+                [(descendant.pk, _(descendant.name)) for descendant in descendants]
+            )
+        else:
+            yield (child.pk, _(child.name))
+
+
+class ProductForm(BetterModelForm):
+    summary = forms.CharField(label=_("Titre de l'annnonce"), max_length=100)
+    picture_id = forms.IntegerField(required=True, widget=forms.HiddenInput())
+    picture = forms.ImageField(label=_(u"Photo"), required=False)
+    deposit_amount = forms.DecimalField(label=_(u"Dépôt de garantie"), initial=0, required=False, max_digits=8, decimal_places=2, widget=PriceTextInput(attrs={'class': 'price'}), localize=True, help_text=_(u"Nous conseillons de mettre la valeur actuelle de votre bien. Ce montant vous sera versé si votre objet est cassé ou irréparable."))
+    quantity = forms.IntegerField(label=_(u"Quantité"), initial=1, widget=forms.TextInput(attrs={'class': 'price'}), help_text=_(u"Le locataire peut réserver plusieurs exemplaires si vous les possédez"))
+    description = forms.CharField(label=_(u"Description"), widget=forms.Textarea(), help_text=_(u'Décrivez plus précisement votre objet, son état, comment et quand vous l\'utilisez.'))
+    #payment_type = forms.ChoiceField(choices=PAYMENT_TYPE, required=False, widget=forms.Select(attrs={'class': 'selm'}))
     
-#     def save(self, sender, parent_msg=None):
-#         recipients = self.cleaned_data['recipient']
-#         subject = self.cleaned_data['subject']
-#         body = self.cleaned_data['body']
-#         message_list = []
-#         for r in recipients:
-#             if not hasattr(r, 'new_messages_alerted'):
-#                 patron = Patron.objects.get(pk=r.pk)
-#                 r = patron # Hacking to make messages work
-#             if not r.new_messages_alerted:
-#                 signals.post_save.disconnect(utils.new_message_email, ProductRelatedMessage)
-#             else:
-#                 signals.post_save.connect(utils.new_message_email, ProductRelatedMessage)
-#             msg = ProductRelatedMessage(
-#                 sender = sender,
-#                 recipient = r,
-#                 subject = subject,
-#                 body = body,
-#             )
-#             if parent_msg is not None:
-#                 msg.parent_msg = parent_msg
-#                 parent_msg.replied_at = datetime.datetime.now()
-#                 parent_msg.save()
-#             msg.save()
-#             message_list.append(msg)
-#             if notification:
-#                 if parent_msg is not None:
-#                     notification.send([r], "messages_reply_received", {'message': msg,})
-#                 else:
-#                     notification.send([r], "messages_received", {'message': msg,})
-#         return message_list
+    hour_price = forms.DecimalField(label=_(u"L'heure"), required=False, max_digits=10, decimal_places=2, min_value=D('0.01'), widget=PriceTextInput(attrs={'class': 'price'}), localize=True)
+    day_price = forms.DecimalField(label=_(u"Tarif journée"), required=True, max_digits=10, decimal_places=2, min_value=D('0.01'), widget=PriceTextInput(attrs={'class': 'price'}), localize=True, help_text=_(u"20% de frais de commission (comprenant notamment l'assurance, le paiement en ligne,etc.) seront prélevés sur ce prix à chaque location."))
+    week_end_price = forms.DecimalField(label=_(u"Le week-end"), required=False, max_digits=10, decimal_places=2, min_value=D('0.01'), widget=PriceTextInput(attrs={'class': 'price'}), localize=True)
+    week_price = forms.DecimalField(label=_(u"La semaine"), required=False, max_digits=10, decimal_places=2, min_value=D('0.01'), widget=PriceTextInput(attrs={'class': 'price'}), localize=True)
+    two_weeks_price = forms.DecimalField(label=_(u"Les 15 jours"), required=False, max_digits=10, decimal_places=2, min_value=D('0.01'), widget=PriceTextInput(attrs={'class': 'price'}), localize=True)
+    month_price = forms.DecimalField(label=_(u"Le mois"), required=False, max_digits=10, decimal_places=2, min_value=D('0.01'), widget=PriceTextInput(attrs={'class': 'price'}), localize=True)
+
+    def __init__(self, *args, **kwargs):
+        super(ProductForm, self).__init__(*args, **kwargs)
+        self.title = _(u'Ajouter un objet')
+        self.header = _(u'Donnez envie aux e-loueurs potentiels de louer votre objets.')
+        self.fields['category'] = forms.TypedChoiceField(
+            label=_(u"Catégorie"), coerce=lambda pk: Category.tree.get(pk=pk), 
+            choices=generate_choices((cat.slug for cat in Category.on_site.filter(parent=None) if cat.slug not in ['auto-et-moto', 'hebergement', 'motors', 'automobile', 'location-saisonniere']))
+        )
+
+    def clean_quantity(self):
+        quantity = self.cleaned_data['quantity']
+        if quantity < 1:
+            raise forms.ValidationError(_(u"Vous devez au moins louer un object"))
+        return quantity
+    
+    def clean_deposit_amount(self):
+        deposit_amount = self.cleaned_data.get('deposit_amount', None)
+        if deposit_amount in EMPTY_VALUES:
+            deposit_amount = D('0')
+        return deposit_amount
+
+    def clean_picture(self):
+        picture = self.cleaned_data.get('picture')
+        picture_id = self.cleaned_data.get('picture_id')
+        if not (picture or picture_id):
+            raise forms.ValidationError(_(u"Vous devez ajouter une photo."))
+        return picture
+
+    def clean_payment_type(self):
+        payment_type = self.cleaned_data.get('payment_type', None)
+        if payment_type in EMPTY_VALUES:
+            payment_type = 1
+        return payment_type
+    
+    class Meta:
+        model = Product
+        fieldsets = [
+            ('category', {'fields': ['category'], 'legend': _(u'Choisissez une catégorie')}),
+            ('informations de l\'objet', {
+                'fields': ['summary', 'picture_id', 'picture', 'description', 'quantity'], 
+                'legend': _(u'Informations')}),
+            ('price', {'fields': ['day_price', 'deposit_amount'], 
+                        'legend': _(u'Prix de la location')}),
+            ('price_detail', {
+                'fields': ['hour_price', 'week_end_price', 'week_price', 'two_weeks_price', 'month_price'], 
+                'legend': _(u'Grille des tarifs'),
+                'description': 'La grille tarifaire permet d\'appliquer un tarif dégressif en fonction de la période. Ces prix ne sont pas obligatoires pour publier l\'annonce, il est possible de les ajouter plus tard.',
+                'classes': ['prices-grid', 'hidden-fieldset']})
+        ]
 
 
-class ProductForm(forms.ModelForm):
-    category = TreeNodeChoiceField(queryset=Category.tree.all(), empty_label=_(u"Choisissez une catégorie"), level_indicator=u'--', widget=forms.Select(attrs={'class': 'selm'}))
-    summary = forms.CharField(label=_(u"Titre"), max_length=100, widget=forms.TextInput(attrs={'class': 'inm'}))
-    picture_id = forms.IntegerField(required=False, widget=forms.HiddenInput())
+class CarProductForm(ProductForm):
+    quantity = forms.IntegerField(widget=forms.HiddenInput(), initial=1)
+    summary = forms.CharField(required=False, widget=forms.HiddenInput(), max_length=255)
+    description = forms.CharField(label=_(u"Description"), widget=forms.Textarea(), help_text=_(u'Décrivez plus précissément votre véhicule, son état, ses particularités.'))
+    deposit_amount = forms.DecimalField(label=_(u"Dépôt de garantie"), required=False, max_digits=8, decimal_places=2, widget=PriceTextInput(attrs={'class': 'price'}), localize=True, help_text=_(u"Nous conseillons un dépôt de garantie de 2000€, qui correspond au montant de la franchise de l'assurance voiture. en cas de vol."))
+    licence_plate = FRLicensePlateField(label=_(u'N° d\'immatriculation'), required=True)
+    first_registration_date = DateSelectField(label=_(u'1er mise en circulation'))
+
+
+    def __init__(self, *args, **kwargs):
+        super(CarProductForm, self).__init__(*args, **kwargs)
+        self.title = _(u'Ajouter une voiture')
+        self.header = _(u'Votre voiture peut être très utile. Donnez envie aux e-loueurs potentiels de louer votre véhicule.')
+        self.fields['category'] = forms.TypedChoiceField(
+            label=_(u"Catégorie"), coerce=lambda pk: Category.tree.get(pk=pk), 
+            choices=generate_choices(('automobile',))
+        )
+
+    def clean(self):
+        self.cleaned_data['summary'] = u'{brand} - {model}'.format(
+            brand=self.cleaned_data.get('brand',''), model=self.cleaned_data.get('model', ''))
+        return self.cleaned_data
+
+    class Meta:
+        model = CarProduct
+        fieldsets = [
+            ('category', {'fields': ['category'], 'legend': _(u'Type de véhicule')}),
+            ('informations', {
+                'fields': ['brand', 'summary', 'model', 'picture_id', 'picture', 'description'], 
+                'legend': _(u'Description du véhicule')
+                }),
+            ('car_characteristics', {
+                'fields': ['seat_number', 'door_number', 'fuel', 'transmission', 'mileage', 'consumption'],
+                'legend': _(u'Caractéristique du véhicule'),
+                }),
+            ('assurancies_informations', {
+                'fields': ['tax_horsepower', 'licence_plate', 'first_registration_date'],
+                'legend': _(u'Informations pour l\'assurance'),
+                'description': _(u'Ces informations servent à assurer le véhicule pendant la location <a href=\"#\">(En savoir plus)</a>.'),
+                }),
+            ('options', {
+                'fields': ['air_conditioning', 'power_steering', 
+                    'cruise_control', 'gps', 'baby_seat', 'roof_box', 
+                    'bike_rack', 'snow_tires', 'snow_chains', 
+                    'ski_rack', 'cd_player', 'audio_input'],
+                'legend': _(u'Options & accessoires'),
+                }),
+            ('price', {
+                'fields': ['day_price', 'deposit_amount', 'km_included', 'costs_per_km'], 
+                'legend': _(u'Prix de la location')
+                }),
+            ('price_detail', {
+                'fields': ['hour_price', 'week_end_price', 'week_price', 'two_weeks_price', 'month_price'], 
+                'legend': _(u'Grille des tarifs'),
+                'description': _(u'La grille tarifaire permet d\'appliquer un tarif dégressif en fonction de la période. Ces prix ne sont pas obligatoires pour publier l\'annonce, il est possible de les ajouter plus tard.'),
+                'classes': ['prices-grid', 'hidden-fieldset']
+                })
+            ]
+        widgets = {
+            'seat_number': CommentedSelectInput(info_text=_(u'place(s)')),
+            'door_number': CommentedSelectInput(info_text=_(u'porte(s)')),
+            'consumption': CommentedSelectInput(info_text=_(u'litre/100km')),
+            'tax_horsepower': CommentedSelectInput(info_text=_(u'CV')),
+            'km_included': CommentedTextInput(info_text=_(u'Km')),
+            'costs_per_km': CommentedTextInput(info_text=_(u'€/Km'))
+        }
+
+
+class RealEstateForm(ProductForm):
+    quantity = forms.IntegerField(widget=forms.HiddenInput(), initial=1)
+    description = forms.CharField(label=_(u"Description"), widget=forms.Textarea(), help_text=_(u'Décrivez les spécifités de votre logement et insistez sur ce qui le rend exceptionnel.'))
+    deposit_amount = forms.DecimalField(label=_(u"Dépôt de garantie"), required=False, max_digits=8, decimal_places=2, widget=PriceTextInput(attrs={'class': 'price'}), localize=True, help_text=_(u"Nous conseillons un dépôt de garantie de 75€. Ceci correspond au montant de la franchise de l'assurance."))
+    day_price = forms.DecimalField(label=_(u"Prix par nuit"), required=True, max_digits=10, decimal_places=2, min_value=D('0.01'), widget=PriceTextInput(attrs={'class': 'price'}), localize=True, help_text=_(u"Prix de location à la journée"))
+
+    def __init__(self, *args, **kwargs):
+        super(RealEstateForm, self).__init__(*args, **kwargs)
+        self.title = _(u'Ajouter un logement')
+        self.header = _(u'Votre logement est unique. Donnez envie aux e-loueurs potentiels de venir y séjourner.')
+        self.fields['category'] = forms.TypedChoiceField(
+            label=_(u"Catégorie"), coerce=lambda pk: Category.tree.get(pk=pk), 
+            choices=generate_choices(('location-saisonniere', ))
+        )
+
+    class Meta:
+        model = RealEstateProduct
+        fieldsets = [
+            ('category', {'fields': ['category'], 'legend': _(u'Choisissez une catégorie')}),
+            ('informations du logement', {
+                'fields': ['summary', 'picture_id', 'picture', 'description'], 
+                'legend': _(u'Informations')}),
+            ('real_estate_description', {
+                'fields' : ['capacity', 'private_life', 'chamber_number', 'rules'],
+                'legend' : _(u'Description du lieu')}),
+            ('service_included', {
+                'fields': [
+                    'air_conditioning', 'breakfast', 'balcony', 'lockable_chamber', 
+                    'towel', 'lift', 'family_friendly', 'gym', 'accessible', 
+                    'heating', 'jacuzzi', 'chimney', 'internet_access', 
+                    'kitchen', 'parking', 'smoking_accepted', 'ideal_for_events',
+                    'tv', 'washing_machine', 'tumble_dryer', 'computer_with_internet'
+                ],
+                'legend': _(u'Service inclus')}),
+            ('price', {
+                'fields': ['day_price', 'deposit_amount'], 
+                'legend': _(u'Prix de la location')}),
+            ('price_detail', {
+                'fields': ['hour_price', 'week_end_price', 'week_price', 'two_weeks_price', 'month_price'], 
+                'legend': _(u'Grille des tarifs'),
+                'description': 'La grille tarifaire permet d\'appliquer un tarif dégressif en fonction de la période. Ces prix ne sont pas obligatoires pour publier l\'annonce, il est possible de les ajouter plus tard.',
+                'classes': ['prices-grid', 'hidden-fieldset']})]
+        widgets = {
+            'capacity': CommentedSelectInput(info_text=_(u'persone(s)')),
+            'chamber_number': CommentedSelectInput(info_text=_(u'chambre(s)'))
+        }
+
+
+class ProductEditForm(BetterModelForm):
     picture = forms.ImageField(label=_(u"Photo"), required=False, widget=forms.FileInput(attrs={'class': 'inm'}))
-    deposit_amount = forms.DecimalField(label=_(u"Caution"), initial=0, required=False, max_digits=8, decimal_places=2, widget=forms.TextInput(attrs={'class': 'inm price'}), localize=True)
-    quantity = forms.IntegerField(label=_(u"Quantité"), initial=1, widget=forms.TextInput(attrs={'class': 'inm price'}))
-    description = forms.CharField(label=_(u"Description"), widget=forms.Textarea())
-    payment_type = forms.ChoiceField(choices=PAYMENT_TYPE, required=False, widget=forms.Select(attrs={'class': 'selm'}))
-    
-    hour_price = forms.DecimalField(label=_(u"l'heure"), required=False, max_digits=10, decimal_places=2, min_value=D('0.01'), widget=forms.TextInput(attrs={'class': 'ins'}), localize=True)
-    day_price = forms.DecimalField(label=_(u"la journée"), required=True, max_digits=10, decimal_places=2, min_value=D('0.01'), widget=forms.TextInput(attrs={'class': 'ins'}), localize=True)
-    week_end_price = forms.DecimalField(label=_(u"le week-end"), required=False, max_digits=10, decimal_places=2, min_value=D('0.01'), widget=forms.TextInput(attrs={'class': 'ins'}), localize=True)
-    week_price = forms.DecimalField(label=_(u"la semaine"), required=False, max_digits=10, decimal_places=2, min_value=D('0.01'), widget=forms.TextInput(attrs={'class': 'ins'}), localize=True)
-    two_weeks_price = forms.DecimalField(label=_(u"les 15 jours"), required=False, max_digits=10, decimal_places=2, min_value=D('0.01'), widget=forms.TextInput(attrs={'class': 'ins'}), localize=True)
-    month_price = forms.DecimalField(label=_(u"le mois"), required=False, max_digits=10, decimal_places=2, min_value=D('0.01'), widget=forms.TextInput(attrs={'class': 'ins'}), localize=True)
+    deposit_amount = forms.DecimalField(label=_(u"Dépôt de garantie"), initial=0, required=False, max_digits=8, decimal_places=2, widget=PriceTextInput(attrs={'class': 'price'}), localize=True, help_text=_(u"Montant utilisé en cas de dédomagement"))
+    quantity = forms.IntegerField(label=_(u"Quantité"), initial=1, widget=forms.TextInput(attrs={'class': 'price'}), help_text=_(u"Le locataire peut réserver plusieurs exemplaires si vous les possédez"))
+
+
+    def __init__(self, *args, **kwargs):
+        super(ProductEditForm, self).__init__(*args, **kwargs)
+        self.fields['category'] = forms.TypedChoiceField(
+            label=_(u"Catégorie"), coerce=lambda pk: Category.tree.get(pk=pk), 
+            choices=generate_choices(
+                (cat.slug for cat in Category.on_site.filter(parent=None) if cat.slug not in ['auto-et-moto', 'hebergement', 'motors', 'automobile', 'location-saisonniere']), None
+            )
+        )
+    class Meta:
+        model = Product
+        fieldsets = [
+            ('category', {'fields': ['category'], 'legend': _(u'Catégorie')}),
+            ('informations', {
+                'fields': ['summary', 'picture', 'description', 'quantity', 'deposit_amount'], 
+                'legend': _(u'Informations')}),
+        ]
+
+    def save(self, *args, **kwargs):
+        if self.new_picture:
+            self.instance.pictures.all().delete() 
+            self.instance.pictures.add(Picture.objects.create(image=self.cleaned_data['picture']))
+        return super(ProductEditForm, self).save(*args, **kwargs)
     
     def clean_quantity(self):
         quantity = self.cleaned_data['quantity']
@@ -260,53 +442,152 @@ class ProductForm(forms.ModelForm):
         return deposit_amount
     
     def clean_picture(self):
-        picture = self.cleaned_data['picture']
-        picture_id = self.cleaned_data['picture_id']
-        if not (picture or picture_id):
-            raise forms.ValidationError(_(u"Vous devez ajouter une photo."))
-    
+        picture = self.cleaned_data.get('picture', None)
+        self.new_picture = picture
+        return picture
+
     def clean_payment_type(self):
         payment_type = self.cleaned_data.get('payment_type', None)
         if payment_type in EMPTY_VALUES:
             payment_type = 1
         return payment_type
+
+class CarProductEditForm(ProductEditForm):
+    summary = forms.CharField(required=False, widget=forms.HiddenInput(), max_length=255)
+    first_registration_date = DateSelectField()
+    licence_plate = FRLicensePlateField(label=_(u'N° d\'immatriculation'), required=True)
+    first_registration_date = DateSelectField(label=_(u'1er mise en circulation'))
+
+    def __init__(self, *args, **kwargs):
+        super(CarProductEditForm, self).__init__(*args, **kwargs)
+        del self.fields['quantity']
+        self.fields['category'] = forms.TypedChoiceField(
+            label=_(u"Catégorie"), coerce=lambda pk: Category.tree.get(pk=pk), 
+            choices=generate_choices(('automobile',), None)
+        )
+
+    def clean(self):
+        if self.errors:
+            return self.cleaned_data
+        self.cleaned_data['summary'] = u'{brand} - {model}'.format(**self.cleaned_data)
+        return self.cleaned_data
+
+    class Meta:
+        model = CarProduct
+        fieldsets = [
+            ('category', {'fields': ['category'], 'legend': _(u'Type de véhicule')}),
+            ('informations', {
+                'fields': ['summary', 'brand', 'model', 'picture', 'description', 'deposit_amount', 'km_included', 'costs_per_km'], 
+                'legend': _(u'Description du véhicule')
+                }),
+            ('car_characteristics', {
+                'fields': ['seat_number', 'door_number', 'fuel', 'transmission', 'mileage', 'consumption'],
+                'legend': _(u'Caractéristique du véhicule'),
+                }),
+            ('assurancies_informations', {
+                'fields': ['tax_horsepower', 'licence_plate', 'first_registration_date'],
+                'legend': _(u'Informations pour l\'assurance'),
+                'description': _(u'Ces informations servent à assurer le véhicule pendant la location <a href=\"#\">(En savoir plus)</a>.'),
+                }),
+            ('options', {
+                'fields': ['air_conditioning', 'power_steering', 
+                    'cruise_control', 'gps', 'baby_seat', 'roof_box', 
+                    'bike_rack', 'snow_tires', 'snow_chains', 
+                    'ski_rack', 'cd_player', 'audio_input'],
+                'legend': _(u'Options & accessoires'),
+                })
+        ]           
+        widgets = {
+            'seat_number': CommentedSelectInput(info_text=_(u'place(s)')),
+            'door_number': CommentedSelectInput(info_text=_(u'porte(s)')),
+            'consumption': CommentedSelectInput(info_text=_(u'litre/100km')),
+            'tax_horsepower': CommentedSelectInput(info_text=_(u'CV')),
+            'km_included': CommentedTextInput(info_text=_(u'Km')),
+            'costs_per_km': CommentedTextInput(info_text=_(u'€/Km'))
+        }
+
+class RealEstateEditForm(ProductEditForm):
+    def __init__(self, *args, **kwargs):
+        super(RealEstateEditForm, self).__init__(*args, **kwargs)
+        self.fields['category'] = forms.TypedChoiceField(
+            label=_(u"Catégorie"), coerce=lambda pk: Category.tree.get(pk=pk), 
+            choices=generate_choices(('location-saisonniere', ), None)
+        )
+        del self.fields['quantity']
     
     class Meta:
-        model = Product
-        fields = ('category', 'summary', 'picture_id', 'picture', 'deposit_amount', 'quantity', 'description', 'payment_type')
+        model = RealEstateProduct
+        fieldsets = [
+            ('category', {'fields': ['category'], 'legend': _(u'Choisissez un catégorie')}),
+            ('informations', {
+                'fields': ['summary', 'picture', 'description'], 
+                'legend': _(u'Informations')}),
+            ('real_estate_description', {
+                'fields' : ['capacity', 'private_life', 'chamber_number', 'rules'],
+                'legend' : _(u'Description du lieu')}),
+            ('service_included', {
+                'fields': [
+                    'air_conditioning', 'breakfast', 'balcony', 'lockable_chamber', 
+                    'towel', 'lift', 'family_friendly', 'gym', 'accessible', 
+                    'heating', 'jacuzzi', 'chimney', 'internet_access', 'kitchen', 
+                    'parking', 'smoking_accepted', 'ideal_for_events', 'tv', 
+                    'washing_machine', 'tumble_dryer', 'computer_with_internet'
+                ],
+                'legend': _(u'Service inclus')})
+        ]
 
+     
 
-class ProductEditForm(forms.ModelForm):
-    category = TreeNodeChoiceField(queryset=Category.tree.all(), empty_label="Choisissez une catégorie", level_indicator=u'--')
-    summary = forms.CharField(max_length=100, widget=forms.TextInput(attrs={'class': 'inm'}))
-    deposit_amount = forms.DecimalField(initial=0, required=False, max_digits=8, decimal_places=2, widget=forms.TextInput(attrs={'class': 'inm price'}), localize=True)
-    quantity = forms.IntegerField(initial=1, widget=forms.TextInput(attrs={'class': 'inm price'}))
-    picture = forms.ImageField(label=_(u"Photo"), required=False, widget=forms.FileInput(attrs={'class': 'inm'}))
-    description = forms.CharField(label=_(u"Description"), widget=forms.Textarea())
-
-    hour_price = forms.DecimalField(label=_(u"l'heure"), required=False, max_digits=10, decimal_places=2, min_value=D('0.01'), widget=forms.TextInput(attrs={'class': 'ins'}), localize=True)
-    day_price = forms.DecimalField(label=_(u"la journée"), required=True, max_digits=10, decimal_places=2, min_value=D('0.01'), widget=forms.TextInput(attrs={'class': 'ins'}), localize=True)
-    week_end_price = forms.DecimalField(label=_(u"le week-end"), required=False, max_digits=10, decimal_places=2, min_value=D('0.01'), widget=forms.TextInput(attrs={'class': 'ins'}), localize=True)
-    week_price = forms.DecimalField(label=_(u"la semaine"), required=False, max_digits=10, decimal_places=2, min_value=D('0.01'), widget=forms.TextInput(attrs={'class': 'ins'}), localize=True)
-    two_weeks_price = forms.DecimalField(label=_(u"les 15 jours"), required=False, max_digits=10, decimal_places=2, min_value=D('0.01'), widget=forms.TextInput(attrs={'class': 'ins'}), localize=True)
-    month_price = forms.DecimalField(label=_(u"le mois"), required=False, max_digits=10, decimal_places=2, min_value=D('0.01'), widget=forms.TextInput(attrs={'class': 'ins'}), localize=True)
+class ProductAddressEditForm(BetterModelForm):
+    addresses__address1 = forms.CharField(label=_(u"Rue"), max_length=255, required=False)
+    addresses__zipcode = forms.CharField(label=_(u"Code postal"), required=False, max_length=9)
+    addresses__city = forms.CharField(label=_(u"Ville"), required=False, max_length=255)
+    addresses__country = forms.ChoiceField(label=(u"Pays"), choices=COUNTRY_CHOICES, initial=settings.LANGUAGE_CODE.split('-')[1].upper(), required=False)
     
-    
+
     def __init__(self, *args, **kwargs):
-        super(ProductEditForm, self).__init__(*args, **kwargs)
-        self.fields['category'].widget.attrs['class'] = "selm"
-    
-    def clean_deposit_amount(self):
-        deposit_amount = self.cleaned_data.get('deposit_amount', None)
-        if deposit_amount in EMPTY_VALUES:
-            deposit_amount = D('0')
-        return deposit_amount
-    
-    def clean_picture(self):
-        picture = self.cleaned_data.get('picture', None)
-        self.new_picture = picture
-        return picture
-    
+        super(ProductAddressEditForm, self).__init__(*args, **kwargs)
+        self.fields['address'].queryset = self.instance.owner.addresses.all()
+        self.fields['address'].label = _(u"Adresse")
+        self.fields['address'].required = False
+
+    def clean(self):
+        address = self.cleaned_data.get('address')
+        address1 = self.cleaned_data['addresses__address1']
+        zipcode = self.cleaned_data['addresses__zipcode']
+        city = self.cleaned_data['addresses__city']
+        country = self.cleaned_data['addresses__country']
+
+        if not address and not (address1 and zipcode and city and country):
+            self.cleaned_data['address'] = self.instance.address
+            raise forms.ValidationError(_(u"Vous devez spécifiez une adresse"))
+        if not any(self.errors) and not address:
+            self.cleaned_data['address'] = Address(address1=address1, zipcode=zipcode, city=city, country=country, patron=self.instance.owner)
+            self.cleaned_data['address'].save()
+        return self.cleaned_data
+
+    class Meta:
+        model = Product
+        fields = ('address', 'addresses__address1', 'addresses__zipcode', 'addresses__city', 'addresses__country')
+        fieldsets = [
+            ('address', {
+                'fields': ['address'], 
+                'legend': 'Adresse existante'}),
+            ('new_address', {
+                'fields': ['addresses__address1', 'addresses__zipcode', 'addresses__city', 'addresses__country'],
+                'legend': 'Nouvelle adresse',
+                'classes': ['new-address', 'hidden-fieldset']})
+        ]
+
+      
+class ProductPriceEditForm(BetterModelForm):
+    hour_price = forms.DecimalField(label=_(u"L'heure"), required=False, max_digits=10, decimal_places=2, min_value=D('0.01'), widget=PriceTextInput(attrs={'class': 'price'}), localize=True)
+    day_price = forms.DecimalField(label=_(u"La journée"), required=True, max_digits=10, decimal_places=2, min_value=D('0.01'), widget=PriceTextInput(attrs={'class': 'price'}), localize=True)
+    week_end_price = forms.DecimalField(label=_(u"Le week-end"), required=False, max_digits=10, decimal_places=2, min_value=D('0.01'), widget=PriceTextInput(attrs={'class': 'price'}), localize=True)
+    week_price = forms.DecimalField(label=_(u"La semaine"), required=False, max_digits=10, decimal_places=2, min_value=D('0.01'), widget=PriceTextInput(attrs={'class': 'price'}), localize=True)
+    two_weeks_price = forms.DecimalField(label=_(u"Les 15 jours"), required=False, max_digits=10, decimal_places=2, min_value=D('0.01'), widget=PriceTextInput(attrs={'class': 'price'}), localize=True)
+    month_price = forms.DecimalField(label=_(u"Le mois"), required=False, max_digits=10, decimal_places=2, min_value=D('0.01'), widget=PriceTextInput(attrs={'class': 'price'}), localize=True)
+
     def save(self, *args, **kwargs):
         for unit in UNIT.keys():
             field = "%s_price" % unit.lower()
@@ -322,22 +603,28 @@ class ProductEditForm(forms.ModelForm):
                 else:
                     #TODO: could have problems with seasonal prices
                     self.instance.prices.filter(unit=UNIT[unit]).delete()
-        if self.new_picture:
-            self.instance.pictures.all().delete() 
-            self.instance.pictures.add(Picture.objects.create(image=self.cleaned_data['picture']))
-        return super(ProductEditForm, self).save(*args, **kwargs)
     
     class Meta:
         model = Product
-        fields = ('category', 'summary', 'deposit_amount', 'quantity', 'description')
+        fields = ('hour_price', 'day_price', 'week_end_price', 'week_price', 'two_weeks_price', 'month_price')
+        fieldsets = [
+            ('price', {
+                'fields': ['day_price', 'deposit_amount'], 
+                'legend': _(u'Prix de la location')}),
+            ('price_detail', {
+                'fields': ['hour_price', 'week_end_price', 'week_price', 'two_weeks_price', 'month_price'], 
+                'legend': _(u'Grille des tarifs'),
+                'description': 'La grille tarifaire permet d\'appliquer un tarif dégressif en fonction de la période. Ces prix ne sont pas obligatoires pour publier l\'annonce, il est possible de les ajouter plus tard.',
+                'classes': ['prices-grid']})
+        ]      
 
-  
 
 class ProductAdminForm(forms.ModelForm):
     category = TreeNodeChoiceField(queryset=Category.tree.all(), empty_label="Choisissez une catégorie", level_indicator=u'--')
     
     class Meta:
         model = Product
+
 
 class AlertForm(forms.ModelForm):
     designation = forms.CharField(max_length=100, widget=forms.TextInput(attrs={'class': 'inm'}))
@@ -346,6 +633,3 @@ class AlertForm(forms.ModelForm):
     class Meta:
         model = Alert
         fields = ('description', 'designation')
-
-
-

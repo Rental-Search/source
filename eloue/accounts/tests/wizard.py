@@ -89,7 +89,7 @@ class AccountWizardTest(TestCase):
             'wizard_step': 0
         })
         self.assertTrue(response.status_code, 200)
-        self.assertFormError(response, 'form', 'email', _(u"Pour garantir un service de qualité et la sécurité des utilisateurs de e-loue.com, vous ne pouvez pas vous enregistrer avec une adresse email jetable."))
+        self.assertFormError(response, 'form', 'email', _(u"Pour garantir un service de qualité et la sécurité des utilisateurs d'e-loue.com, vous ne pouvez pas vous enregistrer avec une adresse email jetable."))
     
     def test_first_step_with_already_existing_account(self):
         response = self.client.post(reverse('auth_login'), {
@@ -301,7 +301,7 @@ class FacebookAccountWizardTest(TestCase):
                 })
         self.assertRedirects(response, settings.LOGIN_REDIRECT_URL)
         p = Patron.objects.get(username='kosii2')
-        self.assertRaises(Avatar.DoesNotExist, getattr, p, 'avatar')
+        self.assertFalse(p.avatar)
         self.assertEqual(p.email, 'kosii.spam@gmail.com')
         self.assertEqual(p, FacebookSession.objects.get(access_token=access_token).user)
         self.assertFalse(p.has_usable_password())

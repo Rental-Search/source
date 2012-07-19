@@ -1,137 +1,255 @@
 {% extends "base.html" %}
 {% load i18n product %}
 
-{% block title %}{% trans "Confirmez votre réservation" %}{% endblock %}
+{% block title %}{% trans "Payez votre réservation" %}{% endblock %}
 
 {% block content %}
-<div id="content-home" class="xgrid">
-    <div id="wizard" class="x12">
-        <div class="wizard-header">
-            <h1>{% trans "Réservation" %}</h1>
-        </div>
-         <ol class="sbs-steps">
- 			{% if not user.is_authenticated %}
- 				<li>{% trans "1. Identifiez-vous" %}</li>
- 				<li class="on">{% trans "2. Confirmetion de location" %}</li>
- 			{% else %}
- 				<li>{% trans "1. Informations" %}</li>
- 				<li class="on">{% trans "2. Confirmation de location" %}</li>
- 			{% endif %}
- 		</ol>
-        <a href="{% url faq-topic-list %}" class="btn big-blue">{% trans "Obtenir de l'aide" %}</a>
-    </div>
-    <div class="x8">
-        <div class="content-header x8 first">
-            <h2>{% trans "Objet réservé" %}</h2>
-        </div>
-        <div class="x8 first" style="margin-bottom: 20px;">
-            <form class="form" action="" method="POST">
-            {% csrf_token %}
-            <a class="pl-img" href="{{ object.get_absolute_url }}">
-				{% with product.pictures.all|first as picture %}
-          {% if picture.thumbnail %}
-           <img src="{{ picture.thumbnail.url }}" alt="product.summary" />
-          {% endif %}
-         {% endwith %}
-			</a>
-			<div class="pl-header">
-				<h2><a href="{{ product.get_absolute_url }}">{{ product.summary|capfirst|truncate:50 }}</a></h2>
-			</div>
-			<div class="pl-content">
-				<div class="pl-desc">{{ product.description|truncate:100 }}</div>
-				<div class="pl-distance">
-					
-				</div>
-				<div class="pl-price">
-				    {% with product.prices.day|first as price %}
-					 <span class="price">{{ price }}</span><br />
-					 <span class="unit">par {{ price.unit|unit }}</span>
-					{% endwith %}
-				</div>
-			</div>
-			<div class="pl-footer">
-				Par <a href="{{ product.owner.get_absolute_url }}" class="owner">{{ product.owner.username }}</a> | {{ product.address.city|capfirst }}, {{ product.address.zipcode }}
-			</div>
-        </div>
-        <div class="content-header x8 first">
-			<h2>{% trans "Dates et total" %}</h2>
-		</div>
-		<div class="x8 first">
-		    <table class="booking-resume">
-                <tr>
-                    <th>{% trans "Début :" %}</th>
-                    <td>{{ preview.started_at|date:"l j F Y"|capfirst }} à {{ preview.started_at|date:"H:i"}}</td>
-                </tr>
-                <tr>
-                    <th>{% trans "Fin :" %}</th>
-                    <td>{{ preview.ended_at|date:"l j F Y"|capfirst }} à {{ preview.ended_at|date:"H:i"}}</td>
-                </tr>
-                <tr>
-                  <th>{% trans "Quantité :" %}</th>
-                  <td>{{ preview.quantity}}</th>
-                </tr>
-                <tr>
-                    <th>{% trans "Prix par jour :" %}</th>
-                    <td class="number">{{ product.prices.day|first }}</td>
-                </tr>
-                <tr>
-                    <th>{% trans "Durée de la location :" %}</th>
-                    <td class="number">{{ preview.started_at|timesince:preview.ended_at }}</td>
-                </tr>
-                <tr class="total">
-                    <th>{% trans "Total :" %}</th>
-                    <td class="number">{{ preview.total_amount|currency }}</td>
-                </tr>
-            </table>
-		</div>
-		<div id="submit-wizard" class="x8 first">
-		    <p>
-		        <input type="hidden" name="{{ step_field }}" value="{{ step0 }}" />
-    	        {{ previous_fields|safe }}
-    	        {% trans "Vous allez être redirigé(e) sur Paypal mais ne serez pas débité(e)" %}
-    		    <input type="submit" class="btn big-green" value="{% trans "Continuer" %}" />
-    		</p>
-		</div>
-	  </form>
-    </div>
-    <div class="x4">
-          <div class="box-info">
-              <h3>{% trans "Louez en toute sécurité !" %}</h3>
-              <ul class="vertical-assurancy">
-                  <li class="va-pp">
-                      {% blocktrans %}
-                        Grâce à <strong>PayPal</strong>, bénéficiez du paiement le plus sécurisé au monde.
-                      {% endblocktrans %}
-                  </li>
-                  <li class="va-assurone">
-                      {% blocktrans %}
-                        Notre <strong>partenaire assureur</strong> garantit l'objets en cas de casse.
-                      {% endblocktrans %}
-                  </li>
-              </ul>
-          </div>
-          <div id="payment-info" class="box-info">
-              {% if product.payment_type == 0 %}
-              <h3>{% trans "Paiement hors ligne" %}</h3>
-                <p>
-                    {% trans "Le propriétaire souhaite le paiement hors ligne (chèque/espèce). Vous le payerez le premier jour de la location."%}
-                </p>
-              {% else %}
-              <h3>{% trans "Paiement en ligne" %}</h3>
+<div id="wizard-page" class="container-main">
+  <ul class="breadcrumb">
+    <li><a href="{% url home %}">{% trans "Accueil" %}</a></li>
+    <li><a href="{{ request.HTTP_REFERER }}">{{ wizard_title }}</a></li>
+    <li>{% trans "Paiement de la réservation" %}</li>
+  </ul>
+  <div class="content-main">
+    <p class="form-header">
+      {% blocktrans %}
+      Lorsque vous cliquez sur "paiement" en bas de cette page, vous ne serez pas débité. Il s'agit simplement d'une pré-réservation. Vous ne serez débité que si le propriétaire accepte la demande de location sous 24h.
+      {% endblocktrans %}
+    </p>
+    <h2>{% trans "Récapitulatif de votre réservation" %}</h2>
+    <form class="form-horizontal" action="" method="POST">
+    {% csrf_token %}
+      <table class="table table-bordered booking-resume">
+      <tbody>
+          <tr>
+              <th style="vertical-align: middle; text-align">
+                {% if product.carproduct %}
+                  {% trans "Véhicule" %}
+                {% else %}
+                  {% if product.realestate.product %}
+                    {% trans "Logement" %}
+                  {% else %}
+                    {% trans "Produit" %}
+                  {% endif %}
+                {% endif %}
+              </th>
+              <td>
+                {% with product.pictures.all|first as picture %}
+                {% if picture %}
+                    <img src="{{ picture.thumbnail.url }}" alt="{{ product.summary }}" style="float: left; margin-right: 10px;">
+                {% endif %}
+                {% endwith %}
+                <h3>{{ product.summary|capfirst }}<h3> 
+                <span style="font-size: 13px">{{ product.address.city|capfirst }} - {{ product.address.zipcode }}</span>
+              </td>
+          </tr>
+          <tr>
+            <th>{% trans "Propriétaire" %}</th>
+            <td>{{ product.owner.username }}</td>
+          </tr>
+          <tr>
+            <td colspan="2" style="font-size: 12px;">
               {% blocktrans %}
-  			  <ol>
-  					<li> Paiement sur payal</li>
-  					<li> Le propriétaire est averti de votre demande</li>
-  					<li> Nous vous informons par mail de sa réponse :<br />
-  					    <ul>
-      						<li>S’il accepte vous serez débité le premier jour de la location</li>
-      						<li>S’il refuse vous ne serez pas débité</li>
-      					</ul>
-      				</li>
-  	      	 </ol>
-  			 {% endblocktrans %}
-  			 {% endif %}
-          </div> 
-	</div>
-</div>
+                L'intégralité des informations et coordonnées du propriétaire, vous seras communiqué par email s'il accepte la location.
+              {% endblocktrans %}
+            </td>
+          </td>
+          <tr>
+              <th>{% trans "Période de réservation" %}</th>
+              <td><b>Du</b> {{preview.started_at|date:"l d F Y H:i"}} <b>au</b> {{preview.ended_at|date:"l d F Y H:i"}}</td>
+          </tr> 
+          <tr>
+              <th>{% trans "Montant de la réservation" %}</th>
+              <td class="align-center">{{preview.total_amount|currency}}</td>
+          </tr>
+      </tbody>
+      </table>
+        <h2>{% trans "Vos informations" %}</h2>
+        <table class="table table-bordered booking-resume">
+          <tr>
+            <th>{% trans "Nom et Prénom" %}</th>
+            <td>{% firstof new_patron.first_name preview.first_name %} {% firstof new_patron.last_name preview.last_name %}</td>
+          </tr>
+          <tr>
+            <th>{% trans "Téléphone" %}</th>
+            <td>
+              {%firstof preview.phones__phone new_patron.phones.all|first %}
+            </td>
+          </tr>
+          <tr>
+            <th>{% trans "Adresse" %}</th>
+            <td>
+              {% if preview.addresses %}
+                {{ preview.addresses }}
+              {% else %}
+                {{preview.addresses__address1}} {{preview.addresses__zipcode}} {{preview.addresses__city}} {{preview.addresses__country}}
+              {% endif %}
+            </td>
+          </tr>
+          {% if product.carproduct %}
+          <tr>
+            <th>{% trans "Date et lieu de naissance" %}</th>
+            <td>Le {% firstof new_patron.date_of_birth|date:"d/m/Y" preview.date_of_birth|date:"d/m/Y" %} à {% firstof new_patron.place_of_birth preview.place_of_birth %}</td>
+          </tr>
+          <tr>
+            <th>{% trans "Permis de conduire" %}</th>
+            <td>{% trans "N°" %} {%firstof new_patron.drivers_license_number preview.drivers_license_number %} {% trans "délivré le" %} {% firstof new_patron.drivers_license_date|date:"d/m/Y" preview.drivers_license_date|date:"d/m/Y" %}</td>
+          </tr>
+          {% else %}
+            {% if product.realestateproduct %}
+            {% else %}
+            {% endif %}
+          {% endif %}
+        </table>
+        {% if insurance_available %}
+        <h2>{% trans "Condition et assurance" %}</h2>
+        <table class="table table-bordered booking-resume">
+          <tr>
+            <td colspan="2" id="conditions">
+              {% include "rent/partials/condition_assurance.html" %}
+            </td>
+          </tr>
+          {% if product.deposit_amount %}
+          <tr>
+            <th>
+              {% trans "Dépôt de garantie" %}
+            </th>
+            <td>
+              {{ product.local_currency_deposit_amount|currency }}<br>
+              (Uniquement débité en cas de dommage constaté et avec votre accord)
+            </td>
+          </tr>
+          {% endif %}
+        </table>
+        {% endif %}
+        <h2>{% trans "Paiement" %}</h2>
+        {% with form.non_field_errors as form_errors %}
+          {% include "partials/alerts_message.html" %}
+        {% endwith %}
+        {% if form.instance.pk %}
+        <p style="margin-bottom: 5px; line-height: 18px;">{% trans "Vos coordonnées bancaire sont déjà enregistrées. Elles vont être utilisées pour cette réservation."%}</p>
+        <table class="table table-bordered booking-resume">
+          <tr>
+            <th>{% trans "Numéro de carte de crédit"%}</th>
+            <td>{{request.user.creditcard.masked_number}}</td>
+          </tr>
+          <tr>
+            <th>{% trans "Nom du détenteur"%}</th>
+            <td>{{request.user.creditcard.holder_name}}</td>
+          </tr>
+          <tr>
+            <th>{% trans "Date d'expiration" %}</th>
+            <td>{{request.user.creditcard.expires|slice:":2"}}/{{request.user.creditcard.expires|slice:"2:"}}</td>
+          </tr>
+          <tr>
+            <td colspan="2" style="text-align: right;"><a id="display-credit-card-form" href="#">{% trans "Modifier mes coordonnées bancaire"%}</a></td>
+          </tr>
+        </table>
+        {% endif %}
+        <fieldset id="credit-card-form" {% if form.instance.pk %}style="display: none"{% endif %}>
+          {% if form.card_number %}
+            <div class="control-group {% if form.card_number.errors %} error {% endif %}">
+              <label class="control-label" for="{{ form.card_number.id_for_label }}">
+                {{ form.card_number.label }}
+              </label>
+              <div class="controls">
+                {{ form.card_number }}
+                <p class="help-block">{{ form.card_number.help_text}}</p>
+                {% if form.card_number.errors %}
+                <span class="help-inline">
+                {% for error in form.card_number.errors %}
+                  {{ error|escape }}
+                {% endfor %}
+                </span>
+                {% endif %}
+              </div>{# controls #}
+            </div>{# control-group #}
+          {% endif %}
+          {% if form.expires %}
+            <div class="control-group {% if form.expires.errors %} error {% endif %}">
+              <label class="control-label" for="{{ form.expires.id_for_label }}">
+                {{ form.expires.label }}
+              </label>
+              <div class="controls">
+                {{ form.expires }}
+                <p class="help-block">{{ form.expires.help_text}}</p>
+                {% if form.expires.errors %}
+                <span class="help-inline">
+                {% for error in form.expires.errors %}
+                  {{ error|escape }}
+                {% endfor %}
+                </span>
+                {% endif %}
+              </div>{# controls #}
+            </div>{# control-group #}
+          {% endif %}
+          {% if form.holder_name %}
+            <div class="control-group {% if form.holder_name.errors %} error {% endif %}">
+              <label class="control-label" for="{{ form.holder_name.id_for_label }}">
+                {{ form.holder_name.label }}
+              </label>
+              <div class="controls">
+                {{ form.holder_name }}
+                <p class="help-block">{{ form.holder_name.help_text}}</p>
+                {% if form.holder_name.errors %}
+                <span class="help-inline">
+                {% for error in form.holder_name.errors %}
+                  {{ error|escape }}
+                {% endfor %}
+                </span>
+                {% endif %}
+              </div>{# controls #}
+            </div>{# control-group #}
+          {% endif %}
+          {% if form.cvv %}
+            <div class="control-group {% if form.cvv.errors %} error {% endif %}">
+              <label class="control-label" for="{{ form.cvv.id_for_label }}">
+                {{ form.cvv.label }}
+              </label>
+              <div class="controls">
+                {{ form.cvv }}
+                <p class="help-block">{{ form.cvv.help_text}}</p>
+                {% if form.cvv.errors %}
+                <span class="help-inline">
+                {% for error in form.cvv.errors %}
+                  {{ error|escape }}
+                {% endfor %}
+                </span>
+                {% endif %}
+              </div>{# controls #}
+            </div>{# control-group #}
+          {% endif %}
+          {% if form.keep %}
+            <div class="control-group {% if form.keep.errors %} error {% endif %}">
+              <label class="checkbox" for="{{ form.keep.id_for_label }}">
+                {{ form.keep }} {% trans "Conserver mes coordonnées bancaires" %}
+              </label>
+              <div class="controls">
+                <p class="help-block">{{ form.keep.help_text}}</p>
+                {% if form.keep.errors %}
+                <span class="help-inline">
+                {% for error in form.keep.errors %}
+                  {{ error|escape }}
+                {% endfor %}
+                </span>
+                {% endif %}
+              </div>{# controls #}
+            </div>
+          {% endif %}
+          {% if form.instance.pk %}
+          <div class="control-group" style="text-align: right; font-family: Ubuntu, sans-serif; font-size: 13px;">
+            <a id="cancel-credit-card-form" href="#" style="color: #ea0c31;">{% trans "Annuler les modifications"%}</a>
+          </div>
+          {% endif %}
+        </fieldset>{# credit-card-form #}
+        <div class="form-actions">
+          <input type="hidden" name="{{ step_field }}" value="{{ step0 }}" />
+          {{ previous_fields|safe }}
+          <button type="submit" class="btn btn-primary">{% trans "Paiment" %}</button>
+        </div>
+    </form>
+  </div>
+</div>{# container_main #}
+{% endblock %}
+{% block footer %}
 {% endblock %}

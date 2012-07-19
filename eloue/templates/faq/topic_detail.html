@@ -10,18 +10,20 @@
 {% endblock %}
 
 {% block content %}
-<div id="content" class="xgrid">
-    <div class="content-top" style="margin-bottom: 10px;">
-        <h1>{{ topic.title }}</h1>
-    </div>
-    <div class="x12">
-  	{% if topic.description %}
-  	<p>{{ topic.description }}</p>
- 		{% endif %}
- 		{% for question in question_list %}
-  	<h2 id="{{ question.slug }}">{{ question.question }}</h2>
-  	{{ question.answer|markdown }}
- 		{% endfor %}
-	</div>
+<div id="flatpages" class="container-main">
+  <ul class="breadcrumb">
+    <li><a href="{% url home %}">{% trans "Accueil" %}</a></li>
+    <li>{% trans "Questions Fréquentes" %}</li>
+  </ul>
+  <div class="one-content">
+    <h1>{{ topic.title }}</h1>
+    {% if topic.description %}
+      <p>{{ topic.description }}</p>
+    {% endif %}
+    {% for question in question_list %}
+      <h2 id="{{ question.slug }}">{{ question.question }}</h2>
+      {{ question.answer|markdown }}
+    {% endfor %}
+  </div>
 </div>
 {% endblock %}

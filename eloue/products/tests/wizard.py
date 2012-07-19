@@ -65,7 +65,7 @@ class ProductWizardTestWithFacebookAccount(TestCase):
         uid = 100003207275288
         access_token = 'AAAC0EJC00lQBAOf7XANWgcw2UzKdLn5q13bUp07KRPy8MntAdsPzJsnFOiCu7ZCegQIX46eu7OAjXp3sFucTCRKYGH42OW9ywcissIAZDZD'
         response = self.client.post(reverse('product_create'), {
-            '0-category': 484,
+            '0-category': 1,
             '0-picture_id': 1,
             '0-summary': 'Bentley Brooklands',
             '0-day_price': '150',
@@ -82,7 +82,7 @@ class ProductWizardTestWithFacebookAccount(TestCase):
             'wizard_step': 1
         })
         self.assertTrue(response.status_code, 200)
-        self.assertTemplateUsed(response, 'products/product_missing.html')
+        self.assertTemplateUsed(response, 'accounts/auth_missing.html')
         self.assertTrue(mock_object.called)
     
     @patch.object(GraphAPI, 'get_object')
@@ -94,7 +94,7 @@ class ProductWizardTestWithFacebookAccount(TestCase):
         uid = 100003207275288
         access_token = 'AAAC0EJC00lQBAOf7XANWgcw2UzKdLn5q13bUp07KRPy8MntAdsPzJsnFOiCu7ZCegQIX46eu7OAjXp3sFucTCRKYGH42OW9ywcissIAZDZD'
         response = self.client.post(reverse('product_create'), {
-            '0-category': 484,
+            '0-category': 1,
             '0-picture_id': 1,
             '0-summary': 'Bentley Brooklands',
             '0-day_price': '150',
@@ -116,7 +116,7 @@ class ProductWizardTestWithFacebookAccount(TestCase):
             'wizard_step': 2,
             'hash_1': '6941fd7b20d720833717a1f92e8027af'
         })
-        self.assertRedirects(response, 'location/auto-et-moto/voiture/voiture-de-luxe/bentley-brooklands-8/')
+        self.assertRedirects(response, 'location/bebe/mobilier-bebe/lits/bentley-brooklands-8/')
         self.assertTrue(response.status_code, 200)
         self.assertTrue(mock_object.called)
 
@@ -131,7 +131,7 @@ class ProductWizardTestWithFacebookAccount(TestCase):
         access_token = 'AAAC0EJC00lQBAGnc6FW8QlB5tz4ppuSXeR0FQ8kdCagwHwRraHDBI4HE7eigTprugjh0uGPu4h2FG2VEaRO8RxRcm8ObicNyZB21JGgZDZD'
         self.assertRaises(FacebookSession.DoesNotExist, FacebookSession.objects.get, uid=uid)
         response = self.client.post(reverse('product_create'), {
-            '0-category': 484,
+            '0-category': 1,
             '0-picture_id': 1,
             '0-summary': 'Bentley Brooklands',
             '0-day_price': '150',
@@ -148,7 +148,7 @@ class ProductWizardTestWithFacebookAccount(TestCase):
             'wizard_step': 1
         })
         self.assertTrue(response.status_code, 200)
-        self.assertTemplateUsed(response, 'products/product_missing.html')
+        self.assertTemplateUsed(response, 'accounts/auth_missing.html')
         FacebookSession.objects.get(uid=uid)
         self.assertTrue(mock_object.called)
 
@@ -163,7 +163,7 @@ class ProductWizardTestWithFacebookAccount(TestCase):
         self.assertRaises(FacebookSession.DoesNotExist, FacebookSession.objects.get, uid=100000609837182)
         self.assertRaises(Patron.DoesNotExist, Patron.objects.get, username='kosii2')
         response = self.client.post(reverse('product_create'), {
-            '0-category': 484,
+            '0-category': 1,
             '0-picture_id': 1,
             '0-summary': 'Bentley Brooklands',
             '0-day_price': '150',
@@ -188,7 +188,7 @@ class ProductWizardTestWithFacebookAccount(TestCase):
             'wizard_step': 2,
             'hash_1': '6941fd7b20d720833717a1f92e8027af'
         })
-        self.assertRedirects(response, 'location/auto-et-moto/voiture/voiture-de-luxe/bentley-brooklands-8/')
+        self.assertRedirects(response, 'location/bebe/mobilier-bebe/lits/bentley-brooklands-8/')
         self.assertTrue(response.status_code, 200)
         self.assertEqual(Patron.objects.get(username='kosii2'), FacebookSession.objects.get(uid=uid).user)
         self.assertTrue(mock_object.called)
@@ -205,7 +205,7 @@ class ProductWizardTestWithFacebookAccount(TestCase):
         self.assertEqual(FacebookSession.objects.get(uid=uid).user, None)
         Patron.objects.get(username='kosii1')
         response = self.client.post(reverse('product_create'), {
-            '0-category': 484,
+            '0-category': 1,
             '0-picture_id': 1,
             '0-summary': 'Bentley Brooklands',
             '0-day_price': '150',
@@ -222,7 +222,7 @@ class ProductWizardTestWithFacebookAccount(TestCase):
             'wizard_step': 1
         })
         self.assertTrue(response.status_code, 200)
-        self.assertTemplateUsed(response, 'products/product_missing.html')
+        self.assertTemplateUsed(response, 'accounts/auth_missing.html')
         self.assertEqual(FacebookSession.objects.get(uid=uid).user, Patron.objects.get(username='kosii1'))
         self.assertTrue(mock_object.called)
 
@@ -236,7 +236,7 @@ class ProductWizardTestWithFacebookAccount(TestCase):
         access_token = 'AAAC0EJC00lQBAFeztcpDKBgyFDRm9kIiaSe7amtYzcw2MLiSdfEeh9ftpZAFzYUT0zwIqXCnBEYe95I1cnMX8dZCQ2Dw10qJlhJRgYxgZDZD'
         self.assertEqual(FacebookSession.objects.get(uid=uid).user, None)
         response = self.client.post(reverse('product_create'), {
-            '0-category': 484,
+            '0-category': 1,
             '0-picture_id': 1,
             '0-summary': 'Bentley Brooklands',
             '0-day_price': '150',
@@ -258,7 +258,7 @@ class ProductWizardTestWithFacebookAccount(TestCase):
             'wizard_step': 2,
             'hash_1': '6941fd7b20d720833717a1f92e8027af'
         })
-        self.assertRedirects(response, 'location/auto-et-moto/voiture/voiture-de-luxe/bentley-brooklands-8/')
+        self.assertRedirects(response, 'location/bebe/mobilier-bebe/lits/bentley-brooklands-8/')
         self.assertTrue(response.status_code, 200)
         self.assertEqual(Patron.objects.get(username='kosii1'), FacebookSession.objects.get(uid=uid).user)
         self.assertTrue(mock_object.called)
@@ -319,7 +319,7 @@ class MessageWizardTestWithFacebook(TestCase):
             '0-body': 'How are you?',
             'wizard_step': 0
         })
-        self.assertTemplateUsed(response, 'django_messages/message_register.html')
+        self.assertTemplateUsed(response, 'accounts/auth_login.html')
         self.assertFalse(mock_object.called)
 
     @patch.object(GraphAPI, 'get_object')
@@ -342,7 +342,7 @@ class MessageWizardTestWithFacebook(TestCase):
             'wizard_step': 1,
             'hash_0': '6941fd7b20d720833717a1f92e8027af',
         })
-        self.assertRedirects(response, self.product.get_absolute_url())
+        self.assertRedirects(response, reverse('thread_details', kwargs={'thread_id': 1}))
     
     @patch.object(GraphAPI, 'get_object')
     @patch.object(MultiPartFormWizard, 'security_hash')
@@ -364,7 +364,7 @@ class MessageWizardTestWithFacebook(TestCase):
             'wizard_step': 1,
             'hash_0': '6941fd7b20d720833717a1f92e8027af',
         })
-        self.assertTemplateUsed(response, 'django_messages/message_missing.html')
+        self.assertTemplateUsed(response, 'accounts/auth_missing.html')
     
     @patch.object(GraphAPI, 'get_object')
     @patch.object(MultiPartFormWizard, 'security_hash')
@@ -387,7 +387,7 @@ class MessageWizardTestWithFacebook(TestCase):
             'hash_0': '6941fd7b20d720833717a1f92e8027af',
             'hash_1': '6941fd7b20d720833717a1f92e8027af',
         })
-        self.assertTemplateUsed(response, 'django_messages/message_missing.html')
+        self.assertTemplateUsed(response, 'accounts/auth_missing.html')
 
     @patch.object(GraphAPI, 'get_object')
     @patch.object(MultiPartFormWizard, 'security_hash')
@@ -412,7 +412,7 @@ class MessageWizardTestWithFacebook(TestCase):
             'hash_1': '6941fd7b20d720833717a1f92e8027af',
             'hash_3': '6941fd7b20d720833717a1f92e8027af',
         })
-        self.assertRedirects(response, self.product.get_absolute_url())
+        self.assertRedirects(response, reverse('thread_details', kwargs={'thread_id': 1}))
         self.assertEqual(FacebookSession.objects.get(uid=100000609837182).user, Patron.objects.get(username='kosii2'))
 
     @patch.object(GraphAPI, 'get_object')
@@ -436,7 +436,7 @@ class MessageWizardTestWithFacebook(TestCase):
             'hash_0': '6941fd7b20d720833717a1f92e8027af',
             'hash_1': '6941fd7b20d720833717a1f92e8027af'
         })
-        self.assertRedirects(response, self.product.get_absolute_url())
+        self.assertRedirects(response, reverse('thread_details', kwargs={'thread_id': 1}))
 
         
 class ProductWizardTest(TestCase):
@@ -450,7 +450,7 @@ class ProductWizardTest(TestCase):
     def test_first_step_as_anonymous(self):
         f = open(local_path('../fixtures/bentley.jpg'))
         response = self.client.post(reverse('product_create'), {
-            '0-category': 484,
+            '0-category': 1,
             '0-picture': f,
             '0-summary': 'Bentley Brooklands',
             '0-day_price': '150',
@@ -461,14 +461,14 @@ class ProductWizardTest(TestCase):
             'wizard_step': 0
         })
         self.assertTrue(response.status_code, 200)
-        self.assertTemplateUsed(response, 'products/product_register.html')
+        self.assertTemplateUsed(response, 'accounts/auth_login.html')
         self.assertEquals(Picture.objects.count(), 2)
     
     @patch.object(MultiPartFormWizard, 'security_hash')
     def test_second_step_as_anonymous(self, mock_method):
         mock_method.return_value = '6941fd7b20d720833717a1f92e8027af'
         response = self.client.post(reverse('product_create'), {
-            '0-category': 484,
+            '0-category': 1,
             '0-picture_id': 1,
             '0-summary': 'Bentley Brooklands',
             '0-day_price': '150',
@@ -482,13 +482,13 @@ class ProductWizardTest(TestCase):
             'wizard_step': 1
         })
         self.assertTrue(response.status_code, 200)
-        self.assertTemplateUsed(response, 'products/product_missing.html')
+        self.assertTemplateUsed(response, 'accounts/auth_missing.html')
     
     @patch.object(MultiPartFormWizard, 'security_hash')
     def test_third_step_as_anonymous(self, mock_method):
         mock_method.return_value = '6941fd7b20d720833717a1f92e8027af'
         response = self.client.post(reverse('product_create'), {
-            '0-category': 484,
+            '0-category': 1,
             '0-picture_id': 1,
             '0-summary': 'Bentley Brooklands',
             '0-day_price': '150',
@@ -509,7 +509,7 @@ class ProductWizardTest(TestCase):
             'wizard_step': 2
         })
         l = len(Product.objects.all())
-        self.assertRedirects(response, reverse('booking_create', args=['auto-et-moto/voiture/voiture-de-luxe/', 'bentley-brooklands', l]))
+        self.assertRedirects(response, reverse('booking_create', args=['bebe/mobilier-bebe/lits/', 'bentley-brooklands', l]))
         
     @patch.object(MultiPartFormWizard, 'security_hash')
     def test_first_step_message_wizard_as_anonymous(self, mock_method):
@@ -519,7 +519,7 @@ class ProductWizardTest(TestCase):
             '0-body': 'May I have a lower price? never send me a email',
             'wizard_step': 0
         })
-        self.assertTemplateUsed(response, 'django_messages/message_register.html')
+        self.assertTemplateUsed(response, 'accounts/auth_login.html')
 
     @patch.object(MultiPartFormWizard, 'security_hash')
     def test_second_step_message_wizard_as_anonymous(self, mock_method):
@@ -540,7 +540,7 @@ class ProductWizardTest(TestCase):
         self.assertEqual(product, thread.product)
 
 class AlertWizardTest(TestCase):
-    fixtures = ['patron', 'address']
+    fixtures = ['patron', 'address', 'category']
     
     def test_zero_step(self):
         response = self.client.get(reverse('alert_create'))

@@ -14,17 +14,22 @@ from datetime import timedelta
 
 from django.conf import settings
 from django.core.urlresolvers import reverse
+from django.core.validators import MaxValueValidator
 from django.contrib.sites.models import Site
+from django.contrib.contenttypes.models import ContentType
+from django.contrib.contenttypes import generic
 from django.db import models
 from django.db.models import permalink
 from django.db.models.signals import post_save
 from django.utils.formats import get_format
 from django.utils.translation import ugettext_lazy as _
 from django.db.models import Q
+from django.core.urlresolvers import reverse
 
 from eloue.accounts.models import Patron
-from eloue.products.models import CURRENCY, UNIT, Product
+from eloue.products.models import CURRENCY, UNIT, Product, PAYMENT_TYPE
 from eloue.products.utils import Enum
+from eloue.products.signals import post_save_to_update_product
 from eloue.rent.decorators import incr_sequence
 from eloue.rent.fields import UUIDField, IntegerAutoField
 from eloue.rent.manager import BookingManager, CurrentSiteBookingManager
@@ -56,11 +61,6 @@ BOOKING_STATE = Enum([
 ])
 
 DEFAULT_CURRENCY = get_format('CURRENCY') if not settings.CONVERT_XPF else "XPF"
-
-COMMISSION = D(str(getattr(settings, 'COMMISSION', 0.15)))
-INSURANCE_FEE = D(str(getattr(settings, 'INSURANCE_FEE', 0.0594)))
-INSURANCE_COMMISSION = D(str(getattr(settings, 'INSURANCE_COMMISSION', 0)))
-INSURANCE_TAXES = D(str(getattr(settings, 'INSURANCE_TAXES', 0.09)))
 
 
 USE_HTTPS = getattr(settings, 'USE_HTTPS', True)
@@ -120,7 +120,11 @@ class Booking(models.Model):
     
     on_site = CurrentSiteBookingManager()
     objects = BookingManager()
-    
+
+    content_type = models.ForeignKey(ContentType, null=True, blank=True)
+    object_id = models.PositiveIntegerField(null=True, blank=True)
+    payment = generic.GenericForeignKey('content_type', 'object_id')
+
     STATE = BOOKING_STATE
     
     @incr_sequence('contract_id', 'rent_booking_contract_id_seq')
@@ -152,9 +156,6 @@ class Booking(models.Model):
         def is_state(self):
             return self.state == getattr(BOOKING_STATE, state)
         return is_state
-        
-    def init_payment_processor(self):
-        self.payment_processor = PAY_PROCESSORS[self.product.payment_type](self)
     
     @staticmethod
     def calculate_available_quantity(product, started_at, ended_at):
@@ -192,9 +193,16 @@ class Booking(models.Model):
               key=itemgetter(0)
             )
             return max(_accumulate(sum(map(lambda x: mul(*itemgetter(1, 2)(x)), j)) for i, j in grouped_dates))
-        bookings = Booking.objects.filter(product=product).filter(Q(state="pending")|Q(state="ongoing")).filter(~Q(ended_at__lte=started_at) & ~Q(started_at__gte=ended_at))
-        return product.quantity - max_rented_quantity(bookings)
         
+        bookings = Booking.objects.filter(
+            product=product
+        ).filter(
+            Q(state="pending")|Q(state="ongoing")
+        ).filter(
+            ~Q(ended_at__lte=started_at) & ~Q(started_at__gte=ended_at)
+        )
+        return product.quantity - max_rented_quantity(bookings)
+
     @staticmethod
     def calculate_price(product, started_at, ended_at):
         delta = ended_at - started_at
@@ -221,28 +229,6 @@ class Booking(models.Model):
         
         return unit, amount.quantize(D(".00"))
 
-    def not_need_ipn(self):
-        return self.payment_processor.NOT_NEED_IPN
-        
-    @smart_transition(source='authorizing', target='authorized', conditions=[not_need_ipn], save=True)
-    def preapproval(self, cancel_url=None, return_url=None, ip_address=None):
-        """Preapprove payments for borrower from Paypal.
-        
-        Keywords arguments :
-        cancel_url -- The URL to which the sender’s browser is redirected after the sender cancels the preapproval at paypal.com.
-        return_url -- The URL to which the sender’s browser is redirected after the sender approves the preapproval on paypal.com.
-        ip_address -- The ip address of sender.
-        
-        The you should redirect user to :
-        https://www.paypal.com/webscr?cmd=_ap-preapproval&preapprovalkey={{ preapproval_key }}
-        """
-        try:
-            self.preapproval_key = self.payment_processor.preapproval(cancel_url, return_url, ip_address)
-        except PaypalError, e: 
-            self.state = BOOKING_STATE.REJECTED
-            log.error(e)
-        self.save()
-    
     def send_recovery_email(self):
         context = {
             'booking': self,
@@ -262,18 +248,29 @@ class Booking(models.Model):
         message.send()
     
     def send_acceptation_email(self):
-        from eloue.rent.contract import ContractGenerator
         context = {'booking': self}
-        contract_generator = ContractGenerator()
-        contract = contract_generator(self)
-        content = contract.getvalue()
+        if not self.owner.is_professional:
+            contract = self.product.subtype.contract_generator(self)
+            content = contract.getvalue()
         message = create_alternative_email('rent/emails/owner_acceptation', context, settings.DEFAULT_FROM_EMAIL, [self.owner.email])
-        message.attach('contrat.pdf', content, 'application/pdf')
+        if not self.owner.is_professional: 
+            message.attach('contrat.pdf', content, 'application/pdf')
         message.send()
         message = create_alternative_email('rent/emails/borrower_acceptation', context, settings.DEFAULT_FROM_EMAIL, [self.borrower.email])
-        message.attach('contrat.pdf', content, 'application/pdf')
+        if not self.owner.is_professional:    
+            message.attach('contrat.pdf', content, 'application/pdf')
         message.send()
     
+    def send_borrower_receipt(self):
+        context = {'booking': self}
+        message = create_alternative_email('rent/emails/borrower_receipt', context, settings.DEFAULT_FROM_EMAIL, [self.borrower.email])
+        message.send()
+
+    def send_owner_receipt(self):
+        context = {'booking': self}
+        message = create_alternative_email('rent/emails/owner_receipt', context, settings.DEFAULT_FROM_EMAIL, [self.owner.email])
+        message.send()
+
     def send_rejection_email(self):
         context = {'booking': self}
         message = create_alternative_email('rent/emails/borrower_rejection', context, settings.DEFAULT_FROM_EMAIL, [self.borrower.email])
@@ -310,100 +307,115 @@ class Booking(models.Model):
     @property
     def commission(self):
         """Return our commission
-        
-        >>> booking = Booking(total_amount=10)
+        >>> from eloue.products.models import Product
+        >>> booking = Booking(total_amount=10, product=Product())
         >>> booking.commission
-        Decimal('1.50')
+        Decimal('2.0')
         """
-        return self.total_amount * COMMISSION
+        return self.total_amount * self.product.subtype.commission
         
     @property
     def total_commission(self):
         """ Return all the commission
-        
-        >>> booking = Booking(total_amount=10)
+        >>> from eloue.products.models import Product
+        >>> booking = Booking(total_amount=10, product=Product())
         >>> booking.total_commission
-        Decimal('2.040')
+        Decimal('2.6470')
         """
         return self.commission + self.insurance_fee
     
     @property
     def net_price(self):
         """Return net price for owner
-        
-        >>> booking = Booking(total_amount=10)
+        >>> from eloue.products.models import Product
+        >>> booking = Booking(total_amount=10, product=Product())
         >>> booking.net_price
-        Decimal('8.50')
+        Decimal('8.0')
         """
         return self.total_amount - self.commission
     
     @property
     def insurance_commission(self):
         """Return our commission on insurance
-        
-        >>> booking = Booking(total_amount=10)
+        >>> from eloue.products.models import Product
+        >>> booking = Booking(total_amount=10, product=Product())
         >>> booking.insurance_commission
         Decimal('0')
         """
-        return self.total_amount * INSURANCE_COMMISSION
+        return self.total_amount * self.product.subtype.insurance_commission
     
     @property
     def insurance_fee(self):
         """Return insurance commission
-        
-        >>> booking = Booking(total_amount=10)
+        >>> from eloue.products.models import Product
+        >>> booking = Booking(total_amount=10, product=Product())
         >>> booking.insurance_fee
-        Decimal('0.540')
+        Decimal('0.6470')
         """
-        return self.total_amount * INSURANCE_FEE
+        return self.total_amount * self.product.subtype.insurance_fee
     
     @property
     def insurance_taxes(self):
         """Return insurance taxes
-        
-        >>> booking = Booking(total_amount=10)
+        >>> from eloue.products.models import Product
+        >>> booking = Booking(total_amount=10, product=Product())
         >>> booking.insurance_taxes
-        Decimal('0.04860')
+        Decimal('0.058230')
         """
-        return self.insurance_fee * INSURANCE_TAXES
+        return self.insurance_fee * self.product.subtype.insurance_taxes
     
-    @transition(source='pending', target='ongoing')
-    def hold(self, cancel_url=None, return_url=None):
-        """Take money from borrower and keep it safe for later.
+    def not_need_ipn(self):
+        return self.payment.NOT_NEED_IPN
         
-        Keywords arguments :
-        cancel_url -- The URL to which the sender’s browser is redirected after the sender cancels the preapproval at paypal.com.
-        return_url -- The URL to which the sender’s browser is redirected after the sender approves the preapproval on paypal.com.
-        ip_address -- The ip address of sender.
+    @smart_transition(source='authorizing', target='authorized', conditions=[not_need_ipn], save=True)
+    def preapproval(self, *args, **kwargs):
+        self.payment.preapproval(*args, **kwargs)
+        self.payment.save()
+        self.send_ask_email()
         
-        Then you should redirect user to :
-        https://www.paypal.com/webscr?cmd=_ap-payment&paykey={{ pay_key }}
-        """
-        self.pay_key = self.payment_processor.pay(cancel_url, return_url)
-        self.save()
+    @transition(source='authorized', target='pending', save=True)
+    def accept(self):
+        domain = Site.objects.get_current().domain
+        protocol = "https"
+        cancel_url="%s://%s%s" % (protocol, domain, reverse("booking_failure", args=[self.pk.hex]))
+        return_url="%s://%s%s" % (protocol, domain, reverse("booking_success", args=[self.pk.hex]))
 
+        self.payment.pay(cancel_url, return_url)
+        self.payment.save()
+        self.send_acceptation_email()
+        self.send_borrower_receipt()
+
+    @transition(source='pending', target='ongoing', save=True)
+    def activate(self):
+        pass
+
+    @transition(source='ongoing', target='ended', save=True)
+    def end(self):
+        self.send_ended_email()
+    
     @transition(source='ended', target='closing', save=True)
     @smart_transition(source='closing', target='closed', conditions=[not_need_ipn], save=True)
     def pay(self):
         """Return deposit_amount to borrower and pay the owner"""
-        self.payment_processor.execute_payment()
+        self.payment.execute_payment()
+        self.send_owner_receipt()
     
     @transition(source=['authorized', 'pending'], target='canceled', save=True)
     def cancel(self):
         """Cancel preapproval for the borrower"""
-        self.payment_processor.cancel_preapproval()
+        self.payment.cancel_preapproval()
     
     @transition(source='incident', target='deposit', save=True)
     def litigation(self, amount=None, cancel_url='', return_url=''):
         """Giving caution to owner"""
         # FIXME : Deposit amount isn't considered in preapproval amount
        
-        self.payment_processor.give_caution(amount, cancel_url, return_url)
+        self.payment.give_caution(amount, cancel_url, return_url)
     
     @transition(source='incident', target='refunded', save=True)
     def refund(self):
         """Refund borrower or owner if something as gone wrong"""
-        self.payment_processor.refund()
+        self.payment.refund()
     
     @property
     def _currency(self):
@@ -411,8 +423,66 @@ class Booking(models.Model):
             return "EUR"
         else:
             return self.currency
-    
 
+class Comment(models.Model):
+    booking = models.OneToOneField(Booking)
+    comment = models.TextField(_(u'Commentaire'))
+    note = models.PositiveSmallIntegerField(_(u'Note'),
+        choices=enumerate(xrange(6)),
+        validators=[MaxValueValidator(5)]
+    )
+    created_at = models.DateTimeField(editable=False, auto_now_add=True)
+
+    @property
+    def response(self):
+        raise NotImplementedError
+    
+    @property
+    def writer(self):
+        raise NotImplementedError
+
+    #@permalink
+    def get_absolute_url(self):
+        raise NotImplementedError
+        #return ('booking_detail', [self.pk.hex])
+
+    @property
+    def product(self):
+        return self.booking.product
+
+    def __unicode__(self):
+        return self.comment
+
+    class Meta:
+        abstract = True
+        ordering = ['-created_at']
+    
+class OwnerComment(Comment):
+    @property
+    def response(self):
+        return self.booking.borrowercomment
+    @property
+    def writer(self):
+        return self.booking.owner
+
+    def send_notification_comment_email(self):
+        context = {'comment': self, 'author': self.booking.owner, 'patron': self.booking.borrower}
+        message = create_alternative_email('rent/emails/comment', context, settings.DEFAULT_FROM_EMAIL, [self.booking.borrower.email])
+        message.send()
+    
+class BorrowerComment(Comment):
+    @property
+    def response(self):
+        return self.booking.ownercomment
+    @property
+    def writer(self):
+        return self.booking.borrower
+
+    def send_notification_comment_email(self):
+        context = {'comment': self, 'author': self.booking.borrower, 'patron': self.booking.owner}
+        message = create_alternative_email('rent/emails/comment', context, settings.DEFAULT_FROM_EMAIL, [self.booking.owner.email])
+        message.send()
+    
 class Sinister(models.Model):
     uuid = UUIDField(primary_key=True)
     sinister_id = IntegerAutoField(unique=True, db_index=True)
@@ -431,3 +501,6 @@ class Sinister(models.Model):
     
 
 post_save.connect(post_save_sites, sender=Booking)
+post_save.connect(post_save_to_update_product, sender=BorrowerComment)
+post_save.connect(post_save_to_update_product, sender=OwnerComment)
+

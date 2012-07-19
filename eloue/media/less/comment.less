@@ -1,0 +1,146 @@
+// STARS SYSTEM
+//--------------
+
+.stars {
+  background: url("../images/stars.png") repeat-x top left;
+  height: 14px;
+  display: block;
+}
+  .stars.empty {
+    background-position: 0 -14px;
+    width: 80px;
+  }
+    .stars.filled_0 { width: 0px; }
+    .stars.filled_1 { width: 16px; }
+    .stars.filled_2 { width: 32px; }
+    .stars.filled_3 { width: 48px; }
+    .stars.filled_4 { width: 64px }
+    .stars.filled_5 { width: 80px; }
+
+// COMMENTS
+//---------
+
+.comments {
+  margin-bottom: 20px;
+
+  li {
+    margin-bottom: 15px;
+  }
+}
+
+.comment-img {
+  display: block;
+  float: left;
+  .size(60px, 60px);
+  position: relative;
+  
+  margin-right: 15px;
+
+  &:after {
+    .box-shadow(inset 0 1px 2px rgba(0,0,0,0.35));
+    .rounded(3px);
+
+    position: absolute;
+    top: 0;
+    left: 0;
+    .size(100%, 100%);
+    z-index: 2;
+    content: "";
+  }
+  img {
+    display: block;
+    .rounded(3px);
+  }
+}
+
+.comment-content {
+  background: @blueLight;
+  border: 1px solid #b2ced9;
+  .rounded(3px);
+  @shadow: inset 0 1px 0 rgba(255,255,255,1);
+  .box-shadow(@shadow);
+  width: 605px;
+      
+  display: table-cell;
+  vertical-align: top;
+  
+  position: relative;
+  padding: 10px;
+  
+  div { position: relative; }
+  
+  .comment-dial {
+    background: transparent url("../images/comment-dial.png") no-repeat 0 0;
+    display: block;
+    .size(20px, 10px);
+
+    position: absolute;
+    top: 10px;
+    left:-20px;
+  }
+  
+  .comment-writter {
+    #font > .sans-serif(Arial, normal, 12px);
+    color: @blue;
+    
+    margin-bottom: 10px;
+    
+    a {
+      #font > .sans-serif(Arial, normal, 24px);
+      font-style: italic;
+      
+      margin-right: 5px;
+    }
+    
+    .stars.empty {
+      float: right;
+      margin-top: 4px;
+    }
+  }
+  
+  .comment-date {
+    #font > .sans-serif(Arial, normal, 12px);
+    color: @blue;
+    
+    margin-bottom: 10px;
+  }
+  
+  .comment-text {
+    #font > .sans-serif();
+    color: @blueDark;
+    line-height: @baseline;
+  }
+}
+
+.more-comment {
+  text-align: right;
+  
+  margin-bottom: 20px;
+  
+  a { #font > .sans-serif('Ubuntu', bold, @basefont); }
+}
+
+
+// INFO BLOCK
+//-----------
+
+.info-block {
+  background: @blueLight;
+  border: 1px solid #B2CED9;
+  .rounded(3px);
+  
+  margin-bottom: 30px;
+  
+  h2 {
+    #gradient > .vertical(#d6e5f2, #e4eff9);
+    .box-shadow(inset 0 1px 0 rgba(255,255,255,0.7));
+    border-bottom: 1px solid #B2CED9;
+    
+    #font > .sans-serif('Ubuntu', bold, @basefont);
+    color: @blueDark;
+    text-shadow: 0 1px rgba(255,255,255,0.5);
+    
+    padding: 10px;
+  }
+  
+}

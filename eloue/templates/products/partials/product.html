@@ -1,0 +1,31 @@
+{% load product %}
+<a href="{{product.get_absolute_url}}" class="pl-img">
+    {% with product.pictures.all|first as picture %}
+        <img src="{{picture.thumbnail.url }}" width="60" height="60" />
+    {% endwith %}
+</a><!-- pl-img -->
+<div class="pl-content">
+    <h3>
+        <a href="{{ product.get_absolute_url }}">{{ product.summary|capfirst|truncate:28 }}</a>
+    </h3>
+    {% if product.owner.default_address %}
+        {% with product.owner.default_address as address %}
+            <address>{{address.zipcode}}, {{address.city|capfirst}}</address>
+        {% endwith %}
+    {% else %}
+        {% with product.owner.addresses.all|first as address %}
+            <address>{{address.zipcode}}, {{address.city}}</address>
+        {% endwith %}
+    {% endif %}
+    <p class="pl-price">{{product.daily_price}}&euro; <span>/jour</span></p>
+</div><!-- pl-content -->
+<div class="pl-avatar">
+    <a href="{{product.owner.get_absolute_url}}">
+        {% if product.owner.avatar %}
+            <img src="{{product.owner.thumbnail.url}}" width="60" height="60" />
+        {% else %}
+            <img src="{{ MEDIA_URL }}images/default_avatar.png" width="60" height="60" />
+        {% endif %}
+    </a>
+    <span class="dial-avatar"></span>
+</div>

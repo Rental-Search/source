@@ -4,3 +4,4 @@ from eloue.products.tests.models import *
 from eloue.products.tests.price import *
 from eloue.products.tests.views import *
 from eloue.products.tests.wizard import *
+from eloue.products.tests.fields import *

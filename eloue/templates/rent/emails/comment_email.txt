@@ -1,0 +1,33 @@
+{% load i18n %}
+{% blocktrans with author.first_name as author_first_name and author.last_name as author_last_name and patron.first_name as first_name and patron.last_name as last_name and comment.note as note and comment.comment as comment_content and site.domain as domain and comment.booking.get_absolute_url as booking_url %}
+
+Bonjour {{ first_name }} {{ last_name }},
+
+{{ author_first_name }} {{ author_last_name }} vous a laissé un commentaire :
+
+Evaluation : {{ note }}
+
+Commentaire :</strong> {{ comment_content }}
+
+
+Vous pouvez voir le commentaire sur votre tableau de bord en cliquant ci dessous :
+{{protocol }}://{{ domain}}{{ booking_url }}
+{% endblocktrans %}
+
+
+{% if not comment.booking.ownercomment and comment.booking.owner == patron %}
+{% trans "Vous pouvez aussi commenter la location en cliquant sur le lien ci dessous" %} :
+{{ protocol }}://{{ site.domain }}{% url comments %}
+{% endif %}
+
+{% if not comment.booking.borrowercomment and comment.booking.borrower == patron %}
+{% trans "Vous pouvez aussi commenter la location en cliquant sur le lien ci dessous" %} :
+{{ protocol }}://{{ site.domain }}{% url comments %}
+{% endif %}
+
+{% blocktrans with site.name as site_name %}
+
+A bientôt,
+
+L'équipe {{ site_name }}
+{% endblocktrans %}

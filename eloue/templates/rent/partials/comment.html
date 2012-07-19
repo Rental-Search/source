@@ -1,0 +1,20 @@
+{% load i18n %}
+<a href="{{ comment.writer.get_absolute_url }}" class="comment-img">
+    {% if comment.writer.avatar %}
+        <img src="{{comment.writer.thumbnail.url}}" width="60" height="60" alt=""/>
+    {% else %}
+        <img src="{{ MEDIA_URL }}images/default_avatar.png" width="60" height="60" alt="">
+    {% endif %}
+</a>
+<div class="comment-content">
+    <div>
+        <p class="comment-writter">
+            <a href="{{ comment.writer.get_absolute_url }}">{{ comment.writer.username }}</a> {{ comment.created_at|date:"l d F Y" }}
+            <span class="stars empty"><span class="stars filled_{{ comment.note }}"></span></span>
+        </p>
+        <p class="comment-text">
+            {{ comment.comment }}
+        </p><!-- comment-content -->
+        <span class="comment-dial"></span>
+    </div>
+</div>

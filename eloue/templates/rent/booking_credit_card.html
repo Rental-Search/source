@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Identifiction" %}{% endblock %}
+
+{% block content %}
+<div id="wizard-page" class="container-main">
+	<ul class="breadcrumb">
+		<li><a href="{% url home %}">{% trans "Accueil" %}</a></li>
+		<li>{% trans "Identification" %}</li>
+	</ul>
+	<div class="content-main">
+		<h1>{% trans "Informations de paiement" %}</h1>
+		<form class="" method="post" action="">
+			{% csrf_token %}
+		    {{form.non_field_errors}}
+			<label>{{ form.card_number.label }}</label>
+			{{ form.card_number }}
+			<label>{{ form.expires.label }}</label>
+			{{ form.expires }}
+			<label>{{ form.cvv.label }}</label>
+			{{ form.cvv }}
+			<label class="checkbox">
+				{{ form.save }} {% trans "Conserver mes coordonnées bancaire" %}
+			</label>
+	      	<div class="form-actions">
+    			<button type="submit" class="btn btn-primary">Enregistrer</button>
+  			</div>
+	      <input type="hidden" name="{{ step_field }}" value="{{ step0 }}" />
+	      {{ previous_fields|safe }}
+	      Powered by Paybox™
+	    </form>
+	</div>
+	<div class="content-aside">
+	</div>
+</div>
+{% endblock %}

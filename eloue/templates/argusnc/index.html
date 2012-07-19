@@ -1,0 +1,174 @@
+{% extends "base.html" %}
+{% load i18n compressed mptt_tags product cache %}
+
+{% block title %}{% trans "Location entre particuliers ou professionnels de tout type d'objet" %}{% endblock %}
+
+{% block head %}
+ {{ block.super }}
+ <link rel="canonical" href="{% if request.is_secure %}https{%else%}http{%endif%}://www.e-loue.com/">
+{% endblock %}
+
+{% block content %}
+{% csrf_token %}
+<div class="container-top">
+    <div class="search-home">
+        <h1 class="rent-anythings">{% trans "Rejoignez la communauté des e-loueurs !" %} <br> 
+            <small>{% trans "Au lieu d'acheter, louez pour augmenter votre pouvoir d'usage." %}</small>
+        </h1>
+        <form action="{% url product_list %}" method="get">
+            <p class="what">
+                {{form.q}}
+                <input type="submit" value="Rechercher" class="btn bt-big-orange" />
+                {{form.l.as_hidden}}
+            </p>
+        </form>
+            <p class="city">
+                <span class="city-to">à </span>
+                <span class="city-name" id="city-name"></span>
+                <button class="btn-other-town"><span>Changer de ville</span></button>
+            </p>
+            <p class="city-input">
+                <input id="id_l" type="text" name="city" />
+                <button class="btn-edit-town">me geolocaliser</button> ou <button class="btn-cancel-edit-town">annuler</button>
+            </p>
+    </div><!-- search-home -->
+    <div class="products-home">
+        <div class="products-home-tabs" style="display: none;">
+            <ul>
+                <li><a href="#near_car">{% trans "Voitures" %}</a></li>
+                <li><a href="#near">{% trans "Objets" %}</a></li>
+                <li><a href="#near_realestate">{% trans "Logements" %}</a></li>
+                <li><a href="#hotloc">{% trans "Locations du moment" %}</a></li>
+            </ul>
+            <div id="near">
+                <ul class="product-list"></ul>
+                <p class="more-product">
+                    <a href="#" class="more-product-link">{% trans "Chargez plus d'annonces..." %}</a>
+                </p>
+            </div>{# near #}
+            <div id="near_car">
+                <ul class="product-list"></ul>
+                <p class="more-product">
+                    <a href="#" class="more-product-link">{% trans "Chargez plus d'annonces..." %}</a>
+                </p>
+            </div>{# near #}
+            <div id="near_realestate">
+                <ul class="product-list"></ul>
+                <p class="more-product">
+                    <a href="#" class="more-product-link">{% trans "Chargez plus d'annonces..." %}</a>
+                </p>
+            </div>{# near #}
+            <div id="hotloc">
+                {% cache 43200 curiosities %}
+                <ul class="product-list">
+                {% for curiosity in curiosities %}
+                    {% with curiosity.product as product %}
+                        <li>
+                        {% include "products/partials/product.html" %}
+                        </li>
+                    {% endwith %}
+                {% endfor %}
+                </ul>
+                {% endcache %}
+            </div>{# hotloc #}
+        </div>{# products-home-tabs #}
+    </div>{# product-home #}
+    <ul class="args">
+        <li class="arg-how">
+            <a href="/temoignages/">
+                <h4>{% trans "Témoignages" %}</h4>
+            </a>
+        </li>
+        <li class="arg-iphoneApp">
+            
+        </li>
+        <li class="arg-garanties">
+            <a href="/assurance-tranquillite/">
+                <p style="padding: 22px 0; font-size: 18px; line-height: 22px; margin-bottom: 1px;">{% trans "Réservation et paiement <br>en ligne" %}</p>
+                <h4>{% trans "La garantie" %}</h4>
+                <img class="small_logo" src="{{ MEDIA_URL }}images/small_logo.png" width="71" height="24" alt="{% trans "Location garantie"%}"/>
+            </a>
+        </li><!-- arg-garanties -->
+        <li class="arg-fb">
+            
+        </li>
+    </ul>{# args #}
+    {% cache 500 last_joined request.session.location.city %}
+    <div class="new-profils" style="margin-bottom: 20px;">
+        <div class="np-title">{% trans "Derniers<br/>inscrits" %}</div><!-- np-title -->
+        {% with last_joined as patron_list %}
+          {% include "accounts/partials/avatar_list.html" %}
+        {% endwith %}
+    </div>{# new_profils #}
+    {% endcache %}
+</div>{# container-top #}
+{% endblock %}
+
+{% block tail %}
+    {{ block.super }}
+    <script src="//maps.googleapis.com/maps/api/js?sensor=false&amp;libraries=places" type="text/javascript"></script>
+    <script type="text/javascript" >
+
+        $(document).ready(function() {
+
+            (function( $ ) {
+              $.fn.loadMore = function(url) {
+                if (typeof(url) === 'undefined') {
+                  this.data('offset', this.data('offset') + 1);
+                  $.ajax({
+                    url: this.data('url')+this.data('offset'),
+                    success: function(result) {
+                        $('ul', this).append($('li', result));
+                        $('.more-product-link', this).removeClass('loading');
+                    },
+                    cache: false,
+                    dataType: 'html',
+                    context: this
+                  });
+                } else {
+                  $('ul', this).load(url+' li');
+                  $('.more-product-link', this).click(function(e) {
+                    e.preventDefault();
+                    $(this).addClass('loading');
+                    $(this.parentNode.parentNode).loadMore();
+                  })
+                  this.data('url', url);
+                  this.data('offset', 0);
+                }
+              };
+            })( jQuery );
+
+            location_changed = function() {
+
+                $('#near').loadMore('lists/object/');
+                $('#near_car').loadMore('lists/car/');
+                $('#near_realestate').loadMore('lists/realestate/');
+                $.ajax(
+                    {
+                        url:'/get_user_location/', 
+                        cache: false,
+                        success: function(response) {
+                            $('.city-name').html(response);
+                            $('#id_for_l').val(response);
+                            $('.search-home').removeClass('editing');
+                        }
+                    }
+                )
+            }
+
+             geolocation_stuff(location_changed);
+
+
+            $(".products-home-tabs").show();
+            location_changed();
+
+
+            if (!$.cookie('geocoding')) 
+                navigator.geolocation.getCurrentPosition(
+                    SuccessBuilder(2, false, location_changed), 
+                    geocoder_error_handler
+                );
+           
+        });
+    </script>
+{% endblock %}

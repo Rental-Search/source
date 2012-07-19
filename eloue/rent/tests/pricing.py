@@ -150,7 +150,7 @@ class BookingSeasonTest(TestCase):
         started_at = datetime(2010, 9, 15)
         ended_at = started_at + timedelta(days=2)
         unit, price = Booking.calculate_price(product, started_at, ended_at)
-        self.assertEquals(price, D('20'))
+        self.assertEquals(price, D('22'))
         self.assertEquals(unit, UNIT.DAY)
     
     def test_calculate_over_season(self):
@@ -158,7 +158,7 @@ class BookingSeasonTest(TestCase):
         started_at = datetime(2010, 9, 15, 9, 0)
         ended_at = started_at + timedelta(days=14)
         unit, price = Booking.calculate_price(product, started_at, ended_at)
-        self.assertEquals(price, D('127.25'))
+        self.assertEquals(price, D('134.88'))
         self.assertEquals(unit, UNIT.DAY)
     
     def test_calculate_over_year(self):
@@ -174,7 +174,7 @@ class BookingSeasonTest(TestCase):
         started_at = datetime(2010, 6, 21, 9, 0)
         ended_at = started_at + timedelta(days=4)
         unit, price = Booking.calculate_price(product, started_at, ended_at)
-        self.assertEquals(price, D('40'))
+        self.assertEquals(price, D('44'))
         self.assertEquals(unit, UNIT.DAY)
     
     def test_calculate_on_end_terminal(self):
@@ -182,7 +182,7 @@ class BookingSeasonTest(TestCase):
         started_at = datetime(2010, 9, 20, 9, 0)
         ended_at = started_at + timedelta(days=3)
         unit, price = Booking.calculate_price(product, started_at, ended_at)
-        self.assertEquals(price, D('29.25'))
+        self.assertEquals(price, D('31.88'))
         self.assertEquals(unit, UNIT.DAY)
     
     def test_calculate_just_at_the_end(self):
@@ -191,6 +191,6 @@ class BookingSeasonTest(TestCase):
         ended_at = started_at + timedelta(days=1)
         unit, price = Booking.calculate_price(product, started_at, ended_at)
         self.assertEqual(unit, UNIT.DAY)
-        self.assertEqual(price, D('9.25'))
+        self.assertEqual(price, D('14.00'))
         
         

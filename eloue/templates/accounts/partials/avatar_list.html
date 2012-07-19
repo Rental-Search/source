@@ -1,0 +1,11 @@
+{% load i18n product %}
+<ul class="avatars-list">
+    {% for patron in patron_list %}
+    <li>
+        <a href="{{patron.url}}">
+            <img src="{{ patron.avatar }}" width="60" height="60" />
+        </a>
+        <p>{{ patron.username|truncate:6 }}</p>
+    </li>
+    {% endfor %}
+</ul>{# avatars-list #}

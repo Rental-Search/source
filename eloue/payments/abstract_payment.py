@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+class PaymentException(Exception):
+    pass
 
 class AbstractPayment(object):
     

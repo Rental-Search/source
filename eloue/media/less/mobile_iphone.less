@@ -1,0 +1,142 @@
+#mobile-iphone {
+	.content-main {
+		.makeColumn(7);
+
+		margin-left: 50px;
+	}
+
+	.content-aside {
+		.makeColumn(4);
+
+		position: relative;
+
+		.iphone-refection {
+			background: transparent url("../images/iphone/reflection.png") no-repeat 0 0;
+			position: absolute;
+			top: 7px;
+			right: 5px;
+			width: 153px;
+			height: 440px;
+		}
+	}
+
+	h1 { 
+		text-align: center;
+		margin-bottom: 30px;
+	}
+
+	#iphone-features {
+		float: left;
+		margin-top: 50px;
+		margin-bottom: 50px;
+	}
+
+	#iphone-features li {
+		float: left;
+		display: inline;
+		width: 140px;
+		text-align: center;
+		padding-top: 151px;
+		margin-right: 30px;
+		#font > .sans-serif('Ubuntu', normal, 16px);
+		color: @blueDark;
+		line-height: 24px;
+
+		strong {
+			font-size: 24px;
+			font-weight: bold;
+		}
+	}
+
+	.increase {
+		background: transparent url("../images/iphone/piggy_bank.png") no-repeat 0 0;
+	}
+
+	.protect {
+		background: transparent url("../images/iphone/world.png") no-repeat 0 0;
+	}
+
+	.profitable {
+		background: transparent url("../images/iphone/camera.png") no-repeat 0 0;
+	}
+
+	.iphone-dl-link {
+		background: transparent url("../images/iphone/dl_app.png") no-repeat 0 0;
+		display: block;
+		height: 65px;
+		width: 562px;
+		text-indent: -9999px;
+		float: left;
+		margin-bottom: 30px;
+	}
+
+	.iphone-desc {
+		float: left;
+		margin-bottom: 30px;
+
+		#font > .sans-serif('Ubuntu', normal, 14px);
+		color: @blueDark;
+
+		width: 510px;
+
+		p {
+			line-height: 18px;
+			text-align: justify;
+
+			width: 500px;
+		}
+	}
+
+	.iphone-slides {
+		background: transparent url("../images/iphone/big_iphone.png") no-repeat 0 0;
+		width: 275px;
+		height: 479px;
+
+		padding-top: 105px;
+		padding-left: 25px;
+	}
+
+	#nav-slideshow {
+		margin-left: 115px;
+		margin-top: 25px;
+		margin-bottom: 25px;
+		float: left;
+
+		a {
+			background: transparent url("../images/iphone/markers.png") no-repeat -13px 0;
+			display: block;
+			float: left;
+			margin-right: 8px;
+			height: 12px;
+			width: 12px;
+			text-indent: -9999px;
+		}
+
+		a.activeSlide {
+			background: transparent url("../images/iphone/markers.png") no-repeat 0 0;
+		}
+	}
+
+	.info-block {
+		float: left;
+		width: 300px;
+
+		line-height: 18px;
+
+		p { margin: 0 15px 15px; }
+
+		ul { 
+			margin: 0 10px 15px;
+			#font > .sans-serif('Ubuntu', normal, 14px);
+			color: @blueDark;
+
+			li {
+				list-style-image: url("../images/list-style-info.png");
+				margin-bottom: 15px;
+				margin-left: 25px;
+				margin-right: 25px;
+				text-align: justify;
+			}
+		}
+	}
+}

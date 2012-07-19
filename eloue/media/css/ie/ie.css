@@ -1,36 +1,11 @@
-/* -----------------------------------------------------------------------
+.breadcrumb > li {
+	background: transparent url("../../images/b-sign.png") no-repeat right 7px !important;
+}
 
 
- Blueprint CSS Framework 1.0
- http://blueprintcss.org
+.nav-bar li a { font-size: 14px !important; }
 
-   * Copyright (c) 2007-Present. See LICENSE for more info.
-   * See README for instructions on how to use Blueprint.
-   * For credits and origins, see AUTHORS.
-   * This is a compressed file. See the sources in the 'src' directory.
+.new-profils .np-title { margin: 0 15px !important;}
 
------------------------------------------------------------------------ */
 
-/* ie.css */
-body {text-align:center;}
-.xgrid {text-align:left;}
-* html .column, * html .x1, * html .x2, * html .x3, * html .x4, * html .x5, * html .x6, * html .x7, * html .x8, * html .x9, * html .x10, * html .x11, * html .x12, * html .x13, * html .x14, * html .x15, * html .x16, * html .x17, * html .x18, * html .x19, * html .x20, * html .x21, * html .x22, * html .x23, * html .x24 {display:inline;overflow-x:hidden;}
-* html legend {margin:0px -8px 16px 0;padding:0;}
-sup {vertical-align:text-top;}
-sub {vertical-align:text-bottom;}
-html>body p code {*white-space:normal;}
-hr {margin:-8px auto 11px;}
-img {-ms-interpolation-mode:bicubic;}
-.clearfix, .xgrid {display:inline-block;}
-* html .clearfix, * html .xgrid {height:1%;}
-fieldset {padding-top:0;}
-legend {margin-top:-0.2em;margin-bottom:1em;margin-left:-0.5em;}
-textarea {overflow:auto;}
-label {vertical-align:middle;position:relative;top:-0.25em;}
-input.text, input.title, textarea {background-color:#fff;border:1px solid #bbb;}
-input.text:focus, input.title:focus {border-color:#666;}
-input.text, input.title, textarea, select {margin:0.5em 0;}
-input.checkbox, input.radio {position:relative;top:.25em;}
-form.inline div, form.inline p {vertical-align:middle;}
-form.inline input.checkbox, form.inline input.radio, form.inline input.button, form.inline button {margin:0.5em 0;}
-button, input.button {position:relative;top:0.25em;}
+

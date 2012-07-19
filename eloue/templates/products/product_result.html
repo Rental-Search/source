@@ -1,0 +1,410 @@
+{% extends "base.html" %}
+ {% load cache facets i18n l10n param category product paginator mptt_tags seo booking %}
+
+{% block title %}
+{% if breadcrumbs.categorie.object.description %}
+{{ breadcrumbs.categorie.object.description.title }}
+{% else %}
+{% trans "Location" %}{% if not form.cleaned_data.q %}{% for crumb in breadcrumbs|facets %} {{ crumb.pretty_value|capfirst }}{% endfor %}{% endif %}{% if form.cleaned_data.q %} {{ form.cleaned_data.q }}{% endif %}{% if form.cleaned_data.l %} {{ form.cleaned_data.l|capfirst }}{% endif %}
+{% endif %}
+{% endblock %}
+
+{% block description %}
+{% if breadcrumbs.categorie.object.description %}
+{{ breadcrumbs.categorie.object.description.description }}
+{% else %}
+{% trans "Location " %}
+{% for crumb in breadcrumbs|facets %}
+&rsaquo; {{ crumb.pretty_value|capfirst }}
+{% endfor %}
+{% if form.cleaned_data.l %}
+&rsaquo; {{ form.cleaned_data.l|capfirst }}
+{% endif %}
+{% if form.cleaned_data.q %}
+&rsaquo; &quot;{{ form.cleaned_data.q }}&quot;
+{% endif %}
+{% endif %}
+{% endblock %}
+
+{% block  head %}
+    {{ block.super }}
+    {% if breadcrumbs.categorie %}
+        <link rel="canonical" href="{% if request.is_secure %}https{%else%}http{%endif%}://{{ request.get_host }}{{ breadcrumbs.categorie.url }}{% if page > 1 %}page/{{page}}/{% endif %}{{canonical_parameters}}"/>
+    {% else %}
+        <link rel="canonical" href="{% if request.is_secure %}https{%else%}http{%endif%}://{{ request.get_host }}/location/{% if page > 1%}page/{{page}}/{% endif %}{{canonical_parameters}}"/>
+    {% endif %}
+
+    {% if page_obj.has_next %}
+        {% if breadcrumbs.categorie %}
+            <link rel="next" href="{% if request.is_secure %}https{%else%}http{%endif%}://{{ request.get_host }}{{ breadcrumbs.categorie.url }}page/{{page_obj.next_page_number}}/{{canonical_parameters}}"/>
+        {% else %}
+            <link rel="next" href="{% if request.is_secure %}https{%else%}http{%endif%}://{{ request.get_host }}/location/page/{{page_obj.next_page_number}}/{{canonical_parameters}}"/>
+        {% endif %}
+    {% endif %}
+
+    {% if page_obj.has_previous %}
+        {% if page == 2%}
+            {% if breadcrumbs.categorie %}
+                <link rel="prev" href="{% if request.is_secure %}https{%else%}http{%endif%}://{{ request.get_host }}{{ breadcrumbs.categorie.url }}{{canonical_parameters}}"/>
+            {% else %}
+                <link rel="prev" href="{% if request.is_secure %}https{%else%}http{%endif%}://{{ request.get_host }}/location/{{canonical_parameters}}"/>
+            {% endif %}
+        {% else %}
+            {% if breadcrumbs.categorie %}
+                <link rel="prev" href="{% if request.is_secure %}https{%else%}http{%endif%}://{{ request.get_host }}{{ breadcrumbs.categorie.url }}page/{{page_obj.previous_page_number}}/{{canonical_parameters}}"/>
+            {% else %}
+                <link rel="prev" href="{% if request.is_secure %}https{%else%}http{%endif%}://{{ request.get_host }}/location/page/{{page_obj.previous_page_number}}/{{canonical_parameters}}"/>
+            {% endif %}
+        {% endif %}
+    {% endif %}
+
+{% endblock %}
+
+{% block content %}
+{% csrf_token %}
+<div id="result-page" class="container-main">
+    <ul class="breadcrumb">
+        <li><a href="{% url home %}">{% trans "Accueil" %}</a></li>
+        {% for crumb in breadcrumbs|facets %}
+			{% if form.cleaned_data.l or form.cleaned_data.q %}
+			    {% for category in crumb.object.get_ancestors %}
+    			 <li><a href="{{ category.get_absolute_url }}">{{ category.name|capfirst }}</a></li>
+    			{% endfor %}
+				<li><a href="{{ crumb.url }}">{{ crumb.pretty_value|capfirst }}</a></li>
+			{% else %}
+			    {% for category in crumb.object.get_ancestors %}
+    			 <li><a href="{{ category.get_absolute_url }}">{{ category.name|capfirst }}</a></li>
+    			{% endfor %}
+				<li class="lastb">{{ crumb.pretty_value|capfirst }}</a></li>
+			{% endif %}
+		{% endfor %}
+		{% if form.cleaned_data.q %}
+			{% if form.cleaned_data.l %}
+				<li><a href="{% facet_url breadcrumbs -"l" -"r" %}">{% trans "location" %} {{ form.cleaned_data.q }}</a></li>
+			{% else %}
+				<li class="lastb">{% trans "location" %} {{ form.cleaned_data.q }}</li>
+			{% endif %}
+		{% endif %}
+		{% if form.cleaned_data.l %}
+			<li class="lastb">{{ form.cleaned_data.l|capfirst }}</li>
+		{% endif %}
+    </ul>{# breadcrumb #}
+    <div class="content-main">
+    {% if breadcrumbs.categorie.object.description %}
+    <div class="category-description">
+        {{ breadcrumbs.categorie.object.description.header|safe }}
+    </div>
+    {% endif %}
+    {% if product_list %}
+        {% if form.cleaned_data.q %}
+        {% blocktrans with form.cleaned_data.q as keywords count paginator.count as count %}
+            <h1>Résultat pour <strong>"{{ keywords }}"</strong></h1>
+            {% plural %}
+            <h1>Résultats pour <strong>"{{ keywords }}"</strong></h1>
+        {% endblocktrans%}
+        {% endif %}
+        <ul class="product-filter">
+            <li class="filter-title">Trier par</li>
+            <li {% if form.sort.data == "-created_at" or not form.sort.data %} class="filter-selected" {% endif %}>
+                {% if form.sort.data == "-created_at" or not form.sort.data %}
+                    {% trans "Les plus récents" %}
+                {% else %}
+                    <a href="{% facet_url breadcrumbs "sort" "" %}">{% trans "Les plus récents" %}</a>
+                {% endif %}
+            </li>
+            {% if form.cleaned_data.l %}
+            <li {% if form.sort.data == "geo_distance" %} class="filter-selected" {% endif %}>
+                {% if form.sort.data == "geo_distance" %}
+                {% trans "Les plus proches" %}
+                {% else %}
+                <a href="{% facet_url breadcrumbs "sort" "geo_distance" %}">{% trans "Les plus proches" %}</a>
+                {% endif %}
+            </li>
+            {% endif %}
+            <li {% if form.sort.data == "price" %} class="filter-selected" {% endif %}>
+                {% if form.sort.data == "price" %}
+                    {% trans "Les prix les plus bas" %}
+                {% else %}
+                    <a href="{% facet_url breadcrumbs "sort" "price" %}">{% trans "Les prix les plus bas" %}</a>
+                {% endif %}
+            </li>
+            <li {% if form.sort.data == "-price" %} class="filter-selected" {% endif %}>
+                {% if form.sort.data == "-price" %}
+                    {% trans "Les prix les plus haut" %}
+                {% else %}
+                    <a href="{% facet_url breadcrumbs "sort" "-price" %}">{% trans "Les prix les plus haut" %}</a>
+                {% endif %}
+            </li>
+        </ul>{# product_filter #}
+        {% with 50 as truncation %}
+            {% with 'True' as marker %}
+                {% include 'products/partials/result_list.html' %}
+            {% endwith %}
+        {% endwith %}
+        {% pagination %}
+        {% if is_paginated %}
+        <div class="pagination">
+            {% if page_obj.has_previous %}
+                <a href="{% facet_url breadcrumbs "page" page_obj.previous_page_number %}" class="prev">&#171; {% trans "Page précédente" %}</a>
+            {% endif %}
+            {% for page in page_range %}
+            <a href="{% facet_url breadcrumbs "page" page %}" {% if page_obj.number == page %}class="page-selected"{% endif %}>{{ page }}</a>
+            {% endfor %}
+            {% if page_obj.has_next %}
+                <a href="{% facet_url breadcrumbs "page" page_obj.next_page_number %}" class="next">{% trans "Page suivante" %} &#187;</a>
+            {% endif %}
+        </div><!-- pagination -->
+        {% endif %}
+        {% if breadcrumbs.categorie.object.description %}
+        <div class="category-description">
+            {{ breadcrumbs.categorie.object.description.footer|safe }}
+        </div>
+        {% endif %}
+    {% else %}
+    <h1>{% trans "Pas de résultat pour cette recherche" %}</h1>
+    {% endif %}
+    </div>{# content-main #}
+    <div class="content-aside">
+        <form action="{% url product_list %}" method="get" id="form_search_results">
+            <div class="search-block">
+                {{form.q}}
+                <input type="submit" value="Rechercher" class="btn-search"/>
+            </div><!-- search-block -->
+            <div id="where" class="info-block">
+                <h2>Lieu</h2>
+                <p class="town-input">{{form.l}}</p>
+                <div id="map-canvas" class="map"></div>
+                <p class="radius-input">Dans un rayon de {{form.r}} Km</p>
+            </div><!-- where -->
+        </form>
+        {% if product_list %}
+        <div id ="facet-categories" class="info-block">
+            <h2>{% trans "Filtrer par catégorie" %}</h2>
+            {% if breadcrumbs.categorie %}
+            <p>
+                <a href="{% facet_url breadcrumbs -breadcrumbs.categorie.label %}">
+                    {% trans "Voir tous les résultats" %}
+                </a>
+            </p>
+            {% endif %}
+            {% if facets.fields.categories %}
+            <ul>
+                {% for value, count in facets.fields.categories %}
+                {% if count > 0 %}
+                {% with value|category as category %}
+                 {% if category != 'None' %}
+                    {% if breadcrumbs.categorie %}
+                    {% if breadcrumbs.categorie.value != category.slug %}
+                    <li>
+    					<a href="{% facet_url breadcrumbs -breadcrumbs.categorie.label category.get_ancertors_slug category.slug %}">
+    					    {{ category.name }}
+    					</a> 
+    				</li>
+    				{% endif %}
+					{% else %}
+					<li>
+						<a href="{% facet_url breadcrumbs category.get_ancertors_slug category.slug %}">{{ category.name }}</a> 
+					</li>
+					{% endif %}
+				{% endif %}
+                {% endwith%}
+                {% endif %}
+                {% endfor %}
+            </ul>
+            {% endif %}
+        </div>{# facet-categories #}
+        {% endif %}
+    </div>{# content-aside #}
+</div>{# container-main #}
+</div>
+
+{% endblock %}
+
+{% block tail %}
+    {{block.super}}
+    <script src="//maps.googleapis.com/maps/api/js?sensor=false&amp;libraries=places" type="text/javascript"></script>
+
+    <script type="text/javascript" charset="utf-8">
+        var map;
+
+        var products = [
+            {% for product in product_list %}
+                ['{{ product.summary }}', {{ product.lat|unlocalize }}, {{ product.lng|unlocalize }}, {{ forloop.counter }}]{% if not forloop.last %},{% endif %}
+            {% endfor %}
+        ];
+
+        function setMarkers(map, locations) {
+
+            for (var i = 0; i < locations.length; i++) {
+                var product = locations[i];
+
+                var image = new google.maps.MarkerImage('{{ MEDIA_URL }}images/markers.png',
+                    new google.maps.Size(20, 33),
+                    new google.maps.Point(44, 34*i),
+                    new google.maps.Point(10, 33));
+
+                var image_hover = new google.maps.MarkerImage('{{ MEDIA_URL }}images/markers.png',
+                    new google.maps.Size(20, 33),
+                    new google.maps.Point(0, 34*i),
+                    new google.maps.Point(10, 33));
+
+
+                var myLatLng = new google.maps.LatLng(product[1], product[2]);
+                
+                var marker = new google.maps.Marker({
+                        position: myLatLng,
+                        map: map,
+                        title: product[0],
+                        zIndex: product[3],
+                        icon: image
+                    });
+
+                marker.set("myZIndex", marker.getZIndex());
+
+                google.maps.event.addListener(marker, "mouseover", mouseoverListenerGenerator(image_hover, marker));
+
+                google.maps.event.addListener(marker, "mouseout",  mouseoutListenerGenerator(image, marker));
+
+                $('li#marker-' + marker.get("myZIndex")).mouseover(triggerMouseOverGenerator(marker));
+
+                $('li#marker-' + marker.get("myZIndex")).mouseout(triggerMouseOutGenerator(marker));
+            }
+        }
+
+        function mouseoverListenerGenerator(image_hover, marker) {
+            return function() {
+                this.setOptions({
+                    icon:image_hover,
+                    zIndex:200
+                });
+                $('li#marker-' + marker.get("myZIndex")).css("background-color","#F7F8FA");
+            }
+        }
+        function mouseoutListenerGenerator(image, marker) {
+            return function() {
+                this.setOptions({
+                    icon:image,
+                    zIndex:this.get("myZIndex")
+                });
+                $('li#marker-' + marker.get("myZIndex")).css("background-color","#FFF");
+            }
+        }
+        function triggerMouseOverGenerator(marker) {
+            return function() {
+                google.maps.event.trigger(marker, 'mouseover');
+            }
+        }
+        function triggerMouseOutGenerator(marker) {
+            return function() {
+                google.maps.event.trigger(marker, 'mouseout');
+            }
+        }
+
+
+        function initialize() {
+            function zoom(radius) {
+                if (radius <= 0.5)
+                    return 14;
+                if (radius <= 1)
+                    return 13;
+                if (radius <= 3)
+                    return 12;
+                if (radius <= 6)
+                    return 11;
+                if (radius <= 15)
+                    return 10;
+                if (radius <= 25)
+                    return 9;
+                if (radius <= 100)
+                    return 7;
+                if (radius <= 200)
+                    return 6;
+                if (radius <= 300)
+                    return 5;
+                if (radius <= 700)
+                    return 4;
+                return 3;
+            }
+            radius = Number($("#id_r").val().replace(',', '.'));
+            var myOptions = {
+                zoom: zoom(radius),
+                disableDefaultUI: true,
+                zoomControl: true,
+                mapTypeId: google.maps.MapTypeId.ROADMAP
+            };
+            map = new google.maps.Map(document.getElementById("map-canvas"), myOptions);
+            geocoder = new google.maps.Geocoder();
+            geocoder.geocode(
+                {address: document.getElementById("id_l").value}, 
+                function(result, status){
+                    if (status == google.maps.GeocoderStatus.OK) {
+                        map.setCenter(result[0].geometry.location);
+                        var circle = new google.maps.Circle({
+                          map: map,
+                          radius: radius*1000,
+                          fillColor: '#FFFFFF',
+                          editable: false
+                        });
+                    }
+                }
+            )
+
+            setMarkers(map, products);
+        }
+
+
+        $(document).ready(function () {
+            $('#id_l').click(function (){
+                $('#form_search_results').keypress(function(e){
+                    if ( e.which == 13 ) e.preventDefault();
+                });
+            });
+
+            autocomplete = new google.maps.places.Autocomplete(
+                document.getElementById("id_l"), 
+                {
+                    types: ['geocode'], 
+                    bounds: new google.maps.LatLngBounds(
+                        new google.maps.LatLng(42.13316390, -5.982051999999999), 
+                        new google.maps.LatLng(50.03800220, 10.409550)
+                    )
+                }
+            );
+
+            google.maps.event.addListener(autocomplete, 'place_changed', function() {
+                // code found at 
+                // http://stackoverflow.com/questions/3525670/radius-of-viewable-region-in-google-maps-v3 
+                console.log(autocomplete.getPlace().geometry);
+                bounds = autocomplete.getPlace().geometry.viewport;
+                if (bounds) {
+                    center = bounds.getCenter();
+                    ne = bounds.getNorthEast();
+
+                    // r = radius of the earth in statute miles
+                    var r = 6378.7;  
+
+                    // Convert lat or lng from decimal degrees into radians (divide by 57.2958)
+                    var lat1 = center.lat() / 57.29577951; 
+                    var lon1 = center.lng() / 57.29577951;
+                    var lat2 = ne.lat() / 57.29577951;
+                    var lon2 = ne.lng() / 57.29577951;
+
+                    // distance = circle radius from center to Northeast corner of bounds
+                    var dis = r * Math.acos(Math.sin(lat1) * Math.sin(lat2) + 
+                      Math.cos(lat1) * Math.cos(lat2) * Math.cos(lon2 - lon1));
+                } else {
+                    var dis = 1;
+                }
+                    id_r = $('#id_r');
+                    id_l = $('#id_l');
+                    id_r.attr({READONLY: true});
+                    id_l.attr({READONLY: true});
+                    id_r.val(Math.ceil(dis));
+
+                    $("#form_search_results").submit();
+            });
+
+            initialize();
+        });
+    </script>
+{% endblock %}

@@ -1,0 +1,52 @@
+/* Patterns.less
+ * Repeatable UI elements outside the base styles provided from the scaffolding
+ * ---------------------------------------------------------------------------- */
+
+
+ // TABS
+ // -----
+ 
+ //we use jquery ui tabs
+ @import "ui/jquery.ui.tabs.less";
+ 
+ 
+ // DATEPICKER
+ //-----------
+ 
+ //we use jqueru ui datepicker
+ @import "ui/jquery.ui.datepicker.less";
+
+
+
+ // PAGINATION
+// -----------
+
+.pagination {
+  text-align: center;
+  
+  margin-bottom: 20px;
+  
+  a {
+    #font > .sans-serif(Arial, bold, @basefont);
+    
+    padding: 10px 7px;
+    
+    &.page-selected { color: @orange; }
+  }
+}
+
+
+// ANSWER STATS
+// -------------
+
+.answer-stats {
+  #font > .sans-serif('Ubuntu', normal, 13px);
+  color: @blueDark;
+
+  th, td { padding-bottom: 5px; }
+  td { font-weight: bold; }
+  th { text-align: left; }
+}
+
+
+ 

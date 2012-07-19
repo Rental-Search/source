@@ -1,78 +1,88 @@
 {% load i18n %}
-<div class="x6 or">
-    <div class="fbconnect-content">
-        <div id="fbconnect">Connectez-vous avec Facebook</div>
-        <span>Plus simple et rapide.</span>
-    </div>
-</div>
-<div class="x6">
-    <div class="emailOauth-content">
-        {{ form.non_field_errors }}
-    	<form class="inline" action="" method="POST">
-    	{% csrf_token %}
-        <p class="email">
-            <label>{% trans "Votre adresse email est :" %}</label> {{ form.email }}
-    		{% if form.email.errors %}
-    		    {% for error in form.email.errors %}
-    		        <span class="error">{{ error|escape }}</span>
-    		    {% endfor %}
-    		{% endif %}
-        </p>
-        <p class="question">{% trans "Avez-vous un compte ?" %}</p>
-        {{ form.exists }}
-    	{% if form.exists.errors %}
-    	    {% for error in form.exists.errors %}
-    	        <span class="error">{{ error|escape }}</span>
-    	    {% endfor %}
-    	{% endif %}
-        <p class="password">
-    		{{ form.password }}
-    		<a href="{% url password_reset %}" class="pd-forget">{% trans "Mot de passe oublié" %}</a>
-    		{% if form.password.errors %}
-    		    {% for error in form.password.errors %}
-    		        <span class="error">{{ error|escape }}</span>
-    		    {% endfor %}
-    		{% endif %}
-    	</p>
-    </div>
-    <div id="submit-wizard">
-        <p>
-            {{ form.facebook_access_token }}
-            {{ form.facebook_expires }}
-            {{ form.facebook_uid }}
-    	    <input type="hidden" name="{{ step_field }}" value="{{ step0 }}" />
-        	{{ previous_fields|safe }}
-        	<input type="submit" class="btn big-green" value="{% trans "Continuer &rarr;" %}" />
-        </p>
-    </form>
-    </div>
-</div>
+
 <div id="fb-root"></div>
-<script type="text/javascript">  (function() {
-    var ga = document.createElement('script');     ga.type = 'text/javascript'; ga.async = true;
-    ga.src = ('https:'   == document.location.protocol ? 'https://ssl'   : 'http://www') + '.google-analytics.com/ga.js';
-    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-    })();
-</script>
-<script>
-  window.fbAsyncInit = function() {
-    FB.init({
-      appId      : '255056637886187', // App ID
-      channelURL : '{{ MEDIA_URL }}channel.html', // Channel File
-      status     : true, // check login status
-      cookie     : true, // enable cookies to allow the server to access the session
-      oauth      : true, // enable OAuth 2.0
-      xfbml      : true  // parse XFBML
-    });
+<div class="fbconnect-content">
+  <div class="fb-elements">
+    <div id="fbconnect">Connectez-vous avec Facebook</div>
+    <span class="fb-slogan">Plus simple et rapide.</span>
+    <div class="fb-pile">
+        <fb:facepile app_id="{{FACEBOOK_APP_ID}}" width="240" max_rows="1"></fb:facepile>
+    </div>
+  </div>
+</div>{# fbconnect-content #}
+<div class="email-login-content">
+  {% with form.non_field_errors as form_errors %}
+    {% include "partials/alerts_message.html" %}
+  {% endwith %}
+  <form action="" method="POST" class="form-inline">
+  {% csrf_token %}
+  <div class="control-group email-group">
+    {{form.facebook_access_token}}
+    {{form.facebook_expires}}
+    {{form.facebook_uid}}
+    <label class="email-label">{% trans "Votre adresse email est : " %}</label> 
+    {{ form.email }}
+    {% if form.email.errors %}
+    <span class="help-inline">
+      {% for error in form.email.errors %}
+        {{ error|escape }} 
+      {% endfor %}
+    </span>
+    {% endif %}
+  </div>
+  <div class="control-group exists_group">
+    <p class="account-ask">{% trans "Avez-vous un compte ?" %}</p>
+    {{ form.exists }}
+    {% if form.exists.errors %}
+    <span class="help-inline">
+      {% for error in form.exists.errors %}
+        {{ error|escape }} 
+      {% endfor %}
+    </span>
+    {% endif %}
+  </div>
+  <div class="control-group password-group">
+    {{ form.password }}
+    <span class="help-inline"><a href="{% url password_reset %}" >{% trans "Mot de passe oublié" %}</a></span>
+    {% if form.password.errors %}
+    <span class="help-inline">
+      {% for error in form.password.errors %}
+        {{ error|escape }}
+      {% endfor %}
+    </span>
+    {% endif %}
+  </div>
+  <div class="form-actions">
+      {% if step_field %}
+        <input type="hidden" name="{{ step_field }}" value="{{ step0 }}" />
+        {{ previous_fields|safe }}
+      {% endif %}
+      <button type="submit" class="btn btn-primary">{% trans "Continuer"%}</button>
+  </div>
+  </form>
+</div>{# email-login-content #}
+{% block tail %}
+  {{ block.super }}
+  <script src="//maps.googleapis.com/maps/api/js?sensor=false&amp;libraries=places" type="text/javascript"></script>
+  <script>
+    window.fbAsyncInit = function() {
+      FB.init({
+        appId      : '{{ FACEBOOK_APP_ID }}', // App ID
+        channelUrl : '{{ MEDIA_URL }}channel.html', // Channel File
+        status     : true, // check login status
+        cookie     : true, // enable cookies to allow the server to access the session
+        xfbml      : true  // parse XFBML
+      });
 
-    // Additional initialization code here
-  };
+      // Additional initialization code here
+    };
 
-  // Load the SDK Asynchronously
-  (function(d){
-     var js, id = 'facebook-jssdk'; if (d.getElementById(id)) {return;}
-     js = d.createElement('script'); js.id = id; js.async = true;
-     js.src = "//connect.facebook.net/fr_FR/all.js";
-     d.getElementsByTagName('head')[0].appendChild(js);
-   }(document));
-</script>
+    // Load the SDK Asynchronously
+    (function(d){
+       var js, id = 'facebook-jssdk'; if (d.getElementById(id)) {return;}
+       js = d.createElement('script'); js.id = id; js.async = true;
+       js.src = "//connect.facebook.net/fr_FR/all.js";
+       d.getElementsByTagName('head')[0].appendChild(js);
+     }(document));
+  </script>
+{% endblock %}

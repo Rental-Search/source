@@ -1,0 +1,910 @@
+{% extends "base.html" %}
+
+{% load i18n %}
+
+{% block title %}{{ flatpage.title }}{% endblock %}
+
+{% block content %}
+<div id="flatpages" class="container-main">
+	<ul class="breadcrumb">
+		<li><a href="{% url home %}">{% trans "Accueil" %}</a></li>
+		<li>{{ flatpage.title }}</li>
+	</ul>
+	<div class="one-content">
+		<h1>{{ flatpage.title }}</h1>
+		<h2>1 - Rappel</h2>
+		<p>La politique assurance e-loue concerne les 3 catégories de biens qui se louent sur e-loue.</p>
+		<p>
+			Nous avons établi des partenariats avec 3 assureurs, à savoir :
+		</p>
+		<table class="table">
+			<thead>
+				<tr>
+					<th>Catégorie de bien</th>
+					<th>Assureurs</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>Objets</td>
+					<td>Generali</td>
+				</tr>
+				<tr>
+					<td>Automobiles</td>
+					<td>MMA</td>
+				</tr>
+				<tr>
+					<td>Logements</td>
+					<td>Europ assistance</td>
+				</tr>
+			</tbody>
+		</table>
+		<h2>2 - Garanties et franchises</h2>
+		<div class="product-tabs">
+			<ul>
+                <li><a href="#goods">{% trans "Objets" %}</a></li>
+                <li><a href="#car">{% trans "Voitures" %}</a></li>
+                <li><a href="#real-estate">{% trans "Logements"%}</a></li>
+            </ul>
+            <div id="goods">
+            	<table class="table">
+            		<thead>
+            			<tr>
+            				<th colspan="1" class="align-center">Politique assurance</th>
+            				<th colspan="3" class="align-center">Objets</th>
+            			</tr>
+            		</thead>
+            		<tbody>
+            			<tr>
+            				<th colspan="4" class="align-center">Ce que l'assurance couvre</th>
+            			</tr>
+            			<tr>
+            				<th></th>
+            				<th class="align-center">Types de garanties</th>
+            				<th class="align-center">Montant de la garantie</th>
+            				<th class="align-center">Montant de la franchise</th>
+            			</tr>
+            			<tr>
+            				<th class="align-center">Garanties et franchises</th>
+            				<td class="align-center">Casse accidentelle (vols exclus)</td>
+            				<td class="align-center">750 &euro;</td>
+            				<td class="align-center">15%</td>
+            			</tr>
+            			<tr>
+            				<th colspan="4" class="align-center">Conditions pour qu'une location soit assurée</th>
+            			</tr>
+            			<tr>
+            				<th rowspan="3" class="align-center" style="vertical-align: middle;">Condition portant sur le bien</th>
+            				<td colspan="3" class="align-center">Sont exclus l'ensemble des objets interdits à la location sur le site e-loue.</td>
+            			</tr>
+            			<tr>
+            				<td colspan="3" class="align-center">Voir politique de conformités des biens et liste des biens interdits</td>
+            			</tr>
+            			<tr>
+            				<td colspan="3" class="align-center">Le propriétaire doit être un particulier (sont exclus les professionnels).</td>
+            			</tr>
+            			<tr>
+            				<th rowspan="2" class="align-center" style="vertical-align: middle;">Condition portant sur le locataire</th>
+            				<td colspan="3" class="align-center">Le locataire doit être un particulier</td>
+            			</tr>
+            			<tr>
+            				<td colspan="3" class="align-center">Le locataire doit payer la location sur le site avec une carte bancaire à son nom qu'il présentera au propriétaire au début de la location.</td>
+            			</tr>
+            			<tr>
+            				<th rowspan="2" class="align-center" style="vertical-align: middle;">"Conditions portant sur l'utilisation du bien"</th>
+            				<td colspan="3" class="align-center">La location doit se faire en France métropolitaine</td>
+            			</tr>
+            			<tr>
+            				<td colspan="3" class="align-center">La durée de location ne doit pas excéder 90 jours</td>
+            			</tr>
+            		</tbody>
+            	</table>
+            </div>
+           	<div id="car">
+           		<table class="table">
+            		<thead>
+            			<tr>
+            				<th colspan="1" class="align-center">Politique assurance</th>
+            				<th colspan="3" class="align-center">Voiture</th>
+            			</tr>
+            		</thead>
+            		<tbody>
+            			<tr>
+            				<th colspan="4" class="align-center">Ce que l'assurance couvre</th>
+            			</tr>
+            			<tr>
+            				<th class="align-center" rowspan="9" style="vertical-align: middle;">Garanties et franchises</th>
+            				<th class="align-center">Types de garanties</th>
+            				<th class="align-center">Montant de la garantie</th>
+            				<th class="align-center">Montant de la franchise</th>
+            			</tr>
+            			<tr>
+            				<td>Responsabilité civile / dommages corporels</td>
+            				<td class="align-center" style="vertical-align: middle;">illimité</td>
+            				<td class="align-center" rowspan="2" style="vertical-align: middle;">500 &euro;</td>
+            			</tr>
+            			<tr>
+            				<td>responsabilité civile tiers / dommages matériels et immatériels consécutifs. </td>
+            				<td class="align-center" style="vertical-align: middle;">100 M€</td>
+            			</tr>
+            			<tr>
+            				<td>Défense et recours</td>
+            				<td class="align-center">20 000&euro;</td>
+            				<td class="align-center">200 &euro;</td>
+            			</tr>
+            			<tr>
+            				<td>Dommages corporels conducteur / Avances et Frais médicaux</td>
+            				<td class="align-center">3 500&euro;</td>
+            				<td class="align-center">néant</td>
+            			</tr>
+            			<tr>
+            				<td>Dommages corporels conducteur / Autres dommages corporels.</td>
+            				<td class="align-center">1 M&euro;</td>
+            				<td class="align-center">10% d'invalidité permanente</td>
+            			</tr>
+            			<tr>
+            				<td>Dommages tous accidents (1)</td>
+            				<td class="align-center">40 000&euro;</td>
+            				<td class="align-center">800&euro;</td>
+            			</tr>
+            			<tr>
+            				<td>Vol</td>
+            				<td class="align-center">40 000&euro;</td>
+            				<td class="align-center">2 000&euro;</td>
+            			</tr>
+            			<tr>
+            				<td>Incendie</td>
+            				<td class="align-center">40 000&euro;</td>
+            				<td class="align-center">2 000&euro;</td>
+            			</tr>
+            			<tr>
+            				<th colspan="4" class="align-center">Conditions pour qu'une location soit assurée</th>
+            			</tr>
+            			<tr>
+            				<th rowspan="5" class="align-center" style="vertical-align: middle;">Condition portant sur le bien</th>
+            				<td colspan="3" class="align-center">Uniquement les voitures particulières : mention VP sur la carte grise dans la case J.1</td>
+            			</tr>
+            			<tr>
+            				<td colspan="3" class="align-center">Sont exclus les véhicules utilitaires, les véhicules destinés au transport public de marchandises ou de voyageurs, les véhicules de plus de 9 places destinés au transport de personnes, les 2 roues.</td>
+            			</tr>
+            			<tr>
+            				<td colspan="3" class="align-center">Compte tenu du montant de la garantie limitée à 40 000 €, sont exclus les véhicules de sport et de luxe (et seront retirés du site par notre équipe de modération). En général, les véhicules dont la puissance fiscale est supérieure à 13 CV sont refusés.</td>
+            			</tr>
+            			<tr>
+            				<td colspan="3" class="align-center">Le certificat d'immatriculation doit être au nom d'un particulier.</td>
+            			</tr>
+            			<tr>
+            				<td colspan="3" class="align-center">Le véhicule doit déjà être couvert par un contrat d'assurance annuel, en dehors de l'assurance proposée par e-loue.</td>
+            			</tr>
+            			<tr>
+            				<th rowspan="4" class="align-center" style="vertical-align: middle;">Condition portant sur le locataire</th>
+            				<td colspan="3" class="align-center">Le conducteur doit avoir au moins 21 ans.</td>
+            			</tr>
+            			<tr>
+            				<td colspan="3" class="align-center">Le conducteur doit être titulaire d'un permis de conduire obtenu depuis plus de 2 ans valable en France.</td>
+            			</tr>
+            			<tr>
+            				<td colspan="3" class="align-center">Le conducteur doit payer la location sur le site avec une carte bancaire à son nom qu'il présentera au propriétaire au début de la location, ainsi que son permis de conduire.</td>
+            			</tr>
+            			<tr>
+            				<td colspan="3" class="align-center">Il est possible d'avoir plusieurs conducteurs. Dans ce cas, chaque conducteur devra être mentionné sur le contrat de location et répondre aux conditions d'age et de permis de conduire.</td>
+            			</tr>
+            			<tr>
+            				<th rowspan="4" class="align-center" style="vertical-align: middle;">Condition portant sur l'utilisation du bien</th>
+            				<td colspan="3" class="align-center">Le véhicule ne doit circuler qu'en France métropolitaine</td>
+            			</tr>
+            			<tr>
+            				<td colspan="3" class="align-center">L'usage est exclusivement privé</td>
+            			</tr>
+            			<tr>
+            				<td colspan="3" class="align-center">La durée de location ne doit pas excéder 90 jours</td>
+            			</tr>
+            			<tr>
+            				<td colspan="3" class="align-center">Le transport de passagers à titre onéreux est exclus</td>
+            			</tr>
+            		</tbody>
+            	</table>
+           	</div>
+           	<div id="real-estate">
+           		<table class="table">
+            		<thead>
+            			<tr>
+            				<th colspan="1" class="align-center">Politique assurance</th>
+            				<th colspan="3" class="align-center">Logement</th>
+            			</tr>
+            		</thead>
+            		<tbody>
+            			<tr>
+            				<th colspan="4" class="align-center">Ce que l'assurance couvre</th>
+            			</tr>
+            			<tr>
+            				<th class="align-center" rowspan="8" style="vertical-align: middle;">Garanties et franchises</th>
+            				<th class="align-center">Types de garanties</th>
+            				<th class="align-center">Montant de la garantie</th>
+            				<th class="align-center">Montant de la franchise</th>
+            			</tr>
+            			<tr>
+            				<td>Responsabilité civile / dommages corporels</td>
+            				<td class="align-center">illimité</td>
+            				<td class="align-center">500 &euro;</td>
+            			</tr>
+            			<tr>
+            				<td>Annulation de séjour suite à :<br>Maladie, accident, décès, dommages atériels au domicile ou locaux professionnels, licenciement économique de l'assuré ou de son conjoint, annulation de l'accompagnant du bénéficiaire.</td>
+            				<td class="align-center">acompte + solde dans la limite de 15 000 €</td>
+            				<td class="align-center">néant</td>
+            			</tr>
+            			<tr>
+            				<td>Interruption de séjour suite à :<br>Remboursement des conditions terrestres non utilisées en cas de rapatriement médical ou de retour anticipé</td>
+            				<td class="align-center">Loyer non couru dans la limite de 15 000&euro;</td>
+            				<td class="align-center">néant</td>
+            			</tr>
+            			<tr>
+            				<td>Responsabilité civile villégiature :<br>Dommages coporels et matériels suite incendie, explosion, dégâts des eaux.</td>
+            				<td class="align-center">1 525 000&euro;</td>
+            				<td class="align-center">75&euro;</td>
+            			</tr>
+            			<tr>
+            				<td>Responsabilité civile villégiature :<br>Dommages aux biens mobiliers et immobiliers appartenant au propriétaire du bien loué.</td>
+            				<td class="align-center">2 500&euro;</td>
+            				<td class="align-center">75&euro;</td>
+            			</tr>
+            			<tr>
+            				<td>Non-conformité du bien loué :<br>Refus d'occupation par le locataire suite à une non-conformité du bien loué Frais hôtelier en cas de non-conformité.</td>
+            				<td class="align-center" rowspan="2" style="vertical-align: middle">
+            					Sommes conservées par le propriétaire. Frais hôtelier à hauteur de 75 € par personne et dans la limite d'une nuit.
+            				</td>
+            				<td class="align-center" rowspan="2" style="vertical-align: middle">néant</td>
+            			</tr>
+            			<tr>
+            				<td>
+            					Garanties de pertes pécuniaires résultant d'actes malhonnêtes ou frauduleux :<br>Location réalisée de manière frauduleuse. Frais hôtelier en cas de fraude.
+            				</td>
+            			</tr>
+            			<tr>
+            				<th colspan="4" class="align-center">Conditions pour qu'une location soit assurée</th>
+            			</tr>
+            			<tr>
+            				<th rowspan="2" class="align-center" style="vertical-align: middle;">Condition portant sur le bien</th>
+            				<td colspan="3" class="align-center">Les locations saisonnières dans n'importe quel pays dans le monde à l'exclusion des pays en état de guere civile ou étrangère, d'instabilité politique notoire, subissant des représailles, des restrictions à la libre circulation des personnes et des biens et ce quel que soit le motif, notamment sanitaire, de sécurité, météorologique, et subissant des actes de terrorisme, des catastrophes naturelles ou désintégration du moyau atomique.</td>
+            			</tr>
+            			<tr>
+            				<td colspan="3" class="align-center">Les locations saisonnières dont le co-contractant au contrat de réservation est un particulier, propriétaire ou co-propriétaire, ou locataire expressément autorisés dans leur bail à ptratiquer de la sous-location.</td>
+            			</tr>
+            			<tr>
+            				<th rowspan="2" class="align-center" style="vertical-align: middle;">Condition portant sur le locataire</th>
+            				<td colspan="3" class="align-center">le locataire doit être un particulier.</td>
+            			</tr>
+            			<tr>
+            				<td colspan="3" class="align-center">le locataire doit payer la location sur le site avec une carte bancaire à son nom qu'il présentera au propriétaire au début de la location.</td>
+            			</tr>
+            			<tr>
+            				<th class="align-center" style="vertical-align: middle;">Condition portant sur l'utilisation du bien</th>
+            				<td colspan="3" class="align-center">La durée de location ne peut excéder 90 jours.</td>
+            			</tr>
+            		</tbody>
+            	</table>
+           	</div>
+		</div>{# product-tabs #}
+		<p>
+			L’ensemble des garanties d’assurance sont régies par les conditions particulières et générales des contrats d’assurance. Il est demandé aux utilisateurs d’en prendre connaissance et de s’assurer de les avoir bien comprises.
+		</p>
+		<table class="table">
+			<thead>
+				<tr>
+					<th>Catégories de biens</th>
+					<th>Conditions particulières</th>
+					<th>Conditions générales</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>Objets</td>
+					<td></td>
+					<td><a href="http://eloue.s3.amazonaws.com/media/assurances/Assurone.pdf">Notice d'information assurance AssurOne</a></td>
+				</tr>
+				<tr>
+					<td>Voiture</td>
+					<td><a href="http://eloue.s3.amazonaws.com/media/assurances/MMA.pdf">Assurance location voiture MMA</a></td>
+					<td><a href="http://eloue.s3.amazonaws.com/media/assurances/Autofleet.pdf">Contrat MMA</a></td>
+				</tr>
+				<tr>
+					<td>Objets</td>
+					<td><a href="http://eloue.s3.amazonaws.com/media/assurances/europ_assistance.pdf">Condition Général Europ Asistance</a></td>
+					<td></td>
+				</tr>
+			</tbody>
+		</table>
+		<h2>3 - Que faire en cas de vol, dommage, panne du bien loué ?</h2>
+		<div class="product-tabs">
+			<ul>
+                <li><a href="#goods">{% trans "Objets" %}</a></li>
+                <li><a href="#car">{% trans "Voitures" %}</a></li>
+                <li><a href="#real-estate">{% trans "Logements"%}</a></li>
+            </ul>
+            <div id="goods">
+            	<table class="table">
+            		<thead>
+            			<tr>
+            				<th colspan="1" class="align-center">Modalités pratiques</th>
+            				<th colspan="3" class="align-center">Objets</th>
+            			</tr>
+            		</thead>
+            		<tbody>
+            			<tr>
+            				<th rowspan="5" class="align-center" style="vertical-align: middle;">En cas de dommages</tH>
+            				<td>Le locataire doit prévenir immédiatement le propriétaire et restituer l'objet.</td>
+            			</tr>
+            			<tr>
+            				<td>Dans tous les cas, l'état des lieux de sortie tel que prévu au contrat doit être fait et signé par les parties . <a href="https://wwww.e-loue.com/depot_de_garantie/">Voir document gestion du dépôt de garantie.</a></td>
+            			</tr>
+            			<tr>
+            				<td>Le propriétaire doit réaliser un devis de réparation ou obtenir un certificat d'irréparabilité dans les 48 heures à transmettre au locataire, ainsi que la facture initiale d'achat du bien.</td>
+            			</tr>
+            			<tr>
+            				<td>Le locataire sera prélevé sur demande du propriétaire auprès des services e-loue par mail à l'adresse : contact@e-loue.com ou par téléphone au numéro : 0826 800 200 du montant de la franchise. <a href="https://www.e-loue.com/depot_de_garantie/">Voir document gestion du dépôt de garantie.</a></td>
+            			</tr>
+            			<tr>
+            				<td>Le locataire doit envoyer par courrier une déclaration de sinistre directement au service assurance afin d'obtenir le remboursement selon les modalités du contrat d'assurance.</td>
+            			</tr>
+            			<tr>
+            				<th rowspan="3" class="align-center" style="vertical-align: middle;">En cas de panne</th>
+            				<td>Il n'existe pas de service d'assistance en cas de panne pour les location d'objets.</td>
+            			</tr>
+            			<tr>
+            				<td>Le locataire doit prévenir immédiatement le propriétaire et restituer l'objet.</td>
+            			</tr>
+            			<tr>
+            				<td>Le locataire prévient les services e-loue par mail à l'adresse : contact@e-loue.com ou par téléphone au numéro : 0826 800 200 qui ouvre un dossier de demande de remboursement auprès du propriétaire. Le remboursement de la location sur la base du prorata d'utilisation vs la durée totale prévue de la location.</td>
+            			</tr>
+            		</tbody>
+            	</table>
+            </div>
+            <div id="car">
+            	<table class="table">
+            		<thead>
+            			<tr>
+            				<th colspan="1" class="align-center">Modalités pratiques</th>
+            				<th colspan="3" class="align-center">Voiture</th>
+            			</tr>
+            		</thead>
+            		<tbody>
+            			<tr>
+            				<th rowspan="6" class="align-center" style="vertical-align: middle;">En cas de dommages</tH>
+            				<td>Si un tiers est impliqué dans l'accident, le locataire remplit le constat amiable avec références du contrat d'assurance.</td>
+            			</tr>
+            			<tr>
+            				<td>Si besoin l'assistance 24h/24 de e-loue dépêche un dépanneur pour remorquer le véhicule vers un garage proche; Voir paragraphe ci-dessous : service assistance.</td>
+            			</tr>
+            			<tr>
+            				<td>Le locataire prévient immédiatement le propriétaire qui contacte immédiatement les services e-loue par mail à l'adresse contact@e-loue.com ou par téléphone au numéro : 0826 800 200 qui ouvre un dossier de déclaration de sinistre.</td>
+            			</tr>
+            			<tr>
+            				<td>Dans tous les cas, l'état des lieux de sortie tel que prévu au contrat doit être fait et signé par les parties . <a href="https://www.e-loue.com/depot_de_garantie/">Voir document gestion du dépôt de garantie.</a></td>
+            			</tr>
+            			<tr>
+            				<td>Si le montant des réparations est inférieur à la franchise d'assurance, les réparations sont entièrement à la charge du locataire. Le dépôt de garantie assure le propriétaire d'être remboursé. <a href="https://www.e-loue.com/depot_de_garantie/">Voir document gestion du dépôt de garantie.</a></td>
+            			</tr>
+            			<tr>
+            				<td>Si le montant des réparations est supérieur à la franchise d'assurance, les services e-loue déclare le sinistre à la MMA, qui paie directement les réparations au garage. La franchise est à la charge du locataire. Voir document gestion du dépôt de garantie.</td>
+            			</tr>
+            			<tr>
+            				<th rowspan="4" class="align-center" style="vertical-align: middle;">En cas de vol</th>
+            				<td>Le locataire doit porter plainte au commissariat immédiatement.</td>
+            			</tr>
+            			<tr>
+            				<td>Le locataire prévient immédiatement  le propriétaire qui contacte immédiatement les services e-loue par mail à l'adresse : contact@e-loue.com ou par téléphone au numéro : 0826 800 200 qui ouvre un dossier de déclaration de sinistre.</td>
+            			</tr>
+            			<tr>
+            				<td>Le locataire sera prélevé sur demande du propriétaire auprès des services e-loue par mail à l'adresse : contact@e-loue.com ou par téléphone au numéro : 0826 800 200 du montant de la franchise.<a href="https://www.e-loue.com/depot_de_garantie/">Voir document gestion du dépôt de garantie.</a></td>
+            			</tr>
+            			<tr>
+            				<td>L'expert de l'assurance évalue la valeur du véhicule volé, et le propriétaire est remboursé du montant correspondant, moins la franchise vol.</td>
+            			</tr>
+            			<tr>
+            				<th rowspan="4" class="align-center" style="vertical-align: middle;">En cas de panne</th>
+            				<td>Le locataire prévient le propriétaire</td>
+            			</tr>
+            			<tr>
+            				<td>Si le véhicule a moins de 10 ans, l'assistance 24h/24 e-loue intervient : <br>le véhicule est remorqué dans un garage proche, et si besoin le transport des passagers est pris en charge. Comme toujours en cas de panne, le propriétaire paie la réparation de son véhicule. L'assistance peut si besoin prendre en charge le transport du propriétaire jusqu'au garage où il doit aller chercher son véhicule</td>
+            			</tr>
+            			<tr>
+            				<td>Si le véhicule a plus de 10 ans, le propriétaire doit coordonner et payer le dépannage du véhicule vers le garage de son choix</td>
+            			</tr>
+            			<tr>
+            				<td>Le locataire prévient les services e-loue par mail à l'adresse : contact@e-loue.com ou par téléphone au numéro : 0826 800 200 qui ouvre un dossier de demande de remboursement auprès du propriétaire.
+Le remboursement de la location sur la base du prorata d'utilisation du véhicule vs la durée totale prévue de la location.</td>
+            			</tr>
+            		</tbody>
+            	</table>
+            </div>
+            <div id="real-estate">
+            	<table class="table">
+            		<thead>
+            			<tr>
+            				<th colspan="1" class="align-center">Modalités pratiques</th>
+            				<th colspan="3" class="align-center">Logement</th>
+            			</tr>
+            		</thead>
+            		<tbody>
+            			<tr>
+            				<th rowspan="6" class="align-center" style="vertical-align: middle;">En cas de dommages</tH>
+            				<td>Dans le cadre de la garantie responsabilité civile villégiature, en cas de dommages, le locataire doit prévenir immédiatement le propriétaire.</td>
+            			</tr>
+            			<tr>
+            				<td>Dans tous les cas, l'état des lieux de sortie tel que prévu au contrat doit être fait et signé par les parties. <a href="https://wwww.e-loue.com/depot_de_garantie/">Voir document gestion du dépôt de garantie.</a></td>
+            			</tr>
+            			<tr>
+            				<td>Le propriétaire doit réaliser un devis de réparation ou une facture de rachat du bien détérioré  à transmettre au locataire dans les 48 heures, et un constat amiable dans le cas d'un dégât des eaux, incendies, explosion.</td>
+            			</tr>
+            			<tr>
+            				<td>Le locataire sera prélevé sur demande du propriétaire auprès des services e-loue par mail à l'adresse : contact@e-loue.com ou par téléphone au numéro : 0826 800 200 du montant de la franchise. <a href="https://wwww.e-loue.com">Voir document gestion du dépôt de garantie.</a></td>
+            			</tr>
+            			<tr>
+            				<td>Le locataire doit envoyer par courrier une déclaration de sinistre directement au service assurance afin d'obtenir le remboursement selon les modalités du contrat d'assurance.</td>
+            			</tr>
+            			<tr>
+            				<td>Sont traités les cas de déclaration de sinistre dans le cadre des garanties annulation/interruption de séjour, non-conformité du bien loué, actes malhonnêtes ou frauduleux et assistance rapatriement dans un tableau ci-dessous.</td>
+            			</tr>
+            			<tr>
+            				<th class="align-center" style="vertical-align: middle;">En cas de vol</th>
+            				<td>En cas de cambriolage constaté par le locataire durant la période de location, le locataire doit prévenir immédiatement le propriétaire qui se chargera de prendre contact avec son assureur.</td>
+            			</tr>
+            			<tr>
+            				<th class="align-center" style="vertical-align: middle;">En cas de panne</th>
+            				<td>En cas de panne constaté par le locataire durant la période de location (chauffage, eaux, équipements), le locataire doit contacter immédiatement le propriétaire qui s'engage à mettre tout en œuvre pour assurer les réparations.</td>
+            			</tr>
+            		</tbody>
+            	</table>
+            </div>
+        </div>{# product-tab #}
+        <p>Le tableau ci-dessus vous guide dans les démarches à effectuer en cas de vol, dommage ou panne du bien loué.<br> Pour toutes questions relatives, contacter les services e-loue.</p>
+        <h2>4 - Quels documents sont nécessaires à la constitution d’une déclaration de sinistre ?</h2>
+        <div class="product-tabs">
+        	<ul>
+                <li><a href="#goods">{% trans "Objets" %}</a></li>
+                <li><a href="#car">{% trans "Voitures" %}</a></li>
+                <li><a href="#real-estate">{% trans "Logements"%}</a></li>
+            </ul>
+            <div id="goods">
+            	<table class="table">
+            		<thead>
+            			<tr>
+            				<th colspan="1" class="align-center">Modalités pratiques</th>
+            				<th colspan="3" class="align-center">Objets</th>
+            			</tr>
+            		</thead>
+            		<tbody>
+            			<tr>
+            				<th rowspan="5" class="align-center" style="vertical-align: middle;">En cas de dommages</tH>
+            				<td>Le locataire dispose d'un délai de 5 jours ouvrés suivant le constat de la casse pour envoyer par courrier une déclaration de sinistre directement auprès de l'assureur.</td>
+            			</tr>
+            			<tr>
+            				<td>Déclaration sur l'honneur décrivant très précisément la date, le lieu et les circonstances du dommage accidentel.</td>
+            			</tr>
+            			<tr>
+            				<td>Copie du contrat de location</td>
+            			</tr>
+            			<tr>
+            				<td>Une photographie du bien avant réparation et le devis/facture de réparation fournie par le propriétaire si le bien est réparable.</td>
+            			</tr>
+            			<tr>
+            				<td>Le certificat d'irréparabilité établi par un SAV compétent et la facture d'achat initiale du bien garanti fourni par le propriétaire ou tout autre type de preuve de la valeur du bien garanti si le bien est irréparable.</td>
+            			</tr>
+            			<tr>
+            				<th rowspan="5" class="align-center" style="vertical-align: middle;">En cas de panne</tH>
+            				<td>Le locataire dispose d'un délai de 5 jours ouvrés suivant le constat de la casse pour envoyer par courrier une déclaration de sinistre directement auprès de l'assureur.</td>
+            			</tr>
+            			<tr>
+            				<td>Déclaration sur l'honneur décrivant très précisément la date, le lieu et les circonstances du dommage accidentel.</td>
+            			</tr>
+            			<tr>
+            				<td>Copie du contrat de location</td>
+            			</tr>
+            			<tr>
+            				<td>Une photographie du bien avant réparation et le devis/facture de réparation fournie par le propriétaire si le bien est réparable.</td>
+            			</tr>
+            			<tr>
+            				<td>Le certificat d'irréparabilité établi par un SAV compétent et la facture d'achat initiale du bien garanti fourni par le propriétaire ou tout autre type de preuve de la valeur du bien garanti si le bien est irréparable.</td>
+            			</tr>
+            		</tbody>
+            	</table>
+            </div>
+            <div id="car">
+            	<table class="table">
+            		<thead>
+            			<tr>
+            				<th colspan="1" class="align-center">Modalités pratiques</th>
+            				<th colspan="3" class="align-center">Voitures</th>
+            			</tr>
+            		</thead>
+            		<tbody>
+            			<tr>
+            				<th rowspan="9" class="align-center" style="vertical-align: middle;">En cas de dommages</tH>
+            				<td>Les services e-loue disposent d'un délai de 5 jours pour procéder à la déclaration de sinistre auprès de l'assureur. Les services e-loue se mettront en relation avec propriétaire et locataire afin de traiter au mieux le dossier.</td>
+            			</tr>
+            			<tr>
+            				<td>La date, l’heure et le lieu précis du sinistre</td>
+            			</tr>
+            			<tr>
+            				<td>La nature et les circonstances exactes de celui-ci</td>
+            			</tr>
+            			<tr>
+            				<td>Ses causes et ses conséquences connues ou présumées</td>
+            			</tr>
+            			<tr>
+            				<td>Les nom, prénom et adresse, la date d’obtention du permis du conducteur ou de l’auteur du sinistre</td>
+            			</tr>
+            			<tr>
+            				<td>Les nom, prénom et adresse des victimes et des témoins éventuels</td>
+            			</tr>
+            			<tr>
+            				<td>La marque et le numéro d’immatriculation du ou des véhicules en cause, la société d’assurance et le numéro de contrat correspondant</td>
+            			</tr>
+            			<tr>
+            				<td>Un exemplaire du constat amiable (même si le véhicule n’est pas en cause) et de nous transmettre ce document complété et signé par les parties en présence</td>
+            			</tr>
+            			<tr>
+            				<td>Justificatifs de tous les frais engagés à la suite du sinistre (remorquage, dépannage…).</td>
+            			</tr>
+            			<tr>
+            				<th rowspan="6" class="align-center" style="vertical-align: middle;">En cas de vol</th>
+            				<td>Les services e-loue disposent d'un délai de 2 jours pour procéder à la déclaration de sinistre auprès de l'assureur. Les services e-loue se mettront en relation avec propriétaire et locataire afin de traiter au mieux le dossier.</td>
+            			</tr>
+            			<tr>
+            				<td>Une copie du dépôt de plainte (mentionnant le vol de la carte grise et/ou des bagages et objets personnels, des marchandises s'il y a lieu).</td>
+            			</tr>
+            			<tr>
+            				<td>La carte grise (ou le certificat de vol de la carte grise), les clés du véhicule, le certificat de non gage, les factures d’achat et d’entretien du véhicule.</td>
+            			</tr>
+            			<tr>
+            				<td>Les clés du véhicule</td>
+            			</tr>
+            			<tr>
+            				<td>Le certificat de non gage</td>
+            			</tr>
+            			<tr>
+            				<td>Les factures d’achat et d’entretien du véhicule</td>
+            			</tr>
+            			<tr>
+            				<th class="align-center" style="vertical-align: middle;">En cas de panne</th>
+            				<td>Justificatifs de tous les frais engagés.</td>
+            			</tr>
+            		</tbody>
+            	</table>
+            </div>
+            <div id="real-estate">
+            	<table class="table">
+            		<thead>
+            			<tr>
+            				<th colspan="1" class="align-center">Modalités pratiques</th>
+            				<th colspan="3" class="align-center">Logement</th>
+            			</tr>
+            		</thead>
+            		<tbody>
+            			<tr>
+            				<th rowspan="12" class="align-center" style="vertical-align: middle;">En cas de dommages</tH>
+            				<td>Le locataire dispose d'un délai de 5 jours ouvrés suivant le constat de la casse pour envoyer par courrier une déclaration de sinistre directement auprès de l'assureur.</td>
+            			</tr>
+            			<tr>
+            				<th>Dans le cas de dommages mobiliers et immobiliers :</th>
+            			</tr>
+            			<tr>
+            				<td>Informations générales : nom de l'agence de location : "e-loue", numéro de référence location, dates de début et de fin de séjour.</td>
+            			</tr>
+            			<tr>
+            				<td>Déclaration circonstanciée du locataire</td>
+            			</tr>
+            			<tr>
+            				<td>Etat des lieux entrées et sorties</td>
+            			</tr>
+            			<tr>
+            				<td>Devis et/ou facture de rachat du biens détérioré (original)</td>
+            			</tr>
+            			<tr>
+            				<th>Dans le cas de dommages consécutifs à dégât des eaux, incendie, explosion :</th>
+            			</tr>
+            			<tr>
+            				<td>Informations générales : nom de l'agence de location : "e-loue", numéro de référence location, dates de début et de fin de séjour.</td>
+            			</tr>
+            			<tr>
+            				<td>Constat amiable (et devis si existant) en cas de dégâts des eaux</td>
+            			</tr>
+            			<tr>
+            				<td>Déclaration sur papier simple des dommages, des circonstances, de la date, de l'intervention des pompiers ou non, et s'il y a eu des blessés, dans l'attente du rapport des pompiers en cas d'incendie ou explosion.</td>
+            			</tr>
+            			<tr>
+            				<td>Etat des lieux entrées et sorties</td>
+            			</tr>
+            		</tbody>
+            	</table>
+            </div>
+        </div>
+        <p>
+        	Le tableau ci-dessus résume l’ensemble des documents qu’il est nécessaire de préparer dans le cadre de la constitution d’un dossier de déclaration de sinistre.
+        </p>
+        <p>
+        	Une fois ces éléments préparés et avant l’envoie aux assureurs, nous vous recommandons de contacter les services e-loue afin de vérifier que votre dossier est complet.
+        </p>
+        <h2>5 - Qui contacter en cas de sinistre ?</h2>
+        <div class="product-tabs">
+        	<ul>
+                <li><a href="#goods">{% trans "Objets" %}</a></li>
+                <li><a href="#car">{% trans "Voitures" %}</a></li>
+                <li><a href="#real-estate">{% trans "Logements"%}</a></li>
+            </ul>
+            <div id="goods">
+            	<table class="table">
+            		<thead>
+            			<tr>
+            				<th colspan="1" class="align-center">Modalités pratiques</th>
+            				<th colspan="3" class="align-center">Objets</th>
+            			</tr>
+            		</thead>
+            		<tbody>
+            			<tr>
+            				<th rowspan="3" class="align-center" style="vertical-align: middle;">En cas de dommages</tH>
+            				<td>Services e-loue par mail au : contact@e-loue.com</td>
+            			</tr>
+            			<tr>
+            				<td>services e-loue par téléphone au : 0826 800 200</td>
+            			</tr>
+            			<tr>
+            				<td>
+            					Adresse d'envoi de la déclaration de sinistre :<br>
+            					Gestion Assurance - Assurone Group<br>
+            					BP 30200<br>
+            					95120 Saint Gatien
+            				</td>
+            			</tr>
+            			<tr>
+            				<th rowspan="2" class="align-center" style="vertical-align: middle;">En cas de panne</th>
+            				<td>Services e-loue par mail au : contact@e-loue.com</td>
+            			</tr>
+            			<tr>
+            				<td>services e-loue par téléphone au : 0826 800 200</td>
+            			</tr>
+            		</tbody>
+            	</table>
+            </div>
+            <div id="car">
+            	<table class="table">
+            		<thead>
+            			<tr>
+            				<th colspan="1" class="align-center">Modalités pratiques</th>
+            				<th colspan="3" class="align-center">Voitures</th>
+            			</tr>
+            		</thead>
+            		<tbody>
+            			<tr>
+            				<th rowspan="2" class="align-center" style="vertical-align: middle;">En cas de dommages</tH>
+            				<td>Services e-loue par mail au : contact@e-loue.com</td>
+            			</tr>
+            			<tr>
+            				<td>services e-loue par téléphone au : 0826 800 200</td>
+            			</tr>
+            			<tr>
+            				<th class="align-center" style="vertical-align: middle;">En cas de panne</th>
+            				<td>Numéro d'assistance 24/24 7/7 :  01 47 11 67 67</td>
+            			</tr>
+            		</tbody>
+            	</table>
+            </div>
+            <div id="real-estate">
+            	<table class="table">
+            		<thead>
+            			<tr>
+            				<th colspan="1" class="align-center">Modalités pratiques</th>
+            				<th colspan="3" class="align-center">Logement</th>
+            			</tr>
+            		</thead>
+            		<tbody>
+            			<tr>
+            				<th rowspan="3" class="align-center" style="vertical-align: middle;">En cas de dommages</tH>
+            				<td>Services e-loue par mail au : contact@e-loue.com</td>
+            			</tr>
+            			<tr>
+            				<td>services e-loue par téléphone au : 0826 800 200</td>
+            			</tr>
+            			<tr>
+            				<td>
+            					Adresse d'envoi de la déclaration de sinistre :<br>
+								AADAR PLUS C/O Cabinet ALBINET<br>
+								5, cité de trévisse 75009 Paris<br>
+								mail : claim@cabinetalbinet.fr<br>
+								Fax : 01 48 01 84 83<br>
+            				</td>
+            			</tr>
+            		</tbody>
+            	</table>
+            </div>
+        </div>
+        <p>
+        	Nous vous recommandons de sauvergarder dans vos agendas les coordonnées du tableau ci-dessous. Ainsi en cas de nécessité vous disposerez des contacts nécessaires pour vous supporter dans vos démarches.
+        </p>
+        <h2>6 - Les garanties complémentaires de la location saisonnière</h2>
+        <p>
+        	Au-delà des garanties dommages, vol, panne décrites, e-loue propose des garanties complémentaires dans le cadre de la location saisonnière 
+        </p>
+        <p>
+        	Ces garanties complémentaires incluses dans le prix du service assurance permettent de louer en toute sérénité et couvrent l’annulation/interruption de séjour, la non-conformité du bien loué, les actes frauduleux et malhonnête.
+        </p>
+        <table class="table">
+        	<thead>
+        		<tr>
+	        		<th>Location logement</th>
+	        		<th>Que faire ?</th>
+	        		<th>Quel documents produire ?</th>
+	        		<th>Qui contacter ?</th>
+	        	</tr>
+        	</thead>
+        	<tbody>
+        		<tr>
+        			<th rowspan="6">Annulation de séjour</th>
+        			<td>Le locataire doit impérativement procéder à l'annulation de son séjour via le site e-loue. (voir politique annulation).</td>
+        			<td>Informations générales : nom de l'agence de location : "e-loue", numéro de référence location, dates de début et de fin de séjour</td>
+        			<td>Services e-loue par mail au : contact@e-loue.com</td>
+        		</tr>
+        		<tr>
+        			<td>En fonction de la politique annulation définie par le propriétaire et validée par le locataire, les services e-loue procéderons au paiement du solde de la transaction.</td>
+        			<td>En cas de maladie ou d'accident :<br>
+						- Certificat médical et/ou bulletin d'hospitalisation sous plis fermé précisant l'origine, la nature, la gravité et les conséquences prévisibles de la maladie ou de l'accident<br>
+						- Copie de l'arrêt de travail<br>
+						- Photocopies des ordonnances comportant les vignettes des médicaments prescrits, ananlyses et examens pratiqués.
+					</td>
+        			<td>services e-loue par téléphone au : 0826 800 200</td>
+        		</tr>
+        		<tr>
+        			<td>Le locataire doit ensuite procéder à une déclaration de sinistre directement auprès des services assurance dans un délai maximum de 5 jours ouvrés.</td>
+        			<td>
+        				En cas de licenciement économique :<br>
+						- Copie de la lettre de licenciement<br>
+						- Copie du contrat de travail<br>
+					</td>
+        			<td>
+        				Adresse d'envoi de la déclaration de sinistre :<br>
+						AADAR PLUS C/O Cabinet ALBINET<br>
+						5, cité de trévisse 75009 Paris<br>
+						mail : claim@cabinetalbinet.fr<br>
+						Fax : 01 48 01 84 83<br>
+					</td>
+        		</tr>
+        		<tr>
+        			<td></td>
+        			<td>
+        				En cas de grossessse ou complication de grossesse :<br>
+						- Certificat attestant de la date de début de grossesse<br>
+						- Certificat médical ou bulletin d'hospitalisation<br>
+						- Copie de la feuille d'examen prénatal<br>
+						- Copie de l'arrêt de travail<br>
+					</td>
+        			<td></td>
+        		</tr>
+        		<tr>
+        			<td></td>
+        			<td>
+        				En cas de décès :<br>
+						- Certificat de décès<br>
+						- Fiche d'état civil<br>
+					</td>
+        			<td></td>
+        		</tr>
+        		<tr>
+        			<td></td>
+        			<td>Tous les autres cas :<br>
+						- Tout justificatif
+					</td>
+        			<td></td>
+        		</tr>
+        		<tr>
+        			<th rowspan="3">Intéruption de séjour</th>
+        			<td>"Le locataire doit impérativement prévenir le propriétaire afin de convenir des modalités de fin de séjour 
+(état des lieux, dépôt de garantie, remise des clès,…)"</td>
+        			<td>Informations générales : nom de l'agence de location : "e-loue", numéro de référence location, dates de début et de fin de séjour.</td>
+        			<td>N° assitance : + 33 (0)1 41 85 80 02</td>
+        		</tr>
+        		<tr>
+        			<td>
+        				Le locataire doit ensuite prendre directement contacter avec le service assistance afin :<br>
+						- D'obtenir l'accord préalable avant de prendre toute initiative ou d'engager des dépenses<br>
+						- Se conformer aux solutions que préconise l'assureur<br>
+						- Fournir tous les éléments relatifs au contrat<br>
+						- Fournir tous les justificatifs originaux des dépenses dont le remboursement est demandé<br>
+        			</td>
+        			<td>Les documents demandés sont identiques à ceux demandés dans le cas de l'annulation de séjour. En tous états de cause, la prise de contact préalable avec l'assureur étant nécessaire, il sera à ce moment là préciser toutes les pièces souhaités en fonction de la raisons de l'iinterruption.</td>
+        			<td>N° fax assistance : + 33 (0)1 41 85 85 71</td>
+        		</tr>
+        		<tr>
+        			<td>A l'issu du rapatriement, le locataire doit procéder à la déclaration de sinistre directement auprès de l'assureur afin de demander le remboursement des prestations non utilisées du fait de l'interruption de séjour</td>
+        			<td></td>
+        			<td></td>
+        		</tr>
+        		<tr>
+        			<th rowspan="5">Non conformité du bien</th>
+        			<td>Le locataire doit impérativement aviser directement le propriétaire, les services e-loue et l'assureur verbalement et par écrit dans les 72 heures de son arrivée et de son refus de prendre possession des locaux loués et des raisons qui le motivent.</td>
+        			<td>Informations générales : nom de l'agence de location : "e-loue", numéro de référence location, dates de début et de fin de séjour.</td>
+        			<td>Services e-loue par mail au : contact@e-loue.com</td>
+        		</tr>
+        		<tr>
+        			<td>Il est IMPERATIF que le locataire envoie aux mêmes personnes et dans le même délai une lettre recommandée avec accusé de réception.</td>
+        			<td>L'original de la facture initiale acquittée, délivrée lors de la réservation de la location et faisant ressortir les dates de la location.</td>
+        			<td>services e-loue par téléphone au : 0826 800 200</td>
+        		</tr>
+        		<tr>
+        			<td>Par la suite, le locataire doit envoyer directement à l'assureur une déclaration de sinistre.</td>
+        			<td>La copie de l'annonce parue sur le site e-loue et des photographies</td>
+        			<td>
+        				Adresse d'envoi de la déclaration de sinistre :<br> 
+						AADAR PLUS C/O Cabinet ALBINET<br>
+						5, cité de trévisse 75009 Paris<br>
+						mail : claim@cabinetalbinet.fr<br>
+						Fax : 01 48 01 84 83<br>
+        			</td>
+        		</tr>
+        		<tr>
+        			<td></td>
+        			<td>Le compte-rendu d'état des lieux, photographies, témoignages et tout autre document permettant à l'assureur de supposer qu'il s'agit bien d'une non-conformité substantielle.</td>
+        			<td></td>
+        		</tr>
+        		<tr>
+        			<td></td>
+        			<td>Les coordonnées courriel ou postale du propriétaire</td>
+        			<td></td>
+        		</tr>
+        		<tr>
+        			<th rowspan="4">Actes frauduleux ou malhonnêtes</th>
+        			<td>Le locataire doit impérativement aviser directement le propriétaire, les services e-loue et l'assureur verbalement et par écrit dans les 72 heures de la découverte de la fraude ou de toute suspicion de fraude et prendre toutes mesures nécessaires pour interrompre les effets de l'infraction et limiter l'importance du sinistre.</td>
+        			<td>Le récépissé de plainte ou de tout autre acte analogue dans les meilleurs délais, et au plus tard dans les huits jours de son dépôt.</td>
+        			<td>Services e-loue par mail au : contact@e-loue.com</td>
+        		</tr>
+        		<tr>
+        			<td>Le locataire doit impérativement déposer plainte au pénal auprès des autorités compétentes. A défaut de dépôt de plainte, exécuter sans délais les formalités administratives et/ou judiciaires qui s'imposent auprès de celles-ci.</td>
+        			<td>La copie de l'accord de location signé par le propriétaire.</td>
+        			<td>services e-loue par téléphone au : 0826 800 200</td>
+        		</tr>
+        		<tr>
+        			<td>Par la suite, le locataire doit envoyer directement à l'assureur une déclaration de sinistre.</td>
+        			<td>Tout documents prouvant les réglements effectués pour la réservation et leurs encaissements.</td>
+        			<td>
+        				Adresse d'envoi de la déclaration de sinistre :<br> 
+						AADAR PLUS C/O Cabinet ALBINET<br>
+						5, cité de trévisse 75009 Paris<br>
+						mail : claim@cabinetalbinet.fr<br>
+						Fax : 01 48 01 84 83<br>
+        			</td>
+        		</tr>
+        		<tr>
+        			<td></td>
+        			<td>Les coordonnées courriel ou postale du propriétaire</td>
+        			<td></td>
+        		</tr>
+        	</tbody>
+        </table>
+        <h2>7 - Les services Assistance</h2>
+        <p>Afin de compléter son offre de services, e-loue propose en complément du service assurance, un service d’assistance.</p>
+        <p>Il s’agit :</p>
+        <ul>
+        	<li>Service assistance dépannage dans le cas de la location de voiture</li>
+        	<li>Service assistance rapatriement dans le cadre de la location saisonnière </li>
+        </ul>
+        <table class="table">
+        	<thead>
+        		<tr>
+        			<th class="align-center">Assistance pannes & accidents</th>
+        			<th class="align-center">Assistance rapatriment</th>
+        		</tr>
+        		<tr>
+        			<th class="align-center">Location voiture</th>
+        			<th class="align-center">Location logement</th>
+        		</tr>
+        	</thead>
+        	<tbody>
+        		<tr>
+        			<td class="align-center">Numéro d’appel : + 33 (0)1 47 11 67 67</td>
+        			<td class="align-center">Numéro d’appel : + 33 (0)1 41 85 80 02</td>
+        		</tr>
+        	</tbody>
+        </table>
+        <p>L’ensemble des prestations du service assistance est consultable dans le document : « Politique assistance ».</p>
+	</div>{# one-content #}
+</div>
+{% endblock %}

@@ -1,0 +1,89 @@
+{% extends "accounts/patron_edit.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Modification de mes cordonnées bancaires" %}{% endblock %}
+
+{% block content-main-profil %}
+
+{% if form.is_multipart %}
+<form enctype="multipart/form-data" class="form-horizontal" method="post" action="">
+{% else %}
+<form class="form-horizontal" method="post" action="">
+{% endif %}
+{% csrf_token %}
+<p class="form-header">
+      {% trans "En enregistrant vos coordonnées bancaires, vous n'aurez plus besoin de les réécrire lors de vos prochaines demandes de locations."%}
+</p>
+<fieldset id="credit-card-form">
+  <legend>Modifier votre carte bancaire</legend>
+  {% with form.non_field_errors as form_errors %}
+    {% include "partials/non_field_errors.html" %}
+  {% endwith %}
+  <div class="control-group {% if form.card_number.errors %} error {% endif %}">
+    <label class="control-label" for="{{ form.card_number.id_for_label }}">{{ form.card_number.label }}</label>
+    <div class="controls">
+      {{ form.card_number }}
+      <p class="help-block">{{ form.card_number.help_text}}</p>
+      {% if form.card_number.errors %}
+      <span class="help-inline">
+      {% for error in form.card_number.errors %}
+        {{ error|escape }}
+      {% endfor %}
+      </span>
+      {% endif %}
+    </div>{# controls #}
+  </div>{# control-group #}
+  <div class="control-group {% if form.expires.errors %} error {% endif %}">
+    <label class="control-label" for="{{ form.expires.id_for_label }}">
+      {{ form.expires.label }}
+    </label>
+    <div class="controls">
+      {{ form.expires }}
+      <p class="help-block">{{ form.expires.help_text}}</p>
+      {% if form.expires.errors %}
+      <span class="help-inline">
+      {% for error in form.expires.errors %}
+        {{ error|escape }}
+      {% endfor %}
+      </span>
+      {% endif %}
+    </div>{# controls #}
+  </div>{# control-group #}
+  <div class="control-group {% if form.holder_name.errors %} error {% endif %}">
+    <label class="control-label" for="{{ form.holder_name.id_for_label }}">{{ form.holder_name.label }}</label>
+    <div class="controls">
+      {{ form.holder_name }}
+      <p class="help-block">{{ form.holder_name.help_text}}</p>
+      {% if form.holder_name.errors %}
+      <span class="help-inline">
+      {% for error in form.holder_name.errors %}
+        {{ error|escape }}
+      {% endfor %}
+      </span>
+      {% endif %}
+    </div>{# controls #}
+  </div>{# control-group #}
+  <div class="control-group {% if form.cvv.errors %} error {% endif %}">
+    <label class="control-label" for="{{ form.cvv.id_for_label }}">{{ form.cvv.label }}</label>
+    <div class="controls">
+      {{ form.cvv }}
+      <p class="help-block">{{ form.cvv.help_text}}</p>
+      {% if form.cvv.errors %}
+      <span class="help-inline">
+      {% for error in form.cvv.errors %}
+        {{ error|escape }}
+      {% endfor %}
+      </span>
+      {% endif %}
+    </div>{# controls #}
+  </div>{# control-group #}
+  <div class="form-actions">
+    <button type="submit" class="btn btn-primary">Enregistrer</button>
+    <button type="reset" class="btn btn-cancel">Annuler</button>
+    {% if request.user.creditcard %}
+      <a class="delete-credit-card" href="{% url patron_delete_credit_card %}">{% trans "Supprimer la carte" %}</a>
+    {% endif %}
+  </div>
+</fieldset>
+</form>
+{% endblock %}

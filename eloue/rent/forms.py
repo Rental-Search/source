@@ -12,7 +12,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from pyke.knowledge_engine import CanNotProve
 
-from eloue.rent.models import Booking, Sinister
+from eloue.rent.models import Booking, Sinister, OwnerComment, BorrowerComment
 from eloue.rent.utils import get_product_occupied_date, datespan, DATE_FORMAT
 from django.db.models import Q
 
@@ -50,13 +50,15 @@ BOOKING_DAYS = getattr(settings, 'BOOKING_DAYS', 85)
 
 class ISO8601DateTimeField(forms.Field):
     def to_python(self, value):
+        if value in validators.EMPTY_VALUES:
+            return None
         return parser.parse(value)
     
 
 class DateTimeWidget(forms.MultiWidget):
     def __init__(self, attrs=None, date_format=None, time_format=None, *args, **kwargs):
         widgets = (
-            forms.DateInput(attrs={'class': 'ins dps'}, format=date_format),
+            forms.DateInput(attrs={'class': 'ins dps date-input'}, format=date_format),
             forms.Select(choices=TIME_CHOICE, attrs={'class': 'sells'}),
         )
         super(DateTimeWidget, self).__init__(widgets, *args, **kwargs)
@@ -234,3 +236,14 @@ class SinisterForm(forms.ModelForm):
 
 class IncidentForm(forms.Form):
     message = forms.CharField(required=True, widget=forms.Textarea(attrs={'placeholder': _(u"Décrivez votre incident")}))
+
+
+class OwnerCommentForm(forms.ModelForm):
+    class Meta:
+        model = OwnerComment
+        fields = ('note', 'comment', )
+
+class BorrowerCommentForm(forms.ModelForm):
+    class Meta:
+        model = BorrowerComment
+        fields = ('note', 'comment', )

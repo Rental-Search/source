@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-10-03 14:52+0200\n"
-"PO-Revision-Date: 2011-10-03 14:54+0100\n"
+"PO-Revision-Date: 2012-01-23 16:10+0100\n"
 "Last-Translator: benoit\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -259,7 +259,7 @@ msgstr "Phone number"
 
 #: accounts/forms.py:297
 msgid "Addresse"
-msgstr "Address"
+msgstr "Adresse"
 
 #: accounts/forms.py:364
 #: accounts/tests/wizard.py:157
@@ -581,7 +581,7 @@ msgstr "Expired"
 
 #: accounts/models.py:253
 msgid "addresses"
-msgstr "addresses"
+msgstr "adresses"
 
 #: accounts/models.py:274
 msgid "Coordonnées géographiques incorrectes"

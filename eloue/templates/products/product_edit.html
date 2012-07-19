@@ -1,215 +1,132 @@
-{% extends "base.html" %}
-{% load i18n mptt_tags product%}
+{% extends "accounts/dashboard.html" %}
+{% load i18n navbar product %}
 
-{% block title %}{% trans "Vos produits mis en locations" %}{% endblock %}
+{% block title %}{% trans "Mes annonces" %}{% endblock %}
 
-{% block content %}
-<div id="content" class="xgrid">
-    <div class="content-top">
-        <ul id="menu" class="x12">
-            <li class="menu-tab first"><a href="{% url dashboard %}">{% trans "Tableau de bord" %}</a></li>
-			<li class="menu-tab selected">{% trans "Propriétaire" %}</li>
-			<li class="menu-tab"><a href="{% url borrower_booking %}">{% trans "Locataire" %}</a></li>
-			<li class="menu-tab"><a href="{% url patron_edit %}">{% trans "Mon compte" %}</a></li>
-			<li class="menu-tab"><a href="{% url inbox %}">{% blocktrans %}Messages({{ unread_message_count }}){% endblocktrans %}</a></li>
-        </ul>
-    </div>
-    <div id="sub-menu">
-        <ul class="x12">
-            <li class="sub-tab first"><a href="{% url owner_booking %}">{% trans "Locations actives" %}</a></li>
-			<li class="sub-tab"><a href="{% url owner_history %}">{% trans "Historique des locations" %}</a></li>
-			<li class="sub-tab selected">{% trans "Mes objets" %}</li>
-			<li class="sub-tab"><a href="{% url product_create %}">{% trans "Ajouter un objet" %}</a></li>
-        </ul>
-    </div>
-    <form class="inline" enctype="multipart/form-data" action="" method="POST">
-    <div class="x6">
-        <div class="content-header x6 first">
-            <h2>1. Catégorie</h2>
-        </div>
-        {% csrf_token %}
-		<table class="new">
-			<tr>
-				<td colspan="2" {% if form.category.errors %} class="error-field" {% endif %}>
-				{{ form.category }}
-				{% if form.category.errors %}
-					{% for error in form.category.errors %}
-					<br />
-					<span class="error">{{ error|escape }}</span>
-					{% endfor %}
-				{% endif %}
-				</td>
-			</tr>
-		</table>
-    </div>
-    <div class="x6">
-        <div class="content-header x6 first">
-            <h2>2. Information</h2>
-        </div>
-        <table class="new">
-            <tr>
-				<th><label>{{ form.picture.label }} {% if form.picture.field.required %}*{% endif %}:</label></th>
-				<td>
-					{% for picture in product.pictures.all %}
-						{% if picture.thumbnail %}
-				       		<a href="#"><img src="{{ picture.thumbnail.url }}" /></a>
-				        {% endif %}
-					{% endfor %}
-					{{ form.picture }}
-					{% if form.picture.errors %}
-					    {% for error in form.picture.errors %}
-									<br />
-					        <span class="error">{{ error|escape }}</span>
-					    {% endfor %}
-					{% endif %}
-				</td>
-			</tr>
-			<tr>
-				<th><label>{{ form.summary.label }} {% if form.summary.field.required %}*{% endif %} :</label></th>
-				<td {% if form.summary.errors %} class="error-field" {% endif %}>
-					{{ form.summary }}
-					{% if form.summary.errors %}
-					    {% for error in form.summary.errors %}
-									<br />
-					        <span class="error">{{ error|escape }}</span>
-					    {% endfor %}
-					{% endif %}
-				</td>
-			</tr>
-			<tr>
-				<th><label>{{ form.deposit_amount.label }} {% if form.deposit_amount.field.required %}*{% endif %} :</label></th>
-				<td {% if form.deposit_amount.errors %} class="error-field" {% endif %}>
-					{{  form.deposit_amount }} <span class="unit">{% currency_symbol %}</span>
-					{% if form.deposit_amount.errors %}
-					    {% for error in form.deposit_amount.errors %}
-									<br />
-					        <span class="error">{{ error|escape }}</span>
-					    {% endfor %}
-					{% endif %}
-				</td>
-			</tr>
-			<tr>
-				<th><label>{{ form.quantity.label }} {% if form.quantity.field.required %}*{% endif %} :</label></th>
-				<td {% if form.quantity.errors %} class="error-field" {% endif %}>
-					{{  form.quantity }}
-					{% if form.quantity.errors %}
-					    {% for error in form.quantity.errors %}
-									<br />
-					        <span class="error">{{ error|escape }}</span>
-					    {% endfor %}
-					{% endif %}
-				</td>
-			</tr>
-			<tr>
-				<th class="desc-input"><label>{{ form.description.label }} {% if form.description.field.required %}*{% endif %} :</label></th>
-				<td {% if form.description.errors %} class="error-field" {% endif %}>
-					{{ form.description }}
-					{% if form.description.errors %}
-					    {% for error in form.description.errors %}
-									<br />
-					        <span class="error">{{ error|escape }}</span>
-					    {% endfor %}
-					{% endif %}
-				</td>
-			</tr>
-        </table>
-    </div>
-    <div class="content-header x12">
-        <h2>3. {% trans "Prix de location" %}</h2>
-    </div>
-    <div class="x12">
-        <div class="tabsPrices">
-            <ul>
-				<li><a href="#tabs-1">{% trans "Prix simplifiés"%}</a></li>
-			</ul>
-			<div id="tabs-1">
-			    <h5>{% trans "Prix par défaut :" %}</h5>
-			    {% blocktrans %}
-			    <p>Vous pouvez ne remplir qu’une seule case et cliquer sur l’icône <img src="{{MEDIA_URL}}/images/mini_calculator.png" alt="Calculer les prix de location automatiquement" /> pour calculer les autres valeurs automatiquement.</p>
-			    {% endblocktrans %}
-			    <ul class="prices-form clearfix">
-			        <li>
-			            <p class="{% if form.hour_price.errors %}error-field{% endif %}">
-			             {{ form.hour_price }}
-							<span><label class="labs "><span class="current-symbol">{% currency_symbol %}</span> {{ form.hour_price.label }}{% if form.hour_price.field.required %}*{% endif %}</label><span>
-						</p>
-			        </li>
-			        <li>
-			            <p class="{% if form.day_price.errors %}error-field{% endif %}">
-			                {{ form.day_price }}
-							<label class="labs"><span class="current-symbol">{% currency_symbol %}</span> {{ form.day_price.label }}{% if form.day_price.field.required %}*{% endif %}</label>
-			            </p>
-			        </li>
-			        <li>
-			            <p class="{% if form.week_end_price.errors %}error-field{% endif %}">
-			                {{ form.week_end_price }}
-						    <label class="labs"><span class="current-symbol">{% currency_symbol %}</span> {{ form.week_end_price.label }}{% if form.week_end_price.field.required %}*{% endif %}</label>
-			             </p>
-			        </li>
-			        <li>
-			            <p class="{% if form.week_price.errors %}error-field{% endif %}">
-			                {{ form.week_price }}
-							<label class="labs"><span class="current-symbol">{% currency_symbol %}</span> {{ form.week_price.label }}{% if form.week_price.field.required %}*{% endif %}</label>
-			            </p>
-			        </li>
-			        <li>
-			            <p class="{% if form.two_weeks_price.errors %}error-field{% endif %}">
-			                {{ form.two_weeks_price }}
-							<label class="labs"><span class="current-symbol">{% currency_symbol %}</span> {{ form.two_weeks_price.label }}{% if form.two_weeks_price.field.required %}*{% endif %}</label>
-			            </p>
-			        </li>
-			        <li>
-			            <p class="{% if form.month_price.errors %}error-field{% endif%}">
-			                {{ form.month_price }}
-							<label class="labs"><span class="current-symbol">{% currency_symbol %}</span> {{ form.month_price.label }}{% if form.month_price.field.required %}*{% endif %}</label>
-			            </p>
-			        </li>
-			        <li class="calculator"><a href="#">{% trans "Calculer" %}</a></li>
-                    <li class="supp-list-prices"></li>
-			    </ul>
-			    {% if form.hour_price.errors %}
-    			    {% for error in form.hour_price.errors %}
-    			        <span class="error">{{ error|escape }}</span></br>
-    			    {% endfor %}
-    			{% endif %}
-			    {% if form.day_price.errors %}
-    			    {% for error in form.day_price.errors %}
-    			        <span class="error">{{ error|escape }}</span></br>
-    			    {% endfor %}
-    			{% endif %}
-			    {% if form.week_end_price.errors %}
-    			    {% for error in form.week_end_price.errors %}
-    			        <span class="error">{{ error|escape }}</span></br>
-    			    {% endfor %}
-    			{% endif %}
-			    {% if form.week_price.errors %}
-    			    {% for error in form.week_price.errors %}
-    			        <span class="error">{{ error|escape }}</span></br>
-    			    {% endfor %}
-    			{% endif %}
-			    {% if form.two_weeks_price.errors %}
-    			    {% for error in form.two_weeks_price.errors %}
-    			        <span class="error">{{ error|escape }}</span></br>
-    			    {% endfor %}
-    			{% endif %}
-			    {% if form.month_price.errors %}
-    			    {% for error in form.month_price.errors %}
-    			        <span class="error">{{ error|escape }}</span></br>
-    			    {% endfor %}
-    			{% endif %}
-			</div>
-        </div>
-    </div>
-    <div class="x12">
-        <p class="required-field">{% trans "* champ obligatoire" %}</p>
-    </div>
-    <div id="submit-wizard" class="x12">
-        <p>
-            <a href="{% url product_delete product.slug product.pk %}" style="padding-right: 500px; color: #900;">{% trans "Supprimer cet objet" %}</a>
-		   <!-- <a href="{% url owner_product %}">{% trans "Annuler" %}</a> {% trans "ou" %} -->
-    		<input type="submit" class="btn big-green" value="{% trans "Sauvegarder" %}" />
-		</p>
-	</form>
-	</div>
-</div>
+{% block head %}
+  {{block.super}}
 {% endblock %}
+
+{% block content-aside-profil %}
+{% url owner_product_edit product.slug product.pk as product_edit %}
+{% url owner_product_address_edit product.slug product.pk as product_address_edit %}
+{% url owner_product_price_edit product.slug product.pk as product_price_edit %}
+
+
+<div class="previous-sub-bar">
+  &larr;  <a href="{% url owner_product %}">{% trans "Retour à mes annonces" %}</a>
+</div>
+<ul class="nav-sub-bar">
+    <li><a href="{{ product_edit }}"  class="{% active request product_edit "$" %}">{% trans "Description et photos" %}</a></li>
+    <li><a href="{{ product_address_edit }}"  class="{% active request product_address_edit %}">{% trans "Adresse" %}</a></li>
+    <li><a href="{{ product_price_edit }}"  class="{% active request product_price_edit %}">{% trans "Prix" %}</a></li>
+    <li>
+      <a href="{% url product_delete product_id=product.id slug=product.slug %}" >Supprimer</a>
+    </li>
+</ul>
+{% endblock %}
+{% block content-main-profil %}
+
+{% with form.non_field_errors as form_errors %}
+  {% include "partials/non_field_errors.html" %}
+{% endwith %}
+
+<h2>{% trans "Modification de "%} {{ product.summary }} <small><a href="{{ product.get_absolute_url }}">({% trans "Voir l'annonce" %}) </a></small></h2>
+{% if form.is_multipart %}
+<form enctype="multipart/form-data" class="form-horizontal" method="post" action="">
+{% else %}
+<form class="form-horizontal" method="post" action="">
+{% endif %}
+{% csrf_token %}
+
+{% for fieldset in form.fieldsets %}
+      <fieldset class="{{ fieldset.classes }}">
+        {% if fieldset.legend %}
+            <legend>{{ fieldset.legend }}</legend>
+          {% endif %}
+          {% if fieldset.description %}
+            <div class="control-group">
+              <p class="fieldset-description">{{ fieldset.description }}</p>
+            </div>
+          {% endif %}
+          {% if fieldset.name == "service_included" or fieldset.name == "options" %}
+          {% for formfield in fieldset %}
+          <div class="control-group {% if formfield.errors %} error {% endif %}">
+            <div class="controls">
+              <label class="checkbox">
+                {{formfield}}
+                {{formfield.label}}
+              </label>
+              {% if formfield.errors %}
+                <span class="help-inline">
+                {% for error in formfield.errors %}
+                  {{ error|escape }}
+                {% endfor %}
+                </span>
+              {% endif %}
+            </div>
+          </div>
+          {% endfor %}
+          {% else %}
+            {% for formfield in fieldset %}
+              {% if formfield.is_hidden %}
+              <div class="control-group" style="margin-bottom: 0px;">
+                {{formfield}}
+              </div>
+              {% else %}
+                <div class="control-group {% if formfield.errors %} error {% endif %}">
+                    <label class="control-label" for="{{ formfield.id_for_label }}">{{ formfield.label }} {% if formfield.field.required %}*{% endif %}</label>
+                    <div class="controls">
+                        {% if formfield.name == "picture" %}{% with form.instance.pictures.all|first as picture %}<img src="{{picture.thumbnail.url}}"/>{% endwith %}{%endif%}
+                        {{ formfield }}
+                        <p class="help-block">{{ formfield.help_text}}</p>
+                        {% if formfield.errors %}
+                        <span class="help-inline">
+                            {% for error in formfield.errors %}
+                                {{ error|escape }}
+                            {% endfor %}
+                        </span>
+                        {% endif %}
+                    </div>
+                </div>
+              {% endif %}
+            {% endfor %}
+            {% if fieldset.name == "address" %}
+            <div class="control-group">
+              <a href="#" class="add-new-address">+ {% trans "Ajoutez une nouvelle adresse" %}</a>
+            </div>
+            {% endif %}
+          {% endif %}
+      </fieldset> 
+      {% endfor %}
+  <div class="form-actions">
+    <button type="submit" class="btn btn-primary">Enregistrer</button>
+    <button type="reset" class="btn btn-cancel">Annuler</button>
+  </div>
+</form>
+{% endblock %}
+
+{% block tail %}
+  {{ block.super }}
+  <script type="text/javascript">
+    $(document).ready(function (){
+      $("#id_category").chosen();
+
+      var addNewAddress = $(".add-new-address");
+      if (
+          addNewAddress.length == 0 || (!Boolean($("#id_address").val()) && !( Boolean($('#id_addresses__address1').val()) && 
+          Boolean($('#id_addresses__zipcode').val()) && Boolean($('#id_addresses__city').val())))
+        ){
+          $(".new-address").show();
+      }
+
+      addNewAddress.click(function (event) { 
+          event.preventDefault();
+          $("#id_address").val('');
+          $(".new-address").show();
+          $(this).hide();
+      });
+    });
+  </script>
+{% endblock %}
+

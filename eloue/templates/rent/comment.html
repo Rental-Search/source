@@ -1,0 +1,53 @@
+{% extends "accounts/borrower_booking.html" %}
+{% load i18n bookingaction %}
+
+{{form.instance.booking}}
+{% block owner_product %}
+    {% if request.user == form.instance.booking.owner %}selected-nav-bar-link{% endif %}
+{% endblock %}
+{% block borrower_booking %}
+    {% if request.user == form.instance.booking.borrower %}selected-nav-bar-link{% endif %}
+{% endblock %}
+
+{% block content-aside-profil %}
+    {% if request.user == booking.borrower %}
+        {% if booking.state == "authorized"%}{% url borrower_booking_authorized as return_url %}{% endif %}
+        {% if booking.state == "pending"%}{% url borrower_booking_pending as return_url %}{% endif %}
+        {% if booking.state == "ongoing"%}{% url borrower_booking_ongoing as return_url %}{% endif %}
+        {% if booking.state != "authorized" and booking.state != "pending" and booking.state != "ongoing" %}
+            {% url borrower_booking_history as return_url %}
+        {% endif %}
+    {% endif %}
+        <div class="previous-sub-bar">
+          &larr;  <a href="{{ form.instance.booking.get_absolute_url }}">{% trans "Retour à la reservation" %}</a>
+        </div>
+{% endblock %}
+
+{% block content-main-profil %}
+<form class="form-horizontal" method="post" action="">
+    {{ form.non_field_errors }}
+    {% csrf_token %}
+    {% for formfield in form %}
+    <div class="control-group {% if formfield.errors %} error {% endif %}">
+        <label class="control-label" for="{{ formfield.id_for_label }}">{{ formfield.label }} {% if formfield.field.required %}*{% endif %}</label>
+        <div class="controls">
+            {{ formfield }}
+            <p class="help-block">{{ formfield.help_text}}</p>
+            {% if formfield.errors %}
+            <span class="help-inline">
+                {% for error in formfield.errors %}
+                    {{ error|escape }}
+                {% endfor %}
+            </span>
+            {% endif %}
+        </div>
+    </div>
+    {% endfor %}
+    <div class="form-actions">
+        <button type="submit" class="btn btn-primary">{% trans "Enregistrer" %}</button>
+        {% for hidden in form.hidden_fields %}
+            {{ hidden }}
+        {% endfor %}
+    </div>
+</form>
+{% endblock %}

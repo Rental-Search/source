@@ -1,15 +1,16 @@
 # -*- coding: utf-8 -*-
- # -*- coding: utf-8 -*-
 import re
 from urllib import urlencode
+import urllib
 import datetime
 from django.conf import settings
 from django.contrib.sites.models import Site
 from django.contrib import messages
+from django.contrib.gis.geos import Point
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.vary import vary_on_headers
-from django.http import Http404
+from django.http import Http404, HttpResponseForbidden
 from django.shortcuts import get_object_or_404
 from django.utils.datastructures import SortedDict, MultiValueDict
 from django.utils.translation import ugettext as _
@@ -19,7 +20,7 @@ from django.views.generic.simple import direct_to_template, redirect_to
 from django.views.generic.list_detail import object_list
 from django.db.models import Q
 
-from django.shortcuts import render_to_response
+from django.shortcuts import render_to_response, redirect
 from django.template import RequestContext
 from django.views.generic.list_detail import object_detail
 
@@ -31,36 +32,95 @@ from eloue.decorators import ownership_required, secure_required, mobify
 from eloue.accounts.forms import EmailAuthenticationForm
 from eloue.accounts.models import Patron
 
-from eloue.products.forms import AlertSearchForm, AlertForm, FacetedSearchForm, ProductForm, ProductEditForm, MessageEditForm
+from eloue.products.forms import AlertSearchForm, AlertForm, FacetedSearchForm, RealEstateEditForm, ProductForm, CarProductEditForm, ProductEditForm, ProductAddressEditForm, ProductPriceEditForm, MessageEditForm
 
 from eloue.products.models import Category, Product, Curiosity, UNIT, ProductRelatedMessage, Alert, MessageThread
+from eloue.accounts.models import Address
+
 from eloue.products.wizard import ProductWizard, MessageWizard, AlertWizard, AlertAnswerWizard
+from eloue.products.search_indexes import product_search, car_search, realestate_search, product_only_search
 from eloue.rent.forms import BookingOfferForm
 from eloue.rent.models import Booking
 from django_messages.forms import ComposeForm
 from eloue.products.utils import format_quote, escape_percent_sign
 from django.core.cache import cache
  
+from eloue.accounts.search_indexes import patron_search
 
 PAGINATE_PRODUCTS_BY = getattr(settings, 'PAGINATE_PRODUCTS_BY', 10)
 DEFAULT_RADIUS = getattr(settings, 'DEFAULT_RADIUS', 50)
 USE_HTTPS = getattr(settings, 'USE_HTTPS', True)
+
+def last_added(search_index, location, offset=0):
+    coords = location['coordinates']
+    region_coords = location.get('region_coords') or coords
+    region_radius = location.get('region_radius') or location['radius']
+    last_added = search_index.spatial(
+            lat=region_coords[0], long=region_coords[1], radius=min(region_radius, 1541)
+        ).spatial(
+            lat=coords[0], long=coords[1], radius=min(region_radius*2 if region_radius else float('inf'), 1541)
+        ).order_by('-created_at_date', 'geo_distance')
+    return last_added[offset*10:(offset+1)*10]
 
 @mobify
 @cache_page(300)
 @vary_on_headers('Referer')
 def homepage(request):
     curiosities = Curiosity.on_site.all()
-    form = FacetedSearchForm()
+    location = request.session.setdefault('location', settings.DEFAULT_LOCATION)
+    address = location.get('formatted_address') or (u'{city}, {country}'.format(**location) if location.get('city') else u'{country}'.format(**location))
+    form = FacetedSearchForm({'l': address}, auto_id='id_for_%s')
     alerts = Alert.on_site.all()[:3]
-    return direct_to_template(request, template='index.html', extra_context={'form': form, 'curiosities': curiosities, 'alerts':alerts})
+    try:
+        coords = location['coordinates']
+        last_joined = patron_search.spatial(
+            lat=coords[0], long=coords[1], radius=1541
+        ).order_by('-date_joined_date', 'geo_distance')
+    except KeyError:
+        last_joined = patron_search.order_by('-date_joined_date')
+    return render_to_response(
+        template_name='index.html', 
+        dictionary={
+            'product_list': last_added(product_only_search, location),
+            'car_list': last_added(car_search, location),
+            'realestate_list': last_added(realestate_search, location),
+            'form': form, 'curiosities': curiosities,
+            'alerts':alerts,
+            'last_joined': last_joined[:11],
+        }, 
+        context_instance=RequestContext(request)
+    )
+
+def homepage_object_list(request, search_index, offset=0):
+    offset = int(offset) if offset else 0
+    location = request.session.setdefault('location', settings.DEFAULT_LOCATION)
+    return render_to_response(
+        template_name='products/partials/result_list.html',
+        dictionary={
+            'product_list': last_added(search_index, location, offset),
+            'truncation': 28
+        },
+        context_instance=RequestContext(request),
+        mimetype='text/plain; charset=utf-8'
+    )
 
 
 @mobify
 @cache_page(300)
 def search(request):
     form = FacetedSearchForm()
-    return direct_to_template(request, template='products/search.html', extra_context={'form': form})
+    return direct_to_template(
+        request, template='products/search.html', 
+        extra_context={'form': form, }
+    )
+
+
+@never_cache
+@secure_required
+def publish_new_ad(request, *args, **kwargs):
+    return direct_to_template(request, template='products/publish_new_ad.html')
+    
+
 
 
 @never_cache
@@ -68,53 +128,112 @@ def search(request):
 def product_create(request, *args, **kwargs):
     wizard = ProductWizard([ProductForm, EmailAuthenticationForm])
     return wizard(request, *args, **kwargs)
-    
+
+@never_cache
+@secure_required
+def car_product_create(request, *args, **kwargs):
+    from eloue.products.forms import CarProductForm
+    wizard = ProductWizard([CarProductForm, EmailAuthenticationForm])
+    return wizard(request, *args, **kwargs)
+
+@never_cache
+@secure_required
+def real_estate_product_create(request, *args, **kwargs):
+    from eloue.products.forms import RealEstateForm
+    wizard = ProductWizard([RealEstateForm, EmailAuthenticationForm])
+    return wizard(request, *args, **kwargs)
+
 
 @login_required
 @ownership_required(model=Product, object_key='product_id', ownership=['owner'])
 def product_edit(request, slug, product_id):
     product = get_object_or_404(Product.on_site, pk=product_id)
-    initial = {
-        'category': product.category.id,
-        'deposit_amount': product.deposit_amount
-    }
-    for price in product.prices.all():
-        initial['%s_price' % UNIT.reverted[price.unit].lower()] = price.amount
-    form = ProductEditForm(data=request.POST or None, files=request.FILES or None, instance=product, initial=initial)
+    try:
+        form = CarProductEditForm(data=request.POST or None, files=request.FILES or None, instance=product.carproduct)
+    except Product.DoesNotExist:
+        try:
+            form = RealEstateEditForm(data=request.POST or None, files=request.FILES or None, instance=product.realestateproduct)
+        except Product.DoesNotExist:
+            form = ProductEditForm(data=request.POST or None, files=request.FILES or None, instance=product)
+
     if form.is_valid():
         product = form.save()
-        messages.success(request, _(u"Votre produit a bien été édité !"))
-    return direct_to_template(request, 'products/product_edit.html', extra_context={'product': product, 'form': form})
+        messages.success(request, _(u"Les modifications ont bien été prises en compte"))
+        return redirect(
+            'eloue.products.views.product_edit', 
+            slug=slug, product_id=product_id
+        )
+
+    return render_to_response(
+        'products/product_edit.html', dictionary={
+            'product': product, 
+            'form': form,
+        }, 
+        context_instance=RequestContext(request)
+    )
 
 
-# @login_required
-# def compose_product_related_message(request, recipient=None, form_class=MessageComposeForm,
-#     template_name='django_messages/compose.html', success_url=None, recipient_filter=None):
-#     if request.method == "POST":
-#         sender = request.user
-#         form = form_class(request.POST, recipient_filter=recipient_filter)
-#         if form.is_valid():
-#             form.save(sender=request.user)
-#             messages.add_message(request, messages.SUCCESS, _(u"Message successfully sent."))
-#             if success_url is None:
-#                 success_url = reverse('messages_inbox')
-#             if request.GET.has_key('next'):
-#                 success_url = request.GET['next']
-#             return HttpResponseRedirect(success_url)
-#     else:
-#         form = form_class()
-#         if recipient is not None:
-#             recipients = [u.username for u in User.objects.filter(username__in=[r.strip() for r in recipient.split('+')])]
-#             form.fields['recipient'].initial = ','.join(recipients)
-#     return render_to_response(template_name, {
-#         'form': form,
-#         }, context_instance=RequestContext(request))
+@login_required
+@ownership_required(model=Product, object_key='product_id', ownership=['owner'])
+def product_address_edit(request, slug, product_id):
+    product = get_object_or_404(Product.on_site, pk=product_id)
+
+    if request.method == "POST":
+        form = ProductAddressEditForm(data=request.POST, instance=product)
+        if form.is_valid():
+            product = form.save()
+            messages.success(request, _(u"L'adress a bien été modifié"))
+            return redirect(
+                'eloue.products.views.product_address_edit', 
+                slug=slug, product_id=product_id
+            )
+    else:
+        form = ProductAddressEditForm(instance=product)
+    
+    
+    return render_to_response(
+        'products/product_edit.html', dictionary={
+            'product': product, 
+            'form': form
+        }, 
+        context_instance=RequestContext(request)
+    )
+
+@login_required
+@ownership_required(model=Product, object_key='product_id', ownership=['owner'])
+def product_price_edit(request, slug, product_id):
+    product = get_object_or_404(Product.on_site, pk=product_id)
+    initial = {}
+
+    for price in product.prices.all():
+        initial['%s_price' % UNIT.reverted[price.unit].lower()] = price.amount
+
+    form = ProductPriceEditForm(data=request.POST or None, instance=product, initial=initial)
+
+    if form.is_valid():
+        product = form.save()
+        messages.success(request, _(u"Les prix ont bien été modifiés"))
+        return redirect(
+            'eloue.products.views.product_price_edit', 
+            slug=slug, product_id=product_id
+        )
+    return render_to_response(
+        'products/product_edit.html', dictionary={
+            'product': product, 
+            'form': form
+        }, 
+        context_instance=RequestContext(request)
+    )
+
 
 def thread_list(user, is_archived):
-    return sorted(MessageThread.objects.filter(
-      Q(sender=user, sender_archived=is_archived)
-      |Q(recipient=user, recipient_archived=is_archived)
-    ).order_by('-last_message__sent_at'), key=lambda thread: not (thread.new_sender() if user==thread.sender else thread.new_recipient()))
+    return sorted(
+        MessageThread.objects.filter(
+            Q(sender=user, sender_archived=is_archived)
+            |Q(recipient=user, recipient_archived=is_archived)
+        ).order_by('-last_message__sent_at'), 
+        key=lambda thread: not (thread.new_sender() if user==thread.sender else thread.new_recipient())
+    )
 
 
 @login_required
@@ -182,7 +301,7 @@ def thread_details(request, thread_id):
     if request.method == "POST":
         editForm = MessageEditForm(request.POST, prefix='0')
         if editForm.is_valid():
-            if editForm.cleaned_data['jointOffer']:
+            if editForm.cleaned_data.get('jointOffer'):
                 booking = Booking(
                   product=product, 
                   owner=owner, 
@@ -243,34 +362,49 @@ def message_create(request, product_id, recipient_id):
     message_wizard = MessageWizard([MessageEditForm, EmailAuthenticationForm])
     return message_wizard(request, product_id, recipient_id)
 
+@never_cache
+@secure_required
+def patron_message_create(request, recipient_username):
+    message_wizard = MessageWizard([MessageEditForm, EmailAuthenticationForm])
+    recipient = Patron.objects.get(slug=recipient_username)
+    return message_wizard(request, None, recipient.pk)
 
 @login_required
 @ownership_required(model=Product, object_key='product_id', ownership=['owner'])
 def product_delete(request, slug, product_id):
-    product = get_object_or_404(Product.on_site, pk=product_id)
+    product = get_object_or_404(Product.on_site, pk=product_id).subtype
+
+    if product.bookings.all():
+        is_booked = True
+    else:
+        is_booked = False
+
     if request.method == "POST":
         product.delete()
         messages.success(request, _(u"Votre objet à bien été supprimée"))
         return redirect_to(request, reverse('owner_product'))
     else:
-        return direct_to_template(request, template='products/product_delete.html', extra_context={'product': product})
+        return direct_to_template(request, template='products/product_delete.html', extra_context={'product': product, 'is_booked': is_booked})
 
 
 @mobify
 @cache_page(900)
 @vary_on_cookie
 def product_list(request, urlbits, sqs=SearchQuerySet(), suggestions=None, page=None):
-    form = FacetedSearchForm(request.GET)
+    location = request.session.setdefault('location', settings.DEFAULT_LOCATION)
+    query_data = request.GET.copy()
+    if not query_data.get('l'):
+        query_data['l'] = location['country']
+    form = FacetedSearchForm(query_data)
     if not form.is_valid():
         raise Http404
-        
+    
     breadcrumbs = SortedDict()
     breadcrumbs['q'] = {'name': 'q', 'value': form.cleaned_data.get('q', None), 'label': 'q', 'facet': False}
+    breadcrumbs['sort'] = {'name': 'sort', 'value': form.cleaned_data.get('sort', None), 'label': 'sort', 'facet': False}
     breadcrumbs['l'] = {'name': 'l', 'value': form.cleaned_data.get('l', None), 'label': 'l', 'facet': False}
     breadcrumbs['r'] = {'name': 'r', 'value': form.cleaned_data.get('r', None), 'label': 'r', 'facet': False}
-    breadcrumbs['sort'] = {'name': 'sort', 'value': form.cleaned_data.get('sort', None), 'label': 'sort', 'facet': False}
-    
-    
+
     urlbits = urlbits or ''
     urlbits = filter(None, urlbits.split('/')[::-1])
     while urlbits:
@@ -282,7 +416,13 @@ def product_list(request, urlbits, sqs=SearchQuerySet(), suggestions=None, page=
                 raise Http404
             if bit.endswith(_('categorie')):
                 item = get_object_or_404(Category, slug=value)
-                params = MultiValueDict((facet['label'], [unicode(facet['value']).encode('utf-8')]) for facet in breadcrumbs.values() if (not facet['facet']) and not (facet['label'] == 'r' and facet['value'] == DEFAULT_RADIUS)and not (facet['label'] == 'l' and facet['value'] == '') and not (facet['label'] == 'sort' and facet['value'] == '') and not (facet['label'] == 'q' and facet['value'] == ''))
+                is_facet_not_empty = lambda facet: not (
+                    facet['facet'] or
+                    (facet['label'], facet['value']) in [ ('sort', ''), ('q', '')]
+                )
+                params = MultiValueDict(
+                    (facet['label'], [unicode(facet['value']).encode('utf-8')]) for facet in breadcrumbs.values() if is_facet_not_empty(facet)
+                )
                 path = item.get_absolute_url()
                 for bit in urlbits:
                     if bit.startswith(_('page')):
@@ -294,13 +434,6 @@ def product_list(request, urlbits, sqs=SearchQuerySet(), suggestions=None, page=
                 if any([value for key, value in params.iteritems()]):
                     path = '%s?%s' % (path, urlencode(params))
                 return redirect_to(request, escape_percent_sign(path))
-            elif bit.endswith(_('loueur')):
-                item = get_object_or_404(Patron.on_site, slug=value)
-                breadcrumbs[bit] = {
-                    'name': 'owner', 'value': value, 'label': bit, 'object': item,
-                    'pretty_name': _(u"Loueur"), 'pretty_value': item.username,
-                    'url': 'par-%s/%s' % (bit, value), 'facet': True
-                }
             else:
                 raise Http404
         elif bit.startswith(_('page')):
@@ -319,12 +452,22 @@ def product_list(request, urlbits, sqs=SearchQuerySet(), suggestions=None, page=
             }
     
     site_url="%s://%s" % ("https" if USE_HTTPS else "http", Site.objects.get_current().domain)
-    form = FacetedSearchForm(dict((facet['name'], facet['value']) for facet in breadcrumbs.values()), searchqueryset=sqs)
+    form = FacetedSearchForm(
+        dict((facet['name'], facet['value']) for facet in breadcrumbs.values()),
+        searchqueryset=sqs)
     sqs, suggestions = form.search()
-    return object_list(request, sqs, page=page, paginate_by=PAGINATE_PRODUCTS_BY, template_name="products/product_list.html",
+    # we use canonical_parameters to generate the canonical url in the header
+    canonical_parameters = SortedDict(((key, unicode(value['value']).encode('utf-8')) for (key, value) in breadcrumbs.iteritems() if value['value']))
+    canonical_parameters.pop('categorie', None)
+    canonical_parameters.pop('r', None)
+    canonical_parameters.pop('sort', None)
+    canonical_parameters = urllib.urlencode(canonical_parameters)
+    if canonical_parameters:
+        canonical_parameters = '?' + canonical_parameters
+    return object_list(request, sqs, page=page, paginate_by=PAGINATE_PRODUCTS_BY, template_name="products/product_result.html",
         template_object_name='product', extra_context={
             'facets': sqs.facet_counts(), 'form': form, 'breadcrumbs': breadcrumbs, 'suggestions': suggestions,
-            'site_url': site_url
+            'site_url': site_url, 'canonical_parameters': canonical_parameters
     })
 
 @never_cache
@@ -403,5 +546,3 @@ def suggestion(request):
         resp += "\n%s"%el
     cache.set(word, resp, 0)
     return HttpResponse(resp)
-        
-        

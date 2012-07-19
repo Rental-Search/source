@@ -31,7 +31,7 @@ class ProductViewsTest(TestCase):
     
     def test_product_edit_form(self):
         self.client.login(username='alexandre.woog@e-loue.com', password='alexandre')
-        response = self.client.get(reverse('product_edit', args=['perceuse-visseuse-philips', 1]))
+        response = self.client.get(reverse('owner_product_edit', args=['perceuse-visseuse-philips', 1]))
         self.assertEqual(response.status_code, 200)
         self.assertTrue('form' in response.context)
         self.assertTrue('product' in response.context)
@@ -41,29 +41,36 @@ class ProductViewsTest(TestCase):
     
     def test_product_edit(self):
         self.client.login(username='alexandre.woog@e-loue.com', password='alexandre')
-        response = self.client.post(reverse('product_edit', args=['perceuse-visseuse-philips', 1]), {
+        response = self.client.post(reverse('owner_product_edit', args=['perceuse-visseuse-philips', 1]), {
             'category': 1,
             'summary': 'Perceuse visseuse Philips',
+            'quantity': 1,
+            'description': "Engrenage plantaire haute performance 2 vitesses.",
+            'deposit_amount': 250
+        })
+        product = Product.objects.get(pk=1)
+        self.assertTrue(response.status_code, 302)
+        self.assertEqual(product.description, "Engrenage plantaire haute performance 2 vitesses.")
+        self.assertEqual(product.prices.day().count(), 1)
+        self.assertEqual(product.prices.day()[0].amount, 24)
+
+    def test_product_price_edit(self):
+        self.client.login(username='alexandre.woog@e-loue.com', password='alexandre')
+        response = self.client.post(reverse('owner_product_price_edit', args=['perceuse-visseuse-philips', 1]), {
             'day_price': 100,
             'deposit_amount': 250,
-            'quantity': 1,
-            'description': "Engrenage plantaire haute performance 2 vitesses."
         })
         product = Product.objects.get(pk=1)
         self.assertTrue(response.status_code, 200)
-        self.assertEqual(product.description, "Engrenage plantaire haute performance 2 vitesses.")
+        self.assertEqual(product.description, u"Engrenage plantaire haute performance 2 vitesses : dur\u00e9e de vie sup\u00e9rieure, transmission optimale, fonctionnement r\u00e9gulier.")
         self.assertEqual(product.prices.day().count(), 1)
         self.assertEqual(product.prices.day()[0].amount, 100)
 
     def test_product_edit_form_with_nonpositive_price(self):
         self.client.login(username='alexandre.woog@e-loue.com', password='alexandre')
-        response = self.client.post(reverse('product_edit', args=['perceuse-visseuse-philips', 1]), {
-            'category': 1,
-            'summary': 'Perceuse visseuse Philips',
+        response = self.client.post(reverse('owner_product_price_edit', args=['perceuse-visseuse-philips', 1]), {
             'day_price': 0,
             'deposit_amount': 250,
-            'quantity': 1,
-            'description': "Engrenage plantaire haute performance 2 vitesses."        
         })
         product = Product.objects.get(pk=1)
         self.assertTrue(response.status_code, 200)
@@ -74,7 +81,7 @@ class ProductViewsTest(TestCase):
         
     def test_product_edit_when_no_owner(self):
         self.client.login(username='timothee.peignier@e-loue.com', password='timothee')
-        response = self.client.get(reverse('product_edit', args=['perceuse-visseuse-philips', 1]))
+        response = self.client.get(reverse('owner_product_edit', args=['perceuse-visseuse-philips', 1]))
         self.assertEqual(response.status_code, 403)
     
     def test_product_list(self):

@@ -27,15 +27,15 @@ class SourceClass(BaseSource):
     def get_docs(self):
         try:
             xml_source = urlopen(BASE_URL + "xmlchronobook.php", timeout=5)
-            books = etree.parse(xml_source)
+            books = etree.parse(xml_source, parser=etree.XMLParser(recover=True))
         except Exception, e:
             log.exception("Exception: %s".format(e))
-        for book in books.getroot():    
+        location = "Paris, France"
+        lat, lon = self.get_coordinates(location)
+        for book in books.getroot():
             attrib = book.attrib
             html = html_tree(attrib['fiche'])
             thumbnail = html.xpath(XP_IMAGE)
-            location = "Paris, France"
-            lat, lon = self.get_coordinates(location)
             if not len(thumbnail):
                 continue
             else:

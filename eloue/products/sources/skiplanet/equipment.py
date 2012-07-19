@@ -2,6 +2,8 @@
 from httplib2 import Http
 from lxml import objectify
 
+import itertools
+
 from .. import BaseSource, Product
 
 
@@ -40,12 +42,12 @@ class SourceClass(BaseSource):
         response, content = Http().request("http://www.ski-planet.com/affiliation/flux-materiel.xml")
         root = objectify.fromstring(content)
         tarifs = [(root, el) for el in root.xpath('//Tarif')]
-        return pool.map(parse_equipment, tarifs, len(tarifs) // BaseSource.processes)
+        gen = itertools.imap(parse_equipment, tarifs)
+        for doc in gen:
+            yield doc
     
     def get_docs(self):
         pool = self.get_pool()
         docs = self.get_equipment(pool)
-        pool.close()
-        pool.join()
         return docs
     

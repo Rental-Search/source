@@ -131,7 +131,7 @@ class ApiTest(TestCase):
             'price': "15.2",
             'deposit_amount': 150,
             'picture': encodestring(f.read()),
-            'category': '/api/1.0/category/390/',
+            'category': '/api/1.0/category/1/',
             'address': '/api/1.0/address/1/'
         }
         request = self._get_request(method='POST')
@@ -147,7 +147,7 @@ class ApiTest(TestCase):
         self.assertEquals(product.summary, 'Tondeuse')
         self.assertEquals(product.description, 'Merveilleuse tondeuse')
         self.assertEquals(product.quantity, 1)
-        self.assertEquals(product.category.id, 390)
+        self.assertEquals(product.category.id, 1)
         self.assertEquals(product.address.id, 1)
         self.assertEquals(product.pictures.count(), 1)
     

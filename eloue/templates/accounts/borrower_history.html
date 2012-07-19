@@ -1,48 +1,86 @@
-{% extends "base.html" %}
-{% load i18n product paginator%}
+{% extends "accounts/borrower_booking.html" %}
+{% load i18n navbar %}
 
-{% block title %}{% trans "Vos locations en cours en tant que locataire" %}{% endblock %}
+{% block title %}{% trans "Mes réservations - Historique des réservations" %}{% endblock %}
+{% block head %}
+	{{block.super}}
+{% endblock %}
 
-{% block content %}
-<div id="content" class="xgrid">
-    <div class="content-top">
-        <ul id="menu" class="x12">
-            <li class="menu-tab first"><a href="{% url dashboard %}">{% trans "Tableau de bord" %}</a></li>
-			<li class="menu-tab selected"><a href="{% url owner_booking %}">{% trans "Propriétaire" %}</a></li>
-			<li class="menu-tab">{% trans "Locataire" %}</li>
-			<li class="menu-tab"><a href="{% url patron_edit %}">{% trans "Mon compte" %}</a></li>
-			<li class="menu-tab"><a href="{% url inbox %}">{% blocktrans %}Messages({{ unread_message_count }}){% endblocktrans %}</a></li>
-		</ul>
-    </div>
-    <div id="sub-menu">
-        <ul class="x12">
-            <li class="sub-tab first"><a href="{% url borrower_booking %}">{% trans "Locations en cours" %}</a></li>
-			<li class="sub-tab">{% trans "Historique des locations" %}</li>
-        </ul>
-    </div>
-    <div class="content-header x12">
-		<h1>{% trans "Historique des locations" %}</h1>
-	</div>
-	<ul id="booking-list" class="x12">
-	{% for booking in booking_list %}
-    	{% include "rent/partials/booking.html" %}
-    {% endfor %}
-	</ul>
-	{% pagination %}
-	{% if is_paginated %}
-	<div class="pages x8 first">
-	    <ul class="pages-list">
-	        {% if page_obj.has_previous %}
-	        <li class="previous"><a href="{% url owner_product page_obj.previous_page_number %}">&#171; {% trans "Page précédente" %}</a></li>
-	        {% endif %}
-	        {% for page in page_range %}
-	        <li class="page-{{ page }} {% if page_obj.number == page %}select{% endif %}"><a href="{% url owner_product page %}">{{ page }}</a></li>
-	        {% endfor %}
-	        {% if page_obj.has_next %}
-	        <li class="next"><a href="{% url owner_product page_obj.next_page_number %}">{% trans "Page suivante" %} &#187;</a></li>
-	        {% endif %}
-        </ul> 
-    </div>{# pager #}
-    {% endif %}
-</div>
+
+{% block content-main-profil %}
+<h2>{% trans "Historique des réservations"%}</h2>
+<ul class="booking-list">
+	<li>
+		<table class="table table-bordered booking-resume">
+		<tbody>
+			<tr>
+				<th class="b-state">Clôturé</th>
+				<td><a href="#" class="b-title">Robe de  soirée</a> <a href="#" class="b-more">Voir le détail</a></td>
+			</tr>
+			<tr>
+				<th>Début</th>
+				<td>Lundi 15 novembre 2012</td>
+			</tr> 
+				<th>Fin</th>
+				<td>Mercredi 18 novembre 2012</td>
+			</tr>
+			<tr>
+				<th>Montant</th>
+				<td>27 &euro;</td>
+			</tr>
+			<tr class="b-action">
+				<td colspan="2"><a href="#">Annuler</a> - <a href="#">Envoyer un message au propriétaire</a></td>
+			</tr>
+		</tbody>
+		</table>
+	</li>
+	<li>
+		<table class="table table-bordered booking-resume">
+		<tbody>
+			<tr>
+				<th class="b-state">Clôturé</th>
+				<td><a href="#" class="b-title">Robe de  soirée</a> <a href="#" class="b-more">Voir le détail</a></td>
+			</tr>
+			<tr>
+				<th>Début</th>
+				<td>Lundi 15 novembre 2012</td>
+			</tr> 
+				<th>Fin</th>
+				<td>Mercredi 18 novembre 2012</td>
+			</tr>
+			<tr>
+				<th>Montant</th>
+				<td>34 &euro;</td>
+			</tr>
+			<tr class="b-action">
+				<td colspan="2"><a href="#">Déclarer un incident</a> - <a href="#">Envoyer un message au propriétaire</a></td>
+			</tr>
+		</tbody>
+		</table>
+	</li>
+	<li>
+		<table class="table table-bordered booking-resume">
+		<tbody>
+			<tr>
+				<th class="b-state">Clôturé</th>
+				<td><a href="#" class="b-title">Robe de  soirée</a> <a href="#" class="b-more">Voir le détail</a></td>
+			</tr>
+			<tr>
+				<th>Début</th>
+				<td>Lundi 15 novembre 2012</td>
+			</tr> 
+				<th>Fin</th>
+				<td>Mercredi 18 novembre 2012</td>
+			</tr>
+			<tr>
+				<th>Montant</th>
+				<td>134 &euro;</td>
+			</tr>
+			<tr class="b-action">
+				<td colspan="2"><a href="#">Commenter</a> - <a href="#">Envoyer un message au propriétaire</a></td>
+			</tr>
+		</tbody>
+		</table>
+	</li>
+</ul>
 {% endblock %}

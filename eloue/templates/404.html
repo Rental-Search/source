@@ -4,15 +4,15 @@
 {% block title %}{% trans "La page demandée est introuvable" %}{% endblock %}
 
 {% block content %}
-<div id="content" class="xgrid">
-     <div class="content-top">
-         <h1>{% trans "La page est introuvable" %}</h1>
-     </div>
-     <div class="x12">
-        {% url contact as contact_url %}
-        {% blocktrans %}
-         Si l'erreur persiste, merci de nous <a href="{{ contact_url }}">contacter</a>.
-        {% endblocktrans %}
-     </div>
+<div class="container-main">
+	<div class="one-content">
+		<h1>{% trans "La page est introuvable" %}</h1>
+		<p style="margin-bottom: 20px;">
+			{% url contact as contact_url %}
+        	{% blocktrans %}
+         		Si l'erreur persiste, merci de nous <a href="{{ contact_url }}">contacter</a>.
+        	{% endblocktrans %}
+		</p>
+	</div>
  </div>
 {% endblock content %}

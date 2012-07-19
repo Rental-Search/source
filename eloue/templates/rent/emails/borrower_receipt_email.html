@@ -1,0 +1,18 @@
+{% load i18n %} 
+{% blocktrans with booking.owner.get_full_name as owner_name and booking.borrower.get_full_name as borrower_name and booking.product.summary as summary and booking.product.category.name as category and booking.product.summary as summary and booking.owner.phones.all|first as owner_phone and booking.started_at|date:"DATETIME_FORMAT" as starting_at and booking.started_at|timesince:booking.ended_at as duration and booking.owner.email as owner_email and site.name as site_name and booking.total_amount as total_amount %}
+<p>Bonjour {{ borrower_name }},</p>
+
+<p>Vous avez été débité de {{total_amount}} euros pour la réservation suivante :</p>
+
+<ul>
+ 	<li><strong>Type :</strong> {{ category }}</li>
+ 	<li><strong>Objet :</strong> {{ summary }}</li>
+ 	<li><strong>Début de la location :</strong> {{ starting_at }}</li>
+ 	<li><strong>Durée de la location :</strong> {{ duration }}</li>
+</ul>
+
+<p>Bonne location !</p>
+
+<p>L'équipe {{ site_name }}</p>
+
+{% endblocktrans %}

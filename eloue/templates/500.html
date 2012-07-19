@@ -31,81 +31,18 @@
   </script>
  </head>
  <body>
-     {% if messages %}
- 	    {% for message in messages %}
- 	    <div id="notification" class="notification {% if message.tags %} {{ message.tags }}"{% endif %}>
-     	    <span id="notification-text">{{ message }}</span>
-     	</div>
- 	    {% endfor %}
- 	{% endif %}
- 	<div id="top-header" class="xgrid">
-	</div>
-	<div id="header" class="xgrid">
-        <div class="x10">
-            <ul class="nav-bar">
-                <li class="nav" style="padding-left: 0px;">
-                    <a href="{% url home %}" class="nav-link">{% trans "Accueil" %}</a>
-                </li>
-    			{% if user.is_authenticated %}
-    			<li class="nav">
-    			    <a href="{% url dashboard %}" class="nav-link">{% trans "Tableau de bord" %}</a>
-    			</li>
-    			{%  endif %}
-    			<li class="nav">
-    			    <a href="{% trans "/comment-ca-marche/" %}" class="nav-link">{% trans "Comment ça marche ?" %}</a>
-    			</li>
-    			{% if user.is_anonymous %}
-    			<li class="nav">
-    				<a href="{% url auth_login %}" class="nav-link" >{% trans "S'inscrire ou se connecter" %}</a>
-    			</li>
-    			{% else %}
-    			<li class="nav">
-    				<a href="{% url auth_logout %}" class="nav-link">{% trans "Se déconnecter" %}</a>
-    			</li>
-    			{% endif %}
-			</ul>
-        </div>
-        <div class="x2">
-            <a href="{% url product_create %}" class="btn medium-green"  >{% trans "Mettre en location" %}</a>
-        </div>
-    </div><!-- header -->
-    <div id="content-home" class="xgrid">
-        <div class="x12">
-            <h1>{% trans "La page est pour le moment indisponible" %}</h1>
-            {% url contact as contact_url %}
-			{% blocktrans %}
-			    Si l'erreur persiste, merci de nous <a href="mailto:contact@e-loue.com">contact@e-loue.com</a>.
-			{% endblocktrans %}
-        </div>
+    <div class="top-bar"><div class="container"><div class="logo"><a href="/"><img src="https://media.e-loue.com/images/logo_new.png" alt="e-loue" width="155" height="47"></a></div><!-- logo --><div class="top-content"><ul class="top-contact"><li class="top-number">0826 800 200 <span>(0,15 €/min)</span></li></ul><!-- top-contact --><nav><a href="/comment-ca-marche/" class="nav-link">Comment ça marche ?</a><a href="/login/" class="nav-link">S'inscrire ou se connecter</a><a href="/login/" class="fb-connect-small"><img src="https://media.e-loue.com/images/fb_connect_small.png" width="16" height="16"></a><a href="/location/ajouter/" class="add-product-link">Déposer une annonce</a></nav></div></div></div>
+
+    <div class="container-main">
+    <div class="one-content">
+      <h1>{% trans "Erreur sur le serveur" %}</h1>
+      <p style="margin-bottom: 20px;">
+      {% url contact as contact_url %}
+          {% blocktrans %}
+            Si l'erreur persiste, merci de nous <a href="emailTo:contact@e-loue.com">contacter</a>.
+          {% endblocktrans %}
+      </p>
     </div>
-    <div id="footer" class="xgrid">
-        <div class="x4">
-			<h4>{% trans "Liens utiles" %}</h4>
-			<ul>
-				<li><a href="{% url home %}">{% trans "Accueil" %}</a></li>
-				<li><a href="{% url dashboard %}">{% trans "Mon compte" %}</a></li>
-				<li><a href="{% url product_create %}">{% trans "Mettre en location" %}</a></li>
-				{% if user.is_authenticated %}
-					<li><a href="{% trans "/comment-ca-marche/" %}">{% trans "Comment ça marche ?" %}</a></li>
-				{% endif %}
-			</ul>
-		</div>
-		<div class="x4">
-			<h4>{% trans "Info" %}</h4>
-			<ul>
-				<li><a href="{% trans "/assurance-tranquillite/" %}">{% trans "Assurance tranquillité" %}</a></li>
-				<li><a href="{% trans "/conditions-generales/" %}">{% trans "Conditions générales" %}</a></li>
-				<li><a href="{% trans "/respect-vie-privee/" %}">{% trans "Respect de la vie privée" %}</a></li>
-			</ul>
-		</div>
-		<div class="x4">
-			<h4>{% trans "Support" %}</h4>
-			<ul>
-				<li><a href="{% url faq-topic-list %}">{% trans "Aide" %}</a></li>
-				<li><a href="{% url contact %}">{% trans "Contactez-nous" %}</a></li>
-				<li><a href="{% trans "/qui-sommes-nous/" %}">{% trans "Qui sommes nous ?" %}</a></li>
-			</ul>
-    	</div>
     </div>
  </body>
 </html>

@@ -1,153 +1,479 @@
 {% extends "base.html" %}
 {% load i18n product booking cache %}
 
+
+{% block html_properties %}
+    xmlns:fb="http://ogp.me/ns/fb#" itemscope itemtype="http://schema.org/Product"
+{% endblock %}
+
 {% block title %}{% trans "Location"%} {{ product.summary }}{% endblock %}
 
 {% block description %}{{ product.summary }} {{ product.description }}{% endblock %}
 
 
-{% block  head %}
+{% block head %}
  {{ block.super }}
- <link rel="canonical" href="{{ product.get_absolute_url }}" />
+    {% cache 43200 product:meta product.pk %}
+    {% with product.pictures.all|first as picture %}
+    {% with product.get_absolute_url as absolute_url %}
+        <meta property="og:title" content="A louer sur e-loue : {{product.summary}}"/>
+        <meta property="og:type" content="product"/>
+        <meta property="og:url" content="{% if request.is_secure %}https{%else%}http{%endif%}://{{ request.get_host }}{{ absolute_url }}"/>
+        {% with product.address as address %}
+            <meta property="og:locality" content="{{address.city}}"/>
+            <meta property="og:postal-code" content="{{address.zipcode}}"/>
+            <meta property="og:country-name" content="{{address.get_country_display}}"/>
+        {% endwith %}
+          {% if picture %}
+            <meta property="og:image" content="{{picture.thumbnail.url }}"/>
+          {% endif %}
+        <meta property="og:site_name" content="e-loue"/>
+        <meta property="fb:app_id" content="{{FACEBOOK_APP_ID}}"/>
+        <meta property="og:description" content="{{ product.description }}"/>
+
+        {% if picture %}
+            <meta itemprop="image" content="{{picture.thumbnail.url}}">
+        {% endif %}
+        <link rel="canonical" href="{% if request.is_secure %}https{%else%}http{%endif%}://{{ request.get_host }}{{ absolute_url }}" />
+    {% endwith %}
+    {% endwith %} {# picture #}
+    {% endcache %}
+{% endblock %}
+
+{% block tail %}
+	{{ block.super }}
+    <script>
+      window.fbAsyncInit = function() {
+        FB.init({
+          appId      : '{{FACEBOOK_APP_ID}}', // App ID
+          channelUrl : '{{ MEDIA_URL }}channel.html', // Channel File
+          status     : true, // check login status
+          cookie     : true, // enable cookies to allow the server to access the session
+          xfbml      : true  // parse XFBML
+        });
+
+        // Additional initialization code here
+      };
+
+      // Load the SDK Asynchronously
+      (function(d){
+         var js, id = 'facebook-jssdk'; if (d.getElementById(id)) {return;}
+         js = d.createElement('script'); js.id = id; js.async = true;
+         js.src = "//connect.facebook.net/fr_FR/all.js";
+         d.getElementsByTagName('head')[0].appendChild(js);
+       }(document));
+    </script>
+    
+    <script type="text/javascript">
+      (function() {
+        var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+        po.src = 'https://apis.google.com/js/plusone.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+      })();
+    </script>
+    
+    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+
+    <script>
+        enabled = {};
+        function availability(year, month, inst) {
+            $.ajax({
+                type: 'GET',
+                url: 'occupied_date/',
+                dataType: 'json',
+                data: {year:year, month:month},
+                success: function(response) {
+                    enabled = {};
+                    for (i in response) {
+                        enabled[response[i][0]] = response[i][1];
+                    }
+                    if (typeof(inst) == 'undefined'){
+                        $('.hasDatepicker').datepicker("refresh");
+                    } else {
+                        inst.input.datepicker("refresh");
+                    }
+                }
+            });
+        }
+
+        beforeShowDay = function(date) {
+            today = new Date();
+            today.setHours(0);
+            today.setMinutes(0);
+            today.setSeconds(0);
+            today.setMilliseconds(0);
+            if (date < today) {
+                return [false, 'outdated'];
+            }
+            c = date.getFullYear()+'-'+('0'+(date.getMonth()+1)).slice(-2)+'-'+('0'+date.getDate()).slice(-2);
+            if (c in enabled && !enabled[c]) return [false, 'unavailable'];
+            return [true];
+        }
+        
+        onChangeMonthYear = function(year, month, inst) {
+            availability(inst.drawYear, inst.drawMonth + 1, inst);
+        }
+
+        beforeShow = function(input, inst) {
+            setTimeout(
+                //XXX: outside a timeout it doesn't work, dunno why
+                function(){
+                    availability(inst.selectedYear, inst.selectedMonth + 1, inst);
+            }, 0);
+        }
+
+        $(document).ready(function () {
+            date = new Date();
+            $(".calendar-display").datepicker(
+                {
+                    minDate: 0,
+                    maxDate: '+360d',
+                    beforeShowDay: beforeShowDay,
+                    onChangeMonthYear: onChangeMonthYear
+                }
+            );
+
+            //Display datepicker on product detail page
+            startDate = $('input[name$=started_at_0]');
+            startDate.datepicker({
+                dateFormat: 'dd/mm/yy',
+                defaultDate: '+1d',
+                minDate: 0, 
+                maxDate: '+360d',
+                beforeShow: beforeShow,
+                beforeShowDay: beforeShowDay,
+                onChangeMonthYear: onChangeMonthYear,
+                onSelect: function(dateText, inst) {
+                    var date1 = $(this).datepicker('getDate');
+                    var date = new Date( Date.parse( date1 ) ); 
+                    date.setDate( date.getDate() + 1 );
+                    var newDate = date.toDateString(); 
+                    newDate = new Date( Date.parse( newDate ) );
+                    var ended_at = $('input[name$=ended_at_0]');
+                    ended_at.datepicker("option", "minDate", newDate);
+                    ended_at.datepicker('setDate', newDate );
+                    bookingPrice($('#booking_create'));
+                }
+            }).datepicker('setDate', '+1d');
+            
+            endDate = $('input[name$=ended_at_0]');
+            endDate.datepicker({
+                defaultDate: '+2d',
+                dateFormat: 'dd/mm/yy',
+                beforeShowDay: beforeShowDay,
+                onChangeMonthYear: onChangeMonthYear,
+                beforeShow: beforeShow
+            }).datepicker('setDate', '+2d');
+
+            availability(date.getFullYear(), date.getMonth()+1);
+        });
+
+        
+    </script>
 {% endblock %}
 
 {% block content %}
-<div id="search" class="xgrid">
-	<form class="form" action="{% url product_list %}">
-	<div class="x5">
-		<p>
-			<label for="id_q">{% trans "Que voulez-vous louer ?" %}</label><br />
-			{{ search_form.q }}<br />
-			<span>{% trans "Exemple :" %} </span> <a href="{% url product_list %}?q={% trans "voiture" %}">{% trans "Voiture" %}</a>, <a href="{% url product_list %}?q={% trans "chèvre" %}">{% trans "Chèvre" %}</a>, <a href="{% url product_list %}?q={% trans "ski" %}">{% trans "Ski" %}</a>, <a href="{% url product_list %}?q={% trans "robe" %}">{% trans "Robe" %}</a>
-		</p>
-	</div>
-	<div class="x5">
-		<p>
-			<label>{% trans "Où ?" %}</label><br />
-			{{ search_form.l }}<br />
-			<span>{% trans "Exemple :" %} </span> <a href="{% url product_list %}?l={% trans "Paris, 75012" %}">{% trans "Paris, 75012" %}</a>
-		</p>
-	</div>
-	<div class="x2">
-		<p>
-			<input type="submit" value="{% trans "Rechercher" %}" class="btn big-orange"/>
-		</p>
-	</div>
-	</form>
-</div>
-<div id="content" class="xgrid">
-    <div class="breadcrumb">
-        <ul class="x12 breadcrumbs">
-            <li><a href="{% url home %}">{% trans "Accueil" %}</a></li>
-			{% for category in product.category.get_ancestors %}
-			 <li><a href="{{ category.get_absolute_url }}">{{ category.name|capfirst }}</a></li>
-			{% endfor %}
-			<li><a href="{{ product.category.get_absolute_url }}">{% trans "Location" %} {{ product.category|capfirst }}</a></li>
-			<li class="lastb">{{ product.summary|capitalize }}</li>
-        </ul>
-    </div>
-    <div class="x12 content-header">
-        <h1>{{ product.summary|capitalize }}</h1>
-    </div>
-    <div class="x8">
-        <div class="product-pic">
-            {% with product.pictures.all|first as picture %}
-    		  {% if picture %}
-    		   <img src="{{ picture.display.url }}" alt="{{ product.summary }}" />
-    		  {% endif %}
-    		 {% endwith %}
-        </div>
-        <div class="product-thumbs">
-            {% for picture in product.pictures.all %}
-			 {% if picture.thumbnail %}
-       		  <a href="#"><img src="{{ picture.thumbnail.url }}" /></a>
-             {% endif %}
-			{% endfor %}
-        </div>
-        <div class="product-desc">
-            <p class="product-properties">
-                {% trans "Lieu" %} : <span class="p-value">{{ product.address.city|capfirst }}, {{ product.address.zipcode }}</span>
-                {% if product.deposit_amount %}
-                &#149;
-                {% trans "Caution" %} : <span class="p-value">{{ product.deposit_amount|quantize|currency }}</span>
+<div id="fb-root"></div>
+
+<div class="container-main">
+
+{% cache 43200 product:breadcrumb product.pk %}
+    <ul class="breadcrumb">
+        <li><a href="{% url home %}">{% trans "Accueil" %}</a></li>
+		{% for category in product.category.get_ancestors %}
+		 <li><a href="{{ category.get_absolute_url }}">{{ category.name|capfirst }}</a></li>
+		{% endfor %}
+		<li><a href="{{ product.category.get_absolute_url }}">{% trans "Location" %} {{ product.category|capfirst }}</a></li>
+		<li class="lastb">{{ product.summary|capitalize }}</li>
+    </ul>{# breadcrumb #}
+{% endcache %}
+    <div class="content-main">
+        {% include "partials/alerts_message.html" %}
+
+{% cache 43200 product:details:before_csrf product.pk site.pk %}
+        <h1>{{ product.summary|capitalize}}</h1>
+        <div class="product-resume">
+            <div class="product-resume-left">
+                <address class="product-address ">
+                    <i class="icon-map-marker"></i>
+                    {% with product.address as product_address %}
+                    {{ product_address.city|capfirst }}, {{ product_address.zipcode }}
+                    {% endwith %}
+                </address>
+                {% if product.name == 'carproduct' %}
+                <ul class="product-properties">
+                    <li>
+                        <i class="icon-user"></i>
+                        {{ product.seat_number }} {% trans "places" %}
+                    </li>
+                    <li>
+                        <i class="icon-th-large"></i>
+                        {{ product.door_number }} {% trans "portes" %}
+                    </li>
+                    <li>
+                        <i class="icon-fire"></i>
+                        {{ product.get_fuel_display }}
+                    </li>
+                    <li>
+                        <i class="icon-move"></i>
+                        {{ product.get_transmission_display }}
+                    </li>
+                    <li>
+                        <i class="icon-road"></i>
+                        {{  product.consumption }} {% trans "L/100km" %}
+                    </li>
+                </ul>{# product-properties #}
                 {% endif %}
-            </p>
+                {% if product.name == 'realestateproduct' %}
+                <ul class="product-properties">
+                    <li>
+                        <i class="icon-user"></i>
+                        {{product.capacity}} {% trans "personnes" %}
+                    </li>
+                    <li>
+                        <i class="icon-home"></i>
+                        {{ product.get_private_life_display }}
+                    </li>
+                    <li>
+                        <i class="icon-tags"></i>
+                        {{ product.chamber_number }} {% trans "chambres" %}
+                    </li>
+                </ul>
+                {% endif %}
+            </div>
+            <div class="product-resume-right">
+                <span class="stars empty"><span class="stars filled_{{ product.average_note }}"></span></span>
+                <a href="#id_product_comment">
+                {% blocktrans count product.borrowercomments.count as count %}
+                    ({{ count }} avis)
+                    {% plural %}
+                    ({{ count }} avis)
+                {% endblocktrans%}
+                </a>
+            </div>
+        </div>{# product-resume #}
+        <div class="product-tabs">
+            <ul>
+                <li><a href="#gallery">{% trans "Photo" %}</a></li>
+                <li><a href="#prices_calendar">{% trans "Disponibilitées et tarifs" %}</a></li>
+                {% if insurance_available %}
+                    <li><a href="#conditions">{% trans "Conditions et assurance"%}</a></li>
+                {% endif %}
+            </ul>
+            <div id="gallery">
+            {% with product.pictures.all|first as picture %}
+                {% if picture %}
+                    <img src="{{ picture.display.url }}" alt="{{ product.summary }}">
+                {% endif %}
+            {% endwith %}
+            </div> {# gallery #}
+            <div id="prices_calendar">
+                <div class="prices">
+                    <div class="table-bg">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>{% trans "Période" %}</th>
+                                    <th class="price-head">{% trans "Prix" %}</th>
+                                </tr>
+                            </thead>
+                            {% for price in prices %}
+                            <tr>
+                                <td>{% trans price.get_prefixed_unit_display|capfirst %}
+                                </td>
+                                <td class="price-display">{{ price }}</td>
+                            </tr>
+                            {% endfor %}
+                        </table>
+                    </div>
+                    {% if product.deposit_amount %}
+                    <ul>
+                        <li style="margin-bottom: 10px;">{% trans "Dépôt de garantie" %} : {{ product.local_currency_deposit_amount|currency }}</li>
+                        <li>{% trans "Uniquement débité en cas de dommage constaté et avec votre accord."%}</li>
+                    </ul>
+                    {% endif %}
+                    {% if product.type == 'carproduct' %}
+                    <ul class="service-included">
+                        <li>
+                            {% if product.km_included %}{{ product.km_included }} km inclus par jour {% endif %} 
+                            {% if product.costs_per_km %}{% if product.km_included %}puis {% endif %}{{ product.costs_per_km|floatformat:2 }} &euro;/km supplémentaire{% endif %}
+                        </li>
+                        <li>Assurance vol et accident incluse</li>
+                    </ul>
+                    {% endif %}
+                </div>{# prices #}
+                <div class="calendar">
+                    <div class="calendar-display"></div>
+                    <ul class="calendar-legend">
+                        <li>
+                            <span class="available-date"></span>
+                            {% trans "Date disponible" %}
+                        </li>
+                        <li>
+                            <span class="unavailable-date"></span>
+                            {% trans "Date non disponible" %}
+                        </li>
+                    </ul>
+                </div>{# calendar #}
+            </div>
+            {% if insurance_available %}
+            <div id="conditions">
+                {% include "rent/partials/condition_assurance.html" %}
+            </div>
+            {% endif %}
+        </div>{# product-tabs #}
+        {% if product.options %}
+        <div class="product-info">
+            <h2>{% trans "Options & accessoires" %}</h2>
+            <ul class="product-options">
+                {% for option in product.options %}
+                <li><i class="icon-ok"></i> {{option}}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+        <div class="product-info">
+            <h2>{% trans "Description" %}</h2>
             {{ product.description|linebreaksp }}
         </div>
-    </div>
-    <div class="x4">
-        <div class="box-tools">
-            <div class="box-tools-top">
-                <div id="product_price" class="product-price">
-                    {% with product.prices.day|first as price %}
-            		  <span class="price">{{ price }}</span>
-            		  <span class="unit">{% blocktrans with price.unit|unit as unit %} / par {{ unit }}{% endblocktrans %}</span>
-            		 {% endwith %}
-                </div>
-                <form id="booking_create" action="" method="post" class="form">
-                <div id="booking-dates" class="clearfix">
-                    <p class="started-date">
-                        <label class="labm">{% trans "Début" %} :</label><br />
-        				{{ form.started_at }}
-                    </p>
-                    <p class="ended-date">
-                        <label class="labm">{% trans "Fin" %} :</label><br />
-        				{{ form.ended_at }}
-                    </p>
-                </div>
-                {% if product.quantity > 1 %}
-                <div class="quantity">
-                    <p>
-                        <label class="labm">{% trans "Quantité" %} :</label>
+        {% if product.rules %}
+        <div class="product-info">
+            <h2>{% trans "Règle d'utilisation"%}</h2>
+            {{ product.rules|linebreaksp }}
+        </div>        
+        {% endif %}
+        <div id="id-product-comment" class="product-comment">
+            {% with product.borrowercomments as borrowercomments %}
+                {% if borrowercomments.count > 0 %}
+                    {% blocktrans count borrowercomments.count as count %}
+                        <h2>{{ count }} commentaires</h2>
+                        {% plural %}
+                        <h2>{{ count }} commentaire</h2>
+                    {% endblocktrans%}
+                {% else %}
+                <h2>{% trans "Pas de commentaire" %}</h2>
                 {% endif %}
-                        {{ form.quantity }}
-                {% if product.quantity > 1 %}
-                    </p>
-                </div>
-                {% endif %}
-            </div>
-            <div id="booking-total" class="box-tools-bottom">
-                {% blocktrans with product.product.day|first as day_price %}
-        		  <p>Total : <span class="day">1 jour,</span> soit <span class="total-price">{{ day_price }}</span></p>
-        		 {% endblocktrans %}
-            </div>
-            <div class="box-tools-footer">
+                <ul>
+                {% for comment in borrowercomments %}
+                    <li>{% include "rent/partials/comment.html" %}</li>
+                {% empty %}
+                    <li>{% trans "Soyez-le premier à réserver et commenter !" %}</li>
+                {% endfor %}
+                </ul>
+            {% endwith %}
+        </div>{# product-comment #}
+    </div>{# content-main #}
+    <div class="content-aside">
+    {% with product.get_absolute_url as absolute_url %}
+        <ul class="social-button">
+            <li class="fb">
+                <fb:like href="{% if request.is_secure %}https{%else%}http{%endif%}://{{ request.get_host }}{{ absolute_url }}" send="true" layout="button_count" show_faces="false" font="tahoma"></fb:like>
+            </li>
+            <li class="tweet">
+                <a href="https://twitter.com/share" class="twitter-share-button" data-count="none" data-url="{% if request.is_secure %}https{%else%}http{%endif%}://{{ request.get_host }}{{ absolute_url }}" data-hashtags="eloue" data-text="A louer sur e-loue : "></a>
+            </li>
+            <li class="gplus">
+                <g:plusone size="medium" annotation="none" href="{% if request.is_secure %}https{%else%}http{%endif%}://{{ request.get_host }}{{ absolute_url }}"></g:plusone>
+            </li>
+        </ul>{# social-button #}
+    {% endwith %}
+        <div class="booking-block">
+            <h2>{% trans "Réservez en ligne" %}</h2>
+            <form id="booking_create" action="" method="POST">
+{% endcache %}
                 {% csrf_token %}
-        		<input type="hidden" name="{{ step_field }}" value="{{ step0 }}" />
-        	    {{ previous_fields|safe }}
-        		<p>
-        			<input type="submit" value="{% trans "Louer &rarr;" %}" class="btn big-green" />
-        		</p>
-        		</form>
-            </div>
+{% cache 43200 product:details:after_csrf product.pk site.pk %}
+                <div class="top-block">
+                {% with product.daily_price as price %}
+                    {{ price }} <span>{% blocktrans with price.unit|unit as unit %} / par {{ unit }}{% endblocktrans %}</span>
+                {% endwith %}
+{% endcache %}
+                </div>{# top block #}
+                <div class="main-block">
+                    <div class="booking-dates form-stacked">
+                        <p class="start-date">
+                            <label>{% trans "Début" %} :</label>
+                            {{ form.started_at }}
+                        </p>
+                        <p class="end-date">
+                            <label>{% trans "Fin" %} :</label>
+                            {{ form.ended_at }}
+                        </p>
+                        {% if product.quantity > 1 %}
+                        <p class="quantity-input">
+                            <label>{% trans "Quantité" %} :</label>
+                            {{ form.quantity }}
+                        </p>
+                        {% else %}
+                        {{ form.quantity }}
+                        {% endif %}
+                    </div>
+                    <div id="available">
+                        <p class="available">Ces dates sont disponibles</p>
+                    </div>
+                </div>{# main-block #}
+{% cache 43200 product:details:after_dates product.pk %}
+                 <div class="bottom-block">
+                     {% blocktrans with product.product.day|first as day_price %}
+                        <p id="booking-total" class="total-price">
+                            Total : <span class="day">1 jour,</span> soit <span class="pricing">{{ day_price }}</span>
+                        </p>
+                        <p><input type="submit" class="btn-booking" value="Réservez"/></p>
+                    {% endblocktrans %}
+                        <p class="booking-info">
+                            {% trans "Il s'agit simplement d'une pré-réservation. Vous ne serez débité que si le propriétaire accepte la demande de location sous 24h."%}
+                        </p>
+                    </form>
+                </div><!-- bottom-block -->
+        </div>{# booking-block #}
+            {% with product.owner as patron %}
+            <div id="owner" class="info-block">
+                <h2>
+                    {% if patron.is_professional %}
+                        {% trans "Professionnel"%}
+                    {% else %}
+                        {% trans "Particulier" %}
+                    {% endif %}
+                    <small>
+                        <a href="{{ patron.get_absolute_url }}" >({% trans " Voir toutes ses annonces "%})</a>
+                    </small>
+                </h2>
+                <a href="{{ patron.get_absolute_url }}" class="onwer-avatar">
+                    {% if patron.avatar %}
+                    <img src="{{ patron.profil.url }}" alt="{% trans "loueur"%}{{ patron.username }}" width="100" height="100">
+                    {% else %}
+                    <img src="{{ MEDIA_URL }}images/default_avatar.png" alt="{% trans "loueur"%}{{ patron.username }}" width="100" height="100">
+                    {% endif %}
+                </a>
+                <p class="owner-username">
+                    <a href="{{ patron.get_absolute_url }}">{{ patron.username|truncate:16 }}</a>
+                </p>
+                <address>
+                    {% if patron.default_address %}
+                        {% with patron.default_address as default_address %}
+                            {{ default_address.city }} - {{ default_address.zipcode }}
+                        {% endwith %}
+                    {% else %}
+                        {% with patron.addresses.all|first as default_address %}
+                            {{ default_address.city }} - {{ default_address.zipcode }}
+                        {% endwith %}
+                    {% endif %}
+                </address>
+                <a href="{% url message_create product.pk patron.pk %}" class="btn-contactme">Contactez-moi</a>
+                <span style="margin-top: 0; margin-bottom: 10px; margin-left: 20px;" class="stars empty"><span class="stars filled_{{ patron.average_note }}"></span></span>
+                {% include "accounts/partials/response_stats.html" %}
+            </div>{#  owner #}
+            {% endwith %}
+        {% if product_list %}
+        <div id="related-product" class="info-block">
+            <h2>Objets similaires</h2>
+            {% with 15 as truncation %}
+            {% include 'products/partials/result_list.html' %}
+            {% endwith %}
         </div>
-        <div id="owner-info" class="box-welcome">
-            <h3>{% trans "Propriétaire" %}</h3>
-            {% if product.owner.avatar %}
-            <img src="{{ product.owner.avatar.product_page.url }}" alt="{% trans "loueur"%}{{ product.owner.username }}">
-            {% else %}
-            <img src="{{ MEDIA_URL }}images/default_avatar.png" alt="{% trans "loueur"%}{{ product.owner.username }}">
-            {% endif %}
-            <p class="pseudo">
-                <a href="{{ product.owner.get_absolute_url }}">{{ product.owner.username }}</a>
-            </p>
-            <a href="{% url message_create product.pk product.owner.pk %}" class="btn long-blue">{% trans "Contactez-moi" %}</a>
-        </div>
-        <div id="payment-info" class="box-info">
-              <h3>{% trans "Paiement en ligne" %}</h3>
-              {% blocktrans %}
-			  <ol>
-					<li> Paiement sur payal</li>
-					<li> Le propriétaire est averti de votre demande</li>
-					<li> Nous vous informons par mail de sa réponse :<br />
-					    <ul>
-    						<li>S’il accepte vous serez débité le premier jour de la location</li>
-    						<li>S’il refuse vous ne serez pas débité</li>
-    					</ul>
-    				</li>
-	      	 </ol>
-			 {% endblocktrans %}
-        </div>
-    </div>
-</div>
+        {% endif %}
+{% endcache %}
+    </div>{# content-aside #}
+</div>{# container-main #}
 {% endblock %}
+
