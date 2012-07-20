@@ -674,7 +674,7 @@ def gmail_invite(request):
                 if email:
                     initial_data.append({'checked': False, 'name': e.name.full_name.text if e.name else '', 'email': email})
             formset = GmailContactFormset(initial=initial_data)
-            return direct_to_template(request, 'accounts/gmail_invite.html', {'formset': formset})
+            return direct_to_template(request, 'accounts/gmail_invite.html', {'formset': formset, 'initial_data': initial_data})
     return direct_to_template(request, 'accounts/gmail_invite.html')
 
 @login_required
