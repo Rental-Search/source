@@ -1,30 +1,25 @@
-<html xmlns="http://www.w3.org/1999/xhtml"
-  xmlns:fb="https://www.facebook.com/2008/fbml">
-  <head>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
-    <script src="https://raw.github.com/janl/mustache.js/master/mustache.js"></script>
-    <script src="//connect.facebook.net/en_US/all.js"></script>
-    <title>Request Tester C</title>
-  </head>
+{% extends "accounts/patron_edit.html" %}
+{% load i18n navbar %}
 
-  <body>
-    <div id="fb-root"></div>
-    <p>
-      <input type="button"
-        onclick="sendRequestToRecipients(); return false;"
-        value="Send Request to Users Directly"
-      />
-      <input type="text" value="User ID" name="user_ids" />
-      </p>
-    <p>
-    <input type="button"
-      onclick="sendRequestViaMultiFriendSelector(); return false;"
-      value="Send Request to Many Users with MFS"
-    />
-    </p>
-    <ul id="friends">
-    </ul>
-    <script>
+
+{% block title %}{% trans "Envoyer une invitation à mes amis Facebook" %}{% endblock %}
+
+{% block html_properties %} xmlns="http://www.w3.org/1999/xhtml" xmlns:fb="https://www.facebook.com/2008/fbml"{% endblock %}
+
+{% block tail %}
+  {{ block.super }}
+  <script>
+  // Load the SDK Asynchronously
+  (function(d){
+     var js, id = 'facebook-jssdk'; if (d.getElementById(id)) {return;}
+     js = d.createElement('script'); js.id = id; js.async = true;
+     js.src = "//connect.facebook.net/fr_FR/all.js";
+     d.getElementsByTagName('head')[0].appendChild(js);
+   }(document));
+  </script>
+
+
+  <script>
       window.fbAsyncInit = function() {
         console.log("before init...")
         FB.init({
@@ -96,5 +91,30 @@
         // Handle callback here
       }
     </script>
-  </body>
-</html>
+{% endblock %}
+
+{% block invite-submenu %}
+<ul>
+  <li><a href="{{ facebook_invite }}" class="{% active request facebook_invite %}-sub">{% trans "Facebook" %}</a></li>
+  <li><a href="{{ gmail_invite }}" class="{% active request gmail_invite %}-sub">{% trans "Gmail"%}</a><li>
+</ul>
+{% endblock %}
+
+{% block content-main-profil %}
+<div id="fb-root"></div>
+<h1>{% trans "Invitez vos amis Facebook sur e-loue" %}</h1>
+<p>
+  <input type="button"
+      onclick="sendRequestToRecipients(); return false;"
+      value="Send Request to Users Directly"
+  />
+  <input type="text" value="User ID" name="user_ids" />
+</p>
+<p>
+  <input type="button"
+    onclick="sendRequestViaMultiFriendSelector(); return false;"
+    value="Send Request to Many Users with MFS"
+  />
+</p>
+<ul id="friends"></ul>
+{% endblock %}

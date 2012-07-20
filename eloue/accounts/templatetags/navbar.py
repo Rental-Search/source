@@ -1,10 +1,11 @@
-from django.template import Library
+from django.template import Library, Node
 
 register = Library()
 
 @register.simple_tag
 def active(request, pattern, option=''):
     import re
+    print request
     if re.search('%s%s' % (pattern, option), request.path):
         return 'selected-nav-bar-link'
     return ''

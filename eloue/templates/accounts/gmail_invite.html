@@ -1,31 +1,93 @@
-{% extends "base.html" %}
-{% load i18n product paginator %}
+{% extends "accounts/facebook_invite.html" %}
+{% load i18n navbar %}
 
-{% block title %}{% trans "Votre profil" %}{% endblock %}
 
-{% block content %}    
-<script src="http://connect.facebook.net/en_US/all.js"></script>
+{% block title %}{% trans "nvoyer une invitation à mes contacts Gmail" %}{% endblock %}
+
+{% block tail %}
+{{ block.super }}
 <script type="text/javascript">
-function poptastic(url) {
-  var newWindow = window.open(url, '_blank', 'height=600,width=450');
-  newWindow.opener = self;
-  if (1) {
-    newWindow.focus();
-  }
-}
-  FB.init({
-    appId  : '255056637886187',
-    status : true,
-    cookie : true,
-    oauth: true
-  });
-  function sendRequestViaMultiFriendSelector() {
-    FB.ui({method: 'apprequests',
-      message: 'My Great Request'
-    });
-  }
-  
+// Load the SDK Asynchronously
+  (function(d){
+     var js, id = 'facebook-jssdk'; if (d.getElementById(id)) {return;}
+     js = d.createElement('script'); js.id = id; js.async = true;
+     js.src = "//connect.facebook.net/fr_FR/all.js";
+     d.getElementsByTagName('head')[0].appendChild(js);
+   }(document));
+
+
+	function poptastic(url) {
+	  var newWindow = window.open(url, '_blank', 'height=600,width=450');
+	  newWindow.opener = self;
+	  if (1) {
+	    newWindow.focus();
+	  }
+	}
+	FB.init({
+		ppId  : '255056637886187',
+		status : true,
+		cookie : true,
+		oauth: true
+	});
+	function sendRequestViaMultiFriendSelector() {
+		FB.ui({method: 'apprequests',
+			message: 'My Great Request'
+		});
+	}
 </script>
+
+{% endblock %}
+
+
+{% block content-main-profil %}
+
+{% if formset %} 
+<form method="POST" action="">
+    {% csrf_token %}
+    {{ formset.management_form }}
+    Choisissez vos amis:
+    <div style="height:250px;width:500px;font:16px/26px Georgia, Garamond, Serif;overflow:scroll;">
+	    <table>
+		    {% for form in formset.forms %}
+			    <tr>
+			    	<td>{{ form.checked }}</td>
+			    	<td>{{ form.email }} {{ form.name }}
+
+			    	{% if form.email.data %} {{ form.email.data }}
+			    	{% else %} {{ form.initial.email }}
+			    	{% endif %}
+
+			    	{% if form.name.data %} ({{ form.name.data }})
+			    	{% else %}
+			    		{% if form.initial.name %} ({{ form.initial.name }}) 
+			    		{% endif %}
+			    	{% endif %}
+
+			    	</td>
+			    </tr>
+	        {% endfor %}
+	    </table>
+	</div>
+    <input type="submit" value="Envoie invitation"/>
+</form>
+{% else %}
+<div class="x12 p4">
+	<a href="javascript:poptastic('https://accounts.google.com/o/oauth2/auth?scope=https://www.googleapis.com/auth/userinfo.email+https://www.googleapis.com/auth/userinfo.profile+https://www.google.com/m8/feeds&state=/profile&redirect_uri=http://localhost:8000/oauth2callback&response_type=token&client_id=382908503214.apps.googleusercontent.com')">
+		Invitez vos amis! <img src="https://www.google.com/mail/help/images/small_logo.gif"/>
+	</a><p/>    <script src="http://connect.facebook.net/en_US/all.js"></script>
+
+    <input type="button"
+      onclick="sendRequestViaMultiFriendSelector(); return false;"
+      value="Send Request to Many Users with MFS"/>
+</div>
+<form action="" id="gmail_submit_token" method="GET">
+    <input type="hidden" name="0-facebook_access_token" id="id_0-facebook_access_token">
+    <input type="submit" value="" style="visibility:hidden"/>
+</form>
+{% endif %}
+
+{% endblock %}
+
 <div id="content" class="xgrid">
        <div class="content-top">
          <ul id="menu" class="x12">
@@ -86,4 +148,3 @@ function poptastic(url) {
 	    </form>
 		{% endif %}
 </div>
-{% endblock %}

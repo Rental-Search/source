@@ -815,7 +815,31 @@ a {
     color: @blueDark;
     
     margin-right: 1px;
+
+    ul {
+      margin: 5px 40px 0 20px;
+      
+      li {
+        line-height: 35px;
+      }
+
+      a {
+        display: inline;
+        #font > .sans-serif('Ubuntu', normal, 12px); 
+        padding: 7px;
+        &:hover {
+          .border-radius(20px, 20px, 20px, 20px);
+        }
+      }
+
+      .selected-nav-bar-link-sub, a.selected-nav-bar-link-sub:hover {
+          #font > .sans-serif('Ubuntu', bold, 12px);
+          background: none;
+          cursor: default;
+      }
+    }
   }
+
   a {
     display: block;
     padding: 10px;
@@ -846,6 +870,8 @@ a {
     background-color: #fff;
     
     margin-right: -1px;
+
+    cursor: default;
   }
 }
 
