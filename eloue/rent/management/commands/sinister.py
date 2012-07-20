@@ -9,6 +9,7 @@ from tempfile import TemporaryFile
 from django.core.management.base import BaseCommand
 from django.utils.datastructures import SortedDict
 from django.utils.encoding import smart_str
+from django.db.models import Q
 
 from eloue.decorators import activate_language
 
@@ -26,7 +27,11 @@ class Command(BaseCommand):
         csv_file = TemporaryFile()
         writer = csv.writer(csv_file, delimiter='|')
         period = (date.today() - timedelta(days=1))
-        for sinister in Sinister.objects.filter(created_at__year=period.year, created_at__month=period.month, created_at__day=period.day):
+        for sinister in Sinister.objects.filter(
+            ~Q(product__owner__is_professional=True), 
+            product__carproduct=None, product__realestateproduct=None, 
+            created_at__year=period.year, created_at__month=period.month, 
+            created_at__day=period.day, product__category__need_insurance=True):
             row = SortedDict()
             row['Login locataire'] = sinister.booking.borrower.username
             row['Adresse email'] = sinister.booking.borrower.email
