@@ -7,32 +7,12 @@
 {% block tail %}
 {{ block.super }}
 <script type="text/javascript">
-// Load the SDK Asynchronously
-  (function(d){
-     var js, id = 'facebook-jssdk'; if (d.getElementById(id)) {return;}
-     js = d.createElement('script'); js.id = id; js.async = true;
-     js.src = "//connect.facebook.net/fr_FR/all.js";
-     d.getElementsByTagName('head')[0].appendChild(js);
-   }(document));
-
-
 	function poptastic(url) {
 	  var newWindow = window.open(url, '_blank', 'height=600,width=450');
 	  newWindow.opener = self;
 	  if (1) {
 	    newWindow.focus();
 	  }
-	}
-	FB.init({
-		ppId  : '255056637886187',
-		status : true,
-		cookie : true,
-		oauth: true
-	});
-	function sendRequestViaMultiFriendSelector() {
-		FB.ui({method: 'apprequests',
-			message: 'My Great Request'
-		});
 	}
 </script>
 
