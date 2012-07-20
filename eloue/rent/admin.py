@@ -80,8 +80,12 @@ class CommentAdmin(admin.ModelAdmin):
     list_display = ('comment', 'note')
 
 class SinisterAdmin(admin.ModelAdmin):
-    list_display = ('uuid', 'booking', 'patron', 'product',)
-
+    def booking(obj):
+        return obj.booking_id
+    list_display = ('uuid', booking, 'patron', 'product',)
+    fields = ('patron', 'product', 'description', booking)
+    readonly_fields = (booking, )
+    
 try:
     admin.site.register(Booking, BookingAdmin)
     admin.site.register(OwnerComment, CommentAdmin)
