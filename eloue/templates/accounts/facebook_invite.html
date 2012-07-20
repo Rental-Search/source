@@ -62,7 +62,7 @@
               }
             );
           } else {
-            $('#friends').html('<a id="fbfb">fb connect</a>');
+            $('p#fb-connect-invite-link').html('<a id="fbfb" class="btn">{% trans "Trouvez  vos amis sur Facebook" %}</a>');
             $('#fbfb').click(function (event) {
               FB.login(function (response){
                 console.log(response);
@@ -104,18 +104,13 @@
 {% block content-main-profil %}
 <div id="fb-root"></div>
 <h1>{% trans "Invitez vos amis Facebook sur e-loue" %}</h1>
-<p>
-  <input type="button"
-      onclick="sendRequestToRecipients(); return false;"
-      value="Send Request to Users Directly"
-  />
-  <input type="text" value="User ID" name="user_ids" />
-</p>
-<p>
-  <input type="button"
-    onclick="sendRequestViaMultiFriendSelector(); return false;"
-    value="Send Request to Many Users with MFS"
-  />
-</p>
+
+<div class="fb-connect-invite" style="margin: 0 70px;">
+  <p style="font-size: 14px; line-height: 20px; margin-bottom: 20px;">
+    Nous n'avons pas pu trouver vos amis sur Facebook parce que vous n'avez pas connecté Facebook à e-loue. Cliquez sur le bouton ci dessous pour créer la connexion.
+  </p>
+  <p id="fb-connect-invite-link" style="text-align: center;"></p>
+</div>
+
 <ul id="friends"></ul>
 {% endblock %}

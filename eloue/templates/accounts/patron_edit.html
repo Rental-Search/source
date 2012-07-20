@@ -25,7 +25,7 @@
 <ul class="nav-sub-bar">
     <li><a href="{{ patron_edit }}"  class="{% active request "^/dashboard/account/$" %}">{% trans "Mon Profil" %}</a></li>
     <li>
-      <a href="{{ facebook_invite }}" class="{% active request "^/dashboard/account/invite/" %}">{% trans "Invitation" %}</a>
+      <a href="{{ facebook_invite }}" class="{% active request "^/dashboard/account/invite/" %}">{% trans "Invitez vos amis" %}</a>
       {% block invite-submenu %}{% endblock %}
     </li>
     <li><a href="{{ comments }}" class="{% active request comments %}">{% trans "Commentaires" %}</a></li>
