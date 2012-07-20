@@ -84,7 +84,7 @@ class SinisterAdmin(admin.ModelAdmin):
         return obj.booking_id
     list_display = ('uuid', booking, 'patron', 'product',)
     fields = ('patron', 'product', 'description', booking)
-    readonly_fields = (booking, )
+    readonly_fields = (booking, 'product', 'patron')
     
 try:
     admin.site.register(Booking, BookingAdmin)
