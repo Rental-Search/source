@@ -95,8 +95,9 @@
 
 {% block invite-submenu %}
 <ul>
-  <li><a href="{{ facebook_invite }}" class="{% active request facebook_invite %}-sub">{% trans "Facebook" %}</a></li>
-  <li><a href="{{ gmail_invite }}" class="{% active request gmail_invite %}-sub">{% trans "Gmail"%}</a><li>
+  <li><a href="{{ facebook_invite }}" class="{% active request facebook_invite %}-sub">
+    <img src="{{ MEDIA_URL }}images/facebook_12by12.png" alt="" />{% trans "Facebook" %}</a></li>
+  <li><a href="{{ gmail_invite }}" class="{% active request gmail_invite %}-sub"><img src="{{ MEDIA_URL }}images/gmail_12by12.png" alt="" />{% trans "Gmail"%}</a><li>
 </ul>
 {% endblock %}
 
