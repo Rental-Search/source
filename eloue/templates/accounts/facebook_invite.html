@@ -38,11 +38,10 @@
               'me/friends/?fields=picture,name', 
               function (response) {
                 console.log(response.data);
-                template = '<ul id="friends">{% templatetag openvariable %}#data{%templatetag closevariable %}<li id="{%templatetag openvariable%}id{% templatetag closevariable %}"><img src="{%templatetag openvariable%}picture{% templatetag closevariable %}"/> {%templatetag openvariable%}name{% templatetag closevariable %}</li>{%templatetag openvariable%}/data{%templatetag closevariable %}</ul>';
+                template = '<ul id="friends">{% templatetag openvariable %}#data{%templatetag closevariable %}<li id="{%templatetag openvariable%}id{% templatetag closevariable %}"><img src="{%templatetag openvariable%}picture{% templatetag closevariable %}"/> {%templatetag openvariable%}name{% templatetag closevariable %} <span id="{%templatetag openvariable%}id{% templatetag closevariable %}"><b>Invite</b></span></li>{%templatetag openvariable%}/data{%templatetag closevariable %}</ul>';
 
-                // console.log(Mustache.render(template, {data: response.data}));
-                $('#friends').html(Mustache.render(template, {data: response.data}));
-                $('li', '#friends').click(
+                $('#friends').html(Mustache.to_html(template, {data: response.data}));
+                $('span', '#friends').click(
                   function a(i) {
                     FB.ui({
                       to: i.currentTarget.id,
