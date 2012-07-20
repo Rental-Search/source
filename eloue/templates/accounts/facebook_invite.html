@@ -38,8 +38,8 @@
               'me/friends/?fields=picture,name', 
               function (response) {
                 console.log(response.data);
-                template = '<ul id="friends">{% templatetag openvariable %}#data{%templatetag closevariable %}<li id="{%templatetag openvariable%}id{% templatetag closevariable %}"><img src="{%templatetag openvariable%}picture{% templatetag closevariable %}"/> {%templatetag openvariable%}name{% templatetag closevariable %} <span id="{%templatetag openvariable%}id{% templatetag closevariable %}"><b>Invite</b></span></li>{%templatetag openvariable%}/data{%templatetag closevariable %}</ul>';
-
+                template = '{% templatetag openvariable %}#data{%templatetag closevariable %}<li id="{%templatetag openvariable%}id{% templatetag closevariable %}"><img src="{%templatetag openvariable%}picture{% templatetag closevariable %}" width="30"/><div class="name">{%templatetag openvariable%}name{% templatetag closevariable %}</div> <span id="{%templatetag openvariable%}id{% templatetag closevariable %}"><button type="button" class="btn btn-contactme">{% trans "Inviter"%}</button></span></li>{%templatetag openvariable%}/data{%templatetag closevariable %}';
+                $('')
                 $('#friends').html(Mustache.to_html(template, {data: response.data}));
                 $('span', '#friends').click(
                   function a(i) {
@@ -62,6 +62,7 @@
             );
           } else {
             $('p#fb-connect-invite-link').html('<a id="fbfb" class="btn">{% trans "Trouvez  vos amis sur Facebook" %}</a>');
+            $('p#fb-connect-invite-text').html('Nous n\'avons pas pu trouver vos amis sur Facebook parce que vous n\'avez pas connecté Facebook à e-loue. Cliquez sur le bouton ci dessous pour créer la connexion.')
             $('#fbfb').click(function (event) {
               FB.login(function (response){
                 console.log(response);
@@ -90,6 +91,23 @@
         // Handle callback here
       }
     </script>
+
+
+
+    <script>
+    $("#filter").keyup(function () {
+        console.log('fsdfd');
+        var filter = $(this).val(), count = 0;
+        $(".filtered:first li").each(function () {
+            if ($(this).text().search(new RegExp(filter, "i")) < 0) {
+                $(this).hide("hidden");
+            } else {
+                $(this).show("hidden");
+                count++;
+            }
+        });
+    });
+    </script>
 {% endblock %}
 
 {% block invite-submenu %}
@@ -101,15 +119,55 @@
 {% endblock %}
 
 {% block content-main-profil %}
+<style type="text/css">
+#friends {
+  height: 300px;
+  overflow-y: auto;
+}
+
+#friends li {
+  margin-bottom: 5px;
+  font-family: Arial, sans-serif;
+  font-weight: normal;
+  color: #364C59;
+  font-size: 13px;
+  height: 35px;
+  border-bottom: 1px solid #ddd
+}
+
+ul {
+  padding-top: 5px;
+}
+
+#friends img {
+  float: left;
+  margin-right: 5px;
+  display: table-cell;
+}
+
+#friends li button {
+  font-size: 11px;
+  padding: 3px;
+  float: right;
+  margin-top: 5px;
+}
+
+
+#friends .name {
+  margin-top: 10px;
+  float: left;
+}
+</style>
 <div id="fb-root"></div>
-<h1>{% trans "Invitez vos amis Facebook sur e-loue" %}</h1>
+<h1>{% trans "Facebook" %}</h1>
 
 <div class="fb-connect-invite" style="margin: 0 70px;">
-  <p style="font-size: 14px; line-height: 20px; margin-bottom: 20px;">
-    Nous n'avons pas pu trouver vos amis sur Facebook parce que vous n'avez pas connecté Facebook à e-loue. Cliquez sur le bouton ci dessous pour créer la connexion.
-  </p>
+  <p id="fb-connect-invite-text" style="font-size: 14px; line-height: 20px; margin-bottom: 20px;"></p>
   <p id="fb-connect-invite-link" style="text-align: center;"></p>
+  <div style="margin: 0 140px;">
+    <h2>{% trans "Invitez vos amis"%}</h2>
+    <input type="text" placeholder="Rechercher un ami" id="filter" style="width: 270px; margin-bottom: 0px;"/>
+    <ul id="friends" class="filtered"></ul>
+  </div>
 </div>
-
-<ul id="friends"></ul>
 {% endblock %}
