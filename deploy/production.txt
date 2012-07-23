@@ -22,7 +22,7 @@ django-form-utils==0.2.0
 django-staticfiles==1.1.2
 backports.ssl_match_hostname
 -e git://github.com/e-loue/django-pipeline.git#egg=django-pipeline
--e git://github.com/e-loue/boto.git#egg=boto
+boto==2.5.2
 -e git://github.com/e-loue/pyPdf.git#egg=pyPdf
 -e git://github.com/e-loue/python-oauth2.git#egg=oauth2
 -e svn+http://code.djangoproject.com/svn/django/branches/releases/1.2.X@15591#egg=django
