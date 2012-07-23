@@ -59,52 +59,13 @@
 
 
 {% block content-main-profil %}
-<style type="text/css">
-.friends-list {
-  height: 300px;
-  overflow-y: auto;
-}
-
-.friends-list li {
-  margin-bottom: 5px;
-  font-family: Arial, sans-serif;
-  font-weight: normal;
-  color: #364C59;
-  font-size: 13px;
-  height: 35px;
-  border-bottom: 1px solid #ddd
-}
-
-.friends-list {
-  padding-top: 5px;
-}
-
-.friends-list img {
-  float: left;
-  margin-right: 5px;
-  display: table-cell;
-}
-
-.friends-list li button {
-  font-size: 11px;
-  padding: 3px;
-  float: right;
-  margin-top: 5px;
-}
-
-.friends-list .name {
-  margin-top: 10px;
-  float: left;
-}
-</style>
-
 <h1>{% trans "Gmail"%}</h1>
 
-<div class="fb-connect-invite" style="margin: 0 70px;">
+<div class="fb-connect-invite">
   {% if initial_data %} 
-  <div style="margin: 0 140px;">
+  <div class="fb-container-list">
   	<h2>{% trans "Invitez vos contacts" %}</h2>
-  	<input type="text" placeholder="Rechercher un contact" id="filter" style="width: 270px; margin-bottom: 0px;"/>
+  	<input type="text" placeholder="Rechercher un contact" id="filter"/>
   	<ul id="gmail-list" class="friends-list filtered">
   		{% for data in initial_data %}
   		<li>
@@ -117,10 +78,10 @@
   	</ul>
   </div>
 	{% else %}
-  <p style="font-size: 14px; line-height: 20px; margin-bottom: 20px;">
+  <p class="fb-connect-invite-text">
     Nous n'avons pas pu trouver vos contacts sur Gmail parce que vous n'avez pas connecté Gmail à e-loue. Cliquez sur le bouton ci dessous pour créer la connexion.
   </p>
-	<p style="text-align: center;">
+	<p class="fb-connect-invite-link">
 		<a href="javascript:poptastic('https://accounts.google.com/o/oauth2/auth?scope=https://www.googleapis.com/auth/userinfo.email+https://www.googleapis.com/auth/userinfo.profile+https://www.google.com/m8/feeds&state=/profile&redirect_uri=http://localhost:8000/oauth2callback&response_type=token&client_id=382908503214.apps.googleusercontent.com')" class="btn">
 			Invitez vos contacts Gmail
 		</a>
