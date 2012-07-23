@@ -167,7 +167,9 @@ ul {
   <div style="margin: 0 140px;">
     <h2>{% trans "Invitez vos amis"%}</h2>
     <input type="text" placeholder="Rechercher un ami" id="filter" style="width: 270px; margin-bottom: 0px;"/>
-    <ul id="friends" class="filtered"></ul>
+    <ul id="friends" class="filtered">
+      <li class="loading">chargement...</li>
+    </ul>
   </div>
 </div>
 {% endblock %}
