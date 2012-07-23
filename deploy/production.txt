@@ -33,7 +33,7 @@ boto==2.5.2
 -e git://github.com/kossovics/django-haystack.git@1.2.X#egg=haystack
 -e git://github.com/e-loue/django-fsm.git#egg=fsm
 -e git://github.com/e-loue/django-oauth-plus.git#egg=django-oauth-plus
--e git://github.com/e-loue/django-storages.git#egg=storages
+django-storages==1.1.5
 -e git://github.com/e-loue/django-tastypie.git#egg=tastypie
 -e git://github.com/e-loue/django-lean.git#egg=django_lean
 -e git://github.com/e-loue/django-mptt.git#egg=mptt
