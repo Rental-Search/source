@@ -47,6 +47,7 @@
       if (answer == true) {
         email = $('input:hidden[name=email]').val();
         gmail_send_invite(email);
+        $(this).parent().remove();
       } else {
         return false;
       }
@@ -90,7 +91,6 @@
   float: right;
   margin-top: 5px;
 }
-
 
 .friends-list .name {
   margin-top: 10px;
