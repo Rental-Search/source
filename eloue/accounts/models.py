@@ -391,6 +391,13 @@ class Patron(User):
                 use_https=True
             )
 
+    def send_gmail_invite(self, receiver, *args):
+        context = {
+            'patron': self
+        }
+        message = create_alternative_email('accounts/gmail_invitation', context, settings.DEFAULT_FROM_EMAIL, [receiver])
+        message.send()
+
     def is_expired(self):
         """
         >>> patron = Patron(date_joined=datetime.datetime.now())

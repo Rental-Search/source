@@ -42,7 +42,7 @@ from django.shortcuts import redirect
 from eloue.decorators import secure_required, mobify, ownership_required
 from eloue.accounts.forms import (EmailAuthenticationForm, GmailContactFormset, PatronEditForm, 
     PatronPasswordChangeForm, ContactForm, 
-    PatronSetPasswordForm, FacebookForm, CreditCardForm)
+    PatronSetPasswordForm, FacebookForm, CreditCardForm, GmailContactForm)
 from eloue.accounts.models import Patron, FacebookSession, CreditCard
 
 from eloue.accounts.wizard import AuthenticationWizard
@@ -636,46 +636,60 @@ def accounts_studies_autocomplete(request):
 
 @login_required
 def gmail_invite(request):
-    if request.POST:
-        formset = GmailContactFormset(request.POST)
-        if formset.is_valid():
-            emails = map(lambda email: email['email'], filter(lambda email: email['checked'], formset.cleaned_data))
-            datatuple = [('SUBJECT', 'MESSAGE', 'OUR_EMAIL', (email, )) for email in emails]
-            send_mass_mail(datatuple)
-            return redirect('invitation_sent')
+    access_token = request.GET.get('0-facebook_access_token', None)
+    if access_token:
+        token_info = simplejson.load(
+            urllib.urlopen(
+                'https://www.googleapis.com/oauth2/v1/'
+                'tokeninfo?access_token=%s'%access_token
+            )
+        )
+        if 'audience' not in token_info or token_info['audience'] != settings.GOOGLE_CLIENT_ID:
+            return HttpResponseForbidden()
+        client = gdata.contacts.client.ContactsClient(source='e-loue')
+        token = gdata.gauth.OAuth2Token(
+            client_id=settings.GOOGLE_CLIENT_ID,
+            client_secret=settings.GOOGLE_CLIENT_SECRET,
+            scope=('https://www.googleapis.com/auth/userinfo.email+'
+                'https://www.googleapis.com/auth/userinfo.profile+'
+                'https://www.google.com/m8/feeds'
+            ), user_agent='', access_token=access_token
+        )
+        client = token.authorize(client)
+        query = gdata.contacts.client.ContactsQuery()
+        query.max_results = 10000
+        initial_data = []
+        for e in client.GetContacts(q=query).entry:
+            email = next(itertools.imap(lambda email: email.address, itertools.ifilter(lambda email: email.primary and email.primary=='true', e.email)), None)
+            if email:
+                initial_data.append({'checked': False, 'name': e.name.full_name.text if e.name else '', 'email': email})
+        return direct_to_template(request, 'accounts/gmail_invite.html', {'initial_data': initial_data})
+    else:
+        return direct_to_template(request, 'accounts/gmail_invite.html')
 
-        return direct_to_template(request, 'accounts/gmail_invite.html', {'formset': formset})
-    elif request.GET:
-        access_token = request.GET.get('0-facebook_access_token', None)
-        if access_token:
-            token_info = simplejson.load(
-                urllib.urlopen(
-                    'https://www.googleapis.com/oauth2/v1/'
-                    'tokeninfo?access_token=%s'%access_token
-                )
+@login_required
+def gmail_send_invite(request):
+    if request.POST:
+        form = GmailContactForm(request.POST)
+        if form.is_valid():
+            request.user.send_gmail_invite(form.cleaned_data['email'])
+            return HttpResponse(
+                simplejson.dumps({'status': "OK"}), 
+                mimetype="application/json"
             )
-            if 'audience' not in token_info or token_info['audience'] != settings.GOOGLE_CLIENT_ID:
-                return HttpResponseForbidden()
-            client = gdata.contacts.client.ContactsClient(source='e-loue')
-            token = gdata.gauth.OAuth2Token(
-                client_id=settings.GOOGLE_CLIENT_ID,
-                client_secret=settings.GOOGLE_CLIENT_SECRET,
-                scope=('https://www.googleapis.com/auth/userinfo.email+'
-                    'https://www.googleapis.com/auth/userinfo.profile+'
-                    'https://www.google.com/m8/feeds'
-                ), user_agent='', access_token=access_token
+        else:
+            return HttpResponse(
+                simplejson.dumps({'status': "KO"}), 
+                mimetype="application/json"
             )
-            client = token.authorize(client)
-            query = gdata.contacts.client.ContactsQuery()
-            query.max_results = 10000
-            initial_data = []
-            for e in client.GetContacts(q=query).entry:
-                email = next(itertools.imap(lambda email: email.address, itertools.ifilter(lambda email: email.primary and email.primary=='true', e.email)), None)
-                if email:
-                    initial_data.append({'checked': False, 'name': e.name.full_name.text if e.name else '', 'email': email})
-            formset = GmailContactFormset(initial=initial_data)
-            return direct_to_template(request, 'accounts/gmail_invite.html', {'formset': formset, 'initial_data': initial_data})
-    return direct_to_template(request, 'accounts/gmail_invite.html')
+    else:
+        return HttpResponse(
+            simplejson.dumps({'status': "KO"}), 
+            mimetype="application/json"
+        )
+
+
+
 
 @login_required
 def facebook_invite(request):

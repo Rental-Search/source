@@ -4,7 +4,7 @@ from django.conf.urls.defaults import *
 from eloue.accounts.views import dashboard, patron_edit, patron_edit_password, patron_edit_phonenumber,\
 									patron_edit_addresses, accounts_work_autocomplete, accounts_studies_autocomplete, comments,\
 									comments_received, owner_booking_pending, owner_booking_ongoing, owner_booking_history, owner_booking_authorized, alert_edit, owner_product, \
-                                    associate_facebook, facebook_invite, gmail_invite
+                                    associate_facebook, facebook_invite, gmail_invite, gmail_send_invite
 from eloue.products.views import product_edit, product_address_edit, product_price_edit, thread_details, archive_thread, unarchive_thread, inbox, archived
 from eloue.rent.views import booking_detail, booking_accept, booking_cancel, booking_reject, booking_incident, booking_close
 
@@ -29,6 +29,7 @@ urlpatterns = patterns('',
 
     url(r'^account/invite/facebook/$', facebook_invite, name="facebook_invite"),
     url(r'^account/invite/gmail/$', gmail_invite, name="gmail_invite"),
+    url(r'^account/invite/gmail/send_invitation/$', gmail_send_invite, name="gmail_send_invite"),
 
     url(r'^owner/booking/authorized/$', owner_booking_authorized, name="owner_booking_authorized"),
     url(r'^owner/booking/authorized/(?P<page>\d+)/$', owner_booking_authorized, name="owner_booking_authorized"),
