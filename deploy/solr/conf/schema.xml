@@ -108,15 +108,19 @@
 
     <field name="accessible" type="boolean" indexed="true" stored="true" multiValued="false" />
 
-    <field name="username" type="text" indexed="true" stored="true" multiValued="false" />
+    <field name="profile" type="string" indexed="false" stored="true" multiValued="false" />
 
-    <field name="tumble_dryer" type="boolean" indexed="true" stored="true" multiValued="false" />
+    <field name="seat_number" type="slong" indexed="true" stored="true" multiValued="false" />
 
     <field name="patron" type="text" indexed="true" stored="true" multiValued="false" />
 
     <field name="text" type="text" indexed="true" stored="true" multiValued="false" />
 
-    <field name="sites" type="text" indexed="true" stored="true" multiValued="true" />
+    <field name="pro" type="boolean" indexed="true" stored="true" multiValued="false" />
+
+    <field name="zipcode" type="string" indexed="false" stored="true" multiValued="false" />
+
+    <field name="price" type="sfloat" indexed="true" stored="true" multiValued="false" />
 
     <field name="jacuzzi" type="boolean" indexed="true" stored="true" multiValued="false" />
 
@@ -132,13 +136,11 @@
 
     <field name="lng" type="tdouble" indexed="true" stored="true" multiValued="false" />
 
-    <field name="tax_horsepower" type="text" indexed="true" stored="true" multiValued="false" />
+    <field name="breakfast" type="boolean" indexed="true" stored="true" multiValued="false" />
 
     <field name="special" type="boolean" indexed="true" stored="true" multiValued="false" />
 
     <field name="balcony" type="boolean" indexed="true" stored="true" multiValued="false" />
-
-    <field name="family_friendly" type="boolean" indexed="true" stored="true" multiValued="false" />
 
     <field name="city" type="string" indexed="false" stored="true" multiValued="false" />
 
@@ -146,39 +148,35 @@
 
     <field name="consumption" type="text" indexed="true" stored="true" multiValued="false" />
 
-    <field name="title" type="text" indexed="true" stored="true" multiValued="false" />
+    <field name="sites_exact" type="string" indexed="true" stored="true" multiValued="true" />
 
     <field name="tv" type="boolean" indexed="true" stored="true" multiValued="false" />
 
-    <field name="chimney" type="boolean" indexed="true" stored="true" multiValued="false" />
-
     <field name="brand" type="text" indexed="true" stored="true" multiValued="false" />
 
-    <field name="zipcode" type="string" indexed="false" stored="true" multiValued="false" />
+    <field name="sites" type="text" indexed="true" stored="true" multiValued="true" />
 
-    <field name="licence_plate" type="text" indexed="true" stored="true" multiValued="false" />
+    <field name="family_friendly" type="boolean" indexed="true" stored="true" multiValued="false" />
 
     <field name="computer_with_internet" type="boolean" indexed="true" stored="true" multiValued="false" />
 
-    <field name="baby_seat" type="boolean" indexed="true" stored="true" multiValued="false" />
+    <field name="categories" type="text" indexed="true" stored="true" multiValued="true" />
 
     <field name="fuel" type="slong" indexed="true" stored="true" multiValued="false" />
 
     <field name="roof_box" type="boolean" indexed="true" stored="true" multiValued="false" />
 
-    <field name="owner_url" type="string" indexed="false" stored="true" multiValued="false" />
+    <field name="lockable_chamber" type="boolean" indexed="true" stored="true" multiValued="false" />
 
-    <field name="snow_tires" type="boolean" indexed="true" stored="true" multiValued="false" />
+    <field name="ski_rack" type="boolean" indexed="true" stored="true" multiValued="false" />
 
     <field name="thumbnail" type="string" indexed="false" stored="true" multiValued="false" />
 
-    <field name="gps" type="boolean" indexed="true" stored="true" multiValued="false" />
+    <field name="baby_seat" type="boolean" indexed="true" stored="true" multiValued="false" />
 
-    <field name="profile" type="string" indexed="false" stored="true" multiValued="false" />
+    <field name="username" type="text" indexed="true" stored="true" multiValued="false" />
 
-    <field name="heating" type="boolean" indexed="true" stored="true" multiValued="false" />
-
-    <field name="chamber_number" type="slong" indexed="true" stored="true" multiValued="false" />
+    <field name="licence_plate" type="text" indexed="true" stored="true" multiValued="false" />
 
     <field name="mileage" type="slong" indexed="true" stored="true" multiValued="false" />
 
@@ -192,15 +190,17 @@
 
     <field name="cruise_control" type="boolean" indexed="true" stored="true" multiValued="false" />
 
-    <field name="price" type="sfloat" indexed="true" stored="true" multiValued="false" />
-
     <field name="gym" type="boolean" indexed="true" stored="true" multiValued="false" />
+
+    <field name="chamber_number" type="slong" indexed="true" stored="true" multiValued="false" />
+
+    <field name="tax_horsepower" type="text" indexed="true" stored="true" multiValued="false" />
 
     <field name="categories_exact" type="string" indexed="true" stored="true" multiValued="true" />
 
     <field name="lift" type="boolean" indexed="true" stored="true" multiValued="false" />
 
-    <field name="seat_number" type="slong" indexed="true" stored="true" multiValued="false" />
+    <field name="tumble_dryer" type="boolean" indexed="true" stored="true" multiValued="false" />
 
     <field name="owner_avatar" type="text" indexed="true" stored="true" multiValued="false" />
 
@@ -212,13 +212,15 @@
 
     <field name="first_registration_date" type="date" indexed="true" stored="true" multiValued="false" />
 
-    <field name="categories" type="text" indexed="true" stored="true" multiValued="true" />
+    <field name="owner_url" type="string" indexed="false" stored="true" multiValued="false" />
+
+    <field name="chimney" type="boolean" indexed="true" stored="true" multiValued="false" />
 
     <field name="kitchen" type="boolean" indexed="true" stored="true" multiValued="false" />
 
     <field name="price_exact" type="sfloat" indexed="true" stored="true" multiValued="false" />
 
-    <field name="lockable_chamber" type="boolean" indexed="true" stored="true" multiValued="false" />
+    <field name="snow_tires" type="boolean" indexed="true" stored="true" multiValued="false" />
 
     <field name="towel" type="boolean" indexed="true" stored="true" multiValued="false" />
 
@@ -228,13 +230,13 @@
 
     <field name="url" type="text" indexed="true" stored="true" multiValued="false" />
 
-    <field name="owner_exact" type="string" indexed="true" stored="true" multiValued="false" />
+    <field name="created_at" type="date" indexed="true" stored="true" multiValued="false" />
 
-    <field name="sites_exact" type="string" indexed="true" stored="true" multiValued="true" />
+    <field name="title" type="text" indexed="true" stored="true" multiValued="false" />
+
+    <field name="heating" type="boolean" indexed="true" stored="true" multiValued="false" />
 
     <field name="snow_chains" type="boolean" indexed="true" stored="true" multiValued="false" />
-
-    <field name="breakfast" type="boolean" indexed="true" stored="true" multiValued="false" />
 
     <field name="summary" type="edge_ngram" indexed="true" stored="true" multiValued="false" />
 
@@ -254,11 +256,11 @@
 
     <field name="model" type="text" indexed="true" stored="true" multiValued="false" />
 
+    <field name="gps" type="boolean" indexed="true" stored="true" multiValued="false" />
+
+    <field name="owner_exact" type="string" indexed="true" stored="true" multiValued="false" />
+
     <field name="internet_access" type="boolean" indexed="true" stored="true" multiValued="false" />
-
-    <field name="created_at" type="date" indexed="true" stored="true" multiValued="false" />
-
-    <field name="ski_rack" type="boolean" indexed="true" stored="true" multiValued="false" />
 
   </fields>
 
