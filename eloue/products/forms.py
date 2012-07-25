@@ -49,7 +49,7 @@ class FacetedSearchForm(SearchForm):
     sort = forms.ChoiceField(required=False, choices=SORT, widget=forms.HiddenInput())
     price = FacetField(label=_(u"Prix"), pretty_name=_("par-prix"), required=False)
     categories = FacetField(label=_(u"Catégorie"), pretty_name=_("par-categorie"), required=False, widget=forms.HiddenInput())
-    pro = forms.BooleanField(required=False)
+    pro = forms.NullBooleanField(required=False)
 
     def clean_r(self):
         location = self.cleaned_data.get('l', None)
