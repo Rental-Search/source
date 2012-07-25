@@ -365,8 +365,8 @@ else:
 # Business configuration
 BOOKING_DAYS = 85  # Max booking days
 COMMISSION = decimal.Decimal('0.2')  # Our commission percentage
-POLICY_NUMBER = None  # Our insurance policy number
-PARTNER_NUMBER = None  # Our insurance partner number
+POLICY_NUMBER = "AC477704"  # Our insurance policy number
+PARTNER_NUMBER = "GRDT020"  # Our insurance partner number
 INSURANCE_FTP_HOST = None  # Our insurance ftp server host
 INSURANCE_FTP_USER = None  # Our insurance ftp server username
 INSURANCE_FTP_PASSWORD = None  # Our insurance ftp server password

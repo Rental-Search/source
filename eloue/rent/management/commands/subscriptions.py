@@ -14,6 +14,8 @@ from eloue.decorators import activate_language
 
 log = logbook.Logger('eloue.rent.subscriptions')
 
+def comma_separated(number):
+    return str(number).replace('.', ',')
 
 class Command(BaseCommand):
     help = "Send daily insurance subscriptions"
@@ -45,15 +47,15 @@ class Command(BaseCommand):
             row['Date d\'effet des garanties'] = booking.started_at.strftime("%Y%m%d")
             row[u'Numéro de commande'] = booking.uuid
             row['Type de produit'] = booking.product.category.name
-            row['Informations complémentaires produit'] = smart_str(booking.product.summary)
             row[u'Désignation'] = smart_str(booking.product.description)
-            row['Prix de la location TTC'] = booking.total_amount
-            row['Montant de la Caution'] = booking.deposit_amount
+            row['Informations complémentaires produit'] = smart_str(booking.product.summary)
+            row['Prix de la location TTC'] = comma_separated(booking.total_amount)
+            row['Montant de la Caution'] = comma_separated(booking.deposit_amount)
             row[u'Durée de garantie'] = (booking.ended_at - booking.started_at).days
-            row[u'Prix de cession de l\'assurance HT'] = booking.insurance_fee
-            row['Com. du partenaire'] = booking.insurance_commission
-            row['Taxes assurance à 9%'] = booking.insurance_taxes
-            row['Cotisation TTC'] = booking.insurance_amount
+            row[u'Prix de cession de l\'assurance HT'] = comma_separated(booking.insurance_fee)
+            row['Com. du partenaire'] = comma_separated(booking.insurance_commission)
+            row['Taxes assurance à 9%'] = comma_separated(booking.insurance_taxes)
+            row['Cotisation TTC'] = comma_separated(booking.insurance_amount)
             writer.writerow(row.values())
         log.info('Uploading daily insurance subscriptions')
         ftp = FTP(settings.INSURANCE_FTP_HOST)
