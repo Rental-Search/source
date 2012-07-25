@@ -1,3 +1,50 @@
+{% extends "base_email.html"%}
+
+{% load i18n %}
+
+{% block title_email %}{% trans "Demande de réservation"%}{% endblock %}
+
+
+{% block content_email %}
+<tr>
+	<td valign="top" width="100%" style="border-collapse: collapse;">
+        <table border="0" cellpadding="0" cellspacing="0" width="510">
+            <tbody>
+                <tr>
+                    <td valign="top" style="padding-top: 20px;border-collapse: collapse;">
+                        <div style="color: #505050;font-family: Arial;font-size: 14px;line-height: 200%;text-align: left;">
+                        	{% blocktrans with booking.owner.get_full_name as owner_name and booking.borrower.username as borrower %}
+
+                            Bonjour {{ owner_name }},<br><br>
+
+                             {{ borrower }} souhaite louer l’un de vos objets. Voici les détails de la réservation :<br>
+                           	{% endblocktrans %}
+
+                            {% include "rent/emails/partials/booking_details_email.html" %}
+
+
+                            {% blocktrans with site.name as site_name and protocol as protocol and site.domain as domain and booking.get_absolute_url as booking_url %}
+
+                            Cliquez sur le bouton ci dessous pour lui répondre :
+
+                           	<p style="margin-top: 15px; text-align: center;">
+                            	<a href="{{ protocol }}://{{ domain }}{{ booking_url }}" style="text-decoration: none;">
+                                	<img src="http://eloue.s3.amazonaws.com/media/email/answer-booking-btn.png" alt="" width="236" height="40" />
+                            	</a>
+                            </p>
+
+                            L'équipe {{ site_name }}<br>
+                            {% endblocktrans %}
+                        </div>                                                                    
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </td>
+</tr>
+{% endblock %}
+
+
 {% load i18n %}
 {% blocktrans with booking.owner.username as owner and booking.borrower.username as borrower and booking.product.category.name as category and booking.product.summary as summary and booking.started_at|date:"DATETIME_FORMAT" as starting_at and booking.started_at|timesince:booking.ended_at as duration and booking.get_absolute_url as booking_url and site.domain as domain and site.name as site_name %}
 <p>Bonjour {{ owner }},</p>
