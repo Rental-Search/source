@@ -70,7 +70,7 @@ class PatronAdmin(UserAdmin, CurrentSiteAdmin):
     
     def send_activation_email(self, request, queryset):
         for patron in queryset:
-            if patron.is_expired() or patron.is_active:
+            if patron.is_active:
                 continue
             try:
                 patron.send_activation_email()

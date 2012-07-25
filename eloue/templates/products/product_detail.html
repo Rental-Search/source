@@ -252,22 +252,28 @@
                 </a>
             </div>
         </div>{# product-resume #}
-        <div class="product-tabs">
-            <ul>
-                <li><a href="#gallery">{% trans "Photo" %}</a></li>
-                <li><a href="#prices_calendar">{% trans "Disponibilitées et tarifs" %}</a></li>
+        <div class="product-tabs ui-tabs ui-widget ui-widget-content ui-corner-all">
+            <ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
+                <li class="ui-state-default ui-corner-top ui-tabs-selected ui-state-active">
+                    <a href="#gallery">{% trans "Photo" %}</a>
+                </li>
+                <li class="ui-state-default ui-corner-top">
+                    <a href="#prices_calendar">{% trans "Disponibilitées et tarifs" %}</a>
+                </li>
                 {% if insurance_available %}
-                    <li><a href="#conditions">{% trans "Conditions et assurance"%}</a></li>
+                <li class="ui-state-default ui-corner-top">
+                    <a href="#conditions">{% trans "Conditions et assurance"%}</a>
+                </li>
                 {% endif %}
             </ul>
-            <div id="gallery">
+            <div id="gallery" class="ui-tabs-panel ui-widget-content ui-corner-bottom">
             {% with product.pictures.all|first as picture %}
                 {% if picture %}
                     <img src="{{ picture.display.url }}" alt="{{ product.summary }}">
                 {% endif %}
             {% endwith %}
             </div> {# gallery #}
-            <div id="prices_calendar">
+            <div id="prices_calendar" class="ui-tabs-panel ui-widget-content ui-corner-bottom ui-tabs-hide">
                 <div class="prices">
                     <div class="table-bg">
                         <table class="table table-striped">
@@ -317,7 +323,7 @@
                 </div>{# calendar #}
             </div>
             {% if insurance_available %}
-            <div id="conditions">
+            <div id="conditions" class="ui-tabs-panel ui-widget-content ui-corner-bottom ui-tabs-hide">
                 {% include "rent/partials/condition_assurance.html" %}
             </div>
             {% endif %}
@@ -379,42 +385,42 @@
     {% endwith %}
     {% with product.owner as patron %}
         {% if patron.is_professional %}
-        <div id="owner" class="info-block">
-            <h2>
-                {% trans "Professionnel"%}
-                <small>
-                    <a href="{{ patron.get_absolute_url }}" >({% trans " Voir toutes ses annonces "%})</a>
-                </small>
-            </h2>
-            <a href="{{ patron.get_absolute_url }}" class="onwer-avatar">
-                {% if patron.avatar %}
-                <img src="{{ patron.profil.url }}" alt="{% trans "loueur"%}{{ patron.username }}" width="100" height="100">
-                {% else %}
-                <img src="{{ MEDIA_URL }}images/default_avatar.png" alt="{% trans "loueur"%}{{ patron.username }}" width="100" height="100">
-                {% endif %}
-            </a>
-            <p class="owner-username">
-                <a href="{{ patron.get_absolute_url }}">{{ patron.company_name|truncate:16 }}</a>
-            </p>
-            <address>
-                {% if patron.default_address %}
-                    {% with patron.default_address as default_address %}
-                        {{ default_address.city }} - {{ default_address.zipcode }}
-                    {% endwith %}
-                {% else %}
-                    {% with patron.addresses.all|first as default_address %}
-                        {{ default_address.city }} - {{ default_address.zipcode }}
-                    {% endwith %}
-                {% endif %}
-            </address>
-            <a href="{% url message_create product.pk patron.pk %}" class="btn-contactme">Contactez-moi</a>
-            <ul class="pro-contact">
-                <li><a href="#">www.e-loue.com</a></li>
-                <li>01 45 57 90 34</li>
-            </ul>
-        </div>{#  owner #}
+            <div id="owner" class="info-block">
+                <h2>
+                    {% trans "Professionnel"%}
+                    <small>
+                        <a href="{{ patron.get_absolute_url }}" >({% trans " Voir toutes ses annonces "%})</a>
+                    </small>
+                </h2>
+                <a href="{{ patron.get_absolute_url }}" class="onwer-avatar">
+                    {% if patron.avatar %}
+                    <img src="{{ patron.profil.url }}" alt="{% trans "loueur"%}{{ patron.username }}" width="100" height="100">
+                    {% else %}
+                    <img src="{{ MEDIA_URL }}images/default_avatar.png" alt="{% trans "loueur"%}{{ patron.username }}" width="100" height="100">
+                    {% endif %}
+                </a>
+                <p class="owner-username">
+                    <a href="{{ patron.get_absolute_url }}">{{ patron.company_name|truncate:13 }}</a>
+                </p>
+                <address>
+                    {% if patron.default_address %}
+                        {% with patron.default_address as default_address %}
+                            {{ default_address.city }} - {{ default_address.zipcode }}
+                        {% endwith %}
+                    {% else %}
+                        {% with patron.addresses.all|first as default_address %}
+                            {{ default_address.city }} - {{ default_address.zipcode }}
+                        {% endwith %}
+                    {% endif %}
+                </address>
+                <a href="{% url message_create product.pk patron.pk %}" class="btn-contactme">Contactez-moi</a>
+                <ul class="pro-contact">
+                    <li><a href="#">www.e-loue.com</a></li>
+                    <li>01 45 57 90 34</li>
+                </ul>
+            </div>{#  owner #}
         {% else %}
-        <div id="owner" class="info-block">
+            <div id="owner" class="info-block">
                 <h2>
                     {% trans "Particulier" %}
                     <small>
@@ -429,7 +435,7 @@
                     {% endif %}
                 </a>
                 <p class="owner-username">
-                    <a href="{{ patron.get_absolute_url }}">{{ patron.username|truncate:16 }}</a>
+                    <a href="{{ patron.get_absolute_url }}">{{ patron.username|truncate:13 }}</a>
                 </p>
                 <address>
                     {% if patron.default_address %}
@@ -446,7 +452,7 @@
                 <span style="margin-top: 0; margin-bottom: 10px; margin-left: 20px;" class="stars empty"><span class="stars filled_{{ patron.average_note }}"></span></span>
                 {% include "accounts/partials/response_stats.html" %}
             </div>{#  owner #}
-            {% endif %}
+        {% endif %}
         {% endwith %}
         <div class="booking-block">
             <h2>{% trans "Réservez en ligne" %}</h2>

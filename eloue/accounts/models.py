@@ -529,3 +529,4 @@ class PatronAccepted(models.Model):
 signals.post_save.connect(post_save_sites, sender=Patron)
 signals.pre_delete.connect(pre_delete_creditcard, sender=CreditCard)
 signals.post_save.connect(post_save_to_batch_update_product, sender=Address)
+signals.post_save.connect(post_save_to_batch_update_product, sender=Patron)
