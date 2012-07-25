@@ -38,7 +38,7 @@ class ProductIndex(QueuedSearchIndex):
     thumbnail = CharField(indexed=False)
     profile = CharField(indexed=False)
     special = BooleanField()
-    pro = BooleanField(model_attr='owner__is_professional')
+    pro = BooleanField(model_attr='owner__is_professional', default=False)
     
     def prepare_sites(self, obj):
         return [site.id for site in obj.sites.all()]
