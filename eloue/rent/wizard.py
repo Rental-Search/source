@@ -25,7 +25,7 @@ from eloue.accounts.models import Patron, Avatar, CreditCard
 from eloue.geocoder import GoogleGeocoder
 from eloue.products.forms import FacetedSearchForm
 from eloue.products.models import Product, PAYMENT_TYPE
-from eloue.rent.models import Booking, BorrowerComment
+from eloue.rent.models import Booking, ProBooking, BorrowerComment
 from eloue.rent.forms import BookingForm, BookingConfirmationForm
 from eloue.wizard import MultiPartFormWizard
 
@@ -117,18 +117,18 @@ class BookingWizard(MultiPartFormWizard):
         except PaymentException as e:
             booking.state = Booking.STATE.REJECTED
             booking.save()
-
-        if booking.state == Booking.STATE.AUTHORIZED:
+            return redirect('booking_failure', booking.pk.hex)
+        else:
             GoalRecord.record('rent_object_pre_paypal', WebUser(request))
             return redirect('booking_success', booking.pk.hex)
-        return redirect('booking_failure', booking.pk.hex)
 
     
     def get_form(self, step, data=None, files=None):
         next_form = self.form_list[step]
         if issubclass(next_form, BookingForm):
             product = self.extra_context['product']
-            booking = Booking(product=product, owner=product.owner)
+            klass = ProBooking if product.owner.is_professional else Booking
+            booking = klass(product=product, owner=product.owner)
             started_at = datetime.datetime.now() + datetime.timedelta(days=1)
             ended_at = started_at + datetime.timedelta(days=1)
             initial = {
