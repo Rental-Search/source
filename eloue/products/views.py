@@ -404,7 +404,7 @@ def product_list(request, urlbits, sqs=SearchQuerySet(), suggestions=None, page=
     breadcrumbs['sort'] = {'name': 'sort', 'value': form.cleaned_data.get('sort', None), 'label': 'sort', 'facet': False}
     breadcrumbs['l'] = {'name': 'l', 'value': form.cleaned_data.get('l', None), 'label': 'l', 'facet': False}
     breadcrumbs['r'] = {'name': 'r', 'value': form.cleaned_data.get('r', None), 'label': 'r', 'facet': False}
-    breadcrumbs['pro'] = {'name': 'pro', 'value': form.cleaned_data.get('pro'), 'label': 'pro', 'facet': False}
+    breadcrumbs['renter'] = {'name': 'renter', 'value': form.cleaned_data.get('renter'), 'label': 'renter', 'facet': False}
 
     urlbits = urlbits or ''
     urlbits = filter(None, urlbits.split('/')[::-1])

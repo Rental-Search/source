@@ -182,14 +182,14 @@
         <div class="info-block info-block-list">
             <h2>{% trans "Filtrer par loueur"%}</h2>
             <ul>
-                {% if not breadcrumbs.pro.value == None %}
-                    <li><a href="{% facet_url breadcrumbs -"pro" %}">{% trans "Tous les loueurs" %}</a></li>
+                {% if breadcrumbs.renter.value %}
+                    <li><a href="{% facet_url breadcrumbs -"renter" %}">{% trans "Tous les loueurs" %}</a></li>
                 {% endif %}
-                {% if breadcrumbs.pro.value == None or breadcrumbs.pro.value %}
-                    <li><a href="{% facet_url breadcrumbs "pro" "False" %}">{% trans "Particuliers" %}</a></li>
+                {% if breadcrumbs.renter.value != "particuliers" %}
+                    <li><a href="{% facet_url breadcrumbs "renter" "particuliers" %}">{% trans "Particuliers" %}</a></li>
                 {% endif %}
-                {% if not breadcrumbs.pro.value %}
-                    <li><a href="{% facet_url breadcrumbs "pro" "True" %}">{% trans "Professionnels" %}</a></li>
+                {% if breadcrumbs.renter.value != "professionnels" %}
+                    <li><a href="{% facet_url breadcrumbs "renter" "professionnels" %}">{% trans "Professionnels" %}</a></li>
                 {% endif %}
             </ul>
         </div>
