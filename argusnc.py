@@ -8,9 +8,9 @@ os.environ['AWS_SECRET_ACCESS_KEY'] = 'EidEX/OtmAyUlVMdRzqdxL7RsPD2n0hp6BGZGvFF'
 
 site.addsitedir(local_path('env/lib/python2.6/site-packages'))
 
-sys.path.insert(0, local_path('.'))
-sys.path.insert(0, local_path('eloue'))
-sys.path.insert(0, local_path('env/lib/python2.6/site-packages'))
+sys.path.append(local_path('.'))
+sys.path.append(local_path('eloue'))
+sys.path.append(local_path('env/lib/python2.6/site-packages'))
 
 import django.core.handlers.wsgi
 from haystack import site
