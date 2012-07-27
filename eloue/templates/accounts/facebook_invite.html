@@ -35,6 +35,8 @@
               function (response) {
                 template = '{% templatetag openvariable %}#data{%templatetag closevariable %}<li id="{%templatetag openvariable%}id{% templatetag closevariable %}"><img src="{%templatetag openvariable%}picture{% templatetag closevariable %}" width="30"/><div class="name">{%templatetag openvariable%}name{% templatetag closevariable %}</div> <span id="{%templatetag openvariable%}id{% templatetag closevariable %}"><button type="button" class="btn btn-contactme">{% trans "Inviter"%}</button></span></li>{%templatetag openvariable%}/data{%templatetag closevariable %}';
                 $('')
+                $('p#fb-connect-invite-text').html('');
+                $('div.fb-container-list').show();
                 $('#friends').html(Mustache.to_html(template, {data: response.data}));
                 $('span', '#friends').click(
                   function a(i) {
@@ -57,6 +59,7 @@
           } else {
             $('p#fb-connect-invite-link').html('<a id="fbfb" class="btn">{% trans "Trouvez  vos amis sur Facebook" %}</a>');
             $('p#fb-connect-invite-text').html('Nous n\'avons pas pu trouver vos amis sur Facebook parce que vous n\'avez pas connecté Facebook à e-loue. Cliquez sur le bouton ci dessous pour créer la connexion.')
+            $('div.fb-container-list').hide();
             $('#fbfb').click(function (event) {
               FB.login(function (response){
                 window.location.reload();
@@ -115,9 +118,9 @@
 
 <h1>{% trans "Facebook" %}</h1>
 <div class="fb-connect-invite">
-  <p id="fb-connect-invite-text"></p>
+  <p id="fb-connect-invite-text">Chargement...</p>
   <p id="fb-connect-invite-link"></p>
-  <div class="fb-container-list">
+  <div class="fb-container-list" style="display: none;">
     <h2>{% trans "Invitez vos amis"%}</h2>
     <input type="text" placeholder="Rechercher un ami" id="filter" />
     <ul id="friends" class="friends-list filtered">

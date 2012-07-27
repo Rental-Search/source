@@ -150,8 +150,10 @@ $(document).ready(function() {
     if (passwordInput.attr('type') != 'hidden') {
         if (parseInt(exists, 10)) {
             passwordInput.removeAttr('disabled');
+            passwordInput.parent().show();
         } else {
             passwordInput.attr('disabled', 'disabled');
+            passwordInput.parent().hide()
         }
     }
     $("input[name$='exists']").change(function(event) {
