@@ -43,8 +43,10 @@
                     FB.ui({
                       to: i.currentTarget.id,
                       method: 'send',
-                      name: '!!!',
+                      name: 'Rejoins moi dans la communauté des e-loueurs !',
                       link: 'https://www.e-loue.com/',
+                      picture: 'http://eloue.s3.amazonaws.com/media/email/eloue-small-logo.png',
+                      description: 'Je viens de m\'inscrire sur e-loue. Site super sympa ! Rejoins moi dans la communauté des e-loueurs et tu pourras toi aussi louer n\'importe quel objet (voiture, perceuse, déguisement, électroménager, caméra, etc.).'
                     });
                   }
                 );
@@ -67,24 +69,6 @@
             })
           }
         });
-      }
-
-      function sendRequestToRecipients() {
-        var user_ids = document.getElementsByName("user_ids")[0].value;
-        FB.ui({method: 'apprequests',
-          message: 'My Great Request',
-          to: user_ids, 
-        }, requestCallback);
-      }
-
-      function sendRequestViaMultiFriendSelector() {
-        FB.ui({method: 'apprequests',
-          message: 'My Great Request'
-        }, requestCallback);
-      }
-      
-      function requestCallback(response) {
-        // Handle callback here
       }
     </script>
 
