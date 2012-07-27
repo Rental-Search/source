@@ -102,13 +102,15 @@
           {% endif %}
         </table>
         {% if insurance_available %}
-        <h2>{% trans "Condition et assurance" %}</h2>
+        <h2>{% trans "Conditions" %}</h2>
         <table class="table table-bordered booking-resume">
+          {% if not product.owner.is_professional %}
           <tr>
             <td colspan="2" id="conditions">
               {% include "rent/partials/condition_assurance.html" %}
             </td>
           </tr>
+          {% endif %}
           {% if product.deposit_amount %}
           <tr>
             <th>
@@ -122,7 +124,9 @@
           {% endif %}
         </table>
         {% endif %}
+        {% if form.fields %}
         <h2>{% trans "Paiement" %}</h2>
+        {% endif %}
         {% with form.non_field_errors as form_errors %}
           {% include "partials/alerts_message.html" %}
         {% endwith %}
@@ -245,7 +249,13 @@
         <div class="form-actions">
           <input type="hidden" name="{{ step_field }}" value="{{ step0 }}" />
           {{ previous_fields|safe }}
-          <button type="submit" class="btn btn-primary">{% trans "Paiment" %}</button>
+          <button type="submit" class="btn btn-primary">
+            {% if form.fields %} 
+              {% trans "Paiment" %}
+            {% else %}
+              {% trans "Valider la demande de réservation" %}
+            {% endif %}
+          </button>
         </div>
     </form>
   </div>
