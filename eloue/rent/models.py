@@ -440,10 +440,7 @@ class ProBooking(Booking):
 
     @smart_transition(source='professional', target='professional', save=True)
     def preapproval(self, *args, **kwargs):
-        pass
-
-    def send_ask_email(self):
-        pass
+        self.send_ask_email()
 
 
 class Comment(models.Model):
