@@ -58,7 +58,7 @@ BOOKING_STATE = Enum([
     ('outdated', 'OUTDATED', _(u"Dépassé")),
     ('unaccepted', 'UNACCEPTED', _(u"Pas accepté")),
     ('accepted_unauthorized', 'ACCEPTED_UNAUTHORIZED', _(u"Accepté et en cours d'autorisation")),
-    ('professional', 'PROFESSIONAL', _(u""))
+    ('professional', 'PROFESSIONAL', _(u"XXXX"))
 ])
 
 DEFAULT_CURRENCY = get_format('CURRENCY') if not settings.CONVERT_XPF else "XPF"
@@ -526,6 +526,7 @@ class Sinister(models.Model):
     
 
 post_save.connect(post_save_sites, sender=Booking)
+post_save.connect(post_save_sites, sender=ProBooking)
 post_save.connect(post_save_to_update_product, sender=BorrowerComment)
 post_save.connect(post_save_to_update_product, sender=OwnerComment)
 
