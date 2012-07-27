@@ -31,6 +31,9 @@ from eloue.wizard import MultiPartFormWizard
 
 USE_HTTPS = getattr(settings, 'USE_HTTPS', True)
 
+from django import forms
+class A(forms.Form):
+    pass
 
 class BookingWizard(MultiPartFormWizard):
     
@@ -52,7 +55,7 @@ class BookingWizard(MultiPartFormWizard):
             'product_list': product_search.more_like_this(product)[:4]
         }
         if request.method == "POST":
-            if product.payment_type != PAYMENT_TYPE.NOPAY:
+            if product.payment_type != PAYMENT_TYPE.NOPAY and not product.owner.is_professional:
                 if request.user.is_authenticated():
                     try:
                         request.user.creditcard
@@ -68,6 +71,9 @@ class BookingWizard(MultiPartFormWizard):
                             self.form_list.append(ExistingBookingCreditCardForm)
                         except (CreditCard.DoesNotExist, AttributeError):
                             self.form_list.append(BookingCreditCardForm)
+            else:
+                self.form_list.append(A)
+
         return super(BookingWizard, self).__call__(request, product, *args, **kwargs)
 
     def done(self, request, form_list):
@@ -170,7 +176,7 @@ class BookingWizard(MultiPartFormWizard):
             return 'accounts/auth_login.html'
         elif issubclass(self.form_list[step], BookingForm):
             return 'products/product_detail.html'
-        elif issubclass(self.form_list[step], (BookingCreditCardForm, ExistingBookingCreditCardForm)):
+        elif issubclass(self.form_list[step], (BookingCreditCardForm, ExistingBookingCreditCardForm, A)):
             return 'rent/booking_confirm.html'
         else:
             return 'accounts/auth_missing.html'
