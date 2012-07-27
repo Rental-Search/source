@@ -1,0 +1,27 @@
+{% load i18n %}
+
+{% blocktrans with booking.product.summary as summary and booking.started_at|date:"DATETIME_FORMAT" as starting_at and booking.ended_at|date:"DATETIME_FORMAT" as ended_at and booking.total_amount as total_amount and booking.get_absolute_url as booking_url and protocol as protocol and site.domain as domain %}
+<table width="100%" style="font-family: 'Arial', sans-serif; font-size: 13px; font-weight: normal; color: #364C59; margin-bottom: 30px; border: 1px solid #DDD; border-collapse: separate;">
+    <tbody>
+        <tr>
+            <th></th>
+            <td style="border-left: 1px solid #DDD; padding: 8px; line-height: 18px; text-align: left; vertical-align: top;">
+                <a href="{{ protocol }}://{{ domain }}{{ booking_url }}" style="color: #6EB924;">{{ summary }}</a>
+                <a href="{{ protocol }}://{{ domain }}{{ booking_url }}" style="color: #6EB924; font-weight: normal; float: right; font-size: 12px;"> (Voir le détail)</a>
+            </td>
+        </tr>
+        <tr>
+            <th style="padding: 8px; line-height: 18px; text-align: left; vertical-align: top; border-top: 1px solid #DDD;">Début</th>
+            <td style="border-left: 1px solid #DDD; padding: 8px; line-height: 18px; text-align: left; vertical-align: top; border-top: 1px solid #DDD; text-align: center;">{{ starting_at }}</td>
+        </tr>
+        <tr>
+            <th style="padding: 8px; line-height: 18px; text-align: left; vertical-align: top; border-top: 1px solid #DDD;">Fin</th>
+            <td style="border-left: 1px solid #DDD; padding: 8px; line-height: 18px; text-align: left; vertical-align: top; border-top: 1px solid #DDD; text-align: center;">{{ ended_at }}</td>
+        </tr>
+        <tr>
+            <th style="padding: 8px; line-height: 18px; text-align: left; vertical-align: top; border-top: 1px solid #DDD;">Montant</th>
+            <td style="border-left: 1px solid #DDD;padding: 8px; line-height: 18px; text-align: left; vertical-align: top; border-top: 1px solid #DDD; text-align: center;"><b>{{ total_amount }}</b></td>
+        </tr>
+    </tbody>
+</table>
+{% endblocktrans %}

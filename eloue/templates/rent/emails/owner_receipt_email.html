@@ -1,3 +1,47 @@
+{% extends "base_email.html" %}
+{% load i18n %}
+
+{% block title_email %}{% trans "Crédit du montant de votre réservation" %}{% endblock %}
+
+{% block content_email %}
+<tr>
+	<td valign="top" width="100%" style="border-collapse: collapse;">
+        <table border="0" cellpadding="0" cellspacing="0" width="510">
+            <tbody>
+                <tr>
+                    <td valign="top" style="padding-top: 20px;border-collapse: collapse;">
+                        <div style="color: #505050;font-family: Arial;font-size: 14px;line-height: 200%;text-align: left;">
+                        	{% blocktrans with booking.owner.get_full_name as owner_name and booking.net_price as net_price %}
+
+                            Bonjour {{ owner_name }}<br><br>
+
+                            Vous avez été crédité de {{net_price}} euros pour la réservation suivante :<br>
+                           	{% endblocktrans %}
+
+                            {% include "rent/emails/partials/booking_details_email.html" %}
+
+                            {% blocktrans with site.name as site_name and protocol as protocol and site.domain as domain and booking.total_amount as total_amount and booking.commission as commission %}
+
+                            Ce montant correspond au montant total de la réservation ({{total_amount }}&euro;) moins la commission e-loue de 20% ({{commission }}&euro;)
+
+                           	Bonne location !<br><br>
+
+                            A très vite,<br>
+
+                            L'équipe {{ site_name }}<br>
+                            {% endblocktrans %}
+                        </div>                                                                    
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </td>
+</tr>
+{% endblock %}
+
+
+
+
 {% load i18n %}{% blocktrans with booking.owner.get_full_name as owner_name and booking.borrower.get_full_name as borrower_name and booking.product.summary as summary and booking.product.category.name as category and booking.product.summary as summary and booking.borrower.phones.all|first as borrower_phone and booking.started_at|date:"DATETIME_FORMAT" as starting_at and booking.started_at|timesince:booking.ended_at as duration and booking.borrower.email as borrower_email and site.name as site_name and booking.net_price as net_price and booking.total_amount as total_amount and booking.commission as commission %}
 <p>Bonjour {{ owner_name }},</p>
 
