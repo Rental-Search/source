@@ -25,12 +25,15 @@ from eloue.accounts.models import Patron, Avatar, CreditCard
 from eloue.geocoder import GoogleGeocoder
 from eloue.products.forms import FacetedSearchForm
 from eloue.products.models import Product, PAYMENT_TYPE
-from eloue.rent.models import Booking, BorrowerComment
+from eloue.rent.models import Booking, ProBooking, BorrowerComment
 from eloue.rent.forms import BookingForm, BookingConfirmationForm
 from eloue.wizard import MultiPartFormWizard
 
 USE_HTTPS = getattr(settings, 'USE_HTTPS', True)
 
+from django import forms
+class A(forms.Form):
+    pass
 
 class BookingWizard(MultiPartFormWizard):
     
@@ -52,7 +55,7 @@ class BookingWizard(MultiPartFormWizard):
             'product_list': product_search.more_like_this(product)[:4]
         }
         if request.method == "POST":
-            if product.payment_type != PAYMENT_TYPE.NOPAY:
+            if product.payment_type != PAYMENT_TYPE.NOPAY and not product.owner.is_professional:
                 if request.user.is_authenticated():
                     try:
                         request.user.creditcard
@@ -68,6 +71,9 @@ class BookingWizard(MultiPartFormWizard):
                             self.form_list.append(ExistingBookingCreditCardForm)
                         except (CreditCard.DoesNotExist, AttributeError):
                             self.form_list.append(BookingCreditCardForm)
+            else:
+                self.form_list.append(A)
+
         return super(BookingWizard, self).__call__(request, product, *args, **kwargs)
 
     def done(self, request, form_list):
@@ -117,18 +123,18 @@ class BookingWizard(MultiPartFormWizard):
         except PaymentException as e:
             booking.state = Booking.STATE.REJECTED
             booking.save()
-
-        if booking.state == Booking.STATE.AUTHORIZED:
+            return redirect('booking_failure', booking.pk.hex)
+        else:
             GoalRecord.record('rent_object_pre_paypal', WebUser(request))
             return redirect('booking_success', booking.pk.hex)
-        return redirect('booking_failure', booking.pk.hex)
 
     
     def get_form(self, step, data=None, files=None):
         next_form = self.form_list[step]
         if issubclass(next_form, BookingForm):
             product = self.extra_context['product']
-            booking = Booking(product=product, owner=product.owner)
+            klass = ProBooking if product.owner.is_professional else Booking
+            booking = klass(product=product, owner=product.owner)
             started_at = datetime.datetime.now() + datetime.timedelta(days=1)
             ended_at = started_at + datetime.timedelta(days=1)
             initial = {
@@ -170,7 +176,7 @@ class BookingWizard(MultiPartFormWizard):
             return 'accounts/auth_login.html'
         elif issubclass(self.form_list[step], BookingForm):
             return 'products/product_detail.html'
-        elif issubclass(self.form_list[step], (BookingCreditCardForm, ExistingBookingCreditCardForm)):
+        elif issubclass(self.form_list[step], (BookingCreditCardForm, ExistingBookingCreditCardForm, A)):
             return 'rent/booking_confirm.html'
         else:
             return 'accounts/auth_missing.html'

@@ -57,7 +57,8 @@ BOOKING_STATE = Enum([
     ('closed', 'CLOSED', _(u'Clôturé')),
     ('outdated', 'OUTDATED', _(u"Dépassé")),
     ('unaccepted', 'UNACCEPTED', _(u"Pas accepté")),
-    ('accepted_unauthorized', 'ACCEPTED_UNAUTHORIZED', _(u"Accepté et en cours d'autorisation"))
+    ('accepted_unauthorized', 'ACCEPTED_UNAUTHORIZED', _(u"Accepté et en cours d'autorisation")),
+    ('professional', 'PROFESSIONAL', _(u"XXXX"))
 ])
 
 DEFAULT_CURRENCY = get_format('CURRENCY') if not settings.CONVERT_XPF else "XPF"
@@ -424,6 +425,27 @@ class Booking(models.Model):
         else:
             return self.currency
 
+
+class ProBooking(Booking):
+    def __init__(self, *args, **kwargs):
+        self._meta.get_field('state').default = 'professional'
+        super(ProBooking, self).__init__(*args, **kwargs)
+
+    class Meta:
+        proxy = True
+
+    @smart_transition(source='professional', target='professional', save=True)
+    def accept(self):
+        pass
+
+    @smart_transition(source='professional', target='professional', save=True)
+    def preapproval(self, *args, **kwargs):
+        pass
+
+    def send_ask_email(self):
+        pass
+
+
 class Comment(models.Model):
     booking = models.OneToOneField(Booking)
     comment = models.TextField(_(u'Commentaire'))
@@ -504,6 +526,7 @@ class Sinister(models.Model):
     
 
 post_save.connect(post_save_sites, sender=Booking)
+post_save.connect(post_save_sites, sender=ProBooking)
 post_save.connect(post_save_to_update_product, sender=BorrowerComment)
 post_save.connect(post_save_to_update_product, sender=OwnerComment)
 

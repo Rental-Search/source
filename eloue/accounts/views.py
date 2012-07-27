@@ -495,7 +495,7 @@ def dashboard(request):
 
 @login_required
 def owner_booking_authorized(request, page=None):
-    queryset = request.user.bookings.authorized()
+    queryset = request.user.bookings.professional() if request.user.is_professional else request.user.bookings.authorized()
     return object_list(
         request, queryset, page=page, paginate_by=10, 
         extra_context={'title_page': u'Demandes de réservation'},

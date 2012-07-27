@@ -30,5 +30,13 @@ class BookingManager(Manager):
                 BOOKING_STATE.OUTDATED
             ]
         )
+
+    def get(self, *args, **kwargs):
+        instance = super(BookingManager, self).get(*args, **kwargs)
+        from eloue.rent.models import ProBooking, BOOKING_STATE
+        if instance.state == BOOKING_STATE.PROFESSIONAL:
+            return ProBooking(*[getattr(instance, field.attname) for field in instance._meta.fields])
+        return instance
+
 class CurrentSiteBookingManager(CurrentSiteManager, BookingManager):
     pass

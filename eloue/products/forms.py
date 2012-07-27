@@ -49,7 +49,7 @@ class FacetedSearchForm(SearchForm):
     sort = forms.ChoiceField(required=False, choices=SORT, widget=forms.HiddenInput())
     price = FacetField(label=_(u"Prix"), pretty_name=_("par-prix"), required=False)
     categories = FacetField(label=_(u"Catégorie"), pretty_name=_("par-categorie"), required=False, widget=forms.HiddenInput())
-    pro = forms.NullBooleanField(required=False)
+    renter = forms.CharField(required=False)
 
     def clean_r(self):
         location = self.cleaned_data.get('l', None)
@@ -92,12 +92,14 @@ class FacetedSearchForm(SearchForm):
             if self.load_all:
                 sqs = sqs.load_all()
             
-            is_pro = self.cleaned_data.get('pro')
-            if is_pro is not None:
-                sqs = sqs.filter(pro=is_pro)
+            status = self.cleaned_data.get('renter')
+            if status == "particuliers":
+                sqs = sqs.filter(pro=False)
+            elif status == "professionnels":
+                sqs = sqs.filter(pro=True)
 
             for key in self.cleaned_data.keys():
-                if self.cleaned_data[key] and key not in ["q", "l", "r", "sort", "pro"]:
+                if self.cleaned_data[key] and key not in ["q", "l", "r", "sort", "renter"]:
                     sqs = sqs.narrow("%s_exact:%s" % (key, self.cleaned_data[key]))
             
             if self.cleaned_data['sort']:
