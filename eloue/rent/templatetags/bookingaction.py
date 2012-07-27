@@ -172,6 +172,7 @@ borrower = {
     'closing': (Incident, SendMessageToOwner, LeaveComment),
     'closed': (Incident, SendMessageToOwner, LeaveComment),
     'outdated': (),
+    'professional': (),
 }
 
 owner = {
@@ -188,6 +189,7 @@ owner = {
     'closing': (Incident, SendMessageToBorrower, LeaveComment),
     'closed': (Incident, SendMessageToBorrower, LeaveComment), 
     'outdated': (),
+    'professional': (),
 }
 
 @register.simple_tag
