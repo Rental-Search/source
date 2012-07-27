@@ -23,6 +23,9 @@
                             {% blocktrans with site.name as site_name and protocol as protocol and site.domain as domain and booking.get_absolute_url as booking_url %}
 
                            	Si vous rencontrez un quelconque problème, nous vous invitons à nous <a href="{{ protocol }}://{{ domain }}{{ booking_url }}">signaler l'incident</a><br><br>
+
+                            A très vite,<br>
+                            
                             L'équipe {{ site_name }}<br><br>
                             {% endblocktrans %}
                         </div>                                                                    

@@ -32,8 +32,12 @@
 
                             {% blocktrans with site.name as site_name and protocol as protocol and site.domain as domain and booking.product.category.get_absolute_url as category_url %}
 
-                            Retrouvez tous les objets de cette catégorie sur <a href="{{ protocol }}://{{ domain }}{{ category_url }}">{{ domain }}</a>.<br><br>
+                            Retrouvez tous les objets de cette catégorie sur <a href="{{ protocol }}://{{ domain }}{{ category_url }}">{{ domain }}</a>.<br>
 
+                            Aussi n'hésitez pas à nous appeler au 0826 800 200 (0,15&euro;/min) pour qu'un conseiller e-loue vous aide.<br><br>
+
+                            A très vite<br>
+                            
                             L'équipe {{ site_name }}<br>
                             {% endblocktrans %}
                         </div>                                                                    

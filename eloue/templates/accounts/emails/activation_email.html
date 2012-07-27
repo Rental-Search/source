@@ -16,7 +16,7 @@
                                 Bonjour {{ username }},<br><br>
 
                                 Nous vous remercions de vous être enregistré(e) sur <a href="{{ protocol }}://{{ domain }}">{{ domain }}</a>.<br><br>
-                                Afin d’activer votre compte et rejoindre notre communauté de loueurs, il vous reste à cliquer sur le bouton ci-dessous.<br><br>
+                                Afin d’activer votre compte et de rejoindre notre communauté de loueurs, vous devez cliquer sur le bouton ci-dessous.<br><br>
 
                             {% endblocktrans %}
                             <p style="margin-top: 0px; text-align: center;">
@@ -24,6 +24,8 @@
                                 	<img src="http://eloue.s3.amazonaws.com/media/email/activation-btn.png" alt="" width="157" height="40" />
                             	</a>
                             </p>
+                            {% trans "A très vite"%}<br>
+                            
                             {% trans "L'équipe" %} {{ site.name }}.
                         </div>                                                                    
                     </td>

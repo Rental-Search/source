@@ -15,7 +15,7 @@
 
                             Bonjour {{ owner_name }}<br><br>
 
-                            La réservation suiviant vient de se terminer :<br>
+                            La réservation vient de se terminer :<br>
                            	{% endblocktrans %}
 
                             {% include "rent/emails/partials/booking_details_email.html" %}
@@ -26,7 +26,9 @@
 
                            	Si vous rencontrez un quelconque problème, nous vous invitons à nous <a href="{{ protocol }}://{{ domain }}{{ booking_url }}">signaler l'incident.</a><br><br>
 
-                            L'équipe {{ site_name }}<br><br>
+                            A très vite,<br>
+
+                            L'équipe {{ site_name }}<br>
                             {% endblocktrans %}
                         </div>                                                                    
                     </td>

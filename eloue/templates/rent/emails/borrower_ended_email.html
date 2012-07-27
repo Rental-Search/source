@@ -15,16 +15,18 @@
 
                             Bonjour {{ borrower_name }}<br><br>
 
-                            La réservation suiviant vient de se terminer :<br>
+                            La réservation suiviante vient de se terminer :<br>
                            	{% endblocktrans %}
 
                             {% include "rent/emails/partials/booking_details_email.html" %}
 
                             {% blocktrans with site.name as site_name and protocol as protocol and site.domain as domain and booking.get_absolute_url as booking_url %}
 
-                            Nous espérons que tout s’est déroulé selon votre convenance, et que vous êtes satisfaite(e) de votre location.<br>
+                            Nous espérons que tout s’est bien déroulé selon votre convenance, et que vous êtes satisfaite(e) de votre location.<br>
 
                            	Si vous rencontrez un quelconque problème, nous vous invitons à nous <a href="{{ protocol }}://{{ domain }}{{ booking_url }}">signaler l'incident</a><br><br>
+                            A très vite,<br>
+
                             L'équipe {{ site_name }}<br><br>
                             {% endblocktrans %}
                         </div>                                                                    

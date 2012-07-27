@@ -15,7 +15,7 @@
 
                             Bonjour {{ borrower_name }}<br><br>
 
-                            Vous avez été débité de {{total_amount}} euros pour la réservation suivante :<br>
+                            Vous avez été débité de {{total_amount}} euro(s) pour la réservation suivante :<br>
                            	{% endblocktrans %}
 
                             {% include "rent/emails/partials/booking_details_email.html" %}
@@ -24,6 +24,8 @@
 
 
                            	Bonne location !<br><br>
+
+                            A très vite,<br>
 
                             L'équipe {{ site_name }}<br>
                             {% endblocktrans %}

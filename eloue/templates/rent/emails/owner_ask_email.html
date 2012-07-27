@@ -26,13 +26,15 @@
 
                             {% blocktrans with site.name as site_name and protocol as protocol and site.domain as domain and booking.get_absolute_url as booking_url %}
 
-                            Cliquez sur le bouton ci dessous pour lui répondre :
+                            Cliquez au plus vite sur le bouton ci dessous pour lui répondre :
 
                            	<p style="margin-top: 15px; text-align: center;">
                             	<a href="{{ protocol }}://{{ domain }}{{ booking_url }}" style="text-decoration: none;">
                                 	<img src="http://eloue.s3.amazonaws.com/media/email/answer-booking-btn.png" alt="" width="236" height="40" />
                             	</a>
                             </p>
+
+                            A très vite,<br>
 
                             L'équipe {{ site_name }}<br>
                             {% endblocktrans %}

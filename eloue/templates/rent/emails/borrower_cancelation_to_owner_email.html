@@ -16,14 +16,15 @@
 
                             Bonjour {{ owner_name }}<br><br>
 
-                            Hélas, {{ borrower }} a décidé de se rétracter. La location suivante est donc annulée :<br>
+                            Hélas, {{ borrower }} a décidé de ne plus effectuer la location. La location suivante est donc annulée :<br>
                            	{% endblocktrans %}
 
                             {% include "rent/emails/partials/booking_details_email.html" %}
 
                             {% blocktrans with site.name as site_name %}
                             
-
+                            A très vite,<br>
+                            
                             L'équipe {{ site_name }}<br>
                             {% endblocktrans %}
                         </div>                                                                    

@@ -22,9 +22,11 @@
 
                             {% blocktrans with site.name as site_name and protocol as protocol and site.domain as domain and booking.total_amount as total_amount and booking.commission as commission %}
 
-                            Ce montant correspond au montant total de la réservation ({{total_amount }}) moins la commission e-loue de 20% ({{commission }})
+                            Ce montant correspond au montant total de la réservation ({{total_amount }}&euro;) moins la commission e-loue de 20% ({{commission }}&euro;)
 
                            	Bonne location !<br><br>
+
+                            A très vite,<br>
 
                             L'équipe {{ site_name }}<br>
                             {% endblocktrans %}

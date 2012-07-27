@@ -15,12 +15,12 @@
 
                             Bonjour {{ borrower_name }}<br><br>
 
-                            Malgré son précédent accord, {{ owner }} a décidé d'annuler la location suivante :<br>
+                            Malgré son précédent accord, le propriétaire a décidé d'annuler la location suivante :<br>
                            	{% endblocktrans %}
 
                             {% include "rent/emails/partials/booking_details_email.html" %}
 
-                            Nous vous confirmons que vous allez être remboursé de la réservation.<br>
+                            Nous vous confirmons que vous allez être intégralement remboursé de la réservation.<br>
 
                            	{% with booking.product.more_like_this as related_products %}
 							{% if related_products %}
@@ -34,7 +34,11 @@
 
                             {% blocktrans with site.name as site_name and protocol as protocol and site.domain as domain and booking.product.category.get_absolute_url as category_url %}
 
-                            Retrouvez tous les objets de cette catégorie sur <a href="{{ protocol }}://{{ domain }}{{ category_url }}">{{ domain }}</a>.<br><br>
+                            Retrouvez tous les objets de cette catégorie sur <a href="{{ protocol }}://{{ domain }}{{ category_url }}">{{ domain }}</a>.<br>
+
+                            Aussi n'hésitez pas à nous appeler au 0826 800 200 (0,15&euro;/min) pour qu'un conseiller e-loue vous aide.<br>
+
+                            A très vite,<br>
 
                             L'équipe {{ site_name }}<br>
                             {% endblocktrans %}
