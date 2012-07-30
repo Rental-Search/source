@@ -477,6 +477,23 @@ def patron_edit_addresses(request):
 
 
 @login_required
+def patron_edit_opening_times(request):
+    from eloue.accounts.forms import OpeningsForm, OpeningTimes
+    try:
+        instance = request.user.openingtimes
+    except OpeningTimes.DoesNotExist:
+        instance = OpeningTimes(patron=request.user)
+    if request.method == "POST":
+        form = OpeningsForm(request.POST, instance=instance)
+        if form.is_valid():
+            form.save()
+            return redirect(patron_edit_opening_times)
+    else:
+        form = OpeningsForm(instance=instance)
+    return render_to_response('accounts/patron_edit_opening_times.html', {'form': form}, context_instance=RequestContext(request))
+
+
+@login_required
 def dashboard(request):
     new_thread_ids = ProductRelatedMessage.objects.filter(
         recipient=request.user, read_at=None
@@ -585,7 +602,8 @@ def borrower_booking_history(request, page=None):
     return object_list(
         request, queryset, page=page, paginate_by=10,
         extra_context={'title_page': u'Réservations terminées'},
-        template_name='accounts/borrower_booking.html')
+        template_name='accounts/borrower_booking.html'
+    )
 
 @mobify
 def contact(request):

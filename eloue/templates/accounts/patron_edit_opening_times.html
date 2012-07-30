@@ -1,0 +1,41 @@
+{% extends "accounts/patron_edit.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Modification de mes adresses" %}{% endblock %}
+
+{% block content-main-profil %}
+<form class="form-horizontal" method="post" action="" method="POST">
+    {% csrf_token %}
+    {{ formset.management_form }}
+    <legend>{% trans "Vos ouvertures" %}</legend>
+
+    {% if form.non_field_errors %}{{ form.non_field_errors }}{% endif %}
+    {% for fieldset in form.fieldsets %}
+      <fieldset class="{{ fieldset.classes }}">
+      {% if fieldset.legend %}
+        <legend>{{ fieldset.legend }}</legend>
+      {% endif %}
+      {% if fieldset.description %}
+        <p class="description">{{ fieldset.description }}</p>
+      {% endif %}
+      <ul>
+      {% for field in fieldset %}
+        {% if field.is_hidden %}
+          {{ field }}
+        {% else %}
+          <li{{ field.row_attrs }}>
+            {{ field.errors }}
+            {{ field.label_tag }}
+            {{ field }}
+          </li>
+        {% endif %}
+      {% endfor %}
+      </ul>
+      </fieldset>
+    {% endfor %}
+    <div class="form-actions">
+        <button type="submit" class="btn btn-primary">Enregistrer</button>
+        <button type="reset" class="btn btn-cancel">Annuler</button>
+    </div>
+</form>
+{% endblock %}

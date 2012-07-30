@@ -902,3 +902,68 @@ class ContactForm(forms.Form):
     subject = forms.CharField(label=_(u"Sujet"), max_length=100, required=True, widget=forms.TextInput(attrs={'class': 'inm'}))
     message = forms.CharField(label=_(u"Message"), required=True, widget=forms.Textarea(attrs={'class': 'inm'}))
     cc_myself = forms.BooleanField(label=_(u"Etre en copie"), required=False)
+
+
+from eloue.accounts.models import OpeningTimes
+
+class OpeningsForm(BetterModelForm):
+
+    def clean(self):
+        days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']
+        for day in days:
+            opens = self.cleaned_data.get(day + '_opens')
+            closes = self.cleaned_data.get(day + '_closes')
+            pause_starts = self.cleaned_data.get(day + '_pause_starts')
+            pause_ends = self.cleaned_data.get(day + '_pause_ends')
+            if opens and closes:
+                # we are open the given day
+                if opens >= closes:
+                    raise forms.ValidationError('La date d\'ouverture doit etre inferieure a celui de fermeture')
+                if pause_starts and pause_ends:
+                    if not opens < pause_starts < pause_ends < closes:
+                        raise forms.ValidationError(' ')
+                elif pause_starts or pause_ends:
+                    raise forms.ValidationError(' ')
+            elif not opens and not closes:
+                # we are not open
+                if pause_starts or pause_ends:
+                    raise forms.ValidationError('Vous ne pouvez pas definir de pause si vous n etes pas ouvert')
+            else:
+                # errounous 
+                raise forms.ValidationError('Vous devez saisir l ouverture et le fermeture')
+        return self.cleaned_data
+
+    class Meta:
+        model = OpeningTimes
+        fieldsets = [
+            ('monday', {
+                'fields': ['monday_opens', 'monday_closes', 'monday_pause_starts', 'monday_pause_ends', ],
+                'legend': _('Lundi'),
+                }
+            ),
+            ('tuesday', {
+                'fields': ['tuesday_opens', 'tuesday_closes', 'tuesday_pause_starts', 'tuesday_pause_ends', ],
+                'legend': _('Mardi'),
+                }),
+            ('wednesday', {
+                'fields': ['wednesday_opens', 'wednesday_closes', 'wednesday_pause_starts', 'wednesday_pause_ends', ],
+                'legend': _('Mercredi'),
+                }),
+            ('thursday', {
+                'fields': ['thursday_opens', 'thursday_closes', 'thursday_pause_starts', 'thursday_pause_ends', ],
+                'legend': _('Jeudi'),
+                }),
+            ('friday', {
+                'fields': ['friday_opens', 'friday_closes', 'friday_pause_starts', 'friday_pause_ends', ],
+                'legend': _('Vendredi'),
+                }),
+            ('saturday', {
+                'fields': ['saturday_opens', 'saturday_closes', 'saturday_pause_starts', 'saturday_pause_ends', ],
+                'legend': _('Samedi'),
+                }),
+            ('sunday', {
+                'fields': ['sunday_opens', 'sunday_closes', 'sunday_pause_starts', 'sunday_pause_ends', ],
+                'legend': _('Dimanche'),
+                }),
+        ]
+

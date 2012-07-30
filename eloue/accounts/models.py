@@ -193,6 +193,8 @@ class Patron(User):
 
     rib = models.CharField(max_length=23, blank=True)
 
+    url = models.URLField(blank=True)
+
     thumbnail = ImageSpec(
         processors=[
             resize.Crop(width=60, height=60), 
@@ -404,6 +406,56 @@ class Patron(User):
         return (self.date_joined + expiration_date <= datetime.datetime.now())
     is_expired.boolean = True
     is_expired.short_description = ugettext(u"Expiré")
+
+
+from datetime import time
+HOURS = [(time(h, 0), "%02d:00" % (h,)) for h in xrange(24)]
+
+class OpeningTimes(models.Model):
+    patron = models.OneToOneField(Patron, editable=False)
+
+    monday_opens = models.TimeField(choices=HOURS, null=True, blank=True)
+    monday_closes = models.TimeField(choices=HOURS, null=True, blank=True)
+
+    tuesday_opens = models.TimeField(choices=HOURS, null=True, blank=True)
+    tuesday_closes = models.TimeField(choices=HOURS, null=True, blank=True)
+    
+    wednesday_opens = models.TimeField(choices=HOURS, null=True, blank=True)
+    wednesday_closes = models.TimeField(choices=HOURS, null=True, blank=True)
+
+    thursday_opens = models.TimeField(choices=HOURS, null=True, blank=True)
+    thursday_closes = models.TimeField(choices=HOURS, null=True, blank=True)
+
+    friday_opens = models.TimeField(choices=HOURS, null=True, blank=True)
+    friday_closes = models.TimeField(choices=HOURS, null=True, blank=True)
+
+    saturday_opens = models.TimeField(choices=HOURS, null=True, blank=True)
+    saturday_closes = models.TimeField(choices=HOURS, null=True, blank=True)
+
+    sunday_opens = models.TimeField(choices=HOURS, null=True, blank=True)
+    sunday_closes = models.TimeField(choices=HOURS, null=True, blank=True)
+
+
+    monday_pause_starts = models.TimeField(choices=HOURS, null=True, blank=True)
+    monday_pause_ends = models.TimeField(choices=HOURS, null=True, blank=True)
+
+    tuesday_pause_starts = models.TimeField(choices=HOURS, null=True, blank=True)
+    tuesday_pause_ends = models.TimeField(choices=HOURS, null=True, blank=True)
+
+    wednesday_pause_starts = models.TimeField(choices=HOURS, null=True, blank=True)
+    wednesday_pause_ends = models.TimeField(choices=HOURS, null=True, blank=True)
+
+    thursday_pause_starts = models.TimeField(choices=HOURS, null=True, blank=True)
+    thursday_pause_ends = models.TimeField(choices=HOURS, null=True, blank=True)
+
+    friday_pause_starts = models.TimeField(choices=HOURS, null=True, blank=True)
+    friday_pause_ends = models.TimeField(choices=HOURS, null=True, blank=True)
+
+    saturday_pause_starts = models.TimeField(choices=HOURS, null=True, blank=True)
+    saturday_pause_ends = models.TimeField(choices=HOURS, null=True, blank=True)
+
+    sunday_pause_starts = models.TimeField(choices=HOURS, null=True, blank=True)
+    sunday_pause_ends = models.TimeField(choices=HOURS, null=True, blank=True)
 
 
 class CreditCard(models.Model):
