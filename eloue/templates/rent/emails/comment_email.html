@@ -1,32 +1,72 @@
+{% extends "base_email.html" %}
+
 {% load i18n %}
-{% blocktrans with author.first_name as author_first_name and author.last_name as author_last_name and patron.first_name as first_name and patron.last_name as last_name and comment.note as note and comment.comment as comment_content and site.domain as domain and comment.booking.get_absolute_url as booking_url %}
 
-<p>Bonjour {{ first_name }} {{ last_name }},</p>
+{% block title_email %}{% trans "Nouveau commentaire sur votre réservation" %}{% endblock %}
 
-<p>{{ author_first_name }} {{ author_last_name }} vous a laissé un commentaire :</p>
-<ul>
- <li><strong>Evaluation :</strong> {{ note }}</li>
- <li><strong>Commentaire :</strong> {{ comment_content }}</li>
-</ul>
 
-<p>Vous pouvez voir le commentaire sur votre tableau de bord en cliquant ci dessous :</p>
-<p><a href="{{protocol }}://{{ domain}}{{ booking_url }}"></a>
+{% block content_email %}
+<tr>
+    <td valign="top" width="60" style="padding-right: 20px;border-collapse: collapse;">
+        <table border="0" cellpadding="0" cellspacing="0" width="100%" class="centerColumnContent">
+            <tbody>
+                <tr>
+                    <td valign="top" style="padding-top: 20px;border-collapse: collapse;">
+                    	{% if author.avatar %}
+		                <img src="{{ author.thumbnail.url }}" alt="" alt="" border="0" width="60" style="margin: 0;padding: 0;max-width: 130px;margin-bottom: 10px;border: 0;height: auto;line-height: 100%;outline: none;text-decoration: none;display: inline;">
+		                {% else %}
+		                <img src="http://eloue.s3.amazonaws.com/media/email/default_avatar.png" alt="{% trans "loueur"%}{{ patron.username }}" alt="" border="0" width="60" style="margin: 0;padding: 0;max-width: 130px;margin-bottom: 10px;border: 0;height: auto;line-height: 100%;outline: none;text-decoration: none;display: inline;">
+		                {% endif %}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </td>
+    <td valign="top" width="510" style="border-collapse: collapse;">
+        <table border="0" cellpadding="0" cellspacing="0" width="510" class="leftColumnContent">
+            <tbody>
+                <tr>
+                    <td valign="top" style="padding-top: 20px;border-collapse: collapse;">
+                        <div style="color: #505050;font-family: Helvetica;font-size: 14px;line-height: 150%;text-align: left;">
+                        {% blocktrans with author.username as author_username and comment.comment as comment_content %}
+                           <h1 style="color: #6EB924;display: block;font-family: Arial;font-size: 22px;font-weight: normal;line-height: 100%;margin-top: 0;margin-right: 0;margin-bottom: 10px;margin-left: 0;text-align: left; font-style: italic;">{{ author_username }}</h1>
+                           {{ comment_content }}
+                        {% endblocktrans %}
+                        </div>                                                                    
+                    </td>
+                </tr>
+                <tr>
+                    <td valign="top" style="padding-top: 20px;border-collapse: collapse;">
+                        <div style="color: #505050;font-family: Helvetica;font-size: 14px;line-height: 150%;"></div>                                                                    
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </td>
+</tr>
+{% endblock %}
+
+{% block footer_email %}
+    {% blocktrans with protocol as protocol and site.domain as domain and comment.booking.get_absolute_url as booking_url %}
+
+    Vous pouvez voir le commentaire sur votre tableau de bord en cliquant ci dessous :<br>
+    <a href="{{protocol }}://{{ domain}}{{ booking_url }}">Accéder à tous mes commentaires</a><br><br>
+    {% endblocktrans %}
+
+    {% if not comment.booking.ownercomment and comment.booking.owner == patron %}
+    {% trans "Vous pouvez aussi commenter la location en cliquant sur le lien ci dessous" %} :<br>
+    <p><a href="{{ protocol }}://{{ site.domain }}{% url comments %}">{{ protocol }}://{{ site.domain }}{% url comments %}</a><br><br>
+    {% endif %}
+
+    {% if not comment.booking.borrowercomment and comment.booking.borrower == patron %}
+    {% trans "Vous pouvez aussi commenter la location en cliquant sur le lien ci dessous" %} :<br>
+    <a href="{{ protocol }}://{{ site.domain }}{% url comments %}">{{ protocol }}://{{ site.domain }}{% url comments %}</a><br><br>
+    {% endif %}
+    {% blocktrans with site.name as site_name %}
+    A très vite,<br>
+
+    L'équipe {{ site_name }}
 {% endblocktrans %}
 
 
-{% if not comment.booking.ownercomment and comment.booking.owner == patron %}
-<p>{% trans "Vous pouvez aussi commenter la location en cliquant sur le lien ci dessous" %} :</p>
-<p><a href="{{ protocol }}://{{ site.domain }}{% url comments %}">{{ protocol }}://{{ site.domain }}{% url comments %}</a></p>
-{% endif %}
-
-{% if not comment.booking.borrowercomment and comment.booking.borrower == patron %}
-<p>{% trans "Vous pouvez aussi commenter la location en cliquant sur le lien ci dessous" %} :</p>
-<p><a href="{{ protocol }}://{{ site.domain }}{% url comments %}">{{ protocol }}://{{ site.domain }}{% url comments %}</a></p>
-{% endif %}
-
-{% blocktrans with site.name as site_name %}
-
-<p>A bientôt,</p>
-
-<p>L'équipe {{ site_name }}</p>
-{% endblocktrans %}
+{% endblock %}
