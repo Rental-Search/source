@@ -1,18 +1,15 @@
 {% load i18n %}
-{% blocktrans with patron.first_name as first_name and patron.last_name as last_name %}
+{% blocktrans with patron.username as username and site.domain as domain and site.name as site_name %}
 
-Bonjour {{ first_name }} {{ last_name }},
+	Bonjour {{ username }},<br><br>
 
-Nous vous remercions de vous être enregistré(e) sur {{ protocol }}://{{ domain }}
-{% endblocktrans %}
-
-{% blocktrans with site.domain as domain and site.name as site_name %}
-
-Veuillez cliquer sur le lien ci-dessous pour finaliser la création de votre compte :
-
-{% endblocktrans %}
+ 	Nous vous remercions de vous être enregistré(e) sur <a href="{{ protocol }}://{{ domain }}">{{ domain }}</a>.
+	Veuillez cliquer sur le bouton ci-dessous pour finaliser la validation de votre compte.
+{% endblock %}
 
 {{ protocol }}://{{ domain }}{% url propw uidb36=uid token=token %}
+
+{% trans "A très vite" %},
 
 {% trans "L'équipe" %} {{ site.name }}.
 
