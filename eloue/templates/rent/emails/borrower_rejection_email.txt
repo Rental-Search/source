@@ -2,7 +2,7 @@
 {% blocktrans with booking.borrower.username as borrower_name and booking.owner.username as owner_name and booking.product.summary as summary and booking.product.category.name as category and booking.product.summary as summary and booking.started_at|date:"DATETIME_FORMAT" as starting_at and booking.started_at|timesince:booking.ended_at as duration %}
 Bonjour {{ borrower_name }}, 
 
-Hélas, {{ owner_name }} a refusé votre proposition de location suivante : 
+Hélas, le propriétaire a refusé votre proposition de location suivante : 
 
 Type : {{ category }} 
 Objet : {{ summary }} 

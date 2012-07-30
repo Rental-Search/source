@@ -44,7 +44,7 @@ urlpatterns = patterns('',
         'is_admin_site': False,
         'password_reset_form': EmailPasswordResetForm,
         'template_name': 'accounts/password_reset_form.html',
-        'email_template_name': 'accounts/password_reset_email'
+        'email_template_name': 'accounts/emails/password_reset_email'
         }, name="password_reset"),
     url(r'^reset/done/$', password_reset_done, {
         'template_name': 'accounts/password_reset_done.html'
