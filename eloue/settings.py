@@ -341,8 +341,8 @@ AWS_HEADERS = {
     'Cache-Control': 'max-age=31556926,public',
 }
 
-GOOGLE_CLIENT_ID = getattr(local, 'GOOGLE_CLIENT_ID', '382908503214.apps.googleusercontent.com')
-GOOGLE_CLIENT_SECRET = getattr(local, 'GOOGLE_CLIENT_SECRET', 'bHf4VtyrFzphNMCzg7lkQXGy')
+GOOGLE_CLIENT_ID = getattr(local, 'GOOGLE_CLIENT_ID', '218840159400.apps.googleusercontent.com')
+GOOGLE_CLIENT_SECRET = getattr(local, 'GOOGLE_CLIENT_SECRET', 'BXFNFpDb6MN0ocLoPunjkzvZ')
 
 FACEBOOK_APP_ID = getattr(local, 'FACEBOOK_APP_ID', '197983240245844')
 
