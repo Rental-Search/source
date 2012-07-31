@@ -909,29 +909,61 @@ from eloue.accounts.models import OpeningTimes
 class OpeningsForm(BetterModelForm):
 
     def clean(self):
+        cleaned_data = super(OpeningsForm, self).clean()
         days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']
         for day in days:
-            opens = self.cleaned_data.get(day + '_opens')
-            closes = self.cleaned_data.get(day + '_closes')
-            pause_starts = self.cleaned_data.get(day + '_pause_starts')
-            pause_ends = self.cleaned_data.get(day + '_pause_ends')
+            opens_var = day + '_opens'
+            closes_var = day + '_closes'
+            pause_starts_var = day + '_pause_starts'
+            pause_ends_var = day + '_pause_ends'
+
+            opens = cleaned_data.get(opens_var)
+            closes = cleaned_data.get(closes_var)
+            pause_starts = cleaned_data.get(pause_starts_var)
+            pause_ends = cleaned_data.get(pause_ends_var)
             if opens and closes:
                 # we are open the given day
                 if opens >= closes:
-                    raise forms.ValidationError('La date d\'ouverture doit etre inferieure a celui de fermeture')
+                    # so the opening time should preced closing time
+                    error_msg = 'La date d\'ouverture doit etre inferieure a celui de fermeture'
+                    self._errors[opens_var] = error_msg
+                    self._errors[closes_var] = error_msg
+                    del cleaned_data[opens_var]
+                    del cleaned_data[closes_var]
                 if pause_starts and pause_ends:
+                    # if there is a pause
                     if not opens < pause_starts < pause_ends < closes:
-                        raise forms.ValidationError(' ')
+                        error_msg = 'Le debut de la pause doit preceder la fin'
+                        self._errors[opens_var] = error_msg
+                        self._errors[closes_var] = error_msg
+                        self._errors[pause_starts_var] = error_msg
+                        self._errors[pause_ends_var] = error_msg
+                        del cleaned_data[opens_var]
+                        del cleaned_data[closes_var]
+                        del cleaned_data[pause_starts_var]
+                        del cleaned_data[pause_ends_var]
                 elif pause_starts or pause_ends:
-                    raise forms.ValidationError(' ')
+                    error_msg = 'Vous devez saisir le debut et la fin de la pause'
+                    self._errors[opens_var] = error_msg
+                    self._errors[closes_var] = error_msg
+                    del cleaned_data[opens_var]
+                    del cleaned_data[closes_var]
             elif not opens and not closes:
                 # we are not open
                 if pause_starts or pause_ends:
-                    raise forms.ValidationError('Vous ne pouvez pas definir de pause si vous n etes pas ouvert')
+                    error_msg = 'Vous ne pouvez pas definir de pause si vous n etes pas ouvert'
+                    self._errors[pause_starts_var] = error_msg
+                    self._errors[pause_ends_var] = error_msg
+                    del cleaned_data[pause_starts_var]
+                    del cleaned_data[pause_ends_var]
             else:
                 # errounous 
-                raise forms.ValidationError('Vous devez saisir l ouverture et le fermeture')
-        return self.cleaned_data
+                error_msg = 'Vous devez saisir l ouverture et le fermeture'
+                self._errors[opens_var] = error_msg
+                self._errors[closes_var] = error_msg
+                del cleaned_data[opens_var]
+                del cleaned_data[closes_var]
+        return cleaned_data
 
     class Meta:
         model = OpeningTimes
