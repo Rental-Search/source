@@ -8,8 +8,10 @@
         {% if languages_count %}
             <h4>{% trans "Téléphone" %}</h4>
             <p>01 45 67 89 09 87</p>
+            {% if patron.url %}
             <h4>{% trans "Site Internet"%}</h4>
-            <p><a href="#">www.e-loue.com</a></p>
+            <p><a href="#">{{patron.url}}</a></p>
+            {% endif %}
             {% if languages_count %}
             <h4>{% trans "Languages Parlées" %}</h4>
             <p style="margin-bottom: 30px;">{{ languages.all|join:", "}}</p>

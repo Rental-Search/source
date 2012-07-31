@@ -356,7 +356,7 @@ class CompanyEditForm(PatronEditForm):
                 'legend': _(u'Informations nécessaires')
             }),
             ('extra_info', {
-                'fields': ['about', 'languages'],
+                'fields': ['about', 'url', 'languages'],
                 'legend': _(u"Informations sur l'entreprise")
             }),
             ('driver_info', {
