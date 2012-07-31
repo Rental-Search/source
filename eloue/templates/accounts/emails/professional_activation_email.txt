@@ -5,7 +5,7 @@
 
  	Nous vous remercions de vous être enregistré(e) sur <a href="{{ protocol }}://{{ domain }}">{{ domain }}</a>.
 	Veuillez cliquer sur le bouton ci-dessous pour finaliser la validation de votre compte.
-{% endblock %}
+{% endblocktrans %}
 
 {{ protocol }}://{{ domain }}{% url propw uidb36=uid token=token %}
 
