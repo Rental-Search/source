@@ -25,13 +25,10 @@
                         <td width="40%">Lundi</td>
                         {% if openingtimes.monday_opens %}
                             <td width="60%" align="center">
-                                {{openingtimes.monday_opens|time:"G\hi"}} 
-                                {% if openingtimes.monday_pause_starts %}
-                                 - {{openingtimes.monday_pause_starts|time:"G\hi"}}, {{openingtimes.monday_pause_ends|time:"G\hi"}} -
-                                {% else %}
-                                -
+                                {{openingtimes.monday_opens|time:"G\hi"}} - {{openingtimes.monday_closes|time:"G\hi"}}
+                                {% if openingtimes.monday_opens_second %}
+                                    , {{openingtimes.monday_opens_second|time:"G\hi"}} - {{openingtimes.monday_closes_second|time:"G\hi"}}
                                 {% endif %}
-                                {{openingtimes.monday_closes|time:"G\hi"}}
                             </td>
                         {% else %}
                             <td width="60%" align="center">Fermé</td>
@@ -41,13 +38,10 @@
                         <td width="40%">Mardi</td>
                         {% if openingtimes.tuesday_opens %}
                             <td width="60%" align="center">
-                                {{openingtimes.tuesday_opens|time:"G\hi"}}
-                                {% if openingtimes.tuesday_pause_starts %}
-                                 - {{openingtimes.tuesday_pause_starts|time:"G\hi"}}, {{openingtimes.tuesday_pause_ends|time:"G\hi"}} -
-                                {% else %}
-                                -
+                                {{openingtimes.tuesday_opens|time:"G\hi"}} - {{openingtimes.tuesday_closes|time:"G\hi"}}
+                                {% if openingtimes.tuesday_opens_second %}
+                                    , {{openingtimes.tuesday_opens_second|time:"G\hi"}} - {{openingtimes.tuesday_closes_second|time:"G\hi"}}
                                 {% endif %}
-                                {{openingtimes.tuesday_closes|time:"G\hi"}}
                             </td>
                         {% else %}
                             <td width="60%" align="center">Fermé</td>
@@ -57,13 +51,10 @@
                         <td width="40%">Mercredi</td>
                         {% if openingtimes.wednesday_opens %}
                             <td width="60%" align="center">
-                                {{openingtimes.wednesday_opens|time:"G\hi"}}
-                                {% if openingtimes.wednesday_pause_starts %}
-                                 - {{openingtimes.wednesday_pause_starts|time:"G\hi"}}, {{openingtimes.wednesday_pause_ends|time:"G\hi"}} -
-                                {% else %}
-                                -
+                                {{openingtimes.wednesday_opens|time:"G\hi"}} - {{openingtimes.wednesday_closes|time:"G\hi"}}
+                                {% if openingtimes.wednesday_opens_second %}
+                                    , {{openingtimes.wednesday_opens_second|time:"G\hi"}} - {{openingtimes.wednesday_closes_second|time:"G\hi"}}
                                 {% endif %}
-                                {{openingtimes.wednesday_closes|time:"G\hi"}}
                             </td>
                         {% else %}
                             <td width="60%" align="center">Fermé</td>
@@ -73,13 +64,13 @@
                         <td width="40%">Jeudi</td>
                         {% if openingtimes.thursday_opens %}
                         <td width="60%" align="center">
-                            {{openingtimes.thursday_opens|time:"G\hi"}}
+                            {{openingtimes.thursday_opens|time:"G\hi"}} - {{openingtimes.thursday_closes|time:"G\hi"}}
                             {% if openingtimes.thursday_pause_starts %}
-                             - {{openingtimes.thursday_pause_starts|time:"G\hi"}}, {{openingtimes.thursday_pause_ends|time:"G\hi"}} -
+                                , {{openingtimes.thursday_opens_second|time:"G\hi"}} - {{openingtimes.thursday_closes_second|time:"G\hi"}}
                             {% else %}
                             -
                             {% endif %}
-                            {{openingtimes.thursday_closes|time:"G\hi"}}
+                            
                         </td>
                         {% else %}
                             <td width="60%" align="center">Fermé</td>
@@ -89,13 +80,10 @@
                         <td width="40%">Vendredi</td>
                         {% if openingtimes.friday_opens %}
                         <td width="60%" align="center">
-                            {{openingtimes.friday_opens|time:"G\hi"}}
-                            {% if openingtimes.friday_pause_starts %}
-                             - {{openingtimes.friday_pause_starts|time:"G\hi"}}, {{openingtimes.friday_pause_ends|time:"G\hi"}} -
-                            {% else %}
-                            -
+                            {{openingtimes.friday_opens|time:"G\hi"}} - {{openingtimes.friday_closes|time:"G\hi"}}
+                            {% if openingtimes.friday_opens_second %}
+                                , {{openingtimes.friday_opens_second|time:"G\hi"}} - {{openingtimes.friday_closes_second|time:"G\hi"}}
                             {% endif %}
-                            {{openingtimes.friday_closes|time:"G\hi"}}
                         </td>
                         {% else %}
                             <td width="60%" align="center">Fermé</td>
@@ -105,13 +93,10 @@
                         <td width="40%">Samedi</td>
                         {% if openingtimes.saturday_opens %}
                         <td width="60%" align="center">
-                            {{openingtimes.saturday_opens|time:"G\hi"}}
-                            {% if openingtimes.saturday_pause_starts %}
-                             - {{openingtimes.saturday_pause_starts|time:"G\hi"}}, {{openingtimes.saturday_pause_ends|time:"G\hi"}} -
-                            {% else %}
-                            -
+                            {{openingtimes.saturday_opens|time:"G\hi"}} - {{openingtimes.saturday_closes|time:"G\hi"}}
+                            {% if openingtimes.saturday_opens_second %}
+                                , {{openingtimes.saturday_opens_second|time:"G\hi"}} - {{openingtimes.saturday_closes_second|time:"G\hi"}}
                             {% endif %}
-                            {{openingtimes.saturday_closes|time:"G\hi"}}
                         </td>
                         {% else %}
                             <td width="60%" align="center">Fermé</td>
@@ -121,13 +106,10 @@
                         <td width="40%">Dimanche</td>
                         {% if openingtimes.sunday_opens %}
                         <td width="60%" align="center">
-                            {{openingtimes.sunday_opens|time:"G\hi"}}
-                            {% if openingtimes.sunday_pause_starts %}
-                             - {{openingtimes.sunday_pause_starts|time:"G\hi"}}, {{openingtimes.sunday_pause_ends|time:"G\hi"}} -
-                            {% else %}
-                            -
+                            {{openingtimes.sunday_opens|time:"G\hi"}} - {{openingtimes.sunday_closes|time:"G\hi"}}
+                            {% if openingtimes.sunday_opens_second %}
+                                , {{openingtimes.sunday_opens_second|time:"G\hi"}} - {{openingtimes.sunday_closes_second|time:"G\hi"}} -
                             {% endif %}
-                            {{openingtimes.sunday_closes|time:"G\hi"}}
                         </td>
                         {% else %}
                             <td width="60%" align="center">Fermé</td>
