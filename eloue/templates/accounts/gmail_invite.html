@@ -45,7 +45,7 @@
     $( "#gmail-list button.btn" ).click(function() {
       answer = confirm('Etes-vous sur de vouloir envoyer une invitation ?');
       if (answer == true) {
-        email = $('input:hidden[name=email]').val();
+        email = $(this).parent().find('input:hidden[name=email]').val();
         gmail_send_invite(email);
         $(this).parent().remove();
       } else {
