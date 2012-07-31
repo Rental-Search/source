@@ -10,6 +10,8 @@ Début de la location : {{ starting_at }}
 Durée de la location : {{ duration }}
 
 Conformément à votre demande, nous vous confirmons que cette location a bien été annulée et donc qu'aucun débit n'aura lieu.
+
+A très vite,
  
 L'équipe {{ site_name }}
 {% endblocktrans %}

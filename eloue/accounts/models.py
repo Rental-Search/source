@@ -379,7 +379,7 @@ class Patron(User):
             'activation_key': self.activation_key,
             'expiration_days': settings.ACCOUNT_ACTIVATION_DAYS
         }
-        message = create_alternative_email('accounts/activation', context, settings.DEFAULT_FROM_EMAIL, [self.email])
+        message = create_alternative_email('accounts/emails/activation', context, settings.DEFAULT_FROM_EMAIL, [self.email])
         message.send()
 
     def send_professional_activation_email(self, *args):
@@ -387,7 +387,7 @@ class Patron(User):
         form = EmailPasswordResetForm({'email': self.email})
         if form.is_valid():
             form.save(
-                email_template_name='accounts/professional_activation_email', 
+                email_template_name='accounts/emails/professional_activation_email', 
                 use_https=True
             )
 
@@ -536,3 +536,4 @@ class PatronAccepted(models.Model):
 signals.post_save.connect(post_save_sites, sender=Patron)
 signals.pre_delete.connect(pre_delete_creditcard, sender=CreditCard)
 signals.post_save.connect(post_save_to_batch_update_product, sender=Address)
+signals.post_save.connect(post_save_to_batch_update_product, sender=Patron)

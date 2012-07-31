@@ -1,12 +1,40 @@
+{% extends "base_email.html" %}
 {% load i18n %}
-{% blocktrans with booking.owner.username as username and booking.product.summary as summary and booking.started_at|date:"DATETIME_FORMAT" as starting_at and booking.started_at|timesince:booking.ended_at as duration and booking.get_absolute_url as booking_url and site.domain as domain and site.name as site_name %}
-<p>Bonjour {{ username }},</p>
 
-<p>La location de l’objet {{ summary }}, qui a débutée le {{ starting_at }} pour une durée de {{ duration }}, vient de finir.</p>
+{% block title_email %}{% trans "Fin de votre réservation" %}{% endblock %}
 
-<p>Nous espérons que tout s’est déroulé selon votre convenance et vous rappelons qu'il vous faut vous connecter sur votre compte {{ site_name }} pour <a href="{{ protocol }}://{{ domain }}{{ booking_url }}">clôturer cette location</a>.</p>
+{% block content_email %}
+<tr>
+	<td valign="top" width="100%" style="border-collapse: collapse;">
+        <table border="0" cellpadding="0" cellspacing="0" width="510">
+            <tbody>
+                <tr>
+                    <td valign="top" style="padding-top: 20px;border-collapse: collapse;">
+                        <div style="color: #505050;font-family: Arial;font-size: 14px;line-height: 200%;text-align: left;">
+                        	{% blocktrans with booking.owner.get_full_name as owner_name and booking.owner.username as owner %}
 
-<p>Une fois cette étape effectuée, vous recevrez votre paiement.</p>
+                            Bonjour {{ owner_name }}<br><br>
 
-<p>L'équipe {{ site_name }}</p> 
-{% endblocktrans %}
+                            La réservation vient de se terminer :<br>
+                           	{% endblocktrans %}
+
+                            {% include "rent/emails/partials/booking_details_email.html" %}
+
+                            {% blocktrans with site.name as site_name and protocol as protocol and site.domain as domain and booking.get_absolute_url as booking_url %}
+
+                            Nous espérons que tout s’est déroulé selon votre convenance, et que vous êtes satisfaite(e) de votre location.<br>
+
+                           	Si vous rencontrez un quelconque problème, nous vous invitons à nous <a href="{{ protocol }}://{{ domain }}{{ booking_url }}">signaler l'incident.</a><br><br>
+
+                            A très vite,<br>
+
+                            L'équipe {{ site_name }}<br>
+                            {% endblocktrans %}
+                        </div>                                                                    
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </td>
+</tr>
+{% endblock %}

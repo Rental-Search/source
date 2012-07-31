@@ -1,1 +1,1 @@
-Terminer votre réservation
+{% load i18n %}{% trans "Terminer votre réservation" %}

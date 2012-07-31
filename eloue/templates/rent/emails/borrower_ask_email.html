@@ -1,18 +1,43 @@
+{% extends "base_email.html" %}
 {% load i18n %}
-{% blocktrans with booking.owner.username as owner and booking.borrower.username as borrower and booking.product.category.name as category and booking.product.summary as summary and booking.started_at|date:"DATETIME_FORMAT" as starting_at and booking.started_at|timesince:booking.ended_at as duration and site.name as site_name %}
- <p>Bonjour {{ borrower }},</p>
 
- <p>Nous avons bien pris en compte votre demande de location et venons d’informer {{ owner }} de votre proposition.</p>
-  
- <p>Voici donc les différents éléments qui lui ont été transmis :</p> 
- <ul>
-  <li><strong>Type :</strong> {{ category }}</li>
-  <li><strong>Objet :</strong> {{ summary }}</li>
-  <li><strong>Début de la location :</strong> {{ starting_at }}</li> 
-  <li><strong>Durée de la location :</strong> {{ duration }}</li>
- </ul>
- 
- <p>Vous serez prochainement informé(e) de sa réponse. Pour rappel : votre compte ne sera débité que si le propriétaire accepte la location.</p>
+{% block title_email %}{% trans "Demande de réservation"%}{% endblock %}
 
-<p>L'équipe {{ site_name }}</p>
-{% endblocktrans %}
+{% block content_email %}
+<tr>
+	<td valign="top" width="100%" style="border-collapse: collapse;">
+        <table border="0" cellpadding="0" cellspacing="0" width="510">
+            <tbody>
+                <tr>
+                    <td valign="top" style="padding-top: 20px;border-collapse: collapse;">
+                        <div style="color: #505050;font-family: Arial;font-size: 14px;line-height: 200%;text-align: left;">
+                        	{% blocktrans with booking.borrower.get_full_name as borrower_name and booking.owner.username as owner %}
+
+                            Bonjour {{ borrower_name }}<br><br>
+
+                            Nous avons bien pris en compte votre demande de réservation et venons d’informer le propriétaire de votre proposition.
+
+                            Voici donc les différents éléments qui lui ont été transmis :<br>
+                           	{% endblocktrans %}
+
+                            {% include "rent/emails/partials/booking_details_email.html" %}
+
+
+                            {% blocktrans with site.name as site_name %}
+
+                           	Vous serez prochainement informé(e) de sa réponse. Pour rappel : votre compte ne sera débité que si le propriétaire accepte la location.<br>
+                             
+                            Bonne location !<br><br>
+
+                            A très vite,<br>
+
+                            L'équipe {{ site_name }}<br>
+                            {% endblocktrans %}
+                        </div>                                                                    
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </td>
+</tr>
+{% endblock %}

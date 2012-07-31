@@ -1,0 +1,7 @@
+ <ul>
+  {% for result in booking.product.more_like_this %}
+   {% with result.object as product %}
+    <li><a href="{{ protocol }}://{{ site.domain }}{{ product.get_absolute_url }}">{{ product.summary }}</a> ({{ product.address.zipcode }})</li>
+   {% endwith %}
+  {% endfor %}
+ </ul>
