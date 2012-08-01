@@ -3,11 +3,6 @@
 Bonjour {{ username }},
 
 Vous venez de clôturer la location de l’objet {{ summary }}, qui a débutée le {{ starting_at }} pour une durée de {{ duration }} jour(s).  
-Le paiement de {{ total_amount }} est donc en cours et devrait être visible dans les prochaines minutes.
- 
-Si vous le souhaitez, vous pouvez éditer une facture en cliquant sur le lien ci-après :
-
-{{ protocol }}://{{ domain }}{{ booking_url }}
 
 Naturellement, si vous rencontrez une quelconque difficulté, n'hésitez pas à nous contacter.
  

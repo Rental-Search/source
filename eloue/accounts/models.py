@@ -30,6 +30,7 @@ from django.template.defaultfilters import slugify
 from eloue.accounts.manager import PatronManager
 from eloue.geocoder import GoogleGeocoder
 from eloue.products.utils import Enum
+from eloue.products.signals import post_save_to_batch_update_product
 from eloue.signals import post_save_sites, pre_delete_creditcard
 from eloue.utils import create_alternative_email, cache_to
 from eloue.payments.paypal_payment import accounts, PaypalError
@@ -171,6 +172,7 @@ class Patron(User):
     avatar = models.ImageField(upload_to=upload_to, null=True, blank=True)
 
     default_address = models.ForeignKey('Address', null=True, blank=True, related_name="+")
+    default_number = models.ForeignKey('PhoneNumber', null=True, blank=True, related_name="+")
 
     customers = models.ManyToManyField('self', symmetrical=False)
 
@@ -373,10 +375,27 @@ class Patron(User):
 
     def send_activation_email(self):
         context = {
-            'patron': self, 'activation_key': self.activation_key,
+            'patron': self, 
+            'activation_key': self.activation_key,
             'expiration_days': settings.ACCOUNT_ACTIVATION_DAYS
         }
-        message = create_alternative_email('accounts/activation', context, settings.DEFAULT_FROM_EMAIL, [self.email])
+        message = create_alternative_email('accounts/emails/activation', context, settings.DEFAULT_FROM_EMAIL, [self.email])
+        message.send()
+
+    def send_professional_activation_email(self, *args):
+        from eloue.accounts.forms import EmailPasswordResetForm
+        form = EmailPasswordResetForm({'email': self.email})
+        if form.is_valid():
+            form.save(
+                email_template_name='accounts/emails/professional_activation_email', 
+                use_https=True
+            )
+
+    def send_gmail_invite(self, receiver, *args):
+        context = {
+            'patron': self
+        }
+        message = create_alternative_email('accounts/emails/gmail_invitation', context, settings.DEFAULT_FROM_EMAIL, [receiver])
         message.send()
 
     def is_expired(self):
@@ -393,14 +412,18 @@ class Patron(User):
     is_expired.boolean = True
     is_expired.short_description = ugettext(u"Expiré")
 
+
 class CreditCard(models.Model):
     card_number = models.CharField(max_length=20)
     expires = models.CharField(max_length=4)
-    holder = models.OneToOneField(Patron, editable=False)
+    holder = models.OneToOneField(Patron, editable=False, null=True)
     masked_number = models.CharField(max_length=20, blank=False)
     keep = models.BooleanField()
     holder_name = models.CharField(max_length=60, help_text=_(u'Conserver mes coordonnées bancaire'))
+    subscriber_reference = models.CharField(max_length=250, blank=True)
 
+    def __unicode__(self):
+        return self.masked_number
 
 class FacebookSession(models.Model):
 
@@ -512,3 +535,5 @@ class PatronAccepted(models.Model):
 
 signals.post_save.connect(post_save_sites, sender=Patron)
 signals.pre_delete.connect(pre_delete_creditcard, sender=CreditCard)
+signals.post_save.connect(post_save_to_batch_update_product, sender=Address)
+signals.post_save.connect(post_save_to_batch_update_product, sender=Patron)

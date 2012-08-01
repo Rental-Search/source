@@ -1,0 +1,93 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+</head>
+<body leftmargin="0" marginwidth="0" topmargin="0" marginheight="0" offset="0" style="-webkit-text-size-adjust: 100%;margin: 0;padding: 0;background-color: #FFFFF;width: 100% !important;" screen_capture_injected="true">
+<center>
+	<table border="0" cellpadding="0" cellspacing="0" height="100%" width="100%" style="margin: 0;padding: 0;background-color: #FAFAFA;height: 100% !important;width: 100% !important;">
+        <tbody>
+            <tr>
+            	<td align="center" valign="top" style="border-collapse: collapse;">
+                    <!-- // Begin Template Header \\ -->
+                	<table border="0" cellpadding="0" cellspacing="0" width="100%">
+                    	<tbody>
+                        	<tr>
+                            	<td align="center" valign="top" style="border-collapse: collapse;background-color: #E2E9EF;padding-top: 5px;padding-bottom: 5px; border-bottom: 1px solid #ABC9D5;">
+                                	<!-- // Begin Lower Header Content \\ -->
+                                    <table border="0" cellpadding="0" cellspacing="0" width="600" style="padding: 10px;">
+                                    	<tbody>
+                                            <tr>
+                                            	<td valign="top" width="140" class="lowerHeaderContent" style="border-collapse: collapse;color: #FFFFFF;font-family: Arial;font-size: 34px;font-weight: normal;line-height: 100%;vertical-align: middle; text-align: left;">
+                                                	<div>
+                                                    	<img src="https://media.e-loue.com/images/logo_new.png" alt="" height="30px" style="margin-top: 5px;"/>
+                                                    </div>
+                                                </td>
+                                                <td valign="top" width="460" class="lowerHeaderContent" style="border-collapse: collapse;color: #546B78;font-family: Arial;font-size: 18px;font-weight: normal;line-height: 100%;vertical-align: middle; text-align: center;">
+                                                    <div>
+                                                        {% block title_email %}{% endblock %}
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <!-- // End  Lower Header Content \\ -->
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <!-- // End Template Header \\ -->
+                </td>
+            </tr>
+            <tr>
+            	<td align="center" valign="top" style="padding-bottom: 40px;border-collapse: collapse;border-bottom: 4px solid #ABC9D5;">
+                    <!-- // Begin Template Body \\ -->
+                    <table border="0" cellpadding="0" cellspacing="0" width="600" style="padding: 10px;">
+                        <tbody>
+                        {% block content_email %}
+                        {% endblock %}
+                        </tbody>
+                    </table>
+                    <!-- // End Template Body \\ -->
+                </td>
+            </tr>
+            <tr>
+                <td align="center" valign="top" style="border-collapse: collapse;">
+                    <!-- // Begin Template Footer \\ -->
+                    <table border="0" cellpadding="0" cellspacing="0" width="100%" style="border-top: 4px solid #FAFAFA;">
+                        <tbody>
+                            <tr>
+                                <td align="center" valign="top" style="padding-top: 40px;padding-bottom: 40px;border-collapse: collapse;">
+                                
+                                    <!-- // Begin Footer Content \\ -->
+                                    <table border="0" cellpadding="0" cellspacing="0" width="600" class="footerContent">
+                                        <tbody>
+                                            <tr>
+                                                <td valign="middle" style="border-collapse: collapse;">
+                                                    <div style="color: #707070;font-family: Arial;font-size: 11px;line-height: 125%;text-align: left; margin-bottom: 20px;">
+                                                        <a href="https://twitter.com/eloue" style="color: #909090;font-weight: normal;text-decoration: underline;">Suivez-nous sur Twitter</a> | <a href="https://www.facebook.com/location.eloue" style="color: #909090;font-weight: normal;text-decoration: underline;">Page Facebook</a>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td valign="middle" style="border-collapse: collapse;">
+                                                    <div style="color: #707070;font-family: Arial;font-size: 12px;line-height: 125%;text-align: left;">
+                                                        {% block footer_email %}{% endblock %}
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <!-- // End Footer Content \\ -->
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <!-- // End Template Footer \\ -->
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</center>
+</body>
+</html>

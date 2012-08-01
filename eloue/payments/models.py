@@ -3,8 +3,12 @@ from django.db import models
 
 from eloue.rent.models import Booking
 from eloue.payments import *
+from eloue.accounts.models import CreditCard
 
 class PaymentInformation(models.Model, abstract_payment.AbstractPayment):
+    # I did not used a generic reverse relation here, because of a bug in django 1.2
+    # we must replace this with:
+    # booking = generic.ReverseRelation(Booking)
     @property
     def booking(self):
         tipe = ContentType.objects.get_for_model(self)
@@ -32,4 +36,4 @@ class PayboxDirectPaymentInformation(PayboxPaymentInformation, paybox_payment.Pa
     numauth = models.CharField(max_length=20)
 
 class PayboxDirectPlusPaymentInformation(PayboxPaymentInformation, paybox_payment.PayboxDirectPlusPayment):
-	pass
+    creditcard = models.ForeignKey(CreditCard, null=True)

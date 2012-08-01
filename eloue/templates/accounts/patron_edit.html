@@ -11,15 +11,25 @@
 {% endblock %}
 
 {% block content-aside-profil %}
+
 {% url patron_edit as patron_edit %}
+{% url facebook_invite as facebook_invite %}
+{% url gmail_invite as gmail_invite %}
 {% url comments as comments %}
 {% url patron_edit_addresses as patron_edit_addresses %}
 {% url patron_edit_phonenumber as patron_edit_phonenumber %}
 {% url patron_edit_password as patron_edit_password %}
 {% url patron_edit_credit_card as patron_edit_credit_card %}
 {% url patron_edit_rib as patron_edit_rib %}
+
 <ul class="nav-sub-bar">
     <li><a href="{{ patron_edit }}"  class="{% active request "^/dashboard/account/$" %}">{% trans "Mon Profil" %}</a></li>
+    {% if request.user.is_staff %}
+    <li>
+      <a href="{{ facebook_invite }}" class="{% active request "^/dashboard/account/invite/" %}">{% trans "Invitez vos amis" %}</a>
+      {% block invite-submenu %}{% endblock %}
+    </li>
+    {% endif %}
     <li><a href="{{ comments }}" class="{% active request comments %}">{% trans "Commentaires" %}</a></li>
     <li><a href="{{ patron_edit_addresses }}" class="{% active request patron_edit_addresses %}">{% trans "Adresses" %}</a></li>
     <li><a href="{{ patron_edit_phonenumber }}" class="{% active request patron_edit_phonenumber %}">{% trans "Téléphone" %}</a></li>
@@ -59,6 +69,8 @@
         {% endif %}
         {{ field }}
         <p class="help-block">{{ field.help_text }}</p>
+        {% if field.name == "default_address" %}<p class="help-block"><a href="{% url patron_edit_addresses %}#newAddress">{% trans "Ajouter une nouvelle adresse"%}</a></p>{% endif %}
+        {% if field.name == "default_number" %}<p class="help-block"><a href="{% url patron_edit_phonenumber %}#newPhone">{% trans "Ajouter un nouveau téléphone"%}</a></p>{% endif %}
         {% if field.errors %}
           <span class="help-inline">
           {% for error in field.errors %}

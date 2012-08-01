@@ -341,6 +341,9 @@ AWS_HEADERS = {
     'Cache-Control': 'max-age=31556926,public',
 }
 
+GOOGLE_CLIENT_ID = getattr(local, 'GOOGLE_CLIENT_ID', '218840159400.apps.googleusercontent.com')
+GOOGLE_CLIENT_SECRET = getattr(local, 'GOOGLE_CLIENT_SECRET', 'BXFNFpDb6MN0ocLoPunjkzvZ')
+
 FACEBOOK_APP_ID = getattr(local, 'FACEBOOK_APP_ID', '197983240245844')
 
 # Paypal configuration
@@ -433,13 +436,13 @@ if DEBUG:
     PAYBOX_RANG = getattr(local, 'PAYBOX_RANG', 99)
     PAYBOX_CLE = getattr(local, 'PAYBOX_CLE', '1999888I')
     PAYBOX_DEVISE = getattr(local, 'PAYBOX_DEVISE', 978)
-    PAYBOX_ACTIVITE = getattr(local, 'PAYBOX_ACTIVITE', '024')
+    PAYBOX_ACTIVITE = getattr(local, 'PAYBOX_ACTIVITE', '027')
     PAYBOX_ENDPOINT = getattr(local, 'PAYBOX_ENDPOINT', "https://preprod-ppps.paybox.com/PPPS.php")
 else:
     PAYBOX_SITE = getattr(local, 'PAYBOX_SITE', '3818292')
     PAYBOX_RANG = getattr(local, 'PAYBOX_RANG', '01')
     PAYBOX_DEVISE = getattr(local, 'PAYBOX_DEVISE', 978)
-    PAYBOX_ACTIVITE = getattr(local, 'PAYBOX_ACTIVITE', '024')
+    PAYBOX_ACTIVITE = getattr(local, 'PAYBOX_ACTIVITE', '027')
     PAYBOX_ENDPOINT = getattr(local, 'PAYBOX_ENDPOINT', "https://ppps.paybox.com/PPPS.php")
     PAYBOX_VERSION = getattr(local, 'PAYBOX_VERSION', '00104')
     PAYBOX_CLE = getattr(local, 'PAYBOX_CLE', 'IJEDEDBC')

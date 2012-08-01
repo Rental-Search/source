@@ -1,7 +1,11 @@
 # -*- coding: utf-8 -*-
 import smtplib
 import socket
-import datetime
+import datetime, time
+import urllib
+import simplejson
+import itertools
+
 from logbook import Logger
 import simplejson
 
@@ -9,11 +13,14 @@ import simplejson
 from django_lean.experiments.models import GoalRecord
 from django_lean.experiments.utils import WebUser
 
+import gdata.contacts.client
+import gdata.gauth
+
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.sites.models import Site
-from django.core.mail import EmailMessage, BadHeaderError
+from django.core.mail import EmailMessage, BadHeaderError, send_mass_mail
 from django.core.urlresolvers import reverse
 from django.db.models import Count, Q
 from django.views.decorators.http import require_GET
@@ -33,14 +40,16 @@ from oauth_provider.models import Token
 from django.shortcuts import redirect
  
 from eloue.decorators import secure_required, mobify, ownership_required
-from eloue.accounts.forms import (EmailAuthenticationForm, PatronEditForm, 
+from eloue.accounts.forms import (EmailAuthenticationForm, GmailContactFormset, PatronEditForm, 
     PatronPasswordChangeForm, ContactForm, 
-    PatronSetPasswordForm, FacebookForm, CreditCardForm)
+    PatronSetPasswordForm, FacebookForm, CreditCardForm, GmailContactForm)
 from eloue.accounts.models import Patron, FacebookSession, CreditCard
+
 from eloue.accounts.wizard import AuthenticationWizard
 
 from eloue import geocoder
 from eloue.products.forms import FacetedSearchForm
+
 from eloue.products.models import ProductRelatedMessage, MessageThread
 from eloue.products.search_indexes import product_search
 from eloue.rent.models import Booking, BorrowerComment, OwnerComment
@@ -95,6 +104,9 @@ def oauth_authorize(request, *args, **kwargs):
 def oauth_callback(request, *args, **kwargs):
     token = Token.objects.get(key=kwargs['oauth_token'])
     return HttpResponse(token.verifier)
+
+def google_oauth_callback(request):
+    return direct_to_template(request, 'accounts/google_callback.html')
 
 @never_cache
 @login_required
@@ -329,7 +341,7 @@ def patron_detail(request, slug, patron_id=None, page=None):
         patron = get_object_or_404(Patron.on_site, pk=patron_id)
         return redirect_to(request, patron.get_absolute_url(), permanent=True)
     patron = get_object_or_404(Patron.on_site.select_related('default_address', 'languages'), slug=slug)
-    patron_products = product_search.narrow(u'owner:{0}'.format(patron.username))
+    patron_products = product_search.filter(owner_exact=patron.username)
     return object_list(
         request, patron_products, page=page, 
         paginate_by=9, template_name='accounts/patron_detail.html', 
@@ -384,10 +396,14 @@ def patron_edit_phonenumber(request):
 
 @login_required
 def patron_edit_credit_card(request):
+    import uuid
     try:
         instance = request.user.creditcard
     except CreditCard.DoesNotExist:
-        instance = CreditCard(holder=request.user, keep=True)
+        instance = CreditCard(
+            holder=request.user, keep=True, 
+            subscriber_reference=uuid.uuid4().hex
+        )
     if request.method == 'POST':
         form = CreditCardForm(data=request.POST, instance=instance)
         if form.is_valid():
@@ -398,6 +414,27 @@ def patron_edit_credit_card(request):
     return render_to_response(
         template_name='accounts/patron_edit_credit_card.html', 
         dictionary={'form': form}, context_instance=RequestContext(request))
+
+@login_required
+def patron_delete_credit_card(request):
+    try:
+        instance = request.user.creditcard
+        if not instance.keep:
+            messages.error(request, _(u"Vous n'avez pas de carte enregistrée"))
+            return redirect(patron_edit_credit_card)
+    except CreditCard.DoesNotExist:
+        messages.error(request, _(u"Vous n'avez pas de carte enregistrée"))
+        return redirect(patron_edit_credit_card)
+    
+    if instance.payboxdirectpluspaymentinformation_set.all():
+        instance.holder = None
+        instance.save()
+    else:
+        instance.delete()
+
+    messages.success(request, _(u"On a bien supprimé les détails de votre carte bancaire."))
+    return redirect(patron_edit_credit_card)
+
 
 @login_required
 def patron_edit_rib(request):
@@ -597,3 +634,63 @@ def accounts_studies_autocomplete(request):
     school_list = [{'label': school['school'], 'value': school['school']} for school in schools]
     return HttpResponse(simplejson.dumps(school_list), mimetype="application/json")
 
+@login_required
+def gmail_invite(request):
+    access_token = request.GET.get('0-facebook_access_token', None)
+    if access_token:
+        token_info = simplejson.load(
+            urllib.urlopen(
+                'https://www.googleapis.com/oauth2/v1/'
+                'tokeninfo?access_token=%s'%access_token
+            )
+        )
+        if 'audience' not in token_info or token_info['audience'] != settings.GOOGLE_CLIENT_ID:
+            return HttpResponseForbidden()
+        client = gdata.contacts.client.ContactsClient(source='e-loue')
+        token = gdata.gauth.OAuth2Token(
+            client_id=settings.GOOGLE_CLIENT_ID,
+            client_secret=settings.GOOGLE_CLIENT_SECRET,
+            scope=('https://www.googleapis.com/auth/userinfo.email+'
+                'https://www.googleapis.com/auth/userinfo.profile+'
+                'https://www.google.com/m8/feeds'
+            ), user_agent='', access_token=access_token
+        )
+        client = token.authorize(client)
+        query = gdata.contacts.client.ContactsQuery()
+        query.max_results = 10000
+        initial_data = []
+        for e in client.GetContacts(q=query).entry:
+            email = next(itertools.imap(lambda email: email.address, itertools.ifilter(lambda email: email.primary and email.primary=='true', e.email)), None)
+            if email:
+                initial_data.append({'checked': False, 'name': e.name.full_name.text if e.name else '', 'email': email})
+        return direct_to_template(request, 'accounts/gmail_invite.html', {'initial_data': initial_data})
+    else:
+        return direct_to_template(request, 'accounts/gmail_invite.html')
+
+@login_required
+def gmail_send_invite(request):
+    if request.POST:
+        form = GmailContactForm(request.POST)
+        if form.is_valid():
+            request.user.send_gmail_invite(form.cleaned_data['email'])
+            return HttpResponse(
+                simplejson.dumps({'status': "OK"}), 
+                mimetype="application/json"
+            )
+        else:
+            return HttpResponse(
+                simplejson.dumps({'status': "KO"}), 
+                mimetype="application/json"
+            )
+    else:
+        return HttpResponse(
+            simplejson.dumps({'status': "KO"}), 
+            mimetype="application/json"
+        )
+
+
+
+
+@login_required
+def facebook_invite(request):
+    return direct_to_template(request, 'accounts/facebook_invite.html')

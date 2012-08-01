@@ -2,7 +2,7 @@
 {% blocktrans with booking.borrower.username as username and booking.owner.username as owner and booking.product.category.name as category and booking.product.summary as summary  and booking.started_at|date:"DATETIME_FORMAT" as starting_at and booking.started_at|timesince:booking.ended_at as duration %}
 Bonjour {{ username }}, 
 
-Malgré son précédent accord, {{ owner }} a décidé d'annuler la location suivante : 
+Malgré son précédent accord, le propriétaire a décidé d'annuler la location suivante : 
 
 Type : {{ category }} 
 Objet : {{ summary }} 

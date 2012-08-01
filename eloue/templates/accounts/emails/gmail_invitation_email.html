@@ -1,0 +1,31 @@
+{% extends "base_email.html" %}
+
+{% load i18n %}
+
+{% block title_email %}{% trans "Rejoins moi dans la communauté des e-loueurs !" %}{% endblock %}
+
+{% block content_email %}
+<tr>
+	<td valign="top" width="100%" style="border-collapse: collapse;">
+		<table border="0" cellpadding="0" cellspacing="0" width="510" class="leftColumnContent">
+			<tr>
+				<td valign="top" style="padding-top: 20px;border-collapse: collapse;">
+					<div style="color: #505050;font-family: Arial;font-size: 14px;line-height: 200%;text-align: left;">
+						{% blocktrans with patron.first_name as first_name and site.domain as domain and protocol as protocol %}
+							<p>Bonjour,</p>
+
+							<p>Je viens de m'inscrire sur e-loue. Site super sympa ! Rejoins moi dans la communauté des e-loueurs et tu pourras toi aussi louer n'importe quel objet (voiture, perceuse, déguisement, électroménager, caméra, etc.).</p>
+
+							<p>Voici le lien : <a href="{{ protocol }}://{{ domain }}">{{ domain }}</a></p>
+
+							<p>Cordialement,</p>
+
+							<p>{{ first_name }}</p>
+						{% endblocktrans %}
+					</div>
+				</td>
+			</tr>
+		</table>
+	</td>
+</tr>
+{% endblock %}

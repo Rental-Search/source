@@ -1,4 +1,4 @@
-from django.template import Library
+from django.template import Library, Node
 
 register = Library()
 

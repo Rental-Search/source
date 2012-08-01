@@ -150,8 +150,10 @@ $(document).ready(function() {
     if (passwordInput.attr('type') != 'hidden') {
         if (parseInt(exists, 10)) {
             passwordInput.removeAttr('disabled');
+            passwordInput.parent().show();
         } else {
             passwordInput.attr('disabled', 'disabled');
+            passwordInput.parent().hide()
         }
     }
     $("input[name$='exists']").change(function(event) {
@@ -159,8 +161,10 @@ $(document).ready(function() {
         if (passwordInput.attr('type') != 'hidden') {
             if (parseInt(radio.val(), 10)) {
                 passwordInput.removeAttr('disabled');
+                passwordInput.parent().show()
             } else {
                 passwordInput.attr('disabled', 'disabled');
+                passwordInput.parent().hide()
             }
         }
     });
@@ -271,6 +275,26 @@ $(document).ready(function() {
             return false;
         }
     });
+
+    //Confirm delete credit card
+    $(".delete-credit-card").click(function() {
+        return confirm('Êtes-vous sûr de vouloir supprimer cette carte de crédit ?');
+    });
+
+    //New credit card on confirm booking
+    $("#display-credit-card-form").click(function(e) { 
+        e.preventDefault(); 
+        $("#credit-card-form").show();
+    });
+
+    //Cancel credit card on confirm booking
+    $("#cancel-credit-card-form").click(function(e) {
+        e.preventDefault();
+        $("input[name$=-card_number]").val("");
+        $("input[name$=-holder_name]").val("");
+        $("input[name$=-cvv]").val("");
+        $("#credit-card-form").hide();
+    })
 
     //loading for accept action and refuse action booking
     $('button.btn-booking-action.pending, button.btn-booking-action.rejected').click(function () {

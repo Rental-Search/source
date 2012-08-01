@@ -1,0 +1,96 @@
+
+{% extends "accounts/facebook_invite.html" %}
+{% load i18n navbar product %}
+
+
+{% block title %}{% trans "Envoyer une invitation à mes contacts Gmail" %}{% endblock %}
+
+{% block tail %}
+{{ block.super }}
+<script type="text/javascript">
+	function poptastic(url) {
+	  var newWindow = window.open(url, '_blank', 'height=600,width=450');
+	  newWindow.opener = self;
+	  if (1) {
+	    newWindow.focus();
+	  }
+	}
+</script>
+<script type="text/javascript">
+  function gmail_send_invite(email) {
+    $(document).ajaxSend(function(event, xhr, settings) {
+      if (!safeMethod(settings.type) && sameOrigin(settings.url)) {
+          xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+      }
+    });
+    $.ajax({
+      type: 'POST',
+      url: '{% url gmail_send_invite %}',
+      data: {
+        email: email,
+      },
+      cache: false,
+      success: function(response) {
+          if (response["status"] == "OK") {
+              alert("{% trans "Invitation correctement envoyée" %}");
+          }
+          if (response["status"] == "FAIL") {
+              alert("{% trans "Impossible d'envoyer l'invitation" %}");
+          }
+      }
+    });
+  }
+
+  $(function() {
+    $( "#gmail-list button.btn" ).click(function() {
+      answer = confirm('Etes-vous sur de vouloir envoyer une invitation ?');
+      if (answer == true) {
+        email = $(this).parent().find('input:hidden[name=email]').val();
+        gmail_send_invite(email);
+        $(this).parent().remove();
+      } else {
+        return false;
+      }
+    });
+  });
+</script>
+
+{% endblock %}
+
+
+{% block content-main-profil %}
+<h1>{% trans "Gmail"%}</h1>
+
+<div class="fb-connect-invite">
+  {% if initial_data %} 
+  <div class="fb-container-list">
+  	<h2>{% trans "Invitez vos contacts" %}</h2>
+  	<input type="text" placeholder="Rechercher un contact" id="filter"/>
+  	<ul id="gmail-list" class="friends-list filtered">
+  		{% for data in initial_data %}
+  		<li>
+  			<img src="{{ MEDIA_URL }}images/default_avatar.png" width="30"/>
+  			<div class="name">{{ data.name|truncate:28}}</div> 
+        <input type="hidden" value="{{ data.email }}" name="email" />
+  			<button type="button" class="btn btn-contactme">{% trans "Inviter"%}</button>	
+  		</li>
+  		{% endfor %}
+  	</ul>
+  </div>
+	{% else %}
+  <p class="fb-connect-invite-text">
+    Nous n'avons pas pu trouver vos contacts sur Gmail parce que vous n'avez pas connecté Gmail à e-loue. Cliquez sur le bouton ci dessous pour créer la connexion.
+  </p>
+	<p class="fb-connect-invite-link">
+		<a href="javascript:poptastic('https://accounts.google.com/o/oauth2/auth?scope=https://www.googleapis.com/auth/userinfo.email+https://www.googleapis.com/auth/userinfo.profile+https://www.google.com/m8/feeds&state=/profile&redirect_uri=http://localhost:8000/oauth2callback&response_type=token&client_id=382908503214.apps.googleusercontent.com')" class="btn">
+			Invitez vos contacts Gmail
+		</a>
+	</p>
+	<form action="" id="gmail_submit_token" method="GET">
+	    <input type="hidden" name="0-facebook_access_token" id="id_0-facebook_access_token">
+	    <input type="submit" value="" style="visibility:hidden"/>
+	</form>
+	{% endif %}
+</div>
+
+{% endblock %}

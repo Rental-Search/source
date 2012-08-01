@@ -24,7 +24,11 @@
         </form>
             <p class="city">
                 <span class="city-to">à </span>
-                <span class="city-name" id="city-name"></span>
+                <span class="city-name" id="city-name">
+                    {% with request.session.location as location %}
+                        {% firstof location.formatted_address location.city location.region location.country location.fallback %}
+                    {% endwith %}
+                </span>
                 <button class="btn-other-town"><span>Changer de ville</span></button>
             </p>
             <p class="city-input">
@@ -33,42 +37,55 @@
             </p>
     </div><!-- search-home -->
     <div class="products-home">
-        <div class="products-home-tabs" style="display: none;">
-            <ul>
-                <li><a href="#near">{% trans "Objets" %}</a></li>
-                <li><a href="#near_car">{% trans "Voitures" %}</a></li>
-                <li><a href="#near_realestate">{% trans "Logements" %}</a></li>
-                <li><a href="#hotloc">{% trans "Locations du moment" %}</a></li>
+        <div class="products-home-tabs ui-tabs ui-widget ui-widget-content ui-corner-all">
+            <ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
+                <li class="ui-state-default ui-corner-top ui-tabs-selected ui-state-active"><a href="#near">{% trans "Objets" %}</a></li>
+                <li class="ui-state-default ui-corner-top"><a href="#near_car">{% trans "Voitures" %}</a></li>
+                <li class="ui-state-default ui-corner-top"><a href="#near_realestate">{% trans "Logements" %}</a></li>
+                <li class="ui-state-default ui-corner-top"><a href="#hotloc">{% trans "Locations du moment" %}</a></li>
             </ul>
-            <div id="near">
-                <ul class="product-list"></ul>
+            <div id="near" class="ui-tabs-panel ui-widget-content ui-corner-bottom">
+                {# <ul class="product-list"></ul> #}
+                {% with 28 as truncation %}
+                    {% include 'products/partials/result_list.html' %}
+                {% endwith %}
                 <p class="more-product">
                     <a href="#" class="more-product-link">{% trans "Chargez plus d'annonces..." %}</a>
                 </p>
             </div>{# near #}
-            <div id="near_car">
-                <ul class="product-list"></ul>
-                <p class="more-product">
-                    <a href="#" class="more-product-link">{% trans "Chargez plus d'annonces..." %}</a>
-                </p>
-            </div>{# near #}
-            <div id="near_realestate">
-                <ul class="product-list"></ul>
-                <p class="more-product">
-                    <a href="#" class="more-product-link">{% trans "Chargez plus d'annonces..." %}</a>
-                </p>
-            </div>{# near #}
-            <div id="hotloc">
-                {% cache 43200 curiosities %}
-                <ul class="product-list">
-                {% for curiosity in curiosities %}
-                    {% with curiosity.product as product %}
-                        <li>
-                        {% include "products/partials/product.html" %}
-                        </li>
+            <div id="near_car" class="ui-tabs-panel ui-widget-content ui-corner-bottom ui-tabs-hide">
+                {# <ul class="product-list"></ul> #}
+                {% with car_list as product_list %} 
+                    {% with 28 as truncation %}
+                        {% include 'products/partials/result_list.html' %}
                     {% endwith %}
-                {% endfor %}
-                </ul>
+                {% endwith %}
+                <p class="more-product">
+                    <a href="#" class="more-product-link">{% trans "Chargez plus d'annonces..." %}</a>
+                </p>
+            </div>{# near #}
+            <div id="near_realestate" class="ui-tabs-panel ui-widget-content ui-corner-bottom ui-tabs-hide">
+                {# <ul class="product-list"></ul> #}
+                {% with realestate_list as product_list %} 
+                    {% with 28 as truncation %}
+                        {% include 'products/partials/result_list.html' %}
+                    {% endwith %}
+                {% endwith %}
+                <p class="more-product">
+                    <a href="#" class="more-product-link">{% trans "Chargez plus d'annonces..." %}</a>
+                </p>
+            </div>{# near #}
+            <div id="hotloc" class="ui-tabs-panel ui-widget-content ui-corner-bottom ui-tabs-hide">
+                {% cache 43200 curiosities %}
+                    <ul class="product-list">
+                    {% for curiosity in curiosities %}
+                        {% with curiosity.product as product %}
+                            <li>
+                                {% include "products/partials/product.html" %}
+                            </li>
+                        {% endwith %}
+                    {% endfor %}
+                    </ul>
                 {% endcache %}
             </div>{# hotloc #}
         </div>{# products-home-tabs #}
@@ -124,12 +141,13 @@
         $(document).ready(function() {
 
             (function( $ ) {
-              $.fn.loadMore = function(url) {
+              $.fn.loadMore = function(url, flag) {
                 if (typeof(url) === 'undefined') {
                   this.data('offset', this.data('offset') + 1);
                   $.ajax({
                     url: this.data('url')+this.data('offset'),
                     success: function(result) {
+                        console.log($('ul', this));
                         $('ul', this).append($('li', result));
                         $('.more-product-link', this).removeClass('loading');
                     },
@@ -138,23 +156,26 @@
                     context: this
                   });
                 } else {
-                  $('ul', this).load(url+' li');
-                  $('.more-product-link', this).click(function(e) {
-                    e.preventDefault();
-                    $(this).addClass('loading');
-                    $(this.parentNode.parentNode).loadMore();
-                  })
-                  this.data('url', url);
-                  this.data('offset', 0);
+                    if (typeof(flag) == 'undefined') {
+                      $('ul', this).load(url+' li');
+                      this.data('offset', 0);
+                    } else {
+                      this.data('offset', 1);
+                    }
+                    $('.more-product-link', this).click(function(e) {
+                      e.preventDefault();
+                      $(this).addClass('loading');
+                      $(this.parentNode.parentNode).loadMore();
+                    });
+                    this.data('url', url);
                 }
               };
             })( jQuery );
 
-            location_changed = function() {
-
-                $('#near').loadMore('lists/object/');
-                $('#near_car').loadMore('lists/car/');
-                $('#near_realestate').loadMore('lists/realestate/');
+            location_changed = function(flag) {
+                $('#near').loadMore('lists/object/', flag);
+                $('#near_car').loadMore('lists/car/', flag);
+                $('#near_realestate').loadMore('lists/realestate/', flag);
                 $.ajax(
                     {
                         url:'/get_user_location/', 
@@ -168,11 +189,11 @@
                 )
             }
 
-             geolocation_stuff(location_changed);
+            geolocation_stuff(location_changed);
 
 
             $(".products-home-tabs").show();
-            location_changed();
+            location_changed(1);
 
 
             if (!$.cookie('geocoding')) 

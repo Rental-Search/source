@@ -492,6 +492,9 @@ class Sinister(models.Model):
     product = models.ForeignKey(Product, related_name='sinisters')
     
     created_at = models.DateTimeField(blank=True, editable=False)
+
+    def __unicide__(self):
+        return self.uuid
     
     @incr_sequence('sinister_id', 'rent_sinister_sinister_id_seq')
     def save(self, *args, **kwargs):

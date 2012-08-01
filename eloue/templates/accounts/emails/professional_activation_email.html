@@ -1,0 +1,35 @@
+{% extends "base_email.html" %}
+
+{% load i18n %}
+
+{% block title_email %}{% trans "Validation de votre inscription pro" %}{% endblock %}
+
+{% block content_email %}
+<tr>
+    <td valign="top" width="100%" style="border-collapse: collapse;">
+        <table border="0" cellpadding="0" cellspacing="0" width="510" class="leftColumnContent">
+            <tbody>
+                <tr>
+                    <td valign="top" style="padding-top: 20px;border-collapse: collapse;">
+                        <div style="color: #505050;font-family: Arial;font-size: 14px;line-height: 200%;text-align: left;">
+                        	{% blocktrans with patron.username as username and site.domain as domain and protocol as protocol %}
+                                Bonjour {{ username }},<br><br>
+
+                                Nous vous remercions de vous être enregistré(e) sur <a href="{{ protocol }}://{{ domain }}">{{ domain }}</a>.<br><br>
+                                Veuillez cliquer sur le bouton ci-dessous pour finaliser la validation de votre compte.<br><br>
+
+                            {% endblocktrans %}
+                            <p style="margin-top: 0px; text-align: center;">
+                            	<a href="{{ protocol }}://{{ site.domain }}{% url propw uidb36=uid token=token %}" style="text-decoration: none;">
+                                	<img src="http://eloue.s3.amazonaws.com/media/email/activation-btn.png" alt="" width="157" height="40" />
+                            	</a>
+                            </p>
+                            {% trans "L'équipe" %} {{ site.name }}.
+                        </div>                                                                    
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </td>
+</tr>
+{% endblock %}

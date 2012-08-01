@@ -1,0 +1,141 @@
+{% load compressed i18n markup seo cache %}
+<!doctype html>
+<html lang="fr" {% block html_properties %} {% endblock %}>
+ <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>{% filter striplinebreak %}{% block title %}{% endblock %} {% if is_paginated and page_obj.has_previous %}- {% trans "Page" %} {{ page_obj.number }}{% endif %} - {% trans "e-loue" %}{% endfilter %}</title>
+  <meta name="description" content="{% filter striplinebreak %}{% block description %}Plateforme pour louer ou mettre en location tout type d'objet : materiel, reception, mariage, sono, utilitaires, ski{% endblock %}{% if is_paginated and page_obj.has_previous %} Page {{ page_obj.number }}{% endif %}{% endfilter %}">
+  <meta name="google-site-verification" content="FWAXGNflP5tHx07gmHbTDhPEsI-BVU66-mF-sLIH5VU" />
+  <link rel="shortcut icon" href="{{ MEDIA_URL }}favicon.ico">
+  {% block head %}
+  {% compressed_css 'master' %}
+  <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
+
+  {% endblock %}
+  <!--[if lt IE 9]>
+      <script src="{{ MEDIA_URL }}js/html5.js"></script>
+      {% compressed_css 'ie' %}
+  <![endif]-->
+ </head>
+ 
+ <body>
+    <div class="top-bar" style="background: none; box-shadow: none; border-bottom: none;">
+        <div class="container">
+            <div class="logo">
+                <a href="{% url home %}"><img src="{{ MEDIA_URL }}images/bml/logo_bml.gif" alt="e-loue" width="214" height="50"/></a>
+            </div><!-- logo -->
+            <div class="top-content">
+                <nav>
+                    {% if user.is_anonymous %}
+                        <a href="{% trans "/comment-ca-marche/" %}" class="nav-link">{% trans "Comment ça marche ?" %}</a>
+                    {% else %}
+                        <a href="{% url dashboard %}" class="profil-link">
+                            {% if user.avatar %}
+                            <img src="{{ user.thumbnail.url }}" width="20" height="20">
+                            {% else %}
+                            <img src="{{ MEDIA_URL }}images/default_avatar.png"  width="20" height="20">
+                            {% endif %}
+                            {% trans "Tableau de bord" %}  
+                            {% with unread_message_count|add:user.bookings.authorized.count as notification_count %}
+                                {% if notification_count > 0 %}
+                                    ({{notification_count}})
+                                {% endif %}
+                            {% endwith %}
+                        </a>
+                    {% endif %}
+                    {% if not user.is_authenticated %}
+                        <a href="{% url auth_login %}" class="nav-link" >{% trans "S'inscrire ou se connecter" %}</a>
+                        <a href="{% url auth_login %}" class="fb-connect-small">
+                            <img src="{{ MEDIA_URL }}images/fb_connect_small.png" width="16" height="16">
+                        </a>
+                    {% else %}
+                        <a href="{% url auth_logout %}" class="nav-link">{% trans "Se déconnecter" %}</a>
+                    {% endif %}
+                    <a href="{% url publish_new_ad %}" class="add-product-link"  >{% trans "Déposer une annonce" %}</a>
+                </nav>
+            </div>{# top-content #}
+        </div>{# container #}
+    </div>{# topbar #}
+    {% block content %}{% endblock %}
+    {% block footer %}
+    <div class="container">
+        <footer>
+            <div class="f-col first">
+                <div class="f-title">{% trans "Liens utiles" %}</div>
+                <ul>
+              <li><a href="{% url home %}">{% trans "Accueil" %}</a></li>
+              <li><a href="{% url dashboard %}">{% trans "Mon compte" %}</a></li>
+              <li><a href="{% url publish_new_ad %}">{% trans "Déposer une annonce" %}</a></li>
+              {% if user.is_authenticated %}
+                <li><a href="{% trans "/comment-ca-marche/" %}">{% trans "Comment ça marche ?" %}</a></li>
+              {% endif %}
+            </ul>
+            </div><!-- f-col first -->
+            <div class="f-col">
+              <div class="f-title">{% trans "Info" %}</div>
+              <ul>
+                <li><a href="{% trans "/conditions-generales/" %}">{% trans "Conditions générales" %}</a></li>
+                <li><a href="{% trans "/respect-vie-privee/" %}">{% trans "Respect de la vie privée" %}</a></li>
+              </ul>
+            </div><!-- f-col -->
+            <div class="f-col">
+                <div class="f-title">{% trans "Support" %}</div>
+                <ul>
+              <li><a href="{% url contact %}">{% trans "Contactez-nous" %}</a></li>
+            </ul>
+            </div><!-- f-col -->
+            <div class="f-col">
+                <div class="f-title">{% trans "Communauté" %}</div>
+                <ul>
+              <li><a href="{% url faq-topic-list %}">{% trans "Aide" %}</a></li>
+            </ul>
+            </div><!-- f-col -->
+            <div class="f-bottom first">
+        </footer>
+    </div>{# container #}
+    <div class="container" style="background-color: #925940; padding: 10px;">
+      <style>
+        .menu_foot {
+          margin: 0px 0px 0px 0px;
+        }
+        .menu_foot .item11 {
+          border: 0px;
+        }
+        .menu_foot li {
+          float: left;
+          display: block;
+          list-style: none;
+          border-left: 1px solid white;
+          padding: 0px 8px 0px 08px;
+        }
+        .menu_foot li a {
+          color: #fff;
+          font-size: 12px;
+          font-family: Arial, Helvetica, sans-serif;
+        }
+      </style>
+      <ul class="menu_foot">
+        <li class="item11"><a href="http://www.bienmeloger.nc"><span>Accueil</span></a></li>
+        <li class="item12"><a href="http://www.bienmeloger.nc/contact?view=multicontact"><span>Contact</span></a></li>
+        <li class="item32"><a href="http://www.bienmeloger.nc/mentions-legales"><span>Mentions Légales</span></a></li>
+        <li class="item33"><a href="http://www.bienmeloger.nc/plan-du-site"><span>Plan du site</span></a></li>
+        <li class="item38"><a href="http://www.bienmeloger.nc/liens"><span>Liens</span></a></li>
+        <li class="item36"><a href="http://www.bienmeloger.nc/newsletters"><span>Newsletters</span></a></li>
+        <li class="item24"><a href="http://www.bienmeloger.nc/annuaire-des-professionnels"><span>Annuaire des professionnels</span></a></li>
+        <li class="item72"><a href="http://www.bienmeloger.nc/agences-immobilieres-nouvelle-caledonie"><span>Agences immobilières</span></a></li>
+      </ul>
+    </div>{# container #}
+    {% endblock %}
+    {% block tail %}
+      {% compressed_js 'application' %}
+    {% endblock %}
+    <script type="text/javascript">  (
+        function() {
+            var ga = document.createElement('script');     ga.type = 'text/javascript'; ga.async = true;
+            ga.src = ('https:'   == document.location.protocol ? 'https://ssl'   : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+    </script>
+ </body>
+</html>

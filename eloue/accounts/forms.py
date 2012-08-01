@@ -8,10 +8,12 @@ from form_utils.forms import BetterForm, BetterModelForm
 from django.conf import settings
 from django.contrib.auth import authenticate, login
 from django.contrib.sites.models import Site
-from django.contrib.auth.forms import PasswordResetForm, PasswordChangeForm, SetPasswordForm
+from django.contrib.auth.models import UserManager
+from django.contrib.auth.forms import PasswordResetForm, PasswordChangeForm, SetPasswordForm, UserCreationForm
 from django.contrib.auth.tokens import default_token_generator
 from django.core import validators
 from django.forms.fields import EMPTY_VALUES
+from django.forms.formsets import formset_factory, BaseFormSet
 from django.forms.models import inlineformset_factory, BaseInlineFormSet
 from django.template.defaultfilters import slugify
 from django.template.loader import render_to_string
@@ -203,7 +205,7 @@ class EmailPasswordResetForm(PasswordResetForm):
         'autocapitalize': 'off', 'autocorrect': 'off', 'class': 'inb'
     }))
     
-    def save(self, domain_override=None, use_https=False, token_generator=default_token_generator, **kwargs):
+    def save(self, domain_override=None, use_https=False, token_generator=default_token_generator, email_template_name='registration/password_reset_email', **kwargs):
         """Generates a one-use only link for resetting password and sends to the user"""
         from django.core.mail import EmailMultiAlternatives
         for user in self.users_cache:
@@ -222,9 +224,12 @@ class EmailPasswordResetForm(PasswordResetForm):
                 'token': token_generator.make_token(user),
                 'protocol': use_https and 'https' or 'http',
             }
-            subject = render_to_string('accounts/password_reset_email_subject.txt', {'patron': user, 'site': Site.objects.get_current()})
-            text_content = render_to_string('accounts/password_reset_email.txt', context)
-            html_content = render_to_string('accounts/password_reset_email.html', context)
+            subject = render_to_string(
+                email_template_name + '_subject.txt', 
+                {'patron': user, 'site': Site.objects.get_current()}
+            )
+            text_content = render_to_string(email_template_name + '.txt', context)
+            html_content = render_to_string(email_template_name + '.html', context)
             message = EmailMultiAlternatives(subject, text_content, settings.DEFAULT_FROM_EMAIL, [user.email])
             message.attach_alternative(html_content, "text/html")
             message.send()
@@ -267,7 +272,7 @@ class PatronEditForm(BetterModelForm):
                 'fields': [
                     'is_professional', 'company_name', 'username', 'avatar', 
                     'email', 'civility', 'first_name', 'last_name',
-                    'default_address', 'date_of_birth', 'place_of_birth',
+                    'default_address', 'default_number', 'date_of_birth', 'place_of_birth',
                     'paypal_email', 'is_subscribed', 'new_messages_alerted',
                 ],
                 'legend': _(u'Informations nécessaires')
@@ -292,6 +297,9 @@ class PatronEditForm(BetterModelForm):
         self.fields['default_address'].widget.attrs['class'] = "selm"
         self.fields['default_address'].label = _(u'Adresse par defaut')
         self.fields['default_address'].queryset = self.instance.addresses.all()
+        self.fields['default_number'].widget.attrs['class'] = "selm"
+        self.fields['default_number'].label = _(u'Téléphone par defaut')
+        self.fields['default_number'].queryset = self.instance.phones.all()
     
     def clean_company_name(self):
         is_professional = self.cleaned_data.get('is_professional')
@@ -377,6 +385,49 @@ PatronPasswordChangeForm.base_fields.keyOrder = ['old_password', 'new_password1'
     
 
 class PatronChangeForm(forms.ModelForm):
+    class Meta:
+        model = Patron
+
+
+class PatronCreationForm(UserCreationForm):
+    password1 = forms.CharField(label=_("Password"), widget=forms.PasswordInput, required=False)
+    password2 = forms.CharField(label=_("Password confirmation"), widget=forms.PasswordInput,
+        help_text = _("Enter the same password as above, for verification."), required=False)
+    email = forms.EmailField(label=_(u"Email"), max_length=75, required=True)
+    first_name = forms.CharField(label=_(u"Prénom"), required=True)
+    last_name = forms.CharField(label=_(u"Nom"), required=True)
+
+    def __init__(self, *args, **kwargs):
+        super(PatronCreationForm, self).__init__(*args, **kwargs)
+        self.fields['slug'].required = False
+
+    def clean_company_name(self):
+        is_professional = self.cleaned_data.get('is_professional')
+        company_name = self.cleaned_data.get('company_name', None)
+        if is_professional and not company_name:
+            raise forms.ValidationError(_(u"Vous devez entrer le nom de l'entreprise"))
+        return company_name
+
+    def clean_slug(self):
+        slug = self.cleaned_data.get("username", "")
+        return slugify(slug)
+
+    def clean(self):
+        if self.cleaned_data.get("is_professional"):
+            self.cleaned_data['password1'] = None
+            self.cleaned_data['password2'] = None
+        else:
+            msg = _(u"Ce champ est obligatoire.")
+            if not self.cleaned_data.get("password1"):
+                self._errors["password1"] = self.error_class([msg])
+                if 'password1' in self.cleaned_data:
+                    del self.cleaned_data["password1"]
+            if not self.cleaned_data.get("password2"):
+                self._errors["password2"] = self.error_class([msg])
+                if 'password2' in self.cleaned_data:
+                    del self.cleaned_data["password2"]
+        return self.cleaned_data
+
     class Meta:
         model = Patron
     
@@ -504,6 +555,7 @@ def mask_card_number(card_number):
         card_number
     )
 
+
 class CreditCardForm(forms.ModelForm):
     cvv = forms.CharField(max_length=4, label=_(u'Cryptogramme de sécurité'), help_text=_(u'Les 3 derniers chiffres au dos de la carte.'))
     expires = ExpirationField(label=_(u'Date d\'expiration'))
@@ -523,7 +575,9 @@ class CreditCardForm(forms.ModelForm):
         # see note: https://docs.djangoproject.com/en/dev/topics/forms/modelforms/#using-a-subset-of-fields-on-the-form
         # we excluded, then added, to avoid save automatically the card_number
         model = CreditCard
-        exclude = ('card_number', 'masked_number', 'keep')
+        exclude = (
+            'card_number', 'masked_number', 'keep', 'subscriber_reference'
+        )
 
     def clean_card_number(self):
         def _luhn_valid(card_number):
@@ -560,12 +614,12 @@ class CreditCardForm(forms.ModelForm):
         try:
             if self.instance.pk:
                 self.cleaned_data['card_number'] = pm.modify(
-                    self.instance.holder.pk, 
+                    self.instance.subscriber_reference, 
                     self.cleaned_data['card_number'],
                     self.cleaned_data['expires'], self.cleaned_data['cvv']) 
             else:
                 self.cleaned_data['card_number'] = pm.subscribe(
-                    self.instance.holder.pk, 
+                    self.instance.subscriber_reference,
                     self.cleaned_data['card_number'], 
                     self.cleaned_data['expires'], self.cleaned_data['cvv']
                 )
@@ -579,44 +633,69 @@ class CreditCardForm(forms.ModelForm):
         return instance
 
 class BookingCreditCardForm(CreditCardForm):
-    class Meta:
+    class Meta(CreditCardForm.Meta):
         # see note: https://docs.djangoproject.com/en/dev/topics/forms/modelforms/#using-a-subset-of-fields-on-the-form
         # we excluded, then added, to avoid save automatically the card_number
-        model = CreditCard
         exclude = ('card_number', 'holder', 'masked_number')
 
+class ExistingBookingCreditCardForm(CreditCardForm):
+    cvv = forms.CharField(max_length=4, required=False, label=_(u'Cryptogramme de sécurité'), help_text=_(u'Les 3 derniers chiffres au dos de la carte.'))
+    expires = ExpirationField(label=_(u'Date d\'expiration'), required=False)
 
-class CvvForm(forms.ModelForm):
-    cvv = forms.CharField(label=_(u'Veuillez resaisir votre cryptogram visuel'), min_length=3, max_length=4, widget=forms.TextInput())
-    
     def __init__(self, *args, **kwargs):
-        if 'instance' not in kwargs:
-            raise ValueError("you should specify 'instance' for this form")
-        super(CvvForm, self).__init__(*args, **kwargs)
-
-    class Meta:
-        exclude = ('expires', 'masked_number', 'card_number', 'holder', 
-            'keep', 'holder_name')
-        model = CreditCard
+        super(CreditCardForm, self).__init__(*args, **kwargs)
+        self.fields['card_number'] = forms.CharField(
+            label=_(u'Numéro de carte de crédit'),
+            min_length=16, max_length=24, required=False
+        )
+        self.fields['holder_name'] = forms.CharField(
+            label=_(u'Titulaire de la carte'), required=False
+        )
 
     def clean(self):
         if self.errors:
             return self.cleaned_data
-        try:
-            from eloue.payments.paybox_payment import PayboxManager, PayboxException
-            pm = PayboxManager()
-            pm.authorize_subscribed(
-                self.instance.holder.pk, self.instance.card_number, 
-                self.instance.expires, self.cleaned_data['cvv'], 1, 'verification'
-            )
-        except PayboxException as e:
-            raise forms.ValidationError(_(u'La validation de votre carte a échoué.'))
+        cvv = self.cleaned_data.get('cvv')
+        holder_name = self.cleaned_data.get('holder_name')
+        card_number = self.cleaned_data.get('card_number')
+        expires = self.cleaned_data.get('expires')
+        if any((cvv, holder_name, card_number, expires)):
+            if not all((cvv, holder_name, card_number, expires)):
+                raise forms.ValidationError('You have to fill out all the fields')
+            else:
+                try:
+                    from eloue.payments.paybox_payment import PayboxManager, PayboxException
+                    pm = PayboxManager()
+                    self.cleaned_data['masked_number'] = mask_card_number(self.cleaned_data['card_number'])
+                    pm.authorize(self.cleaned_data['card_number'], 
+                        self.cleaned_data['expires'], self.cleaned_data['cvv'], 1, 'verification'
+                    )
+                except PayboxException as e:
+                    raise forms.ValidationError(_(u'La validation de votre carte a échoué.'))
         return self.cleaned_data
-    
+
     def save(self, *args, **kwargs):
-        if kwargs.get('commit'):
-            raise NotImplementedError('you have nothing to commit here!!')
-        return super(CvvForm, self).save(*args, **kwargs)
+        commit = kwargs.pop('commit', True)
+        cvv = self.cleaned_data.get('cvv')
+        holder_name = self.cleaned_data.get('holder_name')
+        card_number = self.cleaned_data.get('card_number')
+        expires = self.cleaned_data.get('expires')
+        if any((cvv, holder_name, card_number, expires)):
+            pm = PayboxManager()
+            try:
+                self.cleaned_data['card_number'] = pm.modify(
+                    self.instance.subscriber_reference, 
+                    self.cleaned_data['card_number'],
+                    self.cleaned_data['expires'], self.cleaned_data['cvv']) 
+            except PayboxException:
+                raise
+            instance = super(CreditCardForm, self).save(*args, commit=False, **kwargs)
+            instance.card_number = self.cleaned_data['card_number']
+            instance.masked_number = self.cleaned_data['masked_number']
+            if commit:
+                instance.save()
+            return instance
+        return self.instance
 
 def make_missing_data_form(instance, required_fields=[]):
     fields = SortedDict({
@@ -787,3 +866,19 @@ class ContactForm(forms.Form):
     subject = forms.CharField(label=_(u"Sujet"), max_length=100, required=True, widget=forms.TextInput(attrs={'class': 'inm'}))
     message = forms.CharField(label=_(u"Message"), required=True, widget=forms.Textarea(attrs={'class': 'inm'}))
     cc_myself = forms.BooleanField(label=_(u"Etre en copie"), required=False)
+
+class GmailContactForm(forms.Form):
+    checked = forms.BooleanField(required=False)
+    name = forms.CharField(max_length=200, required=False, widget=forms.HiddenInput())
+    email = forms.EmailField(widget=forms.HiddenInput())
+
+class BaseGmailContactFormset(BaseFormSet):
+    def clean(self):
+        if any(self.errors):
+            return self.cleaned_data
+        checked_contacts = filter(lambda form: form.cleaned_data.get('checked', None), self.forms)
+        if len(checked_contacts) > 20:
+            raise forms.ValidationError(_('Vous pouvez choisir 20 contacts maximum'))
+        return self.cleaned_data
+
+GmailContactFormset = formset_factory(GmailContactForm, formset=BaseGmailContactFormset, extra=0)
