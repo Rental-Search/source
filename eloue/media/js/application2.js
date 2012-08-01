@@ -293,6 +293,8 @@ $(document).ready(function() {
         $("input[name$=-card_number]").val("");
         $("input[name$=-holder_name]").val("");
         $("input[name$=-cvv]").val("");
+        $("select[name$=-expires_0]").val("");
+        $("select[name$=-expires_1]").val("");
         $("#credit-card-form").hide();
     })
 
