@@ -58,7 +58,7 @@ class Command(BaseCommand):
         csv_file.seek(0)
         latin1csv_file = TemporaryFile()
         for line in csv_file:
-            latin1csv_file.write(line.decode('utf-8').encode('latin1'))
+            latin1csv_file.write(line.decode('utf-8').encode('latin1', 'ignore'))
         latin1csv_file.seek(0)
         log.info('Uploading daily insurance subscriptions')
         ftp = FTP(settings.INSURANCE_FTP_HOST)
