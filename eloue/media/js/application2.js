@@ -287,6 +287,14 @@ $(document).ready(function() {
         $("#credit-card-form").show();
     });
 
+    if (Boolean($("input[name$=-card_number]").val()) ||
+        Boolean($("input[name$=-holder_name]").val()) ||
+        Boolean($("input[name$=-cvv]").val()) ||
+        Boolean($("select[name$=-expires_0]").val()) ||
+        Boolean($("select[name$=-expires_1]").val()) ) {
+        $("#credit-card-form").show();
+    }
+
     //Cancel credit card on confirm booking
     $("#cancel-credit-card-form").click(function(e) {
         e.preventDefault();
