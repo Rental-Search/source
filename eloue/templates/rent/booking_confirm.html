@@ -131,15 +131,15 @@
         <table class="table table-bordered booking-resume">
           <tr>
             <th>{% trans "Numéro de carte de crédit"%}</th>
-            <td>{{request.user.creditcard.masked_number}}</td>
+            <td>{{form.instance.holder.creditcard.masked_number}}</td>
           </tr>
           <tr>
             <th>{% trans "Nom du détenteur"%}</th>
-            <td>{{request.user.creditcard.holder_name}}</td>
+            <td>{{form.instance.holder.creditcard.holder_name}}</td>
           </tr>
           <tr>
             <th>{% trans "Date d'expiration" %}</th>
-            <td>{{request.user.creditcard.expires|slice:":2"}}/{{request.user.creditcard.expires|slice:"2:"}}</td>
+            <td>{{form.instance.holder.creditcard.expires|slice:":2"}}/{{form.instance.holder.creditcard.expires|slice:"2:"}}</td>
           </tr>
           <tr>
             <td colspan="2" style="text-align: right;"><a id="display-credit-card-form" href="#">{% trans "Modifier mes coordonnées bancaire"%}</a></td>

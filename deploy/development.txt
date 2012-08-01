@@ -34,7 +34,7 @@ django==1.3
 -e git://github.com/robhudson/django-debug-toolbar.git#egg=debug_toolbar
 -e git://github.com/e-loue/django-announcements.git#egg=announcements
 -e git://github.com/e-loue/django-faq.git#egg=faq
--e git://github.com/kossovics/django-haystack.git@1.2.X#egg=haystack
+-e git://github.com/e-loue/django-haystack.git@1.2.X#egg=haystack
 -e git://github.com/e-loue/django-storages.git#egg=storages
 -e git://github.com/e-loue/django-tastypie.git#egg=tastypie
 -e git://github.com/e-loue/django-fsm.git#egg=fsm
