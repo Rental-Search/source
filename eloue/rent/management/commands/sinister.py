@@ -55,12 +55,17 @@ class Command(BaseCommand):
             row['Montant de la Caution'] = comma_separated(sinister.booking.deposit_amount)
             row['Prix de la location TTC'] = comma_separated(sinister.booking.total_amount)
             writer.writerow(row.values())
+        csv_file.seek(0)
+        latin1csv_file = TemporaryFile()
+        for line in csv_file:
+            latin1csv_file.write(line.decode('utf-8').encode('latin1'))
+        latin1csv_file.seek(0)
         log.info('Uploading daily insurance subscriptions')
         ftp = FTP(settings.INSURANCE_FTP_HOST)
         ftp.login(settings.INSURANCE_FTP_USER, settings.INSURANCE_FTP_PASSWORD)
         if settings.INSURANCE_FTP_CWD:
             ftp.cwd(settings.INSURANCE_FTP_CWD)
-        ftp.storlines("STOR sinistre-eloue-%s-%s" % (period.month, period.day), csv_file)
+        ftp.storlines("STOR sinistre-eloue-%s-%s" % (period.month, period.day), latin1csv_file)
         ftp.quit()
         log.info('Finished daily insurance sinisters batch')
     
