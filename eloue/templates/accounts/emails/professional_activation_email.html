@@ -20,8 +20,8 @@
 
                             {% endblocktrans %}
                             <p style="margin-top: 0px; text-align: center;">
-                            	<a href="{{ protocol }}://{{ site.domain }}{% url propw uidb36=uid token=token %}" style="text-decoration: none;">
-                                	<img src="http://eloue.s3.amazonaws.com/media/email/activation-btn.png" alt="" width="157" height="40" />
+                            	<a href="{{ protocol }}://{{ site.domain }}{% url propw uidb36=uid token=token %}" style="text-decoration: none; cursor: pointer; display: inline-block; background-color: #f36100; padding: 10px; font-family: Arial, sans-serif; line-height: 18px; font-size: 14px; color: #fff; border: 1px solid #c85007; vertical-align: 7%;">
+                                	{% trans "Activer votre compte" %}
                             	</a>
                             </p>
                             {% trans "L'équipe" %} {{ site.name }}.
