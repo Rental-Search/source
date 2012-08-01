@@ -10,7 +10,7 @@ nosetests.xml
 .pydevproject
 .settings/
 env
-env-1.3/
+env-1.3
 eloue.db
 eloue/local.py
 eloue/media/js/*.r*.js
