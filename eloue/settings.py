@@ -105,7 +105,7 @@ else:
     )
 
 TEMPLATE_CONTEXT_PROCESSORS = (
-    'django.core.context_processors.auth',
+    'django.contrib.auth.context_processors.auth',
     'django.core.context_processors.debug',
     'django.core.context_processors.media',
     'django.core.context_processors.request',
@@ -340,6 +340,9 @@ AWS_AUTO_CREATE_BUCKET = getattr(local, 'AWS_AUTO_CREATE_BUCKET', False)
 AWS_HEADERS = {
     'Cache-Control': 'max-age=31556926,public',
 }
+
+GOOGLE_CLIENT_ID = getattr(local, 'GOOGLE_CLIENT_ID', '218840159400.apps.googleusercontent.com')
+GOOGLE_CLIENT_SECRET = getattr(local, 'GOOGLE_CLIENT_SECRET', 'BXFNFpDb6MN0ocLoPunjkzvZ')
 
 FACEBOOK_APP_ID = getattr(local, 'FACEBOOK_APP_ID', '197983240245844')
 

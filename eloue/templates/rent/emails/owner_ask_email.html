@@ -29,8 +29,8 @@
                             Cliquez au plus vite sur le bouton ci dessous pour lui répondre :
 
                            	<p style="margin-top: 15px; text-align: center;">
-                            	<a href="{{ protocol }}://{{ domain }}{{ booking_url }}" style="text-decoration: none;">
-                                	<img src="http://eloue.s3.amazonaws.com/media/email/answer-booking-btn.png" alt="" width="236" height="40" />
+                            	<a href="{{ protocol }}://{{ domain }}{{ booking_url }}" style="text-decoration: none; cursor: pointer; display: inline-block; background-color: #f36100; padding: 10px; font-family: Arial, sans-serif; line-height: 18px; font-size: 14px; color: #fff; border: 1px solid #c85007; vertical-align: 7%;">
+                                    Accepter ou refuser la réservation
                             	</a>
                             </p>
 
@@ -46,22 +46,3 @@
     </td>
 </tr>
 {% endblock %}
-
-
-{% load i18n %}
-{% blocktrans with booking.owner.username as owner and booking.borrower.username as borrower and booking.product.category.name as category and booking.product.summary as summary and booking.started_at|date:"DATETIME_FORMAT" as starting_at and booking.started_at|timesince:booking.ended_at as duration and booking.get_absolute_url as booking_url and site.domain as domain and site.name as site_name %}
-<p>Bonjour {{ owner }},</p>
-
-<p>{{ borrower }} souhaite louer l’un de vos objets. Voici les détails de sa proposition :</p>
-
-<ul>
- <li><strong>Type :</strong> {{ category }}</li>
- <li><strong>Objet :</strong> {{ summary }}</li>
- <li><strong>Début de la location :</strong> {{ starting_at }}</li>
- <li><strong>Durée de la location :</strong> {{ duration }}</li>
-</ul>
-
-<p>Pour lui répondre et/ou accepter cette location, il vous suffit d’aller dans <a href="{{ protocol }}://{{ domain }}{{ booking_url }}">l’onglet propositions</a> de votre compte e-loue.com.<p>
-
-<p>L'équipe {{ site_name }}</p>
-{% endblocktrans %}

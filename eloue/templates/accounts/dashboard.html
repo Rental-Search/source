@@ -85,6 +85,13 @@
     <div class="content-main-profil">
         {% include "partials/alerts_message.html" %}
         {% block content-main-profil %}
+        {% if user.is_staff %}
+        <div class="invite-your-friends">
+            <img src="{{MEDIA_URL}}images/default_avatar.png" alt="" />
+            <p>Invitez vos amis à vous rejoindre sur e-loue pour encore plus de location !</p>
+            <a href="{% url facebook_invite%}" class="btn">{% trans "Envoyer des invitations" %}</a>
+        </div>
+        {% endif %}
         <div class="dashboard-last-message">
             <h2 style="margin-bottom: 20px;">{% trans "Vos nouveaux messages" %}</h2>
             {% if thread_list %}

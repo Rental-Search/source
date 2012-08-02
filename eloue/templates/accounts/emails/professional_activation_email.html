@@ -2,7 +2,7 @@
 
 {% load i18n %}
 
-{% block title_email %}{% trans "Validation de votre inscription pro"%}{% endblock %}
+{% block title_email %}{% trans "Validation de votre inscription pro" %}{% endblock %}
 
 {% block content_email %}
 <tr>
@@ -12,7 +12,7 @@
                 <tr>
                     <td valign="top" style="padding-top: 20px;border-collapse: collapse;">
                         <div style="color: #505050;font-family: Arial;font-size: 14px;line-height: 200%;text-align: left;">
-                        	{% blocktrans with patron.username as username and site.domain as domain and site.name as site_name %}
+                        	{% blocktrans with patron.username as username and site.domain as domain and protocol as protocol %}
                                 Bonjour {{ username }},<br><br>
 
                                 Nous vous remercions de vous être enregistré(e) sur <a href="{{ protocol }}://{{ domain }}">{{ domain }}</a>.<br><br>
@@ -20,8 +20,8 @@
 
                             {% endblocktrans %}
                             <p style="margin-top: 0px; text-align: center;">
-                            	<a href="{{ protocol }}://{{ site.domain }}{% url auth_activate activation_key %}" style="text-decoration: none;">
-                                	<img src="http://eloue.s3.amazonaws.com/media/email/activation-btn.png" alt="" width="157" height="40" />
+                            	<a href="{{ protocol }}://{{ site.domain }}{% url propw uidb36=uid token=token %}" style="text-decoration: none; cursor: pointer; display: inline-block; background-color: #f36100; padding: 10px; font-family: Arial, sans-serif; line-height: 18px; font-size: 14px; color: #fff; border: 1px solid #c85007; vertical-align: 7%;">
+                                	{% trans "Activer votre compte" %}
                             	</a>
                             </p>
                             {% trans "L'équipe" %} {{ site.name }}.
@@ -33,27 +33,3 @@
     </td>
 </tr>
 {% endblock %}
-
-
-
-
-
-{% load i18n %}
-{% blocktrans with patron.first_name as first_name and patron.last_name as last_name %}
-
- <p>Bonjour {{ first_name }} {{ last_name }},</p>
- <p>Nous vous remercions de vous être enregistré(e) sur <a href="{{ protocol }}://{{ domain }}/">{{ domain }}</a>.</p>
-{% endblocktrans %}
-
-{% blocktrans with site.domain as domain and site.name as site_name %}
-
-<p>Veuillez cliquer sur le lien ci-dessous pour finaliser la création de votre compte :</p>
-
-{% endblocktrans %}
-
-<p>
-	<a href="{{ protocol }}://{{ domain }}{% url propw uidb36=uid token=token %}">{{ protocol }}://{{ domain }}{% url propw uidb36=uid token=token %}</a>
-</p>
-
-<p>{% trans "L'équipe" %} {{ site.name }}.</p>
-

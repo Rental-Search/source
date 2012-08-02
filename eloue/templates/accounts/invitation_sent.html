@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% load i18n product paginator %}
+
+{% block title %}{% trans "Votre profil" %}{% endblock %}
+
+{% block content %}
+</script>
+<div id="content" class="xgrid">
+       <div class="content-top">
+         <ul id="menu" class="x12">
+            <li class="menu-tab first"><a href="{% url dashboard %}">{% trans "Tableau de bord" %}</a></li>
+			<li class="menu-tab">{% trans "Mon compte" %}</li>
+			<li class="menu-tab"><a href="{% url inbox %}">{% blocktrans %}Messages({{ unread_message_count }}){% endblocktrans %}</a></li>
+		 </ul>
+	    </div>
+	    <div id="sub-menu">
+	        <ul class="x12">
+	            <li class="sub-tab first"><a href="{% url patron_edit %}">{% trans "Votre profil" %}</a></li>
+			    <li class="sub-tab"><a href="{% url patron_edit_password %}">{% trans "Modification du mot de passe" %}</a></li>
+			    <li class="sub-tab">{% trans "Facebook connect" %}</li>
+	        </ul>
+	    </div>
+	    Vos invitation sont bien envoyées.
+</div>
+{% endblock %}
