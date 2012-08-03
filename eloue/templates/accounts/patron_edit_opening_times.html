@@ -10,8 +10,10 @@
     <legend>{% trans "Vos ouvertures" %}</legend>
 
     {% if form.non_field_errors %}{{ form.non_field_errors }}{% endif %}
+
     {% for fieldset in form.fieldsets %}
-      <fieldset class="{{ fieldset.classes }}">
+      <fieldset class="{{ fieldset.classes }}" id="{{fieldset.name}}">
+        {% if 'collapse' not in fieldset.classes %} <span id="{{fieldset.name}}" class="adder"> NEXT</span> {% endif %}
       {% if fieldset.legend %}
         <legend>{{ fieldset.legend }}</legend>
       {% endif %}
@@ -38,4 +40,21 @@
         <button type="reset" class="btn btn-cancel">Annuler</button>
     </div>
 </form>
+
+<script type="text/javascript">
+  $('.collapse').each(function() {
+    console.log($('select[id$="second"]', this));
+    $(this).hide();
+  });
+  
+  $('.adder').click(function (e) {
+    console.log('OJOIJ');
+    console.log(e);
+    console.log('#'+e.target.id+'_second');
+    console.log($('#'+e.target.id+'_second'));
+    $('#'+e.target.id+'_second').show();
+  })
+</script>
+
 {% endblock %}
+

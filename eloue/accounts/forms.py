@@ -970,33 +970,60 @@ class OpeningsForm(BetterModelForm):
         model = OpeningTimes
         fieldsets = [
             ('monday', {
-                'fields': ['monday_opens', 'monday_closes', 'monday_opens_second', 'monday_closes_second',],
+                'fields': ['monday_opens', 'monday_closes', ],
                 'legend': _('Lundi'),
-                }
-            ),
+                }),
+            ('monday_second', {
+                'fields': ['monday_opens_second', 'monday_closes_second', ],
+                'classes': ['collapse', ],
+                }),
             ('tuesday', {
-                'fields': ['tuesday_opens', 'tuesday_closes', 'tuesday_opens_second', 'tuesday_closes_second', ],
+                'fields': ['tuesday_opens', 'tuesday_closes', ],
                 'legend': _('Mardi'),
                 }),
+            ('tuesday_second', {
+                'fields': ['tuesday_opens_second', 'tuesday_closes_second', ],
+                'classes': ['collapse', ],
+                }),
             ('wednesday', {
-                'fields': ['wednesday_opens', 'wednesday_closes', 'wednesday_opens_second', 'wednesday_closes_second',],
+                'fields': ['wednesday_opens', 'wednesday_closes', ],
                 'legend': _('Mercredi'),
                 }),
+            ('wednesday_second', {
+                'fields': ['wednesday_opens_second', 'wednesday_closes_second',],
+                'classes': ['collapse', ],
+                }),
             ('thursday', {
-                'fields': ['thursday_opens', 'thursday_closes', 'thursday_opens_second', 'thursday_closes_second',],
+                'fields': ['thursday_opens', 'thursday_closes',],
                 'legend': _('Jeudi'),
                 }),
+            ('thursday_second', {
+                'fields': ['thursday_opens_second', 'thursday_closes_second',],
+                'classes': ['collapse', ],
+                }),
             ('friday', {
-                'fields': ['friday_opens', 'friday_closes', 'friday_opens_second', 'friday_closes_second', ],
+                'fields': ['friday_opens', 'friday_closes', ],
                 'legend': _('Vendredi'),
                 }),
+            ('friday_second', {
+                'fields': ['friday_opens_second', 'friday_closes_second', ],
+                'classes': ['collapse', ],
+                }),
             ('saturday', {
-                'fields': ['saturday_opens', 'saturday_closes', 'saturday_opens_second', 'saturday_closes_second', ],
+                'fields': ['saturday_opens', 'saturday_closes', ],
                 'legend': _('Samedi'),
                 }),
+            ('saturday_second', {
+                'fields': ['saturday_opens_second', 'saturday_closes_second', ],
+                'classes': ['collapse', ],
+                }),
             ('sunday', {
-                'fields': ['sunday_opens', 'sunday_closes', 'sunday_opens_second', 'sunday_closes_second', ],
+                'fields': ['sunday_opens', 'sunday_closes', ],
                 'legend': _('Dimanche'),
+                }),
+            ('sunday_second', {
+                'fields': ['sunday_opens_second', 'sunday_closes_second', ],
+                'classes': ['collapse', ],
                 }),
         ]
 
