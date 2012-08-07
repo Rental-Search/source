@@ -73,7 +73,7 @@
     },
     {
         "fields": {
-            "domain": "argusnc.e-loue.com",
+            "domain": "locations.argus.nc",
             "name": "ArgusNC"
         },
         "model": "sites.site",
@@ -89,7 +89,7 @@
     },
     {
         "fields": {
-            "domain": "www.gites.nc",
+            "domain": "locations.bienmeloger.nc",
             "name": "GitesNC"
         },
         "model": "sites.site",
