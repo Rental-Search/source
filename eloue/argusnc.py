@@ -5,10 +5,10 @@ local_path = lambda path: os.path.join(os.path.dirname(__file__), path)
 
 SITE_ID = 10
 
-SESSION_COOKIE_DOMAIN = 'argusnc.e-loue.com'
+SESSION_COOKIE_DOMAIN = 'locations.argus.nc'
 
 
-USE_HTTPS = False
+USE_HTTPS = True
 
 CACHE_MIDDLEWARE_KEY_PREFIX = 'argusnc'
 
