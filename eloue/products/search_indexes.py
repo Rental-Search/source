@@ -127,9 +127,9 @@ class CarIndex(ProductIndex):
 
 class RealEstateIndex(ProductIndex):
     
-    capacity = IntegerField(model_attr='capacity')
-    private_life = IntegerField(model_attr='private_life')
-    chamber_number = IntegerField(model_attr='chamber_number')
+    capacity = IntegerField(model_attr='capacity', null=True)
+    private_life = IntegerField(model_attr='private_life', null=True)
+    chamber_number = IntegerField(model_attr='chamber_number', null=True)
     rules = CharField(model_attr='rules', null=True)
 
     # services inclus
