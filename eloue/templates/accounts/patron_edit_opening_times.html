@@ -4,7 +4,56 @@
 {% block title %}{% trans "Modification de mes adresses" %}{% endblock %}
 
 {% block content-main-profil %}
-<form class="form-horizontal" method="post" action="" method="POST">
+
+<form method="POST" action="">
+  <legend>{% trans "Horaires d'ouverture"%}</legend>
+  {% if form.non_field_errors %}{{ form.non_field_errors }}{% endif %}
+  <table class="table">
+    <thead>
+      <tr>  
+        <th>{% trans "Jour"%}</th>
+        <th>{% trans "Tranches horaires"%}</th>
+        <th>{% trans "Action" %}</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for fieldset in form.fieldsets %}
+      <tr>
+        <td>{{ fieldset.legend }}</td>
+        <td class="slots">
+          <ul>
+            {% for field in fieldset %}
+              {% if field.is_hidden %}
+                {{ field }}
+              {% else %}
+                <li {% if not field.value %}style="display: none;"{% endif %}>
+                  {{ field.errors }}
+                  {{ field.label_tag }}
+                  {{ field }}
+                </li>
+              {% endif %}
+            {% endfor %}
+          </ul>
+        </td>
+        <td>
+          <a href="#" class="open_slot">{% trans "Ajouter une tranche d'horaire" %}</a><br>
+          <a href="#" class="close_slot">{% trans "Supprimer une tranche d'horaire" %}</a><br>
+          {% if not forloop.first %}
+          <a href="#" class="copy_previous_slot">{% trans "Copier la tranche précédente" %}</a>
+          {% endif %}
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <div class="form-actions">
+        <button type="submit" class="btn btn-primary">Enregistrer</button>
+        <button type="reset" class="btn btn-cancel">Annuler</button>
+    </div>  
+</form>
+
+
+<form class="form-horizontal" action="" method="POST">
     {% csrf_token %}
     {{ formset.management_form }}
     <legend>{% trans "Vos ouvertures" %}</legend>
@@ -40,21 +89,5 @@
         <button type="reset" class="btn btn-cancel">Annuler</button>
     </div>
 </form>
-
-<script type="text/javascript">
-  $('.collapse').each(function() {
-    console.log($('select[id$="second"]', this));
-    $(this).hide();
-  });
-  
-  $('.adder').click(function (e) {
-    console.log('OJOIJ');
-    console.log(e);
-    console.log('#'+e.target.id+'_second');
-    console.log($('#'+e.target.id+'_second'));
-    $('#'+e.target.id+'_second').show();
-  })
-</script>
-
 {% endblock %}
 
