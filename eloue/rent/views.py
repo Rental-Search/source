@@ -89,6 +89,7 @@ def product_occupied_date(request, slug, product_id):
         return HttpResponse('[]', mimetype='application/json')
 
 @require_GET
+@never_cache
 def booking_price(request, slug, product_id):
 
     def generate_select_list(n, selected):
