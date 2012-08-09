@@ -59,7 +59,7 @@
                 </p>
             </div>{# near #}
             <div id="hotloc">
-                {% cache 43200 curiosities %}
+                {% cache 43200 curiosities site %}
                 <ul class="product-list">
                 {% for curiosity in curiosities %}
                     {% with curiosity.product as product %}
