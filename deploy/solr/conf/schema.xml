@@ -136,13 +136,7 @@
 
     <field name="ideal_for_events" type="boolean" indexed="true" stored="true" multiValued="false" />
 
-<<<<<<< HEAD
-    <field name="lng" type="tdouble" indexed="true" stored="true" multiValued="false" />
-
-    <field name="breakfast" type="boolean" indexed="true" stored="true" multiValued="false" />
-=======
     <field name="tax_horsepower" type="text" indexed="true" stored="true" multiValued="false" />
->>>>>>> master
 
     <field name="lng" type="tdouble" indexed="true" stored="true" multiValued="false" />
 
@@ -160,15 +154,9 @@
 
     <field name="tv" type="boolean" indexed="true" stored="true" multiValued="false" />
 
-<<<<<<< HEAD
-    <field name="brand" type="text" indexed="true" stored="true" multiValued="false" />
-
-    <field name="sites" type="text" indexed="true" stored="true" multiValued="true" />
-=======
     <field name="chimney" type="boolean" indexed="true" stored="true" multiValued="false" />
 
     <field name="zipcode" type="string" indexed="false" stored="true" multiValued="false" />
->>>>>>> master
 
     <field name="family_friendly" type="boolean" indexed="true" stored="true" multiValued="false" />
 
@@ -204,11 +192,8 @@
 
     <field name="cruise_control" type="boolean" indexed="true" stored="true" multiValued="false" />
 
-<<<<<<< HEAD
-=======
     <field name="brand" type="text" indexed="true" stored="true" multiValued="false" />
 
->>>>>>> master
     <field name="gym" type="boolean" indexed="true" stored="true" multiValued="false" />
 
     <field name="chamber_number" type="slong" indexed="true" stored="true" multiValued="false" />
