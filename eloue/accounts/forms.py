@@ -929,8 +929,8 @@ class OpeningsForm(BetterModelForm):
                     error_msg = 'La date d\'ouverture doit etre inferieure a celui de fermeture'
                     self._errors[opens_var] = error_msg
                     self._errors[closes_var] = error_msg
-                    del cleaned_data[opens_var]
-                    del cleaned_data[closes_var]
+                    cleaned_data.pop(opens_var, None)
+                    cleaned_data.pop(closes_var, None)
                 if opens_second and closes_second:
                     # if there is a pause
                     if not opens < closes < opens_second < closes_second:
@@ -939,31 +939,31 @@ class OpeningsForm(BetterModelForm):
                         self._errors[closes_var] = error_msg
                         self._errors[opens_second_var] = error_msg
                         self._errors[closes_second_var] = error_msg
-                        del cleaned_data[opens_var]
-                        del cleaned_data[closes_var]
-                        del cleaned_data[opens_second_var]
-                        del cleaned_data[closes_second_var]
+                        cleaned_data.pop(opens_var, None)
+                        cleaned_data.pop(closes_var, None)
+                        cleaned_data.pop(opens_second_var, None)
+                        cleaned_data.pop(closes_second_var, None)
                 elif opens_second or closes_second:
                     error_msg = 'Vous devez saisir le debut et la fin de la pause'
                     self._errors[opens_second_var] = error_msg
                     self._errors[closes_second_var] = error_msg
-                    del cleaned_data[opens_second_var]
-                    del cleaned_data[closes_second_var]
+                    cleaned_data.pop(opens_second_var, None)
+                    cleaned_data.pop(closes_second_var, None)
             elif not opens and not closes:
                 # we are not open
                 if opens_second or closes_second:
                     error_msg = 'Vous ne pouvez pas definir de pause si vous n etes pas ouvert'
-                    self._errors[pause_starts_var] = error_msg
-                    self._errors[pause_ends_var] = error_msg
-                    del cleaned_data[pause_starts_var]
-                    del cleaned_data[pause_ends_var]
+                    self._errors[opens_second_var] = error_msg
+                    self._errors[closes_second_var] = error_msg
+                    cleaned_data.pop(opens_second_var, None)
+                    cleaned_data.pop(closes_second_var, None)
             else:
                 # errounous 
                 error_msg = 'Vous devez saisir l ouverture et le fermeture'
                 self._errors[opens_var] = error_msg
                 self._errors[closes_var] = error_msg
-                del cleaned_data[opens_var]
-                del cleaned_data[closes_var]
+                cleaned_data.pop(opens_var, None)
+                cleaned_data.pop(closes_var, None)
         return cleaned_data
 
     class Meta:
