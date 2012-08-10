@@ -926,7 +926,7 @@ class OpeningsForm(BetterModelForm):
                 # we are open the given day
                 if opens >= closes:
                     # so the opening time should preced closing time
-                    error_msg = 'La date d\'ouverture doit etre inferieure a celui de fermeture'
+                    error_msg = "L\'heure d\'ouverture doit etre inferieure a celui de fermeture"
                     self._errors[opens_var] = error_msg
                     self._errors[closes_var] = error_msg
                     cleaned_data.pop(opens_var, None)
@@ -934,7 +934,7 @@ class OpeningsForm(BetterModelForm):
                 if opens_second and closes_second:
                     # if there is a pause
                     if not opens < closes < opens_second < closes_second:
-                        error_msg = 'Le debut de la pause doit preceder la fin'
+                        error_msg = "Le debut de la pause doit preceder la fin"
                         self._errors[opens_var] = error_msg
                         self._errors[closes_var] = error_msg
                         self._errors[opens_second_var] = error_msg
@@ -944,7 +944,7 @@ class OpeningsForm(BetterModelForm):
                         cleaned_data.pop(opens_second_var, None)
                         cleaned_data.pop(closes_second_var, None)
                 elif opens_second or closes_second:
-                    error_msg = 'Vous devez saisir le debut et la fin de la pause'
+                    error_msg = "Vous devez saisir le debut et la fin de la tranche d\'horaire"
                     self._errors[opens_second_var] = error_msg
                     self._errors[closes_second_var] = error_msg
                     cleaned_data.pop(opens_second_var, None)
@@ -958,8 +958,8 @@ class OpeningsForm(BetterModelForm):
                     cleaned_data.pop(opens_second_var, None)
                     cleaned_data.pop(closes_second_var, None)
             else:
-                # errounous 
-                error_msg = 'Vous devez saisir l ouverture et le fermeture'
+                # errounous
+                error_msg = "Vous devez saisir l ouverture et le fermeture"
                 self._errors[opens_var] = error_msg
                 self._errors[closes_var] = error_msg
                 cleaned_data.pop(opens_var, None)
@@ -970,60 +970,32 @@ class OpeningsForm(BetterModelForm):
         model = OpeningTimes
         fieldsets = [
             ('monday', {
-                'fields': ['monday_opens', 'monday_closes', ],
+                'fields': ['monday_opens', 'monday_closes', 'monday_opens_second', 'monday_closes_second', ],
                 'legend': _('Lundi'),
                 }),
-            ('monday_second', {
-                'fields': ['monday_opens_second', 'monday_closes_second', ],
-                'classes': ['collapse', ],
-                }),
             ('tuesday', {
-                'fields': ['tuesday_opens', 'tuesday_closes', ],
+                'fields': ['tuesday_opens', 'tuesday_closes', 'tuesday_opens_second', 'tuesday_closes_second',],
                 'legend': _('Mardi'),
                 }),
-            ('tuesday_second', {
-                'fields': ['tuesday_opens_second', 'tuesday_closes_second', ],
-                'classes': ['collapse', ],
-                }),
             ('wednesday', {
-                'fields': ['wednesday_opens', 'wednesday_closes', ],
+                'fields': ['wednesday_opens', 'wednesday_closes', 'wednesday_opens_second', 'wednesday_closes_second',],
                 'legend': _('Mercredi'),
                 }),
-            ('wednesday_second', {
-                'fields': ['wednesday_opens_second', 'wednesday_closes_second',],
-                'classes': ['collapse', ],
-                }),
             ('thursday', {
-                'fields': ['thursday_opens', 'thursday_closes',],
+                'fields': ['thursday_opens', 'thursday_closes', 'thursday_opens_second', 'thursday_closes_second',],
                 'legend': _('Jeudi'),
                 }),
-            ('thursday_second', {
-                'fields': ['thursday_opens_second', 'thursday_closes_second',],
-                'classes': ['collapse', ],
-                }),
             ('friday', {
-                'fields': ['friday_opens', 'friday_closes', ],
+                'fields': ['friday_opens', 'friday_closes', 'friday_opens_second', 'friday_closes_second', ],
                 'legend': _('Vendredi'),
                 }),
-            ('friday_second', {
-                'fields': ['friday_opens_second', 'friday_closes_second', ],
-                'classes': ['collapse', ],
-                }),
             ('saturday', {
-                'fields': ['saturday_opens', 'saturday_closes', ],
+                'fields': ['saturday_opens', 'saturday_closes', 'saturday_opens_second', 'saturday_closes_second',],
                 'legend': _('Samedi'),
                 }),
-            ('saturday_second', {
-                'fields': ['saturday_opens_second', 'saturday_closes_second', ],
-                'classes': ['collapse', ],
-                }),
             ('sunday', {
-                'fields': ['sunday_opens', 'sunday_closes', ],
+                'fields': ['sunday_opens', 'sunday_closes', 'sunday_opens_second', 'sunday_closes_second',],
                 'legend': _('Dimanche'),
-                }),
-            ('sunday_second', {
-                'fields': ['sunday_opens_second', 'sunday_closes_second', ],
-                'classes': ['collapse', ],
                 }),
         ]
 

@@ -41,7 +41,7 @@ django==1.3
 -e git://github.com/e-loue/django-lean.git#egg=django_lean
 -e git://github.com/e-loue/django-lint.git#egg=django-lint
 -e git://github.com/e-loue/django-mptt.git#egg=mptt
--e git://github.com/e-loue/django-redis-cache#egg=redis_cache
+django-redis-cache==0.5.0
 -e git://github.com/e-loue/pinder.git#egg=pinder
 -e git://github.com/e-loue/pyke.git#egg=pyke
 -e git://github.com/e-loue/pysolr.git#egg=pysolr

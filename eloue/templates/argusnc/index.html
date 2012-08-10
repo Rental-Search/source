@@ -59,7 +59,7 @@
                 </p>
             </div>{# near #}
             <div id="hotloc">
-                {% cache 43200 curiosities %}
+                {% cache 43200 curiosities site %}
                 <ul class="product-list">
                 {% for curiosity in curiosities %}
                     {% with curiosity.product as product %}
@@ -93,7 +93,7 @@
             
         </li>
     </ul>{# args #}
-    {% cache 500 last_joined request.session.location.city %}
+    {% cache 500 last_joined request.session.location.city site %}
     <div class="new-profils" style="margin-bottom: 20px;">
         <div class="np-title">{% trans "Derniers<br/>inscrits" %}</div><!-- np-title -->
         {% with last_joined as patron_list %}

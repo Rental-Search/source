@@ -4,56 +4,139 @@
 {% block title %}{% trans "Modification de mes adresses" %}{% endblock %}
 
 {% block content-main-profil %}
-<form class="form-horizontal" method="post" action="" method="POST">
-    {% csrf_token %}
-    {{ formset.management_form }}
-    <legend>{% trans "Vos ouvertures" %}</legend>
 
-    {% if form.non_field_errors %}{{ form.non_field_errors }}{% endif %}
-
-    {% for fieldset in form.fieldsets %}
-      <fieldset class="{{ fieldset.classes }}" id="{{fieldset.name}}">
-        {% if 'collapse' not in fieldset.classes %} <span id="{{fieldset.name}}" class="adder"> NEXT</span> {% endif %}
-      {% if fieldset.legend %}
-        <legend>{{ fieldset.legend }}</legend>
-      {% endif %}
-      {% if fieldset.description %}
-        <p class="description">{{ fieldset.description }}</p>
-      {% endif %}
-      <ul>
-      {% for field in fieldset %}
-        {% if field.is_hidden %}
-          {{ field }}
-        {% else %}
-          <li{{ field.row_attrs }}>
-            {{ field.errors }}
-            {{ field.label_tag }}
-            {{ field }}
-          </li>
-        {% endif %}
+<form method="POST" action="" class="form-horizontal">
+  {% csrf_token %}
+  {{ formset.management_form }}
+  <legend>{% trans "Horaires d'ouverture"%}</legend>
+  {% if form.non_field_errors %}{{ form.non_field_errors }}{% endif %}
+  <table class="table">
+    <thead>
+      <tr>  
+        <th>{% trans "Jour"%}</th>
+        <th>{% trans "Tranches horaires"%}</th>
+        <th>{% trans "Actions" %}</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for fieldset in form.fieldsets %}
+      <tr>
+        <td>{{ fieldset.legend }}</td>
+        <td class="slots">
+          <ul>
+            {% for field in fieldset %}
+              {% if field.is_hidden %}
+                {{ field }}
+              {% else %}
+                <li {% if not field.value %}style="display: none;"{% endif %}>
+                  <div class="control-group">
+                    <label class="control-label" for="select01">{{ field.label }}</label>
+                    <div class="controls">
+                      {{ field }}
+                      {% if field.errors %}
+                        <span class="help-inline">
+                        {{ field.errors }}
+                        </span>
+                      {% endif %}
+                    </div>
+                  </div>
+                </li>
+              {% endif %}
+            {% endfor %}
+          </ul>
+        </td>
+        <td class="opening-actions">
+          <a href="#" class="open_slot"><i class="icon-plus-sign"></i> {% trans "Ajouter une tranche d'horaire" %}</a><br>
+          <a href="#" class="close_slot"><i class="icon-minus-sign"></i> {% trans "Supprimer une tranche d'horaire" %}</a><br>
+          {% if not forloop.first %}
+          <a href="#" class="copy_previous_slot"><i class="icon-time"></i> {% trans "Copier la tranche précédente" %}</a>
+          {% endif %}
+        </td>
+      </tr>
       {% endfor %}
-      </ul>
-      </fieldset>
-    {% endfor %}
-    <div class="form-actions">
+    </tbody>
+  </table>
+  <div class="form-actions">
         <button type="submit" class="btn btn-primary">Enregistrer</button>
         <button type="reset" class="btn btn-cancel">Annuler</button>
-    </div>
+    </div>  
 </form>
+{% endblock %}
+
+{% block tail %}
+{{ block.super }}
 
 <script type="text/javascript">
-  $('.collapse').each(function() {
-    console.log($('select[id$="second"]', this));
-    $(this).hide();
+
+$(document).ready(function() {
+  //openings store
+  showSlot = function(slots){
+      if (slots.first().is(":visible") == false) {
+          slots.first().next().andSelf().show();
+      } else {
+          slots.last().prev().andSelf().show();
+      }
+  };
+
+  hideSlot = function(slots){
+      if (slots.last().is(":visible") == false) {
+          slots = slots.first().next().andSelf();
+          slots.hide();
+      } else {
+          slots = slots.last().prev().andSelf();
+          slots = slots.hide();
+      }
+
+      slots.each(function (index){
+          $(this).children().children('div').children('select').val("");
+      });
+  };
+
+  resetSlot = function(slot){
+      $(slot.children()).each(function (){
+          $(this).attr('selected', false);
+      })
+  };
+
+  selectedHour = function(slot, value){
+      $(slot.children()).filter(function(){
+          return $(this).val() == value;
+      }).attr('selected', 'selected');
+  };
+
+  $('a.open_slot').click(function (e) { 
+      e.preventDefault();
+      var slots = $(this).parent().parent().children(".slots").children().children();
+      showSlot(slots);
   });
-  
-  $('.adder').click(function (e) {
-    console.log('OJOIJ');
-    console.log(e);
-    console.log('#'+e.target.id+'_second');
-    console.log($('#'+e.target.id+'_second'));
-    $('#'+e.target.id+'_second').show();
+
+  $('a.close_slot').click(function (e) {
+      e.preventDefault();
+      var slots = $(this).parent().parent().children(".slots").children().children();
+      hideSlot(slots);
+  });
+
+  $('a.copy_previous_slot').click(function (e) {
+      e.preventDefault();
+      var prevSlots = $(this).parent().parent().prev().children(".slots").children().children();
+      var slots = $(this).parent().parent().children(".slots").children().children();
+
+      prevSlots.each(function (index) {
+          var value = $(this).children().children('div').children('select').val();
+          var slot = $(slots[index]).children().children('div').children('select');
+          
+          resetSlot(slot);
+          selectedHour(slot, value);
+
+          if( $(this).is(":visible") ){
+              $(slot).parent().parent().parent().show();
+          } else {
+              $(slot).parent().parent().parent().hide();
+          }
+      });
   })
+});
+
 </script>
 
 {% endblock %}

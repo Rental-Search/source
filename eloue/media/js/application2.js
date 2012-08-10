@@ -327,6 +327,4 @@ $(document).ready(function() {
            $('.fbconnect-content .fb-slogan').html('Connexion en cours...');
          }, {scope: 'email,user_location'});
     });
-
-    
 });

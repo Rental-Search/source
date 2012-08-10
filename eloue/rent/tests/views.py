@@ -164,7 +164,6 @@ class BookingViewsTestWithMultipleQuantity(TestCase):
         }, HTTP_X_REQUESTED_WITH='XMLHttpRequest')
         self.assertEqual(response.status_code, 200)
         json = simplejson.loads(response.content)
-        print json
         self.assertTrue('max_available' in json)
         self.assertEqual(json['max_available'], 1)
         self.assertFalse('warnings' in json)
@@ -183,7 +182,6 @@ class BookingViewsTestWithMultipleQuantity(TestCase):
         }, HTTP_X_REQUESTED_WITH='XMLHttpRequest')
         self.assertEqual(response.status_code, 200)
         json = simplejson.loads(response.content)
-        print json
         self.assertTrue('max_available' in json)
         self.assertEqual(json['max_available'], 0)
         self.assertFalse('warnings' in json)

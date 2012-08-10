@@ -421,47 +421,47 @@ HOURS = [(time(h, 0), "%02d:00" % (h,)) for h in xrange(24)]
 class OpeningTimes(models.Model):
     patron = models.OneToOneField(Patron, editable=False)
 
-    monday_opens = models.TimeField(choices=HOURS, null=True, blank=True)
-    monday_closes = models.TimeField(choices=HOURS, null=True, blank=True)
+    monday_opens = models.TimeField(_(u'De'), choices=HOURS, null=True, blank=True)
+    monday_closes = models.TimeField(_(u'à'), choices=HOURS, null=True, blank=True)
 
-    monday_opens_second = models.TimeField(choices=HOURS, null=True, blank=True)
-    monday_closes_second = models.TimeField(choices=HOURS, null=True, blank=True)
+    monday_opens_second = models.TimeField(_(u'De'), choices=HOURS, null=True, blank=True)
+    monday_closes_second = models.TimeField(_(u'à'), choices=HOURS, null=True, blank=True)
     
-    tuesday_opens = models.TimeField(choices=HOURS, null=True, blank=True)
-    tuesday_closes = models.TimeField(choices=HOURS, null=True, blank=True)
+    tuesday_opens = models.TimeField(_(u'De'), choices=HOURS, null=True, blank=True)
+    tuesday_closes = models.TimeField(_(u'à'), choices=HOURS, null=True, blank=True)
     
-    tuesday_opens_second = models.TimeField(choices=HOURS, null=True, blank=True)
-    tuesday_closes_second = models.TimeField(choices=HOURS, null=True, blank=True)
+    tuesday_opens_second = models.TimeField(_(u'De'), choices=HOURS, null=True, blank=True)
+    tuesday_closes_second = models.TimeField(_(u'à'), choices=HOURS, null=True, blank=True)
     
-    wednesday_opens = models.TimeField(choices=HOURS, null=True, blank=True)
-    wednesday_closes = models.TimeField(choices=HOURS, null=True, blank=True)
+    wednesday_opens = models.TimeField(_(u'De'), choices=HOURS, null=True, blank=True)
+    wednesday_closes = models.TimeField(_(u'à'), choices=HOURS, null=True, blank=True)
 
-    wednesday_opens_second = models.TimeField(choices=HOURS, null=True, blank=True)
-    wednesday_closes_second = models.TimeField(choices=HOURS, null=True, blank=True)
+    wednesday_opens_second = models.TimeField(_(u'De'), choices=HOURS, null=True, blank=True)
+    wednesday_closes_second = models.TimeField(_(u'à'), choices=HOURS, null=True, blank=True)
 
-    thursday_opens = models.TimeField(choices=HOURS, null=True, blank=True)
-    thursday_closes = models.TimeField(choices=HOURS, null=True, blank=True)
+    thursday_opens = models.TimeField(_(u'De'), choices=HOURS, null=True, blank=True)
+    thursday_closes = models.TimeField(_(u'à'), choices=HOURS, null=True, blank=True)
 
-    thursday_opens_second = models.TimeField(choices=HOURS, null=True, blank=True)
-    thursday_closes_second = models.TimeField(choices=HOURS, null=True, blank=True)
+    thursday_opens_second = models.TimeField(_(u'De'), choices=HOURS, null=True, blank=True)
+    thursday_closes_second = models.TimeField(_(u'à'), choices=HOURS, null=True, blank=True)
 
-    friday_opens = models.TimeField(choices=HOURS, null=True, blank=True)
-    friday_closes = models.TimeField(choices=HOURS, null=True, blank=True)
+    friday_opens = models.TimeField(_(u'De'), choices=HOURS, null=True, blank=True)
+    friday_closes = models.TimeField(_(u'à'), choices=HOURS, null=True, blank=True)
 
-    friday_opens_second = models.TimeField(choices=HOURS, null=True, blank=True)
-    friday_closes_second = models.TimeField(choices=HOURS, null=True, blank=True)
+    friday_opens_second = models.TimeField(_(u'De'), choices=HOURS, null=True, blank=True)
+    friday_closes_second = models.TimeField(_(u'à'), choices=HOURS, null=True, blank=True)
 
-    saturday_opens = models.TimeField(choices=HOURS, null=True, blank=True)
-    saturday_closes = models.TimeField(choices=HOURS, null=True, blank=True)
+    saturday_opens = models.TimeField(_(u'De'), choices=HOURS, null=True, blank=True)
+    saturday_closes = models.TimeField(_(u'à'), choices=HOURS, null=True, blank=True)
 
-    saturday_opens_second = models.TimeField(choices=HOURS, null=True, blank=True)
-    saturday_closes_second = models.TimeField(choices=HOURS, null=True, blank=True)
+    saturday_opens_second = models.TimeField(_(u'De'), choices=HOURS, null=True, blank=True)
+    saturday_closes_second = models.TimeField(_(u'à'), choices=HOURS, null=True, blank=True)
 
-    sunday_opens = models.TimeField(choices=HOURS, null=True, blank=True)
-    sunday_closes = models.TimeField(choices=HOURS, null=True, blank=True)
+    sunday_opens = models.TimeField(_(u'De'), choices=HOURS, null=True, blank=True)
+    sunday_closes = models.TimeField(_(u'à'), choices=HOURS, null=True, blank=True)
 
-    sunday_opens_second = models.TimeField(choices=HOURS, null=True, blank=True)
-    sunday_closes_second = models.TimeField(choices=HOURS, null=True, blank=True)
+    sunday_opens_second = models.TimeField(_(u'De'), choices=HOURS, null=True, blank=True)
+    sunday_closes_second = models.TimeField(_(u'à'), choices=HOURS, null=True, blank=True)
 
 
 class CreditCard(models.Model):
