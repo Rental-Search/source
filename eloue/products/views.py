@@ -225,6 +225,20 @@ def product_price_edit(request, slug, product_id):
     )
 
 
+@login_required
+@ownership_required(model=Product, object_key='product_id', ownership=['owner'])
+def product_highlight_edit(request, slug, product_id):
+    from eloue.products.forms import HighlightForm
+    now = datetime.datetime.now()
+    product = get_object_or_404(Product.on_site, pk=product_id)
+    highlights = product.producthighlight_set.filter(date_to__lt=now).order_by('-date_to')
+    return render_to_response(
+        'products/product_edit.html', 
+        {'product': product, 'highlights': highlights},
+        context_instance=RequestContext(request)
+    )
+
+
 def thread_list(user, is_archived):
     return sorted(
         MessageThread.objects.filter(

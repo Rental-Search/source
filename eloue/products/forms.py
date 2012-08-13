@@ -640,3 +640,14 @@ class AlertForm(forms.ModelForm):
     class Meta:
         model = Alert
         fields = ('description', 'designation')
+
+
+from eloue.products.models import ProductHighlight
+
+
+class HighlightForm(forms.ModelForm):
+
+    class Meta:
+        model = ProductHighlight
+
+

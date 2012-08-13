@@ -181,7 +181,6 @@ DEFAULT_CURRENCY = get_format('CURRENCY') if not settings.CONVERT_XPF else "XPF"
 
 ALERT_RADIUS = getattr(settings, 'ALERT_RADIUS', 200)
 
-
 class Product(models.Model):
     """A product"""
     summary = models.CharField(_(u'Titre'), max_length=255)
@@ -969,7 +968,15 @@ class Alert(models.Model):
     
     class Meta:
         get_latest_by = 'created_at'
-    
+
+
+class ProductHighlight(models.Model):
+    created_at = models.DateTimeField(auto_now=True)
+    date_from = models.DateTimeField()
+    date_to = models.DateTimeField()
+    product = models.ForeignKey(Product)
+
+
 
 post_save.connect(post_save_answer, sender=Answer)
 post_save.connect(post_save_product, sender=Product)
@@ -983,3 +990,4 @@ post_save.connect(post_save_sites, sender=RealEstateProduct)
 
 post_save.connect(post_save_to_update_product, sender=Price)
 post_save.connect(post_save_to_update_product, sender=Picture)
+post_save.connect(post_save_to_update_product, sender=ProductHighlight)

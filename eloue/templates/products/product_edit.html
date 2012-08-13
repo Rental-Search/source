@@ -11,7 +11,7 @@
 {% url owner_product_edit product.slug product.pk as product_edit %}
 {% url owner_product_address_edit product.slug product.pk as product_address_edit %}
 {% url owner_product_price_edit product.slug product.pk as product_price_edit %}
-
+{% url owner_product_highlight_edit product.slug product.pk as product_highlight_edit %}
 
 <div class="previous-sub-bar">
   &larr;  <a href="{% url owner_product %}">{% trans "Retour à mes annonces" %}</a>
@@ -23,6 +23,11 @@
     <li>
       <a href="{% url product_delete product_id=product.id slug=product.slug %}" >Supprimer</a>
     </li>
+    {% if request.user.is_professional %}
+      <li>
+        <a href="{{product_highlight_edit}}">Mettre en avant l'annonce</a>
+      </li>
+    {% endif %}
 </ul>
 {% endblock %}
 {% block content-main-profil %}
