@@ -193,7 +193,7 @@ class Patron(User):
 
     rib = models.CharField(max_length=23, blank=True)
 
-    url = models.URLField(blank=True)
+    url = models.URLField(_(u"Site internet"), blank=True, help_text=_(u"5 euros par mois"))
 
     thumbnail = ImageSpec(
         processors=[
