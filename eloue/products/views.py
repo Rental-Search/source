@@ -229,12 +229,33 @@ def product_price_edit(request, slug, product_id):
 @ownership_required(model=Product, object_key='product_id', ownership=['owner'])
 def product_highlight_edit(request, slug, product_id):
     from eloue.products.forms import HighlightForm
+    from eloue.products.models import ProductHighlight
     now = datetime.datetime.now()
     product = get_object_or_404(Product.on_site, pk=product_id)
-    highlights = product.producthighlight_set.filter(date_to__lt=now).order_by('-date_to')
+    highlights = product.producthighlight_set.order_by('-ended_at')
+    old_highlights = product.producthighlight_set.filter(ended_at__isnull=False).order_by('-ended_at')
+    new_highlight = product.producthighlight_set.filter(ended_at__isnull=True)
+    if new_highlight:
+        highlight, = new_highlight
+        if request.method == "POST":
+            form = HighlightForm(request.POST, instance=highlight)
+            if form.is_valid():
+                form.instance.ended_at = now
+                form.save()
+                return redirect('.')
+        else:
+            form = HighlightForm(instance=highlight)
+    else:
+        if request.method == "POST":
+            form = HighlightForm(request.POST, instance=ProductHighlight(product=product))
+            if form.is_valid():
+                form.save()
+                return redirect('.')
+        else:
+            form = HighlightForm(instance=ProductHighlight(product=product))
     return render_to_response(
-        'products/product_edit.html', 
-        {'product': product, 'highlights': highlights},
+        'products/product_highlight_edit.html', 
+        {'product': product, 'old_highlights': old_highlights, 'form': form},
         context_instance=RequestContext(request)
     )
 

@@ -971,12 +971,15 @@ class Alert(models.Model):
 
 
 class ProductHighlight(models.Model):
-    created_at = models.DateTimeField(auto_now=True)
-    date_from = models.DateTimeField()
-    date_to = models.DateTimeField()
-    product = models.ForeignKey(Product)
+    started_at = models.DateTimeField(auto_now_add=True)
+    ended_at = models.DateTimeField(editable=False, null=True, blank=True)
+    product = models.ForeignKey(Product, editable=False)
 
-
+    def total_amount(self):
+        ended_at = self.ended_at or datetime.now()
+        td = (ended_at - self.started_at)
+        dt_sec = (td.microseconds + (td.seconds + td.days * 24 * 3600) * 10**6) / 10**6
+        return dt_sec * 0.0001
 
 post_save.connect(post_save_answer, sender=Answer)
 post_save.connect(post_save_product, sender=Product)

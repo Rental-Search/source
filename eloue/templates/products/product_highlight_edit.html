@@ -1,0 +1,98 @@
+{% extends "accounts/dashboard.html" %}
+{% load i18n navbar product %}
+
+{% block title %}{% trans "Mes annonces" %}{% endblock %}
+
+{% block head %}
+  {{block.super}}
+{% endblock %}
+
+{% block content-aside-profil %}
+{% url owner_product_edit product.slug product.pk as product_edit %}
+{% url owner_product_address_edit product.slug product.pk as product_address_edit %}
+{% url owner_product_price_edit product.slug product.pk as product_price_edit %}
+{% url owner_product_highlight_edit product.slug product.pk as product_highlight_edit %}
+
+<div class="previous-sub-bar">
+  &larr;  <a href="{% url owner_product %}">{% trans "Retour à mes annonces" %}</a>
+</div>
+<ul class="nav-sub-bar">
+    <li><a href="{{ product_edit }}"  class="{% active request product_edit "$" %}">{% trans "Description et photos" %}</a></li>
+    <li><a href="{{ product_address_edit }}"  class="{% active request product_address_edit %}">{% trans "Adresse" %}</a></li>
+    <li><a href="{{ product_price_edit }}"  class="{% active request product_price_edit %}">{% trans "Prix" %}</a></li>
+    <li>
+      <a href="{% url product_delete product_id=product.id slug=product.slug %}" >Supprimer</a>
+    </li>
+    {% if request.user.is_professional %}
+      <li>
+        <a href="{{product_highlight_edit}}">Mettre en avant l'annonce</a>
+      </li>
+    {% endif %}
+</ul>
+{% endblock %}
+{% block content-main-profil %}
+
+{% with form.non_field_errors as form_errors %}
+  {% include "partials/non_field_errors.html" %}
+{% endwith %}
+
+<h2>{% trans "Modification de "%} {{ product.summary }} <small><a href="{{ product.get_absolute_url }}">({% trans "Voir l'annonce" %}) </a></small></h2>
+{% if form.is_multipart %}
+<form enctype="multipart/form-data" class="form-horizontal" method="post" action="">
+{% else %}
+<form class="form-horizontal" method="post" action="">
+{% endif %}
+{% csrf_token %}
+
+{% if form.instance.pk %}
+  your item is highlighted from {{form.instance.started_at}}
+{% else %}
+  for a better visibility, highlight your item!
+{% endif %}
+
+{{form}}
+
+  <div class="form-actions">
+    {% if form.instance.pk %}
+      <button type="submit" class="btn btn-primary">Deactivate</button>
+    {% else %}
+      <button type="submit" class="btn btn-primary">Activate</button>
+    {% endif %}
+    <button type="reset" class="btn btn-cancel">Annuler</button>
+  </div>
+</form>
+
+<ul>
+{% for highlight in old_highlights %}
+  <li>your object was highlighted between{{highlight.started_at}} and {{highlight.ended_at}} in a value of {{highlight.total_amount}} euros</li>
+{% empty %}
+  <li>NO HIGHLIGHTS</li>
+{% endfor %}
+</ul>
+
+{% endblock %}
+
+{% block tail %}
+  {{ block.super }}
+  <script type="text/javascript">
+    $(document).ready(function (){
+      $("#id_category").chosen();
+
+      var addNewAddress = $(".add-new-address");
+      if (
+          addNewAddress.length == 0 || (!Boolean($("#id_address").val()) && !( Boolean($('#id_addresses__address1').val()) && 
+          Boolean($('#id_addresses__zipcode').val()) && Boolean($('#id_addresses__city').val())))
+        ){
+          $(".new-address").show();
+      }
+
+      addNewAddress.click(function (event) { 
+          event.preventDefault();
+          $("#id_address").val('');
+          $(".new-address").show();
+          $(this).hide();
+      });
+    });
+  </script>
+{% endblock %}
+
