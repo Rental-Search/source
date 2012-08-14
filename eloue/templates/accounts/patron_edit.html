@@ -28,6 +28,7 @@
       <li><a href="">{% trans "Notification" %}</a></li>
       <li><a href="">{% trans "Facturation" %}</a></li>
       <li><a href="{% url patron_edit_opening_times %}">{% trans "Horaires d'ouverture" %}</a></li>
+      <li><a href="{% url patron_edit_highlight %}">{% trans "Mettre en avant vos annonces" %}</a></li>
     {% endif %}
     {% if request.user.is_staff %}
     <li>

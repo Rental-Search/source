@@ -26,7 +26,8 @@ urlpatterns = patterns('',
         name="patron_delete_credit_card"
     ),
     url(r'^account/rib/$', 'eloue.accounts.views.patron_edit_rib', name='patron_edit_rib'),
-    
+    url(r'^account/highlight/$', 'eloue.accounts.views.patron_edit_highlight', name='patron_edit_highlight'),
+    url(r'^account/highlight/(?P<product_id>\d+)/$', 'eloue.accounts.views.toggle_highlight', name='toggle_highlight'),
     url(r'^account/accounts_work_autocomplete$', accounts_work_autocomplete, name='accounts_work_autocomplete'),
     url(r'^account/accounts_studies_autocomplete/$', accounts_studies_autocomplete, name='accounts_studies_autocomplete'),
     url(r'^account/comments/$', comments, name="comments"),
