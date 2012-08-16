@@ -981,24 +981,6 @@ class ProductHighlight(models.Model):
         dt_sec = (td.microseconds + (td.seconds + td.days * 24 * 3600) * 10**6) / 10**6
         return dt_sec * 0.0001
 
-class Billing(models.Model):
-    created_at = models.DateTimeField(auto_now_add=True)
-    modified_at = models.DateTimeField(auto_now=True)
-    patron = models.ForeignKey(Patron)
-
-    summary = models.CharField(max_length=128)
-    date = models.DateField()
-    state = models.IntegerField(choices=[(0, 'UNPAID'), (1, 'PAID')])
-    debit = models.DecimalField(max_digits=8, decimal_places=2)
-    credit = models.DecimalField(max_digits=8, decimal_places=2)
-    balance = models.DecimalField(max_digits=8, decimal_places=2)
-
-    highlights = models.ManyToManyField(ProductHighlight)
-    plans = models.ManyToManyField('accounts.ProPackage')
-
-    def pdf(self):
-        raise NotImplementedError()
-
 post_save.connect(post_save_answer, sender=Answer)
 post_save.connect(post_save_product, sender=Product)
 post_save.connect(post_save_curiosity, sender=Curiosity)

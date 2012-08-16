@@ -591,6 +591,9 @@ class ProPackage(models.Model):
     valid_from = models.DateField()
     valid_until = models.DateField(null=True, blank=True)
 
+    def __unicode__(self):
+        return u'{maximum_items}/{total_amount} euro'.format(maximum_items=self.maximum_items, total_amount=self.total_amount)
+
     class Meta:
         unique_together = (('maximum_items', 'valid_until'), )
 
@@ -599,6 +602,24 @@ class Subscription(models.Model):
     propackage = models.ForeignKey(ProPackage)
     subscription_started = models.DateTimeField(auto_now_add=True)
     subscription_ended = models.DateTimeField()
+
+class Billing(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True)
+    modified_at = models.DateTimeField(auto_now=True)
+    patron = models.ForeignKey(Patron)
+
+    summary = models.CharField(max_length=128)
+    date = models.DateField()
+    state = models.IntegerField(choices=[(0, 'UNPAID'), (1, 'PAID')])
+    debit = models.DecimalField(max_digits=8, decimal_places=2)
+    credit = models.DecimalField(max_digits=8, decimal_places=2)
+    balance = models.DecimalField(max_digits=8, decimal_places=2)
+
+    highlights = models.ManyToManyField('products.ProductHighlight')
+    plans = models.ManyToManyField('accounts.ProPackage')
+
+    def pdf(self):
+        raise NotImplementedError()
 
 signals.post_save.connect(post_save_sites, sender=Patron)
 signals.pre_delete.connect(pre_delete_creditcard, sender=CreditCard)

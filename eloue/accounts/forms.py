@@ -339,9 +339,10 @@ class PatronEditForm(BetterModelForm):
                 form_errors_append(self, 'paypal_email', _(u"Vérifiez que vous avez bien répondu à l'email d'activation de Paypal"))
         return self.cleaned_data
 
+from accounts.models import ProPackage
+from django.db.models import Q
 class CompanyEditForm(PatronEditForm):
     avatar = forms.ImageField(required=False, label=_(u"Logo de l\'entreprise"))
-
     about = forms.CharField(label=_(u"A propos de l'entreprise"), required=False, widget=forms.Textarea(attrs={'class': 'inm'}))
 
     class Meta:
@@ -349,7 +350,7 @@ class CompanyEditForm(PatronEditForm):
         fieldsets = [
             ('basic_info', {
                 'fields': [
-                    'is_professional', 'company_name', 'username', 'avatar', 
+                    'is_professional', 'company_name', 'subscriptions', 'username', 'avatar', 
                     'email', 'civility', 'first_name', 'last_name',
                     'default_address', 'default_number', 'date_of_birth', 'place_of_birth',
                     'paypal_email', 'is_subscribed', 'new_messages_alerted',
@@ -375,6 +376,12 @@ class CompanyEditForm(PatronEditForm):
         self.fields['default_address'].queryset = self.instance.addresses.all()
         self.fields['default_number'].label = _(u'Téléphone de l\'entreprise')
         self.fields['default_number'].queryset = self.instance.phones.all()
+        now = datetime.datetime.now()
+        self.fields['subscriptions'] = forms.ModelChoiceField(
+            queryset=ProPackage.objects.filter(
+                Q(valid_until__isnull=True)|Q(valid_until__lte=now) 
+            )
+        )
 
 
 class PatronSetPasswordForm(forms.Form):
