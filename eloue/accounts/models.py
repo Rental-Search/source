@@ -159,6 +159,8 @@ class Patron(User):
     """A member"""
     civility = models.PositiveSmallIntegerField(_(u"Civilité"), null=True, blank=True, choices=CIVILITY_CHOICES)
     company_name = models.CharField(null=True, blank=True, max_length=255)
+    subscriptions = models.ManyToManyField('ProPackage', through='Subscription')
+
     activation_key = models.CharField(null=True, blank=True, max_length=40)
     is_subscribed = models.BooleanField(_(u'newsletter'), default=False, help_text=_(u"Précise si l'utilisateur est abonné à la newsletter"))
     new_messages_alerted = models.BooleanField(_(u'alerts if new messages come'), default=True, help_text=_(u"Précise si l'utilisateur est informé par email s'il a nouveaux messages"))
@@ -583,6 +585,20 @@ class PatronAccepted(models.Model):
     email = models.EmailField()
     sites = models.ManyToManyField(Site, related_name='patrons_accepted')
 
+class ProPackage(models.Model):
+    maximum_items = models.PositiveIntegerField()
+    total_amount = models.DecimalField(max_digits=8, decimal_places=2)
+    valid_from = models.DateField()
+    valid_until = models.DateField(null=True, blank=True)
+
+    class Meta:
+        unique_together = (('maximum_items', 'valid_until'), )
+
+class Subscription(models.Model):
+    patron = models.ForeignKey(Patron)
+    propackage = models.ForeignKey(ProPackage)
+    subscription_started = models.DateTimeField(auto_now_add=True)
+    subscription_ended = models.DateTimeField()
 
 signals.post_save.connect(post_save_sites, sender=Patron)
 signals.pre_delete.connect(pre_delete_creditcard, sender=CreditCard)
