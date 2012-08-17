@@ -603,6 +603,12 @@ class Subscription(models.Model):
     subscription_started = models.DateTimeField(auto_now_add=True)
     subscription_ended = models.DateTimeField(null=True, blank=True)
 
+    def price(self):
+        ended_at = self.subscription_ended or datetime.datetime.now()
+        td = (ended_at - self.subscription_started)
+        dt_sec = (td.microseconds + (td.seconds + td.days * 24 * 3600) * 10**6) / 10**6
+        return dt_sec * 0.00003
+
 class Billing(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     modified_at = models.DateTimeField(auto_now=True)
