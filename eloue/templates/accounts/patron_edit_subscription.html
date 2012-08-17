@@ -60,5 +60,12 @@
         <button type="reset" class="btn btn-cancel">Annuler</button>
       </div>
   </form>
-
+Your subscription history:</br>
+<ul>
+{% for subscription in request.user.subscription_set.all %}
+<li>Between: {{subscription.subscription_started}} and {% firstof subscription.subscription_ended "now" %}, package: {{subscription.propackage}}, price: {{ subscription.price }} Euro </li>
+{% empty %}
+-.-
+{% endfor %}
+</ul>
 {% endblock %}

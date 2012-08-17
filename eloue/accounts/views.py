@@ -389,9 +389,10 @@ def patron_edit_subscription(request, *args, **kwargs):
         form = SubscriptionEditForm(request.POST)
         if form.is_valid():
             new_package = form.cleaned_data.get('subscription')
-            if new_package != subscription.propackage:
-                subscription.subscription_ended = datetime.datetime.now()
-                subscription.save()
+            if (subscription is None and new_package) or (new_package != subscription.propackage):
+                if subscription:
+                    subscription.subscription_ended = datetime.datetime.now()
+                    subscription.save()
                 if new_package:
                     Subscription.objects.create(patron=patron, propackage=new_package)
             return redirect('.')
