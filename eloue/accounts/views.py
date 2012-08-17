@@ -25,7 +25,7 @@ from django.core.urlresolvers import reverse
 from django.db.models import Count, Q
 from django.views.decorators.http import require_GET
 from django.forms.models import model_to_dict, inlineformset_factory
-from django.shortcuts import get_object_or_404, render_to_response
+from django.shortcuts import get_object_or_404, render_to_response, render
 from django.template import RequestContext
 from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.csrf import csrf_exempt
@@ -376,6 +376,28 @@ def patron_edit(request, *args, **kwargs):
             'form': form
         }
     )
+
+@login_required
+def patron_edit_subscription(request, *args, **kwargs):
+    from eloue.accounts.forms import SubscriptionEditForm
+    from eloue.accounts.models import Subscription
+    patron = request.user
+    if not patron.is_professional:
+        return HttpResponseForbidden()
+    subscription, = Subscription.objects.filter(patron=patron, subscription_ended__isnull=True) or (None,)
+    if request.method == "POST":
+        form = SubscriptionEditForm(request.POST)
+        if form.is_valid():
+            new_package = form.cleaned_data.get('subscription')
+            if new_package != subscription.propackage:
+                subscription.subscription_ended = datetime.datetime.now()
+                subscription.save()
+                if new_package:
+                    Subscription.objects.create(patron=patron, propackage=new_package)
+            return redirect('.')
+    else:
+        form = SubscriptionEditForm(initial={'subscription': subscription.propackage} if subscription else None)
+    return render(request, 'accounts/patron_edit_subscription.html', {'form': form})
 
 
 @login_required

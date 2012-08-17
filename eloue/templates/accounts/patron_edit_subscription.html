@@ -54,42 +54,7 @@
 <form class="form-horizontal" method="post" action="">
 {% endif %}
 {% csrf_token %}    
-{% if form.non_field_errors %}{{ form.non_field_errors }}{% endif %}
-    {% for fieldset in form.fieldsets %}
-      <fieldset class="{{ fieldset.classes }}" {% if fieldset.name == 'extra_info' %}id="extraInfo"{% endif %}>
-      {% if fieldset.legend %}
-        <legend>{{ fieldset.legend }}</legend>
-      {% endif %}
-      {% if fieldset.description %}
-        <p class="description">{{ fieldset.description }}</p>
-      {% endif %}
-    {% for field in fieldset %}
-    <div class="control-group {% if field.errors %} error {% endif %}">
-      <label class="control-label" for="{{ field.id_for_label }}">{{ field.label }} {% if field.field.required %}*{% endif %}</label>
-      <div class="controls">
-        {% if field.name == "avatar" %}
-          {% if request.user.avatar %}
-            <img src="{{ request.user.thumbnail.url }}" alt="{% trans "loueur"%}{{ request.user.username }}" style="float: left; margin-right: 10px; border: 1px solid #9EB0BA;">
-          {% else %}
-            <img src="{{ MEDIA_URL }}images/default_avatar.png" alt="{% trans "loueur"%}{{ request.user.username }}" style="float: left; margin-right: 10px; border: 1px solid #9EB0BA;">
-          {% endif %}
-        {% endif %}
-        {{ field }}
-        <p class="help-block">{{ field.help_text }}</p>
-        {% if field.name == "default_address" %}<p class="help-block"><a href="{% url patron_edit_addresses %}#newAddress">{% trans "Ajouter une nouvelle adresse"%}</a></p>{% endif %}
-        {% if field.name == "default_number" %}<p class="help-block"><a href="{% url patron_edit_phonenumber %}#newPhone">{% trans "Ajouter un nouveau téléphone"%}</a></p>{% endif %}
-        {% if field.errors %}
-          <span class="help-inline">
-          {% for error in field.errors %}
-            {{ error|escape }} 
-          {% endfor %}
-          </span>
-        {% endif %}
-      </div>
-    </div>
-    {% endfor %}
-    </fieldset>
-    {% endfor %}
+{{form}}
       <div class="form-actions">
         <button type="submit" class="btn btn-primary">Enregistrer</button>
         <button type="reset" class="btn btn-cancel">Annuler</button>

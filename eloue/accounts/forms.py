@@ -350,7 +350,7 @@ class CompanyEditForm(PatronEditForm):
         fieldsets = [
             ('basic_info', {
                 'fields': [
-                    'is_professional', 'company_name', 'subscriptions', 'username', 'avatar', 
+                    'is_professional', 'company_name', 'username', 'avatar', 
                     'email', 'civility', 'first_name', 'last_name',
                     'default_address', 'default_number', 'date_of_birth', 'place_of_birth',
                     'paypal_email', 'is_subscribed', 'new_messages_alerted',
@@ -376,8 +376,13 @@ class CompanyEditForm(PatronEditForm):
         self.fields['default_address'].queryset = self.instance.addresses.all()
         self.fields['default_number'].label = _(u'Téléphone de l\'entreprise')
         self.fields['default_number'].queryset = self.instance.phones.all()
+
+
+class SubscriptionEditForm(forms.Form):
+    def __init__(self, *args, **kwargs):
+        super(SubscriptionEditForm, self).__init__(*args, **kwargs)
         now = datetime.datetime.now()
-        self.fields['subscriptions'] = forms.ModelChoiceField(
+        self.fields['subscription'] = forms.ModelChoiceField(required=False,
             queryset=ProPackage.objects.filter(
                 Q(valid_until__isnull=True)|Q(valid_until__lte=now) 
             )
