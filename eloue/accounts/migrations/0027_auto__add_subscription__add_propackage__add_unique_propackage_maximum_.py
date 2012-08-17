@@ -14,7 +14,7 @@ class Migration(SchemaMigration):
             ('patron', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['accounts.Patron'])),
             ('propackage', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['accounts.ProPackage'])),
             ('subscription_started', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
-            ('subscription_ended', self.gf('django.db.models.fields.DateTimeField')()),
+            ('subscription_ended', self.gf('django.db.models.fields.DateTimeField')(null=True, blank=True)),
         ))
         db.send_create_signal('accounts', ['Subscription'])
 
@@ -23,7 +23,7 @@ class Migration(SchemaMigration):
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('maximum_items', self.gf('django.db.models.fields.PositiveIntegerField')()),
             ('total_amount', self.gf('django.db.models.fields.DecimalField')(max_digits=8, decimal_places=2)),
-            ('valid_from', self.gf('django.db.models.fields.DateField')()),
+            ('valid_from', self.gf('django.db.models.fields.DateField')(default=datetime.datetime.now)),
             ('valid_until', self.gf('django.db.models.fields.DateField')(null=True, blank=True)),
         ))
         db.send_create_signal('accounts', ['ProPackage'])
@@ -225,7 +225,7 @@ class Migration(SchemaMigration):
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'maximum_items': ('django.db.models.fields.PositiveIntegerField', [], {}),
             'total_amount': ('django.db.models.fields.DecimalField', [], {'max_digits': '8', 'decimal_places': '2'}),
-            'valid_from': ('django.db.models.fields.DateField', [], {}),
+            'valid_from': ('django.db.models.fields.DateField', [], {'default': 'datetime.datetime.now'}),
             'valid_until': ('django.db.models.fields.DateField', [], {'null': 'True', 'blank': 'True'})
         },
         'accounts.subscription': {
@@ -233,7 +233,7 @@ class Migration(SchemaMigration):
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'patron': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['accounts.Patron']"}),
             'propackage': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['accounts.ProPackage']"}),
-            'subscription_ended': ('django.db.models.fields.DateTimeField', [], {}),
+            'subscription_ended': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
             'subscription_started': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'})
         },
         'auth.group': {

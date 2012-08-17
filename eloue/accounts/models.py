@@ -588,11 +588,11 @@ class PatronAccepted(models.Model):
 class ProPackage(models.Model):
     maximum_items = models.PositiveIntegerField()
     total_amount = models.DecimalField(max_digits=8, decimal_places=2)
-    valid_from = models.DateField()
+    valid_from = models.DateField(default=datetime.datetime.now)
     valid_until = models.DateField(null=True, blank=True)
 
     def __unicode__(self):
-        return u'{maximum_items}/{total_amount} euro'.format(maximum_items=self.maximum_items, total_amount=self.total_amount)
+        return u'{maximum_items} item/{total_amount} euro'.format(maximum_items=self.maximum_items, total_amount=self.total_amount)
 
     class Meta:
         unique_together = (('maximum_items', 'valid_until'), )
@@ -601,7 +601,7 @@ class Subscription(models.Model):
     patron = models.ForeignKey(Patron)
     propackage = models.ForeignKey(ProPackage)
     subscription_started = models.DateTimeField(auto_now_add=True)
-    subscription_ended = models.DateTimeField()
+    subscription_ended = models.DateTimeField(null=True, blank=True)
 
 class Billing(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
