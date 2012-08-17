@@ -622,7 +622,7 @@ class Billing(models.Model):
     balance = models.DecimalField(max_digits=8, decimal_places=2)
 
     highlights = models.ManyToManyField('products.ProductHighlight')
-    plans = models.ManyToManyField('accounts.ProPackage')
+    plans = models.ManyToManyField('accounts.Subscription')
 
     def pdf(self):
         raise NotImplementedError()

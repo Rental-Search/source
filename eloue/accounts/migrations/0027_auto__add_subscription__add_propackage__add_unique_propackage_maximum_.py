@@ -58,9 +58,9 @@ class Migration(SchemaMigration):
         db.create_table('accounts_billing_plans', (
             ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
             ('billing', models.ForeignKey(orm['accounts.billing'], null=False)),
-            ('propackage', models.ForeignKey(orm['accounts.propackage'], null=False))
+            ('subscription', models.ForeignKey(orm['accounts.subscription'], null=False))
         ))
-        db.create_unique('accounts_billing_plans', ['billing_id', 'propackage_id'])
+        db.create_unique('accounts_billing_plans', ['billing_id', 'subscription_id'])
 
 
     def backwards(self, orm):
@@ -114,7 +114,7 @@ class Migration(SchemaMigration):
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'modified_at': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),
             'patron': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['accounts.Patron']"}),
-            'plans': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['accounts.ProPackage']", 'symmetrical': 'False'}),
+            'plans': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['accounts.Subscription']", 'symmetrical': 'False'}),
             'state': ('django.db.models.fields.IntegerField', [], {}),
             'summary': ('django.db.models.fields.CharField', [], {'max_length': '128'})
         },
