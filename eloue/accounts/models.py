@@ -603,7 +603,8 @@ class Subscription(models.Model):
     subscription_started = models.DateTimeField(auto_now_add=True)
     subscription_ended = models.DateTimeField(null=True, blank=True)
 
-    def price(self):
+    def price(self, date_to, date_from):
+
         ended_at = self.subscription_ended or datetime.datetime.now()
         td = (ended_at - self.subscription_started)
         dt_sec = (td.microseconds + (td.seconds + td.days * 24 * 3600) * 10**6) / 10**6
@@ -624,10 +625,40 @@ class Billing(models.Model):
     highlights = models.ManyToManyField('products.ProductHighlight')
     plans = models.ManyToManyField('accounts.Subscription')
 
+    @models.permalink
     def get_absolute_url(self):
-        pass
+        date = self.date
+        return (
+            'billing_object', (), 
+            {'year': '%04d'%date.year, 
+             'month': '%02d'%date.month, 
+             'day': '%02d'%date.day})
+
     def pdf(self):
         raise NotImplementedError()
+
+    @staticmethod
+    def builder(patron, date_to):
+        """Returns a (billing, subscriptions, highlights) tuple for a given
+        """
+        import calendar
+        month_days = calendar.monthrange(date_to.year, date_to.month)[1]
+        date_from = date_to - datetime.timedelta(days=month_days)
+        # TODO: verify this logical expression
+        highlights = ProductHighlight.objects.filter((
+            ~models.Q(ended_at__lte=date_from) && 
+            ~models.Q(started_at__gte=date_to) ||
+            models.Q(ended_at__isnull=True) && 
+            models.Q(started_at__lte=date_to)), 
+            product__owner=patron)
+        subscriptions = Subscription.objects.filter((
+            ~models.Q(subscription_ended__lte=date_from) && 
+            ~models.Q(subscription_started__gte=date_to) || 
+            models.Q(subscription_ended__isnull=True) && 
+            models.Q(subscription_started__lte=date_to)),
+            patron=patron)
+        return Billing(date=date_to),  highlights, subscriptions
+
 
 signals.post_save.connect(post_save_sites, sender=Patron)
 signals.pre_delete.connect(pre_delete_creditcard, sender=CreditCard)

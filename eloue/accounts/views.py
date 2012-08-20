@@ -43,7 +43,7 @@ from eloue.decorators import secure_required, mobify, ownership_required
 from eloue.accounts.forms import (EmailAuthenticationForm, GmailContactFormset, PatronEditForm, 
     PatronPasswordChangeForm, ContactForm, CompanyEditForm,
     PatronSetPasswordForm, FacebookForm, CreditCardForm, GmailContactForm)
-from eloue.accounts.models import Patron, FacebookSession, CreditCard
+from eloue.accounts.models import Patron, FacebookSession, CreditCard, Billing
 
 from eloue.accounts.wizard import AuthenticationWizard
 
@@ -380,9 +380,18 @@ def patron_edit(request, *args, **kwargs):
 
 
 @login_required
+def billing_object(request, year, month, day):
+    billing = get_object_or_404(
+        Billing, patron=request.user, 
+        date=datetime.date(int(year), int(month), int(day)))
+    response = HttpResponse(str(billing), content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment; filename=facture_e-loue_{year}-{month}-{day}.pdf'.format(year=year, month=month, day=day)
+    return response
+
+@login_required
 def billing(request):
     patron = request.user
-
+    
     return render(request, 'accounts/patron_billing.html', {})
 
 
