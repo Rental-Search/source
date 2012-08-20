@@ -17,11 +17,6 @@ urlpatterns = patterns('',
     url(r'^account/credit_card/$', 'eloue.accounts.views.patron_edit_credit_card', name="patron_edit_credit_card"),
     url(r'^account/openings/$', 'eloue.accounts.views.patron_edit_opening_times', name="patron_edit_opening_times"),
     url(r'^account/credit_card/delete/$', 'eloue.accounts.views.patron_delete_credit_card', name="patron_delete_credit_card"),
-    url(
-        r'^account/billing/$', 
-        'eloue.accounts.views.billing', 
-        name="billing"
-    ),
     url(r'^account/rib/$', 'eloue.accounts.views.patron_edit_rib', name='patron_edit_rib'),
     url(r'^account/accounts_work_autocomplete$', accounts_work_autocomplete, name='accounts_work_autocomplete'),
     url(r'^account/accounts_studies_autocomplete/$', accounts_studies_autocomplete, name='accounts_studies_autocomplete'),
@@ -29,6 +24,7 @@ urlpatterns = patterns('',
     url(r'^account/comments_received/$', comments_received, name="comments_received"),
 
     url(r'^account/pro_account/subscription/$', 'eloue.accounts.views.patron_edit_subscription', name="patron_edit_subscription"),
+    url(r'^account/pro_account/billing/$', 'eloue.accounts.views.billing', name="billing"),
 
     url(r'^account/pro_option/highlight/$', 'eloue.accounts.views.patron_edit_highlight', name='patron_edit_highlight'),
     url(r'^account/pro_option/highlight/(?P<product_id>\d+)/$', 'eloue.accounts.views.toggle_highlight', name='toggle_highlight'),

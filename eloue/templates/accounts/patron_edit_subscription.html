@@ -4,7 +4,7 @@
 
 {% block pro_account-submenu %}
   <ul>
-     <li><a href="#">{% trans "Facturation" %}</a></li>
+     <li><a href="{{ billing }}">{% trans "Facturation" %}</a></li>
      <li><a href="{{ patron_edit_subscription }}" class="selected-nav-bar-link-sub">{% trans "Modifier votre plan" %}</a></li>
   </ul>
 {% endblock %}
