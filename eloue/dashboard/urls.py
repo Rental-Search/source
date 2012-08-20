@@ -30,6 +30,11 @@ urlpatterns = patterns('',
         'eloue.accounts.views.patron_edit_subscription', 
         name="patron_edit_subscription"
     ),
+    url(
+        r'^account/billing/$', 
+        'eloue.accounts.views.billing', 
+        name="billing"
+    ),
     url(r'^account/rib/$', 'eloue.accounts.views.patron_edit_rib', name='patron_edit_rib'),
     url(r'^account/highlight/$', 'eloue.accounts.views.patron_edit_highlight', name='patron_edit_highlight'),
     url(r'^account/highlight/(?P<product_id>\d+)/$', 'eloue.accounts.views.toggle_highlight', name='toggle_highlight'),

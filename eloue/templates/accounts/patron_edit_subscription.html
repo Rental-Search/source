@@ -1,53 +1,9 @@
-{% extends "accounts/dashboard.html" %}
+{% extends "accounts/patron_edit.html" %}
 {% load i18n navbar %}
 
 {% block title %}{% trans "Votre profil" %}{% endblock %}
-{% block head %}
-	{{block.super}}
-
-	<script type="text/javascript" src="https://www.google.com/jsapi"></script>
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-	<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js"></script>
-{% endblock %}
-
-{% block content-aside-profil %}
-
-{% url patron_edit as patron_edit %}
-{% url facebook_invite as facebook_invite %}
-{% url gmail_invite as gmail_invite %}
-{% url comments as comments %}
-{% url patron_edit_addresses as patron_edit_addresses %}
-{% url patron_edit_phonenumber as patron_edit_phonenumber %}
-{% url patron_edit_password as patron_edit_password %}
-{% url patron_edit_credit_card as patron_edit_credit_card %}
-{% url patron_edit_rib as patron_edit_rib %}
-{% url patron_edit_subscription as patron_edit_subscription %}
-<ul class="nav-sub-bar">
-    <li><a href="{{ patron_edit }}"  class="{% active request "^/dashboard/account/$" %}">{% trans "Mon Profil" %}</a></li>
-    {% if request.user.is_professional %}
-      <li><a href="">{% trans "Notification" %}</a></li>
-      <li><a href="">{% trans "Facturation" %}</a></li>
-      <li><a href="{% url patron_edit_opening_times %}">{% trans "Horaires d'ouverture" %}</a></li>
-      <li><a href="{% url patron_edit_highlight %}">{% trans "Mettre en avant vos annonces" %}</a></li>
-      <li><a href="{{ patron_edit_subscription }}" class="{% active request patron_edit_subscription %}">{% trans "Pro package" %}</a></li>
-    {% endif %}
-    {% if request.user.is_staff %}
-    <li>
-      <a href="{{ facebook_invite }}" class="{% active request "^/dashboard/account/invite/" %}">{% trans "Invitez vos amis" %}</a>
-      {% block invite-submenu %}{% endblock %}
-    </li>
-    {% endif %}
-    <li><a href="{{ comments }}" class="{% active request comments %}">{% trans "Commentaires" %}</a></li>
-    <li><a href="{{ patron_edit_addresses }}" class="{% active request patron_edit_addresses %}">{% trans "Adresses" %}</a></li>
-    <li><a href="{{ patron_edit_phonenumber }}" class="{% active request patron_edit_phonenumber %}">{% trans "Téléphone" %}</a></li>
-    <li><a href="{{ patron_edit_password }}" class="{% active request patron_edit_password %}">{% trans "Mot de passe" %}</a></li>
-    <li><a href="{{ patron_edit_credit_card }}" class="{% active request patron_edit_credit_card %}">{% trans "Carte bancaire" %}</a></li>
-    <li><a href="{{ patron_edit_rib }}" class="{% active request patron_edit_rib%}">{% trans "RIB "%}</a></li>
-</ul>
-{% endblock %}
 
 {% block content-main-profil %}
-
 {% if form.is_multipart %}
 <form enctype="multipart/form-data" class="form-horizontal" method="post" action="">
 {% else %}
