@@ -12,7 +12,7 @@
                 <tr>
                     <td valign="top" style="padding-top: 20px;border-collapse: collapse;">
                         <div style="color: #505050;font-family: Arial;font-size: 14px;line-height: 200%;text-align: left;">
-                        	{% blocktrans with patron.username as username and site.domain as domain and protocol as protocol %}
+                        	{% blocktrans with patron.username as username and domain as domain and protocol as protocol %}
                                 Bonjour {{ username }},<br><br>
 
                                 Nous vous remercions de vous être enregistré(e) sur <a href="{{ protocol }}://{{ domain }}">{{ domain }}</a>.<br><br>
@@ -20,7 +20,7 @@
 
                             {% endblocktrans %}
                             <p style="margin-top: 0px; text-align: center;">
-                            	<a href="{{ protocol }}://{{ site.domain }}{% url propw uidb36=uid token=token %}" style="text-decoration: none; cursor: pointer; display: inline-block; background-color: #f36100; padding: 10px; font-family: Arial, sans-serif; line-height: 18px; font-size: 14px; color: #fff; border: 1px solid #c85007; vertical-align: 7%;">
+                            	<a href="{{ protocol }}://{{ domain }}{% url propw uidb36=uid token=token %}" style="text-decoration: none; cursor: pointer; display: inline-block; background-color: #f36100; padding: 10px; font-family: Arial, sans-serif; line-height: 18px; font-size: 14px; color: #fff; border: 1px solid #c85007; vertical-align: 7%;">
                                 	{% trans "Activer votre compte" %}
                             	</a>
                             </p>
