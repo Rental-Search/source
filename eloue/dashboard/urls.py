@@ -15,28 +15,18 @@ urlpatterns = patterns('',
     url(r'^account/phonenumbers/$', patron_edit_phonenumber, name="patron_edit_phonenumber"),
     url(r'^account/addresses/$', patron_edit_addresses, name="patron_edit_addresses"),
     url(r'^account/credit_card/$', 'eloue.accounts.views.patron_edit_credit_card', name="patron_edit_credit_card"),
-    url(
-        r'^account/openings/$', 
-        'eloue.accounts.views.patron_edit_opening_times',
-        name="patron_edit_opening_times",
-        ),
-    url(
-        r'^account/credit_card/delete/$', 
-        'eloue.accounts.views.patron_delete_credit_card', 
-        name="patron_delete_credit_card"
-    ),
-    url(
-        r'^account/subscription/$', 
-        'eloue.accounts.views.patron_edit_subscription', 
-        name="patron_edit_subscription"
-    ),
+    url(r'^account/openings/$', 'eloue.accounts.views.patron_edit_opening_times', name="patron_edit_opening_times"),
+    url(r'^account/credit_card/delete/$', 'eloue.accounts.views.patron_delete_credit_card', name="patron_delete_credit_card"),
     url(r'^account/rib/$', 'eloue.accounts.views.patron_edit_rib', name='patron_edit_rib'),
-    url(r'^account/highlight/$', 'eloue.accounts.views.patron_edit_highlight', name='patron_edit_highlight'),
-    url(r'^account/highlight/(?P<product_id>\d+)/$', 'eloue.accounts.views.toggle_highlight', name='toggle_highlight'),
     url(r'^account/accounts_work_autocomplete$', accounts_work_autocomplete, name='accounts_work_autocomplete'),
     url(r'^account/accounts_studies_autocomplete/$', accounts_studies_autocomplete, name='accounts_studies_autocomplete'),
     url(r'^account/comments/$', comments, name="comments"),
     url(r'^account/comments_received/$', comments_received, name="comments_received"),
+
+    url(r'^account/pro_account/subscription/$', 'eloue.accounts.views.patron_edit_subscription', name="patron_edit_subscription"),
+
+    url(r'^account/pro_option/highlight/$', 'eloue.accounts.views.patron_edit_highlight', name='patron_edit_highlight'),
+    url(r'^account/pro_option/highlight/(?P<product_id>\d+)/$', 'eloue.accounts.views.toggle_highlight', name='toggle_highlight'),
 
     url(r'^account/invite/facebook/$', facebook_invite, name="facebook_invite"),
     url(r'^account/invite/gmail/$', gmail_invite, name="gmail_invite"),
