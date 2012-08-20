@@ -17,6 +17,11 @@ urlpatterns = patterns('',
     url(r'^account/credit_card/$', 'eloue.accounts.views.patron_edit_credit_card', name="patron_edit_credit_card"),
     url(r'^account/openings/$', 'eloue.accounts.views.patron_edit_opening_times', name="patron_edit_opening_times"),
     url(r'^account/credit_card/delete/$', 'eloue.accounts.views.patron_delete_credit_card', name="patron_delete_credit_card"),
+    url(
+        r'^account/billing/$', 
+        'eloue.accounts.views.billing', 
+        name="billing"
+    ),
     url(r'^account/rib/$', 'eloue.accounts.views.patron_edit_rib', name='patron_edit_rib'),
     url(r'^account/accounts_work_autocomplete$', accounts_work_autocomplete, name='accounts_work_autocomplete'),
     url(r'^account/accounts_studies_autocomplete/$', accounts_studies_autocomplete, name='accounts_studies_autocomplete'),

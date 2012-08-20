@@ -233,6 +233,7 @@ def comments_received(request):
         })
     )
 
+
 @login_required
 def comments(request):
     patron = request.user
@@ -376,6 +377,14 @@ def patron_edit(request, *args, **kwargs):
             'form': form
         }
     )
+
+
+@login_required
+def billing(request):
+    patron = request.user
+
+    return render(request, 'accounts/patron_billing.html', {})
+
 
 @login_required
 def patron_edit_subscription(request, *args, **kwargs):

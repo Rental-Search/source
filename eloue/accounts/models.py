@@ -624,6 +624,8 @@ class Billing(models.Model):
     highlights = models.ManyToManyField('products.ProductHighlight')
     plans = models.ManyToManyField('accounts.Subscription')
 
+    def get_absolute_url(self):
+        pass
     def pdf(self):
         raise NotImplementedError()
 

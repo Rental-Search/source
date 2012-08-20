@@ -35,7 +35,8 @@
       <a href="{{ patron_edit_highlight }}" class="{% active request "^/dashboard/account/pro_option/"%}">{% trans "Options pro" %}</a>
       {% block pro_opiton-submenu %}{% endblock %}
     </li>
-    {% endif %}
+    {% url billing as billing %}
+    <li><a href="{{ billing }}" class="{% active request billing %}">{% trans "Facturation" %}</a></li>
     {% if request.user.is_staff %}
     <li>
       <a href="{{ facebook_invite }}" class="{% active request "^/dashboard/account/invite/" %}">{% trans "Invitez vos amis" %}</a>
