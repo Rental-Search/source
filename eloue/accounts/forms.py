@@ -382,7 +382,7 @@ class SubscriptionEditForm(forms.Form):
     def __init__(self, *args, **kwargs):
         super(SubscriptionEditForm, self).__init__(*args, **kwargs)
         now = datetime.datetime.now()
-        self.fields['subscription'] = forms.ModelChoiceField(required=False,
+        self.fields['subscription'] = forms.ModelChoiceField(required=True,
             queryset=ProPackage.objects.filter(
                 Q(valid_until__isnull=True)|Q(valid_until__lte=now) 
             )

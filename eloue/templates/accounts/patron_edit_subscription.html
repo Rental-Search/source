@@ -14,10 +14,10 @@
 <script type="text/javascript">
 $(document).ready(function (){
 	$('table.plan_list .btn-contactme').click(function (e) {
-		e.preventDefault(); 
+		e.preventDefault();
 		answer = confirm('Etes-vous sur de vouloir changer le plan ?');
         if (answer == true) {
-            return true;
+        	$(this.parentNode).submit();
         } else {
             return false;
         }
@@ -38,36 +38,24 @@ $(document).ready(function (){
 		</tr>
 	</thead>
 	<tbody>
-		<tr>
-			<td>{% trans "Micro" %}</td>
-			<td class="align-center">5</td>
-			<td class="align-center">30&euro;</td>
-			<td class="align-center"><a href="#" class="btn-contactme">Choisir ce plan</a></td>
-		</tr>
-		<tr>
-			<td>{% trans "Petit" %}</td>
-			<td class="align-center">10</td>
-			<td class="align-center">54&euro;</td>
-			<td class="align-center">Votre plan actuel</td>
-		</tr>
-		<tr>
-			<td>{% trans "Moyen" %}</td>
-			<td class="align-center">30</td>
-			<td class="align-center">76&euro;</td>
-			<td class="align-center"><a href="#" class="btn-contactme">Choisir ce plan</a></td>
-		</tr>
-		<tr>
-			<td>{% trans "Large" %}</td>
-			<td class="align-center">50</td>
-			<td class="align-center">100&euro;</td>
-			<td class="align-center"><a href="#" class="btn-contactme">Choisir ce plan</a></td>
-		</tr>
-		<tr>
-			<td>{% trans "Illimité" %}</td>
-			<td class="align-center">Illimité</td>
-			<td class="align-center">158&euro;</td>
-			<td class="align-center"><a href="#" class="btn-contactme">Choisir ce plan</a></td>
-		</tr>
+		{% for plan in plans %}
+			<tr>
+				<td>{% trans plan.name %}</td>
+				<td class="align-center">{% firstof plan.maximum_items "Illimité" %}</td>
+				<td class="align-center">{{ plan.price }}&euro;</td>
+				{% if plan.pk != current_subscription.propackage.pk %}
+					<td class="align-center"> 
+						<form action="" method="post">
+							{% csrf_token %}
+							<input type="hidden" name="subscription" value="{{ plan.pk }}" />
+							<input type="submit" value="Choisir ce plan" class="btn-contactme"/>
+						</form>
+					</td>
+				{% else %}
+					<td class="align-center">Votre plan actuel</td>
+				{% endif %}
+			</tr>
+		{% endfor %}
 	</tbody>
 </table>
 {% endblock %}

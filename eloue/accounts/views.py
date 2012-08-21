@@ -398,11 +398,15 @@ def billing(request):
 @login_required
 def patron_edit_subscription(request, *args, **kwargs):
     from eloue.accounts.forms import SubscriptionEditForm
-    from eloue.accounts.models import Subscription
+    from eloue.accounts.models import Subscription, ProPackage
     patron = request.user
     if not patron.is_professional:
         return HttpResponseForbidden()
     subscription, = Subscription.objects.filter(patron=patron, subscription_ended__isnull=True) or (None,)
+    now = datetime.datetime.now()
+    plans = ProPackage.objects.filter(
+        Q(valid_until__isnull=True, valid_from__lte=now) or
+        Q(valid_until__isnull=False, valid_until__gte=now))
     if request.method == "POST":
         form = SubscriptionEditForm(request.POST)
         if form.is_valid():
@@ -414,9 +418,12 @@ def patron_edit_subscription(request, *args, **kwargs):
                 if new_package:
                     Subscription.objects.create(patron=patron, propackage=new_package)
             return redirect('.')
-    else:
-        form = SubscriptionEditForm(initial={'subscription': subscription.propackage} if subscription else None)
-    return render(request, 'accounts/patron_edit_subscription.html', {'form': form})
+        else:
+            messages.error(request, "WRONG ASD")
+    return render(
+        request, 'accounts/patron_edit_subscription.html', 
+        {'plans': plans, 'current_subscription': subscription}
+    )
 
 
 @login_required

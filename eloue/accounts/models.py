@@ -593,11 +593,12 @@ class ProPackage(models.Model):
     name = models.CharField(max_length=64)
 
     def __unicode__(self):
-        return u'{maximum_items} item/{total_amount} euro'.format(maximum_items=self.maximum_items, total_amount=self.total_amount)
+        return u'{maximum_items} item/{price} euro'.format(maximum_items=self.maximum_items, price=self.price)
 
     class Meta:
         unique_together = (('maximum_items', 'valid_until'), )
-
+        ordering = ('-maximum_items', )
+    
 class Subscription(models.Model):
     patron = models.ForeignKey(Patron)
     propackage = models.ForeignKey(ProPackage)
