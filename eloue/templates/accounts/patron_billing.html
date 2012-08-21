@@ -10,6 +10,178 @@
   </ul>
 {% endblock %}
 
-{% block content-main-profil %}
+{% block tail %}
+{{ block.super }}
+<script type="text/javascript">
+	$(document).ready(function (){
+		var thead = $('table.billing table thead tr');
 
+		thead.click(function (){
+			var tbody = $(this).parent().parent().children('tbody');
+			if(tbody.length == 1){
+				if(tbody.is(":visible") == false ){
+					tbody.show();
+					$(this).children().children('i').attr('class', 'icon-minus-sign');
+				} else {
+					tbody.hide();
+					$(this).children().children('i').attr('class', 'icon-plus-sign');
+				}
+			}		
+		});
+	});
+</script>
+{% endblock %}
+
+{% block content-main-profil %}
+<h2>{% trans "Relevé actuel du mois" %}</h2>
+<table class="table billing" width="100%">
+	<tr>
+		<th class="billing-header">{% trans "Récapitulatif" %}</th>
+	</tr>
+	<tr>
+		<td>
+			<table class="table">
+				<thead>
+					<tr>
+						<td></i>Plan et options</td>
+						<td class="amount">63,03 &euro;</td>
+					</tr>
+				</thead>
+			</table>
+		</td>
+	</tr>
+	<tr>
+		<th class="billing-header">{% trans "Détails" %}</th>
+	</tr>
+	<!--
+	<tr>
+		<td colspan="2" class="billing-detail">
+			<a href="#" class="billing-detail-plus">{% trans "Etendre tous les services" %}</a> | <a href="#" class="billing-detail-minus">{% trans "Réduire tous les services"%}</a>
+		</td>
+	</tr>
+	-->
+	<tr>
+		<td>
+			<table class="table">
+				<thead>
+					<tr>
+						<td><i class="icon-plus-sign"></i> {% trans "Plan" %}</td>
+						<td class="amount">30 &euro;</td>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td class="billing-item">
+							Micro - 5 annonces (<a href="{% url patron_edit_subscription %}">{% trans "Modifier mon plan" %}</a>)
+						</td>
+						<td class="amount">30 &euro;</td>
+					</tr>
+				</tbody>
+			</table>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<table class="table">
+				<thead>
+					<tr>
+						<td><i class="icon-plus-sign"></i> {% trans "Mise en avant" %}</td>
+						<td class="amount">22,50 &euro;</td>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td class="billing-item"><a href="#">Echelle 15m</a></td>
+						<td class="amount">7,50 &euro;</td>
+					</tr>
+					<tr>
+						<td class="billing-item"><a href="#">Visseuse sans fil</a></td>
+						<td class="amount">7,50 &euro;</td>
+					</tr>
+					<tr>
+						<td class="billing-item"><a href="#">Marteau piqueur</a></td>
+						<td class="amount">7,50 &euro;</td>
+					</tr>
+				</tbody>
+			</table>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<table class="table">
+				<thead>
+					<tr>
+						<td><i class="icon-plus-sign"></i> {% trans "Notification par email" %}</td>
+						<td class="amount">0,20 &euro;</td>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td class="billing-item">benoit.woj@e-loue.com</td>
+						<td class="amount">0,10&euro;</td>
+					</tr>
+					<tr>
+						<td class="billing-item">alexandre.woog@e-loue.com</td>
+						<td class="amount">0,10&euro;</td>
+					</tr>
+				</tbody>
+			</table>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<table class="table">
+				<thead>
+					<tr>
+						<td><i class="icon-plus-sign"></i> {% trans "TVA" %}</td>
+						<td class="amount">10,33 &euro;</td>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td class="billing-item">{% trans "TVA à 19,60" %}</td>
+						<td class="amount">10,33 &euro;</td>
+					</tr>
+				</tbody>
+			</table>
+		</td>
+	</tr>
+</table>
+<h2>{% trans "Historique des factures"%}</h2>
+<table class="table billing-history">
+	<thead>
+		<tr>
+			<th>{% trans "Date" %}</th>
+			<th>{% trans "Carte de crédit" %}</th>
+			<th>{% trans "Facture" %}</th>
+			<th>{% trans "Montant" %}</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>04/08/2012</td>
+			<td>4***********5383</td>
+			<td><a href="#">Télécharger la facture</a></td>
+			<td>63,03 &euro;</td>
+		</tr>
+		<tr>
+			<td>04/07/2012</td>
+			<td>4***********5383</td>
+			<td><a href="#">Télécharger la facture</a></td>
+			<td>63,03 &euro;</td>
+		</tr>
+		<tr class="billing-error">
+			<td>04/06/2012</td>
+			<td>4***********5383</td>
+			<td></td>
+			<td>Echoué</td>
+		</tr>
+		<tr>
+			<td>04/05/2012</td>
+			<td>4***********5383</td>
+			<td><a href="#">Télécharger la facture</a></td>
+			<td>63,03 &euro;</td>
+		</tr>
+	</tbody>
+</table>
 {% endblock %}

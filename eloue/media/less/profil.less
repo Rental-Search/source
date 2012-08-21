@@ -209,3 +209,64 @@
     margin-bottom: 0px;
   }
 }
+
+//BILLING
+//--------
+
+.table.billing {
+  #font > .sans-serif(Arial, normal, 14px);
+  color: @blueDark;
+
+  .billing-header {
+    background-color: #e3f6fd;
+  }
+
+  .billing-detail {
+    font-size: 11px;
+  }
+
+  border-left: 1px solid #DDD;
+  border-right: 1px solid #DDD;
+  border-bottom: 1px solid #DDD;
+
+  border-collapse: separate;
+  .rounded(4px);
+
+  table {
+    margin-bottom: 0px;
+
+    thead {
+      tr  { cursor: pointer ;}
+    }
+
+    tbody {
+      display: none;
+      #font > .sans-serif(Arial, normal, 12px);
+    }
+
+    td {
+      border-top: 0px;
+    }
+
+    .billing-item {
+      padding-left: 30px;
+    }
+
+    .amount {
+      text-align: right;
+      width: 80px;
+    }
+  }
+}
+
+//BILLING-HISTORY
+//----------------
+.billing-history {
+  #font > .sans-serif(Arial, normal, 12px);
+  color: @blueDark;
+
+  .billing-error {
+    color: @red;
+  }
+}
+
