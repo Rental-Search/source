@@ -587,9 +587,10 @@ class PatronAccepted(models.Model):
 
 class ProPackage(models.Model):
     maximum_items = models.PositiveIntegerField()
-    total_amount = models.DecimalField(max_digits=8, decimal_places=2)
+    price = models.DecimalField(max_digits=8, decimal_places=2)
     valid_from = models.DateField(default=datetime.datetime.now)
     valid_until = models.DateField(null=True, blank=True)
+    name = models.CharField(max_length=64)
 
     def __unicode__(self):
         return u'{maximum_items} item/{total_amount} euro'.format(maximum_items=self.maximum_items, total_amount=self.total_amount)
