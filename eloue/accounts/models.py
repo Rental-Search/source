@@ -586,7 +586,7 @@ class PatronAccepted(models.Model):
     sites = models.ManyToManyField(Site, related_name='patrons_accepted')
 
 class ProPackage(models.Model):
-    maximum_items = models.PositiveIntegerField()
+    maximum_items = models.PositiveIntegerField(null=True, blank=True)
     price = models.DecimalField(max_digits=8, decimal_places=2)
     valid_from = models.DateField(default=datetime.datetime.now)
     valid_until = models.DateField(null=True, blank=True)

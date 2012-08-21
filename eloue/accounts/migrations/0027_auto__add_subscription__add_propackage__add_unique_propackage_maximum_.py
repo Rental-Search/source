@@ -21,7 +21,7 @@ class Migration(SchemaMigration):
         # Adding model 'ProPackage'
         db.create_table('accounts_propackage', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('maximum_items', self.gf('django.db.models.fields.PositiveIntegerField')()),
+            ('maximum_items', self.gf('django.db.models.fields.PositiveIntegerField')(null=True, blank=True)),
             ('price', self.gf('django.db.models.fields.DecimalField')(max_digits=8, decimal_places=2)),
             ('valid_from', self.gf('django.db.models.fields.DateField')(default=datetime.datetime.now)),
             ('valid_until', self.gf('django.db.models.fields.DateField')(null=True, blank=True)),
@@ -224,7 +224,7 @@ class Migration(SchemaMigration):
         'accounts.propackage': {
             'Meta': {'unique_together': "(('maximum_items', 'valid_until'),)", 'object_name': 'ProPackage'},
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'maximum_items': ('django.db.models.fields.PositiveIntegerField', [], {}),
+            'maximum_items': ('django.db.models.fields.PositiveIntegerField', [], {'null': 'True', 'blank': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '64'}),
             'price': ('django.db.models.fields.DecimalField', [], {'max_digits': '8', 'decimal_places': '2'}),
             'valid_from': ('django.db.models.fields.DateField', [], {'default': 'datetime.datetime.now'}),
