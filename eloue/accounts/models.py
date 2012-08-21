@@ -646,15 +646,15 @@ class Billing(models.Model):
         date_from = date_to - datetime.timedelta(days=month_days)
         # TODO: verify this logical expression
         highlights = ProductHighlight.objects.filter((
-            ~models.Q(ended_at__lte=date_from) && 
-            ~models.Q(started_at__gte=date_to) ||
-            models.Q(ended_at__isnull=True) && 
+            ~models.Q(ended_at__lte=date_from) and 
+            ~models.Q(started_at__gte=date_to) or
+            models.Q(ended_at__isnull=True) and 
             models.Q(started_at__lte=date_to)), 
             product__owner=patron)
         subscriptions = Subscription.objects.filter((
-            ~models.Q(subscription_ended__lte=date_from) && 
-            ~models.Q(subscription_started__gte=date_to) || 
-            models.Q(subscription_ended__isnull=True) && 
+            ~models.Q(subscription_ended__lte=date_from) and 
+            ~models.Q(subscription_started__gte=date_to) or
+            models.Q(subscription_ended__isnull=True) and 
             models.Q(subscription_started__lte=date_to)),
             patron=patron)
         return Billing(date=date_to),  highlights, subscriptions
