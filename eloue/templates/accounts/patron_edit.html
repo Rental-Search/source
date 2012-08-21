@@ -22,16 +22,22 @@
 {% url patron_edit_credit_card as patron_edit_credit_card %}
 {% url patron_edit_rib as patron_edit_rib %}
 {% url patron_edit_subscription as patron_edit_subscription %}
+{% url patron_edit_highlight as patron_edit_highlight %}
 {% url billing as billing %}
+
 
 <ul class="nav-sub-bar">
     <li><a href="{{ patron_edit }}"  class="{% active request "^/dashboard/account/$" %}">{% trans "Mon Profil" %}</a></li>
     {% if request.user.is_professional %}
-      <li><a href="">{% trans "Notification" %}</a></li>
-      <li><a href="{{ billing }}" class="{% active request billing %}">{% trans "Facturation" %}</a></li>
-      <li><a href="{% url patron_edit_opening_times %}">{% trans "Horaires d'ouverture" %}</a></li>
-      <li><a href="{% url patron_edit_highlight %}">{% trans "Mettre en avant vos annonces" %}</a></li>
-      <li><a href="{{ patron_edit_subscription }}" class="{% active request patron_edit_subscription %}">{% trans "Pro package" %}</a></li>
+    <li><a href="{% url patron_edit_opening_times %}" class="{% active request "^/dashboard/account/openings/"%}">{% trans "Horaires d'ouverture" %}</a></li>
+    <li>
+        <a href="{{ billing }}" class="{% active request "^/dashboard/account/pro_account/" %}">{% trans "Compte pro" %}</a>
+        {% block pro_account-submenu %}{% endblock %}
+    </li>
+    <li>
+      <a href="{{ patron_edit_highlight }}" class="{% active request "^/dashboard/account/pro_option/"%}">{% trans "Options pro" %}</a>
+      {% block pro_opiton-submenu %}{% endblock %}
+    </li>
     {% endif %}
     {% if request.user.is_staff %}
     <li>
@@ -44,7 +50,7 @@
     <li><a href="{{ patron_edit_phonenumber }}" class="{% active request patron_edit_phonenumber %}">{% trans "Téléphone" %}</a></li>
     <li><a href="{{ patron_edit_password }}" class="{% active request patron_edit_password %}">{% trans "Mot de passe" %}</a></li>
     <li><a href="{{ patron_edit_credit_card }}" class="{% active request patron_edit_credit_card %}">{% trans "Carte bancaire" %}</a></li>
-    <li><a href="{{ patron_edit_rib }}" class="{% active request patron_edit_rib%}">{% trans "RIB "%}</a></li>
+    <li><a href="{{ patron_edit_rib }}" class="{% active request patron_edit_rib %}">{% trans "RIB "%}</a></li>
 </ul>
 {% endblock %}
 

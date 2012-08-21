@@ -1,27 +1,73 @@
 {% extends "accounts/patron_edit.html" %}
-{% load i18n navbar %}
+{% load i18n %}
+{% block title %}{% trans "Modifiers votre plan" %}{% endblock %}
 
-{% block title %}{% trans "Votre profil" %}{% endblock %}
+{% block pro_account-submenu %}
+  <ul>
+     <li><a href="{{ billing }}">{% trans "Facturation" %}</a></li>
+     <li><a href="{{ patron_edit_subscription }}" class="selected-nav-bar-link-sub">{% trans "Modifier votre plan" %}</a></li>
+  </ul>
+{% endblock %}
+
+{% block tail %}
+{{ block.super }}
+<script type="text/javascript">
+$(document).ready(function (){
+	$('table.plan_list .btn-contactme').click(function (e) {
+		e.preventDefault(); 
+		answer = confirm('Etes-vous sur de vouloir changer le plan ?');
+        if (answer == true) {
+            return true;
+        } else {
+            return false;
+        }
+	});
+});
+</script>
+{% endblock %}
+
 
 {% block content-main-profil %}
-{% if form.is_multipart %}
-<form enctype="multipart/form-data" class="form-horizontal" method="post" action="">
-{% else %}
-<form class="form-horizontal" method="post" action="">
-{% endif %}
-{% csrf_token %}    
-{{form}}
-      <div class="form-actions">
-        <button type="submit" class="btn btn-primary">Enregistrer</button>
-        <button type="reset" class="btn btn-cancel">Annuler</button>
-      </div>
-  </form>
-Your subscription history:</br>
-<ul>
-{% for subscription in request.user.subscription_set.all %}
-<li>Between: {{subscription.subscription_started}} and {% firstof subscription.subscription_ended "now" %}, package: {{subscription.propackage}}, price: {{ subscription.price }} Euro </li>
-{% empty %}
--.-
-{% endfor %}
-</ul>
+<table class="table plan_list">
+	<thead>
+		<tr>
+			<th>{% trans "Plan" %}</th>
+			<th class="align-center">{% trans "Dépôt d'annonce max" %}</th>
+			<th class="align-center">{% trans "Prix par mois" %}</th>
+			<th></th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>{% trans "Micro" %}</td>
+			<td class="align-center">5</td>
+			<td class="align-center">30&euro;</td>
+			<td class="align-center"><a href="#" class="btn-contactme">Choisir ce plan</a></td>
+		</tr>
+		<tr>
+			<td>{% trans "Petit" %}</td>
+			<td class="align-center">10</td>
+			<td class="align-center">54&euro;</td>
+			<td class="align-center">Votre plan actuel</td>
+		</tr>
+		<tr>
+			<td>{% trans "Moyen" %}</td>
+			<td class="align-center">30</td>
+			<td class="align-center">76&euro;</td>
+			<td class="align-center"><a href="#" class="btn-contactme">Choisir ce plan</a></td>
+		</tr>
+		<tr>
+			<td>{% trans "Large" %}</td>
+			<td class="align-center">50</td>
+			<td class="align-center">100&euro;</td>
+			<td class="align-center"><a href="#" class="btn-contactme">Choisir ce plan</a></td>
+		</tr>
+		<tr>
+			<td>{% trans "Illimité" %}</td>
+			<td class="align-center">Illimité</td>
+			<td class="align-center">158&euro;</td>
+			<td class="align-center"><a href="#" class="btn-contactme">Choisir ce plan</a></td>
+		</tr>
+	</tbody>
+</table>
 {% endblock %}
