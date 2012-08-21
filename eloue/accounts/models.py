@@ -643,6 +643,7 @@ class Billing(models.Model):
         """Returns a (billing, subscriptions, highlights) tuple for a given
         """
         import calendar
+        from eloue.products.models import ProductHighlight
         month_days = calendar.monthrange(date_to.year, date_to.month)[1]
         date_from = date_to - datetime.timedelta(days=month_days)
         # TODO: verify this logical expression
