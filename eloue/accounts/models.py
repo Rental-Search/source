@@ -617,12 +617,12 @@ class Billing(models.Model):
     modified_at = models.DateTimeField(auto_now=True)
     patron = models.ForeignKey(Patron)
 
-    summary = models.CharField(max_length=128)
+    #summary = models.CharField(max_length=128)
     date = models.DateField()
     state = models.IntegerField(choices=[(0, 'UNPAID'), (1, 'PAID')])
-    debit = models.DecimalField(max_digits=8, decimal_places=2)
-    credit = models.DecimalField(max_digits=8, decimal_places=2)
-    balance = models.DecimalField(max_digits=8, decimal_places=2)
+    #debit = models.DecimalField(max_digits=8, decimal_places=2)
+    #credit = models.DecimalField(max_digits=8, decimal_places=2)
+    #balance = models.DecimalField(max_digits=8, decimal_places=2)
 
     highlights = models.ManyToManyField('products.ProductHighlight')
     plans = models.ManyToManyField('accounts.Subscription')
