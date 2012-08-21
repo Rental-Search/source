@@ -152,6 +152,7 @@
 
 .opening {
   #font > .sans-serif(Arial, normal, 14px);
+  color: @blueDark !important;
 
   th { text-align:center; }
 
@@ -217,6 +218,8 @@
   #font > .sans-serif(Arial, normal, 14px);
   color: @blueDark;
 
+  margin-bottom: 40px;
+
   .billing-header {
     background-color: #e3f6fd;
   }
@@ -268,5 +271,25 @@
   .billing-error {
     color: @red;
   }
+}
+
+//HIGHLIGHT_LIST
+//----------------
+
+.highlight-list {
+  #font > .sans-serif(Arial, normal, 12px);
+  color: @blueDark;
+
+  border: 1px solid #DDD;
+  
+
+  border-collapse: separate;
+  .rounded(4px);
+
+  .highlight-action {
+    text-align: right;
+    a { color: @red; }
+  }
+
 }
 

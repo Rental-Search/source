@@ -11,6 +11,93 @@
 </ul>
 {% endblock %}
 
-{% block content-main-profil %}
+{% block tail %}
+{{ block.super }}
+<script type="text/javascript">
+	$(document).ready(function (){
+		$("a#add_new_highlight").click(function (e){
+			e.preventDefault();
+			$( "div#add_new_highlight_form" ).dialog(
+				{ 
+					resizable: false, 
+					width: '350px'
+				}
+			);
+		});
 
+		$('td.highlight-action a').click(function (e){
+			e.preventDefault();
+			answer = confirm('Etes-vous sûr de vouloir retirer la mise en avant ?');
+	        if (answer == true) {
+	            return true;
+	        } else {
+	            return false;
+	        }
+		});
+	});
+</script>
+{% endblock %}
+
+{% block content-main-profil %}
+<h2 style="margin-bottom: 30px">
+	{% trans "Liste des annonces misent en avant"%}  <small style="padding-left: 50px;"><a href="#" id="add_new_highlight"><i class="icon-plus-sign"></i> {% trans "Ajouter une annonce" %}</a></small>
+</h2>
+<table class="table highlight-list">
+	<thead>
+		<tr>
+			<th>Annonce</th>
+			<th>Durée de mise en avant</th>
+			<th></th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td><a href="#">Echelle 15m</a></td>
+			<td>Depuis 3 jours</td>
+			<td class="highlight-action">
+				<a href="#"><i class="icon-remove"></i> {% trans "Retirer la mise en avant"%}</a>
+			</td>
+		</tr>
+		<tr>
+			<td><a href="#">Visseuse sans fil</a></td>
+			<td>Depuis 2 semaine et 3 jours</td>
+			<td class="highlight-action">
+				<a href="#"><i class="icon-remove"></i> {% trans "Retirer la mise en avant"%}</a>
+			</td>
+		</tr>
+		<tr>
+			<td><a href="#">Marteau piqueur</a></td>
+			<td>Depuis 1 mois 2 semaine et 6 jours</td>
+			<td class="highlight-action">
+				<a href="#"><i class="icon-remove"></i> {% trans "Retirer la mise en avant"%}</a>
+			</td>
+		</tr>
+	</tbody>
+</table>
+<div id="add_new_highlight_form" title="Mettre en avant une nouvelle annonce" style="display: none;">
+	<form class="form" method="post" action="" style="margin-bottom: 0px; margin-top: 20px;">
+		<div class="control-group">
+			<div class="controls">
+				<select name="product" id="product">
+					<option value="" selected="selected">Choisissez une annonce</option>
+					<option value="40">Echelle 15m</option>
+					<option value="41">Visseuse sans fil</option>
+					<option value="42">Marteau piqueur</option>
+					<option value="40">Echelle 15m</option>
+					<option value="41">Visseuse sans fil</option>
+					<option value="42">Marteau piqueur</option>
+					<option value="40">Echelle 15m</option>
+					<option value="41">Visseuse sans fil</option>
+					<option value="42">Marteau piqueur</option>
+					<option value="40">Echelle 15m</option>
+					<option value="41">Visseuse sans fil</option>
+					<option value="42">Marteau piqueur</option>
+				</select>
+			</div>
+		</div>
+		<div class="form-actions" style="padding-bottom: 0px; margin-bottom: 0px; padding-left: 205px;">
+	    	<button type="submit" class="btn btn-primary">{% trans "Valider" %}</button>
+	    </div>
+	</form>
+</div>
 {% endblock %}
