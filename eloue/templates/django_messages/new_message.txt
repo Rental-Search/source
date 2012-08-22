@@ -9,4 +9,4 @@ Bonjour {{ recipient }},
 {{ message.body|safe }}
 
 
-{% trans "Voici le lien pour répondre :"%} { site_url }}{% url thread_details message.thread.pk %}
+{% trans "Voici le lien pour répondre :"%} {{ site_url }}{% url thread_details message.thread.pk %}
