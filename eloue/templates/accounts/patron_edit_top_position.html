@@ -1,0 +1,20 @@
+{% extends "accounts/patron_edit.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Top position" %}{% endblock %}
+
+{% block pro_opiton-submenu %}
+<ul>
+  <li><a href="{{ patron_edit_highlight }}">{% trans "Mise en avant" %}</a></li>
+  <li><a href="{{ patron_edit_notification }}">{% trans "Notifications" %}</a></li>
+  <li><a href="{{ patron_edit_top_position }}" class="selected-nav-bar-link-sub">{% trans "Top position" %}</a></li>
+</ul>
+{% endblock %}
+
+
+{% block content-main-profil %}
+
+<h2>{% trans "Top position"%}</h2>
+	
+
+{% endblock %}

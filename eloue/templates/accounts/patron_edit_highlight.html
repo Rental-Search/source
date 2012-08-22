@@ -5,9 +5,9 @@
 
 {% block pro_opiton-submenu %}
 <ul>
-  <li><a href="#">{% trans "Notifications" %}</a></li>
-  <li><a href="{{ patron_edit_highlight }}" class="selected-nav-bar-link-sub">{% trans "Mise en avant" %}</a></li>
-  <li><a href="#">{% trans "Top position" %}</a></li>
+  <li><a href="{{ patron_edit_highlight }}" class="selected-nav-bar-link-sub">{% trans "Mise en avant" %}</a></li>	
+  <li><a href="{{ patron_edit_notification }}">{% trans "Notifications" %}</a></li>
+  <li><a href="{{ patron_edit_top_position }}">{% trans "Top position" %}</a></li>
 </ul>
 {% endblock %}
 

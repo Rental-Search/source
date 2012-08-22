@@ -787,3 +787,11 @@ def gmail_send_invite(request):
 @login_required
 def facebook_invite(request):
     return direct_to_template(request, 'accounts/facebook_invite.html')
+
+@login_required
+def patron_edit_notification(request):
+    return direct_to_template(request, 'accounts/patron_edit_notification.html')
+
+@login_required
+def patron_edit_top_position(request):
+    return direct_to_template(request, 'accounts/patron_edit_top_position.html')
