@@ -36,7 +36,6 @@ urlpatterns = patterns('',
         name="billing_object"
         ),
     url(r'^account/pro_option/highlight/$', 'eloue.accounts.views.patron_edit_highlight', name='patron_edit_highlight'),
-    url(r'^account/pro_option/highlight/(?P<product_id>\d+)/$', 'eloue.accounts.views.toggle_highlight', name='toggle_highlight'),
     url(r'^account/pro_option/notification/$', 'eloue.accounts.views.patron_edit_notification', name='patron_edit_notification'),
     url(r'^account/pro_option/top_position/$', 'eloue.accounts.views.patron_edit_top_position', name='patron_edit_top_position'),
 

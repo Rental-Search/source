@@ -522,26 +522,6 @@ def patron_edit_rib(request):
         dictionary={'form': form}, context_instance=RequestContext(request)
     )
 
-@csrf_exempt
-@require_POST
-@login_required
-def toggle_highlight(request, product_id):
-    from eloue.products.forms import HighlightForm
-    from eloue.products.models import ProductHighlight, Product
-    now = datetime.datetime.now()
-    product = get_object_or_404(Product.on_site, pk=product_id)
-    highlights = product.producthighlight_set.order_by('-ended_at')
-    old_highlights = product.producthighlight_set.filter(ended_at__isnull=False).order_by('-ended_at')
-    new_highlight = product.producthighlight_set.filter(ended_at__isnull=True)
-    if new_highlight:
-        highlight, = new_highlight
-        highlight.ended_at = now
-        highlight.save()
-    else:
-        ProductHighlight.objects.create(product=product)
-    import json
-    response_data = {'state': 'OK'}
-    return HttpResponse(json.dumps(response_data), mimetype="application/json")
 
 @login_required
 def patron_edit_highlight(request):
