@@ -545,14 +545,43 @@ def toggle_highlight(request, product_id):
 
 @login_required
 def patron_edit_highlight(request):
-    def _is_highlighted(product):
-        return bool(product.producthighlight_set.filter(ended_at__isnull=True))
+    from eloue.products.forms import HighlightForm
+    from eloue.products.models import ProductHighlight, Product
+
     patron = request.user
-    products = patron.products.all()
-    products_state = dict((product, _is_highlighted(product)) for product in products)
+
+    highlights = ProductHighlight.objects.filter(
+        ended_at__isnull=True).values_list('product', flat=True)
+    print highlights
+    highlighted = patron.products.filter(id__in=highlights)
+    print highlighted
+    not_highlighted = patron.products.filter(~Q(id__in=highlights))
+    print not_highlighted
+    assert(not set(highlighted) & set(not_highlighted))
+    if request.method == "POST":
+        try:
+            product_id = int(request.POST.get('product'))
+        except ValueError:
+            return HttpResponseForbidden()
+        product = get_object_or_404(patron.products, pk=product_id)
+        now = datetime.datetime.now()
+        highlights = product.producthighlight_set.order_by('-ended_at')
+        old_highlights = product.producthighlight_set.filter(ended_at__isnull=False).order_by('-ended_at')
+        new_highlight = product.producthighlight_set.filter(ended_at__isnull=True)
+        if new_highlight:
+            highlight, = new_highlight
+            highlight.ended_at = now
+            highlight.save()
+        else:
+            ProductHighlight.objects.create(product=product)
+        return redirect('.')
+
     return render_to_response(
         template_name='accounts/patron_edit_highlight.html',
-        dictionary={'products_state': products_state}, 
+        dictionary={
+            'highlighted': highlighted,
+            'not_highlighted': not_highlighted,
+        }, 
         context_instance=RequestContext(request)
     )
 

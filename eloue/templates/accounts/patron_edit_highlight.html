@@ -29,6 +29,8 @@
 			e.preventDefault();
 			answer = confirm('Etes-vous sûr de vouloir retirer la mise en avant ?');
 	        if (answer == true) {
+	        	console.log(e, $(this), this.parentNode);
+	        	this.parentNode.submit();
 	            return true;
 	        } else {
 	            return false;
@@ -51,47 +53,33 @@
 		</tr>
 	</thead>
 	<tbody>
-		<tr>
-			<td><a href="#">Echelle 15m</a></td>
-			<td>Depuis 3 jours</td>
-			<td class="highlight-action">
-				<a href="#"><i class="icon-remove"></i> {% trans "Retirer la mise en avant"%}</a>
-			</td>
-		</tr>
-		<tr>
-			<td><a href="#">Visseuse sans fil</a></td>
-			<td>Depuis 2 semaine et 3 jours</td>
-			<td class="highlight-action">
-				<a href="#"><i class="icon-remove"></i> {% trans "Retirer la mise en avant"%}</a>
-			</td>
-		</tr>
-		<tr>
-			<td><a href="#">Marteau piqueur</a></td>
-			<td>Depuis 1 mois 2 semaine et 6 jours</td>
-			<td class="highlight-action">
-				<a href="#"><i class="icon-remove"></i> {% trans "Retirer la mise en avant"%}</a>
-			</td>
-		</tr>
+		{% for product in highlighted %}
+			<tr>
+				<td><a href="{{ product.get_absolute_url }}">{{ product.summary }}</a></td>
+				<td>Depuis 3 jours</td>
+				<td class="highlight-action">
+					<form action="" method="post">
+						{% csrf_token %}
+						<a href="#"><i class="icon-remove"></i> {% trans "Retirer la mise en avant"%}</a>
+						<input type="hidden" name="product" value="{{ product.pk }}" />
+					</form>
+				</td>
+			</tr>
+		{% empty %}
+			<tr>{% trans "Pas de produit mis en avant. Pensez-y pour ameliorer la visibilite de vos objets" %}</tr>
+		{% endfor %}
 	</tbody>
 </table>
 <div id="add_new_highlight_form" title="Mettre en avant une nouvelle annonce" style="display: none;">
 	<form class="form" method="post" action="" style="margin-bottom: 0px; margin-top: 20px;">
+		{% csrf_token %}
 		<div class="control-group">
 			<div class="controls">
 				<select name="product" id="product">
 					<option value="" selected="selected">Choisissez une annonce</option>
-					<option value="40">Echelle 15m</option>
-					<option value="41">Visseuse sans fil</option>
-					<option value="42">Marteau piqueur</option>
-					<option value="40">Echelle 15m</option>
-					<option value="41">Visseuse sans fil</option>
-					<option value="42">Marteau piqueur</option>
-					<option value="40">Echelle 15m</option>
-					<option value="41">Visseuse sans fil</option>
-					<option value="42">Marteau piqueur</option>
-					<option value="40">Echelle 15m</option>
-					<option value="41">Visseuse sans fil</option>
-					<option value="42">Marteau piqueur</option>
+					{% for product in not_highlighted %}
+						<option value="{{ product.pk }}">{{ product.summary }}</option>
+					{% endfor %}
 				</select>
 			</div>
 		</div>
