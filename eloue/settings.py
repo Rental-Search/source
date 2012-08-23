@@ -447,3 +447,7 @@ else:
     PAYBOX_ENDPOINT = getattr(local, 'PAYBOX_ENDPOINT', "https://ppps.paybox.com/PPPS.php")
     PAYBOX_VERSION = getattr(local, 'PAYBOX_VERSION', '00104')
     PAYBOX_CLE = getattr(local, 'PAYBOX_CLE', 'IJEDEDBC')
+
+
+PRODUCTHIGHLIGHT_PRICE = decimal.Decimal('7.5')
+

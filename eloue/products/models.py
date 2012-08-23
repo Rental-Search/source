@@ -975,11 +975,16 @@ class ProductHighlight(models.Model):
     ended_at = models.DateTimeField(editable=False, null=True, blank=True)
     product = models.ForeignKey(Product, editable=False)
 
-    def total_amount(self):
-        ended_at = self.ended_at or datetime.now()
-        td = (ended_at - self.started_at)
+    def price(self, _from=datetime.min, to=datetime.max):
+        started_at = _from if _from > self.started_at else self.started_at
+        ended_at = to if to < self.ended_at else self.ended_at
+        days_num = calendar.monthrange(started_at.year, started_at.month)[1]
+        days_sec = days_num * 24 * 60 * 60
+
+        td = (ended_at - started_at)
         dt_sec = (td.microseconds + (td.seconds + td.days * 24 * 3600) * 10**6) / 10**6
-        return dt_sec * 0.0001
+        print settings.PRODUCTHIGHLIGHT_PRICE * dt_sec / days_sec
+        return settings.PRODUCTHIGHLIGHT_PRICE * dt_sec / days_sec
 
 post_save.connect(post_save_answer, sender=Answer)
 post_save.connect(post_save_product, sender=Product)
@@ -994,3 +999,4 @@ post_save.connect(post_save_sites, sender=RealEstateProduct)
 post_save.connect(post_save_to_update_product, sender=Price)
 post_save.connect(post_save_to_update_product, sender=Picture)
 post_save.connect(post_save_to_update_product, sender=ProductHighlight)
+

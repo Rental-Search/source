@@ -91,6 +91,12 @@
 					</tr>
 				</thead>
 				<tbody>
+					{% for highlight in highlights %}
+						<tr>
+							<td class="billing-item"><a href="#">{{ highlight.product.summary }}</a></td>
+							<td class="amount">{{ highlight.price }}&euro;</td>
+						</tr>
+					{% endfor %}
 					<tr>
 						<td class="billing-item"><a href="#">Echelle 15m</a></td>
 						<td class="amount">7,50 &euro;</td>

@@ -388,11 +388,20 @@ def billing_object(request, year, month, day):
     response['Content-Disposition'] = 'attachment; filename=facture_e-loue_{year}-{month}-{day}.pdf'.format(year=year, month=month, day=day)
     return response
 
+
 @login_required
 def billing(request):
     patron = request.user
-    
-    return render(request, 'accounts/patron_billing.html', {})
+    billings = patron.billing_set.all()
+    now = datetime.datetime.now()
+    billing, highlights, subscriptions = Billing.builder(patron, now)
+    print billing, highlights, subscriptions
+    return render(
+        request, 'accounts/patron_billing.html', 
+        {
+            'billings': billings, 'billing': billing, 
+            'highlights': highlights, 'subscriptions': subscriptions
+        })
 
 
 @login_required
