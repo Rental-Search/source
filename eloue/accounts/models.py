@@ -593,7 +593,11 @@ class ProPackage(models.Model):
     valid_until = models.DateField(null=True, blank=True)
 
     def __unicode__(self):
-        return u'{maximum_items} item/{price} euro'.format(maximum_items=self.maximum_items, price=self.price)
+        if self.maximum_items:
+            return u'{maximum_items} item - {price} euro'.format(maximum_items=self.maximum_items, price=self.price)
+        else:
+            return u'illimity items - {price} euro'.format(price=self.price)
+
 
     class Meta:
         unique_together = (('maximum_items', 'valid_until'), )
