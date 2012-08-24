@@ -976,14 +976,13 @@ class ProductHighlight(models.Model):
     product = models.ForeignKey(Product, editable=False)
 
     def price(self, _from=datetime.min, to=datetime.max):
-        started_at = _from if _from > self.started_at else self.started_at
-        ended_at = to if to < self.ended_at else self.ended_at
+        started_at = _from if (_from > self.started_at) else self.started_at
+        ended_at = to if (not self.ended_at or to < self.ended_at) else self.ended_at
         days_num = calendar.monthrange(started_at.year, started_at.month)[1]
         days_sec = days_num * 24 * 60 * 60
 
         td = (ended_at - started_at)
         dt_sec = (td.microseconds + (td.seconds + td.days * 24 * 3600) * 10**6) / 10**6
-        print settings.PRODUCTHIGHLIGHT_PRICE * dt_sec / days_sec
         return settings.PRODUCTHIGHLIGHT_PRICE * dt_sec / days_sec
 
 post_save.connect(post_save_answer, sender=Answer)

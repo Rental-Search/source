@@ -1,5 +1,5 @@
 {% extends "accounts/patron_edit.html" %}
-{% load i18n %}
+{% load i18n price %}
 
 {% block title %}{% trans "Facturation" %}{% endblock %}
 
@@ -67,16 +67,18 @@
 				<thead>
 					<tr>
 						<td><i class="icon-plus-sign"></i> {% trans "Plan" %}</td>
-						<td class="amount">30 &euro;</td>
+						<td class="amount">{{ subscriptions_sum }} &euro;</td>
 					</tr>
 				</thead>
 				<tbody>
+					{% for subscription in subscriptions %}
 					<tr>
 						<td class="billing-item">
-							Micro - 5 annonces (<a href="{% url patron_edit_subscription %}">{% trans "Modifier mon plan" %}</a>)
+							{{ subscription.propackage.name }} - {% firstof subscription.propackage.maximum_items "Illimité" %} annonces (<a href="{% url patron_edit_subscription %}">{% trans "Modifier mon plan" %}</a>)
 						</td>
-						<td class="amount">30 &euro;</td>
+						<td class="amount">{% price subscription from to %} &euro;</td>
 					</tr>
+					{% endfor %}
 				</tbody>
 			</table>
 		</td>
@@ -87,28 +89,16 @@
 				<thead>
 					<tr>
 						<td><i class="icon-plus-sign"></i> {% trans "Mise en avant" %}</td>
-						<td class="amount">22,50 &euro;</td>
+						<td class="amount">{{ highlights_sum }} &euro;</td>
 					</tr>
 				</thead>
 				<tbody>
 					{% for highlight in highlights %}
 						<tr>
 							<td class="billing-item"><a href="#">{{ highlight.product.summary }}</a></td>
-							<td class="amount">{{ highlight.price }}&euro;</td>
+							<td class="amount">{% price highlight from to %}&euro;</td>
 						</tr>
 					{% endfor %}
-					<tr>
-						<td class="billing-item"><a href="#">Echelle 15m</a></td>
-						<td class="amount">7,50 &euro;</td>
-					</tr>
-					<tr>
-						<td class="billing-item"><a href="#">Visseuse sans fil</a></td>
-						<td class="amount">7,50 &euro;</td>
-					</tr>
-					<tr>
-						<td class="billing-item"><a href="#">Marteau piqueur</a></td>
-						<td class="amount">7,50 &euro;</td>
-					</tr>
 				</tbody>
 			</table>
 		</td>
