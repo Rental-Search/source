@@ -420,7 +420,7 @@ def billing(request):
             'billings': billings, 'billing': billing, 
             'highlights': highlights, 'subscriptions': subscriptions,
             'highlights_sum': highlights_sum, 'subscriptions_sum': subscriptions_sum,
-            'from': _from, 'to': to
+            'from': _from, 'to': to, 'sum': highlights_sum + subscriptions_sum
         })
 
 
