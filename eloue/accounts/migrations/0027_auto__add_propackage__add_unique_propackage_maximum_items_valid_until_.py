@@ -8,16 +8,6 @@ class Migration(SchemaMigration):
 
     def forwards(self, orm):
         
-        # Adding model 'Subscription'
-        db.create_table('accounts_subscription', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('patron', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['accounts.Patron'])),
-            ('propackage', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['accounts.ProPackage'])),
-            ('subscription_started', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
-            ('subscription_ended', self.gf('django.db.models.fields.DateTimeField')(null=True, blank=True)),
-        ))
-        db.send_create_signal('accounts', ['Subscription'])
-
         # Adding model 'ProPackage'
         db.create_table('accounts_propackage', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
@@ -32,36 +22,46 @@ class Migration(SchemaMigration):
         # Adding unique constraint on 'ProPackage', fields ['maximum_items', 'valid_until']
         db.create_unique('accounts_propackage', ['maximum_items', 'valid_until'])
 
+        # Adding model 'Subscription'
+        db.create_table('accounts_subscription', (
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('patron', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['accounts.Patron'])),
+            ('propackage', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['accounts.ProPackage'])),
+            ('subscription_started', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
+            ('subscription_ended', self.gf('django.db.models.fields.DateTimeField')(null=True, blank=True)),
+        ))
+        db.send_create_signal('accounts', ['Subscription'])
+
+        # Adding model 'BillingProductHighlight'
+        db.create_table('accounts_billingproducthighlight', (
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('producthighlight', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['products.ProductHighlight'])),
+            ('billing', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['accounts.Billing'])),
+            ('price', self.gf('django.db.models.fields.DecimalField')(max_digits=8, decimal_places=2)),
+        ))
+        db.send_create_signal('accounts', ['BillingProductHighlight'])
+
         # Adding model 'Billing'
         db.create_table('accounts_billing', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('created_at', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
             ('modified_at', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, blank=True)),
             ('patron', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['accounts.Patron'])),
-            ('summary', self.gf('django.db.models.fields.CharField')(max_length=128)),
             ('date', self.gf('django.db.models.fields.DateField')()),
             ('state', self.gf('django.db.models.fields.IntegerField')()),
-            ('debit', self.gf('django.db.models.fields.DecimalField')(max_digits=8, decimal_places=2)),
-            ('credit', self.gf('django.db.models.fields.DecimalField')(max_digits=8, decimal_places=2)),
-            ('balance', self.gf('django.db.models.fields.DecimalField')(max_digits=8, decimal_places=2)),
+            ('total_amount', self.gf('django.db.models.fields.DecimalField')(max_digits=8, decimal_places=2)),
+            ('total_tva', self.gf('django.db.models.fields.DecimalField')(max_digits=8, decimal_places=2)),
         ))
         db.send_create_signal('accounts', ['Billing'])
 
-        # Adding M2M table for field highlights on 'Billing'
-        db.create_table('accounts_billing_highlights', (
-            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
-            ('billing', models.ForeignKey(orm['accounts.billing'], null=False)),
-            ('producthighlight', models.ForeignKey(orm['products.producthighlight'], null=False))
+        # Adding model 'BillingSubscription'
+        db.create_table('accounts_billingsubscription', (
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('subscription', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['accounts.Subscription'])),
+            ('billing', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['accounts.Billing'])),
+            ('price', self.gf('django.db.models.fields.DecimalField')(max_digits=8, decimal_places=2)),
         ))
-        db.create_unique('accounts_billing_highlights', ['billing_id', 'producthighlight_id'])
-
-        # Adding M2M table for field plans on 'Billing'
-        db.create_table('accounts_billing_plans', (
-            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
-            ('billing', models.ForeignKey(orm['accounts.billing'], null=False)),
-            ('subscription', models.ForeignKey(orm['accounts.subscription'], null=False))
-        ))
-        db.create_unique('accounts_billing_plans', ['billing_id', 'subscription_id'])
+        db.send_create_signal('accounts', ['BillingSubscription'])
 
 
     def backwards(self, orm):
@@ -69,20 +69,20 @@ class Migration(SchemaMigration):
         # Removing unique constraint on 'ProPackage', fields ['maximum_items', 'valid_until']
         db.delete_unique('accounts_propackage', ['maximum_items', 'valid_until'])
 
+        # Deleting model 'ProPackage'
+        db.delete_table('accounts_propackage')
+
         # Deleting model 'Subscription'
         db.delete_table('accounts_subscription')
 
-        # Deleting model 'ProPackage'
-        db.delete_table('accounts_propackage')
+        # Deleting model 'BillingProductHighlight'
+        db.delete_table('accounts_billingproducthighlight')
 
         # Deleting model 'Billing'
         db.delete_table('accounts_billing')
 
-        # Removing M2M table for field highlights on 'Billing'
-        db.delete_table('accounts_billing_highlights')
-
-        # Removing M2M table for field plans on 'Billing'
-        db.delete_table('accounts_billing_plans')
+        # Deleting model 'BillingSubscription'
+        db.delete_table('accounts_billingsubscription')
 
 
     models = {
@@ -106,18 +106,30 @@ class Migration(SchemaMigration):
         },
         'accounts.billing': {
             'Meta': {'object_name': 'Billing'},
-            'balance': ('django.db.models.fields.DecimalField', [], {'max_digits': '8', 'decimal_places': '2'}),
             'created_at': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
-            'credit': ('django.db.models.fields.DecimalField', [], {'max_digits': '8', 'decimal_places': '2'}),
             'date': ('django.db.models.fields.DateField', [], {}),
-            'debit': ('django.db.models.fields.DecimalField', [], {'max_digits': '8', 'decimal_places': '2'}),
-            'highlights': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['products.ProductHighlight']", 'symmetrical': 'False'}),
+            'highlights': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['products.ProductHighlight']", 'through': "orm['accounts.BillingProductHighlight']", 'symmetrical': 'False'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'modified_at': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),
             'patron': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['accounts.Patron']"}),
-            'plans': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['accounts.Subscription']", 'symmetrical': 'False'}),
+            'plans': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['accounts.Subscription']", 'through': "orm['accounts.BillingSubscription']", 'symmetrical': 'False'}),
             'state': ('django.db.models.fields.IntegerField', [], {}),
-            'summary': ('django.db.models.fields.CharField', [], {'max_length': '128'})
+            'total_amount': ('django.db.models.fields.DecimalField', [], {'max_digits': '8', 'decimal_places': '2'}),
+            'total_tva': ('django.db.models.fields.DecimalField', [], {'max_digits': '8', 'decimal_places': '2'})
+        },
+        'accounts.billingproducthighlight': {
+            'Meta': {'object_name': 'BillingProductHighlight'},
+            'billing': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['accounts.Billing']"}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'price': ('django.db.models.fields.DecimalField', [], {'max_digits': '8', 'decimal_places': '2'}),
+            'producthighlight': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['products.ProductHighlight']"})
+        },
+        'accounts.billingsubscription': {
+            'Meta': {'object_name': 'BillingSubscription'},
+            'billing': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['accounts.Billing']"}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'price': ('django.db.models.fields.DecimalField', [], {'max_digits': '8', 'decimal_places': '2'}),
+            'subscription': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['accounts.Subscription']"})
         },
         'accounts.creditcard': {
             'Meta': {'object_name': 'CreditCard'},
@@ -222,7 +234,7 @@ class Migration(SchemaMigration):
             'patron': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'phones'", 'to': "orm['accounts.Patron']"})
         },
         'accounts.propackage': {
-            'Meta': {'unique_together': "(('maximum_items', 'valid_until'),)", 'object_name': 'ProPackage'},
+            'Meta': {'ordering': "('-maximum_items',)", 'unique_together': "(('maximum_items', 'valid_until'),)", 'object_name': 'ProPackage'},
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'maximum_items': ('django.db.models.fields.PositiveIntegerField', [], {'null': 'True', 'blank': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '64'}),

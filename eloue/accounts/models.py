@@ -612,20 +612,29 @@ class Subscription(models.Model):
         dt_sec = (td.microseconds + (td.seconds + td.days * 24 * 3600) * 10**6) / 10**6
         return dt_sec * 0.00003
 
+class BillingSubscription(models.Model):
+    subscription = models.ForeignKey('Subscription')
+    billing = models.ForeignKey('Billing')
+    price = models.DecimalField(max_digits=8, decimal_places=2)
+
+
+class BillingProductHighlight(models.Model):
+    producthighlight = models.ForeignKey('products.ProductHighlight')
+    billing = models.ForeignKey('Billing')
+    price = models.DecimalField(max_digits=8, decimal_places=2)
+
 class Billing(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     modified_at = models.DateTimeField(auto_now=True)
     patron = models.ForeignKey(Patron)
 
-    #summary = models.CharField(max_length=128)
     date = models.DateField()
     state = models.IntegerField(choices=[(0, 'UNPAID'), (1, 'PAID')])
-    #debit = models.DecimalField(max_digits=8, decimal_places=2)
-    #credit = models.DecimalField(max_digits=8, decimal_places=2)
-    #balance = models.DecimalField(max_digits=8, decimal_places=2)
+    total_amount = models.DecimalField(max_digits=8, decimal_places=2)
+    total_tva = models.DecimalField(max_digits=8, decimal_places=2)
 
-    highlights = models.ManyToManyField('products.ProductHighlight')
-    plans = models.ManyToManyField('accounts.Subscription')
+    highlights = models.ManyToManyField('products.ProductHighlight', through='BillingProductHighlight')
+    plans = models.ManyToManyField('accounts.Subscription', through='BillingSubscription')
 
     @models.permalink
     def get_absolute_url(self):
