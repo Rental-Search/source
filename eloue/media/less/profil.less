@@ -273,23 +273,30 @@
   }
 }
 
+
 //HIGHLIGHT_LIST
 //----------------
-
 .highlight-list {
   #font > .sans-serif(Arial, normal, 12px);
   color: @blueDark;
 
   border: 1px solid #DDD;
-  
 
   border-collapse: separate;
   .rounded(4px);
 
   .highlight-action {
     text-align: right;
-    a { color: @red; }
+    button { 
+      color: @red;
+      background: none;
+    }
   }
 
+  .no-highlight {
+    #font > .sans-serif(Arial, normal, 14px);
+    text-align: center;
+    margin-top: 100px;
+  } 
 }
 
