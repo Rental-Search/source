@@ -167,13 +167,13 @@ class ContractGeneratorCar(ContractGenerator):
         canvas.showPage()
         canvas.setFont("Helvetica", 8)
         canvas.drawString(106, 754, u"{first_name} {last_name}".format(
-            first_name=booking.owner.first_name,
-            last_name=booking.owner.last_name.upper()
+            first_name=booking.borrower.first_name,
+            last_name=booking.borrower.last_name.upper()
         ))
 
-        canvas.drawString(88, 744, u"{phone}".format(phone=first_or_empty(booking.owner.phones.all())))
+        canvas.drawString(88, 744, u"{phone}".format(phone=first_or_empty(booking.borrower.phones.all())))
         canvas.drawString(82, 734, u"{address}".format(
-            address=booking.owner.default_address or booking.owner.addresses.all()[0])
+            address=booking.borrower.default_address or booking.borrower.addresses.all()[0])
         )
         canvas.drawString(135, 715, "{date_of_birth}, {place_of_birth}".format(
                 date_of_birth=booking.borrower.date_of_birth.strftime("%d/%m/%Y"),
@@ -191,11 +191,11 @@ class ContractGeneratorCar(ContractGenerator):
 
 
         canvas.drawString(360, 750, u"{first_name} {last_name}".format(
-                first_name=booking.borrower.first_name, 
-                last_name=booking.borrower.last_name.upper()
+                first_name=booking.owner.first_name, 
+                last_name=booking.owner.last_name.upper()
             )
         )
-        canvas.drawString(351, 735, u"{phone}".format(phone=first_or_empty(booking.borrower.phones.all())))
+        canvas.drawString(351, 735, u"{phone}".format(phone=first_or_empty(booking.owner.phones.all())))
 
         canvas.drawString(368, 707, u"{summary}".format(summary=booking.product.summary))
 
