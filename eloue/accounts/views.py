@@ -603,9 +603,9 @@ def patron_edit_top_position(request):
 
     def _toggle_topposition(product):
         now = datetime.datetime.now()
-        highlights = product.producthighlight_set.order_by('-ended_at')
-        old_highlights = product.producthighlight_set.filter(ended_at__isnull=False).order_by('-ended_at')
-        new_highlight = product.producthighlight_set.filter(ended_at__isnull=True)
+        highlights = product.producttopposition_set.order_by('-ended_at')
+        old_highlights = product.producttopposition_set.filter(ended_at__isnull=False).order_by('-ended_at')
+        new_highlight = product.producttopposition_set.filter(ended_at__isnull=True)
         if new_highlight:
             highlight, = new_highlight
             highlight.ended_at = now
@@ -628,8 +628,8 @@ def patron_edit_top_position(request):
     return render_to_response(
         template_name='accounts/patron_edit_top_position.html',
         dictionary={
-            'highlighted': highlighted,
-            'not_highlighted': not_highlighted,
+            'in_topposition': in_topposition,
+            'not_in_topposition': not_in_topposition,
         }, 
         context_instance=RequestContext(request)
     )
