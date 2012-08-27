@@ -8,6 +8,15 @@ class Migration(SchemaMigration):
 
     def forwards(self, orm):
         
+        # Adding model 'BillingProductTopPosition'
+        db.create_table('accounts_billingproducttopposition', (
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('producttopposition', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['products.ProductTopPosition'])),
+            ('billing', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['accounts.Billing'])),
+            ('price', self.gf('django.db.models.fields.DecimalField')(max_digits=8, decimal_places=2)),
+        ))
+        db.send_create_signal('accounts', ['BillingProductTopPosition'])
+
         # Adding model 'ProPackage'
         db.create_table('accounts_propackage', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
@@ -69,6 +78,9 @@ class Migration(SchemaMigration):
         # Removing unique constraint on 'ProPackage', fields ['maximum_items', 'valid_until']
         db.delete_unique('accounts_propackage', ['maximum_items', 'valid_until'])
 
+        # Deleting model 'BillingProductTopPosition'
+        db.delete_table('accounts_billingproducttopposition')
+
         # Deleting model 'ProPackage'
         db.delete_table('accounts_propackage')
 
@@ -114,6 +126,7 @@ class Migration(SchemaMigration):
             'patron': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['accounts.Patron']"}),
             'plans': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['accounts.Subscription']", 'through': "orm['accounts.BillingSubscription']", 'symmetrical': 'False'}),
             'state': ('django.db.models.fields.IntegerField', [], {}),
+            'toppositions': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['products.ProductTopPosition']", 'through': "orm['accounts.BillingProductTopPosition']", 'symmetrical': 'False'}),
             'total_amount': ('django.db.models.fields.DecimalField', [], {'max_digits': '8', 'decimal_places': '2'}),
             'total_tva': ('django.db.models.fields.DecimalField', [], {'max_digits': '8', 'decimal_places': '2'})
         },
@@ -123,6 +136,13 @@ class Migration(SchemaMigration):
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'price': ('django.db.models.fields.DecimalField', [], {'max_digits': '8', 'decimal_places': '2'}),
             'producthighlight': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['products.ProductHighlight']"})
+        },
+        'accounts.billingproducttopposition': {
+            'Meta': {'object_name': 'BillingProductTopPosition'},
+            'billing': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['accounts.Billing']"}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'price': ('django.db.models.fields.DecimalField', [], {'max_digits': '8', 'decimal_places': '2'}),
+            'producttopposition': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['products.ProductTopPosition']"})
         },
         'accounts.billingsubscription': {
             'Meta': {'object_name': 'BillingSubscription'},
@@ -319,6 +339,13 @@ class Migration(SchemaMigration):
         },
         'products.producthighlight': {
             'Meta': {'object_name': 'ProductHighlight'},
+            'ended_at': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'product': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['products.Product']"}),
+            'started_at': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'})
+        },
+        'products.producttopposition': {
+            'Meta': {'object_name': 'ProductTopPosition'},
             'ended_at': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'product': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['products.Product']"}),

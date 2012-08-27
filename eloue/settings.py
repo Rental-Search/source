@@ -450,4 +450,5 @@ else:
 
 
 PRODUCTHIGHLIGHT_PRICE = decimal.Decimal('7.5')
+PRODUCTTOPPOSITION_PRICE = decimal.Decimal('10.0')
 

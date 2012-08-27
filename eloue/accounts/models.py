@@ -627,6 +627,13 @@ class BillingProductHighlight(models.Model):
     billing = models.ForeignKey('Billing')
     price = models.DecimalField(max_digits=8, decimal_places=2)
 
+
+class BillingProductTopPosition(models.Model):
+    producttopposition = models.ForeignKey('products.ProductTopPosition')
+    billing = models.ForeignKey('Billing')
+    price = models.DecimalField(max_digits=8, decimal_places=2)
+
+
 class Billing(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     modified_at = models.DateTimeField(auto_now=True)
@@ -640,6 +647,7 @@ class Billing(models.Model):
 
     highlights = models.ManyToManyField('products.ProductHighlight', through='BillingProductHighlight')
     plans = models.ManyToManyField('accounts.Subscription', through='BillingSubscription')
+    toppositions = models.ManyToManyField('products.ProductTopPosition', through='BillingProductTopPosition')
 
     @models.permalink
     def get_absolute_url(self):

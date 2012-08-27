@@ -11,17 +11,29 @@ class Migration(SchemaMigration):
         # Adding model 'ProductHighlight'
         db.create_table('products_producthighlight', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('started_at', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, blank=True)),
+            ('started_at', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
             ('ended_at', self.gf('django.db.models.fields.DateTimeField')(null=True, blank=True)),
             ('product', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['products.Product'])),
         ))
         db.send_create_signal('products', ['ProductHighlight'])
+
+        # Adding model 'ProductTopPosition'
+        db.create_table('products_producttopposition', (
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('started_at', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
+            ('ended_at', self.gf('django.db.models.fields.DateTimeField')(null=True, blank=True)),
+            ('product', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['products.Product'])),
+        ))
+        db.send_create_signal('products', ['ProductTopPosition'])
 
 
     def backwards(self, orm):
         
         # Deleting model 'ProductHighlight'
         db.delete_table('products_producthighlight')
+
+        # Deleting model 'ProductTopPosition'
+        db.delete_table('products_producttopposition')
 
 
     models = {
@@ -67,6 +79,7 @@ class Migration(SchemaMigration):
             'school': ('django.db.models.fields.CharField', [], {'max_length': '75', 'null': 'True', 'blank': 'True'}),
             'sites': ('django.db.models.fields.related.ManyToManyField', [], {'related_name': "'patrons'", 'symmetrical': 'False', 'to': "orm['sites.Site']"}),
             'slug': ('django.db.models.fields.SlugField', [], {'unique': 'True', 'max_length': '50', 'db_index': 'True'}),
+            'subscriptions': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['accounts.ProPackage']", 'through': "orm['accounts.Subscription']", 'symmetrical': 'False'}),
             'url': ('django.db.models.fields.URLField', [], {'max_length': '200', 'blank': 'True'}),
             'user_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['auth.User']", 'unique': 'True', 'primary_key': 'True'}),
             'work': ('django.db.models.fields.CharField', [], {'max_length': '75', 'null': 'True', 'blank': 'True'})
@@ -77,6 +90,23 @@ class Migration(SchemaMigration):
             'kind': ('django.db.models.fields.PositiveSmallIntegerField', [], {'default': '4'}),
             'number': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
             'patron': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'phones'", 'to': "orm['accounts.Patron']"})
+        },
+        'accounts.propackage': {
+            'Meta': {'ordering': "('-maximum_items',)", 'unique_together': "(('maximum_items', 'valid_until'),)", 'object_name': 'ProPackage'},
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'maximum_items': ('django.db.models.fields.PositiveIntegerField', [], {'null': 'True', 'blank': 'True'}),
+            'name': ('django.db.models.fields.CharField', [], {'max_length': '64'}),
+            'price': ('django.db.models.fields.DecimalField', [], {'max_digits': '8', 'decimal_places': '2'}),
+            'valid_from': ('django.db.models.fields.DateField', [], {'default': 'datetime.datetime.now'}),
+            'valid_until': ('django.db.models.fields.DateField', [], {'null': 'True', 'blank': 'True'})
+        },
+        'accounts.subscription': {
+            'Meta': {'object_name': 'Subscription'},
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'patron': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['accounts.Patron']"}),
+            'propackage': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['accounts.ProPackage']"}),
+            'subscription_ended': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
+            'subscription_started': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'})
         },
         'auth.group': {
             'Meta': {'object_name': 'Group'},
@@ -266,7 +296,7 @@ class Migration(SchemaMigration):
             'ended_at': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'product': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['products.Product']"}),
-            'started_at': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'})
+            'started_at': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'})
         },
         'products.productrelatedmessage': {
             'Meta': {'ordering': "['-sent_at']", 'object_name': 'ProductRelatedMessage', '_ormbases': ['django_messages.Message']},
@@ -284,6 +314,13 @@ class Migration(SchemaMigration):
             'reviewer': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'productreview_reviews'", 'to': "orm['accounts.Patron']"}),
             'score': ('django.db.models.fields.FloatField', [], {}),
             'summary': ('django.db.models.fields.CharField', [], {'max_length': '255', 'blank': 'True'})
+        },
+        'products.producttopposition': {
+            'Meta': {'object_name': 'ProductTopPosition'},
+            'ended_at': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'product': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['products.Product']"}),
+            'started_at': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'})
         },
         'products.property': {
             'Meta': {'object_name': 'Property'},
