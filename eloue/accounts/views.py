@@ -590,6 +590,50 @@ def patron_edit_highlight(request):
         context_instance=RequestContext(request)
     )
 
+
+@login_required
+def patron_edit_top_position(request):
+    from eloue.products.models import ProductTopPosition, Product
+    
+    def _split_products_on_topposition(products):
+        toppositions = ProductTopPosition.objects.filter(ended_at__isnull=True).values_list('product', flat=True)
+        in_topposition = products.filter(id__in=toppositions)
+        not_in_topposition = products.filter(~Q(id__in=toppositions))
+        return in_topposition, not_in_topposition
+
+    def _toggle_topposition(product):
+        now = datetime.datetime.now()
+        highlights = product.producthighlight_set.order_by('-ended_at')
+        old_highlights = product.producthighlight_set.filter(ended_at__isnull=False).order_by('-ended_at')
+        new_highlight = product.producthighlight_set.filter(ended_at__isnull=True)
+        if new_highlight:
+            highlight, = new_highlight
+            highlight.ended_at = now
+            highlight.save()
+        else:
+            ProductTopPosition.objects.create(product=product)
+
+    patron = request.user
+    in_topposition, not_in_topposition = _split_products_on_topposition(patron.products)
+
+    if request.method == "POST":
+        try:
+            product_id = int(request.POST.get('product'))
+        except ValueError:
+            return HttpResponseForbidden()
+        product = get_object_or_404(patron.products, pk=product_id)
+        _toggle_topposition(product)
+        return redirect('.')
+
+    return render_to_response(
+        template_name='accounts/patron_edit_top_position.html',
+        dictionary={
+            'highlighted': highlighted,
+            'not_highlighted': not_highlighted,
+        }, 
+        context_instance=RequestContext(request)
+    )
+
 @login_required
 def patron_edit_addresses(request):
     from eloue.accounts.forms import AddressFormSet
@@ -841,7 +885,3 @@ def facebook_invite(request):
 @login_required
 def patron_edit_notification(request):
     return direct_to_template(request, 'accounts/patron_edit_notification.html')
-
-@login_required
-def patron_edit_top_position(request):
-    return direct_to_template(request, 'accounts/patron_edit_top_position.html')

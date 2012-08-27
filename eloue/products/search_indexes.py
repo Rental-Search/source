@@ -40,15 +40,9 @@ class ProductIndex(QueuedSearchIndex):
     special = BooleanField()
     pro = BooleanField(model_attr='owner__is_professional', default=False)
     
-    is_highlighted = BooleanField()
-    highlight_expires = DateTimeField()
+    is_highlighted = BooleanField(model_attr='is_highlighted')
+    is_top = BooleanField(model_attr='is_top')
 
-
-    def prepare_is_highlighted(self, obj):
-        pass
-
-    def prepare_highlight_expires(self, obj):
-        pass
     
     def prepare_sites(self, obj):
         return [site.id for site in obj.sites.all()]

@@ -1,7 +1,7 @@
 {% load cache i18n product seo booking %}
 <ul class="product-list">
     {% for product in product_list %}
-    <li id="marker-{{forloop.counter }}" {% if forloop.counter == 3 %}class="highlight"{% endif %}>
+    <li id="marker-{{forloop.counter }}" {% if product.is_highlighted %}class="highlight"{% endif %}>
         {% if marker == 'True' %}
             <div class="pl-marker" >{{ forloop.counter }}</div>
         {% endif %}
