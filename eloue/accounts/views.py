@@ -391,16 +391,36 @@ def billing_object(request, year, month, day):
 
 @login_required
 def billing(request):
+    import calendar
+
     patron = request.user
-    billings = patron.billing_set.all()
-    now = datetime.datetime.now()
-    billing, highlights, subscriptions = Billing.builder(patron, now)
-    print billing, highlights, subscriptions
+    billings = patron.billing_set.order_by('date')
+
+    to = datetime.datetime.now()
+    if billings:
+        date = datetime.datetime.combine(billings[-1].date, datetime.time())
+        days = calendar.monthrange(date.year, date.month)
+        _from = date + datetime.timedelta(days=days)
+    else:
+        s = patron.subscription_set.order_by('subscription_started')
+        if s:
+            _from  = datetime.datetime.combine(
+                patron.subscription_set.order_by(
+                    'subscription_started'
+                )[0].subscription_started.date(), datetime.time())
+        else:
+            _from = to
+
+    billing, highlights, subscriptions = Billing.builder(patron, _from, to)
+    highlights_sum = sum(map(lambda highlight: highlight.price(_from, to), highlights), 0)
+    subscriptions_sum = sum(map(lambda subscription: subscription.price(_from, to), subscriptions), 0)
     return render(
         request, 'accounts/patron_billing.html', 
         {
             'billings': billings, 'billing': billing, 
-            'highlights': highlights, 'subscriptions': subscriptions
+            'highlights': highlights, 'subscriptions': subscriptions,
+            'highlights_sum': highlights_sum, 'subscriptions_sum': subscriptions_sum,
+            'from': _from, 'to': to, 'sum': highlights_sum + subscriptions_sum
         })
 
 
@@ -541,12 +561,8 @@ def patron_edit_highlight(request):
 
     highlights = ProductHighlight.objects.filter(
         ended_at__isnull=True).values_list('product', flat=True)
-    print highlights
     highlighted = patron.products.filter(id__in=highlights)
-    print highlighted
     not_highlighted = patron.products.filter(~Q(id__in=highlights))
-    print not_highlighted
-    assert(not set(highlighted) & set(not_highlighted))
     if request.method == "POST":
         try:
             product_id = int(request.POST.get('product'))

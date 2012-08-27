@@ -3,6 +3,8 @@ import datetime
 import logbook
 import uuid
 import urllib2
+import calendar
+
 import simplejson
 import facebook
 
@@ -609,27 +611,39 @@ class Subscription(models.Model):
     subscription_started = models.DateTimeField(auto_now_add=True)
     subscription_ended = models.DateTimeField(null=True, blank=True)
 
-    def price(self, date_to, date_from):
-
-        ended_at = self.subscription_ended or datetime.datetime.now()
-        td = (ended_at - self.subscription_started)
+    def price(self, _from=datetime.datetime.min, to=datetime.datetime.max):
+        started_at = _from if _from > self.subscription_started else self.subscription_started
+        ended_at = to if not self.subscription_ended or to < self.subscription_ended else self.subscription_ended
+        days_num = calendar.monthrange(started_at.year, started_at.month)[1]
+        days_sec = days_num * 24 * 60 * 60
+        td = (ended_at - started_at)
         dt_sec = (td.microseconds + (td.seconds + td.days * 24 * 3600) * 10**6) / 10**6
-        return dt_sec * 0.00003
+        return self.propackage.price * dt_sec / days_sec
+
+class BillingSubscription(models.Model):
+    subscription = models.ForeignKey('Subscription')
+    billing = models.ForeignKey('Billing')
+    price = models.DecimalField(max_digits=8, decimal_places=2)
+
+
+class BillingProductHighlight(models.Model):
+    producthighlight = models.ForeignKey('products.ProductHighlight')
+    billing = models.ForeignKey('Billing')
+    price = models.DecimalField(max_digits=8, decimal_places=2)
 
 class Billing(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     modified_at = models.DateTimeField(auto_now=True)
     patron = models.ForeignKey(Patron)
 
-    #summary = models.CharField(max_length=128)
+    # first day of the period
     date = models.DateField()
     state = models.IntegerField(choices=[(0, 'UNPAID'), (1, 'PAID')])
-    #debit = models.DecimalField(max_digits=8, decimal_places=2)
-    #credit = models.DecimalField(max_digits=8, decimal_places=2)
-    #balance = models.DecimalField(max_digits=8, decimal_places=2)
+    total_amount = models.DecimalField(max_digits=8, decimal_places=2)
+    total_tva = models.DecimalField(max_digits=8, decimal_places=2)
 
-    highlights = models.ManyToManyField('products.ProductHighlight')
-    plans = models.ManyToManyField('accounts.Subscription')
+    highlights = models.ManyToManyField('products.ProductHighlight', through='BillingProductHighlight')
+    plans = models.ManyToManyField('accounts.Subscription', through='BillingSubscription')
 
     @models.permalink
     def get_absolute_url(self):
@@ -644,27 +658,28 @@ class Billing(models.Model):
         raise NotImplementedError()
 
     @staticmethod
-    def builder(patron, date_to):
+    def builder(patron, date_from, date_to):
         """Returns a (billing, subscriptions, highlights) tuple for a given
         """
-        import calendar
         from eloue.products.models import ProductHighlight
-        month_days = calendar.monthrange(date_to.year, date_to.month)[1]
-        date_from = date_to - datetime.timedelta(days=month_days)
+        if not isinstance(date_from, datetime.datetime):
+            date_from = datetime.datetime.combine(date_from, datetime.time())
+        if not isinstance(date_to, datetime.datetime):
+            date_to = datetime.datetime.combine(date_to, datetime.time())
         # TODO: verify this logical expression
-        highlights = ProductHighlight.objects.filter((
-            ~models.Q(ended_at__lte=date_from) and 
-            ~models.Q(started_at__gte=date_to) or
-            models.Q(ended_at__isnull=True) and 
+        highlights = ProductHighlight.objects.select_related('product').filter((
+            ~models.Q(ended_at__lte=date_from) & 
+            ~models.Q(started_at__gte=date_to) |
+            models.Q(ended_at__isnull=True) & 
             models.Q(started_at__lte=date_to)), 
             product__owner=patron)
         subscriptions = Subscription.objects.filter((
-            ~models.Q(subscription_ended__lte=date_from) and 
-            ~models.Q(subscription_started__gte=date_to) or
-            models.Q(subscription_ended__isnull=True) and 
+            ~models.Q(subscription_ended__lte=date_from) & 
+            ~models.Q(subscription_started__gte=date_to) |
+            models.Q(subscription_ended__isnull=True) & 
             models.Q(subscription_started__lte=date_to)),
             patron=patron)
-        return Billing(date=date_to),  highlights, subscriptions
+        return Billing(date=date_from), highlights, subscriptions
 
 
 signals.post_save.connect(post_save_sites, sender=Patron)
