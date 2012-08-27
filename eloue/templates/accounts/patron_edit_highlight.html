@@ -25,7 +25,7 @@
 			);
 		});
 
-		$('td.highlight-action a').click(function (e){
+		$('td.highlight-action button').click(function (e){
 			e.preventDefault();
 			answer = confirm('Etes-vous sûr de vouloir retirer la mise en avant ?');
 	        if (answer == true) {
@@ -58,15 +58,19 @@
 				<td><a href="{{ product.get_absolute_url }}">{{ product.summary }}</a></td>
 				<td>Depuis 3 jours</td>
 				<td class="highlight-action">
-					<form action="" method="post">
+					<form action="" method="post" style="margin-bottom: 0px;">
 						{% csrf_token %}
-						<a href="#"><i class="icon-remove"></i> {% trans "Retirer la mise en avant"%}</a>
 						<input type="hidden" name="product" value="{{ product.pk }}" />
+						<button><i class="icon-remove"></i> {% trans "Retirer la mise en avant"%}</button>
 					</form>
 				</td>
 			</tr>
-		{% empty %}
-			<tr>{% trans "Pas de produit mis en avant. Pensez-y pour ameliorer la visibilite de vos objets" %}</tr>
+			{% empty %}
+			<tr>
+				<td colspan="3" class="no-highlight">
+					{% trans "Pas d'annonce mise en avant. Pensez-y pour ameliorer votre visibilité." %}
+				</td>
+			</tr>
 		{% endfor %}
 	</tbody>
 </table>

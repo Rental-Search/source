@@ -89,7 +89,7 @@
 				<thead>
 					<tr>
 						<td><i class="icon-plus-sign"></i> {% trans "Mise en avant" %}</td>
-						<td class="amount">{{ highlights_sum }} &euro;</td>
+						<td class="amount">{{ highlights_sum|floatformat:2 }} &euro;</td>
 					</tr>
 				</thead>
 				<tbody>

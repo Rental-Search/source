@@ -1,0 +1,48 @@
+[
+	{
+        "fields": {
+            "name": "Micro",
+            "maximum_items": 5,
+            "price": 30
+        },
+        "model": "accounts.propackage",
+        "pk": 1
+    },
+    {
+        "fields": {
+            "name": "Petit",
+            "maximum_items": 10,
+            "price": 54
+        },
+        "model": "accounts.propackage",
+        "pk": 2
+    },
+    {
+        "fields": {
+            "name": "Moyen",
+            "maximum_items": 30,
+            "price": 76
+        },
+        "model": "accounts.propackage",
+        "pk": 3
+    },
+    {
+        "fields": {
+            "name": "Large",
+            "maximum_items": 50,
+            "price": 100
+        },
+        "model": "accounts.propackage",
+      
+        "pk": 4
+    },
+    {
+        "fields": {
+            "name": "Infini",
+            "maximum_items": null,
+            "price": 158
+        },
+        "model": "accounts.propackage",
+        "pk": 5
+    }
+]

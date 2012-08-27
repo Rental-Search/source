@@ -197,7 +197,7 @@ class Patron(User):
 
     rib = models.CharField(max_length=23, blank=True)
 
-    url = models.URLField(_(u"Site internet"), blank=True, help_text=_(u"5 euros par mois"))
+    url = models.URLField(_(u"Site internet"), blank=True, help_text=_(u"L'affichage de l'adresse du site est facturée 5€ par mois."))
 
     thumbnail = ImageSpec(
         processors=[
@@ -588,14 +588,18 @@ class PatronAccepted(models.Model):
     sites = models.ManyToManyField(Site, related_name='patrons_accepted')
 
 class ProPackage(models.Model):
+    name = models.CharField(max_length=64)
     maximum_items = models.PositiveIntegerField(null=True, blank=True)
     price = models.DecimalField(max_digits=8, decimal_places=2)
     valid_from = models.DateField(default=datetime.datetime.now)
     valid_until = models.DateField(null=True, blank=True)
-    name = models.CharField(max_length=64)
 
     def __unicode__(self):
-        return u'{maximum_items} item/{price} euro'.format(maximum_items=self.maximum_items, price=self.price)
+        if self.maximum_items:
+            return u'{maximum_items} item - {price} euro'.format(maximum_items=self.maximum_items, price=self.price)
+        else:
+            return u'illimity items - {price} euro'.format(price=self.price)
+
 
     class Meta:
         unique_together = (('maximum_items', 'valid_until'), )

@@ -415,8 +415,16 @@
                 </address>
                 <a href="{% url message_create product.pk patron.pk %}" class="btn-contactme">Contactez-moi</a>
                 <ul class="pro-contact">
-                    <li><a href="#">www.e-loue.com</a></li>
-                    <li>01 45 57 90 34</li>
+                    {% if patron.url %}
+                    <li><a href="#">{{ patron.url }}</a></li>
+                    {% endif %}
+                    {% if patron.default_number %}
+                    <li>
+                        {% with patron.default_number as default_number %}
+                            {{ default_number.number }}
+                        {% endwith %}
+                    </li>
+                    {% endif %}
                 </ul>
             </div>{#  owner #}
         {% else %}

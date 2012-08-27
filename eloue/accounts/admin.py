@@ -10,7 +10,7 @@ from django.utils.encoding import smart_str
 from django.utils.translation import ugettext_lazy as _
 
 from eloue.admin import CurrentSiteAdmin
-from eloue.accounts.models import Patron, Address, PhoneNumber, PatronAccepted
+from eloue.accounts.models import Patron, Address, PhoneNumber, PatronAccepted, ProPackage
 from eloue.accounts.forms import PatronChangeForm, PatronCreationForm
 
 log = logbook.Logger('eloue')
@@ -90,9 +90,14 @@ class AddressAdmin(admin.ModelAdmin):
     )
 
 
+class ProPackageAdmin(admin.ModelAdmin):
+    pass
+
+
 try:
     admin.site.register(Address, AddressAdmin)
     admin.site.register(Patron, PatronAdmin)
     admin.site.register(PatronAccepted)
+    admin.site.register(ProPackage, ProPackageAdmin)
 except admin.sites.AlreadyRegistered, e:
     log.warn('Site is already registered : %s' % e)
