@@ -560,7 +560,7 @@ def patron_edit_highlight(request):
     patron = request.user
 
     highlights = ProductHighlight.objects.filter(
-        ended_at__isnull=True).values_list('product', flat=True)
+        ended_at__isnull=True, product__owner=patron).values_list('product', flat=True)
     highlighted = patron.products.filter(id__in=highlights)
     not_highlighted = patron.products.filter(~Q(id__in=highlights))
     if request.method == "POST":
@@ -595,8 +595,10 @@ def patron_edit_highlight(request):
 def patron_edit_top_position(request):
     from eloue.products.models import ProductTopPosition, Product
     
-    def _split_products_on_topposition(products):
-        toppositions = ProductTopPosition.objects.filter(ended_at__isnull=True).values_list('product', flat=True)
+    def _split_products_on_topposition(products, patron):
+        toppositions = ProductTopPosition.objects.filter(
+            ended_at__isnull=True, product__owner=patron
+        ).values_list('product', flat=True)
         in_topposition = products.filter(id__in=toppositions)
         not_in_topposition = products.filter(~Q(id__in=toppositions))
         return in_topposition, not_in_topposition
@@ -614,7 +616,8 @@ def patron_edit_top_position(request):
             ProductTopPosition.objects.create(product=product)
 
     patron = request.user
-    in_topposition, not_in_topposition = _split_products_on_topposition(patron.products)
+    in_topposition, not_in_topposition = _split_products_on_topposition(
+        patron.products, patron)
 
     if request.method == "POST":
         try:
