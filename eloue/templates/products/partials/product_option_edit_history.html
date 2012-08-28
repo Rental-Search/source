@@ -1,0 +1,26 @@
+{% load i18n product %}
+
+<table class="table highlight-list">
+  <thead>
+    <tr>
+      <th>{% trans "Date de début" %}</th>
+      <th>{% trans "Date de fin" %}</th>
+      <th style="text-align:right;">{% trans "Coût" %}</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for highlight in old_highlights %}
+      <tr>
+        <td>{{highlight.started_at}}</td>
+        <td>{{highlight.ended_at}}</td>
+        <td style="text-align:right;">{{ highlight.price|floatformat:2 }}&euro;</td>
+      </tr>
+      {% empty %}
+      <tr>
+        <td colspan="3" class="no-highlight">
+          {% trans "Pas encore d'historique pour cette annonce" %}
+        </td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
