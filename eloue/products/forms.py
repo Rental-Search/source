@@ -100,7 +100,10 @@ class FacetedSearchForm(SearchForm):
 
             top_products = sqs.filter(is_top=True)[:3]
             if top_products:
-                # from haystack.backends import SQ
+                # XXX: ugly workaround because of SOLR-1658 (https://issues.apache.org/jira/browse/SOLR-1658)
+                # as soon as we upgrad solr we should remove this workaround
+                # I subclassed and modified the query string generator function in a SearchQuery class
+                # to remove the outer parenthesis of a negation.
                 from haystack.backends.solr_backend import SearchQuery
                 from haystack.constants import DJANGO_CT, VALID_FILTERS, FILTER_SEPARATOR
                 class BSQ(SearchQuery):
@@ -138,16 +141,8 @@ class FacetedSearchForm(SearchForm):
                             final_query = "%s %s" % (final_query, " ".join(boost_list))
                         
                         return final_query
-                # TODO: ugly workaround because of SOLR-1658
-                # as soon as we upgrad solr we should remove this workaround
-                # ids = ' OR '.join('id:"{id}"'.format(id=product.id) for product in top_products)
-                # sqs = sqs.raw_search("NOT ({ids}) AND (django_ct:products.product)".format(ids=ids))
-                # the above is equivalent to:
-                # sqs = sqs.exclude(id__id=[product.id for product in top_products])
-                # print SQ, SQ.mro()
                 sqs.query = sqs.query._clone(BSQ)
-                # sqs.query.build_query = BSQ.build_query
-                # sqs.query.add_filter(~SQ(id__in=[product.id for product in top_products]))
+
                 sqs = sqs.exclude(id__in=[product.id for product in top_products])
 
             for key in self.cleaned_data.keys():
