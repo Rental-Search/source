@@ -95,70 +95,72 @@
         {{ breadcrumbs.categorie.object.description.header|safe }}
     </div>
     {% endif %}
-    {% if product_list %}
-        {% if form.cleaned_data.q %}
-        {% blocktrans with form.cleaned_data.q as keywords count paginator.count as count %}
-            <h1>Résultat pour <strong>"{{ keywords }}"</strong></h1>
-            {% plural %}
-            <h1>Résultats pour <strong>"{{ keywords }}"</strong></h1>
-        {% endblocktrans%}
+    {% if product_list or top_products %}
+        {% if product_list %}
+            {% if form.cleaned_data.q %}
+            {% blocktrans with form.cleaned_data.q as keywords count paginator.count as count %}
+                <h1>Résultat pour <strong>"{{ keywords }}"</strong></h1>
+                {% plural %}
+                <h1>Résultats pour <strong>"{{ keywords }}"</strong></h1>
+            {% endblocktrans%}
+            {% endif %}
+            <ul class="product-filter">
+                <li class="filter-title">Trier par</li>
+                <li {% if form.sort.data == "-created_at" or not form.sort.data %} class="filter-selected" {% endif %}>
+                    {% if form.sort.data == "-created_at" or not form.sort.data %}
+                        {% trans "Les plus récents" %}
+                    {% else %}
+                        <a href="{% facet_url breadcrumbs "sort" "" %}">{% trans "Les plus récents" %}</a>
+                    {% endif %}
+                </li>
+                {% if form.cleaned_data.l %}
+                <li {% if form.sort.data == "geo_distance" %} class="filter-selected" {% endif %}>
+                    {% if form.sort.data == "geo_distance" %}
+                    {% trans "Les plus proches" %}
+                    {% else %}
+                    <a href="{% facet_url breadcrumbs "sort" "geo_distance" %}">{% trans "Les plus proches" %}</a>
+                    {% endif %}
+                </li>
+                {% endif %}
+                <li {% if form.sort.data == "price" %} class="filter-selected" {% endif %}>
+                    {% if form.sort.data == "price" %}
+                        {% trans "Les prix les plus bas" %}
+                    {% else %}
+                        <a href="{% facet_url breadcrumbs "sort" "price" %}">{% trans "Les prix les plus bas" %}</a>
+                    {% endif %}
+                </li>
+                <li {% if form.sort.data == "-price" %} class="filter-selected" {% endif %}>
+                    {% if form.sort.data == "-price" %}
+                        {% trans "Les prix les plus haut" %}
+                    {% else %}
+                        <a href="{% facet_url breadcrumbs "sort" "-price" %}">{% trans "Les prix les plus haut" %}</a>
+                    {% endif %}
+                </li>
+            </ul>{# product_filter #}
         {% endif %}
-        <ul class="product-filter">
-            <li class="filter-title">Trier par</li>
-            <li {% if form.sort.data == "-created_at" or not form.sort.data %} class="filter-selected" {% endif %}>
-                {% if form.sort.data == "-created_at" or not form.sort.data %}
-                    {% trans "Les plus récents" %}
-                {% else %}
-                    <a href="{% facet_url breadcrumbs "sort" "" %}">{% trans "Les plus récents" %}</a>
-                {% endif %}
-            </li>
-            {% if form.cleaned_data.l %}
-            <li {% if form.sort.data == "geo_distance" %} class="filter-selected" {% endif %}>
-                {% if form.sort.data == "geo_distance" %}
-                {% trans "Les plus proches" %}
-                {% else %}
-                <a href="{% facet_url breadcrumbs "sort" "geo_distance" %}">{% trans "Les plus proches" %}</a>
-                {% endif %}
-            </li>
-            {% endif %}
-            <li {% if form.sort.data == "price" %} class="filter-selected" {% endif %}>
-                {% if form.sort.data == "price" %}
-                    {% trans "Les prix les plus bas" %}
-                {% else %}
-                    <a href="{% facet_url breadcrumbs "sort" "price" %}">{% trans "Les prix les plus bas" %}</a>
-                {% endif %}
-            </li>
-            <li {% if form.sort.data == "-price" %} class="filter-selected" {% endif %}>
-                {% if form.sort.data == "-price" %}
-                    {% trans "Les prix les plus haut" %}
-                {% else %}
-                    <a href="{% facet_url breadcrumbs "sort" "-price" %}">{% trans "Les prix les plus haut" %}</a>
-                {% endif %}
-            </li>
-        </ul>{# product_filter #}
-        {% with truncation=50 %}
-            {% if top_products %}
+        {% if top_products %}
+            {% with truncation=50 %}
                 {% include 'products/partials/top_ads.html' %}
-            {% endif %}
-        {% endwith %}
-        {% with truncation=50 %}
-            {% with 'True' as marker %}
-                {% include 'products/partials/result_list.html' %}
             {% endwith %}
-        {% endwith %}
-        {% pagination %}
-        {% if is_paginated %}
-        <div class="pagination">
-            {% if page_obj.has_previous %}
-                <a href="{% facet_url breadcrumbs "page" page_obj.previous_page_number %}" class="prev">&#171; {% trans "Page précédente" %}</a>
+        {% endif %}
+        {% if product_list %}
+            {% with truncation=50 marker='True' %}
+                    {% include 'products/partials/result_list.html' %}
+            {% endwith %}
+            {% pagination %}
+            {% if is_paginated %}
+            <div class="pagination">
+                {% if page_obj.has_previous %}
+                    <a href="{% facet_url breadcrumbs "page" page_obj.previous_page_number %}" class="prev">&#171; {% trans "Page précédente" %}</a>
+                {% endif %}
+                {% for page in page_range %}
+                <a href="{% facet_url breadcrumbs "page" page %}" {% if page_obj.number == page %}class="page-selected"{% endif %}>{{ page }}</a>
+                {% endfor %}
+                {% if page_obj.has_next %}
+                    <a href="{% facet_url breadcrumbs "page" page_obj.next_page_number %}" class="next">{% trans "Page suivante" %} &#187;</a>
+                {% endif %}
+            </div><!-- pagination -->
             {% endif %}
-            {% for page in page_range %}
-            <a href="{% facet_url breadcrumbs "page" page %}" {% if page_obj.number == page %}class="page-selected"{% endif %}>{{ page }}</a>
-            {% endfor %}
-            {% if page_obj.has_next %}
-                <a href="{% facet_url breadcrumbs "page" page_obj.next_page_number %}" class="next">{% trans "Page suivante" %} &#187;</a>
-            {% endif %}
-        </div><!-- pagination -->
         {% endif %}
         {% if breadcrumbs.categorie.object.description %}
         <div class="category-description">
@@ -166,7 +168,7 @@
         </div>
         {% endif %}
     {% else %}
-    <h1>{% trans "Pas de résultat pour cette recherche" %}</h1>
+        <h1>{% trans "Pas de résultat pour cette recherche" %}</h1>
     {% endif %}
     </div>{# content-main #}
     <div class="content-aside">
