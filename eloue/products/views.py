@@ -490,7 +490,7 @@ def product_list(request, urlbits, sqs=SearchQuerySet(), suggestions=None, page=
     form = FacetedSearchForm(
         dict((facet['name'], facet['value']) for facet in breadcrumbs.values()),
         searchqueryset=sqs)
-    sqs, suggestions = form.search()
+    sqs, suggestions, top_products = form.search()
     # we use canonical_parameters to generate the canonical url in the header
     canonical_parameters = SortedDict(((key, unicode(value['value']).encode('utf-8')) for (key, value) in breadcrumbs.iteritems() if value['value']))
     canonical_parameters.pop('categorie', None)
@@ -502,7 +502,7 @@ def product_list(request, urlbits, sqs=SearchQuerySet(), suggestions=None, page=
     return object_list(request, sqs, page=page, paginate_by=PAGINATE_PRODUCTS_BY, template_name="products/product_result.html",
         template_object_name='product', extra_context={
             'facets': sqs.facet_counts(), 'form': form, 'breadcrumbs': breadcrumbs, 'suggestions': suggestions,
-            'site_url': site_url, 'canonical_parameters': canonical_parameters
+            'site_url': site_url, 'canonical_parameters': canonical_parameters, 'top_products': top_products
     })
 
 @never_cache

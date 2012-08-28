@@ -98,6 +98,58 @@ class FacetedSearchForm(SearchForm):
             elif status == "professionnels":
                 sqs = sqs.filter(pro=True)
 
+            top_products = sqs.filter(is_top=True)[:3]
+            if top_products:
+                # from haystack.backends import SQ
+                from haystack.backends.solr_backend import SearchQuery
+                from haystack.constants import DJANGO_CT, VALID_FILTERS, FILTER_SEPARATOR
+                class BSQ(SearchQuery):
+                    def build_query(self):
+                        """
+                        Interprets the collected query metadata and builds the final query to
+                        be sent to the backend.
+                        """
+                        query = self.query_filter.as_query_string(self.build_query_fragment)
+
+                        if not query:
+                            # Match all.
+                            query = self.matching_all_fragment()
+
+                        if len(self.models):
+                            models = sorted(['%s:%s.%s' % (DJANGO_CT, model._meta.app_label, model._meta.module_name) for model in self.models])
+                            models_clause = ' OR '.join(models)
+
+                            if query != self.matching_all_fragment():
+                                if query.startswith('NOT'):
+                                    final_query = '%s AND (%s)' % (query, models_clause)
+                                else:
+                                    final_query = '(%s) AND (%s)' % (query, models_clause)
+                            else:
+                                final_query = models_clause
+                        else:
+                            final_query = query
+
+                        if self.boost:
+                            boost_list = []
+
+                            for boost_word, boost_value in self.boost.items():
+                                boost_list.append(self.boost_fragment(boost_word, boost_value))
+
+                            final_query = "%s %s" % (final_query, " ".join(boost_list))
+                        
+                        return final_query
+                # TODO: ugly workaround because of SOLR-1658
+                # as soon as we upgrad solr we should remove this workaround
+                # ids = ' OR '.join('id:"{id}"'.format(id=product.id) for product in top_products)
+                # sqs = sqs.raw_search("NOT ({ids}) AND (django_ct:products.product)".format(ids=ids))
+                # the above is equivalent to:
+                # sqs = sqs.exclude(id__id=[product.id for product in top_products])
+                # print SQ, SQ.mro()
+                sqs.query = sqs.query._clone(BSQ)
+                # sqs.query.build_query = BSQ.build_query
+                # sqs.query.add_filter(~SQ(id__in=[product.id for product in top_products]))
+                sqs = sqs.exclude(id__in=[product.id for product in top_products])
+
             for key in self.cleaned_data.keys():
                 if self.cleaned_data[key] and key not in ["q", "l", "r", "sort", "renter"]:
                     sqs = sqs.narrow("%s_exact:%s" % (key, self.cleaned_data[key]))
@@ -106,9 +158,9 @@ class FacetedSearchForm(SearchForm):
                 sqs = sqs.order_by(self.cleaned_data['sort'])
             else:
                 sqs = sqs.order_by(SORT.RECENT)
-            return sqs, suggestions
+            return sqs, suggestions, top_products
         else:
-            return self.searchqueryset, None
+            return self.searchqueryset, None, top_products
 
 
 class AlertSearchForm(SearchForm):

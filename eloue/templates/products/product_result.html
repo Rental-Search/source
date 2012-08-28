@@ -136,8 +136,12 @@
                 {% endif %}
             </li>
         </ul>{# product_filter #}
-        {% include 'products/partials/top_ads.html' %}
-        {% with 50 as truncation %}
+        {% with truncation=50 %}
+            {% if top_products %}
+                {% include 'products/partials/top_ads.html' %}
+            {% endif %}
+        {% endwith %}
+        {% with truncation=50 %}
             {% with 'True' as marker %}
                 {% include 'products/partials/result_list.html' %}
             {% endwith %}
