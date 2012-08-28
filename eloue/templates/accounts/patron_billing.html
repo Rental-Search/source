@@ -98,6 +98,28 @@
 		</td>
 	</tr>
 	{% endif %}
+	{% if toppositions %}
+	<tr>
+		<td>
+			<table class="table">
+				<thead>
+					<tr>
+						<td><i class="icon-plus-sign"></i> {% trans "Top position" %}</td>
+						<td class="amount">{{ toppositions_sum|floatformat:2 }} &euro;</td>
+					</tr>
+				</thead>
+				<tbody>
+					{% for topposition in toppositions %}
+						<tr>
+							<td class="billing-item"><a href="#">{{ topposition.product.summary }}</a></td>
+							<td class="amount">{% price topposition from to %}&euro;</td>
+						</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</td>
+	</tr>
+	{% endif %}
 	<tr>
 		<td>
 			<table class="table">

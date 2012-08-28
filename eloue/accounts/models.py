@@ -669,7 +669,7 @@ class Billing(models.Model):
     def builder(patron, date_from, date_to):
         """Returns a (billing, subscriptions, highlights) tuple for a given
         """
-        from eloue.products.models import ProductHighlight
+        from eloue.products.models import ProductHighlight, ProductTopPosition
         if not isinstance(date_from, datetime.datetime):
             date_from = datetime.datetime.combine(date_from, datetime.time())
         if not isinstance(date_to, datetime.datetime):
@@ -687,7 +687,13 @@ class Billing(models.Model):
             models.Q(subscription_ended__isnull=True) & 
             models.Q(subscription_started__lte=date_to)),
             patron=patron)
-        return Billing(date=date_from), highlights, subscriptions
+        toppositions = ProductTopPosition.objects.select_related('product').filter((
+            ~models.Q(ended_at__lte=date_from) & 
+            ~models.Q(started_at__gte=date_to) |
+            models.Q(ended_at__isnull=True) & 
+            models.Q(started_at__lte=date_to)), 
+            product__owner=patron)
+        return Billing(date=date_from), highlights, subscriptions, toppositions
 
 
 signals.post_save.connect(post_save_sites, sender=Patron)

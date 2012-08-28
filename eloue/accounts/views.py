@@ -411,15 +411,16 @@ def billing(request):
         else:
             _from = to
 
-    billing, highlights, subscriptions = Billing.builder(patron, _from, to)
+    billing, highlights, subscriptions, toppositions = Billing.builder(patron, _from, to)
     highlights_sum = sum(map(lambda highlight: highlight.price(_from, to), highlights), 0)
     subscriptions_sum = sum(map(lambda subscription: subscription.price(_from, to), subscriptions), 0)
+    toppositions_sum = sum(map(lambda topposition: topposition.price(_from, to), toppositions), 0)
     return render(
         request, 'accounts/patron_billing.html', 
         {
             'billings': billings, 'billing': billing, 
-            'highlights': highlights, 'subscriptions': subscriptions,
-            'highlights_sum': highlights_sum, 'subscriptions_sum': subscriptions_sum,
+            'highlights': highlights, 'subscriptions': subscriptions, 'toppositions': toppositions,
+            'highlights_sum': highlights_sum, 'subscriptions_sum': subscriptions_sum, 'toppositions_sum': toppositions_sum,
             'from': _from, 'to': to, 'sum': highlights_sum + subscriptions_sum
         })
 
