@@ -22,7 +22,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.sites.models import Site
 from django.core.mail import EmailMessage, BadHeaderError, send_mass_mail
 from django.core.urlresolvers import reverse
-from django.db.models import Count, Q
+from django.db.models import Count, Q, Max
 from django.views.decorators.http import require_GET
 from django.forms.models import model_to_dict, inlineformset_factory
 from django.shortcuts import get_object_or_404, render_to_response, render
@@ -562,7 +562,7 @@ def patron_edit_highlight(request):
 
     highlights = ProductHighlight.objects.filter(
         ended_at__isnull=True, product__owner=patron).values_list('product', flat=True)
-    highlighted = patron.products.filter(id__in=highlights)
+    highlighted = patron.products.annotate(since=Max('producthighlight__started_at')).filter(id__in=highlights)
     not_highlighted = patron.products.filter(~Q(id__in=highlights))
     if request.method == "POST":
         try:
@@ -600,7 +600,7 @@ def patron_edit_top_position(request):
         toppositions = ProductTopPosition.objects.filter(
             ended_at__isnull=True, product__owner=patron
         ).values_list('product', flat=True)
-        in_topposition = products.filter(id__in=toppositions)
+        in_topposition = products.annotate(since=Max('producttopposition__started_at')).filter(id__in=toppositions)
         not_in_topposition = products.filter(~Q(id__in=toppositions))
         return in_topposition, not_in_topposition
 
