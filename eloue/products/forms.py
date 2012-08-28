@@ -689,12 +689,12 @@ class AlertForm(forms.ModelForm):
         fields = ('description', 'designation')
 
 
-from eloue.products.models import ProductHighlight
-
+from eloue.products.models import ProductHighlight, ProductTopPosition
 
 class HighlightForm(forms.ModelForm):
-
     class Meta:
         model = ProductHighlight
 
-
+class TopPositionForm(forms.ModelForm):
+    class Meta:
+        model = ProductTopPosition
