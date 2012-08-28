@@ -1,13 +1,7 @@
-{% extends "accounts/dashboard.html" %}
+{% extends "products/product_edit.html" %}
 {% load i18n navbar product %}
 
 {% block title %}{% trans "Suppression de" %} {{ product.summary }}{% endblock %}
-
-{% block content-aside-profil %}
-<div class="previous-sub-bar">
-  &larr;  <a href="{% url owner_product_edit product.slug product.pk %}">{% trans "Retour à l'annonce" %}</a>
-</div>
-{% endblock %}
 
 {% block content-main-profil %}
 {% if is_booked %}

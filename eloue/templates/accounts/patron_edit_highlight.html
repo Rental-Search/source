@@ -56,7 +56,7 @@
 		{% for product in highlighted %}
 			<tr>
 				<td><a href="{{ product.get_absolute_url }}">{{ product.summary }}</a></td>
-				<td>Depuis 3 jours</td>
+				<td></td>
 				<td class="highlight-action">
 					<form action="" method="post" style="margin-bottom: 0px;">
 						{% csrf_token %}

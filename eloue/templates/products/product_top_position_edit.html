@@ -4,16 +4,11 @@
 
 {% block title %}{% trans "Mes annonces" %}{% endblock %}
 
-
 {% block content-main-profil %}
-{% if form.instance.pk %}
-  <h2>{% trans "Votre annonce est mise en avant depuis" %} {{form.instance.started_at|timesince }}</h2>
-{% else %}
-  <h2>{% trans "Mettre en avant son annonce" %}</h2>
-{% endif %}
+<h2>{% trans "Mettre en avant son annonce" %}</h2>
 {% include "products/partials/product_option_edit_form.html" %}
 
-<h2>{% trans "Historique des mises en avant" %}<h2>
+<h2>{% trans "Historique des mise en top position" %}<h2>
 {% include "products/partials/product_option_edit_history.html" %}
 
 {% endblock %}

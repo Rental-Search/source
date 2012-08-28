@@ -45,7 +45,7 @@
 				<thead>
 					<tr>
 						<td>Plan et options</td>
-						<td class="amount">{{ sum }} &euro;</td>
+						<td class="amount">{{ sum|floatformat:2 }} &euro;</td>
 					</tr>
 				</thead>
 			</table>
@@ -54,20 +54,13 @@
 	<tr>
 		<th class="billing-header">{% trans "Détails" %}</th>
 	</tr>
-	<!--
-	<tr>
-		<td colspan="2" class="billing-detail">
-			<a href="#" class="billing-detail-plus">{% trans "Etendre tous les services" %}</a> | <a href="#" class="billing-detail-minus">{% trans "Réduire tous les services"%}</a>
-		</td>
-	</tr>
-	-->
 	<tr>
 		<td>
 			<table class="table">
 				<thead>
 					<tr>
 						<td><i class="icon-plus-sign"></i> {% trans "Plan" %}</td>
-						<td class="amount">{{ subscriptions_sum }} &euro;</td>
+						<td class="amount">{{ subscriptions_sum|floatformat:2 }} &euro;</td>
 					</tr>
 				</thead>
 				<tbody>
@@ -83,6 +76,7 @@
 			</table>
 		</td>
 	</tr>
+	{% if highlights %}
 	<tr>
 		<td>
 			<table class="table">
@@ -103,28 +97,7 @@
 			</table>
 		</td>
 	</tr>
-	<tr>
-		<td>
-			<table class="table">
-				<thead>
-					<tr>
-						<td><i class="icon-plus-sign"></i> {% trans "Notification par email" %}</td>
-						<td class="amount">0,20 &euro;</td>
-					</tr>
-				</thead>
-				<tbody>
-					<tr>
-						<td class="billing-item">benoit.woj@e-loue.com</td>
-						<td class="amount">0,10&euro;</td>
-					</tr>
-					<tr>
-						<td class="billing-item">alexandre.woog@e-loue.com</td>
-						<td class="amount">0,10&euro;</td>
-					</tr>
-				</tbody>
-			</table>
-		</td>
-	</tr>
+	{% endif %}
 	<tr>
 		<td>
 			<table class="table">

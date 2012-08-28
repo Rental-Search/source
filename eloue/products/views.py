@@ -259,6 +259,17 @@ def product_highlight_edit(request, slug, product_id):
         context_instance=RequestContext(request)
     )
 
+@login_required
+@ownership_required(model=Product, object_key='product_id', ownership=['owner'])
+def product_top_position_edit(request, slug, product_id):
+    product = get_object_or_404(Product.on_site, pk=product_id)
+
+    return render_to_response(
+      'products/product_top_position_edit.html',
+      {'product': product },
+      context_instance=RequestContext(request)
+    )
+
 
 def thread_list(user, is_archived):
     return sorted(
