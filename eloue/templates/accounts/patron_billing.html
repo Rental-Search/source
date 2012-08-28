@@ -89,7 +89,7 @@
 				<tbody>
 					{% for highlight in highlights %}
 						<tr>
-							<td class="billing-item"><a href="#">{{ highlight.product.summary }}</a></td>
+							<td class="billing-item"><a href="{{ highlight.product.get_absolute_url }}">{{ highlight.product.summary }}</a></td>
 							<td class="amount">{% price highlight from to %}&euro;</td>
 						</tr>
 					{% endfor %}
@@ -111,7 +111,7 @@
 				<tbody>
 					{% for topposition in toppositions %}
 						<tr>
-							<td class="billing-item"><a href="#">{{ topposition.product.summary }}</a></td>
+							<td class="billing-item"><a href="{{ topposition.product.get_absolute_url }}">{{ topposition.product.summary }}</a></td>
 							<td class="amount">{% price topposition from to %}&euro;</td>
 						</tr>
 					{% endfor %}
