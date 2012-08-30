@@ -1,8 +1,9 @@
 {% load i18n product booking %}
-<p style="margin-top: 5px; margin-bottom: 4px;  font-family: Arial, sans-serif; color: #364C59; text-indent: 10px;">{% trans "Top annonces"%}</p>
-<ul class="product-list" style="border-left: 1px solid #B2CED9; border-right: 1px solid #B2CED9; border-top: 1px solid #b2CED9; background: #F7F8FA;">
+<p class="top-ads-title">{% trans "Top annonces"%}</p>
+<ul id="top-ads-list" class="product-list">
     {% for product in top_products %}
-        <li style="border-top: none;">
+        <li id="top_marker-{{forloop.counter }}">
+            <div class="pl-marker" >{{ forloop.counter }}</div>
             <a href="{{ product.url }}" class="pl-img">
                 <img src="{{ product.thumbnail }}" alt="{{ product.summary }}" width="60" height="60">
             </a><!-- pl-img -->

@@ -254,20 +254,42 @@
             {% endfor %}
         ];
 
-        function setMarkers(map, locations) {
+        var topProducts = [
+            {% for product in top_products %}
+                ['{{ product.summary }}', {{ product.lat|unlocalize }}, {{ product.lng|unlocalize }}, {{ forloop.counter }}]{% if not forloop.last %},{% endif %}
+            {% endfor %}
+        ];
+
+        function setMarkers(map, locations, markerId) {
 
             for (var i = 0; i < locations.length; i++) {
                 var product = locations[i];
 
-                var image = new google.maps.MarkerImage('{{ MEDIA_URL }}images/markers.png',
+            var image, image_hover;
+
+            if (markerId == "li#marker-") {
+                image = new google.maps.MarkerImage('{{ MEDIA_URL }}images/markers.png',
                     new google.maps.Size(20, 33),
                     new google.maps.Point(44, 34*i),
                     new google.maps.Point(10, 33));
 
-                var image_hover = new google.maps.MarkerImage('{{ MEDIA_URL }}images/markers.png',
+                image_hover = new google.maps.MarkerImage('{{ MEDIA_URL }}images/markers.png',
                     new google.maps.Size(20, 33),
                     new google.maps.Point(0, 34*i),
                     new google.maps.Point(10, 33));
+            }
+
+            if (markerId == "li#top_marker-") {
+                image = new google.maps.MarkerImage('{{ MEDIA_URL }}images/markers.png',
+                    new google.maps.Size(20, 33),
+                    new google.maps.Point(65, 34*i),
+                    new google.maps.Point(10, 33));
+
+                image_hover = new google.maps.MarkerImage('{{ MEDIA_URL }}images/markers.png',
+                    new google.maps.Size(20, 33),
+                    new google.maps.Point(21, 34*i),
+                    new google.maps.Point(10, 33));
+            }
 
 
                 var myLatLng = new google.maps.LatLng(product[1], product[2]);
@@ -282,32 +304,32 @@
 
                 marker.set("myZIndex", marker.getZIndex());
 
-                google.maps.event.addListener(marker, "mouseover", mouseoverListenerGenerator(image_hover, marker));
+                google.maps.event.addListener(marker, "mouseover", mouseoverListenerGenerator(image_hover, marker, markerId));
 
-                google.maps.event.addListener(marker, "mouseout",  mouseoutListenerGenerator(image, marker));
+                google.maps.event.addListener(marker, "mouseout",  mouseoutListenerGenerator(image, marker, markerId));
 
-                $('li#marker-' + marker.get("myZIndex")).mouseover(triggerMouseOverGenerator(marker));
+                $(markerId + marker.get("myZIndex")).mouseover(triggerMouseOverGenerator(marker));
 
-                $('li#marker-' + marker.get("myZIndex")).mouseout(triggerMouseOutGenerator(marker));
+                $(markerId + marker.get("myZIndex")).mouseout(triggerMouseOutGenerator(marker));
             }
         }
 
-        function mouseoverListenerGenerator(image_hover, marker) {
+        function mouseoverListenerGenerator(image_hover, marker, markerId) {
             return function() {
                 this.setOptions({
                     icon:image_hover,
                     zIndex:200
                 });
-                $('li#marker-' + marker.get("myZIndex")).css("background-color","#F7F8FA");
+                $(markerId + marker.get("myZIndex")).css("background-color","#F7F8FA");
             }
         }
-        function mouseoutListenerGenerator(image, marker) {
+        function mouseoutListenerGenerator(image, marker, markerId) {
             return function() {
                 this.setOptions({
                     icon:image,
                     zIndex:this.get("myZIndex")
                 });
-                $('li#marker-' + marker.get("myZIndex")).removeAttr("style");
+                $(markerId + marker.get("myZIndex")).removeAttr("style");
             }
         }
         function triggerMouseOverGenerator(marker) {
@@ -370,7 +392,8 @@
                 }
             )
 
-            setMarkers(map, products);
+            setMarkers(map, products, 'li#marker-');
+            setMarkers(map, topProducts, 'li#top_marker-');
         }
 
 
@@ -394,8 +417,7 @@
 
             google.maps.event.addListener(autocomplete, 'place_changed', function() {
                 // code found at 
-                // http://stackoverflow.com/questions/3525670/radius-of-viewable-region-in-google-maps-v3 
-                console.log(autocomplete.getPlace().geometry);
+                // http://stackoverflow.com/questions/3525670/radius-of-viewable-region-in-google-maps-v3
                 bounds = autocomplete.getPlace().geometry.viewport;
                 if (bounds) {
                     center = bounds.getCenter();
