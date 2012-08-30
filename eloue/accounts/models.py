@@ -4,6 +4,7 @@ import logbook
 import uuid
 import urllib2
 import calendar
+from decimal import Decimal as D
 
 import simplejson
 import facebook
@@ -15,6 +16,8 @@ from imagekit.processors import resize, Adjust, Transpose
 from django.core.exceptions import ValidationError
 from django.contrib.sites.managers import CurrentSiteManager
 from django.contrib.sites.models import Site
+from django.contrib.contenttypes.models import ContentType
+from django.contrib.contenttypes import generic
 from django.contrib.auth.models import User
 from django.contrib.gis.db import models
 from django.conf import settings
@@ -334,6 +337,26 @@ class Patron(User):
     def is_confirmed(self):
         return paypal_payment.confirm_paypal_account(self.paypal_email)
     
+    def next_billing_date(self):
+        from eloue.accounts.management.commands.billing import plus_one_month, minus_one_month
+        from django.db.models import Min, Max
+        from eloue.products.models import ProductHighlight, ProductTopPosition
+        last_billing_date = self.billing_set.aggregate(Max('date'))['date__max']
+        if last_billing_date:
+            return plus_one_month(last_billing_date)
+
+        first_subscription = self.subscription_set.aggregate(Min('subscription_started'))['subscription_started__min']
+        first_topposition = ProductTopPosition.objects.filter(product__owner=self).aggregate(Min('started_at'))['started_at__min']
+        first_highlight = ProductHighlight.objects.filter(product__owner=self).aggregate(Min('started_at'))['started_at__min']
+        # if he was never billed, we'll use the starting date of the first service used
+        started_at_list = filter(None, [first_subscription, first_topposition, first_highlight])
+        if started_at_list:
+            return min(started_at_list).date()
+
+        # if he uses no service at all, we return None
+        return None
+
+
     @property
     def response_rate(self):
         from eloue.products.models import MessageThread
@@ -653,6 +676,10 @@ class Billing(models.Model):
     plans = models.ManyToManyField('accounts.Subscription', through='BillingSubscription')
     toppositions = models.ManyToManyField('products.ProductTopPosition', through='BillingProductTopPosition')
 
+    object_id = models.PositiveIntegerField()
+    content_type = models.ForeignKey(ContentType)
+    payment = generic.GenericForeignKey('content_type', 'object_id')
+
     @models.permalink
     def get_absolute_url(self):
         date = self.date
@@ -663,7 +690,15 @@ class Billing(models.Model):
              'day': '%02d'%date.day})
 
     def pdf(self):
+        if self.pk is None:
+            raise ValueError('You can generate pdf only for already saved Billings.')
         raise NotImplementedError()
+
+    def preapproval(self, **kwargs):
+        self.payment.preapproval(self, 'billing:%d'%self.id, self.total_amount, **kwargs)
+
+    def pay(self, **kwargs):
+        self.payment.pay(self, 'billing:%d'%self.id, self.total_amount, **kwargs)
 
     @staticmethod
     def builder(patron, date_from, date_to):
@@ -693,8 +728,23 @@ class Billing(models.Model):
             models.Q(ended_at__isnull=True) & 
             models.Q(started_at__lte=date_to)), 
             product__owner=patron)
-        return Billing(date=date_from), highlights, subscriptions, toppositions
 
+        highlights.sum = sum(map(lambda highlight: highlight.price(date_from, date_to), highlights), 0)
+        subscriptions.sum = sum(map(lambda subscription: subscription.price(date_from, date_to), subscriptions), 0)
+        toppositions.sum = sum(map(lambda topposition: topposition.price(date_from, date_to), toppositions), 0)
+        total_amount = highlights.sum + subscriptions.sum + toppositions.sum
+        total_tva = total_amount * settings.TVA
+        return (
+            Billing(date=date_from, patron=patron, state=0, 
+                total_amount=total_amount, total_tva=total_tva), 
+            highlights, subscriptions, toppositions
+        )
+
+
+class BillingHistory(models.Model):
+    billing = models.ForeignKey('accounts.Billing')
+    date = models.DateTimeField(auto_now_add=True)
+    succeeded = models.BooleanField()
 
 signals.post_save.connect(post_save_sites, sender=Patron)
 signals.pre_delete.connect(pre_delete_creditcard, sender=CreditCard)

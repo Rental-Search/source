@@ -5,6 +5,7 @@ import datetime, time
 import urllib
 import simplejson
 import itertools
+from decimal import Decimal as D
 
 from logbook import Logger
 import simplejson
@@ -381,9 +382,26 @@ def patron_edit(request, *args, **kwargs):
 
 @login_required
 def billing_object(request, year, month, day):
-    billing = get_object_or_404(
-        Billing, patron=request.user, 
-        date=datetime.date(int(year), int(month), int(day)))
+    from eloue.accounts.management.commands.billing import plus_one_month
+
+    date_from = datetime.date(int(year), int(month), int(day))
+    billing = get_object_or_404(Billing, patron=request.user, date=date_from)
+    date_from = datetime.datetime.combine(date_from, datetime.time())
+    date_to = plus_one_month(date_from)
+
+    subscriptions = billing.highlights.all()
+    toppositions = billing.toppositions.all()
+    highlights = billing.highlights.all()
+
+    highlights.sum = sum(map(lambda highlight: highlight.price(date_from, date_to), highlights), 0)
+    subscriptions.sum = sum(map(lambda subscription: subscription.price(date_from, date_to), subscriptions), 0)
+    toppositions.sum = sum(map(lambda topposition: topposition.price(date_from, date_to), toppositions), 0)
+
+    return render(request, 'accounts/partials/billing_table.html', 
+        {'billing': billing, 'subscriptions': subscriptions, 'toppositions': toppositions, 'highlights': highlights,
+            'from': date_from, 'to': date_to,
+        })
+
     response = HttpResponse(str(billing), content_type='application/pdf')
     response['Content-Disposition'] = 'attachment; filename=facture_e-loue_{year}-{month}-{day}.pdf'.format(year=year, month=month, day=day)
     return response
@@ -391,37 +409,18 @@ def billing_object(request, year, month, day):
 
 @login_required
 def billing(request):
-    import calendar
-
     patron = request.user
     billings = patron.billing_set.order_by('date')
-
     to = datetime.datetime.now()
-    if billings:
-        date = datetime.datetime.combine(billings[-1].date, datetime.time())
-        days = calendar.monthrange(date.year, date.month)
-        _from = date + datetime.timedelta(days=days)
-    else:
-        s = patron.subscription_set.order_by('subscription_started')
-        if s:
-            _from  = datetime.datetime.combine(
-                patron.subscription_set.order_by(
-                    'subscription_started'
-                )[0].subscription_started.date(), datetime.time())
-        else:
-            _from = to
-
+    _from = datetime.datetime.combine(patron.next_billing_date(), datetime.time())
+    
     billing, highlights, subscriptions, toppositions = Billing.builder(patron, _from, to)
-    highlights_sum = sum(map(lambda highlight: highlight.price(_from, to), highlights), 0)
-    subscriptions_sum = sum(map(lambda subscription: subscription.price(_from, to), subscriptions), 0)
-    toppositions_sum = sum(map(lambda topposition: topposition.price(_from, to), toppositions), 0)
     return render(
         request, 'accounts/patron_billing.html', 
         {
-            'billings': billings, 'billing': billing, 
-            'highlights': highlights, 'subscriptions': subscriptions, 'toppositions': toppositions,
-            'highlights_sum': highlights_sum, 'subscriptions_sum': subscriptions_sum, 'toppositions_sum': toppositions_sum,
-            'from': _from, 'to': to, 'sum': highlights_sum + subscriptions_sum + toppositions_sum
+            'billings': billings, 'billing': billing, 'highlights': highlights, 
+            'subscriptions': subscriptions, 'toppositions': toppositions,
+            'from': _from, 'to': to,
         })
 
 
