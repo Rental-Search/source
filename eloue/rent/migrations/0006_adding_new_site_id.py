@@ -6,6 +6,9 @@ from django.db import models
 from django.contrib.sites.models import Site
 
 class Migration(DataMigration):
+    depends_on = (
+        ("accounts", "0015_adding_new_site_id"),
+    )
 
     def forwards(self, orm):
         site = Site.objects.get(name='e-loue beta')

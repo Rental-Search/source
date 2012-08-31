@@ -5,6 +5,9 @@ from south.v2 import SchemaMigration
 from django.db import models
 
 class Migration(SchemaMigration):
+    depends_on = (
+        ("products", "0024_auto__add_producthighlight__add_producttopposition"),
+    )
 
     def forwards(self, orm):
         

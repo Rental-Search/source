@@ -10,6 +10,12 @@ class FakeAdmin(object):
     def has_perm(self, perm): return True
 
 class Migration(DataMigration):
+    depends_on = (
+        ("products", "0020_new_categories"),
+        ("accounts", "0015_adding_new_site_id"),
+        ("rent", "0006_adding_new_site_id"),
+        ("products", "0017_adding_new_site_id"),
+    )
 
     def forwards(self, orm):
         "Write your forwards methods here."
