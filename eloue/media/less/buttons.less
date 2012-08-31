@@ -218,6 +218,50 @@
   }
 }
 
+.btn-pro-access {
+  .btn-booking();
+
+  margin-top: 3px;
+  width: 245px !important;
+  font-size: 12px;
+  line-height: 12px;
+
+  &:hover {
+    text-decoration: none;
+  }
+}
+
+.btn-publish-ad {
+  cursor: pointer;
+  display: inline-block;
+  #gradient > .vertical(#ff8315, #f36100);
+  padding: 10px;
+  font-family: 'Ubuntu', sans-serif;
+  text-shadow: 0 1px 0 rgba(0,0,0,.25);
+  line-height: 18px;
+  font-size: 14px;
+  color: #fff;
+  border: 1px solid #c85007;
+  .rounded(3px);
+  @shadow: inset 0 1px #ffa85c;
+  .box-shadow(@shadow);
+  vertical-align: 7%;
+
+  width: 143px;
+  text-align: center;
+  margin-bottom: 10px;
+  
+  &:hover {
+    #gradient > .vertical(#f6832c, #ff8315);
+
+    text-decoration: none;
+  }
+  
+  &:active {
+    #gradient > .vertical(#f36100, #f6832c);
+  }
+}
+
 
 //FACEBOOK CONNECT BUTTON
 //------------------------
