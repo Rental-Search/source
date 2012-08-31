@@ -43,7 +43,7 @@ from eloue.decorators import secure_required, mobify, ownership_required
 from eloue.accounts.forms import (EmailAuthenticationForm, GmailContactFormset, PatronEditForm, 
     PatronPasswordChangeForm, ContactForm, CompanyEditForm,
     PatronSetPasswordForm, FacebookForm, CreditCardForm, GmailContactForm)
-from eloue.accounts.models import Patron, FacebookSession, CreditCard, Billing
+from eloue.accounts.models import Patron, FacebookSession, CreditCard, Billing, Subscription, ProPackage
 
 from eloue.accounts.wizard import AuthenticationWizard
 
@@ -427,7 +427,6 @@ def billing(request):
 @login_required
 def patron_edit_subscription(request, *args, **kwargs):
     from eloue.accounts.forms import SubscriptionEditForm
-    from eloue.accounts.models import Subscription, ProPackage
     patron = request.user
     if not patron.is_professional:
         return HttpResponseForbidden()
@@ -879,6 +878,13 @@ def gmail_send_invite(request):
         )
 
 
+def patron_subscription(request):
+    now = datetime.datetime.now()
+    plans = ProPackage.objects.filter(
+        Q(valid_until__isnull=True, valid_from__lte=now) or
+        Q(valid_until__isnull=False, valid_until__gte=now)).order_by('maximum_items')
+
+    return direct_to_template(request, 'accounts/patron_subscription.html', {'plans': plans})
 
 
 @login_required

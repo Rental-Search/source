@@ -11,7 +11,7 @@ from django.utils.translation import ugettext as _
 
 from eloue.accounts.forms import EmailPasswordResetForm, PatronSetPasswordForm
 
-from eloue.accounts.views import activate, authenticate, authenticate_headless, contact, google_oauth_callback
+from eloue.accounts.views import activate, authenticate, authenticate_headless, contact, google_oauth_callback, patron_subscription
 
 from eloue.products.views import homepage, search, reply_product_related_message, homepage_object_list
 from eloue.products.search_indexes import product_only_search, car_search, realestate_search
@@ -59,6 +59,7 @@ urlpatterns = patterns('',
     url(r'^reset/complete/$', password_reset_complete, {
         'template_name': 'accounts/password_reset_complete.html'
     }, name="password_reset_complete"),
+    url(r'^espace_pro/$', patron_subscription, name="patron_subscription"),
     url(r'^faq/', include('faq.urls')),
     url(r'^contact/$', contact, name="contact"),
     url(r'^activate/(?P<activation_key>\w+)/$', activate, name='auth_activate'),
