@@ -695,10 +695,10 @@ class Billing(models.Model):
         raise NotImplementedError()
 
     def preapproval(self, **kwargs):
-        self.payment.preapproval(self, 'billing:%d'%self.id, self.total_amount, **kwargs)
+        self.payment.preapproval(self, 'billing:%d'%self.id, self.total_amount, None, **kwargs)
 
     def pay(self, **kwargs):
-        self.payment.pay(self, 'billing:%d'%self.id, self.total_amount, **kwargs)
+        self.payment.pay(self, 'billing:%d'%self.id, self.total_amount, None, **kwargs)
 
     @staticmethod
     def builder(patron, date_from, date_to):

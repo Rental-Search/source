@@ -216,7 +216,7 @@ class PayboxDirectPlusPayment(abstract_payment.AbstractPayment):
 
     # new style API
     # it does not depend anymore on the fact that it's used for a booking
-    def preapproval(self, reference, amount, cvv, currency=None):
+    def preapproval(self, reference, amount, currency, cvv):
         booking = self.booking
         from eloue.utils import convert_from_xpf
         if currency == "XPF":
@@ -225,11 +225,12 @@ class PayboxDirectPlusPayment(abstract_payment.AbstractPayment):
             amount = D(amount*100).quantize(0)
         amount = str(amount)
         self.numappel, self.numtrans = self.paybox_manager.authorize_subscribed(
-            member_id=self.credit_card.subscriber_reference, card_number=self.credit_card.card_number, 
-            expiration_date=self.credit_card.expires, cvv=cvv, amount=amount, 
+            member_id=self.creditcard.subscriber_reference, card_number=self.creditcard.card_number, 
+            expiration_date=self.creditcard.expires, cvv=cvv, amount=amount, 
             reference=reference
         )
-    def pay(self, reference, amount, currency=None):
+
+    def pay(self, reference, amount, currency):
         from eloue.utils import convert_from_xpf
         if currency == "XPF":
             amount = convert_from_xpf(D(amount*100)).quantize(0)
@@ -242,36 +243,6 @@ class PayboxDirectPlusPayment(abstract_payment.AbstractPayment):
             reference=reference
         )
 
-
-    # old style API
-    def preapproval(self, credit_card, cvv):
-        booking = self.booking
-        from eloue.utils import convert_from_xpf
-        from django.conf import settings
-        if booking.currency == "XPF":
-            amount = convert_from_xpf(D(booking.total_amount*100)).quantize(0)
-        else:
-            amount = D(booking.total_amount*100).quantize(0)
-        amount = str(amount)
-        self.numappel, self.numtrans = self.paybox_manager.authorize_subscribed(
-            member_id=credit_card.subscriber_reference, card_number=credit_card.card_number, 
-            expiration_date=credit_card.expires, cvv=cvv, amount=amount, 
-            reference=booking.pk.hex
-        )
-    
-    def pay(self, cancel_url, return_url):
-        booking = self.booking
-        from eloue.utils import convert_from_xpf
-        if booking.currency == "XPF":
-            amount = convert_from_xpf(D(booking.total_amount*100)).quantize(0)
-        else:
-            amount = D(booking.total_amount*100).quantize(0)
-        amount = str(amount)
-        self.paybox_manager.debit_subscribed(
-            member_id=self.creditcard.subscriber_reference, amount=amount, 
-            numappel=self.numappel, numtrans=self.numtrans, 
-            reference=booking.pk.hex
-        )
         
     def execute_payment(self, *args, **kwargs):
         pass
