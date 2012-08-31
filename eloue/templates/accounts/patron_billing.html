@@ -48,7 +48,7 @@
 	</thead>
 	<tbody>
 		{% for billing in billings %}
-			<tr {% if not billing.state %}class="biling-error"{%endif%}>
+			<tr {% if not billing.state %}class="billing-error"{%endif%}>
 				<td>{{ billing.date }}</td>
 				<td>{% firstof billing.payment.creditcard "Ajoutez votre carte de credit"%}</td>
 				<td><a href="{{ billing.get_absolute_url }}">Télécharger la facture</a></td>
