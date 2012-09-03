@@ -217,7 +217,6 @@ class PayboxDirectPlusPayment(abstract_payment.AbstractPayment):
     # new style API
     # it does not depend anymore on the fact that it's used for a booking
     def preapproval(self, reference, amount, currency, cvv):
-        booking = self.booking
         from eloue.utils import convert_from_xpf
         if currency == "XPF":
             amount = convert_from_xpf(D(amount*100)).quantize(0)
