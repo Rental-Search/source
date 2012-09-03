@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Espace professionnel" %}{% endblock %}
+
+{% block content %}
+
+<div class="container-main">
+	<ul class="breadcrumb">
+    	<li><a href="{% url home %}">{% trans "Accueil" %}</a></li>
+    	<li>{% trans "Espace professionnel" %}</li>
+    </ul>
+    <div class="one-content">
+    	<h1 style="margin-bottom: 40px;">{% trans "Bienvenue sur notre espace professionnel" %}</h1>
+    	<h2 style="margin-bottom: 20px;">{% trans "Choisissez un abonnement adapté à vos besoin" %} :</h2>
+    	<div class="plans">
+    		{% for plan in plans %}
+	    		{% if forloop.last %}
+	    		<div class="info-block infini-plan">
+	    			<p class="infini-items">{% trans "Annonces illimitées" %}</p>
+	    			<div class="plan-description">
+		    			<h2>{{ plan.name }}</h2>
+		    			<p class="plan_price">
+			            		{{ plan.price|floatformat:0 }}&euro;<span>/mois</span>
+			            </p>
+			        </div>
+			        <a href="#" class="btn-select-plan">{% trans "Choisir cet abonnement" %}</a>
+	    		</div>
+	        	{% else %}
+	    		<div class="info-block plan {% if forloop.first %}first{% endif %}">
+		            <h2>
+		            	{{ plan.name }} 
+		            	<div class="plan_price">
+		            		{{ plan.price|floatformat:0 }}&euro;<span>/mois</span>
+		            	</div>
+		            </h2>
+		            <p class="max-items">{{ plan.maximum_items }} {% trans "annonces maximums" %}</p>
+		            <a href="#" class="btn-select-plan">{% trans "Choisir cet abonnement" %}</a>
+	        	</div>
+	        	{% endif %}
+        	{% endfor %}
+        </div>
+        <h2>{% trans "Des options vous sont proposées pour augmenter votre visibilité et votre réactivité" %} :</h2>
+        <div classs="pro-options">
+        	
+        </div>
+    </div>
+</div>
+{% endblock %}

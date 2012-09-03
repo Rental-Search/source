@@ -5,83 +5,90 @@
 
 
 {% block content %}
-<div class="container-main">
+<div id="publish-new-ad" class="container-main">
     <ul class="breadcrumb">
     	<li><a href="{% url home %}">{% trans "Accueil" %}</a></li>
     	<li>{% trans "Déposer une annonce" %}</li>
     </ul>
-    <div id="publish-new-ad">
-        <h1 class="publish-intro">
-        	{% blocktrans %}
-                Grâce à la location, vous allez gagner de l'argent<br>tout en rendant service aux e-loueurs et à la planète !
-            {% endblocktrans %}
+    <div class="one-content"> 
+        <h1>{% trans "Déposer une annonce"%}
+            <a href="{% url patron_subscription %}" class="btn-pro-access">{% trans "Professionnel ? Accédez à notre espace pro"%}</a>
         </h1>
-        <div class="advantage ht-fonction">
-            <ul class="ht-f-col">
-                <li>
-                    <div class="ht-icon lock"></div>
-                    <div class="ht-f-desc">
-                        <span>{% trans "Sécurité"%}</span><br>
-                        {% trans "Paiement garanti par la Société Générale"%}<br>
-                        {% trans "Blocage de la caution pendant la location"%}<br>
-                        {% trans "Contrat de location pré-rempli"%}<br>
-                    </div>
-                </li>
-                <li>
-                    <div class="ht-icon money"></div>
-                    <div class="ht-f-desc">
-                        <span>{% trans "Tarif"%}</span><br>
-                        {% trans "Pas de frais d'inscription"%}<br>
-                        {% trans "Mise en location GRATUITE"%}<br>
-                        {% trans "Frais de 20% sur la location (seulement si vous louez)"%}<br>
-                    </div>
-                </li>
-            </ul>
-            <ul class="ht-f-col">
-                <li>
-                    <div class="ht-icon assurancy"></div>
-                    <div class="ht-f-desc">
-                        <span>{% trans "Fléxibilité"%}</span><br>
-                        {% trans "Possibilité de refuser une location"%}<br>
-                        {% trans "Gestion de votre calendrier de disponibilités"%}<br>
-                        {% trans "Communiquez avec les locataires par messagerie"%}<br>
-                    </div>
-                </li>
-                <li>
-                    <div class="ht-icon people"></div>
-                    <div class="ht-f-desc">
-                        <span>Forte visibilité</span><br>
-                        {% trans "Annonce visible sur les moteurs de recherche."%}<br>
-                        {% trans "Parutions dans la presse"%}<br>
-                        {% trans "Annonce sera visible sur les réseaux sociaux"%}<br>
-                    </div>
-                </li>
-            </ul>
-        </div>{# advantage #}
-        <div class="product-type">
-            <ul>
-                <li style="height: 54px;">{% trans "Assurance comprise avec MMA : Casse, Vol, responsabilité civile, dépannage 24h/24h"%} <br><a href="/assurance-tranquillite/">({% trans "en savoir plus"%})</a></li>
-                <li>{% trans "Rejoignez une communauté de plus de 40 000 e-loueurs"%}</li>
-                <li>{% trans "Les e-loueurs de voitures gagnent en moyenne 300&euro; par mois."%}</li>
-            </ul>
-            <a href="{% url car_product_create %}" class="btn">Ajouter une voiture</a>
-        </div>{# car-product-create #}
-        <div class="product-type">
-            <ul>
-                <li style="height: 54px;">{% trans "Assurance comprise avec Europe Assistance"%}<br><a href="/assurance-tranquillite/">({% trans "en savoir plus"%})</a></li>
-                <li>{% trans "Rejoignez une communauté de plus de 40 000 e-loueurs"%}</li>
-                <li>{% trans "Les e-loueurs d'appartements gagnent en moyenne 350&euro; par mois."%}</li>
-            </ul>
-            <a href="{% url real_estate_product_create %}" class="btn">Ajouter un logement</a>
-        </div>{# real-estate-product-create #}
-        <div class="product-type">
-            <ul>
-                <li style="height: 54px;">{% trans "Assurance casse comprise avec AssurOne"%}<br><a href="/assurance-tranquillite/">({% trans "en savoir plus"%})</a></li>
-                <li>{% trans "Rejoignez une communauté de plus de 40 000 e-loueurs"%}</li>
-                <li>{% trans "Les e-loueurs d'objets gagnent en moyenne 200&euro; par mois."%}</li>
-            </ul>
-            <a href="{% url product_create %}" class="btn">Ajouter un autre objet</a>
-        </div>{# product-create #}
+        <p class="publish-intro">
+            {% blocktrans %}
+                Grâce à la location, vous allez gagner de l’argent tout<br>en rendant service aux loueurs et à la planète.
+            {% endblocktrans %}
+        </p>
+        <div class="publish-ads">
+            <div class="publish-ad first">
+                <a href="{% url car_product_create %}" class="btn-publish-ad">
+                    <i class="add-car"></i><br>
+                    {% trans "Déposer une voiture"%}
+                </a>
+                <p style="margin-bottom: 13px;">{% trans "Assurance comprise"%}<p>
+                <img src="{{ MEDIA_URL }}images/logo_mma.png" alt="location de voiture assuré par MMA" width="116" style="margin-bottom: 5px;"><br>
+                <a href="#">({% trans "En savoir plus" %})</a>
+            </div>
+            <div class="publish-ad">
+                <a href="{% url real_estate_product_create %}" class="btn-publish-ad">
+                    <i class="add-home"></i><br>
+                    {% trans "Déposer un logement"%}
+                </a>
+                <p style="margin-bottom: 5px;">{% trans "Assurance comprise"%}<p>
+                <img src="{{ MEDIA_URL }}images/e-loue_europ_assistance.png" alt="location de logement assuré par Europ assistance" width="72"><br>
+                <a href="#">({% trans "En savoir plus" %})</a>
+            </div>
+            <div class="publish-ad">
+                <a href="{% url product_create %}" class="btn-publish-ad">
+                    <i class="add-items"></i><br>
+                    {% trans "Déposer un objet"%}
+                </a>
+                <p>{% trans "Assurance comprise"%}<p>
+                 <img src="{{ MEDIA_URL }}images/assurone.png" alt="location d'un objet assuré par Assurone" width="73" style="margin-bottom: 3px;"><br>
+                <a href="#">({% trans "En savoir plus" %})</a>
+            </div>
+        </div>
+    </div>
+    <div class="advantage ht-fonction">
+        <ul class="ht-f-col">
+            <li>
+                <div class="ht-icon lock"></div>
+                <div class="ht-f-desc">
+                    <span>Sécurité</span><br>
+                    Paiement garanti par la Société Générale<br>
+                    Blocage de la caution pendant la location<br>
+                    Contrat de location pré-rempli<br>
+                </div>
+            </li>
+            <li>
+                <div class="ht-icon money"></div>
+                <div class="ht-f-desc"><span>Tarif</span><br>
+                    Pas de frais d'inscription<br>
+                    Mise en location GRATUITE<br>
+                    Frais de 20% sur la location (seulement si vous louez)<br>
+                </div>
+            </li>
+        </ul>
+        <ul class="ht-f-col">
+            <li>
+                <div class="ht-icon assurancy"></div>
+                <div class="ht-f-desc">
+                    <span>Fléxibilité</span><br>
+                    Possibilité de refuser une location<br>
+                    Gestion de votre calendrier de disponibilités<br>
+                    Communiquez avec les locataires par messagerie<br>
+                </div>
+            </li>
+            <li>
+                <div class="ht-icon people"></div>
+                <div class="ht-f-desc">
+                    <span>Forte visibilité</span><br>
+                    Annonce visible sur les moteurs de recherche.<br>
+                    Parutions dans la presse<br>
+                    Annonce sera visible sur les réseaux sociaux<br>
+                </div>
+            </li>
+        </ul>
     </div>
 </div>{# container-main #}
 {% endblock %}
