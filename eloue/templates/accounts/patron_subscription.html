@@ -10,7 +10,36 @@
     	<li>{% trans "Espace professionnel" %}</li>
     </ul>
     <div class="one-content">
-    	<h1 style="margin-bottom: 40px;">{% trans "Bienvenue sur notre espace professionnel" %}</h1>
+    	<h1 style="margin-bottom: 25px; font-size: 30px;">{% trans "Bienvenue sur notre espace professionnel" %}</h1>
+    	<div class="pro-introduction">
+    		<div class="pro-welcome">
+    			<p style="margin-bottom: 15px;">
+	    			e-loue.com est une place de marché<br> de la location.
+	    		</p>
+	    		<p style="font-size: 18px;">
+	    			Quelque soit votre domaine d’activité dans la location, nos membres seront intéréssés par vos annonces.
+	    		</p>
+    		</div>
+    		<div class="pro-intro-desc">
+	    		<ul>
+	    			<li>
+	    				<i class="pro-check"></i> Gérer plus de location
+	    			</li>
+	    			<li>
+	    				<i class="pro-check"></i> Canal de distribution complémentaire
+	    			</li>
+	    			<li>
+	    				<i class="pro-check"></i> Visibilité sur un site très connu
+	    			</li>
+	    			<li>
+	    				<i class="pro-check"></i> Augmenter vos locations
+	    			</li>
+	    			<li>
+	    				<i class="pro-check"></i> Toucher tout les membres sur e-loue
+	    			</li>
+	    		</ul>
+	    	</div>
+    	</div>
     	<h2 style="margin-bottom: 40px;">{% trans "Choisissez un abonnement adapté à vos besoin" %} :</h2>
     	<div class="plans">
     		{% for plan in plans %}
@@ -64,7 +93,7 @@
         		</li>
         		<li>
         			<i class="top-position"></i>
-        			<span class="title-option">Mise en avant</span>
+        			<span class="title-option">Top position</span>
         			<span class="price-option">5,50&euro;/mois/annonce</span><br>
         			Votre annonce est mise en première position sur le moteur de recherche.
         		</li>
