@@ -511,7 +511,9 @@ def patron_edit_credit_card(request):
                     current_subscription.subscription_ended = datetime.datetime.now()
                     current_subscription.save()
                 Subscription.objects.create(patron=patron, propackage=propackage)
+                messages.info(request, u'On a validé votre abonnement')
             form.save()
+            messages.info(request, u'Votre carte a bien été ajouté')
             return redirect(patron_edit_credit_card)
     else:
         form = CreditCardForm(data=None, instance=instance)
@@ -530,6 +532,12 @@ def patron_delete_credit_card(request):
         messages.error(request, _(u"Vous n'avez pas de carte enregistrée"))
         return redirect(patron_edit_credit_card)
     
+    from accounts.models import Billing
+
+    if request.user.is_professional and any(Billing.builder(request.user, request.user.next_billing_date(), datetime.datetime.now())[1:]):
+        messages.error(request, _(u"Vous avez un abonnement en cours, veuillez nous contacter à contact@e-loue.com pour supprimer votre carte."))
+        return redirect(patron_edit_credit_card)
+
     if instance.payboxdirectpluspaymentinformation_set.all():
         instance.holder = None
         instance.save()
