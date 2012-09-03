@@ -109,16 +109,13 @@ class BookingWizard(MultiPartFormWizard):
             else:
                 creditcard = request.user.creditcard
             payment = PayboxDirectPlusPaymentInformation.objects.create(creditcard=creditcard)
-            booking.payment = payment
-            booking.save()
             preapproval_parameters = {'cvv': cleaned_data.get('cvv', '')}
-
-
         else:
             preapproval_parameters = {}
             payment = NonPaymentInformation.objects.create()
-            booking.payment = payment
-            booking.save()
+
+        booking.payment = payment
+        booking.save()
 
         try:
             booking.preapproval(**preapproval_parameters)
