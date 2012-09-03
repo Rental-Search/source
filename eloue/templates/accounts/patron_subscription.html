@@ -4,7 +4,6 @@
 {% block title %}{% trans "Espace professionnel" %}{% endblock %}
 
 {% block content %}
-
 <div class="container-main">
 	<ul class="breadcrumb">
     	<li><a href="{% url home %}">{% trans "Accueil" %}</a></li>
@@ -12,7 +11,7 @@
     </ul>
     <div class="one-content">
     	<h1 style="margin-bottom: 40px;">{% trans "Bienvenue sur notre espace professionnel" %}</h1>
-    	<h2 style="margin-bottom: 20px;">{% trans "Choisissez un abonnement adapté à vos besoin" %} :</h2>
+    	<h2 style="margin-bottom: 40px;">{% trans "Choisissez un abonnement adapté à vos besoin" %} :</h2>
     	<div class="plans">
     		{% for plan in plans %}
 	    		{% if forloop.last %}
@@ -40,10 +39,37 @@
 	        	{% endif %}
         	{% endfor %}
         </div>
-        <h2>{% trans "Des options vous sont proposées pour augmenter votre visibilité et votre réactivité" %} :</h2>
-        <div classs="pro-options">
-        	
+        <h2 style="margin-bottom: 40px;">{% trans "Des options vous sont proposées pour augmenter votre visibilité et votre réactivité" %} :</h2>
+        <div class="pro-options">
+        	<ul class="first">
+        		<li>
+        			<i class="notification"></i>
+        			<span class="title-option">Notification par email</span>
+        			<span class="price-option">0,01&euro;/envoi</span><br>
+        			Envoyez les demandes de devis sur plusieurs adresses emails.
+        		</li>
+        		<li>
+        			<i class="highlight"></i>
+        			<span class="title-option">Mise en avant</span>
+        			<span class="price-option">7,50&euro;/mois/annonce</span><br>
+        			Votre annonce est mise en avant sur toutes nos listes (accueil,  resultat, annonces similaires).
+        		</li>
+        	</ul>
+        	<ul>
+        		<li>
+        			<i class="sms"></i>
+        			<span class="title-option">Notification par email</span>
+        			<span class="price-option">0,08&euro;/envoi</span><br>
+        			Pour répondre rapidement aux devis, recevez les demandes de réservation sur votre mobile.
+        		</li>
+        		<li>
+        			<i class="top-position"></i>
+        			<span class="title-option">Mise en avant</span>
+        			<span class="price-option">5,50&euro;/mois/annonce</span><br>
+        			Votre annonce est mise en première position sur le moteur de recherche.
+        		</li>
+        	</ul>
         </div>
-    </div>
+	</div>        
 </div>
 {% endblock %}
