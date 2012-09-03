@@ -39,6 +39,7 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         from eloue.payments.models import PayboxDirectPlusPaymentInformation
         from eloue.accounts.models import Billing, Patron
+
         # generate new billings
         date_to = datetime.datetime.combine(datetime.date.today(), datetime.time())
         date_from = datetime.datetime.combine(minus_one_month(date_to), datetime.time())
@@ -73,10 +74,11 @@ class Command(BaseCommand):
                 # need to add payment method and card
 
         # try to debit unpaid billings
-        for billing in Billing.objects.filter(state=0):
+        for billing in Billing.objects.filter(state='unpaid'):
             try:
                 billing.pay()
-            except Exception:
+            except Exception as e:
+                print 'we couldnt pay the billing {pk}'.format(pk=billing.pk), e
                 # we only should catch PaymentExceptions
                 pass
 
