@@ -369,19 +369,14 @@ class Booking(models.Model):
         return self.payment.NOT_NEED_IPN
         
     @smart_transition(source='authorizing', target='authorized', conditions=[not_need_ipn], save=True)
-    def preapproval(self, *args, **kwargs):
-        self.payment.preapproval(*args, **kwargs)
+    def preapproval(self, **kwargs):
+        self.payment.preapproval(self.pk, self.total_amount, self.currency, **kwargs)
         self.payment.save()
         self.send_ask_email()
         
     @transition(source='authorized', target='pending', save=True)
     def accept(self):
-        domain = Site.objects.get_current().domain
-        protocol = "https"
-        cancel_url="%s://%s%s" % (protocol, domain, reverse("booking_failure", args=[self.pk.hex]))
-        return_url="%s://%s%s" % (protocol, domain, reverse("booking_success", args=[self.pk.hex]))
-
-        self.payment.pay(cancel_url, return_url)
+        self.payment.pay(self.pk, self.total_amount, self.currency)
         self.payment.save()
         self.send_acceptation_email()
         self.send_borrower_receipt()

@@ -5,6 +5,7 @@ import datetime, time
 import urllib
 import simplejson
 import itertools
+from decimal import Decimal as D
 
 from logbook import Logger
 import simplejson
@@ -22,7 +23,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.sites.models import Site
 from django.core.mail import EmailMessage, BadHeaderError, send_mass_mail
 from django.core.urlresolvers import reverse
-from django.db.models import Count, Q
+from django.db.models import Count, Q, Max
 from django.views.decorators.http import require_GET
 from django.forms.models import model_to_dict, inlineformset_factory
 from django.shortcuts import get_object_or_404, render_to_response, render
@@ -381,9 +382,26 @@ def patron_edit(request, *args, **kwargs):
 
 @login_required
 def billing_object(request, year, month, day):
-    billing = get_object_or_404(
-        Billing, patron=request.user, 
-        date=datetime.date(int(year), int(month), int(day)))
+    from eloue.accounts.management.commands.billing import plus_one_month
+
+    date_from = datetime.date(int(year), int(month), int(day))
+    billing = get_object_or_404(Billing, patron=request.user, date=date_from)
+    date_from = datetime.datetime.combine(date_from, datetime.time())
+    date_to = plus_one_month(date_from)
+
+    subscriptions = billing.highlights.all()
+    toppositions = billing.toppositions.all()
+    highlights = billing.highlights.all()
+
+    highlights.sum = sum(map(lambda highlight: highlight.price(date_from, date_to), highlights), 0)
+    subscriptions.sum = sum(map(lambda subscription: subscription.price(date_from, date_to), subscriptions), 0)
+    toppositions.sum = sum(map(lambda topposition: topposition.price(date_from, date_to), toppositions), 0)
+
+    return render(request, 'accounts/partials/billing_table.html', 
+        {'billing': billing, 'subscriptions': subscriptions, 'toppositions': toppositions, 'highlights': highlights,
+            'from': date_from, 'to': date_to,
+        })
+
     response = HttpResponse(str(billing), content_type='application/pdf')
     response['Content-Disposition'] = 'attachment; filename=facture_e-loue_{year}-{month}-{day}.pdf'.format(year=year, month=month, day=day)
     return response
@@ -391,36 +409,18 @@ def billing_object(request, year, month, day):
 
 @login_required
 def billing(request):
-    import calendar
-
     patron = request.user
     billings = patron.billing_set.order_by('date')
-
     to = datetime.datetime.now()
-    if billings:
-        date = datetime.datetime.combine(billings[-1].date, datetime.time())
-        days = calendar.monthrange(date.year, date.month)
-        _from = date + datetime.timedelta(days=days)
-    else:
-        s = patron.subscription_set.order_by('subscription_started')
-        if s:
-            _from  = datetime.datetime.combine(
-                patron.subscription_set.order_by(
-                    'subscription_started'
-                )[0].subscription_started.date(), datetime.time())
-        else:
-            _from = to
-
-    billing, highlights, subscriptions = Billing.builder(patron, _from, to)
-    highlights_sum = sum(map(lambda highlight: highlight.price(_from, to), highlights), 0)
-    subscriptions_sum = sum(map(lambda subscription: subscription.price(_from, to), subscriptions), 0)
+    _from = datetime.datetime.combine(patron.next_billing_date(), datetime.time())
+    
+    billing, highlights, subscriptions, toppositions = Billing.builder(patron, _from, to)
     return render(
         request, 'accounts/patron_billing.html', 
         {
-            'billings': billings, 'billing': billing, 
-            'highlights': highlights, 'subscriptions': subscriptions,
-            'highlights_sum': highlights_sum, 'subscriptions_sum': subscriptions_sum,
-            'from': _from, 'to': to, 'sum': highlights_sum + subscriptions_sum
+            'billings': billings, 'billing': billing, 'highlights': highlights, 
+            'subscriptions': subscriptions, 'toppositions': toppositions,
+            'from': _from, 'to': to,
         })
 
 
@@ -430,7 +430,7 @@ def patron_edit_subscription(request, *args, **kwargs):
     patron = request.user
     if not patron.is_professional:
         return HttpResponseForbidden()
-    subscription, = Subscription.objects.filter(patron=patron, subscription_ended__isnull=True) or (None,)
+    subscription = patron.current_subscription
     now = datetime.datetime.now()
     plans = ProPackage.objects.filter(
         Q(valid_until__isnull=True, valid_from__lte=now) or
@@ -440,11 +440,22 @@ def patron_edit_subscription(request, *args, **kwargs):
         if form.is_valid():
             new_package = form.cleaned_data.get('subscription')
             if (subscription is None and new_package) or (new_package != subscription.propackage):
-                if subscription:
-                    subscription.subscription_ended = datetime.datetime.now()
-                    subscription.save()
-                if new_package:
-                    Subscription.objects.create(patron=patron, propackage=new_package)
+                if new_package and not new_package.maximum_items is None and new_package.maximum_items <= patron.products.count():
+                    messages.error(request, 'L\'abonnement choisi autorise moins d\'objets que vous avez actuellement')
+                    return redirect('.')
+                try:
+                    patron.creditcard
+                except:
+                    messages.error(request, u'Pour un abonnement vous devez posseder une carte bancaire. Merci de renseigner la carte utilisée pour le paiement.')
+                    response = redirect('patron_edit_credit_card')
+                    response['Location'] += '?' + urllib.urlencode({'subscription': new_package.pk})
+                    return response
+                else:
+                    if subscription:
+                        subscription.subscription_ended = datetime.datetime.now()
+                        subscription.save()
+                    if new_package:
+                        Subscription.objects.create(patron=patron, propackage=new_package)
             return redirect('.')
         else:
             messages.error(request, "WRONG ASD")
@@ -456,7 +467,6 @@ def patron_edit_subscription(request, *args, **kwargs):
 
 @login_required
 def patron_edit_password(request):
-    
     form = PatronPasswordChangeForm(request.user, request.POST or None) \
       if request.user.has_usable_password() \
       else PatronSetPasswordForm(request.user, request.POST or None) 
@@ -482,16 +492,25 @@ def patron_edit_phonenumber(request):
 @login_required
 def patron_edit_credit_card(request):
     import uuid
+    patron = request.user
     try:
-        instance = request.user.creditcard
+        instance = patron.creditcard
     except CreditCard.DoesNotExist:
         instance = CreditCard(
-            holder=request.user, keep=True, 
+            holder=patron, keep=True, 
             subscriber_reference=uuid.uuid4().hex
         )
     if request.method == 'POST':
         form = CreditCardForm(data=request.POST, instance=instance)
         if form.is_valid():
+            subscription = request.GET.get('subscription')
+            if subscription is not None:
+                propackage = get_object_or_404(ProPackage, pk=subscription)
+                current_subscription = patron.current_subscription
+                if current_subscription:
+                    current_subscription.subscription_ended = datetime.datetime.now()
+                    current_subscription.save()
+                Subscription.objects.create(patron=patron, propackage=propackage)
             form.save()
             return redirect(patron_edit_credit_card)
     else:
@@ -560,7 +579,7 @@ def patron_edit_highlight(request):
 
     highlights = ProductHighlight.objects.filter(
         ended_at__isnull=True, product__owner=patron).values_list('product', flat=True)
-    highlighted = patron.products.filter(id__in=highlights)
+    highlighted = patron.products.annotate(since=Max('producthighlight__started_at')).filter(id__in=highlights)
     not_highlighted = patron.products.filter(~Q(id__in=highlights))
     if request.method == "POST":
         try:
@@ -598,7 +617,7 @@ def patron_edit_top_position(request):
         toppositions = ProductTopPosition.objects.filter(
             ended_at__isnull=True, product__owner=patron
         ).values_list('product', flat=True)
-        in_topposition = products.filter(id__in=toppositions)
+        in_topposition = products.annotate(since=Max('producttopposition__started_at')).filter(id__in=toppositions)
         not_in_topposition = products.filter(~Q(id__in=toppositions))
         return in_topposition, not_in_topposition
 

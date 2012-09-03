@@ -5,6 +5,9 @@ from south.v2 import SchemaMigration
 from django.db import models
 
 class Migration(SchemaMigration):
+    depends_on = (
+        ("products", "0024_auto__add_producthighlight__add_producttopposition"),
+    )
 
     def forwards(self, orm):
         
@@ -20,11 +23,11 @@ class Migration(SchemaMigration):
         # Adding model 'ProPackage'
         db.create_table('accounts_propackage', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('name', self.gf('django.db.models.fields.CharField')(max_length=64)),
             ('maximum_items', self.gf('django.db.models.fields.PositiveIntegerField')(null=True, blank=True)),
             ('price', self.gf('django.db.models.fields.DecimalField')(max_digits=8, decimal_places=2)),
             ('valid_from', self.gf('django.db.models.fields.DateField')(default=datetime.datetime.now)),
             ('valid_until', self.gf('django.db.models.fields.DateField')(null=True, blank=True)),
-            ('name', self.gf('django.db.models.fields.CharField')(max_length=64)),
         ))
         db.send_create_signal('accounts', ['ProPackage'])
 
@@ -50,6 +53,15 @@ class Migration(SchemaMigration):
         ))
         db.send_create_signal('accounts', ['BillingProductHighlight'])
 
+        # Adding model 'BillingHistory'
+        db.create_table('accounts_billinghistory', (
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('billing', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['accounts.Billing'])),
+            ('date', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
+            ('succeeded', self.gf('django.db.models.fields.BooleanField')(default=False)),
+        ))
+        db.send_create_signal('accounts', ['BillingHistory'])
+
         # Adding model 'Billing'
         db.create_table('accounts_billing', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
@@ -57,9 +69,11 @@ class Migration(SchemaMigration):
             ('modified_at', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, blank=True)),
             ('patron', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['accounts.Patron'])),
             ('date', self.gf('django.db.models.fields.DateField')()),
-            ('state', self.gf('django.db.models.fields.IntegerField')()),
+            ('state', self.gf('django.db.models.fields.CharField')(default='unpaid', max_length=50)),
             ('total_amount', self.gf('django.db.models.fields.DecimalField')(max_digits=8, decimal_places=2)),
             ('total_tva', self.gf('django.db.models.fields.DecimalField')(max_digits=8, decimal_places=2)),
+            ('object_id', self.gf('django.db.models.fields.PositiveIntegerField')()),
+            ('content_type', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['contenttypes.ContentType'])),
         ))
         db.send_create_signal('accounts', ['Billing'])
 
@@ -90,6 +104,9 @@ class Migration(SchemaMigration):
         # Deleting model 'BillingProductHighlight'
         db.delete_table('accounts_billingproducthighlight')
 
+        # Deleting model 'BillingHistory'
+        db.delete_table('accounts_billinghistory')
+
         # Deleting model 'Billing'
         db.delete_table('accounts_billing')
 
@@ -118,17 +135,26 @@ class Migration(SchemaMigration):
         },
         'accounts.billing': {
             'Meta': {'object_name': 'Billing'},
+            'content_type': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['contenttypes.ContentType']"}),
             'created_at': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
             'date': ('django.db.models.fields.DateField', [], {}),
             'highlights': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['products.ProductHighlight']", 'through': "orm['accounts.BillingProductHighlight']", 'symmetrical': 'False'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'modified_at': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),
+            'object_id': ('django.db.models.fields.PositiveIntegerField', [], {}),
             'patron': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['accounts.Patron']"}),
             'plans': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['accounts.Subscription']", 'through': "orm['accounts.BillingSubscription']", 'symmetrical': 'False'}),
-            'state': ('django.db.models.fields.IntegerField', [], {}),
+            'state': ('django.db.models.fields.CharField', [], {'default': "'unpaid'", 'max_length': '50'}),
             'toppositions': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['products.ProductTopPosition']", 'through': "orm['accounts.BillingProductTopPosition']", 'symmetrical': 'False'}),
             'total_amount': ('django.db.models.fields.DecimalField', [], {'max_digits': '8', 'decimal_places': '2'}),
             'total_tva': ('django.db.models.fields.DecimalField', [], {'max_digits': '8', 'decimal_places': '2'})
+        },
+        'accounts.billinghistory': {
+            'Meta': {'object_name': 'BillingHistory'},
+            'billing': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['accounts.Billing']"}),
+            'date': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'succeeded': ('django.db.models.fields.BooleanField', [], {'default': 'False'})
         },
         'accounts.billingproducthighlight': {
             'Meta': {'object_name': 'BillingProductHighlight'},

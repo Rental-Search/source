@@ -1,5 +1,5 @@
 {% extends "accounts/patron_edit.html" %}
-{% load i18n price %}
+{% load i18n price booking product %}
 
 {% block title %}{% trans "Facturation" %}{% endblock %}
 
@@ -35,88 +35,7 @@
 
 {% block content-main-profil %}
 <h2>{% trans "Relevé actuel du mois" %}</h2>
-<table class="table billing" width="100%">
-	<tr>
-		<th class="billing-header">{% trans "Récapitulatif" %}</th>
-	</tr>
-	<tr>
-		<td>
-			<table class="table">
-				<thead>
-					<tr>
-						<td>Plan et options</td>
-						<td class="amount">{{ sum|floatformat:2 }} &euro;</td>
-					</tr>
-				</thead>
-			</table>
-		</td>
-	</tr>
-	<tr>
-		<th class="billing-header">{% trans "Détails" %}</th>
-	</tr>
-	<tr>
-		<td>
-			<table class="table">
-				<thead>
-					<tr>
-						<td><i class="icon-plus-sign"></i> {% trans "Plan" %}</td>
-						<td class="amount">{{ subscriptions_sum|floatformat:2 }} &euro;</td>
-					</tr>
-				</thead>
-				<tbody>
-					{% for subscription in subscriptions %}
-					<tr>
-						<td class="billing-item">
-							{{ subscription.propackage.name }} - {% firstof subscription.propackage.maximum_items "Illimité" %} annonces (<a href="{% url patron_edit_subscription %}">{% trans "Modifier mon plan" %}</a>)
-						</td>
-						<td class="amount">{% price subscription from to %} &euro;</td>
-					</tr>
-					{% endfor %}
-				</tbody>
-			</table>
-		</td>
-	</tr>
-	{% if highlights %}
-	<tr>
-		<td>
-			<table class="table">
-				<thead>
-					<tr>
-						<td><i class="icon-plus-sign"></i> {% trans "Mise en avant" %}</td>
-						<td class="amount">{{ highlights_sum|floatformat:2 }} &euro;</td>
-					</tr>
-				</thead>
-				<tbody>
-					{% for highlight in highlights %}
-						<tr>
-							<td class="billing-item"><a href="#">{{ highlight.product.summary }}</a></td>
-							<td class="amount">{% price highlight from to %}&euro;</td>
-						</tr>
-					{% endfor %}
-				</tbody>
-			</table>
-		</td>
-	</tr>
-	{% endif %}
-	<tr>
-		<td>
-			<table class="table">
-				<thead>
-					<tr>
-						<td><i class="icon-plus-sign"></i> {% trans "TVA" %}</td>
-						<td class="amount">10,33 &euro;</td>
-					</tr>
-				</thead>
-				<tbody>
-					<tr>
-						<td class="billing-item">{% trans "TVA à 19,60" %}</td>
-						<td class="amount">10,33 &euro;</td>
-					</tr>
-				</tbody>
-			</table>
-		</td>
-	</tr>
-</table>
+	{% include 'accounts/partials/billing_table.html' %}
 <h2>{% trans "Historique des factures"%}</h2>
 <table class="table billing-history">
 	<thead>
@@ -128,6 +47,14 @@
 		</tr>
 	</thead>
 	<tbody>
+		{% for billing in billings %}
+			<tr {% if not billing.state %}class="billing-error"{%endif%}>
+				<td>{{ billing.date }}</td>
+				<td>{% firstof billing.payment.creditcard "Ajoutez votre carte de credit"%}</td>
+				<td><a href="{{ billing.get_absolute_url }}">Télécharger la facture</a></td>
+				<td>{{ billing.total_amount|quantize|currency }}</td>
+			</tr>
+		{% endfor %}
 		<tr>
 			<td>04/08/2012</td>
 			<td>4***********5383</td>

@@ -20,7 +20,7 @@ from django.views.generic.simple import direct_to_template, redirect_to
 from django.views.generic.list_detail import object_list
 from django.db.models import Q
 
-from django.shortcuts import render_to_response, redirect
+from django.shortcuts import render_to_response, render, redirect
 from django.template import RequestContext
 from django.views.generic.list_detail import object_detail
 
@@ -232,7 +232,6 @@ def product_highlight_edit(request, slug, product_id):
     from eloue.products.models import ProductHighlight
     now = datetime.datetime.now()
     product = get_object_or_404(Product.on_site, pk=product_id)
-    highlights = product.producthighlight_set.order_by('-ended_at')
     old_highlights = product.producthighlight_set.filter(ended_at__isnull=False).order_by('-ended_at')
     new_highlight = product.producthighlight_set.filter(ended_at__isnull=True)
     if new_highlight:
@@ -253,21 +252,41 @@ def product_highlight_edit(request, slug, product_id):
                 return redirect('.')
         else:
             form = HighlightForm(instance=ProductHighlight(product=product))
-    return render_to_response(
-        'products/product_highlight_edit.html', 
+    return render(
+        request, 'products/product_highlight_edit.html', 
         {'product': product, 'old_highlights': old_highlights, 'form': form},
-        context_instance=RequestContext(request)
     )
 
 @login_required
 @ownership_required(model=Product, object_key='product_id', ownership=['owner'])
 def product_top_position_edit(request, slug, product_id):
+    from eloue.products.forms import TopPositionForm
+    from eloue.products.models import ProductTopPosition
+    now = datetime.datetime.now()
     product = get_object_or_404(Product.on_site, pk=product_id)
-
-    return render_to_response(
-      'products/product_top_position_edit.html',
-      {'product': product },
-      context_instance=RequestContext(request)
+    old_toppositions = product.producttopposition_set.filter(ended_at__isnull=False).order_by('-ended_at')
+    new_topposition = product.producttopposition_set.filter(ended_at__isnull=True)
+    if new_topposition:
+        topposition, = new_topposition
+        if request.method == "POST":
+            form = TopPositionForm(request.POST, instance=topposition)
+            if form.is_valid():
+                form.instance.ended_at = now
+                form.save()
+                return redirect('.')
+        else:
+            form = TopPositionForm(instance=topposition)
+    else:
+        if request.method == "POST":
+            form = TopPositionForm(request.POST, instance=ProductTopPosition(product=product))
+            if form.is_valid():
+                form.save()
+                return redirect('.')
+        else:
+            form = TopPositionForm(instance=ProductTopPosition(product=product))
+    return render(
+        request, 'products/product_top_position_edit.html',
+        {'product': product, 'old_highlights': old_toppositions, 'form': form},
     )
 
 

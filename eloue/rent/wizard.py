@@ -108,18 +108,17 @@ class BookingWizard(MultiPartFormWizard):
                 creditcard = creditcard_form.save()
             else:
                 creditcard = request.user.creditcard
-            preapproval_parameters = (creditcard, cleaned_data.get('cvv', ''))
-            payment = PayboxDirectPlusPaymentInformation(booking=booking, creditcard=creditcard)
+            payment = PayboxDirectPlusPaymentInformation.objects.create(creditcard=creditcard)
+            preapproval_parameters = {'cvv': cleaned_data.get('cvv', '')}
         else:
-            preapproval_parameters = ()
-            payment = NonPaymentInformation()
+            preapproval_parameters = {}
+            payment = NonPaymentInformation.objects.create()
 
-        payment.save()
         booking.payment = payment
         booking.save()
 
         try:
-            booking.preapproval(*preapproval_parameters)
+            booking.preapproval(**preapproval_parameters)
         except PaymentException as e:
             booking.state = Booking.STATE.REJECTED
             booking.save()
