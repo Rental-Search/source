@@ -430,7 +430,7 @@ def patron_edit_subscription(request, *args, **kwargs):
     patron = request.user
     if not patron.is_professional:
         return HttpResponseForbidden()
-    subscription, = Subscription.objects.filter(patron=patron, subscription_ended__isnull=True) or (None,)
+    subscription = patron.current_subscription
     now = datetime.datetime.now()
     plans = ProPackage.objects.filter(
         Q(valid_until__isnull=True, valid_from__lte=now) or
@@ -443,11 +443,19 @@ def patron_edit_subscription(request, *args, **kwargs):
                 if new_package and not new_package.maximum_items is None and new_package.maximum_items <= patron.products.count():
                     messages.error(request, 'L\'abonnement choisi autorise moins d\'objets que vous avez actuellement')
                     return redirect('.')
-                if subscription:
-                    subscription.subscription_ended = datetime.datetime.now()
-                    subscription.save()
-                if new_package:
-                    Subscription.objects.create(patron=patron, propackage=new_package)
+                try:
+                    patron.creditcard
+                except:
+                    messages.error(request, u'Pour un abonnement vous devez posseder une carte bancaire. Merci de renseigner la carte utilisée pour le paiement.')
+                    response = redirect('patron_edit_credit_card')
+                    response['Location'] += '?' + urllib.urlencode({'subscription': new_package.pk})
+                    return response
+                else:
+                    if subscription:
+                        subscription.subscription_ended = datetime.datetime.now()
+                        subscription.save()
+                    if new_package:
+                        Subscription.objects.create(patron=patron, propackage=new_package)
             return redirect('.')
         else:
             messages.error(request, "WRONG ASD")
@@ -484,16 +492,25 @@ def patron_edit_phonenumber(request):
 @login_required
 def patron_edit_credit_card(request):
     import uuid
+    patron = request.user
     try:
-        instance = request.user.creditcard
+        instance = patron.creditcard
     except CreditCard.DoesNotExist:
         instance = CreditCard(
-            holder=request.user, keep=True, 
+            holder=patron, keep=True, 
             subscriber_reference=uuid.uuid4().hex
         )
     if request.method == 'POST':
         form = CreditCardForm(data=request.POST, instance=instance)
         if form.is_valid():
+            subscription = request.GET.get('subscription')
+            if subscription is not None:
+                propackage = get_object_or_404(ProPackage, pk=subscription)
+                current_subscription = patron.current_subscription
+                if current_subscription:
+                    current_subscription.subscription_ended = datetime.datetime.now()
+                    current_subscription.save()
+                Subscription.objects.create(patron=patron, propackage=propackage)
             form.save()
             return redirect(patron_edit_credit_card)
     else:
