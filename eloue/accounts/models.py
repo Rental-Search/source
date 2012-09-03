@@ -12,6 +12,8 @@ import facebook
 from imagekit.models import ImageSpec
 from imagekit.processors import resize, Adjust, Transpose
 
+from fsm.fields import FSMField
+from fsm import transition
 
 from django.core.exceptions import ValidationError
 from django.contrib.sites.managers import CurrentSiteManager
@@ -329,7 +331,7 @@ class Patron(User):
     def current_subscription(self):
         subscriptions = self.subscription_set.order_by('-subscription_started')
         if subscriptions:
-            return subscriptions[0].propackage
+            return subscriptions[0]
         return None
 
     @property
@@ -669,6 +671,8 @@ class BillingProductTopPosition(models.Model):
     price = models.DecimalField(max_digits=8, decimal_places=2)
 
 
+BILLING_STATE = [('unpaid', 'UNPAID'), ('paid', 'UNPAID')]
+
 class Billing(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     modified_at = models.DateTimeField(auto_now=True)
@@ -676,7 +680,7 @@ class Billing(models.Model):
 
     # first day of the period
     date = models.DateField()
-    state = models.IntegerField(choices=[(0, 'UNPAID'), (1, 'PAID')])
+    state = FSMField(default='unpaid', choices=BILLING_STATE)
     total_amount = models.DecimalField(max_digits=8, decimal_places=2)
     total_tva = models.DecimalField(max_digits=8, decimal_places=2)
 
@@ -702,11 +706,11 @@ class Billing(models.Model):
             raise ValueError('You can generate pdf only for already saved Billings.')
         raise NotImplementedError()
 
-    def preapproval(self, **kwargs):
-        self.payment.preapproval(self, 'billing:%d'%self.id, self.total_amount, None, **kwargs)
-
+    @transition(source='unpaid', target='paid', save=True)
     def pay(self, **kwargs):
-        self.payment.pay(self, 'billing:%d'%self.id, self.total_amount, None, **kwargs)
+        self.payment.preapproval('billing:%d'%self.id, self.total_amount, None, '')
+        self.payment.pay('billing:%d'%self.id, self.total_amount, None, **kwargs)
+        self.payment.save()
 
     @staticmethod
     def builder(patron, date_from, date_to):
@@ -743,7 +747,7 @@ class Billing(models.Model):
         total_amount = highlights.sum + subscriptions.sum + toppositions.sum
         total_tva = total_amount * settings.TVA
         return (
-            Billing(date=date_from, patron=patron, state=0, 
+            Billing(date=date_from, patron=patron,
                 total_amount=total_amount, total_tva=total_tva), 
             highlights, subscriptions, toppositions
         )

@@ -69,7 +69,7 @@ class Migration(SchemaMigration):
             ('modified_at', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, blank=True)),
             ('patron', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['accounts.Patron'])),
             ('date', self.gf('django.db.models.fields.DateField')()),
-            ('state', self.gf('django.db.models.fields.IntegerField')()),
+            ('state', self.gf('django.db.models.fields.CharField')(default='unpaid', max_length=50)),
             ('total_amount', self.gf('django.db.models.fields.DecimalField')(max_digits=8, decimal_places=2)),
             ('total_tva', self.gf('django.db.models.fields.DecimalField')(max_digits=8, decimal_places=2)),
             ('object_id', self.gf('django.db.models.fields.PositiveIntegerField')()),
@@ -144,7 +144,7 @@ class Migration(SchemaMigration):
             'object_id': ('django.db.models.fields.PositiveIntegerField', [], {}),
             'patron': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['accounts.Patron']"}),
             'plans': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['accounts.Subscription']", 'through': "orm['accounts.BillingSubscription']", 'symmetrical': 'False'}),
-            'state': ('django.db.models.fields.IntegerField', [], {}),
+            'state': ('django.db.models.fields.CharField', [], {'default': "'unpaid'", 'max_length': '50'}),
             'toppositions': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['products.ProductTopPosition']", 'through': "orm['accounts.BillingProductTopPosition']", 'symmetrical': 'False'}),
             'total_amount': ('django.db.models.fields.DecimalField', [], {'max_digits': '8', 'decimal_places': '2'}),
             'total_tva': ('django.db.models.fields.DecimalField', [], {'max_digits': '8', 'decimal_places': '2'})
