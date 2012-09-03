@@ -54,31 +54,11 @@
 				<td><a href="{{ billing.get_absolute_url }}">Télécharger la facture</a></td>
 				<td>{{ billing.total_amount|quantize|currency }}</td>
 			</tr>
+			{% empty %}
+			<tr>
+				<td colspan="4" style="text-align: center;">{% trans "Pas de facture enregistrée."%}</td>
+			</tr>
 		{% endfor %}
-		<tr>
-			<td>04/08/2012</td>
-			<td>4***********5383</td>
-			<td><a href="#">Télécharger la facture</a></td>
-			<td>63,03 &euro;</td>
-		</tr>
-		<tr>
-			<td>04/07/2012</td>
-			<td>4***********5383</td>
-			<td><a href="#">Télécharger la facture</a></td>
-			<td>63,03 &euro;</td>
-		</tr>
-		<tr class="billing-error">
-			<td>04/06/2012</td>
-			<td>4***********5383</td>
-			<td></td>
-			<td>Echoué</td>
-		</tr>
-		<tr>
-			<td>04/05/2012</td>
-			<td>4***********5383</td>
-			<td><a href="#">Télécharger la facture</a></td>
-			<td>63,03 &euro;</td>
-		</tr>
 	</tbody>
 </table>
 {% endblock %}
