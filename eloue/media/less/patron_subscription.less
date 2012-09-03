@@ -96,5 +96,110 @@
 
 		margin-top: 25px;
 	}
-	
+}
+
+.pro-options {
+	float: left;
+	.columns(12);
+	ul {
+		float: left;
+		width: 450px;
+		margin-left: 40px;
+
+		&.first {
+			margin-left: 0px;
+		}
+	}
+
+	li {
+		margin-bottom: 30px;
+		.clearfix();
+
+		#font > .sans-serif('Ubuntu', normal, 14px);
+		color: @blueDark;
+		line-height: 18px;
+
+		i {
+			background: transparent url('../images/sprite_pro.png') no-repeat 0 0;
+			float: left;
+			display: inline-block;
+			height: 53px;
+			width: 62px;
+			margin-right: 20px;
+			margin-top: 5px;
+		}
+
+		.notification {
+			background: transparent url('../images/sprite_pro.png') no-repeat 0 0;
+		}
+		.highlight {
+			background: transparent url('../images/sprite_pro.png') no-repeat 0 -53px;
+			height: 58px; 
+		}
+		.sms {
+			background: transparent url('../images/sprite_pro.png') no-repeat -62px 0;
+		}
+		.top-position { 
+			background: transparent url('../images/sprite_pro.png') no-repeat -62px -53px;
+			height: 58px; 
+		}
+
+		.title-option {
+			#font > .sans-serif('Ubuntu', normal, 16px);
+			color: #d9185f;
+			line-height: 28px;
+		}
+
+		.price-option {
+			#font > .sans-serif('Ubuntu', normal, 12px);
+			color: @blueDark;
+			float: right;
+			display: block;
+			line-height: 28px;
+		}
+	}	
+}
+
+.pro-introduction {
+	float: left;
+	.columns(12);
+	.clearfix();
+
+	margin-bottom: 40px;
+
+	.pro-welcome {
+		float: left;
+		.columns(6);
+		margin-right: 80px;
+
+		p {
+			#font > .sans-serif('Ubuntu', normal, 24px);
+			line-height: 30px;
+			color: @blueDark;
+
+			margin-left: 15px;
+		}
+	}
+
+	.pro-intro-desc {
+		float: left;
+		.columns(5);
+		margin-left: 20px;
+
+		ul {
+			li {
+				margin-bottom: 15px;
+				#font > .sans-serif('Ubuntu', normal, 16px);
+				color: @blueDark;
+			}
+			i {
+				background: transparent url('../images/check_pro.png') no-repeat 0 0;
+				display: inline-block;
+				height: 25px;
+				width: 25px;
+				line-height: 25px;
+				margin-bottom: -6px;
+			}
+		}
+	}
 }
