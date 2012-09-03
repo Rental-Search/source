@@ -324,6 +324,14 @@ class Patron(User):
             self.save()
             return None
 
+
+    @property
+    def current_subscription(self):
+        subscriptions = self.subscription_set.order_by('-subscription_started')
+        if subscriptions:
+            return subscriptions[0].propackage
+        return None
+
     @property
     def is_verified(self):
         return paypal_payment.verify_paypal_account(email=self.paypal_email, first_name=self.first_name, last_name=self.last_name)

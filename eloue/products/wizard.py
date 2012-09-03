@@ -25,6 +25,18 @@ class ProductWizard(MultiPartFormWizard):
         super(ProductWizard, self).__init__(*args, **kwargs)
         self.title = _(u'Déposer une annonce')
 
+    def __call__(self, request, *args, **kwargs):
+        patron = request.user
+        if patron.is_professional:
+            subscription = patron.current_subscription
+            if not subscription:
+                messages.error(request, u"Veuillez choisir un abonnement pour déposer une annonce.")
+                return redirect('patron_edit_subscription')
+            elif subscription.maximum_items <= patron.products.count():
+                messages.error(request, u'Votre nombre d\'annonces est dépassé. Modifiez votre abonnement.')
+                return redirect('patron_edit_subscription')
+        return super(ProductWizard, self).__call__(self, request, *args, **kwargs)
+
     def done(self, request, form_list):
         super(ProductWizard, self).done(request, form_list)
 

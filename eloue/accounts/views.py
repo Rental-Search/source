@@ -440,6 +440,9 @@ def patron_edit_subscription(request, *args, **kwargs):
         if form.is_valid():
             new_package = form.cleaned_data.get('subscription')
             if (subscription is None and new_package) or (new_package != subscription.propackage):
+                if new_package and not new_package.maximum_items is None and new_package.maximum_items <= patron.products.count():
+                    messages.error(request, 'L\'abonnement choisi autorise moins d\'objets que vous avez actuellement')
+                    return redirect('.')
                 if subscription:
                     subscription.subscription_ended = datetime.datetime.now()
                     subscription.save()
@@ -456,7 +459,6 @@ def patron_edit_subscription(request, *args, **kwargs):
 
 @login_required
 def patron_edit_password(request):
-    
     form = PatronPasswordChangeForm(request.user, request.POST or None) \
       if request.user.has_usable_password() \
       else PatronSetPasswordForm(request.user, request.POST or None) 
