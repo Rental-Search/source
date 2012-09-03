@@ -348,7 +348,7 @@ class Patron(User):
         return paypal_payment.confirm_paypal_account(self.paypal_email)
     
     def next_billing_date(self):
-        from eloue.accounts.management.commands.billing import plus_one_month, minus_one_month
+        from eloue.accounts.management.commands.pro_billing import plus_one_month, minus_one_month
         from django.db.models import Min, Max
         from eloue.products.models import ProductHighlight, ProductTopPosition
         last_billing_date = self.billing_set.aggregate(Max('date'))['date__max']

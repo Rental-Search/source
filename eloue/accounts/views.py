@@ -382,7 +382,7 @@ def patron_edit(request, *args, **kwargs):
 
 @login_required
 def billing_object(request, year, month, day):
-    from eloue.accounts.management.commands.billing import plus_one_month
+    from eloue.accounts.management.commands.pro_billing import plus_one_month
 
     date_from = datetime.date(int(year), int(month), int(day))
     billing = get_object_or_404(Billing, patron=request.user, date=date_from)
