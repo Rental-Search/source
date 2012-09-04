@@ -5,12 +5,67 @@ from south.v2 import SchemaMigration
 from django.db import models
 
 class Migration(SchemaMigration):
-    depends_on = (
-        ("products", "0024_auto__add_producthighlight__add_producttopposition"),
-    )
 
     def forwards(self, orm):
+        depends_on = (
+            ("products", "0024_auto__add_producthighlight__add_producttopposition"),
+        )
         
+        # Adding model 'MailNotification'
+        db.create_table('accounts_mailnotification', (
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('patron', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['accounts.Patron'])),
+            ('started_at', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
+            ('ended_at', self.gf('django.db.models.fields.DateTimeField')(null=True, blank=True)),
+            ('email', self.gf('django.db.models.fields.CharField')(max_length=256)),
+        ))
+        db.send_create_signal('accounts', ['MailNotification'])
+
+        # Adding model 'BillingPhoneNotification'
+        db.create_table('accounts_billingphonenotification', (
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('smsnotification', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['accounts.PhoneNotificationHistory'])),
+            ('billing', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['accounts.Billing'])),
+            ('price', self.gf('django.db.models.fields.DecimalField')(max_digits=8, decimal_places=2)),
+        ))
+        db.send_create_signal('accounts', ['BillingPhoneNotification'])
+
+        # Adding model 'BillingProductHighlight'
+        db.create_table('accounts_billingproducthighlight', (
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('producthighlight', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['products.ProductHighlight'])),
+            ('billing', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['accounts.Billing'])),
+            ('price', self.gf('django.db.models.fields.DecimalField')(max_digits=8, decimal_places=2)),
+        ))
+        db.send_create_signal('accounts', ['BillingProductHighlight'])
+
+        # Adding model 'MailNotificationHistory'
+        db.create_table('accounts_mailnotificationhistory', (
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('sent_at', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
+            ('notification', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['accounts.MailNotification'])),
+        ))
+        db.send_create_signal('accounts', ['MailNotificationHistory'])
+
+        # Adding model 'Subscription'
+        db.create_table('accounts_subscription', (
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('patron', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['accounts.Patron'])),
+            ('propackage', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['accounts.ProPackage'])),
+            ('subscription_started', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
+            ('subscription_ended', self.gf('django.db.models.fields.DateTimeField')(null=True, blank=True)),
+        ))
+        db.send_create_signal('accounts', ['Subscription'])
+
+        # Adding model 'BillingMailNotification'
+        db.create_table('accounts_billingmailnotification', (
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('mailnotification', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['accounts.MailNotificationHistory'])),
+            ('billing', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['accounts.Billing'])),
+            ('price', self.gf('django.db.models.fields.DecimalField')(max_digits=8, decimal_places=2)),
+        ))
+        db.send_create_signal('accounts', ['BillingMailNotification'])
+
         # Adding model 'BillingProductTopPosition'
         db.create_table('accounts_billingproducttopposition', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
@@ -19,6 +74,25 @@ class Migration(SchemaMigration):
             ('price', self.gf('django.db.models.fields.DecimalField')(max_digits=8, decimal_places=2)),
         ))
         db.send_create_signal('accounts', ['BillingProductTopPosition'])
+
+        # Adding model 'PhoneNotification'
+        db.create_table('accounts_phonenotification', (
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('patron', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['accounts.Patron'])),
+            ('started_at', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
+            ('ended_at', self.gf('django.db.models.fields.DateTimeField')(null=True, blank=True)),
+            ('phone_number', self.gf('django.db.models.fields.CharField')(max_length=64)),
+        ))
+        db.send_create_signal('accounts', ['PhoneNotification'])
+
+        # Adding model 'BillingHistory'
+        db.create_table('accounts_billinghistory', (
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('billing', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['accounts.Billing'])),
+            ('date', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
+            ('succeeded', self.gf('django.db.models.fields.BooleanField')(default=False)),
+        ))
+        db.send_create_signal('accounts', ['BillingHistory'])
 
         # Adding model 'ProPackage'
         db.create_table('accounts_propackage', (
@@ -34,33 +108,22 @@ class Migration(SchemaMigration):
         # Adding unique constraint on 'ProPackage', fields ['maximum_items', 'valid_until']
         db.create_unique('accounts_propackage', ['maximum_items', 'valid_until'])
 
-        # Adding model 'Subscription'
-        db.create_table('accounts_subscription', (
+        # Adding model 'BillingSubscription'
+        db.create_table('accounts_billingsubscription', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('patron', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['accounts.Patron'])),
-            ('propackage', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['accounts.ProPackage'])),
-            ('subscription_started', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
-            ('subscription_ended', self.gf('django.db.models.fields.DateTimeField')(null=True, blank=True)),
-        ))
-        db.send_create_signal('accounts', ['Subscription'])
-
-        # Adding model 'BillingProductHighlight'
-        db.create_table('accounts_billingproducthighlight', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('producthighlight', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['products.ProductHighlight'])),
+            ('subscription', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['accounts.Subscription'])),
             ('billing', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['accounts.Billing'])),
             ('price', self.gf('django.db.models.fields.DecimalField')(max_digits=8, decimal_places=2)),
         ))
-        db.send_create_signal('accounts', ['BillingProductHighlight'])
+        db.send_create_signal('accounts', ['BillingSubscription'])
 
-        # Adding model 'BillingHistory'
-        db.create_table('accounts_billinghistory', (
+        # Adding model 'PhoneNotificationHistory'
+        db.create_table('accounts_phonenotificationhistory', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('billing', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['accounts.Billing'])),
-            ('date', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
-            ('succeeded', self.gf('django.db.models.fields.BooleanField')(default=False)),
+            ('sent_at', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
+            ('notification', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['accounts.PhoneNotification'])),
         ))
-        db.send_create_signal('accounts', ['BillingHistory'])
+        db.send_create_signal('accounts', ['PhoneNotificationHistory'])
 
         # Adding model 'Billing'
         db.create_table('accounts_billing', (
@@ -77,41 +140,50 @@ class Migration(SchemaMigration):
         ))
         db.send_create_signal('accounts', ['Billing'])
 
-        # Adding model 'BillingSubscription'
-        db.create_table('accounts_billingsubscription', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('subscription', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['accounts.Subscription'])),
-            ('billing', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['accounts.Billing'])),
-            ('price', self.gf('django.db.models.fields.DecimalField')(max_digits=8, decimal_places=2)),
-        ))
-        db.send_create_signal('accounts', ['BillingSubscription'])
-
 
     def backwards(self, orm):
         
         # Removing unique constraint on 'ProPackage', fields ['maximum_items', 'valid_until']
         db.delete_unique('accounts_propackage', ['maximum_items', 'valid_until'])
 
-        # Deleting model 'BillingProductTopPosition'
-        db.delete_table('accounts_billingproducttopposition')
+        # Deleting model 'MailNotification'
+        db.delete_table('accounts_mailnotification')
 
-        # Deleting model 'ProPackage'
-        db.delete_table('accounts_propackage')
-
-        # Deleting model 'Subscription'
-        db.delete_table('accounts_subscription')
+        # Deleting model 'BillingPhoneNotification'
+        db.delete_table('accounts_billingphonenotification')
 
         # Deleting model 'BillingProductHighlight'
         db.delete_table('accounts_billingproducthighlight')
 
+        # Deleting model 'MailNotificationHistory'
+        db.delete_table('accounts_mailnotificationhistory')
+
+        # Deleting model 'Subscription'
+        db.delete_table('accounts_subscription')
+
+        # Deleting model 'BillingMailNotification'
+        db.delete_table('accounts_billingmailnotification')
+
+        # Deleting model 'BillingProductTopPosition'
+        db.delete_table('accounts_billingproducttopposition')
+
+        # Deleting model 'PhoneNotification'
+        db.delete_table('accounts_phonenotification')
+
         # Deleting model 'BillingHistory'
         db.delete_table('accounts_billinghistory')
 
-        # Deleting model 'Billing'
-        db.delete_table('accounts_billing')
+        # Deleting model 'ProPackage'
+        db.delete_table('accounts_propackage')
 
         # Deleting model 'BillingSubscription'
         db.delete_table('accounts_billingsubscription')
+
+        # Deleting model 'PhoneNotificationHistory'
+        db.delete_table('accounts_phonenotificationhistory')
+
+        # Deleting model 'Billing'
+        db.delete_table('accounts_billing')
 
 
     models = {
@@ -140,9 +212,11 @@ class Migration(SchemaMigration):
             'date': ('django.db.models.fields.DateField', [], {}),
             'highlights': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['products.ProductHighlight']", 'through': "orm['accounts.BillingProductHighlight']", 'symmetrical': 'False'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'mailnotifications': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['accounts.MailNotificationHistory']", 'through': "orm['accounts.BillingMailNotification']", 'symmetrical': 'False'}),
             'modified_at': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),
             'object_id': ('django.db.models.fields.PositiveIntegerField', [], {}),
             'patron': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['accounts.Patron']"}),
+            'phonenotifications': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['accounts.PhoneNotificationHistory']", 'through': "orm['accounts.BillingPhoneNotification']", 'symmetrical': 'False'}),
             'plans': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['accounts.Subscription']", 'through': "orm['accounts.BillingSubscription']", 'symmetrical': 'False'}),
             'state': ('django.db.models.fields.CharField', [], {'default': "'unpaid'", 'max_length': '50'}),
             'toppositions': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['products.ProductTopPosition']", 'through': "orm['accounts.BillingProductTopPosition']", 'symmetrical': 'False'}),
@@ -155,6 +229,20 @@ class Migration(SchemaMigration):
             'date': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'succeeded': ('django.db.models.fields.BooleanField', [], {'default': 'False'})
+        },
+        'accounts.billingmailnotification': {
+            'Meta': {'object_name': 'BillingMailNotification'},
+            'billing': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['accounts.Billing']"}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'mailnotification': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['accounts.MailNotificationHistory']"}),
+            'price': ('django.db.models.fields.DecimalField', [], {'max_digits': '8', 'decimal_places': '2'})
+        },
+        'accounts.billingphonenotification': {
+            'Meta': {'object_name': 'BillingPhoneNotification'},
+            'billing': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['accounts.Billing']"}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'price': ('django.db.models.fields.DecimalField', [], {'max_digits': '8', 'decimal_places': '2'}),
+            'smsnotification': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['accounts.PhoneNotificationHistory']"})
         },
         'accounts.billingproducthighlight': {
             'Meta': {'object_name': 'BillingProductHighlight'},
@@ -201,6 +289,20 @@ class Migration(SchemaMigration):
             'Meta': {'object_name': 'Language'},
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'lang': ('django.db.models.fields.CharField', [], {'max_length': '30'})
+        },
+        'accounts.mailnotification': {
+            'Meta': {'object_name': 'MailNotification'},
+            'email': ('django.db.models.fields.CharField', [], {'max_length': '256'}),
+            'ended_at': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'patron': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['accounts.Patron']"}),
+            'started_at': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'})
+        },
+        'accounts.mailnotificationhistory': {
+            'Meta': {'object_name': 'MailNotificationHistory'},
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'notification': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['accounts.MailNotification']"}),
+            'sent_at': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'})
         },
         'accounts.openingtimes': {
             'Meta': {'object_name': 'OpeningTimes'},
@@ -271,6 +373,20 @@ class Migration(SchemaMigration):
             'email': ('django.db.models.fields.EmailField', [], {'max_length': '75'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'sites': ('django.db.models.fields.related.ManyToManyField', [], {'related_name': "'patrons_accepted'", 'symmetrical': 'False', 'to': "orm['sites.Site']"})
+        },
+        'accounts.phonenotification': {
+            'Meta': {'object_name': 'PhoneNotification'},
+            'ended_at': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'patron': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['accounts.Patron']"}),
+            'phone_number': ('django.db.models.fields.CharField', [], {'max_length': '64'}),
+            'started_at': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'})
+        },
+        'accounts.phonenotificationhistory': {
+            'Meta': {'object_name': 'PhoneNotificationHistory'},
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'notification': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['accounts.PhoneNotification']"}),
+            'sent_at': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'})
         },
         'accounts.phonenumber': {
             'Meta': {'object_name': 'PhoneNumber'},
