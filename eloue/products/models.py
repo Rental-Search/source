@@ -991,7 +991,7 @@ class ProductHighlight(models.Model):
 
         td = (ended_at - started_at)
         dt_sec = (td.microseconds + (td.seconds + td.days * 24 * 3600) * 10**6) / 10**6
-        return settings.PRODUCTHIGHLIGHT_PRICE * dt_sec / days_sec
+        return (settings.PRODUCTHIGHLIGHT_PRICE * dt_sec / days_sec).quantize(D('0.01'))
 
 class ProductTopPosition(models.Model):
     started_at = models.DateTimeField(auto_now_add=True)
@@ -1006,7 +1006,7 @@ class ProductTopPosition(models.Model):
 
         td = (ended_at - started_at)
         dt_sec = (td.microseconds + (td.seconds + td.days * 24 * 3600) * 10**6) / 10**6
-        return settings.PRODUCTTOPPOSITION_PRICE * dt_sec / days_sec
+        return (settings.PRODUCTTOPPOSITION_PRICE * dt_sec / days_sec).quantize(D('0.01'))
 
 
 post_save.connect(post_save_answer, sender=Answer)

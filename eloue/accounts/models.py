@@ -651,7 +651,7 @@ class Subscription(models.Model):
         days_sec = days_num * 24 * 60 * 60
         td = (ended_at - started_at)
         dt_sec = (td.microseconds + (td.seconds + td.days * 24 * 3600) * 10**6) / 10**6
-        return self.propackage.price * dt_sec / days_sec
+        return (self.propackage.price * dt_sec / days_sec).quantize(D('0.01'))
 
 class BillingSubscription(models.Model):
     subscription = models.ForeignKey('Subscription')
@@ -704,14 +704,14 @@ class PhoneNotificationHistory(models.Model):
     notification = models.ForeignKey('accounts.PhoneNotification')
 
     def price(self, date_from, date_to):
-        return D('0.05')
+        return settings.SMSNOTIFICATION_PRICE.quantize(D('0.01'))
 
 class EmailNotificationHistory(models.Model):
     sent_at = models.DateTimeField(auto_now_add=True)
     notification = models.ForeignKey('accounts.EmailNotification')
 
     def price(self, date_from, date_to):
-        return D('0.01')
+        return settings.EMAILNOTIFICATION_PRICE.quantize(D('0.01'))
 
 class BillingPhoneNotification(models.Model):
     phonenotification = models.ForeignKey('accounts.PhoneNotificationHistory')
@@ -810,7 +810,7 @@ class Billing(models.Model):
 
         total_amount = (highlights.sum + subscriptions.sum + toppositions.sum + 
             phonenotifications.sum + emailnotifications.sum)
-        total_tva = total_amount * settings.TVA
+        total_tva = (total_amount * settings.TVA).quantize(D('0.01'))
         return (
             Billing(date=date_from, patron=patron,
                 total_amount=total_amount, total_tva=total_tva), 
