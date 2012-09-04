@@ -397,9 +397,9 @@ def billing_object(request, year, month, day):
     subscriptions.sum = sum(map(lambda subscription: subscription.price(date_from, date_to), subscriptions), 0)
     toppositions.sum = sum(map(lambda topposition: topposition.price(date_from, date_to), toppositions), 0)
 
-    return render(request, 'accounts/partials/billing_table.html', 
+    return render(request, 'accounts/pro_billing.html', 
         {'billing': billing, 'subscriptions': subscriptions, 'toppositions': toppositions, 'highlights': highlights,
-            'from': date_from, 'to': date_to,
+            'from': date_from, 'to': date_to, 'patron': request.user,
         })
 
     response = HttpResponse(str(billing), content_type='application/pdf')

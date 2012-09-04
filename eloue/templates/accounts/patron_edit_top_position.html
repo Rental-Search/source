@@ -1,5 +1,5 @@
 {% extends "accounts/patron_edit.html" %}
-{% load i18n %}
+{% load i18n product %}
 
 {% block title %}{% trans "Top position" %}{% endblock %}
 
@@ -53,7 +53,7 @@ $(document).ready(function (){
 	<tbody>
 		{% for product in in_topposition %}
 			<tr>
-				<td><a href="#">{{ product.summary }}</a></td>
+				<td><a href="#">{{ product.summary|truncate:38 }}</a></td>
 				<td>{{ product.since|timesince }}</td>
 				<td class="highlight-action">
 					<form action="" method="post" style="margin-bottom: 0px;">

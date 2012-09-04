@@ -35,11 +35,34 @@
 	    				<i class="pro-check"></i> Augmenter vos locations
 	    			</li>
 	    			<li>
-	    				<i class="pro-check"></i> Toucher tout les membres sur e-loue
+	    				<i class="pro-check"></i> Toucher tous les membres de e-loue
 	    			</li>
 	    		</ul>
 	    	</div>
     	</div>
+    	<h2 style="margin-bottom: 40px">{% trans "Comment ça marche ?" %}</h2>
+    	<div class="pro-options">
+        	<ul class="first">
+        		<li style="text-align: justify;">
+        			<span class="title-option">Publiez vos annnonces</span><br>
+        			Vous publiez vos annonces directement sur le site. Si vous avez un volume très important d'annonces contactez-nous pour qu'on intègre directement votre catalogue.
+        		</li>
+        		<li style="text-align: justify;">
+        			<span class="title-option">Page entreprise</span><br>
+        			Si vous le souhaitez, votre logo, numéro de téléphone et adresse de votre site web apparaîtront gratuitement. Vous pouvez choisir des options supplémentaires.
+        		</li>
+        	</ul>
+        	<ul>
+        		<li style="text-align: justify;">
+        			<span class="title-option">Mise en relation</span><br>
+        			Les membres de e-loue peuvent voir vos annonces et vous contactent directement s'il sont intéressés. La réservation se fait directement dans votre magasin ou sur votre site internet.
+        		</li>
+        		<li style="text-align: justify;">
+        			<span class="title-option">Sans engagement</span><br>
+        			Vous résiliez quand vous voulez sans frais, il n'y a aucun engagement de durée.
+        		</li>
+        	</ul>
+        </div>
     	<h2 style="margin-bottom: 40px;">{% trans "Choisissez un abonnement adapté à vos besoin" %} :</h2>
     	<div class="plans">
     		{% for plan in plans %}
@@ -62,7 +85,7 @@
 		            		{{ plan.price|floatformat:0 }}&euro;<span>/mois</span>
 		            	</div>
 		            </h2>
-		            <p class="max-items">{{ plan.maximum_items }} {% trans "annonces maximums" %}</p>
+		            <p class="max-items">{{ plan.maximum_items }} {% trans "annonces maximum" %}</p>
 		            <a href="#" class="btn-select-plan">{% trans "Choisir cet abonnement" %}</a>
 	        	</div>
 	        	{% endif %}
@@ -73,7 +96,7 @@
         	<ul class="first">
         		<li>
         			<i class="notification"></i>
-        			<span class="title-option">Notification par email</span>
+        			<span class="title-option">Notifications par email</span>
         			<span class="price-option">0,01&euro;/envoi</span><br>
         			Envoyez les demandes de devis sur plusieurs adresses emails.
         		</li>
@@ -87,7 +110,7 @@
         	<ul>
         		<li>
         			<i class="sms"></i>
-        			<span class="title-option">Notification par email</span>
+        			<span class="title-option">Notifications par SMS</span>
         			<span class="price-option">0,08&euro;/envoi</span><br>
         			Pour répondre rapidement aux devis, recevez les demandes de réservation sur votre mobile.
         		</li>
