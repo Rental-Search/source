@@ -685,7 +685,7 @@ class PhoneNotification(Notification):
     phone_number = models.CharField(max_length=64)
 
     def send(self, msg):
-        super(PhoneNotification, self).send(msg)
+        print 'texto sent'
         PhoneNotificationHistory.objects.create(notification=self)
 
 class EmailNotification(Notification):
@@ -693,9 +693,9 @@ class EmailNotification(Notification):
 
     def __unicode__(self):
         return u"{email}".format(email=self.email)
-    
+
     def send(self, msg):
-        super(EmailNotification, self).send(msg)
+        print 'email sent'
         EmailNotificationHistory.objects.create(notification=self)
 
 
@@ -703,10 +703,15 @@ class PhoneNotificationHistory(models.Model):
     sent_at = models.DateTimeField(auto_now_add=True)
     notification = models.ForeignKey('accounts.PhoneNotification')
 
+    def price(self, date_from, date_to):
+        return D('0.05')
+
 class EmailNotificationHistory(models.Model):
     sent_at = models.DateTimeField(auto_now_add=True)
     notification = models.ForeignKey('accounts.EmailNotification')
 
+    def price(self, date_from, date_to):
+        return D('0.01')
 
 class BillingPhoneNotification(models.Model):
     phonenotification = models.ForeignKey('accounts.PhoneNotificationHistory')
@@ -792,21 +797,25 @@ class Billing(models.Model):
             models.Q(started_at__lte=date_to)), 
             product__owner=patron)
 
-        phonenotification = PhoneNotificationHistory.objects.filter(
+        phonenotifications = PhoneNotificationHistory.objects.select_related('notification').filter(
             sent_at__gt=date_from, sent_at__lte=date_to, notification__patron=patron)
-        emailnotifications = EmailNotificationHistory.objects.filter(
+        emailnotifications = EmailNotificationHistory.objects.select_related('notification').filter(
             sent_at__gt=date_from, sent_at__lte=date_to, notification__patron=patron)
 
-        highlights.sum = sum(map(lambda highlight: highlight.price(date_from, date_to), highlights), 0)
-        subscriptions.sum = sum(map(lambda subscription: subscription.price(date_from, date_to), subscriptions), 0)
-        toppositions.sum = sum(map(lambda topposition: topposition.price(date_from, date_to), toppositions), 0)
+        highlights.sum = sum(map(lambda highlight: highlight.price(date_from, date_to), highlights))
+        subscriptions.sum = sum(map(lambda subscription: subscription.price(date_from, date_to), subscriptions))
+        toppositions.sum = sum(map(lambda topposition: topposition.price(date_from, date_to), toppositions))
+        phonenotifications.sum = sum(map(lambda phonenotification: phonenotification.price(date_from, date_to), phonenotifications))
+        emailnotifications.sum = sum(map(lambda emailnotification: emailnotification.price(date_from, date_to), emailnotifications))
 
-        total_amount = highlights.sum + subscriptions.sum + toppositions.sum
+        total_amount = (highlights.sum + subscriptions.sum + toppositions.sum + 
+            phonenotifications.sum + emailnotifications.sum)
         total_tva = total_amount * settings.TVA
         return (
             Billing(date=date_from, patron=patron,
                 total_amount=total_amount, total_tva=total_tva), 
-            highlights, subscriptions, toppositions
+            highlights, subscriptions, toppositions, 
+            phonenotifications, emailnotifications, 
         )
 
 

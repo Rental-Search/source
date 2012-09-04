@@ -51,27 +51,35 @@ class Command(BaseCommand):
                 except CreditCard.DoesNotExist:
                     creditcard = None
                 payment = PayboxDirectPlusPaymentInformation.objects.create(creditcard=creditcard)
-                billing, highlights, subscriptions, toppositions = Billing.builder(patron, date_from, date_to)
+                (billing, highlights, subscriptions, toppositions, phonenotifications, 
+                    emailnotifications) = Billing.builder(patron, date_from, date_to)
                 billing.payment = payment
                 billing.save()
 
-                from eloue.accounts.models import BillingSubscription, BillingProductHighlight, BillingProductTopPosition
+                from eloue.accounts.models import (BillingSubscription, 
+                    BillingProductHighlight, BillingProductTopPosition, 
+                    BillingPhoneNotification, BillingEmailNotification)
 
                 for subscription in subscriptions:
                     BillingSubscription.objects.create(
                         billing=billing, subscription=subscription,
-                        price=subscription.price(date_from, date_to)
-                        )
+                        price=subscription.price(date_from, date_to))
                 for highlight in highlights:
                     BillingProductHighlight.objects.create(
                         billing=billing, producthighlight=highlight, 
-                        price=highlight.price(date_from, date_to)
-                    )
+                        price=highlight.price(date_from, date_to))
                 for topposition in toppositions:
                     BillingProductTopPosition.objects.create(
                         billing=billing, producttopposition=topposition,
                         price=topposition.price(date_from, date_to))
-                # need to add payment method and card
+                for phonenotification in phonenotifications:
+                    BillingPhoneNotification.objects.create(
+                        billing=billing,  phonenotification=phonenotification,
+                        price=phonenotification.price(date_from, date_to))
+                for emailnotification in emailnotifications:
+                    BillingEmailNotification.objects.create(
+                        billing=billing, emailnotification=emailnotification,
+                        price=emailnotification.price(date_from, date_to))
 
         # try to debit unpaid billings
         for billing in Billing.objects.filter(state='unpaid'):

@@ -84,6 +84,34 @@
 		</td>
 	</tr>
 	{% endif %}
+	{% if phonenotifications or emailnotifications %}
+	<tr>
+		<td>
+			<table class="table">
+				<thead>
+					<tr>
+						<td><i class="icon-plus-sign"></i> {% trans "Notification" %}</td>
+						<td class="amount">{{ toppositions.sum|quantize|currency }}</td>
+					</tr>
+				</thead>
+				<tbody>
+					{% for emailnotification in emailnotifications %}
+						<tr>
+							<td class="billing-item">Email envoyé le {{ emailnotification.sent_at }} à l'adresse {{emailnotification.notification.email}}</td>
+							<td class="amount">{% price emailnotification from to %}</td>
+						</tr>
+					{% endfor %}
+					{% for phonenotification in phonenotifications %}
+						<tr>
+							<td class="billing-item">SMS envoyé le {{ phonenotification.sent_at }} au numero {{ phonenotification.notification.phone_number }}</td>
+							<td class="amount">{% price phonenotification from to %}</td>
+						</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</td>
+	</tr>
+	{% endif %}
 	<tr>
 		<td>
 			<table class="table">

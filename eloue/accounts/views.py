@@ -414,12 +414,15 @@ def billing(request):
     to = datetime.datetime.now()
     _from = datetime.datetime.combine(patron.next_billing_date(), datetime.time())
     
-    billing, highlights, subscriptions, toppositions = Billing.builder(patron, _from, to)
+    (billing, highlights, subscriptions, toppositions, phonenotifications, 
+        emailnotifications) = Billing.builder(patron, _from, to)
+    
     return render(
         request, 'accounts/patron_billing.html', 
         {
             'billings': billings, 'billing': billing, 'highlights': highlights, 
             'subscriptions': subscriptions, 'toppositions': toppositions,
+            'phonenotifications': phonenotifications, 'emailnotifications': emailnotifications,
             'from': _from, 'to': to,
         })
 

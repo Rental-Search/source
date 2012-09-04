@@ -435,6 +435,10 @@ class ProBooking(Booking):
 
     @smart_transition(source='professional', target='professional', save=True)
     def preapproval(self, *args, **kwargs):
+        for phonenotification in self.owner.phonenotification_set.all():
+            phonenotification.send('')
+        for emailnotification in self.owner.emailnotification_set.all():
+            emailnotification.send('')
         self.send_ask_email()
 
 
