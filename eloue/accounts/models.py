@@ -691,6 +691,9 @@ class PhoneNotification(Notification):
 class EmailNotification(Notification):
     email = models.CharField(max_length=256)
 
+    def __unicode__(self):
+        return u"{email}".format(email=self.email)
+    
     def send(self, msg):
         super(EmailNotification, self).send(msg)
         EmailNotificationHistory.objects.create(notification=self)

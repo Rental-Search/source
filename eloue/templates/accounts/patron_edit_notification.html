@@ -32,6 +32,7 @@ $(document).ready(function(){
 			e.preventDefault();
 			answer = confirm(messageAlert);
 	        if (answer == true) {
+				e.currentTarget.parentNode.submit()
 	            return true;
 	        } else {
 	            return false;
@@ -54,6 +55,11 @@ $(document).ready(function(){
 
 
 {% block content-main-profil %}
+{% if form.is_multipart %}
+<form enctype="multipart/form-data" class="form-horizontal" method="post" action="">
+{% else %}
+<form class="form-horizontal" method="post" action="">
+{% endif %}
 <h2 style="margin-bottom: 30px">
 	{% trans "Notification par email"%}  <small style="padding-left: 50px;"><a href="#" id="add_new_email_notification"><i class="icon-plus-sign"></i> {% trans "Ajouter un email" %}</a></small>
 </h2>
@@ -65,24 +71,18 @@ $(document).ready(function(){
 		</tr>
 	</thead>
 	<tbody>
+		{% for mail in mails %}
 		<tr>
-			<td>benoit.woj@e-loue.com</td>
+			<td>{{mail.email}}</td>
 			<td class="highlight-action">
-				<a href="#" class="delete-email"><i class="icon-remove"></i> {% trans "Retirer l'email"%}</a>
+				<form action="" method="post" style="margin-bottom: 0px;">
+					{% csrf_token %}
+					<input type="hidden" name="email_delete" value="{{ mail.pk }}">
+					<a href="#" class="delete-email"><i class="icon-remove"></i> {% trans "Retirer l'email"%}</a>
+				</form>
 			</td>
 		</tr>
-		<tr>
-			<td>Alexandre.woog@e-loue.com</td>
-			<td class="highlight-action">
-				<a href="#" class="delete-email"><i class="icon-remove"></i> {% trans "Retirer l'email"%}</a>
-			</td>
-		</tr>
-		<tr>
-			<td>balazs.kossovics@e-loue.com</td>
-			<td class="highlight-action">
-				<a href="#" class="delete-email"><i class="icon-remove"></i> {% trans "Retirer l'email"%}</a>
-			</td>
-		</tr>
+		{% endfor %}
 	</tbody>
 </table>
 
@@ -97,62 +97,24 @@ $(document).ready(function(){
 		</tr>
 	</thead>
 	<tbody>
-		<tr>
-			<td>0678903456</td>
-			<td class="highlight-action">
-				<a href="#" class="delete-sms"><i class="icon-remove"></i> {% trans "Retirer le numéro"%}</a>
-			</td>
-		</tr>
-		<tr>
-			<td>0623456789</td>
-			<td class="highlight-action">
-				<a href="#" class="delete-sms"><i class="icon-remove"></i> {% trans "Retirer le numéro"%}</a>
-			</td>
-		</tr>
-		<tr>
-			<td>0689234567</td>
-			<td class="highlight-action">
-				<a href="#" class="delete-sms"><i class="icon-remove"></i> {% trans "Retirer le numéro"%}</a>
-			</td>
-		</tr>
+		{% for phone in phones %}
+			<tr>
+				<td>{{ phone.phone_number }}</td>
+				<td class="highlight-action">
+					<form action="" method="post" style="margin-bottom: 0px;">
+						{% csrf_token %}
+						<input type="hidden" name="phonenumber_delete" value="{{ phone.pk }}">
+						<a href="#" class="delete-sms"><i class="icon-remove"></i> {% trans "Retirer le numéro"%}</a>
+					</form>
+				</td>
+			</tr>
+		{% endfor %}
 	</tbody>
 </table>
-
-<h2 style="margin-bottom: 30px">
-	{% trans "Notification par Fax"%}  <small style="padding-left: 50px;"><a href="#" id="add_new_fax_notification"><i class="icon-plus-sign"></i> {% trans "Ajouter un numéro de fax" %}</a></small>
-</h2>
-<table class="table highlight-list">
-	<thead>
-		<tr>
-			<th>Numéro de fax</th>
-			<th></th>
-		</tr>
-	</thead>
-	<tbody>
-		<tr>
-			<td>0178903456</td>
-			<td class="highlight-action">
-				<a href="#" class="delete-fax"><i class="icon-remove"></i> {% trans "Retirer le numéro"%}</a>
-			</td>
-		</tr>
-		<tr>
-			<td>0123456789</td>
-			<td class="highlight-action">
-				<a href="#" class="delete-fax"><i class="icon-remove"></i> {% trans "Retirer le numéro"%}</a>
-			</td>
-		</tr>
-		<tr>
-			<td>0189234567</td>
-			<td class="highlight-action">
-				<a href="#" class="delete-fax"><i class="icon-remove"></i> {% trans "Retirer le numéro"%}</a>
-			</td>
-		</tr>
-	</tbody>
-</table>
-
 
 <div id="add_new_email_notification_form" title="Ajouter un nouvel email de notification" style="display: none;">
 	<form class="form" method="post" action="" style="margin-bottom: 0px; margin-top: 20px;">
+		{% csrf_token %}
 		<div class="control-group">
 			<label>Email</label>
 			<div class="controls">
@@ -167,24 +129,11 @@ $(document).ready(function(){
 
 <div id="add_new_sms_notification_form" title="Ajouter un nouveau numéro de portable" style="display: none;">
 	<form class="form" method="post" action="" style="margin-bottom: 0px; margin-top: 20px;">
+		{% csrf_token %}
 		<div class="control-group">
 			<label>Numéro de portable</label>
 			<div class="controls">
-				<input type="text" name="email" value="">
-			</div>
-		</div>
-		<div class="form-actions" style="padding-bottom: 0px; margin-bottom: 0px; padding-left: 205px;">
-	    	<button type="submit" class="btn btn-primary">{% trans "Valider" %}</button>
-	    </div>
-	</form>
-</div>
-
-<div id="add_new_fax_notification_form" title="Ajouter un nouveau numéro de fax" style="display: none;">
-	<form class="form" method="post" action="" style="margin-bottom: 0px; margin-top: 20px;">
-		<div class="control-group">
-			<label>Numéro de fax</label>
-			<div class="controls">
-				<input type="text" name="email" value="">
+				<input type="text" name="phone_number" value="">
 			</div>
 		</div>
 		<div class="form-actions" style="padding-bottom: 0px; margin-bottom: 0px; padding-left: 205px;">

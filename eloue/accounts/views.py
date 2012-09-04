@@ -920,4 +920,46 @@ def facebook_invite(request):
 
 @login_required
 def patron_edit_notification(request):
-    return direct_to_template(request, 'accounts/patron_edit_notification.html')
+    from eloue.accounts.models import EmailNotification, PhoneNotification
+    patron = request.user
+    mails = patron.emailnotification_set.filter(ended_at__isnull=True) # XXX: filter for valides only
+    phones = patron.phonenotification_set.filter(ended_at__isnull=True) # XXX: filter for valides only
+    if request.method == "POST":
+        # need to validate them
+        if 'email' in request.POST:
+            from django import forms
+            email_field = forms.EmailField()
+            email = request.POST.get('email')
+            try:
+                email = email_field.clean(email)
+                EmailNotification.objects.create(patron=patron, email=email)
+            except forms.ValidationError:
+                messages.error(request, u"Vous devez saisir une adresse email valid.")
+            return redirect('.')
+        elif 'phone_number' in request.POST:
+            from django.contrib.localflavor.fr import forms
+            phone_field = forms.FRPhoneNumberField()
+            phone_number = request.POST.get('phone_number')
+            try:
+                phone_number = phone_field.clean(phone_number)
+                PhoneNotification.objects.create(patron=patron, phone_number=phone_number)
+            except forms.ValidationError:
+                messages.error(request, u"Vous devez saisir une numéro de téléphone valide")
+            return redirect('.')
+        elif 'email_delete' in request.POST:
+            emailnotification = get_object_or_404(EmailNotification, pk=request.POST.get('email_delete'))
+            emailnotification.ended_at = datetime.datetime.now()
+            emailnotification.save()
+            return redirect('.')
+        elif 'phonenumber_delete' in request.POST:
+            phonenotification = get_object_or_404(PhoneNotification, pk=request.POST.get('phonenumber_delete'))
+            phonenotification.ended_at = datetime.datetime.now()
+            phonenotification.save()
+            return redirect('.')
+        else:
+            return HttpResponseForbidden()
+    return render(
+        request, 'accounts/patron_edit_notification.html', 
+        {'mails': mails, 'phones': phones}
+    )
+
