@@ -688,30 +688,30 @@ class PhoneNotification(Notification):
         super(PhoneNotification, self).send(msg)
         PhoneNotificationHistory.objects.create(notification=self)
 
-class MailNotification(Notification):
+class EmailNotification(Notification):
     email = models.CharField(max_length=256)
 
     def send(self, msg):
-        super(MailNotification, self).send(msg)
-        MailNotificationHistory.objects.create(notification=self)
+        super(EmailNotification, self).send(msg)
+        EmailNotificationHistory.objects.create(notification=self)
 
 
 class PhoneNotificationHistory(models.Model):
     sent_at = models.DateTimeField(auto_now_add=True)
     notification = models.ForeignKey('accounts.PhoneNotification')
 
-class MailNotificationHistory(models.Model):
+class EmailNotificationHistory(models.Model):
     sent_at = models.DateTimeField(auto_now_add=True)
-    notification = models.ForeignKey('accounts.MailNotification')
+    notification = models.ForeignKey('accounts.EmailNotification')
 
 
 class BillingPhoneNotification(models.Model):
-    smsnotification = models.ForeignKey('accounts.PhoneNotificationHistory')
+    phonenotification = models.ForeignKey('accounts.PhoneNotificationHistory')
     billing = models.ForeignKey('accounts.Billing')
     price = models.DecimalField(max_digits=8, decimal_places=2)
 
-class BillingMailNotification(models.Model):
-    mailnotification = models.ForeignKey('accounts.MailNotificationHistory')
+class BillingEmailNotification(models.Model):
+    emailnotification = models.ForeignKey('accounts.EmailNotificationHistory')
     billing = models.ForeignKey('accounts.Billing')
     price = models.DecimalField(max_digits=8, decimal_places=2)
 
@@ -734,7 +734,7 @@ class Billing(models.Model):
     toppositions = models.ManyToManyField('products.ProductTopPosition', through='BillingProductTopPosition')
     
     phonenotifications = models.ManyToManyField('accounts.PhoneNotificationHistory', through='BillingPhoneNotification')
-    mailnotifications = models.ManyToManyField('accounts.MailNotificationHistory', through='BillingMailNotification')
+    emailnotifications = models.ManyToManyField('accounts.EmailNotificationHistory', through='BillingEmailNotification')
 
     object_id = models.PositiveIntegerField()
     content_type = models.ForeignKey(ContentType)
@@ -791,12 +791,13 @@ class Billing(models.Model):
 
         phonenotification = PhoneNotificationHistory.objects.filter(
             sent_at__gt=date_from, sent_at__lte=date_to, notification__patron=patron)
-        mailnotification = MailNotificationHistory.objects.filter(
+        emailnotifications = EmailNotificationHistory.objects.filter(
             sent_at__gt=date_from, sent_at__lte=date_to, notification__patron=patron)
 
         highlights.sum = sum(map(lambda highlight: highlight.price(date_from, date_to), highlights), 0)
         subscriptions.sum = sum(map(lambda subscription: subscription.price(date_from, date_to), subscriptions), 0)
         toppositions.sum = sum(map(lambda topposition: topposition.price(date_from, date_to), toppositions), 0)
+
         total_amount = highlights.sum + subscriptions.sum + toppositions.sum
         total_tva = total_amount * settings.TVA
         return (
