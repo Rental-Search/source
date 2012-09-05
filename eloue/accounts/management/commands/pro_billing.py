@@ -4,6 +4,7 @@ import inspect
 import calendar
 
 from django.core.management.base import BaseCommand
+from django.db.models import Max
 from django.conf import settings
 from django.core import mail
 
@@ -14,7 +15,7 @@ class DjangoMailHandler(logbook.MailHandler):
 
     def deliver(self, msg, recipients):
         """Delivers the given message to a list of recpients."""
-        mail.send_mail("importation error", msg.as_string(), self.from_addr, recipients)
+        mail.send_mail("billing error", msg.as_string(), self.from_addr, recipients)
 
 handler = DjangoMailHandler(settings.SERVER_EMAIL, ['ops@e-loue.com'],
                               format_string=logbook.handlers.MAIL_FORMAT_STRING, level='INFO', bubble = True, record_delta=datetime.timedelta(seconds=0))
@@ -82,12 +83,16 @@ class Command(BaseCommand):
                         price=emailnotification.price(date_from, date_to))
 
         # try to debit unpaid billings
-        for billing in Billing.objects.filter(state='unpaid'):
-            try:
+        for billing in Billing.objects.select_related('billinghistory').filter(state='unpaid').annotate(last_try=Max('billinghistory__date')):
+            if (billing.last_try is None) or (datetime.datetime.now - billing.last_try) > datetime.timedelta(days=2):
                 billing.pay()
-            except Exception as e:
-                print 'we couldnt pay the billing {pk}'.format(pk=billing.pk), e
-                # we only should catch PaymentExceptions
-                pass
+            if True or billing.state == 'unpaid':
+                with handler:
+                    log.info(
+                        'We were unable to charge the user {user}\'s credit card'
+                        ' for the amount {total_amount}.'.format(
+                            user=billing.patron.username, 
+                            total_amount=billing.total_amount)
+                        )
 
 

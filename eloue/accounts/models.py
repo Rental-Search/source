@@ -764,9 +764,13 @@ class Billing(models.Model):
 
     @transition(source='unpaid', target='paid', save=True)
     def pay(self, **kwargs):
-        self.payment.preapproval('billing:%d'%self.id, self.total_amount, None, '')
-        self.payment.pay('billing:%d'%self.id, self.total_amount, None, **kwargs)
-        self.payment.save()
+        try:
+            self.payment.preapproval('billing:%d'%self.id, self.total_amount, None, '')
+            self.payment.pay('billing:%d'%self.id, self.total_amount, None, **kwargs)
+            self.payment.save()
+            BillingHistory.objects.create(billing=self, succeeded=True)
+        except PaymentException:
+            BillingHistory.objects.create(billing=self, succeeded=False)
 
     @staticmethod
     def builder(patron, date_from, date_to):
@@ -824,6 +828,9 @@ class BillingHistory(models.Model):
     date = models.DateTimeField(auto_now_add=True)
     succeeded = models.BooleanField()
 
+    class Meta:
+        ordering = ['date']
+    
 signals.post_save.connect(post_save_sites, sender=Patron)
 signals.pre_delete.connect(pre_delete_creditcard, sender=CreditCard)
 signals.post_save.connect(post_save_to_batch_update_product, sender=Address)
