@@ -9,7 +9,7 @@ from django.contrib.admin.views.decorators import staff_member_required
 from django.db.models import Avg, Sum, Q, Count
 
 from eloue.accounts.models import Patron
-from eloue.products.models import Product, CarProduct, RealEstateProduct
+from eloue.products.models import Product, CarProduct, RealEstateProduct, Category
 from eloue.rent.models import Booking
 
 
@@ -51,4 +51,43 @@ def stats(request):
 		RequestContext(request, {'stats': data}),
     )
 
+def top_patron_city(request):
+	cities = Patron.objects.extra(tables=['accounts_address'], where=['"accounts_patron"."default_address_id" = "accounts_address"."id"'], select={'city': 'lower(accounts_address.city)'}).values('city').annotate(Count('id')).order_by('-id__count')[:50]
+
+   	return render_to_response("reporting/admin/top_city.html",
+   		{},
+   		RequestContext(request, {'cities': cities}),
+   	)
+
+def top_booking_patron(request):
+	patrons = Patron.objects.annotate(num_bookings=Count('bookings')).order_by('-num_bookings')[:30]
+
+	return render_to_response("reporting/admin/top_patron.html",
+		{},
+		RequestContext(request, {'patrons': patrons}),
+	)
+
+def top_product_city(request):
+	cities = Product.objects.extra(tables=['accounts_address'], where=['"products_product"."address_id" = "accounts_address"."id"'], select={'city': 'lower(accounts_address.city)'}).values('city').annotate(Count('id')).order_by('-id__count')[:50]
+
+	return render_to_response("reporting/admin/top_city.html",
+   		{},
+   		RequestContext(request, {'cities': cities}),
+   	)
+
+
+def top_product_category(request):
+	categories = Category.tree.annotate(num_products=Count('products')).order_by('-num_products')[:30]
+
+
+	return render_to_response("reporting/admin/top_category.html",
+   		{},
+   		RequestContext(request, {'categories': categories}),
+   	)
+
+
 stats = staff_member_required(stats)
+top_patron_city = staff_member_required(top_patron_city)
+top_product_city = staff_member_required(top_product_city)
+top_product_category = staff_member_required(top_product_category)
+top_booking_patron = staff_member_required(top_booking_patron)
