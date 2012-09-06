@@ -139,3 +139,11 @@ def stats_by_city_detail(request, city):
 
 
 stats = staff_member_required(stats)
+stats_by_patron = staff_member_required(stats_by_patron)
+stats_by_patron_detail = staff_member_required(stats_by_patron_detail)
+stats_by_product = staff_member_required(stats_by_product)
+stats_by_product_detail = staff_member_required(stats_by_product_detail)
+stats_by_category = staff_member_required(stats_by_category)
+stats_by_category_detail = staff_member_required(stats_by_category_detail)
+stats_by_city = staff_member_required(stats_by_city)
+stats_by_city_detail = staff_member_required(stats_by_city_detail)
