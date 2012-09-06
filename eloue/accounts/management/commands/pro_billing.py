@@ -84,7 +84,7 @@ class Command(BaseCommand):
 
         # try to debit unpaid billings
         for billing in Billing.objects.select_related('billinghistory').filter(state='unpaid').annotate(last_try=Max('billinghistory__date')):
-            if (billing.last_try is None) or (datetime.datetime.now - billing.last_try) > datetime.timedelta(days=2):
+            if (billing.last_try is None) or (datetime.datetime.now() - billing.last_try) > datetime.timedelta(days=2):
                 billing.pay()
             if billing.state == 'unpaid':
                 with handler:
