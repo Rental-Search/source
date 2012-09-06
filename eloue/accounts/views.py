@@ -382,12 +382,12 @@ def patron_edit(request, *args, **kwargs):
 
 @login_required
 def billing_object(request, year, month, day):
-    from eloue.accounts.management.commands.pro_billing import plus_one_month
+    from eloue.accounts.management.commands.pro_billing import minus_one_month
 
-    date_from = datetime.date(int(year), int(month), int(day))
-    billing = get_object_or_404(Billing, patron=request.user, date=date_from)
-    date_from = datetime.datetime.combine(date_from, datetime.time())
-    date_to = plus_one_month(date_from)
+    date_to = datetime.date(int(year), int(month), int(day))
+    billing = get_object_or_404(Billing, patron=request.user, date_to=date_to)
+    date_to = datetime.datetime.combine(date_to, datetime.time())
+    date_from = minus_one_month(date_to)
 
     subscriptions = billing.highlights.all()
     toppositions = billing.toppositions.all()

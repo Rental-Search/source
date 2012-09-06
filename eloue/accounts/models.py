@@ -351,9 +351,9 @@ class Patron(User):
         from eloue.accounts.management.commands.pro_billing import plus_one_month, minus_one_month
         from django.db.models import Min, Max
         from eloue.products.models import ProductHighlight, ProductTopPosition
-        last_billing_date = self.billing_set.aggregate(Max('date'))['date__max']
+        last_billing_date = self.billing_set.aggregate(Max('date_to'))['date_to__max']
         if last_billing_date:
-            return plus_one_month(last_billing_date)
+            return last_billing_date
 
         first_subscription = self.subscription_set.aggregate(Min('subscription_started'))['subscription_started__min']
         first_topposition = ProductTopPosition.objects.filter(product__owner=self).aggregate(Min('started_at'))['started_at__min']
@@ -732,7 +732,9 @@ class Billing(models.Model):
     patron = models.ForeignKey(Patron)
 
     # first day of the period
-    date = models.DateField()
+    date_from = models.DateField()
+    # the day after 
+    date_to = models.DateField()
     state = FSMField(default='unpaid', choices=BILLING_STATE)
     total_amount = models.DecimalField(max_digits=8, decimal_places=2)
     total_tva = models.DecimalField(max_digits=8, decimal_places=2)
@@ -750,7 +752,7 @@ class Billing(models.Model):
 
     @models.permalink
     def get_absolute_url(self):
-        date = self.date
+        date = self.date_to
         return (
             'billing_object', (), 
             {'year': '%04d'%date.year, 
@@ -816,7 +818,7 @@ class Billing(models.Model):
             phonenotifications.sum + emailnotifications.sum)
         total_tva = (total_amount * settings.TVA).quantize(D('0.01'))
         return (
-            Billing(date=date_from, patron=patron,
+            Billing(date_from=date_from, date_to=date_to, patron=patron,
                 total_amount=total_amount, total_tva=total_tva), 
             highlights, subscriptions, toppositions, 
             phonenotifications, emailnotifications, 
