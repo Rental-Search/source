@@ -409,8 +409,11 @@ def billing_object(request, year, month, day):
 
 @login_required
 def billing(request):
+    from eloue.accounts.models import BillingHistory
     patron = request.user
-    billings = patron.billing_set.order_by('date')
+    billing_histories = BillingHistory.objects.filter(
+            billing__patron=patron
+        ).order_by('-billing__date_from', '-date')
     to = datetime.datetime.now()
     _from = datetime.datetime.combine(patron.next_billing_date(), datetime.time())
     
@@ -420,10 +423,10 @@ def billing(request):
     return render(
         request, 'accounts/patron_billing.html', 
         {
-            'billings': billings, 'billing': billing, 'highlights': highlights, 
+            'billing': billing, 'highlights': highlights, 
             'subscriptions': subscriptions, 'toppositions': toppositions,
             'phonenotifications': phonenotifications, 'emailnotifications': emailnotifications,
-            'from': _from, 'to': to,
+            'from': _from, 'to': to, 'billing_histories': billing_histories,
         })
 
 
