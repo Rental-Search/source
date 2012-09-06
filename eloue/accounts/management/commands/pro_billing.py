@@ -86,7 +86,7 @@ class Command(BaseCommand):
         for billing in Billing.objects.select_related('billinghistory').filter(state='unpaid').annotate(last_try=Max('billinghistory__date')):
             if (billing.last_try is None) or (datetime.datetime.now - billing.last_try) > datetime.timedelta(days=2):
                 billing.pay()
-            if True or billing.state == 'unpaid':
+            if billing.state == 'unpaid':
                 with handler:
                     log.info(
                         'We were unable to charge the user {user}\'s credit card'
