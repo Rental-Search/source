@@ -27,7 +27,7 @@ class ProductWizard(MultiPartFormWizard):
 
     def __call__(self, request, *args, **kwargs):
         patron = request.user
-        if patron.is_professional:
+        if patron.current_subscription:
             subscription = patron.current_subscription
             if not subscription:
                 messages.error(request, u"Veuillez choisir un abonnement pour déposer une annonce.")

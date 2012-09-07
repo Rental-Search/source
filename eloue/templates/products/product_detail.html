@@ -414,6 +414,7 @@
                     {% endif %}
                 </address>
                 <a href="{% url message_create product.pk patron.pk %}" class="btn-contactme">Contactez-moi</a>
+                {% patron.current_subscription %}
                 <ul class="pro-contact">
                     {% if patron.url %}
                     <li><a href="#">{{ patron.url }}</a></li>
@@ -426,6 +427,7 @@
                     </li>
                     {% endif %}
                 </ul>
+                {% endif %}
             </div>{#  owner #}
         {% else %}
             <div id="owner" class="info-block">

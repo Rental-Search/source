@@ -33,7 +33,11 @@
     {% if request.user.is_professional %}
     <li><a href="{% url patron_edit_opening_times %}" class="{% active request "^/dashboard/account/openings/"%}">{% trans "Horaires d'ouverture" %}</a></li>
     <li>
-        <a href="{{ billing }}" class="{% active request "^/dashboard/account/pro_account/" %}">{% trans "Compte pro" %}</a>
+        {% if request.user.current_subscription %}
+          <a href="{{ billing }}" class="{% active request "^/dashboard/account/pro_account/" %}">{% trans "Compte pro" %}</a>
+        {% else %}
+          <a href="{{ patron_edit_subscription }}" class="{% active request "^/dashboard/account/pro_account/subscription/" %}">{% trans "Compte pro" %}</a>
+        {% endif %} 
         {% block pro_account-submenu %}{% endblock %}
     </li>
     <li>

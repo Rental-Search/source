@@ -4,8 +4,10 @@
 
 {% block pro_account-submenu %}
   <ul>
+  	{% if request.user.current_subscription %}
      <li><a href="{{ billing }}">{% trans "Facturation" %}</a></li>
-     <li><a href="{{ patron_edit_subscription }}" class="selected-nav-bar-link-sub">{% trans "Modifier votre plan" %}</a></li>
+    {% endif %}
+     <li><a href="{{ patron_edit_subscription }}" class="selected-nav-bar-link-sub">{% trans "Abonnements" %}</a></li>
   </ul>
 {% endblock %}
 
@@ -52,7 +54,7 @@ $(document).ready(function (){
 						</form>
 					</td>
 				{% else %}
-					<td class="align-center">Votre plan actuel</td>
+					<td class="align-center">Votre abonnement actuel</td>
 				{% endif %}
 			</tr>
 		{% endfor %}

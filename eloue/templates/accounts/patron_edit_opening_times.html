@@ -5,6 +5,8 @@
 
 {% block content-main-profil %}
 
+
+{% if request.user.current_subscription %}
 <form method="POST" action="" class="form-horizontal">
   {% csrf_token %}
   {{ formset.management_form }}
@@ -61,6 +63,21 @@
         <button type="reset" class="btn btn-cancel">Annuler</button>
     </div>  
 </form>
+{% else %}
+<div style="text-align:center;">
+  <h2>{% trans "Horaires d'ouverture"%}</h2>
+  <img src="{{ MEDIA_URL }}images/options_pro/clock.png" alt="Mise en avant" width="180" height="180" style="margin-bottom: 10px;">
+  <p style="font-size: 14px; margin-bottom: 10px; line-height: 18px;">
+    {% trans "En tant que professionnel, sur votre page entreprise<br> vous avez la possibilité d'afficher l'adresse, le numéro de téléphone<br> et les horaires d'ouverture de votre boutique."%}
+  </p>
+  <p style="font-size: 14px; margin-bottom: 10px;">
+    {% trans "Pour bénéficier de cet avantage, accédez à l'espace pro pour en savoir plus :"%}
+  </p>
+  <p style="text-align: center;">
+    <a href="{% url patron_subscription %}" class="btn-pro-access">{% trans "Professionnel ? Accédez à notre espace pro"%}</a>
+  <p>
+</div>
+{% endif %}
 {% endblock %}
 
 {% block tail %}
