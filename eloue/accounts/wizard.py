@@ -43,3 +43,44 @@ class AuthenticationWizard(MultiPartFormWizard):
         else:
             return 'accounts/auth_missing.html'
     
+class ProSubscriptionWizard(AuthenticationWizard):
+    def __init__(self, *args, **kwargs):
+        super(ProSubscriptionWizard, self).__init__(*args, **kwargs)
+        self.required_fields += ['cvv', 'holder_name', 'card_number', 'expires']
+
+    def __call__(self, request, *args, **kwargs):
+        import datetime
+        from eloue.accounts.models import ProPackage
+        from django.db.models import Q
+        now = datetime.datetime.now()
+        plans = ProPackage.objects.filter(
+            Q(valid_until__isnull=True, valid_from__lte=now) |
+            Q(valid_until__isnull=False, valid_until__gte=now)).order_by('maximum_items')
+
+        self.extra_context.update({'plans': plans})
+        return super(ProSubscriptionWizard, self).__call__(request, *args, **kwargs)
+
+    def done(self, request, form_list):
+        super(ProSubscriptionWizard, self).done(request, form_list)
+        from eloue.accounts.models import ProPackage, Subscription
+        subscription_form = form_list[0]
+        subscription_form.is_valid()
+        propackage = subscription_form.cleaned_data['subscription']
+        if request.user.products.count() <= propackage.maximum_items:
+            current_subscription = request.user.current_subscription
+            if current_subscription:
+                current_subscription.subscription_ended = datetime.datetime.now()
+            Subscription.objects.create(patron=request.user, propackage=propackage)
+            if current_subscription:
+                messages.success(request, 'You have successfully changed your plan')
+            else:
+                messages.success(request, 'You have successfuly subscribed to Eloue pro')
+        else:
+            messages.error(request, 'RRRRR')
+        return redirect('patron_edit_subscription')
+
+    def get_template(self, step):
+        from eloue.accounts.forms import SubscriptionEditForm
+        if issubclass(self.form_list[step], SubscriptionEditForm):
+            return 'accounts/patron_subscription.html'
+        return super(ProSubscriptionWizard, self).get_template(step)

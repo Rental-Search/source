@@ -75,8 +75,6 @@
 			            		{{ plan.price|floatformat:0 }}&euro;<span>/mois</span>
 			            </p>
 			        </div>
-			        <a href="#" class="btn-select-plan">{% trans "Choisir cet abonnement" %}</a>
-	    		</div>
 	        	{% else %}
 	    		<div class="info-block plan {% if forloop.first %}first{% endif %}">
 		            <h2>
@@ -86,9 +84,17 @@
 		            	</div>
 		            </h2>
 		            <p class="max-items">{{ plan.maximum_items }} {% trans "annonces maximum" %}</p>
-		            <a href="#" class="btn-select-plan">{% trans "Choisir cet abonnement" %}</a>
-	        	</div>
 	        	{% endif %}
+                {% if plan.pk != request.user.current_subscription.propackage.pk %}
+                        <form action="{% if request.user.is_authenticated %}{% url patron_edit_subscription %}{% else %} {% endif %}" method="post">
+                            {% csrf_token %}
+                            <input type="hidden" name="{% if request.user.is_authenticated %}{% else %}0-{% endif %}subscription" value="{{ plan.pk }}" />
+                            <input type="submit" value="Choisir ce plan" class="btn-select-plan"/>
+                        </form>
+                {% else %}
+                    <td class="align-center">Votre plan actuel</td>
+                {% endif %}
+                </div>
         	{% endfor %}
         </div>
         <h2 style="margin-bottom: 40px;">{% trans "Des options vous sont proposées pour augmenter votre visibilité et votre réactivité" %} :</h2>

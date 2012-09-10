@@ -771,6 +771,12 @@ def make_missing_data_form(instance, required_fields=[]):
         'drivers_license_date': DateSelectField(label=_(u'Date de délivraisance')),
         'date_of_birth': DateSelectField(label=_(u'Date de naissance')),
         'place_of_birth': forms.CharField(label=_(u'Lieu de naissance'), max_length=255),
+        'cvv': forms.CharField(max_length=4, label=_(u'Cryptogramme de sécurité'), help_text=_(u'Les 3 derniers chiffres au dos de la carte.')),
+        'expires': ExpirationField(label=_(u'Date d\'expiration')),
+        'holder_name': forms.CharField(label=_(u'Titulaire de la carte')),
+        'card_number': forms.CharField(label=_(u'Numéro de carte de crédit'),
+            min_length=16, max_length=24, required=True
+        )
     })
 
 
@@ -895,6 +901,10 @@ def make_missing_data_form(instance, required_fields=[]):
             ('contacts', {
                 'fields': ['addresses', 'addresses__address1', 'addresses__zipcode', 'addresses__city', 'addresses__country', 'phones', 'phones__phone'], 
                 'legend': 'Vos coordonnées'}),
+            ('payment', {
+                'fields': ['cvv', 'expires', 'holder_name', 'card_number', ],
+                'legend': 'Vos coordonnées bancaires'
+                }),
         ]
 
     class_dict = fields.copy()
