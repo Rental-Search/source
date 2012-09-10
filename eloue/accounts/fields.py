@@ -62,6 +62,8 @@ class ExpirationWidget(forms.MultiWidget):
         super(ExpirationWidget, self).__init__(widgets)
     
     def decompress(self, value):
+        if value is None:
+            return (None, None)
         return (value[:2], value[2:])
 
 class HiddenExpirationWidget(ExpirationWidget):

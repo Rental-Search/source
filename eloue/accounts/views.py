@@ -434,12 +434,10 @@ def billing(request):
 def patron_edit_subscription(request, *args, **kwargs):
     from eloue.accounts.forms import SubscriptionEditForm
     patron = request.user
-    if not patron.is_professional:
-        return HttpResponseForbidden()
     subscription = patron.current_subscription
     now = datetime.datetime.now()
     plans = ProPackage.objects.filter(
-        Q(valid_until__isnull=True, valid_from__lte=now) or
+        Q(valid_until__isnull=True, valid_from__lte=now) |
         Q(valid_until__isnull=False, valid_until__gte=now))
     if request.method == "POST":
         form = SubscriptionEditForm(request.POST)
@@ -912,11 +910,10 @@ def gmail_send_invite(request):
 
 
 def patron_subscription(request):
-    now = datetime.datetime.now()
-    plans = ProPackage.objects.filter(
-        Q(valid_until__isnull=True, valid_from__lte=now) or
-        Q(valid_until__isnull=False, valid_until__gte=now)).order_by('maximum_items')
-
+    from eloue.accounts.wizard import ProSubscriptionWizard
+    from eloue.accounts.forms import SubscriptionEditForm
+    subscription_wizard = ProSubscriptionWizard([SubscriptionEditForm, EmailAuthenticationForm])
+    return subscription_wizard(request)
     return direct_to_template(request, 'accounts/patron_subscription.html', {'plans': plans})
 
 
