@@ -54,6 +54,7 @@ class CreditCardFormTest(TestCase):
         self.assertTrue('cvv' in form.errors)
         self.assertTrue('expires' in form.errors)
         self.assertTrue('card_number' in form.errors)
+        self.assertTrue('holder_name' in form.errors)
         self.assertFalse(mock_authorize.called)
 
     @mock.patch.object(PayboxManager, 'authorize')
