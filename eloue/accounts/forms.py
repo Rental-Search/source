@@ -26,7 +26,7 @@ from django.forms.formsets import ORDERING_FIELD_NAME, DELETION_FIELD_NAME
 import facebook
 
 from eloue.accounts import EMAIL_BLACKLIST
-from eloue.accounts.fields import PhoneNumberField, ExpirationField, RIBField, DateSelectField
+from eloue.accounts.fields import PhoneNumberField, ExpirationField, RIBField, DateSelectField, CreditCardField
 from eloue.accounts.models import Patron, Avatar, PhoneNumber, CreditCard, COUNTRY_CHOICES, PatronAccepted, FacebookSession, Address, Language
 from eloue.accounts.widgets import ParagraphRadioFieldRenderer, CommentedCheckboxInput
 from eloue.utils import form_errors_append
@@ -613,9 +613,8 @@ class CreditCardForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(CreditCardForm, self).__init__(*args, **kwargs)
-        self.fields['card_number'] = forms.CharField(
-            label=_(u'Numéro de carte de crédit'),
-            min_length=16, max_length=24, required=True, widget=forms.TextInput(
+        self.fields['card_number'] = CreditCardField(
+            label=_(u'Numéro de carte de crédit'), widget=forms.TextInput(
                 attrs={'placeholder': self.instance.masked_number or ''}
             )
         )
@@ -627,21 +626,6 @@ class CreditCardForm(forms.ModelForm):
         exclude = (
             'card_number', 'masked_number', 'keep', 'subscriber_reference'
         )
-
-    def clean_card_number(self):
-        def _luhn_valid(card_number):
-            return sum(
-                int(j) if not i%2 else sum(int(k) for k in str(2*int(j))) 
-                for i, j 
-                in enumerate(reversed(card_number))
-            )%10 == 0
-        card_number = self.cleaned_data['card_number'].replace(' ','').replace('-', '')
-        try:
-            if not _luhn_valid(card_number):
-                raise forms.ValidationError(u'Veuillez verifier le numero de votre carte bancaire')
-        except ValueError as e:
-            raise forms.ValidationError(u'Votre numero doit etre composé uniquement de chiffres')
-        return card_number
 
     def clean(self):
         if self.errors:
