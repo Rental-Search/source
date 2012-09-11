@@ -344,7 +344,7 @@ def patron_detail(request, slug, patron_id=None, page=None):
         return redirect_to(request, patron.get_absolute_url(), permanent=True)
     patron = get_object_or_404(Patron.on_site.select_related('default_address', 'languages'), slug=slug)
     patron_products = product_search.filter(owner_exact=patron.username)
-    if patron.is_professional:
+    if patron.current_subscription:
         template_name = 'accounts/company_detail.html'
     else:
         template_name = 'accounts/patron_detail.html'
@@ -538,7 +538,7 @@ def patron_delete_credit_card(request):
     
     from accounts.models import Billing
 
-    if request.user.is_professional and any(Billing.builder(request.user, request.user.next_billing_date(), datetime.datetime.now())[1:]):
+    if request.user.current_subscription and any(Billing.builder(request.user, request.user.next_billing_date(), datetime.datetime.now())[1:]):
         messages.error(request, _(u"Vous avez un abonnement en cours, veuillez nous contacter à contact@e-loue.com pour supprimer votre carte."))
         return redirect(patron_edit_credit_card)
 
@@ -717,7 +717,7 @@ def dashboard(request):
 
 @login_required
 def owner_booking_authorized(request, page=None):
-    queryset = request.user.bookings.professional() if request.user.is_professional else request.user.bookings.authorized()
+    queryset = request.user.bookings.professional() if request.user.current_subscription else request.user.bookings.authorized()
     return object_list(
         request, queryset, page=page, paginate_by=10, 
         extra_context={'title_page': u'Demandes de réservation'},

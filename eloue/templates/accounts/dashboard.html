@@ -66,7 +66,7 @@
         </div><!-- profil-block -->
         {% if user.work or user.school or user.languages.count %}
         {% with user as patron %}
-            {% if patron.is_professional %}
+            {% if patron.current_subscription %}
                 {% include "accounts/partials/company_more_info.html" %}
             {% else %}
                 {% include "accounts/partials/more_info.html" %}
@@ -75,7 +75,7 @@
         {% endif %}
         <div class="profil-block last">
             {% with user as patron %}
-                {% if not patron.is_professional %}
+                {% if not patron.current_subscription %}
                     {% include "accounts/partials/response_stats.html" %}
                 {% endif %}
             {% endwith %}

@@ -17,7 +17,7 @@
     <li>
         <a href="{{ owner_product }}"  class="{% active request owner_product %}">{% trans "Gérer mes annonces" %}</a>
     </li>
-    {% if not request.user.is_professional %}
+    {% if not request.user.current_subscription %}
         {% with request.user.bookings.authorized.count as count %}
             <li>
                 <a href="{{ owner_booking_authorized }}" class="{% active request owner_booking_authorized %}">{% trans "Demande de réservation" %}{% if count > 0 %} ({{count}}){% endif %}</a>
@@ -43,7 +43,10 @@
 {% endblock %}
 
 {% block content-main-profil %}
-	<h2>{% trans "Gérer mes annonces" %}</h2>
+	<h2>
+        {% trans "Gérer mes annonces" %}
+        <a href="{% url publish_new_ad %}" style="font-size: 12px; float: right; margin-top: 5px;">({% trans "Déposer une nouvelle annonce"%})</a>
+    </h2>
 	<ul class="product-list">
 	{% for product in product_list %}
 	<li>

@@ -23,7 +23,7 @@
     <li>
       <a href="{{ product_price_edit }}"  class="{% active request product_price_edit %}">{% trans "Prix" %}</a>
     </li>
-    {% if request.user.is_professional %}
+    {% if request.user.current_subscription %}
     <li>
       <a href="{{product_highlight_edit}}" class="{% active request product_highlight_edit %}">{% trans "Mise en avant"%}</a>
     </li>

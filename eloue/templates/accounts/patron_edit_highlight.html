@@ -41,6 +41,7 @@
 {% endblock %}
 
 {% block content-main-profil %}
+{% if request.user.current_subscription %}
 <h2 style="margin-bottom: 30px">
 	{% trans "Liste des annonces misent en avant"%}  <small style="padding-left: 50px;"><a href="#" id="add_new_highlight"><i class="icon-plus-sign"></i> {% trans "Ajouter une annonce" %}</a></small>
 </h2>
@@ -92,4 +93,17 @@
 	    </div>
 	</form>
 </div>
+{% else %}
+<div style="text-align: center;">
+	<h2>{% trans "Mise en avant" %}</h2>
+	<img src="{{ MEDIA_URL }}images/options_pro/highlight.png" alt="Mise en avant" width="180" height="180" style="margin-bottom: 10px;">
+	<p style="font-size: 14px; margin-bottom: 10px;">Votre annonce est mise en avant dans toutes nos listes (page d’accueil,<br>résultats de recherche, annonces similaires).</p>
+	<p style="font-size: 14px; margin-bottom: 10px;">
+	  {% trans "Pour bénéficier de cet avantage, accédez à l'espace pro pour en savoir plus :"%}
+	</p>
+	<p style="text-align: center;">
+	  <a href="{% url patron_subscription %}" class="btn-pro-access">{% trans "Professionnel ? Accédez à notre espace pro"%}</a>
+	<p>
+</div>
+{% endif %}
 {% endblock %}

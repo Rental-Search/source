@@ -546,12 +546,12 @@ class FacebookSession(models.Model):
 class Address(models.Model):
     """An address"""
     patron = models.ForeignKey(Patron, related_name='addresses')
-    address1 = models.CharField(max_length=255)
+    address1 = models.CharField(_(u'Adresse'), max_length=255)
     address2 = models.CharField(max_length=255, null=True, blank=True)
     zipcode = models.CharField(max_length=9)
     position = models.PointField(null=True, blank=True)
-    city = models.CharField(max_length=255)
-    country = models.CharField(max_length=2, choices=COUNTRY_CHOICES)
+    city = models.CharField(_(u'Ville'), max_length=255)
+    country = models.CharField(_(u'Pays'), max_length=2, choices=COUNTRY_CHOICES)
 
     objects = models.GeoManager()
 

@@ -12,43 +12,71 @@
     </ul>
     <div class="one-content"> 
         <h1>{% trans "Déposer une annonce"%}
+            {% if not request.user.current_subscription %}
             <a href="{% url patron_subscription %}" class="btn-pro-access">{% trans "Professionnel ? Accédez à notre espace pro"%}</a>
+            {% endif %}
         </h1>
+        {% if not request.user.current_subscription %}
         <p class="publish-intro">
             {% blocktrans %}
                 Grâce à la location, vous allez gagner de l’argent tout<br>en rendant service aux loueurs et à la planète.
             {% endblocktrans %}
         </p>
+        {% endif %}
         <div class="publish-ads">
             <div class="publish-ad first">
                 <a href="{% url car_product_create %}" class="btn-publish-ad">
                     <i class="add-car"></i><br>
                     {% trans "Déposer une voiture"%}
                 </a>
+                {% if not request.user.is_professional %}
                 <p style="margin-bottom: 13px;">{% trans "Assurance comprise"%}<p>
                 <img src="{{ MEDIA_URL }}images/logo_mma.png" alt="location de voiture assuré par MMA" width="116" style="margin-bottom: 5px;"><br>
                 <a href="/assurance-tranquillite/#car">({% trans "En savoir plus" %})</a>
+                {% endif %}
             </div>
             <div class="publish-ad">
                 <a href="{% url real_estate_product_create %}" class="btn-publish-ad">
                     <i class="add-home"></i><br>
                     {% trans "Déposer un logement"%}
                 </a>
+                {% if not request.user.is_professional %}
                 <p style="margin-bottom: 5px;">{% trans "Assurance comprise"%}<p>
                 <img src="{{ MEDIA_URL }}images/e-loue_europ_assistance.png" alt="location de logement assuré par Europ assistance" width="72"><br>
                 <a href="/assurance-tranquillite/#real-estate">({% trans "En savoir plus" %})</a>
+                {% endif %}
             </div>
             <div class="publish-ad">
                 <a href="{% url product_create %}" class="btn-publish-ad">
                     <i class="add-items"></i><br>
                     {% trans "Déposer un objet"%}
                 </a>
+                {% if not request.user.is_professional %}
                 <p>{% trans "Assurance comprise"%}<p>
                  <img src="{{ MEDIA_URL }}images/assurone.png" alt="location d'un objet assuré par Assurone" width="73" style="margin-bottom: 3px;"><br>
                 <a href="/assurance-tranquillite/#goods">({% trans "En savoir plus" %})</a>
+                {% endif %}
             </div>
         </div>
     </div>
+    {% if request.user.current_subscription %}
+    <div class="one-content" style="width: 760px; margin-left: 120px; margin-right: 120px;">
+        <div class="pro-options" style="width: 730px;">
+            <ul class="first" style="width: 345px;">
+                <li style="text-align: justify;">
+                    <span class="title-option">Publiez vos annnonces</span><br>
+                    Vous publiez vos annonces directement sur le site. Si vous avez un volume très important d'annonces contactez-nous pour qu'on intègre directement votre catalogue.
+                </li>
+            </ul>
+            <ul style="width: 345px;">
+                <li style="text-align: justify;">
+                    <span class="title-option">Mise en relation</span><br>
+                    Les membres de e-loue peuvent voir vos annonces et vous contactent directement s'il sont intéressés. La réservation et le paiement se feront directement dans votre magasin ou sur votre site internet.
+                </li>
+            </ul>
+        </div>
+    </div>
+    {% else %}    
     <div class="advantage ht-fonction">
         <ul class="ht-f-col">
             <li>
@@ -90,5 +118,6 @@
             </li>
         </ul>
     </div>
+    {% endif %}
 </div>{# container-main #}
 {% endblock %}
