@@ -47,6 +47,9 @@ class CreditCardField(forms.CharField):
                 for i, j 
                 in enumerate(reversed(card_number))
             )%10 == 0
+        value = super(CreditCardField, self).clean(value)
+        if not value:
+            return value
         card_number = value.replace(' ','').replace('-', '')
         try:
             if not _luhn_valid(card_number):
