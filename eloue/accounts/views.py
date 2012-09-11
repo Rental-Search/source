@@ -450,7 +450,7 @@ def patron_edit_subscription(request, *args, **kwargs):
                 try:
                     patron.creditcard
                 except:
-                    messages.error(request, u'Pour un abonnement vous devez posseder une carte bancaire. Merci de renseigner la carte utilisée pour le paiement.')
+                    messages.error(request, _(u'Pour un abonnement vous devez enregistrer une carte bancaire. Merci de renseigner la carte utilisée pour le paiement.'))
                     response = redirect('patron_edit_credit_card')
                     response['Location'] += '?' + urllib.urlencode({'subscription': new_package.pk})
                     return response
@@ -515,9 +515,9 @@ def patron_edit_credit_card(request):
                     current_subscription.subscription_ended = datetime.datetime.now()
                     current_subscription.save()
                 Subscription.objects.create(patron=patron, propackage=propackage)
-                messages.info(request, u'On a validé votre abonnement')
+                messages.success(request, u'On a validé votre abonnement')
             form.save()
-            messages.info(request, u'Votre carte a bien été ajouté')
+            messages.success(request, u'Votre carte a bien été ajouté')
             return redirect(patron_edit_credit_card)
     else:
         form = CreditCardForm(data=None, instance=instance)

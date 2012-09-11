@@ -33,7 +33,7 @@ class ProductWizard(MultiPartFormWizard):
                 messages.error(request, u"Veuillez choisir un abonnement pour déposer une annonce.")
                 return redirect('patron_edit_subscription')
             elif subscription.propackage.maximum_items <= patron.products.count():
-                messages.error(request, u'Votre nombre d\'annonces est dépassé. Modifiez votre abonnement.')
+                messages.error(request, u'Votre nombre d\'annonces maximum est dépassé. Veuillez modifier votre abonnement.')
                 return redirect('patron_edit_subscription')
         return super(ProductWizard, self).__call__(request, *args, **kwargs)
 

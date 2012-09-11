@@ -74,11 +74,11 @@ class ProSubscriptionWizard(AuthenticationWizard):
                 current_subscription.subscription_ended = datetime.datetime.now()
             Subscription.objects.create(patron=request.user, propackage=propackage)
             if current_subscription:
-                messages.success(request, 'You have successfully changed your plan')
+                messages.success(request, _(u'Vous avez changer d\'abonnement avec succès'))
             else:
-                messages.success(request, 'You have successfuly subscribed to Eloue pro')
+                messages.success(request, _(u'Votre inscription à l\'abonnement est validé'))
         else:
-            messages.error(request, 'RRRRR')
+            messages.error(request, _(u'Votre nombre d\'annonces dépasse le nombre d\'annonce maximum de cet abonnement. Merci de choisir un abonnement plus important'))
         return redirect('patron_edit_subscription')
 
     def get_template(self, step):
