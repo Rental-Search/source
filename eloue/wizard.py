@@ -140,7 +140,7 @@ class MultiPartFormWizard(FormWizard):
 
         if missing_form:
             missing_form.instance = self.new_patron
-            self.new_patron, self.new_address, self.new_phone = missing_form.save()
+            self.new_patron, self.new_address, self.new_phone, self.credit_card = missing_form.save()
             if not self.new_patron.avatar and self.fb_session:
                 if 'picture' in self.me and 'static-ak' not in self.me['picture']:
                     try:
