@@ -329,7 +329,7 @@ class Patron(User):
 
     @property
     def current_subscription(self):
-        subscriptions = self.subscription_set.order_by('-subscription_started')
+        subscriptions = self.subscription_set.filter(subscription_ended__isnull=True).order_by('-subscription_started')
         if subscriptions:
             return subscriptions[0]
         return None
