@@ -26,7 +26,7 @@ from django.forms.formsets import ORDERING_FIELD_NAME, DELETION_FIELD_NAME
 import facebook
 
 from eloue.accounts import EMAIL_BLACKLIST
-from eloue.accounts.fields import PhoneNumberField, ExpirationField, RIBField, DateSelectField
+from eloue.accounts.fields import PhoneNumberField, ExpirationField, RIBField, DateSelectField, CreditCardField
 from eloue.accounts.models import Patron, Avatar, PhoneNumber, CreditCard, COUNTRY_CHOICES, PatronAccepted, FacebookSession, Address, Language
 from eloue.accounts.widgets import ParagraphRadioFieldRenderer, CommentedCheckboxInput
 from eloue.utils import form_errors_append
@@ -597,9 +597,8 @@ class CreditCardForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(CreditCardForm, self).__init__(*args, **kwargs)
-        self.fields['card_number'] = forms.CharField(
-            label=_(u'Numéro de carte de crédit'),
-            min_length=16, max_length=24, required=True, widget=forms.TextInput(
+        self.fields['card_number'] = CreditCardField(
+            label=_(u'Numéro de carte de crédit'), widget=forms.TextInput(
                 attrs={'placeholder': self.instance.masked_number or ''}
             )
         )
@@ -611,21 +610,6 @@ class CreditCardForm(forms.ModelForm):
         exclude = (
             'card_number', 'masked_number', 'keep', 'subscriber_reference'
         )
-
-    def clean_card_number(self):
-        def _luhn_valid(card_number):
-            return sum(
-                int(j) if not i%2 else sum(int(k) for k in str(2*int(j))) 
-                for i, j 
-                in enumerate(reversed(card_number))
-            )%10 == 0
-        card_number = self.cleaned_data['card_number'].replace(' ','').replace('-', '')
-        try:
-            if not _luhn_valid(card_number):
-                raise forms.ValidationError(u'Veuillez verifier le numero de votre carte bancaire')
-        except ValueError as e:
-            raise forms.ValidationError(u'Votre numero doit etre composé uniquement de chiffres')
-        return card_number
 
     def clean(self):
         if self.errors:
@@ -758,9 +742,7 @@ def make_missing_data_form(instance, required_fields=[]):
         'cvv': forms.CharField(max_length=4, label=_(u'Cryptogramme de sécurité'), help_text=_(u'Les 3 derniers chiffres au dos de la carte.')),
         'expires': ExpirationField(label=_(u'Date d\'expiration')),
         'holder_name': forms.CharField(label=_(u'Titulaire de la carte')),
-        'card_number': forms.CharField(label=_(u'Numéro de carte de crédit'),
-            min_length=16, max_length=24, required=True
-        )
+        'card_number': CreditCardField(label=_(u'Numéro de carte de crédit')),
     })
 
 
@@ -793,7 +775,17 @@ def make_missing_data_form(instance, required_fields=[]):
     
     if instance and instance.username and "first_name" not in required_fields:
         del fields['avatar']
-            
+    
+    if instance:
+        try:
+            if instance.creditcard:
+                del fields['cvv']
+                del fields['expires']
+                del fields['holder_name']
+                del fields['card_number']
+        except CreditCard.DoesNotExist:
+            pass
+
     for f in fields.keys():
         if required_fields and f not in required_fields:
             del fields[f]
@@ -830,8 +822,27 @@ def make_missing_data_form(instance, required_fields=[]):
             )
         else:
             phone = None
+        if self.cleaned_data.get('card_number'):
+            from eloue.payments.paybox_payment import PayboxManager, PayboxException
+            import uuid
+            pm = PayboxManager()
+            subscriber_reference = uuid.uuid4().hex
+            self.cleaned_data['card_number'] = pm.subscribe(
+                subscriber_reference,
+                self.cleaned_data['card_number'], 
+                self.cleaned_data['expires'], self.cleaned_data['cvv']
+            )
+            credit_card = CreditCard.objects.create(
+                subscriber_reference=subscriber_reference,
+                masked_number=self.cleaned_data['masked_number'],
+                card_number=self.cleaned_data['card_number'],
+                holder_name=self.cleaned_data['holder_name'],
+                expires=self.cleaned_data['expires'],
+                holder=self.instance, keep=True
+            )
+
         self.instance.save()
-        return self.instance, address, phone
+        return self.instance, address, phone, credit_card
     
     def clean_password2(self):
         password1 = self.cleaned_data['password1']
@@ -874,6 +885,20 @@ def make_missing_data_form(instance, required_fields=[]):
             raise forms.ValidationError(_(u"Vous devez spécifiez un numéro de téléphone"))
         return phones
     
+    def clean(self):
+        if self.errors:
+            return self.cleaned_data
+        try:
+            from eloue.payments.paybox_payment import PayboxManager, PayboxException
+            pm = PayboxManager()
+            self.cleaned_data['masked_number'] = mask_card_number(self.cleaned_data['card_number'])
+            pm.authorize(self.cleaned_data['card_number'], 
+                self.cleaned_data['expires'], self.cleaned_data['cvv'], 1, 'verification'
+            )
+        except PayboxException as e:
+            raise forms.ValidationError(_(u'La validation de votre carte a échoué.'))
+        return self.cleaned_data
+
     class Meta:
         fieldsets = [
             ('member', {
@@ -895,6 +920,7 @@ def make_missing_data_form(instance, required_fields=[]):
     class_dict.update({'instance': instance, 'Meta': Meta})
     form_class = type('MissingInformationForm', (BetterForm,), class_dict)
     form_class.save = types.MethodType(save, None, form_class)
+    form_class.clean = types.MethodType(clean, None, form_class)
     form_class.clean_password2 = types.MethodType(clean_password2, None, form_class)
     form_class.clean_username = types.MethodType(clean_username, None, form_class)
     form_class.clean_phones = types.MethodType(clean_phones, None, form_class)

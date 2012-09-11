@@ -34,6 +34,29 @@ class PhoneNumberField(forms.Field):
         return re.sub(DIGITS_ONLY, '', smart_unicode(value))
 
 
+
+class CreditCardField(forms.CharField):
+    def __init__(self, *args, **kwargs):
+        super(CreditCardField, self).__init__(
+            *args, min_length=16, max_length=24, **kwargs)
+
+    def clean(self, value):
+        def _luhn_valid(card_number):
+            return sum(
+                int(j) if not i%2 else sum(int(k) for k in str(2*int(j))) 
+                for i, j 
+                in enumerate(reversed(card_number))
+            )%10 == 0
+        card_number = value.replace(' ','').replace('-', '')
+        try:
+            if not _luhn_valid(card_number):
+                raise forms.ValidationError(u'Veuillez verifier le numero de votre carte bancaire')
+        except ValueError as e:
+            raise forms.ValidationError(u'Votre numero doit etre composé uniquement de chiffres')
+        return card_number
+    
+
+
 MONTH_CHOICES = (
     ('', _(u'Mois')),
     ('01', '01'),

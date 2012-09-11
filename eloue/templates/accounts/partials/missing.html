@@ -5,6 +5,11 @@
 <form class="form-horizontal" method="post" action="">
 {% endif %}
 {% csrf_token %}
+    {% if form.non_field_errors %}
+        {% with form_errors=form.non_field_errors %}
+            {% include 'partials/non_field_errors.html' %}
+        {% endwith %}
+    {% endif %}
     {% for fieldset in form.fieldsets %}
     {% if fieldset.boundfields|length > 0 %}
     <fieldset class="{{ fieldset.classes }}">
