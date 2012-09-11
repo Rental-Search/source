@@ -840,6 +840,8 @@ def make_missing_data_form(instance, required_fields=[]):
                 expires=self.cleaned_data['expires'],
                 holder=self.instance, keep=True
             )
+        else:
+            credit_card = None
 
         self.instance.save()
         return self.instance, address, phone, credit_card
@@ -888,15 +890,16 @@ def make_missing_data_form(instance, required_fields=[]):
     def clean(self):
         if self.errors:
             return self.cleaned_data
-        try:
-            from eloue.payments.paybox_payment import PayboxManager, PayboxException
-            pm = PayboxManager()
-            self.cleaned_data['masked_number'] = mask_card_number(self.cleaned_data['card_number'])
-            pm.authorize(self.cleaned_data['card_number'], 
-                self.cleaned_data['expires'], self.cleaned_data['cvv'], 1, 'verification'
-            )
-        except PayboxException as e:
-            raise forms.ValidationError(_(u'La validation de votre carte a échoué.'))
+        if self.cleaned_data.get('card_number'):
+            try:
+                from eloue.payments.paybox_payment import PayboxManager, PayboxException
+                pm = PayboxManager()
+                self.cleaned_data['masked_number'] = mask_card_number(self.cleaned_data['card_number'])
+                pm.authorize(self.cleaned_data['card_number'], 
+                    self.cleaned_data['expires'], self.cleaned_data['cvv'], 1, 'verification'
+                )
+            except PayboxException as e:
+                raise forms.ValidationError(_(u'La validation de votre carte a échoué.'))
         return self.cleaned_data
 
     class Meta:
