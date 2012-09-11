@@ -1,0 +1,26 @@
+{% extends "admin/base_site.html" %}
+
+{% load i18n %}
+
+{% block title %}Product Stats{% endblock %}
+
+{% block breadcrumbs %}
+    <div class="breadcrumbs">
+        <a href="/">{% trans 'Home' %}</a> 
+        &rsaquo; Product Stats Detail
+    </div>
+{% endblock %}
+
+
+{% block content %}
+<div>
+	<div>
+		<ul>
+			<li><strong>Nom de l'annonce</stron> : {{ product.summary }}</li>
+			<li><strong>Categorie</stron> : {{ product.category.name }}</li>
+			<li><strong>Ville</stron> : {{ product.address.city }}</li>
+			<li><strong>Nombre de location</stron> : {{ product.bookings.all.count }}</li>
+		</ul>
+	</div>
+</div>
+{% endblock %}

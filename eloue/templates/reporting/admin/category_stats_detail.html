@@ -1,0 +1,85 @@
+{% extends "admin/base_site.html" %}
+
+{% load i18n %}
+
+{% block title %}Category Stats Detail{% endblock %}
+
+{% block breadcrumbs %}
+    <div class="breadcrumbs">
+        <a href="/">{% trans 'Home' %}</a> 
+        &rsaquo; Category Stats Detail
+    </div>
+{% endblock %}
+
+
+{% block content %}
+<div>
+	<div style="float: left; width: 100%; margin-right: 20px;">
+		<h2>Informations générales</h2>
+		<ul>
+			<li><strong>Nom de la catégorie :</strong> {{ category.name }}</li>
+			<li><strong>Nombre d'annonces :</strong> {{ category.products.all.count }}</li>
+			<li><strong>Nombre de location :</strong> {{ bookings_count.num_bookings }}</li>
+		</ul>
+	</div>
+	<div style="float: left; width: 600px; margin-right: 20px;">
+		<h2>Nombre de réservation par produit</h2>
+		<table>
+			<thead>
+				<tr>
+					<th>Produit</th>
+					<th>Propriétaire</th>
+					<th style="width: 120px;">Nombre de location</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for product in booking_stats %}
+				<tr>
+					<td><a href="{% url stats_by_product_detail product.pk %}">{{ product.summary }}</a></td>
+					<td><a href="{% url stats_by_patron_detail product.owner.pk %}">{{ product.owner }}</a></td>
+					<td>{{ product.num_bookings }}</td>
+				</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
+	<div style="float: left; width: 450px; margin-right: 20px;">
+		<h2>Nombre de produit par utilisateur</h2>
+		<table style="width: 450px;">
+			<thead>
+				<tr>
+					<th>Membre</th>
+					<th>Nombre de produit</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for owner in patron_stats %}
+				<tr>
+					<td><a href="{% url stats_by_patron_detail owner.owner__pk %}">{{ owner.owner__username }}</a></td>
+					<td>{{ owner.num_products }}</td>
+				</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
+	<div style="float: left; width: 450px; margin-right: 20px;">
+		<h2>Nombre de location par utilisateur</h2>
+		<table style="width: 450px;">
+			<thead>
+				<tr>
+					<th>Membre</th>
+					<th>Nombre de location</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for owner in owner_stats %}
+				<tr>
+					<td><a href="{% url stats_by_patron_detail owner.owner__pk %}">{{ owner.owner__username }}</a></td>
+					<td>{{ owner.num_bookings }}</td>
+				</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
+</div>
+{% endblock %}s
