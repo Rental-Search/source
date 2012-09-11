@@ -12,7 +12,11 @@
 {% endif %}
 {% csrf_token %}
 <p class="form-header">
+  {% if patron.current_subscription %}
+      {% trans "L’enregistrement des coordonnées bancaires est nécessaire pour le paiement de votre abonnement et des options." %}
+  {% else %}
       {% trans "En enregistrant vos coordonnées bancaires, vous n'aurez plus besoin de les réécrire lors de vos prochaines demandes de locations."%}
+  {% endif %}
 </p>
 <fieldset id="credit-card-form">
   <legend>Modifier votre carte bancaire</legend>

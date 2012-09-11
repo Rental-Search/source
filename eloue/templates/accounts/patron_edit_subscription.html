@@ -33,7 +33,7 @@ $(document).ready(function (){
 <table class="table plan_list">
 	<thead>
 		<tr>
-			<th>{% trans "Plan" %}</th>
+			<th>{% trans "Abonnement" %}</th>
 			<th class="align-center">{% trans "Nombre d'annonces" %}</th>
 			<th class="align-center">{% trans "Prix par mois" %}</th>
 			<th></th>
@@ -50,7 +50,7 @@ $(document).ready(function (){
 						<form action="" method="post">
 							{% csrf_token %}
 							<input type="hidden" name="subscription" value="{{ plan.pk }}" />
-							<input type="submit" value="Choisir ce plan" class="btn-contactme"/>
+							<input type="submit" value="{% trans "Choisir cet abonnement" %}" class="btn-contactme"/>
 						</form>
 					</td>
 				{% else %}

@@ -249,11 +249,8 @@ class PatronEditForm(BetterModelForm):
     last_name = forms.CharField(label=_(u"Nom"), required=True, widget=forms.TextInput(attrs={'class': 'inm'}))
     avatar = forms.ImageField(required=False, label=_(u"Photo de profil"))
     
-    paypal_email = forms.EmailField(label=_(u"Email PayPal"), required=False, max_length=75, widget=forms.TextInput(attrs={
-            'autocapitalize': 'off', 'autocorrect': 'off', 'class': 'inm'}))
-    
 
-    is_subscribed = forms.BooleanField(required=False, initial=False, label=_(u"Newsletter"), widget=CommentedCheckboxInput(info_text="J'accepte de recevoir de recevoir la Newsletter e-loue"))
+    is_subscribed = forms.BooleanField(required=False, initial=False, label=_(u"Newsletter"), widget=CommentedCheckboxInput(info_text="J'accepte de recevoir de recevoir la Newsletter de e-loue"))
     new_messages_alerted = forms.BooleanField(label=_(u"Notifications"), required=False, initial=True, widget=CommentedCheckboxInput(info_text="J'accepte de recevoir les messages des autres membres"))
 
     date_of_birth = DateSelectField(required=False, label=_(u"Lieu de naissance"))
@@ -263,7 +260,7 @@ class PatronEditForm(BetterModelForm):
     work = forms.CharField(label=_(u"Travail"), required=False, widget=forms.TextInput(attrs={'class': 'inm'}), help_text=_(u"Exemple : Directrice Resources Humaines, ma socitée"))
     school = forms.CharField(label=_(u"Etudes"), required=False, widget=forms.TextInput(attrs={'class': 'inm'}), help_text=_(u"Exemple : Université Panthéon Sorbonne (Paris I)"))
     hobby = forms.CharField(label=_(u"Hobbies"), required=False, widget=forms.TextInput(attrs={'class': 'inm'}))
-    languages = forms.ModelMultipleChoiceField(queryset=Language.objects, label=_(u"Langues parlés"), required=False)
+    languages = forms.ModelMultipleChoiceField(queryset=Language.objects, label=_(u"Langues parlées"), required=False, widget=forms.SelectMultiple(attrs={'data-placeholder': _(u'Choisissez vos langues')}) )
 
     class Meta:
         model = Patron
@@ -273,7 +270,7 @@ class PatronEditForm(BetterModelForm):
                     'is_professional', 'company_name', 'username', 'avatar', 
                     'email', 'civility', 'first_name', 'last_name',
                     'default_address', 'default_number', 'date_of_birth', 'place_of_birth',
-                    'paypal_email', 'is_subscribed', 'new_messages_alerted',
+                    'is_subscribed', 'new_messages_alerted',
                 ],
                 'legend': _(u'Informations nécessaires')
             }),
@@ -322,28 +319,16 @@ class PatronEditForm(BetterModelForm):
             return email
     
     def clean(self):
-        paypal_email = self.cleaned_data.get('paypal_email', None)
         first_name = self.cleaned_data.get('first_name', None)
         last_name = self.cleaned_data.get('last_name', None)
-        if paypal_email:
-            is_verified = paypal_payment.verify_paypal_account(
-                        email=paypal_email,
-                        first_name=first_name,
-                        last_name=last_name
-                       )
-            if is_verified == 'INVALID':
-                form_errors_append(self, 'paypal_email', _(u"Vérifier qu'il s'agit bien de votre email PayPal"))
-                form_errors_append(self, 'first_name', _(u"Vérifier que le prénom est identique à celui de votre compte PayPal"))
-                form_errors_append(self, 'last_name', _(u"Vérifier que le nom est identique à celui de votre compte PayPal"))
-            if not paypal_payment.confirm_paypal_account(email=paypal_email):
-                form_errors_append(self, 'paypal_email', _(u"Vérifiez que vous avez bien répondu à l'email d'activation de Paypal"))
+        
         return self.cleaned_data
 
 from accounts.models import ProPackage
 from django.db.models import Q
 class CompanyEditForm(PatronEditForm):
     avatar = forms.ImageField(required=False, label=_(u"Logo de l\'entreprise"))
-    about = forms.CharField(label=_(u"A propos de l'entreprise"), required=False, widget=forms.Textarea(attrs={'class': 'inm'}))
+    about = forms.CharField(label=_(u"A propos de l'entreprise"), required=False, widget=forms.Textarea(), help_text=_(u'Décrivez votre entreprise afin d’expliquer aux membres de e-loue votre activité.'))
 
     class Meta:
         model = Patron
@@ -352,8 +337,7 @@ class CompanyEditForm(PatronEditForm):
                 'fields': [
                     'is_professional', 'company_name', 'username', 'avatar', 
                     'email', 'civility', 'first_name', 'last_name',
-                    'default_address', 'default_number', 'date_of_birth', 'place_of_birth',
-                    'paypal_email', 'is_subscribed', 'new_messages_alerted',
+                    'default_address', 'default_number', 'date_of_birth', 'place_of_birth', 'is_subscribed', 'new_messages_alerted',
                 ],
                 'legend': _(u'Informations nécessaires')
             }),
