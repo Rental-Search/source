@@ -1,0 +1,33 @@
+{% load i18n %}
+
+{% blocktrans with booking.borrower.get_full_name as borrower_name and booking.owner.username as owner and booking.owner.phones.all|first as owner_phone and booking.owner.email as owner_email %}
+
+Bonjour {{ borrower_name }},
+
+Nous avons bien pris en compte votre demande de réservation et venons d’informer le loueur.
+
+Voici donc les différents éléments qui lui ont été transmis :
+{% endblocktrans %}
+
+{% blocktrans with booking.product.category.name as category and booking.product.summary as summary and booking.started_at|date:"DATETIME_FORMAT" as starting_at and booking.started_at|timesince:booking.ended_at as duration %}
+Type : {{ category }}
+Objet : {{ summary }}
+Début de la location : {{ starting_at }}
+Durée de la location : {{ duration }}
+{% endblocktrans %}
+
+
+{% blocktrans with site.name as site_name %}
+
+Voici les coordonnées du loueur si vous souhaitez le contacter directement :<br>
+
+Numéro de téléphone : {{ owner_phone }}
+Adresse électronique : {{ owner_email }}
+
+ 
+Bonne location !
+
+A très vite,
+
+L'équipe {{ site_name }}
+{% endblocktrans %}

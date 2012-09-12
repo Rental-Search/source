@@ -696,7 +696,7 @@ class EmailNotification(Notification):
 
     def send(self, msg, booking):
         context = {'booking': self}
-        message = create_alternative_email('rent/emails/owner_ask_pro', context, settings.DEFAULT_FROM_EMAIL, [self.email]])
+        message = create_alternative_email('rent/emails/owner_ask_pro', context, settings.DEFAULT_FROM_EMAIL, [self.email])
         message.send()
         EmailNotificationHistory.objects.create(notification=self)
 
