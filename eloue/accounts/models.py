@@ -684,7 +684,7 @@ class Notification(models.Model):
 class PhoneNotification(Notification):
     phone_number = models.CharField(max_length=64)
 
-    def send(self, msg):
+    def send(self, msg, booking):
         print 'texto sent'
         PhoneNotificationHistory.objects.create(notification=self)
 
@@ -694,8 +694,10 @@ class EmailNotification(Notification):
     def __unicode__(self):
         return u"{email}".format(email=self.email)
 
-    def send(self, msg):
-        print 'email sent'
+    def send(self, msg, booking):
+        context = {'booking': self}
+        message = create_alternative_email('rent/emails/owner_ask_pro', context, settings.DEFAULT_FROM_EMAIL, [self.email]])
+        message.send()
         EmailNotificationHistory.objects.create(notification=self)
 
 

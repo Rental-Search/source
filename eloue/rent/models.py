@@ -433,12 +433,19 @@ class ProBooking(Booking):
     def accept(self):
         pass
 
+    def send_ask_email(self):
+        context = {'booking': self}
+        message = create_alternative_email('rent/emails/owner_ask_pro', context, settings.DEFAULT_FROM_EMAIL, [self.owner.email])
+        message.send()
+        message = create_alternative_email('rent/emails/borrower_ask_pro', context, settings.DEFAULT_FROM_EMAIL, [self.borrower.email])
+        message.send()
+
     @smart_transition(source='professional', target='professional', save=True)
     def preapproval(self, *args, **kwargs):
         for phonenotification in self.owner.phonenotification_set.all():
-            phonenotification.send('')
+            phonenotification.send('', self)
         for emailnotification in self.owner.emailnotification_set.all():
-            emailnotification.send('')
+            emailnotification.send('', self)
         self.send_ask_email()
 
 
