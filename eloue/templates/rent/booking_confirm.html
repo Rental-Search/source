@@ -11,12 +11,18 @@
     <li>{% trans "Paiement de la réservation" %}</li>
   </ul>
   <div class="content-main">
+    {% if not product.owner.current_subscription %}
     <p class="form-header">
       {% blocktrans %}
       Lorsque vous cliquez sur "paiement" en bas de cette page, vous ne serez pas débité. Il s'agit simplement d'une pré-réservation. Vous ne serez débité que si le propriétaire accepte la demande de location sous 24h.
       {% endblocktrans %}
     </p>
+    {% endif %}
+    {% if product.owner.current_subscription %}
+    <h2>{% trans "Récapitulatif de votre demande de réservation" %}</h2>
+    {% else %}
     <h2>{% trans "Récapitulatif de votre réservation" %}</h2>
+    {% endif %}
     <form class="form-horizontal" action="" method="POST">
     {% csrf_token %}
       <table class="table table-bordered booking-resume">
@@ -44,16 +50,23 @@
               </td>
           </tr>
           <tr>
+            {% if product.owner.current_subscription %}
+            <th>{% trans "Loueur" %}</th>
+            <td>{{ product.owner.company_name }}</td>
+            {% else %}
             <th>{% trans "Propriétaire" %}</th>
             <td>{{ product.owner.username }}</td>
+            {% endif %}
           </tr>
+          {% if not product.owner.current_subscription %}
           <tr>
             <td colspan="2" style="font-size: 12px;">
               {% blocktrans %}
                 L'intégralité des informations et coordonnées du propriétaire, vous seras communiqué par email s'il accepte la location.
               {% endblocktrans %}
             </td>
-          </td>
+          </tr>
+          {% endif %}
           <tr>
               <th>{% trans "Période de réservation" %}</th>
               <td><b>Du</b> {{preview.started_at|date:"l d F Y H:i"}} <b>au</b> {{preview.ended_at|date:"l d F Y H:i"}}</td>
@@ -118,7 +131,9 @@
             </th>
             <td>
               {{ product.local_currency_deposit_amount|currency }}<br>
+              {% if not product.owner.current_subscription %}
               (Uniquement débité en cas de dommage constaté et avec votre accord)
+              {% endif %}
             </td>
           </tr>
           {% endif %}
