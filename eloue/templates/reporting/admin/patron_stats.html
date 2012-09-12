@@ -1,0 +1,56 @@
+{% extends "admin/base_site.html" %}
+
+{% load i18n %}
+
+{% block title %}Patron Stats{% endblock %}
+
+{% block breadcrumbs %}
+    <div class="breadcrumbs">
+        <a href="/">{% trans 'Home' %}</a> 
+        &rsaquo; Patron Stats
+    </div>
+{% endblock %}
+
+
+{% block content %}
+<div>
+	<div style="float: left; width: 450px; margin-right: 20px;">
+		<h2>Nombre de réservation par membre</h2>
+		<table>
+			<thead>
+				<tr>
+					<th>Membre</th>
+					<th>Nombre de réservation</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for patron in booking_stats %}
+				<tr>
+					<td><a href="{% url stats_by_patron_detail patron.pk %}">{{ patron.username }}</a></td>
+					<td>{{ patron.num_bookings }}</td>
+				</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
+	<div style="float: left; width: 450px;">
+		<h2>Nombre de produit par membre</h2>
+		<table>
+			<thead>
+				<tr>
+					<th>Membre</th>
+					<th>Nombre de produits</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for patron in product_stats %}
+				<tr>
+					<td><a href="{% url stats_by_patron_detail patron.pk %}">{{ patron.username }}</a></td>
+					<td>{{ patron.num_products }}</td>
+				</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
+</div>
+{% endblock %}

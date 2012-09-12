@@ -1,4 +1,4 @@
-{% load bookingaction i18n product %}
+{% load bookingaction i18n product paginator %}
 {% if object_list %}
 <ul class="booking-list">
 	{% for booking in object_list %}
@@ -66,6 +66,20 @@
 		</li>
 	{% endfor %}
 </ul>
+{% pagination %}
+{% if is_paginated %}
+<div class="pagination">
+    {% if page_obj.has_previous %}
+        <a href="?page={{page_obj.previous_page_number}}" class="prev">&#171; {% trans "Page précédente" %}</a>
+    {% endif %}
+    {% for page in page_range %}
+	    <a href="?page={{page}}" {% if page_obj.number == page %}class="page-selected"{% endif %}>{{ page }}</a>
+    {% endfor %}
+    {% if page_obj.has_next %}
+        <a href="?page={{page_obj.next_page_number}}" class="next">{% trans "Page suivante" %} &#187;</a>
+    {% endif %}
+</div><!-- pagination -->
+{% endif %}
 {% else %}
 <p style="text-align: center; margin-top: 60px;">{% trans "Pas de réservation" %}</p>
 {% endif %}

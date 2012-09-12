@@ -86,6 +86,7 @@ class ProductAdmin(CurrentSiteAdmin):
 
 class RealEstateProductAdmin(CurrentSiteAdmin):
     list_display = ('summary', 'category', 'deposit_amount', 'quantity', 'is_archived', 'is_allowed', 'created_at', 'modified_at')
+    inlines = [PictureInline, PropertyValueInline, PriceInline]
 
     def formfield_for_dbfield(self, db_field, **kwargs):
         if db_field.name == 'category':
@@ -97,7 +98,8 @@ class RealEstateProductAdmin(CurrentSiteAdmin):
 
 class CarProductAdmin(CurrentSiteAdmin):
     list_display = ('summary', 'category', 'deposit_amount', 'quantity', 'is_archived', 'is_allowed', 'created_at', 'modified_at')
-
+    inlines = [PictureInline, PropertyValueInline, PriceInline]
+    
     def formfield_for_dbfield(self, db_field, **kwargs):
         if db_field.name == 'category':
             kwargs['form_class'] = TreeNodeChoiceField

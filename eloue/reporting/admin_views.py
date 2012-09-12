@@ -9,8 +9,10 @@ from django.contrib.admin.views.decorators import staff_member_required
 from django.db.models import Avg, Sum, Q, Count
 
 from eloue.accounts.models import Patron
-from eloue.products.models import Product, CarProduct, RealEstateProduct
+from eloue.products.models import Product, CarProduct, RealEstateProduct, Category
 from eloue.rent.models import Booking
+
+from django.shortcuts import get_object_or_404
 
 
 
@@ -51,4 +53,97 @@ def stats(request):
 		RequestContext(request, {'stats': data}),
     )
 
+
+def stats_by_patron(request):
+	booking_stats = Patron.objects.annotate(num_bookings=Count('bookings')).order_by('-num_bookings')
+	product_stats = Patron.objects.annotate(num_products=Count('products')).order_by('-num_products')
+
+	return render_to_response("reporting/admin/patron_stats.html",
+   		{},
+   		RequestContext(request, {'booking_stats': booking_stats, 'product_stats': product_stats}),
+   	)
+
+def stats_by_patron_detail(request, patron_id):
+	patron = get_object_or_404(Patron, pk=patron_id)
+	
+	booking_stats = patron.products.annotate(num_bookings=Count('bookings')).order_by('-num_bookings')
+	category_stats = patron.products.values('category__name', 'category__pk').annotate(num_products=Count('pk'))
+
+
+	return render_to_response("reporting/admin/patron_stats_detail.html",
+   		{},
+   		RequestContext(request, {'patron': patron, 'booking_stats': booking_stats, 'category_stats': category_stats}),
+   	)
+
+def stats_by_product(request):
+	booking_stats = Product.objects.annotate(num_bookings=Count('bookings')).order_by('-num_bookings')
+
+	return render_to_response("reporting/admin/product_stats.html",
+   		{},
+   		RequestContext(request, {'booking_stats': booking_stats}),
+   	)
+
+def stats_by_product_detail(request, product_id):
+	product = get_object_or_404(Product, pk=product_id)
+
+	return render_to_response("reporting/admin/product_stats_detail.html",
+   		{},
+   		RequestContext(request, {'product': product}),
+   	)
+
+def stats_by_category(request):
+	product_stats = Category.tree.annotate(num_products=Count('products')).order_by('-num_products')
+	booking_stats = Category.tree.annotate(num_products_bookings=Count('products__bookings')).order_by('-num_products_bookings')
+
+
+	return render_to_response("reporting/admin/category_stats.html",
+		{},
+		RequestContext(request, {'product_stats': product_stats, 'booking_stats': booking_stats})
+	)
+
+def stats_by_category_detail(request, category_id):
+	category = Category.tree.get(pk=category_id)
+
+	booking_stats = category.products.annotate(num_bookings=Count('bookings')).order_by('-num_bookings')
+	patron_stats = category.products.values('owner__username', 'owner__pk').annotate(num_products=Count('pk')).order_by('-num_products')
+	owner_stats = category.products.values('owner__username', 'owner__pk').annotate(num_bookings=Count('bookings')).order_by('-num_bookings')
+
+	bookings_count = category.products.aggregate(num_bookings=Count('bookings'))
+
+
+	return render_to_response("reporting/admin/category_stats_detail.html",
+		{},
+		RequestContext(request, {'category': category, 'booking_stats': booking_stats, 'bookings_count': bookings_count, 'patron_stats': patron_stats, 'owner_stats': owner_stats })
+	)
+
+def stats_by_city(request):
+	 patron_stats = Patron.objects.extra(tables=['accounts_address'], where=['"accounts_patron"."default_address_id" = "accounts_address"."id"'], select={'city': 'lower(accounts_address.city)'}).values('city').annotate(Count('id')).order_by('-id__count')
+	 product_stats = Product.objects.extra(tables=['accounts_address'], where=['"products_product"."address_id" = "accounts_address"."id"'], select={'city': 'lower(accounts_address.city)'}).values('city').annotate(Count('id')).order_by('-id__count')
+	 booking_stats = Booking.objects.extra(select={'city': 'lower(accounts_address.city)'}, tables=["products_product", "accounts_address"], where=['"products_product"."address_id" = "accounts_address"."id"', '"rent_booking"."product_id" = "products_product"."id"']).values('city').annotate(Count('pk')).order_by('-pk__count')
+
+	 
+	 return render_to_response("reporting/admin/city_stats.html",
+   		{},
+   		RequestContext(request, {'patron_stats': patron_stats, 'product_stats': product_stats, 'booking_stats': booking_stats}),
+   	)
+
+def stats_by_city_detail(request, city):
+	booking_stats = Patron.objects.filter(default_address__city__iexact=city).annotate(num_bookings=Count('bookings')).order_by('-num_bookings')
+	product_stats = Patron.objects.filter(default_address__city__iexact=city).annotate(num_products=Count('products')).order_by('-num_products')
+
+	return render_to_response("reporting/admin/city_stats_detail.html",
+   		{},
+   		RequestContext(request, {'booking_stats': booking_stats, 'product_stats': product_stats, 'city': city}),
+   	)
+
+
+
 stats = staff_member_required(stats)
+stats_by_patron = staff_member_required(stats_by_patron)
+stats_by_patron_detail = staff_member_required(stats_by_patron_detail)
+stats_by_product = staff_member_required(stats_by_product)
+stats_by_product_detail = staff_member_required(stats_by_product_detail)
+stats_by_category = staff_member_required(stats_by_category)
+stats_by_category_detail = staff_member_required(stats_by_category_detail)
+stats_by_city = staff_member_required(stats_by_city)
+stats_by_city_detail = staff_member_required(stats_by_city_detail)

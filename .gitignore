@@ -24,3 +24,4 @@ eloue/templates/20minutes/header.html
 eloue/templates/20minutes/footer.html
 eloue/test_payment_steps.py
 eloue/media/less/styles.css
+build/

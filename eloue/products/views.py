@@ -63,7 +63,6 @@ def last_added(search_index, location, offset=0):
     return last_added[offset*10:(offset+1)*10]
 
 @mobify
-@cache_page(300, key_prefix=settings.CACHE_MIDDLEWARE_KEY_PREFIX)
 def homepage(request):
     curiosities = Curiosity.on_site.all()
     location = request.session.setdefault('location', settings.DEFAULT_LOCATION)
