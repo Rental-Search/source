@@ -9,7 +9,7 @@ PAGINATION_WINDOW = getattr(settings, 'PAGINATION_WINDOW', 10)
 
 class PaginationNode(Node):
     def render(self, context):
-        is_paginated = context['is_paginated']
+        is_paginated = context.get('is_paginated')
         if is_paginated:
             pages = context['pages']
             page = context['page']
