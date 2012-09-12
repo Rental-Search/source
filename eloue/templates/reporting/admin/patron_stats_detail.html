@@ -1,0 +1,62 @@
+{% extends "admin/base_site.html" %}
+
+{% load i18n %}
+
+{% block title %}Patron Stats{% endblock %}
+
+{% block breadcrumbs %}
+    <div class="breadcrumbs">
+        <a href="/">{% trans 'Home' %}</a> 
+        &rsaquo; Patron Stats Detail
+    </div>
+{% endblock %}
+
+
+{% block content %}
+<div>
+	<h1>{{ city }}</h1>
+	<div style="float: left; width: 100%; margin-bottom: 20px;">
+		<h2>Informations générales</h2>
+		<ul>
+			<li><strong>Pseudo :</strong> {{ patron.username }}</li>
+			<li><strong>Ville :</strong> {{ patron.default_address.city }}</li>
+			<li><strong>Nombre d'annonce :</stron> {{ patron.products.all.count }}</li>
+			<li><strong>Nombre de location :</strong> {{ patron.bookings.all.count }}</li>
+		</ul>
+	</div>
+	<div style="float: left; width: 500px; margin-right: 40px;">
+		<h2>Nombre de résevation par annonce</h2>
+		<table>
+			<thead>
+				<th>Annonce</th>
+				<th>Nombre de location</th>
+			</thead>
+			<tbody>
+				{% for product in booking_stats %}
+					<tr>
+						<td><a href="{% url stats_by_product_detail product.id %}">{{ product.summary }}</a></td>
+						<td>{{ product.num_bookings }}</td>
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
+	<div style="float: left; width: 450px; maring-right: 20px;">
+		<h2>Nombre d'annonce par catégorie</h2>
+		<table>
+			<thead>
+				<th>Categorie</th>
+				<th>Nombre d'annonce</th>
+			</thead>
+			<tbody>
+				{% for category in category_stats %}
+					<tr>
+						<td><a href="{% url stats_by_category_detail category.category__pk %}">{{ category.category__name }}</a></td>
+						<td>{{ category.num_products }}</td>
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	<div>	
+</div>
+{% endblock %}

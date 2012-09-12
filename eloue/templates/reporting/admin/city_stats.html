@@ -1,0 +1,75 @@
+{% extends "admin/base_site.html" %}
+
+{% load i18n %}
+
+{% block title %}Product Stats{% endblock %}
+
+{% block breadcrumbs %}
+    <div class="breadcrumbs">
+        <a href="/">{% trans 'Home' %}</a> 
+        &rsaquo; Product Stats
+    </div>
+{% endblock %}
+
+
+{% block content %}
+<div>
+	<div style="float: left; width: 450px; margin-right: 20px;">
+		<h2>Nombre d'annonces par ville</h2>
+		<table>
+			<thead>
+				<tr>
+					<th>Ville</th>
+					<th>Nombre de produit</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for city in product_stats %}
+				<tr>
+					<td><a href="{% url stats_by_city_detail 'paris' %}">{{ city.city }}</a></td>
+					<td>{{ city.id__count }}</td>
+				</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
+	<div style="float: left; width: 450px; margin-right: 20px;">
+		<h2>Nombre de membre par ville</h2>
+		<table>
+			<thead>
+				<tr>
+					<th>Ville</th>
+					<th>Nombre de membre</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for city in patron_stats %}
+				<tr>
+					<td><a href="{% url stats_by_city_detail 'paris' %}">{{ city.city }}</a></td>
+					<td>{{ city.id__count }}</td>
+				</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
+	<div style="float: left; width: 450px;">
+		<h2>Nombre de réservation par ville</h2>
+		<table>
+			<thead>
+				<tr>
+					<th>Ville</th>
+					<th>Nombre de réservation</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for city in booking_stats %}
+				<tr>
+					<td><a href="{% url stats_by_city_detail 'paris' %}">{{ city.city }}</a></td>
+					<td>{{ city.pk__count }}</td>
+				</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
+</div>
+{% endblock %}

@@ -283,7 +283,7 @@
                                     <th class="price-head">{% trans "Prix" %}</th>
                                 </tr>
                             </thead>
-                            {% for price in prices %}
+                            {% for price in product.prices.all %}
                             <tr>
                                 <td>{% trans price.get_prefixed_unit_display|capfirst %}
                                 </td>
