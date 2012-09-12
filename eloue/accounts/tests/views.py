@@ -99,9 +99,8 @@ class PatronTest(TestCase):
             'is_professional': False,
             'is_subscribed': False
         })
-        self.assertEquals(response.status_code, 200)
-        form = response.context['form']
-        self.assertTrue(_(u"Vérifiez que vous avez bien répondu à l'email d'activation de Paypal") in form.errors['paypal_email'][0])
+        self.assertEquals(response.status_code, 302)
+        self.assertRedirects(response, reverse('patron_edit'))
         
         # invalid case
         response = self.client.post(reverse('patron_edit'), {
@@ -114,12 +113,9 @@ class PatronTest(TestCase):
             'is_subscribed': False
         })
         
-        self.assertEquals(response.status_code, 200)
-        form = response.context['form']
-        self.assertTrue(_(u"Vérifier que le prénom est identique à celui de votre compte PayPal") in form.errors['first_name'][0])
-        self.assertTrue(_(u"Vérifier que le nom est identique à celui de votre compte PayPal") in form.errors['last_name'][0])
-        self.assertTrue(_(u"Vérifier qu'il s'agit bien de votre email PayPal") in form.errors['paypal_email'][0])
-        
+        self.assertEquals(response.status_code, 302)
+        self.assertRedirects(response, reverse('patron_edit'))
+
         # verified case
         response = self.client.post(reverse('patron_edit'), {
             'first_name': 'Lin',
