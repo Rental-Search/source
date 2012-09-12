@@ -450,8 +450,8 @@ else:
 
 
 PRODUCTHIGHLIGHT_PRICE = decimal.Decimal('7.5')
-PRODUCTTOPPOSITION_PRICE = decimal.Decimal('10.0')
+PRODUCTTOPPOSITION_PRICE = decimal.Decimal('5.5')
 EMAILNOTIFICATION_PRICE = decimal.Decimal('0.01')
-SMSNOTIFICATION_PRICE = decimal.Decimal('0.05')
+SMSNOTIFICATION_PRICE = decimal.Decimal('0.08')
 
 TVA = decimal.Decimal('0.196')
