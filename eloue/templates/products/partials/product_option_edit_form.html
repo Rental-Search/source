@@ -26,9 +26,9 @@
           {{form}}
           <div style="margin-top: 25px; margin-right: 10px;">
             {% if form.instance.pk %}
-              <button type="submit" id="unhighlight" class="btn btn-primary">{% trans "Retirer de top position"%}</button>
+              <button type="submit" id="unhighlight" class="btn btn-primary">{% trans "Désactiver"%}</button>
             {% else %}
-              <button type="submit" id="highlight" class="btn btn-primary">{% trans "Mettre en top position"%}</button>
+              <button type="submit" id="highlight" class="btn btn-primary">{% trans "Activer"%}</button>
             {% endif %}
           </div>
         </form>

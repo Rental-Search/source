@@ -15,7 +15,7 @@
 
                             Bonjour {{ borrower_name }}<br><br>
 
-                            Nous avons bien pris en compte votre demande de réservation et venons d’informer le propriétaire de votre proposition.<br>
+                            Nous avons bien pris en compte votre demande de réservation et venons d’informer le loueur.<br>
 
                             Voici donc les différents éléments qui lui ont été transmis :<br>
                            	{% endblocktrans %}
@@ -23,9 +23,14 @@
                             {% include "rent/emails/partials/booking_details_email.html" %}
 
 
-                            {% blocktrans with site.name as site_name %}
+                            {% blocktrans with site.name as site_name and booking.owner.phones.all|first as owner_phone and booking.owner.email as owner_email %}
 
-                           	Vous serez prochainement informé(e) de sa réponse. Pour rappel : votre compte ne sera débité que si le propriétaire accepte la location.<br>
+                           	Voici les coordonnées du loueur si vous souhaitez le contacter directement :<br>
+
+                           	<ul>
+								<li><strong>Numéro de téléphone :</strong> {{ owner_phone }}</li>
+								<li><strong>Adresse électronique :</strong> {{ owner_email }}</li>
+							</ul>
                              
                             Bonne location !<br><br>
 

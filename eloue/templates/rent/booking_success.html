@@ -11,13 +11,22 @@
     	<li>{% trans "Réservation effectuée avec succès" %}</li>
   	</ul>
   	<div class="content-main">
-  		<h2>{% trans "Réservation effectuée avec succès !" %}</h2>
-  		<p style="margin-bottom: 40px;">
-  			{% blocktrans %}
-  			Nous avons bien pris en comtpe votre réservation. Le propriétaire a été informé, il va vous répondre le plus rapidement possible (24h maximum).
-  			{% endblocktrans %}
-  		</p>
+      {% if booking.owner.current_subscription %}
+      <h2>{% trans "Demande de réservation effectuée avec succès !" %}</h2>
+      {% else %}
+      <h2>{% trans "Réservation effectuée avec succès !" %}</h2>
+      <p style="margin-bottom: 40px;">
+        {% blocktrans %}
+        Nous avons bien pris en comtpe votre réservation. Le propriétaire a été informé, il va vous répondre le plus rapidement possible (24h maximum).
+        {% endblocktrans %}
+      </p>
       <h2>{% trans "Résumé de la réservation" %}</h2>
+      <p style="margin-bottom: 40px;">
+        {% blocktrans %}
+        Votre demande de réservation a bien été envoyé au loueur. Il va prendre contact avec vous rapidement.
+        {% endblocktrans %}
+      </p>
+      {% endif %}
       <table class="table table-bordered booking-resume">
           <tbody>
               <tr>
@@ -25,10 +34,17 @@
                   <td><a href="{{booking.product.get_absolute_url}}" class="b-title">{{booking.product.summary|capfirst}}</a></td>
               </tr>
               <tr>
+                {% if booking.owner.current_subscription %}
+                <th>{% trans "Loueur"%}</th>
+                <td style="text-align: center;">
+                  <a href="{{booking.owner.get_absolute_url }}">{{ booking.owner.company_name }}</a>
+                </td>
+                {% else %}
                 <th>{% trans "Propriétaire"%}</th>
                 <td style="text-align: center;">
                   <a href="{{booking.owner.get_absolute_url }}">{{ booking.owner.username }}</a>
                 </td>
+                {% endif %}
               </tr>
               <tr>
                   <th>{% trans "Début" %}</th>

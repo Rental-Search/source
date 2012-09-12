@@ -414,7 +414,7 @@
                     {% endif %}
                 </address>
                 <a href="{% url message_create product.pk patron.pk %}" class="btn-contactme">Contactez-moi</a>
-                {% patron.current_subscription %}
+                {% if patron.current_subscription %}
                 <ul class="pro-contact">
                     {% if patron.url %}
                     <li><a href="#">{{ patron.url }}</a></li>
@@ -465,7 +465,13 @@
         {% endif %}
         {% endwith %}
         <div class="booking-block">
-            <h2>{% trans "Réservez en ligne" %}</h2>
+            <h2>
+                {% if product.owner.current_subscription %}
+                    {% trans "Demande de réservation" %}
+                {% else %}
+                    {% trans "Réservez en ligne" %}
+                {% endif %}
+            </h2>
             <form id="booking_create" action="" method="POST">
 {% endcache %}
                 {% csrf_token %}
@@ -501,14 +507,24 @@
                 </div>{# main-block #}
 {% cache 43200 product:details:after_dates product.pk %}
                  <div class="bottom-block">
-                     {% blocktrans with product.product.day|first as day_price %}
+                    {% blocktrans with product.product.day|first as day_price %}
                         <p id="booking-total" class="total-price">
                             Total : <span class="day">1 jour,</span> soit <span class="pricing">{{ day_price }}</span>
                         </p>
-                        <p><input type="submit" class="btn-booking" value="Réservez"/></p>
                     {% endblocktrans %}
+                        <p>
+                            {% if product.owner.current_subscription %}
+                            <input type="submit" class="btn-booking" value="Envoyer"/>
+                            {% else %}
+                            <input type="submit" class="btn-booking" value="Réserver"/>
+                            {% endif %}
+                        </p>
                         <p class="booking-info">
-                            {% trans "Il s'agit simplement d'une pré-réservation. Vous ne serez débité que si le propriétaire accepte la demande de location sous 24h."%}
+                            {% if product.owner.current_subscription %}
+                                {% trans "Il s'agit d'une demande de réservation.<br>Le loueur va vous contacter rapidement. Le prix total est indicatif." %}
+                            {% else %}
+                                {% trans "Il s'agit simplement d'une pré-réservation. Vous ne serez débité que si le propriétaire accepte la demande de location sous 24h."%}
+                            {% endif %}
                         </p>
                     </form>
                 </div><!-- bottom-block -->
