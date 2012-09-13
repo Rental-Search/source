@@ -55,7 +55,7 @@ class BookingWizard(MultiPartFormWizard):
             'product_list': product_search.more_like_this(product)[:4]
         }
         if request.method == "POST":
-            if product.payment_type != PAYMENT_TYPE.NOPAY and not product.owner.is_professional:
+            if product.payment_type != PAYMENT_TYPE.NOPAY and not product.owner.current_subscription:
                 if request.user.is_authenticated():
                     try:
                         request.user.creditcard
