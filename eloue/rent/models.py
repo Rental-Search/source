@@ -422,10 +422,6 @@ class Booking(models.Model):
 
 
 class ProBooking(Booking):
-    def __init__(self, *args, **kwargs):
-        self._meta.get_field('state').default = 'professional'
-        super(ProBooking, self).__init__(*args, **kwargs)
-
     class Meta:
         proxy = True
 

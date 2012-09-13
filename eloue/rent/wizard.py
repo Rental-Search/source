@@ -55,7 +55,7 @@ class BookingWizard(MultiPartFormWizard):
             'product_list': product_search.more_like_this(product)[:4]
         }
         if request.method == "POST":
-            if product.payment_type != PAYMENT_TYPE.NOPAY and not product.owner.is_professional:
+            if product.payment_type != PAYMENT_TYPE.NOPAY and not product.owner.current_subscription:
                 if request.user.is_authenticated():
                     try:
                         request.user.creditcard
@@ -132,8 +132,10 @@ class BookingWizard(MultiPartFormWizard):
         next_form = self.form_list[step]
         if issubclass(next_form, BookingForm):
             product = self.extra_context['product']
-            klass = ProBooking if product.owner.current_subscription else Booking
-            booking = klass(product=product, owner=product.owner)
+            if product.owner.current_subscription:
+                booking = ProBooking(product=product, owner=product.owner, state=Booking.STATE.PROFESSIONAL)
+            else:
+                booking = Booking(product=product, owner=product.owner)
             started_at = datetime.datetime.now() + datetime.timedelta(days=1)
             ended_at = started_at + datetime.timedelta(days=1)
             initial = {

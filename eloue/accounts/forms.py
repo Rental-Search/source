@@ -846,14 +846,6 @@ def make_missing_data_form(instance, required_fields=[]):
         self.instance.save()
         return self.instance, address, phone, credit_card
     
-    def clean_password2(self):
-        password1 = self.cleaned_data['password1']
-        password2 = self.cleaned_data['password2']
-        
-        if password1 != password2:
-            raise forms.ValidationError(_(u"Vos mots de passe ne correspondent pas"))
-        return self.cleaned_data
-    
     def clean_username(self):
         if Patron.objects.filter(username=self.cleaned_data['username']).exists():
             raise forms.ValidationError(_(u"Ce nom d'utilisateur est déjà pris."))
@@ -890,6 +882,7 @@ def make_missing_data_form(instance, required_fields=[]):
     def clean(self):
         if self.errors:
             return self.cleaned_data
+
         if self.cleaned_data.get('card_number'):
             try:
                 from eloue.payments.paybox_payment import PayboxManager, PayboxException
@@ -900,6 +893,18 @@ def make_missing_data_form(instance, required_fields=[]):
                 )
             except PayboxException as e:
                 raise forms.ValidationError(_(u'La validation de votre carte a échoué.'))
+        
+        # testing passwords against each other:
+        password1 = self.cleaned_data.get('password1')
+        password2 = self.cleaned_data.get('password2')
+        
+        if password1 != password2:
+            msg = _(u"Vos mots de passe ne correspondent pas")
+            self._errors['password1'] = [msg]
+            self._errors['password2'] = [msg]
+            del self.cleaned_data['password1']
+            del self.cleaned_data['password2']
+
         return self.cleaned_data
 
     class Meta:
@@ -924,7 +929,6 @@ def make_missing_data_form(instance, required_fields=[]):
     form_class = type('MissingInformationForm', (BetterForm,), class_dict)
     form_class.save = types.MethodType(save, None, form_class)
     form_class.clean = types.MethodType(clean, None, form_class)
-    form_class.clean_password2 = types.MethodType(clean_password2, None, form_class)
     form_class.clean_username = types.MethodType(clean_username, None, form_class)
     form_class.clean_phones = types.MethodType(clean_phones, None, form_class)
     form_class.clean_addresses = types.MethodType(clean_addresses, None, form_class)
