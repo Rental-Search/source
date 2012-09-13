@@ -132,7 +132,7 @@ class BookingWizard(MultiPartFormWizard):
         next_form = self.form_list[step]
         if issubclass(next_form, BookingForm):
             product = self.extra_context['product']
-            klass = ProBooking if product.owner.is_professional else Booking
+            klass = ProBooking if product.owner.current_subscription else Booking
             booking = klass(product=product, owner=product.owner)
             started_at = datetime.datetime.now() + datetime.timedelta(days=1)
             ended_at = started_at + datetime.timedelta(days=1)
