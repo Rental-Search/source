@@ -132,8 +132,7 @@ class BookingWizard(MultiPartFormWizard):
         next_form = self.form_list[step]
         if issubclass(next_form, BookingForm):
             product = self.extra_context['product']
-            klass = ProBooking if product.owner.is_professional else Booking
-            if product.owner.is_professional:
+            if product.owner.current_subscription:
                 booking = ProBooking(product=product, owner=product.owner, state=Booking.STATE.PROFESSIONAL)
             else:
                 booking = Booking(product=product, owner=product.owner)
