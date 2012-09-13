@@ -196,5 +196,36 @@
         },
         "model": "accounts.patron",
         "pk": 6
+    },
+    {
+        "fields": {
+            "username": "pro_test",
+            "first_name": "Balazs",
+            "last_name": "Kossovics",
+            "is_active": true,
+            "is_superuser": false,
+            "is_staff": false,
+            "last_login": "2011-08-18 15:35:00",
+            "groups": [],
+            "user_permissions": [],
+            "password": "sha1$45d9a$1688f15a30d5231b275dafc6b36e671533a3ad41",
+            "email": "elouetest1@gmail.com",
+            "date_joined": "2011-03-17 09:00:10"
+        },
+        "model": "auth.user",
+        "pk": 7
+    },
+    {
+        "fields": {
+            "activation_key": null,
+            "is_professional": true,
+            "company_name": "ELoue",
+            "modified_at": "2011-08-17 09:00:10",
+            "groups": [],
+            "user_permissions": [],
+            "slug": "eloue"
+        },
+        "model": "accounts.patron",
+        "pk": 7
     }
 ]

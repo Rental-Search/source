@@ -5,11 +5,14 @@ import mock
 
 from django.core import mail
 from django.core.exceptions import ValidationError
+from django.core.urlresolvers import reverse
 from django.contrib.gis.geos import Point
 from django.test import TestCase
 from django.contrib.auth.models import User
-from eloue.accounts.models import Patron, Address, CreditCard
+
+from eloue.accounts.models import Patron, Address, CreditCard, ProPackage
 from eloue.payments.paybox_payment import PayboxManager
+from eloue.wizard import MultiPartFormWizard
 
 class CreditCardTest(TestCase):
     fixtures = ['patron']
@@ -153,4 +156,55 @@ class AddressTest(TestCase):
             address.full_clean()
         except ValidationError, e:
             self.fail(e)
+
+class BillingTest(TestCase):
     
+    def setUp(self):
+        patron = Patron.objects.get(pk=7)
+
+    def test_subscribed(self):
+        patron = Patron.objects.get(pk=7)
+        self.assertTrue(patron.current_subscription)
+        self.assertTrue(patron.is_professional)
+
+    def test_not_subscribed(self):
+        patron = Patron.objects.get(pk=6)
+        self.assertFalse(patron.current_subscription)
+        self.assertFalse(patron.is_professional)
+
+    def test_subscription_price(self):
+        patron = Patron.objects.get(pk=7)
+        subscription = patron.current_subscription
+        package = subscription.propackage
+        first_of_february = datetime.datetime(2012, 2, 1)
+        first_of_march = datetime.datetime(2012, 3, 1)
+        first_of_april = datetime.datetime(2012, 4, 1)
+        first_of_may = datetime.datetime(2012, 5, 1)
+        self.assertEqual(subscription.price(first_of_february, first_of_march), package.price)
+        self.assertEqual(subscription.price(first_of_march, first_of_april), package.price)
+        self.assertEqual(subscription.price(first_of_april, first_of_may), package.price)
+
+    @mock.patch.object(MultiPartFormWizard, 'security_hash')
+    def test_subscription_product_add(self, mock_method):
+        mock_method.return_value = '6941fd7b20d720833717a1f92e8027af'
+        patron = Patron.objects.get(pk=7)
+        self.client.login(username='elouetest1@gmail.com', password=' ')
+        response = self.client.post(reverse('product_create'), {
+            '0-category': 1,
+            '0-picture_id': 1,
+            '0-summary': 'Bentley Brooklands',
+            '0-day_price': '150',
+            '0-deposit_amount': '1500',
+            '0-quantity': 1,
+            '0-description': 'Voiture de luxe tout confort',
+            'hash_0': '6941fd7b20d720833717a1f92e8027af',
+            '1-addresses__address1': 'wiefoij',
+            '1-addresses__zipcode': '23432',
+            '1-addresses__city': 'woe',
+            '1-addresses__country': 'FR',
+            '1-phones__phone': '23425232', 
+            'wizard_step': 1,
+            'hash_1': '6941fd7b20d720833717a1f92e8027af'
+        })
+        # print response.context['form'].errors
+        self.assertRedirects(response, 'location/bebe/mobilier-bebe/lits/bentley-brooklands-1/')
