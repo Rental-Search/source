@@ -327,6 +327,15 @@ class Patron(User):
             return None
 
 
+    def subscribe(self, propackage):
+        if propackage.maximum_items < self.products.count():
+            raise ValueError
+        current_subscription = self.current_subscription
+        if current_subscription:
+            current_subscription.subscription_ended = datetime.datetime.now()
+            current_subscription.save()
+        return Subscription.objects.create(patron=self, propackage=propackage)
+
     @property
     def current_subscription(self):
         subscriptions = self.subscription_set.filter(subscription_ended__isnull=True).order_by('-subscription_started')
