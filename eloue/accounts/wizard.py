@@ -68,11 +68,9 @@ class ProSubscriptionWizard(AuthenticationWizard):
         subscription_form = form_list[0]
         subscription_form.is_valid()
         propackage = subscription_form.cleaned_data['subscription']
-        if request.user.products.count() <= propackage.maximum_items:
+        if propackage.maximum_items is None or request.user.products.count() < propackage.maximum_items:
             current_subscription = request.user.current_subscription
-            if current_subscription:
-                current_subscription.subscription_ended = datetime.datetime.now()
-            Subscription.objects.create(patron=request.user, propackage=propackage)
+            request.user.subscribe(propackage)
             if current_subscription:
                 messages.success(request, _(u'Vous avez changer d\'abonnement avec succès'))
             else:
