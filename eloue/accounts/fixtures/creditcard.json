@@ -10,5 +10,17 @@
             "holder": 2,
             "card_number": "SLLLqssDLLS"
         }
+    },
+    {
+        "pk": 2,
+        "model": "accounts.creditcard",
+        "fields": {
+            "holder_name": "oijdfdfd",
+            "masked_number": "1XXXXXXXXXXXX238",
+            "expires": "0616",
+            "keep": false,
+            "holder": 8,
+            "card_number": "SLLLqssDLLS"
+        }
     }
 ]
