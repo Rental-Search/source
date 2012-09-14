@@ -18,5 +18,15 @@
             "subscription_started": "2011-09-07 10:12:03",
             "patron": 7
         }
+    },
+    {
+        "pk": 3,
+        "model": "accounts.subscription",
+        "fields": {
+            "subscription_ended": null,
+            "propackage": 3,
+            "subscription_started": "2011-09-07 10:12:03",
+            "patron": 8
+        }
     }
 ]

@@ -10,7 +10,7 @@ from django.contrib.gis.geos import Point
 from django.test import TestCase
 from django.contrib.auth.models import User
 
-from eloue.accounts.models import Patron, Address, CreditCard, ProPackage
+from eloue.accounts.models import Patron, Address, CreditCard, ProPackage, Subscription
 from eloue.payments.paybox_payment import PayboxManager
 from eloue.wizard import MultiPartFormWizard
 
@@ -158,6 +158,7 @@ class AddressTest(TestCase):
             self.fail(e)
 
 class BillingTest(TestCase):
+    fixtures = ['patron', 'creditcard', 'category', 'picture', 'propackages', 'subscriptions']
     
     def setUp(self):
         patron = Patron.objects.get(pk=7)
@@ -208,3 +209,55 @@ class BillingTest(TestCase):
         })
         # print response.context['form'].errors
         self.assertRedirects(response, 'location/bebe/mobilier-bebe/lits/bentley-brooklands-1/')
+
+
+    @mock.patch.object(MultiPartFormWizard, 'security_hash')
+    def test_subscription_product_add_fail(self, mock_method):
+        mock_method.return_value = '6941fd7b20d720833717a1f92e8027af'
+        pp = ProPackage.objects.create(price=1, maximum_items=0)
+        patron = Patron.objects.get(pk=7)
+        self.assertEqual(patron.current_subscription.propackage.maximum_items, 30)
+        subscription = patron.current_subscription
+        subscription.subscription_ended = datetime.datetime.now()
+        subscription.save()
+        Subscription.objects.create(patron=patron, propackage=pp)
+        self.assertEqual(patron.current_subscription.propackage.maximum_items, 0)
+        self.client.login(username='elouetest1@gmail.com', password=' ')
+        response = self.client.post(reverse('product_create'), {
+            '0-category': 1,
+            '0-picture_id': 1,
+            '0-summary': 'Bentley Brooklands',
+            '0-day_price': '150',
+            '0-deposit_amount': '1500',
+            '0-quantity': 1,
+            '0-description': 'Voiture de luxe tout confort',
+            'hash_0': '6941fd7b20d720833717a1f92e8027af',
+            '1-addresses__address1': 'wiefoij',
+            '1-addresses__zipcode': '23432',
+            '1-addresses__city': 'woe',
+            '1-addresses__country': 'FR',
+            '1-phones__phone': '23425232', 
+            'wizard_step': 1,
+            'hash_1': '6941fd7b20d720833717a1f92e8027af'
+        })
+        self.assertRedirects(response, reverse('patron_edit_subscription'))
+
+    def test_change_subscription_without_creditcard(self):
+        patron = Patron.objects.get(pk=7)
+        self.client.login(username='elouetest1@gmail.com', password=' ')
+        self.assertEqual(patron.current_subscription.propackage.maximum_items, 30)
+        response = self.client.post(reverse('patron_edit_subscription'), {'subscription': 1})
+        self.assertEqual(response.status_code, 302)
+        self.assertRedirects(response, reverse('patron_edit_credit_card')+'?subscription=1')
+        self.assertEqual(patron.current_subscription.propackage.maximum_items, 30)
+        
+    def test_change_subscription_with_creditcard(self):
+        patron = Patron.objects.get(pk=8)
+        patron.creditcard
+        self.client.login(username='elouetest2@gmail.com', password=' ')
+        self.assertEqual(patron.current_subscription.propackage.maximum_items, 30)
+        response = self.client.post(reverse('patron_edit_subscription'), {'subscription': 1})
+        self.assertEqual(response.status_code, 302)
+        self.assertRedirects(response, reverse('patron_edit_subscription'))
+        self.assertEqual(patron.current_subscription.propackage.maximum_items, 5)
+

@@ -175,5 +175,16 @@
         },
         "model": "products.price",
         "pk": 15
+    },
+    {
+        "fields": {
+            "currency": "EUR",
+            "product": 8,
+            "amount": "10",
+            "unit": 1,
+            "name": ""
+        },
+        "model": "products.price",
+        "pk": 16
     }
 ]
