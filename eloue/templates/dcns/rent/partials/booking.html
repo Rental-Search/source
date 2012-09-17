@@ -18,12 +18,12 @@
             	<h5>{{ product.summary|capfirst }}</h5>
             	{% if user == booking.owner %}
             	<div class="bk-borrower">
-            		<img src="{{ MEDIA_URL }}images/bk_borrower_img.png">
+            		<img src="{{ STATIC_URL }}images/bk_borrower_img.png">
             		<h5><a href="{{ booking.borrower.get_absolute_url }}">{{ booking.borrower.get_full_name }}</a></h5>
             	</div>
             	{% else %}
              	<div class="bk-borrower">
-            		<img src="{{ MEDIA_URL }}images/bk_borrower_img.png">
+            		<img src="{{ STATIC_URL }}images/bk_borrower_img.png">
             		<h5><a href="{{ booking.owner.get_absolute_url }}">{{ booking.owner.get_full_name }}</a></h5>
             	</div>
             	{% endif %}

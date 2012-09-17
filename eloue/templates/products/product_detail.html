@@ -46,7 +46,7 @@
       window.fbAsyncInit = function() {
         FB.init({
           appId      : '{{FACEBOOK_APP_ID}}', // App ID
-          channelUrl : '{{ MEDIA_URL }}channel.html', // Channel File
+          channelUrl : '{{ STATIC_URL }}channel.html', // Channel File
           status     : true, // check login status
           cookie     : true, // enable cookies to allow the server to access the session
           xfbml      : true  // parse XFBML
@@ -396,7 +396,7 @@
                     {% if patron.avatar %}
                     <img src="{{ patron.profil.url }}" alt="{% trans "loueur"%}{{ patron.username }}" width="100" height="100">
                     {% else %}
-                    <img src="{{ MEDIA_URL }}images/default_avatar.png" alt="{% trans "loueur"%}{{ patron.username }}" width="100" height="100">
+                    <img src="{{ STATIC_URL }}images/default_avatar.png" alt="{% trans "loueur"%}{{ patron.username }}" width="100" height="100">
                     {% endif %}
                 </a>
                 <p class="owner-username">
@@ -441,7 +441,7 @@
                     {% if patron.avatar %}
                     <img src="{{ patron.profil.url }}" alt="{% trans "loueur"%}{{ patron.username }}" width="100" height="100">
                     {% else %}
-                    <img src="{{ MEDIA_URL }}images/default_avatar.png" alt="{% trans "loueur"%}{{ patron.username }}" width="100" height="100">
+                    <img src="{{ STATIC_URL }}images/default_avatar.png" alt="{% trans "loueur"%}{{ patron.username }}" width="100" height="100">
                     {% endif %}
                 </a>
                 <p class="owner-username">

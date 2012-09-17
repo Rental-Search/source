@@ -7,7 +7,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
   <title>{% filter striplinebreak %}{% block title %}{% endblock %} {% if is_paginated and page_obj.has_previous %}- {% trans "Page" %} {{ page_obj.number }}{% endif %} - {% trans "e-loue" %}{% endfilter %}</title>
   <meta name="description" content="{% filter striplinebreak %}{% block description %}Plateforme pour louer ou mettre en location tout type d'objet : materiel, reception, mariage, sono, utilitaires, ski{% endblock %}{% if is_paginated and page_obj.has_previous %} Page {{ page_obj.number }}{% endif %}{% endfilter %}">
-  <link rel="shortcut icon" href="{{ MEDIA_URL }}favicon.ico">
+  <link rel="shortcut icon" href="{{ STATIC_URL }}favicon.ico">
   {% block head %}
    {% compressed_css 'uk' %}
   {% endblock %}
@@ -35,7 +35,7 @@
     <div id="header" class="xgrid">
         <div class="x4">
             <a href="{% url home %}">
-			    <img src="{{ MEDIA_URL }}images/logo_uk.png" alt="e-loue"/>
+			    <img src="{{ STATIC_URL }}images/logo_uk.png" alt="e-loue"/>
 			</a>
         </div>
         <div class="x8">

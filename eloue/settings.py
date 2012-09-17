@@ -108,6 +108,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.contrib.auth.context_processors.auth',
     'django.core.context_processors.debug',
     'django.core.context_processors.media',
+    'django.core.context_processors.static',
     'django.core.context_processors.request',
     'django.contrib.messages.context_processors.messages',
     'announcements.context_processors.site_wide_announcements',
@@ -211,7 +212,7 @@ CACHE_MIDDLEWARE_KEY_PREFIX = getattr(local, 'CACHE_MIDDLEWARE_KEY_PREFIX', None
 
 STATIC_URL = '/static/'
 STATIC_ROOT = 'eloue/collected_static/'
-STATICFILES_DIRS = [local_path('static/'), ]
+STATICFILES_DIRS = ['eloue/static/', ]
 
 #pipeline configuration
 PIPELINE_VERSION = True

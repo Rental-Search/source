@@ -8,7 +8,7 @@
   <title>{% trans "e-loue - La page est pour le moment indisponible" %}</title>
   <meta name="description" content="{% spaceless %}{% block description %}Plateforme pour louer ou mettre en location tout type d'objet : materiel, reception, mariage, sono, utilitaires, ski{% endblock %}{% if is_paginated and page_obj.has_previous %} Page {{ page_obj.number }}{% endif %}{% endspaceless %}">
   <meta name="google-site-verification" content="JxKbPmnlcJagHiSTQcwcZaA2XWBbpU1ZVHmJ6529HT0" />
-  <link rel="shortcut icon" href="{{ MEDIA_URL }}favicon.ico">
+  <link rel="shortcut icon" href="{{ STATIC_URL }}favicon.ico">
   {% block head %}
    {% compressed_css 'master' %}
   {% endblock %}

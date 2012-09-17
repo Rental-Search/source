@@ -7,7 +7,7 @@
   <meta name="google-site-verification" content="6qIeKJE-UrsueiRe9kSXKLFZiYQRJv4duEu0A0bWwK8" />
   <title>{% filter striplinebreak %}{% block title %}{% endblock %} {% if is_paginated and page_obj.has_previous %}- {% trans "Page" %} {{ page_obj.number }}{% endif %} - {% trans "Stocker Entre Particuliers" %}{% endfilter %}</title>
   <meta name="description" content="{% filter striplinebreak %}{% block description %}Fini le stockage de matériel dans des grands bâtiments dédiés, Stocker Entre Particuliers est la plateforme internet communautaire qui va révolutionner le self-stockage{% endblock %}{% if is_paginated and page_obj.has_previous %} Page {{ page_obj.number }}{% endif %}{% endfilter %}">
-  <link rel="shortcut icon" href="{{ MEDIA_URL }}/sep/favicon.ico">
+  <link rel="shortcut icon" href="{{ STATIC_URL }}/sep/favicon.ico">
   {% block head %}
    {% compressed_css 'sep' %}
   {% endblock %}
