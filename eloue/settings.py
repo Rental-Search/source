@@ -41,6 +41,13 @@ DATABASES = {
     }
 }
 
+CACHES = {
+    'default': {
+        'BACKEND': getattr(local, 'CACHE_BACKEND', 'django.core.cache.backends.dummy.DummyCache'),
+        'LOCATION': getattr(local, 'CACHE_LOCATION', None),
+    }
+}
+
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
 # although not all choices may be available on all operating systems.
@@ -205,7 +212,6 @@ SESSION_ENGINE = local.SESSION_ENGINE
 SESSION_COOKIE_DOMAIN = local.SESSION_COOKIE_DOMAIN
 
 # Cache configuration
-CACHE_BACKEND = local.CACHE_BACKEND
 CACHE_MIDDLEWARE_ANONYMOUS_ONLY = True
 CACHE_MIDDLEWARE_SECONDS = getattr(local, 'CACHE_MIDDLEWARE_SECONDS', 60 * 15)
 CACHE_MIDDLEWARE_KEY_PREFIX = getattr(local, 'CACHE_MIDDLEWARE_KEY_PREFIX', None)
