@@ -6,6 +6,7 @@ from django.conf.urls.defaults import *
 from django.contrib import admin
 from django.contrib.auth.views import logout_then_login, password_reset, password_reset_confirm, password_reset_done, password_reset_complete
 from django.contrib.sitemaps.views import index, sitemap
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.utils import translation
 from django.utils.translation import ugettext as _
 
@@ -90,3 +91,6 @@ urlpatterns = patterns('',
 )
 
 handler404 = 'eloue.views.custom404'
+
+if settings.DEBUG:
+    urlpatterns += staticfiles_urlpatterns()

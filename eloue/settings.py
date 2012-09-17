@@ -155,6 +155,7 @@ INSTALLED_APPS = (
     'django.contrib.redirects',
     'django.contrib.sitemaps',
     'django.contrib.formtools',
+    'django.contrib.staticfiles',
     'django.contrib.markup',
     'django.contrib.gis',
     'south',
@@ -208,9 +209,9 @@ CACHE_MIDDLEWARE_ANONYMOUS_ONLY = True
 CACHE_MIDDLEWARE_SECONDS = getattr(local, 'CACHE_MIDDLEWARE_SECONDS', 60 * 15)
 CACHE_MIDDLEWARE_KEY_PREFIX = getattr(local, 'CACHE_MIDDLEWARE_KEY_PREFIX', None)
 
-STATIC_ROOT = getattr(local, 'STATIC_ROOT', None)
-STATIC_URL = getattr(local, 'STATIC_URL', None)
-
+STATIC_URL = '/static/'
+STATIC_ROOT = 'eloue/collected_static/'
+STATICFILES_DIRS = [local_path('static/'), ]
 
 #pipeline configuration
 PIPELINE_VERSION = True
@@ -221,8 +222,8 @@ PIPELINE_COMPILERS = (
 )
 PIPELINE_LESS_BINARY = getattr(local, 'PIPELINE_LESS_BINARY', '/home/benoitw/node_modules/less/bin/lessc')
 PIPELINE_YUI_BINARY = getattr(local, 'COMPRESS_YUI_BINARY', '/usr/bin/yui-compressor')
-PIPELINE_ROOT = getattr(local, 'PIPELINE_ROOT', MEDIA_ROOT)
-PIPELINE_URL = getattr(local, 'PIPELINE_URL', MEDIA_URL)
+PIPELINE_ROOT = STATIC_ROOT
+PIPELINE_URL = STATIC_URL
 PIPELINE_CSS = {
     'master': {
         'source_filenames': (
