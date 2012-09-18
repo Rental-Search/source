@@ -94,11 +94,6 @@ MEDIA_ROOT = local.MEDIA_ROOT
 # Examples: "http://media.lawrence.com", "http://example.com/media/"
 MEDIA_URL = local.MEDIA_URL
 
-# URL prefix for admin media -- CSS, JavaScript and images. Make sure to use a
-# trailing slash.
-# Examples: "http://foo.com/media/", "/media/".
-ADMIN_MEDIA_PREFIX = '/media/admin/'
-
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = '0j7jp$u!5n00s7=e@evlo0%ng&xm%zv^3-vn6gyy$&nbdd7p*('
 
