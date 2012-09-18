@@ -714,6 +714,48 @@ def dashboard(request):
         request, 'accounts/dashboard.html', {}
     )
 
+from django.views.generic import ListView
+from django.utils.decorators import method_decorator
+from django.views.generic import View
+from django.views.generic.base import TemplateResponseMixin
+
+class ProtectedView(View):
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(ProtectedView, self).dispatch(*args, **kwargs)
+
+class AddTitle(TemplateResponseMixin):
+    title = None
+    def get_context_data(self, **kwargs):
+        context = super(AddTitle, self).get_context_data(**kwargs)
+        if self.title is not None:
+            context['title_page'] = self.title
+        return context
+
+class OwnerBooking(ListView, ProtectedView, AddTitle):
+    template_name = 'accounts/owner_booking.html'
+    paginate_by = PAGINATE_PRODUCTS_BY
+
+class OwnerBookingAuthorized(OwnerBooking):
+    def get_queryset(self):
+        if self.request.user.current_subscription:
+            return self.request.user.bookings.professional()
+        return request.user.bookings.authorized()
+
+class OwnerBookingPending(OwnerBooking):
+    title = u'Réservations à venir'
+    def get_queryset(self):
+        return self.request.user.bookings.pending()
+
+class OwnerBookingOngoing(OwnerBooking):
+    title = u'Réservations en cours'
+    def get_queryset(self):
+        return self.request.user.bookings.ongoing()
+
+class OwnerBookingHistory(OwnerBooking):
+    title = u'Réservations terminées'
+    def get_queryset(self):
+        return self.request.user.bookings.history()
 
 @login_required
 def owner_booking_authorized(request, page=None):
@@ -750,12 +792,13 @@ def owner_booking_history(request, page=None):
         extra_context={'title_page': u'Réservations terminées'},
         template_name='accounts/owner_booking.html')
 
-# @login_required
-# def owner_history(request, page=None):
-#     queryset = request.user.bookings.filter(state__in=[Booking.STATE.CLOSED, Booking.STATE.REJECTED])
-#     return object_list(request, queryset, page=page, paginate_by=10, template_name='accounts/owner_history.html',
-#         template_object_name='booking')
 
+class OwnerProduct(ListView, ProtectedView):
+    template_name = 'accounts/owner_product.html'
+    paginate_by = PAGINATE_PRODUCTS_BY
+
+    def get_queryset(self):
+        return self.request.user.products.all()
 
 @login_required
 def owner_product(request, page=None):
@@ -768,6 +811,32 @@ def alert_edit(request, page=None):
     queryset = request.user.alerts.all()
     return object_list(request, queryset, page=page, paginate_by=10, template_name='accounts/alert_edit.html',
         template_object_name='alert')
+
+
+class BorrowerBooking(ListView, ProtectedView, AddTitle):
+    template_name = 'accounts/borrower_booking.html'
+    paginate_by = PAGINATE_PRODUCTS_BY
+
+
+class BorrowerBookingOngoing(BorrowerBooking):
+    title = u'Réservations en cours'
+    def get_queryset(self):
+        return self.request.user.rentals.ongoing()
+
+class BorrowerBookingPending(BorrowerBooking):
+    title = u'Réservations à venir'
+    def get_queryset(self):
+        return self.request.user.rentals.pending()
+
+class BorrowerBookingAuthorized(BorrowerBooking):
+    title = u'Demandes de réservation'
+    def get_queryset(self):
+        return self.request.user.rentals.authorized()
+
+class BorrowerBookingHistory(BorrowerBooking):
+    title = u'Réservations terminées'
+    def get_queryset(self):
+        return self.request.user.rentals.history()
 
 @login_required
 def borrower_booking_ongoing(request, page=None):
@@ -795,15 +864,7 @@ def borrower_booking_authorized(request, page=None):
 
 @login_required
 def borrower_booking_history(request, page=None):
-    queryset = request.user.rentals.exclude(
-        state__in=[
-            Booking.STATE.ONGOING, 
-            Booking.STATE.PENDING, 
-            Booking.STATE.AUTHORIZED,
-            Booking.STATE.AUTHORIZING,
-            Booking.STATE.OUTDATED
-        ]
-    )
+    queryset = request.user.rentals.history()
     return object_list(
         request, queryset, page=page, paginate_by=10,
         extra_context={'title_page': u'Réservations terminées'},
