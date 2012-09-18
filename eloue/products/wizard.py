@@ -10,7 +10,6 @@ from django.shortcuts import get_object_or_404, redirect
 from django.utils.translation import ugettext as _
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_protect
-from django.views.generic.simple import direct_to_template, redirect_to
 
 from eloue.wizard import MultiPartFormWizard
 from eloue.accounts.forms import EmailAuthenticationForm, make_missing_data_form
@@ -63,7 +62,7 @@ class ProductWizard(MultiPartFormWizard):
         
         messages.success(request, _(u"Votre objet a bien été ajouté"))
         GoalRecord.record('new_object', WebUser(request))
-        return redirect_to(request, product.get_absolute_url(), permanent=False)
+        return redirect(product)
     
     def get_form(self, step, data=None, files=None):
         next_form = self.form_list[step]
@@ -138,7 +137,7 @@ class AlertWizard(MultiPartFormWizard):
             alert.send_alerts()
 
         messages.success(request, _(u"Votre alerte a bien été créée"))
-        return redirect_to(request, reverse("alert_edit"), permanent=False)
+        return redirect("alert_edit")
 
     def get_template(self, step):
         if issubclass(self.form_list[step], EmailAuthenticationForm):
@@ -174,7 +173,7 @@ class AlertAnswerWizard(MultiPartFormWizard):
         alert = self.extra_context['alert']
         alert.send_alerts_answer(product)
         
-        return redirect_to(request, reverse("alert_inform_success", args=[alert.pk]), permanent=False)
+        return redirect("alert_inform_success", alert.pk)
 
     def get_form(self, step, data=None, files=None):
         if issubclass(self.form_list[step], ProductForm):
