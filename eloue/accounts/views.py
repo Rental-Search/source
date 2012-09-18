@@ -40,7 +40,6 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.cache import never_cache, cache_page
 from django.views.decorators.http import require_POST
 from django.views.generic.simple import direct_to_template, redirect_to
-from django.views.generic.list_detail import object_list
 from django.core.context_processors import csrf
 from django.http import HttpResponse, HttpResponseForbidden
 from django.contrib.auth import login
