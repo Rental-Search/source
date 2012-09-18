@@ -16,7 +16,6 @@ from django.utils.datastructures import SortedDict, MultiValueDict
 from django.utils.translation import ugettext as _
 from django.views.decorators.cache import never_cache, cache_page
 from django.views.decorators.vary import vary_on_cookie
-from django.views.generic.simple import direct_to_template, redirect_to
 from django.views.generic.list_detail import object_list
 from django.db.models import Q
 
@@ -107,16 +106,13 @@ def homepage_object_list(request, search_index, offset=0):
 @cache_page(300)
 def search(request):
     form = FacetedSearchForm()
-    return direct_to_template(
-        request, template='products/search.html', 
-        extra_context={'form': form, }
-    )
+    return render(request, 'products/search.html', {'form': form})
 
 
 @never_cache
 @secure_required
 def publish_new_ad(request, *args, **kwargs):
-    return direct_to_template(request, template='products/publish_new_ad.html')
+    return render(request, 'products/publish_new_ad.html')
     
 
 
@@ -445,9 +441,10 @@ def product_delete(request, slug, product_id):
     if request.method == "POST":
         product.delete()
         messages.success(request, _(u"Votre objet à bien été supprimée"))
-        return redirect_to(request, reverse('owner_product'))
+        return redirect('owner_product')
     else:
-        return direct_to_template(request, template='products/product_delete.html', extra_context={'product': product, 'is_booked': is_booked})
+        return render(request, 'products/product_delete.html', 
+            {'product': product, 'is_booked': is_booked})
 
 
 @mobify
@@ -497,7 +494,7 @@ def product_list(request, urlbits, sqs=SearchQuerySet(), suggestions=None, page=
                             raise Http404
                 if any([value for key, value in params.iteritems()]):
                     path = '%s?%s' % (path, urlencode(params))
-                return redirect_to(request, escape_percent_sign(path))
+                return redirect(escape_percent_sign(path))
             else:
                 raise Http404
         elif bit.startswith(_('page')):
@@ -569,9 +566,9 @@ def alert_delete(request, alert_id):
     if request.method == "POST":
         alert.delete()
         messages.success(request, _(u"Votre alerte à bien été supprimée"))
-        return redirect_to(request, reverse('alert_edit'))
+        return redirect('alert_edit')
     else:
-        return direct_to_template(request, template='products/alert_delete.html', extra_context={'alert': alert})
+        return render(request, 'products/alert_delete.html', {'alert': alert})
 
 def suggestion(request): 
     word = request.GET['q']
