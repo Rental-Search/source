@@ -29,8 +29,8 @@ django-pipeline==1.1.27
 -e git://github.com/e-loue/boto.git#egg=boto
 -e git://github.com/e-loue/pyPdf.git#egg=pyPdf
 -e git://github.com/e-loue/python-oauth2.git#egg=oauth2
-django==1.3
--e git://github.com/robhudson/django-debug-toolbar.git#egg=debug_toolbar
+django==1.4
+-e git://github.com/django-debug-toolbar/django-debug-toolbar.git#egg=debug_toolbar
 -e git://github.com/e-loue/django-announcements.git#egg=announcements
 -e git://github.com/e-loue/django-faq.git#egg=faq
 -e git://github.com/e-loue/django-haystack.git@1.2.X#egg=haystack
