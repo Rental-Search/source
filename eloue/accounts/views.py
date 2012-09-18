@@ -757,42 +757,6 @@ class OwnerBookingHistory(OwnerBooking):
     def get_queryset(self):
         return self.request.user.bookings.history()
 
-@login_required
-def owner_booking_authorized(request, page=None):
-    queryset = request.user.bookings.professional() if request.user.current_subscription else request.user.bookings.authorized()
-    return object_list(
-        request, queryset, page=page, paginate_by=10, 
-        extra_context={'title_page': u'Demandes de réservation'},
-        template_name='accounts/owner_booking.html'
-    )
-
-@login_required
-def owner_booking_pending(request, page=None):
-    queryset = request.user.bookings.pending()
-    return object_list(
-        request, queryset, page=page, paginate_by=10, 
-        extra_context={'title_page': u'Réservations à venir'},
-        template_name='accounts/owner_booking.html'
-    )
-
-@login_required
-def owner_booking_ongoing(request, page=None):
-    queryset = request.user.bookings.ongoing()
-    return object_list(
-        request, queryset, page=page, paginate_by=10, 
-        extra_context={'title_page': u'Réservations en cours'},
-        template_name='accounts/owner_booking.html'
-    )
-
-@login_required
-def owner_booking_history(request, page=None):
-    queryset = request.user.bookings.history()
-    return object_list(
-        request, queryset, page=page, paginate_by=10, 
-        extra_context={'title_page': u'Réservations terminées'},
-        template_name='accounts/owner_booking.html')
-
-
 class OwnerProduct(ListView, ProtectedView):
     template_name = 'accounts/owner_product.html'
     paginate_by = PAGINATE_PRODUCTS_BY
@@ -837,39 +801,6 @@ class BorrowerBookingHistory(BorrowerBooking):
     title = u'Réservations terminées'
     def get_queryset(self):
         return self.request.user.rentals.history()
-
-@login_required
-def borrower_booking_ongoing(request, page=None):
-    queryset = request.user.rentals.ongoing()
-    return object_list(
-        request, queryset, page=page, paginate_by=10,
-        extra_context={'title_page': u'Réservations en cours'},
-        template_name='accounts/borrower_booking.html')
-
-@login_required
-def borrower_booking_pending(request, page=None):
-    queryset = request.user.rentals.pending()
-    return object_list(
-        request, queryset, page=page, paginate_by=10, 
-        extra_context={'title_page': u'Réservations à venir'},
-        template_name='accounts/borrower_booking.html')
-
-@login_required
-def borrower_booking_authorized(request, page=None):
-    queryset = request.user.rentals.authorized()
-    return object_list(
-        request, queryset, page=page, paginate_by=10, 
-        extra_context={'title_page': u'Demandes de réservation'},
-        template_name='accounts/borrower_booking.html')
-
-@login_required
-def borrower_booking_history(request, page=None):
-    queryset = request.user.rentals.history()
-    return object_list(
-        request, queryset, page=page, paginate_by=10,
-        extra_context={'title_page': u'Réservations terminées'},
-        template_name='accounts/borrower_booking.html'
-    )
 
 @mobify
 def contact(request):
