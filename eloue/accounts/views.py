@@ -757,30 +757,22 @@ class OwnerBookingHistory(OwnerBooking):
     def get_queryset(self):
         return self.request.user.bookings.history()
 
+
 class OwnerProduct(ListView, ProtectedView):
     template_name = 'accounts/owner_product.html'
     paginate_by = PAGINATE_PRODUCTS_BY
-
     def get_queryset(self):
         return self.request.user.products.all()
 
-@login_required
-def owner_product(request, page=None):
-    queryset = request.user.products.all()
-    return object_list(request, queryset, page=page, paginate_by=10, template_name='accounts/owner_product.html',
-        template_object_name='product')
-
-@login_required
-def alert_edit(request, page=None):
-    queryset = request.user.alerts.all()
-    return object_list(request, queryset, page=page, paginate_by=10, template_name='accounts/alert_edit.html',
-        template_object_name='alert')
+class AlertEdit(ListView, ProtectedView):
+    template_name = 'accounts/alert_edit.html'
+    def get_queryset(self):
+        return self.request.user.alerts.all()
 
 
 class BorrowerBooking(ListView, ProtectedView, AddTitle):
     template_name = 'accounts/borrower_booking.html'
     paginate_by = PAGINATE_PRODUCTS_BY
-
 
 class BorrowerBookingOngoing(BorrowerBooking):
     title = u'Réservations en cours'

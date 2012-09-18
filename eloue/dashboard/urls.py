@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 from django.conf.urls.defaults import *
 
-from eloue.accounts.views import dashboard, patron_edit, patron_edit_password, patron_edit_phonenumber,\
-									patron_edit_addresses, accounts_work_autocomplete, accounts_studies_autocomplete, comments,\
-									comments_received, alert_edit, owner_product, \
-                                    associate_facebook, facebook_invite, gmail_invite, gmail_send_invite
+from eloue.accounts.views import (dashboard, patron_edit, patron_edit_password, 
+    patron_edit_phonenumber, patron_edit_addresses, accounts_work_autocomplete, 
+    accounts_studies_autocomplete, comments, comments_received,
+    associate_facebook, facebook_invite, gmail_invite, gmail_send_invite)
 from eloue.products.views import product_edit, product_address_edit, product_price_edit, thread_details, archive_thread, unarchive_thread, inbox, archived
 from eloue.rent.views import booking_detail, booking_accept, booking_cancel, booking_reject, booking_incident, booking_close
 
@@ -12,6 +12,7 @@ from eloue.accounts.views import (OwnerBookingAuthorized, OwnerBookingPending,
     OwnerBookingOngoing, OwnerBookingHistory)
 from eloue.accounts.views import (BorrowerBookingAuthorized, BorrowerBookingPending,
     BorrowerBookingOngoing, BorrowerBookingHistory)
+from eloue.accounts.views import OwnerProduct, AlertEdit
 
 urlpatterns = patterns('',
 	url(r'^profil/$', dashboard, name="dashboard"),
@@ -66,14 +67,14 @@ urlpatterns = patterns('',
     url(r'^borrower/booking/history/$', BorrowerBookingHistory.as_view(), name="borrower_booking_history"),
     url(r'^borrower/booking/history/(?P<page>\d+)/$', BorrowerBookingHistory.as_view(), name="borrower_booking_history"),
 
-    url(r'^owner/product/$', owner_product, name="owner_product"),
-    url(r'^owner/product/page/(?P<page>\d+)/$', owner_product, name="owner_product"),
+    url(r'^owner/product/$', OwnerProduct.as_view(), name="owner_product"),
+    url(r'^owner/product/page/(?P<page>\d+)/$', OwnerProduct.as_view(), name="owner_product"),
     url(r'^owner/product/(?P<slug>[-\w]+)-(?P<product_id>\d+)/$', product_edit, name="owner_product_edit"),
     url(r'^owner/product/(?P<slug>[-\w]+)-(?P<product_id>\d+)/address/$', product_address_edit, name="owner_product_address_edit"),
     url(r'^owner/product/(?P<slug>[-\w]+)-(?P<product_id>\d+)/price/$', product_price_edit, name="owner_product_price_edit"),
     url(r'^owner/product/(?P<slug>[-\w]+)-(?P<product_id>\d+)/highlight/$', 'eloue.products.views.product_highlight_edit', name="owner_product_highlight_edit"),
     url(r'^owner/product/(?P<slug>[-\w]+)-(?P<product_id>\d+)/top_position/$', 'eloue.products.views.product_top_position_edit', name="owner_product_top_position_edit"),
-    url(r'^alertes/$', alert_edit, name="alert_edit"),
+    url(r'^alertes/$', AlertEdit.as_view(), name="alert_edit"),
     url(r'^booking/(?P<booking_id>[0-9a-f]{32})/$', booking_detail, name="booking_detail"),
     url(r'^booking/(?P<booking_id>[0-9a-f]{32})/comment/$', 'eloue.accounts.views.comment_booking', name="comment_booking"),
     url(r'^booking/(?P<booking_id>[0-9a-f]{32})/view_comment/$', 'eloue.accounts.views.view_comment', name="view_comment"),
