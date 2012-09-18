@@ -17,7 +17,6 @@ from django.views.decorators.http import require_POST, require_GET
 from django.views.decorators.cache import never_cache, cache_page
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic.list_detail import object_detail
-from django.views.generic.simple import direct_to_template, redirect_to
 from django.template.loader import render_to_string
 from django.db.models import Q
 from django_lean.experiments.models import GoalRecord
@@ -148,7 +147,7 @@ def get_availability(request, product_id, year, month):
 @secure_required
 def booking_create_redirect(request, *args, **kwargs):
     product = get_object_or_404(Product.on_site, pk=kwargs['product_id'])
-    return redirect_to(request, product.get_absolute_url())
+    return redirect(product)
 
 
 @mobify

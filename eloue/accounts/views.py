@@ -39,13 +39,12 @@ from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.cache import never_cache, cache_page
 from django.views.decorators.http import require_POST
-from django.views.generic.simple import direct_to_template, redirect_to
 from django.core.context_processors import csrf
 from django.http import HttpResponse, HttpResponseForbidden
 from django.contrib.auth import login
 from oauth_provider.models import Token
-from django.shortcuts import redirect
- 
+from django.shortcuts import redirect, render
+
 from eloue.decorators import secure_required, mobify, ownership_required
 from eloue.accounts.forms import (EmailAuthenticationForm, GmailContactFormset, PatronEditForm, 
     PatronPasswordChangeForm, ContactForm, CompanyEditForm,
@@ -76,8 +75,9 @@ def activate(request, activation_key):
     """Activate account"""
     activation_key = activation_key.lower()  # Normalize before trying anything with it.
     is_actived = Patron.objects.activate(activation_key)
-    return direct_to_template(request, 'accounts/activate.html', extra_context={'is_actived': is_actived,
-        'expiration_days': settings.ACCOUNT_ACTIVATION_DAYS})
+    return render(request, 'accounts/activate.html', 
+        {'is_actived': is_actived,
+        'expiration_days': settings.ACCOUNT_ACTIVATION_DAYS} )
 
 
 @never_cache
@@ -113,7 +113,7 @@ def oauth_callback(request, *args, **kwargs):
     return HttpResponse(token.verifier)
 
 def google_oauth_callback(request):
-    return direct_to_template(request, 'accounts/google_callback.html')
+    return render(request, 'accounts/google_callback.html')
 
 @never_cache
 @login_required
@@ -125,9 +125,9 @@ def associate_facebook(request):
         form.user = request.user
         if form.is_valid():
             return redirect('associate_facebook')
-        return direct_to_template(request, 'accounts/associate_facebook.html', {'form': form})
+        return render(request, 'accounts/associate_facebook.html', {'form': form})
     else:
-        return direct_to_template(
+        return render(
             request, 'accounts/associated_facebook.html', 
             {'me': request.user.facebooksession.uid}
         )
@@ -386,13 +386,7 @@ def patron_edit(request, *args, **kwargs):
         form.save()
         messages.success(request, _(u"Vos informations ont bien été modifiées")) 
         return redirect(reverse('patron_edit'))
-    
-    return direct_to_template(
-        request, 'accounts/patron_edit.html', 
-        extra_context={
-            'form': form
-        }
-    )
+    return render(request, 'accounts/patron_edit.html', {'form': form})
 
 
 @login_required
@@ -493,7 +487,7 @@ def patron_edit_password(request):
     if form.is_valid():
         form.save()
         messages.success(request, _(u"Votre mot de passe à bien été modifié"))
-    return direct_to_template(request, 'accounts/patron_edit_password.html', extra_context={'form': form, 'patron': request.user})
+    return render(request, 'accounts/patron_edit_password.html', {'form': form, 'patron': request.user})
 
 @login_required
 def patron_edit_phonenumber(request):
@@ -710,7 +704,7 @@ def patron_edit_opening_times(request):
             return redirect(patron_edit_opening_times)
     else:
         form = OpeningsForm(instance=instance)
-    return render_to_response('accounts/patron_edit_opening_times.html', {'form': form}, context_instance=RequestContext(request))
+    return render(request, 'accounts/patron_edit_opening_times.html', {'form': form})
 
 
 @login_required
@@ -720,13 +714,8 @@ def dashboard(request):
     ).order_by().values('thread').distinct()
     new_threads = MessageThread.objects.filter(pk__in=[thread['thread'] for thread in new_thread_ids]).order_by('-last_message__sent_at')
     booking_demands = Booking.on_site.filter(owner=request.user, state=Booking.STATE.AUTHORIZED).order_by('-created_at')
-    return render_to_response(
-        template_name='accounts/dashboard.html', 
-        dictionary={'thread_list': new_threads, 'booking_demands': booking_demands}, 
-        context_instance=RequestContext(request)
-    )
-    return direct_to_template(
-        request, 'accounts/dashboard.html', {}
+    return render(request, 'accounts/dashboard.html', 
+        {'thread_list': new_threads, 'booking_demands': booking_demands}, 
     )
 
 
@@ -878,9 +867,9 @@ def gmail_invite(request):
             email = next(itertools.imap(lambda email: email.address, itertools.ifilter(lambda email: email.primary and email.primary=='true', e.email)), None)
             if email:
                 initial_data.append({'checked': False, 'name': e.name.full_name.text if e.name else '', 'email': email})
-        return direct_to_template(request, 'accounts/gmail_invite.html', {'initial_data': initial_data})
+        return render(request, 'accounts/gmail_invite.html', {'initial_data': initial_data})
     else:
-        return direct_to_template(request, 'accounts/gmail_invite.html')
+        return render(request, 'accounts/gmail_invite.html')
 
 @login_required
 def gmail_send_invite(request):
@@ -909,12 +898,11 @@ def patron_subscription(request):
     from eloue.accounts.forms import SubscriptionEditForm
     subscription_wizard = ProSubscriptionWizard([SubscriptionEditForm, EmailAuthenticationForm])
     return subscription_wizard(request)
-    return direct_to_template(request, 'accounts/patron_subscription.html', {'plans': plans})
 
 
 @login_required
 def facebook_invite(request):
-    return direct_to_template(request, 'accounts/facebook_invite.html')
+    return render(request, 'accounts/facebook_invite.html')
 
 @login_required
 def patron_edit_notification(request):
