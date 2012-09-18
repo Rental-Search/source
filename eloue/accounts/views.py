@@ -17,6 +17,13 @@ from django_lean.experiments.utils import WebUser
 import gdata.contacts.client
 import gdata.gauth
 
+
+from django.views.generic import ListView
+from django.utils.decorators import method_decorator
+from django.views.generic import View
+from django.views.generic.base import TemplateResponseMixin
+
+
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -337,27 +344,36 @@ def view_comment(request, booking_id):
         context_instance=RequestContext(request, {'booking': booking})
     )
 
-@cache_page(900)
-def patron_detail(request, slug, patron_id=None, page=None):
-    if patron_id:  # This is here to be compatible with the old app
-        patron = get_object_or_404(Patron.on_site, pk=patron_id)
-        return redirect_to(request, patron.get_absolute_url(), permanent=True)
-    patron = get_object_or_404(Patron.on_site.select_related('default_address', 'languages'), slug=slug)
-    patron_products = product_search.filter(owner_exact=patron.username)
-    if patron.current_subscription:
-        template_name = 'accounts/company_detail.html'
-    else:
-        template_name = 'accounts/patron_detail.html'
 
-    return object_list(
-        request, patron_products, page=page, 
-        paginate_by=9, template_name=template_name, 
-        template_object_name='product', 
-        extra_context={
-            'patron': patron, 'product_list_count': patron_products.count(), 
-            'borrowercomments': BorrowerComment.objects.filter(booking__owner=patron)[:4]
-        }
-    )
+class PatronDetail(ListView):
+    paginate_by = 9
+    context_object_name = 'product_list'
+
+    def dispatch(self, *args, **kwargs):
+        if 'patron_id' in kwargs:
+            # This is here to be compatible with the old app
+            patron = get_object_or_404(Patron.on_site, pk=patron_id)
+            return redirect(patron, permanent=True)
+        else:
+            self.patron = get_object_or_404(
+                Patron.on_site.select_related('default_address', 'languages'), 
+                slug=kwargs.get('slug')
+            )
+        return super(PatronDetail, self).dispatch(*args, **kwargs)
+
+    def get_template_names(self):
+        if self.patron.current_subscription:
+            return ['accounts/company_detail.html', ]
+        return ['accounts/patron_detail.html', ]
+    
+    def get_queryset(self):
+        return product_search.filter(owner_exact=self.patron.username)
+
+    def get_context_data(self, **kwargs):
+        context = super(PatronDetail, self).get_context_data(**kwargs)
+        context['patron'] = self.patron
+        context['borrowercomments'] = BorrowerComment.objects.filter(booking__owner=self.patron)[:4]
+        return context
 
 
 @login_required
@@ -714,10 +730,6 @@ def dashboard(request):
         request, 'accounts/dashboard.html', {}
     )
 
-from django.views.generic import ListView
-from django.utils.decorators import method_decorator
-from django.views.generic import View
-from django.views.generic.base import TemplateResponseMixin
 
 class ProtectedView(View):
     @method_decorator(login_required)

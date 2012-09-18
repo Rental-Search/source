@@ -54,8 +54,8 @@
             <p class="more-comment"><a href="{% url comments %}">Voir tous les commentaires</a></p>
             {% endif %}
         {% if product_list %}
-            {% if product_list_count > 0 %}
-                {% blocktrans with product_list_count as count and product_list_count|pluralize as pluralize %}
+            {% if product_list.count > 0 %}
+                {% blocktrans with product_list.count as count and product_list.count|pluralize as pluralize %}
     	           <h2>{{ count }} annonce{{ pluralize }}</h2>
     	       {% endblocktrans %}
             {% else %}
