@@ -15,7 +15,7 @@ from django.contrib.sites.models import Site
 from django.core.urlresolvers import reverse
 from django.shortcuts import get_object_or_404, redirect
 from django.utils.translation import ugettext_lazy as _
-from django.views.generic.simple import direct_to_template, redirect_to
+from django.views.generic.simple import direct_to_template
 
 from eloue.payments.models import PayboxDirectPaymentInformation, PayboxDirectPlusPaymentInformation, NonPaymentInformation
 from eloue.payments.paybox_payment import PayboxManager, PayboxException
@@ -90,7 +90,7 @@ class BookingWizard(MultiPartFormWizard):
         from django.forms.models import model_to_dict
         if self.new_patron == booking_form.instance.product.owner:
             messages.error(request, _(u"Vous ne pouvez pas louer vos propres objets"))
-            return redirect_to(request, booking_form.instance.product.get_absolute_url())
+            return redirect(booking_form.instance.product)
         
         booking = booking_form.save(commit=False)
         booking.ip = request.META.get('REMOTE_ADDR', None)
