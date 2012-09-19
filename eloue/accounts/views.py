@@ -17,6 +17,13 @@ from django_lean.experiments.utils import WebUser
 import gdata.contacts.client
 import gdata.gauth
 
+
+from django.views.generic import ListView
+from django.utils.decorators import method_decorator
+from django.views.generic import View
+from django.views.generic.base import TemplateResponseMixin
+
+
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -32,14 +39,12 @@ from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.cache import never_cache, cache_page
 from django.views.decorators.http import require_POST
-from django.views.generic.simple import direct_to_template, redirect_to
-from django.views.generic.list_detail import object_list
 from django.core.context_processors import csrf
 from django.http import HttpResponse, HttpResponseForbidden
 from django.contrib.auth import login
 from oauth_provider.models import Token
-from django.shortcuts import redirect
- 
+from django.shortcuts import redirect, render
+
 from eloue.decorators import secure_required, mobify, ownership_required
 from eloue.accounts.forms import (EmailAuthenticationForm, GmailContactFormset, PatronEditForm, 
     PatronPasswordChangeForm, ContactForm, CompanyEditForm,
@@ -70,8 +75,9 @@ def activate(request, activation_key):
     """Activate account"""
     activation_key = activation_key.lower()  # Normalize before trying anything with it.
     is_actived = Patron.objects.activate(activation_key)
-    return direct_to_template(request, 'accounts/activate.html', extra_context={'is_actived': is_actived,
-        'expiration_days': settings.ACCOUNT_ACTIVATION_DAYS})
+    return render(request, 'accounts/activate.html', 
+        {'is_actived': is_actived,
+        'expiration_days': settings.ACCOUNT_ACTIVATION_DAYS} )
 
 
 @never_cache
@@ -107,7 +113,7 @@ def oauth_callback(request, *args, **kwargs):
     return HttpResponse(token.verifier)
 
 def google_oauth_callback(request):
-    return direct_to_template(request, 'accounts/google_callback.html')
+    return render(request, 'accounts/google_callback.html')
 
 @never_cache
 @login_required
@@ -119,9 +125,9 @@ def associate_facebook(request):
         form.user = request.user
         if form.is_valid():
             return redirect('associate_facebook')
-        return direct_to_template(request, 'accounts/associate_facebook.html', {'form': form})
+        return render(request, 'accounts/associate_facebook.html', {'form': form})
     else:
-        return direct_to_template(
+        return render(
             request, 'accounts/associated_facebook.html', 
             {'me': request.user.facebooksession.uid}
         )
@@ -337,27 +343,36 @@ def view_comment(request, booking_id):
         context_instance=RequestContext(request, {'booking': booking})
     )
 
-@cache_page(900)
-def patron_detail(request, slug, patron_id=None, page=None):
-    if patron_id:  # This is here to be compatible with the old app
-        patron = get_object_or_404(Patron.on_site, pk=patron_id)
-        return redirect_to(request, patron.get_absolute_url(), permanent=True)
-    patron = get_object_or_404(Patron.on_site.select_related('default_address', 'languages'), slug=slug)
-    patron_products = product_search.filter(owner_exact=patron.username)
-    if patron.current_subscription:
-        template_name = 'accounts/company_detail.html'
-    else:
-        template_name = 'accounts/patron_detail.html'
 
-    return object_list(
-        request, patron_products, page=page, 
-        paginate_by=9, template_name=template_name, 
-        template_object_name='product', 
-        extra_context={
-            'patron': patron, 'product_list_count': patron_products.count(), 
-            'borrowercomments': BorrowerComment.objects.filter(booking__owner=patron)[:4]
-        }
-    )
+class PatronDetail(ListView):
+    paginate_by = 9
+    context_object_name = 'product_list'
+
+    def dispatch(self, *args, **kwargs):
+        if 'patron_id' in kwargs:
+            # This is here to be compatible with the old app
+            patron = get_object_or_404(Patron.on_site, pk=patron_id)
+            return redirect(patron, permanent=True)
+        else:
+            self.patron = get_object_or_404(
+                Patron.on_site.select_related('default_address', 'languages'), 
+                slug=kwargs.get('slug')
+            )
+        return super(PatronDetail, self).dispatch(*args, **kwargs)
+
+    def get_template_names(self):
+        if self.patron.current_subscription:
+            return ['accounts/company_detail.html', ]
+        return ['accounts/patron_detail.html', ]
+    
+    def get_queryset(self):
+        return product_search.filter(owner_exact=self.patron.username)
+
+    def get_context_data(self, **kwargs):
+        context = super(PatronDetail, self).get_context_data(**kwargs)
+        context['patron'] = self.patron
+        context['borrowercomments'] = BorrowerComment.objects.filter(booking__owner=self.patron)[:4]
+        return context
 
 
 @login_required
@@ -371,13 +386,7 @@ def patron_edit(request, *args, **kwargs):
         form.save()
         messages.success(request, _(u"Vos informations ont bien été modifiées")) 
         return redirect(reverse('patron_edit'))
-    
-    return direct_to_template(
-        request, 'accounts/patron_edit.html', 
-        extra_context={
-            'form': form
-        }
-    )
+    return render(request, 'accounts/patron_edit.html', {'form': form})
 
 
 @login_required
@@ -478,7 +487,7 @@ def patron_edit_password(request):
     if form.is_valid():
         form.save()
         messages.success(request, _(u"Votre mot de passe à bien été modifié"))
-    return direct_to_template(request, 'accounts/patron_edit_password.html', extra_context={'form': form, 'patron': request.user})
+    return render(request, 'accounts/patron_edit_password.html', {'form': form, 'patron': request.user})
 
 @login_required
 def patron_edit_phonenumber(request):
@@ -695,7 +704,7 @@ def patron_edit_opening_times(request):
             return redirect(patron_edit_opening_times)
     else:
         form = OpeningsForm(instance=instance)
-    return render_to_response('accounts/patron_edit_opening_times.html', {'form': form}, context_instance=RequestContext(request))
+    return render(request, 'accounts/patron_edit_opening_times.html', {'form': form})
 
 
 @login_required
@@ -705,110 +714,85 @@ def dashboard(request):
     ).order_by().values('thread').distinct()
     new_threads = MessageThread.objects.filter(pk__in=[thread['thread'] for thread in new_thread_ids]).order_by('-last_message__sent_at')
     booking_demands = Booking.on_site.filter(owner=request.user, state=Booking.STATE.AUTHORIZED).order_by('-created_at')
-    return render_to_response(
-        template_name='accounts/dashboard.html', 
-        dictionary={'thread_list': new_threads, 'booking_demands': booking_demands}, 
-        context_instance=RequestContext(request)
-    )
-    return direct_to_template(
-        request, 'accounts/dashboard.html', {}
+    return render(request, 'accounts/dashboard.html', 
+        {'thread_list': new_threads, 'booking_demands': booking_demands}, 
     )
 
 
-@login_required
-def owner_booking_authorized(request, page=None):
-    queryset = request.user.bookings.professional() if request.user.current_subscription else request.user.bookings.authorized()
-    return object_list(
-        request, queryset, page=page, paginate_by=10, 
-        extra_context={'title_page': u'Demandes de réservation'},
-        template_name='accounts/owner_booking.html'
-    )
+class ProtectedView(View):
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(ProtectedView, self).dispatch(*args, **kwargs)
 
-@login_required
-def owner_booking_pending(request, page=None):
-    queryset = request.user.bookings.pending()
-    return object_list(
-        request, queryset, page=page, paginate_by=10, 
-        extra_context={'title_page': u'Réservations à venir'},
-        template_name='accounts/owner_booking.html'
-    )
+class AddTitle(TemplateResponseMixin):
+    title = None
+    def get_context_data(self, **kwargs):
+        context = super(AddTitle, self).get_context_data(**kwargs)
+        if self.title is not None:
+            context['title_page'] = self.title
+        return context
 
-@login_required
-def owner_booking_ongoing(request, page=None):
-    queryset = request.user.bookings.ongoing()
-    return object_list(
-        request, queryset, page=page, paginate_by=10, 
-        extra_context={'title_page': u'Réservations en cours'},
-        template_name='accounts/owner_booking.html'
-    )
+class OwnerBooking(ListView, ProtectedView, AddTitle):
+    template_name = 'accounts/owner_booking.html'
+    paginate_by = PAGINATE_PRODUCTS_BY
 
-@login_required
-def owner_booking_history(request, page=None):
-    queryset = request.user.bookings.history()
-    return object_list(
-        request, queryset, page=page, paginate_by=10, 
-        extra_context={'title_page': u'Réservations terminées'},
-        template_name='accounts/owner_booking.html')
+class OwnerBookingAuthorized(OwnerBooking):
+    def get_queryset(self):
+        if self.request.user.current_subscription:
+            return self.request.user.bookings.professional()
+        return request.user.bookings.authorized()
 
-# @login_required
-# def owner_history(request, page=None):
-#     queryset = request.user.bookings.filter(state__in=[Booking.STATE.CLOSED, Booking.STATE.REJECTED])
-#     return object_list(request, queryset, page=page, paginate_by=10, template_name='accounts/owner_history.html',
-#         template_object_name='booking')
+class OwnerBookingPending(OwnerBooking):
+    title = u'Réservations à venir'
+    def get_queryset(self):
+        return self.request.user.bookings.pending()
+
+class OwnerBookingOngoing(OwnerBooking):
+    title = u'Réservations en cours'
+    def get_queryset(self):
+        return self.request.user.bookings.ongoing()
+
+class OwnerBookingHistory(OwnerBooking):
+    title = u'Réservations terminées'
+    def get_queryset(self):
+        return self.request.user.bookings.history()
 
 
-@login_required
-def owner_product(request, page=None):
-    queryset = request.user.products.all()
-    return object_list(request, queryset, page=page, paginate_by=10, template_name='accounts/owner_product.html',
-        template_object_name='product')
+class OwnerProduct(ListView, ProtectedView):
+    template_name = 'accounts/owner_product.html'
+    paginate_by = PAGINATE_PRODUCTS_BY
+    def get_queryset(self):
+        return self.request.user.products.all()
 
-@login_required
-def alert_edit(request, page=None):
-    queryset = request.user.alerts.all()
-    return object_list(request, queryset, page=page, paginate_by=10, template_name='accounts/alert_edit.html',
-        template_object_name='alert')
+class AlertEdit(ListView, ProtectedView):
+    template_name = 'accounts/alert_edit.html'
+    def get_queryset(self):
+        return self.request.user.alerts.all()
 
-@login_required
-def borrower_booking_ongoing(request, page=None):
-    queryset = request.user.rentals.ongoing()
-    return object_list(
-        request, queryset, page=page, paginate_by=10,
-        extra_context={'title_page': u'Réservations en cours'},
-        template_name='accounts/borrower_booking.html')
 
-@login_required
-def borrower_booking_pending(request, page=None):
-    queryset = request.user.rentals.pending()
-    return object_list(
-        request, queryset, page=page, paginate_by=10, 
-        extra_context={'title_page': u'Réservations à venir'},
-        template_name='accounts/borrower_booking.html')
+class BorrowerBooking(ListView, ProtectedView, AddTitle):
+    template_name = 'accounts/borrower_booking.html'
+    paginate_by = PAGINATE_PRODUCTS_BY
 
-@login_required
-def borrower_booking_authorized(request, page=None):
-    queryset = request.user.rentals.authorized()
-    return object_list(
-        request, queryset, page=page, paginate_by=10, 
-        extra_context={'title_page': u'Demandes de réservation'},
-        template_name='accounts/borrower_booking.html')
+class BorrowerBookingOngoing(BorrowerBooking):
+    title = u'Réservations en cours'
+    def get_queryset(self):
+        return self.request.user.rentals.ongoing()
 
-@login_required
-def borrower_booking_history(request, page=None):
-    queryset = request.user.rentals.exclude(
-        state__in=[
-            Booking.STATE.ONGOING, 
-            Booking.STATE.PENDING, 
-            Booking.STATE.AUTHORIZED,
-            Booking.STATE.AUTHORIZING,
-            Booking.STATE.OUTDATED
-        ]
-    )
-    return object_list(
-        request, queryset, page=page, paginate_by=10,
-        extra_context={'title_page': u'Réservations terminées'},
-        template_name='accounts/borrower_booking.html'
-    )
+class BorrowerBookingPending(BorrowerBooking):
+    title = u'Réservations à venir'
+    def get_queryset(self):
+        return self.request.user.rentals.pending()
+
+class BorrowerBookingAuthorized(BorrowerBooking):
+    title = u'Demandes de réservation'
+    def get_queryset(self):
+        return self.request.user.rentals.authorized()
+
+class BorrowerBookingHistory(BorrowerBooking):
+    title = u'Réservations terminées'
+    def get_queryset(self):
+        return self.request.user.rentals.history()
 
 @mobify
 def contact(request):
@@ -883,9 +867,9 @@ def gmail_invite(request):
             email = next(itertools.imap(lambda email: email.address, itertools.ifilter(lambda email: email.primary and email.primary=='true', e.email)), None)
             if email:
                 initial_data.append({'checked': False, 'name': e.name.full_name.text if e.name else '', 'email': email})
-        return direct_to_template(request, 'accounts/gmail_invite.html', {'initial_data': initial_data})
+        return render(request, 'accounts/gmail_invite.html', {'initial_data': initial_data})
     else:
-        return direct_to_template(request, 'accounts/gmail_invite.html')
+        return render(request, 'accounts/gmail_invite.html')
 
 @login_required
 def gmail_send_invite(request):
@@ -914,12 +898,11 @@ def patron_subscription(request):
     from eloue.accounts.forms import SubscriptionEditForm
     subscription_wizard = ProSubscriptionWizard([SubscriptionEditForm, EmailAuthenticationForm])
     return subscription_wizard(request)
-    return direct_to_template(request, 'accounts/patron_subscription.html', {'plans': plans})
 
 
 @login_required
 def facebook_invite(request):
-    return direct_to_template(request, 'accounts/facebook_invite.html')
+    return render(request, 'accounts/facebook_invite.html')
 
 @login_required
 def patron_edit_notification(request):

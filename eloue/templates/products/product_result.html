@@ -268,24 +268,24 @@
             var image, image_hover;
 
             if (markerId == "li#marker-") {
-                image = new google.maps.MarkerImage('{{ MEDIA_URL }}images/markers.png',
+                image = new google.maps.MarkerImage('{{ STATIC_URL }}images/markers.png',
                     new google.maps.Size(20, 33),
                     new google.maps.Point(44, 34*i),
                     new google.maps.Point(10, 33));
 
-                image_hover = new google.maps.MarkerImage('{{ MEDIA_URL }}images/markers.png',
+                image_hover = new google.maps.MarkerImage('{{ STATIC_URL }}images/markers.png',
                     new google.maps.Size(20, 33),
                     new google.maps.Point(0, 34*i),
                     new google.maps.Point(10, 33));
             }
 
             if (markerId == "li#top_marker-") {
-                image = new google.maps.MarkerImage('{{ MEDIA_URL }}images/markers.png',
+                image = new google.maps.MarkerImage('{{ STATIC_URL }}images/markers.png',
                     new google.maps.Size(20, 33),
                     new google.maps.Point(65, 34*i),
                     new google.maps.Point(10, 33));
 
-                image_hover = new google.maps.MarkerImage('{{ MEDIA_URL }}images/markers.png',
+                image_hover = new google.maps.MarkerImage('{{ STATIC_URL }}images/markers.png',
                     new google.maps.Size(20, 33),
                     new google.maps.Point(21, 34*i),
                     new google.maps.Point(10, 33));

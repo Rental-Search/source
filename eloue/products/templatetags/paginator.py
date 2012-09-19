@@ -11,8 +11,8 @@ class PaginationNode(Node):
     def render(self, context):
         is_paginated = context.get('is_paginated')
         if is_paginated:
-            pages = context['pages']
-            page = context['page']
+            pages = context['paginator'].num_pages
+            page = context['page_obj'].number
         
             window = int(PAGINATION_WINDOW / 2)
             if(page <= window):
