@@ -212,10 +212,6 @@ MESSAGE_STORAGE = getattr(local, 'MESSAGE_STORAGE', 'django.contrib.messages.sto
 SESSION_ENGINE = local.SESSION_ENGINE
 SESSION_COOKIE_DOMAIN = local.SESSION_COOKIE_DOMAIN
 
-STATIC_URL = '/static/'
-STATIC_ROOT = 'eloue/collected_static/'
-STATICFILES_DIRS = ['eloue/static/', ]
-
 #pipeline configuration
 PIPELINE_VERSION = True
 PIPELINE_CSS_COMPRESSOR = 'pipeline.compressors.yui.YUICompressor'
@@ -225,8 +221,6 @@ PIPELINE_COMPILERS = (
 )
 PIPELINE_LESS_BINARY = getattr(local, 'PIPELINE_LESS_BINARY', '/home/benoitw/node_modules/less/bin/lessc')
 PIPELINE_YUI_BINARY = getattr(local, 'COMPRESS_YUI_BINARY', '/usr/bin/yui-compressor')
-PIPELINE_ROOT = STATIC_ROOT
-PIPELINE_URL = STATIC_URL
 PIPELINE_CSS = {
     'master': {
         'source_filenames': (
@@ -345,6 +339,23 @@ AWS_AUTO_CREATE_BUCKET = getattr(local, 'AWS_AUTO_CREATE_BUCKET', False)
 AWS_HEADERS = {
     'Cache-Control': 'max-age=31556926,public',
 }
+AWS_PRELOAD_METADATA = True
+
+# staticfiles configuration
+STATIC_ROOT = 'static/'
+if DEBUG:
+    STATIC_URL = '/static/'
+else:
+    STATIC_URL = getattr(
+        local, 'STATIC_URL', 
+        '//{domain}/{root}'.format(
+            domain=AWS_S3_CUSTOM_DOMAIN, root=STATIC_ROOT
+        )
+    )
+STATICFILES_DIRS = ['eloue/static/', ]
+
+if not DEBUG:
+    STATICFILES_STORAGE = getattr(local, 'STATICFILES_STORAGE', 'eloue.s3utils.StaticRootS3BotoStorage')
 
 GOOGLE_CLIENT_ID = getattr(local, 'GOOGLE_CLIENT_ID', '218840159400.apps.googleusercontent.com')
 GOOGLE_CLIENT_SECRET = getattr(local, 'GOOGLE_CLIENT_SECRET', 'BXFNFpDb6MN0ocLoPunjkzvZ')
