@@ -99,12 +99,12 @@ def authenticate_headless(request):
     if form.is_valid():
         login(request, form.get_user())
         return HttpResponse()
-    return HttpResponse(csrf(request)["csrf_token"]._proxy____func())
+    return HttpResponse(str(csrf(request)["csrf_token"]))
 
 
 @never_cache
 def oauth_authorize(request, *args, **kwargs):
-    return HttpResponse(csrf(request)["csrf_token"]._proxy____func())
+    return HttpResponse(str(csrf(request)["csrf_token"]))
 
 
 @never_cache
@@ -351,7 +351,7 @@ class PatronDetail(ListView):
     def dispatch(self, *args, **kwargs):
         if 'patron_id' in kwargs:
             # This is here to be compatible with the old app
-            patron = get_object_or_404(Patron.on_site, pk=patron_id)
+            patron = get_object_or_404(Patron.on_site, pk=kwargs['patron_id'])
             return redirect(patron, permanent=True)
         else:
             self.patron = get_object_or_404(
