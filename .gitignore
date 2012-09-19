@@ -26,3 +26,4 @@ eloue/test_payment_steps.py
 eloue/static/less/styles.css
 eloue/collected_static/
 build/
+static/

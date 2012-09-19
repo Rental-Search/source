@@ -213,7 +213,6 @@ SESSION_ENGINE = local.SESSION_ENGINE
 SESSION_COOKIE_DOMAIN = local.SESSION_COOKIE_DOMAIN
 
 #pipeline configuration
-PIPELINE_VERSION = True
 PIPELINE_CSS_COMPRESSOR = 'pipeline.compressors.yui.YUICompressor'
 PIPELINE_JS_COMPRESSOR = ''
 PIPELINE_COMPILERS = (
@@ -342,20 +341,13 @@ AWS_HEADERS = {
 AWS_PRELOAD_METADATA = True
 
 # staticfiles configuration
-STATIC_ROOT = 'static/'
-if DEBUG:
-    STATIC_URL = '/static/'
-else:
-    STATIC_URL = getattr(
-        local, 'STATIC_URL', 
-        '//{domain}/{root}'.format(
-            domain=AWS_S3_CUSTOM_DOMAIN, root=STATIC_ROOT
-        )
-    )
+STATIC_ROOT = local.STATIC_ROOT
+
+STATIC_URL = getattr(local, 'STATIC_URL', '/static/')
+
 STATICFILES_DIRS = ['eloue/static/', ]
 
-if not DEBUG:
-    STATICFILES_STORAGE = getattr(local, 'STATICFILES_STORAGE', 'eloue.s3utils.StaticRootS3BotoStorage')
+STATICFILES_STORAGE = getattr(local, 'STATICFILES_STORAGE', 'eloue.s3utils.StaticRootS3BotoStorage')
 
 GOOGLE_CLIENT_ID = getattr(local, 'GOOGLE_CLIENT_ID', '218840159400.apps.googleusercontent.com')
 GOOGLE_CLIENT_SECRET = getattr(local, 'GOOGLE_CLIENT_SECRET', 'BXFNFpDb6MN0ocLoPunjkzvZ')

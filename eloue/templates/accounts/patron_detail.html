@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load i18n product cache paginator l10n %}
 
-{% block title %}{{ patron.username }}{% endblock %}
+{% block title %}Location entre particulier : loueur {{ patron.username }}{% endblock %}
 
 {% block description %}
  {% blocktrans with patron.username as username %}Toutes les locations de {{ username }}{% endblocktrans %}
