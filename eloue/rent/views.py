@@ -164,26 +164,42 @@ def booking_create(request, *args, **kwargs):
     return wizard(request, product, product.subtype, *args, **kwargs)
 
 
-@login_required
-@ownership_required(model=Booking, object_key='booking_id', ownership=['borrower'])
-def booking_success(request, booking_id):
-    return object_detail(request, queryset=Booking.on_site.all(), object_id=booking_id,
-        template_name='rent/booking_success.html', template_object_name='booking')
+from django.views.generic import DetailView
+from django.utils.decorators import method_decorator
+class BookingSuccess(DetailView):
+    @method_decorator(login_required)
+    @method_decorator(ownership_required(model=Booking, object_key='booking_id', ownership=['borrower']))
+    def dispatch(self, *args, **kwargs):
+        return super(BookingSuccess, self).dispatch(*args, **kwargs)
+
+    queryset = Booking.on_site.all()
+    pk_url_kwarg = 'booking_id'
+    template_name = 'rent/booking_success.html'
+    context_object_name = 'booking'
 
 
-@login_required
-@ownership_required(model=Booking, object_key='booking_id', ownership=['borrower'])
-def booking_failure(request, booking_id):
-    return object_detail(request, queryset=Booking.on_site.all(), object_id=booking_id,
-        template_name='rent/booking_failure.html', template_object_name='booking')
+class BookingFailure(DetailView):
+    @method_decorator(login_required)
+    @method_decorator(ownership_required(model=Booking, object_key='booking_id', ownership=['borrower']))
+    def dispatch(self, *args, **kwargs):
+        return super(BookingFailure, self).dispatch(*args, **kwargs)
+
+    queryset = Booking.on_site.all()
+    pk_url_kwarg = 'booking_id'
+    template_name = 'rent/booking_failure.html'
+    context_object_name = 'booking'
 
 
-@login_required
-@ownership_required(model=Booking, object_key='booking_id', ownership=['owner', 'borrower'])
-def booking_detail(request, booking_id):
-    paypal = request.GET.get('paypal', False)
-    return object_detail(request, queryset=Booking.on_site.all(), object_id=booking_id,
-        template_name='rent/booking_detail.html', template_object_name='booking', extra_context={'paypal': paypal})
+class BookingDetail(DetailView):
+    @method_decorator(login_required)
+    @method_decorator(ownership_required(model=Booking, object_key='booking_id', ownership=['borrower', 'owner']))
+    def dispatch(self, *args, **kwargs):
+        return super(BookingDetail, self).dispatch(*args, **kwargs)
+
+    queryset = Booking.on_site.all()
+    pk_url_kwarg = 'booking_id'
+    template_name = 'rent/booking_detail.html'
+    context_object_name = 'booking'
 
 
 @login_required
