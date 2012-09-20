@@ -55,7 +55,7 @@ from eloue.accounts.wizard import AuthenticationWizard
 
 from eloue import geocoder
 from eloue.products.forms import FacetedSearchForm
-
+from eloue.views import LoginRequiredMixin
 from eloue.products.models import ProductRelatedMessage, MessageThread
 from eloue.products.search_indexes import product_search
 from eloue.rent.models import Booking, BorrowerComment, OwnerComment
@@ -719,11 +719,6 @@ def dashboard(request):
     )
 
 
-class ProtectedView(View):
-    @method_decorator(login_required)
-    def dispatch(self, *args, **kwargs):
-        return super(ProtectedView, self).dispatch(*args, **kwargs)
-
 class AddTitle(TemplateResponseMixin):
     title = None
     def get_context_data(self, **kwargs):
@@ -732,7 +727,7 @@ class AddTitle(TemplateResponseMixin):
             context['title_page'] = self.title
         return context
 
-class OwnerBooking(ListView, ProtectedView, AddTitle):
+class OwnerBooking(ListView, LoginRequiredMixin, AddTitle):
     template_name = 'accounts/owner_booking.html'
     paginate_by = PAGINATE_PRODUCTS_BY
 
@@ -758,19 +753,19 @@ class OwnerBookingHistory(OwnerBooking):
         return self.request.user.bookings.history()
 
 
-class OwnerProduct(ListView, ProtectedView):
+class OwnerProduct(ListView, LoginRequiredMixin):
     template_name = 'accounts/owner_product.html'
     paginate_by = PAGINATE_PRODUCTS_BY
     def get_queryset(self):
         return self.request.user.products.all()
 
-class AlertEdit(ListView, ProtectedView):
+class AlertEdit(ListView, LoginRequiredMixin):
     template_name = 'accounts/alert_edit.html'
     def get_queryset(self):
         return self.request.user.alerts.all()
 
 
-class BorrowerBooking(ListView, ProtectedView, AddTitle):
+class BorrowerBooking(ListView, LoginRequiredMixin, AddTitle):
     template_name = 'accounts/borrower_booking.html'
     paginate_by = PAGINATE_PRODUCTS_BY
 
