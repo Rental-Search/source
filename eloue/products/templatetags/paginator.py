@@ -16,7 +16,7 @@ class PaginationNode(Node):
         
             window = int(PAGINATION_WINDOW / 2)
             if(page <= window):
-                page_range = [n for n in range(1, page + PAGINATION_WINDOW) if n > 0 and n <= pages]
+                page_range = [n for n in range(1, PAGINATION_WINDOW + 1) if n <= pages]
             else:
                 page_range = [n for n in range(page - window, page + window) if n > 0 and n <= pages]
         
