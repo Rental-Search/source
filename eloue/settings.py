@@ -73,6 +73,9 @@ LANGUAGES = (
     ('en-gb', ugettext('English')),
 )
 
+LOCALE_PATHS = (local.local_path('locale/'), )
+
+
 SITE_ID = 1
 DEFAULT_SITES = getattr(local, "DEFAULT_SITES", [1, 3, 4])
 
