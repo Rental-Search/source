@@ -553,14 +553,32 @@ def alert_create(request, *args, **kwargs):
     wizard = AlertWizard([AlertForm, EmailAuthenticationForm])
     return wizard(request, *args, **kwargs)
 
+class AlertList(ListView):
+    template_name = "products/alert_list.html"
+    context_object_name = 'alert'
 
-@cache_page(900)
-@vary_on_cookie
-def alert_list(request, sqs=SearchQuerySet(), page=None):
-    form = FacetedSearchForm()
-    search_alert_form = AlertSearchForm(request.GET, searchqueryset=sqs)
-    return object_list(request, search_alert_form.search(), page=page, paginate_by=PAGINATE_PRODUCTS_BY, template_name="products/alert_list.html",
-        template_object_name='alert', extra_context={'form': form, 'search_alert_form':search_alert_form})
+    @method_decorator(cache_page(900))
+    @method_decorator(vary_on_cookie)
+    def dispatch(self, *args, **kwargs):
+        return super(AlertList, self).dispatch(*args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super(AlertList, self).get_context_data(**kwargs)
+        context['form'] = FacetedSearchForm()
+        context['search_alert_form'] = self.search_alert_form
+        return context
+
+    def get_queryset(self):
+        self.search_alert_form = AlertSearchForm(self.request.GET, searchqueryset=self.kwargs['sqs'])
+        return self.search_alert_form
+
+# @cache_page(900)
+# @vary_on_cookie
+# def alert_list(request, sqs=SearchQuerySet(), page=None):
+#     form = FacetedSearchForm()
+#     search_alert_form = AlertSearchForm(request.GET, searchqueryset=sqs)
+#     return object_list(request, search_alert_form.search(), page=page, paginate_by=PAGINATE_PRODUCTS_BY, ,
+#          extra_context={'form': form, 'search_alert_form':search_alert_form})
 
 
 @never_cache

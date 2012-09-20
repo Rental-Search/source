@@ -5,8 +5,8 @@ from django.utils.translation import ugettext as _
 from eloue.products.search_indexes import alert_search, product_search
 
 from eloue.products.views import product_create, product_edit, message_create, reply_product_related_message, \
-    product_delete, alert_list, alert_create, alert_inform, alert_delete
-from eloue.products.views import ProductList, AlertInformSuccess
+    product_delete, alert_create, alert_inform, alert_delete
+from eloue.products.views import ProductList, AlertInformSuccess, AlertList
 from eloue.rent.views import booking_create, booking_price, product_occupied_date, booking_create_redirect
 
 
@@ -16,7 +16,7 @@ urlpatterns = patterns('',
     url(r'^%s/%s/$' % (_("ajouter"), _("voiture")), 'eloue.products.views.car_product_create', name="car_product_create"),
     url(r'^%s/%s/$' % (_("ajouter"), _("logement")), 'eloue.products.views.real_estate_product_create', name="real_estate_product_create"),
     url(r'^(?P<slug>[-\w]+)-(?P<product_id>\d+)/delete/$', product_delete, name="product_delete"),
-	url(r'^%s/$' % _("alertes"), alert_list, {'sqs': alert_search}, name="alert_list"),
+	url(r'^%s/$' % _("alertes"), AlertList.as_view(), {'sqs': alert_search}, name="alert_list"),
 	url(r'^%s/$' % _("alertes/ajouter"), alert_create, name="alert_create"),
 	url(r'^%s/(?P<alert_id>\d+)/$' % _("alertes"), alert_inform, name="alert_inform"),
 	url(r'^%s/(?P<alert_id>\d+)/$' % _("alertes/supprimer"), alert_delete, name="alert_delete"),
