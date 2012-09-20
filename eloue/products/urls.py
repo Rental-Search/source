@@ -4,8 +4,9 @@ from django.utils.translation import ugettext as _
 
 from eloue.products.search_indexes import alert_search, product_search
 
-from eloue.products.views import product_create, product_list, product_edit, message_create, reply_product_related_message, \
-    product_delete, alert_list, alert_create, alert_inform, alert_inform_success, alert_delete
+from eloue.products.views import product_create, product_edit, message_create, reply_product_related_message, \
+    product_delete, alert_list, alert_create, alert_inform, alert_delete
+from eloue.products.views import ProductList, AlertInformSuccess
 from eloue.rent.views import booking_create, booking_price, product_occupied_date, booking_create_redirect
 
 
@@ -19,11 +20,11 @@ urlpatterns = patterns('',
 	url(r'^%s/$' % _("alertes/ajouter"), alert_create, name="alert_create"),
 	url(r'^%s/(?P<alert_id>\d+)/$' % _("alertes"), alert_inform, name="alert_inform"),
 	url(r'^%s/(?P<alert_id>\d+)/$' % _("alertes/supprimer"), alert_delete, name="alert_delete"),
-	url(r'^alertes/success/(?P<alert_id>\d+)/$', alert_inform_success, name="alert_inform_success"),
+	url(r'^alertes/success/(?P<alert_id>\d+)/$', AlertInformSuccess.as_view(), name="alert_inform_success"),
     url(r'^(?P<product_id>\d+)/%s/(?P<recipient_id>\d+)/$' % _("nouveau-message"), message_create, name="message_create"),
     url(r'^(?P<slug>[-\w]+)-(?P<product_id>\d+)/$', booking_create_redirect),
     url(r'^([^/].+/)(?P<slug>[-\w]+)-(?P<product_id>\d+)/price/$', booking_price, name="booking_price"),
     url(r'^([^/].+/)(?P<slug>[-\w]+)-(?P<product_id>\d+)/$', booking_create, name="booking_create"),
     url(r'^([^/].+/)(?P<slug>[-\w]+)-(?P<product_id>\d+)/occupied_date/$', product_occupied_date, name="product_occupied_date"),
-    url(r'^([^/].+/)?$', product_list, {'sqs': product_search}, name="product_list"),
+    url(r'^([^/].+/)?$', ProductList.as_view(), {'sqs': product_search}, name="product_list"),
 )

@@ -16,12 +16,10 @@ from django.utils.datastructures import SortedDict, MultiValueDict
 from django.utils.translation import ugettext as _
 from django.views.decorators.cache import never_cache, cache_page
 from django.views.decorators.vary import vary_on_cookie
-from django.views.generic.list_detail import object_list
 from django.db.models import Q
 
 from django.shortcuts import render_to_response, render, redirect
 from django.template import RequestContext
-from django.views.generic.list_detail import object_detail
 
 from django.http import Http404, HttpResponseRedirect
 
@@ -446,90 +444,108 @@ def product_delete(request, slug, product_id):
         return render(request, 'products/product_delete.html', 
             {'product': product, 'is_booked': is_booked})
 
+from django.views.generic import ListView, DetailView
+from django.utils.decorators import method_decorator
+from eloue.views import LoginRequiredMixin
 
-@mobify
-@cache_page(900)
-@vary_on_cookie
-def product_list(request, urlbits, sqs=SearchQuerySet(), suggestions=None, page=None):
-    location = request.session.setdefault('location', settings.DEFAULT_LOCATION)
-    query_data = request.GET.copy()
-    if not query_data.get('l'):
-        query_data['l'] = location['country']
-    form = FacetedSearchForm(query_data)
-    if not form.is_valid():
-        raise Http404
-    
-    breadcrumbs = SortedDict()
-    breadcrumbs['q'] = {'name': 'q', 'value': form.cleaned_data.get('q', None), 'label': 'q', 'facet': False}
-    breadcrumbs['sort'] = {'name': 'sort', 'value': form.cleaned_data.get('sort', None), 'label': 'sort', 'facet': False}
-    breadcrumbs['l'] = {'name': 'l', 'value': form.cleaned_data.get('l', None), 'label': 'l', 'facet': False}
-    breadcrumbs['r'] = {'name': 'r', 'value': form.cleaned_data.get('r', None), 'label': 'r', 'facet': False}
-    breadcrumbs['renter'] = {'name': 'renter', 'value': form.cleaned_data.get('renter'), 'label': 'renter', 'facet': False}
+class ProductList(ListView):
+    template_name = "products/product_result.html"
+    paginate_by = PAGINATE_PRODUCTS_BY
+    context_object_name = 'product_list'
 
-    urlbits = urlbits or ''
-    urlbits = filter(None, urlbits.split('/')[::-1])
-    while urlbits:
-        bit = urlbits.pop()
-        if bit.startswith(_('par-')):
-            try:
-                value = urlbits.pop()
-            except IndexError:
-                raise Http404
-            if bit.endswith(_('categorie')):
-                item = get_object_or_404(Category, slug=value)
-                is_facet_not_empty = lambda facet: not (
-                    facet['facet'] or
-                    (facet['label'], facet['value']) in [ ('sort', ''), ('q', '')]
-                )
-                params = MultiValueDict(
-                    (facet['label'], [unicode(facet['value']).encode('utf-8')]) for facet in breadcrumbs.values() if is_facet_not_empty(facet)
-                )
-                path = item.get_absolute_url()
-                for bit in urlbits:
-                    if bit.startswith(_('page')):
-                        try:
-                            page = urlbits.pop(0)
-                            path = '%s/%s/%s' % (path, _(u'page'), page)
-                        except IndexError:
-                            raise Http404
-                if any([value for key, value in params.iteritems()]):
-                    path = '%s?%s' % (path, urlencode(params))
-                return redirect(escape_percent_sign(path))
+    @method_decorator(mobify)
+    @method_decorator(cache_page(900))
+    @method_decorator(vary_on_cookie)
+    def dispatch(self, request, urlbits, sqs=SearchQuerySet(), suggestions=None, page=None):
+        location = request.session.setdefault('location', settings.DEFAULT_LOCATION)
+        query_data = request.GET.copy()
+        if not query_data.get('l'):
+            query_data['l'] = location['country']
+        form = FacetedSearchForm(query_data)
+        if not form.is_valid():
+            raise Http404
+        
+        self.breadcrumbs = SortedDict()
+        self.breadcrumbs['q'] = {'name': 'q', 'value': form.cleaned_data.get('q', None), 'label': 'q', 'facet': False}
+        self.breadcrumbs['sort'] = {'name': 'sort', 'value': form.cleaned_data.get('sort', None), 'label': 'sort', 'facet': False}
+        self.breadcrumbs['l'] = {'name': 'l', 'value': form.cleaned_data.get('l', None), 'label': 'l', 'facet': False}
+        self.breadcrumbs['r'] = {'name': 'r', 'value': form.cleaned_data.get('r', None), 'label': 'r', 'facet': False}
+        self.breadcrumbs['renter'] = {'name': 'renter', 'value': form.cleaned_data.get('renter'), 'label': 'renter', 'facet': False}
+
+        urlbits = urlbits or ''
+        urlbits = filter(None, urlbits.split('/')[::-1])
+        while urlbits:
+            bit = urlbits.pop()
+            if bit.startswith(_('par-')):
+                try:
+                    value = urlbits.pop()
+                except IndexError:
+                    raise Http404
+                if bit.endswith(_('categorie')):
+                    item = get_object_or_404(Category, slug=value)
+                    is_facet_not_empty = lambda facet: not (
+                        facet['facet'] or
+                        (facet['label'], facet['value']) in [ ('sort', ''), ('q', '')]
+                    )
+                    params = MultiValueDict(
+                        (facet['label'], [unicode(facet['value']).encode('utf-8')]) for facet in self.breadcrumbs.values() if is_facet_not_empty(facet)
+                    )
+                    path = item.get_absolute_url()
+                    for bit in urlbits:
+                        if bit.startswith(_('page')):
+                            try:
+                                page = urlbits.pop(0)
+                                path = '%s/%s/%s' % (path, _(u'page'), page)
+                            except IndexError:
+                                raise Http404
+                    if any([value for key, value in params.iteritems()]):
+                        path = '%s?%s' % (path, urlencode(params))
+                    return redirect(escape_percent_sign(path))
+                else:
+                    raise Http404
+            elif bit.startswith(_('page')):
+                try:
+                    page = urlbits.pop()
+                except IndexError:
+                    raise Http404
             else:
-                raise Http404
-        elif bit.startswith(_('page')):
-            try:
-                page = urlbits.pop()
-            except IndexError:
-                raise Http404
-        else:
-            value = bit
-            item = get_object_or_404(Category, slug=value)
-            ancestors_slug = item.get_ancertors_slug()
-            breadcrumbs['categorie'] = {
-                'name': 'categories', 'value': value, 'label': ancestors_slug, 'object': item,
-                'pretty_name': _(u"Catégorie"), 'pretty_value': item.name,
-                'url': item.get_absolute_url(), 'facet': True
-            }
-    
-    site_url="%s://%s" % ("https" if USE_HTTPS else "http", Site.objects.get_current().domain)
-    form = FacetedSearchForm(
-        dict((facet['name'], facet['value']) for facet in breadcrumbs.values()),
-        searchqueryset=sqs)
-    sqs, suggestions, top_products = form.search()
-    # we use canonical_parameters to generate the canonical url in the header
-    canonical_parameters = SortedDict(((key, unicode(value['value']).encode('utf-8')) for (key, value) in breadcrumbs.iteritems() if value['value']))
-    canonical_parameters.pop('categorie', None)
-    canonical_parameters.pop('r', None)
-    canonical_parameters.pop('sort', None)
-    canonical_parameters = urllib.urlencode(canonical_parameters)
-    if canonical_parameters:
-        canonical_parameters = '?' + canonical_parameters
-    return object_list(request, sqs, page=page, paginate_by=PAGINATE_PRODUCTS_BY, template_name="products/product_result.html",
-        template_object_name='product', extra_context={
-            'facets': sqs.facet_counts(), 'form': form, 'breadcrumbs': breadcrumbs, 'suggestions': suggestions,
-            'site_url': site_url, 'canonical_parameters': canonical_parameters, 'top_products': top_products
-    })
+                value = bit
+                item = get_object_or_404(Category, slug=value)
+                ancestors_slug = item.get_ancertors_slug()
+                self.breadcrumbs['categorie'] = {
+                    'name': 'categories', 'value': value, 'label': ancestors_slug, 'object': item,
+                    'pretty_name': _(u"Catégorie"), 'pretty_value': item.name,
+                    'url': item.get_absolute_url(), 'facet': True
+                }
+        
+        self.site_url="%s://%s" % ("https" if USE_HTTPS else "http", Site.objects.get_current().domain)
+        self.form = FacetedSearchForm(
+            dict((facet['name'], facet['value']) for facet in self.breadcrumbs.values()),
+            searchqueryset=sqs)
+        self.sqs, self.suggestions, self.top_products = self.form.search()
+        # we use canonical_parameters to generate the canonical url in the header
+        self.canonical_parameters = SortedDict(((key, unicode(value['value']).encode('utf-8')) for (key, value) in self.breadcrumbs.iteritems() if value['value']))
+        self.canonical_parameters.pop('categorie', None)
+        self.canonical_parameters.pop('r', None)
+        self.canonical_parameters.pop('sort', None)
+        self.canonical_parameters = urllib.urlencode(self.canonical_parameters)
+        if self.canonical_parameters:
+            self.canonical_parameters = '?' + self.canonical_parameters
+        return super(ProductList, self).dispatch(request, urlbits, sqs, suggestions, page=page)
+
+    def get_queryset(self):
+        return self.sqs
+
+    def get_context_data(self, **kwargs):
+        context = super(ProductList, self).get_context_data(**kwargs)
+        context['facets'] = self.sqs.facet_counts()
+        context['form'] = self.form
+        context['breadcrumbs'] = self.breadcrumbs
+        context['suggestions'] = self.suggestions
+        context['site_url'] = self.site_url
+        context['canonical_parameters'] = self.canonical_parameters
+        context['top_products'] = self.top_products
+        return context
 
 @never_cache
 @secure_required
@@ -554,10 +570,11 @@ def alert_inform(request, *args, **kwargs):
     return wizard(request, *args, **kwargs)
 
 
-@login_required
-def alert_inform_success(request, alert_id):
-    return object_detail(request, queryset=Alert.objects.all(), object_id=alert_id,
-        template_name='products/alert_unform_success.html', template_object_name='alert')
+class AlertInformSuccess(LoginRequiredMixin, DetailView):
+    template_name = 'products/alert_unform_success.html'
+    model = Alert
+    context_object_name = 'alert'
+    pk_url_kwarg = 'alert_id'
 
 
 @login_required
