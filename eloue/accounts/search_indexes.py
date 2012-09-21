@@ -36,7 +36,7 @@ class PatronIndex(QueuedSearchIndex):
     def prepare_avatar(self, obj):
         if obj.avatar:
             return obj.thumbnail.url
-        return urljoin(settings.STATIC_URL, "images/default_avatar.png")
+        return ''
 
     def prepare_lat(self, obj):
         return obj.default_address.position[0] if obj.default_address and obj.default_address.position else None

@@ -229,7 +229,7 @@ PIPELINE_CSS = {
             'less/styles.less',
             'css/chosen.css'
         ),
-        'output_filename': 'css/master.r?.css',
+        'output_filename': 'css/master.css',
         'extra_context': {
             'media': 'screen',
         },
@@ -238,7 +238,7 @@ PIPELINE_CSS = {
         'source_filenames': (
             'css/mobile.css',
         ),
-        'output_filename': 'css/mobile.r?.css',
+        'output_filename': 'css/mobile.css',
         'extra_context': {
             'media': 'screen',
         },
@@ -247,7 +247,7 @@ PIPELINE_CSS = {
         'source_filenames': (
             'css/ie/ie.css',
         ),
-        'output_filename': 'css/ie.r?.css',
+        'output_filename': 'css/ie.css',
         'extra_context': {
             'media': 'screen',
         }
@@ -268,7 +268,7 @@ PIPELINE_JS = {
             'js/jquery.cycle.all.latest.js',
             'js/application2.js',
             ),
-        'output_filename': 'js/application2.r?.js',
+        'output_filename': 'js/application2r.js',
         'extra_context': {
             'defer': False,
         },
