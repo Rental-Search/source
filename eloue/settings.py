@@ -344,6 +344,8 @@ AWS_HEADERS = {
 AWS_PRELOAD_METADATA = True
 
 # staticfiles configuration
+AWS_STATICSTORAGE_BUCKET_NAME = getattr(local, 'AWS_STATICSTORAGE_BUCKET_NAME', None)
+AWS_S3_CUSTOM_STATIC_DOMAIN = getattr(local, 'AWS_S3_CUSTOM_STATIC_DOMAIN', None)
 STATIC_ROOT = getattr(local, 'STATIC_ROOT', 'static/')
 STATIC_URL = getattr(local, 'STATIC_URL', '/static/')
 STATICFILES_DIRS = ['eloue/static/', ]
