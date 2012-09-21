@@ -19,6 +19,4 @@ class S3PipelineStorage(PipelineMixin, CachedFilesMixin, S3BotoStorage):
 
 
 StaticRootS3BotoStorage = lambda **kwargs: S3PipelineStorage(
-	bucket=settings.AWS_STATICSTORAGE_BUCKET_NAME, 
-	custom_domain=settings.AWS_S3_CUSTOM_STATIC_DOMAIN,
-	**kwargs)
+	location='static', **kwargs)
