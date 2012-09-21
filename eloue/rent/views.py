@@ -16,7 +16,6 @@ from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.http import require_POST, require_GET
 from django.views.decorators.cache import never_cache, cache_page
 from django.views.decorators.csrf import csrf_exempt
-from django.views.generic.list_detail import object_detail
 from django.template.loader import render_to_string
 from django.db.models import Q
 from django_lean.experiments.models import GoalRecord
