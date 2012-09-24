@@ -72,7 +72,7 @@ class MultiPartFormWizard(FormWizard):
 
         if 'extra_context' in kwargs:
             self.extra_context.update(kwargs['extra_context'])
-        current_step = self.determine_step(request, *args, **kwargs)
+        current_step = self.get_current_or_first_step(request, *args, **kwargs)
         self.parse_params(request, *args, **kwargs)
 
         # Sanity check.

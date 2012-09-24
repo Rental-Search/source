@@ -85,7 +85,7 @@
           {% if request.user.avatar %}
             <img src="{{ request.user.thumbnail.url }}" alt="{% trans "loueur"%}{{ request.user.username }}" style="float: left; margin-right: 10px; border: 1px solid #9EB0BA;">
           {% else %}
-            <img src="{{ MEDIA_URL }}images/default_avatar.png" alt="{% trans "loueur"%}{{ request.user.username }}" style="float: left; margin-right: 10px; border: 1px solid #9EB0BA;">
+            <img src="{{ STATIC_URL }}images/default_avatar.png" alt="{% trans "loueur"%}{{ request.user.username }}" style="float: left; margin-right: 10px; border: 1px solid #9EB0BA;">
           {% endif %}
         {% endif %}
         {{ field }}

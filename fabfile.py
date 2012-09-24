@@ -207,7 +207,7 @@ def compress():
     if not 'current_release' in env:
         releases()
     with cd(env.current_release):
-        run("env/bin/python %(app_name)s/manage.py synccompress" % {'app_name': env.app_name})
+        run("env/bin/python %(app_name)s/manage.py collectstatic" % {'app_name': env.app_name})
 
 def cleanup():
     """Clean up old releases"""

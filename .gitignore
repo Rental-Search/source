@@ -12,9 +12,9 @@ nosetests.xml
 env
 eloue.db
 eloue/local.py
-eloue/media/js/*.r*.js
-eloue/media/js/sep/*.r*.js
-eloue/media/css/*.r*.css
+eloue/static/js/*.r*.js
+eloue/static/js/sep/*.r*.js
+eloue/static/css/*.r*.css
 docs/_build/doctrees/
 eloue/rent/rules
 eloue/products/management/commands/fixtures/differences.yaml
@@ -23,5 +23,7 @@ eloue/media/media/*
 eloue/templates/20minutes/header.html
 eloue/templates/20minutes/footer.html
 eloue/test_payment_steps.py
-eloue/media/less/styles.css
+eloue/static/less/styles.css
+eloue/collected_static/
 build/
+static/

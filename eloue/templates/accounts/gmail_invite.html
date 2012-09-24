@@ -69,7 +69,7 @@
   	<ul id="gmail-list" class="friends-list filtered">
   		{% for data in initial_data %}
   		<li>
-  			<img src="{{ MEDIA_URL }}images/default_avatar.png" width="30"/>
+  			<img src="{{ STATIC_URL }}images/default_avatar.png" width="30"/>
   			<div class="name">{{ data.name|truncate:28}}</div> 
         <input type="hidden" value="{{ data.email }}" name="email" />
   			<button type="button" class="btn btn-contactme">{% trans "Inviter"%}</button>	
