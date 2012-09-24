@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import json
 import calendar
 from datetime import datetime, timedelta, time
 from decimal import Decimal as D
@@ -47,7 +48,7 @@ class BookingViewsTest(TestCase):
         json = simplejson.loads(response.content)
         self.assertTrue('duration' in json)
         self.assertTrue('total_price' in json)
-        self.assertEquals(json['total_price'], smart_str(currency(D('72.00'))))
+        self.assertEquals(json['total_price'], json.loads(json.dumps(smart_str(currency(D('72.00'))))))
         self.assertEquals(json['duration'], '3 '+_("jours"))
     
     def test_booking_price_error(self):
