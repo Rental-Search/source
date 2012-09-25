@@ -75,7 +75,7 @@
             {% if booking.owner.avatar %}
                 <img src="{{ booking.owner.avatar.profil.url }}" width="100" height="100" alt="">
             {% else %}
-                <img src="{{ MEDIA_URL }}images/default_avatar.png" width="100" height="100" alt="">
+                <img src="{{ STATIC_URL }}images/default_avatar.png" width="100" height="100" alt="">
             {% endif %}
             <span style="margin-top: 0; margin-left: 10px;" class="stars empty"><span class="stars filled_{{ booking.owner.average_note }}"></span></span>
         </td>
@@ -119,7 +119,7 @@
             {% if booking.borrower.avatar %}
                 <img src="{{ booking.borrower.avatar.profil.url }}" width="100" height="100" alt="">
             {% else %}
-                <img src="{{ MEDIA_URL }}images/default_avatar.png" width="100" height="100" alt="">
+                <img src="{{ STATIC_URL }}images/default_avatar.png" width="100" height="100" alt="">
             {% endif %}
             <span style="margin-top: 0; margin-left: 10px;" class="stars empty"><span class="stars filled_{{ booking.borrower.average_note }}"></span></span>
         </td>

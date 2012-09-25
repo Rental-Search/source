@@ -7,21 +7,21 @@
   <title>{% filter striplinebreak %}{% block title %}{% endblock %} {% if is_paginated and page_obj.has_previous %}- {% trans "Page" %} {{ page_obj.number }}{% endif %} - {% trans "e-loue" %}{% endfilter %}</title>
   <meta name="description" content="{% filter striplinebreak %}{% block description %}Plateforme pour louer ou mettre en location tout type d'objet : materiel, reception, mariage, sono, utilitaires, ski{% endblock %}{% if is_paginated and page_obj.has_previous %} Page {{ page_obj.number }}{% endif %}{% endfilter %}">
   <meta name="google-site-verification" content="FWAXGNflP5tHx07gmHbTDhPEsI-BVU66-mF-sLIH5VU" />
-  <link rel="shortcut icon" href="{{ MEDIA_URL }}favicon.ico">
+  <link rel="shortcut icon" href="{{ STATIC_URL }}favicon.ico">
   {% block head %}
   {% compressed_css 'master' %}
   <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
 
   {% endblock %}
   <!--[if lt IE 9]>
-      <script src="{{ MEDIA_URL }}js/html5.js"></script>
+      <script src="{{ STATIC_URL }}js/html5.js"></script>
       {% compressed_css 'ie' %}
   <![endif]-->
  </head>
  
  <body>
     <div class="container" style="padding: 0px; width: 980px;">
-      <img src="{{ MEDIA_URL }}images/argusnc/argus_header.jpg" alt="Retour en accueil" title="Retour en accueil" border="0" width="980">
+      <img src="{{ STATIC_URL }}images/argusnc/argus_header.jpg" alt="Retour en accueil" title="Retour en accueil" border="0" width="980">
     </div>{# container #}
     <div class="top-bar" style="background: none; height: 23px; box-shadow: none; border-bottom: none;">
         <div class="container">
@@ -34,7 +34,7 @@
                             {% if user.avatar %}
                             <img src="{{ user.thumbnail.url }}" width="20" height="20">
                             {% else %}
-                            <img src="{{ MEDIA_URL }}images/default_avatar.png"  width="20" height="20">
+                            <img src="{{ STATIC_URL }}images/default_avatar.png"  width="20" height="20">
                             {% endif %}
                             {% trans "Tableau de bord" %}  
                             {% with unread_message_count|add:user.bookings.authorized.count as notification_count %}
@@ -47,7 +47,7 @@
                     {% if not user.is_authenticated %}
                         <a href="{% url auth_login %}" class="nav-link" >{% trans "S'inscrire ou se connecter" %}</a>
                         <a href="{% url auth_login %}" class="fb-connect-small">
-                            <img src="{{ MEDIA_URL }}images/fb_connect_small.png" width="16" height="16">
+                            <img src="{{ STATIC_URL }}images/fb_connect_small.png" width="16" height="16">
                         </a>
                     {% else %}
                         <a href="{% url auth_logout %}" class="nav-link">{% trans "Se déconnecter" %}</a>

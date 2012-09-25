@@ -4,7 +4,7 @@
 	<head>
   		<meta charset="utf-8">
   		<title>{% trans "Facturation"%}</title>
-  		<link rel="shortcut icon" href="{{ MEDIA_URL }}favicon.ico">
+  		<link rel="shortcut icon" href="{{ STATIC_URL }}favicon.ico">
   		{% compressed_css 'master' %}
   	</head>
   	<body style="background: #fff;">
@@ -14,7 +14,7 @@
   		<div id="billing" style="margin: 30px auto; width: 650px; background-color: #fff;">
   			<h1 style="margin-bottom: 20px;">
   				{% trans "Facture" %}
-  				<img src="{{ MEDIA_URL }}images/logo_new.png" alt="e-loue" height="37" style="float: right;"/>
+  				<img src="{{ STATIC_URL }}images/logo_new.png" alt="e-loue" height="37" style="float: right;"/>
   			</h1>
   			<p style="margin-bottom: 20px;">Compte facturé : {{ patron.company_name }}</p>
   			<p style="text-align: right; margin-bottom: 5px;"><a href="#" onClick="window.print()">{% trans "Imprimer la facture"%}</a></p> 

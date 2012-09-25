@@ -175,7 +175,7 @@ class ProductViewsTest(TestCase):
     def test_product_delete(self):
         self.client.login(username='alexandre.woog@e-loue.com', password='alexandre')
         response = self.client.post(reverse('product_delete', args=['perceuse-visseuse-philips', 1]))
-        self.assertRedirects(response, reverse('owner_product'), status_code=301)
+        self.assertRedirects(response, reverse('owner_product'))
         try:
             Product.objects.get(pk=1)
             self.fail()

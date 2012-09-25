@@ -3,7 +3,11 @@
     {% for patron in patron_list %}
     <li>
         <a href="{{patron.url}}">
-            <img src="{{ patron.avatar }}" width="60" height="60" />
+        	{% if patron.avatar %}
+	            <img src="{{ patron.avatar }}" width="60" height="60" />
+	        {% else %}
+	        	<img src="{{ STATIC_URL }}images/default_avatar.png" width="60" height="60" />
+	        {% endif %}
         </a>
         <p>{{ patron.username|truncate:6 }}</p>
     </li>

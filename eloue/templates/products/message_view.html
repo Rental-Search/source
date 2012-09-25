@@ -29,7 +29,7 @@
 			{% if message.sender.avatar %}
 				<img src="{{message.sender.thumbnail.url}}" width="60" height="60" />
 			{% else %}
-				<img src="{{ MEDIA_URL }}images/default_avatar.png" width="60" height="60" alt="">
+				<img src="{{ STATIC_URL }}images/default_avatar.png" width="60" height="60" alt="">
 			{% endif %}
 		</a>
 		<div class="m-content">
@@ -50,7 +50,7 @@
 			{% if user.avatar %}
 				<img src="{{ user.thumbnail.url }}" width="60" height="60">
 			{% else %}
-                <img src="{{ MEDIA_URL }}images/default_avatar.png" width="60" height="60">
+                <img src="{{ STATIC_URL }}images/default_avatar.png" width="60" height="60">
 			{% endif %}
 		</a>
 		<div class="m-content">
