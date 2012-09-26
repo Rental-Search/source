@@ -542,6 +542,15 @@ class FacebookSession(models.Model):
         if not hasattr(self, '_graph_api') or self._graph_api.access_token != self.access_token:
             self._graph_api = facebook.GraphAPI(self.access_token)
         return self._graph_api
+
+class IDNSession(models.Model):
+    token = models.CharField(max_length=255, unique=True)
+        
+    user = models.OneToOneField(Patron, null=True)
+    uid = models.CharField(max_length=255, unique=True, null=True)
+
+    def __unicode__(self):
+        return "IDN : %s" %  self.token
     
 class Address(models.Model):
     """An address"""
