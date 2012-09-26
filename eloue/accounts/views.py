@@ -735,7 +735,7 @@ class OwnerBookingAuthorized(OwnerBooking):
     def get_queryset(self):
         if self.request.user.current_subscription:
             return self.request.user.bookings.professional()
-        return request.user.bookings.authorized()
+        return self.request.user.bookings.authorized()
 
 class OwnerBookingPending(OwnerBooking):
     title = u'Réservations à venir'
