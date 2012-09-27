@@ -545,9 +545,13 @@ class FacebookSession(models.Model):
 
 class IDNSession(models.Model):
     token = models.CharField(max_length=255, unique=True)
-        
-    user = models.OneToOneField(Patron, null=True)
-    uid = models.CharField(max_length=255, unique=True, null=True)
+    user = models.OneToOneField(Patron, null=True, related_name='idn_session')
+    created_at = models.DateTimeField(blank=True, editable=False)
+
+    def save(self, *args, **kwargs):
+        if not self.created_at:
+            self.created_at = datetime.datetime.now()
+        super(IDNSession, self).save(*args, **kwargs)
 
     def __unicode__(self):
         return "IDN : %s" %  self.token

@@ -4,9 +4,16 @@
 {% block title %}{% trans "Enregistrement IDN" %}{% endblock %}
 
 {% block content-main-profil %}
-  <h1 style="margin-bottom: 40px;">Enregistrement Identité Numérique</h1>
-  {% if client %}
-    {{ client }}
+  <h1 style="margin-bottom: 40px;"><img src="{{ STATIC_URL }}/images/laposte_icon.gif" alt="La Poste icône" height="25" style="margin-right: 5px; margin-bottom: -8px;">Enregistrement Identité Numérique</h1>
+  {% if idn %}
+  <p style="text-align:center; font-size: 16px; line-height: 22px; border: 1px solid #ABC9D5; padding: 10px; margin-bottom: 10px;">
+  	Votre <b>I</b>dentité <b>N</b>umérique<br> a été vérifiée le : <b>{{ idn.created_at }}</b>
+  </p>
+  <p style="text-align: right;">
+  	<a href="{% url patron_delete_idn_connect %}">
+  		Je souhaite dissocier mon compte <b>I</b>dentité <b>N</b>umérique
+  	</a>
+  </p>
   {% else %}
   	<p style="text-align: center;">
     	<a href="{{ authorize_link }}"><img src="{{ STATIC_URL }}/images/btn_idnverif1.jpg" alt="" width="236" height="45"/></a>
