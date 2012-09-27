@@ -991,7 +991,7 @@ def patron_edit_idn_connect(request):
                 idn = IDNSession(token=token, user=request.user)
                 idn.save()
 
-            return render(request, 'accounts/patron_edit_idn.html', {'idn': idn}) 
+            return redirect('patron_edit_idn_connect') 
 
         else:
 
