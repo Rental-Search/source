@@ -1008,6 +1008,16 @@ def patron_edit_idn_connect(request):
             return render(request, 'accounts/patron_edit_idn.html', {'authorize_link': authorize_link})
 
 
+@login_required
+def patron_delete_idn_connect(request):
+    from eloue.accounts.models import IDNSession
+    idn = get_object_or_404(IDNSession, user=request.user)
+    try:
+        idn.delete()
+    except:
+        pass
+    return redirect('patron_edit_idn_connect')
+
 
 
 
