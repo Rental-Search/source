@@ -948,51 +948,64 @@ def patron_edit_notification(request):
 def patron_edit_idn_connect(request):
     import oauth2 as oauth
     import urlparse
+    from eloue.accounts.models import IDNSession
+    idn = None
+    try:
+     idn = IDNSession.objects.get(user=request.user)
+    except:
+        pass
 
-    oauth_verifier = request.GET.get('oauth_verifier', None)
-
-    base_url = 'http://idn.recette.laposte.france-sso.fr/'
-    request_token_url = base_url + 'oauth/requestToken'
-    authorize_url = base_url + 'oauth/authorize'
-    access_token_url = base_url + 'oauth/accessToken'
-    me_url = base_url + 'anywhere/me'
-
-    consumer_key = '_ce85bad96eed75f0f7faa8f04a48feedd56b4dcb'
-    consumer_secret = '_80b312627bf936e6f20510232cf946fff885d1f7'
-
-    consumer = oauth.Consumer(key=consumer_key, secret=consumer_secret)
-    client = oauth.Client(consumer)
-
-    if oauth_verifier:
-        #Access Request
-        token = oauth.Token(request.session['request_token']['oauth_token'], request.session['request_token']['oauth_token_secret'])
-        token.set_verifier(oauth_verifier)
-        client = oauth.Client(consumer, token)
-        response, content = client.request(access_token_url, "GET")
-
-        #Get Information about the user
-        access_token = dict(urlparse.parse_qsl(content))
-        print access_token
-        token = oauth.Token(access_token['oauth_token'], access_token['oauth_token_secret'])
-        client = oauth.Client(consumer, token)
-        response, content = client.request(me_url, "GET", body='[%22namePerson\\/friendly%22,%22namePerson%22]')
-
-        return render(request, 'accounts/patron_edit_idn.html', {'client': content}) 
+    if idn:
+        return render(request, 'accounts/patron_edit_idn.html', {'idn': idn})
 
     else:
+        oauth_verifier = request.GET.get('oauth_verifier', None)
 
-        redirect_uri = 'http://localhost:8000/dashboard/account/idn/'
-        scope = '["namePerson","contact/email"]'
+        base_url = 'http://idn.recette.laposte.france-sso.fr/'
+        request_token_url = base_url + 'oauth/requestToken'
+        authorize_url = base_url + 'oauth/authorize'
+        access_token_url = base_url + 'oauth/accessToken'
+        me_url = base_url + 'anywhere/me'
 
-        response, content = client.request(request_token_url, "GET")
+        consumer_key = '_ce85bad96eed75f0f7faa8f04a48feedd56b4dcb'
+        consumer_secret = '_80b312627bf936e6f20510232cf946fff885d1f7'
 
-        request.session['request_token'] = dict(urlparse.parse_qsl(content))
-        request.session.save()
+        consumer = oauth.Consumer(key=consumer_key, secret=consumer_secret)
+        client = oauth.Client(consumer)
 
-        authorize_link = "%s?oauth_token=%s&oauth_callback=%s&oauth_scope=%s" % (authorize_url, request.session['request_token']['oauth_token'], redirect_uri, scope)
+        if oauth_verifier:
+            #Access Request
+            token = oauth.Token(request.session['request_token']['oauth_token'], request.session['request_token']['oauth_token_secret'])
+            token.set_verifier(oauth_verifier)
+            client = oauth.Client(consumer, token)
+            response, content = client.request(access_token_url, "GET")
 
+            #Get Information about the user
+            access_token = dict(urlparse.parse_qsl(content))
+            print access_token
+            token = oauth.Token(access_token['oauth_token'], access_token['oauth_token_secret'])
+            client = oauth.Client(consumer, token)
+            response, content = client.request(me_url, "GET", body='[%22namePerson\\/friendly%22,%22namePerson%22]')
 
-    return render(request, 'accounts/patron_edit_idn.html', {'authorize_link': authorize_link})
+            if response['status'] == '200':
+                idn = IDNSession(token=token, user=request.user)
+                idn.save()
+
+            return render(request, 'accounts/patron_edit_idn.html', {'idn': idn}) 
+
+        else:
+
+            redirect_uri = 'http://localhost:8000/dashboard/account/idn/'
+            scope = '["namePerson","contact/email"]'
+
+            response, content = client.request(request_token_url, "GET")
+
+            request.session['request_token'] = dict(urlparse.parse_qsl(content))
+            request.session.save()
+
+            authorize_link = "%s?oauth_token=%s&oauth_callback=%s&oauth_scope=%s" % (authorize_url, request.session['request_token']['oauth_token'], redirect_uri, scope)
+
+            return render(request, 'accounts/patron_edit_idn.html', {'authorize_link': authorize_link})
 
 
 
