@@ -44,6 +44,7 @@ urlpatterns = patterns('',
     url(r'^account/pro_option/highlight/$', 'eloue.accounts.views.patron_edit_highlight', name='patron_edit_highlight'),
     url(r'^account/pro_option/notification/$', 'eloue.accounts.views.patron_edit_notification', name='patron_edit_notification'),
     url(r'^account/pro_option/top_position/$', 'eloue.accounts.views.patron_edit_top_position', name='patron_edit_top_position'),
+    url(r'^account/idn/$', 'eloue.accounts.views.patron_edit_idn_connect', name='patron_edit_idn_connect'),
 
     url(r'^account/invite/facebook/$', facebook_invite, name="facebook_invite"),
     url(r'^account/invite/gmail/$', gmail_invite, name="gmail_invite"),

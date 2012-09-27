@@ -216,6 +216,7 @@ SESSION_ENGINE = local.SESSION_ENGINE
 SESSION_COOKIE_DOMAIN = local.SESSION_COOKIE_DOMAIN
 
 #pipeline configuration
+PIPELINE = getattr(local, 'PIPELINE', not DEBUG)
 PIPELINE_CSS_COMPRESSOR = 'pipeline.compressors.yui.YUICompressor'
 PIPELINE_JS_COMPRESSOR = ''
 PIPELINE_COMPILERS = (
@@ -347,7 +348,7 @@ AWS_PRELOAD_METADATA = True
 STATIC_ROOT = getattr(local, 'STATIC_ROOT', 'static/')
 STATIC_URL = getattr(local, 'STATIC_URL', '/static/')
 STATICFILES_DIRS = ['eloue/static/', ]
-STATICFILES_STORAGE = getattr(local, 'STATICFILES_STORAGE', 'django.contrib.staticfiles.storage.StaticFilesStorage')
+STATICFILES_STORAGE = getattr(local, 'STATICFILES_STORAGE', 'pipeline.storage.PipelineCachedStorage')
 
 GOOGLE_CLIENT_ID = getattr(local, 'GOOGLE_CLIENT_ID', '218840159400.apps.googleusercontent.com')
 GOOGLE_CLIENT_SECRET = getattr(local, 'GOOGLE_CLIENT_SECRET', 'BXFNFpDb6MN0ocLoPunjkzvZ')

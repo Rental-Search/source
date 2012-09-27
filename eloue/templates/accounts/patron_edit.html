@@ -26,10 +26,12 @@
 {% url billing as billing %}
 {% url patron_edit_notification as patron_edit_notification %}
 {% url patron_edit_top_position as patron_edit_top_position %}
+{% url patron_edit_idn_connect as patron_edit_idn_connect %}
 
 
 <ul class="nav-sub-bar">
     <li><a href="{{ patron_edit }}"  class="{% active request "^/dashboard/account/$" %}">{% trans "Mon Profil" %}</a></li>
+    <li><a href="{{ patron_edit_idn_connect }}" class="{% active request "^/dashboard/account/idn/$" %}">{% trans "Identité Numérique" %}</a></li>
     {% if request.user.is_professional %}
     <li><a href="{% url patron_edit_opening_times %}" class="{% active request "^/dashboard/account/openings/"%}">{% trans "Horaires d'ouverture" %}</a></li>
     <li>

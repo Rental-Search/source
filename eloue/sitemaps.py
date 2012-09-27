@@ -10,12 +10,10 @@ USE_HTTPS = getattr(settings, 'USE_HTTPS', True)
 
 
 class SecureSitemap(Sitemap):
-    def get_urls(self, page=1, site=None):
-        urls = super(SecureSitemap, self).get_urls(page, site)
+    def get_urls(self, *args, **kwargs):
         if USE_HTTPS:
-            for url in urls:
-                url['location'] = url['location'].replace("http://", 'https://')
-        return urls
+            kwargs['protocol'] = 'https'
+        return super(SecureSitemap, self).get_urls(*args, **kwargs)
     
 
 class PatronSitemap(SecureSitemap):

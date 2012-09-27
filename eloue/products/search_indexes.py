@@ -66,7 +66,7 @@ class ProductIndex(QueuedSearchIndex):
     def prepare_owner_avatar(self, obj):
         if obj.owner.avatar:
             return obj.owner.thumbnail.url
-        return urljoin(settings.MEDIA_URL, "images/default_avatar.png")
+        return ''
 
     def prepare_created_at_date(self, obj):
         return obj.created_at.date()
