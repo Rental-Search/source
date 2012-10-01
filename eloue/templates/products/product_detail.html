@@ -167,9 +167,33 @@
 
             availability(date.getFullYear(), date.getMonth()+1);
         });
-
-        
     </script>
+    {% if not debug %}
+    {% if messages %}
+        {% for message in messages %}
+            {% if message.tags == "success" %}
+            <!-- Google Code for Depot HTTPS Conversion Page -->
+            <script type="text/javascript">
+            /* <![CDATA[ */
+            var google_conversion_id = 1027691277;
+            var google_conversion_language = "en";
+            var google_conversion_format = "3";
+            var google_conversion_color = "ffffff";
+            var google_conversion_label = "EO41CNPrpQMQjaaF6gM";
+            var google_conversion_value = 0;
+            /* ]]> */
+            </script>
+            <script type="text/javascript" src="https://www.googleadservices.com/pagead/conversion.js">
+            </script>
+            <noscript>
+            <div style="display:inline;">
+            <img height="1" width="1" style="border-style:none;" alt="" src="https://www.googleadservices.com/pagead/conversion/1027691277/?value=0&amp;label=EO41CNPrpQMQjaaF6gM&amp;guid=ON&amp;script=0"/>
+            </div>
+            </noscript>
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+    {% endif %}
 {% endblock %}
 
 {% block content %}
@@ -541,4 +565,3 @@
     </div>{# content-aside #}
 </div>{# container-main #}
 {% endblock %}
-
