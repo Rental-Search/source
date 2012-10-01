@@ -68,6 +68,7 @@
 
 {% block tail %}
   {{ block.super }}
+  {% if not debug %}
   <!-- Google Code for Location Https Conversion Page -->
   <script type="text/javascript">
   /* <![CDATA[ */
@@ -86,6 +87,7 @@
   <img height="1" width="1" style="border-style:none;" alt="" src="https://www.googleadservices.com/pagead/conversion/1027691277/?value=0&amp;label=-XHsCMvspQMQjaaF6gM&amp;guid=ON&amp;script=0"/>
   </div>
   </noscript>
+  {% endif %}
 {% endblock %}
 {% block footer %}
 {% endblock %}
