@@ -75,6 +75,8 @@ class SimpleDateField(models.PositiveSmallIntegerField):
     
     def to_python(self, value):
         """
+        >>> from django.utils.translation import activate
+        >>> activate('en-gb')
         >>> SimpleDateField().to_python(283)
         283
         >>> SimpleDateField().to_python(None)
@@ -83,7 +85,7 @@ class SimpleDateField(models.PositiveSmallIntegerField):
         >>> SimpleDateField().to_python("2.3")
         Traceback (most recent call last):
         ...
-        ValidationError: [u'This value must be an integer.']
+        ValidationError: [u"'%s' value must be an integer."]
         """
         if value is None:
             return None

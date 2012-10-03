@@ -7,7 +7,7 @@
   <title>{% filter striplinebreak %}{% block title %}{% endblock %} {% if is_paginated and page_obj.has_previous %}- {% trans "Page" %} {{ page_obj.number }}{% endif %} - {% trans "e-loue" %}{% endfilter %}</title>
   <meta name="description" content="{% filter striplinebreak %}{% block description %}Plateforme pour louer ou mettre en location tout type d'objet : materiel, reception, mariage, sono, utilitaires, ski{% endblock %}{% if is_paginated and page_obj.has_previous %} Page {{ page_obj.number }}{% endif %}{% endfilter %}">
   <meta name="google-site-verification" content="JxKbPmnlcJagHiSTQcwcZaA2XWBbpU1ZVHmJ6529HT0" />
-  <link rel="shortcut icon" href="{{ MEDIA_URL }}favicon.ico">
+  <link rel="shortcut icon" href="{{ STATIC_URL }}favicon.ico">
   {% block head %}
     <!--[if lt IE 8]>{% compressed_css 'ie' %}<![endif]-->
    {% compressed_css 'dcns' %}

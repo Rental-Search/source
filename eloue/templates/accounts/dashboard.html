@@ -51,7 +51,7 @@
                 {% if user.avatar %}
                 <img src="{{ user.display.url }}" width="180" height="180">
                 {% else %}
-                <img src="{{ MEDIA_URL }}images/default_avatar.png" width="180" height="180">
+                <img src="{{ STATIC_URL }}images/default_avatar.png" width="180" height="180">
                 <a href="{% url patron_edit %}#id_username" class="add-avatar-link">Ajouter une photo<br>de profil</a>
                 {% endif %}
                 <h1>{{ user.first_name }} {{ user.last_name }}</h1>
@@ -87,7 +87,7 @@
         {% block content-main-profil %}
         {% if user.is_staff %}
         <div class="invite-your-friends">
-            <img src="{{MEDIA_URL}}images/default_avatar.png" alt="" />
+            <img src="{{ STATIC_URL }}images/default_avatar.png" alt="" />
             <p>Invitez vos amis à vous rejoindre sur e-loue pour encore plus de location !</p>
             <a href="{% url facebook_invite%}" class="btn">{% trans "Envoyer des invitations" %}</a>
         </div>

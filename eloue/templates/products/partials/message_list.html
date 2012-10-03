@@ -7,13 +7,13 @@
 				{% if thread.recipient.avatar %}
 					<img src="{{ thread.recipient.thumbnail.url }}" widht="60" height="60" alt=""/>
 				{% else %}
-					<img src="{{ MEDIA_URL }}images/default_avatar.png" width="60" height="60" alt="">
+					<img src="{{ STATIC_URL }}images/default_avatar.png" width="60" height="60" alt="">
 				{% endif %}
 			{% else %}
 				{% if thread.sender.avatar %}
 					<img src="{{thread.sender.thumbnail.url}}" width="60" height="60" alt=""/>
 				{% else %}
-					<img src="{{ MEDIA_URL }}images/default_avatar.png" width="60" height="60" alt="">
+					<img src="{{ STATIC_URL }}images/default_avatar.png" width="60" height="60" alt="">
 				{% endif %}
 			{% endif %}
 		</a>

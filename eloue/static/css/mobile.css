@@ -40,7 +40,7 @@ ul, ol
 body
 {
   color: #364C59;
-  background: #ECF6FF url("../images/body-bg.png") repeat 0 0;
+  background: #ECF6FF url("../images/body_bg.png") repeat 0 0;
   font: 14px arial,sans-serif;
 }
 
@@ -125,7 +125,6 @@ p { margin-bottom: 10px; }
 	#content-home h1 { color: #7C4D32; }
 	#content h1
 	{
-		background: transparent url("../images/content-h-bg.png") repeat-x 0 bottom;
 		padding: 0 0 15px;
 	}
 	.container
@@ -197,7 +196,6 @@ input[type="submit"], .btn
 .arrow-right
 {
 	display: block;
-	background: transparent url("../images/arrow-right.png");
 	float: right;
 	height: 20px;
 	width: 13px;
@@ -211,7 +209,6 @@ input[type="submit"], .btn
 	padding: 5px 0;
 	font-size: 14px;
 	font-weight: normal;
-	background: url("../images/arrow-right.png") no-repeat right center;
 	border-bottom: 1px dashed #B9CAD4;
 }
 
@@ -279,7 +276,6 @@ input[type="submit"], .btn
 .product-pic
 {
 	float: left;
-	background: #F5F5F1 url("../images/pic-bg.png") repeat 0 0;
 	border: 1px solid #EAEAEA;
 	margin-bottom: 15px;
 	padding-top: 3px;

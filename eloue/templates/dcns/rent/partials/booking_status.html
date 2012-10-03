@@ -3,14 +3,14 @@
     {% if booking.state == booking.STATE.AUTHORIZING %}
       {% if booking.borrower == user %}
        <p>
-        <img src="{{ MEDIA_URL }}images/waiting.gif" alt="{% trans "en cours" %}" /><br />
+        <img src="{{ STATIC_URL }}images/waiting.gif" alt="{% trans "en cours" %}" /><br />
     	<span>{% trans "En cours de validation" %}...</span>
        </p>
       {% endif %}
      {% endif %}
      {% if booking.state == booking.STATE.AUTHORIZED %}
      <p>
-      <img src="{{ MEDIA_URL }}images/dcns/status_wait.png" alt="{% trans "En attente" %}" class="wait" />
+      <img src="{{ STATIC_URL }}images/dcns/status_wait.png" alt="{% trans "En attente" %}" class="wait" />
       {% if booking.owner == user %}
        <form action="{% url booking_accept booking.pk.hex %}" method="post">
         {% csrf_token %}
@@ -27,12 +27,12 @@
      {% endif %}
      {% if booking.state == booking.STATE.REJECTED %}
      <p>
-      <img src="{{ MEDIA_URL }}images/dcns/status_rejected.png" alt="{% trans "Rejetée" %}" class="rejected">
+      <img src="{{ STATIC_URL }}images/dcns/status_rejected.png" alt="{% trans "Rejetée" %}" class="rejected">
      </p>
      {% endif %}
      {% if booking.state == booking.STATE.PENDING %}
      <p>
-      <img src="{{ MEDIA_URL }}images/dcns/status_booking.png" alt="{% trans "Réservée" %}" class="booking">
+      <img src="{{ STATIC_URL }}images/dcns/status_booking.png" alt="{% trans "Réservée" %}" class="booking">
       {% if booking.owner == user %}
       <form class="bk-cancel" action="{% url booking_cancel booking.pk.hex %}" method="post">
        {% csrf_token %}
@@ -44,13 +44,13 @@
      {% endif %}
      {% if booking.state == booking.STATE.ONGOING %}
      <p>
-      <img src="{{ MEDIA_URL }}images/dcns/status_renting.png" alt="{% trans "En cours" %}" class="renting">
+      <img src="{{ STATIC_URL }}images/dcns/status_renting.png" alt="{% trans "En cours" %}" class="renting">
       <a href="{% url booking_incident booking.pk.hex %}" class="bk-warning">{% trans "Signaler un incident" %}</a>
      </p>
      {% endif %}
      {% if booking.state == booking.STATE.ENDED %}
      <p>
-      <img src="{{ MEDIA_URL }}images/dcns/status_finish.png" alt="{% trans "Terminée" %}" class="finish">
+      <img src="{{ STATIC_URL }}images/dcns/status_finish.png" alt="{% trans "Terminée" %}" class="finish">
       {% if booking.owner == user %}
        <form class="bk-cancel" action="{% url booking_close booking.pk.hex %}" method="post">
         {% csrf_token %}
@@ -62,13 +62,13 @@
      {% endif %}
      {% if booking.state == booking.STATE.CLOSING %}
       <p>
-       <img src="{{ MEDIA_URL }}images/waiting.gif" alt="{% trans "en cours" %}" /><br />
+       <img src="{{ STATIC_URL }}images/waiting.gif" alt="{% trans "en cours" %}" /><br />
        <span>{% trans "En cours de clôture" %}...</span>
       </p>
      {% endif %}
      {% if booking.state == booking.STATE.CLOSED %}
      <p>
-      <img src="{{ MEDIA_URL }}images/dcns/status_ended.png" alt="{% trans "Clôturée" %}" class="ended">
+      <img src="{{ STATIC_URL }}images/dcns/status_ended.png" alt="{% trans "Clôturée" %}" class="ended">
       <a href="{% url booking_incident booking.pk.hex %}" class="bk-warning">{% trans "Signaler un incident" %}</a>
      </p>
      {% endif %}

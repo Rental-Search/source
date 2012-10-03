@@ -41,6 +41,19 @@ DATABASES = {
     }
 }
 
+CACHES = {
+    'default': {
+        'BACKEND': getattr(local, 'CACHE_BACKEND', 'django.core.cache.backends.dummy.DummyCache'),
+        'LOCATION': getattr(local, 'CACHE_LOCATION', None),
+    }
+}
+
+# Cache configuration
+CACHE_MIDDLEWARE_ANONYMOUS_ONLY = True
+CACHE_MIDDLEWARE_SECONDS = getattr(local, 'CACHE_MIDDLEWARE_SECONDS', 60 * 15)
+CACHE_MIDDLEWARE_KEY_PREFIX = getattr(local, 'CACHE_MIDDLEWARE_KEY_PREFIX', None)
+
+
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
 # although not all choices may be available on all operating systems.
@@ -59,6 +72,9 @@ LANGUAGES = (
     ('fr-fr', ugettext('Français')),
     ('en-gb', ugettext('English')),
 )
+
+LOCALE_PATHS = (local.local_path('locale/'), )
+
 
 SITE_ID = 1
 DEFAULT_SITES = getattr(local, "DEFAULT_SITES", [1, 3, 4])
@@ -80,11 +96,6 @@ MEDIA_ROOT = local.MEDIA_ROOT
 # trailing slash if there is a path component (optional in other cases).
 # Examples: "http://media.lawrence.com", "http://example.com/media/"
 MEDIA_URL = local.MEDIA_URL
-
-# URL prefix for admin media -- CSS, JavaScript and images. Make sure to use a
-# trailing slash.
-# Examples: "http://foo.com/media/", "/media/".
-ADMIN_MEDIA_PREFIX = '/media/admin/'
 
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = '0j7jp$u!5n00s7=e@evlo0%ng&xm%zv^3-vn6gyy$&nbdd7p*('
@@ -108,6 +119,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.contrib.auth.context_processors.auth',
     'django.core.context_processors.debug',
     'django.core.context_processors.media',
+    'django.core.context_processors.static',
     'django.core.context_processors.request',
     'django.contrib.messages.context_processors.messages',
     'announcements.context_processors.site_wide_announcements',
@@ -133,6 +145,17 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.cache.FetchFromCacheMiddleware',
 )
 
+PASSWORD_HASHERS =(
+    'django.contrib.auth.hashers.PBKDF2PasswordHasher',
+    'django.contrib.auth.hashers.PBKDF2SHA1PasswordHasher',
+    'django.contrib.auth.hashers.BCryptPasswordHasher',
+    'django.contrib.auth.hashers.SHA1PasswordHasher',
+    'eloue.accounts.auth.MD5PasswordHasher',
+    'django.contrib.auth.hashers.UnsaltedMD5PasswordHasher',
+    'django.contrib.auth.hashers.CryptPasswordHasher'
+)
+
+
 if DEBUG_TOOLBAR:
     MIDDLEWARE_CLASSES += ('debug_toolbar.middleware.DebugToolbarMiddleware',)
 
@@ -155,6 +178,7 @@ INSTALLED_APPS = (
     'django.contrib.redirects',
     'django.contrib.sitemaps',
     'django.contrib.formtools',
+    'django.contrib.staticfiles',
     'django.contrib.markup',
     'django.contrib.gis',
     'south',
@@ -202,18 +226,8 @@ MESSAGE_STORAGE = getattr(local, 'MESSAGE_STORAGE', 'django.contrib.messages.sto
 SESSION_ENGINE = local.SESSION_ENGINE
 SESSION_COOKIE_DOMAIN = local.SESSION_COOKIE_DOMAIN
 
-# Cache configuration
-CACHE_BACKEND = local.CACHE_BACKEND
-CACHE_MIDDLEWARE_ANONYMOUS_ONLY = True
-CACHE_MIDDLEWARE_SECONDS = getattr(local, 'CACHE_MIDDLEWARE_SECONDS', 60 * 15)
-CACHE_MIDDLEWARE_KEY_PREFIX = getattr(local, 'CACHE_MIDDLEWARE_KEY_PREFIX', None)
-
-STATIC_ROOT = getattr(local, 'STATIC_ROOT', None)
-STATIC_URL = getattr(local, 'STATIC_URL', None)
-
-
 #pipeline configuration
-PIPELINE_VERSION = True
+PIPELINE = getattr(local, 'PIPELINE', not DEBUG)
 PIPELINE_CSS_COMPRESSOR = 'pipeline.compressors.yui.YUICompressor'
 PIPELINE_JS_COMPRESSOR = ''
 PIPELINE_COMPILERS = (
@@ -221,15 +235,13 @@ PIPELINE_COMPILERS = (
 )
 PIPELINE_LESS_BINARY = getattr(local, 'PIPELINE_LESS_BINARY', '/home/benoitw/node_modules/less/bin/lessc')
 PIPELINE_YUI_BINARY = getattr(local, 'COMPRESS_YUI_BINARY', '/usr/bin/yui-compressor')
-PIPELINE_ROOT = getattr(local, 'PIPELINE_ROOT', MEDIA_ROOT)
-PIPELINE_URL = getattr(local, 'PIPELINE_URL', MEDIA_URL)
 PIPELINE_CSS = {
     'master': {
         'source_filenames': (
             'less/styles.less',
             'css/chosen.css'
         ),
-        'output_filename': 'css/master.r?.css',
+        'output_filename': 'css/master.css',
         'extra_context': {
             'media': 'screen',
         },
@@ -238,7 +250,7 @@ PIPELINE_CSS = {
         'source_filenames': (
             'css/mobile.css',
         ),
-        'output_filename': 'css/mobile.r?.css',
+        'output_filename': 'css/mobile.css',
         'extra_context': {
             'media': 'screen',
         },
@@ -247,7 +259,7 @@ PIPELINE_CSS = {
         'source_filenames': (
             'css/ie/ie.css',
         ),
-        'output_filename': 'css/ie.r?.css',
+        'output_filename': 'css/ie.css',
         'extra_context': {
             'media': 'screen',
         }
@@ -268,7 +280,7 @@ PIPELINE_JS = {
             'js/jquery.cycle.all.latest.js',
             'js/application2.js',
             ),
-        'output_filename': 'js/application2.r?.js',
+        'output_filename': 'js/application2r.js',
         'extra_context': {
             'defer': False,
         },
@@ -341,6 +353,12 @@ AWS_AUTO_CREATE_BUCKET = getattr(local, 'AWS_AUTO_CREATE_BUCKET', False)
 AWS_HEADERS = {
     'Cache-Control': 'max-age=31556926,public',
 }
+
+# staticfiles configuration
+STATIC_ROOT = getattr(local, 'STATIC_ROOT', 'static/')
+STATIC_URL = getattr(local, 'STATIC_URL', '/static/')
+STATICFILES_DIRS = ['eloue/static/', ]
+STATICFILES_STORAGE = getattr(local, 'STATICFILES_STORAGE', 'pipeline.storage.PipelineCachedStorage')
 
 GOOGLE_CLIENT_ID = getattr(local, 'GOOGLE_CLIENT_ID', '218840159400.apps.googleusercontent.com')
 GOOGLE_CLIENT_SECRET = getattr(local, 'GOOGLE_CLIENT_SECRET', 'BXFNFpDb6MN0ocLoPunjkzvZ')
