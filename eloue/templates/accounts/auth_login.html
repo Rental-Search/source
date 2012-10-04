@@ -23,3 +23,15 @@
 {% endblock %}
 {% block footer %}
 {% endblock %}
+
+{% block tail %}
+{{ block.super }}
+<script type="text/javascript" src="http://idn.recette.laposte.france-sso.fr/anywhere/jsdk/anywhere-1.2.1.js’"></script>
+
+<script type="text/javascript">
+	idn.anywhere.setup(
+	{   "client_id":"_ce85bad96eed75f0f7faa8f04a48feedd56b4dcb",
+		"redirect_uri":"http://localhost:8000/login/",
+		"scope":"[\"namePerson\",\"contact/email\"]","display":"popin"});
+</script>
+{% endblock %}
