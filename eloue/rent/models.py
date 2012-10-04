@@ -58,7 +58,8 @@ BOOKING_STATE = Enum([
     ('outdated', 'OUTDATED', _(u"Dépassé")),
     ('unaccepted', 'UNACCEPTED', _(u"Pas accepté")),
     ('accepted_unauthorized', 'ACCEPTED_UNAUTHORIZED', _(u"Accepté et en cours d'autorisation")),
-    ('professional', 'PROFESSIONAL', _(u"Demande pro"))
+    ('professional', 'PROFESSIONAL', _(u"Demande pro")),
+    ('professional_saw', 'PROFESSIONAL_SAW', _(u'Lu')),
 ])
 
 DEFAULT_CURRENCY = get_format('CURRENCY') if not settings.CONVERT_XPF else "XPF"
@@ -425,9 +426,11 @@ class ProBooking(Booking):
     class Meta:
         proxy = True
 
-    @smart_transition(source='professional', target='professional', save=True)
+    @smart_transition(source='professional', target='professional_saw', save=True)
     def accept(self):
-        pass
+        context = {'booking': self}
+        message = create_alternative_email('base', context, settings.DEFAULT_FROM_EMAIL, [self.borrower.email])
+        message.send()
 
     def send_ask_email(self):
         context = {'booking': self}
