@@ -55,7 +55,13 @@ class FacetedSearchForm(SearchForm):
         location = self.cleaned_data.get('l', None)
         radius = self.cleaned_data.get('r', None)
         if location not in EMPTY_VALUES and radius in EMPTY_VALUES:
-            name, coordinates, radius = GoogleGeocoder().geocode(location)
+            geocoder = GoogleGeocoder()
+            departement = geocoder.get_departement(location)
+            if departement:
+                name, coordinates, radius = geocoder.geocode(departement['long_name'])
+            else:
+                name, coordinates, radius = geocoder.geocode(location)
+
         if radius in EMPTY_VALUES:
             radius = DEFAULT_RADIUS
         return radius

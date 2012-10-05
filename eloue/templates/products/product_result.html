@@ -416,35 +416,71 @@
             );
 
             google.maps.event.addListener(autocomplete, 'place_changed', function() {
-                // code found at 
-                // http://stackoverflow.com/questions/3525670/radius-of-viewable-region-in-google-maps-v3
-                bounds = autocomplete.getPlace().geometry.viewport;
-                if (bounds) {
-                    center = bounds.getCenter();
-                    ne = bounds.getNorthEast();
+                function get_radius(bounds) {
+                    // code found at 
+                    // http://stackoverflow.com/questions/3525670/radius-of-viewable-region-in-google-maps-v3
+                    if (bounds){
+                        center = bounds.getCenter();
+                        ne = bounds.getNorthEast();
 
-                    // r = radius of the earth in statute miles
-                    var r = 6378.7;  
+                        // r = radius of the earth in statute miles
+                        var r = 6378.7;  
 
-                    // Convert lat or lng from decimal degrees into radians (divide by 57.2958)
-                    var lat1 = center.lat() / 57.29577951; 
-                    var lon1 = center.lng() / 57.29577951;
-                    var lat2 = ne.lat() / 57.29577951;
-                    var lon2 = ne.lng() / 57.29577951;
+                        // Convert lat or lng from decimal degrees into radians (divide by 57.2958)
+                        var lat1 = center.lat() / 57.29577951; 
+                        var lon1 = center.lng() / 57.29577951;
+                        var lat2 = ne.lat() / 57.29577951;
+                        var lon2 = ne.lng() / 57.29577951;
 
-                    // distance = circle radius from center to Northeast corner of bounds
-                    var dis = r * Math.acos(Math.sin(lat1) * Math.sin(lat2) + 
-                      Math.cos(lat1) * Math.cos(lat2) * Math.cos(lon2 - lon1));
-                } else {
-                    var dis = 1;
+                        // distance = circle radius from center to Northeast corner of bounds
+                        var dis = r * Math.acos(Math.sin(lat1) * Math.sin(lat2) + 
+                          Math.cos(lat1) * Math.cos(lat2) * Math.cos(lon2 - lon1));
+                    } else {
+                        dis = 1;
+                    }
+                    return dis;
                 }
+                function set_cells_and_submit(dis) {
                     id_r = $('#id_r');
                     id_l = $('#id_l');
                     id_r.attr({READONLY: true});
                     id_l.attr({READONLY: true});
                     id_r.val(Math.ceil(dis));
 
-                    $("#form_search_results").submit();
+                    $("#form_search_results").submit();  
+                }
+                departement = autocomplete.getPlace().address_components.filter(
+                    function(address_component){
+                        return address_component.types.indexOf('administrative_area_level_2') != -1;
+                    }
+                );
+                if (Boolean(departement.length)) {
+                    console.log(departement);
+                    departement_name = departement[0].long_name;
+                    geocoder = new google.maps.Geocoder();
+                    geocoder.geocode(
+                        {address: departement_name}, 
+                        function(result, status) {
+                            var dis;
+                            if (status == google.maps.GeocoderStatus.OK) {
+                                result = result[0];
+                                if (bounds = result.geometry.bounds);
+                                else (bounds = result.geometry.viewport);
+                                dis = get_radius(bounds);
+                                if (departement_name == 'Paris') {
+                                    dis += 10;
+                                }
+                            } else {
+                                dis = 1;
+                            }
+                            set_cells_and_submit(dis);
+                        }
+                    );
+                } else {
+                    bounds = autocomplete.getPlace().geometry.viewport;
+                    dis = get_radius(bounds);
+                    set_cells_and_submit(dis);
+                }
             });
 
             initialize();
