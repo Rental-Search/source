@@ -55,43 +55,43 @@ class Geocoder(object):
 
 class GoogleGeocoder(Geocoder):
     # http://code.google.com/apis/maps/documentation/geocoding/index.html
-    def _geocode(self, location):
+    def get_json(self, location):
+        return simplejson.load(urllib.urlopen(
+            'http://maps.googleapis.com/maps/api/geocode/json?' + urllib.urlencode({
+                'address': location,
+                'oe': 'utf8',
+                'sensor': 'false',
+                'region': GOOGLE_REGION_CODE
+            })
+        ))
+
+    def _get_radius(self, json):
         try:
-            json = simplejson.load(urllib.urlopen(
-                'http://maps.googleapis.com/maps/api/geocode/json?' + urllib.urlencode({
-                    'address': location,
-                    'oe': 'utf8',
-                    'sensor': 'false',
-                    'region': GOOGLE_REGION_CODE
-                })
-            ))
-            lon = json['results'][0]['geometry']['location']['lng']
-            lat = json['results'][0]['geometry']['location']['lat']
-        except (KeyError, IndexError, IOError):
-            return None, (None, None), None
-        try:  # trying to return at least lat, lon
             sw = Point(json['results'][0]['geometry']['viewport']['southwest']['lat'],
                 json['results'][0]['geometry']['viewport']['southwest']['lng'])
             ne = Point(json['results'][0]['geometry']['viewport']['northeast']['lat'],
                 json['results'][0]['geometry']['viewport']['northeast']['lng'])
             radius = (distance.distance(sw, ne).km // 2) + 1
         except (KeyError, IndexError):
+            return None
+        return radius
+
+    def _geocode(self, location):
+        try:
+            json = self.get_json(location)
+            lon = json['results'][0]['geometry']['location']['lng']
+            lat = json['results'][0]['geometry']['location']['lat']
+        except (KeyError, IndexError, IOError):
+            return None, (None, None), None
+        radius = self._get_radius(json)
+        if radius is None:
             return None, (lat, lon), None
         name = json['results'][0]['formatted_address']
         return name, (lat, lon), int(radius)
     
     def getCityCountry(self, locationName):
         # returns city and country
-
-        json = simplejson.load(urllib.urlopen(
-            'http://maps.googleapis.com/maps/api/geocode/json?' + urllib.urlencode({
-                'address': locationName.encode('utf-8'),
-                'oe': 'utf8',
-                'sensor': 'false',
-                'region': GOOGLE_REGION_CODE
-            })
-        ))
-        
+        json = self.get_json(locationName)
         return json['results'][0]['address_components'][0]['long_name'], json['results'][0]['address_components'][-1]['short_name']
 
 
