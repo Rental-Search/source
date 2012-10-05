@@ -95,6 +95,6 @@ class GoogleGeocoder(Geocoder):
         return json['results'][0]['address_components'][0]['long_name'], json['results'][0]['address_components'][-1]['short_name']
 
     def get_departement(self, location):
-        json = self.get_json(location)
+        json = self.get_json(smart_str(location))
         return next(iter(filter(lambda component: 'administrative_area_level_2' in component['types'], json['results'][0]['address_components'])), None)
 
