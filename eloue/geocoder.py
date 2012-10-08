@@ -101,6 +101,6 @@ class GoogleGeocoder(Geocoder):
                 lambda component: 'administrative_area_level_2' in component['types'], 
                 json['results'][0]['address_components']
             )[0]
-        except (KeyError, IndexError) as e:
+        except (KeyError, IndexError):
             return None
 
