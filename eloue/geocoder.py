@@ -58,7 +58,7 @@ class GoogleGeocoder(Geocoder):
     def get_json(self, location):
         return simplejson.load(urllib.urlopen(
             'http://maps.googleapis.com/maps/api/geocode/json?' + urllib.urlencode({
-                'address': location,
+                'address': smart_str(location),
                 'oe': 'utf8',
                 'sensor': 'false',
                 'region': GOOGLE_REGION_CODE
@@ -95,6 +95,12 @@ class GoogleGeocoder(Geocoder):
         return json['results'][0]['address_components'][0]['long_name'], json['results'][0]['address_components'][-1]['short_name']
 
     def get_departement(self, location):
-        json = self.get_json(smart_str(location))
-        return next(iter(filter(lambda component: 'administrative_area_level_2' in component['types'], json['results'][0]['address_components'])), None)
+        json = self.get_json(location)
+        try:
+            return filter(
+                lambda component: 'administrative_area_level_2' in component['types'], 
+                json['results'][0]['address_components']
+            )[0]
+        except (KeyError, IndexError):
+            return None
 
