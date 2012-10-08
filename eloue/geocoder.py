@@ -96,5 +96,11 @@ class GoogleGeocoder(Geocoder):
 
     def get_departement(self, location):
         json = self.get_json(location)
-        return next(iter(filter(lambda component: 'administrative_area_level_2' in component['types'], json['results'][0]['address_components'])), None)
+        try:
+            return filter(
+                lambda component: 'administrative_area_level_2' in component['types'], 
+                json['results'][0]['address_components']
+            )[0]
+        except (KeyError, IndexError) as e:
+            return None
 
