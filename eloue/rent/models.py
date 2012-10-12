@@ -374,41 +374,41 @@ class Booking(models.Model):
         self.payment.save()
         self.send_ask_email()
         
-    @transition(source='authorized', target='pending', save=True)
+    @transition(field=state, source='authorized', target='pending', save=True)
     def accept(self):
         self.payment.pay(self.pk, self.total_amount, self.currency)
         self.payment.save()
         self.send_acceptation_email()
         self.send_borrower_receipt()
 
-    @transition(source='pending', target='ongoing', save=True)
+    @transition(field=state, source='pending', target='ongoing', save=True)
     def activate(self):
         pass
 
-    @transition(source='ongoing', target='ended', save=True)
+    @transition(field=state, source='ongoing', target='ended', save=True)
     def end(self):
         self.send_ended_email()
     
-    @transition(source='ended', target='closing', save=True)
+    @transition(field=state, source='ended', target='closing', save=True)
     @smart_transition(source='closing', target='closed', conditions=[not_need_ipn], save=True)
     def pay(self):
         """Return deposit_amount to borrower and pay the owner"""
         self.payment.execute_payment()
         self.send_owner_receipt()
     
-    @transition(source=['authorized', 'pending'], target='canceled', save=True)
+    @transition(field=state, source=['authorized', 'pending'], target='canceled', save=True)
     def cancel(self):
         """Cancel preapproval for the borrower"""
         self.payment.cancel_preapproval()
     
-    @transition(source='incident', target='deposit', save=True)
+    @transition(field=state, source='incident', target='deposit', save=True)
     def litigation(self, amount=None, cancel_url='', return_url=''):
         """Giving caution to owner"""
         # FIXME : Deposit amount isn't considered in preapproval amount
        
         self.payment.give_caution(amount, cancel_url, return_url)
     
-    @transition(source='incident', target='refunded', save=True)
+    @transition(field=state, source='incident', target='refunded', save=True)
     def refund(self):
         """Refund borrower or owner if something as gone wrong"""
         self.payment.refund()
