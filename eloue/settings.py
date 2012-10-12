@@ -427,7 +427,7 @@ LV_FTP = "ftp.bo.location-et-vacances.com"
 CAMO_KEY = getattr(local, 'CAMO_KEY', 'OKNZYL69Ml3oISfEmJvtzFjhUeBbugxPDXanydwi4HGWrRTqcQ')
 
 # Mobile configuration
-MOBILE = getattr(local, 'MOBILE', False)
+MOBILE = getattr(local, 'MOBILE', True)
 MOBILE_REDIRECT_BASE = getattr(local, 'MOBILE_REDIRECT_BASE', 'https://m.e-loue.com')
 
 # Franc Pacifique
