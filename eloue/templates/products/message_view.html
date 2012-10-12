@@ -16,7 +16,6 @@
 {% endblock %}
 
 {% block content-main-profil %}
-
 <ul class="messages">
 	{% if request.user == message.recipient %}
 		<h2>Conversation avec {{ message.sender }}</h2>
@@ -72,4 +71,31 @@
 		</div>
 	</li>
 </ul>
+{% endblock %}
+
+{% block tail %}
+{{ block.super }}
+{% if messages %}
+	{% for message in messages %}
+    	{% if message.tags == "success" %}
+		<script type="text/javascript">
+			/* <![CDATA[ */
+			var google_conversion_id = 1027691277;
+			var google_conversion_language = "en";
+			var google_conversion_format = "3";
+			var google_conversion_color = "ffffff";
+			var google_conversion_label = "SfnGCMvgrgMQjaaF6gM";
+			var google_conversion_value = 0;
+			/* ]]> */
+		</script>
+		<script type="text/javascript" src="https://www.googleadservices.com/pagead/conversion.js">
+		</script>
+		<noscript>
+		<div style="display:inline;">
+		<img height="1" width="1" style="border-style:none;" alt="" src="https://www.googleadservices.com/pagead/conversion/1027691277/?value=0&amp;label=SfnGCMvgrgMQjaaF6gM&amp;guid=ON&amp;script=0"/>
+		</div>
+		</noscript>
+    	{% endif %}
+    {% endfor %}
+{% endif %}
 {% endblock %}
