@@ -6,8 +6,7 @@ import random
 import urllib
 
 from decimal import Decimal as D, ROUND_CEILING, ROUND_FLOOR
-from fsm.fields import FSMField
-from fsm import transition
+from django_fsm.db.fields import FSMField, transition
 from pyke import knowledge_engine
 from urlparse import urljoin
 from datetime import timedelta
@@ -85,6 +84,7 @@ PACKAGES = {
 }
 
 log = logbook.Logger('eloue.rent')
+
 
 
 class Booking(models.Model):
@@ -444,6 +444,17 @@ class ProBooking(Booking):
             emailnotification.send('', self)
         self.send_ask_email()
 
+
+class BookingLog(models.Model):
+    booking = models.ForeignKey(Booking)
+    created_at = models.DateTimeField(blank=True, null=True, auto_now_add=True)
+    source_state = FSMField(choices=BOOKING_STATE)
+    target_state = FSMField(choices=BOOKING_STATE)
+
+from django_fsm.signals import post_transition
+def state_logger(sender, instance, name, source, target, **kwargs):
+    BookingLog.objects.create(booking=instance, source_state=source, target_state=target)
+post_transition.connect(state_logger)
 
 class Comment(models.Model):
     booking = models.OneToOneField(Booking)
