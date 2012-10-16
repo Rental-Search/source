@@ -993,7 +993,7 @@ def patron_edit_idn_connect(request):
 
         else:
 
-            redirect_uri = 'http://localhost:8000/dashboard/account/idn/'
+            redirect_uri = 'http://staging.e-loue.com/dashboard/account/idn/'
             scope = '["namePerson","contact/email"]'
 
             response, content = client.request(request_token_url, "GET")
