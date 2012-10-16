@@ -7,7 +7,8 @@
   <h1 style="margin-bottom: 40px;"><img src="{{ STATIC_URL }}/images/laposte_icon.gif" alt="La Poste icône" height="25" style="margin-right: 5px; margin-bottom: -8px;">Enregistrement Identité Numérique</h1>
   {% if idn %}
   <p style="text-align:center; font-size: 16px; line-height: 22px; border: 1px solid #ABC9D5; padding: 10px; margin-bottom: 10px;">
-  	Votre <b>I</b>dentité <b>N</b>umérique<br> a été vérifiée le : <b>{{ idn.created_at }}</b>
+  	Votre <b>I</b>dentité <b>N</b>umérique<br> a été vérifiée le : <b>{{ idn.created_at }}</b><br>
+    Réf. La Poste: <a href="https://idn-preprod-laposte.france-sso.fr/idn_17_badge?nickname={{ idn.idn_id }}">{{ idn.idn_id }}</a>
   </p>
   <p style="text-align: right;">
   	<a href="{% url patron_delete_idn_connect %}">

@@ -546,6 +546,7 @@ class FacebookSession(models.Model):
 class IDNSession(models.Model):
     token = models.CharField(max_length=255, unique=True)
     user = models.OneToOneField(Patron, null=True, related_name='idn_session')
+    idn_id = models.CharField(max_length=255, unique=True)
     created_at = models.DateTimeField(blank=True, editable=False)
 
     def save(self, *args, **kwargs):

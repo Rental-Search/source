@@ -961,14 +961,14 @@ def patron_edit_idn_connect(request):
     else:
         oauth_verifier = request.GET.get('oauth_verifier', None)
 
-        base_url = 'http://idn.recette.laposte.france-sso.fr/'
+        base_url = 'https://idn-preprod-laposte.france-sso.fr/'
         request_token_url = base_url + 'oauth/requestToken'
         authorize_url = base_url + 'oauth/authorize'
         access_token_url = base_url + 'oauth/accessToken'
         me_url = base_url + 'anywhere/me'
 
-        consumer_key = '_ce85bad96eed75f0f7faa8f04a48feedd56b4dcb'
-        consumer_secret = '_80b312627bf936e6f20510232cf946fff885d1f7'
+        consumer_key = '_fdcc008c5a13011d7470010f3f572b80fe4b47c2'
+        consumer_secret = '_rtor2l6jbmw0arubvvwcqlxsu3wgf7i5guaavzrg'
 
         consumer = oauth.Consumer(key=consumer_key, secret=consumer_secret)
         client = oauth.Client(consumer)
@@ -982,14 +982,12 @@ def patron_edit_idn_connect(request):
 
             #Get Information about the user
             access_token = dict(urlparse.parse_qsl(content))
-            print access_token
             token = oauth.Token(access_token['oauth_token'], access_token['oauth_token_secret'])
             client = oauth.Client(consumer, token)
             response, content = client.request(me_url, "GET", body='[%22namePerson\\/friendly%22,%22namePerson%22]')
 
             if response['status'] == '200':
-                idn = IDNSession(token=token, user=request.user)
-                idn.save()
+                idn = IDNSession.objects.create(token=token, user=request.user, idn_id=simplejson.loads(content)['id'])
 
             return redirect('patron_edit_idn_connect') 
 

@@ -12,7 +12,8 @@ class Migration(SchemaMigration):
         db.create_table('accounts_idnsession', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('token', self.gf('django.db.models.fields.CharField')(unique=True, max_length=255)),
-            ('user', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['accounts.Patron'], unique=True, null=True)),
+            ('user', self.gf('django.db.models.fields.related.OneToOneField')(related_name='idn_session', unique=True, null=True, to=orm['accounts.Patron'])),
+            ('idn_id', self.gf('django.db.models.fields.CharField')(unique=True, max_length=255)),
             ('created_at', self.gf('django.db.models.fields.DateTimeField')(blank=True)),
         ))
         db.send_create_signal('accounts', ['IDNSession'])
@@ -142,8 +143,9 @@ class Migration(SchemaMigration):
             'Meta': {'object_name': 'IDNSession'},
             'created_at': ('django.db.models.fields.DateTimeField', [], {'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'idn_id': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '255'}),
             'token': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '255'}),
-            'user': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['accounts.Patron']", 'unique': 'True', 'null': 'True'})
+            'user': ('django.db.models.fields.related.OneToOneField', [], {'related_name': "'idn_session'", 'unique': 'True', 'null': 'True', 'to': "orm['accounts.Patron']"})
         },
         'accounts.language': {
             'Meta': {'object_name': 'Language'},
@@ -273,7 +275,7 @@ class Migration(SchemaMigration):
         },
         'auth.user': {
             'Meta': {'object_name': 'User'},
-            'date_joined': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2012, 9, 27, 8, 38, 57, 3607)'}),
+            'date_joined': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2012, 10, 16, 11, 16, 14, 308031)'}),
             'email': ('django.db.models.fields.EmailField', [], {'max_length': '75', 'blank': 'True'}),
             'first_name': ('django.db.models.fields.CharField', [], {'max_length': '30', 'blank': 'True'}),
             'groups': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['auth.Group']", 'symmetrical': 'False', 'blank': 'True'}),
@@ -281,7 +283,7 @@ class Migration(SchemaMigration):
             'is_active': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
             'is_staff': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'is_superuser': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'last_login': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2012, 9, 27, 8, 38, 57, 3500)'}),
+            'last_login': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2012, 10, 16, 11, 16, 14, 307935)'}),
             'last_name': ('django.db.models.fields.CharField', [], {'max_length': '30', 'blank': 'True'}),
             'password': ('django.db.models.fields.CharField', [], {'max_length': '128'}),
             'user_permissions': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['auth.Permission']", 'symmetrical': 'False', 'blank': 'True'}),
