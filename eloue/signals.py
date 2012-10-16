@@ -32,20 +32,21 @@ def message_content_filter(sender, instance, signal, *args, **kwargs):
     instance.body = _string_filter(body)
 
 
-def message_site_filter(sender, instance, signal, *args, **kwargs):
+def message_site_filter(sender, instance, raw, using, *args, **kwargs):
     """
     Filter to forbiden passing message between users from different sites.
     """
     from eloue.accounts.models import Patron
-    if instance.sender and instance.recipient:
-        patron_sender = Patron.objects.get(pk=instance.sender.pk)
-        patron_recipient = Patron.objects.get(pk=instance.recipient.pk)
-        sender_sites = patron_sender.sites.all()
-        recipient_sites = patron_recipient.sites.all()
-        if set(sender_sites) & set(recipient_sites):
-            pass
-        else:
-            instance.recipient = None
-    
-    
-    
+    if not raw:
+        if instance.sender and instance.recipient:
+            patron_sender = Patron.objects.get(pk=instance.sender.pk)
+            patron_recipient = Patron.objects.get(pk=instance.recipient.pk)
+            sender_sites = patron_sender.sites.all()
+            recipient_sites = patron_recipient.sites.all()
+            if set(sender_sites) & set(recipient_sites):
+                pass
+            else:
+                instance.recipient = None
+
+        
+        

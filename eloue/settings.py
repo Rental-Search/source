@@ -145,6 +145,17 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.cache.FetchFromCacheMiddleware',
 )
 
+PASSWORD_HASHERS =(
+    'django.contrib.auth.hashers.PBKDF2PasswordHasher',
+    'django.contrib.auth.hashers.PBKDF2SHA1PasswordHasher',
+    'django.contrib.auth.hashers.BCryptPasswordHasher',
+    'django.contrib.auth.hashers.SHA1PasswordHasher',
+    'eloue.accounts.auth.MD5PasswordHasher',
+    'django.contrib.auth.hashers.UnsaltedMD5PasswordHasher',
+    'django.contrib.auth.hashers.CryptPasswordHasher'
+)
+
+
 if DEBUG_TOOLBAR:
     MIDDLEWARE_CLASSES += ('debug_toolbar.middleware.DebugToolbarMiddleware',)
 
@@ -416,7 +427,7 @@ LV_FTP = "ftp.bo.location-et-vacances.com"
 CAMO_KEY = getattr(local, 'CAMO_KEY', 'OKNZYL69Ml3oISfEmJvtzFjhUeBbugxPDXanydwi4HGWrRTqcQ')
 
 # Mobile configuration
-MOBILE = getattr(local, 'MOBILE', False)
+MOBILE = getattr(local, 'MOBILE', True)
 MOBILE_REDIRECT_BASE = getattr(local, 'MOBILE_REDIRECT_BASE', 'https://m.e-loue.com')
 
 # Franc Pacifique

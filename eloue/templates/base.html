@@ -138,6 +138,7 @@
     {% block tail %}
     	{% compressed_js 'application' %}
     {% endblock %}
+    {% if not debug %}
     <script type="text/javascript">  (
         function() {
             var ga = document.createElement('script');     ga.type = 'text/javascript'; ga.async = true;
@@ -153,5 +154,6 @@
         '.zopim.com/?WgwK6edNrVndm09BEcS9eHH77YcyszBK';$.type='text/java'+s;z.
         t=+new Date;z._=[];e.parentNode.insertBefore($,e)})(document,'script')
     </script>
+    {% endif %}
  </body>
 </html>

@@ -84,6 +84,7 @@
     </div>{# content-aside-profil #}
     <div class="content-main-profil">
         {% include "partials/alerts_message.html" %}
+        
         {% block content-main-profil %}
         {% if user.is_staff %}
         <div class="invite-your-friends">
