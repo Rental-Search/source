@@ -555,7 +555,7 @@ class IDNSession(models.Model):
         super(IDNSession, self).save(*args, **kwargs)
 
     def __unicode__(self):
-        return "IDN : %s" %  self.token
+        return "IDN : %s" % self.token
     
 class Address(models.Model):
     """An address"""

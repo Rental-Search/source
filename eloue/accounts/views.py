@@ -961,7 +961,7 @@ def patron_edit_idn_connect(request):
     else:
         oauth_verifier = request.GET.get('oauth_verifier', None)
 
-        base_url = 'https://idn-preprod-laposte.france-sso.fr/'
+        base_url = settings.IDN_BASE_URL
         request_token_url = base_url + 'oauth/requestToken'
         authorize_url = base_url + 'oauth/authorize'
         access_token_url = base_url + 'oauth/accessToken'
@@ -993,7 +993,7 @@ def patron_edit_idn_connect(request):
 
         else:
 
-            redirect_uri = 'http://staging.e-loue.com/dashboard/account/idn/'
+            redirect_uri = settings.IDN_REDIRECT_URI
             scope = '["namePerson","contact/email"]'
 
             response, content = client.request(request_token_url, "GET")

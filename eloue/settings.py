@@ -473,3 +473,7 @@ EMAILNOTIFICATION_PRICE = decimal.Decimal('0.01')
 SMSNOTIFICATION_PRICE = decimal.Decimal('0.08')
 
 TVA = decimal.Decimal('0.196')
+
+IDN_BASE_URL = getattr(local, 'IDN_BASE_URL', 'https://idn-preprod-laposte.france-sso.fr/')
+IDN_REDIRECT_URI = getattr(local, 'IDN_REDIRECT_URI', 'http://localhost:8000/dashboard/account/idn/')
+
