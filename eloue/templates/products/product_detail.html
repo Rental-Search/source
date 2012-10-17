@@ -6,7 +6,7 @@
     xmlns:fb="http://ogp.me/ns/fb#" itemscope itemtype="http://schema.org/Product"
 {% endblock %}
 
-{% block title %}{% trans "Location"%} {{ product.summary }}{% endblock %}
+{% block title %}{% trans "Location"%} {{ product.summary }} - {{ product.address.city }}{% endblock %}
 
 {% block description %}{{ product.summary }} {{ product.description }}{% endblock %}
 
@@ -215,7 +215,7 @@
         {% include "partials/alerts_message.html" %}
 
 {% cache 43200 product:details:before_csrf product.pk site.pk %}
-        <h1>{{ product.summary|capitalize}}</h1>
+        <h1>{% trans "Location" %} {{ product.summary|capitalize}} - {{ product.address.city }}</h1>
         <div class="product-resume">
             <div class="product-resume-left">
                 <address class="product-address ">
