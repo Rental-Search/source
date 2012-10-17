@@ -61,6 +61,8 @@ def last_added(search_index, location, offset=0):
 
 @mobify
 def homepage(request):
+    print settings.LANGUAGE_CODE
+    print settings.LOCALE_PATHS
     curiosities = Curiosity.on_site.all()
     location = request.session.setdefault('location', settings.DEFAULT_LOCATION)
     address = location.get('formatted_address') or (u'{city}, {country}'.format(**location) if location.get('city') else u'{country}'.format(**location))
