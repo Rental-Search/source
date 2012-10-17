@@ -735,7 +735,7 @@ class OwnerBookingAuthorized(OwnerBooking):
     def get_queryset(self):
         if self.request.user.current_subscription:
             return self.request.user.bookings.professional()
-        return request.user.bookings.authorized()
+        return self.request.user.bookings.authorized()
 
 class OwnerBookingPending(OwnerBooking):
     title = u'Réservations à venir'
@@ -991,7 +991,7 @@ def patron_edit_idn_connect(request):
                 idn = IDNSession(token=token, user=request.user)
                 idn.save()
 
-            return render(request, 'accounts/patron_edit_idn.html', {'idn': idn}) 
+            return redirect('patron_edit_idn_connect') 
 
         else:
 

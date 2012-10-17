@@ -342,7 +342,6 @@ AWS_AUTO_CREATE_BUCKET = getattr(local, 'AWS_AUTO_CREATE_BUCKET', False)
 AWS_HEADERS = {
     'Cache-Control': 'max-age=31556926,public',
 }
-AWS_PRELOAD_METADATA = True
 
 # staticfiles configuration
 STATIC_ROOT = getattr(local, 'STATIC_ROOT', 'static/')
