@@ -8839,7 +8839,7 @@ msgstr ""
 "\n"
 "A very fast, <br>\n"
 "\n"
-"The team %site_name)s  <br><br> "
+"The team %(site_name)s  <br><br> "
 
 #: templates/rent/emails/borrower_acceptation_email.txt:1
 msgid ""
@@ -8880,7 +8880,7 @@ msgstr ""
 "\n"
 "good rental!\n"
 "\n"
-"The team %site_name)s"
+"The team %(site_name)s"
 
 #: templates/rent/emails/borrower_acceptation_email_subject.txt:1
 #: templates/rent/emails/owner_acceptation_email_subject.txt:1
@@ -8929,7 +8929,7 @@ msgstr ""
 "\n"
 "A very fast, <br>\n"
 "\n"
-"The team %site_name)s  <br> "
+"The team %(site_name)s  <br> "
 
 #: templates/rent/emails/borrower_ask_email.txt:2
 msgid ""
@@ -8956,7 +8956,7 @@ msgid ""
 msgstr ""
 "Hello %(borrower)s,\n"
 "\n"
-"we have well taken into account your rental application and just inform % "
+"we have well taken into account your rental application and just inform %"
 "(owner)s of your proposal.\n"
 "\n"
 "So here are the different elements that have been forwarded:\n"
@@ -8971,7 +8971,7 @@ msgstr ""
 "\n"
 "Has very quickly,\n"
 "\n"
-"the team %site_name)s"
+"the team %(site_name)s"
 
 #: templates/rent/emails/borrower_ask_email_subject.txt:1
 msgid "Votre demande de location"
@@ -9027,7 +9027,7 @@ msgstr ""
 "\n"
 "A very fast, <BR>\n"
 "\n"
-"The team %site_name)s  <BR> "
+"The team %(site_name)s  <BR> "
 
 #: templates/rent/emails/borrower_ask_pro_email.txt:3
 msgid ""
@@ -9087,7 +9087,7 @@ msgstr ""
 "\n"
 "Has very quickly,\n"
 "\n"
-"the team %site_name)s"
+"the team %(site_name)s"
 
 #: templates/rent/emails/borrower_cancelation_to_borrower_email.html:5
 #: templates/rent/emails/borrower_cancelation_to_borrower_email_subject.txt:1
@@ -9130,7 +9130,7 @@ msgstr ""
 "has been canceled and therefore that no flow will not take place. <br><br>\n"
 "\n"
 "A very fast, <br>\n"
-"The team %site_name)s  <br> "
+"The team %(site_name)s  <br> "
 
 #: templates/rent/emails/borrower_cancelation_to_borrower_email.txt:2
 msgid ""
@@ -9165,7 +9165,7 @@ msgstr ""
 "\n"
 "Has very quickly,\n"
 "\n"
-"the team %site_name)s"
+"the team %(site_name)s"
 
 #: templates/rent/emails/borrower_cancelation_to_owner_email.html:15
 msgid ""
@@ -9193,7 +9193,7 @@ msgid ""
 msgstr ""
 "A very fast, <br>\n"
 "\n"
-"The team %site_name)s  <br> "
+"The team %(site_name)s  <br> "
 
 #: templates/rent/emails/borrower_cancelation_to_owner_email.txt:2
 msgid ""
@@ -9259,7 +9259,7 @@ msgstr ""
 "\n"
 "A very fast, <br>\n"
 "\n"
-"The team %site_name)s  <br><br> "
+"The team %(site_name)s  <br><br> "
 
 #: templates/rent/emails/borrower_closed_email.txt:2
 msgid ""
@@ -9331,7 +9331,7 @@ msgstr ""
 "(domain)s%(booking_url)s\">report the incident</a><br><br>\n"
 "A very fast, <br>\n"
 "\n"
-"The team %site_name)s  <br><br> "
+"The team %(site_name)s  <br><br> "
 
 #: templates/rent/emails/borrower_ended_email.txt:2
 msgid ""
@@ -9407,7 +9407,7 @@ msgstr ""
 "\n"
 "A very fast, <br>\n"
 "\n"
-"The team %site_name)s  <br> "
+"The team %(site_name)s  <br> "
 
 #: templates/rent/emails/borrower_receipt_email.txt:2
 msgid ""
@@ -9438,7 +9438,7 @@ msgstr ""
 "\n"
 "good rental!\n"
 "\n"
-"The team %site_name)s"
+"The team %(site_name)s"
 
 #: templates/rent/emails/borrower_recovery_email.html:2
 msgid ""
@@ -9477,7 +9477,7 @@ msgstr ""
 "\n"
 "<p><a href=\"%(preapproval_url)s\">%(Preapproval_url)s</a></p>\n"
 "\n"
-"<p>The team %site_name)s  </p>"
+"<p>The team %(site_name)s  </p>"
 
 #: templates/rent/emails/borrower_recovery_email.txt:2
 msgid ""
@@ -9560,7 +9560,7 @@ msgstr ""
 "\n"
 "Has very quickly <br>\n"
 "\n"
-"The team %site_name)s  <br> "
+"The team %(site_name)s  <br> "
 
 #: templates/rent/emails/borrower_rejection_email.txt:2
 msgid ""
@@ -9602,7 +9602,7 @@ msgstr ""
 "\n"
 "%(protocol)s: // %(domain)s%(category_url)s\n"
 "\n"
-"The team %site_name)s"
+"The team %(site_name)s"
 
 #: templates/rent/emails/comment_email.html:5
 msgid "Nouveau commentaire sur votre réservation"
@@ -9655,7 +9655,7 @@ msgid ""
 msgstr ""
 "A very fast, <br>\n"
 "\n"
-"The team %site_name)s"
+"The team %(site_name)s"
 
 #: templates/rent/emails/comment_email.txt:2
 msgid ""
@@ -9696,7 +9696,7 @@ msgid ""
 msgstr ""
 "Soon,\n"
 "\n"
-"the team %site_name)s"
+"the team %(site_name)s"
 
 #: templates/rent/emails/comment_email_subject.txt:1
 msgid "Nouveau commentaire sur e-loue"
@@ -9752,7 +9752,7 @@ msgstr ""
 "\n"
 "Good rental! <br><br>\n"
 "\n"
-"The team %site_name)s  <br><br> "
+"The team %(site_name)s  <br><br> "
 
 #: templates/rent/emails/owner_acceptation_email.txt:1
 msgid ""
@@ -9794,7 +9794,7 @@ msgstr ""
 "\n"
 "good rental!\n"
 "\n"
-"The team %site_name)s"
+"The team %(site_name)s"
 
 #: templates/rent/emails/owner_ask_email.html:16
 #: templates/rent/emails/owner_ask_pro_email.html:15
@@ -9850,7 +9850,7 @@ msgstr ""
 "\n"
 "A very fast, <br>\n"
 "\n"
-"The team %site_name)s  <br> "
+"The team %(site_name)s  <br> "
 
 #: templates/rent/emails/owner_ask_email.txt:2
 msgid ""
@@ -9920,7 +9920,7 @@ msgstr ""
 "\n"
 "A very fast, <BR>\n"
 "\n"
-"The team %site_name)s  <BR> "
+"The team %(site_name)s  <BR> "
 
 #: templates/rent/emails/owner_ask_pro_email.txt:2
 msgid ""
@@ -9943,7 +9943,7 @@ msgid ""
 "L'équipe %(site_name)s\n"
 "\n"
 msgstr ""
-"Hello %(Owner)s,\n"
+"Hello %(owner)s,\n"
 "\n"
 "%(borrower)s wishes to rent one of your objects. Here are the details of "
 "his proposal:\n"
@@ -9998,7 +9998,7 @@ msgstr ""
 "\n"
 "A very fast, <br>\n"
 "\n"
-"The team %site_name)s  <br> "
+"The team %(site_name)s  <br> "
 
 #: templates/rent/emails/owner_cancelation_to_borrower_email.txt:2
 msgid ""
@@ -10039,7 +10039,7 @@ msgstr ""
 "\n"
 "%(protocol)s: // %(domain)s%(category_url)s\n"
 "\n"
-"The team %site_name)s"
+"The team %(site_name)s"
 
 #: templates/rent/emails/owner_cancelation_to_owner_email.html:15
 msgid ""
@@ -10072,7 +10072,7 @@ msgstr ""
 "\n"
 "A very fast, <br>\n"
 "\n"
-"The team %site_name)s  <br> "
+"The team %(site_name)s  <br> "
 
 #: templates/rent/emails/owner_cancelation_to_owner_email.txt:2
 msgid ""
@@ -10103,7 +10103,7 @@ msgstr ""
 "in accordance with your request, we can confirm that this rental has been "
 "canceled.\n"
 "\n"
-"The team %site_name)s"
+"The team %(site_name)s"
 
 #: templates/rent/emails/owner_closed_email.html:15
 msgid ""
@@ -10125,7 +10125,7 @@ msgid ""
 "\n"
 "                            L'équipe %(site_name)s<br><br>\n"
 "                            "
-msgstr "The team %site_name)s  <br><br> "
+msgstr "The team %(site_name)s  <br><br> "
 
 #: templates/rent/emails/owner_closed_email.txt:2
 msgid ""
@@ -10148,7 +10148,7 @@ msgstr ""
 "Of course, if you encounter any difficulty, please do not hesitate to "
 "contact us.\n"
 "\n"
-"The team %site_name)s"
+"The team %(site_name)s"
 
 #: templates/rent/emails/owner_ended_email.html:14
 msgid ""
@@ -10187,7 +10187,7 @@ msgstr ""
 "\n"
 "A very fast, <br>\n"
 "\n"
-"The team %site_name)s  <br> "
+"The team %(site_name)s  <br> "
 
 #: templates/rent/emails/owner_ended_email.txt:2
 msgid ""
@@ -10213,14 +10213,14 @@ msgstr ""
 "a duration of %(duration)s, has just finished.\n"
 "\n"
 "We hope that everything was done according to your convenience and you "
-"remember that you need you connect on your account %site_name)s to wrap up "
+"remember that you need you connect on your account %(site_name)s to wrap up "
 "this rental:\n"
 "\n"
 "%(protocol)s: // %(domain)s%(booking_url)s\n"
 "\n"
 "once this step done, you will receive your payment.\n"
 "\n"
-"The team %site_name)s"
+"The team %(site_name)s"
 
 #: templates/rent/emails/owner_receipt_email.html:4
 msgid "Crédit du montant de votre réservation"
@@ -10263,7 +10263,7 @@ msgstr ""
 "\n"
 "A very fast, <br>\n"
 "\n"
-"The team %site_name)s  <br> "
+"The team %(site_name)s  <br> "
 
 #: templates/rent/emails/owner_receipt_email.txt:1
 msgid ""
