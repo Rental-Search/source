@@ -1293,7 +1293,7 @@ msgstr "The month"
 #: templates/dcns/rent/booking_incident.html:61
 #: templates/shiseido/products/product_edit.html:21
 msgid "Ajouter un objet"
-msgstr "Add an item"
+msgstr "Publish an item"
 
 #: products/forms.py:299
 msgid "Donnez envie aux e-loueurs potentiels de louer votre objets."
@@ -1356,7 +1356,7 @@ msgstr "1 Put into circulation"
 
 #: products/forms.py:358
 msgid "Ajouter une voiture"
-msgstr "Add a car"
+msgstr "Publish a car"
 
 #: products/forms.py:359
 msgid ""
@@ -1470,7 +1470,7 @@ msgstr "Rental price for the day"
 
 #: products/forms.py:423
 msgid "Ajouter un logement"
-msgstr "Add a slot"
+msgstr "Publish a space"
 
 #: products/forms.py:424
 msgid ""
@@ -2189,7 +2189,7 @@ msgstr "Your alert to well been deleted"
 #: templates/products/publish_new_ad.html:11
 #: templates/products/publish_new_ad.html:14
 msgid "Déposer une annonce"
-msgstr "Remove an announcement"
+msgstr "Publish an announcement"
 
 #: products/wizard.py:67
 msgid "Votre objet a bien été ajouté"
@@ -3657,7 +3657,7 @@ msgstr "Reservation Request"
 
 #: templates/accounts/owner_product.html:48
 msgid "Déposer une nouvelle annonce"
-msgstr "Remove a new announcement"
+msgstr "Publish a new announcement"
 
 #: templates/accounts/owner_product.html:75
 msgid "Modifier l'annonce"
@@ -8261,16 +8261,17 @@ msgstr "Book online"
 #: templates/products/product_detail.html:534
 msgid ""
 "\n"
-"                        <p id=\"booking-total\" class=\"total-price\">\n"
-"                            Total : <span class=\"day\">1 jour,</span> soit "
+"<p id=\"booking-total\" class=\"total-price\">\n"
+"Total : <span class=\"day\">1 jour,</span> soit "
 "<span class=\"pricing\">%(day_price)s</span>\n"
-"                        </p>\n"
-"                    "
+"</p>\n"
+
 msgstr ""
+"\n"
 "<p id=\"booking-total\" class=\"total-total-Price\">\n"
-"Total: <span class=\"Day\">1 day, </span>or<span class=\"pricing\"> % "
-"(day_price)s  </span>\n"
-"</p> "
+"Total: <span class=\"Day\">1 day,</span>"
+"or<span class=\"pricing\">%(day_price)s</span>\n"
+"</p>\n"
 
 #: templates/products/product_detail.html:548
 msgid ""
@@ -8390,7 +8391,7 @@ msgstr ""
 
 #: templates/products/publish_new_ad.html:30
 msgid "Déposer une voiture"
-msgstr "Remove a car"
+msgstr "Publish a car"
 
 #: templates/products/publish_new_ad.html:33
 #: templates/products/publish_new_ad.html:44
@@ -8406,11 +8407,11 @@ msgstr "Learn more"
 
 #: templates/products/publish_new_ad.html:41
 msgid "Déposer un logement"
-msgstr "Remove a slot"
+msgstr "Publish a space"
 
 #: templates/products/publish_new_ad.html:52
 msgid "Déposer un objet"
-msgstr "Remove an Object"
+msgstr "Publish an Object"
 
 #: templates/products/search.html:23
 #: templates/shiseido/index.html:24

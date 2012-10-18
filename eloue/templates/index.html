@@ -18,7 +18,7 @@
         <form action="{% url product_list %}" method="get">
             <p class="what">
                 {{form.q}}
-                <input type="submit" value="Rechercher" class="btn bt-big-orange" />
+                <input type="submit" value="{% trans "Rechercher" %}" class="btn bt-big-orange" />
                 {{form.l.as_hidden}}
             </p>
         </form>
@@ -29,11 +29,11 @@
                         {% firstof location.formatted_address location.city location.region location.country location.fallback %}
                     {% endwith %}
                 </span>
-                <button class="btn-other-town"><span>Changer de ville</span></button>
+                <button class="btn-other-town"><span>{% trans "Changer de ville" %}</span></button>
             </p>
             <p class="city-input">
                 <input id="id_l" type="text" name="city" />
-                <button class="btn-edit-town">me geolocaliser</button> ou <button class="btn-cancel-edit-town">annuler</button>
+                <button class="btn-edit-town">{% trans "me geolocaliser" %}</button> {% trans "ou" %} <button class="btn-cancel-edit-town">{% trans "annuler" %}</button>
             </p>
     </div><!-- search-home -->
     <div class="products-home">
@@ -127,7 +127,7 @@
     </div>{# new_profils #}
     {% endcache %}
     <div class="press">
-        <div class="press-title">Ils parlent de nous !</div>
+        <div class="press-title">{% trans "Ils parlent de nous !"%}</div>
         <img src="{{ STATIC_URL }}images/e-loue_dans_la_press.png" width="619" height="39" />
     </div>{# press #}
 </div>{# container-top #}

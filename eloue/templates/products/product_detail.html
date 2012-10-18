@@ -538,9 +538,9 @@
                     {% endblocktrans %}
                         <p>
                             {% if product.owner.current_subscription %}
-                            <input type="submit" class="btn-booking" value="Envoyer"/>
+                            <input type="submit" class="btn-booking" value="{% trans "Envoyer" %}"/>
                             {% else %}
-                            <input type="submit" class="btn-booking" value="Réserver"/>
+                            <input type="submit" class="btn-booking" value="{% trans "Réserver" %}"/>
                             {% endif %}
                         </p>
                         <p class="booking-info">
