@@ -16,11 +16,67 @@ from eloue.accounts.models import Patron, Avatar
 from eloue.wizard import MultiPartFormWizard
 
 class AuthenticationWizard(MultiPartFormWizard):
-
     def __init__(self, *args, **kwargs):
         super(AuthenticationWizard, self).__init__(*args, **kwargs)
         self.required_fields = ['username', 'password1', 'password2', 'is_professional', 'company_name', 'avatar']
         self.title = _(u'S\'incrire ou se connecter')
+
+    def __call__(self, request, *args, **kwargs):
+        self.request = request
+        import oauth2 as oauth
+        import urllib, urlparse
+        from django.core.urlresolvers import reverse
+        scope = '["namePerson/friendly","namePerson","contact/postalAddress/home"]'
+
+        consumer_key = '_ce85bad96eed75f0f7faa8f04a48feedd56b4dcb'
+        consumer_secret = '_80b312627bf936e6f20510232cf946fff885d1f7'
+
+        base_url = 'http://idn.recette.laposte.france-sso.fr/'
+        request_token_url = base_url + 'oauth/requestToken'
+        authorize_url = base_url + 'oauth/authorize'
+        access_token_url = base_url + 'oauth/accessToken'
+        me_url = base_url + 'anywhere/me?oauth_scope=%s' % (scope, )
+        consumer = oauth.Consumer(key=consumer_key, secret=consumer_secret)
+        client = oauth.Client(consumer)
+        if request.method == 'GET':
+            if request.GET.get('connected'):
+                response, content = client.request(request_token_url, "GET")
+                request_token = dict(urlparse.parse_qsl(content))
+                request.session['request_token'] = request_token
+                link = "%s?oauth_token=%s&oauth_callback=%s&oauth_scope=%s" % (
+                    authorize_url, 
+                    request_token['oauth_token'], 
+                    'http://localhost:8000/login/', 
+                    scope
+                )
+                return redirect(link)
+            elif request.GET.get('oauth_verifier'):
+                print 'LOFASZOHASDIUPHASPIUDHPIASUHIUHIUD'
+                self.initial[0] = {
+                    'idn_oauth_verifier': request.GET.get('oauth_verifier'), 
+                    'sdfsdf': 'rgrgg', 
+                }
+                # oauth_verifier = request.GET.get('oauth_verifier')
+                # request_token = request.session.get('request_token')
+
+                # token = oauth.Token(request_token['oauth_token'],
+                #     request_token['oauth_token_secret'])
+                # token.set_verifier(oauth_verifier)
+                # client = oauth.Client(consumer, token)
+                # response, content = client.request(access_token_url, "GET")
+                # access_token = dict(urlparse.parse_qsl(content))
+
+                # token = oauth.Token(access_token['oauth_token'],
+                #     access_token['oauth_token_secret'])
+                # client = oauth.Client(consumer, token)
+                # print client.request(me_url, "GET")
+                # return redirect('auth_login')
+        return super(AuthenticationWizard, self).__call__(request, *args, **kwargs)
+
+    def get_form(self, step, data=None, files=None):
+        form = super(AuthenticationWizard, self).get_form(step, data, files)
+        form.request_token = self.request.session.get('request_token')
+        return form
 
     def done(self, request, form_list):
         super(AuthenticationWizard, self).done(request, form_list)

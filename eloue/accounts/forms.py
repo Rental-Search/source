@@ -112,6 +112,9 @@ class EmailAuthenticationForm(forms.Form):
     facebook_expires = forms.IntegerField(required=False, widget=forms.HiddenInput())
     facebook_uid = forms.CharField(required=False, widget=forms.HiddenInput())
 
+    idn_oauth_verifier = forms.CharField(required=False, widget=forms.HiddenInput())
+    idn_id = forms.CharField(required=False, widget=forms.HiddenInput())
+    idn_access_token = forms.CharField(required=False, widget=forms.HiddenInput())
 
     def __init__(self, *args, **kwargs):
         self.user_cache = None
@@ -132,10 +135,13 @@ class EmailAuthenticationForm(forms.Form):
         return email
 
     def clean(self):
-
         facebook_access_token = self.cleaned_data.get('facebook_access_token')
         facebook_expires = self.cleaned_data.get('facebook_expires')
         facebook_uid = self.cleaned_data.get('facebook_uid')
+
+        idn_id = self.cleaned_data.get('id_id')
+        idn_oauth_verifier = self.cleaned_data.get('idn_oauth_verifier')
+        idn_access_token = self.cleaned_data.get('idn_access_token')
 
         email = self.cleaned_data.get('email')
         password = self.cleaned_data.get('password')
@@ -177,7 +183,69 @@ class EmailAuthenticationForm(forms.Form):
                     self.fb_session.save()
                 except Patron.DoesNotExist:
                     pass
+        elif any([idn_oauth_verifier, idn_id]):
+            print 'why are we here????', self.cleaned_data
+            print 'initial', self.initial
+            from eloue.accounts.models import IDNSession
+            import oauth2 as oauth
+            import urllib, urlparse
+            from django.core.urlresolvers import reverse
+            import pprint, simplejson
+            scope = '["namePerson/friendly","namePerson","contact/postalAddress/home"]'
+            consumer_key = '_ce85bad96eed75f0f7faa8f04a48feedd56b4dcb'
+            consumer_secret = '_80b312627bf936e6f20510232cf946fff885d1f7'
+            base_url = 'http://idn.recette.laposte.france-sso.fr/'
+            request_token_url = base_url + 'oauth/requestToken'
+            authorize_url = base_url + 'oauth/authorize'
+            access_token_url = base_url + 'oauth/accessToken'
+            me_url = base_url + 'anywhere/me?oauth_scope=%s' % (scope, )
+            
+            if idn_oauth_verifier:
+                #!!!!! VERIFY IF USER ALREADY STARTED REGISTRATION AND STUFFS LIKE THAT
+                # WHETHER IT EXISTS ETC...
+                assert not idn_id
+                assert not idn_access_token
+                consumer = oauth.Consumer(key=consumer_key, secret=consumer_secret)
+                client = oauth.Client(consumer)
+                # oauth_verifier = self.cleaned_data.get('idn_oauth_verifier')
+                # oauth_verifier = request.GET.get('oauth_verifier')
+                # request_token = request.session.get('request_token')
 
+                request_token = oauth.Token(self.request_token['oauth_token'],
+                    self.request_token['oauth_token_secret'])
+                request_token.set_verifier(idn_oauth_verifier)
+                client = oauth.Client(consumer, request_token)
+                response, content = client.request(access_token_url, "GET")
+                print response, content
+                assert simplejson.loads(response['status']) == 200
+                access_token_data = dict(urlparse.parse_qsl(content))
+                print access_token_data
+                access_token = oauth.Token(access_token_data['oauth_token'],
+                    access_token_data['oauth_token_secret'])
+                client = oauth.Client(consumer, access_token)
+                response, content = client.request(me_url, "GET")
+                assert simplejson.loads(response['status']) == 200
+                content = simplejson.loads(content)
+                pprint.pprint(content)
+                idn_id = content['id']
+                self.idn_session, created = IDNSession.objects.get_or_create(
+                    uid=idn_id, defaults = {
+                        'access_token': access_token_data['oauth_token'],
+                        'access_token_secret': access_token_data['oauth_token_secret']
+                    }
+                )
+                if created:
+                    self.idn_id.access_token = access_token_data['oauth_token']
+                    self.idn_id.access_token_secret = access_token_data['oauth_token_secret']
+                    self.idn_id.save()
+                del self.cleaned_data['idn_oauth_verifier']
+                self.cleaned_data['idn_id'] = idn_id
+                self.cleaned_data['idn_access_token'] = access_token_data['oauth_token']
+            else:
+                try:
+                    IDNSession.objects.get(uid=idn_id, access_token=idn_access_token)
+                except IDNSession.DoesNotExist:
+                    raise forms.ValidationError('')
         else:
             if email is None or email == u'':
                 raise forms.ValidationError('Empty email') # TODO: more meaningful error message
@@ -188,7 +256,6 @@ class EmailAuthenticationForm(forms.Form):
                     raise forms.ValidationError(_(u"Veuillez saisir une adresse email et un mot de passe valide."))
                 elif not self.user_cache.is_active:
                     raise forms.ValidationError(_(u"Ce compte est inactif parce qu'il n'a pas été activé."))
-            
         return self.cleaned_data
     
     def get_user_id(self):

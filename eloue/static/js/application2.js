@@ -310,7 +310,7 @@ $(document).ready(function() {
     $('button.btn-booking-action.pending, button.btn-booking-action.rejected').click(function () {
         $('tr.b-action').addClass('loading');
     });
-    
+
     //fbconnect
     $('#fbconnect').click(function () {
         FB.login(function(response) {
@@ -327,4 +327,18 @@ $(document).ready(function() {
            $('.fbconnect-content .fb-slogan').html('Connexion en cours...');
          }, {scope: 'email,user_location'});
     });
+
+    if ($('input[name$="idn_oauth_verifier"]').val()) {
+        console.log($('input[name$="idn_oauth_verifier"]').val());
+        $('input[name$="email"]').removeAttr('value');
+        $('input[name$="password"]').removeAttr('value');
+        // $('form').submit();
+        $('input[type="submit"]').attr('disabled','disabled');
+        $('#fbconnect').remove();
+        $('.fbconnect-content .fb-slogan').html('Connexion en cours...');
+    } else {
+        console.log('sdfdsf');
+        console.log($('input[name$="idn_oauth_verifier"]').val());
+        console.log('szar');
+    }
 });

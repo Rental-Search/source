@@ -18,7 +18,11 @@
 		<h1>{% trans "Identification" %}</h1>
 		{% include "accounts/partials/login.html" %}
 	</div>
-	<idn:connect></idn:connect>
+      <script type="text/javascript" src="http://idn.test.laposte.france-sso.fr/anywhere/jsdk/anywhere-1.2.1.js"></script>
+      <script language="Javascript">idn.anywhere.setup({"client_id":"_ce85bad96eed75f0f7faa8f04a48feedd56b4dcb","redirect_uri":"http://localhost:8000/login/?connected=true","scope":"null","display":"popin"});</script>
+     <!-- Parce que le Javascript est possible, activer les modes popin et popup -->
+
+<idn:connect></idn:connect>
 </div>
 {% endblock %}
 {% block footer %}

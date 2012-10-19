@@ -11,15 +11,29 @@ class Migration(SchemaMigration):
         # Adding model 'IDNSession'
         db.create_table('accounts_idnsession', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('token', self.gf('django.db.models.fields.CharField')(unique=True, max_length=255)),
             ('user', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['accounts.Patron'], unique=True, null=True)),
-            ('created_at', self.gf('django.db.models.fields.DateTimeField')(blank=True)),
+            ('created_at', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
+            ('uid', self.gf('django.db.models.fields.CharField')(unique=True, max_length=32)),
+            ('access_token', self.gf('django.db.models.fields.CharField')(max_length=255)),
+            ('access_token_secret', self.gf('django.db.models.fields.CharField')(max_length=255)),
         ))
         db.send_create_signal('accounts', ['IDNSession'])
+
+        # Adding unique constraint on 'IDNSession', fields ['user', 'uid']
+        db.create_unique('accounts_idnsession', ['user_id', 'uid'])
+
+        # Adding unique constraint on 'IDNSession', fields ['access_token', 'access_token_secret']
+        db.create_unique('accounts_idnsession', ['access_token', 'access_token_secret'])
 
 
     def backwards(self, orm):
         
+        # Removing unique constraint on 'IDNSession', fields ['access_token', 'access_token_secret']
+        db.delete_unique('accounts_idnsession', ['access_token', 'access_token_secret'])
+
+        # Removing unique constraint on 'IDNSession', fields ['user', 'uid']
+        db.delete_unique('accounts_idnsession', ['user_id', 'uid'])
+
         # Deleting model 'IDNSession'
         db.delete_table('accounts_idnsession')
 
@@ -139,10 +153,12 @@ class Migration(SchemaMigration):
             'user': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['accounts.Patron']", 'unique': 'True', 'null': 'True'})
         },
         'accounts.idnsession': {
-            'Meta': {'object_name': 'IDNSession'},
-            'created_at': ('django.db.models.fields.DateTimeField', [], {'blank': 'True'}),
+            'Meta': {'unique_together': "(('user', 'uid'), ('access_token', 'access_token_secret'))", 'object_name': 'IDNSession'},
+            'access_token': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
+            'access_token_secret': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
+            'created_at': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'token': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '255'}),
+            'uid': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '32'}),
             'user': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['accounts.Patron']", 'unique': 'True', 'null': 'True'})
         },
         'accounts.language': {
@@ -273,7 +289,7 @@ class Migration(SchemaMigration):
         },
         'auth.user': {
             'Meta': {'object_name': 'User'},
-            'date_joined': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2012, 9, 27, 8, 38, 57, 3607)'}),
+            'date_joined': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2012, 10, 19, 16, 40, 3, 919176)'}),
             'email': ('django.db.models.fields.EmailField', [], {'max_length': '75', 'blank': 'True'}),
             'first_name': ('django.db.models.fields.CharField', [], {'max_length': '30', 'blank': 'True'}),
             'groups': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['auth.Group']", 'symmetrical': 'False', 'blank': 'True'}),
@@ -281,7 +297,7 @@ class Migration(SchemaMigration):
             'is_active': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
             'is_staff': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'is_superuser': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'last_login': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2012, 9, 27, 8, 38, 57, 3500)'}),
+            'last_login': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2012, 10, 19, 16, 40, 3, 919062)'}),
             'last_name': ('django.db.models.fields.CharField', [], {'max_length': '30', 'blank': 'True'}),
             'password': ('django.db.models.fields.CharField', [], {'max_length': '128'}),
             'user_permissions': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['auth.Permission']", 'symmetrical': 'False', 'blank': 'True'}),
