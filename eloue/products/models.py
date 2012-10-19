@@ -654,7 +654,6 @@ class Category(MPTTModel):
         if ancestors_slug:
             return _(u"/location/%(ancestors_slug)s/%(slug)s/") % {'ancestors_slug': ancestors_slug, 'slug': self.slug }
         else:
-            print _(u"/location/%(slug)s/")
             return _(u"/location/%(slug)s/") % {'slug': self.slug}
             
 
