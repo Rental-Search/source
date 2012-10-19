@@ -531,16 +531,16 @@
                 </div>{# main-block #}
 {% cache 43200 product:details:after_dates product.pk %}
                  <div class="bottom-block">
-                    {% blocktrans with product.product.day|first as day_price %}
+                    {% blocktrans with product.prices.day as day_price %}
                         <p id="booking-total" class="total-price">
                             Total : <span class="day">1 jour,</span> soit <span class="pricing">{{ day_price }}</span>
                         </p>
                     {% endblocktrans %}
                         <p>
                             {% if product.owner.current_subscription %}
-                            <input type="submit" class="btn-booking" value="Envoyer"/>
+                            <input type="submit" class="btn-booking" value="{% trans "Envoyer" %}"/>
                             {% else %}
-                            <input type="submit" class="btn-booking" value="Réserver"/>
+                            <input type="submit" class="btn-booking" value="{% trans "Réserver" %}"/>
                             {% endif %}
                         </p>
                         <p class="booking-info">
