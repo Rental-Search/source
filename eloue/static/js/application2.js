@@ -328,17 +328,17 @@ $(document).ready(function() {
          }, {scope: 'email,user_location'});
     });
 
-    if ($('input[name$="idn_oauth_verifier"]').val()) {
-        console.log($('input[name$="idn_oauth_verifier"]').val());
+    if ($('input[name="0-idn_id"]').val() && $('input[name="0-idn_access_token"]').val()) {
         $('input[name$="email"]').removeAttr('value');
         $('input[name$="password"]').removeAttr('value');
-        // $('form').submit();
+        $('form').submit();
         $('input[type="submit"]').attr('disabled','disabled');
         $('#fbconnect').remove();
         $('.fbconnect-content .fb-slogan').html('Connexion en cours...');
     } else {
         console.log('sdfdsf');
-        console.log($('input[name$="idn_oauth_verifier"]').val());
+        console.log($('input[name$="idn_id"]').val());
+        console.log($('input[name$="idn_access_token"]').val());
         console.log('szar');
     }
 });

@@ -41,12 +41,7 @@ class MultiPartFormWizard(FormWizard):
     
     @method_decorator(csrf_protect)
     def __call__(self, request, *args, **kwargs):
-        if 'extra_context' in kwargs:
-            self.extra_context.update(kwargs['extra_context'])
-        current_step = self.get_current_or_first_step(request, *args, **kwargs)
-        self.parse_params(request, *args, **kwargs)
-
-        if request.method == 'POST':
+        if request.method == "POST":
             if request.user.is_authenticated():
                 self.patron = request.user
                 if not self.fb_session:
@@ -64,20 +59,25 @@ class MultiPartFormWizard(FormWizard):
             else:
                 if EmailAuthenticationForm not in self.form_list:
                     self.form_list.append(EmailAuthenticationForm)
-                    current_step = self.get_current_or_first_step(request, *args, **kwargs)
-                if not next((form for form in self.form_list if getattr(form, '__name__', None) == 'MissingInformationForm'), None):
-                    form = self.get_form(self.form_list.index(EmailAuthenticationForm), request.POST, request.FILES)
-                    form.is_valid()  # Here to fill form user_cache
-                    if form.fb_session and 'password1' in self.required_fields:
-                        self.required_fields.remove('password1')
-                        self.required_fields.remove('password2')
-                    missing_fields, missing_form = make_missing_data_form(form.get_user(), self.required_fields)
-                    if missing_fields:
-                        self.form_list.insert(2, missing_form)
-            if 'form' not in locals():
-                form = self.get_form(current_step, request.POST, request.FILES)
-        else:
-            form = self.get_form(current_step)
+                if EmailAuthenticationForm in self.form_list:
+                    if not next((form for form in self.form_list if getattr(form, '__name__', None) == 'MissingInformationForm'), None):
+                        form = self.get_form(self.form_list.index(EmailAuthenticationForm), request.POST, request.FILES)
+                        form.is_valid()  # Here to fill form user_cache
+                        if form.fb_session and 'password1' in self.required_fields:
+                            self.required_fields.remove('password1')
+                            self.required_fields.remove('password2')
+                        missing_fields, missing_form = make_missing_data_form(form.get_user(), self.required_fields)
+                        if missing_fields:
+                            self.form_list.insert(2, missing_form)
+
+        if 'extra_context' in kwargs:
+            self.extra_context.update(kwargs['extra_context'])
+        current_step = self.get_current_or_first_step(request, *args, **kwargs)
+        self.parse_params(request, *args, **kwargs)
+
+        # Sanity check.
+        if current_step >= self.num_steps():
+            raise Http404('Step %s does not exist' % current_step)
 
         previous_form_list = []
         for i in range(current_step):
@@ -90,6 +90,11 @@ class MultiPartFormWizard(FormWizard):
             else:
                 self.process_step(request, f, i)
                 previous_form_list.append(f)
+
+        if request.method == 'POST':
+            form = self.get_form(current_step, request.POST, request.FILES)
+        else:
+            form = self.get_form(current_step)
 
         if form.is_valid():
             self.process_step(request, form, current_step)

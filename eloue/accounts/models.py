@@ -564,7 +564,7 @@ class IDNSession(models.Model):
         # we have to stock it in a local variable, and return the value from that
         # local variable, otherwise this stuff is broken with the dummy cache engine
         import oauth2 as oauth
-        scope = '["namePerson/friendly","namePerson","contact/postalAddress/home"]'
+        scope = '["namePerson/friendly","namePerson","contact/postalAddress/home","contact/email"]'
         consumer_key = '_ce85bad96eed75f0f7faa8f04a48feedd56b4dcb'
         consumer_secret = '_80b312627bf936e6f20510232cf946fff885d1f7'
         base_url = 'http://idn.recette.laposte.france-sso.fr/'
