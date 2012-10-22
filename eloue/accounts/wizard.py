@@ -67,7 +67,6 @@ class AuthenticationWizard(MultiPartFormWizard):
                 response, content = client.request(me_url, "GET")
                 assert simplejson.loads(response['status']) == 200
                 content = simplejson.loads(content)
-                pprint.pprint(content)
                 idn_id = content['id']
                 request.session['idn_info'] = {
                     'access_token': access_token_data['oauth_token'],
