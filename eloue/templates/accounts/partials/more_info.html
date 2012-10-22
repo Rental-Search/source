@@ -2,16 +2,12 @@
 {% cache 900 patron_details_info patron.pk %}
 {% with patron.languages as languages %}
     {% with languages.count as languages_count %}
-    {% if patron.work or patron.school or languages_count %}
+    {% if patron.work or patron.school or languages_count or patron.idn_session %}
     <div class="profil-block">
         <h3>Plus d'info</h3>
         {% if patron.idn_session %}
-            <h4>
-                <img src="{{ STATIC_URL }}/images/laposte_icon.gif" alt="La Poste icône" height="20" style="margin-right: 5px; margin-bottom: -5px;">
-                {% trans "Identité Numérique"%}
-            </h4>
-            <p style="margin-bottom: 20px;">{% trans "Validé le "%} : {{ patron.idn_session.created_at|date:"d F Y" }}</p>
-            {% endif %}
+            <idn:badge rel="{{ patron.idn_session.idn_id}}" style="margin-bottom: 10px; margin-left:-18px;"></idn:badge>
+        {% endif %}
         {% if patron.work %}
             <h4>{% trans "Travail" %}</h4>
             <p>{{ patron.work }}</p>

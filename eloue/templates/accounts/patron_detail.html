@@ -99,3 +99,18 @@
 </div>{# profil #}
 {% endcache %}
 {% endblock %}
+
+{% block tail %}
+{{ block.super }}
+{% if patron.idn_session %}
+<script type="text/javascript" src="https://idn-preprod-laposte.france-sso.fr/anywhere/jsdk/anywhere-1.2.1.js"></script>
+
+<script type="text/javascript">
+   idn.anywhere.setup({
+      client_id : "_fdcc008c5a13011d7470010f3f572b80fe4b47c2",
+      redirect_uri : "http://staging.e-loue.com/login/",
+      display : "popin"
+    }) ;
+</script>
+{% endif %}
+{% endblock %}

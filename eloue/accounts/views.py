@@ -948,20 +948,23 @@ def patron_edit_idn_connect(request):
     from eloue.accounts.models import IDNSession
     scope = '["namePerson/friendly","namePerson","contact/postalAddress/home","contact/email","namePerson/last","namePerson/first"]'
 
-    consumer_key = '_ce85bad96eed75f0f7faa8f04a48feedd56b4dcb'
-    consumer_secret = '_80b312627bf936e6f20510232cf946fff885d1f7'
-
-    base_url = 'http://idn.recette.laposte.france-sso.fr/'
+    consumer_key = settings.IDN_CONSUMER_KEY
+    consumer_secret = settings.IDN_CONSUMER_SECRET
+    base_url = settings.IDN_BASE_URL
+    
     request_token_url = base_url + 'oauth/requestToken'
     authorize_url = base_url + 'oauth/authorize'
     access_token_url = base_url + 'oauth/accessToken'
     me_url = base_url + 'anywhere/me?oauth_scope=%s' % (scope, )
+    
     try:
         request.user.idnsession
     except IDNSession.DoesNotExist:
         consumer = oauth.Consumer(key=consumer_key, secret=consumer_secret)
         client = oauth.Client(consumer)
+
         if request.GET.get('connected'):
+
             response, content = client.request(request_token_url, "GET")
             request_token = dict(urlparse.parse_qsl(content))
             request.session['request_token'] = request_token
