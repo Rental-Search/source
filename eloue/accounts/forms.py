@@ -196,7 +196,6 @@ class EmailAuthenticationForm(forms.Form):
             authorize_url = base_url + 'oauth/authorize'
             access_token_url = base_url + 'oauth/accessToken'
             try:
-                print idn_id, idn_access_token
                 access_token_data = self.request.session[(idn_id, idn_access_token)]
             except KeyError:
                 self.request.session.pop('idn_info', None)
