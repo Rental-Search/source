@@ -28,10 +28,11 @@ class AuthenticationWizard(MultiPartFormWizard):
         from django.core.urlresolvers import reverse
         scope = '["namePerson/friendly","namePerson","contact/postalAddress/home","contact/email","namePerson/last","namePerson/first"]'
 
-        consumer_key = '_ce85bad96eed75f0f7faa8f04a48feedd56b4dcb'
-        consumer_secret = '_80b312627bf936e6f20510232cf946fff885d1f7'
+        consumer_key = settings.IDN_CONSUMER_KEY
+        consumer_secret = settings.IDN_CONSUMER_SECRET
+        base_url = settings.IDN_BASE_URL
+        return_url = settings.IDN_RETURN_URL
 
-        base_url = 'http://idn.recette.laposte.france-sso.fr/'
         request_token_url = base_url + 'oauth/requestToken'
         authorize_url = base_url + 'oauth/authorize'
         access_token_url = base_url + 'oauth/accessToken'
@@ -46,7 +47,7 @@ class AuthenticationWizard(MultiPartFormWizard):
                 link = "%s?oauth_token=%s&oauth_callback=%s&oauth_scope=%s" % (
                     authorize_url, 
                     request_token['oauth_token'], 
-                    'http://localhost:8000/login/', 
+                    return_url, 
                     scope
                 )
                 return redirect(link)

@@ -360,10 +360,17 @@ STATIC_URL = getattr(local, 'STATIC_URL', '/static/')
 STATICFILES_DIRS = ['eloue/static/', ]
 STATICFILES_STORAGE = getattr(local, 'STATICFILES_STORAGE', 'pipeline.storage.PipelineCachedStorage')
 
+
+#API KEYS
 GOOGLE_CLIENT_ID = getattr(local, 'GOOGLE_CLIENT_ID', '218840159400.apps.googleusercontent.com')
 GOOGLE_CLIENT_SECRET = getattr(local, 'GOOGLE_CLIENT_SECRET', 'BXFNFpDb6MN0ocLoPunjkzvZ')
 
 FACEBOOK_APP_ID = getattr(local, 'FACEBOOK_APP_ID', '197983240245844')
+
+IDN_CONSUMER_KEY = getattr(local, 'IDN_CONSUMER_KEY', '_ce85bad96eed75f0f7faa8f04a48feedd56b4dcb')
+IDN_CONSUMER_SECRET = getattr(local, 'IDN_CONSUMER_SECRET', '_80b312627bf936e6f20510232cf946fff885d1f7')
+IDN_BASE_URL = getattr(local, 'IDN_BASE_URL', 'http://idn.recette.laposte.france-sso.fr/')
+IDN_RETURN_URL = getattr(local, 'IDN_RETURN_URL', 'http://localhost:8000/login/')
 
 # Paypal configuration
 USE_PAYPAL_SANDBOX = getattr(local, 'USE_PAYPAL_SANDBOX', DEBUG)
