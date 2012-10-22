@@ -263,6 +263,7 @@ def booking_read(request, booking_id):
     assert isinstance(pro_booking, ProBooking)
     if request.method == "POST":
         pro_booking.accept()
+        messages.success(request, _("Cette réservation a bien été marqué comme lu"))
     return redirect(pro_booking)
 
 
