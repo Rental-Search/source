@@ -6,7 +6,8 @@ from eloue.accounts.views import (dashboard, patron_edit, patron_edit_password,
     accounts_studies_autocomplete, comments, comments_received,
     associate_facebook, facebook_invite, gmail_invite, gmail_send_invite)
 from eloue.products.views import product_edit, product_address_edit, product_price_edit, thread_details, archive_thread, unarchive_thread, inbox, archived
-from eloue.rent.views import booking_accept, booking_cancel, booking_reject, booking_incident, booking_close
+from eloue.rent.views import (booking_accept, booking_cancel, booking_reject, 
+    booking_incident, booking_close, booking_read)
 from eloue.rent.views import BookingDetail
 from eloue.accounts.views import (OwnerBookingAuthorized, OwnerBookingPending, 
     OwnerBookingOngoing, OwnerBookingHistory)
@@ -81,6 +82,7 @@ urlpatterns = patterns('',
     url(r'^booking/(?P<booking_id>[0-9a-f]{32})/accept/$', booking_accept, name="booking_accept"),
     url(r'^booking/(?P<booking_id>[0-9a-f]{32})/cancel/$', booking_cancel, name="booking_cancel"),
     url(r'^booking/(?P<booking_id>[0-9a-f]{32})/reject/$', booking_reject, name="booking_reject"),
+    url(r'^booking/(?P<booking_id>[0-9a-f]{32})/read/$', booking_read, name="booking_read"),
     url(r'^booking/(?P<booking_id>[0-9a-f]{32})/incident/$', booking_incident, name="booking_incident"),
     url(r'^booking/(?P<booking_id>[0-9a-f]{32})/close/$', booking_close, name="booking_close"),
     url(r'^booking/(?P<booking_id>[0-9a-f]{32})/contract/$', 'eloue.rent.views.booking_contract', name="booking_contract"),

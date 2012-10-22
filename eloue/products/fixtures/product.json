@@ -146,5 +146,26 @@
         },
         "model": "products.product",
         "pk": 7
+    },
+    {
+        "fields": {
+            "category": 1,
+            "description": "fegrgererher",
+            "created_at": "2011-10-10 09:00:10",
+            "deposit_amount": "250",
+            "sites": [
+                1,
+                2,
+                3,
+                9,
+                11
+            ],
+            "summary": "iuhiohuouhiuhpi",
+            "address": 1,
+            "owner": 7,
+            "quantity": 3
+        },
+        "model": "products.product",
+        "pk": 8
     }
 ]

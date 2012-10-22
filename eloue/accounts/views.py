@@ -443,7 +443,7 @@ def billing(request):
 def patron_edit_subscription(request, *args, **kwargs):
     from eloue.accounts.forms import SubscriptionEditForm
     patron = request.user
-    subscription = patron.current_subscription
+    current_subscription = patron.current_subscription
     now = datetime.datetime.now()
     plans = ProPackage.objects.filter(
         Q(valid_until__isnull=True, valid_from__lte=now) |
@@ -452,8 +452,8 @@ def patron_edit_subscription(request, *args, **kwargs):
         form = SubscriptionEditForm(request.POST)
         if form.is_valid():
             new_package = form.cleaned_data.get('subscription')
-            if (subscription is None and new_package) or (new_package != subscription.propackage):
-                if new_package and not new_package.maximum_items is None and new_package.maximum_items <= patron.products.count():
+            if not current_subscription or new_package != current_subscription.propackage:
+                if new_package.maximum_items is not None and new_package.maximum_items < patron.products.count():
                     messages.error(request, 'L\'abonnement choisi autorise moins d\'objets que vous avez actuellement')
                     return redirect('.')
                 try:
@@ -464,17 +464,13 @@ def patron_edit_subscription(request, *args, **kwargs):
                     response['Location'] += '?' + urllib.urlencode({'subscription': new_package.pk})
                     return response
                 else:
-                    if subscription:
-                        subscription.subscription_ended = datetime.datetime.now()
-                        subscription.save()
-                    if new_package:
-                        Subscription.objects.create(patron=patron, propackage=new_package)
+                    patron.subscribe(new_package)
             return redirect('.')
         else:
             messages.error(request, "WRONG ASD")
     return render(
         request, 'accounts/patron_edit_subscription.html', 
-        {'plans': plans, 'current_subscription': subscription}
+        {'plans': plans, 'current_subscription': current_subscription}
     )
 
 
