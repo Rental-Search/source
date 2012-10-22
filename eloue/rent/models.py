@@ -428,9 +428,7 @@ class ProBooking(Booking):
 
     @smart_transition(source='professional', target='professional_saw', save=True)
     def accept(self):
-        context = {'booking': self}
-        message = create_alternative_email('base', context, settings.DEFAULT_FROM_EMAIL, [self.borrower.email])
-        message.send()
+        pass
 
     def send_ask_email(self):
         context = {'booking': self}
