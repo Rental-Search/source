@@ -569,6 +569,11 @@ class PhoneNumberForm(forms.ModelForm):
             raise forms.ValidationError(_(u"Vous devez spécifiez un numéro de téléphone"))
         return self.cleaned_data['number']
     
+    def clean(self):
+        if self.cleaned_data['DELETE'] and self.instance.patron.default_number == self.instance:
+            raise forms.ValidationError(_(u'Vous ne pouvez pas supprimer votre numéro par default.'))
+        return self.cleaned_data
+
     class Meta:
         model = PhoneNumber
         fields = ('number', )
@@ -595,7 +600,7 @@ class PhoneNumberBaseFormSet(MixinHiddenDeleteFormset, BaseInlineFormSet):
         if not len(filter(lambda form:(not form.cleaned_data.get('DELETE', True) if hasattr(form, 'cleaned_data') else False), self.forms)):
             raise forms.ValidationError(_(u"Vous ne pouvez pas supprimer tout vos numéros."))
         if any(self.errors):
-            return
+            raise forms.ValidationError('')
         return self.cleaned_data
 
 PhoneNumberFormset = inlineformset_factory(Patron, PhoneNumber, form=PhoneNumberForm, formset=PhoneNumberBaseFormSet, exclude=['kind'], extra=1, can_delete=True)
