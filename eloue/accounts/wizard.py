@@ -26,7 +26,7 @@ class AuthenticationWizard(MultiPartFormWizard):
         import oauth2 as oauth
         import urllib, urlparse, simplejson, pprint
         from django.core.urlresolvers import reverse
-        scope = '["namePerson/friendly","namePerson","contact/postalAddress/home","contact/email"]'
+        scope = '["namePerson/friendly","namePerson","contact/postalAddress/home","contact/email","namePerson/last","namePerson/first"]'
 
         consumer_key = '_ce85bad96eed75f0f7faa8f04a48feedd56b4dcb'
         consumer_secret = '_80b312627bf936e6f20510232cf946fff885d1f7'
@@ -51,11 +51,6 @@ class AuthenticationWizard(MultiPartFormWizard):
                 )
                 return redirect(link)
             elif request.GET.get('oauth_verifier'):
-                # print 'LOFASZOHASDIUPHASPIUDHPIASUHIUHIUD'
-                # self.initial[0] = {
-                #     'idn_oauth_verifier': request.GET.get('oauth_verifier'), 
-                #     'sdfsdf': 'rgrgg', 
-                # }
                 idn_oauth_verifier = request.GET.get('oauth_verifier')
                 request_token = oauth.Token(
                     request.session['request_token']['oauth_token'],
@@ -63,10 +58,8 @@ class AuthenticationWizard(MultiPartFormWizard):
                 request_token.set_verifier(idn_oauth_verifier)
                 client = oauth.Client(consumer, request_token)
                 response, content = client.request(access_token_url, "GET")
-                print response, content
                 assert simplejson.loads(response['status']) == 200
                 access_token_data = dict(urlparse.parse_qsl(content))
-                print access_token_data
                 access_token = oauth.Token(access_token_data['oauth_token'],
                     access_token_data['oauth_token_secret'])
                 client = oauth.Client(consumer, access_token)
@@ -75,30 +68,14 @@ class AuthenticationWizard(MultiPartFormWizard):
                 content = simplejson.loads(content)
                 pprint.pprint(content)
                 idn_id = content['id']
-                # request.session[(idn_id, access_token_data['oauth_token'])] = access_token_data
                 request.session['idn_info'] = {
                     'access_token': access_token_data['oauth_token'],
                     'idn_id': idn_id
                 }
                 request.session[(idn_id, access_token_data['oauth_token'])] = access_token_data
                 del request.session['request_token']
-                # oauth_verifier = request.GET.get('oauth_verifier')
-                # request_token = request.session.get('request_token')
-
-                # token = oauth.Token(request_token['oauth_token'],
-                #     request_token['oauth_token_secret'])
-                # token.set_verifier(oauth_verifier)
-                # client = oauth.Client(consumer, token)
-                # response, content = client.request(access_token_url, "GET")
-                # access_token = dict(urlparse.parse_qsl(content))
-
-                # token = oauth.Token(access_token['oauth_token'],
-                #     access_token['oauth_token_secret'])
-                # client = oauth.Client(consumer, token)
-                # print client.request(me_url, "GET")
                 return redirect('auth_login')
             elif 'idn_info' in request.session:
-                print 'O!!!!???!?!?!!?'
                 self.initial[0] = {
                     'idn_id': request.session['idn_info']['idn_id'],
                     'idn_access_token': request.session['idn_info']['access_token']
