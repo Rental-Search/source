@@ -943,65 +943,111 @@ def patron_edit_notification(request):
 @login_required
 def patron_edit_idn_connect(request):
     import oauth2 as oauth
-    import urlparse
-    from eloue.accounts.models import IDNSession
-    idn = None
-    try:
-     idn = IDNSession.objects.get(user=request.user)
-    except:
-        pass
+    import urllib, urlparse
+    import urllib
+    scope = '["namePerson/friendly","namePerson","contact/postalAddress/home"]'
 
-    if idn:
-        return render(request, 'accounts/patron_edit_idn.html', {'idn': idn})
+    consumer_key = '_ce85bad96eed75f0f7faa8f04a48feedd56b4dcb'
+    consumer_secret = '_80b312627bf936e6f20510232cf946fff885d1f7'
 
-    else:
-        oauth_verifier = request.GET.get('oauth_verifier', None)
+    base_url = 'http://idn.recette.laposte.france-sso.fr/'
+    request_token_url = base_url + 'oauth/requestToken'
+    authorize_url = base_url + 'oauth/authorize'
+    access_token_url = base_url + 'oauth/accessToken'
+    me_url = base_url + 'anywhere/me?oauth_scope=%s' % (scope, )
+    consumer = oauth.Consumer(key=consumer_key, secret=consumer_secret)
+    client = oauth.Client(consumer)
+    if request.GET.get('connected'):
+        response, content = client.request(request_token_url, "GET")
+        request_token = dict(urlparse.parse_qsl(content))
+        request.session['request_token'] = request_token
+        link = "%s?oauth_token=%s&oauth_callback=%s&oauth_scope=%s" % (
+            authorize_url, 
+            request_token['oauth_token'], 
+            'http://localhost:8000'+reverse('patron_edit_idn_connect'), 
+            scope
+        )
+        return redirect(link)
+    elif request.GET.get('oauth_verifier'):
+        oauth_verifier = request.GET.get('oauth_verifier')
+        request_token = request.session.get('request_token')
 
-        base_url = 'http://idn.recette.laposte.france-sso.fr/'
-        request_token_url = base_url + 'oauth/requestToken'
-        authorize_url = base_url + 'oauth/authorize'
-        access_token_url = base_url + 'oauth/accessToken'
-        me_url = base_url + 'anywhere/me'
+        token = oauth.Token(request_token['oauth_token'],
+            request_token['oauth_token_secret'])
+        token.set_verifier(oauth_verifier)
+        client = oauth.Client(consumer, token)
+        response, content = client.request(access_token_url, "GET")
+        access_token = dict(urlparse.parse_qsl(content))
 
-        consumer_key = '_ce85bad96eed75f0f7faa8f04a48feedd56b4dcb'
-        consumer_secret = '_80b312627bf936e6f20510232cf946fff885d1f7'
+        token = oauth.Token(access_token['oauth_token'],
+            access_token['oauth_token_secret'])
+        client = oauth.Client(consumer, token)
+        print client.request(me_url, "GET")
+        return redirect('patron_edit_idn_connect')
 
-        consumer = oauth.Consumer(key=consumer_key, secret=consumer_secret)
-        client = oauth.Client(consumer)
 
-        if oauth_verifier:
-            #Access Request
-            token = oauth.Token(request.session['request_token']['oauth_token'], request.session['request_token']['oauth_token_secret'])
-            token.set_verifier(oauth_verifier)
-            client = oauth.Client(consumer, token)
-            response, content = client.request(access_token_url, "GET")
+    return render(request, 'accounts/patron_edit_idn.html')
 
-            #Get Information about the user
-            access_token = dict(urlparse.parse_qsl(content))
-            print access_token
-            token = oauth.Token(access_token['oauth_token'], access_token['oauth_token_secret'])
-            client = oauth.Client(consumer, token)
-            response, content = client.request(me_url, "GET", body='[%22namePerson\\/friendly%22,%22namePerson%22]')
+    # import oauth2 as oauth
+    # import urlparse
+    # from eloue.accounts.models import IDNSession
+    # idn = None
+    # try:
+    #  idn = IDNSession.objects.get(user=request.user)
+    # except:
+    #     pass
 
-            if response['status'] == '200':
-                idn = IDNSession(token=token, user=request.user)
-                idn.save()
+    # if idn:
+    #     return render(request, 'accounts/patron_edit_idn.html', {'idn': idn})
 
-            return redirect('patron_edit_idn_connect') 
+    # else:
+    #     oauth_verifier = request.GET.get('oauth_verifier', None)
 
-        else:
+    #     base_url = 'http://idn.recette.laposte.france-sso.fr/'
+    #     request_token_url = base_url + 'oauth/requestToken'
+    #     authorize_url = base_url + 'oauth/authorize'
+    #     access_token_url = base_url + 'oauth/accessToken'
+    #     me_url = base_url + 'anywhere/me'
 
-            redirect_uri = 'http://localhost:8000/dashboard/account/idn/'
-            scope = '["namePerson","contact/email"]'
+    #     consumer_key = '_ce85bad96eed75f0f7faa8f04a48feedd56b4dcb'
+    #     consumer_secret = '_80b312627bf936e6fw20510232cf946fff885d1f7'
 
-            response, content = client.request(request_token_url, "GET")
+    #     consumer = oauth.Consumer(key=consumer_key, secret=consumer_secret)
+    #     client = oauth.Client(consumer)
 
-            request.session['request_token'] = dict(urlparse.parse_qsl(content))
-            request.session.save()
+    #     if oauth_verifier:
+    #         #Access Request
+    #         token = oauth.Token(request.session['request_token']['oauth_token'], request.session['request_token']['oauth_token_secret'])
+    #         token.set_verifier(oauth_verifier)
+    #         client = oauth.Client(consumer, token)
+    #         response, content = client.request(access_token_url, "GET")
 
-            authorize_link = "%s?oauth_token=%s&oauth_callback=%s&oauth_scope=%s" % (authorize_url, request.session['request_token']['oauth_token'], redirect_uri, scope)
+    #         #Get Information about the user
+    #         access_token = dict(urlparse.parse_qsl(content))
+    #         print access_token
+    #         token = oauth.Token(access_token['oauth_token'], access_token['oauth_token_secret'])
+    #         client = oauth.Client(consumer, token)
+    #         response, content = client.request(me_url, "GET", body='[%22namePerson\\/friendly%22,%22namePerson%22]')
 
-            return render(request, 'accounts/patron_edit_idn.html', {'authorize_link': authorize_link})
+    #         if response['status'] == '200':
+    #             idn = IDNSession(token=token, user=request.user)
+    #             idn.save()
+
+    #         return redirect('patron_edit_idn_connect') 
+
+    #     else:
+
+    #         redirect_uri = 'http://localhost:8000/dashboard/account/idn/'
+    #         scope = '["namePerson","contact/email"]'
+
+    #         response, content = client.request(request_token_url, "GET")
+
+    #         request.session['request_token'] = dict(urlparse.parse_qsl(content))
+    #         request.session.save()
+
+    #         authorize_link = "%s?oauth_token=%s&oauth_callback=%s&oauth_scope=%s" % (authorize_url, request.session['request_token']['oauth_token'], redirect_uri, scope)
+
+    #         return render(request, 'accounts/patron_edit_idn.html', {'authorize_link': authorize_link})
 
 
 @login_required

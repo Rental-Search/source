@@ -556,18 +556,47 @@ class FacebookSession(models.Model):
         return self._graph_api
 
 class IDNSession(models.Model):
-    token = models.CharField(max_length=255, unique=True)
-    user = models.OneToOneField(Patron, null=True, related_name='idn_session')
-    created_at = models.DateTimeField(blank=True, editable=False)
+    user = models.OneToOneField(Patron, null=True)
+    created_at = models.DateTimeField(blank=True, editable=False, auto_now_add=True)
+    uid = models.CharField(max_length=32, unique=True)
+    access_token = models.CharField(max_length=255)
+    access_token_secret = models.CharField(max_length=255)
 
-    def save(self, *args, **kwargs):
-        if not self.created_at:
-            self.created_at = datetime.datetime.now()
-        super(IDNSession, self).save(*args, **kwargs)
+    class Meta:
+        unique_together = (('user', 'uid'), ('access_token', 'access_token_secret'), )
 
     def __unicode__(self):
-        return "IDN : %s" %  self.token
+        return "IDN : %s" %  self.uid
     
+    @property
+    def me(self):
+        def normalize(me_dict):
+            normalized = {}
+            normalized['email'] = me_dict['contact/email']
+            normalized['last_name'] = me_dict['namePerson/last']
+            normalized['first_name'] = me_dict['namePerson/first']
+            normalized['username'] = me_dict['namePerson/friendly']
+            return normalized
+
+        me_dict = cache.get('idn:me_%s' % self.uid, {})
+        if me_dict:
+            return me_dict
+        # we have to stock it in a local variable, and return the value from that
+        # local variable, otherwise this stuff is broken with the dummy cache engine
+        import oauth2 as oauth
+        scope = '["namePerson/friendly","namePerson","contact/postalAddress/home","contact/email","namePerson/last","namePerson/first"]'
+        consumer_key = '_ce85bad96eed75f0f7faa8f04a48feedd56b4dcb'
+        consumer_secret = '_80b312627bf936e6f20510232cf946fff885d1f7'
+        base_url = 'http://idn.recette.laposte.france-sso.fr/'
+        me_url = base_url + 'anywhere/me?oauth_scope=%s' % (scope, )
+        consumer = oauth.Consumer(key=consumer_key, secret=consumer_secret)
+        access_token = oauth.Token(self.access_token, self.access_token_secret)
+        client = oauth.Client(consumer, access_token)
+        response, content = client.request(me_url, "GET")
+        me_dict = normalize(simplejson.loads(content))
+        cache.set('idn:me_%s' % self.uid, me_dict, 0)
+        return me_dict
+
 class Address(models.Model):
     """An address"""
     patron = models.ForeignKey(Patron, related_name='addresses')
