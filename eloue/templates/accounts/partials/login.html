@@ -4,13 +4,10 @@
 <div class="fbconnect-content">
   <div class="fb-elements">
     <div id="fbconnect">Connectez-vous avec Facebook</div>
-    {# <span class="fb-slogan">Plus simple et rapide.</span> #}
+      <span class="fb-slogan">Plus simple et rapide.</span>
     <div class="fb-pile">
         <fb:facepile app_id="{{FACEBOOK_APP_ID}}" width="240" max_rows="1"></fb:facepile>
     </div>
-  </div>
-  <div class="idnconnect">
-    <idn:connect></idn:connect>
   </div>
 </div>{# fbconnect-content #}
 <div class="email-login-content">
@@ -23,8 +20,6 @@
     {{form.facebook_access_token}}
     {{form.facebook_expires}}
     {{form.facebook_uid}}
-    {{form.idn_id}}
-    {{form.idn_access_token}}
     <label class="email-label">{% trans "Votre adresse email est : " %}</label> 
     {{ form.email }}
     {% if form.email.errors %}

@@ -956,6 +956,7 @@ def patron_edit_idn_connect(request):
     authorize_url = base_url + 'oauth/authorize'
     access_token_url = base_url + 'oauth/accessToken'
     me_url = base_url + 'anywhere/me?oauth_scope=%s' % (scope, )
+    return_url = request.build_absolute_uri(reverse('patron_edit_idn_connect'))
     
     try:
         request.user.idnsession
@@ -971,7 +972,7 @@ def patron_edit_idn_connect(request):
             link = "%s?oauth_token=%s&oauth_callback=%s&oauth_scope=%s" % (
                 authorize_url, 
                 request_token['oauth_token'], 
-                'http://localhost:8000'+reverse('patron_edit_idn_connect'), 
+                return_url, 
                 scope
             )
             return redirect(link)
