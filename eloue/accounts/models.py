@@ -567,6 +567,9 @@ class IDNSession(models.Model):
 
     def __unicode__(self):
         return "IDN : %s" %  self.uid
+
+    def profile_url(self):
+        return '%sidn_17_badge?nickname=%s' % (settings.IDN_BASE_URL, self.uid)
     
     @property
     def me(self):
