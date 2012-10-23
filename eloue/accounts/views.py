@@ -372,7 +372,7 @@ class PatronDetail(ListView):
         context = super(PatronDetail, self).get_context_data(**kwargs)
         context['patron'] = self.patron
         context['borrowercomments'] = BorrowerComment.objects.filter(booking__owner=self.patron)[:4]
-        context['redirect_uri'] = request.build_absolute_uri(reverse('patron_edit_idn_connect'))
+        context['redirect_uri'] = self.request.build_absolute_uri(reverse('patron_edit_idn_connect'))
         context['consumer_key'] = settings.IDN_CONSUMER_KEY
         context['base_url'] = settings.IDN_BASE_URL
         return context
