@@ -372,6 +372,9 @@ class PatronDetail(ListView):
         context = super(PatronDetail, self).get_context_data(**kwargs)
         context['patron'] = self.patron
         context['borrowercomments'] = BorrowerComment.objects.filter(booking__owner=self.patron)[:4]
+        context['redirect_uri'] = request.build_absolute_uri(reverse('patron_edit_idn_connect'))
+        context['consumer_key'] = settings.IDN_CONSUMER_KEY
+        context['base_url'] = settings.IDN_BASE_URL
         return context
 
 
@@ -998,7 +1001,7 @@ def patron_edit_idn_connect(request):
                 access_token_secret=access_token_data['oauth_token_secret'],
                 uid=content['id'],
             )
-    return render(request, 'accounts/patron_edit_idn.html', {'redirect_uri': redirect_uri, 'consumer_key': consumer_key})
+    return render(request, 'accounts/patron_edit_idn.html', {'redirect_uri': redirect_uri, 'consumer_key': consumer_key, 'base_url': base_url})
 
 @login_required
 def patron_delete_idn_connect(request):

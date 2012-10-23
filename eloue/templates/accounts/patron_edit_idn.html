@@ -24,7 +24,7 @@
 
 {% block tail %}
 {{ block.super }}
-<script type="text/javascript" src="https://www.idn.laposte.fr/anywhere/jsdk/anywhere-1.2.1.js"></script>
+<script type="text/javascript" src="{{ base_url }}anywhere/jsdk/anywhere-1.2.1.js"></script>
 <script language="Javascript">idn.anywhere.setup({"client_id":"{{ consumer_key }}","redirect_uri":"{{ redirect_uri }}?connected=true","scope":"null","display":"popin"});
 </script>
 {% endblock %}

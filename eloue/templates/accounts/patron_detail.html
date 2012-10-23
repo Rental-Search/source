@@ -103,12 +103,12 @@
 {% block tail %}
 {{ block.super }}
 {% if patron.idn_session %}
-<script type="text/javascript" src="https://idn-preprod-laposte.france-sso.fr/anywhere/jsdk/anywhere-1.2.1.js"></script>
+<script type="text/javascript" src="{{ base_url }}anywhere/jsdk/anywhere-1.2.1.js"></script>
 
 <script type="text/javascript">
    idn.anywhere.setup({
-      client_id : "_fdcc008c5a13011d7470010f3f572b80fe4b47c2",
-      redirect_uri : "http://staging.e-loue.com/login/",
+      client_id : "{{ consumer_key }}",
+      redirect_uri : "{{ redirect_uri }}",
       display : "popin"
     }) ;
 </script>
