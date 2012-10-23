@@ -998,7 +998,7 @@ def patron_edit_idn_connect(request):
                 access_token_secret=access_token_data['oauth_token_secret'],
                 uid=content['id'],
             )
-    return render(request, 'accounts/patron_edit_idn.html', {'redirect_uri': redirect_uri})
+    return render(request, 'accounts/patron_edit_idn.html', {'redirect_uri': redirect_uri, 'consumer_key': consumer_key})
 
 @login_required
 def patron_delete_idn_connect(request):
