@@ -5,7 +5,7 @@
     {% if patron.work or patron.school or languages_count or patron.idn_session %}
     <div class="profil-block">
         <h3>Plus d'info</h3>
-        {% if patron.idn_session %}
+        {% if patron.idnsession %}
             <idn:badge rel="{{ patron.idn_session.idn_id}}" style="margin-bottom: 10px; margin-left:-18px;"></idn:badge>
         {% endif %}
         {% if patron.work %}
