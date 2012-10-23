@@ -956,7 +956,7 @@ def patron_edit_idn_connect(request):
     authorize_url = base_url + 'oauth/authorize'
     access_token_url = base_url + 'oauth/accessToken'
     me_url = base_url + 'anywhere/me?oauth_scope=%s' % (scope, )
-    return_url = request.build_absolute_uri(reverse('patron_edit_idn_connect'))
+    redirect_uri = request.build_absolute_uri(reverse('patron_edit_idn_connect'))
     
     try:
         request.user.idnsession
@@ -972,7 +972,7 @@ def patron_edit_idn_connect(request):
             link = "%s?oauth_token=%s&oauth_callback=%s&oauth_scope=%s" % (
                 authorize_url, 
                 request_token['oauth_token'], 
-                return_url, 
+                redirect_uri, 
                 scope
             )
             return redirect(link)
@@ -998,7 +998,7 @@ def patron_edit_idn_connect(request):
                 access_token_secret=access_token_data['oauth_token_secret'],
                 uid=content['id'],
             )
-    return render(request, 'accounts/patron_edit_idn.html')
+    return render(request, 'accounts/patron_edit_idn.html', {'redirect_uri': redirect_uri})
 
 @login_required
 def patron_delete_idn_connect(request):
