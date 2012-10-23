@@ -2,11 +2,11 @@
 {% cache 900 patron_details_info patron.pk %}
 {% with patron.languages as languages %}
     {% with languages.count as languages_count %}
-    {% if patron.work or patron.school or languages_count or patron.idn_session %}
+    {% if patron.work or patron.school or languages_count or patron.idnsession %}
     <div class="profil-block">
         <h3>Plus d'info</h3>
         {% if patron.idnsession %}
-            <idn:badge rel="{{ patron.idn_session.idn_id}}" style="margin-bottom: 10px; margin-left:-18px;"></idn:badge>
+            <idn:badge rel="{{ patron.idnsession.uid}}" style="margin-bottom: 10px; margin-left:-18px;"></idn:badge>
         {% endif %}
         {% if patron.work %}
             <h4>{% trans "Travail" %}</h4>
