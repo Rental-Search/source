@@ -461,7 +461,7 @@ class BookingLog(models.Model):
             created_at=self.created_at
         )
 
-@receiver(post_transition)
+@receiver(post_transition, dispatch_uid='eloue.rent.models')
 def state_logger(sender, instance, name, source, target, **kwargs):
     BookingLog.objects.create(booking=instance, source_state=source, target_state=target)
 
