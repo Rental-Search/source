@@ -372,6 +372,9 @@ class PatronDetail(ListView):
         context = super(PatronDetail, self).get_context_data(**kwargs)
         context['patron'] = self.patron
         context['borrowercomments'] = BorrowerComment.objects.filter(booking__owner=self.patron)[:4]
+        context['redirect_uri'] = self.request.build_absolute_uri(reverse('patron_edit_idn_connect'))
+        context['consumer_key'] = settings.IDN_CONSUMER_KEY
+        context['base_url'] = settings.IDN_BASE_URL
         return context
 
 
@@ -443,7 +446,7 @@ def billing(request):
 def patron_edit_subscription(request, *args, **kwargs):
     from eloue.accounts.forms import SubscriptionEditForm
     patron = request.user
-    subscription = patron.current_subscription
+    current_subscription = patron.current_subscription
     now = datetime.datetime.now()
     plans = ProPackage.objects.filter(
         Q(valid_until__isnull=True, valid_from__lte=now) |
@@ -452,8 +455,8 @@ def patron_edit_subscription(request, *args, **kwargs):
         form = SubscriptionEditForm(request.POST)
         if form.is_valid():
             new_package = form.cleaned_data.get('subscription')
-            if (subscription is None and new_package) or (new_package != subscription.propackage):
-                if new_package and not new_package.maximum_items is None and new_package.maximum_items <= patron.products.count():
+            if not current_subscription or new_package != current_subscription.propackage:
+                if new_package.maximum_items is not None and new_package.maximum_items < patron.products.count():
                     messages.error(request, 'L\'abonnement choisi autorise moins d\'objets que vous avez actuellement')
                     return redirect('.')
                 try:
@@ -464,17 +467,13 @@ def patron_edit_subscription(request, *args, **kwargs):
                     response['Location'] += '?' + urllib.urlencode({'subscription': new_package.pk})
                     return response
                 else:
-                    if subscription:
-                        subscription.subscription_ended = datetime.datetime.now()
-                        subscription.save()
-                    if new_package:
-                        Subscription.objects.create(patron=patron, propackage=new_package)
+                    patron.subscribe(new_package)
             return redirect('.')
         else:
             messages.error(request, "WRONG ASD")
     return render(
         request, 'accounts/patron_edit_subscription.html', 
-        {'plans': plans, 'current_subscription': subscription}
+        {'plans': plans, 'current_subscription': current_subscription}
     )
 
 
@@ -943,4 +942,78 @@ def patron_edit_notification(request):
         request, 'accounts/patron_edit_notification.html', 
         {'mails': mails, 'phones': phones}
     )
+
+@login_required
+def patron_edit_idn_connect(request):
+    import oauth2 as oauth
+    import urllib, urlparse
+    import urllib, json
+    from eloue.accounts.models import IDNSession
+    scope = '["namePerson/friendly","namePerson","contact/postalAddress/home","contact/email","namePerson/last","namePerson/first"]'
+
+    consumer_key = settings.IDN_CONSUMER_KEY
+    consumer_secret = settings.IDN_CONSUMER_SECRET
+    base_url = settings.IDN_BASE_URL
+    
+    request_token_url = base_url + 'oauth/requestToken'
+    authorize_url = base_url + 'oauth/authorize'
+    access_token_url = base_url + 'oauth/accessToken'
+    me_url = base_url + 'anywhere/me?oauth_scope=%s' % (scope, )
+    redirect_uri = request.build_absolute_uri(reverse('patron_edit_idn_connect'))
+    
+    try:
+        request.user.idnsession
+    except IDNSession.DoesNotExist:
+        consumer = oauth.Consumer(key=consumer_key, secret=consumer_secret)
+        client = oauth.Client(consumer)
+
+        if request.GET.get('connected'):
+
+            response, content = client.request(request_token_url, "GET")
+            request_token = dict(urlparse.parse_qsl(content))
+            request.session['request_token'] = request_token
+            link = "%s?oauth_token=%s&oauth_callback=%s&oauth_scope=%s" % (
+                authorize_url, 
+                request_token['oauth_token'], 
+                redirect_uri, 
+                scope
+            )
+            return redirect(link)
+        elif request.GET.get('oauth_verifier'):
+            idn_oauth_verifier = request.GET.get('oauth_verifier')
+            request_token = oauth.Token(
+                request.session['request_token']['oauth_token'],
+                request.session['request_token']['oauth_token_secret'])
+            request_token.set_verifier(idn_oauth_verifier)
+            client = oauth.Client(consumer, request_token)
+            response, content = client.request(access_token_url, "GET")
+            assert simplejson.loads(response['status']) == 200
+            access_token_data = dict(urlparse.parse_qsl(content))
+            access_token = oauth.Token(access_token_data['oauth_token'],
+                access_token_data['oauth_token_secret'])
+            client = oauth.Client(consumer, access_token)
+            response, content = client.request(me_url, "GET")
+            assert simplejson.loads(response['status']) == 200
+            content = simplejson.loads(content)
+            IDNSession.objects.create(
+                user=request.user,
+                access_token=access_token_data['oauth_token'],
+                access_token_secret=access_token_data['oauth_token_secret'],
+                uid=content['id'],
+            )
+    return render(request, 'accounts/patron_edit_idn.html', {'redirect_uri': redirect_uri, 'consumer_key': consumer_key, 'base_url': base_url})
+
+@login_required
+def patron_delete_idn_connect(request):
+    from eloue.accounts.models import IDNSession
+    idn = get_object_or_404(IDNSession, user=request.user)
+    try:
+        idn.delete()
+    except:
+        pass
+    return redirect('patron_edit_idn_connect')
+
+
+
+
 

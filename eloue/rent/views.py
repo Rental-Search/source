@@ -28,7 +28,7 @@ from eloue.decorators import ownership_required, validate_ipn, secure_required, 
 from eloue.accounts.forms import EmailAuthenticationForm
 from eloue.products.models import Product, PAYMENT_TYPE, UNIT
 from eloue.rent.forms import BookingForm, BookingConfirmationForm, BookingStateForm, PreApprovalIPNForm, PayIPNForm, IncidentForm
-from eloue.rent.models import Booking
+from eloue.rent.models import Booking, ProBooking
 from eloue.rent.wizard import BookingWizard
 from eloue.utils import currency
 from datetime import datetime, timedelta, date
@@ -254,6 +254,17 @@ def booking_reject(request, booking_id):
             initial={'state': Booking.STATE.REJECTED},
             instance=booking)
     return redirect(booking)
+
+
+@login_required
+@ownership_required(model=Booking, object_key='booking_id', ownership=['owner'])
+def booking_read(request, booking_id):
+    pro_booking = get_object_or_404(Booking.on_site, pk=booking_id, state=Booking.STATE.PROFESSIONAL)
+    assert isinstance(pro_booking, ProBooking)
+    if request.method == "POST":
+        pro_booking.accept()
+        messages.success(request, _(u"Cette réservation a bien été marqué comme lu"))
+    return redirect(pro_booking)
 
 
 @login_required

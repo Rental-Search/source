@@ -1,0 +1,13 @@
+{% load i18n %}
+
+{% block title_email %}{% trans "Validation de votre inscription pro" %}{% endblock %}
+
+
+{% blocktrans with patron.username as username and patron.current_subscription as current_subscription %}
+    Bonjour {{ username }},<br><br>
+
+    Nous vous confirmons votre changement d'abonnement.<br><br>
+    {{ current_subscription }}
+
+{% endblocktrans %}
+{% trans "L'équipe" %} {{ site.name }}.

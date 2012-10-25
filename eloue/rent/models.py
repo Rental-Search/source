@@ -7,9 +7,11 @@ import urllib
 
 from decimal import Decimal as D, ROUND_CEILING, ROUND_FLOOR
 from django_fsm.db.fields import FSMField, transition
+from django_fsm.signals import post_transition
 from pyke import knowledge_engine
 from urlparse import urljoin
 from datetime import timedelta
+
 
 from django.conf import settings
 from django.core.urlresolvers import reverse
@@ -20,6 +22,7 @@ from django.contrib.contenttypes import generic
 from django.db import models
 from django.db.models import permalink
 from django.db.models.signals import post_save
+from django.dispatch.dispatcher import receiver
 from django.utils.formats import get_format
 from django.utils.translation import ugettext_lazy as _
 from django.db.models import Q
@@ -57,7 +60,8 @@ BOOKING_STATE = Enum([
     ('outdated', 'OUTDATED', _(u"Dépassé")),
     ('unaccepted', 'UNACCEPTED', _(u"Pas accepté")),
     ('accepted_unauthorized', 'ACCEPTED_UNAUTHORIZED', _(u"Accepté et en cours d'autorisation")),
-    ('professional', 'PROFESSIONAL', _(u"Demande pro"))
+    ('professional', 'PROFESSIONAL', _(u"Demande pro")),
+    ('professional_saw', 'PROFESSIONAL_SAW', _(u'Lu')),
 ])
 
 DEFAULT_CURRENCY = get_format('CURRENCY') if not settings.CONVERT_XPF else "XPF"
@@ -425,7 +429,7 @@ class ProBooking(Booking):
     class Meta:
         proxy = True
 
-    @transition(field=Booking._meta.get_field('state'), source='professional', target='professional', save=True)
+    @transition(field=Booking._meta.get_field('state'), source='professional', target='professional_saw', save=True)
     def accept(self):
         pass
 
@@ -451,10 +455,15 @@ class BookingLog(models.Model):
     source_state = FSMField(choices=BOOKING_STATE)
     target_state = FSMField(choices=BOOKING_STATE)
 
-from django_fsm.signals import post_transition
+    def __unicode__(self):
+        return '{source_state} -> {target_state} @ {created_at}'.format(
+            source_state=self.source_state, target_state=self.target_state, 
+            created_at=self.created_at
+        )
+
+@receiver(post_transition)
 def state_logger(sender, instance, name, source, target, **kwargs):
     BookingLog.objects.create(booking=instance, source_state=source, target_state=target)
-post_transition.connect(state_logger)
 
 class Comment(models.Model):
     booking = models.OneToOneField(Booking)

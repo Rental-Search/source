@@ -19,6 +19,8 @@
         {% endif %}
     {% endif %}
     {% if request.user == booking.owner %}
+        {% if booking.state == "professional"%} {% url owner_booking_authorized as return_url %}{% endif %}
+        {% if booking.state == "professional_saw"%} {% url owner_booking_authorized as return_url %}{% endif %}
         {% if booking.state == "authorized"%}{% url owner_booking_authorized as return_url %}{% endif %}
         {% if booking.state == "pending"%}{% url owner_booking_pending as return_url %}{% endif %}
         {% if booking.state == "ongoing"%}{% url owner_booking_ongoing as return_url %}{% endif %}

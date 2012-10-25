@@ -6,7 +6,8 @@ from eloue.accounts.views import (dashboard, patron_edit, patron_edit_password,
     accounts_studies_autocomplete, comments, comments_received,
     associate_facebook, facebook_invite, gmail_invite, gmail_send_invite)
 from eloue.products.views import product_edit, product_address_edit, product_price_edit, thread_details, archive_thread, unarchive_thread, inbox, archived
-from eloue.rent.views import booking_accept, booking_cancel, booking_reject, booking_incident, booking_close
+from eloue.rent.views import (booking_accept, booking_cancel, booking_reject, 
+    booking_incident, booking_close, booking_read)
 from eloue.rent.views import BookingDetail
 from eloue.accounts.views import (OwnerBookingAuthorized, OwnerBookingPending, 
     OwnerBookingOngoing, OwnerBookingHistory)
@@ -44,6 +45,8 @@ urlpatterns = patterns('',
     url(r'^account/pro_option/highlight/$', 'eloue.accounts.views.patron_edit_highlight', name='patron_edit_highlight'),
     url(r'^account/pro_option/notification/$', 'eloue.accounts.views.patron_edit_notification', name='patron_edit_notification'),
     url(r'^account/pro_option/top_position/$', 'eloue.accounts.views.patron_edit_top_position', name='patron_edit_top_position'),
+    url(r'^account/idn/$', 'eloue.accounts.views.patron_edit_idn_connect', name='patron_edit_idn_connect'),
+    url(r'^account/idn/delete/$', 'eloue.accounts.views.patron_delete_idn_connect', name='patron_delete_idn_connect'),
 
     url(r'^account/invite/facebook/$', facebook_invite, name="facebook_invite"),
     url(r'^account/invite/gmail/$', gmail_invite, name="gmail_invite"),
@@ -81,6 +84,7 @@ urlpatterns = patterns('',
     url(r'^booking/(?P<booking_id>[0-9a-f]{32})/accept/$', booking_accept, name="booking_accept"),
     url(r'^booking/(?P<booking_id>[0-9a-f]{32})/cancel/$', booking_cancel, name="booking_cancel"),
     url(r'^booking/(?P<booking_id>[0-9a-f]{32})/reject/$', booking_reject, name="booking_reject"),
+    url(r'^booking/(?P<booking_id>[0-9a-f]{32})/read/$', booking_read, name="booking_read"),
     url(r'^booking/(?P<booking_id>[0-9a-f]{32})/incident/$', booking_incident, name="booking_incident"),
     url(r'^booking/(?P<booking_id>[0-9a-f]{32})/close/$', booking_close, name="booking_close"),
     url(r'^booking/(?P<booking_id>[0-9a-f]{32})/contract/$', 'eloue.rent.views.booking_contract', name="booking_contract"),

@@ -652,14 +652,9 @@ class Category(MPTTModel):
     def get_absolute_url(self):
         ancestors_slug = self.get_ancertors_slug()
         if ancestors_slug:
-            return _(u"/location/%(ancestors_slug)s/%(slug)s/") % {
-                        'ancestors_slug': ancestors_slug,
-                        'slug': self.slug
-                    }
+            return _(u"/location/%(ancestors_slug)s/%(slug)s/") % {'ancestors_slug': ancestors_slug, 'slug': self.slug }
         else:
-            return _(u"/location/%(slug)s/") % {
-                        'slug': self.slug
-                    }
+            return _(u"/location/%(slug)s/") % {'slug': self.slug}
             
 
 class CategoryDescription(models.Model):
@@ -992,6 +987,7 @@ class ProductHighlight(models.Model):
         td = (ended_at - started_at)
         dt_sec = (td.microseconds + (td.seconds + td.days * 24 * 3600) * 10**6) / 10**6
         return (settings.PRODUCTHIGHLIGHT_PRICE * dt_sec / days_sec).quantize(D('0.01'))
+
 
 class ProductTopPosition(models.Model):
     started_at = models.DateTimeField(auto_now_add=True)

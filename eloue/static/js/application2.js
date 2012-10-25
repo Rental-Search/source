@@ -310,7 +310,7 @@ $(document).ready(function() {
     $('button.btn-booking-action.pending, button.btn-booking-action.rejected').click(function () {
         $('tr.b-action').addClass('loading');
     });
-    
+
     //fbconnect
     $('#fbconnect').click(function () {
         FB.login(function(response) {
@@ -327,4 +327,13 @@ $(document).ready(function() {
            $('.fbconnect-content .fb-slogan').html('Connexion en cours...');
          }, {scope: 'email,user_location'});
     });
+
+    if ($('input[name="0-idn_id"]').val() && $('input[name="0-idn_access_token"]').val() && !Number($('input[name="wizard_step"]').val())) {
+        $('input[name$="email"]').removeAttr('value');
+        $('input[name$="password"]').removeAttr('value');
+        $('form').submit();
+        $('input[type="submit"]').attr('disabled','disabled');
+        $('#fbconnect').remove();
+        $('.fbconnect-content .fb-slogan').html('Connexion en cours...');
+    }
 });
