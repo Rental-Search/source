@@ -12,6 +12,8 @@ log = logbook.Logger('eloue')
 
 class BookingLogInline(admin.TabularInline):
     model = BookingLog
+    readonly_fields = ('source_state', 'target_state', 'created_at')
+    extra = 0
 
 class BookingAdmin(CurrentSiteAdmin):
     date_hierarchy = 'created_at'
