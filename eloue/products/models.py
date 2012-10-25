@@ -325,7 +325,6 @@ class Product(models.Model):
             ),
             key=operator.itemgetter(0)
         )
-        import pprint
         changements = [
             (key, sum(event[1]*event[2] for event in group))
             for key, group
@@ -337,8 +336,6 @@ class Product(models.Model):
             _accumulate(map(operator.itemgetter(1), changements))
         )
         availables = [(key, self.quantity - value) for key, value in borrowed]
-        #pprint.pprint(availables)
-        #print 'availables', availables, [(key, list(value)) for (key, value) in itertools.groupby(availables, key=lambda x:x[0].date())]
         
         return [
             (d.date(), available) 
