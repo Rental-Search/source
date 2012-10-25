@@ -368,7 +368,7 @@ class Booking(models.Model):
     def not_need_ipn(self):
         return self.payment.NOT_NEED_IPN
         
-    @smart_transition(source='authorizing', target='authorized', conditions=[not_need_ipn], save=True)
+    @transition(field=state, source='authorizing', target='authorized', conditions=[not_need_ipn], save=True)
     def preapproval(self, **kwargs):
         self.payment.preapproval(self.pk, self.total_amount, self.currency, **kwargs)
         self.payment.save()
@@ -390,7 +390,7 @@ class Booking(models.Model):
         self.send_ended_email()
     
     @transition(field=state, source='ended', target='closing', save=True)
-    @smart_transition(source='closing', target='closed', conditions=[not_need_ipn], save=True)
+    @transition(field=state, source='closing', target='closed', conditions=[not_need_ipn], save=True)
     def pay(self):
         """Return deposit_amount to borrower and pay the owner"""
         self.payment.execute_payment()
@@ -425,7 +425,7 @@ class ProBooking(Booking):
     class Meta:
         proxy = True
 
-    @smart_transition(source='professional', target='professional', save=True)
+    @transition(field=Booking._meta.get_field('state'), source='professional', target='professional', save=True)
     def accept(self):
         pass
 
@@ -436,7 +436,7 @@ class ProBooking(Booking):
         message = create_alternative_email('rent/emails/borrower_ask_pro', context, settings.DEFAULT_FROM_EMAIL, [self.borrower.email])
         message.send()
 
-    @smart_transition(source='professional', target='professional', save=True)
+    @transition(field=Booking._meta.get_field('state'), source='professional', target='professional', save=True)
     def preapproval(self, *args, **kwargs):
         for phonenotification in self.owner.phonenotification_set.all():
             phonenotification.send('', self)
