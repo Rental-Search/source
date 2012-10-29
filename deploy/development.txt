@@ -58,4 +58,4 @@ django-redis-cache==0.5.0
 -e git://github.com/e-loue/python-sdk.git#egg=facebook-sdk
 -e git://github.com/e-loue/django-qsstats-magic.git#egg=qsstats
 PIL
-
+beautifulsoup4
