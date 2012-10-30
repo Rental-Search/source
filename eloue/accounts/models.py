@@ -12,8 +12,7 @@ import facebook
 from imagekit.models import ImageSpec
 from imagekit.processors import resize, Adjust, Transpose
 
-from fsm.fields import FSMField
-from fsm import transition
+from django_fsm.db.fields import FSMField, transition
 
 from django.core.exceptions import ValidationError
 from django.contrib.sites.managers import CurrentSiteManager
@@ -823,7 +822,7 @@ class Billing(models.Model):
             raise ValueError('You can generate pdf only for already saved Billings.')
         raise NotImplementedError()
 
-    @transition(source='unpaid', target='paid', save=True)
+    @transition(field=state, source='unpaid', target='paid', save=True)
     def pay(self, **kwargs):
         try:
             self.payment.preapproval('billing:%d'%self.id, self.total_amount, None, '')

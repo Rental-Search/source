@@ -6,9 +6,14 @@ from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext_lazy as _
 
 from eloue.admin import CurrentSiteAdmin
-from eloue.rent.models import Booking, OwnerComment, BorrowerComment, Sinister
+from eloue.rent.models import Booking, OwnerComment, BorrowerComment, Sinister, BookingLog
 
 log = logbook.Logger('eloue')
+
+class BookingLogInline(admin.TabularInline):
+    model = BookingLog
+    readonly_fields = ('source_state', 'target_state', 'created_at')
+    extra = 0
 
 class BookingAdmin(CurrentSiteAdmin):
     date_hierarchy = 'created_at'
@@ -70,6 +75,7 @@ class BookingAdmin(CurrentSiteAdmin):
         if obj.owner.phones.exists():
             return obj.owner.phones.all()[0]
     owner_phone.short_description = _('Owner phone')
+    inlines = [BookingLogInline, ]
 
 class CommentAdmin(admin.ModelAdmin):
     fieldsets = (

@@ -36,7 +36,7 @@ django-debug-toolbar==0.9.4
 -e git://github.com/e-loue/django-haystack.git@1.2.X#egg=haystack
 django-storages==1.1.5
 -e git://github.com/e-loue/django-tastypie.git#egg=tastypie
--e git://github.com/e-loue/django-fsm.git#egg=fsm
+django-fsm==1.4.1
 -e git://github.com/e-loue/django-lean.git#egg=django_lean
 -e git://github.com/e-loue/django-lint.git#egg=django-lint
 django-mptt==0.5.4
