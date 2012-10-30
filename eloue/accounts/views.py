@@ -749,6 +749,8 @@ class OwnerBookingOngoing(OwnerBooking):
 class OwnerBookingHistory(OwnerBooking):
     title = u'Réservations terminées'
     def get_queryset(self):
+        if self.request.user.current_subscription:
+            return self.request.user.bookings.professional_saw()
         return self.request.user.bookings.history()
 
 
