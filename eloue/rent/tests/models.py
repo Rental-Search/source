@@ -147,8 +147,7 @@ class BookingTest(TestCase):
         )
         self.assertEquals(booking.product.payment_type, 0) #non payment 
         self.assertEquals(booking.state, Booking.STATE.AUTHORIZING) 
-        #booking.init_payment_processor() 
-        #self.assertTrue(isinstance(booking.payment_processor, models.PAY_PROCESSORS[0]))
+        self.assertTrue(isinstance(booking.payment, NonPaymentInformation))
         booking.preapproval()
         self.assertEquals(booking.state, Booking.STATE.AUTHORIZED) #state changed
     
@@ -168,8 +167,7 @@ class BookingTest(TestCase):
         )
         self.assertEquals(booking.product.payment_type, 0) #non payment 
         self.assertEquals(booking.state, Booking.STATE.ENDED) 
-        #booking.init_payment_processor()
-        #self.assertTrue(isinstance(booking.payment_processor, models.PAY_PROCESSORS[0]))
+        self.assertTrue(isinstance(booking.payment, NonPaymentInformation))
         booking.pay()
         self.assertEquals(booking.state, Booking.STATE.CLOSED) #state changed
     

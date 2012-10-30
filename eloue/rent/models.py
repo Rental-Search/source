@@ -393,8 +393,7 @@ class Booking(models.Model):
     def end(self):
         self.send_ended_email()
     
-    @transition(field=state, source='ended', target='closing', save=True)
-    @transition(field=state, source='closing', target='closed', conditions=[not_need_ipn], save=True)
+    @transition(field=state, source='ended', target='closed', save=True)
     def pay(self):
         """Return deposit_amount to borrower and pay the owner"""
         self.payment.execute_payment()
