@@ -82,7 +82,7 @@ class Command(BaseCommand):
             family_url = quote(family.get('href'))
 
             with closing(urlopen(self.base_url + family_url)) as product_list_page:
-                product_list_soup = BeautifulSoup(product_list_page)
+                product_list_soup = BeautifulSoup(product_list_page, 'html.parser')
             for product in product_list_soup.find_all('div', class_='blocPdtListe'):
                 product_url = product.find('a').get('href')
                 self.product_links[product_url] = family_url
@@ -101,7 +101,7 @@ class Command(BaseCommand):
             product_url = quote(product_url)
             try:
                 with closing(urlopen(self.base_url + product_url)) as product_page:
-                    product_soup = BeautifulSoup(product_page)
+                    product_soup = BeautifulSoup(product_page, 'html.parser')
             except HTTPError:
                 print 'error loading page for object at url', self.base_url + product_url
             image_url = product_soup.find('div', id='photo').a.get('href')
@@ -149,7 +149,7 @@ class Command(BaseCommand):
         self.address = self.patron.default_address or self.patron.addresses.all()[0]
 
         with closing(urlopen(self.base_url)) as main_page:
-            self.soup = BeautifulSoup(main_page)
+            self.soup = BeautifulSoup(main_page, 'html.parser')
 
         self.product_families = self.soup.findAll('a', href=re.compile('famille'))
         
