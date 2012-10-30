@@ -130,6 +130,8 @@ class ProSubscriptionWizard(AuthenticationWizard):
 
     def done(self, request, form_list):
         super(ProSubscriptionWizard, self).done(request, form_list)
+        request.user.is_professional = True
+        request.user.save()
         from eloue.accounts.models import ProPackage, Subscription
         subscription_form = form_list[0]
         subscription_form.is_valid()
