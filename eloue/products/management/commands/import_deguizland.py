@@ -3,7 +3,7 @@ from django.core.management.base import BaseCommand, CommandError
 from django.core.files import uploadedfile
 
 from bs4 import BeautifulSoup
-import re
+import re, sys
 from urllib2 import urlopen, quote, HTTPError
 import threading
 from contextlib import closing
@@ -130,8 +130,10 @@ class Command(BaseCommand):
                     )
                 )
             except HTTPError as e:
-                print 'error loading image for object at url:', self.base_url + product_url
+                print '\nerror loading image for object at url:', self.base_url + product_url
             product.prices.add(Price(amount=price, unit=UNIT.DAY))
+            sys.stdout.write('.')
+            sys.stdout.flush()
 
 
     def handle(self, *args, **options):
@@ -142,12 +144,9 @@ class Command(BaseCommand):
             self.patron = Patron.objects.get(username='DEGUIZLAND')
         except Patron.DoesNotExist:
             print "Can't find user 'deguizeland'"
-            # return
+            return
 
-        try:
-            self.address = self.patron.default_address
-        except Address.DoesNotExist:
-            self.address = self.patron.addresses.all()[0]
+        self.address = self.patron.default_address or self.patron.addresses.all()[0]
 
         with closing(urlopen(self.base_url)) as main_page:
             self.soup = BeautifulSoup(main_page)
@@ -160,7 +159,7 @@ class Command(BaseCommand):
             if thread is not threading.currentThread():
                 thread.join()
 
-        print len(self.product_links)
+        print 'Found %d object' % len(self.product_links)
 
         for i in xrange(self.thread_num):
             threading.Thread(target=self._product_crawler).start()
