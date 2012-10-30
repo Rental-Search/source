@@ -699,8 +699,11 @@ class Subscription(models.Model):
     propackage = models.ForeignKey(ProPackage)
     subscription_started = models.DateTimeField(auto_now_add=True)
     subscription_ended = models.DateTimeField(null=True, blank=True)
+    free = models.BooleanField(default=False)
 
     def price(self, _from=datetime.datetime.min, to=datetime.datetime.max):
+        if self.free:
+            return D(0).quantize(D('0.01'))
         started_at = _from if _from > self.subscription_started else self.subscription_started
         ended_at = to if not self.subscription_ended or to < self.subscription_ended else self.subscription_ended
         days_num = calendar.monthrange(started_at.year, started_at.month)[1]
