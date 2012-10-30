@@ -8,7 +8,7 @@ from base64 import decodestring
 from decimal import Decimal as D
 import simplejson as json
 
-from fsm import transition
+from django_fsm.db.fields import transition
 
 from tastypie import fields
 from tastypie.api import Api
