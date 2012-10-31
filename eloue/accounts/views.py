@@ -518,11 +518,7 @@ def patron_edit_credit_card(request):
             subscription = request.GET.get('subscription')
             if subscription is not None:
                 propackage = get_object_or_404(ProPackage, pk=subscription)
-                current_subscription = patron.current_subscription
-                if current_subscription:
-                    current_subscription.subscription_ended = datetime.datetime.now()
-                    current_subscription.save()
-                Subscription.objects.create(patron=patron, propackage=propackage)
+                patron.subscribe(propackage)
                 messages.success(request, u'On a validé votre abonnement')
             form.save()
             messages.success(request, u'Votre carte a bien été ajouté')
@@ -749,6 +745,8 @@ class OwnerBookingOngoing(OwnerBooking):
 class OwnerBookingHistory(OwnerBooking):
     title = u'Réservations terminées'
     def get_queryset(self):
+        if self.request.user.current_subscription:
+            return self.request.user.bookings.professional_saw()
         return self.request.user.bookings.history()
 
 
