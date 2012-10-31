@@ -5,6 +5,9 @@ import urlparse
 import random
 import time, datetime
 
+import redis
+
+from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import logout_then_login, password_reset, password_reset_confirm, password_reset_done, password_reset_complete
 from django.utils.html import strip_spaces_between_tags as compress_html
@@ -66,6 +69,7 @@ class SearchBotReportMiddleware(object):
                 }
                 request_string = urllib.urlencode(request_dict)
                 ping_url = urlparse.urlunparse(('http', 'www.google-analytics.com', '__utm.gif', None, request_string, None))
-                print ping_url
+                r = redis.Redis(*settings.GA_PING_QUEUE_CONNECTION)
+                r.lpush(settings.GA_PING_QUEUE_NAME, ping_url)
                 break
         return None
