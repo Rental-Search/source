@@ -2,7 +2,7 @@
 import datetime
 from south.db import db
 from south.v2 import DataMigration
-from django.db import models
+from django.db import models, router
 from django.contrib import sites, admin
 from eloue.accounts.models import Patron
 
@@ -10,12 +10,19 @@ class FakeAdmin(object):
     def has_perm(self, perm): return True
 
 class Migration(DataMigration):
+    depends_on = (
+        ("products", "0020_new_categories"),
+        ("accounts", "0015_adding_new_site_id"),
+        ("rent", "0006_adding_new_site_id"),
+        ("products", "0017_adding_new_site_id"),
+    )
 
     def forwards(self, orm):
         "Write your forwards methods here."
-        to_delete, perms_needed = admin.util.get_deleted_objects(
-            sites.models.Site.objects.filter(domain='beta.e-loue.com'),
-            None, FakeAdmin(), admin.site
+        using = router.db_for_write(sites.models.Site)
+        to_delete, perms_needed, protected = admin.util.get_deleted_objects(
+            sites.models.Site.objects.filter(domain='beta.e-loue.com'), 
+            None, FakeAdmin(), admin.site, using
         )
         assert len(to_delete)==1, 'Warning, other object than Site(\'beta.e-loue.com\' would get deleted. Exit.'
         sites.models.Site.objects.get(domain='beta.e-loue.com').delete()

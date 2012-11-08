@@ -1,47 +1,160 @@
-<html>
-<head>
+{% load compressed i18n markup seo cache %}
+<!doctype html>
+<html lang="fr" {% block html_properties %} {% endblock %}>
+ <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-  <script type="text/javascript">
+  <title>{% filter striplinebreak %}{% block title %}{% endblock %} {% if is_paginated and page_obj.has_previous %}- {% trans "Page" %} {{ page_obj.number }}{% endif %} - {% trans "e-loue" %}{% endfilter %}</title>
+  <meta name="description" content="{% filter striplinebreak %}{% block description %}Plateforme pour louer ou mettre en location tout type d'objet : materiel, reception, mariage, sono, utilitaires, ski{% endblock %}{% if is_paginated and page_obj.has_previous %} Page {{ page_obj.number }}{% endif %}{% endfilter %}">
+  <meta name="google-site-verification" content="FWAXGNflP5tHx07gmHbTDhPEsI-BVU66-mF-sLIH5VU" />
+  <link rel="shortcut icon" href="{{ STATIC_URL }}favicon.ico">
+  {% block head %}
+  {% compressed_css 'master' %}
+  <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
 
+  {% endblock %}
+  <META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+  <!--[if lt IE 9]>
+      <script src="{{ STATIC_URL }}js/html5.js"></script>
+      {% compressed_css 'ie' %}
+  <![endif]-->
+<script type="text/javascript">
     var _gaq = _gaq || [];
-    _gaq.push(['_setAccount', 'UA-8258979-4']);
+    _gaq.push(['_setAccount', 'UA-8258979-1']);
+    _gaq.push(['_setDomainName', 'www.e-loue.com']);
     _gaq.push(['_trackPageview']);
-
-    (function() {
-      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-    })();
-
+    {% spaceless %}
+        {% if user.is_authenticated %}
+     _gaq.push(['_setVar', 'authenticated']);
+    {% else %}
+     _gaq.push(['_setVar', 'anonymous']);
+    {% endif %}{% endspaceless %}
+    {% block gaq %}{% endblock %}
   </script>
-  <style type="text/css">
-  body {
-    background: white url("http://eloue.s3.amazonaws.com/media/static/body_bg.png") repeat-x 0 0; 
-    margin: 0;
-    font-family: Arial, sans-serif;
-    color: #364C59;
-  }
-
-  .building {
-    font-family: Arial, sans-serif;
-    font-size: 12px;
-    font-weight: bold;
-    color: #364C59;
-  }
-  </style>
-</head>
-<body>
-  <div style="margin: 50px auto; width: 800px; height:242px;">
-    <img src="http://eloue.s3.amazonaws.com/media/static/eloue-logo.png" alt="Maintenance en cours..." width="800" height="242"/>
-    <p style="text-align: right; padding-right: 60px;" class="building">Current maintenance...</p>
-  </div>
-  <script type="text/javascript">  (
-    function() {
-      var ga = document.createElement('script');     ga.type = 'text/javascript'; ga.async = true;
-      ga.src = ('https:'   == document.location.protocol ? 'https://ssl'   : 'http://www') + '.google-analytics.com/ga.js';
-      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-    })();
-  </script>
-</body>
+  
+ </head>
+ 
+ <body>
+    <div class="top-bar">
+        <div class="container">
+            <div class="logo">
+                <a href="{% url home %}"><img src="{{ STATIC_URL }}images/logo_new.png" alt="e-loue" width="155" height="47"/></a>
+            </div><!-- logo -->
+            <div class="top-content">
+                <ul class="top-contact">
+                    <li class="top-number">0826 800 200 <span>(0,15 &euro;/min)</span></li>
+                </ul><!-- top-contact -->
+                <nav>
+                    {% if user.is_anonymous %}
+                        <a href="{% trans "/comment-ca-marche/" %}" class="nav-link">{% trans "Comment ça marche ?" %}</a>
+                    {% else %}
+                        <a href="{% url dashboard %}" class="profil-link">
+                            {% if user.avatar %}
+                            <img src="{{ user.thumbnail.url }}" width="20" height="20">
+                            {% else %}
+                            <img src="{{ STATIC_URL }}images/default_avatar.png"  width="20" height="20">
+                            {% endif %}
+                            {% trans "Tableau de bord" %}  
+                            {% with unread_message_count|add:user.bookings.authorized.count as notification_count %}
+                                {% if notification_count > 0 %}
+                                    ({{notification_count}})
+                                {% endif %}
+                            {% endwith %}
+                        </a>
+                    {% endif %}
+                    {% if not user.is_authenticated %}
+                        <a href="{% url auth_login %}" class="nav-link" >{% trans "S'inscrire ou se connecter" %}</a>
+                        <a href="{% url auth_login %}" class="fb-connect-small">
+                            <img src="{{ STATIC_URL }}images/fb_connect_small.png" width="16" height="16">
+                        </a>
+                    {% else %}
+                        <a href="{% url auth_logout %}" class="nav-link">{% trans "Se déconnecter" %}</a>
+                    {% endif %}
+                    <a href="{% url publish_new_ad %}" class="add-product-link"  >{% trans "Déposer une annonce" %}</a>
+                </nav>
+            </div>{# top-content #}
+        </div>{# container #}
+    </div>{# topbar #}
+    {% block content %}{% endblock %}
+    {% block footer %}
+    <div class="container">
+        <footer>
+            <div class="f-col first">
+                <div class="f-title">{% trans "Liens utiles" %}</div>
+                <ul>
+        			<li><a href="{% url home %}">{% trans "Accueil" %}</a></li>
+        			<li><a href="{% url dashboard %}">{% trans "Mon compte" %}</a></li>
+        			<li><a href="{% url publish_new_ad %}">{% trans "Déposer une annonce" %}</a></li>
+        			{% if user.is_authenticated %}
+        				<li><a href="{% trans "/comment-ca-marche/" %}">{% trans "Comment ça marche ?" %}</a></li>
+        			{% endif %}
+        		</ul>
+            </div><!-- f-col first -->
+            <div class="f-col">
+                <div class="f-title">{% trans "Info" %}</div>
+                <ul>
+        			<li><a href="{% url patron_subscription %}">{% trans "Espace professionnel" %}</a></li>
+        			<li><a href="{% trans "/argus-de-la-location-objets/"%}">{% trans "Combien louer ses objets ?"%}</a></li>
+        			<li><a href="{% trans "/assurance-tranquillite/" %}">{% trans "Assurance tranquillité" %}</a></li>
+        			<li><a href="{% trans "/conditions-generales/" %}">{% trans "Conditions générales" %}</a></li>
+        			<li><a href="{% trans "/respect-vie-privee/" %}">{% trans "Respect de la vie privée" %}</a></li>
+        		</ul>
+            </div><!-- f-col -->
+            <div class="f-col">
+                <div class="f-title">{% trans "Support" %}</div>
+                <ul>
+        			<li><a href="{% url faq-topic-list %}">{% trans "Aide" %}</a></li>
+        			<li><a href="{% url contact %}">{% trans "Contactez-nous" %}</a></li>
+        			<li><a href="{% trans "/espace-presse/" %}">{% trans "Espace presse" %}</a></li>
+        			<li><a href="{% trans "/qui-sommes-nous/" %}">{% trans "Qui sommes nous ?" %}</a></li>
+        		</ul>
+            </div><!-- f-col -->
+            <div class="f-col">
+                <div class="f-title">{% trans "Communauté" %}</div>
+                <ul>
+        			<li><a href="http://blog.e-loue.com">{% trans "Blog" %}</a></li>
+        			<li><a href="https://twitter.com/eloue">{% trans "Twitter" %}</a></li>
+        			<li><a href="https://www.facebook.com/pages/e-louecom/104685226447">{% trans "Facebook" %}</a></li>
+        			<li><a href="/partenaires/">{% trans "Nos partenaires" %}</a></li>
+        		</ul>
+            </div><!-- f-col -->
+            <div class="f-bottom first">
+            {% cache 432000 announcements site %}
+            {% if site_wide_announcements %}
+            {% with site_wide_announcements|first as announcement %}
+            <div class="twitter-box">
+                {{ announcement.content|markdown }}
+                <div class="twitter-dialogue"></div>
+                </div>
+                <div class="twitter-info">
+                    <p><span class="twitter-time">{{ announcement.creation_date|date:"l j F Y"|capfirst }}<span> {% trans "sur" %} <a href="http://blog.e-loue.com">e-loue blog</a></span></span></p>
+                </div>
+            </div>
+            {% endwith %}
+            {% endif %}
+            {% endcache %}
+        </footer>
+    </div>{# container #}
+    {% endblock %}
+    {% block tail %}
+    	{% compressed_js 'application' %}
+    {% endblock %}
+    {% if not debug %}
+    <script type="text/javascript">  (
+        function() {
+            var ga = document.createElement('script');     ga.type = 'text/javascript'; ga.async = true;
+            ga.src = ('https:'   == document.location.protocol ? 'https://ssl'   : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+    </script>
+    <script type="text/javascript">
+        window.$zopim||(function(d,s){var z=$zopim=function(c){z._.push(c)},$=
+        z.s=d.createElement(s),e=d.getElementsByTagName(s)[0];z.set=function(o
+        ){z.set._.push(o)};$.setAttribute('charset','utf-8');$.async=!0;z.set.
+        _=[];$.src=('https:'==d.location.protocol?'https://ssl':'http://cdn')+
+        '.zopim.com/?WgwK6edNrVndm09BEcS9eHH77YcyszBK';$.type='text/java'+s;z.
+        t=+new Date;z._=[];e.parentNode.insertBefore($,e)})(document,'script')
+    </script>
+    {% endif %}
+ </body>
 </html>

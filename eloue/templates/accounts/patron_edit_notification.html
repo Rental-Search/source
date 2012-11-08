@@ -1,0 +1,167 @@
+{% extends "accounts/patron_edit.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Notifications" %}{% endblock %}
+
+{% block pro_opiton-submenu %}
+<ul>
+  <li><a href="{{ patron_edit_highlight }}">{% trans "Mise en avant" %}</a></li>
+  <li><a href="{{ patron_edit_notification }}" class="selected-nav-bar-link-sub">{% trans "Notifications" %}</a></li>
+  <li><a href="{{ patron_edit_top_position }}">{% trans "Top position" %}</a></li>
+</ul>
+{% endblock %}
+
+{% block tail %}
+<script type="text/javascript">
+$(document).ready(function(){
+
+	var dialogLink = function(linkId, dialogId) {
+		$(linkId).click(function (e){
+			e.preventDefault();
+			$(dialogId).dialog(
+				{ 
+					resizable: false, 
+					width: '350px'
+				}
+			);
+		});
+	};
+
+	var deleteNotificationLink = function(id, messageAlert) {
+		$(id).click(function (e){
+			e.preventDefault();
+			answer = confirm(messageAlert);
+	        if (answer == true) {
+				e.currentTarget.parentNode.submit()
+	            return true;
+	        } else {
+	            return false;
+	        }
+		});
+	};
+
+	dialogLink('a.#add_new_email_notification', 'div#add_new_email_notification_form');
+	deleteNotificationLink('.delete-email', 'Etes-vous sûr de vouloir retirer l\'email des notifications ?');
+
+	dialogLink('a.#add_new_sms_notification', 'div#add_new_sms_notification_form');
+	deleteNotificationLink('.delete-sms', 'Etes-vous sûr de vouloir retirer le numéro des notifications ?');
+
+	dialogLink('a.#add_new_fax_notification', 'div#add_new_fax_notification_form');
+	deleteNotificationLink('.delete-fax', 'Etes-vous sûr de vouloir retirer le numéro des notifications ?');
+
+});
+</script>
+{% endblock %}
+
+
+{% block content-main-profil %}
+{% if request.user.current_subscription %}
+{% if form.is_multipart %}
+<form enctype="multipart/form-data" class="form-horizontal" method="post" action="">
+{% else %}
+<form class="form-horizontal" method="post" action="">
+{% endif %}
+<h2 style="margin-bottom: 30px">
+	{% trans "Notification par email"%}  <small style="padding-left: 50px;"><a href="#" id="add_new_email_notification"><i class="icon-plus-sign"></i> {% trans "Ajouter un email" %}</a></small>
+</h2>
+<table class="table highlight-list" style="margin-bottom: 40px;">
+	<thead>
+		<tr>
+			<th>Email</th>
+			<th></th>
+		</tr>
+	</thead>
+	<tbody>
+		{% for mail in mails %}
+		<tr>
+			<td>{{mail.email}}</td>
+			<td class="highlight-action">
+				<form action="" method="post" style="margin-bottom: 0px;">
+					{% csrf_token %}
+					<input type="hidden" name="email_delete" value="{{ mail.pk }}">
+					<a href="#" class="delete-email"><i class="icon-remove"></i> {% trans "Retirer l'email"%}</a>
+				</form>
+			</td>
+		</tr>
+		{% endfor %}
+	</tbody>
+</table>
+
+<h2 style="margin-bottom: 30px">
+	{% trans "Notification par sms"%}  <small style="padding-left: 50px;"><a href="#" id="add_new_sms_notification"><i class="icon-plus-sign"></i> {% trans "Ajouter un numéro de portable" %}</a></small>
+</h2>
+<table class="table highlight-list" style="margin-bottom: 40px;">
+	<thead>
+		<tr>
+			<th>Numéro de portable</th>
+			<th></th>
+		</tr>
+	</thead>
+	<tbody>
+		{% for phone in phones %}
+			<tr>
+				<td>{{ phone.phone_number }}</td>
+				<td class="highlight-action">
+					<form action="" method="post" style="margin-bottom: 0px;">
+						{% csrf_token %}
+						<input type="hidden" name="phonenumber_delete" value="{{ phone.pk }}">
+						<a href="#" class="delete-sms"><i class="icon-remove"></i> {% trans "Retirer le numéro"%}</a>
+					</form>
+				</td>
+			</tr>
+		{% endfor %}
+	</tbody>
+</table>
+
+<div id="add_new_email_notification_form" title="Ajouter un nouvel email de notification" style="display: none;">
+	<form class="form" method="post" action="" style="margin-bottom: 0px; margin-top: 20px;">
+		{% csrf_token %}
+		<div class="control-group">
+			<label>Email</label>
+			<div class="controls">
+				<input type="text" name="email" value="">
+			</div>
+		</div>
+		<div class="form-actions" style="padding-bottom: 0px; margin-bottom: 0px; padding-left: 205px;">
+	    	<button type="submit" class="btn btn-primary">{% trans "Valider" %}</button>
+	    </div>
+	</form>
+</div>
+
+<div id="add_new_sms_notification_form" title="Ajouter un nouveau numéro de portable" style="display: none;">
+	<form class="form" method="post" action="" style="margin-bottom: 0px; margin-top: 20px;">
+		{% csrf_token %}
+		<div class="control-group">
+			<label>Numéro de portable</label>
+			<div class="controls">
+				<input type="text" name="phone_number" value="">
+			</div>
+		</div>
+		<div class="form-actions" style="padding-bottom: 0px; margin-bottom: 0px; padding-left: 205px;">
+	    	<button type="submit" class="btn btn-primary">{% trans "Valider" %}</button>
+	    </div>
+	</form>
+</div>
+{% else %}
+<div style="text-align:center">
+	<h2>{% trans "Notifications par mail" %}</h2>
+	<img src="{{ STATIC_URL }}images/options_pro/email_notification.png" alt="Mise en avant" width="180" height="180" style="margin-bottom: 10px;">
+	<p style="font-size: 14px; margin-bottom: 10px;">{% trans "Recevez les demandes de devis sur plusieurs adresses emails." %}</p>
+	<p style="font-size: 14px; margin-bottom: 10px;">
+	  {% trans "Pour bénéficier de cet avantage, accédez à l'espace pro pour en savoir plus :"%}
+	</p>
+	<p style="margin-bottom: 50px;">
+	  <a href="{% url patron_subscription %}" class="btn-pro-access">{% trans "Professionnel ? Accédez à notre espace pro"%}</a>
+	<p>
+	<h2>{% trans "Notifications par SMS" %}</h2>
+	<img src="{{ STATIC_URL }}images/options_pro/sms_notification.png" alt="Mise en avant" width="180" height="180" style="margin-bottom: 10px;">
+	<p style="font-size: 14px; margin-bottom: 10px;">Pour répondre rapidement aux devis, recevez les demandes de réservation sur votre mobile.</p>
+	<p style="font-size: 14px; margin-bottom: 10px;">
+	  {% trans "Pour bénéficier de cet avantage, accédez à l'espace pro pour en savoir plus :"%}
+	</p>
+	<p>
+	  <a href="{% url patron_subscription %}" class="btn-pro-access">{% trans "Professionnel ? Accédez à notre espace pro"%}</a>
+	<p>
+</div>
+{% endif %}
+{% endblock %}

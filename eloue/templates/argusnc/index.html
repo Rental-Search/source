@@ -59,7 +59,7 @@
                 </p>
             </div>{# near #}
             <div id="hotloc">
-                {% cache 43200 curiosities %}
+                {% cache 43200 curiosities site %}
                 <ul class="product-list">
                 {% for curiosity in curiosities %}
                     {% with curiosity.product as product %}
@@ -86,14 +86,14 @@
             <a href="/assurance-tranquillite/">
                 <p style="padding: 22px 0; font-size: 18px; line-height: 22px; margin-bottom: 1px;">{% trans "Réservation et paiement <br>en ligne" %}</p>
                 <h4>{% trans "La garantie" %}</h4>
-                <img class="small_logo" src="{{ MEDIA_URL }}images/small_logo.png" width="71" height="24" alt="{% trans "Location garantie"%}"/>
+                <img class="small_logo" src="{{ STATIC_URL }}images/small_logo.png" width="71" height="24" alt="{% trans "Location garantie"%}"/>
             </a>
         </li><!-- arg-garanties -->
         <li class="arg-fb">
             
         </li>
     </ul>{# args #}
-    {% cache 500 last_joined request.session.location.city %}
+    {% cache 500 last_joined request.session.location.city site %}
     <div class="new-profils" style="margin-bottom: 20px;">
         <div class="np-title">{% trans "Derniers<br/>inscrits" %}</div><!-- np-title -->
         {% with last_joined as patron_list %}

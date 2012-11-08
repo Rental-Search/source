@@ -7,14 +7,14 @@
   <title>{% filter striplinebreak %}{% block title %}{% endblock %} {% if is_paginated and page_obj.has_previous %}- {% trans "Page" %} {{ page_obj.number }}{% endif %} - {% trans "e-loue" %}{% endfilter %}</title>
   <meta name="description" content="{% filter striplinebreak %}{% block description %}Plateforme pour louer ou mettre en location tout type d'objet : materiel, reception, mariage, sono, utilitaires, ski{% endblock %}{% if is_paginated and page_obj.has_previous %} Page {{ page_obj.number }}{% endif %}{% endfilter %}">
   <meta name="google-site-verification" content="FWAXGNflP5tHx07gmHbTDhPEsI-BVU66-mF-sLIH5VU" />
-  <link rel="shortcut icon" href="{{ MEDIA_URL }}favicon.ico">
+  <link rel="shortcut icon" href="{{ STATIC_URL }}favicon.ico">
   {% block head %}
   {% compressed_css 'master' %}
   <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
 
   {% endblock %}
   <!--[if lt IE 9]>
-      <script src="{{ MEDIA_URL }}js/html5.js"></script>
+      <script src="{{ STATIC_URL }}js/html5.js"></script>
       {% compressed_css 'ie' %}
   <![endif]-->
 <script type="text/javascript">
@@ -37,7 +37,7 @@
     <div class="top-bar">
         <div class="container">
             <div class="logo">
-                <a href="{% url home %}"><img src="{{ MEDIA_URL }}images/logo_new.png" alt="e-loue" width="155" height="47"/></a>
+                <a href="{% url home %}"><img src="{{ STATIC_URL }}images/logo_new.png" alt="e-loue" width="155" height="47"/></a>
             </div><!-- logo -->
             <div class="top-content">
                 <ul class="top-contact">
@@ -51,20 +51,28 @@
                             {% if user.avatar %}
                             <img src="{{ user.thumbnail.url }}" width="20" height="20">
                             {% else %}
-                            <img src="{{ MEDIA_URL }}images/default_avatar.png"  width="20" height="20">
+                            <img src="{{ STATIC_URL }}images/default_avatar.png"  width="20" height="20">
                             {% endif %}
-                            {% trans "Tableau de bord" %}  
-                            {% with unread_message_count|add:user.bookings.authorized.count as notification_count %}
-                                {% if notification_count > 0 %}
-                                    ({{notification_count}})
-                                {% endif %}
-                            {% endwith %}
+                            {% trans "Tableau de bord" %} 
+                            {% if not request.user.current_subscription %}
+                                {% with unread_message_count|add:user.bookings.authorized.count as notification_count %}
+                                    {% if notification_count > 0 %}
+                                        ({{notification_count}})
+                                    {% endif %}
+                                {% endwith %}
+                            {% else %}
+                                {% with unread_message_count|add:user.bookings.professional.count as notification_count %}
+                                    {% if notification_count > 0 %}
+                                        ({{notification_count}})
+                                    {% endif %}
+                                {% endwith %}
+                            {% endif %}
                         </a>
                     {% endif %}
                     {% if not user.is_authenticated %}
                         <a href="{% url auth_login %}" class="nav-link" >{% trans "S'inscrire ou se connecter" %}</a>
                         <a href="{% url auth_login %}" class="fb-connect-small">
-                            <img src="{{ MEDIA_URL }}images/fb_connect_small.png" width="16" height="16">
+                            <img src="{{ STATIC_URL }}images/fb_connect_small.png" width="16" height="16">
                         </a>
                     {% else %}
                         <a href="{% url auth_logout %}" class="nav-link">{% trans "Se déconnecter" %}</a>
@@ -92,7 +100,7 @@
             <div class="f-col">
                 <div class="f-title">{% trans "Info" %}</div>
                 <ul>
-        			<li><a href="{% trans "/espace-professionnel/" %}">{% trans "Espace professionnel" %}</a></li>
+        			<li><a href="{% url patron_subscription %}">{% trans "Espace professionnel" %}</a></li>
         			<li><a href="{% trans "/argus-de-la-location-objets/"%}">{% trans "Combien louer ses objets ?"%}</a></li>
         			<li><a href="{% trans "/assurance-tranquillite/" %}">{% trans "Assurance tranquillité" %}</a></li>
         			<li><a href="{% trans "/conditions-generales/" %}">{% trans "Conditions générales" %}</a></li>
@@ -118,7 +126,7 @@
         		</ul>
             </div><!-- f-col -->
             <div class="f-bottom first">
-            {% cache 432000 announcements %}
+            {% cache 432000 announcements site %}
             {% if site_wide_announcements %}
             {% with site_wide_announcements|first as announcement %}
             <div class="twitter-box">
@@ -138,6 +146,7 @@
     {% block tail %}
     	{% compressed_js 'application' %}
     {% endblock %}
+    {% if not debug %}
     <script type="text/javascript">  (
         function() {
             var ga = document.createElement('script');     ga.type = 'text/javascript'; ga.async = true;
@@ -153,5 +162,6 @@
         '.zopim.com/?WgwK6edNrVndm09BEcS9eHH77YcyszBK';$.type='text/java'+s;z.
         t=+new Date;z._=[];e.parentNode.insertBefore($,e)})(document,'script')
     </script>
+    {% endif %}
  </body>
 </html>

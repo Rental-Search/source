@@ -4,10 +4,12 @@ from south.db import db
 from south.v2 import DataMigration
 from django.db import models
 from django.contrib.sites.models import Site
+from django.core.management import call_command
 
 class Migration(DataMigration):
 
     def forwards(self, orm):
+        call_command("loaddata", "initial_data.json")
         site, _ = Site.objects.get_or_create(name='e-loue beta', domain='beta.e-loue.com', pk=11)
         for patron in orm.Patron.objects.all():
             patron.sites.add(site.pk)

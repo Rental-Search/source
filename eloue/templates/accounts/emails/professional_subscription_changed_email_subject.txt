@@ -1,0 +1,1 @@
+{% load i18n %}{% trans "Confirmation de changement de votre abonnement" %}

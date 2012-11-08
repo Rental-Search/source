@@ -1,0 +1,12 @@
+{% load i18n %}
+
+{% blocktrans with message.recipient.username as recipient and message.sender.username as sender and message.sent_at as sent_at %}
+Envoyé par {{ sender }} :
+
+Bonjour {{ recipient }},
+{% endblocktrans %}
+
+{{ message.body|safe }}
+
+
+{% trans "Voici le lien pour répondre :"%} {{ site_url }}{% url thread_details message.thread.pk %}

@@ -12,9 +12,11 @@
 	</ul>
 	<div class="content-main">
 		<h1>{{ form.title }}</h1>
+		{% if not request.user.current_subscription%}
 		<p class="form-header">
 			{{ form.header }}
 		</p>
+		{% endif %}
 		{% if form.is_multipart %}
 		<form enctype="multipart/form-data" class="form-horizontal" method="post" action="">
 		{% else %}

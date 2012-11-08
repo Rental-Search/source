@@ -155,6 +155,59 @@ class ContractGeneratorNormal(ContractGenerator):
         canvas.drawString(122, 542, str(booking.total_amount))
         
         canvas.drawString(382, 619,  str(booking.product.deposit_amount))
+
+        
+
+        canvas.showPage()
+        canvas.setFont("Helvetica", 8)
+
+        #locataire
+        canvas.drawString(130, 721,  u"{first_name} {last_name}".format(
+                first_name=booking.borrower.first_name.upper(), 
+                last_name=booking.borrower.last_name.upper()
+            )
+        )
+
+        canvas.drawString(100, 706,  u"{address1}".format(
+            address1=booking.borrower.default_address.address1 or booking.borrower.addresses.all()[0].address1)
+        )
+
+        canvas.drawString(113, 690, u"{zipcode} {city}".format(
+                zipcode=booking.borrower.default_address.zipcode or booking.borrower.addresses.all()[0].zipcode,
+                city=booking.borrower.default_address.city or booking.borrower.addresses.all()[0].city,
+            )
+        )
+
+        canvas.drawString(153, 674, u"{deposit_amount} euros".format(
+            deposit_amount=booking.product.deposit_amount)
+        )
+
+        canvas.drawString(131, 658, str(booking.product.summary))
+
+        canvas.drawString(65, 628, str(booking.product.summary))
+
+
+        #propriétaire
+        canvas.drawString(353, 721, u"{first_name} {last_name}".format(
+                first_name=booking.owner.first_name.upper(), 
+                last_name=booking.owner.last_name.upper()
+            )
+
+        )
+
+        canvas.drawString(323, 706,  u"{address1}".format(
+            address1=booking.owner.default_address.address1 or booking.owner.addresses.all()[0].address1))
+
+        canvas.drawString(336, 690, u"{zipcode} {city}".format(
+                zipcode=booking.owner.default_address.zipcode or booking.owner.addresses.all()[0].zipcode,
+                city=booking.owner.default_address.city or booking.owner.addresses.all()[0].city,
+            )
+        )
+
+        canvas.drawString(338, 626, format(booking.started_at, _(u"d F Y à H\hi.")))
+
+        canvas.drawString(336, 611, format(booking.ended_at, _(u"d F Y à H\hi.")))
+
         return canvas
 
 
@@ -167,13 +220,13 @@ class ContractGeneratorCar(ContractGenerator):
         canvas.showPage()
         canvas.setFont("Helvetica", 8)
         canvas.drawString(106, 754, u"{first_name} {last_name}".format(
-            first_name=booking.owner.first_name,
-            last_name=booking.owner.last_name.upper()
+            first_name=booking.borrower.first_name.upper(),
+            last_name=booking.borrower.last_name.upper()
         ))
 
-        canvas.drawString(88, 744, u"{phone}".format(phone=first_or_empty(booking.owner.phones.all())))
+        canvas.drawString(88, 744, u"{phone}".format(phone=first_or_empty(booking.borrower.phones.all())))
         canvas.drawString(82, 734, u"{address}".format(
-            address=booking.owner.default_address or booking.owner.addresses.all()[0])
+            address=booking.borrower.default_address or booking.borrower.addresses.all()[0])
         )
         canvas.drawString(135, 715, "{date_of_birth}, {place_of_birth}".format(
                 date_of_birth=booking.borrower.date_of_birth.strftime("%d/%m/%Y"),
@@ -191,11 +244,11 @@ class ContractGeneratorCar(ContractGenerator):
 
 
         canvas.drawString(360, 750, u"{first_name} {last_name}".format(
-                first_name=booking.borrower.first_name, 
-                last_name=booking.borrower.last_name.upper()
+                first_name=booking.owner.first_name, 
+                last_name=booking.owner.last_name.upper()
             )
         )
-        canvas.drawString(351, 735, u"{phone}".format(phone=first_or_empty(booking.borrower.phones.all())))
+        canvas.drawString(351, 735, u"{phone}".format(phone=first_or_empty(booking.owner.phones.all())))
 
         canvas.drawString(368, 707, u"{summary}".format(summary=booking.product.summary))
 
@@ -221,8 +274,7 @@ class ContractGeneratorCar(ContractGenerator):
         ))
 
         canvas.drawString(110, 593, str(booking.total_amount))
-        
-        # canvas.drawString(382, 619,  str(booking.product.deposit_amount))
+
         return canvas
         
 

@@ -6,11 +6,12 @@ import random
 import urllib
 
 from decimal import Decimal as D, ROUND_CEILING, ROUND_FLOOR
-from fsm.fields import FSMField
-from fsm import transition
+from django_fsm.db.fields import FSMField, transition
+from django_fsm.signals import post_transition
 from pyke import knowledge_engine
 from urlparse import urljoin
 from datetime import timedelta
+
 
 from django.conf import settings
 from django.core.urlresolvers import reverse
@@ -21,6 +22,7 @@ from django.contrib.contenttypes import generic
 from django.db import models
 from django.db.models import permalink
 from django.db.models.signals import post_save
+from django.dispatch.dispatcher import receiver
 from django.utils.formats import get_format
 from django.utils.translation import ugettext_lazy as _
 from django.db.models import Q
@@ -57,7 +59,9 @@ BOOKING_STATE = Enum([
     ('closed', 'CLOSED', _(u'Clôturé')),
     ('outdated', 'OUTDATED', _(u"Dépassé")),
     ('unaccepted', 'UNACCEPTED', _(u"Pas accepté")),
-    ('accepted_unauthorized', 'ACCEPTED_UNAUTHORIZED', _(u"Accepté et en cours d'autorisation"))
+    ('accepted_unauthorized', 'ACCEPTED_UNAUTHORIZED', _(u"Accepté et en cours d'autorisation")),
+    ('professional', 'PROFESSIONAL', _(u"Demande pro")),
+    ('professional_saw', 'PROFESSIONAL_SAW', _(u'Lu')),
 ])
 
 DEFAULT_CURRENCY = get_format('CURRENCY') if not settings.CONVERT_XPF else "XPF"
@@ -84,6 +88,7 @@ PACKAGES = {
 }
 
 log = logbook.Logger('eloue.rent')
+
 
 
 class Booking(models.Model):
@@ -367,52 +372,46 @@ class Booking(models.Model):
     def not_need_ipn(self):
         return self.payment.NOT_NEED_IPN
         
-    @smart_transition(source='authorizing', target='authorized', conditions=[not_need_ipn], save=True)
-    def preapproval(self, *args, **kwargs):
-        self.payment.preapproval(*args, **kwargs)
+    @transition(field=state, source='authorizing', target='authorized', conditions=[not_need_ipn], save=True)
+    def preapproval(self, **kwargs):
+        self.payment.preapproval(self.pk, self.total_amount, self.currency, **kwargs)
         self.payment.save()
         self.send_ask_email()
         
-    @transition(source='authorized', target='pending', save=True)
+    @transition(field=state, source='authorized', target='pending', save=True)
     def accept(self):
-        domain = Site.objects.get_current().domain
-        protocol = "https"
-        cancel_url="%s://%s%s" % (protocol, domain, reverse("booking_failure", args=[self.pk.hex]))
-        return_url="%s://%s%s" % (protocol, domain, reverse("booking_success", args=[self.pk.hex]))
-
-        self.payment.pay(cancel_url, return_url)
+        self.payment.pay(self.pk, self.total_amount, self.currency)
         self.payment.save()
         self.send_acceptation_email()
         self.send_borrower_receipt()
 
-    @transition(source='pending', target='ongoing', save=True)
+    @transition(field=state, source='pending', target='ongoing', save=True)
     def activate(self):
         pass
 
-    @transition(source='ongoing', target='ended', save=True)
+    @transition(field=state, source='ongoing', target='ended', save=True)
     def end(self):
         self.send_ended_email()
     
-    @transition(source='ended', target='closing', save=True)
-    @smart_transition(source='closing', target='closed', conditions=[not_need_ipn], save=True)
+    @transition(field=state, source='ended', target='closed', save=True)
     def pay(self):
         """Return deposit_amount to borrower and pay the owner"""
         self.payment.execute_payment()
         self.send_owner_receipt()
     
-    @transition(source=['authorized', 'pending'], target='canceled', save=True)
+    @transition(field=state, source=['authorized', 'pending'], target='canceled', save=True)
     def cancel(self):
         """Cancel preapproval for the borrower"""
         self.payment.cancel_preapproval()
     
-    @transition(source='incident', target='deposit', save=True)
+    @transition(field=state, source='incident', target='deposit', save=True)
     def litigation(self, amount=None, cancel_url='', return_url=''):
         """Giving caution to owner"""
         # FIXME : Deposit amount isn't considered in preapproval amount
        
         self.payment.give_caution(amount, cancel_url, return_url)
     
-    @transition(source='incident', target='refunded', save=True)
+    @transition(field=state, source='incident', target='refunded', save=True)
     def refund(self):
         """Refund borrower or owner if something as gone wrong"""
         self.payment.refund()
@@ -423,6 +422,47 @@ class Booking(models.Model):
             return "EUR"
         else:
             return self.currency
+
+
+class ProBooking(Booking):
+    class Meta:
+        proxy = True
+
+    @transition(field=Booking._meta.get_field('state'), source='professional', target='professional_saw', save=True)
+    def accept(self):
+        pass
+
+    def send_ask_email(self):
+        context = {'booking': self}
+        message = create_alternative_email('rent/emails/owner_ask_pro', context, settings.DEFAULT_FROM_EMAIL, [self.owner.email])
+        message.send()
+        message = create_alternative_email('rent/emails/borrower_ask_pro', context, settings.DEFAULT_FROM_EMAIL, [self.borrower.email])
+        message.send()
+
+    @transition(field=Booking._meta.get_field('state'), source='professional', target='professional', save=True)
+    def preapproval(self, *args, **kwargs):
+        for phonenotification in self.owner.phonenotification_set.all():
+            phonenotification.send('', self)
+        for emailnotification in self.owner.emailnotification_set.all():
+            emailnotification.send('', self)
+        self.send_ask_email()
+
+
+class BookingLog(models.Model):
+    booking = models.ForeignKey(Booking)
+    created_at = models.DateTimeField(blank=True, null=True, auto_now_add=True)
+    source_state = FSMField(choices=BOOKING_STATE)
+    target_state = FSMField(choices=BOOKING_STATE)
+
+    def __unicode__(self):
+        return '{source_state} -> {target_state} @ {created_at}'.format(
+            source_state=self.source_state, target_state=self.target_state, 
+            created_at=self.created_at
+        )
+
+@receiver(post_transition, dispatch_uid='eloue.rent.models')
+def state_logger(sender, instance, name, source, target, **kwargs):
+    BookingLog.objects.create(booking=instance, source_state=source, target_state=target)
 
 class Comment(models.Model):
     booking = models.OneToOneField(Booking)
@@ -504,6 +544,7 @@ class Sinister(models.Model):
     
 
 post_save.connect(post_save_sites, sender=Booking)
+post_save.connect(post_save_sites, sender=ProBooking)
 post_save.connect(post_save_to_update_product, sender=BorrowerComment)
 post_save.connect(post_save_to_update_product, sender=OwnerComment)
 

@@ -116,7 +116,7 @@ class ProductWizardTestWithFacebookAccount(TestCase):
             'wizard_step': 2,
             'hash_1': '6941fd7b20d720833717a1f92e8027af'
         })
-        self.assertRedirects(response, 'location/bebe/mobilier-bebe/lits/bentley-brooklands-8/')
+        self.assertRedirects(response, 'location/bebe/mobilier-bebe/lits/bentley-brooklands-9/')
         self.assertTrue(response.status_code, 200)
         self.assertTrue(mock_object.called)
 
@@ -188,7 +188,7 @@ class ProductWizardTestWithFacebookAccount(TestCase):
             'wizard_step': 2,
             'hash_1': '6941fd7b20d720833717a1f92e8027af'
         })
-        self.assertRedirects(response, 'location/bebe/mobilier-bebe/lits/bentley-brooklands-8/')
+        self.assertRedirects(response, 'location/bebe/mobilier-bebe/lits/bentley-brooklands-9/')
         self.assertTrue(response.status_code, 200)
         self.assertEqual(Patron.objects.get(username='kosii2'), FacebookSession.objects.get(uid=uid).user)
         self.assertTrue(mock_object.called)
@@ -258,7 +258,7 @@ class ProductWizardTestWithFacebookAccount(TestCase):
             'wizard_step': 2,
             'hash_1': '6941fd7b20d720833717a1f92e8027af'
         })
-        self.assertRedirects(response, 'location/bebe/mobilier-bebe/lits/bentley-brooklands-8/')
+        self.assertRedirects(response, 'location/bebe/mobilier-bebe/lits/bentley-brooklands-9/')
         self.assertTrue(response.status_code, 200)
         self.assertEqual(Patron.objects.get(username='kosii1'), FacebookSession.objects.get(uid=uid).user)
         self.assertTrue(mock_object.called)

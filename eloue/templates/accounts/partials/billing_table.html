@@ -1,0 +1,133 @@
+{% load i18n product booking price %}
+<table class="table billing" width="100%">
+	<tr>
+		<th class="billing-header">{% trans "Récapitulatif" %}</th>
+	</tr>
+	<tr>
+		<td>
+			<table class="table">
+				<thead>
+					<tr>
+						<td>Plan et options</td>
+						<td class="amount">{{ billing.total_amount|currency }}</td>
+					</tr>
+				</thead>
+			</table>
+		</td>
+	</tr>
+	<tr>
+		<th class="billing-header">{% trans "Détails" %}</th>
+	</tr>
+	<tr>
+		<td>
+			<table class="table">
+				<thead>
+					<tr>
+						<td><i class="icon-plus-sign"></i> {% trans "Plan" %}</td>
+						<td class="amount">{{ subscriptions.sum|currency }}</td>
+					</tr>
+				</thead>
+				<tbody>
+					{% for subscription in subscriptions %}
+					<tr>
+						<td class="billing-item">
+							{{ subscription.propackage.name }} - {% firstof subscription.propackage.maximum_items "Illimité" %} annonces (<a href="{% url patron_edit_subscription %}">{% trans "Modifier mon plan" %}</a>)
+						</td>
+						<td class="amount">{% price subscription from to %} &euro;</td>
+					</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</td>
+	</tr>
+	{% if highlights %}
+	<tr>
+		<td>
+			<table class="table">
+				<thead>
+					<tr>
+						<td><i class="icon-plus-sign"></i> {% trans "Mise en avant" %}</td>
+						<td class="amount">{{ highlights.sum|currency }}</td>
+					</tr>
+				</thead>
+				<tbody>
+					{% for highlight in highlights %}
+						<tr>
+							<td class="billing-item"><a href="{{ highlight.product.get_absolute_url }}">{{ highlight.product.summary }}</a></td>
+							<td class="amount">{% price highlight from to %}&euro;</td>
+						</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</td>
+	</tr>
+	{% endif %}
+	{% if toppositions %}
+	<tr>
+		<td>
+			<table class="table">
+				<thead>
+					<tr>
+						<td><i class="icon-plus-sign"></i> {% trans "Top position" %}</td>
+						<td class="amount">{{ toppositions.sum|currency }}</td>
+					</tr>
+				</thead>
+				<tbody>
+					{% for topposition in toppositions %}
+						<tr>
+							<td class="billing-item"><a href="{{ topposition.product.get_absolute_url }}">{{ topposition.product.summary }}</a></td>
+							<td class="amount">{% price topposition from to %}</td>
+						</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</td>
+	</tr>
+	{% endif %}
+	{% if phonenotifications or emailnotifications %}
+	<tr>
+		<td>
+			<table class="table">
+				<thead>
+					<tr>
+						<td><i class="icon-plus-sign"></i> {% trans "Notification" %}</td>
+						<td class="amount">{{ toppositions.sum|currency }}</td>
+					</tr>
+				</thead>
+				<tbody>
+					{% for emailnotification in emailnotifications %}
+						<tr>
+							<td class="billing-item">Email envoyé le {{ emailnotification.sent_at }} à l'adresse {{emailnotification.notification.email}}</td>
+							<td class="amount">{% price emailnotification from to %}</td>
+						</tr>
+					{% endfor %}
+					{% for phonenotification in phonenotifications %}
+						<tr>
+							<td class="billing-item">SMS envoyé le {{ phonenotification.sent_at }} au numero {{ phonenotification.notification.phone_number }}</td>
+							<td class="amount">{% price phonenotification from to %}</td>
+						</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</td>
+	</tr>
+	{% endif %}
+	<tr>
+		<td>
+			<table class="table">
+				<thead>
+					<tr>
+						<td><i class="icon-plus-sign"></i> {% trans "TVA" %}</td>
+						<td class="amount">{{ billing.total_tva|currency }}</td>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td class="billing-item">{% trans "TVA à 19,60" %}</td>
+						<td class="amount">{{ billing.total_tva|currency }}</td>
+					</tr>
+				</tbody>
+			</table>
+		</td>
+	</tr>
+</table>

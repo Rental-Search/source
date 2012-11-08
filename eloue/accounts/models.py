@@ -3,16 +3,22 @@ import datetime
 import logbook
 import uuid
 import urllib2
+import calendar
+from decimal import Decimal as D
+
 import simplejson
 import facebook
 
 from imagekit.models import ImageSpec
 from imagekit.processors import resize, Adjust, Transpose
 
+from django_fsm.db.fields import FSMField, transition
 
 from django.core.exceptions import ValidationError
 from django.contrib.sites.managers import CurrentSiteManager
 from django.contrib.sites.models import Site
+from django.contrib.contenttypes.models import ContentType
+from django.contrib.contenttypes import generic
 from django.contrib.auth.models import User
 from django.contrib.gis.db import models
 from django.conf import settings
@@ -159,6 +165,8 @@ class Patron(User):
     """A member"""
     civility = models.PositiveSmallIntegerField(_(u"Civilité"), null=True, blank=True, choices=CIVILITY_CHOICES)
     company_name = models.CharField(null=True, blank=True, max_length=255)
+    subscriptions = models.ManyToManyField('ProPackage', through='Subscription')
+
     activation_key = models.CharField(null=True, blank=True, max_length=40)
     is_subscribed = models.BooleanField(_(u'newsletter'), default=False, help_text=_(u"Précise si l'utilisateur est abonné à la newsletter"))
     new_messages_alerted = models.BooleanField(_(u'alerts if new messages come'), default=True, help_text=_(u"Précise si l'utilisateur est informé par email s'il a nouveaux messages"))
@@ -192,6 +200,8 @@ class Patron(User):
     objects = PatronManager()
 
     rib = models.CharField(max_length=23, blank=True)
+
+    url = models.URLField(_(u"Site internet"), blank=True, help_text=_(u"L'affichage de l'adresse du site est facturée 5€ par mois."))
 
     thumbnail = ImageSpec(
         processors=[
@@ -315,6 +325,26 @@ class Patron(User):
             self.save()
             return None
 
+
+    def subscribe(self, propackage):
+        current_subscription = self.current_subscription
+        context = {}
+        if current_subscription:
+            current_subscription.subscription_ended = datetime.datetime.now()
+            current_subscription.save()
+            message = create_alternative_email('accounts/emails/professional_subscription_changed', context, settings.DEFAULT_FROM_EMAIL, [self.email])
+        else:
+            message = create_alternative_email('accounts/emails/professional_subscribed', context, settings.DEFAULT_FROM_EMAIL, [self.email])
+        message.send()
+        return Subscription.objects.create(patron=self, propackage=propackage)
+
+    @property
+    def current_subscription(self):
+        subscriptions = self.subscription_set.filter(subscription_ended__isnull=True).order_by('-subscription_started')
+        if subscriptions:
+            return subscriptions[0]
+        return None
+
     @property
     def is_verified(self):
         return paypal_payment.verify_paypal_account(email=self.paypal_email, first_name=self.first_name, last_name=self.last_name)
@@ -328,6 +358,26 @@ class Patron(User):
     def is_confirmed(self):
         return paypal_payment.confirm_paypal_account(self.paypal_email)
     
+    def next_billing_date(self):
+        from eloue.accounts.management.commands.pro_billing import plus_one_month, minus_one_month
+        from django.db.models import Min, Max
+        from eloue.products.models import ProductHighlight, ProductTopPosition
+        last_billing_date = self.billing_set.aggregate(Max('date_to'))['date_to__max']
+        if last_billing_date:
+            return last_billing_date
+
+        first_subscription = self.subscription_set.aggregate(Min('subscription_started'))['subscription_started__min']
+        first_topposition = ProductTopPosition.objects.filter(product__owner=self).aggregate(Min('started_at'))['started_at__min']
+        first_highlight = ProductHighlight.objects.filter(product__owner=self).aggregate(Min('started_at'))['started_at__min']
+        # if he was never billed, we'll use the starting date of the first service used
+        started_at_list = filter(None, [first_subscription, first_topposition, first_highlight])
+        if started_at_list:
+            return min(started_at_list).date()
+
+        # if he uses no service at all, we return None
+        return None
+
+
     @property
     def response_rate(self):
         from eloue.products.models import MessageThread
@@ -379,7 +429,7 @@ class Patron(User):
             'activation_key': self.activation_key,
             'expiration_days': settings.ACCOUNT_ACTIVATION_DAYS
         }
-        message = create_alternative_email('accounts/activation', context, settings.DEFAULT_FROM_EMAIL, [self.email])
+        message = create_alternative_email('accounts/emails/activation', context, settings.DEFAULT_FROM_EMAIL, [self.email])
         message.send()
 
     def send_professional_activation_email(self, *args):
@@ -387,9 +437,16 @@ class Patron(User):
         form = EmailPasswordResetForm({'email': self.email})
         if form.is_valid():
             form.save(
-                email_template_name='accounts/professional_activation_email', 
+                email_template_name='accounts/emails/professional_activation_email', 
                 use_https=True
             )
+
+    def send_gmail_invite(self, receiver, *args):
+        context = {
+            'patron': self
+        }
+        message = create_alternative_email('accounts/emails/gmail_invitation', context, settings.DEFAULT_FROM_EMAIL, [receiver])
+        message.send()
 
     def is_expired(self):
         """
@@ -404,6 +461,55 @@ class Patron(User):
         return (self.date_joined + expiration_date <= datetime.datetime.now())
     is_expired.boolean = True
     is_expired.short_description = ugettext(u"Expiré")
+
+
+from datetime import time
+HOURS = [(time(h, 0), "%02d:00" % (h,)) for h in xrange(24)]
+
+class OpeningTimes(models.Model):
+    patron = models.OneToOneField(Patron, editable=False)
+
+    monday_opens = models.TimeField(_(u'De'), choices=HOURS, null=True, blank=True)
+    monday_closes = models.TimeField(_(u'à'), choices=HOURS, null=True, blank=True)
+
+    monday_opens_second = models.TimeField(_(u'De'), choices=HOURS, null=True, blank=True)
+    monday_closes_second = models.TimeField(_(u'à'), choices=HOURS, null=True, blank=True)
+    
+    tuesday_opens = models.TimeField(_(u'De'), choices=HOURS, null=True, blank=True)
+    tuesday_closes = models.TimeField(_(u'à'), choices=HOURS, null=True, blank=True)
+    
+    tuesday_opens_second = models.TimeField(_(u'De'), choices=HOURS, null=True, blank=True)
+    tuesday_closes_second = models.TimeField(_(u'à'), choices=HOURS, null=True, blank=True)
+    
+    wednesday_opens = models.TimeField(_(u'De'), choices=HOURS, null=True, blank=True)
+    wednesday_closes = models.TimeField(_(u'à'), choices=HOURS, null=True, blank=True)
+
+    wednesday_opens_second = models.TimeField(_(u'De'), choices=HOURS, null=True, blank=True)
+    wednesday_closes_second = models.TimeField(_(u'à'), choices=HOURS, null=True, blank=True)
+
+    thursday_opens = models.TimeField(_(u'De'), choices=HOURS, null=True, blank=True)
+    thursday_closes = models.TimeField(_(u'à'), choices=HOURS, null=True, blank=True)
+
+    thursday_opens_second = models.TimeField(_(u'De'), choices=HOURS, null=True, blank=True)
+    thursday_closes_second = models.TimeField(_(u'à'), choices=HOURS, null=True, blank=True)
+
+    friday_opens = models.TimeField(_(u'De'), choices=HOURS, null=True, blank=True)
+    friday_closes = models.TimeField(_(u'à'), choices=HOURS, null=True, blank=True)
+
+    friday_opens_second = models.TimeField(_(u'De'), choices=HOURS, null=True, blank=True)
+    friday_closes_second = models.TimeField(_(u'à'), choices=HOURS, null=True, blank=True)
+
+    saturday_opens = models.TimeField(_(u'De'), choices=HOURS, null=True, blank=True)
+    saturday_closes = models.TimeField(_(u'à'), choices=HOURS, null=True, blank=True)
+
+    saturday_opens_second = models.TimeField(_(u'De'), choices=HOURS, null=True, blank=True)
+    saturday_closes_second = models.TimeField(_(u'à'), choices=HOURS, null=True, blank=True)
+
+    sunday_opens = models.TimeField(_(u'De'), choices=HOURS, null=True, blank=True)
+    sunday_closes = models.TimeField(_(u'à'), choices=HOURS, null=True, blank=True)
+
+    sunday_opens_second = models.TimeField(_(u'De'), choices=HOURS, null=True, blank=True)
+    sunday_closes_second = models.TimeField(_(u'à'), choices=HOURS, null=True, blank=True)
 
 
 class CreditCard(models.Model):
@@ -447,16 +553,61 @@ class FacebookSession(models.Model):
         if not hasattr(self, '_graph_api') or self._graph_api.access_token != self.access_token:
             self._graph_api = facebook.GraphAPI(self.access_token)
         return self._graph_api
+
+class IDNSession(models.Model):
+    user = models.OneToOneField(Patron, null=True)
+    created_at = models.DateTimeField(blank=True, editable=False, auto_now_add=True)
+    uid = models.CharField(max_length=32, unique=True)
+    access_token = models.CharField(max_length=255)
+    access_token_secret = models.CharField(max_length=255)
+
+    class Meta:
+        unique_together = (('user', 'uid'), ('access_token', 'access_token_secret'), )
+
+    def __unicode__(self):
+        return "IDN : %s" %  self.uid
+
+    def profile_url(self):
+        return '%sidn_17_badge?nickname=%s' % (settings.IDN_BASE_URL, self.uid)
     
+    @property
+    def me(self):
+        def normalize(me_dict):
+            normalized = {}
+            normalized['email'] = me_dict['contact/email']
+            normalized['last_name'] = me_dict['namePerson/last']
+            normalized['first_name'] = me_dict['namePerson/first']
+            normalized['username'] = me_dict['namePerson/friendly']
+            return normalized
+
+        me_dict = cache.get('idn:me_%s' % self.uid, {})
+        if me_dict:
+            return me_dict
+        # we have to stock it in a local variable, and return the value from that
+        # local variable, otherwise this stuff is broken with the dummy cache engine
+        import oauth2 as oauth
+        scope = '["namePerson/friendly","namePerson","contact/postalAddress/home","contact/email","namePerson/last","namePerson/first"]'
+        consumer_key = '_ce85bad96eed75f0f7faa8f04a48feedd56b4dcb'
+        consumer_secret = '_80b312627bf936e6f20510232cf946fff885d1f7'
+        base_url = 'http://idn.recette.laposte.france-sso.fr/'
+        me_url = base_url + 'anywhere/me?oauth_scope=%s' % (scope, )
+        consumer = oauth.Consumer(key=consumer_key, secret=consumer_secret)
+        access_token = oauth.Token(self.access_token, self.access_token_secret)
+        client = oauth.Client(consumer, access_token)
+        response, content = client.request(me_url, "GET")
+        me_dict = normalize(simplejson.loads(content))
+        cache.set('idn:me_%s' % self.uid, me_dict, 0)
+        return me_dict
+
 class Address(models.Model):
     """An address"""
     patron = models.ForeignKey(Patron, related_name='addresses')
-    address1 = models.CharField(max_length=255)
+    address1 = models.CharField(_(u'Adresse'), max_length=255)
     address2 = models.CharField(max_length=255, null=True, blank=True)
     zipcode = models.CharField(max_length=9)
     position = models.PointField(null=True, blank=True)
-    city = models.CharField(max_length=255)
-    country = models.CharField(max_length=2, choices=COUNTRY_CHOICES)
+    city = models.CharField(_(u'Ville'), max_length=255)
+    country = models.CharField(_(u'Pays'), max_length=2, choices=COUNTRY_CHOICES)
 
     objects = models.GeoManager()
 
@@ -525,7 +676,225 @@ class PatronAccepted(models.Model):
     email = models.EmailField()
     sites = models.ManyToManyField(Site, related_name='patrons_accepted')
 
+class ProPackage(models.Model):
+    name = models.CharField(max_length=64)
+    maximum_items = models.PositiveIntegerField(null=True, blank=True)
+    price = models.DecimalField(max_digits=8, decimal_places=2)
+    valid_from = models.DateField(default=datetime.datetime.now)
+    valid_until = models.DateField(null=True, blank=True)
 
+    def __unicode__(self):
+        if self.maximum_items:
+            return u'{maximum_items} item - {price} euro'.format(maximum_items=self.maximum_items, price=self.price)
+        else:
+            return u'illimity items - {price} euro'.format(price=self.price)
+
+
+    class Meta:
+        unique_together = (('maximum_items', 'valid_until'), )
+        ordering = ('-maximum_items', )
+    
+class Subscription(models.Model):
+    patron = models.ForeignKey(Patron)
+    propackage = models.ForeignKey(ProPackage)
+    subscription_started = models.DateTimeField(auto_now_add=True)
+    subscription_ended = models.DateTimeField(null=True, blank=True)
+    free = models.BooleanField(default=False)
+
+    def price(self, _from=datetime.datetime.min, to=datetime.datetime.max):
+        if self.free:
+            return D(0).quantize(D('0.01'))
+        started_at = _from if _from > self.subscription_started else self.subscription_started
+        ended_at = to if not self.subscription_ended or to < self.subscription_ended else self.subscription_ended
+        days_num = calendar.monthrange(started_at.year, started_at.month)[1]
+        days_sec = days_num * 24 * 60 * 60
+        td = (ended_at - started_at)
+        dt_sec = (td.microseconds + (td.seconds + td.days * 24 * 3600) * 10**6) / 10**6
+        return (self.propackage.price * dt_sec / days_sec).quantize(D('0.01'))
+
+class BillingSubscription(models.Model):
+    subscription = models.ForeignKey('Subscription')
+    billing = models.ForeignKey('Billing')
+    price = models.DecimalField(max_digits=8, decimal_places=2)
+
+
+class BillingProductHighlight(models.Model):
+    producthighlight = models.ForeignKey('products.ProductHighlight')
+    billing = models.ForeignKey('Billing')
+    price = models.DecimalField(max_digits=8, decimal_places=2)
+
+
+class BillingProductTopPosition(models.Model):
+    producttopposition = models.ForeignKey('products.ProductTopPosition')
+    billing = models.ForeignKey('Billing')
+    price = models.DecimalField(max_digits=8, decimal_places=2)
+
+
+class Notification(models.Model):
+    patron = models.ForeignKey(Patron)
+    started_at = models.DateTimeField(auto_now_add=True)
+    ended_at = models.DateTimeField(editable=False, null=True, blank=True)
+
+    class Meta:
+        abstract = True
+    def send(self, msg):
+        raise NotImplementedError()
+
+class PhoneNotification(Notification):
+    phone_number = models.CharField(max_length=64)
+
+    def send(self, msg, booking):
+        print 'texto sent'
+        PhoneNotificationHistory.objects.create(notification=self)
+
+class EmailNotification(Notification):
+    email = models.CharField(max_length=256)
+
+    def __unicode__(self):
+        return u"{email}".format(email=self.email)
+
+    def send(self, msg, booking):
+        context = {'booking': self}
+        message = create_alternative_email('rent/emails/owner_ask_pro', context, settings.DEFAULT_FROM_EMAIL, [self.email])
+        message.send()
+        EmailNotificationHistory.objects.create(notification=self)
+
+
+class PhoneNotificationHistory(models.Model):
+    sent_at = models.DateTimeField(auto_now_add=True)
+    notification = models.ForeignKey('accounts.PhoneNotification')
+
+    def price(self, date_from, date_to):
+        return settings.SMSNOTIFICATION_PRICE.quantize(D('0.01'))
+
+class EmailNotificationHistory(models.Model):
+    sent_at = models.DateTimeField(auto_now_add=True)
+    notification = models.ForeignKey('accounts.EmailNotification')
+
+    def price(self, date_from, date_to):
+        return settings.EMAILNOTIFICATION_PRICE.quantize(D('0.01'))
+
+class BillingPhoneNotification(models.Model):
+    phonenotification = models.ForeignKey('accounts.PhoneNotificationHistory')
+    billing = models.ForeignKey('accounts.Billing')
+    price = models.DecimalField(max_digits=8, decimal_places=2)
+
+class BillingEmailNotification(models.Model):
+    emailnotification = models.ForeignKey('accounts.EmailNotificationHistory')
+    billing = models.ForeignKey('accounts.Billing')
+    price = models.DecimalField(max_digits=8, decimal_places=2)
+
+
+BILLING_STATE = [('unpaid', 'UNPAID'), ('paid', 'UNPAID')]
+
+class Billing(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True)
+    modified_at = models.DateTimeField(auto_now=True)
+    patron = models.ForeignKey(Patron)
+
+    # first day of the period
+    date_from = models.DateField()
+    # the day after 
+    date_to = models.DateField()
+    state = FSMField(default='unpaid', choices=BILLING_STATE)
+    total_amount = models.DecimalField(max_digits=8, decimal_places=2)
+    total_tva = models.DecimalField(max_digits=8, decimal_places=2)
+
+    highlights = models.ManyToManyField('products.ProductHighlight', through='BillingProductHighlight')
+    plans = models.ManyToManyField('accounts.Subscription', through='BillingSubscription')
+    toppositions = models.ManyToManyField('products.ProductTopPosition', through='BillingProductTopPosition')
+    
+    phonenotifications = models.ManyToManyField('accounts.PhoneNotificationHistory', through='BillingPhoneNotification')
+    emailnotifications = models.ManyToManyField('accounts.EmailNotificationHistory', through='BillingEmailNotification')
+
+    object_id = models.PositiveIntegerField()
+    content_type = models.ForeignKey(ContentType)
+    payment = generic.GenericForeignKey('content_type', 'object_id')
+
+    @models.permalink
+    def get_absolute_url(self):
+        date = self.date_to
+        return (
+            'billing_object', (), 
+            {'year': '%04d'%date.year, 
+             'month': '%02d'%date.month, 
+             'day': '%02d'%date.day})
+
+    def pdf(self):
+        if self.pk is None:
+            raise ValueError('You can generate pdf only for already saved Billings.')
+        raise NotImplementedError()
+
+    @transition(field=state, source='unpaid', target='paid', save=True)
+    def pay(self, **kwargs):
+        try:
+            self.payment.preapproval('billing:%d'%self.id, self.total_amount, None, '')
+            self.payment.pay('billing:%d'%self.id, self.total_amount, None, **kwargs)
+            self.payment.save()
+            BillingHistory.objects.create(billing=self, succeeded=True)
+        except PaymentException:
+            BillingHistory.objects.create(billing=self, succeeded=False)
+
+    @staticmethod
+    def builder(patron, date_from, date_to):
+        """Returns a (billing, subscriptions, highlights) tuple for a given
+        """
+        from eloue.products.models import ProductHighlight, ProductTopPosition
+        if not isinstance(date_from, datetime.datetime):
+            date_from = datetime.datetime.combine(date_from, datetime.time())
+        if not isinstance(date_to, datetime.datetime):
+            date_to = datetime.datetime.combine(date_to, datetime.time())
+        # TODO: verify this logical expression
+        highlights = ProductHighlight.objects.select_related('product').filter((
+            ~models.Q(ended_at__lte=date_from) & 
+            ~models.Q(started_at__gte=date_to) |
+            models.Q(ended_at__isnull=True) & 
+            models.Q(started_at__lte=date_to)), 
+            product__owner=patron)
+        subscriptions = Subscription.objects.filter((
+            ~models.Q(subscription_ended__lte=date_from) & 
+            ~models.Q(subscription_started__gte=date_to) |
+            models.Q(subscription_ended__isnull=True) & 
+            models.Q(subscription_started__lte=date_to)),
+            patron=patron)
+        toppositions = ProductTopPosition.objects.select_related('product').filter((
+            ~models.Q(ended_at__lte=date_from) & 
+            ~models.Q(started_at__gte=date_to) |
+            models.Q(ended_at__isnull=True) & 
+            models.Q(started_at__lte=date_to)), 
+            product__owner=patron)
+
+        phonenotifications = PhoneNotificationHistory.objects.select_related('notification').filter(
+            sent_at__gt=date_from, sent_at__lte=date_to, notification__patron=patron)
+        emailnotifications = EmailNotificationHistory.objects.select_related('notification').filter(
+            sent_at__gt=date_from, sent_at__lte=date_to, notification__patron=patron)
+
+        highlights.sum = sum(map(lambda highlight: highlight.price(date_from, date_to), highlights))
+        subscriptions.sum = sum(map(lambda subscription: subscription.price(date_from, date_to), subscriptions))
+        toppositions.sum = sum(map(lambda topposition: topposition.price(date_from, date_to), toppositions))
+        phonenotifications.sum = sum(map(lambda phonenotification: phonenotification.price(date_from, date_to), phonenotifications))
+        emailnotifications.sum = sum(map(lambda emailnotification: emailnotification.price(date_from, date_to), emailnotifications))
+
+        total_amount = (highlights.sum + subscriptions.sum + toppositions.sum + 
+            phonenotifications.sum + emailnotifications.sum)
+        total_tva = (total_amount * settings.TVA).quantize(D('0.01'))
+        return (
+            Billing(date_from=date_from, date_to=date_to, patron=patron,
+                total_amount=total_amount, total_tva=total_tva), 
+            highlights, subscriptions, toppositions, 
+            phonenotifications, emailnotifications, 
+        )
+
+
+class BillingHistory(models.Model):
+    billing = models.ForeignKey('accounts.Billing')
+    date = models.DateTimeField(auto_now_add=True)
+    succeeded = models.BooleanField()
+
+    class Meta:
+        ordering = ['date']
+    
 signals.post_save.connect(post_save_sites, sender=Patron)
 signals.pre_delete.connect(pre_delete_creditcard, sender=CreditCard)
 signals.post_save.connect(post_save_to_batch_update_product, sender=Address)
+signals.post_save.connect(post_save_to_batch_update_product, sender=Patron)

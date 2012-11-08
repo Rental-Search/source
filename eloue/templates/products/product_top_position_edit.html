@@ -1,0 +1,38 @@
+{% extends "products/product_edit.html" %}
+
+{% load i18n navbar product %}
+
+{% block title %}{% trans "Mes annonces" %}{% endblock %}
+
+{% block content-main-profil %}
+<h2>{% trans "Mettre en avant son annonce" %}</h2>
+{% include "products/partials/product_option_edit_form.html" %}
+
+<h2>{% trans "Historique des top position" %}<h2>
+{% include "products/partials/product_option_edit_history.html" %}
+
+{% endblock %}
+
+{% block tail %}
+  {{block.super}}
+  <script type="text/javascript">
+  $(document).ready(function () {
+      $("button#unhighlight").click(function() {
+        answer = confirm('{% trans "Etes-vous sûr de vouloir retirer la mise en avant ?"%}');
+        if (answer == true) {
+            return true;
+        } else {
+            return false;
+        }
+      });
+      $("button#highlight").click(function() {
+        answer = confirm('{% trans "Etes-vous sûr de vouloir activer la mise en avant ?" %}');
+        if (answer == true) {
+            return true;
+        } else {
+            return false;
+        }
+      });
+  });
+  </script>
+{% endblock %}

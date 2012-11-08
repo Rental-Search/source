@@ -43,18 +43,25 @@ DEFAULT_RADIUS = getattr(settings, 'DEFAULT_RADIUS', 50)
 
 
 class FacetedSearchForm(SearchForm):
-    q = forms.CharField(required=False, max_length=100, widget=forms.TextInput(attrs={'class': 'x9 inb search-box-q', 'tabindex': '1', 'placeholder': 'Que voulez-vous louer ?'}))
-    l = forms.CharField(required=False, max_length=100, widget=forms.TextInput(attrs={'class': 'x9 inb', 'tabindex': '2', 'placeholder': 'Où voulez-vous louer?'}))
+    q = forms.CharField(required=False, max_length=100, widget=forms.TextInput(attrs={'class': 'x9 inb search-box-q', 'tabindex': '1', 'placeholder': _(u'Que voulez-vous louer ?')}))
+    l = forms.CharField(required=False, max_length=100, widget=forms.TextInput(attrs={'class': 'x9 inb', 'tabindex': '2', 'placeholder': _(u'Où voulez-vous louer?')}))
     r = forms.DecimalField(required=False, widget=forms.TextInput(attrs={'class': 'ins'}))
     sort = forms.ChoiceField(required=False, choices=SORT, widget=forms.HiddenInput())
     price = FacetField(label=_(u"Prix"), pretty_name=_("par-prix"), required=False)
     categories = FacetField(label=_(u"Catégorie"), pretty_name=_("par-categorie"), required=False, widget=forms.HiddenInput())
-    
+    renter = forms.CharField(required=False)
+
     def clean_r(self):
         location = self.cleaned_data.get('l', None)
         radius = self.cleaned_data.get('r', None)
         if location not in EMPTY_VALUES and radius in EMPTY_VALUES:
-            name, coordinates, radius = GoogleGeocoder().geocode(location)
+            geocoder = GoogleGeocoder()
+            departement = geocoder.get_departement(location)
+            if departement:
+                name, coordinates, radius = geocoder.geocode(departement['long_name'])
+            else:
+                name, coordinates, radius = geocoder.geocode(location)
+
         if radius in EMPTY_VALUES:
             radius = DEFAULT_RADIUS
         return radius
@@ -91,17 +98,70 @@ class FacetedSearchForm(SearchForm):
             if self.load_all:
                 sqs = sqs.load_all()
             
+            status = self.cleaned_data.get('renter')
+            if status == "particuliers":
+                sqs = sqs.filter(pro=False)
+            elif status == "professionnels":
+                sqs = sqs.filter(pro=True)
+
+            top_products = sqs.filter(is_top=True)[:3]
+            if top_products:
+                # XXX: ugly workaround because of SOLR-1658 (https://issues.apache.org/jira/browse/SOLR-1658)
+                # as soon as we upgrad solr we should remove this workaround
+                # I subclassed and modified the query string generator function in a SearchQuery class
+                # to remove the outer parenthesis of a negation.
+                from haystack.backends.solr_backend import SearchQuery
+                from haystack.constants import DJANGO_CT, VALID_FILTERS, FILTER_SEPARATOR
+                class BSQ(SearchQuery):
+                    def build_query(self):
+                        """
+                        Interprets the collected query metadata and builds the final query to
+                        be sent to the backend.
+                        """
+                        query = self.query_filter.as_query_string(self.build_query_fragment)
+
+                        if not query:
+                            # Match all.
+                            query = self.matching_all_fragment()
+
+                        if len(self.models):
+                            models = sorted(['%s:%s.%s' % (DJANGO_CT, model._meta.app_label, model._meta.module_name) for model in self.models])
+                            models_clause = ' OR '.join(models)
+
+                            if query != self.matching_all_fragment():
+                                if query.startswith('NOT'):
+                                    final_query = '%s AND (%s)' % (query, models_clause)
+                                else:
+                                    final_query = '(%s) AND (%s)' % (query, models_clause)
+                            else:
+                                final_query = models_clause
+                        else:
+                            final_query = query
+
+                        if self.boost:
+                            boost_list = []
+
+                            for boost_word, boost_value in self.boost.items():
+                                boost_list.append(self.boost_fragment(boost_word, boost_value))
+
+                            final_query = "%s %s" % (final_query, " ".join(boost_list))
+                        
+                        return final_query
+                sqs.query = sqs.query._clone(BSQ)
+
+                sqs = sqs.exclude(id__in=[product.id for product in top_products])
+
             for key in self.cleaned_data.keys():
-                if self.cleaned_data[key] and key not in ["q", "l", "r", "sort"]:
+                if self.cleaned_data[key] and key not in ["q", "l", "r", "sort", "renter"]:
                     sqs = sqs.narrow("%s_exact:%s" % (key, self.cleaned_data[key]))
             
             if self.cleaned_data['sort']:
                 sqs = sqs.order_by(self.cleaned_data['sort'])
             else:
                 sqs = sqs.order_by(SORT.RECENT)
-            return sqs, suggestions
+            return sqs, suggestions, top_products
         else:
-            return self.searchqueryset, None
+            return self.searchqueryset, None, top_products
 
 
 class AlertSearchForm(SearchForm):
@@ -633,3 +693,14 @@ class AlertForm(forms.ModelForm):
     class Meta:
         model = Alert
         fields = ('description', 'designation')
+
+
+from eloue.products.models import ProductHighlight, ProductTopPosition
+
+class HighlightForm(forms.ModelForm):
+    class Meta:
+        model = ProductHighlight
+
+class TopPositionForm(forms.ModelForm):
+    class Meta:
+        model = ProductTopPosition

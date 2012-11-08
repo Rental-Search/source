@@ -1,0 +1,133 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Espace professionnel" %}{% endblock %}
+
+{% block content %}
+<div class="container-main">
+	<ul class="breadcrumb">
+    	<li><a href="{% url home %}">{% trans "Accueil" %}</a></li>
+    	<li>{% trans "Espace professionnel" %}</li>
+    </ul>
+    <div class="one-content">
+    	<h1 style="margin-bottom: 30px; font-size: 30px;">{% trans "Bienvenue sur notre espace professionnel" %}</h1>
+    	<div class="pro-introduction">
+    		<div class="pro-welcome">
+    			<p style="margin-bottom: 15px;">
+	    			e-loue.com est une place de marché<br> de la location.
+	    		</p>
+	    		<p style="font-size: 18px;">
+	    			Quelque soit votre domaine d’activité dans la location, nos membres seront intéréssés par vos annonces.
+	    		</p>
+    		</div>
+    		<div class="pro-intro-desc">
+	    		<ul>
+	    			<li>
+	    				<i class="pro-check"></i> Gérer plus de locations
+	    			</li>
+	    			<li>
+	    				<i class="pro-check"></i> Canal de distribution complémentaire
+	    			</li>
+	    			<li>
+	    				<i class="pro-check"></i> Visibilité sur un site très connu
+	    			</li>
+	    			<li>
+	    				<i class="pro-check"></i> Augmenter vos locations
+	    			</li>
+	    			<li>
+	    				<i class="pro-check"></i> Toucher tous les membres de e-loue
+	    			</li>
+	    		</ul>
+	    	</div>
+    	</div>
+    	<h2 style="margin-bottom: 40px">{% trans "Comment ça marche ?" %}</h2>
+    	<div class="pro-options">
+        	<ul class="first">
+        		<li style="text-align: justify;">
+        			<span class="title-option">Publiez vos annonces</span><br>
+        			Vous publiez vos annonces directement sur le site. Si vous avez un volume très important d'annonces contactez-nous pour qu'on intègre directement votre catalogue.
+        		</li>
+        		<li style="text-align: justify;">
+        			<span class="title-option">Page entreprise</span><br>
+        			Si vous le souhaitez, votre logo, numéro de téléphone et adresse de votre site web apparaîtront gratuitement. Vous pouvez choisir des options supplémentaires.
+        		</li>
+        	</ul>
+        	<ul>
+        		<li style="text-align: justify;">
+        			<span class="title-option">Mise en relation</span><br>
+        			Les membres de e-loue peuvent voir vos annonces et vous contactent directement s'il sont intéressés. La réservation et le paiement se feront directement dans votre magasin ou sur votre site internet.
+        		</li>
+        		<li style="text-align: justify;">
+        			<span class="title-option">Sans engagement</span><br>
+        			Vous résiliez quand vous voulez sans frais, il n'y a aucun engagement de durée.
+        		</li>
+        	</ul>
+        </div>
+    	<h2 style="margin-bottom: 40px;">{% trans "Choisissez un abonnement adapté à vos besoin" %} :</h2>
+    	<div class="plans">
+    		{% for plan in plans %}
+	    		{% if forloop.last %}
+	    		<div class="info-block infini-plan">
+	    			<p class="infini-items">{% trans "Annonces illimitées" %}</p>
+	    			<div class="plan-description">
+		    			<h2>{{ plan.name }}</h2>
+		    			<p class="plan_price">
+			            		{{ plan.price|floatformat:0 }}&euro;<span>/mois</span>
+			            </p>
+			        </div>
+	        	{% else %}
+	    		<div class="info-block plan {% if forloop.first %}first{% endif %}">
+		            <h2>
+		            	{{ plan.name }} 
+		            	<div class="plan_price">
+		            		{{ plan.price|floatformat:0 }}&euro;<span>/mois</span>
+		            	</div>
+		            </h2>
+		            <p class="max-items">{{ plan.maximum_items }} {% trans "annonces maximum" %}</p>
+	        	{% endif %}
+                {% if plan.pk != request.user.current_subscription.propackage.pk %}
+                        <form action="{% if request.user.is_authenticated %}{% url patron_edit_subscription %}{% else %} {% endif %}" method="post">
+                            {% csrf_token %}
+                            <input type="hidden" name="{% if request.user.is_authenticated %}{% else %}0-{% endif %}subscription" value="{{ plan.pk }}" />
+                            <input type="submit" value="Choisir cet abonnement" class="btn-select-plan"/>
+                        </form>
+                {% else %}
+                    <div class="selected-plan">Votre abonnement actuel</div>
+                {% endif %}
+                </div>
+        	{% endfor %}
+        </div>
+        <h2 style="margin-bottom: 40px;">{% trans "Des options vous sont proposées pour augmenter votre visibilité et votre réactivité" %} :</h2>
+        <div class="pro-options">
+        	<ul class="first">
+        		<li>
+        			<i class="notification"></i>
+        			<span class="title-option">Notifications par email</span>
+        			<span class="price-option">0,01&euro;/envoi</span><br>
+        			Recevez les demandes de devis sur plusieurs adresses emails.
+        		</li>
+        		<li>
+        			<i class="highlight"></i>
+        			<span class="title-option">Mise en avant</span>
+        			<span class="price-option">7,50&euro;/mois/annonce</span><br>
+        			Votre annonce est mise en avant dans les listes (page d’accueil, résultats de recherche, annonces similaires).
+        		</li>
+        	</ul>
+        	<ul>
+        		<li>
+        			<i class="sms"></i>
+        			<span class="title-option">Notifications par SMS</span>
+        			<span class="price-option">0,08&euro;/envoi</span><br>
+        			Pour répondre rapidement aux devis, recevez les demandes de réservation sur votre mobile.
+        		</li>
+        		<li>
+        			<i class="top-position"></i>
+        			<span class="title-option">Top position</span>
+        			<span class="price-option">5,50&euro;/mois/annonce</span><br>
+        			Votre annonce est mise en première position des résultats de recherches sur le site.
+        		</li>
+        	</ul>
+        </div>
+	</div>        
+</div>
+{% endblock %}

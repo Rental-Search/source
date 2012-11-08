@@ -1,0 +1,825 @@
+// PRODUCT LIST
+ //--------------
+ 
+.product-list {
+  .highlight {
+    background-color: #e3f6fd;
+  }
+}
+
+.product-list li {
+ border-bottom: 1px solid #b2ced9;
+ height: 80px;
+
+ &:first-child {
+   border-top: 1px solid #b2ced9;
+ }
+
+ &:last-child {
+   border-bottom: 0;
+ }
+}
+
+.pl-marker {
+  float: left; 
+  padding-top: 10px; 
+  padding-left: 5px; 
+  color: #364C59; 
+
+  #font > .sans-serif('Ubuntu', normal, 13px);
+}
+
+.pl-img {
+ float: left;
+ .size(60px, 80px);
+ display: table-cell;
+ text-align: center;
+ vertical-align: middle;
+}
+
+.pl-content {
+ float: left;
+
+ address {
+   #font > .sans-serif('Myriad Pro', normal, 13px);
+   color: @blueDark;
+   margin-bottom: 5px;
+ }
+
+ .pl-price {
+   float: left;
+   background-color: #f7f1c1;
+   .rounded(3px);
+
+   #font > .sans-serif(Arial, bold, @basefont);
+   color: @orange;
+
+   padding: 4px;
+
+   span {
+     font-size: 12px;
+   }
+ }
+}
+
+.category-description {
+  #font > .sans-serif('Ubuntu', normal, 12px);
+  color: @blueDark;
+  margin-bottom: 20px;
+  line-height: 16px;
+  text-align: justify;
+}
+
+.more-product {
+  text-align: center; 
+  height: auto; 
+  padding: 10px; 
+  border-top: 1px solid #B2CED9;
+  border-bottom: 1px solid #B2CED9;
+
+  .more-product-link {
+    background-color: #F7F8FA;
+    display: block;
+
+    border: 1px solid #B2CED9;
+    padding: 8px;
+    .rounded(3px);
+
+    #font > .sans-serif('Myriad Pro', normal, 13px);
+  }
+
+  .more-product-link.loading {
+    background: #F7F8FA url("../images/waiting.gif") no-repeat center 9px;
+    text-indent: -9999px;
+  }
+}
+
+.pl-avatar {
+ float: right;
+ display: block;
+ position: relative;
+ .size(60px, 80px);
+
+ #gradient > .vertical(#e8ebef, #f7f8fa);
+ .box-shadow(inset 0 1px 0 rgba(255,255,255,0.7));
+ border-left: 1px solid #b2ced9;
+
+ .dial-avatar {
+   background: transparent url("../images/dial-avatar.png") no-repeat 0 0;
+   display: block;
+   position: absolute;
+   .size(14px, 9px);
+   top: 33px;
+   left: -9px;
+ }
+
+ a {
+   display: block;
+   .size(60px, 60px);
+   position: relative;
+
+   margin-left: 10px;
+
+   &:after {
+     .box-shadow(inset 0 1px 2px rgba(0,0,0,0.35));
+     .rounded(3px);
+
+     position: absolute;
+     top: 0;
+     left: 0;
+     .size(100%, 100%);
+     z-index: 2;
+     content: "";
+   }
+   img {
+     display: block;
+     .rounded(3px);
+   }
+ }
+}
+
+.pl-img, .pl-content, .pl-avatar{
+ padding: 10px 0;
+}
+
+// PRODUCT VIGNETTE
+// ----------------
+
+.product-vignettes {
+  margin-right: -15px;
+  
+  .clearfix();
+  
+  > li {
+    float: left;
+    position: relative;
+    .size(204px, 200px);
+    
+    background: @blueLight;
+    border: 1px solid #b2ced9;
+    .rounded(3px);
+    @shadow: inset 0 1px 0 rgba(255,255,255,1);
+    .box-shadow(@shadow);
+    
+    text-align: center;
+    
+    margin-right: 15px;
+    margin-bottom: 15px;
+    padding: 10px;
+    
+    img {
+      @shadow: 0 0 0 1px rgba(0, 0, 0, 0.2);
+      .box-shadow(@shadow);
+      
+      margin-bottom: 10px;
+    }
+    
+    h3 {
+      #font > .sans-serif('Ubuntu', bold, 16px);
+      text-shadow: 0 1px rgba(255,255,255,1);
+    }
+    
+    &:hover {
+       .box-shadow(0 0 0 3px rgba(178,206,217,0.2));
+     }
+  }
+  
+  .pv-price {
+    position: absolute;
+    bottom: 60px;
+    right: -5px;
+    
+    background-color: #f7f1c1;
+    .rounded(3px);
+
+    #font > .sans-serif(Arial, bold, @basefont);
+    color: @orange;
+
+    padding: 4px;
+
+    span { font-size: 12px; }
+   }
+   
+   a:hover {
+     text-decoration: none;
+   }
+}
+
+
+ //PRODUCT TABS
+ //-------------
+
+ .product-tabs {
+   margin-bottom: 20px;
+
+   .ui-widget-header { 
+     background: #fff;
+     border: none;
+   }
+
+   .ui-state-active, .ui-widget-content .ui-state-active, .ui-widget-header .ui-state-active { 
+     background: @blueLight;
+     @shadow:  0 1px 0 @blueLight;
+     .box-shadow(@shadow);
+   }
+
+   .ui-widget-content {
+     border: 1px solid #b2ced9 !important;
+     .border-radius( 3px, 3px, 3px, 0);
+     @shadow: inset 0 1px 0 rgba(255,255,255,1);
+     .box-shadow(@shadow);
+     background: @blueLight !important;
+
+     padding: 20px !important;
+   }
+
+   #gallery {
+     text-align: center;
+   }
+ }
+
+
+#conditions {
+  p {
+    line-height: 16px;
+    margin-bottom: 5px;
+  }
+
+  p.last { margin-bottom: 20px; }
+
+  h4 {
+    #font > .sans-serif('Ubuntu', bold, 14px);
+    color: @blueDark;
+    margin-bottom: 10px;
+  }
+}
+
+
+ // PRODUCT PROPERTIES
+//--------------------
+.product-properties {
+  .clearfix();
+  
+  > li {
+    float: left;
+    margin-right: 10px;
+    color: @blueDark;
+  }
+  
+  .divider {
+    color: @blueDark;
+  }
+}
+
+.product-deposit {
+  color: @blueDark;
+  
+  margin-bottom: 10px;
+
+  span {
+    color: @orange;
+  }
+}
+
+
+// PRODUCT FILTER BAR
+// ------------------
+
+.product-filter {
+  background-color: @blueLight;
+  border: 1px solid #B2CED9;
+  .border-radius(3px, 0, 0, 3px);
+  
+  margin: 0;
+  padding: 0;
+  
+  .clearfix();
+  
+  > li {
+    float: left;
+    
+    a {
+      display: block;
+      border-right: 1px solid #B2CED9;
+      
+      #font > .sans-serif(Arial, bold, 12px);
+      color: #98a7af;
+      text-shadow: 0 1px rgba(255,255,255,1); 
+      
+      padding: 9px 10px;
+      
+      &:hover {
+        #gradient > .vertical(#d6e5f2, #e4eff9);
+        color: @blueDark;
+        text-decoration: none;
+      }
+    }
+  }
+  
+  .filter-title {
+    border-right: 1px solid #B2CED9;
+    
+    #font > .sans-serif(Arial, normal, 12px);
+    color: @blueDark;
+    text-shadow: 0 1px rgba(255,255,255,1);
+    
+    padding: 9px 10px;
+  }
+  
+  .filter-selected {
+    #gradient > .vertical(#d6e5f2, #e4eff9);
+    border-right: 1px solid #B2CED9;
+    
+    #font > .sans-serif(Arial, bold, 12px);
+    color: @blueDark;
+    text-shadow: 0 1px rgba(255,255,255,1);
+    
+    padding: 9px 10px;
+  }
+}
+
+
+// PRODUCT
+// -----------
+
+
+.content-main {
+  .makeColumn(8);
+}
+
+.content-aside {
+  .makeColumn(4);
+}
+
+.product-info {
+  .clearfix();
+
+  margin-bottom: 20px;
+  #font > .sans-serif('Ubuntu', normal, 13px);
+
+  p {
+    color: #555;
+    line-height: 18px;
+  }
+}
+
+.product-desc {
+  margin-bottom: 30px;
+
+  float: left;
+  width: 350px;
+  margin-right: 20px;
+
+  p {
+    line-height: 18px;
+  }
+}
+
+.product-comment {
+  margin-bottom: 20px;
+
+  li {
+    #font > .sans-serif('Ubuntu', normal, 13px);
+    color: #555;
+  }
+}
+
+.social-button {
+  text-align: right;
+  padding-top: 5px;
+  margin-bottom: 15px;
+  
+  li { 
+    display: inline;
+    margin-right: 5px;
+  }
+  
+  .fb { vertical-align: 25%; }
+}
+
+.booking-block {
+  background-color: #e4f8d1;
+  border: 1px solid #92db49;
+  .rounded(3px);
+  
+  margin-bottom: 30px;
+  
+  form {
+    margin-bottom: 10px;
+  }
+  
+  h2 {
+    #gradient > .vertical(#b8e68c, #ccf7a4);
+    .box-shadow(inset 0 1px 0 rgba(255,255,255,0.7));
+    border-bottom: 1px solid #92DB49;
+    
+    #font > .sans-serif('Ubuntu', bold, 18px);
+    color: @blueDark;
+    text-shadow: 0 1px rgba(255,255,255,0.5);
+    
+    padding: 10px;
+    margin-bottom: 15px;
+  }
+  
+  .top-block {
+    border-bottom: 1px dashed #92DB49;
+    
+    padding-bottom: 15px;
+    margin: 0 10px 10px;
+    
+    #font > .sans-serif(Arial, bold, 24px);
+    color: @orange;
+  }
+  
+  span {
+    #font > .sans-serif(Arial, bold, @basefont);
+    color: @blueDark;
+  }
+  
+  .main-block {
+    border-bottom: 1px dashed #92DB49;
+    
+    padding-bottom: 10px;
+    margin: 0 10px 10px;
+  }
+  
+  .booking-dates {
+    .clearfix();
+    
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+  }
+  
+  .start-date {
+    float: left;
+    width: 134px;
+    
+    margin-right: 10px;
+  }
+  
+  .end-date {
+    float: left;
+    width: 134px;
+  }
+  
+  .date-input {
+    background: #fff url("../images/icone-calendrier.png") no-repeat 110px 5px;
+    width: 124px;
+    #font > .sans-serif(Arial, normal, 12px);
+  }
+  
+  select {
+    #font > .sans-serif(Arial, normal, 12px);
+    margin-top: 10px;
+    width: 60px;
+  }
+  
+  .quantity-input {
+    border-top: 1px dashed #92DB49;
+    border-bottom: 1px dashed #92DB49;
+    
+    float: left; 
+    width: 278px; 
+    margin-top: 10px;
+    padding: 10px 0;
+    
+    select { margin-top: 0px; }
+    
+    label { float: left; margin-right: 5px; margin-top: 3px;}
+  }
+  
+  .bottom-block {
+    margin: 0 10px;
+    
+    .total-price {
+      border-bottom: 1px dashed #92DB49;
+      
+      #font > .sans-serif(Arial, normal, 18px);
+      color: @blueDark;
+      text-align: right;
+      
+      padding: 5px 0 15px;
+      margin-bottom: 10px;
+      
+      .day {
+        #font > .sans-serif(Arial, bold, 18px);
+      }
+
+      .pricing {
+        #font > .sans-serif(Arial, bold, 18px);
+        color: @orange;
+      }
+    }
+
+    .booking-info { margin-top: 10px;}
+  }
+  
+  .available {
+    background: #fff url("../images/available_icon.png") no-repeat 8px 9px;
+    .box-shadow(0 1px 2px rgba(0,0,0,0.3));
+    .rounded(3px);
+    
+    #font > .sans-serif('Ubuntu', normal, 13px);
+    color: @green;
+    
+    padding: 7px 7px 7px 30px;
+    margin-bottom: 10px;
+  }
+  
+  .unavailable {
+    background: #fff url("../images/unavailable_icon.png") no-repeat 8px 9px;
+    .box-shadow(0 1px 2px rgba(0,0,0,0.3));
+    .rounded(3px);
+    
+    #font > .sans-serif('Ubuntu', normal, 13px);
+    color: @red;
+    
+    padding: 7px 7px 7px 30px;
+    margin-bottom: 10px;
+  }
+}
+
+#owner {
+  
+  h2 { margin-bottom: 0; }
+  
+  .onwer-avatar {
+    display: block;
+    float: left;
+    .size(100px, 100px);
+    position: relative;
+
+    margin: 10px;
+
+    &:after {
+      .box-shadow(inset 0 1px 2px rgba(0,0,0,0.35));
+      .rounded(3px);
+
+      position: absolute;
+      top: 0;
+      left: 0;
+      .size(100%, 100%);
+      z-index: 2;
+      content: "";
+    }
+    img {
+      display: block;
+      .rounded(3px);
+    }
+  }
+  
+  .owner-username {
+    margin: 10px 0;
+
+    a {
+        #font > .sans-serif(Arial, normal, 22px);
+        color: @green;
+        font-style: italic;
+    }
+  }
+  
+  address {
+    #font > .sans-serif(Arial, normal, @basefont);
+    color: @blueDark;
+    margin-right: 10px;
+    margin-bottom: 15px;
+    line-height: 14px;
+  }
+  
+  .btn-contactme { padding: 8px 36px; margin-bottom: 15px;}
+  
+  table {
+    margin: 0 10px 10px;
+    width: 280px; 
+  }
+
+  .pro-contact {
+    margin: 5px 10px 0;
+
+    li {
+      #font > .sans-serif(Arial, normal, @basefont);
+      margin-bottom: 10px;
+      text-align: center;
+    }
+  }
+  
+}
+
+#related-product { 
+  background-color: #fff;
+  
+  h2 { margin-bottom: 0px; }
+}
+
+
+// PRICES AND CALENDAR
+//---------------------
+
+#prices_calendar {
+  #font > .sans-serif("Ubuntu", normal, 13px);
+  .clearfix();
+}
+
+.prices {
+  float: left;
+  width: 218px;
+
+  margin-right: 20px;
+
+  .service-included {
+    li {
+      margin-bottom: 5px;
+      color: @blueDark;
+      #font > .sans-serif("Ubuntu", normal, 11px);
+      margin-left: 3px;
+      line-height: 14px;
+    }
+  }
+
+  .table-bg {
+    background-color: #fff;
+    border: 1px solid #DDD;
+    .rounded(3px) !important;
+
+    margin-bottom: 10px;
+  }
+
+  .table {
+    margin-bottom: 0px;
+    width: 216px; 
+    color: #364C59;
+  }
+
+  .price-head { text-align: right; }
+
+  .price-display {
+    vertical-align: middle;
+    text-align: right;
+  }
+}
+
+.calendar {
+  float: left;
+  width: 338px;
+
+  .calendar-legend {
+    margin-top: 10px;
+
+    li { float: left; margin-right: 20px; }
+
+    .clearfix();
+
+    .unavailable-date {
+      background-color: #EA0C31; 
+      display: block; 
+      height: 20px; 
+      width: 33px; 
+      float: left; 
+      margin-right: 5px; 
+      margin-top: -4px;
+    }
+
+    .available-date {
+      background-color: @green;
+      display: block; 
+      height: 20px; 
+      width: 33px; 
+      float: left; 
+      margin-right: 5px; 
+      margin-top: -4px;
+    }
+  }
+}
+
+.calendar-display {
+  
+  color: #364C59;
+  
+  .ui-datepicker {
+    -webkit-border-top-left-radius: 3px !important;
+    border-top-left-radius: 3px !important;
+    -moz-border-radius-topleft: 3px !important;
+
+    background: #fff !important;
+
+    padding: 10px !important;
+
+    border: 1px solid #DDD !important;
+  }
+
+  .ui-state-default {
+      -webkit-box-shadow: none !important;
+      -moz-box-shadow: none !important;
+      box-shadow: none !important;
+      text-align: center;
+      padding: 4px 0;
+
+      background: @green !important;
+
+      color: #fff;
+
+      border: 1px solid @green !important;
+  }
+
+  .outdated .ui-state-default {
+    background: #FFF !important;
+    color: #DDD;
+    border: none !important;
+  }
+
+  .unavailable .ui-state-default {
+    background: #EA0C31 !important;
+    color: #FFF;
+    border:   1px solid #EA0C31 !important;
+  }
+
+  .ui-state-active {
+    background: @green !important;
+  }
+
+  .ui-datepicker-title {
+    font-size: 14px;
+    font-weight: bold;
+  }
+
+}
+
+
+// PRODUCT OPTIONS
+//-----------------
+
+.product-options {
+  li {
+    #font > .sans-serif("Ubuntu", normal, @basefont);
+    display: inline-block;
+    margin-right: 10px;
+
+    width: 150px;
+
+    color: #555;
+  } 
+}
+
+
+//PRODUCT RESUME
+//--------------
+
+.product-resume {
+  background: @blueLight;
+  border: 1px solid #b2ced9;
+  .rounded(3px);
+  @shadow: inset 0 1px 0 rgba(255,255,255,1);
+  .box-shadow(@shadow);
+
+  padding: 10px 10px;
+
+  .clearfix();
+
+  margin-bottom: 15px;
+
+  #font > .sans-serif(Arial, normal, 13px);
+
+  .product-address {
+    color: @green;
+
+    margin-bottom: 10px;
+  }
+
+  .product-resume-left {
+    float: left;
+  }
+
+  .product-resume-right {
+    float: right;
+
+    a {
+      display: block; 
+      float: right; 
+      margin-top: 5px; 
+      font-size: 11px;
+    }
+  }
+}
+
+
+.top-ads-title {
+   margin-top: 5px; 
+   margin-bottom: 4px;  
+
+   #font > .sans-serif(Arial, normal, 12px);
+
+   color: #364C59; 
+   text-indent: 10px;
+}
+
+#top-ads-list {
+  border-left: 1px solid #B2CED9; 
+  border-right: 1px solid #B2CED9; 
+  border-top: 1px solid #b2CED9; 
+  background: #F7F8FA;
+
+  li {
+    border-top: none;
+  }
+}
+

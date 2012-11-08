@@ -1,0 +1,302 @@
+/*****
+mobile
+******/
+
+html, body, div, span, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, code, sup,
+del, dfn, em, img, q, dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td 
+{
+font-weight: inherit;
+font-style: inherit;
+font-size: 100%;
+font-family: inherit;
+padding: 0;
+margin: 0;
+border: 0;
+
+}
+
+.clear { clear: both; }
+
+
+a	
+{ 
+	color: #364C59; 
+	text-decoration: none; 
+}
+a:visited	{ color: #364C59; }
+a:focus, a:hover{ text-decoration: underline; }
+
+ul { list-style: none; }
+ul, ol
+{
+	padding: 0;
+	margin: 0;
+}
+
+body
+{
+  color: #364C59;
+  background: #ECF6FF url("../images/body_bg.png") repeat 0 0;
+  font: 14px arial,sans-serif;
+}
+
+h1 
+{ 
+	font-size: 16px;
+	margin-bottom: 10px;
+}
+h2 { font-size: 14px; }
+
+
+p { margin-bottom: 10px; }
+
+
+
+#header {}
+	.top-header 
+	{ 
+		height: 20px;
+		margin: 10px 0; 
+	}
+		.logo
+		{
+			float: left;
+			display: block;
+			height: 20px;
+			width: 60px;
+			padding-left: 5px;
+		}
+		.signup, .signout
+		{
+			float: right;
+			padding: 3px 5px 0 0;
+			font-size: 11px;
+			color: #6EB924 !important;
+		}
+		
+	.nav-header 
+	{ 
+		background-color: #fff;
+		height: 28px;
+		margin: 5px 0 0; 
+	}
+		.nav 
+		{ 
+			height: 28px;
+		}
+			.nav li
+			{
+				background-color: #f5f5f5;
+				float: left;
+				width: 50%;
+				text-align: center;
+				border-left: 1px solid #CCDBE9;
+				border-bottom: 1px solid #CCDBE9;
+				margin-left: -1px;
+			}
+			
+			#welcome { border-left: none; }
+			
+			.selected 
+			{ 
+				background-color: #fff !important;
+				border-top: 1px solid #CCDBE9;
+				border-bottom: none !important;
+				z-index: 1;
+			}
+				.selected a { font-weight: bold; }
+				
+				.nav li a
+				{
+					display: block;
+					padding: 5px 0 6px;
+				}
+				
+#content-home, #content
+{
+	background-color: #fff;
+	padding-top: 15px;
+	border-bottom: 1px solid #CCDBE9;
+}
+	#content-home h1 { color: #7C4D32; }
+	#content h1
+	{
+		padding: 0 0 15px;
+	}
+	.container
+	{
+		padding: 10px;
+	}
+	
+	.product-list {}
+
+#footer
+{
+	height: 30px;
+	font-size: 11px;
+	padding-bottom: 20px;
+	margin: 15px 0 10px;
+}
+	#footer p 
+	{ 
+		text-align: center;
+		margin-bottom: 5px;
+		padding: 0 5px;
+	}
+
+.form
+	label { font-size: 12px; }
+	input 
+	{ 
+		padding: 4px 5px;
+		margin: 5px 0;
+		width: 96%;
+		height: 15px;
+	}
+	
+input[type="submit"], .btn
+{
+	padding: 5px;
+	border: none;
+	font-weight: bold;
+	text-shadow: transparent 0 -1px 0;
+	text-overflow: ellipsis;
+	text-decoration: none;
+	white-space: nowrap;
+	letter-spacing: 1px;
+	border: none;
+	border-radius: 3px;
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	-webkit-appearance: none;
+}
+	.big-orange 
+	{ 
+		background-color: #FF7200;
+		width: 100%;
+		height: 30px;
+		font-size: 14px;
+		color: #fff;
+	}
+	.small-blue
+	{
+		background-color: #e9f1f7;
+		height: 15px;
+		font-size: 12px;
+		border: 1px solid #93b1c2;
+		color: #364C59;
+		width: 50px;
+		text-align: center;
+	}
+
+.arrow-right
+{
+	display: block;
+	float: right;
+	height: 20px;
+	width: 13px;
+}
+
+.product-list { margin-top: 5px; }
+
+.pl-product 
+{
+	height: 50px;
+	padding: 5px 0;
+	font-size: 14px;
+	font-weight: normal;
+	border-bottom: 1px dashed #B9CAD4;
+}
+
+	.pl-product a 
+	{
+		height: 50px;
+		padding: 0;
+		overflow: hidden;
+	}
+
+	.pl-img 
+	{
+		display: block;
+		position: absolute;
+		width: 50px;
+		height: 50px;
+		background: #EEE;
+	}
+
+	.pl-desc 
+	{
+		padding-left: 55px;
+		padding-right: 30px;
+	}
+
+	.pl-desc  p {
+		margin-bottom: 3px;
+	}
+	
+	.pl-desc .price
+	{
+		color: #FF7200;
+		font-size: 11px;
+	}
+
+	.pl-desc .from {
+		color: #999;
+		font-size: 11px;
+		overflow: hidden;
+	}
+	
+.search-link  
+{ 
+	color: #6EB924 !important;
+	font-size: 11px;
+}
+
+.pagination 
+{ 
+	height: 30px;
+	margin: 10px 0 0;
+}
+	.previous, .next { display: block; }
+	.previous { float: left; }
+	.next { float: right; }
+
+.product-thumbs
+{
+	float: right;
+	width: 50px;
+}
+
+.col1 { padding-right: 50px;}
+
+.product-pic
+{
+	float: left;
+	border: 1px solid #EAEAEA;
+	margin-bottom: 15px;
+	padding-top: 3px;
+	text-align: center;
+	width: 240px;
+}
+
+.product-desc { margin-bottom: 10px; }
+	.product-desc p { margin-bottom: 5px; }
+.product-properties 
+	{ 
+		color: #364C59;
+		margin-bottom: 10px;
+	}
+  .product-properties .p-value { font-weight: bold; }
+  .product-properties .owner { color: #6EB924 !important; }
+
+		
+
+
+
+
+
+

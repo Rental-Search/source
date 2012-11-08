@@ -4,7 +4,7 @@
 <div class="fbconnect-content">
   <div class="fb-elements">
     <div id="fbconnect">Connectez-vous avec Facebook</div>
-    <span class="fb-slogan">Plus simple et rapide.</span>
+      <span class="fb-slogan">Plus simple et rapide.</span>
     <div class="fb-pile">
         <fb:facepile app_id="{{FACEBOOK_APP_ID}}" width="240" max_rows="1"></fb:facepile>
     </div>
@@ -60,15 +60,15 @@
       <button type="submit" class="btn btn-primary">{% trans "Continuer"%}</button>
   </div>
   </form>
+
 </div>{# email-login-content #}
 {% block tail %}
-  {{ block.super }}
   <script src="//maps.googleapis.com/maps/api/js?sensor=false&amp;libraries=places" type="text/javascript"></script>
   <script>
     window.fbAsyncInit = function() {
       FB.init({
         appId      : '{{ FACEBOOK_APP_ID }}', // App ID
-        channelUrl : '{{ MEDIA_URL }}channel.html', // Channel File
+        channelUrl : '{{ STATIC_URL }}channel.html', // Channel File
         status     : true, // check login status
         cookie     : true, // enable cookies to allow the server to access the session
         xfbml      : true  // parse XFBML

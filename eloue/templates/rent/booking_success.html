@@ -11,13 +11,22 @@
     	<li>{% trans "Réservation effectuée avec succès" %}</li>
   	</ul>
   	<div class="content-main">
-  		<h2>{% trans "Réservation effectuée avec succès !" %}</h2>
-  		<p style="margin-bottom: 40px;">
-  			{% blocktrans %}
-  			Nous avons bien pris en comtpe votre réservation. Le propriétaire a été informé, il va vous répondre le plus rapidement possible (24h maximum).
-  			{% endblocktrans %}
-  		</p>
+      {% if booking.owner.current_subscription %}
+      <h2>{% trans "Demande de réservation effectuée avec succès !" %}</h2>
+      {% else %}
+      <h2>{% trans "Réservation effectuée avec succès !" %}</h2>
+      <p style="margin-bottom: 40px;">
+        {% blocktrans %}
+        Nous avons bien pris en comtpe votre réservation. Le propriétaire a été informé, il va vous répondre le plus rapidement possible (24h maximum).
+        {% endblocktrans %}
+      </p>
       <h2>{% trans "Résumé de la réservation" %}</h2>
+      <p style="margin-bottom: 40px;">
+        {% blocktrans %}
+        Votre demande de réservation a bien été envoyé au loueur. Il va prendre contact avec vous rapidement.
+        {% endblocktrans %}
+      </p>
+      {% endif %}
       <table class="table table-bordered booking-resume">
           <tbody>
               <tr>
@@ -25,10 +34,17 @@
                   <td><a href="{{booking.product.get_absolute_url}}" class="b-title">{{booking.product.summary|capfirst}}</a></td>
               </tr>
               <tr>
+                {% if booking.owner.current_subscription %}
+                <th>{% trans "Loueur"%}</th>
+                <td style="text-align: center;">
+                  <a href="{{booking.owner.get_absolute_url }}">{{ booking.owner.company_name }}</a>
+                </td>
+                {% else %}
                 <th>{% trans "Propriétaire"%}</th>
                 <td style="text-align: center;">
                   <a href="{{booking.owner.get_absolute_url }}">{{ booking.owner.username }}</a>
                 </td>
+                {% endif %}
               </tr>
               <tr>
                   <th>{% trans "Début" %}</th>
@@ -50,5 +66,28 @@
 </div>
 {% endblock %}
 
+{% block tail %}
+  {{ block.super }}
+  {% if not debug %}
+  <!-- Google Code for Location Https Conversion Page -->
+  <script type="text/javascript">
+  /* <![CDATA[ */
+  var google_conversion_id = 1027691277;
+  var google_conversion_language = "en";
+  var google_conversion_format = "3";
+  var google_conversion_color = "ffffff";
+  var google_conversion_label = "-XHsCMvspQMQjaaF6gM";
+  var google_conversion_value = 0;
+  /* ]]> */
+  </script>
+  <script type="text/javascript" src="https://www.googleadservices.com/pagead/conversion.js">
+  </script>
+  <noscript>
+  <div style="display:inline;">
+  <img height="1" width="1" style="border-style:none;" alt="" src="https://www.googleadservices.com/pagead/conversion/1027691277/?value=0&amp;label=-XHsCMvspQMQjaaF6gM&amp;guid=ON&amp;script=0"/>
+  </div>
+  </noscript>
+  {% endif %}
+{% endblock %}
 {% block footer %}
 {% endblock %}

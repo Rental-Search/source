@@ -21,24 +21,34 @@
                     {% endif %}
                 </a>
             </li>
-            <li>
-                <a href="{{ borrower_booking }}" class="{% block borrower_booking %}{% endblock %}{% active request  "^/dashboard/borrower/" %}">
-                    {% trans "Mes réservations" %}
-                    {% with request.user.rentals.authorized.count|add:request.user.rentals.pending.count|add:request.user.rentals.ongoing.count as count %}
-                        {% if count > 0%}
-                            ({{count}})
-                        {% endif %}
-                    {% endwith %}
-                </a>
-            </li>
+            {% if not request.user.current_subscription %}
+                <li>
+                    <a href="{{ borrower_booking }}" class="{% block borrower_booking %}{% endblock %}{% active request  "^/dashboard/borrower/" %}">
+                        {% trans "Mes réservations" %}
+                        {% with request.user.rentals.authorized.count|add:request.user.rentals.pending.count|add:request.user.rentals.ongoing.count as count %}
+                            {% if count > 0%}
+                                ({{count}})
+                            {% endif %}
+                        {% endwith %}
+                    </a>
+                </li>
+            {% endif %}
             <li>
                 <a href="{{ owner_product }}" class="{% block owner_product %}{% endblock %}{% active request "^/dashboard/owner/" %}">
                     {% trans "Mes annonces" %}
-                    {% with request.user.bookings.authorized.count|add:request.user.bookings.pending.count|add:request.user.bookings.ongoing.count as count %}
-                        {% if count > 0%}
-                            ({{count}})
-                        {% endif %}
-                    {% endwith %}
+                    {% if not request.user.current_subscription %}
+                        {% with request.user.bookings.authorized.count|add:request.user.bookings.pending.count|add:request.user.bookings.ongoing.count as count %}
+                            {% if count > 0%}
+                                ({{count}})
+                            {% endif %}
+                        {% endwith %}
+                    {% else %}
+                        {% with request.user.bookings.professional.count as count %}
+                            {% if count > 0%}
+                                ({{count}})
+                            {% endif %}
+                        {% endwith %}
+                    {% endif %}
                 </a>
             </li>
             <li><a href="{{ patron_edit }}" class="{% active request patron_edit %}">{% trans "Paramètres de compte" %}</a></li>
@@ -51,7 +61,7 @@
                 {% if user.avatar %}
                 <img src="{{ user.display.url }}" width="180" height="180">
                 {% else %}
-                <img src="{{ MEDIA_URL }}images/default_avatar.png" width="180" height="180">
+                <img src="{{ STATIC_URL }}images/default_avatar.png" width="180" height="180">
                 <a href="{% url patron_edit %}#id_username" class="add-avatar-link">Ajouter une photo<br>de profil</a>
                 {% endif %}
                 <h1>{{ user.first_name }} {{ user.last_name }}</h1>
@@ -65,32 +75,34 @@
             </div><!-- profil-description -->
         </div><!-- profil-block -->
         {% if user.work or user.school or user.languages.count %}
-        <div class="profil-block">
-            <h3>Plus d'info</h3>
-            {% if user.work %}
-                <h4>{% trans "Travail" %}</h4>
-                <p>{{ user.work }}</p>
+        {% with user as patron %}
+            {% if patron.current_subscription %}
+                {% include "accounts/partials/company_more_info.html" %}
+            {% else %}
+                {% include "accounts/partials/more_info.html" %}
             {% endif %}
-            {% if user.school %}
-                <h4>{% trans "Etudes" %}</h4>
-                <p>{{user.school}}</p>
-            {% endif %}
-            {% if user.languages.count %}
-                <h4>{% trans "Languages Parlées" %}</h4>
-                <p>{{ user.languages.all|join:", "}}</p>
-            {% endif %}
-        </div>{# profil-block #}
+        {% endwith %}
         {% endif %}
         <div class="profil-block last">
             {% with user as patron %}
-                {% include "accounts/partials/response_stats.html" %}
+                {% if not patron.current_subscription %}
+                    {% include "accounts/partials/response_stats.html" %}
+                {% endif %}
             {% endwith %}
         </div>{# profil-block #}
         {% endblock %}
     </div>{# content-aside-profil #}
     <div class="content-main-profil">
         {% include "partials/alerts_message.html" %}
+        
         {% block content-main-profil %}
+        {% if user.is_staff %}
+        <div class="invite-your-friends">
+            <img src="{{ STATIC_URL }}images/default_avatar.png" alt="" />
+            <p>Invitez vos amis à vous rejoindre sur e-loue pour encore plus de location !</p>
+            <a href="{% url facebook_invite%}" class="btn">{% trans "Envoyer des invitations" %}</a>
+        </div>
+        {% endif %}
         <div class="dashboard-last-message">
             <h2 style="margin-bottom: 20px;">{% trans "Vos nouveaux messages" %}</h2>
             {% if thread_list %}

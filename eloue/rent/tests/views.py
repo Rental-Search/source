@@ -1,14 +1,17 @@
 # -*- coding: utf-8 -*-
+import json
 import calendar
 from datetime import datetime, timedelta, time
 from decimal import Decimal as D
 from django.core.urlresolvers import reverse
+from django.utils.encoding import smart_str
 from django.test import TestCase
 from django.utils import simplejson
 
 from django.utils.translation import ugettext as _
 
 from eloue.rent.models import Booking
+from eloue.utils import currency
 
 class BookingViewsTest(TestCase):
     fixtures = ['category', 'patron', 'address', 'price', 'product', 'booking', 'sinister']
@@ -45,8 +48,8 @@ class BookingViewsTest(TestCase):
         json = simplejson.loads(response.content)
         self.assertTrue('duration' in json)
         self.assertTrue('total_price' in json)
-        self.assertEquals(json['total_price'], '72.00')
-        self.assertEquals(json['duration'], '3 '+_("jours"))
+        self.assertEquals(json['total_price'], simplejson.loads(simplejson.dumps(smart_str(currency(D('72.00'))))))
+        self.assertEquals(json['duration'], '3 '+ "jours")
     
     def test_booking_price_error(self):
         started_at = self._next_weekday(0)
@@ -164,7 +167,6 @@ class BookingViewsTestWithMultipleQuantity(TestCase):
         }, HTTP_X_REQUESTED_WITH='XMLHttpRequest')
         self.assertEqual(response.status_code, 200)
         json = simplejson.loads(response.content)
-        print json
         self.assertTrue('max_available' in json)
         self.assertEqual(json['max_available'], 1)
         self.assertFalse('warnings' in json)
@@ -183,7 +185,6 @@ class BookingViewsTestWithMultipleQuantity(TestCase):
         }, HTTP_X_REQUESTED_WITH='XMLHttpRequest')
         self.assertEqual(response.status_code, 200)
         json = simplejson.loads(response.content)
-        print json
         self.assertTrue('max_available' in json)
         self.assertEqual(json['max_available'], 0)
         self.assertFalse('warnings' in json)

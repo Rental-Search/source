@@ -1,0 +1,113 @@
+{% load i18n cache %}
+
+{% cache 900 patron_details_info patron.pk %}
+{% with patron.languages as languages %}
+    {% with languages.count as languages_count %}
+    <div class="profil-block" style="border-bottom: none;">
+        <h3>{% trans "Plus d'info" %}</h3>
+            {% if patron.default_number %}
+            <h4>{% trans "Téléphone" %}</h4> 
+            <p>
+                {% with patron.default_number as default_number %}
+                    {{ default_number.number }}
+                {% endwith %}
+            </p>
+            {% endif %}
+            {% if patron.url %}
+            <h4>{% trans "Site Internet"%}</h4>
+            <p><a href="{{ patron.url }}">{{patron.url}}</a></p>
+            {% endif %}
+            {% if languages_count %}
+            <h4>{% trans "Languages Parlées" %}</h4>
+            <p style="margin-bottom: 30px;">{{ languages.all|join:", "}}</p>
+            {% endif %}
+        {% if patron.openingtimes %}
+        {% with patron.openingtimes as openingtimes %}
+            <h3>{% trans "Horaires d'ouverture" %}</h3>
+            <table class="timetable">
+                <tbody>
+                    <tr>
+                        <td width="40%">Lundi</td>
+                        {% if openingtimes.monday_opens %}
+                            <td width="60%" align="center">
+                                {{openingtimes.monday_opens|time:"G\hi"}} - {{openingtimes.monday_closes|time:"G\hi"}}{% if openingtimes.monday_opens_second %}, {{openingtimes.monday_opens_second|time:"G\hi"}} - {{openingtimes.monday_closes_second|time:"G\hi"}}
+                                {% endif %}
+                            </td>
+                        {% else %}
+                            <td width="60%" align="center">Fermé</td>
+                        {% endif %}
+                    </tr>
+                    <tr>
+                        <td width="40%">Mardi</td>
+                        {% if openingtimes.tuesday_opens %}
+                            <td width="60%" align="center">
+                                {{openingtimes.tuesday_opens|time:"G\hi"}} - {{openingtimes.tuesday_closes|time:"G\hi"}}{% if openingtimes.tuesday_opens_second %}, {{openingtimes.tuesday_opens_second|time:"G\hi"}} - {{openingtimes.tuesday_closes_second|time:"G\hi"}}
+                                {% endif %}
+                            </td>
+                        {% else %}
+                            <td width="60%" align="center">Fermé</td>
+                        {% endif %}
+                    </tr>
+                    <tr>
+                        <td width="40%">Mercredi</td>
+                        {% if openingtimes.wednesday_opens %}
+                            <td width="60%" align="center">
+                                {{openingtimes.wednesday_opens|time:"G\hi"}} - {{openingtimes.wednesday_closes|time:"G\hi"}}{% if openingtimes.wednesday_opens_second %}, {{openingtimes.wednesday_opens_second|time:"G\hi"}} - {{openingtimes.wednesday_closes_second|time:"G\hi"}}
+                                {% endif %}
+                            </td>
+                        {% else %}
+                            <td width="60%" align="center">Fermé</td>
+                        {% endif %}
+                    </tr>
+                    <tr>
+                        <td width="40%">Jeudi</td>
+                        {% if openingtimes.thursday_opens %}
+                        <td width="60%" align="center">
+                            {{openingtimes.thursday_opens|time:"G\hi"}} - {{openingtimes.thursday_closes|time:"G\hi"}}{% if openingtimes.thursday_opens_second %}, {{openingtimes.thursday_opens_second|time:"G\hi"}} - {{openingtimes.thursday_closes_second|time:"G\hi"}}
+                            {% endif %}
+                        </td>
+                        {% else %}
+                            <td width="60%" align="center">Fermé</td>
+                        {% endif %}
+                    </tr>
+                    <tr>
+                        <td width="40%">Vendredi</td>
+                        {% if openingtimes.friday_opens %}
+                        <td width="60%" align="center">
+                            {{openingtimes.friday_opens|time:"G\hi"}} - {{openingtimes.friday_closes|time:"G\hi"}}{% if openingtimes.friday_opens_second %}, {{openingtimes.friday_opens_second|time:"G\hi"}} - {{openingtimes.friday_closes_second|time:"G\hi"}}
+                            {% endif %}
+                        </td>
+                        {% else %}
+                            <td width="60%" align="center">Fermé</td>
+                        {% endif %}
+                    </tr>
+                    <tr>
+                        <td width="40%">Samedi</td>
+                        {% if openingtimes.saturday_opens %}
+                        <td width="60%" align="center">
+                            {{openingtimes.saturday_opens|time:"G\hi"}} - {{openingtimes.saturday_closes|time:"G\hi"}}{% if openingtimes.saturday_opens_second %}, {{openingtimes.saturday_opens_second|time:"G\hi"}} - {{openingtimes.saturday_closes_second|time:"G\hi"}}
+                            {% endif %}
+                        </td>
+                        {% else %}
+                            <td width="60%" align="center">Fermé</td>
+                        {% endif %}
+                    </tr>
+                    <tr>
+                        <td width="40%">Dimanche</td>
+                        {% if openingtimes.sunday_opens %}
+                        <td width="60%" align="center">
+                            {{openingtimes.sunday_opens|time:"G\hi"}} - {{openingtimes.sunday_closes|time:"G\hi"}}{% if openingtimes.sunday_opens_second %}, {{openingtimes.sunday_opens_second|time:"G\hi"}} - {{openingtimes.sunday_closes_second|time:"G\hi"}}
+                            {% endif %}
+                        </td>
+                        {% else %}
+                            <td width="60%" align="center">Fermé</td>
+                        {% endif %}
+                    </tr>
+                </tbody>
+            </table>
+        {% endwith %}
+        {% endif %}
+    </div>{# profil-block #}
+    {% endwith %}
+{% endwith %}
+{% endcache %}

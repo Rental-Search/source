@@ -15,7 +15,6 @@ from django.contrib.sites.models import Site
 from django.core.urlresolvers import reverse
 from django.shortcuts import get_object_or_404, redirect
 from django.utils.translation import ugettext_lazy as _
-from django.views.generic.simple import direct_to_template, redirect_to
 
 from eloue.payments.models import PayboxDirectPaymentInformation, PayboxDirectPlusPaymentInformation, NonPaymentInformation
 from eloue.payments.paybox_payment import PayboxManager, PayboxException
@@ -25,12 +24,15 @@ from eloue.accounts.models import Patron, Avatar, CreditCard
 from eloue.geocoder import GoogleGeocoder
 from eloue.products.forms import FacetedSearchForm
 from eloue.products.models import Product, PAYMENT_TYPE
-from eloue.rent.models import Booking, BorrowerComment
+from eloue.rent.models import Booking, ProBooking, BorrowerComment
 from eloue.rent.forms import BookingForm, BookingConfirmationForm
 from eloue.wizard import MultiPartFormWizard
 
 USE_HTTPS = getattr(settings, 'USE_HTTPS', True)
 
+from django import forms
+class A(forms.Form):
+    pass
 
 class BookingWizard(MultiPartFormWizard):
     
@@ -52,7 +54,7 @@ class BookingWizard(MultiPartFormWizard):
             'product_list': product_search.more_like_this(product)[:4]
         }
         if request.method == "POST":
-            if product.payment_type != PAYMENT_TYPE.NOPAY:
+            if product.payment_type != PAYMENT_TYPE.NOPAY and not product.owner.current_subscription:
                 if request.user.is_authenticated():
                     try:
                         request.user.creditcard
@@ -68,6 +70,9 @@ class BookingWizard(MultiPartFormWizard):
                             self.form_list.append(ExistingBookingCreditCardForm)
                         except (CreditCard.DoesNotExist, AttributeError):
                             self.form_list.append(BookingCreditCardForm)
+            else:
+                self.form_list.append(A)
+
         return super(BookingWizard, self).__call__(request, product, *args, **kwargs)
 
     def done(self, request, form_list):
@@ -84,7 +89,7 @@ class BookingWizard(MultiPartFormWizard):
         from django.forms.models import model_to_dict
         if self.new_patron == booking_form.instance.product.owner:
             messages.error(request, _(u"Vous ne pouvez pas louer vos propres objets"))
-            return redirect_to(request, booking_form.instance.product.get_absolute_url())
+            return redirect(booking_form.instance.product)
         
         booking = booking_form.save(commit=False)
         booking.ip = request.META.get('REMOTE_ADDR', None)
@@ -102,33 +107,34 @@ class BookingWizard(MultiPartFormWizard):
                 creditcard = creditcard_form.save()
             else:
                 creditcard = request.user.creditcard
-            preapproval_parameters = (creditcard, cleaned_data.get('cvv', ''))
-            payment = PayboxDirectPlusPaymentInformation(booking=booking, creditcard=creditcard)
+            payment = PayboxDirectPlusPaymentInformation.objects.create(creditcard=creditcard)
+            preapproval_parameters = {'cvv': cleaned_data.get('cvv', '')}
         else:
-            preapproval_parameters = ()
-            payment = NonPaymentInformation()
+            preapproval_parameters = {}
+            payment = NonPaymentInformation.objects.create()
 
-        payment.save()
         booking.payment = payment
         booking.save()
 
         try:
-            booking.preapproval(*preapproval_parameters)
+            booking.preapproval(**preapproval_parameters)
         except PaymentException as e:
             booking.state = Booking.STATE.REJECTED
             booking.save()
-
-        if booking.state == Booking.STATE.AUTHORIZED:
+            return redirect('booking_failure', booking.pk.hex)
+        else:
             GoalRecord.record('rent_object_pre_paypal', WebUser(request))
             return redirect('booking_success', booking.pk.hex)
-        return redirect('booking_failure', booking.pk.hex)
 
     
     def get_form(self, step, data=None, files=None):
         next_form = self.form_list[step]
         if issubclass(next_form, BookingForm):
             product = self.extra_context['product']
-            booking = Booking(product=product, owner=product.owner)
+            if product.owner.current_subscription:
+                booking = ProBooking(product=product, owner=product.owner, state=Booking.STATE.PROFESSIONAL)
+            else:
+                booking = Booking(product=product, owner=product.owner)
             started_at = datetime.datetime.now() + datetime.timedelta(days=1)
             ended_at = started_at + datetime.timedelta(days=1)
             initial = {
@@ -170,7 +176,7 @@ class BookingWizard(MultiPartFormWizard):
             return 'accounts/auth_login.html'
         elif issubclass(self.form_list[step], BookingForm):
             return 'products/product_detail.html'
-        elif issubclass(self.form_list[step], (BookingCreditCardForm, ExistingBookingCreditCardForm)):
+        elif issubclass(self.form_list[step], (BookingCreditCardForm, ExistingBookingCreditCardForm, A)):
             return 'rent/booking_confirm.html'
         else:
             return 'accounts/auth_missing.html'

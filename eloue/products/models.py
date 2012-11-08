@@ -181,7 +181,6 @@ DEFAULT_CURRENCY = get_format('CURRENCY') if not settings.CONVERT_XPF else "XPF"
 
 ALERT_RADIUS = getattr(settings, 'ALERT_RADIUS', 200)
 
-
 class Product(models.Model):
     """A product"""
     summary = models.CharField(_(u'Titre'), max_length=255)
@@ -326,7 +325,6 @@ class Product(models.Model):
             ),
             key=operator.itemgetter(0)
         )
-        import pprint
         changements = [
             (key, sum(event[1]*event[2] for event in group))
             for key, group
@@ -338,8 +336,6 @@ class Product(models.Model):
             _accumulate(map(operator.itemgetter(1), changements))
         )
         availables = [(key, self.quantity - value) for key, value in borrowed]
-        #pprint.pprint(availables)
-        #print 'availables', availables, [(key, list(value)) for (key, value) in itertools.groupby(availables, key=lambda x:x[0].date())]
         
         return [
             (d.date(), available) 
@@ -399,6 +395,14 @@ class Product(models.Model):
         else:
             return ContractGenerator()
 
+    @property
+    def is_highlighted(self):
+        return bool(self.producthighlight_set.filter(ended_at__isnull=True))
+
+    @property
+    def is_top(self):
+        return bool(self.producttopposition_set.filter(ended_at__isnull=True))
+    
 class CarProduct(Product):
 
     brand = models.CharField(_(u'marque'), max_length=30)
@@ -645,14 +649,9 @@ class Category(MPTTModel):
     def get_absolute_url(self):
         ancestors_slug = self.get_ancertors_slug()
         if ancestors_slug:
-            return _(u"/location/%(ancestors_slug)s/%(slug)s/") % {
-                        'ancestors_slug': ancestors_slug,
-                        'slug': self.slug
-                    }
+            return _(u"/location/%(ancestors_slug)s/%(slug)s/") % {'ancestors_slug': ancestors_slug, 'slug': self.slug }
         else:
-            return _(u"/location/%(slug)s/") % {
-                        'slug': self.slug
-                    }
+            return _(u"/location/%(slug)s/") % {'slug': self.slug}
             
 
 class CategoryDescription(models.Model):
@@ -969,7 +968,39 @@ class Alert(models.Model):
     
     class Meta:
         get_latest_by = 'created_at'
-    
+
+
+class ProductHighlight(models.Model):
+    started_at = models.DateTimeField(auto_now_add=True)
+    ended_at = models.DateTimeField(editable=False, null=True, blank=True)
+    product = models.ForeignKey(Product, editable=False)
+
+    def price(self, _from=datetime.min, to=datetime.max):
+        started_at = _from if (_from > self.started_at) else self.started_at
+        ended_at = to if (not self.ended_at or to < self.ended_at) else self.ended_at
+        days_num = calendar.monthrange(started_at.year, started_at.month)[1]
+        days_sec = days_num * 24 * 60 * 60
+
+        td = (ended_at - started_at)
+        dt_sec = (td.microseconds + (td.seconds + td.days * 24 * 3600) * 10**6) / 10**6
+        return (settings.PRODUCTHIGHLIGHT_PRICE * dt_sec / days_sec).quantize(D('0.01'))
+
+
+class ProductTopPosition(models.Model):
+    started_at = models.DateTimeField(auto_now_add=True)
+    ended_at = models.DateTimeField(editable=False, null=True, blank=True)
+    product = models.ForeignKey(Product, editable=False)
+
+    def price(self, _from=datetime.min, to=datetime.max):
+        started_at = _from if (_from > self.started_at) else self.started_at
+        ended_at = to if (not self.ended_at or to < self.ended_at) else self.ended_at
+        days_num = calendar.monthrange(started_at.year, started_at.month)[1]
+        days_sec = days_num * 24 * 60 * 60
+
+        td = (ended_at - started_at)
+        dt_sec = (td.microseconds + (td.seconds + td.days * 24 * 3600) * 10**6) / 10**6
+        return (settings.PRODUCTTOPPOSITION_PRICE * dt_sec / days_sec).quantize(D('0.01'))
+
 
 post_save.connect(post_save_answer, sender=Answer)
 post_save.connect(post_save_product, sender=Product)
@@ -983,3 +1014,6 @@ post_save.connect(post_save_sites, sender=RealEstateProduct)
 
 post_save.connect(post_save_to_update_product, sender=Price)
 post_save.connect(post_save_to_update_product, sender=Picture)
+post_save.connect(post_save_to_update_product, sender=ProductHighlight)
+post_save.connect(post_save_to_update_product, sender=ProductTopPosition)
+

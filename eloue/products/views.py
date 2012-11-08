@@ -16,13 +16,10 @@ from django.utils.datastructures import SortedDict, MultiValueDict
 from django.utils.translation import ugettext as _
 from django.views.decorators.cache import never_cache, cache_page
 from django.views.decorators.vary import vary_on_cookie
-from django.views.generic.simple import direct_to_template, redirect_to
-from django.views.generic.list_detail import object_list
 from django.db.models import Q
 
-from django.shortcuts import render_to_response, redirect
+from django.shortcuts import render_to_response, render, redirect
 from django.template import RequestContext
-from django.views.generic.list_detail import object_detail
 
 from django.http import Http404, HttpResponseRedirect
 
@@ -63,8 +60,6 @@ def last_added(search_index, location, offset=0):
     return last_added[offset*10:(offset+1)*10]
 
 @mobify
-@cache_page(300)
-@vary_on_headers('Referer')
 def homepage(request):
     curiosities = Curiosity.on_site.all()
     location = request.session.setdefault('location', settings.DEFAULT_LOCATION)
@@ -109,16 +104,13 @@ def homepage_object_list(request, search_index, offset=0):
 @cache_page(300)
 def search(request):
     form = FacetedSearchForm()
-    return direct_to_template(
-        request, template='products/search.html', 
-        extra_context={'form': form, }
-    )
+    return render(request, 'products/search.html', {'form': form})
 
 
 @never_cache
 @secure_required
 def publish_new_ad(request, *args, **kwargs):
-    return direct_to_template(request, template='products/publish_new_ad.html')
+    return render(request, 'products/publish_new_ad.html')
     
 
 
@@ -223,6 +215,71 @@ def product_price_edit(request, slug, product_id):
             'form': form
         }, 
         context_instance=RequestContext(request)
+    )
+
+
+@login_required
+@ownership_required(model=Product, object_key='product_id', ownership=['owner'])
+def product_highlight_edit(request, slug, product_id):
+    from eloue.products.forms import HighlightForm
+    from eloue.products.models import ProductHighlight
+    now = datetime.datetime.now()
+    product = get_object_or_404(Product.on_site, pk=product_id)
+    old_highlights = product.producthighlight_set.filter(ended_at__isnull=False).order_by('-ended_at')
+    new_highlight = product.producthighlight_set.filter(ended_at__isnull=True)
+    if new_highlight:
+        highlight, = new_highlight
+        if request.method == "POST":
+            form = HighlightForm(request.POST, instance=highlight)
+            if form.is_valid():
+                form.instance.ended_at = now
+                form.save()
+                return redirect('.')
+        else:
+            form = HighlightForm(instance=highlight)
+    else:
+        if request.method == "POST":
+            form = HighlightForm(request.POST, instance=ProductHighlight(product=product))
+            if form.is_valid():
+                form.save()
+                return redirect('.')
+        else:
+            form = HighlightForm(instance=ProductHighlight(product=product))
+    return render(
+        request, 'products/product_highlight_edit.html', 
+        {'product': product, 'old_highlights': old_highlights, 'form': form},
+    )
+
+@login_required
+@ownership_required(model=Product, object_key='product_id', ownership=['owner'])
+def product_top_position_edit(request, slug, product_id):
+    from eloue.products.forms import TopPositionForm
+    from eloue.products.models import ProductTopPosition
+    now = datetime.datetime.now()
+    product = get_object_or_404(Product.on_site, pk=product_id)
+    old_toppositions = product.producttopposition_set.filter(ended_at__isnull=False).order_by('-ended_at')
+    new_topposition = product.producttopposition_set.filter(ended_at__isnull=True)
+    if new_topposition:
+        topposition, = new_topposition
+        if request.method == "POST":
+            form = TopPositionForm(request.POST, instance=topposition)
+            if form.is_valid():
+                form.instance.ended_at = now
+                form.save()
+                return redirect('.')
+        else:
+            form = TopPositionForm(instance=topposition)
+    else:
+        if request.method == "POST":
+            form = TopPositionForm(request.POST, instance=ProductTopPosition(product=product))
+            if form.is_valid():
+                form.save()
+                return redirect('.')
+        else:
+            form = TopPositionForm(instance=ProductTopPosition(product=product))
+    return render(
+        request, 'products/product_top_position_edit.html',
+        {'product': product, 'old_highlights': old_toppositions, 'form': form},
     )
 
 
@@ -382,93 +439,113 @@ def product_delete(request, slug, product_id):
     if request.method == "POST":
         product.delete()
         messages.success(request, _(u"Votre objet à bien été supprimée"))
-        return redirect_to(request, reverse('owner_product'))
+        return redirect('owner_product')
     else:
-        return direct_to_template(request, template='products/product_delete.html', extra_context={'product': product, 'is_booked': is_booked})
+        return render(request, 'products/product_delete.html', 
+            {'product': product, 'is_booked': is_booked})
 
+from django.views.generic import ListView, DetailView
+from django.utils.decorators import method_decorator
+from eloue.views import LoginRequiredMixin
 
-@mobify
-@cache_page(900)
-@vary_on_cookie
-def product_list(request, urlbits, sqs=SearchQuerySet(), suggestions=None, page=None):
-    location = request.session.setdefault('location', settings.DEFAULT_LOCATION)
-    query_data = request.GET.copy()
-    if not query_data.get('l'):
-        query_data['l'] = location['country']
-    form = FacetedSearchForm(query_data)
-    if not form.is_valid():
-        raise Http404
-    
-    breadcrumbs = SortedDict()
-    breadcrumbs['q'] = {'name': 'q', 'value': form.cleaned_data.get('q', None), 'label': 'q', 'facet': False}
-    breadcrumbs['sort'] = {'name': 'sort', 'value': form.cleaned_data.get('sort', None), 'label': 'sort', 'facet': False}
-    breadcrumbs['l'] = {'name': 'l', 'value': form.cleaned_data.get('l', None), 'label': 'l', 'facet': False}
-    breadcrumbs['r'] = {'name': 'r', 'value': form.cleaned_data.get('r', None), 'label': 'r', 'facet': False}
+class ProductList(ListView):
+    template_name = "products/product_result.html"
+    paginate_by = PAGINATE_PRODUCTS_BY
+    context_object_name = 'product_list'
 
-    urlbits = urlbits or ''
-    urlbits = filter(None, urlbits.split('/')[::-1])
-    while urlbits:
-        bit = urlbits.pop()
-        if bit.startswith(_('par-')):
-            try:
-                value = urlbits.pop()
-            except IndexError:
-                raise Http404
-            if bit.endswith(_('categorie')):
-                item = get_object_or_404(Category, slug=value)
-                is_facet_not_empty = lambda facet: not (
-                    facet['facet'] or
-                    (facet['label'], facet['value']) in [ ('sort', ''), ('q', '')]
-                )
-                params = MultiValueDict(
-                    (facet['label'], [unicode(facet['value']).encode('utf-8')]) for facet in breadcrumbs.values() if is_facet_not_empty(facet)
-                )
-                path = item.get_absolute_url()
-                for bit in urlbits:
-                    if bit.startswith(_('page')):
-                        try:
-                            page = urlbits.pop(0)
-                            path = '%s/%s/%s' % (path, _(u'page'), page)
-                        except IndexError:
-                            raise Http404
-                if any([value for key, value in params.iteritems()]):
-                    path = '%s?%s' % (path, urlencode(params))
-                return redirect_to(request, escape_percent_sign(path))
+    @method_decorator(mobify)
+    @method_decorator(cache_page(900))
+    @method_decorator(vary_on_cookie)
+    def dispatch(self, request, urlbits, sqs=SearchQuerySet(), suggestions=None, page=None):
+        location = request.session.setdefault('location', settings.DEFAULT_LOCATION)
+        query_data = request.GET.copy()
+        if not query_data.get('l'):
+            query_data['l'] = location['country']
+        form = FacetedSearchForm(query_data)
+        if not form.is_valid():
+            raise Http404
+        
+        self.breadcrumbs = SortedDict()
+        self.breadcrumbs['q'] = {'name': 'q', 'value': form.cleaned_data.get('q', None), 'label': 'q', 'facet': False}
+        self.breadcrumbs['sort'] = {'name': 'sort', 'value': form.cleaned_data.get('sort', None), 'label': 'sort', 'facet': False}
+        self.breadcrumbs['l'] = {'name': 'l', 'value': form.cleaned_data.get('l', None), 'label': 'l', 'facet': False}
+        self.breadcrumbs['r'] = {'name': 'r', 'value': form.cleaned_data.get('r', None), 'label': 'r', 'facet': False}
+        self.breadcrumbs['renter'] = {'name': 'renter', 'value': form.cleaned_data.get('renter'), 'label': 'renter', 'facet': False}
+
+        urlbits = urlbits or ''
+        urlbits = filter(None, urlbits.split('/')[::-1])
+        while urlbits:
+            bit = urlbits.pop()
+            if bit.startswith(_('par-')):
+                try:
+                    value = urlbits.pop()
+                except IndexError:
+                    raise Http404
+                if bit.endswith(_('categorie')):
+                    item = get_object_or_404(Category, slug=value)
+                    is_facet_not_empty = lambda facet: not (
+                        facet['facet'] or
+                        (facet['label'], facet['value']) in [ ('sort', ''), ('q', '')]
+                    )
+                    params = MultiValueDict(
+                        (facet['label'], [unicode(facet['value']).encode('utf-8')]) for facet in self.breadcrumbs.values() if is_facet_not_empty(facet)
+                    )
+                    path = item.get_absolute_url()
+                    for bit in urlbits:
+                        if bit.startswith(_('page')):
+                            try:
+                                page = urlbits.pop(0)
+                                path = '%s/%s/%s' % (path, _(u'page'), page)
+                            except IndexError:
+                                raise Http404
+                    if any([value for key, value in params.iteritems()]):
+                        path = '%s?%s' % (path, urlencode(params))
+                    return redirect(escape_percent_sign(path))
+                else:
+                    raise Http404
+            elif bit.startswith(_('page')):
+                try:
+                    page = urlbits.pop()
+                except IndexError:
+                    raise Http404
             else:
-                raise Http404
-        elif bit.startswith(_('page')):
-            try:
-                page = urlbits.pop()
-            except IndexError:
-                raise Http404
-        else:
-            value = bit
-            item = get_object_or_404(Category, slug=value)
-            ancestors_slug = item.get_ancertors_slug()
-            breadcrumbs['categorie'] = {
-                'name': 'categories', 'value': value, 'label': ancestors_slug, 'object': item,
-                'pretty_name': _(u"Catégorie"), 'pretty_value': item.name,
-                'url': item.get_absolute_url(), 'facet': True
-            }
-    
-    site_url="%s://%s" % ("https" if USE_HTTPS else "http", Site.objects.get_current().domain)
-    form = FacetedSearchForm(
-        dict((facet['name'], facet['value']) for facet in breadcrumbs.values()),
-        searchqueryset=sqs)
-    sqs, suggestions = form.search()
-    # we use canonical_parameters to generate the canonical url in the header
-    canonical_parameters = SortedDict(((key, unicode(value['value']).encode('utf-8')) for (key, value) in breadcrumbs.iteritems() if value['value']))
-    canonical_parameters.pop('categorie', None)
-    canonical_parameters.pop('r', None)
-    canonical_parameters.pop('sort', None)
-    canonical_parameters = urllib.urlencode(canonical_parameters)
-    if canonical_parameters:
-        canonical_parameters = '?' + canonical_parameters
-    return object_list(request, sqs, page=page, paginate_by=PAGINATE_PRODUCTS_BY, template_name="products/product_result.html",
-        template_object_name='product', extra_context={
-            'facets': sqs.facet_counts(), 'form': form, 'breadcrumbs': breadcrumbs, 'suggestions': suggestions,
-            'site_url': site_url, 'canonical_parameters': canonical_parameters
-    })
+                value = bit
+                item = get_object_or_404(Category, slug=value)
+                ancestors_slug = item.get_ancertors_slug()
+                self.breadcrumbs['categorie'] = {
+                    'name': 'categories', 'value': value, 'label': ancestors_slug, 'object': item,
+                    'pretty_name': _(u"Catégorie"), 'pretty_value': item.name,
+                    'url': item.get_absolute_url(), 'facet': True
+                }
+        
+        self.site_url="%s://%s" % ("https" if USE_HTTPS else "http", Site.objects.get_current().domain)
+        self.form = FacetedSearchForm(
+            dict((facet['name'], facet['value']) for facet in self.breadcrumbs.values()),
+            searchqueryset=sqs)
+        self.sqs, self.suggestions, self.top_products = self.form.search()
+        # we use canonical_parameters to generate the canonical url in the header
+        self.canonical_parameters = SortedDict(((key, unicode(value['value']).encode('utf-8')) for (key, value) in self.breadcrumbs.iteritems() if value['value']))
+        self.canonical_parameters.pop('categorie', None)
+        self.canonical_parameters.pop('r', None)
+        self.canonical_parameters.pop('sort', None)
+        self.canonical_parameters = urllib.urlencode(self.canonical_parameters)
+        if self.canonical_parameters:
+            self.canonical_parameters = '?' + self.canonical_parameters
+        return super(ProductList, self).dispatch(request, urlbits, sqs, suggestions, page=page)
+
+    def get_queryset(self):
+        return self.sqs
+
+    def get_context_data(self, **kwargs):
+        context = super(ProductList, self).get_context_data(**kwargs)
+        context['facets'] = self.sqs.facet_counts()
+        context['form'] = self.form
+        context['breadcrumbs'] = self.breadcrumbs
+        context['suggestions'] = self.suggestions
+        context['site_url'] = self.site_url
+        context['canonical_parameters'] = self.canonical_parameters
+        context['top_products'] = self.top_products
+        return context
 
 @never_cache
 @secure_required
@@ -476,14 +553,32 @@ def alert_create(request, *args, **kwargs):
     wizard = AlertWizard([AlertForm, EmailAuthenticationForm])
     return wizard(request, *args, **kwargs)
 
+class AlertList(ListView):
+    template_name = "products/alert_list.html"
+    context_object_name = 'alert'
 
-@cache_page(900)
-@vary_on_cookie
-def alert_list(request, sqs=SearchQuerySet(), page=None):
-    form = FacetedSearchForm()
-    search_alert_form = AlertSearchForm(request.GET, searchqueryset=sqs)
-    return object_list(request, search_alert_form.search(), page=page, paginate_by=PAGINATE_PRODUCTS_BY, template_name="products/alert_list.html",
-        template_object_name='alert', extra_context={'form': form, 'search_alert_form':search_alert_form})
+    @method_decorator(cache_page(900))
+    @method_decorator(vary_on_cookie)
+    def dispatch(self, *args, **kwargs):
+        return super(AlertList, self).dispatch(*args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super(AlertList, self).get_context_data(**kwargs)
+        context['form'] = FacetedSearchForm()
+        context['search_alert_form'] = self.search_alert_form
+        return context
+
+    def get_queryset(self):
+        self.search_alert_form = AlertSearchForm(self.request.GET, searchqueryset=self.kwargs['sqs'])
+        return self.search_alert_form
+
+# @cache_page(900)
+# @vary_on_cookie
+# def alert_list(request, sqs=SearchQuerySet(), page=None):
+#     form = FacetedSearchForm()
+#     search_alert_form = AlertSearchForm(request.GET, searchqueryset=sqs)
+#     return object_list(request, search_alert_form.search(), page=page, paginate_by=PAGINATE_PRODUCTS_BY, ,
+#          extra_context={'form': form, 'search_alert_form':search_alert_form})
 
 
 @never_cache
@@ -493,10 +588,11 @@ def alert_inform(request, *args, **kwargs):
     return wizard(request, *args, **kwargs)
 
 
-@login_required
-def alert_inform_success(request, alert_id):
-    return object_detail(request, queryset=Alert.objects.all(), object_id=alert_id,
-        template_name='products/alert_unform_success.html', template_object_name='alert')
+class AlertInformSuccess(LoginRequiredMixin, DetailView):
+    template_name = 'products/alert_unform_success.html'
+    model = Alert
+    context_object_name = 'alert'
+    pk_url_kwarg = 'alert_id'
 
 
 @login_required
@@ -505,9 +601,9 @@ def alert_delete(request, alert_id):
     if request.method == "POST":
         alert.delete()
         messages.success(request, _(u"Votre alerte à bien été supprimée"))
-        return redirect_to(request, reverse('alert_edit'))
+        return redirect('alert_edit')
     else:
-        return direct_to_template(request, template='products/alert_delete.html', extra_context={'alert': alert})
+        return render(request, 'products/alert_delete.html', {'alert': alert})
 
 def suggestion(request): 
     word = request.GET['q']

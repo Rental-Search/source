@@ -17,25 +17,44 @@
     <li>
         <a href="{{ owner_product }}"  class="{% active request owner_product %}">{% trans "Gérer mes annonces" %}</a>
     </li>
-    {% with request.user.bookings.authorized.count as count %}
-        <li>
-            <a href="{{ owner_booking_authorized }}" class="{% active request owner_booking_authorized %}">{% trans "Demande de réservation" %}{% if count > 0 %} ({{count}}){% endif %}</a>
-        </li>
-    {% endwith %}
-    {% with request.user.bookings.pending.count as count %}
-        <li>
-            <a href="{{ owner_booking_pending }}" class="{% active request owner_booking_pending %}">{% trans "Réservations à venir" %} {% if count > 0%}({{count}}){% endif %}</a>
-        </li>
-    {% endwith %}
-    {% with request.user.bookings.ongoing.count as count %}
-        <li><a href="{{ owner_booking_ongoing }}" class="{% active request owner_booking_ongoing %}">{% trans "Réservations en cours" %} {% if count > 0%}({{count}}){% endif %}</a></li>
-    {% endwith %}
-    <li><a href="{{ owner_booking_history }}" class="{% active request owner_booking_history %}">{% trans "Réservations terminées" %}</a></li>
+    {% if not request.user.current_subscription %}
+        {% with request.user.bookings.authorized.count as count %}
+            <li>
+                <a href="{{ owner_booking_authorized }}" class="{% active request owner_booking_authorized %}">{% trans "Demande de réservation" %}{% if count > 0 %} ({{count}}){% endif %}</a>
+            </li>
+        {% endwith %}
+    {% else %}
+        {% with request.user.bookings.professional.count as count %}
+            <li>
+                <a href="{{ owner_booking_authorized }}" class="{% active request owner_booking_authorized %}">{% trans "Demande de réservation" %}{% if count > 0 %} ({{count}}){% endif %}</a>
+            </li>
+        {% endwith %}
+    {% endif %}
+    {% if request.user.current_subscription %}
+        {% with request.user.bookings.professional_saw.count as count %}
+            <li>
+                <a href="{{ owner_booking_history }}" class="{% active request owner_booking_history %}">{% trans "Réservations lues" %} {% if count > 0%}({{count}}){% endif %}</a>
+            </li>
+        {% endwith %}
+    {% else %}
+        {% with request.user.bookings.pending.count as count %}
+            <li>
+                <a href="{{ owner_booking_pending }}" class="{% active request owner_booking_pending %}">{% trans "Réservations à venir" %} {% if count > 0%}({{count}}){% endif %}</a>
+            </li>
+        {% endwith %}
+        {% with request.user.bookings.ongoing.count as count %}
+            <li><a href="{{ owner_booking_ongoing }}" class="{% active request owner_booking_ongoing %}">{% trans "Réservations en cours" %} {% if count > 0%}({{count}}){% endif %}</a></li>
+        {% endwith %}
+        <li><a href="{{ owner_booking_history }}" class="{% active request owner_booking_history %}">{% trans "Réservations terminées" %}</a></li>
+    {% endif %}
 </ul>
 {% endblock %}
 
 {% block content-main-profil %}
-	<h2>{% trans "Gérer mes annonces" %}</h2>
+	<h2>
+        {% trans "Gérer mes annonces" %}
+        <a href="{% url publish_new_ad %}" style="font-size: 12px; float: right; margin-top: 5px;">({% trans "Déposer une nouvelle annonce"%})</a>
+    </h2>
 	<ul class="product-list">
 	{% for product in product_list %}
 	<li>

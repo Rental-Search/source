@@ -5,10 +5,10 @@ local_path = lambda path: os.path.join(os.path.dirname(__file__), path)
 
 SITE_ID = 12
 
-SESSION_COOKIE_DOMAIN = 'e-loue.gites'
+SESSION_COOKIE_DOMAIN = 'locations.bienmeloger.nc'
 
 
-USE_HTTPS = False
+USE_HTTPS = True
 
 CACHE_MIDDLEWARE_KEY_PREFIX = 'gites'
 

@@ -1,0 +1,115 @@
+{% extends "accounts/patron_edit.html" %}
+{% load i18n navbar %}
+
+
+{% block title %}{% trans "Envoyer une invitation à mes amis Facebook" %}{% endblock %}
+
+{% block html_properties %} xmlns="http://www.w3.org/1999/xhtml" xmlns:fb="https://www.facebook.com/2008/fbml"{% endblock %}
+
+{% block tail %}
+  {{ block.super }}
+  <script>
+  // Load the SDK Asynchronously
+  (function(d){
+     var js, id = 'facebook-jssdk'; if (d.getElementById(id)) {return;}
+     js = d.createElement('script'); js.id = id; js.async = true;
+     js.src = "//connect.facebook.net/fr_FR/all.js";
+     d.getElementsByTagName('head')[0].appendChild(js);
+   }(document));
+  </script>
+
+
+  <script>
+      window.fbAsyncInit = function() {
+        FB.init({
+          appId      : '{{ FACEBOOK_APP_ID }}', // App ID
+          channelUrl : '{{ MEDIA_URL }}channel.html', // Channel File
+          status : true,
+          cookie : true,
+          oauth: true
+        });
+        FB.getLoginStatus(function(response){
+          if (response.status === 'connected') {
+            FB.api(
+              'me/friends/?fields=picture,name', 
+              function (response) {
+                template = '{% templatetag openvariable %}#data{%templatetag closevariable %}<li id="{%templatetag openvariable%}id{% templatetag closevariable %}"><img src="{%templatetag openvariable%}picture{% templatetag closevariable %}" width="30"/><div class="name">{%templatetag openvariable%}name{% templatetag closevariable %}</div> <span id="{%templatetag openvariable%}id{% templatetag closevariable %}"><button type="button" class="btn btn-contactme">{% trans "Inviter"%}</button></span></li>{%templatetag openvariable%}/data{%templatetag closevariable %}';
+                $('')
+                $('p#fb-connect-invite-text').html('');
+                $('div.fb-container-list').show();
+                $('#friends').html(Mustache.to_html(template, {data: response.data}));
+                $('span', '#friends').click(
+                  function a(i) {
+                    FB.ui({
+                      to: i.currentTarget.id,
+                      method: 'send',
+                      name: 'Rejoins moi dans la communauté des e-loueurs !',
+                      link: 'https://www.e-loue.com/',
+                      picture: 'http://eloue.s3.amazonaws.com/media/email/eloue-small-logo.png',
+                      description: 'Je viens de m\'inscrire sur e-loue. Site super sympa ! Rejoins moi dans la communauté des e-loueurs et tu pourras toi aussi louer n\'importe quel objet (voiture, perceuse, déguisement, électroménager, caméra, etc.).'
+                    });
+                  }
+                );
+                // for (friend_index in response.data) {
+                //   friend = response.data[friend_index];
+                //   img_src = friend.picture;
+                //   name = friend.name;
+                //   $('#friends').append('<li id>'+'<img src="'+img_src+'"/>' +name+'</li>');
+                // }
+              }
+            );
+          } else {
+            $('p#fb-connect-invite-link').html('<a id="fbfb" class="btn">{% trans "Trouvez  vos amis sur Facebook" %}</a>');
+            $('p#fb-connect-invite-text').html('Nous n\'avons pas pu trouver vos amis sur Facebook parce que vous n\'avez pas connecté Facebook à e-loue. Cliquez sur le bouton ci dessous pour créer la connexion.')
+            $('div.fb-container-list').hide();
+            $('#fbfb').click(function (event) {
+              FB.login(function (response){
+                window.location.reload();
+              }, {scope: ''});
+            })
+          }
+        });
+      }
+    </script>
+
+
+
+    <script>
+      $("#filter").keyup(function () {
+          var filter = $(this).val(), count = 0;
+          $(".filtered:first li").each(function () {
+              if ($(this).text().search(new RegExp(filter, "i")) < 0) {
+                  $(this).hide("hidden");
+              } else {
+                  $(this).show("hidden");
+                  count++;
+              }
+          });
+      });
+    </script>
+{% endblock %}
+
+{% block invite-submenu %}
+<ul>
+  <li><a href="{{ facebook_invite }}" class="{% active request facebook_invite %}-sub">
+    <img src="{{ STATIC_URL }}images/facebook_12by12.png" alt="" />{% trans "Facebook" %}</a></li>
+  <li><a href="{{ gmail_invite }}" class="{% active request gmail_invite %}-sub"><img src="{{ STATIC_URL }}images/gmail_12by12.png" alt="" />{% trans "Gmail"%}</a><li>
+</ul>
+{% endblock %}
+
+{% block content-main-profil %}
+<div id="fb-root"></div>
+
+<h1>{% trans "Facebook" %}</h1>
+<div class="fb-connect-invite">
+  <p id="fb-connect-invite-text">Chargement...</p>
+  <p id="fb-connect-invite-link"></p>
+  <div class="fb-container-list" style="display: none;">
+    <h2>{% trans "Invitez vos amis"%}</h2>
+    <input type="text" placeholder="Rechercher un ami" id="filter" />
+    <ul id="friends" class="friends-list filtered">
+      <li class="loading">chargement...</li>
+    </ul>
+  </div>
+</div>
+{% endblock %}

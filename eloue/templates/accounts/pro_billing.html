@@ -1,0 +1,41 @@
+{% load i18n compressed %}
+<!doctype html>
+<html lang="fr" {% block html_properties %} {% endblock %}>
+	<head>
+  		<meta charset="utf-8">
+  		<title>{% trans "Facturation"%}</title>
+  		<link rel="shortcut icon" href="{{ STATIC_URL }}favicon.ico">
+  		{% compressed_css 'master' %}
+  	</head>
+  	<body style="background: #fff;">
+  		<style type="text/css">
+  			#billing tbody { display: table-row-group;}
+  		</style>
+  		<div id="billing" style="margin: 30px auto; width: 650px; background-color: #fff;">
+  			<h1 style="margin-bottom: 20px;">
+  				{% trans "Facture" %}
+  				<img src="{{ STATIC_URL }}images/logo_new.png" alt="e-loue" height="37" style="float: right;"/>
+  			</h1>
+  			<p style="margin-bottom: 20px;">Compte facturé : {{ patron.company_name }}</p>
+  			<p style="text-align: right; margin-bottom: 5px;"><a href="#" onClick="window.print()">{% trans "Imprimer la facture"%}</a></p> 
+  			{% include 'accounts/partials/billing_table.html' %}
+  			<div style="margin-top: 20px; border-top: 2px solid #364C59; padding-top: 20px; font-family: Arial; color: #364C59; font-size: 14px;">
+  				<address>
+  					e-loue<br>
+  					19 rue de Toul<br>
+  					75012 Paris<br><br>
+  					Email : contact@e-loue.com
+  				</address>
+  			</div>
+  		</div>
+  		{% compressed_js 'application' %}
+  		<script type="text/javascript">
+  			$(document).ready(function (){
+  				$('.icon-plus-sign').each(function (){
+  					$(this).remove();
+  				});
+  			});
+  		</script>
+  	</body>
+
+</html>

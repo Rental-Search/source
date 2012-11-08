@@ -1,0 +1,137 @@
+#how-to {
+	h1 {
+		margin-bottom: 40px;
+		text-align: center;
+    font-size: 24px;
+	}
+}
+
+.ht-col {
+	.makeColumn(6);
+
+	margin-bottom: 20px;
+
+  #font > .sans-serif('Ubuntu', normal, @basefont);
+
+	h1 {
+		font-weight: bold;
+		text-align: center;
+		padding: 0;
+		margin: 0 40px;
+		line-height: 38px;
+    font-size: 32px;
+	}
+
+	ol {
+		padding: 10px 0;
+		margin: 0 40px;
+		list-style-type: none;
+
+		li {
+			margin: 10px 0 15px;
+			height: 95px;
+			line-height: 1.3em;
+			margin-bottom: 20px;
+
+			.ht-number
+      {
+        float: left;
+        height: 60px;
+        width: 60px;
+        margin-top: 5px;
+        margin-right: 10px;
+        margin-bottom: 20px;
+      }
+      
+       .ht-n1-g { background: transparent url("../images/steps_number.png") no-repeat 0px 0px; }
+       .ht-n2-g { background: transparent url("../images/steps_number.png") no-repeat 0px -60px; }
+       .ht-n3-g { background: transparent url("../images/steps_number.png") no-repeat 0px -120px; }
+       .ht-n4-g { background: transparent url("../images/steps_number.png") no-repeat 0px -180px; }
+       
+       .ht-n1-o { background: transparent url("../images/steps_number.png") no-repeat -60px 0px; }
+       .ht-n2-o { background: transparent url("../images/steps_number.png") no-repeat -60px -59px; }
+       .ht-n3-o { background: transparent url("../images/steps_number.png") no-repeat -60px -119px; }
+       .ht-n4-o { background: transparent url("../images/steps_number.png") no-repeat -60px -179px; }
+       
+       .ht-number.orange { background-color: #FF7200; }
+       
+      
+      .ht-desc
+      {
+        color: #9EB0BA;
+        font-size: 13px;
+
+        span
+        {
+          color: #364C59;
+          font-size: 23px;
+          line-height: 32px;
+        }
+      }
+        
+		}
+	}
+}
+
+.ht-fonction {
+	.makeColumn(12);
+
+	background-color: #f5f7f9;
+  width: 860px;
+	margin-left: 60px;
+	.rounded(15px);
+	border-radius: 15px;
+	padding: 10px 0;
+	margin-bottom: 20px;
+
+  #font > .sans-serif('Ubuntu', normal, @basefont);
+  color: @blueDark;
+
+	h1
+        {
+          text-align:center;
+          margin: 0 40px;
+          padding-bottom: 20px;
+          margin-bottom: 20px;
+          font-weight:  bold;
+        } 
+
+    .ht-f-col
+        {
+          float: left;
+          width: 370px;
+          margin-left: 40px;
+
+          li
+          {
+            list-style-type: none;
+            height: 70px;
+            margin: 20px 0;
+          }
+
+          .ht-icon
+            {
+              display: block;
+              float: left;
+              width: 80px;
+              height: 70px;
+              margin-right: 20px;
+            }
+              .assurancy { background: transparent url("../images/fonction.png") no-repeat 0px 0px; }
+              .car { background: transparent url("../images/fonction.png") no-repeat -80px 0px; }
+              .laptop { background: transparent url("../images/fonction.png") no-repeat -160px 0px; }
+              
+              .lock { background: transparent url("../images/fonction.png") no-repeat 0px -70px; }
+              .people { background: transparent url("../images/fonction.png") no-repeat -80px -70px; }
+              .money { background: transparent url("../images/fonction.png") no-repeat -160px -70px; }
+              
+            .ht-f-desc span
+            {
+              font-size: 18px;
+              font-weight: bold;
+              line-height: 28px;
+            }
+          
+        } 
+}
+	

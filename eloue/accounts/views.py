@@ -1,7 +1,12 @@
 # -*- coding: utf-8 -*-
 import smtplib
 import socket
-import datetime
+import datetime, time
+import urllib
+import simplejson
+import itertools
+from decimal import Decimal as D
+
 from logbook import Logger
 import simplejson
 
@@ -9,38 +14,48 @@ import simplejson
 from django_lean.experiments.models import GoalRecord
 from django_lean.experiments.utils import WebUser
 
+import gdata.contacts.client
+import gdata.gauth
+
+
+from django.views.generic import ListView
+from django.utils.decorators import method_decorator
+from django.views.generic import View
+from django.views.generic.base import TemplateResponseMixin
+
+
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.sites.models import Site
-from django.core.mail import EmailMessage, BadHeaderError
+from django.core.mail import EmailMessage, BadHeaderError, send_mass_mail
 from django.core.urlresolvers import reverse
-from django.db.models import Count, Q
+from django.db.models import Count, Q, Max
 from django.views.decorators.http import require_GET
 from django.forms.models import model_to_dict, inlineformset_factory
-from django.shortcuts import get_object_or_404, render_to_response
+from django.shortcuts import get_object_or_404, render_to_response, render
 from django.template import RequestContext
 from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.cache import never_cache, cache_page
 from django.views.decorators.http import require_POST
-from django.views.generic.simple import direct_to_template, redirect_to
-from django.views.generic.list_detail import object_list
 from django.core.context_processors import csrf
 from django.http import HttpResponse, HttpResponseForbidden
 from django.contrib.auth import login
 from oauth_provider.models import Token
-from django.shortcuts import redirect
- 
+from django.shortcuts import redirect, render
+
 from eloue.decorators import secure_required, mobify, ownership_required
-from eloue.accounts.forms import (EmailAuthenticationForm, PatronEditForm, 
-    PatronPasswordChangeForm, ContactForm, 
-    PatronSetPasswordForm, FacebookForm, CreditCardForm)
-from eloue.accounts.models import Patron, FacebookSession, CreditCard
+from eloue.accounts.forms import (EmailAuthenticationForm, GmailContactFormset, PatronEditForm, 
+    PatronPasswordChangeForm, ContactForm, CompanyEditForm,
+    PatronSetPasswordForm, FacebookForm, CreditCardForm, GmailContactForm)
+from eloue.accounts.models import Patron, FacebookSession, CreditCard, Billing, Subscription, ProPackage
+
 from eloue.accounts.wizard import AuthenticationWizard
 
 from eloue import geocoder
 from eloue.products.forms import FacetedSearchForm
+from eloue.views import LoginRequiredMixin
 from eloue.products.models import ProductRelatedMessage, MessageThread
 from eloue.products.search_indexes import product_search
 from eloue.rent.models import Booking, BorrowerComment, OwnerComment
@@ -60,8 +75,9 @@ def activate(request, activation_key):
     """Activate account"""
     activation_key = activation_key.lower()  # Normalize before trying anything with it.
     is_actived = Patron.objects.activate(activation_key)
-    return direct_to_template(request, 'accounts/activate.html', extra_context={'is_actived': is_actived,
-        'expiration_days': settings.ACCOUNT_ACTIVATION_DAYS})
+    return render(request, 'accounts/activate.html', 
+        {'is_actived': is_actived,
+        'expiration_days': settings.ACCOUNT_ACTIVATION_DAYS} )
 
 
 @never_cache
@@ -83,18 +99,21 @@ def authenticate_headless(request):
     if form.is_valid():
         login(request, form.get_user())
         return HttpResponse()
-    return HttpResponse(csrf(request)["csrf_token"]._proxy____func())
+    return HttpResponse(str(csrf(request)["csrf_token"]))
 
 
 @never_cache
 def oauth_authorize(request, *args, **kwargs):
-    return HttpResponse(csrf(request)["csrf_token"]._proxy____func())
+    return HttpResponse(str(csrf(request)["csrf_token"]))
 
 
 @never_cache
 def oauth_callback(request, *args, **kwargs):
     token = Token.objects.get(key=kwargs['oauth_token'])
     return HttpResponse(token.verifier)
+
+def google_oauth_callback(request):
+    return render(request, 'accounts/google_callback.html')
 
 @never_cache
 @login_required
@@ -106,9 +125,9 @@ def associate_facebook(request):
         form.user = request.user
         if form.is_valid():
             return redirect('associate_facebook')
-        return direct_to_template(request, 'accounts/associate_facebook.html', {'form': form})
+        return render(request, 'accounts/associate_facebook.html', {'form': form})
     else:
-        return direct_to_template(
+        return render(
             request, 'accounts/associated_facebook.html', 
             {'me': request.user.facebooksession.uid}
         )
@@ -221,6 +240,7 @@ def comments_received(request):
         })
     )
 
+
 @login_required
 def comments(request):
     patron = request.user
@@ -323,43 +343,142 @@ def view_comment(request, booking_id):
         context_instance=RequestContext(request, {'booking': booking})
     )
 
-@cache_page(900)
-def patron_detail(request, slug, patron_id=None, page=None):
-    if patron_id:  # This is here to be compatible with the old app
-        patron = get_object_or_404(Patron.on_site, pk=patron_id)
-        return redirect_to(request, patron.get_absolute_url(), permanent=True)
-    patron = get_object_or_404(Patron.on_site.select_related('default_address', 'languages'), slug=slug)
-    patron_products = product_search.filter(owner_exact=patron.username)
-    return object_list(
-        request, patron_products, page=page, 
-        paginate_by=9, template_name='accounts/patron_detail.html', 
-        template_object_name='product', 
-        extra_context={
-            'patron': patron, 'product_list_count': patron_products.count(), 
-            'borrowercomments': BorrowerComment.objects.filter(booking__owner=patron)[:4]
-        }
-    )
+
+class PatronDetail(ListView):
+    paginate_by = 9
+    context_object_name = 'product_list'
+
+    def dispatch(self, *args, **kwargs):
+        if 'patron_id' in kwargs:
+            # This is here to be compatible with the old app
+            patron = get_object_or_404(Patron.on_site, pk=kwargs['patron_id'])
+            return redirect(patron, permanent=True)
+        else:
+            self.patron = get_object_or_404(
+                Patron.on_site.select_related('default_address', 'languages'), 
+                slug=kwargs.get('slug')
+            )
+        return super(PatronDetail, self).dispatch(*args, **kwargs)
+
+    def get_template_names(self):
+        if self.patron.current_subscription:
+            return ['accounts/company_detail.html', ]
+        return ['accounts/patron_detail.html', ]
+    
+    def get_queryset(self):
+        return product_search.filter(owner_exact=self.patron.username)
+
+    def get_context_data(self, **kwargs):
+        context = super(PatronDetail, self).get_context_data(**kwargs)
+        context['patron'] = self.patron
+        context['borrowercomments'] = BorrowerComment.objects.filter(booking__owner=self.patron)[:4]
+        context['redirect_uri'] = self.request.build_absolute_uri(reverse('patron_edit_idn_connect'))
+        context['consumer_key'] = settings.IDN_CONSUMER_KEY
+        context['base_url'] = settings.IDN_BASE_URL
+        return context
 
 
 @login_required
 def patron_edit(request, *args, **kwargs):
-    form = PatronEditForm(request.POST or None, request.FILES or None, instance=request.user)
+    if request.user.is_professional:
+        form = CompanyEditForm(request.POST or None, request.FILES or None, instance=request.user)
+    else:
+        form = PatronEditForm(request.POST or None, request.FILES or None, instance=request.user)
+
     if form.is_valid():
         form.save()
         messages.success(request, _(u"Vos informations ont bien été modifiées")) 
         return redirect(reverse('patron_edit'))
+    return render(request, 'accounts/patron_edit.html', {'form': form})
+
+
+@login_required
+def billing_object(request, year, month, day):
+    from eloue.accounts.management.commands.pro_billing import minus_one_month
+
+    date_to = datetime.date(int(year), int(month), int(day))
+    billing = get_object_or_404(Billing, patron=request.user, date_to=date_to)
+    date_to = datetime.datetime.combine(date_to, datetime.time())
+    date_from = minus_one_month(date_to)
+
+    subscriptions = billing.highlights.all()
+    toppositions = billing.toppositions.all()
+    highlights = billing.highlights.all()
+
+    highlights.sum = sum(map(lambda highlight: highlight.price(date_from, date_to), highlights), 0)
+    subscriptions.sum = sum(map(lambda subscription: subscription.price(date_from, date_to), subscriptions), 0)
+    toppositions.sum = sum(map(lambda topposition: topposition.price(date_from, date_to), toppositions), 0)
+
+    return render(request, 'accounts/pro_billing.html', 
+        {'billing': billing, 'subscriptions': subscriptions, 'toppositions': toppositions, 'highlights': highlights,
+            'from': date_from, 'to': date_to, 'patron': request.user,
+        })
+
+    response = HttpResponse(str(billing), content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment; filename=facture_e-loue_{year}-{month}-{day}.pdf'.format(year=year, month=month, day=day)
+    return response
+
+
+@login_required
+def billing(request):
+    from eloue.accounts.models import BillingHistory
+    patron = request.user
+    billing_histories = BillingHistory.objects.filter(
+            billing__patron=patron
+        ).order_by('-billing__date_from', '-date')
+    to = datetime.datetime.now()
+    _from = datetime.datetime.combine(patron.next_billing_date(), datetime.time())
     
-    return direct_to_template(
-        request, 'accounts/patron_edit.html', 
-        extra_context={
-            'form': form
-        }
+    (billing, highlights, subscriptions, toppositions, phonenotifications, 
+        emailnotifications) = Billing.builder(patron, _from, to)
+    
+    return render(
+        request, 'accounts/patron_billing.html', 
+        {
+            'billing': billing, 'highlights': highlights, 
+            'subscriptions': subscriptions, 'toppositions': toppositions,
+            'phonenotifications': phonenotifications, 'emailnotifications': emailnotifications,
+            'from': _from, 'to': to, 'billing_histories': billing_histories,
+        })
+
+
+@login_required
+def patron_edit_subscription(request, *args, **kwargs):
+    from eloue.accounts.forms import SubscriptionEditForm
+    patron = request.user
+    current_subscription = patron.current_subscription
+    now = datetime.datetime.now()
+    plans = ProPackage.objects.filter(
+        Q(valid_until__isnull=True, valid_from__lte=now) |
+        Q(valid_until__isnull=False, valid_until__gte=now))
+    if request.method == "POST":
+        form = SubscriptionEditForm(request.POST)
+        if form.is_valid():
+            new_package = form.cleaned_data.get('subscription')
+            if not current_subscription or new_package != current_subscription.propackage:
+                if new_package.maximum_items is not None and new_package.maximum_items < patron.products.count():
+                    messages.error(request, 'L\'abonnement choisi autorise moins d\'objets que vous avez actuellement')
+                    return redirect('.')
+                try:
+                    patron.creditcard
+                except:
+                    messages.error(request, _(u'Pour un abonnement vous devez enregistrer une carte bancaire. Merci de renseigner la carte utilisée pour le paiement.'))
+                    response = redirect('patron_edit_credit_card')
+                    response['Location'] += '?' + urllib.urlencode({'subscription': new_package.pk})
+                    return response
+                else:
+                    patron.subscribe(new_package)
+            return redirect('.')
+        else:
+            messages.error(request, "WRONG ASD")
+    return render(
+        request, 'accounts/patron_edit_subscription.html', 
+        {'plans': plans, 'current_subscription': current_subscription}
     )
 
 
 @login_required
 def patron_edit_password(request):
-    
     form = PatronPasswordChangeForm(request.user, request.POST or None) \
       if request.user.has_usable_password() \
       else PatronSetPasswordForm(request.user, request.POST or None) 
@@ -367,7 +486,7 @@ def patron_edit_password(request):
     if form.is_valid():
         form.save()
         messages.success(request, _(u"Votre mot de passe à bien été modifié"))
-    return direct_to_template(request, 'accounts/patron_edit_password.html', extra_context={'form': form, 'patron': request.user})
+    return render(request, 'accounts/patron_edit_password.html', {'form': form, 'patron': request.user})
 
 @login_required
 def patron_edit_phonenumber(request):
@@ -385,17 +504,24 @@ def patron_edit_phonenumber(request):
 @login_required
 def patron_edit_credit_card(request):
     import uuid
+    patron = request.user
     try:
-        instance = request.user.creditcard
+        instance = patron.creditcard
     except CreditCard.DoesNotExist:
         instance = CreditCard(
-            holder=request.user, keep=True, 
+            holder=patron, keep=True, 
             subscriber_reference=uuid.uuid4().hex
         )
     if request.method == 'POST':
         form = CreditCardForm(data=request.POST, instance=instance)
         if form.is_valid():
+            subscription = request.GET.get('subscription')
+            if subscription is not None:
+                propackage = get_object_or_404(ProPackage, pk=subscription)
+                patron.subscribe(propackage)
+                messages.success(request, u'On a validé votre abonnement')
             form.save()
+            messages.success(request, u'Votre carte a bien été ajouté')
             return redirect(patron_edit_credit_card)
     else:
         form = CreditCardForm(data=None, instance=instance)
@@ -414,6 +540,12 @@ def patron_delete_credit_card(request):
         messages.error(request, _(u"Vous n'avez pas de carte enregistrée"))
         return redirect(patron_edit_credit_card)
     
+    from accounts.models import Billing
+
+    if request.user.current_subscription and any(Billing.builder(request.user, request.user.next_billing_date(), datetime.datetime.now())[1:]):
+        messages.error(request, _(u"Vous avez un abonnement en cours, veuillez nous contacter à contact@e-loue.com pour supprimer votre carte."))
+        return redirect(patron_edit_credit_card)
+
     if instance.payboxdirectpluspaymentinformation_set.all():
         instance.holder = None
         instance.save()
@@ -453,6 +585,92 @@ def patron_edit_rib(request):
         dictionary={'form': form}, context_instance=RequestContext(request)
     )
 
+
+@login_required
+def patron_edit_highlight(request):
+    from eloue.products.forms import HighlightForm
+    from eloue.products.models import ProductHighlight, Product
+
+    patron = request.user
+
+    highlights = ProductHighlight.objects.filter(
+        ended_at__isnull=True, product__owner=patron).values_list('product', flat=True)
+    highlighted = patron.products.annotate(since=Max('producthighlight__started_at')).filter(id__in=highlights)
+    not_highlighted = patron.products.filter(~Q(id__in=highlights))
+    if request.method == "POST":
+        try:
+            product_id = int(request.POST.get('product'))
+        except ValueError:
+            return HttpResponseForbidden()
+        product = get_object_or_404(patron.products, pk=product_id)
+        now = datetime.datetime.now()
+        highlights = product.producthighlight_set.order_by('-ended_at')
+        old_highlights = product.producthighlight_set.filter(ended_at__isnull=False).order_by('-ended_at')
+        new_highlight = product.producthighlight_set.filter(ended_at__isnull=True)
+        if new_highlight:
+            highlight, = new_highlight
+            highlight.ended_at = now
+            highlight.save()
+        else:
+            ProductHighlight.objects.create(product=product)
+        return redirect('.')
+
+    return render_to_response(
+        template_name='accounts/patron_edit_highlight.html',
+        dictionary={
+            'highlighted': highlighted,
+            'not_highlighted': not_highlighted,
+        }, 
+        context_instance=RequestContext(request)
+    )
+
+
+@login_required
+def patron_edit_top_position(request):
+    from eloue.products.models import ProductTopPosition, Product
+    
+    def _split_products_on_topposition(products, patron):
+        toppositions = ProductTopPosition.objects.filter(
+            ended_at__isnull=True, product__owner=patron
+        ).values_list('product', flat=True)
+        in_topposition = products.annotate(since=Max('producttopposition__started_at')).filter(id__in=toppositions)
+        not_in_topposition = products.filter(~Q(id__in=toppositions))
+        return in_topposition, not_in_topposition
+
+    def _toggle_topposition(product):
+        now = datetime.datetime.now()
+        highlights = product.producttopposition_set.order_by('-ended_at')
+        old_highlights = product.producttopposition_set.filter(ended_at__isnull=False).order_by('-ended_at')
+        new_highlight = product.producttopposition_set.filter(ended_at__isnull=True)
+        if new_highlight:
+            highlight, = new_highlight
+            highlight.ended_at = now
+            highlight.save()
+        else:
+            ProductTopPosition.objects.create(product=product)
+
+    patron = request.user
+    in_topposition, not_in_topposition = _split_products_on_topposition(
+        patron.products, patron)
+
+    if request.method == "POST":
+        try:
+            product_id = int(request.POST.get('product'))
+        except ValueError:
+            return HttpResponseForbidden()
+        product = get_object_or_404(patron.products, pk=product_id)
+        _toggle_topposition(product)
+        return redirect('.')
+
+    return render_to_response(
+        template_name='accounts/patron_edit_top_position.html',
+        dictionary={
+            'in_topposition': in_topposition,
+            'not_in_topposition': not_in_topposition,
+        }, 
+        context_instance=RequestContext(request)
+    )
+
 @login_required
 def patron_edit_addresses(request):
     from eloue.accounts.forms import AddressFormSet
@@ -468,115 +686,105 @@ def patron_edit_addresses(request):
 
 
 @login_required
+def patron_edit_opening_times(request):
+    from eloue.accounts.forms import OpeningsForm, OpeningTimes
+    try:
+        instance = request.user.openingtimes
+    except OpeningTimes.DoesNotExist:
+        instance = OpeningTimes(patron=request.user)
+    if request.method == "POST":
+        form = OpeningsForm(request.POST, instance=instance)
+        if form.is_valid():
+            form.save()
+            return redirect(patron_edit_opening_times)
+    else:
+        form = OpeningsForm(instance=instance)
+    return render(request, 'accounts/patron_edit_opening_times.html', {'form': form})
+
+
+@login_required
 def dashboard(request):
     new_thread_ids = ProductRelatedMessage.objects.filter(
         recipient=request.user, read_at=None
     ).order_by().values('thread').distinct()
     new_threads = MessageThread.objects.filter(pk__in=[thread['thread'] for thread in new_thread_ids]).order_by('-last_message__sent_at')
     booking_demands = Booking.on_site.filter(owner=request.user, state=Booking.STATE.AUTHORIZED).order_by('-created_at')
-    return render_to_response(
-        template_name='accounts/dashboard.html', 
-        dictionary={'thread_list': new_threads, 'booking_demands': booking_demands}, 
-        context_instance=RequestContext(request)
-    )
-    return direct_to_template(
-        request, 'accounts/dashboard.html', {}
+    return render(request, 'accounts/dashboard.html', 
+        {'thread_list': new_threads, 'booking_demands': booking_demands}, 
     )
 
 
-@login_required
-def owner_booking_authorized(request, page=None):
-    queryset = request.user.bookings.authorized()
-    return object_list(
-        request, queryset, page=page, paginate_by=10, 
-        extra_context={'title_page': u'Demandes de réservation'},
-        template_name='accounts/owner_booking.html'
-    )
+class AddTitle(TemplateResponseMixin):
+    title = None
+    def get_context_data(self, **kwargs):
+        context = super(AddTitle, self).get_context_data(**kwargs)
+        if self.title is not None:
+            context['title_page'] = self.title
+        return context
 
-@login_required
-def owner_booking_pending(request, page=None):
-    queryset = request.user.bookings.pending()
-    return object_list(
-        request, queryset, page=page, paginate_by=10, 
-        extra_context={'title_page': u'Réservations à venir'},
-        template_name='accounts/owner_booking.html'
-    )
+class OwnerBooking(ListView, LoginRequiredMixin, AddTitle):
+    template_name = 'accounts/owner_booking.html'
+    paginate_by = PAGINATE_PRODUCTS_BY
 
-@login_required
-def owner_booking_ongoing(request, page=None):
-    queryset = request.user.bookings.ongoing()
-    return object_list(
-        request, queryset, page=page, paginate_by=10, 
-        extra_context={'title_page': u'Réservations en cours'},
-        template_name='accounts/owner_booking.html'
-    )
+class OwnerBookingAuthorized(OwnerBooking):
+    def get_queryset(self):
+        if self.request.user.current_subscription:
+            return self.request.user.bookings.professional()
+        return self.request.user.bookings.authorized()
 
-@login_required
-def owner_booking_history(request, page=None):
-    queryset = request.user.bookings.history()
-    return object_list(
-        request, queryset, page=page, paginate_by=10, 
-        extra_context={'title_page': u'Réservations terminées'},
-        template_name='accounts/owner_booking.html')
+class OwnerBookingPending(OwnerBooking):
+    title = u'Réservations à venir'
+    def get_queryset(self):
+        return self.request.user.bookings.pending()
 
-# @login_required
-# def owner_history(request, page=None):
-#     queryset = request.user.bookings.filter(state__in=[Booking.STATE.CLOSED, Booking.STATE.REJECTED])
-#     return object_list(request, queryset, page=page, paginate_by=10, template_name='accounts/owner_history.html',
-#         template_object_name='booking')
+class OwnerBookingOngoing(OwnerBooking):
+    title = u'Réservations en cours'
+    def get_queryset(self):
+        return self.request.user.bookings.ongoing()
+
+class OwnerBookingHistory(OwnerBooking):
+    title = u'Réservations terminées'
+    def get_queryset(self):
+        if self.request.user.current_subscription:
+            return self.request.user.bookings.professional_saw()
+        return self.request.user.bookings.history()
 
 
-@login_required
-def owner_product(request, page=None):
-    queryset = request.user.products.all()
-    return object_list(request, queryset, page=page, paginate_by=10, template_name='accounts/owner_product.html',
-        template_object_name='product')
+class OwnerProduct(ListView, LoginRequiredMixin):
+    template_name = 'accounts/owner_product.html'
+    paginate_by = PAGINATE_PRODUCTS_BY
+    def get_queryset(self):
+        return self.request.user.products.all()
 
-@login_required
-def alert_edit(request, page=None):
-    queryset = request.user.alerts.all()
-    return object_list(request, queryset, page=page, paginate_by=10, template_name='accounts/alert_edit.html',
-        template_object_name='alert')
+class AlertEdit(ListView, LoginRequiredMixin):
+    template_name = 'accounts/alert_edit.html'
+    def get_queryset(self):
+        return self.request.user.alerts.all()
 
-@login_required
-def borrower_booking_ongoing(request, page=None):
-    queryset = request.user.rentals.ongoing()
-    return object_list(
-        request, queryset, page=page, paginate_by=10,
-        extra_context={'title_page': u'Réservations en cours'},
-        template_name='accounts/borrower_booking.html')
 
-@login_required
-def borrower_booking_pending(request, page=None):
-    queryset = request.user.rentals.pending()
-    return object_list(
-        request, queryset, page=page, paginate_by=10, 
-        extra_context={'title_page': u'Réservations à venir'},
-        template_name='accounts/borrower_booking.html')
+class BorrowerBooking(ListView, LoginRequiredMixin, AddTitle):
+    template_name = 'accounts/borrower_booking.html'
+    paginate_by = PAGINATE_PRODUCTS_BY
 
-@login_required
-def borrower_booking_authorized(request, page=None):
-    queryset = request.user.rentals.authorized()
-    return object_list(
-        request, queryset, page=page, paginate_by=10, 
-        extra_context={'title_page': u'Demandes de réservation'},
-        template_name='accounts/borrower_booking.html')
+class BorrowerBookingOngoing(BorrowerBooking):
+    title = u'Réservations en cours'
+    def get_queryset(self):
+        return self.request.user.rentals.ongoing()
 
-@login_required
-def borrower_booking_history(request, page=None):
-    queryset = request.user.rentals.exclude(
-        state__in=[
-            Booking.STATE.ONGOING, 
-            Booking.STATE.PENDING, 
-            Booking.STATE.AUTHORIZED,
-            Booking.STATE.AUTHORIZING,
-            Booking.STATE.OUTDATED
-        ]
-    )
-    return object_list(
-        request, queryset, page=page, paginate_by=10,
-        extra_context={'title_page': u'Réservations terminées'},
-        template_name='accounts/borrower_booking.html')
+class BorrowerBookingPending(BorrowerBooking):
+    title = u'Réservations à venir'
+    def get_queryset(self):
+        return self.request.user.rentals.pending()
+
+class BorrowerBookingAuthorized(BorrowerBooking):
+    title = u'Demandes de réservation'
+    def get_queryset(self):
+        return self.request.user.rentals.authorized()
+
+class BorrowerBookingHistory(BorrowerBooking):
+    title = u'Réservations terminées'
+    def get_queryset(self):
+        return self.request.user.rentals.history()
 
 @mobify
 def contact(request):
@@ -621,4 +829,189 @@ def accounts_studies_autocomplete(request):
         school__icontains=term).values('school').annotate(Count('school'))
     school_list = [{'label': school['school'], 'value': school['school']} for school in schools]
     return HttpResponse(simplejson.dumps(school_list), mimetype="application/json")
+
+@login_required
+def gmail_invite(request):
+    access_token = request.GET.get('0-facebook_access_token', None)
+    if access_token:
+        token_info = simplejson.load(
+            urllib.urlopen(
+                'https://www.googleapis.com/oauth2/v1/'
+                'tokeninfo?access_token=%s'%access_token
+            )
+        )
+        if 'audience' not in token_info or token_info['audience'] != settings.GOOGLE_CLIENT_ID:
+            return HttpResponseForbidden()
+        client = gdata.contacts.client.ContactsClient(source='e-loue')
+        token = gdata.gauth.OAuth2Token(
+            client_id=settings.GOOGLE_CLIENT_ID,
+            client_secret=settings.GOOGLE_CLIENT_SECRET,
+            scope=('https://www.googleapis.com/auth/userinfo.email+'
+                'https://www.googleapis.com/auth/userinfo.profile+'
+                'https://www.google.com/m8/feeds'
+            ), user_agent='', access_token=access_token
+        )
+        client = token.authorize(client)
+        query = gdata.contacts.client.ContactsQuery()
+        query.max_results = 10000
+        initial_data = []
+        for e in client.GetContacts(q=query).entry:
+            email = next(itertools.imap(lambda email: email.address, itertools.ifilter(lambda email: email.primary and email.primary=='true', e.email)), None)
+            if email:
+                initial_data.append({'checked': False, 'name': e.name.full_name.text if e.name else '', 'email': email})
+        return render(request, 'accounts/gmail_invite.html', {'initial_data': initial_data})
+    else:
+        return render(request, 'accounts/gmail_invite.html')
+
+@login_required
+def gmail_send_invite(request):
+    if request.POST:
+        form = GmailContactForm(request.POST)
+        if form.is_valid():
+            request.user.send_gmail_invite(form.cleaned_data['email'])
+            return HttpResponse(
+                simplejson.dumps({'status': "OK"}), 
+                mimetype="application/json"
+            )
+        else:
+            return HttpResponse(
+                simplejson.dumps({'status': "KO"}), 
+                mimetype="application/json"
+            )
+    else:
+        return HttpResponse(
+            simplejson.dumps({'status': "KO"}), 
+            mimetype="application/json"
+        )
+
+
+def patron_subscription(request):
+    from eloue.accounts.wizard import ProSubscriptionWizard
+    from eloue.accounts.forms import SubscriptionEditForm
+    subscription_wizard = ProSubscriptionWizard([SubscriptionEditForm, EmailAuthenticationForm])
+    return subscription_wizard(request)
+
+
+@login_required
+def facebook_invite(request):
+    return render(request, 'accounts/facebook_invite.html')
+
+@login_required
+def patron_edit_notification(request):
+    from eloue.accounts.models import EmailNotification, PhoneNotification
+    patron = request.user
+    mails = patron.emailnotification_set.filter(ended_at__isnull=True) # XXX: filter for valides only
+    phones = patron.phonenotification_set.filter(ended_at__isnull=True) # XXX: filter for valides only
+    if request.method == "POST":
+        # need to validate them
+        if 'email' in request.POST:
+            from django import forms
+            email_field = forms.EmailField()
+            email = request.POST.get('email')
+            try:
+                email = email_field.clean(email)
+                EmailNotification.objects.create(patron=patron, email=email)
+            except forms.ValidationError:
+                messages.error(request, u"Vous devez saisir une adresse email valid.")
+            return redirect('.')
+        elif 'phone_number' in request.POST:
+            from django.contrib.localflavor.fr import forms
+            phone_field = forms.FRPhoneNumberField()
+            phone_number = request.POST.get('phone_number')
+            try:
+                phone_number = phone_field.clean(phone_number)
+                PhoneNotification.objects.create(patron=patron, phone_number=phone_number)
+            except forms.ValidationError:
+                messages.error(request, u"Vous devez saisir une numéro de téléphone valide")
+            return redirect('.')
+        elif 'email_delete' in request.POST:
+            emailnotification = get_object_or_404(EmailNotification, pk=request.POST.get('email_delete'))
+            emailnotification.ended_at = datetime.datetime.now()
+            emailnotification.save()
+            return redirect('.')
+        elif 'phonenumber_delete' in request.POST:
+            phonenotification = get_object_or_404(PhoneNotification, pk=request.POST.get('phonenumber_delete'))
+            phonenotification.ended_at = datetime.datetime.now()
+            phonenotification.save()
+            return redirect('.')
+        else:
+            return HttpResponseForbidden()
+    return render(
+        request, 'accounts/patron_edit_notification.html', 
+        {'mails': mails, 'phones': phones}
+    )
+
+@login_required
+def patron_edit_idn_connect(request):
+    import oauth2 as oauth
+    import urllib, urlparse
+    import urllib, json
+    from eloue.accounts.models import IDNSession
+    scope = '["namePerson/friendly","namePerson","contact/postalAddress/home","contact/email","namePerson/last","namePerson/first"]'
+
+    consumer_key = settings.IDN_CONSUMER_KEY
+    consumer_secret = settings.IDN_CONSUMER_SECRET
+    base_url = settings.IDN_BASE_URL
+    
+    request_token_url = base_url + 'oauth/requestToken'
+    authorize_url = base_url + 'oauth/authorize'
+    access_token_url = base_url + 'oauth/accessToken'
+    me_url = base_url + 'anywhere/me?oauth_scope=%s' % (scope, )
+    redirect_uri = request.build_absolute_uri(reverse('patron_edit_idn_connect'))
+    
+    try:
+        request.user.idnsession
+    except IDNSession.DoesNotExist:
+        consumer = oauth.Consumer(key=consumer_key, secret=consumer_secret)
+        client = oauth.Client(consumer)
+
+        if request.GET.get('connected'):
+
+            response, content = client.request(request_token_url, "GET")
+            request_token = dict(urlparse.parse_qsl(content))
+            request.session['request_token'] = request_token
+            link = "%s?oauth_token=%s&oauth_callback=%s&oauth_scope=%s" % (
+                authorize_url, 
+                request_token['oauth_token'], 
+                redirect_uri, 
+                scope
+            )
+            return redirect(link)
+        elif request.GET.get('oauth_verifier'):
+            idn_oauth_verifier = request.GET.get('oauth_verifier')
+            request_token = oauth.Token(
+                request.session['request_token']['oauth_token'],
+                request.session['request_token']['oauth_token_secret'])
+            request_token.set_verifier(idn_oauth_verifier)
+            client = oauth.Client(consumer, request_token)
+            response, content = client.request(access_token_url, "GET")
+            assert simplejson.loads(response['status']) == 200
+            access_token_data = dict(urlparse.parse_qsl(content))
+            access_token = oauth.Token(access_token_data['oauth_token'],
+                access_token_data['oauth_token_secret'])
+            client = oauth.Client(consumer, access_token)
+            response, content = client.request(me_url, "GET")
+            assert simplejson.loads(response['status']) == 200
+            content = simplejson.loads(content)
+            IDNSession.objects.create(
+                user=request.user,
+                access_token=access_token_data['oauth_token'],
+                access_token_secret=access_token_data['oauth_token_secret'],
+                uid=content['id'],
+            )
+    return render(request, 'accounts/patron_edit_idn.html', {'redirect_uri': redirect_uri, 'consumer_key': consumer_key, 'base_url': base_url})
+
+@login_required
+def patron_delete_idn_connect(request):
+    from eloue.accounts.models import IDNSession
+    idn = get_object_or_404(IDNSession, user=request.user)
+    try:
+        idn.delete()
+    except:
+        pass
+    return redirect('patron_edit_idn_connect')
+
+
+
+
 

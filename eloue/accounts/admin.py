@@ -10,7 +10,7 @@ from django.utils.encoding import smart_str
 from django.utils.translation import ugettext_lazy as _
 
 from eloue.admin import CurrentSiteAdmin
-from eloue.accounts.models import Patron, Address, PhoneNumber, PatronAccepted
+from eloue.accounts.models import Patron, Address, PhoneNumber, PatronAccepted, ProPackage, Subscription
 from eloue.accounts.forms import PatronChangeForm, PatronCreationForm
 
 log = logbook.Logger('eloue')
@@ -70,7 +70,7 @@ class PatronAdmin(UserAdmin, CurrentSiteAdmin):
     
     def send_activation_email(self, request, queryset):
         for patron in queryset:
-            if patron.is_expired() or patron.is_active:
+            if patron.is_active:
                 continue
             try:
                 patron.send_activation_email()
@@ -89,10 +89,19 @@ class AddressAdmin(admin.ModelAdmin):
         (_('Geolocation'), {'classes': ('collapse',), 'fields': ('position',)})
     )
 
+class SubscriptionAdmin(admin.ModelAdmin):
+    list_display = ('patron', 'propackage', 'subscription_started', 'subscription_ended')
+
+
+class ProPackageAdmin(admin.ModelAdmin):
+    pass
+
 
 try:
     admin.site.register(Address, AddressAdmin)
     admin.site.register(Patron, PatronAdmin)
     admin.site.register(PatronAccepted)
+    admin.site.register(ProPackage, ProPackageAdmin)
+    admin.site.register(Subscription, SubscriptionAdmin)
 except admin.sites.AlreadyRegistered, e:
     log.warn('Site is already registered : %s' % e)

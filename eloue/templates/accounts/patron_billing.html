@@ -1,0 +1,60 @@
+{% extends "accounts/patron_edit.html" %}
+{% load i18n price booking product %}
+
+{% block title %}{% trans "Facturation" %}{% endblock %}
+
+{% block pro_account-submenu %}
+  <ul>
+     <li><a href="{{ billing }}" class="selected-nav-bar-link-sub">{% trans "Facturation" %}</a></li>
+     <li><a href="{{ patron_edit_subscription }}">{% trans "Abonnements" %}</a></li>
+  </ul>
+{% endblock %}
+
+
+{% block tail %}
+{{ block.super }}
+<script type="text/javascript">
+	$(document).ready(function (){
+		var thead = $('table.billing table thead tr');
+
+		thead.click(function (){
+			var tbody = $(this).parent().parent().children('tbody');
+			if(tbody.length == 1){
+				if(tbody.is(":visible") == false ){
+					tbody.show();
+					$(this).children().children('i').attr('class', 'icon-minus-sign');
+				} else {
+					tbody.hide();
+					$(this).children().children('i').attr('class', 'icon-plus-sign');
+				}
+			}		
+		});
+	});
+</script>
+{% endblock %}
+
+{% block content-main-profil %}
+<h2>{% trans "Relevé actuel du mois" %}</h2>
+	{% include 'accounts/partials/billing_table.html' %}
+<h2>{% trans "Historique des factures"%}</h2>
+<table class="table billing-history">
+	<thead>
+		<tr>
+			<th>{% trans "Date" %}</th>
+			<th>{% trans "Carte de crédit" %}</th>
+			<th>{% trans "Facture" %}</th>
+			<th>{% trans "Montant" %}</th>
+		</tr>
+	</thead>
+	<tbody>
+		{% for billinghistory in billing_histories %}
+		<tr {% if not billinghistory.succeeded %}class="billing-error"{%endif%}>
+			<td>{{ billinghistory.date }}</td>
+			<td>{{ billinghistory.billing.payment.creditcard.masked_number }}</td>
+			<td><a href="{{ billinghistory.billing.get_absolute_url }}" target="_blank">Télécharger la facture</a></td>
+			<td>{{ billinghistory.billing.total_amount|currency }}</td>
+		</tr>
+		{% endfor %}
+	</tbody>
+</table>
+{% endblock %}

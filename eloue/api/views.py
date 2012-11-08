@@ -5,7 +5,7 @@ import re
 import traceback
 
 from django.http import HttpResponse, HttpResponseBadRequest
-from django.contrib.csrf.middleware import csrf_exempt
+from django.views.decorators.csrf import csrf_exempt
 
 from tastypie.exceptions import ImmediateHttpResponse
 from tastypie.http import HttpUnauthorized, HttpBadRequest

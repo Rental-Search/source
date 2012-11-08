@@ -19,7 +19,7 @@ AFFILIATE_TAG = 'uk'
 
 GOOGLE_REGION_CODE = '.co.uk'
 
-DEFAULT_SITES = [5, 6]
+DEFAULT_SITES = [1, 5, 6]
 
 TEMPLATE_DIRS = (
     local_path('templates/uk/'),

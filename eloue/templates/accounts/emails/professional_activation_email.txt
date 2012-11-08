@@ -1,0 +1,18 @@
+{% load i18n %}
+{% blocktrans with patron.username as username and site.domain as domain and site.name as site_name %}
+
+	Bonjour {{ username }},<br><br>
+
+ 	Nous vous remercions de vous être enregistré(e) sur <a href="{{ protocol }}://{{ domain }}">{{ domain }}</a>.
+	Veuillez cliquer sur le bouton ci-dessous pour finaliser la validation de votre compte.
+{% endblocktrans %}
+
+{{ protocol }}://{{ domain }}{% url propw uidb36=uid token=token %}
+
+{% trans "A très vite" %},
+
+{% trans "L'équipe" %} {{ site.name }}.
+
+
+
+

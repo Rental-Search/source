@@ -1,7 +1,7 @@
 {% load cache i18n product seo booking %}
 <ul class="product-list">
     {% for product in product_list %}
-    <li id="marker-{{forloop.counter }}">
+    <li id="marker-{{forloop.counter }}" {% if product.is_highlighted %}class="highlight"{% endif %}>
         {% if marker == 'True' %}
             <div class="pl-marker" >{{ forloop.counter }}</div>
         {% endif %}
@@ -26,7 +26,7 @@
                 {% if product.owner_avatar %}
                     <img src="{{product.owner_avatar}}" width="60" height="60" />
                 {% else %}
-                    <img src="{{ MEDIA_URL }}images/default_avatar.png" width="60" height="60" />
+                    <img src="{{ STATIC_URL }}images/default_avatar.png" width="60" height="60" />
                 {% endif %}
             </a>
             <span class="dial-avatar"></span>

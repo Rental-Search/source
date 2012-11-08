@@ -1,0 +1,37 @@
+{% extends "base_email.html" %}
+
+{% load i18n %}
+
+{% block title_email %}{% trans "Activation de votre compte" %}{% endblock %}
+
+{% block content_email %}
+<tr>
+    <td valign="top" width="100%" style="border-collapse: collapse;">
+        <table border="0" cellpadding="0" cellspacing="0" width="510" class="leftColumnContent">
+            <tbody>
+                <tr>
+                    <td valign="top" style="padding-top: 20px;border-collapse: collapse;">
+                        <div style="color: #505050;font-family: Arial;font-size: 14px;line-height: 200%;text-align: left;">
+                        	{% blocktrans with patron.username as username and site.domain as domain and site.name as site_name %}
+                                Bonjour {{ username }},<br><br>
+
+                                Nous vous remercions de vous être enregistré(e) sur <a href="{{ protocol }}://{{ domain }}">{{ domain }}</a>.<br><br>
+                                Afin d’activer votre compte et de rejoindre notre communauté de loueurs, vous devez cliquer sur le bouton ci-dessous.<br><br>
+
+                            {% endblocktrans %}
+                            <p style="margin-top: 0px; text-align: center;">
+                            	<a href="{{ protocol }}://{{ site.domain }}{% url auth_activate activation_key %}" style="text-decoration: none; cursor: pointer; display: inline-block; background-color: #f36100; padding: 10px; font-family: Arial, sans-serif; line-height: 18px; font-size: 14px; color: #fff; border: 1px solid #c85007; vertical-align: 7%;">
+                                    {% trans "Activer votre compte" %}
+                            	</a>
+                            </p>
+                            {% trans "A très vite"%}<br>
+                            
+                            {% trans "L'équipe" %} {{ site.name }}.
+                        </div>                                                                    
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </td>
+</tr>
+{% endblock content_email %}

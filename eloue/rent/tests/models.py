@@ -147,8 +147,7 @@ class BookingTest(TestCase):
         )
         self.assertEquals(booking.product.payment_type, 0) #non payment 
         self.assertEquals(booking.state, Booking.STATE.AUTHORIZING) 
-        #booking.init_payment_processor() 
-        #self.assertTrue(isinstance(booking.payment_processor, models.PAY_PROCESSORS[0]))
+        self.assertTrue(isinstance(booking.payment, NonPaymentInformation))
         booking.preapproval()
         self.assertEquals(booking.state, Booking.STATE.AUTHORIZED) #state changed
     
@@ -168,8 +167,7 @@ class BookingTest(TestCase):
         )
         self.assertEquals(booking.product.payment_type, 0) #non payment 
         self.assertEquals(booking.state, Booking.STATE.ENDED) 
-        #booking.init_payment_processor()
-        #self.assertTrue(isinstance(booking.payment_processor, models.PAY_PROCESSORS[0]))
+        self.assertTrue(isinstance(booking.payment, NonPaymentInformation))
         booking.pay()
         self.assertEquals(booking.state, Booking.STATE.CLOSED) #state changed
     
@@ -179,7 +177,12 @@ class BookingTest(TestCase):
         from eloue.payments.models import PayboxDirectPlusPaymentInformation
         from eloue.accounts.models import CreditCard
         mock_authorize.return_value = '00012345', '000012345'
-        payment = PayboxDirectPlusPaymentInformation.objects.create()
+        creditcard = CreditCard.objects.create(
+                expires='0119', card_number='1111222233334444', 
+                holder=Patron.objects.get(pk=2)
+            )
+        payment = PayboxDirectPlusPaymentInformation.objects.create(
+            creditcard=creditcard)
         booking = Booking.objects.create(
             started_at=datetime.datetime.now(),
             ended_at=datetime.datetime.now() + datetime.timedelta(days=3),
@@ -192,14 +195,7 @@ class BookingTest(TestCase):
             payment=payment
         )
         self.assertEquals(booking.state, Booking.STATE.AUTHORIZING) 
-        #booking.init_payment_processor() 
-        #self.assertTrue(isinstance(booking.payment_processor, models.PAY_PROCESSORS[1]))
-        booking.preapproval(
-            credit_card=CreditCard(
-                expires='0119', card_number='1111222233334444', 
-                holder=Patron.objects.get(pk=2)
-            ), cvv='123'
-        )
+        booking.preapproval(cvv='123')
         self.assertTrue(mock_authorize.called)
         self.assertEquals(booking.state, Booking.STATE.AUTHORIZED)
         

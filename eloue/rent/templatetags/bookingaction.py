@@ -86,6 +86,7 @@ Accept = PostForm('Accepter', 'eloue.rent.views.booking_accept', BOOKING_STATE.P
 Refuse = PostForm('Refuser', 'eloue.rent.views.booking_reject', BOOKING_STATE.REJECTED)
 Cancel = PostForm('Annuler la location', 'eloue.rent.views.booking_cancel', BOOKING_STATE.CANCELED)
 Close = PostForm(u'Clôturer', 'eloue.rent.views.booking_close', BOOKING_STATE.CLOSING)
+Read = PostForm(u'Marquer comme lu', 'eloue.rent.views.booking_read', BOOKING_STATE.PROFESSIONAL_SAW)
 
 
 Incident = LinkWidget(
@@ -172,6 +173,8 @@ borrower = {
     'closing': (Incident, SendMessageToOwner, LeaveComment),
     'closed': (Incident, SendMessageToOwner, LeaveComment),
     'outdated': (),
+    'professional': (),
+    'professional_saw': (),
 }
 
 owner = {
@@ -188,6 +191,8 @@ owner = {
     'closing': (Incident, SendMessageToBorrower, LeaveComment),
     'closed': (Incident, SendMessageToBorrower, LeaveComment), 
     'outdated': (),
+    'professional': (Read, ),
+    'professional_saw': (),
 }
 
 @register.simple_tag

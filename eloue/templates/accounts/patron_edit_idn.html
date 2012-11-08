@@ -1,0 +1,30 @@
+{% extends "accounts/patron_edit.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Enregistrement IDN" %}{% endblock %}
+
+{% block content-main-profil %}
+  <h1 style="margin-bottom: 40px;"><img src="{{ STATIC_URL }}images/laposte_icon.gif" alt="La Poste icône" height="25" style="margin-right: 5px; margin-bottom: -8px;">Enregistrement Identité Numérique</h1>
+  {% if request.user.idnsession %}
+  <p style="text-align:center; font-size: 16px; line-height: 22px; border: 1px solid #ABC9D5; padding: 10px; margin-bottom: 10px;">
+  	Votre <b>I</b>dentité <b>N</b>umérique<br> a été vérifiée le : <b>{{ request.user.idnsession.created_at }}</b><br>
+    Réf. La Poste: <a href="{{ request.user.idnsession.profile_url }}">{{ request.user.idnsession.uid }}</a>
+  </p>
+  <p style="text-align: right;">
+  	<a href="{% url patron_delete_idn_connect %}">
+  		Je souhaite dissocier mon compte <b>I</b>dentité <b>N</b>umérique
+  	</a>
+  </p>
+  {% else %}
+  <p style="text-align: center">
+  	 <idn:connect></idn:connect>
+  </p>
+  {% endif %}
+{% endblock %}
+
+{% block tail %}
+{{ block.super }}
+<script type="text/javascript" src="{{ base_url }}anywhere/jsdk/anywhere-1.2.1.js"></script>
+<script language="Javascript">idn.anywhere.setup({"client_id":"{{ consumer_key }}","redirect_uri":"{{ redirect_uri }}?connected=true","scope":"null","display":"popin"});
+</script>
+{% endblock %}

@@ -1,0 +1,37 @@
+{% load i18n product %}
+<ul class="product-list" style="margin-bottom: 20px;">
+  <li style="border-bottom: 1px solid #B2CED9;">
+    <a href="{{ product.get_absolute_url }}" class="pl-img">
+      {% with product.pictures.all|first as picture %}
+              {% if picture.thumbnail %}
+              <img src="{{ picture.thumbnail.url }}" alt="product.summary" width="60" height="60" />
+            {% endif %}
+      {% endwith %}
+    </a><!-- pl-img -->
+    <div class="pl-content">
+      <h3>
+        <a href="{% url owner_product_edit product.slug product.pk %}">{{product.summary|capitalize|truncate:200 }}</a>
+      </h3>
+      <address>
+        {{ product.address.city|capfirst }}
+        {% if product.address.zipcode %}, {{ product.address.zipcode }} {% endif %}
+      </address>
+      {% with product.prices.day|first as price %}
+            <p class="pl-price">{{ price }} <span>/{{price.unit|unit}}</span></p>
+      {% endwith %}
+      </div><!-- pl-content -->
+      <div class="pl-action" style="float:right;">
+        <form enctype="multipart/form-data" action="" method="POST">
+          {% csrf_token %}
+          {{form}}
+          <div style="margin-top: 25px; margin-right: 10px;">
+            {% if form.instance.pk %}
+              <button type="submit" id="unhighlight" class="btn btn-primary">{% trans "Désactiver"%}</button>
+            {% else %}
+              <button type="submit" id="highlight" class="btn btn-primary">{% trans "Activer"%}</button>
+            {% endif %}
+          </div>
+        </form>
+      </div>
+  </li>
+</ul>

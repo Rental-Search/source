@@ -10,11 +10,13 @@ from django.utils import translation
 from django.utils.translation import ugettext as _
 
 from eloue.accounts.forms import EmailPasswordResetForm, PatronSetPasswordForm
-from eloue.accounts.views import activate, authenticate, authenticate_headless, contact, associate_facebook
+
+from eloue.accounts.views import activate, authenticate, authenticate_headless, contact, google_oauth_callback, patron_subscription
 
 from eloue.products.views import homepage, search, reply_product_related_message, homepage_object_list
 from eloue.products.search_indexes import product_only_search, car_search, realestate_search
 from eloue.sitemaps import CategorySitemap, FlatPageSitemap, PatronSitemap, ProductSitemap
+from django.views.generic import TemplateView
 
 from functools import partial
 
@@ -35,6 +37,7 @@ sitemaps = {
 translation.activate(settings.LANGUAGE_CODE)  # Force language for test and dev
 
 urlpatterns = patterns('',
+    url(r'^invitation_sent/$', TemplateView.as_view(template_name='accounts/invitation_sent.html'), name='invitation_sent'),
     url(r'^user_geolocation/$', 'eloue.accounts.views.user_geolocation', name='user_geolocation'),
     url(r'^get_user_location/$', 'eloue.accounts.views.get_user_location', name='get_user_location'),
     url(r"^announcements/", include("announcements.urls")),
@@ -44,7 +47,7 @@ urlpatterns = patterns('',
         'is_admin_site': False,
         'password_reset_form': EmailPasswordResetForm,
         'template_name': 'accounts/password_reset_form.html',
-        'email_template_name': 'accounts/password_reset_email'
+        'email_template_name': 'accounts/emails/password_reset_email'
         }, name="password_reset"),
     url(r'^reset/done/$', password_reset_done, {
         'template_name': 'accounts/password_reset_done.html'
@@ -56,16 +59,18 @@ urlpatterns = patterns('',
     url(r'^reset/complete/$', password_reset_complete, {
         'template_name': 'accounts/password_reset_complete.html'
     }, name="password_reset_complete"),
+    url(r'^espace_pro/$', patron_subscription, name="patron_subscription"),
     url(r'^faq/', include('faq.urls')),
     url(r'^contact/$', contact, name="contact"),
     url(r'^activate/(?P<activation_key>\w+)/$', activate, name='auth_activate'),
     url(r'^login/$', authenticate, name='auth_login'),
     url(r'^login_headless/$', authenticate_headless, name='auth_login_headless'),
     url(r'^logout/$', logout_then_login, name='auth_logout'),
+    url(r'^oauth2callback$', google_oauth_callback),
     url(r'^dashboard/', include('eloue.dashboard.urls')),
     url(r'^media/(.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT}),
-    url(r'^%s' % _("loueur/"), include('eloue.accounts.urls')),
-    url(r'^%s' % _("location/"), include('eloue.products.urls')),
+    url(r'^%s' % "loueur/", include('eloue.accounts.urls')),
+    url(r'^%s' % "location/", include('eloue.products.urls')),
     url(r'^booking/', include('eloue.rent.urls')),
     url(r'^experiments/', include('django_lean.experiments.urls')),
     url(r'^edit/reports/', include('django_lean.experiments.admin_urls')),
@@ -77,7 +82,7 @@ urlpatterns = patterns('',
     url(r'^lists/object/(?P<offset>[0-9]*)$', partial(homepage_object_list, search_index=product_only_search), name=''),
     url(r'^lists/car/(?P<offset>[0-9]*)$', partial(homepage_object_list, search_index=car_search), name=''),
     url(r'^lists/realestate/(?P<offset>[0-9]*)$', partial(homepage_object_list, search_index=realestate_search), name=''),
-    url(r'^%s/$' % _('recherche'), search, name="search"),
+    url(r'^%s/$' % 'recherche', search, name="search"),
     url(r'^propw/(?P<uidb36>[0-9A-Za-z]+)-(?P<token>.+)/$', password_reset_confirm, {
         'set_password_form': PatronSetPasswordForm,
         'template_name': 'accounts/professional_password_reset_confirm.html',

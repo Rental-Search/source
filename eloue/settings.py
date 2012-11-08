@@ -41,6 +41,19 @@ DATABASES = {
     }
 }
 
+CACHES = {
+    'default': {
+        'BACKEND': getattr(local, 'CACHE_BACKEND', 'django.core.cache.backends.dummy.DummyCache'),
+        'LOCATION': getattr(local, 'CACHE_LOCATION', None),
+    }
+}
+
+# Cache configuration
+CACHE_MIDDLEWARE_ANONYMOUS_ONLY = True
+CACHE_MIDDLEWARE_SECONDS = getattr(local, 'CACHE_MIDDLEWARE_SECONDS', 60 * 15)
+CACHE_MIDDLEWARE_KEY_PREFIX = getattr(local, 'CACHE_MIDDLEWARE_KEY_PREFIX', None)
+
+
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
 # although not all choices may be available on all operating systems.
@@ -59,6 +72,9 @@ LANGUAGES = (
     ('fr-fr', ugettext('Français')),
     ('en-gb', ugettext('English')),
 )
+
+LOCALE_PATHS = (local.local_path('locale/'), )
+
 
 SITE_ID = 1
 DEFAULT_SITES = getattr(local, "DEFAULT_SITES", [1, 3, 4])
@@ -81,11 +97,6 @@ MEDIA_ROOT = local.MEDIA_ROOT
 # Examples: "http://media.lawrence.com", "http://example.com/media/"
 MEDIA_URL = local.MEDIA_URL
 
-# URL prefix for admin media -- CSS, JavaScript and images. Make sure to use a
-# trailing slash.
-# Examples: "http://foo.com/media/", "/media/".
-ADMIN_MEDIA_PREFIX = '/media/admin/'
-
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = '0j7jp$u!5n00s7=e@evlo0%ng&xm%zv^3-vn6gyy$&nbdd7p*('
 
@@ -105,9 +116,10 @@ else:
     )
 
 TEMPLATE_CONTEXT_PROCESSORS = (
-    'django.core.context_processors.auth',
+    'django.contrib.auth.context_processors.auth',
     'django.core.context_processors.debug',
     'django.core.context_processors.media',
+    'django.core.context_processors.static',
     'django.core.context_processors.request',
     'django.contrib.messages.context_processors.messages',
     'announcements.context_processors.site_wide_announcements',
@@ -133,6 +145,17 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.cache.FetchFromCacheMiddleware',
 )
 
+PASSWORD_HASHERS =(
+    'django.contrib.auth.hashers.PBKDF2PasswordHasher',
+    'django.contrib.auth.hashers.PBKDF2SHA1PasswordHasher',
+    'django.contrib.auth.hashers.BCryptPasswordHasher',
+    'django.contrib.auth.hashers.SHA1PasswordHasher',
+    'eloue.accounts.auth.MD5PasswordHasher',
+    'django.contrib.auth.hashers.UnsaltedMD5PasswordHasher',
+    'django.contrib.auth.hashers.CryptPasswordHasher'
+)
+
+
 if DEBUG_TOOLBAR:
     MIDDLEWARE_CLASSES += ('debug_toolbar.middleware.DebugToolbarMiddleware',)
 
@@ -155,6 +178,7 @@ INSTALLED_APPS = (
     'django.contrib.redirects',
     'django.contrib.sitemaps',
     'django.contrib.formtools',
+    'django.contrib.staticfiles',
     'django.contrib.markup',
     'django.contrib.gis',
     'south',
@@ -202,17 +226,8 @@ MESSAGE_STORAGE = getattr(local, 'MESSAGE_STORAGE', 'django.contrib.messages.sto
 SESSION_ENGINE = local.SESSION_ENGINE
 SESSION_COOKIE_DOMAIN = local.SESSION_COOKIE_DOMAIN
 
-# Cache configuration
-CACHE_BACKEND = local.CACHE_BACKEND
-CACHE_MIDDLEWARE_ANONYMOUS_ONLY = True
-CACHE_MIDDLEWARE_SECONDS = getattr(local, 'CACHE_MIDDLEWARE_SECONDS', 60 * 15)
-CACHE_MIDDLEWARE_KEY_PREFIX = getattr(local, 'CACHE_MIDDLEWARE_KEY_PREFIX', None)
-
-STATIC_ROOT = getattr(local, 'STATIC_ROOT', None)
-STATIC_URL = getattr(local, 'STATIC_URL', None)
-
-
 #pipeline configuration
+PIPELINE = getattr(local, 'PIPELINE', not DEBUG)
 PIPELINE_CSS_COMPRESSOR = 'pipeline.compressors.yui.YUICompressor'
 PIPELINE_JS_COMPRESSOR = ''
 PIPELINE_COMPILERS = (
@@ -220,15 +235,13 @@ PIPELINE_COMPILERS = (
 )
 PIPELINE_LESS_BINARY = getattr(local, 'PIPELINE_LESS_BINARY', '/home/benoitw/node_modules/less/bin/lessc')
 PIPELINE_YUI_BINARY = getattr(local, 'COMPRESS_YUI_BINARY', '/usr/bin/yui-compressor')
-PIPELINE_ROOT = getattr(local, 'PIPELINE_ROOT', MEDIA_ROOT)
-PIPELINE_URL = getattr(local, 'PIPELINE_URL', MEDIA_URL)
 PIPELINE_CSS = {
     'master': {
         'source_filenames': (
             'less/styles.less',
             'css/chosen.css'
         ),
-        'output_filename': 'css/master.r?.css',
+        'output_filename': 'css/master.css',
         'extra_context': {
             'media': 'screen',
         },
@@ -237,7 +250,7 @@ PIPELINE_CSS = {
         'source_filenames': (
             'css/mobile.css',
         ),
-        'output_filename': 'css/mobile.r?.css',
+        'output_filename': 'css/mobile.css',
         'extra_context': {
             'media': 'screen',
         },
@@ -246,7 +259,7 @@ PIPELINE_CSS = {
         'source_filenames': (
             'css/ie/ie.css',
         ),
-        'output_filename': 'css/ie.r?.css',
+        'output_filename': 'css/ie.css',
         'extra_context': {
             'media': 'screen',
         }
@@ -267,7 +280,7 @@ PIPELINE_JS = {
             'js/jquery.cycle.all.latest.js',
             'js/application2.js',
             ),
-        'output_filename': 'js/application2.r?.js',
+        'output_filename': 'js/application2r.js',
         'extra_context': {
             'defer': False,
         },
@@ -341,7 +354,23 @@ AWS_HEADERS = {
     'Cache-Control': 'max-age=31556926,public',
 }
 
+# staticfiles configuration
+STATIC_ROOT = getattr(local, 'STATIC_ROOT', 'static/')
+STATIC_URL = getattr(local, 'STATIC_URL', '/static/')
+STATICFILES_DIRS = ['eloue/static/', ]
+STATICFILES_STORAGE = getattr(local, 'STATICFILES_STORAGE', 'pipeline.storage.PipelineCachedStorage')
+
+
+#API KEYS
+GOOGLE_CLIENT_ID = getattr(local, 'GOOGLE_CLIENT_ID', '218840159400.apps.googleusercontent.com')
+GOOGLE_CLIENT_SECRET = getattr(local, 'GOOGLE_CLIENT_SECRET', 'BXFNFpDb6MN0ocLoPunjkzvZ')
+
 FACEBOOK_APP_ID = getattr(local, 'FACEBOOK_APP_ID', '197983240245844')
+
+IDN_CONSUMER_KEY = getattr(local, 'IDN_CONSUMER_KEY', '_ce85bad96eed75f0f7faa8f04a48feedd56b4dcb')
+IDN_CONSUMER_SECRET = getattr(local, 'IDN_CONSUMER_SECRET', '_80b312627bf936e6f20510232cf946fff885d1f7')
+IDN_BASE_URL = getattr(local, 'IDN_BASE_URL', 'http://idn.recette.laposte.france-sso.fr/')
+IDN_RETURN_URL = getattr(local, 'IDN_RETURN_URL', 'http://localhost:8000/login/')
 
 # Paypal configuration
 USE_PAYPAL_SANDBOX = getattr(local, 'USE_PAYPAL_SANDBOX', DEBUG)
@@ -405,7 +434,7 @@ LV_FTP = "ftp.bo.location-et-vacances.com"
 CAMO_KEY = getattr(local, 'CAMO_KEY', 'OKNZYL69Ml3oISfEmJvtzFjhUeBbugxPDXanydwi4HGWrRTqcQ')
 
 # Mobile configuration
-MOBILE = getattr(local, 'MOBILE', False)
+MOBILE = getattr(local, 'MOBILE', True)
 MOBILE_REDIRECT_BASE = getattr(local, 'MOBILE_REDIRECT_BASE', 'https://m.e-loue.com')
 
 # Franc Pacifique
@@ -443,3 +472,12 @@ else:
     PAYBOX_ENDPOINT = getattr(local, 'PAYBOX_ENDPOINT', "https://ppps.paybox.com/PPPS.php")
     PAYBOX_VERSION = getattr(local, 'PAYBOX_VERSION', '00104')
     PAYBOX_CLE = getattr(local, 'PAYBOX_CLE', 'IJEDEDBC')
+
+
+PRODUCTHIGHLIGHT_PRICE = decimal.Decimal('7.5')
+PRODUCTTOPPOSITION_PRICE = decimal.Decimal('5.5')
+EMAILNOTIFICATION_PRICE = decimal.Decimal('0.01')
+SMSNOTIFICATION_PRICE = decimal.Decimal('0.08')
+
+TVA = decimal.Decimal('0.196')
+

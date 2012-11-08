@@ -18,7 +18,7 @@
         <form action="{% url product_list %}" method="get">
             <p class="what">
                 {{form.q}}
-                <input type="submit" value="Rechercher" class="btn bt-big-orange" />
+                <input type="submit" value="{% trans "Rechercher" %}" class="btn bt-big-orange" />
                 {{form.l.as_hidden}}
             </p>
         </form>
@@ -29,11 +29,11 @@
                         {% firstof location.formatted_address location.city location.region location.country location.fallback %}
                     {% endwith %}
                 </span>
-                <button class="btn-other-town"><span>Changer de ville</span></button>
+                <button class="btn-other-town"><span>{% trans "Changer de ville" %}</span></button>
             </p>
             <p class="city-input">
                 <input id="id_l" type="text" name="city" />
-                <button class="btn-edit-town">me geolocaliser</button> ou <button class="btn-cancel-edit-town">annuler</button>
+                <button class="btn-edit-town">{% trans "me geolocaliser" %}</button> {% trans "ou" %} <button class="btn-cancel-edit-town">{% trans "annuler" %}</button>
             </p>
     </div><!-- search-home -->
     <div class="products-home">
@@ -76,7 +76,7 @@
                 </p>
             </div>{# near #}
             <div id="hotloc" class="ui-tabs-panel ui-widget-content ui-corner-bottom ui-tabs-hide">
-                {% cache 43200 curiosities %}
+                {% cache 43200 curiosities site %}
                     <ul class="product-list">
                     {% for curiosity in curiosities %}
                         {% with curiosity.product as product %}
@@ -98,15 +98,15 @@
         </li>
         <li class="arg-iphoneApp">
             <a href="/mobile/iphone/">
-                <img src="{{ MEDIA_URL }}images/e-loue_sur_iPhone.png" width="204" height="126" />
+                <img src="{{ STATIC_URL }}images/e-loue_sur_iPhone.png" width="204" height="126" />
                 <h4>{% trans "L'appli pour tout louer !" %}</h4>
             </a>
         </li>
         <li class="arg-garanties">
             <a href="/assurance-tranquillite/">
-                <img src="{{ MEDIA_URL }}images/garanties.png" width="204" height="88" alt="{% trans "Les garanties e-loue"%}" />
+                <img src="{{ STATIC_URL }}images/garanties.png" width="204" height="88" alt="{% trans "Les garanties e-loue"%}" />
                 <h4>{% trans "La garantie" %}</h4>
-                <img class="small_logo" src="{{ MEDIA_URL }}images/small_logo.png" width="71" height="24" alt="{% trans "Location garantie"%}"/>
+                <img class="small_logo" src="{{ STATIC_URL }}images/small_logo.png" width="71" height="24" alt="{% trans "Location garantie"%}"/>
             </a>
         </li><!-- arg-garanties -->
         <li class="arg-fb">
@@ -118,7 +118,7 @@
             </a>
         </li>
     </ul>{# args #}
-    {% cache 500 last_joined request.session.location.city %}
+    {% cache 500 last_joined request.session.location.city site %}
     <div class="new-profils">
         <div class="np-title">{% trans "Derniers<br/>inscrits" %}</div><!-- np-title -->
         {% with last_joined as patron_list %}
@@ -127,9 +127,12 @@
     </div>{# new_profils #}
     {% endcache %}
     <div class="press">
-        <div class="press-title">Ils parlent de nous !</div>
-        <img src="{{ MEDIA_URL }}images/e-loue_dans_la_press.png" width="619" height="39" />
+        <div class="press-title">{% trans "Ils parlent de nous !"%}</div>
+        <img src="{{ STATIC_URL }}images/e-loue_dans_la_press.png" width="619" height="39" />
     </div>{# press #}
+    <div class="home-categies">
+    
+    </div>
 </div>{# container-top #}
 {% endblock %}
 

@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+{% load i18n product cache paginator l10n %}
+
+{% block title %}Location entre particulier : loueur {{ patron.username }}{% endblock %}
+
+{% block description %}
+ {% blocktrans with patron.username as username %}Toutes les locations de {{ username }}{% endblocktrans %}
+{% endblock %}
+
+{% block content %}
+{% cache 900 patron_details_content patron.pk page_obj %}
+<div id="profil" class="container-main">
+    <div class="content-aside-profil">
+        <div class="profil-block">
+            <div class="avatar-picture">
+                {% if patron.avatar %}
+                <img src="{{ patron.display.url }}" alt="{% trans "loueur"%}{{ patron.username }}" width="180" height="180">
+                {% else %}
+                <img src="{{ STATIC_URL }}images/default_avatar.png" alt="{% trans "loueur"%}{{ patron.username }}" width="180" height="180">
+                {% endif %}
+                <h1>{{ patron.username|truncate:13 }}</h1>
+                {% with patron.default_address as default_address %}
+                    {% if default_address %}
+                        <address>
+                            {{ default_address.address1 }}<br>
+                            {{ default_address.city }} - {{ default_address.zipcode }}
+                        </address>
+                    {% else %}
+                        {% if patron.addresses.all|first %}
+                            {% with patron.addresses.all|first as address %}
+                                 <address>{{ address.city }} - {{ address.zipcode }}</address>
+                            {% endwith %}
+                        {% endif %}
+                    {% endif %}
+                {% endwith %}
+            </div>{# avatar-picture #}
+            <div class="profil-intro-content">
+                {% if patron.about %}
+                    <p class="profil-description">{{ patron.about }}</p>
+                {% endif %}
+                <a class="btn-contactme" href={% url patron_message_create recipient_username=patron.slug %}>{% trans "Contactez-moi" %}</a>
+            </div>{# profil-description #}
+        </div>{# profil-block #}
+        {% include "accounts/partials/company_more_info.html" %}
+    </div>{# content-aside-profil #}
+    <div class="content-main-profil">
+            {% if borrowercomments %}
+            <h2>{% trans "Commentaires" %} <small>({{ borrowercomments.count }} {% trans "avis" %})</small></h2>
+            <ul class="comments">
+                {% for comment in borrowercomments %}
+                    <li>{% include 'rent/partials/comment.html' %}</li>
+                {% endfor %}
+            </ul>
+            <p class="more-comment"><a href="{% url comments %}">Voir tous les commentaires</a></p>
+            {% endif %}
+        {% if product_list %}
+            {% if product_list.count > 0 %}
+                {% blocktrans with product_list.count as count and product_list.count|pluralize as pluralize %}
+    	           <h2>{{ count }} annonce{{ pluralize }}</h2>
+    	       {% endblocktrans %}
+            {% else %}
+                <h2>{% trans "Pas d'annonce" %}</h2>
+            {% endif %}
+            <ul class="product-vignettes">
+                {% for product in product_list %}
+                <li>
+                    <a href="{{ product.url }}">
+                        <img src="{{product.profile}}" width="200" height="170" />
+                        <h3>{{ product.summary|truncate:22 }}</h3>
+                        <p class="pv-price">{{ product.price|unlocalize }} <span>/{{ 1|unit }}</span></p>
+                    </a>
+                </li>
+                {% endfor %}
+            </ul>{# product-vignettes #}
+            {% pagination %}
+            {% if is_paginated %}
+            <div class="pagination">
+                {% if page_obj.has_previous %}
+                    {% if page_obj.previous_page_number == 1 %}
+                        <a href=" {{ patron.get_absolute_url }}" class="prev">&#171; {% trans "Page précédente" %}</a>
+                    {% else %}
+                        <a href="{% url patron_detail patron.slug page_obj.previous_page_number %}" class="prev">&#171; {% trans "Page précédente" %}</a>
+                    {% endif %}   
+                {% endif %}
+                {% for page in page_range %}
+                    {% if page == 1 %}
+                        <a href="{{ patron.get_absolute_url }}" {% if page_obj.number == page %}class="page-selected"{% endif %}>{{ page }}</a>
+                    {% else %}
+                        <a href="{% url patron_detail patron.slug page %}" {% if page_obj.number == page %}class="page-selected"{% endif %}>{{ page }}</a>
+                    {% endif %}
+                {% endfor %}
+                {% if page_obj.has_next %}
+                    <a href="{% url patron_detail patron.slug page_obj.next_page_number %}" class="next">{% trans "Page suivante" %} &#187;</a>
+                {% endif %}
+            </div><!-- pagination -->
+            {% endif %}
+        {% endif %}
+    </div>{# content-main-profil #}
+</div>{# profil #}
+{% endcache %}
+{% endblock %}

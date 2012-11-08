@@ -8,7 +8,7 @@ from base64 import decodestring
 from decimal import Decimal as D
 import simplejson as json
 
-from fsm import transition
+from django_fsm.db.fields import transition
 
 from tastypie import fields
 from tastypie.api import Api
@@ -47,7 +47,6 @@ from eloue.products.models import Product, Category, Picture, Price, upload_to, 
 from eloue.products.search_indexes import product_search
 from eloue.accounts.models import Address, PhoneNumber, Patron, PHONE_TYPES
 from eloue.rent.models import Booking
-from eloue.rent.views import booking_success, booking_failure
 
 __all__ = ['api_v1']
 

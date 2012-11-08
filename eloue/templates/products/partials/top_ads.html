@@ -1,0 +1,25 @@
+{% load i18n product booking %}
+<p class="top-ads-title">{% trans "Top annonces"%}</p>
+<ul id="top-ads-list" class="product-list">
+    {% for product in top_products %}
+        <li id="top_marker-{{forloop.counter }}">
+            <div class="pl-marker" >{{ forloop.counter }}</div>
+            <a href="{{ product.url }}" class="pl-img">
+                <img src="{{ product.thumbnail }}" alt="{{ product.summary }}" width="60" height="60">
+            </a><!-- pl-img -->
+            <div class="pl-content">
+                <h3><a href="{{ product.url }}">{{ product.summary}}</a></h3>
+                {% with product.city|capfirst|add:", "|add:product.zipcode|truncate:truncation as address %}
+                    <address>{{ address }}</address>
+                {% endwith %}
+                <p class="pl-price">{{ product.price|quantize|currency }} <span>/jour</span></p>
+            </div><!-- pl-content -->
+            <div class="pl-avatar">
+                <a href="{{ product.owner_url }}">
+                    <img src="{{ product.owner_avatar }}" width="60" height="60">
+                </a>
+                <span class="dial-avatar"></span>
+            </div>
+        </li>
+    {% endfor %}
+</ul>

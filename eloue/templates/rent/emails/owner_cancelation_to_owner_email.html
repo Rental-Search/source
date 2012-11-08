@@ -1,17 +1,39 @@
+{% extends "base_email.html" %}
+
 {% load i18n %}
-{% blocktrans with booking.owner.username as username and booking.product.category.name as category and booking.product.summary as summary  and booking.started_at|date:"DATETIME_FORMAT" as starting_at and booking.started_at|timesince:booking.ended_at as duration and site.name as site_name %}
-<p>Bonjour {{ username }},</p>
 
-<p>Vous avez manifesté votre souhait d'annuler la location suivante :</p>
+{% block title_email %}{% trans "Annulation de votre location"%}{% endblock %}
 
-<ul>
-  <li><strong>Type :</strong> {{ category }}</li>
-  <li><strong>Objet :</strong> {{ summary }}</li>
-  <li><strong>Début de la location :</strong> {{ starting_at }}</li> 
-  <li><strong>Durée de la location :</strong> {{ duration }}</li>
- </ul>
+{% block content_email %}
+<tr>
+	<td valign="top" width="100%" style="border-collapse: collapse;">
+        <table border="0" cellpadding="0" cellspacing="0" width="510">
+            <tbody>
+                <tr>
+                    <td valign="top" style="padding-top: 20px;border-collapse: collapse;">
+                        <div style="color: #505050;font-family: Arial;font-size: 14px;line-height: 200%;text-align: left;">
+                        	{% blocktrans with booking.owner.get_full_name as owner_name and booking.owner.username as owner %}
 
-<p>Conformément à votre demande, nous vous confirmons que cette location a bien été annulée.</p>
- 
-<p>L'équipe {{ site_name }}</p>
-{% endblocktrans %}
+                            Bonjour {{ owner_name }}<br><br>
+
+                            Vous avez manifesté votre souhait d'annuler la location suivante :<br>
+                           	{% endblocktrans %}
+
+                            {% include "rent/emails/partials/booking_details_email.html" %}
+
+                            {% blocktrans with site.name as site_name %}
+
+                           	Conformément à votre demande, nous vous confirmons que cette location a bien été annulée.<br><br>
+                            
+                            A très vite,<br> 
+
+                            L'équipe {{ site_name }}<br>
+                            {% endblocktrans %}
+                        </div>                                                                    
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </td>
+</tr>
+{% endblock %}

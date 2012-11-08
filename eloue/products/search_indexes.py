@@ -38,6 +38,11 @@ class ProductIndex(QueuedSearchIndex):
     thumbnail = CharField(indexed=False)
     profile = CharField(indexed=False)
     special = BooleanField()
+    pro = BooleanField(model_attr='owner__is_professional', default=False)
+    
+    is_highlighted = BooleanField(model_attr='is_highlighted')
+    is_top = BooleanField(model_attr='is_top')
+
     
     def prepare_sites(self, obj):
         return [site.id for site in obj.sites.all()]
@@ -61,7 +66,7 @@ class ProductIndex(QueuedSearchIndex):
     def prepare_owner_avatar(self, obj):
         if obj.owner.avatar:
             return obj.owner.thumbnail.url
-        return urljoin(settings.MEDIA_URL, "images/default_avatar.png")
+        return ''
 
     def prepare_created_at_date(self, obj):
         return obj.created_at.date()
@@ -127,9 +132,9 @@ class CarIndex(ProductIndex):
 
 class RealEstateIndex(ProductIndex):
     
-    capacity = IntegerField(model_attr='capacity')
-    private_life = IntegerField(model_attr='private_life')
-    chamber_number = IntegerField(model_attr='chamber_number')
+    capacity = IntegerField(model_attr='capacity', null=True)
+    private_life = IntegerField(model_attr='private_life', null=True)
+    chamber_number = IntegerField(model_attr='chamber_number', null=True)
     rules = CharField(model_attr='rules', null=True)
 
     # services inclus

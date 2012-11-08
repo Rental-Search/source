@@ -12,6 +12,8 @@
  Durée de la location : {{ duration }}
 
  Vous serez prochainement informé(e) de sa réponse. Pour rappel : votre compte ne sera débité que si le propriétaire accepte la location.
+
+ A très vite,
  
  L'équipe {{ site_name }}
  

@@ -1,0 +1,48 @@
+{% extends "base_email.html" %}
+{% load i18n %}
+
+{% block title_email %}{% trans "Demande de réservation"%}{% endblock %}
+
+{% block content_email %}
+<tr>
+	<td valign="top" width="100%" style="border-collapse: collapse;">
+        <table border="0" cellpadding="0" cellspacing="0" width="510">
+            <tbody>
+                <tr>
+                    <td valign="top" style="padding-top: 20px;border-collapse: collapse;">
+                        <div style="color: #505050;font-family: Arial;font-size: 14px;line-height: 200%;text-align: left;">
+                        	{% blocktrans with booking.borrower.get_full_name as borrower_name and booking.owner.username as owner %}
+
+                            Bonjour {{ borrower_name }}<br><br>
+
+                            Nous avons bien pris en compte votre demande de réservation et venons d’informer le loueur.<br>
+
+                            Voici donc les différents éléments qui lui ont été transmis :<br>
+                           	{% endblocktrans %}
+
+                            {% include "rent/emails/partials/booking_details_email.html" %}
+
+
+                            {% blocktrans with site.name as site_name and booking.owner.phones.all|first as owner_phone and booking.owner.email as owner_email %}
+
+                           	Voici les coordonnées du loueur si vous souhaitez le contacter directement :<br>
+
+                           	<ul>
+								<li><strong>Numéro de téléphone :</strong> {{ owner_phone }}</li>
+								<li><strong>Adresse électronique :</strong> {{ owner_email }}</li>
+							</ul>
+                             
+                            Bonne location !<br><br>
+
+                            A très vite,<br>
+
+                            L'équipe {{ site_name }}<br>
+                            {% endblocktrans %}
+                        </div>                                                                    
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </td>
+</tr>
+{% endblock %}

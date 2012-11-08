@@ -13,6 +13,7 @@ from django.contrib.auth.forms import PasswordResetForm, PasswordChangeForm, Set
 from django.contrib.auth.tokens import default_token_generator
 from django.core import validators
 from django.forms.fields import EMPTY_VALUES
+from django.forms.formsets import formset_factory, BaseFormSet
 from django.forms.models import inlineformset_factory, BaseInlineFormSet
 from django.template.defaultfilters import slugify
 from django.template.loader import render_to_string
@@ -25,7 +26,7 @@ from django.forms.formsets import ORDERING_FIELD_NAME, DELETION_FIELD_NAME
 import facebook
 
 from eloue.accounts import EMAIL_BLACKLIST
-from eloue.accounts.fields import PhoneNumberField, ExpirationField, RIBField, DateSelectField
+from eloue.accounts.fields import PhoneNumberField, ExpirationField, RIBField, DateSelectField, CreditCardField
 from eloue.accounts.models import Patron, Avatar, PhoneNumber, CreditCard, COUNTRY_CHOICES, PatronAccepted, FacebookSession, Address, Language
 from eloue.accounts.widgets import ParagraphRadioFieldRenderer, CommentedCheckboxInput
 from eloue.utils import form_errors_append
@@ -111,6 +112,9 @@ class EmailAuthenticationForm(forms.Form):
     facebook_expires = forms.IntegerField(required=False, widget=forms.HiddenInput())
     facebook_uid = forms.CharField(required=False, widget=forms.HiddenInput())
 
+    idn_oauth_verifier = forms.CharField(required=False, widget=forms.HiddenInput())
+    idn_id = forms.CharField(required=False, widget=forms.HiddenInput())
+    idn_access_token = forms.CharField(required=False, widget=forms.HiddenInput())
 
     def __init__(self, *args, **kwargs):
         self.user_cache = None
@@ -131,10 +135,12 @@ class EmailAuthenticationForm(forms.Form):
         return email
 
     def clean(self):
-
         facebook_access_token = self.cleaned_data.get('facebook_access_token')
         facebook_expires = self.cleaned_data.get('facebook_expires')
         facebook_uid = self.cleaned_data.get('facebook_uid')
+
+        idn_id = self.cleaned_data.get('idn_id')
+        idn_access_token = self.cleaned_data.get('idn_access_token')
 
         email = self.cleaned_data.get('email')
         password = self.cleaned_data.get('password')
@@ -177,6 +183,50 @@ class EmailAuthenticationForm(forms.Form):
                 except Patron.DoesNotExist:
                     pass
 
+        elif any([idn_access_token, idn_id]):
+            from eloue.accounts.models import IDNSession
+            import oauth2 as oauth
+            import urllib, urlparse
+            from django.core.urlresolvers import reverse
+            import pprint, simplejson
+            consumer_key = '_ce85bad96eed75f0f7faa8f04a48feedd56b4dcb'
+            consumer_secret = '_80b312627bf936e6f20510232cf946fff885d1f7'
+            base_url = 'http://idn.recette.laposte.france-sso.fr/'
+            request_token_url = base_url + 'oauth/requestToken'
+            authorize_url = base_url + 'oauth/authorize'
+            access_token_url = base_url + 'oauth/accessToken'
+            try:
+                access_token_data = self.request.session[(idn_id, idn_access_token)]
+            except KeyError:
+                self.request.session.pop('idn_info', None)
+                raise forms.ValidationError('Activate cookies')
+
+            # We kept here the fb_session variable name, though we should change it to something
+            # more general, like self.oauth_session. In order to do that, we need to change it
+            # in the previous if block, in the wizard and possibly in some template too.
+            self.fb_session, created = IDNSession.objects.get_or_create(
+                uid=idn_id, defaults = {
+                    'access_token': access_token_data['oauth_token'],
+                    'access_token_secret': access_token_data['oauth_token_secret']
+                }
+            )
+            if not created:
+                self.fb_session.access_token = access_token_data['oauth_token']
+                self.fb_session.access_token_secret = access_token_data['oauth_token_secret']
+                self.fb_session.save()
+
+            self.me = self.fb_session.me
+            
+            if self.fb_session.user:
+                self.user_cache = self.fb_session.user
+            else:
+                try:
+                    self.user_cache = Patron.objects.get(email=self.me['email'])
+                    self.fb_session.user = self.user_cache
+                    self.fb_session.save()
+                except Patron.DoesNotExist:
+                    pass
+
         else:
             if email is None or email == u'':
                 raise forms.ValidationError('Empty email') # TODO: more meaningful error message
@@ -187,7 +237,6 @@ class EmailAuthenticationForm(forms.Form):
                     raise forms.ValidationError(_(u"Veuillez saisir une adresse email et un mot de passe valide."))
                 elif not self.user_cache.is_active:
                     raise forms.ValidationError(_(u"Ce compte est inactif parce qu'il n'a pas été activé."))
-            
         return self.cleaned_data
     
     def get_user_id(self):
@@ -248,11 +297,8 @@ class PatronEditForm(BetterModelForm):
     last_name = forms.CharField(label=_(u"Nom"), required=True, widget=forms.TextInput(attrs={'class': 'inm'}))
     avatar = forms.ImageField(required=False, label=_(u"Photo de profil"))
     
-    paypal_email = forms.EmailField(label=_(u"Email PayPal"), required=False, max_length=75, widget=forms.TextInput(attrs={
-            'autocapitalize': 'off', 'autocorrect': 'off', 'class': 'inm'}))
-    
 
-    is_subscribed = forms.BooleanField(required=False, initial=False, label=_(u"Newsletter"), widget=CommentedCheckboxInput(info_text="J'accepte de recevoir de recevoir la Newsletter e-loue"))
+    is_subscribed = forms.BooleanField(required=False, initial=False, label=_(u"Newsletter"), widget=CommentedCheckboxInput(info_text="J'accepte de recevoir de recevoir la Newsletter de e-loue"))
     new_messages_alerted = forms.BooleanField(label=_(u"Notifications"), required=False, initial=True, widget=CommentedCheckboxInput(info_text="J'accepte de recevoir les messages des autres membres"))
 
     date_of_birth = DateSelectField(required=False, label=_(u"Lieu de naissance"))
@@ -262,7 +308,7 @@ class PatronEditForm(BetterModelForm):
     work = forms.CharField(label=_(u"Travail"), required=False, widget=forms.TextInput(attrs={'class': 'inm'}), help_text=_(u"Exemple : Directrice Resources Humaines, ma socitée"))
     school = forms.CharField(label=_(u"Etudes"), required=False, widget=forms.TextInput(attrs={'class': 'inm'}), help_text=_(u"Exemple : Université Panthéon Sorbonne (Paris I)"))
     hobby = forms.CharField(label=_(u"Hobbies"), required=False, widget=forms.TextInput(attrs={'class': 'inm'}))
-    languages = forms.ModelMultipleChoiceField(queryset=Language.objects, label=_(u"Langues parlés"), required=False)
+    languages = forms.ModelMultipleChoiceField(queryset=Language.objects, label=_(u"Langues parlées"), required=False, widget=forms.SelectMultiple(attrs={'data-placeholder': _(u'Choisissez vos langues')}) )
 
     class Meta:
         model = Patron
@@ -272,7 +318,7 @@ class PatronEditForm(BetterModelForm):
                     'is_professional', 'company_name', 'username', 'avatar', 
                     'email', 'civility', 'first_name', 'last_name',
                     'default_address', 'default_number', 'date_of_birth', 'place_of_birth',
-                    'paypal_email', 'is_subscribed', 'new_messages_alerted',
+                    'is_subscribed', 'new_messages_alerted',
                 ],
                 'legend': _(u'Informations nécessaires')
             }),
@@ -321,22 +367,58 @@ class PatronEditForm(BetterModelForm):
             return email
     
     def clean(self):
-        paypal_email = self.cleaned_data.get('paypal_email', None)
         first_name = self.cleaned_data.get('first_name', None)
         last_name = self.cleaned_data.get('last_name', None)
-        if paypal_email:
-            is_verified = paypal_payment.verify_paypal_account(
-                        email=paypal_email,
-                        first_name=first_name,
-                        last_name=last_name
-                       )
-            if is_verified == 'INVALID':
-                form_errors_append(self, 'paypal_email', _(u"Vérifier qu'il s'agit bien de votre email PayPal"))
-                form_errors_append(self, 'first_name', _(u"Vérifier que le prénom est identique à celui de votre compte PayPal"))
-                form_errors_append(self, 'last_name', _(u"Vérifier que le nom est identique à celui de votre compte PayPal"))
-            if not paypal_payment.confirm_paypal_account(email=paypal_email):
-                form_errors_append(self, 'paypal_email', _(u"Vérifiez que vous avez bien répondu à l'email d'activation de Paypal"))
+        
         return self.cleaned_data
+
+from accounts.models import ProPackage
+from django.db.models import Q
+class CompanyEditForm(PatronEditForm):
+    avatar = forms.ImageField(required=False, label=_(u"Logo de l\'entreprise"))
+    about = forms.CharField(label=_(u"A propos de l'entreprise"), required=False, widget=forms.Textarea(), help_text=_(u'Décrivez votre entreprise afin d’expliquer aux membres de e-loue votre activité.'))
+
+    class Meta:
+        model = Patron
+        fieldsets = [
+            ('basic_info', {
+                'fields': [
+                    'is_professional', 'company_name', 'username', 'avatar', 
+                    'email', 'civility', 'first_name', 'last_name',
+                    'default_address', 'default_number', 'date_of_birth', 'place_of_birth', 'is_subscribed', 'new_messages_alerted',
+                ],
+                'legend': _(u'Informations nécessaires')
+            }),
+            ('extra_info', {
+                'fields': ['about', 'url', 'languages'],
+                'legend': _(u"Informations sur l'entreprise")
+            }),
+            ('driver_info', {
+                'fields': ['drivers_license_date', 'drivers_license_number'],
+                'legend': _(u"Informations sur le permis")
+            })
+        ]
+        widgets = {
+            'is_professional': CommentedCheckboxInput('Je suis professionel'),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super(PatronEditForm, self).__init__(*args, **kwargs)
+        self.fields['default_address'].label = _(u'Adresse de l\'entreprise')
+        self.fields['default_address'].queryset = self.instance.addresses.all()
+        self.fields['default_number'].label = _(u'Téléphone de l\'entreprise')
+        self.fields['default_number'].queryset = self.instance.phones.all()
+
+
+class SubscriptionEditForm(forms.Form):
+    def __init__(self, *args, **kwargs):
+        super(SubscriptionEditForm, self).__init__(*args, **kwargs)
+        now = datetime.datetime.now()
+        self.fields['subscription'] = forms.ModelChoiceField(required=True,
+            queryset=ProPackage.objects.filter(
+                Q(valid_until__isnull=True)|Q(valid_until__lte=now) 
+            )
+        )
 
 
 class PatronSetPasswordForm(forms.Form):
@@ -459,6 +541,11 @@ class PhoneNumberForm(forms.ModelForm):
             raise forms.ValidationError(_(u"Vous devez spécifiez un numéro de téléphone"))
         return self.cleaned_data['number']
     
+    def clean(self):
+        if self.cleaned_data['DELETE'] and self.instance.patron.default_number == self.instance:
+            raise forms.ValidationError(_(u'Vous ne pouvez pas supprimer votre numéro par default.'))
+        return self.cleaned_data
+
     class Meta:
         model = PhoneNumber
         fields = ('number', )
@@ -485,7 +572,7 @@ class PhoneNumberBaseFormSet(MixinHiddenDeleteFormset, BaseInlineFormSet):
         if not len(filter(lambda form:(not form.cleaned_data.get('DELETE', True) if hasattr(form, 'cleaned_data') else False), self.forms)):
             raise forms.ValidationError(_(u"Vous ne pouvez pas supprimer tout vos numéros."))
         if any(self.errors):
-            return
+            raise forms.ValidationError('')
         return self.cleaned_data
 
 PhoneNumberFormset = inlineformset_factory(Patron, PhoneNumber, form=PhoneNumberForm, formset=PhoneNumberBaseFormSet, exclude=['kind'], extra=1, can_delete=True)
@@ -563,9 +650,8 @@ class CreditCardForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(CreditCardForm, self).__init__(*args, **kwargs)
-        self.fields['card_number'] = forms.CharField(
-            label=_(u'Numéro de carte de crédit'),
-            min_length=16, max_length=24, required=True, widget=forms.TextInput(
+        self.fields['card_number'] = CreditCardField(
+            label=_(u'Numéro de carte de crédit'), widget=forms.TextInput(
                 attrs={'placeholder': self.instance.masked_number or ''}
             )
         )
@@ -577,21 +663,6 @@ class CreditCardForm(forms.ModelForm):
         exclude = (
             'card_number', 'masked_number', 'keep', 'subscriber_reference'
         )
-
-    def clean_card_number(self):
-        def _luhn_valid(card_number):
-            return sum(
-                int(j) if not i%2 else sum(int(k) for k in str(2*int(j))) 
-                for i, j 
-                in enumerate(reversed(card_number))
-            )%10 == 0
-        card_number = self.cleaned_data['card_number'].replace(' ','').replace('-', '')
-        try:
-            if not _luhn_valid(card_number):
-                raise forms.ValidationError(u'Veuillez verifier le numero de votre carte bancaire')
-        except ValueError as e:
-            raise forms.ValidationError(u'Votre numero doit etre composé uniquement de chiffres')
-        return card_number
 
     def clean(self):
         if self.errors:
@@ -721,6 +792,10 @@ def make_missing_data_form(instance, required_fields=[]):
         'drivers_license_date': DateSelectField(label=_(u'Date de délivraisance')),
         'date_of_birth': DateSelectField(label=_(u'Date de naissance')),
         'place_of_birth': forms.CharField(label=_(u'Lieu de naissance'), max_length=255),
+        'cvv': forms.CharField(max_length=4, label=_(u'Cryptogramme de sécurité'), help_text=_(u'Les 3 derniers chiffres au dos de la carte.')),
+        'expires': ExpirationField(label=_(u'Date d\'expiration')),
+        'holder_name': forms.CharField(label=_(u'Titulaire de la carte')),
+        'card_number': CreditCardField(label=_(u'Numéro de carte de crédit')),
     })
 
 
@@ -753,7 +828,17 @@ def make_missing_data_form(instance, required_fields=[]):
     
     if instance and instance.username and "first_name" not in required_fields:
         del fields['avatar']
-            
+    
+    if instance:
+        try:
+            if instance.creditcard:
+                del fields['cvv']
+                del fields['expires']
+                del fields['holder_name']
+                del fields['card_number']
+        except CreditCard.DoesNotExist:
+            pass
+
     for f in fields.keys():
         if required_fields and f not in required_fields:
             del fields[f]
@@ -790,16 +875,29 @@ def make_missing_data_form(instance, required_fields=[]):
             )
         else:
             phone = None
+        if self.cleaned_data.get('card_number'):
+            from eloue.payments.paybox_payment import PayboxManager, PayboxException
+            import uuid
+            pm = PayboxManager()
+            subscriber_reference = uuid.uuid4().hex
+            self.cleaned_data['card_number'] = pm.subscribe(
+                subscriber_reference,
+                self.cleaned_data['card_number'], 
+                self.cleaned_data['expires'], self.cleaned_data['cvv']
+            )
+            credit_card = CreditCard.objects.create(
+                subscriber_reference=subscriber_reference,
+                masked_number=self.cleaned_data['masked_number'],
+                card_number=self.cleaned_data['card_number'],
+                holder_name=self.cleaned_data['holder_name'],
+                expires=self.cleaned_data['expires'],
+                holder=self.instance, keep=True
+            )
+        else:
+            credit_card = None
+
         self.instance.save()
-        return self.instance, address, phone
-    
-    def clean_password2(self):
-        password1 = self.cleaned_data['password1']
-        password2 = self.cleaned_data['password2']
-        
-        if password1 != password2:
-            raise forms.ValidationError(_(u"Vos mots de passe ne correspondent pas"))
-        return self.cleaned_data
+        return self.instance, address, phone, credit_card
     
     def clean_username(self):
         if Patron.objects.filter(username=self.cleaned_data['username']).exists():
@@ -834,6 +932,34 @@ def make_missing_data_form(instance, required_fields=[]):
             raise forms.ValidationError(_(u"Vous devez spécifiez un numéro de téléphone"))
         return phones
     
+    def clean(self):
+        if self.errors:
+            return self.cleaned_data
+
+        if self.cleaned_data.get('card_number'):
+            try:
+                from eloue.payments.paybox_payment import PayboxManager, PayboxException
+                pm = PayboxManager()
+                self.cleaned_data['masked_number'] = mask_card_number(self.cleaned_data['card_number'])
+                pm.authorize(self.cleaned_data['card_number'], 
+                    self.cleaned_data['expires'], self.cleaned_data['cvv'], 1, 'verification'
+                )
+            except PayboxException as e:
+                raise forms.ValidationError(_(u'La validation de votre carte a échoué.'))
+        
+        # testing passwords against each other:
+        password1 = self.cleaned_data.get('password1')
+        password2 = self.cleaned_data.get('password2')
+        
+        if password1 != password2:
+            msg = _(u"Vos mots de passe ne correspondent pas")
+            self._errors['password1'] = [msg]
+            self._errors['password2'] = [msg]
+            del self.cleaned_data['password1']
+            del self.cleaned_data['password2']
+
+        return self.cleaned_data
+
     class Meta:
         fieldsets = [
             ('member', {
@@ -845,13 +971,17 @@ def make_missing_data_form(instance, required_fields=[]):
             ('contacts', {
                 'fields': ['addresses', 'addresses__address1', 'addresses__zipcode', 'addresses__city', 'addresses__country', 'phones', 'phones__phone'], 
                 'legend': 'Vos coordonnées'}),
+            ('payment', {
+                'fields': ['cvv', 'expires', 'holder_name', 'card_number', ],
+                'legend': 'Vos coordonnées bancaires'
+                }),
         ]
 
     class_dict = fields.copy()
     class_dict.update({'instance': instance, 'Meta': Meta})
     form_class = type('MissingInformationForm', (BetterForm,), class_dict)
     form_class.save = types.MethodType(save, None, form_class)
-    form_class.clean_password2 = types.MethodType(clean_password2, None, form_class)
+    form_class.clean = types.MethodType(clean, None, form_class)
     form_class.clean_username = types.MethodType(clean_username, None, form_class)
     form_class.clean_phones = types.MethodType(clean_phones, None, form_class)
     form_class.clean_addresses = types.MethodType(clean_addresses, None, form_class)
@@ -865,3 +995,114 @@ class ContactForm(forms.Form):
     subject = forms.CharField(label=_(u"Sujet"), max_length=100, required=True, widget=forms.TextInput(attrs={'class': 'inm'}))
     message = forms.CharField(label=_(u"Message"), required=True, widget=forms.Textarea(attrs={'class': 'inm'}))
     cc_myself = forms.BooleanField(label=_(u"Etre en copie"), required=False)
+
+
+from eloue.accounts.models import OpeningTimes
+
+class OpeningsForm(BetterModelForm):
+
+    def clean(self):
+        cleaned_data = super(OpeningsForm, self).clean()
+        days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']
+        for day in days:
+            opens_var = day + '_opens'
+            closes_var = day + '_closes'
+            opens_second_var = day + '_opens_second'
+            closes_second_var = day + '_closes_second'
+
+            opens = cleaned_data.get(opens_var)
+            closes = cleaned_data.get(closes_var)
+            opens_second = cleaned_data.get(opens_second_var)
+            closes_second = cleaned_data.get(closes_second_var)
+            if opens and closes:
+                # we are open the given day
+                if opens >= closes:
+                    # so the opening time should preced closing time
+                    error_msg = _(u'L\'heure d\'ouverture doit etre inferieure a celui de fermeture')
+                    self._errors[opens_var] = error_msg
+                    self._errors[closes_var] = error_msg
+                    cleaned_data.pop(opens_var, None)
+                    cleaned_data.pop(closes_var, None)
+                if opens_second and closes_second:
+                    # if there is a pause
+                    if not opens < closes < opens_second < closes_second:
+                        error_msg = _(u'Le debut de la tranche horaire doit précéder la fin')
+                        self._errors[opens_var] = error_msg
+                        self._errors[closes_var] = error_msg
+                        self._errors[opens_second_var] = error_msg
+                        self._errors[closes_second_var] = error_msg
+                        cleaned_data.pop(opens_var, None)
+                        cleaned_data.pop(closes_var, None)
+                        cleaned_data.pop(opens_second_var, None)
+                        cleaned_data.pop(closes_second_var, None)
+                elif opens_second or closes_second:
+                    error_msg = _(u'Vous devez saisir le debut et la fin de la tranche d\'horaire')
+                    self._errors[opens_second_var] = error_msg
+                    self._errors[closes_second_var] = error_msg
+                    cleaned_data.pop(opens_second_var, None)
+                    cleaned_data.pop(closes_second_var, None)
+            elif not opens and not closes:
+                # we are not open
+                if opens_second or closes_second:
+                    error_msg = _(u'Vous ne pouvez pas definir de tranche horaire si vous n\'etes pas ouvert')
+                    self._errors[opens_second_var] = error_msg
+                    self._errors[closes_second_var] = error_msg
+                    cleaned_data.pop(opens_second_var, None)
+                    cleaned_data.pop(closes_second_var, None)
+            else:
+                # errounous
+                error_msg = _(u'Vous devez saisir l\'ouverture et le fermeture')
+                self._errors[opens_var] = error_msg
+                self._errors[closes_var] = error_msg
+                cleaned_data.pop(opens_var, None)
+                cleaned_data.pop(closes_var, None)
+        return cleaned_data
+
+    class Meta:
+        model = OpeningTimes
+        fieldsets = [
+            ('monday', {
+                'fields': ['monday_opens', 'monday_closes', 'monday_opens_second', 'monday_closes_second', ],
+                'legend': _('Lundi'),
+                }),
+            ('tuesday', {
+                'fields': ['tuesday_opens', 'tuesday_closes', 'tuesday_opens_second', 'tuesday_closes_second',],
+                'legend': _('Mardi'),
+                }),
+            ('wednesday', {
+                'fields': ['wednesday_opens', 'wednesday_closes', 'wednesday_opens_second', 'wednesday_closes_second',],
+                'legend': _('Mercredi'),
+                }),
+            ('thursday', {
+                'fields': ['thursday_opens', 'thursday_closes', 'thursday_opens_second', 'thursday_closes_second',],
+                'legend': _('Jeudi'),
+                }),
+            ('friday', {
+                'fields': ['friday_opens', 'friday_closes', 'friday_opens_second', 'friday_closes_second', ],
+                'legend': _('Vendredi'),
+                }),
+            ('saturday', {
+                'fields': ['saturday_opens', 'saturday_closes', 'saturday_opens_second', 'saturday_closes_second',],
+                'legend': _('Samedi'),
+                }),
+            ('sunday', {
+                'fields': ['sunday_opens', 'sunday_closes', 'sunday_opens_second', 'sunday_closes_second',],
+                'legend': _('Dimanche'),
+                }),
+        ]
+
+class GmailContactForm(forms.Form):
+    checked = forms.BooleanField(required=False)
+    name = forms.CharField(max_length=200, required=False, widget=forms.HiddenInput())
+    email = forms.EmailField(widget=forms.HiddenInput())
+
+class BaseGmailContactFormset(BaseFormSet):
+    def clean(self):
+        if any(self.errors):
+            return self.cleaned_data
+        checked_contacts = filter(lambda form: form.cleaned_data.get('checked', None), self.forms)
+        if len(checked_contacts) > 20:
+            raise forms.ValidationError(_('Vous pouvez choisir 20 contacts maximum'))
+        return self.cleaned_data
+
+GmailContactFormset = formset_factory(GmailContactForm, formset=BaseGmailContactFormset, extra=0)

@@ -1,19 +1,51 @@
+{% extends "base_email.html" %}
+
 {% load i18n %}
-{% blocktrans with message.recipient.username as recipient and message.sender.username as sender%}
 
-Bonjour {{ recipient }},
+{% block title_email %}{% trans "Vous avez reçu un nouveau message" %}{% endblock %}
 
-Vous avez reçu un message de {{ sender }} qui contient le message suivant :
-{% endblocktrans %}
-
-{{ message.body|safe }}
-
-
-
-Cliquez sur le lien suivant pour répondre à ce message :
-{{ site_url }}{% url thread_details message.thread.pk %}
-
-------
-L'equipe {{ site_url }}
-
-{% trans "Reply" %}: {{ site_url }}{% url thread_details message.thread.pk %}
+{% block content_email %}
+<tr>
+    <td valign="top" width="60" style="padding-right: 20px;border-collapse: collapse;">
+        <table border="0" cellpadding="0" cellspacing="0" width="100%" class="centerColumnContent">
+            <tbody>
+                <tr>
+                    <td valign="top" style="padding-top: 20px;border-collapse: collapse;">
+                    	{% if message.sender.avatar %}
+		                <img src="{{ message.sender.thumbnail.url }}" alt="" alt="" border="0" width="60" style="margin: 0;padding: 0;max-width: 130px;margin-bottom: 10px;border: 0;height: auto;line-height: 100%;outline: none;text-decoration: none;display: inline;">
+		                {% else %}
+		                <img src="http://eloue.s3.amazonaws.com/media/email/default_avatar.png" alt="{% trans "loueur"%}{{ patron.username }}" alt="" border="0" width="60" style="margin: 0;padding: 0;max-width: 130px;margin-bottom: 10px;border: 0;height: auto;line-height: 100%;outline: none;text-decoration: none;display: inline;">
+		                {% endif %}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </td>
+    <td valign="top" width="510" style="border-collapse: collapse;">
+        <table border="0" cellpadding="0" cellspacing="0" width="510" class="leftColumnContent">
+            <tbody>
+                <tr>
+                    <td valign="top" style="padding-top: 20px;border-collapse: collapse;">
+                        <div style="color: #505050;font-family: Helvetica;font-size: 14px;line-height: 150%;text-align: left;">
+                        {% blocktrans with message.recipient.username as recipient and message.sender.username as sender and message.sent_at as sent_at %}
+                           <h1 style="color: #6EB924;display: block;font-family: Arial;font-size: 22px;font-weight: normal;line-height: 100%;margin-top: 0;margin-right: 0;margin-bottom: 10px;margin-left: 0;text-align: left; font-style: italic;">{{ sender }}</h1>
+                            Bonjour {{ recipient }},<br><br>
+                        {% endblocktrans %}
+                        {{ message.body|safe }}
+                        </div>                                                                    
+                    </td>
+                </tr>
+                <tr>
+                    <td valign="top" style="padding-top: 20px;border-collapse: collapse;">
+                        <div style="color: #505050;font-family: Helvetica;font-size: 14px;line-height: 150%;text-align: right;">
+                            <a href="{{ site_url }}{% url thread_details message.thread.pk %}" style="text-decoration: none; cursor: pointer; display: inline-block; background-color: #f36100; padding: 10px; font-family: Arial, sans-serif; line-height: 18px; font-size: 14px; color: #fff; border: 1px solid #c85007; vertical-align: 7%;">
+                                    {% trans "Répondre au message" %}
+                            </a>
+                        </div>                                                                    
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </td>
+</tr>
+{% endblock %}

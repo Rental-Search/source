@@ -1,0 +1,63 @@
+{% extends "accounts/patron_edit.html" %}
+{% load i18n %}
+{% block title %}{% trans "Modifiers votre plan" %}{% endblock %}
+
+{% block pro_account-submenu %}
+  <ul>
+  	{% if request.user.current_subscription %}
+     <li><a href="{{ billing }}">{% trans "Facturation" %}</a></li>
+    {% endif %}
+     <li><a href="{{ patron_edit_subscription }}" class="selected-nav-bar-link-sub">{% trans "Abonnements" %}</a></li>
+  </ul>
+{% endblock %}
+
+{% block tail %}
+{{ block.super }}
+<script type="text/javascript">
+$(document).ready(function (){
+	$('table.plan_list .btn-contactme').click(function (e) {
+		e.preventDefault();
+		answer = confirm('Etes-vous sur de vouloir changer le plan ?');
+        if (answer == true) {
+        	$(this.parentNode).submit();
+        } else {
+            return false;
+        }
+	});
+});
+</script>
+{% endblock %}
+
+
+{% block content-main-profil %}
+<table class="table plan_list">
+	<thead>
+		<tr>
+			<th>{% trans "Abonnement" %}</th>
+			<th class="align-center">{% trans "Nombre d'annonces" %}</th>
+			<th class="align-center">{% trans "Prix par mois" %}</th>
+			<th></th>
+		</tr>
+	</thead>
+	<tbody>
+		{% for plan in plans %}
+			<tr>
+				<td>{% trans plan.name %}</td>
+				<td class="align-center">{% firstof plan.maximum_items "Illimité" %}</td>
+				<td class="align-center">{{ plan.price }}&euro;</td>
+				{% if plan.pk != current_subscription.propackage.pk %}
+					<td class="align-center"> 
+						<form action="" method="post">
+							{% csrf_token %}
+							<input type="hidden" name="subscription" value="{{ plan.pk }}" />
+							<input type="submit" value="{% trans "Choisir cet abonnement" %}" class="btn-contactme"/>
+						</form>
+					</td>
+				{% else %}
+					<td class="align-center">Votre abonnement actuel</td>
+				{% endif %}
+			</tr>
+		{% endfor %}
+	</tbody>
+</table>
+{% endblock %}

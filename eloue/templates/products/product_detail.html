@@ -6,7 +6,7 @@
     xmlns:fb="http://ogp.me/ns/fb#" itemscope itemtype="http://schema.org/Product"
 {% endblock %}
 
-{% block title %}{% trans "Location"%} {{ product.summary }}{% endblock %}
+{% block title %}{% trans "Location"%} {{ product.summary }} - {{ product.address.city }}{% endblock %}
 
 {% block description %}{{ product.summary }} {{ product.description }}{% endblock %}
 
@@ -46,7 +46,7 @@
       window.fbAsyncInit = function() {
         FB.init({
           appId      : '{{FACEBOOK_APP_ID}}', // App ID
-          channelUrl : '{{ MEDIA_URL }}channel.html', // Channel File
+          channelUrl : '{{ STATIC_URL }}channel.html', // Channel File
           status     : true, // check login status
           cookie     : true, // enable cookies to allow the server to access the session
           xfbml      : true  // parse XFBML
@@ -167,9 +167,33 @@
 
             availability(date.getFullYear(), date.getMonth()+1);
         });
-
-        
     </script>
+    {% if not debug %}
+    {% if messages %}
+        {% for message in messages %}
+            {% if message.tags == "success" %}
+            <!-- Google Code for Depot HTTPS Conversion Page -->
+            <script type="text/javascript">
+            /* <![CDATA[ */
+            var google_conversion_id = 1027691277;
+            var google_conversion_language = "en";
+            var google_conversion_format = "3";
+            var google_conversion_color = "ffffff";
+            var google_conversion_label = "EO41CNPrpQMQjaaF6gM";
+            var google_conversion_value = 0;
+            /* ]]> */
+            </script>
+            <script type="text/javascript" src="https://www.googleadservices.com/pagead/conversion.js">
+            </script>
+            <noscript>
+            <div style="display:inline;">
+            <img height="1" width="1" style="border-style:none;" alt="" src="https://www.googleadservices.com/pagead/conversion/1027691277/?value=0&amp;label=EO41CNPrpQMQjaaF6gM&amp;guid=ON&amp;script=0"/>
+            </div>
+            </noscript>
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+    {% endif %}
 {% endblock %}
 
 {% block content %}
@@ -191,7 +215,7 @@
         {% include "partials/alerts_message.html" %}
 
 {% cache 43200 product:details:before_csrf product.pk site.pk %}
-        <h1>{{ product.summary|capitalize}}</h1>
+        <h1>{% trans "Location" %} {{ product.summary|capitalize}} - {{ product.address.city }}</h1>
         <div class="product-resume">
             <div class="product-resume-left">
                 <address class="product-address ">
@@ -258,7 +282,7 @@
                     <a href="#gallery">{% trans "Photo" %}</a>
                 </li>
                 <li class="ui-state-default ui-corner-top">
-                    <a href="#prices_calendar">{% trans "Disponibilitées et tarifs" %}</a>
+                    <a href="#prices_calendar">{% trans "Disponibilités et tarifs" %}</a>
                 </li>
                 {% if insurance_available %}
                 <li class="ui-state-default ui-corner-top">
@@ -283,7 +307,7 @@
                                     <th class="price-head">{% trans "Prix" %}</th>
                                 </tr>
                             </thead>
-                            {% for price in prices %}
+                            {% for price in product.prices.all %}
                             <tr>
                                 <td>{% trans price.get_prefixed_unit_display|capfirst %}
                                 </td>
@@ -384,45 +408,94 @@
         </ul>{# social-button #}
     {% endwith %}
     {% with product.owner as patron %}
-        <div id="owner" class="info-block">
-            <h2>
-                {% if patron.is_professional %}
+        {% if patron.is_professional %}
+            <div id="owner" class="info-block">
+                <h2>
                     {% trans "Professionnel"%}
-                {% else %}
+                    <small>
+                        <a href="{{ patron.get_absolute_url }}" >({% trans " Voir toutes ses annonces "%})</a>
+                    </small>
+                </h2>
+                <a href="{{ patron.get_absolute_url }}" class="onwer-avatar">
+                    {% if patron.avatar %}
+                    <img src="{{ patron.profil.url }}" alt="{% trans "loueur"%}{{ patron.username }}" width="100" height="100">
+                    {% else %}
+                    <img src="{{ STATIC_URL }}images/default_avatar.png" alt="{% trans "loueur"%}{{ patron.username }}" width="100" height="100">
+                    {% endif %}
+                </a>
+                <p class="owner-username">
+                    <a href="{{ patron.get_absolute_url }}">{{ patron.company_name|truncate:13 }}</a>
+                </p>
+                <address>
+                    {% if patron.default_address %}
+                        {% with patron.default_address as default_address %}
+                            {{ default_address.city }} - {{ default_address.zipcode }}
+                        {% endwith %}
+                    {% else %}
+                        {% with patron.addresses.all|first as default_address %}
+                            {{ default_address.city }} - {{ default_address.zipcode }}
+                        {% endwith %}
+                    {% endif %}
+                </address>
+                <a href="{% url message_create product.pk patron.pk %}" class="btn-contactme">Contactez-moi</a>
+                {% if patron.current_subscription %}
+                <ul class="pro-contact">
+                    {% if patron.url %}
+                    <li><a href="#">{{ patron.url }}</a></li>
+                    {% endif %}
+                    {% if patron.default_number %}
+                    <li>
+                        {% with patron.default_number as default_number %}
+                            {{ default_number.number }}
+                        {% endwith %}
+                    </li>
+                    {% endif %}
+                </ul>
+                {% endif %}
+            </div>{#  owner #}
+        {% else %}
+            <div id="owner" class="info-block">
+                <h2>
                     {% trans "Particulier" %}
-                {% endif %}
-                <small>
-                    <a href="{{ patron.get_absolute_url }}" >({% trans " Voir toutes ses annonces "%})</a>
-                </small>
-            </h2>
-            <a href="{{ patron.get_absolute_url }}" class="onwer-avatar">
-                {% if patron.avatar %}
-                <img src="{{ patron.profil.url }}" alt="{% trans "loueur"%}{{ patron.username }}" width="100" height="100">
-                {% else %}
-                <img src="{{ MEDIA_URL }}images/default_avatar.png" alt="{% trans "loueur"%}{{ patron.username }}" width="100" height="100">
-                {% endif %}
-            </a>
-            <p class="owner-username">
-                <a href="{{ patron.get_absolute_url }}">{{ patron.username|truncate:16 }}</a>
-            </p>
-            <address>
-                {% if patron.default_address %}
-                    {% with patron.default_address as default_address %}
-                        {{ default_address.city }} - {{ default_address.zipcode }}
-                    {% endwith %}
-                {% else %}
-                    {% with patron.addresses.all|first as default_address %}
-                        {{ default_address.city }} - {{ default_address.zipcode }}
-                    {% endwith %}
-                {% endif %}
-            </address>
-            <a href="{% url message_create product.pk patron.pk %}" class="btn-contactme">Contactez-moi</a>
-            <span style="margin-top: 0; margin-bottom: 10px; margin-left: 20px;" class="stars empty"><span class="stars filled_{{ patron.average_note }}"></span></span>
-            {% include "accounts/partials/response_stats.html" %}
-        </div>{#  owner #}
+                    <small>
+                        <a href="{{ patron.get_absolute_url }}" >({% trans " Voir toutes ses annonces "%})</a>
+                    </small>
+                </h2>
+                <a href="{{ patron.get_absolute_url }}" class="onwer-avatar">
+                    {% if patron.avatar %}
+                    <img src="{{ patron.profil.url }}" alt="{% trans "loueur"%}{{ patron.username }}" width="100" height="100">
+                    {% else %}
+                    <img src="{{ STATIC_URL }}images/default_avatar.png" alt="{% trans "loueur"%}{{ patron.username }}" width="100" height="100">
+                    {% endif %}
+                </a>
+                <p class="owner-username">
+                    <a href="{{ patron.get_absolute_url }}">{{ patron.username|truncate:13 }}</a>
+                </p>
+                <address>
+                    {% if patron.default_address %}
+                        {% with patron.default_address as default_address %}
+                            {{ default_address.city }} - {{ default_address.zipcode }}
+                        {% endwith %}
+                    {% else %}
+                        {% with patron.addresses.all|first as default_address %}
+                            {{ default_address.city }} - {{ default_address.zipcode }}
+                        {% endwith %}
+                    {% endif %}
+                </address>
+                <a href="{% url message_create product.pk patron.pk %}" class="btn-contactme">Contactez-moi</a>
+                <span style="margin-top: 0; margin-bottom: 10px; margin-left: 20px;" class="stars empty"><span class="stars filled_{{ patron.average_note }}"></span></span>
+                {% include "accounts/partials/response_stats.html" %}
+            </div>{#  owner #}
+        {% endif %}
         {% endwith %}
         <div class="booking-block">
-            <h2>{% trans "Réservez en ligne" %}</h2>
+            <h2>
+                {% if product.owner.current_subscription %}
+                    {% trans "Demande de réservation" %}
+                {% else %}
+                    {% trans "Réservez en ligne" %}
+                {% endif %}
+            </h2>
             <form id="booking_create" action="" method="POST">
 {% endcache %}
                 {% csrf_token %}
@@ -458,14 +531,24 @@
                 </div>{# main-block #}
 {% cache 43200 product:details:after_dates product.pk %}
                  <div class="bottom-block">
-                     {% blocktrans with product.product.day|first as day_price %}
+                    {% blocktrans with product.prices.day as day_price %}
                         <p id="booking-total" class="total-price">
                             Total : <span class="day">1 jour,</span> soit <span class="pricing">{{ day_price }}</span>
                         </p>
-                        <p><input type="submit" class="btn-booking" value="Réservez"/></p>
                     {% endblocktrans %}
+                        <p>
+                            {% if product.owner.current_subscription %}
+                            <input type="submit" class="btn-booking" value="{% trans "Envoyer" %}"/>
+                            {% else %}
+                            <input type="submit" class="btn-booking" value="{% trans "Réserver" %}"/>
+                            {% endif %}
+                        </p>
                         <p class="booking-info">
-                            {% trans "Il s'agit simplement d'une pré-réservation. Vous ne serez débité que si le propriétaire accepte la demande de location sous 24h."%}
+                            {% if product.owner.current_subscription %}
+                                {% trans "Il s'agit d'une demande de réservation.<br>Le loueur va vous contacter rapidement. Le prix total est indicatif." %}
+                            {% else %}
+                                {% trans "Il s'agit simplement d'une pré-réservation. Vous ne serez débité que si le propriétaire accepte la demande de location sous 24h."%}
+                            {% endif %}
                         </p>
                     </form>
                 </div><!-- bottom-block -->
@@ -482,4 +565,3 @@
     </div>{# content-aside #}
 </div>{# container-main #}
 {% endblock %}
-

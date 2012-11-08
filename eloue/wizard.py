@@ -72,7 +72,7 @@ class MultiPartFormWizard(FormWizard):
 
         if 'extra_context' in kwargs:
             self.extra_context.update(kwargs['extra_context'])
-        current_step = self.determine_step(request, *args, **kwargs)
+        current_step = self.get_current_or_first_step(request, *args, **kwargs)
         self.parse_params(request, *args, **kwargs)
 
         # Sanity check.
@@ -140,15 +140,16 @@ class MultiPartFormWizard(FormWizard):
 
         if missing_form:
             missing_form.instance = self.new_patron
-            self.new_patron, self.new_address, self.new_phone = missing_form.save()
+            self.new_patron, self.new_address, self.new_phone, self.credit_card = missing_form.save()
             if not self.new_patron.avatar and self.fb_session:
-                if 'picture' in self.me and 'static-ak' not in self.me['picture']:
-                    try:
-                        fb_image_object = urlopen(self.me['picture']).read()
+                try:
+                    if not self.me['picture']['data']['is_silhouette']:
+                        url = self.me['picture']['data']['url']
+                        fb_image_object = urlopen(url).read()
                         self.new_patron.avatar = SimpleUploadedFile('picture',fb_image_object)
                         self.new_patron.save()
-                    except IOError:
-                        pass
+                except (IOError, KeyError):
+                    pass
         address = None
         from eloue.accounts.views import GEOLOCATION_SOURCE
         if not request.session.get('location') or request.session['location'].get('source') > GEOLOCATION_SOURCE.ADDRESS:
@@ -222,8 +223,14 @@ class MultiPartFormWizard(FormWizard):
             # maybe we should move this section into process_step, or another function
             # this does not seem the best place to handle
             if self.fb_session:
-                default_picture = settings.MEDIA_URL + 'images/default_avatar.png'
-                context['fb_image'] = self.me.get('picture', default_picture)
+                default_picture = settings.STATIC_URL + 'images/default_avatar.png'
+                try:
+                    if not self.me['picture']['data']['is_silhouette']:
+                        context['fb_image'] = self.me['picture']['data']['url']
+                    else:
+                        context['fb_image'] = default_picture
+                except KeyError:
+                    context['fb_image'] = default_picture
         old_data, old_files = request.POST, request.FILES
         prev_fields = []
         if old_data:
