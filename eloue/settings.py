@@ -394,13 +394,13 @@ else:
 # Business configuration
 BOOKING_DAYS = 85  # Max booking days
 COMMISSION = decimal.Decimal('0.2')  # Our commission percentage
-POLICY_NUMBER = None  # Our insurance policy number
-PARTNER_NUMBER = None  # Our insurance partner number
-INSURANCE_FTP_HOST = None  # Our insurance ftp server host
-INSURANCE_FTP_USER = None  # Our insurance ftp server username
-INSURANCE_FTP_PASSWORD = None  # Our insurance ftp server password
-INSURANCE_FTP_CWD = None  # Our insurance ftp server directory
-INSURANCE_EMAIL = None  # Our insurance email
+POLICY_NUMBER = getattr(local, 'POLICY_NUMBER', "111111")  # Our insurance policy number
+PARTNER_NUMBER = getattr(local, 'PARTNER_NUMBER', "222222")  # Our insurance partner number
+INSURANCE_FTP_HOST = getattr(local, 'INSURANCE_FTP_HOST', "ftp.e-loue.com")  # Our insurance ftp server host
+INSURANCE_FTP_USER = getattr(local, 'INSURANCE_FTP_USER', "eloue")  # Our insurance ftp server username
+INSURANCE_FTP_PASSWORD = getattr(local, 'INSURANCE_FTP_PASSWORD', "uvUz47t6")  # Our insurance ftp server password
+INSURANCE_FTP_CWD = getattr(local, 'INSURANCE_FTP_CWD', "/")  # Our insurance ftp server directory
+INSURANCE_EMAIL = getattr(local, 'INSURANCE_EMAIL', "benoit.woj@gmail.com")  # Our insurance email
 
 INSURANCE_FEE_NORMAL = decimal.Decimal('0.0647')
 INSURANCE_FEE_CAR = decimal.Decimal('0.1')
