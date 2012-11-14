@@ -31,8 +31,11 @@ class Command(BaseCommand):
         period = (date.today() - timedelta(days=1))
         for booking in Booking.objects.pending().filter(created_at__year=period.year, created_at__month=period.month, created_at__day=period.day):
             row = SortedDict()
+            row['Numéro locataire'] = booking.borrower.pk
             row['Login locataire'] = booking.borrower.username
             row['Adresse email'] = booking.borrower.email
+            row['Téléphone locataire'] = booking.borrower.phones.all()[0]
+            row['Portable locataire'] = booking.borrower.phones.all()[0]
             row['Nom'] = smart_str(booking.borrower.last_name)
             row[u'Prénom'] = smart_str(booking.borrower.first_name)
             address = booking.borrower.addresses.all()[0]
@@ -41,10 +44,23 @@ class Command(BaseCommand):
             row['Code postal'] = address.zipcode
             row['Ville'] = smart_str(address.city)
             row['Pays'] = COUNTRY_CHOICES[address.country]
+            row['Numéro propriétaire'] = booking.owner.pk
+            row['Login propriétaire'] = booking.owner.username
+            row['Adresse email propriétaire'] = booking.owner.email
+            row['Téléphone propriétaire'] = booking.owner.phones.all()[0]
+            row['Portable propriétaire'] = booking.owner.phones.all()[0]
+            row['Nom propriétaire'] = smart_str(booking.owner.last_name)
+            row[u'Prénom propriétaire'] = smart_str(booking.owner.first_name)
+            address = booking.owner.addresses.all()[0]
+            row['Adresse 1 propriétaire'] = smart_str(address.address1)
+            row['Adresse 2 propriétaire'] = smart_str(address.address2) if address.address2 else None
+            row['Code postal propriétaire'] = address.zipcode
+            row['Ville propriétaire'] = smart_str(address.city)
+            row['Pays propriétaire'] = COUNTRY_CHOICES[address.country]
             row['Numéro police'] = settings.POLICY_NUMBER
             row['Numéro partenaire'] = settings.PARTNER_NUMBER
             row['Numéro contrat'] = 500000 + booking.contract_id
-            row['Date d\'effet des garanties'] = booking.started_at.strftime("%Y%m%d")
+            row['Date d\'effet de la location'] = booking.started_at.strftime("%Y%m%d")
             row[u'Numéro de commande'] = booking.uuid
             row['Type de produit'] = booking.product.category.name
             row[u'Désignation'] = smart_str(booking.product.description)
