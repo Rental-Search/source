@@ -43,7 +43,7 @@ class Command(BaseCommand):
             row['Pays'] = COUNTRY_CHOICES[address.country]
             row['Numéro police'] = settings.POLICY_NUMBER
             row['Numéro partenaire'] = settings.PARTNER_NUMBER
-            row['Numéro contrat'] = booking.contract_id
+            row['Numéro contrat'] = 500000 + booking.contract_id
             row['Date d\'effet des garanties'] = booking.started_at.strftime("%Y%m%d")
             row[u'Numéro de commande'] = booking.uuid
             row['Type de produit'] = booking.product.category.name

@@ -396,13 +396,13 @@ BOOKING_DAYS = 85  # Max booking days
 COMMISSION = decimal.Decimal('0.2')  # Our commission percentage
 POLICY_NUMBER = "AC477704"  # Our insurance policy number
 PARTNER_NUMBER = "GRDT020"  # Our insurance partner number
-INSURANCE_FTP_HOST = None  # Our insurance ftp server host
-INSURANCE_FTP_USER = None  # Our insurance ftp server username
-INSURANCE_FTP_PASSWORD = None  # Our insurance ftp server password
-INSURANCE_FTP_CWD = None  # Our insurance ftp server directory
-INSURANCE_EMAIL = None  # Our insurance email
+INSURANCE_FTP_HOST = 'ftppartenaire.assurone.com'  # Our insurance ftp server host
+INSURANCE_FTP_USER = 'eloue'  # Our insurance ftp server username
+INSURANCE_FTP_PASSWORD = '0QsnTY5b'  # Our insurance ftp server password
+INSURANCE_FTP_CWD = '/'  # Our insurance ftp server directory
+INSURANCE_EMAIL = 'benoit.woj@e-loue.com'  # Our insurance email
 
-INSURANCE_FEE_NORMAL = decimal.Decimal('0.0647')
+INSURANCE_FEE_NORMAL = decimal.Decimal('0.0459')
 INSURANCE_FEE_CAR = decimal.Decimal('0.1')
 INSURANCE_FEE_REALESTATE = decimal.Decimal('0.035')
 
