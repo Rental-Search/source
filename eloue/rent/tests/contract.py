@@ -16,7 +16,7 @@ class ContractTest(TestCase):
         generator = ContractGeneratorNormal()
         contract = generator(booking)
         reader = PdfFileReader(contract)
-        self.assertEquals(reader.getNumPages(), 2)
+        self.assertEquals(reader.getNumPages(), 3)
     
     def test_second_page(self):
         booking = Booking.objects.get(pk='87ee8e9dec1d47c29ebb27e09bda8fc3')
@@ -34,5 +34,5 @@ class ContractTest(TestCase):
         generator = ContractGeneratorNormal()
         contract = generator(booking)
         reader = PdfFileReader(contract)
-        self.assertEquals(reader.getNumPages(), 2)
+        self.assertEquals(reader.getNumPages(), 3)
     

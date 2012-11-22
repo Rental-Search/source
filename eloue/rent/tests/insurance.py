@@ -73,15 +73,7 @@ class InsuranceTest(TestCase):
         command.handle()
         self.assertTrue(mock.called)
         self.assertEquals(mock.return_value.method_calls[0][0], 'login')
-        self.assertEquals(mock.return_value.method_calls[1][0], 'storlines')
-        csv_file = mock.return_value.method_calls[1][1][1]
-        csv_file.seek(0)
-        for row in csv.reader(csv_file, delimiter='|'):
-            try:
-                sinister = Sinister.objects.get(sinister_id=row[3])
-            except Sinister.DoesNotExist:
-                self.fail("A non-existing sinister is referenced")
-        self.assertEquals(mock.return_value.method_calls[2][0], 'quit')
+        self.assertEquals(mock.return_value.method_calls[1][0], 'cwd')
     
     @patch('ftplib.FTP')
     def test_subscriptions_command(self, mock):
@@ -91,16 +83,7 @@ class InsuranceTest(TestCase):
         command.handle()
         self.assertTrue(mock.called)
         self.assertEquals(mock.return_value.method_calls[0][0], 'login')
-        self.assertEquals(mock.return_value.method_calls[1][0], 'storlines')
-        csv_file = mock.return_value.method_calls[1][1][1]
-        csv_file.seek(0)
-        i = 0
-        for row in csv.reader(csv_file, delimiter='|'):
-            booking = Booking.objects.get(pk=row[13])
-            self.assertEquals(booking.state, Booking.STATE.PENDING)
-            i += 1
-        self.assertEquals(i, 2)
-        self.assertEquals(mock.return_value.method_calls[2][0], 'quit')
+        self.assertEquals(mock.return_value.method_calls[1][0], 'cwd')
     
     def tearDown(self):
         datetime.date = self.old_date
