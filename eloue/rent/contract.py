@@ -200,7 +200,7 @@ class ContractGeneratorNormal(ContractGenerator):
         owner_address = booking.owner.default_address or booking.owner.addresses.all()[0]
 
         canvas.drawString(323, 706,  u"{address1}".format(
-            address1=owner_address.address1)
+            address1=owner_address.address1))
 
         canvas.drawString(336, 690, u"{zipcode} {city}".format(
                 zipcode=owner_address.zipcode,
