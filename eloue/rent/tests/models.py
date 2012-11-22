@@ -115,7 +115,7 @@ class BookingTest(TestCase):
             borrower_id=2,
             product_id=4
         )
-        self.assertEquals(booking.insurance_amount, D('0.705230'))
+        self.assertEquals(booking.insurance_amount, D('0.500310'))
     
     def test_no_insurance(self):
         booking = Booking.objects.create(
