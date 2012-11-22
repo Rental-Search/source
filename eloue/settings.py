@@ -484,5 +484,5 @@ SMSNOTIFICATION_PRICE = decimal.Decimal('0.08')
 
 TVA = decimal.Decimal('0.196')
 
-GA_PING_QUEUE_CONNECTION = ('localhost', 6379, 2)
+GA_PING_QUEUE_CONNECTION = ('localhost', 6379, 1)
 GA_PING_QUEUE_NAME = 'ga_queue'

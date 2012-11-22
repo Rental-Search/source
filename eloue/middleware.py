@@ -43,20 +43,20 @@ class SearchBotReportMiddleware(object):
 
         http_user_agent = request.META.get('HTTP_USER_AGENT', '')
         for http_user_agent_re in http_user_agents:
-            if re.match(http_user_agent_re, http_user_agent):
+            if not re.match(http_user_agent_re, http_user_agent):
                 request_dict = {
                     'utmwv': 1,
                     'utmn': random.randint(1000000000,9999999999), #Nb au hasard
-                    'utmsr': '-', #Resolution ecran
-                    'utmsc': '-', #Qualite ecran
-                    'utmul': '-', #Langue du navigateur
+                    'utmsr': '', #Resolution ecran
+                    'utmsc': '', #Qualite ecran
+                    'utmul': '', #Langue du navigateur
                     'utmje': '0', #Java enabled
-                    'utmfl': '-', #Flash version
+                    'utmfl': '', #Flash version
                     'utmdt': '', #Nom de la page visitée
                     'utmhn': 'e-loue.com', #Nom du site Web
-                    'utmr': '-', #pas de referer
+                    'utmr': '', #pas de referer
                     'utmp': request.path, #Page Vue par le visiteur
-                    'utme': '-', #Nombre???(Objet*Action*Label) ': '> 5(Robots*Bot Name*Pathname)
+                    'utme': '', #Nombre???(Objet*Action*Label) ': '> 5(Robots*Bot Name*Pathname)
                     'utmac': '', #Numero de compte analytics
                     'utmcc': '__utma%3D{var_cookie}.{var_random}.{var_now}.{var_now}.{var_now}.1%3B%2B''__utmb%3D{var_cookie}%3B%2B__utmc%3D{var_cookie}%3B%2B__utmz%3D{var_cookie}''.{var_now}.1.1.utmccn%3D(organic)%7Cutmcsr%3D{botname}%7Cutmctr%3D{uri}%7Cutmcmd%3Dorganic%3B%2B__utmv%3D{var_cookie}.Robot%20hostname%3A%20{var_server}%3B'.format(
                         var_cookie=var_cookie,
@@ -67,6 +67,7 @@ class SearchBotReportMiddleware(object):
                         var_server=request.META['REMOTE_HOST'],
                     )
                 }
+                print request_dict
                 request_string = urllib.urlencode(request_dict)
                 ping_url = urlparse.urlunparse(('http', 'www.google-analytics.com', '__utm.gif', None, request_string, None))
                 r = redis.Redis(*settings.GA_PING_QUEUE_CONNECTION)
