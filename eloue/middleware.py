@@ -64,7 +64,7 @@ class SearchBotReportMiddleware(object):
                         var_now=int(time.mktime(datetime.datetime.now().timetuple())),
                         botname=http_user_agents[http_user_agent_re],
                         uri=request.path,
-                        var_server=request.META['REMOTE_HOST'] or '',
+                        var_server=request.META['REMOTE_HOST'],
                     )
                 }
                 print request_dict
