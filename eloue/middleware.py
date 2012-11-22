@@ -43,7 +43,7 @@ class SearchBotReportMiddleware(object):
 
         http_user_agent = request.META.get('HTTP_USER_AGENT', '')
         for http_user_agent_re in http_user_agents:
-            if not re.match(http_user_agent_re, http_user_agent):
+            if re.match(http_user_agent_re, http_user_agent):
                 request_dict = {
                     'utmwv': 1,
                     'utmn': random.randint(1000000000,9999999999), #Nb au hasard
