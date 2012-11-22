@@ -133,6 +133,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 MIDDLEWARE_CLASSES = (
     'django.middleware.cache.UpdateCacheMiddleware',
     'django.middleware.gzip.GZipMiddleware',
+    'eloue.middleware.SearchBotReportMiddleware',
     'eloue.middleware.SpacelessMiddleware',
     'django.middleware.common.CommonMiddleware',
 	'django.contrib.sessions.middleware.SessionMiddleware',
@@ -483,3 +484,5 @@ SMSNOTIFICATION_PRICE = decimal.Decimal('0.08')
 
 TVA = decimal.Decimal('0.196')
 
+GA_PING_QUEUE_CONNECTION = ('localhost', 6379, 2)
+GA_PING_QUEUE_NAME = 'ga_queue'
