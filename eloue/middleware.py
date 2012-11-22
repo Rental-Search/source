@@ -40,7 +40,7 @@ class RequireLoginMiddleware(object):
 class SearchBotReportMiddleware(object):
     def process_request(self, request):
         var_cookie = 'UA-36530163-1'
-
+        print request
         http_user_agent = request.META.get('HTTP_USER_AGENT', '')
         for http_user_agent_re in http_user_agents:
             if re.match(http_user_agent_re, http_user_agent):
@@ -64,7 +64,7 @@ class SearchBotReportMiddleware(object):
                         var_now=int(time.mktime(datetime.datetime.now().timetuple())),
                         botname=http_user_agents[http_user_agent_re],
                         uri=request.path,
-                        var_server=request.META['REMOTE_HOST'],
+                        var_server=request.META['REMOTE_HOST'] or '',
                     )
                 }
                 print request_dict
