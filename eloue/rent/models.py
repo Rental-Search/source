@@ -365,7 +365,7 @@ class Booking(models.Model):
         >>> from eloue.products.models import Product
         >>> booking = Booking(total_amount=10, product=Product())
         >>> booking.insurance_taxes
-        Decimal('0.058230')
+        Decimal('0.041310')
         """
         return self.insurance_fee * self.product.subtype.insurance_taxes
     
