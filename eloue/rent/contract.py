@@ -168,13 +168,15 @@ class ContractGeneratorNormal(ContractGenerator):
             )
         )
 
+        borrower_address = booking.borrower.default_address or booking.borrower.addresses.all()[0]
+
         canvas.drawString(100, 706,  u"{address1}".format(
-            address1=booking.borrower.default_address.address1 or booking.borrower.addresses.all()[0].address1)
+            address1=borrower_address.address1)
         )
 
         canvas.drawString(113, 690, u"{zipcode} {city}".format(
-                zipcode=booking.borrower.default_address.zipcode or booking.borrower.addresses.all()[0].zipcode,
-                city=booking.borrower.default_address.city or booking.borrower.addresses.all()[0].city,
+                zipcode=borrower_address.zipcode,
+                city=borrower_address.city,
             )
         )
 
@@ -195,12 +197,14 @@ class ContractGeneratorNormal(ContractGenerator):
 
         )
 
+        owner_address = booking.owner.default_address or booking.owner.addresses.all()[0]
+
         canvas.drawString(323, 706,  u"{address1}".format(
-            address1=booking.owner.default_address.address1 or booking.owner.addresses.all()[0].address1))
+            address1=owner_address.address1)
 
         canvas.drawString(336, 690, u"{zipcode} {city}".format(
-                zipcode=booking.owner.default_address.zipcode or booking.owner.addresses.all()[0].zipcode,
-                city=booking.owner.default_address.city or booking.owner.addresses.all()[0].city,
+                zipcode=owner_address.zipcode,
+                city=owner_address.city,
             )
         )
 
