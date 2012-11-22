@@ -64,10 +64,9 @@ class SearchBotReportMiddleware(object):
                         var_now=int(time.mktime(datetime.datetime.now().timetuple())),
                         botname=http_user_agents[http_user_agent_re],
                         uri=request.path,
-                        var_server=request.META['REMOTE_HOST'],
+                        var_server=request.META['REMOTE_HOST'] or '',
                     )
                 }
-                print request_dict
                 request_string = urllib.urlencode(request_dict)
                 ping_url = urlparse.urlunparse(('http', 'www.google-analytics.com', '__utm.gif', None, request_string, None))
                 r = redis.Redis(*settings.GA_PING_QUEUE_CONNECTION)
