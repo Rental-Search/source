@@ -44,8 +44,8 @@ class Command(BaseCommand):
             row['Code postal'] = address.zipcode
             row['Ville'] = smart_str(address.city)
             row['Pays'] = COUNTRY_CHOICES[address.country]
-            row['Numéro propriétaire'] = booking.owner.pk
-            row['Login propriétaire'] = booking.owner.username
+            row['Numéro propriétaire'] = smart_str(booking.owner.pk)
+            row['Login propriétaire'] = smart_str(booking.owner.username)
             row['Adresse email propriétaire'] = booking.owner.email
             row['Téléphone propriétaire'] = booking.owner.phones.all()[0]
             row['Portable propriétaire'] = booking.owner.phones.all()[0]
@@ -53,7 +53,7 @@ class Command(BaseCommand):
             row[u'Prénom propriétaire'] = smart_str(booking.owner.first_name)
             address = booking.owner.addresses.all()[0]
             row['Adresse 1 propriétaire'] = smart_str(address.address1)
-            row['Adresse 2 propriétaire'] = smart_str(address.address2) if address.address2 else None
+            row['Adresse 2 propriétaire'] = smart_str(address.address2 if address.address2 else None)
             row['Code postal propriétaire'] = address.zipcode
             row['Ville propriétaire'] = smart_str(address.city)
             row['Pays propriétaire'] = COUNTRY_CHOICES[address.country]
@@ -62,7 +62,7 @@ class Command(BaseCommand):
             row['Numéro contrat'] = 500000 + booking.contract_id
             row['Date d\'effet de la location'] = booking.started_at.strftime("%Y%m%d")
             row[u'Numéro de commande'] = booking.uuid
-            row['Type de produit'] = booking.product.category.name
+            row['Type de produit'] = smart_str(booking.product.category.name)
             row[u'Désignation'] = smart_str(booking.product.description)
             row['Informations complémentaires produit'] = smart_str(booking.product.summary)
             row['Prix de la location TTC'] = comma_separated(booking.total_amount)
