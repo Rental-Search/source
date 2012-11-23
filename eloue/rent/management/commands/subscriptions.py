@@ -63,7 +63,7 @@ class Command(BaseCommand):
             row['Date d\'effet de la location'] = booking.started_at.strftime("%Y%m%d")
             row[u'Numéro de commande'] = booking.uuid
             row['Type de produit'] = smart_str(booking.product.category.name)
-            row[u'Désignation'] = smart_str(booking.product.description)
+            row[u'Désignation'] = smart_str(booking.product.description.replace("\n", " "))
             row['Informations complémentaires produit'] = smart_str(booking.product.summary)
             row['Prix de la location TTC'] = comma_separated(booking.total_amount)
             row['Montant de la Caution'] = comma_separated(booking.deposit_amount)
