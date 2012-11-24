@@ -11,7 +11,7 @@ from reportlab.pdfgen import canvas
 
 from django.conf import settings
 from django.utils.dateformat import format
-from django.utils.encoding import force_unicode
+from django.utils.encoding import force_unicode, smart_str
 from django.utils.translation import ugettext as _
 
 from eloue.rent.utils import spellout
@@ -96,7 +96,7 @@ class ContractGenerator(object):
         ))
 
 
-        canvas.drawString(100, 595, u"{summary}".format(summary=booking.product.summary))
+        canvas.drawString(100, 595, u"{summary}".format(summary=smart_str(booking.product.summary)))
 
         canvas.drawString(170, 561, format(booking.started_at, _(u"d F Y à H\hi.")))
         canvas.drawString(170, 551, format(booking.ended_at, _(u"d F Y à H\hi.")))
@@ -148,7 +148,7 @@ class ContractGeneratorNormal(ContractGenerator):
         ))
 
 
-        canvas.drawString(100, 595, u"{summary}".format(summary=booking.product.summary))
+        canvas.drawString(100, 595, u"{summary}".format(summary=smart_str(booking.product.summary)))
 
         canvas.drawString(170, 561, format(booking.started_at, _(u"d F Y à H\hi.")))
         canvas.drawString(170, 551, format(booking.ended_at, _(u"d F Y à H\hi.")))
@@ -184,9 +184,9 @@ class ContractGeneratorNormal(ContractGenerator):
             deposit_amount=booking.product.deposit_amount)
         )
 
-        canvas.drawString(131, 658, str(booking.product.summary))
+        canvas.drawString(131, 658, smart_str(booking.product.summary))
 
-        canvas.drawString(65, 628, str(booking.product.summary))
+        canvas.drawString(65, 628, smart_str(booking.product.summary))
 
 
         #propriétaire
@@ -254,7 +254,7 @@ class ContractGeneratorCar(ContractGenerator):
         )
         canvas.drawString(351, 735, u"{phone}".format(phone=first_or_empty(booking.owner.phones.all())))
 
-        canvas.drawString(368, 707, u"{summary}".format(summary=booking.product.summary))
+        canvas.drawString(368, 707, u"{summary}".format(summary=smart_str(booking.product.summary)))
 
 
 
@@ -323,7 +323,7 @@ class ContractGeneratorRealEstate(ContractGenerator):
             expires2=booking.payment.creditcard.expires[2:],
         ))
         
-        canvas.drawString(82, 610, u"{summary}".format(summary=booking.product.summary))
+        canvas.drawString(82, 610, u"{summary}".format(summary=smart_str(booking.product.summary)))
 
         canvas.drawString(152, 573, format(booking.started_at, _(u"d F Y à H\hi.")))
         canvas.drawString(152, 563, format(booking.ended_at, _(u"d F Y à H\hi.")))
