@@ -83,7 +83,7 @@ class Command(BaseCommand):
         ftp.login(settings.INSURANCE_FTP_USER, settings.INSURANCE_FTP_PASSWORD)
         if settings.INSURANCE_FTP_CWD:
             ftp.cwd(settings.INSURANCE_FTP_CWD)
-        ftp.storlines("STOR subscriptions-eloue-%s-%s" % (period.month, period.day), latin1csv_file)
+        ftp.storlines("STOR subscriptions-eloue-%s-%s.csv" % (period.month, period.day), latin1csv_file)
         ftp.quit()
         log.info('Finished daily insurance subscriptions batch')
     
