@@ -4,59 +4,49 @@
 {% block title %}{% trans "Stocker Entre Particuliers" %}{% endblock %}
 
 {% block content %}
-<div id="header" class="xgrid">
-    <div class="x12">
-        <img src="{{ STATIC_URL }}images/sep/logo_big.png" />
+<div class="container">
+    <div class="row">
+        <div class="span12" style="text-align: center; margin-top: 30px; margin-bottom: 30px;">
+            <img src="{{ STATIC_URL }}images/sep/logo_big.png" width="600"/>
+        </div>
     </div>
 </div>
-<div id="top-content" class="xgrid">
-    <div class="x12">
-        <h1>
-            <strong>Stocker Entre Particuliers</strong> est la plateforme internet <br /> communautaire qui va révolutionner le self-stockage.
+<div class="container">
+    <div class="row">
+        <div class="span12">
+        <h1 style="text-align: center; margin-bottom: 20px;">
+            <b>Stocker Entre Particuliers</b> est la plateforme internet<br>communautaire qui va révolutionner le self-stockage.
         </h1>
+        </div>
     </div>
 </div>
-<div id="content" class="xgrid">
-    <div class="x12">
-        <p>Pour obtenir plus d'information ou être informé du lancement, remplissez le formulaire ci-dessous :</p>
+<div class="container">
+    <div class="row">
+        <div class="container-main" style="margin-left: 168px; width: 600px; margin-bottom: 30px; padding-top: 10px;">
+            <form class="form-horizontal" method="post" action="{% url contact %}">
+            <p style="margin-bottom: 20px; padding: 0 10px;">Pour obtenir plus d'information ou être informé du lancement, remplissez le formulaire ci-dessous :</p>
+            {% csrf_token %}
+            {% for formfield in form %}
+            <div class="control-group {% if formfield.errors %} error {% endif %}">
+                <label class="control-label" for="{{ formfield.id_for_label }}">{{ formfield.label }} {% if formfield.field.required %}*{% endif %}</label>
+                <div class="controls">
+                    {{ formfield }}
+                    <p class="help-block">{{ formfield.help_text}}</p>
+                    {% if formfield.errors %}
+                    <span class="help-inline">
+                        {% for error in formfield.errors %}
+                            {{ error|escape }}
+                        {% endfor %}
+                    </span>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">{% trans "Continuer" %}</button>
+            </div>
+        </form>
+        </div>
     </div>
-    <div class="x5 p4">
-    <form class="form" action="{% url contact %}" method="POST">
-        {% csrf_token %}
-        <p>
-            <label>{{ form.sender.label }} {% if form.sender.field.required %}*{% endif %} :</label>
-            {{ form.sender }}
-            {% if form.sender.errors %}
-				{% for error in form.sender.errors %}
-					<br />
-				  <span class="error">{{ error|escape }}</span>
-				{% endfor %}
-			{% endif %}
-        </p>
-        <p>
-            <label>{{ form.subject.label }} {% if form.subject.field.required %}*{% endif %} :</label>
-            {{ form.subject }}
-            {% if form.subject.errors %}
-				{% for error in form.subject.errors %}
-					<br />
-				  <span class="error">{{ error|escape }}</span>
-				{% endfor %}
-			{% endif %}
-        </p>
-        <p>
-            <label>{{ form.message.label }} {% if form.subject.field.required %}*{% endif %} :</label>
-            {{ form.message }}
-            {% if form.subject.errors %}
-				{% for error in form.message.errors %}
-					<br />
-				  <span class="error">{{ error|escape }}</span>
-				{% endfor %}
-			{% endif %}
-        </p>
-        <p class="checkbox-input">{{ form.cc_myself}} <label for="id_cc_myself">{{ form.cc_myself.label }}</label></p>
-        <p class="submit">
-            <input class="button white" type="submit"  value="{% trans "Envoyer" %}" />
-        </p> 
-    </form>
 </div>
 {% endblock %}
