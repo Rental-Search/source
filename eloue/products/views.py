@@ -342,7 +342,7 @@ def thread_details(request, thread_id):
 
     thread = get_object_or_404(MessageThread, id=thread_id)
     if request.user != thread.sender and request.user != thread.recipient:
-        return HttpResponseForbidden()
+        return HttpResponseRedirect(reverse('inbox'))
 
     user = request.user
     peer = thread.sender if user == thread.recipient else thread.recipient
