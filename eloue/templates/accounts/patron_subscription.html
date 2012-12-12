@@ -43,17 +43,26 @@
         <div class="step-by-step-pro">
             <ul>
                 <li class="step-pro">
-                    <img src="{{ STATIC_URL }}images/profile_pro.png" alt="exemple profile pro">
+                    <a href="#profile_pro" id="profile-pro">
+                        <img src="{{ STATIC_URL }}images/profile_pro.png" alt="exemple profile pro">
+                    </a>
+                    <i class="icon-search"></i>
                     <p>Choisissez un abonnement et importez simplement votre<br>catalogue avec notre aide</p>
                 </li>
                 <li class="arrow-pro"></li>
                 <li class="step-pro">
-                    <img src="{{ STATIC_URL }}images/search_page_pro.png" alt="exemple profile pro">
+                    <a href="#search_page_pro" id="search-page-pro">
+                        <img src="{{ STATIC_URL }}images/search_page_pro.png" alt="exemple profile pro">
+                    </a>
+                    <i class="icon-search"></i>
                     <p>Les clients voient vos annonces<br>sur e-loue.com</p>
                 </li>
                 <li class="arrow-pro"></li>
                 <li class="step-pro">
-                    <img src="{{ STATIC_URL }}images/product_page_pro.png" alt="exemple profile pro">
+                    <a href="#product_page_pro" id="product-page-pro">
+                        <img src="{{ STATIC_URL }}images/product_page_pro.png" alt="exemple profile pro">
+                    </a>
+                    <i class="icon-search"></i>
                     <p>Les clients vous contactent directement par téléphone ou<br>par mail pour une réservation</p>
                 </li>
             </ul>
@@ -125,4 +134,56 @@
         </div>
 	</div>        
 </div>
+<div id="profile-pro-dialog" style="display:none" title="Page profile d'un professionnel">
+    <img src="{{ STATIC_URL }}images/profile_pro_large.png" width="600" />
+</div>
+<div id="search-pro-dialog" style="display:none" title="Résultat de recherche">
+    <img src="{{ STATIC_URL }}images/search_page_pro_large.png" width="600" />
+</div>
+<div id="product-pro-dialog" style="display:none" title="Annonce d'un professionnel">
+    <img src="{{ STATIC_URL }}images/product_page_pro_large.png" width="600" />
+</div>
+{% endblock %}
+
+{% block tail %}
+{{ block.super }}
+<script type="text/javascript">
+$(document).ready(function (){
+     $("#profile-pro-dialog").dialog({
+        autoOpen: false,
+        width: 'auto',
+        resizable: false,
+     });
+     $("#search-pro-dialog").dialog({
+        autoOpen: false,
+        width: 'auto',
+        resizable: false,
+     });
+     $("#product-pro-dialog").dialog({
+        autoOpen: false,
+        width: 'auto',
+        resizable: false,
+     });
+    $("#profile-pro").click(function (e){
+        e.preventDefault();
+        $("#profile-pro-dialog").dialog("open");
+        $("#profile-pro-dialog").css('padding', '0');
+        $("#profile-pro-dialog img").css('margin-bottom', '-2px');
+    });
+    $("#search-page-pro").click(function (e){
+        e.preventDefault();
+        console.log("click");
+        $("#search-pro-dialog").dialog("open");
+        $("#search-pro-dialog").css('padding', '0');
+        $("#search-pro-dialog img").css('margin-bottom', '-2px');
+    });
+    $("#product-page-pro").click(function (e){
+        e.preventDefault();
+        console.log("click");
+        $("#product-pro-dialog").dialog("open");
+        $("#product-pro-dialog").css('padding', '0');
+        $("#product-pro-dialog img").css('margin-bottom', '-2px');
+    });
+});
+</script>
 {% endblock %}
