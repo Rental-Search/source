@@ -624,6 +624,8 @@ class Category(MPTTModel):
     on_site = CurrentSiteManager()
     objects = models.Manager()
     tree = TreeManager()
+
+    product = models.OneToOneField(Product, related_name='category_product', null=True, blank=True)
     
     class Meta:
         ordering = ['name']

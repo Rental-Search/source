@@ -17,6 +17,7 @@ from django.utils.translation import ugettext as _
 from django.views.decorators.cache import never_cache, cache_page
 from django.views.decorators.vary import vary_on_cookie
 from django.db.models import Q
+from django.db.models import Count
 
 from django.shortcuts import render_to_response, render, redirect
 from django.template import RequestContext
@@ -73,6 +74,14 @@ def homepage(request):
         ).order_by('-date_joined_date', 'geo_distance')
     except KeyError:
         last_joined = patron_search.order_by('-date_joined_date')
+      
+    categories_list = {}
+    parent_categories = Category.on_site.filter(parent__isnull=True).exclude(slug='divers')
+    for cat in parent_categories:
+        categories_list[cat] = cat.get_leafnodes().annotate(num_products=Count('products')).order_by('-num_products')[:5]
+
+
+
     return render_to_response(
         template_name='index.html', 
         dictionary={
@@ -82,6 +91,7 @@ def homepage(request):
             'form': form, 'curiosities': curiosities,
             'alerts':alerts,
             'last_joined': last_joined[:11],
+            'categories_list': categories_list,
         }, 
         context_instance=RequestContext(request)
     )

@@ -131,7 +131,21 @@
         <img src="{{ STATIC_URL }}images/e-loue_dans_la_press.png" width="619" height="39" />
     </div>{# press #}
     <div class="home-categies">
-    
+        <ul>
+        {% for key, value in categories_list.items %}
+            <li style="margin-bottom: 20px; float: left; margin-right: 20px;">
+                <h3>{{ key.name }}</h3>
+                {% with key.product.pictures.all|first as picture %}
+                <img src="{{ picture.thumbnail.url }}" alt="{{ key.product.summary }}" width="60" height="60"/>
+                {% endwith %}
+                <ul>
+                    {% for cat in value %}
+                    <li>{{ cat.name }}</li>
+                    {% endfor %}
+                </ul>   
+            </li>
+        {% endfor %}
+        </ul>
     </div>
 </div>{# container-top #}
 <!-- Advertiser 'Eloue',  Conversion tracking 'Eloue_CPC_arrivee' - DO NOT MODIFY THIS PIXEL IN ANY WAY -->
