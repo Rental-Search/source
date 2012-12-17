@@ -14,28 +14,30 @@
     	<div class="pro-introduction">
     		<div class="pro-welcome">
     			<p style="margin-bottom: 15px;">
-	    			e-loue.com est une place de marché<br> de la location.
+	    			{% blocktrans %}
+                    e-loue.com est une place de marché<br> de la location.
+                    {% endblocktrans %}
 	    		</p>
 	    		<p style="font-size: 18px;">
-	    			Quelque soit votre domaine d’activité dans la location, nos membres seront intéréssés par vos annonces.
+                    {% trans "Quelque soit votre domaine d’activité dans la location, nos membres seront intéréssés par vos annonces." %}
 	    		</p>
     		</div>
     		<div class="pro-intro-desc">
 	    		<ul>
 	    			<li>
-	    				<i class="pro-check"></i> Gérer plus de locations
+	    				<i class="pro-check"></i> {% trans "Gérer plus de locations" %}
 	    			</li>
 	    			<li>
-	    				<i class="pro-check"></i> Canal de distribution complémentaire
+	    				<i class="pro-check"></i> {% trans "Canal de distribution complémentaire" %}
 	    			</li>
 	    			<li>
-	    				<i class="pro-check"></i> Visibilité sur un site très connu
+	    				<i class="pro-check"></i> {% trans "Visibilité sur un site très connu" %}
 	    			</li>
 	    			<li>
-	    				<i class="pro-check"></i> Augmenter vos locations
+	    				<i class="pro-check"></i> {% trans "Augmenter vos locations" %}
 	    			</li>
 	    			<li>
-	    				<i class="pro-check"></i> Toucher tous les membres de e-loue
+	    				<i class="pro-check"></i> {% trans "Toucher tous les membres de e-loue" %}
 	    			</li>
 	    		</ul>
 	    	</div>
@@ -47,7 +49,11 @@
                         <img src="{{ STATIC_URL }}images/profile_pro.png" alt="exemple profile pro">
                     </a>
                     <i class="icon-search"></i>
-                    <p>Choisissez un abonnement et importez simplement votre<br>catalogue avec notre aide</p>
+                    <p>
+                        {% blocktrans %}
+                        Choisissez un abonnement et importez simplement votre<br>catalogue avec notre aide
+                        {% endblocktrans %}
+                    </p>
                 </li>
                 <li class="arrow-pro"></li>
                 <li class="step-pro">
@@ -55,7 +61,11 @@
                         <img src="{{ STATIC_URL }}images/search_page_pro.png" alt="exemple profile pro">
                     </a>
                     <i class="icon-search"></i>
-                    <p>Les clients voient vos annonces<br>sur e-loue.com</p>
+                    <p>
+                        {% blocktrans %}
+                        Les clients voient vos annonces<br>sur e-loue.com
+                        {% endblocktrans %}
+                    </p>
                 </li>
                 <li class="arrow-pro"></li>
                 <li class="step-pro">
@@ -63,7 +73,11 @@
                         <img src="{{ STATIC_URL }}images/product_page_pro.png" alt="exemple profile pro">
                     </a>
                     <i class="icon-search"></i>
-                    <p>Les clients vous contactent directement par téléphone ou<br>par mail pour une réservation</p>
+                    <p>
+                        {% blocktrans %}
+                        Les clients vous contactent directement par téléphone ou<br>par mail pour une réservation
+                        {% endblocktrans %}
+                    </p>
                 </li>
             </ul>
         </div>
@@ -84,7 +98,7 @@
 		            <h2>
 		            	{{ plan.name }} 
 		            	<div class="plan_price">
-		            		{{ plan.price|floatformat:0 }}&euro;<span>/mois</span>
+		            		{{ plan.price|floatformat:0 }}&euro;<span>/{% trans "mois" %}</span>
 		            	</div>
 		            </h2>
 		            <p class="max-items">{{ plan.maximum_items }} {% trans "annonces maximum" %}</p>
@@ -93,10 +107,10 @@
                         <form action="{% if request.user.is_authenticated %}{% url patron_edit_subscription %}{% else %} {% endif %}" method="post">
                             {% csrf_token %}
                             <input type="hidden" name="{% if request.user.is_authenticated %}{% else %}0-{% endif %}subscription" value="{{ plan.pk }}" />
-                            <input type="submit" value="Choisir cet abonnement" class="btn-select-plan"/>
+                            <input type="submit" value="{% trans "Choisir cet abonnement" %}" class="btn-select-plan"/>
                         </form>
                 {% else %}
-                    <div class="selected-plan">Votre abonnement actuel</div>
+                    <div class="selected-plan">{% trans "Votre abonnement actuel" %}</div>
                 {% endif %}
                 </div>
         	{% endfor %}
@@ -106,29 +120,29 @@
         	<ul class="first">
         		<li>
         			<i class="notification"></i>
-        			<span class="title-option">Notifications par email</span>
-        			<span class="price-option">0,01&euro;/envoi</span><br>
-        			Recevez les demandes de devis sur plusieurs adresses emails.
+        			<span class="title-option">{% trans "Notifications par email" %}</span>
+        			<span class="price-option">0,01&euro;/{% trans "envoi" %}</span><br>
+        			{% trans "Recevez les demandes de devis sur plusieurs adresses emails." %}
         		</li>
         		<li>
         			<i class="highlight"></i>
-        			<span class="title-option">Mise en avant</span>
-        			<span class="price-option">7,50&euro;/mois/annonce</span><br>
-        			Votre annonce est mise en avant dans les listes (page d’accueil, résultats de recherche, annonces similaires).
+        			<span class="title-option">{% trans "Mise en avant" %}</span>
+        			<span class="price-option">7,50&euro;/{% trans "mois" %}/{% trans "annonce" %}</span><br>
+        			{% trans "Votre annonce est mise en avant dans les listes (page d’accueil, résultats de recherche, annonces similaires)." %}
         		</li>
         	</ul>
         	<ul>
         		<li>
         			<i class="sms"></i>
-        			<span class="title-option">Notifications par SMS</span>
-        			<span class="price-option">0,08&euro;/envoi</span><br>
-        			Pour répondre rapidement aux devis, recevez les demandes de réservation sur votre mobile.
+        			<span class="title-option">{% trans "Notifications par SMS" %}</span>
+        			<span class="price-option">0,08&euro;/{% trans "envoi" %}</span><br>
+        			{% trans "Pour répondre rapidement aux devis, recevez les demandes de réservation sur votre mobile." %}
         		</li>
         		<li>
         			<i class="top-position"></i>
-        			<span class="title-option">Top position</span>
-        			<span class="price-option">5,50&euro;/mois/annonce</span><br>
-        			Votre annonce est mise en première position des résultats de recherches sur le site.
+        			<span class="title-option">{% trans "Top position" %}</span>
+        			<span class="price-option">5,50&euro;/{% trans "mois" %}/{% trans "annonce" %}</span><br>
+        			{% trans "Votre annonce est mise en première position des résultats de recherches sur le site." %}
         		</li>
         	</ul>
         </div>
