@@ -37,6 +37,7 @@
             </p>
     </div><!-- search-home -->
     <div class="products-home">
+        <h2>{% trans "Annonces de location déposées proche de chez vous :"%}</h2>
         <div class="products-home-tabs ui-tabs ui-widget ui-widget-content ui-corner-all">
             <ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
                 <li class="ui-state-default ui-corner-top ui-tabs-selected ui-state-active"><a href="#near">{% trans "Objets" %}</a></li>
@@ -90,6 +91,25 @@
             </div>{# hotloc #}
         </div>{# products-home-tabs #}
     </div>{# product-home #}
+    <div class="home-categories">
+        {% for column in categories_list.items|partition:4%}
+        <div class="home-categories-column {% if forloop.first %}first-column{% endif %}">
+        {% for key, value in column %}
+            <div class="home-categorie {% if forloop.last %}last-categorie{% endif %}">
+                <h3>{{ key.name }}</h3>
+                {% with key.product.pictures.all|first as picture %}
+                <img src="{{ picture.thumbnail.url }}" alt="{{ key.product.summary }}" width="60" height="60"/>
+                {% endwith %}
+                <ul>
+                    {% for cat in value %}
+                    <li><a href="{{ cat.get_absolute_url }}" title="{% trans "location"%} {{ cat.name }}">{% trans "Location" %} {{ cat.name|lower }}</a></li>
+                    {% endfor %}
+                </ul>   
+            </div>
+        {% endfor %}
+        </div>  
+        {% endfor %}
+    </div>
     <ul class="args">
         <li class="arg-how">
             <a href="/temoignages/">
@@ -130,23 +150,6 @@
         <div class="press-title">{% trans "Ils parlent de nous !"%}</div>
         <img src="{{ STATIC_URL }}images/e-loue_dans_la_press.png" width="619" height="39" />
     </div>{# press #}
-    <div class="home-categies">
-        <ul>
-        {% for key, value in categories_list.items %}
-            <li style="margin-bottom: 20px; float: left; margin-right: 20px;">
-                <h3>{{ key.name }}</h3>
-                {% with key.product.pictures.all|first as picture %}
-                <img src="{{ picture.thumbnail.url }}" alt="{{ key.product.summary }}" width="60" height="60"/>
-                {% endwith %}
-                <ul>
-                    {% for cat in value %}
-                    <li>{{ cat.name }}</li>
-                    {% endfor %}
-                </ul>   
-            </li>
-        {% endfor %}
-        </ul>
-    </div>
 </div>{# container-top #}
 <!-- Advertiser 'Eloue',  Conversion tracking 'Eloue_CPC_arrivee' - DO NOT MODIFY THIS PIXEL IN ANY WAY -->
 <img src="http://ad.yieldmanager.com/pixel?id=2174825&t=2" width="1" height="1" />
