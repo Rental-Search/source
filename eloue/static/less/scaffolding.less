@@ -985,21 +985,27 @@ a {
 // HOME CATEGORIES
 //----------------
 
+.home-categories-container {
+  float: left;
+  width: 980px;
+
+  margin-top: 30px;
+
+  h2 {
+    margin-bottom: 18px;
+    color: @blue;
+  }
+}
 
 .home-categories {
   float: left;
   width: 980px;
-  overflow-y: auto;
-
-
 
   border: 1px solid #b2ced9;
   border-bottom: 3px solid #b2ced9;
   .rounded(3px);
   @shadow: 0 0 0 5px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.7);
   .box-shadow(@shadow);
-
-  margin-top: 30px;
 
   .home-categories-column {
     float: left;
