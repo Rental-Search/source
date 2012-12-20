@@ -76,9 +76,9 @@ def homepage(request):
         last_joined = patron_search.order_by('-date_joined_date')
       
     categories_list = {}
-    # parent_categories = Category.on_site.filter(parent__isnull=True).exclude(slug='divers')
-    # for cat in parent_categories:
-    #     categories_list[cat] = cat.get_leafnodes().annotate(num_products=Count('products')).order_by('-num_products')[:5]
+    parent_categories = Category.on_site.filter(parent__isnull=True).exclude(slug='divers')
+    for cat in parent_categories:
+        categories_list[cat] = cat.get_leafnodes().annotate(num_products=Count('products')).order_by('-num_products')[:5]
 
 
 
