@@ -15,6 +15,7 @@ from django.shortcuts import get_object_or_404
 from django.utils.datastructures import SortedDict, MultiValueDict
 from django.utils.translation import ugettext as _
 from django.views.decorators.cache import never_cache, cache_page
+from django.core.cache import cache
 from django.views.decorators.vary import vary_on_cookie
 from django.db.models import Q
 from django.db.models import Count
@@ -75,12 +76,14 @@ def homepage(request):
     except KeyError:
         last_joined = patron_search.order_by('-date_joined_date')
       
-    categories_list = {}
-    parent_categories = Category.on_site.filter(parent__isnull=True).exclude(slug='divers')
-    for cat in parent_categories:
-        categories_list[cat] = cat.get_leafnodes().annotate(num_products=Count('products')).order_by('-num_products')[:5]
+    categories_list = cache.get('home_categories_list')
 
-
+    if categories_list is None:
+        categories_list = {}
+        parent_categories = Category.on_site.filter(parent__isnull=True).exclude(slug='divers')
+        for cat in parent_categories:
+            categories_list[cat] = cat.get_leafnodes().annotate(num_products=Count('products')).order_by('-num_products')[:5]
+        cache.set('home_categories_list', categories_list, 10*60)
 
     return render_to_response(
         template_name='index.html', 
