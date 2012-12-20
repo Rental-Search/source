@@ -91,6 +91,30 @@
             </div>{# hotloc #}
         </div>{# products-home-tabs #}
     </div>{# product-home #}
+    {% cache 900 categories %}
+    <div class="home-categories-container">
+        <h2>{% trans "Annonces de location par catégories" %} :</h2>
+        <div class="home-categories">
+            {% for column in categories_list.items|partition:4%}
+            <div class="home-categories-column {% if forloop.first %}first-column{% endif %}">
+            {% for key, value in column %}
+                <div class="home-categorie {% if forloop.last %}last-categorie{% endif %}">
+                    <h3>{{ key.name }}</h3>
+                    {% with key.product.pictures.all|first as picture %}
+                    <img src="{{ picture.thumbnail.url }}" alt="{{ key.product.summary }}" width="60" height="60"/>
+                    {% endwith %}
+                    <ul>
+                        {% for cat in value %}
+                        <li><a href="{{ cat.get_absolute_url }}" title="{% trans "location"%} {{ cat.name }}">{% trans "Location" %} {{ cat.name|lower }}</a></li>
+                        {% endfor %}
+                    </ul>   
+                </div>
+            {% endfor %}
+            </div>  
+            {% endfor %}
+        </div>{# home-categories #}
+    </div>{# home-categories-container #}
+    {% endcache %}
     <ul class="args">
         <li class="arg-how">
             <a href="/temoignages/">
