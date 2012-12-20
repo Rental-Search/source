@@ -115,6 +115,7 @@ class CategoryAdmin(MPTTModelAdmin):
     list_display = ('name', 'parent')
     search_fields = ['name', 'parent__name']
     prepopulated_fields = {"slug": ("name",)}
+    raw_id_fields = ("product",)
     inlines = [CategoryDescriptionInline]
 
 

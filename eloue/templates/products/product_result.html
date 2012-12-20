@@ -90,6 +90,13 @@
 		{% endif %}
     </ul>{# breadcrumb #}
     <div class="content-main">
+    {% if not form.cleaned_data.q %}
+        {% if breadcrumbs.categorie.object.description %}
+            <h1>{{ breadcrumbs.categorie.object.description.title }}</h1>
+        {% else %}
+            <h1>{% trans "Location"%} {% for crumb in breadcrumbs|facets %} {{ crumb.pretty_value|capfirst }}{% endfor %}</h1>
+        {% endif %}
+    {% endif %}
     {% if breadcrumbs.categorie.object.description %}
     <div class="category-description">
         {{ breadcrumbs.categorie.object.description.header|safe }}

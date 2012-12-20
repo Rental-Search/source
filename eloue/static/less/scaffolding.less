@@ -341,17 +341,23 @@ a {
 // -----------
 
 .products-home {
-  background-color: #fff;
   
   display: inline;
   float: left;
-  .size(372px, 463px);
+  width: 463px;
   
   margin-left: 50px;
+
+  h2 {
+    margin-bottom: 18px;
+    text-align: left;
+    color: @blue;
+  }
   
   .products-home-tabs {
     position: relative;
-    
+
+    background: #fff;
     border: 1px solid #b2ced9;
     border-bottom: 3px solid #b2ced9;
     .rounded(3px);
@@ -973,5 +979,78 @@ a {
     line-height: 18px;
     text-align: justify;
   }
+}
+
+
+// HOME CATEGORIES
+//----------------
+
+.home-categories-container {
+  float: left;
+  width: 980px;
+
+  margin-top: 30px;
+
+  h2 {
+    margin-bottom: 18px;
+    color: @blue;
+  }
+}
+
+.home-categories {
+  float: left;
+  width: 980px;
+
+  border: 1px solid #b2ced9;
+  border-bottom: 3px solid #b2ced9;
+  .rounded(3px);
+  @shadow: 0 0 0 5px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.7);
+  .box-shadow(@shadow);
+
+  .home-categories-column {
+    float: left;
+    border-left: 1px solid #b2ced9;
+
+    &.first-column {
+      border-left: none;
+    }
+  }
+
+  .home-categorie {
+    border-bottom: 1px solid #b2ced9;
+    width: 224.25px;
+    padding: 10px;
+
+    &.last-categorie { 
+      margin-bottom: 0px;
+      border-bottom: none;
+    }
+
+    h3 {
+      margin-bottom: 10px;
+    }
+
+    img {
+      float: left;
+      margin-right: 10px;
+      border: 1px solid #b2ced9;
+    }
+
+    ul {
+      display: table-cell;
+    }
+
+    li {
+      #font > .sans-serif(Arial, normal, @basefont);
+      margin-bottom: 5px;
+      overflow: hidden;
+      height: 14px;
+
+      a {
+        overflow: hidden;
+      }
+    }
+  }
+
 }
 

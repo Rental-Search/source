@@ -45,6 +45,16 @@ from eloue import signals as eloue_signals
 
 from eloue.utils import currency, create_alternative_email, cache_to
 
+
+import copy
+import types
+
+#http://stackoverflow.com/questions/5614741/cant-use-a-list-of-methods-in-a-python-class-it-breaks-deepcopy-workaround
+def _deepcopy_method(x, memo):
+    return type(x)(x.im_func, copy.deepcopy(x.im_self, memo), x.im_class)
+copy._deepcopy_dispatch[types.MethodType] = _deepcopy_method
+
+
 UNIT = Enum([
     (0, 'HOUR', _(u'heure'), _(u'1 heure')),
     (1, 'DAY', _(u'jour'), _(u'1 jour')),
@@ -624,6 +634,8 @@ class Category(MPTTModel):
     on_site = CurrentSiteManager()
     objects = models.Manager()
     tree = TreeManager()
+
+    product = models.OneToOneField(Product, related_name='category_product', null=True, blank=True)
     
     class Meta:
         ordering = ['name']
