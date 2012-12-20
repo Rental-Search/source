@@ -82,7 +82,7 @@ def homepage(request):
         categories_list = {}
         parent_categories = Category.on_site.filter(parent__isnull=True).exclude(slug='divers')
         for cat in parent_categories:
-            categories_list[cat] = cat.get_leafnodes().annotate(num_products=Count('products')).order_by('-num_products')[:5]
+            categories_list[cat] = list(cat.get_leafnodes().annotate(num_products=Count('products')).order_by('-num_products')[:5])
         cache.set('home_categories_list', categories_list, 10*60)
 
     return render_to_response(
