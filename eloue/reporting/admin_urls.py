@@ -3,7 +3,7 @@ from eloue.reporting.admin_views import stats, stats_by_patron, stats_by_product
 
 
 urlpatterns = patterns('',
-    url(r'^all/$', stats, name="stats"),
+    url(r'^all/?$', stats, name="stats"),
     url(r'^patron/$', stats_by_patron, name="stats_by_patron"),
     url(r'^patron/(?P<patron_id>\d+)/$', stats_by_patron_detail, name="stats_by_patron_detail"),
     url(r'^product/$', stats_by_product, name="stats_by_product"),

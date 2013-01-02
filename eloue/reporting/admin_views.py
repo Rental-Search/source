@@ -19,6 +19,13 @@ from django.shortcuts import get_object_or_404
 
 
 def stats(request):
+	query_data = request.GET.copy()
+
+	if query_data.get('year'):
+		year = int(query_data.get('year'))
+	else:
+		year = int(2012)
+
 	data = {}
 
 	booking_transaction_list = [Booking.STATE.PENDING, Booking.STATE.ONGOING, Booking.STATE.ENDED, Booking.STATE.INCIDENT, Booking.STATE.CLOSING, Booking.STATE.CLOSED]
@@ -47,7 +54,7 @@ def stats(request):
 	}
 
 	for key, value in qss_parameters_list.items():
-		data[key] = qsstats.QuerySetStats(*value).time_series(datetime.date(2012, 1, 1), datetime.date(2012, 12, 31), interval='months')
+		data[key] = qsstats.QuerySetStats(*value).time_series(datetime.date(year, 1, 1), datetime.date(year, 12, 31), interval='months')
 
 
 	return render_to_response(
