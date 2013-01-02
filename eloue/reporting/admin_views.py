@@ -12,6 +12,8 @@ from eloue.accounts.models import Patron
 from eloue.products.models import Product, CarProduct, RealEstateProduct, Category
 from eloue.rent.models import Booking
 
+from django_messages.models import Message
+
 from django.shortcuts import get_object_or_404
 
 
@@ -41,6 +43,7 @@ def stats(request):
 		'need_assurancy_asked_booking': (Booking.objects.filter(Q(product__category__need_insurance=True)), 'created_at', Count('uuid')),
 		'need_assurancy_booking': (Booking.objects.filter(state__in=booking_transaction_list).filter(Q(product__category__need_insurance=True)), 'created_at', Count('uuid')),
 		'incident_declaration': (Booking.objects.filter(state__in=[Booking.STATE.INCIDENT]), 'created_at', Count('uuid')),
+		'messages': (Message.objects.all(), 'sent_at'),
 	}
 
 	for key, value in qss_parameters_list.items():
