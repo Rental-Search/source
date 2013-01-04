@@ -148,7 +148,7 @@ class ContractGeneratorNormal(ContractGenerator):
         ))
 
 
-        canvas.drawString(100, 595, u"{summary}".format(summary=smart_str(booking.product.summary)))
+        canvas.drawString(100, 595, u"{summary}".format(summary=booking.product.summary))
 
         canvas.drawString(170, 561, format(booking.started_at, _(u"d F Y à H\hi.")))
         canvas.drawString(170, 551, format(booking.ended_at, _(u"d F Y à H\hi.")))
