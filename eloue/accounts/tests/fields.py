@@ -81,7 +81,7 @@ class ExpirationWidgetTest(TestCase):
 class ExpirationFieldTest(TestCase):
     def testExpirationFieldValid(self):
         field = ExpirationField()
-        self.assertTrue(field.clean(['01', '12']))
+        self.assertTrue(field.clean(['01', '13']))
         self.assertTrue(field.clean(['12', '22']))
 
     def testExpirationFieldInvalid(self):
@@ -89,7 +89,7 @@ class ExpirationFieldTest(TestCase):
         self.assertRaises(forms.ValidationError, field.clean, [])
         self.assertRaises(forms.ValidationError, field.clean, ['','14'])
         self.assertRaises(forms.ValidationError, field.clean, ['14', ''])
-        self.assertRaises(forms.ValidationError, field.clean, ['00', '12'])
+        self.assertRaises(forms.ValidationError, field.clean, ['00', '13'])
         self.assertRaises(forms.ValidationError, field.clean, ['13', '12'])
         self.assertRaises(forms.ValidationError, field.clean, ['13', '11'])
         self.assertRaises(forms.ValidationError, field.clean, ['13', '23'])
