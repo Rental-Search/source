@@ -81,8 +81,11 @@
                 </li>
             </ul>
         </div>
-    	<h2 style="margin-bottom: 40px;">{% trans "Choisissez un abonnement adapté à votre besoin" %} :</h2>
+    	<h2 style="margin-bottom: 30px;">{% trans "Choisissez un abonnement adapté à votre besoin" %} :</h2>
     	<div class="plans">
+            <p style="text-align: center; height: 40px;">
+                <span class="plan-first-month" style="font-size: 16px; font-weight:normal;">Le premier mois d'essai à <b>4,50 &euro;</b> pour tous les abonnements</span>
+            </p>
     		{% for plan in plans %}
 	    		{% if forloop.last %}
 	    		<div class="info-block infini-plan">
