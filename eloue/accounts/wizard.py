@@ -152,3 +152,8 @@ class ProSubscriptionWizard(AuthenticationWizard):
         if issubclass(self.form_list[step], SubscriptionEditForm):
             return 'accounts/patron_subscription.html'
         return super(ProSubscriptionWizard, self).get_template(step)
+
+    def process_step(self, request, form, step):
+        super(ProSubscriptionWizard, self).process_step(request, form, step)
+        self.extra_context.setdefault('preview', {}).update(form.cleaned_data)
+

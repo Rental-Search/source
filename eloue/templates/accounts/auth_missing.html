@@ -11,12 +11,34 @@
 		<li>{% trans "Informations complémentaires" %}</li>
 	</ul>
 	<div class="content-main">
-		<h1>{% trans "Informations complémentaires" %}</h1>
+        {% if preview.subscription %}
+		<h1>{% trans "Informations sur votre abonnement" %}</h1>
+        <div class="info-block infini-plan" style="width: 598px; margin-bottom: 5px;">
+            <p class="infini-items">
+                {% if preview.subscription.maximum_items %}
+                    {{ preview.subscription.maximum_items }} {% trans "annonces maximums" %}
+                {% else %}
+                    {% trans "Annonces illimitées" %}
+                {% endif %}
+            </p>
+            <div class="plan-description">
+                <h2>{{ preview.subscription.name }}</h2>
+                <p class="plan_price">
+                    <span class="plan-first-month">4,50 &euro; le premier mois</span>
+                    puis
+                    {{ preview.subscription.price|floatformat:0 }}&euro;/mois
+                </p>
+            </div>
+        </div>
+        <p style="text-align: right;">{% trans "Sans engagement et sans frais de résiliation."%}
+        {% else %}
+        <h1>{% trans "Informations complémentaires" %}</h1>
         <p class="form-header">
             {% blocktrans %}
             Pour protéger votre confidentialité, nous cachons votre nom, numéro de téléphone et vos coordonnées tant que la location n'a pas été confirmée.
             {% endblocktrans%}
         </p>
+        {% endif %}
 		{% include "accounts/partials/missing.html" %}
 	</div>
 </div>
