@@ -176,6 +176,10 @@ class BookingForm(forms.ModelForm):
                 raise ValidationError(_(u"La durée d'une location est limitée à %s jours."%BOOKING_DAYS))
             
             unit = Booking.calculate_price(product, started_at, ended_at)
+            
+            if not unit[1]:
+                raise ValidationError(_(u"Prix sur devis"))
+
             self.cleaned_data['price_unit'] = unit[0]
             
             self.cleaned_data['total_amount'] = unit[1] * (1 if quantity is None else (quantity if self.max_available >= quantity else self.max_available))

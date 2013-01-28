@@ -89,7 +89,6 @@ def product_occupied_date(request, slug, product_id):
 @require_GET
 @never_cache
 def booking_price(request, slug, product_id):
-
     def generate_select_list(n, selected):
         select_options = [{'value': x, 'selected': x==selected} for x in xrange(1, 1 + n)]
         return select_options
@@ -98,7 +97,7 @@ def booking_price(request, slug, product_id):
         return HttpResponseNotAllowed(['GET', 'XHR'])
     product = get_object_or_404(Product.on_site, pk=product_id)
     form = BookingForm(request.GET, prefix="0", instance=Booking(product=product))
-    
+
     if form.is_valid():
         duration = timesince(form.cleaned_data['started_at'], form.cleaned_data['ended_at'])
         total_price = smart_str(currency(form.cleaned_data['total_amount']))
@@ -123,14 +122,18 @@ def booking_price(request, slug, product_id):
         return HttpResponse(simplejson.dumps(response_dict), mimetype='application/json')
     else:
         max_available = getattr(form, 'max_available', product.quantity)
-        price_unit = product.prices.filter(unit=1)[0]
-        response_dict = {
-          'errors': form.errors.values(), 
-          'unit_name': UNIT[1][1], 
-          'unit_value': smart_str(currency(price_unit.amount)), 
-          'max_available': max_available, 
-          'select_list': generate_select_list(max_available, selected=1)
-        }
+        try:
+            price_unit = product.prices.filter(unit=1)[0]
+            response_dict = {
+              'errors': form.errors.values(), 
+              'unit_name': UNIT[1][1], 
+              'unit_value': smart_str(currency(price_unit.amount)), 
+              'max_available': max_available, 
+              'select_list': generate_select_list(max_available, selected=1)
+            }
+        except:
+            response_dict = {}
+        
         return HttpResponse(simplejson.dumps(response_dict), mimetype='application/json')
 
 

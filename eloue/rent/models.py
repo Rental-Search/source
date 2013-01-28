@@ -214,25 +214,29 @@ class Booking(models.Model):
         
         engine = knowledge_engine.engine((__file__, '.rules'))
         engine.activate('pricing')
-        for price in product.prices.all():
-            engine.assert_('prices', 'price', (price.unit, price.day_amount))
-        vals, plans = engine.prove_1_goal('pricing.pricing($type, $started_at, $ended_at, $delta)', started_at=started_at, ended_at=ended_at, delta=delta)
-        engine.reset()
+        prices = product.prices.all()
+        if prices:
+            for price in prices:
+                engine.assert_('prices', 'price', (price.unit, price.day_amount))
+            vals, plans = engine.prove_1_goal('pricing.pricing($type, $started_at, $ended_at, $delta)', started_at=started_at, ended_at=ended_at, delta=delta)
+            engine.reset()
 
-        amount, unit = D(0), PACKAGES_UNIT[vals['type']]
-        package = PACKAGES[unit]
-        
-        for price in product.prices.filter(unit=unit, started_at__isnull=False, ended_at__isnull=False):
-            price_delta = price.delta(started_at, ended_at)
-            delta -= price_delta
-            amount += package(price.day_amount, price_delta, False)
-        
-        if (delta.days > 0 or delta.seconds > 0):
-            price = product.prices.get(unit=unit, started_at__isnull=True, ended_at__isnull=True)
-            null_delta = timedelta(days=0)
-            amount += package(price.day_amount, null_delta if null_delta > delta else delta)
-        
-        return unit, amount.quantize(D(".00"))
+            amount, unit = D(0), PACKAGES_UNIT[vals['type']]
+            package = PACKAGES[unit]
+            
+            for price in product.prices.filter(unit=unit, started_at__isnull=False, ended_at__isnull=False):
+                price_delta = price.delta(started_at, ended_at)
+                delta -= price_delta
+                amount += package(price.day_amount, price_delta, False)
+            
+            if (delta.days > 0 or delta.seconds > 0):
+                price = product.prices.get(unit=unit, started_at__isnull=True, ended_at__isnull=True)
+                null_delta = timedelta(days=0)
+                amount += package(price.day_amount, null_delta if null_delta > delta else delta)
+            
+            return unit, amount.quantize(D(".00"))
+        else:
+            return None, None
 
     def send_recovery_email(self):
         context = {
