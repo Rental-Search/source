@@ -300,6 +300,7 @@
             <div id="prices_calendar" class="ui-tabs-panel ui-widget-content ui-corner-bottom ui-tabs-hide">
                 <div class="prices">
                     <div class="table-bg">
+                        {% if product.price.all %}
                         <table class="table table-striped">
                             <thead>
                                 <tr>
@@ -315,6 +316,9 @@
                             </tr>
                             {% endfor %}
                         </table>
+                        {% else %}
+                            <p style="padding: 10px;">{% trans "Prix uniquement sur devis"%}</p>
+                        {% endif %}
                     </div>
                     {% if product.deposit_amount %}
                     <ul>
@@ -502,7 +506,11 @@
 {% cache 43200 product:details:after_csrf product.pk site.pk %}
                 <div class="top-block">
                 {% with product.daily_price as price %}
+                {% if price %}
                     {{ price }} <span>{% blocktrans with price.unit|unit as unit %} / par {{ unit }}{% endblocktrans %}</span>
+                {% else %}
+                    {% trans "Sur devis" %}
+                {% endif %}
                 {% endwith %}
 {% endcache %}
                 </div>{# top block #}
@@ -531,11 +539,13 @@
                 </div>{# main-block #}
 {% cache 43200 product:details:after_dates product.pk %}
                  <div class="bottom-block">
+                    {% if day_price %}
                     {% blocktrans with product.prices.day as day_price %}
                         <p id="booking-total" class="total-price">
                             Total : <span class="day">1 jour,</span> soit <span class="pricing">{{ day_price }}</span>
                         </p>
                     {% endblocktrans %}
+                    {% endif %}
                         <p>
                             {% if product.owner.current_subscription %}
                             <input type="submit" class="btn-booking" value="{% trans "Envoyer" %}"/>

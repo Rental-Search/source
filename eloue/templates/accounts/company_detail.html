@@ -67,7 +67,13 @@
                     <a href="{{ product.url }}">
                         <img src="{{product.profile}}" width="200" height="170" />
                         <h3>{{ product.summary|truncate:22 }}</h3>
-                        <p class="pv-price">{{ product.price|unlocalize }} <span>/{{ 1|unit }}</span></p>
+                        <p class="pv-price">
+                            {% if product.price %}
+                            {{ product.price|unlocalize }} <span>/{{ 1|unit }}</span>
+                            {%  else %}
+                            {% trans "Sur devis" %}
+                            {% endif %}
+                        </p>
                     </a>
                 </li>
                 {% endfor %}

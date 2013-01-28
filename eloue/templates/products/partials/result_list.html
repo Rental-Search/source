@@ -18,6 +18,8 @@
                 <address>{{address}}</address>
                 {% if product.price %}
                     <p class="pl-price">{{ product.price|quantize|currency }} <span>/jour</span></p>
+                {% else %}
+                    <p class="pl-price">{% trans "Sur devis" %}</p>
                 {% endif %}
             {% endwith %}
         </div><!-- pl-content -->

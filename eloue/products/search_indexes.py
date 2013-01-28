@@ -73,8 +73,11 @@ class ProductIndex(QueuedSearchIndex):
 
     def prepare_price(self, obj):
         # It doesn't play well with season
-        now = datetime.datetime.now()
-        unit, amount = Booking.calculate_price(obj, now, now + datetime.timedelta(days=1))
+        if obj.prices.all():
+            now = datetime.datetime.now()
+            unit, amount = Booking.calculate_price(obj, now, now + datetime.timedelta(days=1))
+        else:
+            amount = None
         return amount
     
     def prepare_special(self, obj):
