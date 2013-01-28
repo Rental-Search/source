@@ -91,6 +91,7 @@ class AddressAdmin(admin.ModelAdmin):
 
 class SubscriptionAdmin(admin.ModelAdmin):
     list_display = ('patron', 'propackage', 'subscription_started', 'subscription_ended')
+    raw_id_fields = ("patron",)
 
 
 class ProPackageAdmin(admin.ModelAdmin):
