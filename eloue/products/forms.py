@@ -104,7 +104,12 @@ class FacetedSearchForm(SearchForm):
             elif status == "professionnels":
                 sqs = sqs.filter(pro=True)
 
-            top_products = sqs.filter(is_top=True)[:3]
+            
+            if query:
+                top_products = sqs.filter(is_top=True)[:3]
+            else:
+                top_products = None
+
             if top_products:
                 # XXX: ugly workaround because of SOLR-1658 (https://issues.apache.org/jira/browse/SOLR-1658)
                 # as soon as we upgrad solr we should remove this workaround
