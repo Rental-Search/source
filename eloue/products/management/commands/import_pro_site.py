@@ -159,7 +159,7 @@ class Command(BaseCommand):
 		self.product_links = {}
 
 		try:
-			self.patron = Patron.objects.get(username='tof')
+			self.patron = Patron.objects.get(pk=22860)
 		except Patron.DoesNotExist:
 			print "Can't find this patron"
 			return
