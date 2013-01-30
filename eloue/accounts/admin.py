@@ -28,7 +28,7 @@ class PatronAdmin(UserAdmin, CurrentSiteAdmin):
     add_form = PatronCreationForm
     fieldsets = (
         (None, {'fields': ('username', 'slug', 'password', 'sites')}),
-        (_('Personal info'), {'fields': ('civility', 'first_name', 'last_name', 'email', 'affiliate')}),
+        (_('Personal info'), {'fields': ('civility', 'first_name', 'last_name', 'email', 'affiliate', 'avatar')}),
         (_('Company info'), {'fields': ('is_professional', 'company_name')}),
         (_('Permissions'), {'fields': ('is_staff', 'is_active', 'is_superuser', 'is_subscribed', 'new_messages_alerted', 'user_permissions')}),
         (_('Important dates'), {'fields': ('last_login', 'date_joined',)}),
