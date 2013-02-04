@@ -19,7 +19,7 @@ class Command(BaseCommand):
 		from eloue.products.models import Patron
 
 		try:
-			patron = Patron.objects.get(pk=22784)
+			patron = Patron.objects.get(pk=22750)
 			address = patron.addresses.all()[0]
 		except Patron.DoesNotExist:
 			print "Can't find the user"
