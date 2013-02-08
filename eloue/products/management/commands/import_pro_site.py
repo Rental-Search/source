@@ -111,7 +111,7 @@ class Command(BaseCommand):
 	
 	def handle(self, *args, **options):
 		from eloue.accounts.models import Patron, Address
-		self.product_links = {u'La-Candy-Box-gonflable.html': '-Chateaux-et-aires-de-jeux-.html'}
+		self.product_links = {}
 
 		try:
 			self.patron = Patron.objects.get(pk=22981)
