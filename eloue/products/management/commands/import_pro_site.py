@@ -10,71 +10,20 @@ from contextlib import closing
 
 
 category_mapping = {
-	'Costume-Deguisement.asp?pid=7,1,120': 'pays-du-monde',
-	'Costume-Deguisement.asp?pid=7,1,6': 'pays-du-monde',
-	'Costume-Deguisement.asp?pid=7,1,121': 'pays-du-monde',
-	'Costume-Deguisement.asp?pid=7,1,15': 'pays-du-monde',
-	'Costume-Deguisement.asp?pid=7,1,149': 'pays-du-monde',
-	'Costume-Deguisement.asp?pid=7,1,7': 'pays-du-monde',
-	'Costume-Deguisement.asp?pid=7,1,14': 'pays-du-monde',
-	'Costume-Deguisement.asp?pid=7,1,2': 'pays-du-monde',
-	'Costume-Deguisement.asp?pid=7,1,9': 'pays-du-monde',
-	'Costume-Deguisement.asp?pid=7,1,13': 'pays-du-monde',
-	'Costume-Deguisement.asp?pid=7,1,17': 'pays-du-monde',
-	'Costume-Deguisement.asp?pid=7,1,4': 'pays-du-monde',
-	'Costume-Deguisement.asp?pid=7,1,11': 'pays-du-monde',
-	'Costume-Deguisement.asp?pid=7,1,20': 'pays-du-monde',
-	'Costume-Deguisement.asp?pid=7,1,19': 'pays-du-monde',
-	'Costume-Deguisement.asp?pid=7,2,39': 'historique',
-	'Costume-Deguisement.asp?pid=7,2,27': 'historique',
-	'Costume-Deguisement.asp?pid=7,2,34': 'historique',
-	'Costume-Deguisement.asp?pid=7,2,29': 'historique',
-	'Costume-Deguisement.asp?pid=7,2,32': 'historique',
-	'Costume-Deguisement.asp?pid=7,2,24': 'historique',
-	'Costume-Deguisement.asp?pid=7,2,31': 'historique',
-	'Costume-Deguisement.asp?pid=7,2,37': 'historique',
-	'Costume-Deguisement.asp?pid=7,2,25': 'historique',
-	'Costume-Deguisement.asp?pid=7,2,35': 'historique',
-	'Costume-Deguisement.asp?pid=7,2,22': 'historique',
-	'Costume-Deguisement.asp?pid=7,2,38': 'historique',
-	'Costume-Deguisement.asp?pid=7,2,23': 'historique',
-	'Costume-Deguisement.asp?pid=7,2,33': 'historique',
-	'Costume-Deguisement.asp?pid=7,2,28': 'annees-60-70',
-	'Costume-Deguisement.asp?pid=7,2,41': 'annees-60-70',
-	'Costume-Deguisement.asp?pid=7,2,41': 'annees-60-70',
-	'Costume-Deguisement.asp?pid=7,3,66': 'carnaval',
-	'Costume-Deguisement.asp?pid=7,3,45': 'uniforme',
-	'Costume-Deguisement.asp?pid=7,3,57': 'uniforme',
-	'Costume-Deguisement.asp?pid=7,3,46': 'princesse',
-	'Costume-Deguisement.asp?pid=7,3,58': 'carnaval',
-	'Costume-Deguisement.asp?pid=7,3,69': 'uniforme',
-	'Costume-Deguisement.asp?pid=7,3,61': 'carnaval',
-	'Costume-Deguisement.asp?pid=7,3,70': 'aventure',
-	'Costume-Deguisement.asp?pid=7,3,60': 'uniforme',
-	'Costume-Deguisement.asp?pid=7,3,71': 'halloween',
-	'Costume-Deguisement.asp?pid=7,3,59': 'uniforme',
-	'Costume-Deguisement.asp?pid=7,3,73': 'uniforme',
-	'Costume-Deguisement.asp?pid=7,3,51': 'pere-noel',
-	'Costume-Deguisement.asp?pid=7,3,64': 'uniforme',
-	'Costume-Deguisement.asp?pid=7,3,47': 'uniforme',
-	'Costume-Deguisement.asp?pid=7,3,148': 'aventure',
-	'Costume-Deguisement.asp?pid=7,3,65': 'aventure',
-	'Costume-Deguisement.asp?pid=7,3,67': 'uniforme',
-	'Costume-Deguisement.asp?pid=7,4,0': 'animal',
-	'Costume-Deguisement.asp?pid=7,5,123': 'historique',
-	'Costume-Deguisement.asp?pid=7,5,147': 'aventure',
-	'Costume-Deguisement.asp?pid=7,5,124': 'perruque',
-	'Costume-Deguisement.asp?pid=7,5,145': 'uniforme',
-	'Costume-Deguisement.asp?pid=7,5,146': 'aventure',
-	'Costume-Deguisement.asp?pid=7,5,144': 'masque',
-	'Costume-Deguisement.asp?pid=7,5,122': 'pere-noel',
+	'-Chateaux-et-aires-de-jeux-.html': 'jeux-gonflables',
+	'-Toboggans-Et-Multiplay-.html': 'jeux-gonflables',
+	'-Gonflables-Sportifs-.html': 'jeux-gonflables',
+	'-Gonflable-Animations-.html': 'jeux-gonflables',
+	'-Gonflables-Pub-et-Deco-.html': 'jeux-gonflables',
+	'-Pack-de-Jeux-Gonflables-.html': 'jeux-gonflables',
 }
+
 
 class Command(BaseCommand):
 	args = ''
 	help = 'Import pro site'
 
-	base_url = 'http://www.sommier.com/'
+	base_url = 'http://www.asg34.com/'
 	thread_num = 4
 
 	def _subpage_crawler(self):
@@ -87,10 +36,10 @@ class Command(BaseCommand):
 
 			with closing(urlopen(self.base_url + family_url)) as product_list_page:
 				product_list_soup = BeautifulSoup(product_list_page, 'html.parser')
-			for product in product_list_soup.findAll(href=re.compile("img=")):
-				product_url = product.get('href')
+				products = product_list_soup.find(id="conteneur")
+			for product in products.findAll(class_="encadre"):
+				product_url = product.find("a").get("href")
 				self.product_links[product_url] = family_url
-
 
 	def _product_crawler(self):
 		"""Crawle product page and create a Product"""
@@ -101,13 +50,20 @@ class Command(BaseCommand):
 			return D(s[s.find("Prix de location : ")+18:s.find('\u20ac')].replace(' ', '').replace(',', '.'))
 
 		def _get_summary(s):
-			string = s[s.find("ref. :")+7:s.find(")")].lower()
-			if string.startswith(u'z'):
-				string = s[s.find(') ')+2:s.find(' (')]
-			return 'costume %s' % string
+			return 'Structures gonflable : %s' % s
 
 		def _get_description(s):
-			return 'Costume %s' % s[s.find(')')+2:s.find('Prix de location')].replace(': ',':\n - ').replace(', ', '\n - ')		
+			string = s.find(class_="soustitre").get_text()
+
+			string += u"\n\nCaractéristiques :\n\n"
+			
+			for li in s.findAll(class_="entry-content")[0].findAll("li"):
+				string += "%s\n" % li.get_text()
+
+			for paragraph in s.findAll(class_="entry-content")[0].findAll("p"):
+				string += paragraph.get_text()
+
+			return string
 
 		while True:
 			try:
@@ -121,45 +77,44 @@ class Command(BaseCommand):
 			except:
 				print 'error loading page for object at url', self.base_url + product_url
 
-			product = product_soup.findAll(width='95%')[1]
-			
-			img_url = product.find('img').get('src')
+			product = product_soup.find(id='ficheJeux')
+
+			img_url = product.findAll("img")[0].get("src")
 			try:
 				img_url = quote(img_url)
 			except:
 				img_url = None
 
-			product_info = product.find('td', class_='collec').text
-			summary = _get_summary(product_info)
-			price = _get_price(product_info)
-			description = _get_description(product_info)
+			summary = _get_summary(product.find("h1").string)
+
+			description = _get_description(product)
+
 			category = Category.objects.get(slug=category_mapping[category])
 
 			product = Product.objects.create(summary=summary, description=description, 
-                deposit_amount=0, address=self.address, owner=self.patron,
-                category=category)
+   				deposit_amount=0, address=self.address, owner=self.patron,
+   				category=category)
 
 			if img_url:
 				try:
 					with closing(urlopen(self.base_url + img_url)) as image:
 						product.pictures.add(Picture.objects.create(
-	                        image=uploadedfile.SimpleUploadedFile(
-	                            name='img', content=image.read())
-	                    )
-	                )
+							image=uploadedfile.SimpleUploadedFile(
+	  							name='img', content=image.read())
+	  						)
+	  					)
 				except HTTPError as e:
 					print '\nerror loading image for object at url:', self.base_url + img_url
 
-			product.prices.add(Price(amount=price, unit=UNIT.DAY))
 			sys.stdout.write('.')
 			sys.stdout.flush()
 	
 	def handle(self, *args, **options):
 		from eloue.accounts.models import Patron, Address
-		self.product_links = {}
+		self.product_links = {u'La-Candy-Box-gonflable.html': '-Chateaux-et-aires-de-jeux-.html'}
 
 		try:
-			self.patron = Patron.objects.get(pk=22860)
+			self.patron = Patron.objects.get(pk=22981)
 		except Patron.DoesNotExist:
 			print "Can't find this patron"
 			return
