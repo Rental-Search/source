@@ -61,4 +61,6 @@ EMAIL_BLACKLIST = (
     r'justonemail.net$',
     r'letmymail.com$',
     r'onemoremail.net$',
+    r'hushmail.com$',
+    r'izzane.net$',
 )
