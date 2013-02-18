@@ -143,6 +143,7 @@ class RedirectionAdmin(admin.ModelAdmin):
     list_display = ('redirection_url', 'patron', 'product', 'redirect_at',)
     ordering = ['-redirect_at']
     date_hierarchy = 'redirect_at'
+    raw_id_fields = ('patron', 'product',)
 
 
 try:
