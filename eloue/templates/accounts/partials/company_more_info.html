@@ -1,5 +1,4 @@
 {% load i18n cache %}
-
 {% cache 900 patron_details_info patron.pk %}
 {% with patron.languages as languages %}
     {% with languages.count as languages_count %}
@@ -15,7 +14,7 @@
             {% endif %}
             {% if patron.url %}
             <h4>{% trans "Site Internet"%}</h4>
-            <p><a href="{{ patron.url }}">{{patron.url}}</a></p>
+            <p class="company_detail_url"><a href="{{ patron.url }}">{{patron.url}}</a></p>
             {% endif %}
             {% if languages_count %}
             <h4>{% trans "Languages Parlées" %}</h4>

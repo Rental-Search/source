@@ -23,7 +23,7 @@ from django.db.models import Count
 from django.shortcuts import render_to_response, render, redirect
 from django.template import RequestContext
 
-from django.http import Http404, HttpResponseRedirect
+from django.http import Http404, HttpResponseRedirect, HttpResponseBadRequest
 
 from haystack.query import SearchQuerySet
 from django.http import HttpResponse
@@ -31,7 +31,7 @@ from eloue.decorators import ownership_required, secure_required, mobify
 from eloue.accounts.forms import EmailAuthenticationForm
 from eloue.accounts.models import Patron
 
-from eloue.products.forms import AlertSearchForm, AlertForm, FacetedSearchForm, RealEstateEditForm, ProductForm, CarProductEditForm, ProductEditForm, ProductAddressEditForm, ProductPriceEditForm, MessageEditForm
+from eloue.products.forms import AlertSearchForm, AlertForm, FacetedSearchForm, RealEstateEditForm, ProductForm, CarProductEditForm, ProductEditForm, ProductAddressEditForm, ProductPriceEditForm, MessageEditForm, RedirectionForm
 
 from eloue.products.models import Category, Product, Curiosity, UNIT, ProductRelatedMessage, Alert, MessageThread
 from eloue.accounts.models import Address
@@ -655,3 +655,13 @@ def suggestion(request):
         resp += "\n%s"%el
     cache.set(word, resp, 0)
     return HttpResponse(resp)
+
+def redirect_to_website(request):
+    """Save the redirection to pro patron website"""
+    if request.is_ajax() and request.method == 'POST':
+        form = RedirectionForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return HttpResponse('', mimetype='application/json')
+    return HttpResponseBadRequest()
+

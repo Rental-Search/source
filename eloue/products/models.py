@@ -1014,6 +1014,18 @@ class ProductTopPosition(models.Model):
         return (settings.PRODUCTTOPPOSITION_PRICE * dt_sec / days_sec).quantize(D('0.01'))
 
 
+class Redirection(models.Model):
+    """Redirection to pro patron website"""
+    patron = models.ForeignKey(Patron, related_name='redirections')
+    product = models.ForeignKey(Product, null=True, blank=True, related_name='redirections')
+    redirect_at = models.DateTimeField(editable=False, auto_now_add=True)
+    redirection_url = models.URLField()
+
+    def __unicode__(self):
+        return smart_unicode(self.redirection_url)
+
+
+
 post_save.connect(post_save_answer, sender=Answer)
 post_save.connect(post_save_product, sender=Product)
 post_save.connect(post_save_curiosity, sender=Curiosity)
