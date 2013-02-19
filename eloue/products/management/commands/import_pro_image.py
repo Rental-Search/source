@@ -17,15 +17,14 @@ class Command(BaseCommand):
 	def handle(self, *args, **options):
 		from eloue.products.models import Picture, Price, Category, Product, UNIT
 		from eloue.products.models import Patron
-
+		if len(args) != 3:
+			print "I need exactly three argument table path, image folder path and patron id"
+			return
 		try:
-			patron = Patron.objects.get(pk=22750)
+			patron = Patron.objects.get(pk=args[2])
 			address = patron.addresses.all()[0]
 		except Patron.DoesNotExist:
 			print "Can't find the user"
-			return
-		if len(args) != 2:
-			print "I need exactly two argument"
 			return
 		with open(args[0]) as xlsx:
 			sheet = xlrd.open_workbook(file_contents=xlsx.read()).sheets()[0]
@@ -52,7 +51,11 @@ class Command(BaseCommand):
 							address=address,
 							owner=patron
 						)
-						product.prices.add(Price(amount=1, unit=UNIT.DAY))
+						if product_row['prix_jour']:
+							product.prices.add(Price(amount=product_row['prix_jour'], unit=UNIT.DAY))
+
+						if product_row['caution']:
+							product.deposit_amount = product_row['caution']
 						
 						image_path = '%s/%s' % (args[1], image_name)
 						try:
