@@ -75,6 +75,25 @@
     <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
 
     <script>
+        function redirect_to_website() {
+            $.ajax({
+                type: 'POST',
+                url: '/location/redirect_to_website/',
+                data: {
+                    'csrfmiddlewaretoken': '{{ csrf_token }}',
+                    'redirection_url': '{{ product.owner.url }}',
+                    'product': '{{ product.pk }}',
+                    'patron': '{{ product.owner.pk }}'
+                }
+            });
+        }
+
+        $('.pro-contact a').click(function (e){
+            e.preventDefault();
+            redirect_to_website();
+            document.location.href = "{{ product.owner.url }}";
+        })
+
         enabled = {};
         function availability(year, month, inst) {
             $.ajax({
@@ -300,7 +319,7 @@
             <div id="prices_calendar" class="ui-tabs-panel ui-widget-content ui-corner-bottom ui-tabs-hide">
                 <div class="prices">
                     <div class="table-bg">
-                        {% if product.price.all %}
+                        {% if product.prices.all %}
                         <table class="table table-striped">
                             <thead>
                                 <tr>

@@ -10,7 +10,7 @@ from django.utils.encoding import smart_str
 from django.utils.translation import ugettext_lazy as _
 
 from eloue.admin import CurrentSiteAdmin
-from eloue.accounts.models import Patron, Address, PhoneNumber, PatronAccepted, ProPackage, Subscription
+from eloue.accounts.models import Patron, Address, PhoneNumber, PatronAccepted, ProPackage, Subscription, OpeningTimes
 from eloue.accounts.forms import PatronChangeForm, PatronCreationForm
 
 log = logbook.Logger('eloue')
@@ -22,16 +22,20 @@ class AddressInline(admin.TabularInline):
 class PhoneNumberInline(admin.TabularInline):
     model = PhoneNumber
 
+class OpeningTimesInline(admin.StackedInline):
+    model = OpeningTimes
+
 
 class PatronAdmin(UserAdmin, CurrentSiteAdmin):
     form = PatronChangeForm
     add_form = PatronCreationForm
     fieldsets = (
         (None, {'fields': ('username', 'slug', 'password', 'sites')}),
-        (_('Personal info'), {'fields': ('civility', 'first_name', 'last_name', 'email', 'affiliate')}),
-        (_('Company info'), {'fields': ('is_professional', 'company_name')}),
+        (_('Personal info'), {'fields': ('civility', 'first_name', 'last_name', 'email', 'affiliate', 'avatar')}),
+        (_('Company info'), {'fields': ('is_professional', 'company_name', 'url')}),
         (_('Permissions'), {'fields': ('is_staff', 'is_active', 'is_superuser', 'is_subscribed', 'new_messages_alerted', 'user_permissions')}),
         (_('Important dates'), {'fields': ('last_login', 'date_joined',)}),
+
         (_('Paypal'), {'classes': ('collapse',), 'fields': ('paypal_email',)}),
         (_('Groups'), {'classes': ('collapse',), 'fields': ('groups',)}),
     )
@@ -49,7 +53,7 @@ class PatronAdmin(UserAdmin, CurrentSiteAdmin):
     list_filter = ('is_active', 'is_staff', 'is_superuser', 'is_professional', 'is_subscribed', 'affiliate', 'new_messages_alerted')
     save_on_top = True
     ordering = ['-date_joined']
-    inlines = [AddressInline, PhoneNumberInline]
+    inlines = [AddressInline, PhoneNumberInline, OpeningTimesInline]
     actions = ['export_as_csv', 'send_activation_email']
     search_fields = ('username', 'first_name', 'last_name', 'email', 'phones__number', 'addresses__city', 'company_name')
 

@@ -6,11 +6,12 @@ from eloue.products.search_indexes import alert_search, product_search
 
 from eloue.products.views import product_create, product_edit, message_create, reply_product_related_message, \
     product_delete, alert_create, alert_inform, alert_delete
-from eloue.products.views import ProductList, AlertInformSuccess, AlertList
+from eloue.products.views import ProductList, AlertInformSuccess, AlertList, redirect_to_website
 from eloue.rent.views import booking_create, booking_price, product_occupied_date, booking_create_redirect
 
 
 urlpatterns = patterns('',
+    url(r'^redirect_to_website/$', redirect_to_website, name="redirect_to_website"),
     url(r'^%s/$' % _("ajouter"), 'eloue.products.views.publish_new_ad', name="publish_new_ad"),
     url(r'^%s/%s/$' % (_("ajouter"), _("objet")), product_create, name="product_create"),
     url(r'^%s/%s/$' % (_("ajouter"), _("voiture")), 'eloue.products.views.car_product_create', name="car_product_create"),
