@@ -7,30 +7,6 @@
  {% blocktrans with patron.username as username %}Toutes les locations de {{ username }}{% endblocktrans %}
 {% endblock %}
 
-{% block tail %}
-{{ block.super }}
-<script type="text/javascript">
-    function redirect_to_website() {
-        $.ajax({
-            type: 'POST',
-            url: '/location/redirect_to_website/',
-            data: {
-                'csrfmiddlewaretoken': '{{ csrf_token }}',
-                'redirection_url': '{{ patron.url }}',
-                'product': '',
-                'patron': '{{ patron.pk }}'
-            }
-        });
-    }
-
-    $('p.company_detail_url a').click(function (e){
-        e.preventDefault();
-        redirect_to_website();
-        document.location.href = "{{ patron.url }}";
-    })
-</script>
-{% endblock %}
-
 {% block content %}
 {% cache 900 patron_details_content patron.pk page_obj %}
 <div id="profil" class="container-main">
