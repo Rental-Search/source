@@ -445,7 +445,7 @@
                 {% if patron.current_subscription %}
                 <ul class="pro-contact">
                     {% if patron.url %}
-                    <li><a href="#" onClick="_gaq.push(['_trackEvent', 'Pro', 'redirection_from', '{{ product.get_absolute_url }}', 'patron.pk']);">{{ patron.url }}</a></li>
+                    <li><a href="#" onClick="_gaq.push(['_trackEvent', 'Pro', 'Redirection', '{{ patron.slug }}']);">{{ patron.url }}</a></li>
                     {% endif %}
                     {% if patron.default_number %}
                     <li>
