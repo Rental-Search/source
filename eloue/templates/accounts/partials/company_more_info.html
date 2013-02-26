@@ -14,7 +14,7 @@
             {% endif %}
             {% if patron.url %}
             <h4>{% trans "Site Internet"%}</h4>
-            <p class="company_detail_url"><a href="{{ patron.url }}">{{patron.url}}</a></p>
+            <p class="company_detail_url"><a href="{{ patron.url }}" onClick="_gaq.push(['_trackEvent', 'Pro', 'Redirection', '{{ patron.slug }}']);" rel="nofollow">{{patron.url}}</a></p>
             {% endif %}
             {% if languages_count %}
             <h4>{% trans "Languages Parlées" %}</h4>

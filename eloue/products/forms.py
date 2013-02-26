@@ -14,7 +14,7 @@ from eloue.accounts.fields import DateSelectField
 from eloue.accounts.models import Patron, COUNTRY_CHOICES, Address
 from eloue.geocoder import GoogleGeocoder
 from eloue.products.fields import FacetField, FRLicensePlateField
-from eloue.products.models import Alert, PatronReview, ProductReview, Product, CarProduct, RealEstateProduct, Picture, Category, UNIT, PAYMENT_TYPE, ProductRelatedMessage, MessageThread, Redirection
+from eloue.products.models import Alert, PatronReview, ProductReview, Product, CarProduct, RealEstateProduct, Picture, Category, UNIT, PAYMENT_TYPE, ProductRelatedMessage, MessageThread
 from eloue.products.widgets import PriceTextInput, CommentedSelectInput, CommentedTextInput
 from eloue.products.utils import Enum
 from django_messages.forms import ComposeForm
@@ -709,8 +709,4 @@ class HighlightForm(forms.ModelForm):
 class TopPositionForm(forms.ModelForm):
     class Meta:
         model = ProductTopPosition
-
-class RedirectionForm(forms.ModelForm):
-    class Meta:
-        model = Redirection
 

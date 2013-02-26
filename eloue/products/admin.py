@@ -11,7 +11,7 @@ from mptt.forms import TreeNodeChoiceField
 from eloue.admin import CurrentSiteAdmin
 from eloue.products.forms import ProductAdminForm
 
-from eloue.products.models import Alert, Product, CarProduct, RealEstateProduct, Picture, Category, Property, PropertyValue, Price, ProductReview, PatronReview, Curiosity, ProductRelatedMessage, CategoryDescription, Redirection
+from eloue.products.models import Alert, Product, CarProduct, RealEstateProduct, Picture, Category, Property, PropertyValue, Price, ProductReview, PatronReview, Curiosity, ProductRelatedMessage, CategoryDescription
 
 
 log = logbook.Logger('eloue')
@@ -138,13 +138,6 @@ class CuriosityAdmin(CurrentSiteAdmin):
 class AlertAdmin(admin.ModelAdmin):
     pass
 
-class RedirectionAdmin(admin.ModelAdmin):
-    model = Redirection
-    list_display = ('redirection_url', 'patron', 'product', 'redirect_at',)
-    ordering = ['-redirect_at']
-    date_hierarchy = 'redirect_at'
-    raw_id_fields = ('patron', 'product',)
-
 
 try:
     admin.site.register(Product, ProductAdmin)
@@ -156,6 +149,5 @@ try:
     admin.site.register(ProductReview, ProductReviewAdmin)
     admin.site.register(PatronReview, PatronReviewAdmin)
     admin.site.register(Alert, AlertAdmin)
-    admin.site.register(Redirection, RedirectionAdmin)
 except admin.sites.AlreadyRegistered, e:
     log.warn('Site is already registered : %s' % e)
