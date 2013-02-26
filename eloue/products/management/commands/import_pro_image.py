@@ -51,8 +51,21 @@ class Command(BaseCommand):
 							address=address,
 							owner=patron
 						)
+						
 						if product_row['prix_jour']:
 							product.prices.add(Price(amount=product_row['prix_jour'], unit=UNIT.DAY))
+
+						if product_row['prix_weekend']:
+							product.prices.add(Price(amount=product_row['prix_weekend'], unit=UNIT.WEEK_END))
+
+						if product_row['prix_semaine']:
+							product.prices.add(Price(amount=product_row['prix_semaine'], unit=UNIT.WEEK))
+
+						if product_row['prix_2semaines']:
+							product.prices.add(Price(amount=product_row['prix_2semaines'], unit=UNIT.TWO_WEEKS))
+
+						if product_row['prix_mois']:
+							product.prices.add(Price(amount=product_row['prix_mois'], unit=UNIT.MONTH))
 
 						if product_row['caution']:
 							product.deposit_amount = product_row['caution']
