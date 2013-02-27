@@ -110,12 +110,13 @@ class GoogleAnalyticsSetStats(object):
 				if interval == 'days':
 					date = datetime.datetime.strptime(row[0], '%Y%m%d')
 				elif interval == 'weeks':
-					week = int(row[1]) - 1
+					week = int(row[1]) - 2
 					date = datetime.datetime.strptime('0%s%s' % (week, row[3]), '%w%W%Y') + datetime.timedelta(days=1)
 				elif interval == 'months':
 					date = datetime.datetime.strptime('%s%s' % (row[2], row[3]), '%m%Y')
 
 				row.reverse()
+				
 				data[date] += int(row[0])
 
 
