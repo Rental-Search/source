@@ -28,9 +28,13 @@ TOKEN_FILE_NAME = settings.GOOGLE_TOKEN_FILE_NAME
 
 class GoogleAnalyticsSetStats(object):
 
-	def __init__(self, *args, **kwargs):
+	def __init__(self, metrics=None, dimensions=None, filters=None, *args, **kwargs):
 		self.service = self._initialize_service()
 		self.profile_id = self._get_eloue_profile_id()
+		self.metrics = metrics
+		self.dimensions = dimensions
+		self.filters = filters
+
 
 
 	def _prepare_credentials(self):
@@ -93,29 +97,33 @@ class GoogleAnalyticsSetStats(object):
       		ids='ga:' + self.profile_id,
       		start_date=u'%s' % start,
       		end_date=u'%s' % end,
-      		metrics='ga:pageviews', 
-      		dimensions='ga:date,ga:pagePathLevel2,ga:pagePath,ga:day,ga:week,ga:month,ga:year', 
-      		filters='ga:pagePathLevel2==/deguizland/').execute()
+      		metrics='%s' % self.metrics, 
+      		dimensions='ga:date,ga:week,ga:month,ga:year,%s' % self.dimensions, 
+      		filters='%s' % self.filters
+      	).execute()
 
 		data = defaultdict(int)
 		stats = []
 
-		if interval == 'days':
+		if result['rows']:
 			for row in result['rows']:
-				date = datetime.datetime.strptime(row[0], '%Y%m%d')
-				data[date] += int(row[7])
-		elif interval == 'weeks':
-			for row in result['rows']:
-				week = int(row[4]) - 1
-				date = datetime.datetime.strptime('0%s%s' % (week, row[6]), '%w%W%Y') + datetime.timedelta(days=1)
-				data[date] += int(row[7])
-		elif interval == 'months':
-			for row in result['rows']:
-				date = datetime.datetime.strptime('%s%s' % (row[5], row[6]), '%m%Y')
-				data[date] += int(row[7])
+				if interval == 'days':
+					date = datetime.datetime.strptime(row[0], '%Y%m%d')
+				elif interval == 'weeks':
+					week = int(row[1]) - 1
+					date = datetime.datetime.strptime('0%s%s' % (week, row[3]), '%w%W%Y') + datetime.timedelta(days=1)
+				elif interval == 'months':
+					date = datetime.datetime.strptime('%s%s' % (row[2], row[3]), '%m%Y')
 
-		for key in sorted(data.iterkeys()):
-			stats.append((key, data[key]))
+				row.reverse()
+				data[date] += int(row[0])
 
-		return stats
+
+			for key in sorted(data.iterkeys()):
+				stats.append((key, data[key]))
+
+			return stats, result['rows']
+
+		else:
+			return stats, []
 
