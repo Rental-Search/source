@@ -48,7 +48,7 @@ class Command(BaseCommand):
             row['Login propriétaire'] = smart_str(booking.owner.username)
             row['Adresse email propriétaire'] = booking.owner.email
             row['Téléphone propriétaire'] = booking.owner.phones.all()[0]
-            row['Portable propriétaire'] = booking.owner.phones.all()[0].replace("\n", " ").replace("\r", " ")
+            row['Portable propriétaire'] = booking.owner.phones.all()[0]
             row['Nom propriétaire'] = smart_str(booking.owner.last_name.replace("\n", " ").replace("\r", " "))
             row[u'Prénom propriétaire'] = smart_str(booking.owner.first_name.replace("\n", " ").replace("\r", " "))
             address = booking.owner.addresses.all()[0]
