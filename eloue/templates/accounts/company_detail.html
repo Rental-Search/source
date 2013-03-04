@@ -7,6 +7,28 @@
  {% blocktrans with patron.username as username %}Toutes les locations de {{ username }}{% endblocktrans %}
 {% endblock %}
 
+{% block tail %}
+    {{ block.super }}
+    <script type="text/javascript">
+        $(document).ready(function (){
+            $(".btn-pro-contact a").click(function (e){
+                e.preventDefault();
+                val = $(this).attr("href");
+                $('.btn-pro-contact div').slideUp();
+                if($(this).hasClass('open') == true) {
+                    $('.btn-info').removeClass('open');
+                } else {
+                    $('.btn-info').removeClass('open')
+                    $(val).slideDown();
+                    $(this).addClass('open');   
+                }
+                
+
+            });
+        });
+    </script>
+{% endblock %}
+
 {% block content %}
 {% cache 900 patron_details_content patron.pk page_obj %}
 <div id="profil" class="container-main">

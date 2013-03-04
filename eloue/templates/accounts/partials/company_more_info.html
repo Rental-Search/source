@@ -4,22 +4,30 @@
     {% with languages.count as languages_count %}
     <div class="profil-block" style="border-bottom: none;">
         <h3>{% trans "Plus d'info" %}</h3>
-            {% if patron.default_number %}
-            <h4>{% trans "Téléphone" %}</h4> 
-            <p>
-                {% with patron.default_number as default_number %}
-                    {{ default_number.number }}
-                {% endwith %}
-            </p>
-            {% endif %}
-            {% if patron.url %}
-            <h4>{% trans "Site Internet"%}</h4>
-            <p class="company_detail_url"><a href="{{ patron.url }}" onClick="_gaq.push(['_trackEvent', 'Pro', 'Redirection', '{{ patron.slug }}']);" rel="nofollow">{{patron.url}}</a></p>
-            {% endif %}
-            {% if languages_count %}
-            <h4>{% trans "Languages Parlées" %}</h4>
-            <p style="margin-bottom: 30px;">{{ languages.all|join:", "}}</p>
-            {% endif %}
+            {% if patron.current_subscription %}
+                <div class="btn-pro-contact btn-group-vertical">
+                {% if patron.default_number %}
+                    <a href="#btn-pro-contact-number" class="btn btn-info btn-small" onClick="_gaq.push(['_trackEvent', 'Pro', 'Phone', '{{ patron.slug }}']);">Téléphone</a>
+                    <div id="btn-pro-contact-number">
+                        <p>{{ patron.default_number.number }}</p>
+                    </div>
+                {% endif %}
+                {% if patron.url %}
+                    <a href="#btn-pro-contact-redirection" class="btn btn-info btn-small">Site Internet</a>
+                    <div id="btn-pro-contact-redirection">
+                        <p><a href="{{ patron.url }}" onClick="_gaq.push(['_trackEvent', 'Pro', 'Redirection', '{{ patron.slug }}']);" rel="nofollow">{{patron.url}}</a></p>
+                    </div>
+                {% endif %}
+                {% if patron.default_address %}
+                    <a href="#btn-pro-contact-shop" class="btn btn-info btn-small last-child" onClick="_gaq.push(['_trackEvent', 'Pro', 'Address', '{{ patron.slug }}']);">Boutique</a>
+                    <div id="btn-pro-contact-shop">
+                        <address>{{ patron.default_address.address1 }}<br>
+                        {{ patron.default_address.zipcode }} {{ patron.default_address.city }}
+                        </address>
+                    </div>
+                {% endif %}
+                </div>
+                {% endif %}
         {% if patron.openingtimes %}
         {% with patron.openingtimes as openingtimes %}
             <h3>{% trans "Horaires d'ouverture" %}</h3>

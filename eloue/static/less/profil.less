@@ -300,3 +300,48 @@
   } 
 }
 
+// BTN PRO CONTACT
+//----------------
+
+.btn-pro-contact.btn-group-vertical {
+  .btn { 
+    width: 148px;
+    text-align: center;
+  }
+  .open.last-child {
+    .rounded(0);
+  }
+
+  div {
+    background-color: #fff;
+    padding: 10px;
+    border-left: 1px solid #93b1c2;
+    border-right: 1px solid #93b1c2;
+    display: none;
+
+    h5 { 
+      margin-bottom: 10px;
+      #font > .sans-serif('Ubuntu', bold, 13px);
+      color: @blueDark;
+      text-align: center;
+    }
+    p { 
+      text-align: center; 
+      margin: 10px 0;
+    }
+
+    address {
+      display: block !important;
+      line-height: 20px !important;
+      margin-bottom: 0px !important;
+      text-align: center;
+      #font > .sans-serif('Ubuntu', normal, 12px);
+    }
+
+    &:last-child {
+      border-bottom: 1px solid #93b1c2;
+      .border-radius(0, 4px, 4px, 0);
+    }
+  }
+}
+

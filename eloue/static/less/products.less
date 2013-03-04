@@ -586,21 +586,11 @@
     line-height: 14px;
   }
   
-  .btn-contactme { padding: 8px 36px; margin-bottom: 15px;}
+  .btn-contactme { padding: 8px 37px; margin-bottom: 15px;}
   
   table {
     margin: 0 10px 10px;
     width: 280px; 
-  }
-
-  .pro-contact {
-    margin: 5px 10px 0;
-
-    li {
-      #font > .sans-serif(Arial, normal, @basefont);
-      margin-bottom: 10px;
-      text-align: center;
-    }
   }
   
 }
@@ -609,6 +599,37 @@
   background-color: #fff;
   
   h2 { margin-bottom: 0px; }
+}
+
+.btn-pro-contact {
+  margin: 5px 10px 10px;
+
+  .btn { padding: 5px 15px; }
+}
+
+.btn-pro-contact-content {
+  div {
+    background-color: #fff;
+    .rounded(4px);
+    margin: 5px 10px 10px;
+    padding: 10px;
+    border: 1px solid #93b1c2;
+    display: none;
+
+    h5 { 
+      margin-bottom: 10px;
+      #font > .sans-serif('Ubuntu', bold, 13px);
+      color: @blueDark;
+    }
+    p { text-align: center; }
+
+    address {
+      display: block !important;
+      line-height: 20px !important;
+      margin-bottom: 0px !important;
+      text-align: center;
+    }
+  }
 }
 
 

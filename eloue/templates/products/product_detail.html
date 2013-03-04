@@ -168,6 +168,21 @@
             availability(date.getFullYear(), date.getMonth()+1);
         });
     </script>
+    <script type="text/javascript">
+        $(document).ready(function (){
+            $("div.btn-pro-contact a").click(function (e) {
+                e.preventDefault();
+                if ($('.open.btn-pro-contact').length == 0) { 
+                    $('.btn-pro-contact').addClass('open');
+                }
+                $('.btn-pro-contact .dropdown-toggle').removeClass('dropdown-toggle');
+                $(".btn-pro-contact-content div").hide();
+                val = $(this).attr("href");
+                $(this).addClass('dropdown-toggle');
+                $(val).show();
+            });
+        })
+    </script>
     {% if not debug %}
     {% if messages %}
         {% for message in messages %}
@@ -441,20 +456,41 @@
                         {% endwith %}
                     {% endif %}
                 </address>
-                <a href="{% url message_create product.pk patron.pk %}" class="btn-contactme">Contactez-moi</a>
+                <a href="{% url message_create product.pk patron.pk %}" class="btn-contactme">Contactez moi</a>
                 {% if patron.current_subscription %}
-                <ul class="pro-contact">
-                    {% if patron.url %}
-                    <li><a href="{{ patron.url }}" rel="nofollow" onClick="_gaq.push(['_trackEvent', 'Pro', 'Redirection', '{{ patron.slug }}']);">{{ patron.url }}</a></li>
-                    {% endif %}
+                <div class="btn-pro-contact btn-group">
+                {% if patron.default_number %}
+                  <a href="#btn-pro-contact-number" class="btn btn-info btn-small" onClick="_gaq.push(['_trackEvent', 'Pro', 'Phone', '{{ patron.slug }}']);">Téléphone</a>
+                {% endif %}
+                {% if patron.url %}
+                  <a href="#btn-pro-contact-redirection" class="btn btn-info btn-small">Site Internet</a>
+                {% endif %}
+                {% if patron.default_address %}
+                  <a href="#btn-pro-contact-shop" class="btn btn-info btn-small" onClick="_gaq.push(['_trackEvent', 'Pro', 'Address', '{{ patron.slug }}']);">Boutique</a>
+                {% endif %}
+                </div>
+                <div class="btn-pro-contact-content">
                     {% if patron.default_number %}
-                    <li>
-                        {% with patron.default_number as default_number %}
-                            {{ default_number.number }}
-                        {% endwith %}
-                    </li>
+                    <div id="btn-pro-contact-number">
+                        <h5>{% trans "Contacter par téléphone"%}</h5>
+                        <p>{{ patron.default_number.number }}</p>
+                    </div>
                     {% endif %}
-                </ul>
+                    {% if patron.url %}
+                    <div id="btn-pro-contact-redirection">
+                        <h5>{% trans "Vister le site internet"%}</h5>
+                        <p><a href="{{ patron.url }}" onClick="_gaq.push(['_trackEvent', 'Pro', 'Redirection', '{{ patron.slug }}']);" rel="nofollow">{{patron.url}}</a></p>
+                    </div>
+                    {% endif %}
+                    {% if patron.default_address %}
+                    <div id="btn-pro-contact-shop">
+                        <h5>{% trans "Aller à la boutique"%}</h5>
+                        <address>{{ patron.default_address.address1 }}<br>
+                        {{ patron.default_address.zipcode }} {{ patron.default_address.city }}
+                        </address>
+                    </div>
+                    {% endif %}
+                </div>
                 {% endif %}
             </div>{#  owner #}
         {% else %}
