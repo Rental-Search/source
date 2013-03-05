@@ -6,6 +6,7 @@ from django.core.files import uploadedfile
 from urllib2 import urlopen, quote, HTTPError
 from contextlib import closing
 
+
 def next_row(sheet, row):
     return (unicode(sheet.cell(row, i).value) for i in xrange(sheet.ncols))
 
@@ -35,52 +36,86 @@ class Command(BaseCommand):
 				while True:
 					try:
 						product_row = dict(zip(header, next_row(sheet, row)))
-						image_name = product_row["photo"]
-						summary = product_row["titre"]
+						
+						summary = product_row["titre"].lower()
 						description = product_row["description"]
+
 						try:
 							category = Category.objects.get(slug=product_row["categorie"])
 						except:
 							print "error category: " + product_row["categorie"]
+
+
+						try:
+							deposit_amount = product_row['caution']
+						except:
+							deposit_amount = 0
 						
 						product = Product.objects.create(
 							summary=summary,
 							description=description,
-							deposit_amount=0,
+							deposit_amount=deposit_amount,
 							category=category,
 							address=address,
 							owner=patron
 						)
 						
-						if product_row['prix_jour']:
-							product.prices.add(Price(amount=product_row['prix_jour'], unit=UNIT.DAY))
-
-						if product_row['prix_weekend']:
-							product.prices.add(Price(amount=product_row['prix_weekend'], unit=UNIT.WEEK_END))
-
-						if product_row['prix_semaine']:
-							product.prices.add(Price(amount=product_row['prix_semaine'], unit=UNIT.WEEK))
-
-						if product_row['prix_2semaines']:
-							product.prices.add(Price(amount=product_row['prix_2semaines'], unit=UNIT.TWO_WEEKS))
-
-						if product_row['prix_mois']:
-							product.prices.add(Price(amount=product_row['prix_mois'], unit=UNIT.MONTH))
-
-						if product_row['caution']:
-							product.deposit_amount = product_row['caution']
-						
-						image_path = '%s/%s' % (args[1], image_name)
 						try:
+							product.prices.add(Price(amount=product_row['prix_jour'], unit=UNIT.DAY))
+						except:
+							pass
+
+						try:
+							product.prices.add(Price(amount=product_row['prix_weekend'], unit=UNIT.WEEK_END))
+						except:
+							pass
+
+						try:
+							product.prices.add(Price(amount=product_row['prix_semaine'], unit=UNIT.WEEK))
+						except:
+							pass
+
+						try:
+							product.prices.add(Price(amount=product_row['prix_2semaines'], unit=UNIT.TWO_WEEKS))
+						except:
+							pass
+
+						try:
+							product.prices.add(Price(amount=product_row['prix_mois'], unit=UNIT.MONTH))
+						except:
+							pass
+						
+
+						try:
+							image_name = product_row["photo"]
+						except:
+							pass
+							
+						try:
+							image_path = '%s/%s' % (args[1], image_name)
 							with closing(open(image_path)) as image:
 								picture = Picture.objects.create(image=uploadedfile.SimpleUploadedFile(name='img', content=image.read()))
 								product.pictures.add(picture)
 						except:
-							print "error: " + image_path
+							pass
+
+
+						try:
+							image_url = product_row["photo_url"]
+						except:
+							pass
+
+						try:
+							with closing(urlopen(image_url)) as image:
+								picture = Picture.objects.create(image=uploadedfile.SimpleUploadedFile(name='img', content=image.read()))
+								product.pictures.add(picture)
+						except:
+							pass
 
 						product.save()
 						print product
 					except:
+						print "error"
 						break
 					else:
 						break
