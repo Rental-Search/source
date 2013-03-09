@@ -92,6 +92,10 @@
 		</form>
 	</div>
 </div>
+<div id="form-waiting-dialog" style="display:none line-height: 18px;" title="Validation en cours...">
+    <p>L'annonce est cours de validation.</p>
+    <p>Merci de patienter.</p>
+</div>
 {% endblock %}
 
 {% block footer %}
@@ -107,6 +111,16 @@
      			event.preventDefault();
      			$(".prices-grid").show();
      			$(this).hide();
+			});
+			$("div#form-waiting-dialog").dialog({
+	        	autoOpen: false,
+	        	width: 'auto',
+	        	resizable: false,
+	        	dialogClass: "no-close",
+	        	modal: true,
+	     	});
+	     	$("div.form-actions .btn-primary").click(function (){
+				$("div#form-waiting-dialog").dialog("open");
 			});
 		})
 	</script>
