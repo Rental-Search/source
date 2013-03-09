@@ -486,3 +486,8 @@ TVA = decimal.Decimal('0.196')
 
 GA_PING_QUEUE_CONNECTION = ('localhost', 6379, 1)
 GA_PING_QUEUE_NAME = 'ga_queue'
+
+
+#GOOGLE TOKEN
+GOOGLE_CLIENT_SECRETS = getattr(local, 'GOOGLE_CLIENT_SECRETS', '')
+GOOGLE_TOKEN_FILE_NAME = getattr(local, 'GOOGLE_TOKEN_FILE_NAME', '')
