@@ -15,7 +15,7 @@ from eloue.proapp.analytics_api_v3_auth import GoogleAnalyticsSetStats
 from eloue.proapp.api.authentication import SessionAuthentication
 from eloue.proapp.forms import TimeSerieForm
 from eloue.products.models import Product, Category, Picture, Price
-from eloue.accounts.models import Patron
+from eloue.accounts.models import Patron, Address, PhoneNumber, Subscription, CreditCard
 
 
 def get_time_series(request=None):
@@ -44,7 +44,7 @@ def get_analytics_event_references(event_action, event_label):
 
 	return metrics, dimensions, filters	
 
-
+#Products resources
 class ProductResource(ModelResource):
 	category = fields.ToOneField('eloue.proapp.api.resources.CategoryResource', 'category', related_name='categories', full=True)
 
@@ -114,6 +114,69 @@ class PriceResource(ModelResource):
 		return super(EnvironmentResource, self).obj_create(bundle, request, product__owner=request.user)
 
 
+#Accounts resources
+class PatronResource(ModelResource):
+	class Meta:
+		queryset = Patron.objects.all()
+		resource_name = 'accounts/patron'
+		list_allowed_methods = ['get']
+		detail_allowed_methods = ['get', 'post', 'put']
+		authentication = SessionAuthentication()
+
+	def apply_authorization_limits(self, request, object_list):
+		return object_list.filter(pk=request.user.pk)
+
+
+class AddressResource(ModelResource):
+	class Meta:
+		queryset = Address.objects.all()
+		resource_name = 'accounts/address'
+		list_allowed_methods = ['get', 'put', 'delete']
+		detail_allowed_methods = ['get', 'post', 'put', 'delete']
+		authentication = SessionAuthentication()
+
+	def apply_authorization_limits(self, request, object_list):
+		return object_list.filter(patron=request.user)
+
+
+class PhoneNumberResource(ModelResource):
+	class Meta:
+		queryset = PhoneNumber.objects.all()
+		resource_name = 'accounts/phone_number'
+		list_allowed_methods = ['get', 'put', 'delete']
+		detail_allowed_methods = ['get', 'post', 'put', 'delete']
+		authentication = SessionAuthentication()
+
+	def apply_authorization_limits(self, request, object_list):
+		return object_list.filter(patron=request.user)
+
+
+class SubscriptionResource(ModelResource):
+	class Meta:
+		queryset = Subscription.objects.all()
+		resource_name = 'accounts/subscription'
+		list_allowed_methods = ['get']
+		detail_allowed_methods = ['get', 'post', 'put']
+		authentication = SessionAuthentication()
+
+	def apply_authorization_limits(self, request, object_list):
+		return object_list.filter(patron=request.user)
+
+
+class CreditCardResource(ModelResource):
+	class Meta:
+		queryset = CreditCard.objects.all()
+		resource_name = 'accounts/credit_card'
+		list_allowed_methods = ['get']
+		detail_allowed_methods = ['get', 'post']
+		excludes = ['card_number']
+		authentication = SessionAuthentication()
+
+	def apply_authorization_limits(self, request, object_list):
+		return object_list.filter(holder=request.user)
+
+
+#Events resources
 class PageViewResource(Resource):
 	class Meta:
 		resource_name = 'pageviews'
@@ -156,9 +219,9 @@ class PageViewResource(Resource):
 		return self.create_response(request, object_list)
 
 
-class RedirectionResource(Resource):
+class RedirectionEventResource(Resource):
 	class Meta:
-		resource_name = 'redirections'
+		resource_name = 'redirection_events'
 		authentication = SessionAuthentication()
 
 	def override_urls(self):
@@ -195,9 +258,9 @@ class RedirectionResource(Resource):
 		return self.create_response(request, object_list)
 
 
-class PhoneResource(Resource):
+class PhoneEventResource(Resource):
 	class Meta:
-		resource_name = 'phones'
+		resource_name = 'phone_events'
 		authentication = SessionAuthentication()
 
 	def override_urls(self):
@@ -234,9 +297,9 @@ class PhoneResource(Resource):
 		return self.create_response(request, object_list)
 
 
-class AddressResource(Resource):
+class AddressEventResource(Resource):
 	class Meta:
-		resource_name = 'addresses'
+		resource_name = 'address_events'
 		authentication = SessionAuthentication()
 
 	def override_urls(self):
@@ -281,6 +344,11 @@ api_v1.register(CategoryResource())
 api_v1.register(PictureResource())
 api_v1.register(PriceResource())
 api_v1.register(PageViewResource())
-api_v1.register(RedirectionResource())
-api_v1.register(PhoneResource())
+api_v1.register(RedirectionEventResource())
+api_v1.register(PhoneEventResource())
+api_v1.register(AddressEventResource())
+api_v1.register(PatronResource())
 api_v1.register(AddressResource())
+api_v1.register(PhoneNumberResource())
+api_v1.register(SubscriptionResource())
+api_v1.register(CreditCardResource())
