@@ -101,11 +101,11 @@ class GoogleAnalyticsSetStats(object):
       		dimensions='ga:date,ga:week,ga:month,ga:year,%s' % self.dimensions, 
       		filters='%s' % self.filters
       	).execute()
-
+		print self.filters
 		data = defaultdict(int)
 		stats = []
 
-		if result['rows']:
+		try:
 			for row in result['rows']:
 				if interval == 'days':
 					date = datetime.datetime.strptime(row[0], '%Y%m%d')
@@ -125,6 +125,6 @@ class GoogleAnalyticsSetStats(object):
 
 			return stats, result['rows']
 
-		else:
+		except:
 			return stats, []
 
