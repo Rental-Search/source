@@ -176,7 +176,7 @@ class CreditCardResource(ModelResource):
 		return object_list.filter(holder=request.user)
 
 
-#Events resources
+#Google Anamytics resources
 class PageViewResource(Resource):
 	class Meta:
 		resource_name = 'pageviews'
