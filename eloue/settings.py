@@ -265,6 +265,15 @@ PIPELINE_CSS = {
             'media': 'screen',
         }
     },
+    'proapp': {
+        'source_filenames': (
+            'proapp/less/app.less',
+        ),
+        'output_filename': 'css/proapp.css',
+        'extra_context': {
+            'media': 'screen',
+        },
+    }
 }
 
 PIPELINE_JS = {
@@ -280,8 +289,31 @@ PIPELINE_JS = {
             'js/jquery.cookie.js',
             'js/jquery.cycle.all.latest.js',
             'js/application2.js',
-            ),
+        ),
         'output_filename': 'js/application2r.js',
+        'extra_context': {
+            'defer': False,
+        },
+    },
+    'proapp': {
+        'source_filenames': (
+            'proapp/js/libs/jquery.js',
+            'proapp/js/libs/underscore-min.js',
+            'proapp/js/libs/backbone-min.js',
+            'proapp/js/libs/bootstrap/bootstrap-transition.js',
+            'proapp/js/libs/bootstrap/bootstrap-alert.js',
+            'proapp/js/libs/bootstrap/bootstrap-modal.js',
+            'proapp/js/libs/bootstrap/bootstrap-dropdown.js',
+            'proapp/js/libs/bootstrap/bootstrap-scrollspy.js',
+            'proapp/js/libs/bootstrap/bootstrap-tab.js',
+            'proapp/js/libs/bootstrap/bootstrap-tooltip.js',
+            'proapp/js/libs/bootstrap/bootstrap-popover.js',
+            'proapp/js/libs/bootstrap/bootstrap-button.js',
+            'proapp/js/libs/bootstrap/bootstrap-collapse.js',
+            'proapp/js/libs/bootstrap/bootstrap-carousel.js',
+            'proapp/js/libs/bootstrap/bootstrap-typeahead.js',
+        ),
+        'output_filename': 'js/proapp.js',
         'extra_context': {
             'defer': False,
         },

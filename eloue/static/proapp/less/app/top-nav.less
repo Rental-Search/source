@@ -1,0 +1,46 @@
+#pro-app {
+	.nav-pills > .active > a, .nav-pills > .active > a:hover {
+		background-color: #5DB5E6;
+		color: #fff;
+		text-shadow: 0 -1px 0 rgba(0,0,0,.20);
+	}
+
+	.nav-pills > li > a:hover { background-color: #ebf2f5; }
+
+	.top-nav {
+
+		li {
+			position: relative;
+			width: 110px; margin-right: 20px;
+
+			&.active {
+				.glyphicons-icon { background-image: url(../img/glyphicons/glyphicons-white.png); }
+
+				.arrow-tab {
+					background: transparent url(../img/app/arrow_tab.png) no-repeat 0 0;
+					display: block;
+					position: absolute;
+					bottom: -17px;
+					left: 37px;
+					height: 15px;
+					width: 30px;
+					z-index: -1;
+				}
+			}
+		}
+		
+		a { 
+			text-align: center;
+			font-weight: bold;
+			color: #364c59;
+		}
+
+		.glyphicons-icon {
+			&.home { background-position: 10px -85px; }
+			&.stats { background-position: 7px -181px; }
+			&.envelope { background-position: 7px -37px; }
+			&.show_thumbnails_with_lines { background-position: -327px -709px; }
+			&.nameplate { background-position: -87px -1669px; }
+		}
+	}
+}

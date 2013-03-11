@@ -1,0 +1,42 @@
+#pro-app {
+	.content-pill {
+		background: #fff;
+		.border-radius(5px);
+		border: 1px solid #b2ced9;
+		border-bottom: 3px solid #b2ced9;
+		.box-shadow(0 0 0 5px rgb(240,245,247));
+
+		.tabs-left {
+			.nav-tabs {
+				padding: 20px 0 10px 10px;
+				margin-bottom: 0px;
+				margin-right: 0px;
+				border-right: none;
+
+				.active > a, .active > a:hover {
+					border-color: #b2ced9 transparent #b2ced9 #b2ced9;
+					color: #364c59;
+					background-color: #fff;
+					margin-right: -1px;
+				}
+				li > a:hover { 
+					background-color: #ebf2f5;
+					border-color: #ebf2f5 transparent #ebf2f5 #ebf2f5;
+					margin-right: 0px;
+				}
+
+				a {
+					line-height: 14px;
+					padding-top: 11px;
+					padding-bottom: 11px;
+					color: #364c59;
+				}
+			}
+		}
+
+		.tab-content {
+			border-left: 1px solid #b2ced9;
+			padding-left: 20px;
+		}
+	}
+}

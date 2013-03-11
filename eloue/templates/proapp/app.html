@@ -1,0 +1,42 @@
+{% load compressed %}
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<title>Pro App</title>
+		{% block head %}
+			{% compressed_css 'proapp' %}
+		{% endblock %}
+	</head>
+	<body>
+		<div id="pro-app" class="container-fluid">
+			<ul class="nav nav-pills top-nav">
+				<li id="welcome-pill">
+					<a href="#"><i class="glyphicons-icon home blue"></i><br>Accueil</a>
+					<span class="arrow-tab"></span>
+				</li>
+				<li id="analytics-pill">
+					<a href="#analytics"><i class="glyphicons-icon stats blue"></i><br>Statistiques</a>
+					<span class="arrow-tab"></span>
+				</li>
+				<li id="message-pill">
+					<a href="#message"><i class="glyphicons-icon envelope blue"></i><br>Messages</a>
+					<span class="arrow-tab"></span>
+				</li>
+				<li id="ads-pill">
+					<a href="#ads"><i class="glyphicons-icon show_thumbnails_with_lines blue"></i><br>Annonces</a>
+					<span class="arrow-tab"></span>
+				</li>
+				<li id="parameters-pill" class="active">
+					<a href="#parameters"><i class="glyphicons-icon nameplate"></i><br>Paramètres</a>
+					<span class="arrow-tab"></span>
+				</li>
+		    </ul><!-- nav-pills top-nav -->
+		    <div class="content-pill">
+		    	
+		    </div>{# content-pill #}
+		</div>{# pro-app #}
+		{% compressed_js 'proapp' %}	
+	</body>
+</html
