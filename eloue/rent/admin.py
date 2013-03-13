@@ -81,10 +81,11 @@ class CommentAdmin(admin.ModelAdmin):
     raw_id_fields = ('booking',)
     fieldsets = (
         (None, {
-            'fields': ('comment', 'note', 'booking')
+            'fields': ('comment', 'note', 'booking', 'created_at')
         }),
     )
-    list_display = ('comment', 'note', 'booking')
+    list_display = ('comment', 'note', 'booking', 'created_at')
+    readonly_fields = ('created_at',)
 
 class SinisterAdmin(admin.ModelAdmin):
     def booking(obj):
