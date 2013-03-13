@@ -78,12 +78,13 @@ class BookingAdmin(CurrentSiteAdmin):
     inlines = [BookingLogInline, ]
 
 class CommentAdmin(admin.ModelAdmin):
+    raw_id_fields = ('booking',)
     fieldsets = (
         (None, {
-            'fields': ('comment', 'note')
+            'fields': ('comment', 'note', 'booking')
         }),
     )
-    list_display = ('comment', 'note')
+    list_display = ('comment', 'note', 'booking')
 
 class SinisterAdmin(admin.ModelAdmin):
     def booking(obj):
