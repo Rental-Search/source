@@ -295,11 +295,12 @@ PIPELINE_JS = {
             'defer': False,
         },
     },
-    'proapp': {
+    'proapplibs': {
         'source_filenames': (
             'proapp/js/libs/jquery.js',
             'proapp/js/libs/underscore-min.js',
             'proapp/js/libs/backbone-min.js',
+            'proapp/js/libs/backbone.layoutmanager.js',
             'proapp/js/libs/bootstrap/bootstrap-transition.js',
             'proapp/js/libs/bootstrap/bootstrap-alert.js',
             'proapp/js/libs/bootstrap/bootstrap-modal.js',
@@ -313,11 +314,23 @@ PIPELINE_JS = {
             'proapp/js/libs/bootstrap/bootstrap-carousel.js',
             'proapp/js/libs/bootstrap/bootstrap-typeahead.js',
         ),
-        'output_filename': 'js/proapp.js',
+        'output_filename': 'js/proapplibs.js',
         'extra_context': {
             'defer': False,
         },
     },
+
+    'proapp': {
+        'source_filenames': (
+            'proapp/js/views/layout.js',
+            'proapp/js/app.js',
+        ),
+        'output_filename': 'js/proapplibs.js',
+        'extra_context': {
+            'defer': False,
+        },
+    },
+
 }
 
 
