@@ -10,8 +10,15 @@
 		{% endblock %}
 	</head>
 	<body>
+
+
 		<script type="text/template" id="navpillsitem-template">
-			<a href="#"><i class="glyphicons-icon <%- icon %> blue"></i><br><%- label %></a>
+			<a href="<%= path %>"><i class="glyphicons-icon <%= icon %> blue"></i><br><%= label %></a>
+			<span class="arrow-tab"></span>
+		</script>
+
+		<script type="text/template" id="navpillcontent-template">
+			<h1><%= name %></h1>
 		</script>
 
 		{% compressed_js 'proapplibs' %}
