@@ -15,8 +15,6 @@ app.LayoutView = Backbone.View.extend({
 
 	render: function() {
 		this.renderNavPill();
-		//this.renderContentPill();
-		this.$el.appendTo("body");
 		return this;
 	},
 

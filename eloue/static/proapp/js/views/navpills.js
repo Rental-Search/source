@@ -18,26 +18,33 @@ app.NavPillsView = Backbone.View.extend({
 		var self = this;
 
 		homeNavPillContentView = new app.NavPillContentView();
-		homeNavPillContentView.navPillsItemView = new app.NavPillsItemView({icon: "home", labelName: "Acceuil", itemName: "home"});
+		homeNavPillContentView.id = 'home';
+		homeNavPillContentView.navPillsItemView = new app.NavPillsItemView({icon: "home", labelName: "Acceuil"});
 		this.navPillContentViews.push(homeNavPillContentView);
+
 		statsNavPillContentView = new app.NavPillContentView();
-		statsNavPillContentView.navPillsItemView = new app.NavPillsItemView({icon: "stats", labelName: "Statistique", path: "stats/", itemName: "stats"});
+		statsNavPillContentView.id = 'stats';
+		statsNavPillContentView.navPillsItemView = new app.NavPillsItemView({icon: "stats", labelName: "Statistique", path: "stats/"});
 		this.navPillContentViews.push(statsNavPillContentView);
+
 		messagesNavPillContentView = new app.NavPillContentView();
-		messagesNavPillContentView.navPillsItemView = new app.NavPillsItemView({icon: "envelope", labelName: "Messages", path: "messages/", itemName: "messages"});
+		messagesNavPillContentView.id = 'messages';
+		messagesNavPillContentView.navPillsItemView = new app.NavPillsItemView({icon: "envelope", labelName: "Messages", path: "messages/"});
 		this.navPillContentViews.push(messagesNavPillContentView);
+
 		adsNavPillContentView = new app.NavPillContentView();
-		adsNavPillContentView.navPillsItemView = new app.NavPillsItemView({icon: "show_thumbnails_with_lines", labelName: "Annonces", path: "ads/", itemName: "ads"});
+		adsNavPillContentView.id = 'ads';
+		adsNavPillContentView.navPillsItemView = new app.NavPillsItemView({icon: "show_thumbnails_with_lines", labelName: "Annonces", path: "ads/"});
 		this.navPillContentViews.push(adsNavPillContentView);
+
 		settingsNavPillContentView = new app.NavPillContentView();
-		settingsNavPillContentView.navPillsItemView = new app.NavPillsItemView({icon: "nameplate", labelName: "Paramètres", path: "settings/", itemName: "settings"});
+		settingsNavPillContentView.id = 'settings';
+		settingsNavPillContentView.navPillsItemView = new app.NavPillsItemView({icon: "nameplate", labelName: "Paramètres", path: "settings/"});
 		this.navPillContentViews.push(settingsNavPillContentView);
 
 		_.each(this.navPillContentViews, function(view) {
-			app.appRouter.on('route:'+view.navPillsItemView.itemName, self.switchPill, [self, view]);
+			app.appRouter.on('route:'+view.id, self.switchPill, [self, view]);
 		});
-
-		//self.selectedPillContentView = _.first(this.navPillContentViews);
 	},
 
 	render: function() {
