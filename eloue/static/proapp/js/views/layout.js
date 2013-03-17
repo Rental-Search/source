@@ -19,7 +19,8 @@ app.LayoutView = Backbone.View.extend({
 	},
 
 	renderContentPill: function() {
-		if (this.$el.children(".content-pill").length) this.$el.children(".content-pill").remove();
-		this.$el.append(this.navPillsView.selectedPillContentView.render().el);
+		this.$el.children(".content-pill").hide();
+		this.$el.append(this.navPillsView.selectedPillContentView.$el.show());
+		this.navPillsView.selectedPillContentView.render()
 	}
 });

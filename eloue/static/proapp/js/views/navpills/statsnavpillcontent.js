@@ -7,6 +7,8 @@ app.StatsNavPillContentView = app.NavPillContentView.extend({
 	className: 'content-pill tabbable tabs-left',
 
 	initialize: function() {
+		console.log("init stats content pill");
+
 		this.statsNavtabsView = new app.NavTabsView();
 		
 		var overviewNavTabContentView = new app.NavTabContentView()
@@ -22,21 +24,21 @@ app.StatsNavPillContentView = app.NavPillContentView.extend({
 		this.statsNavtabsView.pushNavTabContentViews(phoneNavTabContentView);
 
 		this.statsNavtabsView.selectTabItem(overviewNavTabContentView);
-		this.statsNavtabsView.on('selectedtabcontentview:change', this.renderTabContent, this);
 	},
 
-	render: function() {	
+	render: function() {
+		this.statsNavtabsView.on('selectedtabcontentview:change', this.renderTabContent, this);
 		this.renderNavTabs();
 		this.renderTabContent();
 		return this;
 	},
 
 	renderNavTabs: function() {
-		this.$el.append(this.statsNavtabsView.render().el);
+		this.$el.append(this.statsNavtabsView.$el);
+		this.statsNavtabsView.render();
 	},
 
 	renderTabContent: function() {
-		if(this.$el.children(".tab-content").length) this.$el.children(".tab-content").remove();
 		this.$el.append(this.statsNavtabsView.selectedTabContentView.render().el)
 	}
 });

@@ -11,8 +11,6 @@ app.NavPillsView = Backbone.View.extend({
 
 	selectedPillContentView: '',
 
-	root: '/pro/dashboard/',
-
 
 	initialize: function() {
 		var self = this;
@@ -59,22 +57,23 @@ app.NavPillsView = Backbone.View.extend({
 		this.$el.append(view.navPillsItemView.render().el);
 	},
 
-	selectPillItem: function() {
+	selectPillItem: function(view) {
+		this.selectedPillContentView = view;
 		this.selectedPillContentView.navPillsItemView.setActiveItem();
 		this.trigger('navpillcontentselected:change');
 	},
 
 	unselectPillItem: function() {
-		if (this.selectedPillContentView.navPillsItemView) this.selectedPillContentView.navPillsItemView.setUnactiveItem();
+		if (this.selectedPillContentView.navPillsItemView) {
+			this.selectedPillContentView.navPillsItemView.setUnactiveItem();
+		}
 	},
 
 	switchPill: function() {
-		console.log("switchPill");
 		var self = this[0];
 		var view = this[1];
 		self.unselectPillItem();
-		self.selectedPillContentView = view;
-		self.selectPillItem();
+		self.selectPillItem(view);
 	}
 
 });

@@ -11,7 +11,7 @@ app.NavTabsView = Backbone.View.extend({
 	selectedTabContentView: '',
 
 	initialize: function() {
-
+		console.log("init nav tabs");
 	},
 
 	pushNavTabContentViews: function(view) {
@@ -20,21 +20,30 @@ app.NavTabsView = Backbone.View.extend({
 	},
 
 	render: function() {
+		console.log("render nav tabs");
 		self = this;
 		_.each(self.navTabContentViews, function(view) {
-			self.$el.append(view.navTabsItemView.render().el);
+			self.$el.append(view.navTabsItemView.$el);
+			view.navTabsItemView.render();
 		});
+
+
 		return self;
 	},
 
 	selectTabItem: function(view) {
+		console.log("selected tab");
 		this.selectedTabContentView = view;
 		this.selectedTabContentView.navTabsItemView.setActiveItem();
 		this.trigger('selectedtabcontentview:change');
 	},
 
 	unselectTabItem: function() {
-		if( this.selectedTabContentView.navTabsItemView) this.selectedTabContentView.navTabsItemView.setUnactiveItem();
+		if( this.selectedTabContentView.navTabsItemView) {
+			this.selectedTabContentView.navTabsItemView.setUnactiveItem();
+			this.selectedTabContentView.remove();
+		}
+			
 	},
 
 	switchTab: function() {
