@@ -6553,7 +6553,7 @@ a.badge:focus {
   height: 14px;
   line-height: 14px;
   vertical-align: text-top;
-  background-image: url(../../img/glyphicons_halflings.png);
+  background-image: url(../img/glyphicons/glyphicons_halflings.png);
   background-position: 0 0;
   background-repeat: no-repeat;
   vertical-align: top;
@@ -6562,10 +6562,10 @@ a.badge:focus {
   *margin-right: .3em;
 }
 .halflings-icon.white {
-  background-image: url(../img/glyphicons_halflings-white.png);
+  background-image: url(../img/glyphicons/glyphicons_halflings-white.png);
 }
 .halflings-icon.blue {
-  background-image: url(../img/glyphicons_halflings-blue.png);
+  background-image: url(../img/glyphicons/glyphicons_halflings-blue.png);
 }
 .halflings-icon.glass {
   background-position: 0 0;
@@ -7112,31 +7112,31 @@ body {
   -moz-box-shadow: 0 0 0 5px #f0f5f7;
   box-shadow: 0 0 0 5px #f0f5f7;
 }
-#pro-app .content-pill .tabs-left .nav-tabs {
+#pro-app .tabs-left .nav-tabs {
   padding: 20px 0 10px 10px;
   margin-bottom: 0px;
   margin-right: 0px;
   border-right: none;
 }
-#pro-app .content-pill .tabs-left .nav-tabs .active > a,
-#pro-app .content-pill .tabs-left .nav-tabs .active > a:hover {
+#pro-app .tabs-left .nav-tabs .active > a,
+#pro-app .tabs-left .nav-tabs .active > a:hover {
   border-color: #b2ced9 transparent #b2ced9 #b2ced9;
   color: #364c59;
   background-color: #fff;
   margin-right: -1px;
 }
-#pro-app .content-pill .tabs-left .nav-tabs li > a:hover {
+#pro-app .tabs-left .nav-tabs li > a:hover {
   background-color: #ebf2f5;
   border-color: #ebf2f5 transparent #ebf2f5 #ebf2f5;
   margin-right: 0px;
 }
-#pro-app .content-pill .tabs-left .nav-tabs a {
+#pro-app .tabs-left .nav-tabs a {
   line-height: 14px;
   padding-top: 11px;
   padding-bottom: 11px;
   color: #364c59;
 }
-#pro-app .content-pill .tab-content {
+#pro-app .tab-content {
   border-left: 1px solid #b2ced9;
   padding-left: 20px;
 }

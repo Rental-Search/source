@@ -17,27 +17,27 @@ app.NavPillsView = Backbone.View.extend({
 	initialize: function() {
 		var self = this;
 
-		homeNavPillContentView = new app.NavPillContentView();
+		var homeNavPillContentView = new app.NavPillContentView();
 		homeNavPillContentView.id = 'home';
 		homeNavPillContentView.navPillsItemView = new app.NavPillsItemView({icon: "home", labelName: "Acceuil"});
 		this.navPillContentViews.push(homeNavPillContentView);
 
-		statsNavPillContentView = new app.NavPillContentView();
+		var statsNavPillContentView = new app.StatsNavPillContentView();
 		statsNavPillContentView.id = 'stats';
 		statsNavPillContentView.navPillsItemView = new app.NavPillsItemView({icon: "stats", labelName: "Statistique", path: "stats/"});
 		this.navPillContentViews.push(statsNavPillContentView);
 
-		messagesNavPillContentView = new app.NavPillContentView();
+		var messagesNavPillContentView = new app.NavPillContentView();
 		messagesNavPillContentView.id = 'messages';
 		messagesNavPillContentView.navPillsItemView = new app.NavPillsItemView({icon: "envelope", labelName: "Messages", path: "messages/"});
 		this.navPillContentViews.push(messagesNavPillContentView);
 
-		adsNavPillContentView = new app.NavPillContentView();
+		var adsNavPillContentView = new app.NavPillContentView();
 		adsNavPillContentView.id = 'ads';
 		adsNavPillContentView.navPillsItemView = new app.NavPillsItemView({icon: "show_thumbnails_with_lines", labelName: "Annonces", path: "ads/"});
 		this.navPillContentViews.push(adsNavPillContentView);
 
-		settingsNavPillContentView = new app.NavPillContentView();
+		var settingsNavPillContentView = new app.NavPillContentView();
 		settingsNavPillContentView.id = 'settings';
 		settingsNavPillContentView.navPillsItemView = new app.NavPillsItemView({icon: "nameplate", labelName: "Paramètres", path: "settings/"});
 		this.navPillContentViews.push(settingsNavPillContentView);
@@ -69,6 +69,7 @@ app.NavPillsView = Backbone.View.extend({
 	},
 
 	switchPill: function() {
+		console.log("switchPill");
 		var self = this[0];
 		var view = this[1];
 		self.unselectPillItem();

@@ -9,21 +9,17 @@ app.LayoutView = Backbone.View.extend({
 
 	initialize: function() {
 		this.navPillsView = new app.NavPillsView();
-		this.navPillsView.on('navpillcontentselected:change', this.renderContentPill, this)
+		this.navPillsView.on('navpillcontentselected:change', this.renderContentPill, this);
 		this.render();
 	},
 
 	render: function() {
-		this.renderNavPill();
-		return this;
-	},
-
-	renderNavPill: function() {
 		this.$el.append(this.navPillsView.render().el);
+		return this;
 	},
 
 	renderContentPill: function() {
 		if (this.$el.children(".content-pill").length) this.$el.children(".content-pill").remove();
 		this.$el.append(this.navPillsView.selectedPillContentView.render().el);
-	},
+	}
 });

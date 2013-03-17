@@ -21,6 +21,17 @@
 			<h1><%= name %></h1>
 		</script>
 
+		<script type="text/template" id="navtabsitem-template">
+			<a href="<%= path %>">
+				<i class="halflings-icon <%= icon %> blue"></i>  
+				<%= label %>
+			</a>
+		</script>
+
+		<script type="text/template" id="navtabcontent-template">
+			<h3><%= name %></h3>
+		</script>
+
 		{% compressed_js 'proapplibs' %}
 		{% compressed_js 'proapp' %}	
 	</body>

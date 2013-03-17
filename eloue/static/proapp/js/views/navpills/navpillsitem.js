@@ -14,8 +14,6 @@ app.NavPillsItemView = Backbone.View.extend({
 
 	labelName: '',
 
-	itemName: '',
-
 	events: {
 		'click a': 'selectedItem'
 	},
@@ -24,7 +22,6 @@ app.NavPillsItemView = Backbone.View.extend({
 		if (this.options.path) this.path = this.options.path;
 		if (this.options.icon) this.icon = this.options.icon;
 		if (this.options.labelName) this.labelName = this.options.labelName;
-		if (this.options.itemName) this.itemName = this.options.itemName;
 	},
 
 	render: function() {

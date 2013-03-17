@@ -322,9 +322,13 @@ PIPELINE_JS = {
 
     'proapp': {
         'source_filenames': (
-            'proapp/js/views/navpillcontent.js',
-            'proapp/js/views/navpillsitem.js',
-            'proapp/js/views/navpills.js',
+            'proapp/js/views/navtabs/navtabsitem.js',
+            'proapp/js/views/navtabs/navtabcontent.js',
+            'proapp/js/views/navtabs/navtabs.js',
+            'proapp/js/views/navpills/navpillcontent.js',
+            'proapp/js/views/navpills/statsnavpillcontent.js',
+            'proapp/js/views/navpills/navpillsitem.js',
+            'proapp/js/views/navpills/navpills.js',
             'proapp/js/views/layout.js',
             'proapp/js/routers/routes.js',
             'proapp/js/app.js',
