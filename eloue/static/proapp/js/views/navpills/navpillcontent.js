@@ -11,7 +11,7 @@ app.NavPillContentView = Backbone.View.extend({
 	navPillsItemView: '',
 
 	initialize: function() {
-
+		
 	},
 
 	render: function() {

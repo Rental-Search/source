@@ -26,8 +26,6 @@ app.NavTabsView = Backbone.View.extend({
 			self.$el.append(view.navTabsItemView.$el);
 			view.navTabsItemView.render();
 		});
-
-
 		return self;
 	},
 

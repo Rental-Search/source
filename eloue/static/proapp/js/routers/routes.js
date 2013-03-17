@@ -10,5 +10,5 @@ var Workspace = Backbone.Router.extend({
 		'messages/': 		'messages',
 		'ads/': 			'ads',
 		'settings/':		'settings',
-	}
+	},
 });
