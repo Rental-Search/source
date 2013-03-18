@@ -7,36 +7,36 @@ app.NavPillsView = Backbone.View.extend({
 	tagName: 'ul',
 	className: 'nav nav-pills  top-nav',
 
-	navPillContentViews: [],
+	navPillsItemViews: [],
 
-	selectedPillContentView: '',
+	selectedPillItemView: '',
 
-	pushNavPillContentViews: function(view) {
-		this.navPillContentViews.push(view);
-		app.appRouter.on('route:'+view.id, this.switchPill, [this,view]);
+	pushNavPillItemView: function(view){
+		this.navPillsItemViews.push(view);
+		view.on('selectedPillItem:change', this.switchPill, [this, view]);
 	},
 
 	render: function() {
 		var self = this;
-		_.each(this.navPillContentViews, function(view) {
+		_.each(self.navPillsItemViews, function(view) {
 			self.renderPillItem(view);
 		});
 		return self;
 	},
 
 	renderPillItem: function(view) {
-		this.$el.append(view.navPillsItemView.render().el);
+		this.$el.append(view.$el);
+		view.render();
 	},
 
 	selectPillItem: function(view) {
-		this.selectedPillContentView = view;
-		this.selectedPillContentView.navPillsItemView.setActiveItem();
-		this.trigger('navpillcontentselected:change');
+		this.selectedPillItemView = view;
+		this.selectedPillItemView.setActiveItem();
 	},
 
 	unselectPillItem: function() {
-		if (this.selectedPillContentView.navPillsItemView) {
-			this.selectedPillContentView.navPillsItemView.setUnactiveItem();
+		if (this.selectedPillItemView) {
+			this.selectedPillItemView.setUnactiveItem();
 		}
 	},
 

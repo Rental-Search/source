@@ -8,14 +8,12 @@ app.NavPillContentView = Backbone.View.extend({
 
 	template: _.template($("#navpillcontent-template").html()),
 
-	navPillsItemView: '',
-
 	initialize: function() {
-		
+
 	},
 
 	render: function() {
-		this.$el.html(this.template({'name': this.navPillsItemView.labelName}));
+		this.$el.html(this.template({'name': this.id }));
 		return this;
 	}
 });

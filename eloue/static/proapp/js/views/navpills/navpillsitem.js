@@ -40,5 +40,9 @@ app.NavPillsItemView = Backbone.View.extend({
 	selectedItem: function(e) {
 		e.preventDefault();
 		app.appRouter.navigate(this.path, {trigger: true});
-	}
+	},
+
+	setSelectedPillItem: function() {
+		this.trigger('selectedPillItem:change');
+	} 
 });
