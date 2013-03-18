@@ -7,11 +7,11 @@ app.NavTabsItemView = Backbone.View.extend({
 
 	template: _.template($("#navtabsitem-template").html()),
 
-	path: '',
+	path: null,
 
-	icon: '',
+	icon: null,
 
-	labalName: '',
+	labelName: null,
 
 	events: {
 		'click a': 'selectedItem'
@@ -24,23 +24,20 @@ app.NavTabsItemView = Backbone.View.extend({
 	},
 
 	render: function() {
-		console.log("render item tab");
-		this.delegateEvents();
 		this.$el.html(this.template({'icon': this.icon, 'label': this.labelName, 'path': this.path}));
 		return this;
-	},
-
-	setActiveItem: function() {
-		this.$el.addClass("active");
 	},
 
 	setUnactiveItem: function() {
 		this.$el.removeClass("active");
 	},
 
+	setActiveItem: function() {
+		this.$el.addClass("active");
+	},
+
 	selectedItem: function(e) {
-		console.log("click on tab");
 		e.preventDefault();
-		this.trigger('navtabsitemview:selected');
+		this.trigger('selectedTabItem:change');
 	}
 });

@@ -4,41 +4,44 @@ var app = app || {};
 
 
 app.StatsNavPillContentView = app.NavPillContentView.extend({
+	id: 'content-stats',
+
 	className: 'content-pill tabbable tabs-left',
 
+	navTabsView: null,
+
+	currentNavTabContent: null,
+
 	initialize: function() {
-		console.log("init stats content pill");
+		this.navTabsView = new app.NavTabsView();
+		this.navTabsView.id = 'nav-tabs-stats';
+		this.navTabsView.pushNavTabContentViews(new app.NavTabsItemView({icon: 'dashboard', path: 'stats/', labelName: 'Vue d\'ensemble'}));
+		this.navTabsView.pushNavTabContentViews(new app.NavTabsItemView({icon: 'user', path: 'stats/traffic/', labelName: 'Visite'}));
+		this.navTabsView.pushNavTabContentViews(new app.NavTabsItemView({icon: 'phone', path: 'stats/phone/', labelName: 'Appels'}));
+	},
 
-		this.statsNavtabsView = new app.NavTabsView();
-		
-		var overviewNavTabContentView = new app.NavTabContentView()
-		overviewNavTabContentView.navTabsItemView = new app.NavTabsItemView({icon: 'dashboard', path: 'stats/', labelName: 'Vue d\'ensemble'});
-		this.statsNavtabsView.pushNavTabContentViews(overviewNavTabContentView);
-
-		var trafficNavTabContentView = new app.NavTabContentView()
-		trafficNavTabContentView.navTabsItemView = new app.NavTabsItemView({icon: 'user', path: 'stats/traffic/', labelName: 'Visite'});;
-		this.statsNavtabsView.pushNavTabContentViews(trafficNavTabContentView);
-
-		var phoneNavTabContentView = new app.NavTabContentView()
-		phoneNavTabContentView.navTabsItemView = new app.NavTabsItemView({icon: 'phone', path: 'stats/phone/', labelName: 'Appels'});;
-		this.statsNavtabsView.pushNavTabContentViews(phoneNavTabContentView);
-
-		this.statsNavtabsView.selectTabItem(overviewNavTabContentView);
+	setCurrentNavTabContent: function(navTabContentView) {
+		if (this.currentNavTabContent) {
+			this.currentNavTabContent.close();
+		}
+		this.currentNavTabContent = navTabContentView;
 	},
 
 	render: function() {
-		this.statsNavtabsView.on('selectedtabcontentview:change', this.renderTabContent, this);
-		this.renderNavTabs();
-		this.renderTabContent();
+		this.$el.prepend(this.navTabsView.$el);
+		this.navTabsView.render();
+		console.log(this.navTabsView.cid);
 		return this;
 	},
 
-	renderNavTabs: function() {
-		this.$el.append(this.statsNavtabsView.$el);
-		this.statsNavtabsView.render();
+	renderNavTabContent: function() {
+		if (this.currentNavTabContent) {
+			this.$el.append(this.currentNavTabContent.$el);
+			this.currentNavTabContent.render();
+		}
 	},
 
-	renderTabContent: function() {
-		this.$el.append(this.statsNavtabsView.selectedTabContentView.render().el)
+	onClose: function() {
+		this.navTabsView.close();
 	}
 });

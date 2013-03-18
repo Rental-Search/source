@@ -9,6 +9,8 @@ app.LayoutView = Backbone.View.extend({
 
 	navPillsView: new app.NavPillsView(),
 
+	currentNavPillContent: null,
+
 	initialize: function() {
 		this.navPillsView.pushNavPillItemView(new app.NavPillsItemView({icon: "home", labelName: "Acceuil"}));
 		this.navPillsView.pushNavPillItemView(new app.NavPillsItemView({icon: "stats", labelName: "Statistique", path: "stats/"}));
@@ -17,14 +19,23 @@ app.LayoutView = Backbone.View.extend({
 		this.navPillsView.pushNavPillItemView(new app.NavPillsItemView({icon: "nameplate", labelName: "Paramètres", path: "settings/"}));
 	},
 
+	setCurrentNavPillContent: function(navPillContentView) {
+		if (this.currentNavPillContent != null) {
+			this.currentNavPillContent.close();
+		}
+		this.currentNavPillContent = navPillContentView;
+	},
+
 	render: function() {
 		this.$el.prepend(this.navPillsView.$el);
 		this.navPillsView.render();
 		return this;
 	},
 
-	renderNavPillContent: function(view) {
-		this.$el.append(view.$el);
-		view.render();
+	renderNavPillContent: function() {
+		if (this.currentNavPillContent) {
+			this.$el.append(this.currentNavPillContent.$el);
+			this.currentNavPillContent.render();
+		}
 	}
 });

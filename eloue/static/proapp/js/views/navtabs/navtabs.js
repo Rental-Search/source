@@ -6,40 +6,41 @@ app.NavTabsView = Backbone.View.extend({
 	tagName: 'ul',
 	className: 'nav nav-tabs',
 
-	navTabContentViews: [],
+	navTabsItemViews: null,
 
-	selectedTabContentView: '',
+	selectedTabItemView: null,
 
 	initialize: function() {
-		console.log("init nav tabs");
+		this.navTabsItemViews = [];
 	},
 
 	pushNavTabContentViews: function(view) {
-		this.navTabContentViews.push(view);
-		view.navTabsItemView.on('navtabsitemview:selected', this.switchTab, [this,view]);
+		this.navTabsItemViews.push(view);
+		view.on('selectedTabItem:change', this.switchTab, [this,view]);
 	},
 
 	render: function() {
-		console.log("render nav tabs");
-		self = this;
-		_.each(self.navTabContentViews, function(view) {
-			self.$el.append(view.navTabsItemView.$el);
-			view.navTabsItemView.render();
+		var self = this;
+		_.each(self.navTabsItemViews, function(view) {
+			self.renderTabItem(view);
 		});
-		return self;
+		delete self;
+		return this;
+	},
+
+	renderTabItem: function(view) {
+		this.$el.append(view.$el);
+		view.render();
 	},
 
 	selectTabItem: function(view) {
-		console.log("selected tab");
-		this.selectedTabContentView = view;
-		this.selectedTabContentView.navTabsItemView.setActiveItem();
-		this.trigger('selectedtabcontentview:change');
+		this.selectedTabItemView = view;
+		this.selectedTabItemView.setActiveItem();
 	},
 
 	unselectTabItem: function() {
-		if( this.selectedTabContentView.navTabsItemView) {
-			this.selectedTabContentView.navTabsItemView.setUnactiveItem();
-			this.selectedTabContentView.remove();
+		if( this.selectedTabItemView) {
+			this.selectedTabItemView.setUnactiveItem();
 		}
 			
 	},
@@ -49,5 +50,13 @@ app.NavTabsView = Backbone.View.extend({
 		var view = this[1];
 		self.unselectTabItem();
 		self.selectTabItem(view);
+		delete self;
+		delete view;
+	},
+
+	onClose: function() {
+		_.each(this.navTabsItemViews, function(view) {
+			view.close();
+		});
 	}
 });
