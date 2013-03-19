@@ -56,7 +56,7 @@
         {% if product_list %}
             {% if product_list.count > 0 %}
                 {% blocktrans with product_list.count as count and product_list.count|pluralize as pluralize %}
-    	           <h2>{{ count }} annonce{{ pluralize }}</h2>
+    	           <h2>{{ count }} Annonces{{ pluralize }}</h2>
     	       {% endblocktrans %}
             {% else %}
                 <h2>{% trans "Pas d'annonce" %}</h2>
