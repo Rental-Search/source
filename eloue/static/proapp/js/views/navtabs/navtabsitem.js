@@ -38,6 +38,10 @@ app.NavTabsItemView = Backbone.View.extend({
 
 	selectedItem: function(e) {
 		e.preventDefault();
+		app.appRouter.navigate(this.path, {trigger: true});
+	},
+
+	setSelectedTabItem: function() {
 		this.trigger('selectedTabItem:change');
 	}
 });

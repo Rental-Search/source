@@ -7,6 +7,7 @@ var Workspace = Backbone.Router.extend({
 	routes: {
 		'': 				'home',
 		'stats/': 			'stats',
+		'stats/:metric/': 	'stats',
 		'messages/': 		'messages',
 		'ads/': 			'ads',
 		'settings/':		'settings',
@@ -24,11 +25,31 @@ var Workspace = Backbone.Router.extend({
 		app.layoutView.renderNavPillContent();
 	},
 
-	stats: function() {
+	stats: function(metric) {
 		app.layoutView.navPillsView.navPillsItemViews[1].setSelectedPillItem();
-		var statsNavPillContentView = new app.StatsNavPillContentView();
-		app.layoutView.setCurrentNavPillContent(statsNavPillContentView);
-		app.layoutView.renderNavPillContent();
+		
+		if (app.layoutView.currentNavPillContent instanceof app.StatsNavPillContentView) {
+			var statsNavPillContentView = app.layoutView.currentNavPillContent;
+		} else {
+			var statsNavPillContentView = new app.StatsNavPillContentView();
+			app.layoutView.setCurrentNavPillContent(statsNavPillContentView);
+			app.layoutView.renderNavPillContent();
+		}
+
+		if(metric == undefined) {
+			var navTabContentView = new app.NavTabContentView({id: 'overview'});
+			statsNavPillContentView.navTabsView.navTabsItemViews[0].setSelectedTabItem();
+		} else if(metric == 'traffic') {
+			var navTabContentView = new app.NavTabContentView({id: 'visite'});
+			statsNavPillContentView.navTabsView.navTabsItemViews[1].setSelectedTabItem();
+		} else if(metric == 'phone') {
+			var navTabContentView = new app.NavTabContentView({id: 'appels'});
+			statsNavPillContentView.navTabsView.navTabsItemViews[2].setSelectedTabItem();
+		}
+
+		statsNavPillContentView.setCurrentNavTabContentView(navTabContentView);
+		statsNavPillContentView.renderNavTabContent();
+		
 	},
 
 	messages: function() {

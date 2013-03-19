@@ -21,7 +21,8 @@ app.NavPillsView = Backbone.View.extend({
 		_.each(self.navPillsItemViews, function(view) {
 			self.renderPillItem(view);
 		});
-		return self;
+		delete self;
+		return this;
 	},
 
 	renderPillItem: function(view) {

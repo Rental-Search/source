@@ -20,7 +20,7 @@ app.StatsNavPillContentView = app.NavPillContentView.extend({
 		this.navTabsView.pushNavTabContentViews(new app.NavTabsItemView({icon: 'phone', path: 'stats/phone/', labelName: 'Appels'}));
 	},
 
-	setCurrentNavTabContent: function(navTabContentView) {
+	setCurrentNavTabContentView: function(navTabContentView) {
 		if (this.currentNavTabContent) {
 			this.currentNavTabContent.close();
 		}
