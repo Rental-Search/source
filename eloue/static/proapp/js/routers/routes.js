@@ -36,20 +36,22 @@ var Workspace = Backbone.Router.extend({
 			app.layoutView.renderNavPillContent();
 		}
 
-		if(metric == undefined) {
-			var navTabContentView = new app.NavTabContentView({id: 'overview'});
+		if (metric == undefined) {
+			var navTabContentView = new app.NavTabContentView({titleName: 'Vue d\'ensemble'});
 			statsNavPillContentView.navTabsView.navTabsItemViews[0].setSelectedTabItem();
-		} else if(metric == 'traffic') {
-			var navTabContentView = new app.NavTabContentView({id: 'visite'});
+		} else if (metric == 'redirection') {
+			var navTabContentView = new app.RedirectionNavTabContentView({titleName: 'Redirections'});
+			statsNavPillContentView.navTabsView.navTabsItemViews[3].setSelectedTabItem();
+		} else if (metric == 'traffic') {
+			var navTabContentView = new app.NavTabContentView({titleName: 'Visites'});
 			statsNavPillContentView.navTabsView.navTabsItemViews[1].setSelectedTabItem();
-		} else if(metric == 'phone') {
-			var navTabContentView = new app.NavTabContentView({id: 'appels'});
+		} else if (metric == 'phone') {
+			var navTabContentView = new app.NavTabContentView({titleName: 'Appels'});
 			statsNavPillContentView.navTabsView.navTabsItemViews[2].setSelectedTabItem();
 		}
 
 		statsNavPillContentView.setCurrentNavTabContentView(navTabContentView);
 		statsNavPillContentView.renderNavTabContent();
-		
 	},
 
 	messages: function() {

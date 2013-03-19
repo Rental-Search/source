@@ -7112,31 +7112,114 @@ body {
   -moz-box-shadow: 0 0 0 5px #f0f5f7;
   box-shadow: 0 0 0 5px #f0f5f7;
 }
-#pro-app .tabs-left .nav-tabs {
+.tabs-left .nav-tabs {
   padding: 20px 0 10px 10px;
   margin-bottom: 0px;
   margin-right: 0px;
   border-right: none;
 }
-#pro-app .tabs-left .nav-tabs .active > a,
-#pro-app .tabs-left .nav-tabs .active > a:hover {
+.tabs-left .nav-tabs .active > a,
+.tabs-left .nav-tabs .active > a:hover {
   border-color: #b2ced9 transparent #b2ced9 #b2ced9;
   color: #364c59;
   background-color: #fff;
   margin-right: -1px;
 }
-#pro-app .tabs-left .nav-tabs li > a:hover {
+.tabs-left .nav-tabs li > a:hover {
   background-color: #ebf2f5;
   border-color: #ebf2f5 transparent #ebf2f5 #ebf2f5;
   margin-right: 0px;
 }
-#pro-app .tabs-left .nav-tabs a {
+.tabs-left .nav-tabs a {
   line-height: 14px;
   padding-top: 11px;
   padding-bottom: 11px;
   color: #364c59;
 }
-#pro-app .tab-content {
+.tabs-left .tab-content {
   border-left: 1px solid #b2ced9;
   padding-left: 20px;
+}
+h3 {
+  color: #364c59;
+  margin-bottom: 30px;
+}
+.btn.active {
+  color: rgba(255, 255, 255, 0.75);
+}
+.btn {
+  color: #364c59;
+  text-shadow: 0 -1px 0 rgba(255, 255, 255, 0.25);
+  background-color: #e5eff6;
+  background-image: -moz-linear-gradient(top, #ebf2f5, #dbeaf7);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#ebf2f5), to(#dbeaf7));
+  background-image: -webkit-linear-gradient(top, #ebf2f5, #dbeaf7);
+  background-image: -o-linear-gradient(top, #ebf2f5, #dbeaf7);
+  background-image: linear-gradient(to bottom, #ebf2f5, #dbeaf7);
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffebf2f5', endColorstr='#ffdbeaf7', GradientType=0);
+  border-color: #dbeaf7 #dbeaf7 #9cc5e9;
+  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+  *background-color: #dbeaf7;
+  /* Darken IE7 buttons by default so they stand out more given they won't have borders */
+
+  filter: progid:DXImageTransform.Microsoft.gradient(enabled = false);
+}
+.btn:hover,
+.btn:focus,
+.btn:active,
+.btn.active,
+.btn.disabled,
+.btn[disabled] {
+  color: #364c59;
+  background-color: #dbeaf7;
+  *background-color: #c6def2;
+}
+.btn:active,
+.btn.active {
+  background-color: #b1d2ee \9;
+}
+.range-date {
+  float: right;
+  margin-right: 15px;
+  margin-top: 4px;
+}
+.range-date input {
+  border-color: #b2ced9;
+  color: #364c59;
+}
+.range-date .span3 {
+  text-align: center;
+  cursor: text;
+}
+.range-date input[disabled] {
+  background-color: #fff;
+}
+.range-date .dropdown-menu {
+  border-color: #b2ced9;
+}
+.range-date .dropdown-menu form {
+  margin: 0 10px;
+}
+.range-date .input-small {
+  text-align: center;
+}
+.range-date .form-inline .input-small,
+.range-date .form-inline button {
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+}
+.range-date .form-inline button {
+  vertical-align: middle;
+  height: 30px;
+}
+.range-date .form-inline .btn-small:last-child {
+  -webkit-border-radius: 3px !important;
+  -moz-border-radius: 3px !important;
+  border-radius: 3px !important;
+  margin-left: 5px;
+}
+.range-date .btn-group.open .btn.dropdown-toggle {
+  background-color: #dbeaf7;
 }

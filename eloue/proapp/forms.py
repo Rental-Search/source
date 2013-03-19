@@ -8,7 +8,7 @@ INTERVAL_CHOICES = Enum([
     ('weeks', 'weeks', u'weeks'),
 ])
 
-class TimeSerieForm(forms.Form):
+class TimeSeriesForm(forms.Form):
 	start_date = forms.DateField(required=True)
 	end_date = forms.DateField(required=True)
 	interval = forms.ChoiceField(choices=INTERVAL_CHOICES, required=True)

@@ -14,10 +14,10 @@ app.StatsNavPillContentView = app.NavPillContentView.extend({
 
 	initialize: function() {
 		this.navTabsView = new app.NavTabsView();
-		this.navTabsView.id = 'nav-tabs-stats';
 		this.navTabsView.pushNavTabContentViews(new app.NavTabsItemView({icon: 'dashboard', path: 'stats/', labelName: 'Vue d\'ensemble'}));
-		this.navTabsView.pushNavTabContentViews(new app.NavTabsItemView({icon: 'user', path: 'stats/traffic/', labelName: 'Visite'}));
+		this.navTabsView.pushNavTabContentViews(new app.NavTabsItemView({icon: 'user', path: 'stats/traffic/', labelName: 'Visites'}));
 		this.navTabsView.pushNavTabContentViews(new app.NavTabsItemView({icon: 'phone', path: 'stats/phone/', labelName: 'Appels'}));
+		this.navTabsView.pushNavTabContentViews(new app.NavTabsItemView({icon: 'phone', path: 'stats/redirection/', labelName: 'Redirections'}));
 	},
 
 	setCurrentNavTabContentView: function(navTabContentView) {
@@ -30,7 +30,6 @@ app.StatsNavPillContentView = app.NavPillContentView.extend({
 	render: function() {
 		this.$el.prepend(this.navTabsView.$el);
 		this.navTabsView.render();
-		console.log(this.navTabsView.cid);
 		return this;
 	},
 
@@ -43,5 +42,6 @@ app.StatsNavPillContentView = app.NavPillContentView.extend({
 
 	onClose: function() {
 		this.navTabsView.close();
+		if (this.currentNavTabContent) this.currentNavTabContent.close();
 	}
 });

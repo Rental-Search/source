@@ -13,7 +13,7 @@ from tastypie.utils import trailing_slash
 
 from eloue.proapp.analytics_api_v3_auth import GoogleAnalyticsSetStats
 from eloue.proapp.api.authentication import SessionAuthentication
-from eloue.proapp.forms import TimeSerieForm
+from eloue.proapp.forms import TimeSeriesForm
 from eloue.products.models import Product, Category, Picture, Price
 from eloue.accounts.models import Patron, Address, PhoneNumber, Subscription, CreditCard
 
@@ -25,7 +25,7 @@ def get_time_series(request=None):
 	interval = 'days'
 
 	if request.GET.get('start_date') or request.GET.get('end_date') or request.GET.get('interval'):
-		form = TimeSerieForm(request.GET)
+		form = TimeSeriesForm(request.GET)
 		if form.is_valid():
 			start_date = form.cleaned_data['start_date']
 			end_date = form.cleaned_data['end_date']
@@ -193,7 +193,6 @@ class PageViewResource(Resource):
 		self.throttle_check(request)
 		
 		patron = request.user
-		print patron.products.all()
 
 		#Google Analytics References
 		metrics = 'ga:pageviews'
@@ -234,7 +233,7 @@ class RedirectionEventResource(Resource):
 		self.method_check(request, allowed=['get'])
 		self.throttle_check(request)
 
-		patron = request.user
+		patron = Patron.objects.get(slug='serel')#request.user
 
 		#Google Analytics References
 		metrics, dimensions, filters = get_analytics_event_references(event_action="Redirection", event_label=patron.slug)

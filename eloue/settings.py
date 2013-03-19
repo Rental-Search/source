@@ -300,6 +300,7 @@ PIPELINE_JS = {
             'proapp/js/libs/jquery.js',
             'proapp/js/libs/underscore-min.js',
             'proapp/js/libs/backbone-min.js',
+            'proapp/js/libs/backbone-tastypie.js',
             'proapp/js/libs/backbone.layoutmanager.js',
             'proapp/js/libs/bootstrap/bootstrap-transition.js',
             'proapp/js/libs/bootstrap/bootstrap-alert.js',
@@ -322,8 +323,11 @@ PIPELINE_JS = {
 
     'proapp': {
         'source_filenames': (
+            'proapp/js/models/redirection_events.js',
             'proapp/js/views/navtabs/navtabsitem.js',
             'proapp/js/views/navtabs/navtabcontent.js',
+            'proapp/js/views/navtabs/stats/redirectionnavtabcontent.js',
+            'proapp/js/views/navtabs/stats/timeseriesform.js',
             'proapp/js/views/navtabs/navtabs.js',
             'proapp/js/views/navpills/navpillcontent.js',
             'proapp/js/views/navpills/statsnavpillcontent.js',
