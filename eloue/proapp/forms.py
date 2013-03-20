@@ -14,7 +14,7 @@ class TimeSeriesForm(forms.Form):
 	interval = forms.ChoiceField(choices=INTERVAL_CHOICES, required=True)
 
 	def clean(self):
-		cleaned_data = super(TimeSerieForm, self).clean()
+		cleaned_data = super(TimeSeriesForm, self).clean()
 		start_date = cleaned_data.get('start_date')
 		end_date = cleaned_data.get('end_date')
 

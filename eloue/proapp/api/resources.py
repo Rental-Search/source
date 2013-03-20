@@ -24,6 +24,8 @@ def get_time_series(request=None):
 	start_date = (end_date - datetime.timedelta(days=30))
 	interval = 'days'
 
+	print request
+
 	if request.GET.get('start_date') or request.GET.get('end_date') or request.GET.get('interval'):
 		form = TimeSeriesForm(request.GET)
 		if form.is_valid():
@@ -246,7 +248,10 @@ class RedirectionEventResource(Resource):
 
 		objects = {
 			'data': data,
-			'details': details
+			'details': details,
+			'start_date': start_date,
+			'end_date': end_date,
+			'interval': interval
 		}
 
 		object_list = {
