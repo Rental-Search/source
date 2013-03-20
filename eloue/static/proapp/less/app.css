@@ -7054,6 +7054,9 @@ body {
 #pro-app {
   height: 100%;
 }
+a {
+  outline: 0 !important;
+}
 #pro-app .nav-pills > .active > a,
 #pro-app .nav-pills > .active > a:hover {
   background-color: #5DB5E6;
@@ -7202,6 +7205,9 @@ h3 {
 }
 .range-date .input-small {
   text-align: center;
+}
+.range-date .input-small.error {
+  border-color: #9d261d;
 }
 .range-date .form-inline .input-small,
 .range-date .form-inline button {

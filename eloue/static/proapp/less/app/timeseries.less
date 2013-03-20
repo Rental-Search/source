@@ -20,7 +20,13 @@
 		border-color: #b2ced9;
 	}
 
-	.input-small { text-align: center; }
+	.input-small { 
+		text-align: center;
+
+		&.error {
+			border-color: @red;
+		}
+	}
 
 	.form-inline {
 		.input-small, button { .border-radius(3px); }
