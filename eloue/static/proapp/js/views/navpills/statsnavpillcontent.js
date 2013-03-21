@@ -32,12 +32,12 @@ app.StatsNavPillContentView = app.NavPillContentView.extend({
 
 	render: function() {
 		this.renderNavTabs();
-		this.navTabsView.render();
 		return this;
 	},
 
 	renderNavTabs: function() {
 		this.$el.prepend(this.navTabsView.$el);
+		this.navTabsView.render();
 	},
 
 	renderNavTabContent: function() {

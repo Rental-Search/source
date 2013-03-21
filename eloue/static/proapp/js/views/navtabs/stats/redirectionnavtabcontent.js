@@ -25,6 +25,7 @@ app.RedirectionNavTabContentView = app.NavTabContentView.extend({
 	},
 
 	render: function() {
+		console.log("redirection nav tab content");
 		this.$el.html("<h3>" + this.titleName + "</h3>");
 
 		if (this.timeSeriesView) {
