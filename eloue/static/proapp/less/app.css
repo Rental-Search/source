@@ -7119,7 +7119,7 @@ a {
   padding: 20px 0 10px 10px;
   margin-bottom: 0px;
   margin-right: 0px;
-  border-right: none;
+  border: none;
 }
 .tabs-left .nav-tabs .active > a,
 .tabs-left .nav-tabs .active > a:hover {
@@ -7139,8 +7139,8 @@ a {
   color: #364c59;
 }
 .tabs-left .tab-content {
-  border-left: 1px solid #b2ced9;
   padding-left: 20px;
+  border-left: 1px solid #b2ced9;
 }
 h3 {
   color: #364c59;

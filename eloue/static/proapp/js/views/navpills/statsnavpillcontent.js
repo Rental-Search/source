@@ -14,6 +14,7 @@ app.StatsNavPillContentView = app.NavPillContentView.extend({
 
 	initialize: function() {
 		this.timeSeriesView = new app.TimeSeriesView();
+
 		this.navTabsView = new app.NavTabsView();
 		this.navTabsView.pushNavTabContentViews(new app.NavTabsItemView({icon: 'dashboard', path: 'stats/', labelName: 'Vue d\'ensemble'}));
 		this.navTabsView.pushNavTabContentViews(new app.NavTabsItemView({icon: 'user', path: 'stats/traffic/', labelName: 'Visites'}));
@@ -30,15 +31,19 @@ app.StatsNavPillContentView = app.NavPillContentView.extend({
 	},
 
 	render: function() {
-		this.$el.prepend(this.navTabsView.$el);
+		this.renderNavTabs();
 		this.navTabsView.render();
 		return this;
 	},
 
+	renderNavTabs: function() {
+		this.$el.prepend(this.navTabsView.$el);
+	},
+
 	renderNavTabContent: function() {
 		if (this.currentNavTabContent) {
+			this.navTabsView.$el.removeClass('border-right');
 			this.$el.append(this.currentNavTabContent.$el);
-			this.currentNavTabContent.render();
 		}
 	},
 

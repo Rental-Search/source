@@ -27,16 +27,16 @@
 		</script>
 
 		<script type="text/template" id="timeseriesform-template">
-			<input class="span3" id="appendedDropdownButton" type="text" value="16 déc. 2012 - 15 janv. 2013" disabled="disabled">
+			<input class="span3" id="appendedDropdownButton" type="text" value="<%= timeseriesvalue %>" disabled="disabled">
 			<div class="btn-group">
 				<button class="btn dropdown-toggle">
 					<span class="caret"></span>
 				</button>
 				<div class="dropdown-menu pull-right">
 					<form class="form-inline" action="#">
-						<input type="text" class="input-small" name="start_date" value="16/12/2012"> -
-						<input type="text" class="input-small" name="end_date" value="15/01/2013"> 
-						<input type="hidden" name="interval" value="days"> 
+						<input type="text" class="input-small" name="start_date" value="<%= start_date %>"> -
+						<input type="text" class="input-small" name="end_date" value="<%= end_date %>"> 
+						<input type="hidden" name="interval" value="<%= interval %>"> 
 						<button type="submit" class="btn btn-small">Appliquer</button>
 					</form>
 				</div>

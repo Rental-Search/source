@@ -24,8 +24,6 @@ def get_time_series(request=None):
 	start_date = (end_date - datetime.timedelta(days=30))
 	interval = 'days'
 
-	print request
-
 	if request.GET.get('start_date') or request.GET.get('end_date') or request.GET.get('interval'):
 		form = TimeSeriesForm(request.GET)
 		if form.is_valid():
@@ -100,7 +98,6 @@ class PictureResource(ModelResource):
 
 class PriceResource(ModelResource):
 	product = fields.ToOneField('eloue.proapp.api.resources.ProductResource', 'product', related_name='pictures')
-
 	class Meta:
 		queryset = Price.objects.all()
 		resource_name = 'products/price'

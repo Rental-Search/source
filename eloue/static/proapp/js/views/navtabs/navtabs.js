@@ -4,7 +4,7 @@ var app = app || {}
 
 app.NavTabsView = Backbone.View.extend({
 	tagName: 'ul',
-	className: 'nav nav-tabs',
+	className: 'nav nav-tabs border-right',
 
 	navTabsItemViews: null,
 

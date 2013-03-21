@@ -101,7 +101,8 @@ class GoogleAnalyticsSetStats(object):
       		dimensions='ga:date,ga:week,ga:month,ga:year,%s' % self.dimensions, 
       		filters='%s' % self.filters
       	).execute()
-		print self.filters
+
+
 		data = defaultdict(int)
 		stats = []
 

@@ -7,6 +7,7 @@ var app = app || {};
 app.TimeSeriesView = Backbone.View.extend({
 	className: 'input-append range-date pull-right',
 
+
 	template: _.template($("#timeseriesform-template").html()),
 
 	events: {
@@ -15,9 +16,21 @@ app.TimeSeriesView = Backbone.View.extend({
 		'submit .form-inline':			'submitForm',
 	},
 
-	render: function(){
+	serialize: function(timeseries) {
+		var date1 = timeseries.start_date.split("-");
+		var date2 = timeseries.end_date.split("-");
+
+		return {
+			timeseriesvalue : this._dateFrenchFormat(this._parseDate(date1)) + " - " + this._dateFrenchFormat(this._parseDate(date2)),
+			start_date: timeseries.start_date.split("-").reverse().join("/"), 
+			end_date: timeseries.end_date.split("-").reverse().join("/"), 
+			interval: timeseries.interval.split("-").reverse().join("/")
+		};
+	},
+
+	render: function(timeseries){
 		this.delegateEvents();
-		this.$el.html(this.template());
+		this.$el.html(this.template(this.serialize(timeseries)));
 		return this;
 	},
 
@@ -56,11 +69,16 @@ app.TimeSeriesView = Backbone.View.extend({
 		return false;
 	},
 
-	serialize: function() {
+	serializeForm: function() {
 		return $("form.form-inline").serialize();
 	},
 
 	_parseDate: function(date) {
 		return new Date(date[0],date[1]-1,date[2]);
+	},
+
+	_dateFrenchFormat: function(date) {
+		var months = ["janvier", "février", "mars", "avril", "mai", "juin", "juillet", "août", "septembre", "octobre", "novembre", "décembre"];
+		return date.getDate() + " " + months[date.getMonth()] + " " + date.getFullYear();
 	}
 });
