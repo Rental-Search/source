@@ -323,7 +323,7 @@ PIPELINE_JS = {
 
     'proapp': {
         'source_filenames': (
-            'proapp/js/models/redirection_events.js',
+            'proapp/js/models/redirectionevents.js',
             'proapp/js/views/navtabs/navtabsitem.js',
             'proapp/js/views/navtabs/navtabcontent.js',
             'proapp/js/views/navtabs/stats/redirectionnavtabcontent.js',

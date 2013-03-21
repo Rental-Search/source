@@ -10,17 +10,18 @@ app.TimeSeriesView = Backbone.View.extend({
 	template: _.template($("#timeseriesform-template").html()),
 
 	events: {
-		'click .btn.dropdown-toggle': 		'dropdown',
-		'change	input.input-small': 		'validateInput', 
-		'submit .form-inline': 				'submitForm',
+		'click .btn.dropdown-toggle': 	'toggleDropdown',
+		'keyup	input.input-small': 	'validateInput', 
+		'submit .form-inline':			'submitForm',
 	},
 
 	render: function(){
+		this.delegateEvents();
 		this.$el.html(this.template());
 		return this;
 	},
 
-	dropdown: function(e) {
+	toggleDropdown: function(e) {
 		e.stopPropagation();
 		this.$el.children("div.btn-group").toggleClass('open');
 		
@@ -32,6 +33,7 @@ app.TimeSeriesView = Backbone.View.extend({
 		$('html').click(function(){
 			self.$el.children("div.btn-group").removeClass('open');
 		});
+
 		delete self;
 	},
 
@@ -50,8 +52,12 @@ app.TimeSeriesView = Backbone.View.extend({
 
 	submitForm: function() {
 		this.$el.children("div.btn-group").removeClass('open');
-		console.log($("form.form-inline").serialize());
+		this.trigger('timeseriesform:submited')
 		return false;
+	},
+
+	serialize: function() {
+		return $("form.form-inline").serialize();
 	},
 
 	_parseDate: function(date) {
