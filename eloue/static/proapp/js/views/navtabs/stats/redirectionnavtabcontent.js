@@ -26,7 +26,6 @@ app.RedirectionNavTabContentView = app.NavTabContentView.extend({
 
 	render: function() {
 		this.$el.html("<h3>" + this.titleName + "</h3>");
-		this.$el.height(400);
 
 		if (this.timeSeriesView) {
 			this.$el.children("h3").append(this.timeSeriesView.$el);

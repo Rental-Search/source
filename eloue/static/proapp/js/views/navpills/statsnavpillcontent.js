@@ -42,7 +42,6 @@ app.StatsNavPillContentView = app.NavPillContentView.extend({
 
 	renderNavTabContent: function() {
 		if (this.currentNavTabContent) {
-			this.navTabsView.$el.removeClass('border-right');
 			this.$el.append(this.currentNavTabContent.$el);
 		}
 	},
