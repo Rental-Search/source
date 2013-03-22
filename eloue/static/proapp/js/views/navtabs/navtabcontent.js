@@ -13,13 +13,11 @@ app.NavTabContentView = Backbone.View.extend({
 
 	initialize: function() {
 		if (this.options.titleName) this.titleName = this.options.titleName;
-
 		this.render();
 	},
 
-	setTimeSeriesView: function(timeSeriesView) {
-		this.timeSeriesView = timeSeriesView;
-		//this.timeSeriesView.on('timeseriesform:submited', this.render, this);
+	setTimeSeriesView: function(timeSeries) {
+		
 	},
 
 	render: function() {

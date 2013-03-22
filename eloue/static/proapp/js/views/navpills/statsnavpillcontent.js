@@ -32,8 +32,6 @@ app.StatsNavPillContentView = app.NavPillContentView.extend({
 	},
 
 	updateTimeSeries: function () {
-		console.log("updateTimeSeries");
-		console.log(this.currentNavTabContent.timeSeries);
 		this.timeSeries = this.currentNavTabContent.timeSeries;
 	},
 

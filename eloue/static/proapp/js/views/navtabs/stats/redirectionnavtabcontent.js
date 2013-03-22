@@ -22,7 +22,6 @@ app.RedirectionNavTabContentView = app.NavTabContentView.extend({
 	fetchModel: function() {
 		var self = this;
 		var params;
-		console.log("fetchModel");
 
 		if(this.timeSeriesView.serializeForm()) {
 			params = this.timeSeriesView.serializeForm();
@@ -31,7 +30,6 @@ app.RedirectionNavTabContentView = app.NavTabContentView.extend({
 		} else {
 			params = null;
 		}
-		console.log(params);
 		this.model.fetch({data: params})
 			.success(function () {
 				self.timeSeries = self._getTimeSeries();
