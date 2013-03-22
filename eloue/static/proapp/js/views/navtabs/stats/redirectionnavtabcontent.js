@@ -2,30 +2,46 @@
 
 var app = app || {};
 
-app.RedirectionNavTabContentView = app.NavTabContentView.extend({
 
-	timeSeriesView: null,
+app.RedirectionNavTabContentView = app.NavTabContentView.extend({
 
 	initialize: function() {
 		if (this.options.titleName) this.titleName = this.options.titleName;
-		this.model = new app.RedirectionEventModel();
-		this.model.on('change', this.render, this);
 	},
 
-	setTimeSeriesView: function(timeSeriesView) {
-		this.timeSeriesView = timeSeriesView;
+	setTimeSeriesView: function(timeSeries) {
+		this.timeSeries = timeSeries;
+		this.timeSeriesView = new app.TimeSeriesView();
 		this.timeSeriesView.on('timeseriesform:submited', this.fetchModel, this);
+
+		this.model = new app.RedirectionEventModel();
+		this.model.on('change', this.render, this);
 		this.fetchModel();
 	},
 
 	fetchModel: function() {
-		var params = this.timeSeriesView.serializeForm();
-		this.model.fetch({data: params});
+		var self = this;
+		var params;
+		console.log("fetchModel");
+
+		if(this.timeSeriesView.serializeForm()) {
+			params = this.timeSeriesView.serializeForm();
+		} else if (this.timeSeries) {
+			params = $.param(this.timeSeries);
+		} else {
+			params = null;
+		}
+		console.log(params);
+		this.model.fetch({data: params})
+			.success(function () {
+				self.timeSeries = self._getTimeSeries();
+				self.trigger('timeSeries:change');
+			});
 		delete params;
+		delete self;
 	},
 
 	render: function() {
-		console.log("redirection nav tab content");
 		this.$el.html("<h3>" + this.titleName + "</h3>");
 
 		if (this.timeSeriesView) {
@@ -44,6 +60,7 @@ app.RedirectionNavTabContentView = app.NavTabContentView.extend({
 	},
 
 	onClose: function() {
+		this.timeSeriesView.close();
 		this.model.unbind();
 		delete this.model;
 	}

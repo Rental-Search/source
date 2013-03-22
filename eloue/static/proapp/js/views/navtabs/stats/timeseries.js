@@ -1,6 +1,5 @@
 // js/views/navtabs/stats/timeseries.js
 
-
 var app = app || {};
 
 

@@ -12,9 +12,9 @@ app.StatsNavPillContentView = app.NavPillContentView.extend({
 
 	currentNavTabContent: null,
 
-	initialize: function() {
-		this.timeSeriesView = new app.TimeSeriesView();
+	timeSeries: null,
 
+	initialize: function() {
 		this.navTabsView = new app.NavTabsView();
 		this.navTabsView.pushNavTabContentViews(new app.NavTabsItemView({icon: 'dashboard', path: 'stats/', labelName: 'Vue d\'ensemble'}));
 		this.navTabsView.pushNavTabContentViews(new app.NavTabsItemView({icon: 'user', path: 'stats/traffic/', labelName: 'Visites'}));
@@ -27,7 +27,14 @@ app.StatsNavPillContentView = app.NavPillContentView.extend({
 			this.currentNavTabContent.close();
 		}
 		this.currentNavTabContent = navTabContentView;
-		this.currentNavTabContent.setTimeSeriesView(this.timeSeriesView);
+		this.currentNavTabContent.on('timeSeries:change', this.updateTimeSeries, this);
+		this.currentNavTabContent.setTimeSeriesView(this.timeSeries);
+	},
+
+	updateTimeSeries: function () {
+		console.log("updateTimeSeries");
+		console.log(this.currentNavTabContent.timeSeries);
+		this.timeSeries = this.currentNavTabContent.timeSeries;
 	},
 
 	render: function() {
@@ -48,7 +55,6 @@ app.StatsNavPillContentView = app.NavPillContentView.extend({
 
 	onClose: function() {
 		this.navTabsView.close();
-		this.timeSeriesView.close();
 		if (this.currentNavTabContent) this.currentNavTabContent.close();
 	}
 });
