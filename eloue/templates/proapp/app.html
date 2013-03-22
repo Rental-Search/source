@@ -46,7 +46,9 @@
 		<script type="text/javascript">
 			API_URL = {
 				redirection_events: "{% url api_dispatch_list api_name="1.0" resource_name="redirection_events" %}"
-			}
+			};
+
+			STATIC_URL = '{{ STATIC_URL }}'
 		</script>
 		{% compressed_js 'proapplibs' %}
 		{% compressed_js 'proapp' %}	

@@ -21,7 +21,6 @@ app.RedirectionNavTabContentView = app.NavTabContentView.extend({
 	},
 
 	fetchModel: function() {
-		this.renderLoading();
 		var self = this;
 		var params;
 
@@ -43,15 +42,13 @@ app.RedirectionNavTabContentView = app.NavTabContentView.extend({
 	},
 
 	renderLoading: function() {
-		this.$el.html('<p>loading...</p>');
+		this.$el.html('<img class="loading" src="' + STATIC_URL + 'proapp/img/app/loading.gif" width="123" height="70"/>');
 	},
 
 	render: function() {
-		console.log("render redirection nav content view");
 		this.$el.html("<h3>" + this.model.get("start_date") + " " + this.model.get("end_date") + "</h3>");
 
 		if (this.timeSeriesView) {
-			console.log("render timeSeriesView");
 			this.$el.children("h3").append(this.timeSeriesView.$el);
 			this.timeSeriesView.render(this._getTimeSeries());
 		}

@@ -1,0 +1,2 @@
+// js/views/loading.js
+
