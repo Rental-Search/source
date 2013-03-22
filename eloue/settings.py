@@ -334,6 +334,7 @@ PIPELINE_JS = {
             'proapp/js/views/navpills/navpillsitem.js',
             'proapp/js/views/navpills/navpills.js',
             'proapp/js/views/layout.js',
+            'proapp/js/views/loading.js',
             'proapp/js/routers/routes.js',
             'proapp/js/app.js',
         ),

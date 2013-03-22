@@ -7,6 +7,7 @@ app.RedirectionNavTabContentView = app.NavTabContentView.extend({
 
 	initialize: function() {
 		if (this.options.titleName) this.titleName = this.options.titleName;
+		this.loadingView = new app.LoadingView();
 	},
 
 	setTimeSeriesView: function(timeSeries) {
@@ -42,11 +43,12 @@ app.RedirectionNavTabContentView = app.NavTabContentView.extend({
 	},
 
 	renderLoading: function() {
-		this.$el.html('<img class="loading" src="' + STATIC_URL + 'proapp/img/app/loading.gif" width="123" height="70"/>');
+		this.$el.html(this.loadingView.$el);
+		this.loadingView.render();
 	},
 
 	render: function() {
-		this.$el.html("<h3>" + this.model.get("start_date") + " " + this.model.get("end_date") + "</h3>");
+		this.$el.html("<h3>" + this.titleName + "</h3>");
 
 		if (this.timeSeriesView) {
 			this.$el.children("h3").append(this.timeSeriesView.$el);
@@ -65,6 +67,7 @@ app.RedirectionNavTabContentView = app.NavTabContentView.extend({
 
 	onClose: function() {
 		this.timeSeriesView.close();
+		this.loadingView.close();
 		this.model.unbind();
 		delete this.model;
 	}

@@ -10,6 +10,11 @@
 		{% endblock %}
 	</head>
 	<body>
+		<script type="text/template" id="loading-template">
+			<p style="text-align: center; margin-top: 150px;">
+				<img src="{{ STATIC_URL }}proapp/img/app/loading.gif" width="123" height="70">
+			</p>
+		</script>
 		<script type="text/template" id="navpillsitem-template">
 			<a href="<%= path %>"><i class="glyphicons-icon <%= icon %> blue"></i><br><%= label %></a>
 			<span class="arrow-tab"></span>
@@ -27,7 +32,7 @@
 		</script>
 
 		<script type="text/template" id="timeseriesform-template">
-			<input class="span3" id="appendedDropdownButton" type="text" value="<%= timeseriesvalue %>" disabled="disabled">
+			<input class="span4" id="appendedDropdownButton" type="text" value="<%= timeseriesvalue %>" disabled="disabled">
 			<div class="btn-group">
 				<button class="btn dropdown-toggle">
 					<span class="caret"></span>

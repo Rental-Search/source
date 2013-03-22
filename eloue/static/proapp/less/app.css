@@ -7147,6 +7147,10 @@ h3 {
   color: #364c59;
   margin-bottom: 30px;
 }
+.loading {
+  position: aboslute;
+  top: 150px;
+}
 .btn.active {
   color: rgba(255, 255, 255, 0.75);
 }
@@ -7191,7 +7195,7 @@ h3 {
   border-color: #b2ced9;
   color: #364c59;
 }
-.range-date .span3 {
+.range-date .span4 {
   text-align: center;
   cursor: text;
 }
