@@ -8,6 +8,7 @@ app.RedirectionNavTabContentView = app.NavTabContentView.extend({
 	initialize: function() {
 		if (this.options.titleName) this.titleName = this.options.titleName;
 		this.loadingView = new app.LoadingView();
+		//this.chartView = new app.ChartsView();
 	},
 
 	setTimeSeriesView: function(timeSeries) {
@@ -42,11 +43,6 @@ app.RedirectionNavTabContentView = app.NavTabContentView.extend({
 		delete self;
 	},
 
-	renderLoading: function() {
-		this.$el.html(this.loadingView.$el);
-		this.loadingView.render();
-	},
-
 	render: function() {
 		this.$el.html("<h3>" + this.titleName + "</h3>");
 
@@ -54,7 +50,16 @@ app.RedirectionNavTabContentView = app.NavTabContentView.extend({
 			this.$el.children("h3").append(this.timeSeriesView.$el);
 			this.timeSeriesView.render(this._getTimeSeries());
 		}
+
+		//this.$el.append(this.chartView.$el);
+		//this.chartView.render();
+
 		return this;
+	},
+
+	renderLoading: function() {
+		this.$el.html(this.loadingView.$el);
+		this.loadingView.render();
 	},
 
 	_getTimeSeries: function() {
