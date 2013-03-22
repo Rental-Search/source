@@ -15,11 +15,13 @@ app.RedirectionNavTabContentView = app.NavTabContentView.extend({
 		this.timeSeriesView.on('timeseriesform:submited', this.fetchModel, this);
 
 		this.model = new app.RedirectionEventModel();
-		this.model.on('change', this.render, this);
+		this.model.on('request', this.renderLoading, this);
+		this.model.on('sync', this.render, this);
 		this.fetchModel();
 	},
 
 	fetchModel: function() {
+		this.renderLoading();
 		var self = this;
 		var params;
 
@@ -30,6 +32,7 @@ app.RedirectionNavTabContentView = app.NavTabContentView.extend({
 		} else {
 			params = null;
 		}
+
 		this.model.fetch({data: params})
 			.success(function () {
 				self.timeSeries = self._getTimeSeries();
@@ -39,10 +42,16 @@ app.RedirectionNavTabContentView = app.NavTabContentView.extend({
 		delete self;
 	},
 
+	renderLoading: function() {
+		this.$el.html('<p>loading...</p>');
+	},
+
 	render: function() {
-		this.$el.html("<h3>" + this.titleName + "</h3>");
+		console.log("render redirection nav content view");
+		this.$el.html("<h3>" + this.model.get("start_date") + " " + this.model.get("end_date") + "</h3>");
 
 		if (this.timeSeriesView) {
+			console.log("render timeSeriesView");
 			this.$el.children("h3").append(this.timeSeriesView.$el);
 			this.timeSeriesView.render(this._getTimeSeries());
 		}

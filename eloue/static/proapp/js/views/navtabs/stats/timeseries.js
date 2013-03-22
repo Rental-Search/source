@@ -36,6 +36,8 @@ app.TimeSeriesView = Backbone.View.extend({
 	toggleDropdown: function(e) {
 		e.stopPropagation();
 		this.$el.children("div.btn-group").toggleClass('open');
+		$("button[type=submit].btn.btn-small").attr("disabled", "disabled");
+
 		
 		$('.dropdown-menu.pull-right').click(function(e) {
 			e.stopPropagation();

@@ -42,7 +42,6 @@ app.NavTabsView = Backbone.View.extend({
 		if( this.selectedTabItemView) {
 			this.selectedTabItemView.setUnactiveItem();
 		}
-			
 	},
 
 	switchTab: function() {
