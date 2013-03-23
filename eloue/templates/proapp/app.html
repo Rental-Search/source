@@ -50,7 +50,23 @@
 		</script>
 
 		<script type="text/template" id="charts-template">
-			 <div id="overview"></div> 
+			<div class="charts-header clearfix">
+              <ul class="charts-legend pull-left">
+              <% _.each(chartLegends, function( legend ){ %>
+                <li class="<%= legend.className %>">
+                  <i class="halflings-icon <%= legend.icon %> blue"></i>&nbsp;<%= legend.count %>&nbsp;<%= legend.labelName %>
+                </li>
+              <% }); %>
+              </ul>
+              <div class="btn-group pull-right filter-time">
+                <button id="days" class="btn btn-mini">Jour</button>
+                <button id="weeks" class="btn btn-mini">Semaine</button>
+                <button id="months" class="btn btn-mini">Mois</button>
+              </div>
+            </div>
+			<div id="overview">
+				<div id="plot"></div>
+			</div> 
 		</script>
 
 		<script type="text/javascript">

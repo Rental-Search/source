@@ -13,7 +13,7 @@ app.LayoutView = Backbone.View.extend({
 
 	initialize: function() {
 		this.navPillsView.pushNavPillItemView(new app.NavPillsItemView({icon: "home", labelName: "Acceuil"}));
-		this.navPillsView.pushNavPillItemView(new app.NavPillsItemView({icon: "stats", labelName: "Statistique", path: "stats/"}));
+		this.navPillsView.pushNavPillItemView(new app.NavPillsItemView({icon: "stats", labelName: "Statistiques", path: "stats/"}));
 		this.navPillsView.pushNavPillItemView(new app.NavPillsItemView({icon: "envelope", labelName: "Messages", path: "messages/"}));
 		this.navPillsView.pushNavPillItemView(new app.NavPillsItemView({icon: "show_thumbnails_with_lines", labelName: "Annonces", path: "ads/"}));
 		this.navPillsView.pushNavPillItemView(new app.NavPillsItemView({icon: "nameplate", labelName: "Paramètres", path: "settings/"}));

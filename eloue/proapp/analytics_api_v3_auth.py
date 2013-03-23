@@ -1,5 +1,8 @@
 # import required classes
-import httplib2, sys, datetime
+import httplib2
+import sys
+import datetime
+import calendar
 from collections import defaultdict
 from apiclient.discovery import build
 from oauth2client.client import flow_from_clientsecrets, AccessTokenRefreshError
@@ -117,15 +120,14 @@ class GoogleAnalyticsSetStats(object):
 					date = datetime.datetime.strptime('%s%s' % (row[2], row[3]), '%m%Y')
 
 				row.reverse()
-				
-				data[date] += int(row[0])
+				data[calendar.timegm(date.timetuple()) * 1000] += int(row[0])
 
 
 			for key in sorted(data.iterkeys()):
 				stats.append((key, data[key]))
 
-			return stats, result['rows']
+			return stats, result['rows'], result['totalResults']
 
 		except:
-			return stats, []
+			return stats, [], 0
 

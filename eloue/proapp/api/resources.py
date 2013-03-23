@@ -202,11 +202,15 @@ class PageViewResource(Resource):
 		start_date, end_date, interval = get_time_series(request=request)
 
 		#Google Analytics Query
-		data, details = GoogleAnalyticsSetStats(metrics=metrics, dimensions=dimensions, filters=filters).time_serie(start_date, end_date, interval=interval)
+		data, details, totalResults = GoogleAnalyticsSetStats(metrics=metrics, dimensions=dimensions, filters=filters).time_serie(start_date, end_date, interval=interval)
 
 		objects = {
 			'data': data,
-			'details': details
+			'details': details,
+			'start_date': start_date,
+			'end_date': end_date,
+			'interval': interval,
+			'count': totalResults
 		}
 
 		object_list = {
@@ -232,7 +236,7 @@ class RedirectionEventResource(Resource):
 		self.method_check(request, allowed=['get'])
 		self.throttle_check(request)
 
-		patron = Patron.objects.get(slug='serel')#request.user
+		patron = Patron.objects.get(slug='deguizland')#request.user
 
 		#Google Analytics References
 		metrics, dimensions, filters = get_analytics_event_references(event_action="Redirection", event_label=patron.slug)
@@ -241,14 +245,15 @@ class RedirectionEventResource(Resource):
 		start_date, end_date, interval = get_time_series(request=request)
 
 		#Google Analytics Query
-		data, details = GoogleAnalyticsSetStats(metrics=metrics, dimensions=dimensions, filters=filters).time_serie(start_date, end_date, interval=interval)
+		data, details, totalResults = GoogleAnalyticsSetStats(metrics=metrics, dimensions=dimensions, filters=filters).time_serie(start_date, end_date, interval=interval)
 
 		objects = {
 			'data': data,
 			'details': details,
 			'start_date': start_date,
 			'end_date': end_date,
-			'interval': interval
+			'interval': interval,
+			'count': totalResults
 		}
 
 		object_list = {
@@ -283,11 +288,15 @@ class PhoneEventResource(Resource):
 		start_date, end_date, interval = get_time_series(request=request)
 
 		#Google Analytics Query
-		data, details = GoogleAnalyticsSetStats(metrics=metrics, dimensions=dimensions, filters=filters).time_serie(start_date, end_date, interval=interval)
+		data, details, totalResults = GoogleAnalyticsSetStats(metrics=metrics, dimensions=dimensions, filters=filters).time_serie(start_date, end_date, interval=interval)
 
 		objects = {
 			'data': data,
-			'details': details
+			'details': details,
+			'start_date': start_date,
+			'end_date': end_date,
+			'interval': interval,
+			'count': totalResults
 		}
 
 		object_list = {
@@ -322,11 +331,15 @@ class AddressEventResource(Resource):
 		start_date, end_date, interval = get_time_series(request=request)
 
 		#Google Analytics Query
-		data, details = GoogleAnalyticsSetStats(metrics=metrics, dimensions=dimensions, filters=filters).time_serie(start_date, end_date, interval=interval)
+		data, details, totalResults = GoogleAnalyticsSetStats(metrics=metrics, dimensions=dimensions, filters=filters).time_serie(start_date, end_date, interval=interval)
 
 		objects = {
 			'data': data,
-			'details': details
+			'details': details,
+			'start_date': start_date,
+			'end_date': end_date,
+			'interval': interval,
+			'count': totalResults
 		}
 
 		object_list = {

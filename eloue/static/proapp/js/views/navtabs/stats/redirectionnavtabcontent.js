@@ -8,7 +8,8 @@ app.RedirectionNavTabContentView = app.NavTabContentView.extend({
 	initialize: function() {
 		if (this.options.titleName) this.titleName = this.options.titleName;
 		this.loadingView = new app.LoadingView();
-		//this.chartView = new app.ChartsView();
+		this.chartView = new app.ChartsView();
+		this.chartView.on('interval:change', this.fetchModel, this);
 	},
 
 	setTimeSeriesView: function(timeSeries) {
@@ -51,10 +52,30 @@ app.RedirectionNavTabContentView = app.NavTabContentView.extend({
 			this.timeSeriesView.render(this._getTimeSeries());
 		}
 
-		//this.$el.append(this.chartView.$el);
-		//this.chartView.render();
+		this.renderCharts();
 
 		return this;
+	},
+
+	renderCharts: function() {
+		this.$el.append(this.chartView.$el);
+		if (this.model.toJSON().count >1 ) {
+			this.chartView.chartsLegendItems = [
+				{className: 'charts-redirections', icon: 'link', labelName: 'Redirections', count: this.model.toJSON().count}
+			]
+		} else {
+			this.chartView.chartsLegendItems = [
+				{className: 'charts-redirections', icon: 'link', labelName: 'Redirection', count: this.model.toJSON().count}
+			]
+		}
+		
+		this.chartView.datasets = [{
+          data: this.model.toJSON().data,
+          color: "#fe8f00",
+          label: "Redirections"
+        }]
+        this.chartView.interval = this.model.toJSON().interval;
+		this.chartView.render();
 	},
 
 	renderLoading: function() {
@@ -73,6 +94,7 @@ app.RedirectionNavTabContentView = app.NavTabContentView.extend({
 	onClose: function() {
 		this.timeSeriesView.close();
 		this.loadingView.close();
+		this.chartView.close();
 		this.model.unbind();
 		delete this.model;
 	}

@@ -7236,3 +7236,85 @@ h3 {
 .range-date .btn-group.open .btn.dropdown-toggle {
   background-color: #dbeaf7;
 }
+.charts {
+  position: relative;
+  margin-bottom: 40px;
+}
+.charts .charts-header {
+  margin-right: 16px;
+}
+.charts .charts-header .filter-time {
+  margin-top: 2px;
+}
+.charts #overview {
+  margin-bottom: 40px;
+  margin-top: 10px;
+  padding: 10px;
+  margin-right: 15px;
+}
+.charts #overview #plot {
+  height: 300px;
+}
+.charts-legend {
+  list-style-type: none;
+  margin-bottom: 0px;
+  margin-left: 0;
+}
+.charts-legend li {
+  float: left;
+  margin-right: 15px;
+  padding: 2px 4px;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  overflow: hidden;
+  zoom: 1;
+  border-width: 1px;
+  border-style: solid;
+  font-weight: normal;
+  color: #364c59;
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.2);
+  font-size: 12px;
+}
+.charts-legend li i {
+  margin-top: 2px;
+}
+.charts-legend .charts-trafic {
+  border-color: #fe8f00;
+}
+.charts-legend .charts-calls {
+  border-color: #9dcc09;
+}
+.charts-legend .charts-messages {
+  border-color: #993399;
+}
+.charts-legend .charts-redirections {
+  border-color: #de6829;
+}
+.charts-details {
+  margin-right: 20px;
+}
+.charts-details .table {
+  color: #364c59;
+  border-color: #b2ced9;
+  margin-bottom: 0px;
+}
+#charts-popover {
+  width: 190px;
+}
+#charts-popover h3 {
+  font-size: 12px;
+  padding: 3px;
+  font-weight: bold;
+}
+#charts-popover p {
+  margin: 0 0 4px;
+}
+#charts-popover .charts-label-color {
+  display: block;
+  height: 14px;
+  width: 14px;
+  margin-right: 5px;
+  float: left;
+  margin-top: 3px;
+}
