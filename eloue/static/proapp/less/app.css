@@ -7057,6 +7057,10 @@ body {
 a {
   outline: 0 !important;
 }
+.table-striped tbody > tr:nth-child(odd) > td,
+.table-striped tbody > tr:nth-child(odd) > th {
+  background-color: #ebf2f5;
+}
 #pro-app .nav-pills > .active > a,
 #pro-app .nav-pills > .active > a:hover {
   background-color: #5DB5E6;

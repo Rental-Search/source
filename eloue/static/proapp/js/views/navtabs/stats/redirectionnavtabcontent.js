@@ -48,6 +48,7 @@ app.RedirectionNavTabContentView = app.NavTabContentView.extend({
 	},
 
 	render: function() {
+		app.redirectionModel = this.model.toJSON();
 		this.$el.html("<h3>" + this.titleName + "</h3>");
 
 		if (this.timeSeriesView) {
@@ -83,8 +84,8 @@ app.RedirectionNavTabContentView = app.NavTabContentView.extend({
 	},
 
 	renderChartsDetails: function() {
-		this.chartsDetailsView.headerItems = ['Dates', 'Pages'];
-		this.chartsDetailsView.dataList = this.model.toJSON().details;
+		this.chartsDetailsView.headerItems = ['Pages', 'Nombre de redirections'];
+		this.chartsDetailsView.dataList = _.countBy(app.redirectionModel.details, function(redirection) { return redirection[3]; });
 		this.$el.append(this.chartsDetailsView.$el);
 		this.chartsDetailsView.render();
 	},

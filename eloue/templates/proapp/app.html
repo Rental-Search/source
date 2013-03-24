@@ -79,10 +79,10 @@
 					</tr>
 				</thead>
 				<tboby>
-					<% _.each(dataList, function(data){ %>
+					<%_.each(dataList, function(value, key) { %>
 						<tr>
-							<td><%= data[7] %></td>
-							<td><%= data[3] %></td>
+							<td><a href="<%= key %>" target="_blank"><%= key %></a></td>
+							<td style="width: 170px; text-align: center;"><%= value %></td>
 						</tr>
 					<% }); %>
 				</tbody>
