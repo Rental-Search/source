@@ -105,7 +105,6 @@ class GoogleAnalyticsSetStats(object):
       		filters='%s' % self.filters
       	).execute()
 
-
 		data = defaultdict(int)
 		stats = []
 
@@ -114,20 +113,34 @@ class GoogleAnalyticsSetStats(object):
 				if interval == 'days':
 					date = datetime.datetime.strptime(row[0], '%Y%m%d')
 				elif interval == 'weeks':
-					week = int(row[1]) - 2
-					date = datetime.datetime.strptime('0%s%s' % (week, row[3]), '%w%W%Y') + datetime.timedelta(days=1)
+					week = int(row[1])-1
+					date = datetime.datetime.strptime('0%s%s' % (week, row[3]), '%w%U%Y')
 				elif interval == 'months':
 					date = datetime.datetime.strptime('%s%s' % (row[2], row[3]), '%m%Y')
 
 				row.reverse()
 				data[calendar.timegm(date.timetuple()) * 1000] += int(row[0])
 
+			if interval == 'days':
+				if not data[calendar.timegm(start.timetuple()) * 1000]:
+					data[calendar.timegm(start.timetuple()) * 1000] = 0
+
 
 			for key in sorted(data.iterkeys()):
 				stats.append((key, data[key]))
 
+			if interval == 'weeks' or interval == 'months':
+				if stats[0][0] != calendar.timegm(start.timetuple()) * 1000 and stats[0][0] < calendar.timegm(start.timetuple()) * 1000:
+					stats[0] = (calendar.timegm(start.timetuple()) * 1000, stats[0][1])
+				if stats[0][0] != calendar.timegm(start.timetuple()) * 1000 and stats[0][0] > calendar.timegm(start.timetuple()) * 1000:
+					stats.insert(0, (calendar.timegm(start.timetuple()) * 1000, 0))
+
+
 			return stats, result['rows'], result['totalResults']
 
 		except:
+			stats.append((calendar.timegm(start.timetuple()) * 1000, 0))
+			stats.append((calendar.timegm(end.timetuple()) * 1000, 0))
+
 			return stats, [], 0
 

@@ -43,10 +43,24 @@ app.ChartsView = Backbone.View.extend({
     },
 
 	renderPlot: function() {
-        var monthList = ["janv", "févr", "mars", "avr", "mai", "juin", "juill", "août", "sept", "oct", "nov", "déc"]
+        var self = this;
+        
+        _.each(this.datasets, function(data) {
+            if (_.size(data.data) > 0) {
+                if (self.interval == 'weeks') {
+                    data.data = self._newWeeksDataArray(data.data);
+                } else if (self.interval == 'months') {
+                    data.data = self._newMonthsDataArray(data.data);
+                } else {
+                    data.data = self._newDaysDataArray(data.data);
+                }
+            }
+        });
+
+        var monthList = ["janv.", "févr.", "mars", "avr.", "mai", "juin", "juill.", "août", "sept.", "oct.", "nov.", "déc."]
         var flotOptions = {
-            xaxis: { color: "#364c59", mode: "time", timeformat: "%d %b.", monthNames: monthList, autoscaleMargin: 0,},
-            yaxis: { color: "#364c59", tickDecimals: 0, min: 0, position: 'left'},
+            xaxis: { color: "#364c59", mode: "time", timeformat: "%d %b", monthNames: monthList, autoscaleMargin: 0},
+            yaxis: { color: "#364c59", tickDecimals: 0, min: 0, position: 'left', transform: function (v) { return v; }},
             selection: { mode: "x" },
             grid: { markings: this._weekendAreas, borderColor: "#364c59", borderWidth: 0, hoverable: true},
             series: { lines: { show: true }, points: { show: true } },
@@ -55,7 +69,7 @@ app.ChartsView = Backbone.View.extend({
 
         this.plot = $.plot(this.$el.children("#overview").children('#plot'), this.datasets, flotOptions);
 
-        var self = this;
+        
         $(window).resize(function () {
           self.plot.resize();
           self.plot.setupGrid();
@@ -87,5 +101,79 @@ app.ChartsView = Backbone.View.extend({
             i += 7 * 24 * 60 * 60 * 1000;
         } while (i < axes.xaxis.max);
         return markings;
-	}
+	},
+
+    /* create and return new array padding missing days*/
+    _newDaysDataArray: function(data) {
+        var startDay = data[0][0],
+        newData = [data[0]];
+
+        for (i = 1; i < data.length; i++) {
+            var diff = this._dateDayDiff(data[i - 1][0], data[i][0]);
+            var startDate = new Date(data[i - 1][0]);
+            if (diff > 1) {
+                for (j = 0; j < diff - 1; j++) {
+                    var fillDate = new Date(startDate).setDate(startDate.getDate() + (j + 1));
+                    newData.push([fillDate, 0]);
+                }
+            }
+            newData.push(data[i]);
+        }
+        return newData;
+    },
+
+    /* create and return new array padding missing weeks*/
+    _newWeeksDataArray: function(data) {
+        var newData = [data[0]];
+        
+        for (i = 1; i < data.length; i++) {
+            var diff = this._dateWeekDiff(data[i - 1][0], data[i][0]);
+            if (diff > 1) {
+                var startDate = new Date(data[i - 1][0]);
+                startDate.setUTCDate(startDate.getUTCDate() - ((startDate.getUTCDay()) % 7))
+                for(j = 0; j <= diff - 1; j++) {
+                    startDate = new Date(startDate.getTime() + 7 * 24 * 60 * 60 * 1000);
+                    newData.push([startDate, 0]);
+                }
+            }
+            newData.push(data[i]);
+        }
+        return newData;
+    },
+
+    /* create and return new array padding missing months*/
+    _newMonthsDataArray: function(data) {
+        var newData = [data[0]];
+        for (i = 1; i < data.length; i++) {
+            var diff = this._dateMonthDiff(data[i - 1][0], data[i][0]);
+            if (diff > 1) {
+                var startDate = new Date(data[i - 1][0]);
+                for(j = 0; j <= diff - 1; j++) {
+                    startDate = new Date(startDate.getFullYear(), startDate.getMonth()+1, 01);
+                    newData.push([startDate, 0]);
+                }
+            }
+            newData.push(data[i]);
+        }
+        return newData;
+    },
+
+    /* helper functions to find date differences*/
+    _dateDayDiff: function(d1, d2) {
+        return Math.floor((d2 - d1) / (1000 * 60 * 60 * 24));
+    },
+
+    _dateWeekDiff: function(d1, d2) {
+        return Math.floor((d2 - d1) / (7 * 24 * 60 * 60 * 1000));
+    },
+
+    _dateMonthDiff: function(d1, d2) {
+        d1 = new Date(d1);
+        d2 = new Date(d2);
+        var months;
+        months = (d2.getFullYear() - d1.getFullYear()) * 12;
+        months -= d1.getMonth() + 1;
+        months += d2.getMonth();
+        return months <= 0 ? 0 : months;
+    }
 });

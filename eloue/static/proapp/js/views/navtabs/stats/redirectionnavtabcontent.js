@@ -8,8 +8,11 @@ app.RedirectionNavTabContentView = app.NavTabContentView.extend({
 	initialize: function() {
 		if (this.options.titleName) this.titleName = this.options.titleName;
 		this.loadingView = new app.LoadingView();
+		
 		this.chartView = new app.ChartsView();
 		this.chartView.on('interval:change', this.fetchModel, this);
+
+		this.chartsDetailsView = new app.ChartsDeatilsView();
 	},
 
 	setTimeSeriesView: function(timeSeries) {
@@ -53,6 +56,7 @@ app.RedirectionNavTabContentView = app.NavTabContentView.extend({
 		}
 
 		this.renderCharts();
+		this.renderChartsDetails();
 
 		return this;
 	},
@@ -78,6 +82,13 @@ app.RedirectionNavTabContentView = app.NavTabContentView.extend({
 		this.chartView.render();
 	},
 
+	renderChartsDetails: function() {
+		this.chartsDetailsView.headerItems = ['Dates', 'Pages'];
+		this.chartsDetailsView.dataList = this.model.toJSON().details;
+		this.$el.append(this.chartsDetailsView.$el);
+		this.chartsDetailsView.render();
+	},
+
 	renderLoading: function() {
 		this.$el.html(this.loadingView.$el);
 		this.loadingView.render();
@@ -95,6 +106,7 @@ app.RedirectionNavTabContentView = app.NavTabContentView.extend({
 		this.timeSeriesView.close();
 		this.loadingView.close();
 		this.chartView.close();
+		this.chartsDetailsView.close();
 		this.model.unbind();
 		delete this.model;
 	}

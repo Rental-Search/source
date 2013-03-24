@@ -59,7 +59,7 @@
               <% }); %>
               </ul>
               <div class="btn-group pull-right filter-time">
-                <button id="days" class="btn btn-mini">Jour</button>
+                <button id="days" class="btn btn-mini	">Jour</button>
                 <button id="weeks" class="btn btn-mini">Semaine</button>
                 <button id="months" class="btn btn-mini">Mois</button>
               </div>
@@ -67,6 +67,26 @@
 			<div id="overview">
 				<div id="plot"></div>
 			</div> 
+		</script>
+
+		<script type="text/template" id="chartsdetails-template">
+			<table class="table table-striped">
+				<thead>
+					<tr>
+					<% _.each(headerItems, function(item){ %>
+						<th><%= item %></th>
+					<% }); %>
+					</tr>
+				</thead>
+				<tboby>
+					<% _.each(dataList, function(data){ %>
+						<tr>
+							<td><%= data[7] %></td>
+							<td><%= data[3] %></td>
+						</tr>
+					<% }); %>
+				</tbody>
+			</table>
 		</script>
 
 		<script type="text/javascript">

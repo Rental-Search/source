@@ -332,6 +332,7 @@ PIPELINE_JS = {
             'proapp/js/views/navtabs/stats/redirectionnavtabcontent.js',
             'proapp/js/views/navtabs/stats/timeseries.js',
             'proapp/js/views/navtabs/stats/charts.js',
+            'proapp/js/views/navtabs/stats/chartsdetails.js',
             'proapp/js/views/navtabs/navtabs.js',
             'proapp/js/views/navpills/navpillcontent.js',
             'proapp/js/views/navpills/statsnavpillcontent.js',
