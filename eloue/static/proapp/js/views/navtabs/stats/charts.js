@@ -32,6 +32,22 @@ app.ChartsView = Backbone.View.extend({
         }
     },
 
+    serializeData: function() {
+        var self = this;
+        
+        _.each(this.datasets, function(data) {
+            if (_.size(data.data) > 0) {
+                if (self.interval == 'weeks') {
+                    data.data = self._newWeeksDataArray(data.data);
+                } else if (self.interval == 'months') {
+                    data.data = self._newMonthsDataArray(data.data);
+                } else {
+                    data.data = self._newDaysDataArray(data.data);
+                }
+            }
+        });
+    },
+
     render: function() {
         this.delegateEvents();
         if (this.plot) {
@@ -51,17 +67,7 @@ app.ChartsView = Backbone.View.extend({
 	renderPlot: function() {
         var self = this;
         
-        _.each(this.datasets, function(data) {
-            if (_.size(data.data) > 0) {
-                if (self.interval == 'weeks') {
-                    data.data = self._newWeeksDataArray(data.data);
-                } else if (self.interval == 'months') {
-                    data.data = self._newMonthsDataArray(data.data);
-                } else {
-                    data.data = self._newDaysDataArray(data.data);
-                }
-            }
-        });
+        this.serializeData();
 
         var flotOptions = {
             xaxis: { color: "#364c59", mode: "time", timeformat: "%d %b", monthNames: this.monthList, autoscaleMargin: 0},
