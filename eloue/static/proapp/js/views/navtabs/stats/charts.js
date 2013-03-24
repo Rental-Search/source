@@ -8,6 +8,8 @@ app.ChartsView = Backbone.View.extend({
 
 	template: _.template($("#charts-template").html()),
 
+    toolTipTemplate: _.template($("#chartstooltip-template").html()),
+
 	datasets: null,
 
     plot: null,
@@ -15,6 +17,10 @@ app.ChartsView = Backbone.View.extend({
     chartsLegendItems: null,
 
     interval: null,
+
+    monthList: ["janv.", "févr.", "mars", "avr.", "mai", "juin", "juill.", "août", "sept.", "oct.", "nov.", "déc."],
+
+    dayList: ["Dimanche", "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi"],
 
     events: {
         'click .filter-time .btn-mini': 'updateInterval'
@@ -57,9 +63,8 @@ app.ChartsView = Backbone.View.extend({
             }
         });
 
-        var monthList = ["janv.", "févr.", "mars", "avr.", "mai", "juin", "juill.", "août", "sept.", "oct.", "nov.", "déc."]
         var flotOptions = {
-            xaxis: { color: "#364c59", mode: "time", timeformat: "%d %b", monthNames: monthList, autoscaleMargin: 0},
+            xaxis: { color: "#364c59", mode: "time", timeformat: "%d %b", monthNames: this.monthList, autoscaleMargin: 0},
             yaxis: { color: "#364c59", tickDecimals: 0, min: 0, position: 'left', transform: function (v) { return v; }},
             selection: { mode: "x" },
             grid: { markings: this._weekendAreas, borderColor: "#364c59", borderWidth: 0, hoverable: true},
@@ -68,7 +73,7 @@ app.ChartsView = Backbone.View.extend({
         };
 
         this.plot = $.plot(this.$el.children("#overview").children('#plot'), this.datasets, flotOptions);
-
+        $("#plot").bind("plothover", this, this.toolTip);
         
         $(window).resize(function () {
           self.plot.resize();
@@ -78,11 +83,47 @@ app.ChartsView = Backbone.View.extend({
         delete self;
 	},
 
+    renderTooltip: function(x, y, contents) {
+        var d = new Date(contents.datapoint[0]);
+
+        var object = {
+            'date': [this.dayList[d.getDay()], d.getDate(), this.monthList[d.getMonth()], d.getFullYear()].join(" "),
+            'label': contents.series.label,
+            'count': contents.datapoint[1],
+            'color': contents.series.color
+        }
+
+        $(this.toolTipTemplate(object)).css( {
+            top: y - 80,
+            left: x - 98,
+        }).appendTo("body").fadeIn(200);
+
+        delete d;
+        delete object;
+    },
+
     updateInterval: function(e) {
         $("div.filter-time").children().removeClass('active');
         $(e.currentTarget).addClass('active');
         $("form.form-inline").children("input[name=interval]").val($(".filter-time .active").attr('id'));
         this.trigger("interval:change");
+    },
+
+    toolTip: function (event, pos, item) {
+        self = event.data;
+        if (item) {
+            if (previousPoint != item.series.label) {
+                previousPoint = item.series.label;
+
+                $('#charts-popover').remove();
+                self.renderTooltip(item.pageX, item.pageY, item);
+            }
+        }
+        else {
+            $("#charts-popover").remove();
+            previousPoint = null;            
+        }
+        delete self;
     },
 
 	_weekendAreas: function(axes) {

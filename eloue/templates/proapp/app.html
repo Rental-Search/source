@@ -68,6 +68,19 @@
 				<div id="plot"></div>
 			</div> 
 		</script>
+		
+		<script type="text/template" id="chartstooltip-template">
+			<div id="charts-popover" class="popover top">
+				<div class="arrow"></div>
+				<h3 class="popover-title"><%= date %></h3>
+				<div class="popover-content">
+					<p>
+						<span class="charts-label-color" style="background-color: <%= color %>"></span>
+						<%= label %> : <%= count %>
+					</p>
+				</div>
+			</div>
+		</script>
 
 		<script type="text/template" id="chartsdetails-template">
 			<table class="table table-striped">
