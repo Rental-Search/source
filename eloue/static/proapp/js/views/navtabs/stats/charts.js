@@ -20,9 +20,9 @@ app.ChartsView = Backbone.View.extend({
 
     previousPoint: null,
 
-    monthList: ["janv.", "févr.", "mars", "avr.", "mai", "juin", "juill.", "août", "sept.", "oct.", "nov.", "déc."],
+    monthNames: ["janv.", "févr.", "mars", "avr.", "mai", "juin", "juill.", "août", "sept.", "oct.", "nov.", "déc."],
 
-    dayList: ["Dimanche", "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi"],
+    dayDays: ["Dimanche", "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi"],
 
     events: {
         'click .filter-time .btn-mini': 'updateInterval'
@@ -73,10 +73,10 @@ app.ChartsView = Backbone.View.extend({
         this.serializeData();
 
         var flotOptions = {
-            xaxis: { color: "#364c59", mode: "time", timeformat: "%d %b", monthNames: this.monthList, autoscaleMargin: 0},
+            xaxis: { color: "#364c59", mode: "time", timeformat: "%d %b", monthNames: this.monthNames, autoscaleMargin: 0},
             yaxis: { color: "#364c59", tickDecimals: 0, min: 0, position: 'left', transform: function (v) { return v; }},
             selection: { mode: "x" },
-            grid: { markings: this._weekendAreas, borderColor: "#364c59", borderWidth: 0, hoverable: true, mouseActiveRadius: 200},
+            grid: { markings: this._weekendAreas, borderColor: "#364c59", borderWidth: 0, hoverable: true, mouseActiveRadius: 40},
             series: { lines: { show: true }, points: { show: true } },
             legend: { show: true }
         };
@@ -96,7 +96,7 @@ app.ChartsView = Backbone.View.extend({
         var d = new Date(contents.datapoint[0]);
 
         var object = {
-            'date': [this.dayList[d.getDay()], d.getDate(), this.monthList[d.getMonth()], d.getFullYear()].join(" "),
+            'date': [this.dayDays[d.getDay()], d.getDate(), this.monthNames[d.getMonth()], d.getFullYear()].join(" "),
             'label': contents.series.label,
             'count': contents.datapoint[1],
             'color': contents.series.color
