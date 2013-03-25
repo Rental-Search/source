@@ -18,6 +18,8 @@ app.ChartsView = Backbone.View.extend({
 
     interval: null,
 
+    previousPoint: null,
+
     monthList: ["janv.", "févr.", "mars", "avr.", "mai", "juin", "juill.", "août", "sept.", "oct.", "nov.", "déc."],
 
     dayList: ["Dimanche", "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi"],
@@ -51,8 +53,9 @@ app.ChartsView = Backbone.View.extend({
     render: function() {
         this.delegateEvents();
         if (this.plot) {
-            this.$el.children("#overview").children().children().remove();
-            this.plot = null;
+            this.plot.shutdown();
+            //this.$el.children("#overview").children().children().remove();
+            //this.plot = null;
         }
     	this.$el.html(this.template(this.serialize()));
         this.renderFilterTime();
@@ -73,7 +76,7 @@ app.ChartsView = Backbone.View.extend({
             xaxis: { color: "#364c59", mode: "time", timeformat: "%d %b", monthNames: this.monthList, autoscaleMargin: 0},
             yaxis: { color: "#364c59", tickDecimals: 0, min: 0, position: 'left', transform: function (v) { return v; }},
             selection: { mode: "x" },
-            grid: { markings: this._weekendAreas, borderColor: "#364c59", borderWidth: 0, hoverable: true},
+            grid: { markings: this._weekendAreas, borderColor: "#364c59", borderWidth: 0, hoverable: true, mouseActiveRadius: 200},
             series: { lines: { show: true }, points: { show: true } },
             legend: { show: true }
         };
@@ -118,8 +121,9 @@ app.ChartsView = Backbone.View.extend({
     toolTip: function (event, pos, item) {
         self = event.data;
         if (item) {
-            if (previousPoint != item.series.label) {
-                previousPoint = item.series.label;
+
+            if (self.previousPoint != item.pageX) {
+                self.previousPoint = item.pageX;
 
                 $('#charts-popover').remove();
                 self.renderTooltip(item.pageX, item.pageY, item);
@@ -127,7 +131,7 @@ app.ChartsView = Backbone.View.extend({
         }
         else {
             $("#charts-popover").remove();
-            previousPoint = null;            
+            self.previousPoint = null;            
         }
         delete self;
     },
