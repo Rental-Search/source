@@ -27,10 +27,61 @@ app.TimeSeriesView = Backbone.View.extend({
 		};
 	},
 
-	render: function(timeseries){
+	render: function(timeseries) {
 		this.delegateEvents();
 		this.$el.html(this.template(this.serialize(timeseries)));
+		this.renderDatePicker();
 		return this;
+	},
+
+	renderDatePicker: function() {
+		$( "#datepicker" ).datepicker({
+			numberOfMonths: 3,
+			showCurrentAtPos: 0,
+			maxDate: "d",
+			onSelect: function(dateText, inst) {
+				var selectedDate = new Date(inst.selectedYear, inst.selectedMonth, inst.selectedDay);
+				var minDate = $(this).datepicker( "option", "minDate" );
+
+				if ( minDate == null ) {
+					$("input[name=start_date]").focus();
+					$(this).datepicker( "option", "minDate", selectedDate);
+					$("input[name=start_date]").val(dateText);
+					$("input[name=end_date]").focus();
+					
+				} 
+
+				if  (minDate != null && minDate.getTime() == selectedDate.getTime()) {
+					$("input[name=start_date]").focus();
+					$(this).datepicker( "option", "minDate", "");
+				}
+
+				if ( minDate != null ) {
+					$("input[name=end_date]").val(dateText);
+					$("input[name=start_date]").focus();
+				}
+			},
+
+			beforeShowDay: function(date) {
+				var startDate = $.datepicker.parseDate('dd/mm/yy', $("input[name=start_date]").val().toString());
+				var endDate = $.datepicker.parseDate('dd/mm/yy', $("input[name=end_date]").val().toString());
+
+				console.log( startDate );
+				console.log( endDate );
+
+				if ( startDate != null && endDate != null ) {
+					if ( date.getTime() >= startDate.getTime() && date.getTime() <= endDate.getTime()) {
+						return [true, "highlighted"];
+					}
+				}
+
+				return [true, ""];
+			}
+		});
+
+		$("input[name=start_date]").bind("focus", function() {
+			$("#datepicker").datepicker( "option", "minDate", null );
+		});
 	},
 
 	toggleDropdown: function(e) {
@@ -47,6 +98,9 @@ app.TimeSeriesView = Backbone.View.extend({
 		$('html').click(function(){
 			self.$el.children("div.btn-group").removeClass('open');
 		});
+
+		$("input[name=start_date]").focus();
+		this.validateInput();
 
 		delete self;
 	},

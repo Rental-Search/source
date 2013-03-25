@@ -317,6 +317,9 @@ PIPELINE_JS = {
             'proapp/js/libs/flot/jquery.flot.js',
             'proapp/js/libs/flot/jquery.flot.pie.js',
             'proapp/js/libs/flot/jquery.flot.time.js',
+            'proapp/js/libs/ui/jquery.ui.core.js',
+            'proapp/js/libs/ui/jquery.ui.datepicker.js',
+            'proapp/js/libs/ui/i18n/jquery.ui.datepicker-fr.js'
         ),
         'output_filename': 'js/proapplibs.js',
         'extra_context': {

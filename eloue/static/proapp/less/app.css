@@ -1,3 +1,8 @@
+@import "ui/jquery.ui.theme.css";
+
+@import "ui/jquery.ui.core.css";
+
+@import "ui/jquery.ui.datepicker.css";
 /*!
  * Bootstrap v2.3.1
  *
@@ -7221,6 +7226,11 @@ h3 {
   -moz-box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(157,38,29,.6);
   box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(157,38,29,.6);
 }
+.range-date .timeseries-shortcut {
+  font-size: 11px;
+  text-align: center;
+  margin-left: 15px;
+}
 .range-date .form-inline .input-small,
 .range-date .form-inline button {
   -webkit-border-radius: 3px;
@@ -7239,6 +7249,11 @@ h3 {
 }
 .range-date .btn-group.open .btn.dropdown-toggle {
   background-color: #dbeaf7;
+}
+.range-date #datepicker {
+  border-bottom: 1px solid #b2ced9;
+  margin-bottom: 5px;
+  padding-bottom: 5px;
 }
 .charts {
   position: relative;
