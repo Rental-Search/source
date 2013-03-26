@@ -21,7 +21,7 @@ app.ChartsDeatilsView = Backbone.View.extend({
 	render: function() {
 		var object = this.serialize();
 		if (_.size(object.dataList) == 0) {
-			this.$el.html("<p style=\"text-align: center;\">Pas redirections pour ces dates.</p>")
+			this.$el.html("<p style=\"text-align: center;\">Pas de données pour ces dates.</p>")
 		} else {
 			this.$el.html(this.template(object));
 		}

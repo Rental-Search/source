@@ -279,7 +279,7 @@ class PhoneEventResource(Resource):
 		self.method_check(request, allowed=['get'])
 		self.throttle_check(request)
 
-		patron = request.user
+		patron = Patron.objects.get(slug='deguizland')#patron = request.user
 
 		#Google Analytics References
 		metrics, dimensions, filters = get_analytics_event_references(event_action="Phone", event_label=patron.slug)

@@ -5,6 +5,23 @@ var app = app || {};
 
 app.RedirectionNavTabContentView = app.NavTabContentView.extend({
 
+	chartItem: {
+		model: new app.RedirectionEventModel(),
+		chartsLegendItem: {
+			className: 'charts-redirections', 
+			icon: 'link', 
+			labelName: 'Redirection', 
+			count: null	
+		},
+		dataset: {
+			data: null,
+      		color: "#fe8f00",
+      		label: "Redirections"
+		},
+		interval: null,
+		headerItems: ['Pages', 'Nombre de redirections']
+	},
+
 	initialize: function() {
 		if (this.options.titleName) this.titleName = this.options.titleName;
 		this.loadingView = new app.LoadingView();
@@ -19,10 +36,10 @@ app.RedirectionNavTabContentView = app.NavTabContentView.extend({
 		this.timeSeries = timeSeries;
 		this.timeSeriesView = new app.TimeSeriesView();
 		this.timeSeriesView.on('timeseriesform:submited', this.fetchModel, this);
+		
+		this.chartItem.model.on('request', this.renderLoading, this);
+		this.chartItem.model.on('sync', this.render, this);
 
-		this.model = new app.RedirectionEventModel();
-		this.model.on('request', this.renderLoading, this);
-		this.model.on('sync', this.render, this);
 		this.fetchModel();
 	},
 
@@ -30,25 +47,26 @@ app.RedirectionNavTabContentView = app.NavTabContentView.extend({
 		var self = this;
 		var params;
 
-		if(this.timeSeriesView.serializeForm()) {
-			params = this.timeSeriesView.serializeForm();
-		} else if (this.timeSeries) {
-			params = $.param(this.timeSeries);
+		if(self.timeSeriesView.serializeForm()) {
+			params = self.timeSeriesView.serializeForm();
+		} else if (self.timeSeries) {
+			params = $.param(self.timeSeries);
 		} else {
 			params = null;
 		}
 
-		this.model.fetch({data: params})
+		this.chartItem.model.fetch({data: params})
 			.success(function () {
 				self.timeSeries = self._getTimeSeries();
 				self.trigger('timeSeries:change');
 			});
+
 		delete params;
 		delete self;
 	},
 
 	render: function() {
-		app.redirectionModel = this.model.toJSON();
+		//app.redirectionModel = this.model.toJSON();
 		this.$el.html("<h3>" + this.titleName + "</h3>");
 
 		if (this.timeSeriesView) {
@@ -64,28 +82,24 @@ app.RedirectionNavTabContentView = app.NavTabContentView.extend({
 
 	renderCharts: function() {
 		this.$el.append(this.chartView.$el);
-		if (this.model.toJSON().count >1 ) {
-			this.chartView.chartsLegendItems = [
-				{className: 'charts-redirections', icon: 'link', labelName: 'Redirections', count: this.model.toJSON().count}
-			]
-		} else {
-			this.chartView.chartsLegendItems = [
-				{className: 'charts-redirections', icon: 'link', labelName: 'Redirection', count: this.model.toJSON().count}
-			]
-		}
+
+		this.chartItem.chartsLegendItem.count = this.chartItem.model.toJSON().count;
+		this.chartView.chartsLegendItems = [this.chartItem.chartsLegendItem]
 		
-		this.chartView.datasets = [{
-          data: this.model.toJSON().data,
-          color: "#fe8f00",
-          label: "Redirections"
-        }]
-        this.chartView.interval = this.model.toJSON().interval;
+		this.chartItem.dataset.data = this.chartItem.model.toJSON().data;
+		this.chartView.datasets = [this.chartItem.dataset];
+
+        this.chartView.interval = this.chartItem.model.toJSON().interval;
+
 		this.chartView.render();
+
+		delete chartsLegendItems;
+		delete datasets;
 	},
 
 	renderChartsDetails: function() {
-		this.chartsDetailsView.headerItems = ['Pages', 'Nombre de redirections'];
-		this.chartsDetailsView.dataList = _.countBy(app.redirectionModel.details, function(redirection) { return redirection[3]; });
+		this.chartsDetailsView.headerItems = this.chartItem.headerItems;
+		this.chartsDetailsView.dataList = _.countBy(this.chartItem.model.toJSON().details, function(redirection) { return redirection[3]; });
 		this.$el.append(this.chartsDetailsView.$el);
 		this.chartsDetailsView.render();
 	},
@@ -97,9 +111,9 @@ app.RedirectionNavTabContentView = app.NavTabContentView.extend({
 
 	_getTimeSeries: function() {
 		return {
-			start_date: String(this.model.get('start_date')), 
-			end_date: String(this.model.get('end_date')), 
-			interval: String(this.model.get('interval'))
+			start_date: String(this.chartItem.model.get('start_date')), 
+			end_date: String(this.chartItem.model.get('end_date')), 
+			interval: String(this.chartItem.model.get('interval'))
 		};
 	},
 
@@ -108,7 +122,7 @@ app.RedirectionNavTabContentView = app.NavTabContentView.extend({
 		this.loadingView.close();
 		this.chartView.close();
 		this.chartsDetailsView.close();
-		this.model.unbind();
-		delete this.model;
+		this.chartItem.model.unbind();
+		delete this.chartItem;
 	}
 });
