@@ -36,54 +36,58 @@ app.TimeSeriesView = Backbone.View.extend({
 
 	renderDatePicker: function() {
 		var datePicker = $( "#datepicker" );
+		var minD = null
 		datePicker.datepicker({
 			numberOfMonths: 3,
-			showCurrentAtPos: 0,
 			maxDate: "d",
 			onSelect: function(dateText, inst) {
-				var selectedDate = new Date(inst.selectedYear, inst.selectedMonth, inst.selectedDay);
-				var minDate = $(this).datepicker( "option", "minDate" );
 
-				if ( minDate == null ) {
+				var selectedDate = new Date(inst.selectedYear, inst.selectedMonth, inst.selectedDay);
+				if ( minD == null ) {
 					$("input[name=start_date]").focus();
-					$(this).datepicker( "option", "minDate", selectedDate);
 					$("input[name=start_date]").val(dateText);
 					$("input[name=end_date]").focus();
-					
-				} 
-
-				if  (minDate != null && minDate.getTime() == selectedDate.getTime()) {
+				} else if ( minD != null && minD.getTime() == selectedDate.getTime() && $("input[name=start_date]") == true ) {
 					$("input[name=start_date]").focus();
-					$(this).datepicker( "option", "minDate", "");
-				}
-
-				if ( minDate != null ) {
+				} else if ( minD != null ) {
 					$("input[name=end_date]").val(dateText);
 					$("input[name=start_date]").focus();
 				}
 			},
-
 			beforeShowDay: function(date) {
 				var startDate = $.datepicker.parseDate('dd/mm/yy', $("input[name=start_date]").val().toString());
 				var endDate = $.datepicker.parseDate('dd/mm/yy', $("input[name=end_date]").val().toString());
-
+				
 				if ( startDate != null && endDate != null ) {
-					if ( date.getTime() >= startDate.getTime() && date.getTime() <= endDate.getTime()) {
+					if ( minD != null ) {
+						if ( date.getTime() < startDate ) {
+							return [false, ""];
+						}
+					} else if ( date.getTime() >= startDate.getTime() && date.getTime() <= endDate.getTime()) {
 						return [true, "highlighted"];
+					} else {
+						return [true, ""];
 					}
 				}
 
 				return [true, ""];
-			}
+			},
 		});
 
 		$("input[name=start_date]").bind("focus", function() {
-			$("#datepicker").datepicker( "option", "minDate", null );
+			minD = null;
+			$("#datepicker").datepicker( "refresh" );
+		});
+
+		$("input[name=end_date]").bind("focus", function() {
+			minD = $.datepicker.parseDate('dd/mm/yy', $("input[name=start_date]").val().toString());
+			$("#datepicker").datepicker( "refresh" );
 		});
 
 		//select today range dates
 		$("a[href=#today-link]").bind("click", function(e){
 			e.preventDefault();
+			minD = null;
 			var date = new Date();
 			date.setDate(date.getDate());
 			$("input[name=start_date]").val([date.getDate(), date.getMonth() + 1, date.getFullYear()].join("/"));
@@ -94,6 +98,7 @@ app.TimeSeriesView = Backbone.View.extend({
 		//select yesterday range dates
 		$("a[href=#yesterday-link]").bind("click", function(e){
 			e.preventDefault();
+			minD = null;
 			var date = new Date();
 			date.setDate(date.getDate() -1);
 			$("input[name=start_date]").val([date.getDate(), date.getMonth() + 1, date.getFullYear()].join("/"));
@@ -104,10 +109,11 @@ app.TimeSeriesView = Backbone.View.extend({
 		//select last week range dates
 		$("a[href=#lastweek-link]").bind("click", function(e){
 			e.preventDefault();
-
+			minD = null;
 			//get previous saturday date
 			var date = new Date();
-			date.setUTCDate(date.getUTCDate() - ((date.getUTCDay() + 1) % 7));
+			date.setDate(date.getDate());
+			date.setUTCDate(date.getUTCDate() - ((date.getUTCDay()) % 7));
 			date.setUTCSeconds(0);
 			date.setUTCMinutes(0);
         	date.setUTCHours(0);
@@ -124,12 +130,12 @@ app.TimeSeriesView = Backbone.View.extend({
 		//select last month range dates
 		$("a[href=#lastmonth-link]").bind("click", function(e){
 			e.preventDefault();
-
+			minD = null;
 			//get previous saturday date
 			var date = new Date();
 			var firstDay = new Date(date.getFullYear(), date.getMonth() - 1, 1);
 			var lastDay = new Date(date.getFullYear(), date.getMonth(), 0);
-			
+
 			$("input[name=start_date]").val([firstDay.getDate(), firstDay.getMonth() + 1, firstDay.getFullYear()].join("/"));
 			$("input[name=end_date]").val([lastDay.getDate(), lastDay.getMonth() + 1, lastDay.getFullYear()].join("/"));
 
