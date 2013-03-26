@@ -40,19 +40,21 @@
 				</button>
 				<div class="dropdown-menu pull-right">
 					<div id="datepicker"></div>
-					<div class="timeseries-shortcut pull-left">
-						<span>Racourcis : </span> 
-						<a href="#">Aujourdhui</a> |
-						<a href="#">Hier</a> |
-						<a href="#">Semaine dernière</a> |
-						<a href="#">Mois dernier</a>
+					<div class="dropdown-menu-bottom">
+						<form class="form-inline pull-right" action="#">
+							<input type="text" class="input-small" name="start_date" value="<%= start_date %>"> -
+							<input type="text" class="input-small" name="end_date" value="<%= end_date %>"> 
+							<input type="hidden" name="interval" value="<%= interval %>"> 
+							<button type="submit" class="btn btn-small">Appliquer</button>
+						</form>
+						<div class="timeseries-shortcut pull-left">
+							<span>Racourcis : </span> 
+							<a href="#today-link">Aujourd&#145;hui</a> |
+							<a href="#yesterday-link">Hier</a> |
+							<a href="#lastweek-link">La semaine dernière</a> |
+							<a href="#lastmonth-link">Le mois dernier</a>
+						</div>
 					</div>
-					<form class="form-inline pull-right" action="#">
-						<input type="text" class="input-small" name="start_date" value="<%= start_date %>"> -
-						<input type="text" class="input-small" name="end_date" value="<%= end_date %>"> 
-						<input type="hidden" name="interval" value="<%= interval %>"> 
-						<button type="submit" class="btn btn-small">Appliquer</button>
-					</form>
 				</div>
 			</div>
 		</script>
