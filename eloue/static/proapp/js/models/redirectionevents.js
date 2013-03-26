@@ -1,4 +1,4 @@
-// js/models/redirection.js
+// js/models/redirectionevent.js
 
 var app = app || {};
 

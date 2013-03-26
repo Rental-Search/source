@@ -46,7 +46,7 @@ var Workspace = Backbone.Router.extend({
 			var navTabContentView = new app.NavTabContentView({titleName: 'Visites'});
 			statsNavPillContentView.navTabsView.navTabsItemViews[1].setSelectedTabItem();
 		} else if (metric == 'phone') {
-			var navTabContentView = new app.NavTabContentView({titleName: 'Appels'});
+			var navTabContentView = new app.PhoneNavTabContentView({titleName: 'Appels'});
 			statsNavPillContentView.navTabsView.navTabsItemViews[2].setSelectedTabItem();
 		}
 
