@@ -89,7 +89,7 @@
 .ui-state-highlight,
 .ui-widget-content .ui-state-highlight,
 .ui-widget-header .ui-state-highlight {
-	background: #ebf2f5/;
+	background: none !important;
 	color: #364c59;
 	font-weight: bold;
 }

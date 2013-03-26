@@ -51,13 +51,21 @@ app.TimeSeriesView = Backbone.View.extend({
 					$("input[name=start_date]").focus();
 				} else if ( minD != null ) {
 					$("input[name=end_date]").val(dateText);
+					$( this ).datepicker( "setDate", null);
 					$("input[name=start_date]").focus();
 				}
 			},
 			beforeShowDay: function(date) {
-				var startDate = $.datepicker.parseDate('dd/mm/yy', $("input[name=start_date]").val().toString());
-				var endDate = $.datepicker.parseDate('dd/mm/yy', $("input[name=end_date]").val().toString());
-				
+				var startDate, endDate;
+				try {
+					startDate = $.datepicker.parseDate('dd/mm/yy', $("input[name=start_date]").val().toString());
+					endDate = $.datepicker.parseDate('dd/mm/yy', $("input[name=end_date]").val().toString());
+				}
+				catch (e) {
+					startDate = null;
+					endDate = null;
+				}
+
 				if ( startDate != null && endDate != null ) {
 					if ( minD != null ) {
 						if ( date.getTime() < startDate ) {
@@ -84,6 +92,12 @@ app.TimeSeriesView = Backbone.View.extend({
 			$("#datepicker").datepicker( "refresh" );
 		});
 
+
+		$("input[name=end_date]").bind("keyup", function() {
+			minD = null
+		});
+
+
 		//select today range dates
 		$("a[href=#today-link]").bind("click", function(e){
 			e.preventDefault();
@@ -93,6 +107,7 @@ app.TimeSeriesView = Backbone.View.extend({
 			$("input[name=start_date]").val([date.getDate(), date.getMonth() + 1, date.getFullYear()].join("/"));
 			$("input[name=end_date]").val([date.getDate(), date.getMonth() + 1, date.getFullYear()].join("/"));
 			datePicker.datepicker( "refresh" );
+			this.validateInput();
 		});
 
 		//select yesterday range dates
@@ -104,6 +119,7 @@ app.TimeSeriesView = Backbone.View.extend({
 			$("input[name=start_date]").val([date.getDate(), date.getMonth() + 1, date.getFullYear()].join("/"));
 			$("input[name=end_date]").val([date.getDate(), date.getMonth() + 1, date.getFullYear()].join("/"));
 			datePicker.datepicker( "refresh" );
+			this.validateInput();
 		});
 
 		//select last week range dates
@@ -125,6 +141,7 @@ app.TimeSeriesView = Backbone.View.extend({
 			$("input[name=start_date]").val([date.getDate(), date.getMonth() + 1, date.getFullYear()].join("/"));
 
 			datePicker.datepicker( "refresh" );
+			this.validateInput();
 		});
 
 		//select last month range dates
@@ -140,6 +157,7 @@ app.TimeSeriesView = Backbone.View.extend({
 			$("input[name=end_date]").val([lastDay.getDate(), lastDay.getMonth() + 1, lastDay.getFullYear()].join("/"));
 
 			datePicker.datepicker( "refresh" );
+			this.validateInput();
 		});
 	},
 
@@ -171,10 +189,12 @@ app.TimeSeriesView = Backbone.View.extend({
 		var start_date = this._parseDate($("input[name=start_date]").val().split("/").reverse());
 		var end_date = this._parseDate($("input[name=end_date]").val().split("/").reverse());
 
-		if (start_date > end_date || $(e.currentTarget).val().match(/^\d\d?\/\d\d?\/\d\d\d\d$/) == null) {
+		if (start_date > end_date || $(e.currentTarget).val().match(/^\d{1,2}\/\d{1,2}\/\d{4}$/) == null) {
 			$(e.currentTarget).addClass('error');
 			$("button[type=submit].btn.btn-small").attr("disabled", "disabled");
 		}
+
+		$("#datepicker").datepicker( "refresh" );
 	},
 
 	submitForm: function() {

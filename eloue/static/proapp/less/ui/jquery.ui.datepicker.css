@@ -179,6 +179,6 @@
 }
 
 .ui-datepicker .highlighted a {
-	background-color: #005580;
+	background-color: #005580 !important;
 	color: #fff;
 }
