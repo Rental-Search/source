@@ -329,6 +329,8 @@ PIPELINE_JS = {
 
     'proapp': {
         'source_filenames': (
+            'proapp/js/models/trafficevents.js',
+            'proapp/js/models/addressevents.js',
             'proapp/js/models/redirectionevents.js',
             'proapp/js/models/phoneevents.js',
             'proapp/js/views/navtabs/navtabsitem.js',
@@ -336,6 +338,8 @@ PIPELINE_JS = {
             'proapp/js/views/navtabs/stats/statsnavtabcontent.js',
             'proapp/js/views/navtabs/stats/redirectionnavtabcontent.js',
             'proapp/js/views/navtabs/stats/phonenavtabcontent.js',
+            'proapp/js/views/navtabs/stats/addressnavtabcontent.js',
+            'proapp/js/views/navtabs/stats/trafficnavtabcontent.js',
             'proapp/js/views/navtabs/stats/timeseries.js',
             'proapp/js/views/navtabs/stats/charts.js',
             'proapp/js/views/navtabs/stats/chartsdetails.js',

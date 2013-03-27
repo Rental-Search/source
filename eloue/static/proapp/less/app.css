@@ -7298,7 +7298,7 @@ h3 {
 .charts-legend li i {
   margin-top: 2px;
 }
-.charts-legend .charts-trafic {
+.charts-legend .charts-traffic {
   border-color: #fe8f00;
 }
 .charts-legend .charts-calls {
@@ -7309,6 +7309,9 @@ h3 {
 }
 .charts-legend .charts-redirections {
   border-color: #de6829;
+}
+.charts-legend .charts-addresses {
+  border-color: #349B9D;
 }
 .charts-details {
   margin-right: 20px;

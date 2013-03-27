@@ -16,7 +16,7 @@ app.PhoneNavTabContentView = app.StatsNavTabContentView.extend({
 		dataset: {
 			data: null,
       		color: "#9dcc09",
-      		label: "Phones"
+      		label: "Appels"
 		},
 		interval: null,
 		headerItems: ['Pages', 'Nombre d\'appels']

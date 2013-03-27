@@ -29,12 +29,6 @@ app.ChartsView = Backbone.View.extend({
     },
 
     serialize: function() {
-        //plurilize label name
-        _.each(this.chartsLegendItems, function(legendItem) {
-            if ( legendItem.count > 1 ) {
-                legendItem.labelName = legendItem.labelName + "s";
-            }
-        });
         return {
             chartLegends: this.chartsLegendItems
         }

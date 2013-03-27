@@ -98,9 +98,13 @@ app.StatsNavTabContentView = app.NavTabContentView.extend({
 
 	renderChartsDetails: function() {
 		this.chartsDetailsView.headerItems = this.chartItem.headerItems;
-		this.chartsDetailsView.dataList = _.countBy(this.chartItem.model.toJSON().details, function(line) { return line[3]; });
+		this.chartsDetailsView.dataList = this.serializeChartsDetails();
 		this.$el.append(this.chartsDetailsView.$el);
 		this.chartsDetailsView.render();
+	},
+
+	serializeChartsDetails: function() {
+		return _.countBy(this.chartItem.model.toJSON().details, function(line) { return line[3]; });
 	},
 
 	renderLoading: function() {
