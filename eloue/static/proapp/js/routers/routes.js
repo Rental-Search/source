@@ -37,20 +37,17 @@ var Workspace = Backbone.Router.extend({
 		}
 
 		if (metric == undefined) {
-			var navTabContentView = new app.NavTabContentView({titleName: 'Vue d\'ensemble'});
+			var navTabContentView = new app.TrafficNavTabContentView({titleName: 'Visites'});
 			statsNavPillContentView.navTabsView.navTabsItemViews[0].setSelectedTabItem();
 		} else if (metric == 'redirection') {
 			var navTabContentView = new app.RedirectionNavTabContentView({titleName: 'Redirections'});
-			statsNavPillContentView.navTabsView.navTabsItemViews[3].setSelectedTabItem();
-		} else if (metric == 'traffic') {
-			var navTabContentView = new app.TrafficNavTabContentView({titleName: 'Visites'});
-			statsNavPillContentView.navTabsView.navTabsItemViews[1].setSelectedTabItem();
+			statsNavPillContentView.navTabsView.navTabsItemViews[2].setSelectedTabItem();
 		} else if (metric == 'phone') {
 			var navTabContentView = new app.PhoneNavTabContentView({titleName: 'Appels'});
-			statsNavPillContentView.navTabsView.navTabsItemViews[2].setSelectedTabItem();
+			statsNavPillContentView.navTabsView.navTabsItemViews[1].setSelectedTabItem();
 		} else if (metric == 'address') {
 			var navTabContentView = new app.AddressNavTabContentView({titleName: 'Adresses'});
-			statsNavPillContentView.navTabsView.navTabsItemViews[4].setSelectedTabItem();
+			statsNavPillContentView.navTabsView.navTabsItemViews[3].setSelectedTabItem();
 		}
 
 		statsNavPillContentView.setCurrentNavTabContentView(navTabContentView);

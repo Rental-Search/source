@@ -16,8 +16,7 @@ app.StatsNavPillContentView = app.NavPillContentView.extend({
 
 	initialize: function() {
 		this.navTabsView = new app.NavTabsView();
-		this.navTabsView.pushNavTabContentViews(new app.NavTabsItemView({icon: 'dashboard', path: 'stats/', labelName: 'Vue d\'ensemble'}));
-		this.navTabsView.pushNavTabContentViews(new app.NavTabsItemView({icon: 'user', path: 'stats/traffic/', labelName: 'Visites'}));
+		this.navTabsView.pushNavTabContentViews(new app.NavTabsItemView({icon: 'user', path: 'stats/', labelName: 'Visites'}));
 		this.navTabsView.pushNavTabContentViews(new app.NavTabsItemView({icon: 'phone', path: 'stats/phone/', labelName: 'Appels'}));
 		this.navTabsView.pushNavTabContentViews(new app.NavTabsItemView({icon: 'link', path: 'stats/redirection/', labelName: 'Redirections'}));
 		this.navTabsView.pushNavTabContentViews(new app.NavTabsItemView({icon: 'map-marker', path: 'stats/address/', labelName: 'Adresses'}));
