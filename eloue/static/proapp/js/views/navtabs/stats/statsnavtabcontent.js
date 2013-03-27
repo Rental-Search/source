@@ -4,7 +4,6 @@ var app = app || {};
 
 
 app.StatsNavTabContentView = app.NavTabContentView.extend({
-
 	chartItem: {
 		model: null,
 		chartsLegendItem: {
@@ -65,6 +64,12 @@ app.StatsNavTabContentView = app.NavTabContentView.extend({
 		delete self;
 	},
 
+	serialize: function() {
+		this.chartItem.chartsLegendItem.count = this.chartItem.model.toJSON().count;
+		this.chartItem.dataset.data = this.chartItem.model.toJSON().data;
+		this.chartView.interval = this.chartItem.model.toJSON().interval;
+	},
+
 	render: function() {
 		this.$el.html("<h3>" + this.titleName + "</h3>");
 
@@ -72,6 +77,8 @@ app.StatsNavTabContentView = app.NavTabContentView.extend({
 			this.$el.children("h3").append(this.timeSeriesView.$el);
 			this.timeSeriesView.render(this._getTimeSeries());
 		}
+
+		this.serialize();
 
 		this.renderCharts();
 		this.renderChartsDetails();
@@ -81,19 +88,9 @@ app.StatsNavTabContentView = app.NavTabContentView.extend({
 
 	renderCharts: function() {
 		this.$el.append(this.chartView.$el);
-
-		this.chartItem.chartsLegendItem.count = this.chartItem.model.toJSON().count;
 		this.chartView.chartsLegendItems = [this.chartItem.chartsLegendItem]
-		
-		this.chartItem.dataset.data = this.chartItem.model.toJSON().data;
 		this.chartView.datasets = [this.chartItem.dataset];
-
-        this.chartView.interval = this.chartItem.model.toJSON().interval;
-
 		this.chartView.render();
-
-		delete chartsLegendItems;
-		delete datasets;
 	},
 
 	renderChartsDetails: function() {

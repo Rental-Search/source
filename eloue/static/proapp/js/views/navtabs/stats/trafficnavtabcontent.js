@@ -4,7 +4,6 @@ var app = app || {};
 
 
 app.TrafficNavTabContentView = app.StatsNavTabContentView.extend({
-
 	chartItem: {
 		model: new app.TrafficEventModel(),
 		chartsLegendItem: {
