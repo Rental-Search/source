@@ -54,9 +54,8 @@ app.ChartsView = Backbone.View.extend({
         this.delegateEvents();
         if (this.plot) {
             this.plot.shutdown();
-            //this.$el.children("#overview").children().children().remove();
-            //this.plot = null;
         }
+
     	this.$el.html(this.template(this.serialize()));
         this.renderFilterTime();
     	this.renderPlot();
@@ -82,6 +81,7 @@ app.ChartsView = Backbone.View.extend({
         };
 
         this.plot = $.plot(this.$el.children("#overview").children('#plot'), this.datasets, flotOptions);
+
         $("#plot").bind("plothover", this, this.toolTip);
         
         $(window).resize(function () {

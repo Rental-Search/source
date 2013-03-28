@@ -55,9 +55,12 @@ app.StatsNavTabContentView = app.NavTabContentView.extend({
 		}
 
 		this.chartItem.model.fetch({data: params})
-			.success(function () {
+			.success(function() {
 				self.timeSeries = self._getTimeSeries();
 				self.trigger('timeSeries:change');
+			})
+			.fail(function() {
+				self.renderFail();
 			});
 
 		delete params;
@@ -98,6 +101,11 @@ app.StatsNavTabContentView = app.NavTabContentView.extend({
 		this.chartsDetailsView.dataList = this.serializeChartsDetails();
 		this.$el.append(this.chartsDetailsView.$el);
 		this.chartsDetailsView.render();
+	},
+
+	renderFail: function() {
+		this.$el.html("<h3>" + this.titleName + "</h3>");
+		this.$el.append("<p>Impossible de récupérer les données.</p>");
 	},
 
 	serializeChartsDetails: function() {

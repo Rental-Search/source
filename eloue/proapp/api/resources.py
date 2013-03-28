@@ -2,6 +2,8 @@
 import qsstats
 import datetime
 
+from collections import defaultdict
+
 from django.conf.urls.defaults import *
 from django.http import Http404
 from tastypie import fields
@@ -191,18 +193,61 @@ class PageViewResource(Resource):
 		self.method_check(request, allowed=['get'])
 		self.throttle_check(request)
 		
-		patron = Patron.objects.get(slug='ma-petite-cuisine')#patron = request.user
+		patron = Patron.objects.get(slug='deguizland')#patron = request.user
 
-		#Google Analytics References
-		metrics = 'ga:pageviews'
-		dimensions = 'ga:pagePath'
-		filters = 'ga:pagePathLevel2==/%s/,%s' % (patron.slug, ",".join(["ga:pagePathLevel4=@%s-%s" % (product.slug, product.pk) for product in patron.products.all()])) 
+		
+		data = []
+		details = []
+		totalResults = 0
 
 		#Time series
 		start_date, end_date, interval = get_time_series(request=request)
 
+		#Google Analytics References
+		metrics = 'ga:pageviews'
+		dimensions = 'ga:pagePath'
+		filters = 'ga:pagePathLevel2==/%s/' % patron.slug
+
 		#Google Analytics Query
-		data, details, totalResults = GoogleAnalyticsSetStats(metrics=metrics, dimensions=dimensions, filters=filters).time_serie(start_date, end_date, interval=interval)
+		partial_data, partial_details, partial_totalResults = GoogleAnalyticsSetStats(metrics=metrics, dimensions=dimensions, filters=filters).time_serie(start_date, end_date, interval=interval)
+
+		data += partial_data
+		details += partial_details
+		totalResults += partial_totalResults
+
+
+		position = 0
+
+		while (patron.products.all().count() != position):
+
+			products = patron.products.all()[position:][:45]
+
+			#Time series
+			start_date, end_date, interval = get_time_series(request=request)
+
+			#Google Analytics References
+			metrics = 'ga:pageviews'
+			dimensions = 'ga:pagePath'
+			filters = '%s' % ",".join(["ga:pagePathLevel4=@-%s/" % (product.pk) for product in products])
+
+			#Google Analytics Query
+			partial_data, partial_details, partial_totalResults = GoogleAnalyticsSetStats(metrics=metrics, dimensions=dimensions, filters=filters).time_serie(start_date, end_date, interval=interval)
+
+			data += partial_data
+			details += partial_details
+			totalResults += partial_totalResults
+			position += products.count()
+
+
+		group_by_data = defaultdict(int)
+
+		for date, total in data:
+			group_by_data[date] += total
+
+		
+		data = []
+		for key in sorted(group_by_data.iterkeys()):
+				data.append((key, group_by_data[key]))
 
 		objects = {
 			'data': data,
@@ -236,7 +281,7 @@ class RedirectionEventResource(Resource):
 		self.method_check(request, allowed=['get'])
 		self.throttle_check(request)
 
-		patron = Patron.objects.get(slug='ma-petite-cuisine')#request.user
+		patron = Patron.objects.get(slug='deguizland')#request.user
 
 		#Google Analytics References
 		metrics, dimensions, filters = get_analytics_event_references(event_action="Redirection", event_label=patron.slug)
@@ -279,7 +324,7 @@ class PhoneEventResource(Resource):
 		self.method_check(request, allowed=['get'])
 		self.throttle_check(request)
 
-		patron = Patron.objects.get(slug='ma-petite-cuisine')#patron = request.user
+		patron = Patron.objects.get(slug='deguizland')#patron = request.user
 
 		#Google Analytics References
 		metrics, dimensions, filters = get_analytics_event_references(event_action="Phone", event_label=patron.slug)
@@ -322,7 +367,7 @@ class AddressEventResource(Resource):
 		self.method_check(request, allowed=['get'])
 		self.throttle_check(request)
 
-		patron = Patron.objects.get(slug='ma-petite-cuisine') #patron = request.user
+		patron = Patron.objects.get(slug='deguizland') #patron = request.user
 
 		#Google Analytics References
 		metrics, dimensions, filters = get_analytics_event_references(event_action="Address", event_label=patron.slug)
