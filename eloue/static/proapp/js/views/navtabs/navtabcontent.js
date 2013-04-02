@@ -7,17 +7,9 @@ app.NavTabContentView = Backbone.View.extend({
 
 	titleName: '',
 
-	timeSeriesView: null,
-
-	timeSeries: null,
-
 	initialize: function() {
 		if (this.options.titleName) this.titleName = this.options.titleName;
 		this.render();
-	},
-
-	setTimeSeriesView: function(timeSeries) {
-		
 	},
 
 	render: function() {

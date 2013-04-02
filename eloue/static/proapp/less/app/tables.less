@@ -1,0 +1,98 @@
+.table-striped tbody > tr:nth-child(odd) > td, .table-striped tbody > tr:nth-child(odd) > th {
+	background-color: #ebf2f5;
+}
+
+.table-time {
+	width: 600px;
+	margin-left: 10px;
+	
+	tr:first-child th, tr:first-child td {
+		border-top: none;
+	}
+
+	th, td {
+		vertical-align: middle;
+	}
+
+	.times-range {
+		text-align: center;
+	}
+
+	.actions-time {
+		text-align: center;
+
+		ul {
+			text-align: left;
+			list-style-type: none;
+			margin-left: 0px;
+			font-size: 11px;
+			margin-bottom: 0px;
+		}
+
+		.halflings-icon {
+			vertical-align: middle;
+		}
+	}
+}
+
+.table-billing {
+	border-left: 1px solid #b2ced9;
+  	border-right: 1px solid #b2ced9;
+  	border-bottom: 1px solid #b2ced9;
+
+  	border-collapse: separate;
+
+  	.border-radius(4px);
+
+  	margin-bottom: 40px;
+
+  	&.table th, &.table td {
+  		border-top: 1px solid #b2ced9;
+  	}
+
+	.table-billing-header {
+		background-color: #e3f6fd;
+		color: #364c59;
+	}
+
+	.table-billing-detail {
+    	font-size: 11px;
+  	}
+
+  	.table {
+	    margin-bottom: 0px;
+
+	    thead {
+			tr  { cursor: pointer ;}
+	    }
+
+		tbody {
+			display: none;
+			#font > .sans-serif(Arial, normal, 12px);
+	    }
+
+		td {
+			border-top: 0px;
+		}
+
+		.table-billing-item {
+			padding-left: 30px;
+		}
+
+		.table-billing-amount {
+			text-align: right;
+			width: 80px;
+	    }
+	}
+
+}
+
+.table-billing-history {
+	#font > .sans-serif(Arial, normal, 12px);
+	color: #364c59;
+
+	.billing-error {
+    	color: @red;
+  	}
+}
+

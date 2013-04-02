@@ -5,12 +5,13 @@ var app = app || {}
 
 var Workspace = Backbone.Router.extend({
 	routes: {
-		'': 				'home',
-		'stats/': 			'stats',
-		'stats/:metric/': 	'stats',
-		'messages/': 		'messages',
-		'ads/': 			'ads',
-		'settings/':		'settings',
+		'': 					'home',
+		'stats/': 				'stats',
+		'stats/:metric/': 		'stats',
+		'messages/': 			'messages',
+		'ads/': 				'ads',
+		'accounts/':			'accounts',
+		'accounts/:metric/':	'accounts',
 	},
 
 	initialize: function() {
@@ -36,7 +37,7 @@ var Workspace = Backbone.Router.extend({
 			app.layoutView.renderNavPillContent();
 		}
 
-		if (metric == undefined) {
+		if ( _.isUndefined(metric) ) {
 			var navTabContentView = new app.TrafficNavTabContentView({titleName: 'Visites'});
 			statsNavPillContentView.navTabsView.navTabsItemViews[0].setSelectedTabItem();
 		} else if (metric == 'redirection') {
@@ -70,11 +71,26 @@ var Workspace = Backbone.Router.extend({
 		app.layoutView.renderNavPillContent();
 	},
 
-	settings: function() {
+	accounts: function(metric) {
 		app.layoutView.navPillsView.navPillsItemViews[4].setSelectedPillItem();
-		var settingsNavPillContentView = new app.NavPillContentView();
-		settingsNavPillContentView.id = 'settings';
-		app.layoutView.setCurrentNavPillContent(settingsNavPillContentView);
-		app.layoutView.renderNavPillContent();
+
+		if (app.layoutView.currentNavPillContent instanceof app.AccountsNavPillContentView) {
+			var accountsNavPillContentView = app.layoutView.currentNavPillContent;
+		} else {
+			var accountsNavPillContentView = new app.AccountsNavPillContentView();
+			app.layoutView.setCurrentNavPillContent(accountsNavPillContentView);
+			app.layoutView.renderNavPillContent();
+		}
+
+		if( _.isUndefined(metric) ) {
+			var navTabContentView = new app.AccountsNavTabContentView({titleName: 'Informations liées au compte'});
+			accountsNavPillContentView.navTabsView.navTabsItemViews[0].setSelectedTabItem();
+		} else if ( metric == 'billing' ) {
+			var navTabContentView = new app.BillingNavTabContentView({titleName: 'Facturation'});
+			accountsNavPillContentView.navTabsView.navTabsItemViews[1].setSelectedTabItem();
+		}
+
+		accountsNavPillContentView.setCurrentNavTabContentView(navTabContentView);
+		accountsNavPillContentView.renderNavTabContent();
 	}
 });

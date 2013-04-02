@@ -193,7 +193,7 @@ class PageViewResource(Resource):
 		self.method_check(request, allowed=['get'])
 		self.throttle_check(request)
 		
-		patron = Patron.objects.get(slug='deguizland')#patron = request.user
+		patron = Patron.objects.get(slug='ma-petite-cuisine')#patron = request.user
 
 		
 		data = []
@@ -281,7 +281,7 @@ class RedirectionEventResource(Resource):
 		self.method_check(request, allowed=['get'])
 		self.throttle_check(request)
 
-		patron = Patron.objects.get(slug='deguizland')#request.user
+		patron = Patron.objects.get(slug='ma-petite-cuisine')#request.user
 
 		#Google Analytics References
 		metrics, dimensions, filters = get_analytics_event_references(event_action="Redirection", event_label=patron.slug)
@@ -324,7 +324,7 @@ class PhoneEventResource(Resource):
 		self.method_check(request, allowed=['get'])
 		self.throttle_check(request)
 
-		patron = Patron.objects.get(slug='deguizland')#patron = request.user
+		patron = Patron.objects.get(slug='ma-petite-cuisine')#patron = request.user
 
 		#Google Analytics References
 		metrics, dimensions, filters = get_analytics_event_references(event_action="Phone", event_label=patron.slug)
@@ -367,7 +367,7 @@ class AddressEventResource(Resource):
 		self.method_check(request, allowed=['get'])
 		self.throttle_check(request)
 
-		patron = Patron.objects.get(slug='deguizland') #patron = request.user
+		patron = Patron.objects.get(slug='ma-petite-cuisine') #patron = request.user
 
 		#Google Analytics References
 		metrics, dimensions, filters = get_analytics_event_references(event_action="Address", event_label=patron.slug)
