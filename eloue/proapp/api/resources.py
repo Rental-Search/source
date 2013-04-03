@@ -17,7 +17,7 @@ from eloue.proapp.analytics_api_v3_auth import GoogleAnalyticsSetStats
 from eloue.proapp.api.authentication import SessionAuthentication
 from eloue.proapp.forms import TimeSeriesForm
 from eloue.products.models import Product, Category, Picture, Price
-from eloue.accounts.models import Patron, Address, PhoneNumber, Subscription, CreditCard
+from eloue.accounts.models import Patron, Address, PhoneNumber, Subscription, CreditCard, OpeningTimes
 
 
 def get_time_series(request=None):
@@ -122,10 +122,39 @@ class PatronResource(ModelResource):
 		resource_name = 'accounts/patron'
 		list_allowed_methods = ['get']
 		detail_allowed_methods = ['get', 'post', 'put']
+		excludes = ['about', 'activation_key', 'affiliate', 'avatar', 'company_name', 'date_joined', 'date_of_birth', 'drivers_license_date', 'drivers_license_number', 'hobby', 'is_active', 'is_professional', 'is_staff', 'is_superuser', 'last_login', 'modified_at', 'new_messages_alerted', 'password', 'paypal_email', 'place_of_birth', 'rib', 'school', 'work', 'url']
 		authentication = SessionAuthentication()
 
 	def apply_authorization_limits(self, request, object_list):
 		return object_list.filter(pk=request.user.pk)
+
+
+class ShopResource(ModelResource):
+	opening_times = fields.ToOneField('eloue.proapp.api.resources.OpeningTimesResource', 'patron', full=True)
+
+	class Meta:
+		queryset = Patron.objects.all()
+		resource_name = 'accounts/shop'
+		list_allowed_methods = ['get']
+		detail_allowed_methods = ['get', 'post', 'put']
+		excludes = ['activation_key', 'affiliate', 'date_joined', 'date_of_birth', 'drivers_license_date', 'drivers_license_number', 'hobby', 'is_active', 'is_professional', 'is_staff', 'is_superuser', 'last_login', 'modified_at', 'new_messages_alerted', 'password', 'paypal_email', 'place_of_birth', 'rib', 'school', 'work', 'civility', 'email', 'first_name', 'is_subscribed', 'last_name', 'username']
+		authentication = SessionAuthentication()
+
+	def apply_authorization_limits(self, request, object_list):
+		return object_list.filter(pk=request.user.pk)
+
+
+class OpeningTimesResource(ModelResource):
+	class Meta:
+		queryset = OpeningTimes.objects.all()
+		resource_name = 'accounts/opening_times'
+		list_allowed_methods = ['get']
+		detail_allowed_methods = ['get', 'post', 'put']
+		authentication = SessionAuthentication()
+
+	def apply_authorization_limits(self, request, object_list):
+		return object_list.filter(pk=request.user.pk)
+
 
 
 class AddressResource(ModelResource):
@@ -407,6 +436,8 @@ api_v1.register(RedirectionEventResource())
 api_v1.register(PhoneEventResource())
 api_v1.register(AddressEventResource())
 api_v1.register(PatronResource())
+api_v1.register(ShopResource())
+api_v1.register(OpeningTimesResource())
 api_v1.register(AddressResource())
 api_v1.register(PhoneNumberResource())
 api_v1.register(SubscriptionResource())

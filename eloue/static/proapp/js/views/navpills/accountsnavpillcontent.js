@@ -16,8 +16,10 @@ app.AccountsNavPillContentView = app.NavPillContentView.extend({
 
 	initialize: function() {
 		this.navTabsView = new app.NavTabsView();
-		this.navTabsView.pushNavTabContentViews(new app.NavTabsItemView({icon: 'user', path: 'accounts/', labelName: 'Informations'}))
-		this.navTabsView.pushNavTabContentViews(new app.NavTabsItemView({icon: 'euro', path: 'accounts/billing/', labelName: 'Facturation'}))
+		this.navTabsView.pushNavTabContentViews(new app.NavTabsItemView({icon: 'user', path: 'accounts/', labelName: 'Le gérant'}));
+		this.navTabsView.pushNavTabContentViews(new app.NavTabsItemView({icon: 'home', path: 'accounts/shop/', labelName: 'L\'agence'}));
+		this.navTabsView.pushNavTabContentViews(new app.NavTabsItemView({icon: 'euro', path: 'accounts/billing/', labelName: 'Facturation'}));
+		this.navTabsView.pushNavTabContentViews(new app.NavTabsItemView({icon: 'list-alt', path:'accounts/plan/', labelName: 'Abonnements'}));
 	},
 
 	setCurrentNavTabContentView: function(navTabContentView) {

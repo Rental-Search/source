@@ -83,11 +83,17 @@ var Workspace = Backbone.Router.extend({
 		}
 
 		if( _.isUndefined(metric) ) {
-			var navTabContentView = new app.AccountsNavTabContentView({titleName: 'Informations liées au compte'});
+			var navTabContentView = new app.AccountsNavTabContentView({titleName: 'Informations sur la gérant'});
 			accountsNavPillContentView.navTabsView.navTabsItemViews[0].setSelectedTabItem();
+		} else if ( metric == 'shop' ) {
+			var navTabContentView = new app.ShopNavTabContentView({titleName: 'Informations sur l\'agence'});
+			accountsNavPillContentView.navTabsView.navTabsItemViews[1].setSelectedTabItem();
 		} else if ( metric == 'billing' ) {
 			var navTabContentView = new app.BillingNavTabContentView({titleName: 'Facturation'});
-			accountsNavPillContentView.navTabsView.navTabsItemViews[1].setSelectedTabItem();
+			accountsNavPillContentView.navTabsView.navTabsItemViews[2].setSelectedTabItem();
+		} else if ( metric == 'plan' ) {
+			var navTabContentView = new app.PlanNavTabContentView({titleName: 'Abonnements'});
+			accountsNavPillContentView.navTabsView.navTabsItemViews[3].setSelectedTabItem();	
 		}
 
 		accountsNavPillContentView.setCurrentNavTabContentView(navTabContentView);

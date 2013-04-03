@@ -7412,6 +7412,13 @@ select {
   background-color: #ebf2f5;
   border: 1px solid #b2ced9;
 }
+.form-actions {
+  background-color: transparent;
+  border-top: 1px solid #b2ced9;
+}
+.form-actions button {
+  margin-left: 10px;
+}
 .table-striped tbody > tr:nth-child(odd) > td,
 .table-striped tbody > tr:nth-child(odd) > th {
   background-color: #ebf2f5;
@@ -7497,4 +7504,21 @@ select {
 }
 .table-billing-history .billing-error {
   color: #9d261d;
+}
+.table-plan-list {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: Arial;
+  font-weight: normal;
+  line-height: 14px;
+  color: #364c59;
+}
+.table-plan-list th {
+  font-size: 12px;
+}
+.table-plan-list td {
+  vertical-align: middle;
+  height: 31px;
+}
+.table-plan-list .align-center {
+  text-align: center;
 }

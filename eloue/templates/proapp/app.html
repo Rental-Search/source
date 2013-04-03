@@ -49,7 +49,7 @@
 						</form>
 						<div class="timeseries-shortcut pull-left">
 							<span>Racourcis : </span> 
-							<a href="#today-link">àjourd&#145;hui</a> |
+							<a href="#today-link">aujourd&#145;hui</a> |
 							<a href="#yesterday-link">Hier</a> |
 							<a href="#lastweek-link">La semaine dernière</a> |
 							<a href="#lastmonth-link">Le mois dernier</a>
@@ -140,6 +140,15 @@
 						</div>
 					</div>
 				</fieldset>
+				<div class="form-actions">
+  					<button type="submit" class="btn btn-primary">Save changes</button> <button type="button" class="btn">Cancel</button>
+				</div>
+			</form>
+		</script>
+
+		<script type="text/template" id="shopnavtabcontent-template">
+			<h3><%= titleName %></h3>
+			<form action="#">
 				<fieldset>
 					<legend style="margin-bottom: 20px;">Informations sur la boutique</legend>
 					<div class="media" style="margin-top: 10px;">
@@ -329,6 +338,9 @@
 						</tbody>
 					</table>
 				</fieldset>
+				<div class="form-actions">
+  					<button type="submit" class="btn btn-primary">Save changes</button> <button type="button" class="btn">Cancel</button>
+				</div>
 			</form>
 		</script>
 
@@ -397,6 +409,62 @@
 							<td>1XXX XXXX XXXX X234</td>
 							<td><a href="#" target="_blank">Télécharger la facture</a></td>
 							<td>23,00&euro;</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</script>
+
+		<script type="text/template" id="plannavtabcontent-template">
+			<h3><%= titleName %></h3>
+			<div class="content">
+				<table class="table table-plan-list">
+					<thead>
+						<tr>
+							<th>Abonnement</th>
+							<th class="align-center">Nombre d&#145;annonces</th>
+							<th class="align-center">Prix par mois</th>
+							<th></th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>Infini</td>
+							<td class="align-center">Illimité</td>
+							<td class="align-center">158,00&euro;</td>
+							<td class="align-center"> 
+								<a href="#" class="btn">Choisir cet abonnement</a>	
+							</td>
+						</tr>
+						<tr>
+							<td>Infini</td>
+							<td class="align-center">Illimité</td>
+							<td class="align-center">158,00&euro;</td>
+							<td class="align-center">Votre abonnement actuel</td>
+						</tr>
+						<tr>
+							<td>Infini</td>
+							<td class="align-center">Illimité</td>
+							<td class="align-center">158,00&euro;</td>
+							<td class="align-center"> 
+								<a href="#" class="btn">Choisir cet abonnement</a>	
+							</td>
+						</tr>
+						<tr>
+							<td>Infini</td>
+							<td class="align-center">Illimité</td>
+							<td class="align-center">158,00&euro;</td>
+							<td class="align-center"> 
+								<a href="#" class="btn">Choisir cet abonnement</a>	
+							</td>
+						</tr>
+						<tr>
+							<td>Infini</td>
+							<td class="align-center">Illimité</td>
+							<td class="align-center">158,00&euro;</td>
+							<td class="align-center"> 
+								<a href="#" class="btn">Choisir cet abonnement</a>	
+							</td>
 						</tr>
 					</tbody>
 				</table>
