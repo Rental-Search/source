@@ -112,9 +112,6 @@ class PriceResource(ModelResource):
 	def apply_authorization_limits(self, request, object_list):
 		return object_list.filter(product__owner=request.user)
 
-	def obj_create(self, bundle, request=None, **kwargs):
-		return super(EnvironmentResource, self).obj_create(bundle, request, product__owner=request.user)
-
 
 #Accounts resources
 class PatronResource(ModelResource):
@@ -126,6 +123,7 @@ class PatronResource(ModelResource):
 		excludes = ['about', 'activation_key', 'affiliate', 'avatar', 'company_name', 'date_joined', 'date_of_birth', 'drivers_license_date', 'drivers_license_number', 'hobby', 'is_active', 'is_professional', 'is_staff', 'is_superuser', 'last_login', 'modified_at', 'new_messages_alerted', 'password', 'paypal_email', 'place_of_birth', 'rib', 'school', 'work', 'url']
 		authentication = SessionAuthentication()
 		authorization = Authorization()
+
 
 	def apply_authorization_limits(self, request, object_list):
 		return object_list.filter(pk=request.user.pk)
@@ -148,6 +146,15 @@ class ShopResource(ModelResource):
 	def apply_authorization_limits(self, request, object_list):
 		return object_list.filter(pk=request.user.pk)
 
+	
+	def hydrate(self, bundle):
+		bundle.data['addresses'][0]['patron'] = bundle.data['resource_uri']
+
+		print bundle.data['addresses']
+
+		return bundle
+
+
 
 class OpeningTimesResource(ModelResource):
 	class Meta:
@@ -164,6 +171,8 @@ class OpeningTimesResource(ModelResource):
 
 
 class AddressResource(ModelResource):
+
+	patron = fields.ToOneField('eloue.proapp.api.resources.ShopResource', 'patron', full=False, null=False)
 
 	class Meta:
 		queryset = Address.objects.all()
