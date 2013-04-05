@@ -14,6 +14,7 @@ Backbone.View.prototype.close = function(){
 
 $(function() {
 	console.log("---- App starting ----");
+	Backbone.Tastypie.csrfToken = $('input[name=csrfmiddlewaretoken]').val()
 	app.appRouter = new Workspace();
 	Backbone.history.start({pushState: true, root: '/pro/dashboard/'})
 	$('body').append(app.layoutView.$el);

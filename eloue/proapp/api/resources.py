@@ -11,6 +11,7 @@ from tastypie.api import Api
 from tastypie.authorization import Authorization
 from tastypie.resources import ModelResource, Resource
 from tastypie.utils import trailing_slash
+from tastypie.authorization import Authorization
 
 
 from eloue.proapp.analytics_api_v3_auth import GoogleAnalyticsSetStats
@@ -121,24 +122,28 @@ class PatronResource(ModelResource):
 		queryset = Patron.objects.all()
 		resource_name = 'accounts/patron'
 		list_allowed_methods = ['get']
-		detail_allowed_methods = ['get', 'post', 'put']
+		detail_allowed_methods = ['get', 'put']
 		excludes = ['about', 'activation_key', 'affiliate', 'avatar', 'company_name', 'date_joined', 'date_of_birth', 'drivers_license_date', 'drivers_license_number', 'hobby', 'is_active', 'is_professional', 'is_staff', 'is_superuser', 'last_login', 'modified_at', 'new_messages_alerted', 'password', 'paypal_email', 'place_of_birth', 'rib', 'school', 'work', 'url']
 		authentication = SessionAuthentication()
+		authorization = Authorization()
 
 	def apply_authorization_limits(self, request, object_list):
 		return object_list.filter(pk=request.user.pk)
 
 
 class ShopResource(ModelResource):
-	opening_times = fields.ToOneField('eloue.proapp.api.resources.OpeningTimesResource', 'patron', full=True)
+	#opening_times = fields.ToOneField('eloue.proapp.api.resources.OpeningTimesResource', 'patron', full=True)
+	addresses = fields.ToManyField('eloue.proapp.api.resources.AddressResource', 'addresses', full=True)
+	phones = fields.ToManyField('eloue.proapp.api.resources.PhoneNumberResource', 'phones', full=True)
 
 	class Meta:
 		queryset = Patron.objects.all()
 		resource_name = 'accounts/shop'
 		list_allowed_methods = ['get']
-		detail_allowed_methods = ['get', 'post', 'put']
-		excludes = ['activation_key', 'affiliate', 'date_joined', 'date_of_birth', 'drivers_license_date', 'drivers_license_number', 'hobby', 'is_active', 'is_professional', 'is_staff', 'is_superuser', 'last_login', 'modified_at', 'new_messages_alerted', 'password', 'paypal_email', 'place_of_birth', 'rib', 'school', 'work', 'civility', 'email', 'first_name', 'is_subscribed', 'last_name', 'username']
+		detail_allowed_methods = ['get', 'put']
+		excludes = ['avatar', 'activation_key', 'affiliate', 'date_joined', 'date_of_birth', 'drivers_license_date', 'drivers_license_number', 'hobby', 'is_active', 'is_professional', 'is_staff', 'is_superuser', 'last_login', 'modified_at', 'new_messages_alerted', 'password', 'paypal_email', 'place_of_birth', 'rib', 'school', 'work', 'civility', 'email', 'first_name', 'is_subscribed', 'last_name', 'username']
 		authentication = SessionAuthentication()
+		authorization = Authorization()
 
 	def apply_authorization_limits(self, request, object_list):
 		return object_list.filter(pk=request.user.pk)
@@ -151,6 +156,7 @@ class OpeningTimesResource(ModelResource):
 		list_allowed_methods = ['get']
 		detail_allowed_methods = ['get', 'post', 'put']
 		authentication = SessionAuthentication()
+		authorization = Authorization()
 
 	def apply_authorization_limits(self, request, object_list):
 		return object_list.filter(pk=request.user.pk)
@@ -158,27 +164,33 @@ class OpeningTimesResource(ModelResource):
 
 
 class AddressResource(ModelResource):
+
 	class Meta:
 		queryset = Address.objects.all()
 		resource_name = 'accounts/address'
-		list_allowed_methods = ['get', 'put', 'delete']
-		detail_allowed_methods = ['get', 'post', 'put', 'delete']
+		list_allowed_methods = ['get']
+		detail_allowed_methods = ['get', 'post', 'put']
+		include_resource_uri = True
 		authentication = SessionAuthentication()
+		authorization = Authorization()
 
-	def apply_authorization_limits(self, request, object_list):
-		return object_list.filter(patron=request.user)
+	#def apply_authorization_limits(self, request, object_list):
+	#	return object_list.filter(patron=request.user)
 
 
 class PhoneNumberResource(ModelResource):
+
 	class Meta:
 		queryset = PhoneNumber.objects.all()
 		resource_name = 'accounts/phone_number'
-		list_allowed_methods = ['get', 'put', 'delete']
-		detail_allowed_methods = ['get', 'post', 'put', 'delete']
+		list_allowed_methods = ['get']
+		detail_allowed_methods = ['get', 'post', 'put']
+		include_resource_uri = True
 		authentication = SessionAuthentication()
+		authorization = Authorization()
 
-	def apply_authorization_limits(self, request, object_list):
-		return object_list.filter(patron=request.user)
+	#def apply_authorization_limits(self, request, object_list):
+	#	return object_list.filter(patron=request.user)
 
 
 class SubscriptionResource(ModelResource):

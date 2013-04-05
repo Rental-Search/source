@@ -1,4 +1,3 @@
-
 # -*- coding: utf-8 -*-
 import local
 import logging
@@ -333,6 +332,8 @@ PIPELINE_JS = {
             'proapp/js/models/addressevents.js',
             'proapp/js/models/redirectionevents.js',
             'proapp/js/models/phoneevents.js',
+            'proapp/js/models/patron.js',
+            'proapp/js/models/shop.js',
             'proapp/js/views/navtabs/navtabsitem.js',
             'proapp/js/views/navtabs/navtabcontent.js',
             'proapp/js/views/navtabs/stats/statsnavtabcontent.js',
@@ -344,6 +345,7 @@ PIPELINE_JS = {
             'proapp/js/views/navtabs/stats/charts.js',
             'proapp/js/views/navtabs/stats/chartsdetails.js',
             'proapp/js/views/navtabs/accounts/accountsnavtabcontent.js',
+            'proapp/js/views/navtabs/accounts/patronnavtabcontent.js',
             'proapp/js/views/navtabs/accounts/shopnavtabcontent.js',
             'proapp/js/views/navtabs/accounts/billingnavtabcontent.js',
             'proapp/js/views/navtabs/accounts/plannavtabcontent.js',
@@ -356,6 +358,7 @@ PIPELINE_JS = {
             'proapp/js/views/layout.js',
             'proapp/js/views/loading.js',
             'proapp/js/routers/routes.js',
+            'proapp/js/utils.js',
             'proapp/js/app.js',
         ),
         'output_filename': 'js/proapplibs.js',

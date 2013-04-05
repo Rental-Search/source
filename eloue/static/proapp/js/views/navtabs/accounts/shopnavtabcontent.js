@@ -1,26 +1,33 @@
-// js/views/navtabs/accounts/billingnavtabcontent.js
+// js/views/navtabs/accounts/shopnavtabcontent.js
 
 var app = app || {};
 
 
-app.ShopNavTabContentView = app.NavTabContentView.extend({
+app.ShopNavTabContentView = app.AccountsNavTabContentView.extend({
 
 	template: _.template($("#shopnavtabcontent-template").html()),
 
-	initialize: function() {
-		if (this.options.titleName) this.titleName = this.options.titleName;
+	model: app.ShopModel,
 
-		this.render();
-	},
+	serializeDataObject: function() {
+		data = this.$el.children('form').serializeObject();
 
-	serialize: function() {
 		return {
-			titleName: this.titleName
-		}
-	},
-
-	render: function() {
-		this.$el.html(this.template(this.serialize()));
-		return this;
+			about: data.about,
+			addresses: [
+				{	
+					address1: data.address1,
+					city: data.city,
+					zipcode: data.zipcode,
+				}
+			],
+			phones: [
+				{
+					number: data.number,
+				}
+			],
+			company_name: data.company_name,
+			url: data.url
+		};
 	}
 });

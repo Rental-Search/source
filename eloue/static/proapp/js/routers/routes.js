@@ -83,7 +83,7 @@ var Workspace = Backbone.Router.extend({
 		}
 
 		if( _.isUndefined(metric) ) {
-			var navTabContentView = new app.AccountsNavTabContentView({titleName: 'Informations sur la gérant'});
+			var navTabContentView = new app.PatronNavTabContentView({titleName: 'Informations sur la gérant'});
 			accountsNavPillContentView.navTabsView.navTabsItemViews[0].setSelectedTabItem();
 		} else if ( metric == 'shop' ) {
 			var navTabContentView = new app.ShopNavTabContentView({titleName: 'Informations sur l\'agence'});

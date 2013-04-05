@@ -119,29 +119,34 @@
 					<legend style="margin-bottom: 20px;">Informations sur le gérant</legend>
 					<div style="margin-left: 10px;">
 						<div class="control-group">
-							<input type="text" id="id_sername" placeholder="Pseudo" class="span5">
+							<label for="id_username">Pseudo</label>
+							<input type="text" id="id_username" name="username" value="<%= model.username %>" placeholder="Pseudo" class="span5">
 						</div>
 						<div class="control-group ">
-							<input name="email" maxlength="75" àtocapitalize="off" àtocorrect="off" type="text" value="" id="id_email" placeholder="Email" class="span5">
+							<label for="id_email">Email</label>
+							<input name="email" maxlength="75" àtocapitalize="off" àtocorrect="off" type="text" value="<%= model.email %>" id="id_email" placeholder="Email" class="span5">
 						</div>
 						<div class="control-group">
+							<label for="id_civility">Civilité</label>
 							<select name="civility" id="id_civility" class="span5">
 								<option value="">Civilité</option>
-								<option value="0">Madame</option>
-								<option value="1">Mademoiselle</option>
-								<option value="2">Monsieur</option>
+								<option value="0" <% if (model.civility == 0) { %>selected="selected" <% } %>>Madame</option>
+								<option value="1" <% if (model.civility == 1) { %>selected="selected" <% } %>>Mademoiselle</option>
+								<option value="2" <% if (model.civility == 2) { %>selected="selected" <% } %>>Monsieur</option>
 							</select>
 						</div>
 						<div class="control-group ">
-							<input id="id_first_name" type="text" value="" name="first_name" placeholder="Prénom" class="span5">
+							<label for="id_first_name">Prénom</label>
+							<input id="id_first_name" type="text" value="<%= model.first_name %>" name="first_name" placeholder="Prénom" class="span5">
 						</div>
 						<div class="control-group ">
-							<input id="id_last_name" type="text" value="" name="last_name" placeholder="Nom" class="span5">
+							<label for="id_last_name">Nom</label>
+							<input id="id_last_name" type="text" value="<%= model.last_name %>" name="last_name" placeholder="Nom" class="span5">
 						</div>
 					</div>
 				</fieldset>
 				<div class="form-actions">
-  					<button type="submit" class="btn btn-primary">Save changes</button> <button type="button" class="btn">Cancel</button>
+  					<button type="submit" class="btn btn-primary">Enregistrer</button> <button type="button" class="btn cancel">Annuler</button>
 				</div>
 			</form>
 		</script>
@@ -158,23 +163,28 @@
 						</div>
 						<div class="media-body">
 							<div class="control-group">
-	    					
-	    						<input type="text" placeholder="Nom de la boutique" class="span5">
+								<label>Nom de la boutique</label>
+	    						<input type="text" placeholder="Nom de la boutique" id="id_company_name" name="company_name" value="<%= model.company_name %>" class="span5">
 	    					</div>
 	    					<div class="control-group">
-    						
-    							<input type="text" placeholder="Site internet" class="span5">
+    							<label>Site internet</label>
+    							<input type="text" placeholder="Site internet" id="id_url" name="url" value="<%= model.url %>" class="span5">
     						</div>
     						<div class="control-group">
-    							<input type="text" placeholder="Numéro de téléphone" class="span5">
+    							<label>Numéro de téléphone</label>
+    							<input type="text" placeholder="Numéro de téléphone" id="id_number" name="number" value="<%= model.phones[0].number %>"  class="span5">
     						</div>
     						<div class="control-group">
     							<label>Adresse</label>
-    							<input type="text" placeholder="Rue" class="span5">
+    							<input type="text" placeholder="Rue" id="id_address1" name="address1" value="<%= model.addresses[0].address1 %>" class="span5">
     						</div>
     						<div class="control-group controls-row">
-    							<input type="text" placeholder="Code postal" class="span2">
-    							<input type="text" placeholder="Ville" class="span3">
+    							<input type="text" placeholder="Code postal" id="id_zipcode" name="zipcode" value="<%= model.addresses[0].zipcode %>" class="span2">
+    							<input type="text" placeholder="Ville" id="id_city" name="city" value="<%= model.addresses[0].city %>" class="span3">
+    						</div>
+    						<div class="control-group">
+    							<label for="id_about">A propos de l&#145;entreprise</label>
+    							<textarea class="span5" style="height: 100px;" id="id_about" name="about"><%= model.about %></textarea>
     						</div>
     					</div>
 				</fieldset>
@@ -471,16 +481,22 @@
 			</div>
 		</script>
 
+		 <!-- Include the CSRF token in the body of the HTML -->
+        {% csrf_token %}
+
 		<script type="text/javascript">
 			API_URL = {
 				redirection_events: "{% url api_dispatch_list api_name="1.0" resource_name="redirection_events" %}",
 				phone_events: "{% url api_dispatch_list api_name="1.0" resource_name="phone_events" %}",
 				address_events: "{% url api_dispatch_list api_name="1.0" resource_name="address_events" %}",
 				traffic_events: "{% url api_dispatch_list api_name="1.0" resource_name="pageviews" %}",
+				patron: "{% url api_dispatch_list api_name="1.0" resource_name="accounts/patron" %}",
+				shop: "{% url api_dispatch_list api_name="1.0" resource_name="accounts/shop" %}",
 			};
 
 			STATIC_URL = '{{ STATIC_URL }}'
 		</script>
+
 		{% compressed_js 'proapplibs' %}
 		{% compressed_js 'proapp' %}	
 	</body>
