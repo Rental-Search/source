@@ -3155,6 +3155,14 @@ msgstr "Change city"
 msgid "me geolocaliser"
 msgstr "geolocation"
 
+#: templates/index.html:40
+msgid "Annonces de location déposées près de chez vous :"
+msgstr "Rentals near you :"
+
+#: templates/index.html:96
+msgid "Annonces de location par catégorie"
+msgstr "Rentals by categories"
+
 #: templates/index.html:36
 #: templates/accounts/patron_paypal.html:48
 #: templates/dcns/accounts/contact.html:62
