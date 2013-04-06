@@ -371,7 +371,9 @@ class PatronDetail(ListView):
     def get_context_data(self, **kwargs):
         context = super(PatronDetail, self).get_context_data(**kwargs)
         context['patron'] = self.patron
-        context['borrowercomments'] = BorrowerComment.objects.filter(booking__owner=self.patron)[:4]
+        context['borrowercomments'] = BorrowerComment.objects.filter(booking__owner=self.patron)
+        context['ownercomments'] = OwnerComment.objects.filter(booking__borrower=self.patron)
+        context['comments_count'] = context['borrowercomments'].count() + context['ownercomments'].count()
         context['redirect_uri'] = self.request.build_absolute_uri(reverse('patron_edit_idn_connect'))
         context['consumer_key'] = settings.IDN_CONSUMER_KEY
         context['base_url'] = settings.IDN_BASE_URL

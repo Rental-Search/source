@@ -44,15 +44,21 @@
         </div>{# profil-block #}
     </div>{# content-aside-profil #}
     <div class="content-main-profil">
-            {% if borrowercomments %}
-            <h2>{% trans "Commentaires" %} <small>({{ borrowercomments.count }} {% trans "avis" %})</small></h2>
-            <ul class="comments">
-                {% for comment in borrowercomments %}
-                    <li>{% include 'rent/partials/comment.html' %}</li>
-                {% endfor %}
+        {% if borrowercomments or ownercomments %}
+            <h2>{% trans "Commentaires" %} <small>({{ comments_count }} {% trans "avis" %})</small></h2>
+            <ul id="profil-comments" class="comments">
+                {% if borrowercomments %}
+                    {% for comment in borrowercomments %}
+                        <li>{% include 'rent/partials/comment.html' %}</li>
+                    {% endfor %}
+                {% endif %}
+                {% if ownercomments %}
+                    {% for comment in ownercomments %}
+                        <li>{% include 'rent/partials/comment.html' %}</li>
+                    {% endfor %}
+                {% endif %}
             </ul>
-            <p class="more-comment"><a href="{% url comments %}">Voir tous les commentaires</a></p>
-            {% endif %}
+        {% endif %}
         {% if product_list %}
             {% if product_list.count > 0 %}
                 {% blocktrans with product_list.count as count and product_list.count|pluralize as pluralize %}

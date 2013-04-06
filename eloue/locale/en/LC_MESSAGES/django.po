@@ -6,37 +6,22 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-10-17 11:42+0200\n"
-"PO-Revision-Date: 2012-10-17 12:33+0100\n"
-"Last-Translator: benoit\n"
+"POT-Creation-Date: 2012-12-17 09:37+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Translate Toolkit 1.9.0\n"
 
-#: settings.py:72
-msgid "Français"
-msgstr "French "
-
 #: settings.py:73
+msgid "Français"
+msgstr "French"
+
+#: settings.py:74
 msgid "English"
 msgstr "English"
-
-#: urls.py:72
-msgid "loueur/"
-msgstr "renter/"
-
-#: urls.py:73
-#: products/templatetags/facets.py:28
-#: products/templatetags/facets.py:73
-#: products/templatetags/facets.py:125
-msgid "location/"
-msgstr "rent/"
-
-#: urls.py:85
-msgid "recherche"
-msgstr "search"
 
 #: accounts/admin.py:31
 #: accounts/admin.py:41
@@ -103,7 +88,7 @@ msgstr "Your RIB failed the checksum validation. Please verify."
 
 #: accounts/forms.py:37
 msgid "Je n'ai pas encore de compte"
-msgstr "I have still not registered on e-loue"
+msgstr "I have not yet registered on e-loue"
 
 #: accounts/forms.py:38
 msgid "J'ai déjà un compte et mon mot de passe est :"
@@ -118,116 +103,116 @@ msgid "J'ai déjà un compte PayPal et mon email est :"
 msgstr "i already have a Paypal account and my email is :"
 
 #: accounts/forms.py:71
-#: accounts/forms.py:162
+#: accounts/forms.py:167
 msgid ""
 "Les serveurs de Facebook sont inaccessibles. Veuillez reessayer dans "
 "quelques secondes."
-msgstr "Facebook is not accessible. Please, try in few secondes"
+msgstr "Facebook is not accessible. Please, try again soon"
 
 #: accounts/forms.py:76
-#: accounts/forms.py:150
+#: accounts/forms.py:155
 #: accounts/tests/wizard.py:362
 msgid "Wrong facebook uid."
 msgstr "Wrong facebook uid."
 
 #: accounts/forms.py:94
 msgid "Un compte e-loue est déjà associé à votre Facebook"
-msgstr "A e-loue account is associeted to you Facebook account"
+msgstr "An e-loue account is already linked to you Facebook account"
 
 #: accounts/forms.py:105
 #: accounts/forms.py:106
-#: accounts/forms.py:204
-#: accounts/forms.py:241
-#: accounts/forms.py:429
-#: accounts/forms.py:944
+#: accounts/forms.py:252
+#: accounts/forms.py:289
+#: accounts/forms.py:477
+#: accounts/forms.py:992
 msgid "Email"
 msgstr "Email"
 
 #: accounts/forms.py:108
-#: accounts/forms.py:426
+#: accounts/forms.py:474
 msgid "Password"
 msgstr "Password"
 
 #: accounts/forms.py:108
-#: accounts/forms.py:731
-#: templates/accounts/patron_edit.html:57
+#: accounts/forms.py:779
+#: templates/accounts/patron_edit.html:59
 msgid "Mot de passe"
 msgstr "Password"
 
-#: accounts/forms.py:127
+#: accounts/forms.py:130
 #: accounts/tests/wizard.py:92
 msgid ""
 "Pour garantir un service de qualité et la sécurité des utilisateurs "
 "d'e-loue.com, vous ne pouvez pas vous enregistrer avec une adresse email "
 "jetable."
 msgstr ""
-"To ensure a quality service and safety of users of e-loue.com, you cannot "
+"To ensure a quality service and the safety of e-loue users, you cannot "
 "register with a disposable email address."
 
-#: accounts/forms.py:130
+#: accounts/forms.py:133
 #: accounts/tests/wizard.py:101
 msgid "Un compte existe déjà pour cet email"
 msgstr "An account already exists for that email"
 
-#: accounts/forms.py:188
+#: accounts/forms.py:237
 #: accounts/tests/wizard.py:72
 #: accounts/tests/wizard.py:82
 msgid "Veuillez saisir une adresse email et un mot de passe valide."
 msgstr "Please enter a valid email address and password"
 
-#: accounts/forms.py:190
+#: accounts/forms.py:239
 #: accounts/tests/wizard.py:62
 msgid "Ce compte est inactif parce qu'il n'a pas été activé."
 msgstr "This account is inactive as it has not been activated yet."
 
-#: accounts/forms.py:238
-#: accounts/forms.py:724
+#: accounts/forms.py:286
+#: accounts/forms.py:772
 #: templates/products/product_detail.html:414
 msgid "Professionnel"
 msgstr "Professional"
 
-#: accounts/forms.py:239
-#: accounts/forms.py:725
+#: accounts/forms.py:287
+#: accounts/forms.py:773
 msgid "Nom de la société"
 msgstr "Company name"
 
-#: accounts/forms.py:243
-#: accounts/forms.py:726
+#: accounts/forms.py:291
+#: accounts/forms.py:774
 msgid "Pseudo"
 msgstr "Username"
 
-#: accounts/forms.py:244
-#: accounts/forms.py:727
+#: accounts/forms.py:292
+#: accounts/forms.py:775
 msgid "Required. 30 characters or fewer. Letters, digits and @/./+/-/_ only."
 msgstr "Required. 30 characters or fewer. Letters, digits and @/./+/-/_ only."
 
-#: accounts/forms.py:245
-#: accounts/forms.py:728
+#: accounts/forms.py:293
+#: accounts/forms.py:776
 msgid "This value may contain only letters, numbers and @/./+/-/_ characters."
 msgstr "This value may contain only letters, numbers and @/./+/-/_ characters."
 
-#: accounts/forms.py:248
-#: accounts/forms.py:430
-#: accounts/forms.py:733
+#: accounts/forms.py:296
+#: accounts/forms.py:478
+#: accounts/forms.py:781
 msgid "Prénom"
 msgstr "First name"
 
-#: accounts/forms.py:249
-#: accounts/forms.py:431
-#: accounts/forms.py:734
+#: accounts/forms.py:297
+#: accounts/forms.py:479
+#: accounts/forms.py:782
 msgid "Nom"
 msgstr "Surname"
 
-#: accounts/forms.py:250
-#: accounts/forms.py:741
+#: accounts/forms.py:298
+#: accounts/forms.py:789
 msgid "Photo de profil"
 msgstr "Profile Picture"
 
-#: accounts/forms.py:253
+#: accounts/forms.py:301
 msgid "Newsletter"
 msgstr "Newsletter"
 
-#: accounts/forms.py:254
+#: accounts/forms.py:302
 #: templates/accounts/patron_edit_highlight.html:9
 #: templates/accounts/patron_edit_notification.html:4
 #: templates/accounts/patron_edit_notification.html:9
@@ -235,87 +220,87 @@ msgstr "Newsletter"
 msgid "Notifications"
 msgstr "Notifications"
 
-#: accounts/forms.py:256
-#: accounts/forms.py:746
-#: accounts/models.py:198
+#: accounts/forms.py:304
+#: accounts/forms.py:794
+#: accounts/models.py:197
 msgid "Lieu de naissance"
-msgstr "birthplace"
+msgstr "Place of birth"
 
-#: accounts/forms.py:257
-#: accounts/models.py:194
+#: accounts/forms.py:305
+#: accounts/models.py:193
 msgid "Date d'obtention"
 msgstr "Graduation date"
 
-#: accounts/forms.py:259
+#: accounts/forms.py:307
 msgid "A propos de vous"
 msgstr "About you"
 
-#: accounts/forms.py:260
-#: accounts/models.py:106
-#: templates/accounts/partials/more_info.html:9
+#: accounts/forms.py:308
+#: accounts/models.py:105
+#: templates/accounts/partials/more_info.html:12
 msgid "Travail"
 msgstr "Work"
 
-#: accounts/forms.py:260
+#: accounts/forms.py:308
 msgid "Exemple : Directrice Resources Humaines, ma socitée"
 msgstr "Example: Director Human Resources, my socitée"
 
-#: accounts/forms.py:261
-#: templates/accounts/partials/more_info.html:13
+#: accounts/forms.py:309
+#: templates/accounts/partials/more_info.html:16
 msgid "Etudes"
 msgstr "Studies"
 
-#: accounts/forms.py:261
+#: accounts/forms.py:309
 msgid "Exemple : Université Panthéon Sorbonne (Paris I)"
 msgstr "Example: University Panthéon Sorbonne (Paris I)"
 
-#: accounts/forms.py:262
+#: accounts/forms.py:310
 msgid "Hobbies"
 msgstr "Hobbies"
 
-#: accounts/forms.py:263
+#: accounts/forms.py:311
 msgid "Langues parlées"
 msgstr "Languages spoken"
 
-#: accounts/forms.py:263
+#: accounts/forms.py:311
 msgid "Choisissez vos langues"
 msgstr "Choose your languages"
 
-#: accounts/forms.py:275
-#: accounts/forms.py:292
-#: accounts/forms.py:342
+#: accounts/forms.py:323
+#: accounts/forms.py:340
+#: accounts/forms.py:390
 msgid "Informations nécessaires"
 msgstr "Necessary Information"
 
-#: accounts/forms.py:279
+#: accounts/forms.py:327
 msgid "Informations de profil"
 msgstr "Profile Information"
 
-#: accounts/forms.py:283
-#: accounts/forms.py:350
+#: accounts/forms.py:331
+#: accounts/forms.py:398
 msgid "Informations sur le permis"
-msgstr "Information on the permit"
+msgstr "License information"
 
-#: accounts/forms.py:295
+#: accounts/forms.py:343
 msgid "Adresse par defaut"
 msgstr "Default Address"
 
-#: accounts/forms.py:298
+#: accounts/forms.py:346
 msgid "Téléphone par defaut"
 msgstr "Default Phone"
 
-#: accounts/forms.py:305
-#: accounts/forms.py:876
+#: accounts/forms.py:353
+#: accounts/forms.py:924
 msgid "Vous devez entrer le nom de votre société"
 msgstr "You have to enter your company's name"
 
-#: accounts/forms.py:311
+#: accounts/forms.py:359
 #: accounts/tests/views.py:167
 #: accounts/tests/views.py:327
 msgid "This field is required."
 msgstr "This field is required."
 
-#: accounts/forms.py:314
+#: accounts/forms.py:362
 #: accounts/tests/views.py:181
 msgid ""
 "Pour garantir un service de qualité et la sécurité des utilisateurs "
@@ -323,125 +308,125 @@ msgid ""
 "adresse email jetable. Ne craignez rien, vous ne recevrez aucun courrier "
 "indésirable."
 msgstr ""
-"To ensure a quality service and safety of users of e-loue.com in the subway, "
-"you cannot register with a disposable email address. Do not be afraid, you "
-"will not receive any junk mail."
+"To ensure a quality service and the safety of e-loue users, you cannot "
+"register with a disposable email address. Do not worry, you will not receive "
+"any junk mail."
 
-#: accounts/forms.py:317
+#: accounts/forms.py:365
 #: accounts/tests/views.py:153
 msgid "Un compte avec cet email existe déjà"
 msgstr "An account already exists for this email address"
 
-#: accounts/forms.py:330
+#: accounts/forms.py:378
 msgid "Logo de l'entreprise"
 msgstr "Logo of the company"
 
-#: accounts/forms.py:331
+#: accounts/forms.py:379
 msgid "A propos de l'entreprise"
 msgstr "About the Company"
 
-#: accounts/forms.py:331
+#: accounts/forms.py:379
 msgid ""
 "Décrivez votre entreprise afin d’expliquer aux membres de e-loue votre "
 "activité."
 msgstr ""
-"Describe your business in order to explain to the members of e-rented your "
+"Describe your company in order to explain to the members of e-loue your "
 "activity."
 
-#: accounts/forms.py:346
+#: accounts/forms.py:394
 msgid "Informations sur l'entreprise"
-msgstr "Information about the company"
+msgstr "Company information"
 
-#: accounts/forms.py:359
+#: accounts/forms.py:407
 msgid "Adresse de l'entreprise"
 msgstr "Address of the business"
 
-#: accounts/forms.py:361
+#: accounts/forms.py:409
 msgid "Téléphone de l'entreprise"
 msgstr "The company's Telephone"
 
-#: accounts/forms.py:381
+#: accounts/forms.py:429
 msgid "New password"
 msgstr "New password"
 
-#: accounts/forms.py:382
+#: accounts/forms.py:430
 msgid "New password confirmation"
 msgstr "New password confirmation"
 
-#: accounts/forms.py:393
+#: accounts/forms.py:441
 msgid "The two password fields didn't match."
 msgstr "The two password fields didn't match."
 
-#: accounts/forms.py:407
+#: accounts/forms.py:455
 msgid "Ancien mot de passe"
 msgstr "Old password"
 
-#: accounts/forms.py:415
+#: accounts/forms.py:463
 msgid "Your old password was entered incorrectly. Please enter it again."
 msgstr "Your old password was entered incorrectly. Please enter it again."
 
-#: accounts/forms.py:427
+#: accounts/forms.py:475
 msgid "Password confirmation"
 msgstr "Password confirmation"
 
-#: accounts/forms.py:428
+#: accounts/forms.py:476
 msgid "Enter the same password as above, for verification."
 msgstr "Enter the same password as above, for verification."
 
-#: accounts/forms.py:441
+#: accounts/forms.py:489
 msgid "Vous devez entrer le nom de l'entreprise"
 msgstr "You must enter the name of the company"
 
-#: accounts/forms.py:453
+#: accounts/forms.py:501
 msgid "Ce champ est obligatoire."
 msgstr "This field is mandatory."
 
-#: accounts/forms.py:469
+#: accounts/forms.py:517
 msgid "E-mail"
 msgstr "E-mail"
 
-#: accounts/forms.py:478
+#: accounts/forms.py:526
 msgid "Vous devez entrer votre email Paypal"
 msgstr "You have to enter your Paypal email"
 
-#: accounts/forms.py:489
-#: accounts/forms.py:742
-#: accounts/forms.py:770
-#: templates/accounts/patron_edit.html:56
+#: accounts/forms.py:537
+#: accounts/forms.py:790
+#: accounts/forms.py:818
+#: templates/accounts/patron_edit.html:58
 #: templates/accounts/partials/company_more_info.html:9
 #: templates/dcns/accounts/partials/missing.html:97
 #: templates/rent/booking_confirm.html:87
 msgid "Téléphone"
 msgstr "Phone number"
 
-#: accounts/forms.py:493
-#: accounts/forms.py:884
+#: accounts/forms.py:541
+#: accounts/forms.py:932
 #: accounts/tests/views.py:445
 msgid "Vous devez spécifiez un numéro de téléphone"
 msgstr "You have to enter a telephone number"
 
-#: accounts/forms.py:498
+#: accounts/forms.py:546
 msgid "Vous ne pouvez pas supprimer votre numéro par default."
 msgstr "You cannot delete your number by default."
 
-#: accounts/forms.py:513
-#: accounts/forms.py:515
+#: accounts/forms.py:561
+#: accounts/forms.py:563
 msgid "Order"
 msgstr "Order"
 
-#: accounts/forms.py:517
+#: accounts/forms.py:565
 #: templates/django_messages/inbox.html:47
 #: templates/django_messages/view.html:34
 msgid "Delete"
 msgstr "Delete"
 
-#: accounts/forms.py:525
+#: accounts/forms.py:573
 msgid "Vous ne pouvez pas supprimer tout vos numéros."
 msgstr "You cannot delete all your numbers."
 
-#: accounts/forms.py:533
-#: accounts/forms.py:762
-#: accounts/models.py:549
+#: accounts/forms.py:581
+#: accounts/forms.py:810
+#: accounts/models.py:605
 #: products/forms.py:611
 #: templates/dcns/accounts/partials/missing.html:133
 #: templates/products/product_edit.html:22
@@ -449,33 +434,33 @@ msgstr "You cannot delete all your numbers."
 msgid "Adresse"
 msgstr "Address"
 
-#: accounts/forms.py:533
-#: accounts/forms.py:548
-#: accounts/forms.py:735
+#: accounts/forms.py:581
+#: accounts/forms.py:596
+#: accounts/forms.py:783
 #: products/forms.py:602
 msgid "Rue"
 msgstr "Street"
 
-#: accounts/forms.py:534
+#: accounts/forms.py:582
 msgid "Code Postal"
 msgstr "Postal Code"
 
-#: accounts/forms.py:534
-#: accounts/forms.py:551
-#: accounts/forms.py:736
+#: accounts/forms.py:582
+#: accounts/forms.py:599
+#: accounts/forms.py:784
 #: products/forms.py:603
 msgid "Code postal"
 msgstr "Zipcode"
 
-#: accounts/forms.py:535
-#: accounts/forms.py:554
-#: accounts/forms.py:739
-#: accounts/models.py:553
+#: accounts/forms.py:583
+#: accounts/forms.py:602
+#: accounts/forms.py:787
+#: accounts/models.py:609
 #: products/forms.py:604
 msgid "Ville"
 msgstr "City"
 
-#: accounts/forms.py:539
+#: accounts/forms.py:587
 msgid ""
 "Vous ne pouvez pas supprimer une adresse associé à un produit. Veuillez le "
 "changer sur le page produit."
@@ -483,445 +468,445 @@ msgstr ""
 "You cannot delete an address associated with a product. Please change it on "
 "the product page."
 
-#: accounts/forms.py:541
+#: accounts/forms.py:589
 msgid "Vous ne pouvez pas supprimer votre adresse par default."
 msgstr "You cannot delete your address by default."
 
-#: accounts/forms.py:598
-#: accounts/forms.py:664
-#: accounts/forms.py:747
+#: accounts/forms.py:646
+#: accounts/forms.py:712
+#: accounts/forms.py:795
 msgid "Cryptogramme de sécurité"
-msgstr "Cryptogram of security"
+msgstr "Security code"
 
-#: accounts/forms.py:598
-#: accounts/forms.py:664
-#: accounts/forms.py:747
+#: accounts/forms.py:646
+#: accounts/forms.py:712
+#: accounts/forms.py:795
 msgid "Les 3 derniers chiffres au dos de la carte."
 msgstr "The last 3 digits on the back of the card."
 
-#: accounts/forms.py:599
-#: accounts/forms.py:665
-#: accounts/forms.py:748
+#: accounts/forms.py:647
+#: accounts/forms.py:713
+#: accounts/forms.py:796
 #: templates/rent/booking_confirm.html:160
 msgid "Date d'expiration"
 msgstr "Expiration Date"
 
-#: accounts/forms.py:600
-#: accounts/forms.py:674
-#: accounts/forms.py:749
+#: accounts/forms.py:648
+#: accounts/forms.py:722
+#: accounts/forms.py:797
 msgid "Titulaire de la carte"
 msgstr "Holder of the card"
 
-#: accounts/forms.py:606
-#: accounts/forms.py:670
-#: accounts/forms.py:750
+#: accounts/forms.py:654
+#: accounts/forms.py:718
+#: accounts/forms.py:798
 #: templates/rent/booking_confirm.html:152
 msgid "Numéro de carte de crédit"
 msgstr "Credit Card Number"
 
-#: accounts/forms.py:630
-#: accounts/forms.py:696
-#: accounts/forms.py:900
+#: accounts/forms.py:678
+#: accounts/forms.py:744
+#: accounts/forms.py:948
 msgid "La validation de votre carte a échoué."
 msgstr "The validation of your card has failed."
 
-#: accounts/forms.py:732
+#: accounts/forms.py:780
 msgid "Mot de passe à nouveau"
 msgstr "Password to new"
 
-#: accounts/forms.py:740
-#: accounts/models.py:554
+#: accounts/forms.py:788
+#: accounts/models.py:610
 msgid "Pays"
 msgstr "Countries"
 
-#: accounts/forms.py:743
+#: accounts/forms.py:791
 msgid "Numéro de permis"
 msgstr "Permit Number"
 
-#: accounts/forms.py:744
+#: accounts/forms.py:792
 msgid "Date de délivraisance"
 msgstr "Date of delivraisance"
 
-#: accounts/forms.py:745
-#: accounts/models.py:197
+#: accounts/forms.py:793
+#: accounts/models.py:196
 msgid "Date de naissance"
 msgstr "Date of birth"
 
-#: accounts/forms.py:763
+#: accounts/forms.py:811
 msgid "Selectionnez une adresse enregistrée précédemment"
 msgstr "Select a previously saved address"
 
-#: accounts/forms.py:771
+#: accounts/forms.py:819
 msgid "Selectionnez un numéro de téléphone enregistré précédemment"
 msgstr "Select a phone number registered previously"
 
-#: accounts/forms.py:856
-#: accounts/forms.py:858
+#: accounts/forms.py:904
+#: accounts/forms.py:906
 #: accounts/tests/wizard.py:146
 #: accounts/tests/wizard.py:327
 msgid "Ce nom d'utilisateur est déjà pris."
 msgstr "This username is already taken."
 
-#: accounts/forms.py:869
+#: accounts/forms.py:917
 #: products/forms.py:623
 msgid "Vous devez spécifiez une adresse"
 msgstr "You have to enter an address"
 
-#: accounts/forms.py:907
+#: accounts/forms.py:955
 #: accounts/tests/wizard.py:162
 msgid "Vos mots de passe ne correspondent pas"
 msgstr "Your passwords don't match"
 
-#: accounts/forms.py:922
+#: accounts/forms.py:970
 #: templates/rent/booking_confirm.html:108
 msgid "Permis de conduire"
 msgstr "Driver's License"
 
-#: accounts/forms.py:947
+#: accounts/forms.py:995
 #: products/forms.py:206
 msgid "Sujet"
 msgstr "Subject"
 
-#: accounts/forms.py:948
+#: accounts/forms.py:996
 #: templates/django_messages/view.html:3
 msgid "Message"
 msgstr "Message"
 
-#: accounts/forms.py:949
+#: accounts/forms.py:997
 msgid "Etre en copie"
 msgstr "Be in copy"
 
-#: accounts/forms.py:973
+#: accounts/forms.py:1021
 msgid "L'heure d'ouverture doit etre inferieure a celui de fermeture"
 msgstr "The opening time must be less than that of closure"
 
-#: accounts/forms.py:981
+#: accounts/forms.py:1029
 msgid "Le debut de la tranche horaire doit précéder la fin"
 msgstr "The beginning of the installment schedule must precede the end"
 
-#: accounts/forms.py:991
+#: accounts/forms.py:1039
 msgid "Vous devez saisir le debut et la fin de la tranche d'horaire"
 msgstr "You must enter the beginning and the end of the installment schedule"
 
-#: accounts/forms.py:999
+#: accounts/forms.py:1047
 msgid "Vous ne pouvez pas definir de tranche horaire si vous n'etes pas ouvert"
 msgstr "You cannot define time-slice if you are not open"
 
-#: accounts/forms.py:1006
+#: accounts/forms.py:1054
 msgid "Vous devez saisir l'ouverture et le fermeture"
 msgstr "You must enter the opening and the closing"
 
-#: accounts/forms.py:1018
+#: accounts/forms.py:1066
 msgid "Lundi"
 msgstr "Monday"
 
-#: accounts/forms.py:1022
+#: accounts/forms.py:1070
 msgid "Mardi"
 msgstr "Tuesday"
 
-#: accounts/forms.py:1026
+#: accounts/forms.py:1074
 msgid "Mercredi"
 msgstr "Wednesday"
 
-#: accounts/forms.py:1030
+#: accounts/forms.py:1078
 msgid "Jeudi"
 msgstr "Thursday"
 
-#: accounts/forms.py:1034
+#: accounts/forms.py:1082
 msgid "Vendredi"
 msgstr "Friday"
 
-#: accounts/forms.py:1038
+#: accounts/forms.py:1086
 msgid "Samedi"
 msgstr "Saturday"
 
-#: accounts/forms.py:1042
+#: accounts/forms.py:1090
 msgid "Dimanche"
 msgstr "Sunday"
 
-#: accounts/forms.py:1057
+#: accounts/forms.py:1105
 msgid "Vous pouvez choisir 20 contacts maximum"
-msgstr "You can choose 20 maximum contacts"
+msgstr "You can choose a maximum of 20 contacts"
 
-#: accounts/models.py:47
+#: accounts/models.py:46
 msgid "Madame"
 msgstr "Mrs."
 
-#: accounts/models.py:48
+#: accounts/models.py:47
 msgid "Mademoiselle"
 msgstr "Ms."
 
-#: accounts/models.py:49
+#: accounts/models.py:48
 msgid "Monsieur"
 msgstr "Mr."
 
-#: accounts/models.py:53
+#: accounts/models.py:52
 msgid "France"
 msgstr "France"
 
-#: accounts/models.py:54
+#: accounts/models.py:53
 msgid "Belgique"
 msgstr "Belgium"
 
-#: accounts/models.py:55
+#: accounts/models.py:54
 msgid "Luxembourg"
 msgstr "Luxembourg"
 
-#: accounts/models.py:56
+#: accounts/models.py:55
 msgid "Réunion"
 msgstr "Réunion"
 
-#: accounts/models.py:57
+#: accounts/models.py:56
 msgid "Allemagne"
 msgstr "Germany"
 
-#: accounts/models.py:58
+#: accounts/models.py:57
 msgid "Andore"
 msgstr "Andorra"
 
-#: accounts/models.py:59
+#: accounts/models.py:58
 msgid "Autriche"
 msgstr "Austria"
 
-#: accounts/models.py:60
+#: accounts/models.py:59
 msgid "Canada"
 msgstr "Canada"
 
-#: accounts/models.py:61
+#: accounts/models.py:60
 msgid "Chypre"
 msgstr "Cyprus"
 
-#: accounts/models.py:62
+#: accounts/models.py:61
 msgid "Danemark"
 msgstr "Denmark"
 
-#: accounts/models.py:63
+#: accounts/models.py:62
 msgid "Espagne"
 msgstr "Spain"
 
-#: accounts/models.py:64
+#: accounts/models.py:63
 msgid "États-Unis"
 msgstr "United States"
 
-#: accounts/models.py:65
+#: accounts/models.py:64
 msgid "Finlande"
 msgstr "Finland"
 
-#: accounts/models.py:66
+#: accounts/models.py:65
 msgid "Grèce"
 msgstr "Greece"
 
-#: accounts/models.py:67
+#: accounts/models.py:66
 msgid "Guadeloupe"
 msgstr "Guadeloupe"
 
-#: accounts/models.py:68
+#: accounts/models.py:67
 msgid "Guernesey"
 msgstr "Guernsey"
 
-#: accounts/models.py:69
+#: accounts/models.py:68
 msgid "Guyane Française"
 msgstr "French Guiana"
 
-#: accounts/models.py:70
+#: accounts/models.py:69
 msgid "Hongrie"
 msgstr "Hungary"
 
-#: accounts/models.py:71
+#: accounts/models.py:70
 msgid "Irlande"
 msgstr "Ireland"
 
-#: accounts/models.py:72
+#: accounts/models.py:71
 msgid "Islande"
 msgstr "Iceland"
 
-#: accounts/models.py:73
+#: accounts/models.py:72
 msgid "Italie"
 msgstr "Italy"
 
-#: accounts/models.py:74
+#: accounts/models.py:73
 msgid "Japon"
 msgstr "Japan"
 
-#: accounts/models.py:75
+#: accounts/models.py:74
 msgid "Jersey"
 msgstr "Jersey"
 
-#: accounts/models.py:76
+#: accounts/models.py:75
 msgid "Lettonie"
 msgstr "Latvia"
 
-#: accounts/models.py:77
+#: accounts/models.py:76
 msgid "Liechtenstein"
 msgstr "Liechtenstein"
 
-#: accounts/models.py:78
+#: accounts/models.py:77
 msgid "Lituanie"
 msgstr "Lithuania"
 
-#: accounts/models.py:79
+#: accounts/models.py:78
 msgid "Malte"
 msgstr "Malta"
 
-#: accounts/models.py:80
+#: accounts/models.py:79
 msgid "Martinique"
 msgstr "Martinique"
 
-#: accounts/models.py:81
+#: accounts/models.py:80
 msgid "Maurice"
 msgstr "Mauritius"
 
-#: accounts/models.py:82
+#: accounts/models.py:81
 msgid "Mayotte"
 msgstr "Mayotte"
 
-#: accounts/models.py:83
+#: accounts/models.py:82
 msgid "Monaco"
 msgstr "Monaco"
 
-#: accounts/models.py:84
+#: accounts/models.py:83
 msgid "Maroc"
 msgstr "Morocco"
 
-#: accounts/models.py:85
+#: accounts/models.py:84
 msgid "Norvège"
 msgstr "Norway"
 
-#: accounts/models.py:86
+#: accounts/models.py:85
 msgid "Nouvelle-Calédonie"
 msgstr "New Caledonia"
 
-#: accounts/models.py:87
+#: accounts/models.py:86
 msgid "Pays-Bas"
 msgstr "Netherlands"
 
-#: accounts/models.py:88
+#: accounts/models.py:87
 msgid "Pologne"
 msgstr "Poland"
 
-#: accounts/models.py:89
+#: accounts/models.py:88
 msgid "Polynésie Française"
 msgstr "French Polynesia"
 
-#: accounts/models.py:90
+#: accounts/models.py:89
 msgid "Portugal"
 msgstr "Portugal"
 
-#: accounts/models.py:91
+#: accounts/models.py:90
 msgid "Roumanie"
 msgstr "Romania"
 
-#: accounts/models.py:92
+#: accounts/models.py:91
 msgid "Royaume-Uni"
 msgstr "United Kingdom"
 
-#: accounts/models.py:93
+#: accounts/models.py:92
 msgid "Russie, Fédération de"
 msgstr "Russian Federation"
 
-#: accounts/models.py:94
+#: accounts/models.py:93
 msgid "Saint-Pierre-et-Miquelon"
 msgstr "Saint Pierre and Miquelon"
 
-#: accounts/models.py:95
+#: accounts/models.py:94
 msgid "Saint-Siège (État de la cité du Vatican)"
 msgstr "Vatican City"
 
-#: accounts/models.py:96
+#: accounts/models.py:95
 msgid "Suède"
 msgstr "Sweden"
 
-#: accounts/models.py:97
+#: accounts/models.py:96
 msgid "Suisse"
 msgstr "Switzerland"
 
-#: accounts/models.py:98
+#: accounts/models.py:97
 msgid "Tchèque, République"
 msgstr "Czech Republic"
 
-#: accounts/models.py:99
+#: accounts/models.py:98
 msgid "Terres Australes Françaises"
 msgstr "French Southern and Antarctic Lands"
 
-#: accounts/models.py:100
+#: accounts/models.py:99
 msgid "Tunisie"
 msgstr "Tunisia"
 
-#: accounts/models.py:101
+#: accounts/models.py:100
 msgid "Turquie"
 msgstr "Turkey"
 
-#: accounts/models.py:105
+#: accounts/models.py:104
 msgid "Domicile"
 msgstr "Home"
 
-#: accounts/models.py:107
+#: accounts/models.py:106
 msgid "Mobile"
 msgstr "Cellphone"
 
-#: accounts/models.py:108
+#: accounts/models.py:107
 msgid "Fax"
 msgstr "Fax"
 
-#: accounts/models.py:109
+#: accounts/models.py:108
 msgid "Autre"
 msgstr "Other"
 
-#: accounts/models.py:167
+#: accounts/models.py:166
 msgid "Civilité"
 msgstr "Title"
 
-#: accounts/models.py:172
+#: accounts/models.py:171
 msgid "newsletter"
 msgstr "newsletter"
 
-#: accounts/models.py:172
+#: accounts/models.py:171
 msgid "Précise si l'utilisateur est abonné à la newsletter"
 msgstr "Specifies whether the user has subscribed to the newsletter or not"
 
-#: accounts/models.py:173
+#: accounts/models.py:172
 msgid "alerts if new messages come"
 msgstr "alerts if new messages come"
 
-#: accounts/models.py:173
+#: accounts/models.py:172
 msgid "Précise si l'utilisateur est informé par email s'il a nouveaux messages"
 msgstr "Specifies whether the user is informed by email if it has new messages"
 
-#: accounts/models.py:174
+#: accounts/models.py:173
 msgid "professionnel"
 msgstr "professional"
 
-#: accounts/models.py:174
+#: accounts/models.py:173
 msgid "Précise si l'utilisateur est un professionnel"
 msgstr "Specifies whether the user is a professional"
 
-#: accounts/models.py:175
+#: accounts/models.py:174
 msgid "date de modification"
 msgstr "modification date"
 
-#: accounts/models.py:195
+#: accounts/models.py:194
 msgid "Numéro du permis"
 msgstr "The permit Number"
 
-#: accounts/models.py:205
+#: accounts/models.py:204
 msgid "Site internet"
 msgstr "Internet Site"
 
-#: accounts/models.py:205
+#: accounts/models.py:204
 msgid "L'affichage de l'adresse du site est facturée 5€ par mois."
 msgstr "The display of the address of the site is charged 5€ per month."
 
-#: accounts/models.py:260
-#: accounts/models.py:265
+#: accounts/models.py:259
+#: accounts/models.py:264
 msgid "Un utilisateur utilisant cet email existe déjà"
 msgstr "A user with this email address already exists"
 
-#: accounts/models.py:262
-#: accounts/models.py:267
+#: accounts/models.py:261
+#: accounts/models.py:266
 msgid "Un utilisateur utilisant ce nom d'utilisateur existe déjà"
 msgstr "A user with this username already exists"
 
-#: accounts/models.py:317
+#: accounts/models.py:316
 #: templates/base.html:7
 #: templates/admin/base_site.html:4
 #: templates/admin/base_site.html.py:7
@@ -932,17 +917,31 @@ msgstr "A user with this username already exists"
 #: templates/nc/_base.html:9
 #: templates/nc/base.html:7
 #: templates/shiseido/base.html:7
+#: templates/uk/base.html:7
 msgid "e-loue"
-msgstr "eRentmarket"
+msgstr "e-loue"
 
-#: accounts/models.py:452
+#: accounts/models.py:463
 msgid "Expiré"
 msgstr "Expired"
 
-#: accounts/models.py:461
-#: accounts/models.py:464
-#: accounts/models.py:467
-#: accounts/models.py:470
+#: accounts/models.py:472
+#: accounts/models.py:475
+#: accounts/models.py:478
+#: accounts/models.py:481
+#: accounts/models.py:484
+#: accounts/models.py:487
+#: accounts/models.py:490
+#: accounts/models.py:493
+#: accounts/models.py:496
+#: accounts/models.py:499
+#: accounts/models.py:502
+#: accounts/models.py:505
+#: accounts/models.py:508
+#: accounts/models.py:511
+msgid "De"
+msgstr "Of"
+
 #: accounts/models.py:473
 #: accounts/models.py:476
 #: accounts/models.py:479
@@ -953,40 +952,27 @@ msgstr "Expired"
 #: accounts/models.py:494
 #: accounts/models.py:497
 #: accounts/models.py:500
-msgid "De"
-msgstr "Of"
-
-#: accounts/models.py:462
-#: accounts/models.py:465
-#: accounts/models.py:468
-#: accounts/models.py:471
-#: accounts/models.py:474
-#: accounts/models.py:477
-#: accounts/models.py:480
-#: accounts/models.py:483
-#: accounts/models.py:486
-#: accounts/models.py:489
-#: accounts/models.py:492
-#: accounts/models.py:495
-#: accounts/models.py:498
-#: accounts/models.py:501
+#: accounts/models.py:503
+#: accounts/models.py:506
+#: accounts/models.py:509
+#: accounts/models.py:512
 msgid "à"
 msgstr "To"
 
-#: accounts/models.py:510
+#: accounts/models.py:521
 #: templates/rent/booking_credit_card.html:24
 msgid "Conserver mes coordonnées bancaire"
 msgstr "Keep my bank details"
 
-#: accounts/models.py:561
+#: accounts/models.py:617
 msgid "addresses"
 msgstr "adresses"
 
-#: accounts/models.py:582
+#: accounts/models.py:638
 msgid "Coordonnées géographiques incorrectes"
 msgstr "Incorrect geographical coordinates"
 
-#: accounts/models.py:606
+#: accounts/models.py:662
 msgid "Géolocalisé"
 msgstr "Geolocated"
 
@@ -1006,11 +992,11 @@ msgstr "Rental set by user address"
 msgid "Default location"
 msgstr "Default location"
 
-#: accounts/views.py:387
+#: accounts/views.py:390
 msgid "Vos informations ont bien été modifiées"
-msgstr "Your information has been successfully changed"
+msgstr "Your information has been successfully updated"
 
-#: accounts/views.py:462
+#: accounts/views.py:465
 msgid ""
 "Pour un abonnement vous devez enregistrer une carte bancaire. Merci de "
 "renseigner la carte utilisée pour le paiement."
@@ -1018,66 +1004,66 @@ msgstr ""
 "For a subscription you must register a credit card. Thank you to complete "
 "the card used for payment."
 
-#: accounts/views.py:489
+#: accounts/views.py:488
 msgid "Votre mot de passe à bien été modifié"
 msgstr "Your password has been successfully changed"
 
-#: accounts/views.py:499
+#: accounts/views.py:498
 msgid "Vos numéros de téléphones ont bien été modifiés"
 msgstr "Your telephone numbers have been changed"
 
-#: accounts/views.py:542
-#: accounts/views.py:545
+#: accounts/views.py:537
+#: accounts/views.py:540
 msgid "Vous n'avez pas de carte enregistrée"
 msgstr "You do not have a saved card"
 
-#: accounts/views.py:551
+#: accounts/views.py:546
 msgid ""
 "Vous avez un abonnement en cours, veuillez nous contacter à "
 "contact@e-loue.com pour supprimer votre carte."
 msgstr ""
-"You have a current subscription, please contact us at contact@e-loue.com to "
+"You have an ongoing subscription, please contact us at contact@e-loue.com to "
 "delete your card."
 
-#: accounts/views.py:560
+#: accounts/views.py:555
 msgid "On a bien supprimé les détails de votre carte bancaire."
 msgstr "It was well removes the details of your credit card."
 
-#: accounts/views.py:571
+#: accounts/views.py:566
 msgid "Votre RIB a bien été ajouté"
 msgstr "Your RIB has been added"
 
-#: accounts/views.py:578
+#: accounts/views.py:573
 #: rent/views.py:221
 msgid "Votre demande est dépassée"
 msgstr "Your request is exceeded"
 
-#: accounts/views.py:581
+#: accounts/views.py:576
 #: rent/views.py:232
 msgid "La demande de location a été acceptée"
 msgstr "The rental application has been accepted"
 
-#: accounts/views.py:686
+#: accounts/views.py:681
 msgid "Vos adresses ont bien été modifiées"
 msgstr "Your addresses have been changed"
 
-#: accounts/views.py:806
+#: accounts/views.py:803
 msgid "Votre message a bien été envoyé"
 msgstr "Your message has been successfully sent"
 
-#: accounts/views.py:809
+#: accounts/views.py:806
 msgid "Erreur lors de l'envoi du message"
 msgstr "An error occurred when sending the message"
 
-#: accounts/wizard.py:23
+#: accounts/wizard.py:22
 msgid "S'incrire ou se connecter"
-msgstr "Subscribe or connect"
+msgstr "Register or log in"
 
-#: accounts/wizard.py:29
+#: accounts/wizard.py:95
 msgid "Bienvenue !"
 msgstr "Welcome!"
 
-#: accounts/wizard.py:32
+#: accounts/wizard.py:98
 msgid ""
 "Bienvenue ! Nous vous avons envoyé un lien de validation par email. Cette "
 "validation est impérative pour terminer votre enregistrement."
@@ -1085,21 +1071,21 @@ msgstr ""
 "Welcome! We have sent you an activation link by email. It is mandatory to "
 "activate your account to finish the registration process."
 
-#: accounts/wizard.py:77
+#: accounts/wizard.py:143
 msgid "Vous avez changer d'abonnement avec succès"
 msgstr "You change subscription with success"
 
-#: accounts/wizard.py:79
+#: accounts/wizard.py:145
 msgid "Votre inscription à l'abonnement est validé"
 msgstr "Your registration for the subscription is valid"
 
-#: accounts/wizard.py:81
+#: accounts/wizard.py:147
 msgid ""
 "Votre nombre d'annonces dépasse le nombre d'annonce maximum de cet "
 "abonnement. Merci de choisir un abonnement plus important"
 msgstr ""
-"Your number of announcements exceeds the number of announced maximum of this "
-"subscription. Thank you for choosing a subscription more important"
+"Your number of ads exceeds the maximum number of ads for this subscription. "
+"Please upgrade your subscription."
 
 #: accounts/tests/wizard.py:344
 msgid "Invalid OAuth access token."
@@ -1122,11 +1108,24 @@ msgstr "Newest"
 
 #: products/forms.py:38
 msgid "Les pris les plus bas"
-msgstr "Lowest prices"
+msgstr "Price (low to high)"
 
 #: products/forms.py:39
 msgid "Les pris les plus haut"
-msgstr "Highest prices"
+msgstr "Price (high to low)"
+
+#: products/forms.py:46
+#: templates/dcns/accounts/patron_detail.html:18
+#: templates/mobile/index.html:20
+#: templates/mobile/products/search.html:20
+#: templates/products/alert_list.html:17
+#: templates/shiseido/index.html:15
+msgid "Que voulez-vous louer ?"
+msgstr "What do you want to rent?"
+
+#: products/forms.py:47
+msgid "Où voulez-vous louer?"
+msgstr "Where do you want to rent?"
 
 #: products/forms.py:50
 #: templates/products/product_detail.html:307
@@ -1189,13 +1188,13 @@ msgstr "Choose a category"
 
 #: products/forms.py:281
 msgid "Titre de l'annnonce"
-msgstr "Title of the announced"
+msgstr "Advertisement title"
 
 #: products/forms.py:283
 #: products/forms.py:464
 #: templates/products/product_detail.html:282
 msgid "Photo"
-msgstr "Picture"
+msgstr "Photo"
 
 #: products/forms.py:284
 #: products/forms.py:351
@@ -1228,7 +1227,7 @@ msgstr "Quantity"
 #: products/forms.py:285
 #: products/forms.py:466
 msgid "Le locataire peut réserver plusieurs exemplaires si vous les possédez"
-msgstr "The tenant can book multiple copies if you have"
+msgstr "The renter can book multiple items if you have them"
 
 #: products/forms.py:286
 #: products/forms.py:350
@@ -1242,8 +1241,7 @@ msgstr "Description"
 msgid ""
 "Décrivez plus précisement votre objet, son état, comment et quand vous "
 "l'utilisez."
-msgstr ""
-"Describe more precisely your object, its status, how and when you use it."
+msgstr "Describe your object in detail: its state, how and when to use it."
 
 #: products/forms.py:289
 #: products/forms.py:644
@@ -1259,8 +1257,8 @@ msgid ""
 "20% de frais de commission (comprenant notamment l'assurance, le paiement en "
 "ligne,etc.) seront prélevés sur ce prix à chaque location."
 msgstr ""
-"20% Of The cost of commission (including insurance, the online payment,etc. "
-") will be collected on to the price on each rental."
+"20% commission on each rental will be collected according to the price  "
+"(including insurance, the online payment,etc. )."
 
 #: products/forms.py:291
 #: products/forms.py:646
@@ -1293,11 +1291,11 @@ msgstr "The month"
 #: templates/dcns/rent/booking_incident.html:61
 #: templates/shiseido/products/product_edit.html:21
 msgid "Ajouter un objet"
-msgstr "Publish an item"
+msgstr "Add an item"
 
 #: products/forms.py:299
 msgid "Donnez envie aux e-loueurs potentiels de louer votre objets."
-msgstr "Give envy to the e-potential renters to rent your objects."
+msgstr "Make potential e-loue renters want to rent your objects."
 
 #: products/forms.py:308
 #: products/forms.py:495
@@ -1320,51 +1318,51 @@ msgstr "Information"
 #: products/forms.py:451
 #: products/forms.py:673
 msgid "Prix de la location"
-msgstr "Price of the rental"
+msgstr "Rental price"
 
 #: products/forms.py:341
 #: products/forms.py:400
 #: products/forms.py:454
 #: products/forms.py:676
 msgid "Grille des tarifs"
-msgstr "Grid of tariffs"
+msgstr "Price chart"
 
 #: products/forms.py:350
 msgid ""
 "Décrivez plus précissément votre véhicule, son état, ses particularités."
-msgstr "Describe more precissement your vehicle, its status, its peculiarities."
+msgstr "Describe your vehicle in detail: its state, its features."
 
 #: products/forms.py:351
 msgid ""
 "Nous conseillons un dépôt de garantie de 2000€, qui correspond au montant de "
 "la franchise de l'assurance voiture. en cas de vol."
 msgstr ""
-"We recommend that you a deposit of 2000 €, which corresponds to the amount "
-"of the deductible of the car insurance, in case of theft."
+"We recommend a deposit of 2000 €, which corresponds to the car insurance "
+"excess payable in case of theft."
 
 #: products/forms.py:352
 #: products/forms.py:518
-#: products/models.py:442
+#: products/models.py:439
 msgid "N° d'immatriculation"
 msgstr "Registration No."
 
 #: products/forms.py:353
 #: products/forms.py:519
-#: products/models.py:443
+#: products/models.py:440
 msgid "1er mise en circulation"
 msgstr "1 Put into circulation"
 
 #: products/forms.py:358
 msgid "Ajouter une voiture"
-msgstr "Publish a car"
+msgstr "Add a car"
 
 #: products/forms.py:359
 msgid ""
 "Votre voiture peut être très utile. Donnez envie aux e-loueurs potentiels de "
 "louer votre véhicule."
 msgstr ""
-"Your car can be very useful. Give envy to the e-potential renters to rent "
-"your vehicle."
+"Your car can be very useful. Make potential e-loue renters want to rent your "
+"vehicle."
 
 #: products/forms.py:373
 #: products/forms.py:538
@@ -1374,17 +1372,17 @@ msgstr "Type of vehicle"
 #: products/forms.py:376
 #: products/forms.py:541
 msgid "Description du véhicule"
-msgstr "Description of the vehicle"
+msgstr "Vehicle description"
 
 #: products/forms.py:380
 #: products/forms.py:545
 msgid "Caractéristique du véhicule"
-msgstr "Characteristic of the vehicle"
+msgstr "Vehicle characteristics"
 
 #: products/forms.py:384
 #: products/forms.py:549
 msgid "Informations pour l'assurance"
-msgstr "Information for the insurance"
+msgstr "Insurance information"
 
 #: products/forms.py:385
 #: products/forms.py:550
@@ -1392,7 +1390,7 @@ msgid ""
 "Ces informations servent à assurer le véhicule pendant la location <a "
 "href=\"#\">(En savoir plus)</a>."
 msgstr ""
-"This information is used to ensure the vehicle during the rental period <a "
+"This information is used to insure the vehicle during the rental period <a "
 "href=\"#\">(learn more)</a>."
 
 #: products/forms.py:392
@@ -1407,14 +1405,14 @@ msgid ""
 "période. Ces prix ne sont pas obligatoires pour publier l'annonce, il est "
 "possible de les ajouter plus tard."
 msgstr ""
-"The tariff schedule allows you to apply a discount depending on the period. "
-"These prices are not required to publish the advertisement, it is possible "
-"to add them later."
+"The price chart allows you to apply a discount depending on the rental "
+"period. These prices are not required to publish the ad, it is possible to "
+"add them later."
 
 #: products/forms.py:406
 #: products/forms.py:561
 msgid "place(s)"
-msgstr "Place(s)"
+msgstr "Seat(s)"
 
 #: products/forms.py:407
 #: products/forms.py:562
@@ -1424,7 +1422,7 @@ msgstr "Door(s)"
 #: products/forms.py:408
 #: products/forms.py:563
 msgid "litre/100km"
-msgstr "Liter/ 100km"
+msgstr "Litre/ 100km"
 
 #: products/forms.py:409
 #: products/forms.py:564
@@ -1449,7 +1447,7 @@ msgid ""
 "Décrivez les spécifités de votre logement et insistez sur ce qui le rend "
 "exceptionnel."
 msgstr ""
-"Describe the specificities of your housing and insist on what makes the "
+"Describe the details of your accommodation and highlight what makes the "
 "place special."
 
 #: products/forms.py:418
@@ -1457,8 +1455,7 @@ msgid ""
 "Nous conseillons un dépôt de garantie de 75€. Ceci correspond au montant de "
 "la franchise de l'assurance."
 msgstr ""
-"We recommend that you a security deposit of 75 €.  This corresponds to the "
-"amount of the deductible of the insurance."
+"We recommend a deposit of 75 €.  This corresponds to the insurance excess."
 
 #: products/forms.py:419
 msgid "Prix par nuit"
@@ -1466,29 +1463,29 @@ msgstr "Price per night"
 
 #: products/forms.py:419
 msgid "Prix de location à la journée"
-msgstr "Rental price for the day"
+msgstr "Rental price per day"
 
 #: products/forms.py:423
 msgid "Ajouter un logement"
-msgstr "Publish a space"
+msgstr "Add a property"
 
 #: products/forms.py:424
 msgid ""
 "Votre logement est unique. Donnez envie aux e-loueurs potentiels de venir y "
 "séjourner."
 msgstr ""
-"Your accommodation is unique. Give envy to the e-potential renters to come "
-"and stay."
+"Your accommodation is unique. Make potential e-loue renters want to come and "
+"stay."
 
 #: products/forms.py:439
 #: products/forms.py:587
 msgid "Description du lieu"
-msgstr "Description of the place"
+msgstr "Description of accommodation"
 
 #: products/forms.py:448
 #: products/forms.py:596
 msgid "Service inclus"
-msgstr "Service included"
+msgstr "Services included"
 
 #: products/forms.py:458
 msgid "persone(s)"
@@ -1496,7 +1493,7 @@ msgstr "Person(s)"
 
 #: products/forms.py:459
 msgid "chambre(s)"
-msgstr "Room(s)"
+msgstr "Bedroom(s)"
 
 #: products/forms.py:465
 msgid "Montant utilisé en cas de dédomagement"
@@ -1555,6 +1552,9 @@ msgstr "2 Weeks Ago"
 
 #: products/models.py:54
 #: rent/utils.py:65
+#: templates/accounts/patron_subscription.html:101
+#: templates/accounts/patron_subscription.html:130
+#: templates/accounts/patron_subscription.html:144
 msgid "mois"
 msgstr "month"
 
@@ -1600,16 +1600,16 @@ msgstr "deleted"
 
 #: products/models.py:82
 msgid "Le locataire me paye directement et mon objet n'est pas assuré"
-msgstr "The tenant pays me directly and my item is not insured"
+msgstr "The renter pays me directly and my item is not insured"
 
 #: products/models.py:83
 msgid "Le locataire paye en ligne et mon objet est assuré"
-msgstr "The tenant pays online and my item is insured"
+msgstr "The renter pays online and my item is insured"
 
 #: products/models.py:84
 msgid ""
 "Le locataire paye en ligne par son carte bancaire et mon objet est assuré"
-msgstr "The lessee paid online by his credit card and my object is assured"
+msgstr "The renter pays online by credit card and my item is insured"
 
 #: products/models.py:88
 #: products/models.py:100
@@ -1768,11 +1768,11 @@ msgstr "Apartment/House"
 
 #: products/models.py:173
 msgid "Chambre partagé"
-msgstr "House sharing"
+msgstr "Shared bedroom"
 
 #: products/models.py:174
 msgid "Chambre privée"
-msgstr "Private Room"
+msgstr "Private bedroom"
 
 #: products/models.py:186
 msgid "Titre"
@@ -1794,259 +1794,259 @@ msgstr "Type of payments"
 msgid "product"
 msgstr "product"
 
-#: products/models.py:411
+#: products/models.py:408
 msgid "marque"
-msgstr "Mark"
+msgstr "Make"
 
-#: products/models.py:412
+#: products/models.py:409
 msgid "modèle"
 msgstr "Model"
 
-#: products/models.py:415
+#: products/models.py:412
 msgid "nombre de place"
-msgstr "Number of place"
+msgstr "Number of seats"
+
+#: products/models.py:413
+msgid "nombre de porte"
+msgstr "Number of doors"
+
+#: products/models.py:414
+msgid "énergie"
+msgstr "Fuel"
+
+#: products/models.py:415
+msgid "boite de vitesse"
+msgstr "Transmission"
 
 #: products/models.py:416
-msgid "nombre de porte"
-msgstr "Number of door"
+msgid "kilométrage"
+msgstr "mileage"
 
 #: products/models.py:417
-msgid "énergie"
-msgstr "Energy"
-
-#: products/models.py:418
-msgid "boite de vitesse"
-msgstr "Speed box"
-
-#: products/models.py:419
-msgid "kilométrage"
-msgstr "MILEAGE"
-
-#: products/models.py:420
 msgid "consommation"
 msgstr "Consumption"
 
-#: products/models.py:423
+#: products/models.py:420
 msgid "kilomètres inclus/jour"
-msgstr "Kilometers included/day"
+msgstr "Kilometres included/day"
 
-#: products/models.py:423
+#: products/models.py:420
 msgid "Nombre de kilomètres maximum que le locataire peut effectuer par jour."
-msgstr "Maximum Number of kilometers that the tenant can perform per day."
+msgstr "Maximum number of kilometres per day."
 
-#: products/models.py:424
+#: products/models.py:421
 msgid "Prix par kilomètres supplémentaires"
-msgstr "Price per extra kilometers"
+msgstr "Price per extra kilometre"
 
-#: products/models.py:424
+#: products/models.py:421
 msgid ""
 "Prix du kilomètre supplémentaire. Si le locataire dépasse le nombre de "
 "kilomètre inclus par jour."
 msgstr ""
-"Price of extra kilometers. If the tenant exceeds the number of kilometer "
+"Price of extra kilometers. If the tenant exceeds the number of kilometres "
 "included per day."
 
-#: products/models.py:427
+#: products/models.py:424
 msgid "climatisation"
 msgstr "Air conditioning"
 
-#: products/models.py:428
+#: products/models.py:425
 msgid "direction assistée"
 msgstr "Power assisted steering"
 
-#: products/models.py:429
+#: products/models.py:426
 msgid "régulateur de vitesse"
 msgstr "Cruise control"
 
-#: products/models.py:430
+#: products/models.py:427
 msgid "GPS"
 msgstr "GPS"
 
-#: products/models.py:431
+#: products/models.py:428
 msgid "siège bébé"
 msgstr "Baby seat"
 
-#: products/models.py:432
+#: products/models.py:429
 msgid "coffre de toit"
 msgstr "Roof box"
 
-#: products/models.py:433
+#: products/models.py:430
 msgid "porte-vélo"
-msgstr "Bicycle carrier"
+msgstr "Bike rack"
 
-#: products/models.py:434
+#: products/models.py:431
 msgid "pneus neige"
-msgstr "Snow tires"
+msgstr "Snow tyres"
 
-#: products/models.py:435
+#: products/models.py:432
 msgid "chaines"
 msgstr "Chains"
 
-#: products/models.py:436
+#: products/models.py:433
 msgid "porte-skis"
-msgstr "Door-skis"
+msgstr "Ski rack"
 
-#: products/models.py:437
+#: products/models.py:434
 msgid "lecteur CD"
 msgstr "CD player"
 
-#: products/models.py:438
+#: products/models.py:435
 msgid "entrée audio/iPod"
-msgstr "Audio input/iPod"
+msgstr "Audio/iPod input"
 
-#: products/models.py:441
+#: products/models.py:438
 msgid "CV fiscaux"
 msgstr "Tax CV"
 
-#: products/models.py:494
+#: products/models.py:491
 msgid "capacité"
 msgstr "Capacity"
 
-#: products/models.py:494
+#: products/models.py:491
 msgid "Nombre de personne que peux accueillir votre locgement"
-msgstr "Number of person that can accommodate your locgement"
+msgstr "Number of people that your property can accommodate"
 
-#: products/models.py:495
+#: products/models.py:492
 msgid "Type de logement"
 msgstr "Type of housing"
 
-#: products/models.py:497
+#: products/models.py:494
 msgid "nombre de chambre"
-msgstr "Number of house"
+msgstr "Number of bedrooms"
 
-#: products/models.py:498
+#: products/models.py:495
 msgid "Règles d'utilisation"
 msgstr "Rules for the use"
 
-#: products/models.py:501
+#: products/models.py:498
 msgid "air conditionné"
 msgstr "Air conditioning"
 
-#: products/models.py:502
+#: products/models.py:499
 msgid "petit déjeuner"
 msgstr "Breakfast"
 
-#: products/models.py:503
+#: products/models.py:500
 msgid "balcon/terasse"
 msgstr "Balcony/terrace"
 
-#: products/models.py:504
+#: products/models.py:501
 msgid "chambre avec serrure"
-msgstr "House with lock"
+msgstr "Bedroom with lock"
 
-#: products/models.py:505
+#: products/models.py:502
 msgid "serviettes"
 msgstr "Towels"
 
-#: products/models.py:506
+#: products/models.py:503
 msgid "ascenseur dans l'immeuble"
-msgstr "Elevator in the building"
+msgstr "Lift in the building"
 
-#: products/models.py:507
+#: products/models.py:504
 msgid "adapté aux familles/enfants"
 msgstr "Suitable for families/children"
 
-#: products/models.py:508
+#: products/models.py:505
 msgid "salle de sport"
 msgstr "Gym"
 
-#: products/models.py:509
+#: products/models.py:506
 msgid "accessible aux personnes handicapées"
-msgstr "Accessible to persons with disabilities"
+msgstr "With disabled access"
 
-#: products/models.py:510
+#: products/models.py:507
 msgid "chauffage"
 msgstr "Heating"
 
-#: products/models.py:511
+#: products/models.py:508
 msgid "jacuzzi"
 msgstr "Jacuzzi"
 
-#: products/models.py:512
+#: products/models.py:509
 msgid "cheminée intérieure"
 msgstr "Indoor fireplace"
 
-#: products/models.py:513
+#: products/models.py:510
 msgid "accès internet"
 msgstr "Internet access"
 
-#: products/models.py:514
+#: products/models.py:511
 msgid "cuisine"
 msgstr "Kitchen"
 
-#: products/models.py:515
+#: products/models.py:512
 msgid "parking"
 msgstr "Parking"
 
-#: products/models.py:516
+#: products/models.py:513
 msgid "fumeurs acceptées"
 msgstr "Smoking accepted"
 
-#: products/models.py:517
+#: products/models.py:514
 msgid "idéal pour des évènements"
 msgstr "Ideal for events"
 
-#: products/models.py:518
+#: products/models.py:515
 msgid "TV"
 msgstr "TV"
 
-#: products/models.py:519
+#: products/models.py:516
 msgid "machine à laver"
 msgstr "Washing machine"
 
-#: products/models.py:520
+#: products/models.py:517
 msgid "sèche linge"
 msgstr "Dryer"
 
-#: products/models.py:521
+#: products/models.py:518
 msgid "ordinateur avec Internet"
 msgstr "Computer with Internet"
 
-#: products/models.py:633
+#: products/models.py:630
 msgid "category"
 msgstr "category"
 
-#: products/models.py:634
+#: products/models.py:631
 msgid "categories"
 msgstr "categories"
 
-#: products/models.py:655
+#: products/models.py:652
 msgid "/location/%(ancestors_slug)s/%(slug)s/"
-msgstr "/rent/%(ancestors_slug)s/ %(slug)s/"
+msgstr "/Location/%(ancestors_slug)s/ % (slug)s/"
 
-#: products/models.py:660
+#: products/models.py:654
 msgid "/location/%(slug)s/"
-msgstr "/rent/%(slug)s/"
+msgstr "/Location/%(slug)s/"
 
-#: products/models.py:683
+#: products/models.py:675
 msgid "properties"
 msgstr "properties"
 
-#: products/models.py:734
+#: products/models.py:726
 msgid "Le prix ne peut pas être négatif"
 msgstr "The price cannot be a negative value"
 
-#: products/models.py:789
+#: products/models.py:781
 msgid "Score can't be higher than 1"
 msgstr "Score can't be higher than 1"
 
-#: products/models.py:791
+#: products/models.py:783
 msgid "Score can't be a negative value"
 msgstr "Score can't be a negative value"
 
-#: products/models.py:800
+#: products/models.py:792
 msgid "Vous ne pouvez pas commenter vos propres locations"
 msgstr "You cannot comment on your own rentals"
 
-#: products/models.py:802
+#: products/models.py:794
 msgid "Vous ne pouvez pas commenter un produit que vous n'avez pas loué"
 msgstr "You cannot comment on a product that you have not rented"
 
-#: products/models.py:812
+#: products/models.py:804
 msgid "Vous ne pouvez pas commenter votre profil"
 msgstr "You cannot comment on your own profile"
 
-#: products/models.py:814
+#: products/models.py:806
 msgid ""
 "Vous ne pouvez pas commenter le profil d'un loueur avec lequel n'avez pas "
 "effectué de réservations"
@@ -2054,15 +2054,15 @@ msgstr ""
 "You cannot comment on a borrower's profile with whom you haven't done any "
 "bookings"
 
-#: products/models.py:888
+#: products/models.py:880
 #: templates/django_messages/inbox.html:32
 #: templates/django_messages/outbox.html:30
 #: templates/django_messages/trash.html:30
 msgid "Subject"
 msgstr "Subject"
 
-#: products/models.py:889
-#: products/models.py:890
+#: products/models.py:881
+#: products/models.py:882
 msgid "Archived"
 msgstr "Archived"
 
@@ -2116,7 +2116,7 @@ msgid ""
 "\n"
 "\n"
 "\n"
-"\n"	
+"\n"
 "\n"
 "%(sender)s wrote:\n"
 "%(body)s"
@@ -2177,8 +2177,8 @@ msgid "Votre alerte à bien été supprimée"
 msgstr "Your alert to well been deleted"
 
 #: products/wizard.py:25
-#: templates/base.html:72
-#: templates/base.html.py:86
+#: templates/base.html:80
+#: templates/base.html.py:94
 #: templates/argusnc/base.html:55
 #: templates/argusnc/base.html.py:69
 #: templates/gites/base.html:55
@@ -2188,8 +2188,10 @@ msgstr "Your alert to well been deleted"
 #: templates/nc/products/publish_new_ad.html:11
 #: templates/products/publish_new_ad.html:11
 #: templates/products/publish_new_ad.html:14
+#: templates/uk/base.html:73
+#: templates/uk/base.html.py:87
 msgid "Déposer une annonce"
-msgstr "Publish an announcement"
+msgstr "Register an ad"
 
 #: products/wizard.py:67
 msgid "Votre objet a bien été ajouté"
@@ -2211,43 +2213,49 @@ msgstr "Your message has been sent to the owner"
 msgid "Votre alerte a bien été créée"
 msgstr "Your alert has been created"
 
-#: rent/admin.py:17
+#: products/templatetags/facets.py:28
+#: products/templatetags/facets.py:73
+#: products/templatetags/facets.py:125
+msgid "location/"
+msgstr "rent/"
+
+#: rent/admin.py:22
 msgid "Borrower & Owner"
 msgstr "Borrower & Owner"
 
-#: rent/admin.py:18
+#: rent/admin.py:23
 msgid "Payment"
 msgstr "Payment"
 
-#: rent/admin.py:32
+#: rent/admin.py:37
 msgid "Envoyer un email de relance"
 msgstr "Send an chaser"
 
-#: rent/admin.py:36
+#: rent/admin.py:41
 msgid "Product"
 msgstr "Product"
 
-#: rent/admin.py:43
+#: rent/admin.py:48
 msgid "Borrower"
 msgstr "Borrower"
 
-#: rent/admin.py:48
+#: rent/admin.py:53
 msgid "Borrower email"
 msgstr "Borrower email"
 
-#: rent/admin.py:54
+#: rent/admin.py:59
 msgid "Borrower phone"
 msgstr "Borrower phone"
 
-#: rent/admin.py:61
+#: rent/admin.py:66
 msgid "Owner"
 msgstr "Owner"
 
-#: rent/admin.py:66
+#: rent/admin.py:71
 msgid "Owner email"
 msgstr "Owner email"
 
-#: rent/admin.py:72
+#: rent/admin.py:77
 msgid "Owner phone"
 msgstr "Owner phone"
 
@@ -2255,10 +2263,12 @@ msgstr "Owner phone"
 #: rent/contract.py:102
 #: rent/contract.py:153
 #: rent/contract.py:154
-#: rent/contract.py:209
-#: rent/contract.py:210
-#: rent/contract.py:272
-#: rent/contract.py:273
+#: rent/contract.py:211
+#: rent/contract.py:213
+#: rent/contract.py:266
+#: rent/contract.py:267
+#: rent/contract.py:328
+#: rent/contract.py:329
 msgid "d F Y à H\\hi."
 msgstr "F d Y at H\\hi."
 
@@ -2280,7 +2290,7 @@ msgstr "This transaction doesn't seem to be linked to an internal transaction"
 #: rent/forms.py:172
 #: rent/forms.py:227
 msgid "Vous ne pouvez pas louer à ces dates"
-msgstr "You may not rent to these dates"
+msgstr "You may not rent during these dates"
 
 #: rent/forms.py:174
 msgid "Une location ne peut pas terminer avant d'avoir commencer"
@@ -2294,79 +2304,83 @@ msgstr "The duration of a lease is limited to %s days."
 msgid "Décrivez votre incident"
 msgstr "Declare your incident"
 
-#: rent/models.py:46
+#: rent/models.py:48
 msgid "En cours d'autorisation"
 msgstr "Awaiting approval"
 
-#: rent/models.py:47
+#: rent/models.py:49
 #: templates/dcns/rent/partials/booking_status.html:13
 #: templates/rent/partials/booking_status.html:13
 msgid "En attente"
 msgstr "Pending"
 
-#: rent/models.py:48
+#: rent/models.py:50
 msgid "Rejeté"
 msgstr "Denied"
 
-#: rent/models.py:49
+#: rent/models.py:51
 msgid "Annulé"
 msgstr "Canceled"
 
-#: rent/models.py:50
+#: rent/models.py:52
 msgid "A venir"
 msgstr "To come"
 
-#: rent/models.py:51
+#: rent/models.py:53
 #: templates/dcns/rent/partials/booking_status.html:47
 #: templates/rent/partials/booking_status.html:53
 msgid "En cours"
 msgstr "In progress"
 
-#: rent/models.py:52
+#: rent/models.py:54
 msgid "Terminé"
 msgstr "Complete"
 
-#: rent/models.py:53
+#: rent/models.py:55
 msgid "Incident"
 msgstr "Incident"
 
-#: rent/models.py:54
+#: rent/models.py:56
 msgid "Remboursé"
 msgstr "Refunded"
 
-#: rent/models.py:55
+#: rent/models.py:57
 msgid "Caution versée"
 msgstr "Security deposit paid"
 
-#: rent/models.py:56
+#: rent/models.py:58
 msgid "En attende de clôture"
 msgstr "Awaiting finalisation"
 
-#: rent/models.py:57
+#: rent/models.py:59
 msgid "Clôturé"
 msgstr "Finalised"
 
-#: rent/models.py:58
+#: rent/models.py:60
 msgid "Dépassé"
 msgstr "Exceeded"
 
-#: rent/models.py:59
+#: rent/models.py:61
 msgid "Pas accepté"
 msgstr "Not Accepted"
 
-#: rent/models.py:60
+#: rent/models.py:62
 msgid "Accepté et en cours d'autorisation"
 msgstr "Accepted and in the process of authorization"
 
-#: rent/models.py:61
+#: rent/models.py:63
 msgid "Demande pro"
 msgstr "Request pro"
 
-#: rent/models.py:450
+#: rent/models.py:64
+msgid "Lu"
+msgstr "Read"
+
+#: rent/models.py:469
 msgid "Commentaire"
 msgstr "Comment"
 
-#: rent/models.py:451
+#: rent/models.py:470
 msgid "Note"
 msgstr "Note"
 
@@ -2376,8 +2390,8 @@ msgid_plural "années"
 msgstr[0] "year"
 msgstr[1] "years"
 
-#: rent/utils.py:69
 #: rent/utils.py:89
+#: rent/utils.py:69
 msgid "minute"
 msgid_plural "minutes"
 msgstr[0] "minute"
@@ -2540,10 +2554,14 @@ msgid "Cette réservation n'a pu être refusée"
 msgstr "This booking could not be declined."
 
 #: rent/views.py:266
+msgid "Cette réservation a bien été marqué comme lu"
+msgstr "This reservation was marked well as read"
+
+#: rent/views.py:277
 msgid "Cette réservation a bien été annulée"
 msgstr "This booking has been canceled."
 
-#: rent/views.py:277
+#: rent/views.py:288
 msgid ""
 "Cette réservation a bien été cloturée. Si vous voulez vous pouvez ajouter un "
 "commentaire et une note sur le déroulement de la location."
@@ -2551,7 +2569,7 @@ msgstr ""
 "This reservation has been terminated. If you want you can add a comment and "
 "a note on the conduct of the rental."
 
-#: rent/views.py:301
+#: rent/views.py:312
 msgid ""
 "Nous avons bien pris en compte la déclaration de l'incident. Nous vous "
 "contacterons rapidement."
@@ -2573,10 +2591,6 @@ msgstr "Booking"
 #: rent/wizard.py:91
 msgid "Vous ne pouvez pas louer vos propres objets"
 msgstr "You cannot rent your own rentals"
-
-#: rent/tests/views.py:52
-msgid "jours"
-msgstr "Days"
 
 #: templates/404.html:4
 #: templates/dcns/404.html:4
@@ -2600,7 +2614,7 @@ msgstr ""
 #: templates/500.html:8
 #: templates/dcns/500.html:8
 msgid "e-loue - La page est pour le moment indisponible"
-msgstr "eRentmarket - The page is currently unavailable"
+msgstr "e-loue - The page is currently unavailable"
 
 #: templates/500.html:38
 msgid "Erreur sur le serveur"
@@ -2632,11 +2646,12 @@ msgstr "Registration validation"
 #: templates/nc/base.html:7
 #: templates/sep/base.html:8
 #: templates/shiseido/base.html:7
+#: templates/uk/base.html:7
 msgid "Page"
 msgstr "Page"
 
 #: templates/base.html:48
-#: templates/base.html.py:88
+#: templates/base.html.py:96
 #: templates/20minutes/base.html:19
 #: templates/20minutes/base.html.py:37
 #: templates/argusnc/base.html:31
@@ -2655,14 +2670,15 @@ msgstr "Page"
 #: templates/nc/base.html.py:88
 #: templates/products/search.html:97
 #: templates/shiseido/base.html:96
+#: templates/uk/base.html:49
+#: templates/uk/base.html.py:89
 msgid "/comment-ca-marche/"
 msgstr "/how-it-works/"
 
 #: templates/base.html:48
-#: templates/base.html.py:88
+#: templates/base.html.py:96
 #: templates/20minutes/base.html:19
 #: templates/20minutes/base.html.py:37
-#: templates/accounts/patron_subscription.html:43
 #: templates/argusnc/base.html:31
 #: templates/argusnc/base.html.py:71
 #: templates/dcns/500.html:55
@@ -2679,6 +2695,8 @@ msgstr "/how-it-works/"
 #: templates/nc/base.html:48
 #: templates/nc/base.html.py:88
 #: templates/shiseido/base.html:96
+#: templates/uk/base.html:49
+#: templates/uk/base.html.py:89
 msgid "Comment ça marche ?"
 msgstr "How it works"
 
@@ -2717,10 +2735,11 @@ msgstr "How it works"
 #: templates/rent/comments_received.html:11
 #: templates/shiseido/base.html:37
 #: templates/shiseido/products/product_edit.html:10
+#: templates/uk/base.html:57
 msgid "Tableau de bord"
 msgstr "Control panel"
 
-#: templates/base.html:65
+#: templates/base.html:73
 #: templates/20minutes/base.html:14
 #: templates/argusnc/base.html:48
 #: templates/dcns/500.html:59
@@ -2729,10 +2748,11 @@ msgstr "Control panel"
 #: templates/nc/_base.html:68
 #: templates/nc/base.html:65
 #: templates/shiseido/base.html:47
+#: templates/uk/base.html:66
 msgid "S'inscrire ou se connecter"
 msgstr "Register or log in"
 
-#: templates/base.html:70
+#: templates/base.html:78
 #: templates/20minutes/base.html:16
 #: templates/argusnc/base.html:53
 #: templates/dcns/500.html:63
@@ -2741,10 +2761,11 @@ msgstr "Register or log in"
 #: templates/nc/_base.html:70
 #: templates/nc/base.html:70
 #: templates/shiseido/base.html:39
+#: templates/uk/base.html:71
 msgid "Se déconnecter"
 msgstr "Logout"
 
-#: templates/base.html:82
+#: templates/base.html:90
 #: templates/20minutes/base.html:31
 #: templates/argusnc/base.html:65
 #: templates/dcns/500.html:83
@@ -2754,10 +2775,11 @@ msgstr "Logout"
 #: templates/nc/_base.html:85
 #: templates/nc/base.html:82
 #: templates/shiseido/base.html:91
+#: templates/uk/base.html:83
 msgid "Liens utiles"
 msgstr "Useful links"
 
-#: templates/base.html:84
+#: templates/base.html:92
 #: templates/20minutes/base.html:33
 #: templates/accounts/auth_login.html:13
 #: templates/accounts/auth_missing.html:9
@@ -2794,10 +2816,11 @@ msgstr "Useful links"
 #: templates/rent/booking_success.html:9
 #: templates/shiseido/base.html:93
 #: templates/shiseido/products/product_detail.html:34
+#: templates/uk/base.html:85
 msgid "Accueil"
 msgstr "Home"
 
-#: templates/base.html:85
+#: templates/base.html:93
 #: templates/20minutes/base.html:34
 #: templates/accounts/associate_facebook.html:13
 #: templates/accounts/associated_facebook.html:13
@@ -2831,10 +2854,11 @@ msgstr "Home"
 #: templates/rent/comments_received.html:14
 #: templates/shiseido/base.html:94
 #: templates/shiseido/products/product_edit.html:13
+#: templates/uk/base.html:86
 msgid "Mon compte"
 msgstr "My account"
 
-#: templates/base.html:93
+#: templates/base.html:101
 #: templates/20minutes/base.html:42
 #: templates/argusnc/base.html:76
 #: templates/dcns/500.html:94
@@ -2843,27 +2867,31 @@ msgstr "My account"
 #: templates/nc/_base.html:96
 #: templates/nc/base.html:93
 #: templates/shiseido/base.html:100
+#: templates/uk/base.html:94
 msgid "Info"
 msgstr "Info"
 
-#: templates/base.html:95
+#: templates/base.html:103
 #: templates/20minutes/base.html:44
 #: templates/accounts/patron_subscription.html:4
 #: templates/accounts/patron_subscription.html:10
 #: templates/nc/_base.html:98
 #: templates/nc/base.html:95
+#: templates/uk/base.html:96
 msgid "Espace professionnel"
 msgstr "Professional space"
 
-#: templates/base.html:96
+#: templates/base.html:104
+#: templates/uk/base.html:97
 msgid "/argus-de-la-location-objets/"
 msgstr "/Argus-of-the-rental-objects/"
 
-#: templates/base.html:96
+#: templates/base.html:104
+#: templates/uk/base.html:97
 msgid "Combien louer ses objets ?"
-msgstr "How much rent its objects?"
+msgstr "Suggested prices"
 
-#: templates/base.html:97
+#: templates/base.html:105
 #: templates/20minutes/base.html:45
 #: templates/dcns/500.html:96
 #: templates/dcns/base.html:87
@@ -2871,20 +2899,22 @@ msgstr "How much rent its objects?"
 #: templates/nc/_base.html:99
 #: templates/shiseido/base.html:102
 #: templates/shiseido/index.html:98
+#: templates/uk/base.html:98
 msgid "/assurance-tranquillite/"
 msgstr "Tranquility Insurance"
 
-#: templates/base.html:97
+#: templates/base.html:105
 #: templates/20minutes/base.html:45
 #: templates/dcns/500.html:96
 #: templates/dcns/base.html:87
 #: templates/mobile/base.html:44
 #: templates/nc/_base.html:99
 #: templates/shiseido/base.html:102
+#: templates/uk/base.html:98
 msgid "Assurance tranquillité"
 msgstr "Worry free insurance policy"
 
-#: templates/base.html:98
+#: templates/base.html:106
 #: templates/20minutes/base.html:46
 #: templates/argusnc/base.html:78
 #: templates/dcns/500.html:97
@@ -2894,10 +2924,11 @@ msgstr "Worry free insurance policy"
 #: templates/nc/_base.html:100
 #: templates/nc/base.html:96
 #: templates/shiseido/base.html:103
+#: templates/uk/base.html:99
 msgid "/conditions-generales/"
 msgstr " /terms-and-conditions/"
 
-#: templates/base.html:98
+#: templates/base.html:106
 #: templates/20minutes/base.html:46
 #: templates/argusnc/base.html:78
 #: templates/dcns/500.html:97
@@ -2907,10 +2938,11 @@ msgstr " /terms-and-conditions/"
 #: templates/nc/_base.html:100
 #: templates/nc/base.html:96
 #: templates/shiseido/base.html:103
+#: templates/uk/base.html:99
 msgid "Conditions générales"
 msgstr "Terms and Conditions"
 
-#: templates/base.html:99
+#: templates/base.html:107
 #: templates/20minutes/base.html:47
 #: templates/argusnc/base.html:79
 #: templates/dcns/500.html:98
@@ -2920,10 +2952,11 @@ msgstr "Terms and Conditions"
 #: templates/nc/_base.html:101
 #: templates/nc/base.html:97
 #: templates/shiseido/base.html:104
+#: templates/uk/base.html:100
 msgid "/respect-vie-privee/"
 msgstr "/privacy-policy/"
 
-#: templates/base.html:99
+#: templates/base.html:107
 #: templates/20minutes/base.html:47
 #: templates/argusnc/base.html:79
 #: templates/dcns/500.html:98
@@ -2933,10 +2966,11 @@ msgstr "/privacy-policy/"
 #: templates/nc/_base.html:101
 #: templates/nc/base.html:97
 #: templates/shiseido/base.html:104
+#: templates/uk/base.html:100
 msgid "Respect de la vie privée"
-msgstr "Respect for privacy"
+msgstr "Privacy policy"
 
-#: templates/base.html:103
+#: templates/base.html:111
 #: templates/20minutes/base.html:51
 #: templates/argusnc/base.html:83
 #: templates/dcns/500.html:102
@@ -2945,10 +2979,11 @@ msgstr "Respect for privacy"
 #: templates/nc/_base.html:105
 #: templates/nc/base.html:101
 #: templates/shiseido/base.html:108
+#: templates/uk/base.html:104
 msgid "Support"
 msgstr "Support"
 
-#: templates/base.html:105
+#: templates/base.html:113
 #: templates/20minutes/base.html:53
 #: templates/argusnc/base.html:91
 #: templates/dcns/500.html:104
@@ -2957,10 +2992,11 @@ msgstr "Support"
 #: templates/nc/_base.html:107
 #: templates/nc/base.html:103
 #: templates/shiseido/base.html:110
+#: templates/uk/base.html:106
 msgid "Aide"
 msgstr "Help"
 
-#: templates/base.html:106
+#: templates/base.html:114
 #: templates/20minutes/base.html:54
 #: templates/accounts/contact.html:10
 #: templates/accounts/contact.html.py:13
@@ -2971,47 +3007,52 @@ msgstr "Help"
 #: templates/nc/_base.html:108
 #: templates/nc/base.html:104
 #: templates/shiseido/base.html:111
+#: templates/uk/base.html:107
 msgid "Contactez-nous"
 msgstr "Contact us"
 
-#: templates/base.html:107
+#: templates/base.html:115
 #: templates/20minutes/base.html:55
 #: templates/nc/_base.html:109
 #: templates/nc/base.html:105
 #: templates/products/search.html:135
 #: templates/shiseido/index.html:137
+#: templates/uk/base.html:108
 msgid "/espace-presse/"
 msgstr "/press/"
 
-#: templates/base.html:107
+#: templates/base.html:115
 #: templates/20minutes/base.html:55
 #: templates/flatpages/press.html:10
 #: templates/nc/_base.html:109
 #: templates/nc/base.html:105
 #: templates/products/search.html:135
 #: templates/shiseido/index.html:137
+#: templates/uk/base.html:108
 msgid "Espace presse"
-msgstr "Press"
+msgstr "e-loue in the media"
 
-#: templates/base.html:108
+#: templates/base.html:116
 #: templates/20minutes/base.html:56
 #: templates/dcns/500.html:106
 #: templates/dcns/base.html:97
 #: templates/nc/_base.html:110
 #: templates/nc/base.html:106
+#: templates/uk/base.html:109
 msgid "/qui-sommes-nous/"
 msgstr "/about-us/"
 
-#: templates/base.html:108
+#: templates/base.html:116
 #: templates/20minutes/base.html:56
 #: templates/dcns/500.html:106
 #: templates/dcns/base.html:97
 #: templates/nc/_base.html:110
 #: templates/nc/base.html:106
+#: templates/uk/base.html:109
 msgid "Qui sommes nous ?"
 msgstr "About us"
 
-#: templates/base.html:112
+#: templates/base.html:120
 #: templates/index.html:117
 #: templates/20minutes/base.html:60
 #: templates/argusnc/base.html:89
@@ -3019,41 +3060,47 @@ msgstr "About us"
 #: templates/nc/_base.html:114
 #: templates/nc/base.html:110
 #: templates/nc/index.html:100
+#: templates/uk/base.html:113
 msgid "Communauté"
 msgstr "Community"
 
-#: templates/base.html:114
+#: templates/base.html:122
 #: templates/20minutes/base.html:62
 #: templates/nc/_base.html:116
 #: templates/nc/base.html:112
+#: templates/uk/base.html:115
 msgid "Blog"
 msgstr "Blog"
 
-#: templates/base.html:115
+#: templates/base.html:123
 #: templates/20minutes/base.html:63
 #: templates/nc/_base.html:117
 #: templates/nc/base.html:113
+#: templates/uk/base.html:116
 msgid "Twitter"
 msgstr "Twitter"
 
-#: templates/base.html:116
+#: templates/base.html:124
 #: templates/20minutes/base.html:64
 #: templates/accounts/facebook_invite.html:95
 #: templates/accounts/facebook_invite.html:103
 #: templates/nc/_base.html:118
 #: templates/nc/base.html:114
+#: templates/uk/base.html:117
 msgid "Facebook"
 msgstr "Facebook"
 
-#: templates/base.html:117
+#: templates/base.html:125
 #: templates/nc/base.html:115
+#: templates/uk/base.html:118
 msgid "Nos partenaires"
 msgstr "Our Partners"
 
-#: templates/base.html:129
+#: templates/base.html:137
 #: templates/20minutes/base.html:76
 #: templates/nc/_base.html:130
 #: templates/nc/base.html:127
+#: templates/uk/base.html:130
 msgid "sur"
 msgstr "to"
 
@@ -3064,15 +3111,14 @@ msgstr "to"
 #: templates/nc/index.html:4
 #: templates/shiseido/index.html:4
 msgid "Location entre particuliers ou professionnels de tout type d'objet"
-msgstr ""
-"Rental between private individuals or professionals of any type of object"
+msgstr "Rental of any type of object between individuals or professionals"
 
 #: templates/index.html:15
 #: templates/argusnc/index.html:15
 #: templates/gites/index.html:15
 #: templates/nc/index.html:15
 msgid "Rejoignez la communauté des e-loueurs !"
-msgstr "Join the community of e-renters!"
+msgstr "Join the community of e-loue renters!"
 
 #: templates/index.html:16
 #: templates/argusnc/index.html:16
@@ -3081,12 +3127,68 @@ msgstr "Join the community of e-renters!"
 msgid "Au lieu d'acheter, louez pour augmenter votre pouvoir d'usage."
 msgstr "Instead of buying, rent to increase your power to use."
 
+#: templates/index.html:21
+#: templates/dcns/index.html:31
+#: templates/dcns/accounts/patron_detail.html:31
+#: templates/dcns/products/alert_list.html:30
+#: templates/dcns/products/product_detail.html:26
+#: templates/dcns/products/product_list.html:53
+#: templates/mobile/index.html:11
+#: templates/mobile/index.html.py:28
+#: templates/mobile/flatpages/default.html:10
+#: templates/mobile/products/product_detail.html:12
+#: templates/mobile/products/product_list.html:43
+#: templates/mobile/products/search.html:11
+#: templates/mobile/products/search.html:28
+#: templates/products/alert_list.html:30
+#: templates/products/search.html:28
+#: templates/shiseido/index.html:29
+#: templates/shiseido/products/product_detail.html:26
+msgid "Rechercher"
+msgstr "Search"
+
+#: templates/index.html:32
+msgid "Changer de ville"
+msgstr "Change city"
+
+#: templates/index.html:36
+msgid "me geolocaliser"
+msgstr "geolocation"
+
+#: templates/index.html:40
+msgid "Annonces de location déposées près de chez vous :"
+msgstr "Rentals near you :"
+
+#: templates/index.html:96
+msgid "Annonces de location par catégorie"
+msgstr "Rentals by categories"
+
+#: templates/index.html:36
+#: templates/accounts/patron_paypal.html:48
+#: templates/dcns/accounts/contact.html:62
+#: templates/dcns/accounts/patron_paypal.html:43
+#: templates/dcns/accounts/partials/login.html:35
+#: templates/dcns/accounts/partials/missing.html:390
+#: templates/dcns/accounts/partials/missing.html:392
+#: templates/dcns/products/alert_create.html:66
+#: templates/dcns/products/product_delete.html:57
+#: templates/dcns/products/product_edit.html:176
+#: templates/dcns/rent/booking_confirm.html:87
+#: templates/dcns/rent/booking_incident.html:179
+#: templates/shiseido/products/product_edit.html:176
+msgid "ou"
+msgstr "or"
+
+#: templates/index.html:36
+msgid "annuler"
+msgstr "Cancel"
+
 #: templates/index.html:42
 #: templates/argusnc/index.html:39
 #: templates/flatpages/assurancies.html:45
 #: templates/flatpages/assurancies.html:320
 #: templates/flatpages/assurancies.html:464
-#: templates/flatpages/assurancies.html:631
+#: templates/flatpages/assurancies.html:646
 #: templates/gites/index.html:39
 #: templates/nc/index.html:38
 msgid "Objets"
@@ -3097,7 +3199,7 @@ msgstr "Objects"
 #: templates/flatpages/assurancies.html:46
 #: templates/flatpages/assurancies.html:321
 #: templates/flatpages/assurancies.html:465
-#: templates/flatpages/assurancies.html:632
+#: templates/flatpages/assurancies.html:647
 #: templates/gites/index.html:38
 #: templates/nc/index.html:39
 msgid "Voitures"
@@ -3108,7 +3210,7 @@ msgstr "Cars"
 #: templates/flatpages/assurancies.html:47
 #: templates/flatpages/assurancies.html:322
 #: templates/flatpages/assurancies.html:466
-#: templates/flatpages/assurancies.html:633
+#: templates/flatpages/assurancies.html:648
 #: templates/gites/index.html:40
 #: templates/nc/index.html:40
 msgid "Logements"
@@ -3119,7 +3221,7 @@ msgstr "Housing"
 #: templates/gites/index.html:41
 #: templates/nc/index.html:41
 msgid "Locations du moment"
-msgstr "Rentals of the time"
+msgstr "New rentals"
 
 #: templates/index.html:53
 #: templates/index.html.py:64
@@ -3134,7 +3236,7 @@ msgstr "Rentals of the time"
 #: templates/nc/index.html.py:52
 #: templates/nc/index.html:58
 msgid "Chargez plus d'annonces..."
-msgstr "Load more d'annonces ..."
+msgstr "Show more ads ..."
 
 #: templates/index.html:96
 #: templates/argusnc/index.html:79
@@ -3146,18 +3248,18 @@ msgstr "Testimonies"
 #: templates/index.html:102
 #: templates/nc/index.html:85
 msgid "L'appli pour tout louer !"
-msgstr "The appli for any rent!"
+msgstr "The app for any rental!"
 
 #: templates/index.html:107
 msgid "Les garanties e-loue"
-msgstr "The guarantees e-rented"
+msgstr "E-loue guarantees"
 
 #: templates/index.html:108
 #: templates/argusnc/index.html:88
 #: templates/gites/index.html:88
 #: templates/nc/index.html:91
 msgid "La garantie"
-msgstr "The warranty"
+msgstr "Guarantee"
 
 #: templates/index.html:109
 #: templates/argusnc/index.html:89
@@ -3171,7 +3273,12 @@ msgstr "Rental Guarantee"
 #: templates/gites/index.html:98
 #: templates/nc/index.html:106
 msgid "Derniers<br/>inscrits"
-msgstr "Latest <br/>Registered"
+msgstr "New <br/>Users"
+
+#: templates/index.html:130
+#: templates/shiseido/index.html:135
+msgid "Ils parlent de nous !"
+msgstr "They're all talking about us !"
 
 #: templates/20minutes/base.html:12
 #: templates/20minutes/base.html.py:35
@@ -3212,7 +3319,7 @@ msgstr "/professional-area/"
 #: templates/20minutes/base.html:76
 #: templates/nc/_base.html:130
 msgid "e-loue blog"
-msgstr "the eRentmarket blog"
+msgstr "the e-loue blog"
 
 #: templates/accounts/activate.html:4
 #: templates/accounts/activate.html:11
@@ -3327,7 +3434,7 @@ msgstr "Owner"
 #: templates/rent/comments_received.html:13
 #: templates/shiseido/products/product_edit.html:12
 msgid "Locataire"
-msgstr "Borrower"
+msgstr "Renter"
 
 #: templates/accounts/associate_facebook.html:14
 #: templates/accounts/associated_facebook.html:14
@@ -3335,7 +3442,7 @@ msgstr "Borrower"
 #: templates/accounts/patron_paypal.html:14
 #: templates/rent/comments_received.html:15
 msgid "Messages(%(unread_message_count)s)"
-msgstr "Messages%(unread_message_count)s)"
+msgstr "Messages% (unread_message_count)s)"
 
 #: templates/accounts/associate_facebook.html:20
 #: templates/accounts/associated_facebook.html:20
@@ -3397,12 +3504,11 @@ msgid ""
 "confirmée.\n"
 "            "
 msgstr ""
-"\n"
-"To protect your privacy, we hide your name, phone number and your contact "
-"information as long as the lease has not been confirmed. "
+"To protect your privacy, we hide your name, phone number and contact "
+"information until the lease has been confirmed."
 
 #: templates/accounts/borrower_booking.html:4
-#: templates/accounts/dashboard.html:26
+#: templates/accounts/dashboard.html:27
 msgid "Mes réservations"
 msgstr "My reservations"
 
@@ -3411,17 +3517,17 @@ msgid "Demandes de réservation"
 msgstr "Requests for reservation"
 
 #: templates/accounts/borrower_booking.html:19
-#: templates/accounts/owner_product.html:35
+#: templates/accounts/owner_product.html:42
 msgid "Réservations à venir"
 msgstr "Reservations to come"
 
 #: templates/accounts/borrower_booking.html:22
-#: templates/accounts/owner_product.html:39
+#: templates/accounts/owner_product.html:46
 msgid "Réservations en cours"
 msgstr "Current Reservations"
 
 #: templates/accounts/borrower_booking.html:24
-#: templates/accounts/owner_product.html:41
+#: templates/accounts/owner_product.html:48
 msgid "Réservations terminées"
 msgstr "Reservations completed"
 
@@ -3443,8 +3549,8 @@ msgstr "All of %(username)s rentals"
 #: templates/accounts/company_detail.html:19
 #: templates/accounts/patron_detail.html:17
 #: templates/accounts/patron_detail.html:19
-#: templates/accounts/patron_edit.html:86
 #: templates/accounts/patron_edit.html:88
+#: templates/accounts/patron_edit.html:90
 #: templates/django_messages/new_message.html:17
 #: templates/products/product_detail.html:421
 #: templates/products/product_detail.html:423
@@ -3462,7 +3568,7 @@ msgstr "Contact me"
 
 #: templates/accounts/company_detail.html:48
 #: templates/accounts/patron_detail.html:48
-#: templates/accounts/patron_edit.html:54
+#: templates/accounts/patron_edit.html:56
 #: templates/rent/comments_received.html:21
 msgid "Commentaires"
 msgstr "Comments"
@@ -3478,18 +3584,16 @@ msgid ""
 "\n"
 "    \t           <h2>%(count)s annonce%(pluralize)s</h2>\n"
 "    \t       "
-msgstr ""
-"\n"
-"<h2>%(Count)s announcement%(pluralize)s  </h2> "
+msgstr "<h2>% (Count)s ad% (pluralize)s  </h2>"
 
 #: templates/accounts/company_detail.html:62
 #: templates/accounts/patron_detail.html:62
 msgid "Pas d'annonce"
-msgstr "No announcement"
+msgstr "No ads"
 
 #: templates/accounts/company_detail.html:80
 #: templates/accounts/company_detail.html:82
-#: templates/accounts/owner_product.html:84
+#: templates/accounts/owner_product.html:92
 #: templates/accounts/patron_detail.html:80
 #: templates/accounts/patron_detail.html:82
 #: templates/accounts/partials/booking_list_borrower.html:36
@@ -3507,7 +3611,7 @@ msgid "Page précédente"
 msgstr "Previous page"
 
 #: templates/accounts/company_detail.html:93
-#: templates/accounts/owner_product.html:90
+#: templates/accounts/owner_product.html:98
 #: templates/accounts/patron_detail.html:93
 #: templates/accounts/partials/booking_list_borrower.html:42
 #: templates/accounts/partials/booking_list_owner.html:79
@@ -3526,13 +3630,14 @@ msgstr "Next page"
 #: templates/accounts/contact.html:4
 #: templates/dcns/accounts/contact.html:4
 msgid "Contactez e-loue"
-msgstr "Contact eRentMarket"
+msgstr "Contact e-loue"
 
 #: templates/accounts/contact.html:34
 #: templates/accounts/partials/login.html:60
 #: templates/accounts/partials/missing.html:71
 #: templates/django_messages/message_create.html:46
 #: templates/products/product_create.html:87
+#: templates/sep/accounts/contact.html:46
 msgid "Continuer"
 msgstr "Next"
 
@@ -3551,28 +3656,28 @@ msgstr "Your control panel"
 msgid "Messages"
 msgstr "Messages"
 
-#: templates/accounts/dashboard.html:36
+#: templates/accounts/dashboard.html:38
 #: templates/accounts/owner_booking.html:4
 #: templates/accounts/owner_product.html:4
 #: templates/products/product_edit.html:4
 #: templates/products/product_highlight_edit.html:5
 #: templates/products/product_top_position_edit.html:5
 msgid "Mes annonces"
-msgstr "My Ads"
+msgstr "My ads"
 
-#: templates/accounts/dashboard.html:44
+#: templates/accounts/dashboard.html:54
 msgid "Paramètres de compte"
 msgstr "Account Settings"
 
-#: templates/accounts/dashboard.html:93
+#: templates/accounts/dashboard.html:103
 msgid "Envoyer des invitations"
 msgstr "Send invitations"
 
-#: templates/accounts/dashboard.html:97
+#: templates/accounts/dashboard.html:107
 msgid "Vos nouveaux messages"
 msgstr "Your new messages"
 
-#: templates/accounts/dashboard.html:106
+#: templates/accounts/dashboard.html:116
 #: templates/dcns/index.html:102
 #: templates/dcns/accounts/alert_edit.html:13
 #: templates/dcns/accounts/borrower_booking.html:13
@@ -3586,7 +3691,7 @@ msgstr "Your new messages"
 #: templates/dcns/accounts/patron_paypal.html:13
 #: templates/dcns/products/alert_list.html:42
 msgid "Demandes de location"
-msgstr "Requests for rental"
+msgstr "Rental requests"
 
 #: templates/accounts/facebook_invite.html:5
 msgid "Envoyer une invitation à mes amis Facebook"
@@ -3607,7 +3712,7 @@ msgid "Gmail"
 msgstr "Gmail"
 
 #: templates/accounts/facebook_invite.html:108
-#: templates/accounts/patron_edit.html:50
+#: templates/accounts/patron_edit.html:52
 msgid "Invitez vos amis"
 msgstr "Invite your friends"
 
@@ -3634,14 +3739,14 @@ msgid ""
 "connexion."
 msgstr ""
 "We could not find your Gmail contacts because you have not linked your Gmail "
-"accounts and e-rented. Click the button below to create the connection."
+"accounts to e-loue. Click the button below to create the connection."
 
 #: templates/accounts/owner_history.html:4
 msgid "Mes annonces - Historique des réservations"
-msgstr "My ads - historical booking"
+msgstr "My ads - booking history"
 
 #: templates/accounts/owner_product.html:18
-#: templates/accounts/owner_product.html:47
+#: templates/accounts/owner_product.html:55
 msgid "Gérer mes annonces"
 msgstr "Manage my ads"
 
@@ -3655,13 +3760,17 @@ msgstr "Manage my ads"
 msgid "Demande de réservation"
 msgstr "Reservation Request"
 
-#: templates/accounts/owner_product.html:48
-msgid "Déposer une nouvelle annonce"
-msgstr "Publish a new announcement"
+#: templates/accounts/owner_product.html:36
+msgid "Réservations lues"
+msgstr "Read reservations"
 
-#: templates/accounts/owner_product.html:75
+#: templates/accounts/owner_product.html:56
+msgid "Déposer une nouvelle annonce"
+msgstr "Register a new ad"
+
+#: templates/accounts/owner_product.html:83
 msgid "Modifier l'annonce"
-msgstr "Edit the announcement"
+msgstr "Edit the ad"
 
 #: templates/accounts/password_reset_complete.html:4
 #: templates/accounts/password_reset_complete.html:9
@@ -3801,51 +3910,55 @@ msgstr "Invoice"
 #: templates/accounts/patron_billing.html:46
 #: templates/accounts/partials/booking_list_borrower.html:20
 #: templates/accounts/partials/booking_list_owner.html:52
-#: templates/rent/booking_detail.html:51
+#: templates/rent/booking_detail.html:53
 #: templates/rent/booking_incident.html:39
 #: templates/rent/booking_success.html:57
 msgid "Montant"
 msgstr "Amount"
 
-#: templates/accounts/patron_edit.html:32
+#: templates/accounts/patron_edit.html:33
 msgid "Mon Profil"
 msgstr "My Profile"
 
 #: templates/accounts/patron_edit.html:34
+msgid "Identité Numérique"
+msgstr "Digital identity"
+
+#: templates/accounts/patron_edit.html:36
 #: templates/accounts/patron_edit_opening_times.html:13
 #: templates/accounts/patron_edit_opening_times.html:68
 #: templates/accounts/partials/company_more_info.html:26
 msgid "Horaires d'ouverture"
 msgstr "Opening Hours"
 
-#: templates/accounts/patron_edit.html:37
 #: templates/accounts/patron_edit.html:39
+#: templates/accounts/patron_edit.html:41
 msgid "Compte pro"
 msgstr "Account pro"
 
-#: templates/accounts/patron_edit.html:44
+#: templates/accounts/patron_edit.html:46
 msgid "Options pro"
 msgstr "Options pro"
 
-#: templates/accounts/patron_edit.html:55
+#: templates/accounts/patron_edit.html:57
 #: templates/rent/comments_received.html:24
 msgid "Adresses"
 msgstr "Addresses"
 
-#: templates/accounts/patron_edit.html:58
+#: templates/accounts/patron_edit.html:60
 msgid "Carte bancaire"
 msgstr "Credit Card"
 
-#: templates/accounts/patron_edit.html:59
+#: templates/accounts/patron_edit.html:61
 msgid "RIB "
 msgstr "RIB "
 
-#: templates/accounts/patron_edit.html:93
+#: templates/accounts/patron_edit.html:95
 #: templates/accounts/patron_edit_addresses.html:14
 msgid "Ajouter une nouvelle adresse"
 msgstr "Add a new address"
 
-#: templates/accounts/patron_edit.html:94
+#: templates/accounts/patron_edit.html:96
 msgid "Ajouter un nouveau téléphone"
 msgstr "Add a new phone"
 
@@ -3885,12 +3998,13 @@ msgstr "Delete the card"
 
 #: templates/accounts/patron_edit_highlight.html:4
 msgid "Mise en avant des annonces"
-msgstr "Put in front of the announcements"
+msgstr "Top ads"
 
 #: templates/accounts/patron_edit_highlight.html:8
 #: templates/accounts/patron_edit_highlight.html:98
 #: templates/accounts/patron_edit_notification.html:8
 #: templates/accounts/patron_edit_top_position.html:8
+#: templates/accounts/patron_subscription.html:129
 #: templates/accounts/partials/billing_table.html:49
 #: templates/products/product_edit.html:28
 msgid "Mise en avant"
@@ -3901,6 +4015,7 @@ msgstr "Put in before"
 #: templates/accounts/patron_edit_top_position.html:4
 #: templates/accounts/patron_edit_top_position.html:10
 #: templates/accounts/patron_edit_top_position.html:96
+#: templates/accounts/patron_subscription.html:143
 #: templates/accounts/partials/billing_table.html:71
 #: templates/products/product_edit.html:31
 msgid "Top position"
@@ -3908,12 +4023,12 @@ msgstr "Top position"
 
 #: templates/accounts/patron_edit_highlight.html:46
 msgid "Liste des annonces misent en avant"
-msgstr "List of announcements are betting in front"
+msgstr "Top ads list"
 
 #: templates/accounts/patron_edit_highlight.html:46
 #: templates/accounts/patron_edit_top_position.html:44
 msgid "Ajouter une annonce"
-msgstr "Add an announcement"
+msgstr "Add an ad"
 
 #: templates/accounts/patron_edit_highlight.html:65
 msgid "Retirer la mise en avant"
@@ -3921,7 +4036,7 @@ msgstr "Remove the front"
 
 #: templates/accounts/patron_edit_highlight.html:72
 msgid "Pas d'annonce mise en avant. Pensez-y pour ameliorer votre visibilité."
-msgstr "No announcement put forward. Think about it to improve your visibility."
+msgstr "No ads in top position. Think about it to improve your visibility."
 
 #: templates/accounts/patron_edit_highlight.html:92
 #: templates/accounts/patron_edit_notification.html:126
@@ -3937,7 +4052,7 @@ msgstr "Validate"
 msgid ""
 "Pour bénéficier de cet avantage, accédez à l'espace pro pour en savoir plus "
 ":"
-msgstr "To qualify for this benefit, go to the pro space to learn more:"
+msgstr "To qualify for this benefit, visit the pro space to learn more:"
 
 #: templates/accounts/patron_edit_highlight.html:105
 #: templates/accounts/patron_edit_notification.html:154
@@ -3946,7 +4061,11 @@ msgstr "To qualify for this benefit, go to the pro space to learn more:"
 #: templates/accounts/patron_edit_top_position.html:103
 #: templates/products/publish_new_ad.html:16
 msgid "Professionnel ? Accédez à notre espace pro"
-msgstr "Professional? Go to our space pro"
+msgstr "Professional? Visit our pro space"
+
+#: templates/accounts/patron_edit_idn.html:4
+msgid "Enregistrement IDN"
+msgstr "Recording IDN"
 
 #: templates/accounts/patron_edit_notification.html:65
 msgid "Notification par email"
@@ -3977,10 +4096,12 @@ msgid "Notifications par mail"
 msgstr "Notifications by email"
 
 #: templates/accounts/patron_edit_notification.html:149
+#: templates/accounts/patron_subscription.html:125
 msgid "Recevez les demandes de devis sur plusieurs adresses emails."
 msgstr "Receive the quotation requests on multiple email addresses."
 
 #: templates/accounts/patron_edit_notification.html:156
+#: templates/accounts/patron_subscription.html:137
 msgid "Notifications par SMS"
 msgstr "Notifications by SMS"
 
@@ -4048,8 +4169,8 @@ msgid ""
 "Il est obligatoire d’enregistrer son RIB afin d'être payé à la fin d'une "
 "location."
 msgstr ""
-"It is mandatory to register its RIB in order to be paid at the end of a "
-"tenancy."
+"Registration of bank details is mandatory in order to be paid at the end of "
+"a rental."
 
 #: templates/accounts/patron_edit_rib.html:18
 msgid "Modification de mon rib"
@@ -4081,19 +4202,20 @@ msgstr "Subscription"
 
 #: templates/accounts/patron_edit_subscription.html:37
 msgid "Nombre d'annonces"
-msgstr "Number of advertisements"
+msgstr "Number of ads"
 
 #: templates/accounts/patron_edit_subscription.html:38
 msgid "Prix par mois"
 msgstr "Price per month"
 
 #: templates/accounts/patron_edit_subscription.html:53
+#: templates/accounts/patron_subscription.html:110
 msgid "Choisir cet abonnement"
 msgstr "Choose this subscription"
 
 #: templates/accounts/patron_edit_top_position.html:44
 msgid "Liste des annonces en top position"
-msgstr "List of announcements in top position"
+msgstr "List of ads in top position"
 
 #: templates/accounts/patron_edit_top_position.html:63
 msgid "Retirer de top position"
@@ -4102,20 +4224,18 @@ msgstr "Remove of top position"
 #: templates/accounts/patron_edit_top_position.html:70
 msgid ""
 "Pas d'annonce en top position. Pensez-y pour ameliorer votre visibilité."
-msgstr ""
-"No announcement in top position. Think about it to improve your visibility."
+msgstr "No ads in top position. Think about it to improve your visibility."
 
 #: templates/accounts/patron_edit_top_position.html:76
 msgid "Ajouter une annonce en top position"
-msgstr "Add an announcement in top position"
+msgstr "Add an ad in top position"
 
 #: templates/accounts/patron_edit_top_position.html:98
+#: templates/accounts/patron_subscription.html:145
 msgid ""
 "Votre annonce est mise en première position des résultats de recherches sur "
 "le site."
-msgstr ""
-"Your announcement is put in the first position of the results of research on "
-"the site."
+msgstr "Your ad is put in first position of the search results on the site."
 
 #: templates/accounts/patron_paypal.html:4
 #: templates/dcns/accounts/patron_paypal.html:4
@@ -4186,12 +4306,12 @@ msgstr "Verifying your PayPal account"
 #: templates/accounts/patron_paypal.html:32
 #: templates/dcns/accounts/patron_paypal.html:31
 msgid "Avez-vous un compte e-loue ?"
-msgstr "Do you already have an eRentmarket account?"
+msgstr "Do you already have an e-loue account?"
 
 #: templates/accounts/patron_paypal.html:44
 #: templates/dcns/accounts/patron_paypal.html:49
 msgid "e-loue PayPal verified"
-msgstr "eRentmarket PayPal verified"
+msgstr "e-loue PayPal verified"
 
 #: templates/accounts/patron_paypal.html:48
 #: templates/dcns/accounts/contact.html:62
@@ -4211,21 +4331,6 @@ msgstr "eRentmarket PayPal verified"
 msgid "Annuler"
 msgstr "Cancel"
 
-#: templates/accounts/patron_paypal.html:48
-#: templates/dcns/accounts/contact.html:62
-#: templates/dcns/accounts/patron_paypal.html:43
-#: templates/dcns/accounts/partials/login.html:35
-#: templates/dcns/accounts/partials/missing.html:390
-#: templates/dcns/accounts/partials/missing.html:392
-#: templates/dcns/products/alert_create.html:66
-#: templates/dcns/products/product_delete.html:57
-#: templates/dcns/products/product_edit.html:176
-#: templates/dcns/rent/booking_confirm.html:87
-#: templates/dcns/rent/booking_incident.html:179
-#: templates/shiseido/products/product_edit.html:176
-msgid "ou"
-msgstr "or"
-
 #: templates/accounts/patron_paypal.html:49
 #: templates/dcns/accounts/patron_paypal.html:44
 #: templates/dcns/accounts/partials/login.html:36
@@ -4239,25 +4344,117 @@ msgstr "Next &rarr;"
 msgid "Bienvenue sur notre espace professionnel"
 msgstr "Welcome to our professional space"
 
-#: templates/accounts/patron_subscription.html:66
-msgid "Choisissez un abonnement adapté à vos besoin"
+#: templates/accounts/patron_subscription.html:17
+msgid ""
+"\n"
+"                    e-loue.com est une place de marché<br> de la location.\n"
+"                    "
+msgstr "<br>Of the rent.</br> E-loue.com a marketplace is "
+
+#: templates/accounts/patron_subscription.html:22
+msgid ""
+"Quelque soit votre domaine d’activité dans la location, nos membres seront "
+"intéréssés par vos annonces."
+msgstr ""
+"About is your activity sector in the rent, our members will be intéréssés by "
+"your announcements."
+
+#: templates/accounts/patron_subscription.html:28
+msgid "Gérer plus de locations"
+msgstr "Manage more rents"
+
+#: templates/accounts/patron_subscription.html:31
+msgid "Canal de distribution complémentaire"
+msgstr "Complementary distribution channel"
+
+#: templates/accounts/patron_subscription.html:34
+msgid "Visibilité sur un site très connu"
+msgstr "Visibility on a very well-known site"
+
+#: templates/accounts/patron_subscription.html:37
+msgid "Augmenter vos locations"
+msgstr "Increase your rents"
+
+#: templates/accounts/patron_subscription.html:40
+msgid "Toucher tous les membres de e-loue"
+msgstr "To affect all the members of e - rents"
+
+#: templates/accounts/patron_subscription.html:53
+msgid ""
+"\n"
+"                        Choisissez un abonnement et importez simplement "
+"votre<br>catalogue avec notre aide\n"
+"                        "
+msgstr ""
+"Choose a subscription and matter simply you <br>Catalog with our help</br> r "
+""
+
+#: templates/accounts/patron_subscription.html:65
+msgid ""
+"\n"
+"                        Les clients voient vos annonces<br>sur e-loue.com\n"
+"                        "
+msgstr "The customers see your announcement <br>On e-loue.com</br> s "
+
+#: templates/accounts/patron_subscription.html:77
+msgid ""
+"\n"
+"                        Les clients vous contactent directement par "
+"téléphone ou<br>par mail pour une réservation\n"
+"                        "
+msgstr ""
+"The customers contact you directly by telephone o <br>By e-mail for a "
+"reservation</br> r "
+
+#: templates/accounts/patron_subscription.html:84
+msgid "Choisissez un abonnement adapté à votre besoin"
 msgstr "Choose a subscription adapted to your needs"
 
-#: templates/accounts/patron_subscription.html:71
+#: templates/accounts/patron_subscription.html:89
 msgid "Annonces illimitées"
-msgstr "Unlimited Advertisements"
+msgstr "Unlimited ads"
 
-#: templates/accounts/patron_subscription.html:86
+#: templates/accounts/patron_subscription.html:104
 msgid "annonces maximum"
-msgstr "Advertised maximum"
+msgstr "Ads maximum"
 
-#: templates/accounts/patron_subscription.html:100
+#: templates/accounts/patron_subscription.html:113
+msgid "Votre abonnement actuel"
+msgstr "Your current subscription"
+
+#: templates/accounts/patron_subscription.html:118
 msgid ""
 "Des options vous sont proposées pour augmenter votre visibilité et votre "
 "réactivité"
+msgstr "Options to increase your visibility and your responsiveness"
+
+#: templates/accounts/patron_subscription.html:123
+msgid "Notifications par email"
+msgstr "Notifications by email"
+
+#: templates/accounts/patron_subscription.html:124
+#: templates/accounts/patron_subscription.html:138
+msgid "envoi"
+msgstr "Sending"
+
+#: templates/accounts/patron_subscription.html:130
+#: templates/accounts/patron_subscription.html:144
+msgid "annonce"
+msgstr "Announcement"
+
+#: templates/accounts/patron_subscription.html:131
+msgid ""
+"Votre annonce est mise en avant dans les listes (page d’accueil, résultats "
+"de recherche, annonces similaires)."
+msgstr "Your ad has priority listing (homepage, search results, similar ads)."
+
+#: templates/accounts/patron_subscription.html:139
+msgid ""
+"Pour répondre rapidement aux devis, recevez les demandes de réservation sur "
+"votre mobile."
 msgstr ""
-"The options you are proposed to increase your visibility and your "
-"responsiveness"
+"To answer quickly in estimate, receive the demands of reservation on your "
+"motive."
 
 #: templates/accounts/pro_billing.html:20
 msgid "Imprimer la facture"
@@ -4285,13 +4482,12 @@ msgid ""
 "\n"
 "                            "
 msgstr ""
+"Hello % (username)s, <br><br>\n"
 "\n"
-"Hello %(username)s, <br><br>\n"
-"\n"
-"We thank you for you be saved(e) on <a href=\"%(protocol)s://%(domain)s\">% "
+"We thank you for registering at <a href=\"%(protocol)s://%(domain)s\">% "
 "(domain)s</a>. <br><br>\n"
 "In order to activate your account and join our community of renters, you "
-"must click the button below. <br><br> "
+"must click the button below. <br><br>"
 
 #: templates/accounts/emails/activation_email.html:24
 #: templates/accounts/emails/professional_activation_email.html:24
@@ -4309,6 +4505,10 @@ msgstr "Has very quickly"
 #: templates/accounts/emails/activation_email.txt:13
 #: templates/accounts/emails/professional_activation_email.html:27
 #: templates/accounts/emails/professional_activation_email.txt:14
+#: templates/accounts/emails/professional_subscribed_email.html:23
+#: templates/accounts/emails/professional_subscribed_email.txt:14
+#: templates/accounts/emails/professional_subscription_changed_email.html:22
+#: templates/accounts/emails/professional_subscription_changed_email.txt:13
 msgid "L'équipe"
 msgstr "The team"
 
@@ -4322,17 +4522,16 @@ msgid ""
 "\tAfin d’activer votre compte et de rejoindre notre communauté de loueurs, "
 "vous devez cliquer sur le bouton ci-dessous.\n"
 msgstr ""
+"Hello % (username)s,\n"
 "\n"
-"Hello %(username)s,\n"
-"\n"
-"\twe thank you for you be saved(e) on <a href=\"%(protocol)s://%(domain)s\">% "
+"\twe thank you for registering at <a href=\"%(protocol)s://%(domain)s\">% "
 "(domain)s</a>.\n"
 "\tIn order to activate your account and join our community of renters, you "
 "must click the button below."
 
 #: templates/accounts/emails/gmail_invitation_email.html:5
 msgid "Rejoins moi dans la communauté des e-loueurs !"
-msgstr "Agree with me in the community of e-renters!"
+msgstr "Agree with me in the community of e-loue renters!"
 
 #: templates/accounts/emails/gmail_invitation_email.html:14
 msgid ""
@@ -4364,7 +4563,7 @@ msgstr ""
 "\n"
 "\t\t\t\t\t\t\t<p>Cordially, </p>\n"
 "\n"
-"\t\t\t\t\t\t\t<p>%(FIRST_NAME)s  </p>"
+"\t\t\t\t\t\t\t<p>% (FIRST_NAME)s  </p>"
 
 #: templates/accounts/emails/gmail_invitation_email.txt:2
 msgid ""
@@ -4378,7 +4577,7 @@ msgid ""
 msgstr ""
 "\n"
 "Hello,\n"
-"%(first_name)s invites you on e-rented\n"
+"% (first_name)s invites you on e-rented\n"
 "\n"
 "Cordially,\n"
 "\n"
@@ -4400,7 +4599,7 @@ msgid ""
 "\t\t\t\t\t\t\t"
 msgstr ""
 "\n"
-"Hello %(username)s, <br><br>\n"
+"Hello % (username)s, <br><br>\n"
 "\t\n"
 "\t\t\t\t\t\t\t\tWe just received a notification of a forgotten password. <br>\n"
 "\t\t\t\t\t\t\t\tYou only need to click the button below to create a new one. <br>"
@@ -4412,7 +4611,7 @@ msgstr "Create a new password"
 #: templates/accounts/emails/password_reset_email.html:29
 #: templates/accounts/emails/password_reset_email.txt:14
 msgid "L'équipe e-loue"
-msgstr "The eRentmarket team"
+msgstr "The e-loue team"
 
 #: templates/accounts/emails/password_reset_email.txt:2
 msgid ""
@@ -4450,6 +4649,10 @@ msgid "Oubli de votre mot de passe"
 msgstr "Forgotten your password?"
 
 #: templates/accounts/emails/professional_activation_email.html:5
+#: templates/accounts/emails/professional_subscribed_email.html:5
+#: templates/accounts/emails/professional_subscribed_email.txt:3
+#: templates/accounts/emails/professional_subscription_changed_email.html:5
+#: templates/accounts/emails/professional_subscription_changed_email.txt:3
 msgid "Validation de votre inscription pro"
 msgstr "Validation of your registration pro"
 
@@ -4458,21 +4661,17 @@ msgid ""
 "\n"
 "                                Bonjour %(username)s,<br><br>\n"
 "\n"
-"                                Nous vous remercions de vous être "
-"enregistré(e) sur <a href=\"%(protocol)s://%(domain)s\">%"
-"(domain)s</a>.<br><br>\n"
+"                                Vous êtes maintenant enregistré sur <a "
+"href=\"%(protocol)s://%(domain)s\">%(domain)s</a>.<br><br>\n"
 "                                Veuillez cliquer sur le bouton ci-dessous "
 "pour finaliser la validation de votre compte.<br><br>\n"
 "\n"
 "                            "
 msgstr ""
-"\n"
-"Hello %(username)s, <br><br>\n"
-"\n"
-"We thank you for you be saved(e) on <a href=\"%(protocol)s://%(domain)s\">% "
-"(domain)s</a>. <br><br>\n"
-"Please click on the button below to complete the validation of your account. "
-"<br><br> "
+"<br><br> <br><br>Please click the button below to finalize the validation of "
+"your account <br><br></br></br> .</br></br> You are now registered <a "
+"href=\"%(protocol)s://%(domain)s\">% (Domain)</a>  on.</br></br> Hello "
+"(username), "
 
 #: templates/accounts/emails/professional_activation_email.txt:2
 msgid ""
@@ -4487,12 +4686,74 @@ msgid ""
 msgstr ""
 "\n"
 "\n"
-"Hello %(username)s, <br><br>\n"
+"Hello % (username)s, <br><br>\n"
 "\n"
 "\tWe thank you for you be saved(e) on <a href=\"%(protocol)s://%(domain)s\">% "
 "(domain)s</a>.\n"
 "\tPlease click on the button below to complete the validation of your "
 "account."
+
+#: templates/accounts/emails/professional_subscribed_email.html:15
+msgid ""
+"\n"
+"                                Bonjour %(username)s,<br><br>\n"
+"\n"
+"                                Nous vous confirmons la souscription à "
+"l'abonnement suivant :<br><br>\n"
+"                                %(current_subscription)s\n"
+"\n"
+"\n"
+"                            "
+msgstr ""
+"<br><br> <br><br>% (Current_subscription)</br></br> We confirm you the "
+"subscription in the following subscription:</br></br> Hello (username), "
+
+#: templates/accounts/emails/professional_subscribed_email.txt:6
+msgid ""
+"\n"
+"    Bonjour %(username)s,<br><br>\n"
+"\n"
+"    Nous vous confirmons la souscription à l'bonnement suivant :<br><br>\n"
+"    %(current_subscription)s\n"
+"\n"
+"\n"
+msgstr ""
+"<br><br> <br><br>% (Current_subscription)</br></br> We confirm you the "
+"subscription in the following bonnement:</br></br> Hello (username),"
+
+#: templates/accounts/emails/professional_subscribed_email_subject.txt:1
+msgid "Confirmation souscription abonnement professionnel"
+msgstr "Confirmation subscription professional subscription"
+
+#: templates/accounts/emails/professional_subscription_changed_email.html:15
+msgid ""
+"\n"
+"                                Bonjour %(username)s,<br><br>\n"
+"\n"
+"                                Nous vous confirmons votre changement "
+"d'abonnement.<br><br>\n"
+"                                %(current_subscription)s\n"
+"\n"
+"                            "
+msgstr ""
+"<br><br> <br><br>% (Current_subscription)</br></br> We confirm you your "
+"change of subscription.</br></br> Hello (username), "
+
+#: templates/accounts/emails/professional_subscription_changed_email.txt:6
+msgid ""
+"\n"
+"    Bonjour %(username)s,<br><br>\n"
+"\n"
+"    Nous vous confirmons votre changement d'abonnement.<br><br>\n"
+"    %(current_subscription)s\n"
+"\n"
+msgstr ""
+"<br><br> <br><br>% (Current_subscription)</br></br> We confirm you your "
+"change of subscription.</br></br> Hello (username),"
+
+#: templates/accounts/emails/professional_subscription_changed_email_subject.txt:1
+msgid "Confirmation de changement de votre abonnement"
+msgstr "Confirmation of change of your subscription"
 
 #: templates/accounts/partials/billing_table.html:4
 msgid "Récapitulatif"
@@ -4520,7 +4781,7 @@ msgstr "VAT"
 
 #: templates/accounts/partials/billing_table.html:126
 msgid "TVA à 19,60"
-msgstr "VAT to 19.60"
+msgstr "VAT at 19.60"
 
 #: templates/accounts/partials/booking_list_borrower.html:10
 msgid "Voir le détail"
@@ -4530,7 +4791,7 @@ msgstr "See the detail"
 #: templates/accounts/partials/booking_list_owner.html:45
 #: templates/dcns/products/product_detail.html:76
 #: templates/products/product_detail.html:512
-#: templates/rent/booking_detail.html:44
+#: templates/rent/booking_detail.html:46
 #: templates/rent/booking_incident.html:31
 #: templates/rent/booking_success.html:50
 #: templates/shiseido/products/product_detail.html:76
@@ -4541,7 +4802,7 @@ msgstr "Start "
 #: templates/accounts/partials/booking_list_owner.html:48
 #: templates/dcns/products/product_detail.html:80
 #: templates/products/product_detail.html:516
-#: templates/rent/booking_detail.html:47
+#: templates/rent/booking_detail.html:49
 #: templates/rent/booking_incident.html:35
 #: templates/rent/booking_success.html:53
 #: templates/shiseido/products/product_detail.html:80
@@ -4563,10 +4824,10 @@ msgstr "More info"
 
 #: templates/accounts/partials/company_more_info.html:17
 msgid "Site Internet"
-msgstr "Internet Site"
+msgstr "Website"
 
 #: templates/accounts/partials/company_more_info.html:21
-#: templates/accounts/partials/more_info.html:17
+#: templates/accounts/partials/more_info.html:20
 msgid "Languages Parlées"
 msgstr "Languages Spoken"
 
@@ -4610,11 +4871,11 @@ msgstr ""
 
 #: templates/accounts/partials/response_stats.html:6
 msgid "Taux de réponse"
-msgstr "Response rates"
+msgstr "Response rate"
 
 #: templates/accounts/partials/response_stats.html:12
 msgid "Temps de réponse moyen"
-msgstr "Average Response Time"
+msgstr "Average response time"
 
 #: templates/accounts/partials/terms.html:3
 msgid ""
@@ -5713,25 +5974,6 @@ msgstr "dress"
 msgid "Robe"
 msgstr "Dress"
 
-#: templates/dcns/index.html:31
-#: templates/dcns/accounts/patron_detail.html:31
-#: templates/dcns/products/alert_list.html:30
-#: templates/dcns/products/product_detail.html:26
-#: templates/dcns/products/product_list.html:53
-#: templates/mobile/index.html:11
-#: templates/mobile/index.html.py:28
-#: templates/mobile/flatpages/default.html:10
-#: templates/mobile/products/product_detail.html:12
-#: templates/mobile/products/product_list.html:43
-#: templates/mobile/products/search.html:11
-#: templates/mobile/products/search.html:28
-#: templates/products/alert_list.html:30
-#: templates/products/search.html:28
-#: templates/shiseido/index.html:29
-#: templates/shiseido/products/product_detail.html:26
-msgid "Rechercher"
-msgstr "Search"
-
 #: templates/dcns/index.html:39
 msgid "A louer en ce moment"
 msgstr "A rent at the moment"
@@ -5801,8 +6043,8 @@ msgid ""
 "Nous vous invitons à créer une demande de location permettant d'avertir les "
 "membres proches de chez vous de votre rechercher."
 msgstr ""
-"We invite you to make a rent request in order to inform the people who are "
-"close to you about your search."
+"We invite you to make a rental request in order to inform members in your "
+"area about your search."
 
 #: templates/dcns/accounts/alert_edit.html:58
 #: templates/dcns/products/alert_list.html:102
@@ -5835,7 +6077,7 @@ msgstr "* = required field"
 
 #: templates/dcns/accounts/contact.html:63
 #: templates/dcns/rent/booking_incident.html:180
-#: templates/sep/accounts/contact.html:58
+#: templates/products/product_detail.html:541
 msgid "Envoyer"
 msgstr "Send"
 
@@ -5849,7 +6091,7 @@ msgstr "Go to my items"
 
 #: templates/dcns/accounts/dashboard.html:33
 msgid "Bienvenue sur e-loue ! Que pouvez-vous faire ensuite ?"
-msgstr "Welcome to eRentmarket! What can you do next?"
+msgstr "Welcome to e-loue! What can you do next?"
 
 #: templates/dcns/accounts/dashboard.html:36
 msgid "Mettre un objet en location"
@@ -5885,8 +6127,8 @@ msgstr[1] ""
 "                <span>Rentals<br />pending</span>\n"
 "              "
 
-#: templates/dcns/accounts/dashboard.html:56
 #: templates/dcns/accounts/dashboard.html:89
+#: templates/dcns/accounts/dashboard.html:56
 msgid ""
 "\n"
 "                <span>Location<br />active</span>\n"
@@ -6007,15 +6249,7 @@ msgstr "E-mail address:"
 #: templates/mobile/index.html:17
 #: templates/products/search.html:9
 msgid "Avec e-loue, tout se loue !"
-msgstr "On eRentmarket, everything is for rent!"
-
-#: templates/dcns/accounts/patron_detail.html:18
-#: templates/mobile/index.html:20
-#: templates/mobile/products/search.html:20
-#: templates/products/alert_list.html:17
-#: templates/shiseido/index.html:15
-msgid "Que voulez-vous louer ?"
-msgstr "What do you want to rent?"
+msgstr "On e-loue, everything is for rent!"
 
 #: templates/dcns/accounts/patron_detail.html:51
 msgid ""
@@ -7060,7 +7294,7 @@ msgstr "Frequently asked questions"
 #: templates/dcns/faq/topic_list.html:7
 #: templates/faq/topic_list.html:7
 msgid "Les questions les plus fréquemment posées sur e-loue"
-msgstr "Questions most frequently asked on eRentmarket"
+msgstr "Frequently asked questions on e-loue"
 
 #: templates/dcns/faq/topic_list.html:13
 #: templates/faq/topic_detail.html:16
@@ -7121,8 +7355,8 @@ msgid ""
 "Demandes de location des locataires qui n'ont pas trouvé l'objet qu'ils "
 "veulent louer près de chez eux."
 msgstr ""
-"Ask for rental when tenants haven't found the object that they want to rent "
-"nearby."
+"Rental demands by renters who haven't found the object that they want to "
+"rent nearby."
 
 #: templates/dcns/products/alert_list.html:57
 msgid "cherche :"
@@ -7134,7 +7368,7 @@ msgstr "> Respond to the request"
 
 #: templates/dcns/products/alert_list.html:78
 msgid "Rechercher une demande"
-msgstr "Find a request"
+msgstr "Search for request"
 
 #: templates/dcns/products/alert_list.html:86
 #: templates/dcns/products/product_list.html:192
@@ -7152,8 +7386,8 @@ msgid ""
 "Nous vous invitons à créer une demande de location permettant d'avertir les "
 "membres proches de chez vous."
 msgstr ""
-"We invite you to make a rent request in order to inform the people who are "
-"close to you about your search."
+"We invite you to make a rental request in order to inform members in your "
+"area about your search."
 
 #: templates/dcns/products/alert_missing.html:4
 #: templates/dcns/products/product_missing.html:4
@@ -7266,7 +7500,7 @@ msgstr "Two possible types of payment"
 #: templates/dcns/products/product_create.html:205
 #: templates/shiseido/products/product_create.html:205
 msgid "Le locataire paye en chèque/espèce"
-msgstr "The leaseholder will pay by cheque/cash"
+msgstr "The renter will pay by cheque/cash"
 
 #: templates/dcns/products/product_create.html:207
 #: templates/shiseido/products/product_create.html:207
@@ -7274,13 +7508,13 @@ msgid ""
 "Le locataire vous paye directement quand vous lui remettez l'objet. Votre "
 "objet ne sera pas assuré pendant la location."
 msgstr ""
-"The tenant you paid him directly when you replace the object. Your object "
-"will not be ensured during the rental period."
+"The renter pays you directly when collecting the item. Your object will not "
+"be insured during the rental period."
 
 #: templates/dcns/products/product_create.html:211
 #: templates/shiseido/products/product_create.html:211
 msgid "Le locataire paye en ligne"
-msgstr "The lessee paid online"
+msgstr "The renter pays online"
 
 #: templates/dcns/products/product_create.html:213
 #: templates/shiseido/products/product_create.html:213
@@ -7288,8 +7522,8 @@ msgid ""
 "Votre objet est assuré et la réception du paiement garantie à la fin de la "
 "location"
 msgstr ""
-"Your object is garanteed and the reception of payment is also garanteed at "
-"the end of the rent"
+"Your object is insured and the receipt of payment is also guaranteed at the "
+"end of the rent"
 
 #: templates/dcns/products/product_delete.html:4
 #: templates/dcns/products/product_edit.html:4
@@ -7302,6 +7536,7 @@ msgstr "Modification of"
 #: templates/dcns/products/product_list.html:5
 #: templates/products/product_detail.html:9
 #: templates/products/product_detail.html:210
+#: templates/products/product_detail.html:218
 #: templates/products/product_result.html:8
 #: templates/shiseido/products/product_detail.html:4
 #: templates/shiseido/products/product_detail.html:38
@@ -7443,13 +7678,13 @@ msgstr "Newest"
 #: templates/products/product_result.html:127
 #: templates/products/product_result.html:129
 msgid "Les prix les plus bas"
-msgstr "Lowest prices"
+msgstr "Price (low to high)"
 
 #: templates/dcns/products/product_list.html:113
 #: templates/products/product_result.html:134
 #: templates/products/product_result.html:136
 msgid "Les prix les plus haut"
-msgstr "Highest prices"
+msgstr "Price (high to low)"
 
 #: templates/dcns/products/product_list.html:145
 #: templates/products/product_list_category.html:32
@@ -7457,6 +7692,7 @@ msgid "par jour"
 msgstr "per day"
 
 #: templates/dcns/products/product_list.html:148
+#: templates/products/product_detail.html:543
 #: templates/products/product_list_category.html:35
 msgid "Réserver"
 msgstr "Book"
@@ -7610,7 +7846,7 @@ msgstr "Owner :"
 #: templates/dcns/rent/booking_detail.html:136
 #: templates/dcns/rent/booking_incident.html:109
 msgid "Locataire :"
-msgstr "Borrower :"
+msgstr "Renter :"
 
 #: templates/dcns/rent/booking_detail.html:170
 #: templates/dcns/rent/booking_incident.html:187
@@ -7770,6 +8006,7 @@ msgstr "Messages(%(messages_inbox_count)s)"
 #: templates/django_messages/outbox.html:18
 #: templates/django_messages/trash.html:18
 #: templates/django_messages/view.html:18
+#: templates/products/message_view.html:14
 msgid "Messages reçus"
 msgstr "Received messages"
 
@@ -7816,7 +8053,7 @@ msgstr "Action"
 #: templates/django_messages/outbox.html:42
 #: templates/django_messages/trash.html:42
 #: templates/django_messages/view.html:25
-#: templates/products/message_view.html:37
+#: templates/products/message_view.html:38
 #: templates/products/partials/message_list.html:42
 msgid "DATETIME_FORMAT"
 msgstr "DATETIME_FORMAT"
@@ -7866,7 +8103,7 @@ msgstr ""
 ";font-weight: normal;line-height: 100%%;margin-top: 0;margin-right: 0"
 ";margin-bottom: 10px;margin-left: 0;text-align: left; font-style: italic;\">% "
 "(Sender)s  </h1>\n"
-"Hello %(container)s, <br><br> "
+"Hello % (container)s, <br><br> "
 
 #: templates/django_messages/new_message.html:42
 msgid "Répondre au message"
@@ -7879,9 +8116,9 @@ msgid ""
 "\n"
 "Bonjour %(recipient)s,\n"
 msgstr ""
-"Sent by %(sender)s:\n"
+"Sent by % (sender)s:\n"
 "\n"
-"Hello %(container)s,"
+"Hello % (container)s,"
 
 #: templates/django_messages/new_message.txt:12
 msgid "Voici le lien pour répondre :"
@@ -7905,17 +8142,14 @@ msgid ""
 "  Les questions les plus fréquemment posées sur e-loue à propos de %"
 "(section)s\n"
 " "
-msgstr ""
-"\n"
-"  The most frequently asked questions on eRentmarket about %(section)s\n"
-" "
+msgstr "Frequently asked questions on e-loue about %(section)s"
 
 #: templates/flatpages/mobile_iphone.html:10
 #: templates/flatpages/mobile_iphone.html:12
 #: templates/products/search.html:64
 #: templates/shiseido/index.html:65
 msgid "e-loue sur iPhone"
-msgstr "E-rent on iphone"
+msgstr "e-loue on iphone"
 
 #: templates/flatpages/press.html:27
 msgid "Télécharger"
@@ -7996,8 +8230,8 @@ msgid ""
 "en rendant service aux e-loueurs et à la planète !\n"
 "            "
 msgstr ""
-"Thanks to the rental, you will earn money <br>While making service to the "
-"e-hire companies and to the planet! "
+"By renting, you will earn money <br>while providing a service to e-loue "
+"renters and to the planet!"
 
 #: templates/nc/products/publish_new_ad.html:24
 msgid "Sécurité"
@@ -8005,19 +8239,19 @@ msgstr "Security"
 
 #: templates/nc/products/publish_new_ad.html:25
 msgid "Paiement garanti par la Société Générale"
-msgstr "Payment guaranteed by the General Society"
+msgstr "Payment guaranteed by Société Générale"
 
 #: templates/nc/products/publish_new_ad.html:26
 msgid "Blocage de la caution pendant la location"
-msgstr "Blocking of the bond during the rental period"
+msgstr "Deposit held during the rental period"
 
 #: templates/nc/products/publish_new_ad.html:27
 msgid "Contrat de location pré-rempli"
-msgstr "Rental contract pre-filled"
+msgstr "Pre-filled rental contract"
 
 #: templates/nc/products/publish_new_ad.html:33
 msgid "Tarif"
-msgstr "Tariff"
+msgstr "Rates"
 
 #: templates/nc/products/publish_new_ad.html:34
 msgid "Pas de frais d'inscription"
@@ -8025,11 +8259,11 @@ msgstr "No registration fee"
 
 #: templates/nc/products/publish_new_ad.html:35
 msgid "Mise en location GRATUITE"
-msgstr "Upgrade for free rental"
+msgstr "Rental advertisement FREE"
 
 #: templates/nc/products/publish_new_ad.html:36
 msgid "Frais de 20%% sur la location (seulement si vous louez)"
-msgstr "Costs of 20%% on the rental (only if you rent)"
+msgstr "Commission of 20%% on the rental (only if you rent)"
 
 #: templates/nc/products/publish_new_ad.html:44
 msgid "Fléxibilité"
@@ -8041,41 +8275,43 @@ msgstr "Possibility to refuse a rental"
 
 #: templates/nc/products/publish_new_ad.html:46
 msgid "Gestion de votre calendrier de disponibilités"
-msgstr "Managing your calendar of availability"
+msgstr "Manage your availability calendar"
 
 #: templates/nc/products/publish_new_ad.html:47
 msgid "Communiquez avec les locataires par messagerie"
-msgstr "Contact the tenants by email"
+msgstr "Contact renters by email"
 
 #: templates/nc/products/publish_new_ad.html:54
 msgid "Annonce visible sur les moteurs de recherche."
-msgstr "Announcement visible on the search engines."
+msgstr "Ad visible on search engines"
 
 #: templates/nc/products/publish_new_ad.html:55
 msgid "Parutions dans la presse"
-msgstr "Releases in the press"
+msgstr "Publications in the press"
 
 #: templates/nc/products/publish_new_ad.html:56
 msgid "Annonce sera visible sur les réseaux sociaux"
-msgstr "Announcement will be visible on the social networks"
+msgstr "Ad visible on social networks"
 
 #: templates/nc/products/publish_new_ad.html:63
 #: templates/nc/products/publish_new_ad.html:70
 #: templates/nc/products/publish_new_ad.html:77
 msgid "Rejoignez une communauté de plus de 40 000 e-loueurs"
-msgstr "Join a community of more than 40,000 e-hire companies"
+msgstr "Join a community of more than 40,000 e-renters"
 
 #: templates/nc/products/publish_new_ad.html:64
 msgid "Les e-loueurs de voitures gagnent en moyenne 300&euro; par mois."
-msgstr "The e-car hire earn on average 300 euros per month."
+msgstr "Those who offer car hire on e-loue earn on average 300 euros per month."
 
 #: templates/nc/products/publish_new_ad.html:71
 msgid "Les e-loueurs d'appartements gagnent en moyenne 350&euro; par mois."
-msgstr "The e-rental apartments on average earn 350€ per month."
+msgstr ""
+"Those who offer apartment rentals on e-loue earn on average 350€ per month."
 
 #: templates/nc/products/publish_new_ad.html:78
 msgid "Les e-loueurs d'objets gagnent en moyenne 200&euro; par mois."
-msgstr "The e-hire to objects on average earn 200 euros per month."
+msgstr ""
+"Those who offer object rental on e-loue earn on average 200 euros per month."
 
 #: templates/products/alert_list.html:55
 msgid "Créée le"
@@ -8121,17 +8357,13 @@ msgid "Mes messages reçus"
 msgstr "My messages received"
 
 #: templates/products/inbox.html:14
-#: templates/products/message_view.html:14
+#: templates/products/message_view.html:15
 msgid "Messages archivés"
 msgstr "Archived Messages"
 
 #: templates/products/message_view.html:4
 msgid "Mes messages"
 msgstr "My messages"
-
-#: templates/products/message_view.html:13
-msgid "Massages reçus"
-msgstr "Massage received"
 
 #: templates/products/product_create.html:4
 msgid "en location"
@@ -8147,15 +8379,15 @@ msgstr "Deletion of"
 
 #: templates/products/product_delete.html:8
 msgid "Impossible de supprimer l'annonce"
-msgstr "Unable to delete the announcement"
+msgstr "Unable to delete the ad"
 
 #: templates/products/product_delete.html:11
 msgid "Etes-vous sûr de vouloir l'annonce ?"
-msgstr "Are you sure you want to the announcement?"
+msgstr "Are you sure you want this ad?"
 
 #: templates/products/product_detail.html:231
 msgid "places"
-msgstr "Placed"
+msgstr "doors"
 
 #: templates/products/product_detail.html:235
 msgid "portes"
@@ -8171,7 +8403,7 @@ msgstr "People"
 
 #: templates/products/product_detail.html:263
 msgid "chambres"
-msgstr "Rooms"
+msgstr "Bedrooms"
 
 #: templates/products/product_detail.html:271
 msgid ""
@@ -8217,7 +8449,7 @@ msgstr "Date not available"
 
 #: templates/products/product_detail.html:371
 msgid "Règle d'utilisation"
-msgstr "Rule of use"
+msgstr "Rules of use"
 
 #: templates/products/product_detail.html:378
 msgid ""
@@ -8239,20 +8471,20 @@ msgstr[1] ""
 
 #: templates/products/product_detail.html:384
 msgid "Pas de commentaire"
-msgstr "No comment"
+msgstr "No comments"
 
 #: templates/products/product_detail.html:390
 msgid "Soyez-le premier à réserver et commenter !"
-msgstr "You Can Be the first to book and comment on!"
+msgstr "Be the first to make a booking and leave a comment!"
 
 #: templates/products/product_detail.html:416
 #: templates/products/product_detail.html:461
 msgid " Voir toutes ses annonces "
-msgstr " See all its announcements "
+msgstr "See all the ads"
 
 #: templates/products/product_detail.html:459
 msgid "Particulier"
-msgstr "Particular"
+msgstr "Individual"
 
 #: templates/products/product_detail.html:496
 msgid "Réservez en ligne"
@@ -8261,17 +8493,16 @@ msgstr "Book online"
 #: templates/products/product_detail.html:534
 msgid ""
 "\n"
-"<p id=\"booking-total\" class=\"total-price\">\n"
-"Total : <span class=\"day\">1 jour,</span> soit "
+"                        <p id=\"booking-total\" class=\"total-price\">\n"
+"                            Total : <span class=\"day\">1 jour,</span> soit "
 "<span class=\"pricing\">%(day_price)s</span>\n"
-"</p>\n"
-
+"                        </p>\n"
+"                    "
 msgstr ""
-"\n"
 "<p id=\"booking-total\" class=\"total-total-Price\">\n"
-"Total: <span class=\"Day\">1 day,</span>"
-"or<span class=\"pricing\">%(day_price)s</span>\n"
-"</p>\n"
+"Total: <span class=\"Day\">1 day, </span>or<span class=\"pricing\"> % "
+"(day_price)s  </span>\n"
+"</p> "
 
 #: templates/products/product_detail.html:548
 msgid ""
@@ -8286,12 +8517,12 @@ msgid ""
 "Il s'agit simplement d'une pré-réservation. Vous ne serez débité que si le "
 "propriétaire accepte la demande de location sous 24h."
 msgstr ""
-"It is simply a pre-reservation. You will only be debited if the owner "
-"accepts the request for the lease under 24h."
+"It is just a pre-reservation. You will only be debited if the owner accepts "
+"the request for the lease within 24 hours."
 
 #: templates/products/product_edit.html:18
 msgid "Retour à mes annonces"
-msgstr "Return to My Ads"
+msgstr "Return to My ads"
 
 #: templates/products/product_edit.html:21
 msgid "Description et photos"
@@ -8303,7 +8534,7 @@ msgstr "Modification of "
 
 #: templates/products/product_edit.html:46
 msgid "Voir l'annonce"
-msgstr "See the announcement"
+msgstr "See the ad"
 
 #: templates/products/product_edit.html:108
 msgid "Ajoutez une nouvelle adresse"
@@ -8311,7 +8542,7 @@ msgstr "Add a new address"
 
 #: templates/products/product_highlight_edit.html:10
 msgid "Votre annonce est mise en avant depuis"
-msgstr "Your announcement is forward since"
+msgstr "Your ad has priority listing since"
 
 #: templates/products/product_highlight_edit.html:12
 msgid "Mettre en avant"
@@ -8344,8 +8575,8 @@ msgid_plural ""
 "\n"
 "                <h1>Résultats pour <strong>\"%(keywords)s\"</strong></h1>\n"
 "            "
-msgstr[0] "<h1>Results for<Strong> \" %(keywords)s\" </Strong></h1> "
-msgstr[1] "<h1>Results for<Strong> \" %(keywords)s\" </Strong></h1> "
+msgstr[0] "<h1>Results for<Strong> \" % (keywords)s\" </Strong></h1> "
+msgstr[1] "<h1>Results for<Strong> \" % (keywords)s\" </Strong></h1> "
 
 #: templates/products/product_result.html:171
 msgid "Pas de résultat pour cette recherche"
@@ -8369,11 +8600,11 @@ msgstr "Professionals"
 
 #: templates/products/product_result.html:203
 msgid "Filtrer par catégorie"
-msgstr "Filter by Category"
+msgstr "Filter by category"
 
 #: templates/products/product_top_position_edit.html:8
 msgid "Mettre en avant son annonce"
-msgstr "Put in before its announcement"
+msgstr "Get the ad to top positions"
 
 #: templates/products/product_top_position_edit.html:11
 msgid "Historique des top position"
@@ -8386,12 +8617,12 @@ msgid ""
 "tout<br>en rendant service aux loueurs et à la planète.\n"
 "            "
 msgstr ""
-"Thanks to the rental, you will earn money any <BR>In rendering service to "
-"renters and to the planet. "
+"By renting, you will earn money <BR>while providing a service to e-loue "
+"renters and to the planet."
 
 #: templates/products/publish_new_ad.html:30
 msgid "Déposer une voiture"
-msgstr "Publish a car"
+msgstr "Register a car"
 
 #: templates/products/publish_new_ad.html:33
 #: templates/products/publish_new_ad.html:44
@@ -8407,11 +8638,11 @@ msgstr "Learn more"
 
 #: templates/products/publish_new_ad.html:41
 msgid "Déposer un logement"
-msgstr "Publish a space"
+msgstr "Register a property"
 
 #: templates/products/publish_new_ad.html:52
 msgid "Déposer un objet"
-msgstr "Publish an Object"
+msgstr "Register an object"
 
 #: templates/products/search.html:23
 #: templates/shiseido/index.html:24
@@ -8421,16 +8652,16 @@ msgstr " Paris, 75012"
 #: templates/products/search.html:36
 #: templates/shiseido/index.html:37
 msgid "Les curiosités d'e-loue"
-msgstr "eRentmarket curiosity shop"
+msgstr "e-loue curiosity shop"
 
 #: templates/products/search.html:68
 #: templates/shiseido/index.html:69
 msgid "location entre particulier avec e-loue sur iphone"
-msgstr "Rental between particular with e-rented on iphone"
+msgstr "Rental between individuals with e-loue on iphone"
 
 #: templates/products/search.html:82
 msgid "Avec les garanties e-loue, louez en toute sécurité !"
-msgstr "Rent safely by relying on eRentmarket!"
+msgstr "Rent safely by relying on e-loue!"
 
 #: templates/products/search.html:85
 #: templates/shiseido/index.html:86
@@ -8460,7 +8691,7 @@ msgstr ""
 #: templates/products/search.html:136
 #: templates/shiseido/index.html:138
 msgid "e-loue dans les média"
-msgstr "eRentmarket in the news"
+msgstr "e-loue in the news"
 
 #: templates/products/partials/message_list.html:44
 msgid "Archiver"
@@ -8476,7 +8707,7 @@ msgstr "Activate"
 
 #: templates/products/partials/product_option_edit_history.html:6
 msgid "Date de début"
-msgstr "Date of beginning"
+msgstr "Start date"
 
 #: templates/products/partials/product_option_edit_history.html:7
 msgid "Date de fin"
@@ -8488,7 +8719,7 @@ msgstr "Cost"
 
 #: templates/products/partials/product_option_edit_history.html:21
 msgid "Pas encore d'historique pour cette annonce"
-msgstr "Not yet of history for this announcement"
+msgstr "Not history yet for this ad"
 
 #: templates/products/partials/top_ads.html:2
 msgid "Top annonces"
@@ -8512,7 +8743,7 @@ msgid ""
 msgstr ""
 "When you click \"payment\" at the bottom of this page, you will not be "
 "charged. It is simply a pre-reservation. You will only be debited if the "
-"owner accepts the request for the lease under 24h. "
+"owner accepts the request for the lease within 24 hours."
 
 #: templates/rent/booking_confirm.html:22
 msgid "Récapitulatif de votre demande de réservation"
@@ -8546,12 +8777,12 @@ msgid ""
 "propriétaire, vous seras communiqué par email s'il accepte la location.\n"
 "              "
 msgstr ""
-"All the information and details of the owner, you shalt be sent by email if "
-"it accepts the rental. "
+"The owner's information and contact details shall be sent to you by email if "
+" the rental is accepted."
 
 #: templates/rent/booking_confirm.html:71
 msgid "Période de réservation"
-msgstr "Booking Period"
+msgstr "Reservation period"
 
 #: templates/rent/booking_confirm.html:75
 msgid "Montant de la réservation"
@@ -8607,7 +8838,7 @@ msgstr "Keep my bank details"
 
 #: templates/rent/booking_confirm.html:260
 msgid "Annuler les modifications"
-msgstr "Undo the changes"
+msgstr "Undo changes"
 
 #: templates/rent/booking_confirm.html:269
 msgid "Paiment"
@@ -8621,36 +8852,36 @@ msgstr "Validate a booking request"
 msgid "Informations de paiement"
 msgstr "Payment Information"
 
-#: templates/rent/booking_detail.html:31
+#: templates/rent/booking_detail.html:33
 msgid "Retour aux réservations"
 msgstr "Return to the reservations"
 
-#: templates/rent/booking_detail.html:36
+#: templates/rent/booking_detail.html:38
 msgid "La réservation"
 msgstr "The booking"
 
-#: templates/rent/booking_detail.html:57
+#: templates/rent/booking_detail.html:59
 msgid "Commission"
 msgstr "Commission"
 
-#: templates/rent/booking_detail.html:71
+#: templates/rent/booking_detail.html:73
 msgid "Information sur le propriétaire"
-msgstr "Information on the owner"
+msgstr "Information about the owner"
 
-#: templates/rent/booking_detail.html:115
+#: templates/rent/booking_detail.html:117
 msgid "Informations sur le locataire"
-msgstr "Information on the tenant"
+msgstr "Information about the renter"
 
-#: templates/rent/booking_detail.html:162
-#: templates/rent/booking_detail.html:176
+#: templates/rent/booking_detail.html:164
+#: templates/rent/booking_detail.html:178
 msgid "Votre commentaire"
 msgstr "Your comment"
 
-#: templates/rent/booking_detail.html:164
+#: templates/rent/booking_detail.html:166
 msgid "Commentaire du locataire"
-msgstr "Comment of the tenant"
+msgstr "Renter comments"
 
-#: templates/rent/booking_detail.html:178
+#: templates/rent/booking_detail.html:180
 msgid "Commentaire du propriétaire"
 msgstr "Comment of the owner"
 
@@ -8715,8 +8946,8 @@ msgid ""
 "été informé, il va vous répondre le plus rapidement possible (24h maximum).\n"
 "        "
 msgstr ""
-"We have well escaped your reservation. The owner was informed, he will "
-"answer you as quickly as possible (24h maximum). "
+"Your reservation has been received. The owner has been informed, and will "
+"answer you as soon as possible (24h maximum)."
 
 #: templates/rent/booking_success.html:25
 msgid ""
@@ -8778,7 +9009,7 @@ msgstr "Comments from the owners"
 
 #: templates/rent/comments_received.html:46
 msgid "Commentaires des locataires"
-msgstr "Comments of tenants"
+msgstr "Renter comments"
 
 #: templates/rent/emails/borrower_acceptation_email.html:5
 #: templates/rent/emails/owner_acceptation_email.html:4
@@ -8795,7 +9026,7 @@ msgid ""
 "acceptée :<br>\n"
 "                           \t"
 msgstr ""
-"Hello %(borrower_name)s  <br><br>\n"
+"Hello % (borrower_name)s  <br><br>\n"
 "\n"
 "Your following booking request has been accepted: <br>"
 
@@ -8812,8 +9043,8 @@ msgid ""
 msgstr ""
 "Here is the information to contact the owner: <br>\n"
 "<ul>\n"
-"\t\t\t\t\t\t\t\t<li><strong>Phone Number: </strong>%(owner_phone)s  </li>\n"
-"\t\t\t\t\t\t\t\t<li><strong>E-mail Address: </strong>%(owner_email)s  </li>\n"
+"\t\t\t\t\t\t\t\t<li><strong>Phone Number: </strong>% (owner_phone)s  </li>\n"
+"\t\t\t\t\t\t\t\t<li><strong>E-mail Address: </strong>% (owner_email)s  </li>\n"
 "\t\t\t\t\t\t\t</ul>"
 
 #: templates/rent/emails/borrower_acceptation_email.html:37
@@ -8831,7 +9062,7 @@ msgid ""
 "                            L'équipe %(site_name)s<br><br>\n"
 "                            "
 msgstr ""
-"So that you only need to contact %(owner_name)s to enjoy your %(summary)s. "
+"So that you only need to contact % (owner_name)s to enjoy your % (summary)s. "
 "<br>\n"
 "\n"
 "\n"
@@ -8839,7 +9070,7 @@ msgstr ""
 "\n"
 "A very fast, <br>\n"
 "\n"
-"The team %(site_name)s  <br><br> "
+"The team %site_name)s  <br><br> "
 
 #: templates/rent/emails/borrower_acceptation_email.txt:1
 msgid ""
@@ -8863,24 +9094,24 @@ msgid ""
 "\n"
 "L'équipe %(site_name)s\n"
 msgstr ""
-"Hello %(borrower_name)s,\n"
+"Hello % (borrower_name)s,\n"
 "\n"
 "your next lease proposal was accepted:\n"
 "\n"
-"Type: %(category)s\n"
-"Purpose: %(summary)s\n"
-"beginning of the lease: %(starting_at)s\n"
-"Duration of the lease: %(duration)s\n"
+"Type: % (category)s\n"
+"Purpose: % (summary)s\n"
+"beginning of the lease: % (starting_at)s\n"
+"Duration of the lease: % (duration)s\n"
 "\n"
 "you will find in attachment your rental contract. So that you only need to "
-"contact %(owner_name)s to enjoy your %(summary)s.\n"
+"contact % (owner_name)s to enjoy your % (summary)s.\n"
 "\n"
-"Phone Number: %(owner_phone)s\n"
-"email address: %(owner_email)s\n"
+"Phone Number: % (owner_phone)s\n"
+"email address: % (owner_email)s\n"
 "\n"
 "good rental!\n"
 "\n"
-"The team %(site_name)s"
+"The team %site_name)s"
 
 #: templates/rent/emails/borrower_acceptation_email_subject.txt:1
 #: templates/rent/emails/owner_acceptation_email_subject.txt:1
@@ -8900,7 +9131,7 @@ msgid ""
 "été transmis :<br>\n"
 "                           \t"
 msgstr ""
-"Hello %(borrower_name)s  <BR><BR>\n"
+"Hello % (borrower_name)s  <BR><BR>\n"
 "\n"
 "We have well taken into account your reservation request and just to inform "
 "the owner of your proposal. <BR>\n"
@@ -8929,7 +9160,7 @@ msgstr ""
 "\n"
 "A very fast, <br>\n"
 "\n"
-"The team %(site_name)s  <br> "
+"The team %site_name)s  <br> "
 
 #: templates/rent/emails/borrower_ask_email.txt:2
 msgid ""
@@ -8954,24 +9185,24 @@ msgid ""
 " L'équipe %(site_name)s\n"
 " \n"
 msgstr ""
-"Hello %(borrower)s,\n"
+"Hello % (borrower)s,\n"
 "\n"
-"we have well taken into account your rental application and just inform %"
+"we have well taken into account your rental application and just inform % "
 "(owner)s of your proposal.\n"
 "\n"
 "So here are the different elements that have been forwarded:\n"
 "\n"
-"Type: %(category)s\n"
-"Purpose: %(summary)s\n"
-"beginning of the lease: %(starting_at)s\n"
-"Duration of the lease: %(duration)s\n"
+"Type: % (category)s\n"
+"Purpose: % (summary)s\n"
+"beginning of the lease: % (starting_at)s\n"
+"Duration of the lease: % (duration)s\n"
 "\n"
 "you will be shortly informed(e) for his response. Reminder: your account "
 "will be charged only if the owner accepts the rental.\n"
 "\n"
 "Has very quickly,\n"
 "\n"
-"the team %(site_name)s"
+"the team %site_name)s"
 
 #: templates/rent/emails/borrower_ask_email_subject.txt:1
 msgid "Votre demande de location"
@@ -8990,7 +9221,7 @@ msgid ""
 "été transmis :<br>\n"
 "                           \t"
 msgstr ""
-"Hello %(borrower_name)s  <BR><BR>\n"
+"Hello % (borrower_name)s  <BR><BR>\n"
 "\n"
 "We have well taken into account your reservation request and just to inform "
 "the lessor. <BR>\n"
@@ -9019,15 +9250,15 @@ msgstr ""
 "Here are the coordinates of the lessor if you want to contact directly: <BR>\n"
 "\n"
 "\t<ul>\n"
-"\t\t\t\t\t\t\t\t<Li><Strong>Phone Number: </Strong>%(owner_phone)s  </Li>\n"
-"\t\t\t\t\t\t\t\t<Li><Strong>E-mail Address: </Strong>%(owner_email)s  </Li>\n"
+"\t\t\t\t\t\t\t\t<Li><Strong>Phone Number: </Strong>% (owner_phone)s  </Li>\n"
+"\t\t\t\t\t\t\t\t<Li><Strong>E-mail Address: </Strong>% (owner_email)s  </Li>\n"
 "\t\t\t\t\t\t\t</ul>\n"
 "\n"
 "Good rental! <BR><BR>\n"
 "\n"
 "A very fast, <BR>\n"
 "\n"
-"The team %(site_name)s  <BR> "
+"The team %site_name)s  <BR> "
 
 #: templates/rent/emails/borrower_ask_pro_email.txt:3
 msgid ""
@@ -9040,7 +9271,7 @@ msgid ""
 "\n"
 "Voici donc les différents éléments qui lui ont été transmis :\n"
 msgstr ""
-"Hello %(borrower_name)s,\n"
+"Hello % (borrower_name)s,\n"
 "\n"
 "we have well taken into account your reservation request and just to inform "
 "the lessor.\n"
@@ -9055,10 +9286,10 @@ msgid ""
 "Début de la location : %(starting_at)s\n"
 "Durée de la location : %(duration)s\n"
 msgstr ""
-"Type: %(category)s\n"
-"Purpose: %(summary)s\n"
-"beginning of the lease: %(starting_at)s\n"
-"Duration of the lease: %(duration)s"
+"Type: % (category)s\n"
+"Purpose: % (summary)s\n"
+"beginning of the lease: % (starting_at)s\n"
+"Duration of the lease: % (duration)s"
 
 #: templates/rent/emails/borrower_ask_pro_email.txt:20
 msgid ""
@@ -9079,15 +9310,15 @@ msgid ""
 msgstr ""
 "Here are the coordinates of the lessor if you want to contact directly: <BR>\n"
 "\n"
-"Phone Number: %(owner_phone)s\n"
-"email address: %(owner_email)s\n"
+"Phone Number: % (owner_phone)s\n"
+"email address: % (owner_email)s\n"
 "\n"
 "\n"
 "good rental!\n"
 "\n"
 "Has very quickly,\n"
 "\n"
-"the team %(site_name)s"
+"the team %site_name)s"
 
 #: templates/rent/emails/borrower_cancelation_to_borrower_email.html:5
 #: templates/rent/emails/borrower_cancelation_to_borrower_email_subject.txt:1
@@ -9110,7 +9341,7 @@ msgid ""
 "location suivante :<br>\n"
 "                           \t"
 msgstr ""
-"Hello %(borrower_name)s  <br><br>\n"
+"Hello % (borrower_name)s  <br><br>\n"
 "\n"
 "You expressed your desire to cancel the lease: <br>"
 
@@ -9130,7 +9361,7 @@ msgstr ""
 "has been canceled and therefore that no flow will not take place. <br><br>\n"
 "\n"
 "A very fast, <br>\n"
-"The team %(site_name)s  <br> "
+"The team %site_name)s  <br> "
 
 #: templates/rent/emails/borrower_cancelation_to_borrower_email.txt:2
 msgid ""
@@ -9151,21 +9382,21 @@ msgid ""
 " \n"
 "L'équipe %(site_name)s\n"
 msgstr ""
-"Hello %(username)s,\n"
+"Hello % (username)s,\n"
 "\n"
 "you have expressed your desire to cancel the rental:\n"
 "\n"
-"Type: %(category)s\n"
-"Purpose: %(summary)s\n"
-"beginning of the lease: %(starting_at)s\n"
-"Duration of the lease: %(duration)s\n"
+"Type: % (category)s\n"
+"Purpose: % (summary)s\n"
+"beginning of the lease: % (starting_at)s\n"
+"Duration of the lease: % (duration)s\n"
 "\n"
 "in accordance with your request, we can confirm that this rental has been "
 "canceled and therefore that no flow will take place.\n"
 "\n"
 "Has very quickly,\n"
 "\n"
-"the team %(site_name)s"
+"the team %site_name)s"
 
 #: templates/rent/emails/borrower_cancelation_to_owner_email.html:15
 msgid ""
@@ -9177,10 +9408,10 @@ msgid ""
 "effectuer la location. La location suivante est donc annulée :<br>\n"
 "                           \t"
 msgstr ""
-"Hello %(owner_name)s  <br><br>\n"
+"Hello % (owner_name)s  <br><br>\n"
 "\n"
-"Unfortunately, the tenant has decided to no longer perform the rental. The "
-"following rental is therefore canceled: <br>"
+"Unfortunately, the renter has decided not to proceed with the rental. The "
+"following rental is therefore cancelled: <br>"
 
 #: templates/rent/emails/borrower_cancelation_to_owner_email.html:24
 msgid ""
@@ -9193,7 +9424,7 @@ msgid ""
 msgstr ""
 "A very fast, <br>\n"
 "\n"
-"The team %(site_name)s  <br> "
+"The team %site_name)s  <br> "
 
 #: templates/rent/emails/borrower_cancelation_to_owner_email.txt:2
 msgid ""
@@ -9210,17 +9441,17 @@ msgid ""
 "\n"
 "L'équipe %(site_name)s\n"
 msgstr ""
-"Hello %(username)s,\n"
+"Hello % (username)s,\n"
 "\n"
-"Alas, the tenant has decided to retract. The following rental is therefore "
-"canceled:\n"
+"Unfortunately, the renter has decided to retract. The following rental is "
+"therefore cancelled:\n"
 "\n"
-"Type: %(category)s\n"
-"Purpose: %(summary)s\n"
-"beginning of the lease: %(starting_at)s\n"
-"Duration of the lease: %(duration)s\n"
+"Type: % (category)s\n"
+"Purpose: % (summary)s\n"
+"beginning of the lease: % (starting_at)s\n"
+"Duration of the lease: % (duration)s\n"
 "\n"
-"The team %(site_name)s"
+"The team % (site_name)s"
 
 #: templates/rent/emails/borrower_closed_email.html:4
 #: templates/rent/emails/owner_closed_email.html:5
@@ -9237,7 +9468,7 @@ msgid ""
 ":<br>\n"
 "                           \t"
 msgstr ""
-"Hello %(borrower_name)s  <br><br>\n"
+"Hello % (borrower_name)s  <br><br>\n"
 "\n"
 "The following booking has been closed: <br>"
 
@@ -9259,7 +9490,7 @@ msgstr ""
 "\n"
 "A very fast, <br>\n"
 "\n"
-"The team %(site_name)s  <br><br> "
+"The team %site_name)s  <br><br> "
 
 #: templates/rent/emails/borrower_closed_email.txt:2
 msgid ""
@@ -9275,15 +9506,15 @@ msgid ""
 " \n"
 "L'équipe %(site_name)s\n"
 msgstr ""
-"Hello %(username)s,\n"
+"Hello % (username)s,\n"
 "\n"
 "your tenancy was terminated.\n"
 "\n"
 "If you have any problems, we invite you to report the incident:\n"
 "\n"
-"%(protocol)s: // %(domain)s%(booking_url)s\n"
+"% (protocol)s: // % (domain)s% (booking_url)s\n"
 "\n"
-"The team %(site_name)s"
+"The team % (site_name)s"
 
 #: templates/rent/emails/borrower_closed_email_subject.txt:1
 #: templates/rent/emails/owner_closed_email_subject.txt:1
@@ -9305,7 +9536,7 @@ msgid ""
 ":<br>\n"
 "                           \t"
 msgstr ""
-"Hello %(borrower_name)s  <br><br>\n"
+"Hello % (borrower_name)s  <br><br>\n"
 "\n"
 "The booking suiviante has just been completed: <br>"
 
@@ -9331,7 +9562,7 @@ msgstr ""
 "(domain)s%(booking_url)s\">report the incident</a><br><br>\n"
 "A very fast, <br>\n"
 "\n"
-"The team %(site_name)s  <br><br> "
+"The team %site_name)s  <br><br> "
 
 #: templates/rent/emails/borrower_ended_email.txt:2
 msgid ""
@@ -9351,10 +9582,10 @@ msgid ""
 " \n"
 "L'équipe %(site_name)s\n"
 msgstr ""
-"Hello %(username)s,\n"
+"Hello % (username)s,\n"
 "\n"
-"the rental of the object %(summary)s, which began the %(starting_at)s for "
-"a duration of %(duration)s, has just finished.\n"
+"the rental of the object % (summary)s, which began the % (starting_at)s for "
+"a duration of % (duration)s, has just finished.\n"
 "\n"
 "We hope that everything was done according to your liking, and that you are "
 "satisfied with(e) of your rental.\n"
@@ -9362,9 +9593,9 @@ msgstr ""
 "If you have experienced any problem, please remember to let us know the "
 "problem:\n"
 "\n"
-"%(protocol)s: // %(domain)s%(booking_url)s\n"
+"% (protocol)s: // % (domain)s% (booking_url)s\n"
 "\n"
-"The team %(site_name)s"
+"The team % (site_name)s"
 
 #: templates/rent/emails/borrower_ended_email_subject.txt:1
 #: templates/rent/emails/owner_ended_email_subject.txt:1
@@ -9386,9 +9617,9 @@ msgid ""
 "pour la réservation suivante :<br>\n"
 "                           \t"
 msgstr ""
-"Hello %(borrower_name)s  <br><br>\n"
+"Hello % (borrower_name)s  <br><br>\n"
 "\n"
-"You have been charged to %(total_amount)s euro(s) for the following "
+"You have been charged to % (total_amount)s euro(s) for the following "
 "booking: <br>"
 
 #: templates/rent/emails/borrower_receipt_email.html:23
@@ -9407,7 +9638,7 @@ msgstr ""
 "\n"
 "A very fast, <br>\n"
 "\n"
-"The team %(site_name)s  <br> "
+"The team %site_name)s  <br> "
 
 #: templates/rent/emails/borrower_receipt_email.txt:2
 msgid ""
@@ -9427,18 +9658,18 @@ msgid ""
 "L'équipe %(site_name)s\n"
 "\n"
 msgstr ""
-"Hello %(borrower_name)s,\n"
+"Hello % (borrower_name)s,\n"
 "\n"
-"you have been charged to %(total_amount)s euros to the following booking:\n"
+"you have been charged to % (total_amount)s euros to the following booking:\n"
 "\n"
-"Type: %(category)s\n"
-"Purpose: %(summary)s\n"
-"beginning of the lease: %(starting_at)s\n"
-"Duration of the lease: %(duration)s\n"
+"Type: % (category)s\n"
+"Purpose: % (summary)s\n"
+"beginning of the lease: % (starting_at)s\n"
+"Duration of the lease: % (duration)s\n"
 "\n"
 "good rental!\n"
 "\n"
-"The team %(site_name)s"
+"The team %site_name)s"
 
 #: templates/rent/emails/borrower_recovery_email.html:2
 msgid ""
@@ -9462,22 +9693,22 @@ msgid ""
 "\n"
 " <p>L'équipe %(site_name)s</p>\n"
 msgstr ""
-"<p>Hello %(borrower)s, </p>\n"
+"<p>Hello % (borrower)s, </p>\n"
 "\n"
 "<p>We note that you are not go until the end of the following booking: </p>\n"
 "\n"
 "<ul>\n"
-"<li><strong>Type: </strong>%(category)s  </li>\n"
-"<li><strong>Purpose: </strong>%(summary)s  </li>\n"
-"<li><strong>Beginning of the lease: </strong>%(starting_at)s  </li>\n"
-"<li><strong>Duration of the lease: </strong>%(duration)s  </li>\n"
+"<li><strong>Type: </strong>% (category)s  </li>\n"
+"<li><strong>Purpose: </strong>% (summary)s  </li>\n"
+"<li><strong>Beginning of the lease: </strong>% (starting_at)s  </li>\n"
+"<li><strong>Duration of the lease: </strong>% (duration)s  </li>\n"
 "</ul>\n"
 "\n"
 "<p>To resume your reservation, you can simply click on the link below: </p>\n"
 "\n"
-"<p><a href=\"%(preapproval_url)s\">%(Preapproval_url)s</a></p>\n"
+"<p><a href=\"%(preapproval_url)s\">% (Preapproval_url)s</a></p>\n"
 "\n"
-"<p>The team %(site_name)s  </p>"
+"<p>The team %site_name)s  </p>"
 
 #: templates/rent/emails/borrower_recovery_email.txt:2
 msgid ""
@@ -9499,20 +9730,20 @@ msgid ""
 "\n"
 "L'équipe %(site_name)s\n"
 msgstr ""
-"Hello %(borrower)s,\n"
+"Hello % (borrower)s,\n"
 "\n"
 "we note that you do not go until the end of the following booking:\n"
 "\n"
-"Type: %(category)s\n"
-"Purpose: %(summary)s\n"
-"beginning of the lease: %(starting_at)s\n"
-"Duration of the lease: %(duration)s\n"
+"Type: % (category)s\n"
+"Purpose: % (summary)s\n"
+"beginning of the lease: % (starting_at)s\n"
+"Duration of the lease: % (duration)s\n"
 "\n"
 "to resume your reservation, you can simply click the link below:\n"
 "\n"
-"%(preapproval_url)s\n"
+"% (preapproval_url)s\n"
 "\n"
-"The team %(site_name)s"
+"The team % (site_name)s"
 
 #: templates/rent/emails/borrower_recovery_email_subject.txt:1
 msgid "Terminer votre réservation"
@@ -9533,7 +9764,7 @@ msgid ""
 "proposition de réservation suivante :<br>\n"
 "                           \t"
 msgstr ""
-"Hello %(borrower_name)s  <br><br>\n"
+"Hello % (borrower_name)s  <br><br>\n"
 "\n"
 "Unfortunately, the owner has refused your proposal following booking: <br>"
 
@@ -9553,14 +9784,14 @@ msgid ""
 "                            "
 msgstr ""
 "Find all of the objects in this category on <a href=\"%(protocol)s://%"
-"(domain)s%(category_url)s\">%(domain)s</a>. <br>\n"
+"(domain)s%(category_url)s\">% (domain)s</a>. <br>\n"
 "\n"
-"Also please don't hesitate to call us at 0826 800,200 (0.15 € /min) for that "
-"a counselor e-rented you help. <br><br>\n"
+"Also please don't hesitate to call us at 0826 800,200 (0.15 € /min) for help "
+"from an e-loue assistant. <br><br>\n"
 "\n"
-"Has very quickly <br>\n"
+"Regards <br>\n"
 "\n"
-"The team %(site_name)s  <br> "
+"The team %site_name)s  <br>"
 
 #: templates/rent/emails/borrower_rejection_email.txt:2
 msgid ""
@@ -9574,20 +9805,20 @@ msgid ""
 "Début de la location : %(starting_at)s \n"
 "Durée de la location : %(duration)s\n"
 msgstr ""
-"Hello %(borrower_name)s,\n"
+"Hello % (borrower_name)s,\n"
 "\n"
 "unfortunately, the owner has refused your lease proposal:\n"
 "\n"
-"Type: %(category)s\n"
-"Purpose: %(summary)s\n"
-"beginning of the lease: %(starting_at)s\n"
-"Duration of the lease: %(duration)s"
+"Type: % (category)s\n"
+"Purpose: % (summary)s\n"
+"beginning of the lease: % (starting_at)s\n"
+"Duration of the lease: % (duration)s"
 
 #: templates/rent/emails/borrower_rejection_email.txt:14
 #: templates/rent/emails/owner_cancelation_to_borrower_email.txt:16
 msgid ""
 "Cependant, d’autres objets similaires peuvent peut-être vous intéresser :"
-msgstr "Meanwhile, other items might interest you :"
+msgstr "Meanwhile, other similar items might interest you :"
 
 #: templates/rent/emails/borrower_rejection_email.txt:23
 msgid ""
@@ -9600,9 +9831,9 @@ msgid ""
 msgstr ""
 "Find all of the objects in this category on e-loue.com:\n"
 "\n"
-"%(protocol)s: // %(domain)s%(category_url)s\n"
+"% (protocol)s: // % (domain)s% (category_url)s\n"
 "\n"
-"The team %(site_name)s"
+"The team %site_name)s"
 
 #: templates/rent/emails/comment_email.html:5
 msgid "Nouveau commentaire sur votre réservation"
@@ -9622,7 +9853,7 @@ msgstr ""
 ";font-weight: normal;line-height: 100%%;margin-top: 0;margin-right: 0"
 ";margin-bottom: 10px;margin-left: 0;text-align: left; font-style: italic;\">% "
 "(Author_username)s  </h1>\n"
-"%(Comment_content)s "
+"% (Comment_content)s "
 
 #: templates/rent/emails/comment_email.html:50
 msgid ""
@@ -9655,7 +9886,7 @@ msgid ""
 msgstr ""
 "A very fast, <br>\n"
 "\n"
-"The team %(site_name)s"
+"The team %site_name)s"
 
 #: templates/rent/emails/comment_email.txt:2
 msgid ""
@@ -9674,17 +9905,17 @@ msgid ""
 "dessous :\n"
 "%(protocol)s://%(domain)s%(booking_url)s\n"
 msgstr ""
-"Hello %(first_name)s %(last_name)s,\n"
+"Hello % (first_name)s % (last_name)s,\n"
 "\n"
-"%(author_first_name )s %(author_last_name)s left you a comment:\n"
+"% (author_first_name )s % (author_last_name)s left you a comment:\n"
 "\n"
-"Evaluation: %(note)s\n"
+"Evaluation: % (note)s\n"
 "\n"
-"Comment: </strong>%(comment_content)s\n"
+"Comment: </strong>% (comment_content)s\n"
 "\n"
 "\n"
 "You can see the comment on your dashboard by clicking below:\n"
-"%(protocol)s: // %(domain)s%(booking_url)s"
+"% (protocol)s: // % (domain)s% (booking_url)s"
 
 #: templates/rent/emails/comment_email.txt:28
 msgid ""
@@ -9696,11 +9927,11 @@ msgid ""
 msgstr ""
 "Soon,\n"
 "\n"
-"the team %(site_name)s"
+"the team %site_name)s"
 
 #: templates/rent/emails/comment_email_subject.txt:1
 msgid "Nouveau commentaire sur e-loue"
-msgstr "New comment on e-rented"
+msgstr "New comment on e-loue"
 
 #: templates/rent/emails/owner_acceptation_email.html:14
 msgid ""
@@ -9712,7 +9943,7 @@ msgid ""
 "suivante :<br>\n"
 "                           \t"
 msgstr ""
-"Hello %(owner_name)s  <br><br>\n"
+"Hello % (owner_name)s  <br><br>\n"
 "\n"
 "You come to accept the lease proposal: <br>"
 
@@ -9727,10 +9958,10 @@ msgid ""
 "\t\t\t\t\t\t\t</ul>\n"
 "\t\t\t\t\t\t\t"
 msgstr ""
-"Here is the information to contact the tenant: <br>\n"
+"Here is the information to contact the renter: <br>\n"
 "<ul>\n"
-"\t\t\t\t\t\t\t\t<li><strong>Phone Number: </strong>%(borrower_phone)s  </li>\n"
-"\t\t\t\t\t\t\t\t<li><strong>E-mail Address: </strong>%(borrower_email)s  </li>\n"
+"\t\t\t\t\t\t\t\t<li><strong>Phone Number: </strong>% (borrower_phone)s  </li>\n"
+"\t\t\t\t\t\t\t\t<li><strong>E-mail Address: </strong>% (borrower_email)s  </li>\n"
 "\t\t\t\t\t\t\t</ul>"
 
 #: templates/rent/emails/owner_acceptation_email.html:36
@@ -9746,13 +9977,13 @@ msgid ""
 "                            L'équipe %(site_name)s<br><br>\n"
 "                            "
 msgstr ""
-"So that you only need to contact %(borrower_name)s to enjoy your % "
+"So that you only need to contact % (borrower_name)s to enjoy your % "
 "(summary)s. <br>\n"
 "\n"
 "\n"
 "Good rental! <br><br>\n"
 "\n"
-"The team %(site_name)s  <br><br> "
+"The team %site_name)s  <br><br> "
 
 #: templates/rent/emails/owner_acceptation_email.txt:1
 msgid ""
@@ -9777,24 +10008,24 @@ msgid ""
 "\n"
 "L'équipe %(site_name)s\n"
 msgstr ""
-"Hello %(owner_name)s,\n"
+"Hello % (owner_name)s,\n"
 "\n"
 "you have just accepted the lease proposal:\n"
 "\n"
-"Type: %(category)s\n"
-"Purpose: %(summary)s\n"
-"beginning of the lease: %(starting_at)s\n"
-"Duration of the lease: %(duration)s\n"
+"Type: % (category)s\n"
+"Purpose: % (summary)s\n"
+"beginning of the lease: % (starting_at)s\n"
+"Duration of the lease: % (duration)s\n"
 "\n"
 "you will find in attachment your rental contract. So that you only need to "
-"contact %(borrower_name)s for the benefit of your %(summary)s.\n"
+"contact % (borrower_name)s for the benefit of your % (summary)s.\n"
 "\n"
-"Phone Number: %(borrower_phone)s\n"
-"email address: %(borrower_email)s\n"
+"Phone Number: % (borrower_phone)s\n"
+"email address: % (borrower_email)s\n"
 "\n"
 "good rental!\n"
 "\n"
-"The team %(site_name)s"
+"The team %site_name)s"
 
 #: templates/rent/emails/owner_ask_email.html:16
 #: templates/rent/emails/owner_ask_pro_email.html:15
@@ -9808,9 +10039,9 @@ msgid ""
 "                            Voici les détails de la réservation :<br>\n"
 "                           \t"
 msgstr ""
-"Hello %(owner_name)s, <br><br>\n"
+"Hello % (owner_name)s, <br><br>\n"
 "\n"
-"%(Borrower)s wishes to rent one of your objects. <br>\n"
+"% (Borrower)s wishes to rent one of your objects. <br>\n"
 "Here are the details of the reservation: <br>"
 
 #: templates/rent/emails/owner_ask_email.html:27
@@ -9850,7 +10081,7 @@ msgstr ""
 "\n"
 "A very fast, <br>\n"
 "\n"
-"The team %(site_name)s  <br> "
+"The team %site_name)s  <br> "
 
 #: templates/rent/emails/owner_ask_email.txt:2
 msgid ""
@@ -9873,22 +10104,22 @@ msgid ""
 "L'équipe %(site_name)s\n"
 "\n"
 msgstr ""
-"Hello %(owner)s,\n"
+"Hello % (owner)s,\n"
 "\n"
-"%(borrower)s wishes to rent one of your objects. Here are the details of "
+"% (borrower)s wishes to rent one of your objects. Here are the details of "
 "his proposal:\n"
 "\n"
-"Type: %(category)s\n"
-"Purpose: %(summary)s\n"
-"beginning of the lease: %(starting_at)s\n"
-"Duration of the lease: %(duration)s\n"
+"Type: % (category)s\n"
+"Purpose: % (summary)s\n"
+"beginning of the lease: % (starting_at)s\n"
+"Duration of the lease: % (duration)s\n"
 "\n"
 "to respond to him and/or accept this rental, you will need to go to the tab "
 "of your account proposals e-loue.com:\n"
 "\n"
-"%(protocol)s: // %(domain)s%(booking_url)s\n"
+"% (protocol)s: // % (domain)s% (booking_url)s\n"
 "\n"
-"The team %(site_name)s"
+"The team % (site_name)s"
 
 #: templates/rent/emails/owner_ask_email_subject.txt:1
 msgid "Demande de location de l'un de vos objets !"
@@ -9914,13 +10145,13 @@ msgstr ""
 "Here are the coordinates of the client for the contact quickly: <BR>\n"
 "\n"
 "<ul>\n"
-"\t\t\t\t\t\t\t\t<Li><Strong>Phone Number: </Strong>%(borrower_phone)s  </Li>\n"
-"\t\t\t\t\t\t\t\t<Li><Strong>E-mail Address: </Strong>%(borrower_email)s  </Li>\n"
+"\t\t\t\t\t\t\t\t<Li><Strong>Phone Number: </Strong>% (borrower_phone)s  </Li>\n"
+"\t\t\t\t\t\t\t\t<Li><Strong>E-mail Address: </Strong>% (borrower_email)s  </Li>\n"
 "\t\t\t\t\t\t\t</ul>\n"
 "\n"
 "A very fast, <BR>\n"
 "\n"
-"The team %(site_name)s  <BR> "
+"The team %site_name)s  <BR> "
 
 #: templates/rent/emails/owner_ask_pro_email.txt:2
 msgid ""
@@ -9943,22 +10174,22 @@ msgid ""
 "L'équipe %(site_name)s\n"
 "\n"
 msgstr ""
-"Hello %(owner)s,\n"
+"Hello % (Owner)s,\n"
 "\n"
-"%(borrower)s wishes to rent one of your objects. Here are the details of "
+"% (borrower)s wishes to rent one of your objects. Here are the details of "
 "his proposal:\n"
 "\n"
-"Type: %(category)s\n"
-"Purpose: %(summary)s\n"
-"beginning of the lease: %(starting_at)s\n"
-"Duration of the lease: %(duration)s\n"
+"Type: % (category)s\n"
+"Purpose: % (summary)s\n"
+"beginning of the lease: % (starting_at)s\n"
+"Duration of the lease: % (duration)s\n"
 "\n"
 "Here are the coordinates of the client for the quickly contact:\n"
 "\n"
-"Phone Number: %(borrower_phone)s\n"
-"email address: %(borrower_email)s\n"
+"Phone Number: % (borrower_phone)s\n"
+"email address: % (borrower_email)s\n"
 "\n"
-"The team %(site_name)s"
+"The team % (site_name)s"
 
 #: templates/rent/emails/owner_cancelation_to_borrower_email.html:14
 msgid ""
@@ -9970,7 +10201,7 @@ msgid ""
 "décidé d'annuler la location suivante :<br>\n"
 "                           \t"
 msgstr ""
-"Hello %(borrower_name)s  <br><br>\n"
+"Hello % (borrower_name)s  <br><br>\n"
 "\n"
 "Despite his previous agreement, the owner has decided to cancel the lease: "
 "<br>"
@@ -9991,14 +10222,14 @@ msgid ""
 "                            "
 msgstr ""
 "Find all of the objects in this category on <a href=\"%(protocol)s://%"
-"(domain)s%(category_url)s\">%(domain)s</a>. <br>\n"
+"(domain)s%(category_url)s\">% (domain)s</a>. <br>\n"
 "\n"
-"Also please don't hesitate to call us at 0826 800,200 (0.15 € /min) for that "
-"a counselor e-rented you help. <br>\n"
+"Also please don't hesitate to call us at 0826 800,200 (0.15 € /min) for help "
+"from an e-loue assistant. <br>\n"
 "\n"
-"A very fast, <br>\n"
+"Regards, <br>\n"
 "\n"
-"The team %(site_name)s  <br> "
+"The team %site_name)s  <br>"
 
 #: templates/rent/emails/owner_cancelation_to_borrower_email.txt:2
 msgid ""
@@ -10015,14 +10246,14 @@ msgid ""
 " \n"
 "Nous vous confirmons qu'aucun débit n'aura lieu.\n"
 msgstr ""
-"Hello %(username)s,\n"
+"Hello % (username)s,\n"
 "\n"
 "despite his previous agreement, the owner has decided to cancel the rental:\n"
 "\n"
-"Type: %(category)s\n"
-"Purpose: %(summary)s\n"
-"beginning of the lease: %(starting_at)s\n"
-"Duration of the lease: %(duration)s\n"
+"Type: % (category)s\n"
+"Purpose: % (summary)s\n"
+"beginning of the lease: % (starting_at)s\n"
+"Duration of the lease: % (duration)s\n"
 "\n"
 "We confirm to you that no flow will take place."
 
@@ -10035,11 +10266,11 @@ msgid ""
 " \n"
 "L'équipe %(site_name)s\n"
 msgstr ""
-"Find all of the objects in this category on %(domain)s:\n"
+"Find all of the objects in this category on % (domain)s:\n"
 "\n"
-"%(protocol)s: // %(domain)s%(category_url)s\n"
+"% (protocol)s: // % (domain)s% (category_url)s\n"
 "\n"
-"The team %(site_name)s"
+"The team %site_name)s"
 
 #: templates/rent/emails/owner_cancelation_to_owner_email.html:15
 msgid ""
@@ -10051,7 +10282,7 @@ msgid ""
 "location suivante :<br>\n"
 "                           \t"
 msgstr ""
-"Hello %(owner_name)s  <br><br>\n"
+"Hello % (owner_name)s  <br><br>\n"
 "\n"
 "You expressed your desire to cancel the lease: <br>"
 
@@ -10072,7 +10303,7 @@ msgstr ""
 "\n"
 "A very fast, <br>\n"
 "\n"
-"The team %(site_name)s  <br> "
+"The team %site_name)s  <br> "
 
 #: templates/rent/emails/owner_cancelation_to_owner_email.txt:2
 msgid ""
@@ -10091,19 +10322,19 @@ msgid ""
 " \n"
 "L'équipe %(site_name)s\n"
 msgstr ""
-"Hello %(username)s,\n"
+"Hello % (username)s,\n"
 "\n"
 "you have expressed your desire to cancel the rental:\n"
 "\n"
-"Type: %(category)s\n"
-"Purpose: %(summary)s\n"
-"beginning of the lease: %(starting_at)s\n"
-"Duration of the lease: %(duration)s\n"
+"Type: % (category)s\n"
+"Purpose: % (summary)s\n"
+"beginning of the lease: % (starting_at)s\n"
+"Duration of the lease: % (duration)s\n"
 "\n"
 "in accordance with your request, we can confirm that this rental has been "
 "canceled.\n"
 "\n"
-"The team %(site_name)s"
+"The team %site_name)s"
 
 #: templates/rent/emails/owner_closed_email.html:15
 msgid ""
@@ -10115,7 +10346,7 @@ msgid ""
 ":<br>\n"
 "                           \t"
 msgstr ""
-"Hello %(owner_name)s  <br><br>\n"
+"Hello % (owner_name)s  <br><br>\n"
 "\n"
 "The following booking has been closed: <br>"
 
@@ -10125,7 +10356,7 @@ msgid ""
 "\n"
 "                            L'équipe %(site_name)s<br><br>\n"
 "                            "
-msgstr "The team %(site_name)s  <br><br> "
+msgstr "The team %site_name)s  <br><br> "
 
 #: templates/rent/emails/owner_closed_email.txt:2
 msgid ""
@@ -10140,15 +10371,15 @@ msgid ""
 " \n"
 "L'équipe %(site_name)s\n"
 msgstr ""
-"Hello %(username)s,\n"
+"Hello % (username)s,\n"
 "\n"
-"you just close the rental of the object %(summary)s, which began the % "
-"(starting_at)s for a duration of %(duration)s day(s).\n"
+"you just close the rental of the object % (summary)s, which began the % "
+"(starting_at)s for a duration of % (duration)s day(s).\n"
 "\n"
 "Of course, if you encounter any difficulty, please do not hesitate to "
 "contact us.\n"
 "\n"
-"The team %(site_name)s"
+"The team %site_name)s"
 
 #: templates/rent/emails/owner_ended_email.html:14
 msgid ""
@@ -10159,7 +10390,7 @@ msgid ""
 "                            La réservation vient de se terminer :<br>\n"
 "                           \t"
 msgstr ""
-"Hello %(owner_name)s  <br><br>\n"
+"Hello % (owner_name)s  <br><br>\n"
 "\n"
 "The reservation has just been completed: <br>"
 
@@ -10187,7 +10418,7 @@ msgstr ""
 "\n"
 "A very fast, <br>\n"
 "\n"
-"The team %(site_name)s  <br> "
+"The team %site_name)s  <br> "
 
 #: templates/rent/emails/owner_ended_email.txt:2
 msgid ""
@@ -10207,20 +10438,20 @@ msgid ""
 "\n"
 "L'équipe %(site_name)s\n"
 msgstr ""
-"Hello %(username)s,\n"
+"Hello % (username)s,\n"
 "\n"
-"the rental of the object %(summary)s, which began the %(starting_at)s for "
-"a duration of %(duration)s, has just finished.\n"
+"the rental of the object % (summary)s, which began the % (starting_at)s for "
+"a duration of % (duration)s, has just finished.\n"
 "\n"
 "We hope that everything was done according to your convenience and you "
-"remember that you need you connect on your account %(site_name)s to wrap up "
+"remember that you need you connect on your account %site_name)s to wrap up "
 "this rental:\n"
 "\n"
-"%(protocol)s: // %(domain)s%(booking_url)s\n"
+"% (protocol)s: // % (domain)s% (booking_url)s\n"
 "\n"
 "once this step done, you will receive your payment.\n"
 "\n"
-"The team %(site_name)s"
+"The team %site_name)s"
 
 #: templates/rent/emails/owner_receipt_email.html:4
 msgid "Crédit du montant de votre réservation"
@@ -10236,9 +10467,9 @@ msgid ""
 "pour la réservation suivante :<br>\n"
 "                           \t"
 msgstr ""
-"Hello %(owner_name)s  <br><br>\n"
+"Hello % (owner_name)s  <br><br>\n"
 "\n"
-"You have been credited with %(net_price)s euros to the following booking: "
+"You have been credited with % (net_price)s euros to the following booking: "
 "<br>"
 
 #: templates/rent/emails/owner_receipt_email.html:23
@@ -10246,7 +10477,7 @@ msgid ""
 "\n"
 "\n"
 "                            Ce montant correspond au montant total de la "
-"réservation (%(total_amount)s&euro;) moins la commission e-loue de 20%%(%"
+"réservation (%(total_amount)s&euro;) moins la commission e-loue de 20%% (%"
 "(commission)s&euro;)\n"
 "\n"
 "                           \tBonne location !<br><br>\n"
@@ -10257,13 +10488,13 @@ msgid ""
 "                            "
 msgstr ""
 "This amount corresponds to the total amount of the reservation ( % "
-"(total_amount)s€) less the commission e-leased from 20%%( %(commission)s€)\n"
+"(total_amount)s€) less the commission e-leased from 20%% ( % (commission)s€)\n"
 "\n"
 "\tGood rental! <br><br>\n"
 "\n"
 "A very fast, <br>\n"
 "\n"
-"The team %(site_name)s  <br> "
+"The team %site_name)s  <br> "
 
 #: templates/rent/emails/owner_receipt_email.txt:1
 msgid ""
@@ -10279,32 +10510,32 @@ msgid ""
 "Durée de la location : %(duration)s\n"
 "\n"
 "Ce montant correspond au montant total de la réservation (%(total_amount)s) "
-"moins la commission e-loue de 20%%(%(commission)s)\n"
+"moins la commission e-loue de 20%% (%(commission)s)\n"
 "\n"
 "A bientôt,\n"
 "\n"
 "L'équipe %(site_name)s\n"
 "\n"
 msgstr ""
-"Hello %(owner_name)s,\n"
+"Hello % (owner_name)s,\n"
 "\n"
-"you have been credited with %(net_price)s euros to the following booking:\n"
+"you have been credited with % (net_price)s euros to the following booking:\n"
 "\n"
-"Type: %(category)s\n"
-"Purpose: %(summary)s\n"
-"beginning of the lease: %(starting_at)s\n"
-"Duration of the lease: %(duration)s\n"
+"Type: % (category)s\n"
+"Purpose: % (summary)s\n"
+"beginning of the lease: % (starting_at)s\n"
+"Duration of the lease: % (duration)s\n"
 "\n"
 "This amount corresponds to the total amount of the reservation ( % "
-"(total_amount)s) less the commission e-rented 20%%( %(commission)s)\n"
+"(total_amount)s) less the commission e-rented 20%% ( % (commission)s)\n"
 "\n"
 "has soon,\n"
 "\n"
-"the team %(site_name)s"
+"the team % (site_name)s"
 
 #: templates/rent/emails/owner_receipt_email_subject.txt:1
 msgid "Facture e-loue"
-msgstr "Invoice e-rented"
+msgstr "e-loue invoice"
 
 #: templates/rent/emails/partials/booking_details_email.html:3
 msgid ""
@@ -10357,7 +10588,7 @@ msgstr ""
 "<td style=\"border-left: 1px solid #DDD; padding: 8px; line-height: 18px; "
 "text-align: left; vertical-align: top;\">\n"
 "               <a href=\"%(protocol)s://%(domain)s%(booking_url)s\" "
-"style=\"color: #6EB924;\">%(Summary)s</a>\n"
+"style=\"color: #6EB924;\">% (Summary)s</a>\n"
 "               <a href=\"%(protocol)s://%(domain)s%(booking_url)s\" "
 "style=\"color: #6EB924; font-weight: normal; float: right; font-size: 12px;\"> "
 "(see the detail)</a>\n"
@@ -10368,21 +10599,21 @@ msgstr ""
 "align: top; border-top: 1px solid #DDD;\">Beginning </th>\n"
 "<td style=\"border-left: 1px solid #DDD; padding: 8px; line-height: 18px; "
 "text-align: left; vertical-align: top; border-top: 1px solid #DDD; text-"
-"align: center;\">%(Starting_at)s  </td>\n"
+"align: center;\">% (Starting_at)s  </td>\n"
 "</tr>\n"
 "<tr>\n"
 "<th style=\"padding: 8px; line-height: 18px; text-align: left; vertical-"
 "align: top; border-top: 1px solid #DDD;\">End </th>\n"
 "<td style=\"border-left: 1px solid #DDD; padding: 8px; line-height: 18px; "
 "text-align: left; vertical-align: top; border-top: 1px solid #DDD; text-"
-"align: center;\">%(Ended_at)s  </td>\n"
+"align: center;\">% (Ended_at)s  </td>\n"
 "</tr>\n"
 "<tr>\n"
 "<th style=\"padding: 8px; line-height: 18px; text-align: left; vertical-"
 "align: top; border-top: 1px solid #DDD;\">Amount </th>\n"
 "<td style=\"border-left: 1px solid #DDD;padding: 8px; line-height: 18px; "
 "text-align: left; vertical-align: top; border-top: 1px solid #DDD; text-"
-"align: center;\"><b>%(Total_amount)s  </b></td>\n"
+"align: center;\"><b>% (Total_amount)s  </b></td>\n"
 "</tr>\n"
 "</tbody>\n"
 "</table>"
@@ -10418,15 +10649,15 @@ msgstr "Stocker Entre Particuliers"
 
 #: templates/shiseido/base.html:30
 msgid " Bienvenue, %(first_name)s !"
-msgstr " Welcome, %(first_name)s!"
+msgstr " Welcome, % (first_name)s!"
 
 #: templates/shiseido/base.html:32
 msgid " Bienvenue, %(username)s !"
-msgstr " Welcome, %(username)s!"
+msgstr " Welcome, % (username)s!"
 
 #: templates/shiseido/index.html:83
 msgid "Avec les garanties e-loue, louez en toute sérénité !"
-msgstr "With the guarantees e-leased, lease in any serenity!"
+msgstr "Stress-free rental with the e-loue guarantees!"
 
 #: templates/shiseido/index.html:91
 msgid ""
@@ -10440,17 +10671,13 @@ msgstr ""
 "your items.</p>\n"
 "\t\t\t\t\t\t"
 
-#: templates/shiseido/index.html:135
-msgid "Ils parlent de nous !"
-msgstr "They talk about us !"
-
 #: templates/shiseido/index.html:143
 msgid "Rejoignez notre communauté"
 msgstr "Join our community"
 
 #: templates/shiseido/index.html:148
 msgid "Devenez fan<br>sur Facebook"
-msgstr "Become fan<br>on Facebook"
+msgstr "Become a fan<br>on Facebook"
 
 #: templates/shiseido/index.html:154
 msgid "Suivez-nous<br>sur Twitter"
