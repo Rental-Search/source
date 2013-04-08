@@ -47,6 +47,7 @@ def get_analytics_event_references(event_action, event_label):
 
 	return metrics, dimensions, filters	
 
+
 #Products resources
 class ProductResource(ModelResource):
 	category = fields.ToOneField('eloue.proapp.api.resources.CategoryResource', 'category', related_name='categories', full=True)
@@ -130,9 +131,8 @@ class PatronResource(ModelResource):
 
 
 class ShopResource(ModelResource):
-	#opening_times = fields.ToOneField('eloue.proapp.api.resources.OpeningTimesResource', 'patron', full=True)
-	addresses = fields.ToManyField('eloue.proapp.api.resources.AddressResource', 'addresses', full=True)
-	phones = fields.ToManyField('eloue.proapp.api.resources.PhoneNumberResource', 'phones', full=True)
+	default_address = fields.ToOneField('eloue.proapp.api.resources.AddressResource', 'default_address', full=True, null=True)
+	default_number = fields.ToOneField('eloue.proapp.api.resources.PhoneNumberResource', 'default_number', full=True, null=True)
 
 	class Meta:
 		queryset = Patron.objects.all()
@@ -145,15 +145,6 @@ class ShopResource(ModelResource):
 
 	def apply_authorization_limits(self, request, object_list):
 		return object_list.filter(pk=request.user.pk)
-
-	
-	def hydrate(self, bundle):
-		bundle.data['addresses'][0]['patron'] = bundle.data['resource_uri']
-
-		print bundle.data['addresses']
-
-		return bundle
-
 
 
 class OpeningTimesResource(ModelResource):
@@ -169,10 +160,8 @@ class OpeningTimesResource(ModelResource):
 		return object_list.filter(pk=request.user.pk)
 
 
-
 class AddressResource(ModelResource):
-
-	patron = fields.ToOneField('eloue.proapp.api.resources.ShopResource', 'patron', full=False, null=False)
+	patron = fields.ToOneField('eloue.proapp.api.resources.ShopResource', 'patron')
 
 	class Meta:
 		queryset = Address.objects.all()
@@ -183,11 +172,9 @@ class AddressResource(ModelResource):
 		authentication = SessionAuthentication()
 		authorization = Authorization()
 
-	#def apply_authorization_limits(self, request, object_list):
-	#	return object_list.filter(patron=request.user)
-
 
 class PhoneNumberResource(ModelResource):
+	patron = fields.ToOneField('eloue.proapp.api.resources.ShopResource', 'patron')
 
 	class Meta:
 		queryset = PhoneNumber.objects.all()
@@ -197,9 +184,6 @@ class PhoneNumberResource(ModelResource):
 		include_resource_uri = True
 		authentication = SessionAuthentication()
 		authorization = Authorization()
-
-	#def apply_authorization_limits(self, request, object_list):
-	#	return object_list.filter(patron=request.user)
 
 
 class SubscriptionResource(ModelResource):

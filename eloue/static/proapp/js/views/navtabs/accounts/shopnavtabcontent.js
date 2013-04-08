@@ -10,24 +10,27 @@ app.ShopNavTabContentView = app.AccountsNavTabContentView.extend({
 	model: app.ShopModel,
 
 	serializeDataObject: function() {
-		data = this.$el.children('form').serializeObject();
+		var data = this.$el.children('form').serializeObject();
 
-		return {
-			about: data.about,
-			addresses: [
-				{	
+		var object = {
+				about: data.about,
+				default_address: {	
 					address1: data.address1,
 					city: data.city,
 					zipcode: data.zipcode,
-				}
-			],
-			phones: [
-				{
+					patron: this.model.toJSON().resource_uri,
+				},
+				default_number: {
 					number: data.number,
-				}
-			],
-			company_name: data.company_name,
-			url: data.url
-		};
+					patron: this.model.toJSON().resource_uri,
+				},
+				company_name: data.company_name,
+				url: data.url
+			};
+
+		if ( !_.isNull(shop.toJSON().default_address) ) object.default_address.resource_uri = shop.toJSON().default_address.resource_uri;
+		if ( !_.isNull(shop.toJSON().default_number) ) object.default_number.resource_uri = shop.toJSON().default_number.resource_uri;
+
+		return object;
 	}
 });

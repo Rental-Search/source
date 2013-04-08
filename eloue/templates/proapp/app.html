@@ -172,15 +172,15 @@
     						</div>
     						<div class="control-group">
     							<label>Numéro de téléphone</label>
-    							<input type="text" placeholder="Numéro de téléphone" id="id_number" name="number" value="<%= model.phones[0].number %>"  class="span5">
+    							<input type="text" placeholder="Numéro de téléphone" id="id_number" name="number" value="<% if (model.default_number) { %><%= model.default_number.number %> <% } %>"  class="span5">
     						</div>
     						<div class="control-group">
     							<label>Adresse</label>
-    							<input type="text" placeholder="Rue" id="id_address1" name="address1" value="<%= model.addresses[0].address1 %>" class="span5">
+    							<input type="text" placeholder="Rue" id="id_address1" name="address1" value="<% if (model.default_address) { %><%= model.default_address.address1 %> <% } %>" class="span5">
     						</div>
     						<div class="control-group controls-row">
-    							<input type="text" placeholder="Code postal" id="id_zipcode" name="zipcode" value="<%= model.addresses[0].zipcode %>" class="span2">
-    							<input type="text" placeholder="Ville" id="id_city" name="city" value="<%= model.addresses[0].city %>" class="span3">
+    							<input type="text" placeholder="Code postal" id="id_zipcode" name="zipcode" value="<% if (model.default_address) { %><%= model.default_address.zipcode %><% } %>" class="span2">
+    							<input type="text" placeholder="Ville" id="id_city" name="city" value="<% if (model.default_address) { %><%= model.default_address.city %><% } %>" class="span3">
     						</div>
     						<div class="control-group">
     							<label for="id_about">A propos de l&#145;entreprise</label>
