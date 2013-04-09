@@ -28,6 +28,7 @@ from django.http import Http404, HttpResponseRedirect, HttpResponseBadRequest
 from haystack.query import SearchQuerySet
 from django.http import HttpResponse
 from eloue.decorators import ownership_required, secure_required, mobify
+from eloue.utils import cache_key
 from eloue.accounts.forms import EmailAuthenticationForm
 from eloue.accounts.models import Patron
 
@@ -76,14 +77,14 @@ def homepage(request):
     except KeyError:
         last_joined = patron_search.order_by('-date_joined_date')
       
-    categories_list = cache.get('home_categories_list')
+    categories_list = cache.get(cache_key('home_categories_list', Site.objects.get_current()))
 
     if categories_list is None:
         categories_list = {}
         parent_categories = Category.on_site.filter(parent__isnull=True).exclude(slug='divers')
         for cat in parent_categories:
             categories_list[cat] = list(cat.get_leafnodes().annotate(num_products=Count('products')).order_by('-num_products')[:5])
-        cache.set('home_categories_list', categories_list, 10*60)
+        cache.set(cache_key('home_categories_list', Site.objects.get_current()), categories_list, 10*60)
 
     return render_to_response(
         template_name='index.html', 
