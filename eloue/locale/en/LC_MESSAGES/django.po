@@ -8570,6 +8570,10 @@ msgstr "Are you sure you want to enable the development before?"
 msgid "Par"
 msgstr "By"
 
+#: templates/products/product_result.html:39
+msgid "Dans un rayon de"
+msgstr "Within"
+
 #: templates/products/product_result.html:101
 msgid ""
 "\n"
