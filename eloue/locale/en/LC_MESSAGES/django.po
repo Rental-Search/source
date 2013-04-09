@@ -8520,6 +8520,10 @@ msgstr ""
 "It is just a pre-reservation. You will only be debited if the owner accepts "
 "the request for the lease within 24 hours."
 
+#: templates/products/product_detail.html:604
+msgid "Objets similaires"
+msgstr "Others Items"
+
 #: templates/products/product_edit.html:18
 msgid "Retour à mes annonces"
 msgstr "Return to My ads"
