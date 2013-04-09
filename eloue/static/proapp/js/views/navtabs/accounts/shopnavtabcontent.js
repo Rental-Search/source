@@ -28,8 +28,8 @@ app.ShopNavTabContentView = app.AccountsNavTabContentView.extend({
 				url: data.url
 			};
 
-		if ( !_.isNull(shop.toJSON().default_address) ) object.default_address.resource_uri = shop.toJSON().default_address.resource_uri;
-		if ( !_.isNull(shop.toJSON().default_number) ) object.default_number.resource_uri = shop.toJSON().default_number.resource_uri;
+		if ( !_.isNull(shop.toJSON().default_address) ) object.default_address.id = shop.toJSON().default_address.id;
+		if ( !_.isNull(shop.toJSON().default_number) ) object.default_number.id = shop.toJSON().default_number.id;
 
 		return object;
 	}

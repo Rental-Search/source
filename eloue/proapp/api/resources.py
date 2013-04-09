@@ -131,6 +131,7 @@ class PatronResource(ModelResource):
 
 
 class ShopResource(ModelResource):
+	
 	default_address = fields.ToOneField('eloue.proapp.api.resources.AddressResource', 'default_address', full=True, null=True)
 	default_number = fields.ToOneField('eloue.proapp.api.resources.PhoneNumberResource', 'default_number', full=True, null=True)
 
