@@ -7451,6 +7451,18 @@ select {
 .table-time .actions-time .halflings-icon {
   vertical-align: middle;
 }
+.table-time table {
+  width: 100%;
+}
+.table-time table tr {
+  display: none;
+}
+.table-time table th,
+.table-time table td {
+  border-top: none;
+  padding-bottom: 0px;
+  text-align: center;
+}
 .table-billing {
   border-left: 1px solid #b2ced9;
   border-right: 1px solid #b2ced9;

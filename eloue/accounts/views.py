@@ -689,7 +689,7 @@ def patron_edit_addresses(request):
 def patron_edit_opening_times(request):
     from eloue.accounts.forms import OpeningsForm, OpeningTimes
     try:
-        instance = request.user.openingtimes
+        instance = request.user.opening_times
     except OpeningTimes.DoesNotExist:
         instance = OpeningTimes(patron=request.user)
     if request.method == "POST":

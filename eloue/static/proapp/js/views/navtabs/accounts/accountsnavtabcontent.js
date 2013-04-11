@@ -41,6 +41,7 @@ app.AccountsNavTabContentView = app.NavTabContentView.extend({
 
 	render: function() {
 		this.$el.html(this.template(this.serialize()));
+		this.afterRender();
 		return this;
 	},
 
@@ -48,6 +49,8 @@ app.AccountsNavTabContentView = app.NavTabContentView.extend({
 		this.$el.html(this.loadingView.$el);
 		this.loadingView.render();
 	},
+
+	afterRender: function() {},
 
 	submitForm: function () {
 		data = this.serializeDataObject();

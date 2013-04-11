@@ -195,153 +195,293 @@
 							<tr>
 								<td style="width: 20%;">Lundi</td>
 								<td style="width: 60%;" class="times-range">
-									De&nbsp;
-									<div class="input-append">
-  										<input class="span1" id="prependedInput" type="text" placeholder="">
-  										<span class="add-on"><i class="halflings-icon time blue"></i></span>
-									</div>
-									&nbsp;à&nbsp;
-									<div class="input-append">
-  										<input class="span1" id="prependedInput" type="text" placeholder="">
-  										<span class="add-on"><i class="halflings-icon time blue"></i>  </span>
-									</div>
+									<table>
+										<tr>
+											<td width="100%">
+												De&nbsp;
+												<div class="input-append">
+			  										<input class="span1" id="prependedInput" type="text" name="monday_opens" value="<%= model.opening_times.monday_opens %>">
+			  										<span class="add-on"><i class="halflings-icon time blue"></i></span>
+												</div>
+												&nbsp;à&nbsp;
+												<div class="input-append">
+			  										<input class="span1" id="prependedInput" type="text" name="monday_closes" value="<%= model.opening_times.monday_closes %>">
+			  										<span class="add-on"><i class="halflings-icon time blue"></i>  </span>
+												</div>
+											</td>
+										</tr>
+										<tr>
+											<td width="100%">
+												De&nbsp;
+												<div class="input-append">
+			  										<input class="span1" id="prependedInput" type="text" name="monday_opens_second" value="<%= model.opening_times.monday_opens_second %>">
+			  										<span class="add-on"><i class="halflings-icon time blue"></i></span>
+												</div>
+												&nbsp;à&nbsp;
+												<div class="input-append">
+			  										<input class="span1" id="prependedInput" type="text" name="monday_closes_second" value="<%= model.opening_times.monday_closes_second %>">
+			  										<span class="add-on"><i class="halflings-icon time blue"></i>  </span>
+												</div>
+											</td>
+										</tr>	
+									</table>
 								</td>
 								<td style="width: 20%;" class="actions-time">
 									<ul>
-										<li><a href="#"><i class="halflings-icon plus-sign  blue"></i> Ajouter</a></li>
-										<li><a href="#"><i class="halflings-icon minus-sign blue"></i> Supprimer</a></li>
+										<li><a href="#" class="open-slot"><i class="halflings-icon plus-sign  blue"></i> Ajouter</a></li>
+										<li><a href="#" class="close-slot"><i class="halflings-icon minus-sign blue"></i> Supprimer</a></li>
 									</ul>
 								</td>
 							</tr>
 							<tr>
 								<td style="width: 20%;">Mardi</td>
 								<td style="width: 60%;" class="times-range">
-									De&nbsp;
-									<div class="input-append">
-  										<input class="span1" id="prependedInput" type="text" placeholder="">
-  										<span class="add-on"><i class="halflings-icon time blue"></i></span>
-									</div>
-									&nbsp;à&nbsp;
-									<div class="input-append">
-  										<input class="span1" id="prependedInput" type="text" placeholder="">
-  										<span class="add-on"><i class="halflings-icon time blue"></i>  </span>
-									</div>
+									<table>
+										<tr>
+											<td width="100%">
+												De&nbsp;
+												<div class="input-append">
+			  										<input class="span1" id="prependedInput" type="text" name="tuesday_opens" value="<%= model.opening_times.tuesday_opens %>">
+			  										<span class="add-on"><i class="halflings-icon time blue"></i></span>
+												</div>
+												&nbsp;à&nbsp;
+												<div class="input-append">
+			  										<input class="span1" id="prependedInput" type="text" name="tuesday_closes" value="<%= model.opening_times.tuesday_closes %>">
+			  										<span class="add-on"><i class="halflings-icon time blue"></i>  </span>
+												</div>
+											</td>
+										</tr>
+										<tr>
+											<td width="100%">
+												De&nbsp;
+												<div class="input-append">
+			  										<input class="span1" id="prependedInput" type="text" name="tuesday_opens_second" value="<%= model.opening_times.tuesday_opens_second %>">
+			  										<span class="add-on"><i class="halflings-icon time blue"></i></span>
+												</div>
+												&nbsp;à&nbsp;
+												<div class="input-append">
+			  										<input class="span1" id="prependedInput" type="text" name="tuesday_closes_second" value="<%= model.opening_times.tuesday_closes_second %>">
+			  										<span class="add-on"><i class="halflings-icon time blue"></i>  </span>
+												</div>
+											</td>
+										</tr>	
+									</table>
 								</td>
 								<td style="width: 20%;" class="actions-time">
 									<ul>
-										<li><a href="#"><i class="halflings-icon plus-sign  blue"></i> Ajouter</a></li>
-										<li><a href="#"><i class="halflings-icon minus-sign blue"></i> Supprimer</a></li>
-										<li><a href="#"><i class="halflings-icon time blue"></i> Copier</a></li>
+										<li><a href="#" class="open-slot"><i class="halflings-icon plus-sign  blue"></i> Ajouter</a></li>
+										<li><a href="#" class="close-slot"><i class="halflings-icon minus-sign blue"></i> Supprimer</a></li>
+										<li><a href="#" class="clone-slot"><i class="halflings-icon time blue"></i> Copier</a></li>
 									</ul>
 								</td>
 							</tr>
 							<tr>
 								<td style="width: 20%;">Mercredi</td>
 								<td style="width: 60%;" class="times-range">
-									De&nbsp;
-									<div class="input-append">
-  										<input class="span1" id="prependedInput" type="text" placeholder="">
-  										<span class="add-on"><i class="halflings-icon time blue"></i></span>
-									</div>
-									&nbsp;à&nbsp;
-									<div class="input-append">
-  										<input class="span1" id="prependedInput" type="text" placeholder="">
-  										<span class="add-on"><i class="halflings-icon time blue"></i>  </span>
-									</div>
+									<table>
+										<tr>
+											<td>
+												De&nbsp;
+												<div class="input-append">
+			  										<input class="span1" id="prependedInput" type="text" name="wednesday_opens" value="<%= model.opening_times.wednesday_opens %>">
+			  										<span class="add-on"><i class="halflings-icon time blue"></i></span>
+												</div>
+												&nbsp;à&nbsp;
+												<div class="input-append">
+			  										<input class="span1" id="prependedInput" type="text" name="wednesday_closes" value="<%= model.opening_times.wednesday_closes %>">
+			  										<span class="add-on"><i class="halflings-icon time blue"></i>  </span>
+												</div>
+											</td>
+										</tr>
+										<tr>
+											<td>
+												De&nbsp;
+												<div class="input-append">
+			  										<input class="span1" id="prependedInput" type="text" name="wednesday_opens_second" value="<%= model.opening_times.wednesday_opens_second %>">
+			  										<span class="add-on"><i class="halflings-icon time blue"></i></span>
+												</div>
+												&nbsp;à&nbsp;
+												<div class="input-append">
+			  										<input class="span1" id="prependedInput" type="text" name="wednesday_closes_second" value="<%= model.opening_times.wednesday_closes_second %>">
+			  										<span class="add-on"><i class="halflings-icon time blue"></i>  </span>
+												</div>
+											</td>
+										</tr>	
+									</table>
 								</td>
 								<td style="width: 20%;" class="actions-time">
 									<ul>
-										<li><a href="#"><i class="halflings-icon plus-sign  blue"></i> Ajouter</a></li>
-										<li><a href="#"><i class="halflings-icon minus-sign blue"></i> Supprimer</a></li>
-										<li><a href="#"><i class="halflings-icon time blue"></i> Copier</a></li>
+										<li><a href="#" class="open-slot"><i class="halflings-icon plus-sign  blue"></i> Ajouter</a></li>
+										<li><a href="#" class="close-slot"><i class="halflings-icon minus-sign blue"></i> Supprimer</a></li>
+										<li><a href="#" class="clone-slot"><i class="halflings-icon time blue"></i> Copier</a></li>
 									</ul>
 								</td>
 							</tr>
 							<tr>
 								<td style="width: 20%;">Jeudi</td>
 								<td style="width: 60%;" class="times-range">
-									De&nbsp;
-									<div class="input-append">
-  										<input class="span1" id="prependedInput" type="text" placeholder="">
-  										<span class="add-on"><i class="halflings-icon time blue"></i></span>
-									</div>
-									&nbsp;à&nbsp;
-									<div class="input-append">
-  										<input class="span1" id="prependedInput" type="text" placeholder="">
-  										<span class="add-on"><i class="halflings-icon time blue"></i>  </span>
-									</div>
+									<table>
+										<tr>
+											<td>
+												De&nbsp;
+												<div class="input-append">
+			  										<input class="span1" id="prependedInput" type="text" name="thursday_opens" value="<%= model.opening_times.thursday_opens %>">
+			  										<span class="add-on"><i class="halflings-icon time blue"></i></span>
+												</div>
+												&nbsp;à&nbsp;
+												<div class="input-append">
+			  										<input class="span1" id="prependedInput" type="text" name="thursday_closes" value="<%= model.opening_times.thursday_closes %>">
+			  										<span class="add-on"><i class="halflings-icon time blue"></i>  </span>
+												</div>
+											</td>
+										</tr>
+										<tr>
+											<td>
+												De&nbsp;
+												<div class="input-append">
+			  										<input class="span1" id="prependedInput" type="text" name="thursday_opens_second" value="<%= model.opening_times.thursday_opens_second %>">
+			  										<span class="add-on"><i class="halflings-icon time blue"></i></span>
+												</div>
+												&nbsp;à&nbsp;
+												<div class="input-append">
+			  										<input class="span1" id="prependedInput" type="text" name="thursday_closes_second" value="<%= model.opening_times.thursday_closes_second %>">
+			  										<span class="add-on"><i class="halflings-icon time blue"></i>  </span>
+												</div>
+											</td>
+										</tr>	
+									</table>
 								</td>
 								<td style="width: 20%;" class="actions-time">
 									<ul>
-										<li><a href="#"><i class="halflings-icon plus-sign  blue"></i> Ajouter</a></li>
-										<li><a href="#"><i class="halflings-icon minus-sign blue"></i> Supprimer</a></li>
-										<li><a href="#"><i class="halflings-icon time blue"></i> Copier</a></li>
+										<li><a href="#" class="open-slot"><i class="halflings-icon plus-sign  blue"></i> Ajouter</a></li>
+										<li><a href="#" class="close-slot"><i class="halflings-icon minus-sign blue"></i> Supprimer</a></li>
+										<li><a href="#" class="clone-slot"><i class="halflings-icon time blue"></i> Copier</a></li>
 									</ul>
 								</td>
 							</tr>
 							<tr>
 								<td style="width: 20%;">Vendredi</td>
 								<td style="width: 60%;" class="times-range">
-									De&nbsp;
-									<div class="input-append">
-  										<input class="span1" id="prependedInput" type="text" placeholder="">
-  										<span class="add-on"><i class="halflings-icon time blue"></i></span>
-									</div>
-									&nbsp;à&nbsp;
-									<div class="input-append">
-  										<input class="span1" id="prependedInput" type="text" placeholder="">
-  										<span class="add-on"><i class="halflings-icon time blue"></i>  </span>
-									</div>
+									<table>
+										<tr>
+											<td>
+												De&nbsp;
+												<div class="input-append">
+			  										<input class="span1" id="prependedInput" type="text" name="friday_opens" value="<%= model.opening_times.friday_opens %>">
+			  										<span class="add-on"><i class="halflings-icon time blue"></i></span>
+												</div>
+												&nbsp;à&nbsp;
+												<div class="input-append">
+			  										<input class="span1" id="prependedInput" type="text" name="friday_closes" value="<%= model.opening_times.friday_closes %>">
+			  										<span class="add-on"><i class="halflings-icon time blue"></i>  </span>
+												</div>
+											</td>
+										</tr>
+										<tr>
+											<td>
+												De&nbsp;
+												<div class="input-append">
+			  										<input class="span1" id="prependedInput" type="text" name="friday_opens_second" value="<%= model.opening_times.friday_opens_second %>">
+			  										<span class="add-on"><i class="halflings-icon time blue"></i></span>
+												</div>
+												&nbsp;à&nbsp;
+												<div class="input-append">
+			  										<input class="span1" id="prependedInput" type="text" name="friday_closes_second" value="<%= model.opening_times.friday_closes_second %>">
+			  										<span class="add-on"><i class="halflings-icon time blue"></i>  </span>
+												</div>
+											</td>
+										</tr>	
+									</table>
 								</td>
 								<td style="width: 20%;" class="actions-time">
 									<ul>
-										<li><a href="#"><i class="halflings-icon plus-sign  blue"></i> Ajouter</a></li>
-										<li><a href="#"><i class="halflings-icon minus-sign blue"></i> Supprimer</a></li>
-										<li><a href="#"><i class="halflings-icon time blue"></i> Copier</a></li>
+										<li><a href="#" class="open-slot"><i class="halflings-icon plus-sign  blue"></i> Ajouter</a></li>
+										<li><a href="#" class="close-slot"><i class="halflings-icon minus-sign blue"></i> Supprimer</a></li>
+										<li><a href="#" class="clone-slot"><i class="halflings-icon time blue"></i> Copier</a></li>
 									</ul>
 								</td>
 							</tr>
 							<tr>
 								<td style="width: 20%;">Samedi</td>
 								<td style="width: 60%;" class="times-range">
-									De&nbsp;
-									<div class="input-append">
-  										<input class="span1" id="prependedInput" type="text" placeholder="">
-  										<span class="add-on"><i class="halflings-icon time blue"></i></span>
-									</div>
-									&nbsp;à&nbsp;
-									<div class="input-append">
-  										<input class="span1" id="prependedInput" type="text" placeholder="">
-  										<span class="add-on"><i class="halflings-icon time blue"></i>  </span>
-									</div>
+									<table>
+										<tr>
+											<td>
+												De&nbsp;
+												<div class="input-append">
+			  										<input class="span1" id="prependedInput" type="text" name="saturday_opens" value="<%= model.opening_times.saturday_opens %>">
+			  										<span class="add-on"><i class="halflings-icon time blue"></i></span>
+												</div>
+												&nbsp;à&nbsp;
+												<div class="input-append">
+			  										<input class="span1" id="prependedInput" type="text" name="saturday_closes" value="<%= model.opening_times.saturday_closes %>">
+			  										<span class="add-on"><i class="halflings-icon time blue"></i>  </span>
+												</div>
+											</td>
+										</tr>
+										<tr>
+											<td>
+												De&nbsp;
+												<div class="input-append">
+			  										<input class="span1" id="prependedInput" type="text" name="saturday_opens_second" value="<%= model.opening_times.saturday_opens_second %>">
+			  										<span class="add-on"><i class="halflings-icon time blue"></i></span>
+												</div>
+												&nbsp;à&nbsp;
+												<div class="input-append">
+			  										<input class="span1" id="prependedInput" type="text" name="saturday_closes_second" value="<%= model.opening_times.saturday_closes_second %>">
+			  										<span class="add-on"><i class="halflings-icon time blue"></i>  </span>
+												</div>
+											</td>
+										</tr>	
+									</table>
 								</td>
 								<td style="width: 20%;" class="actions-time">
 									<ul>
-										<li><a href="#"><i class="halflings-icon plus-sign  blue"></i> Ajouter</a></li>
-										<li><a href="#"><i class="halflings-icon minus-sign blue"></i> Supprimer</a></li>
-										<li><a href="#"><i class="halflings-icon time blue"></i> Copier</a></li>
+										<li><a href="#" class="open-slot"><i class="halflings-icon plus-sign  blue"></i> Ajouter</a></li>
+										<li><a href="#" class="close-slot"><i class="halflings-icon minus-sign blue"></i> Supprimer</a></li>
+										<li><a href="#" class="clone-slot"><i class="halflings-icon time blue"></i> Copier</a></li>
 									</ul>
 								</td>
 							</tr>
 							<tr>
 								<td style="width: 20%;">Dimanche</td>
 								<td style="width: 60%;" class="times-range">
-									De&nbsp;
-									<div class="input-append">
-  										<input class="span1" id="prependedInput" type="text" placeholder="">
-  										<span class="add-on"><i class="halflings-icon time blue"></i></span>
-									</div>
-									&nbsp;à&nbsp;
-									<div class="input-append">
-  										<input class="span1" id="prependedInput" type="text" placeholder="">
-  										<span class="add-on"><i class="halflings-icon time blue"></i>  </span>
-									</div>
+									<table>
+										<tr>
+											<td>
+												De&nbsp;
+												<div class="input-append">
+			  										<input class="span1" id="prependedInput" type="text" name="sunday_opens" value="<%= model.opening_times.sunday_opens %>">
+			  										<span class="add-on"><i class="halflings-icon time blue"></i></span>
+												</div>
+												&nbsp;à&nbsp;
+												<div class="input-append">
+			  										<input class="span1" id="prependedInput" type="text" name="sunday_closes" value="<%= model.opening_times.sunday_closes %>">
+			  										<span class="add-on"><i class="halflings-icon time blue"></i>  </span>
+												</div>
+											</td>
+										</tr>
+										<tr>
+											<td>
+												De&nbsp;
+												<div class="input-append">
+			  										<input class="span1" id="prependedInput" type="text" name="sunday_opens_second" value="<%= model.opening_times.sunday_opens_second %>">
+			  										<span class="add-on"><i class="halflings-icon time blue"></i></span>
+												</div>
+												&nbsp;à&nbsp;
+												<div class="input-append">
+			  										<input class="span1" id="prependedInput" type="text" name="sunday_closes_second" value="<%= model.opening_times.sunday_closes_second %>">
+			  										<span class="add-on"><i class="halflings-icon time blue"></i>  </span>
+												</div>
+											</td>
+										</tr>	
+									</table>
 								</td>
 								<td style="width: 20%;" class="actions-time">
 									<ul>
-										<li><a href="#"><i class="halflings-icon plus-sign  blue"></i> Ajouter</a></li>
-										<li><a href="#"><i class="halflings-icon minus-sign blue"></i> Supprimer</a></li>
-										<li><a href="#"><i class="halflings-icon time blue"></i> Copier</a></li>
+										<li><a href="#" class="open-slot"><i class="halflings-icon plus-sign  blue"></i> Ajouter</a></li>
+										<li><a href="#" class="close-slot"><i class="halflings-icon minus-sign blue"></i> Supprimer</a></li>
+										<li><a href="#" class="clone-slot"><i class="halflings-icon time blue"></i> Copier</a></li>
 									</ul>
 								</td>
 							</tr>

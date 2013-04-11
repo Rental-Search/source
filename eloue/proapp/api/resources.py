@@ -131,7 +131,7 @@ class PatronResource(ModelResource):
 
 
 class ShopResource(ModelResource):
-	
+	opening_times = fields.ToOneField('eloue.proapp.api.resources.OpeningTimesResource', 'opening_times', full=True, null=True)
 	default_address = fields.ToOneField('eloue.proapp.api.resources.AddressResource', 'default_address', full=True, null=True)
 	default_number = fields.ToOneField('eloue.proapp.api.resources.PhoneNumberResource', 'default_number', full=True, null=True)
 
@@ -143,12 +143,15 @@ class ShopResource(ModelResource):
 		excludes = ['avatar', 'activation_key', 'affiliate', 'date_joined', 'date_of_birth', 'drivers_license_date', 'drivers_license_number', 'hobby', 'is_active', 'is_professional', 'is_staff', 'is_superuser', 'last_login', 'modified_at', 'new_messages_alerted', 'password', 'paypal_email', 'place_of_birth', 'rib', 'school', 'work', 'civility', 'email', 'first_name', 'is_subscribed', 'last_name', 'username']
 		authentication = SessionAuthentication()
 		authorization = Authorization()
+		include_resource_uri = True
 
 	def apply_authorization_limits(self, request, object_list):
 		return object_list.filter(pk=request.user.pk)
 
 
 class OpeningTimesResource(ModelResource):
+	patron = fields.ToOneField('eloue.proapp.api.resources.ShopResource', 'patron')
+
 	class Meta:
 		queryset = OpeningTimes.objects.all()
 		resource_name = 'accounts/opening_times'
@@ -156,9 +159,7 @@ class OpeningTimesResource(ModelResource):
 		detail_allowed_methods = ['get', 'post', 'put']
 		authentication = SessionAuthentication()
 		authorization = Authorization()
-
-	def apply_authorization_limits(self, request, object_list):
-		return object_list.filter(pk=request.user.pk)
+		include_resource_uri = True
 
 
 class AddressResource(ModelResource):
