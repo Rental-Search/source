@@ -93,7 +93,7 @@
 	    			<div class="plan-description">
 		    			<h2>{{ plan.name }}</h2>
 		    			<p class="plan_price">
-			            		{{ plan.price|floatformat:0 }}&euro;<span>/mois</span>
+			            		{{ plan.price|floatformat:0 }}&euro; HT<span>/mois</span>
 			            </p>
 			        </div>
 	        	{% else %}
@@ -101,7 +101,7 @@
 		            <h2>
 		            	{{ plan.name }} 
 		            	<div class="plan_price">
-		            		{{ plan.price|floatformat:0 }}&euro;<span>/{% trans "mois" %}</span>
+		            		{{ plan.price|floatformat:0 }}&euro; HT<span>/{% trans "mois" %}</span>
 		            	</div>
 		            </h2>
 		            <p class="max-items">{{ plan.maximum_items }} {% trans "annonces maximum" %}</p>

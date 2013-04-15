@@ -40,7 +40,7 @@
                 {% else %}
                 <img src="{{ STATIC_URL }}images/default_avatar.png" alt="{% trans "loueur"%}{{ patron.username }}" width="180" height="180">
                 {% endif %}
-                <h1>{{ patron.username|truncate:13 }}</h1>
+                <h1>{{ patron.company_name|truncate:13 }}</h1>
                 {% with patron.default_address as default_address %}
                     {% if default_address %}
                         <address>
@@ -78,7 +78,7 @@
         {% if product_list %}
             {% if product_list.count > 0 %}
                 {% blocktrans with product_list.count as count and product_list.count|pluralize as pluralize %}
-    	           <h2>{{ count }} annonce{{ pluralize }}</h2>
+    	           <h2>{{ count }} Annonces{{ pluralize }}</h2>
     	       {% endblocktrans %}
             {% else %}
                 <h2>{% trans "Pas d'annonce" %}</h2>

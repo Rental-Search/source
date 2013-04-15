@@ -522,7 +522,7 @@
                         {% endwith %}
                     {% endif %}
                 </address>
-                <a href="{% url message_create product.pk patron.pk %}" class="btn-contactme">Contactez-moi</a>
+                <a href="{% url message_create product.pk patron.pk %}" class="btn-contactme">{% trans "Contactez-moi" %}</a>
                 <span style="margin-top: 0; margin-bottom: 10px; margin-left: 20px;" class="stars empty"><span class="stars filled_{{ patron.average_note }}"></span></span>
                 {% include "accounts/partials/response_stats.html" %}
             </div>{#  owner #}
@@ -578,7 +578,7 @@
                     {% if product.daily_price %}
                     {% blocktrans with product.daily_price as day_price %}
                         <p id="booking-total" class="total-price">
-                            Total : <span class="day">1 jour,</span> soit <span class="pricing">{{ day_price }}</span>
+                            Total : <span class="day">1 jour</span> soit <span class="pricing">{{ day_price }}</span>
                         </p>
                     {% endblocktrans %}
                     {% endif %}
@@ -601,7 +601,7 @@
         </div>{# booking-block #}
         {% if product_list %}
         <div id="related-product" class="info-block">
-            <h2>Objets similaires</h2>
+            <h2>{% trans "Objets similaires" %}</h2>
             {% with 15 as truncation %}
             {% include 'products/partials/result_list.html' %}
             {% endwith %}

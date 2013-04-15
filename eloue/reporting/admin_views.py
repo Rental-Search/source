@@ -10,7 +10,7 @@ from django.db.models import Avg, Sum, Q, Count
 
 from eloue.accounts.models import Patron
 from eloue.products.models import Product, CarProduct, RealEstateProduct, Category
-from eloue.rent.models import Booking
+from eloue.rent.models import Booking, OwnerComment, BorrowerComment
 
 from django_messages.models import Message
 
@@ -51,6 +51,8 @@ def stats(request):
 		'need_assurancy_booking': (Booking.objects.filter(state__in=booking_transaction_list).filter(Q(product__category__need_insurance=True)), 'created_at', Count('uuid')),
 		'incident_declaration': (Booking.objects.filter(state__in=[Booking.STATE.INCIDENT]), 'created_at', Count('uuid')),
 		'messages': (Message.objects.all(), 'sent_at'),
+		'borrower_comment': (BorrowerComment.objects.all(), 'created_at'),
+		'owner_comment': (OwnerComment.objects.all(), 'created_at'),
 	}
 
 	for key, value in qss_parameters_list.items():

@@ -90,9 +90,9 @@ class CommentAdmin(admin.ModelAdmin):
 class SinisterAdmin(admin.ModelAdmin):
     def booking(obj):
         return obj.booking_id
-    list_display = ('uuid', booking, 'patron', 'product',)
-    fields = ('patron', 'product', 'description', booking)
-    readonly_fields = (booking, 'product', 'patron')
+    list_display = ('uuid', booking, 'patron', 'product', 'created_at')
+    fields = ('patron', 'product', 'description', booking, 'created_at')
+    readonly_fields = (booking, 'product', 'patron', 'created_at')
     
 try:
     admin.site.register(Booking, BookingAdmin)

@@ -185,10 +185,10 @@
                 <input type="submit" value="Rechercher" class="btn-search"/>
             </div><!-- search-block -->
             <div id="where" class="info-block">
-                <h2>Lieu</h2>
+                <h2>{% trans "Lieu" %}</h2>
                 <p class="town-input">{{form.l}}</p>
                 <div id="map-canvas" class="map"></div>
-                <p class="radius-input">Dans un rayon de {{form.r}} Km</p>
+                <p class="radius-input">{% trans "Dans un rayon de" %} {{form.r}} Km</p>
             </div><!-- where -->
         </form>
         {% if product_list %}
