@@ -796,6 +796,7 @@ def make_missing_data_form(instance, required_fields=[]):
         'expires': ExpirationField(label=_(u'Date d\'expiration')),
         'holder_name': forms.CharField(label=_(u'Titulaire de la carte')),
         'card_number': CreditCardField(label=_(u'Numéro de carte de crédit')),
+        'godfather_email': forms.EmailField(label=_(u'Email de votre parrain'), required=False, help_text=_(u'Commissions offertes pendant 3 mois si vous êtes parrainé par membre e-loue. Offre valable entre le 18 avril et le 30 avril 2013.')),
     })
 
 
@@ -963,7 +964,7 @@ def make_missing_data_form(instance, required_fields=[]):
     class Meta:
         fieldsets = [
             ('member', {
-                'fields': ['is_professional', 'company_name', 'username', 'password1', 'password2', 'first_name', 'last_name', 'avatar', 'date_of_birth', 'place_of_birth'], 
+                'fields': ['is_professional', 'company_name', 'username', 'password1', 'password2', 'first_name', 'last_name', 'avatar', 'godfather_email','date_of_birth', 'place_of_birth'], 
                 'legend': 'Vous'}),
             ('driver_info', {
                 'fields': ['drivers_license_number', 'drivers_license_date'],
