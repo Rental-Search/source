@@ -8,7 +8,9 @@ Type : {{ category }}
 Objet : {{ summary }} 
 Début de la location : {{ starting_at }} 
 Durée de la location : {{ duration }}
+
 {% endblocktrans %}
+
 {% with booking.product.more_like_this as related_products %}
 {% if related_products %}
  {% trans "Cependant, d’autres objets similaires peuvent peut-être vous intéresser :" %}
@@ -20,8 +22,9 @@ Durée de la location : {{ duration }}
  {% endfor %}
 {% endif %}
 {% endwith %}
+
 {% blocktrans with booking.product.category.get_absolute_url as category_url and site.domain as domain and site.name as site_name %}
-Retrouvez tous les objets de cette catégorie sur e-loue.com :
+Retrouvez tous les objets de cette catégorie sur e-loue.com 
 
 {{ protocol }}://{{ domain }}{{ category_url }}
  
