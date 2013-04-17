@@ -167,9 +167,14 @@ class BookingWizard(MultiPartFormWizard):
     def parse_params(self, request, product, *args, **kwargs):
         self.extra_context['product'] = product
         self.extra_context['prices'] = product.prices.filter(unit=1)
-        self.extra_context['search_form'] = FacetedSearchForm()
+        
         self.extra_context['comments'] = BorrowerComment.objects.filter(booking__product=product)
         self.extra_context['insurance_available'] = settings.INSURANCE_AVAILABLE
+        if product.is_archived:
+            location = request.session.setdefault('location', settings.DEFAULT_LOCATION)
+            address = location.get('formatted_address') or (u'{city}, {country}'.format(**location) if location.get('city') else u'{country}'.format(**location))
+            self.extra_context['search_form'] = FacetedSearchForm({'l': address}, auto_id='id_for_%s')
+
     
     def get_template(self, step):
         if issubclass(self.form_list[step], EmailAuthenticationForm):

@@ -13,7 +13,7 @@ from mptt.managers import TreeManager as OriginalTreeManager
 
 class ProductManager(GeoManager):
     def active(self):
-        return self.filter(is_archived=False, is_allowed=True)
+        return self.filter(is_allowed=True)
     
     def archived(self):
         return self.filter(is_archived=True, is_allowed=True)

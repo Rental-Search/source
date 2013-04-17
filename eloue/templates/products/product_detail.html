@@ -38,6 +38,26 @@
     {% endwith %}
     {% endwith %} {# picture #}
     {% endcache %}
+    {% if product.is_archived %}
+    <style>
+    .ui-widget-overlay {
+       background: #000 !important;
+       opacity: .70 !important;
+       filter: Alpha(Opacity=70)!important;
+    }
+
+    .ui-dialog .ui-dialog-title {
+        float: none !important;
+        margin: 0px !important ;
+        
+        h2 { margin-top: 10px; }
+      }
+
+    .ui-dialog-title {
+        text-align: center !important;
+    }
+    </style>
+    {% endif %}
 {% endblock %}
 
 {% block tail %}
@@ -181,6 +201,19 @@
                 $(this).addClass('dropdown-toggle');
                 $(val).show();
             });
+            {% if product.is_archived %}
+                $("#product-archived").dialog({
+                    autoOpen: true,
+                    width: '500',
+                    resizable: false,
+                    modal: true,
+                    closeOnEscape: false,
+                    open: function(event, ui) { $(".ui-dialog-titlebar-close.ui-corner-all").remove(); 
+                    },
+                    draggable: false,
+                });
+
+            {% endif%}
         })
     </script>
     {% if not debug %}
@@ -610,4 +643,17 @@
 {% endcache %}
     </div>{# content-aside #}
 </div>{# container-main #}
+{% if product.is_archived %}
+<div id="product-archived" title="<h2>{% trans "Désolé l'annnonce n\'est plus disponible" %}</h2> <br> <p >{% trans "Effectuez une nouvelle recherche"%} {% if product_list %}{% trans "ou sélectionnez un objet similaire" %}{% endif %}</p>">
+    <form action="{% url product_list %}" method="get" id="form_search_results">
+        <div class="search-block">
+            {{search_form.q}}
+            <input type="submit" value="Rechercher" class="btn-search"/>
+        </div><!-- search-block -->
+    </form>
+    {% with 35 as truncation %}
+        {% include 'products/partials/result_list.html' %}
+    {% endwith %}
+</div>
+{% endif %}
 {% endblock %}
