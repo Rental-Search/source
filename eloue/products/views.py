@@ -445,18 +445,17 @@ def patron_message_create(request, recipient_username):
 def product_delete(request, slug, product_id):
     product = get_object_or_404(Product.on_site, pk=product_id).subtype
 
-    if product.bookings.all():
-        is_booked = True
-    else:
-        is_booked = False
-
     if request.method == "POST":
-        product.delete()
+        if product.bookings.all() or product.messages.all():
+            product.is_archived = True
+            product.save()
+        else:
+            product.delete()
         messages.success(request, _(u"Votre objet à bien été supprimée"))
         return redirect('owner_product')
     else:
         return render(request, 'products/product_delete.html', 
-            {'product': product, 'is_booked': is_booked})
+            {'product': product})
 
 from django.views.generic import ListView, DetailView
 from django.utils.decorators import method_decorator

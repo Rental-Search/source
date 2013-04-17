@@ -56,7 +56,7 @@ from eloue.accounts.wizard import AuthenticationWizard
 from eloue import geocoder
 from eloue.products.forms import FacetedSearchForm
 from eloue.views import LoginRequiredMixin
-from eloue.products.models import ProductRelatedMessage, MessageThread
+from eloue.products.models import ProductRelatedMessage, MessageThread, Product
 from eloue.products.search_indexes import product_search
 from eloue.rent.models import Booking, BorrowerComment, OwnerComment
 from eloue.rent.forms import OwnerCommentForm, BorrowerCommentForm
@@ -756,7 +756,7 @@ class OwnerProduct(ListView, LoginRequiredMixin):
     template_name = 'accounts/owner_product.html'
     paginate_by = PAGINATE_PRODUCTS_BY
     def get_queryset(self):
-        return self.request.user.products.all()
+        return Product.objects.filter(owner=self.request.user, is_archived=False)
 
 class AlertEdit(ListView, LoginRequiredMixin):
     template_name = 'accounts/alert_edit.html'

@@ -196,6 +196,8 @@ class Patron(User):
     date_of_birth = models.DateTimeField(_(u"Date de naissance"), blank=True, null=True)
     place_of_birth = models.CharField(_(u"Lieu de naissance"), blank=True, max_length=255)
 
+    godfather_email = models.EmailField(null=True, blank=True)
+
     on_site = CurrentSiteManager()
     objects = PatronManager()
 

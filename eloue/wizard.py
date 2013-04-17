@@ -34,6 +34,8 @@ class MultiPartFormWizard(FormWizard):
           'phones', 'phones__phone', 'addresses',
           'addresses__address1', 'addresses__zipcode', 'addresses__city', 'addresses__country', 'avatar'
         ]
+        if self.form_list[0].__name__ == 'CarProductForm':
+            self.required_fields.append('godfather_email')
         self.fb_session = None
         self.new_patron = None
         self.me = {}
