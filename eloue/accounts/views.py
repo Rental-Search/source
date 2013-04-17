@@ -756,7 +756,7 @@ class OwnerProduct(ListView, LoginRequiredMixin):
     template_name = 'accounts/owner_product.html'
     paginate_by = PAGINATE_PRODUCTS_BY
     def get_queryset(self):
-        return Product.objects.filter(owner=self.request.user)
+        return Product.objects.filter(owner=self.request.user, is_archived=False)
 
 class AlertEdit(ListView, LoginRequiredMixin):
     template_name = 'accounts/alert_edit.html'
