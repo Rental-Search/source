@@ -7523,14 +7523,23 @@ select {
   font-weight: normal;
   line-height: 14px;
   color: #364c59;
+  width: 700px;
+}
+.table-plan-list form {
+  margin: 0px;
 }
 .table-plan-list th {
   font-size: 12px;
+  text-align: center;
 }
 .table-plan-list td {
   vertical-align: middle;
   height: 31px;
+  padding: 20px 0;
 }
 .table-plan-list .align-center {
   text-align: center;
+}
+.table-plan-list .align-left {
+  text-align: left;
 }

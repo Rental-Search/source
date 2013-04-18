@@ -189,6 +189,7 @@
     					</div>
 				</fieldset>
 				<fieldset>
+					<% console.log(model);%>
 					<legend>Horraire d&#145;ouverture de la boutique</legend>
 					<table class="table table-time">
 						<tbody>
@@ -570,52 +571,35 @@
 			<div class="content">
 				<table class="table table-plan-list">
 					<thead>
-						<tr>
-							<th>Abonnement</th>
-							<th class="align-center">Nombre d&#145;annonces</th>
-							<th class="align-center">Prix par mois</th>
-							<th></th>
-						</tr>
+						<th class="align-left">Abonnement</th>
+						<th>Nombre d&#145;annonces</th>
+						<th>Prix par mois</th>
+						<th></th>
 					</thead>
 					<tbody>
+						<% _.each(model.plans, function(plan) {%>
 						<tr>
-							<td>Infini</td>
-							<td class="align-center">Illimité</td>
-							<td class="align-center">158,00&euro;</td>
-							<td class="align-center"> 
-								<a href="#" class="btn">Choisir cet abonnement</a>	
+							<td><%= plan.name %></td>
+							<td class="align-center">
+								<% if (_.isNull(plan.maximum_items)){%>
+									Illimité
+								<% } else { %>
+									<%= plan.maximum_items %>
+								<% } %>
+							</td>
+							<td class="align-center"><%= plan.price %>&euro;</td>
+							<td class="align-center">
+								<% if ( plan.id == model.propackage.id ){%>
+									Votre abonnement actuel
+								<% } else {%>
+									<form action="#">
+										<input type="hidden" name="subscription" value="<%= plan.id %>">
+										<input type="submit" value="Choisir cet abonnement" class="btn">
+									</form>
+								<% } %>
 							</td>
 						</tr>
-						<tr>
-							<td>Infini</td>
-							<td class="align-center">Illimité</td>
-							<td class="align-center">158,00&euro;</td>
-							<td class="align-center">Votre abonnement actuel</td>
-						</tr>
-						<tr>
-							<td>Infini</td>
-							<td class="align-center">Illimité</td>
-							<td class="align-center">158,00&euro;</td>
-							<td class="align-center"> 
-								<a href="#" class="btn">Choisir cet abonnement</a>	
-							</td>
-						</tr>
-						<tr>
-							<td>Infini</td>
-							<td class="align-center">Illimité</td>
-							<td class="align-center">158,00&euro;</td>
-							<td class="align-center"> 
-								<a href="#" class="btn">Choisir cet abonnement</a>	
-							</td>
-						</tr>
-						<tr>
-							<td>Infini</td>
-							<td class="align-center">Illimité</td>
-							<td class="align-center">158,00&euro;</td>
-							<td class="align-center"> 
-								<a href="#" class="btn">Choisir cet abonnement</a>	
-							</td>
-						</tr>
+						<% }); %>
 					</tbody>
 				</table>
 			</div>
@@ -632,6 +616,7 @@
 				traffic_events: "{% url api_dispatch_list api_name="1.0" resource_name="pageviews" %}",
 				patron: "{% url api_dispatch_list api_name="1.0" resource_name="accounts/patron" %}",
 				shop: "{% url api_dispatch_list api_name="1.0" resource_name="accounts/shop" %}",
+				subscription: "{% url api_dispatch_list api_name="1.0" resource_name="accounts/subscription" %}"
 			};
 
 			STATIC_URL = '{{ STATIC_URL }}'

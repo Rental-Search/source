@@ -6,6 +6,7 @@ from collections import defaultdict
 
 from django.conf.urls.defaults import *
 from django.http import Http404
+from django.db.models import Q
 from tastypie import fields
 from tastypie.api import Api
 from tastypie.authorization import Authorization
@@ -18,7 +19,7 @@ from eloue.proapp.analytics_api_v3_auth import GoogleAnalyticsSetStats
 from eloue.proapp.api.authentication import SessionAuthentication
 from eloue.proapp.forms import TimeSeriesForm
 from eloue.products.models import Product, Category, Picture, Price
-from eloue.accounts.models import Patron, Address, PhoneNumber, Subscription, CreditCard, OpeningTimes
+from eloue.accounts.models import Patron, Address, PhoneNumber, Subscription, CreditCard, OpeningTimes, ProPackage
 
 
 def get_time_series(request=None):
@@ -188,16 +189,40 @@ class PhoneNumberResource(ModelResource):
 		authorization = Authorization()
 
 
+class ProPackageResource(ModelResource):
+
+	class Meta:
+		queryset = ProPackage.objects.all()
+		resource_name = 'accounts/propackage'
+		list_allowed_methods = ['get']
+		detail_allowed_methods = []
+		authentication = SessionAuthentication()
+
+
 class SubscriptionResource(ModelResource):
+	patron = fields.ToOneField('eloue.proapp.api.resources.PatronResource', 'patron')
+	propackage = fields.ToOneField('eloue.proapp.api.resources.ProPackageResource', 'propackage', full=True)
+
 	class Meta:
 		queryset = Subscription.objects.all()
 		resource_name = 'accounts/subscription'
 		list_allowed_methods = ['get']
 		detail_allowed_methods = ['get', 'post', 'put']
 		authentication = SessionAuthentication()
+		authorization = Authorization()
 
 	def apply_authorization_limits(self, request, object_list):
 		return object_list.filter(patron=request.user)
+
+	def dehydrate(self, bundle):
+		now = datetime.datetime.now()
+		propackages = ProPackageResource()
+		objects = ProPackage.objects.filter(
+					Q(valid_until__isnull=True, valid_from__lte=now) |
+        			Q(valid_until__isnull=False, valid_until__gte=now))
+
+		bundle.data['plans'] = list(objects.values())
+		return bundle
 
 
 class CreditCardResource(ModelResource):
@@ -448,4 +473,5 @@ api_v1.register(OpeningTimesResource())
 api_v1.register(AddressResource())
 api_v1.register(PhoneNumberResource())
 api_v1.register(SubscriptionResource())
+api_v1.register(ProPackageResource())
 api_v1.register(CreditCardResource())

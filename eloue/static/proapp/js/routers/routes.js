@@ -92,7 +92,7 @@ var Workspace = Backbone.Router.extend({
 			var navTabContentView = new app.BillingNavTabContentView({titleName: 'Facturation'});
 			accountsNavPillContentView.navTabsView.navTabsItemViews[2].setSelectedTabItem();
 		} else if ( metric == 'plan' ) {
-			var navTabContentView = new app.PlanNavTabContentView({titleName: 'Abonnements'});
+			var navTabContentView = new app.SubscriptionNavTabContentView({titleName: 'Abonnements'});
 			accountsNavPillContentView.navTabsView.navTabsItemViews[3].setSelectedTabItem();	
 		}
 

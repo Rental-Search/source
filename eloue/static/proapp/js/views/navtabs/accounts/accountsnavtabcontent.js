@@ -28,7 +28,6 @@ app.AccountsNavTabContentView = app.NavTabContentView.extend({
 	},
 
 	serialize: function() {
-		window.shop = this.model;
 		return {
 			titleName: this.titleName,
 			model: this.model.toJSON()
@@ -53,7 +52,7 @@ app.AccountsNavTabContentView = app.NavTabContentView.extend({
 	afterRender: function() {},
 
 	submitForm: function () {
-		data = this.serializeDataObject();
+		var data = this.serializeDataObject();
 
 		this._disabledForm();
 
