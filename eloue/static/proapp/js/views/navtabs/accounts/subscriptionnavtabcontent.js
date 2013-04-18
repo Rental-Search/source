@@ -14,15 +14,34 @@ app.SubscriptionNavTabContentView = app.AccountsNavTabContentView.extend({
 	},
 
 	submitForm: function (e) {
-		var data = this.serializeDataObject();
+		var data = this.serializeDataObject(e.currentTarget);
+
 		console.log(data);
+
+		this.model.save(data, {
+			success: function(model, response, options) {
+				console.log(model);
+				console.log(response);
+				console.log(options);
+			},
+			error: function(model, xhr, options) {
+				console.log(model);
+				console.log(xhr);
+				console.log(options);
+			}
+		});
 
 		return false;
 	},
 
 	serializeDataObject: function(form) {
-		console.log(form);
-		//return this.$el.children('form').serializeObject();
-		return true
+		var data = $(form).serializeObject();
+		console.log(data.subscription)
+		var object = {
+			propackage: {
+				id: data.subscription
+			}
+		}
+		return object
 	},
 });

@@ -67,9 +67,7 @@ app.AccountsNavTabContentView = app.NavTabContentView.extend({
 				self._enabledForm();
 			}
 		});
-
-		console.log(this.model.toJSON());
-		
+				
 		return false;
 	},
 

@@ -195,7 +195,7 @@ class ProPackageResource(ModelResource):
 		queryset = ProPackage.objects.all()
 		resource_name = 'accounts/propackage'
 		list_allowed_methods = ['get']
-		detail_allowed_methods = []
+		detail_allowed_methods = ['get']
 		authentication = SessionAuthentication()
 
 
@@ -212,7 +212,7 @@ class SubscriptionResource(ModelResource):
 		authorization = Authorization()
 
 	def apply_authorization_limits(self, request, object_list):
-		return object_list.filter(patron=request.user)
+		return object_list.filter(patron=request.user, subscription_ended=None)
 
 	def dehydrate(self, bundle):
 		now = datetime.datetime.now()
@@ -222,6 +222,19 @@ class SubscriptionResource(ModelResource):
         			Q(valid_until__isnull=False, valid_until__gte=now))
 
 		bundle.data['plans'] = list(objects.values())
+		return bundle
+
+	def is_valid(self, bundle, request=None):
+		errors = {}
+
+		return errors
+
+	def obj_update(self, bundle, request=None, **kwargs):
+		patron = request.user
+		new_propackage = ProPackage.objects.get(pk=bundle.data['propackage']['id'])
+
+		patron.subscribe(new_propackage)
+
 		return bundle
 
 

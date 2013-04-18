@@ -20,8 +20,6 @@ app.ShopNavTabContentView = app.AccountsNavTabContentView.extend({
 	serializeDataObject: function() {
 		var data = this.$el.children('form').serializeObject();
 
-		window.dataObject = data;
-
 		var object = {
 				about: data.about,
 				default_address: {	
