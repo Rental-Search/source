@@ -1,4 +1,4 @@
-// js/collections/plan.js
+// js/collections/plans.js
 
 var app = app || {};
 

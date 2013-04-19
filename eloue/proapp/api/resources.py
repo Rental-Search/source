@@ -19,7 +19,7 @@ from eloue.proapp.analytics_api_v3_auth import GoogleAnalyticsSetStats
 from eloue.proapp.api.authentication import SessionAuthentication
 from eloue.proapp.forms import TimeSeriesForm
 from eloue.products.models import Product, Category, Picture, Price
-from eloue.accounts.models import Patron, Address, PhoneNumber, Subscription, CreditCard, OpeningTimes, ProPackage
+from eloue.accounts.models import Patron, Address, PhoneNumber, Subscription, CreditCard, OpeningTimes, ProPackage, Billing
 
 
 def get_time_series(request=None):
@@ -245,6 +245,44 @@ class SubscriptionResource(ModelResource):
 		patron.subscribe(new_propackage)
 
 		return bundle
+
+
+class BillingResource(ModelResource):
+	class Meta:
+		queryset = Billing.objects.all()
+		resource_name = 'accounts/billing'
+		list_allowed_methods = ['get']
+		detail_allowed_methods = ['get']
+
+
+	def apply_authorization_limits(self, request, object_list):
+		return object_list.filter(patron=request.user)
+
+	
+	def dehydrate(self, bundle):
+		billing = Billing.objects.get(pk=int(bundle.data['id']))
+		bundle.data['masked_credit_card_number'] = billing.payment.creditcard.masked_number
+
+		return bundle
+		
+	
+	def alter_list_data_to_serialize(self, request, data):
+		patron = request.user
+		to = datetime.datetime.now()
+		_from = datetime.datetime.combine(patron.next_billing_date(), datetime.time())
+
+		(billing, highlights, subscriptions, toppositions, phonenotifications, 
+		emailnotifications) = Billing.builder(patron, _from, to)
+
+		objects = data['objects']
+		data['objects'] = {'billing_history': objects}
+
+		data['objects'].update({'current_billing': {'billing': billing.__dict__, 'highlights': list(highlights.values()), 'subscriptions': list(subscriptions.values()), 
+        	'toppositions': list(toppositions.values()), 'phonenotifications': list(phonenotifications.values()), 
+        	'emailnotifications': list(emailnotifications.values()), 'from': _from, 'to': to }})
+		
+		return data
+
 
 
 class CreditCardResource(ModelResource):
@@ -496,4 +534,5 @@ api_v1.register(AddressResource())
 api_v1.register(PhoneNumberResource())
 api_v1.register(SubscriptionResource())
 api_v1.register(ProPackageResource())
+api_v1.register(BillingResource())
 api_v1.register(CreditCardResource())

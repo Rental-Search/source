@@ -497,6 +497,7 @@
 
 		<script type="text/template" id="billingnavtabcontent-template">
 			<h3><%= titleName %></h3>
+			<% console.log(model); %>
 			<h4>Relevé actuel du mois</h4>
 			<div class="content">
 				<table class="table table-billing">
@@ -549,18 +550,14 @@
 						</tr>
 					</thead>
 					<tbody>
-						<tr class="billing-error">
-							<td>12/03/2013</td>
-							<td>1XXX XXXX XXXX X234</td>
-							<td><a href="#" target="_blank"></a></td>
-							<td></td>
-						</tr>
-						<tr>
-							<td>12/03/2013</td>
-							<td>1XXX XXXX XXXX X234</td>
-							<td><a href="#" target="_blank">Télécharger la facture</a></td>
-							<td>23,00&euro;</td>
-						</tr>
+						<% _.each(model.billing_history, function(billing) { %>
+							<tr <% if ( billing.state == 'unpaid' ) {%>class="billing-error"<% }%>>
+								<td><%= billing.created_at %></td>
+								<td><%= billing.masked_credit_card_number %></td>
+								<td><% if ( billing.state == 'unpaid' ) { %>Disponible après le paiement<% } %></td>
+								<td><%= billing.total_amount %></td>
+							</tr>
+						<% }); %>
 					</tbody>
 				</table>
 			</div>
@@ -577,7 +574,7 @@
 						<th></th>
 					</thead>
 					<tbody>
-						<% console.log(model); _.each(model, function(plan) {%>
+						<% _.each(model, function(plan) {%>
 						<tr>
 							<td><%= plan.name %></td>
 							<td class="align-center">
@@ -617,7 +614,8 @@
 				patron: "{% url api_dispatch_list api_name="1.0" resource_name="accounts/patron" %}",
 				shop: "{% url api_dispatch_list api_name="1.0" resource_name="accounts/shop" %}",
 				subscription: "{% url api_dispatch_list api_name="1.0" resource_name="accounts/subscription" %}",
-				plan: "{% url api_dispatch_list api_name="1.0" resource_name="accounts/propackage" %}"
+				plan: "{% url api_dispatch_list api_name="1.0" resource_name="accounts/propackage" %}",
+				bills: "{% url api_dispatch_list api_name="1.0" resource_name="accounts/billing"%}"
 			};
 
 			STATIC_URL = '{{ STATIC_URL }}'

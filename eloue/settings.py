@@ -336,6 +336,7 @@ PIPELINE_JS = {
             'proapp/js/models/shop.js',
             'proapp/js/models/subscription.js',
             'proapp/js/models/plan.js',
+            'proapp/js/models/bill.js',
             'proapp/js/collections/plans.js',
             'proapp/js/views/navtabs/navtabsitem.js',
             'proapp/js/views/navtabs/navtabcontent.js',
