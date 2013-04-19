@@ -3,11 +3,11 @@
 var app = app || {};
 
 
-app.SubscriptionNavTabContentView = app.AccountsNavTabContentView.extend({
+app.PlanNavTabContentView = app.AccountsNavTabContentView.extend({
 
 	template: _.template($("#plannavtabcontent-template").html()),
 
-	model: app.SubscriptionModel,
+	model: app.PlansCollection,
 
 	events: {
 		'submit form':				'submitForm',
@@ -16,27 +16,35 @@ app.SubscriptionNavTabContentView = app.AccountsNavTabContentView.extend({
 	submitForm: function (e) {
 		var data = this.serializeDataObject(e.currentTarget);
 
-		console.log(data);
+		var subscriptionModel = new app.SubscriptionModel();
 
-		this.model.save(data, {
+		var self = this;
+		
+		subscriptionModel.fetch({
 			success: function(model, response, options) {
-				console.log(model);
-				console.log(response);
-				console.log(options);
+				subscriptionModel.save(data, {
+					success: function(model, response, options) {
+						self.model.fetch();
+					},
+					error: function(model, xhr, options) {
+						console.log("error to save");
+					}
+				});
 			},
 			error: function(model, xhr, options) {
-				console.log(model);
-				console.log(xhr);
-				console.log(options);
+				console.log("error to fetch");
 			}
 		});
+
+		console.log(subscriptionModel.toJSON());
+
+		var self = this;
 
 		return false;
 	},
 
 	serializeDataObject: function(form) {
 		var data = $(form).serializeObject();
-		console.log(data.subscription)
 		var object = {
 			propackage: {
 				id: data.subscription

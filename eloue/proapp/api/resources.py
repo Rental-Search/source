@@ -192,11 +192,22 @@ class PhoneNumberResource(ModelResource):
 class ProPackageResource(ModelResource):
 
 	class Meta:
-		queryset = ProPackage.objects.all()
+		queryset = ProPackage.objects.filter(
+					Q(valid_until__isnull=True, valid_from__lte=datetime.datetime.now()) |
+        			Q(valid_until__isnull=False, valid_until__gte=datetime.datetime.now()))
 		resource_name = 'accounts/propackage'
 		list_allowed_methods = ['get']
 		detail_allowed_methods = ['get']
 		authentication = SessionAuthentication()
+
+	def dehydrate(self, bundle):
+		patron = bundle.request.user
+		if patron.current_subscription and int(bundle.data['id']) == patron.current_subscription.propackage.pk:
+			bundle.data['is_current_subscription'] = True
+		else:
+			bundle.data['is_current_subscription'] = False
+
+		return bundle
 
 
 class SubscriptionResource(ModelResource):
@@ -206,7 +217,7 @@ class SubscriptionResource(ModelResource):
 	class Meta:
 		queryset = Subscription.objects.all()
 		resource_name = 'accounts/subscription'
-		list_allowed_methods = ['get']
+		list_allowed_methods = ['get', 'post']
 		detail_allowed_methods = ['get', 'post', 'put']
 		authentication = SessionAuthentication()
 		authorization = Authorization()
@@ -214,22 +225,20 @@ class SubscriptionResource(ModelResource):
 	def apply_authorization_limits(self, request, object_list):
 		return object_list.filter(patron=request.user, subscription_ended=None)
 
-	def dehydrate(self, bundle):
-		now = datetime.datetime.now()
-		propackages = ProPackageResource()
-		objects = ProPackage.objects.filter(
-					Q(valid_until__isnull=True, valid_from__lte=now) |
-        			Q(valid_until__isnull=False, valid_until__gte=now))
-
-		bundle.data['plans'] = list(objects.values())
-		return bundle
-
 	def is_valid(self, bundle, request=None):
 		errors = {}
 
 		return errors
 
 	def obj_update(self, bundle, request=None, **kwargs):
+		patron = request.user
+		new_propackage = ProPackage.objects.get(pk=bundle.data['propackage']['id'])
+
+		patron.subscribe(new_propackage)
+
+		return bundle
+
+	def obj_create(self, bundle, request=None, **kwargs):
 		patron = request.user
 		new_propackage = ProPackage.objects.get(pk=bundle.data['propackage']['id'])
 

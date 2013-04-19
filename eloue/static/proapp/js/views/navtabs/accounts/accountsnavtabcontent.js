@@ -20,7 +20,7 @@ app.AccountsNavTabContentView = app.NavTabContentView.extend({
 		this.loadingView = new app.LoadingView();
 
 		this.model = new this.model();
-		this.model.on('change', this.render, this);
+		this.model.on('sync', this.render, this);
 		this.model.on('invalid', this.showErrors, this);
 
 		this.renderLoading();
@@ -67,7 +67,7 @@ app.AccountsNavTabContentView = app.NavTabContentView.extend({
 				self._enabledForm();
 			}
 		});
-				
+
 		return false;
 	},
 

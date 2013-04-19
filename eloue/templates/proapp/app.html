@@ -577,7 +577,7 @@
 						<th></th>
 					</thead>
 					<tbody>
-						<% _.each(model.plans, function(plan) {%>
+						<% console.log(model); _.each(model, function(plan) {%>
 						<tr>
 							<td><%= plan.name %></td>
 							<td class="align-center">
@@ -589,7 +589,7 @@
 							</td>
 							<td class="align-center"><%= plan.price %>&euro;</td>
 							<td class="align-center">
-								<% if ( plan.id == model.propackage.id ){%>
+								<% if ( plan.is_current_subscription ){%>
 									Votre abonnement actuel
 								<% } else {%>
 									<form action="#">
@@ -616,7 +616,8 @@
 				traffic_events: "{% url api_dispatch_list api_name="1.0" resource_name="pageviews" %}",
 				patron: "{% url api_dispatch_list api_name="1.0" resource_name="accounts/patron" %}",
 				shop: "{% url api_dispatch_list api_name="1.0" resource_name="accounts/shop" %}",
-				subscription: "{% url api_dispatch_list api_name="1.0" resource_name="accounts/subscription" %}"
+				subscription: "{% url api_dispatch_list api_name="1.0" resource_name="accounts/subscription" %}",
+				plan: "{% url api_dispatch_list api_name="1.0" resource_name="accounts/propackage" %}"
 			};
 
 			STATIC_URL = '{{ STATIC_URL }}'
