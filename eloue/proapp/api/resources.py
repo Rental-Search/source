@@ -18,7 +18,7 @@ from tastypie.authorization import Authorization
 from eloue.proapp.analytics_api_v3_auth import GoogleAnalyticsSetStats
 from eloue.proapp.api.authentication import SessionAuthentication
 from eloue.proapp.forms import TimeSeriesForm
-from eloue.products.models import Product, Category, Picture, Price
+from eloue.products.models import Product, Category, Picture, Price, ProductTopPosition, ProductHighlight
 from eloue.accounts.models import Patron, Address, PhoneNumber, Subscription, CreditCard, OpeningTimes, ProPackage, Billing
 
 
@@ -264,22 +264,59 @@ class BillingResource(ModelResource):
 		bundle.data['masked_credit_card_number'] = billing.payment.creditcard.masked_number
 
 		return bundle
-		
+
 	
 	def alter_list_data_to_serialize(self, request, data):
 		patron = request.user
 		to = datetime.datetime.now()
 		_from = datetime.datetime.combine(patron.next_billing_date(), datetime.time())
 
+		#Generate current billing
 		(billing, highlights, subscriptions, toppositions, phonenotifications, 
 		emailnotifications) = Billing.builder(patron, _from, to)
+		
+		current_billing = {
+			'billing': billing.__dict__, 
+			'highlights': list(highlights.values()),
+			'highlights_sum': highlights.sum,
+			'subscriptions': list(subscriptions.values()),
+			'subscriptions_sum': subscriptions.sum,
+        	'toppositions': list(toppositions.values()),
+        	'toppositions_sum': toppositions.sum,
+        	'phonenotifications': list(phonenotifications.values()),
+        	'emailnotifications': list(emailnotifications.values()), 
+        	'from': _from, 'to': to 
+		}
+
+		for subscription in current_billing['subscriptions']:
+			sub = Subscription.objects.get(pk=subscription['id'])
+			subscription['propackage'] = sub.propackage.name
+			del subscription['propackage_id']
+			if sub.subscription_started and sub.subscription_ended:
+				subscription['price'] = sub.price(sub.subscription_started, sub.subscription_ended)
+			else:
+				subscription['price'] = None
+
+
+		for topposition in current_billing['toppositions']:
+			top = ProductTopPosition.objects.get(pk=topposition['id'])
+			topposition['product'] = top.product.summary
+			if top.started_at and top.ended_at:
+				topposition['price'] = top.price(top.started_at, top.ended_at)
+			del topposition['product_id']
+
+
+		for highlight in current_billing['highlights']:
+			hight = ProductHighlight.objects.get(pk=highlight['id'])
+			highlight['product'] = top.product.summary
+			if hight.started_at and hight.ended_at:
+				topposition['price'] = hight.price(hight.started_at, hight.ended_at)
+			del highlight['product_id']
 
 		objects = data['objects']
 		data['objects'] = {'billing_history': objects}
 
-		data['objects'].update({'current_billing': {'billing': billing.__dict__, 'highlights': list(highlights.values()), 'subscriptions': list(subscriptions.values()), 
-        	'toppositions': list(toppositions.values()), 'phonenotifications': list(phonenotifications.values()), 
-        	'emailnotifications': list(emailnotifications.values()), 'from': _from, 'to': to }})
+		data['objects'].update({'current_billing': current_billing})
 		
 		return data
 

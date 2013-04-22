@@ -509,7 +509,7 @@
 							<td>
 								<table class="table">
 									<thead>
-										<tr><td>Plan et options</td><td class="table-billing-amount">0,00</td></tr>
+										<tr><td>Plan et options</td><td class="table-billing-amount"><%= model.current_billing.billing.total_amount%> &euro;</td></tr>
 									</thead>
 								</table>
 							</td>
@@ -522,14 +522,102 @@
 								<table class="table">
 									<thead>
 										<tr>
-											<td><i class="halflings-icon minus-sign blue"></i> Plan</td>
-											<td class="table-billing-amount">0,00</td>
+											<td><i class="halflings-icon plus-sign blue"></i> Plan</td>
+											<td></td>
+											<td class="table-billing-amount"><%= model.current_billing.subscriptions_sum %> &euro;</td>
 										</tr>
 									</thead>
-									<tbody style="display: table-row-group;">
+									<tbody>
+										<% _.each(model.current_billing.subscriptions, function(subscription) {%>
 										<tr>
-											<td class="table-billing-item">Infini - Illimité annonces (<a href="/dashboard/account/pro_account/subscription/">Modifier mon plan</a>)</td>
-											<td class="table-billing-amount">0,00 €</td>
+											<td class="table-billing-item"><%= subscription.propackage %></td>
+											<% if ( _.isNull(subscription.subscription_ended) ) { %>
+												<td class="table-billing-range-date">Abonnement en cours. A débuté le <%= subscription.subscription_started %>.</td>
+											<% } else { %>
+												<td class="table-billing-range-date">Du <%= subscription.subscription_started %> au <%= subscription.subscription_ended %></td>
+											<% } %>
+											<td class="table-billing-amount">
+												<% if ( !_.isNull(subscription.price) ) { %> <%= subscription.price %> &euro;<% } %>
+											</td>
+										</tr>
+										<% }); %>
+									</tbody>
+								</table>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<table class="table">
+									<thead>
+										<tr>
+											<td><i class="halflings-icon plus-sign blue"></i> Top position</td>
+											<td></td>
+											<td class="table-billing-amount"><%= model.current_billing.toppositions_sum %> &euro;</td>
+										</tr>
+									</thead>
+									<tbody>
+										<% _.each(model.current_billing.toppositions, function(topposition) {%>
+										<tr>
+											<td class="table-billing-item"><%= topposition.product %></td>
+											<% if ( _.isNull(topposition.ended_at) ) { %>
+												<td class="table-billing-range-date">Top position en cours. A débuté le <%= topposition.started_at %>.</td>
+											<% } else { %>
+												<td class="table-billing-range-date">Du <%= toppositon.started_at %> au <%= topposition.ended_at %></td>
+											<% } %>
+											<td class="table-billing-amount">
+												<% if ( !_.isUndefined(topposition.price) ) { %> <%= topposition.price %> &euro;<% } %>
+											</td>
+										</tr>
+										<% }); %>
+									</tbody>
+								</table>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<table class="table">
+									<thead>
+										<tr>
+											<td><i class="halflings-icon plus-sign blue"></i> Mise en avant</td>
+											<td></td>
+											<td class="table-billing-amount"><%= model.current_billing.highlights_sum %> &euro;</td>
+										</tr>
+									</thead>
+									<tbody>
+										<% _.each(model.current_billing.highlights, function(highlight) {%>
+										<tr>
+											<td class="table-billing-item"><%= highlight.product %></td>
+											<% if ( _.isNull(highlight.ended_at) ) { %>
+												<td class="table-billing-range-date">Top position en cours. A débuté le <%= highlight.started_at %>.</td>
+											<% } else { %>
+												<td class="table-billing-range-date">Du <%= highlight.started_at %> au <%= highlight.ended_at %></td>
+											<% } %>
+											<td class="table-billing-amount">
+												<% if ( !_.isUndefined(highlight.price) ) { %> <%= highlight.price %> &euro;<% } %>
+											</td>
+										</tr>
+										<% }); %>
+									</tbody>
+								</table>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<table class="table">
+									<thead>
+										<tr>
+											<td><i class="halflings-icon plus-sign blue"></i> TVA</td>
+											<td></td>
+											<td class="table-billing-amount"><%= model.current_billing.billing.total_tva %></td>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td class="table-billing-item">TVA à 19,6%</td>
+											<td class="table-billing-range-date"></td>
+											<td class="table-billing-amount">
+												<%= model.current_billing.billing.total_tva %>
+											</td>
 										</tr>
 									</tbody>
 								</table>

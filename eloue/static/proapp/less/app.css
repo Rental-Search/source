@@ -7507,6 +7507,15 @@ select {
   text-align: right;
   width: 80px;
 }
+.table-billing .table .table-billing-range-date {
+  text-align: center;
+}
+.table-billing .table .halflings-icon {
+  vertical-align: middle;
+}
+.table-billing .detail-content {
+  display: none;
+}
 .table-billing-history {
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: Arial;
