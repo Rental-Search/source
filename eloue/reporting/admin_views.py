@@ -35,6 +35,8 @@ def stats(request):
 		'patrons_private': (Patron.objects.filter(Q(is_professional=False) | Q(is_professional=None)) , 'date_joined'),
 		'patrons_professionnal': (Patron.objects.filter(is_professional=True), 'date_joined'),
 		'products': (Product.objects.all(), 'created_at'),
+		'products_pro': (Product.objects.filter(owner__is_professional=True), 'created_at'),
+		'products_private': (Product.objects.filter(owner__is_professional=False), 'created_at'),
 		'car_product': (CarProduct.objects.all(), 'created_at'),
 		'real_estate_product': (RealEstateProduct.objects.all(), 'created_at'),
 		'other_item_product': (Product.objects.filter(carproduct=None).filter(realestateproduct=None), 'created_at'),
