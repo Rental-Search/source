@@ -7552,3 +7552,76 @@ select {
 .table-plan-list .align-left {
   text-align: left;
 }
+.list-side-content {
+  float: left;
+  width: 280px;
+  border-right: 1px solid #b2ced9;
+  overflow-y: auto;
+  height: 100%;
+}
+.items-list {
+  margin: 0px;
+  list-style-type: none;
+}
+.items-list li {
+  position: relative;
+  margin: 0;
+}
+.items-list li:hover {
+  background-color: #ebf2f5;
+  cursor: pointer;
+}
+.items-list li a {
+  color: #364c59;
+  text-decoration: none;
+  display: block;
+  padding: 7px 15px 7px 20px;
+  border-bottom: 1px solid #b2ced9;
+}
+.items-list li.active {
+  background-color: #5DB5D4;
+}
+.items-list li.active a,
+.items-list li.active small {
+  color: #fff;
+}
+.items-list li:last-child {
+  border-bottom: none;
+}
+.items-list li .item-status {
+  position: absolute;
+  top: 33px;
+  left: 4px;
+  height: 10px;
+  width: 10px;
+  -webkit-border-radius: 50px;
+  -moz-border-radius: 50px;
+  border-radius: 50px;
+}
+.items-list li .unread {
+  background: #9dcc09;
+}
+.items-list li .item-img {
+  display: block;
+  margin-right: 10px;
+}
+.items-list li .item-body h5 {
+  margin-top: -3px;
+  margin-bottom: 5px;
+  font-size: 13px;
+}
+.items-list li .item-body h5 small {
+  float: right;
+  margin-top: 4px;
+}
+.items-list li .item-resume {
+  margin-bottom: 0px;
+  font-size: 12px;
+}
+.label-price,
+.badge-price {
+  background-color: #fff;
+  color: #ff6600;
+  text-shadow: 0 -1px 0 rgba(255, 255, 255, 0.25);
+  font-weight: normal;
+}

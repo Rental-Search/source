@@ -690,6 +690,36 @@
 			</div>
 		</script>
 
+		<script type="text/template" id="list-template">
+			<ul class="items-list">
+				<% _.each(collection, function(item) { %>
+				<li>
+					<a href="ads/<%= item.id %>" resource_uri="<%= item.resource_uri %>" class="clearfix">
+						<div class="item-status"></div>
+						<img class="item-img pull-left" src="/static/images/default_avatar.png" alt="">
+						<div class="item-body">
+							<h5><%= item.summary %></h5>
+							<p class="item-resume">
+								<span class="label label-price">
+								<% if( _.isNull(item.day_price) ) {%>
+									Sur devis
+								<% } else {%> <%= item.day_price %> &euro;<% } %>
+								</span>
+							</p>
+						</div>
+					</a>
+				</li>
+				<% }); %>
+			</ul>
+		</script>
+
+		<script type="text/template" id="list-detail-template">
+			<% if ( _.isNull(model) ) {%>
+				<p>Pas d&#145;annonce sélectionné</p>
+			<% } else {%>
+				<p><%= model.summary %></p>
+			<% } %>
+		</script>
 		 <!-- Include the CSRF token in the body of the HTML -->
         {% csrf_token %}
 
@@ -703,7 +733,8 @@
 				shop: "{% url api_dispatch_list api_name="1.0" resource_name="accounts/shop" %}",
 				subscription: "{% url api_dispatch_list api_name="1.0" resource_name="accounts/subscription" %}",
 				plan: "{% url api_dispatch_list api_name="1.0" resource_name="accounts/propackage" %}",
-				bills: "{% url api_dispatch_list api_name="1.0" resource_name="accounts/billing"%}"
+				bills: "{% url api_dispatch_list api_name="1.0" resource_name="accounts/billing"%}",
+				product: "{% url api_dispatch_list api_name="1.0" resource_name="products/product"%}",
 			};
 
 			STATIC_URL = '{{ STATIC_URL }}'

@@ -65,7 +65,7 @@ var Workspace = Backbone.Router.extend({
 
 	ads: function() {
 		app.layoutView.navPillsView.navPillsItemViews[3].setSelectedPillItem();
-		var adsNavPillContentView = new app.NavPillContentView();
+		var adsNavPillContentView = new app.AdsNavPillContentView();
 		adsNavPillContentView.id = 'ads';
 		app.layoutView.setCurrentNavPillContent(adsNavPillContentView);
 		app.layoutView.renderNavPillContent();

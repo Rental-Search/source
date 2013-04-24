@@ -1,4 +1,4 @@
-// js/views/navpillsitem.js
+// js/views/navpills/navpillcontent.js
 
 var app = app || {};
 
