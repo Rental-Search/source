@@ -114,8 +114,8 @@ class Command(BaseCommand):
 
 						product.save()
 						print product
-					except:
-						print "error"
+					except Exception,e:
+						print e
 						break
 					else:
 						break
