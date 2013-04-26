@@ -1,0 +1,68 @@
+.range-date {
+	float: right;
+	margin-right: 15px;
+	margin-top: 4px;
+
+
+	#appendedDropdownButton {
+		height: 22px;
+	}
+
+	input { 
+		border-color: #b2ced9;
+		color: #364c59;
+	}
+
+	.span4 {
+		text-align: center;
+		cursor: text;
+	}
+
+	input[disabled] { background-color: #fff; }
+
+	.dropdown-menu {
+		form { margin: 0 10px; }
+		border-color: #b2ced9;
+	}
+
+	.input-small { 
+		text-align: center;
+
+		&.error {
+			border-color: @red;
+			.box-shadow(~"inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(157,38,29,.6)");
+		}
+	}
+
+	.timeseries-shortcut {
+		font-size: 11px;
+		text-align: center;
+		margin-left: 15px;
+	}
+
+	.form-inline {
+		.input-small, button { .border-radius(3px); }
+
+		button { 
+			vertical-align: middle;
+			height: 30px;
+		}
+
+		.btn-small:last-child {
+			.border-radius(3px) !important;
+			margin-left: 5px;
+		}
+
+
+	}
+
+	.btn-group.open .btn.dropdown-toggle {
+		background-color: #dbeaf7;
+	}
+
+	#datepicker {
+		border-bottom: 1px solid #b2ced9;
+		margin-bottom: 5px;
+		padding-bottom: 5px;
+	}
+}

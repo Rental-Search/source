@@ -469,7 +469,7 @@ from datetime import time
 HOURS = [(time(h, 0), "%02d:00" % (h,)) for h in xrange(24)]
 
 class OpeningTimes(models.Model):
-    patron = models.OneToOneField(Patron, editable=False)
+    patron = models.OneToOneField(Patron, editable=False, related_name='opening_times')
 
     monday_opens = models.TimeField(_(u'De'), choices=HOURS, null=True, blank=True)
     monday_closes = models.TimeField(_(u'à'), choices=HOURS, null=True, blank=True)

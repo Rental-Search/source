@@ -1,4 +1,3 @@
-
 # -*- coding: utf-8 -*-
 import local
 import logging
@@ -265,6 +264,15 @@ PIPELINE_CSS = {
             'media': 'screen',
         }
     },
+    'proapp': {
+        'source_filenames': (
+            'proapp/less/app.less',
+        ),
+        'output_filename': 'css/proapp.css',
+        'extra_context': {
+            'media': 'screen',
+        },
+    }
 }
 
 PIPELINE_JS = {
@@ -280,12 +288,96 @@ PIPELINE_JS = {
             'js/jquery.cookie.js',
             'js/jquery.cycle.all.latest.js',
             'js/application2.js',
-            ),
+        ),
         'output_filename': 'js/application2r.js',
         'extra_context': {
             'defer': False,
         },
     },
+    'proapplibs': {
+        'source_filenames': (
+            'proapp/js/libs/jquery.js',
+            'proapp/js/libs/underscore-min.js',
+            'proapp/js/libs/backbone.js',
+            'proapp/js/libs/backbone-tastypie.js',
+            'proapp/js/libs/backbone.layoutmanager.js',
+            'proapp/js/libs/bootstrap/bootstrap-transition.js',
+            'proapp/js/libs/bootstrap/bootstrap-alert.js',
+            'proapp/js/libs/bootstrap/bootstrap-modal.js',
+            'proapp/js/libs/bootstrap/bootstrap-dropdown.js',
+            'proapp/js/libs/bootstrap/bootstrap-scrollspy.js',
+            'proapp/js/libs/bootstrap/bootstrap-tab.js',
+            'proapp/js/libs/bootstrap/bootstrap-tooltip.js',
+            'proapp/js/libs/bootstrap/bootstrap-popover.js',
+            'proapp/js/libs/bootstrap/bootstrap-button.js',
+            'proapp/js/libs/bootstrap/bootstrap-collapse.js',
+            'proapp/js/libs/bootstrap/bootstrap-carousel.js',
+            'proapp/js/libs/bootstrap/bootstrap-typeahead.js',
+            'proapp/js/libs/flot/jquery.flot.js',
+            'proapp/js/libs/flot/jquery.flot.pie.js',
+            'proapp/js/libs/flot/jquery.flot.time.js',
+            'proapp/js/libs/ui/jquery.ui.core.js',
+            'proapp/js/libs/ui/jquery.ui.datepicker.js',
+            'proapp/js/libs/ui/i18n/jquery.ui.datepicker-fr.js'
+        ),
+        'output_filename': 'js/proapplibs.js',
+        'extra_context': {
+            'defer': False,
+        },
+    },
+
+    'proapp': {
+        'source_filenames': (
+            'proapp/js/models/trafficevents.js',
+            'proapp/js/models/addressevents.js',
+            'proapp/js/models/redirectionevents.js',
+            'proapp/js/models/phoneevents.js',
+            'proapp/js/models/patron.js',
+            'proapp/js/models/shop.js',
+            'proapp/js/models/subscription.js',
+            'proapp/js/models/plan.js',
+            'proapp/js/models/bill.js',
+            'proapp/js/models/product.js',
+            'proapp/js/collections/plans.js',
+            'proapp/js/collections/products.js',
+            'proapp/js/views/list/navcontent.js',
+            'proapp/js/views/list/listdetail.js',
+            'proapp/js/views/list/list.js',
+            'proapp/js/views/navtabs/navtabsitem.js',
+            'proapp/js/views/navtabs/navtabcontent.js',
+            'proapp/js/views/navtabs/stats/statsnavtabcontent.js',
+            'proapp/js/views/navtabs/stats/redirectionnavtabcontent.js',
+            'proapp/js/views/navtabs/stats/phonenavtabcontent.js',
+            'proapp/js/views/navtabs/stats/addressnavtabcontent.js',
+            'proapp/js/views/navtabs/stats/trafficnavtabcontent.js',
+            'proapp/js/views/navtabs/stats/timeseries.js',
+            'proapp/js/views/navtabs/stats/charts.js',
+            'proapp/js/views/navtabs/stats/chartsdetails.js',
+            'proapp/js/views/navtabs/accounts/accountsnavtabcontent.js',
+            'proapp/js/views/navtabs/accounts/patronnavtabcontent.js',
+            'proapp/js/views/navtabs/accounts/shopnavtabcontent.js',
+            'proapp/js/views/navtabs/accounts/billingnavtabcontent.js',
+            'proapp/js/views/navtabs/accounts/subscriptionnavtabcontent.js',
+            'proapp/js/views/navtabs/accounts/plannavtabcontent.js',
+            'proapp/js/views/navtabs/navtabs.js',
+            'proapp/js/views/navpills/navpillcontent.js',
+            'proapp/js/views/navpills/statsnavpillcontent.js',
+            'proapp/js/views/navpills/accountsnavpillcontent.js',
+            'proapp/js/views/navpills/adsnavpillcontent.js',
+            'proapp/js/views/navpills/navpillsitem.js',
+            'proapp/js/views/navpills/navpills.js',
+            'proapp/js/views/layout.js',
+            'proapp/js/views/loading.js',
+            'proapp/js/routers/routes.js',
+            'proapp/js/utils.js',
+            'proapp/js/app.js',
+        ),
+        'output_filename': 'js/proapplibs.js',
+        'extra_context': {
+            'defer': False,
+        },
+    },
+
 }
 
 
@@ -486,3 +578,8 @@ TVA = decimal.Decimal('0.196')
 
 GA_PING_QUEUE_CONNECTION = ('localhost', 6379, 1)
 GA_PING_QUEUE_NAME = 'ga_queue'
+
+
+#GOOGLE TOKEN
+GOOGLE_CLIENT_SECRETS = getattr(local, 'GOOGLE_CLIENT_SECRETS', '')
+GOOGLE_TOKEN_FILE_NAME = getattr(local, 'GOOGLE_TOKEN_FILE_NAME', '')

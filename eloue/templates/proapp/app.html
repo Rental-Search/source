@@ -1,0 +1,770 @@
+{% load compressed %}
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<title>Pro App</title>
+		{% block head %}
+			{% compressed_css 'proapp' %}
+		{% endblock %}
+	</head>
+	<body>
+		<script type="text/template" id="loading-template">
+			<p class="loading-app">
+				<img src="{{ STATIC_URL }}proapp/img/app/loading.gif" width="123" height="70">
+			</p>
+		</script>
+
+		<script type="text/template" id="navpillsitem-template">
+			<a href="<%= path %>"><i class="glyphicons-icon <%= icon %> blue"></i><br><%= label %></a>
+			<span class="arrow-tab"></span>
+		</script>
+
+		<script type="text/template" id="navpillcontent-template">
+			<h1><%= name %></h1>
+		</script>
+
+		<script type="text/template" id="navtabsitem-template">
+			<a href="<%= path %>">
+				<i class="halflings-icon <%= icon %> blue"></i>  
+				&nbsp;<%= label %>
+			</a>
+		</script>
+
+		<script type="text/template" id="timeseriesform-template">
+			<input class="span4" id="appendedDropdownButton" type="text" value="<%= timeseriesvalue %>" disabled="disabled">
+			<div class="btn-group">
+				<button class="btn dropdown-toggle">
+					<span class="caret"></span>
+				</button>
+				<div class="dropdown-menu pull-right">
+					<div id="datepicker"></div>
+					<div class="dropdown-menu-bottom">
+						<form class="form-inline pull-right" action="#">
+							<input type="text" class="input-small" name="start_date" value="<%= start_date %>"> -
+							<input type="text" class="input-small" name="end_date" value="<%= end_date %>"> 
+							<input type="hidden" name="interval" value="<%= interval %>"> 
+							<button type="submit" class="btn btn-small">Appliquer</button>
+						</form>
+						<div class="timeseries-shortcut pull-left">
+							<span>Racourcis : </span> 
+							<a href="#today-link">aujourd&#145;hui</a> |
+							<a href="#yesterday-link">Hier</a> |
+							<a href="#lastweek-link">La semaine dernière</a> |
+							<a href="#lastmonth-link">Le mois dernier</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</script>
+
+		<script type="text/template" id="charts-template">
+			<div class="charts-header clearfix">
+              <ul class="charts-legend pull-left">
+              <% _.each(chartLegends, function( legend ){ %>
+                <li class="<%= legend.className %>">
+                  <i class="halflings-icon <%= legend.icon %> blue"></i>&nbsp;<%= legend.count %>&nbsp;<%= legend.labelName %> <% if ( legend.count > 1 ) { %>s<% };%>
+                </li>
+              <% }); %>
+              </ul>
+              <div class="btn-group pull-right filter-time">
+                <button id="days" class="btn btn-mini	">Jour</button>
+                <button id="weeks" class="btn btn-mini">Semaine</button>
+                <button id="months" class="btn btn-mini">Mois</button>
+              </div>
+            </div>
+			<div id="overview">
+				<div id="plot"></div>
+			</div> 
+		</script>
+		
+		<script type="text/template" id="chartstooltip-template">
+			<div id="charts-popover" class="popover top">
+				<div class="arrow"></div>
+				<h3 class="popover-title"><%= date %></h3>
+				<div class="popover-content">
+					<p>
+						<span class="charts-label-color" style="background-color: <%= color %>"></span>
+						<%= label %> : <%= count %>
+					</p>
+				</div>
+			</div>
+		</script>
+
+		<script type="text/template" id="chartsdetails-template">
+			<table class="table table-striped">
+				<thead>
+					<tr>
+					<% _.each(headerItems, function(item){ %>
+						<th><%= item %></th>
+					<% }); %>
+					</tr>
+				</thead>
+				<tboby>
+					<%_.each(dataList, function(value, key) { %>
+						<tr>
+							<td><a href="<%= key %>" target="_blank"><%= key %></a></td>
+							<td style="width: 170px; text-align: center;"><%= value %></td>
+						</tr>
+					<% }); %>
+				</tbody>
+			</table>
+		</script>
+
+		<script type="text/template" id="accountsnavtabcontent-template">
+			<h3><%= titleName %></h3>
+			<form action="#">
+				<fieldset>
+					<legend style="margin-bottom: 20px;">Informations sur le gérant</legend>
+					<div style="margin-left: 10px;">
+						<div class="control-group">
+							<label for="id_username">Pseudo</label>
+							<input type="text" id="id_username" name="username" value="<%= model.username %>" placeholder="Pseudo" class="span5">
+						</div>
+						<div class="control-group ">
+							<label for="id_email">Email</label>
+							<input name="email" maxlength="75" àtocapitalize="off" àtocorrect="off" type="text" value="<%= model.email %>" id="id_email" placeholder="Email" class="span5">
+						</div>
+						<div class="control-group">
+							<label for="id_civility">Civilité</label>
+							<select name="civility" id="id_civility" class="span5">
+								<option value="">Civilité</option>
+								<option value="0" <% if (model.civility == 0) { %>selected="selected" <% } %>>Madame</option>
+								<option value="1" <% if (model.civility == 1) { %>selected="selected" <% } %>>Mademoiselle</option>
+								<option value="2" <% if (model.civility == 2) { %>selected="selected" <% } %>>Monsieur</option>
+							</select>
+						</div>
+						<div class="control-group ">
+							<label for="id_first_name">Prénom</label>
+							<input id="id_first_name" type="text" value="<%= model.first_name %>" name="first_name" placeholder="Prénom" class="span5">
+						</div>
+						<div class="control-group ">
+							<label for="id_last_name">Nom</label>
+							<input id="id_last_name" type="text" value="<%= model.last_name %>" name="last_name" placeholder="Nom" class="span5">
+						</div>
+					</div>
+				</fieldset>
+				<div class="form-actions">
+  					<button type="submit" class="btn btn-primary">Enregistrer</button> <button type="button" class="btn cancel">Annuler</button>
+				</div>
+			</form>
+		</script>
+
+		<script type="text/template" id="shopnavtabcontent-template">
+			<h3><%= titleName %></h3>
+			<form action="#">
+				<fieldset>
+					<legend style="margin-bottom: 20px;">Informations sur la boutique</legend>
+					<div class="media" style="margin-top: 10px;">
+						<div class="pull-left" style="text-align: center; margin-left: 10px;">
+							<img src="{{ STATIC_URL }}proapp/img/app/no-company-logo.png" class="media-object img-polaroid" style="margin-bottom: 10px;">
+							<button id="add-logo-company" class="btn btn-mini">Ajouter un logo</button>
+						</div>
+						<div class="media-body">
+							<div class="control-group">
+								<label>Nom de la boutique</label>
+	    						<input type="text" placeholder="Nom de la boutique" id="id_company_name" name="company_name" value="<%= model.company_name %>" class="span5">
+	    					</div>
+	    					<div class="control-group">
+    							<label>Site internet</label>
+    							<input type="text" placeholder="Site internet" id="id_url" name="url" value="<%= model.url %>" class="span5">
+    						</div>
+    						<div class="control-group">
+    							<label>Numéro de téléphone</label>
+    							<input type="text" placeholder="Numéro de téléphone" id="id_number" name="number" value="<% if (model.default_number) { %><%= model.default_number.number %> <% } %>"  class="span5">
+    						</div>
+    						<div class="control-group">
+    							<label>Adresse</label>
+    							<input type="text" placeholder="Rue" id="id_address1" name="address1" value="<% if (model.default_address) { %><%= model.default_address.address1 %> <% } %>" class="span5">
+    						</div>
+    						<div class="control-group controls-row">
+    							<input type="text" placeholder="Code postal" id="id_zipcode" name="zipcode" value="<% if (model.default_address) { %><%= model.default_address.zipcode %><% } %>" class="span2">
+    							<input type="text" placeholder="Ville" id="id_city" name="city" value="<% if (model.default_address) { %><%= model.default_address.city %><% } %>" class="span3">
+    						</div>
+    						<div class="control-group">
+    							<label for="id_about">A propos de l&#145;entreprise</label>
+    							<textarea class="span5" style="height: 100px;" id="id_about" name="about"><%= model.about %></textarea>
+    						</div>
+    					</div>
+				</fieldset>
+				<fieldset>
+					<% console.log(model);%>
+					<legend>Horraire d&#145;ouverture de la boutique</legend>
+					<table class="table table-time">
+						<tbody>
+							<tr>
+								<td style="width: 20%;">Lundi</td>
+								<td style="width: 60%;" class="times-range">
+									<table>
+										<tr>
+											<td width="100%">
+												De&nbsp;
+												<div class="input-append">
+			  										<input class="span1" id="prependedInput" type="text" name="monday_opens" value="<%= model.opening_times.monday_opens %>">
+			  										<span class="add-on"><i class="halflings-icon time blue"></i></span>
+												</div>
+												&nbsp;à&nbsp;
+												<div class="input-append">
+			  										<input class="span1" id="prependedInput" type="text" name="monday_closes" value="<%= model.opening_times.monday_closes %>">
+			  										<span class="add-on"><i class="halflings-icon time blue"></i>  </span>
+												</div>
+											</td>
+										</tr>
+										<tr>
+											<td width="100%">
+												De&nbsp;
+												<div class="input-append">
+			  										<input class="span1" id="prependedInput" type="text" name="monday_opens_second" value="<%= model.opening_times.monday_opens_second %>">
+			  										<span class="add-on"><i class="halflings-icon time blue"></i></span>
+												</div>
+												&nbsp;à&nbsp;
+												<div class="input-append">
+			  										<input class="span1" id="prependedInput" type="text" name="monday_closes_second" value="<%= model.opening_times.monday_closes_second %>">
+			  										<span class="add-on"><i class="halflings-icon time blue"></i>  </span>
+												</div>
+											</td>
+										</tr>	
+									</table>
+								</td>
+								<td style="width: 20%;" class="actions-time">
+									<ul>
+										<li><a href="#" class="open-slot"><i class="halflings-icon plus-sign  blue"></i> Ajouter</a></li>
+										<li><a href="#" class="close-slot"><i class="halflings-icon minus-sign blue"></i> Supprimer</a></li>
+									</ul>
+								</td>
+							</tr>
+							<tr>
+								<td style="width: 20%;">Mardi</td>
+								<td style="width: 60%;" class="times-range">
+									<table>
+										<tr>
+											<td width="100%">
+												De&nbsp;
+												<div class="input-append">
+			  										<input class="span1" id="prependedInput" type="text" name="tuesday_opens" value="<%= model.opening_times.tuesday_opens %>">
+			  										<span class="add-on"><i class="halflings-icon time blue"></i></span>
+												</div>
+												&nbsp;à&nbsp;
+												<div class="input-append">
+			  										<input class="span1" id="prependedInput" type="text" name="tuesday_closes" value="<%= model.opening_times.tuesday_closes %>">
+			  										<span class="add-on"><i class="halflings-icon time blue"></i>  </span>
+												</div>
+											</td>
+										</tr>
+										<tr>
+											<td width="100%">
+												De&nbsp;
+												<div class="input-append">
+			  										<input class="span1" id="prependedInput" type="text" name="tuesday_opens_second" value="<%= model.opening_times.tuesday_opens_second %>">
+			  										<span class="add-on"><i class="halflings-icon time blue"></i></span>
+												</div>
+												&nbsp;à&nbsp;
+												<div class="input-append">
+			  										<input class="span1" id="prependedInput" type="text" name="tuesday_closes_second" value="<%= model.opening_times.tuesday_closes_second %>">
+			  										<span class="add-on"><i class="halflings-icon time blue"></i>  </span>
+												</div>
+											</td>
+										</tr>	
+									</table>
+								</td>
+								<td style="width: 20%;" class="actions-time">
+									<ul>
+										<li><a href="#" class="open-slot"><i class="halflings-icon plus-sign  blue"></i> Ajouter</a></li>
+										<li><a href="#" class="close-slot"><i class="halflings-icon minus-sign blue"></i> Supprimer</a></li>
+										<li><a href="#" class="clone-slot"><i class="halflings-icon time blue"></i> Copier</a></li>
+									</ul>
+								</td>
+							</tr>
+							<tr>
+								<td style="width: 20%;">Mercredi</td>
+								<td style="width: 60%;" class="times-range">
+									<table>
+										<tr>
+											<td>
+												De&nbsp;
+												<div class="input-append">
+			  										<input class="span1" id="prependedInput" type="text" name="wednesday_opens" value="<%= model.opening_times.wednesday_opens %>">
+			  										<span class="add-on"><i class="halflings-icon time blue"></i></span>
+												</div>
+												&nbsp;à&nbsp;
+												<div class="input-append">
+			  										<input class="span1" id="prependedInput" type="text" name="wednesday_closes" value="<%= model.opening_times.wednesday_closes %>">
+			  										<span class="add-on"><i class="halflings-icon time blue"></i>  </span>
+												</div>
+											</td>
+										</tr>
+										<tr>
+											<td>
+												De&nbsp;
+												<div class="input-append">
+			  										<input class="span1" id="prependedInput" type="text" name="wednesday_opens_second" value="<%= model.opening_times.wednesday_opens_second %>">
+			  										<span class="add-on"><i class="halflings-icon time blue"></i></span>
+												</div>
+												&nbsp;à&nbsp;
+												<div class="input-append">
+			  										<input class="span1" id="prependedInput" type="text" name="wednesday_closes_second" value="<%= model.opening_times.wednesday_closes_second %>">
+			  										<span class="add-on"><i class="halflings-icon time blue"></i>  </span>
+												</div>
+											</td>
+										</tr>	
+									</table>
+								</td>
+								<td style="width: 20%;" class="actions-time">
+									<ul>
+										<li><a href="#" class="open-slot"><i class="halflings-icon plus-sign  blue"></i> Ajouter</a></li>
+										<li><a href="#" class="close-slot"><i class="halflings-icon minus-sign blue"></i> Supprimer</a></li>
+										<li><a href="#" class="clone-slot"><i class="halflings-icon time blue"></i> Copier</a></li>
+									</ul>
+								</td>
+							</tr>
+							<tr>
+								<td style="width: 20%;">Jeudi</td>
+								<td style="width: 60%;" class="times-range">
+									<table>
+										<tr>
+											<td>
+												De&nbsp;
+												<div class="input-append">
+			  										<input class="span1" id="prependedInput" type="text" name="thursday_opens" value="<%= model.opening_times.thursday_opens %>">
+			  										<span class="add-on"><i class="halflings-icon time blue"></i></span>
+												</div>
+												&nbsp;à&nbsp;
+												<div class="input-append">
+			  										<input class="span1" id="prependedInput" type="text" name="thursday_closes" value="<%= model.opening_times.thursday_closes %>">
+			  										<span class="add-on"><i class="halflings-icon time blue"></i>  </span>
+												</div>
+											</td>
+										</tr>
+										<tr>
+											<td>
+												De&nbsp;
+												<div class="input-append">
+			  										<input class="span1" id="prependedInput" type="text" name="thursday_opens_second" value="<%= model.opening_times.thursday_opens_second %>">
+			  										<span class="add-on"><i class="halflings-icon time blue"></i></span>
+												</div>
+												&nbsp;à&nbsp;
+												<div class="input-append">
+			  										<input class="span1" id="prependedInput" type="text" name="thursday_closes_second" value="<%= model.opening_times.thursday_closes_second %>">
+			  										<span class="add-on"><i class="halflings-icon time blue"></i>  </span>
+												</div>
+											</td>
+										</tr>	
+									</table>
+								</td>
+								<td style="width: 20%;" class="actions-time">
+									<ul>
+										<li><a href="#" class="open-slot"><i class="halflings-icon plus-sign  blue"></i> Ajouter</a></li>
+										<li><a href="#" class="close-slot"><i class="halflings-icon minus-sign blue"></i> Supprimer</a></li>
+										<li><a href="#" class="clone-slot"><i class="halflings-icon time blue"></i> Copier</a></li>
+									</ul>
+								</td>
+							</tr>
+							<tr>
+								<td style="width: 20%;">Vendredi</td>
+								<td style="width: 60%;" class="times-range">
+									<table>
+										<tr>
+											<td>
+												De&nbsp;
+												<div class="input-append">
+			  										<input class="span1" id="prependedInput" type="text" name="friday_opens" value="<%= model.opening_times.friday_opens %>">
+			  										<span class="add-on"><i class="halflings-icon time blue"></i></span>
+												</div>
+												&nbsp;à&nbsp;
+												<div class="input-append">
+			  										<input class="span1" id="prependedInput" type="text" name="friday_closes" value="<%= model.opening_times.friday_closes %>">
+			  										<span class="add-on"><i class="halflings-icon time blue"></i>  </span>
+												</div>
+											</td>
+										</tr>
+										<tr>
+											<td>
+												De&nbsp;
+												<div class="input-append">
+			  										<input class="span1" id="prependedInput" type="text" name="friday_opens_second" value="<%= model.opening_times.friday_opens_second %>">
+			  										<span class="add-on"><i class="halflings-icon time blue"></i></span>
+												</div>
+												&nbsp;à&nbsp;
+												<div class="input-append">
+			  										<input class="span1" id="prependedInput" type="text" name="friday_closes_second" value="<%= model.opening_times.friday_closes_second %>">
+			  										<span class="add-on"><i class="halflings-icon time blue"></i>  </span>
+												</div>
+											</td>
+										</tr>	
+									</table>
+								</td>
+								<td style="width: 20%;" class="actions-time">
+									<ul>
+										<li><a href="#" class="open-slot"><i class="halflings-icon plus-sign  blue"></i> Ajouter</a></li>
+										<li><a href="#" class="close-slot"><i class="halflings-icon minus-sign blue"></i> Supprimer</a></li>
+										<li><a href="#" class="clone-slot"><i class="halflings-icon time blue"></i> Copier</a></li>
+									</ul>
+								</td>
+							</tr>
+							<tr>
+								<td style="width: 20%;">Samedi</td>
+								<td style="width: 60%;" class="times-range">
+									<table>
+										<tr>
+											<td>
+												De&nbsp;
+												<div class="input-append">
+			  										<input class="span1" id="prependedInput" type="text" name="saturday_opens" value="<%= model.opening_times.saturday_opens %>">
+			  										<span class="add-on"><i class="halflings-icon time blue"></i></span>
+												</div>
+												&nbsp;à&nbsp;
+												<div class="input-append">
+			  										<input class="span1" id="prependedInput" type="text" name="saturday_closes" value="<%= model.opening_times.saturday_closes %>">
+			  										<span class="add-on"><i class="halflings-icon time blue"></i>  </span>
+												</div>
+											</td>
+										</tr>
+										<tr>
+											<td>
+												De&nbsp;
+												<div class="input-append">
+			  										<input class="span1" id="prependedInput" type="text" name="saturday_opens_second" value="<%= model.opening_times.saturday_opens_second %>">
+			  										<span class="add-on"><i class="halflings-icon time blue"></i></span>
+												</div>
+												&nbsp;à&nbsp;
+												<div class="input-append">
+			  										<input class="span1" id="prependedInput" type="text" name="saturday_closes_second" value="<%= model.opening_times.saturday_closes_second %>">
+			  										<span class="add-on"><i class="halflings-icon time blue"></i>  </span>
+												</div>
+											</td>
+										</tr>	
+									</table>
+								</td>
+								<td style="width: 20%;" class="actions-time">
+									<ul>
+										<li><a href="#" class="open-slot"><i class="halflings-icon plus-sign  blue"></i> Ajouter</a></li>
+										<li><a href="#" class="close-slot"><i class="halflings-icon minus-sign blue"></i> Supprimer</a></li>
+										<li><a href="#" class="clone-slot"><i class="halflings-icon time blue"></i> Copier</a></li>
+									</ul>
+								</td>
+							</tr>
+							<tr>
+								<td style="width: 20%;">Dimanche</td>
+								<td style="width: 60%;" class="times-range">
+									<table>
+										<tr>
+											<td>
+												De&nbsp;
+												<div class="input-append">
+			  										<input class="span1" id="prependedInput" type="text" name="sunday_opens" value="<%= model.opening_times.sunday_opens %>">
+			  										<span class="add-on"><i class="halflings-icon time blue"></i></span>
+												</div>
+												&nbsp;à&nbsp;
+												<div class="input-append">
+			  										<input class="span1" id="prependedInput" type="text" name="sunday_closes" value="<%= model.opening_times.sunday_closes %>">
+			  										<span class="add-on"><i class="halflings-icon time blue"></i>  </span>
+												</div>
+											</td>
+										</tr>
+										<tr>
+											<td>
+												De&nbsp;
+												<div class="input-append">
+			  										<input class="span1" id="prependedInput" type="text" name="sunday_opens_second" value="<%= model.opening_times.sunday_opens_second %>">
+			  										<span class="add-on"><i class="halflings-icon time blue"></i></span>
+												</div>
+												&nbsp;à&nbsp;
+												<div class="input-append">
+			  										<input class="span1" id="prependedInput" type="text" name="sunday_closes_second" value="<%= model.opening_times.sunday_closes_second %>">
+			  										<span class="add-on"><i class="halflings-icon time blue"></i>  </span>
+												</div>
+											</td>
+										</tr>	
+									</table>
+								</td>
+								<td style="width: 20%;" class="actions-time">
+									<ul>
+										<li><a href="#" class="open-slot"><i class="halflings-icon plus-sign  blue"></i> Ajouter</a></li>
+										<li><a href="#" class="close-slot"><i class="halflings-icon minus-sign blue"></i> Supprimer</a></li>
+										<li><a href="#" class="clone-slot"><i class="halflings-icon time blue"></i> Copier</a></li>
+									</ul>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</fieldset>
+				<div class="form-actions">
+  					<button type="submit" class="btn btn-primary">Save changes</button> <button type="button" class="btn">Cancel</button>
+				</div>
+			</form>
+		</script>
+
+		<script type="text/template" id="billingnavtabcontent-template">
+			<h3><%= titleName %></h3>
+			<% console.log(model); %>
+			<h4>Relevé actuel du mois</h4>
+			<div class="content">
+				<table class="table table-billing">
+					<tbody>
+						<tr>
+							<th class="table-billing-header">Récapitulatif</th>
+						</tr>
+						<tr>
+							<td>
+								<table class="table">
+									<thead>
+										<tr><td>Plan et options</td><td class="table-billing-amount"><%= model.current_billing.billing.total_amount%> &euro;</td></tr>
+									</thead>
+								</table>
+							</td>
+						</tr>
+						<tr>
+							<th class="table-billing-header">Détails</th>
+						</tr>
+						<tr>
+							<td>
+								<table class="table">
+									<thead>
+										<tr>
+											<td><i class="halflings-icon plus-sign blue"></i> Plan</td>
+											<td></td>
+											<td class="table-billing-amount"><%= model.current_billing.subscriptions_sum %> &euro;</td>
+										</tr>
+									</thead>
+									<tbody>
+										<% _.each(model.current_billing.subscriptions, function(subscription) {%>
+										<tr>
+											<td class="table-billing-item"><%= subscription.propackage %></td>
+											<% if ( _.isNull(subscription.subscription_ended) ) { %>
+												<td class="table-billing-range-date">Abonnement en cours. A débuté le <%= subscription.subscription_started %>.</td>
+											<% } else { %>
+												<td class="table-billing-range-date">Du <%= subscription.subscription_started %> au <%= subscription.subscription_ended %></td>
+											<% } %>
+											<td class="table-billing-amount">
+												<% if ( !_.isNull(subscription.price) ) { %> <%= subscription.price %> &euro;<% } %>
+											</td>
+										</tr>
+										<% }); %>
+									</tbody>
+								</table>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<table class="table">
+									<thead>
+										<tr>
+											<td><i class="halflings-icon plus-sign blue"></i> Top position</td>
+											<td></td>
+											<td class="table-billing-amount"><%= model.current_billing.toppositions_sum %> &euro;</td>
+										</tr>
+									</thead>
+									<tbody>
+										<% _.each(model.current_billing.toppositions, function(topposition) {%>
+										<tr>
+											<td class="table-billing-item"><%= topposition.product %></td>
+											<% if ( _.isNull(topposition.ended_at) ) { %>
+												<td class="table-billing-range-date">Top position en cours. A débuté le <%= topposition.started_at %>.</td>
+											<% } else { %>
+												<td class="table-billing-range-date">Du <%= toppositon.started_at %> au <%= topposition.ended_at %></td>
+											<% } %>
+											<td class="table-billing-amount">
+												<% if ( !_.isUndefined(topposition.price) ) { %> <%= topposition.price %> &euro;<% } %>
+											</td>
+										</tr>
+										<% }); %>
+									</tbody>
+								</table>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<table class="table">
+									<thead>
+										<tr>
+											<td><i class="halflings-icon plus-sign blue"></i> Mise en avant</td>
+											<td></td>
+											<td class="table-billing-amount"><%= model.current_billing.highlights_sum %> &euro;</td>
+										</tr>
+									</thead>
+									<tbody>
+										<% _.each(model.current_billing.highlights, function(highlight) {%>
+										<tr>
+											<td class="table-billing-item"><%= highlight.product %></td>
+											<% if ( _.isNull(highlight.ended_at) ) { %>
+												<td class="table-billing-range-date">Top position en cours. A débuté le <%= highlight.started_at %>.</td>
+											<% } else { %>
+												<td class="table-billing-range-date">Du <%= highlight.started_at %> au <%= highlight.ended_at %></td>
+											<% } %>
+											<td class="table-billing-amount">
+												<% if ( !_.isUndefined(highlight.price) ) { %> <%= highlight.price %> &euro;<% } %>
+											</td>
+										</tr>
+										<% }); %>
+									</tbody>
+								</table>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<table class="table">
+									<thead>
+										<tr>
+											<td><i class="halflings-icon plus-sign blue"></i> TVA</td>
+											<td></td>
+											<td class="table-billing-amount"><%= model.current_billing.billing.total_tva %></td>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td class="table-billing-item">TVA à 19,6%</td>
+											<td class="table-billing-range-date"></td>
+											<td class="table-billing-amount">
+												<%= model.current_billing.billing.total_tva %>
+											</td>
+										</tr>
+									</tbody>
+								</table>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<h4>Historiques des prélèvements</h4>
+			<div class="content">
+				<table class="table table-billing-history">
+					<thead>
+						<tr>
+							<th>Date</th>
+							<th>Carte de crédit</th>
+							<th>Facture</th>
+							<th>Montant</th>
+						</tr>
+					</thead>
+					<tbody>
+						<% _.each(model.billing_history, function(billing) { %>
+							<tr <% if ( billing.state == 'unpaid' ) {%>class="billing-error"<% }%>>
+								<td><%= billing.created_at %></td>
+								<td><%= billing.masked_credit_card_number %></td>
+								<td><% if ( billing.state == 'unpaid' ) { %>Disponible après le paiement<% } %></td>
+								<td><%= billing.total_amount %></td>
+							</tr>
+						<% }); %>
+					</tbody>
+				</table>
+			</div>
+		</script>
+
+		<script type="text/template" id="plannavtabcontent-template">
+			<h3><%= titleName %></h3>
+			<div class="content">
+				<table class="table table-plan-list">
+					<thead>
+						<th class="align-left">Abonnement</th>
+						<th>Nombre d&#145;annonces</th>
+						<th>Prix par mois (HT)</th>
+						<th></th>
+					</thead>
+					<tbody>
+						<% _.each(model, function(plan) {%>
+						<tr>
+							<td><%= plan.name %></td>
+							<td class="align-center">
+								<% if (_.isNull(plan.maximum_items)){%>
+									Illimité
+								<% } else { %>
+									<%= plan.maximum_items %>
+								<% } %>
+							</td>
+							<td class="align-center"><%= plan.price %>&euro;</td>
+							<td class="align-center">
+								<% if ( plan.is_current_subscription ){%>
+									Votre abonnement actuel
+								<% } else {%>
+									<form action="#">
+										<input type="hidden" name="subscription" value="<%= plan.id %>">
+										<input type="submit" value="Choisir cet abonnement" class="btn">
+									</form>
+								<% } %>
+							</td>
+						</tr>
+						<% }); %>
+					</tbody>
+				</table>
+			</div>
+		</script>
+
+		<script type="text/template" id="list-template">
+			<ul class="items-list">
+				<% _.each(collection, function(item) { %>
+				<li>
+					<a href="ads/<%= item.id %>" resource_uri="<%= item.resource_uri %>" class="clearfix">
+						<div class="item-status"></div>
+						<img class="item-img pull-left" src="<%= item.pictures[0].thumbnail_url %>" alt="">
+						<div class="item-body">
+							<h5><%= item.summary %></h5>
+							<p class="item-resume">
+								<span class="label label-price">
+								<% if( _.isNull(item.day_price) ) {%>
+									Sur devis
+								<% } else {%> <%= item.day_price %> &euro;<% } %>
+								</span>
+							</p>
+						</div>
+					</a>
+				</li>
+				<% }); %>
+			</ul>
+		</script>
+
+		<script type="text/template" id="list-detail-template">
+			<% if ( _.isNull(model) ) {%>
+				<p class="no-selected-item">
+					<img src="{{ STATIC_URL }}proapp/img/app/no-selected-item.png" width="173" height="57">
+				</p>
+			<% } else {%>
+				<div class="navbar">
+					<div class="navbar-inner" style="height: 30px !important;">
+						<div class="brand">
+							<img class="media-object pull-left" src="<%= model.pictures[0].thumbnail_url %>" alt="" width="25px"> <%= model.summary %>
+							<span class="label label-price">
+								<% if (_.isNull(model.day_price) ) { %>
+									sur devis
+								<% } else { %>
+									<%= model.day_price %>&euro;/jour
+								<% } %>
+							</span>
+						</div>
+						<ul id="product-nav" class="nav">
+							<li class="active"><a href="#product-informations-form"><i class="halflings-icon info-sign blue"></i> Informations</a></li>
+							<li><a href="#product-image"><i class="halflings-icon picture blue"></i> Images</a></li>
+							<li ><a href="#product-prices-disponibilities"><i class="halflings-icon calendar blue"></i> Tarifs et disponibilités</a></li>
+						</ul>
+					</div>
+				</div><!-- navbar -->
+			<% } %>
+		</script>
+
+		<script type="text/template" id="nav-content-template">
+			<h1>Annonce</h1>
+		</script>
+		 <!-- Include the CSRF token in the body of the HTML -->
+        {% csrf_token %}
+
+		<script type="text/javascript">
+			API_URL = {
+				redirection_events: "{% url api_dispatch_list api_name="1.0" resource_name="redirection_events" %}",
+				phone_events: "{% url api_dispatch_list api_name="1.0" resource_name="phone_events" %}",
+				address_events: "{% url api_dispatch_list api_name="1.0" resource_name="address_events" %}",
+				traffic_events: "{% url api_dispatch_list api_name="1.0" resource_name="pageviews" %}",
+				patron: "{% url api_dispatch_list api_name="1.0" resource_name="accounts/patron" %}",
+				shop: "{% url api_dispatch_list api_name="1.0" resource_name="accounts/shop" %}",
+				subscription: "{% url api_dispatch_list api_name="1.0" resource_name="accounts/subscription" %}",
+				plan: "{% url api_dispatch_list api_name="1.0" resource_name="accounts/propackage" %}",
+				bills: "{% url api_dispatch_list api_name="1.0" resource_name="accounts/billing"%}",
+				product: "{% url api_dispatch_list api_name="1.0" resource_name="products/product"%}",
+			};
+
+			STATIC_URL = '{{ STATIC_URL }}'
+		</script>
+
+		{% compressed_js 'proapplibs' %}
+		{% compressed_js 'proapp' %}	
+	</body>
+</html

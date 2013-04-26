@@ -60,6 +60,7 @@ urlpatterns = patterns('',
         'template_name': 'accounts/password_reset_complete.html'
     }, name="password_reset_complete"),
     url(r'^espace_pro/$', patron_subscription, name="patron_subscription"),
+    url(r'^pro/', include('proapp.urls')),
     url(r'^faq/', include('faq.urls')),
     url(r'^contact/$', contact, name="contact"),
     url(r'^activate/(?P<activation_key>\w+)/$', activate, name='auth_activate'),
