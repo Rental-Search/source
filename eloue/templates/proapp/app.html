@@ -11,7 +11,7 @@
 	</head>
 	<body>
 		<script type="text/template" id="loading-template">
-			<p style="text-align: center; margin-top: 150px;">
+			<p class="loading-app">
 				<img src="{{ STATIC_URL }}proapp/img/app/loading.gif" width="123" height="70">
 			</p>
 		</script>
@@ -696,7 +696,7 @@
 				<li>
 					<a href="ads/<%= item.id %>" resource_uri="<%= item.resource_uri %>" class="clearfix">
 						<div class="item-status"></div>
-						<img class="item-img pull-left" src="/static/images/default_avatar.png" alt="">
+						<img class="item-img pull-left" src="<%= item.pictures[0].thumbnail_url %>" alt="">
 						<div class="item-body">
 							<h5><%= item.summary %></h5>
 							<p class="item-resume">
@@ -715,10 +715,34 @@
 
 		<script type="text/template" id="list-detail-template">
 			<% if ( _.isNull(model) ) {%>
-				<p>Pas d&#145;annonce sélectionné</p>
+				<p class="no-selected-item">
+					<img src="{{ STATIC_URL }}proapp/img/app/no-selected-item.png" width="173" height="57">
+				</p>
 			<% } else {%>
-				<p><%= model.summary %></p>
+				<div class="navbar">
+					<div class="navbar-inner" style="height: 30px !important;">
+						<div class="brand">
+							<img class="media-object pull-left" src="<%= model.pictures[0].thumbnail_url %>" alt="" width="25px"> <%= model.summary %>
+							<span class="label label-price">
+								<% if (_.isNull(model.day_price) ) { %>
+									sur devis
+								<% } else { %>
+									<%= model.day_price %>&euro;/jour
+								<% } %>
+							</span>
+						</div>
+						<ul id="product-nav" class="nav">
+							<li class="active"><a href="#product-informations-form"><i class="halflings-icon info-sign blue"></i> Informations</a></li>
+							<li><a href="#product-image"><i class="halflings-icon picture blue"></i> Images</a></li>
+							<li ><a href="#product-prices-disponibilities"><i class="halflings-icon calendar blue"></i> Tarifs et disponibilités</a></li>
+						</ul>
+					</div>
+				</div><!-- navbar -->
 			<% } %>
+		</script>
+
+		<script type="text/template" id="nav-content-template">
+			<h1>Annonce</h1>
 		</script>
 		 <!-- Include the CSRF token in the body of the HTML -->
         {% csrf_token %}

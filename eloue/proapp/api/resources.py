@@ -52,7 +52,9 @@ def get_analytics_event_references(event_action, event_label):
 #Products resources
 class ProductResource(ModelResource):
 	category = fields.ToOneField('eloue.proapp.api.resources.CategoryResource', 'category', related_name='categories', full=True)
-
+	prices = fields.ToManyField('eloue.proapp.api.resources.PriceResource', 'prices')
+	pictures = fields.ToManyField('eloue.proapp.api.resources.PictureResource', 'pictures', full=True)
+	
 	class Meta:
 		queryset = Product.objects.all()
 		resource_name = 'products/product'
@@ -109,6 +111,11 @@ class PictureResource(ModelResource):
 
 	def obj_create(self, bundle, request=None, **kwargs):
 		return super(EnvironmentResource, self).obj_create(bundle, request, product__owner=request.user)
+
+	def dehydrate(self, bundle):
+		bundle.data['thumbnail_url'] = bundle.obj.thumbnail.url
+		bundle.data['display_url'] = bundle.obj.display.url
+		return bundle
 
 
 class PriceResource(ModelResource):
