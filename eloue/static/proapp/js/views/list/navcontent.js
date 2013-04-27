@@ -21,6 +21,7 @@ app.NavContentView = Backbone.View.extend({
 	},
 
 	render: function() {
+		console.log("render content of navcontent");
 		this.$el.html(this.template(this.serialize()));
 		return this;
 	},

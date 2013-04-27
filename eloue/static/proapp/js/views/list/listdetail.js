@@ -24,12 +24,14 @@ app.ListDetailView = Backbone.View.extend({
 
 	render: function() {
 		this.$el.html(this.template(this.serialize()));
-		if( _.isNull(this.model) ) this.renderNavContent();
+		if( !_.isNull(this.model) ) this.renderNavContent(this.model);
 		return this;
 	},
 
-	renderNavContent: function() {
+	renderNavContent: function(model) {
 		console.log("render nav content");
+		this.currentNavContent = new app.NavContentView({model: model});
+		this.$el.append(this.currentNavContent.render().el);
 	},
 
 	onClose: function() {

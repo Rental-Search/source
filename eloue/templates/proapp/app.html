@@ -742,7 +742,7 @@
 		</script>
 
 		<script type="text/template" id="nav-content-template">
-			<h1>Annonce</h1>
+			<h1><%= model.summary %></h1>
 		</script>
 		 <!-- Include the CSRF token in the body of the HTML -->
         {% csrf_token %}
