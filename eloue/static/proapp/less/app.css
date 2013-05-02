@@ -7630,6 +7630,9 @@ select {
   margin-left: 280px;
   height: 100%;
 }
+.list-main-content .navbar {
+  margin-bottom: 0px;
+}
 .list-main-content .navbar-inner {
   -webkit-border-top-left-radius: 0px;
   -moz-border-radius-topleft: 0px;
@@ -7645,6 +7648,7 @@ select {
   border-right: 0px;
 }
 .list-main-content .navbar-inner .brand {
+  padding: 9px 20px 9px;
   font-size: 14px;
 }
 .list-main-content .navbar-inner .brand img {
@@ -7670,6 +7674,21 @@ select {
 }
 .list-main-content .nav .halflings-icon.calendar {
   background-position: -192px -122px;
+}
+.list-main-content .nav-container {
+  overflow-y: auto;
+  height: 191px;
+}
+.list-main-content .nav-content {
+  margin: 15px;
+  padding: 10px;
+  border: 1px solid #b2ced9;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+  -webkit-box-shadow: 1px 1px 4px #cccccc;
+  -moz-box-shadow: 1px 1px 4px #cccccc;
+  box-shadow: 1px 1px 4px #cccccc;
 }
 .label-price,
 .badge-price {

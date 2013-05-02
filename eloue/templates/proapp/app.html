@@ -694,7 +694,7 @@
 			<ul class="items-list">
 				<% _.each(collection, function(item) { %>
 				<li>
-					<a href="ads/<%= item.id %>" resource_uri="<%= item.resource_uri %>" class="clearfix">
+					<a href="ads/<%= item.id %>/" resource_uri="<%= item.resource_uri %>" class="clearfix">
 						<div class="item-status"></div>
 						<img class="item-img pull-left" src="<%= item.pictures[0].thumbnail_url %>" alt="">
 						<div class="item-body">
@@ -742,7 +742,75 @@
 		</script>
 
 		<script type="text/template" id="nav-content-template">
-			<h1><%= model.summary %></h1>
+			<div class="nav-content">
+				<form action="#" class="form-horizontal">
+					<fieldset>
+						<legend>Catégorie</legend>
+						<div class="control-group">
+							<div class="controls controls-row">
+								<div class="span3">
+									<label for="id_categories">Categories</label>
+									<select id="id_categories" multiple="multiple">
+										<option>Electroménager</option>
+										<option>Jardinage</option>
+										<option>Auto et Moto</option>
+										<option>Hébergement</option>
+										<option>Image et Son</option>
+										<option>Bricolage</option>
+									</select>
+								</div>
+								<div class="span3">
+									<label for="id_categories">Sous catégories</label>
+									<select id="id_categories" multiple="multiple">
+										<option>Electroménager</option>
+										<option>Jardinage</option>
+										<option>Auto et Moto</option>
+										<option>Hébergement</option>
+										<option>Image et Son</option>
+										<option>Bricolage</option>
+									</select>
+								</div>
+								<div class="span3">
+									<label for="id_categories">Objets</label>
+									<select id="id_categories" multiple="multiple">
+										<option>Electroménager</option>
+										<option>Jardinage</option>
+										<option>Auto et Moto</option>
+										<option>Hébergement</option>
+										<option>Image et Son</option>
+										<option>Bricolage</option>
+									</select>
+								</div>
+							</div>
+						</div>
+					</fieldset>
+					<fieldset>
+						<legend>Description</legend>
+						<div class="control-group">
+							<label class="control-label" for="id_sumamry">Titre</label>
+							<div class="controls">
+						      <input type="text" id="id_summary" placeholder="Titre" name=summary>
+						    </div>
+						</div>
+						<div class="control-group">
+							<label class="control-label" for="id_desciption">Description</label>
+							<div class="controls">
+						      <textarea rows="6" placeholder="Description" id="id_description" name="description"></textarea>
+						    </div>
+						</div>
+						<div class="control-group">
+							<label class="control-label" for="id_quantity">Quantité</label>
+							<div class="controls">
+						      <input class="input-mini" type="text" id="id_quantity" name="quantity" placeholder="Quantité">
+						    </div>
+						</div>
+					</fieldset>
+					<div class="form-actions" style="height: 30px;">
+					  	<button type="submit" class="btn">Enregister</button>
+					  	<button type="button" class="btn">Annuler</button>
+					</div>
+				</form>
+			</div><!-- nav-content -->
 		</script>
 		 <!-- Include the CSRF token in the body of the HTML -->
         {% csrf_token %}

@@ -40,7 +40,7 @@ app.ListView = Backbone.View.extend({
 
 		this.selectedItem = this.collection.get($(e.currentTarget).attr('resource_uri'));
 
-		this.trigger('listView:selectedItem');
+		app.appRouter.navigate($(e.currentTarget).attr('href'), {trigger: true});
 	},
 
 	onClose: function() {

@@ -30,7 +30,7 @@ app.ListDetailView = Backbone.View.extend({
 
 	renderNavContent: function(model) {
 		console.log("render nav content");
-		this.currentNavContent = new app.NavContentView({model: model});
+		this.currentNavContent.model = model;
 		this.$el.append(this.currentNavContent.render().el);
 	},
 
