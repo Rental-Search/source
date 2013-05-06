@@ -732,31 +732,31 @@ class OwnerBookingAuthorized(OwnerBooking):
     def get_queryset(self):
         if self.request.user.current_subscription:
             return self.request.user.bookings.professional()
-        return self.request.user.bookings.authorized()
+        return self.request.user.bookings.authorized().order_by('-created_at')
 
 class OwnerBookingPending(OwnerBooking):
     title = u'Réservations à venir'
     def get_queryset(self):
-        return self.request.user.bookings.pending()
+        return self.request.user.bookings.pending().order_by('-created_at')
 
 class OwnerBookingOngoing(OwnerBooking):
     title = u'Réservations en cours'
     def get_queryset(self):
-        return self.request.user.bookings.ongoing()
+        return self.request.user.bookings.ongoing().order_by('-created_at')
 
 class OwnerBookingHistory(OwnerBooking):
     title = u'Réservations terminées'
     def get_queryset(self):
         if self.request.user.current_subscription:
             return self.request.user.bookings.professional_saw()
-        return self.request.user.bookings.history()
+        return self.request.user.bookings.history().order_by('-created_at')
 
 
 class OwnerProduct(ListView, LoginRequiredMixin):
     template_name = 'accounts/owner_product.html'
     paginate_by = PAGINATE_PRODUCTS_BY
     def get_queryset(self):
-        return Product.objects.filter(owner=self.request.user, is_archived=False)
+        return Product.objects.filter(owner=self.request.user, is_archived=False).order_by('-created_at')
 
 class AlertEdit(ListView, LoginRequiredMixin):
     template_name = 'accounts/alert_edit.html'
@@ -771,22 +771,22 @@ class BorrowerBooking(ListView, LoginRequiredMixin, AddTitle):
 class BorrowerBookingOngoing(BorrowerBooking):
     title = u'Réservations en cours'
     def get_queryset(self):
-        return self.request.user.rentals.ongoing()
+        return self.request.user.rentals.ongoing().order_by('-created_at')
 
 class BorrowerBookingPending(BorrowerBooking):
     title = u'Réservations à venir'
     def get_queryset(self):
-        return self.request.user.rentals.pending()
+        return self.request.user.rentals.pending().order_by('-created_at')
 
 class BorrowerBookingAuthorized(BorrowerBooking):
     title = u'Demandes de réservation'
     def get_queryset(self):
-        return self.request.user.rentals.authorized()
+        return self.request.user.rentals.authorized().order_by('-created_at')
 
 class BorrowerBookingHistory(BorrowerBooking):
     title = u'Réservations terminées'
     def get_queryset(self):
-        return self.request.user.rentals.history()
+        return self.request.user.rentals.history().order_by('-created_at')
 
 @mobify
 def contact(request):
