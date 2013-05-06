@@ -304,7 +304,7 @@ class ProductForm(BetterModelForm):
         self.header = _(u'Donnez envie aux e-loueurs potentiels de louer votre objets.')
         self.fields['category'] = forms.TypedChoiceField(
             label=_(u"Catégorie"), coerce=lambda pk: Category.tree.get(pk=pk), 
-            choices=generate_choices((cat.slug for cat in Category.on_site.filter(parent=None) if cat.slug not in ['hebergement', 'motors', 'automobile', 'location-saisonniere']))
+            choices=generate_choices((cat.slug for cat in Category.on_site.filter(parent=None) if cat.slug not in ['motors', 'automobile', 'location-saisonniere']))
         )
 
     def clean_quantity(self):
