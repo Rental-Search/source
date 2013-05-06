@@ -7,11 +7,12 @@ app.AdsNavPillContentView = app.NavPillContentView.extend({
 
 	className: 'content-pill clearfix',
 
+	currentDetailContent: null,
+
 	initialize: function() {
 		this.listView = new app.ListView({collection: app.ProductsCollection});
 		this.listDetailView = new app.ListDetailView();
 		
-		this.listView.on('listView:selectedItem', this.detailRender, this);
 		this.listView.collection.on('sync', this.resizeView, this);
 		$(window).bind("resize.app", _.bind(this.resizeView, this));
 	},
@@ -19,11 +20,11 @@ app.AdsNavPillContentView = app.NavPillContentView.extend({
 	render: function() {
 		this.resizeView();
 		this.$el.html(this.listView.el);
-		this.detailRender();
+		this.renderDetail();
 		return this;
 	},
 
-	detailRender: function() {
+	renderDetail: function() {
 		this.listDetailView.model = this.listView.selectedItem;
 		this.$el.append(this.listDetailView.render().el);
 	},

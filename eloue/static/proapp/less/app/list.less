@@ -74,6 +74,10 @@
 	margin-left: 280px;
 	height: 100%;
 
+	.navbar {
+		margin-bottom: 0px;
+	}
+
 	.navbar-inner {
 		.border-top-left-radius(0px);
 		.border-bottom-left-radius(0px);
@@ -83,6 +87,8 @@
 		border-right: 0px;
 
 		.brand {
+			padding: 9px 20px 9px; 
+			
 			img { 
 				margin-right: 5px;
 				margin-top: -2px;
@@ -104,6 +110,20 @@
 		.halflings-icon.info-sign { background-position: -120px -97px; }
 		.halflings-icon.picture { background-position: -456px -50px; }
 		.halflings-icon.calendar { background-position: -192px -122px; }
+	}
+
+	.nav-container {
+		overflow-y: auto;
+		height: 191px;
+	}
+
+	.nav-content {
+		margin: 15px;
+		padding: 10px;
+
+		border: 1px solid #b2ced9;
+		.border-radius(4px);
+		.box-shadow(1px 1px 4px #ccc);	
 	}
 }
 

@@ -10,6 +10,7 @@ var Workspace = Backbone.Router.extend({
 		'stats/:metric/': 		'stats',
 		'messages/': 			'messages',
 		'ads/': 				'ads',
+		'ads/:id/': 			'ads',
 		'accounts/':			'accounts',
 		'accounts/:metric/':	'accounts',
 	},
@@ -63,12 +64,18 @@ var Workspace = Backbone.Router.extend({
 		app.layoutView.renderNavPillContent();
 	},
 
-	ads: function() {
+	ads: function(id) {
 		app.layoutView.navPillsView.navPillsItemViews[3].setSelectedPillItem();
-		var adsNavPillContentView = new app.AdsNavPillContentView();
-		adsNavPillContentView.id = 'ads';
-		app.layoutView.setCurrentNavPillContent(adsNavPillContentView);
-		app.layoutView.renderNavPillContent();
+
+		if (app.layoutView.currentNavPillContent instanceof app.AdsNavPillContentView) {
+			
+		} else {
+			var adsNavPillContentView = new app.AdsNavPillContentView();
+			app.layoutView.setCurrentNavPillContent(adsNavPillContentView);
+			app.layoutView.renderNavPillContent();
+		}
+
+		app.layoutView.currentNavPillContent.renderDetail();
 	},
 
 	accounts: function(metric) {
