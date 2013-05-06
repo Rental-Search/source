@@ -10,8 +10,6 @@ app.NavContentView = Backbone.View.extend({
 	model: null,
 
 	initialize: function() {
-		this.model = this.options.model;
-		this.model.on('sync', this.render, this);
 		$(window).bind("resize.app", _.bind(this.resizeView, this));
 	},
 
