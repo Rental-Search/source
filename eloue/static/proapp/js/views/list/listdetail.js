@@ -9,6 +9,8 @@ app.ListDetailView = Backbone.View.extend({
 
 	model: null,
 
+	navTabsView: null,
+
 	currentNavContent: null,
 
 	initialize: function() {

@@ -6,17 +6,18 @@ var app = app || {}
 var Workspace = Backbone.Router.extend({
 	routes: {
 		'': 					'home',
-		'stats/': 				'stats',
-		'stats/:metric/': 		'stats',
+		'stats/(:metric/)': 	'stats',
 		'messages/': 			'messages',
-		'ads/': 				'ads',
-		'ads/:id/': 			'ads',
-		'accounts/':			'accounts',
-		'accounts/:metric/':	'accounts',
+		'ads/(:id/)': 			'ads',
+		'accounts/(:metric/)':	'accounts',
 	},
 
 	initialize: function() {
+		Backbone.Tastypie.csrfToken = $('input[name=csrfmiddlewaretoken]').val()
 		app.layoutView = new app.LayoutView();
+		Backbone.history.start({pushState: true, root: '/pro/dashboard/'})
+		$('body').append(app.layoutView.$el);
+		app.layoutView.render();
 	},
 
 	home: function() {
@@ -38,7 +39,7 @@ var Workspace = Backbone.Router.extend({
 			app.layoutView.renderNavPillContent();
 		}
 
-		if ( _.isUndefined(metric) ) {
+		if ( _.isNull(metric) ) {
 			var navTabContentView = new app.TrafficNavTabContentView({titleName: 'Visites'});
 			statsNavPillContentView.navTabsView.navTabsItemViews[0].setSelectedTabItem();
 		} else if (metric == 'redirection') {
@@ -75,10 +76,11 @@ var Workspace = Backbone.Router.extend({
 			app.layoutView.renderNavPillContent();
 		}
 
-		app.layoutView.currentNavPillContent.renderDetail();
+		app.layoutView.currentNavPillContent.renderDetail(id);
 	},
 
 	accounts: function(metric) {
+		console.log(metric);
 		app.layoutView.navPillsView.navPillsItemViews[4].setSelectedPillItem();
 
 		if (app.layoutView.currentNavPillContent instanceof app.AccountsNavPillContentView) {
@@ -89,7 +91,7 @@ var Workspace = Backbone.Router.extend({
 			app.layoutView.renderNavPillContent();
 		}
 
-		if( _.isUndefined(metric) ) {
+		if( _.isNull(metric) ) {
 			var navTabContentView = new app.PatronNavTabContentView({titleName: 'Informations sur la gérant'});
 			accountsNavPillContentView.navTabsView.navTabsItemViews[0].setSelectedTabItem();
 		} else if ( metric == 'shop' ) {

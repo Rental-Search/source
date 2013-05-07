@@ -14,18 +14,21 @@ app.AdsNavPillContentView = app.NavPillContentView.extend({
 		this.listDetailView = new app.ListDetailView();
 		
 		this.listView.collection.on('sync', this.resizeView, this);
-		$(window).bind("resize.app", _.bind(this.resizeView, this));
+		$(window).bind('resize.app', _.bind(this.resizeView, this));
 	},
 
 	render: function() {
 		this.resizeView();
 		this.$el.html(this.listView.el);
-		this.renderDetail();
 		return this;
 	},
 
-	renderDetail: function() {
-		this.listDetailView.model = this.listView.selectedItem;
+	renderDetail: function(id) {
+		if ( _.isUndefined(id) ) {
+			this.listDetailView.model = null;
+		} else {
+			this.listDetailView.model = this.listView.collection.findWhere({id: id.toString()});
+		}
 		this.$el.append(this.listDetailView.render().el);
 	},
 
