@@ -2,40 +2,74 @@
 
 var app = app || {};
 
-app.LayoutView = Backbone.View.extend({
+app.LayoutView = app.NavView.extend({
 	id: 'pro-app',
 
 	className: 'container-fluid',
 
-	navPillsView: new app.NavPillsView(),
-
-	currentNavPillContent: null,
-
 	initialize: function() {
-		this.navPillsView.pushNavPillItemView(new app.NavPillsItemView({icon: "home", labelName: "Acceuil"}));
-		this.navPillsView.pushNavPillItemView(new app.NavPillsItemView({icon: "stats", labelName: "Statistiques", path: "stats/"}));
-		this.navPillsView.pushNavPillItemView(new app.NavPillsItemView({icon: "envelope", labelName: "Messages", path: "messages/"}));
-		this.navPillsView.pushNavPillItemView(new app.NavPillsItemView({icon: "show_thumbnails_with_lines", labelName: "Annonces", path: "ads/"}));
-		this.navPillsView.pushNavPillItemView(new app.NavPillsItemView({icon: "nameplate", labelName: "Compte", path: "accounts/"}));
-	},
+		//Extend the class name for navpills
+		this.navTabItemsView = this.navTabItemsView.extend({className:  'nav nav-pills  top-nav'});
 
-	setCurrentNavPillContent: function(navPillContentView) {
-		if (this.currentNavPillContent != null) {
-			this.currentNavPillContent.close();
-		}
-		this.currentNavPillContent = navPillContentView;
-	},
+		var itemView = app.NavTabItemView.extend({
+			template: _.template($("#navpillsitem-template").html()),
+		});
 
-	render: function() {
-		this.$el.prepend(this.navPillsView.$el);
-		this.navPillsView.render();
-		return this;
-	},
+		var HomeView = Backbone.View.extend({
+			className: 'content-pill',
 
-	renderNavPillContent: function() {
-		if (this.currentNavPillContent) {
-			this.$el.append(this.currentNavPillContent.$el);
-			this.currentNavPillContent.render();
-		}
-	}
+			item: itemView.extend({path: '', icon: 'home', labelName: 'Acceuil'}),
+
+			render: function() {
+				this.$el.html('<h1>Acceuil</h1>');
+				return this;
+			},
+		});
+
+		var StatsView = Backbone.View.extend({
+			className: 'content-pill',
+
+			item: itemView.extend({path: 'stats/', icon: 'stats', labelName: 'Statistiques'}),
+
+			render: function() {
+				this.$el.html('<h1>Statistique</h1>');
+				return this;
+			},
+		});
+
+		var MessagesView = Backbone.View.extend({
+			className: 'content-pill',
+
+			item: itemView.extend({path: 'messages/', icon: 'envelope', labelName: 'Messages'}),
+
+			render: function() {
+				this.$el.html('<h1>Messages</h1>');
+				return this;
+			},
+		});
+
+		var AdsView = Backbone.View.extend({
+			className: 'content-pill',
+
+			item: itemView.extend({path: 'ads/', icon: 'show_thumbnails_with_lines', labelName: 'Annonces'}),
+
+			render: function() {
+				this.$el.html('<h1>Annonces</h1>');
+				return this;
+			},
+		});
+
+		var AccountsView = Backbone.View.extend({
+			className: 'content-pill',
+
+			item: itemView.extend({path: 'accounts/', icon: 'nameplate', labelName: 'Compte'}),
+
+			render: function() {
+				this.$el.html('<h1>Compte</h1>');
+				return this;
+			},
+		});
+		
+		this.navTabViews = [HomeView, StatsView, MessagesView, AdsView, AccountsView];
+	},
 });
