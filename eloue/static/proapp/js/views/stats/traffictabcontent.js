@@ -3,7 +3,17 @@
 var app = app || {};
 
 
-app.TrafficNavTabContentView = app.StatsNavTabContentView.extend({
+app.TrafficTabContentView = app.StatsTabContentView.extend({
+
+	item: app.NavTabItemView.extend({
+		template: _.template($("#navtabsitem-template").html()),
+		icon: 'user', 
+		path: 'stats/', 
+		labelName: 'Visites'
+	}),
+
+	titleName: 'Visites',
+
 	chartItem: {
 		model: new app.TrafficEventModel(),
 		chartsLegendItem: {

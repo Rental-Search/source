@@ -26,17 +26,6 @@ app.LayoutView = app.NavView.extend({
 			},
 		});
 
-		var StatsView = Backbone.View.extend({
-			className: 'content-pill',
-
-			item: itemView.extend({path: 'stats/', icon: 'stats', labelName: 'Statistiques'}),
-
-			render: function() {
-				this.$el.html('<h1>Statistique</h1>');
-				return this;
-			},
-		});
-
 		var MessagesView = Backbone.View.extend({
 			className: 'content-pill',
 
@@ -70,6 +59,6 @@ app.LayoutView = app.NavView.extend({
 			},
 		});
 		
-		this.navTabViews = [HomeView, StatsView, MessagesView, AdsView, AccountsView];
+		this.navTabViews = [HomeView, app.StatsPillContentView, MessagesView, AdsView, AccountsView];
 	},
 });

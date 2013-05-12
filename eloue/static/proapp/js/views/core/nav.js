@@ -17,7 +17,8 @@ app.NavView = Backbone.View.extend({
 
 		this.navTabItemsView.setSelectedItemAtIndex(index);
 		this.selectedNavTabView = new this.navTabViews[index]();
-		this.renderSelectedNavTabView()
+		this.trigger('selectedNavTabView:change');
+		this.renderSelectedNavTabView();
 	},
 
 	render: function() {
