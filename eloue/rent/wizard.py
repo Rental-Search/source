@@ -93,8 +93,12 @@ class BookingWizard(MultiPartFormWizard):
         
         booking = booking_form.save(commit=False)
         booking.ip = request.META.get('REMOTE_ADDR', None)
-        booking.total_amount = Booking.calculate_price(booking.product,
-            booking_form.cleaned_data['started_at'], booking_form.cleaned_data['ended_at'])[1]
+        unit = Booking.calculate_price(booking.product,
+            booking_form.cleaned_data['started_at'], booking_form.cleaned_data['ended_at'])
+        max_available = Booking.calculate_available_quantity(booking.product, booking_form.cleaned_data['started_at'], booking_form.cleaned_data['ended_at'])
+        
+        booking.total_amount = unit[1] * (1 if booking_form.cleaned_data['quantity'] is None else (booking_form.cleaned_data['quantity'] if max_available >= booking_form.cleaned_data['quantity'] else max_available))
+
         booking.borrower = self.new_patron
 
         if creditcard_form:
