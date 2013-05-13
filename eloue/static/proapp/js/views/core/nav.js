@@ -18,7 +18,6 @@ app.NavView = Backbone.View.extend({
 		this.navTabItemsView.setSelectedItemAtIndex(index);
 		this.selectedNavTabView = new this.navTabViews[index]();
 		this.trigger('selectedNavTabView:change');
-		this.renderSelectedNavTabView();
 	},
 
 	render: function() {
@@ -33,11 +32,14 @@ app.NavView = Backbone.View.extend({
 		});
 		this.navTabItemsView = new this.navTabItemsView();
 		this.navTabItemsView.items = items;
-		this.$el.append(this.navTabItemsView.render().$el)
+		this.$el.append(this.navTabItemsView.$el);
+		this.navTabItemsView.render();
 	},
 
 	renderSelectedNavTabView: function() {
-		this.$el.append(this.selectedNavTabView.render().$el);
+		this.$el.append(this.selectedNavTabView.$el);
+		console.log(this.selectedNavTabView.$el);
+		this.selectedNavTabView.render()
 	},
 
 	onClose: function() {

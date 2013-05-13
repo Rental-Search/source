@@ -33,7 +33,7 @@ app.StatsTabContentView = Backbone.View.extend({
 		this.chartView = new app.ChartsView();
 		this.chartView.on('interval:change', this.fetchModel, this);
 
-		//this.chartsDetailsView = new app.ChartsDeatilsView();
+		this.chartsDetailsView = new app.ChartsDeatilsView();
 	},
 
 	setTimeSeriesView: function(timeSeries) {
@@ -67,7 +67,6 @@ app.StatsTabContentView = Backbone.View.extend({
 			.fail(function() {
 				self.renderFail();
 			});
-
 		delete params;
 		delete self;
 	},
@@ -89,7 +88,7 @@ app.StatsTabContentView = Backbone.View.extend({
 		this.serialize();
 
 		this.renderCharts();
-		//this.renderChartsDetails();
+		this.renderChartsDetails();
 
 		return this;
 	},

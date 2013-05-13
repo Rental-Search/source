@@ -57,7 +57,6 @@ app.StatsPillContentView = app.NavView.extend({
 	},
 
 	selectedNavTabViewChange: function() {
-		console.log('selectedNavTabViewChange');
 		this.selectedNavTabView.on('timeSeries:change', this.updateTimeSeries, this);
 		this.selectedNavTabView.setTimeSeriesView(this.timeSeries);
 	},
