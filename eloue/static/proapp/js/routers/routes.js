@@ -5,11 +5,11 @@ var app = app || {};
 
 var Workspace = Backbone.Router.extend({
 	routes: {
-		'': 					'home',
-		'stats/(:metric/)': 	'stats',
-		'messages/': 			'messages',
-		'ads/': 				'ads',
-		'accounts/':			'accounts', 
+		'': 						'home',
+		'stats/(:metric/)': 		'stats',
+		'messages/': 				'messages',
+		'ads/': 					'ads',
+		'accounts/(:params/)':		'accounts', 
 	},
 
 	initialize: function() {
@@ -45,7 +45,17 @@ var Workspace = Backbone.Router.extend({
 		app.layoutView.setSelectedNavTabViewAtIndex(3);
 	},
 	
-	accounts: function() {
+	accounts: function(params) {
 		app.layoutView.setSelectedNavTabViewAtIndex(4);
+
+		if( _.isNull(params) ) {
+			app.layoutView.selectedNavTabView.setSelectedNavTabViewAtIndex(0);
+		} else if (params == 'shop') {
+			app.layoutView.selectedNavTabView.setSelectedNavTabViewAtIndex(1);	
+		} else if (params == 'billing') {
+			app.layoutView.selectedNavTabView.setSelectedNavTabViewAtIndex(2);	
+		} else if (params == 'plan') {
+			app.layoutView.selectedNavTabView.setSelectedNavTabViewAtIndex(3);	
+		}
 	}
 });

@@ -47,18 +47,7 @@ app.LayoutView = app.NavView.extend({
 				return this;
 			},
 		});
-
-		var AccountsView = Backbone.View.extend({
-			className: 'content-pill',
-
-			item: itemView.extend({path: 'accounts/', icon: 'nameplate', labelName: 'Compte'}),
-
-			render: function() {
-				this.$el.html('<h1>Compte</h1>');
-				return this;
-			},
-		});
 		
-		this.navTabViews = [HomeView, app.StatsPillContentView, MessagesView, AdsView, AccountsView];
+		this.navTabViews = [HomeView, app.StatsPillContentView, MessagesView, AdsView, app.AccountsPillContentView];
 	},
 });
