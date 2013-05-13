@@ -42,7 +42,7 @@ app.StatsTabContentView = Backbone.View.extend({
 		this.timeSeriesView.on('timeseriesform:submited', this.fetchModel, this);
 		
 		this.chartItem.model.on('request', this.renderLoading, this);
-		this.chartItem.model.on('sync', this.render, this);
+		this.chartItem.model.on('sync', this.renderStats, this);
 
 		this.fetchModel();
 	},
@@ -78,6 +78,10 @@ app.StatsTabContentView = Backbone.View.extend({
 	},
 
 	render: function() {
+		return this;
+	},
+
+	renderStats: function() {
 		this.$el.html("<h3>" + this.titleName + "</h3>");
 
 		if (this.timeSeriesView) {
@@ -89,8 +93,6 @@ app.StatsTabContentView = Backbone.View.extend({
 
 		this.renderCharts();
 		this.renderChartsDetails();
-
-		return this;
 	},
 
 	renderCharts: function() {

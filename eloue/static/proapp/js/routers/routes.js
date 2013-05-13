@@ -26,11 +26,9 @@ var Workspace = Backbone.Router.extend({
 
 	stats: function(metric) {
 		app.layoutView.setSelectedNavTabViewAtIndex(1);
-		app.layoutView.renderSelectedNavTabView();
-
+		
 		if( _.isNull(metric) ) {
 			app.layoutView.selectedNavTabView.setSelectedNavTabViewAtIndex(0);
-			app.layoutView.selectedNavTabView.renderSelectedNavTabView();
 		} else if (metric == 'redirection') {
 			app.layoutView.selectedNavTabView.setSelectedNavTabViewAtIndex(1);
 		} else if (metric == 'phone') {

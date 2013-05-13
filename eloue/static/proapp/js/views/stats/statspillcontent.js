@@ -3,6 +3,7 @@
 var app = app || {};
 
 app.StatsPillContentView = app.NavView.extend({
+	
 	id: 'content-stats',
 
 	className: 'content-pill tabbable tabs-left',
@@ -23,35 +24,7 @@ app.StatsPillContentView = app.NavView.extend({
 		//Extend the class name for navtabs
 		this.navTabItemsView = this.navTabItemsView.extend({className:  'nav nav-tabs border-right'});
 
-		//Setup the correct template for the nav tab
-		var itemView = app.NavTabItemView.extend({
-			template: _.template($("#navtabsitem-template").html()),
-		});
-
-		var TrafficView = app.TrafficTabContentView;
-
-		var RedirectionView = app.StatsTabContentView.extend({
-
-			item: itemView.extend({icon: 'link', path: 'stats/redirection/', labelName: 'Redirections'}),
-
-			titleName: 'Redirections',
-		});
-
-		var PhoneView = app.StatsTabContentView.extend({
-
-			item: itemView.extend({icon: 'phone', path: 'stats/phone/', labelName: 'Appels'}),
-
-			titleName: 'Téléphones',
-		});
-
-		var AddressView = app.StatsTabContentView.extend({
-
-			item: itemView.extend({icon: 'map-marker', path: 'stats/address/', labelName: 'Adresses'}),
-
-			titleName: 'Adresses',
-		});
-
-		this.navTabViews = [TrafficView, RedirectionView, PhoneView, AddressView];
+		this.navTabViews = [app.TrafficTabContentView, app.RedirectionTabContentView, app.PhoneTabContentView, app.AddressTabContentView];
 
 		this.on('selectedNavTabView:change', this.selectedNavTabViewChange, this);
 	},
