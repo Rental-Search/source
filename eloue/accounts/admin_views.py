@@ -19,8 +19,6 @@ SUBSCRIPTION_PAYMENT_TYPE_CHOICES = (
 
 def patron_create_subscription(request):
 
-	print request.user.is_staff
-
 	required_fields = ['username', 'is_professional', 'company_name', 'first_name', 'last_name', 'phones__phone', 'addresses__address1', 'addresses__zipcode', 'addresses__city', 'addresses__country', 'cvv', 'holder_name', 'card_number', 'expires']
 
 	missing_fields, missing_form = make_missing_data_form(None, required_fields)
@@ -98,7 +96,6 @@ def patron_create_subscription(request):
 	form = NewSubscriptionForm(request.POST or None)
 
 	if form.is_valid():
-		print form.cleaned_data['username']
 		new_patron = Patron.objects.create_user(
 			form.cleaned_data['username'], 
 			form.cleaned_data['email']
