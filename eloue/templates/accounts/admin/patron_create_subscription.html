@@ -1,0 +1,61 @@
+{% extends "admin/base_site.html" %}
+
+{% load compressed i18n %}
+
+{% block extrastyle %}
+	{% compressed_css 'master' %}
+{% endblock %}
+
+{% block title %}Inscription pro{% endblock %}
+
+{% block breadcrumbs %}
+    <div class="breadcrumbs">
+        <a href="/">{% trans 'Home' %}</a> 
+        &rsaquo; New subscription
+    </div>
+{% endblock %}
+
+{% block content %}
+
+	<form class="form-horizontal" method="post" action="">
+{% csrf_token %}
+    {% if form.non_field_errors %}
+        {% with form_errors=form.non_field_errors %}
+            {% include 'partials/non_field_errors.html' %}
+        {% endwith %}
+    {% endif %}
+    {% for fieldset in form.fieldsets %}
+    {% if fieldset.boundfields|length > 0 %}
+    <fieldset class="{{ fieldset.classes }}">
+        {% if fieldset.legend %}
+        <legend>{{ fieldset.legend }}</legend>
+        {% endif %}
+        {% for formfield in fieldset %}
+        <div class="control-group {% if formfield.errors %} error {% endif %}">
+            <label class="control-label" for="{{ formfield.id_for_label }}">{{ formfield.label }} {% if formfield.field.required %}*{% endif %}</label>
+            <div class="controls">
+                {{ formfield }}
+                <p class="help-block">{{ formfield.help_text }}</p>
+                {% if formfield.errors %}
+                    <span class="help-inline">
+                    {% for error in formfield.errors %}
+                        {{ error|escape }}
+                    {% endfor %}
+                    </span>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    </fieldset>
+    {% endif %}
+    {% endfor %}
+    <div class="form-actions">
+        <input type="hidden" name="{{ step_field }}" value="{{ step0 }}" />
+        {{ previous_fields|safe }}
+        {% if product %}
+        {% else %}
+        {% endif %}
+        <button type="submit" class="btn btn-primary">{% trans "Continuer" %}</button>
+    </div>
+</form>
+{% endblock %}
