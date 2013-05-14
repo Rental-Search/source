@@ -108,6 +108,11 @@ PHONE_TYPES = Enum([
     (4, 'OTHER', _('Autre'))
 ])
 
+SUBSCRIPTION_PAYMENT_TYPE_CHOICES = Enum([
+    (0, 'CREDIT_CARD', _('Carte de crédit')),
+    (1, 'CHECK', _('Chèque')),
+])
+
 DEFAULT_CURRENCY = get_format('CURRENCY')
 
 log = logbook.Logger('eloue.accounts')
@@ -702,6 +707,7 @@ class Subscription(models.Model):
     subscription_started = models.DateTimeField(auto_now_add=True)
     subscription_ended = models.DateTimeField(null=True, blank=True)
     free = models.BooleanField(default=False)
+    payment_type = models.PositiveSmallIntegerField(_(u"Type de paiement"), null=True, blank=True, choices=SUBSCRIPTION_PAYMENT_TYPE_CHOICES)
 
     def price(self, _from=datetime.datetime.min, to=datetime.datetime.max):
         if self.free:
