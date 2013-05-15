@@ -13,6 +13,11 @@ app.AccountsTabContentView = Backbone.View.extend({
 
 	template: null,
 
+	events: {
+		'submit form':				'submitForm',
+		'click button.cancel':		'cancelForm'
+	},
+
 	initialize: function() {
 		this.loadingView = new app.LoadingView();
 
@@ -65,7 +70,7 @@ app.AccountsTabContentView = Backbone.View.extend({
 				self._enabledForm();
 			}
 		});
-
+		
 		return false;
 	},
 
