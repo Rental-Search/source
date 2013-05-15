@@ -12,12 +12,19 @@
                 <tr>
                     <td valign="top" style="padding-top: 20px;border-collapse: collapse;">
                         <div style="color: #505050;font-family: Arial;font-size: 14px;line-height: 200%;text-align: left;">
-                        	{% blocktrans with patron.username as username and patron.current_subscription as current_subscription %}
-                                Bonjour {{ username }},<br><br>
+                        	{% blocktrans with patron.username as username and patron.current_subscription.propackage as propackage %}
+                                Bonjour,<br><br>
 
                                 Nous vous confirmons la souscription à l'abonnement suivant :<br><br>
-                                {{ current_subscription }}
+                                {{ propackage }}
 
+                                Nous vous invitons à prendre connaissance des conditions générales : <a href="https://www.e-loue.com/conditions-generales/">Conditions générales e-loue</a>
+
+                                Nous allons vous recontacter pour la mise en place de votre e-boutique sur le site.<br>
+
+                                Merci pour votre confiance et bienvenue chez e-loue !<br>
+
+                                Bonnes e-locations,<br>
 
                             {% endblocktrans %}
                             {% trans "L'équipe" %} {{ site.name }}.

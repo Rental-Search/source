@@ -989,6 +989,7 @@ def make_missing_data_form(instance, required_fields=[]):
     form_class.clean_company_name = types.MethodType(clean_company_name, None, form_class)
     return fields != {}, form_class
 
+
 class ContactForm(forms.Form):
     sender = forms.EmailField(label=_(u"Email"), max_length=75, required=True, widget=forms.TextInput(attrs={
         'autocapitalize': 'off', 'autocorrect': 'off', 'class': 'inm'

@@ -53,6 +53,12 @@
               <th>{% trans "Fin" %}</th>
                   <td class="align-center">{{booking.ended_at|date:"l d F Y H:i"|capfirst}}</td>
               </tr>
+              {% if booking.quantity > 1 %}
+              <tr>
+                  <th>{% trans "Quantité" %}</th>
+                  <td class="align-center"><b>{{booking.quantity}}</b></td>
+              </tr>
+              {% endif %}
               <tr>
                   <th>{% trans "Montant" %}</th>
                   <td class="align-center"><b>{{booking.total_amount|currency}}</b></td>

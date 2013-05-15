@@ -70,7 +70,11 @@
           <tr>
               <th>{% trans "Période de réservation" %}</th>
               <td><b>Du</b> {{preview.started_at|date:"l d F Y H:i"}} <b>au</b> {{preview.ended_at|date:"l d F Y H:i"}}</td>
-          </tr> 
+          </tr>
+          <tr>
+              <th>{% trans "Quantité" %}</th>
+              <td class="align-center">{{preview.quantity}}</td>
+          </tr>
           <tr>
               <th>{% trans "Montant de la réservation" %}</th>
               <td class="align-center">{{preview.total_amount|currency}}</td>

@@ -108,6 +108,11 @@ PHONE_TYPES = Enum([
     (4, 'OTHER', _('Autre'))
 ])
 
+SUBSCRIPTION_PAYMENT_TYPE_CHOICES = Enum([
+    (0, 'CREDIT_CARD', _(u'Carte de crédit')),
+    (1, 'CHECK', _(u'Chèque')),
+])
+
 DEFAULT_CURRENCY = get_format('CURRENCY')
 
 log = logbook.Logger('eloue.accounts')
@@ -330,15 +335,17 @@ class Patron(User):
 
     def subscribe(self, propackage):
         current_subscription = self.current_subscription
-        context = {}
+        context = {'patron': self}
         if current_subscription:
             current_subscription.subscription_ended = datetime.datetime.now()
             current_subscription.save()
+            subscription = Subscription.objects.create(patron=self, propackage=propackage)
             message = create_alternative_email('accounts/emails/professional_subscription_changed', context, settings.DEFAULT_FROM_EMAIL, [self.email])
         else:
+            subscription = Subscription.objects.create(patron=self, propackage=propackage)
             message = create_alternative_email('accounts/emails/professional_subscribed', context, settings.DEFAULT_FROM_EMAIL, [self.email])
         message.send()
-        return Subscription.objects.create(patron=self, propackage=propackage)
+        return subscription
 
     @property
     def current_subscription(self):
@@ -702,6 +709,7 @@ class Subscription(models.Model):
     subscription_started = models.DateTimeField(auto_now_add=True)
     subscription_ended = models.DateTimeField(null=True, blank=True)
     free = models.BooleanField(default=False)
+    payment_type = models.PositiveSmallIntegerField(_(u"Type de paiement"), null=True, blank=True, choices=SUBSCRIPTION_PAYMENT_TYPE_CHOICES)
 
     def price(self, _from=datetime.datetime.min, to=datetime.datetime.max):
         if self.free:

@@ -1,0 +1,79 @@
+{% extends "admin/base_site.html" %}
+
+{% load compressed i18n %}
+
+{% block extrastyle %}
+	{% compressed_css 'master' %}
+{% endblock %}
+
+{% block title %}Inscription pro{% endblock %}
+
+{% block breadcrumbs %}
+    <div class="breadcrumbs">
+        <a href="/">{% trans 'Home' %}</a> 
+        &rsaquo; New subscription
+    </div>
+{% endblock %}
+
+{% block content %}
+<div id="wizard-page" class="container-main">
+    <div class="content-main">
+        <h1>Souscription abonnement pro</h1>
+        <form class="form-horizontal" method="post" action="">
+        {% csrf_token %}
+            {% if form.non_field_errors %}
+                {% with form_errors=form.non_field_errors %}
+                    {% include 'partials/non_field_errors.html' %}
+                {% endwith %}
+            {% endif %}
+            {% for fieldset in form.fieldsets %}
+            {% if fieldset.boundfields|length > 0 %}
+            <fieldset class="{{ fieldset.classes }}">
+                {% if fieldset.legend %}
+                <legend>{{ fieldset.legend }}</legend>
+                {% endif %}
+                {% for formfield in fieldset %}
+                {% if formfield.is_hidden %}
+                    {{formfield}}
+                {% else %}
+                <div class="control-group {% if formfield.errors %} error {% endif %}">
+                    <label class="control-label" for="{{ formfield.id_for_label }}">{{ formfield.label }} {% if formfield.field.required %}*{% endif %}</label>
+                    <div class="controls">
+                        {{ formfield }}
+                        <p class="help-block">{{ formfield.help_text }}</p>
+                        {% if formfield.errors %}
+                            <span class="help-inline">
+                            {% for error in formfield.errors %}
+                                {{ error|escape }}
+                            {% endfor %}
+                            </span>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endif %}
+                {% endfor %}
+            </fieldset>
+            {% endif %}
+            {% endfor %}
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">{% trans "Créer le compte" %}</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% compressed_js 'application' %}
+<script type="text/javascript">
+    $(document).ready(function() {
+        $("#id_company_name").parent().parent().show();
+        if( $('#id_payment_type').val() == 1 ) {
+            $('.creditcard').hide()   
+        }
+        $('#id_payment_type').on('change', function() {
+            if( this.value == 0 ) {
+                $('.creditcard').show()
+            } else { $('.creditcard').hide() }
+        });
+    });
+
+</script>
+{% endblock %}
