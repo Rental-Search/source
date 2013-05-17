@@ -48,6 +48,6 @@ app.LayoutView = app.NavView.extend({
 			},
 		});
 		
-		this.navTabViews = [HomeView, app.StatsPillContentView, MessagesView, AdsView, app.AccountsPillContentView];
+		this.navTabViews = [HomeView, app.StatsPillContentView, MessagesView, app.AdsPillContentView, app.AccountsPillContentView];
 	},
 });

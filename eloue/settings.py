@@ -328,6 +328,7 @@ PIPELINE_JS = {
 
     'proapp': {
         'source_filenames': (
+            'proapp/js/models/product.js',
             'proapp/js/models/plan.js',
             'proapp/js/models/bill.js',
             'proapp/js/models/shop.js',
@@ -337,11 +338,15 @@ PIPELINE_JS = {
             'proapp/js/models/addressevents.js',
             'proapp/js/models/trafficevents.js',
             'proapp/js/collections/plans.js',
+            'proapp/js/collections/products.js',
             'proapp/js/views/core/loading.js',
             'proapp/js/views/core/navtabitem.js',
             'proapp/js/views/core/navtab.js',
             'proapp/js/views/core/navtabitems.js',
             'proapp/js/views/core/nav.js',
+            'proapp/js/views/core/listitems.js',
+            'proapp/js/views/core/list.js',
+            'proapp/js/views/ads/adspillcontent.js',
             'proapp/js/views/accounts/accountstabcontent.js',
             'proapp/js/views/accounts/patrontabcontent.js',
             'proapp/js/views/accounts/shoptabcontent.js',

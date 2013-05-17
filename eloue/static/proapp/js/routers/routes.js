@@ -8,7 +8,7 @@ var Workspace = Backbone.Router.extend({
 		'': 						'home',
 		'stats/(:metric/)': 		'stats',
 		'messages/': 				'messages',
-		'ads/': 					'ads',
+		'ads/(:id/)': 					'ads',
 		'accounts/(:params/)':		'accounts', 
 	},
 
@@ -21,7 +21,10 @@ var Workspace = Backbone.Router.extend({
 	},
 
 	home: function() {
-		app.layoutView.setSelectedNavTabViewAtIndex(0);
+		if ( app.layoutView.selectedNavTabView instanceof app.layoutView.navTabViews[0] ) {
+		} else {
+			app.layoutView.setSelectedNavTabViewAtIndex(0);
+		}
 	},
 
 	stats: function(metric) {
@@ -38,15 +41,29 @@ var Workspace = Backbone.Router.extend({
 		}
 	},
 	messages: function() {
-		app.layoutView.setSelectedNavTabViewAtIndex(2);
+		if ( app.layoutView.selectedNavTabView instanceof app.layoutView.navTabViews[2] ) {
+		} else {
+			app.layoutView.setSelectedNavTabViewAtIndex(2);
+		}
 	},
 
-	ads: function() {
-		app.layoutView.setSelectedNavTabViewAtIndex(3);
+	ads: function(id) {
+		if ( app.layoutView.selectedNavTabView instanceof app.layoutView.navTabViews[3] ) {
+		} else {
+			app.layoutView.setSelectedNavTabViewAtIndex(3);
+		}
+
+		if( !_.isNull(id) ) {
+			app.layoutView.selectedNavTabView.setDetailViewWithId(id);
+		}
+
 	},
 	
 	accounts: function(params) {
-		app.layoutView.setSelectedNavTabViewAtIndex(4);
+		if ( app.layoutView.selectedNavTabView instanceof app.layoutView.navTabViews[4] ) {
+		} else {
+			app.layoutView.setSelectedNavTabViewAtIndex(4);
+		}
 
 		if( _.isNull(params) ) {
 			app.layoutView.selectedNavTabView.setSelectedNavTabViewAtIndex(0);

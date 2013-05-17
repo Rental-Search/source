@@ -97,11 +97,11 @@
 		return Backbone.oldSync( method, model, options );
 	};
 
-	Backbone.Model.prototype.idAttribute = 'resource_uri';
+	Backbone.Model.prototype.idAttribute = 'id';
 
 	Backbone.Model.prototype.url = function() {
 		// Use the id if possible
-		var url = this.id;
+		var url = this.resource_uri;
 
 		// If there's no idAttribute, use the 'urlRoot'. Fallback to try to have the collection construct a url.
 		// Explicitly add the 'id' attribute if the model has one.

@@ -75,9 +75,9 @@ app.ShopTabContentView = app.AccountsTabContentView.extend({
 				}
 			};
 
-		if ( !_.isNull(shop.toJSON().default_address) ) object.default_address.id = shop.toJSON().default_address.id;
-		if ( !_.isNull(shop.toJSON().default_number) ) object.default_number.id = shop.toJSON().default_number.id;
-		if ( !_.isNull(shop.toJSON().opening_times.id) ) object.opening_times.id = shop.toJSON().opening_times.id;
+		//if ( !_.isNull(shop.toJSON().default_address) ) object.default_address.id = shop.toJSON().default_address.id;
+		//if ( !_.isNull(shop.toJSON().default_number) ) object.default_number.id = shop.toJSON().default_number.id;
+		//if ( !_.isNull(shop.toJSON().opening_times.id) ) object.opening_times.id = shop.toJSON().opening_times.id;
 
 		return object;
 	},

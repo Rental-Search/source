@@ -23,7 +23,7 @@ app.AccountsTabContentView = Backbone.View.extend({
 
 		this.model = new this.model();
 		this.model.on('request', this.renderLoading, this);
-		this.model.on('sync', this.render, this);
+		this.model.on('sync', this.renderContent, this);
 		this.model.on('invalid', this.showErrors, this);
 		this.model.fetch();
 
@@ -42,9 +42,12 @@ app.AccountsTabContentView = Backbone.View.extend({
 	},
 
 	render: function() {
+		return this;
+	},
+
+	renderContent: function() {
 		this.$el.html(this.template(this.serialize()));
 		this.trigger('accounttabcontentrender:after');
-		return this;
 	},
 
 	renderLoading: function() {
@@ -55,6 +58,7 @@ app.AccountsTabContentView = Backbone.View.extend({
 	renderAfter: function() {},
 
 	submitForm: function () {
+		console.log('submit form')
 		var data = this.serializeDataObject();
 
 		this._disabledForm();

@@ -496,7 +496,6 @@
 
 		<script type="text/template" id="billingnavtabcontent-template">
 			<h3><%= titleName %></h3>
-			<% console.log(model); %>
 			<h4>Relevé actuel du mois</h4>
 			<div class="content">
 				<table class="table table-billing">
@@ -693,7 +692,7 @@
 			<ul class="items-list">
 				<% _.each(collection, function(item) { %>
 				<li>
-					<a href="ads/<%= item.id %>/" resource_uri="<%= item.resource_uri %>" class="clearfix">
+					<a href="/pro/dashboard/ads/<%= item.id %>/" id="<%= item.id %>" class="clearfix">
 						<div class="item-status"></div>
 						<img class="item-img pull-left" src="<%= item.pictures[0].thumbnail_url %>" alt="">
 						<div class="item-body">
