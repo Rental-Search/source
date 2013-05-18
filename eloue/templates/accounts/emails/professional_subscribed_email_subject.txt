@@ -1,1 +1,1 @@
-{% load i18n %}{% trans "Confirmation souscription abonnement professionnel" %}
+{% load i18n %}{% trans "Confirmation inscription compte professionnel e-loue" %}
