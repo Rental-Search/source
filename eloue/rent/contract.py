@@ -88,11 +88,11 @@ class ContractGenerator(object):
         #     )
         # )
         canvas.drawString(373, 499, "{masked_number}".format(
-            masked_number=booking.borrower.creditcard.masked_number
+            masked_number=booking.payment.creditcard.masked_number
         ))
         canvas.drawString(352, 483, "{expires1}/{expires2}".format(
-            expires1=booking.borrower.creditcard.expires[:2],
-            expires2=booking.borrower.creditcard.expires[2:],
+            expires1=booking.payment.creditcard.expires[:2],
+            expires2=booking.payment.creditcard.expires[2:],
         ))
 
 
