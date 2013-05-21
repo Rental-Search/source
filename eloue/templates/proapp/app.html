@@ -739,6 +739,28 @@
 			<% } %>
 		</script>
 
+		<script type="text/template" id="ads-details-template">
+			<div class="navbar">
+				<div class="navbar-inner" style="height: 30px !important;">
+					<div class="brand">
+						<img class="media-object pull-left" src="<%= model.pictures[0].thumbnail_url %>" alt="" width="25px"> <%= model.summary %>
+						<span class="label label-price">
+							<% if (_.isNull(model.day_price) ) { %>
+								sur devis
+							<% } else { %>
+								<%= model.day_price %>&euro;/jour
+							<% } %>
+						</span>
+					</div>
+					<ul id="product-nav" class="nav">
+						<li class="active"><a href="#product-informations-form"><i class="halflings-icon info-sign blue"></i> Informations</a></li>
+						<li><a href="#product-image"><i class="halflings-icon picture blue"></i> Images</a></li>
+						<li ><a href="#product-prices-disponibilities"><i class="halflings-icon calendar blue"></i> Tarifs et disponibilités</a></li>
+					</ul>
+				</div>
+			</div><!-- navbar -->
+		</script>
+
 		<script type="text/template" id="nav-content-template">
 			<div class="nav-content">
 				<form action="#" class="form-horizontal">

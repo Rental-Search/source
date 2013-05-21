@@ -24,8 +24,19 @@ app.ListView = Backbone.View.extend({
 
 	renderList: function() {
 		this.listItemsView = new this.listItemsView();
+		this.listItemsView.on('selectedItem:change', this.renderDetailView, this);
 		this.$el.append(this.listItemsView.$el);
 		this.listItemsView.render();
+	},
+
+	renderDetailView: function() {
+		if( !_.isNull(this.detailView) ) {
+			if ( _.isFunction(this.detailView) ) this.detailView = new this.detailView();
+			console.log(this.detailView.cid);
+			this.detailView.model = this.listItemsView.selectedItem;
+			this.$el.append(this.detailView.$el);
+			this.detailView.render();
+		}
 	},
 
 	resizeView: function() {
@@ -36,5 +47,6 @@ app.ListView = Backbone.View.extend({
 
 	onClose: function() {
 		this.listItemsView.close();
+		this.detailView.close();
 	}
 });

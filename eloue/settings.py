@@ -346,6 +346,7 @@ PIPELINE_JS = {
             'proapp/js/views/core/nav.js',
             'proapp/js/views/core/listitems.js',
             'proapp/js/views/core/list.js',
+            'proapp/js/views/ads/adsdetails.js',
             'proapp/js/views/ads/adspillcontent.js',
             'proapp/js/views/accounts/accountstabcontent.js',
             'proapp/js/views/accounts/patrontabcontent.js',

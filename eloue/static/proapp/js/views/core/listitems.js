@@ -51,7 +51,7 @@ app.ListItemsView = Backbone.View.extend({
 		this.selectedItem = this.collection.get(id);
 		//if collection is not fetched we just id is stock
 		if ( _.isUndefined(this.selectedItem) ) this.selectedItem = id; 
-		this.trigger('selectedItem:change');
+		else this.trigger('selectedItem:change');	
 	},
 
 	activeSelectedItem: function() {
