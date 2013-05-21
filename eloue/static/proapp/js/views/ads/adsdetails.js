@@ -2,22 +2,33 @@
 
 var app = app || {};
 
-app.AdsDetailsView = Backbone.View.extend({
+app.AdsDetailsView = app.NavView.extend({
 	className: 'list-main-content',
 
 	model: null,
 
 	template: _.template($("#ads-details-template").html()),
 
+	initialize: function() {
+		this.navTabItemsView = this.navTabItemsView.extend({ id: 'product-nav', className: 'nav'})
+		
+		this.navTabViews =  [app.AdsInfoView, app.AdsPicView, app.AdsPriceView];
+	},
 
 	serialize: function() {
-		return {
-			model: this.model.toJSON()
-		}
+		if( _.isNull(this.model) ) return { model: this.model }
+		else return { model: this.model.toJSON() }
 	},
 
 	render: function() {
 		this.$el.html(this.template(this.serialize()));
+		if ( !_.isNull(this.model) ) this.renderNavTabItems();
 		return this;
+	},
+
+	renderNavTabItems: function() {
+		this.setItems();
+		this.$el.children('.navbar').children('.navbar-inner').append(this.navTabItemsView.$el);
+		this.navTabItemsView.render();
 	}
 });

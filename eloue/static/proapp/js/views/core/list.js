@@ -19,6 +19,7 @@ app.ListView = Backbone.View.extend({
 	render: function() {
 		this.resizeView();
 		this.renderList();
+		this.renderDetailView();
 		return this;
 	},
 
@@ -32,7 +33,6 @@ app.ListView = Backbone.View.extend({
 	renderDetailView: function() {
 		if( !_.isNull(this.detailView) ) {
 			if ( _.isFunction(this.detailView) ) this.detailView = new this.detailView();
-			console.log(this.detailView.cid);
 			this.detailView.model = this.listItemsView.selectedItem;
 			this.$el.append(this.detailView.$el);
 			this.detailView.render();

@@ -27,14 +27,19 @@ app.NavView = Backbone.View.extend({
 	},
 
 	renderNavTabItems: function() {
+		this.setItems();
+		this.$el.append(this.navTabItemsView.$el);
+		this.navTabItemsView.render();
+	},
+
+	setItems: function() {
 		var items = [];
 		_.each(this.navTabViews, function(view) {
 			items.push(view.prototype.item);
 		});
-		this.navTabItemsView = new this.navTabItemsView();
+		if( _.isFunction(this.navTabItemsView) ) this.navTabItemsView = new this.navTabItemsView();
+		if( !_.isEmpty(this.navTabItemsView.items) ) this.navTabItemsView.onClose();
 		this.navTabItemsView.items = items;
-		this.$el.append(this.navTabItemsView.$el);
-		this.navTabItemsView.render();
 	},
 
 	renderSelectedNavTabView: function() {
@@ -43,7 +48,7 @@ app.NavView = Backbone.View.extend({
 	},
 
 	onClose: function() {
-		this.navTabItemsView.close();
-		this.selectedNavTabView.close();
+		if( !_.isNull(this.selectedNavTabView) ) this.navTabItemsView.close();
+		if( !_.isNull(this.selectedNavTabView) ) this.selectedNavTabView.close();
 	}
 });

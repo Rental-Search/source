@@ -36,8 +36,7 @@ app.ListItemsView = Backbone.View.extend({
 
 	renderItems: function() {
 		this.$el.html(this.template(this.serialize()));
-
-		//if selectedItem is an id and not an object so the the item is not active
+		//if selectedItem is a string and not an object so we selected the item
 		if( _.isString(this.selectedItem) ) this.setSelectedItemWithId(this.selectedItem);
 	},
 

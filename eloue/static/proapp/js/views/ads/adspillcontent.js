@@ -23,17 +23,6 @@ app.AdsPillContentView = app.ListView.extend({
 			collection: app.ProductsCollection
 		});
 
-		// this.detailView = Backbone.View.extend({
-		// 	className: 'list-main-content',
-
-		// 	model: null,
-
-		// 	render: function() {
-		// 		this.$el.html('<h1>' + this.model.toJSON().summary + '</h1>');
-		// 		return this;
-		// 	}
-		// });
-
 		this.detailView = new app.AdsDetailsView;
 	}
 });
