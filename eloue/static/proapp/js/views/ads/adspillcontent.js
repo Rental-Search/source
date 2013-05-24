@@ -23,6 +23,6 @@ app.AdsPillContentView = app.ListView.extend({
 			collection: app.ProductsCollection
 		});
 
-		this.detailView = new app.AdsDetailsView;
+		this.detailView = app.AdsDetailsView;
 	}
 });

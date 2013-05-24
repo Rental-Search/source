@@ -5,11 +5,11 @@ var app = app || {};
 
 var Workspace = Backbone.Router.extend({
 	routes: {
-		'': 						'home',
-		'stats/(:metric/)': 		'stats',
-		'messages/': 				'messages',
-		'ads/(:id/)': 					'ads',
-		'accounts/(:params/)':		'accounts', 
+		'': 							'home',
+		'stats/(:metric/)': 			'stats',
+		'messages/': 					'messages',
+		'ads/(:id/)(:params/)': 		'ads',
+		'accounts/(:params/)':			'accounts', 
 	},
 
 	initialize: function() {
@@ -21,10 +21,7 @@ var Workspace = Backbone.Router.extend({
 	},
 
 	home: function() {
-		if ( app.layoutView.selectedNavTabView instanceof app.layoutView.navTabViews[0] ) {
-		} else {
-			app.layoutView.setSelectedNavTabViewAtIndex(0);
-		}
+		app.layoutView.setSelectedNavTabViewAtIndex(0);
 	},
 
 	stats: function(metric) {
@@ -41,29 +38,33 @@ var Workspace = Backbone.Router.extend({
 		}
 	},
 	messages: function() {
-		if ( app.layoutView.selectedNavTabView instanceof app.layoutView.navTabViews[2] ) {
-		} else {
-			app.layoutView.setSelectedNavTabViewAtIndex(2);
-		}
+		app.layoutView.setSelectedNavTabViewAtIndex(2);
 	},
 
-	ads: function(id) {
-		if ( app.layoutView.selectedNavTabView instanceof app.layoutView.navTabViews[3] ) {
-		} else {
-			app.layoutView.setSelectedNavTabViewAtIndex(3);
-		}
+	ads: function(id, params) {
+		console.log("render pill content");
+		app.layoutView.setSelectedNavTabViewAtIndex(3);
 
 		if( !_.isNull(id) ) {
-			app.layoutView.selectedNavTabView.setDetailViewWithId(id);
+			console.log("render detail content");
+			app.layoutView.selectedNavTabView.setDetailViewWithId(id, function() {
+				if( _.isNull(params) ) {
+					console.log("render information");
+					app.layoutView.selectedNavTabView.selectedDetailView.setSelectedNavTabViewAtIndex(0);
+				} else if ( params == 'pictures' ) {
+					console.log("pictures tab view");
+					app.layoutView.selectedNavTabView.selectedDetailView.setSelectedNavTabViewAtIndex(1);
+				} else if ( params == 'prices' ) {
+					console.log("prices  tab view");
+					app.layoutView.selectedNavTabView.selectedDetailView.setSelectedNavTabViewAtIndex(2);
+				}	
+			});
 		}
 
 	},
 	
 	accounts: function(params) {
-		if ( app.layoutView.selectedNavTabView instanceof app.layoutView.navTabViews[4] ) {
-		} else {
-			app.layoutView.setSelectedNavTabViewAtIndex(4);
-		}
+		app.layoutView.setSelectedNavTabViewAtIndex(4);
 
 		if( _.isNull(params) ) {
 			app.layoutView.selectedNavTabView.setSelectedNavTabViewAtIndex(0);
