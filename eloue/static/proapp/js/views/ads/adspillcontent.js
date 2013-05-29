@@ -17,12 +17,12 @@ app.AdsPillContentView = app.ListView.extend({
 		labelName: 'Annonces'
 	}),
 
+	listItemsView: app.ListItemsView.extend({ collection: app.ProductsCollection }),
+
+	detailView: app.AdsDetailsView,
+
 	initialize: function() {
 		this.constructor.__super__.initialize.apply(this, [this.options]);
-		this.listItemsView = this.listItemsView.extend({
-			collection: app.ProductsCollection
-		});
-
-		this.detailView = app.AdsDetailsView;
+		
 	}
 });

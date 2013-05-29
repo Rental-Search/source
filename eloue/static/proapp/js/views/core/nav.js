@@ -16,6 +16,7 @@ app.NavView = Backbone.View.extend({
 		if( !_.isNull(this.selectedNavTabView) ) {
 			if ( this.selectedNavTabView instanceof this.navTabViews[index] ) {
 				return;
+				console.log('return');
 			} else {
 				this.selectedNavTabView.close();
 			}

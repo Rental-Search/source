@@ -16,7 +16,6 @@ app.ListItemsView = Backbone.View.extend({
 	},
 
 	initialize: function() {
-		this.on('selectedItem:change', this.activeSelectedItem, this);
 	},
 
 	serialize: function() {
@@ -26,7 +25,6 @@ app.ListItemsView = Backbone.View.extend({
 	},
 
 	render: function() {
-		console.log("render");
 		if( !_.isNull(this.collection) ) {
 			this.collection = new this.collection();
 			this.collection.on('sync', this.renderItems, this);
@@ -47,7 +45,8 @@ app.ListItemsView = Backbone.View.extend({
 	},
 
 	setSelectedItemWithId: function(id) {
-		
+		this.selectedItem = this.collection.get(id);
+		this.activeSelectedItem();
 	},
 
 	activeSelectedItem: function() {
