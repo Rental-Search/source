@@ -34,6 +34,8 @@ app.ListView = Backbone.View.extend({
 			this.listItemsView.setSelectedItemWithId(id);
 			this.renderSelectedDetailView();
 		}
+
+		this.once("selectedDetailView:rendered", callback, this);
 	},
 
 	render: function() {
@@ -52,6 +54,7 @@ app.ListView = Backbone.View.extend({
 		this.selectedDetailView.model = this.listItemsView.selectedItem;
 		this.$el.append(this.selectedDetailView.$el);
 		this.selectedDetailView.render();
+		this.trigger("selectedDetailView:rendered");
 	},
 
 	resizeView: function() {

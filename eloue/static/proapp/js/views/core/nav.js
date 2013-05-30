@@ -12,7 +12,7 @@ app.NavView = Backbone.View.extend({
 
 	initialize: function() {},
 
-	setSelectedNavTabViewAtIndex: function(index) {
+	setSelectedNavTabViewAtIndex: function(index, callback) {
 		if( !_.isNull(this.selectedNavTabView) ) {
 			if ( this.selectedNavTabView instanceof this.navTabViews[index] ) {
 				return;
