@@ -43,12 +43,10 @@ var Workspace = Backbone.Router.extend({
 
 	ads: function(id, params) {
 		app.layoutView.setSelectedNavTabViewAtIndex(3);
-
 		if( !_.isNull(id) ) {
 			app.layoutView.selectedNavTabView.setDetailViewWithId(id, function() {
 				if( _.isNull(params) ) {
-					console.log("render information");
-					console.log(app.layoutView.selectedNavTabView.selectedDetailView);
+					console.log('info tab view');
 					app.layoutView.selectedNavTabView.selectedDetailView.setSelectedNavTabViewAtIndex(0);
 				} else if ( params == 'pictures' ) {
 					console.log("pictures tab view");
@@ -59,7 +57,6 @@ var Workspace = Backbone.Router.extend({
 				}
 			});
 		}
-
 	},
 	
 	accounts: function(params) {

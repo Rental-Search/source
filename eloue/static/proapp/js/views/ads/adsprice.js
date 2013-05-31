@@ -7,7 +7,7 @@ app.AdsPriceView = Backbone.View.extend({
 	item: app.NavTabItemView.extend({
 		template: _.template($("#navbaritem-template").html()),
 		icon: 'calendar',
-		path: '',
+		path: null,
 		labelName: 'Tarifs et disponibilités'
 	}),
 

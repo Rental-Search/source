@@ -24,6 +24,8 @@ app.ListView = Backbone.View.extend({
 			}
 		}
 
+		this.once("selectedDetailView:rendered", callback, this);
+
 		// Waiting the result of the fetch before render the detail view
 		if( this.listItemsView.collection.length == 0 ) {
 			this.listItemsView.collection.once('sync', function() {
@@ -34,8 +36,6 @@ app.ListView = Backbone.View.extend({
 			this.listItemsView.setSelectedItemWithId(id);
 			this.renderSelectedDetailView();
 		}
-
-		this.once("selectedDetailView:rendered", callback, this);
 	},
 
 	render: function() {
@@ -51,7 +51,7 @@ app.ListView = Backbone.View.extend({
 
 	renderSelectedDetailView: function() {
 		this.selectedDetailView = new this.detailView();
-		this.selectedDetailView.model = this.listItemsView.selectedItem;
+		this.selectedDetailView.setModel(this.listItemsView.selectedItem);
 		this.$el.append(this.selectedDetailView.$el);
 		this.selectedDetailView.render();
 		this.trigger("selectedDetailView:rendered");

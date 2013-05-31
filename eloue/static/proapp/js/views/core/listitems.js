@@ -15,8 +15,7 @@ app.ListItemsView = Backbone.View.extend({
 		'click a': 'selectItem'
 	},
 
-	initialize: function() {
-	},
+	initialize: function() {},
 
 	serialize: function() {
 		return {

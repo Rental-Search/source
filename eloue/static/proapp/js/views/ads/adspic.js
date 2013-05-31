@@ -6,7 +6,7 @@ app.AdsPicView = Backbone.View.extend({
 	item: app.NavTabItemView.extend({
 		template: _.template($("#navbaritem-template").html()),
 		icon: 'picture',
-		path: '',
+		path: null,
 		labelName: 'Images'
 	}),
 

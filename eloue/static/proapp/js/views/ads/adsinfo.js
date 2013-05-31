@@ -6,7 +6,7 @@ app.AdsInfoView = Backbone.View.extend({
 	item: app.NavTabItemView.extend({
 		template: _.template($("#navbaritem-template").html()),
 		icon: 'info-sign',
-		path: '',
+		path: null,
 		labelName: 'Informations'
 	}),
 

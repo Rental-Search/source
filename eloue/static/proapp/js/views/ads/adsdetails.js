@@ -15,6 +15,13 @@ app.AdsDetailsView = app.NavView.extend({
 		this.navTabViews =  [app.AdsInfoView, app.AdsPicView, app.AdsPriceView];
 	},
 
+	setModel: function(model) {
+		this.model = model;
+		this.navTabViews[0].prototype.item.prototype.path = 'ads/' + this.model.id + '/';
+		this.navTabViews[1].prototype.item.prototype.path = 'ads/' + this.model.id + '/pictures/';
+		this.navTabViews[2].prototype.item.prototype.path = 'ads/' + this.model.id + '/prices/';
+	},
+
 	serialize: function() {
 		if( _.isNull(this.model) ) return { model: this.model }
 		else return { model: this.model.toJSON() }
