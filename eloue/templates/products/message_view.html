@@ -1,5 +1,5 @@
 {% extends "products/inbox.html" %}
-{% load i18n navbar %}
+{% load i18n navbar product l10n %}
 
 {% block title %}{% trans "Mes messages" %}{% endblock %}
 {% block head %}
@@ -17,17 +17,18 @@
 {% endblock %}
 
 {% block content-main-profil %}
+<div class="messages-content">
+{% if request.user == thread.recipient %}
+	<h2>Conversation avec {{ thread.sender }}</h2>
+{% else %}
+	<h2>Conversation avec {{ thread.recipient }}</h2>
+{% endif %}
 <ul class="messages">
-	{% if request.user == message.recipient %}
-		<h2>Conversation avec {{ message.sender }}</h2>
-	{% else %}
-		<h2>Conversation avec {{ message.recipient }}</h2>
-	{% endif %}
 {% for message in message_list %}
 	<li>
 		<a href="{{message.sender.patron.get_absolute_url}}" class="m-img">
-			{% if message.sender.avatar %}
-				<img src="{{message.sender.thumbnail.url}}" width="60" height="60" />
+			{% if message.sender.patron.avatar %}
+				<img src="{{message.sender.patron.profil.url}}" width="60" height="60" />
 			{% else %}
 				<img src="{{ STATIC_URL }}images/default_avatar.png" width="60" height="60" alt="">
 			{% endif %}
@@ -62,9 +63,9 @@
 					<form method="post" action="">
 						{% csrf_token %}
 						{{ editForm.body }}
-						<div class="form-actions">
+						<p style="text-align: left;">
         					<button type="submit" class="btn btn-primary">Envoyer</button>
-      					</div>
+        				</p>
 					</form>
 				</div>
 				<span class="message-dial"></span>
@@ -72,6 +73,30 @@
 		</div>
 	</li>
 </ul>
+</div>{# messages-content #}
+{% if thread.product %}
+<div class="product-related-content">
+	<h5>{% trans "Annonce liée à la conversation" %}</h5>
+	<ul class="product-vignettes">
+		<li>
+			<a href="{{ thread.product.get_absolute_url }}">
+				{% with thread.product.pictures.all|first as picture %}
+					{% if picture %}
+                    	<img src="{{ picture.display.url }}" alt="{{ product.summary }}" width="160">
+               		{% endif %}
+				{% endwith %}
+				<h3>{{ thread.product.summary|truncate:22 }}</h3>
+				{% with thread.product.prices.all|first as price %}
+				<p class="pv-price">{{ price|unlocalize }} <span>/{{ 1|unit }}</span></p>
+				{% endwith %}
+			</a>
+		</li>
+	</ul>{# product-vignettes #}
+	{% if request.user != thread.product.owner %}
+		<a href="{{ thread.product.get_absolute_url }}" title="Réservez" class="btn-search">{% trans "Effectuez la réservation"%}</a>
+	{% endif %}
+</div>{# product-related-content #}
+{% endif %}
 {% endblock %}
 
 {% block tail %}
