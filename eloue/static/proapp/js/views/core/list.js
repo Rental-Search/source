@@ -16,26 +16,36 @@ app.ListView = Backbone.View.extend({
 	},
 
 	setDetailViewWithId: function(id, callback) {
-		if( !_.isNull(this.selectedDetailView) ) {
-			if ( this.selectedDetailView.model.id == parseInt(id) ) {
-				return;
-			} else {
-				this.selectedDetailView.close();
+		if( !_.isNull(id) ) {
+			if( !_.isNull(this.selectedDetailView) ) {
+				if (!_.isNull(this.selectedDetailView.model)) {
+					if ( this.selectedDetailView.model.id == parseInt(id) ) {
+						callback();
+						return;
+					} else {
+						this.selectedDetailView.close();
+					}
+				} else {
+					this.selectedDetailView.close();
+				}
 			}
-		}
 
-		this.once("selectedDetailView:rendered", callback, this);
+			this.once("selectedDetailView:rendered", callback, this);
 
-		// Waiting the result of the fetch before render the detail view
-		if( this.listItemsView.collection.length == 0 ) {
-			this.listItemsView.collection.once('sync', function() {
+			// Waiting the result of the fetch before render the detail view
+			if( this.listItemsView.collection.length == 0 ) {
+				this.listItemsView.collection.once('sync', function() {
+					this.listItemsView.setSelectedItemWithId(id);
+					this.renderSelectedDetailView();
+				}, this);
+			} else {
 				this.listItemsView.setSelectedItemWithId(id);
 				this.renderSelectedDetailView();
-			}, this);
+			}
 		} else {
-			this.listItemsView.setSelectedItemWithId(id);
-			this.renderSelectedDetailView();
+			this.renderNoSelectedDetailView();
 		}
+		
 	},
 
 	render: function() {
@@ -47,6 +57,12 @@ app.ListView = Backbone.View.extend({
 	renderList: function() {
 		this.$el.append(this.listItemsView.$el);
 		this.listItemsView.render();
+	},
+
+	renderNoSelectedDetailView: function() {
+		this.selectedDetailView = new this.detailView();
+		this.$el.append(this.selectedDetailView.$el);
+		this.selectedDetailView.render();
 	},
 
 	renderSelectedDetailView: function() {

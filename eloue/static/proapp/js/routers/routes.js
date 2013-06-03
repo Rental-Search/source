@@ -43,20 +43,15 @@ var Workspace = Backbone.Router.extend({
 
 	ads: function(id, params) {
 		app.layoutView.setSelectedNavTabViewAtIndex(3);
-		if( !_.isNull(id) ) {
-			app.layoutView.selectedNavTabView.setDetailViewWithId(id, function() {
-				if( _.isNull(params) ) {
-					console.log('info tab view');
-					app.layoutView.selectedNavTabView.selectedDetailView.setSelectedNavTabViewAtIndex(0);
-				} else if ( params == 'pictures' ) {
-					console.log("pictures tab view");
-					app.layoutView.selectedNavTabView.selectedDetailView.setSelectedNavTabViewAtIndex(1);
-				} else if ( params == 'prices' ) {
-					console.log("prices  tab view");
-					app.layoutView.selectedNavTabView.selectedDetailView.setSelectedNavTabViewAtIndex(2);
-				}
-			});
-		}
+		app.layoutView.selectedNavTabView.setDetailViewWithId(id, function() {
+			if( _.isNull(params) ) {
+				app.layoutView.selectedNavTabView.selectedDetailView.setSelectedNavTabViewAtIndex(0);
+			} else if ( params == 'pictures' ) {
+				app.layoutView.selectedNavTabView.selectedDetailView.setSelectedNavTabViewAtIndex(1);
+			} else if ( params == 'prices' ) {
+				app.layoutView.selectedNavTabView.selectedDetailView.setSelectedNavTabViewAtIndex(2);
+			}
+		});
 	},
 	
 	accounts: function(params) {
