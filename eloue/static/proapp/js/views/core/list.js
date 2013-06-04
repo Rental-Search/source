@@ -43,9 +43,12 @@ app.ListView = Backbone.View.extend({
 				this.renderSelectedDetailView();
 			}
 		} else {
+			if( !_.isNull(this.selectedDetailView) ) {
+				this.listItemsView.unactiveSelectedItem();
+				this.selectedDetailView.close();
+			}
 			this.renderNoSelectedDetailView();
 		}
-		
 	},
 
 	render: function() {

@@ -49,11 +49,15 @@ app.ListItemsView = Backbone.View.extend({
 	},
 
 	activeSelectedItem: function() {
-		this.$el.children().children().removeClass('active');
+		this.unactiveSelectedItem();
 		if( !_.isUndefined(this.selectedItem) ) {
 			$('#' + this.selectedItem.id ).parent().addClass('active');
 		}
 	},
+
+	unactiveSelectedItem: function() {
+		this.$el.children().children().removeClass('active');
+	},	
 
 	onClose: function() {
 		if( !_.isNull(this.collection) ) {

@@ -43,6 +43,7 @@ var Workspace = Backbone.Router.extend({
 
 	ads: function(id, params) {
 		app.layoutView.setSelectedNavTabViewAtIndex(3);
+
 		app.layoutView.selectedNavTabView.setDetailViewWithId(id, function() {
 			if( _.isNull(params) ) {
 				app.layoutView.selectedNavTabView.selectedDetailView.setSelectedNavTabViewAtIndex(0);

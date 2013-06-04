@@ -3,12 +3,18 @@
 var app = app || {};
 
 app.AdsInfoView = Backbone.View.extend({
+	product_id: null,
+	
+	model: app.ProductModel,
+
 	item: app.NavTabItemView.extend({
 		template: _.template($("#navbaritem-template").html()),
 		icon: 'info-sign',
 		path: null,
 		labelName: 'Informations'
 	}),
+
+
 
 	render: function() {
 		this.$el.html('<h1>Informations</h1>');

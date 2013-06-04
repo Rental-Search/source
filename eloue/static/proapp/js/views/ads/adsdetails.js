@@ -37,5 +37,10 @@ app.AdsDetailsView = app.NavView.extend({
 		this.setItems();
 		this.$el.children('.navbar').children('.navbar-inner').append(this.navTabItemsView.$el);
 		this.navTabItemsView.render();
-	}
+	},
+
+	renderSelectedNavTabView: function() {
+		this.$el.append(this.selectedNavTabView.$el);
+		this.selectedNavTabView.render();
+	},
 });
