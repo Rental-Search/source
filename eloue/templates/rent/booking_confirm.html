@@ -264,6 +264,9 @@
             <a id="cancel-credit-card-form" href="#" style="color: #ea0c31;">{% trans "Annuler les modifications"%}</a>
           </div>
           {% endif %}
+          <div class="alert alert-success" style="text-align: center; font-weight:bold; margin: 0 70px;">
+            <img src="{{ STATIC_URL }}images/icon-lock-green.png" alt="transaction sécurisée"> Il s'agit d'une transaction sécurisée.
+          </div>
         </fieldset>{# credit-card-form #}
         <div class="form-actions">
           <input type="hidden" name="{{ step_field }}" value="{{ step0 }}" />

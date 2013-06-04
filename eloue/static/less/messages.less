@@ -1,3 +1,32 @@
+.messages-content {
+  float: left;
+  width: 500px;
+}
+
+.product-related-content {
+  float: left;  
+  margin-left: 20px;
+  width: 180px;
+
+  .product-vignettes > li {
+    width: 160px;
+    height: auto;
+  }
+
+  .product-vignettes > li h3 {
+    font-size: 13px;
+  }
+
+  .btn-search {
+    width: 155px;
+    text-align: center;
+
+    &:hover {
+      text-decoration: none;
+    }
+  }
+}
+
 .messages { 
   li {
     margin-bottom: 20px;
@@ -9,7 +38,7 @@
 }
 
 .m-img {
-	display: block;
+  display: block;
   float: left;
   .size(60px, 60px);
   position: relative;
@@ -34,61 +63,62 @@
 }
 
 .m-content {
-	border-left: 2px solid #b2ced9;
+  border-left: 2px solid #b2ced9;
 
-	display: table-cell;
-	vertical-align: top;
-	padding: 0 10px;
-	width: 600px;
+  display: table-cell;
+  vertical-align: top;
+  padding: 0 10px;
+  width: 600px;
   
-	position: relative;
+  position: relative;
 
-	.m-body { position: relative; }
+  .m-body { position: relative; }
 
   .m-message p {
     line-height: 18px;
   }
 
+  .m-message form { margin-bottom: 0px; }
 
-	.message-dial {
-		background: transparent url("../images/dial-message.png") no-repeat 0 0;
-    	display: block;
-    	.size(23px, 11px);
+  .message-dial {
+    background: transparent url("../images/dial-message.png") no-repeat 0 0;
+      display: block;
+      .size(23px, 11px);
 
-    	position: absolute;
-    	top: 17px;
-    	left:-21px;	
-	}
+      position: absolute;
+      top: 17px;
+      left:-21px; 
+  }
 
-	.m-sender {
-		#font > .sans-serif(Arial, normal, 12px);
-    	color: @blue;
+  .m-sender {
+    #font > .sans-serif(Arial, normal, 12px);
+      color: @blue;
     
-    	margin-bottom: 10px;
+      margin-bottom: 10px;
     
-	    a {
-	      #font > .sans-serif(Arial, normal, 18px);
-	      font-style: italic;
-	      
-	      margin-right: 5px;
-	    }
+      a {
+        #font > .sans-serif(Arial, normal, 18px);
+        font-style: italic;
+        
+        margin-right: 5px;
+      }
 
-	    .m-action {
-      		float: right;
-      		margin-top: 4px;
+      .m-action {
+          float: right;
+          margin-top: 4px;
 
-      		a {
-      			#font > .sans-serif('Ubuntu', normal, @basefont);
-      			font-style: normal;
-      		}
-    	}
-	}
+          a {
+            #font > .sans-serif('Ubuntu', normal, @basefont);
+            font-style: normal;
+          }
+      }
+  }
   
-	.m-subject {
-		#font > .sans-serif('Ubuntu', normal, 14px);
-		padding-bottom: 5px;
+  .m-subject {
+    #font > .sans-serif('Ubuntu', normal, 14px);
+    padding-bottom: 5px;
     color: @blueDark;
-	}
+  }
 
   .m-text {
     p {
@@ -97,7 +127,7 @@
   }
 
   #id_0-body {
-    width: 440px;
+    width: 353px;
     height: 70px;
   }
 }
