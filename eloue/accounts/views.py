@@ -366,7 +366,7 @@ class PatronDetail(ListView):
         return ['accounts/patron_detail.html', ]
     
     def get_queryset(self):
-        return product_search.filter(owner_exact=self.patron.username)
+        return product_search.filter(owner_exact=self.patron.username).order_by('-created_at')
 
     def get_context_data(self, **kwargs):
         context = super(PatronDetail, self).get_context_data(**kwargs)
