@@ -20,7 +20,7 @@ app.NavView = Backbone.View.extend({
 				this.selectedNavTabView.close();
 			}
 		}
-
+		
 		this.navTabItemsView.setSelectedItemAtIndex(index);
 		this.selectedNavTabView = new this.navTabViews[index]();
 		this.trigger('selectedNavTabView:change');

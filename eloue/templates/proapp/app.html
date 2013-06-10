@@ -774,7 +774,7 @@
 			</a>
 		</script>
 
-		<script type="text/template" id="nav-content-template">
+		<script type="text/template" id="ads-info-template">
 			<div class="nav-content">
 				<form action="#" class="form-horizontal">
 					<fieldset>
@@ -822,19 +822,19 @@
 						<div class="control-group">
 							<label class="control-label" for="id_sumamry">Titre</label>
 							<div class="controls">
-						      <input type="text" id="id_summary" placeholder="Titre" name=summary>
+						      <input type="text" id="id_summary" placeholder="Titre" name="summary" value="<%= model.summary %>">
 						    </div>
 						</div>
 						<div class="control-group">
 							<label class="control-label" for="id_desciption">Description</label>
 							<div class="controls">
-						      <textarea rows="6" placeholder="Description" id="id_description" name="description"></textarea>
+						      <textarea rows="6" placeholder="Description" id="id_description" name="description"><%= model.description %></textarea>
 						    </div>
 						</div>
 						<div class="control-group">
 							<label class="control-label" for="id_quantity">Quantité</label>
 							<div class="controls">
-						      <input class="input-mini" type="text" id="id_quantity" name="quantity" placeholder="Quantité">
+						      <input class="input-mini" style="text-align: right;" type="text" id="id_quantity" name="quantity" placeholder="Quantité" value="<%= model.quantity %>">
 						    </div>
 						</div>
 					</fieldset>
@@ -845,6 +845,16 @@
 				</form>
 			</div><!-- nav-content -->
 		</script>
+
+		<script type="text/template" id="ads-pictures-template">
+			<div class="nav-content">
+				<div class="add-new-picture">
+					<button class="btn"><i class="halflings-icon blue plus-sign"></i> Ajouter une nouvelle image</button>
+				</div><!-- add new picture -->
+				
+			</div>
+		</script>
+
 		 <!-- Include the CSRF token in the body of the HTML -->
         {% csrf_token %}
 

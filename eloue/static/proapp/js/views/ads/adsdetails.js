@@ -42,5 +42,6 @@ app.AdsDetailsView = app.NavView.extend({
 	renderSelectedNavTabView: function() {
 		this.$el.append(this.selectedNavTabView.$el);
 		this.selectedNavTabView.render();
+		this.selectedNavTabView.setModel(this.model);
 	},
 });

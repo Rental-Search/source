@@ -1,4 +1,4 @@
-// js/views/core/listitems.js
+ // js/views/core/listitems.js
 
 var app = app || {};
 

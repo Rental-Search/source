@@ -7697,3 +7697,13 @@ select {
   text-shadow: 0 -1px 0 rgba(255, 255, 255, 0.25);
   font-weight: normal;
 }
+.add-new-picture {
+  text-align: center;
+  padding: 20px;
+  border-bottom: 1px solid #b2ced9;
+  margin-bottom: 20px;
+}
+.add-new-picture .halflings-icon.plus-sign {
+  background-position: 0 -97px;
+  vertical-align: middle;
+}
