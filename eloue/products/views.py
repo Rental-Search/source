@@ -126,7 +126,10 @@ def search(request):
 def publish_new_ad(request, *args, **kwargs):
     return render(request, 'products/publish_new_ad.html')
     
-
+@never_cache
+@secure_required
+def shipping_service_offer(request, *args, **kwargs):
+    return render(request, 'products/shipping_service_offer.html')
 
 
 @never_cache

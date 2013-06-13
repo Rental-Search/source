@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Offre de lancement du service de livraison"%}{% endblock %}
+
+{% block content %}
+<div id="shipping-service-offer" class="container-main">
+	<ul class="breadcrumb">
+		<li><a href="{% url home %}">{% trans "Accueil" %}</li>
+		<li>{% trans "Service de livraison" %}</li>
+	</ul>{# breadcrumb #}
+	<div class="one-content">
+		<h1>Service de livraison</h1>
+	</div>{# one-content #}
+</div>{# container-main #}
+{% endblock %}
