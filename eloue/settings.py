@@ -265,17 +265,6 @@ PIPELINE_CSS = {
             'media': 'screen',
         }
     },
-    'shipping_service_offer': {
-        'source_filenames': (
-            'less/styles.less',
-            'less/shipping_serivice_offer.less',
-            'css/chosen.css'
-        ),
-        'output_filename': 'css/shipping_service_offer.css',
-        'extra_context': {
-            'media': 'screen',
-        },
-    },
 }
 
 PIPELINE_JS = {

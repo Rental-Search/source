@@ -93,3 +93,301 @@
 	.assurancy { margin-top: 8px; }
 	.people { margin-top: 10px; }
 }
+
+
+#shipping-service-offer {
+	h2 {
+		color: #546b78;
+		#font > .sans-serif('Ubnutu', bold, 18px);
+		margin-bottom: 20px;
+	}
+
+	.shipping-top {
+		margin-bottom: 60px;
+
+		h1 { 
+			text-align: center;
+			font-family: 'Satisfy', cursive;
+			font-size: 26px;
+			font-weight: bold;
+			color: #546b78;
+			margin-bottom: 20px;
+			span { color: @orange; }
+		}
+
+		.shipping-intro {
+			#font > .sans-serif('Ubuntu', normal, 18px);
+			color: #546b78;
+			text-align: center;
+			line-height: 20px;
+		}
+	}
+
+	.shipping-offer {
+		margin-left: -20px;
+		.clearfix();
+		margin-bottom: 60px;
+
+		.satisfy-font { font-family: 'Satisfy', cursive; }
+
+		.shipping-like-patrick {
+			.makeColumn(6);
+			position: relative;
+
+			.shipping-patrick-img {
+				position: absolute;
+				top: 0;
+				left: 0;
+			}
+
+			.shipping-like-patrick-title {
+				margin-top: 10px;
+				margin-left: 220px;
+				font-size: 26px;
+				color: #546B78;
+				line-height: 32px;
+				.satisfy-font { font-size: 28px;}
+			}
+
+			.shipping-partner {
+				margin-left: 220px;
+				margin-top: 115px;
+
+				p {
+					#font > .sans-serif('Ubuntu', normal, 14px);
+					margin-bottom: 10px;
+				}
+
+				.pickup-logo { margin-left: 30px;}
+			}
+		}
+
+		.shipping-participation {
+			.makeColumn(6);
+
+			.ui-tabs {
+				border: 1px solid #b2ced9;
+			}
+
+			.ui-tabs-panel {
+				padding: 20px 30px;
+
+				.shipping-offer-how {
+
+				}
+			}
+
+			.shipping-offer-how {
+				#font > .sans-serif('Ubuntu', normal, 14px);
+				color: #546B78;
+				margin-bottom: 10px;
+				.clearfix();
+
+				li { 
+					.clearfix();
+					margin-bottom: 20px;
+
+					i { 
+						float: left;
+						margin-top: 5px;
+					}
+
+					div {
+						margin-left: 80px;
+						line-height: 18px;
+						font-size: 15px;
+
+						strong { font-weight: bold; }
+					}
+				}
+			}
+
+			.btn-shipping-offer { 
+				width: 378px;
+				text-align: center; 
+			}
+		}
+	}
+
+	.shipping-available-in-france {
+		margin-left: -20px;
+		.clearfix();
+		margin-bottom: 60px;
+
+		.shippping-pickup-map {
+			.makeColumn(6);
+		}
+
+		.shipping-pickup-service-description {
+			.makeColumn(6);
+
+			ul {
+				padding: 20px 30px 0;
+				#font > .sans-serif('Ubuntu', normal, 14px);
+				color: #546B78;
+
+				li { 
+					.clearfix();
+					margin-bottom: 23px;
+
+					i { 
+						float: left;
+						margin-top: 5px;
+					}
+
+					div {
+						margin-left: 80px;
+						line-height: 18px;
+						font-size: 15px;
+						text-align: justify;
+
+						strong { font-weight: bold; }
+					}
+
+					&:last-child { margin-bottom: 0px; }
+				}
+			}
+		}
+	}
+
+	.shipping-how {
+		margin-left: -20px;
+		.clearfix();
+		margin-bottom: 60px;
+		div { .makeColumn(12); }
+		
+		ul {
+			.clearfix();
+			border: 1px solid #b2ced9;
+			.rounded(3px);
+
+			li {
+				background: transparent url("../images/shipping_service_offer/row.png") no-repeat right 0;
+				float: left;
+				height: 130px;
+				width: 218px;
+				padding-top: 20px;
+				padding-bottom: 20px;
+				padding-right: 20px;
+
+				text-align: center;
+
+				.shipping-icon-email-flag { margin-bottom: 7px; }
+				
+				&:last-child {
+					background: none;
+					padding-right: 0px;
+				}
+
+				p {
+					#font > .sans-serif('Ubuntu', normal, 14px);
+					line-height: 18px;
+					margin: 20px 10px 0;
+					color: #546B78;
+				}
+			}
+		}
+	}
+
+	.shipping-offer-terms {
+		margin-left: -20px;
+		.clearfix();
+		margin-bottom: 20px;
+		div { .makeColumn(12); }
+
+		ul { 
+			list-style-type: square;
+			margin-left: 20px;
+		}
+
+		li {
+			#font > .sans-serif('Ubuntu', normal, 14px);
+			line-height: 18px;
+
+			color: #546B78;
+
+			margin-bottom: 10px;
+		}
+	}
+}
+
+[class^="shipping-icon-"],
+[class*=" shipping-icon-"] {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  line-height: 14px;
+  vertical-align: text-top;
+  background-image: url("../images/shipping_service_offer/shipping_sprite.png");
+  background-position: 14px 14px;
+  background-repeat: no-repeat;
+
+  .ie7-restore-right-whitespace();
+}
+
+.shipping-icon-camera { 
+	background-position: 0  0;
+	height: 34px;
+	width: 45px; 
+}
+
+.shipping-icon-ok { 
+	background-position: -46px  0;
+	height: 34px;
+	width: 42px; 
+}
+
+.shipping-icon-coin { 
+	background-position: -88px  0;
+	height: 43px;
+	width: 44px; 
+}
+
+.shipping-icon-calendar { 
+	background-position: 0px  -84px;
+	height: 38px;
+	width: 36px; 
+}
+
+.shipping-icon-pickup-marker { 
+	background-position: -36px  -84px;
+	height: 48px;
+	width: 36px; 
+}
+
+.shipping-icon-clock { 
+	background-position: -72px  -84px;
+	height: 38px;
+	width: 38px; 
+}
+
+.shipping-icon-euro { 
+	background-position: -110px  -84px;
+	height: 36px;
+	width: 35px; 
+}
+
+.shipping-icon-email-flag {
+	background-position: 0px  -132px;
+	height: 46px;
+	width: 54px;
+}
+
+.shipping-icon-yes-no {
+	background-position: -54px -132px;
+	height: 53px;
+	width: 144px;
+}
+
+.shipping-icon-camera-pickup {
+	background-position: -198px -132px;
+	height: 56px;
+	width: 156px;
+}
+
+.shipping-icon-pickup-camera {
+	background-position: -354px -132px;
+	height: 56px;
+	width: 150px;
+}
+
