@@ -5,7 +5,7 @@
 
 {% block head %}
 	<link href='https://fonts.googleapis.com/css?family=Satisfy' rel='stylesheet' type='text/css'>
-	{% compressed_css 'shipping_service_offer' %}
+	{{ block.super }}
 {% endblock %}
 
 {% block content %}
@@ -16,13 +16,9 @@
 	</ul>{# breadcrumb #}
 	<div class="one-content">
 		<div class="shipping-top">
-			<h1>{% trans "Offre de lancement du service de livraison" %} : <span>{% trans "Gagnez 5000 &euro; en cash"%} !</span></h1>
-			<p class="shipping-intro">
-				{% blocktrans %}
-					Les locations ne se font plus obligatoirement près de chez-vous.<br>
-					Proposez notre service de livraison aux locataires pour avoir plus de locations.
-				{% endblocktrans %}
-			</p>
+			<h1>{% trans "Offre de lancement du service de livraison" %}<br> 
+				<span>{% trans "Gagnez 5000 &euro; en cash, 1 &euro; par annonce déposée !"%}</span></h1>
+
 		</div>{# shippint-top #}
 		<div class="shipping-offer">
 			<div class="shipping-like-patrick">
@@ -57,7 +53,7 @@
 								<div>
 									{% blocktrans %}
 										L’annonce est validé par e-loue.<br>
-										Les objets doivent entrer dans une pochette de dimenssion : <strong>20cm x 20cm x 10cm</strong>.
+										Les objets doivent entrer dans une pochette de dimension : <strong>40cm x 40cm x 20cm</strong>.
 									{% endblocktrans %}
 								</div>
 							</li>
@@ -65,7 +61,7 @@
 								<i class="shipping-icon-coin"></i>
 								<div>
 									{% blocktrans %}
-										A chaque annonce validée, <strong>gagnez 1 euro</strong	> que vous recevez par virement bancaire.
+										A chaque annonce validée, <strong>gagnez 1 euro</strong	> que vous recevrez par virement bancaire.
 									{% endblocktrans %}
 								</div>
 							</li>
@@ -135,7 +131,7 @@
 					</li>
 					<li class="shipping-end">
 						<i class="shipping-icon-pickup-camera"></i>
-						<p>{% trans "En fin de location, je suis averti par sms pour récupéer l'objet" %}.</p>
+						<p>{% trans "En fin de location, je suis averti par sms pour récupérer l'objet" %}.</p>
 					</li>
 				</ul>
 			</div>
@@ -150,10 +146,10 @@
 						Lorsque vous déposez une annonce vous devez cocher la case « j’accepte que mon objet soit loué via la navette pickup ».
 					</li>
 					<li>
-						Les objets mis en location doivent entrer dans une pochette, ce qui équivaut à entrer dans un colis de dimension 20cm X 20cm X 10cm.<br>
+						Les objets mis en location doivent entrer dans une pochette souple de dimension 40cm x 40cm x 20cm.<br>
 						Exemples : appareil photo, livre, costume, Ipad, perceuse, épilateur définitif, vidéoprojecteur, jeu, ustensile, console, sac à main, décoration, etc.
 					</li>
-					<li>L’offre est limité à 5 objets / famille, soit 5 euros / famille.</li>
+					<li>L’offre est limitée à 5 objets / famille, soit 5 euros / famille. Les annonces doivent être déposées dans les 3 jours après l'inscription au site.</li>
 					<li>La conformité et véracité des objets et des photos seront vérifiées avant d’être validées.</li>
 					<li>
 						Les objets doivent être réellement en location. C’est à dire que vous ne pouvez pas refuser abusivement et sans raison les demandes de location.
