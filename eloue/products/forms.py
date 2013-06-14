@@ -339,9 +339,9 @@ class ProductForm(BetterModelForm):
             ('informations de l\'objet', {
                 'fields': ['summary', 'picture_id', 'picture', 'description', 'quantity'], 
                 'legend': _(u'Informations')}),
-            ('shipping', {
-                'fields': ['shipping'],
-                'legend': _(u'Livraison de l\'objet')}),
+            # ('shipping', {
+            #     'fields': ['shipping'],
+            #     'legend': _(u'Livraison de l\'objet')}),
             ('price', {'fields': ['day_price', 'deposit_amount'], 
                         'legend': _(u'Prix de la location')}),
             ('price_detail', {
