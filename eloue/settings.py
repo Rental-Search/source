@@ -271,7 +271,7 @@ PIPELINE_CSS = {
             'less/shipping_serivice_offer.less',
             'css/chosen.css'
         ),
-        'output_filename': 'css/master.css',
+        'output_filename': 'css/shipping_service_offer.css',
         'extra_context': {
             'media': 'screen',
         },
