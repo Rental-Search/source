@@ -37,9 +37,15 @@ class ProductWizard(MultiPartFormWizard):
 
     def done(self, request, form_list):
         super(ProductWizard, self).done(request, form_list)
-        
         patron = request.user
         subscription = patron.current_subscription
+
+        if patron.is_professional and not patron.current_subscription:
+            messages.success(request, _(u"En tant que professionnel, vous devez souscrire à un abonnement avant de pouvoir déposer une annonce."))
+            return redirect(
+                'eloue.accounts.views.patron_subscription'
+            )
+
         if subscription:
             propackage = subscription.propackage
             if propackage.maximum_items is not None and subscription.propackage.maximum_items <= patron.products.count():
