@@ -472,7 +472,7 @@ class ProductEditForm(BetterModelForm):
     picture = forms.ImageField(label=_(u"Photo"), required=False, widget=forms.FileInput(attrs={'class': 'inm'}))
     deposit_amount = forms.DecimalField(label=_(u"Dépôt de garantie"), initial=0, required=False, max_digits=8, decimal_places=2, widget=PriceTextInput(attrs={'class': 'price'}), localize=True, help_text=_(u"Montant utilisé en cas de dédomagement"))
     quantity = forms.IntegerField(label=_(u"Quantité"), initial=1, widget=forms.TextInput(attrs={'class': 'price'}), help_text=_(u"Le locataire peut réserver plusieurs exemplaires si vous les possédez"))
-
+    shipping = forms.BooleanField(label=_(u"Livraison possible"), required=False, initial=False, widget=CommentedCheckboxInput(info_text='J\'accepte de livrer partout en France avec la navette pickup (service disponible à partir de septembre).'))
 
     def __init__(self, *args, **kwargs):
         super(ProductEditForm, self).__init__(*args, **kwargs)
@@ -486,6 +486,9 @@ class ProductEditForm(BetterModelForm):
         model = Product
         fieldsets = [
             ('category', {'fields': ['category'], 'legend': _(u'Catégorie')}),
+            ('shipping', {
+                'fields': ['shipping'],
+                'legend': _(u'Livraison de l\'objet')}),
             ('informations', {
                 'fields': ['summary', 'picture', 'description', 'quantity', 'deposit_amount'], 
                 'legend': _(u'Informations')}),
