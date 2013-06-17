@@ -67,6 +67,11 @@ class ProductWizard(MultiPartFormWizard):
         messages.success(request, _(u"Votre objet a bien été ajouté"))
         GoalRecord.record('new_object', WebUser(request))
         return redirect(product)
+
+
+    def parse_params(self, request, *args, **kwargs):
+        self.extra_context['shipping'] = request.GET.get('shipping', None)
+
     
     def get_form(self, step, data=None, files=None):
         next_form = self.form_list[step]
