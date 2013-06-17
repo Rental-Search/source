@@ -124,7 +124,7 @@ def search(request):
 @never_cache
 @secure_required
 def publish_new_ad(request, *args, **kwargs):
-    if not request.user.is_anonymous:
+    if request.user.is_authenticated():
         if request.user.is_professional and not request.user.current_subscription:
             messages.success(request, _(u"En tant que professionnel, vous devez souscrire à un abonnement avant de pouvoir déposer une annonce."))
             return redirect(
