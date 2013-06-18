@@ -144,6 +144,7 @@ class AlertAdmin(admin.ModelAdmin):
 class EloueMessageAdmin(MessageAdmin):
     list_filter = ('sent_at', )
     search_fields = ('subject', 'body', 'sender', 'recipient')
+    readonly_fields = ('recipient', 'sender', 'parent_msg')
 
 
 try:
