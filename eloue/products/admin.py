@@ -13,6 +13,8 @@ from eloue.products.forms import ProductAdminForm
 
 from eloue.products.models import Alert, Product, CarProduct, RealEstateProduct, Picture, Category, Property, PropertyValue, Price, ProductReview, PatronReview, Curiosity, ProductRelatedMessage, CategoryDescription
 
+from django_messages.models import Message
+from django_messages.admin import MessageAdmin
 
 log = logbook.Logger('eloue')
 
@@ -139,6 +141,11 @@ class AlertAdmin(admin.ModelAdmin):
     pass
 
 
+class EloueMessageAdmin(MessageAdmin):
+    list_filter = ('sent_at', )
+    search_fields = ('subject', 'body', 'sender', 'recipient')
+
+
 try:
     admin.site.register(Product, ProductAdmin)
     admin.site.register(CarProduct, CarProductAdmin)
@@ -149,5 +156,7 @@ try:
     admin.site.register(ProductReview, ProductReviewAdmin)
     admin.site.register(PatronReview, PatronReviewAdmin)
     admin.site.register(Alert, AlertAdmin)
+    admin.site.unregister(Message)
+    admin.site.register(Message, EloueMessageAdmin)
 except admin.sites.AlreadyRegistered, e:
     log.warn('Site is already registered : %s' % e)
