@@ -68,7 +68,7 @@ class ProductAdmin(CurrentSiteAdmin):
     inlines = [PictureInline, PropertyValueInline, PriceInline]
     raw_id_fields = ("owner", "address")
     list_display = ('summary', 'category', 'deposit_amount', 'quantity', 'is_archived', 'shipping', 'created_at', 'modified_at')
-    list_filter = ('is_archived', 'is_allowed', 'category')
+    list_filter = ('shipping', 'is_archived', 'is_allowed', 'category')
     list_editable = ('category',)
     ordering = ['-created_at']
     list_per_page = 20
