@@ -13,6 +13,8 @@ from eloue.products.forms import ProductAdminForm
 
 from eloue.products.models import Alert, Product, CarProduct, RealEstateProduct, Picture, Category, Property, PropertyValue, Price, ProductReview, PatronReview, Curiosity, ProductRelatedMessage, CategoryDescription
 
+from django_messages.models import Message
+from django_messages.admin import MessageAdmin
 
 log = logbook.Logger('eloue')
 
@@ -65,8 +67,8 @@ class ProductAdmin(CurrentSiteAdmin):
     search_fields = ['summary', 'description', 'category__name', 'owner__username', 'owner__email']
     inlines = [PictureInline, PropertyValueInline, PriceInline]
     raw_id_fields = ("owner", "address")
-    list_display = ('summary', 'category', 'deposit_amount', 'quantity', 'is_archived', 'is_allowed', 'created_at', 'modified_at')
-    list_filter = ('is_archived', 'is_allowed', 'category')
+    list_display = ('summary', 'category', 'deposit_amount', 'quantity', 'is_archived', 'shipping', 'created_at', 'modified_at')
+    list_filter = ('shipping', 'is_archived', 'is_allowed', 'category')
     list_editable = ('category',)
     ordering = ['-created_at']
     list_per_page = 20
@@ -139,6 +141,12 @@ class AlertAdmin(admin.ModelAdmin):
     pass
 
 
+class EloueMessageAdmin(MessageAdmin):
+    list_filter = ('sent_at', )
+    search_fields = ('subject', 'body', 'recipient__username', 'sender__username',)
+    readonly_fields = ('recipient', 'sender', 'parent_msg')
+
+
 try:
     admin.site.register(Product, ProductAdmin)
     admin.site.register(CarProduct, CarProductAdmin)
@@ -149,5 +157,7 @@ try:
     admin.site.register(ProductReview, ProductReviewAdmin)
     admin.site.register(PatronReview, PatronReviewAdmin)
     admin.site.register(Alert, AlertAdmin)
+    admin.site.unregister(Message)
+    admin.site.register(Message, EloueMessageAdmin)
 except admin.sites.AlreadyRegistered, e:
     log.warn('Site is already registered : %s' % e)

@@ -199,6 +199,7 @@ class Product(models.Model):
     description = models.TextField()
     address = models.ForeignKey(Address, related_name='products')
     quantity = models.IntegerField(_(u'Quantité'), default=1)
+    shipping = models.BooleanField(_(u'Livraison possible'), default=False)
 
     is_archived = models.BooleanField(_(u'archivé'), default=False, db_index=True)
     is_allowed = models.BooleanField(_(u'autorisé'), default=True, db_index=True)
@@ -262,12 +263,15 @@ class Product(models.Model):
     def local_currency_deposit_amount(self):
         # XXX: ugly and not very well tested hack
         from eloue.utils import convert_from_xpf, convert_to_xpf
-        if self.daily_price.currency == DEFAULT_CURRENCY:
-            return self.deposit_amount
-        if self.daily_price.currency == 'XPF':
-            return convert_from_xpf(self.deposit_amount.amount)
+        if self.daily_price:
+            if self.daily_price.currency == DEFAULT_CURRENCY:
+                return self.deposit_amount
+            if self.daily_price.currency == 'XPF':
+                return convert_from_xpf(self.deposit_amount.amount)
+            else:
+                return convert_to_xpf(self.deposit_amount)
         else:
-            return convert_to_xpf(self.deposit_amount)
+            return self.deposit_amount 
 
     @property
     def average_note(self):

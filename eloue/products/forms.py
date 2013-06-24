@@ -23,7 +23,7 @@ from django.db.models import signals
 from django_messages import utils
 from django_messages.fields import CommaSeparatedUserField
 
-
+from eloue.accounts.widgets import CommentedCheckboxInput
 from eloue.accounts.models import Address
 
 if "notification" in settings.INSTALLED_APPS:
@@ -289,7 +289,7 @@ class ProductForm(BetterModelForm):
     deposit_amount = forms.DecimalField(label=_(u"Dépôt de garantie"), initial=0, required=False, max_digits=8, decimal_places=2, widget=PriceTextInput(attrs={'class': 'price'}), localize=True, help_text=_(u"Nous conseillons de mettre la valeur actuelle de votre bien. Ce montant vous sera versé si votre objet est cassé ou irréparable."))
     quantity = forms.IntegerField(label=_(u"Quantité"), initial=1, widget=forms.TextInput(attrs={'class': 'price'}), help_text=_(u"Le locataire peut réserver plusieurs exemplaires si vous les possédez"))
     description = forms.CharField(label=_(u"Description"), widget=forms.Textarea(), help_text=_(u'Décrivez plus précisement votre objet, son état, comment et quand vous l\'utilisez.'))
-    #payment_type = forms.ChoiceField(choices=PAYMENT_TYPE, required=False, widget=forms.Select(attrs={'class': 'selm'}))
+    shipping = forms.BooleanField(label=_(u"Livraison possible"), required=False, initial=False, widget=CommentedCheckboxInput(info_text='J\'accepte de livrer partout en France avec la navette pickup (service disponible à partir de septembre).'))
     
     hour_price = forms.DecimalField(label=_(u"L'heure"), required=False, max_digits=10, decimal_places=2, min_value=D('0.01'), widget=PriceTextInput(attrs={'class': 'price'}), localize=True)
     day_price = forms.DecimalField(label=_(u"Tarif journée"), required=True, max_digits=10, decimal_places=2, min_value=D('0.01'), widget=PriceTextInput(attrs={'class': 'price'}), localize=True, help_text=_(u"20% de frais de commission (comprenant notamment l'assurance, le paiement en ligne,etc.) seront prélevés sur ce prix à chaque location."))
@@ -339,6 +339,9 @@ class ProductForm(BetterModelForm):
             ('informations de l\'objet', {
                 'fields': ['summary', 'picture_id', 'picture', 'description', 'quantity'], 
                 'legend': _(u'Informations')}),
+            ('shipping', {
+                'fields': ['shipping'],
+                'legend': _(u'Livraison de l\'objet')}),
             ('price', {'fields': ['day_price', 'deposit_amount'], 
                         'legend': _(u'Prix de la location')}),
             ('price_detail', {
@@ -469,7 +472,7 @@ class ProductEditForm(BetterModelForm):
     picture = forms.ImageField(label=_(u"Photo"), required=False, widget=forms.FileInput(attrs={'class': 'inm'}))
     deposit_amount = forms.DecimalField(label=_(u"Dépôt de garantie"), initial=0, required=False, max_digits=8, decimal_places=2, widget=PriceTextInput(attrs={'class': 'price'}), localize=True, help_text=_(u"Montant utilisé en cas de dédomagement"))
     quantity = forms.IntegerField(label=_(u"Quantité"), initial=1, widget=forms.TextInput(attrs={'class': 'price'}), help_text=_(u"Le locataire peut réserver plusieurs exemplaires si vous les possédez"))
-
+    shipping = forms.BooleanField(label=_(u"Livraison possible"), required=False, initial=False, widget=CommentedCheckboxInput(info_text='J\'accepte de livrer partout en France avec la navette pickup (service disponible à partir de septembre).'))
 
     def __init__(self, *args, **kwargs):
         super(ProductEditForm, self).__init__(*args, **kwargs)
@@ -483,6 +486,9 @@ class ProductEditForm(BetterModelForm):
         model = Product
         fieldsets = [
             ('category', {'fields': ['category'], 'legend': _(u'Catégorie')}),
+            ('shipping', {
+                'fields': ['shipping'],
+                'legend': _(u'Livraison de l\'objet')}),
             ('informations', {
                 'fields': ['summary', 'picture', 'description', 'quantity', 'deposit_amount'], 
                 'legend': _(u'Informations')}),

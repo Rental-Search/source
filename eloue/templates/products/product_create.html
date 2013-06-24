@@ -27,7 +27,12 @@
   			{% endwith %}
 			{% csrf_token %}
 			{% for fieldset in form.fieldsets %}
+			{% if fieldset.name == "shipping" and not shipping %}
+			<fieldset class="{{ fieldset.classes }}" style="display: none;">
+			{% else %}
 			<fieldset class="{{ fieldset.classes }}">
+			{% endif %}
+			
 				{% if fieldset.legend %}
     				<legend>{{ fieldset.legend }}</legend>
   				{% endif %}

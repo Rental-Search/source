@@ -1,0 +1,166 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Offre de lancement du service de livraison"%}{% endblock %}
+
+{% block head %}
+	<link href='https://fonts.googleapis.com/css?family=Satisfy' rel='stylesheet' type='text/css'>
+	{{ block.super }}
+{% endblock %}
+
+{% block content %}
+<div id="shipping-service-offer" class="container-main">
+	<ul class="breadcrumb">
+		<li><a href="{% url home %}">{% trans "Accueil" %}</a></li>
+		<li>{% trans "Service de livraison" %}</li>
+	</ul>{# breadcrumb #}
+	<div class="one-content">
+		<div class="shipping-top">
+			<h1>{% trans "Offre de lancement du service de livraison de e-loue" %}<br> 
+				<span>{% trans "Gagnez 5000 &euro; en cash, 1 &euro; par annonce déposée !"%}</span></h1>
+
+		</div>{# shippint-top #}
+		<div class="shipping-offer">
+			<div class="shipping-like-patrick">
+				<img src="{{ STATIC_URL }}images/shipping_service_offer/patrick.png" alt="Membre e-loue accepte qui accepte de livrer les locations" class="shipping-patrick-img">
+				<p class="shipping-like-patrick-title">
+					{% blocktrans %}
+					Comme <span class="satisfy-font">Patrick</span> louez vos objets partout en France !
+					{% endblocktrans %}
+				</p>
+				<div class="shipping-partner">
+					<p>{% trans "En partenariat avec :" %}</p>
+					<img src="{{ STATIC_URL }}images/shipping_service_offer/pickup_logo.png" alt="la navette pickup en partenariat avec e-loue" class="pickup-logo">
+				</div>{# shipping-partner #}
+			</div>{# shipping-like-patrick #}
+			<div class="shipping-participation">
+				<div class="ui-tabs ui-widget ui-widget-content ui-corner-all">
+					<ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
+						<li class="ui-state-default ui-corner-top ui-tabs-selected ui-state-active"><a href="#how">{% trans "Comment participer ?" %}</a></li>
+					</ul>
+					<div id="how" class="ui-tabs-panel ui-widget-content ui-corner-bottom">
+						<ul class="shipping-offer-how">
+							<li>
+								<i class="shipping-icon-camera"></i>
+								<div>
+									{% blocktrans %}
+										<strong>Déposez des annonces</strong> d’objets sur e-loue et <strong>acceptez de les louer</strong> partout en France.
+									{% endblocktrans %}
+								</div>
+							</li>
+							<li>
+								<i class="shipping-icon-ok"></i>
+								<div>
+									{% blocktrans %}
+										L’annonce doit être validée par e-loue.<br>
+										Les objets doivent entrer dans une pochette de dimension : <strong>40cm x 40cm x 20cm</strong>.
+									{% endblocktrans %}
+								</div>
+							</li>
+							<li>
+								<i class="shipping-icon-coin"></i>
+								<div>
+									{% blocktrans %}
+										A chaque annonce validée, <strong>gagnez 1 euro</strong	> que vous recevrez par virement bancaire.
+									{% endblocktrans %}
+								</div>
+							</li>
+						</ul>
+						<a href="{% url product_create %}?shipping=true" class="btn btn-shipping-offer">{% trans "Je partcipe en déposant mes annonces" %}</a>
+					</div>{# how #}
+				</div>{# ui-tabs #}
+			</div>{# shipping-participation #}
+		</div>{# shipping-offer #}
+		<div class="shipping-available-in-france">
+			<div class="shippping-pickup-map">
+				<img src="{{ STATIC_URL }}images/shipping_service_offer/pickup_map.png" src="les point relais de la navette pickup sont partout en France">
+			</div>{# shippping-pickup-map #}
+			<div class="shipping-pickup-service-description">
+				<h2>{% trans "La Navette pickup disponible partout en France" %}</h2>
+				<ul>
+					<li>
+						<i class="shipping-icon-calendar"></i>
+						<div>
+							{% blocktrans %}
+								Le service de livraison de e-loue démarrera en septembre et permettra de louer des objets à côté de chez soi comme avant, ou partout en France grâce à l’envoi des objets dans les pochettes Navette Pickup.
+							{% endblocktrans %}
+						</div>
+					</li>
+					<li>
+						<i class="shipping-icon-pickup-marker"></i>
+						<div>
+							{% blocktrans %}
+								Il y aura dès l’ouverture 1500 point relais partenaires partout en France, et rapidement cela montera à 6000.
+							{% endblocktrans %}
+						</div>
+					</li>
+					<li>
+						<i class="shipping-icon-clock"></i>
+						<div>
+							{% blocktrans %}
+								La livraison sera en général de 24 ou 48h (non garanti).
+							{% endblocktrans %}
+						</di>
+					</li>
+					<li>
+						<i class="shipping-icon-euro"></i>
+						<div>
+							{% blocktrans %}
+								Les coûts de livraison seront très faibles et à la charge du locataire, donc en tant que propriétaire vous n’aurez rien à payer.
+							{% endblocktrans %}
+						</div>
+					</li>
+				</ul>
+			</div>{# shipping-pickup-service-description #}
+		</div>{# shipping-available-in-france #}
+		<div class="shipping-how">
+			<div>
+				<h2>{% trans "Comment se passeront les locations sur e-loue avec la Navette pickup ?" %}</h2>
+				<ul>
+					<li class="shipping-asking-booking">
+						<i class="shipping-icon-email-flag"></i>
+						<p>{% trans "Je reçois par mail une demande de réservation." %}</p>
+					</li>
+					<li class="shipping-booking-anwser">
+						<i class="shipping-icon-yes-no"></i>
+						<p>{% trans "J'ai le choix d'accepter ou de refuser la demande" %}</p>
+					</li>
+					<li class="shipping-start">
+						<i class="shipping-icon-camera-pickup"></i>
+						<p>{% trans "Si j'accepte, je me rends dans un point relais navette pickup pour envoyer l'objet" %}.</p>
+					</li>
+					<li class="shipping-end">
+						<i class="shipping-icon-pickup-camera"></i>
+						<p>{% trans "En fin de location, je suis averti par sms pour récupérer l'objet" %}.</p>
+					</li>
+				</ul>
+			</div>
+		</div>{# shipping-how #}
+		<div class="shipping-offer-terms">
+			<div>
+				<h2>{% trans "Les conditions de l'offre de lancement :" %}</h2>
+				{% blocktrans %}
+				<ul>
+					<li>Etre un nouvel inscrit au site e-loue.</li>
+					<li>
+						Lorsque vous déposez une annonce vous devez cocher la case « j’accepte que mon objet soit loué via la navette pickup ».
+					</li>
+					<li>
+						Les objets mis en location doivent entrer dans une pochette souple de dimension 40cm x 40cm x 20cm.<br>
+						Exemples : appareil photo, livre, costume, Ipad, perceuse, épilateur définitif, vidéoprojecteur, jeu, ustensile, console, sac à main, décoration, etc.
+					</li>
+					<li>L’offre est limitée à 5 objets / famille, soit 5 euros / famille. Les annonces doivent être déposées dans les 3 jours après l'inscription au site.</li>
+					<li>La conformité et véracité des objets et des photos seront vérifiées avant d’être validées.</li>
+					<li>
+						Les objets doivent être réellement en location. C’est à dire que vous ne pouvez pas refuser abusivement et sans raison les demandes de location.
+					</li>
+					<li>
+						L’argent sera versé par virement début octobre, afin que tous les contrôles soient effectués.
+					</li>
+				</ul>
+			</div>
+			{% endblocktrans %}
+		</div>{# shipping-terms #}
+	</div>{# one-content #}
+</div>{# container-main #}
+{% endblock %}

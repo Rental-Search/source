@@ -570,7 +570,7 @@ class PhoneNumberBaseFormSet(MixinHiddenDeleteFormset, BaseInlineFormSet):
     def clean(self):
         super(PhoneNumberBaseFormSet, self).clean()
         if not len(filter(lambda form:(not form.cleaned_data.get('DELETE', True) if hasattr(form, 'cleaned_data') else False), self.forms)):
-            raise forms.ValidationError(_(u"Vous ne pouvez pas supprimer tout vos numéros."))
+            raise forms.ValidationError(_(u"Vous ne pouvez pas supprimer tous vos numéros."))
         if any(self.errors):
             raise forms.ValidationError('')
         return self.cleaned_data

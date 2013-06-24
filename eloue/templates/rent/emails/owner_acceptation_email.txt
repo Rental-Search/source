@@ -8,7 +8,7 @@ Objet : {{ summary }}
 Début de la location : {{ starting_at }} 
 Durée de la location : {{ duration }}
  
-Vous trouverez en pièce jointe votre contrat de location. Il ne vous reste donc plus qu'à contacter {{ borrower_name }} pour le faire profiter de votre {{ summary }}.
+Vous trouverez en pièce jointe votre contrat de location. Il ne vous reste donc plus qu'à contacter {{ borrower_name }} pour effectuer la location.
  
 Numéro de téléphone : {{ borrower_phone }}
 Adresse électronique : {{ borrower_email }}
