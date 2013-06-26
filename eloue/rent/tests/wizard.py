@@ -477,7 +477,9 @@ class BookingWizardTest(TestCase):
         self.product.is_archived = True
         self.product.save()
         response = self.client.get(reverse('booking_create', args=['location/bebe/mobilier-bebe/lits/', self.product.slug, self.product.id]))
-        self.assertEquals(response.status_code, 404)
+        self.assertEquals(response.status_code, 200)
+        self.assertContains(response, '<h2>Désolé l\'annnonce n\'est plus disponible</h2>')
+
     
     def test_zero_step_allowed(self):
         self.product.is_allowed = False
