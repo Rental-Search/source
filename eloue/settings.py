@@ -328,7 +328,6 @@ PIPELINE_JS = {
 
     'proapp': {
         'source_filenames': (
-            
             'proapp/js/models/redirectionevents.js',
             'proapp/js/models/phoneevents.js',
             'proapp/js/models/addressevents.js',
