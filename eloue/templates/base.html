@@ -68,6 +68,9 @@
                                 {% endwith %}
                             {% endif %}
                         </a>
+                        {% if user.current_subscription %}
+                        <a href="{% url proapp_dashboard %}stats/" class="nav-link">Statistiques</a>
+                        {% endif %}
                     {% endif %}
                     {% if not user.is_authenticated %}
                         <a href="{% url auth_login %}" class="nav-link" >{% trans "S'inscrire ou se connecter" %}</a>

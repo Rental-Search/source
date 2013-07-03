@@ -51,11 +51,6 @@
                     {% endif %}
                 </a>
             </li>
-            {% if request.user.current_subscription %}
-            <li>
-                <a href="{% url proapp_dashboard %}stats/">Statistiques</a>
-            </li>
-            {% endif %}
             <li><a href="{{ patron_edit }}" class="{% active request patron_edit %}">{% trans "Paramètres de compte" %}</a></li>
         </ul>
     </div>{# top-bar #}

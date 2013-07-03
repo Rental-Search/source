@@ -1,193 +1,139 @@
+{% extends "base.html" %}
 {% load compressed i18n markup seo cache %}
-<!DOCTYPE html>
-<html lang="en">
-	<head>
-		<meta charset="utf-8">
-		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-		<title>{% filter striplinebreak %}{% block title %}{% endblock %} {% if is_paginated and page_obj.has_previous %}- {% trans "Page" %} {{ page_obj.number }}{% endif %} - {% trans "e-loue" %}{% endfilter %}</title>
-		<meta name="description" content="{% filter striplinebreak %}{% block description %}Plateforme pour louer ou mettre en location tout type d'objet : materiel, reception, mariage, sono, utilitaires, ski{% endblock %}{% if is_paginated and page_obj.has_previous %} Page {{ page_obj.number }}{% endif %}{% endfilter %}">
-		<meta name="google-site-verification" content="FWAXGNflP5tHx07gmHbTDhPEsI-BVU66-mF-sLIH5VU" />
- 		<link rel="shortcut icon" href="{{ STATIC_URL }}favicon.ico">
-		{% block head %}
-			{% compressed_css 'proapp' %}
-		{% endblock %}
-		<script type="text/javascript">
-    		var _gaq = _gaq || [];
-    		_gaq.push(['_setAccount', 'UA-8258979-1']);
-    		_gaq.push(['_setDomainName', 'www.e-loue.com']);
-    		_gaq.push(['_trackPageview']);
-    		{% spaceless %}
-        		{% if user.is_authenticated %}
-     			_gaq.push(['_setVar', 'authenticated']);
-    			{% else %}
-     			_gaq.push(['_setVar', 'anonymous']);
-    			{% endif %}
-    		{% endspaceless %}
-    		{% block gaq %}{% endblock %}
-  		</script>
-	</head>
-	<body>
-		<div class="top-bar">
-	        <div class="container">
-	            <div class="logo">
-	                <a href="{% url home %}"><img src="{{ STATIC_URL }}images/logo_new.png" alt="e-loue" width="155" height="47"/></a>
-	            </div><!-- logo -->
-	            <div class="top-content">
-	                <ul class="top-contact">
-	                    <li class="top-number">0826 800 200 <span>(0,15 &euro;/min)</span></li>
-	                </ul><!-- top-contact -->
-	                <nav>
-	                    {% if user.is_anonymous %}
-	                        <a href="{% trans "/comment-ca-marche/" %}" class="nav-link">{% trans "Comment ça marche ?" %}</a>
-	                    {% else %}
-	                        <a href="{% url dashboard %}" class="profil-link">
-	                            {% if user.avatar %}
-	                            <img src="{{ user.thumbnail.url }}" width="20" height="20">
-	                            {% else %}
-	                            <img src="{{ STATIC_URL }}images/default_avatar.png"  width="20" height="20">
-	                            {% endif %}
-	                            {% trans "Tableau de bord" %} 
-	                            {% if not request.user.current_subscription %}
-	                                {% with unread_message_count|add:user.bookings.authorized.count as notification_count %}
-	                                    {% if notification_count > 0 %}
-	                                        ({{notification_count}})
-	                                    {% endif %}
-	                                {% endwith %}
-	                            {% else %}
-	                                {% with unread_message_count|add:user.bookings.professional.count as notification_count %}
-	                                    {% if notification_count > 0 %}
-	                                        ({{notification_count}})
-	                                    {% endif %}
-	                                {% endwith %}
-	                            {% endif %}
-	                        </a>
-	                    {% endif %}
-	                    {% if not user.is_authenticated %}
-	                        <a href="{% url auth_login %}" class="nav-link" >{% trans "S'inscrire ou se connecter" %}</a>
-	                        <a href="{% url auth_login %}" class="fb-connect-small">
-	                            <img src="{{ STATIC_URL }}images/fb_connect_small.png" width="16" height="16">
-	                        </a>
-	                    {% else %}
-	                        <a href="{% url auth_logout %}" class="nav-link">{% trans "Se déconnecter" %}</a>
-	                    {% endif %}
-	                    <a href="{% url publish_new_ad %}" class="add-product-link"  >{% trans "Déposer une annonce" %}</a>
-	                </nav>
-	            </div>{# top-content #}
-	        </div>{# container #}
-	    </div>{# topbar #}
-		<script type="text/template" id="loading-template">
-			<p class="loading-app">
-				<img src="{{ STATIC_URL }}proapp/img/app/loading.gif" width="123" height="70">
+
+{% block title %}{% trans "Vos statistiques" %}{% endblock %}
+
+{% block head %}
+	{{ block.super }}
+	{% compressed_css 'proapp' %}
+
+	<style type="text/css">
+		.top-nav { display: none; }
+
+	</style>
+{% endblock %}
+
+
+{% block content %}
+
+<div id="proApp"></div>
+ <!-- Include the CSRF token in the body of the HTML -->
+{% csrf_token %}
+
+{% endblock %}
+
+{% block tail %}
+<script type="text/template" id="loading-template">
+	<p class="loading-app">
+		<img src="{{ STATIC_URL }}proapp/img/app/loading.gif" width="123" height="70">
+	</p>
+</script>
+
+<script type="text/template" id="navpillsitem-template">
+	<a href="<%= path %>"><i class="glyphicons-icon <%= icon %> blue"></i><br><%= label %></a>
+	<span class="arrow-tab"></span>
+</script>
+
+<script type="text/template" id="navtabsitem-template">
+	<a href="<%= path %>">
+		<i class="halflings-icon <%= icon %> blue"></i>  
+		&nbsp;<%= label %>
+	</a>
+</script>
+
+<script type="text/template" id="timeseriesform-template">
+	<input class="span4" id="appendedDropdownButton" type="text" value="<%= timeseriesvalue %>" disabled="disabled">
+	<div class="btn-group">
+		<button class="btn dropdown-toggle">
+			<span class="caret"></span>
+		</button>
+		<div class="dropdown-menu pull-right">
+			<div id="datepicker"></div>
+			<div class="dropdown-menu-bottom">
+				<form class="form-inline pull-right" action="#">
+					<input type="text" class="input-small" name="start_date" value="<%= start_date %>"> -
+					<input type="text" class="input-small" name="end_date" value="<%= end_date %>"> 
+					<input type="hidden" name="interval" value="<%= interval %>"> 
+					<button type="submit" class="btn btn-small">Appliquer</button>
+				</form>
+				<div class="timeseries-shortcut pull-left">
+					<span>Racourcis : </span> 
+					<a href="#today-link">aujourd&#145;hui</a> |
+					<a href="#yesterday-link">Hier</a> |
+					<a href="#lastweek-link">La semaine dernière</a> |
+					<a href="#lastmonth-link">Le mois dernier</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</script>
+
+<script type="text/template" id="charts-template">
+	<div class="charts-header clearfix">
+      <ul class="charts-legend pull-left">
+      <% _.each(chartLegends, function( legend ){ %>
+        <li class="<%= legend.className %>">
+          <i class="halflings-icon <%= legend.icon %> blue"></i>&nbsp;<%= legend.count %>&nbsp;<%= legend.labelName %> <% if ( legend.count > 1 ) { %>s<% };%>
+        </li>
+      <% }); %>
+      </ul>
+      <div class="btn-group pull-right filter-time">
+        <button id="days" class="btn btn-mini	">Jour</button>
+        <button id="weeks" class="btn btn-mini">Semaine</button>
+        <button id="months" class="btn btn-mini">Mois</button>
+      </div>
+    </div>
+	<div id="overview">
+		<div id="plot"></div>
+	</div> 
+</script>
+
+<script type="text/template" id="chartstooltip-template">
+	<div id="charts-popover" class="popover top">
+		<div class="arrow"></div>
+		<h3 class="popover-title"><%= date %></h3>
+		<div class="popover-content">
+			<p>
+				<span class="charts-label-color" style="background-color: <%= color %>"></span>
+				<%= label %> : <%= count %>
 			</p>
-		</script>
+		</div>
+	</div>
+</script>
 
-		<script type="text/template" id="navpillsitem-template">
-			<a href="<%= path %>"><i class="glyphicons-icon <%= icon %> blue"></i><br><%= label %></a>
-			<span class="arrow-tab"></span>
-		</script>
+<script type="text/template" id="chartsdetails-template">
+	<table class="table table-striped">
+		<thead>
+			<tr>
+			<% _.each(headerItems, function(item){ %>
+				<th><%= item %></th>
+			<% }); %>
+			</tr>
+		</thead>
+		<tboby>
+			<%_.each(dataList, function(value, key) { %>
+				<tr>
+					<td><a href="<%= key %>" target="_blank"><%= key %></a></td>
+					<td style="width: 170px; text-align: center;"><%= value %></td>
+				</tr>
+			<% }); %>
+		</tbody>
+	</table>
+</script>
 
-		<script type="text/template" id="navtabsitem-template">
-			<a href="<%= path %>">
-				<i class="halflings-icon <%= icon %> blue"></i>  
-				&nbsp;<%= label %>
-			</a>
-		</script>
+<script type="text/javascript">
+	API_URL = {
+		redirection_events: "{% url api_dispatch_list api_name="1.0" resource_name="redirection_events" %}",
+		phone_events: "{% url api_dispatch_list api_name="1.0" resource_name="phone_events" %}",
+		address_events: "{% url api_dispatch_list api_name="1.0" resource_name="address_events" %}",
+		traffic_events: "{% url api_dispatch_list api_name="1.0" resource_name="pageviews" %}",
+	};
 
-		<script type="text/template" id="timeseriesform-template">
-			<input class="span4" id="appendedDropdownButton" type="text" value="<%= timeseriesvalue %>" disabled="disabled">
-			<div class="btn-group">
-				<button class="btn dropdown-toggle">
-					<span class="caret"></span>
-				</button>
-				<div class="dropdown-menu pull-right">
-					<div id="datepicker"></div>
-					<div class="dropdown-menu-bottom">
-						<form class="form-inline pull-right" action="#">
-							<input type="text" class="input-small" name="start_date" value="<%= start_date %>"> -
-							<input type="text" class="input-small" name="end_date" value="<%= end_date %>"> 
-							<input type="hidden" name="interval" value="<%= interval %>"> 
-							<button type="submit" class="btn btn-small">Appliquer</button>
-						</form>
-						<div class="timeseries-shortcut pull-left">
-							<span>Racourcis : </span> 
-							<a href="#today-link">aujourd&#145;hui</a> |
-							<a href="#yesterday-link">Hier</a> |
-							<a href="#lastweek-link">La semaine dernière</a> |
-							<a href="#lastmonth-link">Le mois dernier</a>
-						</div>
-					</div>
-				</div>
-			</div>
-		</script>
+	STATIC_URL = '{{ STATIC_URL }}'
+</script>
 
-		<script type="text/template" id="charts-template">
-			<div class="charts-header clearfix">
-              <ul class="charts-legend pull-left">
-              <% _.each(chartLegends, function( legend ){ %>
-                <li class="<%= legend.className %>">
-                  <i class="halflings-icon <%= legend.icon %> blue"></i>&nbsp;<%= legend.count %>&nbsp;<%= legend.labelName %> <% if ( legend.count > 1 ) { %>s<% };%>
-                </li>
-              <% }); %>
-              </ul>
-              <div class="btn-group pull-right filter-time">
-                <button id="days" class="btn btn-mini	">Jour</button>
-                <button id="weeks" class="btn btn-mini">Semaine</button>
-                <button id="months" class="btn btn-mini">Mois</button>
-              </div>
-            </div>
-			<div id="overview">
-				<div id="plot"></div>
-			</div> 
-		</script>
-		
-		<script type="text/template" id="chartstooltip-template">
-			<div id="charts-popover" class="popover top">
-				<div class="arrow"></div>
-				<h3 class="popover-title"><%= date %></h3>
-				<div class="popover-content">
-					<p>
-						<span class="charts-label-color" style="background-color: <%= color %>"></span>
-						<%= label %> : <%= count %>
-					</p>
-				</div>
-			</div>
-		</script>
+{% compressed_js 'proapplibs' %}
+{% compressed_js 'proapp' %}
 
-		<script type="text/template" id="chartsdetails-template">
-			<table class="table table-striped">
-				<thead>
-					<tr>
-					<% _.each(headerItems, function(item){ %>
-						<th><%= item %></th>
-					<% }); %>
-					</tr>
-				</thead>
-				<tboby>
-					<%_.each(dataList, function(value, key) { %>
-						<tr>
-							<td><a href="<%= key %>" target="_blank"><%= key %></a></td>
-							<td style="width: 170px; text-align: center;"><%= value %></td>
-						</tr>
-					<% }); %>
-				</tbody>
-			</table>
-		</script>
 
-		 <!-- Include the CSRF token in the body of the HTML -->
-        {% csrf_token %}
-
-		<script type="text/javascript">
-			API_URL = {
-				redirection_events: "{% url api_dispatch_list api_name="1.0" resource_name="redirection_events" %}",
-				phone_events: "{% url api_dispatch_list api_name="1.0" resource_name="phone_events" %}",
-				address_events: "{% url api_dispatch_list api_name="1.0" resource_name="address_events" %}",
-				traffic_events: "{% url api_dispatch_list api_name="1.0" resource_name="pageviews" %}",
-			};
-
-			STATIC_URL = '{{ STATIC_URL }}'
-		</script>
-
-		{% compressed_js 'proapplibs' %}
-		{% compressed_js 'proapp' %}	
-	</body>
-</html
+{% endblock %}

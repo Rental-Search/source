@@ -11,7 +11,7 @@ var Workspace = Backbone.Router.extend({
 	initialize: function() {
 		Backbone.Tastypie.csrfToken = $('input[name=csrfmiddlewaretoken]').val()
 		app.layoutView = new app.LayoutView();
-		$('body').append(app.layoutView.$el);
+		$('#proApp').html(app.layoutView.$el);
 		app.layoutView.render();
 		Backbone.history.start({pushState: true, root: '/pro/dashboard/'})
 	},
