@@ -7076,6 +7076,76 @@ a {
 .f-col ul {
   margin-left: 0px;
 }
+.btn:hover {
+  background: none;
+}
+.range-date .ui-datepicker-header.ui-widget-header {
+  background: none;
+  border: none;
+}
+.range-date .ui-state-default {
+  border: none;
+  background: none;
+  border: 2px;
+}
+.range-date h1,
+.range-date h2,
+.range-date h3,
+.range-date h4,
+.range-date h5,
+.range-date h6,
+.range-date p,
+.range-date blockquote,
+.range-date pre,
+.range-date a,
+.range-date abbr,
+.range-date acronym,
+.range-date address,
+.range-date cite,
+.range-date code,
+.range-date del,
+.range-date dfn,
+.range-date em,
+.range-date img,
+.range-date q,
+.range-date s,
+.range-date samp,
+.range-date small,
+.range-date strike,
+.range-date strong,
+.range-date sub,
+.range-date sup,
+.range-date tt,
+.range-date var,
+.range-date dd,
+.range-date dl,
+.range-date dt,
+.range-date li,
+.range-date ol,
+.range-date ul,
+.range-date fieldset,
+.range-date form,
+.range-date label,
+.range-date legend,
+.range-date button,
+.range-date table,
+.range-date caption,
+.range-date tbody,
+.range-date tfoot,
+.range-date thead,
+.range-date tr,
+.range-date th,
+.range-date td {
+  line-height: 1.3;
+}
+.range-date .dropdown-toggle {
+  padding: 5px 12px;
+}
+.input-append input,
+.input-append .uneditable-input {
+  float: none;
+  height: 23px;
+}
 #pro-app .nav-pills > .active > a,
 #pro-app .nav-pills > .active > a:hover {
   background-color: #5DB5E6;
