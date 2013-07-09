@@ -1,25 +1,19 @@
 
-import qsstats
 import datetime
 
 from collections import defaultdict
 
 from django.conf.urls.defaults import *
 from django.http import Http404
-from django.db.models import Q
-from tastypie import fields
 from tastypie.api import Api
-from tastypie.authorization import Authorization
-from tastypie.resources import ModelResource, Resource
+from tastypie.resources import Resource
 from tastypie.utils import trailing_slash
-from tastypie.authorization import Authorization
 
 
 from eloue.proapp.analytics_api_v3_auth import GoogleAnalyticsSetStats
 from eloue.proapp.api.authentication import SessionAuthentication
 from eloue.proapp.forms import TimeSeriesForm
-from eloue.products.models import Product, Category, Picture, Price, ProductTopPosition, ProductHighlight
-from eloue.accounts.models import Patron, Address, PhoneNumber, Subscription, CreditCard, OpeningTimes, ProPackage, Billing
+from eloue.accounts.models import Patron
 
 
 def get_time_series(request=None):
@@ -65,7 +59,7 @@ class PageViewResource(Resource):
 		self.method_check(request, allowed=['get'])
 		self.throttle_check(request)
 		
-		patron = Patron.objects.get(slug='ma-petite-cuisine')#patron = request.user
+		patron = request.user
 
 		
 		data = []
@@ -153,7 +147,7 @@ class RedirectionEventResource(Resource):
 		self.method_check(request, allowed=['get'])
 		self.throttle_check(request)
 
-		patron = Patron.objects.get(slug='ma-petite-cuisine')#request.user
+		patron = request.user
 
 		#Google Analytics References
 		metrics, dimensions, filters = get_analytics_event_references(event_action="Redirection", event_label=patron.slug)
@@ -196,7 +190,7 @@ class PhoneEventResource(Resource):
 		self.method_check(request, allowed=['get'])
 		self.throttle_check(request)
 
-		patron = Patron.objects.get(slug='ma-petite-cuisine')#patron = request.user
+		patron = request.user
 
 		#Google Analytics References
 		metrics, dimensions, filters = get_analytics_event_references(event_action="Phone", event_label=patron.slug)
@@ -239,7 +233,7 @@ class AddressEventResource(Resource):
 		self.method_check(request, allowed=['get'])
 		self.throttle_check(request)
 
-		patron = Patron.objects.get(slug='ma-petite-cuisine') #patron = request.user
+		patron = request.user
 
 		#Google Analytics References
 		metrics, dimensions, filters = get_analytics_event_references(event_action="Address", event_label=patron.slug)
