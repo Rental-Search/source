@@ -93,9 +93,27 @@ class AddressAdmin(admin.ModelAdmin):
         (_('Geolocation'), {'classes': ('collapse',), 'fields': ('position',)})
     )
 
+
 class SubscriptionAdmin(admin.ModelAdmin):
     list_display = ('patron', 'propackage', 'subscription_started', 'subscription_ended')
     raw_id_fields = ("patron",)
+    readonly_fields = ('subscription_started', 'company_name', 'contact', 'address', 'phone')
+    fieldsets = (
+        (_('Abonnement'), {'fields': ('propackage', 'subscription_started', 'subscription_ended', 'payment_type', )}),
+        (_('Patron informations'), {'fields': ('patron', 'company_name', 'contact', 'address', 'phone')})
+    )
+
+    def company_name(self, obj):
+        return obj.patron.company_name
+
+    def contact(self, obj):
+        return '%s %s' % (obj.patron.first_name, obj.patron.last_name)
+
+    def address(self, obj):
+        return obj.patron.default_address
+
+    def phone(self, obj):
+        return obj.self.patron.default_number
 
 
 class ProPackageAdmin(admin.ModelAdmin):
