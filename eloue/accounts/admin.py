@@ -98,7 +98,7 @@ class AddressAdmin(admin.ModelAdmin):
 
 
 class SubscriptionAdmin(admin.ModelAdmin):
-    list_display = ('patron', 'propackage', 'subscription_started', 'subscription_ended', 'comment')
+    list_display = ('company_name', 'propackage', 'subscription_started', 'subscription_ended', 'payment_type','online_date', 'comment')
     raw_id_fields = ("patron",)
     readonly_fields = ('subscription_started', 'company_name', 'contact', 'address', 'phone', 'online_date', 'products_count')
     fieldsets = (
