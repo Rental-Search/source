@@ -709,7 +709,10 @@ class Subscription(models.Model):
     subscription_started = models.DateTimeField(auto_now_add=True)
     subscription_ended = models.DateTimeField(null=True, blank=True)
     free = models.BooleanField(default=False)
+    number_of_free_month = models.PositiveSmallIntegerField(_(u"Nombre de mois gratuit"), null=True, blank=True)
     payment_type = models.PositiveSmallIntegerField(_(u"Type de paiement"), null=True, blank=True, choices=SUBSCRIPTION_PAYMENT_TYPE_CHOICES)
+    annual_payment_date = models.DateTimeField(_(u"Date de paiement annuel"), null=True, blank=True)
+    comment = models.TextField(_(u"Commentaire"), blank=True, null=True)
 
     def price(self, _from=datetime.datetime.min, to=datetime.datetime.max):
         if self.free:
@@ -846,7 +849,7 @@ class Billing(models.Model):
             BillingHistory.objects.create(billing=self, succeeded=False)
 
     @staticmethod
-    def builder(patron, date_from, date_to):
+    def builder(patron, date_from, date_to, subscription_discount_amount=None):
         """Returns a (billing, subscriptions, highlights) tuple for a given
         """
         from eloue.products.models import ProductHighlight, ProductTopPosition
@@ -879,8 +882,12 @@ class Billing(models.Model):
         emailnotifications = EmailNotificationHistory.objects.select_related('notification').filter(
             sent_at__gt=date_from, sent_at__lte=date_to, notification__patron=patron)
 
+        if subscription_discount_amount:
+            subscriptions.sum = D(subscription_discount_amount)
+        else:
+            subscriptions.sum = sum(map(lambda subscription: subscription.price(date_from, date_to), subscriptions))
+
         highlights.sum = sum(map(lambda highlight: highlight.price(date_from, date_to), highlights))
-        subscriptions.sum = sum(map(lambda subscription: subscription.price(date_from, date_to), subscriptions))
         toppositions.sum = sum(map(lambda topposition: topposition.price(date_from, date_to), toppositions))
         phonenotifications.sum = sum(map(lambda phonenotification: phonenotification.price(date_from, date_to), phonenotifications))
         emailnotifications.sum = sum(map(lambda emailnotification: emailnotification.price(date_from, date_to), emailnotifications))

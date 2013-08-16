@@ -10,7 +10,7 @@ from django.utils.encoding import smart_str
 from django.utils.translation import ugettext_lazy as _
 
 from eloue.admin import CurrentSiteAdmin
-from eloue.accounts.models import Patron, Address, PhoneNumber, PatronAccepted, ProPackage, Subscription, OpeningTimes
+from eloue.accounts.models import Patron, Address, PhoneNumber, PatronAccepted, ProPackage, Subscription, OpeningTimes, Billing
 from eloue.accounts.forms import PatronChangeForm, PatronCreationForm
 
 log = logbook.Logger('eloue')
@@ -24,6 +24,9 @@ class PhoneNumberInline(admin.TabularInline):
 
 class OpeningTimesInline(admin.StackedInline):
     model = OpeningTimes
+
+class BillingInline(admin.StackedInline):
+    model = Billing
 
 
 class PatronAdmin(UserAdmin, CurrentSiteAdmin):
@@ -95,13 +98,14 @@ class AddressAdmin(admin.ModelAdmin):
 
 
 class SubscriptionAdmin(admin.ModelAdmin):
-    list_display = ('patron', 'propackage', 'subscription_started', 'subscription_ended')
+    list_display = ('patron', 'propackage', 'subscription_started', 'subscription_ended', 'comment')
     raw_id_fields = ("patron",)
-    readonly_fields = ('subscription_started', 'company_name', 'contact', 'address', 'phone')
+    readonly_fields = ('subscription_started', 'company_name', 'contact', 'address', 'phone', 'online_date', 'products_count')
     fieldsets = (
-        (_('Abonnement'), {'fields': ('propackage', 'subscription_started', 'subscription_ended', 'payment_type', )}),
-        (_('Patron informations'), {'fields': ('patron', 'company_name', 'contact', 'address', 'phone')})
+        (_('Abonnement'), {'fields': ('propackage', 'subscription_started', 'subscription_ended', 'payment_type', 'annual_payment_date', 'free', 'number_of_free_month', 'comment')}),
+        (_('Patron informations'), {'fields': ('patron', 'company_name', 'contact', 'address', 'phone', 'online_date', 'products_count')})
     )
+    ordering = ['-subscription_started']
 
     def company_name(self, obj):
         return obj.patron.company_name
@@ -113,7 +117,16 @@ class SubscriptionAdmin(admin.ModelAdmin):
         return obj.patron.default_address
 
     def phone(self, obj):
-        return obj.self.patron.default_number
+        return obj.patron.default_number
+
+    def online_date(self, obj):
+        try:
+            return obj.patron.products.all().order_by('-created_at')[0].created_at.strftime("%d/%m/%y")
+        except:
+            return None
+
+    def products_count(self, obj):
+        return obj.patron.products.all().count()
 
 
 class ProPackageAdmin(admin.ModelAdmin):
