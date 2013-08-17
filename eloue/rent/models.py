@@ -466,7 +466,8 @@ class BookingLog(models.Model):
 
 @receiver(post_transition, dispatch_uid='eloue.rent.models')
 def state_logger(sender, instance, name, source, target, **kwargs):
-    BookingLog.objects.create(booking=instance, source_state=source, target_state=target)
+    if isinstance(instance, Booking):
+        BookingLog.objects.create(booking=instance, source_state=source, target_state=target)
 
 class Comment(models.Model):
     booking = models.OneToOneField(Booking)

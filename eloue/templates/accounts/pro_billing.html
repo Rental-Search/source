@@ -19,6 +19,7 @@
   			<p style="margin-bottom: 20px;">Compte facturé : {{ patron.company_name }}</p>
   			<p style="text-align: right; margin-bottom: 5px;"><a href="#" onClick="window.print()">{% trans "Imprimer la facture"%}</a></p> 
   			{% include 'accounts/partials/billing_table.html' %}
+        <p>Soit un total de {{ billing_total }} &euro; TTC</p>
   			<div style="margin-top: 20px; border-top: 2px solid #364C59; padding-top: 20px; font-family: Arial; color: #364C59; font-size: 14px;">
   				<address>
   					e-loue<br>

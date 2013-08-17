@@ -400,8 +400,11 @@ def billing_object(request, year, month, day):
 
     date_to = datetime.date(int(year), int(month), int(day))
     billing = get_object_or_404(Billing, patron=request.user, date_to=date_to)
-    date_to = datetime.datetime.combine(date_to, datetime.time())
-    date_from = minus_one_month(date_to)
+    # date_to = datetime.datetime.combine(date_to, datetime.time())
+    # date_from = minus_one_month(date_to)
+
+    date_to = billing.date_to
+    date_from = billing.date_from
 
     subscriptions = billing.highlights.all()
     toppositions = billing.toppositions.all()
@@ -412,7 +415,7 @@ def billing_object(request, year, month, day):
     toppositions.sum = sum(map(lambda topposition: topposition.price(date_from, date_to), toppositions), 0)
 
     return render(request, 'accounts/pro_billing.html', 
-        {'billing': billing, 'subscriptions': subscriptions, 'toppositions': toppositions, 'highlights': highlights,
+        {'billing': billing, 'billing_total': billing.total_amount + billing.total_tva, 'subscriptions': subscriptions, 'toppositions': toppositions, 'highlights': highlights,
             'from': date_from, 'to': date_to, 'patron': request.user,
         })
 
