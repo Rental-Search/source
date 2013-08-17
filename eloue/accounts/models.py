@@ -841,8 +841,9 @@ class Billing(models.Model):
     @transition(field=state, source='unpaid', target='paid', save=True)
     def pay(self, **kwargs):
         try:
-            self.payment.preapproval('billing:%d'%self.id, self.total_tva + total_amount, None, '')
-            self.payment.pay('billing:%d'%self.id, self.total_tva + total_amount, None, **kwargs)
+            total = self.total_tva + self.total_amount
+            self.payment.preapproval('billing:%d'%self.id, total, None, '')
+            self.payment.pay('billing:%d'%self.id, total, None, **kwargs)
             self.payment.save()
             BillingHistory.objects.create(billing=self, succeeded=True)
         except:
