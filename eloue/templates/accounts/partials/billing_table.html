@@ -9,7 +9,7 @@
 				<thead>
 					<tr>
 						<td>Plan et options</td>
-						<td class="amount">{{ billing.total_amount|currency }}</td>
+						<td class="amount">{{ billing.total_amount }} &euro;</td>
 					</tr>
 				</thead>
 			</table>
@@ -24,7 +24,7 @@
 				<thead>
 					<tr>
 						<td><i class="icon-plus-sign"></i> {% trans "Plan" %}</td>
-						<td class="amount">{{ subscriptions.sum|currency }}</td>
+						<td class="amount">{{ subscriptions.sum }} &euro;</td>
 					</tr>
 				</thead>
 				<tbody>
@@ -47,14 +47,14 @@
 				<thead>
 					<tr>
 						<td><i class="icon-plus-sign"></i> {% trans "Mise en avant" %}</td>
-						<td class="amount">{{ highlights.sum|currency }}</td>
+						<td class="amount">{{ highlights.sum }} &euro;</td>
 					</tr>
 				</thead>
 				<tbody>
 					{% for highlight in highlights %}
 						<tr>
 							<td class="billing-item"><a href="{{ highlight.product.get_absolute_url }}">{{ highlight.product.summary }}</a></td>
-							<td class="amount">{% price highlight from to %}&euro;</td>
+							<td class="amount">{% price highlight from to %} &euro;</td>
 						</tr>
 					{% endfor %}
 				</tbody>
@@ -69,7 +69,7 @@
 				<thead>
 					<tr>
 						<td><i class="icon-plus-sign"></i> {% trans "Top position" %}</td>
-						<td class="amount">{{ toppositions.sum|currency }}</td>
+						<td class="amount">{{ toppositions.sum }} &euro;</td>
 					</tr>
 				</thead>
 				<tbody>
@@ -91,7 +91,7 @@
 				<thead>
 					<tr>
 						<td><i class="icon-plus-sign"></i> {% trans "Notification" %}</td>
-						<td class="amount">{{ toppositions.sum|currency }}</td>
+						<td class="amount">{{ toppositions.sum }} &euro;</td>
 					</tr>
 				</thead>
 				<tbody>
@@ -118,13 +118,13 @@
 				<thead>
 					<tr>
 						<td><i class="icon-plus-sign"></i> {% trans "TVA" %}</td>
-						<td class="amount">{{ billing.total_tva|currency }}</td>
+						<td class="amount">{{ billing.total_tva }} &euro;</td>
 					</tr>
 				</thead>
 				<tbody>
 					<tr>
 						<td class="billing-item">{% trans "TVA à 19,60" %}</td>
-						<td class="amount">{{ billing.total_tva|currency }}</td>
+						<td class="amount">{{ billing.total_tva }} &euro;</td>
 					</tr>
 				</tbody>
 			</table>

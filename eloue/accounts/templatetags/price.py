@@ -6,4 +6,7 @@ register = Library()
 
 @register.simple_tag
 def price(obj, _from, to):
-	return floatformat(obj.price(_from, to), 2)
+	try:
+		return floatformat(obj.price(_from, to), 2)
+	except:
+		return obj.price

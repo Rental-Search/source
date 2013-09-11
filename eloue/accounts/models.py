@@ -714,9 +714,10 @@ class Subscription(models.Model):
     annual_payment_date = models.DateTimeField(_(u"Date de paiement annuel"), null=True, blank=True)
     comment = models.TextField(_(u"Commentaire"), blank=True, null=True)
 
-    def price(self, _from=datetime.datetime.min, to=datetime.datetime.max):
+    def price(self, _from=datetime.datetime.min, to=datetime.datetime.max, discount=False):
         if self.free:
-            return D(0).quantize(D('0.01'))
+            return D('4.50').quantize(D('0.01'))
+
         started_at = _from if _from > self.subscription_started else self.subscription_started
         ended_at = to if not self.subscription_ended or to < self.subscription_ended else self.subscription_ended
         days_num = calendar.monthrange(started_at.year, started_at.month)[1]
@@ -849,8 +850,11 @@ class Billing(models.Model):
         except:
             BillingHistory.objects.create(billing=self, succeeded=False)
 
+    def total_amount_vat_include(self):
+        return self.total_tva + self.total_amount
+
     @staticmethod
-    def builder(patron, date_from, date_to, subscription_discount_amount=None):
+    def builder(patron, date_from, date_to):
         """Returns a (billing, subscriptions, highlights) tuple for a given
         """
         from eloue.products.models import ProductHighlight, ProductTopPosition
@@ -883,11 +887,7 @@ class Billing(models.Model):
         emailnotifications = EmailNotificationHistory.objects.select_related('notification').filter(
             sent_at__gt=date_from, sent_at__lte=date_to, notification__patron=patron)
 
-        if subscription_discount_amount:
-            subscriptions.sum = D(subscription_discount_amount)
-        else:
-            subscriptions.sum = sum(map(lambda subscription: subscription.price(date_from, date_to), subscriptions))
-
+        subscriptions.sum = sum(map(lambda subscription: subscription.price(date_from, date_to), subscriptions))
         highlights.sum = sum(map(lambda highlight: highlight.price(date_from, date_to), highlights))
         toppositions.sum = sum(map(lambda topposition: topposition.price(date_from, date_to), toppositions))
         phonenotifications.sum = sum(map(lambda phonenotification: phonenotification.price(date_from, date_to), phonenotifications))

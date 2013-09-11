@@ -400,19 +400,17 @@ def billing_object(request, year, month, day):
 
     date_to = datetime.date(int(year), int(month), int(day))
     billing = get_object_or_404(Billing, patron=request.user, date_to=date_to)
-    # date_to = datetime.datetime.combine(date_to, datetime.time())
-    # date_from = minus_one_month(date_to)
 
     date_to = billing.date_to
     date_from = billing.date_from
 
-    subscriptions = billing.highlights.all()
-    toppositions = billing.toppositions.all()
-    highlights = billing.highlights.all()
+    subscriptions = billing.billingsubscription_set.all()
+    toppositions = billing.billingproducttopposition_set.all()
+    highlights = billing.billingproducthighlight_set.all()
 
-    highlights.sum = sum(map(lambda highlight: highlight.price(date_from, date_to), highlights), 0)
-    subscriptions.sum = sum(map(lambda subscription: subscription.price(date_from, date_to), subscriptions), 0)
-    toppositions.sum = sum(map(lambda topposition: topposition.price(date_from, date_to), toppositions), 0)
+    highlights.sum = sum(map(lambda highlight: highlight.price, highlights), 0)
+    subscriptions.sum = sum(map(lambda subscription: subscription.price, subscriptions), 0)
+    toppositions.sum = sum(map(lambda topposition: topposition.price, toppositions), 0)
 
     return render(request, 'accounts/pro_billing.html', 
         {'billing': billing, 'billing_total': billing.total_amount + billing.total_tva, 'subscriptions': subscriptions, 'toppositions': toppositions, 'highlights': highlights,
@@ -433,7 +431,6 @@ def billing(request):
         ).order_by('-billing__date_from', '-date')
     to = datetime.datetime.now()
     _from = datetime.datetime.combine(patron.next_billing_date(), datetime.time())
-    
     (billing, highlights, subscriptions, toppositions, phonenotifications, 
         emailnotifications) = Billing.builder(patron, _from, to)
     

@@ -52,7 +52,7 @@
 			<td>{{ billinghistory.date }}</td>
 			<td>{{ billinghistory.billing.payment.creditcard.masked_number }}</td>
 			<td><a href="{{ billinghistory.billing.get_absolute_url }}" target="_blank">Télécharger la facture</a></td>
-			<td>{{ billinghistory.billing.total_amount|currency }}</td>
+			<td>{{ billinghistory.billing.total_amount_vat_include }} &euro;</td>
 		</tr>
 		{% endfor %}
 	</tbody>
