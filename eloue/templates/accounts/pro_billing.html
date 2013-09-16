@@ -17,6 +17,7 @@
   				<img src="{{ STATIC_URL }}images/logo_new.png" alt="e-loue" height="37" style="float: right;"/>
   			</h1>
   			<p style="margin-bottom: 20px;">Compte facturé : {{ patron.company_name }}</p>
+        <p style="margin-bottom: 5px; float: left;">Période : Du {{ billing.date_from }} au {{ billing.date_to }}</p>
   			<p style="text-align: right; margin-bottom: 5px;"><a href="#" onClick="window.print()">{% trans "Imprimer la facture"%}</a></p> 
   			{% include 'accounts/partials/billing_table.html' %}
         <p>Soit un total de {{ billing_total }} &euro; TTC</p>

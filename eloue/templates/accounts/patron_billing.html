@@ -41,6 +41,7 @@
 	<thead>
 		<tr>
 			<th>{% trans "Date" %}</th>
+			<th>{% trans "Période" %}</th>
 			<th>{% trans "Carte de crédit" %}</th>
 			<th>{% trans "Facture" %}</th>
 			<th>{% trans "Montant" %}</th>
@@ -50,6 +51,7 @@
 		{% for billinghistory in billing_histories %}
 		<tr {% if not billinghistory.succeeded %}class="billing-error"{%endif%}>
 			<td>{{ billinghistory.date }}</td>
+			<td>{% trans "Du" %} {{ billinghistory.billing.date_from }}<br> {% trans "au" %} {{ billinghistory.billing.date_to }}</td>
 			<td>{{ billinghistory.billing.payment.creditcard.masked_number }}</td>
 			<td><a href="{{ billinghistory.billing.get_absolute_url }}" target="_blank">Télécharger la facture</a></td>
 			<td>{{ billinghistory.billing.total_amount_vat_include }} &euro;</td>
