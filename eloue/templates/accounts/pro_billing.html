@@ -13,7 +13,7 @@
   		</style>
   		<div id="billing" style="margin: 30px auto; width: 650px; background-color: #fff;">
   			<h1 style="margin-bottom: 20px;">
-  				{% trans "Facture" %}
+  				{% trans "Facture N°" %} {{ billing.pk }}
   				<img src="{{ STATIC_URL }}images/logo_new.png" alt="e-loue" height="37" style="float: right;"/>
   			</h1>
   			<p style="margin-bottom: 20px;">Compte facturé : {{ patron.company_name }}</p>
