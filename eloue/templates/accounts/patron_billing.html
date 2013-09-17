@@ -53,7 +53,13 @@
 			<td>{{ billinghistory.date }}</td>
 			<td>{% trans "Du" %} {{ billinghistory.billing.date_from }}<br> {% trans "au" %} {{ billinghistory.billing.date_to }}</td>
 			<td>{{ billinghistory.billing.payment.creditcard.masked_number }}</td>
-			<td><a href="{{ billinghistory.billing.get_absolute_url }}" target="_blank">Télécharger la facture</a></td>
+			<td>
+				{% if billinghistory.succeeded %}
+					<a href="{{ billinghistory.billing.get_absolute_url }}" target="_blank">Télécharger la facture</a>
+				{% else %}
+					{% trans "transaction refusée" %}
+				{% endif %}
+			</td>
 			<td>{{ billinghistory.billing.total_amount_vat_include }} &euro;</td>
 		</tr>
 		{% endfor %}
