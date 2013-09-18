@@ -118,8 +118,8 @@
     {% endcache %}
     <ul class="args">
         <li class="arg-how">
-            <a href="/temoignages/">
-                <h4>{% trans "Témoignages" %}</h4>
+            <a href="#" id="arg-how-link">
+                <h4>{% trans "Découvrez e-loue" %}</h4>
             </a>
         </li>
         <li class="arg-iphoneApp">
@@ -157,9 +157,12 @@
         <img src="{{ STATIC_URL }}images/e-loue_dans_la_press.png" width="619" height="39" />
     </div>{# press #}
 </div>{# container-top #}
-<!-- Advertiser 'Eloue',  Conversion tracking 'Eloue_CPC_arrivee' - DO NOT MODIFY THIS PIXEL IN ANY WAY -->
-<img src="https://ad.yieldmanager.com/pixel?id=2174825&t=2" width="1" height="1" />
-<!-- End of conversion tag -->
+
+<div id="arg-how-dialog" style="display: none" title="">
+    <div style="height: 480px; width: 640px;">
+        <div id="yt-player"></div>
+    </div>
+</div>
 {% endblock %}
 
 {% block tail %}
@@ -233,7 +236,48 @@
            
         });
 
+        //youtube player
+        var tag = document.createElement('script');
 
+        tag.src = "https://www.youtube.com/iframe_api";
+        var firstScriptTag = document.getElementsByTagName('script')[0];
+        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+        var player;
+
+        function onYouTubeIframeAPIReady() {
+            $("#arg-how-dialog").dialog({
+                autoOpen: false,
+                width: 'auto',
+                resizable: false,
+                beforeClose: function(event, ui) {
+                    player.destroy();
+                },
+                open: function(event, ui) {
+                    player = new YT.Player('yt-player', {
+                        height: '480',
+                        width: '640',
+                        videoId: 'nERu_2pSSb0',
+                        events: {
+                            'onReady': onPlayerReady,
+                        }
+                    });
+                }
+            });
+
+            $("#arg-how-link").click(function(e) {
+                e.preventDefault();
+                $("#arg-how-dialog").dialog("open");
+                $("#arg-how-dialog").css('padding', '0');
+                $("#arg-how-dialog iframe").css('margin-bottom', '-5px');
+            });
+        }
+
+        function onPlayerReady(event) {
+            event.target.playVideo();
+        }
+
+        
     </script>
 {% endblock %}
 
