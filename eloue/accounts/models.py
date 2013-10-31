@@ -680,6 +680,43 @@ class PhoneNumber(models.Model):
     def __unicode__(self):
         return smart_unicode(self.number)
 
+class ProAgency(models.Model):
+    """Agency of a pro"""
+    patron = models.ForeignKey(Patron, related_name='pro_agencies')
+    name = models.CharField(max_length=255)
+
+    #phone number
+    phone_number = models.CharField(max_length=255)
+
+    #address
+    address1 = models.CharField(_(u'Adresse'), max_length=255)
+    address2 = models.CharField(max_length=255, null=True, blank=True)
+    zipcode = models.CharField(max_length=9)
+    position = models.PointField(null=True, blank=True)
+    city = models.CharField(_(u'Ville'), max_length=255)
+    country = models.CharField(_(u'Pays'), max_length=2, choices=COUNTRY_CHOICES)
+
+    
+    def __unicode__(self):
+        return smart_unicode(self.name)
+
+    
+    def save(self, *args, **kwargs):
+        self.position = self.geocode()
+        super(ProAgency, self).save(*args, **kwargs)
+
+    def geocode(self):
+        location = ', '.join(
+            filter(
+                lambda t: t is not None, 
+                [self.address1, self.address2, self.zipcode, self.city, self.country]
+            )
+        )
+        name, (lat, lon), radius = GoogleGeocoder().geocode(location)
+        if lat and lon:
+            return Point(lat, lon)
+
+
 class PatronAccepted(models.Model):
     """Patron accpeted to create an account for private plateform"""
     email = models.EmailField()

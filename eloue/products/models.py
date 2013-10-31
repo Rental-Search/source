@@ -29,7 +29,7 @@ from django.utils.translation import ugettext as _
 
 from mptt.models import MPTTModel
 
-from eloue.accounts.models import Patron, Address
+from eloue.accounts.models import Patron, Address, ProAgency
 from eloue.geocoder import GoogleGeocoder
 from eloue.products.fields import SimpleDateField
 from eloue.products.manager import ProductManager, PriceManager, QuestionManager, CurrentSiteProductManager, TreeManager
@@ -39,7 +39,6 @@ from eloue.products.utils import Enum
 from eloue.signals import post_save_sites
 from eloue.rent.contract import ContractGenerator, ContractGeneratorNormal, ContractGeneratorCar, ContractGeneratorRealEstate
 from django_messages.models import Message 
-from eloue.accounts.models import Patron
 from django.db.models import signals
 from eloue import signals as eloue_signals
 
@@ -212,6 +211,9 @@ class Product(models.Model):
     objects = ProductManager()
     
     modified_at = models.DateTimeField(blank=True, null=True, auto_now=True)
+
+    pro_agencies = models.ManyToManyField(ProAgency, related_name='products')
+
 
     class Meta:
         verbose_name = _('product')
@@ -417,6 +419,7 @@ class Product(models.Model):
     def is_top(self):
         return bool(self.producttopposition_set.filter(ended_at__isnull=True))
     
+
 class CarProduct(Product):
 
     brand = models.CharField(_(u'marque'), max_length=30)

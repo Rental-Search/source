@@ -2,10 +2,10 @@
 {% cache 900 patron_details_info patron.pk %}
 {% with patron.languages as languages %}
     {% with languages.count as languages_count %}
-    <div class="profil-block" style="border-bottom: none;">
+    <div class="profil-block last">
         <h3>{% trans "Plus d'infos" %}</h3>
             {% if patron.current_subscription %}
-                <div class="btn-pro-contact btn-group-vertical">
+                <div class="btn-pro-contact btn-group-vertical" style="margin-bottom: 30px;">
                 {% if patron.default_number %}
                     <a href="#btn-pro-contact-number" class="btn btn-info btn-small" onClick="_gaq.push(['_trackEvent', 'Pro', 'Phone', '{{ patron.slug }}']);">Téléphone</a>
                     <div id="btn-pro-contact-number">
@@ -28,6 +28,24 @@
                 {% endif %}
                 </div>
                 {% endif %}
+        {% if patron.pro_agencies.all %}
+            <h3>{% trans "Agences" %}</h3>
+            <div class="pro-agencies">
+                <ul>
+                {% for agency in patron.pro_agencies.all %}
+                    <li>
+                        <span class="name-agency">{{ agency.name }}</span>
+                        <address>
+                            {{ agency.address1 }}<br>
+                            {{ agency.zipcode }} {{ agency.city }}<br>
+                        </address>
+                        <a href="#" class="phone-agency-link" nClick="_gaq.push(['_trackEvent', 'Pro', 'Phone', '{{ patron.slug }}']);">Voir le N° de Téléphone</a>
+                        <span class="phone-agency">{{ agency.phone_number }}<span>
+                    </li>
+                {% endfor %}
+                </ul>
+            </div>
+        {% endif%}
         {% if patron.openingtimes %}
         {% with patron.openingtimes as openingtimes %}
             <h3>{% trans "Horaires d'ouverture" %}</h3>

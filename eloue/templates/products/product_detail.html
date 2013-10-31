@@ -214,8 +214,17 @@
                 });
 
             {% endif%}
-        })
+        }
     </script>
+    <script type="text/javascript">
+            $(document).ready(function() {
+                $('a.phone-agency-link').click(function(e) {
+                    e.preventDefault();
+                    $(this).hide();
+                    $(this).parent().children('.phone-agency').show('slow')
+                });
+            });
+        </script>
     {% if not debug %}
     {% if messages %}
         {% for message in messages %}
@@ -461,6 +470,54 @@
     {% endwith %}
     {% with product.owner as patron %}
         {% if patron.is_professional %}
+            {% if patron.pro_agencies.all %}
+            <div id="owner" class="info-block" style="height: 155px;">
+                <h2>
+                    {% trans "Professionnel"%}
+                    <small>
+                        <a href="{{ patron.get_absolute_url }}" >({% trans " Voir toutes ses annonces "%})</a>
+                    </small>
+                </h2>
+                <a href="{{ patron.get_absolute_url }}" class="onwer-avatar">
+                    {% if patron.avatar %}
+                    <img src="{{ patron.profil.url }}" alt="{% trans "loueur"%}{{ patron.username }}" width="100" height="100">
+                    {% else %}
+                    <img src="{{ STATIC_URL }}images/default_avatar.png" alt="{% trans "loueur"%}{{ patron.username }}" width="100" height="100">
+                    {% endif %}
+                </a>
+                <p class="patron-company_name">
+                    {{ patron.company_name|truncate:13 }}
+                </p>
+                <p class="patron-description">
+                    {{ patron.about }}
+                </p>
+                <p class="patron-website">
+                    <a href="{{ patron.url }}">{{ patron.url }}</a>
+                </p>
+            </div>
+            {% if patron.pro_agencies.all %}
+                <div id="pro-agencies" class="info-block">
+                    <h2>
+                        {% trans "Retrait en magasin"%}
+                    </h2>
+                    <div class="pro-agencies">
+                        <ul>
+                        {% for agency in patron.pro_agencies.all %}
+                            <li>
+                                <span class="name-agency">{{ agency.name }}</span>
+                                <address>
+                                    {{ agency.address1 }}<br>
+                                    {{ agency.zipcode }} {{ agency.city }}<br>
+                                </address>
+                                <a href="#" class="phone-agency-link" nClick="_gaq.push(['_trackEvent', 'Pro', 'Phone', '{{ patron.slug }}']);">Voir le N° de Téléphone</a>
+                                <span class="phone-agency">{{ agency.phone_number }}<span>
+                            </li>
+                        {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            {% endif %}
+            {% else %}
             <div id="owner" class="info-block">
                 <h2>
                     {% trans "Professionnel"%}
@@ -526,6 +583,7 @@
                 </div>
                 {% endif %}
             </div>{#  owner #}
+            {% endif %}
         {% else %}
             <div id="owner" class="info-block">
                 <h2>

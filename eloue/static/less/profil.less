@@ -21,6 +21,11 @@
     text-decoration: underline; 
 
     line-height: 18px;
+
+    &.last {
+      border-bottom: none;
+      .box-shadow(none);
+    }
   }
   
   h3 {
@@ -352,5 +357,46 @@
 #profil-comments {
   max-height: 400px;
   overflow: auto;
+}
+
+// PRO AGENCIES
+//-------------
+
+.pro-agencies {
+  border: 1px solid #93b1c2;
+  .rounded(3px);
+  @shadow: inset 0 1px 0 rgba(255,255,255,.1);
+
+  height: 300px;
+  overflow-y: auto;
+  background-color: #fff;
+
+  li {
+    padding: 10px;
+
+
+    .name-agency {
+      #font > .sans-serif('Ubuntu', normal, 14px);
+      font-weight: bold;
+      line-height: 18px;
+      color: @blueDark;
+    }
+
+    address {
+      #font > .sans-serif('Arial', normal, 13px);
+      line-height: 16px;
+    }
+
+    .phone-agency { 
+      display: none;
+      #font > .sans-serif('Arial', normal, 13px);
+      line-height: 16px;
+    }
+
+    .phone-agency-link {
+      #font > .sans-serif('Arial', normal, 13px);
+      line-height: 16px;
+    }
+  }
 }
 

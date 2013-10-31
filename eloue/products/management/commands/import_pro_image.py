@@ -97,6 +97,7 @@ class Command(BaseCommand):
 								picture = Picture.objects.create(image=uploadedfile.SimpleUploadedFile(name='img', content=image.read()))
 								product.pictures.add(picture)
 						except:
+							print image_path
 							pass
 
 

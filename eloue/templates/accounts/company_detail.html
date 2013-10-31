@@ -27,6 +27,18 @@
             });
         });
     </script>
+
+    {% if patron.pro_agencies.all %}
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('a.phone-agency-link').click(function(e) {
+                e.preventDefault();
+                $(this).hide();
+                $(this).parent().children('.phone-agency').show('slow')
+            });
+        });
+    </script>
+    {% endif %}
 {% endblock %}
 
 {% block content %}
