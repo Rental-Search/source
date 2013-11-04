@@ -212,7 +212,7 @@ class Product(models.Model):
     
     modified_at = models.DateTimeField(blank=True, null=True, auto_now=True)
 
-    pro_agencies = models.ManyToManyField(ProAgency, related_name='products')
+    pro_agencies = models.ManyToManyField(ProAgency, related_name='products', blank=True, null=True)
 
 
     class Meta:
