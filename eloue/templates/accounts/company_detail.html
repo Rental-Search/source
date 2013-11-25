@@ -58,7 +58,11 @@
                 {% if patron.about %}
                     <p class="profil-description">{{ patron.about }}</p>
                 {% endif %}
-                <a class="btn-contactme" href={% url patron_message_create recipient_username=patron.slug %}>{% trans "Contactez-moi" %}</a>
+                {% if patron.slug == 'loxam'%}
+                    <a class="btn-contactme" href="http://www.loxam.fr/contact.php">{% trans "Contactez-moi" %}</a>
+                {% else %}
+                    <a class="btn-contactme" href={% url patron_message_create recipient_username=patron.slug %}>{% trans "Contactez-moi" %}</a>
+                {% endif %}
             </div>{# profil-description #}
         </div>{# profil-block #}
         {% include "accounts/partials/company_more_info.html" %}
