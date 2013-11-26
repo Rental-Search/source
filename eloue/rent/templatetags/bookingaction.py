@@ -94,7 +94,7 @@ Incident = LinkWidget(
 		'eloue.rent.views.booking_incident', 
 		kwargs={'booking_id': booking.pk.hex}
 	),
-	text=u'Signaler une incident'
+	text=u'Signaler un incident'
 )
 
 Contract = LinkWidget(
