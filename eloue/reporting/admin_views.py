@@ -135,11 +135,11 @@ def stats_by_city(request):
 	 patron_stats = Patron.objects.extra(tables=['accounts_address'], where=['"accounts_patron"."default_address_id" = "accounts_address"."id"'], select={'city': 'lower(accounts_address.city)'}).values('city').annotate(Count('id')).order_by('-id__count')
 	 product_stats = Product.objects.extra(tables=['accounts_address'], where=['"products_product"."address_id" = "accounts_address"."id"'], select={'city': 'lower(accounts_address.city)'}).values('city').annotate(Count('id')).order_by('-id__count')
 	 booking_stats = Booking.objects.extra(select={'city': 'lower(accounts_address.city)'}, tables=["products_product", "accounts_address"], where=['"products_product"."address_id" = "accounts_address"."id"', '"rent_booking"."product_id" = "products_product"."id"']).values('city').annotate(Count('pk')).order_by('-pk__count')
-
+	 booking_amounts_stats = Booking.objects.extra(select={'city': 'lower(accounts_address.city)'}, tables=["products_product", "accounts_address"], where=['"products_product"."address_id" = "accounts_address"."id"', '"rent_booking"."product_id" = "products_product"."id"']).values('city').annotate(Sum('total_amount')).order_by('-total_amount__sum')
 	 
 	 return render_to_response("reporting/admin/city_stats.html",
    		{},
-   		RequestContext(request, {'patron_stats': patron_stats, 'product_stats': product_stats, 'booking_stats': booking_stats}),
+   		RequestContext(request, {'patron_stats': patron_stats, 'product_stats': product_stats, 'booking_stats': booking_stats, 'booking_amounts_stats': booking_amounts_stats}),
    	)
 
 def stats_by_city_detail(request, city):

@@ -52,7 +52,7 @@
 			</tbody>
 		</table>
 	</div>
-	<div style="float: left; width: 450px;">
+	<div style="float: left; width: 450px;  margin-right: 20px;">
 		<h2>Nombre de réservation par ville</h2>
 		<table>
 			<thead>
@@ -66,6 +66,25 @@
 				<tr>
 					<td><a href="{% url stats_by_city_detail 'paris' %}">{{ city.city }}</a></td>
 					<td>{{ city.pk__count }}</td>
+				</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
+	<div style="float: left; width: 450px;">
+		<h2>Volume d'affaire par ville</h2>
+		<table>
+			<thead>
+				<tr>
+					<th>Ville</th>
+					<th>Volume d'affaire</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for city in booking_amounts_stats %}
+				<tr>
+					<td><a href="{% url stats_by_city_detail 'paris' %}">{{ city.city }}</a></td>
+					<td>{{ city.total_amount__sum }}</td>
 				</tr>
 				{% endfor %}
 			</tbody>
