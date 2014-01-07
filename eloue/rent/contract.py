@@ -116,26 +116,26 @@ class ContractGeneratorNormal(ContractGenerator):
         canvas.showPage()
         canvas.setFont("Helvetica", 8)
 
-        canvas.drawString(59, 724, u"{first_name} {last_name}".format(
+        canvas.drawString(66, 724, u"{first_name} {last_name}".format(
             first_name=booking.owner.first_name,
             last_name=booking.owner.last_name.upper()
         ))
 
-        canvas.drawString(59, 706, u"{phone}".format(phone=first_or_empty(booking.owner.phones.all())))
-        canvas.drawString(59, 688, u"{address}".format(
+        canvas.drawString(66, 706, u"{phone}".format(phone=first_or_empty(booking.owner.phones.all())))
+        canvas.drawString(66, 688, u"{address}".format(
             address=booking.owner.default_address or booking.owner.addresses.all()[0])
         )
 
         if booking.borrower.is_professional:
             canvas.drawString(369, 717, booking.borrower.company_name)
 
-        canvas.drawString(380, 707, u"{first_name} {last_name}".format(
+        canvas.drawString(375, 709, u"{first_name} {last_name}".format(
                 first_name=booking.borrower.first_name, 
                 last_name=booking.borrower.last_name.upper()
             )
         )
-        canvas.drawString(364, 698, u"{phone}".format(phone=first_or_empty(booking.borrower.phones.all())))
-        canvas.drawString(356, 689, u"{address1}".format(
+        canvas.drawString(360, 700, u"{phone}".format(phone=first_or_empty(booking.borrower.phones.all())))
+        canvas.drawString(352, 691, u"{address1}".format(
             address1=booking.borrower.default_address or booking.borrower.addresses.all()[0])
         )
 
@@ -148,11 +148,11 @@ class ContractGeneratorNormal(ContractGenerator):
         ))
 
 
-        canvas.drawString(100, 595, u"{summary}".format(summary=booking.product.summary))
+        canvas.drawString(106, 593, u"{summary}".format(summary=booking.product.summary))
 
-        canvas.drawString(170, 561, format(booking.started_at, _(u"d F Y à H\hi.")))
-        canvas.drawString(170, 551, format(booking.ended_at, _(u"d F Y à H\hi.")))
-        canvas.drawString(122, 542, str(booking.total_amount))
+        canvas.drawString(173, 551, format(booking.started_at, _(u"d F Y à H\hi.")))
+        canvas.drawString(173, 541, format(booking.ended_at, _(u"d F Y à H\hi.")))
+        canvas.drawString(128, 532, str(booking.total_amount))
         
         canvas.drawString(382, 619,  str(booking.product.deposit_amount))
 

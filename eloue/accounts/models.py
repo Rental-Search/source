@@ -637,7 +637,9 @@ class Address(models.Model):
         return smart_unicode("%s %s %s %s" % (self.address1, self.address2 if self.address2 else '', self.zipcode, self.city))
 
     def save(self, *args, **kwargs):
-        self.position = self.geocode()
+        position = self.geocode()
+        if position:
+            self.position = position
         super(Address, self).save(*args, **kwargs)
 
     def clean(self):
