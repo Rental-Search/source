@@ -223,61 +223,62 @@ class ContractGeneratorCar(ContractGenerator):
     def draw(self, canvas, booking):
         canvas.showPage()
         canvas.setFont("Helvetica", 8)
-        canvas.drawString(106, 754, u"{first_name} {last_name}".format(
+        canvas.drawString(144, 764, u"{first_name} {last_name}".format(
             first_name=booking.borrower.first_name.upper(),
             last_name=booking.borrower.last_name.upper()
         ))
 
-        canvas.drawString(88, 744, u"{phone}".format(phone=first_or_empty(booking.borrower.phones.all())))
-        canvas.drawString(82, 734, u"{address}".format(
+        canvas.drawString(126, 754, u"{phone}".format(phone=first_or_empty(booking.borrower.phones.all())))
+        canvas.drawString(81, 734, u"{address}".format(
             address=booking.borrower.default_address or booking.borrower.addresses.all()[0])
         )
-        canvas.drawString(135, 715, "{date_of_birth}, {place_of_birth}".format(
+        canvas.drawString(180, 712, "{date_of_birth}, {place_of_birth}".format(
                 date_of_birth=booking.borrower.date_of_birth.strftime("%d/%m/%Y"),
                 place_of_birth=booking.borrower.place_of_birth
             )
         )
-        canvas.drawString(127, 706, u"{drivers_license_number}".format(
+        canvas.drawString(172, 701, u"{drivers_license_number}".format(
                 drivers_license_number=booking.borrower.drivers_license_number
             )
         )
-        canvas.drawString(135, 696, u"{drivers_license_date}".format(
+        canvas.drawString(192, 691, u"{drivers_license_date}".format(
             drivers_license_date=booking.borrower.drivers_license_date.strftime("%d/%m/%y")
         ))
 
 
 
-        canvas.drawString(360, 750, u"{first_name} {last_name}".format(
+        canvas.drawString(379, 764, u"{first_name} {last_name}".format(
                 first_name=booking.owner.first_name, 
                 last_name=booking.owner.last_name.upper()
             )
         )
-        canvas.drawString(351, 735, u"{phone}".format(phone=first_or_empty(booking.owner.phones.all())))
+        canvas.drawString(361, 754, u"{phone}".format(phone=first_or_empty(booking.owner.phones.all())))
 
-        canvas.drawString(368, 707, u"{summary}".format(summary=smart_str(booking.product.summary)))
-
-
-
-        canvas.drawString(362, 693, u"{licence_plate}".format(licence_plate=booking.product.carproduct.licence_plate))
-        canvas.drawString(398, 680, u"{first_registration_date}".format(first_registration_date=booking.product.carproduct.first_registration_date))
+        canvas.drawString(388, 722, u"{summary}".format(summary=smart_str(booking.product.summary)))
 
 
 
-        canvas.drawString(157, 630, format(booking.started_at, _(u"d F Y à H\hi.")))
-        canvas.drawString(157, 620, format(booking.ended_at, _(u"d F Y à H\hi.")))
+        canvas.drawString(382, 712, u"{licence_plate}".format(licence_plate=booking.product.carproduct.licence_plate))
+        canvas.drawString(428, 701, u"{first_registration_date}".format(first_registration_date=booking.product.carproduct.first_registration_date))
 
-        canvas.drawString(150, 611, u"{km_included}".format(km_included=booking.product.carproduct.km_included or 0))
-        canvas.drawString(152, 601, u"{costs_per_km}".format(costs_per_km=booking.product.carproduct.costs_per_km or 0))
 
-        canvas.drawString(107, 535, "{masked_number}".format(
+
+        canvas.drawString(205, 612, format(booking.started_at, _(u"d F Y à H\hi.")))
+        canvas.drawString(205, 601, format(booking.ended_at, _(u"d F Y à H\hi.")))
+
+        canvas.drawString(198, 591, u"{km_included}".format(km_included=booking.product.carproduct.km_included or 0))
+        canvas.drawString(203, 580, u"{costs_per_km}".format(costs_per_km=booking.product.carproduct.costs_per_km or 0))
+        canvas.drawString(154, 569, str(booking.total_amount))
+
+        canvas.drawString(148, 550, "{masked_number}".format(
             masked_number=booking.payment.creditcard.masked_number
         ))
-        canvas.drawString(95, 517, "{expires1}/{expires2}".format(
+        canvas.drawString(122, 519, "{expires1}/{expires2}".format(
             expires1=booking.payment.creditcard.expires[:2],
             expires2=booking.payment.creditcard.expires[2:],
         ))
 
-        canvas.drawString(110, 593, str(booking.total_amount))
+        
 
         return canvas
         
