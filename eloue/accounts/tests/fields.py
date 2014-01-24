@@ -81,7 +81,7 @@ class ExpirationWidgetTest(TestCase):
 class ExpirationFieldTest(TestCase):
     def testExpirationFieldValid(self):
         field = ExpirationField()
-        self.assertTrue(field.clean(['01', '13']))
+        self.assertTrue(field.clean(['01', '16']))
         self.assertTrue(field.clean(['12', '22']))
 
     def testExpirationFieldInvalid(self):
