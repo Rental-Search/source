@@ -158,6 +158,8 @@ class ApiTest(TestCase):
             'email': 'chuck.berry@chess-records.com'
         }
         request = self._get_request(method='POST')
+        print request
+        print self._get_headers(request)
         response = self.client.post(self._resource_url('user'),
             data=simplejson.dumps(post_data),
             content_type='application/json',

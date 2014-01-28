@@ -98,7 +98,7 @@ class CreditCardFormTest(TestCase):
         mock_authorize.side_effect = PayboxException(11, '')
         form = CreditCardForm(
             {
-                'cvv': '123', 'expires_0': '02', 'expires_1': '13',
+                'cvv': '123', 'expires_0': '02', 'expires_1': '14',
                 'card_number': '1111222233334444',  'holder_name': 'xxx'
             }
         )
