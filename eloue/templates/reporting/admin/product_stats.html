@@ -26,7 +26,7 @@
 			<tbody>
 				{% for product in booking_stats %}
 				<tr>
-					<td><a href="{% url stats_by_product_detail product.pk %}">{{ product.summary }}</a></td>
+					<td><a href="{% url 'stats_by_product_detail' product.pk %}">{{ product.summary }}</a></td>
 					<td>{{ product.num_bookings }}</td>
 				</tr>
 				{% endfor %}

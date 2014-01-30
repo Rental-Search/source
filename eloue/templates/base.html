@@ -37,7 +37,7 @@
     <div class="top-bar">
         <div class="container">
             <div class="logo">
-                <a href="{% url home %}"><img src="{{ STATIC_URL }}images/logo_new.png" alt="e-loue" width="155" height="47"/></a>
+                <a href="{% url 'products.views.homepage' %}"><img src="{{ STATIC_URL }}images/logo_new.png" alt="e-loue" width="155" height="47"/></a>
             </div><!-- logo -->
             <div class="top-content">
                 <ul class="top-contact">
@@ -47,7 +47,7 @@
                     {% if user.is_anonymous %}
                         <a href="{% trans "/comment-ca-marche/" %}" class="nav-link">{% trans "Comment ça marche ?" %}</a>
                     {% else %}
-                        <a href="{% url dashboard %}" class="profil-link">
+                        <a href="{% url 'accounts.views.dashboard' %}" class="profil-link">
                             {% if user.avatar %}
                             <img src="{{ user.thumbnail.url }}" width="20" height="20">
                             {% else %}
@@ -70,14 +70,14 @@
                         </a>
                     {% endif %}
                     {% if not user.is_authenticated %}
-                        <a href="{% url auth_login %}" class="nav-link" >{% trans "S'inscrire ou se connecter" %}</a>
-                        <a href="{% url auth_login %}" class="fb-connect-small">
+                        <a href="{% url 'accounts.views.authenticate' %}" class="nav-link" >{% trans "S'inscrire ou se connecter" %}</a>
+                        <a href="{% url 'accounts.views.authenticate' %}" class="fb-connect-small">
                             <img src="{{ STATIC_URL }}images/fb_connect_small.png" width="16" height="16">
                         </a>
                     {% else %}
-                        <a href="{% url auth_logout %}" class="nav-link">{% trans "Se déconnecter" %}</a>
+                        <a href="{% url 'auth_logout' %}" class="nav-link">{% trans "Se déconnecter" %}</a>
                     {% endif %}
-                    <a href="{% url publish_new_ad %}" class="add-product-link"  >{% trans "Déposer une annonce" %}</a>
+                    <a href="{% url 'products.views.publish_new_ad' %}" class="add-product-link"  >{% trans "Déposer une annonce" %}</a>
                 </nav>
             </div>{# top-content #}
         </div>{# container #}
@@ -89,9 +89,9 @@
             <div class="f-col first">
                 <div class="f-title">{% trans "Liens utiles" %}</div>
                 <ul>
-        			<li><a href="{% url home %}">{% trans "Accueil" %}</a></li>
-        			<li><a href="{% url dashboard %}">{% trans "Mon compte" %}</a></li>
-        			<li><a href="{% url publish_new_ad %}">{% trans "Déposer une annonce" %}</a></li>
+        			<li><a href="{% url 'products.views.homepage' %}">{% trans "Accueil" %}</a></li>
+        			<li><a href="{% url 'accounts.views.dashboard' %}">{% trans "Mon compte" %}</a></li>
+        			<li><a href="{% url 'products.views.publish_new_ad' %}">{% trans "Déposer une annonce" %}</a></li>
         			{% if user.is_authenticated %}
         				<li><a href="{% trans "/comment-ca-marche/" %}">{% trans "Comment ça marche ?" %}</a></li>
         			{% endif %}
@@ -100,7 +100,7 @@
             <div class="f-col">
                 <div class="f-title">{% trans "Info" %}</div>
                 <ul>
-        			<li><a href="{% url patron_subscription %}">{% trans "Espace professionnel" %}</a></li>
+        			<li><a href="{% url 'accounts.views.patron_subscription' %}">{% trans "Espace professionnel" %}</a></li>
         			<li><a href="{% trans "/argus-de-la-location-objets/"%}">{% trans "Combien louer ses objets ?"%}</a></li>
         			<li><a href="{% trans "/assurance-tranquillite/" %}">{% trans "Assurance tranquillité" %}</a></li>
         			<li><a href="{% trans "/conditions-generales/" %}">{% trans "Conditions générales" %}</a></li>
@@ -110,8 +110,8 @@
             <div class="f-col">
                 <div class="f-title">{% trans "Support" %}</div>
                 <ul>
-        			<li><a href="{% url faq-topic-list %}">{% trans "Aide" %}</a></li>
-        			<li><a href="{% url contact %}">{% trans "Contactez-nous" %}</a></li>
+        			<li><a href="{% url 'faq-topic-list' %}">{% trans "Aide" %}</a></li>
+        			<li><a href="{% url 'accounts.views.contact' %}">{% trans "Contactez-nous" %}</a></li>
         			<li><a href="{% trans "/espace-presse/" %}">{% trans "Espace presse" %}</a></li>
         			<li><a href="{% trans "/qui-sommes-nous/" %}">{% trans "Qui sommes nous ?" %}</a></li>
         		</ul>

@@ -6,7 +6,7 @@
 {% block content %}
 <div class="container-main">
 	<ul class="breadcrumb">
-    	<li><a href="{% url home %}">{% trans "Accueil" %}</a></li>
+    	<li><a href="{% url 'products.views.homepage' %}">{% trans "Accueil" %}</a></li>
     	<li>{% trans "Espace professionnel" %}</li>
     </ul>
     <div class="one-content">
@@ -108,7 +108,7 @@
 		            <p class="max-items">{{ plan.maximum_items }} {% trans "annonces maximum" %}</p>
 	        	{% endif %}
                 {% if plan.pk != request.user.current_subscription.propackage.pk %}
-                        <form action="{% if request.user.is_authenticated %}{% url patron_edit_subscription %}{% else %} {% endif %}" method="post">
+                        <form action="{% if request.user.is_authenticated %}{% url 'accounts.views.patron_edit_subscription' %}{% else %} {% endif %}" method="post">
                             {% csrf_token %}
                             <input type="hidden" name="{% if request.user.is_authenticated %}{% else %}0-{% endif %}subscription" value="{{ plan.pk }}" />
                             <input type="submit" value="{% trans "Choisir cet abonnement" %}" class="btn-select-plan"/>

@@ -7,11 +7,11 @@
 {% endblock %}
 
 {% block content-aside-profil %}
-{% url owner_product as owner_product %}
-{% url owner_booking_authorized as owner_booking_authorized %}
-{% url owner_booking_history as owner_booking_history %}
-{% url owner_booking_pending as owner_booking_pending %}
-{% url owner_booking_ongoing as owner_booking_ongoing %}
+{% url 'owner_product' as owner_product %}
+{% url 'owner_booking_authorized' as owner_booking_authorized %}
+{% url 'owner_booking_history' as owner_booking_history %}
+{% url 'owner_booking_pending' as owner_booking_pending %}
+{% url 'owner_booking_ongoing' as owner_booking_ongoing %}
 
 <ul class="nav-sub-bar">
     <li>
@@ -53,7 +53,7 @@
 {% block content-main-profil %}
 	<h2>
         {% trans "Gérer mes annonces" %}
-        <a href="{% url publish_new_ad %}" style="font-size: 12px; float: right; margin-top: 5px;">({% trans "Déposer une nouvelle annonce"%})</a>
+        <a href="{% url 'products.views.publish_new_ad' %}" style="font-size: 12px; float: right; margin-top: 5px;">({% trans "Déposer une nouvelle annonce"%})</a>
     </h2>
 	<ul class="product-list">
 	{% for product in product_list %}
@@ -67,7 +67,7 @@
         </a><!-- pl-img -->
         <div class="pl-content">
         	<h3>
-        	<a href="{% url owner_product_edit product.slug product.pk %}">{{product.summary|capitalize|truncate:70 }}</a>
+        	<a href="{% url 'products.views.product_edit' product.slug product.pk %}">{{product.summary|capitalize|truncate:70 }}</a>
         	</h3>
         	<address>
         		{{ product.address.city|capfirst }}
@@ -80,7 +80,7 @@
         	{% endwith %}
        	</div><!-- pl-content -->
        	<div style="float: right; padding-top: 23px;">
-       		<a href="{% url owner_product_edit product.slug product.pk %}" class="btn btn-contactme">{% trans "Modifier l'annonce" %}</a>
+       		<a href="{% url 'products.views.product_edit' product.slug product.pk %}" class="btn btn-contactme">{% trans "Modifier l'annonce" %}</a>
        	</div>
 	</li>
 	{% endfor %}
@@ -89,13 +89,13 @@
         {% if is_paginated %}
         <div class="pagination">
             {% if page_obj.has_previous %}
-                <a href="{% url owner_product page_obj.previous_page_number %}" class="prev">&#171; {% trans "Page précédente" %}</a>
+                <a href="{% url 'owner_product' page_obj.previous_page_number %}" class="prev">&#171; {% trans "Page précédente" %}</a>
             {% endif %}
             {% for page in page_range %}
-            <a href="{% url owner_product page %}" {% if page_obj.number == page %}class="page-selected"{% endif %}>{{ page }}</a>
+            <a href="{% url 'owner_product' page %}" {% if page_obj.number == page %}class="page-selected"{% endif %}>{{ page }}</a>
             {% endfor %}
             {% if page_obj.has_next %}
-                <a href="{% url owner_product page_obj.next_page_number %}" class="next">{% trans "Page suivante" %} &#187;</a>
+                <a href="{% url 'owner_product' page_obj.next_page_number %}" class="next">{% trans "Page suivante" %} &#187;</a>
             {% endif %}
         </div><!-- pagination -->
         {% endif %}

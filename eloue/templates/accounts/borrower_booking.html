@@ -7,10 +7,10 @@
 {% endblock %}
 
 {% block content-aside-profil %}
-{% url borrower_booking_authorized as borrower_booking_authorized %}
-{% url borrower_booking_pending as borrower_booking_pending %}
-{% url borrower_booking_history as borrower_booking_history %}
-{% url borrower_booking_ongoing as borrower_booking_ongoing %}
+{% url 'borrower_booking_authorized' as borrower_booking_authorized %}
+{% url 'borrower_booking_pending' as borrower_booking_pending %}
+{% url 'borrower_booking_history' as borrower_booking_history %}
+{% url 'borrower_booking_ongoing' as borrower_booking_ongoing %}
 <ul class="nav-sub-bar">
 	{% with request.user.rentals.authorized.count as count %}
 		<li><a href="{{ borrower_booking_authorized }}" class="{% active request borrower_booking_authorized %}">{% trans "Demandes de réservation" %} {% if count > 0%}({{count}}){% endif %}</a></li>

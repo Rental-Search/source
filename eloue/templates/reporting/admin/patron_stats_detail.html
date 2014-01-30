@@ -34,7 +34,7 @@
 			<tbody>
 				{% for product in booking_stats %}
 					<tr>
-						<td><a href="{% url stats_by_product_detail product.id %}">{{ product.summary }}</a></td>
+						<td><a href="{% url 'stats_by_product_detail' product.id %}">{{ product.summary }}</a></td>
 						<td>{{ product.num_bookings }}</td>
 					</tr>
 				{% endfor %}
@@ -51,7 +51,7 @@
 			<tbody>
 				{% for category in category_stats %}
 					<tr>
-						<td><a href="{% url stats_by_category_detail category.category__pk %}">{{ category.category__name }}</a></td>
+						<td><a href="{% url 'stats_by_category_detail' category.category__pk %}">{{ category.category__name }}</a></td>
 						<td>{{ category.num_products }}</td>
 					</tr>
 				{% endfor %}

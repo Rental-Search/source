@@ -41,10 +41,10 @@
 </div>
 <div style="float: left; width: 300px;">
 	<ul>
-		<li><a href="{% url stats_by_patron %}">Statistiques par Membre</a></li>
-		<li><a href="{% url stats_by_product %}">Statistiques par Annonce</a></li>
-		<li><a href="{% url stats_by_category %}">Statistiques par Categorie</a></li>
-		<li><a href="{% url stats_by_city %}">Statistiques par Ville</a></li>
+		<li><a href="{% url 'stats_by_patron' %}">Statistiques par Membre</a></li>
+		<li><a href="{% url 'stats_by_product' %}">Statistiques par Annonce</a></li>
+		<li><a href="{% url 'stats_by_category' %}">Statistiques par Categorie</a></li>
+		<li><a href="{% url 'stats_by_city' %}">Statistiques par Ville</a></li>
 	</ul>
 </div>
 {% endblock %}

@@ -26,7 +26,7 @@
 			<tbody>
 				{% for patron in booking_stats %}
 				<tr>
-					<td><a href="{% url stats_by_patron_detail patron.pk %}">{{ patron.username }}</a></td>
+					<td><a href="{% url 'stats_by_patron_detail' patron.pk %}">{{ patron.username }}</a></td>
 					<td>{{ patron.num_bookings }}</td>
 				</tr>
 				{% endfor %}
@@ -45,7 +45,7 @@
 			<tbody>
 				{% for patron in product_stats %}
 				<tr>
-					<td><a href="{% url stats_by_patron_detail patron.pk %}">{{ patron.username }}</a></td>
+					<td><a href="{% url 'stats_by_patron_detail' patron.pk %}">{{ patron.username }}</a></td>
 					<td>{{ patron.num_products }}</td>
 				</tr>
 				{% endfor %}

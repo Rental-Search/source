@@ -12,28 +12,28 @@
 
 {% block content-aside-profil %}
 
-{% url patron_edit as patron_edit %}
-{% url facebook_invite as facebook_invite %}
-{% url gmail_invite as gmail_invite %}
-{% url comments as comments %}
-{% url patron_edit_addresses as patron_edit_addresses %}
-{% url patron_edit_phonenumber as patron_edit_phonenumber %}
-{% url patron_edit_password as patron_edit_password %}
-{% url patron_edit_credit_card as patron_edit_credit_card %}
-{% url patron_edit_rib as patron_edit_rib %}
-{% url patron_edit_subscription as patron_edit_subscription %}
-{% url patron_edit_highlight as patron_edit_highlight %}
-{% url billing as billing %}
-{% url patron_edit_notification as patron_edit_notification %}
-{% url patron_edit_top_position as patron_edit_top_position %}
-{% url patron_edit_idn_connect as patron_edit_idn_connect %}
+{% url 'patron_edit' as patron_edit %}
+{% url 'facebook_invite' as facebook_invite %}
+{% url 'gmail_invite' as gmail_invite %}
+{% url 'comments' as comments %}
+{% url 'patron_edit_addresses' as patron_edit_addresses %}
+{% url 'patron_edit_phonenumber' as patron_edit_phonenumber %}
+{% url 'patron_edit_password' as patron_edit_password %}
+{% url 'patron_edit_credit_card' as patron_edit_credit_card %}
+{% url 'patron_edit_rib' as patron_edit_rib %}
+{% url 'patron_edit_subscription' as patron_edit_subscription %}
+{% url 'patron_edit_highlight' as patron_edit_highlight %}
+{% url 'billing' as billing %}
+{% url 'patron_edit_notification' as patron_edit_notification %}
+{% url 'patron_edit_top_position' as patron_edit_top_position %}
+{% url 'patron_edit_idn_connect' as patron_edit_idn_connect %}
 
 
 <ul class="nav-sub-bar">
     <li><a href="{{ patron_edit }}"  class="{% active request "^/dashboard/account/$" %}">{% trans "Mon Profil" %}</a></li>
     <li><a href="{{ patron_edit_idn_connect }}" class="{% active request "^/dashboard/account/idn/$" %}">{% trans "Identité Numérique" %}</a></li>
     {% if request.user.is_professional %}
-    <li><a href="{% url patron_edit_opening_times %}" class="{% active request "^/dashboard/account/openings/"%}">{% trans "Horaires d'ouverture" %}</a></li>
+    <li><a href="{% url 'accounts.views.patron_edit_opening_times' %}" class="{% active request "^/dashboard/account/openings/"%}">{% trans "Horaires d'ouverture" %}</a></li>
     <li>
         {% if request.user.current_subscription %}
           <a href="{{ billing }}" class="{% active request "^/dashboard/account/pro_account/" %}">{% trans "Compte pro" %}</a>
@@ -92,8 +92,8 @@
         {% endif %}
         {{ field }}
         <p class="help-block">{{ field.help_text }}</p>
-        {% if field.name == "default_address" %}<p class="help-block"><a href="{% url patron_edit_addresses %}#newAddress">{% trans "Ajouter une nouvelle adresse"%}</a></p>{% endif %}
-        {% if field.name == "default_number" %}<p class="help-block"><a href="{% url patron_edit_phonenumber %}#newPhone">{% trans "Ajouter un nouveau téléphone"%}</a></p>{% endif %}
+        {% if field.name == "default_address" %}<p class="help-block"><a href="{% url 'accounts.views.patron_edit_addresses' %}#newAddress">{% trans "Ajouter une nouvelle adresse"%}</a></p>{% endif %}
+        {% if field.name == "default_number" %}<p class="help-block"><a href="{% url 'accounts.views.patron_edit_phonenumber' %}#newPhone">{% trans "Ajouter un nouveau téléphone"%}</a></p>{% endif %}
         {% if field.errors %}
           <span class="help-inline">
           {% for error in field.errors %}

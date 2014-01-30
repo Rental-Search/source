@@ -55,12 +55,12 @@
 
     {% if not comment.booking.ownercomment and comment.booking.owner == patron %}
     {% trans "Vous pouvez aussi commenter la location en cliquant sur le lien ci dessous" %} :<br>
-    <p><a href="{{ protocol }}://{{ site.domain }}{% url comments %}">{{ protocol }}://{{ site.domain }}{% url comments %}</a><br><br>
+    <p><a href="{{ protocol }}://{{ site.domain }}{% url 'comments' %}">{{ protocol }}://{{ site.domain }}{% url 'comments' %}</a><br><br>
     {% endif %}
 
     {% if not comment.booking.borrowercomment and comment.booking.borrower == patron %}
     {% trans "Vous pouvez aussi commenter la location en cliquant sur le lien ci dessous" %} :<br>
-    <a href="{{ protocol }}://{{ site.domain }}{% url comments %}">{{ protocol }}://{{ site.domain }}{% url comments %}</a><br><br>
+    <a href="{{ protocol }}://{{ site.domain }}{% url 'comments' %}">{{ protocol }}://{{ site.domain }}{% url 'comments' %}</a><br><br>
     {% endif %}
     {% blocktrans with site.name as site_name %}
     A très vite,<br>

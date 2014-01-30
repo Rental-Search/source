@@ -17,12 +17,12 @@ Vous pouvez voir le commentaire sur votre tableau de bord en cliquant ci dessous
 
 {% if not comment.booking.ownercomment and comment.booking.owner == patron %}
 {% trans "Vous pouvez aussi commenter la location en cliquant sur le lien ci dessous" %} :
-{{ protocol }}://{{ site.domain }}{% url comments %}
+{{ protocol }}://{{ site.domain }}{% url 'comments' %}
 {% endif %}
 
 {% if not comment.booking.borrowercomment and comment.booking.borrower == patron %}
 {% trans "Vous pouvez aussi commenter la location en cliquant sur le lien ci dessous" %} :
-{{ protocol }}://{{ site.domain }}{% url comments %}
+{{ protocol }}://{{ site.domain }}{% url 'comments' %}
 {% endif %}
 
 {% blocktrans with site.name as site_name %}

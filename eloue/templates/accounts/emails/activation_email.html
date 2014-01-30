@@ -20,7 +20,7 @@
 
                             {% endblocktrans %}
                             <p style="margin-top: 0px; text-align: center;">
-                            	<a href="{{ protocol }}://{{ site.domain }}{% url auth_activate activation_key %}" style="text-decoration: none; cursor: pointer; display: inline-block; background-color: #f36100; padding: 10px; font-family: Arial, sans-serif; line-height: 18px; font-size: 14px; color: #fff; border: 1px solid #c85007; vertical-align: 7%;">
+                            	<a href="{{ protocol }}://{{ site.domain }}{% url 'auth_activate activation_key' %}" style="text-decoration: none; cursor: pointer; display: inline-block; background-color: #f36100; padding: 10px; font-family: Arial, sans-serif; line-height: 18px; font-size: 14px; color: #fff; border: 1px solid #c85007; vertical-align: 7%;">
                                     {% trans "Activer votre compte" %}
                             	</a>
                             </p>

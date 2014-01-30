@@ -7,13 +7,13 @@
 {% block content %}
 <div id="publish-new-ad" class="container-main">
     <ul class="breadcrumb">
-    	<li><a href="{% url home %}">{% trans "Accueil" %}</a></li>
+    	<li><a href="{% url 'products.views.homepage' %}">{% trans "Accueil" %}</a></li>
     	<li>{% trans "Déposer une annonce" %}</li>
     </ul>
     <div class="one-content"> 
         <h1>{% trans "Déposer une annonce"%}
             {% if not request.user.current_subscription %}
-            <a href="{% url patron_subscription %}" class="btn-pro-access">{% trans "Professionnel ? Accédez à notre espace pro"%}</a>
+            <a href="{% url 'accounts.views.patron_subscription' %}" class="btn-pro-access">{% trans "Professionnel ? Accédez à notre espace pro"%}</a>
             {% endif %}
         </h1>
         {% if not request.user.current_subscription %}
@@ -25,7 +25,7 @@
         {% endif %}
         <div class="publish-ads">
             <div class="publish-ad first">
-                <a href="{% url car_product_create %}" class="btn-publish-ad">
+                <a href="{% url 'car_product_create' %}" class="btn-publish-ad">
                     <i class="add-car"></i><br>
                     {% trans "Déposer une voiture"%}
                 </a>
@@ -36,7 +36,7 @@
                 {% endif %}
             </div>
             <div class="publish-ad">
-                <a href="{% url real_estate_product_create %}" class="btn-publish-ad">
+                <a href="{% url 'real_estate_product_create' %}" class="btn-publish-ad">
                     <i class="add-home"></i><br>
                     {% trans "Déposer un logement"%}
                 </a>
@@ -47,7 +47,7 @@
                 {% endif %}
             </div>
             <div class="publish-ad">
-                <a href="{% url product_create %}" class="btn-publish-ad">
+                <a href="{% url 'product_create' %}" class="btn-publish-ad">
                     <i class="add-items"></i><br>
                     {% trans "Déposer un objet"%}
                 </a>

@@ -2,7 +2,7 @@
 <ul class="messages">
 	{% for thread in thread_list %}
 	<li>
-		<a href="{% url thread_details thread_id=thread.id%}" class="m-img">
+		<a href="{% url 'thread_details' thread_id=thread.id%}" class="m-img">
 			{% if request.user == thread.sender %}
 				{% if thread.recipient.avatar %}
 					<img src="{{ thread.recipient.thumbnail.url }}" widht="60" height="60" alt=""/>
@@ -32,7 +32,7 @@
 		{% endif %}
 			<div class="m-body">
 				<p class="m-sender">
-					<a href="{% url thread_details thread_id=thread.id%}">
+					<a href="{% url 'thread_details' thread_id=thread.id%}">
 						{% if request.user == thread.sender %}
 							{{thread.recipient.username }}
 						{% else %}
@@ -40,8 +40,8 @@
 						{% endif %}
 					</a>
 					{{ thread.last_message.sent_at|date:_("DATETIME_FORMAT") }}
-					<span class="m-action"><a href="{% url thread_details thread_id=thread.id %}">{% trans "Lire" %}</a></span> -
-					<span class="m-action"><a href="{% url archive_thread thread_id=thread.id %}">{% trans "Archiver" %}</a></span>
+					<span class="m-action"><a href="{% url 'thread_details' thread_id=thread.id %}">{% trans "Lire" %}</a></span> -
+					<span class="m-action"><a href="{% url 'archive_thread' thread_id=thread.id %}">{% trans "Archiver" %}</a></span>
 				</p>
 				<div class="m-subject">{{ thread.subject }}</div>
 				<span class="message-dial"></span>

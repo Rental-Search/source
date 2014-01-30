@@ -6,18 +6,18 @@
 <div id="content" class="xgrid">
     <div class="content-top">
         <ul id="menu" class="x12">
-			<li class="menu-tab first"><a href="{% url dashboard %}">{% trans "Tableau de bord" %}</a></li>
-			<li class="menu-tab"><a href="{% url owner_booking %}">{% trans "Propriétaire" %}</a></li>
-			<li class="menu-tab"><a href="{% url borrower_booking %}">{% trans "Locataire" %}</a></li>
-			<li class="menu-tab"><a href="{% url patron_edit %}">{% trans "Mon compte" %}</a></li>
-			<li class="menu-tab"><a href="{% url messages_inbox %}">{% blocktrans %}Messages({{ messages_inbox_count }}){% endblocktrans %}</a></li>
+			<li class="menu-tab first"><a href="{% url 'accounts.views.dashboard' %}">{% trans "Tableau de bord" %}</a></li>
+			<li class="menu-tab"><a href="{% url 'owner_booking' %}">{% trans "Propriétaire" %}</a></li>
+			<li class="menu-tab"><a href="{% url 'borrower_booking' %}">{% trans "Locataire" %}</a></li>
+			<li class="menu-tab"><a href="{% url 'accounts.views.patron_edit' %}">{% trans "Mon compte" %}</a></li>
+			<li class="menu-tab"><a href="{% url 'messages_inbox' %}">{% blocktrans %}Messages({{ messages_inbox_count }}){% endblocktrans %}</a></li>
 		</ul>
 	</div>
 	<div id="sub-menu">
 		<ul class="x12">
-			<li class="sub-tab first selected"><a href="{% url messages_inbox %}">{% trans "Messages reçus"%}</a></li>
-			<li class="sub-tab"><a href="{% url messages_outbox %}">{% trans "Messages envoyés" %}</a></li>
-			<li class="sub-tab"><a href="{% url messages_trash %}">{% trans "Messages supprimés" %}</a></li>
+			<li class="sub-tab first selected"><a href="{% url 'messages_inbox' %}">{% trans "Messages reçus"%}</a></li>
+			<li class="sub-tab"><a href="{% url 'messages_outbox' %}">{% trans "Messages envoyés" %}</a></li>
+			<li class="sub-tab"><a href="{% url 'messages_trash' %}">{% trans "Messages supprimés" %}</a></li>
 		</ul>
 	</div>
 	<div class="content-header x12">
@@ -29,9 +29,9 @@
 	</div>
 	<div id="message-action" class="x12">
 		{% ifequal message.recipient.pk user.pk %}
-		<a href="{% url reply_product_related_message message.id %}">{% trans "Reply" %}</a> -
+		<a href="{% url 'reply_product_related_message' message.id %}">{% trans "Reply" %}</a> -
 		{% endifequal %}
-		<a href="{% url messages_delete message.id %}">{% trans "Delete" %}</a>
+		<a href="{% url 'messages_delete' message.id %}">{% trans "Delete" %}</a>
 	</div>
 </div>
 {% endblock %}

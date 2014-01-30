@@ -37,7 +37,7 @@
     <div class="one-content">
       <h1>{% trans "Erreur sur le serveur" %}</h1>
       <p style="margin-bottom: 20px;">
-      {% url contact as contact_url %}
+      {% url 'contact' as contact_url %}
           {% blocktrans %}
             Si l'erreur persiste, merci de nous <a href="emailTo:contact@e-loue.com">contacter</a>.
           {% endblocktrans %}

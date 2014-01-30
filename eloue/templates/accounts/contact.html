@@ -6,13 +6,13 @@
 {% block content %}
 <div id="wizard-page" class="container-main">
 	<ul class="breadcrumb" >
-		<li><a href="{% url home %}">{% trans "Accueil" %}</a></li>
+		<li><a href="{% url 'products.views.homepage' %}">{% trans "Accueil" %}</a></li>
 		<li>{% trans "Contactez-nous" %}</li>
 	</ul>
 	<div class="content-main">
 		<h1>{% trans "Contactez-nous" %}</h1>
         {% include "partials/alerts_message.html" %}
-		<form class="form-horizontal" method="post" action="{% url contact %}">
+		<form class="form-horizontal" method="post" action="{% url 'accounts.views.contact' %}">
 			{% csrf_token %}
 			{% for formfield in form %}
 			<div class="control-group {% if formfield.errors %} error {% endif %}">

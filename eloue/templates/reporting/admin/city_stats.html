@@ -26,7 +26,7 @@
 			<tbody>
 				{% for city in product_stats %}
 				<tr>
-					<td><a href="{% url stats_by_city_detail 'paris' %}">{{ city.city }}</a></td>
+					<td><a href="{% url 'stats_by_city_detail' 'paris' %}">{{ city.city }}</a></td>
 					<td>{{ city.id__count }}</td>
 				</tr>
 				{% endfor %}
@@ -45,7 +45,7 @@
 			<tbody>
 				{% for city in patron_stats %}
 				<tr>
-					<td><a href="{% url stats_by_city_detail 'paris' %}">{{ city.city }}</a></td>
+					<td><a href="{% url 'stats_by_city_detail' 'paris' %}">{{ city.city }}</a></td>
 					<td>{{ city.id__count }}</td>
 				</tr>
 				{% endfor %}
@@ -64,7 +64,7 @@
 			<tbody>
 				{% for city in booking_stats %}
 				<tr>
-					<td><a href="{% url stats_by_city_detail 'paris' %}">{{ city.city }}</a></td>
+					<td><a href="{% url 'stats_by_city_detail' 'paris' %}">{{ city.city }}</a></td>
 					<td>{{ city.pk__count }}</td>
 				</tr>
 				{% endfor %}
@@ -83,7 +83,7 @@
 			<tbody>
 				{% for city in booking_amounts_stats %}
 				<tr>
-					<td><a href="{% url stats_by_city_detail 'paris' %}">{{ city.city }}</a></td>
+					<td><a href="{% url 'stats_by_city_detail' 'paris' %}">{{ city.city }}</a></td>
 					<td>{{ city.total_amount__sum }}</td>
 				</tr>
 				{% endfor %}

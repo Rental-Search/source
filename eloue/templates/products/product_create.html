@@ -6,8 +6,8 @@
 {% block content %}
 <div id="wizard-page" class="container-main">
 	<ul class="breadcrumb" >
-		<li><a href="{% url home %}">{% trans "Accueil" %}</a></li>
-		<li><a href="{% url publish_new_ad %}">{{ wizard_title }}</a></li>
+		<li><a href="{% url 'products.views.homepage' %}">{% trans "Accueil" %}</a></li>
+		<li><a href="{% url 'products.views.publish_new_ad' %}">{{ wizard_title }}</a></li>
 		<li>{{ form.title }}</li>
 	</ul>
 	<div class="content-main">

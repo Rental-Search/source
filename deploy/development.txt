@@ -29,13 +29,13 @@ django-pipeline==1.2.17
 boto==2.5.2
 -e git://github.com/e-loue/pyPdf.git#egg=pyPdf
 -e git://github.com/e-loue/python-oauth2.git#egg=oauth2
-django==1.4.2
+django==1.5.5
 django-debug-toolbar==0.9.4
 -e git://github.com/e-loue/django-announcements.git#egg=announcements
 -e git://github.com/e-loue/django-faq.git#egg=faq
 -e git://github.com/e-loue/django-haystack.git@1.2.X#egg=haystack
 django-storages==1.1.5
--e git://github.com/e-loue/django-tastypie.git#egg=tastypie
+-e git://github.com/toastdriven/django-tastypie.git#egg=tastypie
 django-fsm==1.4.1
 -e git://github.com/e-loue/django-lean.git#egg=django_lean
 -e git://github.com/e-loue/django-lint.git#egg=django-lint

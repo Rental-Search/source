@@ -35,8 +35,8 @@
 			<tbody>
 				{% for product in booking_stats %}
 				<tr>
-					<td><a href="{% url stats_by_product_detail product.pk %}">{{ product.summary }}</a></td>
-					<td><a href="{% url stats_by_patron_detail product.owner.pk %}">{{ product.owner }}</a></td>
+					<td><a href="{% url 'stats_by_product_detail' product.pk %}">{{ product.summary }}</a></td>
+					<td><a href="{% url 'stats_by_patron_detail' product.owner.pk %}">{{ product.owner }}</a></td>
 					<td>{{ product.num_bookings }}</td>
 				</tr>
 				{% endfor %}
@@ -55,7 +55,7 @@
 			<tbody>
 				{% for owner in patron_stats %}
 				<tr>
-					<td><a href="{% url stats_by_patron_detail owner.owner__pk %}">{{ owner.owner__username }}</a></td>
+					<td><a href="{% url 'stats_by_patron_detail' owner.owner__pk %}">{{ owner.owner__username }}</a></td>
 					<td>{{ owner.num_products }}</td>
 				</tr>
 				{% endfor %}
@@ -74,7 +74,7 @@
 			<tbody>
 				{% for owner in owner_stats %}
 				<tr>
-					<td><a href="{% url stats_by_patron_detail owner.owner__pk %}">{{ owner.owner__username }}</a></td>
+					<td><a href="{% url 'stats_by_patron_detail' owner.owner__pk %}">{{ owner.owner__username }}</a></td>
 					<td>{{ owner.num_bookings }}</td>
 				</tr>
 				{% endfor %}

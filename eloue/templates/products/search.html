@@ -8,19 +8,19 @@
         <div class="x12">
 		  <h1>{% trans "Avec e-loue, tout se loue !" %}</h1>
 		</div>
-		<form class="form" action="{% url product_list %}">
+		<form class="form" action="{% url 'product_list' %}">
 		<div class="x5">
 			<p>
 				<label for="id_q">{% trans "Que recherchez-vous ?" %}</label><br />
 				{{ form.q }}<br />
-				<span>{% trans "Exemple :" %} </span> <a href="{% url product_list %}?q={% trans "voiture" %}">{% trans "Voiture" %}</a>, <a href="{% url product_list %}?q={% trans "chèvre" %}">{% trans "Chèvre" %}</a>, <a href="{% url product_list %}?q={% trans "ski" %}">{% trans "Ski" %}</a>, <a href="{% url product_list %}?q={% trans "robe" %}">{% trans "Robe" %}</a>
+				<span>{% trans "Exemple :" %} </span> <a href="{% url 'product_list' %}?q={% trans "voiture" %}">{% trans "Voiture" %}</a>, <a href="{% url 'product_list' %}?q={% trans "chèvre" %}">{% trans "Chèvre" %}</a>, <a href="{% url 'product_list' %}?q={% trans "ski" %}">{% trans "Ski" %}</a>, <a href="{% url 'product_list' %}?q={% trans "robe" %}">{% trans "Robe" %}</a>
 			</p>
 		</div>
 		<div class="x5">
 			<p>
 				<label>{% trans "Où ?" %}</label><br />
 				{{ form.l }}<br />
-				<span>{% trans "Exemple :" %} </span> <a href="{% url product_list %}?l={% trans "Paris, 75012" %}">{% trans "Paris, 75012" %}</a>
+				<span>{% trans "Exemple :" %} </span> <a href="{% url 'product_list' %}?l={% trans "Paris, 75012" %}">{% trans "Paris, 75012" %}</a>
 			</p>
 		</div>
 		<div class="x2">

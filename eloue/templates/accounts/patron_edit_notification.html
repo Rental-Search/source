@@ -151,7 +151,7 @@ $(document).ready(function(){
 	  {% trans "Pour bénéficier de cet avantage, accédez à l'espace pro pour en savoir plus :"%}
 	</p>
 	<p style="margin-bottom: 50px;">
-	  <a href="{% url patron_subscription %}" class="btn-pro-access">{% trans "Professionnel ? Accédez à notre espace pro"%}</a>
+	  <a href="{% url 'accounts.views.patron_subscription' %}" class="btn-pro-access">{% trans "Professionnel ? Accédez à notre espace pro"%}</a>
 	<p>
 	<h2>{% trans "Notifications par SMS" %}</h2>
 	<img src="{{ STATIC_URL }}images/options_pro/sms_notification.png" alt="Mise en avant" width="180" height="180" style="margin-bottom: 10px;">
@@ -160,7 +160,7 @@ $(document).ready(function(){
 	  {% trans "Pour bénéficier de cet avantage, accédez à l'espace pro pour en savoir plus :"%}
 	</p>
 	<p>
-	  <a href="{% url patron_subscription %}" class="btn-pro-access">{% trans "Professionnel ? Accédez à notre espace pro"%}</a>
+	  <a href="{% url 'accounts.views.patron_subscription' %}" class="btn-pro-access">{% trans "Professionnel ? Accédez à notre espace pro"%}</a>
 	<p>
 </div>
 {% endif %}

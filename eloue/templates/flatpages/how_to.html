@@ -6,7 +6,7 @@
 {% block content %}
 <div id="how-to" class="container-main">
 	<ul class="breadcrumb">
-		<li><a href="{% url home %}">{% trans "Accueil" %}</a></li>
+		<li><a href="{% url 'products.views.homepage' %}">{% trans "Accueil" %}</a></li>
 		<li>{% trans "Comment ça marche ?" %}</li>
 	</ul>
 	<h1>{{ flatpage.title }}</h1>

@@ -11,11 +11,11 @@
 
 {% block content-aside-profil %}
     {% if request.user == booking.borrower %}
-        {% if booking.state == "authorized"%}{% url borrower_booking_authorized as return_url %}{% endif %}
-        {% if booking.state == "pending"%}{% url borrower_booking_pending as return_url %}{% endif %}
-        {% if booking.state == "ongoing"%}{% url borrower_booking_ongoing as return_url %}{% endif %}
+        {% if booking.state == "authorized"%}{% url 'borrower_booking_authorized' as return_url %}{% endif %}
+        {% if booking.state == "pending"%}{% url 'borrower_booking_pending' as return_url %}{% endif %}
+        {% if booking.state == "ongoing"%}{% url 'borrower_booking_ongoing' as return_url %}{% endif %}
         {% if booking.state != "authorized" and booking.state != "pending" and booking.state != "ongoing" %}
-            {% url borrower_booking_history as return_url %}
+            {% url 'borrower_booking_history' as return_url %}
         {% endif %}
     {% endif %}
         <div class="previous-sub-bar">

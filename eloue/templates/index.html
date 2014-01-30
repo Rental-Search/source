@@ -15,7 +15,7 @@
         <h1 class="rent-anythings">{% trans "Rejoignez la communauté des e-loueurs !" %} <br> 
             <small>{% trans "Au lieu d'acheter, louez pour augmenter votre pouvoir d'usage." %}</small>
         </h1>
-        <form action="{% url product_list %}" method="get">
+        <form action="{% url 'product_list' %}" method="get">
             <p class="what">
                 {{form.q}}
                 <input type="submit" value="{% trans "Rechercher" %}" class="btn bt-big-orange" />

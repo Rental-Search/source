@@ -38,7 +38,7 @@
                 <tr>
                     <td valign="top" style="padding-top: 20px;border-collapse: collapse;">
                         <div style="color: #505050;font-family: Helvetica;font-size: 14px;line-height: 150%;text-align: right;">
-                            <a href="{{ site_url }}{% url thread_details message.thread.pk %}" style="text-decoration: none; cursor: pointer; display: inline-block; background-color: #f36100; padding: 10px; font-family: Arial, sans-serif; line-height: 18px; font-size: 14px; color: #fff; border: 1px solid #c85007; vertical-align: 7%;">
+                            <a href="{{ site_url }}{% url 'thread_details' message.thread.pk %}" style="text-decoration: none; cursor: pointer; display: inline-block; background-color: #f36100; padding: 10px; font-family: Arial, sans-serif; line-height: 18px; font-size: 14px; color: #fff; border: 1px solid #c85007; vertical-align: 7%;">
                                     {% trans "Répondre au message" %}
                             </a>
                         </div>                                                                    

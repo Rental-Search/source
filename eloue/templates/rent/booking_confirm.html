@@ -6,7 +6,7 @@
 {% block content %}
 <div id="wizard-page" class="container-main">
   <ul class="breadcrumb">
-    <li><a href="{% url home %}">{% trans "Accueil" %}</a></li>
+    <li><a href="{% url 'products.views.homepage' %}">{% trans "Accueil" %}</a></li>
     <li><a href="{{ request.HTTP_REFERER }}">{{ wizard_title }}</a></li>
     <li>{% trans "Paiement de la réservation" %}</li>
   </ul>

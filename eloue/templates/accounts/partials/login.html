@@ -43,7 +43,7 @@
   </div>
   <div class="control-group password-group">
     {{ form.password }}
-    <span class="help-inline"><a href="{% url password_reset %}" >{% trans "Mot de passe oublié" %}</a></span>
+    <span class="help-inline"><a href="{% url 'password_reset' %}" >{% trans "Mot de passe oublié" %}</a></span>
     {% if form.password.errors %}
     <span class="help-inline">
       {% for error in form.password.errors %}
