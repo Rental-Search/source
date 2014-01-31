@@ -1,0 +1,123 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Mettre en location" %}{% endblock %}
+
+
+{% block content %}
+<div id="publish-new-ad" class="container-main">
+    <ul class="breadcrumb">
+    	<li><a href="{% url home %}">{% trans "Accueil" %}</a></li>
+    	<li>{% trans "Déposer une annonce" %}</li>
+    </ul>
+    <div class="one-content"> 
+        <h1 style="margin-bottom: 30px;">{% trans "Déposer une annonce"%}</h1>
+        {% if not request.user.current_subscription %}
+        <p style="text-align:center; margin-bottom: 40px;">
+            <iframe width="420" height="236" src="//www.youtube.com/embed/nERu_2pSSb0" frameborder="0" allowfullscreen></iframe>
+        </p>
+        <p class="publish-intro" style="text-align: left; margin-left: 100px; margin-bottom: 40px;">
+            {% blocktrans %}
+                <span style="color:#f36100;">Gagnez de l'argent</span> en toute simplicité : louez les objets que vous utilisez peu !<br><br>
+                <span style="color: #6eb924">Dites-nous ce que vous voulez mettre en location...</span>
+            {% endblocktrans %}
+        </p>
+        {% endif %}
+        <div class="publish-ads">
+            <div class="publish-ad first">
+                <a href="{% url car_product_create %}" class="btn-publish-ad">
+                    <i class="add-car"></i><br>
+                    {% trans "Déposer une voiture"%}
+                </a>
+                {% if not request.user.is_professional %}
+                <p style="margin-bottom: 13px;">{% trans "Assurance comprise"%}<p>
+                <img src="{{ STATIC_URL }}images/logo_mma.png" alt="location de voiture assuré par MMA" width="116" style="margin-bottom: 5px;"><br>
+                <a href="/assurance-tranquillite/#car">({% trans "En savoir plus" %})</a>
+                {% endif %}
+            </div>
+            <div class="publish-ad">
+                <a href="{% url real_estate_product_create %}" class="btn-publish-ad">
+                    <i class="add-home"></i><br>
+                    {% trans "Déposer un logement"%}
+                </a>
+                {% if not request.user.is_professional %}
+                <p style="margin-bottom: 5px;">{% trans "Assurance comprise"%}<p>
+                <img src="{{ STATIC_URL }}images/e-loue_europ_assistance.png" alt="location de logement assuré par Europ assistance" width="72"><br>
+                <a href="/assurance-tranquillite/#real-estate">({% trans "En savoir plus" %})</a>
+                {% endif %}
+            </div>
+            <div class="publish-ad">
+                <a href="{% url product_create %}" class="btn-publish-ad">
+                    <i class="add-items"></i><br>
+                    {% trans "Déposer un objet"%}
+                </a>
+                {% if not request.user.is_professional %}
+                <p>{% trans "Assurance comprise"%}<p>
+                 <img src="{{ STATIC_URL }}images/assurone.png" alt="location d'un objet assuré par Assurone" width="73" style="margin-bottom: 3px;"><br>
+                <a href="/assurance-tranquillite/#goods">({% trans "En savoir plus" %})</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    {% if request.user.current_subscription %}
+    <div class="one-content" style="width: 760px; margin-left: 120px; margin-right: 120px;">
+        <div class="pro-options" style="width: 730px;">
+            <ul class="first" style="width: 345px;">
+                <li style="text-align: justify;">
+                    <span class="title-option">Publiez vos annnonces</span><br>
+                    Vous publiez vos annonces directement sur le site. Si vous avez un volume très important d'annonces contactez-nous pour qu'on intègre directement votre catalogue.
+                </li>
+            </ul>
+            <ul style="width: 345px;">
+                <li style="text-align: justify;">
+                    <span class="title-option">Mise en relation</span><br>
+                    Les membres de e-loue peuvent voir vos annonces et vous contactent directement s'il sont intéressés. La réservation et le paiement se feront directement dans votre magasin ou sur votre site internet.
+                </li>
+            </ul>
+        </div>
+    </div>
+    {% else %}    
+    <div class="advantage ht-fonction">
+        <ul class="ht-f-col">
+            <li>
+                <div class="ht-icon lock"></div>
+                <div class="ht-f-desc">
+                    <span>Sécurité</span><br>
+                    Paiement garanti par la Société Générale<br>
+                    Blocage de la caution pendant la location<br>
+                    Contrat de location pré-rempli<br>
+                </div>
+            </li>
+            <li>
+                <div class="ht-icon money"></div>
+                <div class="ht-f-desc"><span>Tarif</span><br>
+                    Pas de frais d'inscription<br>
+                    Mise en location GRATUITE<br>
+                    Frais de 20% sur la location (seulement si vous louez)<br>
+                </div>
+            </li>
+        </ul>
+        <ul class="ht-f-col">
+            <li>
+                <div class="ht-icon assurancy"></div>
+                <div class="ht-f-desc">
+                    <span>Fléxibilité</span><br>
+                    Possibilité de refuser une location<br>
+                    Gestion de votre calendrier de disponibilités<br>
+                    Communiquez avec les locataires par messagerie<br>
+                </div>
+            </li>
+            <li>
+                <div class="ht-icon people"></div>
+                <div class="ht-f-desc">
+                    <span>Forte visibilité</span><br>
+                    Annonce visible sur les moteurs de recherche.<br>
+                    Parutions dans la presse<br>
+                    Annonce sera visible sur les réseaux sociaux<br>
+                </div>
+            </li>
+        </ul>
+    </div>
+    {% endif %}
+</div>{# container-main #}
+{% endblock %}
