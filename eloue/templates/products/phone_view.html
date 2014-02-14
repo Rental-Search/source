@@ -112,13 +112,16 @@
 		<h1 style="margin: 30px 265px">{% trans "Besoin d'informations avant de faire la location ?"%}</h1>
 		<div class="content-main" style="margin: 0 180px;">
 			<div class="step">
-				<h2>Etape 1 : Téléphonez au propriétaire de l'annonce</h2>
-				<p>Cet appel vous sera facturé 1,35 €/ appel + 0,34 €/ mn. Après 21h, afin de respecter la tranquillité des membres du site, merci de contacter les loueurs uniquement  par messagerie.</p>
+				<h2><span style="color: #ff7200">Etape 1</span> : Téléphonez au propriétaire de l'annonce</h2>
+				<p>Cet appel vous sera facturé 1,35 €/ appel + 0,34 €/ mn. Après 21h, afin de respecter la tranquillité des membres du site, merci de contacter les loueurs uniquement  par <a href="{% url message_create product.pk product.owner.pk %}">messagerie</a>.</p>
 				<span class="number">{{ number }}</span>
 			</div>
 			<div class="step">
-				<h2>Etape 2 : Réservez en ligne</h2>
-				<p>Pour le prix affiché un paiement et une caution sécurisés, une assurance, un contrat de location et de contribuer aux notations et commentaires !</p>
+				<h2><span style="color: #ff7200">Etape 2</span> : Réservez en ligne</h2>
+				<p>
+					Dès que vous êtes mis d'accord par téléphone avec le loueur, effectuez votre réservation en ligne : Paiment et caution sécurisés, assurance incluse dans le prix affiché, contrat de location pré-rempli, contribution aux notations et commentaires.
+
+				</p>
 				<div style="width: 300px; margin: 30px auto 0;">
 				
 					<div class="booking-block">

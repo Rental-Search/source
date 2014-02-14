@@ -198,7 +198,7 @@ def phone_create(request, *args, **kwargs):
     s = etree.tostring(generate, pretty_print=False)
     base_url = urlparse.urlparse('http://mer.viva-multimedia.com/v2/xmlRequest.php')
     url = '%s?%s' % (base_url.path, urllib.urlencode({'xml': '%s%s' % (xml, s)}))
-    with contextlib.closing(HTTPConnection(base_url.netloc, timeout=10)) as conn:
+    with contextlib.closing(HTTPConnection(base_url.netloc, timeout=20)) as conn:
         conn.request("GET", url)
         response = conn.getresponse()
         content = response.read()
