@@ -202,7 +202,6 @@ def phone_create(request, *args, **kwargs):
         conn.request("GET", url)
         response = conn.getresponse()
         content = response.read()
-    print content
     number = etree.XML(content)[2][0].text
     
     wizard = PhoneBookingWizard([BookingForm, EmailAuthenticationForm,])
