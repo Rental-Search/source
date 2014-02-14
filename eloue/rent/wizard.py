@@ -168,10 +168,10 @@ class BookingWizard(MultiPartFormWizard):
         super(BookingWizard, self).process_step(request, form, step)
         self.extra_context.setdefault('preview', {}).update(form.cleaned_data)
     
-    def parse_params(self, request, product, *args, **kwargs):
+    def parse_params(self, request, product, number, *args, **kwargs):
         self.extra_context['product'] = product
         self.extra_context['prices'] = product.prices.filter(unit=1)
-        
+        self.extra_context['number'] = number
         self.extra_context['comments'] = BorrowerComment.objects.filter(booking__product=product)
         self.extra_context['insurance_available'] = settings.INSURANCE_AVAILABLE
         if product.is_archived:
@@ -189,4 +189,16 @@ class BookingWizard(MultiPartFormWizard):
             return 'rent/booking_confirm.html'
         else:
             return 'accounts/auth_missing.html'
-    
+
+
+class PhoneBookingWizard(BookingWizard):
+
+    def get_template(self, step):
+        if issubclass(self.form_list[step], EmailAuthenticationForm):
+            return 'accounts/auth_login.html'
+        elif issubclass(self.form_list[step], BookingForm):
+            return 'products/phone_view.html'
+        elif issubclass(self.form_list[step], (BookingCreditCardForm, ExistingBookingCreditCardForm, A)):
+            return 'rent/booking_confirm.html'
+        else:
+            return 'accounts/auth_missing.html'

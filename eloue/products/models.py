@@ -29,7 +29,7 @@ from django.utils.translation import ugettext as _
 
 from mptt.models import MPTTModel
 
-from eloue.accounts.models import Patron, Address, ProAgency
+from eloue.accounts.models import Patron, Address, ProAgency, PhoneNumber
 from eloue.geocoder import GoogleGeocoder
 from eloue.products.fields import SimpleDateField
 from eloue.products.manager import ProductManager, PriceManager, QuestionManager, CurrentSiteProductManager, TreeManager
@@ -197,6 +197,7 @@ class Product(models.Model):
     currency = models.CharField(max_length=3, choices=CURRENCY, default=DEFAULT_CURRENCY)
     description = models.TextField()
     address = models.ForeignKey(Address, related_name='products')
+    phone = models.ForeignKey(PhoneNumber, related_name='products', null=True)
     quantity = models.IntegerField(_(u'Quantité'), default=1)
     shipping = models.BooleanField(_(u'Livraison possible'), default=False)
 

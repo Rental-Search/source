@@ -56,6 +56,7 @@ class ProductWizard(MultiPartFormWizard):
         product_form = form_list[0]
         product_form.instance.owner = self.new_patron
         product_form.instance.address = self.new_address
+        product_form.instance.phone = self.new_phone
         product = product_form.save()
         
         for unit in UNIT.keys():

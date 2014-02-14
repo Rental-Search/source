@@ -99,7 +99,7 @@
         function availability(year, month, inst) {
             $.ajax({
                 type: 'GET',
-                url: 'occupied_date/',
+                url: OCCUPIED_DATE,
                 dataType: 'json',
                 data: {year:year, month:month},
                 success: function(response) {
@@ -588,10 +588,7 @@
         {% else %}
             <div id="owner" class="info-block">
                 <h2>
-                    {% trans "Particulier" %}
-                    <small>
-                        <a href="{{ patron.get_absolute_url }}" >({% trans " Voir toutes ses annonces "%})</a>
-                    </small>
+                    {% trans "Posez-moi vos questions" %}
                 </h2>
                 <a href="{{ patron.get_absolute_url }}" class="onwer-avatar">
                     {% if patron.avatar %}
@@ -603,20 +600,32 @@
                 <p class="owner-username">
                     <a href="{{ patron.get_absolute_url }}">{{ patron.username|truncate:13 }}</a>
                 </p>
-                <address>
-                    {% if patron.default_address %}
-                        {% with patron.default_address as default_address %}
-                            {{ default_address.city }} - {{ default_address.zipcode }}
-                        {% endwith %}
-                    {% else %}
-                        {% with patron.addresses.all|first as default_address %}
-                            {{ default_address.city }} - {{ default_address.zipcode }}
-                        {% endwith %}
+                {% if product.phone %}
+                <a href="{{ product.get_absolute_url }}appeler/" class="btn-contactme" style="margin-bottom: 7px; width: 93px; text-align: center;">{% trans "Appeler" %}</a>
+                {% endif %}
+                <a href="{% url message_create product.pk patron.pk %}" class="btn-contactme" style="margin-bottom: 8px; width: 93px; text-align: center">{% trans "Message" %}</a>
+                {% cache 43200 response_stats patron.pk %}
+                <table class="answer-stats" style="margin-top: 10px;">
+                    {% if patron.average_note %}
+                    <tr>
+                        <th >{% trans "Evaluations" %}</th>
+                        <td>
+                            <span class="stars empty"><span class="stars filled_{{ patron.average_note }}"></span></span>
+                        </td>
+                    </tr>
                     {% endif %}
-                </address>
-                <a href="{% url message_create product.pk patron.pk %}" class="btn-contactme">{% trans "Contactez-moi" %}</a>
-                <span style="margin-top: 0; margin-bottom: 10px; margin-left: 20px;" class="stars empty"><span class="stars filled_{{ patron.average_note }}"></span></span>
-                {% include "accounts/partials/response_stats.html" %}
+                    <tr>
+                        <th class="answer-rate">{% trans "Taux de réponse" %}</th>
+                        <td>
+                            {{patron.response_rate|floatformat:"0"}}%
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="answer-time">{% trans "Temps de réponse moyen" %}</th>
+                        <td>{{patron.response_time}}</td>
+                    </tr>
+                </table>
+                {% endcache %}
             </div>{#  owner #}
         {% endif %}
         {% endwith %}

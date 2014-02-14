@@ -29,7 +29,7 @@ from eloue.accounts.forms import EmailAuthenticationForm
 from eloue.products.models import Product, PAYMENT_TYPE, UNIT
 from eloue.rent.forms import BookingForm, BookingConfirmationForm, BookingStateForm, PreApprovalIPNForm, PayIPNForm, IncidentForm
 from eloue.rent.models import Booking, ProBooking
-from eloue.rent.wizard import BookingWizard
+from eloue.rent.wizard import BookingWizard, PhoneBookingWizard
 from eloue.utils import currency
 from datetime import datetime, timedelta, date
 from eloue.rent.utils import get_product_occupied_date, timesince
@@ -165,6 +165,50 @@ def booking_create(request, *args, **kwargs):
     wizard = BookingWizard([BookingForm, EmailAuthenticationForm,])
     return wizard(request, product, product.subtype, *args, **kwargs)
 
+@mobify
+@never_cache
+@secure_required
+def phone_create(request, *args, **kwargs):
+    product = get_object_or_404(Product.on_site.active().select_related(
+        'address', 'category', 'owner', 'owner__default_address', 
+        'carproduct', 'realestateproduct'
+        ), pk=kwargs['product_id']).subtype
+    
+    from lxml import etree
+    import contextlib
+    import urlparse
+    from httplib import HTTPConnection
+    import urllib
+
+    generate = etree.Element('generate')
+    siteId = etree.Element('siteId')
+    siteId.text = '45364001'
+    idClient = etree.Element('idClient')
+    idClient.text = '%s%s' % (request.META['REMOTE_ADDR'], request.META['HTTP_USER_AGENT'])
+    number = etree.Element('numero')
+    number.text = product.phone.number
+    country = etree.Element('pays')
+    country.text = 'FR'
+    generate.append(siteId)
+    generate.append(idClient)
+    generate.append(number)
+    generate.append(country)
+
+    xml = '<?xml version="1.0" encoding="UTF-8"?>\n'
+    s = etree.tostring(generate, pretty_print=False)
+    base_url = urlparse.urlparse('http://mer.viva-multimedia.com/v2/xmlRequest.php')
+    url = '%s?%s' % (base_url.path, urllib.urlencode({'xml': '%s%s' % (xml, s)}))
+    with contextlib.closing(HTTPConnection(base_url.netloc, timeout=10)) as conn:
+        conn.request("GET", url)
+        response = conn.getresponse()
+        content = response.read()
+    print content
+    number = etree.XML(content)[2][0].text
+    
+    wizard = PhoneBookingWizard([BookingForm, EmailAuthenticationForm,])
+
+
+    return wizard(request, product, number, product.subtype, *args, **kwargs)
 
 from django.views.generic import DetailView
 from django.utils.decorators import method_decorator
