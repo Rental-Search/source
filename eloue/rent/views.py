@@ -204,10 +204,12 @@ def phone_create(request, *args, **kwargs):
         content = response.read()
     number = etree.XML(content)[2][0].text
     
+    num = lambda s: ' '.join(' '.join(s[i:i+2] for i in range(0, len(s), 2)).split())
+
     wizard = PhoneBookingWizard([BookingForm, EmailAuthenticationForm,])
 
 
-    return wizard(request, product, number, product.subtype, *args, **kwargs)
+    return wizard(request, product, num(number), product.subtype, *args, **kwargs)
 
 from django.views.generic import DetailView
 from django.utils.decorators import method_decorator
