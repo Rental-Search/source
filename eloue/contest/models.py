@@ -8,6 +8,12 @@ class Gamer(models.Model):
 	patron = models.ForeignKey(Patron)
 	birthday = models.DateTimeField(null=True)
 	like_facebook = models.BooleanField(default=False)
+	created_at = models.DateTimeField(editable=False)
+	
+	def save(self, *args, **kwargs):
+		if not self.created_at:
+			self.created_at = datetime.now()
+		super(Gamer, self).save(*args, **kwargs)
 
 
 class ProductGamer(models.Model):
