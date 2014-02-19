@@ -12,8 +12,25 @@
  <head>
  <body>
  	<div class="contest">
- 	{% block content %}{% endblock %}  
-    </div>
-    {% block tail %}{% endblock %}
+ 		<div class="contest-container">
+	 		<div class="contest-header">
+	 			<div class="contest-logo">
+	 				<a href="{% url contest_publish_new_ad %}">
+	 					<img src="{{ STATIC_URL }}images/contest/contest-logo{% block contest-step %}{% endblock %}.png">
+	 				</a>
+	 			</div>
+	 			<div class="contest-logo-eloue">
+	 				<img src="{{ STATIC_URL }}images/contest/contest-eloue-logo.png">
+	 			</div>
+	 		</div>
+	 		<div class="contest-content">{% block content %}{% endblock %}</div>
+	    </div>{# contest-container #}
+	    <div class="contest-footer">
+	    	<a href="{% url contest_terms %}" target="_blank">Règlement</a>
+	 	</div>{# footer #}
+ 	</div>{# contest #}
+    {% block tail %}
+    	{% compressed_js 'application' %}
+    {% endblock %}
  </body>
 </html>

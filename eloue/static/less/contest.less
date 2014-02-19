@@ -1,0 +1,147 @@
+// CSS Reset
+@import "reset.less";
+
+// Core mixins and variables
+@import "variables.less";
+@import "mixins.less";
+
+// Grid system and page structure
+@import "scaffolding.less";
+
+// Styled patterns and elements
+@import "typo.less";
+@import "buttons.less";
+@import "form.less";
+@import "tables.less";
+@import "sprites.less";
+@import "patterns.less";
+@import "alerts.less";
+@import "breadcrumb.less";
+@import "products.less";
+@import "profil.less";
+@import "comment.less";
+@import "labels.less";
+@import "messages.less";
+@import "bookings.less";
+@import "howTo.less";
+@import "press.less";
+@import "mobile_iphone.less";
+@import "publish_new_ad.less";
+@import "patron_subscription.less";
+
+
+
+//Jquery UI theme
+@import "ui/jquery.ui.core.less";
+@import "ui/jquery.ui.theme.less";
+@import "ui/jquery.ui.datepicker.less";
+@import "ui/jquery.ui.dialog.less";
+
+
+body { background-image: none; }
+
+
+.contest { 
+	margin: 0 auto;
+	width: 1000px;
+}
+
+.contest-container {
+	background: transparent url(../images/contest/contest-bg.png) repeat-y 0 0;
+	float: left;
+	width: 1000px;
+
+	.contest-header {
+		float: left;
+		width: 1000px;
+		height: 130px;
+
+		.contest-logo {
+			float: left;
+			height: 130px;
+		}
+
+		.contest-logo-eloue {
+			float: right;
+			height: 130px;
+		}
+	}
+
+	.contest-content {
+		float: left;
+		width: 970px;
+		margin: 15px;
+
+		.contest-col-one {
+			float: left;
+			wdth: 504px;
+			margin-right: 10px;
+		}
+
+		.contest-col-two {
+			float: left;
+			width: 456px;
+
+			&.contest-publish-new-ad {
+				h1 { 
+					margin-bottom: 30px;
+					text-align: center;
+				}
+
+				h2 { 
+					margin-bottom: 25px;
+					color: #6eb924;
+					text-align: center;
+				}
+
+				li { text-align: center; }
+
+				.add-car {
+					display: inline-block;
+					height: 73px;
+					width: 80px;
+
+					margin-bottom: 3px;
+
+					background: url('../images/sprite_publish_ads.png') no-repeat 0 0;
+				}
+
+				.add-home {
+					display: inline-block;
+					height: 73px;
+					width: 72px;
+
+					margin-bottom: 3px;
+
+					background: url('../images/sprite_publish_ads.png') no-repeat -80px 0;
+				}
+
+				.add-items {
+					display: inline-block;
+					height: 73px;
+					width: 102px;
+
+					margin-bottom: 3px;
+
+					background: url('../images/sprite_publish_ads.png') no-repeat -152px 0;
+				}
+			}
+		}
+
+		.contest-col {
+			float: left;
+			widh: 970px;
+		}
+	}
+}
+
+.contest-footer {
+	float: left;
+	margin: 10px;
+	width: 980px;
+	text-align: center;
+
+	#font > .sans-serif('Ubuntu', normal, 12px);
+}
+
+
