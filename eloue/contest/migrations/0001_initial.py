@@ -8,11 +8,20 @@ class Migration(SchemaMigration):
 
     def forwards(self, orm):
         
+        # Adding model 'Gamer'
+        db.create_table('contest_gamer', (
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('patron', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['accounts.Patron'])),
+            ('birthday', self.gf('django.db.models.fields.DateTimeField')(null=True)),
+            ('like_facebook', self.gf('django.db.models.fields.BooleanField')(default=False)),
+        ))
+        db.send_create_signal('contest', ['Gamer'])
+
         # Adding model 'ProductGamer'
         db.create_table('contest_productgamer', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('gamer', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['contest.Gamer'])),
             ('product', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['products.Product'])),
-            ('birthday', self.gf('django.db.models.fields.DateTimeField')(null=True)),
             ('created_at', self.gf('django.db.models.fields.DateTimeField')()),
         ))
         db.send_create_signal('contest', ['ProductGamer'])
@@ -20,6 +29,9 @@ class Migration(SchemaMigration):
 
     def backwards(self, orm):
         
+        # Deleting model 'Gamer'
+        db.delete_table('contest_gamer')
+
         # Deleting model 'ProductGamer'
         db.delete_table('contest_productgamer')
 
@@ -130,7 +142,7 @@ class Migration(SchemaMigration):
         },
         'auth.user': {
             'Meta': {'object_name': 'User'},
-            'date_joined': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2014, 2, 19, 10, 12, 3, 51903)'}),
+            'date_joined': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2014, 2, 19, 16, 10, 7, 139245)'}),
             'email': ('django.db.models.fields.EmailField', [], {'max_length': '75', 'blank': 'True'}),
             'first_name': ('django.db.models.fields.CharField', [], {'max_length': '30', 'blank': 'True'}),
             'groups': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['auth.Group']", 'symmetrical': 'False', 'blank': 'True'}),
@@ -138,7 +150,7 @@ class Migration(SchemaMigration):
             'is_active': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
             'is_staff': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'is_superuser': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'last_login': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2014, 2, 19, 10, 12, 3, 51801)'}),
+            'last_login': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2014, 2, 19, 16, 10, 7, 139088)'}),
             'last_name': ('django.db.models.fields.CharField', [], {'max_length': '30', 'blank': 'True'}),
             'password': ('django.db.models.fields.CharField', [], {'max_length': '128'}),
             'user_permissions': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['auth.Permission']", 'symmetrical': 'False', 'blank': 'True'}),
@@ -151,10 +163,17 @@ class Migration(SchemaMigration):
             'model': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '100'})
         },
+        'contest.gamer': {
+            'Meta': {'object_name': 'Gamer'},
+            'birthday': ('django.db.models.fields.DateTimeField', [], {'null': 'True'}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'like_facebook': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            'patron': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['accounts.Patron']"})
+        },
         'contest.productgamer': {
             'Meta': {'object_name': 'ProductGamer'},
-            'birthday': ('django.db.models.fields.DateTimeField', [], {'null': 'True'}),
             'created_at': ('django.db.models.fields.DateTimeField', [], {}),
+            'gamer': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['contest.Gamer']"}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'product': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['products.Product']"})
         },

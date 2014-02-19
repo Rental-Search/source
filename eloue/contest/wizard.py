@@ -3,7 +3,7 @@ from eloue.accounts.forms import EmailAuthenticationForm
 from eloue.products.forms import ProductForm
 from eloue.products.models import Product, Picture, UNIT, Alert
 
-from eloue.contest.models import ProductGamer
+from eloue.contest.models import Gamer, ProductGamer
 
 from django.shortcuts import redirect
 
@@ -32,7 +32,12 @@ class ContestProductWizard(ProductWizard):
 		product_form.instance.phone = self.new_phone
 		product = product_form.save()
 
-		ProductGamer.objects.create(product=product)
+		try:
+			gamer = Gamer.objects.get(patron=product.owner)
+		except:
+			gamer = Gamer.objects.create(patron=product.owner)
+		
+		ProductGamer.objects.create(product=product, gamer=gamer)
 
 		for unit in UNIT.keys():
 			field = "%s_price" % unit.lower()

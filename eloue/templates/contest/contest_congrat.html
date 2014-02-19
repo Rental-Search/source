@@ -3,6 +3,78 @@
 {% block title %}Félicitation{% endblock %}
 
 {% block content %}
-<h1>Bravo !!</h1>
+<div class="contest-col">
+	<h1><span style="color:#f36100;">Bravo ! Votre annonce est bien déposée et vous êtes inscrit au tirage au sort.</span><br>Pour avoir deux fois plus de chance au tirage au sort,<br>cliquez sur le bouton "j’aime" de la page facebook de e-loue.</h1>
 
+	<div class="facebook-plugin">
+		<div class="fb-like-box" data-href="https://www.facebook.com/location.eloue" data-width="924" data-height="480" data-colorscheme="light" data-show-faces="true" data-header="false" data-stream="false" data-show-border="true"></div>
+	</div>
+	<div class="contest-more-links">
+		<a href="{% url booking_create_redirect product.slug product.pk %}">Voir l'annonce sur le site</a>
+	</div>
+</div>
+{% endblock %}
+
+
+{% block tail %}
+ {{ block.super }}
+ 	<div id="fb-root"></div>
+	<script>
+		window.fbAsyncInit = function() {
+	        FB.init({
+	          appId      : '197983240245844',
+	          status     : true,
+	          xfbml      : true
+	        });
+
+			var page_like_callback = function(url, html_element) {
+			  $.ajax({
+					type: 'POST',
+					url: '{% url contest_edit_gamer gamer_id %}',
+					data: {'like_facebook': true},
+					dateType: 'json',
+					success: function(response) { 
+						alert('Votre seconde chance est enregistrée !');
+					},
+					error: function(resposne) { alert('Désolé, il y a une erreur.'); },
+				});
+			}
+
+			FB.Event.subscribe('edge.create', page_like_callback);
+		};
+
+		(function(d, s, id){
+			var js, fjs = d.getElementsByTagName(s)[0];
+			if (d.getElementById(id)) {return;}
+			js = d.createElement(s); js.id = id;
+			js.src = "//connect.facebook.net/fr_FR/all.js";
+			fjs.parentNode.insertBefore(js, fjs);
+		}(document, 'script', 'facebook-jssdk'));
+
+	</script>
+	<script type="text/javascript">
+	$.ajaxSetup({ 
+	     beforeSend: function(xhr, settings) {
+	         function getCookie(name) {
+	             var cookieValue = null;
+	             if (document.cookie && document.cookie != '') {
+	                 var cookies = document.cookie.split(';');
+	                 for (var i = 0; i < cookies.length; i++) {
+	                     var cookie = jQuery.trim(cookies[i]);
+	                     // Does this cookie string begin with the name we want?
+	                 if (cookie.substring(0, name.length + 1) == (name + '=')) {
+	                     cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+	                     break;
+	                 }
+	             }
+	         }
+	         return cookieValue;
+	         }
+	         if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {
+	             // Only send the token to relative URLs i.e. locally.
+	             xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+	         }
+	     } 
+	});
+	</script>
 {% endblock %}

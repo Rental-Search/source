@@ -7265,6 +7265,22 @@ body {
   float: left;
   widh: 970px;
 }
+.contest-container .contest-content .contest-col h1 {
+  text-align: center;
+}
+.contest-container .contest-content .contest-col .facebook-plugin {
+  background-color: #fff;
+  height: 480px;
+  width: 924px;
+  margin: 0 23px 20px;
+}
+.contest-container .contest-content .contest-col .contest-more-links {
+  font-family: 'Ubuntu', sans-serif;
+  font-size: 18px;
+  font-weight: normal;
+  text-align: center;
+  margin: 20px;
+}
 .contest-footer {
   float: left;
   margin: 10px;
