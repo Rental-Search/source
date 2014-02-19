@@ -1,0 +1,10 @@
+{% extends "contest/contest_base.html" %}
+
+{% block title %}Jeu concours{% endblock %}
+
+{% block content %}
+<h1>Jeu concours</h1>
+<a href="{% url contest_publish_car %}">Déposer une voiture</a><br>
+<a href="{% url contest_publish_real_estate %}">Déposer un logement</a><br>
+<a href="{% url contest_publish_product %}">Déposer un objet</a><br>
+{% endblock %}

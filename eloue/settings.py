@@ -199,6 +199,7 @@ INSTALLED_APPS = (
     'api',
     'oauth_provider',
     'payments',
+    'contest',
 )
 if DEBUG_TOOLBAR:
     INSTALLED_APPS += ('debug_toolbar',)
@@ -272,7 +273,17 @@ PIPELINE_CSS = {
         'extra_context': {
             'media': 'screen',
         },
-    }
+    },
+    'contest': {
+        'source_filenames': (
+            'less/contest.less',
+            'css/chosen.css'
+        ),
+        'output_filename': 'css/contest.css',
+        'extra_context': {
+            'media': 'screen',
+        },
+    },
 }
 
 PIPELINE_JS = {

@@ -1,0 +1,19 @@
+{% load compressed %}
+<!doctype html>
+<html lang="fr">
+ <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>{% block title %}{% endblock %}</title>
+  
+  <link rel="shortcut icon" href="{{ STATIC_URL }}favicon.ico">
+
+  {% compressed_css 'contest' %}
+ <head>
+ <body>
+ 	<div class="contest">
+ 	{% block content %}{% endblock %}  
+    </div>
+    {% block tail %}{% endblock %}
+ </body>
+</html>
