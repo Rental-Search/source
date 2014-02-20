@@ -99,7 +99,7 @@
         function availability(year, month, inst) {
             $.ajax({
                 type: 'GET',
-                url: OCCUPIED_DATE,
+                url: 'occupied_date/',
                 dataType: 'json',
                 data: {year:year, month:month},
                 success: function(response) {
