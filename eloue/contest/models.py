@@ -1,5 +1,6 @@
 from datetime import datetime
 from django.db import models
+from django.utils.encoding import smart_unicode
 from eloue.products.models import Product
 from eloue.accounts.models import Patron
 
@@ -9,6 +10,9 @@ class Gamer(models.Model):
 	birthday = models.DateTimeField(null=True)
 	like_facebook = models.BooleanField(default=False)
 	created_at = models.DateTimeField(editable=False)
+
+	def __unicode__(self):
+		return smart_unicode(self.patron)
 	
 	def save(self, *args, **kwargs):
 		if not self.created_at:

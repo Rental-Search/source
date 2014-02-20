@@ -61,7 +61,6 @@ def contest_edit_gamer(request, gamer_id, *args, **kwargs):
 	except:
 		raise Http404
 	if request.user.pk != gamer.patron.pk:
-		print 'not user'
 		raise Http404
 	form = GamerForm(request.POST, instance=gamer)
 	if form.is_valid():
@@ -69,6 +68,7 @@ def contest_edit_gamer(request, gamer_id, *args, **kwargs):
 		gamer_dict = gamer.__dict__
 		gamer_dict.pop('_state')
 		gamer_dict.pop('_patron_cache') if gamer_dict.has_key('_patron_cache') else False
+		gamer_dict.pop('created_at') if gamer_dict.has_key('created_at') else False
 		json = simplejson.dumps(gamer_dict)
 		return HttpResponse(json, mimetype="application/json")
 	else:

@@ -25,9 +25,11 @@
 	 		</div>
 	 		<div class="contest-content">{% block content %}{% endblock %}</div>
 	    </div>{# contest-container #}
+	    {% block footer %}
 	    <div class="contest-footer">
 	    	<a href="{% url contest_terms %}" target="_blank">Règlement</a>
 	 	</div>{# footer #}
+	 	{% endblock %}
  	</div>{# contest #}
     {% block tail %}
     	{% compressed_js 'application' %}

@@ -10,7 +10,7 @@
 		<div class="fb-like-box" data-href="https://www.facebook.com/location.eloue" data-width="924" data-height="480" data-colorscheme="light" data-show-faces="true" data-header="false" data-stream="false" data-show-border="true"></div>
 	</div>
 	<div class="contest-more-links">
-		<a href="{% url booking_create_redirect product.slug product.pk %}">Voir l'annonce sur le site</a>
+		<a href="{% url booking_create_redirect product.slug product.pk %}">Voir votre annonce sur le site</a>
 	</div>
 </div>
 {% endblock %}
@@ -40,7 +40,21 @@
 				});
 			}
 
+			var page_unlike_callback = function(url, html_element) {
+			  $.ajax({
+					type: 'POST',
+					url: '{% url contest_edit_gamer gamer_id %}',
+					data: {'like_facebook': false},
+					dateType: 'json',
+					success: function(response) { 
+						alert('Votre seconde chance est annulée.');
+					},
+					error: function(resposne) { alert('Désolé, il y a une erreur.'); },
+				});
+			}
+
 			FB.Event.subscribe('edge.create', page_like_callback);
+			FB.Event.subscribe('edge.remove', page_unlike_callback);
 		};
 
 		(function(d, s, id){
