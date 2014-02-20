@@ -23,32 +23,12 @@ class ContestProductWizard(ProductWizard):
 
 	def done(self, request, form_list):
 		super(ContestProductWizard, self).done(request, form_list)
-		patron = request.user
-
-		#Create product
-		product_form = form_list[0]
-		product_form.instance.owner = self.new_patron
-		product_form.instance.address = self.new_address
-		product_form.instance.phone = self.new_phone
-		product = product_form.save()
 
 		try:
-			gamer = Gamer.objects.get(patron=product.owner)
+			gamer = Gamer.objects.get(patron=self.product.owner)
 		except:
-			gamer = Gamer.objects.create(patron=product.owner)
+			gamer = Gamer.objects.create(patron=self.product.owner)
 		
-		ProductGamer.objects.create(product=product, gamer=gamer)
-
-		for unit in UNIT.keys():
-			field = "%s_price" % unit.lower()
-			if field in product_form.cleaned_data and product_form.cleaned_data[field]:
-				product.prices.create(
-					unit=UNIT[unit],
-					amount=product_form.cleaned_data[field]
-				)
-        
-		picture_id = product_form.cleaned_data.get('picture_id')
-		if picture_id:
-			product.pictures.add(Picture.objects.get(pk=picture_id))
+		ProductGamer.objects.create(product=self.product, gamer=gamer)
 
 		return redirect('contest.views.contest_congrat')

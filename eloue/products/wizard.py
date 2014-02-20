@@ -57,23 +57,23 @@ class ProductWizard(MultiPartFormWizard):
         product_form.instance.owner = self.new_patron
         product_form.instance.address = self.new_address
         product_form.instance.phone = self.new_phone
-        product = product_form.save()
+        self.product = product_form.save()
         
         for unit in UNIT.keys():
             field = "%s_price" % unit.lower()
             if field in product_form.cleaned_data and product_form.cleaned_data[field]:
-                product.prices.create(
+                self.product.prices.create(
                     unit=UNIT[unit],
                     amount=product_form.cleaned_data[field]
                 )
         
         picture_id = product_form.cleaned_data.get('picture_id')
         if picture_id:
-            product.pictures.add(Picture.objects.get(pk=picture_id))
+            self.product.pictures.add(Picture.objects.get(pk=picture_id))
         
         messages.success(request, _(u"Votre objet a bien été ajouté"))
         GoalRecord.record('new_object', WebUser(request))
-        return redirect(product)
+        return redirect(self.product)
 
 
     def parse_params(self, request, *args, **kwargs):
