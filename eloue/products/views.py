@@ -210,7 +210,7 @@ def product_address_edit(request, slug, product_id):
         form = ProductAddressEditForm(data=request.POST, instance=product)
         if form.is_valid():
             product = form.save()
-            messages.success(request, _(u"L'adresse a bien été modifié"))
+            messages.success(request, _(u"L'adresse a bien été modifiée"))
             return redirect(
                 'eloue.products.views.product_address_edit', 
                 slug=slug, product_id=product_id
