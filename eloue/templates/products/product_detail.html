@@ -34,6 +34,8 @@
         {% if picture %}
             <meta itemprop="image" content="{{picture.thumbnail.url}}">
         {% endif %}
+        <meta itemprop="itemreviewed" content="{{ product.summary }}">
+        
         <link rel="canonical" href="{% if request.is_secure %}https{%else%}http{%endif%}://{{ request.get_host }}{{ absolute_url }}" />
     {% endwith %}
     {% endwith %} {# picture #}
