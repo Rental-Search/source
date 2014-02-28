@@ -3,12 +3,13 @@ import datetime
 
 from django.core.exceptions import ValidationError
 from django.db import IntegrityError
-from django.test import TestCase
+from django.test import TransactionTestCase
 
 from eloue.products.models import Product, Price
 
 
-class PriceTest(TestCase):
+class PriceTest(TransactionTestCase):
+    reset_sequences = True
     fixtures = ['category', 'patron', 'address', 'product']
     
     def test_amount_values_negative(self):
@@ -23,7 +24,8 @@ class PriceTest(TestCase):
             self.fail(e)
     
 
-class StandardPriceTest(TestCase):
+class StandardPriceTest(TransactionTestCase):
+    reset_sequences = True
     fixtures = ['category', 'patron', 'address', 'product']
     
     def setUp(self):
@@ -41,7 +43,8 @@ class StandardPriceTest(TestCase):
         self.assertTrue(standard_price in product.prices.all())
     
 
-class SeasonalPriceTest(TestCase):
+class SeasonalPriceTest(TransactionTestCase):
+    reset_sequences = True
     fixtures = ['category', 'patron', 'address', 'product', 'booking']
     
     def setUp(self):

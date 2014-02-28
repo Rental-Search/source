@@ -30,7 +30,7 @@ def update_product_prices(request):
             if not is_authenticated(request):
                 return HttpUnauthorized()
 
-            data = json.loads(request.raw_post_data)
+            data = json.loads(request.body)
             ids = [s.split("/")[-2] for s in data["products"]]
             products = Product.objects.filter(id__in=ids)
 

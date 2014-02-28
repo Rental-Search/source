@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from django.conf.urls.defaults import *
+from django.conf.urls import *
 
 from eloue.accounts.views import (dashboard, patron_edit, patron_edit_password, 
     patron_edit_phonenumber, patron_edit_addresses, accounts_work_autocomplete, 

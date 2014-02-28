@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from django.conf.urls.defaults import *
+from django.conf.urls import *
 from django.utils.translation import ugettext as _
 
 from eloue.products.search_indexes import alert_search, product_search

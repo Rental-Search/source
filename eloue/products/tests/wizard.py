@@ -2,7 +2,7 @@
 import os
 
 from django.core.urlresolvers import reverse
-from django.test import TestCase
+from django.test import TransactionTestCase
 
 from mock import patch
 from facebook import GraphAPIError, GraphAPI
@@ -13,7 +13,8 @@ from eloue.products.models import Product, ProductRelatedMessage, MessageThread
 from eloue.accounts.models import Address, FacebookSession, Patron
 local_path = lambda path: os.path.join(os.path.dirname(__file__), path)
 
-class ProductWizardTestWithFacebookAccount(TestCase):
+class ProductWizardTestWithFacebookAccount(TransactionTestCase):
+    reset_sequences = True
     fixtures = ['category', 'patron', 'address', 'price', 'product', 'picture', 'facebooksession']
     # with already existing account associated with a facebook session
 
@@ -263,7 +264,8 @@ class ProductWizardTestWithFacebookAccount(TestCase):
         self.assertEqual(Patron.objects.get(username='kosii1'), FacebookSession.objects.get(uid=uid).user)
         self.assertTrue(mock_object.called)
 
-class MessageWizardTestWithFacebook(TestCase):
+class MessageWizardTestWithFacebook(TransactionTestCase):
+    reset_sequences = True
     fixtures = ['category', 'patron', 'facebooksession', 'address', 'price', 'product', 'picture']
 
     me1 = {
@@ -439,7 +441,8 @@ class MessageWizardTestWithFacebook(TestCase):
         self.assertRedirects(response, reverse('thread_details', kwargs={'thread_id': 1}))
 
         
-class ProductWizardTest(TestCase):
+class ProductWizardTest(TransactionTestCase):
+    reset_sequences = True
     fixtures = ['category', 'patron', 'address', 'price', 'product', 'picture']
     
     def test_zero_step(self):
@@ -539,7 +542,8 @@ class ProductWizardTest(TestCase):
         self.assertEqual(thread.subject, 'Ask for price, test for wizard')
         self.assertEqual(product, thread.product)
 
-class AlertWizardTest(TestCase):
+class AlertWizardTest(TransactionTestCase):
+    reset_sequences = True
     fixtures = ['patron', 'address', 'category']
     
     def test_zero_step(self):

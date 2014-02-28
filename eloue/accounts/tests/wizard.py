@@ -8,14 +8,15 @@ from facebook import GraphAPIError, GraphAPI
 from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.http import QueryDict
-from django.test import TestCase
+from django.test import TransactionTestCase
 from django.utils.translation import ugettext as _
 
 from eloue.wizard import MultiPartFormWizard
 from eloue.accounts.models import Patron, Avatar, FacebookSession
 from eloue.accounts.forms import make_missing_data_form
 
-class AccountWizardTest(TestCase):
+class AccountWizardTest(TransactionTestCase):
+    reset_sequences = True
     fixtures = ['patron']
     
     def test_zero_step(self):
@@ -161,7 +162,7 @@ class AccountWizardTest(TestCase):
         self.assertTrue(response.status_code, 200)
         self.assertFormError(response, 'form', 'password2', _(u"Vos mots de passe ne correspondent pas"))
 
-class FacebookAccountWizardTest(TestCase):
+class FacebookAccountWizardTest(TransactionTestCase):
     """
     Access token's, facebook accounts, and gmail account:
 
@@ -178,6 +179,7 @@ class FacebookAccountWizardTest(TestCase):
         and we have a user with the same address, so they will be associated
     """
 
+    reset_sequences = True
     fixtures = ['patron', 'facebooksession']
     
     def test_zero_step(self):

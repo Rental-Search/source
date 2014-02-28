@@ -26,7 +26,7 @@ from oauth_provider.store import store, InvalidTokenError, InvalidConsumerError
 from oauth_provider.utils import get_oauth_request, verify_oauth_request
 
 from django.conf import settings
-from django.conf.urls.defaults import url
+from django.conf.urls import url
 from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
 from django.core.urlresolvers import reverse
@@ -76,7 +76,25 @@ class OAuthentication(Authentication):
             oauth_request = get_oauth_request(request)
             try:
                 consumer = store.get_consumer(request, oauth_request, oauth_request.get_parameter('oauth_consumer_key'))
+                
+                try:
+                    if oauth_request.get_parameter('oauth_token'):
+                        try:
+                            token = store.get_access_token(request, oauth_request, consumer, oauth_request.get_parameter('oauth_token'))
+
+                            if not verify_oauth_request(request, oauth_request, consumer, token=token):
+                                return False
+
+                            if consumer and token:
+                                request.user = token.user.patron
+
+                        except InvalidTokenError:
+                            return False
+                except:
+                    pass
+
                 return True
+
             except InvalidConsumerError:
                 return False
         return False
@@ -84,7 +102,18 @@ class OAuthentication(Authentication):
 
 class OAuthAuthorization(Authorization):
 
-    def is_authorized(self, request, object=None):
+    def _is_valid(self, request):
+
+        if is_valid_request(request):  # Read/Write part
+            if request.user:
+                return True
+            else:
+                return False
+
+        return False
+
+
+    def is_authorized(self, request):
 
         if is_valid_request(request, ['oauth_consumer_key']):  # Read-only part
             oauth_request = get_oauth_request(request)
@@ -101,23 +130,42 @@ class OAuthAuthorization(Authorization):
 
             return self._is_valid(request)
 
-    def _is_valid(self, request):
-        if is_valid_request(request):  # Read/Write part
-            oauth_request = get_oauth_request(request)
-            consumer = store.get_consumer(request, oauth_request, oauth_request.get_parameter('oauth_consumer_key'))
-            try:
-                token = store.get_access_token(request, oauth_request, consumer, oauth_request.get_parameter('oauth_token'))
-            except InvalidTokenError:
-                return False
 
-            if not verify_oauth_request(request, oauth_request, consumer, token=token):
-                return False
+    def read_list(self, object_list, bundle):
+        if self.is_authorized(bundle.request):
+            return object_list
+        else:
+            return []
 
-            if consumer and token:
-                request.user = token.user.patron
-                return True
+    def read_detail(self, object_list, bundle):
+        return self.is_authorized(bundle.request)
 
-        return False
+    def create_list(self, object_list, bundle):
+        if self.is_authorized(bundle.request):
+            return object_list
+        else:
+            return []
+
+    def create_detail(self, object_list, bundle):
+        return self.is_authorized(bundle.request)
+
+    def update_list(self, object_list, bundle):
+        if self.is_authorized(bundle.request):
+            return object_list
+        else:
+            return []
+
+    def update_detail(self, object_list, bundle):
+        return self.is_authorized(bundle.request)
+
+    def delete_list(self, object_list, bundle):
+        if self.is_authorized(bundle.request):
+            return object_list
+        else:
+            return []
+
+    def delete_detail(self, object_list, bundle):
+        return self.is_authorized(bundle.request)
 
 
 
@@ -177,21 +225,21 @@ class UserSpecificResource(OAuthResource):
     FILTER_GET_REQUESTS = True
     USER_FIELD_NAME = "user"
 
-    def obj_get_list(self, request=None, **kwargs):
+    def obj_get_list(self, bundle, **kwargs):
         # Get back the user object injected in get_list, and add it to the filters
         # If FILTER_GET_REQUESTS is true
         filters = None
 
-        if hasattr(request, 'GET'):
-            filters = request.GET.copy()
+        if hasattr(bundle.request, 'GET'):
+            filters = bundle.request.GET.copy()
 
         if self.FILTER_GET_REQUESTS:
-            filters[self.USER_FIELD_NAME] = request.user
+            filters[self.USER_FIELD_NAME] = bundle.request.user
 
         applicable_filters = self.build_filters(filters=filters)
 
         try:
-            return self.get_object_list(request).filter(**applicable_filters)
+            return self.get_object_list(bundle.request).filter(**applicable_filters)
 
         except ValueError:
             raise NotFound("Invalid resource lookup data provided (mismatched type).")
@@ -222,7 +270,7 @@ class UserResource(OAuthResource):
         }
 
 
-    def obj_create(self, bundle, request=None, **kwargs):
+    def obj_create(self, bundle, **kwargs):
         """Creates a new inactive user"""
 
         data = bundle.data
@@ -235,10 +283,10 @@ class UserResource(OAuthResource):
 
         return bundle
 
-    def obj_update(self, bundle, request=None, pk='', **kwargs):
+    def obj_update(self, bundle, pk='', **kwargs):
         pk = int(pk)
         patron = Patron.objects.get(id=pk)
-        if patron == request.user:
+        if patron == bundle.request.user:
             for field in ("email", "username"):
                 if field in bundle.data:
                     setattr(patron, field, bundle.data[field])
@@ -246,10 +294,10 @@ class UserResource(OAuthResource):
         else:
             raise ImmediateHttpResponse(response=HttpBadRequest())
 
-    def obj_delete(self, request=None, pk='', **kwargs):
+    def obj_delete(self, pk='', **kwargs):
         pk = int(pk)
         patron = Patron.objects.get(id=pk)
-        if patron == request.user:
+        if patron == bundle.request.user:
             patron.delete()
         else:
             raise ImmediateHttpResponse(response=HttpBadRequest())
@@ -260,15 +308,15 @@ class CustomerResource(UserResource):
     class Meta(UserResource.Meta):
         resource_name = "customer"
 
-    def obj_get_list(self, request=None, **kwargs):
-        user = request.user
+    def obj_get_list(self, bundle, **kwargs):
+        user = bundle.request.user
         return user.customers.all()
 
-    def obj_create(self, bundle, request=None, **kwargs):
+    def obj_create(self, bundle, **kwargs):
         """Creates a new inactive user"""
 
-        bundle = super(CustomerResource, self).obj_create(bundle, request, **kwargs)
-        user = request.user
+        bundle = super(CustomerResource, self).obj_create(bundle, **kwargs)
+        user = bundle.request.user
 
         if not user.is_anonymous():
             user.customers.add(bundle.obj)
@@ -284,23 +332,23 @@ class PhoneNumberResource(UserSpecificResource):
         resource_name = "phonenumber"
         allowed_methods = ['get', 'post', 'put', 'delete']
 
-    def obj_create(self, bundle, request=None, **kwargs):
-        bundle.data['patron'] = UserResource().get_resource_uri(request.user)
+    def obj_create(self, bundle, **kwargs):
+        bundle.data['patron'] = UserResource().get_resource_uri(bundle.request.user)
         bundle.data['kind'] = getattr(PHONE_TYPES, bundle.data['kind'])
-        return super(PhoneNumberResource, self).obj_create(bundle, request, **kwargs)
+        return super(PhoneNumberResource, self).obj_create(bundle, **kwargs)
 
-    def obj_update(self, bundle, request=None, pk='', **kwargs):
+    def obj_update(self, bundle, pk='', **kwargs):
         pk = int(pk)
         number = PhoneNumber.objects.filter(id=pk)
-        if number[0].patron == request.user:
+        if number[0].patron == bundle.request.user:
                 number.update(**bundle.data)
         else:
             raise ImmediateHttpResponse(response=HttpBadRequest())
 
-    def obj_delete(self, request=None, pk='', **kwargs):
+    def obj_delete(self, pk='', **kwargs):
         pk = int(pk)
         number = PhoneNumber.objects.get(id=pk)
-        if number.patron == request.user:
+        if number.patron == bundel.request.user:
             number.delete()
         else:
             raise ImmediateHttpResponse(response=HttpBadRequest())
@@ -320,22 +368,22 @@ class AddressResource(UserSpecificResource):
             bundle.data["position"] = {'lat': bundle.obj.position.x, 'lng': bundle.obj.position.y}
         return bundle
 
-    def obj_create(self, bundle, request=None, **kwargs):
-        bundle.data['patron'] = UserResource().get_resource_uri(request.user)
-        return super(AddressResource, self).obj_create(bundle, request, **kwargs)
+    def obj_create(self, bundle, **kwargs):
+        bundle.data['patron'] = UserResource().get_resource_uri(bundle.request.user)
+        return super(AddressResource, self).obj_create(bundle, **kwargs)
 
-    def obj_delete(self, request=None, pk='', **kwargs):
+    def obj_delete(self, pk='', **kwargs):
         pk = int(pk)
         address = Address.objects.get(id=pk)
-        if address.patron == request.user:
+        if address.patron == bundle.request.user:
             address.delete()
         else:
             raise ImmediateHttpResponse(response=HttpBadRequest())
 
-    def obj_update(self, bundle, request=None, pk='', **kwargs):
+    def obj_update(self, bundle, pk='', **kwargs):
         pk = int(pk)
         address = Address.objects.filter(id=pk)
-        if address[0].patron == request.user:
+        if address[0].patron == bundle.request.user:
             address.update(**bundle.data)
         else:
             raise ImmediateHttpResponse(response=HttpBadRequest())
@@ -465,9 +513,9 @@ class ProductResource(UserSpecificResource):
 
     def post_list(self, request, **kwargs):
         """Stop making it return standard location header"""
-        deserialized = self.deserialize(request, request.raw_post_data, format=request.META.get('CONTENT_TYPE', 'application/json'))
-        bundle = self.build_bundle(data=dict_strip_unicode_keys(deserialized))
-        self.is_valid(bundle, request)
+        deserialized = self.deserialize(request, request.body, format=request.META.get('CONTENT_TYPE', 'application/json'))
+        bundle = self.build_bundle(data=dict_strip_unicode_keys(deserialized), request=request)
+        self.is_valid(bundle)
         updated_bundle = self.obj_create(bundle, request=request)
         return HttpCreated(location=updated_bundle.obj.get_absolute_url())
 
@@ -506,7 +554,7 @@ class ProductResource(UserSpecificResource):
                 price = Price(product=bundle.obj, **price_dict)
                 price.save()
 
-    def obj_create(self, bundle, request=None, **kwargs):
+    def obj_create(self, bundle, **kwargs):
         """
         On product creation, if the request contains a "picture" parameter
         Creates a file with the content of the field
@@ -516,22 +564,22 @@ class ProductResource(UserSpecificResource):
         day_price_data = bundle.data.pop("price", None)
         prices = bundle.data.pop("prices", None)
 
-        bundle.data['owner'] = UserResource().get_resource_uri(request.user)
-        bundle = super(ProductResource, self).obj_create(bundle, request, **kwargs)
+        bundle.data['owner'] = UserResource().get_resource_uri(bundle.request.user)
+        bundle = super(ProductResource, self).obj_create(bundle, **kwargs)
 
         self._obj_process_fields(bundle.obj, picture_data, day_price_data)
         self.add_prices(bundle, prices)
 
         return bundle
 
-    def obj_update(self, bundle, request=None, pk='', **kwargs):
+    def obj_update(self, bundle, pk='', **kwargs):
         p_id = pk.split("-")[-1]
         product = Product.objects.filter(id=int(p_id))
-        if product[0].owner == request.user:
+        if product[0].owner == bundle.request.user:
             picture_data = bundle.data.pop("picture", None)
             day_price_data = bundle.data.pop("price", None)
             prices = bundle.data.pop("prices", None)
-            bundle = super(ProductResource, self).obj_update(bundle, request=request, pk=p_id, **kwargs)
+            bundle = super(ProductResource, self).obj_update(bundle, pk=p_id, **kwargs)
 
             self.add_prices(bundle, prices)
             self._obj_process_fields(bundle.obj, picture_data, day_price_data)
@@ -591,7 +639,7 @@ class BookingResource(OAuthResource):
             'started_at': ALL_WITH_RELATIONS,
         }
 
-    def obj_create(self, bundle, request=None, **kwargs):
+    def obj_create(self, bundle, **kwargs):
 
         from dateutil import parser
 
@@ -604,12 +652,12 @@ class BookingResource(OAuthResource):
         unit, total_amount = Booking.calculate_price(product, started_at, ended_at)
         domain = Site.objects.get_current().domain
         protocol = "https" if USE_HTTPS else "http"
-        state = "authorized" if product.owner == request.user else "authorizing"
+        state = "authorized" if product.owner == bundle.request.user else "authorizing"
 
-        bundle = super(BookingResource, self).obj_create(bundle, request=request,
+        bundle = super(BookingResource, self).obj_create(bundle,
             state= state,
             owner=product.owner,
-            borrower=request.user,
+            borrower=bundle.request.user,
             total_amount=total_amount,
             **kwargs
         )
@@ -631,7 +679,7 @@ class BookingResource(OAuthResource):
 
         return bundle
 
-    def obj_update(self, bundle, request=None, pk='', **kwargs):
+    def obj_update(self, bundle, pk='', **kwargs):
 
         is_offline_booking = bool(bundle.data.pop("is_offline_booking", False))
         require_keys(["state"], bundle.data)
@@ -659,7 +707,7 @@ class BookingResource(OAuthResource):
                     response=error("Need to be in state %s to switch to state %s" % (from_state, booking.state))
                 )
 
-        if booking.owner != request.user:
+        if booking.owner != bundle.request.user:
             error("Can't modify booking : Wrong user")
 
         if new_state == 'pending':
@@ -676,12 +724,12 @@ class BookingResource(OAuthResource):
 
             assert_current_state_is("authorized")
             booking.send_acceptation_email()
-            GoalRecord.record('rent_object_accepted', WebUser(request))
+            GoalRecord.record('rent_object_accepted', WebUser(bundle.request))
 
         elif new_state == 'rejected':
             assert_current_state_is("authorized")
             booking.send_rejection_email()
-            GoalRecord.record('rent_object_rejected', WebUser(request))
+            GoalRecord.record('rent_object_rejected', WebUser(bundle.request))
 
         elif new_state == 'closed':
             assert_current_state_is(["closing", "ongoing"])
@@ -690,7 +738,7 @@ class BookingResource(OAuthResource):
                 booking.pay()
 
 
-        return super(BookingResource, self).obj_update(bundle, request=request, pk=pk, **kwargs)
+        return super(BookingResource, self).obj_update(bundle, request=bundle.request, pk=pk, **kwargs)
 
     def apply_authorization_limits(self, request, object_list):
         return object_list.filter( Q(borrower=request.user) | Q(owner=request.user) )
@@ -714,18 +762,19 @@ class MessageResource(OAuthResource):
         fields = []
         allowed_methods = ['get', 'post']
 
-    def obj_get_list(self, request=None, **kwargs):
-        object_list = self.get_object_list(request).filter( Q(recipient=request.user) | Q(sender=request.user) )
+    def obj_get_list(self, bundle, **kwargs):
+        object_list = self.get_object_list(bundle.request).filter( Q(recipient=bundle.request.user) | Q(sender=bundle.request.user) )
         return object_list
 
-    def obj_create(self, bundle,  request=None, **kwargs):
+    def obj_create(self, bundle, **kwargs):
         data = bundle.data
+
         try:
             recipient = Patron.objects.get(id=int(data["recipient"].split("/")[-2]))
             parent_msg = ProductRelatedMessage.objects.get(id=int(data["parent_msg"].split("/")[-2]))
             thread = MessageThread.objects.get(id=int(data["thread"]))
             bundle.obj=ProductRelatedMessage(recipient = recipient,
-                                sender = request.user,
+                                sender = bundle.request.user,
                                 parent_msg = parent_msg,
                                 subject = data["subject"],
                                 body = data["body"],
@@ -736,10 +785,10 @@ class MessageResource(OAuthResource):
         return bundle
 
     def post_list(self, request, **kwargs):
-        post_data = self.deserialize(request, request.raw_post_data, format=request.META.get('CONTENT_TYPE', 'application/json'))
-        bundle = self.build_bundle(data=dict_strip_unicode_keys(post_data))
-        self.is_valid(bundle, request)
-        updated_bundle = self.obj_create(bundle, request=request)
+        post_data = self.deserialize(request, request.body, format=request.META.get('CONTENT_TYPE', 'application/json'))
+        bundle = self.build_bundle(data=dict_strip_unicode_keys(post_data), request=request)
+        self.is_valid(bundle)
+        updated_bundle = self.obj_create(bundle)
         if updated_bundle.obj.sender is updated_bundle.obj.recipient:
             error_message = "You can't send message to yourself"
             cont_dic = {"error":error_message}

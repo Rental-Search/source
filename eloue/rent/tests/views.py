@@ -5,7 +5,7 @@ from datetime import datetime, timedelta, time
 from decimal import Decimal as D
 from django.core.urlresolvers import reverse
 from django.utils.encoding import smart_str
-from django.test import TestCase
+from django.test import TransactionTestCase
 from django.utils import simplejson
 
 from django.utils.translation import ugettext as _
@@ -13,7 +13,8 @@ from django.utils.translation import ugettext as _
 from eloue.rent.models import Booking
 from eloue.utils import currency
 
-class BookingViewsTest(TestCase):
+class BookingViewsTest(TransactionTestCase):
+    reset_sequences = True
     fixtures = ['category', 'patron', 'address', 'price', 'product', 'booking', 'sinister']
     
     def _next_weekday(self, weekday):
@@ -91,7 +92,8 @@ class BookingViewsTest(TestCase):
         })
         self.assertEquals(response.status_code, 405)
 
-class BookingViewsTestWithMultipleQuantity(TestCase):
+class BookingViewsTestWithMultipleQuantity(TransactionTestCase):
+    reset_sequences = True
     fixtures = ['category', 'patron', 'address', 'price', 'product', 'booking', 'sinister']
     def setUp(self):
         

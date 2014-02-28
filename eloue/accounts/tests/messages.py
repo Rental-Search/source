@@ -6,7 +6,6 @@ from django_messages.models import Message
 
 class SendTestCase(TestCase):
     
-    
     def setUp(self):
         self.user1 = Patron(username='user1', password='123456', email='user1@example.com')
         self.user1.save()

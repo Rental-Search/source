@@ -6,7 +6,7 @@ import datetime
 from django.core.files import File
 from django.core.exceptions import ValidationError
 from django.db import transaction
-from django.test import TestCase
+from django.test import TransactionTestCase
 
 from eloue.products.models import (Picture, Product, ProductReview, PatronReview, 
     CarProduct, RealEstateProduct)
@@ -14,8 +14,9 @@ from eloue.products.models import (Picture, Product, ProductReview, PatronReview
 local_path = lambda path: os.path.join(os.path.dirname(__file__), path)
 
 
-class ProductTest(TestCase):
+class ProductTest(TransactionTestCase):
     fixtures = ['category', 'patron', 'address', 'price', 'product']
+    reset_sequences = True
     
     @transaction.commit_on_success
     def test_product_creation(self):
@@ -65,7 +66,9 @@ class ProductTest(TestCase):
         self.assertEqual(RealEstateProduct.objects.count(), 1)
         self.assertTrue(realestateproduct.product_ptr)
 
-class PictureTest(TestCase):
+class PictureTest(TransactionTestCase):
+    reset_sequences = True
+
     def test_ensure_delete(self):
         f = open(local_path('../fixtures/bentley.jpg'))
         picture = Picture.objects.create(image=File(f))
@@ -75,7 +78,8 @@ class PictureTest(TestCase):
         self.assertFalse(os.path.exists(image_path))
     
 
-class ProductReviewTest(TestCase):
+class ProductReviewTest(TransactionTestCase):
+    reset_sequences = True
     fixtures = ['category', 'patron', 'address', 'price', 'product', 'booking']
     
     def test_score_values_negative(self):
@@ -102,7 +106,8 @@ class ProductReviewTest(TestCase):
         self.assertRaises(ValidationError, review.full_clean)
     
 
-class PatronReviewTest(TestCase):
+class PatronReviewTest(TransactionTestCase):
+    reset_sequences = True
     fixtures = ['category', 'patron', 'address', 'price', 'product', 'booking']
     
     def test_score_values_negative(self):

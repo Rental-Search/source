@@ -8,7 +8,7 @@
 	<div class="one-content">
 		<h1>{% trans "La page est introuvable" %}</h1>
 		<p style="margin-bottom: 20px;">
-			{% url contact as contact_url %}
+			{% url 'contact' as contact_url %}
         	{% blocktrans %}
          		Si l'erreur persiste, merci de nous <a href="{{ contact_url }}">contacter</a>.
         	{% endblocktrans %}

@@ -4,7 +4,7 @@ import datetime
 from mock import patch
 
 from django.core.urlresolvers import reverse
-from django.test import TestCase
+from django.test import TransactionTestCase
 
 from facebook import GraphAPIError, GraphAPI
 
@@ -25,7 +25,8 @@ class MockDateTime(datetime.datetime):
     def now(cls):
         return datetime.datetime(2010, 8, 15, 9, 0)
 
-class BookingWizardTestWithFacebook(TestCase):
+class BookingWizardTestWithFacebook(TransactionTestCase):
+    reset_sequences = True
     fixtures = ['category', 'patron', 'address', 'price', 'product', 'facebooksession']
 
     def setUp(self):
@@ -461,7 +462,8 @@ class BookingWizardTestWithFacebookAssociate(BookingWizardTestWithFacebook):
         self.assertEqual(FacebookSession.objects.get(uid=self.uid).user, Patron.objects.get(username='kosii1'))
         self.assertTrue(mock_object.called)
 
-class BookingWizardTest(TestCase):
+class BookingWizardTest(TransactionTestCase):
+    reset_sequences = True
     fixtures = ['category', 'patron', 'address', 'price', 'product']
     
     def setUp(self):

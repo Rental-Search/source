@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import mock
 
-from django.test import TestCase
+from django.test import TestCase, TransactionTestCase
 
 from eloue.accounts.forms import (RIBForm, CreditCardForm, mask_card_number, 
     EmailAuthenticationForm)
@@ -42,7 +42,8 @@ class RIBFormTest(TestCase):
         self.assertFalse(form.is_valid())
 
 
-class CreditCardFormTest(TestCase):
+class CreditCardFormTest(TransactionTestCase):
+    reset_sequences = True
     fixtures = ['patron']
 
     @mock.patch.object(PayboxManager, 'authorize')

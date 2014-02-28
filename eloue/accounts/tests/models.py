@@ -7,14 +7,15 @@ from django.core import mail
 from django.core.exceptions import ValidationError
 from django.core.urlresolvers import reverse
 from django.contrib.gis.geos import Point
-from django.test import TestCase
+from django.test import TransactionTestCase
 from django.contrib.auth.models import User
 
 from eloue.accounts.models import Patron, Address, CreditCard, ProPackage, Subscription
 from eloue.payments.paybox_payment import PayboxManager
 from eloue.wizard import MultiPartFormWizard
 
-class CreditCardTest(TestCase):
+class CreditCardTest(TransactionTestCase):
+    reset_sequences = True
     fixtures = ['patron']
 
     def setUp(self):
@@ -32,7 +33,8 @@ class CreditCardTest(TestCase):
         self.assertTrue(unsubscribe_mock.called)
         unsubscribe_mock.called_with(1)
 
-class AccountManagerTest(TestCase):
+class AccountManagerTest(TransactionTestCase):
+    reset_sequences = True
     def test_inactive_account_creation(self):
         patron = Patron.objects.create_inactive('benoit', 'benoit.woj@e-loue.com', 'benoit')
         self.assertEquals(patron.username, 'benoit')
@@ -92,7 +94,8 @@ class AccountManagerTest(TestCase):
             self.fail(e)
     
 
-class AccountTest(TestCase):
+class AccountTest(TransactionTestCase):
+    reset_sequences = True
     def test_modified_at(self):
         patron = Patron.objects.create_user('benoit', 'benoit@e-loue.com', 'benoit')
         self.assertTrue(patron.modified_at <= datetime.datetime.now())
@@ -101,7 +104,8 @@ class AccountTest(TestCase):
         self.assertTrue(modified_at <= patron.modified_at <= datetime.datetime.now())
     
 
-class AddressTest(TestCase):
+class AddressTest(TransactionTestCase):
+    reset_sequences = True
     fixtures = ['patron']
     
     def test_latitude_too_high(self):
@@ -157,7 +161,8 @@ class AddressTest(TestCase):
         except ValidationError, e:
             self.fail(e)
 
-class BillingTest(TestCase):
+class BillingTest(TransactionTestCase):
+    reset_sequences = True
     fixtures = ['patron', 'creditcard', 'category', 'picture', 'propackages', 'subscriptions']
     
     def setUp(self):

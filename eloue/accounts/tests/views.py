@@ -6,7 +6,7 @@ import django.forms as forms
 from django.conf import settings
 from django.core import mail
 from django.core.urlresolvers import reverse
-from django.test import TestCase
+from django.test import TransactionTestCase
 from django.utils.translation import ugettext as _
 from django.contrib.sites.models import Site
 from eloue.accounts.forms import PatronPasswordChangeForm, ContactForm
@@ -22,7 +22,8 @@ def dummy_verify_paypal_account(email, first_name, last_name):
     elif first_name=='Lin' and last_name=='LIU' and email=='test_verified_status@e-loue.com':
         return 'VERIFIED'
 
-class PatronInfoAjaxTest(TestCase):
+class PatronInfoAjaxTest(TransactionTestCase):
+    reset_sequences = True
     fixtures = ['category', 'patron', 'address', 'price', 'product', 'booking']
 
     def test_work_autocomplete(self):
@@ -57,7 +58,8 @@ class PatronInfoAjaxTest(TestCase):
         response = json.loads(response.content)
         self.assertEqual(len(response), 2)
 
-class PatronTest(TestCase):
+class PatronTest(TransactionTestCase):
+    reset_sequences = True
     fixtures = ['category', 'patron', 'address', 'price', 'product', 'booking']
     
     def setUp(self):
@@ -271,7 +273,8 @@ class PatronTest(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTrue('object_list' in response.context)
 
-class AddressManagement(TestCase):
+class AddressManagement(TransactionTestCase):
+    reset_sequences = True
     fixtures = ['category', 'patron', 'address', 'price', 'product']
 
     def test_modify_address(self):
@@ -399,7 +402,8 @@ class AddressManagement(TestCase):
         self.assertRedirects(response, reverse('patron_edit_addresses'))
 
 
-class PhonenumberManagement(TestCase):
+class PhonenumberManagement(TransactionTestCase):
+    reset_sequences = True
     fixtures = ['category', 'patron', 'address', 'price', 'product', 'phones']
 
     def test_new_phone_number(self):

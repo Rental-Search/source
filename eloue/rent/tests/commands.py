@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import datetime
 
-from django.test import TestCase
+from django.test import TransactionTestCase
 
 from mock import patch
 
@@ -20,7 +20,8 @@ class MockBooking(Booking):
         return cls.objects
     
 
-class PaymentsTest(TestCase):
+class PaymentsTest(TransactionTestCase):
+    reset_sequences = True
     fixtures = ['category', 'patron', 'phones', 'address', 'price', 'product', 'booking', 'sinister']
     
     def setUp(self):

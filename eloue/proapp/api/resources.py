@@ -3,7 +3,7 @@ import datetime
 
 from collections import defaultdict
 
-from django.conf.urls.defaults import *
+from django.conf.urls import *
 from django.http import Http404
 from tastypie.api import Api
 from tastypie.resources import Resource

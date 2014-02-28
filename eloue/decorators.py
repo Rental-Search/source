@@ -29,7 +29,7 @@ def validate_ipn(view_func):
     """Decorator makes sure ipn is coming from Paypal."""
     def _wrapped_view_func(request, *args, **kwargs):
         if VALIDATE_IPN:
-            response, content = Http().request(endpoint % request.raw_post_data)
+            response, content = Http().request(endpoint % request.body)
             if not content == 'VERIFIED':
                 return HttpResponseForbidden()
         return view_func(request, *args, **kwargs)

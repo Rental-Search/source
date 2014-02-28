@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import django.forms as forms
 from django.core.urlresolvers import reverse
-from django.test import TestCase
+from django.test import TransactionTestCase
 from eloue.accounts.models import Patron
 from eloue.products.models import Product, ProductRelatedMessage, MessageThread
 from django_messages import utils
@@ -9,7 +9,8 @@ from django_messages.utils import new_message_email
 from eloue.signals import message_content_filter, message_site_filter
 
 
-class ProductViewsTest(TestCase):
+class ProductViewsTest(TransactionTestCase):
+    reset_sequences = True
     fixtures = ['category', 'patron', 'address', 'price', 'product']
     
     def setUp(self):

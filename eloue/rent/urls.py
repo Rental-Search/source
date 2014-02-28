@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from django.conf.urls.defaults import *
+from django.conf.urls import *
 
 from eloue.rent.views import preapproval_ipn, pay_ipn
 from eloue.rent.views import BookingSuccess, BookingFailure

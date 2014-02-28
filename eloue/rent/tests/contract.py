@@ -1,14 +1,15 @@
 # -*- coding: utf-8 -*-
 from pyPdf import PdfFileReader
 
-from django.test import TestCase
+from django.test import TransactionTestCase
 from django.utils.translation import ugettext as _
 
 from eloue.rent.contract import ContractGeneratorNormal
 from eloue.rent.models import Booking
 
 
-class ContractTest(TestCase):
+class ContractTest(TransactionTestCase):
+    reset_sequences = True
     fixtures = ['category', 'patron', 'phones', 'address', 'price', 'product', 'booking', 'creditcard', 'payments']
     
     def test_standard_contract_generator(self):

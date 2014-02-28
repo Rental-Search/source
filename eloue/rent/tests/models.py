@@ -3,7 +3,7 @@ import datetime
 from decimal import Decimal as D
 
 from django.core.exceptions import ValidationError
-from django.test import TestCase
+from django.test import TransactionTestCase
 
 from eloue.accounts.models import Patron
 from eloue.rent.models import Booking, BorrowerComment, OwnerComment
@@ -18,7 +18,8 @@ class MockDateTime(datetime.datetime):
         return datetime.datetime(2010, 8, 15, 9, 0)
 
       
-class BookingTest(TestCase):
+class BookingTest(TransactionTestCase):
+    reset_sequences = True
     fixtures = ['category', 'patron', 'address', 'price', 'product']
     
     def setUp(self):
@@ -204,7 +205,8 @@ class BookingTest(TestCase):
         
         
         
-class CommentTest(TestCase):
+class CommentTest(TransactionTestCase):
+    reset_sequences = True
     fixtures = ['category', 'patron', 'address', 'price', 'product', 'booking']
     def setUp(self):
         self.booking = Booking.objects.get(pk="1fac3d9f309c437b99f912bd08b09526")

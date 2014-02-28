@@ -1,11 +1,11 @@
-from django import test
+from django.test import TransactionTestCase
 from django.db import transaction, IntegrityError
 
 from eloue.rent.forms import BorrowerCommentForm, OwnerCommentForm
 from eloue.rent.models import Booking, BorrowerComment, OwnerComment
 
-class BorrowerCommentFormTest(test.TestCase):
-    
+class BorrowerCommentFormTest(TransactionTestCase):
+    reset_sequences = True
     fixtures = ['category', 'patron', 'address', 'price', 'product', 'booking']
 
     def setUp(self):

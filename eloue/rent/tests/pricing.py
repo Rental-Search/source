@@ -2,7 +2,7 @@
 from datetime import datetime, timedelta
 from decimal import Decimal as D
 
-from django.test import TestCase
+from django.test import TransactionTestCase
 
 from pyke.knowledge_engine import CanNotProve
 
@@ -10,7 +10,8 @@ from eloue.products.models import Product, UNIT
 from eloue.rent.models import Booking
 from eloue.rent.utils import timesince
 
-class BookingPriceTest(TestCase):
+class BookingPriceTest(TransactionTestCase):
+    reset_sequences = True
     fixtures = ['category', 'patron', 'address', 'price', 'product']
     
     def setUp(self):
@@ -142,7 +143,8 @@ class BookingPriceTest(TestCase):
         self.assertEqual(unit, UNIT.DAY)
         
 
-class BookingSeasonTest(TestCase):
+class BookingSeasonTest(TransactionTestCase):
+    reset_sequences = True
     fixtures = ['category', 'patron', 'address', 'price', 'product']
     
     def test_calculate_day_season(self):

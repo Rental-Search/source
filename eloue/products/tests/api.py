@@ -13,7 +13,7 @@ from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.db import transaction
 from django.db.models import Q
-from django.test import Client, TestCase
+from django.test import Client, TransactionTestCase
 from django.utils import simplejson
 
 from eloue.accounts.models import Patron
@@ -29,7 +29,8 @@ OAUTH_TOKEN_SECRET = 'jSdFZCdLgzTCRxcG'
 local_path = lambda path: os.path.join(os.path.dirname(__file__), path)
 
 
-class ApiTest(TestCase):
+class ApiTest(TransactionTestCase):
+    reset_sequences = True
     fixtures = ['category', 'patron', 'address', 'oauth', 'price', 'product', 'booking_api', 'phones', 'messagethread', 'message']
 
     def setUp(self):
@@ -158,8 +159,6 @@ class ApiTest(TestCase):
             'email': 'chuck.berry@chess-records.com'
         }
         request = self._get_request(method='POST')
-        print request
-        print self._get_headers(request)
         response = self.client.post(self._resource_url('user'),
             data=simplejson.dumps(post_data),
             content_type='application/json',
@@ -233,9 +232,10 @@ class ApiTest(TestCase):
             }
         ]
 
-        headers = self._get_headers(self._get_request(method='POST'))
+        
         for data in users_data:
-            self.client.post(
+            headers = self._get_headers(self._get_request(method='POST'))
+            response_post = self.client.post(
                 self._resource_url('customer'),
                 data=simplejson.dumps(data),
                 content_type='application/json',
@@ -248,7 +248,7 @@ class ApiTest(TestCase):
             **headers
         )
         content = simplejson.loads(response.content)
-        self.assertTrue(content["meta"]["total_count"] == 2)
+        self.assertEquals(content["meta"]["total_count"], 2)
 
     def test_user_modification(self):
         login_success = self.client.login(username='alexandre.woog@e-loue.com', password='alexandre')
