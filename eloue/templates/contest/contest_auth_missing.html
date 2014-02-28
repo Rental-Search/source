@@ -1,0 +1,99 @@
+{% extends "contest/contest_base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Identifiction" %}{% endblock %}
+
+{% block contest-step %}-step-2{% endblock %}
+
+{% block content %}
+<div id="wizard-page" class="container-main">
+	<div class="content-main">
+        {% if preview.subscription %}
+		<h1>{% trans "Informations sur votre abonnement" %}</h1>
+        <div class="info-block infini-plan" style="width: 598px; margin-bottom: 5px;">
+            <p class="infini-items">
+                {% if preview.subscription.maximum_items %}
+                    {{ preview.subscription.maximum_items }} {% trans "annonces maximums" %}
+                {% else %}
+                    {% trans "Annonces illimitées" %}
+                {% endif %}
+            </p>
+            <div class="plan-description">
+                <h2>{{ preview.subscription.name }}</h2>
+                <p class="plan_price">
+                    <span class="plan-first-month">4,50 &euro; le premier mois</span>
+                    puis
+                    {{ preview.subscription.price|floatformat:0 }}&euro;/mois
+                </p>
+            </div>
+        </div>
+        <p style="text-align: right;">{% trans "Sans engagement et sans frais de résiliation."%}
+        {% else %}
+        <h1>{% trans "Informations complémentaires" %}</h1>
+        <p class="form-header">
+            {% blocktrans %}
+            Pour protéger votre confidentialité, nous cachons votre nom, numéro de téléphone et vos coordonnées tant que la location n'a pas été confirmée.
+            {% endblocktrans%}
+        </p>
+        {% endif %}
+		{% include "accounts/partials/missing.html" %}
+	</div>
+</div>
+{% endblock %}
+
+{% block tail %}
+    {{ block.super }}
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+        	var addNewAddress = $("a#addNewAddress");
+        	var addNewPhone = $("a#addNewPhone");
+
+            var cancelNewAddress = $("a#cancelNewAddress");
+            var cancelNewPhone  = $("a#cancelNewPhone");
+
+            var addresses = $("#id_1-addresses, #id_2-addresses")[0];
+            var phones = $("#id_1-phones, #id_2-phones")[0];
+
+            if(addresses == undefined || addresses.lenght ==  1) {
+                cancelNewAddress.hide();
+                $("div#newAddress").show();
+            }
+
+            if(phones == undefined || phones.lenght == 1) {
+                cancelNewPhone.hide();
+                $("div#newNumber").show();
+
+            }
+
+            addNewAddress.click(function (e) {
+                e.preventDefault();
+                $("div#newAddress").show();
+                $("div.addresses").hide('slow');
+                addresses.selectedIndex=0;
+            });
+
+            cancelNewAddress.click(function (e) {
+                e.preventDefault();
+                $("div.addresses").show();
+                $("div#newAddress").hide('slow');
+                addresses.selectedIndex=1;
+            });
+
+            addNewPhone.click(function (e) {
+                e.preventDefault();
+                $("div#newNumber").show();
+                $("div.phones").hide('slow');
+                phones.selectedIndex=0;
+            });
+
+            cancelNewPhone.click(function (e) {
+                e.preventDefault();
+                $("div.phones").show();
+                $("div#newNumber").hide('slow');
+                phones.selectedIndex=1;
+            });
+        })
+    </script>
+
+{% endblock %}

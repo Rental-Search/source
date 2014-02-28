@@ -7,7 +7,7 @@ from eloue.products.search_indexes import alert_search, product_search
 from eloue.products.views import product_create, product_edit, message_create, reply_product_related_message, \
     product_delete, alert_create, alert_inform, alert_delete
 from eloue.products.views import ProductList, AlertInformSuccess, AlertList
-from eloue.rent.views import booking_create, booking_price, product_occupied_date, booking_create_redirect
+from eloue.rent.views import booking_create, booking_price, product_occupied_date, booking_create_redirect, phone_create
 
 
 urlpatterns = patterns('',
@@ -24,9 +24,12 @@ urlpatterns = patterns('',
 	url(r'^%s/(?P<alert_id>\d+)/$' % _("alertes/supprimer"), alert_delete, name="alert_delete"),
 	url(r'^alertes/success/(?P<alert_id>\d+)/$', AlertInformSuccess.as_view(), name="alert_inform_success"),
     url(r'^(?P<product_id>\d+)/%s/(?P<recipient_id>\d+)/$' % _("nouveau-message"), message_create, name="message_create"),
-    url(r'^(?P<slug>[-\w]+)-(?P<product_id>\d+)/$', booking_create_redirect),
+    url(r'^(?P<slug>[-\w]+)-(?P<product_id>\d+)/$', booking_create_redirect, name='booking_create_redirect'),
     url(r'^([^/].+/)(?P<slug>[-\w]+)-(?P<product_id>\d+)/price/$', booking_price, name="booking_price"),
     url(r'^([^/].+/)(?P<slug>[-\w]+)-(?P<product_id>\d+)/$', booking_create, name="booking_create"),
     url(r'^([^/].+/)(?P<slug>[-\w]+)-(?P<product_id>\d+)/occupied_date/$', product_occupied_date, name="product_occupied_date"),
+    url(r'^([^/].+/)(?P<slug>[-\w]+)-(?P<product_id>\d+)/appeler/$', phone_create, name="phone_create"),
+    url(r'^([^/].+/)(?P<slug>[-\w]+)-(?P<product_id>\d+)/appeler/occupied_date/$', product_occupied_date, name="product_occupied_date"),
+    url(r'^([^/].+/)(?P<slug>[-\w]+)-(?P<product_id>\d+)/appeler/price/$', booking_price, name="booking_price"),
     url(r'^([^/].+/)?$', ProductList.as_view(), {'sqs': product_search}, name="product_list"),
 )

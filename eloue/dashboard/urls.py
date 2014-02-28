@@ -5,7 +5,7 @@ from eloue.accounts.views import (dashboard, patron_edit, patron_edit_password,
     patron_edit_phonenumber, patron_edit_addresses, accounts_work_autocomplete, 
     accounts_studies_autocomplete, comments, comments_received,
     associate_facebook, facebook_invite, gmail_invite, gmail_send_invite)
-from eloue.products.views import product_edit, product_address_edit, product_price_edit, thread_details, archive_thread, unarchive_thread, inbox, archived
+from eloue.products.views import product_edit, product_address_edit, product_phone_edit, product_price_edit, thread_details, archive_thread, unarchive_thread, inbox, archived
 from eloue.rent.views import (booking_accept, booking_cancel, booking_reject, 
     booking_incident, booking_close, booking_read)
 from eloue.rent.views import BookingDetail
@@ -74,6 +74,7 @@ urlpatterns = patterns('',
     url(r'^owner/product/page/(?P<page>\d+)/$', OwnerProduct.as_view(), name="owner_product"),
     url(r'^owner/product/(?P<slug>[-\w]+)-(?P<product_id>\d+)/$', product_edit, name="owner_product_edit"),
     url(r'^owner/product/(?P<slug>[-\w]+)-(?P<product_id>\d+)/address/$', product_address_edit, name="owner_product_address_edit"),
+    url(r'^owner/product/(?P<slug>[-\w]+)-(?P<product_id>\d+)/phone/$', product_phone_edit, name="owner_product_phone_edit"),
     url(r'^owner/product/(?P<slug>[-\w]+)-(?P<product_id>\d+)/price/$', product_price_edit, name="owner_product_price_edit"),
     url(r'^owner/product/(?P<slug>[-\w]+)-(?P<product_id>\d+)/highlight/$', 'eloue.products.views.product_highlight_edit', name="owner_product_highlight_edit"),
     url(r'^owner/product/(?P<slug>[-\w]+)-(?P<product_id>\d+)/top_position/$', 'eloue.products.views.product_top_position_edit', name="owner_product_top_position_edit"),

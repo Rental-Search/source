@@ -32,7 +32,7 @@ from eloue.utils import cache_key
 from eloue.accounts.forms import EmailAuthenticationForm
 from eloue.accounts.models import Patron
 
-from eloue.products.forms import AlertSearchForm, AlertForm, FacetedSearchForm, RealEstateEditForm, ProductForm, CarProductEditForm, ProductEditForm, ProductAddressEditForm, ProductPriceEditForm, MessageEditForm
+from eloue.products.forms import AlertSearchForm, AlertForm, FacetedSearchForm, RealEstateEditForm, ProductForm, CarProductEditForm, ProductEditForm, ProductAddressEditForm, ProductPhoneEditForm, ProductPriceEditForm, MessageEditForm
 
 from eloue.products.models import Category, Product, Curiosity, UNIT, ProductRelatedMessage, Alert, MessageThread
 from eloue.accounts.models import Address
@@ -210,7 +210,7 @@ def product_address_edit(request, slug, product_id):
         form = ProductAddressEditForm(data=request.POST, instance=product)
         if form.is_valid():
             product = form.save()
-            messages.success(request, _(u"L'adress a bien été modifié"))
+            messages.success(request, _(u"L'adresse a bien été modifiée"))
             return redirect(
                 'eloue.products.views.product_address_edit', 
                 slug=slug, product_id=product_id
@@ -224,6 +224,31 @@ def product_address_edit(request, slug, product_id):
             'product': product, 
             'form': form
         }, 
+        context_instance=RequestContext(request)
+    )
+
+@login_required
+@ownership_required(model=Product, object_key='product_id', ownership=['owner'])
+def product_phone_edit(request, slug, product_id):
+    product = get_object_or_404(Product.on_site, pk=product_id)
+
+    if request.method == "POST":
+        form = ProductPhoneEditForm(data=request.POST, instance=product)
+        if form.is_valid():
+            product = form.save()
+            messages.success(request, _(u"Le numéro de téléphone à bien été enregistré"))
+            return redirect(
+                'eloue.products.views.product_phone_edit',
+                slug=slug, product_id=product_id
+            )
+    else:
+        form = ProductPhoneEditForm(instance=product)
+
+    return render_to_response(
+        'products/product_edit.html', dictionary={
+            'product': product,
+            'form': form
+        },
         context_instance=RequestContext(request)
     )
 
@@ -454,6 +479,40 @@ def reply_product_related_message(request, message_id, form_class=MessageEditFor
 def message_create(request, product_id, recipient_id):
     message_wizard = MessageWizard([MessageEditForm, EmailAuthenticationForm])
     return message_wizard(request, product_id, recipient_id)
+
+@never_cache
+@secure_required
+def phone_create(request, product_id):
+    product = get_object_or_404(Product, pk=product_id)
+
+    from lxml import etree
+    import contextlib
+    import urlparse
+    from httplib import HTTPConnection
+    import urllib
+
+    create_link = etree.Element('createLink')
+    clef = etree.Element('clef')
+    clef.text = '2567617e03781a084ec4ba507947cbac'
+    number = etree.Element('numero')
+    number.text = '0033177350605'
+    country = etree.Element('pays')
+    country.text = 'FR'
+    create_link.append(clef)
+    create_link.append(number)
+    create_link.append(country)
+
+    xml = '<?xml version="1.0" encoding="UTF-8"?>\n'
+    s = etree.tostring(create_link, pretty_print=False)
+    base_url = urlparse.urlparse('http://mer.viva-multimedia.com/xmlRequest.php')
+    url = '%s?%s' % (base_url.path, urllib.urlencode({'xml': '%s%s' % (xml, s)}))
+    with contextlib.closing(HTTPConnection(base_url.netloc, timeout=10)) as conn:
+        conn.request("GET", url)
+        response = conn.getresponse()
+        content = response.read()
+    number = etree.XML(content)[2][0].text
+
+    return render_to_response('products/phone_view.html',{'product': product, 'number': number}, context_instance=RequestContext(request))
 
 @never_cache
 @secure_required

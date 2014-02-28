@@ -1,0 +1,36 @@
+{% extends "contest/contest_base.html" %}
+
+{% block title %}Jeu concours{% endblock %}
+
+{% block contest-step %}{% endblock %}
+
+{% block content %}
+<div class="contest-col-one">
+	<img src="{{ STATIC_URL }}images/contest/contest-prizes.png">
+</div>
+<div class="contest-col-two contest-publish-new-ad">
+	<h1><span style="color:#f36100;">Gagnez de l'argent</span> en toute simplicité : louez les objets que vous utilisez peu !</h1>
+	<h2>Déposez une annonce pour participer au tirage au sort...</h2>
+	<ul>
+		<li>
+			<a href="{% url contest_publish_product %}" class="btn-publish-ad">
+				<i class="add-items"></i><br>
+				Déposez un objet
+			</a>
+		</li>
+		<li>
+			<a href="{% url contest_publish_car %}" class="btn-publish-ad">
+		    	<i class="add-car"></i><br>
+		        Déposez une voiture
+			</a>
+		</li>
+		<li>
+			<a href="{% url contest_publish_real_estate %}" class="btn-publish-ad">
+				<i class="add-home"></i><br>
+					Déposez un logement
+			</a>
+		</li>
+	</ul>
+</div>
+{% endblock %}
+

@@ -8,21 +8,23 @@
 {% endblock %}
 
 {% block content-aside-profil %}
-{% url 'owner_product_edit' product.slug product.pk as product_edit %}
-{% url 'owner_product_address_edit' product.slug product.pk as product_address_edit %}
-{% url 'owner_product_price_edit' product.slug product.pk as product_price_edit %}
-{% url 'owner_product_highlight_edit' product.slug product.pk as product_highlight_edit %}
-{% url 'owner_product_top_position_edit' product.slug product.pk as product_top_position_edit %}
+{% url owner_product_edit product.slug product.pk as product_edit %}
+{% url owner_product_address_edit product.slug product.pk as product_address_edit %}
+{% url owner_product_phone_edit product.slug product.pk as product_phone_edit %}
+{% url owner_product_price_edit product.slug product.pk as product_price_edit %}
+{% url owner_product_highlight_edit product.slug product.pk as product_highlight_edit %}
+{% url owner_product_top_position_edit product.slug product.pk as product_top_position_edit %}
 
 <div class="previous-sub-bar">
   &larr;  <a href="{% url 'owner_product' %}">{% trans "Retour à mes annonces" %}</a>
 </div>
 <ul class="nav-sub-bar">
-    <li><a href="{{ 'product_edit' }}"  class="{% active request product_edit "$" %}">{% trans "Description et photos" %}</a></li>
-    <li><a href="{{ 'product_address_edit' }}"  class="{% active request product_address_edit %}">{% trans "Adresse" %}</a></li>
+    <li><a href="{{ product_edit }}"  class="{% active request product_edit "$" %}">{% trans "Description et photos" %}</a></li>
     <li>
       <a href="{{ 'product_price_edit' }}"  class="{% active request product_price_edit %}">{% trans "Prix" %}</a>
     </li>
+    <li><a href="{{ product_address_edit }}"  class="{% active request product_address_edit %}">{% trans "Adresse" %}</a></li>
+    <li><a href="{{ product_phone_edit }}"  class="{% active request product_phone_edit %}">{% trans "Téléphone" %}</a></li>
     {% if request.user.current_subscription %}
     <li>
       <a href="{{'product_highlight_edit'}}" class="{% active request product_highlight_edit %}">{% trans "Mise en avant"%}</a>
@@ -112,6 +114,11 @@
               <a href="#" class="add-new-address">+ {% trans "Ajoutez une nouvelle adresse" %}</a>
             </div>
             {% endif %}
+            {% if fieldset.name == "phone" %}
+            <div class="control-group">
+              <a href="#" class="add-new-phone">+ {% trans "Ajoutez un nouveau numéro" %}</a>
+            </div>
+            {% endif %}
           {% endif %}
       </fieldset> 
       {% endfor %}
@@ -126,8 +133,10 @@
   {{ block.super }}
   <script type="text/javascript">
     $(document).ready(function (){
+      //Category
       $("#id_category").chosen();
 
+      //Address
       var addNewAddress = $(".add-new-address");
       if (
           addNewAddress.length == 0 || (!Boolean($("#id_address").val()) && !( Boolean($('#id_addresses__address1').val()) && 
@@ -140,6 +149,21 @@
           event.preventDefault();
           $("#id_address").val('');
           $(".new-address").show();
+          $(this).hide();
+      });
+
+      //Phone
+      var addNewPhone = $(".add-new-phone");
+      if (
+          addNewPhone.length == 0 || (!Boolean($("#id_phone").val()))
+        ) {
+            $(".new-phone").show();
+      }
+
+      addNewPhone.click(function (event) {
+          event.preventDefault();
+          $("#id_phone").val('');
+          $(".new-phone").show();
           $(this).hide();
       });
     });

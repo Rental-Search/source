@@ -10,7 +10,7 @@ from django.utils.translation import ugettext as _
 
 from haystack.forms import SearchForm
 from mptt.forms import TreeNodeChoiceField
-from eloue.accounts.fields import DateSelectField
+from eloue.accounts.fields import DateSelectField, PhoneNumberField
 from eloue.accounts.models import Patron, COUNTRY_CHOICES, Address
 from eloue.geocoder import GoogleGeocoder
 from eloue.products.fields import FacetField, FRLicensePlateField
@@ -24,7 +24,7 @@ from django_messages import utils
 from django_messages.fields import CommaSeparatedUserField
 
 from eloue.accounts.widgets import CommentedCheckboxInput
-from eloue.accounts.models import Address
+from eloue.accounts.models import Address, PhoneNumber
 
 if "notification" in settings.INSTALLED_APPS:
     from notification import models as notification
@@ -301,7 +301,7 @@ class ProductForm(BetterModelForm):
     def __init__(self, *args, **kwargs):
         super(ProductForm, self).__init__(*args, **kwargs)
         self.title = _(u'Ajouter un objet')
-        self.header = _(u'Donnez envie aux e-loueurs potentiels de louer votre objets.')
+        self.header = _(u'Donnez envie aux e-loueurs potentiels de louer votre objet.')
         self.fields['category'] = forms.TypedChoiceField(
             label=_(u"Catégorie"), coerce=lambda pk: Category.tree.get(pk=pk), 
             choices=generate_choices((cat.slug for cat in Category.on_site.filter(parent=None) if cat.slug not in ['motors', 'automobile', 'location-saisonniere']))
@@ -650,7 +650,40 @@ class ProductAddressEditForm(BetterModelForm):
                 'classes': ['new-address', 'hidden-fieldset']})
         ]
 
-      
+class ProductPhoneEditForm(BetterModelForm):
+    number = PhoneNumberField(label=_(u"Téléphone"), required=False)
+
+    def __init__(self, *args, **kwargs):
+        super(ProductPhoneEditForm, self).__init__(*args, **kwargs)
+        self.fields['phone'].queryset = self.instance.owner.phones.all()
+        self.fields['phone'].label = _(u"Téléphone")
+        self.fields['phone'].required = False
+
+    def clean_number(self):
+        phone = self.cleaned_data.get('phone')
+        number = self.cleaned_data.get('number')
+
+        if not phone and not number:
+            self.cleaned_data['phone'] = self.instance.phone
+            raise form.ValidationError(_(u"Vous devez spécifiez un numéro"))
+        if not any(self.errors) and not phone:
+            self.cleaned_data['phone'] = PhoneNumber(number=number, patron=self.instance.owner)
+            self.cleaned_data['phone'].save()
+        return self.cleaned_data
+
+    class Meta:
+        model = Product
+        fields = ('phone', 'number', )
+        fieldsets = [
+            ('phone',{
+                'fields': ['phone'],
+                'legend': 'Téléphone existant'}),
+            ('new_phone', {
+                'fields': ['number'],
+                'legend': 'Nouveau téléphone',
+                'classes': ['new-phone', 'hidden-fieldset']})
+        ]
+
 class ProductPriceEditForm(BetterModelForm):
     hour_price = forms.DecimalField(label=_(u"L'heure"), required=False, max_digits=10, decimal_places=2, min_value=D('0.01'), widget=PriceTextInput(attrs={'class': 'price'}), localize=True)
     day_price = forms.DecimalField(label=_(u"La journée"), required=True, max_digits=10, decimal_places=2, min_value=D('0.01'), widget=PriceTextInput(attrs={'class': 'price'}), localize=True)

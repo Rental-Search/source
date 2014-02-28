@@ -34,6 +34,8 @@
         {% if picture %}
             <meta itemprop="image" content="{{picture.thumbnail.url}}">
         {% endif %}
+        <meta itemprop="name" content="{{ product.summary }}">
+        
         <link rel="canonical" href="{% if request.is_secure %}https{%else%}http{%endif%}://{{ request.get_host }}{{ absolute_url }}" />
     {% endwith %}
     {% endwith %} {# picture #}
@@ -172,6 +174,10 @@
                     var ended_at = $('input[name$=ended_at_0]');
                     ended_at.datepicker("option", "minDate", newDate);
                     ended_at.datepicker('setDate', newDate );
+                    var ended_hour = $('#id_0-ended_at_1');
+                    if ( parseInt(ended_hour.val()) != 23 ) {
+                        ended_hour.children('option:selected').next('option').attr('selected', 'selected');
+                    }
                     bookingPrice($('#booking_create'));
                 }
             }).datepicker('setDate', '+1d');
@@ -248,6 +254,20 @@
             <img height="1" width="1" style="border-style:none;" alt="" src="//www.googleadservices.com/pagead/conversion/1027691277/?value=0&amp;label=EO41CNPrpQMQjaaF6gM&amp;guid=ON&amp;script=0"/>
             </div>
             </noscript>
+            <script type="text/javascript">
+                var fb_param = {};
+                fb_param.pixel_id = '6012641161301';
+                fb_param.value = '0.01';
+                fb_param.currency = 'EUR';
+                (function(){
+                var fpw = document.createElement('script');
+                fpw.async = true;
+                fpw.src = '//connect.facebook.net/en_US/fp.js';
+                var ref = document.getElementsByTagName('script')[0];
+                ref.parentNode.insertBefore(fpw, ref);
+                })();
+            </script>
+            <noscript><img height="1" width="1" alt="" style="display:none" src="https://www.facebook.com/offsite_event.php?id=6012641161301&amp;value=0.01&amp;currency=EUR" /></noscript>
             {% endif %}
         {% endfor %}
     {% endif %}
@@ -449,7 +469,7 @@
                 {% for comment in borrowercomments %}
                     <li>{% include "rent/partials/comment.html" %}</li>
                 {% empty %}
-                    <li>{% trans "Soyez-le premier à réserver et commenter !" %}</li>
+                    <li>{% trans "Soyez-le premier à réserver et à commenter !" %}</li>
                 {% endfor %}
                 </ul>
             {% endwith %}
@@ -588,10 +608,7 @@
         {% else %}
             <div id="owner" class="info-block">
                 <h2>
-                    {% trans "Particulier" %}
-                    <small>
-                        <a href="{{ patron.get_absolute_url }}" >({% trans " Voir toutes ses annonces "%})</a>
-                    </small>
+                    {% trans "Posez-moi vos questions" %}
                 </h2>
                 <a href="{{ patron.get_absolute_url }}" class="onwer-avatar">
                     {% if patron.avatar %}
@@ -603,20 +620,32 @@
                 <p class="owner-username">
                     <a href="{{ patron.get_absolute_url }}">{{ patron.username|truncate:13 }}</a>
                 </p>
-                <address>
-                    {% if patron.default_address %}
-                        {% with patron.default_address as default_address %}
-                            {{ default_address.city }} - {{ default_address.zipcode }}
-                        {% endwith %}
-                    {% else %}
-                        {% with patron.addresses.all|first as default_address %}
-                            {{ default_address.city }} - {{ default_address.zipcode }}
-                        {% endwith %}
+                {% if product.phone %}
+                <a href="{{ product.get_absolute_url }}appeler/" class="btn-contactme" style="margin-bottom: 7px; width: 93px; text-align: center;">{% trans "Appeler" %}</a>
+                {% endif %}
+                <a href="{% url message_create product.pk patron.pk %}" class="btn-contactme" style="margin-bottom: 8px; width: 93px; text-align: center">{% trans "Message" %}</a>
+                {% cache 43200 response_stats patron.pk %}
+                <table class="answer-stats" style="margin-top: 10px;">
+                    {% if patron.average_note %}
+                    <tr>
+                        <th >{% trans "Evaluations" %}</th>
+                        <td>
+                            <span class="stars empty"><span class="stars filled_{{ patron.average_note }}"></span></span>
+                        </td>
+                    </tr>
                     {% endif %}
-                </address>
-                <a href="{% url 'products.views.message_create' product.pk patron.pk %}" class="btn-contactme">{% trans "Contactez-moi" %}</a>
-                <span style="margin-top: 0; margin-bottom: 10px; margin-left: 20px;" class="stars empty"><span class="stars filled_{{ patron.average_note }}"></span></span>
-                {% include "accounts/partials/response_stats.html" %}
+                    <tr>
+                        <th class="answer-rate">{% trans "Taux de réponse" %}</th>
+                        <td>
+                            {{patron.response_rate|floatformat:"0"}}%
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="answer-time">{% trans "Temps de réponse moyen" %}</th>
+                        <td>{{patron.response_time}}</td>
+                    </tr>
+                </table>
+                {% endcache %}
             </div>{#  owner #}
         {% endif %}
         {% endwith %}
