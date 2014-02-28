@@ -131,6 +131,19 @@ def publish_new_ad(request, *args, **kwargs):
                 'eloue.accounts.views.patron_subscription'
             )
     return render(request, 'products/publish_new_ad.html')
+
+
+@never_cache
+@secure_required
+def publish_new_ad2(request, *args, **kwargs):
+    if request.user.is_authenticated():
+        if request.user.is_professional and not request.user.current_subscription:
+            messages.success(request, _(u"En tant que professionnel, vous devez souscrire à un abonnement avant de pouvoir déposer une annonce."))
+            return redirect(
+                'eloue.accounts.views.patron_subscription'
+            )
+    return render(request, 'products/publish_new_ad2.html')
+
     
 @never_cache
 @secure_required
