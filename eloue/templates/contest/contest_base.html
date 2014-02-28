@@ -15,7 +15,7 @@
  		<div class="contest-container">
 	 		<div class="contest-header">
 	 			<div class="contest-logo">
-	 				<a href="{% url contest_publish_new_ad %}">
+	 				<a href="{% url 'contest_publish_new_ad' %}">
 	 					<img src="{{ STATIC_URL }}images/contest/contest-logo{% block contest-step %}{% endblock %}.png">
 	 				</a>
 	 			</div>
@@ -27,7 +27,7 @@
 	    </div>{# contest-container #}
 	    {% block footer %}
 	    <div class="contest-footer">
-	    	<a href="{% url contest_terms %}" target="_blank">Règlement</a>
+	    	<a href="{% url 'contest_terms' %}" target="_blank">Règlement</a>
 	 	</div>{# footer #}
 	 	{% endblock %}
  	</div>{# contest #}
