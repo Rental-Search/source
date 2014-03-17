@@ -324,6 +324,16 @@
                         <i class="icon-road"></i>
                         {{  product.consumption }} {% trans "L/100km" %}
                     </li>
+                    <li>
+                        <i class="icon-barcode"></i>
+                        {% if product.licence_plate %}
+                            {% if product.licence_plate_is_peer %}
+                                {% trans "Plaque paire" %}
+                            {% else %}
+                                {% trans "Plaque impaire" %}
+                            {% endif %} 
+                        {% endif %}
+                    </li>
                 </ul>{# product-properties #}
                 {% endif %}
                 {% if product.name == 'realestateproduct' %}
