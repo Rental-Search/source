@@ -460,25 +460,25 @@ class CarProduct(Product):
     objects = ProductManager()
     on_site = CurrentSiteProductManager()
 
-    def licence_plate_is_peer(self):
-        from eloue.products.fields import old_plate_re
-        from eloue.products.fields import new_plate_re
+    # def licence_plate_is_peer(self):
+    #     from eloue.products.fields import old_plate_re
+    #     from eloue.products.fields import new_plate_re
 
-        if not self.licence_plate:
-            return None
+    #     if not self.licence_plate:
+    #         return None
 
-        matches = old_plate_re.match(self.licence_plate)
+    #     matches = old_plate_re.match(self.licence_plate)
 
-        if matches:
-            num = int(matches.groups()[0])
-        else:
-            matches = new_plate_re.match(self.licence_plate)
-            num = int(matches.groups()[1])
+    #     if matches:
+    #         num = int(matches.groups()[0])
+    #     else:
+    #         matches = new_plate_re.match(self.licence_plate)
+    #         num = int(matches.groups()[1])
 
-        if num % 2 == 0:
-            return True
-        else:
-            return False
+    #     if num % 2 == 0:
+    #         return True
+    #     else:
+    #         return False
 
     @property
     def options(self):
