@@ -273,7 +273,26 @@
     {% endif %}
     {% endif %}
 {% endblock %}
-
+{% block gaq %}
+{% if messages %}
+    {%  for message in messages %}
+        {% if message.tags == "success" %}
+        {% if not booking.borrower.is_active %}
+            _gaq.push(['_trackEvent', 'Membre', 'Inscription', 'Dépôt annonce']);
+        {% endif %}
+        {% if thread.product.carproduct %}
+            _gaq.push(['_trackEvent', 'Dépôt annonce', 'Voiture', '{{ product.category.name }}']);
+        {% endif %}
+        {% if thread.product.realestateproduct %}
+            _gaq.push(['_trackEvent', 'Dépôt annonce', 'Logement', '{{ product.category.name }}']);
+        {% endif %}
+        {% if not thread.product.carproduct and not thread.product.realestateproduct %}
+            _gaq.push(['_trackEvent', 'Dépôt annonce', 'Objet', '{{ product.category.name }}']);
+        {% endif %}
+        {% endif %}
+    {% endfor %}
+{% endif %}
+{% endblock %}
 {% block content %}
 <div id="fb-root"></div>
 

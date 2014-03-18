@@ -122,3 +122,13 @@
     </div>{# content-main-profil #}
 </div>{# profil #}
 {% endblock %}
+
+{% block gaq %}
+{% if messages %}
+    {%  for message in messages %}
+        {% if message.tags == "info" %}
+            _gaq.push(['_trackEvent', 'Membre', 'Inscription', 'Simple']);
+        {% endif %}
+    {% endfor %}
+{% endif %}
+{% endblock %}

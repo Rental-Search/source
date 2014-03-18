@@ -95,6 +95,9 @@
   </noscript>
 {% endblock %}
 {% block gaq %}
+  {% if not booking.borrower.is_active %}
+    _gaq.push(['_trackEvent', 'Membre', 'Inscription', 'Réservation']);
+  {% endif %}
   {% if booking.product.carproduct %}
     _gaq.push(['_trackEvent', 'Réservation', 'Demande de réservation', 'Voiture - {{ booking.product.category.name }}']);
   {% endif %}

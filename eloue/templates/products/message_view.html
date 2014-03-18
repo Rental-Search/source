@@ -123,7 +123,17 @@
 		<img height="1" width="1" style="border-style:none;" alt="" src="//www.googleadservices.com/pagead/conversion/1027691277/?value=0&amp;label=SfnGCMvgrgMQjaaF6gM&amp;guid=ON&amp;script=0"/>
 		</div>
 		</noscript>
-			{% block gaq %}
+    	{% endif %}
+    {% endfor %}
+{% endif %}
+{% endblock %}
+{% block gaq %}
+	{% if messages %}
+		{% for message in messages %}
+			{% if message.tags == "success" %}
+				{% if not request.user.is_active %}
+					_gaq.push(['_trackEvent', 'Membre', 'Inscription', 'Message']);
+				{% endif %}
 				{% if thread.product.carproduct %}
 					_gaq.push(['_trackEvent', 'Réservation', 'Message', 'Voiture - {{ thread.product.category.name }}']);
 				{% endif %}
@@ -133,8 +143,7 @@
 				{% if not thread.product.carproduct and not thread.product.realestateproduct %}
 					_gaq.push(['_trackEvent', 'Réservation', 'Message', 'Objet - {{ thread.product.category.get_root }}']);
 				{% endif %}
-			{% endblock %}
-    	{% endif %}
-    {% endfor %}
-{% endif %}
+			{% endif %}
+		{% endfor %}
+	{% endif %}
 {% endblock %}
