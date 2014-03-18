@@ -631,7 +631,15 @@
                     <a href="{{ patron.get_absolute_url }}">{{ patron.username|truncate:13 }}</a>
                 </p>
                 {% if product.phone %}
-                <a href="{{ product.get_absolute_url }}appeler/" class="btn-contactme" style="margin-bottom: 7px; width: 93px; text-align: center;">{% trans "Appeler" %}</a>
+                    {% if product.carproduct %}
+                        <a href="{{ product.get_absolute_url }}appeler/" class="btn-contactme" style="margin-bottom: 7px; width: 93px; text-align: center;" onClick="_gaq.push(['_trackEvent', 'Réservation', 'Appel', 'Voiture - {{ product.category.name }}']);">{% trans "Appeler" %}</a>
+                    {% endif %}
+                    {% if product.realestateproduct %}
+                        <a href="{{ product.get_absolute_url }}appeler/" class="btn-contactme" style="margin-bottom: 7px; width: 93px; text-align: center;" onClick="_gaq.push(['_trackEvent', 'Réservation', 'Appel', 'Logement - {{ product.category.name }}']);">{% trans "Appeler" %}</a>
+                    {% endif %}
+                    {% if not product.carproduct and not product.realestateproduct %}
+                        <a href="{{ product.get_absolute_url }}appeler/" class="btn-contactme" style="margin-bottom: 7px; width: 93px; text-align: center;" onClick="_gaq.push(['_trackEvent', 'Réservation', 'Appel', 'Objet - {{ product.category.get_root }}']);">{% trans "Appeler" %}</a>
+                    {% endif %}
                 {% endif %}
                 <a href="{% url message_create product.pk patron.pk %}" class="btn-contactme" style="margin-bottom: 8px; width: 93px; text-align: center">{% trans "Message" %}</a>
                 {% cache 43200 response_stats patron.pk %}

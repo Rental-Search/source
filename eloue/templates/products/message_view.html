@@ -126,13 +126,13 @@
 		<script type="text/javascript">
 			{% block gaq %}
 				{% if thread.product.carproduct %}
-					_gaq.push(['_trackEvent', 'Réservation', 'message', 'Voiture - {{ thread.product.category.name }}']);
+					_gaq.push(['_trackEvent', 'Réservation', 'Message', 'Voiture - {{ thread.product.category.name }}']);
 				{% endif %}
 				{% if thread.product.realestateproduct %}
-					_gaq.push(['_trackEvent', 'Réservation', 'message', 'Logement - {{ thread.product.category.name }}']);
+					_gaq.push(['_trackEvent', 'Réservation', 'Message', 'Logement - {{ thread.product.category.name }}']);
 				{% endif %}
 				{% if not thread.product.carproduct and not thread.product.realestateproduct %}
-					_gaq.push(['_trackEvent', 'Réservation', 'message', 'Objet - {{ thread.product.category.get_root }}']);
+					_gaq.push(['_trackEvent', 'Réservation', 'Message', 'Objet - {{ thread.product.category.get_root }}']);
 				{% endif %}
 			{% endblock %}
 		</script>
