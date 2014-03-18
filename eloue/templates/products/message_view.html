@@ -123,7 +123,6 @@
 		<img height="1" width="1" style="border-style:none;" alt="" src="//www.googleadservices.com/pagead/conversion/1027691277/?value=0&amp;label=SfnGCMvgrgMQjaaF6gM&amp;guid=ON&amp;script=0"/>
 		</div>
 		</noscript>
-		<script type="text/javascript">
 			{% block gaq %}
 				{% if thread.product.carproduct %}
 					_gaq.push(['_trackEvent', 'Réservation', 'Message', 'Voiture - {{ thread.product.category.name }}']);
@@ -135,7 +134,6 @@
 					_gaq.push(['_trackEvent', 'Réservation', 'Message', 'Objet - {{ thread.product.category.get_root }}']);
 				{% endif %}
 			{% endblock %}
-		</script>
     	{% endif %}
     {% endfor %}
 {% endif %}
