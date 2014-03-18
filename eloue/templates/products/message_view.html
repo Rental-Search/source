@@ -124,15 +124,17 @@
 		</div>
 		</noscript>
 		<script type="text/javascript">
-			{% if thread.product.carproduct %}
-				_gaq.push(['_trackEvent', 'Réservation', 'message', 'Voiture - {{ thread.product.category.name }}']);
-			{% endif %}
-			{% if thread.product.realestateproduct %}
-				_gaq.push(['_trackEvent', 'Réservation', 'message', 'Logement - {{ thread.product.category.name }}']);
-			{% endif %}
-			{% if not thread.product.carproduct and not thread.product.realestateproduct %}
-				_gaq.push(['_trackEvent', 'Réservation', 'message', 'Objet - {{ thread.product.category.get_root }}']);
-			{% endif %}
+			{% block gaq %}
+				{% if thread.product.carproduct %}
+					_gaq.push(['_trackEvent', 'Réservation', 'message', 'Voiture - {{ thread.product.category.name }}']);
+				{% endif %}
+				{% if thread.product.realestateproduct %}
+					_gaq.push(['_trackEvent', 'Réservation', 'message', 'Logement - {{ thread.product.category.name }}']);
+				{% endif %}
+				{% if not thread.product.carproduct and not thread.product.realestateproduct %}
+					_gaq.push(['_trackEvent', 'Réservation', 'message', 'Objet - {{ thread.product.category.get_root }}']);
+				{% endif %}
+			{% endblock %}
 		</script>
     	{% endif %}
     {% endfor %}
