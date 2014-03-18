@@ -205,7 +205,7 @@
                         _gaq.push(['_trackEvent', 'Réservation', 'Réservation acceptée', 'Logement - {{ booking.product.category.name }}']);
                     {% endif %}
                     {% if not booking.product.carproduct and not booking.product.realestateproduct %}
-                        _gaq.push(['_trackEvent', 'Réservation', 'Réservation acceptée', 'Objet - {{ booking.product.category.get_root }}']);
+                        _gaq.push(['_trackEvent', 'Réservation', 'Réservation acceptée', 'Objet - {% for category in booking.product.category.get_ancestors %}{{ category.name }} - {% endfor %}{{ booking.product.category.name }}']);
                     {% endif %}
             {% endif %}
             {% if booking.state == "rejected"%}
@@ -216,7 +216,7 @@
                         _gaq.push(['_trackEvent', 'Réservation', 'Réservation rejetée', 'Logement - {{ booking.product.category.name }}']);
                     {% endif %}
                     {% if not booking.product.carproduct and not booking.product.realestateproduct %}
-                        _gaq.push(['_trackEvent', 'Réservation', 'Réservation rejetée', 'Objet - {{ booking.product.category.get_root }}']);
+                        _gaq.push(['_trackEvent', 'Réservation', 'Réservation rejetée', 'Objet - {% for category in booking.product.category.get_ancestors %}{{ category.name }} - {% endfor %}{{ booking.product.category.name }}']);
                     {% endif %}
             {% endif %}
             {% if booking.state == "canceled"%}
@@ -227,7 +227,7 @@
                         _gaq.push(['_trackEvent', 'Réservation', 'Réservation annulée', 'Logement - {{ booking.product.category.name }}']);
                     {% endif %}
                     {% if not booking.product.carproduct and not booking.product.realestateproduct %}
-                        _gaq.push(['_trackEvent', 'Réservation', 'Réservation annulée', 'Objet - {{ booking.product.category.get_root }}']);
+                        _gaq.push(['_trackEvent', 'Réservation', 'Réservation annulée', 'Objet - {% for category in booking.product.category.get_ancestors %}{{ category.name }} - {% endfor %}{{ booking.product.category.name }}']);
                     {% endif %}
             {% endif %}
         {% endif %}

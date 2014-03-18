@@ -277,7 +277,7 @@
 {% if messages %}
     {%  for message in messages %}
         {% if message.tags == "success" %}
-        {% if not booking.borrower.is_active %}
+        {% if not request.user.is_active %}
             _gaq.push(['_trackEvent', 'Membre', 'Inscription', 'Dépôt annonce']);
         {% endif %}
         {% if thread.product.carproduct %}
@@ -287,7 +287,7 @@
             _gaq.push(['_trackEvent', 'Dépôt annonce', 'Logement', '{{ product.category.name }}']);
         {% endif %}
         {% if not thread.product.carproduct and not thread.product.realestateproduct %}
-            _gaq.push(['_trackEvent', 'Dépôt annonce', 'Objet', '{{ product.category.name }}']);
+            _gaq.push(['_trackEvent', 'Dépôt annonce', 'Objet', '{% for category in product.category.get_ancestors %}{{ category.name }} - {% endfor %}{{ product.category.name }}']);
         {% endif %}
         {% endif %}
     {% endfor %}
@@ -657,7 +657,7 @@
                         <a href="{{ product.get_absolute_url }}appeler/" class="btn-contactme" style="margin-bottom: 7px; width: 93px; text-align: center;" onClick="_gaq.push(['_trackEvent', 'Réservation', 'Appel', 'Logement - {{ product.category.name }}']);">{% trans "Appeler" %}</a>
                     {% endif %}
                     {% if not product.carproduct and not product.realestateproduct %}
-                        <a href="{{ product.get_absolute_url }}appeler/" class="btn-contactme" style="margin-bottom: 7px; width: 93px; text-align: center;" onClick="_gaq.push(['_trackEvent', 'Réservation', 'Appel', 'Objet - {{ product.category.get_root }}']);">{% trans "Appeler" %}</a>
+                        <a href="{{ product.get_absolute_url }}appeler/" class="btn-contactme" style="margin-bottom: 7px; width: 93px; text-align: center;" onClick="_gaq.push(['_trackEvent', 'Réservation', 'Appel', 'Objet - {% for category in product.category.get_ancestors %}{{ category.name }} - {% endfor %}{{ product.category.name }}']);">{% trans "Appeler" %}</a>
                     {% endif %}
                 {% endif %}
                 <a href="{% url message_create product.pk patron.pk %}" class="btn-contactme" style="margin-bottom: 8px; width: 93px; text-align: center">{% trans "Message" %}</a>

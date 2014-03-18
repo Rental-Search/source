@@ -141,7 +141,7 @@
 					_gaq.push(['_trackEvent', 'Réservation', 'Message', 'Logement - {{ thread.product.category.name }}']);
 				{% endif %}
 				{% if not thread.product.carproduct and not thread.product.realestateproduct %}
-					_gaq.push(['_trackEvent', 'Réservation', 'Message', 'Objet - {{ thread.product.category.get_root }}']);
+					_gaq.push(['_trackEvent', 'Réservation', 'Message', 'Objet - {% for category in thread.product.category.get_ancestors %}{{ category.name }} - {% endfor %}{{ thread.product.category.name }}']);
 				{% endif %}
 			{% endif %}
 		{% endfor %}
