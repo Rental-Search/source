@@ -192,3 +192,46 @@
 </div>
 {% endif %}
 {% endblock %}
+
+{% block gaq %}
+{% if messages %}
+    {% for message in messages %}
+        {% if message.tags == "success" %}
+            {% if booking.state == "pending"%}
+                    {% if booking.product.carproduct %}
+                        _gaq.push(['_trackEvent', 'Réservation', 'Réservation acceptée', 'Voiture - {{ booking.product.category.name }}']);
+                    {% endif %}
+                    {% if booking.product.realestateproduct %}
+                        _gaq.push(['_trackEvent', 'Réservation', 'Réservation acceptée', 'Logement - {{ booking.product.category.name }}']);
+                    {% endif %}
+                    {% if not booking.product.carproduct and not booking.product.realestateproduct %}
+                        _gaq.push(['_trackEvent', 'Réservation', 'Réservation acceptée', 'Objet - {{ booking.product.category.get_root }}']);
+                    {% endif %}
+            {% endif %}
+            {% if booking.state == "rejected"%}
+                    {% if booking.product.carproduct %}
+                        _gaq.push(['_trackEvent', 'Réservation', 'Réservation rejetée', 'Voiture - {{ booking.product.category.name }}']);
+                    {% endif %}
+                    {% if booking.product.realestateproduct %}
+                        _gaq.push(['_trackEvent', 'Réservation', 'Réservation rejetée', 'Logement - {{ booking.product.category.name }}']);
+                    {% endif %}
+                    {% if not booking.product.carproduct and not booking.product.realestateproduct %}
+                        _gaq.push(['_trackEvent', 'Réservation', 'Réservation rejetée', 'Objet - {{ booking.product.category.get_root }}']);
+                    {% endif %}
+            {% endif %}
+            {% if booking.state == "canceled"%}
+                    {% if booking.product.carproduct %}
+                        _gaq.push(['_trackEvent', 'Réservation', 'Réservation annulée', 'Voiture - {{ booking.product.category.name }}']);
+                    {% endif %}
+                    {% if booking.product.realestateproduct %}
+                        _gaq.push(['_trackEvent', 'Réservation', 'Réservation annulée', 'Logement - {{ booking.product.category.name }}']);
+                    {% endif %}
+                    {% if not booking.product.carproduct and not booking.product.realestateproduct %}
+                        _gaq.push(['_trackEvent', 'Réservation', 'Réservation annulée', 'Objet - {{ booking.product.category.get_root }}']);
+                    {% endif %}
+            {% endif %}
+        {% endif %}
+    {% endfor %}
+{% endif %}
+{% endblock %}
+
