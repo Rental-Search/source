@@ -1,0 +1,38 @@
+{% extends "admin/base_site.html" %}
+
+{% load compressed i18n %}
+
+
+{% block title %}Inscription pro{% endblock %}
+
+
+{% block breadcrumbs %}
+    <div class="breadcrumbs">
+        <a href="/">{% trans 'Home' %}</a> 
+        &rsaquo; New subscription
+    </div>
+{% endblock %}
+
+{% block messages %}
+{% endblock %}
+
+{% block content %}
+<div id="wizard-page" class="container-main">
+	<div class="content-main">
+		<p style="text-align: center; margin-top: 80px; padding: 20px; border: 1px solid #000">Redirection en cours...</p>
+		<form action="https://slimpay.net/slimpaytpe16/scim.html" method="post" name="mainForm"> 
+{{ form.as_p }}
+<noscript>
+<input type="submit" name="envoyer" value="Envoyer"/> 
+</noscript>
+</form>
+	</div>
+</div>
+
+
+<script type="text/javascript">
+window.onload=function(){document.forms['mainForm'].submit()};
+
+</script>
+
+{% endblock %}
