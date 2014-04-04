@@ -11,155 +11,169 @@
     </ul>
     <div class="one-content">
         {% include "partials/alerts_message.html" %}
-    	<h1 style="margin-bottom: 30px; font-size: 30px;">{% trans "Bienvenue sur notre espace professionnel" %} <small class="pro-contact">0826 800 200 (0,15 &euro;/min)</small></h1>
+    	<h1 style="margin-bottom: 30px; font-size: 30px;">{% trans "Bienvenue sur l'espace e-loue PRO" %} <small class="pro-contact">0826 800 200 (0,15 &euro;/min)</small></h1>
     	<div class="pro-introduction">
     		<div class="pro-welcome">
     			<p style="margin-bottom: 15px;">
 	    			{% blocktrans %}
-                    e-loue.com est une place de marché<br> de la location.
+                    Vous êtes loueur professionnel ? Nous aussi !
                     {% endblocktrans %}
 	    		</p>
-	    		<p style="font-size: 16px;">
-                    {% trans "Quelque soit votre domaine d’activité dans la location, nos membres seront intéréssés par vos annonces." %}<br><b>{% trans "Tous nos abonnements sont sans engagement et sans frais de résiliation" %}</b>.
+	    		<p style="font-size: 16px; font-weight: normal; text-align: justify;">
+                    e-loue.com est le premier site de location dédié aux particuliers et aux professionnels. Quelque soit votre domaine d’activité, quelque soit votre localité, nos membres seront intéressés par vos produits à louer (outils, voitures, immobilier, matériel photo/vidéo, déguisements, …).  Alors n’hésitez pas à souscrire un Pack e-loue PRO pour découvrir un canal de distribution complémentaire et augmenter vos revenus !
 	    		</p>
     		</div>
     		<div class="pro-intro-desc">
-	    		<ul>
-	    			<li>
-	    				<i class="pro-check"></i> {% trans "Gérer plus de locations" %}
-	    			</li>
-	    			<li>
-	    				<i class="pro-check"></i> {% trans "Canal de distribution complémentaire" %}
-	    			</li>
-	    			<li>
-	    				<i class="pro-check"></i> {% trans "Visibilité sur un site très connu" %}
-	    			</li>
-	    			<li>
-	    				<i class="pro-check"></i> {% trans "Augmenter vos locations" %}
-	    			</li>
-	    			<li>
-	    				<i class="pro-check"></i> {% trans "Toucher tous les membres de e-loue" %}
-	    			</li>
-	    		</ul>
+	    		<p style="margin-bottom: 20px;">e-loue, le partenaire qu’il vous faut :</p>
+                <ul>
+                    <li><i></i> Plateforme de location en ligne depuis 5 ans</li>
+                    <li><i></i> 100 000 visiteurs mensuels</li>
+                    <li><i></i> 50 000 produits à louer en France</li>
+                    <li><i></i> + de 10 000 mises en relation mensuelles</li>
+                </ul>
+                <p style="font-size: 16px;">
+                    Autant d’atouts que nous mettons à  votre disposition pour vous apporter de nouveaux clients!
+                </p>
 	    	</div>
     	</div>
-        <div class="step-by-step-pro">
-            <ul>
-                <li class="step-pro">
-                    <a href="#profile_pro" id="profile-pro">
-                        <img src="{{ STATIC_URL }}images/profile_pro.png" alt="exemple profile pro">
-                    </a>
-                    <i class="icon-search"></i>
-                    <p>
-                        {% blocktrans %}
-                        Choisissez un abonnement et importez simplement votre<br>catalogue avec notre aide
-                        {% endblocktrans %}
-                    </p>
+        <div id="step-by-step-pro">
+            <div id="arguments">
+                <ul>
+                    <li class="step-pro"><a href="#" id="arg1">Choisissez votre Pack<br>e-loue Pro</a></li>
+                    <li class="arrow-pro"></li>
+                    <li class="step-pro"><a href="#" id="arg2">Bénéficiez des avantages<br>e-loue Pro</a></li>
+                    <li class="arrow-pro"></li>
+                    <li class="step-pro"><a href="#" id="arg3">Augmentez vos revenus en boostant vos transactions</a></li>
+                </ul>
+            </div>
+            <div id="arguments-container">
+                <div id="arguments-content">
+                    <div id='arg1-content'>
+                        <div id="arguments-container-dialogue"></div>
+                        <ul>
+                            <li>Au choix <strong>parmi nos trois nouveaux Pack</strong> : SILVER, GOLD ou PLATINE</li>
+                            <li>Pack à partir de <stong>seulement 10€ HT / mois</strong></li>
+                            <li>Nouveau, dans tous les Packs e-loue PRO : <strong>nombre d’annonce illimité !</strong></li>
+                        </ul>
+                    </div>
+                    <div id='arg2-content'>
+                        <div id="arguments-container-dialogue"></div>
+                        <ul>
+                            <li>Importez  votre catalogue en toute simplicité</li>
+                            <li>Publiez  un nombre illimité d’annonces sur notre site</li>
+                            <li>Bénéficiez  d’un référencement  Google optimisé</li>
+                        </ul>
+                    </div>
+                    <div id='arg3-content'>
+                        <div id="arguments-container-dialogue"></div>
+                        <ul>
+                            <li>Nos 100 000 visiteurs mensuels voient <strong>vos annonces sur e-loue.com</strong></li>
+                            <li>Les clients vous contactent directement <strong>par téléphone,  mail ou via votre site</strong></li>
+                            <li><strong>Vos volumes de location augmentent</strong>, grâce à votre présence sur  e-loue PRO</li>
+                        </ul>
+                    </div>
+                </div>{# arguments-content #}
+            </div>
+        </div>{# step-by-step-pro #}
+        <div id="products" class="ht-fonction">
+            <ul class="ht-f-col">
+                <li>
+                    <div class="ht-icon lock"></div>
+                    <div class="ht-f-desc">
+                        <span>Efficace</span><br>
+                        Nous vous aportons de nouveau clients,<br>
+                        vous augmentez vos revenus !<br>
+                    </div>
                 </li>
-                <li class="arrow-pro"></li>
-                <li class="step-pro">
-                    <a href="#search_page_pro" id="search-page-pro">
-                        <img src="{{ STATIC_URL }}images/search_page_pro.png" alt="exemple profile pro">
-                    </a>
-                    <i class="icon-search"></i>
-                    <p>
-                        {% blocktrans %}
-                        Les clients voient vos annonces<br>sur e-loue.com
-                        {% endblocktrans %}
-                    </p>
+                <li>
+                    <div class="ht-icon money"></div>
+                    <div class="ht-f-desc"><span>Rapide</span><br>
+                        Nous ouvrons votre boutique et intégrons<br>
+                        vos produits en moins de 2 semaines
+                    </div>
                 </li>
-                <li class="arrow-pro"></li>
-                <li class="step-pro">
-                    <a href="#product_page_pro" id="product-page-pro">
-                        <img src="{{ STATIC_URL }}images/product_page_pro.png" alt="exemple profile pro">
-                    </a>
-                    <i class="icon-search"></i>
-                    <p>
-                        {% blocktrans %}
-                        Les clients vous contactent directement par téléphone ou<br>par mail pour une réservation
-                        {% endblocktrans %}
-                    </p>
+            </ul>
+            <ul class="ht-f-col">
+                <li>
+                    <div class="ht-icon assurancy"></div>
+                    <div class="ht-f-desc">
+                        <span>Transparent</span><br>
+                        Nous vous donnons accès à toutes<br>
+                        les statistiques  Google de votre boutique !
+                    </div>
+                </li>
+                <li>
+                    <div class="ht-icon people"></div>
+                    <div class="ht-f-desc">
+                        <span>Adaptable</span><br>
+                        Vous pouvez modifier ou compléter<br>
+                        votre boutique en toute simplicité !
+                    </div>
                 </li>
             </ul>
         </div>
-    	<h2 style="margin-bottom: 30px;">{% trans "Choisissez un abonnement adapté à votre besoin" %} :</h2>
-    	<div class="plans">
-            <p style="text-align: center; height: 40px;">
-                <span class="plan-first-month" style="font-size: 16px; font-weight:normal;">Le premier mois d'essai à <b>4,50 &euro;</b> pour tous les abonnements</span>
-            </p>
-    		{% for plan in plans %}
-	    		{% if forloop.last %}
-	    		<div class="info-block infini-plan">
-	    			<p class="infini-items">{% trans "Annonces illimitées" %}</p>
-	    			<div class="plan-description">
-		    			<h2>{{ plan.name }}</h2>
-		    			<p class="plan_price">
-			            		{{ plan.price|floatformat:0 }}&euro; HT<span>/mois</span>
-			            </p>
-			        </div>
-	        	{% else %}
-	    		<div class="info-block plan {% if forloop.first %}first{% endif %}">
-		            <h2>
-		            	{{ plan.name }} 
-		            	<div class="plan_price">
-		            		{{ plan.price|floatformat:0 }}&euro; HT<span>/{% trans "mois" %}</span>
-		            	</div>
-		            </h2>
-		            <p class="max-items">{{ plan.maximum_items }} {% trans "annonces maximum" %}</p>
-	        	{% endif %}
-                {% if plan.pk != request.user.current_subscription.propackage.pk %}
-                        <form action="{% if request.user.is_authenticated %}{% url patron_edit_subscription %}{% else %} {% endif %}" method="post">
-                            {% csrf_token %}
-                            <input type="hidden" name="{% if request.user.is_authenticated %}{% else %}0-{% endif %}subscription" value="{{ plan.pk }}" />
-                            <input type="submit" value="{% trans "Choisir cet abonnement" %}" class="btn-select-plan"/>
-                        </form>
-                {% else %}
-                    <div class="selected-plan">{% trans "Votre abonnement actuel" %}</div>
-                {% endif %}
-                </div>
-        	{% endfor %}
+        <div class="plans">
+            <table>
+                <tr class="plans-title">
+                    <td></td>
+                    <td>
+                        <h4>Pack silver</h4>
+                        <span>Accès à e-loue PRO pendant<br>
+                        1 MOIS</span>
+                    </td>
+                    <td>
+                        <h4>Pack gold</h4>
+                        <span>Accès à e-loue PRO pendant<br>
+                        6 MOIS</span>
+                    </td>
+                    <td>
+                        <h4>Pack platine</h4>
+                        <span>Accès à e-loue PRO pendant<br>
+                        12 MOIS</span>
+                    </td>
+                </tr>
+                <tr class="access-fees">
+                    <th>Frais d'accès à e-loue pro</th>
+                    <td>60&euro; HT<br>
+                    </td>
+                    <td>
+                        60&euro; HT<br>
+                        <del>OFFERT</del>
+                    </td>
+                    <td>
+                        60&euro; HT<br>
+                        <del>OFFERT</del>
+                    </td>
+                </tr>
+                <tr class="plans-prices">
+                    <th>Abonnement mensuel</th>
+                    <td>40&euro; HT /MOIS</td>
+                    <td>20&euro; HT /MOIS</td>
+                    <td>12&euro; HT /MOIS</td>
+                </tr>
+            </table>
         </div>
-        <h2 style="margin-bottom: 40px;">{% trans "Des options vous sont proposées pour augmenter votre visibilité et votre réactivité" %} :</h2>
-        <div class="pro-options">
-        	<ul class="first">
-        		<li>
-        			<i class="notification"></i>
-        			<span class="title-option">{% trans "Notifications par email" %}</span>
-        			<span class="price-option">0,01&euro;/{% trans "envoi" %}</span><br>
-        			{% trans "Recevez les demandes de devis sur plusieurs adresses emails." %}
-        		</li>
-        		<li>
-        			<i class="highlight"></i>
-        			<span class="title-option">{% trans "Mise en avant" %}</span>
-        			<span class="price-option">7,50&euro;/{% trans "mois" %}/{% trans "annonce" %}</span><br>
-        			{% trans "Votre annonce est mise en avant dans les listes (page d’accueil, résultats de recherche, annonces similaires)." %}
-        		</li>
-        	</ul>
-        	<ul>
-        		<li>
-        			<i class="sms"></i>
-        			<span class="title-option">{% trans "Notifications par SMS" %}</span>
-        			<span class="price-option">0,08&euro;/{% trans "envoi" %}</span><br>
-        			{% trans "Pour répondre rapidement aux devis, recevez les demandes de réservation sur votre mobile." %}
-        		</li>
-        		<li>
-        			<i class="top-position"></i>
-        			<span class="title-option">{% trans "Top position" %}</span>
-        			<span class="price-option">5,50&euro;/{% trans "mois" %}/{% trans "annonce" %}</span><br>
-        			{% trans "Votre annonce est mise en première position des résultats de recherches sur le site." %}
-        		</li>
-        	</ul>
-        </div>
-	</div>        
-</div>
-<div id="profile-pro-dialog" style="display:none" title="Page profile d'un professionnel">
-    <img src="{{ STATIC_URL }}images/profile_pro_large.png" width="600" />
-</div>
-<div id="search-pro-dialog" style="display:none" title="Résultat de recherche">
-    <img src="{{ STATIC_URL }}images/search_page_pro_large.png" width="600" />
-</div>
-<div id="product-pro-dialog" style="display:none" title="Annonce d'un professionnel">
-    <img src="{{ STATIC_URL }}images/product_page_pro_large.png" width="600" />
+    </div> {# one-content #}
+</div>{# container-main #}
+<div id="products-dialog" style="display:none" title="4 bonnes raisons de choisir e-loue">
+    <ul style='width: 600px;'>
+        <li>
+            <h2>EFFICACE : Nous vous apportons de nouveaux clients, vous augmentez vos revenus !</h2>
+            <p>Une boutique en ligne est utile lorsqu‘elle est visitée. Grace à notre savoir faire en e-marketing (référencement naturel, référencement payant, trafic et notoriété, buzz et retombées médiatiques…), nous faisons le nécessaire pour que votre boutique soit visitée, et - c’est encore mieux - uniquement par des internautes intéressés par les objets que vous loués. Ainsi, grâce à e-loue, vous avez l’opportunité de toucher de nouveaux clients…</p>
+        </li>
+        <li>
+            <h2>RAPIDE : Nous ouvrons votre boutique et intégrons tous vos produits en moins de 2 semaines ! </h2>
+            <p>Grâce à notre expertise et notre savoir-faire, nous sommes en mesure de vous proposer nos services sous 14 jours. Nous savons que vous êtes pressés d'avoir de nouveaux clients, alors nos équipes font le maximum pour vous satisfaire…</p>
+        </li>
+        <li>
+            <h2>TRANSPARENT : Nous vous donnons accès à toutes les au statistiques  Google  de votre boutique !</h2>
+            <p>Vous avez du mal à mesurer les retours de vos campagnes de publicité ?  E-loue vous donne les moyens de voir ce que vous rapporte chaque euro investi chez nous. Dans votre espace réservé, vous avez accès à toutes vos statistiques et aux leads générés grâce à nos services : visites de votre site, appels, messages… Et aucun doute sur l’interprétation de ces données, elles sont issues de Google Analytics…</p>
+        </li>
+        <li>
+            <h2>ADAPTABLE : Vous pouvez modifier ou compléter votre boutique en toute simplicité !</h2>
+            <p>Votre activité évolue, votre boutique e-loue doit évoluer aussi ! Vous pouvez rajouter/supprimer des annonces, changer vos prix  en toute simplicité depuis votre espace client. Mais si vous préférez, vous pouvez nous demander de le faire pour vous : le responsable de votre compte e-loue sera ravi de vous aider.. Dans tous les cas ça ne vous coûte rien, et c'est fait dans la journée…</p>
+        </li>
+    </ul>
 </div>
 {% endblock %}
 
@@ -167,40 +181,31 @@
 {{ block.super }}
 <script type="text/javascript">
 $(document).ready(function (){
-     $("#profile-pro-dialog").dialog({
-        autoOpen: false,
-        width: 'auto',
-        resizable: false,
-     });
-     $("#search-pro-dialog").dialog({
-        autoOpen: false,
-        width: 'auto',
-        resizable: false,
-     });
-     $("#product-pro-dialog").dialog({
-        autoOpen: false,
-        width: 'auto',
-        resizable: false,
-     });
-    $("#profile-pro").click(function (e){
-        e.preventDefault();
-        $("#profile-pro-dialog").dialog("open");
-        $("#profile-pro-dialog").css('padding', '0');
-        $("#profile-pro-dialog img").css('margin-bottom', '-2px');
+     jQuery('div#arguments-content').cycle({ 
+        delay:  10, 
+        speed:  800,
     });
-    $("#search-page-pro").click(function (e){
-        e.preventDefault();
-        console.log("click");
-        $("#search-pro-dialog").dialog("open");
-        $("#search-pro-dialog").css('padding', '0');
-        $("#search-pro-dialog img").css('margin-bottom', '-2px');
+    $('#arg1').hover(function(event) {
+        $('#arguments-content').cycle(0);
+        $('#arguments-content').cycle('pause');
+    }); 
+ 
+    $('#arg2').hover(function(event) {  
+        $('#arguments-content').cycle(1);
+        $('#arguments-content').cycle('pause');
     });
-    $("#product-page-pro").click(function (e){
+    $('#arg3').hover(function(event) {
+        $('#arguments-content').cycle(2);
+        $('#arguments-content').cycle('pause'); 
+    });
+     $("#products-dialog").dialog({
+        autoOpen: false,
+        width: 'auto',
+        resizable: false,
+     });
+     $("#products").click(function (e){
         e.preventDefault();
-        console.log("click");
-        $("#product-pro-dialog").dialog("open");
-        $("#product-pro-dialog").css('padding', '0');
-        $("#product-pro-dialog img").css('margin-bottom', '-2px');
+        $("#products-dialog").dialog("open");
     });
 });
 </script>
