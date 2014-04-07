@@ -733,9 +733,9 @@ class ProPackage(models.Model):
 
     def __unicode__(self):
         if self.maximum_items:
-            return u'{maximum_items} item - {price} euro'.format(maximum_items=self.maximum_items, price=self.price)
+            return u'{name} - {maximum_items} item - {price} euro'.format(name=self.name, maximum_items=self.maximum_items, price=self.price)
         else:
-            return u'illimity items - {price} euro'.format(price=self.price)
+            return u'{name} - illimity items - {price} euro'.format(name=self.name, price=self.price)
 
 
     class Meta:

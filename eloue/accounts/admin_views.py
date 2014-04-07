@@ -12,14 +12,13 @@ from django.contrib.admin.views.decorators import staff_member_required
 from eloue.accounts.forms import make_missing_data_form
 from eloue.accounts.models import Patron, ProPackage
 
-SUBSCRIPTION_PAYMENT_TYPE_CHOICES = (
-    (0, 'Carte de crédit'),
-    (1, 'Chèque'),
-)
+from eloue.payments.slimpay_payment import SlimPayManager
+from eloue.payments.models import SlimPayMandateInformation
+from eloue.payments.slimpay_forms import BridgeForm
 
 def patron_create_subscription(request):
 
-	required_fields = ['username', 'is_professional', 'company_name', 'first_name', 'last_name', 'phones__phone', 'addresses__address1', 'addresses__zipcode', 'addresses__city', 'addresses__country', 'cvv', 'holder_name', 'card_number', 'expires']
+	required_fields = ['username', 'is_professional', 'company_name', 'first_name', 'last_name', 'phones__phone', 'addresses__address1', 'addresses__zipcode', 'addresses__city', 'addresses__country']
 
 	missing_fields, missing_form = make_missing_data_form(None, required_fields)
 
@@ -43,14 +42,6 @@ def patron_create_subscription(request):
 	            ('phone', {
 	                'fields': ['phones__phone'], 
 	                'legend': 'Numéro de téléphone'}),
-	            ('payment_type',{
-	            	'fields': ['payment_type'],
-	            	'legend': 'Choix du mode de paiement'}),
-	            ('payment', {
-	                'fields': ['cvv', 'expires', 'holder_name', 'card_number', ],
-	                'legend': 'Coordonnées bancaires',
-	                'classes': ['creditcard']
-	                }),
 	        ]
 
 		def __init__(self, *args, **kwargs):
@@ -59,39 +50,11 @@ def patron_create_subscription(request):
 			self.fields['is_professional'].initial = True
 			self.fields['is_professional'].widget = forms.HiddenInput()
 			self.fields['phones__phone'].label = 'Numéro'
-			self.fields['cvv'].required = False
-			self.fields['expires'].required = False
-			self.fields['holder_name'].required = False
-			self.fields['card_number'].required = False
-			self.fields['payment_type'] = forms.ChoiceField(label='Mode de paiement', choices=SUBSCRIPTION_PAYMENT_TYPE_CHOICES)
 			self.fields['subscription'] = forms.ModelChoiceField(label='Abonnement', required=True,
 	            queryset=ProPackage.objects.filter(
-	                Q(valid_until__isnull=True)|Q(valid_until__lte=now) 
+	                Q(valid_until__isnull=True)|Q(valid_until__gte=now) 
 	            )
 	        )
-
-		def clean(self):
-			super(NewSubscriptionForm, self).clean()
-			payment_type = self.cleaned_data.get('payment_type', None)
-			if payment_type == "0":
-				msg = 'Ce champ est obligatoire.'
-				
-				if self.cleaned_data['cvv'] == "":
-					self._errors["cvv"] = self.error_class([msg])
-					del self.cleaned_data["cvv"]
-
-				if self.cleaned_data['expires'] == "":
-					self._errors["expires"] = self.error_class([msg])
-					del self.cleaned_data["expires"]
-
-				if self.cleaned_data['holder_name'] == "":
-					self._errors["holder_name"] = self.error_class([msg])
-					del self.cleaned_data["holder_name"]
-
-				if self.cleaned_data['card_number'] == "":
-					self._errors["card_number"] = self.error_class([msg])
-					del self.cleaned_data["card_number"]
-			return self.cleaned_data
 
 	form = NewSubscriptionForm(request.POST or None)
 
@@ -107,11 +70,17 @@ def patron_create_subscription(request):
 		messages.success(request, 'Create user successed')
 
 		patron.subscribe(form.cleaned_data['subscription'])
-		patron.current_subscription.free = True
-		patron.current_subscription.payment_type = form.cleaned_data['payment_type']
 		patron.current_subscription.save()
 
-		form = NewSubscriptionForm()
+		slimpay_mandate_info = SlimPayMandateInformation.objects.create(patron=new_patron)
+
+		blob = slimpay_mandate_info.blob()
+		
+
+		bridge_form = BridgeForm(initial={'blob': blob})
+
+		return render_to_response('payments/admin/slimpay_bridge.html', RequestContext(request, {'form': bridge_form}))
+
 		
 
 	if form.errors:
