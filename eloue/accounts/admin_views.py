@@ -13,6 +13,7 @@ from eloue.accounts.forms import make_missing_data_form
 from eloue.accounts.models import Patron, ProPackage
 
 from eloue.payments.slimpay_payment import SlimPayManager
+from eloue.payments.models import SlimPayMandateInformation
 from eloue.payments.slimpay_forms import BridgeForm
 
 def patron_create_subscription(request):
@@ -51,7 +52,7 @@ def patron_create_subscription(request):
 			self.fields['phones__phone'].label = 'Numéro'
 			self.fields['subscription'] = forms.ModelChoiceField(label='Abonnement', required=True,
 	            queryset=ProPackage.objects.filter(
-	                Q(valid_until__isnull=True)|Q(valid_until__lte=now) 
+	                Q(valid_until__isnull=True)|Q(valid_until__gte=now) 
 	            )
 	        )
 
@@ -71,21 +72,10 @@ def patron_create_subscription(request):
 		patron.subscribe(form.cleaned_data['subscription'])
 		patron.current_subscription.save()
 
+		slimpay_mandate_info = SlimPayMandateInformation.objects.create(patron=new_patron)
 
-		address = new_patron.addresses.all()[0]
-
-		slimpay_manager = SlimPayManager()
-
-		blob = slimpay_manager.transactionRequest(
-			requestType='mandate', 
-			clientReference='%s_%s' % (new_patron.slug, new_patron.pk), 
-			contactFN=new_patron.first_name, 
-			contactLN=new_patron.last_name,
-			Iline1=address.address1,
-			Icity=address.city,
-			IpostalCode=address.zipcode,
-			Icountry=address.country,
-			contactEmail=new_patron.email)
+		blob = slimpay_mandate_info.blob()
+		
 
 		bridge_form = BridgeForm(initial={'blob': blob})
 

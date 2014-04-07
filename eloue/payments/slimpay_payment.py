@@ -28,17 +28,28 @@ class SlimPayManager(object):
 
         return response
 
-    def initRequest(self, clientInitializationUrl, mode, siteId, returnUrl, notifyUrl):
-		args = {
-			'requestType': 'init',
-			'mode': mode,
-			'siteId': siteId,
-			'clientInitializationUrl': clientInitializationUrl,
- 			'notifyUrl': notifyUrl,
- 			'returnUrl': returnUrl
- 		}
+    def initRequest(self, clientInitializationUrl, mode, siteId, returnUrl, notifyUrl, code=None):
+        if mode == 'production':
+            args = {
+                'requestType': 'init',
+                'mode': mode,
+                'siteId': siteId,
+                'clientInitializationUrl': clientInitializationUrl,
+                'notifyUrl': notifyUrl,
+                'returnUrl': returnUrl,
+                'code': code
+            }
+        else:
+            args = {
+    			'requestType': 'init',
+    			'mode': mode,
+    			'siteId': siteId,
+    			'clientInitializationUrl': clientInitializationUrl,
+     			'notifyUrl': notifyUrl,
+     			'returnUrl': returnUrl
+            }
 
- 		return self.execute_command(args)
+        return self.execute_command(args)
 
     def transactionRequest(self, requestType, clientReference, contactFN, contactLN, Iline1, Icity, IpostalCode, Icountry, 
             transactionId=None, clientType=None,  companyName=None, organizationId=None, contactTitle=None,

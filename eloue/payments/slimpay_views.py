@@ -10,6 +10,8 @@ from eloue.payments.slimpay_payment import SlimPayManager
 from eloue.payments.slimpay_forms import BridgeForm
 from eloue.payments.models import SlimPayMandateInformation
 
+from eloue.accounts.models import Patron
+
 @require_POST
 @csrf_exempt
 def clientInitialization(request):
@@ -36,13 +38,14 @@ def notify_response(request):
 
 		response = slimpay_manager.decodeBlob(form.cleaned_data['blob'])
 
-		SlimPayMandateInformation.objects.create(
-				RUM = response.get('RUM'),
-				signatureDate=response.get('signatureDate'),
-				mandateFileName=response.get('mandateFileName'),
-				transactionId=response.get('transactionId'),
-				patron_id=2345
-			)
+		slimpay_mandate_info = SlimPayMandateInformation.objects.get(patron_id=response.get('clientReference'), pk=response.get('transactionId'))
+		slimpay_mandate_info.RUM = response.get('RUM')
+		slimpay_mandate_info.signatureDate = response.get('signatureDate')
+		slimpay_mandate_info.mandateFileName = response.get('mandateFileName')
+		slimpay_mandate_info.transactionStatus = response.get('transactionStatus')
+		slimpay_mandate_info.transactionErrorCode = response.get('transactionErrorCode')
+		
+		slimpay_mandate_info.save()
 
 	# parameters
 	# transactionStatus=success

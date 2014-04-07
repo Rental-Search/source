@@ -11,11 +11,12 @@ class Migration(SchemaMigration):
         # Adding model 'SlimPayMandateInformation'
         db.create_table('payments_slimpaymandateinformation', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('RUM', self.gf('django.db.models.fields.CharField')(max_length=255, null=True, blank=True)),
             ('patron', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['accounts.Patron'])),
+            ('RUM', self.gf('django.db.models.fields.CharField')(max_length=255, null=True, blank=True)),
             ('signatureDate', self.gf('django.db.models.fields.DateTimeField')(null=True, blank=True)),
             ('mandateFileName', self.gf('django.db.models.fields.CharField')(max_length=255, null=True, blank=True)),
-            ('transactionId', self.gf('django.db.models.fields.CharField')(max_length=255, null=True, blank=True)),
+            ('transactionStatus', self.gf('django.db.models.fields.CharField')(max_length=255, null=True, blank=True)),
+            ('transactionErrorCode', self.gf('django.db.models.fields.CharField')(max_length=3, null=True, blank=True)),
         ))
         db.send_create_signal('payments', ['SlimPayMandateInformation'])
 
@@ -130,7 +131,7 @@ class Migration(SchemaMigration):
         },
         'auth.user': {
             'Meta': {'object_name': 'User'},
-            'date_joined': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2014, 3, 31, 19, 2, 51, 750942)'}),
+            'date_joined': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2014, 4, 4, 19, 11, 0, 783108)'}),
             'email': ('django.db.models.fields.EmailField', [], {'max_length': '75', 'blank': 'True'}),
             'first_name': ('django.db.models.fields.CharField', [], {'max_length': '30', 'blank': 'True'}),
             'groups': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['auth.Group']", 'symmetrical': 'False', 'blank': 'True'}),
@@ -138,7 +139,7 @@ class Migration(SchemaMigration):
             'is_active': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
             'is_staff': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'is_superuser': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'last_login': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2014, 3, 31, 19, 2, 51, 750760)'}),
+            'last_login': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2014, 4, 4, 19, 11, 0, 783009)'}),
             'last_name': ('django.db.models.fields.CharField', [], {'max_length': '30', 'blank': 'True'}),
             'password': ('django.db.models.fields.CharField', [], {'max_length': '128'}),
             'user_permissions': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['auth.Permission']", 'symmetrical': 'False', 'blank': 'True'}),
@@ -182,7 +183,8 @@ class Migration(SchemaMigration):
             'mandateFileName': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
             'patron': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['accounts.Patron']"}),
             'signatureDate': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
-            'transactionId': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'})
+            'transactionErrorCode': ('django.db.models.fields.CharField', [], {'max_length': '3', 'null': 'True', 'blank': 'True'}),
+            'transactionStatus': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'})
         },
         'sites.site': {
             'Meta': {'ordering': "('domain',)", 'object_name': 'Site', 'db_table': "'django_site'"},

@@ -6,6 +6,10 @@ from eloue.payments import *
 from eloue.accounts.models import CreditCard
 from eloue.accounts.models import Patron
 
+
+from eloue.payments.slimpay_payment import SlimPayManager
+
+
 class PaymentInformation(models.Model, abstract_payment.AbstractPayment):
     # I did not used a generic reverse relation here, because of a bug in django 1.2
     # we must replace this with:
@@ -45,9 +49,28 @@ class PayboxDirectPlusPaymentInformation(PayboxPaymentInformation, paybox_paymen
 
 
 class SlimPayMandateInformation(models.Model):
-    RUM = models.CharField(null=True, blank=True, max_length=255)
     patron = models.ForeignKey(Patron)
+    RUM = models.CharField(null=True, blank=True, max_length=255)
     signatureDate = models.DateTimeField(null=True, blank=True)
     mandateFileName = models.CharField(null=True, blank=True, max_length=255)
-    transactionId = models.CharField(null=True, blank=True, max_length=255)
+    transactionStatus = models.CharField(null=True, blank=True, max_length=255)
+    transactionErrorCode = models.CharField(null=True, blank=True, max_length=3)
 
+    def blob(self):
+        slimpay_manager = SlimPayManager()
+        
+        address = self.patron.addresses.all()[0]
+
+        blob = slimpay_manager.transactionRequest(
+            requestType='mandate', 
+            clientReference=self.patron.pk, 
+            contactFN=self.patron.first_name, 
+            contactLN=self.patron.last_name,
+            Iline1=address.address1,
+            Icity=address.city,
+            IpostalCode=address.zipcode,
+            Icountry=address.country,
+            contactEmail=self.patron.email,
+            transactionId=self.pk
+        )
+        return blob
