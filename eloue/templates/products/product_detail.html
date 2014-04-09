@@ -623,7 +623,7 @@
                 {% if product.phone %}
                 <a href="{{ product.get_absolute_url }}appeler/" class="btn-contactme" style="margin-bottom: 7px; width: 93px; text-align: center;">{% trans "Appeler" %}</a>
                 {% endif %}
-                <a href="{% url message_create product.pk patron.pk %}" class="btn-contactme" style="margin-bottom: 8px; width: 93px; text-align: center">{% trans "Message" %}</a>
+                <a href="{% url 'message_create' product.pk patron.pk %}" class="btn-contactme" style="margin-bottom: 8px; width: 93px; text-align: center">{% trans "Message" %}</a>
                 {% cache 43200 response_stats patron.pk %}
                 <table class="answer-stats" style="margin-top: 10px;">
                     {% if patron.average_note %}

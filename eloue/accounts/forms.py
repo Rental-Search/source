@@ -575,7 +575,7 @@ class PhoneNumberBaseFormSet(MixinHiddenDeleteFormset, BaseInlineFormSet):
             raise forms.ValidationError('')
         return self.cleaned_data
 
-PhoneNumberFormset = inlineformset_factory(Patron, PhoneNumber, form=PhoneNumberForm, formset=PhoneNumberBaseFormSet, exclude=['kind'], extra=1, can_delete=False)
+PhoneNumberFormset = inlineformset_factory(Patron, PhoneNumber, form=PhoneNumberForm, formset=PhoneNumberBaseFormSet, exclude=['kind'], extra=1, can_delete=True)
 
 class AddressForm(forms.ModelForm):
     address1 = forms.CharField(label=_(u"Adresse"), widget=forms.Textarea(attrs={'class': 'inm street', 'placeholder': _(u'Rue')}))
@@ -621,7 +621,7 @@ class AddressBaseFormSet(MixinHiddenDeleteFormset, BaseInlineFormSet):
             pass
     
 
-AddressFormSet = inlineformset_factory(Patron, Address, form=AddressForm, formset=AddressBaseFormSet, extra=1, can_delete=False)
+AddressFormSet = inlineformset_factory(Patron, Address, form=AddressForm, formset=AddressBaseFormSet, extra=1, can_delete=True)
 
 class RIBForm(forms.ModelForm):
     

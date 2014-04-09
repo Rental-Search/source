@@ -535,8 +535,7 @@ def product_delete(request, slug, product_id):
         messages.success(request, _(u"Votre objet à bien été supprimée"))
         return redirect('owner_product')
     else:
-        return render(request, 'products/product_delete.html', 
-            {'product': product})
+        return render(request, 'products/product_delete.html', {'product': product})
 
 from django.views.generic import ListView, DetailView
 from django.utils.decorators import method_decorator
