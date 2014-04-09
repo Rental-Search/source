@@ -74,7 +74,6 @@
 
 {% block tail %}
   {{ block.super }}
-  {% if not debug %}
   <!-- Google Code for Location Https Conversion Page -->
   <script type="text/javascript">
   /* <![CDATA[ */
@@ -94,6 +93,19 @@
   <img height="1" width="1" style="border-style:none;" alt="" src="//www.googleadservices.com/pagead/conversion/1027691277/?value=0&amp;label=-XHsCMvspQMQjaaF6gM&amp;guid=ON&amp;script=0"/>
   </div>
   </noscript>
+{% endblock %}
+{% block gaq %}
+  {% if not request.user.is_active %}
+    _gaq.push(['_trackEvent', 'Membre', 'Inscription', 'Réservation']);
+  {% endif %}
+  {% if booking.product.carproduct %}
+    _gaq.push(['_trackEvent', 'Réservation', 'Demande de réservation', 'Voiture - {{ booking.product.category.name }}']);
+  {% endif %}
+  {% if booking.product.realestateproduct %}
+    _gaq.push(['_trackEvent', 'Réservation', 'Demande de réservation', 'Logement - {{ booking.product.category.name }}']);
+  {% endif %}
+  {% if not booking.product.carproduct and not booking.product.realestateproduct %}
+    _gaq.push(['_trackEvent', 'Réservation', 'Demande de réservation', 'Objet - {% for category in booking.product.category.get_ancestors %}{{ category.name }} - {% endfor %}{{ booking.product.category.name }}']);
   {% endif %}
 {% endblock %}
 {% block footer %}

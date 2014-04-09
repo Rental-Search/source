@@ -273,7 +273,26 @@
     {% endif %}
     {% endif %}
 {% endblock %}
-
+{% block gaq %}
+{% if messages %}
+    {%  for message in messages %}
+        {% if message.tags == "success" %}
+        {% if not request.user.is_active %}
+            _gaq.push(['_trackEvent', 'Membre', 'Inscription', 'Dépôt annonce']);
+        {% endif %}
+        {% if thread.product.carproduct %}
+            _gaq.push(['_trackEvent', 'Dépôt annonce', 'Voiture', '{{ product.category.name }}']);
+        {% endif %}
+        {% if thread.product.realestateproduct %}
+            _gaq.push(['_trackEvent', 'Dépôt annonce', 'Logement', '{{ product.category.name }}']);
+        {% endif %}
+        {% if not thread.product.carproduct and not thread.product.realestateproduct %}
+            _gaq.push(['_trackEvent', 'Dépôt annonce', 'Objet', '{% for category in product.category.get_ancestors %}{{ category.name }} - {% endfor %}{{ product.category.name }}']);
+        {% endif %}
+        {% endif %}
+    {% endfor %}
+{% endif %}
+{% endblock %}
 {% block content %}
 <div id="fb-root"></div>
 
@@ -323,6 +342,16 @@
                     <li>
                         <i class="icon-road"></i>
                         {{  product.consumption }} {% trans "L/100km" %}
+                    </li>
+                    <li>
+                        <i class="icon-barcode"></i>
+                        {% if product.licence_plate %}
+                            {% if product.licence_plate_is_peer %}
+                                {% trans "Plaque paire" %}
+                            {% else %}
+                                {% trans "Plaque impaire" %}
+                            {% endif %} 
+                        {% endif %}
                     </li>
                 </ul>{# product-properties #}
                 {% endif %}
@@ -621,7 +650,15 @@
                     <a href="{{ patron.get_absolute_url }}">{{ patron.username|truncate:13 }}</a>
                 </p>
                 {% if product.phone %}
-                <a href="{{ product.get_absolute_url }}appeler/" class="btn-contactme" style="margin-bottom: 7px; width: 93px; text-align: center;">{% trans "Appeler" %}</a>
+                    {% if product.carproduct %}
+                        <a href="{{ product.get_absolute_url }}appeler/" class="btn-contactme" style="margin-bottom: 7px; width: 93px; text-align: center;" onClick="_gaq.push(['_trackEvent', 'Réservation', 'Appel', 'Voiture - {{ product.category.name }}']);">{% trans "Appeler" %}</a>
+                    {% endif %}
+                    {% if product.realestateproduct %}
+                        <a href="{{ product.get_absolute_url }}appeler/" class="btn-contactme" style="margin-bottom: 7px; width: 93px; text-align: center;" onClick="_gaq.push(['_trackEvent', 'Réservation', 'Appel', 'Logement - {{ product.category.name }}']);">{% trans "Appeler" %}</a>
+                    {% endif %}
+                    {% if not product.carproduct and not product.realestateproduct %}
+                        <a href="{{ product.get_absolute_url }}appeler/" class="btn-contactme" style="margin-bottom: 7px; width: 93px; text-align: center;" onClick="_gaq.push(['_trackEvent', 'Réservation', 'Appel', 'Objet - {% for category in product.category.get_ancestors %}{{ category.name }} - {% endfor %}{{ product.category.name }}']);">{% trans "Appeler" %}</a>
+                    {% endif %}
                 {% endif %}
                 <a href="{% url 'message_create' product.pk patron.pk %}" class="btn-contactme" style="margin-bottom: 8px; width: 93px; text-align: center">{% trans "Message" %}</a>
                 {% cache 43200 response_stats patron.pk %}

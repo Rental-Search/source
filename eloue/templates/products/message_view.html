@@ -127,3 +127,23 @@
     {% endfor %}
 {% endif %}
 {% endblock %}
+{% block gaq %}
+	{% if messages %}
+		{% for message in messages %}
+			{% if message.tags == "success" %}
+				{% if not request.user.is_active %}
+					_gaq.push(['_trackEvent', 'Membre', 'Inscription', 'Message']);
+				{% endif %}
+				{% if thread.product.carproduct %}
+					_gaq.push(['_trackEvent', 'Réservation', 'Message', 'Voiture - {{ thread.product.category.name }}']);
+				{% endif %}
+				{% if thread.product.realestateproduct %}
+					_gaq.push(['_trackEvent', 'Réservation', 'Message', 'Logement - {{ thread.product.category.name }}']);
+				{% endif %}
+				{% if not thread.product.carproduct and not thread.product.realestateproduct %}
+					_gaq.push(['_trackEvent', 'Réservation', 'Message', 'Objet - {% for category in thread.product.category.get_ancestors %}{{ category.name }} - {% endfor %}{{ thread.product.category.name }}']);
+				{% endif %}
+			{% endif %}
+		{% endfor %}
+	{% endif %}
+{% endblock %}

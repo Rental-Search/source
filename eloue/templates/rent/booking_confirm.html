@@ -285,3 +285,7 @@
 {% endblock %}
 {% block footer %}
 {% endblock %}
+
+{% block gaq %}
+  _gaq.push(['_trackPageview', '{{ request.path }}booking_confirm/']);
+{% endblock %}

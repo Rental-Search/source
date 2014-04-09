@@ -23,3 +23,11 @@
 
 {% block footer %}
 {% endblock %}
+
+{% block gaq %}
+{% if request.path == '/login/' %}
+_gaq.push(['_trackPageview', '{{ request.path }}']);
+{% else %}
+_gaq.push(['_trackPageview', '{{ request.path }}auth/']);
+{% endif %}
+{% endblock %}

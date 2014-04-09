@@ -1,3 +1,31 @@
+.product-args {
+	.columns(12);
+	.clearfix();
+	float: left;
+
+	margin-bottom: 40px;
+	margin-top: 10px;
+}
+
+.arg-details {
+	.columns(3);
+	.clearfix();
+	float: left;
+
+	margin: 0 7px;
+
+	h4 {
+		#font > .sans-serif('Ubuntu', bold, 14px);
+		text-align: center;
+		margin-bottom: 10px;
+	}
+
+	p {
+		padding: 0 15px;
+		text-align: center;
+	}
+}
+
 .plans {
 	float: left;
 	.clearfix();
@@ -188,8 +216,8 @@
 		margin-right: 80px;
 
 		p {
-			#font > .sans-serif('Ubuntu', normal, 24px);
-			line-height: 30px;
+			#font > .sans-serif('Ubuntu', bold, 14px);
+			line-height: 20px;
 			color: @blueDark;
 
 			margin-left: 30px;
@@ -200,13 +228,22 @@
 		float: left;
 		.columns(5);
 		margin-left: 20px;
+		margin-top: 0px;
+		#font > .sans-serif('Ubuntu', normal, 14px);
+
+		p {
+			#font > .sans-serif('Ubuntu', normal, 14px);
+			line-height: 18px;
+		}
 
 		ul {
 			margin-top: 5px;
-			margin-left: 10px;
+			margin-left: 30px;
+			margin-bottom: 20px;
+			list-style-type: disc;
 			li {
-				margin-bottom: 15px;
-				#font > .sans-serif('Ubuntu', normal, 16px);
+				margin-bottom: 10px;
+				
 				color: @blueDark;
 			}
 			i {
@@ -221,30 +258,79 @@
 	}
 }
 
-.step-by-step-pro {
+
+
+#step-by-step-pro {
 	float: left;
 	.columns(12);
 	.clearfix();
 
-	margin-bottom: 40px;
+	margin-bottom: 20px;
 
-	li { 
+	#arguments {
 		float: left;
-		position: relative;
 
-		.icon-search {
-			position: absolute;
-			top: 220px;
-			right: 15px;
+		li {
+			line-height: 18px;
 		}
 	}
+
+	#arguments-container {
+		position: relative;
+		float: left;
+		width: 920px;
+		background: #f7f8fa;
+		@shadow: inset 0 0 0 rgba(255,255,255,1);
+		.box-shadow(@shadow);
+		.rounded(3px);
+		border: 1px solid #b2ced9;
+		padding: 10px;
+		margin-top: 20px;
+		#font > .sans-serif('Ubuntu', normal, 14px);
+		color: @blueDark;
+
+		ul {
+			list-style-type: disc;
+			margin-left: 40px;
+			li {
+				margin-bottom: 5px;
+				&:last-child {
+					margin-bottom: 0px;
+				}
+			}
+		}
+
+		#arguments-container-dialogue {
+			position: absolute;
+			height: 21px;
+			width: 15px;
+			top: -31px;
+			left: 50px;
+			background: transparent url('../images/arguments_container_dial.png') no-repeat 0 0;
+		}
+
+		#arg1-content { #arguments-container-dialogue { left: 50px;} }
+		#arg2-content { #arguments-container-dialogue { left: 400px;} }
+		#arg3-content { #arguments-container-dialogue {left: 750px;} }
+	}
+
 
 	.step-pro {
 		width: 244px;
 		text-align: center;
+		float: left;
 
-		img {
-			margin-bottom: 15px;
+		a {
+			display: block;
+			padding: 25px 15px;
+			#font > .sans-serif('Ubuntu', bold, 14px);
+			color: @blueDark;
+			&:hover { text-decoration: none; }
+			background: #f7f8fa;
+			@shadow: inset 0 0 0 rgba(255,255,255,1);
+			.box-shadow(@shadow);
+			.rounded(3px);
+			border: 2px solid #b2ced9;
 		}
 		p { 
 			font-size: 14px; 
@@ -253,10 +339,10 @@
 	}
 
 	.arrow-pro {
-		background: transparent url(../images/arrow_pro.png) no-repeat center center;
 		width: 74px;
 		height: 59px;
-		margin: 85px 15px 0;
+		margin: 11px 15px 0;
+		float: left;
 	}
 }
 
@@ -265,7 +351,7 @@
 	#font > .sans-serif('Ubuntu', bold, 13px);
 	padding-left: 15px;
 	color: #546B78;
-	margin-left: 188px;
+	margin-left: 215px;
 }
 
 .plan-first-month {
@@ -278,4 +364,63 @@
 	padding: 4px;
 }
 
+.plans {
+	width: 940px;
+	float: left;
+	margin-top: 20px;
 
+	table { width: 100% }
+
+	td, th { 
+		padding: 30px;
+		border-left: 1px solid #b2ced9;
+
+		&:first-child { border-left: none; }
+	}
+
+	.offer {
+		color: @orange;
+		font-weight: bold;
+	}
+
+	tr {
+		border-bottom: 1px solid #b2ced9;
+		&:last-child { border-bottom: none; }
+		&:first-child {
+			td, th { padding-top: 10px; }
+		}
+	}
+
+	th { text-align: left; }
+
+	.plans-title {
+		color: @blueDark;
+		text-align: center;
+
+		h4 {
+			#font > .sans-serif('Ubuntu', bold, 18px);
+			
+			margin-top: 15px;
+			margin-bottom: 15px;
+		}
+
+		span {
+			#font > .sans-serif('Ubuntu', normal, 14px);
+			line-height: 18px;
+		}
+	}
+
+	.access-fees {
+		color: @blueDark;
+		#font > .sans-serif('Ubuntu', normal, 14px);
+		text-align: center;
+		line-height: 20px;
+		vertical-align: top;
+	}
+
+	.plans-prices {
+		color: @blueDark;
+		#font > .sans-serif('Ubuntu', normal, 14px);
+		text-align: center;
+	}
+}
