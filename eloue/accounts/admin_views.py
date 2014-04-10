@@ -72,6 +72,8 @@ def patron_create_subscription(request):
 		patron.subscribe(form.cleaned_data['subscription'])
 		patron.current_subscription.save()
 
+		patron.send_professional_activation_email()
+
 		slimpay_mandate_info = SlimPayMandateInformation.objects.create(patron=new_patron)
 
 		blob = slimpay_mandate_info.blob()

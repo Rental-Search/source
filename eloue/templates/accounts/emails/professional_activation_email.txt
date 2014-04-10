@@ -1,17 +1,26 @@
 {% load i18n %}
 
-{% blocktrans with patron.username as username and domain as domain and protocol as protocol %}
+{% blocktrans with patron.first_name as first_name and patron.last_name as last_name and domain as domain and protocol as protocol and patron.current_subscription.propackage as propackage %}
 
-Bonjour {{ username }},
+Bonjour {{ first_name }} {{ last_name }},
 
-Vous êtes maintenant enregistré sur {{ protocol }}://{{ domain }}.
+Nous avons le plaisir de vous confirmer votre inscription sur e-loue, le premier site qui référence toutes les offres de location en France. Nous vous rappelons que vous avez choisi le Pack e-loue {{ propackage }}, qui vous permet de publier un nombre illimité d’annonces sur notre site.
 
-Veuillez cliquer sur le lien ci-dessous pour finaliser la validation de votre compte :
+Pour finaliser votre inscription, nous vous invitons à activer votre compte et personnaliser dès à présent votre mot de passe e-loue. Gardez le précieusement, car pour vos connecter sur notre site, vous aurez besoin de votre adresse e-mail et de ce mot de passe.
 
 {% endblocktrans %}
 
 {{ protocol }}://{{ domain }}{% url propw uidb36=uid token=token %}
 
-{% trans "Cordialement" %},
 
-{% trans "L'équipe" %} {{ site.name }}.
+Notre Service Client PRO vous contactera dans les 48h pour vous expliquer la procédure qui nous permettra de récupérer votre catalogue d’objets à louer, et de publier l’intégralité de vos annonces, en moins de 2 semaines.
+
+Si vous avez des questions, n’hésitez pas à contacter notre Service Client PRO au 01.85.08.33.20 (du lundi au vendredi de 9h à 18h). Nous vous remercions pour votre confiance, et sommes heureux de vous compter parmi nos nouveaux clients e-loue PRO.
+
+Cordialement,
+
+Mélanie
+Service Client e-loue PRO
+01.85.08.33.20
+https://www.e-loue.com/
+https://www.e-loue.com/espace_pro/

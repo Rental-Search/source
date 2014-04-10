@@ -335,16 +335,10 @@ class Patron(User):
 
     def subscribe(self, propackage):
         current_subscription = self.current_subscription
-        context = {'patron': self}
         if current_subscription:
-            current_subscription.subscription_ended = datetime.datetime.now()
-            current_subscription.save()
             subscription = Subscription.objects.create(patron=self, propackage=propackage)
-            message = create_alternative_email('accounts/emails/professional_subscription_changed', context, settings.DEFAULT_FROM_EMAIL, [self.email])
         else:
             subscription = Subscription.objects.create(patron=self, propackage=propackage)
-            message = create_alternative_email('accounts/emails/professional_subscribed', context, settings.DEFAULT_FROM_EMAIL, [self.email])
-        message.send()
         return subscription
 
     @property
