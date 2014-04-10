@@ -66,6 +66,7 @@ def patron_create_subscription(request):
 		form.instance = new_patron
 		patron = form.save()[0]
 		patron.default_number = patron.phones.all()[0]
+		patron.set_password('vTzCngrmjkrsLMnpDEkaQMje3Zqt')
 		patron.save()
 		messages.success(request, 'Create user successed')
 
