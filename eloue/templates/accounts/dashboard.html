@@ -128,6 +128,7 @@
     {%  for message in messages %}
         {% if message.tags == "info" %}
             _gaq.push(['_trackEvent', 'Membre', 'Inscription', 'Simple']);
+            _gaq.push(['_trackPageview', '{{ request.path }}success/']);
         {% endif %}
     {% endfor %}
 {% endif %}
