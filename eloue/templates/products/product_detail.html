@@ -282,12 +282,15 @@
         {% endif %}
         {% if thread.product.carproduct %}
             _gaq.push(['_trackEvent', 'Dépôt annonce', 'Voiture', '{{ product.category.name }}']);
+            _gaq.push(['_trackPageview', '{{ request.path }}success/']);
         {% endif %}
         {% if thread.product.realestateproduct %}
             _gaq.push(['_trackEvent', 'Dépôt annonce', 'Logement', '{{ product.category.name }}']);
+            _gaq.push(['_trackPageview', '{{ request.path }}success/']);
         {% endif %}
         {% if not thread.product.carproduct and not thread.product.realestateproduct %}
             _gaq.push(['_trackEvent', 'Dépôt annonce', 'Objet', '{% for category in product.category.get_ancestors %}{{ category.name }} - {% endfor %}{{ product.category.name }}']);
+            _gaq.push(['_trackPageview', '{{ request.path }}success/']);
         {% endif %}
         {% endif %}
     {% endfor %}
