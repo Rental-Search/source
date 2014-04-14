@@ -12,7 +12,7 @@
                 <tr>
                     <td valign="top" style="padding-top: 20px;border-collapse: collapse;">
                         <div style="color: #505050;font-family: Arial;font-size: 14px;line-height: 200%;text-align: left;">
-                        	{% blocktrans with patron.first_name as first_name and patron.last_name as last_name and domain as domain and protocol as protocol and patron.current_subscription.propackage as propackage %}
+                        	{% blocktrans with patron.first_name as first_name and patron.last_name as last_name and domain as domain and protocol as protocol and patron.current_subscription.propackage.name as propackage %}
                                 Bonjour {{ first_name }} {{ last_name }},<br><br>
 
                                  <p>Nous avons le plaisir de vous confirmer votre inscription sur e-loue, le premier site qui référence toutes les offres de location en France. Nous vous rappelons que vous avez choisi le Pack e-loue {{ propackage }}, qui vous permet de publier un nombre illimité d’annonces sur notre site.</p>

@@ -1,6 +1,6 @@
 {% load i18n %}
 
-{% blocktrans with patron.first_name as first_name and patron.last_name as last_name and domain as domain and protocol as protocol and patron.current_subscription.propackage as propackage %}
+{% blocktrans with patron.first_name as first_name and patron.last_name as last_name and domain as domain and protocol as protocol and patron.current_subscription.propackage.name as propackage %}
 
 Bonjour {{ first_name }} {{ last_name }},
 
