@@ -100,10 +100,10 @@ class AddressAdmin(admin.ModelAdmin):
 class SubscriptionAdmin(admin.ModelAdmin):
     list_display = ('company_name', 'propackage', 'subscription_started', 'subscription_ended', 'payment_type','online_date', 'comment')
     raw_id_fields = ("patron",)
-    readonly_fields = ('subscription_started', 'company_name', 'contact', 'address', 'phone', 'online_date', 'products_count')
+    readonly_fields = ('subscription_started', 'company_name', 'contact', 'address', 'phone', 'online_date', 'products_count', 'email')
     fieldsets = (
         (_('Abonnement'), {'fields': ('propackage', 'subscription_started', 'subscription_ended', 'payment_type', 'annual_payment_date', 'free', 'number_of_free_month', 'comment')}),
-        (_('Patron informations'), {'fields': ('patron', 'company_name', 'contact', 'address', 'phone', 'online_date', 'products_count')})
+        (_('Patron informations'), {'fields': ('patron', 'company_name', 'contact', 'address', 'phone', 'online_date', 'products_count', 'email')})
     )
     ordering = ['-subscription_started']
     list_filter = ('payment_type', 'propackage',)
@@ -120,6 +120,9 @@ class SubscriptionAdmin(admin.ModelAdmin):
 
     def phone(self, obj):
         return obj.patron.default_number
+
+    def email(self, obj):
+        return obj.patron.email
 
     def online_date(self, obj):
         try:
