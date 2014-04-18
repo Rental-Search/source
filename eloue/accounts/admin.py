@@ -90,12 +90,19 @@ class AddressAdmin(admin.ModelAdmin):
     list_display = ('patron', 'address1', 'address2', 'zipcode', 'city', 'country', 'is_geocoded')
     list_filter = ('country',)
     save_on_top = True
-    search_fields = ('address1', 'address2', 'zipcode', 'city')
+    search_fields = ('patron', 'address1', 'address2', 'zipcode', 'city')
     fieldsets = (
         (None, {'fields': ('address1', 'address2', 'zipcode', 'city')}),
         (_('Geolocation'), {'classes': ('collapse',), 'fields': ('position',)})
     )
 
+class PhoneNumberAdmin(admin.ModelAdmin):
+    list_display = ('patron', 'number')
+    search_fields = ('patron', 'number')
+    readonly_fields = ('patron', )
+    fieldsets = (
+        (None, {'fields': ('patron', 'number', 'kind')}),
+    )
 
 class SubscriptionAdmin(admin.ModelAdmin):
     list_display = ('company_name', 'propackage', 'subscription_started', 'subscription_ended', 'payment_type','online_date', 'comment')
@@ -140,6 +147,7 @@ class ProPackageAdmin(admin.ModelAdmin):
 
 try:
     admin.site.register(Address, AddressAdmin)
+    admin.site.register(PhoneNumber, PhoneNumberAdmin)
     admin.site.register(Patron, PatronAdmin)
     admin.site.register(PatronAccepted)
     admin.site.register(ProPackage, ProPackageAdmin)
