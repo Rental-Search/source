@@ -49,6 +49,7 @@ def patron_create_subscription(request):
 			now = datetime.datetime.now()
 			self.fields['is_professional'].initial = True
 			self.fields['is_professional'].widget = forms.HiddenInput()
+			self.fields['company_name'].required = True
 			self.fields['phones__phone'].label = 'Numéro'
 			self.fields['subscription'] = forms.ModelChoiceField(label='Abonnement', required=True,
 	            queryset=ProPackage.objects.filter(

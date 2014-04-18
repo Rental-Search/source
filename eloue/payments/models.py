@@ -5,6 +5,7 @@ from eloue.rent.models import Booking
 from eloue.payments import *
 from eloue.accounts.models import CreditCard
 from eloue.accounts.models import Patron
+from django.utils.encoding import smart_str
 
 
 from eloue.payments.slimpay_payment import SlimPayManager
@@ -64,11 +65,11 @@ class SlimPayMandateInformation(models.Model):
         blob = slimpay_manager.transactionRequest(
             requestType='mandate', 
             clientReference=self.patron.pk, 
-            contactFN=self.patron.first_name, 
-            contactLN=self.patron.last_name,
-            Iline1=address.address1,
-            Icity=address.city,
-            IpostalCode=address.zipcode,
+            contactFN=smart_str(self.patron.first_name), 
+            contactLN=smart_str(self.patron.last_name),
+            Iline1=smart_str(address.address1.replace("\n", " ").replace("\r", " ")),
+            Icity=smart_str(address.city.replace("\n", " ").replace("\r", " ")),
+            IpostalCode=address.zipcode.replace("\n", " ").replace("\r", " "),
             Icountry=address.country,
             contactEmail=self.patron.email,
             transactionId=self.pk
