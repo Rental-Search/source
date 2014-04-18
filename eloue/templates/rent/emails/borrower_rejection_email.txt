@@ -17,7 +17,7 @@ Durée de la location : {{ duration }}
  
  {% for result in booking.more_like_this %}
   {% with result.object as product %}
-   - {{ product.summary }} ({{ product.address.zipcode }}) : {{ protocol }}://{{ site.domain }}{{ product.get_absolute_url }}
+   - {{ product.summary }} ({{ product.address.zipcode }}) : {{ protocol }}://{{ site.domain }}{{ product.get_absolute_url }}?utm_source=e-loue&utm_medium=email_transaction&utm_campaign=borrower_rejection
   {% endwith %}
  {% endfor %}
 {% endif %}
@@ -26,7 +26,7 @@ Durée de la location : {{ duration }}
 {% blocktrans with booking.product.category.get_absolute_url as category_url and site.domain as domain and site.name as site_name %}
 Retrouvez tous les objets de cette catégorie sur e-loue.com 
 
-{{ protocol }}://{{ domain }}{{ category_url }}
+{{ protocol }}://{{ domain }}{{ category_url }}?utm_source=e-loue&utm_medium=email_transaction&utm_campaign=borrower_rejection
  
 L'équipe {{ site_name }}
 {% endblocktrans %}

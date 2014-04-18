@@ -2,11 +2,11 @@
 {% blocktrans with patron.username as username and site.domain as domain and site.name as site_name %}
 	Bonjour {{ username }},
 
-  	Nous vous remercions de vous être enregistré(e) sur <a href="{{ protocol }}://{{ domain }}">{{ domain }}</a>.
+  	Nous vous remercions de vous être enregistré(e) sur <a href="{{ protocol }}://{{ domain }?utm_source=e-loue&utm_medium=email_transaction&utm_campaign=activation_compte">{{ domain }}</a>.
 	Afin d’activer votre compte et de rejoindre notre communauté de loueurs, vous devez cliquer sur le bouton ci-dessous.
 {% endblocktrans %}
 
-{{ protocol }}://{{ site.domain }}{% url auth_activate activation_key %}
+{{ protocol }}://{{ site.domain }}{% url auth_activate activation_key %}?utm_source=e-loue&utm_medium=email_transaction&utm_campaign=activation_compte
 
 {% trans "A très vite" %},
 

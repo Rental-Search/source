@@ -15,12 +15,12 @@
                         	{% blocktrans with patron.username as username and site.domain as domain and site.name as site_name %}
                                 Bonjour {{ username }},<br><br>
 
-                                Nous vous remercions de vous être enregistré(e) sur <a href="{{ protocol }}://{{ domain }}">{{ domain }}</a>.<br><br>
+                                Nous vous remercions de vous être enregistré(e) sur <a href="{{ protocol }}://{{ domain }}?utm_source=e-loue&utm_medium=email_transaction&utm_campaign=activation_compte">{{ domain }}</a>.<br><br>
                                 Afin d’activer votre compte et de rejoindre notre communauté de loueurs, vous devez cliquer sur le bouton ci-dessous.<br><br>
 
                             {% endblocktrans %}
                             <p style="margin-top: 0px; text-align: center;">
-                            	<a href="{{ protocol }}://{{ site.domain }}{% url auth_activate activation_key %}" style="text-decoration: none; cursor: pointer; display: inline-block; background-color: #f36100; padding: 10px; font-family: Arial, sans-serif; line-height: 18px; font-size: 14px; color: #fff; border: 1px solid #c85007; vertical-align: 7%;">
+                            	<a href="{{ protocol }}://{{ site.domain }}{% url auth_activate activation_key %}?utm_source=e-loue&utm_medium=email_transaction&utm_campaign=activation_compte" style="text-decoration: none; cursor: pointer; display: inline-block; background-color: #f36100; padding: 10px; font-family: Arial, sans-serif; line-height: 18px; font-size: 14px; color: #fff; border: 1px solid #c85007; vertical-align: 7%;">
                                     {% trans "Activer votre compte" %}
                             	</a>
                             </p>

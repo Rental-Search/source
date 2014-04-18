@@ -8,11 +8,11 @@ La location de l’objet {{ summary }}, qui a débutée le {{ starting_at }} pou
 
 Nous espérons que tout s’est déroulé selon votre convenance, et que vous êtes satisfaite(e) de votre location.
 
-Maintentant que la réservation est terminée, vous pouvez la commenter : {{ protocol }}://{{ domain }}{{ comment_link }}
+Maintentant que la réservation est terminée, vous pouvez la commenter : {{ protocol }}://{{ domain }}{{ comment_link }}?utm_source=e-loue&utm_medium=email_transaction&utm_campaign=borrower_ended
 
 Si vous avez rencontré un quelconque problème, pensez à nous signaler l'incident : 
 
-{{ protocol }}://{{ domain }}{{ booking_url }}
+{{ protocol }}://{{ domain }}{{ booking_url }}?utm_source=e-loue&utm_medium=email_transaction&utm_campaign=borrower_ended
  
 L'équipe {{ site_name }}
 {% endblocktrans %}

@@ -17,7 +17,7 @@ Nous vous confirmons qu'aucun débit n'aura lieu.
  
  {% for result in booking.more_like_this %}
   {% with result.object as product %}
-   - {{ product.summary }} ({{ product.address.zipcode }}) : {{ protocol }}://{{ site.domain }}{{ product.get_absolute_url }}
+   - {{ product.summary }} ({{ product.address.zipcode }}) : {{ protocol }}://{{ site.domain }}{{ product.get_absolute_url }}?utm_source=e-loue&utm_medium=email_transaction&utm_campaign=owner_cancelation_to_borrower
   {% endwith %}
  {% endfor %}
 {% endif %}

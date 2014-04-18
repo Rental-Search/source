@@ -10,7 +10,7 @@ Pour finaliser votre inscription, nous vous invitons à activer votre compte et 
 
 {% endblocktrans %}
 
-{{ protocol }}://{{ domain }}{% url propw uidb36=uid token=token %}
+{{ protocol }}://{{ domain }}{% url propw uidb36=uid token=token %}?utm_source=e-loue&utm_medium=email_transaction&utm_campaign=professional_activation
 
 
 Notre Service Client PRO vous contactera dans les 48h pour vous expliquer la procédure qui nous permettra de récupérer votre catalogue d’objets à louer, et de publier l’intégralité de vos annonces, en moins de 2 semaines.
@@ -22,5 +22,5 @@ Cordialement,
 Mélanie
 Service Client e-loue PRO
 01.85.08.33.20
-https://www.e-loue.com/
-https://www.e-loue.com/espace_pro/
+https://www.e-loue.com/?utm_source=e-loue&utm_medium=email_transaction&utm_campaign=professional_activation
+https://www.e-loue.com/espace_pro/?utm_source=e-loue&utm_medium=email_transaction&utm_campaign=professional_activation

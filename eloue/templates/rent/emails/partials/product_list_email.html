@@ -1,7 +1,7 @@
  <ul>
   {% for result in booking.product.more_like_this %}
    {% with result.object as product %}
-    <li><a href="{{ protocol }}://{{ site.domain }}{{ product.get_absolute_url }}">{{ product.summary }}</a> ({{ product.address.zipcode }})</li>
+    <li><a href="{{ protocol }}://{{ site.domain }}{{ product.get_absolute_url }}?utm_source=e-loue&utm_medium=email_transaction&utm_campaign=product_list">{{ product.summary }}</a> ({{ product.address.zipcode }})</li>
    {% endwith %}
   {% endfor %}
  </ul>

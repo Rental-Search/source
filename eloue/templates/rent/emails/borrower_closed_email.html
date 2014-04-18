@@ -22,7 +22,7 @@
 
                             {% blocktrans with site.name as site_name and protocol as protocol and site.domain as domain and booking.get_absolute_url as booking_url %}
 
-                           	Si vous rencontrez un quelconque problème, nous vous invitons à nous <a href="{{ protocol }}://{{ domain }}{{ booking_url }}">signaler l'incident</a><br><br>
+                           	Si vous rencontrez un quelconque problème, nous vous invitons à nous <a href="{{ protocol }}://{{ domain }}{{ booking_url }}?utm_source=e-loue&utm_medium=email_transaction&utm_campaign=borrower_closed">signaler l'incident</a><br><br>
 
                             A très vite,<br>
                             

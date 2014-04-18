@@ -50,17 +50,17 @@
     {% blocktrans with protocol as protocol and site.domain as domain and comment.booking.get_absolute_url as booking_url %}
 
     Vous pouvez voir le commentaire sur votre tableau de bord en cliquant ci dessous :<br>
-    <a href="{{protocol }}://{{ domain}}{{ booking_url }}">Accéder à tous mes commentaires</a><br><br>
+    <a href="{{protocol }}://{{ domain}}{{ booking_url }}?utm_source=e-loue&utm_medium=email_transaction&utm_campaign=comment_email">Accéder à tous mes commentaires</a><br><br>
     {% endblocktrans %}
 
     {% if not comment.booking.ownercomment and comment.booking.owner == patron %}
     {% trans "Vous pouvez aussi commenter la location en cliquant sur le lien ci dessous" %} :<br>
-    <p><a href="{{ protocol }}://{{ site.domain }}{% url comments %}">{{ protocol }}://{{ site.domain }}{% url comments %}</a><br><br>
+    <p><a href="{{ protocol }}://{{ site.domain }}{% url comments %}?utm_source=e-loue&utm_medium=email_transaction&utm_campaign=comment_email">{{ protocol }}://{{ site.domain }}{% url comments %}</a><br><br>
     {% endif %}
 
     {% if not comment.booking.borrowercomment and comment.booking.borrower == patron %}
     {% trans "Vous pouvez aussi commenter la location en cliquant sur le lien ci dessous" %} :<br>
-    <a href="{{ protocol }}://{{ site.domain }}{% url comments %}">{{ protocol }}://{{ site.domain }}{% url comments %}</a><br><br>
+    <a href="{{ protocol }}://{{ site.domain }}{% url comments %}?utm_source=e-loue&utm_medium=email_transaction&utm_campaign=comment_email">{{ protocol }}://{{ site.domain }}{% url comments %}</a><br><br>
     {% endif %}
     {% blocktrans with site.name as site_name %}
     A très vite,<br>

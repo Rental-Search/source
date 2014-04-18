@@ -11,7 +11,7 @@
 
  Pour lui répondre et/ou accepter cette location, il vous suffit d’aller dans l’onglet propositions de votre compte e-loue.com :
  
- {{ protocol }}://{{ domain }}{{ booking_url }}
+ {{ protocol }}://{{ domain }}{{ booking_url }}?utm_source=e-loue&utm_medium=email_transaction&utm_campaign=owner_ask
 
 L'équipe {{ site_name }}
 
