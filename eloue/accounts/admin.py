@@ -90,7 +90,7 @@ class AddressAdmin(admin.ModelAdmin):
     list_display = ('patron', 'address1', 'address2', 'zipcode', 'city', 'country', 'is_geocoded')
     list_filter = ('country',)
     save_on_top = True
-    search_fields = ('patron', 'address1', 'address2', 'zipcode', 'city')
+    search_fields = ('patron__username', 'address1', 'address2', 'zipcode', 'city')
     fieldsets = (
         (None, {'fields': ('address1', 'address2', 'zipcode', 'city')}),
         (_('Geolocation'), {'classes': ('collapse',), 'fields': ('position',)})
@@ -98,7 +98,7 @@ class AddressAdmin(admin.ModelAdmin):
 
 class PhoneNumberAdmin(admin.ModelAdmin):
     list_display = ('patron', 'number')
-    search_fields = ('patron', 'number')
+    search_fields = ('patron__username', 'number')
     readonly_fields = ('patron', )
     fieldsets = (
         (None, {'fields': ('patron', 'number', 'kind')}),
