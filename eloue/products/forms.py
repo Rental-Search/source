@@ -355,7 +355,7 @@ class ProductForm(BetterModelForm):
 class CarProductForm(ProductForm):
     quantity = forms.IntegerField(widget=forms.HiddenInput(), initial=1)
     summary = forms.CharField(required=False, widget=forms.HiddenInput(), max_length=255)
-    description = forms.CharField(label=_(u"Description"), widget=forms.Textarea(), help_text=_(u'Décrivez plus précissément votre véhicule, son état, ses particularités.'))
+    description = forms.CharField(label=_(u"Description"), widget=forms.Textarea(), help_text=_(u'Décrivez plus précisément votre véhicule, son état, ses particularités.'))
     deposit_amount = forms.DecimalField(label=_(u"Dépôt de garantie"), required=False, max_digits=8, decimal_places=2, widget=PriceTextInput(attrs={'class': 'price'}), localize=True, help_text=_(u"Nous conseillons un dépôt de garantie de 2000€, qui correspond au montant de la franchise de l'assurance voiture. en cas de vol."))
     licence_plate = FRLicensePlateField(label=_(u'N° d\'immatriculation'), required=True)
     first_registration_date = DateSelectField(label=_(u'1er mise en circulation'))
