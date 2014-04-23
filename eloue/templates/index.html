@@ -144,6 +144,10 @@
             </a>
         </li>
     </ul>{# args #}
+    <div class="press">
+        <div class="press-title">{% trans "Ils parlent de nous !"%}</div>
+        <img src="{{ STATIC_URL }}images/e-loue_dans_la_press.png" width="619" height="39" />
+    </div>{# press #}
     {% cache 500 last_joined request.session.location.city site %}
     <div class="new-profils">
         <div class="np-title">{% trans "Derniers<br/>inscrits" %}</div><!-- np-title -->
@@ -153,8 +157,8 @@
     </div>{# new_profils #}
     {% endcache %}
     <div class="press">
-        <div class="press-title">{% trans "Ils parlent de nous !"%}</div>
-        <img src="{{ STATIC_URL }}images/e-loue_dans_la_press.png" width="619" height="39" />
+        <div class="press-title pro">{% trans "Ils nous font confiance !"%}</div>
+        <img src="{{ STATIC_URL }}images/logo_pro.png" width="619" height="64" />
     </div>{# press #}
 </div>{# container-top #}
 
