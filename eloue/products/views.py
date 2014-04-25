@@ -22,6 +22,7 @@ from django.db.models import Count
 
 from django.shortcuts import render_to_response, render, redirect
 from django.template import RequestContext
+from django.template.loader import render_to_string
 
 from django.http import Http404, HttpResponseRedirect, HttpResponseBadRequest
 
@@ -736,4 +737,9 @@ def suggestion(request):
         resp += "\n%s"%el
     cache.set(word, resp, 0)
     return HttpResponse(resp)
+
+
+def product_xml_list(request):
+    return render(request, 'products/product_template.xml', {'products': product_search.all()},
+        content_type="text/xml")
 

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<products>
+	{% for product in products %}
+	<product id="{{product.pk}}">
+		<name>{{product.summary}}</name>
+		<producturl>https://www.e-loue.com{{ product.url|safe }}</producturl>
+		<bigimage>{{product.thumbnail }}</bigimage>
+		<price>{{ product.price }}</price>
+	</product>
+	{% endfor %}
+</products>
