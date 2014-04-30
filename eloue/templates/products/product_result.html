@@ -493,4 +493,19 @@
             initialize();
         });
     </script>
+    <script type="text/javascript">
+    window.criteo_q = window.criteo_q || [];
+    items =  [];
+
+    {% for product in product_list %}
+        items.push('{{ product.pk }}');
+    {% endfor %}
+
+    window.criteo_q.push(
+            { event: "setAccount", account: 13977 },
+            { event: "setCustomerId", id: "{{ request.user.pk }}" },
+            { event: "setSiteType", type: "d" },
+            { event: "viewList", item: items }
+    );
+    </script>
 {% endblock %}
