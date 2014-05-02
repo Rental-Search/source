@@ -103,7 +103,7 @@
           { event: "setAccount", account: 13977 },
           { event: "setCustomerId", id: "{{ booking.borrower.pk }}" },
           { event: "setSiteType", type: "d" },
-          { event: "trackTransaction" , id: "{{ booking.uiid }}", item: [ 
+          { event: "trackTransaction" , id: "{{ booking.pk }}", item: [ 
                 { id: "{{ booking.product.pk }}", price: price, quantity: {{ booking.quantity }} },
   ]});
 </script>
