@@ -95,12 +95,14 @@
   </noscript>
   <script type="text/javascript" src="//static.criteo.net/js/ld/ld.js" async="true"></script>
   <script type="text/javascript">
-  window.criteo_q = window.criteo_q || [];
   var price = parseFloat("{{ booking.total_amount }}".replace(',', '.')).toFixed(2)
+  </script>
+  <script type="text/javascript">
+  window.criteo_q = window.criteo_q || [];
   window.criteo_q.push( 
           { event: "setAccount", account: 13977 },
-          { event: "setCustomerId", id: "#Customer ID#" },
-          { event: "setSiteType", type: "#m for mobile or t for tablet or d for desktop#" },
+          { event: "setCustomerId", id: "{{ booking.borrower.pk }}" },
+          { event: "setSiteType", type: "d" },
           { event: "trackTransaction" , id: "{{ booking.uiid }}", item: [ 
                 { id: "{{ booking.product.pk }}", price: price, quantity: {{ booking.quantity }} },
   ]});
