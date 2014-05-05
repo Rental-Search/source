@@ -739,7 +739,16 @@ def suggestion(request):
     return HttpResponse(resp)
 
 
-def product_xml_list(request):
-    return render(request, 'products/product_template.xml', {'products': product_search.all()},
+def product_xml_list_criteo(request):
+    ga_parameters = {
+        'utm_source': 'criteo',
+        'utm_medium': 'banniere',
+        'utm_term': 'cpc',
+        'utm_campaign': '2014_05_criteo_banniere_cpc'
+    }
+    return render(request, 'products/product_template_criteo.xml', {'products': product_search.all(), 'ga_parameters': ga_parameters},
         content_type="text/xml")
+
+
+
 

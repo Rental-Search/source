@@ -3,7 +3,13 @@
 	{% for product in products %}
 	<product id="{{product.pk}}">
 		<name>{{product.summary}}</name>
+		{% if ga_parameters %}
+		<producturl>
+			https://www.e-loue.com{{ product.url|safe }}?utm_source={{ga_parameters.utm_source}}&amp;utm_medium={{ga_parameters.utm_medium}}&amp;utm_term={{ga_parameters.utm_term}}&amp;utm_campaign={{ga_parameters.utm_campaign}}
+		</producturl>
+		{% else %}
 		<producturl>https://www.e-loue.com{{ product.url|safe }}</producturl>
+		{% endif %}
 		<bigimage>{{product.thumbnail }}</bigimage>
 		<price>{{ product.price }}</price>
 	</product>
