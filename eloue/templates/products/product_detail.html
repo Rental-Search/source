@@ -174,9 +174,14 @@
                     var ended_at = $('input[name$=ended_at_0]');
                     ended_at.datepicker("option", "minDate", newDate);
                     ended_at.datepicker('setDate', newDate );
+                    var today = new Date();
+                    var started_hour = $('#id_0-started_at_1');
+                    if (parseInt(started_hour.val()) < today.getHours()) {
+                        $(started_hour.children('option')[today.getHours() + 1]).attr('selected', 'selected')
+                    }
                     var ended_hour = $('#id_0-ended_at_1');
-                    if ( parseInt(ended_hour.val()) != 23 ) {
-                        ended_hour.children('option:selected').next('option').attr('selected', 'selected');
+                    if (parseInt(ended_hour.val()) < today.getHours()) {
+                        $(ended_hour.children('option')[today.getHours() + 2]).attr('selected', 'selected')
                     }
                     bookingPrice($('#booking_create'));
                 }
