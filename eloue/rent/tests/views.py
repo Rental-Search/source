@@ -6,12 +6,11 @@ from decimal import Decimal as D
 from django.core.urlresolvers import reverse
 from django.utils.encoding import smart_str
 from django.test import TransactionTestCase
-from django.utils import simplejson
 
 from django.utils.translation import ugettext as _
 
 from eloue.rent.models import Booking
-from eloue.utils import currency
+from eloue.utils import currency, json
 
 class BookingViewsTest(TransactionTestCase):
     reset_sequences = True
@@ -46,10 +45,10 @@ class BookingViewsTest(TransactionTestCase):
             '0-quantity': 1
         }, HTTP_X_REQUESTED_WITH='XMLHttpRequest')
         self.assertEquals(response.status_code, 200)
-        json = simplejson.loads(response.content)
+        json = json.loads(response.content)
         self.assertTrue('duration' in json)
         self.assertTrue('total_price' in json)
-        self.assertEquals(json['total_price'], simplejson.loads(simplejson.dumps(smart_str(currency(D('72.00'))))))
+        self.assertEquals(json['total_price'], json.loads(json.dumps(smart_str(currency(D('72.00'))))))
         self.assertEquals(json['duration'], '3 '+ "jours")
     
     def test_booking_price_error(self):
@@ -63,7 +62,7 @@ class BookingViewsTest(TransactionTestCase):
             '0-quantity': 1
         }, HTTP_X_REQUESTED_WITH='XMLHttpRequest')
         self.assertEquals(response.status_code, 200)
-        json = simplejson.loads(response.content)
+        json = json.loads(response.content)
         self.assertTrue('errors' in json)
     
     def test_available_quantity_warning(self):
@@ -77,7 +76,7 @@ class BookingViewsTest(TransactionTestCase):
             '0-quantity': 2
         }, HTTP_X_REQUESTED_WITH='XMLHttpRequest')
         self.assertEquals(response.status_code, 200)
-        json = simplejson.loads(response.content)
+        json = json.loads(response.content)
         self.assertTrue('warnings' in json)
     
     def test_booking_price_not_ajax(self):
@@ -134,7 +133,7 @@ class BookingViewsTestWithMultipleQuantity(TransactionTestCase):
           '0-quantity': 3
         }, HTTP_X_REQUESTED_WITH='XMLHttpRequest')
         self.assertEqual(response.status_code, 200)
-        json = simplejson.loads(response.content)
+        json = json.loads(response.content)
         self.assertTrue('max_available' in json)
         self.assertEqual(json['max_available'], 3)
         self.assertFalse('warnings' in json)
@@ -151,7 +150,7 @@ class BookingViewsTestWithMultipleQuantity(TransactionTestCase):
           '0-quantity': 3
         }, HTTP_X_REQUESTED_WITH='XMLHttpRequest')
         self.assertEqual(response.status_code, 200)
-        json = simplejson.loads(response.content)
+        json = json.loads(response.content)
         self.assertTrue('warnings' in json)
         self.assertFalse('errors' in json)
         self.assertTrue('max_available' in json)
@@ -168,7 +167,7 @@ class BookingViewsTestWithMultipleQuantity(TransactionTestCase):
           '0-quantity': 1
         }, HTTP_X_REQUESTED_WITH='XMLHttpRequest')
         self.assertEqual(response.status_code, 200)
-        json = simplejson.loads(response.content)
+        json = json.loads(response.content)
         self.assertTrue('max_available' in json)
         self.assertEqual(json['max_available'], 1)
         self.assertFalse('warnings' in json)
@@ -186,7 +185,7 @@ class BookingViewsTestWithMultipleQuantity(TransactionTestCase):
           '0-quantity': 1
         }, HTTP_X_REQUESTED_WITH='XMLHttpRequest')
         self.assertEqual(response.status_code, 200)
-        json = simplejson.loads(response.content)
+        json = json.loads(response.content)
         self.assertTrue('max_available' in json)
         self.assertEqual(json['max_available'], 0)
         self.assertFalse('warnings' in json)

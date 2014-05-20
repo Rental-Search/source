@@ -1,5 +1,5 @@
 from django.conf import settings
-from django.conf.urls import *
+from django.conf.urls import patterns, url, include
 
 from eloue.api.resources import api_v1
 from eloue.api import views

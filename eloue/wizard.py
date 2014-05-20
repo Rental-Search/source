@@ -5,17 +5,21 @@ except ImportError:
     import pickle
 
 import itertools
+import hashlib
 
 from urllib2 import urlopen
 import facebook
 import django.forms as forms
 from django.conf import settings
-from django.contrib.formtools.wizard import FormWizard
+# FIXME: Django 1.6 workaround. It should be rewritten using class views
+try:
+    from django.contrib.formtools.wizard import FormWizard
+except ImportError:
+    from eloue.legacy import FormWizard
 from django.contrib.auth import login, authenticate
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.http import Http404
 from django.utils.decorators import method_decorator
-from django.utils.hashcompat import md5_constructor
 from django.views.decorators.csrf import csrf_protect
 
 from eloue.accounts.forms import EmailAuthenticationForm, make_missing_data_form
@@ -218,7 +222,7 @@ class MultiPartFormWizard(FormWizard):
         data.append(settings.SECRET_KEY)
         
         pickled = pickle.dumps(data, pickle.HIGHEST_PROTOCOL)
-        return md5_constructor(pickled).hexdigest()
+        return hashlib.md5(pickled).hexdigest()
     
     def render(self, form, request, step, context={}):
         if form.__class__.__name__ == 'MissingInformationForm':

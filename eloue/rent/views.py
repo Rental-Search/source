@@ -10,7 +10,6 @@ from django.core.mail import send_mail
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse, HttpResponseNotAllowed
 from django.shortcuts import get_object_or_404, redirect, render_to_response
-from django.utils import simplejson
 from django.utils.encoding import smart_str
 from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.http import require_POST, require_GET
@@ -30,7 +29,7 @@ from eloue.products.models import Product, PAYMENT_TYPE, UNIT
 from eloue.rent.forms import BookingForm, BookingConfirmationForm, BookingStateForm, PreApprovalIPNForm, PayIPNForm, IncidentForm
 from eloue.rent.models import Booking, ProBooking
 from eloue.rent.wizard import BookingWizard, PhoneBookingWizard
-from eloue.utils import currency
+from eloue.utils import currency, json
 from datetime import datetime, timedelta, date
 from eloue.rent.utils import get_product_occupied_date, timesince
 
@@ -78,13 +77,13 @@ def product_occupied_date(request, slug, product_id):
     dthandler = lambda obj: obj.isoformat() if isinstance(obj, (datetime, date)) else None
     if 'year' in request.GET and 'month' in request.GET:
         return HttpResponse(
-            simplejson.dumps(
+            json.dumps(
                 product.monthly_availability(request.GET['year'], request.GET['month']),
                 default=dthandler), 
-            mimetype='application/json'
+            content_type='application/json'
         )
     else:
-        return HttpResponse('[]', mimetype='application/json')
+        return HttpResponse('[]', content_type='application/json')
 
 @require_GET
 @never_cache
@@ -119,7 +118,7 @@ def booking_price(request, slug, product_id):
             response_dict['select_list'] = generate_select_list(max_available, selected=max_available)
         else:
             response_dict['select_list'] = generate_select_list(max_available, selected=quantity)
-        return HttpResponse(simplejson.dumps(response_dict), mimetype='application/json')
+        return HttpResponse(json.dumps(response_dict), content_type='application/json')
     else:
         max_available = getattr(form, 'max_available', product.quantity)
         try:
@@ -134,14 +133,14 @@ def booking_price(request, slug, product_id):
         except:
             response_dict = {}
         
-        return HttpResponse(simplejson.dumps(response_dict), mimetype='application/json')
+        return HttpResponse(json.dumps(response_dict), content_type='application/json')
 
 
 @require_GET
 def get_availability(request, product_id, year, month):
     product = get_object_or_404(Product.on_site, pk=product_id)
     availability = product.daily_available(year, month)
-    return HttpResponse(simplejson.dumps(availability), mimetype='application/json')
+    return HttpResponse(json.dumps(availability), content_type='application/json')
 
 
 @mobify

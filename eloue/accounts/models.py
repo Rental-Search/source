@@ -6,7 +6,6 @@ import urllib2
 import calendar
 from decimal import Decimal as D
 
-import simplejson
 import facebook
 
 from imagekit.models import ImageSpec
@@ -38,7 +37,7 @@ from eloue.geocoder import GoogleGeocoder
 from eloue.products.utils import Enum
 from eloue.products.signals import post_save_to_batch_update_product
 from eloue.signals import post_save_sites, pre_delete_creditcard
-from eloue.utils import create_alternative_email, cache_to
+from eloue.utils import create_alternative_email, cache_to, json
 from eloue.payments.paypal_payment import accounts, PaypalError
 from eloue.payments import paypal_payment
 
@@ -604,7 +603,7 @@ class IDNSession(models.Model):
         access_token = oauth.Token(self.access_token, self.access_token_secret)
         client = oauth.Client(consumer, access_token)
         response, content = client.request(me_url, "GET")
-        me_dict = normalize(simplejson.loads(content))
+        me_dict = normalize(json.loads(content))
         cache.set('idn:me_%s' % self.uid, me_dict, 0)
         return me_dict
 

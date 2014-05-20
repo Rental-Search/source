@@ -6,7 +6,6 @@ import plistlib
 from urllib import unquote,quote,urlencode
 from base64 import decodestring
 from decimal import Decimal as D
-import simplejson as json
 
 from django_fsm.db.fields import transition
 
@@ -47,6 +46,7 @@ from eloue.products.models import Product, Category, Picture, Price, upload_to, 
 from eloue.products.search_indexes import product_search
 from eloue.accounts.models import Address, PhoneNumber, Patron, PHONE_TYPES
 from eloue.rent.models import Booking
+from eloue.utils import json
 
 __all__ = ['api_v1']
 
@@ -427,7 +427,7 @@ class CategoryResource(ModelResource):
     def base_urls(self):
         return super(CategoryResource, self).base_urls()
 
-    def override_urls(self):
+    def prepend_urls(self):
         return [
             url(r"^(?P<resource_name>%s)/tree/$" % self._meta.resource_name, self.wrap_view('get_tree'), name="api_get_tree"),
         ]

@@ -14,11 +14,11 @@ from django.core.urlresolvers import reverse
 from django.db import transaction
 from django.db.models import Q
 from django.test import Client, TransactionTestCase
-from django.utils import simplejson
 
 from eloue.accounts.models import Patron
 from eloue.products.models import Product,ProductRelatedMessage
 from eloue.rent.models import Booking
+from eloue.utils import json
 
 
 OAUTH_CONSUMER_KEY = '451cffaa88bd49e881068349b093598a'
@@ -87,14 +87,14 @@ class ApiTest(TransactionTestCase):
         response = self.client.get(self._resource_url('product'),
             {'oauth_consumer_key': OAUTH_CONSUMER_KEY})
         self.assertEquals(response.status_code, 200)
-        json = simplejson.loads(response.content)
+        json = json.loads(response.content)
         self.assertEquals(json['meta']['total_count'], Product.objects.count())
     
     def test_product_search(self):
         response = self.client.get(self._resource_url('product'), {'q': 'perceuse',
             'oauth_consumer_key': OAUTH_CONSUMER_KEY})
         self.assertEquals(response.status_code, 200)
-        json = simplejson.loads(response.content)
+        json = json.loads(response.content)
         self.assertEquals(json['meta']['total_count'], 3)
         
         
@@ -105,7 +105,7 @@ class ApiTest(TransactionTestCase):
             'oauth_consumer_key': OAUTH_CONSUMER_KEY
         })
         self.assertEquals(response.status_code, 200)
-        json = simplejson.loads(response.content)
+        json = json.loads(response.content)
         self.assertEquals(json['meta']['total_count'], 3)
     
     def test_product_with_dates(self):
@@ -117,7 +117,7 @@ class ApiTest(TransactionTestCase):
             'oauth_consumer_key': OAUTH_CONSUMER_KEY
         })
         self.assertEquals(response.status_code, 200)
-        json = simplejson.loads(response.content)
+        json = json.loads(response.content)
         self.assertEquals(json['meta']['total_count'], Product.objects.count())
         for product in json['objects']:
             self.assertEquals(D(product['price']),
@@ -137,7 +137,7 @@ class ApiTest(TransactionTestCase):
         }
         request = self._get_request(method='POST')
         response = self.client.post(self._resource_url('product'),
-            data=simplejson.dumps(post_data),
+            data=json.dumps(post_data),
             content_type='application/json',
             **self._get_headers(request))
         self.assertEquals(response.status_code, 201)
@@ -160,7 +160,7 @@ class ApiTest(TransactionTestCase):
         }
         request = self._get_request(method='POST')
         response = self.client.post(self._resource_url('user'),
-            data=simplejson.dumps(post_data),
+            data=json.dumps(post_data),
             content_type='application/json',
             **self._get_headers(request))
         self.assertEquals(response.status_code, 201)
@@ -179,7 +179,7 @@ class ApiTest(TransactionTestCase):
         }
         request = self._get_request(method='POST')
         response = self.client.post(self._resource_url('user'),
-            data=simplejson.dumps(post_data),
+            data=json.dumps(post_data),
             content_type='application/json',
             **self._get_headers(request))
         self.assertEquals(response.status_code, 201)
@@ -191,7 +191,7 @@ class ApiTest(TransactionTestCase):
         }
         request = self._get_request(method='POST')
         response = self.client.post(self._resource_url('user'),
-            data=simplejson.dumps(post_data),
+            data=json.dumps(post_data),
             content_type='application/json',
             **self._get_headers(request))
         self.assertEquals(response.status_code, 400)
@@ -207,7 +207,7 @@ class ApiTest(TransactionTestCase):
         headers = self._get_headers(self._get_request(method='POST'))
         response = self.client.post(
             self._resource_url('customer'),
-            data=simplejson.dumps(post_data),
+            data=json.dumps(post_data),
             content_type='application/json',
             **headers
         )
@@ -237,7 +237,7 @@ class ApiTest(TransactionTestCase):
             headers = self._get_headers(self._get_request(method='POST'))
             response_post = self.client.post(
                 self._resource_url('customer'),
-                data=simplejson.dumps(data),
+                data=json.dumps(data),
                 content_type='application/json',
                 **headers
             )
@@ -247,7 +247,7 @@ class ApiTest(TransactionTestCase):
             self._resource_url('customer'),
             **headers
         )
-        content = simplejson.loads(response.content)
+        content = json.loads(response.content)
         self.assertEquals(content["meta"]["total_count"], 2)
 
     def test_user_modification(self):
@@ -257,7 +257,7 @@ class ApiTest(TransactionTestCase):
         myid = Patron.objects.get(email='alexandre.woog@e-loue.com').id
         response = self.client.put(
             self._resource_url('user', myid),
-            data=simplejson.dumps({'username':'trololol'}),
+            data=json.dumps({'username':'trololol'}),
             content_type='application/json',
             **headers
         )
@@ -270,7 +270,7 @@ class ApiTest(TransactionTestCase):
         response = self.client.get(reverse("api_dispatch_list", args=['1.0', 'message']), 
                                             **self._get_headers(request))
         self.assertEquals(response.status_code, 200)
-        json = simplejson.loads(response.content)
+        json = json.loads(response.content)
         self.assertEquals(json['meta']['total_count'],2)
         
     def test_message_creation(self):
@@ -282,7 +282,7 @@ class ApiTest(TransactionTestCase):
                      "recipient": "/api/1.0/user/4/"}
         request = self._get_request(method='POST', use_token=True)
         response = self.client.post(reverse("api_dispatch_list", args=['1.0', 'message']), 
-                                    data=simplejson.dumps(post_data),
+                                    data=json.dumps(post_data),
                                     content_type='application/json',
                                     **self._get_headers(request))
         self.assertEquals(response.status_code, 201)

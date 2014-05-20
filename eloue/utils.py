@@ -11,10 +11,17 @@ from django.conf import settings
 from django.contrib.sites.models import Site
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
-from django.utils.hashcompat import md5_constructor
 from django.utils.http import urlquote
 from django.utils import translation
 import django.forms as forms
+
+try:
+    import json
+except ImportErorr:
+    try:
+        import simplejson as json
+    except ImportErorr:
+        from django.utils import simplejson as json
 
 CAMO_URL = getattr(settings, 'CAMO_URL', 'https://media.e-loue.com/proxy/')
 CAMO_KEY = getattr(settings, 'CAMO_KEY')
@@ -46,7 +53,7 @@ def form_errors_append(form, field_name, message):
 
 
 def cache_key(fragment_name, *args):
-    hasher = md5_constructor(u':'.join([urlquote(arg) for arg in args]))
+    hasher = hashlib.md5(u':'.join([urlquote(arg) for arg in args]))
     return 'template.cache.%s.%s' % (fragment_name, hasher.hexdigest())
 
 

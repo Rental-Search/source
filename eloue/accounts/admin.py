@@ -67,7 +67,7 @@ class PatronAdmin(UserAdmin, CurrentSiteAdmin):
                 obj.send_professional_activation_email()
     
     def export_as_csv(self, request, queryset):
-        response = HttpResponse(mimetype='text/csv')
+        response = HttpResponse(content_type='text/csv')
         response['Content-Disposition'] = 'attachment; filename=%s.csv' % self.model._meta.db_table
         w = csv.writer(response, delimiter=',')
         for obj in queryset:

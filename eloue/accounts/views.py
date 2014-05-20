@@ -3,12 +3,10 @@ import smtplib
 import socket
 import datetime, time
 import urllib
-import simplejson
 import itertools
 from decimal import Decimal as D
 
 from logbook import Logger
-import simplejson
 
 
 from django_lean.experiments.models import GoalRecord
@@ -60,6 +58,7 @@ from eloue.products.models import ProductRelatedMessage, MessageThread, Product
 from eloue.products.search_indexes import product_search
 from eloue.rent.models import Booking, BorrowerComment, OwnerComment
 from eloue.rent.forms import OwnerCommentForm, BorrowerCommentForm
+from eloue.utils import json
 import time
 
 
@@ -149,10 +148,10 @@ def user_geolocation(request):
     source = int(request.POST['source'])
     if stored_location:
         current_source = stored_location.get('source', max(GEOLOCATION_SOURCE.values())+1)
-        if (current_source <= source) and not simplejson.loads(request.POST.get('forced')):
-            return HttpResponse(simplejson.dumps(
+        if (current_source <= source) and not json.loads(request.POST.get('forced')):
+            return HttpResponse(json.dumps(
                 {'status': 'already_geolocated'}),
-                mimetype="application/json"
+                content_type="application/json"
             )
     
     radius = None
@@ -162,7 +161,7 @@ def user_geolocation(request):
     })
 
     if 'address' in request.POST:
-        location = simplejson.loads(request.POST['address'])
+        location = json.loads(request.POST['address'])
         address_components = location['address_components']
         
         formatted_address = location.get('formatted_address')
@@ -202,7 +201,7 @@ def user_geolocation(request):
                 radius = city_radius or region_radius
 
     if 'coordinates' in request.POST:
-        coordinates = simplejson.loads(request.POST['coordinates'])
+        coordinates = json.loads(request.POST['coordinates'])
         coordinates = (coordinates['lat'], coordinates['lon'])
         stored_location.update({
             'coordinates': coordinates
@@ -216,9 +215,9 @@ def user_geolocation(request):
     })
 
     request.session.save()
-    return HttpResponse(simplejson.dumps(
+    return HttpResponse(json.dumps(
         {'status': "OK", 'radius': radius}), 
-        mimetype="application/json"
+        content_type="application/json"
     )
 
 @require_GET
@@ -820,7 +819,7 @@ def accounts_work_autocomplete(request):
     works = Patron.objects.filter(
         work__icontains=term).values('work').annotate(Count('work'))
     work_list = [{'label': work['work'], 'value': work['work']} for work in works]
-    return HttpResponse(simplejson.dumps(work_list), mimetype="application/json")
+    return HttpResponse(json.dumps(work_list), content_type="application/json")
 
 
 @login_required
@@ -830,13 +829,13 @@ def accounts_studies_autocomplete(request):
     schools = Patron.objects.filter(
         school__icontains=term).values('school').annotate(Count('school'))
     school_list = [{'label': school['school'], 'value': school['school']} for school in schools]
-    return HttpResponse(simplejson.dumps(school_list), mimetype="application/json")
+    return HttpResponse(json.dumps(school_list), content_type="application/json")
 
 @login_required
 def gmail_invite(request):
     access_token = request.GET.get('0-facebook_access_token', None)
     if access_token:
-        token_info = simplejson.load(
+        token_info = json.load(
             urllib.urlopen(
                 'https://www.googleapis.com/oauth2/v1/'
                 'tokeninfo?access_token=%s'%access_token
@@ -872,18 +871,18 @@ def gmail_send_invite(request):
         if form.is_valid():
             request.user.send_gmail_invite(form.cleaned_data['email'])
             return HttpResponse(
-                simplejson.dumps({'status': "OK"}), 
-                mimetype="application/json"
+                json.dumps({'status': "OK"}),
+                content_type="application/json"
             )
         else:
             return HttpResponse(
-                simplejson.dumps({'status': "KO"}), 
-                mimetype="application/json"
+                json.dumps({'status': "KO"}),
+                content_type="application/json"
             )
     else:
         return HttpResponse(
-            simplejson.dumps({'status': "KO"}), 
-            mimetype="application/json"
+            json.dumps({'status': "KO"}),
+            content_type="application/json"
         )
 
 
@@ -987,14 +986,14 @@ def patron_edit_idn_connect(request):
             request_token.set_verifier(idn_oauth_verifier)
             client = oauth.Client(consumer, request_token)
             response, content = client.request(access_token_url, "GET")
-            assert simplejson.loads(response['status']) == 200
+            assert json.loads(response['status']) == 200
             access_token_data = dict(urlparse.parse_qsl(content))
             access_token = oauth.Token(access_token_data['oauth_token'],
                 access_token_data['oauth_token_secret'])
             client = oauth.Client(consumer, access_token)
             response, content = client.request(me_url, "GET")
-            assert simplejson.loads(response['status']) == 200
-            content = simplejson.loads(content)
+            assert json.loads(response['status']) == 200
+            content = json.loads(content)
             IDNSession.objects.create(
                 user=request.user,
                 access_token=access_token_data['oauth_token'],

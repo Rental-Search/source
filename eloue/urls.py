@@ -2,7 +2,7 @@
 import logbook
 
 from django.conf import settings
-from django.conf.urls import *
+from django.conf.urls import patterns, url, include
 from django.contrib import admin
 from django.contrib.auth.views import logout_then_login, password_reset, password_reset_confirm, password_reset_done, password_reset_complete
 from django.contrib.sitemaps.views import index, sitemap

@@ -3,7 +3,7 @@ import datetime
 
 from collections import defaultdict
 
-from django.conf.urls import *
+from django.conf.urls import url
 from django.http import Http404
 from tastypie.api import Api
 from tastypie.resources import Resource
@@ -49,7 +49,7 @@ class PageViewResource(Resource):
 		resource_name = 'pageviews'
 		authentication = SessionAuthentication()
 
-	def override_urls(self):
+	def prepend_urls(self):
 		return [
 			url(r"^(?P<resource_name>%s)/analytics%s$" % (self._meta.resource_name, trailing_slash()), self.wrap_view('get_analytics_pageviews'), name="api_get_analytics_pageviews"),
 		]
@@ -137,7 +137,7 @@ class RedirectionEventResource(Resource):
 		resource_name = 'redirection_events'
 		authentication = SessionAuthentication()
 
-	def override_urls(self):
+	def prepend_urls(self):
 		return [
 			url(r"^(?P<resource_name>%s)/analytics%s$" % (self._meta.resource_name, trailing_slash()), self.wrap_view('get_analytics_redirections'), name="api_get_analytics_redirections"),
 		]
@@ -180,7 +180,7 @@ class PhoneEventResource(Resource):
 		resource_name = 'phone_events'
 		authentication = SessionAuthentication()
 
-	def override_urls(self):
+	def prepend_urls(self):
 		return [
 			url(r"^(?P<resource_name>%s)/analytics%s$" % (self._meta.resource_name, trailing_slash()), self.wrap_view('get_analytics_phones'), name="api_get_analytics_phones"),
 		]
@@ -223,7 +223,7 @@ class AddressEventResource(Resource):
 		resource_name = 'address_events'
 		authentication = SessionAuthentication()
 
-	def override_urls(self):
+	def prepend_urls(self):
 		return [
 			url(r"^(?P<resource_name>%s)/analytics%s$" % (self._meta.resource_name, trailing_slash()), self.wrap_view('get_analytics_addresses'), name="api_get_analytics_addresses"),
 		]

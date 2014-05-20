@@ -179,7 +179,7 @@ INSTALLED_APPS = (
     'django.contrib.sitemaps',
     'django.contrib.formtools',
     'django.contrib.staticfiles',
-    'django.contrib.markup',
+    'markup_deprecated', # 'django.contrib.markup',
     'django.contrib.gis',
     'south',
     'mptt',

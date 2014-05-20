@@ -110,7 +110,7 @@ def homepage_object_list(request, search_index, offset=0):
             'truncation': 28
         },
         context_instance=RequestContext(request),
-        mimetype='text/plain; charset=utf-8'
+        content_type='text/plain; charset=utf-8'
     )
 
 

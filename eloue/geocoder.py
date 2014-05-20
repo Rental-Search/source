@@ -5,7 +5,7 @@ import urllib
 from django.conf import settings
 from django.core.cache import cache
 from django.utils.encoding import smart_str
-from django.utils import simplejson
+from eloue.utils import json
 
 from geopy import Point, distance
 
@@ -56,7 +56,7 @@ class Geocoder(object):
 class GoogleGeocoder(Geocoder):
     # http://code.google.com/apis/maps/documentation/geocoding/index.html
     def get_json(self, location):
-        return simplejson.load(urllib.urlopen(
+        return json.load(urllib.urlopen(
             'http://maps.googleapis.com/maps/api/geocode/json?' + urllib.urlencode({
                 'address': smart_str(location),
                 'oe': 'utf8',

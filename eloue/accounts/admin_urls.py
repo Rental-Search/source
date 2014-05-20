@@ -1,4 +1,4 @@
-from django.conf.urls import *
+from django.conf.urls import patterns, url
 from eloue.accounts.admin_views import patron_create_subscription
 
 urlpatterns = patterns('',

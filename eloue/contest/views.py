@@ -3,7 +3,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse, Http404
 from django.views.decorators.cache import never_cache
-from django.utils import simplejson
 from eloue.decorators import secure_required
 from eloue.products.models import Product
 from eloue.products.forms import ProductForm, CarProductForm, RealEstateForm
@@ -11,6 +10,7 @@ from eloue.accounts.forms import EmailAuthenticationForm
 from eloue.contest.wizard import ContestProductWizard
 from eloue.contest.forms import GamerForm
 from eloue.contest.models import Gamer, ProductGamer
+from eloue.utils import json
 
 @never_cache
 @secure_required
@@ -69,10 +69,11 @@ def contest_edit_gamer(request, gamer_id, *args, **kwargs):
 		gamer_dict.pop('_state')
 		gamer_dict.pop('_patron_cache') if gamer_dict.has_key('_patron_cache') else False
 		gamer_dict.pop('created_at') if gamer_dict.has_key('created_at') else False
-		json = simplejson.dumps(gamer_dict)
-		return HttpResponse(json, mimetype="application/json")
+		json = json.dumps(gamer_dict)
+		return HttpResponse(json, content_type="application/json")
 	else:
-		json = simplejson.dumps(form.errors)
-		return HttpResponse(form.errors, mimetype="application/json")
+		json = json.dumps(form.errors)
+		# FIXME: form.errors below is not a JSON
+		return HttpResponse(form.errors, content_type="application/json")
 
 		
