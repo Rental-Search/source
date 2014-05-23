@@ -85,7 +85,7 @@
     <button type="submit" class="btn btn-primary">Enregistrer</button>
     <button type="reset" class="btn btn-cancel">Annuler</button>
     {% if request.user.creditcard %}
-      <a class="delete-credit-card" href="{% url 'accounts.views.patron_delete_credit_card' %}">{% trans "Supprimer la carte" %}</a>
+      <a class="delete-credit-card" href="{% url 'patron_delete_credit_card' %}">{% trans "Supprimer la carte" %}</a>
     {% endif %}
   </div>
 </fieldset>

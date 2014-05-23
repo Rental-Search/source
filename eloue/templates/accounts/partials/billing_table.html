@@ -31,7 +31,7 @@
 					{% for subscription in subscriptions %}
 					<tr>
 						<td class="billing-item">
-							{{ subscription.propackage.name }} - {% firstof subscription.propackage.maximum_items "Illimité" %} annonces (<a href="{% url 'accounts.views.patron_edit_subscription' %}">{% trans "Modifier mon plan" %}</a>)
+							{{ subscription.propackage.name }} - {% firstof subscription.propackage.maximum_items "Illimité" %} annonces (<a href="{% url 'patron_edit_subscription' %}">{% trans "Modifier mon plan" %}</a>)
 						</td>
 						<td class="amount">{% price subscription from to %} &euro;</td>
 					</tr>

@@ -28,15 +28,6 @@ class StandardPriceTest(TransactionTestCase):
     reset_sequences = True
     fixtures = ['category', 'patron', 'address', 'product']
     
-    def setUp(self):
-        from django.db import connection
-        self.isolation_level = connection.isolation_level
-        connection._set_isolation_level(0)
-    
-    def tearDown(self):
-        from django.db import connection
-        connection._set_isolation_level(self.isolation_level)
-    
     def test_product_pricing(self):
         standard_price = Price.objects.create(unit=1, amount=10, product_id=1, currency='EUR')
         product = Product.objects.get(pk=1)
@@ -46,15 +37,6 @@ class StandardPriceTest(TransactionTestCase):
 class SeasonalPriceTest(TransactionTestCase):
     reset_sequences = True
     fixtures = ['category', 'patron', 'address', 'product', 'booking']
-    
-    def setUp(self):
-        from django.db import connection
-        self.isolation_level = connection.isolation_level
-        connection._set_isolation_level(0)
-    
-    def tearDown(self):
-        from django.db import connection
-        connection._set_isolation_level(self.isolation_level)
     
     def test_product_pricing(self):
         seasonal_price = Price.objects.create(

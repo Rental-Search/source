@@ -64,7 +64,7 @@
 {% csrf_token %}
 <div id="result-page" class="container-main">
     <ul class="breadcrumb">
-        <li><a href="{% url 'products.views.homepage' %}">{% trans "Accueil" %}</a></li>
+        <li><a href="{% url 'home' %}">{% trans "Accueil" %}</a></li>
         {% for crumb in breadcrumbs|facets %}
 			{% if form.cleaned_data.l or form.cleaned_data.q %}
 			    {% for category in crumb.object.get_ancestors %}

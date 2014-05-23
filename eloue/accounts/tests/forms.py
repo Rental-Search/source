@@ -153,7 +153,7 @@ class CreditCardFormTest(TransactionTestCase):
         form = CreditCardForm({
                 'cvv': '123', 'expires_0': '12', 'expires_1': '22',
                 'card_number': '1111222233334444',  'holder_name': 'xxx'
-            }, instance=CreditCardForm._meta.model(holder=Patron.objects.get(pk=1)))
+            }, instance=CreditCardForm._meta.model(holder=Patron.objects.get(pk=1), keep=False))
         self.assertTrue(form.is_valid())
         self.assertFalse(form.non_field_errors())
         self.assertFalse(form.errors)
@@ -173,7 +173,7 @@ class CreditCardFormTest(TransactionTestCase):
                 'card_number': '1111222233334444', 'holder_name': 'xxx'
             }, instance=CreditCardForm._meta.model(
                 holder=Patron.objects.get(pk=1), card_number='SLDLrcsLMPC', pk=1,
-                expires='1222', masked_number='1XXXXXXXXXXXX444', holder_name='xxx'
+                expires='1222', masked_number='1XXXXXXXXXXXX444', keep=False, holder_name='xxx'
             )
         )
         self.assertTrue(form.is_valid())

@@ -8,10 +8,10 @@
 <div id="content" class="xgrid">
     <div class="content-top">
         <ul id="menu" class="x12">
-			<li class="menu-tab first"><a href="{% url 'accounts.views.dashboard' %}">{% trans "Tableau de bord" %}</a></li>
+			<li class="menu-tab first"><a href="{% url 'dashboard' %}">{% trans "Tableau de bord" %}</a></li>
 			<li class="menu-tab"><a href="{% url 'owner_booking' %}">{% trans "Propriétaire" %}</a></li>
 			<li class="menu-tab"><a href="{% url 'borrower_booking' %}">{% trans "Locataire" %}</a></li>
-			<li class="menu-tab"><a href="{% url 'accounts.views.patron_edit' %}">{% trans "Mon compte" %}</a></li>
+			<li class="menu-tab"><a href="{% url 'patron_edit' %}">{% trans "Mon compte" %}</a></li>
 			<li class="menu-tab">{% blocktrans %}Messages({{ messages_inbox_count }}){% endblocktrans %}</li>
 		</ul>
 	</div>

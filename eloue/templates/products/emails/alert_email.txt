@@ -2,8 +2,8 @@ Bonjour {{ patron.username }},
 
 Un utilisateur d'e-loue souhaite louer un(e) {{ alert.designation }} près de chez vous.
 
-- Vous possédez cet objet ? Alors venez sur e-loue le proposer en location : {% url 'products.views.product_create' %}
-- Vous n'en possédez pas ? Vous pouvez quand même proposer d'autres objets (similaire ou non !) et ainsi les rentabiliser : {% url 'products.views.product_create' %}
+- Vous possédez cet objet ? Alors venez sur e-loue le proposer en location : {% url 'product_create' %}
+- Vous n'en possédez pas ? Vous pouvez quand même proposer d'autres objets (similaire ou non !) et ainsi les rentabiliser : {% url 'product_create' %}
 
 Nous vous souhaitons de bonnes locations.
 

@@ -300,7 +300,7 @@
 
 {% cache 43200 product:breadcrumb product.pk %}
     <ul class="breadcrumb">
-        <li><a href="{% url 'products.views.homepage' %}">{% trans "Accueil" %}</a></li>
+        <li><a href="{% url 'home' %}">{% trans "Accueil" %}</a></li>
 		{% for category in product.category.get_ancestors %}
 		 <li><a href="{{ category.get_absolute_url }}">{{ category.name|capfirst }}</a></li>
 		{% endfor %}
@@ -596,7 +596,7 @@
                         {% endwith %}
                     {% endif %}
                 </address>
-                <a href="{% url 'products.views.message_create' product.pk patron.pk %}" class="btn-contactme">Contactez moi</a>
+                <a href="{% url 'message_create' product.pk patron.pk %}" class="btn-contactme">Contactez moi</a>
                 {% if patron.current_subscription %}
                 <div class="btn-pro-contact btn-group">
                 {% if patron.default_number %}

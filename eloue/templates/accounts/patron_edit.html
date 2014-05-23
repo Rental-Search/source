@@ -33,7 +33,7 @@
     <li><a href="{{ patron_edit }}"  class="{% active request "^/dashboard/account/$" %}">{% trans "Mon Profil" %}</a></li>
     <li><a href="{{ patron_edit_idn_connect }}" class="{% active request "^/dashboard/account/idn/$" %}">{% trans "Identité Numérique" %}</a></li>
     {% if request.user.is_professional %}
-    <li><a href="{% url 'accounts.views.patron_edit_opening_times' %}" class="{% active request "^/dashboard/account/openings/"%}">{% trans "Horaires d'ouverture" %}</a></li>
+    <li><a href="{% url 'patron_edit_opening_times' %}" class="{% active request "^/dashboard/account/openings/"%}">{% trans "Horaires d'ouverture" %}</a></li>
     <li>
         {% if request.user.current_subscription %}
           <a href="{{ billing }}" class="{% active request "^/dashboard/account/pro_account/" %}">{% trans "Compte pro" %}</a>
@@ -92,8 +92,8 @@
         {% endif %}
         {{ field }}
         <p class="help-block">{{ field.help_text }}</p>
-        {% if field.name == "default_address" %}<p class="help-block"><a href="{% url 'accounts.views.patron_edit_addresses' %}#newAddress">{% trans "Ajouter une nouvelle adresse"%}</a></p>{% endif %}
-        {% if field.name == "default_number" %}<p class="help-block"><a href="{% url 'accounts.views.patron_edit_phonenumber' %}#newPhone">{% trans "Ajouter un nouveau téléphone"%}</a></p>{% endif %}
+        {% if field.name == "default_address" %}<p class="help-block"><a href="{% url 'patron_edit_addresses' %}#newAddress">{% trans "Ajouter une nouvelle adresse"%}</a></p>{% endif %}
+        {% if field.name == "default_number" %}<p class="help-block"><a href="{% url 'patron_edit_phonenumber' %}#newPhone">{% trans "Ajouter un nouveau téléphone"%}</a></p>{% endif %}
         {% if field.errors %}
           <span class="help-inline">
           {% for error in field.errors %}

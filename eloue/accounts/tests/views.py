@@ -431,7 +431,6 @@ class PhonenumberManagement(TransactionTestCase):
             'phones-MAX_NUM_FORMS': '',
             'phones-INITIAL_FORMS': '1'
         })
-        print response
         self.assertTemplateUsed(response, 'accounts/patron_edit_phonenumber.html')
         self.assertContains(response, '<li>Vous ne pouvez pas supprimer tous vos numéros.</li>')
 

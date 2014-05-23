@@ -25,7 +25,7 @@
     });
     $.ajax({
       type: 'POST',
-      url: '{% url 'accounts.views.gmail_send_invite' %}',
+      url: '{% url 'gmail_send_invite' %}',
       data: {
         email: email,
       },

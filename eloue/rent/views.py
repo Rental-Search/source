@@ -333,7 +333,7 @@ def booking_close(request, booking_id):
         booking.pay()
         booking.send_closed_email()
         messages.success(request, _(u"Cette réservation a bien été cloturée. Si vous voulez vous pouvez ajouter un commentaire et une note sur le déroulement de la location."))
-        return redirect(reverse('eloue.accounts.views.comments')+'#'+booking.pk.hex)
+        return redirect(reverse('comments')+'#'+booking.pk.hex)
     return redirect(booking)
 
 

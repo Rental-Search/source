@@ -180,6 +180,7 @@ class BookingTest(TransactionTestCase):
         mock_authorize.return_value = '00012345', '000012345'
         creditcard = CreditCard.objects.create(
                 expires='0119', card_number='1111222233334444', 
+                masked_number='1XXXXXXXXXXXX444', keep=False, holder_name='John Doe',
                 holder=Patron.objects.get(pk=2)
             )
         payment = PayboxDirectPlusPaymentInformation.objects.create(

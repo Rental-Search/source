@@ -270,7 +270,7 @@ def comments(request):
                 form = Form(request.POST, instance=Model(booking=booking), prefix=booking.pk)
                 if form.is_valid():
                     form.save().send_notification_comment_email()
-                    return redirect('eloue.accounts.views.comments')
+                    return redirect('comments')
             else:
                 form = Form(instance=Model(booking=booking), prefix=booking.pk)
             forms.append(form)
@@ -301,7 +301,7 @@ def comments(request):
 def comment_booking(request, booking_id):
     booking = Booking.objects.get(pk=booking_id)
     if booking.state not in (Booking.STATE.CLOSING, Booking.STATE.CLOSED, Booking.STATE.ENDED):
-        return redirect('eloue.accounts.views.comments')
+        return redirect('comments')
     
     if booking.owner == request.user:
         try:
@@ -310,7 +310,7 @@ def comment_booking(request, booking_id):
             Form = OwnerCommentForm
             Model = OwnerComment
         else:
-            return redirect('eloue.accounts.views.comments')
+            return redirect('comments')
     else:
         try:
             booking.borrowercomment
@@ -318,12 +318,12 @@ def comment_booking(request, booking_id):
             Form = BorrowerCommentForm
             Model = BorrowerComment
         else:
-            return redirect('eloue.accounts.views.comments')
+            return redirect('comments')
     if request.POST:
         form = Form(request.POST, instance=Model(booking=booking))
         if form.is_valid():
             form.save().send_notification_comment_email()
-            return redirect('eloue.accounts.views.comments')
+            return redirect('comments')
     else:
         form = Form(instance=Model(booking=booking))
     return render_to_response(
@@ -497,7 +497,7 @@ def patron_edit_phonenumber(request):
         if formset.is_valid():
             formset.save()
             messages.success(request, _(u"Vos numéros de téléphones ont bien été modifiés"))
-            return redirect('eloue.accounts.views.patron_edit_phonenumber')
+            return redirect('patron_edit_phonenumber')
     else:
         formset = PhoneNumberFormset(instance=request.user)
     return render_to_response('accounts/patron_edit_phonenumber.html', dictionary={'formset': formset}, context_instance=RequestContext(request))
@@ -680,7 +680,7 @@ def patron_edit_addresses(request):
         if formset.is_valid():
             formset.save()
             messages.success(request, _(u"Vos adresses ont bien été modifiées"))
-            return redirect('eloue.accounts.views.patron_edit_addresses')
+            return redirect('patron_edit_addresses')
     else:
         formset = AddressFormSet(instance=request.user)
     return render_to_response('accounts/patron_edit_addresses.html', dictionary={'formset': formset}, context_instance=RequestContext(request))

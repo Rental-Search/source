@@ -11,7 +11,7 @@
 {% block content %}
 <div id="shipping-service-offer" class="container-main">
 	<ul class="breadcrumb">
-		<li><a href="{% url 'products.views.homepage' %}">{% trans "Accueil" %}</a></li>
+		<li><a href="{% url 'home' %}">{% trans "Accueil" %}</a></li>
 		<li>{% trans "Service de livraison" %}</li>
 	</ul>{# breadcrumb #}
 	<div class="one-content">
@@ -66,7 +66,7 @@
 								</div>
 							</li>
 						</ul>
-						<a href="{% url 'products.views.product_create' %}?shipping=true" class="btn btn-shipping-offer">{% trans "Je partcipe en déposant mes annonces" %}</a>
+						<a href="{% url 'product_create' %}?shipping=true" class="btn btn-shipping-offer">{% trans "Je partcipe en déposant mes annonces" %}</a>
 					</div>{# how #}
 				</div>{# ui-tabs #}
 			</div>{# shipping-participation #}

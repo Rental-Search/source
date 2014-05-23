@@ -61,7 +61,7 @@
                 {% if patron.slug == 'loxam'%}
                     <a class="btn-contactme" href="http://www.loxam.fr/contact.php">{% trans "Contactez-moi" %}</a>
                 {% else %}
-                    <a class="btn-contactme" href={% url 'products.views.patron_message_create' recipient_username=patron.slug %}>{% trans "Contactez-moi" %}</a>
+                    <a class="btn-contactme" href={% url 'patron_message_create' recipient_username=patron.slug %}>{% trans "Contactez-moi" %}</a>
                 {% endif %}
             </div>{# profil-description #}
         </div>{# profil-block #}
@@ -75,7 +75,7 @@
                     <li>{% include 'rent/partials/comment.html' %}</li>
                 {% endfor %}
             </ul>
-            <p class="more-comment"><a href="{% url 'accounts.views.comments' %}">Voir tous les commentaires</a></p>
+            <p class="more-comment"><a href="{% url 'comments' %}">Voir tous les commentaires</a></p>
             {% endif %}
         {% if product_list %}
             {% if product_list.count > 0 %}

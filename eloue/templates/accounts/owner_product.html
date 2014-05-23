@@ -53,7 +53,7 @@
 {% block content-main-profil %}
 	<h2>
         {% trans "Gérer mes annonces" %}
-        <a href="{% url 'products.views.publish_new_ad' %}" style="font-size: 12px; float: right; margin-top: 5px;">({% trans "Déposer une nouvelle annonce"%})</a>
+        <a href="{% url 'publish_new_ad' %}" style="font-size: 12px; float: right; margin-top: 5px;">({% trans "Déposer une nouvelle annonce"%})</a>
     </h2>
 	<ul class="product-list">
 	{% for product in product_list %}
@@ -67,7 +67,7 @@
         </a><!-- pl-img -->
         <div class="pl-content">
         	<h3>
-        	<a href="{% url 'products.views.product_edit' product.slug product.pk %}">{{product.summary|capitalize|truncate:70 }}</a>
+        	<a href="{% url 'owner_product_edit' product.slug product.pk %}">{{product.summary|capitalize|truncate:70 }}</a>
         	</h3>
         	<address>
         		{{ product.address.city|capfirst }}
@@ -80,7 +80,7 @@
         	{% endwith %}
        	</div><!-- pl-content -->
        	<div style="float: right; padding-top: 23px;">
-       		<a href="{% url 'products.views.product_edit' product.slug product.pk %}" class="btn btn-contactme">{% trans "Modifier l'annonce" %}</a>
+       		<a href="{% url 'owner_product_edit' product.slug product.pk %}" class="btn btn-contactme">{% trans "Modifier l'annonce" %}</a>
        	</div>
 	</li>
 	{% endfor %}

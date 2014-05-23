@@ -69,10 +69,10 @@ def contest_edit_gamer(request, gamer_id, *args, **kwargs):
 		gamer_dict.pop('_state')
 		gamer_dict.pop('_patron_cache') if gamer_dict.has_key('_patron_cache') else False
 		gamer_dict.pop('created_at') if gamer_dict.has_key('created_at') else False
-		json = json.dumps(gamer_dict)
-		return HttpResponse(json, content_type="application/json")
+		json_res = json.dumps(gamer_dict)
+		return HttpResponse(json_res, content_type="application/json")
 	else:
-		json = json.dumps(form.errors)
+		json_res = json.dumps(form.errors)
 		# FIXME: form.errors below is not a JSON
 		return HttpResponse(form.errors, content_type="application/json")
 

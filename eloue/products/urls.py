@@ -4,10 +4,11 @@ from django.utils.translation import ugettext as _
 
 from eloue.products.search_indexes import alert_search, product_search
 
-from eloue.products.views import product_create, product_edit, message_create, reply_product_related_message, \
+from eloue.products.views import product_create, message_create, \
     product_delete, alert_create, alert_inform, alert_delete
 from eloue.products.views import ProductList, AlertInformSuccess, AlertList
-from eloue.rent.views import booking_create, booking_price, product_occupied_date, booking_create_redirect, phone_create
+from eloue.rent.views import booking_create, booking_price, product_occupied_date, \
+    booking_create_redirect, phone_create
 
 
 urlpatterns = patterns('',

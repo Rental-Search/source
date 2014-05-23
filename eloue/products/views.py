@@ -188,7 +188,7 @@ def product_edit(request, slug, product_id):
         product = form.save()
         messages.success(request, _(u"Les modifications ont bien été prises en compte"))
         return redirect(
-            'eloue.products.views.product_edit', 
+            'owner_product_edit', 
             slug=slug, product_id=product_id
         )
 
@@ -212,7 +212,7 @@ def product_address_edit(request, slug, product_id):
             product = form.save()
             messages.success(request, _(u"L'adresse a bien été modifiée"))
             return redirect(
-                'eloue.products.views.product_address_edit', 
+                'owner_product_address_edit', 
                 slug=slug, product_id=product_id
             )
     else:
@@ -238,7 +238,7 @@ def product_phone_edit(request, slug, product_id):
             product = form.save()
             messages.success(request, _(u"Le numéro de téléphone à bien été enregistré"))
             return redirect(
-                'eloue.products.views.product_phone_edit',
+                'owner_product_phone_edit',
                 slug=slug, product_id=product_id
             )
     else:
@@ -267,7 +267,7 @@ def product_price_edit(request, slug, product_id):
         product = form.save()
         messages.success(request, _(u"Les prix ont bien été modifiés"))
         return redirect(
-            'eloue.products.views.product_price_edit', 
+            'owner_product_price_edit', 
             slug=slug, product_id=product_id
         )
     return render_to_response(

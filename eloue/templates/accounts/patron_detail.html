@@ -35,7 +35,7 @@
                 {% if patron.about %}
                     <p class="profil-description">{{ patron.about }}</p>
                 {% endif %}
-                <a class="btn-contactme" href={% url 'products.views.patron_message_create' recipient_username=patron.slug %}>{% trans "Contactez-moi" %}</a>
+                <a class="btn-contactme" href={% url 'patron_message_create' recipient_username=patron.slug %}>{% trans "Contactez-moi" %}</a>
             </div>{# profil-description #}
         </div>{# profil-block #}
         {% include "accounts/partials/more_info.html" %}

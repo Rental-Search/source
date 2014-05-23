@@ -27,7 +27,10 @@ class CreditCardTest(TransactionTestCase):
     @mock.patch.object(PayboxManager, 'unsubscribe')
     def test_delete(self, unsubscribe_mock):
         unsubscribe_mock.return_value = None
-        cc = CreditCard(card_number='123123', expires='0319', holder=Patron.objects.get(pk=1))
+        cc = CreditCard(
+            card_number='123123', expires='0319', holder=Patron.objects.get(pk=1),
+            masked_number='1XXXXXXXXXXXX444', keep=False, holder_name='John Doe',
+        )
         cc.save()
         cc.delete()
         self.assertTrue(unsubscribe_mock.called)

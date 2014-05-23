@@ -87,15 +87,15 @@ class ApiTest(TransactionTestCase):
         response = self.client.get(self._resource_url('product'),
             {'oauth_consumer_key': OAUTH_CONSUMER_KEY})
         self.assertEquals(response.status_code, 200)
-        json = json.loads(response.content)
-        self.assertEquals(json['meta']['total_count'], Product.objects.count())
+        json_res = json.loads(response.content)
+        self.assertEquals(json_res['meta']['total_count'], Product.objects.count())
     
     def test_product_search(self):
         response = self.client.get(self._resource_url('product'), {'q': 'perceuse',
             'oauth_consumer_key': OAUTH_CONSUMER_KEY})
         self.assertEquals(response.status_code, 200)
-        json = json.loads(response.content)
-        self.assertEquals(json['meta']['total_count'], 3)
+        json_res = json.loads(response.content)
+        self.assertEquals(json_res['meta']['total_count'], 3)
         
         
     def test_product_search_with_location(self):
@@ -105,8 +105,8 @@ class ApiTest(TransactionTestCase):
             'oauth_consumer_key': OAUTH_CONSUMER_KEY
         })
         self.assertEquals(response.status_code, 200)
-        json = json.loads(response.content)
-        self.assertEquals(json['meta']['total_count'], 3)
+        json_res = json.loads(response.content)
+        self.assertEquals(json_res['meta']['total_count'], 3)
     
     def test_product_with_dates(self):
         start_at = datetime.now() + timedelta(days=1)
@@ -117,9 +117,9 @@ class ApiTest(TransactionTestCase):
             'oauth_consumer_key': OAUTH_CONSUMER_KEY
         })
         self.assertEquals(response.status_code, 200)
-        json = json.loads(response.content)
-        self.assertEquals(json['meta']['total_count'], Product.objects.count())
-        for product in json['objects']:
+        json_res = json.loads(response.content)
+        self.assertEquals(json_res['meta']['total_count'], Product.objects.count())
+        for product in json_res['objects']:
             self.assertEquals(D(product['price']),
                 Booking.calculate_price(Product.objects.get(pk=product['id']), start_at, end_at)[1])
     
@@ -270,8 +270,8 @@ class ApiTest(TransactionTestCase):
         response = self.client.get(reverse("api_dispatch_list", args=['1.0', 'message']), 
                                             **self._get_headers(request))
         self.assertEquals(response.status_code, 200)
-        json = json.loads(response.content)
-        self.assertEquals(json['meta']['total_count'],2)
+        json_res = json.loads(response.content)
+        self.assertEquals(json_res['meta']['total_count'],2)
         
     def test_message_creation(self):
         post_data = {"body": "test body", 

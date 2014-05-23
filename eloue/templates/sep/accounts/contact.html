@@ -23,7 +23,7 @@
 <div class="container">
     <div class="row">
         <div class="container-main" style="margin-left: 168px; width: 600px; margin-bottom: 30px; padding-top: 10px;">
-            <form class="form-horizontal" method="post" action="{% url 'products.views.contact' %}">
+            <form class="form-horizontal" method="post" action="{% url 'contact' %}">
             <p style="margin-bottom: 20px; padding: 0 10px;">Pour obtenir plus d'information ou être informé du lancement, remplissez le formulaire ci-dessous :</p>
             {% csrf_token %}
             {% for formfield in form %}

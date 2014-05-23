@@ -62,7 +62,7 @@
                 <img src="{{ user.display.url }}" width="180" height="180">
                 {% else %}
                 <img src="{{ STATIC_URL }}images/default_avatar.png" width="180" height="180">
-                <a href="{% url 'accounts.views.patron_edit' %}#id_username" class="add-avatar-link">Ajouter une photo<br>de profil</a>
+                <a href="{% url 'patron_edit' %}#id_username" class="add-avatar-link">Ajouter une photo<br>de profil</a>
                 {% endif %}
                 <h1>{{ user.first_name }} {{ user.last_name }}</h1>
                 <address>{{ user.default_address.city }} - {{ user.default_address.zipcode}}</address>
@@ -71,7 +71,7 @@
                 {% if user.about %}
                     <p class="profil-description">{{ user.about }}</p>
                 {% endif %}
-                <a href="{% url 'accounts.views.patron_edit' %}#extraInfo" class="btn-contactme">Editer mon profil</a>
+                <a href="{% url 'patron_edit' %}#extraInfo" class="btn-contactme">Editer mon profil</a>
             </div><!-- profil-description -->
         </div><!-- profil-block -->
         {% if user.work or user.school or user.languages.count %}
@@ -100,7 +100,7 @@
         <div class="invite-your-friends">
             <img src="{{ STATIC_URL }}images/default_avatar.png" alt="" />
             <p>Invitez vos amis à vous rejoindre sur e-loue pour encore plus de location !</p>
-            <a href="{% url 'accounts.views.facebook_invite' %}" class="btn">{% trans "Envoyer des invitations" %}</a>
+            <a href="{% url 'facebook_invite' %}" class="btn">{% trans "Envoyer des invitations" %}</a>
         </div>
         {% endif %}
         <div class="dashboard-last-message">
@@ -110,7 +110,7 @@
             {% else %}
             <p>Vous n'avez pas de nouveau message.</p>
             {% endif %}
-            <p style="text-align: right;"><a href="{% url 'products.views.inbox' %}">Lire tous vos messages.</a></p>
+            <p style="text-align: right;"><a href="{% url 'inbox' %}">Lire tous vos messages.</a></p>
         </div>
             {% if booking_demands %}
             <h2 style="margin-bottom: 20px;">{% trans "Demandes de location" %}</h2>

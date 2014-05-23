@@ -82,16 +82,16 @@ class PostForm(TemplateWidgetAction):
 		return super(PostForm, self).render(request, context_dict)
 
 
-Accept = PostForm('Accepter', 'eloue.rent.views.booking_accept', BOOKING_STATE.PENDING)
-Refuse = PostForm('Refuser', 'eloue.rent.views.booking_reject', BOOKING_STATE.REJECTED)
-Cancel = PostForm('Annuler la location', 'eloue.rent.views.booking_cancel', BOOKING_STATE.CANCELED)
-Close = PostForm(u'Clôturer', 'eloue.rent.views.booking_close', BOOKING_STATE.CLOSING)
-Read = PostForm(u'Marquer comme lu', 'eloue.rent.views.booking_read', BOOKING_STATE.PROFESSIONAL_SAW)
+Accept = PostForm('Accepter', 'booking_accept', BOOKING_STATE.PENDING)
+Refuse = PostForm('Refuser', 'booking_reject', BOOKING_STATE.REJECTED)
+Cancel = PostForm('Annuler la location', 'booking_cancel', BOOKING_STATE.CANCELED)
+Close = PostForm(u'Clôturer', 'booking_close', BOOKING_STATE.CLOSING)
+Read = PostForm(u'Marquer comme lu', 'booking_read', BOOKING_STATE.PROFESSIONAL_SAW)
 
 
 Incident = LinkWidget(
 	url_builder=lambda request, booking: reverse(
-		'eloue.rent.views.booking_incident', 
+		'booking_incident', 
 		kwargs={'booking_id': booking.pk.hex}
 	),
 	text=u'Signaler un incident'
@@ -99,7 +99,7 @@ Incident = LinkWidget(
 
 Contract = LinkWidget(
 	url_builder=lambda request, booking: reverse(
-		'eloue.rent.views.booking_contract', 
+		'booking_contract', 
 		kwargs={'booking_id': booking.pk.hex}
 	),
 	text=u'Télécharger le contract de location'

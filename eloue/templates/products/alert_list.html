@@ -35,7 +35,7 @@
 <div id="content-product" class="result clearfix">
 	<div class="breadcrumb">
 		<ul class="x12 breadcrumbs">
-			<li><a href="{% url 'products.views.homepage' %}">{% trans "Accueil" %}</a></li>
+			<li><a href="{% url 'home' %}">{% trans "Accueil" %}</a></li>
 			{% if search_alert_form.cleaned_data.l %}
 			    <li><a href="/location/alertes/">{% trans "Alertes locations" %}</a></li>
 				<li class="lastb">{{ search_alert_form.cleaned_data.l|capfirst }}</li>
@@ -60,7 +60,7 @@
 					<p>{{ alert.description}}</p>
 				</div>
 				<div class="bk-action">
-					<a href="{% url 'products.views.product_create' %}">{% trans "Mettre en location" %}</a><br />
+					<a href="{% url 'product_create' %}">{% trans "Mettre en location" %}</a><br />
 					<a href="{% url 'alert_inform' alert.pk %}" title="Avertir le locataire que j'ai mis cet objet en location">{% trans "Avertir" %}</a>
 				</div>
 			</div>
