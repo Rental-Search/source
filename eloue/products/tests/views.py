@@ -2,10 +2,12 @@
 import django.forms as forms
 from django.core.urlresolvers import reverse
 from django.test import TransactionTestCase
-from eloue.accounts.models import Patron
-from eloue.products.models import Product, ProductRelatedMessage, MessageThread
 from django_messages import utils
 from django_messages.utils import new_message_email
+
+from accounts.models import Patron
+from products.models import Product, ProductRelatedMessage, MessageThread
+
 from eloue.signals import message_content_filter, message_site_filter
 
 

@@ -8,9 +8,9 @@ from django.conf import settings
 from django.core import mail
 from django.test import TransactionTestCase
 
-from eloue.rent.management.commands.billing import Command as BillingCommand
-from eloue.rent.management.commands.reimbursement import Command as ReimbursementCommand
-from eloue.rent.models import Booking, Sinister
+from rent.management.commands.billing import Command as BillingCommand
+from rent.management.commands.reimbursement import Command as ReimbursementCommand
+from rent.models import Booking, Sinister
 
 
 class MockDate(datetime.date):
@@ -68,7 +68,7 @@ class InsuranceTest(TransactionTestCase):
     
     @patch('ftplib.FTP')
     def test_sinister_command(self, mock):
-        import eloue.rent.management.commands.sinister as sinister
+        import rent.management.commands.sinister as sinister
         reload(sinister)  # It's loaded before we patch
         command = sinister.Command()
         command.handle()
@@ -78,7 +78,7 @@ class InsuranceTest(TransactionTestCase):
     
     @patch('ftplib.FTP')
     def test_subscriptions_command(self, mock):
-        import eloue.rent.management.commands.subscriptions as subscriptions
+        import rent.management.commands.subscriptions as subscriptions
         reload(subscriptions)  # It's loaded before we patch
         command = subscriptions.Command()
         command.handle()

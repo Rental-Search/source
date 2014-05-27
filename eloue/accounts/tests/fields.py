@@ -3,7 +3,7 @@
 from django.test import TestCase
 
 from django import forms
-from eloue.accounts.fields import (RIBField, RIBWidget, HiddenRIBWidget, 
+from accounts.fields import (RIBField, RIBWidget, HiddenRIBWidget, 
     ExpirationWidget, HiddenExpirationWidget, ExpirationField)
 
 

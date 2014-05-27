@@ -43,7 +43,7 @@ class Command(BaseCommand):
 
 	def _product_crawler(self):
 		"""Crawle product page and create a Product"""
-		from eloue.products.models import Picture, Product, Category, Price, UNIT
+		from products.models import Picture, Product, Category, Price, UNIT
 
 		def _get_price(s):
 			from decimal import Decimal as D
@@ -110,7 +110,7 @@ class Command(BaseCommand):
 			sys.stdout.flush()
 	
 	def handle(self, *args, **options):
-		from eloue.accounts.models import Patron, Address
+		from accounts.models import Patron, Address
 		self.product_links = {}
 
 		try:

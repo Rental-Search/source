@@ -1,15 +1,14 @@
 # -*- coding: utf-8 -*-
 import datetime
 from decimal import Decimal as D
+from mock import patch
 
 from django.core.exceptions import ValidationError
 from django.test import TransactionTestCase
 
-from eloue.accounts.models import Patron
-from eloue.rent.models import Booking, BorrowerComment, OwnerComment
-from eloue.rent import models
-from eloue.payments.paypal_payment import AdaptivePapalPayments
-from mock import patch
+from accounts.models import Patron
+from rent.models import Booking, BorrowerComment, OwnerComment
+from payments.paypal_payment import AdaptivePapalPayments
 
 
 class MockDateTime(datetime.datetime):
@@ -133,7 +132,7 @@ class BookingTest(TransactionTestCase):
         self.assertEquals(booking.product.payment_type, 1)
     
     def test_non_payment_preapproval(self):
-        from eloue.payments.models import NonPaymentInformation
+        from payments.models import NonPaymentInformation
         payment = NonPaymentInformation.objects.create()
         booking = Booking.objects.create(
             started_at=datetime.datetime.now(),
@@ -153,7 +152,7 @@ class BookingTest(TransactionTestCase):
         self.assertEquals(booking.state, Booking.STATE.AUTHORIZED) #state changed
     
     def test_non_payment_pay(self):
-        from eloue.payments.models import NonPaymentInformation
+        from payments.models import NonPaymentInformation
         payment = NonPaymentInformation.objects.create()
         booking = Booking.objects.create(
             started_at=datetime.datetime.now(),
@@ -172,11 +171,11 @@ class BookingTest(TransactionTestCase):
         booking.pay()
         self.assertEquals(booking.state, Booking.STATE.CLOSED) #state changed
     
-    from eloue.payments.paybox_payment import PayboxManager
+    from payments.paybox_payment import PayboxManager
     @patch.object(PayboxManager, 'authorize_subscribed')
     def test_paybox_payment_preapproval(self, mock_authorize):
-        from eloue.payments.models import PayboxDirectPlusPaymentInformation
-        from eloue.accounts.models import CreditCard
+        from payments.models import PayboxDirectPlusPaymentInformation
+        from accounts.models import CreditCard
         mock_authorize.return_value = '00012345', '000012345'
         creditcard = CreditCard.objects.create(
                 expires='0119', card_number='1111222233334444', 

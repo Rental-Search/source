@@ -5,7 +5,7 @@ from django.conf import settings
 from django.conf.urls import patterns, url
 from django.contrib import admin
 
-from eloue.accounts.views import contact
+from accounts.views import contact
 
 log = logbook.Logger('eloue')
 

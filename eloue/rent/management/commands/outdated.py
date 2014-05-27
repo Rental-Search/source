@@ -16,7 +16,7 @@ class Command(BaseCommand):
     @activate_language
     def handle(self, *args, **options):
         """Find outdated rentals and move them in OUTDATED state."""
-        from eloue.rent.models import Booking
+        from rent.models import Booking
         log.info('Starting hourly outdater mover process')
         Booking.objects.filter(
             state__in=[Booking.STATE.AUTHORIZING, Booking.STATE.AUTHORIZED],

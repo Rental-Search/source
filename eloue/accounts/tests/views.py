@@ -9,10 +9,11 @@ from django.core.urlresolvers import reverse
 from django.test import TransactionTestCase
 from django.utils.translation import ugettext as _
 from django.contrib.sites.models import Site
-from eloue.accounts.forms import PatronPasswordChangeForm, ContactForm
-from eloue.accounts.models import Patron, Address
-from eloue.payments import paypal_payment
-from eloue.payments.paypal_payment import verify_paypal_account
+
+from accounts.forms import PatronPasswordChangeForm, ContactForm
+from accounts.models import Patron, Address
+from payments import paypal_payment
+from payments.paypal_payment import verify_paypal_account
 
 def dummy_verify_paypal_account(email, first_name, last_name):
     if first_name=='Lin' and last_name=='LIU' and email=='unverified_paypal_account@e-loue.com':

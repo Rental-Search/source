@@ -22,8 +22,10 @@ from django.http import Http404
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_protect
 
-from eloue.accounts.forms import EmailAuthenticationForm, make_missing_data_form
-from eloue.accounts.models import Patron, Avatar, FacebookSession
+from accounts.forms import EmailAuthenticationForm, make_missing_data_form
+from accounts.models import Patron, Avatar, FacebookSession
+from accounts.views import GEOLOCATION_SOURCE
+
 from eloue.geocoder import GoogleGeocoder
 
 def isMissingInformationForm(obj):
@@ -157,7 +159,6 @@ class MultiPartFormWizard(FormWizard):
                 except (IOError, KeyError):
                     pass
         address = None
-        from eloue.accounts.views import GEOLOCATION_SOURCE
         if not request.session.get('location') or request.session['location'].get('source') > GEOLOCATION_SOURCE.ADDRESS:
             if self.new_patron.default_address and self.new_patron.default_address.is_geocoded():
                 address = self.new_patron.default_address

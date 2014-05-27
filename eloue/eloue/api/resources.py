@@ -41,11 +41,12 @@ from django.shortcuts import get_object_or_404
 from django_lean.experiments.models import GoalRecord
 from django_lean.experiments.utils import WebUser
 
+from products.models import Product, Category, Picture, Price, upload_to, PAYMENT_TYPE, ProductRelatedMessage, MessageThread, UNIT#, StaticPage
+from products.search_indexes import product_search
+from accounts.models import Address, PhoneNumber, Patron, PHONE_TYPES
+from rent.models import Booking
+
 from eloue.geocoder import GoogleGeocoder
-from eloue.products.models import Product, Category, Picture, Price, upload_to, PAYMENT_TYPE, ProductRelatedMessage, MessageThread, UNIT#, StaticPage
-from eloue.products.search_indexes import product_search
-from eloue.accounts.models import Address, PhoneNumber, Patron, PHONE_TYPES
-from eloue.rent.models import Booking
 from eloue.utils import json
 
 __all__ = ['api_v1']

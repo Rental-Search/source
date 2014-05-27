@@ -4,6 +4,7 @@ import socket
 import datetime, time
 import urllib
 import itertools
+import time
 from decimal import Decimal as D
 
 from logbook import Logger
@@ -43,23 +44,24 @@ from django.contrib.auth import login
 from oauth_provider.models import Token
 from django.shortcuts import redirect, render
 
-from eloue.decorators import secure_required, mobify, ownership_required
-from eloue.accounts.forms import (EmailAuthenticationForm, GmailContactFormset, PatronEditForm, 
-    PatronPasswordChangeForm, ContactForm, CompanyEditForm,
+from accounts.forms import (EmailAuthenticationForm, GmailContactFormset, PatronEditForm, 
+    PatronPasswordChangeForm, ContactForm, CompanyEditForm, SubscriptionEditForm,
     PatronSetPasswordForm, FacebookForm, CreditCardForm, GmailContactForm)
-from eloue.accounts.models import Patron, FacebookSession, CreditCard, Billing, Subscription, ProPackage
+from accounts.models import Patron, FacebookSession, CreditCard, Billing, Subscription, ProPackage, BillingHistory
+from accounts.wizard import AuthenticationWizard
 
-from eloue.accounts.wizard import AuthenticationWizard
+from products.forms import FacetedSearchForm
+from products.models import ProductRelatedMessage, MessageThread, Product
+from products.search_indexes import product_search
+from products.utils import Enum
 
-from eloue import geocoder
-from eloue.products.forms import FacetedSearchForm
+from rent.models import Booking, BorrowerComment, OwnerComment
+from rent.forms import OwnerCommentForm, BorrowerCommentForm
+
+from eloue.geocoder import GoogleGeocoder
+from eloue.decorators import secure_required, mobify, ownership_required
 from eloue.views import LoginRequiredMixin
-from eloue.products.models import ProductRelatedMessage, MessageThread, Product
-from eloue.products.search_indexes import product_search
-from eloue.rent.models import Booking, BorrowerComment, OwnerComment
-from eloue.rent.forms import OwnerCommentForm, BorrowerCommentForm
 from eloue.utils import json
-import time
 
 
 PAGINATE_PRODUCTS_BY = getattr(settings, 'PAGINATE_PRODUCTS_BY', 10)
@@ -132,8 +134,6 @@ def associate_facebook(request):
         )
 
 
-from eloue.products.utils import Enum
-
 GEOLOCATION_SOURCE = Enum([
     (1, 'MANUAL', _('Location set manually')),
     (2, 'BROWSER', _('Location set by browser geocoding')),
@@ -172,7 +172,7 @@ def user_geolocation(request):
         countries = filter(lambda component: 'country' in component['types'], address_components)
         country = next(iter(map(lambda component: component['long_name'], countries)), None)
         fallback = next(iter(map(lambda component: component['long_name'], address_components)), None) if not (city or region or country) else None
-        region_coords, region_radius = geocoder.GoogleGeocoder().geocode(', '.join([region, country]))[1:3] if region and country else (None, None)
+        region_coords, region_radius = GoogleGeocoder().geocode(', '.join([region, country]))[1:3] if region and country else (None, None)
 
         stored_location.update({
             'city': city,
@@ -194,10 +194,10 @@ def user_geolocation(request):
                     ne = Point(latitudes['d'], longitudes['d'])
                     radius = (distance.distance(sw, ne).km // 2) + 1
                 except KeyError as e:
-                    city_coords, city_radius = geocoder.GoogleGeocoder().geocode(', '.join(filter(None, [city, region, country])))[1:3] if city and country else (None, None)
+                    city_coords, city_radius = GoogleGeocoder().geocode(', '.join(filter(None, [city, region, country])))[1:3] if city and country else (None, None)
                     radius = city_radius or region_radius
             else:
-                city_coords, city_radius = geocoder.GoogleGeocoder().geocode(', '.join(filter(None, [city, region, country])))[1:3] if region and country else (None, None)
+                city_coords, city_radius = GoogleGeocoder().geocode(', '.join(filter(None, [city, region, country])))[1:3] if region and country else (None, None)
                 radius = city_radius or region_radius
 
     if 'coordinates' in request.POST:
@@ -395,7 +395,7 @@ def patron_edit(request, *args, **kwargs):
 
 @login_required
 def billing_object(request, year, month, day):
-    from eloue.accounts.management.commands.pro_billing import minus_one_month
+    from accounts.management.commands.pro_billing import minus_one_month
 
     date_to = datetime.date(int(year), int(month), int(day))
     billing = get_object_or_404(Billing, patron=request.user, date_to=date_to)
@@ -423,7 +423,6 @@ def billing_object(request, year, month, day):
 
 @login_required
 def billing(request):
-    from eloue.accounts.models import BillingHistory
     patron = request.user
     billing_histories = BillingHistory.objects.filter(
             billing__patron=patron
@@ -445,7 +444,6 @@ def billing(request):
 
 @login_required
 def patron_edit_subscription(request, *args, **kwargs):
-    from eloue.accounts.forms import SubscriptionEditForm
     patron = request.user
     current_subscription = patron.current_subscription
     now = datetime.datetime.now()
@@ -491,7 +489,7 @@ def patron_edit_password(request):
 
 @login_required
 def patron_edit_phonenumber(request):
-    from eloue.accounts.forms import PhoneNumberFormset
+    from accounts.forms import PhoneNumberFormset
     if request.POST:
         formset  = PhoneNumberFormset(request.POST, instance=request.user)
         if formset.is_valid():
@@ -559,7 +557,7 @@ def patron_delete_credit_card(request):
 
 @login_required
 def patron_edit_rib(request):
-    from eloue.accounts.forms import RIBForm
+    from accounts.forms import RIBForm
     if request.method == 'POST':
         form = RIBForm(data=request.POST, instance=request.user)
         if form.is_valid():
@@ -589,8 +587,8 @@ def patron_edit_rib(request):
 
 @login_required
 def patron_edit_highlight(request):
-    from eloue.products.forms import HighlightForm
-    from eloue.products.models import ProductHighlight, Product
+    from products.forms import HighlightForm
+    from products.models import ProductHighlight, Product
 
     patron = request.user
 
@@ -628,7 +626,7 @@ def patron_edit_highlight(request):
 
 @login_required
 def patron_edit_top_position(request):
-    from eloue.products.models import ProductTopPosition, Product
+    from products.models import ProductTopPosition, Product
     
     def _split_products_on_topposition(products, patron):
         toppositions = ProductTopPosition.objects.filter(
@@ -674,7 +672,7 @@ def patron_edit_top_position(request):
 
 @login_required
 def patron_edit_addresses(request):
-    from eloue.accounts.forms import AddressFormSet
+    from accounts.forms import AddressFormSet
     if request.POST:
         formset = AddressFormSet(request.POST, instance=request.user)
         if formset.is_valid():
@@ -688,7 +686,7 @@ def patron_edit_addresses(request):
 
 @login_required
 def patron_edit_opening_times(request):
-    from eloue.accounts.forms import OpeningsForm, OpeningTimes
+    from accounts.forms import OpeningsForm, OpeningTimes
     try:
         instance = request.user.opening_times
     except OpeningTimes.DoesNotExist:
@@ -887,8 +885,8 @@ def gmail_send_invite(request):
 
 
 def patron_subscription(request):
-    from eloue.accounts.wizard import ProSubscriptionWizard
-    from eloue.accounts.forms import SubscriptionEditForm
+    from accounts.wizard import ProSubscriptionWizard
+    from accounts.forms import SubscriptionEditForm
     subscription_wizard = ProSubscriptionWizard([SubscriptionEditForm, EmailAuthenticationForm])
     return subscription_wizard(request)
 
@@ -899,7 +897,7 @@ def facebook_invite(request):
 
 @login_required
 def patron_edit_notification(request):
-    from eloue.accounts.models import EmailNotification, PhoneNotification
+    from accounts.models import EmailNotification, PhoneNotification
     patron = request.user
     mails = patron.emailnotification_set.filter(ended_at__isnull=True) # XXX: filter for valides only
     phones = patron.phonenotification_set.filter(ended_at__isnull=True) # XXX: filter for valides only
@@ -947,7 +945,7 @@ def patron_edit_idn_connect(request):
     import oauth2 as oauth
     import urllib, urlparse
     import urllib, json
-    from eloue.accounts.models import IDNSession
+    from accounts.models import IDNSession
     scope = '["namePerson/friendly","namePerson","contact/postalAddress/home","contact/email","namePerson/last","namePerson/first"]'
 
     consumer_key = settings.IDN_CONSUMER_KEY
@@ -1004,7 +1002,7 @@ def patron_edit_idn_connect(request):
 
 @login_required
 def patron_delete_idn_connect(request):
-    from eloue.accounts.models import IDNSession
+    from accounts.models import IDNSession
     idn = get_object_or_404(IDNSession, user=request.user)
     try:
         idn.delete()

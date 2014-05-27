@@ -8,7 +8,7 @@ from django.core.exceptions import ValidationError
 from django.db import transaction
 from django.test import TransactionTestCase
 
-from eloue.products.models import (Picture, Product, ProductReview, PatronReview, 
+from products.models import (Picture, Product, ProductReview, PatronReview, 
     CarProduct, RealEstateProduct)
 
 local_path = lambda path: os.path.join(os.path.dirname(__file__), path)

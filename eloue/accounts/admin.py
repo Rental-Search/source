@@ -10,8 +10,8 @@ from django.utils.encoding import smart_str
 from django.utils.translation import ugettext_lazy as _
 
 from eloue.admin import CurrentSiteAdmin
-from eloue.accounts.models import Patron, Address, PhoneNumber, PatronAccepted, ProPackage, Subscription, OpeningTimes, Billing
-from eloue.accounts.forms import PatronChangeForm, PatronCreationForm
+from accounts.models import Patron, Address, PhoneNumber, PatronAccepted, ProPackage, Subscription, OpeningTimes, Billing
+from accounts.forms import PatronChangeForm, PatronCreationForm
 
 log = logbook.Logger('eloue')
 

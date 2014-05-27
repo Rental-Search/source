@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import logbook
+from functools import partial
 
 from django.conf import settings
 from django.conf.urls import patterns, url, include
@@ -8,17 +9,13 @@ from django.contrib.auth.views import logout_then_login, password_reset, passwor
 from django.contrib.sitemaps.views import index, sitemap
 from django.utils import translation
 from django.utils.translation import ugettext as _
-
-from eloue.accounts.forms import EmailPasswordResetForm, PatronSetPasswordForm
-
-from eloue.accounts.views import activate, authenticate, authenticate_headless, contact, google_oauth_callback, patron_subscription
-
-from eloue.products.views import homepage, search, reply_product_related_message, homepage_object_list
-from eloue.products.search_indexes import product_only_search, car_search, realestate_search
-from eloue.sitemaps import CategorySitemap, FlatPageSitemap, PatronSitemap, ProductSitemap
 from django.views.generic import TemplateView
 
-from functools import partial
+from accounts.forms import EmailPasswordResetForm, PatronSetPasswordForm
+from accounts.views import activate, authenticate, authenticate_headless, contact, google_oauth_callback, patron_subscription
+from products.views import homepage, search, reply_product_related_message, homepage_object_list
+from products.search_indexes import product_only_search, car_search, realestate_search
+from sitemaps import CategorySitemap, FlatPageSitemap, PatronSitemap, ProductSitemap
 
 log = logbook.Logger('eloue')
 
@@ -38,8 +35,8 @@ translation.activate(settings.LANGUAGE_CODE)  # Force language for test and dev
 
 urlpatterns = patterns('',
     url(r'^invitation_sent/$', TemplateView.as_view(template_name='accounts/invitation_sent.html'), name='invitation_sent'),
-    url(r'^user_geolocation/$', 'eloue.accounts.views.user_geolocation', name='user_geolocation'),
-    url(r'^get_user_location/$', 'eloue.accounts.views.get_user_location', name='get_user_location'),
+    url(r'^user_geolocation/$', 'accounts.views.user_geolocation', name='user_geolocation'),
+    url(r'^get_user_location/$', 'accounts.views.get_user_location', name='get_user_location'),
     url(r"^announcements/", include("announcements.urls")),
     url(r'^sitemap.xml$', index, {'sitemaps': sitemaps}, name="sitemap"),
     url(r'^sitemap-(?P<section>.+).xml$', sitemap, {'sitemaps': sitemaps}),
@@ -69,15 +66,15 @@ urlpatterns = patterns('',
     url(r'^oauth2callback$', google_oauth_callback),
     url(r'^dashboard/', include('eloue.dashboard.urls')),
     url(r'^media/(.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT}),
-    url(r'^%s' % "loueur/", include('eloue.accounts.urls')),
-    url(r'^%s' % "location/", include('eloue.products.urls')),
-    url(r'^%s' % "jeu-concours/", include('eloue.contest.urls')),
-    url(r'^booking/', include('eloue.rent.urls')),
+    url(r'^%s' % "loueur/", include('accounts.urls')),
+    url(r'^%s' % "location/", include('products.urls')),
+    url(r'^%s' % "jeu-concours/", include('contest.urls')),
+    url(r'^booking/', include('rent.urls')),
     url(r'^experiments/', include('django_lean.experiments.urls')),
     url(r'^edit/reports/', include('django_lean.experiments.admin_urls')),
     url(r'^edit/', include(admin.site.urls)),
-    url(r'edit/', include('eloue.accounts.admin_urls')),
-    url(r'^edit/stats/', include('eloue.reporting.admin_urls')),
+    url(r'edit/', include('accounts.admin_urls')),
+    url(r'^edit/stats/', include('reporting.admin_urls')),
     url(r'^api/', include('eloue.api.urls')),
     url(r'^oauth/', include('oauth_provider.urls')),
     url(r'^slimpay/', include('payments.slimpay_urls')),

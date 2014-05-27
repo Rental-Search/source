@@ -16,8 +16,8 @@ class Command(BaseCommand):
 	help = "Import given xls file for pro user"
 
 	def handle(self, *args, **options):
-		from eloue.products.models import Picture, Price, Category, Product, UNIT
-		from eloue.products.models import Patron
+		from products.models import Picture, Price, Category, Product, UNIT
+		from products.models import Patron
 		if len(args) != 3:
 			print "I need exactly three argument table path, image folder path and patron id"
 			return

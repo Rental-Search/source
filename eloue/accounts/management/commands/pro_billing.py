@@ -38,8 +38,8 @@ class Command(BaseCommand):
     args = ""
 
     def handle(self, *args, **options):
-        from eloue.payments.models import PayboxDirectPlusPaymentInformation
-        from eloue.accounts.models import Billing, Patron
+        from payments.models import PayboxDirectPlusPaymentInformation
+        from accounts.models import Billing, Patron
 
         # generate new billings
         date_to = datetime.datetime.combine(datetime.date.today(), datetime.time())
@@ -57,7 +57,7 @@ class Command(BaseCommand):
                 billing.payment = payment
                 billing.save()
 
-                from eloue.accounts.models import (BillingSubscription, 
+                from accounts.models import (BillingSubscription, 
                     BillingProductHighlight, BillingProductTopPosition, 
                     BillingPhoneNotification, BillingEmailNotification)
 

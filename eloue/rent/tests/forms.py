@@ -1,8 +1,8 @@
 from django.test import TransactionTestCase
 from django.db import transaction, IntegrityError
 
-from eloue.rent.forms import BorrowerCommentForm, OwnerCommentForm
-from eloue.rent.models import Booking, BorrowerComment, OwnerComment
+from rent.forms import BorrowerCommentForm, OwnerCommentForm
+from rent.models import Booking, BorrowerComment, OwnerComment
 
 class BorrowerCommentFormTest(TransactionTestCase):
     reset_sequences = True

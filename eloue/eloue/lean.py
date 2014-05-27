@@ -3,7 +3,7 @@ import logbook
 
 from django.db.models import Q
 
-from eloue.rent.models import Booking
+from rent.models import Booking
 
 log = logbook.Logger('eloue.rent.subscriptions')
 

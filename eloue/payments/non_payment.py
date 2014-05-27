@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
-from eloue.payments.abstract_payment import AbstractPayment
-
+from payments.abstract_payment import AbstractPayment
 
 
 class NonPayments(AbstractPayment):

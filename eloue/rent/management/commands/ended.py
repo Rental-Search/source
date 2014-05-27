@@ -16,7 +16,7 @@ class Command(BaseCommand):
     @activate_language
     def handle(self, *args, **options):
         """Find ending rent and move them as ENDED."""
-        from eloue.rent.models import Booking
+        from rent.models import Booking
         log.info('Starting hourly ender mover process')
         dtime = datetime.now() + timedelta(hours=1)
         for booking in Booking.objects.ongoing().filter(

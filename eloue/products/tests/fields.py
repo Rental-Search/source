@@ -1,7 +1,7 @@
 from django.test import TestCase
 from django.forms import ValidationError
 
-from eloue.products.fields import FRLicensePlateField
+from products.fields import FRLicensePlateField
 
 class LicensePlateTest(TestCase):
 

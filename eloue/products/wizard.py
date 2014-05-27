@@ -11,11 +11,12 @@ from django.utils.translation import ugettext as _
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_protect
 
+from accounts.forms import EmailAuthenticationForm, make_missing_data_form
+from accounts.models import Patron, Avatar
+from products.forms import AlertForm, ProductForm, MessageEditForm
+from products.models import Product, Picture, UNIT, Alert
+
 from eloue.wizard import MultiPartFormWizard
-from eloue.accounts.forms import EmailAuthenticationForm, make_missing_data_form
-from eloue.accounts.models import Patron, Avatar
-from eloue.products.forms import AlertForm, ProductForm, MessageEditForm
-from eloue.products.models import Product, Picture, UNIT, Alert
 
 
 class ProductWizard(MultiPartFormWizard):
@@ -43,7 +44,7 @@ class ProductWizard(MultiPartFormWizard):
         if patron.is_professional and not patron.current_subscription:
             messages.success(request, _(u"En tant que professionnel, vous devez souscrire à un abonnement avant de pouvoir déposer une annonce."))
             return redirect(
-                'eloue.accounts.views.patron_subscription'
+                'accounts.views.patron_subscription'
             )
 
         if subscription:
@@ -149,7 +150,7 @@ class AlertWizard(MultiPartFormWizard):
         alert_form.instance.address = self.new_address
         alert = alert_form.save()
 
-        if not settings.AUTHENTICATION_BACKENDS[0] == 'eloue.accounts.auth.PrivatePatronModelBackend':
+        if not settings.AUTHENTICATION_BACKENDS[0] == 'accounts.auth.PrivatePatronModelBackend':
             alert.send_alerts()
 
         messages.success(request, _(u"Votre alerte a bien été créée"))

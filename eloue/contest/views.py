@@ -3,13 +3,15 @@
 from django.shortcuts import render
 from django.http import HttpResponse, Http404
 from django.views.decorators.cache import never_cache
+
+from products.models import Product
+from products.forms import ProductForm, CarProductForm, RealEstateForm
+from accounts.forms import EmailAuthenticationForm
+from contest.wizard import ContestProductWizard
+from contest.forms import GamerForm
+from contest.models import Gamer, ProductGamer
+
 from eloue.decorators import secure_required
-from eloue.products.models import Product
-from eloue.products.forms import ProductForm, CarProductForm, RealEstateForm
-from eloue.accounts.forms import EmailAuthenticationForm
-from eloue.contest.wizard import ContestProductWizard
-from eloue.contest.forms import GamerForm
-from eloue.contest.models import Gamer, ProductGamer
 from eloue.utils import json
 
 @never_cache

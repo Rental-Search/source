@@ -1,13 +1,11 @@
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
 
-from eloue.rent.models import Booking
-from eloue.payments import *
-from eloue.accounts.models import CreditCard
-from eloue.accounts.models import Patron
-
-
-from eloue.payments.slimpay_payment import SlimPayManager
+from rent.models import Booking
+from payments import *
+from payments.slimpay_payment import SlimPayManager
+from accounts.models import CreditCard
+from accounts.models import Patron
 
 
 class PaymentInformation(models.Model, abstract_payment.AbstractPayment):

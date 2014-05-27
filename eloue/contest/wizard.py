@@ -1,11 +1,10 @@
-from eloue.products.wizard import ProductWizard
-from eloue.accounts.forms import EmailAuthenticationForm
-from eloue.products.forms import ProductForm
-from eloue.products.models import Product, Picture, UNIT, Alert
-
-from eloue.contest.models import Gamer, ProductGamer
-
 from django.shortcuts import redirect
+
+from accounts.forms import EmailAuthenticationForm
+from products.wizard import ProductWizard
+from products.forms import ProductForm
+from products.models import Product, Picture, UNIT, Alert
+from contest.models import Gamer, ProductGamer
 
 class ContestProductWizard(ProductWizard):
 

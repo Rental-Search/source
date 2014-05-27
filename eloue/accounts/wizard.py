@@ -11,8 +11,9 @@ from django.shortcuts import redirect
 from django_lean.experiments.models import GoalRecord
 from django_lean.experiments.utils import WebUser
 
-from eloue.accounts.forms import EmailAuthenticationForm, make_missing_data_form
-from eloue.accounts.models import Patron, Avatar
+from accounts.forms import EmailAuthenticationForm, make_missing_data_form, SubscriptionEditForm
+from accounts.models import Patron, Avatar, ProPackage, Subscription
+
 from eloue.wizard import MultiPartFormWizard
 
 class AuthenticationWizard(MultiPartFormWizard):
@@ -118,7 +119,6 @@ class ProSubscriptionWizard(AuthenticationWizard):
 
     def __call__(self, request, *args, **kwargs):
         import datetime
-        from eloue.accounts.models import ProPackage
         from django.db.models import Q
         now = datetime.datetime.now()
         plans = ProPackage.objects.filter(
@@ -132,7 +132,6 @@ class ProSubscriptionWizard(AuthenticationWizard):
         super(ProSubscriptionWizard, self).done(request, form_list)
         request.user.is_professional = True
         request.user.save()
-        from eloue.accounts.models import ProPackage, Subscription
         subscription_form = form_list[0]
         subscription_form.is_valid()
         propackage = subscription_form.cleaned_data['subscription']
@@ -148,7 +147,6 @@ class ProSubscriptionWizard(AuthenticationWizard):
         return redirect('patron_edit_subscription')
 
     def get_template(self, step):
-        from eloue.accounts.forms import SubscriptionEditForm
         if issubclass(self.form_list[step], SubscriptionEditForm):
             return 'accounts/patron_subscription.html'
         return super(ProSubscriptionWizard, self).get_template(step)

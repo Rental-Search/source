@@ -24,7 +24,7 @@ class Command(BaseCommand):
     @activate_language
     def handle(self, *args, **options):
         from django.conf import settings
-        from eloue.rent.models import Sinister
+        from rent.models import Sinister
         log.info('Starting daily insurance sinisters batch')
         csv_file = TemporaryFile()
         writer = csv.writer(csv_file, delimiter='|')

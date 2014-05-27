@@ -2,7 +2,7 @@
 from django.core.cache import cache
 from django.template import Library
 
-from eloue.products.models import Category
+from products.models import Category
 
 register = Library()
 

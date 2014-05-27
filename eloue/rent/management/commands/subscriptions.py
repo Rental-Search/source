@@ -23,8 +23,8 @@ class Command(BaseCommand):
     @activate_language
     def handle(self, *args, **options):
         from django.conf import settings
-        from eloue.accounts.models import COUNTRY_CHOICES
-        from eloue.rent.models import Booking
+        from accounts.models import COUNTRY_CHOICES
+        from rent.models import Booking
         log.info('Starting daily insurance subscriptions batch')
         csv_file = TemporaryFile()
         writer = csv.writer(csv_file, delimiter='|')

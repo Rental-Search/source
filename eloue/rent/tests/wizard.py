@@ -8,12 +8,13 @@ from django.test import TransactionTestCase
 
 from facebook import GraphAPIError, GraphAPI
 
-from eloue.products.models import Product
-from eloue.rent.models import Booking
+from products.models import Product
+from rent.models import Booking
+from accounts.models import FacebookSession, Patron
+from accounts.models import CreditCard
+from payments.paybox_payment import PayboxManager, PayboxException
+
 from eloue.wizard import MultiPartFormWizard
-from eloue.accounts.models import FacebookSession, Patron
-from eloue.accounts.models import CreditCard
-from eloue.payments.paybox_payment import PayboxManager, PayboxException
 
 class BookingMock(Booking):
     def preapproval(self, *args, **kwargs):

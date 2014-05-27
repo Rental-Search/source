@@ -5,8 +5,9 @@ from django.contrib import admin
 from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext_lazy as _
 
+from models import Booking, OwnerComment, BorrowerComment, Sinister, BookingLog
+
 from eloue.admin import CurrentSiteAdmin
-from eloue.rent.models import Booking, OwnerComment, BorrowerComment, Sinister, BookingLog
 
 log = logbook.Logger('eloue')
 

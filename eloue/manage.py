@@ -6,7 +6,8 @@ if __name__ == "__main__":
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "eloue.settings")
 
     try:
-        import settings  # Assumed to be in the same directory.
+        from django.conf import settings
+        #import settings  # Assumed to be in the same directory.
         os.environ['AWS_ACCESS_KEY_ID'] = settings.AWS_ACCESS_KEY_ID
         os.environ['AWS_SECRET_ACCESS_KEY'] = settings.AWS_SECRET_ACCESS_KEY
     except ImportError:

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
-from eloue.accounts.tests.geocoder import *
-from eloue.accounts.tests.models import *
-from eloue.accounts.tests.views import *
-from eloue.accounts.tests.wizard import *
-from eloue.accounts.tests.forms import *
-from eloue.accounts.tests.fields import *
+from accounts.tests.geocoder import *
+from accounts.tests.models import *
+from accounts.tests.views import *
+from accounts.tests.wizard import *
+from accounts.tests.forms import *
+from accounts.tests.fields import *

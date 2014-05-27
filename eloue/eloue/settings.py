@@ -150,7 +150,7 @@ PASSWORD_HASHERS =(
     'django.contrib.auth.hashers.PBKDF2SHA1PasswordHasher',
     'django.contrib.auth.hashers.BCryptPasswordHasher',
     'django.contrib.auth.hashers.SHA1PasswordHasher',
-    'eloue.accounts.auth.MD5PasswordHasher',
+    'accounts.auth.MD5PasswordHasher',
     'django.contrib.auth.hashers.UnsaltedMD5PasswordHasher',
     'django.contrib.auth.hashers.CryptPasswordHasher'
 )
@@ -196,7 +196,6 @@ INSTALLED_APPS = (
     'rent',
     'django_messages',
     'products',
-    'api',
     'oauth_provider',
     'payments',
     'contest',
@@ -211,7 +210,7 @@ if LOCAL_APPS:
 
 # Authentification configuration
 AUTHENTICATION_BACKENDS = (
-    'eloue.accounts.auth.PatronModelBackend',
+    'accounts.auth.PatronModelBackend',
 )
 ACCOUNT_ACTIVATION_DAYS = 7
 
@@ -504,8 +503,8 @@ DEFAULT_RADIUS = 215
 
 # OAuth configuration
 OAUTH_PROVIDER_KEY_SIZE = 32
-OAUTH_AUTHORIZE_VIEW = "eloue.accounts.views.oauth_authorize"
-OAUTH_CALLBACK_VIEW = "eloue.accounts.views.oauth_callback"
+OAUTH_AUTHORIZE_VIEW = 'accounts.views.oauth_authorize'
+OAUTH_CALLBACK_VIEW = 'accounts.views.oauth_callback'
 
 # Performance configuration
 USE_ETAGS = False

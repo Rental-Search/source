@@ -88,7 +88,7 @@ class Command(BaseCommand):
                 self.product_links[product_url] = family_url
 
     def _product_crawler(self):
-        from eloue.products.models import Product, Picture, Price
+        from products.models import Product, Picture, Price
         def _to_decimal(s):
             from decimal import Decimal as D
             return D(s.strip().replace(u'€', '').replace(',', '.').replace(' ', ''))
@@ -117,7 +117,7 @@ class Command(BaseCommand):
             description += '\n'
             description += composition.p.text
             summary = infosProduits.h1.text
-            from eloue.products.models import Category, Price, UNIT
+            from products.models import Category, Price, UNIT
             product = Product.objects.create(
                 summary=summary, description=description, 
                 deposit_amount=deposit_amount, address=self.address, owner=self.patron,
@@ -137,7 +137,7 @@ class Command(BaseCommand):
 
 
     def handle(self, *args, **options):
-        from eloue.accounts.models import Patron, Address
+        from accounts.models import Patron, Address
         self.product_links = {}
 
         try:

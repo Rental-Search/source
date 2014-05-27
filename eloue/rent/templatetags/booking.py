@@ -2,7 +2,7 @@
 import decimal
 from django.template import Library
 
-from eloue.rent.utils import combine as combine_parts
+from rent.utils import combine as combine_parts
 
 register = Library()
 

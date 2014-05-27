@@ -15,9 +15,10 @@ from django.db import transaction
 from django.db.models import Q
 from django.test import Client, TransactionTestCase
 
-from eloue.accounts.models import Patron
-from eloue.products.models import Product,ProductRelatedMessage
-from eloue.rent.models import Booking
+from accounts.models import Patron
+from products.models import Product,ProductRelatedMessage
+from rent.models import Booking
+
 from eloue.utils import json
 
 

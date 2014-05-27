@@ -10,7 +10,7 @@ class Command(BaseCommand):
 	help = "Import given xls file for pro agencies"
 
 	def handle(self, *args, **options):
-		from eloue.accounts.models import Patron, ProAgency
+		from accounts.models import Patron, ProAgency
 
 		if len(args) != 2:
 			print "I need exactly 2 arguments: table path, patron id"

@@ -7,10 +7,12 @@ from django.test import TransactionTestCase
 from mock import patch
 from facebook import GraphAPIError, GraphAPI
 
-from eloue.products.models import Picture
+from products.models import Picture
+from products.models import Product, ProductRelatedMessage, MessageThread
+from accounts.models import Address, FacebookSession, Patron
+
 from eloue.wizard import MultiPartFormWizard
-from eloue.products.models import Product, ProductRelatedMessage, MessageThread
-from eloue.accounts.models import Address, FacebookSession, Patron
+
 local_path = lambda path: os.path.join(os.path.dirname(__file__), path)
 
 class ProductWizardTestWithFacebookAccount(TransactionTestCase):

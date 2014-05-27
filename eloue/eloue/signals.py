@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.conf import settings
 import re
-from eloue.payments.paybox_payment import PayboxManager
+from payments.paybox_payment import PayboxManager
 
 REPLACE_STRING = settings.REPLACE_STRING
 
@@ -36,7 +36,7 @@ def message_site_filter(sender, instance, raw, using, *args, **kwargs):
     """
     Filter to forbiden passing message between users from different sites.
     """
-    from eloue.accounts.models import Patron
+    from accounts.models import Patron
     if not raw:
         if instance.sender and instance.recipient:
             patron_sender = Patron.objects.get(pk=instance.sender.pk)

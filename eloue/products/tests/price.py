@@ -5,7 +5,7 @@ from django.core.exceptions import ValidationError
 from django.db import IntegrityError
 from django.test import TransactionTestCase
 
-from eloue.products.models import Product, Price
+from products.models import Product, Price
 
 
 class PriceTest(TransactionTestCase):

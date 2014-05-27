@@ -3,8 +3,8 @@ import datetime
 from south.db import db
 from south.v2 import DataMigration
 from django.db import models
-from eloue.rent.models import Booking
-from eloue.accounts.models import CreditCard
+from rent.models import Booking
+from accounts.models import CreditCard
 
 def booking_exists(payment):
     try:

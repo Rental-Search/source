@@ -9,11 +9,11 @@ from tastypie.api import Api
 from tastypie.resources import Resource
 from tastypie.utils import trailing_slash
 
+from accounts.models import Patron
 
 from eloue.proapp.analytics_api_v3_auth import GoogleAnalyticsSetStats
 from eloue.proapp.api.authentication import SessionAuthentication
 from eloue.proapp.forms import TimeSeriesForm
-from eloue.accounts.models import Patron
 
 
 def get_time_series(request=None):

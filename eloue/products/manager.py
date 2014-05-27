@@ -23,14 +23,14 @@ class CurrentSiteProductManager(CurrentSiteManager, ProductManager):
 
 class PriceManager(Manager):
     def __init__(self):
-        from eloue.products.models import UNIT
+        from products.models import UNIT
         super(PriceManager, self).__init__()
         for unit in UNIT.enum_dict:
             setattr(self, unit.lower(), types.MethodType(self._filter_factory(unit), self))
     
     @staticmethod
     def _filter_factory(unit):
-        from eloue.products.models import UNIT
+        from products.models import UNIT
         
         def filter(self):
             return self.get_query_set().filter(unit=UNIT[unit])
@@ -39,14 +39,14 @@ class PriceManager(Manager):
 
 class QuestionManager(Manager):
     def __init__(self):
-        from eloue.products.models import STATUS
+        from products.models import STATUS
         super(QuestionManager, self).__init__()
         for status in STATUS.enum_dict:
             setattr(self, status.lower(), types.MethodType(self._filter_factory(status), self))
     
     @staticmethod
     def _filter_factory(status):
-        from eloue.products.models import STATUS
+        from products.models import STATUS
         
         def filter(self):
             return self.get_query_set().filter(status=STATUS[status])

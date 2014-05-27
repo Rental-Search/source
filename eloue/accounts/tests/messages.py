@@ -1,8 +1,8 @@
 import datetime
 from django.test import TestCase
 from django.contrib.auth.models import User
-from eloue.accounts.models import Patron
 from django_messages.models import Message
+from accounts.models import Patron
 
 class SendTestCase(TestCase):
     

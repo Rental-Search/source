@@ -6,11 +6,11 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 from django.shortcuts import render_to_response
 
-from eloue.payments.slimpay_payment import SlimPayManager
-from eloue.payments.slimpay_forms import BridgeForm
-from eloue.payments.models import SlimPayMandateInformation
+from payments.slimpay_payment import SlimPayManager
+from payments.slimpay_forms import BridgeForm
+from payments.models import SlimPayMandateInformation
 
-from eloue.accounts.models import Patron
+from accounts.models import Patron
 
 @require_POST
 @csrf_exempt

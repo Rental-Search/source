@@ -9,12 +9,12 @@ from django.db.models import Q
 from django.contrib.admin.views.decorators import staff_member_required
 
 
-from eloue.accounts.forms import make_missing_data_form
-from eloue.accounts.models import Patron, ProPackage
+from accounts.forms import make_missing_data_form
+from accounts.models import Patron, ProPackage
 
-from eloue.payments.slimpay_payment import SlimPayManager
-from eloue.payments.models import SlimPayMandateInformation
-from eloue.payments.slimpay_forms import BridgeForm
+from payments.slimpay_payment import SlimPayManager
+from payments.models import SlimPayMandateInformation
+from payments.slimpay_forms import BridgeForm
 
 def patron_create_subscription(request):
 

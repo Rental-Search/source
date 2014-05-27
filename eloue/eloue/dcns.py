@@ -19,7 +19,7 @@ AFFILIATE_TAG = 'dcns'
 LOGIN_REDIRECT_URL = '/'
 
 AUTHENTICATION_BACKENDS = (
-    'eloue.accounts.auth.PrivatePatronModelBackend',
+    'accounts.auth.PrivatePatronModelBackend',
 )
 
 MIDDLEWARE_CLASSES += ('eloue.middleware.RequireLoginMiddleware',)

@@ -6,9 +6,9 @@ from django.test import TransactionTestCase
 
 from pyke.knowledge_engine import CanNotProve
 
-from eloue.products.models import Product, UNIT
-from eloue.rent.models import Booking
-from eloue.rent.utils import timesince
+from products.models import Product, UNIT
+from rent.models import Booking
+from rent.utils import timesince
 
 class BookingPriceTest(TransactionTestCase):
     reset_sequences = True

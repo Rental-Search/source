@@ -12,7 +12,7 @@ from haystack.query import SearchQuerySet
 
 from queued_search.indexes import QueuedSearchIndex
 
-from eloue.accounts.models import Patron
+from accounts.models import Patron
 
 class PatronIndex(QueuedSearchIndex):
     username = CharField(model_attr='username')

@@ -45,8 +45,8 @@ class Command(BaseCommand):
     help = "Imports given xls file for user 'spotsound'"
 
     def handle(self, *args, **options):
-        from eloue.products.models import Picture, Price, Product, Category
-        from eloue.accounts.models import Patron
+        from products.models import Picture, Price, Product, Category
+        from accounts.models import Patron
         try:
             patron = Patron.objects.get(username='spotsound')
             address = patron.addresses.all()[0]

@@ -25,13 +25,15 @@ from django.utils.safestring import mark_safe
 from django.forms.formsets import ORDERING_FIELD_NAME, DELETION_FIELD_NAME
 import facebook
 
-from eloue.accounts import EMAIL_BLACKLIST
-from eloue.accounts.fields import PhoneNumberField, ExpirationField, RIBField, DateSelectField, CreditCardField
-from eloue.accounts.models import Patron, Avatar, PhoneNumber, CreditCard, COUNTRY_CHOICES, PatronAccepted, FacebookSession, Address, Language
-from eloue.accounts.widgets import ParagraphRadioFieldRenderer, CommentedCheckboxInput
+from accounts import EMAIL_BLACKLIST
+from accounts.fields import PhoneNumberField, ExpirationField, RIBField, DateSelectField, CreditCardField
+from accounts.models import Patron, Avatar, PhoneNumber, CreditCard, COUNTRY_CHOICES, PatronAccepted, FacebookSession, Address, Language
+from accounts.models import OpeningTimes, IDNSession
+from accounts.widgets import ParagraphRadioFieldRenderer, CommentedCheckboxInput
+from payments import paypal_payment
+from payments.paybox_payment import PayboxManager, PayboxException
+
 from eloue.utils import form_errors_append
-from eloue.payments import paypal_payment
-from eloue.payments.paybox_payment import PayboxManager, PayboxException
 
 STATE_CHOICES = (
     (0, _(u"Je n'ai pas encore de compte")),
@@ -184,7 +186,6 @@ class EmailAuthenticationForm(forms.Form):
                     pass
 
         elif any([idn_access_token, idn_id]):
-            from eloue.accounts.models import IDNSession
             import oauth2 as oauth
             import urllib, urlparse
             from django.core.urlresolvers import reverse
@@ -668,7 +669,7 @@ class CreditCardForm(forms.ModelForm):
         if self.errors:
             return self.cleaned_data
         try:
-            from eloue.payments.paybox_payment import PayboxManager, PayboxException
+            from payments.paybox_payment import PayboxManager, PayboxException
             pm = PayboxManager()
             self.cleaned_data['masked_number'] = mask_card_number(self.cleaned_data['card_number'])
             pm.authorize(self.cleaned_data['card_number'], 
@@ -734,7 +735,7 @@ class ExistingBookingCreditCardForm(CreditCardForm):
                 raise forms.ValidationError('You have to fill out all the fields')
             else:
                 try:
-                    from eloue.payments.paybox_payment import PayboxManager, PayboxException
+                    from payments.paybox_payment import PayboxManager, PayboxException
                     pm = PayboxManager()
                     self.cleaned_data['masked_number'] = mask_card_number(self.cleaned_data['card_number'])
                     pm.authorize(self.cleaned_data['card_number'], 
@@ -877,7 +878,7 @@ def make_missing_data_form(instance, required_fields=[]):
         else:
             phone = None
         if self.cleaned_data.get('card_number'):
-            from eloue.payments.paybox_payment import PayboxManager, PayboxException
+            from payments.paybox_payment import PayboxManager, PayboxException
             import uuid
             pm = PayboxManager()
             subscriber_reference = uuid.uuid4().hex
@@ -939,7 +940,7 @@ def make_missing_data_form(instance, required_fields=[]):
 
         if self.cleaned_data.get('card_number'):
             try:
-                from eloue.payments.paybox_payment import PayboxManager, PayboxException
+                from payments.paybox_payment import PayboxManager, PayboxException
                 pm = PayboxManager()
                 self.cleaned_data['masked_number'] = mask_card_number(self.cleaned_data['card_number'])
                 pm.authorize(self.cleaned_data['card_number'], 
@@ -998,8 +999,6 @@ class ContactForm(forms.Form):
     message = forms.CharField(label=_(u"Message"), required=True, widget=forms.Textarea(attrs={'class': 'inm'}))
     cc_myself = forms.BooleanField(label=_(u"Etre en copie"), required=False)
 
-
-from eloue.accounts.models import OpeningTimes
 
 class OpeningsForm(BetterModelForm):
 

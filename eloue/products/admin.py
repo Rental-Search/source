@@ -8,13 +8,13 @@ from django.shortcuts import redirect
 from mptt.admin import MPTTModelAdmin
 from mptt.forms import TreeNodeChoiceField
 
-from eloue.admin import CurrentSiteAdmin
-from eloue.products.forms import ProductAdminForm
-
-from eloue.products.models import Alert, Product, CarProduct, RealEstateProduct, Picture, Category, Property, PropertyValue, Price, ProductReview, PatronReview, Curiosity, ProductRelatedMessage, CategoryDescription
-
 from django_messages.models import Message
 from django_messages.admin import MessageAdmin
+
+from products.forms import ProductAdminForm
+from products.models import Alert, Product, CarProduct, RealEstateProduct, Picture, Category, Property, PropertyValue, Price, ProductReview, PatronReview, Curiosity, ProductRelatedMessage, CategoryDescription
+
+from eloue.admin import CurrentSiteAdmin
 
 log = logbook.Logger('eloue')
 

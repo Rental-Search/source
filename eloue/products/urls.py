@@ -2,22 +2,22 @@
 from django.conf.urls import patterns, url
 from django.utils.translation import ugettext as _
 
-from eloue.products.search_indexes import alert_search, product_search
+from products.search_indexes import alert_search, product_search
 
-from eloue.products.views import product_create, message_create, \
+from products.views import product_create, message_create, \
     product_delete, alert_create, alert_inform, alert_delete
-from eloue.products.views import ProductList, AlertInformSuccess, AlertList
-from eloue.rent.views import booking_create, booking_price, product_occupied_date, \
+from products.views import ProductList, AlertInformSuccess, AlertList
+from rent.views import booking_create, booking_price, product_occupied_date, \
     booking_create_redirect, phone_create
 
 
 urlpatterns = patterns('',
-    url(r'^%s/$' % _("service_de_livraison"), 'eloue.products.views.shipping_service_offer', name="shipping_service_offer"),
-    url(r'^%s/$' % _("ajouter"), 'eloue.products.views.publish_new_ad', name="publish_new_ad"),
-    url(r'^%s/$' % _("deposer"), 'eloue.products.views.publish_new_ad2', name="publish_new_ad2"),
+    url(r'^%s/$' % _("service_de_livraison"), 'products.views.shipping_service_offer', name="shipping_service_offer"),
+    url(r'^%s/$' % _("ajouter"), 'products.views.publish_new_ad', name="publish_new_ad"),
+    url(r'^%s/$' % _("deposer"), 'products.views.publish_new_ad2', name="publish_new_ad2"),
     url(r'^%s/%s/$' % (_("ajouter"), _("objet")), product_create, name="product_create"),
-    url(r'^%s/%s/$' % (_("ajouter"), _("voiture")), 'eloue.products.views.car_product_create', name="car_product_create"),
-    url(r'^%s/%s/$' % (_("ajouter"), _("logement")), 'eloue.products.views.real_estate_product_create', name="real_estate_product_create"),
+    url(r'^%s/%s/$' % (_("ajouter"), _("voiture")), 'products.views.car_product_create', name="car_product_create"),
+    url(r'^%s/%s/$' % (_("ajouter"), _("logement")), 'products.views.real_estate_product_create', name="real_estate_product_create"),
     url(r'^(?P<slug>[-\w]+)-(?P<product_id>\d+)/delete/$', product_delete, name="product_delete"),
 	url(r'^%s/$' % _("alertes"), AlertList.as_view(), {'sqs': alert_search}, name="alert_list"),
 	url(r'^%s/$' % _("alertes/ajouter"), alert_create, name="alert_create"),

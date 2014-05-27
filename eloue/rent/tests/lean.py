@@ -3,14 +3,15 @@ from datetime import datetime
 
 from django.test import TransactionTestCase
 
-from eloue.accounts.models import Patron
+from accounts.models import Patron
+
 from eloue.lean import PatronEngagementScoreCalculator
 
 
 class ScoreCalculatorTest(TransactionTestCase):
 	reset_sequences = True
 	fixtures = ['category', 'patron', 'address', 'price', 'product', 'booking']
-    
+
 	def test_classic_period(self):
 		score_calculator = PatronEngagementScoreCalculator()
 		patron = Patron.objects.get(pk=1)
@@ -18,4 +19,3 @@ class ScoreCalculatorTest(TransactionTestCase):
 			patron, datetime(2010, 8, 14), datetime(2010, 8, 20)
 		)
 		self.assertAlmostEqual(3.4285714285714284, score)
-    

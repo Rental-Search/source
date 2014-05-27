@@ -1,6 +1,6 @@
 import datetime
 from django import forms
-from eloue.products.utils import Enum
+from products.utils import Enum
 
 INTERVAL_CHOICES = Enum([
     ('days', 'days', u'days'),

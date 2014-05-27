@@ -25,7 +25,7 @@ class Command(BaseCommand):
     args = "[source_prefix source_prefix ...]"
 
     def handle(self, *args, **options):
-        from eloue.products.sources import SourceManager
+        from products.sources import SourceManager
         log.info('Starting updating sources')
         
         try:

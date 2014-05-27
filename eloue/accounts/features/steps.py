@@ -9,7 +9,7 @@ from django.core.urlresolvers import reverse
 from django.test.client import Client
 
 from eloue.checks import *
-from eloue.accounts.models import Patron
+from accounts.models import Patron
 
 
 @Before

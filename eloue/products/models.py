@@ -29,19 +29,20 @@ from django.utils.translation import ugettext as _
 
 from mptt.models import MPTTModel
 
-from eloue.accounts.models import Patron, Address, ProAgency, PhoneNumber
-from eloue.geocoder import GoogleGeocoder
-from eloue.products.fields import SimpleDateField
-from eloue.products.manager import ProductManager, PriceManager, QuestionManager, CurrentSiteProductManager, TreeManager
-from eloue.products.signals import (post_save_answer, post_save_product, 
-    post_save_curiosity, post_save_to_update_product,)
-from eloue.products.utils import Enum
-from eloue.signals import post_save_sites
-from eloue.rent.contract import ContractGenerator, ContractGeneratorNormal, ContractGeneratorCar, ContractGeneratorRealEstate
 from django_messages.models import Message 
 from django.db.models import signals
-from eloue import signals as eloue_signals
 
+from accounts.models import Patron, Address, ProAgency, PhoneNumber
+from products.fields import SimpleDateField
+from products.manager import ProductManager, PriceManager, QuestionManager, CurrentSiteProductManager, TreeManager
+from products.signals import (post_save_answer, post_save_product, 
+    post_save_curiosity, post_save_to_update_product,)
+from products.utils import Enum
+from rent.contract import ContractGenerator, ContractGeneratorNormal, ContractGeneratorCar, ContractGeneratorRealEstate
+
+from eloue.geocoder import GoogleGeocoder
+from eloue.signals import post_save_sites
+from eloue import signals as eloue_signals
 from eloue.utils import currency, create_alternative_email, cache_to
 
 
@@ -239,7 +240,7 @@ class Product(models.Model):
         return ('booking_create', [path, self.slug, self.pk])
     
     def more_like_this(self):
-        from eloue.products.search_indexes import product_search
+        from products.search_indexes import product_search
         return product_search.spatial(
             lat=self.address.position.x, long=self.address.position.y,
             radius=DEFAULT_RADIUS, unit='km'
@@ -278,7 +279,7 @@ class Product(models.Model):
 
     @property
     def average_note(self):
-        from eloue.rent.models import BorrowerComment
+        from rent.models import BorrowerComment
         avg = BorrowerComment.objects.filter(booking__product=self).aggregate(Avg('note'))['note__avg']
         if avg is None:
             return 0
@@ -286,7 +287,7 @@ class Product(models.Model):
     
     @property
     def borrowercomments(self):
-        from eloue.rent.models import BorrowerComment
+        from rent.models import BorrowerComment
         return BorrowerComment.objects.filter(booking__product=self)
     
     def monthly_availability(self, year, month):
@@ -461,8 +462,7 @@ class CarProduct(Product):
     on_site = CurrentSiteProductManager()
 
     def licence_plate_is_peer(self):
-        from eloue.products.fields import old_plate_re
-        from eloue.products.fields import new_plate_re
+        from products.fields import old_plate_re, new_plate_re
 
         if not self.licence_plate:
             return None

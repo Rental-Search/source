@@ -22,7 +22,7 @@ class Command(BaseCommand):
     @activate_language
     def handle(self, *args, **options):
         from django.conf import settings
-        from eloue.rent.models import Booking
+        from rent.models import Booking
         log.info('Starting monthly insurance reimbursement batch')
         csv_file = TemporaryFile()
         writer = csv.writer(csv_file, delimiter='|')

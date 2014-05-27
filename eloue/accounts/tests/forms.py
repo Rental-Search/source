@@ -3,10 +3,10 @@ import mock
 
 from django.test import TestCase, TransactionTestCase
 
-from eloue.accounts.forms import (RIBForm, CreditCardForm, mask_card_number, 
+from accounts.forms import (RIBForm, CreditCardForm, mask_card_number, 
     EmailAuthenticationForm)
-from eloue.accounts.models import Patron
-from eloue.payments.paybox_payment import PayboxManager, PayboxException
+from accounts.models import Patron
+from payments.paybox_payment import PayboxManager, PayboxException
 
 class RIBFormTest(TestCase):
     def testValidRib(self):

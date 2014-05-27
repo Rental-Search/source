@@ -16,16 +16,17 @@ from django.core.urlresolvers import reverse
 from django.shortcuts import get_object_or_404, redirect
 from django.utils.translation import ugettext_lazy as _
 
-from eloue.payments.models import PayboxDirectPaymentInformation, PayboxDirectPlusPaymentInformation, NonPaymentInformation
-from eloue.payments.paybox_payment import PayboxManager, PayboxException
-from eloue.payments.abstract_payment import PaymentException
-from eloue.accounts.forms import EmailAuthenticationForm, BookingCreditCardForm, ExistingBookingCreditCardForm
-from eloue.accounts.models import Patron, Avatar, CreditCard
+from payments.models import PayboxDirectPaymentInformation, PayboxDirectPlusPaymentInformation, NonPaymentInformation
+from payments.paybox_payment import PayboxManager, PayboxException
+from payments.abstract_payment import PaymentException
+from accounts.forms import EmailAuthenticationForm, BookingCreditCardForm, ExistingBookingCreditCardForm
+from accounts.models import Patron, Avatar, CreditCard
+from products.forms import FacetedSearchForm
+from products.models import Product, PAYMENT_TYPE
+from rent.models import Booking, ProBooking, BorrowerComment
+from rent.forms import BookingForm, BookingConfirmationForm
+
 from eloue.geocoder import GoogleGeocoder
-from eloue.products.forms import FacetedSearchForm
-from eloue.products.models import Product, PAYMENT_TYPE
-from eloue.rent.models import Booking, ProBooking, BorrowerComment
-from eloue.rent.forms import BookingForm, BookingConfirmationForm
 from eloue.wizard import MultiPartFormWizard
 
 USE_HTTPS = getattr(settings, 'USE_HTTPS', True)
@@ -49,7 +50,7 @@ class BookingWizard(MultiPartFormWizard):
         if product.name == 'carproduct':
             self.required_fields += ['drivers_license_date', 'drivers_license_number', 'date_of_birth', 'place_of_birth']
         
-        from eloue.products.search_indexes import product_search
+        from products.search_indexes import product_search
         self.extra_context={
             'product_list': product_search.more_like_this(product)[:4]
         }

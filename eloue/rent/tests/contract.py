@@ -4,8 +4,8 @@ from pyPdf import PdfFileReader
 from django.test import TransactionTestCase
 from django.utils.translation import ugettext as _
 
-from eloue.rent.contract import ContractGeneratorNormal
-from eloue.rent.models import Booking
+from rent.contract import ContractGeneratorNormal
+from rent.models import Booking
 
 
 class ContractTest(TransactionTestCase):

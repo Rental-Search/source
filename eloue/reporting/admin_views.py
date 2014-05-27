@@ -8,9 +8,9 @@ from django.contrib.admin.views.decorators import staff_member_required
 
 from django.db.models import Avg, Sum, Q, Count
 
-from eloue.accounts.models import Patron
-from eloue.products.models import Product, CarProduct, RealEstateProduct, Category
-from eloue.rent.models import Booking, OwnerComment, BorrowerComment
+from accounts.models import Patron
+from products.models import Product, CarProduct, RealEstateProduct, Category
+from rent.models import Booking, OwnerComment, BorrowerComment
 
 from django_messages.models import Message
 

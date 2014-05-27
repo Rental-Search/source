@@ -10,8 +10,9 @@ from django.contrib.gis.geos import Point
 from django.test import TransactionTestCase
 from django.contrib.auth.models import User
 
-from eloue.accounts.models import Patron, Address, CreditCard, ProPackage, Subscription
-from eloue.payments.paybox_payment import PayboxManager
+from accounts.models import Patron, Address, CreditCard, ProPackage, Subscription
+from payments.paybox_payment import PayboxManager
+
 from eloue.wizard import MultiPartFormWizard
 
 class CreditCardTest(TransactionTestCase):

@@ -8,7 +8,8 @@ from django.test import TransactionTestCase
 
 from django.utils.translation import ugettext as _
 
-from eloue.rent.models import Booking
+from rent.models import Booking
+
 from eloue.utils import currency, json
 
 class BookingViewsTest(TransactionTestCase):

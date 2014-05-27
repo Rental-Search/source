@@ -2,11 +2,12 @@
 import logbook
 
 from datetime import datetime, timedelta
-from eloue.payments.paybox_payment import PayboxException
 from django.conf import settings
 from django.contrib.sites.models import Site
 from django.core.urlresolvers import reverse
 from django.core.management.base import BaseCommand
+
+from payments.paybox_payment import PayboxException
 
 from eloue.decorators import activate_language
 
@@ -31,7 +32,7 @@ class Command(BaseCommand):
     @activate_language
     def handle(self, *args, **options):
         """Find ongoing rent, hold money and the ipn callback do the rest by moving them in ONGOING state"""
-        from eloue.rent.models import Booking
+        from rent.models import Booking
         log.info('Starting hourly ongoing mover process')
         # unittests failed with dtime = datetime.now + timedelta(hours=1)
         # it's an ugly workaround

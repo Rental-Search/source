@@ -1,30 +1,30 @@
 # -*- coding: utf-8 -*-
 import re
 from decimal import Decimal as D
+import datetime
 
 import django.forms as forms
 from form_utils.forms import BetterModelForm
 from django.conf import settings
 from django.core.validators import EMPTY_VALUES
 from django.utils.translation import ugettext as _
+from django.db.models import signals
 
 from haystack.forms import SearchForm
 from mptt.forms import TreeNodeChoiceField
-from eloue.accounts.fields import DateSelectField, PhoneNumberField
-from eloue.accounts.models import Patron, COUNTRY_CHOICES, Address
-from eloue.geocoder import GoogleGeocoder
-from eloue.products.fields import FacetField, FRLicensePlateField
-from eloue.products.models import Alert, PatronReview, ProductReview, Product, CarProduct, RealEstateProduct, Picture, Category, UNIT, PAYMENT_TYPE, ProductRelatedMessage, MessageThread
-from eloue.products.widgets import PriceTextInput, CommentedSelectInput, CommentedTextInput
-from eloue.products.utils import Enum
 from django_messages.forms import ComposeForm
-import datetime
-from django.db.models import signals
 from django_messages import utils
 from django_messages.fields import CommaSeparatedUserField
 
-from eloue.accounts.widgets import CommentedCheckboxInput
-from eloue.accounts.models import Address, PhoneNumber
+from accounts.fields import DateSelectField, PhoneNumberField
+from accounts.models import Patron, COUNTRY_CHOICES, Address, PhoneNumber
+from accounts.widgets import CommentedCheckboxInput
+from products.fields import FacetField, FRLicensePlateField
+from products.models import Alert, PatronReview, ProductReview, Product, CarProduct, RealEstateProduct, Picture, Category, UNIT, PAYMENT_TYPE, ProductRelatedMessage, ProductHighlight, ProductTopPosition, MessageThread
+from products.widgets import PriceTextInput, CommentedSelectInput, CommentedTextInput
+from products.utils import Enum
+
+from eloue.geocoder import GoogleGeocoder
 
 if "notification" in settings.INSTALLED_APPS:
     from notification import models as notification
@@ -738,8 +738,6 @@ class AlertForm(forms.ModelForm):
         model = Alert
         fields = ('description', 'designation')
 
-
-from eloue.products.models import ProductHighlight, ProductTopPosition
 
 class HighlightForm(forms.ModelForm):
     class Meta:

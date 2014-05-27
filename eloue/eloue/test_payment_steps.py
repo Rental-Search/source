@@ -1,4 +1,4 @@
-from eloue.rent.models import Booking
+from rent.models import Booking
 from django.contrib.sites.models import Site
 from django.core.urlresolvers import reverse
 from eloue import settings

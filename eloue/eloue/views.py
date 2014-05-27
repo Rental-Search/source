@@ -4,7 +4,8 @@ from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.views.generic import View
 from django.template import Context, RequestContext, loader
-from eloue.products.forms import FacetedSearchForm
+
+from products.forms import FacetedSearchForm
 
 @requires_csrf_token
 def custom404(request, template_name='404.html'):

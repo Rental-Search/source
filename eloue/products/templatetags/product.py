@@ -11,7 +11,7 @@ from django.utils.formats import get_format
 
 register = Library()
 
-from eloue.products.models import UNIT
+from products.models import UNIT
 
 
 @register.filter

@@ -8,7 +8,7 @@ from django.utils.datastructures import SortedDict
 from django.utils.crypto import (
     pbkdf2, constant_time_compare, get_random_string)
 from django.utils.translation import ugettext_noop as _
-from eloue.accounts.models import Patron
+from accounts.models import Patron
 
 
 class PatronModelBackend(ModelBackend):

@@ -14,7 +14,7 @@ from django.utils.dateformat import format
 from django.utils.encoding import force_unicode, smart_str
 from django.utils.translation import ugettext as _
 
-from eloue.rent.utils import spellout
+from rent.utils import spellout
 
 local_path = lambda path: os.path.join(os.path.dirname(__file__), path)
 

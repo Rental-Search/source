@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import logbook
 import urllib
-import datetime
+from datetime import datetime, timedelta, date
 
 from django.conf import settings
 from django.contrib import messages
@@ -22,16 +22,16 @@ from django_lean.experiments.utils import WebUser
 from django.contrib.sites.models import Site
 from django.template import RequestContext
 
-from eloue.accounts.models import CreditCard
-from eloue.decorators import ownership_required, validate_ipn, secure_required, mobify
-from eloue.accounts.forms import EmailAuthenticationForm
-from eloue.products.models import Product, PAYMENT_TYPE, UNIT
-from eloue.rent.forms import BookingForm, BookingConfirmationForm, BookingStateForm, PreApprovalIPNForm, PayIPNForm, IncidentForm
-from eloue.rent.models import Booking, ProBooking
-from eloue.rent.wizard import BookingWizard, PhoneBookingWizard
+from accounts.models import CreditCard
+from accounts.forms import EmailAuthenticationForm
+from products.models import Product, PAYMENT_TYPE, UNIT
+from rent.forms import BookingForm, BookingConfirmationForm, BookingStateForm, PreApprovalIPNForm, PayIPNForm, IncidentForm
+from rent.models import Booking, ProBooking
+from rent.wizard import BookingWizard, PhoneBookingWizard
+from rent.utils import get_product_occupied_date, timesince
+
 from eloue.utils import currency, json
-from datetime import datetime, timedelta, date
-from eloue.rent.utils import get_product_occupied_date, timesince
+from eloue.decorators import ownership_required, validate_ipn, secure_required, mobify
 
 log = logbook.Logger('eloue.rent')
 USE_HTTPS = getattr(settings, 'USE_HTTPS', True)
@@ -341,8 +341,8 @@ def booking_close(request, booking_id):
 @ownership_required(model=Booking, object_key='booking_id', ownership=['owner', 'borrower'])
 def booking_incident(request, booking_id):
     booking = get_object_or_404(Booking.on_site, pk=booking_id)
-    from eloue.rent.forms import SinisterForm
-    from eloue.rent.models import Sinister
+    from rent.forms import SinisterForm
+    from rent.models import Sinister
     if request.method == "POST":
         form = SinisterForm(
             request.POST, 

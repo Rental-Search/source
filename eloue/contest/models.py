@@ -1,8 +1,9 @@
 from datetime import datetime
 from django.db import models
 from django.utils.encoding import smart_unicode
-from eloue.products.models import Product
-from eloue.accounts.models import Patron
+
+from products.models import Product
+from accounts.models import Patron
 
 
 class Gamer(models.Model):

@@ -14,7 +14,7 @@ from django.utils.html import strip_spaces_between_tags as compress_html
 from django.utils.encoding import DjangoUnicodeDecodeError
 from django.views.static import serve
 
-from eloue.accounts.views import authenticate, contact
+from accounts.views import authenticate, contact
 
 from eloue.http_user_agents import *
 

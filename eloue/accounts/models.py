@@ -32,14 +32,15 @@ from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import ugettext
 from django.template.defaultfilters import slugify
 
-from eloue.accounts.manager import PatronManager
+from accounts.manager import PatronManager
+from products.utils import Enum
+from products.signals import post_save_to_batch_update_product
+from payments.paypal_payment import accounts, PaypalError
+from payments import paypal_payment
+
 from eloue.geocoder import GoogleGeocoder
-from eloue.products.utils import Enum
-from eloue.products.signals import post_save_to_batch_update_product
 from eloue.signals import post_save_sites, pre_delete_creditcard
 from eloue.utils import create_alternative_email, cache_to, json
-from eloue.payments.paypal_payment import accounts, PaypalError
-from eloue.payments import paypal_payment
 
 CIVILITY_CHOICES = Enum([
     (0, 'MME', _('Madame')),
@@ -367,9 +368,9 @@ class Patron(User):
         return paypal_payment.confirm_paypal_account(self.paypal_email)
     
     def next_billing_date(self):
-        from eloue.accounts.management.commands.pro_billing import plus_one_month, minus_one_month
         from django.db.models import Min, Max
-        from eloue.products.models import ProductHighlight, ProductTopPosition
+        from accounts.management.commands.pro_billing import plus_one_month, minus_one_month
+        from products.models import ProductHighlight, ProductTopPosition
         last_billing_date = self.billing_set.aggregate(Max('date_to'))['date_to__max']
         if last_billing_date:
             return last_billing_date
@@ -388,7 +389,7 @@ class Patron(User):
 
     @property
     def response_rate(self):
-        from eloue.products.models import MessageThread
+        from products.models import MessageThread
         threads = MessageThread.objects.filter(recipient=self).annotate(num_messages=Count('messages'))
         if not threads:
             return 100.0
@@ -399,7 +400,7 @@ class Patron(User):
     
     @property
     def response_time(self):
-        from eloue.products.models import ProductRelatedMessage
+        from products.models import ProductRelatedMessage
         messages = ProductRelatedMessage.objects.select_related().filter(~Q(parent_msg=None), parent_msg__recipient=self, sender=self)
         if not messages:
             return timesince(datetime.datetime.now() - datetime.timedelta(days=1))
@@ -408,7 +409,7 @@ class Patron(User):
 
     @property
     def average_note(self):
-        from eloue.rent.models import BorrowerComment, OwnerComment
+        from rent.models import BorrowerComment, OwnerComment
         borrower_comments = BorrowerComment.objects.filter(booking__owner=self)
         owner_comments = OwnerComment.objects.filter(booking__borrower=self)
 
@@ -441,7 +442,7 @@ class Patron(User):
         message.send()
 
     def send_professional_activation_email(self, *args):
-        from eloue.accounts.forms import EmailPasswordResetForm
+        from accounts.forms import EmailPasswordResetForm
         form = EmailPasswordResetForm({'email': self.email})
         if form.is_valid():
             form.save(
@@ -895,7 +896,7 @@ class Billing(models.Model):
     def builder(patron, date_from, date_to):
         """Returns a (billing, subscriptions, highlights) tuple for a given
         """
-        from eloue.products.models import ProductHighlight, ProductTopPosition
+        from products.models import ProductHighlight, ProductTopPosition
         if not isinstance(date_from, datetime.datetime):
             date_from = datetime.datetime.combine(date_from, datetime.time())
         if not isinstance(date_to, datetime.datetime):

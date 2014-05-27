@@ -28,16 +28,17 @@ from django.utils.translation import ugettext_lazy as _
 from django.db.models import Q
 from django.core.urlresolvers import reverse
 
-from eloue.accounts.models import Patron
-from eloue.products.models import CURRENCY, UNIT, Product, PAYMENT_TYPE
-from eloue.products.utils import Enum
-from eloue.products.signals import post_save_to_update_product
-from eloue.rent.decorators import incr_sequence
-from eloue.rent.fields import UUIDField, IntegerAutoField
-from eloue.rent.manager import BookingManager, CurrentSiteBookingManager
-from eloue.payments.paypal_payment import AdaptivePapalPayments, PaypalError
-from eloue.payments.non_payment import NonPayments
-from eloue.payments.fsm_transition import smart_transition
+from accounts.models import Patron
+from products.models import CURRENCY, UNIT, Product, PAYMENT_TYPE
+from products.utils import Enum
+from products.signals import post_save_to_update_product
+from rent.decorators import incr_sequence
+from rent.fields import UUIDField, IntegerAutoField
+from rent.manager import BookingManager, CurrentSiteBookingManager
+from payments.paypal_payment import AdaptivePapalPayments, PaypalError
+from payments.non_payment import NonPayments
+from payments.fsm_transition import smart_transition
+
 from eloue.signals import post_save_sites
 from eloue.utils import create_alternative_email, convert_from_xpf
 
@@ -316,7 +317,7 @@ class Booking(models.Model):
     @property
     def commission(self):
         """Return our commission
-        >>> from eloue.products.models import Product
+        >>> from products.models import Product
         >>> booking = Booking(total_amount=10, product=Product())
         >>> booking.commission
         Decimal('2.0')
@@ -326,7 +327,7 @@ class Booking(models.Model):
     @property
     def total_commission(self):
         """ Return all the commission
-        >>> from eloue.products.models import Product
+        >>> from products.models import Product
         >>> booking = Booking(total_amount=10, product=Product())
         >>> booking.total_commission
         Decimal('2.4590')
@@ -336,7 +337,7 @@ class Booking(models.Model):
     @property
     def net_price(self):
         """Return net price for owner
-        >>> from eloue.products.models import Product
+        >>> from products.models import Product
         >>> booking = Booking(total_amount=10, product=Product())
         >>> booking.net_price
         Decimal('8.0')
@@ -346,7 +347,7 @@ class Booking(models.Model):
     @property
     def insurance_commission(self):
         """Return our commission on insurance
-        >>> from eloue.products.models import Product
+        >>> from products.models import Product
         >>> booking = Booking(total_amount=10, product=Product())
         >>> booking.insurance_commission
         Decimal('0')
@@ -356,7 +357,7 @@ class Booking(models.Model):
     @property
     def insurance_fee(self):
         """Return insurance commission
-        >>> from eloue.products.models import Product
+        >>> from products.models import Product
         >>> booking = Booking(total_amount=10, product=Product())
         >>> booking.insurance_fee
         Decimal('0.4590')
@@ -366,7 +367,7 @@ class Booking(models.Model):
     @property
     def insurance_taxes(self):
         """Return insurance taxes
-        >>> from eloue.products.models import Product
+        >>> from products.models import Product
         >>> booking = Booking(total_amount=10, product=Product())
         >>> booking.insurance_taxes
         Decimal('0.041310')
@@ -464,7 +465,7 @@ class BookingLog(models.Model):
             created_at=self.created_at
         )
 
-@receiver(post_transition, dispatch_uid='eloue.rent.models')
+@receiver(post_transition, dispatch_uid='rent.models')
 def state_logger(sender, instance, name, source, target, **kwargs):
     if isinstance(instance, Booking):
         BookingLog.objects.create(booking=instance, source_state=source, target_state=target)

@@ -3,8 +3,8 @@ from django.conf import settings
 from django.contrib.sitemaps import Sitemap
 from django.contrib.flatpages.models import FlatPage
 
-from eloue.accounts.models import Patron
-from eloue.products.models import Product, Category
+from accounts.models import Patron
+from products.models import Product, Category
 
 USE_HTTPS = getattr(settings, 'USE_HTTPS', True)
 

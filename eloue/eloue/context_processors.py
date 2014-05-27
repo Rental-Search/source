@@ -3,8 +3,8 @@ from django.conf import settings
 from django.contrib.sites.models import Site
 from django.db.models import Count
 
-from eloue.products.models import ProductRelatedMessage, MessageThread
-from eloue.rent.models import Booking
+from .models import ProductRelatedMessage, MessageThread
+from .models import Booking
 
 def site(request):
     try:

@@ -27,26 +27,25 @@ from django.http import Http404, HttpResponseRedirect, HttpResponseBadRequest
 
 from haystack.query import SearchQuerySet
 from django.http import HttpResponse
+from django_messages.forms import ComposeForm
+from django.core.cache import cache
+
+from accounts.forms import EmailAuthenticationForm
+from accounts.models import Patron, Address
+from accounts.search_indexes import patron_search
+
+from products.forms import AlertSearchForm, AlertForm, FacetedSearchForm, RealEstateEditForm, ProductForm, CarProductEditForm, ProductEditForm, ProductAddressEditForm, ProductPhoneEditForm, ProductPriceEditForm, MessageEditForm
+from products.models import Category, Product, Curiosity, UNIT, ProductRelatedMessage, Alert, MessageThread
+from products.wizard import ProductWizard, MessageWizard, AlertWizard, AlertAnswerWizard
+from products.utils import format_quote, escape_percent_sign
+from products.search_indexes import product_search, car_search, realestate_search, product_only_search
+
+from rent.forms import BookingOfferForm
+from rent.models import Booking
+
 from eloue.decorators import ownership_required, secure_required, mobify
 from eloue.utils import cache_key
-from eloue.accounts.forms import EmailAuthenticationForm
-from eloue.accounts.models import Patron
-
-from eloue.products.forms import AlertSearchForm, AlertForm, FacetedSearchForm, RealEstateEditForm, ProductForm, CarProductEditForm, ProductEditForm, ProductAddressEditForm, ProductPhoneEditForm, ProductPriceEditForm, MessageEditForm
-
-from eloue.products.models import Category, Product, Curiosity, UNIT, ProductRelatedMessage, Alert, MessageThread
-from eloue.accounts.models import Address
-
-from eloue.products.wizard import ProductWizard, MessageWizard, AlertWizard, AlertAnswerWizard
-from eloue.products.search_indexes import product_search, car_search, realestate_search, product_only_search
-from eloue.rent.forms import BookingOfferForm
-from eloue.rent.models import Booking
-from django_messages.forms import ComposeForm
-from eloue.products.utils import format_quote, escape_percent_sign
-from django.core.cache import cache
  
-from eloue.accounts.search_indexes import patron_search
-
 PAGINATE_PRODUCTS_BY = getattr(settings, 'PAGINATE_PRODUCTS_BY', 10)
 DEFAULT_RADIUS = getattr(settings, 'DEFAULT_RADIUS', 50)
 USE_HTTPS = getattr(settings, 'USE_HTTPS', True)
@@ -128,7 +127,7 @@ def publish_new_ad(request, *args, **kwargs):
         if request.user.is_professional and not request.user.current_subscription:
             messages.success(request, _(u"En tant que professionnel, vous devez souscrire à un abonnement avant de pouvoir déposer une annonce."))
             return redirect(
-                'eloue.accounts.views.patron_subscription'
+                'accounts.views.patron_subscription'
             )
     return render(request, 'products/publish_new_ad.html')
 
@@ -140,7 +139,7 @@ def publish_new_ad2(request, *args, **kwargs):
         if request.user.is_professional and not request.user.current_subscription:
             messages.success(request, _(u"En tant que professionnel, vous devez souscrire à un abonnement avant de pouvoir déposer une annonce."))
             return redirect(
-                'eloue.accounts.views.patron_subscription'
+                'accounts.views.patron_subscription'
             )
     return render(request, 'products/publish_new_ad2.html')
 
@@ -160,14 +159,14 @@ def product_create(request, *args, **kwargs):
 @never_cache
 @secure_required
 def car_product_create(request, *args, **kwargs):
-    from eloue.products.forms import CarProductForm
+    from products.forms import CarProductForm
     wizard = ProductWizard([CarProductForm, EmailAuthenticationForm])
     return wizard(request, *args, **kwargs)
 
 @never_cache
 @secure_required
 def real_estate_product_create(request, *args, **kwargs):
-    from eloue.products.forms import RealEstateForm
+    from products.forms import RealEstateForm
     wizard = ProductWizard([RealEstateForm, EmailAuthenticationForm])
     return wizard(request, *args, **kwargs)
 
@@ -282,8 +281,8 @@ def product_price_edit(request, slug, product_id):
 @login_required
 @ownership_required(model=Product, object_key='product_id', ownership=['owner'])
 def product_highlight_edit(request, slug, product_id):
-    from eloue.products.forms import HighlightForm
-    from eloue.products.models import ProductHighlight
+    from products.forms import HighlightForm
+    from products.models import ProductHighlight
     now = datetime.datetime.now()
     product = get_object_or_404(Product.on_site, pk=product_id)
     old_highlights = product.producthighlight_set.filter(ended_at__isnull=False).order_by('-ended_at')
@@ -314,8 +313,8 @@ def product_highlight_edit(request, slug, product_id):
 @login_required
 @ownership_required(model=Product, object_key='product_id', ownership=['owner'])
 def product_top_position_edit(request, slug, product_id):
-    from eloue.products.forms import TopPositionForm
-    from eloue.products.models import ProductTopPosition
+    from products.forms import TopPositionForm
+    from products.models import ProductTopPosition
     now = datetime.datetime.now()
     product = get_object_or_404(Product.on_site, pk=product_id)
     old_toppositions = product.producttopposition_set.filter(ended_at__isnull=False).order_by('-ended_at')

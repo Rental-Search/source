@@ -15,8 +15,8 @@ class Command(BaseCommand):
 	help = "Import given xls file for pro user"
 
 	def handle(self, *args, **options):
-		from eloue.products.models import Picture, Price, Category, Product, UNIT
-		from eloue.products.models import Patron
+		from products.models import Picture, Price, Category, Product, UNIT
+		from accounts.models import Patron
 
 		try:
 			patron = Patron.objects.get(pk=22784)

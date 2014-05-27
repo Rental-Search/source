@@ -12,8 +12,8 @@ from django.test import TransactionTestCase
 from django.utils.translation import ugettext as _
 
 from eloue.wizard import MultiPartFormWizard
-from eloue.accounts.models import Patron, Avatar, FacebookSession
-from eloue.accounts.forms import make_missing_data_form
+from accounts.models import Patron, Avatar, FacebookSession
+from accounts.forms import make_missing_data_form
 
 class AccountWizardTest(TransactionTestCase):
     reset_sequences = True

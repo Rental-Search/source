@@ -12,8 +12,8 @@ from haystack.query import SearchQuerySet
 
 from queued_search.indexes import QueuedSearchIndex
 
-from eloue.products.models import Alert, Product, CarProduct, RealEstateProduct
-from eloue.rent.models import Booking
+from products.models import Alert, Product, CarProduct, RealEstateProduct
+from rent.models import Booking
 
 __all__ = ['ProductIndex', 'product_search', 'product_only_search', 'AlertIndex', 'alert_search', 'car_search', 'realestate_search']
 

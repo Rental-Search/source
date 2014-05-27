@@ -4,7 +4,7 @@ from south.db import db
 from south.v2 import DataMigration
 from django.db import models, router
 from django.contrib import sites, admin
-from eloue.accounts.models import Patron
+from accounts.models import Patron
 
 class FakeAdmin(object):
     def has_perm(self, perm): return True

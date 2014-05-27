@@ -8,7 +8,7 @@ from django.core.context_processors import csrf
 from django.core.urlresolvers import reverse
 from django.conf import settings
 
-from eloue.rent.models import BOOKING_STATE
+from rent.models import BOOKING_STATE
 
 
 register = template.Library()
@@ -131,7 +131,7 @@ class ViewLinkWidget(LinkWidget):
 
 LeaveComment = CommentLinkWidget(
 	url_builder=lambda request, booking: reverse(
-		viewname='eloue.accounts.views.comment_booking',
+		viewname='accounts.views.comment_booking',
 		kwargs={
 			'booking_id':booking.pk.hex
 		}
@@ -141,7 +141,7 @@ LeaveComment = CommentLinkWidget(
 
 SendMessageToBorrower = LinkWidget(
 	url_builder=lambda request, booking: reverse(
-		viewname='eloue.products.views.message_create', 
+		viewname='products.views.message_create', 
 		kwargs={
 			'product_id': booking.product.pk,
 			'recipient_id': booking.borrower.pk
@@ -151,7 +151,7 @@ SendMessageToBorrower = LinkWidget(
 
 SendMessageToOwner = LinkWidget(
 	url_builder=lambda request, booking: reverse(
-		viewname='eloue.products.views.message_create', 
+		viewname='products.views.message_create', 
 		kwargs={
 			'product_id': booking.product.pk,
 			'recipient_id': booking.owner.pk
