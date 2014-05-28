@@ -117,7 +117,8 @@ class Command(BaseCommand):
             description += '\n'
             description += composition.p.text
             summary = infosProduits.h1.text
-            from products.models import Category, Price, UNIT
+            from products.models import Category, Price
+            from products.choices import UNIT
             product = Product.objects.create(
                 summary=summary, description=description, 
                 deposit_amount=deposit_amount, address=self.address, owner=self.patron,

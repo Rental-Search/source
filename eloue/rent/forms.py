@@ -14,36 +14,10 @@ from pyke.knowledge_engine import CanNotProve
 
 from rent.models import Booking, Sinister, OwnerComment, BorrowerComment
 from rent.utils import get_product_occupied_date, datespan, DATE_FORMAT
+from rent.choices import TIME_CHOICE
 from django.db.models import Q
 
 log = logbook.Logger('eloue.rent')
-
-TIME_CHOICE = (
-    ('00:00:00', '00h'),
-    ('01:00:00', '01h'),
-    ('02:00:00', '02h'),
-    ('03:00:00', '03h'),
-    ('04:00:00', '04h'),
-    ('05:00:00', '05h'),
-    ('06:00:00', '06h'),
-    ('07:00:00', '07h'),
-    ('08:00:00', '08h'),
-    ('09:00:00', '09h'),
-    ('10:00:00', '10h'),
-    ('11:00:00', '11h'),
-    ('12:00:00', '12h'),
-    ('13:00:00', '13h'),
-    ('14:00:00', '14h'),
-    ('15:00:00', '15h'),
-    ('16:00:00', '16h'),
-    ('17:00:00', '17h'),
-    ('18:00:00', '18h'),
-    ('19:00:00', '19h'),
-    ('20:00:00', '20h'),
-    ('21:00:00', '21h'),
-    ('22:00:00', '22h'),
-    ('23:00:00', '23h')
-)
 
 BOOKING_DAYS = getattr(settings, 'BOOKING_DAYS', 85)
 

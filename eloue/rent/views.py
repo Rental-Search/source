@@ -24,7 +24,8 @@ from django.template import RequestContext
 
 from accounts.models import CreditCard
 from accounts.forms import EmailAuthenticationForm
-from products.models import Product, PAYMENT_TYPE, UNIT
+from products.models import Product
+from products.choices import UNIT, PAYMENT_TYPE
 from rent.forms import BookingForm, BookingConfirmationForm, BookingStateForm, PreApprovalIPNForm, PayIPNForm, IncidentForm
 from rent.models import Booking, ProBooking
 from rent.wizard import BookingWizard, PhoneBookingWizard

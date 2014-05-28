@@ -10,6 +10,8 @@ from django.db.models.fields import FieldDoesNotExist
 
 from mptt.managers import TreeManager as OriginalTreeManager
 
+from products.choices import UNIT, STATUS
+
 
 class ProductManager(GeoManager):
     def active(self):
@@ -23,15 +25,12 @@ class CurrentSiteProductManager(CurrentSiteManager, ProductManager):
 
 class PriceManager(Manager):
     def __init__(self):
-        from products.models import UNIT
         super(PriceManager, self).__init__()
         for unit in UNIT.enum_dict:
             setattr(self, unit.lower(), types.MethodType(self._filter_factory(unit), self))
     
     @staticmethod
     def _filter_factory(unit):
-        from products.models import UNIT
-        
         def filter(self):
             return self.get_query_set().filter(unit=UNIT[unit])
         return filter
@@ -39,15 +38,12 @@ class PriceManager(Manager):
 
 class QuestionManager(Manager):
     def __init__(self):
-        from products.models import STATUS
         super(QuestionManager, self).__init__()
         for status in STATUS.enum_dict:
             setattr(self, status.lower(), types.MethodType(self._filter_factory(status), self))
     
     @staticmethod
     def _filter_factory(status):
-        from products.models import STATUS
-        
         def filter(self):
             return self.get_query_set().filter(status=STATUS[status])
         return filter

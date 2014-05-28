@@ -43,7 +43,8 @@ class Command(BaseCommand):
 
 	def _product_crawler(self):
 		"""Crawle product page and create a Product"""
-		from products.models import Picture, Product, Category, Price, UNIT
+		from products.models import Picture, Product, Category, Price
+		from products.choices import UNIT
 
 		def _get_price(s):
 			from decimal import Decimal as D

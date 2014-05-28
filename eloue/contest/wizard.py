@@ -3,7 +3,8 @@ from django.shortcuts import redirect
 from accounts.forms import EmailAuthenticationForm
 from products.wizard import ProductWizard
 from products.forms import ProductForm
-from products.models import Product, Picture, UNIT, Alert
+from products.models import Product, Picture, Alert
+from products.choices import UNIT
 from contest.models import Gamer, ProductGamer
 
 class ContestProductWizard(ProductWizard):

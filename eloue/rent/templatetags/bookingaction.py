@@ -8,7 +8,7 @@ from django.core.context_processors import csrf
 from django.core.urlresolvers import reverse
 from django.conf import settings
 
-from rent.models import BOOKING_STATE
+from rent.choices import BOOKING_STATE
 
 
 register = template.Library()

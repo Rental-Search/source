@@ -17,12 +17,13 @@ from django_messages import utils
 from django_messages.fields import CommaSeparatedUserField
 
 from accounts.fields import DateSelectField, PhoneNumberField
-from accounts.models import Patron, COUNTRY_CHOICES, Address, PhoneNumber
+from accounts.models import Patron, Address, PhoneNumber
+from accounts.choices import COUNTRY_CHOICES
 from accounts.widgets import CommentedCheckboxInput
 from products.fields import FacetField, FRLicensePlateField
-from products.models import Alert, PatronReview, ProductReview, Product, CarProduct, RealEstateProduct, Picture, Category, UNIT, PAYMENT_TYPE, ProductRelatedMessage, ProductHighlight, ProductTopPosition, MessageThread
+from products.models import Alert, PatronReview, ProductReview, Product, CarProduct, RealEstateProduct, Picture, Category, ProductRelatedMessage, ProductHighlight, ProductTopPosition, MessageThread
 from products.widgets import PriceTextInput, CommentedSelectInput, CommentedTextInput
-from products.utils import Enum
+from products.choices import UNIT, PAYMENT_TYPE, SORT
 
 from eloue.geocoder import GoogleGeocoder
 
@@ -32,13 +33,6 @@ else:
     notification = None
     
     
-SORT = Enum([
-    ('geo_distance', 'NEAR', _(u"Les plus proches")),
-    ('-created_at', 'RECENT', _(u"Les plus récentes")),
-    ('price', 'LOW_PRICE', _(u"Les pris les plus bas")),
-    ('-price', 'HIGH_PRICE', _(u"Les pris les plus haut")),
-])
-
 DEFAULT_RADIUS = getattr(settings, 'DEFAULT_RADIUS', 50)
 
 

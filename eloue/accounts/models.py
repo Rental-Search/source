@@ -33,7 +33,7 @@ from django.utils.translation import ugettext
 from django.template.defaultfilters import slugify
 
 from accounts.manager import PatronManager
-from products.utils import Enum
+from accounts.choices import CIVILITY_CHOICES, COUNTRY_CHOICES, PHONE_TYPES, SUBSCRIPTION_PAYMENT_TYPE_CHOICES
 from products.signals import post_save_to_batch_update_product
 from payments.paypal_payment import accounts, PaypalError
 from payments import paypal_payment
@@ -42,76 +42,6 @@ from eloue.geocoder import GoogleGeocoder
 from eloue.signals import post_save_sites, pre_delete_creditcard
 from eloue.utils import create_alternative_email, cache_to, json
 
-CIVILITY_CHOICES = Enum([
-    (0, 'MME', _('Madame')),
-    (1, 'MLLE', _('Mademoiselle')),
-    (2, 'M', _('Monsieur'))
-])
-
-COUNTRY_CHOICES = Enum([
-    ('FR', 'FR', _(u'France')),
-    ('BE', 'BE', _(u'Belgique')),
-    ('LU', 'LU', _(u'Luxembourg')),
-    ('RE', 'RE', _(u'Réunion')),
-    ('DE', 'DE', _(u'Allemagne')),
-    ('AD', 'AD', _(u'Andore')),
-    ('AT', 'AT', _(u'Autriche')),
-    ('CA', 'CA', _(u'Canada')),
-    ('CY', 'CY', _(u'Chypre')),
-    ('DK', 'DK', _(u'Danemark')),
-    ('ES', 'ES', _(u'Espagne')),
-    ('US', 'US', _(u'États-Unis')),
-    ('FI', 'FI', _(u'Finlande')),
-    ('GR', 'GR', _(u'Grèce')),
-    ('GP', 'GP', _(u'Guadeloupe')),
-    ('GG', 'GG', _(u'Guernesey')),
-    ('GF', 'GF', _(u'Guyane Française')),
-    ('HU', 'HU', _(u'Hongrie')),
-    ('IE', 'IE', _(u'Irlande')),
-    ('IS', 'IS', _(u'Islande')),
-    ('IT', 'IT', _(u'Italie')),
-    ('JP', 'JP', _(u'Japon')),
-    ('JE', 'JE', _(u'Jersey')),
-    ('LV', 'LV', _(u'Lettonie')),
-    ('LI', 'LI', _(u'Liechtenstein')),
-    ('LT', 'LT', _(u'Lituanie')),
-    ('MT', 'MT', _(u'Malte')),
-    ('MQ', 'MQ', _(u'Martinique')),
-    ('MU', 'MU', _(u'Maurice')),
-    ('YT', 'YT', _(u'Mayotte')),
-    ('MC', 'MC', _(u'Monaco')),
-    ('MA', 'MA', _(u'Maroc')),
-    ('NO', 'NO', _(u'Norvège')),
-    ('NC', 'NC', _(u'Nouvelle-Calédonie')),
-    ('NL', 'NL', _(u'Pays-Bas')),
-    ('PL', 'PL', _(u'Pologne')),
-    ('PF', 'PF', _(u'Polynésie Française')),
-    ('PT', 'PT', _(u'Portugal')),
-    ('RO', 'RO', _(u'Roumanie')),
-    ('GB', 'GB', _(u'Royaume-Uni')),
-    ('RU', 'RU', _(u'Russie, Fédération de')),
-    ('PM', 'PM', _(u'Saint-Pierre-et-Miquelon')),
-    ('VA', 'VA', _(u'Saint-Siège (État de la cité du Vatican)')),
-    ('SE', 'SE', _(u'Suède')),
-    ('CH', 'CH', _(u'Suisse')),
-    ('CZ', 'CZ', _(u'Tchèque, République')),
-    ('TF', 'TF', _(u'Terres Australes Françaises')),
-    ('TN', 'TN', _(u'Tunisie')),
-    ('TR', 'TR', _(u'Turquie'))
-])
-
-PHONE_TYPES = Enum([
-    (0, 'HOME', _('Domicile')),
-    (1, 'WORK', _('Travail')),
-    (2, 'MOBILE', _('Mobile')),
-    (3, 'FAX', _('Fax')),
-    (4, 'OTHER', _('Autre'))
-])
-
-SUBSCRIPTION_PAYMENT_TYPE_CHOICES = Enum([
-    (0, 'CREDIT_CARD', _(u'Carte de crédit')),
-    (1, 'CHECK', _(u'Chèque')),
-])
 
 DEFAULT_CURRENCY = get_format('CURRENCY')
 

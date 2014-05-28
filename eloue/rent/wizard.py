@@ -22,7 +22,8 @@ from payments.abstract_payment import PaymentException
 from accounts.forms import EmailAuthenticationForm, BookingCreditCardForm, ExistingBookingCreditCardForm
 from accounts.models import Patron, Avatar, CreditCard
 from products.forms import FacetedSearchForm
-from products.models import Product, PAYMENT_TYPE
+from products.models import Product
+from products.choices import PAYMENT_TYPE
 from rent.models import Booking, ProBooking, BorrowerComment
 from rent.forms import BookingForm, BookingConfirmationForm
 

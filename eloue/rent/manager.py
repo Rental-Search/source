@@ -6,9 +6,11 @@ from django.db.models import Manager
 
 from django.db.models.query import QuerySet
 
+from rent.choices import BOOKING_STATE
+
 class ProBookingQuerySet(QuerySet):
     def get(self, *args, **kwargs):
-        from rent.models import ProBooking, BOOKING_STATE
+        from rent.models import ProBooking
         instance = super(ProBookingQuerySet, self).get(*args, **kwargs)
         if instance.state == BOOKING_STATE.PROFESSIONAL or instance.state == BOOKING_STATE.PROFESSIONAL_SAW:
             return ProBooking(*[getattr(instance, field.attname) for field in instance._meta.fields])
@@ -17,20 +19,17 @@ class ProBookingQuerySet(QuerySet):
 
 class BookingManager(Manager):
     def __init__(self):
-        from rent.models import BOOKING_STATE
         super(BookingManager, self).__init__()
         for state in BOOKING_STATE.enum_dict:
             setattr(self, state.lower(), types.MethodType(self._filter_factory(state), self, BookingManager))
     
     @staticmethod
     def _filter_factory(state):
-        from rent.models import BOOKING_STATE
         def filter(self, **kwargs):
             return super(BookingManager, self).filter(state=BOOKING_STATE[state], **kwargs)
         return filter
 
     def history(self):
-        from rent.models import BOOKING_STATE
         return self.exclude(
             state__in=[
                 BOOKING_STATE.ONGOING, 

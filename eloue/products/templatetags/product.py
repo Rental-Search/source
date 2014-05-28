@@ -11,7 +11,7 @@ from django.utils.formats import get_format
 
 register = Library()
 
-from products.models import UNIT
+from products.choices import UNIT
 
 
 @register.filter

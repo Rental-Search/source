@@ -15,7 +15,8 @@ class Command(BaseCommand):
 	help = "Import given xls file for pro user"
 
 	def handle(self, *args, **options):
-		from products.models import Picture, Price, Category, Product, UNIT
+		from products.models import Picture, Price, Category, Product
+		from products.choices import UNIT
 		from accounts.models import Patron
 
 		try:

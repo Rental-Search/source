@@ -35,7 +35,8 @@ from accounts.models import Patron, Address
 from accounts.search_indexes import patron_search
 
 from products.forms import AlertSearchForm, AlertForm, FacetedSearchForm, RealEstateEditForm, ProductForm, CarProductEditForm, ProductEditForm, ProductAddressEditForm, ProductPhoneEditForm, ProductPriceEditForm, MessageEditForm
-from products.models import Category, Product, Curiosity, UNIT, ProductRelatedMessage, Alert, MessageThread
+from products.models import Category, Product, Curiosity, ProductRelatedMessage, Alert, MessageThread
+from products.choices import UNIT
 from products.wizard import ProductWizard, MessageWizard, AlertWizard, AlertAnswerWizard
 from products.utils import format_quote, escape_percent_sign
 from products.search_indexes import product_search, car_search, realestate_search, product_only_search

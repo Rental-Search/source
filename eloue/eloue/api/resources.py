@@ -41,9 +41,11 @@ from django.shortcuts import get_object_or_404
 from django_lean.experiments.models import GoalRecord
 from django_lean.experiments.utils import WebUser
 
-from products.models import Product, Category, Picture, Price, upload_to, PAYMENT_TYPE, ProductRelatedMessage, MessageThread, UNIT#, StaticPage
+from products.models import Product, Category, Picture, Price, upload_to, ProductRelatedMessage, MessageThread #, StaticPage
+from products.choices import PAYMENT_TYPE, UNIT
 from products.search_indexes import product_search
-from accounts.models import Address, PhoneNumber, Patron, PHONE_TYPES
+from accounts.models import Address, PhoneNumber, Patron
+from accounts.choices import PHONE_TYPES
 from rent.models import Booking
 
 from eloue.geocoder import GoogleGeocoder

@@ -27,23 +27,13 @@ import facebook
 
 from accounts import EMAIL_BLACKLIST
 from accounts.fields import PhoneNumberField, ExpirationField, RIBField, DateSelectField, CreditCardField
-from accounts.models import Patron, Avatar, PhoneNumber, CreditCard, COUNTRY_CHOICES, PatronAccepted, FacebookSession, Address, Language
-from accounts.models import OpeningTimes, IDNSession
+from accounts.models import Patron, Avatar, PhoneNumber, CreditCard, PatronAccepted, FacebookSession, Address, Language, OpeningTimes, IDNSession
+from accounts.choices import COUNTRY_CHOICES, STATE_CHOICES, PAYPAL_ACCOUNT_CHOICES
 from accounts.widgets import ParagraphRadioFieldRenderer, CommentedCheckboxInput
 from payments import paypal_payment
 from payments.paybox_payment import PayboxManager, PayboxException
 
 from eloue.utils import form_errors_append
-
-STATE_CHOICES = (
-    (0, _(u"Je n'ai pas encore de compte")),
-    (1, _(u"J'ai déjà un compte et mon mot de passe est :")),
-)
-
-PAYPAL_ACCOUNT_CHOICES = (
-    (0, _(u"Je n'ai pas encore de compte PayPal")),
-    (1, _(u"J'ai déjà un compte PayPal et mon email est :")),
-)
 
 class FacebookForm(forms.Form):
     

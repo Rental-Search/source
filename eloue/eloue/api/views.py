@@ -10,7 +10,8 @@ from django.views.decorators.csrf import csrf_exempt
 from tastypie.exceptions import ImmediateHttpResponse
 from tastypie.http import HttpUnauthorized, HttpBadRequest
 
-from products.models import Product, Price, UNIT
+from products.models import Product, Price
+from products.choices import UNIT
 from eloue.api.resources import OAuthentication, OAuthAuthorization
 
 

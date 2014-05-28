@@ -49,11 +49,11 @@ from accounts.forms import (EmailAuthenticationForm, GmailContactFormset, Patron
     PatronSetPasswordForm, FacebookForm, CreditCardForm, GmailContactForm)
 from accounts.models import Patron, FacebookSession, CreditCard, Billing, Subscription, ProPackage, BillingHistory
 from accounts.wizard import AuthenticationWizard
+from accounts.choices import GEOLOCATION_SOURCE
 
 from products.forms import FacetedSearchForm
 from products.models import ProductRelatedMessage, MessageThread, Product
 from products.search_indexes import product_search
-from products.utils import Enum
 
 from rent.models import Booking, BorrowerComment, OwnerComment
 from rent.forms import OwnerCommentForm, BorrowerCommentForm
@@ -133,13 +133,6 @@ def associate_facebook(request):
             {'me': request.user.facebooksession.uid}
         )
 
-
-GEOLOCATION_SOURCE = Enum([
-    (1, 'MANUAL', _('Location set manually')),
-    (2, 'BROWSER', _('Location set by browser geocoding')),
-    (3, 'ADDRESS', _('Location set by user address')),
-    (4, 'DEFAULT', _('Default location'))
-])
 
 @require_POST
 def user_geolocation(request):

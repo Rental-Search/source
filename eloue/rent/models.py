@@ -29,9 +29,10 @@ from django.db.models import Q
 from django.core.urlresolvers import reverse
 
 from accounts.models import Patron
-from products.models import CURRENCY, UNIT, Product, PAYMENT_TYPE
-from products.utils import Enum
+from products.models import Product
+from products.choices import CURRENCY, PAYMENT_TYPE
 from products.signals import post_save_to_update_product
+from rent.choices import BOOKING_STATE, PACKAGES_UNIT, PACKAGES
 from rent.decorators import incr_sequence
 from rent.fields import UUIDField, IntegerAutoField
 from rent.manager import BookingManager, CurrentSiteBookingManager
@@ -45,48 +46,10 @@ from eloue.utils import create_alternative_email, convert_from_xpf
 
 PAY_PROCESSORS = (NonPayments, AdaptivePapalPayments)
 
-BOOKING_STATE = Enum([
-    ('authorizing', 'AUTHORIZING', _(u"En cours d'autorisation")),
-    ('authorized', 'AUTHORIZED', _(u"En attente")),
-    ('rejected', 'REJECTED', _(u'Rejeté')),
-    ('canceled', 'CANCELED', _(u'Annulé')),
-    ('pending', 'PENDING', _(u'A venir')),
-    ('ongoing', 'ONGOING', _(u'En cours')),
-    ('ended', 'ENDED', _(u'Terminé')),
-    ('incident', 'INCIDENT', _(u'Incident')),
-    ('refunded', 'REFUNDED', _(u'Remboursé')),
-    ('deposit', 'DEPOSIT', _(u'Caution versée')),
-    ('closing', 'CLOSING', _(u"En attende de clôture")),
-    ('closed', 'CLOSED', _(u'Clôturé')),
-    ('outdated', 'OUTDATED', _(u"Dépassé")),
-    ('unaccepted', 'UNACCEPTED', _(u"Pas accepté")),
-    ('accepted_unauthorized', 'ACCEPTED_UNAUTHORIZED', _(u"Accepté et en cours d'autorisation")),
-    ('professional', 'PROFESSIONAL', _(u"Demande pro")),
-    ('professional_saw', 'PROFESSIONAL_SAW', _(u'Lu')),
-])
-
 DEFAULT_CURRENCY = get_format('CURRENCY') if not settings.CONVERT_XPF else "XPF"
 
 
 USE_HTTPS = getattr(settings, 'USE_HTTPS', True)
-
-PACKAGES_UNIT = {
-    'hour': UNIT.HOUR,
-    'week_end': UNIT.WEEK_END,
-    'day': UNIT.DAY,
-    'week': UNIT.WEEK,
-    'two_weeks': UNIT.TWO_WEEKS,
-    'month': UNIT.MONTH
-}
-
-PACKAGES = {
-    UNIT.HOUR: lambda amount, delta, round=True: amount * (delta.seconds / D('3600')),
-    UNIT.WEEK_END: lambda amount, delta, round=True: amount,
-    UNIT.DAY: lambda amount, delta, round=True: amount * (max(delta.days + delta.seconds / D('86400'), 1) if round else delta.days + delta.seconds / D('86400')),
-    UNIT.WEEK: lambda amount, delta, round=True: amount * (delta.days + delta.seconds / D('86400')),
-    UNIT.TWO_WEEKS: lambda amount, delta, round=True: amount * (delta.days + delta.seconds / D('86400')),
-    UNIT.MONTH: lambda amount, delta, round=True: amount * (delta.days + delta.seconds / D('86400')),
-}
 
 log = logbook.Logger('eloue.rent')
 

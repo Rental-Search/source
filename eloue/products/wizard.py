@@ -14,7 +14,9 @@ from django.views.decorators.csrf import csrf_protect
 from accounts.forms import EmailAuthenticationForm, make_missing_data_form
 from accounts.models import Patron, Avatar
 from products.forms import AlertForm, ProductForm, MessageEditForm
-from products.models import Product, Picture, UNIT, Alert
+from products.models import Product, Picture, Alert
+from products.choices import UNIT
+
 
 from eloue.wizard import MultiPartFormWizard
 
