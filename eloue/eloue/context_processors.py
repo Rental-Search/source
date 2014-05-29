@@ -3,8 +3,7 @@ from django.conf import settings
 from django.contrib.sites.models import Site
 from django.db.models import Count
 
-from .models import ProductRelatedMessage, MessageThread
-from .models import Booking
+from products.models import ProductRelatedMessage
 
 def site(request):
     try:
