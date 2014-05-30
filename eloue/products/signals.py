@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.core.cache import cache
 from django.contrib.sites.models import Site
-import datetime
+
 from eloue.utils import cache_key
 from django.db.models import signals
 from django.core import exceptions
@@ -21,18 +21,24 @@ def post_save_product(sender, instance, created, **kwargs):
 
 
 def post_save_to_update_product(sender, instance, created, **kwargs):
-	try:
-		product = instance.product
-		signals.post_save.send(
-			sender=product.__class__, instance=product, 
-			raw=False, created=False
-		)
-	except exceptions.ObjectDoesNotExist:
-		pass
+    try:
+        product = instance.product
+        if product is not None:
+            # Fixed issues with picture.json fixture when running tests:
+            # it doesn't make sense to emit signal for None product
+            signals.post_save.send(
+                sender=product.__class__, instance=product,
+                raw=False, created=False
+            )
+    except exceptions.ObjectDoesNotExist:
+        pass
 
 def post_save_to_batch_update_product(sender, instance, created, **kwargs):
-	for product in instance.products.all():
-		signals.post_save.send(sender=product.__class__, instance=product, raw=False, created=False)
+    for product in instance.products.all():
+        signals.post_save.send(
+            sender=product.__class__, instance=product,
+            raw=False, created=False
+        )
 
 
 def post_save_curiosity(sender, instance, created, **kwargs):
