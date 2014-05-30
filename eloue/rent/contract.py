@@ -259,7 +259,7 @@ class ContractGeneratorCar(ContractGenerator):
 
 
         canvas.drawString(382, 712, u"{licence_plate}".format(licence_plate=booking.product.carproduct.licence_plate))
-        canvas.drawString(428, 701, u"{first_registration_date}".format(first_registration_date=booking.product.carproduct.first_registration_date, _(u"d F Y")))
+        canvas.drawString(428, 701, format(booking.product.carproduct.first_registration_date, _(u"d F Y")))
 
 
 
