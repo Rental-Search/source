@@ -234,7 +234,7 @@ class ContractGeneratorCar(ContractGenerator):
         )
         canvas.drawString(180, 712, "{date_of_birth}, {place_of_birth}".format(
                 date_of_birth=booking.borrower.date_of_birth.strftime("%d/%m/%Y"),
-                place_of_birth=booking.borrower.place_of_birth
+                place_of_birth=smart_str(booking.borrower.place_of_birth)
             )
         )
         canvas.drawString(172, 701, u"{drivers_license_number}".format(
@@ -259,7 +259,7 @@ class ContractGeneratorCar(ContractGenerator):
 
 
         canvas.drawString(382, 712, u"{licence_plate}".format(licence_plate=booking.product.carproduct.licence_plate))
-        canvas.drawString(428, 701, u"{first_registration_date}".format(first_registration_date=booking.product.carproduct.first_registration_date))
+        canvas.drawString(428, 701, u"{first_registration_date}".format(first_registration_date=booking.product.carproduct.first_registration_date, _(u"d F Y")))
 
 
 
