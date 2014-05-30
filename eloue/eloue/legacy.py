@@ -14,6 +14,15 @@ from django.views.decorators.csrf import csrf_protect
 
 from django.contrib.formtools.utils import form_hmac
 
+from haystack.query import SearchQuerySet
+from haystack.utils.geo import D, Point
+
+
+class CompatSearchQuerySet(SearchQuerySet):
+    def spatial(self, long=None, lat=None, radius=None, unit='km'):
+        return self.dwithin('location', Point(long, lat), D(**{unit: radius}))
+
+
 class FormWizard(object):
     # The HTML (and POST data) field name for the "step" variable.
     step_field_name="wizard_step"

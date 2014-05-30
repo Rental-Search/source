@@ -14,7 +14,7 @@ from django.views.generic import TemplateView
 from accounts.forms import EmailPasswordResetForm, PatronSetPasswordForm
 from accounts.views import activate, authenticate, authenticate_headless, contact, google_oauth_callback, patron_subscription
 from products.views import homepage, search, reply_product_related_message, homepage_object_list
-from products.search_indexes import product_only_search, car_search, realestate_search
+from products.search import product_only_search, car_search, realestate_search
 from sitemaps import CategorySitemap, FlatPageSitemap, PatronSitemap, ProductSitemap
 
 log = logbook.Logger('eloue')

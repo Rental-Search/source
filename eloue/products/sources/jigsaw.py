@@ -8,10 +8,12 @@ from urllib import urlencode
 
 from django.utils.encoding import smart_str
 
-from . import BaseSource, Product
+from . import BaseSource, meta_class
 
 
 class SourceClass(BaseSource):
+    _meta = meta_class('sources', 'jigsaw')
+
     def request(self, xml):
         response, content = Http().request("http://www.elocationdevoitures.fr/service/ServiceRequest.do?%s" % urlencode({'xml': xml}))
         return objectify.fromstring(content)
@@ -53,7 +55,6 @@ class SourceClass(BaseSource):
         return locations
 
     def get_docs(self):
-        docs = []
         pickup_date = datetime.now() + timedelta(days=7)
         dropoff_date = pickup_date + timedelta(days=1)
         for location in self.get_locations():
@@ -63,14 +64,15 @@ class SourceClass(BaseSource):
                 'dropoff_year': dropoff_date.year, 'dropoff_month': dropoff_date.month, 'dropoff_day': dropoff_date.day, 'dropoff_hour': 12, 'dropoff_minute': 30,
             }))
             for match in root.xpath('//Match'):
-                lat, lon = BaseSource().get_coordinates(match.Route.PickUp.Location.get('locName'))
-                docs.append(Product({
-                    'id': '%s.%s' % (SourceClass().get_prefix(), match.Vehicle.get('id')),
-                    'summary': match.Vehicle.Name.pyval,
-                    'description': match.Vehicle.Description.pyval,
+                pickup = match.Route.PickUp
+                vehicle = match.Vehicle
+                lat, lon = self.get_coordinates(pickup.Location.get('locName'))
+                yield self.make_product({
+                    'summary': vehicle.Name.pyval,
+                    'description': vehicle.Description.pyval,
                     'categories': ['auto-et-moto', 'voiture'],
-                    'lat': lat, 'lng': lon,
-                    'city': match.Route.PickUp.Location.get('locName'),
+                    'location': '%s,%s' % (lon, lat),
+                    'city': pickup.Location.get('locName'),
                     'price': match.Price.pyval,
                     'owner': 'elocationdevoitures',
                     'owner_url': 'http://www.elocationdevoitures.fr/',
@@ -79,11 +81,5 @@ class SourceClass(BaseSource):
                         'pickup_year': pickup_date.year, 'pickup_month': pickup_date.month, 'pickup_day': pickup_date.day, 'pickup_hour': 12, 'pickup_minute': 30,
                         'dropoff_year': dropoff_date.year, 'dropoff_month': dropoff_date.month, 'dropoff_day': dropoff_date.day, 'dropoff_hour': 12, 'dropoff_minute': 30,
                     },
-                    'thumbnail': match.Vehicle.ImageURL.pyval,
-                    'django_id': 'jigsaw.%s' % match.Vehicle.get('id')
-                }))
-        return docs
-
-    def get_prefix(self):
-        return 'source.jigsaw'
-
+                    'thumbnail': vehicle.ImageURL.pyval,
+                }, pk=vehicle.get('id'))

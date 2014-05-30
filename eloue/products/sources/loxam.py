@@ -1,4 +1,4 @@
-from . import BaseSource, Product
+from . import BaseSource, meta_class
 import contextlib
 import urllib2
 from content_extractor import id_gen
@@ -29,7 +29,7 @@ BASE_URL = "http://www.loxam.fr"
 def html_tree(url):
     try:
         urll = BASE_URL + url
-        with contextlib.closing(urlopen(urll, timeout=5)) as html_page:
+        with contextlib.closing(urllib2.urlopen(urll, timeout=5)) as html_page:
             return etree.parse(html_page, etree.HTMLParser(recover=True, encoding='utf-8'))
     except Exception, e:
         log.exception("Exception: {0}".format(e))
@@ -52,6 +52,7 @@ def extract_price(string, sep=","):
     return D(re_num.findall(string)[0].replace(",", "."))
 
 class SourceClass(BaseSource):
+    _meta = meta_class('sources', 'loxam')
 
     id = id_gen()
 
@@ -59,16 +60,11 @@ class SourceClass(BaseSource):
         BaseSource.__init__(self, *args, **kwargs)
     
     def _html_loader(self, url):
-        request = urllib2.Request(
-            url, headers={
-                'Accept-Encoding': 'gzip, identity', 
-            }
-        )
         while True:
             try:
                 with contextlib.closing(urllib2.urlopen(url, timeout=5)) as response:
                     if response.info().get('Content-Encoding') is 'gzip':
-                        response = gzip.GzipFile(fileobj=BytesIO(response))
+                        response = gzip.GzipFile(fileobj=io.BytesIO(response))
                     return etree.parse(response, etree.HTMLParser(recover=True, encoding='utf-8'))
             except urllib2.URLError:
                 continue
@@ -107,27 +103,21 @@ class SourceClass(BaseSource):
             description = ''.join([i.strip() for i in html_tree.find(XP_DESC).itertext()]) if html_tree.find(XP_DESC) is not None else ''.join(html_tree.find(XP_DESC2).itertext()) if html_tree.find(XP_DESC2) is not None else ''
             location = "France"
             lat, lon = self.get_coordinates(location)
-            return Product({
-                'id' : "%s.%d" % (self.get_prefix(), c_id),
+            return self.make_product({
                 'summary': html_tree.find(XP_SUMMARY).text,
                 'description': description,
                 'categories': CATEGORIES.get(cat, CATEGORIES.get(subcat, [])),
-                'lat' : lat, 'lng' : lon,
+                'location': '%s,%s' % (lon, lat),
                 'city' : location,
                 'price': extract_price(html_tree.find(XP_PRICE).text),
                 'owner' : 'loxam',
                 'owner_url' : BASE_URL + "/",
                 'url' : url,
                 'thumbnail' : BASE_URL + thumbnail,
-                'django_id' : u'loxam.%d' % c_id
-            })
+            }, pk=c_id)
         except Exception, e:
             log.exception("Exception : {0}".format(e))
-
-    def get_prefix(self):
-        return 'source.loxam'
 
     def get_docs(self):
         for product in self.get_categories(BASE_URL+"/"):
             yield product
-

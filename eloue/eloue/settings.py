@@ -181,24 +181,25 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'markup_deprecated', # 'django.contrib.markup',
     'django.contrib.gis',
-    'south',
     'mptt',
     'imagekit',
     'django_lean.experiments',
     'rollout',
     'pipeline',
-    'faq',
     'announcements',
     'haystack',
     'queued_search',
     'django_nose',
-    'accounts',
-    'rent',
     'django_messages',
-    'products',
     'oauth_provider',
+    'faq',
+    'accounts',
+    'products',
+    'rent',
     'payments',
     'contest',
+    'eloue.api',
+    'south', # South must be the last in the apps list
 )
 if DEBUG_TOOLBAR:
     INSTALLED_APPS += ('debug_toolbar',)
@@ -373,14 +374,22 @@ PIPELINE_JS = {
 
 
 # South configuration
-SOUTH_TESTS_MIGRATE = getattr(local, 'SOUTH_TESTS_MIGRATE', True)
+SOUTH_TESTS_MIGRATE = getattr(local, 'SOUTH_TESTS_MIGRATE', False)
 
 # Haystack configuration
-HAYSTACK_SITECONF = 'eloue.sites'
-HAYSTACK_SEARCH_ENGINE = getattr(local, 'HAYSTACK_SEARCH_ENGINE', 'solr')
-HAYSTACK_SOLR_URL = getattr(local, 'HAYSTACK_SOLR_URL', 'http://localhost:8983/solr')
-HAYSTACK_INCLUDE_SPELLING = True
-HAYSTACK_ENABLE_REGISTRATIONS = True
+HAYSTACK_CONNECTIONS = {
+    'default': {
+        'ENGINE': 'haystack.backends.elasticsearch_backend.ElasticsearchSearchEngine',
+        'URL': getattr(local, 'HAYSTACK_ELASTICSEARCH_URL', 'http://127.0.0.1:9200/'),
+        'INDEX_NAME': 'eloue',
+    },
+#     'default': {
+#         'ENGINE': 'haystack.backends.solr_backend.SolrEngine',
+#         'URL': getattr(local, 'HAYSTACK_SOLR_URL', 'http://localhost:8983/solr'),
+#         'INCLUDE_SPELLING': True,
+#     },
+}
+HAYSTACK_SIGNAL_PROCESSOR = 'queued_search.signals.QueuedSignalProcessor'
 SEARCH_QUEUE_LOG_LEVEL = logging.INFO
 
 # Queue configuration

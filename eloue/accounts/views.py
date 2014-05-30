@@ -53,7 +53,7 @@ from accounts.choices import GEOLOCATION_SOURCE
 
 from products.forms import FacetedSearchForm
 from products.models import ProductRelatedMessage, MessageThread, Product
-from products.search_indexes import product_search
+from products.search import product_search
 
 from rent.models import Booking, BorrowerComment, OwnerComment
 from rent.forms import OwnerCommentForm, BorrowerCommentForm

@@ -105,49 +105,6 @@ class FacetedSearchForm(SearchForm):
                 top_products = None
 
             if top_products:
-                # XXX: ugly workaround because of SOLR-1658 (https://issues.apache.org/jira/browse/SOLR-1658)
-                # as soon as we upgrad solr we should remove this workaround
-                # I subclassed and modified the query string generator function in a SearchQuery class
-                # to remove the outer parenthesis of a negation.
-                from haystack.backends.solr_backend import SearchQuery
-                from haystack.constants import DJANGO_CT, VALID_FILTERS, FILTER_SEPARATOR
-                class BSQ(SearchQuery):
-                    def build_query(self):
-                        """
-                        Interprets the collected query metadata and builds the final query to
-                        be sent to the backend.
-                        """
-                        query = self.query_filter.as_query_string(self.build_query_fragment)
-
-                        if not query:
-                            # Match all.
-                            query = self.matching_all_fragment()
-
-                        if len(self.models):
-                            models = sorted(['%s:%s.%s' % (DJANGO_CT, model._meta.app_label, model._meta.module_name) for model in self.models])
-                            models_clause = ' OR '.join(models)
-
-                            if query != self.matching_all_fragment():
-                                if query.startswith('NOT'):
-                                    final_query = '%s AND (%s)' % (query, models_clause)
-                                else:
-                                    final_query = '(%s) AND (%s)' % (query, models_clause)
-                            else:
-                                final_query = models_clause
-                        else:
-                            final_query = query
-
-                        if self.boost:
-                            boost_list = []
-
-                            for boost_word, boost_value in self.boost.items():
-                                boost_list.append(self.boost_fragment(boost_word, boost_value))
-
-                            final_query = "%s %s" % (final_query, " ".join(boost_list))
-                        
-                        return final_query
-                sqs.query = sqs.query._clone(BSQ)
-
                 sqs = sqs.exclude(id__in=[product.id for product in top_products])
 
             for key in self.cleaned_data.keys():

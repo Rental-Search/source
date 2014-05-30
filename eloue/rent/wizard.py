@@ -51,7 +51,7 @@ class BookingWizard(MultiPartFormWizard):
         if product.name == 'carproduct':
             self.required_fields += ['drivers_license_date', 'drivers_license_number', 'date_of_birth', 'place_of_birth']
         
-        from products.search_indexes import product_search
+        from products.search import product_search
         self.extra_context={
             'product_list': product_search.more_like_this(product)[:4]
         }

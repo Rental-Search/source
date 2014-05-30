@@ -112,7 +112,7 @@ class Product(models.Model):
         return ('booking_create', [path, self.slug, self.pk])
     
     def more_like_this(self):
-        from products.search_indexes import product_search
+        from products.search import product_search
         return product_search.spatial(
             lat=self.address.position.x, long=self.address.position.y,
             radius=DEFAULT_RADIUS, unit='km'
@@ -131,7 +131,6 @@ class Product(models.Model):
     @property
     def daily_price(self):
         if not hasattr(self, '_daily_price'):
-            import itertools
             self._daily_price = next(itertools.ifilter(lambda price: price.unit == 1, self.prices.all()), None)
         return self._daily_price
 
@@ -287,11 +286,11 @@ class Product(models.Model):
 
     @property
     def is_highlighted(self):
-        return bool(self.producthighlight_set.filter(ended_at__isnull=True))
+        return bool(self.producthighlight_set.filter(ended_at__isnull=True)[:1])
 
     @property
     def is_top(self):
-        return bool(self.producttopposition_set.filter(ended_at__isnull=True))
+        return bool(self.producttopposition_set.filter(ended_at__isnull=True)[:1])
     
 
 class CarProduct(Product):

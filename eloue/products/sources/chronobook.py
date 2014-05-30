@@ -1,6 +1,6 @@
 from decimal import Decimal as D
 
-from . import BaseSource, Product
+from . import BaseSource, meta_class
 from content_extractor import html_tree
 from lxml import etree
 from urllib2 import urlopen
@@ -21,8 +21,7 @@ log = logbook.Logger('eloue.rent.sources')
 
 
 class SourceClass(BaseSource):
-    def get_prefix(self):
-        return 'source.chronobook'
+    _meta = meta_class('sources', 'chronobook')
     
     def get_docs(self):
         try:
@@ -41,17 +40,15 @@ class SourceClass(BaseSource):
             else:
                 thumbnail = html.xpath(XP_IMAGE)[0].attrib['src']
             description = ("\n".join([i.strip() for i in html.xpath(XP_DESC1)[0].itertext()])) if len(html.xpath(XP_DESC1)) else (("\n".join([i.strip() for i in html.xpath(XP_DESC2)[0].itertext()]) if len(html.xpath(XP_DESC2)) else ""))
-            yield Product({
-                'id': '%s.%s' % (SourceClass().get_prefix(), attrib['id']),
+            yield self.make_product({
                 'summary': '%(author)s: %(title)s' % {'author': attrib['auteur'], 'title': book.text},
                 'description': description,
                 'categories': ['culture', 'livre'],
-                'lat': lat, 'lng': lon,
+                'location': '%s,%s' % (lon, lat),
                 'city': location,
                 'price': D('0.45'),
                 'owner': 'chronobook',
                 'owner_url': BASE_URL,
                 'url': attrib['fiche'],
                 'thumbnail': BASE_URL+thumbnail,
-                'django_id': '%s.%s' % (self.get_prefix(), attrib['id'])
-            })
+            }, pk=attrib['id'])

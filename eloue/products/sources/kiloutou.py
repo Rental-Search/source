@@ -1,12 +1,8 @@
 # -*- coding: utf-8 -*-
-from . import BaseSource, Product
+from . import BaseSource, meta_class
 from decimal import Decimal as D
-from collections import defaultdict
-from itertools import chain
-import re
 import logbook
 import urllib2
-import lxml.html
 from lxml import etree
 import StringIO
 import gzip
@@ -54,6 +50,7 @@ def follow_all(content_extractor, a_list):
             yield content
 
 class SourceClass(BaseSource):
+    _meta = meta_class('sources', 'kiloutou')
 
     id = id_gen()
 
@@ -80,26 +77,20 @@ class SourceClass(BaseSource):
         c_id = self.id.next()
         location = "France"
         lat, lon = self.get_coordinates(location)
-        yield Product({
-            'id' : "%s.%d" % (self.get_prefix(), c_id),
+        yield self.make_product({
             'summary' : html_tree.xpath(XP_PNAME)[0].text.strip(),
             'description' : html_tree.xpath(XP_PDESC)[0].text.strip(),
             'categories' : [],
-            'lat' : lat, 'lng' : lon,
+            'location': '%s,%s' % (lon, lat),
             'city' : location,
             'price' : None if html_tree.xpath(XP_PRICE)[0].text.strip() == "Sur devis" else D(html_tree.xpath(XP_PRICE)[0].text.strip()),
             'owner' : 'kiloutou',
             'owner_url' : BASE_URL + "/",
             'url' : href,
             'thumbnail' : html_tree.xpath(XP_THUMBNAIL)[0].attrib["src"],
-            'django_id' : 'kiloutou.%d' % c_id
-        })
+        }, pk=c_id)
 
-
-    def get_prefix(self):
-        return 'source.kiloutou'
 
     def get_docs(self):
         for product in self.get_categories(get_html_tree(req_builder(BASE_URL))):
             yield product
-

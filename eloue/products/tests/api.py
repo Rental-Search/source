@@ -6,7 +6,6 @@ import urlparse
 
 from datetime import datetime, timedelta
 from decimal import Decimal as D
-from haystack import site
 from urllib import urlencode
 
 from django.conf import settings
@@ -14,6 +13,8 @@ from django.core.urlresolvers import reverse
 from django.db import transaction
 from django.db.models import Q
 from django.test import Client, TransactionTestCase
+
+import haystack
 
 from accounts.models import Patron
 from products.models import Product,ProductRelatedMessage
@@ -35,7 +36,7 @@ class ApiTest(TransactionTestCase):
     fixtures = ['category', 'patron', 'address', 'oauth', 'price', 'product', 'booking_api', 'phones', 'messagethread', 'message']
 
     def setUp(self):
-        self.index = site.get_index(Product)
+        self.index = haystack.connections[haystack.constants.DEFAULT_ALIAS].get_unified_index().get_index(Product)
         for product in Product.objects.all():
             self.index.update_object(product)
 
@@ -297,4 +298,5 @@ class ApiTest(TransactionTestCase):
     def tearDown(self):
         for product in Product.objects.all():
             self.index.remove_object(product)
+        del self.index
     

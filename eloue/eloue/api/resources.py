@@ -43,7 +43,7 @@ from django_lean.experiments.utils import WebUser
 
 from products.models import Product, Category, Picture, Price, upload_to, ProductRelatedMessage, MessageThread #, StaticPage
 from products.choices import PAYMENT_TYPE, UNIT
-from products.search_indexes import product_search
+from products.search import product_search
 from accounts.models import Address, PhoneNumber, Patron
 from accounts.choices import PHONE_TYPES
 from rent.models import Booking
@@ -499,8 +499,8 @@ class ProductResource(UserSpecificResource):
 
             if "l" in filters:
                 name, (lat, lon), radius = GoogleGeocoder().geocode(filters['l'])
-                radius = filters.get('r', radius if radius else DEFAULT_RADIUS)
                 if lat and lon:
+                    radius = filters.get('r', radius if radius else DEFAULT_RADIUS)
                     sqs = sqs.spatial(lat=lat, long=lon, radius=radius, unit='km')
 
             pk = []

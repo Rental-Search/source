@@ -14,11 +14,11 @@ from products.choices import UNIT, STATUS
 
 
 class ProductManager(GeoManager):
-    def active(self):
-        return self.filter(is_allowed=True)
+    def active(self, *args, **kwargs):
+        return self.filter(*args, is_allowed=True, **kwargs)
     
-    def archived(self):
-        return self.filter(is_archived=True, is_allowed=True)
+    def archived(self, *args, **kwargs):
+        return self.filter(*args, is_archived=True, is_allowed=True, **kwargs)
 
 class CurrentSiteProductManager(CurrentSiteManager, ProductManager):
     pass
