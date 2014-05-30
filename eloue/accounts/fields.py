@@ -191,7 +191,7 @@ class DateSelectField(forms.MultiValueField):
     DAYS = [('', 'Jour')] + [(x, x) for x in xrange(1, 32)]
     MONTHS = [('', 'Mois')] + [(x, _(calendar.month_name[x])) for x in xrange(1, 13)]
 
-    def __init__(self, min_year=1900, max_year=2012, *args, **kwargs):
+    def __init__(self, min_year=1900, max_year=2014, *args, **kwargs):
         self.YEARS = [('', 'Année')] + [(x, x) for x in xrange(max_year, min_year, -1)]
         fields = (
             forms.TypedChoiceField(coerce=int, choices=self.DAYS),
