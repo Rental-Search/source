@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from decimal import Decimal as D
+
 from django.utils.translation import ugettext_lazy as _
 
 from eloue.utils import Enum
