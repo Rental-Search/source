@@ -6,12 +6,10 @@ import urlparse
 
 from datetime import datetime, timedelta
 from decimal import Decimal as D
-from urllib import urlencode
 
 from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.db import transaction
-from django.db.models import Q
 from django.test import Client, TransactionTestCase
 
 import haystack
@@ -36,9 +34,16 @@ class ApiTest(TransactionTestCase):
     fixtures = ['category', 'patron', 'address', 'oauth', 'price', 'product', 'booking_api', 'phones', 'messagethread', 'message']
 
     def setUp(self):
-        self.index = haystack.connections[haystack.constants.DEFAULT_ALIAS].get_unified_index().get_index(Product)
-        for product in Product.objects.all():
-            self.index.update_object(product)
+        conn = haystack.connections[haystack.constants.DEFAULT_ALIAS]
+        backend = conn.get_backend()
+        index = conn.get_unified_index().get_index(Product)
+        backend.update(index, index.build_queryset())
+
+    def tearDown(self):
+        conn = haystack.connections[haystack.constants.DEFAULT_ALIAS]
+        backend = conn.get_backend()
+        for obj in Product.objects.all():
+            backend.remove(obj)
 
     def _get_request(self, method='GET', parameters=None, use_token=True):
         consumer = oauth.Consumer(OAUTH_CONSUMER_KEY, OAUTH_CONSUMER_SECRET)
@@ -294,9 +299,3 @@ class ApiTest(TransactionTestCase):
         self.assertEquals(message.thread.id, 1)
         self.assertEquals(message.body, 'test body')
         self.assertEquals(message.subject, 'test subject')
-                
-    def tearDown(self):
-        for product in Product.objects.all():
-            self.index.remove_object(product)
-        del self.index
-    

@@ -580,7 +580,6 @@ class Address(models.Model):
         super(Address, self).save(*args, **kwargs)
 
     def clean(self):
-        from django.core.exceptions import ValidationError
         if self.position:
             if self.position.x > 90 or self.position.x < -90 or self.position.y < -180 or self.position.y > 180:
                 raise ValidationError(_(u"Coordonnées géographiques incorrectes"))

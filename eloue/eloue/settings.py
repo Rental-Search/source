@@ -383,8 +383,8 @@ SOUTH_TESTS_MIGRATE = getattr(local, 'SOUTH_TESTS_MIGRATE', False)
 # Haystack configuration
 HAYSTACK_CONNECTIONS = {
     'default': {
-        'ENGINE': 'haystack.backends.elasticsearch_backend.ElasticsearchSearchEngine',
-        'URL': getattr(local, 'HAYSTACK_ELASTICSEARCH_URL', 'http://127.0.0.1:9200/'),
+        'ENGINE': 'eloue.elasticsearch_backend.ElasticsearchSearchEngine',
+        'URL': getattr(local, 'HAYSTACK_ELASTICSEARCH_URL', '127.0.0.1:9200'),
         'INDEX_NAME': 'eloue',
     },
 #     'default': {

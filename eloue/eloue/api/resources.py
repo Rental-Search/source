@@ -1,13 +1,10 @@
 # -*- coding: utf-8 -*-
 
-import re
 import logbook
 import plistlib
-from urllib import unquote,quote,urlencode
+from urllib import unquote, urlencode
 from base64 import decodestring
 from decimal import Decimal as D
-
-from django_fsm.db.fields import transition
 
 from tastypie import fields
 from tastypie.api import Api
@@ -15,7 +12,7 @@ from tastypie.constants import ALL_WITH_RELATIONS
 from tastypie.authentication import Authentication
 from tastypie.authorization import Authorization
 from tastypie.exceptions import NotFound, ImmediateHttpResponse
-from tastypie.http import HttpBadRequest, HttpCreated, HttpAccepted
+from tastypie.http import HttpBadRequest, HttpCreated
 from tastypie.resources import ModelResource
 from tastypie.serializers import Serializer
 from tastypie.utils import dict_strip_unicode_keys
@@ -32,11 +29,9 @@ from django.core.urlresolvers import reverse
 from django.contrib.gis.geos import Point
 from django.contrib.gis.measure import Distance
 from django.contrib.sites.models import Site
-from django.contrib.auth.models import User
 from django.db import IntegrityError
 from django.db.models import Q
-from django.http import HttpResponse,HttpResponseBadRequest
-from django.shortcuts import get_object_or_404
+from django.http import HttpResponseBadRequest
 
 from django_lean.experiments.models import GoalRecord
 from django_lean.experiments.utils import WebUser
@@ -526,7 +521,7 @@ class ProductResource(UserSpecificResource):
         object_list = super(ProductResource, self).get_object_list(request)
         if request and "l" in request.GET:
             name, (lat, lon), radius = GoogleGeocoder().geocode(request.GET['l'])
-            object_list = object_list.distance(Point((lat, lon)), field_name='address__position')
+            object_list = object_list.distance(Point(lat, lon), field_name='address__position')
         return object_list
 
     def _obj_process_fields(self, product, picture_data, day_price_data):

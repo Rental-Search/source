@@ -25,7 +25,7 @@ class GenerateOnDownload(object):
 
 class CompatSearchQuerySet(SearchQuerySet):
     def spatial(self, long=None, lat=None, radius=None, unit='km'):
-        return self.dwithin('location', Point(long, lat), D(**{unit: radius}))
+        return self.dwithin('location', Point(lat, long), D(**{unit: radius}))
 
 
 class FormWizard(object):
