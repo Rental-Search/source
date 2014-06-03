@@ -708,7 +708,7 @@ FIELD_MAPPINGS = {
     'date':       {'type': 'date'},
     'datetime':   {'type': 'date'},
 
-    'location':   {'type': 'geo_point'},        
+    'location':   {'type': 'geo_point', 'lat_lon': 'true'},        
     'boolean':    {'type': 'boolean'},
     'float':      {'type': 'float'},
     'long':       {'type': 'long'},
