@@ -2,15 +2,14 @@
 import uuid
 from decimal import Decimal as D
 
-from datetime import datetime, timedelta, time, date
+from datetime import datetime, timedelta, date
 
 import calendar
-from django.db.models import Q
 import operator
 import itertools
 
-from imagekit.models import ImageSpec
-from imagekit.processors import resize, Adjust, Transpose
+from imagekit.models import ImageSpecField
+from pilkit.processors import Crop, ResizeToFit, Adjust, Transpose
 
 from django.conf import settings
 from django.contrib.gis.db import models
@@ -18,7 +17,6 @@ from django.contrib.gis.geos import Point
 from django.contrib.gis.measure import Distance
 from django.contrib.sites.managers import CurrentSiteManager
 from django.contrib.sites.models import Site
-from django.contrib.auth.models import User
 from django.db.models import permalink, Q, Avg
 from django.db.models.signals import post_save
 from django.template.defaultfilters import slugify
@@ -43,7 +41,7 @@ from rent.contract import ContractGenerator, ContractGeneratorNormal, ContractGe
 from eloue.geocoder import GoogleGeocoder
 from eloue.signals import post_save_sites
 from eloue import signals as eloue_signals
-from eloue.utils import currency, create_alternative_email, cache_to
+from eloue.utils import currency, create_alternative_email
 
 
 import copy
@@ -486,33 +484,37 @@ class Picture(models.Model):
     image = models.ImageField(null=True, blank=True, upload_to=upload_to)
     created_at = models.DateTimeField(blank=True, editable=False)
 
-    thumbnail = ImageSpec(
+    thumbnail = ImageSpecField(
+        source='image',
         processors=[
-            resize.Crop(width=60, height=60), 
+            Crop(width=60, height=60),
             Adjust(contrast=1.2, sharpness=1.1),
             Transpose(Transpose.AUTO),
-        ], image_field='image', pre_cache=False, cache_to=cache_to
+        ],
     )
-    profile = ImageSpec(
+    profile = ImageSpecField(
+        source='image',
         processors=[
-            resize.Crop(width=200, height=170), 
+            Crop(width=200, height=170),
             Adjust(contrast=1.2, sharpness=1.1),
             Transpose(Transpose.AUTO),
-        ], image_field='image', pre_cache=False, cache_to=cache_to
+        ],
     )
-    home = ImageSpec(
+    home = ImageSpecField(
+        source='image',
         processors=[
-            resize.Crop(width=120, height=140), 
+            Crop(width=120, height=140),
             Adjust(contrast=1.2, sharpness=1.1),
             Transpose(Transpose.AUTO),
-        ], image_field='image', pre_cache=False, cache_to=cache_to
+        ],
     )
-    display = ImageSpec(
+    display = ImageSpecField(
+        source='image',
         processors=[
-            resize.Fit(width=578, height=500), 
+            ResizeToFit(width=578, height=500),
             Adjust(contrast=1.2, sharpness=1.1),
             Transpose(Transpose.AUTO),
-        ], image_field='image', pre_cache=False, cache_to=cache_to
+        ],
     )
 
     def save(self, *args, **kwargs):

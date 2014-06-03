@@ -11,7 +11,7 @@ from django.shortcuts import redirect
 from django_lean.experiments.models import GoalRecord
 from django_lean.experiments.utils import WebUser
 
-from accounts.forms import EmailAuthenticationForm, make_missing_data_form, SubscriptionEditForm
+from accounts.forms import EmailAuthenticationForm, SubscriptionEditForm
 from accounts.models import Patron, Avatar, ProPackage, Subscription
 
 from eloue.wizard import MultiPartFormWizard

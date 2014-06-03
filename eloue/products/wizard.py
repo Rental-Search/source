@@ -11,7 +11,7 @@ from django.utils.translation import ugettext as _
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_protect
 
-from accounts.forms import EmailAuthenticationForm, make_missing_data_form
+from accounts.forms import EmailAuthenticationForm
 from accounts.models import Patron, Avatar
 from products.forms import AlertForm, ProductForm, MessageEditForm
 from products.models import Product, Picture, Alert

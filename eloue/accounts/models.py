@@ -2,14 +2,13 @@
 import datetime
 import logbook
 import uuid
-import urllib2
 import calendar
 from decimal import Decimal as D
 
 import facebook
 
-from imagekit.models import ImageSpec
-from imagekit.processors import resize, Adjust, Transpose
+from imagekit.models import ImageSpecField
+from pilkit.processors import Crop, ResizeToFit, Adjust, Transpose
 
 from django_fsm.db.fields import FSMField, transition
 
@@ -21,7 +20,6 @@ from django.contrib.contenttypes import generic
 from django.contrib.auth.models import User
 from django.contrib.gis.db import models
 from django.conf import settings
-from django.contrib.auth.models import User
 from django.contrib.gis.geos import Point
 from django.core.cache import cache
 from django.db.models import permalink, Q, signals, Count, Sum
@@ -40,7 +38,7 @@ from payments import paypal_payment
 
 from eloue.geocoder import GoogleGeocoder
 from eloue.signals import post_save_sites, pre_delete_creditcard
-from eloue.utils import create_alternative_email, cache_to, json
+from eloue.utils import create_alternative_email, json
 
 
 DEFAULT_CURRENCY = get_format('CURRENCY')
@@ -50,40 +48,45 @@ log = logbook.Logger('eloue.accounts')
 def upload_to(instance, filename):
     return 'pictures/avatars/%s.jpg' % uuid.uuid4().hex
 
+# FIXME: either this model is obsoleted and should be removed therefore, or new and not used yet
 class Avatar(models.Model):
 
     patron = models.OneToOneField(User, related_name='avatar_old')
     image = models.ImageField(upload_to=upload_to)
     created_at = models.DateTimeField(editable=False, auto_now_add=True)
 
-    thumbnail = ImageSpec(
+    thumbnail = ImageSpecField(
+        source='image',
         processors=[
-            resize.Crop(width=60, height=60), 
+            Crop(width=60, height=60),
             Adjust(contrast=1.2, sharpness=1.1),
             Transpose(Transpose.AUTO),
-        ], image_field='image', pre_cache=True, cache_to=cache_to
+        ],
     )
-    profil = ImageSpec(
+    profil = ImageSpecField(
+        source='image',
         processors=[
-            resize.Fit(width=100), 
+            ResizeToFit(width=100),
             Adjust(contrast=1.2, sharpness=1.1),
             Transpose(Transpose.AUTO),
-        ], image_field='image', pre_cache=True, cache_to=cache_to
+        ],
     )
-    display = ImageSpec(
+    display = ImageSpecField(
+        source='image',
         processors=[
-            resize.Fit(width=180), 
+            ResizeToFit(width=180),
             Adjust(contrast=1.2, sharpness=1.1),
             Transpose(Transpose.AUTO),
-        ], image_field='image', pre_cache=True, cache_to=cache_to
+        ],
     )
     
-    product_page = ImageSpec(
+    product_page = ImageSpecField(
+        source='image',
         processors=[
-            resize.Fit(width=74, height=74), 
+            ResizeToFit(width=74, height=74),
             Adjust(contrast=1.2, sharpness=1.1),
             Transpose(Transpose.AUTO),
-        ], image_field='image', pre_cache=True, cache_to=cache_to
+        ],
     )
     def delete(self, *args, **kwargs):
         self.image.delete()
@@ -140,34 +143,38 @@ class Patron(User):
 
     url = models.URLField(_(u"Site internet"), blank=True)
 
-    thumbnail = ImageSpec(
+    thumbnail = ImageSpecField(
+        source='avatar',
         processors=[
-            resize.Crop(width=60, height=60), 
+            Crop(width=60, height=60),
             Adjust(contrast=1.2, sharpness=1.1),
             Transpose(Transpose.AUTO),
-        ], image_field='avatar', pre_cache=True, cache_to=cache_to
+        ],
     )
-    profil = ImageSpec(
+    profil = ImageSpecField(
+        source='avatar',
         processors=[
-            resize.Fit(width=100), 
+            ResizeToFit(width=100),
             Adjust(contrast=1.2, sharpness=1.1),
             Transpose(Transpose.AUTO),
-        ], image_field='avatar', pre_cache=True, cache_to=cache_to
+        ],
     )
-    display = ImageSpec(
+    display = ImageSpecField(
+        source='avatar',
         processors=[
-            resize.Fit(width=180), 
+            ResizeToFit(width=180),
             Adjust(contrast=1.2, sharpness=1.1),
             Transpose(Transpose.AUTO),
-        ], image_field='avatar', pre_cache=True, cache_to=cache_to
+        ],
     )
-    
-    product_page = ImageSpec(
+
+    product_page = ImageSpecField(
+        source='avatar',
         processors=[
-            resize.Fit(width=74, height=74), 
+            ResizeToFit(width=74, height=74),
             Adjust(contrast=1.2, sharpness=1.1),
             Transpose(Transpose.AUTO),
-        ], image_field='avatar', pre_cache=True, cache_to=cache_to
+        ],
     )
     
     def save(self, *args, **kwargs):

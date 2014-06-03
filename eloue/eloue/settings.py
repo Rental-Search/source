@@ -189,7 +189,6 @@ INSTALLED_APPS = (
     'announcements',
     'haystack',
     'queued_search',
-    'django_nose',
     'django_messages',
     'oauth_provider',
     'faq',
@@ -199,7 +198,8 @@ INSTALLED_APPS = (
     'payments',
     'contest',
     'eloue.api',
-    'south', # South must be the last in the apps list
+    'south', # South must be the last in the list of applications that contains models
+    'django_nose', # Make sure that django-nose comes after south in INSTALLED_APPS so that django_nose's test command is used.
 )
 if DEBUG_TOOLBAR:
     INSTALLED_APPS += ('debug_toolbar',)
@@ -226,6 +226,10 @@ MESSAGE_STORAGE = getattr(local, 'MESSAGE_STORAGE', 'django.contrib.messages.sto
 # Session configuration
 SESSION_ENGINE = local.SESSION_ENGINE
 SESSION_COOKIE_DOMAIN = local.SESSION_COOKIE_DOMAIN
+
+#imagekit configuration
+IMAGEKIT_SPEC_CACHEFILE_NAMER = 'imagekit.cachefiles.namers.source_name_dot_hash'
+IMAGEKIT_DEFAULT_CACHEFILE_STRATEGY = 'eloue.legacy.GenerateOnDownload'
 
 #pipeline configuration
 PIPELINE = getattr(local, 'PIPELINE', not DEBUG)

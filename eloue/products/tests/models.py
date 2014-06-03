@@ -102,14 +102,53 @@ class ProductTest(TransactionTestCase):
 class PictureTest(TransactionTestCase):
     reset_sequences = True
 
-    def test_ensure_delete(self):
+    def setUp(self):
         f = open(local_path('../fixtures/bentley.jpg'))
-        picture = Picture.objects.create(image=File(f))
-        image_path = picture.image.path
+        self.picture = Picture.objects.create(image=File(f))
+
+    def tearDown(self):
+        if self.picture is not None:
+            self.picture.delete()
+
+    def test_ensure_delete(self):
+        image_path = self.picture.image.path
         self.assertTrue(os.path.exists(image_path))
-        picture.delete()
+        self.picture.delete()
         self.assertFalse(os.path.exists(image_path))
-    
+        self.picture = None
+
+    def test_ensure_imagespecs(self):
+        self.assertTrue(self.picture.thumbnail.url)
+        thumbnail_path = self.picture.thumbnail.path
+        self.assertFalse(os.path.exists(thumbnail_path))
+        self.picture.thumbnail.open()
+        self.assertTrue(os.path.exists(thumbnail_path))
+        self.picture.thumbnail.close()
+        os.unlink(thumbnail_path)
+
+        self.assertTrue(self.picture.profile.url)
+        profile_path = self.picture.profile.path
+        self.assertFalse(os.path.exists(profile_path))
+        self.picture.profile.open()
+        self.assertTrue(os.path.exists(profile_path))
+        self.picture.profile.close()
+        os.unlink(profile_path)
+
+        self.assertTrue(self.picture.home.url)
+        home_path = self.picture.home.path
+        self.assertFalse(os.path.exists(home_path))
+        self.picture.home.open()
+        self.assertTrue(os.path.exists(home_path))
+        self.picture.home.close()
+        os.unlink(home_path)
+
+        self.assertTrue(self.picture.display.url)
+        display_path = self.picture.display.path
+        self.assertFalse(os.path.exists(display_path))
+        self.picture.display.open()
+        self.assertTrue(os.path.exists(display_path))
+        self.picture.display.close()
+        os.unlink(display_path)
 
 class ProductReviewTest(TransactionTestCase):
     reset_sequences = True

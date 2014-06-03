@@ -18,6 +18,11 @@ from haystack.query import SearchQuerySet
 from haystack.utils.geo import D, Point
 
 
+class GenerateOnDownload(object):
+    def on_content_required(self, spec):
+        spec.generate()
+
+
 class CompatSearchQuerySet(SearchQuerySet):
     def spatial(self, long=None, lat=None, radius=None, unit='km'):
         return self.dwithin('location', Point(long, lat), D(**{unit: radius}))

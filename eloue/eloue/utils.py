@@ -2,7 +2,6 @@
 import hashlib
 import hmac
 import locale
-import os
 
 from decimal import ROUND_UP, ROUND_DOWN, Decimal as D
 from urlparse import urlparse, urljoin
@@ -105,12 +104,6 @@ def convert_from_xpf(value):
 def convert_to_xpf(value):
     amount = value / D(settings.XPF_EXCHANGE_RATE)
     return amount.quantize(D("0.00"), rounding=ROUND_UP)
-
-def cache_to(instance, path, specname, extension):
-    filepath, basename = os.path.split(path)
-    filename = os.path.splitext(basename)[0]
-    new_name = '{0}_{1}{2}'.format(specname, filename, extension)
-    return os.path.join(os.path.join('media', filepath), new_name)
 
 class Enum(object):
     """
