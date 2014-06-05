@@ -4,8 +4,6 @@ from decimal import Decimal as D
 
 from django.test import TransactionTestCase
 
-from pyke.knowledge_engine import CanNotProve
-
 from products.models import Product
 from products.choices import UNIT
 from rent.models import Booking

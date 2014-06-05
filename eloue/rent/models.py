@@ -5,16 +5,14 @@ import types
 import random
 import urllib
 
-from decimal import Decimal as D, ROUND_CEILING, ROUND_FLOOR
+from decimal import Decimal as D
 from django_fsm.db.fields import FSMField, transition
 from django_fsm.signals import post_transition
 from pyke import knowledge_engine
-from urlparse import urljoin
 from datetime import timedelta
 
 
 from django.conf import settings
-from django.core.urlresolvers import reverse
 from django.core.validators import MaxValueValidator
 from django.contrib.sites.models import Site
 from django.contrib.contenttypes.models import ContentType
@@ -26,27 +24,26 @@ from django.dispatch.dispatcher import receiver
 from django.utils.formats import get_format
 from django.utils.translation import ugettext_lazy as _
 from django.db.models import Q
-from django.core.urlresolvers import reverse
 
 from accounts.models import Patron
 from products.models import Product
-from products.choices import CURRENCY, PAYMENT_TYPE
+from products.choices import CURRENCY
 from products.signals import post_save_to_update_product
 from rent.choices import BOOKING_STATE, PACKAGES_UNIT, PACKAGES
 from rent.decorators import incr_sequence
 from rent.fields import UUIDField, IntegerAutoField
 from rent.manager import BookingManager, CurrentSiteBookingManager
-from payments.paypal_payment import AdaptivePapalPayments, PaypalError
+from payments.paypal_payment import AdaptivePapalPayments
 from payments.non_payment import NonPayments
-from payments.fsm_transition import smart_transition
 
 from eloue.signals import post_save_sites
-from eloue.utils import create_alternative_email, convert_from_xpf
+from eloue.utils import create_alternative_email
 
 
 PAY_PROCESSORS = (NonPayments, AdaptivePapalPayments)
 
-DEFAULT_CURRENCY = get_format('CURRENCY') if not settings.CONVERT_XPF else "XPF"
+# FIXME: a regression has appeared that get_format() returns values for en-gb instead of fr-fr
+DEFAULT_CURRENCY = get_format('CURRENCY', lang=settings.LANGUAGE_CODE) if not settings.CONVERT_XPF else "XPF"
 
 
 USE_HTTPS = getattr(settings, 'USE_HTTPS', True)
@@ -176,6 +173,7 @@ class Booking(models.Model):
     def calculate_price(product, started_at, ended_at):
         delta = ended_at - started_at
         
+        # TODO: can we cache the engine, or have it as a singleton?
         engine = knowledge_engine.engine((__file__, '.rules'))
         engine.activate('pricing')
         prices = product.prices.all()

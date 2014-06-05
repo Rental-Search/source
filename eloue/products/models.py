@@ -57,7 +57,8 @@ copy._deepcopy_dispatch[types.MethodType] = _deepcopy_method
 
 INSURANCE_MAX_DEPOSIT = getattr(settings, 'INSURANCE_MAX_DEPOSIT', 750)
 DEFAULT_RADIUS = getattr(settings, 'DEFAULT_RADIUS', 50)
-DEFAULT_CURRENCY = get_format('CURRENCY') if not settings.CONVERT_XPF else "XPF"
+# FIXME: a regression has appeared that get_format() returns values for en-gb instead of fr-fr
+DEFAULT_CURRENCY = get_format('CURRENCY', lang=settings.LANGUAGE_CODE) if not settings.CONVERT_XPF else "XPF"
 
 ALERT_RADIUS = getattr(settings, 'ALERT_RADIUS', 200)
 
