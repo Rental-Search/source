@@ -5,7 +5,7 @@ from functools import partial
 from django.conf import settings
 from django.conf.urls import patterns, url, include
 from django.contrib import admin
-from django.contrib.auth.views import logout_then_login, password_reset, password_reset_confirm, password_reset_done, password_reset_complete
+from django.contrib.auth.views import logout_then_login, password_reset, password_reset_confirm, password_reset_confirm_uidb36, password_reset_done, password_reset_complete
 from django.contrib.sitemaps.views import index, sitemap
 from django.utils import translation
 from django.utils.translation import ugettext as _
@@ -49,10 +49,15 @@ urlpatterns = patterns('',
     url(r'^reset/done/$', password_reset_done, {
         'template_name': 'accounts/password_reset_done.html'
     }, name="password_reset_done"),
-    url(r'^reset/(?P<uidb36>[0-9A-Za-z]+)-(?P<token>.+)/$', password_reset_confirm, {
+    url(r'^reset/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$', password_reset_confirm, {
         'set_password_form': PatronSetPasswordForm,
         'template_name': 'accounts/password_reset_confirm.html'
     }, name="password_reset_confirm"),
+    # TODO: You can remove this url pattern after your app has been deployed with Django 1.6 for PASSWORD_RESET_TIMEOUT_DAYS (3 days).
+    url(r'^reset/(?P<uidb36>[0-9A-Za-z]+)-(?P<token>.+)/$', password_reset_confirm_uidb36, {
+        'set_password_form': PatronSetPasswordForm,
+        'template_name': 'accounts/password_reset_confirm.html'
+    }),
     url(r'^reset/complete/$', password_reset_complete, {
         'template_name': 'accounts/password_reset_complete.html'
     }, name="password_reset_complete"),
@@ -83,10 +88,15 @@ urlpatterns = patterns('',
     url(r'^lists/car/(?P<offset>[0-9]*)$', partial(homepage_object_list, search_index=car_search), name=''),
     url(r'^lists/realestate/(?P<offset>[0-9]*)$', partial(homepage_object_list, search_index=realestate_search), name=''),
     url(r'^%s/$' % 'recherche', search, name="search"),
-    url(r'^propw/(?P<uidb36>[0-9A-Za-z]+)-(?P<token>.+)/$', password_reset_confirm, {
+    url(r'^propw/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$', password_reset_confirm, {
         'set_password_form': PatronSetPasswordForm,
         'template_name': 'accounts/professional_password_reset_confirm.html',
     }, name="propw"),
+    # TODO: You can remove this url pattern after your app has been deployed with Django 1.6 for PASSWORD_RESET_TIMEOUT_DAYS (3 days).
+    url(r'^propw/(?P<uidb36>[0-9A-Za-z]+)-(?P<token>.+)/$', password_reset_confirm_uidb36, {
+        'set_password_form': PatronSetPasswordForm,
+        'template_name': 'accounts/professional_password_reset_confirm.html',
+    }),
 )
 
 handler404 = 'eloue.views.custom404'

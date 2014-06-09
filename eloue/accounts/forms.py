@@ -8,7 +8,7 @@ from form_utils.forms import BetterForm, BetterModelForm
 from django.conf import settings
 from django.contrib.auth import authenticate, get_user_model
 from django.contrib.auth.hashers import is_password_usable
-from django.contrib.sites.models import Site
+from django.contrib.sites.models import Site, get_current_site
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.tokens import default_token_generator
 from django.forms.fields import EMPTY_VALUES
@@ -17,7 +17,8 @@ from django.forms.models import inlineformset_factory, BaseInlineFormSet
 from django.template.defaultfilters import slugify
 from django.template.loader import render_to_string
 from django.utils.datastructures import SortedDict
-from django.utils.http import int_to_base36
+from django.utils.http import urlsafe_base64_encode
+from django.utils.encoding import force_bytes
 from django.utils.translation import ugettext as _
 from django.forms.formsets import ORDERING_FIELD_NAME, DELETION_FIELD_NAME
 import facebook
@@ -262,12 +263,18 @@ class EmailPasswordResetForm(forms.Form):
             raise forms.ValidationError(self.error_messages['unusable'])
         return email
 
-    def save(self, domain_override=None, use_https=False, token_generator=default_token_generator, email_template_name='registration/password_reset_email', **kwargs):
-        """Generates a one-use only link for resetting password and sends to the user"""
+    def save(self, domain_override=None,
+             email_template_name='registration/password_reset_email.html',
+             use_https=False, token_generator=default_token_generator,
+             request=None, **kwargs):
+        """
+        Generates a one-use only link for resetting password and sends to the
+        user.
+        """
         from django.core.mail import EmailMultiAlternatives
         for user in self.users_cache:
             if not domain_override:
-                current_site = Site.objects.get_current()
+                current_site = get_current_site(request) if request else Site.objects.get_current()
                 site_name = current_site.name
                 domain = current_site.domain
             else:
@@ -276,15 +283,12 @@ class EmailPasswordResetForm(forms.Form):
                 'email': user.email,
                 'domain': domain,
                 'site_name': site_name,
-                'uid': int_to_base36(user.id),
+                'uid': urlsafe_base64_encode(force_bytes(user.pk)),
                 'patron': user,
                 'token': token_generator.make_token(user),
-                'protocol': use_https and 'https' or 'http',
+                'protocol': 'https' if use_https else 'http',
             }
-            subject = render_to_string(
-                email_template_name + '_subject.txt', 
-                {'patron': user, 'site': Site.objects.get_current()}
-            )
+            subject = render_to_string(email_template_name + '_subject.txt', context)
             text_content = render_to_string(email_template_name + '.txt', context)
             html_content = render_to_string(email_template_name + '.html', context)
             message = EmailMultiAlternatives(subject, text_content, settings.DEFAULT_FROM_EMAIL, [user.email])
