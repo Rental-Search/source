@@ -3,15 +3,14 @@ import types
 import re
 import datetime
 
-import django.forms as forms
+from django import forms
 from form_utils.forms import BetterForm, BetterModelForm
 from django.conf import settings
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, get_user_model
+from django.contrib.auth.hashers import is_password_usable
 from django.contrib.sites.models import Site
-from django.contrib.auth.models import UserManager
-from django.contrib.auth.forms import PasswordResetForm, PasswordChangeForm, SetPasswordForm, UserCreationForm
+from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.tokens import default_token_generator
-from django.core import validators
 from django.forms.fields import EMPTY_VALUES
 from django.forms.formsets import formset_factory, BaseFormSet
 from django.forms.models import inlineformset_factory, BaseInlineFormSet
@@ -20,20 +19,16 @@ from django.template.loader import render_to_string
 from django.utils.datastructures import SortedDict
 from django.utils.http import int_to_base36
 from django.utils.translation import ugettext as _
-from django.dispatch import dispatcher
-from django.utils.safestring import mark_safe
 from django.forms.formsets import ORDERING_FIELD_NAME, DELETION_FIELD_NAME
 import facebook
 
 from accounts import EMAIL_BLACKLIST
 from accounts.fields import PhoneNumberField, ExpirationField, RIBField, DateSelectField, CreditCardField
-from accounts.models import Patron, Avatar, PhoneNumber, CreditCard, PatronAccepted, FacebookSession, Address, Language, OpeningTimes, IDNSession
+from accounts.models import Patron, PhoneNumber, CreditCard, FacebookSession, Address, Language, OpeningTimes, IDNSession
 from accounts.choices import COUNTRY_CHOICES, STATE_CHOICES, PAYPAL_ACCOUNT_CHOICES
 from accounts.widgets import ParagraphRadioFieldRenderer, CommentedCheckboxInput
-from payments import paypal_payment
 from payments.paybox_payment import PayboxManager, PayboxException
 
-from eloue.utils import form_errors_append
 from eloue import legacy
 
 class FacebookForm(forms.Form):
@@ -240,11 +235,33 @@ class EmailAuthenticationForm(forms.Form):
         return self.user_cache
     
 
-class EmailPasswordResetForm(PasswordResetForm):
+class EmailPasswordResetForm(forms.Form):
+    error_messages = {
+        'unknown': _("That email address doesn't have an associated "
+                     "user account. Are you sure you've registered?"),
+        'unusable': _("The user account associated with this email "
+                      "address cannot reset the password."),
+    }
+
     email = forms.EmailField(label=_("Email"), max_length=75, widget=forms.TextInput(attrs={
         'autocapitalize': 'off', 'autocorrect': 'off', 'class': 'inb'
     }))
-    
+
+    def clean_email(self):
+        """
+        Validates that an active user exists with the given email address.
+        """
+        UserModel = get_user_model()
+        email = self.cleaned_data['email']
+        self.users_cache = UserModel._default_manager.filter(
+            email__iexact=email, is_active=True)
+        if not len(self.users_cache):
+            raise forms.ValidationError(self.error_messages['unknown'])
+        if any(not is_password_usable(user.password)
+               for user in self.users_cache):
+            raise forms.ValidationError(self.error_messages['unusable'])
+        return email
+
     def save(self, domain_override=None, use_https=False, token_generator=default_token_generator, email_template_name='registration/password_reset_email', **kwargs):
         """Generates a one-use only link for resetting password and sends to the user"""
         from django.core.mail import EmailMultiAlternatives
@@ -534,7 +551,7 @@ class PhoneNumberForm(forms.ModelForm):
         return self.cleaned_data['number']
     
     def clean(self):
-        if self.cleaned_data['DELETE'] and self.instance.patron.default_number == self.instance:
+        if self.cleaned_data.get('DELETE', False) and self.instance.patron.default_number == self.instance:
             raise forms.ValidationError(_(u'Vous ne pouvez pas supprimer votre numéro par default.'))
         return self.cleaned_data
 
