@@ -11,8 +11,9 @@ from django.utils.crypto import constant_time_compare
 from django.utils.translation import ugettext_lazy as _
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_protect
-
 from django.contrib.formtools.utils import form_hmac
+from django.core.exceptions import ValidationError
+from django import forms
 
 from haystack.query import SearchQuerySet
 from haystack.utils.geo import D, Point
@@ -26,6 +27,34 @@ class GenerateOnDownload(object):
 class CompatSearchQuerySet(SearchQuerySet):
     def spatial(self, long=None, lat=None, radius=None, unit='km'):
         return self.dwithin('location', Point(lat, long), D(**{unit: radius}))
+
+
+# TODO: remove backported forms.fields.TypedChoiceField from Django 1.7b4 after upgrade to Django 1.7 release
+class TypedChoiceField(forms.ChoiceField):
+    def __init__(self, *args, **kwargs):
+        self.coerce = kwargs.pop('coerce', lambda val: val)
+        self.empty_value = kwargs.pop('empty_value', '')
+        super(TypedChoiceField, self).__init__(*args, **kwargs)
+
+    def _coerce(self, value):
+        """
+        Validate that the value can be coerced to the right type (if not empty).
+        """
+        if value == self.empty_value or value in self.empty_values:
+            return self.empty_value
+        try:
+            value = self.coerce(value)
+        except (ValueError, TypeError, ValidationError):
+            raise ValidationError(
+                self.error_messages['invalid_choice'],
+                code='invalid_choice',
+                params={'value': value},
+            )
+        return value
+
+    def clean(self, value):
+        value = super(TypedChoiceField, self).clean(value)
+        return self._coerce(value)
 
 
 class FormWizard(object):

@@ -17,6 +17,8 @@ from rent.utils import get_product_occupied_date, datespan, DATE_FORMAT
 from rent.choices import TIME_CHOICE
 from django.db.models import Q
 
+from eloue import legacy
+
 log = logbook.Logger('eloue.rent')
 
 BOOKING_DAYS = getattr(settings, 'BOOKING_DAYS', 85)
@@ -84,7 +86,7 @@ class DateTimeField(forms.MultiValueField):
     
 
 class PreApprovalIPNForm(forms.Form):
-    approved = forms.TypedChoiceField(required=True, coerce=lambda x: x == 'true', choices=(('true', 'True'), ('false', 'False')))
+    approved = legacy.TypedChoiceField(required=True, coerce=lambda x: x == 'true', choices=(('true', 'True'), ('false', 'False')))
     preapproval_key = forms.CharField(required=True)
     currency_code = forms.CharField()
     starting_date = ISO8601DateTimeField(required=True)

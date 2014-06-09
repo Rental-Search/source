@@ -9,6 +9,8 @@ from django import forms
 from django.utils.encoding import smart_unicode
 from django.utils.translation import ugettext as _
 
+from eloue import legacy
+
 DIGITS_ONLY = re.compile('(\(\d\)|[^\d+])')
 
 
@@ -194,9 +196,9 @@ class DateSelectField(forms.MultiValueField):
     def __init__(self, min_year=1900, max_year=2012, *args, **kwargs):
         self.YEARS = [('', 'Année')] + [(x, x) for x in xrange(max_year, min_year, -1)]
         fields = (
-            forms.TypedChoiceField(coerce=int, choices=self.DAYS),
-            forms.TypedChoiceField(coerce=int, choices=self.MONTHS),
-            forms.TypedChoiceField(coerce=int, choices=self.YEARS),
+            legacy.TypedChoiceField(coerce=int, choices=self.DAYS),
+            legacy.TypedChoiceField(coerce=int, choices=self.MONTHS),
+            legacy.TypedChoiceField(coerce=int, choices=self.YEARS),
         )
         self.widget = DateSelectWidget(widgets=[field.widget for field in fields])
         self.hidden_widget = DateSelectWidget(widgets=[field.hidden_widget for field in fields])

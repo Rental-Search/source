@@ -26,6 +26,7 @@ from products.widgets import PriceTextInput, CommentedSelectInput, CommentedText
 from products.choices import UNIT, PAYMENT_TYPE, SORT
 
 from eloue.geocoder import GoogleGeocoder
+from eloue import legacy
 
 if "notification" in settings.INSTALLED_APPS:
     from notification import models as notification
@@ -249,14 +250,13 @@ class ProductForm(BetterModelForm):
     two_weeks_price = forms.DecimalField(label=_(u"Les 15 jours"), required=False, max_digits=10, decimal_places=2, min_value=D('0.01'), widget=PriceTextInput(attrs={'class': 'price'}), localize=True)
     month_price = forms.DecimalField(label=_(u"Le mois"), required=False, max_digits=10, decimal_places=2, min_value=D('0.01'), widget=PriceTextInput(attrs={'class': 'price'}), localize=True)
 
+    category = legacy.TypedChoiceField(label=_(u"Catégorie"), coerce=lambda pk: Category.on_site.get(pk=pk), choices=())
+
     def __init__(self, *args, **kwargs):
         super(ProductForm, self).__init__(*args, **kwargs)
         self.title = _(u'Ajouter un objet')
         self.header = _(u'Donnez envie aux e-loueurs potentiels de louer votre objet.')
-        self.fields['category'] = forms.TypedChoiceField(
-            label=_(u"Catégorie"), coerce=lambda pk: Category.tree.get(pk=pk), 
-            choices=generate_choices((cat.slug for cat in Category.on_site.filter(parent=None) if cat.slug not in ['motors', 'automobile', 'location-saisonniere']))
-        )
+        self.fields['category'].choices = list(generate_choices(Category.on_site.filter(parent=None).exclude(slug__in=['motors', 'automobile', 'location-saisonniere']).values_list('slug', flat=True)))
 
     def clean_quantity(self):
         quantity = self.cleaned_data['quantity']
@@ -316,10 +316,7 @@ class CarProductForm(ProductForm):
         super(CarProductForm, self).__init__(*args, **kwargs)
         self.title = _(u'Ajouter une voiture')
         self.header = _(u'Votre voiture peut être très utile. Donnez envie aux e-loueurs potentiels de louer votre véhicule.')
-        self.fields['category'] = forms.TypedChoiceField(
-            label=_(u"Catégorie"), coerce=lambda pk: Category.tree.get(pk=pk), 
-            choices=generate_choices(('automobile',))
-        )
+        self.fields['category'].choices = list(generate_choices(('automobile',)))
 
     def clean(self):
         self.cleaned_data['summary'] = u'{brand} - {model}'.format(
@@ -381,10 +378,7 @@ class RealEstateForm(ProductForm):
         super(RealEstateForm, self).__init__(*args, **kwargs)
         self.title = _(u'Ajouter un logement')
         self.header = _(u'Votre logement est unique. Donnez envie aux e-loueurs potentiels de venir y séjourner.')
-        self.fields['category'] = forms.TypedChoiceField(
-            label=_(u"Catégorie"), coerce=lambda pk: Category.tree.get(pk=pk), 
-            choices=generate_choices(('location-saisonniere', ))
-        )
+        self.fields['category'].choices = list(generate_choices(('location-saisonniere',)))
 
     class Meta:
         model = RealEstateProduct
@@ -425,14 +419,11 @@ class ProductEditForm(BetterModelForm):
     quantity = forms.IntegerField(label=_(u"Quantité"), initial=1, widget=forms.TextInput(attrs={'class': 'price'}), help_text=_(u"Le locataire peut réserver plusieurs exemplaires si vous les possédez"))
     shipping = forms.BooleanField(label=_(u"Livraison possible"), required=False, initial=False, widget=CommentedCheckboxInput(info_text='J\'accepte de livrer partout en France avec la navette pickup (service disponible à partir de septembre).'))
 
+    category = legacy.TypedChoiceField(label=_(u"Catégorie"), coerce=lambda pk: Category.on_site.get(pk=pk), choices=())
+
     def __init__(self, *args, **kwargs):
         super(ProductEditForm, self).__init__(*args, **kwargs)
-        self.fields['category'] = forms.TypedChoiceField(
-            label=_(u"Catégorie"), coerce=lambda pk: Category.tree.get(pk=pk), 
-            choices=generate_choices(
-                (cat.slug for cat in Category.on_site.filter(parent=None) if cat.slug not in ['auto-et-moto', 'hebergement', 'motors', 'automobile', 'location-saisonniere']), None
-            )
-        )
+        self.fields['category'].choices = list(generate_choices(Category.on_site.filter(parent=None).exclude(slug__in=['auto-et-moto', 'hebergement', 'motors', 'automobile', 'location-saisonniere']).values_list('slug', flat=True), None))
     class Meta:
         model = Product
         fieldsets = [
@@ -483,10 +474,7 @@ class CarProductEditForm(ProductEditForm):
     def __init__(self, *args, **kwargs):
         super(CarProductEditForm, self).__init__(*args, **kwargs)
         del self.fields['quantity']
-        self.fields['category'] = forms.TypedChoiceField(
-            label=_(u"Catégorie"), coerce=lambda pk: Category.tree.get(pk=pk), 
-            choices=generate_choices(('automobile',), None)
-        )
+        self.fields['category'].choices = list(generate_choices(('automobile',), None))
 
     def clean(self):
         if self.errors:
@@ -531,11 +519,8 @@ class CarProductEditForm(ProductEditForm):
 class RealEstateEditForm(ProductEditForm):
     def __init__(self, *args, **kwargs):
         super(RealEstateEditForm, self).__init__(*args, **kwargs)
-        self.fields['category'] = forms.TypedChoiceField(
-            label=_(u"Catégorie"), coerce=lambda pk: Category.tree.get(pk=pk), 
-            choices=generate_choices(('location-saisonniere', ), None)
-        )
         del self.fields['quantity']
+        self.fields['category'].choices = list(generate_choices(('location-saisonniere',), None))
     
     class Meta:
         model = RealEstateProduct

@@ -34,6 +34,7 @@ from payments import paypal_payment
 from payments.paybox_payment import PayboxManager, PayboxException
 
 from eloue.utils import form_errors_append
+from eloue import legacy
 
 class FacebookForm(forms.Form):
     
@@ -93,7 +94,7 @@ class FacebookForm(forms.Form):
 
 class EmailAuthenticationForm(forms.Form):
     """Displays the login form and handles the login action."""
-    exists = forms.TypedChoiceField(required=True, coerce=int, choices=STATE_CHOICES, widget=forms.RadioSelect(renderer=ParagraphRadioFieldRenderer), initial=1)
+    exists = legacy.TypedChoiceField(required=True, coerce=int, choices=STATE_CHOICES, widget=forms.RadioSelect(renderer=ParagraphRadioFieldRenderer), initial=1)
     email = forms.EmailField(label=_(u"Email"), max_length=75, required=False, widget=forms.TextInput(attrs={
         'autocapitalize': 'off', 'autocorrect': 'off', 'class': 'inm', 'tabindex': '1', 'placeholder': _(u"Email")
     }))
@@ -507,7 +508,7 @@ class PatronCreationForm(UserCreationForm):
 class PatronPaypalForm(forms.ModelForm):
     paypal_email = forms.EmailField(required=False, label=_("E-mail"), max_length=75, widget=forms.TextInput(attrs={
         'autocapitalize': 'off', 'autocorrect': 'off', 'class': 'inm'}))
-    paypal_exists = forms.TypedChoiceField(required=True, coerce=int, choices=PAYPAL_ACCOUNT_CHOICES, widget=forms.RadioSelect(renderer=ParagraphRadioFieldRenderer), initial=1)
+    paypal_exists = legacy.TypedChoiceField(required=True, coerce=int, choices=PAYPAL_ACCOUNT_CHOICES, widget=forms.RadioSelect(renderer=ParagraphRadioFieldRenderer), initial=1)
     
     def clean(self):
         paypal_email = self.cleaned_data.get('paypal_email', None)
