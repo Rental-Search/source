@@ -549,11 +549,6 @@ class PatronPaypalForm(forms.ModelForm):
 class PhoneNumberForm(forms.ModelForm):
     number = PhoneNumberField(label=_(u"Téléphone"), widget=forms.TextInput(attrs={'class': 'inm'}), required=False)
 
-    def clean_number(self):
-        if not self.cleaned_data['number']:
-            raise forms.ValidationError(_(u"Vous devez spécifiez un numéro de téléphone"))
-        return self.cleaned_data['number']
-    
     def clean(self):
         if self.cleaned_data.get('DELETE', False) and self.instance.patron.default_number == self.instance:
             raise forms.ValidationError(_(u'Vous ne pouvez pas supprimer votre numéro par default.'))

@@ -11,7 +11,7 @@ from django.utils.translation import ugettext as _
 
 from eloue import legacy
 
-DIGITS_ONLY = re.compile('(\(\d\)|[^\d+])')
+DIGITS_ONLY = re.compile(r'(\(\d\)|[^\d+])', re.U)
 
 
 class PhoneNumberField(forms.Field):
@@ -33,8 +33,10 @@ class PhoneNumberField(forms.Field):
         """
         if not value:
             return u''
-        return re.sub(DIGITS_ONLY, '', smart_unicode(value))
-
+        res = DIGITS_ONLY.sub('', smart_unicode(value))
+        if not res and value:
+            raise forms.ValidationError(_(u'Vous devez spécifiez un numéro de téléphone'))
+        return res
 
 
 class CreditCardField(forms.CharField):
