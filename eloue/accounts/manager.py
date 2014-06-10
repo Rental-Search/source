@@ -2,11 +2,12 @@
 import hashlib
 import random
 import re
-import datetime
 
 from django.contrib.auth.models import UserManager
 from django.contrib.gis.db.models import GeoManager
 from django.db.models import Q
+from django.utils import timezone
+from django.template.defaultfilters import slugify
 
 SHA1_RE = re.compile('^[a-f0-9]{40}$')
 
@@ -60,15 +61,33 @@ class PatronManager(UserManager, GeoManager):
         salt = hashlib.sha1(str(random.random())).hexdigest()[:5]
         activation_key = hashlib.sha1(salt + email).hexdigest()
         
-        new_patron = self.create_user(username, email, password)
-        new_patron.is_active = False
-        new_patron.activation_key = activation_key
-        new_patron.save()
+        new_patron = self.create_user(
+            username, email, password,
+            is_active=False, activation_key=activation_key
+        )
         
         if send_email:
             new_patron.send_activation_email()
         return new_patron
-        
+
+    def _create_user(self, username, email, password,
+                     is_staff, is_superuser, **extra_fields):
+        """
+        Creates and saves a User with the given username, email and password.
+        """
+        now = timezone.now()
+        if not username:
+            raise ValueError('The given username must be set')
+        email = self.normalize_email(email)
+        slug = extra_fields.pop('slug', slugify(username))
+        user = self.model(username=username, email=email,
+                          is_staff=is_staff, is_active=True,
+                          is_superuser=is_superuser, last_login=now,
+                          date_joined=now, slug=slug, **extra_fields)
+        user.set_password(password)
+        user.full_clean()
+        user.save(using=self._db)
+        return user
     
     def delete_expired(self):
         """

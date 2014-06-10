@@ -26,6 +26,7 @@ from django.conf.urls import url
 from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
 from django.core.urlresolvers import reverse
+from django.core.exceptions import ValidationError
 from django.contrib.gis.geos import Point
 from django.contrib.gis.measure import Distance
 from django.contrib.sites.models import Site
@@ -276,7 +277,9 @@ class UserResource(OAuthResource):
             bundle.obj = Patron.objects.create_user(data["username"], data["email"], data["password"])
         except IntegrityError:
             raise ImmediateHttpResponse(response=HttpBadRequest())
-        except Exception, e:
+        except ValidationError:
+            raise ImmediateHttpResponse(response=HttpBadRequest())
+        except Exception:
             raise ImmediateHttpResponse(response=HttpBadRequest())
 
         return bundle
