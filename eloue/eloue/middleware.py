@@ -5,7 +5,7 @@ import urlparse
 import random
 import time, datetime
 
-import redis
+#import redis
 
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
