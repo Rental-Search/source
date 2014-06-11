@@ -13,6 +13,7 @@ python-mimeparse==0.1.4
 mock==1.0.1
 pylint==1.2.1
 xlrd==0.9.3
+pyPdf==1.13
 reportlab==3.1.8
 south==0.8.4
 sphinx==1.2.2
@@ -38,7 +39,6 @@ django-haystack==2.1.0
 -e git://github.com/e-loue/freshen.git#egg=freshen
 -e git://github.com/e-loue/django-messages.git#egg=django-messages
 -e git://github.com/e-loue/django-faq.git@haystack_2.x#egg=faq
--e git://github.com/e-loue/pyPdf.git#egg=pyPdf
 -e git://github.com/e-loue/python-oauth2.git#egg=oauth2
 -e git://github.com/e-loue/django-announcements.git#egg=announcements
 -e git://github.com/e-loue/django-lean.git#egg=django_lean
