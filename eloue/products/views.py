@@ -750,5 +750,5 @@ def product_xml_list_criteo(request):
         content_type="text/xml")
 
 
-
-
+def product_xml_list_snowglobe(request):
+    return render(request, 'products/product_template_snowglobe.xml', {'products': product_search.all().order_by('-created_at')}, content_type="text/xml")

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<products>
+	{% for product in products %}
+	<product id="{{product.pk}}">
+		{% if product.categories %}
+		{% for category in product.categories %}
+			<category_{{forloop.counter}}>{{ category }}</category_{{forloop.counter}}>
+		{% endfor %}
+		{% endif %}
+		{% if product.summary %}
+		<title>{{ product.summary }}</title>
+		{% endif %}
+		{% if product.city %}
+		<city>{{ product.city }}</city>
+		{% endif %}
+		{% if product.zipcode %}
+		<zipcode>{{ product.zipcode }}</zipcode>
+		{% endif %}
+		{% if product.description %}
+		<description>{{ product.description }}</description>
+		{% endif %}
+	</product>
+	{% endfor %}
+</products>
