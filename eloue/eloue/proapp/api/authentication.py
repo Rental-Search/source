@@ -9,6 +9,7 @@ from django.core.exceptions import ImproperlyConfigured
 from django.middleware.csrf import _sanitize_token, constant_time_compare
 from django.utils.http import same_origin
 from django.utils.translation import ugettext as _
+from django.contrib.auth.models import get_user_model
 from tastypie.http import HttpUnauthorized
 
 try:
@@ -178,7 +179,7 @@ class ApiKeyAuthentication(Authentication):
         Should return either ``True`` if allowed, ``False`` if not or an
         ``HttpResponse`` if you need something custom.
         """
-        from django.contrib.auth.models import User
+        User = get_user_model
 
         try:
             username, api_key = self.extract_credentials(request)
@@ -357,7 +358,7 @@ class DigestAuthentication(Authentication):
         return True
 
     def get_user(self, username):
-        from django.contrib.auth.models import User
+        User = get_user_model()
 
         try:
             user = User.objects.get(username=username)

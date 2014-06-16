@@ -17,7 +17,7 @@ from django.contrib.sites.managers import CurrentSiteManager
 from django.contrib.sites.models import Site
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
-from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractUser
 from django.contrib.gis.db import models
 from django.conf import settings
 from django.contrib.gis.geos import Point
@@ -51,7 +51,7 @@ def upload_to(instance, filename):
 # FIXME: either this model is obsoleted and should be removed therefore, or new and not used yet
 class Avatar(models.Model):
 
-    patron = models.OneToOneField(User, related_name='avatar_old')
+    patron = models.OneToOneField(settings.AUTH_USER_MODEL, related_name='avatar_old')
     image = models.ImageField(upload_to=upload_to)
     created_at = models.DateTimeField(editable=False, auto_now_add=True)
 
@@ -99,7 +99,7 @@ class Language(models.Model):
     def __unicode__(self):
         return ugettext(self.lang)
     
-class Patron(User):
+class Patron(AbstractUser):
     """A member"""
     civility = models.PositiveSmallIntegerField(_(u"Civilité"), null=True, blank=True, choices=CIVILITY_CHOICES)
     company_name = models.CharField(null=True, blank=True, max_length=255)
@@ -189,7 +189,7 @@ class Patron(User):
         """
         To resolve the user comparing problems in other projet lib.
         """
-        if isinstance(other, User):
+        if isinstance(other, AbstractUser):
             if other.pk == self.pk:
                 return True
 

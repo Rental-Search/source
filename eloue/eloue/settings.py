@@ -206,7 +206,7 @@ INSTALLED_APPS = (
     'haystack',
     'queued_search',
     'django_messages',
-    'oauth_provider',
+#    'oauth_provider',
     'faq',
     'accounts',
     'products',
@@ -226,6 +226,7 @@ if LOCAL_APPS:
 
 
 # Authentification configuration
+AUTH_USER_MODEL = 'accounts.Patron'
 AUTHENTICATION_BACKENDS = (
     'accounts.auth.PatronModelBackend',
 )

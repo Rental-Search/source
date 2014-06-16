@@ -1,6 +1,6 @@
 import datetime
 from django.test import TestCase
-from django.contrib.auth.models import User
+from django.contrib.auth.models import get_user_model
 from django_messages.models import Message
 from accounts.models import Patron
 
@@ -38,6 +38,7 @@ class SendTestCase(TestCase):
         self.assertEquals(msg2.recipient, None)
         
     def test_patron_user_cmp(self):
+        User = get_user_model()
         user = User.objects.get(username="user1")
         self.assertTrue(isinstance(user, User))
         self.assertTrue(isinstance(self.user1, Patron))
