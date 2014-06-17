@@ -227,9 +227,6 @@ if LOCAL_APPS:
 
 # Authentification configuration
 AUTH_USER_MODEL = 'accounts.Patron'
-AUTHENTICATION_BACKENDS = (
-    'accounts.auth.PatronModelBackend',
-)
 ACCOUNT_ACTIVATION_DAYS = 7
 
 # Tests configuration

@@ -101,6 +101,10 @@ class Language(models.Model):
     
 class Patron(AbstractUser):
     """A member"""
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = ['username']
+#    email = models.EmailField(_('email address'), blank=False, null=False, unique=True, db_index=True)
+
     civility = models.PositiveSmallIntegerField(_(u"Civilité"), null=True, blank=True, choices=CIVILITY_CHOICES)
     company_name = models.CharField(null=True, blank=True, max_length=255)
     subscriptions = models.ManyToManyField('ProPackage', through='Subscription')
