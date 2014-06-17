@@ -17,7 +17,6 @@ from django.contrib.sites.managers import CurrentSiteManager
 from django.contrib.sites.models import Site
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
-from django.contrib.auth.models import AbstractUser
 from django.contrib.gis.db import models
 from django.conf import settings
 from django.contrib.gis.geos import Point
@@ -32,6 +31,7 @@ from django.template.defaultfilters import slugify
 
 from accounts.manager import PatronManager
 from accounts.choices import CIVILITY_CHOICES, COUNTRY_CHOICES, PHONE_TYPES, SUBSCRIPTION_PAYMENT_TYPE_CHOICES
+from accounts.auth import AbstractUser
 from products.signals import post_save_to_batch_update_product
 from payments.paypal_payment import accounts, PaypalError
 from payments import paypal_payment
@@ -101,10 +101,6 @@ class Language(models.Model):
     
 class Patron(AbstractUser):
     """A member"""
-    USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['username']
-#    email = models.EmailField(_('email address'), blank=False, null=False, unique=True, db_index=True)
-
     civility = models.PositiveSmallIntegerField(_(u"Civilité"), null=True, blank=True, choices=CIVILITY_CHOICES)
     company_name = models.CharField(null=True, blank=True, max_length=255)
     subscriptions = models.ManyToManyField('ProPackage', through='Subscription')
