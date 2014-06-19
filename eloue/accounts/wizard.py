@@ -12,7 +12,7 @@ from django_lean.experiments.models import GoalRecord
 from django_lean.experiments.utils import WebUser
 
 from accounts.forms import EmailAuthenticationForm, SubscriptionEditForm
-from accounts.models import Patron, Avatar, ProPackage, Subscription
+from accounts.models import Patron, ProPackage, Subscription
 
 from eloue.wizard import MultiPartFormWizard
 

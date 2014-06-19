@@ -12,7 +12,7 @@ from django.test import TransactionTestCase
 from django.utils.translation import ugettext as _
 
 from eloue.wizard import MultiPartFormWizard
-from accounts.models import Patron, Avatar, FacebookSession
+from accounts.models import Patron, FacebookSession
 from accounts.forms import make_missing_data_form
 
 class AccountWizardTest(TransactionTestCase):

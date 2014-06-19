@@ -20,7 +20,7 @@ from payments.models import PayboxDirectPaymentInformation, PayboxDirectPlusPaym
 from payments.paybox_payment import PayboxManager, PayboxException
 from payments.abstract_payment import PaymentException
 from accounts.forms import EmailAuthenticationForm, BookingCreditCardForm, ExistingBookingCreditCardForm
-from accounts.models import Patron, Avatar, CreditCard
+from accounts.models import Patron, CreditCard
 from products.forms import FacetedSearchForm
 from products.models import Product
 from products.choices import PAYMENT_TYPE

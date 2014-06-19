@@ -23,7 +23,7 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_protect
 
 from accounts.forms import EmailAuthenticationForm, make_missing_data_form
-from accounts.models import Patron, Avatar, FacebookSession
+from accounts.models import Patron, FacebookSession
 from accounts.choices import GEOLOCATION_SOURCE
 
 from eloue.geocoder import GoogleGeocoder

@@ -12,7 +12,7 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_protect
 
 from accounts.forms import EmailAuthenticationForm
-from accounts.models import Patron, Avatar
+from accounts.models import Patron
 from products.forms import AlertForm, ProductForm, MessageEditForm
 from products.models import Product, Picture, Alert
 from products.choices import UNIT

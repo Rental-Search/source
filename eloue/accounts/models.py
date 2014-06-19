@@ -48,50 +48,6 @@ log = logbook.Logger('eloue.accounts')
 def upload_to(instance, filename):
     return 'pictures/avatars/%s.jpg' % uuid.uuid4().hex
 
-# FIXME: either this model is obsoleted and should be removed therefore, or new and not used yet
-class Avatar(models.Model):
-
-    patron = models.OneToOneField(settings.AUTH_USER_MODEL, related_name='avatar_old')
-    image = models.ImageField(upload_to=upload_to)
-    created_at = models.DateTimeField(editable=False, auto_now_add=True)
-
-    thumbnail = ImageSpecField(
-        source='image',
-        processors=[
-            Crop(width=60, height=60),
-            Adjust(contrast=1.2, sharpness=1.1),
-            Transpose(Transpose.AUTO),
-        ],
-    )
-    profil = ImageSpecField(
-        source='image',
-        processors=[
-            ResizeToFit(width=100),
-            Adjust(contrast=1.2, sharpness=1.1),
-            Transpose(Transpose.AUTO),
-        ],
-    )
-    display = ImageSpecField(
-        source='image',
-        processors=[
-            ResizeToFit(width=180),
-            Adjust(contrast=1.2, sharpness=1.1),
-            Transpose(Transpose.AUTO),
-        ],
-    )
-    
-    product_page = ImageSpecField(
-        source='image',
-        processors=[
-            ResizeToFit(width=74, height=74),
-            Adjust(contrast=1.2, sharpness=1.1),
-            Transpose(Transpose.AUTO),
-        ],
-    )
-    def delete(self, *args, **kwargs):
-        self.image.delete()
-        super(Avatar, self).delete(*args, **kwargs)
-
 class Language(models.Model):
 
     lang = models.CharField(max_length=30)
