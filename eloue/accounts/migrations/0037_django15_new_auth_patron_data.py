@@ -4,14 +4,12 @@ from south.db import db
 from south.v2 import DataMigration
 from django.db import models
 
+
 class Migration(DataMigration):
 
     def forwards(self, orm):
-        "Write your forwards methods here."
-        # Note: Don't use "from appname.models import ModelName". 
-        # Use orm.ModelName to refer to models in this application,
-        # and orm['appname.ModelName'] for models in other applications.
 
+        # fill the new fields we've created to follow auth.User
         db.execute("""UPDATE accounts_patron
  SET password = auth_user.password,
      last_login = auth_user.last_login,
@@ -27,25 +25,29 @@ class Migration(DataMigration):
  WHERE accounts_patron.id = auth_user.id
 """)
 
+        # copy grouping
         db.execute("""INSERT INTO accounts_patron_groups
  SELECT id, user_id, group_id
  FROM auth_user_groups
 """)
 
+        # copy user permissions
         db.execute("""INSERT INTO accounts_patron_user_permissions
  SELECT id, user_id, permission_id
  FROM auth_user_user_permissions
 """)
 
-        db.execute("SELECT setval('accounts_patron_groups_id_seq', max(id)) FROM accounts_patron_groups")
-        db.execute("SELECT setval('accounts_patron_user_permissions_id_seq', max(id)) FROM accounts_patron_user_permissions")
+        # update sequences to generate correct IDs for auto-incrementing fields (primary keys)
+        db.execute("SELECT setval('accounts_patron_groups_id_seq', nextval('auth_user_groups_id_seq')) FROM accounts_patron_groups")
+        db.execute("SELECT setval('accounts_patron_user_permissions_id_seq', nextval('auth_user_user_permissions_id_seq')) FROM accounts_patron_user_permissions")
 
     def backwards(self, orm):
-        "Write your backwards methods here."
 
+        # remove all data from M2M tables
         orm.Patron.groups.through.objects.all().delete()
         orm.Patron.user_permissions.through.objects.all().delete()
 
+        # set sequences' counters to initial state (starting with 1)
         db.execute("SELECT setval('accounts_patron_groups_id_seq', 1) FROM accounts_patron")
         db.execute("SELECT setval('accounts_patron_user_permissions_id_seq', 1) FROM accounts_patron")
 
@@ -402,5 +404,5 @@ class Migration(DataMigration):
         }
     }
 
-    complete_apps = ['auth', 'accounts']
+    complete_apps = ['accounts', 'auth']
     symmetrical = True

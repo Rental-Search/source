@@ -8,6 +8,9 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
+
+        # update SQL table's fields to follow model's fields definition
+
         db.alter_column('accounts_patron', 'password', self.gf('django.db.models.fields.CharField')(max_length=128))
         db.alter_column('accounts_patron', 'last_login', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime.now))
         db.alter_column('accounts_patron', 'is_superuser', self.gf('django.db.models.fields.BooleanField')(default=False))
@@ -16,16 +19,21 @@ class Migration(SchemaMigration):
         db.alter_column('accounts_patron', 'last_name', self.gf('django.db.models.fields.CharField')(max_length=30))
         db.alter_column('accounts_patron', 'email', self.gf('django.db.models.fields.EmailField')(max_length=75))
         db.alter_column('accounts_patron', 'is_staff', self.gf('django.db.models.fields.BooleanField')(default=False))
-        db.alter_column('accounts_patron', 'is_active', self.gf('django.db.models.fields.BooleanField')(default=True)) # TODO: ask Benoit if we should set this to False for us
+        db.alter_column('accounts_patron', 'is_active', self.gf('django.db.models.fields.BooleanField')(default=False))
         db.alter_column('accounts_patron', 'date_joined', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime.now))
+
+        # create unique indexes for the new fields
 
         db.create_unique('accounts_patron', ['username'])
         db.create_unique('accounts_patron', ['email'])
+
+        # create unique indexes for M2M tables
 
         db.create_unique(db.shorten_name('accounts_patron_groups'), ['patron_id', 'group_id'])
         db.create_unique(db.shorten_name('accounts_patron_user_permissions'), ['patron_id', 'permission_id'])
 
     def backwards(self, orm):
+
         db.delete_unique('accounts_patron', ['username'])
         db.delete_unique('accounts_patron', ['email'])
 
@@ -396,4 +404,4 @@ class Migration(SchemaMigration):
         }
     }
 
-    complete_apps = ['accounts']
+    complete_apps = ['accounts', 'auth']

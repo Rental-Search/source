@@ -8,6 +8,9 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
+
+        # phase 1: drop existing foreign key references from all known models to auth.User
+
         db.delete_foreign_key('contest_gamer', 'patron_id')
 
         db.delete_foreign_key('payments_slimpaymandateinformation', 'patron_id')
@@ -42,14 +45,23 @@ class Migration(SchemaMigration):
         db.delete_foreign_key('accounts_patron_customers', 'to_patron_id')
         db.delete_foreign_key('accounts_patron_customers', 'from_patron_id')
 
+        # phase 2: change the primary key for accounts.Patron
+
         db.delete_primary_key('accounts_patron')
         db.rename_column('accounts_patron', 'user_ptr_id', 'id')
         db.create_primary_key('accounts_patron', ['id'])
 
+        # PostgreSQL uses specific 'sequence' objects for auto-incrementing fields (e.g. primary keys)
+        # create a new sequence for the accounts.Patron's primary key field 'id'
         db.execute('CREATE SEQUENCE accounts_patron_id_seq')
+        # make the 'id' field to own the sequence (means the sequence will be automatically removed after the table/field is dropped)
         db.execute('ALTER SEQUENCE accounts_patron_id_seq OWNED BY accounts_patron.id')
+        # set the starting value according to next available value of the auth_user.id's sequence
         db.execute("SELECT setval('accounts_patron_id_seq', nextval('auth_user_id_seq')) FROM accounts_patron")
+        # apply accounts_patron.id to use the sequence
         db.execute("ALTER TABLE accounts_patron ALTER COLUMN id SET DEFAULT nextval('accounts_patron_id_seq')")
+
+        # phase 3: create foreign key references from all known models toaccounts.Patron
 
         db.alter_column('contest_gamer', 'patron_id', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['accounts.Patron']))
 
@@ -85,6 +97,8 @@ class Migration(SchemaMigration):
         db.alter_column('accounts_patron_customers', 'to_patron_id', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['accounts.Patron']))
         db.alter_column('accounts_patron_customers', 'from_patron_id', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['accounts.Patron']))
 
+        # phase 4: introduce fields from auth.User to accounts.Patron
+
         db.add_column('accounts_patron', 'password',
                       self.gf('django.db.models.fields.CharField')(default='', max_length=128),
                       keep_default=False)
@@ -115,6 +129,8 @@ class Migration(SchemaMigration):
         db.add_column('accounts_patron', 'date_joined',
                       self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime.now),
                       keep_default=False)
+
+        # phase 5: create M2M tables for accounts.Patron
 
         # Adding M2M table for field groups on 'Patron'
         db.create_table(db.shorten_name('accounts_patron_groups'), (
@@ -873,4 +889,4 @@ class Migration(SchemaMigration):
         }
     }
 
-    complete_apps = ['contest', 'payments', 'rent', 'products', 'accounts']
+    complete_apps = ['contest', 'payments', 'rent', 'products', 'accounts', 'auth']
