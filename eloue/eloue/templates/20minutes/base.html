@@ -1,4 +1,4 @@
-{% load i18n markup %}
+{% load i18n markup announcements_tags %}
 {% include "header.html" %}
 <div id="header" class="xgrid">
     <div class="logo x2">
@@ -64,8 +64,9 @@
 				<li><a href="https://www.facebook.com/pages/e-louecom/104685226447">{% trans "Facebook" %}</a></li>
 			</ul>
 		</div>
-		{% if site_wide_announcements %}
-		{% with site_wide_announcements|first as announcement %}
+		{% announcements as announcements_list %}
+		{% if announcements_list %}
+		{% with announcements_list|first as announcement %}
 			<div class="x12 twitter-box">
 				{{ announcement.content|markdown }}
 				<div class="twitter-dialogue">

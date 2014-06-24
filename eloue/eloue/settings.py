@@ -138,7 +138,6 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.static',
     'django.core.context_processors.request',
     'django.contrib.messages.context_processors.messages',
-    'announcements.context_processors.site_wide_announcements',
     'eloue.context_processors.site',
     'eloue.context_processors.debug',
     'eloue.context_processors.unread_message_count_context',
