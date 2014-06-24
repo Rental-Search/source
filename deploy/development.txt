@@ -35,11 +35,13 @@ elasticsearch==1.0.0
 queues==0.6.3
 queued_search==2.1.0
 django-haystack==2.1.0
+httplib2==0.9
+oauth2==1.5.211
+django-oauth-plus==2.2.4
 -e git://github.com/e-loue/pyke.git#egg=pyke
 -e git://github.com/e-loue/freshen.git#egg=freshen
 -e git://github.com/e-loue/django-messages.git#egg=django-messages
 -e git://github.com/e-loue/django-faq.git@haystack_2.x#egg=faq
--e git://github.com/e-loue/python-oauth2.git#egg=oauth2
 -e git://github.com/e-loue/django-announcements.git#egg=announcements
 -e git://github.com/e-loue/django-lean.git#egg=django_lean
 -e git://github.com/e-loue/django-lint.git#egg=django-lint
@@ -47,14 +49,12 @@ django-haystack==2.1.0
 -e git://github.com/e-loue/python-paypalx.git#egg=paypalx
 -e git://github.com/e-loue/proclaim.git#egg=proclaim
 -e git://github.com/e-loue/rollout.git#egg=rollout
--e git://github.com/e-loue/django-oauth-plus.git#egg=django-oauth-plus
 -e git://github.com/e-loue/python-sdk.git#egg=facebook-sdk
 -e git://github.com/e-loue/django-qsstats-magic.git#egg=qsstats
 beautifulsoup4
 google-api-python-client
 django-markup-deprecated
 simplejson
-httplib2
 python-dateutil==1.5
 django-fsm==1.4.1
 django-storages==1.1.5

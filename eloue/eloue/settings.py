@@ -206,7 +206,7 @@ INSTALLED_APPS = (
     'haystack',
     'queued_search',
     'django_messages',
-#    'oauth_provider',
+    'oauth_provider',
     'faq',
     'accounts',
     'products',

@@ -13,7 +13,7 @@
     },
     {
         "fields": {
-            "resource": 1,
+            "scope": 1,
             "callback_confirmed": false,
             "timestamp": 1291285352,
             "secret": "jSdFZCdLgzTCRxcG",
