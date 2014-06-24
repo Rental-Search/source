@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 from functools import wraps
-from django_fsm.db.fields import TransitionNotAllowed
-from django_fsm.db.fields.fsmfield import FSMMeta
+from django_fsm import TransitionNotAllowed, FSMMeta
 
 
 def smart_transition(source='*', target=None, save=False, conditions=[]):

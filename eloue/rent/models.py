@@ -6,7 +6,7 @@ import random
 import urllib
 
 from decimal import Decimal as D
-from django_fsm.db.fields import FSMField, transition
+from django_fsm import FSMField, transition
 from django_fsm.signals import post_transition
 from pyke import knowledge_engine
 from datetime import timedelta
@@ -338,46 +338,46 @@ class Booking(models.Model):
     def not_need_ipn(self):
         return self.payment.NOT_NEED_IPN
         
-    @transition(field=state, source='authorizing', target='authorized', conditions=[not_need_ipn], save=True)
+    @transition(field=state, source='authorizing', target='authorized', conditions=[not_need_ipn])
     def preapproval(self, **kwargs):
         self.payment.preapproval(self.pk, self.total_amount, self.currency, **kwargs)
         self.payment.save()
         self.send_ask_email()
         
-    @transition(field=state, source='authorized', target='pending', save=True)
+    @transition(field=state, source='authorized', target='pending')
     def accept(self):
         self.payment.pay(self.pk, self.total_amount, self.currency)
         self.payment.save()
         self.send_acceptation_email()
         self.send_borrower_receipt()
 
-    @transition(field=state, source='pending', target='ongoing', save=True)
+    @transition(field=state, source='pending', target='ongoing')
     def activate(self):
         pass
 
-    @transition(field=state, source='ongoing', target='ended', save=True)
+    @transition(field=state, source='ongoing', target='ended')
     def end(self):
         self.send_ended_email()
     
-    @transition(field=state, source='ended', target='closed', save=True)
+    @transition(field=state, source='ended', target='closed')
     def pay(self):
         """Return deposit_amount to borrower and pay the owner"""
         self.payment.execute_payment()
         self.send_owner_receipt()
     
-    @transition(field=state, source=['authorized', 'pending'], target='canceled', save=True)
+    @transition(field=state, source=['authorized', 'pending'], target='canceled')
     def cancel(self):
         """Cancel preapproval for the borrower"""
         self.payment.cancel_preapproval()
     
-    @transition(field=state, source='incident', target='deposit', save=True)
+    @transition(field=state, source='incident', target='deposit')
     def litigation(self, amount=None, cancel_url='', return_url=''):
         """Giving caution to owner"""
         # FIXME : Deposit amount isn't considered in preapproval amount
        
         self.payment.give_caution(amount, cancel_url, return_url)
     
-    @transition(field=state, source='incident', target='refunded', save=True)
+    @transition(field=state, source='incident', target='refunded')
     def refund(self):
         """Refund borrower or owner if something as gone wrong"""
         self.payment.refund()
@@ -394,7 +394,7 @@ class ProBooking(Booking):
     class Meta:
         proxy = True
 
-    @transition(field=Booking._meta.get_field('state'), source='professional', target='professional_saw', save=True)
+    @transition(field=Booking._meta.get_field('state'), source='professional', target='professional_saw')
     def accept(self):
         pass
 
@@ -405,7 +405,7 @@ class ProBooking(Booking):
         message = create_alternative_email('rent/emails/borrower_ask_pro', context, settings.DEFAULT_FROM_EMAIL, [self.borrower.email])
         message.send()
 
-    @transition(field=Booking._meta.get_field('state'), source='professional', target='professional', save=True)
+    @transition(field=Booking._meta.get_field('state'), source='professional', target='professional')
     def preapproval(self, *args, **kwargs):
         for phonenotification in self.owner.phonenotification_set.all():
             phonenotification.send('', self)

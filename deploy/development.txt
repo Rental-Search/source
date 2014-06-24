@@ -35,6 +35,7 @@ elasticsearch==1.0.0
 queues==0.6.3
 queued_search==2.1.0
 django-haystack==2.1.0
+django-fsm==2.1.0
 -e git://github.com/e-loue/pyke.git#egg=pyke
 -e git://github.com/e-loue/freshen.git#egg=freshen
 -e git://github.com/e-loue/django-messages.git#egg=django-messages
@@ -56,6 +57,5 @@ django-markup-deprecated
 simplejson
 httplib2
 python-dateutil==1.5
-django-fsm==1.4.1
 django-storages==1.1.5
 boto==2.5.2
