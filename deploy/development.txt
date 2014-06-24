@@ -35,6 +35,7 @@ elasticsearch==1.0.0
 queues==0.6.3
 queued_search==2.1.0
 django-haystack==2.1.0
+django-messages==0.5.0
 httplib2==0.9
 oauth2==1.5.211
 django-oauth-plus==2.2.4
@@ -45,7 +46,6 @@ pinder==1.0.1
 django-qsstats-magic==0.7.2
 -e git://github.com/e-loue/pyke.git#egg=pyke
 -e git://github.com/e-loue/freshen.git#egg=freshen
--e git://github.com/e-loue/django-messages.git#egg=django-messages
 -e git://github.com/e-loue/django-faq.git@haystack_2.x#egg=faq
 -e git+https://github.com/ntucker/django-announcements.git#egg=announcements
 -e git://github.com/e-loue/django-lean.git#egg=django_lean

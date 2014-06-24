@@ -1,7 +1,9 @@
-import datetime
 from django.test import TestCase
 from django.contrib.auth.models import get_user_model
+from django.conf import settings
+
 from django_messages.models import Message
+
 from accounts.models import Patron
 
 class SendTestCase(TestCase):
@@ -18,8 +20,8 @@ class SendTestCase(TestCase):
         this is my email: lin.liu@e-loue.com, linliu@sds.com, linliu@oioi.coms"""
         msg1 = Message(sender=self.user1, recipient=self.user2, subject='test of content filter', body=body_before)
         msg1.save()
-        body_after = """this is my phone number: ########, ########, ########
-        this is my email: ########, ########, ########"""
+        body_after = """this is my phone number: %(rs)s, %(rs)s, %(rs)s
+        this is my email: %(rs)s, %(rs)s, %(rs)s""" % {'rs': settings.REPLACE_STRING}
         self.assertEquals(msg1.body, body_after)
         
     def test_site_filter(self):

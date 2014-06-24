@@ -8,8 +8,8 @@ from django_messages.utils import new_message_email
 from accounts.models import Patron
 from products.models import Product, ProductRelatedMessage, MessageThread
 
-from eloue.signals import message_content_filter, message_site_filter
-
+from eloue import legacy
+from eloue.legacy import new_message_email as new_message_email_legacy
 
 class ProductViewsTest(TransactionTestCase):
     reset_sequences = True
@@ -22,11 +22,19 @@ class ProductViewsTest(TransactionTestCase):
                 template_name="",
                 default_protocol=None,
                 *args, **kwargs):
-            self.called = True
+            raise Exception("django_messages.utils.new_message_email should not be used")
         utils.new_message_email = dummy_new_message_email
+        def dummy_new_message_email_legacy(sender, instance, signal,
+                subject_prefix="",
+                template_name="",
+                default_protocol=None,
+                *args, **kwargs):
+            self.called = True
+        legacy.new_message_email = dummy_new_message_email_legacy
 
     def tearDown(self):
         utils.new_message_email = new_message_email
+        legacy.new_message_email = new_message_email_legacy
         
     def test_home_page(self):
         response = self.client.get(reverse('home'))

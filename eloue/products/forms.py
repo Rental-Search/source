@@ -13,7 +13,6 @@ from django.db.models import signals
 from haystack.forms import SearchForm
 from mptt.forms import TreeNodeChoiceField
 from django_messages.forms import ComposeForm
-from django_messages import utils
 from django_messages.fields import CommaSeparatedUserField
 
 from accounts.fields import DateSelectField, PhoneNumberField
@@ -173,7 +172,10 @@ class MessageEditForm(forms.Form):
         if not hasattr(recipient, 'new_messages_alerted'):
             patron = Patron.objects.get(pk=recipient.pk)
             recipient = patron # Hacking to make messages work
-        signals.post_save.connect(utils.new_message_email, ProductRelatedMessage)
+        signals.post_save.connect(
+            legacy.new_message_email, sender=ProductRelatedMessage,
+            dispatch_uid='django_messagee.ProductRelatedMessage-post_save-eloue.legacy.new_message_email'
+        )
         msg = ProductRelatedMessage(
           sender=sender,
           recipient=recipient,

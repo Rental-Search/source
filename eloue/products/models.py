@@ -821,10 +821,28 @@ class ProductRelatedMessage(Message):
         return self.body
 
 if "notification" not in settings.INSTALLED_APPS:
+    # remove django-messages signal handler
     from django_messages import utils
-    signals.post_save.connect(utils.new_message_email, sender=ProductRelatedMessage)
+    signals.post_save.disconnect(utils.new_message_email, sender=Message)
+
+    # add our handler to send messages in both .txt/.html variants
+    from eloue.legacy import new_message_email
+    signals.post_save.connect(
+        new_message_email, sender=Message,
+        dispatch_uid='django_messagee.Message-post_save-eloue.legacy.new_message_email'
+    )
+
+    # register post-save for our custom ProductRelatedMessage model (derived from Message)
+    signals.post_save.connect(
+        new_message_email, sender=ProductRelatedMessage,
+        dispatch_uid='django_messagee.ProductRelatedMessage-post_save-eloue.legacy.new_message_email'
+    )
+
+    # register pre-processing filters for both ProductRelatedMessage and Message
     signals.pre_save.connect(eloue_signals.message_content_filter, sender=ProductRelatedMessage)
     signals.pre_save.connect(eloue_signals.message_site_filter, sender=ProductRelatedMessage) 
+    signals.pre_save.connect(eloue_signals.message_content_filter, sender=Message)
+    signals.pre_save.connect(eloue_signals.message_site_filter, sender=Message)
 
 
 class Alert(models.Model):
@@ -934,4 +952,3 @@ post_save.connect(post_save_to_update_product, sender=Price)
 post_save.connect(post_save_to_update_product, sender=Picture)
 post_save.connect(post_save_to_update_product, sender=ProductHighlight)
 post_save.connect(post_save_to_update_product, sender=ProductTopPosition)
-
