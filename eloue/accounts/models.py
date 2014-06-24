@@ -10,7 +10,7 @@ import facebook
 from imagekit.models import ImageSpecField
 from pilkit.processors import Crop, ResizeToFit, Adjust, Transpose
 
-from django_fsm.db.fields import FSMField, transition
+from django_fsm import FSMField, transition
 
 from django.core.exceptions import ValidationError
 from django.contrib.sites.managers import CurrentSiteManager
@@ -770,7 +770,7 @@ class Billing(models.Model):
             raise ValueError('You can generate pdf only for already saved Billings.')
         raise NotImplementedError()
 
-    @transition(field=state, source='unpaid', target='paid', save=True)
+    @transition(field=state, source='unpaid', target='paid')
     def pay(self, **kwargs):
         try:
             total = self.total_tva + self.total_amount
