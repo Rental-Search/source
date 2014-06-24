@@ -508,7 +508,7 @@
             { event: "setAccount", account: 13977 },
             { event: "setCustomerId", id: "{{ request.user.pk }}" },
             { event: "setSiteType", type: "d" },
-            { event: "viewList", item: items }
+            { event: "viewList", item: items, user_segment: "1" }
     );
     </script>
 {% endblock %}

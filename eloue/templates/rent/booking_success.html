@@ -104,7 +104,7 @@
           { event: "setCustomerId", id: "{{ booking.borrower.pk }}" },
           { event: "setSiteType", type: "d" },
           { event: "trackTransaction" , id: "{{ booking.pk }}", item: [ 
-                { id: "{{ booking.product.pk }}", price: price, quantity: {{ booking.quantity }} },
+                { id: "{{ booking.product.pk }}", price: price, quantity: {{ booking.quantity }}, user_segment: "1" },
   ]});
 </script>
 {% endblock %}
