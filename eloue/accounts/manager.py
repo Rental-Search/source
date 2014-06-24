@@ -75,16 +75,17 @@ class PatronManager(UserManager, GeoManager):
         """
         Creates and saves a User with the given username, email and password.
         """
-        now = timezone.now()
         if not username:
             raise ValueError('The given username must be set')
+        if not email:
+            raise ValueError('The given email must be set')
+        now = timezone.now()
         email = self.normalize_email(email)
-        slug = extra_fields.pop('slug', slugify(username))
-        is_active = extra_fields.pop('is_active', True)
+        slug = extra_fields.pop('slug', None) or slugify(username)
         user = self.model(username=username, email=email,
-                          is_staff=is_staff, is_active=is_active,
-                          is_superuser=is_superuser, last_login=now,
-                          date_joined=now, slug=slug, **extra_fields)
+                          is_staff=is_staff, last_login=now,
+                          is_superuser=is_superuser, slug=slug,
+                          date_joined=now, **extra_fields)
         user.set_password(password)
         user.full_clean()
         user.save(using=self._db)

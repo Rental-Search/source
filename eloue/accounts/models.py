@@ -92,8 +92,9 @@ class Patron(AbstractUser):
 
     godfather_email = models.EmailField(null=True, blank=True)
 
-    on_site = CurrentSiteManager()
+    # PatronManager must be declared first in order to become the '_default_manager' for this model
     objects = PatronManager()
+    on_site = CurrentSiteManager()
 
     rib = models.CharField(max_length=23, blank=True)
 

@@ -12,13 +12,7 @@
             "user_permissions": [],
             "password": "sha1$42bf7$e95c84726a184c99db95c259f5e5d71f524dd4ee",
             "email": "alexandre.woog@e-loue.com",
-            "date_joined": "2010-08-17 09:00:10"
-        },
-        "model": "auth.user",
-        "pk": 1
-    },
-    {
-        "fields": {
+            "date_joined": "2010-08-17 09:00:10",
             "activation_key": null,
             "groups": [],
             "user_permissions": [],
@@ -45,13 +39,7 @@
             "user_permissions": [],
             "password": "sha1$134fb$a4c67091dfa747157e0d69c7cb12be581cd5357d",
             "email": "timothee.peignier@e-loue.com",
-            "date_joined": "2010-08-17 09:00:10"
-        },
-        "model": "auth.user",
-        "pk": 2
-    },
-    {
-        "fields": {
+            "date_joined": "2010-08-17 09:00:10",
             "activation_key": null,
             "is_professional": false,
             "civility": 2,
@@ -79,13 +67,7 @@
             "user_permissions": [],
             "password": "sha1$92184$fe8ea4af5e26354dba14edc19b1eec481b39c5f8",
             "email": "benjamin.marchandlenoir@e-loue.com",
-            "date_joined": "2010-08-17 09:00:10"
-        },
-        "model": "auth.user",
-        "pk": 3
-    },
-    {
-        "fields": {
+            "date_joined": "2010-08-17 09:00:10",
             "activation_key": "0b275c5d0858087288438d1b746015dae7307e3e",
             "groups": [],
             "user_permissions": [],
@@ -111,13 +93,7 @@
             "user_permissions": [],
             "password": "sha1$a93ad$e056bdb299c628a90200575982b88199b1fa3ffe",
             "email": "lin.liu@e-loue.com",
-            "date_joined": "2011-03-17 09:00:10"
-        },
-        "model": "auth.user",
-        "pk": 4
-    },
-    {
-        "fields": {
+            "date_joined": "2011-03-17 09:00:10",
             "activation_key": null,
             "is_professional": false,
             "civility": 2,
@@ -145,13 +121,7 @@
             "user_permissions": [],
             "password": "!",
             "email": "balazs.kossovics@e-loue.com",
-            "date_joined": "2011-03-17 09:00:10"
-        },
-        "model": "auth.user",
-        "pk": 5
-    },
-    {
-        "fields": {
+            "date_joined": "2011-03-17 09:00:10",
             "activation_key": null,
             "is_professional": false,
             "civility": 2,
@@ -165,7 +135,6 @@
         "model": "accounts.patron",
         "pk": 5
     },
-
     {
         "fields": {
             "username": "kosii1",
@@ -179,13 +148,7 @@
             "user_permissions": [],
             "password": "!",
             "email": "elouetest@gmail.com",
-            "date_joined": "2011-03-17 09:00:10"
-        },
-        "model": "auth.user",
-        "pk": 6
-    },
-    {
-        "fields": {
+            "date_joined": "2011-03-17 09:00:10",
             "activation_key": null,
             "is_professional": false,
             "civility": 2,
@@ -210,13 +173,7 @@
             "user_permissions": [],
             "password": "sha1$45d9a$1688f15a30d5231b275dafc6b36e671533a3ad41",
             "email": "elouetest1@gmail.com",
-            "date_joined": "2011-03-17 09:00:10"
-        },
-        "model": "auth.user",
-        "pk": 7
-    },
-    {
-        "fields": {
+            "date_joined": "2011-03-17 09:00:10",
             "activation_key": null,
             "is_professional": true,
             "company_name": "ELoue",
@@ -241,13 +198,7 @@
             "user_permissions": [],
             "password": "sha1$45d9a$1688f15a30d5231b275dafc6b36e671533a3ad41",
             "email": "elouetest2@gmail.com",
-            "date_joined": "2011-03-17 09:00:10"
-        },
-        "model": "auth.user",
-        "pk": 8
-    },
-    {
-        "fields": {
+            "date_joined": "2011-03-17 09:00:10",
             "activation_key": null,
             "is_professional": true,
             "company_name": "ELoue1",

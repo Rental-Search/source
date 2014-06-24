@@ -85,7 +85,7 @@ class OAuthentication(Authentication):
                                 return False
 
                             if consumer and token:
-                                request.user = token.user.patron
+                                request.user = token.user
 
                         except InvalidTokenError:
                             return False
