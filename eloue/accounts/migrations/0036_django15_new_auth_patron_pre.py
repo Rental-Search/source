@@ -4,6 +4,13 @@ from south.db import db
 from south.v2 import SchemaMigration
 from django.db import models
 
+# workaround for django-fsm import FSMField issue after upgrade to 2.1.0
+try:
+    from django_fsm import FSMField
+    FSMField = 'django_fsm.FSMField'
+except ImportError:
+    from django_fsm.db.fields.fsmfield import FSMField
+    FSMField = 'django_fsm.db.fields.fsmfield.FSMField'
 
 class Migration(SchemaMigration):
 
@@ -269,7 +276,7 @@ class Migration(SchemaMigration):
             'patron': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['accounts.Patron']"}),
             'phonenotifications': ('django.db.models.fields.related.ManyToManyField', [], {'to': u"orm['accounts.PhoneNotificationHistory']", 'through': u"orm['accounts.BillingPhoneNotification']", 'symmetrical': 'False'}),
             'plans': ('django.db.models.fields.related.ManyToManyField', [], {'to': u"orm['accounts.Subscription']", 'through': u"orm['accounts.BillingSubscription']", 'symmetrical': 'False'}),
-            'state': ('django_fsm.db.fields.fsmfield.FSMField', [], {'default': "'unpaid'", 'max_length': '50'}),
+            'state': (FSMField, [], {'default': "'unpaid'", 'max_length': '50'}),
             'toppositions': ('django.db.models.fields.related.ManyToManyField', [], {'to': u"orm['products.ProductTopPosition']", 'through': u"orm['accounts.BillingProductTopPosition']", 'symmetrical': 'False'}),
             'total_amount': ('django.db.models.fields.DecimalField', [], {'max_digits': '8', 'decimal_places': '2'}),
             'total_tva': ('django.db.models.fields.DecimalField', [], {'max_digits': '8', 'decimal_places': '2'})
@@ -843,7 +850,7 @@ class Migration(SchemaMigration):
             'quantity': ('django.db.models.fields.IntegerField', [], {'default': '1'}),
             'sites': ('django.db.models.fields.related.ManyToManyField', [], {'related_name': "'bookings'", 'symmetrical': 'False', 'to': u"orm['sites.Site']"}),
             'started_at': ('django.db.models.fields.DateTimeField', [], {}),
-            'state': ('django_fsm.db.fields.fsmfield.FSMField', [], {'default': "'authorizing'", 'max_length': '50'}),
+            'state': (FSMField, [], {'default': "'authorizing'", 'max_length': '50'}),
             'total_amount': ('django.db.models.fields.DecimalField', [], {'max_digits': '8', 'decimal_places': '2'}),
             'uuid': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '32', 'primary_key': 'True'})
         },
@@ -852,8 +859,8 @@ class Migration(SchemaMigration):
             'booking': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['rent.Booking']"}),
             'created_at': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'null': 'True', 'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'source_state': ('django_fsm.db.fields.fsmfield.FSMField', [], {'max_length': '50'}),
-            'target_state': ('django_fsm.db.fields.fsmfield.FSMField', [], {'max_length': '50'})
+            'source_state': (FSMField, [], {'max_length': '50'}),
+            'target_state': (FSMField, [], {'max_length': '50'})
         },
         u'rent.borrowercomment': {
             'Meta': {'ordering': "['-created_at']", 'object_name': 'BorrowerComment'},
