@@ -393,9 +393,9 @@ PIPELINE_JS = {
 # South configuration
 SOUTH_TESTS_MIGRATE = getattr(local, 'SOUTH_TESTS_MIGRATE', False)
 SOUTH_MIGRATION_MODULES = {
-    'auth': 'eloue.migrations.auth', # here we have Django 1.5+ new auth migration
     'announcements': 'eloue.migrations.announcements',
     'django_messages': 'eloue.migrations.django_messages',
+    'auth': 'eloue.migrations.auth', # here we have Django 1.5+ new auth migration
 }
 
 # Haystack configuration
