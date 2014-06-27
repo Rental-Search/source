@@ -1005,5 +1005,83 @@ def patron_delete_idn_connect(request):
 
 
 
+# REST API 2.0
 
+from rest_framework import viewsets
 
+from accounts import serializers, models, search
+from eloue.api import filters
+
+NON_DELETABLE = [name for name in viewsets.ModelViewSet.http_method_names if name.lower() != 'delete']
+
+class UserViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows users to be viewed or edited.
+    """
+    model = models.Patron
+    serializer_class = serializers.UserSerializer
+    filter_backends = (filters.OwnerFilter, filters.HaystackSearchFilter, filters.DjangoFilterBackend)
+    owner_field = 'pk'
+    search_index = search.patron_search
+    filter_fields = ('slug',)
+
+class AddressViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows addresses to be viewed or edited.
+    """
+    model = models.Address
+    serializer_class = serializers.AddressSerializer
+    filter_backends = (filters.OwnerFilter,)
+
+class PhoneNumberViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows phone numbers to be viewed or edited.
+    Phone numbers are sent to the borrower and to the owner for each booking.
+    """
+    model = models.PhoneNumber
+    serializer_class = serializers.PhoneNumberSerializer
+    filter_backends = (filters.OwnerFilter,)
+
+class ProAgencyViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows professional agencies to be viewed or edited.
+    ProAgency lists all agencies of a pro renter.
+    """
+    model = models.ProAgency
+    serializer_class = serializers.ProAgencySerializer
+    filter_backends = (filters.OwnerFilter,)
+
+class ProPackageViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows professional packages to be viewed or edited.
+    ProPackage is subscribed by pro renter to access to e-loue and publish their goods online.
+    """
+    model = models.ProPackage
+    serializer_class = serializers.ProPackageSerializer
+    http_method_names = NON_DELETABLE
+
+class SubscriptionViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows subscriptions to be viewed or edited.
+    Subcriptions are the means through what pro renters subscribe for ProPackages.
+    """
+    model = models.Subscription
+    serializer_class = serializers.SubscriptionSerializer
+    filter_backends = (filters.OwnerFilter,)
+    http_method_names = NON_DELETABLE
+
+class BillingViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows billings to be viewed or edited.
+    """
+    model = models.Billing
+    serializer_class = serializers.BillingSerializer
+    filter_backends = (filters.OwnerFilter,)
+
+class BillingSubscriptionViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows sbilling ubscriptions to be viewed or edited.
+    """
+    model = models.BillingSubscription
+    serializer_class = serializers.BillingSubscriptionSerializer
+    http_method_names = NON_DELETABLE

@@ -366,3 +366,35 @@ def booking_incident(request, booking_id):
         dictionary={'booking': booking, 'form': form}, 
         context_instance=RequestContext(request)
     )
+
+
+# REST API 2.0
+
+from rest_framework import viewsets
+
+from rent import serializers, models
+from eloue.api import filters
+
+class BookingViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows bookings to be viewed or edited.
+    """
+    model = models.Booking
+    serializer_class = serializers.BookingSerializer
+    filter_backends = (filters.OwnerFilter, )
+    owner_field = 'owner'
+
+class CommentViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows transaction comments to be viewed or edited.
+    """
+    model = models.Comment
+    serializer_class = serializers.CommentSerializer
+
+class SinisterViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows sinisters to be viewed or edited.
+    """
+    model = models.Sinister
+    serializer_class = serializers.SinisterSerializer
+    filter_backends = (filters.OwnerFilter, )

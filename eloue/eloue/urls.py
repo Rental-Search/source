@@ -11,6 +11,8 @@ from django.utils import translation
 from django.utils.translation import ugettext as _
 from django.views.generic import TemplateView
 
+from rest_framework import routers
+
 from accounts.forms import EmailPasswordResetForm, PatronSetPasswordForm
 from accounts.views import activate, authenticate, authenticate_headless, contact, google_oauth_callback, patron_subscription
 from products.views import homepage, search, reply_product_related_message, homepage_object_list
@@ -32,6 +34,34 @@ sitemaps = {
 }
 
 translation.activate(settings.LANGUAGE_CODE)  # Force language for test and dev
+
+from accounts import views as accounts_api
+from products import views as products_api
+from rent import views as rent_api
+
+# See http://www.vinaysahni.com/best-practices-for-a-pragmatic-restful-api#restful
+router = routers.DefaultRouter()
+router.register(r'users', accounts_api.UserViewSet, base_name='patron')
+router.register(r'addresses', accounts_api.AddressViewSet, base_name='address')
+router.register(r'phonenumbers', accounts_api.PhoneNumberViewSet, base_name='phonenumber')
+router.register(r'proagencies', accounts_api.ProAgencyViewSet, base_name='proagency')
+router.register(r'propackages', accounts_api.ProPackageViewSet, base_name='propackage')
+router.register(r'subscriptions', accounts_api.SubscriptionViewSet, base_name='subscription')
+router.register(r'billings', accounts_api.BillingViewSet, base_name='billing')
+router.register(r'billingsubscriptions', accounts_api.BillingSubscriptionViewSet, base_name='billingsubscription')
+router.register(r'categories', products_api.CategoryViewSet, base_name='category')
+router.register(r'categorydescriptions', products_api.CategoryDescriptionViewSet, base_name='categorydescription')
+router.register(r'products', products_api.ProductViewSet, base_name='product')
+router.register(r'carproducts', products_api.CarProductViewSet, base_name='carproduct')
+router.register(r'realestateproducts', products_api.RealEstateProductViewSet, base_name='realestateproduct')
+router.register(r'prices', products_api.PriceViewSet, base_name='price')
+router.register(r'pictures', products_api.PictureViewSet, base_name='picture')
+router.register(r'curiosities', products_api.CuriosityViewSet, base_name='curiosity')
+router.register(r'messagethreads', products_api.MessageThreadViewSet, base_name='messagethread')
+router.register(r'productrelatedmessages', products_api.ProductRelatedMessageViewSet, base_name='productrelatedmessage')
+router.register(r'bookings', rent_api.BookingViewSet, base_name='booking')
+router.register(r'comments', rent_api.CommentViewSet, base_name='comment')
+router.register(r'sinisters', rent_api.SinisterViewSet, base_name='sinister')
 
 urlpatterns = patterns('',
     url(r'^invitation_sent/$', TemplateView.as_view(template_name='accounts/invitation_sent.html'), name='invitation_sent'),
@@ -82,6 +112,10 @@ urlpatterns = patterns('',
     url(r'^edit/stats/', include('reporting.admin_urls')),
     url(r'^api/', include('eloue.api.urls')),
     url(r'^oauth/', include('oauth_provider.urls')),
+    url(r'^oauth2/', include('provider.oauth2.urls', namespace='oauth2')), # django-oauth2-provider
+#    url(r'^o/', include('oauth2_provider.urls', namespace='oauth2_provider')), # django-oauth-toolkit
+    url(r'^api/2.0/', include(router.urls)),
+    url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     url(r'^slimpay/', include('payments.slimpay_urls')),
     url(r'^$', homepage, name="home"),
     url(r'^lists/object/(?P<offset>[0-9]*)$', partial(homepage_object_list, search_index=product_only_search), name=''),

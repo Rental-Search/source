@@ -736,3 +736,87 @@ def suggestion(request):
     cache.set(word, resp, 0)
     return HttpResponse(resp)
 
+
+
+# REST API 2.0
+
+from rest_framework import viewsets
+
+from products import serializers, models
+from eloue.api import filters
+
+class CategoryViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows product categories to be viewed or edited.
+    """
+    queryset = models.Category.on_site.all()
+    serializer_class = serializers.CategorySerializer
+
+class CategoryDescriptionViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows product category descriptions to be viewed or edited.
+    """
+    model = models.CategoryDescription
+    serializer_class = serializers.CategoryDescriptionSerializer
+
+class ProductViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows products to be viewed or edited.
+    """
+    queryset = models.Product.on_site.all()
+    serializer_class = serializers.ProductSerializer
+    filter_backends = (filters.OwnerFilter, )
+    owner_field = 'owner'
+
+class CarProductViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows car products to be viewed or edited.
+    """
+    queryset = models.CarProduct.on_site.all()
+    serializer_class = serializers.CarProductSerializer
+    filter_backends = (filters.OwnerFilter, )
+    owner_field = 'owner'
+
+class RealEstateProductViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows real estate products to be viewed or edited.
+    """
+    queryset = models.RealEstateProduct.on_site.all()
+    serializer_class = serializers.RealEstateProductSerializer
+    filter_backends = (filters.OwnerFilter, )
+    owner_field = 'owner'
+
+class PriceViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows product prices to be viewed or edited.
+    """
+    model = models.Price
+    serializer_class = serializers.PriceSerializer
+
+class PictureViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows product images to be viewed or edited.
+    """
+    model = models.Picture
+    serializer_class = serializers.PictureSerializer
+
+class CuriosityViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows product curiosities to be viewed or edited.
+    """
+    queryset = models.Curiosity.on_site.all()
+    serializer_class = serializers.CuriositySerializer
+
+class MessageThreadViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows message threads to be viewed or edited.
+    """
+    model = models.MessageThread
+    serializer_class = serializers.MessageThreadSerializer
+
+class ProductRelatedMessageViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows product related messages to be viewed or edited.
+    """
+    model = models.ProductRelatedMessage
+    serializer_class = serializers.ProductRelatedMessageSerializer
