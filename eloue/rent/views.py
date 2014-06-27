@@ -375,11 +375,13 @@ from rest_framework import viewsets
 from rent import serializers, models
 from eloue.api import filters
 
+NON_DELETABLE = [name for name in viewsets.ModelViewSet.http_method_names if name.lower() != 'delete']
+
 class BookingViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows bookings to be viewed or edited.
     """
-    model = models.Booking
+    queryset = models.Booking.on_site.all()
     serializer_class = serializers.BookingSerializer
     filter_backends = (filters.OwnerFilter, )
     owner_field = 'owner'
@@ -398,3 +400,4 @@ class SinisterViewSet(viewsets.ModelViewSet):
     model = models.Sinister
     serializer_class = serializers.SinisterSerializer
     filter_backends = (filters.OwnerFilter, )
+    http_method_names = NON_DELETABLE
