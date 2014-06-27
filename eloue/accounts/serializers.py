@@ -1,5 +1,5 @@
 
-from rest_framework.serializers import HyperlinkedModelSerializer, ModelSerializer, PrimaryKeyRelatedField
+from rest_framework.serializers import HyperlinkedModelSerializer, ModelSerializer, PrimaryKeyRelatedField, CharField
 from rest_framework_gis.serializers import MapGeometryField
 
 from accounts import models
@@ -18,9 +18,14 @@ class UserSerializer(HyperlinkedModelSerializer):
         read_only_fields = ('id', 'slug', 'avatar', 'default_address', 'default_number', 'rib', 'url')
 
 class AddressSerializer(HyperlinkedGeoModelSerializer):
+    street = CharField(source='address1')
+
+    def transform_street(self, obj, value):
+        return u' '.join([value, obj.address2]) if obj and obj.address2 else value
+
     class Meta:
         model = models.Address
-        fields = ('id', 'patron', 'zipcode', 'position', 'city', 'country') # TODO: 'street'
+        fields = ('id', 'patron', 'street', 'zipcode', 'position', 'city', 'country')
         read_only_fields = ('id', 'patron', 'position')
         geo_field = 'position'
 
@@ -31,9 +36,14 @@ class PhoneNumberSerializer(HyperlinkedModelSerializer):
         read_only_fields = ('id', 'patron')
 
 class ProAgencySerializer(HyperlinkedGeoModelSerializer):
+    address = CharField(source='address1')
+
+    def transform_address(self, obj, value):
+        return u' '.join([value, obj.address2]) if obj and obj.address2 else value
+
     class Meta:
         model = models.ProAgency
-        fields = ('id', 'patron', 'name', 'phone_number', 'zipcode', 'city', 'country', 'position') # TODO: 'address'
+        fields = ('id', 'patron', 'name', 'phone_number', 'address', 'zipcode', 'city', 'country', 'position')
         read_only_fields = ('id', 'patron', 'position')
         geo_field = 'position'
 
