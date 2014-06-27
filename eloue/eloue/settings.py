@@ -443,8 +443,7 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.SessionAuthentication',
     ),
     'DEFAULT_PERMISSION_CLASSES': (
-#        'rest_framework.permissions.DjangoModelPermissions',
-        'rest_framework.permissions.IsAuthenticated',
+        'eloue.api.permissions.TeamStaffDjangoModelPermissions',
     ),
     'DEFAULT_FILTER_BACKENDS': (
         'rest_framework.filters.DjangoFilterBackend',
