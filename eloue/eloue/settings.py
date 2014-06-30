@@ -81,7 +81,7 @@ TIME_ZONE = 'Europe/Paris'
 
 # Language code for this installation. All choices can be found here:
 # http://www.i18nguy.com/unicode/language-identifiers.html
-LANGUAGE_CODE = 'fr-fr'
+LANGUAGE_CODE = getattr(local, "LANGUAGE_CODE", 'fr-fr')
 
 ugettext = lambda s: s
 LANGUAGES = (
@@ -206,6 +206,9 @@ INSTALLED_APPS = (
     'queued_search',
     'django_messages',
     'oauth_provider',
+#    'oauth2_provider', # django-oauth-toolkit
+    'provider', 'provider.oauth2', # django-oauth2-provider
+    'rest_framework',
     'faq',
     'accounts',
     'products',
@@ -421,6 +424,43 @@ else:
     QUEUE_BACKEND = 'redisd'
 QUEUE_REDIS_CONNECTION = getattr(local, 'QUEUE_REDIS_CONNECTION', 'localhost:6379')
 QUEUE_REDIS_DB = getattr(local, 'QUEUE_REDIS_DB', 1)
+
+REST_FRAMEWORK = {
+#     'DEFAULT_RENDERER_CLASSES': (
+#         'rest_framework.renderers.JSONRenderer',
+#         'rest_framework.renderers.BrowsableAPIRenderer',
+#         'rest_framework_plist.renderers.PlistRenderer',
+#     ),
+#     'DEFAULT_PARSER_CLASSES': (
+#         'rest_framework.parsers.JSONParser',
+#         'rest_framework.parsers.FormParser',
+#         'rest_framework.parsers.MultiPartParser',
+#         'rest_framework_plist.parsers.PlistParser',
+#     ),
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+#        'oauth2_provider.ext.rest_framework.OAuth2Authentication',
+        'rest_framework.authentication.OAuth2Authentication',
+        'rest_framework.authentication.SessionAuthentication',
+    ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'eloue.api.permissions.TeamStaffDjangoModelPermissions',
+    ),
+    'DEFAULT_FILTER_BACKENDS': (
+        'rest_framework.filters.DjangoFilterBackend',
+    ),
+    'SEARCH_PARAM': 'q',
+    'ORDERING_PARAM': 'sort',
+    'PAGINATE_BY': getattr(local, 'REST_FRAMEWORK_PAGINATE_BY', 10),
+}
+
+OAUTH2_PROVIDER = {
+    # this is the list of available scopes
+    'SCOPES': {
+        'end-user': 'End-users are borrower or/and owner, and have acces to e-loue where they can seach, publish ads, send messages to another end-user, call to an owner, book a product, comment a booking and manage all their actions in a dashboard.',
+        'teamstaff': 'Team staff access to the administration interface to manage end-users, bookings and products. The access of data is restrected with permissions.',
+        'superuser': 'Super user access to the administration interface to manage end-users, team staff, bookings, products, etc. He has all the permissions.',
+    }
+}
 
 # Email configuration
 EMAIL_BACKEND = getattr(local, 'EMAIL_BACKEND', 'django.core.mail.backends.smtp.EmailBackend')
