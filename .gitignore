@@ -2,12 +2,15 @@
 *.pyc
 *.tmproj
 *.rdb
+*.iml
+*.ipr
 nosetests.xml
 .DS_Store
 .noseids
 .coverage
 .project
 .pydevproject
+.idea/
 .settings/
 env
 env2
