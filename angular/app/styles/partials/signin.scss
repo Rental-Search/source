@@ -1,0 +1,34 @@
+.modal {
+
+  &.login-form .modal-content {
+    width: 273px;
+    height: 400px;
+    color: #ffffff;
+  }
+
+  &.login-form .modal-body {
+    height: 250px;
+    color: #4b484b;
+  }
+
+  &.login-form .modal-body input {
+    margin: 3px;
+  }
+
+  &.login-form .modal-body button{
+    width: 100%;
+  }
+
+  &.login-form .modal-header {
+    text-align: center;
+    font-size: larger;
+    background-color: #f2812c;
+  }
+
+  &.login-form .modal-footer {
+    text-align: center;
+    height: 30px;
+    color: #cecece;
+  }
+
+}

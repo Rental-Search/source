@@ -1,21 +1,21 @@
-/*jshint unused: vars */
-define(['angular', 'controllers/MainCtrl']/*deps*/, function (angular, MainCtrl)/*invoke*/ {
-  'use strict';
+define(["angular", "controllers/MainCtrl", "controllers/LoginCtrl"], function (angular, MainCtrl, LoginCtrl) {
+    "use strict";
 
-  return angular.module('eloueApp', ['eloueApp.controllers.MainCtrl',
-  'ngCookies',
-  'ngResource',
-  'ngSanitize',
-  'ngRoute'
-])
-    .config(function ($routeProvider) {
-      $routeProvider
-        .when('/', {
-          templateUrl: 'views/main.html',
-          controller: 'MainCtrl'
-        })
-        .otherwise({
-          redirectTo: '/'
-        });
+    var eloueApp = angular.module("eloueApp", ["MainModule", "LoginModule",
+        "ngCookies",
+        "ngResource",
+        "ngSanitize",
+        "ngRoute"
+    ]);
+    eloueApp.config(function ($routeProvider) {
+        $routeProvider
+            .when("/", {
+                templateUrl: "views/main.html",
+                controller: "MainCtrl"
+            })
+            .otherwise({
+                redirectTo: "/"
+            });
     });
+    return eloueApp;
 });
