@@ -1,0 +1,96 @@
+&
+	font-weight 600
+	> div
+		padding-top 1em
+		border-bottom 1px solid light_gray
+		&:last-child
+			border-bottom none
+	.wrapper
+		container_width()
+		text-align justify
+		ul
+			display inline
+			li
+				display inline-block
+		&:after
+			display inline-block
+			width 100%
+			height 0
+			font-size 0
+			content ''
+
+	.top
+		font-size .75em
+		li
+			color dark_gray
+			padding .25em 0
+			&:nth-of-type(2n)
+				border-right 1px solid light_gray
+			a
+				color orange
+
+	.middle
+		font-size ( 14 / 16 )em
+		padding-top 1.3em
+		brad = .3em
+		.logo img
+			display block
+			margin-bottom .3em
+		.search
+			> *
+				font-weight 700
+				float left
+				display block
+				padding 1em 1.5em
+				border 1px solid gray
+				height 3.5em
+			input
+				color green
+				border-right none
+				border-radius brad 0 0 brad
+				width 30em
+			select
+				color gray
+				border-color gray light_gray
+				option
+					padding 0
+			button
+				color gray
+				background-color transparent
+				border-left none
+				padding 1em
+				border-radius 0 brad brad 0
+				&:before
+					font-size 150%
+					margin 0
+
+		.annonce
+			button
+				font-weight 700
+				display block
+				background-color green
+				color white
+				border none
+				border-radius brad
+				padding 1em 1.5em
+				height 3.5em
+	.bottom
+		background-color clouds
+		font-size ( 13 / 16 )em
+		li
+			a
+				font-weight 600
+				color black
+				display block
+			&:first-child a
+					padding-left 0
+			&:last-child a
+					padding-right 0
+
+	.banner
+		padding 0
+		img
+			display block
+			container_width()
+
+
