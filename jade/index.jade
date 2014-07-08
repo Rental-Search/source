@@ -1,0 +1,50 @@
+doctype
+html(lang="en")
+head
+	meta(charset="UTF-8")
+	title e-loue
+	link( href ="http://fonts.googleapis.com/css?family=Open+Sans:400,700,600" rel="stylesheet" )
+	link( href ="css/style.css" rel="stylesheet" )
+body
+	#container
+		header
+			.top
+				.wrapper
+					ul
+						li
+							| Bonjour, 
+							a( href = "#" ) inscrivez-vous 
+							| ou 
+							a( href = "#" ) connectez-vous 
+						li &nbsp;
+						li
+							| Lorem ipsum dolor sit amet, consectetur adipisicing elit 
+							a( href = "#" ) offres e-loue Pro 
+						li &nbsp;
+						li
+							| Appelez-nous au 
+							b 0826.800.200 
+							| (0,15&#8364;/min) 
+			.middle
+				.wrapper
+					ul
+						li.logo
+							a( href = "#" )
+								img( src = "img/logo.png" )
+						li.search
+							input( type = "search" )
+							select
+								-for( var i = 0; i < 10; i ++ )
+									option Lorem ipsum #{i}
+							button.icon-search-1
+						li.annonce
+							button Deposez une annonce
+			.bottom
+				.wrapper
+					ul
+						-var items = [ "Logement", "Jardinage", "Automobile", "Image et son", "Bricolage", "Mode et accessori", "Receptioin", "Sante et Bien", "Autres"]
+						-each item in items
+							li
+								a( href = "#" + item ) #{item}
+				.banner
+					img( src = 'img/banner.jpg' )
