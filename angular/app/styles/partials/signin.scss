@@ -31,4 +31,35 @@
     color: #cecece;
   }
 
+  &.registration-form .modal-content {
+    width: 273px;
+    height: 500px;
+    color: #ffffff;
+  }
+
+  &.registration-form .modal-body {
+    height: 350px;
+    color: #4b484b;
+  }
+
+  &.registration-form .modal-body input {
+    margin: 3px;
+  }
+
+  &.registration-form .modal-body button{
+    width: 100%;
+  }
+
+  &.registration-form .modal-header {
+    text-align: center;
+    font-size: larger;
+    background-color: #f2812c;
+  }
+
+  &.registration-form .modal-footer {
+    text-align: center;
+    height: 30px;
+    color: #cecece;
+  }
+
 }

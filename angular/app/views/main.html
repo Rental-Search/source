@@ -1,7 +1,7 @@
 <div class="header">
   <ul class="nav nav-pills pull-right">
     <li><a href="#" data-toggle="modal" data-target="#loginModal">Connectez-vous</a></li>
-    <li><a ng-href="#">Inscrivez-vous</a></li>
+    <li><a href="#" data-toggle="modal" data-target="#registrationModal">Inscrivez-vous</a></li>
   </ul>
     <a href="/"><img src="//eloue.s3.amazonaws.com/static/images/logo_new.png" alt="e-loue" width="155" height="47"></a>
 </div>
@@ -30,34 +30,5 @@
       sécurité grâce à nos assurances.</p>
 </div>
 
-<div id="loginModal" class="modal fade login-form" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-     aria-hidden="true" ng-controller="LoginCtrl">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                Connexion
-            </div>
-            <div class="modal-body">
-                <h4>Connectez-vous à votre compte</h4>
-                <form name="loginForm" class="form-inline" role="form" ng-submit="login()" novalidate>
-                    <input name="username" class="form-control" type="text" placeholder="Email" data-ng-model="credentials.username">
-                    <span
-                            data-ng-show="loginForm.username.$error.required && loginForm.username.$dirty" class="errorMsg">
-            Email is required</span>
-                    <input name="password" class="form-control" type="password" placeholder="Mot de passe" data-ng-model="credentials.password">
-                    <span
-                            data-ng-show="loginForm.password.$error.required && loginForm.password.$dirty" class="errorMsg">
-            Password is required</span>
-                    <label class="checkbox">
-                        <input type="checkbox">Se souvenir de moi
-                    </label>
-                    <button class="btn btn-success" type="submit" data-ng-disabled="loginForm.$invalid || !loginForm.$dirty">Connexion</button>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <p>Vous êtes déjà membre e-toue ?</p>
-                <a href="#">Inscription</a>
-            </div>
-        </div>
-    </div>
-</div>
+<eloue-login-form></eloue-login-form>
+<eloue-registration-form></eloue-registration-form>

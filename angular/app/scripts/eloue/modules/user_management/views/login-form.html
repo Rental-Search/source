@@ -1,0 +1,31 @@
+<div id="loginModal" class="modal fade login-form" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                Connexion
+            </div>
+            <div class="modal-body">
+                <h4>Connectez-vous à votre compte</h4>
+                <form name="loginForm" class="form-inline" role="form" ng-submit="login()" novalidate>
+                    <input name="username" class="form-control" type="text" placeholder="Email" required data-ng-model="credentials.username">
+                    <span
+                            data-ng-show="loginForm.username.$error.required && loginForm.username.$dirty" class="errorMsg">
+            Email is required</span>
+                    <input name="password" class="form-control" type="password" placeholder="Mot de passe" required data-ng-model="credentials.password">
+                    <span
+                            data-ng-show="loginForm.password.$error.required && loginForm.password.$dirty" class="errorMsg">
+            Password is required</span>
+                    <label class="checkbox">
+                        <input type="checkbox">Se souvenir de moi
+                    </label>
+                    <button class="btn btn-success" type="submit" data-ng-disabled="loginForm.$invalid || !loginForm.$dirty">Connexion</button>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <p>Vous êtes déjà membre e-toue ?</p>
+                <a href="#">Inscription</a>
+            </div>
+        </div>
+    </div>
+</div>

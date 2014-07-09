@@ -22,30 +22,17 @@ require.config({
         },
         "jQuery": {exports: "jQuery"},
         "bootstrap": ["jQuery"]
-    },
-    priority: [
-        "angular"
-    ]
+    }
 });
-
-//http://code.angularjs.org/1.2.1/docs/guide/bootstrap#overview_deferred-bootstrap
-window.name = "NG_DEFER_BOOTSTRAP!";
 
 require([
     "jQuery",
-    "bootstrap",
     "angular",
-    "app",
-    "angular-route",
-    "angular-cookies",
-    "angular-sanitize",
-    "angular-resource"
-], function ($, bootstrap, angular, app, ngRoutes, ngCookies, ngSanitize, ngResource) {
+    "bootstrap",
+    "eloue/route"
+], function ($, angular, bootstrap, route) {
     "use strict";
-    /* jshint ignore:start */
-    var $html = angular.element(document.getElementsByTagName("html")[0]);
-    /* jshint ignore:end */
-    angular.element().ready(function () {
-        angular.resumeBootstrap([app.name]);
+    $(function () {
+        angular.bootstrap(document, ["EloueApp"]);
     });
 });

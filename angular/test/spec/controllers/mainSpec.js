@@ -5,7 +5,7 @@ define(['angular', 'angular-mocks', 'app'], function(angular, mocks, app) {
   describe('Controller: MainCtrl', function () {
 
     // load the controller's module
-    beforeEach(module('eloueApp.controllers.MainCtrl'));
+    beforeEach(module('EloueApp.controllers.MainCtrl'));
 
     var MainCtrl,
       scope;
