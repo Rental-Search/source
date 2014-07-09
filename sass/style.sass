@@ -1,0 +1,26 @@
+@import default.sass
+@import palitre.sass
+@import fonts.sass
+
+html
+	height: 100%
+
+body
+	font-family: 'Open Sans', sans-serif
+	height: 100%
+	font-size: 100%
+	& *
+		font-family: 'Open Sans', sans-serif
+
+.b-wrapper
+	min-height: 100%
+
+=content_align_width( $param: 1em )
+	width: ( 60em / $param * 1em)
+	padding: 0 ( .5em / $param * 1em )
+
+header
+	@import header.sass
+	font-weight: 600
+	text-align: center
+	//background-color: rgb(240,240,240)

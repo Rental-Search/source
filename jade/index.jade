@@ -1,50 +1,63 @@
 doctype
 html(lang="en")
-head
-	meta(charset="UTF-8")
-	title e-loue
-	link( href ="http://fonts.googleapis.com/css?family=Open+Sans:400,700,600" rel="stylesheet" )
-	link( href ="css/style.css" rel="stylesheet" )
-body
-	#container
-		header
-			.top
-				.wrapper
-					ul
-						li
+	head
+		meta(charset="UTF-8")
+		title e-loue
+		link( href ="http://fonts.googleapis.com/css?family=Open+Sans:400,700,600" rel="stylesheet" )
+		link( href ="css/style.css" rel="stylesheet" )
+		//-[if lt IE 9]><script src="js/html5shiv.min.js"></script><![endif]
+		//-[if IE 8]>
+			<script>
+				document.createElement('header');
+				document.createElement('section');
+				document.createElement('footer');
+				document.createElement('nav');
+				document.createElement('article');
+				document.createElement('aside');
+			</script>
+			<![endif]
+	body
+		input(type="checkbox")#sourse
+		#sourse-img
+			img( src = "../sourses/homepage_eloue_V5_vert_V1.jpg" )
+		script( src="js/html5shiv.min.js" )
+		.b-wrapper
+			header
+				.header-top
+					ul.header-item-wrapper
+						li.item.header-login
 							| Bonjour, 
 							a( href = "#" ) inscrivez-vous 
 							| ou 
 							a( href = "#" ) connectez-vous 
-						li &nbsp;
-						li
-							| Lorem ipsum dolor sit amet, consectetur adipisicing elit 
-							a( href = "#" ) offres e-loue Pro 
-						li &nbsp;
-						li
+						li.item.dividing-line
+						li.item.header-offers-pro
+							| Vous etes un loueur professionnel, decouvrez les 
+							a( href ="#") offers e-loue Pro 
+						li.item.dividing-line
+						li.item.header-contact
 							| Appelez-nous au 
 							b 0826.800.200 
-							| (0,15&#8364;/min) 
-			.middle
-				.wrapper
-					ul
-						li.logo
+							| (0,15&euro;/min)
+				.header-middle
+					ul.header-item-wrapper
+						li.item.header-logo
 							a( href = "#" )
 								img( src = "img/logo.png" )
-						li.search
-							input( type = "search" )
-							select
-								-for( var i = 0; i < 10; i ++ )
-									option Lorem ipsum #{i}
-							button.icon-search-1
-						li.annonce
-							button Deposez une annonce
-			.bottom
-				.wrapper
-					ul
-						-var items = [ "Logement", "Jardinage", "Automobile", "Image et son", "Bricolage", "Mode et accessori", "Receptioin", "Sante et Bien", "Autres"]
+						li.item.header-search
+							form( name = "header-search" action = "" method = "" )
+								input( name = "what_field" type = "text" form ="header-search" placeholder = "Que voulez-vous louer?" )
+								.header-searc-wrapper
+									input( name = "where_field" type = "text" form ="header-search" placeholder = "Ou ca?" ).icon.location
+									label( for = "where_field" ).icon.location
+								.header-searc-wrapper
+									input( name = "search_header" type = "submit" form ="header-search" value = "" )
+									label( for = "search_header" ).icon.search
+						li.item.publish-ads
+							button( name = "publish_ads" ) Deposez une annonce
+				.header-bottom
+					ul.header-item-wrapper
+						-var items = [ "Logement", "Jardinage", "Automobile", "image et son", "Bricolage", "Mode et accessoire", "Receprion", "Sante etBien etre", "Autres" ]
 						-each item in items
-							li
+							li.item
 								a( href = "#" + item ) #{item}
-				.banner
-					img( src = 'img/banner.jpg' )

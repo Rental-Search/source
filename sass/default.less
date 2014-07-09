@@ -1,0 +1,319 @@
+/*------------------------------------------------------------------------------
+    CSS Document (http://www.w3.org/Style/CSS/)
+
+    project:    wbTemplate
+
+    summary:    PATHS
+                FONT-FACE
+                LESS
+                RESET
+
+----------------------------------------------------------------------------- */
+/* PATHS */
+@fontbaseurl: "http://static1.webedia.fr/fonts/";
+@imgbaseurl: "/web/skins/default/";
+
+/*  =FONT-FACE
+----------------------------------------------------------------------------- */
+
+
+@font-face {
+    font-family: 'ag_old_faceregular';
+    src: url('@{fontbaseurl}ag_old_face_medium-webfont.eot');
+    src: url('@{fontbaseurl}ag_old_face_medium-webfont.eot?#iefix') format('embedded-opentype'),
+         url('@{fontbaseurl}ag_old_face_medium-webfont.woff') format('woff'),
+         url('@{fontbaseurl}ag_old_face_medium-webfont.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'didot_elder_book_osfitalic';
+    src: url('@{fontbaseurl}didotelder-bookitalicosf-webfont.eot');
+    src: url('@{fontbaseurl}didotelder-bookitalicosf-webfont.eot?#iefix') format('embedded-opentype'),
+         url('@{fontbaseurl}didotelder-bookitalicosf-webfont.woff') format('woff'),
+         url('@{fontbaseurl}didotelder-bookitalicosf-webfont.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'didot_elderroman';
+    src: url('@{fontbaseurl}didotelder-roman-webfont.eot');
+    src: url('@{fontbaseurl}didotelder-roman-webfont.eot?#iefix') format('embedded-opentype'),
+         url('@{fontbaseurl}didotelder-roman-webfont.woff') format('woff'),
+         url('@{fontbaseurl}didotelder-roman-webfont.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'didot_elder_alternatesromanIt';
+    src: url('@{fontbaseurl}didotelder-romanitalicalt-webfont.eot');
+    src: url('@{fontbaseurl}didotelder-romanitalicalt-webfont.eot?#iefix') format('embedded-opentype'),
+         url('@{fontbaseurl}didotelder-romanitalicalt-webfont.woff') format('woff'),
+         url('@{fontbaseurl}didotelder-romanitalicalt-webfont.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face{
+    font-family: 'didot_lt_stdbold';
+    src: url('@{fontbaseurl}didotltstd-bold-webfont.eot');
+    src: url('@{fontbaseurl}didotltstd-bold-webfont.eot?#iefix') format('embedded-opentype'),
+         url('@{fontbaseurl}didotltstd-bold-webfont.woff') format('woff'),
+         url('@{fontbaseurl}didotltstd-bold-webfont.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+/*  =LESS
+----------------------------------------------------------------------------- */
+
+
+
+/* main colorz */
+@black: #010101;
+@gray: #dadada;
+@red: #ea433c;
+
+/* default font-size (px) */
+@fz: 16;
+
+/* typography */
+@times: TimesNewRoman, "Times New Roman", Times, Baskerville, Georgia, serif;
+@ag: 'ag_old_faceregular', 'Trebuchet MS', Arial, 'Helvetica Neue', Helvetica, sans-serif;
+@didotR: 'didot_elderroman', TimesNewRoman, "Times New Roman", Times, Baskerville, Georgia, serif;
+@didotB: 'didot_elder_book_osfitalic', TimesNewRoman, "Times New Roman", Times, Baskerville, Georgia, serif;
+@didotI: 'didot_elder_alternatesromanIt', TimesNewRoman, "Times New Roman", Times, Baskerville, Georgia, serif;
+@didotL: 'didot_lt_stdbold', TimesNewRoman, "Times New Roman", Times, Baskerville, Georgia, serif;
+
+/* clearer */
+.clearfix{
+   display: block;
+   zoom: 1; /* IE, don’t use conditional comments here */
+  
+   &:after,
+   &:before
+   {
+      content: "";
+      display: table;
+   }
+   &:after
+   {
+      clear: both;
+   }
+}
+
+/* fonctions */
+.border-radius(@params: 5px 5px 5px 5px){
+    -webkit-border-radius: @params;
+    -moz-border-radius: @params;
+    -ms-border-radius: @params;
+    -o-border-radius: @params;
+    -khtml-border-radius: @params;
+    border-radius: @params;
+}
+
+.box-sizing(@params: border-box){
+    -webkit-box-sizing: @params; /* Safari/Chrome, other WebKit */
+    -moz-box-sizing: @params;    /* Firefox, other Gecko */
+    box-sizing: @params;         /* Opera/IE 8+ */
+}
+
+.box-shadow(@params:0 1px 3px rgba(0, 0, 0, 0.5)){
+    -webkit-box-shadow: @params;
+    -moz-box-shadow: @params;
+    -ms-box-shadow: @params;
+    -o-box-shadow: @params;
+    -khtml-box-shadow: @params;
+    box-shadow: @params;
+}
+
+.box-shadows(@params: inset 0 1px 3px rgba(0, 0, 0, 0.15), @params2: 0 1px 0 0 #fff, @params3: 0px 2px 5px -2px #e8bd88){
+    -webkit-box-shadow: @params, @params2, @params3;
+    -moz-box-shadow: @params, @params2, @params3;
+    -ms-box-shadow: @params, @params2, @params3;
+    -o-box-shadow: @params, @params2, @params3;
+    -khtml-box-shadow: @params, @params2, @params3;
+    box-shadow: @params, @params2, @params3;
+}
+
+.text-shadow(@params:0 1px 0 #000){
+    -webkit-text-shadow: @params;
+    -moz-text-shadow: @params;
+    -ms-text-shadow: @params;
+    -o-text-shadow: @params;
+    -khtml-text-shadow: @params;
+    text-shadow: @params;
+}
+
+.text-shadows(@params:0 1px 0 #fff, @params2: 0 1px 1px rgba(0, 0, 0, 0.35)){
+    -webkit-text-shadow: @params, @params2;
+    -moz-text-shadow: @params, @params2;
+    -ms-text-shadow: @params, @params2;
+    -o-text-shadow: @params, @params2;
+    -khtml-text-shadow: @params, @params2;
+    text-shadow: @params, @params2;
+}
+
+.transform(@params: translate(50px,12px) rotate(135deg)){
+    -webkit-transform: @params;
+    -moz-transform: @params;
+    -ms-transform: @params;
+    -o-transform: @params;
+    -khtml-transform: @params;
+    transform: @params;
+}
+
+.transform-rotate(@params:-2deg){
+    -webkit-transform: rotate(@params);
+    -moz-transform: rotate(@params);
+    -ms-transform: rotate(@params);
+    -o-transform: rotate(@params);
+    -khtml-transform: rotate(@params);
+    transform: rotate(@params);
+}
+
+.transition(@params:all 1s ease-in-out){
+    -webkit-transition: @params;
+    -moz-transition: @params;
+    -ms-transition: @params;
+    -o-transition: @params;
+    -khtml-transition: @params;
+    transition: @params;
+}
+
+.transition-delay(@params:1s){
+    -webkit-transition-delay: @params;
+    -moz-transition-delay: @params;
+    -ms-transition-delay: @params;
+    -o-transition-delay: @params;
+    -khtml-transition-delay: @params;
+    transition-delay: @params;
+}
+
+.vgradient(@color1:#ccc, @color2:#000){
+    background: @color1;
+    background-image: -webkit-gradient(linear,left top,left bottom, color-stop(0, @color1), color-stop(1, @color2));
+    background-image: -moz-linear-gradient(top, @color1, @color2);
+    background-image: -o-linear-gradient(top, @color1, @color2);
+    background-image: -khtml-linear-gradient(top, @color1, @color2);
+    background-image: -ms-linear-gradient(top,  @color1 0%, @color2 100%); /* IE10+ */
+//    filter: e('progid:DXImageTransform.Microsoft.gradient(startColorstr=')@color1, e('endColorstr=')@color2 e(')');
+    background: linear-gradient(top, @color1, @color2); /*future CSS3 browsers*/
+}
+
+.hgradient(@color1:#ccc, @color2:#000){
+    background: @color1;
+    background-image: -webkit-gradient(linear,left top,right top, color-stop(0, @color1), color-stop(1, @color2));
+    background-image: -moz-linear-gradient(left center, @color1, @color2);
+    background-image: -o-linear-gradient(left center, @color1, @color2);
+    background-image: -khtml-linear-gradient(left center, @color1, @color2);
+    background-image: -ms-linear-gradient(left,  @color1 0%, @color2 100%); /* IE10+ */
+//    filter: e('progid:DXImageTransform.Microsoft.gradient(GradientType=1, startColorstr=')@color1, e('endColorstr=')@color2 e(')');
+    background: linear-gradient(left center, @color1, @color2); /*future CSS3 browsers*/
+}
+
+.opacity(@value:.5){
+    -webkit-opacity : @value;
+    -moz-opacity : @value;
+    -o-opacity : @value;
+    -khtml-opacity : @value;
+    opacity: @value;
+}
+
+/* ie7 compliant fucking inline-block */
+.inline-block(){
+    display: inline-block;
+    *display: inline;
+    zoom: 1;
+}
+
+.roll()
+{
+   text-decoration: underline;
+  
+   &:hover,
+   &:focus
+   {
+      text-decoration: none;
+   }
+}
+
+.font-size(@newSize:@fz, @baseSize:@fz){
+    font-size: @newSize * 1em / @baseSize;
+}
+
+
+/*  =RESET
+----------------------------------------------------------------------------- */
+/* =minimum reset ------------------------------------------------------------ */
+html, body, blockquote, ul, ol, form{ margin: 0; padding: 0 }
+p{ margin: 0 0 1em;}
+ul{ list-style: none; }
+img{ display: block; border: none; }
+
+/* =margin fixes ------------------------------------------------------------- */
+h1:first-child, h2:first-child, h3:first-child, h4:first-child, h5:first-child, h6:first-child{ margin-top: 0; }
+p:last-child, ul:last-child, ol:last-child, dl:last-child, blockquote:last-child, pre:last-child, table:last-child{ margin-bottom: 0; }
+
+li p, li ul{
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+/* =text formatting ---------------------------------------------------------- */
+code, pre, samp{ white-space: pre-wrap; }
+code{ line-height: 1em; }
+table{ margin-bottom: 1.5em; }
+input{ margin: 0; }
+
+abbr{
+    cursor:help;
+    border-bottom: 1px dotted @black;
+}
+
+button{
+    padding: 0;
+    border: 0;
+    background: none;
+    cursor: pointer;
+}
+
+/* =html5 -------------------------------------------------------------------- */
+article, aside, audio, canvas, datagrid, datalist, details, dialog, figure, footer, header, menu, nav, section, video { display: block; }
+abbr, eventsource, mark, meter, time, progress, output, bb { display: inline; }
+
+/* =webkit hacks ------------------------------------------------------------- */
+html{ -webkit-font-smoothing: antialiased; } /* ugly Mac OS fonts rendering */
+input, textarea, select{ box-sizing: inherit; } /* user agent stylesheet default is box-sizing: border-box */
+
+/* Webkit input[type=search] custom */
+input[type="search"] { -webkit-appearance: textfield!important; }
+input[type="search"]::-webkit-search-cancel-button{ display: none; }
+
+
+/*  =GENERIC
+----------------------------------------------------------------------------- */
+.fl{ float: left!important; }
+.fr{ float: right!important; }
+
+.txtR{ text-align: right!important; }
+.txtC{ text-align: center!important; }
+
+.pos-r{ position: relative; }
+.m-t{ margin-top: 10px; }
+
+.invisible{ /* accessible hidden */
+    position: absolute;
+    left: 0;
+    text-indent: -5000px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+}
+
+::-moz-selection{ color: #fff; background-color: lighten(@black,15%); } /* firefox */
+::-webkit-selection{ color: #fff; background-color: lighten(@black,15%); } /* webkit */
+::selection{ color: #fff; background-color: lighten(@black,15%); } /* normal */
