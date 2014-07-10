@@ -751,4 +751,74 @@ def product_xml_list_criteo(request):
 
 
 def product_xml_list_snowglobe(request):
-    return render(request, 'products/product_template_snowglobe.xml', {'products': product_search.all().order_by('-created_at')}, content_type="text/xml")
+    from django.utils.datastructures import SortedDict
+    from django.utils.encoding import smart_str
+    from tempfile import TemporaryFile
+    import csv
+
+    products = product_search.all().order_by('-created_at')
+    csv_file = TemporaryFile()
+    writer = csv.writer(csv_file, delimiter='|')
+    
+    row = SortedDict()
+    row['category_1'] = 'category_1'
+    row['category_2'] = 'category_2'
+    row['category_3'] = 'category_3'
+    row['summary'] = 'summary'
+    row['city'] = 'city'
+    row['zipcode'] = 'zipcode'
+    row['description'] = 'description'
+    writer.writerow(row.values())
+
+    for product in products:
+        row = SortedDict()
+        try:
+            row['category_1'] = product.categories[0]
+        except:
+            row['category_1'] = ''
+
+        try:
+            row['category_2'] = product.categories[1]
+        except:
+            row['category_3'] = ''
+
+        try:
+            row['category_3'] = product.categories[2]
+        except:
+            row['category_3'] = ''
+
+        try:
+            row['summary'] = smart_str(product.summary.replace("\n", " ").replace("\r", " "))
+        except:
+            row['summary'] = ''
+
+        try:
+            row['city'] = smart_str(product.city.replace("\n", " ").replace("\r", " "))
+        except:
+            row['city'] = ''
+
+        try:
+            row['zipcode'] = smart_str(product.zipcode.replace("\n", " ").replace("\r", " "))
+        except:
+            row['zipcode'] = ''
+
+        try:
+            row['description'] = smart_str(product.description.replace("\n", " ").replace("\r", " "))
+        except:
+            row['description'] = ''
+
+        writer.writerow(row.values())
+    csv_file.seek(0)
+    latin1csv_file = TemporaryFile()
+    for line in csv_file:
+        latin1csv_file.write(line.decode('utf-8').encode('latin1', 'ignore'))
+    latin1csv_file.seek(0)
+
+    response = HttpResponse(latin1csv_file.read(), content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="products.csv"'
+
+    return response
+
+
+
+    #return render(request, 'products/product_template_snowglobe.xml', {'products': product_search.all().order_by('-created_at')}, content_type="text/xml")
