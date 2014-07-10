@@ -1,15 +1,5 @@
 .header-item-wrapper
-	display: inline-block
-	text-align: justify
-	&:after
-		content: ''
-		width: 100%
-		display: inline-block
-		height: 0
-		overflow: hidden
-		visibility: hidden
-	.item
-		display: inline-block
+	+stretch_equally()
 
 .header-top
 	$h: 3.1em
@@ -33,30 +23,26 @@
 	line-height: $h
 	height: $h
 	.header-item-wrapper
-		+content_align_width()
-	.item
-		padding: 0 .75em
-	.header-logo
-		padding-left: 0
-		a
-			display: inline-block
+		+content_align_width( 1em )
+	a
+		display: inline-block
 		img
 			display: block
 			position: relative
 			top: .9em
 
-$fz: ( 15em / 16 )
+$fz: ( 14em / 16 )
 $br: 3px
 .header-search
 	font-size: $fz
 	form
 		display: inline-block
-		margin: 1em 0 -1em
+		margin: 1.1em 0 -1.1em
 		> *
 			float: left
 			position: relative
 		input
-			font-size: $fz
+			font-size: 1em
 			display: block
 			font-weight: 700
 			border: 1px solid $gr
@@ -70,13 +56,13 @@ $br: 3px
 				+border-radius($br 0 0 $br)
 				color: $grn
 				border-right: none
-				width: 20em
+				width: 20.5em
 			&[ name = "where_field" ]
 				+border-radius(0)
-				width: 11em
+				width: 11.5em
 				color: $med_gr
 				border-color: $gr $light_gr
-				padding-left: 3em
+				padding-left: 2.6em
 				&:focus + .icon,
 				&:hover + .icon,
 					color: $med_gr
@@ -104,29 +90,26 @@ $br: 3px
 				&:before
 					display: block
 					position: absolute
-					top: 30%
-					left: 18%
+					top: 33%
+					left: 20%
 
-.publish-ads
-	padding-right: 0 !important
-	$fz: ( 14em / 16 )
+.header-publish-ads
 	button
-		+border-radius($br)
-		line-height: 3em
-		height: 3em
-		padding: 0 1.8em
 		font-size: $fz
+		+border-radius($br)
+		line-height: 1.5em
+		padding: .8em 1.8em .6em
 		background-color: $grn
 		font-weight: bold
 		color: white
 
 .header-bottom
-	$h: 3.2em
+	$h: 3.45em
 	$fz: ( 13em / 16 )
 	background-color: $clouds
 	color: $black
 	font-size: $fz
-	line-height: $h
+	line-height: $h * .9
 	height: $h
 	.header-item-wrapper
 		+content_align_width($fz)

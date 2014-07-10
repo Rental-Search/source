@@ -13,14 +13,55 @@ body
 		font-family: 'Open Sans', sans-serif
 
 .b-wrapper
-	min-height: 100%
+	font-size: 1em
+	text-align: center
 
-=content_align_width( $param: 1em )
+.fog
+	position: absolute
+	width: 100%
+	height: 100%
+	top: 0
+	left: 0
+	background-color: rgba(255,255,255,.2)
+
+=content_align_width( $param: .83em )
 	width: ( 60em / $param * 1em)
 	padding: 0 ( .5em / $param * 1em )
+	position: relative
+	margin: 0 auto
 
-header
+=stretch_equally()
+	display: inline-block
+	text-align: justify
+	&:after
+		content: ''
+		width: 100%
+		display: inline-block
+		height: 0
+		overflow: hidden
+		visibility: hidden
+	& > *
+		display: inline-block
+
+=fz( $param: 16 )
+	font-size: ( $param * 1em / 16 )
+
+.h-wrapper
 	@import header.sass
 	font-weight: 600
 	text-align: center
 	//background-color: rgb(240,240,240)
+
+.banner
+	background-color: $clouds
+	margin-bottom: 3em
+	@import banner.sass
+
+.insurances
+	@import insurances.sass
+
+.product-list
+	border: 0px solid $light_gr
+	border-width: 1px 0
+	background-color: $clouds
+	@import product-list.sass
