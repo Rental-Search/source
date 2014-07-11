@@ -1,0 +1,182 @@
+/*  =SASS */
+/* default font-size (px) */
+/* typography */
+/* clearer */
+/* main colorz */
+/* default font-size (px) */
+/* fonctions */
+/* ie7 compliant fucking inline-block */
+/*  =RESET */
+/* =minimum reset */
+html, body, blockquote, ul, ol, form {
+  margin: 0;
+  padding: 0;
+}
+
+p {
+  margin: 0 0 1em;
+}
+
+ul {
+  list-style: none;
+}
+
+img {
+  display: block;
+  border: none;
+}
+
+/* =margin fixes */
+h1:first-child, h2:first-child, h3:first-child, h4:first-child, h5:first-child, h6:first-child {
+  margin-top: 0;
+}
+
+p:last-child, ul:last-child, ol:last-child, dl:last-child, blockquote:last-child, pre:last-child, table:last-child {
+  margin-bottom: 0;
+}
+
+li p, li ul {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+a:link, a:visited, a:hover, a:active {
+  text-decoration: none;
+  outline: none;
+  color: inherit;
+}
+
+/* =text formatting ---------------------------------------------------------- */
+code, pre, samp {
+  white-space: pre-wrap;
+}
+
+code {
+  line-height: 1em;
+}
+
+table {
+  margin-bottom: 1.5em;
+}
+
+input {
+  margin: 0;
+}
+
+abbr {
+  cursor: help;
+  border-bottom: 1px dotted #010101;
+}
+
+button {
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
+
+/* =html5 -------------------------------------------------------------------- */
+article, aside, audio, canvas, datagrid, datalist, details, dialog, figure, footer, header, menu, nav, section, video {
+  display: block;
+}
+
+abbr, eventsource, mark, meter, time, progress, output, bb {
+  display: inline;
+}
+
+/* =webkit hacks ------------------------------------------------------------- */
+html {
+  -webkit-font-smoothing: antialiased;
+}
+
+input, textarea, select {
+  -webkit-box-sizing: inherit;
+  -moz-box-sizing: inherit;
+  box-sizing: inherit;
+}
+
+/* Webkit input[type=search] custom */
+input[type="search"] {
+  -webkit-appearance: textfield !important;
+}
+
+input[type="search"]::-webkit-search-cancel-button {
+  display: none;
+}
+
+/*  =GENERIC */
+.fl {
+  float: left !important;
+}
+
+.fr {
+  float: right !important;
+}
+
+.txtR {
+  text-align: right !important;
+}
+
+.txtC {
+  text-align: center !important;
+}
+
+.pos-r {
+  position: relative;
+}
+
+.m-t {
+  margin-top: 10px;
+}
+
+/* accessible hidden */
+.invisible {
+  position: absolute;
+  left: 0;
+  text-indent: -5000px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+::-moz-selection {
+  color: white;
+  background-color: #818181;
+}
+
+::-webkit-selection {
+  color: white;
+  background-color: #818181;
+}
+
+::selection {
+  color: white;
+  background-color: #818181;
+}
+
+input#sourse {
+  position: fixed;
+  z-index: 100000;
+}
+
+input#sourse + #sourse-img {
+  overflow: hidden;
+  opacity: 0;
+  position: absolute;
+  -webkit-transition: opacity 1s, z-index 0s 1s;
+  transition: opacity 1s, z-index 0s 1s;
+  width: 100%;
+  z-index: -1;
+}
+input#sourse + #sourse-img img {
+  display: block;
+  margin: 0 auto;
+}
+
+input#sourse:checked + #sourse-img {
+  -webkit-transition: opacity 1s;
+  transition: opacity 1s;
+  opacity: 1;
+  z-index: 10000;
+  height: auto;
+}
