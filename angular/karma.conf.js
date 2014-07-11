@@ -7,20 +7,19 @@ module.exports = function(config) {
     basePath: '',
 
     // testing framework to use (jasmine/mocha/qunit/...)
-    frameworks: ['jasmine', "requirejs"],
+    frameworks: ['jasmine', 'requirejs'],
 
     // list of files / patterns to load in the browser
     files: [
-      {pattern: 'app/bower_components/angular/angular.js', included: false },
+      {pattern: 'app/bower_components/angular/angular.min.js', included: false },
       {pattern: 'app/bower_components/angular-mocks/angular-mocks.js', included: false },
-      {pattern: 'app/bower_components/angular-resource/angular-resource.js', included: false },
-      {pattern: 'app/bower_components/angular-cookies/angular-cookies.js', included: false },
-      {pattern: 'app/bower_components/angular-sanitize/angular-sanitize.js', included: false },
-      {pattern: 'app/bower_components/angular-route/angular-route.js', included: false },
+      {pattern: 'app/bower_components/angular-resource/angular-resource.min.js', included: false },
+      {pattern: 'app/bower_components/angular-cookies/angular-cookies.min.js', included: false },
+      {pattern: 'app/bower_components/angular-sanitize/angular-sanitize.min.js', included: false },
+      {pattern: 'app/bower_components/angular-route/angular-route.min.js', included: false },
       {pattern: 'app/scripts/*.js', included: false },
       {pattern: 'app/scripts/**/*.js', included: false },
-      {pattern: 'test/spec/**/*.js', included: false },
-      // http://karma-runner.github.io/0.10/plus/requirejs.html
+      {pattern: 'test/unit/**/*.js', included: false },
       'test/test-main.js'
     ],
 
@@ -34,7 +33,7 @@ module.exports = function(config) {
 
     // level of logging
     // possible values: LOG_DISABLE || LOG_ERROR || LOG_WARN || LOG_INFO || LOG_DEBUG
-    logLevel: config.LOG_INFO,
+    logLevel: config.LOG_DEBUG,
 
 
     // enable / disable watching file and executing tests whenever any file changes
@@ -49,7 +48,7 @@ module.exports = function(config) {
     // - Safari (only Mac)
     // - PhantomJS
     // - IE (only Windows)
-    browsers: ['PhantomJS'],
+    browsers: ['Chrome'],
 
 
     // Continuous Integration mode

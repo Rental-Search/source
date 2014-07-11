@@ -31,7 +31,6 @@ define(["eloue/app", "eloue/modules/user_management/services/AuthService",
 
             // Route change event listener
             $rootScope.$on("$locationChangeStart", function (event, next, current) {
-
                 // Redirect not authenticated user
                 var routes = $route.routes;
                 for (var i in routes) {
@@ -46,7 +45,7 @@ define(["eloue/app", "eloue/modules/user_management/services/AuthService",
 
             $rootScope.$on("redirectToLogin", function() {
                 console.log("Redirect to login");
-                $location.path("/login");
+                $location.path("/");
             });
         }]);
     });

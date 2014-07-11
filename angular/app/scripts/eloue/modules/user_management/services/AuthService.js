@@ -3,7 +3,7 @@ define(["angular", "eloue/constants", "eloue/modules/user_management/UserManagem
     /**
      * Authentication service.
      */
-    angular.module("EloueApp.UserManagementModule").factory("AuthService", ["$rootScope", "$cookieStore", "$location", "Endpoints", function ($rootScope, $cookieStore, $location, Endpoints) {
+    angular.module("EloueApp.UserManagementModule").factory("AuthService", ["$rootScope", "$location", "Endpoints", function ($rootScope, $location, Endpoints) {
 
         return {
 
@@ -14,7 +14,7 @@ define(["angular", "eloue/constants", "eloue/modules/user_management/UserManagem
              * @returns Signed in user object
              */
             login: function (credentials) {
-                var userToken = $cookieStore.get("user_token");
+                var userToken = this.getCookie("user_token");
                 var self = this;
                 if (!userToken) {
                     $.ajax({
@@ -28,8 +28,10 @@ define(["angular", "eloue/constants", "eloue/modules/user_management/UserManagem
                             password: credentials.password
                         },
                         success: function (data) {
-                            console.log(data.access_token);
-                            $cookieStore.put("user_token", data.access_token);
+                            var expire = new Date();
+                            expire.setTime(new Date().getTime() + 3600000 * 24 * 30);
+                            document.cookie = "user_token=" + escape(data.access_token) + ";expires="
+                                + expire.toGMTString();
                             self.authorize();
                         },
                         error: function (jqXHR) {
@@ -46,7 +48,7 @@ define(["angular", "eloue/constants", "eloue/modules/user_management/UserManagem
             },
 
             authorize: function authorize() {
-                var userToken = $cookieStore.get("user_token");
+                var userToken = this.getCookie("user_token");
                 if (userToken) {
                     $(".modal-backdrop").hide();
                     $location.path("/dashboard");
@@ -77,8 +79,19 @@ define(["angular", "eloue/constants", "eloue/modules/user_management/UserManagem
              * @returns true if user is logged in
              */
             isLoggedIn: function () {
-                var userToken = $cookieStore.get("user_token");
+                var userToken = this.getCookie("user_token");
                 return userToken;
+            },
+
+            getCookie: function getCookie(cname) {
+                var name = cname + "=";
+                var ca = document.cookie.split(';');
+                for (var i = 0; i < ca.length; i++) {
+                    var c = ca[i];
+                    while (c.charAt(0) == ' ') c = c.substring(1);
+                    if (c.indexOf(name) != -1) return c.substring(name.length, c.length);
+                }
+                return "";
             }
         };
     }]);
