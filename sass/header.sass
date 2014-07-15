@@ -29,42 +29,34 @@ header
 				border-color: lighten($gray-light, 30%)
 		.where-field-wrapper
 			border-radius: 0
-			.icon-map-marker
-				border-radius: 0
-				background-color: white
-				border-color: lighten($gray-light, 30%) transparent lighten($gray-light, 30%) $gray-lighter
-				border-right-width: 0
-				top: 0 !important
-				padding-right: 0
-				padding-left: .7em
+			.sprite-location
+				position: absolute
+				top: 0
+				bottom: 0
+				left: 1em
+				margin: auto
+				z-index: 5
+				+sprite($s-location-pin)
 			.where-field
-				border-left-width: 0
-				border-color: lighten($gray-light, 30%) $gray-lighter lighten($gray-light, 30%) transparent
+				padding-left: 3em
+				border-color: lighten($gray-light, 30%) $gray-lighter
 				border-radius: 0
 				width: 100%
 				color: lighten($gray-light, 15%)
 				+placeholder(lighten($gray-light, 15%))
-		.icon-search:before,
-		.icon-map-marker:before
+				font-weight: 600
+		.icon-search:before
 			color: lighten($gray-light, 15%)
 			font-size: 1.2em
 		.form-control,
 		.btn
+			padding: .8em
 			height: 3em
+		.btn-search
+			border-left: none
 
 	.bottom
 		background-color: lighten($gray-lighter, 5%)
-		.nav
-			height: 3.2em
-			width: 100%
-			text-align: justify
-			&:after
-				display: inline-block
-				width: 100%
-				height: 0
-				overflow: hidden
-		li
-			display: inline-block
 		a
 			padding-top: 1em
 			padding-bottom: 1em
