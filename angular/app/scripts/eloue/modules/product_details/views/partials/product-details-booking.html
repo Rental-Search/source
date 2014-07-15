@@ -1,0 +1,46 @@
+<h4>Réservez en ligne</h4>
+<p> à partir de {{pricePerDay}}€/jour</p>
+<form id="productDetailsBookingForm" name="productDetailsBookingForm" class="" role="form" style="width:500px" novalidate>
+    <div class="form-group">
+        <label class="col-md-3 control-label">Du</label>
+
+        <div class="col-md-9">
+
+            <div class="input-group">
+                <input name="fromDate" class="datepicker-dropdown form-control" size="16" type="text" required
+                       ng-model="bookingDetails.fromDate" ng-pattern="/^(\d{1,2}\/\d{1,2}\/\d{4}){0,1}$/"
+                       data-date-format="dd/mm/yyyy" ng-change="updatePrice()" eloue-datepicker>
+                <div class="input-append bootstrap-timepicker">
+                    <input name="fromTine" type="text" class="form-control" ng-model="bookingDetails.fromHours" ng-change="updatePrice()" eloue-timepicker>
+                    <span class="add-on"><i class="icon-time"></i></span>
+                </div>
+            </div>
+            <span ng-show="productDetailsBookingForm.fromDate.$dirty && pproductDetailsBookingForm.fromDate.$error.required" class="text-danger">From date is required.</span>
+            <span ng-show="productDetailsBookingForm.fromDate.$dirty && pproductDetailsBookingForm.fromDate.$error.pattern" class="text-danger">Invalid date.</span>
+            <span ng-show="productDetailsBookingForm.fromDate.$dirty && pproductDetailsBookingForm.fromDate.$error.pastDate" class="text-danger">Can't select data in the past.</span>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-md-3 control-label">Au</label>
+
+        <div class="col-md-9">
+            <div class="input-group">
+                <input name="toDate" class="datepicker-dropdown form-control" size="16" type="text" required
+                       ng-model="bookingDetails.toDate" ng-pattern="/^(\d{1,2}\/\d{1,2}\/\d{4}){0,1}$/"
+                       data-date-format="dd/mm/yyyy" ng-change="updatePrice()" eloue-datepicker>
+                <div class="input-append bootstrap-timepicker">
+                    <input name="toTime" type="text" class="form-control" ng-model="bookingDetails.toHours" ng-change="updatePrice()" eloue-timepicker>
+                    <span class="add-on"><i class="icon-time"></i></span>
+                </div>
+            </div>
+            <span ng-show="productDetailsBookingForm.toDate.$dirty && productDetailsBookingForm.toDate.$error.required" class="text-danger">From date is required.</span>
+            <span ng-show="productDetailsBookingForm.toDate.$dirty && pproductDetailsBookingForm.toDate.$error.pattern" class="text-danger">Invalid date.</span>
+            <span ng-show="productDetailsBookingForm.toDate.$dirty && pproductDetailsBookingForm.toDate.$error.pastDate" class="text-danger">Can't select data in the past.</span>
+        </div>
+    </div>
+    <p>Durée de la location : {{durationDays}} jours et {{durationHours}} heures</p>
+    <p>Prix de la location : {{bookingPrice}}€</p>
+    <p>Assurance incluse</p>
+    <button class="btn btn-success" type="submit" data-ng-disabled="productDetailsBookingForm.$invalid || !productDetailsBookingForm.$dirty">Réservez</button>
+</form>

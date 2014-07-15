@@ -8,7 +8,9 @@ require.config({
         "angular-resource": "../bower_components/angular-resource/angular-resource.min",
         "angular-route": "../bower_components/angular-route/angular-route.min",
         "angular-cookies": "../bower_components/angular-cookies/angular-cookies.min",
-        "angular-sanitize": "../bower_components/angular-sanitize/angular-sanitize.min"
+        "angular-sanitize": "../bower_components/angular-sanitize/angular-sanitize.min",
+        "bootstrap-datepicker": "../bower_components/bootstrap-datepicker/js/bootstrap-datepicker",
+        "bootstrap-timepicker": "../bower_components/bootstrap-timepicker/js/bootstrap-timepicker"
     },
     shim: {
         "angular": {"exports": "angular"},
@@ -21,7 +23,9 @@ require.config({
             "exports": "angular.mock"
         },
         "jQuery": {exports: "jQuery"},
-        "bootstrap": ["jQuery"]
+        "bootstrap": ["jQuery"],
+        "bootstrap-datepicker": ["jQuery"],
+        "bootstrap-timepicker": ["jQuery"]
     }
 });
 
@@ -29,8 +33,10 @@ require([
     "jQuery",
     "angular",
     "bootstrap",
+    "bootstrap-datepicker",
+    "bootstrap-timepicker",
     "eloue/route"
-], function ($, angular, bootstrap, route) {
+], function ($, angular, bootstrap, datepicker, timepicker, route) {
     "use strict";
     $(function () {
         angular.bootstrap(document, ["EloueApp"]);

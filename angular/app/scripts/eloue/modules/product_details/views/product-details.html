@@ -1,0 +1,20 @@
+<div id="product_details_container">
+    <h3>Product Details</h3>
+
+    <div class="row">
+        <div class="col-lg-8 col-md-8">
+            <button class="btn btn-success" type="submit" data-toggle="modal" data-target="#messageModal">Envoyez un message
+            </button>
+            <button class="btn btn-success" type="submit" data-toggle="modal" data-target="#phoneModal" ng-click="getCallDetails()">Appelez</button>
+        </div>
+        <div class="col-lg-4 col-md-4">
+            <eloue-product-details-booking in-modal="false"></eloue-product-details-booking>
+        </div>
+    </div>
+
+
+</div>
+
+<eloue-booking-modal></eloue-booking-modal>
+<eloue-message-modal></eloue-message-modal>
+<eloue-phone-modal></eloue-phone-modal>

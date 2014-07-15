@@ -1,0 +1,64 @@
+.modal {
+
+  &.phone-form .modal-content {
+    width: 600px;
+    height: 500px;
+    color: #ffffff;
+  }
+
+  &.phone-form .modal-body {
+    height: 380px;
+    color: #4b484b;
+  }
+
+  &.phone-form .modal-body input {
+    margin: 3px;
+  }
+
+  &.phone-form .modal-body button{
+    width: 100%;
+  }
+
+  &.phone-form .modal-header {
+    text-align: center;
+    font-size: larger;
+    background-color: #f2812c;
+  }
+
+  &.phone-form .modal-footer {
+    text-align: center;
+    height: 30px;
+    color: #cecece;
+  }
+
+  &.message-form .modal-content {
+    width: 600px;
+    height: 500px;
+    color: #ffffff;
+  }
+
+  &.message-form .modal-body {
+    height: 380px;
+    color: #4b484b;
+  }
+
+  &.message-form .modal-body input {
+    margin: 3px;
+  }
+
+  &.message-form .modal-body button{
+    width: 100%;
+  }
+
+  &.message-form .modal-header {
+    text-align: center;
+    font-size: larger;
+    background-color: #f2812c;
+  }
+
+  &.message-form .modal-footer {
+    text-align: center;
+    height: 30px;
+    color: #cecece;
+  }
+}

@@ -5,7 +5,7 @@ define(["angular", "eloue/modules/user_management/UserManagementModule", "eloue/
     "use strict";
 
     /**
-     * Directive to display list of attachments.
+     * Directive to display login form.
      */
     angular.module("EloueApp.UserManagementModule").directive("eloueLoginForm", [function () {
         return {
