@@ -119,6 +119,7 @@ module.exports = function(grunt) {
 				destImg: 'img/spritesheet.png',
 				destCSS: 'sass/sprites.sass',
 				algorithm: 'binary-tree',
+				padding: 2,
 				cssVarMap: function(sprite) {
 					sprite.name = 's-' + sprite.name
 				},

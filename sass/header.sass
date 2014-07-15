@@ -6,27 +6,25 @@ header
 		margin: 10px 0
 
 	.middle
-		border: 1px solid $gray-lighter
-		border-width: 1px 0
 		padding: 1.3em 0
 		font-size: 14px
+		.btn-success
+			width: 100%
+		+framing()
 		.logo-wrapper
 			img
 				margin-top: 5px
-		.btn-success
-			font-weight: 700
-			border-color: $brand-success
-			width: 100%
 		.form-control
 			position: relative
 			height: auto
 			font-weight: 700
+			padding: .7em
 			&.what-field
 				width: 60%
 				border-right: none
 				color: $brand-success
 				+placeholder($brand-success)
-				border-color: lighten($gray-light, 30%)
+				border-color: $gray-medium
 		.where-field-wrapper
 			border-radius: 0
 			.sprite-location
@@ -35,28 +33,26 @@ header
 				bottom: 0
 				left: 1em
 				margin: auto
-				z-index: 5
+				z-index: 50
 				+sprite($s-location-pin)
 			.where-field
 				padding-left: 3em
-				border-color: lighten($gray-light, 30%) $gray-lighter
+				border-color: $gray-medium $gray-lighter
 				border-radius: 0
 				width: 100%
-				color: lighten($gray-light, 15%)
-				+placeholder(lighten($gray-light, 15%))
+				color: $gray-strong
+				+placeholder($gray-strong)
 				font-weight: 600
 		.icon-search:before
-			color: lighten($gray-light, 15%)
+			color: $gray-strong
 			font-size: 1.2em
 		.form-control,
 		.btn
-			padding: .8em
 			height: 3em
 		.btn-search
 			border-left: none
 
 	.bottom
-		background-color: lighten($gray-lighter, 5%)
 		a
 			padding-top: 1em
 			padding-bottom: 1em

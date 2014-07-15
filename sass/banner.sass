@@ -1,6 +1,7 @@
 .banner
 	position: relative
 	top: -1px
+
 	img
 		width: 100%
 	.banner-content
@@ -11,14 +12,15 @@
 		text-transform: uppercase
 		color: white
 		text-align: center
+		$ls: .06em
 		p
 			margin: 0
 			padding: 2.3em 0 .65em
 			font-weight: 300
 			font-size: 39px
-			letter-spacing: .06em
+			letter-spacing: $ls
 		a
-			letter-spacing: .06em
+			letter-spacing: $ls
 			text-transform: inherit
 			font-size: 15px
 			font-weight: 700
@@ -27,9 +29,8 @@
 			border: 2px solid white
 			padding: 1.2em 2em
 			display: inline-block
-			border-radius: 13px
-			// behavior: url(PIE.htc)
+			+border-radius(3px)
 			&:hover
 				text-decoration: none
-				// border-color: $brand-primary
-				background-color: rgba(0,0,0,.1)
+				background-color: $brand-primary
+				background-color: $smoke-lite

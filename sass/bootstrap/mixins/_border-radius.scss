@@ -3,20 +3,16 @@
 @mixin border-top-radius($radius) {
   border-top-right-radius: $radius;
    border-top-left-radius: $radius;
-   // behavior: url(PIE.htc);
 }
 @mixin border-right-radius($radius) {
   border-bottom-right-radius: $radius;
      border-top-right-radius: $radius;
-   // behavior: url(PIE.htc);
 }
 @mixin border-bottom-radius($radius) {
   border-bottom-right-radius: $radius;
    border-bottom-left-radius: $radius;
-   // behavior: url(PIE.htc);
 }
 @mixin border-left-radius($radius) {
   border-bottom-left-radius: $radius;
      border-top-left-radius: $radius;
-     // behavior: url(PIE.htc);
 }
