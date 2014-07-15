@@ -1,0 +1,38 @@
+.banner {
+  position: relative;
+}
+.banner img {
+  width: 100%;
+}
+.banner .banner-content {
+  top: 0;
+  left: 0;
+  width: 100%;
+  position: absolute;
+  text-transform: uppercase;
+  color: white;
+  text-align: center;
+}
+.banner .banner-content p {
+  margin: 0;
+  padding: 2.3em 0 0.65em;
+  font-weight: 300;
+  font-size: 39px;
+  letter-spacing: 0.06em;
+}
+.banner .banner-content a {
+  letter-spacing: 0.06em;
+  text-transform: inherit;
+  font-size: 15px;
+  font-weight: 700;
+  background-color: transparent;
+  color: inherit;
+  border: 2px solid white;
+  padding: 1.2em 2em;
+  display: inline-block;
+  border-radius: 3px;
+}
+.banner .banner-content a:hover {
+  text-decoration: none;
+  background-color: rgba(0, 0, 0, 0.1);
+}

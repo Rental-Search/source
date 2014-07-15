@@ -1,0 +1,10 @@
+.insurances ul {
+  margin-top: 2em;
+}
+.insurances ul h4 {
+  font-weight: 700;
+  font-size: 14px;
+}
+.insurances ul p {
+  font-size: 13px;
+}

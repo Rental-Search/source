@@ -1,0 +1,16 @@
+.nav-justified
+	text-align: center
+	white-space: nowrap
+	.devide
+		position: relative
+		&:first-child
+			display: none !important
+		&:before
+			content: ''
+			position: absolute
+			display: block
+			top: 0
+			left: 50%
+			height: 100%
+			width: 1px
+			background-color: $gray-lighter

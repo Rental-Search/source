@@ -1,0 +1,79 @@
+/*
+  SASS variables are information about icon's compiled state, stored under its original file name
+
+  .icon-home
+    width: $icon-home-width
+
+  The large array-like variables contain all information about a single icon
+  $icon-home: x y offset_x offset_y width height total_width total_height image_path
+  */
+$s-payment-x: 102px
+$s-payment-y: 0px
+$s-payment-offset-x: -102px
+$s-payment-offset-y: 0px
+$s-payment-width: 62px
+$s-payment-height: 44px
+$s-payment-total-width: 164px
+$s-payment-total-height: 97px
+$s-payment-image: '../img/spritesheet.png'
+$s-payment: 102px 0px -102px 0px 62px 44px 164px 97px '../img/spritesheet.png'
+$s-serenity-x: 0px
+$s-serenity-y: 59px
+$s-serenity-offset-x: 0px
+$s-serenity-offset-y: -59px
+$s-serenity-width: 56px
+$s-serenity-height: 38px
+$s-serenity-total-width: 164px
+$s-serenity-total-height: 97px
+$s-serenity-image: '../img/spritesheet.png'
+$s-serenity: 0px 59px 0px -59px 56px 38px 164px 97px '../img/spritesheet.png'
+$s-simplicity-x: 40px
+$s-simplicity-y: 0px
+$s-simplicity-offset-x: -40px
+$s-simplicity-offset-y: 0px
+$s-simplicity-width: 62px
+$s-simplicity-height: 54px
+$s-simplicity-total-width: 164px
+$s-simplicity-total-height: 97px
+$s-simplicity-image: '../img/spritesheet.png'
+$s-simplicity: 40px 0px -40px 0px 62px 54px 164px 97px '../img/spritesheet.png'
+$s-trust-x: 0px
+$s-trust-y: 0px
+$s-trust-offset-x: 0px
+$s-trust-offset-y: 0px
+$s-trust-width: 40px
+$s-trust-height: 59px
+$s-trust-total-width: 164px
+$s-trust-total-height: 97px
+$s-trust-image: '../img/spritesheet.png'
+$s-trust: 0px 0px 0px 0px 40px 59px 164px 97px '../img/spritesheet.png'
+
+/*
+  The provided mixins are intended to be used with the array-like variables
+
+  .icon-home
+    @include sprite-width($icon-home)
+
+  .icon-email
+    @include sprite($icon-email)
+  */
+@mixin sprite-width($sprite)
+  width: nth($sprite, 5)
+
+@mixin sprite-height($sprite)
+  height: nth($sprite, 6)
+
+@mixin sprite-position($sprite)
+  $sprite-offset-x: nth($sprite, 3)
+  $sprite-offset-y: nth($sprite, 4)
+  background-position: $sprite-offset-x  $sprite-offset-y
+
+@mixin sprite-image($sprite)
+  $sprite-image: nth($sprite, 9)
+  background-image: url(#{$sprite-image})
+
+@mixin sprite($sprite)
+  @include sprite-image($sprite)
+  @include sprite-position($sprite)
+  @include sprite-width($sprite)
+  @include sprite-height($sprite)

@@ -1,5 +1,5 @@
 doctype
-html(lang = "fr")
+html
 	head
 		title e-loue
 		meta(charset="UTF-8")
@@ -17,51 +17,81 @@ html(lang = "fr")
 		#sourse-img
 			img( src = "sourses/homepage_eloue_V5_vert_V1.jpg" )
 		.container
-			header.row
-
+			header
 				//- header top row
-				.col-md-12.col-md-offset-0.col-lg-10.col-lg-offset-1.top
-					ul(role = "tablist").nav.nav-tabs.nav-justified.text-nowrap.text-center
-						li
-							| Bonjour, 
-							a( href = "#" ) inscrivez-vous 
-							| ou 
-							a( href = "#" ) connectez-vous
-						li.devide
-						li
-							| Vous êtes un loueur professionnel, découvrez les 
-							a( href ="#") offers e-loue Pro
-						li.devide
-						li
-							| Appelez-nous au 
-							b 0826.800.200 
-							| (0,15&euro; / min)
-
+				.row.top
+					.col-lg-10.col-lg-offset-1
+						ul(role = "tablist").nav.nav-tabs.nav-justified
+							li.devide
+							li
+								span
+									| Bonjour, 
+									a( href = "#" ) inscrivez-vous 
+									| ou 
+									a( href = "#" ) connectez-vous
+							li.devide
+							li
+								span
+									| Vous êtes un loueur professionnel, découvrez les 
+									a( href ="#") offers e-loue Pro
+							li.devide
+							li
+								span
+									| Appelez-nous au 
+									b 0826.800.200 
+									| (0,15&euro; / min)
 				//- header middle row
-				.col-md-12.middle
-					.col-md-12.col-md-offset-0.col-lg-10.col-lg-offset-1
-						.row
-							.col-md-2.logo-wrapper
-								a(href = "#")
-									img(src = "img/logo.png")
-							.col-md-7
-								.input-group
-									input(type = "text" placeholder = "Que voulez-vous louer ?" title = "Que voulez-vous louer ?").form-control.what-field
-									span.input-group.where-field
-										span.input-group-addon.glyphicon.glyphicon-search
-										input(type = "text" placeholder = "Où ça ?" title = "Où ça ?").form-control
-									span.input-group-btn
-										button(type = "button").btn.btn-default
-											span.glyphicon.glyphicon-search
-							.col-md-3
-								button(type = "button").btn.btn-success Déposez une annonce
-
-				//- header middle row
-				.col-md-12.bottom
-					.col-md-12.col-md-offset-0.col-lg-10.col-lg-offset-1.zero
+				.row.middle
+					.col-lg-10.col-lg-offset-1.null
+						.col-md-2.logo-wrapper
+							a(href = "#")
+								img(src = "img/logo.png")
+						.col-md-7
+							.input-group
+								input(type = "text" placeholder = "Que voulez-vous louer ?" title = "Que voulez-vous louer ?").form-control.what-field
+								span.input-group.where-field-wrapper
+									span.input-group-addon.icon-map-marker
+									input(type = "text" placeholder = "Où ça ?" title = "Où ça ?").form-control.where-field
+								span.input-group-btn
+									button(type = "button").btn.btn-default
+										span.icon-search
+						.col-md-3
+							button(type = "button").btn.btn-success Déposez une annonce
+				//- header bottom row
+				.row.bottom
+					.col-md-12.col-md-offset-0.col-lg-10.col-lg-offset-1.null
 						ul.nav
 							-var items = [ "Logement", "Jardinage", "Automobile", "Image et son", "Bricolage", "Mode et accessoire", "Réceprion", "Santé et Bien être", "Autres" ]
 							-each item in items
 								li
 									a( href = "#" + item ) #{item}
+
+			.row.banner
+				img(src = "img/banner.jpg")
+				.banner-content
+						p
+							| louez un objet, une voiture...
+							br
+							| près de chez vous, en tout sécurité !
+						//- button(type = "button").btn.btn-default.btn-lg
+							| une communauté de confiance
+						a( href = "#" ) une communauté de confiance
+
+			.row.insurances
+				.col-md-12.col-md-offset-0.col-lg-10.col-lg-offset-1.null
+					ul.nav.nav-tabs.nav-justified
+						-var blocks = []
+						-blocks[0] = { category: "payment", "title": "Louez en toute sécurité", "description": [ "Transactions en ligne sécurisées.", "Aucun échange d'argent." ] }
+						-blocks[1] = { category: "serenity", "title": "Louez en toute sérénité", "description": [ "Assurance incluse et automatique.", "Caution en ligne." ] }
+						-blocks[2] = { category: "simplicity", "title": "Louez en toute simplicité", "description": [ "Service client dédié 7j/7.", "Dépot d'annonce gratuite." ] }
+						-blocks[3] = { category: "trust", "title": "Louez en toute confiance", "description": [ "Notes et commentaires en ligne.", "Messagerie en ligne." ] }
+						-each block in blocks
+							li.devide
+							li
+								span( class = block.category).insurances-img
+								h4 #{block.title}
+								-each description in block.description
+									p #{description}
+
+			.row.product-list
 
