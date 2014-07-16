@@ -2,7 +2,7 @@ header
 	//- header top row
 	.row.top
 		.container
-			.col-lg-10.col-lg-offset-1
+			.col-md-12.col-md-offset-0.col-lg-10.col-lg-offset-1
 				ul(role = "tablist").nav.nav-tabs.nav-justified
 					li.divide
 					li
@@ -23,29 +23,31 @@ header
 							b 0826.800.200 
 							| (0,15&euro; / min)
 	//- header middle row
-	.row.middle
+	.row.middle.framing
 		.container
-			.col-lg-10.col-lg-offset-1.padding-0
-				.col-md-2.logo-wrapper
-					a(href = "#")
-						img(src = "img/logo.png")
-				.col-md-7
-					.input-group
-						input(type = "text" placeholder = "Que voulez-vous louer ?" title = "Que voulez-vous louer ?").form-control.what-field
-						.input-group.where-field-wrapper
-							span.sprite-location
-							input(type = "text" placeholder = "Où ça ?" title = "Où ça ?").form-control.where-field
-						.input-group-btn
-							button(type = "button").btn.btn-default.btn-search
-								span.icon-search
-				.col-md-3
-					button(type = "button").btn.btn-success Déposez une annonce
+			.row
+				.col-md-12.col-md-offset-0.col-lg-10.col-lg-offset-1
+					.col-md-2.logo-wrapper
+						a(href = "#")
+							img(src = "img/logo.png")
+					.col-md-7
+						.input-group
+							input(type = "text" placeholder = "Que voulez-vous louer ?" title = "Que voulez-vous louer ?").form-control.what-field
+							.input-group.where-field-wrapper
+								span.sprite-location
+								input(type = "text" placeholder = "Où ça ?" title = "Où ça ?").form-control.where-field
+							.input-group-btn
+								button(type = "button").btn.btn-default.btn-search
+									span.icon-search
+					.col-md-3
+						button(type = "button").btn.btn-success Déposez une annonce
 	//- header bottom row
 	.row.bottom
 		.container
-			.col-md-12.col-md-offset-0.col-lg-10.col-lg-offset-1.padding-0
-				ul.nav.nav-tabs.nav-justified
-					-var items = [ "Logement", "Jardinage", "Automobile", "Image et son", "Bricolage", "Mode et accessoire", "Réceprion", "Santé et Bien être", "Autres" ]
-					-each item in items
-						li
-							a( href = "#" + item ) #{item}
+			.row
+				.col-md-12.col-md-offset-0.col-lg-10.col-lg-offset-1
+					ul.nav.nav-tabs.nav-justified
+						-var items = [ "Logement", "Jardinage", "Automobile", "Image et son", "Bricolage", "Mode et accessoire", "Réceprion", "Santé et Bien être", "Autres" ]
+						-each item in items
+							li
+								a( href = "#" + item ) #{item}

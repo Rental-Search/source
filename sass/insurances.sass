@@ -1,5 +1,4 @@
 .insurances
-	+framing()
 	$padding-arount-border: 3em
 	padding: $padding-arount-border 0
 	// margin-top: $padding-arount-border
@@ -17,11 +16,20 @@
 		display: block
 		margin: 0 auto
 		margin-bottom: 2em
-		&.payment
+		height: 60px
+		position: relative
+		span
+			position: absolute
+			top: 0
+			left: 0
+			right: 0
+			bottom: 0
+			margin: auto
+		.payment 
 			+sprite($s-payment)
-		&.serenity
+		.serenity
 			+sprite($s-serenity)
-		&.simplicity
+		.simplicity
 			+sprite($s-simplicity)
-		&.trust
+		.trust
 			+sprite($s-trust)

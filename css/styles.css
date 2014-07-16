@@ -7716,15 +7716,6 @@ body {
   padding: 0 !important;
 }
 
-.fog {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(255, 255, 255, 0.1);
-  top: 0;
-  left: 0;
-}
-
 .btn-success {
   padding: 0.8em;
   font-weight: 700;
@@ -7736,6 +7727,12 @@ input.form-control:focus {
   box-shadow: 0 0 6px rgba(0, 0, 0, 0.1) !important;
   z-index: 10 !important;
   border-color: #c4c4c4;
+}
+
+.framing {
+  background-color: white;
+  border: 1px solid #eeeeee;
+  border-width: 1px 0;
 }
 
 /* SASS variables are information about icon's compiled state, stored under its original file name
@@ -7790,9 +7787,6 @@ header .top ul {
 header .middle {
   padding: 1.3em 0;
   font-size: 14px;
-  background-color: white;
-  border: 1px solid #eeeeee;
-  border-width: 1px 0;
 }
 header .middle .btn-success {
   width: 100%;
@@ -7914,9 +7908,6 @@ header .bottom a {
 }
 
 .insurances {
-  background-color: white;
-  border: 1px solid #eeeeee;
-  border-width: 1px 0;
   padding: 3em 0;
 }
 .insurances ul {
@@ -7936,26 +7927,36 @@ header .bottom a {
   display: block;
   margin: 0 auto;
   margin-bottom: 2em;
+  height: 60px;
+  position: relative;
 }
-.insurances .insurances-img.payment {
+.insurances .insurances-img span {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+}
+.insurances .insurances-img .payment {
   background-image: url(../img/spritesheet.png);
   background-position: -107px 0px;
   width: 62px;
   height: 44px;
 }
-.insurances .insurances-img.serenity {
+.insurances .insurances-img .serenity {
   background-image: url(../img/spritesheet.png);
   background-position: 0px -62px;
   width: 56px;
   height: 38px;
 }
-.insurances .insurances-img.simplicity {
+.insurances .insurances-img .simplicity {
   background-image: url(../img/spritesheet.png);
   background-position: -43px 0px;
   width: 62px;
   height: 54px;
 }
-.insurances .insurances-img.trust {
+.insurances .insurances-img .trust {
   background-image: url(../img/spritesheet.png);
   background-position: 0px 0px;
   width: 41px;
@@ -8010,14 +8011,35 @@ header .bottom a {
   padding: 0;
   position: relative;
   border: none;
+  text-decoration: none;
   border-bottom: 1px solid #dadada;
+  color: #2c2c2c;
+  background-color: white;
 }
 .product-list .item .thumbnail .img-wrapper {
   width: 100%;
   position: relative;
 }
+.product-list .item .thumbnail .img-wrapper .fog {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.2);
+  top: 0;
+  left: 0;
+}
 .product-list .item .thumbnail .img-wrapper img {
   width: 100%;
+}
+.product-list .item .thumbnail .img-wrapper .fog {
+  -webkit-transition: all 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out;
+}
+.product-list .item .thumbnail:hover {
+  color: #f27e36;
+}
+.product-list .item .thumbnail:hover .fog {
+  background-color: transparent;
 }
 .product-list .item .thumbnail .info {
   overflow: hidden;
@@ -8072,7 +8094,6 @@ header .bottom a {
   width: 100%;
 }
 .product-list .item .price {
-  font-size: 12px;
   position: absolute;
   margin: 0.7em;
   top: 0;
@@ -8084,8 +8105,7 @@ header .bottom a {
   border-bottom-left-radius: 1.5em;
   border-top-right-radius: 1.5em;
   border-top-left-radius: 1.5em;
-  color: white;
-  padding: 0.5em 1em;
+  padding: 0.6em 1em;
 }
 .product-list .explore {
   text-align: center;
@@ -8099,4 +8119,10 @@ header .bottom a {
   font-size: 1.2em;
   line-height: 14px;
   padding-right: 0.9em;
+}
+
+.comments {
+  background: url(../img/houses.png) repeat-x white;
+  background-position: -20% 100%;
+  height: 470px;
 }
