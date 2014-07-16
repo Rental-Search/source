@@ -2716,7 +2716,7 @@ pre code {
 }
 @media (min-width: 1200px) {
   .container {
-    width: 1170px;
+    width: 970px;
   }
 }
 
@@ -7712,6 +7712,10 @@ body {
   padding: 0 !important;
 }
 
+.margin-b-0 {
+  margin-bottom: 0 !important;
+}
+
 .container {
   padding: 0 !important;
 }
@@ -7733,6 +7737,33 @@ input.form-control:focus {
   background-color: white;
   border: 1px solid #eeeeee;
   border-width: 1px 0;
+}
+
+.link-success {
+  color: #24bd77;
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 13px;
+  letter-spacing: 0.07em;
+}
+.link-success:hover {
+  color: #1c925c;
+}
+
+h3 {
+  font-size: 26px;
+  font-weight: 300;
+  color: #2c2c2c;
+  margin: 1.25em 0;
+  line-height: 1.5em;
+}
+
+p.lg-ln-height {
+  text-align: justify;
+  font-size: 15px;
+  line-height: 2em;
+  margin: 1em 0;
+  color: #777777;
 }
 
 /* SASS variables are information about icon's compiled state, stored under its original file name
@@ -7826,7 +7857,7 @@ header .middle .where-field-wrapper .sprite-location {
   margin: auto;
   z-index: 50;
   background-image: url(../img/spritesheet.png);
-  background-position: -58px -62px;
+  background-position: -229px -140px;
   width: 14px;
   height: 16px;
 }
@@ -7859,6 +7890,7 @@ header .middle .btn-search {
   border-left: none;
 }
 header .bottom a {
+  border: none !important;
   padding-top: 1em;
   padding-bottom: 1em;
   font-size: 13px;
@@ -7868,10 +7900,11 @@ header .bottom a {
 
 .banner {
   position: relative;
-  top: -1px;
+  height: 420px;
+  text-align: center;
 }
 .banner img {
-  width: 100%;
+  height: 100%;
 }
 .banner .banner-content {
   top: 0;
@@ -7882,7 +7915,7 @@ header .bottom a {
   color: white;
   text-align: center;
 }
-.banner .banner-content p {
+.banner .banner-content h2 {
   margin: 0;
   padding: 2.3em 0 0.65em;
   font-weight: 300;
@@ -7908,7 +7941,7 @@ header .bottom a {
 }
 
 .insurances {
-  padding: 3em 0;
+  padding: 3.2em 0;
 }
 .insurances ul {
   line-height: 0.8em;
@@ -7918,10 +7951,11 @@ header .bottom a {
   font-size: 14px;
   color: #2c2c2c;
 }
-.insurances ul p {
+.insurances ul .description {
   font-size: 13px;
   color: #777777;
   font-weight: 600;
+  margin-bottom: 1em;
 }
 .insurances .insurances-img {
   display: block;
@@ -7940,25 +7974,25 @@ header .bottom a {
 }
 .insurances .insurances-img .payment {
   background-image: url(../img/spritesheet.png);
-  background-position: -107px 0px;
+  background-position: -107px -140px;
   width: 62px;
   height: 44px;
 }
 .insurances .insurances-img .serenity {
   background-image: url(../img/spritesheet.png);
-  background-position: 0px -62px;
+  background-position: -171px -140px;
   width: 56px;
   height: 38px;
 }
 .insurances .insurances-img .simplicity {
   background-image: url(../img/spritesheet.png);
-  background-position: -43px 0px;
+  background-position: -43px -140px;
   width: 62px;
   height: 54px;
 }
 .insurances .insurances-img .trust {
   background-image: url(../img/spritesheet.png);
-  background-position: 0px 0px;
+  background-position: 0px -140px;
   width: 41px;
   height: 60px;
 }
@@ -7985,13 +8019,6 @@ header .bottom a {
   background-color: #eeeeee;
 }
 
-.product-list h3 {
-  font-size: 26px;
-  text-align: center;
-  font-weight: 300;
-  color: #2c2c2c;
-  margin: 1.5em 0;
-}
 .product-list .item {
   padding-top: 25%;
   padding: 0 13px;
@@ -8125,4 +8152,81 @@ header .bottom a {
   background: url(../img/houses.png) repeat-x white;
   background-position: -20% 100%;
   height: 470px;
+}
+
+.location-list {
+  padding-bottom: 2em;
+}
+.location-list .ul-wrapper ul li {
+  padding: 0.7em 0;
+  font-weight: 700;
+  color: #c4c4c4;
+  font-size: 13px;
+}
+
+.download-mobile-apps .container {
+  background: url(../img/mobile-phones.png) no-repeat;
+  background-position: right bottom;
+  padding-top: 1em !important;
+  padding-bottom: 5em !important;
+}
+.download-mobile-apps p {
+  color: #9d9d9d;
+}
+.download-mobile-apps a {
+  display: inline-block;
+  margin-right: 1.5em;
+}
+
+.watch-video .video {
+  width: 470px;
+  height: 280px;
+  overflow: hidden;
+  position: relative;
+  cursor: pointer;
+  margin: 4em 0;
+}
+.watch-video .video .smoke {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  top: 0;
+  left: 0;
+}
+.watch-video .video span {
+  background-image: url(../img/spritesheet.png);
+  background-position: -140px 0px;
+  width: 138px;
+  height: 138px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+}
+.watch-video .video:hover span {
+  background-image: url(../img/spritesheet.png);
+  background-position: 0px 0px;
+  width: 138px;
+  height: 138px;
+}
+.watch-video .description {
+  margin-left: 60px;
+}
+.watch-video h3 {
+  margin: 2em 0 0.6em;
+  line-height: 1.5em;
+}
+
+.professional-renter-content .container {
+  padding-bottom: 3em !important;
+}
+.professional-renter-content .img-wrapper {
+  margin-top: 4.5em;
+  text-align: right;
+}
+.professional-renter-content .img-wrapper img {
+  width: 290px;
 }

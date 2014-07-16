@@ -1,8 +1,7 @@
-header
-	//- header top row
+header.row
 	.row.top
 		.container
-			.col-md-12.col-md-offset-0.col-lg-10.col-lg-offset-1
+			.col-md-12
 				ul(role = "tablist").nav.nav-tabs.nav-justified
 					li.divide
 					li
@@ -22,11 +21,10 @@ header
 							| Appelez-nous au 
 							b 0826.800.200 
 							| (0,15&euro; / min)
-	//- header middle row
 	.row.middle.framing
 		.container
 			.row
-				.col-md-12.col-md-offset-0.col-lg-10.col-lg-offset-1
+				.col-md-12
 					.col-md-2.logo-wrapper
 						a(href = "#")
 							img(src = "img/logo.png")
@@ -41,11 +39,10 @@ header
 									span.icon-search
 					.col-md-3
 						button(type = "button").btn.btn-success Déposez une annonce
-	//- header bottom row
 	.row.bottom
 		.container
 			.row
-				.col-md-12.col-md-offset-0.col-lg-10.col-lg-offset-1
+				.col-md-12
 					ul.nav.nav-tabs.nav-justified
 						-var items = [ "Logement", "Jardinage", "Automobile", "Image et son", "Bricolage", "Mode et accessoire", "Réceprion", "Santé et Bien être", "Autres" ]
 						-each item in items

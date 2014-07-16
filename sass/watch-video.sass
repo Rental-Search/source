@@ -1,0 +1,26 @@
+.watch-video
+	.video
+		width: 470px
+		height: 280px
+		overflow: hidden
+		+smoke($smoke-strong)
+		position: relative
+		cursor: pointer
+		margin: 4em 0
+		span
+			+sprite($s-btn-play)
+			position: absolute
+			top: 0
+			left: 0
+			right: 0
+			bottom: 0
+			margin: auto
+		&:hover
+			span
+				+sprite($s-btn-play-hover)
+
+	.description
+		margin-left: 60px
+	h3
+		margin: 2em 0 .6em
+		line-height: 1.5em

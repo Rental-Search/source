@@ -1,0 +1,12 @@
+.watch-video .description {
+  padding-left: 70px;
+}
+.watch-video h3 {
+  margin: 2em 0 0.6em;
+  line-height: 1.5em;
+}
+.watch-video p {
+  text-align: justify;
+  font-size: 15px;
+  line-height: 2em;
+}

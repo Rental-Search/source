@@ -1,7 +1,3 @@
-$grid-columns: 12
-// $grid-gutter-width: 30px
-// $grid-float-breakpoint: 768px
-
 $font-family-base: 'Open Sans'
 
 $brand-primary: rgb(242,126,54)
@@ -15,7 +11,12 @@ $gray-strong: lighten($gray-light, 15%)
 $gray-medium: lighten($gray-light, 30%)
 $gray-lite: lighten($gray-lighter, 5%)
 
-$smoke-lite: rgba(0,0,0,.1)
+$smoke-lite: rgba(black,.1)
+$smoke-lighter: rgba(black,.2)
+$smoke-light: rgba(black,.3)
+$smoke-medium: rgba(black,.4)
+$smoke-strong: rgba(black,.5)
+
 $fog-lite: rgba(white, .1)
 $fog-lighter: rgba(white, .2)
 $fog-light: rgba(white, .3)
@@ -25,3 +26,8 @@ $light: 300
 $regular: 400
 $semibold: 600
 $bold: 700
+
+$grid-gutter-width: 30px
+
+$container-desktop: (940px + $grid-gutter-width)
+$container-large-desktop: $container-desktop
