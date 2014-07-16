@@ -1,4 +1,4 @@
-define(["angular-mocks", "eloue/modules/product_details/controllers/ProductDetailsCtrl"], function() {
+define(["angular-mocks", "eloue/modules/booking/controllers/ProductDetailsCtrl"], function() {
 
     describe("Controller: ProductDetailsCtrl", function () {
 
@@ -8,7 +8,7 @@ define(["angular-mocks", "eloue/modules/product_details/controllers/ProductDetai
             productServiceMock;
 
         beforeEach(module('EloueApp'));
-        beforeEach(module('EloueApp.ProductDetailsModule'));
+        beforeEach(module('EloueApp.BookingModule'));
 
         beforeEach(function () {
             callServiceMock = {login: function () {

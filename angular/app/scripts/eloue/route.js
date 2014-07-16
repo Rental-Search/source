@@ -3,16 +3,17 @@ define(["eloue/app", "eloue/modules/user_management/services/AuthService",
         "eloue/modules/user_management/controllers/LoginCtrl",
         "eloue/modules/user_management/controllers/RegisterCtrl",
         "eloue/modules/dashboard/controllers/DashboardCtrl",
-        "eloue/modules/product_details/controllers/ProductDetailsCtrl",
+        "eloue/modules/booking/controllers/ProductDetailsCtrl",
         "eloue/modules/user_management/directives/LoginFormDirective",
         "eloue/modules/user_management/directives/RegistrationFormDirective",
         "eloue/modules/user_management/directives/validation/PasswordMatchDirective",
-        "eloue/modules/product_details/directives/ProductDetailsBookingDirective",
-        "eloue/modules/product_details/directives/BookingModalDirective",
-        "eloue/modules/product_details/directives/MessageModalDirective",
-        "eloue/modules/product_details/directives/PhoneModalDirective",
-        "eloue/modules/product_details/directives/validation/DatepickerDirective",
-        "eloue/modules/product_details/directives/validation/TimepickerDirective"],
+        "eloue/modules/booking/directives/ProductDetailsBookingDirective",
+        "eloue/modules/booking/directives/BookingModalDirective",
+        "eloue/modules/booking/directives/MessageModalDirective",
+        "eloue/modules/booking/directives/PhoneModalDirective",
+        "eloue/modules/booking/directives/ProductDetailsSmallDirective",
+        "eloue/modules/booking/directives/validation/DatepickerDirective",
+        "eloue/modules/booking/directives/validation/TimepickerDirective"],
     function (EloueApp) {
 
         "use strict";
@@ -30,7 +31,7 @@ define(["eloue/app", "eloue/modules/user_management/services/AuthService",
                     secure: true //this route is secured
                 })
                 .when("/product/:productId", {
-                    templateUrl: "/scripts/eloue/modules/product_details/views/product-details.html",
+                    templateUrl: "/scripts/eloue/modules/booking/views/product-details.html",
                     controller: "ProductDetailsCtrl"
                 })
                 .otherwise({

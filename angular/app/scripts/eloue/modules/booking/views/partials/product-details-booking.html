@@ -1,0 +1,73 @@
+<div>
+    <div class="booking-title" ng-show="!inModal">Réservez en ligne</div>
+    <div class="booking-sub-title"> à partir de <span class="price">{{pricePerDay}}€/jour</span></div>
+    <form id="productDetailsBookingForm" name="productDetailsBookingForm" class="" role="form" novalidate>
+        <div class="form-group">
+            <label class="col-md-3 control-label">Du</label>
+
+            <div class="col-md-9">
+
+                <div class="input-group">
+                    <div class="input-append date form_datetime">
+                        <input id="bookingFromDate" name="fromDate" class="datepicker-dropdown form-control" size="16" type="text" required
+                               ng-model="bookingDetails.fromDate" ng-pattern="/^(\d{1,2}\/\d{1,2}\/\d{4}){0,1}$/"
+                               data-date-format="dd/mm/yyyy" ng-change="updatePrice()" eloue-datepicker >
+                        <span class="add-on"><i class="icon-th"></i></span>
+                    </div>
+
+                    <div class="input-append bootstrap-timepicker">
+                        <input id="bookingFromTime" name="fromTine" type="text" class="form-control" ng-model="bookingDetails.fromHours" ng-change="updatePrice()" eloue-timepicker>
+                        <span class="add-on"><i class="icon-time"></i></span>
+                    </div>
+                </div>
+                <span ng-show="productDetailsBookingForm.fromDate.$dirty && productDetailsBookingForm.fromDate.$error.required" class="text-danger">From date is required.</span>
+                <span ng-show="productDetailsBookingForm.fromDate.$dirty && productDetailsBookingForm.fromDate.$error.pattern" class="text-danger">Invalid date.</span>
+                <span ng-show="productDetailsBookingForm.fromDate.$dirty && productDetailsBookingForm.fromDate.$error.pastDate" class="text-danger">Can't select data in the past.</span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-md-3 control-label">Au</label>
+
+            <div class="col-md-9">
+                <div class="input-group">
+                    <input id="bookingToDate" name="toDate" class="datepicker-dropdown form-control" size="16" type="text" required
+                           ng-model="bookingDetails.toDate" ng-pattern="/^(\d{1,2}\/\d{1,2}\/\d{4}){0,1}$/"
+                           data-date-format="dd/mm/yyyy" ng-change="updatePrice()" eloue-datepicker>
+                    <div class="input-append bootstrap-timepicker">
+                        <input id="bookingToTime" name="toTime" type="text" class="form-control" ng-model="bookingDetails.toHours" ng-change="updatePrice()" eloue-timepicker>
+                        <span class="add-on"><i class="icon-time"></i></span>
+                    </div>
+                </div>
+                <span ng-show="productDetailsBookingForm.toDate.$dirty && productDetailsBookingForm.toDate.$error.required" class="text-danger">From date is required.</span>
+                <span ng-show="productDetailsBookingForm.toDate.$dirty && productDetailsBookingForm.toDate.$error.pattern" class="text-danger">Invalid date.</span>
+                <span ng-show="productDetailsBookingForm.toDate.$dirty && productDetailsBookingForm.toDate.$error.pastDate" class="text-danger">Can't select data in the past.</span>
+            </div>
+        </div>
+        <div ng-show="!inModal">
+            <p>Durée de la location : <strong>{{durationDays}} jours</strong> et <strong>{{durationHours}} heures</strong></p>
+            <p>Prix de la location : <span class="price">{{bookingPrice}}€</span></p>
+            <p>Assurance incluse</p>
+        </div>
+        <div ng-show="inModal">
+            <table class="table">
+                <tbody>
+                <tr>
+                    <td>Durée</td>
+                    <td>{{durationDays}} jours et {{durationHours}} heures</td>
+                </tr>
+                <tr>
+                    <td>Prix</td>
+                    <td>{{bookingPrice}}€</td>
+                </tr>
+                <tr>
+                    <td>Caution</td>
+                    <td>{{caution}}€</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <button class="btn btn-success" type="submit" data-ng-disabled="productDetailsBookingForm.$invalid || !productDetailsBookingForm.$dirty">Réservez</button>
+    </form>
+</div>

@@ -1,9 +1,9 @@
-define(["angular", "eloue/constants", "eloue/modules/product_details/ProductDetailsModule"], function (angular) {
+define(["angular", "eloue/constants", "eloue/modules/booking/BookingModule"], function (angular) {
     "use strict";
     /**
      * Call service.
      */
-    angular.module("EloueApp.ProductDetailsModule").factory("CallService", ["$rootScope", "$location", "Endpoints", function ($rootScope, $location, Endpoints) {
+    angular.module("EloueApp.BookingModule").factory("CallService", ["$rootScope", "$location", "Endpoints", function ($rootScope, $location, Endpoints) {
 
         return {
 

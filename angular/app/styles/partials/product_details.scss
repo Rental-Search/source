@@ -1,13 +1,26 @@
+.booking-title {
+  height: 50px;
+  color: #ffffff;
+  background-color: #f2812c;
+  text-align: center;
+  font-size: 12pt;
+  padding-top: 15px;
+}
+
+.price {
+  color: #f2812c;
+}
+
 .modal {
 
   &.phone-form .modal-content {
-    width: 600px;
-    height: 500px;
+    width: 850px;
+    height: 700px;
     color: #ffffff;
   }
 
   &.phone-form .modal-body {
-    height: 380px;
+    height: 600px;
     color: #4b484b;
   }
 
@@ -32,13 +45,13 @@
   }
 
   &.message-form .modal-content {
-    width: 600px;
-    height: 500px;
+    width: 850px;
+    height: 700px;
     color: #ffffff;
   }
 
   &.message-form .modal-body {
-    height: 380px;
+    height: 600px;
     color: #4b484b;
   }
 

@@ -1,0 +1,86 @@
+
+
+{
+"id": 1,
+"sender": "http://10.0.0.111:8000/api/2.0/users/15497/",
+"recipient": "http://10.0.0.111:8000/api/2.0/users/1190/",
+"product": "http://10.0.0.111:8000/api/2.0/products/315/",
+"last_message": "http://10.0.0.111:8000/api/2.0/productrelatedmessages/35/",
+"subject": "Question",
+"sender_archived": false,
+"recipient_archived": false,
+"messages": [
+    {
+        "text": "Message 1",
+        "sender": {
+            "id": 1190,
+            "email": "1190@e-loue.cc",
+            "company_name": "fdsfds",
+            "is_professional": false,
+            "slug": "benoit",
+            "avatar": "pictures/avatars/a1fc68d292034f45b9ce559bb88d9bec.jpg",
+            "default_address": "http://10.0.0.111:8000/api/2.0/addresses/18/",
+            "default_number": "http://10.0.0.111:8000/api/2.0/phonenumbers/18/",
+            "about": "",
+            "work": "",
+            "school": "",
+            "hobby": "",
+            "languages": [],
+            "drivers_license_date": null,
+            "drivers_license_number": "",
+            "date_of_birth": null,
+            "place_of_birth": "",
+            "rib": "",
+            "url": ""
+        }
+    },
+    {
+        "text": "Message 2",
+        "sender": {
+            "id": 15497,
+            "email": "benoit.woj@e-loue.com",
+            "company_name": "",
+            "is_professional": false,
+            "slug": "qto870",
+            "avatar": "",
+            "default_address": "http://10.0.0.111:8000/api/2.0/addresses/3212/",
+            "default_number": "http://10.0.0.111:8000/api/2.0/phonenumbers/3423/",
+            "about": "",
+            "work": "",
+            "school": "",
+            "hobby": "",
+            "languages": [],
+            "drivers_license_date": null,
+            "drivers_license_number": "",
+            "date_of_birth": null,
+            "place_of_birth": "",
+            "rib": "",
+            "url": ""
+        }
+    },{
+        "text": "Message 3",
+        "sender": {
+            "id": 1190,
+            "email": "1190@e-loue.cc",
+            "company_name": "fdsfds",
+            "is_professional": false,
+            "slug": "benoit",
+            "avatar": "pictures/avatars/a1fc68d292034f45b9ce559bb88d9bec.jpg",
+            "default_address": "http://10.0.0.111:8000/api/2.0/addresses/18/",
+            "default_number": "http://10.0.0.111:8000/api/2.0/phonenumbers/18/",
+            "about": "",
+            "work": "",
+            "school": "",
+            "hobby": "",
+            "languages": [],
+            "drivers_license_date": null,
+            "drivers_license_number": "",
+            "date_of_birth": null,
+            "place_of_birth": "",
+            "rib": "",
+            "url": ""
+        }
+    }
+]
+}
+

@@ -1,7 +1,7 @@
-define(["angular", "eloue/modules/product_details/ProductDetailsModule"], function (angular) {
+define(["angular", "eloue/modules/booking/BookingModule"], function (angular) {
     "use strict";
 
-    angular.module("EloueApp.ProductDetailsModule").directive('eloueTimepicker', function () {
+    angular.module("EloueApp.BookingModule").directive('eloueTimepicker', function () {
         return {
             restrict: 'A',
             replace: true,
