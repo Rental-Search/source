@@ -1,0 +1,9 @@
+.footer-links {
+  padding: 3em 0;
+}
+.footer-links .link-wrapper {
+  margin: 0.5em 0;
+}
+.footer-links .link-wrapper a {
+  padding: 0 !important;
+}

@@ -19,48 +19,49 @@ html
 		.container-flex
 			include jade/header
 
-			.row.banner.hidden-sm.hidden-xs
+			.row.banner.hidden-sm.hidden-xs.text-center
 				img(src = "img/banner.jpg")
 				.container
 					.banner-content
 						include jade/banner
 
 			.row.insurances.framing
-				.container
-					.row
-						.col-md-12
-							include jade/insurances
+				.container.row-md-12
+					include jade/insurances
 
 			.row.product-list
-				.container
-					.row
-						.col-md-12
-							include jade/product-list
+				.container.row-md-12
+					include jade/product-list
 
 			.row.comments.framing
-				.container
-					.row
-						.col-md-12
-							include jade/comments
+				.container.row-md-12
+					include jade/comments
 
 			.row.location-list
-				.container
-					.row
-						.col-md-12
-							include jade/location-list
+				.container.row-md-12
+					include jade/location-list
 
 			.row.download-mobile-apps.framing
-				.container
-					.row
-						.col-md-8
-							include jade/download-mobile-apps
+				.container.row-md-8
+					include jade/download-mobile-apps
 
 			.row.watch-video
-				.container
-					.row
-						include jade/watch-video
+				.container.row-md-12
+					include jade/watch-video
 
 			.row.professional-renter-content.framing
+				.container.row-mad-12
+					include jade/professional-renter-content
+
+			.row.talk-about-us
+				.container.row-mad-12.text-center
+					include jade/talk-about-us
+
+			.row.footer-links.framing
+				.container.row-md-12
+					include jade/footer-links
+
+			.row.rss
 				.container
 					.row
-						include jade/professional-renter-content
+						include jade/rss
