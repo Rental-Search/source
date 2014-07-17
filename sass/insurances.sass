@@ -1,31 +1,16 @@
 .insurances
-	$padding-arount-border: 3.2em
-	padding: $padding-arount-border 0
-	// margin-top: $padding-arount-border
-	ul
-		line-height: .8em
-		h4
-			font-weight: 700
-			font-size: 14px
-			color: $gray-dark
-		p
-			font-size: 13px
-			color: $gray-light
-			font-weight: 600
-			margin-bottom: 1em
+	p
+		font-size: px(13)
+		font-weight: $fw-semibold
+		line-height: 1em
 	.insurances-img
 		display: block
 		margin: 0 auto
 		margin-bottom: 2em
-		height: 60px
+		height: px(60)
 		position: relative
 		span
-			position: absolute
-			top: 0
-			left: 0
-			right: 0
-			bottom: 0
-			margin: auto
+			+centred-abs()
 		.payment 
 			+sprite($s-payment)
 		.serenity

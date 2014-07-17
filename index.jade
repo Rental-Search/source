@@ -14,54 +14,61 @@ html
 				</script> <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
 				<![endif]
 	body
-		include jade/src
-
+		include jade/_src
 		.container-flex
-			include jade/header
+			header.header-site
+				include jade/_header-site
 
-			.row.banner.hidden-sm.hidden-xs.text-center
-				img(src = "img/banner.jpg")
-				.container
-					.banner-content
-						include jade/banner
+			nav.nav-home.container
+				.row
+					include jade/_nav-home
 
-			.row.insurances.framing
-				.container.row-md-12
-					include jade/insurances
+			article
+				.row.banner.hidden-xs.text-center
+					img(src = "img/banner.jpg")
+					.container
+						include jade/_banner
 
-			.row.product-list
-				.container.row-md-12
-					include jade/product-list
+				.row.insurances.framing
+					.container.pad-v-6
+						include jade/_insurances
 
-			.row.comments.framing
-				.container.row-md-12
-					include jade/comments
+				.row.product-list
+					.container.pad-v-6
+						include jade/_product-list
 
-			.row.location-list
-				.container.row-md-12
-					include jade/location-list
+				.row.comments.framing
+					.container
+						include jade/_comments
 
-			.row.download-mobile-apps.framing
-				.container.row-md-8
-					include jade/download-mobile-apps
+				.row.location-list
+					.container
+						include jade/_location-list
 
-			.row.watch-video
-				.container.row-md-12
-					include jade/watch-video
+			main
+				.row.download-mobile-apps.framing
+					.container
+						.col-md-8
+							include jade/_download-mobile-apps
 
-			.row.professional-renter-content.framing
-				.container.row-mad-12
-					include jade/professional-renter-content
+				.row.watch-video
+					.container
+						include jade/_watch-video
 
-			.row.talk-about-us
-				.container.row-mad-12.text-center
-					include jade/talk-about-us
+				.row.professional-renter-content.framing
+					.container
+						include jade/_professional-renter-content
 
-			.row.footer-links.framing
-				.container.row-md-12
-					include jade/footer-links
+				.row.talk-about-us
+					.container.text-center
+						include jade/_talk-about-us
 
-			.row.rss
-				.container
-					.row
-						include jade/rss
+			footer
+				.row.footer-links.framing
+					.container
+						include jade/_footer-links
+
+				.row.rss
+					.container
+						.row
+							include jade/_rss

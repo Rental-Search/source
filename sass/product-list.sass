@@ -1,24 +1,20 @@
 .product-list
+	$mrg: px(13)
+	ul
+		margin-top: -$mrg
+		margin-bottom: -$mrg
 	.item
-		padding-top: 25%
-		$padding: 13px
-		padding: 0 $padding
-		margin: $padding 0
-		position: relative
+		padding: $mrg
 		.thumbnail
-			$br: 3px
+			$br: px(3)
 			+border-bottom-radius($br)
 			+border-top-radius($br)
-			position: absolute
-			width: 100%
-			height: 100%
-			display: block
 			margin: 0
 			padding: 0
 			position: relative
 			border: none
 			text-decoration: none
-			border-bottom: 1px solid darken($gray-lighter, 8%)
+			border-bottom: px(1) solid darken($gray-lighter, 8%)
 			color: $gray-dark
 			background-color: white
 			.img-wrapper
@@ -28,15 +24,16 @@
 				img
 					width: 100%
 				.fog
-					+transition()
+					+transition(all .2s ease-in-out)
 			&:hover
-				color: $brand-primary
+				h6
+					color: $brand-primary
 				.fog
 					background: transparent
 			.info
 				overflow: hidden
 				padding: 1em
-				border: 1px solid $gray-lighter
+				border: px(1) solid $gray-lighter
 				border-top: none
 				+border-bottom-radius($br)
 				position: relative
@@ -45,27 +42,20 @@
 					content: ''
 					bottom: 0
 					right: 0
-					width: 70px
+					width: px(70)
 					height: 100%
 					background: white
-					background: linear-gradient(to right, rgba(255,255,255,0), white 10px)
-			h4
-				font-weight: 600
-				font-size: 13px
-				padding: 0
-				margin: 0
+					background: linear-gradient(to right, rgba(255,255,255,0), white px(10))
 			p
 				margin: 0
-				padding: 0
-				font-weight: 600
-				font-size: 11px
-				color: $gray-light
+				font-weight: $fw-semibold
+				font-size: px(11)
 			.declarer
 				position: absolute
 				bottom: 0
 				top: 0
-				right: 10px
-				$w: 40px
+				right: px(10)
+				$w: px(40)
 				width: $w
 				height: $w
 				$br: 50%
@@ -83,7 +73,7 @@
 			right: 0
 			background-color: $brand-primary
 			letter-spacing: .02em
-			font-weight: 700
+			font-weight: $fw-bold
 			$br: 1.5em
 			+border-bottom-radius($br)
 			+border-top-radius($br)
@@ -92,11 +82,6 @@
 	.explore
 		text-align: center
 		button
-			$p: 1.5em
-			margin: (2 * $p) 0
-			padding-left: $p
-			padding-right: $p
 			span
 				font-size: 1.2em
-				line-height: 14px
-				padding-right: .6 * $p
+				margin-right: px(14)

@@ -1,7 +1,7 @@
 h3
 	| Les viles les plus actives
 .row
-	ul.nav.nav-tabs.nav-justified.ul-wrapper
+	ul.nav.nav-tabs.nav-justified.ul-wrapper.ov-hidden
 		-var cities = []
 		-cities.push({ "name": "paris", "actives": "123 254" })
 		-cities.push({ "name": "lyon", "actives": "98 453" })
@@ -18,7 +18,7 @@ h3
 			li
 				ul.nav
 					-for(var j = 0; (j < Math.ceil(length / col)) && city < length; j++, city++)
-						li.text-left.clearfix
+						li.text-left.text-nowrap
 							.col-md-8
 								a(href = "#").link-success #{cities[city].name}
 							.col-md-4

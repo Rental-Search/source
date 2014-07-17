@@ -17,11 +17,11 @@ ul.row.nav
 				span.badge.price #{products[ ind ].price}&euro; /jour
 				.info
 					.description.text-nowrap
-						h4 #{products[ ind ].title}
+						h6 #{products[ ind ].title}
 						p #{products[ ind ].location}
 						.declarer
 							img( src = products[ ind ].declarer )
 .row.explore
-	button(type = "button").btn.btn-success.btn-explore
+	button(type = "button").btn.btn-success.btn-explore.pad-h-3
 		span.icon-search
 		| Explorez toutes les annonces

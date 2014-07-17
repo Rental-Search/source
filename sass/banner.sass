@@ -1,5 +1,6 @@
 .banner
 	position: relative
+	height: px(425)
 	img
 		height: 100%
 	.banner-content
@@ -7,27 +8,22 @@
 		left: 0
 		width: 100%
 		position: absolute
-		text-transform: uppercase
 		color: white
 		$ls: .06em
 		h2
-			margin: 0
-			padding: 2.3em 0 .65em
-			font-weight: 300
-			font-size: 39px
 			letter-spacing: $ls
 		a
 			letter-spacing: $ls
 			text-transform: inherit
-			font-size: 15px
-			font-weight: 700
+			text-decoration: none
+			font-size: px(15)
+			font-weight: $fw-bold
 			background-color: transparent
 			color: inherit
-			border: 2px solid white
+			border: px(2) solid white
 			padding: 1.2em 2em
 			display: inline-block
-			+border-radius(3px)
+			+border-radius(px(3))
 			&:hover
-				text-decoration: none
-				background-color: $brand-primary
-				background-color: $smoke-lite
+				color: $brand-primary
+				background-color: white

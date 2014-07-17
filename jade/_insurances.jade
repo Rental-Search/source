@@ -1,4 +1,4 @@
-ul.nav.nav-tabs.nav-justified
+ul.nav.nav-tabs.nav-justified.ov-hidden.text-nowrap.text-center
 	-var blocks = []
 	-blocks.push({ "category": "payment", "title": "Louez en toute sécurité", "description": [ "Transactions en ligne sécurisées.", "Aucun échange d'argent." ] })
 	-blocks.push({ "category": "serenity", "title": "Louez en toute sérénité", "description": [ "Assurance incluse et automatique.", "Caution en ligne." ] })
@@ -9,6 +9,6 @@ ul.nav.nav-tabs.nav-justified
 		li
 			.insurances-img
 				span( class = block.category)
-			h4 #{block.title}
+			h5 #{block.title}
 			-each description in block.description
 				p #{description}
