@@ -11,7 +11,7 @@
 "recipient_archived": false,
 "messages": [
     {
-        "text": "Message 1",
+        "body": "Message 1",
         "sender": {
             "id": 1190,
             "email": "1190@e-loue.cc",
@@ -35,7 +35,7 @@
         }
     },
     {
-        "text": "Message 2",
+        "body": "Message 2",
         "sender": {
             "id": 15497,
             "email": "benoit.woj@e-loue.com",
@@ -58,7 +58,7 @@
             "url": ""
         }
     },{
-        "text": "Message 3",
+        "body": "Message 3",
         "sender": {
             "id": 1190,
             "email": "1190@e-loue.cc",

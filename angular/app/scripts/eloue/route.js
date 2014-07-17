@@ -12,8 +12,7 @@ define(["eloue/app", "eloue/modules/user_management/services/AuthService",
         "eloue/modules/booking/directives/MessageModalDirective",
         "eloue/modules/booking/directives/PhoneModalDirective",
         "eloue/modules/booking/directives/ProductDetailsSmallDirective",
-        "eloue/modules/booking/directives/validation/DatepickerDirective",
-        "eloue/modules/booking/directives/validation/TimepickerDirective"],
+        "eloue/modules/booking/directives/validation/DatetimepickerDirective"],
     function (EloueApp) {
 
         "use strict";

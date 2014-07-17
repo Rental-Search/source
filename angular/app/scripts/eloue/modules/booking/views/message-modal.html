@@ -12,9 +12,34 @@
                         <eloue-product-details-booking in-modal="true"></eloue-product-details-booking>
                     </div>
                     <div class="col-lg-6 col-md-6">
-                        <div style="width: 250px; float: left;" data-ng-repeat="message in messages track by message.id">
-                            {{message.text}}
-                        </div>
+                        <section class="chat-list panel-body">
+                            <article ng-repeat="message in productRelatedMessages" class="chat-item" ng-class="{'left': !shouldIndent(message, productRelatedMessages, $first), 'right': shouldIndent(message, chatFeed, $first)}">
+                                <section ng-if="!shouldIndent(message, productRelatedMessages, $first)">
+                                    <a href="" class="thumb-sm avatar pull-left"><img ng-src="{{getAvatar(message.sender.avatar)}}" class="img-circle"></a>
+                                    <section class="chat-body">
+                                        <div class="panel text-sm m-b-none bg bg-light lt">
+                                            <div class="panel-body">
+                                                <span class="arrow left"></span>
+                                                <p class="m-b-none" ng-bind="message.body"></p>
+                                            </div>
+                                        </div>
+                                        <small am-time-ago="message.timestamp" class="text-muted"></small>
+                                    </section>
+                                </section>
+                                <section ng-if="shouldIndent(message, productRelatedMessages, $first)">
+                                    <a href="" class="thumb-sm avatar pull-right"><img ng-src="{{getAvatar(message.sender.avatar)}}" class="img-circle"></a>
+                                    <section class="chat-body">
+                                        <div class="panel text-sm m-b-none bg bg-light dk lter font-semibold">
+                                            <div class="panel-body">
+                                                <span class="arrow right"></span>
+                                                <p class="m-b-none" ng-bind="message.body" style="width: 100%; height: 100%"></p>
+                                            </div>
+                                        </div>
+                                        <small am-time-ago="message.timestamp" class="text-muted"></small>
+                                    </section>
+                                </section>
+                            </article>
+                        </section>
                     </div>
                 </div>
             </div>

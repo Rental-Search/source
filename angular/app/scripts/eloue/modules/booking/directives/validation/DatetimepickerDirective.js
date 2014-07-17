@@ -9,20 +9,12 @@ define(["angular", "eloue/modules/booking/BookingModule"], function (angular) {
             transclude: true,
             link: function (scope, element, attrs, ngModel) {
                 if (!ngModel) return;
-                element.datepicker().on("changeDate", function (event) {
-                    console.log(attrs.name);
-                    var date = event.date;
-                    var day = date.getDate();
-                    var month = date.getMonth() + 1;
-                    var year = date.getFullYear();
-
+                element.datetimepicker().on("change", function (event) {
+                    var date = new Date(Date.parse($(event.target).val()));
                     var currentDate = new Date();
-                    var currentYear = currentDate.getFullYear();
-                    var currentDay = currentDate.getDate();
-                    var currentMonth = currentDate.getMonth() + 1;
 
                     scope.$apply(function () {
-                        ngModel.$setViewValue(day + "/" + month + "/" + year);
+                        ngModel.$setViewValue(date.toString("dd/MM/yyyy hh:mm"));
                     });
                     // Check if selected date is in future
                     var pastDate = date.getTime() > currentDate.getTime();

@@ -20,4 +20,11 @@ define(["eloue/app", "eloue/constants"], function (EloueApp) {
             });
     }]);
 
+    EloueApp.factory("Contacts", ["$resource", "Endpoints", function ($resource, Endpoints) {
+        return $resource("data/contacts.json", {},
+            {
+                "get": { method: "GET"}
+            });
+    }]);
+
 });

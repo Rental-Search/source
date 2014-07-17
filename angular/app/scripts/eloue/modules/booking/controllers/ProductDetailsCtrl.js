@@ -9,54 +9,70 @@ define(["angular", "eloue/modules/booking/BookingModule",
     angular.module("EloueApp.BookingModule").controller("ProductDetailsCtrl", ["$scope", "$route", "CallService", "ProductService", "PriceService", "MessageService", function ($scope, $route, CallService, ProductService, Priceservice, MessageService) {
 
         var currentDate = new Date();
-        var currentDateStr = currentDate.getDate() + "/" + (currentDate.getMonth() +1) + "/" + currentDate.getFullYear();
+        var currentDateStr = currentDate.getDate() + "/" + (currentDate.getMonth() + 1) + "/" + currentDate.getFullYear();
         $scope.productId = $route.current.params.productId;
         $scope.bookingDetails = {
-            "fromDate": new Date(),
-            "fromHours": "0:00 AM",
-            "toDate": currentDateStr,
-            "toHours": "0:00 AM"
-        };
-        $scope.ownerCallDetails = {
-            "number" : "08.99.45.65.43",
-            "tariff" : "0.15"
+            "fromDate": Date.today().toString("dd/MM/yyyy hh:mm"),
+            "toDate": Date.today().toString("dd/MM/yyyy hh:mm")
         };
         $scope.durationDays = 0;
         $scope.durationHours = 0;
         $scope.bookingPrice = 0;
-        $scope.pricePerDay = 10;
+        $scope.pricePerDay = 0;
         $scope.caution = 0;
-        $scope.messages = MessageService.getMessageThread($scope.productId);
+        $scope.productRelatedMessages = {};
+        $scope.ownerCallDetails = {};
+        //TODO: get it from product info
+        $scope.available = true;
 
-        /**
-         * Initialize controls.
-         */
-        $scope.init = function init() {
-            $scope.pricePerDay = Priceservice.getPricePerDay();
-        };
+        MessageService.getMessageThread($scope.productId).$promise.then(function (result) {
+            $scope.productRelatedMessages = result.messages;
+        });
+
+        CallService.getContactCallDetails($scope.productId).$promise.then(function (result) {
+            $scope.ownerCallDetails = result;
+        });
+
+        Priceservice.getPricePerDay($scope.productId).$promise.then(function(result) {
+            $scope.pricePerDay = result;
+        });
 
         /**
          * Update the product booking price based on selected duration.
          */
         $scope.updatePrice = function updatePrice() {
-            console.log($scope.bookingDetails.fromDate + "  " + $scope.bookingDetails.toDate + "  " + $scope.bookingDetails.fromHours + "  " + $scope.bookingDetails.toHours);
-//            $scope.productDetailsBookingForm.fromDate.$parsers.unshift(function (viewValue) {
-//                console.log(viewValue);
-//            });
-            var fromDateTime = new Date();
-            var toDateTime = new Date();
-            var duration = fromDateTime.getTime() - fromDateTime.getTime();
+            console.log($scope.bookingDetails.fromDate + "  " + $scope.bookingDetails.toDate);
 
+            var fromDateTime = new Date(Date.parse($scope.bookingDetails.fromDate));
+            var toDateTime = new Date(Date.parse($scope.bookingDetails.toDate));
+            var duration = toDateTime.getTime() - fromDateTime.getTime();
+
+            var x = duration / 1000;
+            x /= 60;
+            x /= 60;
+            var hours = Math.round(x % 24);
+            x /= 24;
+            var days = Math.round(x);
+            console.log(days + "  " + hours);
+            $scope.durationDays = days;
+            $scope.durationHours = hours;
+            $scope.bookingPrice = $scope.pricePerDay * ((hours / 24) + days);
         };
 
-        $scope.getCallDetails = function getPhoneNumber() {
-            //TODO: get owner id by product id
-            var ownerId = 1;
-            $scope.ownerCallDetails = CallService.getContactCallDetails(ownerId);
+
+        $scope.shouldIndent = function shouldIndent(message, feed, first) {
+            //TODO:
+            return !first;
         };
 
-        $scope.getMessageThread = function getMessageThread() {
-            $scope.messages = MessageService.getMessageThread($scope.productId);
+        $scope.getAvatar = function getAvatar(uri) {
+            //TODO:
+            return 'https://s3-us-west-2.amazonaws.com/watu.io-assets/avatar_default.jpg';
+        };
+
+        $scope.callOwner = function callOwner() {
+            //TODO: call real service
+            console.log("Calling product owner..");
         }
     }]);
 });

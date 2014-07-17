@@ -7,8 +7,8 @@ define(["angular", "eloue/constants", "eloue/modules/booking/BookingModule"], fu
 
         return {
             getPricePerDay: function getPricePerDay(productId) {
-                console.log(1);
-return 12;
+                //TODO: call real service
+                return 12;
             }
         };
     }]);
