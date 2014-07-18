@@ -33,8 +33,8 @@ define(["angular", "eloue/modules/booking/BookingModule",
             $scope.ownerCallDetails = result;
         });
 
-        Priceservice.getPricePerDay($scope.productId).$promise.then(function(result) {
-            $scope.pricePerDay = result;
+        Priceservice.getPricePerDay($scope.productId).$promise.then(function (result) {
+            $scope.pricePerDay = result.amount;
         });
 
         /**
@@ -56,7 +56,7 @@ define(["angular", "eloue/modules/booking/BookingModule",
             console.log(days + "  " + hours);
             $scope.durationDays = days;
             $scope.durationHours = hours;
-            $scope.bookingPrice = $scope.pricePerDay * ((hours / 24) + days);
+            $scope.bookingPrice = ($scope.pricePerDay * ((hours / 24) + days)).toFixed(2);
         };
 
 
@@ -73,6 +73,26 @@ define(["angular", "eloue/modules/booking/BookingModule",
         $scope.callOwner = function callOwner() {
             //TODO: call real service
             console.log("Calling product owner..");
-        }
+        };
+
+        $scope.sendBookingRequest = function sendBookingRequest() {
+             //TODO: call real service
+            console.log("Send booking request..");
+        };
+
+        $scope.openBookingModal = function openBookingModal() {
+            $('.modal').modal('hide');
+            $("#bookingModal").modal("show");
+        };
+
+        $scope.openMessageModal = function openMessageModal() {
+            $('.modal').modal('hide');
+            $("#messageModal").modal("show");
+        };
+
+        $scope.openPhoneModal = function openPhoneModal() {
+            $('.modal').modal('hide');
+            $("#phoneModal").modal("show");
+        };
     }]);
 });

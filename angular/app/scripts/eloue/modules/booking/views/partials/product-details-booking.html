@@ -54,6 +54,6 @@
             </table>
         </div>
 
-        <button class="btn btn-success" type="submit" data-ng-disabled="productDetailsBookingForm.$invalid || !productDetailsBookingForm.$dirty">Réservez</button>
+        <button class="btn btn-success" type="button" ng-click="openBookingModal()" ng-show="!inBooking">Réservez</button>
     </form>
 </div>

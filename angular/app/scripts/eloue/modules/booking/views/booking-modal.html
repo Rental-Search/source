@@ -7,11 +7,89 @@
             </div>
             <div class="modal-body">
                 <div class="row">
-                    <div class="col-lg-6 col-md-6">
+                    <div class="col-lg-4 col-md-4">
                         <eloue-product-details-small></eloue-product-details-small>
-                        <eloue-product-details-booking in-modal="true"></eloue-product-details-booking>
+                        <eloue-product-details-booking in-modal="true"
+                                                       in-booking="true"></eloue-product-details-booking>
                     </div>
                     <div class="col-lg-6 col-md-6">
+                        <form id="bookingForm" name="bookingForm" class="" role="form" ng-submit="sendBookingRequest()" ng-model="bookingDetails" novalidate>
+                            <fieldset>
+                                <legend>Vos informations personnelles</legend>
+
+                                <div class="form-group">
+                                    <div class="col-md-2">
+                                        <select name="nameSuffix" class="form-control" ng-model="bookingDetails.nameSuffix">
+                                            <option value="Mr.">Mr.</option>
+                                            <option value="Ms.">Ms.</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="col-md-5">
+                                        <input name="firstName" type="text" placeholder="Prenom*"
+                                               class="form-control input-md" required ng-model="bookingDetails.firstName">
+                                    </div>
+
+                                    <div class="col-md-5">
+                                        <input name="lastName" type="text" placeholder="Nom*"
+                                               class="form-control input-md" required ng-model="bookingDetails.lastName">
+                                    </div>
+
+                                    <div class="col-md-12">
+                                        <input name="address" type="text" placeholder="Adresse*"
+                                               class="form-control input-md" required ng-model="bookingDetails.address">
+                                    </div>
+
+
+                                    <div class="col-md-6">
+                                        <input name="postalCode" type="text" placeholder="Code postal*"
+                                               class="form-control input-md" required ng-model="bookingDetails.postalCode">
+                                    </div>
+
+
+                                    <div class="col-md-6">
+                                        <input name="city" type="text" placeholder="Ville*"
+                                               class="form-control input-md" required ng-model="bookingDetails.city">
+                                    </div>
+                                </div>
+                                <legend>Vos informations bancaires</legend>
+                                <div class="form-group">
+                                    <div class="col-md-8">
+                                        <div class="input-group">
+                                            <span class="input-group-addon">i</span>
+                                            <input name="cardNumber" class="form-control"
+                                                   placeholder="Numéro de carte*" type="text" required ng-model="bookingDetails.cardNumber">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-4">
+                                        <div class="input-group">
+                                            <span class="input-group-addon">i</span>
+                                            <input name="expireDate" class="form-control"
+                                                   placeholder="MM/AA*" type="text" required ng-model="bookingDetails.expireDate">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-5">
+                                        <div class="input-group">
+                                            <span class="input-group-addon">i</span>
+                                            <input name="securityCode" class="form-control"
+                                                   placeholder="Code de sécurité*" type="text" required ng-model="bookingDetails.securityCode">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-7">
+                                        <div class="input-group">
+                                            <span class="input-group-addon">i</span>
+                                            <input name="cardHolder" class="form-control"
+                                                   placeholder="Nom et prénom du titulaire*" type="text" required ng-model="bookingDetails.cardHolder">
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>
+
+                            <button class="btn btn-success" type="submit">Réservez</button>
+                        </form>
                     </div>
                 </div>
             </div>

@@ -27,4 +27,10 @@ define(["eloue/app", "eloue/constants"], function (EloueApp) {
             });
     }]);
 
+    EloueApp.factory("Prices", ["$resource", "Endpoints", function ($resource, Endpoints) {
+        return $resource("data/prices.json", {},
+            {
+                "get": { method: "GET", params: {productId: ":productId"}}
+            });
+    }]);
 });

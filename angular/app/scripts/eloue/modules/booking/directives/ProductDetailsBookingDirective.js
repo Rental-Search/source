@@ -9,7 +9,8 @@ define(["angular", "eloue/modules/booking/BookingModule", "eloue/modules/booking
             restrict: "E",
             templateUrl: "/scripts/eloue/modules/booking/views/partials/product-details-booking.html",
             scope: {
-                inModal: "=inModal"
+                inModal: "=inModal",
+                inBooking: "=inBooking"
             },
             controller: "ProductDetailsCtrl"
         };

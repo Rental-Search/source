@@ -1,14 +1,14 @@
-define(["angular", "eloue/constants", "eloue/modules/booking/BookingModule"], function (angular) {
+define(["angular", "eloue/constants", "eloue/services", "eloue/modules/booking/BookingModule"], function (angular) {
     "use strict";
     /**
      * Price service.
      */
-    angular.module("EloueApp.BookingModule").factory("PriceService", ["$rootScope", "$location", "Endpoints", function ($rootScope, $location, Endpoints) {
+    angular.module("EloueApp.BookingModule").factory("PriceService", ["$rootScope", "$location", "Endpoints", "Prices", function ($rootScope, $location, Endpoints, Prices) {
 
         return {
             getPricePerDay: function getPricePerDay(productId) {
                 //TODO: call real service
-                return 12;
+                return Prices.get({productId: productId});
             }
         };
     }]);
