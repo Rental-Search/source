@@ -1,5 +1,5 @@
 doctype
-html
+html(lang = "en")
 	head
 		-var title = "e-loue"
 		include jade/_head
@@ -28,3 +28,20 @@ html
 			footer
 				include jade/_footer-links
 				include jade/_rss
+
+		.container
+			input(id="formmapper" type="text" placeholder="Just start typing here...")
+			
+		script(src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js")
+		script(src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js")
+		script(src="http://jamesallardice.github.io/Placeholders.js/assets/js/placeholders.min.js")
+		script(src="http://maps.googleapis.com/maps/api/js?sensor=false&libraries=places")
+		script(src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js")
+		script(src="js/formmapper.js")
+		//- script(src="js/bootstrap.js")
+		script.
+			$(function(){
+				$("#geolocate").formmapper({
+					details: "form",
+				});
+			});
