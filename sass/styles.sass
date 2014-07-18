@@ -1,96 +1,29 @@
-@import variable
-@import bootstrap
-
-
-=fog($fog-color: $fog-lite)
-	.fog
-		position: absolute
-		width: 100%
-		height: 100%
-		background: url(../img/fog.png) repeat
-		background: $fog-color
-		top: 0
-		left: 0
-
-=smoke($smoke-color: $smoke-lite)
-	.smoke
-		position: absolute
-		width: 100%
-		height: 100%
-		background: url(../img/smoke.png) repeat
-		background: $smoke-color
-		top: 0
-		left: 0
-
-=centred-abs()
-	position: absolute
-	top: 0
-	right: 0
-	bottom: 0
-	left: 0
-	margin: auto
-
 @function px($size)
 	@return (($size / 14) * 1em)
+
+@import _variable
+@import bootstrap
+@import _mixins
+@import _helped-classas
+@import _sprites
+@import _src
+@import _header-site.
+@import _nav-home
+@import _banner
+@import _insurances
+@import _product-list
+@import _comments
+@import _location-list
+@import _download-mobile-apps
+@import _watch-video
+@import _professional-renter-content
+@import _talk-about-us
+@import _footer-links
+@import _rss
 
 body
 	background-color: $gray-lite
 	overflow-x: hidden
-.padding-0
-	padding: 0 !important
-.margin-b-0
-	margin-bottom: 0 !important
-.btn-success
-	padding: .8em
-	font-weight: 700
-	border-color: $brand-success
-
-input.form-control:focus
-	+box-shadow( 0 0 6px $smoke-lite !important)
-	z-index: 10 !important
-	border-color: $gray-medium
-
-.framing
-	background-color: white
-	border: 1px solid $gray-lighter
-	border-width: 1px 0
-
-.link-success
-	color: $brand-success
-	font-weight: 700
-	text-transform: uppercase
-	font-size: 13px
-	letter-spacing: .07em
-	&:hover
-		color: darken($brand-success, 10%)
-
-.without-spaces
-	text-align: justify
-	margin-bottom: -1em
-	line-height: 1em
-	overflow: hidden
-	&:after
-		display: inline-block
-		width: 100%
-		content: ""
-	>li
-		display: inline-block
-
-.divide
-	position: relative
-	&:after
-		left: 50%
-		content: ""
-		bottom: -.5em
-		position: absolute
-		height: 1000px
-		width: 1px
-		background-color: $gray-lighter
-	&:first-child
-		display: none !important
-
-.ov-hidden
-	overflow: hidden
 
 h2
 	font-weight: $fw-light
@@ -100,7 +33,8 @@ h3
 	font-size: px(26)
 	font-weight: $fw-light
 	color: $gray-dark
-	margin: 0 0 px(26)
+	margin: 0
+	+mrg-b(1)
 	line-height: 1.5em
 
 h4
@@ -120,60 +54,8 @@ h6
 
 p
 	color: $gray-light
-	line-height: 2em
 
-@import sprites
-@import src
-@import header-site.
-@import nav-home
-@import banner
-@import insurances
-@import product-list
-@import comments
-@import location-list
-@import download-mobile-apps
-@import watch-video
-@import professional-renter-content
-@import talk-about-us
-@import footer-links
-@import rss
-
-
-@media (max-width: $screen-xs-max)
-	body
-		font-size: 10px
-
-@media (min-width: $screen-sm-min) and (max-width: $screen-sm-max)
-	body
-		font-size: 12px
-
-@media (min-width: $screen-md-min) and (max-width: $screen-md-max)
-	body
-		font-size: 14px
-
-@media (min-width: $screen-lg-min)
-	body
-		font-size: 16px
-
-@for $i from 0 through 6
-	.pad-#{$i}
-		padding: #{$i / 2}em !important
-
-	.pad-v-#{$i}
-		padding-top: #{$i / 2}em !important
-		padding-bottom: #{$i / 2}em !important
-
-	.pad-h-#{$i}
-		padding-right: #{$i / 2}em !important
-		padding-left: #{$i / 2}em !important
-
-	.mrg-#{$i}
-		padding: #{$i / 2}em !important
-
-	.mrg-v-#{$i}
-		padding-top: #{$i / 2}em !important
-		padding-bottom: #{$i / 2}em !important
-
-	.mrg-h-#{$i}
-		padding-right: #{$i / 2}em !important
-		padding-left: #{$i / 2}em !important
+main
+	p
+		line-height: 2em
+		text-align: justify

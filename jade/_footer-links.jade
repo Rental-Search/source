@@ -8,8 +8,8 @@ ul.nav.nav-tabs.nav-justified.ov-hidden
 		li.divide
 		li.text-center.ul-wrapper
 			.centering.text-left
-				h4 #{group.header}
+				h4.text-nowrap #{group.header}
 				ul.nav
 					-each link in group.links
-						li.link-wrapper
-							a(href = "#") #{link}
+						li.link-wrapper.mrg-v-1
+							a(href = "#").pad-0 #{link}

@@ -1,56 +1,54 @@
 .rss
+	$mrg-t: 2
 	background-color: $brand-success
-	padding: 2em 0
-	font-size: 14px
+	font-size: px(14)
 	p
-		font-weight: 300
+		font-weight: $fw-light
 		color: white
 		line-height: 1.5em
-		margin-right: -1em
+		+mrg-r(-2)
 		a
 			color: white
 	form
 		width: 100%
-		margin-top: 1em
+		+mrg-t($mrg-t)
 	input
-		font-weight: 600
+		font-weight: $fw-semibold
 		color: $gray
-		width: 20em !important
+		width: px(300) !important
+		// width: 20em !important
 	button
-		font-weight: 700
+		font-weight: $fw-bold
 		color: $brand-success !important
-		padding: 0 2.5em
-		margin-left: .5em
+		+pad-l(5)
+		+pad-r(5)
+		+mrg-l(1)
 	button,
 	input
 		border: none
 		height: 3em
 	.social-btns
-		margin-top: 1em
-		+border-top-radius(3px)
-		+border-bottom-radius(3px)
+		$bor-rad: px(5)
+		+mrg-t($mrg-t)
+		+border-top-radius($bor-rad)
+		+border-bottom-radius($bor-rad)
 		background-color: lighten($brand-success, 10%)
 		display: inline-block
-		height: 3em
 		+clearfix()
 		a
-			font-size: 25px
+			$mrg: px(3)
+			font-size: px(25)
 			display: block
 			float: left
 			background-color: white
 			text-decoration: none
-			+border-top-radius(3px)
-			+border-bottom-radius(3px)
+			+border-top-radius($bor-rad - $mrg)
+			+border-bottom-radius($bor-rad - $mrg)
 			text-align: center
-			margin: 5px
+			margin: $mrg
 			width: 1.25em
 			height: 1.25em
 			position: relative
 			span
 				color: $brand-success
-				position: absolute
-				top: 0
-				right: 0
-				bottom: 0
-				left: 0
-				margin: auto
+				+centred-abs()

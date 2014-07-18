@@ -14,7 +14,7 @@ html
 				</script> <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
 				<![endif]
 	body
-		include jade/_src
+		//- include jade/_src
 		.container-flex
 			header.header-site
 				include jade/_header-site
@@ -30,11 +30,11 @@ html
 						include jade/_banner
 
 				.row.insurances.framing
-					.container.pad-v-6
+					.container.mrg-v-6
 						include jade/_insurances
 
 				.row.product-list
-					.container.pad-v-6
+					.container.mrg-v-6
 						include jade/_product-list
 
 				.row.comments.framing
@@ -42,33 +42,35 @@ html
 						include jade/_comments
 
 				.row.location-list
-					.container
+					.container.mrg-v-6
 						include jade/_location-list
 
 			main
 				.row.download-mobile-apps.framing
 					.container
-						.col-md-8
+						.col-md-9.mrg-v-8.row
 							include jade/_download-mobile-apps
 
 				.row.watch-video
-					.container
-						include jade/_watch-video
+					.container.mrg-v-8
+						.row
+							include jade/_watch-video
 
 				.row.professional-renter-content.framing
-					.container
-						include jade/_professional-renter-content
+					.container.mrg-v-8
+						.row
+							include jade/_professional-renter-content
 
 				.row.talk-about-us
-					.container.text-center
+					.container.text-center.mrg-v-6
 						include jade/_talk-about-us
 
 			footer
 				.row.footer-links.framing
-					.container
+					.container.mrg-v-6
 						include jade/_footer-links
 
 				.row.rss
-					.container
+					.container.mrg-v-4
 						.row
 							include jade/_rss

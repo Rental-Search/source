@@ -1,0 +1,113 @@
+@media (max-width: $screen-xs-max)
+	body
+		font-size: 10px
+
+@media (min-width: $screen-sm-min) and (max-width: $screen-sm-max)
+	body
+		font-size: 12px
+
+@media (min-width: $screen-md-min) and (max-width: $screen-md-max)
+	body
+		font-size: 14px
+
+@media (min-width: $screen-lg-min)
+	body
+		font-size: 16px
+
+@for $i from 0 through 8
+	.pad-#{$i}
+		padding: #{$i / 2}em !important
+
+	.pad-v-#{$i}
+		padding-top: #{$i / 2}em !important
+		padding-bottom: #{$i / 2}em !important
+
+	.pad-h-#{$i}
+		padding-right: #{$i / 2}em !important
+		padding-left: #{$i / 2}em !important
+
+	.mrg-#{$i}
+		margin: #{$i / 2}em !important
+
+	.mrg-v-#{$i}
+		margin-top: #{$i / 2}em !important
+		margin-bottom: #{$i / 2}em !important
+
+	.mrg-h-#{$i}
+		margin-right: #{$i / 2}em !important
+		margin-left: #{$i / 2}em !important
+
+
+.ov-hidden
+	overflow: hidden
+
+.link-sprite
+	font-size: 0
+	color: transparent
+
+.btn-success
+	padding: .8em
+	font-weight: 700
+	border-color: $brand-success
+
+.form-control:focus
+	+box-shadow( 0 0 6px $smoke-lite !important)
+	z-index: 10 !important
+	border-color: $gray-medium
+
+.framing
+	background-color: white
+	border: px(1) solid $gray-lighter
+	border-width: px(1) 0
+
+.link-success-color
+	color: $brand-success
+	font-weight: 700
+	text-transform: uppercase
+	font-size: 13px
+	letter-spacing: .07em
+	&:hover
+		color: darken($brand-success, 10%)
+
+.without-spaces
+	text-align: justify
+	margin-bottom: -1em
+	line-height: 1em
+	overflow: hidden
+	&:after
+		display: inline-block
+		width: 100%
+		content: ""
+	> li
+		display: inline-block
+
+.divide
+	position: relative
+	&:after
+		left: 50%
+		content: ""
+		bottom: -.5em
+		position: absolute
+		height: 1000px
+		width: 1px
+		background-color: $gray-lighter
+	&:first-child
+		display: none !important
+
+.fog
+	position: absolute
+	width: 100%
+	height: 100%
+	background-color: white
+	top: 0
+	left: 0
+	+opacity(.2)
+
+.smoke
+	position: absolute
+	width: 100%
+	height: 100%
+	top: 0
+	left: 0
+	background-color: black
+	+opacity(.5)
