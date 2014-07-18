@@ -2,18 +2,39 @@ define(["angular", "eloue/modules/booking/BookingModule",
     "eloue/modules/booking/services/CallService",
     "eloue/modules/booking/services/ProductService",
     "eloue/modules/booking/services/PriceService",
-    "eloue/modules/booking/services/MessageService"
+    "eloue/modules/booking/services/MessageService",
+    "eloue/services"
 ], function (angular) {
     "use strict";
 
-    angular.module("EloueApp.BookingModule").controller("ProductDetailsCtrl", ["$scope", "$route", "CallService", "ProductService", "PriceService", "MessageService", function ($scope, $route, CallService, ProductService, Priceservice, MessageService) {
+    angular.module("EloueApp.BookingModule").controller("ProductDetailsCtrl", ["$scope", "$route", "CallService", "ProductService", "PriceService", "MessageService", function ($scope, $route, CallService, ProductService, PriceService, MessageService) {
 
-        var currentDate = new Date();
-        var currentDateStr = currentDate.getDate() + "/" + (currentDate.getMonth() + 1) + "/" + currentDate.getFullYear();
+        //TODO: change to real service
+        $scope.currentUser = {
+            "id": 1190,
+            "email": "1190@e-loue.cc",
+            "company_name": "fdsfds",
+            "is_professional": false,
+            "slug": "benoit",
+            "avatar": "pictures/avatars/a1fc68d292034f45b9ce559bb88d9bec.jpg",
+            "default_address": "http://10.0.0.111:8000/api/2.0/addresses/18/",
+            "default_number": "http://10.0.0.111:8000/api/2.0/phonenumbers/18/",
+            "about": "",
+            "work": "",
+            "school": "",
+            "hobby": "",
+            "languages": [],
+            "drivers_license_date": null,
+            "drivers_license_number": "",
+            "date_of_birth": null,
+            "place_of_birth": "",
+            "rib": "",
+            "url": ""
+        };
         $scope.productId = $route.current.params.productId;
         $scope.bookingDetails = {
-            "fromDate": Date.today().toString("dd/MM/yyyy hh:mm"),
-            "toDate": Date.today().toString("dd/MM/yyyy hh:mm")
+            "fromDate": Date.today().add(1).days().toString("dd/MM/yyyy hh:mm"),
+            "toDate": Date.today().add(2).days().toString("dd/MM/yyyy hh:mm")
         };
         $scope.durationDays = 0;
         $scope.durationHours = 0;
@@ -24,6 +45,11 @@ define(["angular", "eloue/modules/booking/BookingModule",
         $scope.ownerCallDetails = {};
         //TODO: get it from product info
         $scope.available = true;
+        $scope.newMessage = {};
+
+        ProductService.getProduct($scope.productId).$promise.then(function (result) {
+            $scope.product = result;
+        });
 
         MessageService.getMessageThread($scope.productId).$promise.then(function (result) {
             $scope.productRelatedMessages = result.messages;
@@ -33,7 +59,7 @@ define(["angular", "eloue/modules/booking/BookingModule",
             $scope.ownerCallDetails = result;
         });
 
-        Priceservice.getPricePerDay($scope.productId).$promise.then(function (result) {
+        PriceService.getPricePerDay($scope.productId).$promise.then(function (result) {
             $scope.pricePerDay = result.amount;
         });
 
@@ -41,24 +67,31 @@ define(["angular", "eloue/modules/booking/BookingModule",
          * Update the product booking price based on selected duration.
          */
         $scope.updatePrice = function updatePrice() {
-            console.log($scope.bookingDetails.fromDate + "  " + $scope.bookingDetails.toDate);
+
 
             var fromDateTime = new Date(Date.parse($scope.bookingDetails.fromDate));
             var toDateTime = new Date(Date.parse($scope.bookingDetails.toDate));
             var duration = toDateTime.getTime() - fromDateTime.getTime();
-
             var x = duration / 1000;
             x /= 60;
             x /= 60;
             var hours = Math.round(x % 24);
             x /= 24;
             var days = Math.round(x);
-            console.log(days + "  " + hours);
             $scope.durationDays = days;
             $scope.durationHours = hours;
             $scope.bookingPrice = ($scope.pricePerDay * ((hours / 24) + days)).toFixed(2);
         };
 
+        $scope.sendMessage = function sendMessage() {
+            var message = $scope.newMessage;
+            message.sender = $scope.currentUser;
+            message.timestamp = new Date().getTime();
+            $scope.productRelatedMessages.push(message);
+            //TODO: save message
+
+            $scope.newMessage = {};
+        };
 
         $scope.shouldIndent = function shouldIndent(message, feed, first) {
             //TODO:
@@ -66,8 +99,7 @@ define(["angular", "eloue/modules/booking/BookingModule",
         };
 
         $scope.getAvatar = function getAvatar(uri) {
-            //TODO:
-            return 'https://s3-us-west-2.amazonaws.com/watu.io-assets/avatar_default.jpg';
+            return uri ? uri  : 'images/avatar_default.jpg';
         };
 
         $scope.callOwner = function callOwner() {
@@ -76,23 +108,25 @@ define(["angular", "eloue/modules/booking/BookingModule",
         };
 
         $scope.sendBookingRequest = function sendBookingRequest() {
-             //TODO: call real service
+            //TODO: call real service
             console.log("Send booking request..");
         };
 
         $scope.openBookingModal = function openBookingModal() {
-            $('.modal').modal('hide');
-            $("#bookingModal").modal("show");
+            $scope.openModal("bookingModal");
         };
 
         $scope.openMessageModal = function openMessageModal() {
-            $('.modal').modal('hide');
-            $("#messageModal").modal("show");
+            $scope.openModal("messageModal");
         };
 
         $scope.openPhoneModal = function openPhoneModal() {
-            $('.modal').modal('hide');
-            $("#phoneModal").modal("show");
+            $scope.openModal("phoneModal");
         };
+
+        $scope.openModal = function openModal(modalId) {
+            $('.modal').modal('hide');
+            $("#" + modalId).modal("show");
+        }
     }]);
 });

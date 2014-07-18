@@ -13,6 +13,8 @@
         "angular-cookies": "1.2.11",
         "angular-sanitize": "1.2.11",
         "angular-route": "1.2.11",
+        "angular-moment": "0.6.2",
+        "ng-stripe-payments": "0.1.1",
         "eonasdan-bootstrap-datetimepicker": "3.0.0",
         "datejs": "1.0.0-rc1"
     },

@@ -30,6 +30,12 @@
                 <span ng-show="productDetailsBookingForm.toDate.$dirty && productDetailsBookingForm.toDate.$error.pastDate" class="text-danger">Can't select data in the past.</span>
             </div>
         </div>
+        <div ng-show="available && !inModal" style="color:#008000">
+            Available
+        </div>
+        <div ng-show="!available && !inModal" style="color:#ff0000">
+            Not available
+        </div>
         <div ng-show="!inModal">
             <p>Durée de la location : <strong>{{durationDays}} jours</strong> et <strong>{{durationHours}} heures</strong></p>
             <p>Prix de la location : <span class="price">{{bookingPrice}}€</span></p>
@@ -48,7 +54,7 @@
                 </tr>
                 <tr>
                     <td>Caution</td>
-                    <td>{{caution}}€</td>
+                    <td>{{product.deposit_amount}}€</td>
                 </tr>
                 </tbody>
             </table>

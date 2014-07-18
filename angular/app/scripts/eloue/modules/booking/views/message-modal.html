@@ -40,7 +40,21 @@
                                     </section>
                                 </section>
                             </article>
+
                         </section>
+                        <footer class="panel-footer">
+                            <!-- chat form -->
+                            <article class="chat-item" id="chat-form">
+                                <section class="chat-body">
+
+                                    <form name="sendMessageForm" ng-submit="sendMessage()" novalidate>
+                                        <textarea ng-model="newMessage.body" placeholder="Rédigez votre message ici..." class="form-control"
+                                                  data-watu-on-enter="postChatMessage(newChatMessage)" required></textarea>
+                                        <button class="btn btn-success" data-ng-disabled="sendMessageForm.$invalid || !sendMessageForm.$dirty" type="submit">Envoyez</button>
+                                    </form>
+                                </section>
+                            </article>
+                        </footer>
                     </div>
                 </div>
             </div>
