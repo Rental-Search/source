@@ -1,15 +1,17 @@
-ul.nav.nav-tabs.nav-justified.ov-hidden
-	-var groups = []
-	-groups.push({ "header": "Le concept eloue", "links": ["Comment ça marche ?", "Simulez vos revenus", "Questions fréquentes", "Conseils pour les propriétaires", "Conseils pour les locataires", "Témoignages"] })
-	-groups.push({ "header": "Pourquoi choisir eloue", "links": ["Assurance sérénité", "Paiement et caution sécurisés", "Contrats de location", "Parrainez vos proches", "L’offre e-loue Pro"] })
-	-groups.push({ "header": "L’entreprise e-loue", "links": ["Qui sommes-nous ?", "Nos partenaires", "Respect de la vie privée", "Conditions générales", "Mentions légales"] })
-	-groups.push({ "header": "En savoir plus", "links": ["Espace presse", "Espace job", "Contactez-nous", "E-loue en mobilité", "Blog e-loue"] })
-	-each group in groups
-		li.divide
-		li.text-center.ul-wrapper
-			.centering.text-left
-				h4.text-nowrap #{group.header}
-				ul.nav
-					-each link in group.links
-						li.link-wrapper.mrg-v-1
-							a(href = "#").pad-0 #{link}
+.row.footer-links.framing
+	.container.mrg-v-6
+		ul.nav.nav-tabs.nav-justified.ov-hidden
+			-var groups = []
+			-groups.push({ "header": "Le concept eloue", "links": ["Comment ça marche ?", "Simulez vos revenus", "Questions fréquentes", "Conseils pour les propriétaires", "Conseils pour les locataires", "Témoignages"] })
+			-groups.push({ "header": "Pourquoi choisir eloue", "links": ["Assurance sérénité", "Paiement et caution sécurisés", "Contrats de location", "Parrainez vos proches", "L’offre e-loue Pro"] })
+			-groups.push({ "header": "L’entreprise e-loue", "links": ["Qui sommes-nous ?", "Nos partenaires", "Respect de la vie privée", "Conditions générales", "Mentions légales"] })
+			-groups.push({ "header": "En savoir plus", "links": ["Espace presse", "Espace job", "Contactez-nous", "E-loue en mobilité", "Blog e-loue"] })
+			-each group in groups
+				li.divide
+				li.text-center.ul-wrapper
+					.centering.text-left
+						h4.text-nowrap #{group.header}
+						ul.nav
+							-each link in group.links
+								li.link-wrapper.mrg-v-1
+									a(href = "#").pad-0 #{link}

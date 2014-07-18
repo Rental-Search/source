@@ -37,6 +37,7 @@
 		+clearfix()
 		a
 			$mrg: px(3)
+			$width: 1.25em
 			font-size: px(25)
 			display: block
 			float: left
@@ -46,9 +47,12 @@
 			+border-bottom-radius($bor-rad - $mrg)
 			text-align: center
 			margin: $mrg
-			width: 1.25em
-			height: 1.25em
+			width: $width
+			height: $width
 			position: relative
-			span
-				color: $brand-success
+			color: $brand-success
+			line-height: $width
 				+centred-abs()
+			&:hover
+				background-color: $brand-success
+				color: white
