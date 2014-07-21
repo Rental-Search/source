@@ -8766,11 +8766,7 @@ main p {
   padding-right: 0;
   font-weight: 600;
 }
-.modal .form-group {
-  margin-top: 1.5em !important;
-  margin-bottom: 1.5em !important;
-}
-.modal .inscription {
+.modal .btn {
   font-size: 1em;
   display: block;
   width: 100%;
@@ -8784,13 +8780,13 @@ main p {
   border-bottom-right-radius: 0.21429em;
   border-top-right-radius: 0.21429em;
 }
-.modal .inscription span {
+.modal .btn span {
   display: inline-block;
   width: 1.2em;
   height: 1.2em;
   line-height: 1.2em;
 }
-.modal .inscription span {
+.modal .btn span {
   border-bottom-left-radius: 0.10714em;
   border-top-left-radius: 0.10714em;
   border-bottom-right-radius: 0.10714em;
@@ -8798,28 +8794,28 @@ main p {
   background-color: white;
   margin-right: 1em !important;
 }
-.modal .inscription.facebook {
+.modal .btn.facebook {
   background-color: #3959a8;
 }
-.modal .inscription.facebook:hover {
+.modal .btn.facebook:hover {
   background-color: #2c4582;
 }
-.modal .inscription.facebook span {
+.modal .btn.facebook span {
   color: #3959a8;
 }
-.modal .inscription.google {
+.modal .btn.google {
   background-color: #e45647;
 }
-.modal .inscription.google:hover {
+.modal .btn.google:hover {
   background-color: #d83120;
 }
-.modal .inscription.google span {
+.modal .btn.google span {
   color: #e45647;
 }
-.modal .inscription, .modal .inscription.email {
+.modal .btn[type="submit"], .modal .btn.email {
   background-color: #24bd77;
 }
-.modal .inscription:hover, .modal .inscription.email:hover {
+.modal .btn[type="submit"]:hover, .modal .btn.email:hover {
   background-color: #1c925c;
 }
 .modal p {
@@ -8845,8 +8841,9 @@ main p {
 }
 .modal .checkbox {
   font-size: 0.85714em;
+  margin: 0;
 }
-.modal .last-link {
+.modal .modal-fotter-link {
   color: #24bd77;
   font-size: 1.21429em;
   font-weight: 400;
@@ -8872,7 +8869,9 @@ main p {
   margin-left: -1.25em;
 }
 .modal .form-group {
-  width: 50%;
+  margin: 1.5em auto;
+  clear: both;
+  width: 52%;
   display: block;
   margin-left: auto;
   margin-right: auto;
@@ -8891,4 +8890,23 @@ main p {
 }
 .modal .form-group input::-webkit-input-placeholder {
   color: inherit;
+}
+.modal .forgot-password {
+  font-size: 0.85714em;
+  min-height: 20px;
+}
+.modal .forgot-password a {
+  color: inherit;
+}
+.modal input[type="text"]:invalid, .modal input[type="text"]:empty,
+.modal input[type="email"]:invalid,
+.modal input[type="email"]:empty,
+.modal input[type="password"]:invalid,
+.modal input[type="password"]:empty {
+  border-color: #f27e36;
+}
+.modal input[type="text"]:valid,
+.modal input[type="email"]:valid,
+.modal input[type="password"]:valid {
+  border-color: #24bd77;
 }

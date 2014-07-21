@@ -1,11 +1,11 @@
 .modal
 	$bor-rad: px(3)
-	$item-width: 50%
+	$item-width: 52%
 	.modal-dialog
 		+mrg-t(8)
 		width: $modal-width
 	.modal-content
-		box-shadow: none
+		+box-shadow(none)
 		border-color: transparent
 		border: none
 		+border-left-radius(0)
@@ -35,10 +35,7 @@
 		color: $gray-strong
 		padding-right: 0
 		font-weight: $fw-semibold
-	.form-group
-		+mrg-t(3)
-		+mrg-b(3)
-	.inscription
+	.btn
 		font-size: px(14)
 		display: block
 		width: 100%
@@ -67,7 +64,7 @@
 				background-color: darken($brand-danger, 10%)
 			span
 				color: $brand-danger
-		&,
+		&[type="submit"],
 		&.email
 			background-color: $brand-success
 			&:hover
@@ -92,7 +89,8 @@
 		font-size: px(17)
 	.checkbox
 		font-size: px(12)
-	.last-link
+		margin: 0
+	.modal-fotter-link
 		color: $brand-success
 		font-size: px(17)
 		font-weight: $fw-regular
@@ -117,6 +115,8 @@
 			top: -($height / 2)
 			margin-left: -($width / 2)
 	.form-group
+		margin: 1.5em auto
+		clear: both
 		width: $item-width
 		+center-block()
 		input
@@ -124,4 +124,18 @@
 			height: 3em
 			padding-top: .6em
 			+placeholder(inherit)
+	.forgot-password
+		font-size: px(12)
+		min-height: 20px
+		a
+			color: inherit
+
+	input[type="text"],
+	input[type="email"],
+	input[type="password"]
+		&:invalid,
+		&:empty
+			border-color: $brand-primary
+		&:valid
+			border-color: $brand-success
 
