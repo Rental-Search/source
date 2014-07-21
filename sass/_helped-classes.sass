@@ -81,6 +81,28 @@
 	> li
 		display: inline-block
 
+.checkbox
+	input
+		margin-left: 0 !important
+		opacity: 0
+		cursor: pointer
+		&:checked + span
+			color: inherit
+	label
+		position: relative
+		border: 1px solid $gray-medium
+		color: $gray-light
+		margin-right: .5em
+		line-height: 1.4em
+		width: 1.5em
+		+border-left-radius(px(4))
+		+border-right-radius(px(4))
+		padding: 0
+		&:hover
+			background-color: $gray-lighter
+		span
+			color: transparent
+
 .divide
 	position: relative
 	&:after

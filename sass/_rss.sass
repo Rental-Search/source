@@ -16,6 +16,7 @@
 		font-weight: $fw-semibold
 		color: $gray
 		width: px(300) !important
+		padding-top: .7em
 		// width: 20em !important
 	button
 		font-weight: $fw-bold
@@ -41,18 +42,14 @@
 			font-size: px(25)
 			display: block
 			float: left
-			background-color: white
 			text-decoration: none
 			+border-top-radius($bor-rad - $mrg)
 			+border-bottom-radius($bor-rad - $mrg)
-			text-align: center
 			margin: $mrg
-			width: $width
-			height: $width
-			position: relative
+			background-color: white
+			text-align: center
 			color: $brand-success
-			line-height: $width
-				+centred-abs()
+			+social($width)
 			&:hover
 				background-color: $brand-success
 				color: white
