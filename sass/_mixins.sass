@@ -36,3 +36,31 @@
 
 =pad-l($i)
 	padding-left: ($i / 2 * 1em) !important
+
+
+=btn($fz: px(14), $bor-rad: px(3))
+	font-size: $fz
+	display: block
+	width: 100%
+	text-align: center
+	font-weight: $fw-bold
+	color: white
+	padding: .8em 0
+	+border-left-radius($bor-rad)
+	+border-right-radius($bor-rad)
+	&.info
+		background-color: $brand-info
+		&:hover
+			background-color: darken($brand-info, 10%)
+	&.danger
+		background-color: $brand-danger
+		&:hover
+			background-color: darken($brand-danger, 10%)
+	&.success
+		background-color: $brand-success
+		&:hover
+			background-color: darken($brand-success, 10%)
+	&.gray
+		background-color: $gray-strong
+		&:hover
+			background-color: darken($gray-strong, 10%)

@@ -36,39 +36,17 @@
 		padding-right: 0
 		font-weight: $fw-semibold
 	.btn
-		font-size: px(14)
-		display: block
-		width: 100%
-		text-align: center
-		font-weight: $fw-bold
-		color: white
-		padding: .8em 0
-		text-decoration: none
-		+border-left-radius($bor-rad)
-		+border-right-radius($bor-rad)
+		+btn()
 		+social(1.2em)
 		span
 			+border-left-radius($bor-rad/2)
 			+border-right-radius($bor-rad/2)
 			background-color: white
 			+mrg-r(2)
-		&.facebook
-			background-color: $brand-info
-			&:hover
-				background-color: darken($brand-info, 10%)
-			span
-				color: $brand-info
-		&.google
-			background-color: $brand-danger
-			&:hover
-				background-color: darken($brand-danger, 10%)
-			span
-				color: $brand-danger
-		&[type="submit"],
-		&.email
-			background-color: $brand-success
-			&:hover
-				background-color: darken($brand-success, 10%)
+		&.info span
+			color: $brand-info
+		&.danger span
+			color: $brand-danger
 	p
 		font-size: px(12)
 		margin-top: 1.5em

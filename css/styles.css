@@ -339,8 +339,8 @@ th {
  * -------------------------- */
 @font-face {
   font-family: 'FontAwesome';
-  src: url("../fonts/fontawesome//fontawesome-webfont.eot?v=3.2.1");
-  src: url("../fonts/fontawesome//fontawesome-webfont.eot?#iefix&v=3.2.1") format("embedded-opentype"), url("../fonts/fontawesome//fontawesome-webfont.woff?v=3.2.1") format("woff"), url("../fonts/fontawesome//fontawesome-webfont.ttf?v=3.2.1") format("truetype"), url("../fonts/fontawesome//fontawesome-webfont.svg#fontawesomeregular?v=3.2.1") format("svg");
+  src: url("/fonts/fontawesome//fontawesome-webfont.eot?v=3.2.1");
+  src: url("/fonts/fontawesome//fontawesome-webfont.eot?#iefix&v=3.2.1") format("embedded-opentype"), url("/fonts/fontawesome//fontawesome-webfont.woff?v=3.2.1") format("woff"), url("/fonts/fontawesome//fontawesome-webfont.ttf?v=3.2.1") format("truetype"), url("/fonts/fontawesome//fontawesome-webfont.svg#fontawesomeregular?v=3.2.1") format("svg");
   font-weight: normal;
   font-style: normal;
 }
@@ -8029,6 +8029,36 @@ button.close {
   display: inline-block;
 }
 
+.breadcrumb {
+  background-color: transparent;
+  margin: 0;
+  font-size: 0.92857em;
+  font-weight: 600;
+  margin: 0;
+  padding: 0;
+  color: #24bd77;
+}
+.breadcrumb > li {
+  color: inherit;
+}
+.breadcrumb > li + li:before {
+  font-family: "FontAwesome";
+  content: " \f105 ";
+  font-size: 1.2em;
+}
+.breadcrumb > li a {
+  padding: 0.6em 0;
+  display: inline-block;
+  color: inherit;
+  text-decoration: none;
+}
+.breadcrumb > li.active, .breadcrumb > li:hover, .breadcrumb > li:hover ~ li {
+  color: #9d9d9d;
+}
+.breadcrumb > li:hover ~ li {
+  color: #d0d0d0;
+}
+
 .checkbox input {
   margin-left: 0 !important;
   opacity: 0;
@@ -8093,6 +8123,31 @@ button.close {
   background-color: black;
   opacity: 0.5;
   filter: alpha(opacity=50);
+}
+
+.rate {
+  font-size: 1.28571em;
+  margin: 0.3em 0;
+  display: inline-block;
+  color: #ffc853;
+}
+.rate:hover span {
+  color: #ffc853 !important;
+}
+.rate span {
+  cursor: pointer;
+  display: inline-block;
+  padding-right: 0.25em;
+}
+.rate span.current-rate ~ span {
+  color: #eeeeee;
+}
+.rate span:hover ~ span {
+  color: #eeeeee !important;
+}
+
+.text-success {
+  color: #24bd77 !important;
 }
 
 /* SASS variables are information about icon's compiled state, stored under its original file name
@@ -8183,7 +8238,7 @@ main p {
   text-align: justify;
 }
 
-.header-site .registration {
+.header-site .signs-links {
   color: #777777;
   font-weight: 600;
   font-size: 0.85714em;
@@ -8224,7 +8279,7 @@ main p {
   margin: auto;
   z-index: 50;
   background-image: url(../img/spritesheet.png);
-  background-position: -809px -67px;
+  background-position: -827px -67px;
   width: 14px;
   height: 16px;
 }
@@ -8608,13 +8663,13 @@ main p {
 .professional-renter-content .img-wrapper a {
   display: inline-block;
   background-image: url(../img/spritesheet.png);
-  background-position: 0px 0px;
+  background-position: -290px 0px;
   width: 288px;
   height: 185px;
 }
 .professional-renter-content .img-wrapper a:hover {
   background-image: url(../img/spritesheet.png);
-  background-position: -290px 0px;
+  background-position: 0px 0px;
   width: 288px;
   height: 185px;
 }
@@ -8774,11 +8829,34 @@ main p {
   font-weight: 700;
   color: white;
   padding: 0.8em 0;
-  text-decoration: none;
   border-bottom-left-radius: 0.21429em;
   border-top-left-radius: 0.21429em;
   border-bottom-right-radius: 0.21429em;
   border-top-right-radius: 0.21429em;
+}
+.modal .btn.info {
+  background-color: #3959a8;
+}
+.modal .btn.info:hover {
+  background-color: #2c4582;
+}
+.modal .btn.danger {
+  background-color: #e45647;
+}
+.modal .btn.danger:hover {
+  background-color: #d83120;
+}
+.modal .btn.success {
+  background-color: #24bd77;
+}
+.modal .btn.success:hover {
+  background-color: #1c925c;
+}
+.modal .btn.gray {
+  background-color: #9d9d9d;
+}
+.modal .btn.gray:hover {
+  background-color: #848484;
 }
 .modal .btn span {
   display: inline-block;
@@ -8794,29 +8872,11 @@ main p {
   background-color: white;
   margin-right: 1em !important;
 }
-.modal .btn.facebook {
-  background-color: #3959a8;
-}
-.modal .btn.facebook:hover {
-  background-color: #2c4582;
-}
-.modal .btn.facebook span {
+.modal .btn.info span {
   color: #3959a8;
 }
-.modal .btn.google {
-  background-color: #e45647;
-}
-.modal .btn.google:hover {
-  background-color: #d83120;
-}
-.modal .btn.google span {
+.modal .btn.danger span {
   color: #e45647;
-}
-.modal .btn[type="submit"], .modal .btn.email {
-  background-color: #24bd77;
-}
-.modal .btn[type="submit"]:hover, .modal .btn.email:hover {
-  background-color: #1c925c;
 }
 .modal p {
   font-size: 0.85714em;
@@ -8909,4 +8969,237 @@ main p {
 .modal input[type="email"]:valid,
 .modal input[type="password"]:valid {
   border-color: #24bd77;
+}
+
+.product-details h3 {
+  margin: 0 !important;
+  font-weight: 400;
+}
+.product-details .breadcrumb {
+  color: #9d9d9d;
+}
+.product-details .breadcrumb li + li:before {
+  color: inherit;
+  content: "-";
+}
+.product-details .breadcrumb li:hover, .product-details .breadcrumb li:hover ~ li {
+  color: inherit;
+}
+
+.aside .section {
+  width: 100%;
+  font-size: 0.92857em;
+  margin-bottom: 22.5px;
+  border-bottom-right-radius: 0.28571em;
+  border-bottom-left-radius: 0.28571em;
+}
+.aside .section .section-header {
+  border-top-right-radius: 0.28571em;
+  border-top-left-radius: 0.28571em;
+  background-color: #f27e36;
+  padding: 1.07143em;
+}
+.aside .section .section-header + .section-body {
+  border-top-right-radius: 0;
+  border-top-left-radius: 0;
+}
+.aside .section h4 {
+  color: white;
+  font-weight: 700;
+  font-size: 1em;
+  margin: 0;
+}
+.aside .section h5 {
+  margin: 0;
+  font-size: 1em;
+  font-weight: 700;
+  color: #24bd77;
+}
+.aside .section .section-body {
+  background-color: white;
+  border: 0.07143em solid #eeeeee;
+  border-top-right-radius: 0.28571em;
+  border-top-left-radius: 0.28571em;
+  border-bottom-right-radius: 0.28571em;
+  border-bottom-left-radius: 0.28571em;
+}
+.aside .section .section-body p {
+  color: #9d9d9d;
+  font-weight: 600;
+}
+.aside .section .section-body p.price {
+  color: #2c2c2c;
+  font-size: 1.23077em;
+}
+.aside .section .section-body p.price big {
+  font-size: 1.4375em;
+}
+.aside .section .section-body small {
+  font-size: 0.84615em;
+}
+.aside .section .section-body big {
+  font-size: 2em;
+}
+.aside .section .section-body .part {
+  border-top: 0.07143em solid #eeeeee;
+  padding: 1.07143em;
+}
+.aside .section .section-body .part:first-child {
+  border-top: none;
+}
+.aside .section .section-body .available {
+  color: #24bd77;
+}
+.aside .section .section-body .available:before {
+  font-family: "FontAwesome";
+  content: "\f00c";
+  font-size: 0.7em;
+  display: inline-block;
+  text-align: center;
+  width: 2em;
+  height: 2em;
+  line-height: 2em;
+  margin-right: 1em;
+  border-radius: 50%;
+  background-color: #24bd77;
+  color: white;
+}
+.aside .section .section-body .available.unavailable {
+  color: #e45647;
+}
+.aside .section .section-body .available.unavailable:before {
+  background-color: #e45647;
+  content: "\f00d";
+}
+.aside .section .chosen-container,
+.aside .section .form-control,
+.aside .section .input-group-addon {
+  color: #2c2c2c;
+  font-weight: 600;
+  background-color: transparent;
+  border-width: 0;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+  font-size: 1em;
+}
+.aside .section .form-control {
+  width: 8em;
+}
+.aside .section .calendar {
+  position: relative;
+}
+.aside .section .calendar span {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  margin: auto;
+  background-image: url(../img/spritesheet.png);
+  background-position: -843px -67px;
+  width: 16px;
+  height: 16px;
+}
+.aside .section .chosen-container {
+  display: block;
+  width: auto !important;
+  padding: 5px 0;
+}
+.aside .section .chosen-container .chosen-single {
+  height: auto;
+  background: #eeeeee;
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(70%, white), to(#eeeeee));
+  background: -webkit-linear-gradient(top, white 70%, #eeeeee);
+  background: linear-gradient(to bottom, white 70%, #eeeeee);
+  border-width: 0;
+}
+.aside .section .chosen-container .chosen-drop {
+  border-color: #eeeeee;
+  border-width: 0.07143em;
+  background-color: white;
+}
+.aside .section .chosen-container .chosen-search {
+  display: none;
+}
+.aside .section .chosen-container .chosen-results li.highlighted,
+.aside .section .chosen-container .chosen-results li.result-selected {
+  background: #f27e36;
+}
+.aside .section .btn {
+  font-size: 1.07692em;
+  display: block;
+  width: 100%;
+  text-align: center;
+  font-weight: 700;
+  color: white;
+  padding: 0.8em 0;
+  border-bottom-left-radius: 0.21429em;
+  border-top-left-radius: 0.21429em;
+  border-bottom-right-radius: 0.21429em;
+  border-top-right-radius: 0.21429em;
+}
+.aside .section .btn.info {
+  background-color: #3959a8;
+}
+.aside .section .btn.info:hover {
+  background-color: #2c4582;
+}
+.aside .section .btn.danger {
+  background-color: #e45647;
+}
+.aside .section .btn.danger:hover {
+  background-color: #d83120;
+}
+.aside .section .btn.success {
+  background-color: #24bd77;
+}
+.aside .section .btn.success:hover {
+  background-color: #1c925c;
+}
+.aside .section .btn.gray {
+  background-color: #9d9d9d;
+}
+.aside .section .btn.gray:hover {
+  background-color: #848484;
+}
+.aside .section .btn span {
+  display: inline-block;
+  margin-right: 1em;
+  vertical-align: middle;
+}
+.aside .section .btn + .btn {
+  margin-top: 1.07143em;
+}
+.aside .section .btn.calendar-ok span {
+  background-image: url(../img/spritesheet.png);
+  background-position: -861px -67px;
+  width: 16px;
+  height: 16px;
+}
+.aside .section .btn.call span {
+  background-image: url(../img/spritesheet.png);
+  background-position: -809px -67px;
+  width: 16px;
+  height: 16px;
+}
+.aside .section .btn.send-message span {
+  background-image: url(../img/spritesheet.png);
+  background-position: -879px -67px;
+  width: 16px;
+  height: 14px;
+}
+.aside .section .profile-picture {
+  width: 100%;
+  height: 0;
+  padding-top: 100%;
+  overflow: hidden;
+  border-radius: 50%;
+  position: relative;
+}
+.aside .section .profile-picture img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
 }

@@ -1,0 +1,82 @@
+.aside.col-md-4
+
+	.section.booking-form
+		.section-header
+			h4 Réservez en ligne
+		form.form-inline.section-body.text-center
+			.row-flex.part
+				p
+					small à partir de
+					big.text-primary &nbsp;56€ /jour
+					-each item in ["Du", "Au"]
+						.row.clearfix.mrg-v-2
+							.col-md-8.form-group
+								.input-group
+									.input-group-addon #{item}
+									input(type="text" placeholder="").form-control
+									.input-group-addon.calendar
+										span
+							.col-md-4.form-group
+								select.form-control
+									-for(var i=0;i<24;i++)
+										-var n = i>9? i + ":00" : "0" + i + ":00"
+										option(value=n) #{n}
+				p.available Cet article est disponible à ces dates
+				// p.available.unavailable Cet article est disponible à ces dates
+			.row-flex.part
+				p.mrg-0
+					| Durée de la location : 
+					b.period-days 3 jours 
+					| et 
+					b.period-hours 9 heures
+				p.price.mrg-0
+					| Prix de la location :
+					big.text-primary &nbsp;168€
+				p Assurance incluse
+			.row-flex.part
+				button(type="submit").btn.success.calendar-ok
+					span
+					| Réservez
+				p.mrg-v-1
+					small Cette somme vous sera débitée lorsque le propriétaire validera la location
+
+	.section.add-to-wishlist
+		.section-body
+			.row-flex.part
+					button(type="submit").btn.gray
+						span.icon-heart-empty
+						| Ajoutez à votre liste d’envies
+
+	.section.owner-information
+		.section-header
+			h4 Contactez-moi
+		.section-body
+			.row.part
+				.col-md-4
+					.profile-picture
+						img(src="/img/home-products/declare2r.png", alt="")
+				.col-md-8
+					h5 Gaspard Kroutchev
+					include _rate
+					p.date-subscription
+						| Membre depuis le
+						br
+						span 12 Juillet 2013
+			.row-flex.part
+				button(type="submit").btn.success.send-message
+					span
+					| Envoyez un message
+				button(type="submit").btn.success.call
+					span
+					| Appelez
+				ul.nav.stats
+					-var stats = []
+					-stats.push({"published-ads": {"value": "7", "clarification": "annonces publiées"}})
+					-each stat in stats
+						li(class="#{stat}")
+							-each item in stat
+								span
+									big.text-success #{item.value}
+								span #{item.clarification}
+
+			.row-flex.part

@@ -1,0 +1,13 @@
+.product-details
+	h3
+		margin: 0 !important
+		font-weight: $fw-regular
+	.breadcrumb
+		color: $gray-strong
+		li
+			& + li:before
+				color: inherit
+				content: "-"
+			&:hover,
+			&:hover ~ li
+				color: inherit
