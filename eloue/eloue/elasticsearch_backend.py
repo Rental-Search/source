@@ -18,6 +18,7 @@ from haystack.utils import log as logging
 try:
     import elasticsearch
     from elasticsearch.helpers import bulk_index
+    from elasticsearch.exceptions import NotFoundError
 except ImportError:
     raise MissingDependency("The 'elasticsearch' backend requires the installation of 'elasticsearch'. Please refer to the documentation.")
 
@@ -112,6 +113,8 @@ class ElasticsearchSearchBackend(BaseSearchBackend):
         # mapping.
         try:
             self.existing_mapping = self.conn.indices.get_mapping(index=self.index_name)
+        except NotFoundError:
+            pass
         except Exception:
             if not self.silently_fail:
                 raise
@@ -131,7 +134,7 @@ class ElasticsearchSearchBackend(BaseSearchBackend):
         if current_mapping != self.existing_mapping:
             try:
                 # Make sure the index is there first.
-                self.conn.indices.create(self.index_name, self.DEFAULT_SETTINGS)
+                self.conn.indices.create(index=self.index_name, body=self.DEFAULT_SETTINGS, ignore=400)
                 self.conn.indices.put_mapping(index=self.index_name, doc_type='modelresult', body=current_mapping)
                 self.existing_mapping = current_mapping
             except Exception:
@@ -708,7 +711,7 @@ FIELD_MAPPINGS = {
     'date':       {'type': 'date'},
     'datetime':   {'type': 'date'},
 
-    'location':   {'type': 'geo_point', 'lat_lon': 'true'},        
+    'location':   {'type': 'geo_point', 'lat_lon': 'true'},
     'boolean':    {'type': 'boolean'},
     'float':      {'type': 'float'},
     'long':       {'type': 'long'},
