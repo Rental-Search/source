@@ -1,0 +1,30 @@
+.banner
+	position: relative
+	height: $banner-height
+	img
+		height: 100%
+	.banner-content
+		top: 0
+		left: 0
+		width: 100%
+		position: absolute
+		color: white
+		$ls: .06em
+		h2
+			+mrg-t(4)
+			letter-spacing: $ls
+		a
+			letter-spacing: $ls
+			text-transform: inherit
+			text-decoration: none
+			font-size: px(15)
+			font-weight: $fw-bold
+			background-color: transparent
+			color: inherit
+			border: px(2) solid white
+			padding: 1.2em 2em
+			display: inline-block
+			+border-radius(px(3))
+			&:hover
+				color: $brand-primary
+				background-color: white

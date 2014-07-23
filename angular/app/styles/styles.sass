@@ -1,0 +1,63 @@
+@function px($size)
+	@return (($size / 14) * 1em)
+
+@import _variable
+@import bootstrap
+@import _mixins
+@import _helped-classes
+@import _sprites
+@import _src
+
+body
+	background-color: $gray-lite
+
+h2
+	font-weight: $fw-light
+	font-size: px(39)
+
+h3
+	font-size: px(26)
+	font-weight: $fw-light
+	color: $gray-dark
+	margin: 0
+	+mrg-b(1)
+	line-height: 1.5em
+
+h4
+	color: $gray-dark
+	font-size: px(20)
+	font-weight: $fw-light
+
+h5
+	color: $gray-dark
+	font-weight: $fw-bold
+	font-size: px(14)
+
+h6
+	font-weight: $fw-semibold
+	font-size: px(13)
+	margin: 0
+
+p
+	color: $gray-light
+
+main
+	p
+		line-height: 2em
+		text-align: justify
+
+@import _header-site
+@import _nav-home
+@import _banner
+@import _insurances
+@import _product-list
+@import _comments
+@import _location-list
+@import _download-mobile-apps
+@import _watch-video
+@import _professional-renter-content
+@import _talk-about-us
+@import _footer-links
+@import _rss
+
+@import _modal

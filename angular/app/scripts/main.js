@@ -47,5 +47,8 @@ require([
     "use strict";
     $(function () {
         angular.bootstrap(document, ["EloueApp"]);
+        $('#geolocate').formmapper({
+            details: "form"
+        });
     });
 });

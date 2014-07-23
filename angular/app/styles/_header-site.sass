@@ -1,0 +1,51 @@
+.header-site
+	$w-what-field: 60%
+	.registration
+		color: $gray-light
+		font-weight: $fw-semibold
+		font-size: px(12)
+
+	.search-form
+		img
+			margin-top: px(5)
+		.btn-success
+			width: 100%
+		.form-control
+			font-weight: $fw-bold
+			&.what-field
+				width: $w-what-field
+				color: $brand-success
+				border-right: none
+				border-color: $gray-medium
+				+placeholder($brand-success)
+		.where-field-wrapper
+			border-radius: 0
+			.sprite-location
+				position: absolute
+				top: 0
+				bottom: 0
+				left: 1em
+				margin: auto
+				z-index: 50
+				+sprite($s-location-pin)
+			.where-field-wrapper
+				width: (100% - $w-what-field)
+			.where-field
+				width: 100%
+				padding-left: 3em
+				border-color: $gray-medium $gray-lighter
+				border-radius: 0
+				color: $gray-strong
+				+placeholder($gray-strong)
+				font-weight: $fw-semibold
+		.icon-search:before
+			color: $gray-strong
+		.form-control,
+		.input-group-btn,
+		.btn
+			font-size: px(14)
+			height: 3em
+		.btn-search
+			border-left: none
+		input
+			padding-top: .7em

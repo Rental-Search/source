@@ -12,5 +12,16 @@ define(["angular", "eloue/modules/user_management/UserManagementModule", "eloue/
 //                $rootScope.$broadcast("redirectToLogin");
             });
         };
-        }]);
+
+        $scope.openRegistrationForm = function openRegistrationForm() {
+            var classic_form = $('.classic-form');
+//            console.log(classic_form);
+//            classic_form.hide();
+//            $('.registration.email').on('click', function(){
+                classic_form.slideDown();
+                $('.registration.email').slideUp();
+//            });
+        }
+
+    }]);
 });

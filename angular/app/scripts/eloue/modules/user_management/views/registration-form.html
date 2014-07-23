@@ -1,62 +1,92 @@
-<div id="registrationModal" class="modal fade registration-form" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-     aria-hidden="true">
+<div id="registrationModal" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
     <div class="modal-dialog">
-        <div class="modal-content">
+        <div class="modal-content text-center">
             <div class="modal-header">
-                Registration
+                <button type="button" data-dismiss="modal" class="close"><span aria-hidden="true">&times;</span><span
+                        class="sr-only">Close</span></button>
+                <h4 class="modal-title">Inscription</h4>
             </div>
             <div class="modal-body">
-                <h4>Inscrivez-vous en 30 secondes</h4>
+                <h3>Inscrivez-vous en 2 secondes</h3>
 
-                <form name="registrationForm" class="form-inline" role="form" ng-submit="register()" novalidate>
-                    <input name="lastName" class="form-control" type="text" placeholder="Nom*"
-                           data-ng-model="account.lastName" required>
+                <div class="form-group"><a href="#" class="btn facebook"><span class="icon-facebook"></span>Inscription
+                    via Facebook</a></div>
+                <div class="form-group"><a href="#" class="btn google"><span class="icon-google-plus"></span>Inscription
+                    via Google</a></div>
+                <p class="info">Nous ne publierons jamais rien sur votre profil (sauf si vous le demandez) <br>Vos
+                    données personnelles ne seront jamais cédées ou vendues.</p><span class="or"></span>
+
+                <h3>Inscrivez-vous en 30 secondes</h3>
+
+                <form name="registrationForm" ng-submit="register()" novalidate>
+                    <div class="classic-form" style="display: none">
+                        <div class="form-group">
+                            <input type="text" placeholder="Nom *" class="form-control" required name="lastName"
+                                   data-ng-model="account.lastName">
                     <span data-ng-show="registrationForm.lastName.$error.required && registrationForm.lastName.$dirty"
                           class="errorMsg">
             Last name is required</span>
-
-
-                    <input name="firstName" class="form-control" type="text" placeholder="Prénom*"
-                           data-ng-model="account.firstName" required>
+                        </div>
+                        <div class="form-group">
+                            <input name="firstName" class="form-control" type="text" placeholder="Prénom *"
+                                   data-ng-model="account.firstName" required>
                     <span data-ng-show="registrationForm.firstName.$error.required && registrationForm.firstName.$dirty"
                           class="errorMsg">
             First name is required</span>
-
-                    <input name="postalCode" class="form-control" type="text" placeholder="Code postal*"
-                           data-ng-model="account.postalCode" required>
+                        </div>
+                        <div class="form-group">
+                            <input name="postalCode" class="form-control" type="text" placeholder="Code postal"
+                                   data-ng-model="account.postalCode" required>
                     <span data-ng-show="registrationForm.postalCode.$error.required && registrationForm.postalCode.$dirty"
                           class="errorMsg">
             Postal code is required</span>
-
-                    <input name="email" class="form-control" type="text" placeholder="E-mail*"
-                           data-ng-model="account.email" required>
+                        </div>
+                        <div class="form-group">
+                            <input name="email" class="form-control" type="email" placeholder="E-mail *"
+                                   data-ng-model="account.email" required>
                     <span data-ng-show="registrationForm.email.$error.required && registrationForm.email.$dirty"
                           class="errorMsg">
             Email is required</span>
-
-                    <input name="password" class="form-control" type="password" placeholder="Mot de passe*"
-                           data-ng-model="account.password" required>
+                        </div>
+                        <div class="form-group">
+                            <input name="password" class="form-control" type="password" placeholder="Mot de passe *"
+                                   data-ng-model="account.password" required>
                     <span data-ng-show="registrationForm.password.$error.required && registrationForm.password.$dirty"
                           class="errorMsg">
             Password is required</span>
-
-                    <input name="confirmPassword" class="form-control" type="password" placeholder="Confirmation*"
-                           data-ng-model="account.confirmPassword" required  eloue-password-match="password">
+                        </div>
+                        <div class="form-group">
+                            <input name="confirmPassword" class="form-control" type="password"
+                                   placeholder="Confirmation *"
+                                   data-ng-model="account.confirmPassword" required eloue-password-match="password">
                     <span data-ng-show="registrationForm.confirmPassword.$error.required && registrationForm.confirmPassword.$dirty"
                           class="errorMsg">
             Confirm password is required</span>
                     <span
                             data-ng-show="!registrationForm.confirmPassword.$error.required && registrationForm.confirmPassword.$error.noMatch && registrationForm.password.$dirty"
                             class="errorMsg">Passwords do not match.</span>
-
-                    <button class="btn btn-success" type="submit"
-                            data-ng-disabled="registrationForm.$invalid || !registrationForm.$dirty">Inscription
-                    </button>
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" class="btn"
+                                    data-ng-disabled="registrationForm.$invalid || !registrationForm.$dirty">
+                                Inscription
+                            </button>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <button type="button" class="btn registration email" ng-click="openRegistrationForm()">Inscription via Email</button>
+                    </div>
+                    <div class="checkbox">
+                        <label for="inform">
+                            <input type="checkbox" checked id="inform"><span class="icon-ok"></span>
+                        </label>Tenez moi informé de l'actualité et des bonnes affaires e-loue
+                    </div>
                 </form>
-            </div>
-            <div class="modal-footer">
-                <p>Vous êtes déjà membre e-toue ?</p>
-                <a href="#">Connexion</a>
+                <p>En créant un compte e-loue, vous acceptez les Conditions Générales<br>et la Politique de
+                    Confidentialité de notre site</p><span class="or"></span>
+                <h4>Vous êtes déjà membre e-loue ?</h4><a href="#connectez-vous" data-toggle="modal"
+                                                          data-target="#loginModal" data-dismiss="modal"
+                                                          class="modal-fotter-link connexion">Connexion</a>
             </div>
         </div>
     </div>
