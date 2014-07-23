@@ -8,7 +8,8 @@
     <link href="/css/styles.css" rel="stylesheet">
     <link href="/css/chosen.min.css" rel="stylesheet">
     <link href="/img/favicon.ico" rel="shortcut icon">
-    <script src="http://w.sharethis.com/button/buttons.js"></script>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
   </head>
   <body>
     <input type="checkbox" id="sourse">
@@ -76,7 +77,7 @@
             <div class="col-md-4 share-btns"></div>
           </div>
           <div class="row">
-            <div class="col-md-8">sd</div>
+            <div class="col-md-8 bg-primary">sd</div>
             <div class="aside col-md-4">
               <div class="section booking-form">
                 <div class="section-header">
@@ -87,14 +88,14 @@
                     <p><small>à partir de</small>
                       <big class="text-primary">&nbsp;56€ /jour</big>
                       <div class="row clearfix mrg-v-2">
-                        <div class="col-md-8 form-group">
+                        <div class="col-md-7 form-group">
                           <div class="input-group">
                             <div class="input-group-addon">Du</div>
                             <input type="text" placeholder="" class="form-control">
                             <div class="input-group-addon calendar"><span></span></div>
                           </div>
                         </div>
-                        <div class="col-md-4 form-group">
+                        <div class="col-md-5 form-group">
                           <select class="form-control">
                             <option value="00:00">00:00</option>
                             <option value="01:00">01:00</option>
@@ -124,14 +125,14 @@
                         </div>
                       </div>
                       <div class="row clearfix mrg-v-2">
-                        <div class="col-md-8 form-group">
+                        <div class="col-md-7 form-group">
                           <div class="input-group">
                             <div class="input-group-addon">Au</div>
                             <input type="text" placeholder="" class="form-control">
                             <div class="input-group-addon calendar"><span></span></div>
                           </div>
                         </div>
-                        <div class="col-md-4 form-group">
+                        <div class="col-md-5 form-group">
                           <select class="form-control">
                             <option value="00:00">00:00</option>
                             <option value="01:00">01:00</option>
@@ -179,9 +180,7 @@
               </div>
               <div class="section add-to-wishlist">
                 <div class="section-body">
-                  <div class="row-flex part">
-                    <button type="submit" class="btn gray"><span class="icon-heart-empty"></span>Ajoutez à votre liste d’envies</button>
-                  </div>
+                  <div class="row-flex part"><a href="#" class="btn gray mrg-0"><span class="icon-heart-empty"></span>Ajoutez à votre liste d’envies</a></div>
                 </div>
               </div>
               <div class="section owner-information">
@@ -189,27 +188,91 @@
                   <h4>Contactez-moi</h4>
                 </div>
                 <div class="section-body">
-                  <div class="row part">
-                    <div class="col-md-4">
-                      <div class="profile-picture"><img src="/img/home-products/declare2r.png" alt=""></div>
-                    </div>
-                    <div class="col-md-8">
-                      <h5>Gaspard Kroutchev</h5>
-                      <div class="rate"><span class="icon-star"></span><span class="icon-star current-rate"></span><span class="icon-star"></span><span class="icon-star"></span><span class="icon-star"></span>
+                  <div class="row-flex part">
+                    <div class="block-thumbnail">
+                      <div class="thumbnail-img"><img src="/img/home-products/declare2r.png" alt=""></div>
+                      <div class="thumbnail-content">
+                        <h5>Gaspard Kroutchev</h5>
+                        <div class="rate"><span class="icon-star"></span><span class="icon-star current-rate"></span><span class="icon-star"></span><span class="icon-star"></span><span class="icon-star"></span>
+                        </div>
+                        <p>Membre depuis le<br><span>12 Juillet 2013</span></p>
                       </div>
-                      <p class="date-subscription">Membre depuis le<br><span>12 Juillet 2013</span></p>
                     </div>
                   </div>
-                  <div class="row-flex part">
-                    <button type="submit" class="btn success send-message"><span></span>Envoyez un message</button>
-                    <button type="submit" class="btn success call"><span></span>Appelez</button>
+                  <div class="row-flex part"><a href="#" class="btn success send-message"><span></span>Envoyez un message</a><a href="#" class="btn success call"><span></span>Appelez</a>
                     <ul class="nav stats">
-                      <li class="[object Object]"><span>
-                          <big class="text-success">7</big></span><span>annonces publiées</span>
+                      <li class="published-ads"><span>
+                          <big class="text-success">7 </big></span><span>annonces publiées</span></li>
+                      <li class="bookings"><span>
+                          <big class="text-success">12 </big></span><span>locations effectués</span></li>
+                      <li class="rating"><span>
+                          <big class="text-success">16 </big></span><span>évalutations</span></li>
+                      <li class="percent-of-responce"><span>
+                          <big class="text-success">98% </big></span><span>de taux de réponse</span></li>
+                      <li class="time-to-answer"><span>
+                          <big class="text-success">6h </big></span><span>de temps de réponse en moyenne</span></li>
+                    </ul>
+                  </div>
+                  <div class="row-flex part connection clearfix">
+                    <div class="col-md-4 pad-0"><a href="#" class="friend-photo-wrapper"><img src="/img/home-products/friend1.png" alt=""></a><a href="#" class="friend-photo-wrapper"><img src="/img/home-products/friend2.png" alt=""></a></div>
+                    <div class="col-md-8 pad-0">
+                      <p><small><a href="#">Philippe Dupré </a>et <a href="#">Tony Finn </a>sont amis avec le propriétaire.</small></p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="section similar-listing">
+                <div class="section-header">
+                  <h4>Annonces similaires</h4>
+                </div>
+                <div class="section-body">
+                  <div class="row-flex part">
+                    <ul class="nav">
+                      <li>
+                        <div class="thumbnail-img"><img src="/img/home-products/audi2.jpg" alt=""></div>
+                        <div class="thumbnail-content">
+                          <h6>Audi - A3</h6>
+                          <p><small>Paris</small></p><span class="badge price">100€ /jour</span>
+                        </div>
+                      </li>
+                      <li>
+                        <div class="thumbnail-img"><img src="/img/home-products/audi2.jpg" alt=""></div>
+                        <div class="thumbnail-content">
+                          <h6>Audi - A3</h6>
+                          <p><small>Paris</small></p><span class="badge price">100€ /jour</span>
+                        </div>
+                      </li>
+                      <li>
+                        <div class="thumbnail-img"><img src="/img/home-products/audi2.jpg" alt=""></div>
+                        <div class="thumbnail-content">
+                          <h6>Audi - A3</h6>
+                          <p><small>Paris</small></p><span class="badge price">100€ /jour</span>
+                        </div>
+                      </li>
+                      <li>
+                        <div class="thumbnail-img"><img src="/img/home-products/audi2.jpg" alt=""></div>
+                        <div class="thumbnail-content">
+                          <h6>Audi - A3</h6>
+                          <p><small>Paris</small></p><span class="badge price">100€ /jour</span>
+                        </div>
+                      </li>
+                      <li>
+                        <div class="thumbnail-img"><img src="/img/home-products/audi2.jpg" alt=""></div>
+                        <div class="thumbnail-content">
+                          <h6>Audi - A3</h6>
+                          <p><small>Paris</small></p><span class="badge price">100€ /jour</span>
+                        </div>
                       </li>
                     </ul>
                   </div>
-                  <div class="row-flex part"></div>
+                </div>
+              </div>
+              <div class="section connected-with-owner">
+                <div class="section-body">
+                  <div class="row-flex part text-center">
+                    <div class="facebook-box"><span class="icon-facebook"></span></div><a href="#" class="btn info mrg-0">Connectez-vous avec Facebook</a>
+                    <p>Vérifiez si un de vos amis connait ce propriétaire ?</p>
+                  </div>
                 </div>
               </div>
             </div>
@@ -418,8 +481,6 @@
         </div>
       </div>
     </div>
-    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-    <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
     <script src="http://jamesallardice.github.io/Placeholders.js/assets/js/placeholders.min.js"></script>
     <script src="http://maps.googleapis.com/maps/api/js?sensor=false&amp;libraries=places"></script>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
@@ -427,20 +488,6 @@
     <script src="/js/formmapper.js"></script>
     <script src="/js/bootstrap/modal.js"></script>
     <script src="/js/bootstrap/dropdown.js"></script>
-    <script>
-      $(document).ready(function(){
-       var classic_form = $('.classic-form');
-       classic_form.hide();
-       $('#geolocate').formmapper({
-        details: "form",
-       });
-       $('.registration').on('click', function(){
-        classic_form.slideDown();
-        $(this).slideUp();
-        console.log($(this))
-       });
-       $("select").chosen();
-      });
-    </script>
+    <script src="/js/scripts.js"></script>
   </body>
 </html>

@@ -2,7 +2,8 @@
 	.section
 		width: 100%
 		font-size: px($section-fz)
-		margin-bottom: $grid-gutter-width*.75
+		margin-bottom: $grid-gutter-width*.5
+		border-bottom: px(1) solid darken($gray-lighter,10%)
 		+border-bottom-radius($section-bd-rad)
 		.section-header
 			+border-top-radius($section-bd-rad)
@@ -24,9 +25,11 @@
 		.section-body
 			background-color: white
 			border: px(1) solid $gray-lighter
+			border-top-width: 0
 			+border-top-radius($section-bd-rad)
 			+border-bottom-radius($section-bd-rad)
-			p
+			p,
+			li
 				color: $gray-strong
 				font-weight: $fw-semibold
 				&.price
@@ -91,8 +94,9 @@
 			.chosen-single
 				height: auto
 				background: $gray-lighter
-				background: linear-gradient(to bottom, white 70%, $gray-lighter)
+				background: linear-gradient(to bottom, white, $gray-lite 70%)
 				border-width: 0
+				box-shadow: none
 			.chosen-drop
 				border-color: $gray-lighter
 				border-width: px(1)
@@ -105,12 +109,11 @@
 
 		.btn
 			+btn(px(14,$section-fz))
+			margin-bottom: $section-pad
 			span
 				display: inline-block
 				margin-right: 1em
 				vertical-align: middle
-			& + .btn
-				margin-top: $section-pad
 			&.calendar-ok
 				span
 					+sprite($s-calendar-ok)
@@ -121,16 +124,56 @@
 				span
 					+sprite($s-mail)
 
-		.profile-picture
-			width: 100%
-			height: 0
-			padding-top: 100%
-			overflow: hidden
-			border-radius: 50%
-			position: relative
-			img
-				position: absolute
-				top: 0
-				left: 0
-				width: 100%
-				height: 100%
+	.owner-information
+		.block-thumbnail
+			+block-with-thumbnail(px(80, $section-fz), 50%)
+
+		.connection
+			.friend-photo-wrapper
+				display: inline-block
+				*display: inline
+				*zoom: 1
+				+mrg-r(1)
+				+mrg-b(1)
+				width: px(30, $section-fz)
+				height: px(30, $section-fz)
+				line-height: px(30, $section-fz)
+				img
+					height: 100%
+					width: 100%
+			p
+				display: inline-block
+				*display: inline
+				*zoom: 1
+				a
+					color: lighten($brand-info, 15%)
+					font-weight: bolder
+	.similar-listing
+		li
+			+block-with-thumbnail(px(80, $section-fz), $section-bd-rad)
+			h6
+				color: $gray-dark
+				margin-top: .5em
+			p
+				margin: .25em 0 .5em !important
+	.connected-with-owner
+		p
+			margin: 1em 0 0
+		.facebook-box
+			background-color: $brand-info
+			color: $brand-info
+			display: inline-block
+			*display: inline
+			*zoom: 1
+			margin-bottom: $section-pad
+			+border-top-radius($section-bd-rad)
+			+border-bottom-radius($section-bd-rad)
+			span
+				display: inline-block
+				*display: inline
+				*zoom: 1
+				background-color: white
+				line-height: 1.1em
+				width: 1.1em
+				margin: .2em
+				font-size: px(45)

@@ -13,6 +13,30 @@
 		height: $width
 		line-height: $width
 
+
+=block-with-thumbnail($img-width: px(80), $bd-rad: $section-bd-rad, $pad: $section-pad)
+	margin-top: $pad
+	&:first-child
+		margin-top: 0
+	.thumbnail-img
+		display: table-cell
+		vertical-align: top
+		width: $img-width
+		height: $img-width
+		+border-top-radius($bd-rad)
+		+border-bottom-radius($bd-rad)
+		overflow: hidden
+		img
+			width: 100%
+			height: 100%
+	.thumbnail-content
+		display: table-cell
+		vertical-align: top
+		padding-left: $pad
+		p
+			margin-bottom: 0
+
+
 =mrg-t($i)
 	margin-top: ($i / 2 * 1em) !important
 
