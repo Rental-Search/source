@@ -26,6 +26,7 @@ from django.template import RequestContext
 from django.http import Http404, HttpResponseRedirect, HttpResponseBadRequest
 
 from haystack.query import SearchQuerySet
+from haystack.utils.geo import D
 from django.http import HttpResponse
 from django_messages.forms import ComposeForm
 from django.core.cache import cache
@@ -36,7 +37,7 @@ from accounts.search import patron_search
 
 from products.forms import AlertSearchForm, AlertForm, FacetedSearchForm, RealEstateEditForm, ProductForm, CarProductEditForm, ProductEditForm, ProductAddressEditForm, ProductPhoneEditForm, ProductPriceEditForm, MessageEditForm
 from products.models import Category, Product, Curiosity, ProductRelatedMessage, Alert, MessageThread
-from products.choices import UNIT
+from products.choices import UNIT, SORT
 from products.wizard import ProductWizard, MessageWizard, AlertWizard, AlertAnswerWizard
 from products.utils import format_quote, escape_percent_sign
 from products.search import product_search, car_search, realestate_search, product_only_search
@@ -46,21 +47,62 @@ from rent.models import Booking
 
 from eloue.decorators import ownership_required, secure_required, mobify
 from eloue.utils import cache_key
+from eloue.geocoder import GoogleGeocoder
  
 PAGINATE_PRODUCTS_BY = getattr(settings, 'PAGINATE_PRODUCTS_BY', 10)
 DEFAULT_RADIUS = getattr(settings, 'DEFAULT_RADIUS', 50)
 USE_HTTPS = getattr(settings, 'USE_HTTPS', True)
+MAX_DISTANCE = 1541
 
-def last_added(search_index, location, offset=0):
-    coords = location['coordinates']
-    region_coords = location.get('region_coords') or coords
-    region_radius = location.get('region_radius') or location['radius']
-    last_added = search_index.spatial(
-            lat=region_coords[0], long=region_coords[1], radius=min(region_radius, 1541)
-        ).spatial(
-            lat=coords[0], long=coords[1], radius=min(region_radius*2 if region_radius else float('inf'), 1541)
-        ).order_by('-created_at_date', 'geo_distance')
-    return last_added[offset*10:(offset+1)*10]
+def get_point_and_radius(coords, radius=None):
+    """get_point_and_radius(coords, radius=None):
+    A helper function which transforms provided coordinates into a gis.geos.Point object and validates radius.
+
+    Input:
+    - coords : coordinates of the center of the zone of interest, tuple or list;
+               must contain (latitude, longitude) in strict order
+    - radius : a radius of the zone of interests, numeric (int or float), or any 'False' value like None, False, empty sequences, etc.
+
+    Output: a (point, radius) tuple where
+    - point : gis.geos.Point object made from the input coordinates
+    - radius : a validated radius of the zone of interests, numeric (int or float)
+    """
+    point = Point(*coords)
+    radius = min(radius or float('inf'), MAX_DISTANCE)
+    return point, radius
+
+def last_added(search_index, location, offset=0, limit=PAGINATE_PRODUCTS_BY, sort_by_date='-created_at_date'):
+    # try to find products in the same region
+    region_point, region_radius = get_point_and_radius(
+        location['region_coords'] or location['coordinates'],
+        location['region_radius'] or location['radius']
+        )
+    last_added = search_index.dwithin('location', region_point, D(km=region_radius)
+        ).distance('location', region_point
+        ).order_by(sort_by_date, SORT.NEAR)
+
+    # if there are no products found in the same region
+    if not last_added.count():
+        # try to find products in the same country
+        try:
+            country_point, country_radius = get_point_and_radius(GoogleGeocoder().geocode(location['country'])[1:3])
+        except:
+            # silently ignore exceptions like country name is missing or incorrect
+            pass
+        else:
+            last_added = search_index.dwithin('location', country_point, D(km=country_radius)
+                ).distance('location', country_point
+                ).order_by(sort_by_date, SORT.NEAR)
+
+    # if there are no products found in the same country
+    if not last_added.count():
+        # do not filter on location, and return full list sorted by the provided date field only
+        last_added = search_index.order_by(sort_by_date)
+
+    return last_added[offset*limit:(offset+1)*limit]
+
+def last_joined(*args, **kwargs):
+    return last_added(*args, sort_by_date='-date_joined_date', **kwargs)
 
 @mobify
 def homepage(request):
@@ -69,14 +111,6 @@ def homepage(request):
     address = location.get('formatted_address') or (u'{city}, {country}'.format(**location) if location.get('city') else u'{country}'.format(**location))
     form = FacetedSearchForm({'l': address}, auto_id='id_for_%s')
     alerts = Alert.on_site.all()[:3]
-    try:
-        coords = location['coordinates']
-        last_joined = patron_search.spatial(
-            lat=coords[0], long=coords[1], radius=1541
-        ).order_by('-date_joined_date', 'geo_distance')
-    except KeyError:
-        last_joined = patron_search.order_by('-date_joined_date')
-      
     categories_list = cache.get(cache_key('home_categories_list', Site.objects.get_current()))
 
     if categories_list is None:
@@ -94,7 +128,7 @@ def homepage(request):
             'realestate_list': last_added(realestate_search, location),
             'form': form, 'curiosities': curiosities,
             'alerts':alerts,
-            'last_joined': last_joined[:11],
+            'last_joined': last_joined(patron_search, location, limit=11),
             'categories_list': categories_list,
         }, 
         context_instance=RequestContext(request)

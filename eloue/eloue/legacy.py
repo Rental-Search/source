@@ -26,7 +26,8 @@ class GenerateOnDownload(object):
 
 class CompatSearchQuerySet(SearchQuerySet):
     def spatial(self, long=None, lat=None, radius=None, unit='km'):
-        return self.dwithin('location', Point(lat, long), D(**{unit: radius}))
+        point = Point(lat, long)
+        return self.dwithin('location', point, D(**{unit: radius})) #.distance('location', point)
 
 
 # TODO: remove backported forms.fields.TypedChoiceField from Django 1.7b4 after upgrade to Django 1.7 release
