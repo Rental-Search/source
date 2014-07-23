@@ -658,6 +658,7 @@ class ProductList(ListView):
         self.canonical_parameters = urllib.urlencode(self.canonical_parameters)
         if self.canonical_parameters:
             self.canonical_parameters = '?' + self.canonical_parameters
+        self.kwargs.update({'page': page}) # Django 1.5+ ignore *args and **kwargs in View.dispatch()
         return super(ProductList, self).dispatch(request, urlbits, sqs, suggestions, page=page)
 
     def get_queryset(self):
