@@ -38,7 +38,11 @@ define(["eloue/app", "eloue/modules/user_management/services/AuthService",
                 });
         });
 
-        EloueApp.run(["$rootScope", "$location", "$route", "AuthService", function ($rootScope, $location, $route, AuthService) {
+        EloueApp.run(["$rootScope", "$location", "$route", "$http", "AuthService", function ($rootScope, $location, $route, $http, AuthService) {
+            var userToken = AuthService.getCookie("user_token");
+            $http.defaults.useXDomain = true;
+            delete $http.defaults.headers.common['X-Requested-With'];
+            $http.defaults.headers.common.authorization = "Bearer " + userToken;
 
             // Route change event listener
             $rootScope.$on("$locationChangeStart", function (event, next, current) {
@@ -55,7 +59,6 @@ define(["eloue/app", "eloue/modules/user_management/services/AuthService",
             });
 
             $rootScope.$on("redirectToLogin", function() {
-                console.log("Redirect to login");
                 $location.path("/");
             });
         }]);

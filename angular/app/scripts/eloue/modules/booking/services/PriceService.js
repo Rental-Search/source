@@ -7,8 +7,7 @@ define(["angular", "eloue/constants", "eloue/services", "eloue/modules/booking/B
 
         return {
             getPricePerDay: function getPricePerDay(productId) {
-                //TODO: call real service
-                return Prices.get({productId: productId});
+                return Prices.get({product: productId});
             }
         };
     }]);

@@ -1,5 +1,4 @@
 define(["angular", "eloue/modules/booking/BookingModule",
-    "eloue/modules/booking/services/CallService",
     "eloue/modules/booking/services/ProductService",
     "eloue/modules/booking/services/PriceService",
     "eloue/modules/booking/services/MessageService",
@@ -7,37 +6,18 @@ define(["angular", "eloue/modules/booking/BookingModule",
 ], function (angular) {
     "use strict";
 
-    angular.module("EloueApp.BookingModule").controller("ProductDetailsCtrl", ["$scope", "$route", "CallService", "ProductService", "PriceService", "MessageService", function ($scope, $route, CallService, ProductService, PriceService, MessageService) {
+    angular.module("EloueApp.BookingModule").controller("ProductDetailsCtrl", ["$scope", "$route", "ProductService", "PriceService", "MessageService", "Users", "Addresses", "PhoneNumbers", function ($scope, $route, ProductService, PriceService, MessageService, Users, Addresses, PhoneNumbers) {
 
-        //TODO: change to real service
-        $scope.currentUser = {
-            "id": 1190,
-            "email": "1190@e-loue.cc",
-            "company_name": "fdsfds",
-            "is_professional": false,
-            "slug": "benoit",
-            "avatar": "pictures/avatars/a1fc68d292034f45b9ce559bb88d9bec.jpg",
-            "default_address": "http://10.0.0.111:8000/api/2.0/addresses/18/",
-            "default_number": "http://10.0.0.111:8000/api/2.0/phonenumbers/18/",
-            "about": "",
-            "work": "",
-            "school": "",
-            "hobby": "",
-            "languages": [],
-            "drivers_license_date": null,
-            "drivers_license_number": "",
-            "date_of_birth": null,
-            "place_of_birth": "",
-            "rib": "",
-            "url": ""
-        };
+        //TODO: change to real user ID
+        $scope.currentUserId = 1190;
         $scope.productId = $route.current.params.productId;
         $scope.bookingDetails = {
-            "fromDate": Date.today().add(1).days().toString("dd/MM/yyyy hh:mm"),
-            "toDate": Date.today().add(2).days().toString("dd/MM/yyyy hh:mm")
+            "fromDate": Date.today().add(1).days().toString("dd/MM/yyyy"),
+            "fromHour": "08:00:00",
+            "toDate": Date.today().add(2).days().toString("dd/MM/yyyy"),
+            "toHour": "08:00:00"
         };
-        $scope.durationDays = 0;
-        $scope.durationHours = 0;
+        $scope.duration = "0 jour";
         $scope.bookingPrice = 0;
         $scope.pricePerDay = 0;
         $scope.caution = 0;
@@ -46,41 +26,94 @@ define(["angular", "eloue/modules/booking/BookingModule",
         //TODO: get it from product info
         $scope.available = true;
         $scope.newMessage = {};
+        $scope.hours = [
+            {"label": "00h", "value": "00:00:00"},
+            {"label": "01h", "value": "01:00:00"},
+            {"label": "02h", "value": "02:00:00"},
+            {"label": "03h", "value": "03:00:00"},
+            {"label": "04h", "value": "04:00:00"},
+            {"label": "05h", "value": "05:00:00"},
+            {"label": "06h", "value": "06:00:00"},
+            {"label": "07h", "value": "07:00:00"},
+            {"label": "08h", "value": "08:00:00"},
+            {"label": "09h", "value": "09:00:00"},
+            {"label": "10h", "value": "10:00:00"},
+            {"label": "11h", "value": "11:00:00"},
+            {"label": "12h", "value": "12:00:00"},
+            {"label": "13h", "value": "13:00:00"},
+            {"label": "14h", "value": "14:00:00"},
+            {"label": "15h", "value": "15:00:00"},
+            {"label": "16h", "value": "16:00:00"},
+            {"label": "17h", "value": "17:00:00"},
+            {"label": "18h", "value": "18:00:00"},
+            {"label": "19h", "value": "19:00:00"},
+            {"label": "20h", "value": "20:00:00"},
+            {"label": "21h", "value": "21:00:00"},
+            {"label": "22h", "value": "22:00:00"},
+            {"label": "23h", "value": "23:00:00"}
+        ];
+
+        Users.get({id: $scope.currentUserId}).$promise.then(function (result) {
+            $scope.currentUser = result;
+        });
 
         ProductService.getProduct($scope.productId).$promise.then(function (result) {
             $scope.product = result;
+            //Get owner object
+            var ownerId = $scope.getIdFromUrl($scope.product.owner);
+            Users.get({id: ownerId}).$promise.then(function (result) {
+                $scope.product.owner = result;
+            });
+            //Get address object
+            var addressId = $scope.getIdFromUrl($scope.product.address);
+            Addresses.get({id: addressId}).$promise.then(function (result) {
+                $scope.product.address = result;
+            });
+            //Get phone object
+            var phoneId = $scope.getIdFromUrl($scope.product.phone);
+            PhoneNumbers.get({id: phoneId}).$promise.then(function (result) {
+                $scope.product.phone = result;
+                $scope.ownerCallDetails = {
+                    "number": result.number,
+                    "tariff": "0.15"
+                }
+            });
         });
 
         MessageService.getMessageThread($scope.productId).$promise.then(function (result) {
             $scope.productRelatedMessages = result.messages;
         });
 
-        CallService.getContactCallDetails($scope.productId).$promise.then(function (result) {
-            $scope.ownerCallDetails = result;
-        });
-
         PriceService.getPricePerDay($scope.productId).$promise.then(function (result) {
-            $scope.pricePerDay = result.amount;
+            if (result.results && result.results.length > 0) {
+                $scope.pricePerDay = result.results[0].amount;
+            } else {
+                $scope.pricePerDay = 0;
+            }
         });
 
         /**
          * Update the product booking price based on selected duration.
          */
         $scope.updatePrice = function updatePrice() {
+            var fromDateTimeStr = $scope.bookingDetails.fromDate + " " + $scope.bookingDetails.fromHour;
+            var toDateTimeStr = $scope.bookingDetails.toDate + " " + $scope.bookingDetails.toHour;
 
-
-            var fromDateTime = new Date(Date.parse($scope.bookingDetails.fromDate));
-            var toDateTime = new Date(Date.parse($scope.bookingDetails.toDate));
-            var duration = toDateTime.getTime() - fromDateTime.getTime();
-            var x = duration / 1000;
-            x /= 60;
-            x /= 60;
-            var hours = Math.round(x % 24);
-            x /= 24;
-            var days = Math.round(x);
-            $scope.durationDays = days;
-            $scope.durationHours = hours;
-            $scope.bookingPrice = ($scope.pricePerDay * ((hours / 24) + days)).toFixed(2);
+            var fromDateTime = new Date(Date.parse(fromDateTimeStr));
+            var toDateTime = new Date(Date.parse(toDateTimeStr));
+            var today = Date.today().set({hour: 8, minute: 0});
+            if (fromDateTime > toDateTime) {
+               $scope.dateRangeError = "From date cannot be after to date";
+            } else if (fromDateTime < today) {
+               $scope.dateRangeError = "From date cannot be before today";
+            } else {
+                ProductService.isAvailable($scope.productId, fromDateTimeStr, toDateTimeStr, "1").$promise.then(function (result) {
+                    $scope.duration = result.duration;
+                    $scope.pricePerDay = result.unit_value;
+                    $scope.bookingPrice = result.total_price;
+                    $scope.available = result.max_available > 0;
+                });
+            }
         };
 
         $scope.sendMessage = function sendMessage() {
@@ -99,7 +132,7 @@ define(["angular", "eloue/modules/booking/BookingModule",
         };
 
         $scope.getAvatar = function getAvatar(uri) {
-            return uri ? uri  : 'images/avatar_default.jpg';
+            return uri ? uri : 'images/avatar_default.jpg';
         };
 
         $scope.callOwner = function callOwner() {
@@ -127,6 +160,12 @@ define(["angular", "eloue/modules/booking/BookingModule",
         $scope.openModal = function openModal(modalId) {
             $('.modal').modal('hide');
             $("#" + modalId).modal("show");
-        }
+        };
+
+        $scope.getIdFromUrl = function getIdFromUrl(url) {
+            return url.slice(0, url.length - 1).substring(url.slice(0, url.length - 1).lastIndexOf("/") + 1, url.length);
+        };
+
+        $scope.updatePrice();
     }]);
 });

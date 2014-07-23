@@ -1,19 +1,24 @@
 <div>
     <div class="booking-title" ng-show="!inModal">Réservez en ligne</div>
-    <div class="booking-sub-title"> à partir de <span class="price">{{pricePerDay}}€/jour</span></div>
+    <div class="booking-sub-title"> à partir de <span class="price">{{pricePerDay}}/jour</span></div>
     <form id="productDetailsBookingForm" name="productDetailsBookingForm" class="" role="form" novalidate>
         <div class="form-group">
             <label class="col-md-3 control-label">Du</label>
 
             <div class="col-md-9">
-
                 <div class="input-group date">
-                        <input name="fromDate" type="text" data-date-format="DD/MM/YYYY hh:mm" ng-model="bookingDetails.fromDate" class="form-control" ng-change="updatePrice()" eloue-datepicker/>
-                        <span class="input-group-addon"><span class="glyphicon-calendar glyphicon"></span></span>
+                    <input name="fromDate" type="text" data-date-format="dd/mm/yyyy"
+                           ng-model="bookingDetails.fromDate" class="form-control" ng-change="updatePrice()"
+                           eloue-datepicker/>
+                    <span class="input-group-addon"><span class="glyphicon-calendar glyphicon"></span></span>
                 </div>
-                <span ng-show="productDetailsBookingForm.fromDate.$dirty && productDetailsBookingForm.fromDate.$error.required" class="text-danger">From date is required.</span>
-                <span ng-show="productDetailsBookingForm.fromDate.$dirty && productDetailsBookingForm.fromDate.$error.pattern" class="text-danger">Invalid date.</span>
-                <span ng-show="productDetailsBookingForm.fromDate.$dirty && productDetailsBookingForm.fromDate.$error.pastDate" class="text-danger">Can't select data in the past.</span>
+                <select class="form-control" name="fromHour" ng-model="bookingDetails.fromHour"
+                        ng-options="h.value as h.label for h in hours" ng-change="updatePrice()">
+                </select>
+                <span ng-show="productDetailsBookingForm.fromDate.$dirty && productDetailsBookingForm.fromDate.$error.required"
+                      class="text-danger">From date is required.</span>
+                <span ng-show="productDetailsBookingForm.fromDate.$dirty && productDetailsBookingForm.fromDate.$error.pattern"
+                      class="text-danger">Invalid date.</span>
             </div>
         </div>
 
@@ -22,14 +27,23 @@
 
             <div class="col-md-9">
                 <div class="input-group date">
-                    <input name="toDate" type="text" data-date-format="DD/MM/YYYY hh:mm"  ng-model="bookingDetails.toDate" class="form-control" ng-change="updatePrice()" eloue-datepicker/>
+                    <input name="toDate" type="text" data-date-format="dd/mm/yyyy"
+                           ng-model="bookingDetails.toDate" class="form-control" ng-change="updatePrice()"
+                           eloue-datepicker/>
                     <span class="input-group-addon"><span class="glyphicon-calendar glyphicon"></span></span>
                 </div>
-                <span ng-show="productDetailsBookingForm.toDate.$dirty && productDetailsBookingForm.toDate.$error.required" class="text-danger">From date is required.</span>
-                <span ng-show="productDetailsBookingForm.toDate.$dirty && productDetailsBookingForm.toDate.$error.pattern" class="text-danger">Invalid date.</span>
-                <span ng-show="productDetailsBookingForm.toDate.$dirty && productDetailsBookingForm.toDate.$error.pastDate" class="text-danger">Can't select data in the past.</span>
+                <select class="form-control" name="toHour" ng-model="bookingDetails.toHour"
+                        ng-options="h.value as h.label for h in hours" ng-change="updatePrice()">
+                </select>
+                <span ng-show="productDetailsBookingForm.toDate.$dirty && productDetailsBookingForm.toDate.$error.required"
+                      class="text-danger">From date is required.</span>
+                <span ng-show="productDetailsBookingForm.toDate.$dirty && productDetailsBookingForm.toDate.$error.pattern"
+                      class="text-danger">Invalid date.</span>
+                <span ng-show="productDetailsBookingForm.toDate.$dirty && productDetailsBookingForm.toDate.$error.pastDate"
+                      class="text-danger">Can't select data in the past.</span>
             </div>
         </div>
+        <span ng-show="dateRangeError" class="text-danger">{{dateRangeError}}</span>
         <div ng-show="available && !inModal" style="color:#008000">
             Available
         </div>
@@ -37,8 +51,10 @@
             Not available
         </div>
         <div ng-show="!inModal">
-            <p>Durée de la location : <strong>{{durationDays}} jours</strong> et <strong>{{durationHours}} heures</strong></p>
-            <p>Prix de la location : <span class="price">{{bookingPrice}}€</span></p>
+            <p>Durée de la location : <strong>{{duration}}</strong></p>
+
+            <p>Prix de la location : <span class="price">{{bookingPrice}}</span></p>
+
             <p>Assurance incluse</p>
         </div>
         <div ng-show="inModal">
@@ -46,11 +62,11 @@
                 <tbody>
                 <tr>
                     <td>Durée</td>
-                    <td>{{durationDays}} jours et {{durationHours}} heures</td>
+                    <td>{{duration}}</td>
                 </tr>
                 <tr>
                     <td>Prix</td>
-                    <td>{{bookingPrice}}€</td>
+                    <td>{{bookingPrice}}</td>
                 </tr>
                 <tr>
                     <td>Caution</td>
@@ -60,6 +76,7 @@
             </table>
         </div>
 
-        <button class="btn btn-success" type="button" ng-click="openBookingModal()" ng-show="!inBooking">Réservez</button>
+        <button class="btn btn-success" type="button" ng-click="openBookingModal()" ng-show="!inBooking">Réservez
+        </button>
     </form>
 </div>

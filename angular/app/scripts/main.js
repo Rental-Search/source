@@ -3,6 +3,7 @@ require.config({
     baseUrl: "../scripts",
     paths: {
         "bootstrap": "../bower_components/bootstrap/dist/js/bootstrap.min",
+        "lodash": "../bower_components/lodash/dist/lodash.min",
         "jQuery": "../bower_components/jquery/dist/jquery.min",
         "angular": "../bower_components/angular/angular.min",
         "angular-resource": "../bower_components/angular-resource/angular-resource.min",
@@ -11,7 +12,7 @@ require.config({
         "angular-sanitize": "../bower_components/angular-sanitize/angular-sanitize.min",
         "moment": "../bower_components/moment/min/moment.min",
         "angular-moment":"../bower_components/angular-moment/angular-moment.min",
-        "eonasdan-bootstrap-datetimepicker": "../bower_components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min",
+        "bootstrap-datepicker": "../bower_components/bootstrap-datepicker/js/bootstrap-datepicker",
 "datejs": "../bower_components/datejs/build/production/date.min"
     },
     shim: {
@@ -28,20 +29,21 @@ require.config({
         "jQuery": {exports: "jQuery"},
         "bootstrap": ["jQuery"],
         "moment": ["jQuery"],
-        "eonasdan-bootstrap-datetimepicker": ["jQuery"]
+        "bootstrap-datepicker": ["jQuery"]
     }
 });
 
 require([
     "jQuery",
+    "lodash",
     "angular",
     "bootstrap",
     "moment",
     "angular-moment",
-    "eonasdan-bootstrap-datetimepicker",
+    "bootstrap-datepicker",
     "datejs",
     "eloue/route"
-], function ($, angular, bootstrap, moment, ngMoment, datetimepicker, datejs, route) {
+], function ($, _, angular, bootstrap, moment, ngMoment, datepicker, datejs, route) {
     "use strict";
     $(function () {
         angular.bootstrap(document, ["EloueApp"]);
