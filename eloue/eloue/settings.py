@@ -604,10 +604,11 @@ DEFAULT_LOCATION = getattr(local, "DEFAULT_LOCATION", {
     'coordinates': (48.856614, 2.3522219),
     'country': u'France',
     'fallback': None,
-    'radius': 550.0,
-    'region': None,
-    'region_coords': None,
-    'region_radius': None,
+    'radius': 11,
+    'formatted_address': u'Paris, France',
+    'region': u'Île-de-France',
+    'region_coords': (48.8499198, 2.6370411),
+    'region_radius': 100,
     'source': 4
 })
 
