@@ -2,7 +2,7 @@ aside
 	section
 		width: 100%
 		font-size: px($section-fz)
-		margin-bottom: $grid-gutter-width*.5
+		margin-bottom: $grid-gutter-width
 		border-bottom: px(1) solid darken($gray-lighter,10%)
 		+border-bottom-radius($section-bd-rad)
 		.section-header
@@ -82,7 +82,6 @@ aside
 	.calendar
 		position: relative
 		span
-			// +centred-abs()
 			display: inline-block
 			*display: inline
 			*zoom: 1
@@ -96,7 +95,7 @@ aside
 			height: auto
 			background: $gray-lighter
 			background: linear-gradient(to bottom, white, $gray-lite 70%)
-			border-width: 0
+			border-width: 0 !important
 			box-shadow: none
 		.chosen-drop
 			border-color: $gray-lighter

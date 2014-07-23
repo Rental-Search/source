@@ -2,15 +2,16 @@ doctype
 html(lang = "en")
 	head
 		-var title = "e-loue"
-		include ../jade/_head
+		include jade/_head
 		
 	body
-		include ../jade/_src
+		include jade/_src
 		.container-flex
 			header
-				include ../jade/_header-site
+				include jade/_header-site
 			nav
-				include ../jade/_breadcrumbs
+				.row-fluid
+					include jade/_breadcrumbs
 
 			article.row-fluid
 				.container.product-details
@@ -27,17 +28,21 @@ html(lang = "en")
 						.col-md-4.share-btns
 					.row
 						main.col-md-8
-							include ../jade/_main
+							.row-fluid.framing-v
+								include jade/_main
 							
 						aside.col-md-4
-							include ../jade/_aside
+							include jade/_aside
 
 			footer
-				include ../jade/_insurances
-				include ../jade/_footer-links
-				include ../jade/_rss
+				.row-fluid.insurances.framing-h
+					include jade/_insurances
+				.row-fluid.footer-links
+					include jade/_footer-links
+				.row-fluid.rss.pad-v-4
+					include jade/_rss
 
-			include ../jade/_sign-in
-			include ../jade/_log-in
+			include jade/_sign-in
+			include jade/_log-in
 
-		include ../jade/_scripts
+		include jade/_scripts

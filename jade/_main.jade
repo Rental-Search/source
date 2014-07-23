@@ -1,1 +1,24 @@
-| asdasd
+section.picture-tab
+	ul.nav.without-spaces.mrg-0
+		-var items = [ "Photos", "Tarifs", "Localisation", "Disponibilité", "Assurance" ]
+		-each item in items
+			li
+				a( href = "#" + item ).pad-v-2 #{item}
+	//- .table
+		.cell1 1111
+		.cell2 2222
+		.cell3 3333
+	#carousel-product.carousel.slide(data-ride="carousel")
+		.carousel-inner
+			.item.active
+				img(src="img/carousel-product/1.jpg", alt="")
+			.item
+				img(src="img/carousel-product/2.jpg", alt="")
+			.item
+				img(src="img/carousel-product/3.jpg", alt="")
+			.item
+				img(src="img/carousel-product/4.jpg", alt="")
+		a(href="#carousel-product" role="button" data-slide="prev").left.carousel-control
+			i.icon-chevron-left
+		a(href="#carousel-product" role="button" data-slide="next").right.carousel-control
+			i.icon-chevron-right

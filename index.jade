@@ -10,46 +10,38 @@ html(lang = "en")
 			header
 				include jade/_header-site
 			nav
-				include jade/_nav-home
+				.nav-home.container
+					include jade/_nav-home
 
 			article
-				include jade/_banner
-				include jade/_insurances
-				include jade/_product-list
-				include jade/_comments
-				include jade/_location-list
+				.row-fluid.banner.hidden-xs.text-center
+					include jade/_banner
+				.row-fluid.insurances.framing-h
+					include jade/_insurances
+				.row-fluid.product-list
+					include jade/_product-list
+				.row-fluid.comments.framing-h
+					include jade/_comments
+				.row-fluid.location-list
+					include jade/_location-list
 
 			main
-				include jade/_download-mobile-apps
-				include jade/_watch-video
-				include jade/_professional-renter-content
-				include jade/_talk-about-us
+				.row-fluid.download-mobile-apps.framing-h
+					include jade/_download-mobile-apps
+				.row-fluid.watch-video
+					include jade/_watch-video
+				.row-fluid.professional-renter-content.framing-h
+					include jade/_professional-renter-content
+				.row-fluid.talk-about-us
+					include jade/_talk-about-us
 
 			footer
-				include jade/_footer-links
-				include jade/_rss
+				.row-fluid.footer-links.framing-h
+					include jade/_footer-links
+				.row-fluid.rss.pad-v-4
+					include jade/_rss
 
 			include jade/_sign-in
-			include jade/log-in
+			include jade/_log-in
 
-		script(src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js")
-		script(src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js")
-		//- script(src="http://ie7-js.googlecode.com/svn/version/2.1(beta4)/IE9.js")
-		script(src="http://jamesallardice.github.io/Placeholders.js/assets/js/placeholders.min.js")
-
-		script(src="http://maps.googleapis.com/maps/api/js?sensor=false&libraries=places")
-		script(src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js")
-		script(src="js/formmapper.js")
-		script(src="js/bootstrap/modal.js")
-		script.
-			$(document).ready(function(){
-				var classic_form = $('.classic-form');
-				classic_form.hide();
-				$('#geolocate').formmapper({
-					details: "form",
-				});
-				$('.registration.email').on('click', function(){
-					classic_form.slideDown();
-					$(this).slideUp();
-					});
-			});
+		include jade/_scripts
