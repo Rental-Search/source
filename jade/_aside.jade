@@ -1,4 +1,4 @@
-.section.booking-form
+section.booking-form
 	.section-header
 		h4 Réservez en ligne
 	form.form-inline.section-body.text-center
@@ -7,14 +7,14 @@
 				small à partir de
 				big.text-primary &nbsp;56€ /jour
 				-each item in ["Du", "Au"]
-					.row.clearfix.mrg-v-2
-						.col-md-7.form-group
+					.row-flex
+						.cell
 							.input-group
 								.input-group-addon #{item}
 								input(type="text" placeholder="").form-control
 								.input-group-addon.calendar
 									span
-						.col-md-5.form-group
+						.cell
 							select.form-control
 								-for(var i=0;i<24;i++)
 									-var n = i>9? i + ":00" : "0" + i + ":00"
@@ -38,14 +38,14 @@
 			p.mrg-v-1
 				small Cette somme vous sera débitée lorsque le propriétaire validera la location
 
-.section.add-to-wishlist
+section.add-to-wishlist
 	.section-body
 		.row-flex.part
 				a(href="#").btn.gray.mrg-0
 					span.icon-heart-empty
 					| Ajoutez à votre liste d’envies
 
-.section.owner-information
+section.owner-information
 	.section-header
 		h4 Contactez-moi
 	.section-body
@@ -92,7 +92,7 @@
 						| et 
 						a(href="#") Tony Finn 
 						| sont amis avec le propriétaire.
-.section.similar-listing
+section.similar-listing
 	.section-header
 		h4 Annonces similaires
 	.section-body
@@ -107,7 +107,7 @@
 							p
 								small Paris
 							span.badge.price 100€ /jour
-.section.connected-with-owner
+section.connected-with-owner
 	.section-body
 		.row-flex.part.text-center
 			.facebook-box
@@ -115,4 +115,3 @@
 			a(href="#").btn.info.mrg-0 Connectez-vous avec Facebook
 			p Vérifiez si un de vos amis connait ce propriétaire ?
 
-			
