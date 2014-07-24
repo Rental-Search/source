@@ -17,7 +17,7 @@
 		color: $gray
 		width: px(300) !important
 		padding-top: .7em
-		// width: 20em !important
+		width: 20em !important
 	button
 		font-weight: $fw-bold
 		color: $brand-success !important
@@ -35,12 +35,13 @@
 		+border-bottom-radius($bor-rad)
 		background-color: lighten($brand-success, 10%)
 		display: inline-block
-		+clearfix()
+		// +clearfix()
 		a
 			$mrg: px(3)
 			$width: 1.25em
 			font-size: px(25)
 			display: block
+			line-height: $width
 			float: left
 			text-decoration: none
 			+border-top-radius($bor-rad - $mrg)

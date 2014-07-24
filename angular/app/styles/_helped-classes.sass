@@ -55,10 +55,14 @@
 	z-index: 10 !important
 	border-color: $gray-medium
 
-.framing
+.framing-h,
+.framing-v
 	background-color: white
 	border: px(1) solid $gray-lighter
+.framing-h
 	border-width: px(1) 0
+.framing-v
+	border-width: 0 px(1)
 
 .link-success-color
 	color: $brand-success
@@ -80,6 +84,34 @@
 		content: ""
 	> li
 		display: inline-block
+
+.breadcrumb
+	background-color: transparent
+	margin: 0
+	font-size: px(13)
+	font-weight: $fw-semibold
+	margin: 0
+	padding: 0
+	color: $brand-success
+	> li
+		color: inherit
+		& + li:before
+			font-family: "FontAwesome"
+			content: " \f105 "
+			font-size: 1.2em
+			cursor: pointer
+		a
+			padding: .6em 0
+			display: inline-block
+			color: inherit
+			text-decoration: none
+		&.active,
+		&:hover
+			color: $gray-strong
+		&:hover ~ li
+			color: lighten($gray-strong,20%)
+			&:before
+				color: inherit
 
 .checkbox
 	input
@@ -134,3 +166,30 @@
 	background-color: black
 	+opacity(.5)
 
+.rate
+	font-size: px(18)
+	margin: .3em 0
+	display: inline-block
+	color: $brand-gold
+	&:hover span
+		color: $brand-gold !important
+	span
+		cursor: pointer
+		display: inline-block
+		padding-right: .25em
+		&.current-rate ~ span
+			color: $gray-lighter
+		&:hover ~ span
+			color: $gray-lighter !important
+
+.text-success
+	color: $brand-success !important
+
+.badge.price
+	background-color: $brand-primary
+	letter-spacing: .02em
+	font-weight: $fw-bold
+	$br: 1.5em
+	+border-bottom-radius($br)
+	+border-top-radius($br)
+	padding: .6em 1em

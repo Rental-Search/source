@@ -1,14 +1,387 @@
-<div id="product_details_container">
-    <h3>Product Details</h3>
-
-    <div class="row">
-        <div class="col-lg-8 col-md-8">
-            <button class="btn btn-success" type="submit" ng-click="openMessageModal()">Envoyez un message
-            </button>
-            <button class="btn btn-success" type="submit" ng-click="openPhoneModal()">Appelez</button>
+<header>
+    <div class="header-site">
+        <div class="container signs-links pad-v-2">
+            <ul role="tablist" class="nav without-spaces">
+                <li class="divide"></li>
+                <li><span>Bonjour, <a href="#inscrivez-vous" data-toggle="modal" data-target="#sign-in">inscrivez-vous </a>ou <a href="#connectez-vous" data-toggle="modal" data-target="#log-in">connectez-vous</a></span></li>
+                <li class="divide"></li>
+                <li><span>Vous êtes un loueur professionnel, découvrez les <a href="#">offers e-loue Pro</a></span></li>
+                <li class="divide"></li>
+                <li><span>Appelez-nous au <b>0826.800.200 </b>(0,15&euro; / min)</span></li>
+            </ul>
         </div>
-        <div class="col-lg-4 col-md-4">
-            <eloue-product-details-booking in-modal="false"></eloue-product-details-booking>
+        <div class="framing-h pad-v-3">
+            <div class="container search-form">
+                <div class="row">
+                    <div class="col-md-2 logo-wrapper"><a href="/"><img src="img/logo.png" alt="logo"></a></div>
+                    <div class="col-md-7">
+                        <div class="input-group">
+                            <input type="text" placeholder="Que voulez-vous louer ?" title="Que voulez-vous louer ?" class="form-control what-field">
+                            <div class="input-group where-field-wrapper"><span class="sprite-location"></span>
+                                <input type="text" placeholder="Où ça ?" title="Où ça ?" id="geolocate" class="form-control where-field">
+                            </div>
+                            <div class="input-group-btn">
+                                <button type="button" class="btn btn-default btn-search"><span class="icon-search"></span></button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <button type="button" class="btn btn-success">Déposez une annonce</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+<nav>
+    <div class="row-fluid">
+        <div class="container">
+            <ol class="breadcrumb">
+                <li><a href="#">Accueil</a></li>
+                <li><a href="#">Location Voiture</a></li>
+                <li><a href="#">Nice</a></li>
+                <li><a href="#">BMW - 520 Touring luxe</a></li>
+            </ol>
+        </div>
+    </div>
+</nav>
+<article class="row-fluid">
+<div class="container product-details">
+<div class="row mrg-v-5">
+    <div class="col-md-8 title">
+        <h3>Location <span class="name">Bmw - 520 touring luxe </span>- <span class="location">NICE</span></h3>
+        <ul class="breadcrumb">
+            <li>Année 2010</li>
+            <li>Moteur Diesel</li>
+            <li>Boite Automatique</li>
+            <li>10 000 à 30 000 km</li>
+        </ul>
+    </div>
+    <div class="col-md-4 share-btns"></div>
+</div>
+<div class="row">
+<main class="col-md-8">
+    <div class="row-fluid framing-v">
+        <section class="picture-tab">
+            <ul class="nav without-spaces mrg-0">
+                <li><a href="#Photos" class="pad-v-2">Photos</a></li>
+                <li><a href="#Tarifs" class="pad-v-2">Tarifs</a></li>
+                <li><a href="#Localisation" class="pad-v-2">Localisation</a></li>
+                <li><a href="#Disponibilité" class="pad-v-2">Disponibilité</a></li>
+                <li><a href="#Assurance" class="pad-v-2">Assurance</a></li>
+            </ul>
+            <div id="carousel-product" data-ride="carousel" class="carousel slide">
+                <div class="carousel-inner">
+                    <div class="item active"><img src="img/carousel-product/1.jpg" alt=""></div>
+                    <div class="item"><img src="img/carousel-product/2.jpg" alt=""></div>
+                    <div class="item"><img src="img/carousel-product/3.jpg" alt=""></div>
+                    <div class="item"><img src="img/carousel-product/4.jpg" alt=""></div>
+                </div><a href="#carousel-product" role="button" data-slide="prev" class="left carousel-control"><i class="icon-chevron-left"></i></a><a href="#carousel-product" role="button" data-slide="next" class="right carousel-control"><i class="icon-chevron-right"></i></a>
+            </div>
+        </section>
+    </div>
+</main>
+<aside class="col-md-4">
+    <eloue-product-details-booking in-modal="false"></eloue-product-details-booking>
+    <section class="add-to-wishlist">
+        <div class="section-body">
+            <div class="row-flex part"><a href="#" class="btn gray mrg-0"><span class="icon-heart-empty"></span>Ajoutez à votre liste d’envies</a></div>
+        </div>
+    </section>
+    <section class="owner-information">
+        <div class="section-header">
+            <h4>Contactez-moi</h4>
+        </div>
+        <div class="section-body">
+            <div class="row-flex part">
+                <div class="block-thumbnail">
+                    <div class="thumbnail-img"><img src="img/home-products/declare2r.png" alt=""></div>
+                    <div class="thumbnail-content">
+                        <h5>Gaspard Kroutchev</h5>
+                        <div class="rate"><span class="icon-star"></span><span class="icon-star current-rate"></span><span class="icon-star"></span><span class="icon-star"></span><span class="icon-star"></span>
+                        </div>
+                        <p>Membre depuis le<br><span>12 Juillet 2013</span></p>
+                    </div>
+                </div>
+            </div>
+            <div class="row-flex part"><button type="button" class="btn success send-message" ng-click="openMessageModal()"><span></span>Envoyez un message</button><button type="button" class="btn success call" ng-click="openPhoneModal()"><span></span>Appelez</button>
+                <ul class="nav stats">
+                    <li class="published-ads"><span>
+                          <big class="text-success">7 </big></span><span>annonces publiées</span></li>
+                    <li class="bookings"><span>
+                          <big class="text-success">12 </big></span><span>locations effectués</span></li>
+                    <li class="rating"><span>
+                          <big class="text-success">16 </big></span><span>évalutations</span></li>
+                    <li class="percent-of-responce"><span>
+                          <big class="text-success">98% </big></span><span>de taux de réponse</span></li>
+                    <li class="time-to-answer"><span>
+                          <big class="text-success">6h </big></span><span>de temps de réponse en moyenne</span></li>
+                </ul>
+            </div>
+            <div class="row-flex part connection clearfix">
+                <div class="col-md-4 pad-0"><a href="#" class="friend-photo-wrapper"><img src="img/home-products/friend1.png" alt=""></a><a href="#" class="friend-photo-wrapper"><img src="img/home-products/friend2.png" alt=""></a></div>
+                <div class="col-md-8 pad-0">
+                    <p class="mrg-0"><small><a href="#">Philippe Dupré </a>et <a href="#">Tony Finn </a>sont amis avec le propriétaire.</small></p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="similar-listing">
+        <div class="section-header">
+            <h4>Annonces similaires</h4>
+        </div>
+        <div class="section-body">
+            <div class="row-flex part">
+                <ul class="nav">
+                    <li>
+                        <div class="thumbnail-img"><img src="img/home-products/audi2.jpg" alt=""></div>
+                        <div class="thumbnail-content">
+                            <h6>Audi - A3</h6>
+                            <p><small>Paris</small></p><span class="badge price">100€ /jour</span>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="thumbnail-img"><img src="img/home-products/audi2.jpg" alt=""></div>
+                        <div class="thumbnail-content">
+                            <h6>Audi - A3</h6>
+                            <p><small>Paris</small></p><span class="badge price">100€ /jour</span>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="thumbnail-img"><img src="img/home-products/audi2.jpg" alt=""></div>
+                        <div class="thumbnail-content">
+                            <h6>Audi - A3</h6>
+                            <p><small>Paris</small></p><span class="badge price">100€ /jour</span>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="thumbnail-img"><img src="img/home-products/audi2.jpg" alt=""></div>
+                        <div class="thumbnail-content">
+                            <h6>Audi - A3</h6>
+                            <p><small>Paris</small></p><span class="badge price">100€ /jour</span>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="thumbnail-img"><img src="img/home-products/audi2.jpg" alt=""></div>
+                        <div class="thumbnail-content">
+                            <h6>Audi - A3</h6>
+                            <p><small>Paris</small></p><span class="badge price">100€ /jour</span>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </section>
+    <section class="connected-with-owner">
+        <div class="section-body">
+            <div class="row-flex part text-center">
+                <div class="facebook-box"><span class="icon-facebook"></span></div><a href="#" class="btn info mrg-0">Connectez-vous avec Facebook</a>
+                <p>Vérifiez si un de vos amis connait ce propriétaire ?</p>
+            </div>
+        </div>
+    </section>
+</aside>
+</div>
+</div>
+</article>
+<footer>
+    <div class="row-fluid insurances framing-h">
+        <div class="container mrg-v-6">
+            <ul class="nav nav-tabs nav-justified ov-hidden text-nowrap text-center">
+                <li class="divide"></li>
+                <li>
+                    <div class="insurances-img"><span class="payment"></span></div>
+                    <h5>Louez en toute sécurité</h5>
+                    <p>Transactions en ligne sécurisées.</p>
+                    <p>Aucun échange d'argent.</p>
+                </li>
+                <li class="divide"></li>
+                <li>
+                    <div class="insurances-img"><span class="serenity"></span></div>
+                    <h5>Louez en toute sérénité</h5>
+                    <p>Assurance incluse et automatique.</p>
+                    <p>Caution en ligne.</p>
+                </li>
+                <li class="divide"></li>
+                <li>
+                    <div class="insurances-img"><span class="simplicity"></span></div>
+                    <h5>Louez en toute simplicité</h5>
+                    <p>Service client dédié 7j/7.</p>
+                    <p>Dépot d'annonce gratuite.</p>
+                </li>
+                <li class="divide"></li>
+                <li>
+                    <div class="insurances-img"><span class="trust"></span></div>
+                    <h5>Louez en toute confiance</h5>
+                    <p>Notes et commentaires en ligne.</p>
+                    <p>Messagerie en ligne.</p>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="row-fluid footer-links">
+        <div class="container mrg-v-6">
+            <ul class="nav nav-tabs nav-justified ov-hidden">
+                <li class="divide"></li>
+                <li class="text-center ul-wrapper">
+                    <div class="centering text-left">
+                        <h4 class="text-nowrap">Le concept eloue</h4>
+                        <ul class="nav">
+                            <li class="link-wrapper mrg-v-1"><a href="#" class="pad-0">Comment ça marche ?</a></li>
+                            <li class="link-wrapper mrg-v-1"><a href="#" class="pad-0">Simulez vos revenus</a></li>
+                            <li class="link-wrapper mrg-v-1"><a href="#" class="pad-0">Questions fréquentes</a></li>
+                            <li class="link-wrapper mrg-v-1"><a href="#" class="pad-0">Conseils pour les propriétaires</a></li>
+                            <li class="link-wrapper mrg-v-1"><a href="#" class="pad-0">Conseils pour les locataires</a></li>
+                            <li class="link-wrapper mrg-v-1"><a href="#" class="pad-0">Témoignages</a></li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="divide"></li>
+                <li class="text-center ul-wrapper">
+                    <div class="centering text-left">
+                        <h4 class="text-nowrap">Pourquoi choisir eloue</h4>
+                        <ul class="nav">
+                            <li class="link-wrapper mrg-v-1"><a href="#" class="pad-0">Assurance sérénité</a></li>
+                            <li class="link-wrapper mrg-v-1"><a href="#" class="pad-0">Paiement et caution sécurisés</a></li>
+                            <li class="link-wrapper mrg-v-1"><a href="#" class="pad-0">Contrats de location</a></li>
+                            <li class="link-wrapper mrg-v-1"><a href="#" class="pad-0">Parrainez vos proches</a></li>
+                            <li class="link-wrapper mrg-v-1"><a href="#" class="pad-0">L’offre e-loue Pro</a></li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="divide"></li>
+                <li class="text-center ul-wrapper">
+                    <div class="centering text-left">
+                        <h4 class="text-nowrap">L’entreprise e-loue</h4>
+                        <ul class="nav">
+                            <li class="link-wrapper mrg-v-1"><a href="#" class="pad-0">Qui sommes-nous ?</a></li>
+                            <li class="link-wrapper mrg-v-1"><a href="#" class="pad-0">Nos partenaires</a></li>
+                            <li class="link-wrapper mrg-v-1"><a href="#" class="pad-0">Respect de la vie privée</a></li>
+                            <li class="link-wrapper mrg-v-1"><a href="#" class="pad-0">Conditions générales</a></li>
+                            <li class="link-wrapper mrg-v-1"><a href="#" class="pad-0">Mentions légales</a></li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="divide"></li>
+                <li class="text-center ul-wrapper">
+                    <div class="centering text-left">
+                        <h4 class="text-nowrap">En savoir plus</h4>
+                        <ul class="nav">
+                            <li class="link-wrapper mrg-v-1"><a href="#" class="pad-0">Espace presse</a></li>
+                            <li class="link-wrapper mrg-v-1"><a href="#" class="pad-0">Espace job</a></li>
+                            <li class="link-wrapper mrg-v-1"><a href="#" class="pad-0">Contactez-nous</a></li>
+                            <li class="link-wrapper mrg-v-1"><a href="#" class="pad-0">E-loue en mobilité</a></li>
+                            <li class="link-wrapper mrg-v-1"><a href="#" class="pad-0">Blog e-loue</a></li>
+                        </ul>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="row-fluid rss pad-v-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <p>Abonnez-vous à la newsletter e-loue pour être <br>informé des bonnes affaires et de nos actualités. <br><a href="#"><b>Déjà 2 Millions d'inscrits !</b></a></p>
+                </div>
+                <div class="col-md-6">
+                    <form role="" class="form-inline">
+                        <input type="email" placeholder="Saisissez votre email..." class="form-control">
+                        <button type="submit" class="btn btn-default">Validez</button>
+                    </form>
+                </div>
+                <div class="col-md-2 text-right">
+                    <div class="social-btns"><a href="#"><span class="icon-facebook"></span></a><a href="#"><span class="icon-twitter"></span></a><a href="#"><span class="icon-google-plus"></span></a></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+<div id="sign-in" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content text-center">
+            <div class="modal-header">
+                <button type="button" data-dismiss="modal" class="close"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title">Inscription</h4>
+            </div>
+            <div class="modal-body">
+                <h3>Inscrivez-vous en 2 secondes</h3>
+                <div class="form-group"><a href="#" class="btn info"><span class="icon-facebook"></span>Inscription via Facebook</a></div>
+                <div class="form-group"><a href="#" class="btn danger"><span class="icon-google-plus"></span>Inscription via Google</a></div>
+                <p class="info">Nous ne publierons jamais rien sur votre profil (sauf si vous le demandez) <br>Vos données personnelles ne seront jamais cédées ou vendues.</p><span class="or"></span>
+                <h3>Inscrivez-vous en 30 secondes</h3>
+                <form>
+                    <div class="classic-form">
+                        <div class="form-group">
+                            <input type="text" placeholder="Nom *" required class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <input type="text" placeholder="Prénom *" required class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <input type="text" placeholder="Code postal *" required class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <input type="email" placeholder="E-mail *" required class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <input type="password" placeholder="Mot de passe *" required class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <input type="password" placeholder="Confirmation *" required class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" class="btn success">Inscription</button>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <button class="btn success registration">Inscription via Email</button>
+                    </div>
+                    <div class="checkbox">
+                        <label for="inform">
+                            <input type="checkbox" checked id="inform"><span class="icon-ok"></span>
+                        </label>Tenez moi informé de l'actualité et des bonnes affaires e-loue
+                    </div>
+                </form>
+                <p>En créant un compte e-loue, vous acceptez les Conditions Générales<br>et la Politique de Confidentialité de notre site</p><span class="or"></span>
+                <h4>Vous êtes déjà membre e-loue ?</h4><a href="#connectez-vous" data-toggle="modal" data-target="#log-in" data-dismiss="modal" class="modal-fotter-link connexion">Connexion</a>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="log-in" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content text-center">
+            <div class="modal-header">
+                <button type="button" data-dismiss="modal" class="close"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title">Connexion</h4>
+            </div>
+            <div class="modal-body">
+                <h3>Connectez-vous à votre compte</h3>
+                <div class="form-group"><a href="#" class="btn info"><span class="icon-facebook"></span>Connexion via Facebook</a></div>
+                <div class="form-group"><a href="#" class="btn danger"><span class="icon-google-plus"></span>Connexion via Google</a></div>
+                <p class="info">Nous ne publierons jamais rien sur votre profil (sauf si vous le demandez) <br>Vos données personnelles ne seront jamais cédées ou vendues.</p><span class="or"></span>
+                <form>
+                    <div class="form-group">
+                        <input type="email" placeholder="E-mail" required class="form-control">
+                    </div>
+                    <div class="form-group mrg-v-0">
+                        <input type="password" placeholder="Mot de passe" required class="form-control">
+                    </div>
+                    <div class="form-group mrg-v-0 clearfix mrg-v-2">
+                        <div class="checkbox pull-left">
+                            <label for="remember-me">
+                                <input type="checkbox" checked id="remember-me"><span class="icon-ok"></span>
+                            </label>Se souvenir de moi
+                        </div>
+                        <div class="forgot-password pull-right"><a href="#">Mot de passe oublié</a></div>
+                    </div>
+                    <div class="form-group mrg-v-2">
+                        <button type="submit" class="btn success">Connexion</button>
+                    </div>
+                </form><span class="or"></span>
+                <h4>Vous êtes déjà membre e-loue ?</h4><a href="#" data-toggle="modal" data-target="#sign-in" data-dismiss="modal" class="modal-fotter-link connexion">Inscription</a>
+            </div>
         </div>
     </div>
 </div>

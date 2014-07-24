@@ -1,63 +1,62 @@
-<div>
-    <div class="booking-title" ng-show="!inModal">Réservez en ligne</div>
-    <div class="booking-sub-title"> à partir de <span class="price">{{pricePerDay}}/jour</span></div>
-    <form id="productDetailsBookingForm" name="productDetailsBookingForm" class="" role="form" novalidate>
-        <div class="form-group">
-            <label class="col-md-3 control-label">Du</label>
-
-            <div class="col-md-9">
-                <div class="input-group date">
-                    <input name="fromDate" type="text" data-date-format="dd/mm/yyyy"
-                           ng-model="bookingDetails.fromDate" class="form-control" ng-change="updatePrice()"
-                           eloue-datepicker/>
-                    <span class="input-group-addon"><span class="glyphicon-calendar glyphicon"></span></span>
+<section class="booking-form">
+    <div class="section-header" ng-show="!inModal">
+        <h4>Réservez en ligne</h4>
+    </div>
+    <form class="form-inline section-body text-center">
+        <div class="row-flex part">
+            <p><small>à partir de</small>
+                <big class="text-primary">&nbsp;{{pricePerDay}} /jour</big>
+            <div class="row-flex">
+                <div class="cell">
+                    <div class="input-group">
+                        <div class="input-group-addon">Du</div>
+                        <input type="text" placeholder="" class="form-control"  name="fromDate" data-date-format="dd/mm/yyyy"
+                               ng-model="bookingDetails.fromDate" ng-change="updatePrice()" eloue-datepicker>
+                        <div class="input-group-addon calendar"><span></span></div>
+                    </div>
                 </div>
-                <select class="form-control" name="fromHour" ng-model="bookingDetails.fromHour"
-                        ng-options="h.value as h.label for h in hours" ng-change="updatePrice()">
-                </select>
-                <span ng-show="productDetailsBookingForm.fromDate.$dirty && productDetailsBookingForm.fromDate.$error.required"
-                      class="text-danger">From date is required.</span>
+                <div class="cell">
+                    <select class="form-control" name="fromHour" ng-model="bookingDetails.fromHour"
+                            ng-options="h.value as h.label for h in hours" ng-change="updatePrice()">
+                    </select>
+                </div>
+            <span ng-show="productDetailsBookingForm.fromDate.$dirty && productDetailsBookingForm.fromDate.$error.required"
+                  class="text-danger">From date is required.</span>
                 <span ng-show="productDetailsBookingForm.fromDate.$dirty && productDetailsBookingForm.fromDate.$error.pattern"
                       class="text-danger">Invalid date.</span>
             </div>
-        </div>
-
-        <div class="form-group">
-            <label class="col-md-3 control-label">Au</label>
-
-            <div class="col-md-9">
-                <div class="input-group date">
-                    <input name="toDate" type="text" data-date-format="dd/mm/yyyy"
-                           ng-model="bookingDetails.toDate" class="form-control" ng-change="updatePrice()"
-                           eloue-datepicker/>
-                    <span class="input-group-addon"><span class="glyphicon-calendar glyphicon"></span></span>
+            <div class="row-flex">
+                <div class="cell">
+                    <div class="input-group">
+                        <div class="input-group-addon">Au</div>
+                        <input type="text" placeholder="" class="form-control"  name="toDate" data-date-format="dd/mm/yyyy"
+                               ng-model="bookingDetails.toDate" ng-change="updatePrice()" eloue-datepicker>
+                        <div class="input-group-addon calendar"><span></span></div>
+                    </div>
                 </div>
-                <select class="form-control" name="toHour" ng-model="bookingDetails.toHour"
-                        ng-options="h.value as h.label for h in hours" ng-change="updatePrice()">
-                </select>
+                <div class="cell">
+                    <select class="form-control" name="toHour" ng-model="bookingDetails.toHour"
+                            ng-options="h.value as h.label for h in hours" ng-change="updatePrice()">
+                    </select>
+                </div>
                 <span ng-show="productDetailsBookingForm.toDate.$dirty && productDetailsBookingForm.toDate.$error.required"
                       class="text-danger">From date is required.</span>
                 <span ng-show="productDetailsBookingForm.toDate.$dirty && productDetailsBookingForm.toDate.$error.pattern"
                       class="text-danger">Invalid date.</span>
-                <span ng-show="productDetailsBookingForm.toDate.$dirty && productDetailsBookingForm.toDate.$error.pastDate"
-                      class="text-danger">Can't select data in the past.</span>
             </div>
+            </p>
+            <span ng-show="dateRangeError" class="text-danger">{{dateRangeError}}</span>
+            <p class="available" ng-show="available && !inModal">Cet article est disponible à ces dates</p>
+            <p class="available unavailable" ng-show="!available && !inModal">Cet article est disponible à ces dates</p>
         </div>
-        <span ng-show="dateRangeError" class="text-danger">{{dateRangeError}}</span>
-        <div ng-show="available && !inModal" style="color:#008000">
-            Available
+        <div ng-show="!inModal" class="row-flex part">
+            <p class="mrg-0">Durée de la location : <b class="period-days">{{duration}}</b></p>
+            <p class="price mrg-0">Prix de la location :
+                <big class="text-primary">&nbsp;{{bookingPrice}}</big>
+            </p>
+            <p class="mrg-0">Assurance incluse</p>
         </div>
-        <div ng-show="!available && !inModal" style="color:#ff0000">
-            Not available
-        </div>
-        <div ng-show="!inModal">
-            <p>Durée de la location : <strong>{{duration}}</strong></p>
-
-            <p>Prix de la location : <span class="price">{{bookingPrice}}</span></p>
-
-            <p>Assurance incluse</p>
-        </div>
-        <div ng-show="inModal">
+        <div ng-show="inModal" class="row-flex part">
             <table class="table">
                 <tbody>
                 <tr>
@@ -75,8 +74,9 @@
                 </tbody>
             </table>
         </div>
-
-        <button class="btn btn-success" type="button" ng-click="openBookingModal()" ng-show="!inBooking">Réservez
-        </button>
+        <div class="row-flex part">
+            <button type="submit" class="btn success calendar-ok" ng-click="openBookingModal()" ng-show="!inBooking"><span></span>Réservez</button>
+            <p class="mrg-v-1"><small>Cette somme vous sera débitée lorsque le propriétaire validera la location</small></p>
+        </div>
     </form>
-</div>
+</section>

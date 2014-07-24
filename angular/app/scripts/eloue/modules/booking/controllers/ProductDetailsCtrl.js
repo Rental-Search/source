@@ -60,6 +60,10 @@ define(["angular", "eloue/modules/booking/BookingModule",
 
         ProductService.getProduct($scope.productId).then(function (result) {
             $scope.product = result;
+            $scope.ownerCallDetails = {
+                number: result.phone.number,
+                tariff: "0.15"
+            };
         });
 
         MessageService.getMessageThread($scope.productId).$promise.then(function (result) {
