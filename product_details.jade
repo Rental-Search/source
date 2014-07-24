@@ -3,7 +3,6 @@ html(lang = "en")
 	head
 		-var title = "e-loue"
 		include jade/_head
-		
 	body
 		include jade/_src
 		.container-flex
@@ -13,7 +12,7 @@ html(lang = "en")
 				.row-fluid.bd-b
 					include jade/_breadcrumbs
 
-			article.row-fluid
+			article.row-fluid.pad-v-5
 				.container.product-details
 					.row
 						.col-md-8.title
@@ -28,7 +27,7 @@ html(lang = "en")
 						.col-md-4.share-btns
 					.row
 						main.col-md-8
-							.row-fluid.framing-v
+							.row-fluid
 								include jade/_main
 							
 						aside.col-md-4

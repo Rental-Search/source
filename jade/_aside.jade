@@ -2,12 +2,12 @@ section.booking-form
 	.section-header
 		h4 Réservez en ligne
 	form.form-inline.section-body.text-center
-		.row-flex.part
+		.part
 			p
 				small à partir de
 				big.text-primary &nbsp;56€ /jour
 				-each item in ["Du", "Au"]
-					.row-flex
+					.row
 						.cell
 							.input-group
 								.input-group-addon #{item}
@@ -21,7 +21,7 @@ section.booking-form
 									option(value=n) #{n}
 			p.available Cet article est disponible à ces dates
 			// p.available.unavailable Cet article est disponible à ces dates
-		.row-flex.part
+		.part
 			p.mrg-0
 				| Durée de la location : 
 				b.period-days 3 jours 
@@ -31,7 +31,7 @@ section.booking-form
 				| Prix de la location :
 				big.text-primary &nbsp;168€
 			p.mrg-0 Assurance incluse
-		.row-flex.part
+		.part
 			button(type="submit").btn.success.calendar-ok
 				span
 				| Réservez
@@ -40,27 +40,29 @@ section.booking-form
 
 section.add-to-wishlist
 	.section-body
-		.row-flex.part
-				a(href="#").btn.gray.mrg-0
-					span.icon-heart-empty
-					| Ajoutez à votre liste d’envies
+		.part
+			a(href="#").btn.gray.mrg-0
+				span.icon-heart-empty
+				| Ajoutez à votre liste d’envies
 
 section.owner-information
 	.section-header
 		h4 Contactez-moi
 	.section-body
-		.row-flex.part
+		.part
 			.block-thumbnail
 				.thumbnail-img
-					img(src="img/home-products/declare2r.png", alt="")
+					a(href="#")
+						img(src="img/home-products/declare2r.png", alt="")
 				.thumbnail-content
-					h5 Gaspard Kroutchev
+					h5 
+						a(href="#") Gaspard Kroutchev
 					include _rate
 					p
 						| Membre depuis le
 						br
 						span 12 Juillet 2013
-		.row-flex.part
+		.part
 			a(href="#").btn.success.send-message
 				span
 				| Envoyez un message
@@ -79,7 +81,7 @@ section.owner-information
 						span
 							big.text-success #{stat.value} 
 						span #{stat.clarification}
-		.row-flex.part.connection.clearfix
+		.part.connection.clearfix
 			.col-md-4.pad-0
 				a(href="#").friend-photo-wrapper
 					img(src="img/home-products/friend1.png", alt="")
@@ -96,20 +98,22 @@ section.similar-listing
 	.section-header
 		h4 Annonces similaires
 	.section-body
-		.row-flex.part
+		.part
 			ul.nav
 				-for(var i=0;i<5;i++)
 					li
 						.thumbnail-img
-							img(src="img/home-products/audi2.jpg", alt="")
+							a(href="#")
+								img(src="img/home-products/audi2.jpg", alt="")
 						.thumbnail-content
-							h6 Audi - A3
+							h6 
+								a(href="#") Audi - A3
 							p
 								small Paris
 							span.badge.price 100€ /jour
 section.connected-with-owner
 	.section-body
-		.row-flex.part.text-center
+		.part.text-center
 			.facebook-box
 				span.icon-facebook
 			a(href="#").btn.info.mrg-0 Connectez-vous avec Facebook

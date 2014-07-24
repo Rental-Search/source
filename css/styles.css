@@ -8148,7 +8148,7 @@ button.close {
 
 .rate {
   font-size: 1.28571em;
-  margin: 0.3em 0;
+  line-height: 1;
   display: inline-block;
   color: #ffc853;
 }
@@ -8540,17 +8540,17 @@ main p {
   margin-right: 1em;
 }
 
-.comments {
+.float-comments {
   height: 33.57143em;
   overflow: hidden;
   position: relative;
 }
-.comments > .container,
-.comments > .container > .row,
-.comments > .container > .row > .col-md-6 {
+.float-comments > .container,
+.float-comments > .container > .row,
+.float-comments > .container > .row > .col-md-6 {
   height: 100%;
 }
-.comments .decorated-houses {
+.float-comments .decorated-houses {
   background: url(../img/houses.png) repeat-x;
   background-position: -20% 100%;
   width: 100%;
@@ -8559,36 +8559,36 @@ main p {
   bottom: 0;
   left: 0;
 }
-.comments ul {
+.float-comments ul {
   position: relative;
   height: 100%;
 }
-.comments .comment {
+.float-comments .comment {
   padding: 0;
   position: absolute;
   bottom: 34px;
 }
-.comments .comment.test {
+.float-comments .comment.test {
   top: -50px;
   right: 0;
 }
-.comments .comment.test2 {
+.float-comments .comment.test2 {
   top: 10px;
 }
-.comments a {
+.float-comments a {
   padding: 1em 1em 1em 5.5em !important;
   color: white;
   background-color: #f27e36;
   font-weight: 600;
   border-radius: 0.35714em;
 }
-.comments a:focus, .comments a:hover {
+.float-comments a:focus, .float-comments a:hover {
   background-color: #e6610f !important;
 }
-.comments a:focus:before, .comments a:hover:before {
+.float-comments a:focus:before, .float-comments a:hover:before {
   border-top-color: #e6610f;
 }
-.comments a .autor-img {
+.float-comments a .autor-img {
   border-radius: 50%;
   position: absolute;
   left: 0;
@@ -8597,21 +8597,21 @@ main p {
   width: 2.85714em;
   margin: 1.42857em;
 }
-.comments a p {
+.float-comments a p {
   color: inherit;
   margin-bottom: 0.5em !important;
 }
-.comments a p.text {
+.float-comments a p.text {
   font-size: 0.92857em;
 }
-.comments a p.info {
+.float-comments a p.info {
   font-size: 0.78571em;
 }
-.comments a h6 {
+.float-comments a h6 {
   z-index: 0.85714em;
   margin-bottom: 0.5em !important;
 }
-.comments a:before {
+.float-comments a:before {
   content: "";
   position: absolute;
   width: 0;
@@ -8996,8 +8996,8 @@ main p {
 }
 
 .product-details h3 {
-  margin: 1.5em 0 0 !important;
   font-weight: 400;
+  margin: 0 !important;
 }
 .product-details .breadcrumb {
   color: #9d9d9d;
@@ -9010,10 +9010,7 @@ main p {
   color: inherit;
 }
 
-aside {
-  padding-top: 1.42857em;
-}
-aside section {
+section {
   width: 100%;
   font-size: 0.92857em;
   margin-bottom: 25px;
@@ -9021,29 +9018,39 @@ aside section {
   border-bottom-right-radius: 0.28571em;
   border-bottom-left-radius: 0.28571em;
 }
-aside section .section-header {
+section .section-header {
   border-top-right-radius: 0.28571em;
   border-top-left-radius: 0.28571em;
   background-color: #f27e36;
   padding: 1.42857em;
 }
-aside section .section-header + .section-body {
+section .section-header + .section-body {
   border-top-right-radius: 0;
   border-top-left-radius: 0;
 }
-aside section h4 {
+section a {
+  color: inherit;
+}
+section a:hover {
+  color: inherit;
+}
+section h3 {
+  font-size: 2em;
+  padding: 0 0 0.5em;
+}
+section h4 {
   color: white;
   font-weight: 700;
   font-size: 1em;
   margin: 0;
 }
-aside section h5 {
+section h5 {
   margin: 0;
   font-size: 1em;
   font-weight: 700;
   color: #24bd77;
 }
-aside section .section-body {
+section .section-body {
   background-color: white;
   border: 0.07143em solid #eeeeee;
   border-top-width: 0;
@@ -9052,37 +9059,42 @@ aside section .section-body {
   border-bottom-right-radius: 0.28571em;
   border-bottom-left-radius: 0.28571em;
 }
-aside section .section-body p,
-aside section .section-body li {
-  color: #9d9d9d;
+section .section-body p,
+section .section-body li {
+  color: inherit;
   font-weight: 600;
 }
-aside section .section-body p.price,
-aside section .section-body li.price {
+section .section-body p.price,
+section .section-body li.price {
   color: #2c2c2c;
   font-size: 1.23077em;
 }
-aside section .section-body p.price big,
-aside section .section-body li.price big {
+section .section-body p.price big,
+section .section-body li.price big {
   font-size: 1.4375em;
 }
-aside section .section-body small {
+section .section-body small {
   font-size: 0.84615em;
 }
-aside section .section-body big {
+section .section-body big {
   font-size: 2em;
 }
-aside section .section-body .part {
+section .section-body .part {
   border-top: 0.07143em solid #eeeeee;
   padding: 1.42857em;
 }
-aside section .section-body .part:first-child {
+section .section-body .part:first-child {
   border-top: none;
 }
-aside section .section-body .available {
+
+aside {
+  color: #9d9d9d;
+  padding-top: 1.42857em;
+}
+aside .booking-form .available {
   color: #24bd77;
 }
-aside section .section-body .available:before {
+aside .booking-form .available:before {
   font-family: "FontAwesome";
   content: "\f00c";
   font-size: 0.7em;
@@ -9096,10 +9108,10 @@ aside section .section-body .available:before {
   background-color: #24bd77;
   color: white;
 }
-aside section .section-body .available.unavailable {
+aside .booking-form .available.unavailable {
   color: #e45647;
 }
-aside section .section-body .available.unavailable:before {
+aside .booking-form .available.unavailable:before {
   background-color: #e45647;
   content: "\f00d";
 }
@@ -9165,7 +9177,7 @@ aside .btn {
   border-top-left-radius: 0.21429em;
   border-bottom-right-radius: 0.21429em;
   border-top-right-radius: 0.21429em;
-  margin-bottom: 1.42857em;
+  margin-bottom: 0.71429em;
   color: white !important;
 }
 aside .btn.info {
@@ -9217,6 +9229,7 @@ aside .btn.send-message span {
 }
 aside .booking-form .cell {
   display: table-cell;
+  padding: 0 0.5em;
 }
 aside .owner-information .block-thumbnail {
   margin-top: 1.42857em;
@@ -9227,15 +9240,18 @@ aside .owner-information .block-thumbnail:first-child {
 aside .owner-information .block-thumbnail .thumbnail-img {
   display: table-cell;
   vertical-align: top;
+}
+aside .owner-information .block-thumbnail .thumbnail-img a {
+  display: block;
+  overflow: hidden;
   width: 6.15385em;
   height: 6.15385em;
   border-top-right-radius: 50%;
   border-top-left-radius: 50%;
   border-bottom-right-radius: 50%;
   border-bottom-left-radius: 50%;
-  overflow: hidden;
 }
-aside .owner-information .block-thumbnail .thumbnail-img img {
+aside .owner-information .block-thumbnail .thumbnail-img a img {
   width: 100%;
   height: 100%;
 }
@@ -9246,6 +9262,9 @@ aside .owner-information .block-thumbnail .thumbnail-content {
 }
 aside .owner-information .block-thumbnail .thumbnail-content p {
   margin-bottom: 0;
+}
+aside .owner-information .block-thumbnail .rate {
+  margin: 0.5em 0;
 }
 aside .owner-information .connection .friend-photo-wrapper {
   display: inline-block;
@@ -9279,15 +9298,18 @@ aside .similar-listing li:first-child {
 aside .similar-listing li .thumbnail-img {
   display: table-cell;
   vertical-align: top;
+}
+aside .similar-listing li .thumbnail-img a {
+  display: block;
+  overflow: hidden;
   width: 6.15385em;
   height: 6.15385em;
   border-top-right-radius: 0.28571em;
   border-top-left-radius: 0.28571em;
   border-bottom-right-radius: 0.28571em;
   border-bottom-left-radius: 0.28571em;
-  overflow: hidden;
 }
-aside .similar-listing li .thumbnail-img img {
+aside .similar-listing li .thumbnail-img a img {
   width: 100%;
   height: 100%;
 }
@@ -9300,8 +9322,8 @@ aside .similar-listing li .thumbnail-content p {
   margin-bottom: 0;
 }
 aside .similar-listing li h6 {
-  color: #2c2c2c;
   margin-top: 0.5em;
+  color: #2c2c2c;
 }
 aside .similar-listing li p {
   margin: 0.25em 0 0.5em !important;
@@ -9334,38 +9356,84 @@ aside .connected-with-owner .facebook-box span {
 
 main {
   padding-top: 1.42857em;
+  color: #4d4d4d;
 }
-main section {
-  padding: 1.42857em;
-  font-size: 0.92857em;
+main p {
+  line-height: 1.7em;
 }
-main .cont {
-  height: 21.42857em;
-  margin: -0.71429em;
+main .part {
+  border-top: none !important;
 }
-main .tcell {
+main .carousel-wrapper {
+  height: 23.84615em;
+  margin: 0.71429em -0.71429em 0;
+}
+main .carousel-wrapper .thumbnail-inner,
+main .carousel-wrapper .carousel {
   float: left;
   height: 100%;
   font-size: 1em;
 }
-main .trow {
-  padding: 0.71429em;
+main .carousel-wrapper .carousel-inner {
+  width: 100%;
+  height: 100%;
 }
-main .small {
+main .carousel-wrapper .thumbnail-inner {
   width: 25%;
 }
-main .small .trow {
+main .carousel-wrapper .thumbnail-inner .thumbnail-img {
   height: 33.33333%;
 }
-main .big {
+main .carousel-wrapper .carousel {
   width: 75%;
 }
-main .big .trow {
+main .carousel-wrapper .carousel .item {
   height: 100%;
 }
-main img {
-  height: 100%;
+main .carousel-wrapper .item,
+main .carousel-wrapper .thumbnail-img {
+  overflow: hidden;
   width: 100%;
+  border: 0.71429em solid transparent;
+}
+main .carousel-wrapper .item img,
+main .carousel-wrapper .thumbnail-img img {
+  display: block;
+  max-width: none;
+}
+main .carousel-wrapper .item img.expand-v,
+main .carousel-wrapper .thumbnail-img img.expand-v {
+  width: 100% !important;
+  height: auto;
+}
+main .carousel-wrapper .item img.expand-h,
+main .carousel-wrapper .thumbnail-img img.expand-h {
+  height: 100% !important;
+  width: auto;
+}
+main .carousel-wrapper .carousel-control {
+  position: absolute;
+  width: 3em;
+  height: 3em;
+  line-height: 3em;
+  border-radius: 50%;
+  background: black;
+  font-size: 0.85714em;
+  top: auto;
+  margin: 2.5em 0.5em;
+  opacity: 0.5;
+  filter: alpha(opacity=50);
+}
+main .carousel-wrapper .carousel-control:hover {
+  opacity: 0.8;
+  filter: alpha(opacity=80);
+}
+main .carousel-wrapper .carousel-control.left {
+  right: 50%;
+  left: auto;
+}
+main .carousel-wrapper .carousel-control.right {
+  left: 50%;
 }
 main .picture-tab .nav a {
   color: #2c2c2c;
@@ -9383,38 +9451,50 @@ main .picture-tab .nav a:hover {
   border-color: #f27e36;
   color: white;
 }
-main #carousel-product {
-  height: 23.07692em;
+main .picture-tab .properties .list-group li {
+  background-color: #fbfbfb;
+  border: none;
+  padding: 0.8em 0.5em;
+}
+main .comments .thumbnail {
+  padding: 1.42857em;
+  border-top-right-radius: 0;
+  border-top-left-radius: 0;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+  margin-top: 1.42857em;
+}
+main .comments .thumbnail:first-child {
+  margin-top: 0;
+}
+main .comments .thumbnail .thumbnail-img {
+  display: table-cell;
+  vertical-align: top;
+}
+main .comments .thumbnail .thumbnail-img a {
+  display: block;
+  overflow: hidden;
+  width: 6.15385em;
+  height: 6.15385em;
+  border-top-right-radius: 50%;
+  border-top-left-radius: 50%;
+  border-bottom-right-radius: 50%;
+  border-bottom-left-radius: 50%;
+}
+main .comments .thumbnail .thumbnail-img a img {
   width: 100%;
-}
-main #carousel-product .carousel-inner {
   height: 100%;
 }
-main #carousel-product img,
-main #carousel-product .item {
-  height: 100%;
+main .comments .thumbnail .thumbnail-content {
+  display: table-cell;
+  vertical-align: top;
+  padding-left: 1.42857em;
 }
-main #carousel-product .carousel-control {
-  position: absolute;
-  width: 3em;
-  height: 3em;
-  line-height: 3em;
-  border-radius: 50%;
-  background: black;
-  font-size: 1.07143em;
-  top: auto;
-  margin: 2em 0.5em;
-  opacity: 0.5;
-  filter: alpha(opacity=50);
+main .comments .thumbnail .thumbnail-content p {
+  margin-bottom: 0;
 }
-main #carousel-product .carousel-control:hover {
-  opacity: 0.8;
-  filter: alpha(opacity=80);
-}
-main #carousel-product .carousel-control.left {
-  right: 50%;
-  left: auto;
-}
-main #carousel-product .carousel-control.right {
-  left: 50%;
+main .comments .thumbnail small {
+  font-size: 0.92308em;
+  font-weight: 600;
+  color: #9d9d9d;
 }
