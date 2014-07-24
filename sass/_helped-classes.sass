@@ -55,14 +55,19 @@
 	z-index: 10 !important
 	border-color: $gray-medium
 
+.bd-b,
+.framing-h,
+.framing-v
+	border: px(1) solid $gray-lighter
 .framing-h,
 .framing-v
 	background-color: white
-	border: px(1) solid $gray-lighter
 .framing-h
 	border-width: px(1) 0
 .framing-v
 	border-width: 0 px(1)
+.bd-b
+	border-width: 0 0 1px
 
 .link-success-color
 	color: $brand-success
@@ -101,7 +106,7 @@
 			font-size: 1.2em
 			cursor: pointer
 		a
-			padding: .6em 0
+			padding: .8em 0
 			display: inline-block
 			color: inherit
 			text-decoration: none
@@ -193,3 +198,7 @@
 	+border-bottom-radius($br)
 	+border-top-radius($br)
 	padding: .6em 1em
+
+.ov-h-v
+	overflow-x: hidden
+

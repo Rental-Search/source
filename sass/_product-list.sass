@@ -1,12 +1,12 @@
 .product-list
 	$mrg: px(13)
+	$br: px(3)
 	ul
 		margin-top: -$mrg
 		margin-bottom: -$mrg
 	.item
 		padding: $mrg
 		.thumbnail
-			$br: px(3)
 			+border-bottom-radius($br)
 			+border-top-radius($br)
 			margin: 0
@@ -17,34 +17,35 @@
 			border-bottom: px(1) solid darken($gray-lighter, 8%)
 			color: $gray-dark
 			background-color: white
-			.img-wrapper
-				width: 100%
-				position: relative
-				img
-					width: 100%
-				.fog
-					+transition(all .2s ease-in-out)
+		.img-wrapper
+			width: 100%
+			position: relative
+			display: block
 			&:hover
-				h6
-					color: $brand-primary
 				.fog
 					background: transparent
-			.info
-				overflow: hidden
-				padding: 1em
-				border: px(1) solid $gray-lighter
-				border-top: none
-				+border-bottom-radius($br)
-				position: relative
-				&:before
-					position: absolute
-					content: ''
-					bottom: 0
-					right: 0
-					width: px(70)
-					height: 100%
-					background: white
-					background: linear-gradient(to right, rgba(255,255,255,0), white px(10))
+			img
+				width: 100%
+			.fog
+				+transition(all .2s ease-in-out)
+		.info
+			overflow: hidden
+			padding: 1em
+			border: px(1) solid $gray-lighter
+			border-top: none
+			+border-bottom-radius($br)
+			position: relative
+			&:before
+				position: absolute
+				content: ''
+				bottom: 0
+				right: 0
+				width: px(70)
+				height: 100%
+				background: white
+				background: linear-gradient(to right, rgba(255,255,255,0), white px(10))
+			h6 a
+				color: $gray-dark
 			p
 				margin: 0
 				font-weight: $fw-semibold

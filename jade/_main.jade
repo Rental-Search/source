@@ -4,11 +4,18 @@ section.picture-tab
 		-each item in items
 			li
 				a( href = "#" + item ).pad-v-2 #{item}
-	//- .table
-		.cell1 1111
-		.cell2 2222
-		.cell3 3333
-	#carousel-product.carousel.slide(data-ride="carousel")
+	.cont.text-center
+		.tcell.small
+			.trow
+				img(src="img/carousel-product/1.jpg", alt="")
+			.trow
+				img(src="img/carousel-product/2.jpg", alt="")
+			.trow
+				img(src="img/carousel-product/3.jpg", alt="")
+		.tcell.big
+			.trow
+				img(src="img/carousel-product/4.jpg", alt="")
+	//- #carousel-product.carousel.slide(data-ride="carousel")
 		.carousel-inner
 			.item.active
 				img(src="img/carousel-product/1.jpg", alt="")

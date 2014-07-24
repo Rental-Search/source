@@ -1,7 +1,29 @@
 main
+	padding-top: $section-pad
 	section
 		padding: $section-pad
 		font-size: px($section-fz)
+
+	.cont
+		height: px(300)
+		margin: 0 -($section-pad/2)
+	.tcell
+		float: left
+		height: 100%
+		font-size: 1em
+	.trow
+		padding: $section-pad/2
+	.small
+		width: 25%
+		.trow
+			height: (100%/3)
+	.big
+		width: 75%
+		.trow
+			height: 100%
+	img
+		height: 100%
+		width: 100%
 
 	.picture-tab
 		.nav a

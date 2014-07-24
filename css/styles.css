@@ -7997,10 +7997,15 @@ button.close {
   border-color: #c4c4c4;
 }
 
+.bd-b,
+.framing-h,
+.framing-v {
+  border: 0.07143em solid #eeeeee;
+}
+
 .framing-h,
 .framing-v {
   background-color: white;
-  border: 0.07143em solid #eeeeee;
 }
 
 .framing-h {
@@ -8009,6 +8014,10 @@ button.close {
 
 .framing-v {
   border-width: 0 0.07143em;
+}
+
+.bd-b {
+  border-width: 0 0 1px;
 }
 
 .link-success-color {
@@ -8056,7 +8065,7 @@ button.close {
   cursor: pointer;
 }
 .breadcrumb > li a {
-  padding: 0.6em 0;
+  padding: 0.8em 0;
   display: inline-block;
   color: inherit;
   text-decoration: none;
@@ -8171,6 +8180,10 @@ button.close {
   border-top-right-radius: 1.5em;
   border-top-left-radius: 1.5em;
   padding: 0.6em 1em;
+}
+
+.ov-h-v {
+  overflow-x: hidden;
 }
 
 /* SASS variables are information about icon's compiled state, stored under its original file name
@@ -8450,24 +8463,22 @@ main p {
   color: #2c2c2c;
   background-color: white;
 }
-.product-list .item .thumbnail .img-wrapper {
+.product-list .item .img-wrapper {
   width: 100%;
   position: relative;
+  display: block;
 }
-.product-list .item .thumbnail .img-wrapper img {
+.product-list .item .img-wrapper:hover .fog {
+  background: transparent;
+}
+.product-list .item .img-wrapper img {
   width: 100%;
 }
-.product-list .item .thumbnail .img-wrapper .fog {
+.product-list .item .img-wrapper .fog {
   -webkit-transition: all 0.2s ease-in-out;
   transition: all 0.2s ease-in-out;
 }
-.product-list .item .thumbnail:hover h6 {
-  color: #f27e36;
-}
-.product-list .item .thumbnail:hover .fog {
-  background: transparent;
-}
-.product-list .item .thumbnail .info {
+.product-list .item .info {
   overflow: hidden;
   padding: 1em;
   border: 0.07143em solid #eeeeee;
@@ -8476,7 +8487,7 @@ main p {
   border-bottom-left-radius: 0.21429em;
   position: relative;
 }
-.product-list .item .thumbnail .info:before {
+.product-list .item .info:before {
   position: absolute;
   content: "";
   bottom: 0;
@@ -8488,12 +8499,15 @@ main p {
   background: -webkit-linear-gradient(left, rgba(255, 255, 255, 0), white 0.71429em);
   background: linear-gradient(to right, rgba(255, 255, 255, 0), white 0.71429em);
 }
-.product-list .item .thumbnail p {
+.product-list .item .info h6 a {
+  color: #2c2c2c;
+}
+.product-list .item .info p {
   margin: 0;
   font-weight: 600;
   font-size: 0.78571em;
 }
-.product-list .item .thumbnail .declarer {
+.product-list .item .info .declarer {
   position: absolute;
   bottom: 0;
   top: 0;
@@ -8507,7 +8521,7 @@ main p {
   overflow: hidden;
   margin: auto 0;
 }
-.product-list .item .thumbnail .declarer img {
+.product-list .item .info .declarer img {
   height: 100%;
   width: 100%;
 }
@@ -8982,7 +8996,7 @@ main p {
 }
 
 .product-details h3 {
-  margin: 0 !important;
+  margin: 1.5em 0 0 !important;
   font-weight: 400;
 }
 .product-details .breadcrumb {
@@ -8996,6 +9010,9 @@ main p {
   color: inherit;
 }
 
+aside {
+  padding-top: 1.42857em;
+}
 aside section {
   width: 100%;
   font-size: 0.92857em;
@@ -9315,9 +9332,40 @@ aside .connected-with-owner .facebook-box span {
   font-size: 3.21429em;
 }
 
+main {
+  padding-top: 1.42857em;
+}
 main section {
   padding: 1.42857em;
   font-size: 0.92857em;
+}
+main .cont {
+  height: 21.42857em;
+  margin: -0.71429em;
+}
+main .tcell {
+  float: left;
+  height: 100%;
+  font-size: 1em;
+}
+main .trow {
+  padding: 0.71429em;
+}
+main .small {
+  width: 25%;
+}
+main .small .trow {
+  height: 33.33333%;
+}
+main .big {
+  width: 75%;
+}
+main .big .trow {
+  height: 100%;
+}
+main img {
+  height: 100%;
+  width: 100%;
 }
 main .picture-tab .nav a {
   color: #2c2c2c;

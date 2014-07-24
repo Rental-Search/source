@@ -11,17 +11,17 @@
 		-for( var i = 0; i < 8; i++)
 			-var ind = i % 3
 			li.col-sm-6.col-md-3.item
-				a(href="#").thumbnail
-					.img-wrapper
+				.thumbnail
+					a(href="#").img-wrapper
 						img( src = products[ ind ].image )
-						.fog
+						span.fog
+					.info.text-nowrap
+						h6 
+							a(href="#") #{products[ ind ].title}
+						p #{products[ ind ].location}
+						a(href="#").declarer
+							img(src=products[ ind ].declarer alt="")
 					span.badge.price #{products[ ind ].price}&euro; /jour
-					.info
-						.description.text-nowrap
-							h6 #{products[ ind ].title}
-							p #{products[ ind ].location}
-							.declarer
-								img( src = products[ ind ].declarer )
 	.row.explore
 		button(type = "button").btn.btn-success.btn-explore.pad-h-3
 			span.icon-search
