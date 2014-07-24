@@ -14,7 +14,7 @@
                     </div>
                     <div class="col-lg-6 col-md-6">
                         <section class="chat-list panel-body">
-                            <article ng-repeat="message in productRelatedMessages" class="chat-item" ng-class="{'left': !shouldIndent(message, productRelatedMessages, $first), 'right': shouldIndent(message, chatFeed, $first)}">
+                            <article ng-repeat="message in productRelatedMessages | orderBy:'sent_at'" class="chat-item" ng-class="{'left': !shouldIndent(message, productRelatedMessages, $first), 'right': shouldIndent(message, chatFeed, $first)}">
                                 <section ng-if="!shouldIndent(message, productRelatedMessages, $first)">
                                     <a href="" class="thumb-sm avatar pull-left"><img ng-src="{{getAvatar(message.sender.avatar)}}" class="img-circle"></a>
                                     <section class="chat-body">

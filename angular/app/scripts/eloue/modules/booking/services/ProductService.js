@@ -26,7 +26,7 @@ define(["angular", "eloue/resources", "eloue/modules/booking/BookingModule"], fu
                         result.owner = results[0];
                         result.address = results[1];
                         result.phone = results[2];
-                        deferred.resolve(result)
+                        deferred.resolve(result);
                     });
                 });
                 return deferred.promise;

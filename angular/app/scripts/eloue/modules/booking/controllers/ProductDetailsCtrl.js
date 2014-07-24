@@ -10,7 +10,7 @@ define(["angular", "eloue/modules/booking/BookingModule",
     angular.module("EloueApp.BookingModule").controller("ProductDetailsCtrl", ["$scope", "$route", "ProductService", "PriceService", "MessageService", "UserService", "Endpoints", function ($scope, $route, ProductService, PriceService, MessageService, UserService, Endpoints) {
 
         //TODO: change to real user ID
-        $scope.currentUserId = 1190;
+        $scope.currentUserId = 17506;
         $scope.productId = $route.current.params.productId;
         $scope.bookingDetails = {
             "fromDate": Date.today().add(1).days().toString("dd/MM/yyyy"),
@@ -22,7 +22,7 @@ define(["angular", "eloue/modules/booking/BookingModule",
         $scope.bookingPrice = 0;
         $scope.pricePerDay = 0;
         $scope.caution = 0;
-        $scope.productRelatedMessages = {};
+        $scope.productRelatedMessages = [];
         $scope.ownerCallDetails = {};
         //TODO: get it from product info
         $scope.available = true;
@@ -66,15 +66,14 @@ define(["angular", "eloue/modules/booking/BookingModule",
             };
         });
 
-        MessageService.getMessageThread($scope.productId).$promise.then(function (result) {
-            angular.forEach(result.results, function(value, key) {
+        MessageService.getMessageThread($scope.productId).then(function (result) {
+            angular.forEach(result, function(value, key) {
                 var senderId = $scope.getIdFromUrl(value.sender);
                 UserService.getUser(senderId).$promise.then(function (result) {
                     value.sender = result;
                 });
             });
-            $scope.productRelatedMessages = result.results;
-
+            $scope.productRelatedMessages = result;
         });
 
         PriceService.getPricePerDay($scope.productId).$promise.then(function (result) {
@@ -113,15 +112,15 @@ define(["angular", "eloue/modules/booking/BookingModule",
             var message = $scope.newMessage;
             message.sender = Endpoints.api_url + "users/" + $scope.currentUser.id + "/";
             message.recipient = Endpoints.api_url + "users/" + $scope.product.owner.id + "/";
-            message.sent_at = new Date().toString("yyyy-MM-dd'T'HH:mm:ss");
-            //TODO: what message thread ?
-            var threadId = null;
-            message.thread = Endpoints.api_url + "messagethreads/" + threadId + "/";
-            console.log(message);
-            $scope.productRelatedMessages.push(message);
-            //TODO: save message
+            message.sent_at = new Date().toString("yyyy-MM-ddTHH:mm:ss");
+            if ($scope.productRelatedMessages && $scope.productRelatedMessages.length > 0) {
+                message.thread = $scope.productRelatedMessages[$scope.productRelatedMessages.length - 1].thread;
+            }
 
-            $scope.newMessage = {};
+            MessageService.sendMessage(message, $scope.productId).then(function (result) {
+                $scope.productRelatedMessages.push(result);
+                $scope.newMessage = {};
+            });
         };
 
         $scope.shouldIndent = function shouldIndent(message, feed, first) {

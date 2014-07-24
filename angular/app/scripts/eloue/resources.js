@@ -12,10 +12,19 @@ define(["eloue/app", "eloue/constants"], function (EloueApp) {
             });
     }]);
 
-    EloueApp.factory("Messages", ["$resource", "Endpoints", function ($resource, Endpoints) {
+    EloueApp.factory("MessageThreads", ["$resource", "Endpoints", function ($resource, Endpoints) {
+        return $resource(Endpoints.api_url + "messagethreads\\/", {},
+            {
+                "list": { method: "GET", params: {product: ":productId"}},
+                "save": {method: "POST"}
+            });
+    }]);
+
+    EloueApp.factory("ProductRelatedMessages", ["$resource", "Endpoints", function ($resource, Endpoints) {
         return $resource(Endpoints.api_url + "productrelatedmessages\\/", {},
             {
-                "list": { method: "GET"}
+                "get": { method: "GET", url: Endpoints.api_url + "productrelatedmessages/:id\\/", params: {id: ":id"}},
+                "save": {method: "POST"}
             });
     }]);
 
