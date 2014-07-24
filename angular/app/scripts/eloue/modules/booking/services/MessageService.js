@@ -34,8 +34,6 @@ define(["angular", "eloue/constants", "eloue/resources", "eloue/modules/booking/
                         "recipient": message.recipient,
                         "product": Endpoints.api_url + "products/" + productId + "/",
                         "subject": "Question",
-                        "sender_archived": false,
-                        "recipient_archived": false,
                         "messages": []
                     };
                     MessageThreads.save({}, messageThread, function (response) {
