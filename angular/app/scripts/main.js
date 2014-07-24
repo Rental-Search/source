@@ -13,7 +13,8 @@ require.config({
         "moment": "../bower_components/moment/min/moment.min",
         "angular-moment":"../bower_components/angular-moment/angular-moment.min",
         "bootstrap-datepicker": "../bower_components/bootstrap-datepicker/js/bootstrap-datepicker",
-"datejs": "../bower_components/datejs/build/production/date.min"
+"datejs": "../bower_components/datejs/build/production/date.min",
+        "formmapper": "../scripts/formmapper"
     },
     shim: {
         "angular": {"exports": "angular"},
@@ -29,7 +30,8 @@ require.config({
         "jQuery": {exports: "jQuery"},
         "bootstrap": ["jQuery"],
         "moment": ["jQuery"],
-        "bootstrap-datepicker": ["jQuery"]
+        "bootstrap-datepicker": ["jQuery"],
+        "formmapper": ["jQuery"]
     }
 });
 
@@ -42,8 +44,9 @@ require([
     "angular-moment",
     "bootstrap-datepicker",
     "datejs",
+    "formmapper",
     "eloue/route"
-], function ($, _, angular, bootstrap, moment, ngMoment, datepicker, datejs, route) {
+], function ($, _, angular, bootstrap, moment, ngMoment, datepicker, datejs, formmapper, route) {
     "use strict";
     $(function () {
         angular.bootstrap(document, ["EloueApp"]);

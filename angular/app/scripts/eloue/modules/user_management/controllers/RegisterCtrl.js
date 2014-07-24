@@ -1,4 +1,4 @@
-define(["angular", "eloue/modules/user_management/UserManagementModule", "eloue/services"], function (angular) {
+define(["angular", "eloue/modules/user_management/UserManagementModule", "eloue/resources"], function (angular) {
     "use strict";
 
     angular.module("EloueApp.UserManagementModule").controller("RegisterCtrl", ["$scope", "Users", function ($scope, Users) {

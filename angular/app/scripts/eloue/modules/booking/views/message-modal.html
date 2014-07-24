@@ -21,10 +21,11 @@
                                         <div class="panel text-sm m-b-none bg bg-light lt">
                                             <div class="panel-body">
                                                 <span class="arrow left"></span>
+                                                <p ng-bind="message.sender.slug"></p>
                                                 <p class="m-b-none" ng-bind="message.body"></p>
                                             </div>
                                         </div>
-                                        <small am-time-ago="message.timestamp" class="text-muted"></small>
+                                        <p ng-bind="message.sent_at" class="text-muted"></p>
                                     </section>
                                 </section>
                                 <section ng-if="shouldIndent(message, productRelatedMessages, $first)">
@@ -33,10 +34,11 @@
                                         <div class="panel text-sm m-b-none bg bg-light dk lter font-semibold">
                                             <div class="panel-body">
                                                 <span class="arrow right"></span>
+                                                <p ng-bind="message.sender.slug"></p>
                                                 <p class="m-b-none" ng-bind="message.body" style="width: 100%; height: 100%"></p>
                                             </div>
                                         </div>
-                                        <small am-time-ago="message.timestamp" class="text-muted"></small>
+                                        <p ng-bind="message.sent_at" class="text-muted"></p>
                                     </section>
                                 </section>
                             </article>

@@ -2,11 +2,12 @@ define(["angular", "eloue/modules/booking/BookingModule",
     "eloue/modules/booking/services/ProductService",
     "eloue/modules/booking/services/PriceService",
     "eloue/modules/booking/services/MessageService",
-    "eloue/services"
+    "eloue/modules/booking/services/UserService",
+    "eloue/constants"
 ], function (angular) {
     "use strict";
 
-    angular.module("EloueApp.BookingModule").controller("ProductDetailsCtrl", ["$scope", "$route", "ProductService", "PriceService", "MessageService", "Users", "Addresses", "PhoneNumbers", function ($scope, $route, ProductService, PriceService, MessageService, Users, Addresses, PhoneNumbers) {
+    angular.module("EloueApp.BookingModule").controller("ProductDetailsCtrl", ["$scope", "$route", "ProductService", "PriceService", "MessageService", "UserService", "Endpoints", function ($scope, $route, ProductService, PriceService, MessageService, UserService, Endpoints) {
 
         //TODO: change to real user ID
         $scope.currentUserId = 1190;
@@ -53,35 +54,23 @@ define(["angular", "eloue/modules/booking/BookingModule",
             {"label": "23h", "value": "23:00:00"}
         ];
 
-        Users.get({id: $scope.currentUserId}).$promise.then(function (result) {
+        UserService.getUser($scope.currentUserId).$promise.then(function (result) {
             $scope.currentUser = result;
         });
 
-        ProductService.getProduct($scope.productId).$promise.then(function (result) {
+        ProductService.getProduct($scope.productId).then(function (result) {
             $scope.product = result;
-            //Get owner object
-            var ownerId = $scope.getIdFromUrl($scope.product.owner);
-            Users.get({id: ownerId}).$promise.then(function (result) {
-                $scope.product.owner = result;
-            });
-            //Get address object
-            var addressId = $scope.getIdFromUrl($scope.product.address);
-            Addresses.get({id: addressId}).$promise.then(function (result) {
-                $scope.product.address = result;
-            });
-            //Get phone object
-            var phoneId = $scope.getIdFromUrl($scope.product.phone);
-            PhoneNumbers.get({id: phoneId}).$promise.then(function (result) {
-                $scope.product.phone = result;
-                $scope.ownerCallDetails = {
-                    "number": result.number,
-                    "tariff": "0.15"
-                }
-            });
         });
 
         MessageService.getMessageThread($scope.productId).$promise.then(function (result) {
-            $scope.productRelatedMessages = result.messages;
+            angular.forEach(result.results, function(value, key) {
+                var senderId = $scope.getIdFromUrl(value.sender);
+                UserService.getUser(senderId).$promise.then(function (result) {
+                    value.sender = result;
+                });
+            });
+            $scope.productRelatedMessages = result.results;
+
         });
 
         PriceService.getPricePerDay($scope.productId).$promise.then(function (result) {
@@ -118,8 +107,13 @@ define(["angular", "eloue/modules/booking/BookingModule",
 
         $scope.sendMessage = function sendMessage() {
             var message = $scope.newMessage;
-            message.sender = $scope.currentUser;
-            message.timestamp = new Date().getTime();
+            message.sender = Endpoints.api_url + "users/" + $scope.currentUser.id + "/";
+            message.recipient = Endpoints.api_url + "users/" + $scope.product.owner.id + "/";
+            message.sent_at = new Date().toString("yyyy-MM-dd'T'HH:mm:ss");
+            //TODO: what message thread ?
+            var threadId = null;
+            message.thread = Endpoints.api_url + "messagethreads/" + threadId + "/";
+            console.log(message);
             $scope.productRelatedMessages.push(message);
             //TODO: save message
 

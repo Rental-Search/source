@@ -13,7 +13,7 @@ define(["eloue/app", "eloue/constants"], function (EloueApp) {
     }]);
 
     EloueApp.factory("Messages", ["$resource", "Endpoints", function ($resource, Endpoints) {
-        return $resource("data/messagethreads.json", {},
+        return $resource(Endpoints.api_url + "productrelatedmessages\\/", {},
             {
                 "list": { method: "GET"}
             });
