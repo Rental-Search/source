@@ -1,0 +1,23 @@
+ul.nav.without-spaces
+	-var items = [ "Photos", "Tarifs", "Localisation", "Disponibilité", "Assurance" ]
+	-each item in items
+		li
+			a( href = "#" + item ).pad-v-2 #{item}
+.carousel-wrapper
+	.thumbnail-inner
+		-for(var i = 1; i<=3; i++)
+			.thumbnail-img
+				img(src=STATIC_URL+"img/carousel-product/"+i+".jpg", alt="")
+	#carousel-product.carousel.slide(data-ride="carousel")
+		.carousel-inner
+			-for(var i = 1; i<=3; i++)
+				-if(i===1)
+					.item.active
+						img(src=STATIC_URL+"img/carousel-product/"+i+".jpg", alt="")
+				-else
+					.item
+						img(src=STATIC_URL+"img/carousel-product/"+i+".jpg", alt="")
+		a(href="#carousel-product" role="button" data-slide="prev").left.carousel-control
+			i.icon-chevron-left
+		a(href="#carousel-product" role="button" data-slide="next").right.carousel-control
+			i.icon-chevron-right

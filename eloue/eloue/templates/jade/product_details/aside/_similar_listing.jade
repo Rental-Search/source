@@ -1,0 +1,16 @@
+.section-header
+	h4 Annonces similaires
+.section-body
+	.part
+		ul.nav
+			-for(var i=0;i<5;i++)
+				li
+					.thumbnail-img
+						a(href="#")
+							img(src=STATIC_URL+"img/home-products/audi2.jpg", alt="")
+					.thumbnail-content
+						h6 
+							a(href="#") Audi - A3
+						p
+							small Paris
+						span.badge.price 100€ /jour

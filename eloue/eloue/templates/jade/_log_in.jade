@@ -1,0 +1,41 @@
+.modal.fade#log-in(tabindex="-1" role="dialog" aria-hidden="true")
+	.modal-dialog
+		.modal-content.text-center
+			.modal-header
+				button(type="button" data-dismiss="modal").close
+					span(aria-hidden="true")&times;
+					span.sr-only Close
+				h4.modal-title Connexion
+			.modal-body
+				h3 Connectez-vous à votre compte
+				.form-group
+					a(href="#").btn.info
+						span.icon-facebook
+						| Connexion via Facebook
+				.form-group
+					a(href="#").btn.danger
+						span.icon-google-plus
+						| Connexion via Google
+				p.info
+					| Nous ne publierons jamais rien sur votre profil (sauf si vous le demandez) 
+					br
+					| Vos données personnelles ne seront jamais cédées ou vendues.
+				span.or
+				form
+					.form-group
+						input(type="email" placeholder="E-mail" required).form-control
+					.form-group.mrg-v-0
+						input(type="password" placeholder="Mot de passe" required).form-control
+					.form-group.mrg-v-0.clearfix.mrg-v-2
+						.checkbox.pull-left
+							label(for="remember-me")
+								input(type="checkbox" checked)#remember-me
+								span.icon-ok
+							| Se souvenir de moi
+						.forgot-password.pull-right
+							a(href="#") Mot de passe oublié
+					.form-group.mrg-v-2
+						button(type="submit").btn.success Connexion
+				span.or
+				h4 Vous êtes déjà membre e-loue ?
+				a(href="#" data-toggle="modal" data-target="#sign-in" data-dismiss="modal").modal-fotter-link.connexion Inscription

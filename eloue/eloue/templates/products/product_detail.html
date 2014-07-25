@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="en"></html>
+<head>
+  <title>e-loue</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700">
+  <link rel="stylesheet" href="../../static/css/styles.css">
+  <link rel="stylesheet" href="../../static/css/chosen.min.css">
+  <link rel="shortcut icon" href="../../static/img/favicon.ico">
+  <!-- for IE < 9 -->
+  <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+  <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+  <script src="http://jamesallardice.github.io/Placeholders.js/assets/js/placeholders.min.js"></script>
+  <script src="http://maps.googleapis.com/maps/api/js?sensor=false&amp;libraries=places"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+  <script src="../../static/js/chosen.jquery.min.js"></script>
+  <script src="../../static/js/formmapper.js"></script>
+  <script src="../../static/js/bootstrap/modal.js"></script>
+  <script src="../../static/js/bootstrap/dropdown.js"></script>
+  <script src="../../static/js/bootstrap/carousel.js"></script>
+  <script src="../../static/js/scripts.js"></script>
+</head>
+<body>
+  <div class="container-flex">
+    <header>
+      <div class="header-site">
+        <div class="container signs-links pad-v-2">
+          <ul role="tablist" class="nav without-spaces">
+            <li class="divide"></li>
+            <li><span>Bonjour, <a href="#inscrivez-vous" data-toggle="modal" data-target="#sign-in">inscrivez-vous </a>ou <a href="#connectez-vous" data-toggle="modal" data-target="#log-in">connectez-vous</a></span></li>
+            <li class="divide"></li>
+            <li><span>Vous êtes un loueur professionnel, découvrez les <a href="#">offers e-loue Pro</a></span></li>
+            <li class="divide"></li>
+            <li><span>Appelez-nous au <b>0826.800.200 </b>(0,15&euro; / min)</span></li>
+          </ul>
+        </div>
+        <div class="framing-h pad-v-3">
+          <div class="container search-form">
+            <div class="row">
+              <div class="col-sm-2 logo-wrapper"><a href="/templates"><img src="../../static/img/logo.png" alt="logo"></a></div>
+              <div class="col-sm-7">
+                <div class="input-group">
+                  <input type="text" placeholder="Que voulez-vous louer ?" title="Que voulez-vous louer ?" class="form-control what-field">
+                  <div class="input-group where-field-wrapper"><span class="sprite-location"></span>
+                    <input type="text" placeholder="Où ça ?" title="Où ça ?" id="geolocate" class="form-control where-field">
+                  </div>
+                  <div class="input-group-btn">
+                    <button type="button" class="btn btn-default btn-search"><span class="icon-search"></span></button>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-3">
+                <button type="button" class="btn btn-success">Déposez une annonce</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+    <nav>
+      <div class="row-fluid bd-b">
+        <div class="container">
+          <ol class="breadcrumb">
+            <li><a href="#">Accueil</a></li>
+            <li><a href="#">Location Voiture</a></li>
+            <li><a href="#">Nice</a></li>
+            <li><a href="#">BMW - 520 Touring luxe</a></li>
+          </ol>
+        </div>
+      </div>
+    </nav>
+    <article class="product-details container">
+      <div class="row">
+        <div class="col-sm-8 product-details-title">
+          <h3 class="pad-0">Location Bmw - 520 touring luxe - NICE</h3>
+          <ul class="breadcrumb">
+            <li>Année 2010</li>
+            <li>Moteur Diesel</li>
+            <li>Boite Automatique</li>
+            <li>10 000 à 30 000 km</li>
+          </ul>
+        </div>
+        <div class="col-sm-4 share-btns"></div>
+      </div>
+      <div class="row">
+        <main class="col-sm-8">
+          <section>
+            <div class="section-body">
+              <div class="part picture-tab">
+                <ul class="nav without-spaces">
+                  <li><a href="#Photos" class="pad-v-2">Photos</a></li>
+                  <li><a href="#Tarifs" class="pad-v-2">Tarifs</a></li>
+                  <li><a href="#Localisation" class="pad-v-2">Localisation</a></li>
+                  <li><a href="#Disponibilité" class="pad-v-2">Disponibilité</a></li>
+                  <li><a href="#Assurance" class="pad-v-2">Assurance</a></li>
+                </ul>
+                <div class="carousel-wrapper">
+                  <div class="thumbnail-inner">
+                    <div class="thumbnail-img"><img src="../../static/img/carousel-product/1.jpg" alt=""></div>
+                    <div class="thumbnail-img"><img src="../../static/img/carousel-product/2.jpg" alt=""></div>
+                    <div class="thumbnail-img"><img src="../../static/img/carousel-product/3.jpg" alt=""></div>
+                  </div>
+                  <div id="carousel-product" data-ride="carousel" class="carousel slide">
+                    <div class="carousel-inner">
+                      <div class="item active"><img src="../../static/img/carousel-product/1.jpg" alt=""></div>
+                      <div class="item"><img src="../../static/img/carousel-product/2.jpg" alt=""></div>
+                      <div class="item"><img src="../../static/img/carousel-product/3.jpg" alt=""></div>
+                    </div><a href="#carousel-product" role="button" data-slide="prev" class="left carousel-control"><i class="icon-chevron-left"></i></a><a href="#carousel-product" role="button" data-slide="next" class="right carousel-control"><i class="icon-chevron-right"></i></a>
+                  </div>
+                </div>
+              </div>
+              <div class="part description">
+                <h3>Déscription</h3>
+                <div class="row">
+                  <div class="col-sm-6 text">
+                    <p>Donec ullamcorper nulla non metus auctor fringilla. Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor. Aenean lacinia bibendum nulla sed consectetur. Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor.</p>
+                    <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec sed odio dui. Maecenas faucibus mollis interdum. Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
+                  </div>
+                  <div class="col-sm-6 properties">
+                    <ul class="list-group">
+                      <li class="list-group-item clearfix"><span class="col-sm-5">Notation</span><b class="col-sm-7">32&nbsp;&nbsp;
+                          <div class="rate"><span class="icon-star"></span><span class="icon-star current-rate"></span><span class="icon-star"></span><span class="icon-star"></span><span class="icon-star"></span>
+                          </div></b></li>
+                      <li class="list-group-item clearfix"><span class="col-sm-5">Date d’achat</span><b class="col-sm-7">2008&nbsp;&nbsp;</b></li>
+                      <li class="list-group-item clearfix"><span class="col-sm-5">Marque</span><b class="col-sm-7">BMW&nbsp;&nbsp;</b></li>
+                      <li class="list-group-item clearfix"><span class="col-sm-5">Modèle</span><b class="col-sm-7">520 Touring&nbsp;&nbsp;</b></li>
+                      <li class="list-group-item clearfix"><span class="col-sm-5">Consommation</span><b class="col-sm-7">4,5 l/100km&nbsp;&nbsp;</b></li>
+                      <li class="list-group-item clearfix"><span class="col-sm-5">Prix neuf</span><b class="col-sm-7">38 000€&nbsp;&nbsp;</b></li>
+                      <li class="list-group-item clearfix"><span class="col-sm-5">Puissance</span><b class="col-sm-7">130 CV&nbsp;&nbsp;</b></li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <div class="part comments comments-ad">
+                <h3>Commentaires liés à cette annonce</h3>
+                <ul class="list-group">
+                  <li class="list-group-item thumbnail">
+                    <div class="thumbnail-img"><a href="#"><img src="../../static/img/home-products/comentator.png" alt=""></a></div>
+                    <div class="thumbnail-content">
+                      <h5><a href="#">Jonathan Moreira</a></h5>
+                      <p>
+                        Integer posuere erat a ante venenatis dapibus posuere velit aliquet.
+                        est non commodo luctus, nisi erat porttitor ligula, eget.
+                      </p><small>Le 12 Mai 2014</small>
+                    </div>
+                  </li>
+                  <li class="list-group-item thumbnail">
+                    <div class="thumbnail-img"><a href="#"><img src="../../static/img/home-products/comentator.png" alt=""></a></div>
+                    <div class="thumbnail-content">
+                      <h5><a href="#">Jonathan Moreira</a></h5>
+                      <p>
+                        Integer posuere erat a ante venenatis dapibus posuere velit aliquet.
+                        est non commodo luctus, nisi erat porttitor ligula, eget.
+                      </p><small>Le 12 Mai 2014</small>
+                    </div>
+                  </li>
+                  <li class="list-group-item thumbnail">
+                    <div class="thumbnail-img"><a href="#"><img src="../../static/img/home-products/comentator.png" alt=""></a></div>
+                    <div class="thumbnail-content">
+                      <h5><a href="#">Jonathan Moreira</a></h5>
+                      <p>
+                        Integer posuere erat a ante venenatis dapibus posuere velit aliquet.
+                        est non commodo luctus, nisi erat porttitor ligula, eget.
+                      </p><small>Le 12 Mai 2014</small>
+                    </div>
+                  </li>
+                  <li class="list-group-item thumbnail">
+                    <div class="thumbnail-img"><a href="#"><img src="../../static/img/home-products/comentator.png" alt=""></a></div>
+                    <div class="thumbnail-content">
+                      <h5><a href="#">Jonathan Moreira</a></h5>
+                      <p>
+                        Integer posuere erat a ante venenatis dapibus posuere velit aliquet.
+                        est non commodo luctus, nisi erat porttitor ligula, eget.
+                      </p><small>Le 12 Mai 2014</small>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+              <div class="part comments comments-owner">
+                <h3>Commentaire liés au propriétaire</h3>
+                <ul class="list-group">
+                  <li class="list-group-item thumbnail">
+                    <div class="thumbnail-img"><a href="#"><img src="../../static/img/home-products/comentator.png" alt=""></a></div>
+                    <div class="thumbnail-content">
+                      <h5><a href="#">Jonathan Moreira</a></h5>
+                      <p>
+                        Integer posuere erat a ante venenatis dapibus posuere velit aliquet.
+                        est non commodo luctus, nisi erat porttitor ligula, eget.
+                      </p><small>Le 12 Mai 2014</small>
+                    </div>
+                  </li>
+                  <li class="list-group-item thumbnail">
+                    <div class="thumbnail-img"><a href="#"><img src="../../static/img/home-products/comentator.png" alt=""></a></div>
+                    <div class="thumbnail-content">
+                      <h5><a href="#">Jonathan Moreira</a></h5>
+                      <p>
+                        Integer posuere erat a ante venenatis dapibus posuere velit aliquet.
+                        est non commodo luctus, nisi erat porttitor ligula, eget.
+                      </p><small>Le 12 Mai 2014</small>
+                    </div>
+                  </li>
+                  <li class="list-group-item thumbnail">
+                    <div class="thumbnail-img"><a href="#"><img src="../../static/img/home-products/comentator.png" alt=""></a></div>
+                    <div class="thumbnail-content">
+                      <h5><a href="#">Jonathan Moreira</a></h5>
+                      <p>
+                        Integer posuere erat a ante venenatis dapibus posuere velit aliquet.
+                        est non commodo luctus, nisi erat porttitor ligula, eget.
+                      </p><small>Le 12 Mai 2014</small>
+                    </div>
+                  </li>
+                  <li class="list-group-item thumbnail">
+                    <div class="thumbnail-img"><a href="#"><img src="../../static/img/home-products/comentator.png" alt=""></a></div>
+                    <div class="thumbnail-content">
+                      <h5><a href="#">Jonathan Moreira</a></h5>
+                      <p>
+                        Integer posuere erat a ante venenatis dapibus posuere velit aliquet.
+                        est non commodo luctus, nisi erat porttitor ligula, eget.
+                      </p><small>Le 12 Mai 2014</small>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </section>
+        </main>
+        <aside class="col-sm-4">
+          <section class="booking-form">
+            <div class="section-header">
+              <h4>Réservez en ligne</h4>
+            </div>
+            <form class="form-inline section-body text-center">
+              <div class="part">
+                <p><small>à partir de</small>
+                  <big class="text-primary">&nbsp;56€ /jour</big>
+                  <div class="row">
+                    <div class="cell">
+                      <div class="input-group">
+                        <div class="input-group-addon">Du</div>
+                        <input type="text" placeholder="" class="form-control">
+                        <div class="input-group-addon calendar"><span></span></div>
+                      </div>
+                    </div>
+                    <div class="cell">
+                      <select class="form-control">
+                        <option value="00:00">00:00</option>
+                        <option value="01:00">01:00</option>
+                        <option value="02:00">02:00</option>
+                        <option value="03:00">03:00</option>
+                        <option value="04:00">04:00</option>
+                        <option value="05:00">05:00</option>
+                        <option value="06:00">06:00</option>
+                        <option value="07:00">07:00</option>
+                        <option value="08:00">08:00</option>
+                        <option value="09:00">09:00</option>
+                        <option value="10:00">10:00</option>
+                        <option value="11:00">11:00</option>
+                        <option value="12:00">12:00</option>
+                        <option value="13:00">13:00</option>
+                        <option value="14:00">14:00</option>
+                        <option value="15:00">15:00</option>
+                        <option value="16:00">16:00</option>
+                        <option value="17:00">17:00</option>
+                        <option value="18:00">18:00</option>
+                        <option value="19:00">19:00</option>
+                        <option value="20:00">20:00</option>
+                        <option value="21:00">21:00</option>
+                        <option value="22:00">22:00</option>
+                        <option value="23:00">23:00</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="cell">
+                      <div class="input-group">
+                        <div class="input-group-addon">Au</div>
+                        <input type="text" placeholder="" class="form-control">
+                        <div class="input-group-addon calendar"><span></span></div>
+                      </div>
+                    </div>
+                    <div class="cell">
+                      <select class="form-control">
+                        <option value="00:00">00:00</option>
+                        <option value="01:00">01:00</option>
+                        <option value="02:00">02:00</option>
+                        <option value="03:00">03:00</option>
+                        <option value="04:00">04:00</option>
+                        <option value="05:00">05:00</option>
+                        <option value="06:00">06:00</option>
+                        <option value="07:00">07:00</option>
+                        <option value="08:00">08:00</option>
+                        <option value="09:00">09:00</option>
+                        <option value="10:00">10:00</option>
+                        <option value="11:00">11:00</option>
+                        <option value="12:00">12:00</option>
+                        <option value="13:00">13:00</option>
+                        <option value="14:00">14:00</option>
+                        <option value="15:00">15:00</option>
+                        <option value="16:00">16:00</option>
+                        <option value="17:00">17:00</option>
+                        <option value="18:00">18:00</option>
+                        <option value="19:00">19:00</option>
+                        <option value="20:00">20:00</option>
+                        <option value="21:00">21:00</option>
+                        <option value="22:00">22:00</option>
+                        <option value="23:00">23:00</option>
+                      </select>
+                    </div>
+                  </div>
+                </p>
+                <p class="available">Cet article est disponible à ces dates</p>
+                <!-- p.available.unavailable Cet article est disponible à ces dates-->
+              </div>
+              <div class="part">
+                <p class="mrg-0">Durée de la location : <b class="period-days">3 jours </b>et <b class="period-hours">9 heures</b></p>
+                <p class="price mrg-0">Prix de la location :
+                  <big class="text-primary">&nbsp;168€</big>
+                </p>
+                <p class="mrg-0">Assurance incluse</p>
+              </div>
+              <div class="part">
+                <button type="submit" class="btn success calendar-ok"><span></span>Réservez</button>
+                <p class="mrg-v-1"><small>Cette somme vous sera débitée lorsque le propriétaire validera la location</small></p>
+              </div>
+            </form>
+          </section>
+          <section class="add-to-wishlist">
+            <div class="section-body">
+              <div class="part"><a href="#" class="btn gray mrg-0"><span class="icon-heart-empty"></span>Ajoutez à votre liste d’envies</a></div>
+            </div>
+          </section>
+          <section class="owner-information">
+            <div class="section-header">
+              <h4>Contactez-moi</h4>
+            </div>
+            <div class="section-body">
+              <div class="part">
+                <div class="block-thumbnail">
+                  <div class="thumbnail-img"><a href="#"><img src="../../static/img/home-products/declare2r.png" alt=""></a></div>
+                  <div class="thumbnail-content">
+                    <h5><a href="#">Gaspard Kroutchev</a></h5>
+                    <div class="rate"><span class="icon-star"></span><span class="icon-star current-rate"></span><span class="icon-star"></span><span class="icon-star"></span><span class="icon-star"></span>
+                    </div>
+                    <p>Membre depuis le<br><span>12 Juillet 2013</span></p>
+                  </div>
+                </div>
+              </div>
+              <div class="part"><a href="#" class="btn success send-message"><span></span>Envoyez un message</a><a href="#" class="btn success call"><span></span>Appelez</a>
+                <ul class="nav stats">
+                  <li class="published-ads"><span>
+                      <big class="text-success">7 </big></span><span>annonces publiées</span></li>
+                  <li class="bookings"><span>
+                      <big class="text-success">12 </big></span><span>locations effectués</span></li>
+                  <li class="rating"><span>
+                      <big class="text-success">16 </big></span><span>évalutations</span></li>
+                  <li class="percent-of-responce"><span>
+                      <big class="text-success">98% </big></span><span>de taux de réponse</span></li>
+                  <li class="time-to-answer"><span>
+                      <big class="text-success">6h </big></span><span>de temps de réponse en moyenne</span></li>
+                </ul>
+              </div>
+              <div class="part connection clearfix">
+                <div class="col-sm-4 pad-0"><a href="#" class="friend-photo-wrapper"><img src="../../static/img/home-products/friend1.png" alt=""></a><a href="#" class="friend-photo-wrapper"><img src="../../static/img/home-products/friend2.png" alt=""></a></div>
+                <div class="col-sm-8 pad-0">
+                  <p class="mrg-0"><small><a href="#">Philippe Dupré </a>et <a href="#">Tony Finn </a>sont amis avec le propriétaire.</small></p>
+                </div>
+              </div>
+            </div>
+          </section>
+          <section class="similar-listing">
+            <div class="section-header">
+              <h4>Annonces similaires</h4>
+            </div>
+            <div class="section-body">
+              <div class="part">
+                <ul class="nav">
+                  <li>
+                    <div class="thumbnail-img"><a href="#"><img src="../../static/img/home-products/audi2.jpg" alt=""></a></div>
+                    <div class="thumbnail-content">
+                      <h6><a href="#">Audi - A3</a></h6>
+                      <p><small>Paris</small></p><span class="badge price">100€ /jour</span>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="thumbnail-img"><a href="#"><img src="../../static/img/home-products/audi2.jpg" alt=""></a></div>
+                    <div class="thumbnail-content">
+                      <h6><a href="#">Audi - A3</a></h6>
+                      <p><small>Paris</small></p><span class="badge price">100€ /jour</span>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="thumbnail-img"><a href="#"><img src="../../static/img/home-products/audi2.jpg" alt=""></a></div>
+                    <div class="thumbnail-content">
+                      <h6><a href="#">Audi - A3</a></h6>
+                      <p><small>Paris</small></p><span class="badge price">100€ /jour</span>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="thumbnail-img"><a href="#"><img src="../../static/img/home-products/audi2.jpg" alt=""></a></div>
+                    <div class="thumbnail-content">
+                      <h6><a href="#">Audi - A3</a></h6>
+                      <p><small>Paris</small></p><span class="badge price">100€ /jour</span>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="thumbnail-img"><a href="#"><img src="../../static/img/home-products/audi2.jpg" alt=""></a></div>
+                    <div class="thumbnail-content">
+                      <h6><a href="#">Audi - A3</a></h6>
+                      <p><small>Paris</small></p><span class="badge price">100€ /jour</span>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </section>
+          <section class="connected-with-owner">
+            <div class="section-body">
+              <div class="part text-center">
+                <div class="facebook-box"><span class="icon-facebook"></span></div><a href="#" class="btn info mrg-0">Connectez-vous avec Facebook</a>
+                <p>Vérifiez si un de vos amis connait ce propriétaire ?</p>
+              </div>
+            </div>
+          </section>
+        </aside>
+      </div>
+    </article>
+    <footer>
+      <section class="row-fluid insurances framing-h">
+        <div class="container mrg-v-6">
+          <ul class="nav nav-tabs nav-justified ov-hidden text-nowrap text-center">
+            <li class="divide"></li>
+            <li>
+              <div class="insurances-img"><span class="payment"></span></div>
+              <h5>Louez en toute sécurité</h5>
+              <p>Transactions en ligne sécurisées.</p>
+              <p>Aucun échange d'argent.</p>
+            </li>
+            <li class="divide"></li>
+            <li>
+              <div class="insurances-img"><span class="serenity"></span></div>
+              <h5>Louez en toute sérénité</h5>
+              <p>Assurance incluse et automatique.</p>
+              <p>Caution en ligne.</p>
+            </li>
+            <li class="divide"></li>
+            <li>
+              <div class="insurances-img"><span class="simplicity"></span></div>
+              <h5>Louez en toute simplicité</h5>
+              <p>Service client dédié 7j/7.</p>
+              <p>Dépot d'annonce gratuite.</p>
+            </li>
+            <li class="divide"></li>
+            <li>
+              <div class="insurances-img"><span class="trust"></span></div>
+              <h5>Louez en toute confiance</h5>
+              <p>Notes et commentaires en ligne.</p>
+              <p>Messagerie en ligne.</p>
+            </li>
+          </ul>
+        </div>
+      </section>
+      <section class="row-fluid footer-links">
+        <div class="container mrg-v-6">
+          <ul class="nav nav-tabs nav-justified ov-hidden">
+            <li class="divide"></li>
+            <li class="text-center ul-wrapper">
+              <div class="centering text-left">
+                <h4 class="text-nowrap">Le concept eloue</h4>
+                <ul class="nav">
+                  <li class="link-wrapper mrg-v-1"><a href="#" class="pad-0">Comment ça marche ?</a></li>
+                  <li class="link-wrapper mrg-v-1"><a href="#" class="pad-0">Simulez vos revenus</a></li>
+                  <li class="link-wrapper mrg-v-1"><a href="#" class="pad-0">Questions fréquentes</a></li>
+                  <li class="link-wrapper mrg-v-1"><a href="#" class="pad-0">Conseils pour les propriétaires</a></li>
+                  <li class="link-wrapper mrg-v-1"><a href="#" class="pad-0">Conseils pour les locataires</a></li>
+                  <li class="link-wrapper mrg-v-1"><a href="#" class="pad-0">Témoignages</a></li>
+                </ul>
+              </div>
+            </li>
+            <li class="divide"></li>
+            <li class="text-center ul-wrapper">
+              <div class="centering text-left">
+                <h4 class="text-nowrap">Pourquoi choisir eloue</h4>
+                <ul class="nav">
+                  <li class="link-wrapper mrg-v-1"><a href="#" class="pad-0">Assurance sérénité</a></li>
+                  <li class="link-wrapper mrg-v-1"><a href="#" class="pad-0">Paiement et caution sécurisés</a></li>
+                  <li class="link-wrapper mrg-v-1"><a href="#" class="pad-0">Contrats de location</a></li>
+                  <li class="link-wrapper mrg-v-1"><a href="#" class="pad-0">Parrainez vos proches</a></li>
+                  <li class="link-wrapper mrg-v-1"><a href="#" class="pad-0">L’offre e-loue Pro</a></li>
+                </ul>
+              </div>
+            </li>
+            <li class="divide"></li>
+            <li class="text-center ul-wrapper">
+              <div class="centering text-left">
+                <h4 class="text-nowrap">L’entreprise e-loue</h4>
+                <ul class="nav">
+                  <li class="link-wrapper mrg-v-1"><a href="#" class="pad-0">Qui sommes-nous ?</a></li>
+                  <li class="link-wrapper mrg-v-1"><a href="#" class="pad-0">Nos partenaires</a></li>
+                  <li class="link-wrapper mrg-v-1"><a href="#" class="pad-0">Respect de la vie privée</a></li>
+                  <li class="link-wrapper mrg-v-1"><a href="#" class="pad-0">Conditions générales</a></li>
+                  <li class="link-wrapper mrg-v-1"><a href="#" class="pad-0">Mentions légales</a></li>
+                </ul>
+              </div>
+            </li>
+            <li class="divide"></li>
+            <li class="text-center ul-wrapper">
+              <div class="centering text-left">
+                <h4 class="text-nowrap">En savoir plus</h4>
+                <ul class="nav">
+                  <li class="link-wrapper mrg-v-1"><a href="#" class="pad-0">Espace presse</a></li>
+                  <li class="link-wrapper mrg-v-1"><a href="#" class="pad-0">Espace job</a></li>
+                  <li class="link-wrapper mrg-v-1"><a href="#" class="pad-0">Contactez-nous</a></li>
+                  <li class="link-wrapper mrg-v-1"><a href="#" class="pad-0">E-loue en mobilité</a></li>
+                  <li class="link-wrapper mrg-v-1"><a href="#" class="pad-0">Blog e-loue</a></li>
+                </ul>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </section>
+      <section class="row-fluid rss pad-v-4">
+        <div class="container">
+          <div class="row">
+            <div class="col-sm-4">
+              <p>Abonnez-vous à la newsletter e-loue pour être informé des bonnes affaires et de nos actualités. <a href="#"><b>Déjà 2 Millions d'inscrits !</b></a></p>
+            </div>
+            <div class="col-sm-6">
+              <form role="" class="form-inline">
+                <input type="email" placeholder="Saisissez votre email..." class="form-control">
+                <button type="submit" class="btn btn-default">Validez</button>
+              </form>
+            </div>
+            <div class="col-sm-2 text-right">
+              <div class="social-btns"><a href="#"><span class="icon-facebook"></span></a><a href="#"><span class="icon-twitter"></span></a><a href="#"><span class="icon-google-plus"></span></a></div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </footer>
+    <div id="sign-in" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
+      <div class="modal-dialog">
+        <div class="modal-content text-center">
+          <div class="modal-header">
+            <button type="button" data-dismiss="modal" class="close"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            <h4 class="modal-title">Inscription</h4>
+          </div>
+          <div class="modal-body">
+            <h3>Inscrivez-vous en 2 secondes</h3>
+            <div class="form-group"><a href="#" class="btn info"><span class="icon-facebook"></span>Inscription via Facebook</a></div>
+            <div class="form-group"><a href="#" class="btn danger"><span class="icon-google-plus"></span>Inscription via Google</a></div>
+            <p class="info">Nous ne publierons jamais rien sur votre profil (sauf si vous le demandez) <br>Vos données personnelles ne seront jamais cédées ou vendues.</p><span class="or"></span>
+            <h3>Inscrivez-vous en 30 secondes</h3>
+            <form>
+              <div class="classic-form">
+                <div class="form-group">
+                  <input type="text" placeholder="Nom *" required class="form-control">
+                </div>
+                <div class="form-group">
+                  <input type="text" placeholder="Prénom *" required class="form-control">
+                </div>
+                <div class="form-group">
+                  <input type="text" placeholder="Code postal *" required class="form-control">
+                </div>
+                <div class="form-group">
+                  <input type="email" placeholder="E-mail *" required class="form-control">
+                </div>
+                <div class="form-group">
+                  <input type="password" placeholder="Mot de passe *" required class="form-control">
+                </div>
+                <div class="form-group">
+                  <input type="password" placeholder="Confirmation *" required class="form-control">
+                </div>
+                <div class="form-group">
+                  <button type="submit" class="btn success">Inscription</button>
+                </div>
+              </div>
+              <div class="form-group">
+                <button class="btn success registration">Inscription via Email</button>
+              </div>
+              <div class="checkbox">
+                <label for="inform">
+                  <input type="checkbox" checked id="inform"><span class="icon-ok"></span>
+                </label>Tenez moi informé de l'actualité et des bonnes affaires e-loue
+              </div>
+            </form>
+            <p>En créant un compte e-loue, vous acceptez les Conditions Générales<br>et la Politique de Confidentialité de notre site</p><span class="or"></span>
+            <h4>Vous êtes déjà membre e-loue ?</h4><a href="#connectez-vous" data-toggle="modal" data-target="#log-in" data-dismiss="modal" class="modal-fotter-link connexion">Connexion</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="log-in" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
+      <div class="modal-dialog">
+        <div class="modal-content text-center">
+          <div class="modal-header">
+            <button type="button" data-dismiss="modal" class="close"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            <h4 class="modal-title">Connexion</h4>
+          </div>
+          <div class="modal-body">
+            <h3>Connectez-vous à votre compte</h3>
+            <div class="form-group"><a href="#" class="btn info"><span class="icon-facebook"></span>Connexion via Facebook</a></div>
+            <div class="form-group"><a href="#" class="btn danger"><span class="icon-google-plus"></span>Connexion via Google</a></div>
+            <p class="info">Nous ne publierons jamais rien sur votre profil (sauf si vous le demandez) <br>Vos données personnelles ne seront jamais cédées ou vendues.</p><span class="or"></span>
+            <form>
+              <div class="form-group">
+                <input type="email" placeholder="E-mail" required class="form-control">
+              </div>
+              <div class="form-group mrg-v-0">
+                <input type="password" placeholder="Mot de passe" required class="form-control">
+              </div>
+              <div class="form-group mrg-v-0 clearfix mrg-v-2">
+                <div class="checkbox pull-left">
+                  <label for="remember-me">
+                    <input type="checkbox" checked id="remember-me"><span class="icon-ok"></span>
+                  </label>Se souvenir de moi
+                </div>
+                <div class="forgot-password pull-right"><a href="#">Mot de passe oublié</a></div>
+              </div>
+              <div class="form-group mrg-v-2">
+                <button type="submit" class="btn success">Connexion</button>
+              </div>
+            </form><span class="or"></span>
+            <h4>Vous êtes déjà membre e-loue ?</h4><a href="#" data-toggle="modal" data-target="#sign-in" data-dismiss="modal" class="modal-fotter-link connexion">Inscription</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>

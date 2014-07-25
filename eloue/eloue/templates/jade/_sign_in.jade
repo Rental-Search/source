@@ -1,0 +1,55 @@
+.modal.fade#sign-in(tabindex="-1" role="dialog" aria-hidden="true")
+	.modal-dialog
+		.modal-content.text-center
+			.modal-header
+				button(type="button" data-dismiss="modal").close
+					span(aria-hidden="true")&times;
+					span.sr-only Close
+				h4.modal-title Inscription
+			.modal-body
+				h3 Inscrivez-vous en 2 secondes
+				.form-group
+					a(href="#").btn.info
+						span.icon-facebook
+						| Inscription via Facebook
+				.form-group
+					a(href="#").btn.danger
+						span.icon-google-plus
+						| Inscription via Google
+				p.info
+					| Nous ne publierons jamais rien sur votre profil (sauf si vous le demandez) 
+					br
+					| Vos données personnelles ne seront jamais cédées ou vendues.
+				span.or
+				h3 Inscrivez-vous en 30 secondes
+				form
+					.classic-form
+						.form-group
+							input(type="text" placeholder="Nom *" required).form-control
+						.form-group
+							input(type="text" placeholder="Prénom *" required).form-control
+						.form-group
+							input(type="text" placeholder="Code postal *" required).form-control
+						.form-group
+							input(type="email" placeholder="E-mail *" required).form-control
+						.form-group
+							input(type="password" placeholder="Mot de passe *" required).form-control
+						.form-group
+							input(type="password" placeholder="Confirmation *" required).form-control
+						.form-group
+							button(type="submit").btn.success
+								| Inscription
+					.form-group
+						button.btn.success.registration Inscription via Email
+					.checkbox
+						label(for="inform")
+							input(type="checkbox" checked)#inform
+							span.icon-ok
+						| Tenez moi informé de l'actualité et des bonnes affaires e-loue
+				p
+					| En créant un compte e-loue, vous acceptez les Conditions Générales
+					br
+					| et la Politique de Confidentialité de notre site
+				span.or
+				h4 Vous êtes déjà membre e-loue ?
+				a( href = "#connectez-vous" data-toggle="modal" data-target="#log-in" data-dismiss="modal").modal-fotter-link.connexion Connexion

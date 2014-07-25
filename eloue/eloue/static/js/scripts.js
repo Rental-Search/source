@@ -7,7 +7,6 @@ $(document).ready(function(){
 	$('.registration').on('click', function(){
 		classic_form.slideDown();
 		$(this).slideUp();
-		console.log($(this))
 	});
 	$('select').chosen();
 
@@ -22,6 +21,5 @@ $(document).ready(function(){
 		} else {
 			$(slide_imgs[index]).addClass('expand-h');
 		}
-		console.log(slide_imgs.length);
 	};
 });

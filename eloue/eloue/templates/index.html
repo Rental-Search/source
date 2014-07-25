@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en"></html>
+<head>
+  <title>e-loue</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700">
+  <link rel="stylesheet" href="../static/css/styles.css">
+  <link rel="stylesheet" href="../static/css/chosen.min.css">
+  <link rel="shortcut icon" href="../static/img/favicon.ico">
+  <!-- for IE < 9 -->
+  <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+  <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+  <script src="http://jamesallardice.github.io/Placeholders.js/assets/js/placeholders.min.js"></script>
+  <script src="http://maps.googleapis.com/maps/api/js?sensor=false&amp;libraries=places"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+  <script src="../static/js/chosen.jquery.min.js"></script>
+  <script src="../static/js/formmapper.js"></script>
+  <script src="../static/js/bootstrap/modal.js"></script>
+  <script src="../static/js/bootstrap/dropdown.js"></script>
+  <script src="../static/js/bootstrap/carousel.js"></script>
+  <script src="../static/js/scripts.js"></script>
+</head>
+<body>
+  <div class="container-flex">
+    <header>
+      <div class="header-site">
+        <div class="container signs-links pad-v-2">
+          <ul role="tablist" class="nav without-spaces">
+            <li class="divide"></li>
+            <li><span>Bonjour, <a href="#inscrivez-vous" data-toggle="modal" data-target="#sign-in">inscrivez-vous </a>ou <a href="#connectez-vous" data-toggle="modal" data-target="#log-in">connectez-vous</a></span></li>
+            <li class="divide"></li>
+            <li><span>Vous êtes un loueur professionnel, découvrez les <a href="#">offers e-loue Pro</a></span></li>
+            <li class="divide"></li>
+            <li><span>Appelez-nous au <b>0826.800.200 </b>(0,15&euro; / min)</span></li>
+          </ul>
+        </div>
+        <div class="framing-h pad-v-3">
+          <div class="container search-form">
+            <div class="row">
+              <div class="col-sm-2 logo-wrapper"><a href="/templates"><img src="../static/img/logo.png" alt="logo"></a></div>
+              <div class="col-sm-7">
+                <div class="input-group">
+                  <input type="text" placeholder="Que voulez-vous louer ?" title="Que voulez-vous louer ?" class="form-control what-field">
+                  <div class="input-group where-field-wrapper"><span class="sprite-location"></span>
+                    <input type="text" placeholder="Où ça ?" title="Où ça ?" id="geolocate" class="form-control where-field">
+                  </div>
+                  <div class="input-group-btn">
+                    <button type="button" class="btn btn-default btn-search"><span class="icon-search"></span></button>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-3">
+                <button type="button" class="btn btn-success">Déposez une annonce</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+    <nav>
+      <div class="nav-home container">
+        <ul class="nav without-spaces row">
+          <li><a href="#Logement" class="pad-v-2">Logement</a></li>
+          <li><a href="#Jardinage" class="pad-v-2">Jardinage</a></li>
+          <li><a href="#Automobile" class="pad-v-2">Automobile</a></li>
+          <li><a href="#Image et son" class="pad-v-2">Image et son</a></li>
+          <li><a href="#Bricolage" class="pad-v-2">Bricolage</a></li>
+          <li><a href="#Mode et accessoire" class="pad-v-2">Mode et accessoire</a></li>
+          <li><a href="#Réceprion" class="pad-v-2">Réceprion</a></li>
+          <li><a href="#Santé et Bien être" class="pad-v-2">Santé et Bien être</a></li>
+          <li><a href="#Autres" class="pad-v-2">Autres</a></li>
+        </ul>
+      </div>
+    </nav>
+    <article>
+      <section class="row-fluid banner hidden-xs text-center ov-h-v"><img src="../static/img/banner.jpg">
+        <div class="container">
+          <div class="banner-content text-uppercase pad-v-5">
+            <h2 class="mrg-v-2">louez un objet, une voiture...<br>près de chez vous, en tout sécurité !</h2><a href="#">une communauté de confiance</a>
+          </div>
+        </div>
+      </section>
+      <section class="row-fluid insurances framing-h">
+        <div class="container mrg-v-6">
+          <ul class="nav nav-tabs nav-justified ov-hidden text-nowrap text-center">
+            <li class="divide"></li>
+            <li>
+              <div class="insurances-img"><span class="payment"></span></div>
+              <h5>Louez en toute sécurité</h5>
+              <p>Transactions en ligne sécurisées.</p>
+              <p>Aucun échange d'argent.</p>
+            </li>
+            <li class="divide"></li>
+            <li>
+              <div class="insurances-img"><span class="serenity"></span></div>
+              <h5>Louez en toute sérénité</h5>
+              <p>Assurance incluse et automatique.</p>
+              <p>Caution en ligne.</p>
+            </li>
+            <li class="divide"></li>
+            <li>
+              <div class="insurances-img"><span class="simplicity"></span></div>
+              <h5>Louez en toute simplicité</h5>
+              <p>Service client dédié 7j/7.</p>
+              <p>Dépot d'annonce gratuite.</p>
+            </li>
+            <li class="divide"></li>
+            <li>
+              <div class="insurances-img"><span class="trust"></span></div>
+              <h5>Louez en toute confiance</h5>
+              <p>Notes et commentaires en ligne.</p>
+              <p>Messagerie en ligne.</p>
+            </li>
+          </ul>
+        </div>
+      </section>
+      <section class="row-fluid product-list">
+        <div class="container mrg-v-6">
+          <h3 class="text-center"><span class="products-count">324 654 </span>annonces de location dans <span class="products-location">toute la France</span></h3>
+          <ul class="row nav mrg-v-4">
+            <li class="col-sm-6 col-md-3 item">
+              <div class="thumbnail"><a href="products/product_detail.html" class="img-wrapper"><img src="../static/img/home-products/bike.jpg"><span class="fog"></span></a>
+                <div class="info text-nowrap">
+                  <h6><a href="#">Bike Bike Bike Bike Bike Bike Bike Bike Bike Bike </a></h6>
+                  <p>Aubervillies</p><a href="#" class="declarer"><img src="../static/img/home-products/declarer.png" alt=""></a>
+                </div><span class="badge price">56&euro; /jour</span>
+              </div>
+            </li>
+            <li class="col-sm-6 col-md-3 item">
+              <div class="thumbnail"><a href="products/product_detail.html" class="img-wrapper"><img src="../static/img/home-products/audi.jpg"><span class="fog"></span></a>
+                <div class="info text-nowrap">
+                  <h6><a href="#">Audi - A3</a></h6>
+                  <p>Paris Paris Paris Paris Paris Paris Paris Paris Paris Paris </p><a href="#" class="declarer"><img src="../static/img/home-products/declarer.png" alt=""></a>
+                </div><span class="badge price">100&euro; /jour</span>
+              </div>
+            </li>
+            <li class="col-sm-6 col-md-3 item">
+              <div class="thumbnail"><a href="products/product_detail.html" class="img-wrapper"><img src="../static/img/home-products/tent.jpg"><span class="fog"></span></a>
+                <div class="info text-nowrap">
+                  <h6><a href="#">Tante tip indien</a></h6>
+                  <p>Nantes</p><a href="#" class="declarer"><img src="../static/img/home-products/declarer.png" alt=""></a>
+                </div><span class="badge price">56&euro; /jour</span>
+              </div>
+            </li>
+            <li class="col-sm-6 col-md-3 item">
+              <div class="thumbnail"><a href="products/product_detail.html" class="img-wrapper"><img src="../static/img/home-products/bike.jpg"><span class="fog"></span></a>
+                <div class="info text-nowrap">
+                  <h6><a href="#">Bike Bike Bike Bike Bike Bike Bike Bike Bike Bike </a></h6>
+                  <p>Aubervillies</p><a href="#" class="declarer"><img src="../static/img/home-products/declarer.png" alt=""></a>
+                </div><span class="badge price">56&euro; /jour</span>
+              </div>
+            </li>
+            <li class="col-sm-6 col-md-3 item">
+              <div class="thumbnail"><a href="products/product_detail.html" class="img-wrapper"><img src="../static/img/home-products/audi.jpg"><span class="fog"></span></a>
+                <div class="info text-nowrap">
+                  <h6><a href="#">Audi - A3</a></h6>
+                  <p>Paris Paris Paris Paris Paris Paris Paris Paris Paris Paris </p><a href="#" class="declarer"><img src="../static/img/home-products/declarer.png" alt=""></a>
+                </div><span class="badge price">100&euro; /jour</span>
+              </div>
+            </li>
+            <li class="col-sm-6 col-md-3 item">
+              <div class="thumbnail"><a href="products/product_detail.html" class="img-wrapper"><img src="../static/img/home-products/tent.jpg"><span class="fog"></span></a>
+                <div class="info text-nowrap">
+                  <h6><a href="#">Tante tip indien</a></h6>
+                  <p>Nantes</p><a href="#" class="declarer"><img src="../static/img/home-products/declarer.png" alt=""></a>
+                </div><span class="badge price">56&euro; /jour</span>
+              </div>
+            </li>
+            <li class="col-sm-6 col-md-3 item">
+              <div class="thumbnail"><a href="products/product_detail.html" class="img-wrapper"><img src="../static/img/home-products/bike.jpg"><span class="fog"></span></a>
+                <div class="info text-nowrap">
+                  <h6><a href="#">Bike Bike Bike Bike Bike Bike Bike Bike Bike Bike </a></h6>
+                  <p>Aubervillies</p><a href="#" class="declarer"><img src="../static/img/home-products/declarer.png" alt=""></a>
+                </div><span class="badge price">56&euro; /jour</span>
+              </div>
+            </li>
+            <li class="col-sm-6 col-md-3 item">
+              <div class="thumbnail"><a href="products/product_detail.html" class="img-wrapper"><img src="../static/img/home-products/audi.jpg"><span class="fog"></span></a>
+                <div class="info text-nowrap">
+                  <h6><a href="#">Audi - A3</a></h6>
+                  <p>Paris Paris Paris Paris Paris Paris Paris Paris Paris Paris </p><a href="#" class="declarer"><img src="../static/img/home-products/declarer.png" alt=""></a>
+                </div><span class="badge price">100&euro; /jour</span>
+              </div>
+            </li>
+          </ul>
+          <div class="row explore">
+            <button type="button" class="btn btn-success btn-explore pad-h-3"><span class="icon-search"></span>Explorez toutes les annonces</button>
+          </div>
+        </div>
+      </section>
+      <section class="row-fluid float-comments framing-h">
+        <div class="container">
+          <div class="row">
+            <div class="col-sm-6">
+              <ul class="nav">
+                <li class="comment col-sm-10"><a href="" class="clearfix"><img src="../static/img/home-products/declarer.png" alt="" class="autor-img">
+                    <p class="text">Merci pour ton offre Jules, grâce à toi j’ai pu partir en week-end tranquille... :-)</p>
+                    <p class="info">Par <b class="autor-name">Philipe </b>il y a <span class="time">23 min</span></p>
+                    <h6><b>Audi 13 - Vileneuve le Roi (94)</b></h6></a></li>
+                <li class="comment col-sm-10 test2"><a href="" class="clearfix"><img src="../static/img/home-products/declarer.png" alt="" class="autor-img">
+                    <p class="text">Merci pour ton offre Jules, grâce à toi j’ai pu partir en week-end tranquille... :-)</p>
+                    <p class="info">Par <b class="autor-name">Philipe </b>il y a <span class="time">23 min</span></p>
+                    <h6><b>Audi 13 - Vileneuve le Roi (94)</b></h6></a></li>
+              </ul>
+            </div>
+            <div class="col-sm-6">
+              <ul class="nav">
+                <li class="comment col-sm-10 test"><a href="" class="clearfix"><img src="../static/img/home-products/declarer.png" alt="" class="autor-img">
+                    <p class="text">Merci pour ton offre Jules, grâce à toi j’ai pu partir en week-end tranquille... :-)</p>
+                    <p class="info">Par <b class="autor-name">Philipe </b>il y a <span class="time">23 min</span></p>
+                    <h6><b>Audi 13 - Vileneuve le Roi (94)</b></h6></a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="decorated-houses"></div>
+      </section>
+      <section class="row-fluid location-list">
+        <div class="container mrg-v-6">
+          <h3>Les viles les plus actives</h3>
+          <div class="row">
+            <ul class="nav nav-tabs nav-justified ov-hidden">
+              <li class="divide"></li>
+              <li>
+                <ul class="nav">
+                  <li class="text-left text-nowrap item-city">
+                    <div class="col-sm-8"><a href="#" class="link-success-color">paris</a></div>
+                    <div class="col-sm-4"><span class="actives-count">123 254</span></div>
+                  </li>
+                  <li class="text-left text-nowrap item-city">
+                    <div class="col-sm-8"><a href="#" class="link-success-color">lyon</a></div>
+                    <div class="col-sm-4"><span class="actives-count">98 453</span></div>
+                  </li>
+                  <li class="text-left text-nowrap item-city">
+                    <div class="col-sm-8"><a href="#" class="link-success-color">toulouse</a></div>
+                    <div class="col-sm-4"><span class="actives-count">90 657</span></div>
+                  </li>
+                </ul>
+              </li>
+              <li class="divide"></li>
+              <li>
+                <ul class="nav">
+                  <li class="text-left text-nowrap item-city">
+                    <div class="col-sm-8"><a href="#" class="link-success-color">nantes</a></div>
+                    <div class="col-sm-4"><span class="actives-count">123 254</span></div>
+                  </li>
+                  <li class="text-left text-nowrap item-city">
+                    <div class="col-sm-8"><a href="#" class="link-success-color">rennes</a></div>
+                    <div class="col-sm-4"><span class="actives-count">98 453</span></div>
+                  </li>
+                  <li class="text-left text-nowrap item-city">
+                    <div class="col-sm-8"><a href="#" class="link-success-color">bordeaux</a></div>
+                    <div class="col-sm-4"><span class="actives-count">90 657</span></div>
+                  </li>
+                </ul>
+              </li>
+              <li class="divide"></li>
+              <li>
+                <ul class="nav">
+                  <li class="text-left text-nowrap item-city">
+                    <div class="col-sm-8"><a href="#" class="link-success-color">lille</a></div>
+                    <div class="col-sm-4"><span class="actives-count">123 254</span></div>
+                  </li>
+                  <li class="text-left text-nowrap item-city">
+                    <div class="col-sm-8"><a href="#" class="link-success-color">montpelier</a></div>
+                    <div class="col-sm-4"><span class="actives-count">98 453</span></div>
+                  </li>
+                  <li class="text-left text-nowrap item-city">
+                    <div class="col-sm-8"><a href="#" class="link-success-color">rouen</a></div>
+                    <div class="col-sm-4"><span class="actives-count">90 657</span></div>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </section>
+    </article>
+    <main>
+      <section class="row-fluid download-mobile-apps framing-h">
+        <div class="container">
+          <div class="col-sm-9 mrg-v-8 row">
+            <h3>Les bonnes affaires e-loue, c'est (aussi) dans la poche</h3>
+            <p>Retrouvez toutes les fonctionnalités que vous aimez sur iPhone, iPad et Android.</p>
+            <div class="row mrg-v-1">
+              <div class="col-sm-6"><a href="#"><img src="../static/img/btn-google-play.png"></a><a href="#"><img src="../static/img/btn-app-store.png"></a></div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section class="row-fluid watch-video">
+        <div class="container mrg-v-8">
+          <div class="row">
+            <div class="col-sm-6">
+              <div class="video">
+                <div class="smoke"></div><img src="../static/img/video-screen.jpg" alt=""><span class="btn-play"></span>
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="description">
+                <h3 class="margin-b-0">e-loue c'est simple, efficace <br>et sécurisé</h3>
+                <p class="lg-ln-height">
+                  Avec e-loue, mettez en location vos biens que n'utilisez pas 
+                  tous les jours : outils, appareils photo, voiture, tondeuse, 
+                  vidéo-projecteur, poussette... Gagnez de l'argent et
+                  rentabiliez vos achats en toure simplicité, et sans risque.
+                  Nos locations sont assurées et sécurisées.
+                </p><a href="#" class="link-success-color">en savoir plus</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section class="row-fluid professional-renter-content framing-h">
+        <div class="container mrg-v-8">
+          <div class="row">
+            <div class="col-sm-8">
+              <h3>Vous êtes loueur professionel ?<br>Nous aussi !</h3>
+              <p>
+                e-loue est le premier site de location dédié au particuliers et aux professionnels. 
+                Quelque soit votre localité et votre domaine d'activité (bricolage, photo/vidéo, jardinage, 
+                matériel de réception, déguisements, voitures,... ), nos membres seront intéressés par 
+                vos produits à louer : ils viennent chez nous pour ça !
+              </p><a href="#" class="link-success-color">en savoir plus</a>
+            </div>
+            <div class="col-sm-4">
+              <div class="img-wrapper text-right"><a href="#" class="link-sprite"></a></div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section class="row-fluid talk-about-us">
+        <div class="container text-center mrg-v-6">
+          <h3>Ils parlent de nous</h3>
+          <div class="row link-sprite"><a href="#">Ils parlent de nous</a></div>
+        </div>
+      </section>
+    </main>
+    <footer>
+      <section class="row-fluid footer-links framing-h">
+        <div class="container mrg-v-6">
+          <ul class="nav nav-tabs nav-justified ov-hidden">
+            <li class="divide"></li>
+            <li class="text-center ul-wrapper">
+              <div class="centering text-left">
+                <h4 class="text-nowrap">Le concept eloue</h4>
+                <ul class="nav">
+                  <li class="link-wrapper mrg-v-1"><a href="#" class="pad-0">Comment ça marche ?</a></li>
+                  <li class="link-wrapper mrg-v-1"><a href="#" class="pad-0">Simulez vos revenus</a></li>
+                  <li class="link-wrapper mrg-v-1"><a href="#" class="pad-0">Questions fréquentes</a></li>
+                  <li class="link-wrapper mrg-v-1"><a href="#" class="pad-0">Conseils pour les propriétaires</a></li>
+                  <li class="link-wrapper mrg-v-1"><a href="#" class="pad-0">Conseils pour les locataires</a></li>
+                  <li class="link-wrapper mrg-v-1"><a href="#" class="pad-0">Témoignages</a></li>
+                </ul>
+              </div>
+            </li>
+            <li class="divide"></li>
+            <li class="text-center ul-wrapper">
+              <div class="centering text-left">
+                <h4 class="text-nowrap">Pourquoi choisir eloue</h4>
+                <ul class="nav">
+                  <li class="link-wrapper mrg-v-1"><a href="#" class="pad-0">Assurance sérénité</a></li>
+                  <li class="link-wrapper mrg-v-1"><a href="#" class="pad-0">Paiement et caution sécurisés</a></li>
+                  <li class="link-wrapper mrg-v-1"><a href="#" class="pad-0">Contrats de location</a></li>
+                  <li class="link-wrapper mrg-v-1"><a href="#" class="pad-0">Parrainez vos proches</a></li>
+                  <li class="link-wrapper mrg-v-1"><a href="#" class="pad-0">L’offre e-loue Pro</a></li>
+                </ul>
+              </div>
+            </li>
+            <li class="divide"></li>
+            <li class="text-center ul-wrapper">
+              <div class="centering text-left">
+                <h4 class="text-nowrap">L’entreprise e-loue</h4>
+                <ul class="nav">
+                  <li class="link-wrapper mrg-v-1"><a href="#" class="pad-0">Qui sommes-nous ?</a></li>
+                  <li class="link-wrapper mrg-v-1"><a href="#" class="pad-0">Nos partenaires</a></li>
+                  <li class="link-wrapper mrg-v-1"><a href="#" class="pad-0">Respect de la vie privée</a></li>
+                  <li class="link-wrapper mrg-v-1"><a href="#" class="pad-0">Conditions générales</a></li>
+                  <li class="link-wrapper mrg-v-1"><a href="#" class="pad-0">Mentions légales</a></li>
+                </ul>
+              </div>
+            </li>
+            <li class="divide"></li>
+            <li class="text-center ul-wrapper">
+              <div class="centering text-left">
+                <h4 class="text-nowrap">En savoir plus</h4>
+                <ul class="nav">
+                  <li class="link-wrapper mrg-v-1"><a href="#" class="pad-0">Espace presse</a></li>
+                  <li class="link-wrapper mrg-v-1"><a href="#" class="pad-0">Espace job</a></li>
+                  <li class="link-wrapper mrg-v-1"><a href="#" class="pad-0">Contactez-nous</a></li>
+                  <li class="link-wrapper mrg-v-1"><a href="#" class="pad-0">E-loue en mobilité</a></li>
+                  <li class="link-wrapper mrg-v-1"><a href="#" class="pad-0">Blog e-loue</a></li>
+                </ul>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </section>
+      <section class="row-fluid rss pad-v-4">
+        <div class="container">
+          <div class="row">
+            <div class="col-sm-4">
+              <p>Abonnez-vous à la newsletter e-loue pour être informé des bonnes affaires et de nos actualités. <a href="#"><b>Déjà 2 Millions d'inscrits !</b></a></p>
+            </div>
+            <div class="col-sm-6">
+              <form role="" class="form-inline">
+                <input type="email" placeholder="Saisissez votre email..." class="form-control">
+                <button type="submit" class="btn btn-default">Validez</button>
+              </form>
+            </div>
+            <div class="col-sm-2 text-right">
+              <div class="social-btns"><a href="#"><span class="icon-facebook"></span></a><a href="#"><span class="icon-twitter"></span></a><a href="#"><span class="icon-google-plus"></span></a></div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </footer>
+    <div id="sign-in" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
+      <div class="modal-dialog">
+        <div class="modal-content text-center">
+          <div class="modal-header">
+            <button type="button" data-dismiss="modal" class="close"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            <h4 class="modal-title">Inscription</h4>
+          </div>
+          <div class="modal-body">
+            <h3>Inscrivez-vous en 2 secondes</h3>
+            <div class="form-group"><a href="#" class="btn info"><span class="icon-facebook"></span>Inscription via Facebook</a></div>
+            <div class="form-group"><a href="#" class="btn danger"><span class="icon-google-plus"></span>Inscription via Google</a></div>
+            <p class="info">Nous ne publierons jamais rien sur votre profil (sauf si vous le demandez) <br>Vos données personnelles ne seront jamais cédées ou vendues.</p><span class="or"></span>
+            <h3>Inscrivez-vous en 30 secondes</h3>
+            <form>
+              <div class="classic-form">
+                <div class="form-group">
+                  <input type="text" placeholder="Nom *" required class="form-control">
+                </div>
+                <div class="form-group">
+                  <input type="text" placeholder="Prénom *" required class="form-control">
+                </div>
+                <div class="form-group">
+                  <input type="text" placeholder="Code postal *" required class="form-control">
+                </div>
+                <div class="form-group">
+                  <input type="email" placeholder="E-mail *" required class="form-control">
+                </div>
+                <div class="form-group">
+                  <input type="password" placeholder="Mot de passe *" required class="form-control">
+                </div>
+                <div class="form-group">
+                  <input type="password" placeholder="Confirmation *" required class="form-control">
+                </div>
+                <div class="form-group">
+                  <button type="submit" class="btn success">Inscription</button>
+                </div>
+              </div>
+              <div class="form-group">
+                <button class="btn success registration">Inscription via Email</button>
+              </div>
+              <div class="checkbox">
+                <label for="inform">
+                  <input type="checkbox" checked id="inform"><span class="icon-ok"></span>
+                </label>Tenez moi informé de l'actualité et des bonnes affaires e-loue
+              </div>
+            </form>
+            <p>En créant un compte e-loue, vous acceptez les Conditions Générales<br>et la Politique de Confidentialité de notre site</p><span class="or"></span>
+            <h4>Vous êtes déjà membre e-loue ?</h4><a href="#connectez-vous" data-toggle="modal" data-target="#log-in" data-dismiss="modal" class="modal-fotter-link connexion">Connexion</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="log-in" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
+      <div class="modal-dialog">
+        <div class="modal-content text-center">
+          <div class="modal-header">
+            <button type="button" data-dismiss="modal" class="close"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            <h4 class="modal-title">Connexion</h4>
+          </div>
+          <div class="modal-body">
+            <h3>Connectez-vous à votre compte</h3>
+            <div class="form-group"><a href="#" class="btn info"><span class="icon-facebook"></span>Connexion via Facebook</a></div>
+            <div class="form-group"><a href="#" class="btn danger"><span class="icon-google-plus"></span>Connexion via Google</a></div>
+            <p class="info">Nous ne publierons jamais rien sur votre profil (sauf si vous le demandez) <br>Vos données personnelles ne seront jamais cédées ou vendues.</p><span class="or"></span>
+            <form>
+              <div class="form-group">
+                <input type="email" placeholder="E-mail" required class="form-control">
+              </div>
+              <div class="form-group mrg-v-0">
+                <input type="password" placeholder="Mot de passe" required class="form-control">
+              </div>
+              <div class="form-group mrg-v-0 clearfix mrg-v-2">
+                <div class="checkbox pull-left">
+                  <label for="remember-me">
+                    <input type="checkbox" checked id="remember-me"><span class="icon-ok"></span>
+                  </label>Se souvenir de moi
+                </div>
+                <div class="forgot-password pull-right"><a href="#">Mot de passe oublié</a></div>
+              </div>
+              <div class="form-group mrg-v-2">
+                <button type="submit" class="btn success">Connexion</button>
+              </div>
+            </form><span class="or"></span>
+            <h4>Vous êtes déjà membre e-loue ?</h4><a href="#" data-toggle="modal" data-target="#sign-in" data-dismiss="modal" class="modal-fotter-link connexion">Inscription</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>

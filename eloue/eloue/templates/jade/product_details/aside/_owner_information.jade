@@ -1,0 +1,48 @@
+.section-header
+	h4 Contactez-moi
+.section-body
+	.part
+		.block-thumbnail
+			.thumbnail-img
+				a(href="#")
+					img(src=STATIC_URL+"img/home-products/declare2r.png", alt="")
+			.thumbnail-content
+				h5 
+					a(href="#") Gaspard Kroutchev
+				include ../../_rate
+				p
+					| Membre depuis le
+					br
+					span 12 Juillet 2013
+	.part
+		a(href="#").btn.success.send-message
+			span
+			| Envoyez un message
+		a(href="#").btn.success.call
+			span
+			| Appelez
+		ul.nav.stats
+			-var stats = []
+			-stats.push({"name": "published-ads", "value": "7", "clarification": "annonces publiées"})
+			-stats.push({"name": "bookings", "value": "12", "clarification": "locations effectués"})
+			-stats.push({"name": "rating", "value": "16", "clarification": "évalutations"})
+			-stats.push({"name": "percent-of-responce", "value": "98%", "clarification": "de taux de réponse"})
+			-stats.push({"name": "time-to-answer", "value": "6h", "clarification": "de temps de réponse en moyenne"})
+			-each stat in stats
+				li(class="#{stat.name}")
+					span
+						big.text-success #{stat.value} 
+					span #{stat.clarification}
+	.part.connection.clearfix
+		.col-sm-4.pad-0
+			a(href="#").friend-photo-wrapper
+				img(src=STATIC_URL+"img/home-products/friend1.png", alt="")
+			a(href="#").friend-photo-wrapper
+				img(src=STATIC_URL+"img/home-products/friend2.png", alt="")
+		.col-sm-8.pad-0
+			p.mrg-0
+				small
+					a(href="#") Philippe Dupré 
+					| et 
+					a(href="#") Tony Finn 
+					| sont amis avec le propriétaire.

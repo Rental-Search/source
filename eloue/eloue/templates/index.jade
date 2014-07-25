@@ -1,0 +1,41 @@
+extends ./base
+
+block variables
+	-var STATIC_URL = '../static/'
+
+block content
+	header
+		include ./jade/_header_site
+	nav
+		include ./jade/_nav_home
+
+	article
+		section.row-fluid.banner.hidden-xs.text-center.ov-h-v
+			include ./jade/_banner
+		section.row-fluid.insurances.framing-h
+			include ./jade/_insurances
+		section.row-fluid.product-list
+			include ./jade/_product_list
+		section.row-fluid.float-comments.framing-h
+			include ./jade/_comments
+		section.row-fluid.location-list
+			include ./jade/_location_list
+
+	main
+		section.row-fluid.download-mobile-apps.framing-h
+			include ./jade/_download_mobile_apps
+		section.row-fluid.watch-video
+			include ./jade/_watch_video
+		section.row-fluid.professional-renter-content.framing-h
+			include ./jade/_professional_renter_content
+		section.row-fluid.talk-about-us
+			include ./jade/_talk_about_us
+
+	footer
+		section.row-fluid.footer-links.framing-h
+			include ./jade/_footer_links
+		section.row-fluid.rss.pad-v-4
+			include ./jade/_rss
+
+	include ./jade/_sign_in
+	include ./jade/_log_in

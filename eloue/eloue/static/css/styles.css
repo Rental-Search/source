@@ -339,8 +339,8 @@ th {
  * -------------------------- */
 @font-face {
   font-family: 'FontAwesome';
-  src: url("../fonts/fontawesome//fontawesome-webfont.eot?v=3.2.1");
-  src: url("../fonts/fontawesome//fontawesome-webfont.eot?#iefix&v=3.2.1") format("embedded-opentype"), url("../fonts/fontawesome//fontawesome-webfont.woff?v=3.2.1") format("woff"), url("../fonts/fontawesome//fontawesome-webfont.ttf?v=3.2.1") format("truetype"), url("../fonts/fontawesome//fontawesome-webfont.svg#fontawesomeregular?v=3.2.1") format("svg");
+  src: url("../fonts/fontawesome/fontawesome-webfont.eot?v=3.2.1");
+  src: url("../fonts/fontawesome/fontawesome-webfont.eot?#iefix&v=3.2.1") format("embedded-opentype"), url("../fonts/fontawesome/fontawesome-webfont.woff?v=3.2.1") format("woff"), url("../fonts/fontawesome/fontawesome-webfont.ttf?v=3.2.1") format("truetype"), url("../fonts/fontawesome/fontawesome-webfont.svg#fontawesomeregular?v=3.2.1") format("svg");
   font-weight: normal;
   font-style: normal;
 }
@@ -8314,7 +8314,7 @@ main p {
   left: 1em;
   margin: auto;
   z-index: 50;
-  background-image: url(../img/spritesheet.png);
+  background-image: url(../../static/img/spritesheet.png);
   background-position: -827px -67px;
   width: 14px;
   height: 16px;
@@ -8418,25 +8418,25 @@ main p {
   margin: auto;
 }
 .insurances .insurances-img .payment {
-  background-image: url(../img/spritesheet.png);
+  background-image: url(../../static/img/spritesheet.png);
   background-position: -687px -67px;
   width: 62px;
   height: 44px;
 }
 .insurances .insurances-img .serenity {
-  background-image: url(../img/spritesheet.png);
+  background-image: url(../../static/img/spritesheet.png);
   background-position: -751px -67px;
   width: 56px;
   height: 38px;
 }
 .insurances .insurances-img .simplicity {
-  background-image: url(../img/spritesheet.png);
+  background-image: url(../../static/img/spritesheet.png);
   background-position: -623px -67px;
   width: 62px;
   height: 54px;
 }
 .insurances .insurances-img .trust {
-  background-image: url(../img/spritesheet.png);
+  background-image: url(../../static/img/spritesheet.png);
   background-position: -580px -67px;
   width: 41px;
   height: 60px;
@@ -8665,7 +8665,7 @@ main p {
   width: 100%;
 }
 .watch-video .video span {
-  background-image: url(../img/spritesheet.png);
+  background-image: url(../../static/img/spritesheet.png);
   background-position: -140px -187px;
   width: 138px;
   height: 138px;
@@ -8677,7 +8677,7 @@ main p {
   margin: auto;
 }
 .watch-video .video:hover span {
-  background-image: url(../img/spritesheet.png);
+  background-image: url(../../static/img/spritesheet.png);
   background-position: 0px -187px;
   width: 138px;
   height: 138px;
@@ -8691,13 +8691,13 @@ main p {
 }
 .professional-renter-content .img-wrapper a {
   display: inline-block;
-  background-image: url(../img/spritesheet.png);
+  background-image: url(../../static/img/spritesheet.png);
   background-position: -290px 0px;
   width: 288px;
   height: 185px;
 }
 .professional-renter-content .img-wrapper a:hover {
-  background-image: url(../img/spritesheet.png);
+  background-image: url(../../static/img/spritesheet.png);
   background-position: 0px 0px;
   width: 288px;
   height: 185px;
@@ -8705,7 +8705,7 @@ main p {
 
 .talk-about-us a {
   display: inline-block;
-  background-image: url(../img/spritesheet.png);
+  background-image: url(../../static/img/spritesheet.png);
   background-position: -580px 0px;
   width: 892px;
   height: 65px;
@@ -9133,7 +9133,7 @@ aside .calendar span {
   display: inline-block;
   *display: inline;
   *zoom: 1;
-  background-image: url(../img/spritesheet.png);
+  background-image: url(../../static/img/spritesheet.png);
   background-position: -843px -67px;
   width: 16px;
   height: 16px;
@@ -9210,19 +9210,19 @@ aside .btn span {
   vertical-align: middle;
 }
 aside .btn.calendar-ok span {
-  background-image: url(../img/spritesheet.png);
+  background-image: url(../../static/img/spritesheet.png);
   background-position: -861px -67px;
   width: 16px;
   height: 16px;
 }
 aside .btn.call span {
-  background-image: url(../img/spritesheet.png);
+  background-image: url(../../static/img/spritesheet.png);
   background-position: -809px -67px;
   width: 16px;
   height: 16px;
 }
 aside .btn.send-message span {
-  background-image: url(../img/spritesheet.png);
+  background-image: url(../../static/img/spritesheet.png);
   background-position: -879px -67px;
   width: 16px;
   height: 14px;
