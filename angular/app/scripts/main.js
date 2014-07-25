@@ -11,9 +11,9 @@ require.config({
         "angular-cookies": "../bower_components/angular-cookies/angular-cookies.min",
         "angular-sanitize": "../bower_components/angular-sanitize/angular-sanitize.min",
         "moment": "../bower_components/moment/min/moment.min",
-        "angular-moment":"../bower_components/angular-moment/angular-moment.min",
+        "angular-moment": "../bower_components/angular-moment/angular-moment.min",
         "bootstrap-datepicker": "../bower_components/bootstrap-datepicker/js/bootstrap-datepicker",
-"datejs": "../bower_components/datejs/build/production/date.min",
+        "datejs": "../bower_components/datejs/build/production/date.min",
         "formmapper": "../scripts/formmapper"
     },
     shim: {

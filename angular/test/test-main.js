@@ -19,7 +19,12 @@ requirejs.config({
         "angular-route": "../bower_components/angular-route/angular-route.min",
         "angular-cookies": "../bower_components/angular-cookies/angular-cookies.min",
         "angular-sanitize": "../bower_components/angular-sanitize/angular-sanitize.min",
-        "angular-mocks": "../bower_components/angular-mocks/angular-mocks"
+        "angular-mocks": "../bower_components/angular-mocks/angular-mocks",
+        "moment": "../bower_components/moment/min/moment.min",
+        "angular-moment": "../bower_components/angular-moment/angular-moment.min",
+        "bootstrap-datepicker": "../bower_components/bootstrap-datepicker/js/bootstrap-datepicker",
+        "datejs": "../bower_components/datejs/build/production/date.min",
+        "formmapper": "../scripts/formmapper"
     },
 
     shim: {
@@ -33,7 +38,10 @@ requirejs.config({
             "exports": "angular.mock"
         },
         "jQuery": {exports: "jQuery"},
-        "bootstrap": ["jQuery"]
+        "bootstrap": ["jQuery"],
+        "moment": ["jQuery"],
+        "bootstrap-datepicker": ["jQuery"],
+        "formmapper": ["jQuery"]
     },
 
     // ask Require.js to load these files (all our tests)

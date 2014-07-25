@@ -2,35 +2,37 @@ define(["angular-mocks", "eloue/modules/booking/services/UserService"], function
 
     describe("Service: UserService", function () {
 
-        var UserService, scope,
-            usersResourceMock;
+        var UserService, usersResourceMock;
 
-        beforeEach(module('EloueApp'));
-        beforeEach(module('EloueApp.BookingModule'));
+        beforeEach(module("EloueApp"));
+        beforeEach(module("EloueApp.BookingModule"));
 
         beforeEach(function () {
             usersResourceMock = {get: function () {
-                console.log("User resource mock called");
             }};
 
             module(function($provide) {
                 $provide.value("Users", usersResourceMock);
-            })
+            });
         });
 
-        //TODO
-
-        beforeEach(inject(function ($rootScope, $controller) {
-            scope = $rootScope.$new();
-
+        beforeEach(inject(function (_UserService_) {
+            UserService = _UserService_;
             spyOn(usersResourceMock, "get").andCallThrough();
-
-            UserService = $controller('UserService', { $scope:scope, Users: usersResourceMock});
         }));
 
-        it('should make a call to Users service', function () {
-            scope.register();
-            expect(usersResourceMock.get).toHaveBeenCalled();
+        it("UserService should be not null", function() {
+            expect(!!UserService).toBe(true);
+        });
+
+        it("UserService should have a getUser function", function() {
+            expect(angular.isFunction(UserService.getUser)).toBe(true);
+        });
+
+        it("UserService should make a call to Users resource", function () {
+            var userId = 1;
+            UserService.getUser(userId);
+            expect(usersResourceMock.get).toHaveBeenCalledWith({id: userId});
         });
     });
 });

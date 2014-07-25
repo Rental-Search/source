@@ -52,25 +52,6 @@ define(["angular", "eloue/constants", "eloue/modules/user_management/UserManagem
                 if (userToken) {
                     $(".modal-backdrop").hide();
                     $location.path("/dashboard");
-//                    $.ajax({
-//                        url: Endpoints.api_url + "users/",
-//                        type: "POST",
-//                        headers: {
-//                            Authorization: "Bearer " + userToken
-//                        },
-//                        data: {},
-//                        success: function (data) {
-//                            console.log(data);
-//
-//                        },
-//                        error: function (jqXHR) {
-//                            if (jqXHR.status == 400) {
-//                                window.alert("An error occured: " + jqXHR.responseJSON);
-//                            } else {
-//                                window.alert("An error occured!");
-//                            }
-//                        }
-//                    });
                 }
             },
 
