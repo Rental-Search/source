@@ -2711,7 +2711,7 @@ pre code {
 }
 @media (min-width: 992px) {
   .container {
-    width: 965px;
+    width: 985px;
   }
 }
 @media (min-width: 1200px) {
@@ -8243,7 +8243,7 @@ h3 {
   font-weight: 300;
   color: #2c2c2c;
   margin: 0;
-  margin-bottom: 0.5em !important;
+  margin-bottom: 0.5em;
   line-height: 1.5em;
 }
 
@@ -8377,7 +8377,7 @@ main p {
   color: white;
 }
 .banner .banner-content h2 {
-  margin-top: 2em !important;
+  margin-top: 2em;
   letter-spacing: 0.06em;
 }
 .banner .banner-content a {
@@ -8599,7 +8599,7 @@ main p {
 }
 .float-comments a p {
   color: inherit;
-  margin-bottom: 0.5em !important;
+  margin-bottom: 0.5em;
 }
 .float-comments a p.text {
   font-size: 0.92857em;
@@ -8609,7 +8609,7 @@ main p {
 }
 .float-comments a h6 {
   z-index: 0.85714em;
-  margin-bottom: 0.5em !important;
+  margin-bottom: 0.5em;
 }
 .float-comments a:before {
   content: "";
@@ -8624,13 +8624,13 @@ main p {
 }
 
 .location-list h3 {
-  margin-bottom: 1.5em !important;
+  margin-bottom: 1.5em;
 }
 .location-list .item-city {
   font-weight: 700;
   color: #c4c4c4;
   font-size: 0.92857em;
-  margin-top: 1em !important;
+  margin-top: 1em;
 }
 .location-list .item-city:before, .location-list .item-city:after {
   content: " ";
@@ -8640,7 +8640,7 @@ main p {
   clear: both;
 }
 .location-list .item-city:first-child {
-  margin-top: 0em !important;
+  margin-top: 0;
 }
 
 .download-mobile-apps .container {
@@ -8651,7 +8651,7 @@ main p {
   color: #9d9d9d;
 }
 .download-mobile-apps a {
-  margin-right: 1.5em !important;
+  margin-right: 1.5em;
 }
 
 .watch-video .video {
@@ -8683,11 +8683,11 @@ main p {
   height: 138px;
 }
 .watch-video .description {
-  margin-left: 4em !important;
+  margin-left: 4em;
 }
 
 .professional-renter-content .img-wrapper {
-  margin-top: 2em !important;
+  margin-top: 2em;
 }
 .professional-renter-content .img-wrapper a {
   display: inline-block;
@@ -8735,14 +8735,14 @@ main p {
   font-weight: 300;
   color: white;
   line-height: 1.5em;
-  margin-right: -1em !important;
+  margin-right: -1em;
 }
 .rss p a {
   color: white;
 }
 .rss form {
   width: 100%;
-  margin-top: 1em !important;
+  margin-right: 1em;
 }
 .rss input {
   font-weight: 600;
@@ -8754,9 +8754,9 @@ main p {
 .rss button {
   font-weight: 700;
   color: #24bd77 !important;
-  padding-left: 2.5em !important;
-  padding-right: 2.5em !important;
-  margin-left: 0.5em !important;
+  padding-left: 2.5em;
+  padding-right: 2.5em;
+  margin-left: 1em;
 }
 .rss button,
 .rss input {
@@ -8764,7 +8764,7 @@ main p {
   height: 3em;
 }
 .rss .social-btns {
-  margin-top: 1em !important;
+  margin-right: 1em;
   border-top-right-radius: 0.35714em;
   border-top-left-radius: 0.35714em;
   border-bottom-right-radius: 0.35714em;
@@ -8799,7 +8799,7 @@ main p {
 }
 
 .modal .modal-dialog {
-  margin-top: 4em !important;
+  margin-top: 4em;
   width: 37.14286em;
 }
 .modal .modal-content {
@@ -8838,8 +8838,8 @@ main p {
   background-color: rgba(255, 255, 255, 0.2);
 }
 .modal .modal-body {
-  padding-top: 3em !important;
-  padding-bottom: 3em !important;
+  padding-top: 3em;
+  padding-bottom: 3em;
   padding-left: 0;
   color: #9d9d9d;
   padding-right: 0;
@@ -8894,7 +8894,7 @@ main p {
   border-bottom-right-radius: 0.10714em;
   border-top-right-radius: 0.10714em;
   background-color: white;
-  margin-right: 1em !important;
+  margin-right: 1em;
 }
 .modal .btn.info span {
   color: #3959a8;
@@ -8995,9 +8995,9 @@ main p {
   border-color: #24bd77;
 }
 
-.product-details h3 {
-  font-weight: 400;
-  margin: 0 !important;
+.product-details {
+  padding-top: 2.5em;
+  padding-bottom: 2.5em;
 }
 .product-details .breadcrumb {
   color: #9d9d9d;
@@ -9009,8 +9009,7 @@ main p {
 .product-details .breadcrumb li:hover, .product-details .breadcrumb li:hover ~ li {
   color: inherit;
 }
-
-section {
+.product-details section {
   width: 100%;
   font-size: 0.92857em;
   margin-bottom: 25px;
@@ -9018,39 +9017,41 @@ section {
   border-bottom-right-radius: 0.28571em;
   border-bottom-left-radius: 0.28571em;
 }
-section .section-header {
+.product-details section .section-header {
   border-top-right-radius: 0.28571em;
   border-top-left-radius: 0.28571em;
   background-color: #f27e36;
   padding: 1.42857em;
 }
-section .section-header + .section-body {
+.product-details section .section-header + .section-body {
   border-top-right-radius: 0;
   border-top-left-radius: 0;
 }
-section a {
+.product-details a {
   color: inherit;
 }
-section a:hover {
+.product-details a:hover {
   color: inherit;
 }
-section h3 {
+.product-details h3 {
   font-size: 2em;
+  margin: 0 !important;
+  font-weight: 400;
   padding: 0 0 0.5em;
 }
-section h4 {
+.product-details h4 {
   color: white;
   font-weight: 700;
   font-size: 1em;
   margin: 0;
 }
-section h5 {
+.product-details h5 {
   margin: 0;
   font-size: 1em;
   font-weight: 700;
   color: #24bd77;
 }
-section .section-body {
+.product-details .section-body {
   background-color: white;
   border: 0.07143em solid #eeeeee;
   border-top-width: 0;
@@ -9059,31 +9060,31 @@ section .section-body {
   border-bottom-right-radius: 0.28571em;
   border-bottom-left-radius: 0.28571em;
 }
-section .section-body p,
-section .section-body li {
+.product-details .section-body p,
+.product-details .section-body li {
   color: inherit;
   font-weight: 600;
 }
-section .section-body p.price,
-section .section-body li.price {
+.product-details .section-body p.price,
+.product-details .section-body li.price {
   color: #2c2c2c;
   font-size: 1.23077em;
 }
-section .section-body p.price big,
-section .section-body li.price big {
+.product-details .section-body p.price big,
+.product-details .section-body li.price big {
   font-size: 1.4375em;
 }
-section .section-body small {
+.product-details .section-body small {
   font-size: 0.84615em;
 }
-section .section-body big {
+.product-details .section-body big {
   font-size: 2em;
 }
-section .section-body .part {
+.product-details .section-body .part {
   border-top: 0.07143em solid #eeeeee;
   padding: 1.42857em;
 }
-section .section-body .part:first-child {
+.product-details .section-body .part:first-child {
   border-top: none;
 }
 
@@ -9270,8 +9271,8 @@ aside .owner-information .connection .friend-photo-wrapper {
   display: inline-block;
   *display: inline;
   *zoom: 1;
-  margin-right: 0.5em !important;
-  margin-bottom: 0.5em !important;
+  margin-right: 0.5em;
+  margin-bottom: 0.5em;
   width: 2.30769em;
   height: 2.30769em;
   line-height: 2.30769em;

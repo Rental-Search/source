@@ -1,7 +1,6 @@
 .product-details
-	h3
-		font-weight: $fw-regular
-		margin: 0 !important
+	padding-top: 2.5em
+	padding-bottom: 2.5em
 	.breadcrumb
 		color: $gray-strong
 		li
@@ -11,3 +10,58 @@
 			&:hover,
 			&:hover ~ li
 				color: inherit
+	section
+		width: 100%
+		font-size: px($section-fz)
+		margin-bottom: $grid-gutter-width
+		border-bottom: px(1) solid darken($gray-lighter,10%)
+		+border-bottom-radius($section-bd-rad)
+		.section-header
+			+border-top-radius($section-bd-rad)
+			background-color: $brand-primary
+			padding: $section-pad
+			& + .section-body
+				+border-top-radius(0)
+	a
+		color: inherit
+		&:hover
+			color: inherit
+	h3
+		font-size: px(26, $section-fz)
+		margin: 0 !important
+		font-weight: $fw-regular
+		padding: 0 0 .5em
+	h4
+		color: white
+		font-weight: $fw-bold
+		font-size: 1em
+		margin: 0
+	h5
+		margin: 0
+		font-size: 1em
+		font-weight: $fw-bold
+		color: $brand-success
+	.section-body
+		background-color: white
+		border: px(1) solid $gray-lighter
+		border-top-width: 0
+		+border-top-radius($section-bd-rad)
+		+border-bottom-radius($section-bd-rad)
+		p,
+		li
+			color: inherit
+			font-weight: $fw-semibold
+			&.price
+				color: $gray-dark
+				font-size: px(16, $section-fz)
+				big
+					font-size: px(23, 16)
+		small
+			font-size: px(11, $section-fz)
+		big
+			font-size: px(26, $section-fz)
+		.part
+			border-top: px(1) solid $gray-lighter
+			padding: $section-pad
+			&:first-child
+				border-top: none

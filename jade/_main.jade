@@ -32,7 +32,8 @@ section.picture-tab
 					p Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec sed odio dui. Maecenas faucibus mollis interdum. Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.
 				.col-md-6.properties
 					ul.list-group
-						-var properties = []
+						-if(!properties)
+							-var properties = []
 						-properties.push({"name": "Notation", "value": "32"})
 						-properties.push({"name": "Date d’achat", "value": "2008"})
 						-properties.push({"name": "Marque", "value": "BMW"})

@@ -9,30 +9,17 @@ html(lang = "en")
 			header
 				include jade/_header-site
 			nav
-				.row-fluid.bd-b
-					include jade/_breadcrumbs
-
-			article.row-fluid.pad-v-5
-				.container.product-details
-					.row
-						.col-md-8.title
-							h3 Location 
-								span.name Bmw - 520 touring luxe 
-								|- 
-								span.location NICE
-							ul.breadcrumb
-								-var specifications = ["Année 2010", "Moteur Diesel", "Boite Automatique", "10 000 à 30 000 km"]
-								-each specification in specifications
-									li #{specification}
-						.col-md-4.share-btns
-					.row
-						main.col-md-8
-							.row-fluid
-								include jade/_main
-							
-						aside.col-md-4
-							include jade/_aside
-
+				include jade/_breadcrumbs
+			article.container.product-details
+				.row
+					.col-md-8.product-details-title
+						include jade/_porduct-details-title
+					.col-md-4.share-btns
+				.row
+					main.col-md-8
+						include jade/_main
+					aside.col-md-4
+						include jade/_aside
 			footer
 				.row-fluid.insurances.framing-h
 					include jade/_insurances
