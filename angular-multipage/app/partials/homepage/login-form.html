@@ -1,0 +1,55 @@
+<div id="loginModal" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content text-center">
+            <div class="modal-header">
+                <button type="button" data-dismiss="modal" class="close"><span aria-hidden="true">&times;</span><span
+                        class="sr-only">Close</span></button>
+                <h4 class="modal-title">Connexion</h4>
+            </div>
+            <div class="modal-body">
+                <h3>Connectez-vous à votre compte</h3>
+
+                <div class="form-group"><a href="#" class="btn facebook"><span class="icon-facebook"></span>Connexion
+                    via Facebook</a></div>
+                <div class="form-group"><a href="#" class="btn google"><span class="icon-google-plus"></span>Connexion
+                    via Google</a></div>
+                <p class="info">Nous ne publierons jamais rien sur votre profil (sauf si vous le demandez) <br>Vos
+                    données personnelles ne seront jamais cédées ou vendues.</p><span class="or"></span>
+
+                <form name="loginForm" ng-submit="login()" novalidate>
+                    <div class="form-group">
+                        <input type="email" placeholder="E-mail" required class="form-control" name="username"
+                               data-ng-model="credentials.username">
+                    <span data-ng-show="loginForm.username.$error.required && loginForm.username.$dirty"
+                          class="errorMsg">
+            Email is required</span>
+                    </div>
+                    <div class="form-group mrg-v-0">
+                        <input type="password" placeholder="Mot de passe" required class="form-control" name="password"
+                               data-ng-model="credentials.password">
+                    <span
+                            data-ng-show="loginForm.password.$error.required && loginForm.password.$dirty"
+                            class="errorMsg">
+            Password is required</span>
+                    </div>
+                    <div class="form-group mrg-v-0 clearfix mrg-v-2">
+                        <div class="checkbox pull-left">
+                            <label for="remember-me">
+                                <input type="checkbox" checked id="remember-me"><span class="icon-ok"></span>
+                            </label>Se souvenir de moi
+                        </div>
+                        <div class="forgot-password pull-right"><a href="#">Mot de passe oublié</a></div>
+                    </div>
+                    <div class="form-group mrg-v-2">
+                        <button  type="submit" class="btn" data-ng-disabled="loginForm.$invalid || !loginForm.$dirty">
+                            Connexion
+                        </button>
+                    </div>
+                </form>
+                <span class="or"></span>
+                <h4>Vous êtes déjà membre e-loue ?</h4><a href="#" data-toggle="modal" data-target="#registrationModal"
+                                                          data-dismiss="modal" class="modal-fotter-link connexion">Inscription</a>
+            </div>
+        </div>
+    </div>
+</div>

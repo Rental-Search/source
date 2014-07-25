@@ -1,0 +1,26 @@
+<div id="phoneModal" class="modal fade phone-form" tabindex="-1" role="dialog"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                Appel
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-lg-4 col-md-4">
+                        <eloue-product-details-small></eloue-product-details-small>
+                        <eloue-product-details-booking in-modal="true"></eloue-product-details-booking>
+                        <button class="btn btn-default" type="button" ng-click="openMessageModal()">Envoyez un message</button>
+                    </div>
+                    <div class="col-lg-6 col-md-6">
+                        <button type="button" class="btn-danger" ng-click="callOwner()">{{ownerCallDetails.number}}
+                            ({{ownerCallDetails.tariff}}€/min)
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
