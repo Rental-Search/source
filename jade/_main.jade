@@ -27,10 +27,10 @@ section.picture-tab
 		.part.description
 			h3 Déscription
 			.row
-				.col-md-6.text
+				.col-sm-6.text
 					p Donec ullamcorper nulla non metus auctor fringilla. Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor. Aenean lacinia bibendum nulla sed consectetur. Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor.
 					p Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec sed odio dui. Maecenas faucibus mollis interdum. Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.
-				.col-md-6.properties
+				.col-sm-6.properties
 					ul.list-group
 						-if(!properties)
 							-var properties = []
@@ -43,8 +43,8 @@ section.picture-tab
 						-properties.push({"name": "Puissance", "value": "130 CV"})
 						-each prop in properties
 							li.list-group-item.clearfix
-								span.col-md-5 #{prop.name}
-								b.col-md-7 #{prop.value}&nbsp;&nbsp;
+								span.col-sm-5 #{prop.name}
+								b.col-sm-7 #{prop.value}&nbsp;&nbsp;
 									-if(prop.name==="Notation")
 										include _rate
 		.part.comments.comments-ad

@@ -8764,7 +8764,6 @@ main p {
   height: 3em;
 }
 .rss .social-btns {
-  margin-right: 1em;
   border-top-right-radius: 0.35714em;
   border-top-left-radius: 0.35714em;
   border-bottom-right-radius: 0.35714em;
@@ -9436,7 +9435,7 @@ main .carousel-wrapper .carousel-control.left {
 main .carousel-wrapper .carousel-control.right {
   left: 50%;
 }
-main .picture-tab .nav a {
+main .nav a {
   color: #2c2c2c;
   font-weight: 600;
   background-color: #eeeeee;
@@ -9447,12 +9446,12 @@ main .picture-tab .nav a {
   border: 1px solid #d5d5d5;
   padding: 0.75em 1.5em !important;
 }
-main .picture-tab .nav a:hover {
+main .nav a:hover {
   background-color: #f27e36;
   border-color: #f27e36;
   color: white;
 }
-main .picture-tab .properties .list-group li {
+main .properties .list-group li {
   background-color: #fbfbfb;
   border: none;
   padding: 0.8em 0.5em;

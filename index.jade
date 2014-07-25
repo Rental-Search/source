@@ -3,44 +3,43 @@ html(lang = "en")
 	head
 		-var title = "e-loue"
 		include jade/_head
-
 	body
 		//- include jade/_src
 		.container-flex
 			header
-				include jade/_header-site
+				include jade/_header_site
 			nav
-				include jade/_nav-home
+				include jade/_nav_home
 
 			article
-				.row-fluid.banner.hidden-xs.text-center.ov-h-v
+				section.row-fluid.banner.hidden-xs.text-center.ov-h-v
 					include jade/_banner
-				.row-fluid.insurances.framing-h
+				section.row-fluid.insurances.framing-h
 					include jade/_insurances
-				.row-fluid.product-list
-					include jade/_product-list
-				.row-fluid.float-comments.framing-h
+				section.row-fluid.product-list
+					include jade/_product_list
+				section.row-fluid.float-comments.framing-h
 					include jade/_comments
-				.row-fluid.location-list
-					include jade/_location-list
+				section.row-fluid.location-list
+					include jade/_location_list
 
 			main
-				.row-fluid.download-mobile-apps.framing-h
-					include jade/_download-mobile-apps
-				.row-fluid.watch-video
-					include jade/_watch-video
-				.row-fluid.professional-renter-content.framing-h
-					include jade/_professional-renter-content
-				.row-fluid.talk-about-us
-					include jade/_talk-about-us
+				section.row-fluid.download-mobile-apps.framing-h
+					include jade/_download_mobile_apps
+				section.row-fluid.watch-video
+					include jade/_watch_video
+				section.row-fluid.professional-renter-content.framing-h
+					include jade/_professional_renter_content
+				section.row-fluid.talk-about-us
+					include jade/_talk_about_us
 
 			footer
-				.row-fluid.footer-links.framing-h
-					include jade/_footer-links
-				.row-fluid.rss.pad-v-4
+				section.row-fluid.footer-links.framing-h
+					include jade/_footer_links
+				section.row-fluid.rss.pad-v-4
 					include jade/_rss
 
-			include jade/_sign-in
-			include jade/_log-in
+			include jade/_sign_in
+			include jade/_log_in
 
 		include jade/_scripts
