@@ -1,20 +1,32 @@
 .insurances
-	p
-		font-size: px(13)
-		font-weight: $fw-semibold
-	.insurances-img
-		display: block
-		margin: 0 auto
-		margin-bottom: 2em
-		height: px(60)
-		position: relative
-		span
-			+centred-abs()
-		.payment 
-			+sprite($s-payment)
-		.serenity
-			+sprite($s-serenity)
-		.simplicity
-			+sprite($s-simplicity)
-		.trust
-			+sprite($s-trust)
+  ul
+    overflow: hidden
+    margin: 3em 0
+    text-align: center
+    white-space: nowrap
+  .insurances-img
+    display: block
+    margin: 0 auto
+    margin-bottom: 2em
+    height: px(60)
+    position: relative
+    span
+      +centred-abs()
+    .payment
+      +sprite($s-payment)
+    .serenity
+      +sprite($s-serenity)
+    .simplicity
+      +sprite($s-simplicity)
+    .trust
+      +sprite($s-trust)
+  h5
+    color: $gray-dark
+    font-weight: $fw-bold
+    font-size: px(14)
+    margin: .5em 0
+  p
+    font-size: px(13)
+    font-weight: $fw-semibold
+    line-height: 1.5em
+    color: $gray-strong

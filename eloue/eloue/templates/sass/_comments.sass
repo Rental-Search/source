@@ -33,14 +33,16 @@
 		color: white
 		background-color: $brand-primary
 		font-weight: $fw-semibold
-		+border-radius(px(5))
+		+border-top-radius(px(5))
+		+border-bottom-radius(px(5))
 		&:focus,
 		&:hover
 			background-color: darken($brand-primary,10%) !important
 			&:before
 				border-top-color: darken($brand-primary,10%)
 		.autor-img
-			+border-radius(50%)
+			+border-top-radius(50%)
+			+border-bottom-radius(50%)
 			position: absolute
 			left: 0
 			top: 0

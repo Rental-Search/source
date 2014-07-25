@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html lang="en"></html>
 <head>
-  <title>e-loue</title>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700">
-  <link rel="stylesheet" href="../static/css/styles.css">
+  <link rel="stylesheet" href="../static/css/bootstrap.css">
   <link rel="stylesheet" href="../static/css/chosen.min.css">
+  <link rel="stylesheet" href="../static/css/homepage_styles.css">
   <link rel="shortcut icon" href="../static/img/favicon.ico">
   <!-- for IE < 9 -->
   <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
@@ -20,105 +20,96 @@
   <script src="../static/js/bootstrap/dropdown.js"></script>
   <script src="../static/js/bootstrap/carousel.js"></script>
   <script src="../static/js/scripts.js"></script>
+  <title>e-loue</title>
 </head>
 <body>
   <div class="container-flex">
-    <header>
-      <div class="header-site">
-        <div class="container signs-links pad-v-2">
-          <ul role="tablist" class="nav without-spaces">
-            <li class="divide"></li>
-            <li><span>Bonjour, <a href="#inscrivez-vous" data-toggle="modal" data-target="#sign-in">inscrivez-vous </a>ou <a href="#connectez-vous" data-toggle="modal" data-target="#log-in">connectez-vous</a></span></li>
-            <li class="divide"></li>
-            <li><span>Vous êtes un loueur professionnel, découvrez les <a href="#">offers e-loue Pro</a></span></li>
-            <li class="divide"></li>
-            <li><span>Appelez-nous au <b>0826.800.200 </b>(0,15&euro; / min)</span></li>
-          </ul>
-        </div>
-        <div class="framing-h pad-v-3">
-          <div class="container search-form">
-            <div class="row">
-              <div class="col-sm-2 logo-wrapper"><a href="/templates"><img src="../static/img/logo.png" alt="logo"></a></div>
-              <div class="col-sm-7">
-                <div class="input-group">
-                  <input type="text" placeholder="Que voulez-vous louer ?" title="Que voulez-vous louer ?" class="form-control what-field">
-                  <div class="input-group where-field-wrapper"><span class="sprite-location"></span>
-                    <input type="text" placeholder="Où ça ?" title="Où ça ?" id="geolocate" class="form-control where-field">
-                  </div>
-                  <div class="input-group-btn">
-                    <button type="button" class="btn btn-default btn-search"><span class="icon-search"></span></button>
-                  </div>
-                </div>
+    <input type="checkbox" id="sourse">
+    <lable for="#sourse" id="sourse-img"><img src="../static/img/src/home.jpg"></lable>
+    <header class="header-site">
+      <section class="container signs-links">
+        <ul role="tablist" class="nav without-spaces">
+          <li class="divide"></li>
+          <li><span>Bonjour, <a href="#inscrivez-vous" data-toggle="modal" data-target="#sign-in">inscrivez-vous </a>ou <a href="#connectez-vous" data-toggle="modal" data-target="#log-in">connectez-vous</a></span></li>
+          <li class="divide"></li>
+          <li><span>Vous êtes un loueur professionnel, découvrez les <a href="#">offers e-loue Pro</a></span></li>
+          <li class="divide"></li>
+          <li><span>Appelez-nous au <b>0826.800.200 </b>(0,15&euro; / min)</span></li>
+        </ul>
+      </section>
+      <div class="framing">
+        <section class="container search-form">
+          <div class="table-cell"><a href="/templates"><img src="../static/img/logo.png" alt="logo"></a></div>
+          <div class="table-cell main-cell">
+            <form action="" class="input-group">
+              <input type="text" placeholder="Que voulez-vous louer ?" title="Que voulez-vous louer ?" class="table-cell main-cell form-control what-field">
+              <div class="table-cell input-group where-field"><span class="sprite-location"></span>
+                <input type="text" placeholder="Où ça ?" title="Où ça ?" id="geolocate" class="form-control">
               </div>
-              <div class="col-sm-3">
-                <button type="button" class="btn btn-success">Déposez une annonce</button>
+              <div class="table-cell input-group-btn">
+                <button type="button" class="btn btn-default btn-search"><span class="icon-search"></span></button>
               </div>
-            </div>
+            </form>
           </div>
-        </div>
+          <div class="table-cell">
+            <button type="button" class="btn bg-success advertise">Déposez une annonce</button>
+          </div>
+        </section>
       </div>
     </header>
-    <nav>
-      <div class="nav-home container">
-        <ul class="nav without-spaces row">
-          <li><a href="#Logement" class="pad-v-2">Logement</a></li>
-          <li><a href="#Jardinage" class="pad-v-2">Jardinage</a></li>
-          <li><a href="#Automobile" class="pad-v-2">Automobile</a></li>
-          <li><a href="#Image et son" class="pad-v-2">Image et son</a></li>
-          <li><a href="#Bricolage" class="pad-v-2">Bricolage</a></li>
-          <li><a href="#Mode et accessoire" class="pad-v-2">Mode et accessoire</a></li>
-          <li><a href="#Réceprion" class="pad-v-2">Réceprion</a></li>
-          <li><a href="#Santé et Bien être" class="pad-v-2">Santé et Bien être</a></li>
-          <li><a href="#Autres" class="pad-v-2">Autres</a></li>
-        </ul>
-      </div>
+    <nav class="nav-home container">
+      <ul class="nav without-spaces row">
+        <li><a href="#Logement">Logement</a></li>
+        <li><a href="#Jardinage">Jardinage</a></li>
+        <li><a href="#Automobile">Automobile</a></li>
+        <li><a href="#Image et son">Image et son</a></li>
+        <li><a href="#Bricolage">Bricolage</a></li>
+        <li><a href="#Mode et accessoire">Mode et accessoire</a></li>
+        <li><a href="#Réceprion">Réceprion</a></li>
+        <li><a href="#Santé et Bien être">Santé et Bien être</a></li>
+        <li><a href="#Autres">Autres</a></li>
+      </ul>
     </nav>
     <article>
-      <section class="row-fluid banner hidden-xs text-center ov-h-v"><img src="../static/img/banner.jpg">
-        <div class="container">
-          <div class="banner-content text-uppercase pad-v-5">
-            <h2 class="mrg-v-2">louez un objet, une voiture...<br>près de chez vous, en tout sécurité !</h2><a href="#">une communauté de confiance</a>
-          </div>
+      <section class="row-fluid banner"><img src="../static/img/banner.jpg">
+        <div class="banner-text table-cell">
+          <h2>louez un objet, une voiture...<br>près de chez vous, en tout sécurité !</h2><a href="#">une communauté de confiance</a>
         </div>
       </section>
-      <section class="row-fluid insurances framing-h">
-        <div class="container mrg-v-6">
-          <ul class="nav nav-tabs nav-justified ov-hidden text-nowrap text-center">
+      <section class="row-fluid insurances framing">
+        <div class="container">
+          <ul class="nav nav-justified">
             <li class="divide"></li>
             <li>
               <div class="insurances-img"><span class="payment"></span></div>
               <h5>Louez en toute sécurité</h5>
-              <p>Transactions en ligne sécurisées.</p>
-              <p>Aucun échange d'argent.</p>
+              <p>Transactions en ligne sécurisées.<br>Aucun échange d'argent.</p>
             </li>
             <li class="divide"></li>
             <li>
               <div class="insurances-img"><span class="serenity"></span></div>
               <h5>Louez en toute sérénité</h5>
-              <p>Assurance incluse et automatique.</p>
-              <p>Caution en ligne.</p>
+              <p>Assurance incluse et automatique.<br>Caution en ligne.</p>
             </li>
             <li class="divide"></li>
             <li>
               <div class="insurances-img"><span class="simplicity"></span></div>
               <h5>Louez en toute simplicité</h5>
-              <p>Service client dédié 7j/7.</p>
-              <p>Dépot d'annonce gratuite.</p>
+              <p>Service client dédié 7j/7.<br>Dépot d'annonce gratuite.</p>
             </li>
             <li class="divide"></li>
             <li>
               <div class="insurances-img"><span class="trust"></span></div>
               <h5>Louez en toute confiance</h5>
-              <p>Notes et commentaires en ligne.</p>
-              <p>Messagerie en ligne.</p>
+              <p>Notes et commentaires en ligne.<br>Messagerie en ligne.</p>
             </li>
           </ul>
         </div>
       </section>
       <section class="row-fluid product-list">
-        <div class="container mrg-v-6">
-          <h3 class="text-center"><span class="products-count">324 654 </span>annonces de location dans <span class="products-location">toute la France</span></h3>
-          <ul class="row nav mrg-v-4">
+        <div class="container">
+          <h3 class="text-center">324 654 annonces de location dans toute la France</h3>
+          <ul class="row nav">
             <li class="col-sm-6 col-md-3 item">
               <div class="thumbnail"><a href="products/product_detail.html" class="img-wrapper"><img src="../static/img/home-products/bike.jpg"><span class="fog"></span></a>
                 <div class="info text-nowrap">
@@ -189,7 +180,7 @@
           </div>
         </div>
       </section>
-      <section class="row-fluid float-comments framing-h">
+      <section class="row-fluid float-comments framing">
         <div class="container">
           <div class="row">
             <div class="col-sm-6">
@@ -278,7 +269,7 @@
       </section>
     </article>
     <main>
-      <section class="row-fluid download-mobile-apps framing-h">
+      <section class="row-fluid download-mobile-apps framing">
         <div class="container">
           <div class="col-sm-9 mrg-v-8 row">
             <h3>Les bonnes affaires e-loue, c'est (aussi) dans la poche</h3>
@@ -312,7 +303,7 @@
           </div>
         </div>
       </section>
-      <section class="row-fluid professional-renter-content framing-h">
+      <section class="row-fluid professional-renter-content framing">
         <div class="container mrg-v-8">
           <div class="row">
             <div class="col-sm-8">
@@ -338,7 +329,7 @@
       </section>
     </main>
     <footer>
-      <section class="row-fluid footer-links framing-h">
+      <section class="row-fluid footer-links framing">
         <div class="container mrg-v-6">
           <ul class="nav nav-tabs nav-justified ov-hidden">
             <li class="divide"></li>

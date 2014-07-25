@@ -1,15 +1,12 @@
-.container.mrg-v-6
-	ul.nav.nav-tabs.nav-justified.ov-hidden.text-nowrap.text-center
-		-var blocks = []
-		-blocks.push({ "category": "payment", "title": "Louez en toute sécurité", "description": [ "Transactions en ligne sécurisées.", "Aucun échange d'argent." ] })
-		-blocks.push({ "category": "serenity", "title": "Louez en toute sérénité", "description": [ "Assurance incluse et automatique.", "Caution en ligne." ] })
-		-blocks.push({ "category": "simplicity", "title": "Louez en toute simplicité", "description": [ "Service client dédié 7j/7.", "Dépot d'annonce gratuite." ] })
-		-blocks.push({ "category": "trust", "title": "Louez en toute confiance", "description": [ "Notes et commentaires en ligne.", "Messagerie en ligne." ] })
-		-each block in blocks
-			li.divide
-			li
-				.insurances-img
-					span( class = block.category)
-				h5 #{block.title}
-				-each description in block.description
-					p #{description}
+.container
+  ul.nav.nav-justified
+    -each insurance in insurances
+      li.divide
+      li
+        .insurances-img
+          span( class = insurance[0])
+        h5 #{insurance[1]}
+        p 
+          | #{insurance[2]}
+          br
+          | #{insurance[3]}

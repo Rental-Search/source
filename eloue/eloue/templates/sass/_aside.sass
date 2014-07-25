@@ -1,139 +1,139 @@
 aside
-	color: $gray-strong
-	padding-top: $section-pad
+  color: $gray-strong
+  padding-top: $section-pad
 
-	.booking-form .available
-		color: $brand-success
-		&:before
-			font-family: "FontAwesome"
-			content: "\f00c"
-			font-size: .7em
-			display: inline-block
-			text-align: center
-			width: 2em
-			height: 2em
-			line-height: 2em
-			margin-right: 1em
-			+border-radius(50%)
-			background-color: $brand-success
-			color: white
-		&.unavailable
-			color: $brand-danger
-			&:before
-				background-color: $brand-danger
-				content: "\f00d"
+  .booking-form .available
+    color: $brand-success
+    &:before
+      font-family: "FontAwesome"
+      content: "\f00c"
+      font-size: .7em
+      display: inline-block
+      text-align: center
+      width: 2em
+      height: 2em
+      line-height: 2em
+      margin-right: 1em
+      +border-radius(50%)
+      background-color: $brand-success
+      color: white
+    &.unavailable
+      color: $brand-danger
+      &:before
+        background-color: $brand-danger
+        content: "\f00d"
 
-	.chosen-container,
-	.form-control,
-	.input-group-addon
-		color: $gray-dark
-		font-weight: $fw-semibold
-		background-color: transparent
-		border-width: 0
-		box-shadow: none
-		font-size: px(13, $section-fz)
+  .chosen-container,
+  .form-control,
+  .input-group-addon
+    color: $gray-dark
+    font-weight: $fw-semibold
+    background-color: transparent
+    border-width: 0
+    box-shadow: none
+    font-size: px(13, $section-fz)
 
-	.calendar
-		position: relative
-		span
-			display: inline-block
-			*display: inline
-			*zoom: 1
-			+sprite($s-calendar)
+  .calendar
+    position: relative
+    span
+      display: inline-block
+      *display: inline
+      *zoom: 1
+      +sprite($s-calendar)
 
-	.chosen-container
-		display: block
-		width: auto !important
-		padding: 5px 0
-		.chosen-single
-			height: auto
-			background: $gray-lighter
-			background: linear-gradient(to bottom, white, $gray-lite 70%)
-			border-width: 0 !important
-			box-shadow: none
-		.chosen-drop
-			border-color: $gray-lighter
-			border-width: px(1)
-			background-color: white
-		.chosen-search
-			display: none
-		.chosen-results li.highlighted,
-		.chosen-results li.result-selected
-			background: $brand-primary
+  .chosen-container
+    display: block
+    width: auto !important
+    padding: 5px 0
+    .chosen-single
+      height: auto
+      background: $gray-lighter
+      background: linear-gradient(to bottom, white, $gray-lite 70%)
+      border-width: 0 !important
+      box-shadow: none
+    .chosen-drop
+      border-color: $gray-lighter
+      border-width: px(1)
+      background-color: white
+    .chosen-search
+      display: none
+    .chosen-results li.highlighted,
+    .chosen-results li.result-selected
+      background: $brand-primary
 
-	.btn
-		+btn(px(14,$section-fz))
-		margin-bottom: $section-pad/2
-		color: white !important
-		span
-			display: inline-block
-			margin-right: 1em
-			vertical-align: middle
-		&.calendar-ok
-			span
-				+sprite($s-calendar-ok)
-		&.call
-			span
-				+sprite($s-call)
-		&.send-message
-			span
-				+sprite($s-mail)
-	.booking-form
-		.cell
-			display: table-cell
-			padding: 0 .5em
-	.owner-information
-		.block-thumbnail
-			+block-with-thumbnail(px(80, $section-fz), 50%)
-			.rate
-				margin: .5em 0
+  .btn
+    +btn(px(14,$section-fz))
+    margin-bottom: $section-pad/2
+    color: white !important
+    span
+      display: inline-block
+      margin-right: 1em
+      vertical-align: middle
+    &.calendar-ok
+      span
+        +sprite($s-calendar-ok)
+    &.call
+      span
+        +sprite($s-call)
+    &.send-message
+      span
+        +sprite($s-mail)
+  .booking-form
+    .cell
+      display: table-cell
+      padding: 0 .5em
+  .owner-information
+    .block-thumbnail
+      +block-with-thumbnail(px(80, $section-fz), 50%)
+      .rate
+        margin: .5em 0
 
-		.connection
-			.friend-photo-wrapper
-				display: inline-block
-				*display: inline
-				*zoom: 1
-				margin-right: .5em
-				margin-bottom: .5em
-				width: px(30, $section-fz)
-				height: px(30, $section-fz)
-				line-height: px(30, $section-fz)
-				img
-					height: 100%
-					width: 100%
-			p
-				display: inline-block
-				*display: inline
-				*zoom: 1
-				a
-					color: lighten($brand-info, 15%)
-					font-weight: bolder
-	.similar-listing
-		li
-			+block-with-thumbnail(px(80, $section-fz), $section-bd-rad)
-			h6
-				margin-top: .5em
-				color: $gray-dark
-			p
-				margin: .25em 0 .5em !important
-	.connected-with-owner
-		p
-			margin: 1em 0 0
-		.facebook-box
-			background-color: $brand-info
-			color: $brand-info
-			display: inline-block
-			*display: inline
-			*zoom: 1
-			margin-bottom: $section-pad
-			+border-top-radius($section-bd-rad)
-			+border-bottom-radius($section-bd-rad)
-			span
-				display: inline-block
-				*display: inline
-				*zoom: 1
-				background-color: white
-				line-height: 1.1em
-				width: 1.1em
-				margin: .2em
-				font-size: px(45)
+    .connection
+      .friend-photo-wrapper
+        display: inline-block
+        *display: inline
+        *zoom: 1
+        margin-right: .5em
+        margin-bottom: .5em
+        width: px(30, $section-fz)
+        height: px(30, $section-fz)
+        line-height: px(30, $section-fz)
+        img
+          height: 100%
+          width: 100%
+      p
+        display: inline-block
+        *display: inline
+        *zoom: 1
+        a
+          color: lighten($brand-info, 15%)
+          font-weight: bolder
+  .similar-listing
+    li
+      +block-with-thumbnail(px(80, $section-fz), $section-bd-rad)
+      h6
+        margin-top: .5em
+        color: $gray-dark
+      p
+        margin: .25em 0 .5em !important
+  .connected-with-owner
+    p
+      margin: 1em 0 0
+    .facebook-box
+      background-color: $brand-info
+      color: $brand-info
+      display: inline-block
+      *display: inline
+      *zoom: 1
+      margin-bottom: $section-pad
+      +border-top-radius($section-bd-rad)
+      +border-bottom-radius($section-bd-rad)
+      span
+        display: inline-block
+        *display: inline
+        *zoom: 1
+        background-color: white
+        line-height: 1.1em
+        width: 1.1em
+        margin: .2em
+        font-size: px(45)

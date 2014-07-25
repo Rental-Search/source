@@ -1,205 +1,183 @@
 @media (max-width: $screen-xs-max)
-	body
-		font-size: 10px
-
+  body
+    font-size: 10px
 @media (min-width: $screen-sm-min) and (max-width: $screen-sm-max)
-	body
-		font-size: 12px
-
+  body
+    font-size: 12px
 @media (min-width: $screen-md-min) and (max-width: $screen-md-max)
-	body
-		font-size: 14px
-
+  body
+    font-size: 14px
 @media (min-width: $screen-lg-min)
-	body
-		font-size: 16px
+  body
+    font-size: 16px
 
-@for $i from 0 through 8
-	.pad-#{$i}
-		padding: #{$i / 2}em !important
+body
+  background-color: $gray-lite
+  overflow-x: hidden
 
-	.pad-v-#{$i}
-		padding-top: #{$i / 2}em !important
-		padding-bottom: #{$i / 2}em !important
-
-	.pad-h-#{$i}
-		padding-right: #{$i / 2}em !important
-		padding-left: #{$i / 2}em !important
-
-	.mrg-#{$i}
-		margin: #{$i / 2}em !important
-
-	.mrg-v-#{$i}
-		margin-top: #{$i / 2}em !important
-		margin-bottom: #{$i / 2}em !important
-
-	.mrg-h-#{$i}
-		margin-right: #{$i / 2}em !important
-		margin-left: #{$i / 2}em !important
-
-
-.ov-hidden
-	overflow: hidden
-
-.link-sprite
-	font-size: 0
-	color: transparent
-
-.btn-success
-	padding: .8em
-	font-weight: 700
-	border-color: $brand-success
+a, a:hover
+  color: inherit
 
 .form-control:focus
-	+box-shadow( 0 0 6px $smoke-lite !important)
-	z-index: 10 !important
-	border-color: $gray-medium
+  +box-shadow( 0 0 6px $smoke-lite !important)
+  z-index: 10 !important
+  border-color: $gray-medium
 
-.bd-b,
-.framing-h,
-.framing-v
-	border: px(1) solid $gray-lighter
-.framing-h,
-.framing-v
-	background-color: white
-.framing-h
-	border-width: px(1) 0
-.framing-v
-	border-width: 0 px(1)
-.bd-b
-	border-width: 0 0 1px
-
-.link-success-color
-	color: $brand-success
-	font-weight: 700
-	text-transform: uppercase
-	font-size: 13px
-	letter-spacing: .07em
-	&:hover
-		color: darken($brand-success, 10%)
+.table-cell
+  display: table-cell
+  width: 1%
+  vertical-align: middle
+  &.main-cell
+    width: 100%
 
 .without-spaces
-	text-align: justify
-	margin-bottom: -1em
-	line-height: 1em
-	overflow: hidden
-	&:after
-		display: inline-block
-		width: 100%
-		content: ""
-	> li
-		display: inline-block
-
-.breadcrumb
-	background-color: transparent
-	margin: 0
-	font-size: px(13)
-	font-weight: $fw-semibold
-	margin: 0
-	padding: 0
-	color: $brand-success
-	> li
-		color: inherit
-		& + li:before
-			font-family: "FontAwesome"
-			content: " \f105 "
-			font-size: 1.2em
-			cursor: pointer
-		a
-			padding: .8em 0
-			display: inline-block
-			color: inherit
-			text-decoration: none
-		&.active,
-		&:hover
-			color: $gray-strong
-		&:hover ~ li
-			color: lighten($gray-strong,20%)
-			&:before
-				color: inherit
-
-.checkbox
-	input
-		margin-left: 0 !important
-		opacity: 0
-		cursor: pointer
-		&:checked + span
-			color: inherit
-	label
-		position: relative
-		border: 1px solid $gray-medium
-		color: $gray-light
-		margin-right: .5em
-		line-height: 1.4em
-		width: 1.5em
-		+border-left-radius(px(4))
-		+border-right-radius(px(4))
-		padding: 0
-		&:hover
-			background-color: $gray-lighter
-		span
-			color: transparent
+  text-align: justify
+  margin-bottom: -1em
+  line-height: 1em
+  overflow: hidden
+  &:after
+    display: inline-block
+    width: 100%
+    content: ""
+  > li
+    display: inline-block
 
 .divide
-	position: relative
-	&:after
-		left: 50%
-		content: ""
-		bottom: -.5em
-		position: absolute
-		height: 1000px
-		width: 1px
-		background-color: $gray-lighter
-	&:first-child
-		display: none !important
+  position: relative
+  &:after
+    left: 50%
+    content: ""
+    bottom: -.5em
+    position: absolute
+    height: 1000px
+    width: 1px
+    background-color: $gray-lighter
+  &:first-child
+    display: none !important
+
+.link-sprite
+  font-size: 0
+  color: transparent
+
+.bg-success
+  border-color: $brand-success
+  background-color: $brand-success
+  &:hover
+    background-color: darken($brand-success, 5%)
+    border-color: darken($brand-success, 5%)
+
+.bd-b,
+.framing
+  border: px(1) solid $gray-lighter
+.framing
+  background-color: white
+  border-width: px(1) 0
+.bd-b
+  border-width: 0 0 1px
+
+.link-success-color
+  color: $brand-success
+  font-weight: 700
+  text-transform: uppercase
+  font-size: 13px
+  letter-spacing: .07em
+  &:hover
+    color: darken($brand-success, 10%)
+
+
+.breadcrumb
+  background-color: transparent
+  margin: 0
+  font-size: px(13)
+  font-weight: $fw-semibold
+  margin: 0
+  padding: 0
+  color: $brand-success
+  > li
+    color: inherit
+    & + li:before
+      font-family: "FontAwesome"
+      content: " \f105 "
+      font-size: 1.2em
+      cursor: pointer
+    a
+      padding: .8em 0
+      display: inline-block
+      color: inherit
+      text-decoration: none
+    &.active,
+    &:hover
+      color: $gray-strong
+    &:hover ~ li
+      color: lighten($gray-strong,20%)
+      &:before
+        color: inherit
+
+.checkbox
+  input
+    margin-left: 0 !important
+    opacity: 0
+    cursor: pointer
+    &:checked + span
+      color: inherit
+  label
+    position: relative
+    border: 1px solid $gray-medium
+    color: $gray-light
+    margin-right: .5em
+    line-height: 1.4em
+    width: 1.5em
+    +border-left-radius(px(4))
+    +border-right-radius(px(4))
+    padding: 0
+    &:hover
+      background-color: $gray-lighter
+    span
+      color: transparent
+
 
 .fog
-	position: absolute
-	width: 100%
-	height: 100%
-	background-color: white
-	top: 0
-	left: 0
-	+opacity(.2)
+  position: absolute
+  width: 100%
+  height: 100%
+  background-color: white
+  top: 0
+  left: 0
+  +opacity(.2)
 
 .smoke
-	position: absolute
-	width: 100%
-	height: 100%
-	top: 0
-	left: 0
-	background-color: black
-	+opacity(.5)
+  position: absolute
+  width: 100%
+  height: 100%
+  top: 0
+  left: 0
+  background-color: black
+  +opacity(.5)
 
 .rate
-	font-size: px(18)
-	// margin: .3em 0
-	line-height: 1
-	display: inline-block
-	color: $brand-gold
-	&:hover span
-		color: $brand-gold !important
-	span
-		cursor: pointer
-		display: inline-block
-		padding-right: .25em
-		&.current-rate ~ span
-			color: $gray-lighter
-		&:hover ~ span
-			color: $gray-lighter !important
+  font-size: px(18)
+  line-height: 1
+  display: inline-block
+  color: $brand-gold
+  &:hover span
+    color: $brand-gold !important
+  span
+    cursor: pointer
+    display: inline-block
+    padding-right: .25em
+    &.current-rate ~ span
+      color: $gray-lighter
+    &:hover ~ span
+      color: $gray-lighter !important
 
 .text-success
-	color: $brand-success !important
+  color: $brand-success !important
 
 .badge.price
-	background-color: $brand-primary
-	letter-spacing: .02em
-	font-weight: $fw-bold
-	$br: 1.5em
-	+border-bottom-radius($br)
-	+border-top-radius($br)
-	padding: .6em 1em
-
-.ov-h-v
-	overflow-x: hidden
-
+  background-color: $brand-primary
+  letter-spacing: .02em
+  font-weight: $fw-bold
+  $br: 1.5em
+  +border-bottom-radius($br)
+  +border-top-radius($br)
+  padding: .6em 1em

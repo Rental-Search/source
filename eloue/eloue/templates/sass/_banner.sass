@@ -1,30 +1,35 @@
 .banner
 	position: relative
+	text-align: center
+	text-transform: uppercase
 	height: $banner-height
+	width: 100%
+	color: white
+	overflow: hidden
+	display: inline-table
 	img
 		height: 100%
-	.banner-content
-		top: 0
-		left: 0
+		z-index: -1
+		+centred-abs()
+	.banner-text
 		width: 100%
-		position: absolute
-		color: white
-		$ls: .06em
-		h2
-			margin-top: 2em
-			letter-spacing: $ls
-		a
-			letter-spacing: $ls
-			text-transform: inherit
-			text-decoration: none
-			font-size: px(15)
-			font-weight: $fw-bold
-			background-color: transparent
-			color: inherit
-			border: px(2) solid white
-			padding: 1.2em 2em
-			display: inline-block
-			+border-radius(px(3))
-			&:hover
-				color: $brand-primary
-				background-color: white
+		letter-spacing: .06em
+	h2
+		letter-spacing: inherit
+		font-weight: $fw-light
+		font-size: px(39)
+		margin-bottom: 1em
+	a
+		letter-spacing: inherit
+		text-decoration: none
+		font-size: px(15)
+		font-weight: $fw-bold
+		background-color: transparent
+		border: px(2) solid white
+		padding: 1.2em 2em
+		display: inline-block
+		+border-top-radius(px(3))
+		+border-bottom-radius(px(3))
+		&:hover
+			color: $brand-primary
+			background-color: white

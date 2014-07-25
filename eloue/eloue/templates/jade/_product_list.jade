@@ -1,28 +1,22 @@
-.container.mrg-v-6
-	h3.text-center
-		span.products-count 324 654 
-		| annonces de location dans 
-		span.products-location toute la France
-	ul.row.nav.mrg-v-4
-		-var products = []
-		-products[0] = { "image": STATIC_URL + "img/home-products/bike.jpg", "title": "Bike Bike Bike Bike Bike Bike Bike Bike Bike Bike ", "location": "Aubervillies", "price": "56", "declarer": STATIC_URL+"img/home-products/declarer.png" }
-		-products[1] = { "image": STATIC_URL + "img/home-products/audi.jpg", "title": "Audi - A3", "location": "Paris Paris Paris Paris Paris Paris Paris Paris Paris Paris ", "price": "100", "declarer": STATIC_URL+"img/home-products/declarer.png" }
-		-products[2] = { "image": STATIC_URL + "img/home-products/tent.jpg", "title": "Tante tip indien", "location": "Nantes", "price": "56", "declarer": STATIC_URL+"img/home-products/declarer.png" }
-		-for( var i = 0; i < 8; i++)
-			-var ind = i % 3
-			li.col-sm-6.col-md-3.item
-				.thumbnail
-					a(href="products/product_detail.html").img-wrapper
-						img( src = products[ ind ].image )
-						span.fog
-					.info.text-nowrap
-						h6 
-							a(href="#") #{products[ ind ].title}
-						p #{products[ ind ].location}
-						a(href="#").declarer
-							img(src=products[ ind ].declarer alt="")
-					span.badge.price #{products[ ind ].price}&euro; /jour
-	.row.explore
-		button(type = "button").btn.btn-success.btn-explore.pad-h-3
-			span.icon-search
-			| Explorez toutes les annonces
+.container
+  h3.text-center 324 654 annonces de location dans toute la France
+  ul.row.nav
+    -each product in products
+      li.col-sm-6.col-md-3.item
+        .thumbnail
+          a(href="products/product_detail.html").img-wrapper
+            img( src = "#{product[0]}" )
+            span.fog
+          .info.text-nowrap
+            h6 
+              a(href="#") #{products[1]}
+            p #{products[2]}
+            a(href="#").declarer
+              img(src="#{product[3]}" alt="")
+          span.badge.price #{products[ ind ].price}&euro; /jour
+  .row.explore
+    button(type = "button").btn.btn-success.btn-explore.pad-h-3
+      span.icon-search
+      | Explorez toutes les annonces
+
+    //- -products[2] = { "image": STATIC_URL + "img/home-products/tent.jpg", "title": "Tante tip indien", "location": "Nantes", "price": "56", "declarer": STATIC_URL+"img/home-products/declarer.png" }

@@ -1,81 +1,81 @@
 .product-list
-	$mrg: px(13)
-	$br: px(3)
-	ul
-		margin-top: -$mrg
-		margin-bottom: -$mrg
-	.item
-		padding: $mrg
-		.thumbnail
-			+border-bottom-radius($br)
-			+border-top-radius($br)
-			margin: 0
-			padding: 0
-			position: relative
-			border: none
-			text-decoration: none
-			border-bottom: px(1) solid darken($gray-lighter, 8%)
-			color: $gray-dark
-			background-color: white
-		.img-wrapper
-			width: 100%
-			position: relative
-			display: block
-			&:hover
-				.fog
-					background: transparent
-			img
-				width: 100%
-			.fog
-				+transition(all .2s ease-in-out)
-		.info
-			overflow: hidden
-			padding: 1em
-			border: px(1) solid $gray-lighter
-			border-top: none
-			+border-bottom-radius($br)
-			position: relative
-			&:before
-				position: absolute
-				content: ''
-				bottom: 0
-				right: 0
-				width: px(70)
-				height: 100%
-				background: white
-				background: linear-gradient(to right, rgba(255,255,255,0), white px(10))
-			h6 a
-				color: $gray-dark
-			p
-				margin: 0
-				font-weight: $fw-semibold
-				font-size: px(11)
-			.declarer
-				position: absolute
-				bottom: 0
-				top: 0
-				right: px(10)
-				$w: px(40)
-				width: $w
-				height: $w
-				$br: 50%
-				+border-bottom-radius($br)
-				+border-top-radius($br)
-				overflow: hidden
-				margin: auto 0
-				img
-					height: 100%
-					width: 100%
-		.price
-			font-size: px(12)
-			position: absolute
-			top: 0
-			right: 0
-			margin: .7em
+  $mrg: px(13)
+  $br: px(3)
+  ul
+    margin-top: -$mrg
+    margin-bottom: -$mrg
+  .item
+    padding: $mrg
+    .thumbnail
+      +border-bottom-radius($br)
+      +border-top-radius($br)
+      margin: 0
+      padding: 0
+      position: relative
+      border: none
+      text-decoration: none
+      border-bottom: px(1) solid darken($gray-lighter, 8%)
+      color: $gray-dark
+      background-color: white
+    .img-wrapper
+      width: 100%
+      position: relative
+      display: block
+      &:hover
+        .fog
+          background: transparent
+      img
+        width: 100%
+      .fog
+        +transition(all .2s ease-in-out)
+    .info
+      overflow: hidden
+      padding: 1em
+      border: px(1) solid $gray-lighter
+      border-top: none
+      +border-bottom-radius($br)
+      position: relative
+      &:before
+        position: absolute
+        content: ''
+        bottom: 0
+        right: 0
+        width: px(70)
+        height: 100%
+        background: white
+        background: linear-gradient(to right, rgba(255,255,255,0), white px(10))
+      h6 a
+        color: $gray-dark
+      p
+        margin: 0
+        font-weight: $fw-semibold
+        font-size: px(11)
+      .declarer
+        position: absolute
+        bottom: 0
+        top: 0
+        right: px(10)
+        $w: px(40)
+        width: $w
+        height: $w
+        $br: 50%
+        +border-bottom-radius($br)
+        +border-top-radius($br)
+        overflow: hidden
+        margin: auto 0
+        img
+          height: 100%
+          width: 100%
+    .price
+      font-size: px(12)
+      position: absolute
+      top: 0
+      right: 0
+      margin: .7em
 
-	.explore
-		text-align: center
-		button
-			span
-				font-size: 1.2em
-				margin-right: px(14)
+  .explore
+    text-align: center
+    button
+      span
+        font-size: 1.2em
+        margin-right: px(14)
