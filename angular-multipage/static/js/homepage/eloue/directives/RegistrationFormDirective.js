@@ -7,10 +7,10 @@ define(["angular", "eloue/app", "eloue/controllers/RegisterCtrl"], function (ang
     /**
      * Directive to display registration form.
      */
-    angular.module("EloueApp").directive("eloueRegistrationForm", [function () {
+    angular.module("EloueApp").directive("eloueRegistrationForm", ["$window", function ($window) {
         return {
             restrict: "E",
-            templateUrl: "/partials/homepage/registration-form.html",
+            templateUrl: $window.templatePrefix + "partials/homepage/registration-form.html",
             scope: {},
             controller: "RegisterCtrl"
         };

@@ -7,10 +7,10 @@ define(["angular", "eloue/app", "eloue/controllers/LoginCtrl"], function (angula
     /**
      * Directive to display login form.
      */
-    angular.module("EloueApp").directive("eloueLoginForm", [function () {
+    angular.module("EloueApp").directive("eloueLoginForm", ["$window", function ($window) {
         return {
             restrict: "E",
-            templateUrl: "/partials/homepage/login-form.html",
+            templateUrl: $window.templatePrefix + "partials/homepage/login-form.html",
             scope: {},
             controller: "LoginCtrl"
         };

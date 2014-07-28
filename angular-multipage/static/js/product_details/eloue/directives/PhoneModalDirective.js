@@ -2,12 +2,12 @@ define(["angular", "eloue/app", "eloue/controllers/ProductDetailsCtrl"], functio
     "use strict";
 
     /**
-     * Directive to display modal window to send message to owner.
+     * Directive to display modal window to call the owner.
      */
-    angular.module("EloueApp").directive("eloueMessageModal", [function () {
+    angular.module("EloueApp").directive("elouePhoneModal", ["$window", function ($window) {
         return {
             restrict: "E",
-            templateUrl: "/partials/product_details/message-modal.html",
+            templateUrl: $window.templatePrefix + "partials/product_details/phone-modal.html",
             scope: {},
             controller: "ProductDetailsCtrl"
         };

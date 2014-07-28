@@ -4,10 +4,10 @@ define(["angular", "eloue/app", "eloue/controllers/ProductDetailsCtrl"], functio
     /**
      * Directive to display booking form on product details page.
      */
-    angular.module("EloueApp").directive("eloueProductDetailsBooking", [function () {
+    angular.module("EloueApp").directive("eloueProductDetailsBooking", ["$window", function ($window) {
         return {
             restrict: "E",
-            templateUrl: "/partials/product_details/product-details-booking.html",
+            templateUrl: $window.templatePrefix + "partials/product_details/product-details-booking.html",
             scope: {
                 inModal: "=inModal",
                 inBooking: "=inBooking"
