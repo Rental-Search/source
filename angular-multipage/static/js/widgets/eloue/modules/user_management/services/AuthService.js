@@ -1,9 +1,9 @@
-define(["angular", "eloue/constants", "eloue/modules/user_management/UserManagementModule"], function (angular) {
+define(["angular", "eloue/constants", "eloue/resources", "eloue/modules/user_management/UserManagementModule"], function (angular) {
     "use strict";
     /**
      * Authentication service.
      */
-    angular.module("EloueApp.UserManagementModule").factory("AuthService", ["$location", "Endpoints", function ($location, Endpoints) {
+    angular.module("EloueApp.UserManagementModule").factory("AuthService", ["$location", "Endpoints", "Registration", function ($location, Endpoints, Registration) {
         return {
 
             /**
@@ -54,6 +54,13 @@ define(["angular", "eloue/constants", "eloue/modules/user_management/UserManagem
                     $(".modal-backdrop").hide();
                     $location.path("/dashboard");
                 }
+            },
+
+            register: function register(account) {
+                Registration.register(account, function (response, header) {
+                    console.log(response);
+                    //TODO: define logic after user successfully registered
+                });
             },
 
             /**

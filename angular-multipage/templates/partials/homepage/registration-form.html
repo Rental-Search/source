@@ -42,6 +42,13 @@
             Postal code is required</span>
                         </div>
                         <div class="form-group">
+                            <input name="username" class="form-control" type="text" placeholder="username"
+                                   data-ng-model="account.username" required>
+                    <span data-ng-show="registrationForm.username.$error.required && registrationForm.username.$dirty"
+                          class="errorMsg">
+            Postal code is required</span>
+                        </div>
+                        <div class="form-group">
                             <input name="email" class="form-control" type="email" placeholder="E-mail *"
                                    data-ng-model="account.email" required>
                     <span data-ng-show="registrationForm.email.$error.required && registrationForm.email.$dirty"

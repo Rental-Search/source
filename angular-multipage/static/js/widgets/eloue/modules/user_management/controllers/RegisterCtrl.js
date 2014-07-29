@@ -1,10 +1,10 @@
-define(["angular", "eloue/modules/user_management/UserManagementModule", "eloue/resources"], function (angular) {
+define(["angular", "eloue/modules/user_management/services/AuthService", "eloue/modules/user_management/UserManagementModule"], function (angular) {
     "use strict";
 
     /**
      * Controller for the registration form.
      */
-    angular.module("EloueApp.UserManagementModule").controller("RegisterCtrl", ["$scope", "Users", function ($scope, Users) {
+    angular.module("EloueApp.UserManagementModule").controller("RegisterCtrl", ["$scope", "AuthService", function ($scope, AuthService) {
 
         /**
          * New user account data.
@@ -15,9 +15,7 @@ define(["angular", "eloue/modules/user_management/UserManagementModule", "eloue/
          * Register new user in the system.
          */
         $scope.register = function register() {
-            Users.register($scope.account, function (response, header) {
-                //TODO: define logic after user successfully registered
-            });
+            AuthService.register($scope.account);
         };
 
         /**

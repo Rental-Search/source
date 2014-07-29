@@ -13,24 +13,7 @@ define(["eloue/app", "eloue/modules/user_management/services/AuthService",
         "eloue/modules/booking/directives/ProductDetailsSmallDirective",
         "eloue/modules/booking/directives/validation/DatetimepickerDirective"],
     function (EloueApp) {
-
         "use strict";
-        /**
-         * Routing configuration for app module.
-         */
-//        EloueApp.config(function ($routeProvider) {
-//            $routeProvider
-//                .when("/", {
-//                    templateUrl: "views/main.html"
-//                })
-//                .when("/product/:productId", {
-//                    templateUrl: "/scripts/eloue/modules/booking/views/product-details.html",
-//                    controller: "ProductDetailsCtrl"
-//                })
-//                .otherwise({
-//                    redirectTo: "/"
-//                });
-//        });
 
         EloueApp.run(["$rootScope", "$location", "$route", "$http", "AuthService", function ($rootScope, $location, $route, $http, AuthService) {
             var userToken = AuthService.getCookie("user_token");
