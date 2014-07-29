@@ -3,6 +3,7 @@ extends ./base
 block variables
   -var STATIC_URL = "../static/"
   -var STYLESHEET_NAME = "homepage_styles"
+
   -var nav_home_items = [ "Logement", "Jardinage", "Automobile", "Image et son", "Bricolage", "Mode et accessoire", "Réceprion", "Santé et Bien être", "Autres" ]
 
   -var insurances = []
@@ -12,9 +13,14 @@ block variables
   -insurances[3] = ["trust", "Louez en toute confiance", "Notes et commentaires en ligne.", "Messagerie en ligne."]
 
   -var products = []
-  -products[0] = [STATIC_URL + "img/home-products/bike.jpg", "Bike Bike Bike Bike Bike Bike Bike Bike Bike Bike ", "Aubervillies", "56", STATIC_URL+"img/home-products/declarer.png"]
-  -products[1] = [STATIC_URL + "img/home-products/audi.jpg", "Audi - A3", "Paris Paris Paris Paris Paris Paris Paris Paris Paris Paris ", "100", STATIC_URL+"img/home-products/declarer.png"]
-  -products[2] = [STATIC_URL + "img/home-products/tent.jpg", "Tante tip indien", "Nantes", "56", STATIC_URL+"img/home-products/declarer.png"]
+  -products[0] = {"img_link": "img/home-products/bike.jpg", "title": "Bike Bike Bike Bike Bike Bike Bike Bike Bike Bike ", "description": "Aubervillies", "price": "56", "declarer_img_link": "img/home-products/declarer.png"}
+  -products[1] = {"img_link": "img/home-products/audi.jpg", "title": "Audi - A3", "description": "Paris Paris Paris Paris Paris Paris Paris Paris Paris Paris ", "price": "100", "declarer_img_link": "img/home-products/declarer.png"}
+  -products[2] = {"img_link": "img/home-products/tent.jpg", "title": "Tante tip indien", "description": "Nantes", "price": "56", "declarer_img_link": "img/home-products/declarer.png"}
+  -products[3] = {"img_link": "img/home-products/tent.jpg", "title": "Tante tip indien", "description": "Nantes", "price": "56", "declarer_img_link": "img/home-products/declarer.png"}
+  -products[4] = {"img_link": "img/home-products/tent.jpg", "title": "Tante tip indien", "description": "Nantes", "price": "56", "declarer_img_link": "img/home-products/declarer.png"}
+  -products[5] = {"img_link": "img/home-products/tent.jpg", "title": "Tante tip indien", "description": "Nantes", "price": "56", "declarer_img_link": "img/home-products/declarer.png"}
+  -products[6] = {"img_link": "img/home-products/tent.jpg", "title": "Tante tip indien", "description": "Nantes", "price": "56", "declarer_img_link": "img/home-products/declarer.png"}
+  -products[7] = {"img_link": "img/home-products/tent.jpg", "title": "Tante tip indien", "description": "Nantes", "price": "56", "declarer_img_link": "img/home-products/declarer.png"}
 
 block content
   include ./jade/_src

@@ -3,9 +3,9 @@ section.container.signs-links
 		li.divide
 		li: span
 			| Bonjour, 
-			a( href = "#inscrivez-vous" data-toggle="modal" data-target="#sign-in") inscrivez-vous 
+			a( href = "#inscrivez-vous", data-toggle="modal", data-target="#sign-in") inscrivez-vous 
 			| ou 
-			a( href = "#connectez-vous" data-toggle="modal" data-target="#log-in") connectez-vous
+			a( href = "#connectez-vous", data-toggle="modal", data-target="#log-in") connectez-vous
 		li.divide
 		li: span
 			| Vous êtes un loueur professionnel, découvrez les 
@@ -22,11 +22,11 @@ section.container.signs-links
 			a(href = "/templates"): img(src = "#{STATIC_URL}img/logo.png", alt = "logo")
 		.table-cell.main-cell
 			form(action="").input-group
-				input(type = "text" placeholder = "Que voulez-vous louer ?" title = "Que voulez-vous louer ?").table-cell.main-cell.form-control.what-field
+				input(type = "text", placeholder = "Que voulez-vous louer ?", title = "Que voulez-vous louer ?").table-cell.main-cell.form-control.what-field
 				.table-cell.input-group.where-field
-					span.sprite-location
-					input(type = "text" placeholder = "Où ça ?" title = "Où ça ?").form-control#geolocate
+					i.sprite-location
+					input(type = "text", placeholder = "Où ça ?", title = "Où ça ?").form-control#geolocate
 				.table-cell.input-group-btn
-					button(type = "button").btn.btn-default.btn-search: span.icon-search
+					button(type = "button").btn.btn-default.btn-search: i.icon-search
 		.table-cell
-			button(type = "button").btn.bg-success.advertise Déposez une annonce
+			button(type = "button").btn.bg-success.btn-advertise Déposez une annonce

@@ -1,81 +1,97 @@
 .product-list
-  $mrg: px(13)
-  $br: px(3)
-  ul
-    margin-top: -$mrg
-    margin-bottom: -$mrg
-  .item
-    padding: $mrg
-    .thumbnail
-      +border-bottom-radius($br)
-      +border-top-radius($br)
-      margin: 0
-      padding: 0
-      position: relative
-      border: none
-      text-decoration: none
-      border-bottom: px(1) solid darken($gray-lighter, 8%)
-      color: $gray-dark
-      background-color: white
-    .img-wrapper
-      width: 100%
-      position: relative
-      display: block
-      &:hover
-        .fog
-          background: transparent
-      img
-        width: 100%
-      .fog
-        +transition(all .2s ease-in-out)
-    .info
-      overflow: hidden
-      padding: 1em
-      border: px(1) solid $gray-lighter
-      border-top: none
-      +border-bottom-radius($br)
-      position: relative
-      &:before
-        position: absolute
-        content: ''
-        bottom: 0
-        right: 0
-        width: px(70)
-        height: 100%
-        background: white
-        background: linear-gradient(to right, rgba(255,255,255,0), white px(10))
-      h6 a
-        color: $gray-dark
-      p
-        margin: 0
-        font-weight: $fw-semibold
-        font-size: px(11)
-      .declarer
-        position: absolute
-        bottom: 0
-        top: 0
-        right: px(10)
-        $w: px(40)
-        width: $w
-        height: $w
-        $br: 50%
-        +border-bottom-radius($br)
-        +border-top-radius($br)
-        overflow: hidden
-        margin: auto 0
-        img
-          height: 100%
-          width: 100%
-    .price
-      font-size: px(12)
-      position: absolute
-      top: 0
-      right: 0
-      margin: .7em
-
-  .explore
+  padding: 3em 0
+  h3
+    font-size: px(26)
+    font-weight: $fw-light
+    color: $gray-dark
     text-align: center
-    button
-      span
-        font-size: 1.2em
-        margin-right: px(14)
+    margin: 0
+  ul
+    margin: 2em 0
+    li
+      margin: 0
+      padding: 1em
+
+  .thumbnail
+    +border-bottom-radius($bd-rad)
+    +border-top-radius($bd-rad)
+    white-space: nowrap
+    padding: 0
+    position: relative
+    border: none
+    border-bottom: px(1) solid darken($gray-lighter, 8%)
+    color: $gray-dark
+    background-color: white
+    overflow: hidden
+    margin: 0
+
+  .img-wrapper
+    width: 100%
+    display: block
+    overflow: hidden
+    &:hover .fog
+      background: transparent
+    .fog
+      +transition(all .2s ease-in-out)
+    img
+      width: 100%
+
+  .info
+    overflow: hidden
+    padding: 1em
+    border: px(1) solid $gray-lighter
+    border-top: none
+    +border-bottom-radius($bd-rad)
+    position: relative
+    &:before
+      position: absolute
+      content: ''
+      bottom: 0
+      right: 0
+      width: px(70)
+      height: 100%
+      background: white
+      background: linear-gradient(to right, rgba(255,255,255,0), white px(10))
+    h6
+      color: $gray-dark
+      font-weight: $fw-semibold
+      font-size: px(13)
+      margin: 0
+    p
+      margin: .5em 0 0 0
+      font-weight: $fw-semibold
+      font-size: px(11)
+      color: $gray-light
+    .declarer
+      position: absolute
+      bottom: 0
+      top: 0
+      right: px(10)
+      $w: px(40)
+      width: $w
+      height: $w
+      $bd-rad: 50%
+      +border-bottom-radius($bd-rad)
+      +border-top-radius($bd-rad)
+      overflow: hidden
+      margin: auto 0
+      img
+        height: 100%
+        width: 100%
+
+  .price
+    font-size: px(12)
+    position: absolute
+    top: 0
+    right: 0
+    margin: .7em
+
+  button
+    text-align: center
+    height: 3em
+    color: white !important
+    font-weight: $fw-bold
+    padding: 0 1.5em
+    i
+      font-size: 1.2em
+      margin-right: 1em

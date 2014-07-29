@@ -7793,18 +7793,10 @@ a, a:hover {
   border-color: #20a86a;
 }
 
-.bd-b,
 .framing {
   border: 0.07143em solid #eeeeee;
-}
-
-.framing {
   background-color: white;
   border-width: 0.07143em 0;
-}
-
-.bd-b {
-  border-width: 0 0 1px;
 }
 
 .link-success-color {

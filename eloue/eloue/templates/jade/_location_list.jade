@@ -1,8 +1,8 @@
-.container.mrg-v-6
+.container
 	h3
 		| Les viles les plus actives
 	.row
-		ul.nav.nav-tabs.nav-justified.ov-hidden
+		ul.nav.nav-justified
 			-var cities = []
 			-cities.push({ "name": "paris", "actives": "123 254" })
 			-cities.push({ "name": "lyon", "actives": "98 453" })
@@ -13,8 +13,8 @@
 			-cities.push({ "name": "lille", "actives": "123 254" })
 			-cities.push({ "name": "montpelier", "actives": "98 453" })
 			-cities.push({ "name": "rouen", "actives": "90 657" })
-			-var col = 3, length = cities.length
-			-for(var i = 0, city = 0; i < col; i++)
+			-var col = 3, city = 0, length = cities.length
+			-for(var i = 0; i < col; i++)
 				li.divide
 				li
 					ul.nav
