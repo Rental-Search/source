@@ -122,3 +122,27 @@
 		&:valid
 			border-color: $brand-success
 
+	.large
+		$bd-property: px(1) solid $gray-lighter
+		width: $modal-large-width
+		.modal-body
+			padding: 0
+		section
+			padding: 2em
+
+		.static-part
+			width: auto
+			border-right: $bd-property
+
+		.change-part
+			width: 100%
+
+		.product-info
+			border-bottom: $bd-property
+			@import pop_up_sections/product-info
+		// .terms
+
+		.dialogs
+			border-bottom: $bd-property
+
+		// .input-message

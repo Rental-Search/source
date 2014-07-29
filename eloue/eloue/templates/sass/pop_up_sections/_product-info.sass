@@ -1,0 +1,27 @@
++block-with-thumbnail(px(140))
+>.thumbnail-img a
+	height: auto
+>.thumbnail-content
+	white-space: nowrap
+	text-align: left
+	.sprite-location
+		display: inline-block
+		margin: 0 .5em -.3em 0
+		+sprite($s-location-pin)
+	h3
+		font-size: inherit
+		font-weight: $fw-bold
+	p
+		font-weight: $fw-semibold
+		font-size: inherit
+		margin: 0 0 .5em
+	.sprite-comment
+		display: inline-block
+		margin: 0 .5em -.3em 1em
+		+sprite($s-comment)
+	.declarer
+		+block-with-thumbnail(px(40))
+		margin-top: 0
+		.thumbnail-content
+			vertical-align: middle
+			font-size: px(13)
