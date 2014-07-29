@@ -129,7 +129,7 @@ define(["angular",
         };
 
         $scope.getAvatar = function getAvatar(uri) {
-            return uri ? uri : '/img/avatar_default.jpg';
+            return uri ? uri : '/static/img/avatar_default.jpg';
         };
 
         $scope.callOwner = function callOwner() {

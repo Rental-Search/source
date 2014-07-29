@@ -21,7 +21,7 @@ module.exports = function (grunt) {
     // Project settings
     yeoman: {
       // configurable paths
-      app: require('./bower.json').appPath || 'static',
+      app: require('./bower.json').appPath || './',
       dist: 'dist'
     },
 
@@ -142,8 +142,9 @@ module.exports = function (grunt) {
     // Automatically inject Bower components into the app
     'bower-install': {
       app: {
-        html: 'templates/index.html',
-        ignorePath: '<%= yeoman.app %>/'
+        html: 'templates/index.html'
+//          ,
+//        ignorePath: '<%= yeoman.app %>/'
       }
     },
 

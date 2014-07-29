@@ -1,6 +1,5 @@
-
 require.config({
-    baseUrl: "../js/product_details",
+    baseUrl: "../static/js/product_details",
     paths: {
         "bootstrap": "../../bower_components/bootstrap/dist/js/bootstrap.min",
         "lodash": "../../bower_components/lodash/dist/lodash.min",
@@ -51,9 +50,6 @@ require([
 ], function ($, _, angular, bootstrap, moment, ngMoment, datepicker, datejs, formmapper, vars, route) {
     "use strict";
     $(function () {
-
-
-
         angular.bootstrap($("#ngAside"), ["EloueApp"]);
         $('#geolocate').formmapper({
             details: "form"

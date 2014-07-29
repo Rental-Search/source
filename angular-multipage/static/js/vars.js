@@ -1,1 +1,1 @@
-var templatePrefix = "/new_ui/";
+var templatePrefix = "/templates/";

@@ -1,7 +1,5 @@
-
-
 require.config({
-    baseUrl: "../js/homepage",
+    baseUrl: "../static/js/homepage",
     paths: {
         "bootstrap": "../../bower_components/bootstrap/dist/js/bootstrap.min",
         "lodash": "../../bower_components/lodash/dist/lodash.min",

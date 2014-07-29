@@ -19,8 +19,8 @@ module.exports = function(config) {
       {pattern: 'app/bower_components/angular-route/angular-route.min.js', included: false },
       {pattern: 'app/js/*.js', included: false },
       {pattern: 'app/js/**/*.js', included: false },
-      {pattern: 'test/unit/**/*.js', included: false },
-      'test/test-main.js'
+      {pattern: 'tests/unit/**/*.js', included: false },
+      'tests/test-main.js'
     ],
 
     // list of files / patterns to exclude
