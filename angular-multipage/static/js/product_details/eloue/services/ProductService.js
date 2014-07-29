@@ -7,6 +7,11 @@ define(["angular", "eloue/app", "eloue/resources"], function (angular) {
 
         return {
 
+            /**
+             * Get product by ID.
+             * @param id
+             * @returns Product promise object.
+             */
             getProduct: function getProduct(id) {
                 var deferred = $q.defer();
                 var self = this;
@@ -32,10 +37,23 @@ define(["angular", "eloue/app", "eloue/resources"], function (angular) {
                 return deferred.promise;
             },
 
+            /**
+             * Checks if product is available on selected dates.
+             * @param id product id
+             * @param startDate booking start date
+             * @param endDate booking end date
+             * @param quantity number of products
+             * @returns Information if product is available and prices.
+             */
             isAvailable: function isAvailable(id, startDate, endDate, quantity) {
                 return CheckAvailability.get({id: id, started_at: startDate, ended_at: endDate, quantity: quantity});
             },
 
+            /**
+             * Retrieves identifier of the object from provided url, that ends with "../{%ID%}/"
+             * @param url URL
+             * @returns ID
+             */
             getIdFromUrl: function getIdFromUrl(url) {
                 var trimmedUrl = url.slice(0, url.length - 1);
                 return trimmedUrl.substring(trimmedUrl.lastIndexOf("/") + 1, url.length);

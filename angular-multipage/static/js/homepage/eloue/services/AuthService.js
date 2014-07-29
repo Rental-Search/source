@@ -1,12 +1,11 @@
 define(["angular", "eloue/constants", "eloue/app"], function (angular) {
     "use strict";
+    
     /**
      * Authentication service.
      */
     angular.module("EloueApp").factory("AuthService", ["$rootScope", "$location", "Endpoints", function ($rootScope, $location, Endpoints) {
-
         return {
-
 
             /**
              * Sign in user with provided credentials.
@@ -47,6 +46,9 @@ define(["angular", "eloue/constants", "eloue/app"], function (angular) {
                 }
             },
 
+            /**
+             * Authorize user by "user_token" cookie.
+             */
             authorize: function authorize() {
                 var userToken = this.getCookie("user_token");
                 if (userToken) {
@@ -60,10 +62,13 @@ define(["angular", "eloue/constants", "eloue/app"], function (angular) {
              * @returns true if user is logged in
              */
             isLoggedIn: function () {
-                var userToken = this.getCookie("user_token");
-                return userToken;
+                return this.getCookie("user_token");
             },
 
+            /**
+             * Retrieves cookie value by provided cookie name.
+             * @param cname cookie name
+             */
             getCookie: function getCookie(cname) {
                 var name = cname + "=";
                 var ca = document.cookie.split(';');

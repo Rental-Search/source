@@ -1,7 +1,14 @@
 define(["angular", "eloue/app", "eloue/resources"], function (angular) {
     "use strict";
 
+    /**
+     * Controller for the registration form.
+     */
     angular.module("EloueApp").controller("RegisterCtrl", ["$scope", "Users", function ($scope, Users) {
+
+        /**
+         * New user account data.
+         */
         $scope.account = {};
 
         /**
@@ -9,18 +16,17 @@ define(["angular", "eloue/app", "eloue/resources"], function (angular) {
          */
         $scope.register = function register() {
             Users.register($scope.account, function (response, header) {
-//                $rootScope.$broadcast("redirectToLogin");
+                //TODO: define logic after user successfully registered
             });
         };
 
+        /**
+         * Opens registration via email form.
+         */
         $scope.openRegistrationForm = function openRegistrationForm() {
             var classic_form = $('.classic-form');
-//            console.log(classic_form);
-//            classic_form.hide();
-//            $('.registration.email').on('click', function(){
-                classic_form.slideDown();
-                $('.registration.email').slideUp();
-//            });
+            classic_form.slideDown();
+            $('.registration.email').slideUp();
         }
 
     }]);

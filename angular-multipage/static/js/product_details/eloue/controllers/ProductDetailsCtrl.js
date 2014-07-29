@@ -7,6 +7,9 @@ define(["angular",
 ], function (angular) {
     "use strict";
 
+    /**
+     * Controller for product details widgets.
+     */
     angular.module("EloueApp").controller("ProductDetailsCtrl", ["$scope", "$route", "ProductService", "PriceService", "MessageService", "UserService", "Endpoints", function ($scope, $route, ProductService, PriceService, MessageService, UserService, Endpoints) {
 
         //TODO: change to real user ID and product ID
@@ -60,6 +63,7 @@ define(["angular",
 
         ProductService.getProduct($scope.productId).then(function (result) {
             $scope.product = result;
+            //TODO: owner contact details will be defined in some other way.
             $scope.ownerCallDetails = {
                 number: result.phone.number,
                 tariff: "0.15"
@@ -67,7 +71,7 @@ define(["angular",
         });
 
         MessageService.getMessageThread($scope.productId).then(function (result) {
-            angular.forEach(result, function(value, key) {
+            angular.forEach(result, function (value, key) {
                 var senderId = $scope.getIdFromUrl(value.sender);
                 UserService.getUser(senderId).$promise.then(function (result) {
                     value.sender = result;
@@ -95,9 +99,9 @@ define(["angular",
             var toDateTime = new Date(Date.parse(toDateTimeStr));
             var today = Date.today().set({hour: 8, minute: 0});
             if (fromDateTime > toDateTime) {
-               $scope.dateRangeError = "From date cannot be after to date";
+                $scope.dateRangeError = "From date cannot be after to date";
             } else if (fromDateTime < today) {
-               $scope.dateRangeError = "From date cannot be before today";
+                $scope.dateRangeError = "From date cannot be before today";
             } else {
                 ProductService.isAvailable($scope.productId, fromDateTimeStr, toDateTimeStr, "1").$promise.then(function (result) {
                     $scope.duration = result.duration;
@@ -108,6 +112,9 @@ define(["angular",
             }
         };
 
+        /**
+         * Send new message to the owner.
+         */
         $scope.sendMessage = function sendMessage() {
             var message = $scope.newMessage;
             message.sender = Endpoints.api_url + "users/" + $scope.currentUser.id + "/";
@@ -123,11 +130,18 @@ define(["angular",
             });
         };
 
+        /**
+         * Checks if message in message thread should have an indent on the page.
+         */
         $scope.shouldIndent = function shouldIndent(message, feed, first) {
             //TODO:
             return !first;
         };
 
+        /**
+         * Get avatar url or default url if user has no avatar.
+         * @param uri
+         */
         $scope.getAvatar = function getAvatar(uri) {
             return uri ? uri : '/static/img/avatar_default.jpg';
         };
@@ -159,6 +173,11 @@ define(["angular",
             $("#" + modalId).modal("show");
         };
 
+        /**
+         * Retrieves identifier of the object from provided url, that ends with "../{%ID%}/"
+         * @param url URL
+         * @returns ID
+         */
         $scope.getIdFromUrl = function getIdFromUrl(url) {
             return url.slice(0, url.length - 1).substring(url.slice(0, url.length - 1).lastIndexOf("/") + 1, url.length);
         };

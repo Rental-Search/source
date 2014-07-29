@@ -1,5 +1,4 @@
 define(["angular", "eloue/app"], function (angular) {
-
     "use strict";
 
     /**

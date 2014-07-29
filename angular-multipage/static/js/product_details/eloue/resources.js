@@ -12,6 +12,9 @@ define(["eloue/app", "eloue/constants"], function (EloueApp) {
             });
     }]);
 
+    /**
+     * Factory for managing message threads.
+     */
     EloueApp.factory("MessageThreads", ["$resource", "Endpoints", function ($resource, Endpoints) {
         return $resource(Endpoints.api_url + "messagethreads\\/", {},
             {
@@ -20,6 +23,9 @@ define(["eloue/app", "eloue/constants"], function (EloueApp) {
             });
     }]);
 
+    /**
+     * Factory for managing product related messages.
+     */
     EloueApp.factory("ProductRelatedMessages", ["$resource", "Endpoints", function ($resource, Endpoints) {
         return $resource(Endpoints.api_url + "productrelatedmessages\\/", {},
             {
@@ -28,6 +34,9 @@ define(["eloue/app", "eloue/constants"], function (EloueApp) {
             });
     }]);
 
+    /**
+     * Factory for managing contacts.
+     */
     EloueApp.factory("Contacts", ["$resource", "Endpoints", function ($resource, Endpoints) {
         return $resource("data/contacts.json", {},
             {
@@ -35,6 +44,9 @@ define(["eloue/app", "eloue/constants"], function (EloueApp) {
             });
     }]);
 
+    /**
+     * Factory for managing products.
+     */
     EloueApp.factory("Products", ["$resource", "Endpoints", function ($resource, Endpoints) {
         return $resource(Endpoints.api_url + "products/:id\\/", {},
             {
@@ -42,6 +54,9 @@ define(["eloue/app", "eloue/constants"], function (EloueApp) {
             });
     }]);
 
+    /**
+     * Factory for checking product availability and price information.
+     */
     EloueApp.factory("CheckAvailability", ["$resource", "Endpoints", function ($resource, Endpoints) {
         return $resource(Endpoints.api_url + "products/:id/is_available\\/", {},
             {
@@ -49,6 +64,9 @@ define(["eloue/app", "eloue/constants"], function (EloueApp) {
             });
     }]);
 
+    /**
+     * Factory for managing prices.
+     */
     EloueApp.factory("Prices", ["$resource", "Endpoints", function ($resource, Endpoints) {
         return $resource(Endpoints.api_url + "prices\\/", {},
             {
@@ -56,6 +74,9 @@ define(["eloue/app", "eloue/constants"], function (EloueApp) {
             });
     }]);
 
+    /**
+     * Factory for managing addresses.
+     */
     EloueApp.factory("Addresses", ["$resource", "Endpoints", function ($resource, Endpoints) {
         return $resource(Endpoints.api_url + "addresses/:id\\/", {},
             {
@@ -63,6 +84,9 @@ define(["eloue/app", "eloue/constants"], function (EloueApp) {
             });
     }]);
 
+    /**
+     * Factory for managing phone numbers.
+     */
     EloueApp.factory("PhoneNumbers", ["$resource", "Endpoints", function ($resource, Endpoints) {
         return $resource(Endpoints.api_url + "phonenumbers/:id\\/", {},
             {

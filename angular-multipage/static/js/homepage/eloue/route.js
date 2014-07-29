@@ -1,4 +1,3 @@
-
 define(["eloue/app", "eloue/services/AuthService",
         "eloue/controllers/LoginCtrl",
         "eloue/controllers/RegisterCtrl",
@@ -6,8 +5,8 @@ define(["eloue/app", "eloue/services/AuthService",
         "eloue/directives/RegistrationFormDirective",
         "eloue/directives/validation/PasswordMatchDirective"],
     function (EloueApp) {
-
         "use strict";
+
         EloueApp.run(["$rootScope", "$location", "$route", "$http", "AuthService", function ($rootScope, $location, $route, $http, AuthService) {
             var userToken = AuthService.getCookie("user_token");
             $http.defaults.useXDomain = true;

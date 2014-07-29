@@ -6,6 +6,12 @@ define(["angular", "eloue/app", "eloue/constants", "eloue/resources"], function 
     angular.module("EloueApp").factory("MessageService", ["$q", "Endpoints", "MessageThreads", "ProductRelatedMessages", "Users", function ($q, Endpoints, MessageThreads, ProductRelatedMessages, Users) {
 
         return {
+
+            /**
+             * Get message thread for product.
+             * @param productId product ID
+             * @returns Messages promises.
+             */
             getMessageThread: function getMessageThread(productId) {
                 var deferred = $q.defer();
                 var self = this;
@@ -24,8 +30,13 @@ define(["angular", "eloue/app", "eloue/constants", "eloue/resources"], function 
                 return deferred.promise;
             },
 
+            /**
+             * Send message to the last message thread for the product.
+             * @param message
+             * @param productId
+             * @returns New saved mesage promise object.
+             */
             sendMessage: function sendMessage(message, productId) {
-
                 var threadDef = $q.defer();
                 var self = this;
                 if (!message.thread) {
@@ -57,6 +68,11 @@ define(["angular", "eloue/app", "eloue/constants", "eloue/resources"], function 
                 return deferred.promise;
             },
 
+            /**
+             * Retrieves identifier of the object from provided url, that ends with "../{%ID%}/"
+             * @param url URL
+             * @returns ID
+             */
             getIdFromUrl: function getIdFromUrl(url) {
                 var trimmedUrl = url.slice(0, url.length - 1);
                 return trimmedUrl.substring(trimmedUrl.lastIndexOf("/") + 1, url.length);
