@@ -1,4 +1,4 @@
-.product-details
+article
 	padding-top: 2.5em
 	padding-bottom: 2.5em
 	.breadcrumb
@@ -15,9 +15,9 @@
 		font-size: px($section-fz)
 		margin-bottom: $grid-gutter-width
 		border-bottom: px(1) solid darken($gray-lighter,10%)
-		+border-bottom-radius($section-bd-rad)
+		+border-bottom-radius($bd-rad)
 		.section-header
-			+border-top-radius($section-bd-rad)
+			+border-top-radius($bd-rad)
 			background-color: $brand-primary
 			padding: $section-pad
 			& + .section-body
@@ -45,8 +45,8 @@
 		background-color: white
 		border: px(1) solid $gray-lighter
 		border-top-width: 0
-		+border-top-radius($section-bd-rad)
-		+border-bottom-radius($section-bd-rad)
+		+border-top-radius($bd-rad)
+		+border-bottom-radius($bd-rad)
 		p,
 		li
 			color: inherit

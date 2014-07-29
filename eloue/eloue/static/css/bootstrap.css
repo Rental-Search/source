@@ -7739,6 +7739,10 @@ a, a:hover {
   border-color: #c4c4c4;
 }
 
+.inline-table {
+  display: inline-table;
+}
+
 .table-cell {
   display: table-cell;
   width: 1%;
@@ -7809,6 +7813,15 @@ a, a:hover {
 .bg-danger:hover {
   background-color: #e14231 !important;
   border-color: #e14231 !important;
+}
+
+.bg-gray {
+  border-color: #9d9d9d;
+  background-color: #9d9d9d;
+}
+.bg-gray:hover {
+  background-color: #919191 !important;
+  border-color: #919191 !important;
 }
 
 .framing {

@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="en"></html>
+<html lang="fr"></html>
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700">
   <link rel="stylesheet" href="../../static/css/bootstrap.css">
   <link rel="stylesheet" href="../../static/css/chosen.min.css">
-  <link rel="stylesheet" href="../../static/css/undefined.css">
+  <link rel="stylesheet" href="../../static/css/product_detail_styles.css">
   <link rel="shortcut icon" href="../../static/img/favicon.ico">
   <!-- for IE < 9 -->
   <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
@@ -23,8 +23,30 @@
   <title>e-loue</title>
 </head>
 <body>
+  <div id="fb-root"></div>
+  <script>
+    (function(d, s, id) {
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) return;
+      js = d.createElement(s); js.id = id;
+      js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.0";
+      fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
+    
+    window.___gcfg = {lang: 'fr'};
+      (function() {
+        var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+        po.src = 'https://apis.google.com/js/platform.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+      })();
+      
+    !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');
+    
+  </script>
   <div class="container-flex">
-    <header>
+    <input type="checkbox" id="sourse">
+    <lable for="#sourse" id="sourse-img"><img src="../../static/img/src/product-detail.jpg"></lable>
+    <header class="header-site">
       <section class="container signs-links">
         <ul role="tablist" class="nav without-spaces">
           <li class="divide"></li>
@@ -41,16 +63,16 @@
           <div class="table-cell main-cell">
             <form action="" class="input-group">
               <input type="text" placeholder="Que voulez-vous louer ?" title="Que voulez-vous louer ?" class="table-cell main-cell form-control what-field">
-              <div class="table-cell input-group where-field"><span class="sprite-location"></span>
+              <div class="table-cell input-group where-field"><i class="sprite-location"></i>
                 <input type="text" placeholder="Où ça ?" title="Où ça ?" id="geolocate" class="form-control">
               </div>
               <div class="table-cell input-group-btn">
-                <button type="button" class="btn btn-default btn-search"><span class="icon-search"></span></button>
+                <button type="button" class="btn btn-default btn-search"><i class="icon-search"></i></button>
               </div>
             </form>
           </div>
           <div class="table-cell">
-            <button type="button" class="btn bg-success advertise">Déposez une annonce</button>
+            <button type="button" class="btn bg-success btn-advertise">Déposez une annonce</button>
           </div>
         </section>
       </div>
@@ -67,7 +89,7 @@
         </div>
       </div>
     </nav>
-    <article class="product-details container">
+    <article class="container">
       <div class="row">
         <div class="col-sm-8 product-details-title">
           <h3 class="pad-0">Location Bmw - 520 touring luxe - NICE</h3>
@@ -78,7 +100,20 @@
             <li>10 000 à 30 000 km</li>
           </ul>
         </div>
-        <div class="col-sm-4 share-btns"></div>
+        <div class="col-sm-4 share-btns">
+          <ul class="nav without-spaces">
+            <li><a href="https://twitter.com/share" data-text="Tweeter" data-lang="fr" data-count="none" class="twitter-share-button">Tweeter</a></li>
+            <li>
+              <div data-href="https://www.e-loue.com" data-layout="button" data-action="like" data-show-faces="false" data-share="false" class="fb-like"></div>
+            </li>
+            <li>
+              <div data-href="https://www.e-loue.com" data-layout="button_count" data-action="recommend" data-show-faces="false" data-share="false" class="fb-like"></div>
+            </li>
+            <li>
+              <div data-size="medium" data-annotation="none" class="g-plusone"></div>
+            </li>
+          </ul>
+        </div>
       </div>
       <div class="row">
         <main class="col-sm-8">
@@ -310,21 +345,21 @@
                 <!-- p.available.unavailable Cet article est disponible à ces dates-->
               </div>
               <div class="part">
-                <p class="mrg-0">Durée de la location : <b class="period-days">3 jours </b>et <b class="period-hours">9 heures</b></p>
-                <p class="price mrg-0">Prix de la location :
+                <p>Durée de la location : <b class="period-days">3 jours </b>et <b class="period-hours">9 heures</b></p>
+                <p class="price">Prix de la location :
                   <big class="text-primary">&nbsp;168€</big>
                 </p>
-                <p class="mrg-0">Assurance incluse</p>
+                <p>Assurance incluse</p>
               </div>
               <div class="part">
-                <button type="submit" class="btn success calendar-ok"><span></span>Réservez</button>
+                <button type="submit" class="btn bg-success calendar-ok"><span></span>Réservez</button>
                 <p class="mrg-v-1"><small>Cette somme vous sera débitée lorsque le propriétaire validera la location</small></p>
               </div>
             </form>
           </section>
           <section class="add-to-wishlist">
             <div class="section-body">
-              <div class="part"><a href="#" class="btn gray mrg-0"><span class="icon-heart-empty"></span>Ajoutez à votre liste d’envies</a></div>
+              <div class="part"><a href="#" class="btn bg-gray"><span class="icon-heart-empty"></span>Ajoutez à votre liste d’envies</a></div>
             </div>
           </section>
           <section class="owner-information">
@@ -343,7 +378,7 @@
                   </div>
                 </div>
               </div>
-              <div class="part"><a href="#" class="btn success send-message"><span></span>Envoyez un message</a><a href="#" class="btn success call"><span></span>Appelez</a>
+              <div class="part"><a href="#" class="btn bg-success send-message"><span></span>Envoyez un message</a><a href="#" class="btn bg-success call"><span></span>Appelez</a>
                 <ul class="nav stats">
                   <li class="published-ads"><span>
                       <big class="text-success">7 </big></span><span>annonces publiées</span></li>
@@ -358,8 +393,8 @@
                 </ul>
               </div>
               <div class="part connection clearfix">
-                <div class="col-sm-4 pad-0"><a href="#" class="friend-photo-wrapper"><img src="../../static/img/home-products/friend1.png" alt=""></a><a href="#" class="friend-photo-wrapper"><img src="../../static/img/home-products/friend2.png" alt=""></a></div>
-                <div class="col-sm-8 pad-0">
+                <div class="col-sm-4"><a href="#" class="friend-photo-wrapper"><img src="../../static/img/home-products/friend1.png" alt=""></a><a href="#" class="friend-photo-wrapper"><img src="../../static/img/home-products/friend2.png" alt=""></a></div>
+                <div class="col-sm-8">
                   <p class="mrg-0"><small><a href="#">Philippe Dupré </a>et <a href="#">Tony Finn </a>sont amis avec le propriétaire.</small></p>
                 </div>
               </div>
@@ -414,7 +449,7 @@
           <section class="connected-with-owner">
             <div class="section-body">
               <div class="part text-center">
-                <div class="facebook-box"><span class="icon-facebook"></span></div><a href="#" class="btn info mrg-0">Connectez-vous avec Facebook</a>
+                <div class="facebook-box"><span class="icon-facebook"></span></div><a href="#" class="btn bg-info">Connectez-vous avec Facebook</a>
                 <p>Vérifiez si un de vos amis connait ce propriétaire ?</p>
               </div>
             </div>
@@ -423,85 +458,111 @@
       </div>
     </article>
     <footer>
-      <section class="row-fluid insurances framing-h">
-        <div class="container mrg-v-6">
-          <ul class="nav nav-tabs nav-justified text-nowrap text-center">
+      <section class="row-fluid insurances framing">
+        <div class="container">
+          <ul class="nav nav-justified">
+            <li class="divide"></li>
+            <li>
+              <div class="insurances-img"><span class="payment"></span></div>
+              <h5>Louez en toute sécurité</h5>
+              <p>Transactions en ligne sécurisées.<br>Aucun échange d'argent.</p>
+            </li>
+            <li class="divide"></li>
+            <li>
+              <div class="insurances-img"><span class="serenity"></span></div>
+              <h5>Louez en toute sérénité</h5>
+              <p>Assurance incluse et automatique.<br>Caution en ligne.</p>
+            </li>
+            <li class="divide"></li>
+            <li>
+              <div class="insurances-img"><span class="simplicity"></span></div>
+              <h5>Louez en toute simplicité</h5>
+              <p>Service client dédié 7j/7.<br>Dépot d'annonce gratuite.</p>
+            </li>
+            <li class="divide"></li>
+            <li>
+              <div class="insurances-img"><span class="trust"></span></div>
+              <h5>Louez en toute confiance</h5>
+              <p>Notes et commentaires en ligne.<br>Messagerie en ligne.</p>
+            </li>
           </ul>
         </div>
       </section>
       <section class="row-fluid footer-links">
-        <div class="container mrg-v-6">
-          <ul class="nav nav-tabs nav-justified ov-hidden">
+        <div class="container">
+          <ul class="nav nav-justified">
             <li class="divide"></li>
-            <li class="text-center ul-wrapper">
-              <div class="centering text-left">
+            <li class="ul-wrapper">
+              <div class="centering">
                 <h4 class="text-nowrap">Le concept eloue</h4>
                 <ul class="nav">
-                  <li class="link-wrapper mrg-v-1"><a href="#" class="pad-0">Comment ça marche ?</a></li>
-                  <li class="link-wrapper mrg-v-1"><a href="#" class="pad-0">Simulez vos revenus</a></li>
-                  <li class="link-wrapper mrg-v-1"><a href="#" class="pad-0">Questions fréquentes</a></li>
-                  <li class="link-wrapper mrg-v-1"><a href="#" class="pad-0">Conseils pour les propriétaires</a></li>
-                  <li class="link-wrapper mrg-v-1"><a href="#" class="pad-0">Conseils pour les locataires</a></li>
-                  <li class="link-wrapper mrg-v-1"><a href="#" class="pad-0">Témoignages</a></li>
+                  <li class="link-wrapper"><a href="#">Comment ça marche ?</a></li>
+                  <li class="link-wrapper"><a href="#">Simulez vos revenus</a></li>
+                  <li class="link-wrapper"><a href="#">Questions fréquentes</a></li>
+                  <li class="link-wrapper"><a href="#">Conseils pour les propriétaires</a></li>
+                  <li class="link-wrapper"><a href="#">Conseils pour les locataires</a></li>
+                  <li class="link-wrapper"><a href="#">Témoignages</a></li>
                 </ul>
               </div>
             </li>
             <li class="divide"></li>
-            <li class="text-center ul-wrapper">
-              <div class="centering text-left">
+            <li class="ul-wrapper">
+              <div class="centering">
                 <h4 class="text-nowrap">Pourquoi choisir eloue</h4>
                 <ul class="nav">
-                  <li class="link-wrapper mrg-v-1"><a href="#" class="pad-0">Assurance sérénité</a></li>
-                  <li class="link-wrapper mrg-v-1"><a href="#" class="pad-0">Paiement et caution sécurisés</a></li>
-                  <li class="link-wrapper mrg-v-1"><a href="#" class="pad-0">Contrats de location</a></li>
-                  <li class="link-wrapper mrg-v-1"><a href="#" class="pad-0">Parrainez vos proches</a></li>
-                  <li class="link-wrapper mrg-v-1"><a href="#" class="pad-0">L’offre e-loue Pro</a></li>
+                  <li class="link-wrapper"><a href="#">Assurance sérénité</a></li>
+                  <li class="link-wrapper"><a href="#">Paiement et caution sécurisés</a></li>
+                  <li class="link-wrapper"><a href="#">Contrats de location</a></li>
+                  <li class="link-wrapper"><a href="#">Parrainez vos proches</a></li>
+                  <li class="link-wrapper"><a href="#">L’offre e-loue Pro</a></li>
                 </ul>
               </div>
             </li>
             <li class="divide"></li>
-            <li class="text-center ul-wrapper">
-              <div class="centering text-left">
+            <li class="ul-wrapper">
+              <div class="centering">
                 <h4 class="text-nowrap">L’entreprise e-loue</h4>
                 <ul class="nav">
-                  <li class="link-wrapper mrg-v-1"><a href="#" class="pad-0">Qui sommes-nous ?</a></li>
-                  <li class="link-wrapper mrg-v-1"><a href="#" class="pad-0">Nos partenaires</a></li>
-                  <li class="link-wrapper mrg-v-1"><a href="#" class="pad-0">Respect de la vie privée</a></li>
-                  <li class="link-wrapper mrg-v-1"><a href="#" class="pad-0">Conditions générales</a></li>
-                  <li class="link-wrapper mrg-v-1"><a href="#" class="pad-0">Mentions légales</a></li>
+                  <li class="link-wrapper"><a href="#">Qui sommes-nous ?</a></li>
+                  <li class="link-wrapper"><a href="#">Nos partenaires</a></li>
+                  <li class="link-wrapper"><a href="#">Respect de la vie privée</a></li>
+                  <li class="link-wrapper"><a href="#">Conditions générales</a></li>
+                  <li class="link-wrapper"><a href="#">Mentions légales</a></li>
                 </ul>
               </div>
             </li>
             <li class="divide"></li>
-            <li class="text-center ul-wrapper">
-              <div class="centering text-left">
+            <li class="ul-wrapper">
+              <div class="centering">
                 <h4 class="text-nowrap">En savoir plus</h4>
                 <ul class="nav">
-                  <li class="link-wrapper mrg-v-1"><a href="#" class="pad-0">Espace presse</a></li>
-                  <li class="link-wrapper mrg-v-1"><a href="#" class="pad-0">Espace job</a></li>
-                  <li class="link-wrapper mrg-v-1"><a href="#" class="pad-0">Contactez-nous</a></li>
-                  <li class="link-wrapper mrg-v-1"><a href="#" class="pad-0">E-loue en mobilité</a></li>
-                  <li class="link-wrapper mrg-v-1"><a href="#" class="pad-0">Blog e-loue</a></li>
+                  <li class="link-wrapper"><a href="#">Espace presse</a></li>
+                  <li class="link-wrapper"><a href="#">Espace job</a></li>
+                  <li class="link-wrapper"><a href="#">Contactez-nous</a></li>
+                  <li class="link-wrapper"><a href="#">E-loue en mobilité</a></li>
+                  <li class="link-wrapper"><a href="#">Blog e-loue</a></li>
                 </ul>
               </div>
             </li>
           </ul>
         </div>
       </section>
-      <section class="row-fluid rss pad-v-4">
+      <section class="row-fluid rss">
         <div class="container">
           <div class="row">
-            <div class="col-sm-4">
-              <p>Abonnez-vous à la newsletter e-loue pour être informé des bonnes affaires et de nos actualités. <a href="#"><b>Déjà 2 Millions d'inscrits !</b></a></p>
+            <div class="table-cell">
+              <p>Abonnez-vous à la newsletter e-loue pour être informé des bonnes affaires et de nos actualités. </p><a href="#"><b>Déjà 2 Millions d'inscrits !</b></a>
             </div>
-            <div class="col-sm-6">
-              <form role="" class="form-inline">
+            <div class="table-cell main-cell">
+              <form role="" class="input-group">
                 <input type="email" placeholder="Saisissez votre email..." class="form-control">
-                <button type="submit" class="btn btn-default">Validez</button>
+                <div class="input-group-btn">
+                  <button type="submit" class="table-cell btn btn-default">Validez</button>
+                </div>
               </form>
             </div>
-            <div class="col-sm-2 text-right">
-              <div class="social-btns"><a href="#"><span class="icon-facebook"></span></a><a href="#"><span class="icon-twitter"></span></a><a href="#"><span class="icon-google-plus"></span></a></div>
+            <div class="table-cell">
+              <div class="social-btns"><a href="#"><i class="icon-facebook"></i></a><a href="#"><i class="icon-twitter"></i></a><a href="#"><i class="icon-google-plus"></i></a></div>
             </div>
           </div>
         </div>
@@ -509,15 +570,15 @@
     </footer>
     <div id="sign-in" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
       <div class="modal-dialog">
-        <div class="modal-content text-center">
+        <div class="modal-content">
           <div class="modal-header">
             <button type="button" data-dismiss="modal" class="close"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
             <h4 class="modal-title">Inscription</h4>
           </div>
           <div class="modal-body">
             <h3>Inscrivez-vous en 2 secondes</h3>
-            <div class="form-group"><a href="#" class="btn info"><span class="icon-facebook"></span>Inscription via Facebook</a></div>
-            <div class="form-group"><a href="#" class="btn danger"><span class="icon-google-plus"></span>Inscription via Google</a></div>
+            <div class="form-group"><a href="#" class="btn bg-info"><i class="icon-facebook"></i>Inscription via Facebook</a></div>
+            <div class="form-group"><a href="#" class="btn bg-danger"><i class="icon-google-plus"></i>Inscription via Google</a></div>
             <p class="info">Nous ne publierons jamais rien sur votre profil (sauf si vous le demandez) <br>Vos données personnelles ne seront jamais cédées ou vendues.</p><span class="or"></span>
             <h3>Inscrivez-vous en 30 secondes</h3>
             <form>
@@ -541,11 +602,11 @@
                   <input type="password" placeholder="Confirmation *" required class="form-control">
                 </div>
                 <div class="form-group">
-                  <button type="submit" class="btn success">Inscription</button>
+                  <button type="submit" class="btn bg-success">Inscription</button>
                 </div>
               </div>
               <div class="form-group">
-                <button class="btn success registration">Inscription via Email</button>
+                <button class="btn bg-success registration">Inscription via Email</button>
               </div>
               <div class="checkbox">
                 <label for="inform">
@@ -561,33 +622,33 @@
     </div>
     <div id="log-in" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
       <div class="modal-dialog">
-        <div class="modal-content text-center">
+        <div class="modal-content">
           <div class="modal-header">
             <button type="button" data-dismiss="modal" class="close"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
             <h4 class="modal-title">Connexion</h4>
           </div>
           <div class="modal-body">
             <h3>Connectez-vous à votre compte</h3>
-            <div class="form-group"><a href="#" class="btn info"><span class="icon-facebook"></span>Connexion via Facebook</a></div>
-            <div class="form-group"><a href="#" class="btn danger"><span class="icon-google-plus"></span>Connexion via Google</a></div>
+            <div class="form-group"><a href="#" class="btn bg-info"><i class="icon-facebook"></i>Connexion via Facebook</a></div>
+            <div class="form-group"><a href="#" class="btn bg-danger"><i class="icon-google-plus"></i>Connexion via Google</a></div>
             <p class="info">Nous ne publierons jamais rien sur votre profil (sauf si vous le demandez) <br>Vos données personnelles ne seront jamais cédées ou vendues.</p><span class="or"></span>
             <form>
               <div class="form-group">
                 <input type="email" placeholder="E-mail" required class="form-control">
               </div>
-              <div class="form-group mrg-v-0">
+              <div class="form-group">
                 <input type="password" placeholder="Mot de passe" required class="form-control">
               </div>
-              <div class="form-group mrg-v-0 clearfix mrg-v-2">
+              <div class="form-group clearfix">
                 <div class="checkbox pull-left">
                   <label for="remember-me">
-                    <input type="checkbox" checked id="remember-me"><span class="icon-ok"></span>
+                    <input type="checkbox" checked id="remember-me"><i class="icon-ok"></i>
                   </label>Se souvenir de moi
                 </div>
                 <div class="forgot-password pull-right"><a href="#">Mot de passe oublié</a></div>
               </div>
-              <div class="form-group mrg-v-2">
-                <button type="submit" class="btn success">Connexion</button>
+              <div class="form-group">
+                <button type="submit" class="btn bg-success">Connexion</button>
               </div>
             </form><span class="or"></span>
             <h4>Vous êtes déjà membre e-loue ?</h4><a href="#" data-toggle="modal" data-target="#sign-in" data-dismiss="modal" class="modal-fotter-link connexion">Inscription</a>

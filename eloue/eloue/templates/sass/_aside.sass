@@ -2,26 +2,31 @@ aside
   color: $gray-strong
   padding-top: $section-pad
 
-  .booking-form .available
-    color: $brand-success
-    &:before
-      font-family: "FontAwesome"
-      content: "\f00c"
-      font-size: .7em
-      display: inline-block
-      text-align: center
-      width: 2em
-      height: 2em
-      line-height: 2em
-      margin-right: 1em
-      +border-radius(50%)
-      background-color: $brand-success
-      color: white
-    &.unavailable
-      color: $brand-danger
+  .booking-form
+    p
+      margin: 0 0 .5em 
+    .available
+      padding-top: 1em
+      color: $brand-success
       &:before
-        background-color: $brand-danger
-        content: "\f00d"
+        font-family: "FontAwesome"
+        content: "\f00c"
+        font-size: .7em
+        display: inline-block
+        text-align: center
+        width: 2em
+        height: 2em
+        line-height: 2em
+        margin-right: 1em
+        +border-top-radius(50%)
+        +border-bottom-radius(50%)
+        background-color: $brand-success
+        color: white
+      &.unavailable
+        color: $brand-danger
+        &:before
+          background-color: $brand-danger
+          content: "\f00d"
 
   .chosen-container,
   .form-control,
@@ -82,11 +87,19 @@ aside
     .cell
       display: table-cell
       padding: 0 .5em
+  .add-to-wishlist a
+    margin: 0
+
   .owner-information
     .block-thumbnail
       +block-with-thumbnail(px(80, $section-fz), 50%)
       .rate
         margin: .5em 0
+    .connection
+      > div
+        padding: 0
+        p
+          margin: 0
 
     .connection
       .friend-photo-wrapper
@@ -110,10 +123,12 @@ aside
           font-weight: bolder
   .similar-listing
     li
-      +block-with-thumbnail(px(80, $section-fz), $section-bd-rad)
+      +block-with-thumbnail(px(80, $section-fz), $bd-rad)
       h6
-        margin-top: .5em
         color: $gray-dark
+        font-weight: $fw-semibold
+        font-size: px(13)
+        margin: .5em 0 0
       p
         margin: .25em 0 .5em !important
   .connected-with-owner
@@ -126,8 +141,8 @@ aside
       *display: inline
       *zoom: 1
       margin-bottom: $section-pad
-      +border-top-radius($section-bd-rad)
-      +border-bottom-radius($section-bd-rad)
+      +border-top-radius($bd-rad)
+      +border-bottom-radius($bd-rad)
       span
         display: inline-block
         *display: inline

@@ -186,6 +186,9 @@ input#sourse:checked + #sourse-img {
   background-color: white;
 }
 
+.insurances {
+  padding: 3em 0;
+}
 .insurances ul {
   overflow: hidden;
   white-space: nowrap;
@@ -245,6 +248,9 @@ input#sourse:checked + #sourse-img {
   color: #9d9d9d;
 }
 
+.product-list {
+  padding: 3em 0;
+}
 .product-list ul {
   margin: 2em 0;
 }
@@ -441,6 +447,9 @@ input#sourse:checked + #sourse-img {
   font-weight: 700;
 }
 
+.location-list {
+  padding: 3em;
+}
 .location-list .nav-justified {
   overflow: hidden;
 }
@@ -468,6 +477,9 @@ input#sourse:checked + #sourse-img {
   background: url(../img/mobile-phones.png) no-repeat;
   background-position: right bottom;
 }
+.download-mobile-apps .row {
+  padding: 3em;
+}
 .download-mobile-apps p {
   color: #9d9d9d;
 }
@@ -476,6 +488,9 @@ input#sourse:checked + #sourse-img {
   margin: 1.5em 1.5em 0 0;
 }
 
+.watch-video {
+  padding: 3em 0;
+}
 .watch-video .video {
   width: 33.57143em;
   height: 18.88393em;
@@ -508,6 +523,9 @@ input#sourse:checked + #sourse-img {
   padding-left: 4em;
 }
 
+.professional-renter-content {
+  padding: 3em 0;
+}
 .professional-renter-content .img-wrapper {
   text-align: right;
   margin-top: 2em;
@@ -527,6 +545,7 @@ input#sourse:checked + #sourse-img {
 }
 
 .talk-about-us {
+  padding: 3em 0;
   text-align: center;
 }
 .talk-about-us a {
@@ -538,6 +557,7 @@ input#sourse:checked + #sourse-img {
 }
 
 .footer-links {
+  padding: 3em 0;
   color: #2c2c2c;
 }
 .footer-links .nav-justified {
@@ -569,6 +589,7 @@ input#sourse:checked + #sourse-img {
 }
 
 .rss {
+  padding: 3em 0;
   color: #bbf2d9;
   background-color: #24bd77;
 }
@@ -819,9 +840,6 @@ input#sourse:checked + #sourse-img {
   border-color: #24bd77;
 }
 
-section > .container {
-  padding: 3em 0;
-}
 section h3 {
   font-size: 1.85714em;
   font-weight: 300;
