@@ -20,7 +20,7 @@
           <div class="container signs-links pad-v-2">
             <ul role="tablist" class="nav without-spaces">
               <li class="divide"></li>
-              <li><span>Bonjour, <a href="#inscrivez-vous" data-toggle="modal" data-target="#sign-in">inscrivez-vous </a>ou <a href="#connectez-vous" data-toggle="modal" data-target="#log-in">connectez-vous</a></span></li>
+              <li><span>Bonjour, <a href="#inscrivez-vous" data-toggle="modal" data-target="#registrationModal">inscrivez-vous </a>ou <a href="#connectez-vous" data-toggle="modal" data-target="#loginModal">connectez-vous</a></span></li>
               <li class="divide"></li>
               <li><span>Vous êtes un loueur professionnel, découvrez les <a href="#">offers e-loue Pro</a></span></li>
               <li class="divide"></li>
@@ -441,93 +441,10 @@
           </div>
         </div>
       </footer>
-      <div id="sign-in" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
-        <div class="modal-dialog">
-          <div class="modal-content text-center">
-            <div class="modal-header">
-              <button type="button" data-dismiss="modal" class="close"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-              <h4 class="modal-title">Inscription</h4>
-            </div>
-            <div class="modal-body">
-              <h3>Inscrivez-vous en 2 secondes</h3>
-              <div class="form-group"><a href="#" class="btn info"><span class="icon-facebook"></span>Inscription via Facebook</a></div>
-              <div class="form-group"><a href="#" class="btn danger"><span class="icon-google-plus"></span>Inscription via Google</a></div>
-              <p class="info">Nous ne publierons jamais rien sur votre profil (sauf si vous le demandez) <br>Vos données personnelles ne seront jamais cédées ou vendues.</p><span class="or"></span>
-              <h3>Inscrivez-vous en 30 secondes</h3>
-              <form>
-                <div class="classic-form">
-                  <div class="form-group">
-                    <input type="text" placeholder="Nom *" required class="form-control">
-                  </div>
-                  <div class="form-group">
-                    <input type="text" placeholder="Prénom *" required class="form-control">
-                  </div>
-                  <div class="form-group">
-                    <input type="text" placeholder="Code postal *" required class="form-control">
-                  </div>
-                  <div class="form-group">
-                    <input type="email" placeholder="E-mail *" required class="form-control">
-                  </div>
-                  <div class="form-group">
-                    <input type="password" placeholder="Mot de passe *" required class="form-control">
-                  </div>
-                  <div class="form-group">
-                    <input type="password" placeholder="Confirmation *" required class="form-control">
-                  </div>
-                  <div class="form-group">
-                    <button type="submit" class="btn success">Inscription</button>
-                  </div>
-                </div>
-                <div class="form-group">
-                  <button class="btn success registration">Inscription via Email</button>
-                </div>
-                <div class="checkbox">
-                  <label for="inform">
-                    <input type="checkbox" checked id="inform"><span class="icon-ok"></span>
-                  </label>Tenez moi informé de l'actualité et des bonnes affaires e-loue
-                </div>
-              </form>
-              <p>En créant un compte e-loue, vous acceptez les Conditions Générales<br>et la Politique de Confidentialité de notre site</p><span class="or"></span>
-              <h4>Vous êtes déjà membre e-loue ?</h4><a href="#connectez-vous" data-toggle="modal" data-target="#log-in" data-dismiss="modal" class="modal-fotter-link connexion">Connexion</a>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div id="log-in" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
-        <div class="modal-dialog">
-          <div class="modal-content text-center">
-            <div class="modal-header">
-              <button type="button" data-dismiss="modal" class="close"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-              <h4 class="modal-title">Connexion</h4>
-            </div>
-            <div class="modal-body">
-              <h3>Connectez-vous à votre compte</h3>
-              <div class="form-group"><a href="#" class="btn info"><span class="icon-facebook"></span>Connexion via Facebook</a></div>
-              <div class="form-group"><a href="#" class="btn danger"><span class="icon-google-plus"></span>Connexion via Google</a></div>
-              <p class="info">Nous ne publierons jamais rien sur votre profil (sauf si vous le demandez) <br>Vos données personnelles ne seront jamais cédées ou vendues.</p><span class="or"></span>
-              <form>
-                <div class="form-group">
-                  <input type="email" placeholder="E-mail" required class="form-control">
-                </div>
-                <div class="form-group mrg-v-0">
-                  <input type="password" placeholder="Mot de passe" required class="form-control">
-                </div>
-                <div class="form-group mrg-v-0 clearfix mrg-v-2">
-                  <div class="checkbox pull-left">
-                    <label for="remember-me">
-                      <input type="checkbox" checked id="remember-me"><span class="icon-ok"></span>
-                    </label>Se souvenir de moi
-                  </div>
-                  <div class="forgot-password pull-right"><a href="#">Mot de passe oublié</a></div>
-                </div>
-                <div class="form-group mrg-v-2">
-                  <button type="submit" class="btn success">Connexion</button>
-                </div>
-              </form><span class="or"></span>
-              <h4>Vous êtes déjà membre e-loue ?</h4><a href="#" data-toggle="modal" data-target="#sign-in" data-dismiss="modal" class="modal-fotter-link connexion">Inscription</a>
-            </div>
-          </div>
-        </div>
+
+      <div id="ngModals">
+          <eloue-login-form></eloue-login-form>
+          <eloue-registration-form></eloue-registration-form>
       </div>
     </div>
     <script src="http://jamesallardice.github.io/Placeholders.js/assets/js/placeholders.min.js"></script>
@@ -539,6 +456,6 @@
     <script src="../static/js/bootstrap/dropdown.js"></script>
     <script src="../static/js/bootstrap/carousel.js"></script>
     <script src="../static/js/scripts.js"></script>
-    <script src="../static/js/require.js" data-main="../static/js/product_details/main-product-details.js"></script>
+    <script src="../static/js/require.js" data-main="../static/js/widgets/main.js"></script>
   </body>
 </html>
