@@ -60,11 +60,13 @@ a, a:hover
   color: transparent
 
 .bg-success
-  border-color: $brand-success
-  background-color: $brand-success
-  &:hover
-    background-color: darken($brand-success, 5%)
-    border-color: darken($brand-success, 5%)
+  +make-bg($brand-success)
+
+.bg-info
+  +make-bg($brand-info)
+
+.bg-danger
+  +make-bg($brand-danger)
 
 .framing
   border: px(1) solid $gray-lighter
@@ -129,7 +131,6 @@ a, a:hover
       background-color: $gray-lighter
     span
       color: transparent
-
 
 .fog
   position: absolute

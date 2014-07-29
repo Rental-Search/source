@@ -1,19 +1,15 @@
 .container
-	.row
-		.col-sm-4
-			p
-				| Abonnez-vous à la newsletter e-loue pour être informé des bonnes affaires et de nos actualités. 
-				a(href="#")
-					b Déjà 2 Millions d'inscrits !
-		.col-sm-6
-			form(role = "").form-inline
-				input(type = "email" placeholder = "Saisissez votre email...").form-control
-				button(type = "submit").btn.btn-default Validez
-		.col-sm-2.text-right
-			.social-btns
-				a(href="#")
-					span.icon-facebook
-				a(href="#")
-					span.icon-twitter
-				a(href="#")
-					span.icon-google-plus
+  .row
+    .table-cell
+      p Abonnez-vous à la newsletter e-loue pour être informé des bonnes affaires et de nos actualités. 
+      a(href="#"): b Déjà 2 Millions d'inscrits !
+    .table-cell.main-cell
+      form(role = "").input-group
+        input(type = "email", placeholder = "Saisissez votre email...").form-control
+        .input-group-btn
+          button(type = "submit").table-cell.btn.btn-default Validez
+    .table-cell
+      .social-btns
+        a(href="#"): i.icon-facebook
+        a(href="#"): i.icon-twitter
+        a(href="#"): i.icon-google-plus

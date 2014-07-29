@@ -7789,8 +7789,26 @@ a, a:hover {
   background-color: #24bd77;
 }
 .bg-success:hover {
-  background-color: #20a86a;
-  border-color: #20a86a;
+  background-color: #20a86a !important;
+  border-color: #20a86a !important;
+}
+
+.bg-info {
+  border-color: #3959a8;
+  background-color: #3959a8;
+}
+.bg-info:hover {
+  background-color: #334f95 !important;
+  border-color: #334f95 !important;
+}
+
+.bg-danger {
+  border-color: #e45647;
+  background-color: #e45647;
+}
+.bg-danger:hover {
+  background-color: #e14231 !important;
+  border-color: #e14231 !important;
 }
 
 .framing {

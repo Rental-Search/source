@@ -1,6 +1,6 @@
 .modal
 	$bor-rad: px(3)
-	$item-width: 52%
+	$item-width: 50%
 	.modal-dialog
 		margin-top: 4em
 		width: $modal-width
@@ -8,6 +8,7 @@
 		+box-shadow(none)
 		border-color: transparent
 		border: none
+		text-align: center
 		+border-left-radius(0)
 		+border-right-radius(0)
 	.modal-header
@@ -38,14 +39,14 @@
 	.btn
 		+btn()
 		+social(1.2em)
-		span
+		i
 			+border-left-radius($bor-rad/2)
 			+border-right-radius($bor-rad/2)
 			background-color: white
 			margin-right: 1em
-		&.info span
+		&.bg-info i
 			color: $brand-info
-		&.danger span
+		&.bg-danger i
 			color: $brand-danger
 	p
 		font-size: px(12)
@@ -63,6 +64,12 @@
 			vertical-align: top
 			width: 1.5em
 			height: 1.5em
+	h3
+		font-size: px(26)
+		font-weight: $fw-light
+		color: $gray-dark
+		margin: 0 0 .5em
+		line-height: 1.5em
 	h4
 		font-size: px(17)
 	.checkbox
@@ -105,8 +112,6 @@
 	.forgot-password
 		font-size: px(12)
 		min-height: 20px
-		a
-			color: inherit
 
 	input[type="text"],
 	input[type="email"],

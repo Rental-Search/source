@@ -23,15 +23,21 @@ block variables
   -products[7] = {"img_link": "img/home-products/tent.jpg", "title": "Tante tip indien", "description": "Nantes", "price": "56", "declarer_img_link": "img/home-products/declarer.png"}
 
   -var cities = []
-  -cities[0] = ({ "name": "paris", "actives": "123 254" })
-  -cities[1] = ({ "name": "lyon", "actives": "98 453" })
-  -cities[2] = ({ "name": "toulouse", "actives": "90 657" })
-  -cities[3] = ({ "name": "nantes", "actives": "123 254" })
-  -cities[4] = ({ "name": "rennes", "actives": "98 453" })
-  -cities[5] = ({ "name": "bordeaux", "actives": "90 657" })
-  -cities[6] = ({ "name": "lille", "actives": "123 254" })
-  -cities[7] = ({ "name": "montpelier", "actives": "98 453" })
-  -cities[8] = ({ "name": "rouen", "actives": "90 657" })
+  -cities[0] = { "name": "paris", "actives": "123 254" }
+  -cities[1] = { "name": "lyon", "actives": "98 453" }
+  -cities[2] = { "name": "toulouse", "actives": "90 657" }
+  -cities[3] = { "name": "nantes", "actives": "123 254" }
+  -cities[4] = { "name": "rennes", "actives": "98 453" }
+  -cities[5] = { "name": "bordeaux", "actives": "90 657" }
+  -cities[6] = { "name": "lille", "actives": "123 254" }
+  -cities[7] = { "name": "montpelier", "actives": "98 453" }
+  -cities[8] = { "name": "rouen", "actives": "90 657" }
+
+  -var footer_links = []
+  -footer_links[0] = { "header": "Le concept eloue", "links": ["Comment ça marche ?", "Simulez vos revenus", "Questions fréquentes", "Conseils pour les propriétaires", "Conseils pour les locataires", "Témoignages"] }
+  -footer_links[1] = { "header": "Pourquoi choisir eloue", "links": ["Assurance sérénité", "Paiement et caution sécurisés", "Contrats de location", "Parrainez vos proches", "L’offre e-loue Pro"] }
+  -footer_links[2] = { "header": "L’entreprise e-loue", "links": ["Qui sommes-nous ?", "Nos partenaires", "Respect de la vie privée", "Conditions générales", "Mentions légales"] }
+  -footer_links[3] = { "header": "En savoir plus", "links": ["Espace presse", "Espace job", "Contactez-nous", "E-loue en mobilité", "Blog e-loue"] }
 
 block content
   include ./jade/_src
@@ -41,31 +47,31 @@ block content
     include ./jade/_nav_home
 
   article
-    section.row-fluid.banner
+    section.banner
       include ./jade/_banner
-    section.row-fluid.insurances.framing
+    section.insurances.framing
       include ./jade/_insurances
-    section.row-fluid.product-list
+    section.product-list
       include ./jade/_product_list
-    section.row-fluid.float-comments.framing
+    section.float-comments.framing
       include ./jade/_comments
-    section.row-fluid.location-list
+    section.location-list
       include ./jade/_location_list
 
   main
-    section.row-fluid.download-mobile-apps.framing
+    section.download-mobile-apps.framing
       include ./jade/_download_mobile_apps
-    section.row-fluid.watch-video
+    section.watch-video
       include ./jade/_watch_video
-    section.row-fluid.professional-renter-content.framing
+    section.professional-renter-content.framing
       include ./jade/_professional_renter_content
-    section.row-fluid.talk-about-us
+    section.talk-about-us
       include ./jade/_talk_about_us
 
   footer
-    section.row-fluid.footer-links.framing
+    section.footer-links.framing
       include ./jade/_footer_links
-    section.row-fluid.rss.pad-v-4
+    section.rss
       include ./jade/_rss
 
   include ./jade/_sign_in

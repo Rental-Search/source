@@ -1,13 +1,22 @@
 .footer-links
-	.ul-wrapper
-		vertical-align: top
-	.centering
-		display: inline-block
-	.link-wrapper
-		a
-			color: $gray-dark
-			font-weight: $fw-semibold
-			font-size: px(13)
-			&:hover
-				background-color: transparent
-				color: $brand-success
+  color: $gray-dark
+  .nav-justified
+    overflow: hidden
+  .ul-wrapper
+    vertical-align: top
+    text-align: center
+  h4
+    font-size: px(20)
+    font-weight: $fw-light
+  .centering
+    display: inline-block
+    text-align: left
+    li
+      margin: .5em 0
+    a
+      font-weight: $fw-semibold
+      font-size: px(13)
+      padding: 0
+      &:hover
+        background-color: transparent
+        color: $brand-success
