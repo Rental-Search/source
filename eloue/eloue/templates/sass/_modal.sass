@@ -232,3 +232,24 @@
             width: auto
             padding-left: 5em
             padding-right: 5em
+
+    .reserve-form
+      text-align: left
+      $pad-form: .75em
+      .table-row
+        margin: 0 (-$pad-form/2)
+      .table-cell
+        width: auto
+      h2
+        color: $gray-dark
+        margin: 0
+        font-size: px(26)
+      form
+        width: 100%
+        input
+          border: px(1) solid $gray-medium
+          height: 3em
+          padding: 0 1em
+          margin: $pad-form 0
+          +border-top-radius($bd-rad)
+          +border-bottom-radius($bd-rad)

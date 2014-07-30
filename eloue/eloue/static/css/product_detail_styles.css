@@ -1270,3 +1270,30 @@ aside .connected-with-owner .facebook-box span {
   padding-left: 5em;
   padding-right: 5em;
 }
+.modal .large .reserve-form {
+  text-align: left;
+}
+.modal .large .reserve-form .table-row {
+  margin: 0 -0.375em;
+}
+.modal .large .reserve-form .table-cell {
+  width: auto;
+}
+.modal .large .reserve-form h2 {
+  color: #2c2c2c;
+  margin: 0;
+  font-size: 1.85714em;
+}
+.modal .large .reserve-form form {
+  width: 100%;
+}
+.modal .large .reserve-form form input {
+  border: 0.07143em solid #c4c4c4;
+  height: 3em;
+  padding: 0 1em;
+  margin: 0.75em 0;
+  border-top-right-radius: 0.21429em;
+  border-top-left-radius: 0.21429em;
+  border-bottom-right-radius: 0.21429em;
+  border-bottom-left-radius: 0.21429em;
+}
