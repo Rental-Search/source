@@ -1,4 +1,4 @@
-define(["angular", "eloue/values", "eloue/resources", "eloue/modules/booking/BookingModule"], function (angular) {
+define(["angular", "../../../../../common/eloue/values", "../../../../../common/eloue/resources", "eloue/modules/booking/BookingModule"], function (angular) {
     "use strict";
     /**
      * Call service.

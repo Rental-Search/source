@@ -1,4 +1,4 @@
-define(["angular", "eloue/resources", "eloue/modules/booking/BookingModule"], function (angular) {
+define(["angular", "../../../../../common/eloue/resources", "eloue/modules/booking/BookingModule"], function (angular) {
     "use strict";
     /**
      * User service.

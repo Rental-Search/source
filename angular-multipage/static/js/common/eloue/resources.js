@@ -1,10 +1,10 @@
 "use strict";
-define(["eloue/app", "eloue/constants"], function (EloueApp) {
+define(["../../common/eloue/commonApp", "../../common/eloue/values"], function (EloueCommon) {
 
     /**
      * Factory for managing users.
      */
-    EloueApp.factory("Users", ["$resource", "Endpoints", function ($resource, Endpoints) {
+    EloueCommon.factory("Users", ["$resource", "Endpoints", function ($resource, Endpoints) {
         return $resource(Endpoints.api_url + "users/:id\\/", {},
             {
                 "get": { method: "GET", params: {id: ":id"}}
@@ -14,17 +14,20 @@ define(["eloue/app", "eloue/constants"], function (EloueApp) {
     /**
      * Factory for user registration.
      */
-    EloueApp.factory("Registration", ["$resource", "Endpoints", function ($resource, Endpoints) {
+    EloueCommon.factory("Registration", ["$resource", "Endpoints", function ($resource, Endpoints) {
         return $resource(Endpoints.api_url + "users\\/", {},
             {
-                "register": { method: "POST", headers: { 'authorization': '' }}
+                "register": {
+                    method: "POST",
+                    headers: { 'authorization': '' }
+                }
             });
     }]);
 
     /**
      * Factory for managing message threads.
      */
-    EloueApp.factory("MessageThreads", ["$resource", "Endpoints", function ($resource, Endpoints) {
+    EloueCommon.factory("MessageThreads", ["$resource", "Endpoints", function ($resource, Endpoints) {
         return $resource(Endpoints.api_url + "messagethreads\\/", {},
             {
                 "list": { method: "GET", params: {product: ":productId"}},
@@ -35,7 +38,7 @@ define(["eloue/app", "eloue/constants"], function (EloueApp) {
     /**
      * Factory for managing product related messages.
      */
-    EloueApp.factory("ProductRelatedMessages", ["$resource", "Endpoints", function ($resource, Endpoints) {
+    EloueCommon.factory("ProductRelatedMessages", ["$resource", "Endpoints", function ($resource, Endpoints) {
         return $resource(Endpoints.api_url + "productrelatedmessages\\/", {},
             {
                 "get": { method: "GET", url: Endpoints.api_url + "productrelatedmessages/:id\\/", params: {id: ":id"}},
@@ -46,7 +49,7 @@ define(["eloue/app", "eloue/constants"], function (EloueApp) {
     /**
      * Factory for managing contacts.
      */
-    EloueApp.factory("Contacts", ["$resource", "Endpoints", function ($resource, Endpoints) {
+    EloueCommon.factory("Contacts", ["$resource", "Endpoints", function ($resource, Endpoints) {
         return $resource("data/contacts.json", {},
             {
                 "get": { method: "GET"}
@@ -56,7 +59,7 @@ define(["eloue/app", "eloue/constants"], function (EloueApp) {
     /**
      * Factory for managing products.
      */
-    EloueApp.factory("Products", ["$resource", "Endpoints", function ($resource, Endpoints) {
+    EloueCommon.factory("Products", ["$resource", "Endpoints", function ($resource, Endpoints) {
         return $resource(Endpoints.api_url + "products/:id\\/", {},
             {
                 "get": { method: "GET", params: {id: ":id"}}
@@ -66,7 +69,7 @@ define(["eloue/app", "eloue/constants"], function (EloueApp) {
     /**
      * Factory for checikng availability of product and retrieving product information.
      */
-    EloueApp.factory("CheckAvailability", ["$resource", "Endpoints", function ($resource, Endpoints) {
+    EloueCommon.factory("CheckAvailability", ["$resource", "Endpoints", function ($resource, Endpoints) {
         return $resource(Endpoints.api_url + "products/:id/is_available\\/", {},
             {
                 "get": { method: "GET", params: {id: ":id", started_at: ":started_at", ended_at: "ended_at", quantity: ":quantity"}}
@@ -76,7 +79,7 @@ define(["eloue/app", "eloue/constants"], function (EloueApp) {
     /**
      * Factory for managing prices.
      */
-    EloueApp.factory("Prices", ["$resource", "Endpoints", function ($resource, Endpoints) {
+    EloueCommon.factory("Prices", ["$resource", "Endpoints", function ($resource, Endpoints) {
         return $resource(Endpoints.api_url + "prices\\/", {},
             {
                 "get": { method: "GET", params: {product: ":productId", unit: "1"}}
@@ -86,7 +89,7 @@ define(["eloue/app", "eloue/constants"], function (EloueApp) {
     /**
      * Factory for managing addresses.
      */
-    EloueApp.factory("Addresses", ["$resource", "Endpoints", function ($resource, Endpoints) {
+    EloueCommon.factory("Addresses", ["$resource", "Endpoints", function ($resource, Endpoints) {
         return $resource(Endpoints.api_url + "addresses/:id\\/", {},
             {
                 "get": { method: "GET", params: {id: ":id"}}
@@ -96,7 +99,7 @@ define(["eloue/app", "eloue/constants"], function (EloueApp) {
     /**
      * Factory for managing phone numbers.
      */
-    EloueApp.factory("PhoneNumbers", ["$resource", "Endpoints", function ($resource, Endpoints) {
+    EloueCommon.factory("PhoneNumbers", ["$resource", "Endpoints", function ($resource, Endpoints) {
         return $resource(Endpoints.api_url + "phonenumbers/:id\\/", {},
             {
                 "get": { method: "GET", params: {id: ":id"}}

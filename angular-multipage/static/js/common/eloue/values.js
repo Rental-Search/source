@@ -1,11 +1,11 @@
-define(["eloue/app"], function (EloueApp) {
+define(["../../common/eloue/commonApp"], function (EloueCommon) {
 
     "use strict";
 
     /**
      * Web service endpoints.
      */
-    EloueApp.constant("Endpoints", {
+    EloueCommon.constant("Endpoints", {
         oauth_url: "http://10.0.0.111:8000/oauth2/",
         api_url: "http://10.0.0.111:8000/api/2.0/"
     });
@@ -13,5 +13,5 @@ define(["eloue/app"], function (EloueApp) {
     /**
      * URL to redirect user after logging in.
      */
-    EloueApp.value("RedirectAfterLogin", { url: "/"});
+    EloueCommon.value("RedirectAfterLogin", { url: "/"});
 });

@@ -1,4 +1,4 @@
-define(["angular", "eloue/values", "eloue/resources", "eloue/modules/user_management/UserManagementModule"], function (angular) {
+define(["angular", "../../../../../common/eloue/values", "../../../../../common/eloue/resources", "eloue/modules/user_management/UserManagementModule"], function (angular) {
     "use strict";
     /**
      * Authentication service.

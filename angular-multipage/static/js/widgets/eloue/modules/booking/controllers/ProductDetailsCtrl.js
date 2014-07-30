@@ -3,7 +3,7 @@ define(["angular", "eloue/modules/booking/BookingModule",
     "eloue/modules/booking/services/PriceService",
     "eloue/modules/booking/services/MessageService",
     "eloue/modules/booking/services/UserService",
-    "eloue/values"
+    "../../../../../common/eloue/values"
 ], function (angular) {
     "use strict";
 
