@@ -28,44 +28,6 @@ aside
           background-color: $brand-danger
           content: "\f00d"
 
-  .chosen-container,
-  .form-control,
-  .input-group-addon
-    color: $gray-dark
-    font-weight: $fw-semibold
-    background-color: transparent
-    border-width: 0
-    box-shadow: none
-    font-size: px(13, $section-fz)
-
-  .calendar
-    position: relative
-    span
-      display: inline-block
-      *display: inline
-      *zoom: 1
-      +sprite($s-calendar)
-
-  .chosen-container
-    display: block
-    width: auto !important
-    padding: 5px 0
-    .chosen-single
-      height: auto
-      background: $gray-lighter
-      background: linear-gradient(to bottom, white, $gray-lite 70%)
-      border-width: 0 !important
-      box-shadow: none
-    .chosen-drop
-      border-color: $gray-lighter
-      border-width: px(1)
-      background-color: white
-    .chosen-search
-      display: none
-    .chosen-results li.highlighted,
-    .chosen-results li.result-selected
-      background: $brand-primary
-
   .btn
     +btn(px(14,$section-fz))
     margin-bottom: $section-pad/2
@@ -83,10 +45,6 @@ aside
     &.send-message
       span
         +sprite($s-mail)
-  .booking-form
-    .cell
-      display: table-cell
-      padding: 0 .5em
   .add-to-wishlist a
     margin: 0
 

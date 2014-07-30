@@ -32,3 +32,32 @@
 -footer_links[1] = { "header": "Pourquoi choisir eloue", "links": ["Assurance sérénité", "Paiement et caution sécurisés", "Contrats de location", "Parrainez vos proches", "L’offre e-loue Pro"] }
 -footer_links[2] = { "header": "L’entreprise e-loue", "links": ["Qui sommes-nous ?", "Nos partenaires", "Respect de la vie privée", "Conditions générales", "Mentions légales"] }
 -footer_links[3] = { "header": "En savoir plus", "links": ["Espace presse", "Espace job", "Contactez-nous", "E-loue en mobilité", "Blog e-loue"] }
+
+//- _product_detail.jade
+-var specifications = ["Année 2010", "Moteur Diesel", "Boite Automatique", "10 000 à 30 000 km"]
+-var tabs = [ "Photos", "Tarifs", "Localisation", "Disponibilité", "Assurance" ]
+
+-var properties = [["Notation", "32"], ["Date d’achat", "2008"], ["Marque", "BMW"], ["Modèle", "520 Touring"], ["Consommation", "4,5 l/100km"], ["Prix neuf", "38 000€"], ["Puissance", "130 CV"]]
+
+-var comments = []
+-comments[0] = {"name": "Jonathan Moreira", "time": "Le 12 Mai 2014", "thumbnail": "img/home-products/comentator.png", "message":"Integer posuere erat a ante venenatis dapibus posuere velit aliquet. est non commodo luctus, nisi erat porttitor ligula, eget."}
+-comments[1] = {"name": "Jonathan Moreira", "time": "Le 12 Mai 2014", "thumbnail": "img/home-products/comentator.png", "message":"Integer posuere erat a ante venenatis dapibus posuere velit aliquet. est non commodo luctus, nisi erat porttitor ligula, eget."}
+-comments[2] = {"name": "Jonathan Moreira", "time": "Le 12 Mai 2014", "thumbnail": "img/home-products/comentator.png", "message":"Integer posuere erat a ante venenatis dapibus posuere velit aliquet. est non commodo luctus, nisi erat porttitor ligula, eget."}
+-comments[3] = {"name": "Jonathan Moreira", "time": "Le 12 Mai 2014", "thumbnail": "img/home-products/comentator.png", "message":"Integer posuere erat a ante venenatis dapibus posuere velit aliquet. est non commodo luctus, nisi erat porttitor ligula, eget."}
+-comments[4] = {"name": "Jonathan Moreira", "time": "Le 12 Mai 2014", "thumbnail": "img/home-products/comentator.png", "message":"Integer posuere erat a ante venenatis dapibus posuere velit aliquet. est non commodo luctus, nisi erat porttitor ligula, eget."}
+
+-var stats = [["7", "annonces publiées"], ["12", "locations effectués"], ["16", "évalutations"], ["98%", "de taux de réponse"], ["6h", "de temps de réponse en moyenne"]]
+
+-var similar_ads = []
+-similar_ads[0] = {"header": "Audi - A3", "price": "100", "thumbnail": "img/home-products/audi2.jpg", "place": "Paris"}
+-similar_ads[1] = {"header": "Audi - A3", "price": "100", "thumbnail": "img/home-products/audi2.jpg", "place": "Paris"}
+-similar_ads[2] = {"header": "Audi - A3", "price": "100", "thumbnail": "img/home-products/audi2.jpg", "place": "Paris"}
+-similar_ads[3] = {"header": "Audi - A3", "price": "100", "thumbnail": "img/home-products/audi2.jpg", "place": "Paris"}
+-similar_ads[4] = {"header": "Audi - A3", "price": "100", "thumbnail": "img/home-products/audi2.jpg", "place": "Paris"}
+-similar_ads[5] = {"header": "Audi - A3", "price": "100", "thumbnail": "img/home-products/audi2.jpg", "place": "Paris"}
+-similar_ads[6] = {"header": "Audi - A3", "price": "100", "thumbnail": "img/home-products/audi2.jpg", "place": "Paris"}
+
+-var pop_up = {}
+-pop_up.product_info = {"header": "BMW 520 Touring Luxe", "thumbnail_product":"img/home-products/audi.jpg", "location": "Nice", "index":"02200", "rate_count":"32", "comments_count":"12", "thumbnail_declarer":"img/home-products/declarer.png","name_declarer":"Julien Dupré"}
+
+-var terms = [["Durée","4 jours et 3 heures"],["Prix","350€"],["Caution","400€"]]

@@ -324,11 +324,6 @@ main .nav a:hover {
   border-color: #f27e36;
   color: white;
 }
-main .properties .list-group li {
-  background-color: #fbfbfb;
-  border: none;
-  padding: 0.8em 0.5em;
-}
 main .comments .thumbnail {
   padding: 1.42857em;
   border-top-right-radius: 0;
@@ -406,56 +401,6 @@ aside .booking-form .available.unavailable:before {
   background-color: #e45647;
   content: "\f00d";
 }
-aside .chosen-container,
-aside .form-control,
-aside .input-group-addon {
-  color: #2c2c2c;
-  font-weight: 600;
-  background-color: transparent;
-  border-width: 0;
-  -webkit-box-shadow: none;
-  box-shadow: none;
-  font-size: 1em;
-}
-aside .calendar {
-  position: relative;
-}
-aside .calendar span {
-  display: inline-block;
-  *display: inline;
-  *zoom: 1;
-  background-image: url(../../static/img/spritesheet.png);
-  background-position: -843px -67px;
-  width: 16px;
-  height: 16px;
-}
-aside .chosen-container {
-  display: block;
-  width: auto !important;
-  padding: 5px 0;
-}
-aside .chosen-container .chosen-single {
-  height: auto;
-  background: #eeeeee;
-  background: -webkit-gradient(linear, left top, left bottom, from(white), color-stop(70%, #fbfbfb));
-  background: -webkit-linear-gradient(top, white, #fbfbfb 70%);
-  background: linear-gradient(to bottom, white, #fbfbfb 70%);
-  border-width: 0 !important;
-  -webkit-box-shadow: none;
-  box-shadow: none;
-}
-aside .chosen-container .chosen-drop {
-  border-color: #eeeeee;
-  border-width: 0.07143em;
-  background-color: white;
-}
-aside .chosen-container .chosen-search {
-  display: none;
-}
-aside .chosen-container .chosen-results li.highlighted,
-aside .chosen-container .chosen-results li.result-selected {
-  background: #f27e36;
-}
 aside .btn {
   font-size: 1.07692em;
   display: block;
@@ -493,10 +438,6 @@ aside .btn.send-message span {
   background-position: -897px -67px;
   width: 16px;
   height: 14px;
-}
-aside .booking-form .cell {
-  display: table-cell;
-  padding: 0 0.5em;
 }
 aside .add-to-wishlist a {
   margin: 0;
@@ -1005,12 +946,12 @@ aside .connected-with-owner .facebook-box span {
 .modal .large .product-info .thumbnail-img a {
   display: block;
   overflow: hidden;
-  width: 10em;
-  height: 10em;
-  border-top-right-radius: 0.21429em;
-  border-top-left-radius: 0.21429em;
-  border-bottom-right-radius: 0.21429em;
-  border-bottom-left-radius: 0.21429em;
+  width: 9.28571em;
+  height: 9.28571em;
+  border-top-right-radius: 0;
+  border-top-left-radius: 0;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
 }
 .modal .large .product-info .thumbnail-img a img {
   width: 100%;
@@ -1071,10 +1012,10 @@ aside .connected-with-owner .facebook-box span {
   overflow: hidden;
   width: 2.85714em;
   height: 2.85714em;
-  border-top-right-radius: 0.21429em;
-  border-top-left-radius: 0.21429em;
-  border-bottom-right-radius: 0.21429em;
-  border-bottom-left-radius: 0.21429em;
+  border-top-right-radius: 50%;
+  border-top-left-radius: 50%;
+  border-bottom-right-radius: 50%;
+  border-bottom-left-radius: 50%;
 }
 .modal .large .product-info > .thumbnail-content .declarer .thumbnail-img a img {
   width: 100%;
@@ -1090,6 +1031,23 @@ aside .connected-with-owner .facebook-box span {
 .modal .large .product-info > .thumbnail-content .declarer .thumbnail-content {
   vertical-align: middle;
   font-size: 0.92857em;
+}
+.modal .large .terms {
+  font-size: 0.92857em;
+  color: #2c2c2c;
+  text-align: left;
+}
+.modal .large .terms .list-group {
+  margin: 2em 0;
+}
+.modal .large .terms p {
+  font-size: 0.92308em;
+  color: #9d9d9d;
+  margin-bottom: 1.5em;
+}
+.modal .large .terms .btn {
+  margin-top: 1em;
+  font-size: 1.07692em;
 }
 .modal .large .dialogs {
   border-bottom: 0.07143em solid #eeeeee;

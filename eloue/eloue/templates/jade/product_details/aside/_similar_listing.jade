@@ -3,14 +3,14 @@
 .section-body
 	.part
 		ul.nav
-			-for(var i=0;i<5;i++)
+			-each similar_ad in similar_ads
 				li
 					.thumbnail-img
 						a(href="#")
-							img(src=STATIC_URL+"img/home-products/audi2.jpg", alt="")
+							img(src=STATIC_URL+similar_ad.thumbnail, alt="")
 					.thumbnail-content
 						h6 
-							a(href="#") Audi - A3
+							a(href="#") #{similar_ad.header}
 						p
-							small Paris
-						span.badge.price 100€ /jour
+							small #{similar_ad.place}
+						span.badge.price #{similar_ad.price}€ /jour

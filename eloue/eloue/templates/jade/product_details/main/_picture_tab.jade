@@ -1,8 +1,7 @@
 ul.nav.without-spaces
-	-var items = [ "Photos", "Tarifs", "Localisation", "Disponibilité", "Assurance" ]
-	-each item in items
+	-each tab in tabs
 		li
-			a( href = "#" + item ).pad-v-2 #{item}
+			a( href = "#" + tab ).pad-v-2 #{tab}
 .carousel-wrapper
 	.thumbnail-inner
 		-for(var i = 1; i<=3; i++)

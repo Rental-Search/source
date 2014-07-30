@@ -5,19 +5,7 @@ form.form-inline.section-body.text-center
 		p
 			small à partir de
 			big.text-primary &nbsp;56€ /jour
-			-each item in ["Du", "Au"]
-				.row
-					.cell
-						.input-group
-							.input-group-addon #{item}
-							input(type="text" placeholder="").form-control
-							.input-group-addon.calendar
-								span
-					.cell
-						select.form-control
-							-for(var i=0;i<24;i++)
-								-var n = i>9? i + ":00" : "0" + i + ":00"
-								option(value=n) #{n}
+		include ../../_date_picker
 		p.available Cet article est disponible à ces dates
 		// p.available.unavailable Cet article est disponible à ces dates
 	.part

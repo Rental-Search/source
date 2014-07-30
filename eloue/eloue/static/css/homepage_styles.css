@@ -869,12 +869,12 @@ input#sourse:checked + #sourse-img {
 .modal .large .product-info .thumbnail-img a {
   display: block;
   overflow: hidden;
-  width: 10em;
-  height: 10em;
-  border-top-right-radius: 50%;
-  border-top-left-radius: 50%;
-  border-bottom-right-radius: 50%;
-  border-bottom-left-radius: 50%;
+  width: 9.28571em;
+  height: 9.28571em;
+  border-top-right-radius: 0;
+  border-top-left-radius: 0;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
 }
 .modal .large .product-info .thumbnail-img a img {
   width: 100%;
@@ -954,6 +954,23 @@ input#sourse:checked + #sourse-img {
 .modal .large .product-info > .thumbnail-content .declarer .thumbnail-content {
   vertical-align: middle;
   font-size: 0.92857em;
+}
+.modal .large .terms {
+  font-size: 0.92857em;
+  color: #2c2c2c;
+  text-align: left;
+}
+.modal .large .terms .list-group {
+  margin: 2em 0;
+}
+.modal .large .terms p {
+  font-size: 0.92308em;
+  color: #9d9d9d;
+  margin-bottom: 1.5em;
+}
+.modal .large .terms .btn {
+  margin-top: 1em;
+  font-size: 1.07692em;
 }
 .modal .large .dialogs {
   border-bottom: 0.07143em solid #eeeeee;

@@ -1,3 +1,19 @@
+/* SASS variables are information about icon's compiled state, stored under its original file name
+ *
+ * .icon-home
+ *   width: $icon-home-width
+ *
+ * The large array-like variables contain all information about a single icon
+ * $icon-home: x y offset_x offset_y width height total_width total_height image_path
+ */
+/* The provided mixins are intended to be used with the array-like variables
+ *
+ * .icon-home
+ *   @include sprite-width($icon-home)
+ *
+ * .icon-email
+ *   @include sprite($icon-email)
+ */
 /*! normalize.css v3.0.1 | MIT License | git.io/normalize */
 html {
   font-family: sans-serif;
@@ -7739,10 +7755,6 @@ a, a:hover {
   border-color: #c4c4c4;
 }
 
-.inline-table {
-  display: inline-table;
-}
-
 .table-cell {
   display: table-cell;
   width: 1%;
@@ -7959,4 +7971,72 @@ a, a:hover {
   border-top-right-radius: 1.5em;
   border-top-left-radius: 1.5em;
   padding: 0.6em 1em;
+}
+
+.date-picker .table-cell {
+  padding: 0 0.5em;
+}
+.date-picker .calendar {
+  position: relative;
+}
+.date-picker .calendar span {
+  display: inline-block;
+  *display: inline;
+  *zoom: 1;
+  background-image: url(../../static/img/spritesheet.png);
+  background-position: -843px -67px;
+  width: 16px;
+  height: 16px;
+}
+.date-picker .chosen-container,
+.date-picker .form-control,
+.date-picker .input-group-addon {
+  color: #2c2c2c;
+  font-weight: 600;
+  background-color: transparent;
+  border-width: 0;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+  font-size: 1em;
+}
+
+.chosen-container {
+  display: block;
+  width: auto !important;
+  padding: 5px 0;
+}
+.chosen-container .chosen-single {
+  height: auto;
+  background: #eeeeee;
+  background: -webkit-gradient(linear, left top, left bottom, from(white), color-stop(70%, #fbfbfb));
+  background: -webkit-linear-gradient(top, white, #fbfbfb 70%);
+  background: linear-gradient(to bottom, white, #fbfbfb 70%);
+  border-width: 0 !important;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
+.chosen-container .chosen-drop {
+  border-color: #eeeeee;
+  border-width: 0.07143em;
+  background-color: white;
+}
+.chosen-container .chosen-search {
+  display: none;
+}
+.chosen-container .chosen-results li.highlighted,
+.chosen-container .chosen-results li.result-selected {
+  background: #f27e36;
+}
+
+.list-group li {
+  background-color: #fbfbfb;
+  border: none;
+  padding: 0.8em 0.5em;
+}
+.list-group li:before, .list-group li:after {
+  content: " ";
+  display: table;
+}
+.list-group li:after {
+  clear: both;
 }

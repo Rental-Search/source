@@ -5,18 +5,9 @@ h3 Déscription
 		p Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec sed odio dui. Maecenas faucibus mollis interdum. Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.
 	.col-sm-6.properties
 		ul.list-group
-			-if(!properties)
-				-var properties = []
-			-properties.push({"name": "Notation", "value": "32"})
-			-properties.push({"name": "Date d’achat", "value": "2008"})
-			-properties.push({"name": "Marque", "value": "BMW"})
-			-properties.push({"name": "Modèle", "value": "520 Touring"})
-			-properties.push({"name": "Consommation", "value": "4,5 l/100km"})
-			-properties.push({"name": "Prix neuf", "value": "38 000€"})
-			-properties.push({"name": "Puissance", "value": "130 CV"})
-			-each prop in properties
-				li.list-group-item.clearfix
-					span.col-sm-5 #{prop.name}
-					b.col-sm-7 #{prop.value}&nbsp;&nbsp;
-						-if(prop.name==="Notation")
+			-each prop, index in properties
+				li.list-group-item
+					span.col-sm-5 #{prop[0]}
+					b.col-sm-7 #{prop[1]}&nbsp;&nbsp;
+						-if(index===0)
 							include ../../_rate
