@@ -931,6 +931,8 @@ aside .connected-with-owner .facebook-box span {
 }
 .modal .large .change-part {
   width: 100%;
+  height: 100%;
+  position: relative;
 }
 .modal .large .product-info {
   border-bottom: 0.07143em solid #eeeeee;
@@ -1050,5 +1052,134 @@ aside .connected-with-owner .facebook-box span {
   font-size: 1.07692em;
 }
 .modal .large .dialogs {
-  border-bottom: 0.07143em solid #eeeeee;
+  padding-bottom: 12em;
+  height: 100%;
+  width: 100%;
+  left: 0;
+  bottom: 0;
+  position: absolute;
+}
+.modal .large .dialogs .dialog-scroll-container {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+.modal .large .dialogs .dialog-container {
+  overflow-y: auto;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  max-height: 100%;
+}
+.modal .large .dialogs .message {
+  text-align: left;
+  margin-top: 1.42857em;
+  margin-top: 2em;
+}
+.modal .large .dialogs .message:first-child {
+  margin-top: 0;
+}
+.modal .large .dialogs .message .thumbnail-img {
+  display: table-cell;
+  vertical-align: top;
+}
+.modal .large .dialogs .message .thumbnail-img a {
+  display: block;
+  overflow: hidden;
+  width: 2.85714em;
+  height: 2.85714em;
+  border-top-right-radius: 50%;
+  border-top-left-radius: 50%;
+  border-bottom-right-radius: 50%;
+  border-bottom-left-radius: 50%;
+}
+.modal .large .dialogs .message .thumbnail-img a img {
+  width: 100%;
+}
+.modal .large .dialogs .message .thumbnail-content {
+  display: table-cell;
+  vertical-align: top;
+  padding-left: 1.42857em;
+}
+.modal .large .dialogs .message .thumbnail-content p {
+  margin-bottom: 0;
+}
+.modal .large .dialogs .message h4 {
+  color: #2c2c2c;
+  font-weight: bolder;
+  margin-top: 0;
+}
+.modal .large .dialogs .message p {
+  font-size: 0.85714em;
+  margin: 0.5em 0 0;
+  line-height: 1.7em;
+}
+.modal .large .dialogs .message .time {
+  color: #c4c4c4;
+  clear: both;
+}
+.modal .large .dialogs .message .thumbnail-frame {
+  border-top-right-radius: 0.21429em;
+  border-top-left-radius: 0.21429em;
+  border-bottom-right-radius: 0.21429em;
+  border-bottom-left-radius: 0.21429em;
+  width: 70%;
+  padding: 1em;
+  position: relative;
+}
+.modal .large .dialogs .message .thumbnail-frame:before {
+  content: "";
+  position: absolute;
+  border: 0.8em solid transparent;
+  top: 0.6em;
+}
+.modal .large .dialogs .message.from-declarer .time,
+.modal .large .dialogs .message.from-declarer .thumbnail-frame {
+  float: left;
+}
+.modal .large .dialogs .message.from-declarer .thumbnail-frame {
+  background-color: #f9f9f9;
+}
+.modal .large .dialogs .message.from-declarer .thumbnail-frame:before {
+  left: -1.5em;
+  border-right-color: #f9f9f9;
+}
+.modal .large .dialogs .message.from-customer .thumbnail-content {
+  padding-left: 0;
+  padding-right: 1.42857em;
+}
+.modal .large .dialogs .message.from-customer .time,
+.modal .large .dialogs .message.from-customer .thumbnail-frame {
+  float: right;
+}
+.modal .large .dialogs .message.from-customer .thumbnail-frame {
+  background-color: #f4f4f4;
+}
+.modal .large .dialogs .message.from-customer .thumbnail-frame:before {
+  right: -1.5em;
+  border-left-color: #f4f4f4;
+}
+.modal .large .input-message {
+  border-top: 0.07143em solid #eeeeee;
+  position: absolute;
+  width: 100%;
+  height: 10em;
+  bottom: 0;
+  left: 0;
+}
+.modal .large .input-message .table-cell {
+  vertical-align: bottom;
+  height: 100%;
+}
+.modal .large .input-message textarea {
+  width: 100%;
+  border-color: transparent;
+  resize: none;
+}
+.modal .large .input-message .btn {
+  width: auto;
+  padding-left: 2em;
+  padding-right: 2em;
+  margin-left: 1em;
 }
