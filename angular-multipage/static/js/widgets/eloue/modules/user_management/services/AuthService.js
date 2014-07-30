@@ -1,9 +1,9 @@
-define(["angular", "eloue/constants", "eloue/resources", "eloue/modules/user_management/UserManagementModule"], function (angular) {
+define(["angular", "eloue/values", "eloue/resources", "eloue/modules/user_management/UserManagementModule"], function (angular) {
     "use strict";
     /**
      * Authentication service.
      */
-    angular.module("EloueApp.UserManagementModule").factory("AuthService", ["$window", "Endpoints", "Registration", function ($window, Endpoints, Registration) {
+    angular.module("EloueApp.UserManagementModule").factory("AuthService", ["$q", "$window", "Endpoints", "RedirectAfterLogin", "Registration", function ($q, $window, Endpoints, RedirectAfterLogin, Registration) {
         return {
 
             /**
@@ -48,19 +48,42 @@ define(["angular", "eloue/constants", "eloue/resources", "eloue/modules/user_man
             /**
              * Authorize user by "user_token" cookie.
              */
-            authorize: function authorize() {
+            authorize: function () {
                 var userToken = this.getCookie("user_token");
                 if (userToken) {
                     $(".modal-backdrop").hide();
-                    $window.location.href = "/dashboard.html";
+                    this.redirectToAttemptedUrl();
                 }
             },
 
+            /**
+             * Remove user token.
+             */
+            clearUserData: function () {
+                document.cookie = "user_token=;expires=" + new Date(0).toGMTString();
+            },
+
+            /**
+             * Redirect to attempted URL.
+             */
+            redirectToAttemptedUrl: function() {
+                $window.location.href = RedirectAfterLogin.url;
+            },
+
+            /**
+             * Save URL that user attempts to access.
+             */
+            saveAttemptUrl: function() {
+                RedirectAfterLogin.url = $window.location.href;
+            },
+
+            /**
+             * Register new account
+             * @param account new account
+             * @returns user promise object.
+             */
             register: function register(account) {
-                Registration.register(account, function (response, header) {
-                    console.log(response);
-                    //TODO: define logic after user successfully registered
-                });
+                return Registration.register(account);
             },
 
             /**

@@ -42,18 +42,18 @@
             Postal code is required</span>
                         </div>
                         <div class="form-group">
-                            <input name="username" class="form-control" type="text" placeholder="username"
-                                   data-ng-model="account.username" required>
-                    <span data-ng-show="registrationForm.username.$error.required && registrationForm.username.$dirty"
-                          class="errorMsg">
-            Postal code is required</span>
-                        </div>
-                        <div class="form-group">
                             <input name="email" class="form-control" type="email" placeholder="E-mail *"
                                    data-ng-model="account.email" required>
                     <span data-ng-show="registrationForm.email.$error.required && registrationForm.email.$dirty"
                           class="errorMsg">
             Email is required</span>
+                        </div>
+                        <div class="form-group">
+                            <input name="username" class="form-control" type="text" placeholder="username"
+                                   data-ng-model="account.username" required>
+                    <span data-ng-show="registrationForm.username.$error.required && registrationForm.username.$dirty"
+                          class="errorMsg">
+            Username is required</span>
                         </div>
                         <div class="form-group">
                             <input name="password" class="form-control" type="password" placeholder="Mot de passe *"
@@ -78,10 +78,15 @@
                                     data-ng-disabled="registrationForm.$invalid || !registrationForm.$dirty">
                                 Inscription
                             </button>
+                            <span data-ng-show="registrationError != ''" class="errorMsg">
+            Registration failed: {{registrationError}}
+                            </span>
                         </div>
                     </div>
                     <div class="form-group">
-                        <button type="button" class="btn registration email" ng-click="openRegistrationForm()">Inscription via Email</button>
+                        <button type="button" class="btn registration email" ng-click="openRegistrationForm()">
+                            Inscription via Email
+                        </button>
                     </div>
                     <div class="checkbox">
                         <label for="inform">

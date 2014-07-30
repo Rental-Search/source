@@ -12,10 +12,25 @@ define(["angular", "eloue/modules/user_management/services/AuthService", "eloue/
         $scope.account = {};
 
         /**
+         * Error occurred during registration.
+         */
+        $scope.registrationError = "";
+
+        /**
          * Register new user in the system.
          */
         $scope.register = function register() {
-            AuthService.register($scope.account);
+            AuthService.register($scope.account).$promise.then(function(response) {
+                // Sign in new user automatically
+                var credentials = {
+                    username: $scope.account.email,
+                    password: $scope.account.password
+                };
+                AuthService.clearUserData();
+                AuthService.login(credentials);
+            }, function (error) {
+                $scope.registrationError = error.data.detail;
+            });
         };
 
         /**

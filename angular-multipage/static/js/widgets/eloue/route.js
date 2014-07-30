@@ -16,6 +16,7 @@ define(["eloue/app", "eloue/modules/user_management/services/AuthService",
         "use strict";
 
         EloueApp.run(["$rootScope", "$location", "$route", "$http", "AuthService", function ($rootScope, $location, $route, $http, AuthService) {
+            AuthService.saveAttemptUrl();
             var userToken = AuthService.getCookie("user_token");
             $http.defaults.useXDomain = true;
             delete $http.defaults.headers.common['X-Requested-With'];

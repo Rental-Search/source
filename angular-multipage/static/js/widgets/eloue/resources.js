@@ -1,5 +1,5 @@
 "use strict";
-define(["eloue/app", "eloue/constants"], function (EloueApp) {
+define(["eloue/app", "eloue/values"], function (EloueApp) {
 
     /**
      * Factory for managing users.
@@ -17,7 +17,10 @@ define(["eloue/app", "eloue/constants"], function (EloueApp) {
     EloueApp.factory("Registration", ["$resource", "Endpoints", function ($resource, Endpoints) {
         return $resource(Endpoints.api_url + "users\\/", {},
             {
-                "register": { method: "POST", headers: { 'authorization': '' }}
+                "register": {
+                    method: "POST",
+                    headers: { 'authorization': '' }
+                }
             });
     }]);
 
