@@ -11,12 +11,12 @@ class OwnerFilter(filters.BaseFilterBackend):
 
     def filter_queryset(self, request, queryset, view):
         user = request.user
-        if user.is_staff or user.is_superuser:
-            return queryset
-        elif user.is_anonymous:
+        if user.is_anonymous():
             return queryset.none()
+        elif user.is_staff or user.is_superuser:
+            return queryset
         owner_field = getattr(view, 'owner_field', self.owner_field)
-        return queryset.filter(**{owner_field: user})
+        return queryset.filter(**{owner_field: user.pk})
 
 class HaystackSearchFilter(filters.BaseFilterBackend):
     # The URL query parameter used for the search.

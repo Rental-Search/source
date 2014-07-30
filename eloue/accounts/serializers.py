@@ -1,5 +1,10 @@
+# -*- coding: utf-8 -*-
+from django.utils.translation import ugettext_lazy as _
 
-from rest_framework.serializers import HyperlinkedModelSerializer, ModelSerializer, PrimaryKeyRelatedField, CharField
+from rest_framework.serializers import (
+    HyperlinkedModelSerializer, ModelSerializer,
+    PrimaryKeyRelatedField, CharField, ValidationError
+)
 from rest_framework_gis.serializers import MapGeometryField
 
 from accounts import models
@@ -8,14 +13,48 @@ class HyperlinkedGeoModelSerializer(HyperlinkedModelSerializer):
     field_mapping = MapGeometryField(HyperlinkedModelSerializer.field_mapping)
 
 class UserSerializer(HyperlinkedModelSerializer):
-    languages = PrimaryKeyRelatedField(many=True) # TODO: remove if we got to expose language resource
+    languages = PrimaryKeyRelatedField(many=True, required=False, blank=True) # TODO: remove if we got to expose language resource
+
+    def restore_object(self, attrs, instance=None):
+        # we should allow password setting on initial user registration only
+        attrs = attrs.copy()
+        password = attrs.pop('password')
+        user = super(UserSerializer, self).restore_object(attrs, instance=instance)
+        if not instance:
+            user.set_password(password)
+        return user
 
     class Meta:
         model = models.Patron
-        fields = ('id', 'email', 'company_name', 'is_professional', 'slug', 'avatar', 'default_address',
-                  'default_number', 'about', 'work', 'school', 'hobby', 'languages', 'drivers_license_date',
-                  'drivers_license_number', 'date_of_birth', 'place_of_birth', 'rib', 'url')
+        fields = ('id', 'email', 'password', 'username', 'company_name', 'is_professional', 'slug', 'avatar',
+                  'default_address', 'default_number', 'about', 'work', 'school', 'hobby', 'languages',
+                  'drivers_license_date', 'drivers_license_number', 'date_of_birth', 'place_of_birth', 'rib', 'url')
         read_only_fields = ('id', 'slug', 'avatar', 'default_address', 'default_number', 'rib', 'url')
+        write_only_fields = ('password',)
+
+class PasswordChangeSerializer(ModelSerializer):
+    current_password = CharField(write_only=True, max_length=128)
+    confirm_password = CharField(write_only=True, max_length=128)
+
+    def restore_object(self, attrs, instance=None):
+        if instance:
+            instance.set_password(attrs['password'])
+        return instance
+
+    def validate_current_password(self, attrs, source):
+        if not self.object.check_password(attrs[source]):
+            raise ValidationError(_("Your current password was entered incorrectly. Please enter it again."))
+        return attrs
+
+    def validate_confirm_password(self, attrs, source):
+        if attrs[source] != attrs['password']:
+            raise ValidationError(_("The two password fields didn't match."))
+        return attrs
+
+    class Meta:
+        model = models.Patron
+        fields = ('password', 'current_password', 'confirm_password')
+        write_only_fields = ('password',)
 
 class AddressSerializer(HyperlinkedGeoModelSerializer):
     street = CharField(source='address1')

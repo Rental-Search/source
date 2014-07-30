@@ -1007,12 +1007,22 @@ def patron_delete_idn_connect(request):
 
 # REST API 2.0
 
-from rest_framework import viewsets
+from rest_framework import viewsets, status
+from rest_framework.decorators import link, action
+from rest_framework.response import Response
 
 from accounts import serializers, models, search
-from eloue.api import filters
+from eloue.api import filters, permissions
 
 NON_DELETABLE = [name for name in viewsets.ModelViewSet.http_method_names if name.lower() != 'delete']
+
+class UserPermission(permissions.TeamStaffDjangoModelPermissions):
+    def has_permission(self, request, view):
+        # allow access on POST to support new user sign-up
+        if request.method == 'POST':
+            return True
+        # pass to parent by default
+        return super(UserPermission, self).has_permission(request, view)
 
 class UserViewSet(viewsets.ModelViewSet):
     """
@@ -1020,10 +1030,20 @@ class UserViewSet(viewsets.ModelViewSet):
     """
     model = models.Patron
     serializer_class = serializers.UserSerializer
+    permission_classes = (UserPermission,)
     filter_backends = (filters.OwnerFilter, filters.HaystackSearchFilter, filters.DjangoFilterBackend)
-    owner_field = 'pk'
+    owner_field = 'id'
     search_index = search.patron_search
     filter_fields = ('slug',)
+
+    @action(methods=['post', 'put'])
+    def reset_password(self, request, *args, **kwargs):
+        user = self.get_object()
+        serializer = serializers.PasswordChangeSerializer(instance=user, data=request.DATA)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({'detail': _(u"Votre mot de passe à bien été modifié")})
+        return Response({'errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
 class AddressViewSet(viewsets.ModelViewSet):
     """
@@ -1041,6 +1061,10 @@ class PhoneNumberViewSet(viewsets.ModelViewSet):
     model = models.PhoneNumber
     serializer_class = serializers.PhoneNumberSerializer
     filter_backends = (filters.OwnerFilter,)
+
+    @link()
+    def premium_rate_number(self, request, *args, **kwargs):
+        pass
 
 class ProAgencyViewSet(viewsets.ModelViewSet):
     """
