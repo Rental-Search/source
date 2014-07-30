@@ -3,7 +3,7 @@ define(["angular", "eloue/constants", "eloue/resources", "eloue/modules/user_man
     /**
      * Authentication service.
      */
-    angular.module("EloueApp.UserManagementModule").factory("AuthService", ["$location", "Endpoints", "Registration", function ($location, Endpoints, Registration) {
+    angular.module("EloueApp.UserManagementModule").factory("AuthService", ["$window", "Endpoints", "Registration", function ($window, Endpoints, Registration) {
         return {
 
             /**
@@ -34,9 +34,9 @@ define(["angular", "eloue/constants", "eloue/resources", "eloue/modules/user_man
                         },
                         error: function (jqXHR) {
                             if (jqXHR.status == 400) {
-                                window.alert("An error occured: " + jqXHR.responseJSON);
+                                alert("An error occured: " + jqXHR.responseJSON);
                             } else {
-                                window.alert("An error occured!");
+                                alert("An error occured!");
                             }
                         }
                     });
@@ -52,7 +52,7 @@ define(["angular", "eloue/constants", "eloue/resources", "eloue/modules/user_man
                 var userToken = this.getCookie("user_token");
                 if (userToken) {
                     $(".modal-backdrop").hide();
-                    $location.path("/dashboard");
+                    $window.location.href = "/dashboard.html";
                 }
             },
 
