@@ -22,7 +22,7 @@ input#sourse {
 #sourse-img {
   overflow: hidden;
   opacity: 0;
-  position: absolute;
+  position: fixed;
   -webkit-transition: opacity 1s, z-index 0s 1s;
   transition: opacity 1s, z-index 0s 1s;
   z-index: -1000;
@@ -990,6 +990,7 @@ input#sourse:checked + #sourse-img {
 .modal .large .dialogs .dialog-container {
   overflow-y: auto;
   position: absolute;
+  padding-right: 1em;
   bottom: 0;
   left: 0;
   width: 100%;
@@ -1105,6 +1106,90 @@ input#sourse:checked + #sourse-img {
   padding-left: 2em;
   padding-right: 2em;
   margin-left: 1em;
+}
+.modal .large .variant-call {
+  padding: 0;
+}
+.modal .large .variant-call ul {
+  margin: 0;
+  padding: 0;
+  counter-reset: variants;
+}
+.modal .large .variant-call ul .table-cell {
+  padding: 2em;
+  border-top: 0.07143em solid #eeeeee;
+  width: 100%;
+  text-align: left;
+  position: relative;
+}
+.modal .large .variant-call ul .text {
+  margin-top: 1.42857em;
+}
+.modal .large .variant-call ul .text:first-child {
+  margin-top: 0;
+}
+.modal .large .variant-call ul .text .thumbnail-img {
+  display: table-cell;
+  vertical-align: top;
+}
+.modal .large .variant-call ul .text .thumbnail-img a {
+  display: block;
+  overflow: hidden;
+  width: 3em;
+  height: 3em;
+  border-top-right-radius: 50%;
+  border-top-left-radius: 50%;
+  border-bottom-right-radius: 50%;
+  border-bottom-left-radius: 50%;
+}
+.modal .large .variant-call ul .text .thumbnail-img a img {
+  width: 100%;
+}
+.modal .large .variant-call ul .text .thumbnail-content {
+  display: table-cell;
+  vertical-align: top;
+  padding-left: 1.42857em;
+}
+.modal .large .variant-call ul .text .thumbnail-content p {
+  margin-bottom: 0;
+}
+.modal .large .variant-call ul .thumbnail-img:before {
+  counter-increment: variants;
+  content: counter(variants);
+  display: block;
+  font-size: 1.28571em;
+  width: 3em;
+  height: 3em;
+  line-height: 2.6em;
+  text-align: center;
+  border: 0.14286em solid #555555;
+  border-radius: 50%;
+}
+.modal .large .variant-call ul .thumbnail-img.text-gray:before {
+  color: #555555;
+}
+.modal .large .variant-call ul .thumbnail-img.text-primary:before {
+  border-color: #f27e36;
+}
+.modal .large .variant-call ul .thumbnail-img.text-success:before {
+  border-color: #24bd77;
+}
+.modal .large .variant-call ul .thumbnail-content {
+  padding: 1em 2em 0 !important;
+}
+.modal .large .variant-call ul .thumbnail-content h3 {
+  font-size: inherit;
+  font-weight: 700;
+}
+.modal .large .variant-call ul .thumbnail-content p {
+  margin-top: 1em;
+  line-height: 1.8em;
+}
+.modal .large .variant-call ul .thumbnail-content .btn {
+  display: inline-block;
+  width: auto;
+  padding-left: 5em;
+  padding-right: 5em;
 }
 
 section h3 {

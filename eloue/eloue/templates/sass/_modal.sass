@@ -1,188 +1,234 @@
 .modal
-	$bor-rad: px(3)
-	$item-width: 50%
-	.modal-dialog
-		margin-top: 4em
-		width: $modal-width
-	.modal-content
-		+box-shadow(none)
-		border-color: transparent
-		border: none
-		text-align: center
-		+border-left-radius(0)
-		+border-right-radius(0)
-	.modal-header
-		background-color: $brand-primary
-		color: white
-	.modal-title
-		font-size: px(17)
-		font-weight: $fw-regular
-		color: inherit
-	.close
-		font-size: px(21)
-		color: inherit
-		text-shadow: none
-		background-color: $fog-light
-		padding: .2em .4em
-		+border-left-radius($bor-rad)
-		+border-right-radius($bor-rad)
-		+opacity(1)
-		&:hover
-			background-color: $fog-lighter
-	.modal-body
-		padding-top: 3em
-		padding-bottom: 3em
-		padding-left: 0
-		color: $gray-strong
-		padding-right: 0
-		font-weight: $fw-semibold
-	.btn
-		+btn()
-		+social(1.2em)
-		i
-			+border-left-radius($bor-rad/2)
-			+border-right-radius($bor-rad/2)
-			background-color: white
-			margin-right: 1em
-		&.bg-info i
-			color: $brand-info
-		&.bg-danger i
-			color: $brand-danger
-	p
-		font-size: px(12)
-		margin-top: 1.5em
-		color: inherit
-		&.info:before
-			text-align: center
-			content: "i"
-			display: inline-block
-			margin-right: 1em
-			font-weight: bold
-			border: px(3) solid $gray-strong
-			border-radius: 50%
-			line-height: 1.1em
-			vertical-align: top
-			width: 1.5em
-			height: 1.5em
-	h3
-		font-size: px(26)
-		font-weight: $fw-light
-		color: $gray-dark
-		margin: 0 0 .5em
-		line-height: 1.5em
-	h4
-		font-size: px(17)
-	.checkbox
-		font-size: px(12)
-		margin: 0
-	.modal-fotter-link
-		color: $brand-success
-		font-size: px(17)
-		font-weight: $fw-regular
-	.or
-		$width: 2.5em
-		$height: 1em
-		position: relative
-		display: block
-		margin: px(30) 0
-		border-top: px(1) solid $gray-lighter
-		color: inherit
-		font-weight: $fw-semibold
-		&:before
-			background-color: white
-			width: $width
-			font-size: px(12)
-			content: "ou"
-			text-transform: uppercase
-			position: absolute
-			left: 50%
-			line-height: $height
-			top: -($height / 2)
-			margin-left: -($width / 2)
-	.form-group
-		margin: 1.5em auto
-		clear: both
-		width: $item-width
-		+center-block()
-		input
-			color: inherit
-			height: 3em
-			padding-top: .6em
-			+placeholder(inherit)
-	.forgot-password
-		font-size: px(12)
-		min-height: 20px
+  $bor-rad: px(3)
+  $item-width: 50%
+  .modal-dialog
+    margin-top: 4em
+    width: $modal-width
+  .modal-content
+    +box-shadow(none)
+    border-color: transparent
+    border: none
+    text-align: center
+    +border-left-radius(0)
+    +border-right-radius(0)
+  .modal-header
+    background-color: $brand-primary
+    color: white
+  .modal-title
+    font-size: px(17)
+    font-weight: $fw-regular
+    color: inherit
+  .close
+    font-size: px(21)
+    color: inherit
+    text-shadow: none
+    background-color: $fog-light
+    padding: .2em .4em
+    +border-left-radius($bor-rad)
+    +border-right-radius($bor-rad)
+    +opacity(1)
+    &:hover
+      background-color: $fog-lighter
+  .modal-body
+    padding-top: 3em
+    padding-bottom: 3em
+    padding-left: 0
+    color: $gray-strong
+    padding-right: 0
+    font-weight: $fw-semibold
+  .btn
+    +btn()
+    +social(1.2em)
+    i
+      +border-left-radius($bor-rad/2)
+      +border-right-radius($bor-rad/2)
+      background-color: white
+      margin-right: 1em
+    &.bg-info i
+      color: $brand-info
+    &.bg-danger i
+      color: $brand-danger
+  p
+    font-size: px(12)
+    margin-top: 1.5em
+    color: inherit
+    &.info:before
+      text-align: center
+      content: "i"
+      display: inline-block
+      margin-right: 1em
+      font-weight: bold
+      border: px(3) solid $gray-strong
+      border-radius: 50%
+      line-height: 1.1em
+      vertical-align: top
+      width: 1.5em
+      height: 1.5em
+  h3
+    font-size: px(26)
+    font-weight: $fw-light
+    color: $gray-dark
+    margin: 0 0 .5em
+    line-height: 1.5em
+  h4
+    font-size: px(17)
+  .checkbox
+    font-size: px(12)
+    margin: 0
+  .modal-fotter-link
+    color: $brand-success
+    font-size: px(17)
+    font-weight: $fw-regular
+  .or
+    $width: 2.5em
+    $height: 1em
+    position: relative
+    display: block
+    margin: px(30) 0
+    border-top: px(1) solid $gray-lighter
+    color: inherit
+    font-weight: $fw-semibold
+    &:before
+      background-color: white
+      width: $width
+      font-size: px(12)
+      content: "ou"
+      text-transform: uppercase
+      position: absolute
+      left: 50%
+      line-height: $height
+      top: -($height / 2)
+      margin-left: -($width / 2)
+  .form-group
+    margin: 1.5em auto
+    clear: both
+    width: $item-width
+    +center-block()
+    input
+      color: inherit
+      height: 3em
+      padding-top: .6em
+      +placeholder(inherit)
+  .forgot-password
+    font-size: px(12)
+    min-height: 20px
 
-	input[type="text"],
-	input[type="email"],
-	input[type="password"]
-		&:invalid,
-		&:empty
-			border-color: $brand-primary
-		&:valid
-			border-color: $brand-success
+  input[type="text"],
+  input[type="email"],
+  input[type="password"]
+    &:invalid,
+    &:empty
+      border-color: $brand-primary
+    &:valid
+      border-color: $brand-success
 
-	.large
-		$bd-property: px(1) solid $gray-lighter
-		width: $modal-large-width
-		.modal-body
-			padding: 0
-		section
-			padding: 2em
+  .large
+    $bd-property: px(1) solid $gray-lighter
+    width: $modal-large-width
+    .modal-body
+      padding: 0
+    section
+      padding: 2em
 
-		.static-part
-			width: auto
-			border-right: $bd-property
+    .static-part
+      width: auto
+      border-right: $bd-property
 
-		.change-part
-			width: 100%
-			height: 100%
-			position: relative
+    .change-part
+      width: 100%
+      height: 100%
+      position: relative
 
-		.product-info
-			border-bottom: $bd-property
-			@import pop_up_sections/product-info
+    .product-info
+      border-bottom: $bd-property
+      @import pop_up_sections/product-info
 
-		.terms
-			font-size: px(13)
-			color: $gray-dark
-			text-align: left
-			.list-group
-				margin: 2em 0
-			p
-				font-size: px(12,13)
-				color: $gray-strong
-				margin-bottom: 1.5em
-			.btn
-				margin-top: 1em
-				font-size: px(14,13)
+    .terms
+      font-size: px(13)
+      color: $gray-dark
+      text-align: left
+      .list-group
+        margin: 2em 0
+      p
+        font-size: px(12,13)
+        color: $gray-strong
+        margin-bottom: 1.5em
+      .btn
+        margin-top: 1em
+        font-size: px(14,13)
 
-		.dialogs
-			padding-bottom: 12em
-			height: 100%
-			width: 100%
-			left: 0
-			bottom: 0
-			position: absolute
-			@import pop_up_sections/dialogs
+    .dialogs
+      padding-bottom: 12em
+      height: 100%
+      width: 100%
+      left: 0
+      bottom: 0
+      position: absolute
+      @import pop_up_sections/dialogs
 
-		.input-message
-			border-top: $bd-property
-			position: absolute
-			width: 100%
-			height: 10em
-			bottom: 0
-			left: 0
+    .input-message
+      border-top: $bd-property
+      position: absolute
+      width: 100%
+      height: 10em
+      bottom: 0
+      left: 0
 
-			.table-cell
-				vertical-align: bottom
-				height: 100%
-			textarea
-				width: 100%
-				border-color: transparent
-				resize: none
-			.btn
-				width: auto
-				padding-left: 2em
-				padding-right: 2em
-				margin-left: 1em
+      .table-cell
+        vertical-align: bottom
+        height: 100%
+      textarea
+        width: 100%
+        border-color: transparent
+        resize: none
+      .btn
+        width: auto
+        padding-left: 2em
+        padding-right: 2em
+        margin-left: 1em
+
+    .variant-call
+      padding: 0
+      ul
+        margin: 0
+        padding: 0
+        counter-reset: variants
+        .table-cell
+          padding: 2em
+          border-top: px(1) solid $gray-lighter
+          width: 100%
+          text-align: left
+          position: relative
+        .text
+          +block-with-thumbnail(3em, 50%)
+        .thumbnail-img
+          &:before
+            counter-increment: variants
+            content: counter(variants)
+            display: block
+            font-size: px(18)
+            width: 3em
+            height: 3em
+            line-height: 2.6em
+            text-align: center
+            border: px(2) solid $gray
+            border-radius: 50%
+          &.text-gray:before
+            color: $gray
+          &.text-primary:before
+            border-color: $brand-primary
+          &.text-success:before
+            border-color: $brand-success
+        .thumbnail-content
+          padding: 1em 2em 0 !important
+          h3
+            font-size: inherit
+            font-weight: $fw-bold
+          p
+            margin-top: 1em
+            line-height: 1.8em
+          .btn
+            display: inline-block
+            width: auto
+            padding-left: 5em
+            padding-right: 5em
