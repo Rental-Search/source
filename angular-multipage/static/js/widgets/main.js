@@ -19,6 +19,7 @@ require.config({
         "placeholders-utils": "../../bower_components/placeholders/lib/utils",
         "placeholders-main": "../../bower_components/placeholders/lib/main",
         "placeholders-jquery": "../../bower_components/placeholders/lib/adapters/placeholders.jquery",
+        "angular-chosen-localytics": "../../bower_components/angular-chosen-localytics/chosen",
         "formmapper": "../formmapper",
         "vars": "../vars"
     },
@@ -29,6 +30,7 @@ require.config({
         "angular-sanitize": ["angular"],
         "angular-resource": ["angular"],
         "angular-moment": ["angular"],
+        "angular-chosen-localytics": ["angular"],
         "angular-mocks": {
             deps: ["angular"],
             "exports": "angular.mock"
@@ -58,6 +60,7 @@ require([
     "placeholders-utils",
     "placeholders-main",
     "placeholders-jquery",
+    "angular-chosen-localytics",
     "formmapper",
     "vars",
     "eloue/route"

@@ -1,4 +1,4 @@
-<section class="booking-form" ng-controller="ProductDetailsCtrl" ng-show="!inModal">
+<section class="booking-form" ng-show="!inModal">
     <div class="section-header">
         <h4>Réservez en ligne</h4>
     </div>
@@ -17,7 +17,7 @@
                 </div>
                 <div class="table-cell">
                     <select class="form-control" name="fromHour" ng-model="bookingDetails.fromHour"
-                            ng-options="h.value as h.label for h in hours" ng-change="updatePrice()">
+                            ng-options="h.value as h.label for h in hours" ng-change="updatePrice()" chosen>
                     </select>
                 </div>
             <span ng-show="productDetailsBookingForm.fromDate.$dirty && productDetailsBookingForm.fromDate.$error.required"
@@ -36,7 +36,7 @@
                 </div>
                 <div class="table-cell">
                     <select class="form-control" name="toHour" ng-model="bookingDetails.toHour"
-                            ng-options="h.value as h.label for h in hours" ng-change="updatePrice()">
+                            ng-options="h.value as h.label for h in hours" ng-change="updatePrice()" chosen>
                     </select>
                 </div>
                 <span ng-show="productDetailsBookingForm.toDate.$dirty && productDetailsBookingForm.toDate.$error.required"
@@ -76,7 +76,7 @@
         </div>
         <div class="table-cell">
             <select class="form-control" name="fromHour" ng-model="bookingDetails.fromHour"
-                    ng-options="h.value as h.label for h in hours" ng-change="updatePrice()">
+                    ng-options="h.value as h.label for h in hours" ng-change="updatePrice()" chosen>
             </select>
         </div>
     </div>
@@ -92,7 +92,7 @@
         </div>
         <div class="table-cell">
             <select class="form-control" name="toHour" ng-model="bookingDetails.toHour"
-                    ng-options="h.value as h.label for h in hours" ng-change="updatePrice()">
+                    ng-options="h.value as h.label for h in hours" ng-change="updatePrice()" chosen>
             </select>
         </div>
     </div>
