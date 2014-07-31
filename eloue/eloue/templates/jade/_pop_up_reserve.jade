@@ -12,6 +12,8 @@
 						include ./pop_up_sections/_product_info
 					section.terms
 						include ./pop_up_sections/_terms
-				.change-part.table-cell
-					section.table.reserve-form
-						include ./pop_up_sections/_reserve_form
+				form(action="").input-group.change-part.table-cell
+					section.table.form-wrapper.personal-information
+						include ./pop_up_sections/_personal_information_form
+					section.table.form-wrapper.bank-information
+						include ./pop_up_sections/_bank_information

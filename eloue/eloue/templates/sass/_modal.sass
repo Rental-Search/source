@@ -50,11 +50,13 @@
       color: $brand-danger
   p
     font-size: px(12)
+    line-height: 1.8em
     color: inherit
     &.info
       position: relative
       padding-left: 2.5em
       display: inline-block
+      margin-bottom: 0
       &:before
         position: absolute
         top: 0
@@ -124,7 +126,7 @@
     &:empty
       border-color: $brand-primary
     &:valid
-      border-color: $brand-success
+      border-color: $gray-medium
 
   .large
     $bd-property: px(1) solid $gray-lighter
@@ -137,6 +139,7 @@
     .static-part
       width: auto
       border-right: $bd-property
+      vertical-align: top
 
     .change-part
       width: 100%
@@ -146,6 +149,9 @@
     .product-info
       border-bottom: $bd-property
       @import pop_up_sections/product-info
+
+    .bank-information
+      border-top: $bd-property
 
     .terms
       font-size: px(13)
@@ -230,14 +236,12 @@
             font-weight: $fw-bold
           p
             margin-top: 1em
-            line-height: 1.8em
           .btn
             display: inline-block
             width: auto
             padding-left: 5em
             padding-right: 5em
-
-    .reserve-form
+    .form-wrapper
       text-align: left
       $pad-form: .75em
       .table-row
@@ -246,58 +250,72 @@
         width: auto
       h2
         color: $gray-dark
-        margin: 0
+        margin: 0 0 1em
         font-size: px(26)
-      form
-        width: 100%
+      .chosen-container
+        display: table-cell
+        float: left
+        padding: 0 !important
+        width: 100% !important
+        border-width: 0 !important
+      .chosen-single
+        background: transparent
+        color: $gray-strong
+        text-align: center
+        box-shadow: none
+        height: 100%
+        border: px(1) solid $gray-medium !important
+        span,
+        div b
+          margin-top: .5em
+        div b
+          height: 20px
+      .chosen-drop
+        border: px(1) solid $gray-medium
+        text-align: center
+        border-top-width: 0
+      .row
         margin-top: $pad-form
-        .chosen-container
-          display: table-cell
-          float: left
-          padding: 0 !important
-          width: 100% !important
-          border-width: 0 !important
-        .chosen-single
-          background: transparent
-          color: $gray-strong
-          text-align: right
-          box-shadow: none
-          height: 100%
-          padding: 0 !important
-          border: px(1) solid $gray-medium !important
-          span,
-          div b
-            margin-top: .5em
-          div b
-            height: 20px
-        .chosen-drop
-          border: px(1) solid $gray-medium
-          text-align: center
-          border-top-width: 0
-        .row
-          margin-top: $pad-form
-          margin-bottom: ($pad-form*2)
-        .btn
-          height: 3em
-          padding: 0
-          width: 100%
-          font-size: inherit
-        input,
-        select,
-        .chosen-container
-          font-size: px(14)
-          border: px(1) solid $gray-medium
-          box-shadow: none
-          height: 3em
-          padding: 0 1em
-          color: $gray-strong
-          +placeholder($gray-strong)
-          +border-top-radius($bd-rad)
-          +border-bottom-radius($bd-rad)
-        input[type="file"],
-        select
-          display: table-cell !important
-          height: 0
-          border-width: 0
-          overflow: hidden
-          padding: 0
+        margin-bottom: ($pad-form*2)
+      .btn
+        height: 3em
+        padding: 0
+        width: 100%
+        font-size: inherit
+      input,
+      select,
+      .chosen-container
+        font-size: px(14)
+        box-shadow: none
+        height: 3em
+        padding: 0 0 0 1em
+        color: $gray-strong
+        +placeholder($gray-strong)
+        +border-top-radius($bd-rad)
+        +border-bottom-radius($bd-rad)
+      input[type="file"],
+      select
+        display: table-cell !important
+        height: 0
+        border-width: 0
+        overflow: hidden
+        padding: 0
+      button
+        margin-top: ($pad-form*2)
+    .bank-information
+      input
+        padding-left: 2.75em
+      i
+        z-index: 50
+        margin: 1em
+        position: absolute
+        left: $padding-base-horizontal
+        top: 0
+        &.card
+          +sprite($s-card)
+        &.calendar
+          +sprite($s-calendar2)
+        &.block
+          +sprite($s-block)
+        &.user
+          +sprite($s-user)

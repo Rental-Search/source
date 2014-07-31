@@ -23,6 +23,7 @@ input#sourse {
   overflow: hidden;
   opacity: 0;
   position: fixed;
+  position: absolute;
   -webkit-transition: opacity 1s, z-index 0s 1s;
   transition: opacity 1s, z-index 0s 1s;
   z-index: -1000;
@@ -81,7 +82,7 @@ input#sourse:checked + #sourse-img {
 }
 .header-site .search-form .where-field .sprite-location {
   background-image: url(../../static/img/spritesheet.png);
-  background-position: -827px -67px;
+  background-position: -809px -67px;
   width: 14px;
   height: 16px;
   position: absolute;
@@ -425,7 +426,7 @@ aside .btn span {
 }
 aside .btn.calendar-ok span {
   background-image: url(../../static/img/spritesheet.png);
-  background-position: -879px -67px;
+  background-position: -913px -67px;
   width: 16px;
   height: 16px;
 }
@@ -437,7 +438,7 @@ aside .btn.call span {
 }
 aside .btn.send-message span {
   background-image: url(../../static/img/spritesheet.png);
-  background-position: -897px -67px;
+  background-position: -949px -67px;
   width: 16px;
   height: 14px;
 }
@@ -824,12 +825,14 @@ aside .connected-with-owner .facebook-box span {
 }
 .modal p {
   font-size: 0.85714em;
+  line-height: 1.8em;
   color: inherit;
 }
 .modal p.info {
   position: relative;
   padding-left: 2.5em;
   display: inline-block;
+  margin-bottom: 0;
 }
 .modal p.info:before {
   position: absolute;
@@ -921,7 +924,7 @@ aside .connected-with-owner .facebook-box span {
 .modal input[type="text"]:valid,
 .modal input[type="email"]:valid,
 .modal input[type="password"]:valid {
-  border-color: #24bd77;
+  border-color: #c4c4c4;
 }
 .modal .large {
   width: 970px;
@@ -935,6 +938,7 @@ aside .connected-with-owner .facebook-box span {
 .modal .large .static-part {
   width: auto;
   border-right: 0.07143em solid #eeeeee;
+  vertical-align: top;
 }
 .modal .large .change-part {
   width: 100%;
@@ -982,9 +986,9 @@ aside .connected-with-owner .facebook-box span {
 }
 .modal .large .product-info > .thumbnail-content .sprite-location {
   display: inline-block;
-  margin: 0 0.5em -0.3em 0;
+  margin: 0 0.5em -0.2em 0;
   background-image: url(../../static/img/spritesheet.png);
-  background-position: -827px -67px;
+  background-position: -809px -67px;
   width: 14px;
   height: 16px;
 }
@@ -999,9 +1003,9 @@ aside .connected-with-owner .facebook-box span {
 }
 .modal .large .product-info > .thumbnail-content .sprite-comment {
   display: inline-block;
-  margin: 0 0.5em -0.3em 1em;
+  margin: 0 0.5em -0.2em 1em;
   background-image: url(../../static/img/spritesheet.png);
-  background-position: -809px -67px;
+  background-position: -895px -67px;
   width: 16px;
   height: 16px;
 }
@@ -1040,6 +1044,9 @@ aside .connected-with-owner .facebook-box span {
 .modal .large .product-info > .thumbnail-content .declarer .thumbnail-content {
   vertical-align: middle;
   font-size: 0.92857em;
+}
+.modal .large .bank-information {
+  border-top: 0.07143em solid #eeeeee;
 }
 .modal .large .terms {
   font-size: 0.92857em;
@@ -1267,7 +1274,6 @@ aside .connected-with-owner .facebook-box span {
 }
 .modal .large .variant-call ul .thumbnail-content p {
   margin-top: 1em;
-  line-height: 1.8em;
 }
 .modal .large .variant-call ul .thumbnail-content .btn {
   display: inline-block;
@@ -1275,99 +1281,130 @@ aside .connected-with-owner .facebook-box span {
   padding-left: 5em;
   padding-right: 5em;
 }
-.modal .large .reserve-form {
+.modal .large .form-wrapper {
   text-align: left;
 }
-.modal .large .reserve-form .table-row {
+.modal .large .form-wrapper .table-row {
   margin: 0 -0.375em;
 }
-.modal .large .reserve-form .table-cell {
+.modal .large .form-wrapper .table-cell {
   width: auto;
 }
-.modal .large .reserve-form h2 {
+.modal .large .form-wrapper h2 {
   color: #2c2c2c;
-  margin: 0;
+  margin: 0 0 1em;
   font-size: 1.85714em;
 }
-.modal .large .reserve-form form {
-  width: 100%;
-  margin-top: 0.75em;
-}
-.modal .large .reserve-form form .chosen-container {
+.modal .large .form-wrapper .chosen-container {
   display: table-cell;
   float: left;
   padding: 0 !important;
   width: 100% !important;
   border-width: 0 !important;
 }
-.modal .large .reserve-form form .chosen-single {
+.modal .large .form-wrapper .chosen-single {
   background: transparent;
   color: #9d9d9d;
-  text-align: right;
+  text-align: center;
   -webkit-box-shadow: none;
   box-shadow: none;
   height: 100%;
-  padding: 0 !important;
   border: 0.07143em solid #c4c4c4 !important;
 }
-.modal .large .reserve-form form .chosen-single span,
-.modal .large .reserve-form form .chosen-single div b {
+.modal .large .form-wrapper .chosen-single span,
+.modal .large .form-wrapper .chosen-single div b {
   margin-top: 0.5em;
 }
-.modal .large .reserve-form form .chosen-single div b {
+.modal .large .form-wrapper .chosen-single div b {
   height: 20px;
 }
-.modal .large .reserve-form form .chosen-drop {
+.modal .large .form-wrapper .chosen-drop {
   border: 0.07143em solid #c4c4c4;
   text-align: center;
   border-top-width: 0;
 }
-.modal .large .reserve-form form .row {
+.modal .large .form-wrapper .row {
   margin-top: 0.75em;
   margin-bottom: 1.5em;
 }
-.modal .large .reserve-form form .btn {
+.modal .large .form-wrapper .btn {
   height: 3em;
   padding: 0;
   width: 100%;
   font-size: inherit;
 }
-.modal .large .reserve-form form input,
-.modal .large .reserve-form form select,
-.modal .large .reserve-form form .chosen-container {
+.modal .large .form-wrapper input,
+.modal .large .form-wrapper select,
+.modal .large .form-wrapper .chosen-container {
   font-size: 1em;
-  border: 0.07143em solid #c4c4c4;
   -webkit-box-shadow: none;
   box-shadow: none;
   height: 3em;
-  padding: 0 1em;
+  padding: 0 0 0 1em;
   color: #9d9d9d;
   border-top-right-radius: 0.21429em;
   border-top-left-radius: 0.21429em;
   border-bottom-right-radius: 0.21429em;
   border-bottom-left-radius: 0.21429em;
 }
-.modal .large .reserve-form form input::-moz-placeholder,
-.modal .large .reserve-form form select::-moz-placeholder,
-.modal .large .reserve-form form .chosen-container::-moz-placeholder {
+.modal .large .form-wrapper input::-moz-placeholder,
+.modal .large .form-wrapper select::-moz-placeholder,
+.modal .large .form-wrapper .chosen-container::-moz-placeholder {
   color: #9d9d9d;
   opacity: 1;
 }
-.modal .large .reserve-form form input:-ms-input-placeholder,
-.modal .large .reserve-form form select:-ms-input-placeholder,
-.modal .large .reserve-form form .chosen-container:-ms-input-placeholder {
+.modal .large .form-wrapper input:-ms-input-placeholder,
+.modal .large .form-wrapper select:-ms-input-placeholder,
+.modal .large .form-wrapper .chosen-container:-ms-input-placeholder {
   color: #9d9d9d;
 }
-.modal .large .reserve-form form input::-webkit-input-placeholder,
-.modal .large .reserve-form form select::-webkit-input-placeholder,
-.modal .large .reserve-form form .chosen-container::-webkit-input-placeholder {
+.modal .large .form-wrapper input::-webkit-input-placeholder,
+.modal .large .form-wrapper select::-webkit-input-placeholder,
+.modal .large .form-wrapper .chosen-container::-webkit-input-placeholder {
   color: #9d9d9d;
 }
-.modal .large .reserve-form form input[type="file"],
-.modal .large .reserve-form form select {
+.modal .large .form-wrapper input[type="file"],
+.modal .large .form-wrapper select {
   display: table-cell !important;
   height: 0;
   border-width: 0;
   overflow: hidden;
   padding: 0;
+}
+.modal .large .form-wrapper button {
+  margin-top: 1.5em;
+}
+.modal .large .bank-information input {
+  padding-left: 2.75em;
+}
+.modal .large .bank-information i {
+  z-index: 50;
+  margin: 1em;
+  position: absolute;
+  left: 12px;
+  top: 0;
+}
+.modal .large .bank-information i.card {
+  background-image: url(../../static/img/spritesheet.png);
+  background-position: -967px -67px;
+  width: 16px;
+  height: 13px;
+}
+.modal .large .bank-information i.calendar {
+  background-image: url(../../static/img/spritesheet.png);
+  background-position: -843px -67px;
+  width: 16px;
+  height: 16px;
+}
+.modal .large .bank-information i.block {
+  background-image: url(../../static/img/spritesheet.png);
+  background-position: -879px -67px;
+  width: 14px;
+  height: 16px;
+}
+.modal .large .bank-information i.user {
+  background-image: url(../../static/img/spritesheet.png);
+  background-position: -931px -67px;
+  width: 16px;
+  height: 16px;
 }

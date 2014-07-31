@@ -1081,64 +1081,85 @@
                 <p></p><a href="#inscrivez-vous" data-toggle="modal" data-target="#pop-up" class="btn bg-gray">Envoyez un message</a>
               </section>
             </div>
-            <div class="change-part table-cell">
-              <section class="table reserve-form">
+            <form action="" class="input-group change-part table-cell">
+              <section class="table form-wrapper personal-information">
                 <h2>Vos informations personnelles</h2>
-                <form action="" class="input-group">
-                  <div class="row">
-                    <div class="col-sm-2">
-                      <select class="form-control">
-                        <option value="male">M.</option>
-                        <option value="female">F.</option>
-                      </select>
-                    </div>
-                    <div class="col-sm-5">
-                      <input type="text" placeholder="Prénom *" class="form-control">
-                    </div>
-                    <div class="col-sm-5">
-                      <input type="text" placeholder="Nom *" class="form-control">
-                    </div>
+                <div class="row">
+                  <div class="col-sm-2">
+                    <select class="form-control">
+                      <option value="male">M.</option>
+                      <option value="female">F.</option>
+                    </select>
                   </div>
-                  <div class="row">
-                    <div class="col-sm-12">
-                      <input type="text" placeholder="Adresse *" class="form-control">
-                    </div>
+                  <div class="col-sm-5">
+                    <input type="text" placeholder="Prénom *" required class="form-control">
                   </div>
-                  <div class="row">
-                    <div class="col-sm-6">
-                      <input type="text" placeholder="Code postal *" class="form-control">
-                    </div>
-                    <div class="col-sm-6">
-                      <input type="text" placeholder="Ville *" class="form-control">
-                    </div>
+                  <div class="col-sm-5">
+                    <input type="text" placeholder="Nom *" required class="form-control">
                   </div>
-                  <div class="row">
-                    <div class="col-sm-6">
-                      <input type="text" placeholder="Date de naissance *" class="form-control">
-                    </div>
-                    <div class="col-sm-6">
-                      <input type="text" placeholder="Lieu de naissance *" class="form-control">
-                    </div>
+                </div>
+                <div class="row">
+                  <div class="col-sm-12">
+                    <input type="text" placeholder="Adresse *" required class="form-control">
                   </div>
-                  <div class="row">
-                    <div class="col-sm-12">
-                      <input type="text" placeholder="Numéro de permis *" class="form-control">
-                    </div>
+                </div>
+                <div class="row">
+                  <div class="col-sm-6">
+                    <input type="text" placeholder="Code postal *" required class="form-control">
                   </div>
-                  <div class="row">
-                    <div class="col-sm-6">
-                      <input type="text" placeholder="Date d’obtention du permis" class="form-control">
-                    </div>
-                    <div class="col-sm-6">
-                      <label for="photo" class="table-cell btn bg-gray">Photo scan de votre permis
-                        <input type="file" id="photo" class="form-control">
-                      </label>
-                    </div>
+                  <div class="col-sm-6">
+                    <input type="text" placeholder="Ville *" required class="form-control">
                   </div>
-                </form>
+                </div>
+                <div class="row">
+                  <div class="col-sm-6">
+                    <input type="text" placeholder="Date de naissance *" required class="form-control">
+                  </div>
+                  <div class="col-sm-6">
+                    <input type="text" placeholder="Lieu de naissance *" required class="form-control">
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-sm-12">
+                    <input type="text" placeholder="Numéro de permis *" required class="form-control">
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-sm-6">
+                    <input type="text" placeholder="Date d’obtention du permis" class="form-control">
+                  </div>
+                  <div class="col-sm-6">
+                    <label for="photo" class="table-cell btn bg-gray">Photo scan de votre permis
+                      <input type="file" id="photo" class="form-control">
+                    </label>
+                  </div>
+                </div>
                 <p class="info">Ces informations seront reproduites sur le contrat de location. Le propriétaire les vérifiera au début de la location. Si elles sont incorrectes, il ne pourra pas vous remettre les clés. Les champs marqués d'une étoile (*) sont obligatoires.</p>
               </section>
-            </div>
+              <section class="table form-wrapper bank-information">
+                <h2>Vos bank-information</h2>
+                <div class="row">
+                  <div class="col-sm-9 card">
+                    <input type="text" placeholder="Numéro de carte *" required class="form-control"><i class="card"></i>
+                  </div>
+                  <div class="col-sm-3">
+                    <input type="text" placeholder="MM/AA *" required class="form-control"><i class="calendar"></i>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-sm-5">
+                    <input type="text" placeholder="Code de sécurité *" required class="form-control"><i class="block"></i>
+                  </div>
+                  <div class="col-sm-7">
+                    <input type="text" placeholder="Nom et prénom du titulaire *" required class="form-control"><i class="user"></i>
+                  </div>
+                </div>
+                <p class="info">Vous devez payer avec votre propre carte bancaire, que vous devrez présenter au propriétaire pour vérification.<br>Si vous payez avec une carte bleue qui n'est pas à votre nom (ou une carte virtuelle, e-carte bleue), le propriétaire devra refuser la location.</p>
+                <div class="col-sm-8 col-sm-offset-2">
+                  <button type="submit" class="btn bg-success">Réservez</button>
+                </div>
+              </section>
+            </form>
           </div>
         </div>
       </div>

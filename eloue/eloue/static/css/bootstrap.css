@@ -7775,7 +7775,6 @@ a, a:hover {
 
 .table {
   display: table;
-  height: 100%;
   margin: 0;
 }
 
@@ -7999,7 +7998,7 @@ a, a:hover {
   *display: inline;
   *zoom: 1;
   background-image: url(../../static/img/spritesheet.png);
-  background-position: -843px -67px;
+  background-position: -825px -67px;
   width: 16px;
   height: 16px;
 }
