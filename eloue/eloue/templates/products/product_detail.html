@@ -817,7 +817,7 @@
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" data-dismiss="modal" class="close"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-            <h4 class="modal-title">Message</h4>
+            <h4 class="modal-title">Appel</h4>
           </div>
           <div class="modal-body table-cell">
             <div class="static-part table-cell">
@@ -973,7 +973,7 @@
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" data-dismiss="modal" class="close"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-            <h4 class="modal-title">Message</h4>
+            <h4 class="modal-title">Réservation</h4>
           </div>
           <div class="modal-body table-cell">
             <div class="static-part table-cell">
@@ -1085,14 +1085,58 @@
               <section class="table reserve-form">
                 <h2>Vos informations personnelles</h2>
                 <form action="" class="input-group">
-                  <div class="table-row">
-                    <input type="text" placeholder="Adresse *" class="form-contro table-cell main-cell">
+                  <div class="row">
+                    <div class="col-sm-2">
+                      <select class="form-control">
+                        <option value="male">M.</option>
+                        <option value="female">F.</option>
+                      </select>
+                    </div>
+                    <div class="col-sm-5">
+                      <input type="text" placeholder="Prénom *" class="form-control">
+                    </div>
+                    <div class="col-sm-5">
+                      <input type="text" placeholder="Nom *" class="form-control">
+                    </div>
                   </div>
-                  <div class="table-row">
-                    <input type="text" placeholder="Code postal *" class="form-contro table-cell">
-                    <input type="text" placeholder="Ville *" class="form-contro table-cell">
+                  <div class="row">
+                    <div class="col-sm-12">
+                      <input type="text" placeholder="Adresse *" class="form-control">
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-sm-6">
+                      <input type="text" placeholder="Code postal *" class="form-control">
+                    </div>
+                    <div class="col-sm-6">
+                      <input type="text" placeholder="Ville *" class="form-control">
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-sm-6">
+                      <input type="text" placeholder="Date de naissance *" class="form-control">
+                    </div>
+                    <div class="col-sm-6">
+                      <input type="text" placeholder="Lieu de naissance *" class="form-control">
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-sm-12">
+                      <input type="text" placeholder="Numéro de permis *" class="form-control">
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-sm-6">
+                      <input type="text" placeholder="Date d’obtention du permis" class="form-control">
+                    </div>
+                    <div class="col-sm-6">
+                      <label for="photo" class="table-cell btn bg-gray">Photo scan de votre permis
+                        <input type="file" id="photo" class="form-control">
+                      </label>
+                    </div>
                   </div>
                 </form>
+                <p class="info">Ces informations seront reproduites sur le contrat de location. Le propriétaire les vérifiera au début de la location. Si elles sont incorrectes, il ne pourra pas vous remettre les clés. Les champs marqués d'une étoile (*) sont obligatoires.</p>
               </section>
             </div>
           </div>

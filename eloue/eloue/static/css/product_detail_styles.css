@@ -824,14 +824,19 @@ aside .connected-with-owner .facebook-box span {
 }
 .modal p {
   font-size: 0.85714em;
-  margin-top: 1.5em;
   color: inherit;
 }
+.modal p.info {
+  position: relative;
+  padding-left: 2.5em;
+  display: inline-block;
+}
 .modal p.info:before {
+  position: absolute;
+  top: 0;
+  left: 0;
   text-align: center;
   content: "i";
-  display: inline-block;
-  margin-right: 1em;
   font-weight: bold;
   border: 0.21429em solid #9d9d9d;
   border-radius: 50%;
@@ -1286,14 +1291,83 @@ aside .connected-with-owner .facebook-box span {
 }
 .modal .large .reserve-form form {
   width: 100%;
+  margin-top: 0.75em;
 }
-.modal .large .reserve-form form input {
+.modal .large .reserve-form form .chosen-container {
+  display: table-cell;
+  float: left;
+  padding: 0 !important;
+  width: 100% !important;
+  border-width: 0 !important;
+}
+.modal .large .reserve-form form .chosen-single {
+  background: transparent;
+  color: #9d9d9d;
+  text-align: right;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+  height: 100%;
+  padding: 0 !important;
+  border: 0.07143em solid #c4c4c4 !important;
+}
+.modal .large .reserve-form form .chosen-single span,
+.modal .large .reserve-form form .chosen-single div b {
+  margin-top: 0.5em;
+}
+.modal .large .reserve-form form .chosen-single div b {
+  height: 20px;
+}
+.modal .large .reserve-form form .chosen-drop {
   border: 0.07143em solid #c4c4c4;
+  text-align: center;
+  border-top-width: 0;
+}
+.modal .large .reserve-form form .row {
+  margin-top: 0.75em;
+  margin-bottom: 1.5em;
+}
+.modal .large .reserve-form form .btn {
+  height: 3em;
+  padding: 0;
+  width: 100%;
+  font-size: inherit;
+}
+.modal .large .reserve-form form input,
+.modal .large .reserve-form form select,
+.modal .large .reserve-form form .chosen-container {
+  font-size: 1em;
+  border: 0.07143em solid #c4c4c4;
+  -webkit-box-shadow: none;
+  box-shadow: none;
   height: 3em;
   padding: 0 1em;
-  margin: 0.75em 0;
+  color: #9d9d9d;
   border-top-right-radius: 0.21429em;
   border-top-left-radius: 0.21429em;
   border-bottom-right-radius: 0.21429em;
   border-bottom-left-radius: 0.21429em;
+}
+.modal .large .reserve-form form input::-moz-placeholder,
+.modal .large .reserve-form form select::-moz-placeholder,
+.modal .large .reserve-form form .chosen-container::-moz-placeholder {
+  color: #9d9d9d;
+  opacity: 1;
+}
+.modal .large .reserve-form form input:-ms-input-placeholder,
+.modal .large .reserve-form form select:-ms-input-placeholder,
+.modal .large .reserve-form form .chosen-container:-ms-input-placeholder {
+  color: #9d9d9d;
+}
+.modal .large .reserve-form form input::-webkit-input-placeholder,
+.modal .large .reserve-form form select::-webkit-input-placeholder,
+.modal .large .reserve-form form .chosen-container::-webkit-input-placeholder {
+  color: #9d9d9d;
+}
+.modal .large .reserve-form form input[type="file"],
+.modal .large .reserve-form form select {
+  display: table-cell !important;
+  height: 0;
+  border-width: 0;
+  overflow: hidden;
+  padding: 0;
 }
