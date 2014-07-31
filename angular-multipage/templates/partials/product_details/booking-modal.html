@@ -1,99 +1,95 @@
-<div id="bookingModal" class="modal fade booking-form" tabindex="-1" role="dialog"
-     aria-hidden="true">
-    <div class="modal-dialog">
+<div id="bookingModal" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
+    <div class="modal-dialog large">
         <div class="modal-content">
             <div class="modal-header">
-                Réservation
+                <button type="button" data-dismiss="modal" class="close"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title">Réservation</h4>
             </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="col-lg-4 col-md-4">
-                        <eloue-product-details-small></eloue-product-details-small>
-                        <eloue-product-details-booking in-modal="true"
-                                                       in-booking="true"></eloue-product-details-booking>
-                    </div>
-                    <div class="col-lg-6 col-md-6">
-                        <form id="bookingForm" name="bookingForm" class="" role="form" ng-submit="sendBookingRequest()" ng-model="bookingDetails" novalidate>
-                            <fieldset>
-                                <legend>Vos informations personnelles</legend>
-
-                                <div class="form-group">
-                                    <div class="col-md-2">
-                                        <select name="nameSuffix" class="form-control" ng-model="bookingDetails.nameSuffix">
-                                            <option value="Mr.">Mr.</option>
-                                            <option value="Ms.">Ms.</option>
-                                        </select>
-                                    </div>
-
-                                    <div class="col-md-5">
-                                        <input name="firstName" type="text" placeholder="Prenom*"
-                                               class="form-control input-md" required ng-model="bookingDetails.firstName">
-                                    </div>
-
-                                    <div class="col-md-5">
-                                        <input name="lastName" type="text" placeholder="Nom*"
-                                               class="form-control input-md" required ng-model="bookingDetails.lastName">
-                                    </div>
-
-                                    <div class="col-md-12">
-                                        <input name="address" type="text" placeholder="Adresse*"
-                                               class="form-control input-md" required ng-model="bookingDetails.address">
-                                    </div>
-
-
-                                    <div class="col-md-6">
-                                        <input name="postalCode" type="text" placeholder="Code postal*"
-                                               class="form-control input-md" required ng-model="bookingDetails.postalCode">
-                                    </div>
-
-
-                                    <div class="col-md-6">
-                                        <input name="city" type="text" placeholder="Ville*"
-                                               class="form-control input-md" required ng-model="bookingDetails.city">
-                                    </div>
-                                </div>
-                                <legend>Vos informations bancaires</legend>
-                                <div class="form-group">
-                                    <div class="col-md-8">
-                                        <div class="input-group">
-                                            <span class="input-group-addon">i</span>
-                                            <input name="cardNumber" class="form-control"
-                                                   placeholder="Numéro de carte*" type="text" required ng-model="bookingDetails.cardNumber">
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-4">
-                                        <div class="input-group">
-                                            <span class="input-group-addon">i</span>
-                                            <input name="expireDate" class="form-control"
-                                                   placeholder="MM/AA*" type="text" required ng-model="bookingDetails.expireDate">
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-5">
-                                        <div class="input-group">
-                                            <span class="input-group-addon">i</span>
-                                            <input name="securityCode" class="form-control"
-                                                   placeholder="Code de sécurité*" type="text" required ng-model="bookingDetails.securityCode">
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-7">
-                                        <div class="input-group">
-                                            <span class="input-group-addon">i</span>
-                                            <input name="cardHolder" class="form-control"
-                                                   placeholder="Nom et prénom du titulaire*" type="text" required ng-model="bookingDetails.cardHolder">
-                                        </div>
-                                    </div>
-                                </div>
-                            </fieldset>
-
-                            <button class="btn btn-success" type="submit">Réservez</button>
-                        </form>
-                    </div>
+            <div class="modal-body table-cell">
+                <div class="static-part table-cell">
+                    <eloue-product-details-small></eloue-product-details-small>
+                    <eloue-product-details-booking in-modal="true"
+                                                   in-booking="true"></eloue-product-details-booking>
                 </div>
-            </div>
-            <div class="modal-footer">
+                <form id="bookingForm" name="bookingForm" class="input-group change-part table-cell" role="form" ng-submit="sendBookingRequest()" ng-model="bookingDetails" novalidate>
+                    <section class="table form-wrapper personal-information">
+                        <h2>Vos informations personnelles</h2>
+                        <div class="row">
+                            <div class="col-sm-2">
+                                <select class="form-control">
+                                    <option value="male">M.</option>
+                                    <option value="female">F.</option>
+                                </select>
+                            </div>
+                            <div class="col-sm-5">
+                                <input name="firstName" type="text" placeholder="Prénom *" ng-model="bookingDetails.firstName" required class="form-control">
+                            </div>
+                            <div class="col-sm-5">
+                                <input name="lastName" type="text" placeholder="Nom *" ng-model="bookingDetails.lastName" required class="form-control">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <input name="address" type="text" placeholder="Adresse *" required ng-model="bookingDetails.address" class="form-control">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <input name="postalCode" type="text" placeholder="Code postal *" required ng-model="bookingDetails.postalCode" class="form-control">
+                            </div>
+                            <div class="col-sm-6">
+                                <input name="city" type="text" placeholder="Ville *" required ng-model="bookingDetails.city" class="form-control">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <input name="dateOfBirth" type="text" placeholder="Date de naissance *" required ng-model="bookingDetails.dateOfBirth" class="form-control">
+                            </div>
+                            <div class="col-sm-6">
+                                <input name="placeOfBirth" type="text" placeholder="Lieu de naissance *" required ng-model="bookingDetails.placeOfBirth" class="form-control">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <input name="licenseNumber" type="text" placeholder="Numéro de permis *" required ng-model="bookingDetails.licenseNumber" class="form-control">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <input name="licenseDate" type="text" placeholder="Date d’obtention du permis" ng-model="bookingDetails.licenseDate" class="form-control">
+                            </div>
+                            <div class="col-sm-6">
+                                <label for="photo" class="table-cell btn bg-gray">Photo scan de votre permis
+                                    <input name="photo" type="file" id="photo" ng-model="bookingDetails.photo" class="form-control">
+                                </label>
+                            </div>
+                        </div>
+                        <p class="info">Ces informations seront reproduites sur le contrat de location. Le propriétaire les vérifiera au début de la location. Si elles sont incorrectes, il ne pourra pas vous remettre les clés. Les champs marqués d'une étoile (*) sont obligatoires.</p>
+                    </section>
+                    <section class="table form-wrapper bank-information">
+                        <h2>Vos bank-information</h2>
+                        <div class="row">
+                            <div class="col-sm-9 card">
+                                <input name="cardNumber" type="text" placeholder="Numéro de carte *" required ng-model="bookingDetails.cardNumber" class="form-control"><i class="card"></i>
+                            </div>
+                            <div class="col-sm-3">
+                                <input name="validDate" type="text" placeholder="MM/AA *" required ng-model="bookingDetails.validDate" class="form-control"><i class="calendar"></i>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-5">
+                                <input name="securityCode" type="text" placeholder="Code de sécurité *" required ng-model="bookingDetails.securityCode" class="form-control"><i class="block"></i>
+                            </div>
+                            <div class="col-sm-7">
+                                <input name="clientName" type="text" placeholder="Nom et prénom du titulaire *" required ng-model="bookingDetails.clientName" class="form-control"><i class="user"></i>
+                            </div>
+                        </div>
+                        <p class="info">Vous devez payer avec votre propre carte bancaire, que vous devrez présenter au propriétaire pour vérification.<br>Si vous payez avec une carte bleue qui n'est pas à votre nom (ou une carte virtuelle, e-carte bleue), le propriétaire devra refuser la location.</p>
+                        <div class="col-sm-8 col-sm-offset-2">
+                            <button type="submit" class="btn bg-success">Réservez</button>
+                        </div>
+                    </section>
+                </form>
             </div>
         </div>
     </div>

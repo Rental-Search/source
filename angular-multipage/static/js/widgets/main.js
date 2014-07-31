@@ -13,6 +13,12 @@ require.config({
         "angular-moment": "../../bower_components/angular-moment/angular-moment.min",
         "bootstrap-datepicker": "../../bower_components/bootstrap-datepicker/js/bootstrap-datepicker",
         "datejs": "../../bower_components/datejs/build/production/date.min",
+        "chosen": "../../bower_components/chosen/chosen.jquery.min",
+        "html5shiv": "../../bower_components/html5shiv/dist/html5shiv.min",
+        "respond": "../../bower_components/respond/respond.min",
+        "placeholders-utils": "../../bower_components/placeholders/lib/utils",
+        "placeholders-main": "../../bower_components/placeholders/lib/main",
+        "placeholders-jquery": "../../bower_components/placeholders/lib/adapters/placeholders.jquery",
         "formmapper": "../formmapper",
         "vars": "../vars"
     },
@@ -31,6 +37,8 @@ require.config({
         "bootstrap": ["jQuery"],
         "moment": ["jQuery"],
         "bootstrap-datepicker": ["jQuery"],
+        "chosen": ["jQuery"],
+        "placeholders-jquery": ["jQuery"],
         "formmapper": ["jQuery"]
     }
 });
@@ -44,15 +52,35 @@ require([
     "angular-moment",
     "bootstrap-datepicker",
     "datejs",
+    "chosen",
+    "html5shiv",
+    "respond",
+    "placeholders-utils",
+    "placeholders-main",
+    "placeholders-jquery",
     "formmapper",
     "vars",
     "eloue/route"
-], function ($, _, angular, bootstrap, moment, ngMoment, datepicker, datejs, formmapper, vars, route) {
+], function ($, _, angular) {
     "use strict";
     $(function () {
         angular.bootstrap(document, ["EloueApp"]);
         $('#geolocate').formmapper({
             details: "form"
         });
+        $('select').chosen();
+
+        var slide_imgs = [].slice.call($('.carousel-wrapper').find('img'));
+        for(var index = 0; index < slide_imgs.length; index++) {
+            var proportions = $(slide_imgs[index]).width() / $(slide_imgs[index]).height(),
+                parent = $(slide_imgs[index]).parent(),
+                parent_proportions = $(parent).width() / $(parent).height();
+
+            if(proportions < parent_proportions) {
+                $(slide_imgs[index]).addClass('expand-v');
+            } else {
+                $(slide_imgs[index]).addClass('expand-h');
+            }
+        }
     });
 });

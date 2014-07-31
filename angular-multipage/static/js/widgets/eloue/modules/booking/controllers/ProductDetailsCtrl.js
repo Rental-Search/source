@@ -91,9 +91,8 @@ define(["angular", "eloue/modules/booking/BookingModule",
         $scope.updatePrice = function updatePrice() {
             var fromDateTimeStr = $scope.bookingDetails.fromDate + " " + $scope.bookingDetails.fromHour;
             var toDateTimeStr = $scope.bookingDetails.toDate + " " + $scope.bookingDetails.toHour;
-
-            var fromDateTime = new Date(Date.parse(fromDateTimeStr));
-            var toDateTime = new Date(Date.parse(toDateTimeStr));
+            var fromDateTime = Date.parseExact(fromDateTimeStr, "dd/MM/yyyy HH:mm:ss");
+            var toDateTime = Date.parseExact(toDateTimeStr, "dd/MM/yyyy HH:mm:ss");
             var today = Date.today().set({hour: 8, minute: 0});
             if (fromDateTime > toDateTime) {
                 $scope.dateRangeError = "From date cannot be after to date";

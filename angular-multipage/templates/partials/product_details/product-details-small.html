@@ -1,8 +1,26 @@
-<div class="row">
-    <!--<img src="../../../../../../images/product_details_small_fake.png">-->
-    <strong>{{product.summary}}</strong>
-    <p>{{product.owner.slug}}</p>
-    <a href="" class="thumb-sm avatar pull-right"><img ng-src="{{getAvatar(product.owner.avatar)}}" class="img-circle"></a>
-    <p>Address: {{product.address.city}}, {{product.address.zipcode}}</p>
-    <p>Comments: {{productRelatedMessages.length}}</p>
-</div>
+<section class="product-info">
+    <div class="thumbnail-img"><a href="#"><img src="../static/img/home-products/audi.jpg"
+                                                alt=""></a></div>
+    <div class="thumbnail-content">
+        <h3>{{product.summary}}</h3>
+
+        <p class="location"><i class="sprite-location"></i>{{product.address.city}}, {{product.address.zipcode}}</p>
+
+        <p class="stats">
+
+        <div class="rate"><span class="icon-star"></span><span
+                class="icon-star current-rate"></span><span class="icon-star"></span><span
+                class="icon-star"></span><span class="icon-star"></span>
+        </div>
+        <span class="rate-count">32</span><span class="comments-count"><i
+            class="sprite-comment"></i>{{productRelatedMessages.length}}</span>
+        </p>
+        <div class="declarer">
+            <div class="thumbnail-img"><a href="#"><img
+                    ng-src="{{getAvatar(product.owner.avatar)}}" alt=""></a></div>
+            <div class="thumbnail-content">
+                <p>{{product.owner.slug}}</p>
+            </div>
+        </div>
+    </div>
+</section>

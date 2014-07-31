@@ -10,7 +10,8 @@ define(["angular", "eloue/modules/booking/BookingModule", "eloue/modules/booking
             templateUrl: $window.templatePrefix + "partials/product_details/product-details-booking.html",
             scope: {
                 inModal: "=inModal",
-                inBooking: "=inBooking"
+                inBooking: "=inBooking",
+                inMessage: "=inMessage"
             },
             controller: "ProductDetailsCtrl"
         };

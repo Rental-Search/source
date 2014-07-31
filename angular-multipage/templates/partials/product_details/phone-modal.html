@@ -1,25 +1,54 @@
-<div id="phoneModal" class="modal fade phone-form" tabindex="-1" role="dialog"
-     aria-hidden="true">
-    <div class="modal-dialog">
+<div id="phoneModal" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
+    <div class="modal-dialog large">
         <div class="modal-content">
             <div class="modal-header">
-                Appel
+                <button type="button" data-dismiss="modal" class="close"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title">Appelez</h4>
             </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="col-lg-4 col-md-4">
-                        <eloue-product-details-small></eloue-product-details-small>
-                        <eloue-product-details-booking in-modal="true"></eloue-product-details-booking>
-                        <button class="btn btn-default" type="button" ng-click="openMessageModal()">Envoyez un message</button>
-                    </div>
-                    <div class="col-lg-6 col-md-6">
-                        <button type="button" class="btn-danger" ng-click="callOwner()">{{ownerCallDetails.number}}
-                            ({{ownerCallDetails.tariff}}€/min)
-                        </button>
-                    </div>
+            <div class="modal-body table-cell">
+                <div class="static-part table-cell">
+                    <eloue-product-details-small></eloue-product-details-small>
+                    <eloue-product-details-booking in-modal="true"></eloue-product-details-booking>
                 </div>
-            </div>
-            <div class="modal-footer">
+                <div class="change-part table-cell">
+                    <section class="table variant-call">
+                        <ul class="table">
+                            <li class="table-row">
+                                <div class="table-cell">
+                                    <div class="text">
+                                        <div class="thumbnail-img text-primary"></div>
+                                        <div class="thumbnail-content">
+                                            <h3>Appelez le propriétaire</h3><a href="#" class="btn bg-primary">{{ownerCallDetails.number}}<br><small>({{ownerCallDetails.tariff}}€ /min)</small></a>
+                                            <p>Après 21h, afin de respecter la tranquillité des membres e-loue, nous vous remercions  de  poser vos questions par <a href="#" class="text-success">messagerie. </a>Et oui, tout le monde a le droit de se reposer.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="table-row">
+                                <div class="table-cell">
+                                    <div class="text">
+                                        <div class="thumbnail-img text-gray"></div>
+                                        <div class="thumbnail-content">
+                                            <h3>Posez lui toutes vos questions</h3>
+                                            <p>Besoin de détails  supplémentaires sur l’objet à louer ?  Des questions sur les modalités de locations ? Sur le  lieu et l’horaire du RDV ? N’ayez pas peur, les membres e-loue  sont très  serviables, et vous répondront...</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="table-row">
+                                <div class="table-cell">
+                                    <div class="text">
+                                        <div class="thumbnail-img text-success"></div>
+                                        <div class="thumbnail-content">
+                                            <h3>Réservez en ligne</h3>
+                                            <p>En réservant sur e-loue, vous avez l’assurance de ne pas avoir de mauvaise surprise : le paiement  est sécurisé, la caution est automatiquement débloquée dès que vous restituez le produit.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </section>
+                </div>
             </div>
         </div>
     </div>
