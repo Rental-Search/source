@@ -1046,7 +1046,7 @@ class UserViewSet(views.LocationHeaderMixin, viewsets.ModelViewSet):
             return Response({'detail': _(u"Votre mot de passe à bien été modifié")})
         return Response({'errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
-class AddressViewSet(viewsets.ModelViewSet):
+class AddressViewSet(views.SetOwnerMixin, views.LocationHeaderMixin, viewsets.ModelViewSet):
     """
     API endpoint that allows addresses to be viewed or edited.
     """
@@ -1054,7 +1054,7 @@ class AddressViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.AddressSerializer
     filter_backends = (filters.OwnerFilter,)
 
-class PhoneNumberViewSet(views.LocationHeaderMixin, viewsets.ModelViewSet):
+class PhoneNumberViewSet(views.SetOwnerMixin, views.LocationHeaderMixin, viewsets.ModelViewSet):
     """
     API endpoint that allows phone numbers to be viewed or edited.
     Phone numbers are sent to the borrower and to the owner for each booking.
@@ -1079,11 +1079,6 @@ class PhoneNumberViewSet(views.LocationHeaderMixin, viewsets.ModelViewSet):
                 status=status.HTTP_400_BAD_REQUEST
             )
         return Response(tags)
-
-    def pre_save(self, obj):
-        user = self.request.user
-        if not obj.patron_id and not user.is_anonymous():
-            obj.patron = user
 
 class ProAgencyViewSet(viewsets.ModelViewSet):
     """

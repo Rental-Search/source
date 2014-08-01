@@ -168,3 +168,29 @@ class PhoneNumbersTest(APITestCase):
         # Location header must be properly set to redirect to the resource have just been created
         self.assertIn('Location', response)
         self.assertTrue(response['Location'].endswith(_location('phonenumber-detail', pk=response.data['id'])))
+
+class AddressesTest(APITestCase):
+    fixtures = ['patron', 'address']
+
+    def setUp(self):
+        self.client.login(username='alexandre.woog@e-loue.com', password='alexandre')
+
+    def test_address_create(self):
+        response = self.client.post(_location('address-list'), {
+            'city': 'Paris',
+            'street': '2, rue debelleyme',
+            'zipcode': '75003',
+            'country': 'FR',
+        })
+        self.assertEquals(response.status_code, 201, response.data)
+        # check we got fields of the created instance in the response
+        self.assertIn('id', response.data)
+        # the currently authenticated user must be used on creation
+        self.assertTrue(response.data['patron'].endswith(_location('patron-detail', pk=1)))
+        # 'street' is stored in 2 different fields in the model: address1 and address2
+        self.assertEquals(response.data['street'], '2, rue debelleyme')
+        # 'position' is expected to be automatically calculated based on city+address+country info by the model 
+        self.assertEquals(response.data['position']['coordinates'], [48.8603858, 2.3645553])
+        # Location header must be properly set to redirect to the resource have just been created
+        self.assertIn('Location', response)
+        self.assertTrue(response['Location'].endswith(_location('address-detail', pk=response.data['id'])))

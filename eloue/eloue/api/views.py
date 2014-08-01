@@ -63,3 +63,10 @@ class LocationHeaderMixin(object):
     def get_location_url(self):
         obj = self.object
         return reverse('%s-detail' % obj._meta.model_name, args=(obj.pk,))
+
+
+class SetOwnerMixin(object):
+    def pre_save(self, obj):
+        user = self.request.user
+        if not obj.patron_id and not user.is_anonymous():
+            obj.patron = user
