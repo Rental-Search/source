@@ -1,4 +1,7 @@
 # -*- coding: utf-8 -*-
+import os.path
+import base64
+
 from django.contrib.auth import get_user_model
 from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext as _
@@ -86,10 +89,7 @@ class EndUsersTest(APITestCase):
         self.assertTrue(User.objects.get(pk=1).check_password('alexandre'))
 
     def test_account_password_edit_unavailable(self):
-        user = User.objects.get(pk=1)
         response = self.client.put(_location('patron-detail', pk=1), {
-            'email': user.email,
-            'username': user.username,
             'password': 'hehehe',
         })
         self.assertEquals(response.status_code, 200)
@@ -105,3 +105,37 @@ class EndUsersTest(APITestCase):
         # check we do NOT have access to other User records
         response = self.client.get(_location('patron-detail', pk=2))
         self.assertEquals(response.status_code, 404)
+
+    def test_account_avatar_upload_multipart(self):
+        self.assertFalse(User.objects.get(pk=1).avatar)
+        with open(os.path.join(os.path.dirname(__file__), '..', 'fixtures', 'avatar.png'), 'rb') as image:
+            response = self.client.put(_location('patron-detail', pk=1), {
+                'avatar': image,
+            }, format='multipart')
+            self.assertEquals(response.status_code, 200)
+            self.assertTrue(User.objects.get(pk=1).avatar)
+
+    def test_account_avatar_upload_json_base64(self):
+        self.assertFalse(User.objects.get(pk=1).avatar)
+        filename = os.path.join(os.path.dirname(__file__), '..', 'fixtures', 'avatar.png')
+        with open(filename, 'rb') as image:
+            response = self.client.put(_location('patron-detail', pk=1), {
+                'avatar': {
+                    'content': base64.b64encode(image.read()),
+                    'filename': os.path.basename(filename),
+                    #'encoding': 'base64',
+                }
+            })
+            self.assertEquals(response.status_code, 200)
+            self.assertTrue(User.objects.get(pk=1).avatar)
+
+    def test_account_avatar_upload_json_url(self):
+        self.assertFalse(User.objects.get(pk=1).avatar)
+        response = self.client.put(_location('patron-detail', pk=1), {
+            'avatar': {
+                'content': 'http://liyaliao.weebly.com/uploads/1/5/2/9/15298970/6065967.jpg',
+                'encoding': 'url',
+            }
+        })
+        self.assertEquals(response.status_code, 200)
+        self.assertTrue(User.objects.get(pk=1).avatar)
