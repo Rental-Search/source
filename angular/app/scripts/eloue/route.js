@@ -22,7 +22,7 @@ define(["eloue/app", "eloue/modules/user_management/services/AuthService",
         EloueApp.config(function ($routeProvider) {
             $routeProvider
                 .when("/", {
-                    templateUrl: "views/main.html"
+                    templateUrl: "views/dashboard.html"
                 })
                 .when("/dashboard", {
                     templateUrl: "/scripts/eloue/modules/dashboard/views/dashboard.html",

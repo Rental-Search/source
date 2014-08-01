@@ -1,7 +1,13 @@
-define(["eloue/app", "eloue/controllers/DashboardCtrl"],
-    function (EloueApp) {
+"use strict";
 
-        "use strict";
+define(["eloue/app",
+        "eloue/controllers/DashboardRootCtrl",
+        "eloue/controllers/DashboardCtrl",
+        "eloue/controllers/MessagesCtrl",
+        "eloue/controllers/BookingsCtrl",
+        "eloue/controllers/ItemsCtrl",
+        "eloue/controllers/AccountCtrl"],
+    function (EloueApp) {
 
         /**
          * Routing configuration for app.
@@ -9,19 +15,24 @@ define(["eloue/app", "eloue/controllers/DashboardCtrl"],
         EloueApp.config(function ($routeProvider) {
             $routeProvider
                 .when("/", {
-                    templateUrl: "partials/dashboard/main.html"
+                    templateUrl: "partials/dashboard/dashboard.html",
+                    controller: "DashboardCtrl"
                 })
                 .when("/messages", {
-                    templateUrl: "partials/dashboard/messages.html"
+                    templateUrl: "partials/dashboard/messages.html",
+                    controller: "MessagesCtrl"
                 })
                 .when("/bookings", {
-                    templateUrl: "partials/dashboard/bookings.html"
+                    templateUrl: "partials/dashboard/bookings.html",
+                    controller: "BookingsCtrl"
                 })
                 .when("/items", {
-                    templateUrl: "partials/dashboard/items.html"
+                    templateUrl: "partials/dashboard/items.html",
+                    controller: "ItemsCtrl"
                 })
                 .when("/account", {
-                    templateUrl: "partials/dashboard/account.html"
+                    templateUrl: "partials/dashboard/account.html",
+                    controller: "AccountCtrl"
                 })
                 .otherwise({
                     redirectTo: "/"
