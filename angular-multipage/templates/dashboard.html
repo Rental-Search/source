@@ -11,6 +11,13 @@
 </head>
 <body>
 <div ng-controller="DashboardRootCtrl">
+    <!-- TODO remove temporary menu -->
+    <a href="#">Dashboard</a><br />
+    <a href="#/messages">Messages</a><br />
+    <a href="#/bookings">Bookings</a><br />
+    <a href="#/items">Items</a><br />
+    <a href="#/account">Account</a><br />
+    <!-- end of temporary menu -->
     <div ng-view></div>
 </div>
 <script src="../static/bower_components/requirejs/require.js" data-main="../static/js/dashboard/main.js"></script>
