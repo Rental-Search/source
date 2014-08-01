@@ -516,40 +516,6 @@ def message_create(request, product_id, recipient_id):
 
 @never_cache
 @secure_required
-def phone_create(request, product_id):
-    product = get_object_or_404(Product, pk=product_id)
-
-    from lxml import etree
-    import contextlib
-    import urlparse
-    from httplib import HTTPConnection
-    import urllib
-
-    create_link = etree.Element('createLink')
-    clef = etree.Element('clef')
-    clef.text = '2567617e03781a084ec4ba507947cbac'
-    number = etree.Element('numero')
-    number.text = '0033177350605'
-    country = etree.Element('pays')
-    country.text = 'FR'
-    create_link.append(clef)
-    create_link.append(number)
-    create_link.append(country)
-
-    xml = '<?xml version="1.0" encoding="UTF-8"?>\n'
-    s = etree.tostring(create_link, pretty_print=False)
-    base_url = urlparse.urlparse('http://mer.viva-multimedia.com/xmlRequest.php')
-    url = '%s?%s' % (base_url.path, urllib.urlencode({'xml': '%s%s' % (xml, s)}))
-    with contextlib.closing(HTTPConnection(base_url.netloc, timeout=10)) as conn:
-        conn.request("GET", url)
-        response = conn.getresponse()
-        content = response.read()
-    number = etree.XML(content)[2][0].text
-
-    return render_to_response('products/phone_view.html',{'product': product, 'number': number}, context_instance=RequestContext(request))
-
-@never_cache
-@secure_required
 def patron_message_create(request, recipient_username):
     message_wizard = MessageWizard([MessageEditForm, EmailAuthenticationForm])
     recipient = Patron.objects.get(slug=recipient_username)

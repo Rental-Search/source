@@ -6,11 +6,13 @@ import requests
 from django.conf import settings
 
 def viva_check_phone(
-    phone_number, client_id,
+    phone_number, client_id=None, request=None,
     site_id=None, url='http://mer.viva-multimedia.com/v2/xmlRequest.php',
     timeout=2.0
 ):
     # validate arguments
+    if client_id is None and request:
+        client_id = ''.join([request.META['REMOTE_ADDR'], request.META['HTTP_USER_AGENT']])
     if site_id is None:
         site_id = getattr(settings, 'VIVA_SITE_ID', '')
 

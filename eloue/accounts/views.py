@@ -1068,9 +1068,8 @@ class PhoneNumberViewSet(viewsets.ModelViewSet):
         # get current object
         obj = self.get_object()
 
-        # get call details by number and REMOTE_ADDR (IP)
-        client_id = ''.join([request.META['REMOTE_ADDR'], request.META['HTTP_USER_AGENT']])
-        tags = viva_check_phone(obj.number, client_id)
+        # get call details by number and request parameters (e.g. REMOTE_ADDR)
+        tags = viva_check_phone(obj.number, request=request)
 
         # check for errors
         error = int(tags.get('error', 0))

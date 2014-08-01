@@ -24,6 +24,7 @@ from django.template import RequestContext
 
 from accounts.models import CreditCard
 from accounts.forms import EmailAuthenticationForm
+from accounts.utils import viva_check_phone
 from products.models import Product
 from products.choices import UNIT, PAYMENT_TYPE
 from rent.forms import BookingForm, BookingConfirmationForm, BookingStateForm, PreApprovalIPNForm, PayIPNForm, IncidentForm
@@ -173,36 +174,10 @@ def phone_create(request, *args, **kwargs):
         'address', 'category', 'owner', 'owner__default_address', 
         'carproduct', 'realestateproduct'
         ), pk=kwargs['product_id']).subtype
-    
-    from lxml import etree
-    import contextlib
-    import urlparse
-    from httplib import HTTPConnection
-    import urllib
 
-    generate = etree.Element('generate')
-    siteId = etree.Element('siteId')
-    siteId.text = '45364001'
-    idClient = etree.Element('idClient')
-    idClient.text = '%s%s' % (request.META['REMOTE_ADDR'], request.META['HTTP_USER_AGENT'])
-    number = etree.Element('numero')
-    number.text = product.phone.number
-    country = etree.Element('pays')
-    country.text = 'FR'
-    generate.append(siteId)
-    generate.append(idClient)
-    generate.append(number)
-    generate.append(country)
-
-    xml = '<?xml version="1.0" encoding="UTF-8"?>\n'
-    s = etree.tostring(generate, pretty_print=False)
-    base_url = urlparse.urlparse('http://mer.viva-multimedia.com/v2/xmlRequest.php')
-    url = '%s?%s' % (base_url.path, urllib.urlencode({'xml': '%s%s' % (xml, s)}))
-    with contextlib.closing(HTTPConnection(base_url.netloc, timeout=20)) as conn:
-        conn.request("GET", url)
-        response = conn.getresponse()
-        content = response.read()
-    number = etree.XML(content)[2][0].text
+    # get call details by number and request parameters (e.g. REMOTE_ADDR)
+    tags = viva_check_phone(product.phone.number, request=request)
+    number = tags['numero']
     
     num = lambda s: ' '.join(' '.join(s[i:i+2] for i in range(0, len(s), 2)).split())
 
