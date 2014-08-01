@@ -1012,6 +1012,7 @@ from rest_framework.decorators import link, action
 from rest_framework.response import Response
 
 from accounts import serializers, models, search
+from accounts.utils import viva_check_phone
 from eloue.api import filters, permissions
 
 NON_DELETABLE = [name for name in viewsets.ModelViewSet.http_method_names if name.lower() != 'delete']
@@ -1064,7 +1065,21 @@ class PhoneNumberViewSet(viewsets.ModelViewSet):
 
     @link()
     def premium_rate_number(self, request, *args, **kwargs):
-        pass
+        # get current object
+        obj = self.get_object()
+
+        # get call details by number and REMOTE_ADDR (IP)
+        client_id = ''.join([request.META['REMOTE_ADDR'], request.META['HTTP_USER_AGENT']])
+        tags = viva_check_phone(obj.number, client_id)
+
+        # check for errors
+        error = int(tags.get('error', 0))
+        if error:
+            return Response(
+                {'error': error, 'error_msg': tags.get('error_msg', '')},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        return Response(tags)
 
 class ProAgencyViewSet(viewsets.ModelViewSet):
     """

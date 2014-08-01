@@ -451,6 +451,7 @@ REST_FRAMEWORK = {
     'SEARCH_PARAM': 'q',
     'ORDERING_PARAM': 'sort',
     'PAGINATE_BY': getattr(local, 'REST_FRAMEWORK_PAGINATE_BY', 10),
+    'TEST_REQUEST_DEFAULT_FORMAT': 'json',
 }
 
 OAUTH2_PROVIDER = {
@@ -649,3 +650,4 @@ SLIMPAY_LOGGER_CONFIG = getattr(local, 'SLIMPAY_LOGGER_CONFIG', '')
 SLIMPAY_SCIM_JAR_FILE = getattr(local, 'SLIMPAY_SCIM_JAR_FILE', '')
 SLIMPAY_SITE_ID = getattr(local, 'SLIMPAY_SITE_ID', '')
 
+VIVA_SITE_ID = getattr(local, 'VIVA_SITE_ID', '45364001')
