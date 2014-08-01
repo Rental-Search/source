@@ -7,13 +7,25 @@ define(["eloue/app", "eloue/controllers/DashboardCtrl"],
          * Routing configuration for app.
          */
         EloueApp.config(function ($routeProvider) {
-//            $routeProvider
-//                .when("/", {
-//                    templateUrl: "views/main.html"
-//                })
-//                .otherwise({
-//                    redirectTo: "/"
-//                });
+            $routeProvider
+                .when("/", {
+                    templateUrl: "partials/dashboard/main.html"
+                })
+                .when("/messages", {
+                    templateUrl: "partials/dashboard/messages.html"
+                })
+                .when("/bookings", {
+                    templateUrl: "partials/dashboard/bookings.html"
+                })
+                .when("/items", {
+                    templateUrl: "partials/dashboard/items.html"
+                })
+                .when("/account", {
+                    templateUrl: "partials/dashboard/account.html"
+                })
+                .otherwise({
+                    redirectTo: "/"
+                });
         });
 
         EloueApp.run(["$rootScope", "$route", "$http", function ($rootScope, $route, $http) {
