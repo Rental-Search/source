@@ -20,7 +20,7 @@ from eloue.http_user_agents import *
 
 class SpacelessMiddleware(object):
     def process_response(self, request, response):
-        if 'text/html' in response['Content-Type']:
+        if 'text/html' in response.get('Content-Type', ''):
             try:
                 response.content = compress_html(response.content)
             except DjangoUnicodeDecodeError:

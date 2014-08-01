@@ -2,6 +2,7 @@
 import os.path
 import base64
 
+from django.db.models import get_model
 from django.contrib.auth import get_user_model
 from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext as _
@@ -169,6 +170,22 @@ class PhoneNumbersTest(APITestCase):
         self.assertIn('Location', response)
         self.assertTrue(response['Location'].endswith(_location('phonenumber-detail', pk=response.data['id'])))
 
+    def test_phonenumber_delete(self):
+        PhoneNumber = get_model('accounts', 'PhoneNumber')
+        self.assertEquals(PhoneNumber.objects.filter(pk=1).count(), 1)
+        response = self.client.delete(_location('phonenumber-detail', pk=1))
+        self.assertEquals(response.status_code, 204, response.data)
+        self.assertEquals(PhoneNumber.objects.filter(pk=1).count(), 0)
+
+    def test_phonenumber_edit_number(self):
+        response = self.client.put(_location('phonenumber-detail', pk=1), {
+            'number': '0198765432',
+        })
+        self.assertEquals(response.status_code, 200, response.data)
+        # check we got fields of the created instance in the response
+        self.assertIn('id', response.data)
+        self.assertEquals(response.data['number'], '0198765432')
+
 class AddressesTest(APITestCase):
     fixtures = ['patron', 'address']
 
@@ -194,3 +211,25 @@ class AddressesTest(APITestCase):
         # Location header must be properly set to redirect to the resource have just been created
         self.assertIn('Location', response)
         self.assertTrue(response['Location'].endswith(_location('address-detail', pk=response.data['id'])))
+
+    def test_address_delete(self):
+        Address = get_model('accounts', 'Address')
+        self.assertEquals(Address.objects.filter(pk=1).count(), 1)
+        response = self.client.delete(_location('address-detail', pk=1))
+        self.assertEquals(response.status_code, 204, response.data)
+        self.assertEquals(Address.objects.filter(pk=1).count(), 0)
+
+    def test_address_edit_street(self):
+        response = self.client.put(_location('address-detail', pk=1), {
+            'city': 'Paris',
+            'street': '2, rue debelleyme',
+            'zipcode': '75003',
+            'country': 'FR',
+        })
+        self.assertEquals(response.status_code, 200, response.data)
+        # check we got fields of the created instance in the response
+        self.assertIn('id', response.data)
+        # 'street' is stored in 2 different fields in the model: address1 and address2
+        self.assertEquals(response.data['street'], '2, rue debelleyme')
+        # 'position' is expected to be automatically calculated based on city+address+country info by the model 
+        self.assertEquals(response.data['position']['coordinates'], [48.8603858, 2.3645553])
