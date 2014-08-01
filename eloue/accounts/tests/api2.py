@@ -54,8 +54,8 @@ class AnonymousUsersTest(APITestCase):
         res = self.client.post(_location('patron-list'), post_data, format='json')
         self.assertEquals(res.status_code, 201)
 
-class EndUsersTest(APITestCase):
-    fixtures = ['patron', 'address', 'phones']
+class UsersTest(APITestCase):
+    fixtures = ['patron']
 
     def setUp(self):
         self.client.login(username='alexandre.woog@e-loue.com', password='alexandre')
@@ -139,3 +139,17 @@ class EndUsersTest(APITestCase):
         })
         self.assertEquals(response.status_code, 200)
         self.assertTrue(User.objects.get(pk=1).avatar)
+
+
+class PhoneNumbersTest(APITestCase):
+    fixtures = ['patron', 'phones']
+
+    def setUp(self):
+        self.client.login(username='alexandre.woog@e-loue.com', password='alexandre')
+
+    def test_phonenumber_premium_rate_number(self):
+        response = self.client.get(_location('phonenumber-premium-rate-number', pk=1))
+        self.assertEquals(response.status_code, 200)
+        self.assertIn('numero', response.data)
+        number = response.data['numero']
+        self.assertTrue(isinstance(number, basestring) and len(number))

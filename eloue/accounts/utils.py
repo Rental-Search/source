@@ -12,7 +12,7 @@ def viva_check_phone(
 ):
     # validate arguments
     if client_id is None and request:
-        client_id = ''.join([request.META['REMOTE_ADDR'], request.META['HTTP_USER_AGENT']])
+        client_id = ''.join([request.META.get(key, '') for key in ('REMOTE_ADDR', 'HTTP_USER_AGENT')])
     if site_id is None:
         site_id = getattr(settings, 'VIVA_SITE_ID', '')
 
