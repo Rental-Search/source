@@ -18,7 +18,7 @@ class AnonymousUsersTest(APITestCase):
         self.assertEqual(_location('patron-reset-password', pk=2222), '/api/2.0/users/2222/reset_password/')
 
     def test_account_anonymous_access_forbidden(self):
-        response = self.client.get(_location('patron-list'), format='json')
+        response = self.client.get(_location('patron-list'))
         self.assertEquals(response.status_code, 401)
 
     def test_account_anonymous_creation_required(self):
@@ -27,11 +27,14 @@ class AnonymousUsersTest(APITestCase):
             'password': 'begood',
             'email': 'chuck.berry@chess-records.com',
         }
-        response = self.client.post(_location('patron-list'), post_data, format='json')
-        self.assertEquals(response.status_code, 201)
+        response = self.client.post(_location('patron-list'), post_data)
+        self.assertEquals(response.status_code, 201, response.data)
 
         # check we got fields of the created instance in the response
         self.assertIn('id', response.data)
+        # Location header must be properly set to redirect to the resource have just been created
+        self.assertIn('Location', response)
+        self.assertTrue(response['Location'].endswith(_location('patron-detail', pk=response.data['id'])), response['Location'])
 
         user = User.objects.get(pk=response.data['id'])
         # check password has been applied
@@ -51,8 +54,8 @@ class AnonymousUsersTest(APITestCase):
             'email': 'chuck.berry@chess-records.com',
             'languages': [22, 51],
         }
-        res = self.client.post(_location('patron-list'), post_data, format='json')
-        self.assertEquals(res.status_code, 201)
+        response = self.client.post(_location('patron-list'), post_data)
+        self.assertEquals(response.status_code, 201, response.data)
 
 class UsersTest(APITestCase):
     fixtures = ['patron']
@@ -66,7 +69,7 @@ class UsersTest(APITestCase):
             'password': 'alex',
             'confirm_password': 'alex'
         })
-        self.assertEquals(response.status_code, 200)
+        self.assertEquals(response.status_code, 200, response.data)
         self.assertEquals(response.data['detail'], _(u"Votre mot de passe à bien été modifié"))
         # check that password has been changed in DB
         self.assertTrue(User.objects.get(pk=1).check_password('alex'))
@@ -112,10 +115,10 @@ class UsersTest(APITestCase):
             response = self.client.put(_location('patron-detail', pk=1), {
                 'avatar': image,
             }, format='multipart')
-            self.assertEquals(response.status_code, 200)
+            self.assertEquals(response.status_code, 200, response.data)
             self.assertTrue(User.objects.get(pk=1).avatar)
 
-    def test_account_avatar_upload_json_base64(self):
+    def test_account_avatar_upload_base64(self):
         self.assertFalse(User.objects.get(pk=1).avatar)
         filename = os.path.join(os.path.dirname(__file__), '..', 'fixtures', 'avatar.png')
         with open(filename, 'rb') as image:
@@ -126,10 +129,10 @@ class UsersTest(APITestCase):
                     #'encoding': 'base64',
                 }
             })
-            self.assertEquals(response.status_code, 200)
+            self.assertEquals(response.status_code, 200, response.data)
             self.assertTrue(User.objects.get(pk=1).avatar)
 
-    def test_account_avatar_upload_json_url(self):
+    def test_account_avatar_upload_url(self):
         self.assertFalse(User.objects.get(pk=1).avatar)
         response = self.client.put(_location('patron-detail', pk=1), {
             'avatar': {
@@ -137,9 +140,8 @@ class UsersTest(APITestCase):
                 'encoding': 'url',
             }
         })
-        self.assertEquals(response.status_code, 200)
+        self.assertEquals(response.status_code, 200, response.data)
         self.assertTrue(User.objects.get(pk=1).avatar)
-
 
 class PhoneNumbersTest(APITestCase):
     fixtures = ['patron', 'phones']
@@ -153,3 +155,16 @@ class PhoneNumbersTest(APITestCase):
         self.assertIn('numero', response.data)
         number = response.data['numero']
         self.assertTrue(isinstance(number, basestring) and len(number))
+
+    def test_phonenumber_create(self):
+        response = self.client.post(_location('phonenumber-list'), {
+            'number': '0198765432',
+        })
+        self.assertEquals(response.status_code, 201, response.data)
+        # check we got fields of the created instance in the response
+        self.assertIn('id', response.data)
+        # the currently authenticated user must be used on creation
+        self.assertTrue(response.data['patron'].endswith(_location('patron-detail', pk=1)))
+        # Location header must be properly set to redirect to the resource have just been created
+        self.assertIn('Location', response)
+        self.assertTrue(response['Location'].endswith(_location('phonenumber-detail', pk=response.data['id'])))

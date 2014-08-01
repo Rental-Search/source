@@ -1,13 +1,12 @@
 # -*- coding: utf-8 -*-
 
 import json
-import re
 import traceback
 
-from django.http import HttpResponse, HttpResponseBadRequest
+from django.core.urlresolvers import reverse
+from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 
-from tastypie.exceptions import ImmediateHttpResponse
 from tastypie.http import HttpUnauthorized, HttpBadRequest
 
 from products.models import Product, Price
@@ -50,5 +49,17 @@ def update_product_prices(request):
             return HttpResponse()
         else:
             return HttpBadRequest()
-    except Exception, e:
+    except Exception:
         traceback.print_exc()
+
+
+class LocationHeaderMixin(object):
+    def get_success_headers(self, data):
+        try:
+            return {'Location': self.get_location_url()}
+        except (TypeError, KeyError):
+            return {}
+
+    def get_location_url(self):
+        obj = self.object
+        return reverse('%s-detail' % obj._meta.model_name, args=(obj.pk,))

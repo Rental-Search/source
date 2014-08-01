@@ -1013,7 +1013,7 @@ from rest_framework.response import Response
 
 from accounts import serializers, models, search
 from accounts.utils import viva_check_phone
-from eloue.api import filters, permissions
+from eloue.api import filters, permissions, views
 
 NON_DELETABLE = [name for name in viewsets.ModelViewSet.http_method_names if name.lower() != 'delete']
 
@@ -1025,7 +1025,7 @@ class UserPermission(permissions.TeamStaffDjangoModelPermissions):
         # pass to parent by default
         return super(UserPermission, self).has_permission(request, view)
 
-class UserViewSet(viewsets.ModelViewSet):
+class UserViewSet(views.LocationHeaderMixin, viewsets.ModelViewSet):
     """
     API endpoint that allows users to be viewed or edited.
     """
@@ -1054,7 +1054,7 @@ class AddressViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.AddressSerializer
     filter_backends = (filters.OwnerFilter,)
 
-class PhoneNumberViewSet(viewsets.ModelViewSet):
+class PhoneNumberViewSet(views.LocationHeaderMixin, viewsets.ModelViewSet):
     """
     API endpoint that allows phone numbers to be viewed or edited.
     Phone numbers are sent to the borrower and to the owner for each booking.
@@ -1079,6 +1079,11 @@ class PhoneNumberViewSet(viewsets.ModelViewSet):
                 status=status.HTTP_400_BAD_REQUEST
             )
         return Response(tags)
+
+    def pre_save(self, obj):
+        user = self.request.user
+        if not obj.patron_id and not user.is_anonymous():
+            obj.patron = user
 
 class ProAgencyViewSet(viewsets.ModelViewSet):
     """
