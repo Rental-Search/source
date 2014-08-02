@@ -1,0 +1,12 @@
+extends ../jade/_base_dashboard
+
+block variables
+  -var STATIC_URL = "../../../static/"
+  //- -var src_img = "dashboard/account_profil"
+
+block content
+  section.tabs-vertical-active.scrollbar-custom
+    ul
+      -each tab in account_tabs
+        li: a(href="#{tab.href}.html"): h4 #{tab.title}
+  block sections

@@ -12,9 +12,9 @@ module.exports = function(grunt) {
 
 		sprite:{
 			all: {
-				src: 'static/img/sprite/*.*',
-				destImg: 'static/img/spritesheet.png',
-				destCSS: 'templates/sass/_sprites.sass',
+				src: 'static/img/sprite_dashboard/*.*',
+				destImg: 'static/img/sprite_sheet.png',
+				destCSS:  'templates/dashboard/sass/_sprites.sass',
 				algorithm: 'binary-tree',
 				padding: 2,
 				cssVarMap: function(sprite) {

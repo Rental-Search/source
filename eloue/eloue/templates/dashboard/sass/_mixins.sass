@@ -1,0 +1,48 @@
+=clearfix()
+  &:before,
+  &:after
+    content: " "
+    display: table
+  &:after
+    clear: both
+
+=indented-text($variant: black)
+  color: rgba($variant, .6)
+  text-shadow: .1em .05em 0 rgba(invert($variant), .3)
+
+=text-shadow($attr)
+  text-shadow: $attr
+  // PIE
+
+=border-radius($attr)
+  border-radius: $attr
+  // PIE
+
+// создание цветовой палитры для элементов
+=make-colors($selector, $color)
+  .text-#{$selector}
+    color: $color
+
+  .text-#{$selector}-hover
+    color: $color
+    cursor: pointer
+    transition: color $trns-fast
+    &:hover
+      color: darken($color, 10%)
+
+  .bg-#{$selector}
+    background: $color
+
+  .bg-#{$selector}-hover
+    background: $color
+    cursor: pointer
+    transition: background-color $trns-fast
+    &:hover
+      background: darken($color, 10%)
+
+
+  .text-#{$selector}-dark
+    color: darken($color, 20%)
+
+  .text-#{$selector}-light
+    color: lighten($color, 20%)

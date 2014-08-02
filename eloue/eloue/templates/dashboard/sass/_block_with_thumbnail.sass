@@ -1,0 +1,17 @@
+.block_with_thumbnail
+  display: table
+  > div
+    display: table-cell
+    padding-left: 2em
+    &:first-child
+      padding-left: 0
+  .thumbnail-container
+    vertical-align: top
+  .exposition-container
+    vertical-align: middle
+  .thumbnail
+    overflow: hidden
+    &.round
+      +border-radius(50%)
+    img
+      display: block

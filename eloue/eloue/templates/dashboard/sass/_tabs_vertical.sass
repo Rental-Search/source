@@ -1,0 +1,19 @@
+.tabs-vertical-static,
+.tabs-vertical-active
+  background-color: white
+  min-width: $tabs-vertical-min-width
+  li
+    border-bottom: $bd-lighter
+
+.tabs-vertical-static li,
+.tabs-vertical-active li > a
+  border-right: 4px solid transparent
+  padding: $indent-sm*$indent-vertical $indent-sm
+  display: block
+  transition: border-color $trns-fast
+
+.tabs-vertical-active li > a:hover
+  background-color: $gray-lite
+  border-color: $brand-success
+  h4
+    font-weight: bolder

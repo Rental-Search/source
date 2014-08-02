@@ -1,0 +1,11 @@
+extends ./_base_account
+block sections
+  section.profil-info.scrollbar-custom
+    .section-content
+      h2 Informations personnelles
+      .block_with_thumbnail
+        .thumbnail-container
+          .thumbnail.round: img(src="#{STATIC_URL}#{tenant.thumbnail}", alt="#{tenant.name} photo", width="120", height="120")
+        .exposition-container
+          label(for="change-img").btn.bg-gray-hover.text-white Modifier mon image
+            input(type="file")#change-img

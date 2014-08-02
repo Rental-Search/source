@@ -1,0 +1,54 @@
+*,
+*:before,
+*:after
+  box-sizing: border-box
+
+html, body
+  min-height: 100%
+  height: 100%
+
+body
+  font-family: $font-family-base
+  font-size: $font-size-base
+  line-height: $line-height-base
+  background-color: $gray-lite
+  color: $gray-dark
+
+a
+  color: inherit
+
+.clearfix
+  +clearfix()
+
+@each $selector, $color in (success: $brand-success, primary: $brand-primary, gray: $gray-medium, white: white)
+  +make-colors($selector, $color)
+
+.container-full-screen
+  width: 100%
+  height: 100%
+  position: relative
+  overflow: hidden
+
+header
+  height: 120px
+
+article.dashboard
+  +clearfix()
+  @import nav_dashboard
+  > *
+    float: left
+    height: 100%
+    overflow: auto
+
+  h2
+    font-size: ($font-size-base - 1)*2
+    font-weight: $fw-regular
+    margin-bottom: $indent-sm
+
+  h3
+    font-size: $font-size-base
+    font-weight: $fw-bold
+
+  h4
+    font-size: $font-size-base - 1
+    font-weight: $fw-semibold

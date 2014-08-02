@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="fr"></html>
+<head>
+  <title>e-loue</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700">
+  <link rel="stylesheet" href="../../../static/css/jquery.mCustomScrollbar.css">
+  <link rel="stylesheet" href="../../../static/css/styles.css">
+  <link rel="shortcut icon" href="../../../static/img/favicon.ico">
+  <!-- for IE < 9 -->
+  <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+  <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+  <script src="http://jamesallardice.github.io/Placeholders.js/assets/js/placeholders.min.js"></script>
+  <!-- jQuery-->
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+  <!-- custom scrollbar-->
+  <script src="../../../static/js/jquery.mCustomScrollbar.js"></script>
+  <!-- my script-->
+  <script src="../../../static/js/dashboard_scripts.js"></script>
+</head>
+<body>
+  <div class="container-full-screen">
+    <input type="checkbox" id="sourse">
+    <lable for="#sourse" id="sourse-img"><img src="../../../static/img/src/undefined.jpg"></lable>
+    <header>header</header>
+    <article class="dashboard">
+      <nav class="bg-success">
+        <ul>
+          <li><a href="../dashboard.html" class="text-success-dark"><i class="fa fa-home"></i>Dashboard</a></li>
+          <li><a href="../messages.html" class="text-success-dark"><i class="fa fa-envelope-o"></i>Messages</a></li>
+          <li><a href="../booking.html" class="text-success-dark"><i class="fa fa-shield"></i>Booking</a></li>
+          <li><a href="../items.html" class="text-success-dark"><i class="fa fa-th-list"></i>Items</a></li>
+          <li><a href="../account.html" class="text-success-dark"><i class="fa fa-user"></i>Account</a></li>
+        </ul>
+      </nav>
+      <section class="tabs-vertical-active scrollbar-custom">
+        <ul>
+          <li><a href="profil.html">
+              <h4>Profil</h4></a></li>
+          <li><a href="verification.html">
+              <h4>Vérification</h4></a></li>
+          <li><a href="address.html">
+              <h4>Adresses</h4></a></li>
+          <li><a href="telephones.html">
+              <h4>Téléphones</h4></a></li>
+          <li><a href="payments.html">
+              <h4>Paiements</h4></a></li>
+          <li><a href="password.html">
+              <h4>Mot de passe</h4></a></li>
+          <li><a href="broker.html">
+              <h4>Parainage</h4></a></li>
+        </ul>
+      </section>
+      <section class="profil-info scrollbar-custom">
+        <div class="section-content">
+          <h2>Informations personnelles</h2>
+          <div class="block_with_thumbnail">
+            <div class="thumbnail-container">
+              <div class="thumbnail round"><img src="../../../static/img/home-products/tenant.png" alt="Gaspard Kroutchev photo" width="120" height="120"></div>
+            </div>
+            <div class="exposition-container">
+              <label for="change-img" class="btn bg-gray-hover text-white">Modifier mon image
+                <input type="file" id="change-img">
+              </label>
+            </div>
+          </div>
+        </div>
+      </section>
+    </article>
+  </div>
+</body>

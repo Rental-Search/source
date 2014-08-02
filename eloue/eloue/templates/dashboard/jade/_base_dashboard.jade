@@ -1,0 +1,18 @@
+doctype
+html(lang="fr")
+include ./_global_variables
+block variables
+head
+  include ./section/_head
+body
+  .container-full-screen
+    include ./_src
+    header header
+    article.dashboard
+      nav.bg-success
+        ul
+          -each item in dashboard_nav_links
+            li: a(href="../#{item.href}.html").text-success-dark
+              i(class="fa fa-#{item.icon}")
+              | #{item.title}
+      block content
