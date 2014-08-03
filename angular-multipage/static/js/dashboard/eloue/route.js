@@ -12,32 +12,41 @@ define(["eloue/app",
         /**
          * Routing configuration for app.
          */
-        EloueApp.config(function ($routeProvider) {
-            $routeProvider
-                .when("/", {
-                    templateUrl: "partials/dashboard/dashboard.html",
-                    controller: "DashboardCtrl"
-                })
-                .when("/messages", {
-                    templateUrl: "partials/dashboard/messages.html",
-                    controller: "MessagesCtrl"
-                })
-                .when("/bookings", {
-                    templateUrl: "partials/dashboard/bookings.html",
-                    controller: "BookingsCtrl"
-                })
-                .when("/items", {
-                    templateUrl: "partials/dashboard/items.html",
-                    controller: "ItemsCtrl"
-                })
-                .when("/account", {
-                    templateUrl: "partials/dashboard/account.html",
-                    controller: "AccountCtrl"
-                })
-                .otherwise({
-                    redirectTo: "/"
-                });
-        });
+        EloueApp.config([
+            "$stateProvider",
+            "$urlRouterProvider",
+            function ($stateProvider, $urlRouterProvider) {
+
+                $urlRouterProvider.otherwise("/");
+
+                $stateProvider
+                    .state("dashboard", {
+                        url: "/",
+                        templateUrl: "partials/dashboard/dashboard.html",
+                        controller: "DashboardCtrl"
+                    })
+                    .state("messages", {
+                        url: "/messages",
+                        templateUrl: "partials/dashboard/messages.html",
+                        controller: "MessagesCtrl"
+                    })
+                    .state("bookings", {
+                        url: "/bookings",
+                        templateUrl: "partials/dashboard/bookings.html",
+                        controller: "BookingsCtrl"
+                    })
+                    .state("items", {
+                        url: "/items",
+                        templateUrl: "partials/dashboard/items.html",
+                        controller: "ItemsCtrl"
+                    })
+                    .state("account", {
+                        url: "/account",
+                        templateUrl: "partials/dashboard/account.html",
+                        controller: "AccountCtrl"
+                    });
+            }
+        ]);
 
         EloueApp.run(["$rootScope", "$route", "$http", function ($rootScope, $route, $http) {
             var userToken = "";

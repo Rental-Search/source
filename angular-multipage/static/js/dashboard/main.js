@@ -9,6 +9,7 @@ require.config({
         "angular-route": "../../bower_components/angular-route/angular-route.min",
         "angular-cookies": "../../bower_components/angular-cookies/angular-cookies.min",
         "angular-sanitize": "../../bower_components/angular-sanitize/angular-sanitize.min",
+        "angular-ui-router": "../../bower_components/angular-ui-router/release/angular-ui-router.min",
         "vars": "../vars"
     },
     shim: {
@@ -17,6 +18,7 @@ require.config({
         "angular-cookies": ["angular"],
         "angular-sanitize": ["angular"],
         "angular-resource": ["angular"],
+        "angular-ui-router": ["angular"],
         "angular-mocks": {
             deps: ["angular"],
             "exports": "angular.mock"
