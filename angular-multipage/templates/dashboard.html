@@ -12,11 +12,11 @@
 <body>
 <div ng-controller="DashboardRootCtrl">
     <!-- TODO remove temporary menu -->
-    <a href="#">Dashboard</a><br />
-    <a href="#/messages">Messages</a><br />
-    <a href="#/bookings">Bookings</a><br />
-    <a href="#/items">Items</a><br />
-    <a href="#/account">Account</a><br />
+    <a ui-sref="dashboard">Dashboard</a><br />
+    <a ui-sref="messages">Messages</a><br />
+    <a ui-sref="bookings">Bookings</a><br />
+    <a ui-sref="items">Items</a><br />
+    <a ui-sref="account">Account</a><br />
     <!-- end of temporary menu -->
     <div ui-view></div>
 </div>

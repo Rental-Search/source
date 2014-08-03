@@ -6,7 +6,14 @@ define(["eloue/app",
         "eloue/controllers/MessagesCtrl",
         "eloue/controllers/BookingsCtrl",
         "eloue/controllers/ItemsCtrl",
-        "eloue/controllers/AccountCtrl"],
+        "eloue/controllers/AccountCtrl",
+        "eloue/controllers/account/AccountProfileCtrl",
+        "eloue/controllers/account/AccountVerificationCtrl",
+        "eloue/controllers/account/AccountAddressesCtrl",
+        "eloue/controllers/account/AccountPhonesCtrl",
+        "eloue/controllers/account/AccountPaymentsCtrl",
+        "eloue/controllers/account/AccountPasswordCtrl",
+        "eloue/controllers/account/AccountInvitationCtrl"],
     function (EloueApp) {
 
         /**
@@ -44,6 +51,41 @@ define(["eloue/app",
                         url: "/account",
                         templateUrl: "partials/dashboard/account.html",
                         controller: "AccountCtrl"
+                    })
+                    .state("account.profile", {
+                        url: "/profile",
+                        templateUrl: "partials/dashboard/account/profile.html",
+                        controller: "AccountProfileCtrl"
+                    })
+                    .state("account.verification", {
+                        url: "/verification",
+                        templateUrl: "partials/dashboard/account/verification.html",
+                        controller: "AccountVerificationCtrl"
+                    })
+                    .state("account.addresses", {
+                        url: "/addresses",
+                        templateUrl: "partials/dashboard/account/addresses.html",
+                        controller: "AccountAddressesCtrl"
+                    })
+                    .state("account.phones", {
+                        url: "/phones",
+                        templateUrl: "partials/dashboard/account/phones.html",
+                        controller: "AccountPhonesCtrl"
+                    })
+                    .state("account.payments", {
+                        url: "/payments",
+                        templateUrl: "partials/dashboard/account/payments.html",
+                        controller: "AccountPaymentsCtrl"
+                    })
+                    .state("account.password", {
+                        url: "/password",
+                        templateUrl: "partials/dashboard/account/password.html",
+                        controller: "AccountPasswordCtrl"
+                    })
+                    .state("account.invitation", {
+                        url: "/invitation",
+                        templateUrl: "partials/dashboard/account/invitation.html",
+                        controller: "AccountInvitationCtrl"
                     });
             }
         ]);

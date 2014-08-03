@@ -1,10 +1,11 @@
 <h3>{{title}}</h3>
 <!-- TODO remove temporary menu -->
-<a href="#/account">Profile</a><br />
-<a href="#/account/verification">Verify status</a><br />
-<a href="#/account/addresses">Addresses</a><br />
-<a href="#/account/phones">Phones</a><br />
-<a href="#/account/payments">Payments</a><br />
-<a href="#/account/password">Change password</a><br />
-<a href="#/account/invitation">Invite friends</a><br />
+<a ui-sref="account.profile">Profile</a><br />
+<a ui-sref="account.verification">Verify status</a><br />
+<a ui-sref="account.addresses">Addresses</a><br />
+<a ui-sref="account.phones">Phones</a><br />
+<a ui-sref="account.payments">Payments</a><br />
+<a ui-sref="account.password">Change password</a><br />
+<a ui-sref="account.invitation">Invite friends</a><br />
 <!-- end of temporary menu -->
+<div ui-view></div>
