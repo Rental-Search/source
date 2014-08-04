@@ -1,23 +1,26 @@
 "use strict";
 
-define(["angular", "eloue/app", "eloue/services/FormDataService"], function (angular) {
+define(["angular", "eloue/app", "../../../../common/eloue/services"], function (angular) {
 
     /**
      * Controller for the account's profile page.
      */
-    angular.module("EloueDashboardApp").controller("AccountProfileCtrl", ["$scope", "FormDataService", function ($scope, FormDataService) {
-        $scope.title = "Profile title";
+    angular.module("EloueDashboardApp").controller("AccountProfileCtrl", [
+        "$scope",
+        "UsersService",
+        function ($scope, UsersService) {
+            UsersService.getMe(function (currentUser) {
+                $scope.currentUser = currentUser;
 
-        $scope.submit = function () {
-            var context = $("#profile_form");
+                $scope.submit = function () {
+                    var context = $("#profile_form");
 
-            var texts = $(":text", context);
-            var files = $(":file", context);
+                    var textFields = $(":text", context);
+                    var fileFields = $(":file", context);
 
-            FormDataService.send("/", texts, files, function () {
-                // TODO onComplete
-                console.log("TODO onComplete");
+                    UsersService.sendFormData($scope.currentUser.id, textFields, fileFields);
+                };
             });
-        };
-    }]);
+        }
+    ]);
 });
