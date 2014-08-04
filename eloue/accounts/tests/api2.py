@@ -11,6 +11,9 @@ from rest_framework.test import APITestCase
 
 User = get_user_model()
 
+IMAGE_FILE = os.path.join(os.path.dirname(__file__), '..', 'fixtures', 'avatar.png')
+IMAGE_URL = 'http://liyaliao.weebly.com/uploads/1/5/2/9/15298970/6065967.jpg'
+
 def _location(name, *args, **kwargs):
     return reverse(name, args=args, kwargs=kwargs)
 
@@ -112,7 +115,7 @@ class UsersTest(APITestCase):
 
     def test_account_avatar_upload_multipart(self):
         self.assertFalse(User.objects.get(pk=1).avatar)
-        with open(os.path.join(os.path.dirname(__file__), '..', 'fixtures', 'avatar.png'), 'rb') as image:
+        with open(IMAGE_FILE, 'rb') as image:
             response = self.client.put(_location('patron-detail', pk=1), {
                 'avatar': image,
             }, format='multipart')
@@ -121,12 +124,11 @@ class UsersTest(APITestCase):
 
     def test_account_avatar_upload_base64(self):
         self.assertFalse(User.objects.get(pk=1).avatar)
-        filename = os.path.join(os.path.dirname(__file__), '..', 'fixtures', 'avatar.png')
-        with open(filename, 'rb') as image:
+        with open(IMAGE_FILE, 'rb') as image:
             response = self.client.put(_location('patron-detail', pk=1), {
                 'avatar': {
                     'content': base64.b64encode(image.read()),
-                    'filename': os.path.basename(filename),
+                    'filename': os.path.basename(IMAGE_FILE),
                     #'encoding': 'base64',
                 }
             })
@@ -137,7 +139,7 @@ class UsersTest(APITestCase):
         self.assertFalse(User.objects.get(pk=1).avatar)
         response = self.client.put(_location('patron-detail', pk=1), {
             'avatar': {
-                'content': 'http://liyaliao.weebly.com/uploads/1/5/2/9/15298970/6065967.jpg',
+                'content': IMAGE_URL,
                 'encoding': 'url',
             }
         })
