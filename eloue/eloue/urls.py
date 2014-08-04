@@ -39,6 +39,19 @@ from accounts import views as accounts_api
 from products import views as products_api
 from rent import views as rent_api
 
+class UserMeViewSet(accounts_api.UserViewSet):
+    def retrieve_me(self, request, pk=None, *args, **kwargs):
+        # use currently authenticated user's ID as pk, ignoring the input argument
+        pk = request.user.pk
+        self.kwargs[self.pk_url_kwarg] = pk
+        return super(UserMeViewSet, self).retrieve(request, pk=pk, *args, **kwargs)
+
+    def update_me(self, request, pk=None, *args, **kwargs):
+        # use currently authenticated user's ID as pk, ignoring the input argument
+        pk = request.user.pk
+        self.kwargs[self.pk_url_kwarg] = pk
+        return super(UserMeViewSet, self).update(request, pk=pk, *args, **kwargs)
+
 # See http://www.vinaysahni.com/best-practices-for-a-pragmatic-restful-api#restful
 router = routers.DefaultRouter()
 router.register(r'users', accounts_api.UserViewSet, base_name='patron')
@@ -112,10 +125,6 @@ urlpatterns = patterns('',
     url(r'^edit/stats/', include('reporting.admin_urls')),
     url(r'^api/', include('eloue.api.urls')),
     url(r'^oauth/', include('oauth_provider.urls')),
-    url(r'^oauth2/', include('provider.oauth2.urls', namespace='oauth2')), # django-oauth2-provider
-#    url(r'^o/', include('oauth2_provider.urls', namespace='oauth2_provider')), # django-oauth-toolkit
-    url(r'^api/2.0/', include(router.urls)),
-    url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     url(r'^slimpay/', include('payments.slimpay_urls')),
     url(r'^$', homepage, name="home"),
     url(r'^lists/object/(?P<offset>[0-9]*)$', partial(homepage_object_list, search_index=product_only_search), name=''),
@@ -131,6 +140,15 @@ urlpatterns = patterns('',
         'set_password_form': PatronSetPasswordForm,
         'template_name': 'accounts/professional_password_reset_confirm.html',
     }),
+
+    # OAuth2
+    url(r'^oauth2/', include('provider.oauth2.urls', namespace='oauth2')), # django-oauth2-provider
+#    url(r'^o/', include('oauth2_provider.urls', namespace='oauth2_provider')), # django-oauth-toolkit
+
+    # API 2.0
+    url(r'^api/2.0/users/me/$', UserMeViewSet.as_view({'get': 'retrieve_me', 'put': 'update_me'})),
+    url(r'^api/2.0/', include(router.urls)),
+    url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
 )
 
 handler404 = 'eloue.views.custom404'

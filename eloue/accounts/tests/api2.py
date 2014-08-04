@@ -144,6 +144,33 @@ class UsersTest(APITestCase):
         self.assertEquals(response.status_code, 200, response.data)
         self.assertTrue(User.objects.get(pk=1).avatar)
 
+    def test_account_get_me(self):
+        self.assertFalse(User.objects.get(pk=1).avatar)
+        response = self.client.get(_location('patron-detail', pk='me'))
+        self.assertEquals(response.status_code, 200, response.data)
+        self.assertEquals(response.data['id'], 1)
+
+    def test_account_delete(self):
+        self.assertEquals(User.objects.filter(pk=1).count(), 1)
+        response = self.client.delete(_location('patron-detail', pk=1))
+        self.assertEquals(response.status_code, 204, response.data)
+        self.assertEquals(User.objects.filter(pk=1).count(), 0)
+
+    def test_account_list_paginated(self):
+        response = self.client.get(_location('patron-list'))
+        self.assertEquals(response.status_code, 200, response.data)
+        # check pagination data format in the response
+        expected = {
+            'count': 1, # we should get only 1 account visible for the current user (pk=1); it must be himself
+            'previous': None,
+            'next': None,
+        }
+        self.assertDictContainsSubset(expected, response.data)
+        self.assertIn('results', response.data)
+        # check data
+        self.assertEquals(response.data['count'], len(response.data['results']))
+        self.assertEquals(response.data['results'][0]['id'], 1)
+
 class PhoneNumbersTest(APITestCase):
     fixtures = ['patron', 'phones']
 
@@ -185,6 +212,20 @@ class PhoneNumbersTest(APITestCase):
         # check we got fields of the created instance in the response
         self.assertIn('id', response.data)
         self.assertEquals(response.data['number'], '0198765432')
+
+    def test_phonenumber_list_paginated(self):
+        response = self.client.get(_location('phonenumber-list'))
+        self.assertEquals(response.status_code, 200, response.data)
+        # check pagination data format in the response
+        expected = {
+            'count': 1, # we should get 1 phone number (from 2 in total) visible for the current user (pk=1)
+            'previous': None,
+            'next': None,
+        }
+        self.assertDictContainsSubset(expected, response.data)
+        self.assertIn('results', response.data)
+        # check data
+        self.assertEquals(response.data['count'], len(response.data['results']))
 
 class AddressesTest(APITestCase):
     fixtures = ['patron', 'address']
@@ -233,3 +274,17 @@ class AddressesTest(APITestCase):
         self.assertEquals(response.data['street'], '2, rue debelleyme')
         # 'position' is expected to be automatically calculated based on city+address+country info by the model 
         self.assertEquals(response.data['position']['coordinates'], [48.8603858, 2.3645553])
+
+    def test_address_list_paginated(self):
+        response = self.client.get(_location('address-list'))
+        self.assertEquals(response.status_code, 200, response.data)
+        # check pagination data format in the response
+        expected = {
+            'count': 2, # we should get 2 addresses (from 3 in total) visible for the current user (pk=1)
+            'previous': None,
+            'next': None,
+        }
+        self.assertDictContainsSubset(expected, response.data)
+        self.assertIn('results', response.data)
+        # check data
+        self.assertEquals(response.data['count'], len(response.data['results']))
