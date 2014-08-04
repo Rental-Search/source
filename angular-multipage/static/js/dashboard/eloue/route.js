@@ -13,7 +13,8 @@ define(["eloue/app",
         "eloue/controllers/account/AccountPhonesCtrl",
         "eloue/controllers/account/AccountPaymentsCtrl",
         "eloue/controllers/account/AccountPasswordCtrl",
-        "eloue/controllers/account/AccountInvitationCtrl"],
+        "eloue/controllers/account/AccountInvitationCtrl",
+        "eloue/directives/FileChooserDirective"],
     function (EloueApp) {
 
         /**
