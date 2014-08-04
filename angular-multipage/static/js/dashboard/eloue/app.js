@@ -5,6 +5,7 @@ define(["angular",
         "angular-route",
         "angular-ui-router",
         "angular-file-reader",
+        "jquery.iframe-transport",
         "../../common/eloue/commonApp"],
     function (angular) {
         // Create dashboard application

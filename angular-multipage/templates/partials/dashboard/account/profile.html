@@ -1,5 +1,7 @@
 <h3>{{title}}</h3>
-<form>
+<form id="profile_form" ng-submit="submit()">
     <img ng-src="{{avatar}}" style="width: 200px;" /><br />
-    <input type="file" name="avatar" file-chooser url-model="avatar"/>
+    <input type="text" name="name" /><br />
+    <input type="file" name="avatar" file-chooser url-model="avatar"/><br />
+    <input type="submit" name="submit" value="Submit">
 </form>
