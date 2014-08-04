@@ -4,7 +4,6 @@ $(document).ready(function() {
         nav: $('.dashboard').find('nav').find('ul'),
       };
 
-
   function setPhysicalProperties() {
     var article_height = $(window).height() - $('header').height(),
         nav_fz = {
@@ -31,10 +30,18 @@ $(document).ready(function() {
     setPhysicalProperties();
   });
 
+  // custom select
+  $('select').chosen();
+console.log($('.chosen-results'));
+  // custom scrollbar
+  // $('.chosen-results').mCustomScrollbar();
   $('.scrollbar-custom').mCustomScrollbar({
     scrollInertia: '200',
     autoHideScrollbar: true,
     theme: 'dark-thin',
-    SetWidth: true
+    SetWidth: true,
+    // mouseWheel:{ disableOver: '.chosen-drop' },
   });
+
+  $('textarea').autosize();
 });

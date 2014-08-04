@@ -1,22 +1,189 @@
-label
-  input[type="file"]
-    height: 0
-    overflow: hidden
-    font-size: 0
-    width: 0
-    padding: 0
-    // display: none
+.input-group
+  display: table
+  border-collapse: separate
+  position: relative
+  width: 100%
 
+.form-control
+  margin-bottom: $indent-sm
+  width: 100%
+  display: block
+
+// custom buttons for anchor, buttons and input[type="file"] tags
 .btn
-  // display: inline-block
   display: table-cell
   vertical-align: middle
-  border-radius: $bdrs
+  +border-radius($bdrs)
   white-space: nowrap
   cursor: pointer
-  height: 3em
+  height: $form-height
   font-weight: $fw-bold
   text-align: center
   padding: 0 2em
   font-size: $font-size-base
   border: 1px solid transparent
+
+// custom file input button
+label.file-input-btn,
+label.file-input-drag
+  cursor: pointer
+  input
+    display: table-column
+    display: inline\9
+    height: 0
+    overflow: hidden
+    font-size: 0
+    width: 0
+    padding: 0
+
+label.file-input-drag
+  width: 100%
+  border-radius: $bdrs
+  border: 3px dashed $gray-light
+  display: block
+  text-align: center
+  padding: $indent-md
+  margin: $indent-xs 0
+  transition-property: border-color, color
+  transition-duration: $trns-fast
+  &:hover
+    border-color: $gray-medium
+    color: $gray-strong
+
+// custom radio
+label.rad-btn
+  cursor: pointer
+  input
+    display: none
+    display: inline\9
+    height: 0
+    overflow: hidden
+    font-size: 0
+    width: 0
+    padding: 0
+    &:checked + i:before
+      background-color: $gray-strong
+  i
+    display: inline-block
+    width: $check-box-size
+    height: $check-box-size
+    margin: 0 .5em (-$check-box-size +1)
+    border: $bd-lighter
+    position: relative
+    background-color: white
+    +border-radius(50%)
+    &:before
+      content: ""
+      width: 40%
+      height: 40%
+      +centred-abs()
+      +border-radius(50%)
+  &:hover i
+    border-color: $gray-medium
+
+// custom checkbox
+
+// custom select
+.chosen-container
+  tabindex: 1
+  &.chosen-with-drop
+    .chosen-single 
+      background: white
+      border-color: $gray-medium
+      +border-radius($bdrs $bdrs 0 0 !important)
+      span:after
+        content: "\f0d8"
+  margin-bottom: $indent-xs
+  font-size: inherit
+  height: $form-height
+  text-align: center
+  width: 100% !important
+  display: block
+  font-weight: $fw-semibold
+  .chosen-single
+    display: table
+    box-shadow: none
+    width: 100%
+    padding: 0 !important
+    div
+      display: none
+    span
+      vertical-align: middle
+      display: table-cell
+      margin: 0
+      padding-right: 1em
+      &:after
+        content: "\f0d7"
+        position: absolute
+        right: 1em
+        font-family: $font-family-icon
+  .chosen-drop
+    border-color: $gray-lighter
+    border-width: px(1)
+    background-color: white
+    border-color: $gray-medium
+    border-top-width: 0
+    // box-shadow: none
+    margin-top: 0
+  .chosen-results
+    padding: 0
+    margin: 0
+    overflow: hidden
+    li
+      color: $gray-medium
+      &.highlighted
+        background: $gray-lighter
+        &:hover
+          color: $gray-medium
+      &.result-selected
+        background: $gray-light
+        &:hover
+          color: white
+
+// .universal-picker
+.select-gradient .chosen-container
+  .chosen-single
+    border: none
+    border-bottom: $bd-lighter
+    background-color: $gray-lighter
+    background: linear-gradient(to bottom, white, darken($gray-lite,2%))
+  .chosen-drop
+    border-color: $gray-lighter
+
+// without searc
+.without-search .chosen-search
+  display: none
+
+
+// custom areas
+textarea,
+input[type="text"],
+input[type="email"],
+.chosen-container .chosen-single
+  font-size: inherit
+  +placeholder($gray-medium)
+  background: white
+  font-weight: inherit
+  color: $gray-medium
+  height: $form-height
+  padding: 0 1em
+  padding-top: .7em\9
+  border: $bd-light
+  box-shadow: none
+  transition: border-color $trns-fast
+  +border-radius($bdrs)
+  &:hover,
+  &:focus
+    border-color: $gray-medium
+  &:invalid
+    border-color: lighten($brand-danger, 20%)
+  &:invalid:focus,
+  &:invalid:hover
+    border-color: $brand-danger
+textarea
+  resize: none
+  height: auto
+  padding: 1em
+  padding-bottom: 0
+  font-family: inherit
+  height: 10em\9

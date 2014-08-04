@@ -1,11 +1,99 @@
 extends ./_base_account
 block sections
-  section.profil-info.scrollbar-custom
+  section.profil-info.scrollbar-custom.text-gray
     .section-content
-      h2 Informations personnelles
-      .block_with_thumbnail
-        .thumbnail-container
-          .thumbnail.round: img(src="#{STATIC_URL}#{tenant.thumbnail}", alt="#{tenant.name} photo", width="120", height="120")
-        .exposition-container
-          label(for="change-img").btn.bg-gray-hover.text-white Modifier mon image
-            input(type="file")#change-img
+      form(action="")
+        h2 Informations personnelles
+        .row
+          .block_with_thumbnail.form-control.col-sm-12
+            //- секция смены фото
+            .col-thumbnail
+              //- важно чтобы у img стояли атрибуты with & height, в противном случае при переполнении контента в .col-exposirion миниатюра сожмётся
+              .thumbnail.round: img(src="#{STATIC_URL}#{tenant.thumbnail}", alt="#{tenant.name} photo", width="120", height="120")
+            .col-exposition
+              label(for="change-img").file-input-btn.btn.bg-gray-hover.text-white Modifier mon image
+                input(type="file")#change-img
+
+        .row
+          .col-sm-5
+            h3 Je suis un professionnel ?
+          .col-sm-2
+            label.rad-btn.form-control Oui
+              input#newsletter(type="radio", name="is-pro")
+              i
+          .col-sm-2
+            label.rad-btn.form-control Non
+              input#is-pro(type="radio", name="is-pro", checked)
+              i
+        .row
+          .col-sm-12
+            input#nickname.form-control(type="text", name="nickname", placeholder="Pseudo *", required, autofocus)
+        .row
+          .col-sm-12
+            input#email.form-control(type="email", name="email", placeholder="Email *", required)
+        .row
+          .col-sm-2.without-search
+            select
+              option(value="male") M.
+              option(value="female") F.
+          .col-sm-5
+            input#first-name.form-control(type="text", name="first-name", placeholder="Prénom *", required)
+          .col-sm-5
+            input#name.form-control(type="text", name="name", placeholder="Nom *", required)
+        .row
+          .col-sm-12.select-gradient.without-search.form-control
+            p.text-uppercase: b: small adresse par défaut
+            select
+              option(value="#{tenant.address}") #{tenant.address}
+            h4.text-right.text-success-hover: a(href="#") Ajouter ou modifier une adresse
+        .row
+          .col-sm-12.select-gradient.without-search.form-control
+            p.text-uppercase: b: small téléphone par défaut
+            select
+              option(value="#{tenant.telephone}") #{tenant.telephone}
+            h4.text-right.text-success-hover: a(href="#") Téléphone par défaut
+        .row
+          .col-sm-12
+            textarea#about-yourself.form-control(name="about-yourself", tabindex="1", placeholder="A propos de vous...")
+        .row
+          .col-sm-12
+            input#languages.form-control(type="text", name="languages", placeholder="Langues parlées")
+        .row
+          .col-sm-8
+            h3 J’accepte de recevoir la newsletter e-loue
+          .col-sm-2
+            label.rad-btn.form-control Oui
+              input#newsletter(type="radio", name="newsletter")
+              i
+          .col-sm-2
+            label.rad-btn.form-control Non
+              input#newsletter(type="radio", name="newsletter", checked)
+              i
+        h2 Informations sur le permis
+        .row
+          .col-sm-3
+            select#select-day(name="select-day", data-placeholder="Jour")
+              -each day in days
+                option(value="#{day}") #{day}
+          .col-sm-3
+            select#select-month(name="select-month", data-placeholder="Mois")
+              -each month in months
+                option(value="#{month}") #{month}
+          .col-sm-3
+            select#select-year(name="select-year", data-placeholder="Année")
+              -each year in years
+                option(value="#{year}") #{year}
+        .row
+          .col-sm-12
+            input#license-number.form-control(type="text", name="license-number *", placeholder="Numéro de permis *", required)
+        .row
+          .col-sm-12.form-control
+            label(for="change-img").file-input-drag
+              i.fa.fa-plus.fa-4x
+              br
+              | Ajouter une photo de votre permis
+              input(type="file")#change-img
+            h4.text-right.text-success-hover: a(href="#") Modifier la photo du permis
+        .row
+          .col-sm-6.col-sm-offset-3
+            button(type="submit").btn.bg-success-hover.text-white Enregistrez les informations

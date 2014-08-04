@@ -7,6 +7,7 @@
 $indent-vertical: 0.75
 $indent-md: 30px
 $indent-sm: 2/3*$indent-md
+$indent-xs: 1/3*$indent-md
 
 /////////////////
 // font-weight //
@@ -16,12 +17,22 @@ $fw-regular: 400
 $fw-semibold: 600
 $fw-bold: 700
 
-///////////////
-// font //
-///////////////
-$font-size-base: 14px
+///////////
+// font  //
+///////////
 $font-family-base: 'Open Sans'
+$font-family-icon: 'FontAwesome'
 $line-height-base: 20/14
+
+$font-size-base: 14px
+
+
+$font-size-little: $font-size-base - 4
+$font-size-small: $font-size-base - 2
+$font-size-smaller: $font-size-base - 1
+// $font-size-big: $font-size-base + 2
+// $font-size-bigger: $font-size-base + 2
+$font-size-large: ($font-size-base*2 )-2
 
 ///////////
 // color //
@@ -33,27 +44,44 @@ $brand-info: rgb(57,89,168)
 $brand-gold: rgb(255,200,83)
 
 $gray-dark: rgb(44,44,44)
-// $gray-strong: lighten($gray-light, 15%)
+$gray-strong: rgb(135,135,135)
 $gray-medium: rgb(172,172,172)
-// $gray-light: rgb(172,172,172)
+$gray-light: rgb(211,211,211)
 $gray-lighter: rgb(234,234,234)
 $gray-lite: rgb(252,252,252)
 
+//////////
+// grid //
+//////////
+// $grid-columns:              12 !default;
+$grid-gutter-width: $indent-sm
 
 ///////////////////
 // tabs vertical //
 ///////////////////
 $tabs-vertical-min-width: 220px
 
+//////////////
+// sections //
+//////////////
+$section-content-max-width: 550px
+
 ////////////////
 // trnastiton //
 ////////////////
 $trns-fast: .2s
 
+///////////
+// forms //
+///////////
+$form-height: 3em
+$check-box-size: 1.2em
+
 ////////////
 // border //
 ////////////
 $bd-lite: 1px solid $gray-lite
+$bd-light: 1px solid $gray-light
 $bd-lighter: 1px solid $gray-lighter
 
 $bdrs: 4px

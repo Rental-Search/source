@@ -12,8 +12,11 @@
   display: block
   transition: border-color $trns-fast
 
-.tabs-vertical-active li > a:hover
-  background-color: $gray-lite
-  border-color: $brand-success
-  h4
-    font-weight: bolder
+.tabs-vertical-active li > a
+  &:hover
+    background-color: $gray-lite
+    border-color: $brand-success
+    h1, h2, h3, h4, h5, h6
+      font-weight: bolder
+  &:active
+    border-color: transparent

@@ -13,6 +13,7 @@ body
   line-height: $line-height-base
   background-color: $gray-lite
   color: $gray-dark
+  font-weight: $fw-semibold
 
 a
   color: inherit
@@ -22,6 +23,17 @@ a
 
 @each $selector, $color in (success: $brand-success, primary: $brand-primary, gray: $gray-medium, white: white)
   +make-colors($selector, $color)
+
+// text
+@each $align in left, center, right, justify
+  .text-#{$align}
+    text-align: #{$align}
+
+.text-nowrap
+  white-space: nowrap
+
+.text-uppercase
+  text-transform: uppercase
 
 .container-full-screen
   width: 100%
@@ -41,14 +53,22 @@ article.dashboard
     overflow: auto
 
   h2
-    font-size: ($font-size-base - 1)*2
+    color: $gray-dark
+    font-size: $font-size-large
     font-weight: $fw-regular
     margin-bottom: $indent-sm
 
   h3
+    color: $gray-dark
     font-size: $font-size-base
-    font-weight: $fw-bold
+    font-weight: $fw-semibold
 
   h4
-    font-size: $font-size-base - 1
-    font-weight: $fw-semibold
+    font-size: $font-size-smaller
+    font-weight: $fw-bold
+
+  p
+    margin-bottom: .5em
+
+  small
+    font-size: $font-size-little
