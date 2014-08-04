@@ -10,6 +10,7 @@ require.config({
         "angular-cookies": "../../bower_components/angular-cookies/angular-cookies.min",
         "angular-sanitize": "../../bower_components/angular-sanitize/angular-sanitize.min",
         "angular-ui-router": "../../bower_components/angular-ui-router/release/angular-ui-router.min",
+        "angular-file-reader": "../../bower_components/angular-filereader/src/filereader.service",
         "vars": "../vars"
     },
     shim: {
