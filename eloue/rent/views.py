@@ -87,18 +87,9 @@ def product_occupied_date(request, slug, product_id):
     else:
         return HttpResponse('[]', content_type='application/json')
 
-@require_GET
-@never_cache
-def booking_price(request, slug, product_id):
-    def generate_select_list(n, selected):
-        select_options = [{'value': x, 'selected': x==selected} for x in xrange(1, 1 + n)]
-        return select_options
 
-    if not request.is_ajax():
-        return HttpResponseNotAllowed(['GET', 'XHR'])
-    product = get_object_or_404(Product.on_site, pk=product_id)
-    form = BookingForm(request.GET, prefix="0", instance=Booking(product=product))
-
+def get_booking_price_from_form(form):
+    product = form.instance.product
     if form.is_valid():
         duration = timesince(form.cleaned_data['started_at'], form.cleaned_data['ended_at'])
         total_price = smart_str(currency(form.cleaned_data['total_amount']))
@@ -109,33 +100,51 @@ def booking_price(request, slug, product_id):
             quantity = 1
         response_dict = {
           'duration': duration,
-          'total_price': total_price, 
-          'unit_name': UNIT[price_unit][1], 
-          'unit_value': smart_str(currency(product.prices.filter(unit=price_unit)[0].amount)), 
-          'max_available': max_available, 
-          'select_list': generate_select_list(max_available, selected=quantity) 
+          'total_price': total_price,
+          'unit_name': UNIT[price_unit][1],
+          'unit_value': smart_str(currency(product.prices.filter(unit=price_unit)[0].amount)),
+          'max_available': max_available,
+          'quantity': max_available if quantity > max_available else quantity,
         }
         if quantity > max_available:
-            response_dict.setdefault('warnings', []).append('Quantité disponible à cette période: %s' % max_available)
-            response_dict['select_list'] = generate_select_list(max_available, selected=max_available)
-        else:
-            response_dict['select_list'] = generate_select_list(max_available, selected=quantity)
-        return HttpResponse(json.dumps(response_dict), content_type='application/json')
+            response_dict.setdefault('warnings', []).append(_(u'Quantité disponible à cette période: %s') % max_available)
     else:
         max_available = getattr(form, 'max_available', product.quantity)
         try:
             price_unit = product.prices.filter(unit=1)[0]
             response_dict = {
-              'errors': form.errors.values(), 
-              'unit_name': UNIT[1][1], 
-              'unit_value': smart_str(currency(price_unit.amount)), 
-              'max_available': max_available, 
-              'select_list': generate_select_list(max_available, selected=1)
+              'unit_name': UNIT[1][1],
+              'unit_value': smart_str(currency(price_unit.amount)),
+              'max_available': max_available,
+              'quantity': 1,
             }
         except:
             response_dict = {}
-        
-        return HttpResponse(json.dumps(response_dict), content_type='application/json')
+    return response_dict
+
+
+@require_GET
+@never_cache
+def booking_price(request, slug, product_id):
+    if not request.is_ajax():
+        return HttpResponseNotAllowed(['GET', 'XHR'])
+
+    product = get_object_or_404(Product.on_site, pk=product_id)
+    form = BookingForm(request.GET, prefix="0", instance=Booking(product=product))
+    response_dict = get_booking_price_from_form(form)
+
+    # add errors if the form is invalid
+    if not form.is_valid():
+        response_dict['errors'] = form.errors.values()
+
+    # add 'select_list' field with values for the quantity selection box
+    max_available = response_dict.get('max_available', None)
+    selected = response_dict.pop('quantity', None)
+    if max_available and selected:
+        select_options = [{'value': x, 'selected': x == selected} for x in xrange(1, 1 + max_available)]
+        response_dict['select_list'] = select_options
+
+    return HttpResponse(json.dumps(response_dict), content_type='application/json')
 
 
 @require_GET

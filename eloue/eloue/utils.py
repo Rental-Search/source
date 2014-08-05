@@ -3,6 +3,7 @@ import hashlib
 import hmac
 import locale
 
+from copy import deepcopy
 from decimal import ROUND_UP, ROUND_DOWN, Decimal as D
 from urlparse import urlparse, urljoin
 
@@ -147,6 +148,13 @@ class Enum(object):
 
     def __iter__(self):
         return self.enum_list.__iter__()
+
+    def __deepcopy__(self, memo={}):
+        copy = Enum([])
+        copy.enum_list = deepcopy(self.enum_list, memo=memo)
+        copy.enum_list_prefixed = deepcopy(self.enum_list_prefixed, memo=memo)
+        copy.enum_dict = deepcopy(self.enum_dict, memo=memo)
+        return copy
 
     def keys(self):
         return self.enum_dict.keys()

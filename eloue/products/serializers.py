@@ -3,6 +3,7 @@ from rest_framework.serializers import HyperlinkedModelSerializer, ImageField
 from rest_framework import fields
 
 from products import models
+from products.choices import UNIT
 from eloue.api.serializers import EncodedImageField
 
 class CategorySerializer(HyperlinkedModelSerializer):
@@ -50,9 +51,23 @@ class RealEstateProductSerializer(HyperlinkedModelSerializer):
         read_only_fields = ('id', 'owner', 'address', 'phone', 'quantity')
 
 class PriceSerializer(HyperlinkedModelSerializer):
+    amount = fields.DecimalField(source='local_currency_amount', max_digits=10, decimal_places=2)
+
+    def transform_currency(self, obj, value):
+        return value and {
+            'id': value,
+            'symbol': obj.get_currency_display(),
+        }
+
+    def transform_unit(self, obj, value):
+        return value and {
+            'id': value,
+            'name': UNIT[value][1],
+        }
+
     class Meta:
         model = models.Price
-        fields = ('id', 'product', 'name', 'amount')
+        fields = ('id', 'product', 'name', 'amount', 'currency', 'unit')
         read_only_fields = ('id', 'product')
 
 class PictureSerializer(HyperlinkedModelSerializer):
@@ -88,10 +103,10 @@ class MessageThreadSerializer(HyperlinkedModelSerializer):
     class Meta:
         model = models.MessageThread
         fields = ('id', 'sender', 'recipient', 'product', 'last_message', 'subject', 'sender_archived', 'recipient_archived', 'messages')
-        read_only_fields = ('id', 'sender', 'recipient', 'product', 'last_message', 'messages')
+        read_only_fields = ('id', 'last_message', 'messages')
 
 class ProductRelatedMessageSerializer(HyperlinkedModelSerializer):
     class Meta:
         model = models.ProductRelatedMessage
-        fields = ('id', 'thread', 'offer')
-        read_only_fields = fields
+        fields = ('id', 'thread', 'sender', 'recipient', 'body', 'sent_at', 'offer')
+        read_only_fields = ('id', 'sent_at')

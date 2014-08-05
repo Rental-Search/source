@@ -13,7 +13,7 @@ from django.utils.translation import ugettext_lazy as _
 from pyke.knowledge_engine import CanNotProve
 
 from rent.models import Booking, Sinister, OwnerComment, BorrowerComment
-from rent.utils import get_product_occupied_date, datespan, DATE_FORMAT
+from rent.utils import get_product_occupied_date, datespan, DATE_FORMAT, DATE_TIME_FORMAT
 from rent.choices import TIME_CHOICE
 from django.db.models import Q
 
@@ -119,11 +119,13 @@ class PayIPNForm(forms.Form):
 class BookingForm(forms.ModelForm):
     started_at = DateTimeField(required=True, input_date_formats=DATE_FORMAT)
     ended_at = DateTimeField(required=True, input_date_formats=DATE_FORMAT)
+    quantity = forms.IntegerField(required=False, widget=forms.HiddenInput(), initial=1)
 
     def __init__(self, *args, **kwargs):
         super(BookingForm, self).__init__(*args, **kwargs)
-        widget = forms.Select(choices=enumerate(xrange(1, 1 + self.instance.product.quantity), start=1)) if self.instance.product.quantity >  1 else forms.HiddenInput()
-        self.fields['quantity'] = forms.IntegerField(required=False, widget=widget, initial=1)
+        if self.instance.product.quantity > 1:
+            widget = forms.Select(choices=enumerate(xrange(1, 1 + self.instance.product.quantity), start=1))
+            self.fields['quantity'].widget = widget
     
     class Meta:
         model = Booking
@@ -136,7 +138,6 @@ class BookingForm(forms.ModelForm):
         quantity = self.cleaned_data.get('quantity')
 
         product = self.instance.product
-        bookings = Booking.objects.filter(product=product).filter(Q(state="pending")|Q(state="ongoing"))
 
         if (started_at and ended_at):
             self.max_available = Booking.calculate_available_quantity(product, started_at, ended_at)
@@ -227,3 +228,10 @@ class BorrowerCommentForm(forms.ModelForm):
     class Meta:
         model = BorrowerComment
         fields = ('note', 'comment', )
+
+
+# API 2.0
+
+class Api20BookingForm(BookingForm):
+    started_at = forms.DateTimeField(required=True, input_formats=DATE_TIME_FORMAT)
+    ended_at = forms.DateTimeField(required=True, input_formats=DATE_TIME_FORMAT)

@@ -741,10 +741,13 @@ def suggestion(request):
 
 # REST API 2.0
 
-from rest_framework import viewsets
+from rest_framework import viewsets, response
+from rest_framework.decorators import link
 
 from products import serializers, models
 from eloue.api import filters
+from rent.forms import Api20BookingForm
+from rent.views import get_booking_price_from_form
 
 class CategoryViewSet(viewsets.ModelViewSet):
     """
@@ -766,8 +769,23 @@ class ProductViewSet(viewsets.ModelViewSet):
     """
     queryset = models.Product.on_site.all()
     serializer_class = serializers.ProductSerializer
-    filter_backends = (filters.OwnerFilter, )
+    filter_backends = (filters.OwnerFilter, filters.HaystackSearchFilter)
     owner_field = 'owner'
+    search_index = product_search
+
+    @link()
+    def is_available(self, request, *args, **kwargs):
+        obj = self.get_object()
+
+        form = Api20BookingForm(data=request.GET, instance=Booking(product=obj))
+        res = get_booking_price_from_form(form)
+
+        # add errors if the form is invalid
+        if not form.is_valid():
+            res['errors'] = form.errors
+            return response.Response(res, status=400)
+
+        return response.Response(res)
 
 class CarProductViewSet(viewsets.ModelViewSet):
     """
@@ -793,6 +811,7 @@ class PriceViewSet(viewsets.ModelViewSet):
     """
     model = models.Price
     serializer_class = serializers.PriceSerializer
+    filter_fields = ('product', 'unit')
 
 class PictureViewSet(viewsets.ModelViewSet):
     """
@@ -814,6 +833,8 @@ class MessageThreadViewSet(viewsets.ModelViewSet):
     """
     model = models.MessageThread
     serializer_class = serializers.MessageThreadSerializer
+    filter_backends = (filters.DjangoFilterBackend,)
+    filter_fields = ('product',)
 
 class ProductRelatedMessageViewSet(viewsets.ModelViewSet):
     """
@@ -821,3 +842,5 @@ class ProductRelatedMessageViewSet(viewsets.ModelViewSet):
     """
     model = models.ProductRelatedMessage
     serializer_class = serializers.ProductRelatedMessageSerializer
+    filter_backends = (filters.DjangoFilterBackend,)
+    filter_fields = ('thread',)
