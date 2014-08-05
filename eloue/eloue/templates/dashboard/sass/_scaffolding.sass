@@ -41,6 +41,9 @@ a
   position: relative
   overflow: hidden
 
+.mCSB_outside + .mCSB_scrollTools
+  right: -$grid-gutter-width
+
 header
   height: 120px
 
@@ -66,7 +69,7 @@ article.dashboard
   h4
     font-size: $font-size-smaller
     font-weight: $fw-bold
-
+    margin: $indent-xs 0
   p
     margin-bottom: .5em
 

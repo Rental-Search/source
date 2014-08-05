@@ -32,16 +32,27 @@ $(document).ready(function() {
 
   // custom select
   $('select').chosen();
-console.log($('.chosen-results'));
+
   // custom scrollbar
-  // $('.chosen-results').mCustomScrollbar();
+  $('.chosen-drop').mCustomScrollbar({
+    scrollInertia: '200',
+    autoHideScrollbar: true,
+    theme: 'dark-thin',
+    scrollbarPosition: 'outside',
+    advanced:{
+      autoScrollOnFocus: false
+    }
+  });
   $('.scrollbar-custom').mCustomScrollbar({
     scrollInertia: '200',
     autoHideScrollbar: true,
     theme: 'dark-thin',
-    SetWidth: true,
-    // mouseWheel:{ disableOver: '.chosen-drop' },
+    advanced:{
+      autoScrollOnFocus: false
+    }
   });
 
+
+  // autoewsize textarea's
   $('textarea').autosize();
 });

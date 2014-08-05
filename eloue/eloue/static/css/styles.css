@@ -3218,6 +3218,10 @@ a {
   overflow: hidden;
 }
 
+.mCSB_outside + .mCSB_scrollTools {
+  right: -20px;
+}
+
 header {
   height: 120px;
 }
@@ -3279,6 +3283,7 @@ article.dashboard h3 {
 article.dashboard h4 {
   font-size: 13px;
   font-weight: 700;
+  margin: 10px 0;
 }
 article.dashboard p {
   margin-bottom: 0.5em;
@@ -3375,6 +3380,13 @@ article.dashboard > section .section-content {
   width: 100%;
   display: block;
 }
+.form-control:before, .form-control:after {
+  content: " ";
+  display: table;
+}
+.form-control:after {
+  clear: both;
+}
 
 .btn {
   display: table-cell;
@@ -3412,7 +3424,6 @@ label.file-input-drag {
   display: block;
   text-align: center;
   padding: 30px;
-  margin: 10px 0;
   -webkit-transition-property: border-color, color;
   transition-property: border-color, color;
   -webkit-transition-duration: 0.2s;
@@ -3436,7 +3447,8 @@ label.rad-btn input {
   padding: 0;
 }
 label.rad-btn input:checked + i:before {
-  background-color: #878787;
+  width: 40%;
+  height: 40%;
 }
 label.rad-btn i {
   display: inline-block;
@@ -3449,9 +3461,14 @@ label.rad-btn i {
   border-radius: 50%;
 }
 label.rad-btn i:before {
+  width: 0;
+  height: 0;
+  -webkit-transition-property: width, height;
+  transition-property: width, height;
+  -webkit-transition-duration: 0.1s;
+  transition-duration: 0.1s;
+  background-color: #878787;
   content: "";
-  width: 40%;
-  height: 40%;
   top: 0;
   right: 0;
   bottom: 0;
@@ -3465,8 +3482,7 @@ label.rad-btn:hover i {
 }
 
 .chosen-container {
-  tabindex: 1;
-  margin-bottom: 10px;
+  font-weight: inherit;
   font-size: inherit;
   height: 3em;
   text-align: center;
@@ -3505,17 +3521,26 @@ label.rad-btn:hover i {
   font-family: "FontAwesome";
 }
 .chosen-container .chosen-drop {
-  border-color: #eaeaea;
-  border-width: 0.07143em;
   background-color: white;
   border-color: #acacac;
+  border-width: 0.07143em;
   border-top-width: 0;
+  max-height: 240px;
   margin-top: 0;
+}
+.chosen-container .chosen-search {
+  padding: 0;
+  margin: 0;
+}
+.chosen-container .chosen-search input {
+  border-width: 0 0 1px !important;
+  font-weight: 400;
 }
 .chosen-container .chosen-results {
   padding: 0;
   margin: 0;
   overflow: hidden;
+  max-height: none !important;
 }
 .chosen-container .chosen-results li {
   color: #acacac;
@@ -3559,7 +3584,7 @@ input[type="email"],
   color: #acacac;
   height: 3em;
   padding: 0 1em;
-  padding-top: 0.7em \9;
+  padding-top: 0.8em \9;
   border: 1px solid lightgray;
   -webkit-box-shadow: none;
   box-shadow: none;
@@ -3617,5 +3642,4 @@ textarea {
   padding: 1em;
   padding-bottom: 0;
   font-family: inherit;
-  height: 10em \9;
 }

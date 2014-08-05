@@ -8,6 +8,7 @@
   margin-bottom: $indent-sm
   width: 100%
   display: block
+  +clearfix()
 
 // custom buttons for anchor, buttons and input[type="file"] tags
 .btn
@@ -43,7 +44,6 @@ label.file-input-drag
   display: block
   text-align: center
   padding: $indent-md
-  margin: $indent-xs 0
   transition-property: border-color, color
   transition-duration: $trns-fast
   &:hover
@@ -62,7 +62,8 @@ label.rad-btn
     width: 0
     padding: 0
     &:checked + i:before
-      background-color: $gray-strong
+      width: 40%
+      height: 40%
   i
     display: inline-block
     width: $check-box-size
@@ -73,9 +74,12 @@ label.rad-btn
     background-color: white
     +border-radius(50%)
     &:before
+      width: 0
+      height: 0
+      transition-property: width, height
+      transition-duration: $trns-flash
+      background-color: $gray-strong
       content: ""
-      width: 40%
-      height: 40%
       +centred-abs()
       +border-radius(50%)
   &:hover i
@@ -85,7 +89,7 @@ label.rad-btn
 
 // custom select
 .chosen-container
-  tabindex: 1
+  font-weight: inherit
   &.chosen-with-drop
     .chosen-single 
       background: white
@@ -93,7 +97,6 @@ label.rad-btn
       +border-radius($bdrs $bdrs 0 0 !important)
       span:after
         content: "\f0d8"
-  margin-bottom: $indent-xs
   font-size: inherit
   height: $form-height
   text-align: center
@@ -118,17 +121,23 @@ label.rad-btn
         right: 1em
         font-family: $font-family-icon
   .chosen-drop
-    border-color: $gray-lighter
-    border-width: px(1)
     background-color: white
     border-color: $gray-medium
+    border-width: px(1)
     border-top-width: 0
-    // box-shadow: none
+    max-height: 240px
     margin-top: 0
+  .chosen-search
+    padding: 0
+    margin: 0
+    input
+      border-width: 0 0 1px !important
+      font-weight: $fw-regular
   .chosen-results
     padding: 0
     margin: 0
     overflow: hidden
+    max-height: none !important
     li
       color: $gray-medium
       &.highlighted
@@ -146,13 +155,14 @@ label.rad-btn
     border: none
     border-bottom: $bd-lighter
     background-color: $gray-lighter
-    background: linear-gradient(to bottom, white, darken($gray-lite,2%))
+    +linear-gradient((to bottom, white, darken($gray-lite,2%)))
   .chosen-drop
     border-color: $gray-lighter
 
 // without searc
 .without-search .chosen-search
   display: none
+
 
 
 // custom areas
@@ -167,7 +177,7 @@ input[type="email"],
   color: $gray-medium
   height: $form-height
   padding: 0 1em
-  padding-top: .7em\9
+  padding-top: .8em\9
   border: $bd-light
   box-shadow: none
   transition: border-color $trns-fast
@@ -186,4 +196,3 @@ textarea
   padding: 1em
   padding-bottom: 0
   font-family: inherit
-  height: 10em\9

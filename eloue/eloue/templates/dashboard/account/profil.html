@@ -19,11 +19,14 @@
   <script src="http://jamesallardice.github.io/Placeholders.js/assets/js/placeholders.min.js"></script>
   <!-- selectivizr-->
   <script src="../../../static/js/selectivizr.js"></script>
-  <!-- custom scrollbar-->
+  <!-- custom scrollbar -->
+  <!-- http://manos.malihu.gr/jquery-custom-content-scroller/-->
   <script src="../../../static/js/jquery.mCustomScrollbar.js"></script>
-  <!-- textarea autoresize-->
+  <!-- textarea autoresize -->
+  <!-- http://www.jacklmoore.com/autosize/-->
   <script src="../../../static/js/jquery.autosize.js"></script>
-  <!-- custom select-->
+  <!-- custom select -->
+  <!-- http://harvesthq.github.io/chosen/-->
   <script src="../../../static/js/chosen.jquery.min.js"></script>
   <!-- my script-->
   <script src="../../../static/js/dashboard_scripts.js"></script>
@@ -104,7 +107,7 @@
             </div>
             <div class="row">
               <div class="col-sm-2 without-search">
-                <select>
+                <select class="form-control">
                   <option value="male">M.</option>
                   <option value="female">F.</option>
                 </select>
@@ -136,7 +139,7 @@
             </div>
             <div class="row">
               <div class="col-sm-12">
-                <textarea id="about-yourself" name="about-yourself" tabindex="1" placeholder="A propos de vous..." class="form-control"></textarea>
+                <textarea id="about-myself" name="about-myself" tabindex="1" rows="6" placeholder="A propos de vous..." class="form-control"></textarea>
               </div>
             </div>
             <div class="row">
@@ -160,8 +163,8 @@
               </div>
             </div>
             <h2>Informations sur le permis</h2>
-            <div class="row">
-              <div class="col-sm-3">
+            <div class="row form-control">
+              <div class="col-sm-2">
                 <select id="select-day" name="select-day" data-placeholder="Jour">
                   <option value="1">1</option>
                   <option value="2">2</option>
@@ -195,7 +198,7 @@
                   <option value="30">30</option>
                 </select>
               </div>
-              <div class="col-sm-3">
+              <div class="col-sm-4">
                 <select id="select-month" name="select-month" data-placeholder="Mois">
                   <option value="Janvier">Janvier</option>
                   <option value="Février">Février</option>
