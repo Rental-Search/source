@@ -1,0 +1,19 @@
+extends ../jade/_base_dashboard
+
+block variables
+  -var STATIC_URL = "../../../static/"
+  -var src_img = "dashboard/messages"
+
+block content
+  section.tabs-vertical-active.sm.scrollbar-custom
+    ul
+      -each dialog in dialogs_tabs
+        li: .block_with_thumbnail
+          .col-thumbnail
+            //- важно чтобы у img стояли атрибуты with & height, в противном случае при переполнении контента в .col-exposirion миниатюра сожмётся
+            .thumbnail.round: a(href="#{dialog.tenant.account_link}")
+              img(src="#{STATIC_URL}#{dialog.tenant.thumbnail_small}", alt="#{tenant.name} photo", width="20", height="20")
+          .col-exposition
+             a(href="#{dialog.tenant.account_link}").text-underline-hover: h3 #{dialog.tenant.first_name}
+             h5.text-overflow #{dialog.topic}
+             p.text-gray.text-overflow #{dialog.last_message}

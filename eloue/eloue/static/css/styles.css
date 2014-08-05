@@ -3218,6 +3218,24 @@ a {
   overflow: hidden;
 }
 
+.text-hide {
+  font: 0/0 a;
+  color: transparent;
+  text-shadow: none;
+  background-color: transparent;
+  border: 0;
+}
+
+.text-overflow {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.text-underline, .text-underline-hover:hover {
+  text-decoration: underline;
+}
+
 .mCSB_outside + .mCSB_scrollTools {
   right: -20px;
 }
@@ -3288,6 +3306,10 @@ article.dashboard h4 {
   font-weight: 700;
   margin: 10px 0;
 }
+article.dashboard h5 {
+  font-size: 12px;
+  font-weight: 600;
+}
 article.dashboard p {
   margin-bottom: 0.5em;
 }
@@ -3318,30 +3340,39 @@ article.dashboard > section .section-content {
 .tabs-vertical-static,
 .tabs-vertical-active {
   background-color: white;
-  min-width: 220px;
+}
+.tabs-vertical-static.sm,
+.tabs-vertical-active.sm {
+  width: 230px;
 }
 .tabs-vertical-static li,
 .tabs-vertical-active li {
+  cursor: pointer;
   border-bottom: 1px solid #eaeaea;
-}
-
-.tabs-vertical-static li,
-.tabs-vertical-active li > a {
   border-right: 4px solid transparent;
   padding: 15px 20px;
   display: block;
   -webkit-transition: border-color 0.2s;
   transition: border-color 0.2s;
+  position: relative;
 }
 
-.tabs-vertical-active li > a:hover {
-  background-color: #fcfcfc;
-  border-color: #24bd77;
+.tabs-vertical-active li > a {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
 }
-.tabs-vertical-active li > a:hover h1, .tabs-vertical-active li > a:hover h2, .tabs-vertical-active li > a:hover h3, .tabs-vertical-active li > a:hover h4, .tabs-vertical-active li > a:hover h5, .tabs-vertical-active li > a:hover h6 {
+
+.tabs-vertical-active li:hover {
+  background-color: #fcfcfc;
+  border-right-color: #24bd77;
+}
+.tabs-vertical-active li:hover h1, .tabs-vertical-active li:hover h2, .tabs-vertical-active li:hover h3, .tabs-vertical-active li:hover h4, .tabs-vertical-active li:hover h5, .tabs-vertical-active li:hover h6 {
   font-weight: bolder;
 }
-.tabs-vertical-active li > a:active {
+.tabs-vertical-active li:active {
   border-color: transparent;
 }
 

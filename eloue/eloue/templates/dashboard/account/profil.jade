@@ -5,8 +5,8 @@ block sections
       form(action="")
         h2 Informations personnelles
         .row
+          //- change photo
           .block_with_thumbnail.form-control.col-sm-12
-            //- change photo
             .col-thumbnail
               //- важно чтобы у img стояли атрибуты with & height, в противном случае при переполнении контента в .col-exposirion миниатюра сожмётся
               .thumbnail.round: img(src="#{STATIC_URL}#{tenant.thumbnail}", alt="#{tenant.name} photo", width="120", height="120")

@@ -6,13 +6,13 @@ head
   include ./section/_head
 body
   .container-full-screen
-    //- include ./_src
+    include ./_src
     header header
     article.dashboard
       nav.bg-success
         ul
           -each item in dashboard_nav_links
-            li: a(href="../#{item.href}.html").text-success-dark
+            li: a(href="../#{item.href}").text-success-dark
               i(class="fa fa-#{item.icon}")
               | #{item.title}
       block content

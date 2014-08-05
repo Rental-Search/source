@@ -4,7 +4,7 @@ $(document).ready(function() {
         nav: $('.dashboard').find('nav').find('ul'),
       };
 
-  function setPhysicalProperties() {
+  function setProperties() {
     var article_height = $(window).height() - $('header').height(),
         nav_fz = {
           current: parseFloat(dashboard.nav.css('font-size')),
@@ -24,10 +24,10 @@ $(document).ready(function() {
 
   }
 
-  setPhysicalProperties();
+  setProperties();
 
   $(window).on('resize', function() {
-    setPhysicalProperties();
+    setProperties();
   });
 
   // custom select

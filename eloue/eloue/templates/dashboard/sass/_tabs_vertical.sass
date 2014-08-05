@@ -1,21 +1,28 @@
 .tabs-vertical-static,
 .tabs-vertical-active
   background-color: white
-  min-width: $tabs-vertical-min-width
+  &.sm
+    width: $tabs-vertical-sm-width
   li
+    cursor: pointer
     border-bottom: $bd-lighter
-
-.tabs-vertical-static li,
-.tabs-vertical-active li > a
-  border-right: 4px solid transparent
-  padding: $indent-sm*$indent-vertical $indent-sm
-  display: block
-  transition: border-color $trns-fast
+    border-right: 4px solid transparent
+    padding: $indent-sm*$indent-vertical $indent-sm
+    display: block
+    transition: border-color $trns-fast
+    position: relative
 
 .tabs-vertical-active li > a
+  position: absolute
+  width: 100%
+  height: 100%
+  left: 0
+  top: 0
+
+.tabs-vertical-active li
   &:hover
     background-color: $gray-lite
-    border-color: $brand-success
+    border-right-color: $brand-success
     h1, h2, h3, h4, h5, h6
       font-weight: bolder
   &:active

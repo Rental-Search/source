@@ -5,8 +5,10 @@ block variables
   -var src_img = "dashboard/account_profil"
 
 block content
-  section.tabs-vertical-active.scrollbar-custom
+  section.tabs-vertical-active.sm.scrollbar-custom
     ul
       -each tab in account_tabs
-        li: a(href="#{tab.href}.html"): h3 #{tab.title}
+        li
+          a(href="#{tab.href}.html")
+          h3 #{tab.title}
   block sections

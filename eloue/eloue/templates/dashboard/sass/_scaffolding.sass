@@ -41,6 +41,18 @@ a
   position: relative
   overflow: hidden
 
+.text-hide
+  +text-hide()
+
+.text-overflow
+  +text-overflow()
+
+.text-underline
+  text-decoration: underline
+
+.text-underline-hover:hover
+  @extend .text-underline
+
 .mCSB_outside + .mCSB_scrollTools
   right: -$grid-gutter-width
 
@@ -72,6 +84,11 @@ article.dashboard
     font-size: $font-size-smaller
     font-weight: $fw-bold
     margin: $indent-xs 0
+
+  h5
+    font-size: $font-size-smaller - 1
+    font-weight: $fw-semibold
+
   p
     margin-bottom: .5em
 
