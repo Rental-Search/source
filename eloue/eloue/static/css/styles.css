@@ -3226,6 +3226,9 @@ header {
   height: 120px;
 }
 
+article.dashboard {
+  position: relative;
+}
 article.dashboard:before, article.dashboard:after {
   content: " ";
   display: table;
@@ -3461,13 +3464,13 @@ label.rad-btn i {
   border-radius: 50%;
 }
 label.rad-btn i:before {
+  background-color: #878787;
   width: 0;
   height: 0;
   -webkit-transition-property: width, height;
   transition-property: width, height;
   -webkit-transition-duration: 0.1s;
   transition-duration: 0.1s;
-  background-color: #878787;
   content: "";
   top: 0;
   right: 0;
